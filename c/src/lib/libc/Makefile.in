@@ -54,7 +54,6 @@ H_FILES=$(srcdir)/libcsupport.h
 SYS_H_FILES=
 RTEMS_H_FILES=$(srcdir)/libio.h
 
-INSTALLED_H_FILES=$(srcdir)/libio.h $(srcdir)/libcsupport.h
 SRCS=$(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES)
 OBJS=$(C_O_FILES)
 
