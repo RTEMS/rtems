@@ -1,0 +1,225 @@
+/*
+ * Cirrus EP7312 linker script
+ *
+ * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
+ *	
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *
+ *  $Id$
+*/
+
+OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm",
+	      "elf32-littlearm")
+OUTPUT_ARCH(arm)
+ENTRY(_start)
+/* SEARCH_DIR(/usr/local/rtems-arm-dev-tools/arm-rtems/lib); */
+
+
+MEMORY {
+	sdram : ORIGIN = 0x00000000, LENGTH = 16M
+	regs  : ORIGIN = 0x80000000, LENGTH = 1M
+}
+
+/*
+ * Declare some sizes.
+ */
+
+_sdram_base = DEFINED(_sdram_base) ? _sdram_base : 0x00000000;
+_sdram_size = DEFINED(_sdram_size) ? _sdram_size : 16M;
+
+
+_irq_stack_size = DEFINED(_irq_stack_size) ? _irq_stack_size : 0x1000;
+_fiq_stack_size = DEFINED(_fiq_stack_size) ? _fiq_stack_size : 0x400;
+_abt_stack_size = DEFINED(_abt_stack_size) ? _abt_stack_size : 0;
+_svc_stack_size = DEFINED(_svc_stack_size) ? _svc_stack_size : 0x1000;
+
+
+
+/* Do we need any of these for elf?
+   __DYNAMIC = 0;    */
+
+SECTIONS
+{
+  .base :
+  {
+    _sram_base = .;
+    arm_exception_table = .;    
+
+    arm_reset_vect    = .;     /* 0x00 */
+    . += 4;
+
+    arm_undef_vect    = .;     /* 0x04 */
+    . += 4;
+
+    arm_swi_vect      = .;     /* 0x08 */
+    . += 4;
+
+    arm_iabrt_vect    = .;     /* 0x0c */
+    . += 4;
+
+    arm_dabrt_vect    = .;     /* 0x10 */
+    . += 4;
+
+    /* no vector here */
+    . += 4;
+
+    arm_irq_vect      = .;     /* 0x18 */
+    . += 4;
+
+    arm_fiq_vect      = .;     /* 0x1c */
+    . += 4;
+			      /* FIXME: */
+    fiq_vect_table    = .;    /* this and irq_vector_table should be swapped */
+    . += (32 * 4);
+
+    irq_vector_table = .;
+    . += (32 * 4);      
+
+  } > sdram
+
+  .init          : 
+  { 
+    KEEP (*(.init))
+  } > sdram   /*=0*/
+
+  .text      :
+  {
+	_text_start = .;
+	 CREATE_OBJECT_SYMBOLS
+	*(.text) 
+	*(.text.*)
+	*(.glue_7)
+	*(.glue_7t)
+
+	/* I think these come from the ld docs: */	
+	___CTOR_LIST__ = .;
+	LONG((___CTOR_END__ - ___CTOR_LIST__) / 4 - 2)
+	*(.ctors)
+	LONG(0)
+	___CTOR_END__ = .;
+	___DTOR_LIST__ = .;
+	LONG((___DTOR_END__ - ___DTOR_LIST__) / 4 - 2)
+	*(.dtors)
+	LONG(0)
+	___DTOR_END__ = .;
+
+	_etext = .;
+	PROVIDE (etext = .);
+  } > sdram  
+
+  .fini      :
+  {
+    KEEP (*(.fini))
+  } > sdram  /*=0*/
+
+  .data :
+  { 
+    *(.data)
+    *(.data.*)
+    *(.gnu.linkonce.d*)
+    *(.jcr)
+    SORT(CONSTRUCTORS)
+    _edata = .;
+  } > sdram 
+
+  .eh_frame : { *(.eh_frame) } > RAM
+  .data1   : { *(.data1) } > RAM
+  .eh_frame : { *(.eh_frame) } > RAM
+  .gcc_except_table : { *(.gcc_except_table) } > RAM
+
+  .rodata :
+  {
+    *(.rodata)
+    *(.rodata.*)
+    *(.gnu.linkonce.r*)
+  } > sdram
+
+  .bss       :
+  {
+	_bss_start_ = .;
+	_clear_start = .;
+	*(.bss)
+	*(.bss.*)
+	*(COMMON)
+	. = ALIGN(64);
+	_clear_end = .;
+
+	. = ALIGN (256);
+	_abt_stack = .;
+	. += _abt_stack_size;
+
+	. = ALIGN (256);
+	_irq_stack = .;
+	. += _irq_stack_size;
+
+	. = ALIGN (256);
+	_fiq_stack = .;
+	. += _fiq_stack_size;
+
+	. = ALIGN (256);
+	_svc_stack = .;
+	. += _svc_stack_size;
+
+	_bss_end_ = .;
+	_end = .;
+	__end = .;
+
+
+	. = ALIGN (1024);
+	_bss_free_start = .;
+
+  } > sdram
+
+/*
+  .regs	:
+  {
+	ep7312_regs_base = .;
+	ep7312_regs = .;
+	. += 8192;
+  } > regs
+*/
+
+
+/* Debugging stuff follows? */
+
+  /* Stabs debugging sections.  */
+  .stab 0 : { *(.stab) } 
+  .stabstr 0 : { *(.stabstr) } 
+  .stab.excl 0 : { *(.stab.excl) } 
+  .stab.exclstr 0 : { *(.stab.exclstr) }
+  .stab.index 0 : { *(.stab.index) } 
+  .stab.indexstr 0 : { *(.stab.indexstr) } 
+  .comment 0 : { *(.comment) }
+  /* DWARF debug sections.
+     Symbols in the DWARF debugging sections are relative to the beginning
+     of the section so we begin them at 0.  */
+  /* DWARF 1 */
+  .debug          0 : { *(.debug) }
+  .line           0 : { *(.line) }
+  /* GNU DWARF 1 extensions */
+  .debug_srcinfo  0 : { *(.debug_srcinfo) }
+  .debug_sfnames  0 : { *(.debug_sfnames) }
+  /* DWARF 1.1 and DWARF 2 */
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  /* DWARF 2 */
+  .debug_info     0 : { *(.debug_info) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) } 
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) } 
+  /* SGI/MIPS DWARF 2 extensions */
+  .debug_weaknames 0 : { *(.debug_weaknames) }
+  .debug_funcnames 0 : { *(.debug_funcnames) }
+  .debug_typenames 0 : { *(.debug_typenames) }
+  .debug_varnames  0 : { *(.debug_varnames) } 
+  /*.stack 0x80000 : { _stack = .; *(.stack) }*/
+  /* These must appear regardless of  .  */
+}
+

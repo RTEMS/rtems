@@ -1,0 +1,15 @@
+2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* New BSP.
+	* .cvsignore, ChangeLog, Makefile.am, bsp_specs, configure.ac, README,
+	times, clock/.cvsignore, clock/Makefile.am, clock/clockdrv.c,
+	console/.cvsignore, console/Makefile.am, console/uart.c,
+	include/.cvsignore, include/Makefile.am, include/bsp.h,
+	include/ep7312.h, irq/.cvsignore, irq/Makefile.am, irq/bsp_irq_asm.S,
+	irq/bsp_irq_init.c, irq/irq.c, irq/irq.h, network/Makefile.am,
+	network/network.c, start/.cvsignore, start/Makefile.am,
+	start/start.S, startup/.cvsignore, startup/Makefile.am,
+	startup/bspstart.c, startup/exit.c, startup/linkcmds,
+	timer/.cvsignore, timer/Makefile.am, timer/timer.c,
+	wrapup/.cvsignore, wrapup/Makefile.am: New file.
+
