@@ -31,24 +31,25 @@ EXTRA_DIST = $(AUTOMAKE_FILES)
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/rtems:
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/bspIo.h: include/rtems/bspIo.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/bspIo.h: include/rtems/bspIo.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bspIo.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bspIo.h
 
-$(PROJECT_INCLUDE)/rtems/userenv.h: include/rtems/userenv.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/userenv.h: include/rtems/userenv.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/userenv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/userenv.h
 
-$(PROJECT_INCLUDE)/rtems/fs.h: include/rtems/fs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/fs.h: include/rtems/fs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fs.h
 
-$(PROJECT_INCLUDE)/rtems/stdint.h: include/rtems/stdint.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/stdint.h: include/rtems/stdint.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stdint.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stdint.h
 
 include $(top_srcdir)/automake/subdirs.am
