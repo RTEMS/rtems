@@ -97,6 +97,8 @@ do
            tmp_scn_file=sptests/$t.scn;;
        psx*)
            tmp_scn_file=psxtests/$t.scn;;
+       itron*)
+           tmp_scn_file=itrontests/$t.scn;;
        *)
            fatal "unknown test $t";;
    esac
