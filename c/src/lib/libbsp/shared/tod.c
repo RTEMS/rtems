@@ -15,7 +15,7 @@
  *  Configuration Information
  */
 
-extern unsigned long              RTC_Count;
+extern size_t                     RTC_Count;
 extern rtems_device_minor_number  RTC_Minor;
 
 int RTC_Present;

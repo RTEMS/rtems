@@ -1,3 +1,7 @@
+2005-01-23	Joel Sherrill <joel@OARcorp.com>
+
+	* tod.c: Change type of RTC_Count to size_t.
+
 2004-12-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 704/bsps.
