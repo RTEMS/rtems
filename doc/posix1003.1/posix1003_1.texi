@@ -1,4 +1,3 @@
-
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename posix1003_1

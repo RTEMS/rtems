@@ -15,8 +15,7 @@ include $(top_srcdir)/project.am
 
 GENERATED_FILES = ch01.texi ch02.texi ch03.texi ch04.texi ch05.texi \
     ch06.texi ch07.texi ch08.texi ch09.texi ch10.texi ch11.texi ch12.texi \
-    ch13.texi ch14.texi ch15.texi ch16.texi ch17.texi ch18.texi ch19.t \
-    ch19.texi
+    ch13.texi ch14.texi ch15.texi ch16.texi ch17.texi ch18.texi ch19.texi
 
 COMMON_FILES = $(top_srcdir)/common/setup.texi \
     $(top_srcdir)/common/cpright.texi
@@ -116,18 +115,15 @@ $(srcdir)/ch18.texi: ch18.t
 	    -u "Top" \
 	    -n "Compliance Summary" < $< > $@
 
-$(srcdir)/ch19.t: ch01.t ch02.t ch03.t ch04.t ch05.t ch06.t ch07.t ch08.t \
-    ch09.t ch10.t ch11.t ch12.t ch13.t ch14.t ch15.t ch16.t ch17.t ch18.t \
-    summarize
-	(cd $(srcdir) && ./summarize > $@)
-
-$(srcdir)/ch19.texi: ch19.t
+$(srcdir)/ch19.texi: ch01.t ch02.t ch03.t ch04.t ch05.t ch06.t ch07.t ch08.t \
+    ch09.t ch10.t ch11.t ch12.t ch13.t ch14.t ch15.t ch16.t ch17.t ch18.t
+	$(srcdir)/summarize $^ | \
 	$(BMENU2) -c -p "List of Cancellation Points" \
 	    -u "Top" \
-	    -n "Command and Variable Index" < $< > $@
+	    -n "Command and Variable Index" > $@
 
 noinst_SCRIPTS = summarize
 
 EXTRA_DIST = ch01.t ch02.t ch03.t ch04.t ch05.t ch06.t ch07.t ch08.t ch09.t \
-    ch10.t ch11.t ch12.t ch13.t ch14.t ch15.t ch16.t ch17.t ch18.t ch19.t \
+    ch10.t ch11.t ch12.t ch13.t ch14.t ch15.t ch16.t ch17.t ch18.t \
     compliance_list summarize
