@@ -42,14 +42,14 @@ hst_subdirs="$hst_subdirs libchip"
 fi
 
 if test "$HAS_NETWORKING" = "yes"; then
-  cfg_subdirs2="$cfg_subdirs2 libnetworking librpc"
+  hst_subdirs="$hst_subdirs libnetworking librpc"
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
   fi
 fi
 
 if test "$HAS_RDBG" = "yes"; then
-  cfg_subdirs2="$cfg_subdirs2 librdbg"
+  hst_subdirs="$hst_subdirs librdbg"
 fi
 AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes" )
 AM_CONDITIONAL(HAS_RDBG, test "$HAS_RDBG" = "yes" )
