@@ -77,7 +77,7 @@ void RTEMS_Malloc_Initialize(
   if (!starting_address) {
     u32_address = (unsigned int)sbrk(length);
 
-    if (u32_address == -1) {
+    if (u32_address == (rtems_unsigned32) -1) {
       rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
       /* DOES NOT RETURN!!! */
     }
@@ -165,7 +165,8 @@ void *malloc(
 
     the_size = ((size + sbrk_amount) / sbrk_amount * sbrk_amount);
 
-    if (((rtems_unsigned32)starting_address = (void *)sbrk(the_size)) == -1)
+    if (((rtems_unsigned32)starting_address = (void *)sbrk(the_size)) 
+            == (rtems_unsigned32) -1)
       return (void *) 0;
 
     status = rtems_region_extend(
