@@ -1,3 +1,11 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, clock/rtc.c, console/console.c, console/inch.c,
+	console/outch.c, ide/ide.c, include/bsp.h, include/crt.h,
+	ne2000/ne2000.c, start/start.S, startup/bspstart.c, startup/exit.c,
+	startup/ldsegs.S, startup/linkcmds, timer/timer.c, timer/timerisr.S:
+	URL for license changed.
+
 2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 461/bsps
