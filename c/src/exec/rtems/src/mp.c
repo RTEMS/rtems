@@ -55,7 +55,13 @@ void _Multiprocessing_Manager_initialization ( void )
 
 void rtems_multiprocessing_announce ( void )
 {
-  _Thread_MP_Ready();
+  _Thread_Disable_dispatch();
+  _Event_sets_Post(
+    RTEMS_EVENT_0,
+    &_Internal_threads_System_initialization_thread->pending_events
+  );
+  _Event_Surrender( _Internal_threads_System_initialization_thread );
+  _Thread_Enable_dispatch();
 }
 
 /*PAGE
@@ -64,63 +70,88 @@ void rtems_multiprocessing_announce ( void )
  *
  */
 
+typedef void (*packet_processor)( rtems_packet_prefix * );
+
+packet_processor _Multiprocessor_Packet_processors[] = {
+  _Internal_threads_MP_Process_packet, /* RTEMS_MP_PACKET_INTERNAL_THREADS */
+  _RTEMS_tasks_MP_Process_packet,      /* RTEMS_MP_PACKET_TASKS */
+  _Message_queue_MP_Process_packet,    /* RTEMS_MP_PACKET_MESSAGE_QUEUE */
+  _Semaphore_MP_Process_packet,        /* RTEMS_MP_PACKET_SEMAPHORE */
+  _Partition_MP_Process_packet,        /* RTEMS_MP_PACKET_PARTITION */
+  0,                                   /* RTEMS_MP_PACKET_REGION */
+  _Event_MP_Process_packet,            /* RTEMS_MP_PACKET_EVENT */
+  _Signal_MP_Process_packet            /* RTEMS_MP_PACKET_SIGNAL */
+};
+
 Thread _Multiprocessing_Receive_server (
   Thread_Argument ignored
 )
 {
 
   rtems_packet_prefix *the_packet;
-
-  _Thread_Dispatch_disable_level = 1;
+  packet_processor     the_function;
 
   for ( ; ; ) {
 
-    _Internal_threads_System_initialization_thread->Notepads[ 0 ] = 1;
+    _Thread_Disable_dispatch();
+    _Event_Seize( RTEMS_EVENT_0, RTEMS_DEFAULT_OPTIONS, RTEMS_NO_TIMEOUT );
+    _Thread_Enable_dispatch();
 
-    the_packet = _MPCI_Receive_packet();
+    for ( ; ; ) {
+      the_packet = _MPCI_Receive_packet();
 
-    if ( ! the_packet ) {
-      _Thread_MP_Block();
-      _Thread_Dispatch_disable_level = 1;
-    }
-    else {
+      if ( !the_packet ) 
+        break;
 
       _Thread_Executing->receive_packet = the_packet;
 
-      switch ( the_packet->the_class ) {
+      if ( !_Mp_packet_Is_valid_packet_class ( the_packet->the_class ) )
+        break;
 
+      the_function = _Multiprocessor_Packet_processors[ the_packet->the_class ];
+    
+      if ( !the_function )
+        break;
+
+      (*the_function)( the_packet );
+#if 0
+      switch ( the_packet->the_class ) {
+ 
         case RTEMS_MP_PACKET_INTERNAL_THREADS:
           _Internal_threads_MP_Process_packet( the_packet );
           break;
-
+ 
         case RTEMS_MP_PACKET_TASKS:
           _RTEMS_tasks_MP_Process_packet( the_packet );
           break;
-
+ 
         case RTEMS_MP_PACKET_MESSAGE_QUEUE:
           _Message_queue_MP_Process_packet( the_packet );
           break;
-
+ 
         case RTEMS_MP_PACKET_SEMAPHORE:
           _Semaphore_MP_Process_packet( the_packet );
           break;
-
+ 
         case RTEMS_MP_PACKET_PARTITION:
           _Partition_MP_Process_packet( the_packet );
           break;
-
+ 
         case RTEMS_MP_PACKET_REGION:
           /* Global regions are unsupported at this time */
           break;
-
+ 
         case RTEMS_MP_PACKET_EVENT:
           _Event_MP_Process_packet( the_packet );
           break;
-
+ 
         case RTEMS_MP_PACKET_SIGNAL:
           _Signal_MP_Process_packet( the_packet );
           break;
       }
+#endif
+
+
     }
   }
 }

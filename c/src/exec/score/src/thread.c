@@ -316,7 +316,8 @@ void _Thread_Clear_state(
 
       if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
         _Thread_Heir = the_thread;
-        if ( _Modes_Is_preempt( _Thread_Executing->current_modes ) )
+        if ( _Modes_Is_preempt( _Thread_Executing->current_modes ) ||
+             the_thread->current_priority == 0 )
           _Context_Switch_necessary = TRUE;
       }
     }

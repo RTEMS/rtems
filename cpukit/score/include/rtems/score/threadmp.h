@@ -90,26 +90,6 @@ Thread_Control *_Thread_MP_Find_proxy (
 );
 
 /*
- *  _Thread_MP_Block
- *
- *  DESCRIPTION:
- *
- *  This routine blocks the MP Receive server thread.
- */
-
-void _Thread_MP_Block( void );
-
-/*
- *  _Thread_MP_Ready
- *
- *  DESCRIPTION:
- *
- *  This routine readies the MP Receive server thread.
- */
-
-void _Thread_MP_Ready( void );
-
-/*
  *  The following is used to determine when the multiprocessing receive
  *  thread is executing so that a proxy can be allocated instead of
  *  blocking the multiprocessing receive thread.
