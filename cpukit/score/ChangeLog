@@ -1,3 +1,18 @@
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu/Makefile.am: mips64orion port removed as mips port more
+	completely covers the MIPS family.
+	* cpu/mips64orion/.cvsignore, cpu/mips64orion/ChangeLog,
+	cpu/mips64orion/Makefile.am, cpu/mips64orion/asm.h,
+	cpu/mips64orion/configure.ac, cpu/mips64orion/cpu.c,
+	cpu/mips64orion/cpu_asm.S, cpu/mips64orion/cpu_asm.h,
+	cpu/mips64orion/idtcpu.h, cpu/mips64orion/idtmon.h,
+	cpu/mips64orion/iregdef.h, cpu/mips64orion/rtems/.cvsignore,
+	cpu/mips64orion/rtems/score/.cvsignore,
+	cpu/mips64orion/rtems/score/cpu.h,
+	cpu/mips64orion/rtems/score/mips64orion.h,
+	cpu/mips64orion/rtems/score/types.h: Removed.
+
 2004-01-07  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Build library using EXTRA_LIBRARIES and automake rules.
