@@ -362,6 +362,8 @@ RTEMS_CHECK_MAKEFILE(make)
 RTEMS_CHECK_MAKEFILE(c/src/lib/libmisc)
 RTEMS_CHECK_MAKEFILE(c/src/tests/samples)
 
+AC_CONFIG_HEADER(c/build-tools/src/config.h)
+
 # try not to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile
@@ -397,7 +399,6 @@ $makefiles
 make/host.cfg
 make/target.cfg
 make/Templates/Makefile.inc
-c/build-tools/src/config.h
 c/update-tools/Makefile)
 
 echo
