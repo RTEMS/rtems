@@ -24,6 +24,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/userext.h>
+#include <rtems/score/watchdog.h>
 #include <rtems/score/wkspace.h>
 
 /*PAGE
@@ -113,6 +114,11 @@ boolean _Thread_Initialize(
   the_thread->fp_context       = fp_area;
   the_thread->Start.fp_context = fp_area;
 #endif
+
+  /*
+   *  Initialize the thread timer
+   */
+  _Watchdog_Initialize( &the_thread->Timer, NULL, 0, NULL );
 
   /*
    * Clear the libc reent hook.

@@ -1,3 +1,10 @@
+2004-07-25	Victor Vengerov <Victor.Vengerov@oktetlabs.ru>
+
+	PR 654/rtems
+	* score/src/threadinitialize.c: Initialize the per thread watchdog
+	timer. When the thread control block is reused, we cannot depend on
+	it being zeroed.
+
 2004-07-24	Mick Davis <mickd@microsol.iinet.net.au>
 
 	PR 641/rtems
