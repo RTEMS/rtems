@@ -17,13 +17,12 @@ libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
 
 EXTRA_LIBRARIES = libnetworking.a
 CLEANFILES = libnetworking.a
-libnetworking_a_SOURCES =
 libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
     $(libnetworking_CPPFLAGS)
 
 EXTRA_LIBRARIES += libnetworking_g.a
 CLEANFILES += libnetworking_g.a
-libnetworking_g_a_SOURCES =
+libnetworking_g_a_SOURCES = $(libnetworking_a_SOURCES)
 libnetworking_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
     $(libnetworking_CPPFLAGS)
 
@@ -43,11 +42,9 @@ include_arpa_HEADERS = arpa/ftp.h arpa/inet.h arpa/nameser.h \
 
 ## kern
 
-kern_C_FILES = kern/kern_mib.c kern/kern_subr.c kern/kern_sysctl.c \
-    kern/uipc_domain.c kern/uipc_mbuf.c kern/uipc_socket.c \
-    kern/uipc_socket2.c
-libnetworking_a_SOURCES += $(kern_C_FILES)
-libnetworking_g_a_SOURCES += $(kern_C_FILES)
+libnetworking_a_SOURCES = kern/kern_mib.c kern/kern_subr.c \
+    kern/kern_sysctl.c kern/uipc_domain.c kern/uipc_mbuf.c \
+    kern/uipc_socket.c kern/uipc_socket2.c
 
 ## machine
 
@@ -65,11 +62,9 @@ include_net_HEADERS = net/bpf.h net/ethernet.h net/if.h net/if_arp.h \
     net/ppp-comp.h net/ppp_defs.h net/radix.h net/raw_cb.h net/route.h \
     net/if_pppvar.h net/pppcompress.h
 
-net_C_FILES = net/if.c net/if_ethersubr.c net/if_loop.c net/radix.c \
-    net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c net/if_ppp.c \
-    net/ppp_tty.c net/pppcompress.c
-libnetworking_a_SOURCES += $(net_C_FILES)
-libnetworking_g_a_SOURCES += $(net_C_FILES)
+libnetworking_a_SOURCES += net/if.c net/if_ethersubr.c net/if_loop.c \
+    net/radix.c net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c \
+    net/if_ppp.c net/ppp_tty.c net/pppcompress.c
 
 ## netinet
 
@@ -83,15 +78,13 @@ include_netinet_HEADERS = netinet/icmp_var.h netinet/if_ether.h \
     netinet/tcp_timer.h netinet/tcp_var.h netinet/tcpip.h netinet/udp.h \
     netinet/udp_var.h
 
-netinet_C_FILES = netinet/if_ether.c netinet/igmp.c netinet/in.c \
+libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/in_cksum.c netinet/in_pcb.c netinet/in_proto.c netinet/in_rmx.c \
     netinet/ip_divert.c netinet/ip_fw.c netinet/ip_icmp.c netinet/ip_input.c \
     netinet/ip_mroute.c netinet/ip_output.c netinet/raw_ip.c \
     netinet/tcp_debug.c netinet/tcp_input.c netinet/tcp_output.c \
     netinet/tcp_subr.c netinet/tcp_timer.c netinet/tcp_usrreq.c \
     netinet/udp_usrreq.c
-libnetworking_a_SOURCES += $(netinet_C_FILES)
-libnetworking_g_a_SOURCES += $(netinet_C_FILES)
 
 ## nfs
 
@@ -100,9 +93,7 @@ include_nfsdir = $(includedir)/nfs
 include_nfs_HEADERS = nfs/krpc.h nfs/nfs.h nfs/nfsdiskless.h nfs/nfsproto.h \
     nfs/rpcv2.h nfs/xdr_subs.h
 
-nfs_C_FILES = nfs/bootp_subr.c
-libnetworking_a_SOURCES += $(nfs_C_FILES)
-libnetworking_g_a_SOURCES += $(nfs_C_FILES)
+libnetworking_a_SOURCES += nfs/bootp_subr.c
 
 ## rtems
 
@@ -111,14 +102,12 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = rtems/rtems_bsdnet.h rtems/rtems_bsdnet_internal.h \
     rtems/tftp.h rtems/ftpfs.h rtems/mkrootfs.h
 
-rtems_C_FILES = rtems/sghostname.c rtems/issetugid.c rtems/rtems_glue.c \
+libnetworking_a_SOURCES += rtems/sghostname.c rtems/issetugid.c rtems/rtems_glue.c \
     rtems/rtems_syscall.c rtems/rtems_bootp.c rtems/rtems_showmbuf.c \
     rtems/rtems_showroute.c rtems/rtems_showifstat.c \
     rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c \
     rtems/rtems_showtcpstat.c rtems/rtems_showudpstat.c rtems/rtems_select.c \
     rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c
-libnetworking_a_SOURCES += $(rtems_C_FILES)
-libnetworking_g_a_SOURCES += $(rtems_C_FILES)
 
 ## sys
 
@@ -143,15 +132,13 @@ libc_CPPFLAGS = -DNOPOLL -DNOSELECT
 
 EXTRA_LIBRARIES += libc.a
 CLEANFILES += libc.a
-libc_a_SOURCES =
 libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(libc_CPPFLAGS)
 
 EXTRA_LIBRARIES += libc_g.a
 CLEANFILES += libc_g.a
-libc_g_a_SOURCES =
 libc_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(libc_CPPFLAGS)
 
-libc_C_FILES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
+libc_a_SOURCES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/gethostbydns.c libc/gethostbyht.c libc/gethostbynis.c \
     libc/gethostnamadr.c libc/getnetbydns.c libc/getnetbyht.c \
     libc/getnetbynis.c libc/getnetnamadr.c libc/getproto.c \
@@ -164,8 +151,7 @@ libc_C_FILES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/res_comp.c libc/res_data.c libc/res_debug.c libc/res_init.c \
     libc/res_mkquery.c libc/res_mkupdate.c libc/res_query.c libc/res_send.c \
     libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c
-libc_a_SOURCES += $(libc_C_FILES)
-libc_g_a_SOURCES += $(libc_C_FILES)
+libc_g_a_SOURCES = $(libc_a_SOURCES)
 
 man_MANS = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
@@ -174,14 +160,10 @@ man_MANS = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
 
 TMP_LIBS += libc$(LIB_VARIANT).a
 
-EXTRA_DIST = libc/addr2ascii.3 libc/addr2ascii.c libc/ascii2addr.c \
-    libc/base64.c libc/byteorder.3 libc/ether_addr.c libc/ethers.3 \
-    libc/gethostbydns.c libc/gethostbyht.c libc/gethostbyname.3 \
-    libc/gethostbynis.c libc/gethostnamadr.c libc/gethostname.c \
-    libc/getnetbydns.c libc/getnetbyht.c libc/getnetbynis.c libc/getnetent.3 \
-    libc/getnetnamadr.c libc/getproto.c libc/getprotoent.3 \
-    libc/getprotoent.c libc/getprotoname.c libc/getservbyname.c \
-    libc/getservbyport.c libc/getservent.3 libc/getservent.c libc/herror.c \
+EXTRA_DIST = libc/addr2ascii.3 libc/byteorder.3 libc/ether_addr.c \
+    libc/ethers.3 libc/gethostbyname.3 libc/gethostname.c libc/getnetbydns.c \
+    libc/getnetbyht.c libc/getnetbynis.c libc/getnetent.3 \
+    libc/getnetnamadr.c libc/getproto.c libc/getprotoent.3 libc/getservent.3 \
     libc/inet.3 libc/inet_addr.c libc/inet_lnaof.c libc/inet_makeaddr.c \
     libc/inet_net_ntop.c libc/inet_net_pton.c libc/inet_neta.c \
     libc/inet_netof.c libc/inet_network.c libc/inet_ntoa.c libc/inet_ntop.c \
@@ -190,8 +172,8 @@ EXTRA_DIST = libc/addr2ascii.3 libc/addr2ascii.c libc/ascii2addr.c \
     libc/ns_parse.c libc/ns_print.c libc/ns_ttl.c libc/nsap_addr.c \
     libc/rcmd.3 libc/rcmd.c libc/recv.c libc/res_comp.c libc/res_config.h \
     libc/res_data.c libc/res_debug.c libc/res_init.c libc/res_mkquery.c \
-    libc/res_mkupdate.c libc/res_query.c libc/res_send.c libc/res_stubs.c \
-    libc/res_update.c libc/resolver.3 libc/send.c libc/strsep.c
+    libc/res_mkupdate.c libc/res_query.c libc/res_stubs.c libc/res_update.c \
+    libc/resolver.3 libc/send.c
 
 ## lib
 
@@ -199,18 +181,15 @@ lib_CPPFLAGS = -DNOPOLL -DNOSELECT
 
 EXTRA_LIBRARIES += lib.a
 CLEANFILES += lib.a
-lib_a_SOURCES =
 lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(lib_CPPFLAGS)
 
 EXTRA_LIBRARIES += lib_g.a
 CLEANFILES += lib_g.a
-lib_g_a_SOURCES =
 lib_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(lib_CPPFLAGS)
 
-lib_C_FILES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c lib/ftpfs.c \
+lib_a_SOURCES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c lib/ftpfs.c \
     lib/syslog.c lib/tftpDriver.c
-lib_a_SOURCES += $(lib_C_FILES)
-lib_g_a_SOURCES += $(lib_C_FILES)
+lib_g_a_SOURCES = $(lib_a_SOURCES)
 
 TMP_LIBS += lib$(LIB_VARIANT).a
 

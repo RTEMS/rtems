@@ -1,5 +1,9 @@
 2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Remove *C_FILES.
+
+2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Add libs to CLEANFILES
 	Set lib*_g_a_SOURCES = lib*_a_SOURCES.
 
