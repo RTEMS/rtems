@@ -1,3 +1,7 @@
+
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* residual/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* vectors/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* pci/Makefile.am: Use 'PREINSTALL_FILES ='.

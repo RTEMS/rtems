@@ -1,3 +1,7 @@
+2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
+
 2001-01-12	Eric Norum <eric.norum@usask.ca>
 
 	* README, clock/Makefile.am, clock/ckinit.c, clock/clock.c:
