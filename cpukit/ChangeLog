@@ -1,5 +1,13 @@
 2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* sapi/include/confdefs.h, sapi/include/rtems/config.h,
+	sapi/include/rtems/extension.h, sapi/include/rtems/fatal.h,
+	sapi/include/rtems/init.h, sapi/include/rtems/io.h,
+	sapi/src/exinit.c, sapi/src/extension.c, sapi/src/fatal.c,
+	sapi/src/io.c: Convert to using c99 fixed size types.
+
+2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* rtems/include/rtems.h,
 	rtems/include/rtems/rtems/asr.h,
 	rtems/include/rtems/rtems/attr.h,

@@ -31,7 +31,7 @@
  */
 
 void _Extension_Manager_initialization(
-  unsigned32 maximum_extensions
+  uint32_t   maximum_extensions
 )
 {
   _Objects_Initialize_information(

@@ -28,7 +28,7 @@
  */
 
 void volatile rtems_fatal_error_occurred(
-  unsigned32 the_error
+  uint32_t   the_error
 )
 {
   _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, FALSE, the_error );

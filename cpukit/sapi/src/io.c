@@ -32,13 +32,13 @@
   
 void _IO_Manager_initialization(
     rtems_driver_address_table *driver_table,
-    unsigned32                  drivers_in_table,
-    unsigned32                  number_of_drivers,
-    unsigned32                  number_of_devices
+    uint32_t                    drivers_in_table,
+    uint32_t                    number_of_drivers,
+    uint32_t                    number_of_devices
 )
 {
   void                *tmp;
-  unsigned32           index;
+  uint32_t             index;
   rtems_driver_name_t *np;
 
   if ( number_of_drivers < drivers_in_table )
@@ -211,8 +211,8 @@ rtems_status_code rtems_io_register_name(
   )
 {
     rtems_driver_name_t *np;
-    unsigned32 level;
-    unsigned32 index;
+    uint32_t   level;
+    uint32_t   index;
 
     /* find an empty slot */
     for( index=0, np = _IO_Driver_name_table ;

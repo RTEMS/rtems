@@ -45,8 +45,8 @@ extern "C" {
  *      defines the entry points for that device driver.
  */
  
-typedef unsigned32 rtems_device_major_number;
-typedef unsigned32 rtems_device_minor_number;
+typedef uint32_t   rtems_device_major_number;
+typedef uint32_t   rtems_device_minor_number;
  
 typedef rtems_status_code rtems_device_driver;
  
@@ -71,7 +71,7 @@ typedef struct {
 
 typedef struct {
     char                     *device_name;
-    unsigned32                device_name_length;
+    uint32_t                  device_name_length;
     rtems_device_major_number major;
     rtems_device_minor_number minor;
 } rtems_driver_name_t;
@@ -85,9 +85,9 @@ typedef struct {
  *  Address Table and Device Name Table.
  */
 
-SAPI_EXTERN unsigned32                  _IO_Number_of_drivers;
+SAPI_EXTERN uint32_t                    _IO_Number_of_drivers;
 SAPI_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
-SAPI_EXTERN unsigned32                  _IO_Number_of_devices;
+SAPI_EXTERN uint32_t                    _IO_Number_of_devices;
 SAPI_EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
 
 /*
@@ -100,9 +100,9 @@ SAPI_EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
 
 void _IO_Manager_initialization(
   rtems_driver_address_table *driver_table,
-  unsigned32                  drivers_in_table,
-  unsigned32                  number_of_drivers,
-  unsigned32                  number_of_devices
+  uint32_t                    drivers_in_table,
+  uint32_t                    number_of_drivers,
+  uint32_t                    number_of_devices
 );
 
 /*

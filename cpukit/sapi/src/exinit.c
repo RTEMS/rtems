@@ -318,7 +318,7 @@ void rtems_initialize_executive_late(
  */
 
 void rtems_shutdown_executive(
-   unsigned32 result
+   uint32_t   result
 )
 {
   if ( _System_state_Current != SYSTEM_STATE_SHUTDOWN ) {

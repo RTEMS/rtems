@@ -81,7 +81,7 @@ extern itron_api_configuration_table    Configuration_ITRON_API;
   (CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS + 1)
 
 #ifdef CONFIGURE_INIT
-unsigned32 rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
+uint32_t   rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
 #endif
 
 /*
