@@ -1,3 +1,19 @@
+2002-11-01	Eric Norum <eric.norum@usask.ca>
+    * cpukit/libnetworking/nfs/bootp_subr.c
+    * cpukit/libnetworking/rtems/rtems_bsdnet.h
+    * cpukit/libnetworking/rtems/rtems_glue.c
+      Till Straumann's patch to use bootp option 129 to get command line string.
+      Till Straumann's patch to change inet_ntoa->inet_ntop.
+
+2002-10-31	Eric Norum <eric.norum@usask.ca>
+    * cpukit/libcsupport/include/rtems/libio.h
+    * cpukit/libcsupport/include/rtems/libio_.h
+    * cpukit/score/include/rtems/score/thread.h
+    * cpukit/score/src/threadinitialize.c
+        Infrastructure changes to prepare for new BSD scheduling code.
+        New sleep/wakeup structure in task control block.
+        Added function pointer in libio structure.
+
 2002-10-30	Eric Norum <eric.norum@usask.ca>
     * cpukit/posix/src/psignal.c: Reflect changes to signal names in newlib
 

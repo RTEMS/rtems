@@ -894,6 +894,14 @@ processOptions (unsigned char *optbuf, int optbufSize)
 	  bootp_strdup_realloc(rtems_bsdnet_bootp_boot_file_name,p);
       break;
 
+	case 129:
+	  /* Site specific option; we use this to get 
+	   * a 'command line string'
+	   */
+	  if (p[0])
+	  	rtems_bsdnet_bootp_cmdline = strdup(p);
+	  break;
+
     default:
       printf ("Ignoring BOOTP/DHCP option code %d\n", code);
       break;
@@ -1058,6 +1066,8 @@ bootpc_init(int update_files)
     printf ("Server name is %s\n", rtems_bsdnet_bootp_server_name);
   if (rtems_bsdnet_bootp_boot_file_name)
     printf ("Boot file is %s\n", rtems_bsdnet_bootp_boot_file_name);
+  if (rtems_bsdnet_bootp_cmdline)
+    printf ("Command line is %s\n", rtems_bsdnet_bootp_cmdline);
 
   /*
    * Use defaults if values were not supplied by BOOTP/DHCP options
