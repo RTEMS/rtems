@@ -1,3 +1,21 @@
+2004-11-23	Joel Sherrill <joel@OARcorp.com>
+
+	* eth_comm/.cvsignore, eth_comm/ChangeLog, eth_comm/Makefile.am,
+	eth_comm/README, eth_comm/bsp_specs, eth_comm/configure.ac,
+	eth_comm/times, eth_comm/canbus/canbus.c, eth_comm/clock/p_clock.c,
+	eth_comm/console/console.c, eth_comm/include/.cvsignore,
+	eth_comm/include/8xx_immap.h, eth_comm/include/bsp.h,
+	eth_comm/include/canbus.h, eth_comm/include/commproc.h,
+	eth_comm/include/coverhd.h, eth_comm/include/info.h,
+	eth_comm/include/tm27.h, eth_comm/irq/irq.c, eth_comm/irq/irq.h,
+	eth_comm/irq/irq_asm.S, eth_comm/irq/irq_init.c,
+	eth_comm/network/README, eth_comm/network/network.c,
+	eth_comm/start/start.S, eth_comm/startup/bspstart.c,
+	eth_comm/startup/cpuinit.c, eth_comm/startup/linkcmds,
+	eth_comm/startup/mmutlbtab.c, eth_comm/vectors/vectors.S,
+	eth_comm/vectors/vectors.h, eth_comm/vectors/vectors_init.c,
+	eth_comm/wrapup/.cvsignore, eth_comm/wrapup/Makefile.am: Removed.
+
 2004-10-26	Eric Norum <norume@aps.anl.gov>
 
     Remove environ common area -- it breaks newlib
