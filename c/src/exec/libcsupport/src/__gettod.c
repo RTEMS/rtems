@@ -1,11 +1,5 @@
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
-#include <rtems.h>
-
-#if !defined(RTEMS_UNIX)
 /*
- *  RTEMS gettimeofday Implementation
- *
+ *  gettimeofday() - SVR4 and BSD4.3 extension required by Newlib
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -18,6 +12,11 @@
  *  $Id$
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+
+#include <rtems.h>
+
+#if !defined(RTEMS_UNIX)
 #ifdef RTEMS_NEWLIB
 #include <sys/reent.h>
 #endif
@@ -61,7 +60,7 @@ int gettimeofday(
    *
    *  NOTE: XXX this routine should really be in the executive proper.
    */
-  
+
   rtems_interrupt_disable(level);
     seconds      = _TOD_Seconds_since_epoch;
     microseconds = _TOD_Current.ticks;
@@ -86,7 +85,7 @@ int gettimeofday(
   return 0;
 }
 
-#if defined(RTEMS_NEWLIB) 
+#if defined(RTEMS_NEWLIB)
 
 /*
  *  "Reentrant" version
@@ -102,7 +101,7 @@ int _gettimeofday_r(
 }
 
 /*
- *  "System call" version 
+ *  "System call" version
  */
 
 int _gettimeofday(

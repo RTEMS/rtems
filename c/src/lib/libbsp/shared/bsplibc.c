@@ -22,7 +22,7 @@ void bsp_libc_init(
 
     /*
      *  Init the RTEMS libio facility to provide UNIX-like system
-     *  calls for use by newlib (ie: provide __rtems_open, __rtems_close, etc)
+     *  calls for use by newlib (ie: provide open, close, etc)
      *  Uses malloc() to get area for the iops, so must be after malloc init
      */
 

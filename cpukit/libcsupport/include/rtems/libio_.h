@@ -1,0 +1,248 @@
+/*
+ *  Libio Internal Information
+ *
+ *  COPYRIGHT (c) 1989-1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
+#ifndef __LIBIO__h
+#define __LIBIO__h
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <rtems.h>
+#include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
+#include <rtems/libio.h>
+
+#include <stdio.h>                      /* O_RDONLY, et.al. */
+#include <fcntl.h>                      /* O_RDONLY, et.al. */
+#include <assert.h>
+#include <stdarg.h>
+
+#if ! defined(O_NDELAY)
+# if defined(solaris2)
+#  define O_NDELAY O_NONBLOCK
+# elif defined(RTEMS_NEWLIB)
+#  define O_NDELAY _FNBIO
+# endif
+#endif
+
+#include <errno.h>
+#include <string.h>                     /* strcmp */
+#include <unistd.h>
+#include <stdlib.h>                     /* calloc() */
+
+#include "libio.h"                      /* libio.h not pulled in by rtems */
+
+
+/*
+ *  Semaphore to protect the io table
+ */
+
+#define RTEMS_LIBIO_SEM         rtems_build_name('L', 'B', 'I', 'O')
+#define RTEMS_LIBIO_IOP_SEM(n)  rtems_build_name('L', 'B', 'I', n)
+
+extern rtems_id        rtems_libio_semaphore;
+
+/*
+ *  File descriptor Table Information
+ */
+
+extern unsigned32      rtems_libio_number_iops;
+extern rtems_libio_t  *rtems_libio_iops;
+extern rtems_libio_t  *rtems_libio_last_iop;
+
+/*
+ *  External I/O Handlers Table
+ * 
+ *  Space for all possible handlers is preallocated
+ *  to speed up dispatch to external handlers.
+ */
+
+extern rtems_libio_handler_t   rtems_libio_handlers[15];
+
+/*
+ *  Default mode for all files.
+ */
+
+extern mode_t    rtems_filesystem_umask;
+
+/*
+ *  set_errno_and_return_minus_one
+ *
+ *  Macro to ease common way to return an error.
+ */
+
+#ifndef set_errno_and_return_minus_one
+#define set_errno_and_return_minus_one( _error ) \
+  do { errno = (_error); return -1; } while(0)
+#endif
+
+/*
+ *  rtems_libio_iop
+ *
+ *  Macro to return the file descriptor pointer.
+ */
+
+#define rtems_libio_iop(_fd) \
+  ((((unsigned32)(_fd)) < rtems_libio_number_iops) ? \
+         &rtems_libio_iops[_fd] : 0)
+
+/*
+ *  rtems_libio_check_fd
+ *
+ *  Macro to check if a file descriptor number is valid.
+ */
+
+#define rtems_libio_check_fd(_fd) \
+  do {                                                     \
+      if ((unsigned32) (_fd) >= rtems_libio_number_iops) { \
+          errno = EBADF;                                   \
+          return -1;                                       \
+      }                                                    \
+  } while (0)
+
+/*
+ *  rtems_libio_check_fd
+ *
+ *  Macro to check if a buffer pointer is valid.
+ */
+
+#define rtems_libio_check_buffer(_buffer) \
+  do {                                    \
+      if ((_buffer) == 0) {               \
+          errno = EINVAL;                 \
+          return -1;                      \
+      }                                   \
+  } while (0)
+
+/*
+ *  rtems_libio_check_count
+ *
+ *  Macro to check if a count or length is valid.
+ */
+
+#define rtems_libio_check_count(_count) \
+  do {                                  \
+      if ((_count) == 0) {              \
+          return 0;                     \
+      }                                 \
+  } while (0)
+
+/*
+ *  rtems_libio_check_permissions
+ *
+ *  Macro to check if a file descriptor is open for this operation.
+ */
+
+#define rtems_libio_check_permissions(_iop, _flag)    \
+  do {                                                \
+      if (((_iop)->flags & (_flag)) == 0) {           \
+            set_errno_and_return_minus_one( EINVAL ); \
+            return -1;                                \
+      }                                               \
+  } while (0)
+
+/*
+ *  rtems_filesystem_is_separator
+ *
+ *  Macro to determine if a character is a path name separator.
+ *
+ *  NOTE:  This macro handles MS-DOS and UNIX style names.
+ */
+
+#define rtems_filesystem_is_separator( _ch ) \
+   ( ((_ch) == '/') || ((_ch) == '\\') || ((_ch) == '\0'))
+
+/*
+ *  rtems_filesystem_get_start_loc
+ *
+ *  Macro to determine if path is absolute or relative.
+ */
+
+#define rtems_filesystem_get_start_loc( _path, _index, _loc )  \
+  do {                                                         \
+    if ( rtems_filesystem_is_separator( (_path)[ 0 ] ) ) {     \
+      *(_loc) = rtems_filesystem_root;                         \
+      *(_index) = 1;                                           \
+    } else {                                                   \
+      *(_loc) = rtems_filesystem_current;                      \
+      *(_index) = 0;                                           \
+    }                                                          \
+  } while (0)
+
+#define rtems_filesystem_get_sym_start_loc( _path, _index, _loc )  \
+  do {                                                         \
+    if ( rtems_filesystem_is_separator( (_path)[ 0 ] ) ) {     \
+      *(_loc) = rtems_filesystem_root;                         \
+      *(_index) = 1;                                           \
+    } else {                                                   \
+      *(_index) = 0;                                           \
+    }                                                          \
+  } while (0)
+
+
+/*
+ *  External structures
+ */
+
+extern rtems_filesystem_location_info_t rtems_filesystem_current;
+extern rtems_filesystem_location_info_t rtems_filesystem_root;
+extern nlink_t                          rtems_filesystem_link_counts;
+
+
+/*
+ *  File Descriptor Routine Prototypes
+ */
+
+rtems_libio_t *rtems_libio_allocate(void);
+
+unsigned32 rtems_libio_fcntl_flags(
+  unsigned32 fcntl_flags
+);
+
+void rtems_libio_free(
+  rtems_libio_t *iop
+);
+
+int rtems_libio_is_open_files_in_fs(
+  rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+int rtems_libio_is_file_open(
+  void  *node_access
+);
+
+/*
+ *  File System Routine Prototypes
+ */
+
+int rtems_filesystem_evaluate_path(
+  const char                        *pathname,
+  int                                flags,
+  rtems_filesystem_location_info_t  *pathloc,
+  int                                follow_link
+);
+
+void rtems_filesystem_initialize();
+
+int init_fs_mount_table();
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+/* end of include file */
+
+
+

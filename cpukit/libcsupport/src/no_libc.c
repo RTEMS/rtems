@@ -1,6 +1,4 @@
-
-/*  no_libc.h
- *
+/*
  *  This file contains stubs for the reentrancy hooks when
  *  an unknown C library is used.
  *
@@ -17,15 +15,15 @@
 
 
 #include <rtems.h>
-#if  !defined(RTEMS_NEWLIB) && !defined(RTEMS_UNIX)
+#if !defined(RTEMS_NEWLIB) && !defined(RTEMS_UNIX)
 
 #include "libcsupport.h"
-#include "internal.h"
 
 #include <stdlib.h>             /* for free() */
 
-void
-libc_init(int reentrant)
+void libc_init(
+  int reentrant
+)
 {
 }
 
@@ -34,11 +32,15 @@ void libc_suspend_main(void)
 }
 
 
-void libc_global_exit(rtems_unsigned32 code)
+void libc_global_exit(
+  rtems_unsigned32 code
+)
 {
 }
 
-void _exit(int status)
+void _exit(
+  int status
+)
 {
 }
 

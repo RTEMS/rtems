@@ -1,20 +1,13 @@
-
 /*
+ *  Implementation of hooks for the CYGNUS newlib libc
+ *  These hooks set things up so that:
+ *       + '_REENT' is switched at task switch time.
+ *
  *  COPYRIGHT (c) 1994 by Division Incorporated
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
- *
- *  Description:
- *      Implementation of hooks for the CYGNUS newlib libc
- *      These hooks set things up so that:
- *              '_REENT' is switched at task switch time.
- *
- *
- *  TODO:
- *
- *  NOTE:
  *
  *  $Id$
  *
@@ -47,7 +40,21 @@
 #include <stdio.h>
 #endif
 
-#include "internal.h"
+/*
+ *  Private routines
+ */
+
+void MY_task_set_note(
+  rtems_tcb        *tcb,
+  rtems_unsigned32 notepad,
+  rtems_unsigned32 note
+);
+
+rtems_unsigned32 MY_task_get_note(
+  rtems_tcb        *tcb,
+  rtems_unsigned32  notepad
+);
+
 
 #define LIBC_NOTEPAD RTEMS_NOTEPAD_LAST
 
@@ -304,7 +311,7 @@ libc_init(int reentrant)
         rc = rtems_extension_create(rtems_build_name('L', 'I', 'B', 'C'),
                               &libc_extension, &extension_id);
         if (rc != RTEMS_SUCCESSFUL)
-            rtems_fatal_error_occurred(rc);
+            rtems_fatal_error_occurred( rc );
 
         libc_reentrant = reentrant;
     }
@@ -353,11 +360,14 @@ int get_errno()
 
 /* #if !defined(RTEMS_UNIX) && !defined(__GO32__) && !defined(_AM29K) */
 #if !defined(RTEMS_UNIX) && !defined(_AM29K)
+#if !defined(pc386)
 void _exit(int status)
 {
     libc_wrapup(); /* Why? XXX */
     rtems_shutdown_executive(status);
 }
+#endif
+
 #else
 
 void exit(int status)
@@ -426,4 +436,46 @@ unsigned int sleep(
 #endif
 
 
+/*
+ *  Newlib Interface Support
+ *
+ *  Routines to Access Internal RTEMS Resources without violating
+ *  kernel visibility.
+ *
+ */
+
+void MY_task_set_note(
+  Thread_Control *the_thread,
+  unsigned32      notepad,
+  unsigned32      note
+)
+{
+  RTEMS_API_Control    *api;
+ 
+  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+
+  if ( api )
+    api->Notepads[ notepad ] = note;
+}
+
+
+unsigned32 MY_task_get_note(
+  Thread_Control *the_thread,
+  unsigned32      notepad
+)
+{
+  RTEMS_API_Control    *api;
+ 
+  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+
+  return api->Notepads[ notepad ];
+}
+
+void *MY_CPU_Context_FP_start(
+  void       *base,
+  unsigned32  offset
+)
+{
+  return _CPU_Context_Fp_start( base, offset );
+}
 #endif

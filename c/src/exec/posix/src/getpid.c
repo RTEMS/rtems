@@ -20,3 +20,22 @@ pid_t getpid( void )
 {
   return _Objects_Local_node;
 }
+
+/*
+ *  _getpid_r
+ *
+ *  This is the Newlib dependent reentrant version of getpid().
+ */
+
+#if defined(RTEMS_NEWLIB)
+
+#include <reent.h>
+
+pid_t _getpid_r(
+  struct _reent *ptr
+)
+{
+  return getpid();
+}
+#endif
+

@@ -135,7 +135,7 @@ void RTEMS_Malloc_Initialize(
 
 #ifdef MALLOC_STATS
   /* zero all the stats */
-  (void) memset(&rtems_malloc_stats, 0, sizeof(rtems_malloc_stats));
+  (void) memset( &rtems_malloc_stats, 0, sizeof(rtems_malloc_stats) );
 #endif
   
   MSBUMP(space_available, length);
@@ -220,9 +220,11 @@ void *malloc(
   {
       unsigned32 actual_size;
       unsigned32 current_depth;
-      status = rtems_region_get_segment_size(RTEMS_Malloc_Heap, return_this, &actual_size);
+      status = rtems_region_get_segment_size(
+                   RTEMS_Malloc_Heap, return_this, &actual_size);
       MSBUMP(lifetime_allocated, actual_size);
-      current_depth = rtems_malloc_stats.lifetime_allocated - rtems_malloc_stats.lifetime_freed;
+      current_depth = rtems_malloc_stats.lifetime_allocated -
+                   rtems_malloc_stats.lifetime_freed;
       if (current_depth > rtems_malloc_stats.max_depth)
           rtems_malloc_stats.max_depth = current_depth;
   }
@@ -335,10 +337,12 @@ void free(
 
 void malloc_dump(void)
 {
-    unsigned32 allocated = rtems_malloc_stats.lifetime_allocated - rtems_malloc_stats.lifetime_freed;
+    unsigned32 allocated = rtems_malloc_stats.lifetime_allocated -
+                     rtems_malloc_stats.lifetime_freed;
 
     printf("Malloc stats\n");
-    printf("  avail:%uk  allocated:%uk (%d%%) max:%uk (%d%%) lifetime:%Luk freed:%Luk\n",
+    printf("  avail:%uk  allocated:%uk (%d%%) "
+              "max:%uk (%d%%) lifetime:%Luk freed:%Luk\n",
            (unsigned int) rtems_malloc_stats.space_available / 1024,
            (unsigned int) allocated / 1024,
            /* avoid float! */

@@ -1,0 +1,84 @@
+/*
+ *  read() - POSIX 1003.1b 6.4.1 - Read From a File
+ *
+ *  COPYRIGHT (c) 1989-1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
+#include "libio_.h"
+
+/* XXX newlib has the prototype for this wrong.  It will be a bit painful */
+/* XXX to fix so we are choosing to delay fixing this. */
+
+int read(
+  int         fd,
+  void       *buffer,
+  unsigned32  count
+)
+{
+  int             rc;  /* XXX change to a size_t when prototype is fixed */
+  rtems_libio_t *iop;
+
+  /*
+   *  If this file descriptor is mapped to an external set of handlers,
+   *  then pass the request on to them.
+   */ 
+
+  if ( rtems_file_descriptor_type( fd ) ) {
+    rtems_libio_read_t fp;
+
+    fp = rtems_libio_handlers[rtems_file_descriptor_type_index(fd)].read;
+    if ( fp == NULL )
+      set_errno_and_return_minus_one( EBADF );
+
+    return (*fp)( fd, buffer, count );
+  }
+
+  /*
+   *  Now process the read().
+   */
+
+  iop = rtems_libio_iop( fd );
+  rtems_libio_check_fd( fd );
+  rtems_libio_check_buffer( buffer );
+  rtems_libio_check_count( count );
+  rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
+
+  if ( !iop->handlers->read )
+    set_errno_and_return_minus_one( ENOTSUP );
+
+  rc = (*iop->handlers->read)( iop, buffer, count );
+
+  if ( rc > 0 )
+    iop->offset += rc;
+
+  return rc;
+}
+
+/*
+ *  _read_r
+ *
+ *  This is the Newlib dependent reentrant version of read().
+ */
+
+#if defined(RTEMS_NEWLIB)
+
+#include <reent.h>
+
+_ssize_t _read_r(
+  struct _reent *ptr,
+  int            fd,
+  void          *buf,
+  size_t         nbytes
+)
+{
+  return read( fd, buf, nbytes );
+}
+#endif

@@ -1944,7 +1944,7 @@ echo "configure:1940: checking whether environment variable AR_FOR_TARGET is an 
     *)  # invalid for AC_PATH_PROG
       echo "$ac_t"""no"" 1>&6
       { echo "configure: error: ***
-        Environment variable AR_FOR_TARGET should ether
+        Environment variable AR_FOR_TARGET should either
 	be unset (preferred) or contain an absolute path" 1>&2; exit 1; }
     ;;
     esac
@@ -2027,7 +2027,7 @@ echo "configure:2023: checking whether environment variable AS_FOR_TARGET is an 
     *)  # invalid for AC_PATH_PROG
       echo "$ac_t"""no"" 1>&6
       { echo "configure: error: ***
-        Environment variable AS_FOR_TARGET should ether
+        Environment variable AS_FOR_TARGET should either
 	be unset (preferred) or contain an absolute path" 1>&2; exit 1; }
     ;;
     esac
@@ -2110,7 +2110,7 @@ echo "configure:2106: checking whether environment variable LD_FOR_TARGET is an 
     *)  # invalid for AC_PATH_PROG
       echo "$ac_t"""no"" 1>&6
       { echo "configure: error: ***
-        Environment variable LD_FOR_TARGET should ether
+        Environment variable LD_FOR_TARGET should either
 	be unset (preferred) or contain an absolute path" 1>&2; exit 1; }
     ;;
     esac
@@ -2193,7 +2193,7 @@ echo "configure:2189: checking whether environment variable NM_FOR_TARGET is an 
     *)  # invalid for AC_PATH_PROG
       echo "$ac_t"""no"" 1>&6
       { echo "configure: error: ***
-        Environment variable NM_FOR_TARGET should ether
+        Environment variable NM_FOR_TARGET should either
 	be unset (preferred) or contain an absolute path" 1>&2; exit 1; }
     ;;
     esac
@@ -2277,7 +2277,7 @@ echo "configure:2273: checking whether environment variable RANLIB_FOR_TARGET is
     *)  # invalid for AC_PATH_PROG
       echo "$ac_t"""no"" 1>&6
       { echo "configure: error: ***
-        Environment variable RANLIB_FOR_TARGET should ether
+        Environment variable RANLIB_FOR_TARGET should either
 	be unset (preferred) or contain an absolute path" 1>&2; exit 1; }
     ;;
     esac
@@ -2350,7 +2350,7 @@ echo "$ac_t""$rtems_cv_AR_FOR_TARGET_S" 1>&6
     else
       { echo "configure: error: ***
         Can't figure out how to build a library index
-	Nether ranlib nor ar -s seem to be available " 1>&2; exit 1; }
+	Neither ranlib nor ar -s seem to be available " 1>&2; exit 1; }
     fi
   fi
 
@@ -2397,7 +2397,7 @@ echo "configure:2393: checking whether environment variable OBJCOPY_FOR_TARGET i
     *)  # invalid for AC_PATH_PROG
       echo "$ac_t"""no"" 1>&6
       { echo "configure: error: ***
-        Environment variable OBJCOPY_FOR_TARGET should ether
+        Environment variable OBJCOPY_FOR_TARGET should either
 	be unset (preferred) or contain an absolute path" 1>&2; exit 1; }
     ;;
     esac
@@ -2480,7 +2480,7 @@ echo "configure:2476: checking whether environment variable SIZE_FOR_TARGET is a
     *)  # invalid for AC_PATH_PROG
       echo "$ac_t"""no"" 1>&6
       { echo "configure: error: ***
-        Environment variable SIZE_FOR_TARGET should ether
+        Environment variable SIZE_FOR_TARGET should either
 	be unset (preferred) or contain an absolute path" 1>&2; exit 1; }
     ;;
     esac
@@ -2563,7 +2563,7 @@ echo "configure:2559: checking whether environment variable STRIP_FOR_TARGET is 
     *)  # invalid for AC_PATH_PROG
       echo "$ac_t"""no"" 1>&6
       { echo "configure: error: ***
-        Environment variable STRIP_FOR_TARGET should ether
+        Environment variable STRIP_FOR_TARGET should either
 	be unset (preferred) or contain an absolute path" 1>&2; exit 1; }
     ;;
     esac

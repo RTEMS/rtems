@@ -424,6 +424,7 @@ NS16550_STATIC int ns16550_set_attributes(
 
   rtems_interrupt_enable(Irql);
 
+  return 0;
 }
 
 /*

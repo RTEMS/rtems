@@ -1,9 +1,15 @@
 /*
- *  This file contains the RTEMS implementation of the POSIX API
- *  routines tcdrain.
+ *  tcdrain() - POSIX 1003.1b 7.2.2 - Line Control Functions
+ *
+ *  COPYRIGHT (c) 1989-1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
- *
  */
 
 #include <rtems.h>
@@ -13,14 +19,15 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <termios.h>
+#include <sys/ioctl.h>
 
-#include "internal.h"
 #include "libio.h"
 
-int
-tcdrain(int fd)
+int tcdrain(
+  int fd
+)
 {
-	return __rtems_ioctl(fd,RTEMS_IO_TCDRAIN,0);
+  return ioctl( fd, RTEMS_IO_TCDRAIN, 0 );
 }
 
 #endif

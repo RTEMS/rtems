@@ -30,8 +30,10 @@
 #include <rtems/rtems/intr.h>
 #include <rtems/io.h>
 #include <rtems/rtems/message.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #include <rtems/score/mpci.h>
+#endif
 #include <rtems/rtems/part.h>
 #include <rtems/score/priority.h>
 #include <rtems/rtems/ratemon.h>
@@ -105,12 +107,22 @@
 #define MPCI_RECEIVE_SERVER_STACK_SIZE 0
 #endif
 
+#if defined(RTEMS_MULTIPROCESSING)
+#define MP_SYSTEM_TASKS \
+   (MPCI_RECEIVE_SERVER_STACK_SIZE + \
+    sizeof(Thread_Control) + \
+    MPCI_RECEIVE_SERVER_FP)
+#else
+#define MP_SYSTEM_TASKS 0
+#endif
+
+/*
+ *  Idle and the MPCI Receive Server Threads
+ */
+
 #define SYSTEM_TASKS  \
-    (STACK_MINIMUM_SIZE + \
-     MPCI_RECEIVE_SERVER_STACK_SIZE + \
-     (2*sizeof(Thread_Control))) + \
-     MPCI_RECEIVE_SERVER_FP + \
-     SYSTEM_IDLE_FP
+    (STACK_MINIMUM_SIZE + sizeof(Thread_Control) + SYSTEM_IDLE_FP + \
+     MP_SYSTEM_TASKS)
 
 #define rtems_unsigned32 unsigned32
 

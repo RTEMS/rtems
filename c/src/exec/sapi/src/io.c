@@ -92,6 +92,7 @@ void _IO_Initialize_all_drivers( void )
  *    error code       - if unsuccessful
  */
 
+#if 0
 rtems_status_code rtems_io_register_name(
     char *device_name,
     rtems_device_major_number major,
@@ -124,6 +125,7 @@ rtems_status_code rtems_io_register_name(
 
     return RTEMS_TOO_MANY;
 }
+#endif
 
 /*PAGE
  *
@@ -140,6 +142,7 @@ rtems_status_code rtems_io_register_name(
  *    error code       - if unsuccessful
  */
 
+#if 0
 rtems_status_code rtems_io_lookup_name(
     const char           *name,
     rtems_driver_name_t **device_info
@@ -161,6 +164,7 @@ rtems_status_code rtems_io_lookup_name(
     *device_info = 0;
     return RTEMS_UNSATISFIED;
 }
+#endif
 
 
 /*PAGE

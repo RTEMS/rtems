@@ -11,33 +11,58 @@ PROJECT_ROOT = @PROJECT_ROOT@
 LIBNAME=libcsupport.a
 LIB=${ARCH}/${LIBNAME}
 
-# define TARGET_PIECES later based on RTEMS_CPU definition
+BASE_FS_PIECES=base_fs mount unmount ioman \
+  libio eval
+
+IMFS_PIECES= imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
+    imfs_gtkn imfs_init imfs_link imfs_mknod imfs_mount imfs_fchmod \
+    imfs_rmnod imfs_unlink imfs_unmount imfs_utime imfs_ntype imfs_stat \
+    imfs_getchild memfile deviceio imfs_handlers imfs_debug imfs_symlink \
+    imfs_readlink
+
+TERMIOS_PIECES= cfgetispeed cfgetospeed cfsetispeed cfsetospeed \
+  tcgetattr tcsetattr tcdrain termios 
+
+SYSTEM_CALL_PIECES=\
+  open close read write lseek ioctl \
+  mkdir mknod mkfifo rmdir chdir \
+  chmod fchmod chown \
+  link unlink umask ftruncate utime \
+  fstat fcntl fpathconf getdents \
+  fsync fdatasync pipe dup dup2  \
+  symlink readlink
+
+DIRECTORY_SCAN_PIECES=\
+  opendir closedir readdir rewinddir scandir seekdir telldir
+
+LIBC_GLUE_PIECES=\
+  malloc __brk __sbrk \
+  __gettod __times \
+  truncate access stat pathconf \
+  newlibc no_libc unixlibc hosterr
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES=__times _execve malloc syscalls \
-    no_libc support libio hosterr tcattr tcdrain \
-    cfiospeed termios $(TARGET_PIECES)
+C_PIECES=\
+    $(LIBC_GLUE_PIECES) \
+    $(TERMIOS_PIECES) \
+    $(SYSTEM_CALL_PIECES) \
+    $(DIRECTORY_SCAN_PIECES) \
+    $(BASE_FS_PIECES) \
+    $(IMFS_PIECES)
+
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES=$(srcdir)/libcsupport.h
 SYS_H_FILES=
 RTEMS_H_FILES=$(srcdir)/libio.h
-PRIVATE_H_FILES=$(srcdir)/internal.h
 
 INSTALLED_H_FILES=$(srcdir)/libio.h $(srcdir)/libcsupport.h
-SRCS=$(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES) $(PRIVATE_H_FILES)
+SRCS=$(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES)
 OBJS=$(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/lib.cfg
-
-ifeq ($(RTEMS_CPU),unix)
-TARGET_PIECES=unixlibc
-else
-TARGET_PIECES=__brk __gettod newlibc newlibif newlibifr \
-  getdents readdir opendir closedir rewinddir scandir seekdir telldir
-endif
 
 #
 # Add local stuff here using +=

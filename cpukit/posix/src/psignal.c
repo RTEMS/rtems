@@ -1222,6 +1222,26 @@ int kill(
 }
 
 /*
+ *  _kill_r
+ *
+ *  This is the Newlib dependent reentrant version of kill().
+ */
+
+#if defined(RTEMS_NEWLIB)
+
+#include <reent.h>
+
+int _kill_r(
+  struct _reent *ptr,
+  pid_t          pid,
+  int            sig
+)
+{
+  return kill( pid, sig );
+}
+#endif
+
+/*
  *  3.3.9 Queue a Signal to a Process, P1003.1b-1993, p. 78
  */
 
