@@ -1,5 +1,10 @@
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Remove include_rtems_score_HEADERS.
+	Reformat for preinstallation dirstamp support.
+
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Remove all-local: $(ARCH).
 
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
