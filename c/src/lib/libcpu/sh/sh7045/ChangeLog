@@ -1,4 +1,13 @@
-2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in subdir Makefile.ams
+	* configure.ac: Reflect changes above.
+	* score/Makefile.am: Removed.
+	* sci/Makefile.am: Removed.
+	* timer/Makefile.am: Removed.
+	* clock/Makefile.am: Removed.
+
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* sci/Makefile.am: Apply 2002-12-14 patch (Apparently dropped by CVS).
 	* score/Makefile.am: Likewise.
