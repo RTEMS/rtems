@@ -52,7 +52,8 @@ EXTRA_DIST += cpuuse/README cpuuse/cpuuse.c
 ## devnull
 
 libdevnull_C_FILES = devnull/devnull.c
-libdevnull_OBJS = $(libdevnull_C_FILES:devnull/%.c=devnull/$(ARCH)/%.$(OBJEXT))
+libdevnull_OBJS = \
+    $(libdevnull_C_FILES:devnull/%.c=devnull/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += devnull/devnull.h
 
@@ -86,7 +87,8 @@ EXTRA_DIST += dummy/README dummy/dummy.c
 ## dumpbuf
 
 libdumpbuf_C_FILES = dumpbuf/dumpbuf.c
-libdumpbuf_OBJS = $(libdumpbuf_C_FILES:dumpbuf/%.c=dumpbuf/$(ARCH)/%.$(OBJEXT))
+libdumpbuf_OBJS = \
+    $(libdumpbuf_C_FILES:dumpbuf/%.c=dumpbuf/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += dumpbuf/dumpbuf.h
 
@@ -106,13 +108,17 @@ EXTRA_DIST += dumpbuf/dumpbuf.c
 # We only build multiprocessing related files if HAS_MP was defined
 libmonitor_MP_C_FILES = monitor/mon-mpci.c
 
-libmonitor_C_FILES = monitor/mon-command.c monitor/mon-symbols.c monitor/mon-prmisc.c monitor/mon-monitor.c \
-    monitor/mon-object.c monitor/mon-server.c monitor/mon-task.c monitor/mon-queue.c monitor/mon-driver.c \
-    monitor/mon-dname.c monitor/mon-itask.c monitor/mon-extension.c monitor/mon-manager.c monitor/mon-config.c
+libmonitor_C_FILES = monitor/mon-command.c monitor/mon-symbols.c \
+    monitor/mon-prmisc.c monitor/mon-monitor.c monitor/mon-object.c \
+    monitor/mon-server.c monitor/mon-task.c monitor/mon-queue.c \
+    monitor/mon-driver.c monitor/mon-dname.c monitor/mon-itask.c \
+    monitor/mon-extension.c monitor/mon-manager.c monitor/mon-config.c
 
-libmonitor_OBJS = $(libmonitor_C_FILES:monitor/%.c=monitor/$(ARCH)/%.$(OBJEXT))
+libmonitor_OBJS = \
+    $(libmonitor_C_FILES:monitor/%.c=monitor/$(ARCH)/%.$(OBJEXT))
 if HAS_MP
-libmonitor_OBJS += $(libmonitor_MP_C_FILES:monitor/%.c=monitor/$(ARCH)/%.$(OBJEXT))
+libmonitor_OBJS += \
+    $(libmonitor_MP_C_FILES:monitor/%.c=monitor/$(ARCH)/%.$(OBJEXT))
 endif
 
 include_rtems_HEADERS += monitor/monitor.h
@@ -128,9 +134,11 @@ monitor/$(ARCH)/libmonitor.a: $(libmonitor_OBJS)
 
 LIBS += monitor/$(ARCH) monitor/$(ARCH)/libmonitor.a
 
-EXTRA_DIST += monitor/README monitor/mon-command.c monitor/mon-config.c monitor/mon-dname.c monitor/mon-driver.c \
-    monitor/mon-extension.c monitor/mon-itask.c monitor/mon-manager.c monitor/mon-monitor.c monitor/mon-mpci.c \
-    monitor/mon-object.c monitor/mon-prmisc.c monitor/mon-queue.c monitor/mon-server.c monitor/mon-symbols.c \
+EXTRA_DIST += monitor/README monitor/mon-command.c monitor/mon-config.c \
+    monitor/mon-dname.c monitor/mon-driver.c monitor/mon-extension.c \
+    monitor/mon-itask.c monitor/mon-manager.c monitor/mon-monitor.c \
+    monitor/mon-mpci.c monitor/mon-object.c monitor/mon-prmisc.c \
+    monitor/mon-queue.c monitor/mon-server.c monitor/mon-symbols.c \
     monitor/mon-task.c
 
 ## mw-fb
@@ -176,7 +184,8 @@ EXTRA_DIST += shell/README shell/shell.c shell/cmds.c
 ## rtmonuse
 
 librtmonuse_C_FILES = rtmonuse/rtmonuse.c
-librtmonuse_OBJS = $(librtmonuse_C_FILES:rtmonuse/%.c=rtmonuse/$(ARCH)/%.$(OBJEXT))
+librtmonuse_OBJS = \
+    $(librtmonuse_C_FILES:rtmonuse/%.c=rtmonuse/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += rtmonuse/rtmonuse.h
 
@@ -193,12 +202,13 @@ EXTRA_DIST += rtmonuse/rtmonuse.c
 
 ## serdbg
 
-libserdbg_C_FILES = serdbg/serdbg.c serdbg/serdbgio.c serdbg/termios_printk.c
+libserdbg_C_FILES = serdbg/serdbg.c serdbg/serdbgio.c \
+    serdbg/termios_printk.c
 libserdbg_OBJS = $(libserdbg_C_FILES:serdbg/%.c=serdbg/$(ARCH)/%.$(OBJEXT))
 
 if LIBSERDBG
-include_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h serdbg/termios_printk_cnf.h \
-                  serdbg/termios_printk.h
+include_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h \
+    serdbg/termios_printk_cnf.h serdbg/termios_printk.h
 endif
 
 serdbg/$(ARCH):
@@ -212,13 +222,15 @@ if LIBSERDBG
 LIBS += serdbg/$(ARCH) serdbg/$(ARCH)/libserdbg.a
 endif
 
-EXTRA_DIST += serdbg/README serdbg/serdbg.c serdbg/serdbgio.c serdbg/serdbgcnf.h serdbg/serdbg.h \
-             serdbg/termios_printk.c serdbg/termios_printk.h serdbg/termios_printk_cnf.h
+EXTRA_DIST += serdbg/README serdbg/serdbg.c serdbg/serdbgio.c \
+    serdbg/serdbgcnf.h serdbg/serdbg.h serdbg/termios_printk.c \
+    serdbg/termios_printk.h serdbg/termios_printk_cnf.h
 
 ## stackchk
 
 libstackchk_C_FILES = stackchk/check.c
-libstackchk_OBJS = $(libstackchk_C_FILES:stackchk/%.c=stackchk/$(ARCH)/%.$(OBJEXT))
+libstackchk_OBJS = \
+    $(libstackchk_C_FILES:stackchk/%.c=stackchk/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += stackchk/stackchk.h
 
@@ -256,7 +268,8 @@ EXTRA_DIST += untar/README untar/untar.c
 ## fsmount
 
 libfsmount_C_FILES = fsmount/fsmount.c
-libfsmount_OBJS = $(libfsmount_C_FILES:fsmount/%.c=fsmount/$(ARCH)/%.$(OBJEXT))
+libfsmount_OBJS = \
+    $(libfsmount_C_FILES:fsmount/%.c=fsmount/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += fsmount/fsmount.h
 
@@ -277,5 +290,83 @@ all-local: $(LIBS)
 .PRECIOUS: $(LIBS)
 
 CLEANDIRS = */$(ARCH)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/rtems:
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems
+
+$(PROJECT_INCLUDE)/rtems/capture.h: capture/capture.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/capture.h
+
+$(PROJECT_INCLUDE)/rtems/capture-cli.h: capture/capture-cli.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/capture-cli.h
+
+$(PROJECT_INCLUDE)/rtems/cpuuse.h: cpuuse/cpuuse.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cpuuse.h
+
+$(PROJECT_INCLUDE)/rtems/devnull.h: devnull/devnull.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/devnull.h
+
+$(PROJECT_INCLUDE)/rtems/dumpbuf.h: dumpbuf/dumpbuf.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dumpbuf.h
+
+$(PROJECT_INCLUDE)/rtems/monitor.h: monitor/monitor.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/monitor.h
+
+$(PROJECT_INCLUDE)/rtems/mw_fb.h: mw-fb/mw_fb.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mw_fb.h
+
+$(PROJECT_INCLUDE)/rtems/mw_uid.h: mw-fb/mw_uid.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mw_uid.h
+
+if LIBSHELL
+$(PROJECT_INCLUDE)/rtems/shell.h: shell/shell.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/shell.h
+endif
+
+$(PROJECT_INCLUDE)/rtems/rtmonuse.h: rtmonuse/rtmonuse.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtmonuse.h
+
+if LIBSERDBG
+$(PROJECT_INCLUDE)/serdbgcnf.h: serdbg/serdbgcnf.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/serdbgcnf.h
+
+$(PROJECT_INCLUDE)/serdbg.h: serdbg/serdbg.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/serdbg.h
+
+$(PROJECT_INCLUDE)/termios_printk_cnf.h: serdbg/termios_printk_cnf.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/termios_printk_cnf.h
+
+$(PROJECT_INCLUDE)/termios_printk.h: serdbg/termios_printk.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/termios_printk.h
+endif
+
+$(PROJECT_INCLUDE)/rtems/stackchk.h: stackchk/stackchk.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stackchk.h
+
+$(PROJECT_INCLUDE)/rtems/untar.h: untar/untar.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/untar.h
+
+$(PROJECT_INCLUDE)/rtems/fsmount.h: fsmount/fsmount.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fsmount.h
 
 include $(top_srcdir)/automake/local.am
