@@ -1,3 +1,9 @@
+2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Reformat.
+	Add autom4te*cache.
+	Remove autom4te.cache.
+
 2002-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems.adb (IO_Initialize): Make this match the C prototype.

@@ -1,3 +1,9 @@
+2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Reformat.
+	Add autom4te*cache.
+	Remove autom4te.cache.
+
 2002-09-14	Ivan Guzvinec <ivang@opencores.org>
 
 	* rtems/score/cpu.h (_CPU_Initialize_vectors) Define to NULL
