@@ -580,12 +580,6 @@ SCORE_EXTERN struct {
 #define CPU_STACK_ALIGNMENT        (PPC_STACK_ALIGNMENT)
 
 /*
- * Needed for Interrupt stack
- */
-#define CPU_MINIMUM_STACK_FRAME_SIZE 8
-
-
-/*
  *  ISR handler macros
  */
 
