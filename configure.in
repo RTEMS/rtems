@@ -311,7 +311,7 @@ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
 fi
 
 # If the tests are enabled, then find all the test suite Makefiles
-AC_MSG_CHECKING([Are the test suites enabled? ])
+AC_MSG_CHECKING([if the test suites are enabled? ])
 tests_enabled=yes
 AC_ARG_ENABLE(tests, \
 [  --enable-tests 	     	    enable tests], \
@@ -336,7 +336,7 @@ if test "$tests_enabled" = "yes"; then
 fi 
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
-AC_MSG_CHECKING([Is the HWAPI enabled? ])
+AC_MSG_CHECKING([if the HWAPI is enabled? ])
 AC_ARG_ENABLE(hwapi, \
 [  --enable-hwapi                 enable hardware API library], \
   [case "${enableval}" in

@@ -2465,8 +2465,8 @@ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
 fi
 
 # If the tests are enabled, then find all the test suite Makefiles
-echo $ac_n "checking Are the test suites enabled? ""... $ac_c" 1>&6
-echo "configure:2470: checking Are the test suites enabled? " >&5
+echo $ac_n "checking if the test suites are enabled? ""... $ac_c" 1>&6
+echo "configure:2470: checking if the test suites are enabled? " >&5
 tests_enabled=yes
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
@@ -2580,8 +2580,8 @@ fi
 fi 
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
-echo $ac_n "checking Is the HWAPI enabled? ""... $ac_c" 1>&6
-echo "configure:2585: checking Is the HWAPI enabled? " >&5
+echo $ac_n "checking if the HWAPI is enabled? ""... $ac_c" 1>&6
+echo "configure:2585: checking if the HWAPI is enabled? " >&5
 # Check whether --enable-hwapi or --disable-hwapi was given.
 if test "${enable_hwapi+set}" = set; then
   enableval="$enable_hwapi"
