@@ -87,7 +87,20 @@ The cfg_mount() function is not supported by this implementation.
 
 @subheading DESCRIPTION:
 The @code{cfg_mount} function maps a configuration space defined
-by the file identified by the the @code{file} argument. 
+by the file identified by the the @code{file} argument.  The 
+distinguished node of the mapped configuration space shall be
+mounted in the active space at the point identified bt the
+@code{cfgpath} configuration pathname.
+
+The @code{notification} argument specifies how changes to the
+mapped configuration space shall be communicated to the application.
+If the @code{notification} argument is NULL, no notification shall
+be performed for the mapped configuration space.  If the Event
+Logging option is defined, the notification argument defines the
+facility to which changes in the mapped configuration space shall
+be logged.  Otherwise, the @code{notification} argument shall
+specify an implementation defined method of notifying the application
+of changes to the mapped configuration space.
 
 @subheading NOTES:
 
@@ -142,7 +155,8 @@ resolution of the cfgpath argument
 
 The @code{cfg_umount} function unmaps the configuration space whose 
 distinguished node is mapped in the active space at the location defined
-by @code{cfgpatah} configuration pathname.
+by @code{cfgpatah} configuration pathname.  All system resources 
+allocated for this configuration space should be deallocated.
 
 @subheading NOTES:
 
@@ -202,7 +216,11 @@ The named node resides on a read-only configuration space.
 @subheading DESCRIPTION:
 
 The @code{cfg_mknod} function creates a new node in the configuration
-space which contains the pathname prefix of @cod{cfgpath}.
+space which contains the pathname prefix of @cod{cfgpath}.  T he node
+name shall be defined by the pathname suffix of @code{cfgpath}.  The
+node name shall be defined by the pathname suffix of @code{cfgpath}. 
+The node permissions shall be specified by the value of @code{mode}.
+The node type shall be specified by the value of @code{type}.
 
 @subheading NOTES:
 
@@ -251,7 +269,7 @@ resolution of the cfgpath argument.
 
 The @code{cfg_get} function stores the value attribute of the
 configuration node identified by @code{cfgpath}, into the buffer
-described by the value pointer.
+described by the @code{value} pointer.
 
 @subheading NOTES:
 
@@ -300,7 +318,7 @@ resolution of the cfgpath argument.
 
 The @code{cfg_set} function stores the value specified by the
 @code{value} argument in the configuration node defined by the 
-@code{cfgpath} argument
+@code{cfgpath} argument.
 
 @subheading NOTES:
 
@@ -368,10 +386,17 @@ resolution of the cfgpath argument.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_link} function shall atomically create a link between 
-specified nodes, and increment by one the link count of the node
-specified by the @code{src} argument.  The @code{src} and @code{dest}
-arguments point to pathnnames which name existing nodes.
+The @code{src} and @code{dest}arguments point to pathnnames which 
+name existing nodes.  The @code{cfg_link} function shall atomically 
+create a link between specified nodes, and increment by one the link 
+count of the node specified by the @code{src} argument. 
+
+If the @code{cfg_lin} function fails, no link shall be created, and
+the link count of the node shall remain unchanged by this function
+call.
+
+This implementation may require that the calling process has permission 
+to access the specified nodes.
 
 @subheading NOTES:
 
@@ -437,6 +462,9 @@ specified by the @code{cfgpath} path prefix and the parent node
 specified by @code{cfgpaht}, and shall decrement the link count 
 of the @code{cfgpath} node.
 
+When the link count of the node becomes zero, the space occupied
+by the node shall be freed and the node shall no longer be accessible.
+
 @subheading NOTES:
 
 @page
@@ -493,6 +521,38 @@ the substituted pathname string exceeded {PATH_MAX}.
 
 The @code{cfg_open} function shall open a configuration traversal stream
 rooted in the configuration nodes name by the @code{pathnames} argument.
+It shall store a pointer to a CFG object that represents that stream at 
+the location identified the @code{cfgstream} pointer.  The @code{pathnames}
+argument is an array of character pointers to NULL-terminated strings. 
+The last member of this array shall be a NULL pointer.
+
+The value of @code{options} is the bitwise inclusive OR of values from the 
+following lists.  Applications shall supply exactly one of the first two 
+values below in @code{options}.
+   CFG_LOGICAL
+   CFG_PHYSICAL
+
+Any combination of the remaining flags can be specified in the value of 
+@code{options}
+   CFG_COMFOLLOW
+   CFG_XDEV
+
+The @code{cfg_open} argument @code{compar} shall either be NULL or point
+to a function that shall be called with two pointers to pointers to CFGENT 
+structures that shall return less than, equal to , or greater than zero if 
+the node referenced by the first argument is considered to be respectively
+less than, equal to, or greater than the node referenced by the second.
+The CFGENT structure fields provided to the comparison routine shall be as 
+described with the exception that the contents of the @code{cfg_path} and
+@code{cfg_pathlen} fields are unspecified.
+
+This comparison routine is used to determine the order in which nodes in
+directories encountered during the traversal are returned, and the order
+of traversal when more than one node is specified in the @code{pathnames}
+argument to @code{cfg_open}.  If a comparison routine is specified, the
+order of traversal shall be from the least to the greatest.  If the 
+@code{compar} argument is NULL, the order of traversal shall be as listed
+in the @code{pathnames} argument. 
 
 @subheading NOTES:
 
@@ -541,6 +601,14 @@ substituted pathname string exceeded {PATH_MATH}.
 @end table
 
 @subheading DESCRIPTION:
+
+The @code{cfg_read} function returns a pointer to a CFGENT sturcture
+representing a node in the configuration space to which @code{cfgp}
+refers.  The returned pointer shall be stored at the location 
+indicated by the @code{node} argument.
+
+The child nodes of each node in the configuration tree is returned
+by @code{cfg_read}.
 
 @subheading NOTES:
 
