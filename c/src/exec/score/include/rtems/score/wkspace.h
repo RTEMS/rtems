@@ -33,6 +33,19 @@ extern "C" {
 EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
 
 /*
+ *  _Workspace_Handler_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this handler.
+ */
+ 
+void _Workspace_Handler_initialization(
+  void       *starting_address,
+  unsigned32  size
+);
+
+/*
  *  _Workspace_Allocate_or_fatal_error
  *
  *  DESCRIPTION:
