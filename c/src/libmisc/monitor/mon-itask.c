@@ -1,8 +1,8 @@
 /*
- *	@(#)itask.c	1.4 - 95/08/02
+ *	@(#)itask.c	1.6 - 96/01/03
  *	
  *
- * RTEMS Monitor init task support
+ *  RTEMS Monitor init task support
  *
  *  $Id$
  */

@@ -1,8 +1,8 @@
 /*
- *      @(#)monitor.h	1.20 - 95/12/12
+ *      @(#)monitor.h	1.21 - 96/01/03
  *      
  *
- *  $Id$
+ *  monitor.h,v 1.3 1995/09/29 17:19:02 joel Exp
  */
 
 /*
@@ -29,21 +29,25 @@ extern "C" {
  */
 
 typedef enum {
-    RTEMS_OBJECT_INVALID   =  0,
-    RTEMS_OBJECT_TASK      =  1,
-    RTEMS_OBJECT_EXTENSION =  2,
-    RTEMS_OBJECT_QUEUE     =  3,
-    RTEMS_OBJECT_SEMAPHORE =  4,
-    RTEMS_OBJECT_DRIVER    =  5,
-    RTEMS_OBJECT_DNAME     =  6,
-    RTEMS_OBJECT_CONFIG    =  7,
-    RTEMS_OBJECT_INIT_TASK =  8,
-    RTEMS_OBJECT_MPCI      =  9,
-    RTEMS_OBJECT_PARTITION = 10,
-    RTEMS_OBJECT_REGION    = 11,
-    RTEMS_OBJECT_PORT      = 12,
-    RTEMS_OBJECT_SYMBOL    = 13,
-} rtems_object_type_t;
+    RTEMS_MONITOR_OBJECT_INVALID   =  OBJECTS_NO_CLASS,
+    RTEMS_MONITOR_OBJECT_TASK      =  OBJECTS_RTEMS_TASKS,
+    RTEMS_MONITOR_OBJECT_EXTENSION =  OBJECTS_RTEMS_EXTENSIONS,
+    RTEMS_MONITOR_OBJECT_QUEUE     =  OBJECTS_RTEMS_MESSAGE_QUEUES,
+    RTEMS_MONITOR_OBJECT_SEMAPHORE =  OBJECTS_RTEMS_SEMAPHORES,
+    RTEMS_MONITOR_OBJECT_PARTITION =  OBJECTS_RTEMS_PARTITIONS,
+    RTEMS_MONITOR_OBJECT_REGION    =  OBJECTS_RTEMS_REGIONS,
+    RTEMS_MONITOR_OBJECT_PORT      =  OBJECTS_RTEMS_PORTS,
+
+    /* following monitor objects are not known to RTEMS, but
+     * we like to have "types" for them anyway */
+    
+    RTEMS_MONITOR_OBJECT_DRIVER    =  OBJECTS_CLASSES_LAST+1,
+    RTEMS_MONITOR_OBJECT_DNAME,
+    RTEMS_MONITOR_OBJECT_CONFIG,
+    RTEMS_MONITOR_OBJECT_INIT_TASK,
+    RTEMS_MONITOR_OBJECT_MPCI,
+    RTEMS_MONITOR_OBJECT_SYMBOL,
+} rtems_monitor_object_type_t;
 
 /*
  * rtems_monitor_init() flags
@@ -302,7 +306,7 @@ typedef void (*rtems_monitor_object_dump_header_fn)(boolean);
 typedef void (*rtems_monitor_object_dump_fn)(void *, boolean);
 
 typedef struct {
-    rtems_object_type_t                 type;
+    rtems_monitor_object_type_t                 type;
     void                               *object_information;
     int                                 size;	/* of canonical object */
     rtems_monitor_object_next_fn        next;
@@ -354,8 +358,8 @@ unsigned32 rtems_monitor_dump_events(rtems_event_set events);
 unsigned32 rtems_monitor_dump_notepad(unsigned32 *notepad);
 
 /* object.c */
-rtems_id   rtems_monitor_id_fixup(rtems_id, unsigned32, rtems_object_type_t);
-rtems_id   rtems_monitor_object_canonical_get(rtems_object_type_t, rtems_id, void *, unsigned32 *size_p);
+rtems_id   rtems_monitor_id_fixup(rtems_id, unsigned32, rtems_monitor_object_type_t);
+rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems_id, void *, unsigned32 *size_p);
 rtems_id   rtems_monitor_object_canonical_next(rtems_monitor_object_info_t *, rtems_id, void *);
 void      *rtems_monitor_object_next(void *, void *, rtems_id, rtems_id *);
 rtems_id   rtems_monitor_object_canonical(rtems_id, void *);

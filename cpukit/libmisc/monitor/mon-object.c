@@ -1,5 +1,5 @@
 /*
- *	@(#)object.c	1.7 - 95/08/02
+ *	@(#)object.c	1.9 - 96/01/03
  *	
  *
  * RTEMS Monitor "object" support.
@@ -35,7 +35,7 @@
 
 rtems_monitor_object_info_t rtems_monitor_object_info[] =
 {
-    { RTEMS_OBJECT_CONFIG,
+    { RTEMS_MONITOR_OBJECT_CONFIG,
       (void *) 0,
       sizeof(rtems_monitor_config_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_config_next,
@@ -43,7 +43,7 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_header_fn) rtems_monitor_config_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_config_dump,
     },
-    { RTEMS_OBJECT_MPCI,
+    { RTEMS_MONITOR_OBJECT_MPCI,
       (void *) 0,
       sizeof(rtems_monitor_mpci_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_mpci_next,
@@ -51,7 +51,7 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_header_fn) rtems_monitor_mpci_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_mpci_dump,
     },
-    { RTEMS_OBJECT_INIT_TASK,
+    { RTEMS_MONITOR_OBJECT_INIT_TASK,
       (void *) 0,
       sizeof(rtems_monitor_init_task_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_init_task_next,
@@ -59,7 +59,7 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_header_fn) rtems_monitor_init_task_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_init_task_dump,
     },
-    { RTEMS_OBJECT_TASK,
+    { RTEMS_MONITOR_OBJECT_TASK,
       (void *) &_RTEMS_tasks_Information,
       sizeof(rtems_monitor_task_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_manager_next,
@@ -67,7 +67,7 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_header_fn) rtems_monitor_task_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_task_dump,
     },
-    { RTEMS_OBJECT_QUEUE,
+    { RTEMS_MONITOR_OBJECT_QUEUE,
       (void *) &_Message_queue_Information,
       sizeof(rtems_monitor_queue_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_manager_next,
@@ -75,7 +75,7 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_header_fn) rtems_monitor_queue_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_queue_dump,
     },
-    { RTEMS_OBJECT_EXTENSION,
+    { RTEMS_MONITOR_OBJECT_EXTENSION,
       (void *) &_Extension_Information,
       sizeof(rtems_monitor_extension_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_manager_next,
@@ -83,7 +83,7 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_header_fn) rtems_monitor_extension_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_extension_dump,
     },
-    { RTEMS_OBJECT_DRIVER,
+    { RTEMS_MONITOR_OBJECT_DRIVER,
       (void *) 0,
       sizeof(rtems_monitor_driver_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_driver_next,
@@ -91,7 +91,7 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_header_fn) rtems_monitor_driver_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_driver_dump,
     },
-    { RTEMS_OBJECT_DNAME,
+    { RTEMS_MONITOR_OBJECT_DNAME,
       /* XXX now that the driver name table is allocated from the */
       /* XXX Workspace, this does not work */
       (void *) 0,
@@ -113,7 +113,7 @@ rtems_id
 rtems_monitor_id_fixup(
     rtems_id            id,
     unsigned32          default_node,
-    rtems_object_type_t type
+    rtems_monitor_object_type_t type
 )
 {
     unsigned32  node;
@@ -121,19 +121,10 @@ rtems_monitor_id_fixup(
     node = rtems_get_node(id);
     if (node == 0)
     {
-#if 0
-        /* XXX Uncomment this when types are added to id's */
         if (rtems_get_class(id) != OBJECTS_NO_CLASS)
             type = rtems_get_class(id);
 
         id = _Objects_Build_id(type, default_node, rtems_get_index(id));
-#else
-#warning "TONY... FIX ME!!!!!"
-#if defined(hppa1_1)
-#warning "TONY... I SAID TO FIX ME!!!!!  <HAHAHAHAHA>" 
-#endif
-        id = _Objects_Build_id(0, default_node, rtems_get_index(id));
-#endif
     }
     return id;
 }
@@ -141,7 +132,7 @@ rtems_monitor_id_fixup(
 
 rtems_monitor_object_info_t *
 rtems_monitor_object_lookup(
-    rtems_object_type_t type
+    rtems_monitor_object_type_t type
 )
 {
     rtems_monitor_object_info_t *p;
@@ -157,7 +148,7 @@ rtems_monitor_object_lookup(
 
 rtems_id
 rtems_monitor_object_canonical_next_remote(
-    rtems_object_type_t type,
+    rtems_monitor_object_type_t type,
     rtems_id            id,
     void               *canonical
 )
@@ -233,7 +224,7 @@ rtems_monitor_object_canonical_next(
 
 rtems_id
 rtems_monitor_object_canonical_get(
-    rtems_object_type_t  type,
+    rtems_monitor_object_type_t  type,
     rtems_id             id,
     void                *canonical,
     unsigned32          *size_p
@@ -299,7 +290,7 @@ rtems_monitor_object_dump_all(
     rtems_id next_id;
     rtems_monitor_union_t canonical;
 
-    next_id = RTEMS_OBJECT_ID_INITIAL(rtems_monitor_default_node);
+    next_id = RTEMS_OBJECT_ID_INITIAL(info->type, rtems_monitor_default_node);
 
     while ((next_id = rtems_monitor_object_canonical_next(
                                          info,
@@ -320,14 +311,14 @@ rtems_monitor_object_cmd(
 {
     int arg;
     rtems_monitor_object_info_t *info = 0;
-    rtems_object_type_t          type = (rtems_object_type_t) command_arg;
+    rtems_monitor_object_type_t  type = (rtems_monitor_object_type_t) command_arg;
     
     /* what is the default type? */
-    type = (rtems_object_type_t) command_arg;
+    type = (rtems_monitor_object_type_t) command_arg;
 
     if (argc == 1)
     {
-        if (type == RTEMS_OBJECT_INVALID)
+        if (type == RTEMS_MONITOR_OBJECT_INVALID)
         {
             printf("A type must be specified to \"dump all\"\n");
             goto done;
@@ -344,16 +335,15 @@ rtems_monitor_object_cmd(
     else
     {
         unsigned32          default_node = rtems_monitor_default_node;
-        rtems_object_type_t last_type = RTEMS_OBJECT_INVALID;
+        rtems_monitor_object_type_t last_type = RTEMS_MONITOR_OBJECT_INVALID;
         rtems_id            id;
 
         for (arg=1; argv[arg]; arg++)
         {
             id = (rtems_id) strtoul(argv[arg], 0, 0);
             id = rtems_monitor_id_fixup(id, default_node, type);
-#if 0
-            type = rtems_get_type(id);
-#endif
+            type = (rtems_monitor_object_type_t) rtems_get_class(id);
+
             /*
              * Allow the item type to change in the middle
              * of the command.  If the type changes, then
@@ -363,13 +353,16 @@ rtems_monitor_object_cmd(
             {
                 info = rtems_monitor_object_lookup(type);
                 if (info == 0)
-                {
-not_found:          printf("Invalid or unsupported type %d\n", type);
-                    goto done;
-                }
+                    goto not_found;
             
                 if (info->dump_header)
                     info->dump_header(verbose);
+            }
+
+            if (info == 0)
+            {
+not_found:      printf("Invalid or unsupported type %d\n", type);
+                goto done;
             }
 
             rtems_monitor_object_dump_1(info, id, verbose);

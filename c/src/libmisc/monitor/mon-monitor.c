@@ -1,5 +1,5 @@
 /*
- *	@(#)monitor.c	1.22 - 95/11/02
+ *	@(#)monitor.c	1.23 - 96/01/03
  *	
  *
  *
@@ -80,6 +80,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  queue     -- show message queue information\n"
       "  extension -- user extensions\n"
       "  driver    -- show information about named drivers\n"
+      "  dname     -- show information about named drivers\n"
       "  object    -- generic object information\n"
       "  node      -- specify default node for commands that take id's\n"
 #ifdef CPU_INVOKE_DEBUGGER
@@ -95,21 +96,21 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  Show the system configuration.\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_CONFIG,
+      RTEMS_MONITOR_OBJECT_CONFIG,
     },
     { "itask",
       "itask\n"
       "  List init tasks for the system\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_INIT_TASK,
+      RTEMS_MONITOR_OBJECT_INIT_TASK,
     }, 
    { "mpci",
       "mpci\n"
       "  Show the MPCI system configuration, if configured.\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_MPCI,
+      RTEMS_MONITOR_OBJECT_MPCI,
     },
     { "pause",
       "pause [ticks]\n"
@@ -155,7 +156,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  Default is to display information about all extensions on this node\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_EXTENSION,
+      RTEMS_MONITOR_OBJECT_EXTENSION,
     },
     { "task",
       "task [id [id ...] ]\n"
@@ -163,7 +164,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  Default is to display information about all tasks on this node\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_TASK,
+      RTEMS_MONITOR_OBJECT_TASK,
     },
     { "queue",
       "queue [id [id ... ] ]\n"
@@ -171,7 +172,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  Default is to display information about all queues on this node\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_QUEUE,
+      RTEMS_MONITOR_OBJECT_QUEUE,
     },
     { "object",
       "object [id [id ...] ]\n"
@@ -180,21 +181,21 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  (which may normally be defaulted)\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_INVALID,
+      RTEMS_MONITOR_OBJECT_INVALID,
     },
     { "driver",
       "driver [ major [ major ... ] ]\n"
       "  Display the RTEMS device driver table.\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_DRIVER,
+      RTEMS_MONITOR_OBJECT_DRIVER,
     },
     { "dname",
       "dname\n"
       "  Displays information about named drivers.\n",
       0,
       rtems_monitor_object_cmd,
-      RTEMS_OBJECT_DNAME,
+      RTEMS_MONITOR_OBJECT_DNAME,
     },
     { "exit",
       "exit [status]\n"

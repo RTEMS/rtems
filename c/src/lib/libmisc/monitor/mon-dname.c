@@ -1,5 +1,5 @@
 /*
- *	@(#)dname.c	1.3 - 95/07/31
+ *	@(#)dname.c	1.5 - 96/01/03
  *	
  *
  * RTEMS monitor driver names support.
@@ -54,7 +54,7 @@ rtems_monitor_dname_next(
 )
 {
     int n = rtems_get_index(*next_id);
-    rtems_driver_name_t    *table = object_information;
+    rtems_driver_name_t    *table = _IO_Driver_name_table;
     rtems_driver_name_t    *np = 0;
 
 /* XXX should we be using _IO_Number_of_devices */

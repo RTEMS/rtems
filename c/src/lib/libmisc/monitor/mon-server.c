@@ -1,8 +1,8 @@
 /*
- *	@(#)server.c	1.3 - 95/08/02
+ *	@(#)server.c	1.5 - 96/01/03
  *	
  *
- * RTEMS monitor server (handles requests for info from RTEMS monitors
+ *  RTEMS monitor server (handles requests for info from RTEMS monitors
  *             running on other nodes)
  *
  *  $Id$
@@ -144,11 +144,11 @@ rtems_monitor_server_task(
         {
             case RTEMS_MONITOR_SERVER_CANONICAL:
             {
-                rtems_object_type_t object_type;
+                rtems_monitor_object_type_t object_type;
                 rtems_id            id;
                 rtems_id            next_id;
 
-                object_type = (rtems_object_type_t) request.argument0;
+                object_type = (rtems_monitor_object_type_t) request.argument0;
                 id          = (rtems_id)            request.argument1;
                 next_id = rtems_monitor_object_canonical_get(object_type,
                                                              id,
