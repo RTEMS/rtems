@@ -1,3 +1,8 @@
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* at91rm9200/Makefile.am, mc9328mxl/Makefile.am,
+	shared/Makefile.am: Remove build-variant support.
+
 2005-01-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* ChangeLog: Merge-in at91rm9200/ChangeLog, mc9328mxl/ChangeLog,
