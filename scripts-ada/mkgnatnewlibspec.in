@@ -61,9 +61,9 @@ sed -e "s%@Release@%${gnatnewlib_rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
     -e "s%@rpm_build_root@%${rpm_build_root}%g" \
     -e "s%@binutils_version@%${binutils_version}%g" \
-    -e "s%@binutils_patch_version@%gnat-${binutils_patch_version}%g" \
+    -e "s%@binutils_patch_version@%${binutils_patch_version}%g" \
     -e "s%@gcc_version@%${gcc_version}%g" \
-    -e "s%@gcc_patch_version@%gnat-${gcc_patch_version}%g" \
+    -e "s%@gcc_patch_version@%${gcc_patch_version}%g" \
     -e "s%@gnat_version@%${gnat_version}%g" \
     -e "s%@gnat_patch_version@%${gnat_patch_version}%g" \
     -e "s%@newlib_version@%${newlib_version}%g" \
