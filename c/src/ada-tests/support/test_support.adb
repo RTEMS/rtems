@@ -207,7 +207,7 @@ package body Test_Support is
    ) return RTEMS.Unsigned32 is
    begin
 
-      return RTEMS.Get_Index( TID ) - 
+      return RTEMS.Get_Index( TID ) - 1 -
         RTEMS.Configuration.RTEMS_API_Configuration.Number_Of_Initialization_Tasks;
 
    end Task_Number;
