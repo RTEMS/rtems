@@ -1,3 +1,7 @@
+2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove ENABLE_GCC28.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

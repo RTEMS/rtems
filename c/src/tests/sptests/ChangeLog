@@ -1,3 +1,7 @@
+2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove ENABLE_GCC28.
+
 2001-04-04	Joel Sherrill <joel@OARcorp.com>
 
 	* spsize/size.c: Reflect SPARC modifcation to get rid of 
