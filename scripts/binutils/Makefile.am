@@ -42,10 +42,6 @@ m68k-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems@osversion@ > $@
 RPM_SPECS_DATA += m68k-rtems@osversion@-$(BINUTILSVERS).spec
 
-mips64orion-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips64orion-rtems@osversion@ > $@
-RPM_SPECS_DATA += mips64orion-rtems@osversion@-$(BINUTILSVERS).spec
-
 mips-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips-rtems@osversion@ > $@
 RPM_SPECS_DATA += mips-rtems@osversion@-$(BINUTILSVERS).spec

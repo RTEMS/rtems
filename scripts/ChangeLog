@@ -1,3 +1,11 @@
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* buildall.in, buildalltar.in, binutils/Makefile.am,
+	cpukit/Makefile.am, gcc3newlib/Makefile.am, gccnewlib/Makefile.am,
+	gdb/Makefile.am, rtems/Makefile.am, rtemsdoc/.cvsignore,
+	rtemsdoc/Makefile.am: mips64orion port removed as mips port more
+	completely covers the MIPS family.
+
 2003-12-16	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Update gcc/newlib for 4.7 series to 3.3.2 with 20031022

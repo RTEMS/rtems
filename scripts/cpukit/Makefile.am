@@ -38,10 +38,6 @@ m68k-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems@osversion@ > $@
 RPM_SPECS_DATA += m68k-rtems@osversion@-cpukit.spec
 
-mips64orion-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems@osversion@ > $@
-RPM_SPECS_DATA += mips64orion-rtems@osversion@-cpukit.spec
-
 mips-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . mips-rtems@osversion@ > $@
 RPM_SPECS_DATA += mips-rtems@osversion@-cpukit.spec

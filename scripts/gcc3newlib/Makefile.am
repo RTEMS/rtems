@@ -52,10 +52,6 @@ m68k-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems@osversion@ > $@
 RPM_SPECS_DATA += m68k-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-mips64orion-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips64orion-rtems@osversion@ > $@
-RPM_SPECS_DATA += mips64orion-rtems@osversion@-$(GCC3NEWLIBVERS).spec
-
 mips-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips-rtems@osversion@ > $@
 RPM_SPECS_DATA += mips-rtems@osversion@-$(GCC3NEWLIBVERS).spec

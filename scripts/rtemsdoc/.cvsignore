@@ -12,7 +12,6 @@ itron-docs.add
 m68k-supplement.add
 Makefile
 Makefile.in
-mips64orion-supplement.add
 mips-supplement.add
 mkspec
 networking-docs.add

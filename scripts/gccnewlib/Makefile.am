@@ -49,9 +49,6 @@ i960-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIB_C_ONLY_SPEC_DEPS)
 m68k-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems
 
-mips64orion-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
-	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems
-
 mips-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . mips-rtems
 
@@ -71,7 +68,6 @@ RPM_SPECS_DATA = arm-rtems-$(GCCNEWLIBVERS).spec \
     c4x-rtems-$(GCCNEWLIBVERS).spec h8300-rtems-$(GCCNEWLIBVERS).spec \
     i386-rtems-$(GCCNEWLIBVERS).spec i960-rtems-$(GCCNEWLIBVERS).spec \
     m68k-rtems-$(GCCNEWLIBVERS).spec mips-rtems-$(GCCNEWLIBVERS).spec \
-    mips64orion-rtems-$(GCCNEWLIBVERS).spec \
     powerpc-rtems-$(GCCNEWLIBVERS).spec sh-rtems-$(GCCNEWLIBVERS).spec \
     sh-rtemself-$(GCCNEWLIBVERS).spec sparc-rtems-$(GCCNEWLIBVERS).spec
 CLEANFILES += $(RPM_SPECS_DATA)
