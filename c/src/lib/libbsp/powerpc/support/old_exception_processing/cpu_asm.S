@@ -36,7 +36,7 @@
  */
 #include <bspopts.h>
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include <rtems/score/ppc_offs.h>
 	
 	BEGIN_CODE

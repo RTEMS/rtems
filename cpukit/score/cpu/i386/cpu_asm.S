@@ -13,7 +13,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 
 /*
  * Format of i386 Register structure

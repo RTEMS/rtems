@@ -1,3 +1,7 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* cpu.c, cpu_asm.S, rtems/score/cpu.h, rtems/score/interrupts.h:

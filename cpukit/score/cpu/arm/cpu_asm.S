@@ -16,7 +16,7 @@
  *
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
 
 

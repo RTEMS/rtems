@@ -16,7 +16,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 
 /*
  *  _CPU_Context_save_fp_context

@@ -31,7 +31,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 
 /*
  * Offsets for various Contexts

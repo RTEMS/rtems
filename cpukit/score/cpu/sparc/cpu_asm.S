@@ -21,7 +21,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 
 #if (SPARC_HAS_FPU == 1)
 
