@@ -4,6 +4,8 @@
 	* aclocal/canonicalize-tools.m4: Remove AS, OBJCOPY, NM, SIZE, STRIP.
 	RTEMS_GCC_PRINT
 	* aclocal/check-multiprocessing.m4: Fix typo.
+	* automake/compile.am: Remove CXX support.
+	Replace AS by CCAS. Remove LINK_LIBS, LINK_OBJS, LINK_FILES.
 
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
