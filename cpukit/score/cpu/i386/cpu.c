@@ -14,7 +14,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <rtems/score/thread.h>
 #include <libcpu/cpuModel.h>
 

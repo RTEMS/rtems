@@ -1,3 +1,7 @@
+2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpu.c: Include rtems/bspIo.h instead of bspIo.h.
+
 2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use RTEMS_ENV_RTEMSCPU.
