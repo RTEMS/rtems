@@ -1,4 +1,11 @@
 *** POSIX TEST 1 ***
+Init: uname - EFAULT (invalid uts pointer argument)
+Init: uts.sysname: RTEMS
+Init: uts.nodename: Node 1
+Init: uts.release: rtems-19991105
+Init: uts.version: 
+Init: uts.machine: SPARC/erc32
+
 Init: clock_gettime - EINVAL (invalid clockid)
 Init: clock_settime - EINVAL (invalid clockid)
 Init: clock_getres - EINVAL (invalid clockid)

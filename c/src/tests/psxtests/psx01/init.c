@@ -13,6 +13,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <sched.h>
+#include <sys/utsname.h>
 
 void *POSIX_Init(
   void *argument
@@ -27,11 +28,28 @@ void *POSIX_Init(
   time_t          seconds1;
   time_t          remaining;
   struct tm       tm;
+  struct utsname  uts;
 
   puts( "\n\n*** POSIX TEST 1 ***" );
 
   build_time( &tm, TM_FRIDAY, TM_MAY, 24, 96, 11, 5, 0 );
 
+  /* print some system information */
+
+  puts( "Init: uname - EFAULT (invalid uts pointer argument)" );
+  status = uname( NULL );
+  assert( status == -1 );
+  assert( errno == EFAULT );
+   
+  status = uname( &uts );
+  assert( !status );
+  printf( "Init: uts.sysname: %s\n", uts.sysname );
+  printf( "Init: uts.nodename: %s\n", uts.nodename );
+  printf( "Init: uts.release: %s\n", uts.release );
+  printf( "Init: uts.version: %s\n", uts.version );
+  printf( "Init: uts.machine: %s\n", uts.machine );
+  puts("");
+   
   /* error cases in clock_gettime and clock_settime */
 
   puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
