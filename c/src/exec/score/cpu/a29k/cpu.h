@@ -39,7 +39,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/a29k.h>               /* pick up machine definitions */
+#include <rtems/score/a29k.h>                /* pick up machine definitions */
 #ifndef ASM
 #include <rtems/score/a29ktypes.h>
 #endif
