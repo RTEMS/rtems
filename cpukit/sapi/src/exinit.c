@@ -29,6 +29,9 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/apiext.h>
+#if 0
+#include <rtems/score/apimutex.h>
+#endif
 #include <rtems/score/copyrt.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
@@ -221,18 +224,23 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
 
-  if ( cpu_table->pretasking_hook )
-    (*cpu_table->pretasking_hook)();
-
   /*
    *  No threads should be created before this point!!! 
+   *  _Thread_Executing and _Thread_Heir are not set.
    *
    *  At this point all API extensions are in place.  After the call to
-   *  _Thread_Create_idle() _Thread_Executing will be set.
-   *  and _Thread_Heir are not set yet.
+   *  _Thread_Create_idle() _Thread_Executing and _Thread_Heir will be set.
    */
 
   _Thread_Create_idle();
+
+
+  /*
+   *  Scheduling can properly occur now as long as we avoid dispatching.
+   */
+
+  if ( cpu_table->pretasking_hook )
+    (*cpu_table->pretasking_hook)();
 
 #if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Create_server();

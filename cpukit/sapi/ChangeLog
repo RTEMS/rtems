@@ -1,3 +1,10 @@
+2001-05-09	Joel Sherrill <joel@OARcorp.com>
+
+	* src/exinit.c: Slightly rework initialization so there
+	is a valid thread as _Thread_Executing when the pre_tasking
+	hook is called.  This allows one directives and malloc
+	to potentially use mutex protection.
+ 
 2001-03-29	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR126, configuration structures now match docs.
