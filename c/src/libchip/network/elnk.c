@@ -3139,8 +3139,8 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    int          pbus, pdev, pfun;
 #if defined(__i386__)
    int          signature;
-   int          value;
-   char         interrupt;
+   unsigned int   value;
+   unsigned char  interrupt;
 #endif
 #if defined(__PPC__)
    unsigned int lvalue;
@@ -3179,7 +3179,8 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
        */
       for( i=0; !done && xl_devs[i].xl_vid; i++)
       {
-         for(unum= 1; !done && BSP_pciFindDevice( xl_devs[i].xl_vid, xl_devs[i].xl_did, unum-1,
+         for(unum= 1; !done &&
+		pci_find_device( xl_devs[i].xl_vid, xl_devs[i].xl_did, unum-1,
                                          &sysboards[numFound].pbus,
                                          &sysboards[numFound].pdev,
                                                   &sysboards[numFound].pfun)==0; unum++)

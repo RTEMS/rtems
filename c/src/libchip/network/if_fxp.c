@@ -459,13 +459,12 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * find device on pci bus
 	 */
-    { int j;
+    { int j; int pbus, pdev, pfun;
 
       for (j=0; fxp_ident_table[j].devid; j++ ) {
-		i = pcib_find_by_devid( 0x8086,
-			fxp_ident_table[j].devid,
-			unitNumber-1,
- 			&(sc->pci_signature));
+		i = pci_find_device( 0x8086, fxp_ident_table[j].devid,
+			unitNumber-1, &pbus, &pdev, &pfun );
+ 		sc->pci_signature =  PCIB_DEVSIG_MAKE( pbus, pdev, pfun );
 		DBGLVL_PRINTK(2,"fxp_attach: find_devid returned %d "
 		      "and pci signature 0x%x\n",
 		      i,sc->pci_signature);

@@ -588,7 +588,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
     * Build setup frame
     */
    setup_frm = (volatile unsigned char *)(bus_to_phys(rmd->buf1));
-   eaddrs = (char *)(sc->arpcom.ac_enaddr);
+   eaddrs = (unsigned char *)(sc->arpcom.ac_enaddr);
    /* Fill the buffer with our physical address. */
    for (i = 1; i < 16; i++) {
       *setup_frm++ = eaddrs[0];
@@ -1012,13 +1012,11 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    unsigned char cvalue;
 #if defined(__i386__)
    int          signature;
-   int          value;
-   char         interrupt;
-   int          diag;
-   unsigned int deviceId;
+   unsigned int value;
+   unsigned char interrupt;
 #endif
-#if defined(__PPC__)
    int          pbus, pdev, pfun;
+#if defined(__PPC__)
    int          tmp;
    unsigned int lvalue;
 #endif
@@ -1039,71 +1037,40 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    }
 
    if (pci_initialize() != PCIB_ERR_SUCCESS)
-      rtems_panic("Unable to initialize PCI");
+      rtems_panic("dec2114x: Unable to initialize PCI");
 
-
-#if defined(__i386__)
-   /*
-    * First, find a DEC board
-    */
-
-   /*
-    * Try to find the network card on the PCI bus. Probe for a DEC 21140
-    * card first. If not found probe the bus for a DEC/Intel 21143 card.
-    */
-   deviceId = PCI_DEVICE_ID_DEC_21140;
-   diag = pcib_find_by_devid( PCI_VENDOR_ID_DEC, deviceId, unitNumber-1, &signature);
-
-   if ( diag == PCIB_ERR_SUCCESS)
-      printk( "DEC 21140 PCI network card found\n" );
-   else
-   {
-      deviceId = PCI_DEVICE_ID_DEC_21143;
-      diag = pcib_find_by_devid( PCI_VENDOR_ID_DEC, deviceId, unitNumber-1, &signature);
-      if ( diag == PCIB_ERR_SUCCESS)
-         printk( "DEC/Intel 21143 PCI network card found\n" );
-      else
-      {
-         printk("No DEC/Intel 21140/3 PCI network card found !!\n");
-         return 0;
-      }
-   }
-#endif
-#if defined(__PPC__)
    /*
     * Find the board
     */
-   if( BSP_pciFindDevice( PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21140,
-                          unitNumber-1, &pbus, &pdev, &pfun) == -1 )
-   {
-      if( BSP_pciFindDevice( PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21143,
-                             unitNumber-1, &pbus, &pdev, &pfun) != -1 )
-      {
+   if ( pci_find_device(PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21140,
+                          unitNumber-1, &pbus, &pdev, &pfun) == -1 ) {
+      if ( pci_find_device(PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21143,
+                             unitNumber-1, &pbus, &pdev, &pfun) != -1 ) {
 
-         pci_write_config_dword(pbus,
-                                pdev,
-                                pfun,
-                                0x40,
-                                PCI_DEVICE_ID_DEC_21143 );
+        /* the 21143 chip must be enabled before it can be accessed */
+#if defined(__i386__)
+        signature =  PCIB_DEVSIG_MAKE( pbus, pdev, pfun );
+        pcib_conf_write32( signature, 0x40, 0 );
+#else
+        pci_write_config_dword(pbus, pdev, pfun, 0x40, PCI_DEVICE_ID_DEC_21143);
+#endif
 
-      }
-      else
-      {
+      } else {
          printk("dec2114x : device '%s' not found on PCI bus\n", config->name );
          return 0;
       }
    }
 
 #ifdef DEC_DEBUG
-   else
-   {
+   else {
       printk("dec21140 : found device '%s', bus 0x%02x, dev 0x%02x, func 0x%02x\n",
              config->name, pbus, pdev, pfun);
    }
 #endif
 
+#if defined(__i386__)
+   signature =  PCIB_DEVSIG_MAKE( pbus, pdev, pfun );
 #endif
-
 
 
 
@@ -1138,10 +1105,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
     * Get card address spaces & retrieve its isr vector
     */
 #if defined(__i386__)
-
-   /* the 21143 chip must be enabled before it can be accessed */
-   if ( deviceId == PCI_DEVICE_ID_DEC_21143 )
-      pcib_conf_write32( signature, 0x40, 0 );
 
    pcib_conf_read32(signature, 16, &value);
    sc->port = value & ~IO_MASK;
