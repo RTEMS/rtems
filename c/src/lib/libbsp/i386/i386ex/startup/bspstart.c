@@ -93,8 +93,8 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-     /*
-    *  we do not use the pretasking_hook.
+  /*
+   *  we do not use the pretasking_hook.
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
@@ -104,13 +104,9 @@ void bsp_start( void )
   /* changed Sept 14 STACK_MINIMUM_SIZE */
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
-#if defined(RTEMS_POSIX_API)
-  BSP_Configuration.work_space_size *= 3;
-#endif
-
-    BSP_Configuration.work_space_start = (void *)
+  BSP_Configuration.work_space_start = (void *)
      RAM_END - BSP_Configuration.work_space_size;
-#ifdef DEBUG  
+#ifdef DEBUG
   printk("workspace size = 0x%x\nstart = 0x%x, RAM_END = 0x%x\n",BSP_Configuration.work_space_size,  BSP_Configuration.work_space_start, RAM_END );
 #endif
 
