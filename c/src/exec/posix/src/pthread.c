@@ -1084,6 +1084,15 @@ int pthread_equal(
   pthread_t  t2
 )
 {
+  /*
+   *  If the system is configured for debug, then we will do everything we
+   *  can to insure that both ids are valid.  Otherwise, we will do the
+   *  cheapest possible thing to determine if they are equal.
+   */
+
+#ifndef RTEMS_DEBUG
+  return _Objects_Are_ids_equal( t1, t2 );
+#else
   int               status;
   Objects_Locations location;
 
@@ -1124,6 +1133,7 @@ int pthread_equal(
 
   _Thread_Enable_dispatch();
   return status;
+#endif
 }
 
 /*PAGE
