@@ -306,7 +306,7 @@ concurrently active in the system.
 @item maximum_keys
 is the maximum number of keys that can be concurrently active in the system.
 
-@item maximum_keys
+@item maximum_timers
 is the maximum number of POSIX timers that can be concurrently active
 in the system.
 
