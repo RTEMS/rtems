@@ -1,3 +1,8 @@
+2004-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 561/rtems
+	* asm.h: Add CONCAT0, EVAL. Let SYM and REG use CONCAT0 and EVAL.
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Move RTEMS_TOP one subdir down.

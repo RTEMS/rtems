@@ -56,13 +56,16 @@
 #define CONCAT1(a, b) CONCAT2(a, b)
 #define CONCAT2(a, b) a ## b
 
+#define EVAL(x) x
+#define CONCAT0(a, b) EVAL(a)EVAL(b)
+
 /* Use the right prefix for global labels.  */
 
-#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
+#define SYM(x) CONCAT0 (__USER_LABEL_PREFIX__, x)
 
 /* Use the right prefix for registers.  */
 
-#define REG(x) CONCAT1 (__REGISTER_PREFIX__, x)
+#define REG(x) CONCAT0 (__REGISTER_PREFIX__, x)
 
 #define d0 REG (d0)
 #define d1 REG (d1)
@@ -140,5 +143,3 @@
 
 #endif
 /* end of include file */
-
-
