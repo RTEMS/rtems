@@ -2,12 +2,12 @@ dnl $Id$
 dnl
 dnl RTEMS_BSP_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 dnl 
-dnl Accept --enable-FEATURE=<RTEMS_BSP>:<value> and --enable-FEATURE=<value>
-dnl in BSP-configure scripts.
+dnl Accept --enable-FEATURE=<RTEMS_BSP>:<bsp-value> and 
+dnl --enable-FEATURE=<value> in BSP-configure scripts.
 dnl
-dnl Configure scripts will receive <value> if <RTEMS_BSP> matches the actual
-dnl value of the shell variable RTEMS_BSP (cf. RTEMS_ENV_RTEMSBSP), and
-dnl <RTEMS_BSP>:<value>.
+dnl Configure scripts will receive <bsp-value> if <RTEMS_BSP> matches the 
+dnl actual value of the shell variable RTEMS_BSP (cf. RTEMS_ENV_RTEMSBSP), 
+dnl and the raw value passed to --enable-FEATURE otherwise.
 dnl
 AC_DEFUN(RTEMS_BSP_ARG_ENABLE,
 [AC_REQUIRE([RTEMS_ENV_RTEMSBSP])

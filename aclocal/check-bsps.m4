@@ -32,11 +32,11 @@ AC_MSG_CHECKING([for bsps])
 	leon)              rtems_bsp="$rtems_bsp leon1 leon2";;
 	sim68000)          rtems_bsp="$rtems_bsp sim68000 simcpu32";;
 	shsim)             rtems_bsp="$rtems_bsp simsh7032 simsh7045";;
-        *) $1="[$]$1 $file";;
+	*) if test -d $srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$file; then
+	     $1="[$]$1 $file"
+	   fi;;
       esac;
     done
-dnl    ;;
-dnl esac
 AC_MSG_RESULT([[$]$1 .. done])
 ])dnl
 

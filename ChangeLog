@@ -1,3 +1,10 @@
+2001-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configre.in: Fix AM_INIT_AUTOMAKE.
+	* aclocal/bsp-arg-enable.m4: Extend comments.
+	* aclocal/check-bsps.m4: Remove extraneous comments, add test -d in
+	the default clause.
+
 2001-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/enable-rtemsbsp.m4: Split out RTEMS_ENV_RTEMSBSP,

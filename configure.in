@@ -15,7 +15,7 @@ if test -f VERSION; then
 fi
 
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE(cross,0,no)
+AM_INIT_AUTOMAKE(rtems,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 dnl These option are only in here to let --help report all supported
