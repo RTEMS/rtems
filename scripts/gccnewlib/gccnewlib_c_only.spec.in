@@ -151,7 +151,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 /opt/rtems/include/g++-3
 /opt/rtems/@target_alias@
 
-%post -n @target_alias@-gcc
+%post
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
@@ -161,7 +161,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     done
   fi
 
-%postun -n @target_alias@-gcc
+%postun
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
