@@ -5,7 +5,7 @@ AC_DEFUN(RTEMS_ENABLE_POSIX,
 ## AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
 
 AC_ARG_ENABLE(posix,
-AC_HELP_STRING([--enable-posix],[enable posix interface]),
+[AC_HELP_STRING([--enable-posix],[enable posix interface])],
 [case "${enableval}" in 
   yes) RTEMS_HAS_POSIX_API=yes ;;
   no) RTEMS_HAS_POSIX_API=no ;;

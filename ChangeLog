@@ -1,3 +1,18 @@
+2002-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/enable-bare.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-cxx.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-inlines.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-itron.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-multiprocessing.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-networking.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-posix.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-rdbg.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-rtemsbsp.m4: Improve quoting of AC_HELP_STRING.
+	* aclocal/enable-tests.m4: Improve quoting of AC_HELP_STRING.
+	(autoconf > 2.54 seems to have problems with the old form of
+	quoting).
+
 2002-10-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/enable-rtemsbsp.m4: Remove '\' in AC_MSG_ERROR 

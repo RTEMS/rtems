@@ -2,7 +2,8 @@ dnl $Id$
 
 AC_DEFUN(RTEMS_ENABLE_INLINES,
 [AC_ARG_ENABLE(rtems-inlines,
-AC_HELP_STRING([--enable-rtems-inlines],[enable RTEMS inline functions (default:enabled, disable to use macros)]),
+[AC_HELP_STRING([--enable-rtems-inlines],
+[enable RTEMS inline functions (default:enabled, disable to use macros)])],
 [case "${enableval}" in
   yes) RTEMS_USE_MACROS=no ;;
   no) RTEMS_USE_MACROS=yes ;;
