@@ -21,30 +21,25 @@
 
 #include "system.h"
 
-rtems_task Task_1_through_3(
-  rtems_task_argument argument
+void Task_1_through_3(
+  void *argument
 )
 {
-  rtems_id          tid;
-  rtems_time_of_day time;
-  rtems_status_code status;
+  int seconds;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
-  directive_failed( status, "rtems_task_ident" );
+  for ( ; ; ) {
+    /* grab the tod */
 
-  while( FOREVER ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-    directive_failed( status, "rtems_clock_get" );
+    /* if we have run longer 35 seconds exit */
 
-    if ( time.second >= 35 ) {
-      puts( "*** END OF TEST 1 ***" );
+    if ( seconds >= 35 ) {
+      puts( "*** END OF POSIX TEST 1 ***" );
       exit( 0 );
     }
 
-    put_name( Task_name[ task_number( tid ) ], FALSE );
-    print_time( " - rtems_clock_get - ", &time, "\n" );
+    /* put our task number and the current time */
 
-    status = rtems_task_wake_after( task_number( tid ) * 5 * TICKS_PER_SECOND );
-    directive_failed( status, "rtems_task_wake_after" );
+    /* delay based on our thread number */
+ 
   }
 }

@@ -14,16 +14,18 @@
  *  $Id$
  */
 
-#include <tmacros.h>
-
 /* functions */
 
-rtems_task Init(
-  rtems_task_argument argument
+#include <bsp.h>
+#include <pthread.h>
+#include <stdio.h>
+
+void Init(
+  void *argument
 );
 
-rtems_task Task_1_through_3(
-  rtems_task_argument argument
+void Task_1_through_3(
+  void *argument
 );
 
 /* configuration information */
@@ -33,11 +35,12 @@ rtems_task Task_1_through_3(
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_HAS_OWN_INIT_TASK_TABLE
+#define CONFIGURE_INIT_TASK_TABLE_SIZE 0
+#define CONFIGURE_INIT_TASK_TABLE      NULL
+
 #include <confdefs.h>
 
 /* global variables */
-
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
 /* end of include file */
