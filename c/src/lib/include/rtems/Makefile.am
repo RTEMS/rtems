@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = assoc.h error.h libcsupport.h libio.h libio_.h
+H_FILES = assoc.h error.h libcsupport.h libio.h libio_.h termiostypes.h
 
 noinst_HEADERS = $(H_FILES)
 

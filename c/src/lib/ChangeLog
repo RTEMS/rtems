@@ -1,4 +1,11 @@
 
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/Makefile.am: Added termiostypes.h.
+	* libc/Makefile.am: Removed termiostypes.h.
+	* libc/termios.c: Changed include of "termiostypes.h" to
+	<rtems/termiostypes.h> since that is an RTEMS specific header file.
+
 2000-11-29	Joel Sherrill <joel@OARcorp.com>
 
 	* include/sys/ttycom.h: New file -- moved from libnetworking/sys.

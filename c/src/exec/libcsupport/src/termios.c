@@ -25,7 +25,7 @@
 #include <unistd.h>
 #include <sys/ttycom.h>
 
-#include "termiostypes.h"
+#include <rtems/termiostypes.h>
 
 /*
  *  FreeBSD does not support a full POSIX termios so we have to help it out
