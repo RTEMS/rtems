@@ -23,7 +23,7 @@ libcapture_OBJS = \
 include_rtems_HEADERS += capture/capture.h capture/capture-cli.h
 
 capture/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) capture/$(ARCH)
+	@$(mkdir_p) capture/$(ARCH)
 	@: > capture/$(ARCH)/$(dirstamp)
 capture/$(ARCH)/%.$(OBJEXT): capture/%.c capture/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -42,7 +42,7 @@ libcpuuse_OBJS = $(libcpuuse_C_FILES:cpuuse/%.c=cpuuse/$(ARCH)/%.$(OBJEXT))
 include_rtems_HEADERS += cpuuse/cpuuse.h
 
 cpuuse/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) cpuuse/$(ARCH)
+	@$(mkdir_p) cpuuse/$(ARCH)
 	@: > cpuuse/$(ARCH)/$(dirstamp)
 cpuuse/$(ARCH)/%.$(OBJEXT): cpuuse/%.c cpuuse/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -61,7 +61,7 @@ libdevnull_OBJS = \
 include_rtems_HEADERS += devnull/devnull.h
 
 devnull/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) devnull/$(ARCH)
+	@$(mkdir_p) devnull/$(ARCH)
 	@: > devnull/$(ARCH)/$(dirstamp)
 devnull/$(ARCH)/%.$(OBJEXT): devnull/%.c devnull/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -78,7 +78,7 @@ libdummy_C_FILES = dummy/dummy.c
 libdummy_OBJS = $(libdummy_C_FILES:dummy/%.c=dummy/$(ARCH)/%.$(OBJEXT))
 
 dummy/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) dummy/$(ARCH)
+	@$(mkdir_p) dummy/$(ARCH)
 	@: > dummy/$(ARCH)/$(dirstamp)
 dummy/$(ARCH)/%.$(OBJEXT): dummy/%.c dummy/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -98,7 +98,7 @@ libdumpbuf_OBJS = \
 include_rtems_HEADERS += dumpbuf/dumpbuf.h
 
 dumpbuf/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) dumpbuf/$(ARCH)
+	@$(mkdir_p) dumpbuf/$(ARCH)
 	@: > dumpbuf/$(ARCH)/$(dirstamp)
 dumpbuf/$(ARCH)/%.$(OBJEXT): dumpbuf/%.c dumpbuf/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -132,7 +132,7 @@ include_rtems_HEADERS += monitor/monitor.h
 noinst_HEADERS += monitor/symbols.h
 
 monitor/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) monitor/$(ARCH)
+	@$(mkdir_p) monitor/$(ARCH)
 	@: > monitor/$(ARCH)/$(dirstamp)
 monitor/$(ARCH)/%.$(OBJEXT): monitor/%.c monitor/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -156,7 +156,7 @@ libmw_fb_OBJS = $(libmw_fb_C_FILES:mw-fb/%.c=mw-fb/${ARCH}/%.$(OBJEXT))
 include_rtems_HEADERS += mw-fb/mw_fb.h mw-fb/mw_uid.h
 
 mw-fb/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) mw-fb/$(ARCH)
+	@$(mkdir_p) mw-fb/$(ARCH)
 	@: > mw-fb/$(ARCH)/$(dirstamp)
 mw-fb/$(ARCH)/%.$(OBJEXT): mw-fb/%.c mw-fb/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -177,7 +177,7 @@ include_rtems_HEADERS += shell/shell.h
 endif
 
 shell/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) shell/$(ARCH)
+	@$(mkdir_p) shell/$(ARCH)
 	@: > shell/$(ARCH)/$(dirstamp)
 shell/$(ARCH)/%.$(OBJEXT): shell/%.c shell/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -199,7 +199,7 @@ librtmonuse_OBJS = \
 include_rtems_HEADERS += rtmonuse/rtmonuse.h
 
 rtmonuse/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) rtmonuse/$(ARCH)
+	@$(mkdir_p) rtmonuse/$(ARCH)
 	@: > rtmonuse/$(ARCH)/$(dirstamp)
 rtmonuse/$(ARCH)/%.$(OBJEXT): rtmonuse/%.c rtmonuse/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -222,7 +222,7 @@ include_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h \
 endif
 
 serdbg/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) serdbg/$(ARCH)
+	@$(mkdir_p) serdbg/$(ARCH)
 	@: > serdbg/$(ARCH)/$(dirstamp)
 serdbg/$(ARCH)/%.$(OBJEXT): serdbg/%.c serdbg/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -248,7 +248,7 @@ include_rtems_HEADERS += stackchk/stackchk.h
 noinst_HEADERS += stackchk/internal.h
 
 stackchk/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) stackchk/$(ARCH)
+	@$(mkdir_p) stackchk/$(ARCH)
 	@: > stackchk/$(ARCH)/$(dirstamp)
 stackchk/$(ARCH)/%.$(OBJEXT): stackchk/%.c stackchk/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -267,7 +267,7 @@ libuntar_OBJS = $(libuntar_C_FILES:untar/%.c=untar/$(ARCH)/%.$(OBJEXT))
 include_rtems_HEADERS += untar/untar.h
 
 untar/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) untar/$(ARCH)
+	@$(mkdir_p) untar/$(ARCH)
 	@: > untar/$(ARCH)/$(dirstamp)
 untar/$(ARCH)/%.$(OBJEXT): untar/%.c untar/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -287,7 +287,7 @@ libfsmount_OBJS = \
 include_rtems_HEADERS += fsmount/fsmount.h
 
 fsmount/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) fsmount/$(ARCH)
+	@$(mkdir_p) fsmount/$(ARCH)
 	@: > fsmount/$(ARCH)/$(dirstamp)
 fsmount/$(ARCH)/%.$(OBJEXT): fsmount/%.c fsmount/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -308,14 +308,12 @@ CLEANDIRS = */$(ARCH)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/capture.h: capture/capture.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/capture.h

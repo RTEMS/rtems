@@ -146,9 +146,8 @@ EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/chain.h: include/chain.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/chain.h
@@ -199,9 +198,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
 endif
 
 $(PROJECT_INCLUDE)/motorola/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/motorola
+	@$(mkdir_p) $(PROJECT_INCLUDE)/motorola
 	@: > $(PROJECT_INCLUDE)/motorola/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/$(dirstamp)
 
 $(PROJECT_INCLUDE)/motorola/mc68230.h: include/motorola/mc68230.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68230.h
@@ -212,9 +210,8 @@ $(PROJECT_INCLUDE)/motorola/mc68681.h: include/motorola/mc68681.h $(PROJECT_INCL
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68681.h
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/assoc.h
@@ -245,9 +242,8 @@ $(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h $(PROJECT_INCLUDE)/rtems
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
 
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sys
+	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
 $(PROJECT_INCLUDE)/sys/filio.h: include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
@@ -286,9 +282,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
 endif
 
 $(PROJECT_INCLUDE)/zilog/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/zilog
+	@$(mkdir_p) $(PROJECT_INCLUDE)/zilog
 	@: > $(PROJECT_INCLUDE)/zilog/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/$(dirstamp)
 
 $(PROJECT_INCLUDE)/zilog/z8036.h: include/zilog/z8036.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8036.h

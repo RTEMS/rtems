@@ -144,18 +144,16 @@ EXTRA_DIST = $(STD_C_FILES) $(MP_C_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems.h: include/rtems.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems.h
 
 $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/rtems
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/rtems/asr.h: include/rtems/rtems/asr.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/asr.h

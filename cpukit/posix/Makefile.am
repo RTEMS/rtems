@@ -179,9 +179,8 @@ EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_POSIX
 $(PROJECT_INCLUDE)/sched.h: include/sched.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -201,9 +200,8 @@ $(PROJECT_INCLUDE)/semaphore.h: include/semaphore.h $(PROJECT_INCLUDE)/$(dirstam
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/semaphore.h
 
 $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/posix
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/posix
 	@: > $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/posix/cancel.h: include/rtems/posix/cancel.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cancel.h

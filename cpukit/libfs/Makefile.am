@@ -45,7 +45,7 @@ include_HEADERS += src/imfs/imfs.h
 IMFSLIB = src/imfs/$(ARCH)/libimfs.a
 
 src/imfs/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) src/imfs/$(ARCH)
+	@$(mkdir_p) src/imfs/$(ARCH)
 	@: > src/imfs/$(ARCH)/$(dirstamp)
 src/imfs/$(ARCH)/%.$(OBJEXT): src/imfs/%.c src/imfs/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -79,7 +79,7 @@ include_HEADERS += src/dosfs/dosfs.h
 DOSFSLIB = src/dosfs/$(ARCH)/libdosfs.a
 
 src/dosfs/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) src/dosfs/$(ARCH)
+	@$(mkdir_p) src/dosfs/$(ARCH)
 	@: > src/dosfs/$(ARCH)/$(dirstamp)
 src/dosfs/$(ARCH)/%.$(OBJEXT): src/dosfs/%.c src/dosfs/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -98,9 +98,8 @@ CLEANDIRS = src
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/imfs.h: src/imfs/imfs.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/imfs.h

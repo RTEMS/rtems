@@ -126,9 +126,8 @@ EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES) src/TODO
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_ITRON
 $(PROJECT_INCLUDE)/itron.h: include/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -136,9 +135,8 @@ $(PROJECT_INCLUDE)/itron.h: include/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/itron.h
 
 $(PROJECT_INCLUDE)/itronsys/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/itronsys
+	@$(mkdir_p) $(PROJECT_INCLUDE)/itronsys
 	@: > $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
 
 $(PROJECT_INCLUDE)/itronsys/eventflags.h: include/itronsys/eventflags.h $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/itronsys/eventflags.h
@@ -197,9 +195,8 @@ $(PROJECT_INCLUDE)/itronsys/vmempool.h: include/itronsys/vmempool.h $(PROJECT_IN
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/itronsys/vmempool.h
 
 $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/itron
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/itron
 	@: > $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/itron/config.h: include/rtems/itron/config.h $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/config.h

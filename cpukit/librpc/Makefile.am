@@ -33,7 +33,7 @@ libxdr_C_O_FILES = \
 libxdr_OBJS = $(libxdr_C_O_FILES)
 
 src/xdr/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) src/xdr/$(ARCH)
+	@$(mkdir_p) src/xdr/$(ARCH)
 	@: > src/xdr/$(ARCH)/$(dirstamp)
 src/xdr/$(ARCH)/%.$(OBJEXT): src/xdr/%.c src/xdr/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -73,7 +73,7 @@ librpc_a_CPPFLAGS = -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close \
     -D_RTEMS_RPC_INTERNAL_
 
 src/rpc/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) src/rpc/$(ARCH)
+	@$(mkdir_p) src/rpc/$(ARCH)
 	@: > src/rpc/$(ARCH)/$(dirstamp)
 src/rpc/$(ARCH)/%.$(OBJEXT): src/rpc/%.c src/rpc/$(ARCH)/$(dirstamp)
 	${COMPILE} $(librpc_a_CPPFLAGS) -o $@ -c $<
@@ -101,9 +101,8 @@ PREINSTALL_FILES =
 
 if LIBRPC
 $(PROJECT_INCLUDE)/rpc/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rpc
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rpc
 	@: > $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rpc/auth.h: include/rpc/auth.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth.h

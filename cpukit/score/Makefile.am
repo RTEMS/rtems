@@ -167,9 +167,8 @@ all-local: $(PREINSTALL_FILES) $(LIB)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/debug.h: include/rtems/debug.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/debug.h
@@ -184,9 +183,8 @@ $(PROJECT_INCLUDE)/rtems/seterr.h: include/rtems/seterr.h $(PROJECT_INCLUDE)/rte
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/seterr.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/address.h: include/rtems/score/address.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/address.h

@@ -170,7 +170,7 @@ man_MANS = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
 libc_CPPFLAGS = -DNOPOLL -DNOSELECT
 
 libc/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) libc/$(ARCH)
+	@$(mkdir_p) libc/$(ARCH)
 	@: > libc/$(ARCH)/$(dirstamp)
 libc/$(ARCH)/%.$(OBJEXT): libc/%.c libc/$(ARCH)/$(dirstamp)
 	${COMPILE} $(libc_CPPFLAGS) -o $@ -c $<
@@ -209,7 +209,7 @@ lib_OBJS = $(lib_C_FILES:lib/%.c=lib/$(ARCH)/%.$(OBJEXT))
 lib_CPPFLAGS = -DNOPOLL -DNOSELECT
 
 lib/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) lib/$(ARCH)
+	@$(mkdir_p) lib/$(ARCH)
 	@: > lib/$(ARCH)/$(dirstamp)
 lib/$(ARCH)/%.$(OBJEXT): lib/%.c lib/$(ARCH)/$(dirstamp)
 	${COMPILE} $(lib_CPPFLAGS) -o $@ -c $<
@@ -234,9 +234,8 @@ endif
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/bpfilter.h: bpfilter.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -276,9 +275,8 @@ $(PROJECT_INCLUDE)/memory.h: memory.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/memory.h
 
 $(PROJECT_INCLUDE)/arpa/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/arpa
+	@$(mkdir_p) $(PROJECT_INCLUDE)/arpa
 	@: > $(PROJECT_INCLUDE)/arpa/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 
 $(PROJECT_INCLUDE)/arpa/ftp.h: arpa/ftp.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/ftp.h
@@ -301,9 +299,8 @@ $(PROJECT_INCLUDE)/arpa/telnet.h: arpa/telnet.h $(PROJECT_INCLUDE)/arpa/$(dirsta
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/telnet.h
 
 $(PROJECT_INCLUDE)/machine/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/machine
+	@$(mkdir_p) $(PROJECT_INCLUDE)/machine
 	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/$(dirstamp)
 
 $(PROJECT_INCLUDE)/machine/conf.h: machine/conf.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/conf.h
@@ -330,9 +327,8 @@ $(PROJECT_INCLUDE)/machine/vmparam.h: machine/vmparam.h $(PROJECT_INCLUDE)/machi
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/vmparam.h
 
 $(PROJECT_INCLUDE)/net/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/net
+	@$(mkdir_p) $(PROJECT_INCLUDE)/net
 	@: > $(PROJECT_INCLUDE)/net/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/$(dirstamp)
 
 $(PROJECT_INCLUDE)/net/bpf.h: net/bpf.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/bpf.h
@@ -399,9 +395,8 @@ $(PROJECT_INCLUDE)/net/pppcompress.h: net/pppcompress.h $(PROJECT_INCLUDE)/net/$
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/pppcompress.h
 
 $(PROJECT_INCLUDE)/netinet/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/netinet
+	@$(mkdir_p) $(PROJECT_INCLUDE)/netinet
 	@: > $(PROJECT_INCLUDE)/netinet/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 
 $(PROJECT_INCLUDE)/netinet/icmp_var.h: netinet/icmp_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/icmp_var.h
@@ -492,9 +487,8 @@ $(PROJECT_INCLUDE)/netinet/udp_var.h: netinet/udp_var.h $(PROJECT_INCLUDE)/netin
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/udp_var.h
 
 $(PROJECT_INCLUDE)/nfs/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/nfs
+	@$(mkdir_p) $(PROJECT_INCLUDE)/nfs
 	@: > $(PROJECT_INCLUDE)/nfs/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 
 $(PROJECT_INCLUDE)/nfs/krpc.h: nfs/krpc.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/krpc.h
@@ -521,9 +515,8 @@ $(PROJECT_INCLUDE)/nfs/xdr_subs.h: nfs/xdr_subs.h $(PROJECT_INCLUDE)/nfs/$(dirst
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/xdr_subs.h
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h: rtems/rtems_bsdnet.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h
@@ -546,9 +539,8 @@ $(PROJECT_INCLUDE)/rtems/mkrootfs.h: rtems/mkrootfs.h $(PROJECT_INCLUDE)/rtems/$
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mkrootfs.h
 
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sys
+	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
 $(PROJECT_INCLUDE)/sys/buf.h: sys/buf.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/buf.h
@@ -659,9 +651,8 @@ $(PROJECT_INCLUDE)/sys/un.h: sys/un.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/un.h
 
 $(PROJECT_INCLUDE)/vm/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/vm
+	@$(mkdir_p) $(PROJECT_INCLUDE)/vm
 	@: > $(PROJECT_INCLUDE)/vm/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/$(dirstamp)
 
 $(PROJECT_INCLUDE)/vm/vm.h: vm/vm.h $(PROJECT_INCLUDE)/vm/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vm/vm.h

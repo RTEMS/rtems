@@ -14,9 +14,8 @@ all-local: $(PREINSTALL_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/adainclude/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/adainclude
+	@$(mkdir_p) $(PROJECT_INCLUDE)/adainclude
 	@: > $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
 
 if RTEMS_ADA
 $(PROJECT_INCLUDE)/adainclude/rtems.adb: rtems.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
