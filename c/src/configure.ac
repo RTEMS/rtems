@@ -34,9 +34,7 @@ AC_CONFIG_SUBDIRS(exec)
 fi
 AC_CONFIG_SUBDIRS(optman)
 AC_CONFIG_SUBDIRS(lib/libcpu)
-AC_CONFIG_SUBDIRS(libblock)
 AC_CONFIG_SUBDIRS(lib/libbsp)
-AC_CONFIG_SUBDIRS(libfs)
 AC_CONFIG_SUBDIRS(libmisc)
 
 if test "$RTEMS_CPU" != "unix"; then

@@ -1,3 +1,7 @@
+2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove CONFIG_SUBIDIRS libblock, libfs.
+
 2002-05-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove lib.
