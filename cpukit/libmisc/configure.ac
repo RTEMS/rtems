@@ -39,7 +39,7 @@ AC_MSG_RESULT([$HAVE_ASSIGNABLE_STDIO])
 # serdbg exploits weak symbols
 AC_CACHE_CHECK([whether $CC supports function __attribute__((weak))],
 [rtems_cv_cc_attribute_weak],[
-  AS_IF([test $GCC = yes],[
+  AS_IF([test x"$GCC" = xyes],[
     save_CFLAGS=$CFLAGS
     CFLAGS=-Werror])
 
@@ -51,7 +51,7 @@ AC_CACHE_CHECK([whether $CC supports function __attribute__((weak))],
     [rtems_cv_cc_attribute_weak=yes],
     [rtems_cv_cc_attribute_weak=no])
 
-  AS_IF([test $GCC = yes],[
+  AS_IF([test x"$GCC" = xyes],[
     CFLAGS=$save_CFLAGS])
 ])
 

@@ -1,3 +1,7 @@
+2002-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Fix tests for GCC.
+
 2002-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add check for weak function attribute.
