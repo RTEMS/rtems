@@ -30,14 +30,14 @@ The directives provided by the configuration space manager are:
 @item @code{cfg_read} - Read a Configuration Space
 @item @code{cfg_children} - Get Node Entries
 @item @code{cfg_mark} - Set Configuration Space Option
-@item @code{readdir} - Reads a directory
-@item @code{umask} - Sets a file creation mask
+@item @code{cfg_readdir} - Reads a directory
+@item @code{cfg_umask} - Sets a file creation mask
 @item @code{link} - Creates a link to a file
 @item @code{unlink} - Removes a directory entry
-@item @code{mkdir} - Makes a directory
+@item @code{cfg_mkdir} - Makes a directory
 @item @code{open} - Opens a file
-@item @code{chmod} - Changes file mode
-@item @code{chown} - Changes the owner and/or group of a file
+@item @code{cfg_chmod} - Changes file mode
+@item @code{{cfg_chown} - Changes the owner and/or group of a file
 @end itemize
 
 @section Background
@@ -1132,7 +1132,7 @@ The @code{_POSIX_CFG} feature flag is defined to indicate
 this service is available.
 
 @page
-@subsection readdir - Reads a directory
+@subsection cfg_readdir - Reads a directory
 
 @subheading CALLING SEQUENCE:
 
@@ -1141,7 +1141,7 @@ this service is available.
 #include <sys/types.h>
 #include <dirent.h>
 
-struct dirent *readdir(
+struct dirent *cfg_readdir(
   DIR   *dirp
 );
 @end example
@@ -1160,14 +1160,14 @@ Invalid file descriptor
 
 @subheading DESCRIPTION:
 
-The @code{readdir} function returns a pointer to a structure @code{dirent}
+The @code{cfg_readdir} function returns a pointer to a structure @code{dirent}
 representing the next directory entry from the directory stream pointed to
 by @code{dirp}.  On end-of-file, NULL is returned.
 
-The @code{readdir} function may (or may not) return entries for . or .. Your
+The @code{cfg_readdir} function may (or may not) return entries for . or .. Your
 program should tolerate reading dot and dot-dot but not require them.
 
-The data pointed to be @code{readdir} may be overwritten by another call to
+The data pointed to be @code{cfg_readdir} may be overwritten by another call to
 @code{readdir} for the same directory stream.  It will not be overwritten by 
 a call for another directory.
 
@@ -1292,7 +1292,7 @@ descriptor.
 @subheading NOTES:
 
 @page
-@subsection umask - Sets a file creation mask.
+@subsection cfg_umask - Sets a file creation mask.
 
 @subheading CALLING SEQUENCE:
 
@@ -1301,7 +1301,7 @@ descriptor.
 #include <sys/types.h>
 #include <sys/stat.h>
 
-mode_t umask(
+mode_t cfg_umask(
   mode_t cmask
 );
 @end example
@@ -1314,7 +1314,7 @@ mode_t umask(
 
 @subheading DESCRIPTION:
 
-The @code{umask} function sets the process file creation mask to @code{cmask}.
+The @code{cfg_umask} function sets the process file creation mask to @code{cmask}.
 The file creation mask is used during @code{open}, @code{creat}, @code{mkdir},
 @code{mkfifo} calls to turn off permission bits in the @code{mode} argument.
 Bit positions that are set in @code{cmask} are cleared in the mode of the
@@ -1440,7 +1440,7 @@ file is no longer accessible.
 @subheading NOTES:
 
 @page
-@subsection mkdir - Makes a directory
+@subsection cfg_mkdir - Makes a directory
 
 @subheading CALLING SEQUENCE:
 
@@ -1449,7 +1449,7 @@ file is no longer accessible.
 #include <sys/types.h>
 #include <sys/stat.h>
 
-int mkdir(
+int cfg_mkdir(
   const char *path,
   mode_t      mode
 );
@@ -1485,7 +1485,7 @@ Read-only file system.
 
 @subheading DESCRIPTION:
 
-The @code{mkdir} function creates a new diectory named @code{path}.  The 
+The @code{cfg_mkdir} function creates a new diectory named @code{path}.  The 
 permission bits (modified by the file creation mask) are set from @code{mode}.
 The owner and group IDs for the directory are set from the effective user ID
 and group ID.
@@ -1496,7 +1496,7 @@ empty.
 @subheading NOTES:
 
 @page
-@subsection chmod - Changes file mode.
+@subsection cfg_chmod - Changes file mode.
 
 @subheading CALLING SEQUENCE:
 
@@ -1505,7 +1505,7 @@ empty.
 #include <sys/types.h>
 #include <sys/stat.h>
 
-int chmod(
+int cfg_chmod(
   const char *path,
   mode_t      mode
 );
@@ -1541,13 +1541,13 @@ Read-only file system.
 Set the file permission bits, the set user ID bit, and the set group ID bit 
 for the file named by @code{path} to @code{mode}.  If the effective user ID 
 does not match the owner of the file and the calling process does not have 
-the appropriate privileges, @code{chmod} returns -1 and sets @code{errno} to
+the appropriate privileges, @code{cfg_chmod} returns -1 and sets @code{errno} to
 @code{EPERM}.
 
 @subheading NOTES:
 
 @page
-@subsection chown - Changes the owner and/or group of a file.
+@subsection cfg_chown - Changes the owner and/or group of a file.
 
 @subheading CALLING SEQUENCE:
 
@@ -1556,7 +1556,7 @@ the appropriate privileges, @code{chmod} returns -1 and sets @code{errno} to
 #include <sys/types.h>
 #include <unistd.h>
 
-int chown(
+int cfg_chown(
   const char *path,
   uid_t       owner,
   gid_t       group
@@ -1600,7 +1600,7 @@ bits are cleared.
 
 Some systems consider it a security violation to allow the owner of a file to
 be changed,  If users are billed for disk space usage, loaning a file to 
-another user could result in incorrect billing.  The @code{chown} function
+another user could result in incorrect billing.  The @code{cfg_chown} function
 may be restricted to privileged users for some or all files.  The group ID can
 still be changed to one of the supplementary group IDs.
 
