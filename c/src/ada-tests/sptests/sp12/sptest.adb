@@ -1,0 +1,806 @@
+--
+--  SPTEST / BODY
+--
+--  DESCRIPTION:
+--
+--  This package is the implementation of Test 12 of the RTEMS
+--  Single Processor Test Suite.
+--
+--  DEPENDENCIES: 
+--
+--  
+--
+--  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+--  On-Line Applications Research Corporation (OAR).
+--  All rights assigned to U.S. Government, 1994.
+--
+--  This material may be reproduced by or for the U.S. Government pursuant
+--  to the copyright license under the clause at DFARS 252.227-7013.  This
+--  notice must appear in all copies of this file and its derivatives.
+--
+--  sptest.adb,v 1.3 1995/07/12 19:41:50 joel Exp
+--
+
+with INTERFACES; use INTERFACES;
+with RTEMS;
+with TEST_SUPPORT;
+with TEXT_IO;
+with UNSIGNED32_IO;
+
+package body SPTEST is
+
+--PAGE
+-- 
+--  INIT
+--
+
+   procedure INIT (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+      STATUS : RTEMS.STATUS_CODES;
+   begin
+
+      TEXT_IO.NEW_LINE( 2 );
+      TEXT_IO.PUT_LINE( "*** TEST 12 ***" );
+
+      SPTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
+      SPTEST.TASK_NAME( 2 ) := RTEMS.BUILD_NAME(  'T', 'A', '2', ' ' );
+      SPTEST.TASK_NAME( 3 ) := RTEMS.BUILD_NAME(  'T', 'A', '3', ' ' );
+      SPTEST.TASK_NAME( 4 ) := RTEMS.BUILD_NAME(  'T', 'A', '4', ' ' );
+      SPTEST.TASK_NAME( 5 ) := RTEMS.BUILD_NAME(  'T', 'A', '5', ' ' );
+
+      SPTEST.PRIORITY_TASK_NAME( 1 ) := 
+         RTEMS.BUILD_NAME(  'P', 'R', 'I', '1' );
+      SPTEST.PRIORITY_TASK_NAME( 2 ) := 
+         RTEMS.BUILD_NAME(  'P', 'R', 'I', '2' );
+      SPTEST.PRIORITY_TASK_NAME( 3 ) := 
+         RTEMS.BUILD_NAME(  'P', 'R', 'I', '3' );
+      SPTEST.PRIORITY_TASK_NAME( 4 ) := 
+         RTEMS.BUILD_NAME(  'P', 'R', 'I', '4' );
+      SPTEST.PRIORITY_TASK_NAME( 5 ) := 
+         RTEMS.BUILD_NAME(  'P', 'R', 'I', '5' );
+
+      SPTEST.SEMAPHORE_NAME( 1 ) := RTEMS.BUILD_NAME(  'S', 'M', '1', ' ' );
+      SPTEST.SEMAPHORE_NAME( 2 ) := RTEMS.BUILD_NAME(  'S', 'M', '2', ' ' );
+      SPTEST.SEMAPHORE_NAME( 3 ) := RTEMS.BUILD_NAME(  'S', 'M', '3', ' ' );
+
+      RTEMS.SEMAPHORE_CREATE( 
+         SPTEST.SEMAPHORE_NAME( 1 ), 
+         1,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.SEMAPHORE_ID( 1 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE OF SM1" );
+
+      RTEMS.SEMAPHORE_CREATE( 
+         SPTEST.SEMAPHORE_NAME( 2 ), 
+         0,
+         RTEMS.PRIORITY,
+         SPTEST.SEMAPHORE_ID( 2 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE OF SM2" );
+
+      RTEMS.SEMAPHORE_CREATE( 
+         SPTEST.SEMAPHORE_NAME( 3 ), 
+         1,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.SEMAPHORE_ID( 3 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE OF SM3" );
+
+      TEXT_IO.PUT_LINE( "INIT - Forward priority queue test" );
+      SPTEST.PRIORITY_TEST_DRIVER( 0 );
+
+      TEXT_IO.PUT_LINE( "INIT - Backward priority queue test" );
+      SPTEST.PRIORITY_TEST_DRIVER( 32 );
+
+TEST_SUPPORT.PAUSE;
+
+      TEXT_IO.PUT_LINE( 
+        "INIT - Binary Semaphore and Priority Inheritance Test" 
+      );
+
+      RTEMS.SEMAPHORE_DELETE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_DELETE OF SM2" );
+
+      TEXT_IO.PUT_LINE( 
+        "INIT - semaphore_create - allocated binary semaphore"
+      );
+      RTEMS.SEMAPHORE_CREATE( 
+         SPTEST.SEMAPHORE_NAME( 2 ), 
+         0,
+         RTEMS.BINARY_SEMAPHORE + RTEMS.PRIORITY + RTEMS.INHERIT_PRIORITY,
+         SPTEST.SEMAPHORE_ID( 2 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE OF SM2" );
+
+      TEXT_IO.PUT_LINE( 
+        "INIT - semaphore_release - allocated binary semaphore"
+      );
+      RTEMS.SEMAPHORE_RELEASE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE OF SM2" );
+
+      TEXT_IO.PUT_LINE( 
+        "INIT - semaphore_delete - allocated binary semaphore"
+      );
+      RTEMS.SEMAPHORE_DELETE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_DELETE OF SM2" );
+
+      RTEMS.SEMAPHORE_CREATE( 
+         SPTEST.SEMAPHORE_NAME( 2 ), 
+         1,
+         RTEMS.BINARY_SEMAPHORE + RTEMS.PRIORITY + RTEMS.INHERIT_PRIORITY,
+         SPTEST.SEMAPHORE_ID( 2 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE OF SM2" );
+
+      SPTEST.PRIORITY_TEST_DRIVER( 64 );
+
+TEST_SUPPORT.PAUSE;
+
+      RTEMS.SEMAPHORE_DELETE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_DELETE OF SM2" );
+
+      RTEMS.SEMAPHORE_CREATE( 
+         SPTEST.SEMAPHORE_NAME( 2 ), 
+         0,
+         RTEMS.PRIORITY,
+         SPTEST.SEMAPHORE_ID( 2 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE OF SM2" );
+
+      RTEMS.SEMAPHORE_RELEASE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE OF SM2" );
+
+      RTEMS.TASK_CREATE( 
+         SPTEST.TASK_NAME( 1 ), 
+         4, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.TASK_ID( 1 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA1" );
+
+      RTEMS.TASK_CREATE( 
+         SPTEST.TASK_NAME( 2 ), 
+         4, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.TASK_ID( 2 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA2" );
+
+      RTEMS.TASK_CREATE( 
+         SPTEST.TASK_NAME( 3 ), 
+         4, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.TASK_ID( 3 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA3" );
+
+      RTEMS.TASK_START(
+         SPTEST.TASK_ID( 1 ),
+         SPTEST.TASK_1'ACCESS,
+         0,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA1" );
+
+      RTEMS.TASK_START(
+         SPTEST.TASK_ID( 2 ),
+         SPTEST.TASK_2'ACCESS,
+         0,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA2" );
+
+      RTEMS.TASK_START(
+         SPTEST.TASK_ID( 3 ),
+         SPTEST.TASK_3'ACCESS,
+         0,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA3" );
+
+      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
+
+   end INIT;
+
+--PAGE
+-- 
+--  PRIORITY_TEST_DRIVER
+--
+
+   procedure PRIORITY_TEST_DRIVER (
+      PRIORITY_BASE : in     RTEMS.UNSIGNED32
+   ) is 
+      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+      STATUS            : RTEMS.STATUS_CODES;
+   begin
+
+      for INDEX in 1 .. 5
+      loop
+
+         case INDEX is
+            when 1 | 2 | 3 => 
+               SPTEST.TASK_PRIORITY( INDEX )  := 
+                  PRIORITY_BASE + RTEMS.TASK_PRIORITY( INDEX );
+            when others    => 
+               SPTEST.TASK_PRIORITY( INDEX )  := PRIORITY_BASE + 3;
+         end case;
+
+         RTEMS.TASK_CREATE( 
+            SPTEST.PRIORITY_TASK_NAME( INDEX ), 
+            SPTEST.TASK_PRIORITY( INDEX ), 
+            2048, 
+            RTEMS.DEFAULT_MODES,
+            RTEMS.DEFAULT_ATTRIBUTES,
+            SPTEST.PRIORITY_TASK_ID( INDEX ),
+            STATUS
+         );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOOP" );
+
+      end loop;
+
+      if PRIORITY_BASE = 0 then
+
+         for INDEX in 1 .. 5
+         loop
+
+            RTEMS.TASK_START( 
+               SPTEST.PRIORITY_TASK_ID( INDEX ),
+               SPTEST.PRIORITY_TASK'ACCESS,
+               RTEMS.TASK_ARGUMENT( INDEX ), 
+               STATUS
+            );
+            TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
+      
+         end loop;
+
+      else
+
+         for INDEX in reverse 1 .. 5
+         loop
+
+            RTEMS.TASK_START( 
+               SPTEST.PRIORITY_TASK_ID( INDEX ),
+               SPTEST.PRIORITY_TASK'ACCESS,
+               RTEMS.TASK_ARGUMENT( INDEX ), 
+               STATUS
+            );
+            TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
+      
+            RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+            TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER LOOP" );
+
+            if PRIORITY_BASE = 64 then
+               if INDEX = 4 then
+                  RTEMS.TASK_SET_PRIORITY( 
+                     SPTEST.PRIORITY_TASK_ID( 5 ),
+                     PRIORITY_BASE + 4,
+                     PREVIOUS_PRIORITY,
+                     STATUS
+                  );
+                  TEXT_IO.PUT( "PDRV - change priority of PRI5 from " );
+                  UNSIGNED32_IO.PUT( PREVIOUS_PRIORITY );
+                  TEXT_IO.PUT( " to " );
+                  UNSIGNED32_IO.PUT( PRIORITY_BASE + 4 );
+                  TEXT_IO.NEW_LINE;
+                  TEST_SUPPORT.DIRECTIVE_FAILED( 
+                     STATUS, 
+                     "PDRV TASK_SET_PRIORITY" 
+                  );
+               end if;
+
+               RTEMS.TASK_SET_PRIORITY( 
+                  SPTEST.PRIORITY_TASK_ID( 5 ),
+                  RTEMS.CURRENT_PRIORITY,
+                  PREVIOUS_PRIORITY,
+                  STATUS
+               );
+               TEXT_IO.PUT( "PDRV - priority of PRI5 is " );
+               UNSIGNED32_IO.PUT( PREVIOUS_PRIORITY );
+               TEXT_IO.NEW_LINE;
+               TEST_SUPPORT.DIRECTIVE_FAILED( 
+                  STATUS, 
+                  "PDRV TASK_SET_PRIORITY" 
+               );
+            end if;
+
+         end loop;
+
+      end if;
+
+      RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER AFTER LOOP" );
+
+      if PRIORITY_BASE = 0 then
+         for INDEX in 1 .. 5
+         loop
+
+            RTEMS.SEMAPHORE_RELEASE( 
+               SPTEST.SEMAPHORE_ID( 2 ),
+               STATUS
+            );
+            TEST_SUPPORT.DIRECTIVE_FAILED( 
+               STATUS,
+               "SEMAPHORE_RELEASE LOOP"
+            );
+
+         end loop;
+      end if;
+
+      if PRIORITY_BASE = 64 then
+
+         TEXT_IO.PUT_LINE( "PDRV - task_resume - PRI5" );
+         RTEMS.TASK_RESUME( SPTEST.PRIORITY_TASK_ID( 5 ), STATUS );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESUME" );
+
+         RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+         TEST_SUPPORT.DIRECTIVE_FAILED( 
+           STATUS, 
+           "TASK_WAKE_AFTER SO PRI5 can run" 
+         );
+
+         RTEMS.TASK_DELETE( SPTEST.PRIORITY_TASK_ID( 5 ), STATUS );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF PRI5" );
+      else
+
+         for INDEX in 1 .. 5
+         loop
+
+            RTEMS.TASK_DELETE( 
+               SPTEST.PRIORITY_TASK_ID( INDEX ),
+               STATUS
+            );
+            TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE LOOP" );
+
+         end loop;
+      end if;
+
+
+   end PRIORITY_TEST_DRIVER;
+
+--PAGE
+-- 
+--  PRIORITY_TASK
+--
+
+   procedure PRIORITY_TASK (
+      ITS_INDEX : in     RTEMS.TASK_ARGUMENT
+   ) is 
+      TIMEOUT          : RTEMS.INTERVAL;
+      ITS_PRIORITY     : RTEMS.TASK_PRIORITY;
+      CURRENT_PRIORITY : RTEMS.TASK_PRIORITY;
+      STATUS           : RTEMS.STATUS_CODES;
+   begin
+
+      ITS_PRIORITY := SPTEST.TASK_PRIORITY( INTEGER( ITS_INDEX ) );
+
+      if ITS_PRIORITY < 3 then
+         TIMEOUT := 5 * TEST_SUPPORT.TICKS_PER_SECOND;
+      else
+         TIMEOUT := RTEMS.NO_TIMEOUT;
+      end if;
+
+      TEST_SUPPORT.PUT_NAME( PRIORITY_TASK_NAME( INTEGER(ITS_INDEX) ), FALSE );
+      TEXT_IO.PUT_LINE( " - semaphore_obtain - wait forever on SM2" );
+   
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 2 ), 
+         RTEMS.DEFAULT_OPTIONS, 
+         TIMEOUT, 
+         STATUS 
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN OF SM2" );
+
+      if ITS_PRIORITY < 64 then
+         TEXT_IO.PUT( "PRI" );
+         UNSIGNED32_IO.PUT( ITS_INDEX );
+         TEXT_IO.PUT( " - WHY AM I HERE? (priority = " );
+         UNSIGNED32_IO.PUT( ITS_PRIORITY );
+         TEXT_IO.PUT_LINE( " )" );
+         RTEMS.SHUTDOWN_EXECUTIVE( 0 );
+      end if;
+
+      if ITS_INDEX = 5 then
+         TEXT_IO.PUT_LINE(
+            "PRI5 - task_suspend - until all priority tasks blocked" 
+         );
+      end if;
+
+      RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND" );
+
+      TEXT_IO.PUT_LINE( "PRI5 - task_delete - all tasks waiting on SM2" );
+      for INDEX in 1 .. 4 
+      loop
+
+         RTEMS.TASK_DELETE(  SPTEST.PRIORITY_TASK_ID( INDEX ), STATUS );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE LOOP" );
+
+      end loop;
+
+      TEXT_IO.PUT_LINE( "PRI5 - semaphore_obtain - nested" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 2 ), 
+         RTEMS.DEFAULT_OPTIONS, 
+         TIMEOUT, 
+         STATUS 
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN NESTED" );
+
+      TEXT_IO.PUT_LINE( "PRI5 - semaphore_release - nested" );
+      RTEMS.SEMAPHORE_RELEASE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE NESTED" );
+
+      TEXT_IO.PUT_LINE( "PRI5 - semaphore_release - restore priority" );
+      RTEMS.SEMAPHORE_RELEASE( SPTEST.SEMAPHORE_ID( 2 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE" );
+
+      RTEMS.TASK_SET_PRIORITY( 
+         SPTEST.PRIORITY_TASK_ID( 5 ),
+         RTEMS.CURRENT_PRIORITY,
+         CURRENT_PRIORITY,
+         STATUS
+      );
+      TEXT_IO.PUT( "PRI5 - priority of PRI5 is " );
+      UNSIGNED32_IO.PUT( CURRENT_PRIORITY );
+      TEXT_IO.NEW_LINE;
+      TEST_SUPPORT.DIRECTIVE_FAILED( 
+         STATUS, 
+         "PRI5 TASK_SET_PRIORITY CURRENT" 
+      );
+      RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+
+   end PRIORITY_TASK;
+   
+--PAGE
+-- 
+--  TASK_1
+--
+
+   procedure TASK_1 (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+      SMID   : RTEMS.ID;
+      STATUS : RTEMS.STATUS_CODES;
+   begin
+
+      RTEMS.SEMAPHORE_IDENT( 
+         SPTEST.SEMAPHORE_NAME( 1 ), 
+         RTEMS.SEARCH_ALL_NODES, 
+         SMID, 
+         STATUS 
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_IDENT OF SM1" );
+      TEXT_IO.PUT( "TA1 - semaphore_ident - smid => " );
+      UNSIGNED32_IO.PUT( SMID, WIDTH => 8, BASE => 16 );
+      TEXT_IO.NEW_LINE;
+
+      TEXT_IO.PUT_LINE( "TA1 - semaphore_obtain - wait forever on SM2" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 2 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM2" );
+     
+      TEXT_IO.PUT_LINE( "TA1 - got SM2" );
+
+      TEXT_IO.PUT_LINE( "TA1 - semaphore_obtain - wait forever on SM3" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 3 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM3" );
+     
+      TEXT_IO.PUT_LINE( "TA1 - got SM3" );
+   
+      TEXT_IO.PUT_LINE( "TA1 - semaphore_obtain - get SM1 - NO_WAIT" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 1 ),
+         RTEMS.NO_WAIT, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM1" );
+     
+      TEXT_IO.PUT_LINE( "TA1 - got SM1" );
+
+      TEXT_IO.PUT_LINE( "TA1 - task_wake_after - sleep 5 seconds" );
+      RTEMS.TASK_WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
+
+TEST_SUPPORT.PAUSE;
+
+      TEXT_IO.PUT_LINE( "TA1 - semaphore_release - release SM1" );
+      RTEMS.SEMAPHORE_RELEASE( SPTEST.SEMAPHORE_ID( 1 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE ON SM1" );
+     
+      TEXT_IO.PUT_LINE( 
+         "TA1 - semaphore_obtain - waiting for SM1 with 10 second timeout"
+      );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 1 ),
+         RTEMS.DEFAULT_MODES, 
+         10 * TEST_SUPPORT.TICKS_PER_SECOND,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM3" );
+     
+      TEXT_IO.PUT_LINE( "TA1 - got SM1" );
+   
+      TEXT_IO.PUT_LINE( "TA1 - semaphore_release - release SM2" );
+      RTEMS.SEMAPHORE_RELEASE( 
+         SPTEST.SEMAPHORE_ID( 2 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE ON SM2" );
+
+      TEXT_IO.PUT_LINE( "TA1 - task_wake_after - sleep 5 seconds" );
+      RTEMS.TASK_WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
+
+TEST_SUPPORT.PAUSE;
+
+      TEXT_IO.PUT_LINE( "TA1 - task_delete - delete TA3" );
+      RTEMS.TASK_DELETE( SPTEST.TASK_ID( 3 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA3" );
+
+      RTEMS.TASK_CREATE( 
+         SPTEST.TASK_NAME( 4 ), 
+         4, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.TASK_ID( 4 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA4" );
+
+      RTEMS.TASK_CREATE( 
+         SPTEST.TASK_NAME( 5 ), 
+         4, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.TASK_ID( 5 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF TA5" );
+
+      RTEMS.TASK_START(
+         SPTEST.TASK_ID( 4 ),
+         SPTEST.TASK_4'ACCESS,
+         0,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA4" );
+
+      RTEMS.TASK_START(
+         SPTEST.TASK_ID( 5 ),
+         SPTEST.TASK_5'ACCESS,
+         0,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA5" );
+
+      TEXT_IO.PUT_LINE( "TA1 - task_wake_after - sleep 5 seconds" );
+      RTEMS.TASK_WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
+
+      TEXT_IO.PUT_LINE( "TA1 - task_delete - delete TA4" );
+      RTEMS.TASK_DELETE( SPTEST.TASK_ID( 4 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA4" );
+
+      TEXT_IO.PUT_LINE( "TA1 - semaphore_release - release SM1" );
+      RTEMS.SEMAPHORE_RELEASE( 
+         SPTEST.SEMAPHORE_ID( 1 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE ON SM1" );
+
+      TEXT_IO.PUT_LINE( "TA1 - task_wake_after - sleep 5 seconds" );
+      RTEMS.TASK_WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
+
+      TEXT_IO.PUT_LINE( "TA1 - semaphore_delete - delete SM1" );
+      RTEMS.SEMAPHORE_DELETE( SPTEST.SEMAPHORE_ID( 1 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_DELETE OF SM1" );
+
+      TEXT_IO.PUT_LINE( "TA1 - semaphore_delete - delete SM3" );
+      RTEMS.SEMAPHORE_DELETE( SPTEST.SEMAPHORE_ID( 3 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_DELETE OF SM3" );
+
+      TEXT_IO.PUT_LINE( "TA1 - task_delete - delete self" );
+      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA1" );
+
+   end TASK_1;
+
+--PAGE
+-- 
+--  TASK_2
+--
+
+   procedure TASK_2 (
+      ARGUMENT : in    RTEMS.TASK_ARGUMENT
+   ) is
+      STATUS            : RTEMS.STATUS_CODES;
+      PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
+   begin
+ 
+      TEXT_IO.PUT_LINE( "TA2 - semaphore_obtain - wait forever on SM1" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 1 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM1" );
+     
+      TEXT_IO.PUT_LINE( "TA2 - got SM1" );
+   
+      TEXT_IO.PUT_LINE( "TA2 - semaphore_release - release SM1" );
+      RTEMS.SEMAPHORE_RELEASE( 
+         SPTEST.SEMAPHORE_ID( 1 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE ON SM1" );
+
+      TEXT_IO.PUT_LINE( 
+         "TA2 - task_set_priority - make self highest priority task" 
+      );
+      RTEMS.TASK_SET_PRIORITY(
+         RTEMS.SELF,
+         3,
+         PREVIOUS_PRIORITY,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_PRIORITY ON TA2" );
+     
+      TEXT_IO.PUT_LINE( "TA2 - semaphore_obtain - wait forever on SM2" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 2 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM2" );
+     
+      TEXT_IO.PUT_LINE( "TA2 - got SM2" );
+   
+      TEXT_IO.PUT_LINE( "TA2 - semaphore_release - release SM2" );
+      RTEMS.SEMAPHORE_RELEASE( 
+         SPTEST.SEMAPHORE_ID( 2 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE ON SM2" );
+   
+      TEXT_IO.PUT_LINE( "TA2 - task_delete - delete self" );
+      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA2" );
+
+   end TASK_2;
+
+--PAGE
+-- 
+--  TASK_3
+--
+
+   procedure TASK_3 (
+      ARGUMENT : in    RTEMS.TASK_ARGUMENT
+   ) is
+      STATUS : RTEMS.STATUS_CODES;
+   begin
+ 
+      TEXT_IO.PUT_LINE( "TA3 - semaphore_obtain - wait forever on SM2" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 2 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM2" );
+      TEXT_IO.PUT_LINE( "TA3 - got SM2" );
+   
+      TEXT_IO.PUT_LINE( "TA3 - semaphore_release - release SM2" );
+      RTEMS.SEMAPHORE_RELEASE( 
+         SPTEST.SEMAPHORE_ID( 2 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE ON SM2" );
+   
+      TEXT_IO.PUT_LINE( "TA3 - semaphore_obtain - wait forever on SM3" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 3 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM3" );
+     
+   end TASK_3;
+
+--PAGE
+-- 
+--  TASK_4
+--
+
+   procedure TASK_4 (
+      ARGUMENT : in    RTEMS.TASK_ARGUMENT
+   ) is
+      STATUS : RTEMS.STATUS_CODES;
+   begin
+ 
+      TEXT_IO.PUT_LINE( "TA4 - semaphore_obtain - wait forever on SM1" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 1 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM1" );
+     
+   end TASK_4;
+
+--PAGE
+-- 
+--  TASK_5
+--
+
+   procedure TASK_5 (
+      ARGUMENT : in    RTEMS.TASK_ARGUMENT
+   ) is
+      STATUS : RTEMS.STATUS_CODES;
+   begin
+ 
+      TEXT_IO.PUT_LINE( "TA5 - semaphore_obtain - wait forever on SM1" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 1 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_OBTAIN ON SM1" );
+     
+      TEXT_IO.PUT_LINE( "TA5 - got SM1" );
+   
+      TEXT_IO.PUT_LINE( "TA5 - semaphore_obtain - wait forever on SM1" );
+      RTEMS.SEMAPHORE_OBTAIN( 
+         SPTEST.SEMAPHORE_ID( 1 ),
+         RTEMS.DEFAULT_MODES, 
+         RTEMS.NO_TIMEOUT,
+         STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS( 
+         STATUS, 
+         RTEMS.OBJECT_WAS_DELETED, 
+         "SEMAPHORE_OBTAIN ON SM1" 
+      );
+      TEXT_IO.PUT_LINE( "TA5 - SM1 deleted by TA1" );
+    
+      TEXT_IO.PUT_LINE( "*** END OF TEST 12 ***" );
+      RTEMS.SHUTDOWN_EXECUTIVE( 0 );
+   
+   end TASK_5;
+
+end SPTEST;
