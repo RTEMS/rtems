@@ -13,4 +13,5 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS=include tools start startup clock console timer pc386dev wrapup
+SUB_DIRS=include tools start startup clock console timer pc386dev network \
+          wrapup

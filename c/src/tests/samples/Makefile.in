@@ -25,4 +25,6 @@ MP_TESTS = $(MP_TESTS_$(HAS_MP)_V)
 
 FP_TESTS = paranoia
 
-SUB_DIRS=hello ticker base_sp $(MP_TESTS) $(CPLUSPLUS_TESTS) $(FP_TESTS)
+# socket socket/pgmHost
+SUB_DIRS=hello ticker base_sp 
+	 $(MP_TESTS) $(CPLUSPLUS_TESTS) $(FP_TESTS)
