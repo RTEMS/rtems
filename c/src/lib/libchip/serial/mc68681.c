@@ -41,7 +41,7 @@ console_fns mc68681_fns =
   mc68681_initialize_interrupts,  /* deviceInitialize */
   mc68681_write_polled,           /* deviceWritePolled */
   mc68681_set_attributes,         /* deviceSetAttributes */
-  FALSE,                          /* deviceOutputUsesInterrupts */
+  TRUE                            /* deviceOutputUsesInterrupts */
 };
 
 console_fns mc68681_fns_polled =
@@ -282,82 +282,21 @@ MC68681_STATIC void mc68681_initialize_context(
 {
   int          port;
   unsigned int pMC68681;
+  unsigned int pMC68681_port;
   
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
 
   pmc68681Context->mate = -1;
 
   for (port=0 ; port<Console_Port_Count ; port++ ) {
-    if ( Console_Port_Tbl[port].ulCtrlPort1 == pMC68681 ) {
+    if ( Console_Port_Tbl[port].ulCtrlPort1 == pMC68681 && 
+         Console_Port_Tbl[port].ulCtrlPort2 != pMC68681_port ) {
       pmc68681Context->mate = port;
       break;
     }
   }
 
-}
-
-/*
- *  mc68681_build_imr
- *
- *  This function returns the value for the interrupt mask register for this
- *  DUART.  Since this is a shared register, we must look at the other port
- *  on this chip to determine whether or not it is using interrupts.
- */
-
-MC68681_STATIC unsigned int mc68681_build_imr(
-  int  minor,
-  int  enable_flag
-)
-{
-  int              mate;
-  unsigned int     mask;
-  unsigned int     mate_mask;
-  unsigned int     pMC68681;
-  unsigned int     pMC68681_port;
-  mc68681_context *pmc68681Context;
-  
-  pMC68681       = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port  = Console_Port_Tbl[minor].ulCtrlPort2;
-  pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
-  mate            = pmc68681Context->mate;
-
-  mate_mask = 0;
-
-  /*
-   *  Decide if the other port on this DUART is using interrupts
-   */
-
-  if ( mate != -1 ) {
-    if ( Console_Port_Tbl[mate].pDeviceFns->deviceOutputUsesInterrupts )
-      mate_mask = 0x03;
-
-    /*
-     *  If equal, then minor is A so the mate must be B
-     */
-
-    if ( pMC68681 == pMC68681_port )
-      mate_mask <<= 4;
-  }
-
-  /*
-   *  Add in minor's mask
-   */
-
-  mask = 0;
-  if ( enable_flag ) {
-    if ( Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts ) {
-      if ( pMC68681 == pMC68681_port )
-         mask = 0x03;
-      else
-         mask = 0x30;
-    }
-  }
-
-#if 0
-  return mask | mate_mask;
-#endif
-
-  return 0;
 }
 
 /*
@@ -546,85 +485,6 @@ MC68681_STATIC void mc68681_write_polled(
 }
 
 /*
- *  mc68681_process
- *
- *  This routine is the per port console interrupt handler.
- */
-
-MC68681_STATIC void mc68681_process(
-  int  minor
-)
-{
-  unsigned32              pMC68681;
-  unsigned32              pMC68681_port;
-  volatile unsigned8      ucLineStatus; 
-  char                    cChar;
-  getRegister_f           getReg;
-  setRegister_f           setReg;
-
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  getReg        = Console_Port_Tbl[minor].getRegister;
-  setReg        = Console_Port_Tbl[minor].setRegister;
-
-  /*
-   * Deal with any received characters
-   */
-  while(TRUE) {
-    ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
-    if(!(ucLineStatus & MC68681_RX_READY)) {
-      break;
-    }
-    /*
-     *  If there is a RX error, then dump all the data.
-     */
-    if ( ucLineStatus & MC68681_RX_ERRORS ) {
-      do {
-        cChar = (*getReg)(pMC68681_port, MC68681_RX_BUFFER);
-        ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
-      } while ( ucLineStatus & MC68681_RX_READY );
-      continue;
-    }
-    cChar = (*getReg)(pMC68681_port, MC68681_RX_BUFFER);
-    rtems_termios_enqueue_raw_characters( 
-      Console_Port_Data[minor].termios_data,
-      &cChar, 
-      1 
-    );
-  }
-
-  /*
-   *  Deal with the transmitter
-   */
-
-  while(TRUE) {
-    if(Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
-      Console_Port_Data[minor].bActive = FALSE;
-
-      /*
-       * There is no data to transmit
-       */
-      break;
-    }
-
-    ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
-    if(!(ucLineStatus & (MC68681_TX_EMPTY|MC68681_TX_READY))) {
-      /*
-       *  We'll get another interrupt when the TX can take another character.
-       */
-      break;
-    }
-
-    Ring_buffer_Remove_character( &Console_Port_Data[minor].TxBuffer, cChar);
-    /*
-     * transmit character
-     */
-    (*setReg)(pMC68681_port, MC68681_TX_BUFFER, cChar);
-  }
-
-}
-
-/*
  *  mc68681_isr
  *
  *  This is the single interrupt entry point which parcels interrupts
@@ -719,9 +579,9 @@ MC68681_STATIC void mc68681_initialize_interrupts(int minor)
  */
 
 MC68681_STATIC int mc68681_write_support_int(
-  int   minor, 
+  int         minor, 
   const char *buf, 
-  int   len
+  int         len
 )
 {
   int i;
@@ -893,5 +753,144 @@ MC68681_STATIC int mc68681_baud_rate(
   *baud_mask_p = (baud_mask << 4) | baud_mask;
   *acr_bit_p   = acr_bit;
   return status;
+}
+
+/*
+ *  mc68681_process
+ *
+ *  This routine is the per port console interrupt handler.
+ */
+
+MC68681_STATIC void mc68681_process(
+  int  minor
+)
+{
+  unsigned32              pMC68681;
+  unsigned32              pMC68681_port;
+  volatile unsigned8      ucLineStatus; 
+  char                    cChar;
+  getRegister_f           getReg;
+  setRegister_f           setReg;
+
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  getReg        = Console_Port_Tbl[minor].getRegister;
+  setReg        = Console_Port_Tbl[minor].setRegister;
+
+  /*
+   * Deal with any received characters
+   */
+  while(TRUE) {
+    ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
+    if(!(ucLineStatus & MC68681_RX_READY)) {
+      break;
+    }
+    /*
+     *  If there is a RX error, then dump all the data.
+     */
+    if ( ucLineStatus & MC68681_RX_ERRORS ) {
+      do {
+        cChar = (*getReg)(pMC68681_port, MC68681_RX_BUFFER);
+        ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
+      } while ( ucLineStatus & MC68681_RX_READY );
+      continue;
+    }
+    cChar = (*getReg)(pMC68681_port, MC68681_RX_BUFFER);
+    rtems_termios_enqueue_raw_characters( 
+      Console_Port_Data[minor].termios_data,
+      &cChar, 
+      1 
+    );
+  }
+
+  /*
+   *  Deal with the transmitter
+   */
+
+  while(TRUE) {
+    if(Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
+      Console_Port_Data[minor].bActive = FALSE;
+
+      /*
+       * There is no data to transmit
+       */
+      break;
+    }
+
+    ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
+    if(!(ucLineStatus & (MC68681_TX_EMPTY|MC68681_TX_READY))) {
+      /*
+       *  We'll get another interrupt when the TX can take another character.
+       */
+      break;
+    }
+
+    Ring_buffer_Remove_character( &Console_Port_Data[minor].TxBuffer, cChar);
+    /*
+     * transmit character
+     */
+    (*setReg)(pMC68681_port, MC68681_TX_BUFFER, cChar);
+  }
+
+}
+
+/*
+ *  mc68681_build_imr
+ *
+ *  This function returns the value for the interrupt mask register for this
+ *  DUART.  Since this is a shared register, we must look at the other port
+ *  on this chip to determine whether or not it is using interrupts.
+ */
+
+MC68681_STATIC unsigned int mc68681_build_imr(
+  int  minor,
+  int  enable_flag
+)
+{
+  int              mate;
+  unsigned int     mask;
+  unsigned int     mate_mask;
+  unsigned int     pMC68681;
+  unsigned int     pMC68681_port;
+  mc68681_context *pmc68681Context;
+  
+  pMC68681        = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port   = Console_Port_Tbl[minor].ulCtrlPort2;
+  pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
+  mate            = pmc68681Context->mate;
+
+  mate_mask = 0;
+
+  /*
+   *  Decide if the other port on this DUART is using interrupts
+   */
+
+  if ( mate != -1 ) {
+    if ( Console_Port_Tbl[mate].pDeviceFns->deviceOutputUsesInterrupts )
+      mate_mask = 0x03;
+
+    /*
+     *  If equal, then minor is A so the mate must be B
+     */
+
+    if ( pMC68681 == pMC68681_port )
+      mate_mask <<= 4;
+  }
+
+  /*
+   *  Add in minor's mask
+   */
+
+  mask = 0;
+  if ( enable_flag ) {
+    if ( Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts ) {
+      if ( pMC68681 == pMC68681_port )
+         mask = 0x03;
+      else
+         mask = 0x30;
+    }
+  }
+
+  return mask | mate_mask;
 }
 
