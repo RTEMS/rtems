@@ -49,7 +49,7 @@ AM_CONDITIONAL(INLINE,test x"$INLINEdir" = x"inline" )
 AM_CONDITIONAL(MACROS,test x"$INLINEdir" = x"macros" )
 AM_CONDITIONAL(HAS_MP,test x"$HAS_MP" = x"yes" )
 
-AC_DEFINE(RTEMS_VERSION,["rtems-][_RTEMS_VERSION]["],[RTEMS version string])
+AC_DEFINE(RTEMS_VERSION,["][_RTEMS_VERSION]["],[RTEMS version string])
 
 AM_CONDITIONAL(HAS_POSIX,test x"$HAS_POSIX_API" = x"yes")
 AM_CONDITIONAL(HAS_ITRON,test x"$HAS_ITRON_API" = x"yes")
@@ -67,8 +67,8 @@ AM_CONDITIONAL([LIBSCORECPU],
 [test -f "${srcdir}/score/cpu/${RTEMS_CPU}/cpu.c"])
 
 AC_CONFIG_SUBDIRS([libcsupport])
+
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
-  AC_CONFIG_SUBDIRS(libnetworking)
 ## FIXME: Should better use a feature-based test
 AC_MSG_CHECKING([whether CPU supports librpc])
   case "$RTEMS_CPU" in
@@ -109,6 +109,7 @@ AS_IF([test x"${enable_unixlib}" = x"yes"],
     [to indicate RTEMS using RTEMS's unixlib])]
 )
 
+AC_CHECK_FUNCS([strsep strcasecmp snprintf])
 
 AM_CONFIG_HEADER([score/include/rtems/score/cpuopts-tmp.h],[
 echo "/* target cpu dependent options file */"         >$tmp/config.h
@@ -187,6 +188,11 @@ AC_CONFIG_FILES([libfs/Makefile
 libfs/src/Makefile
 libfs/src/imfs/Makefile
 libfs/src/dosfs/Makefile])
+
+AC_CONFIG_FILES([libnetworking/Makefile
+libnetworking/lib/Makefile
+libnetworking/libc/Makefile
+libnetworking/wrapup/Makefile])
 
 AC_CONFIG_FILES([ada/Makefile])
 

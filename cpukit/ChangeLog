@@ -1,5 +1,12 @@
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Merge-in libnetworking/configure.ac.
+	Remove "rtems-" from RTEMS_VERSION.
+	Add AC_CHECK_FUNCS([strsep strcasecmp snprintf]).
+	* Makefile.am: Add libmisc to SUBDIRS.
+
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Merge-in libmisc/configure.ac.
 	* Makefile.am: Add libmisc to SUBDIRS.
 
