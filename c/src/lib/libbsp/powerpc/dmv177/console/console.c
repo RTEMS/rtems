@@ -25,7 +25,7 @@
 #define COM1                      0
 #define COM2                      1
 #define NUM_PORTS                 2
-#define USE_FOR_CONSOLE           COM1
+#define USE_FOR_CONSOLE           COM2
 
 /*
  *  Define RDB_BREAK_IN if you need to be able to break in to the
@@ -129,7 +129,7 @@ int console_write_support(
    * poll each byte in the string out of the port.
    */
   while (nwrite < len) {
-#if defined(CONSOLE_USE_INTERRUPTS)
+#if CONSOLE_USE_INTERRUPTS
 #else
     console_outbyte_polled(port, *buf++);
 #endif
