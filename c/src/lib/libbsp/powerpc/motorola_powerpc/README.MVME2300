@@ -1,0 +1,39 @@
+This BSP was adapted from Eric Valette MCP750 Generic motorola
+port to MVME2300 by Jay Kulpinski <jskulpin@eng01.gdds.com>.
+In other to work correctly, the Tundra Universe chip must
+be turned off using PPCBug as explained below.
+
+
+
+
+The Tundra Universe chip is a bridge between the PCI and VME buses.
+It has four programmable mapping windows in each direction, much like
+the Raven.  PPCBUG lets you specify the mappings if you don't want
+to do it in your application.  The mappings on our board, which may
+or not be the default Motorola mappings, had one window appearing
+at 0x01000000 in PCI space.  This is the same place the bootloader
+code remapped the Raven registers.  The windows' mappings are 
+very likely to be application specific, so I wouldn't worry too
+much about setting them in the BSP, but it would be nice to have
+a standard interface to do so.  Whoever needs that first can 
+incorporate the ppcn_60x BSP code for the Universe chip. :-)
+
+These options in PPCBUG's ENV command did the job:
+
+VME3PCI Master Master Enable [Y/N] = Y?
+PCI Slave Image 0 Control                = 00000000?   <-----
+PCI Slave Image 0 Base Address Register  = 00000000?
+PCI Slave Image 0 Bound Address Register = 00000000?
+PCI Slave Image 0 Translation Offset     = 00000000?
+PCI Slave Image 1 Control                = 00000000?   <-----
+PCI Slave Image 1 Base Address Register  = 01000000?
+PCI Slave Image 1 Bound Address Register = 20000000?
+PCI Slave Image 1 Translation Offset     = 00000000?
+PCI Slave Image 2 Control                = 00000000?   <-----
+PCI Slave Image 2 Base Address Register  = 20000000?
+PCI Slave Image 2 Bound Address Register = 22000000?
+PCI Slave Image 2 Translation Offset     = D0000000?
+PCI Slave Image 3 Control                = 00000000?   <-----
+PCI Slave Image 3 Base Address Register  = 2FFF0000?
+PCI Slave Image 3 Bound Address Register = 30000000?
+PCI Slave Image 3 Translation Offset     = D0000000?        
