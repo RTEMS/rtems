@@ -2,8 +2,8 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.4_p5
-%define srcvers	1.4-p5
+%define rpmvers 1.5
+%define srcvers	1.5
 
 %define _defaultbuildroot	/var/tmp/%{name}-%{srcvers}-root
 %define _prefix			/opt/rtems

@@ -21,25 +21,33 @@ AC_MSG_RESULT([$EXEEXT])
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
 
-# Some linux distributions use /usr/src/packages
-# redhat uses /usr/src/redhat
-# others might use /usr/src
 AC_MSG_CHECKING(for rpm SPECS directory)
-if test -d /usr/src/packages/SPECS;
+# Allow users to override RPM_SPECSdir from the environment.
+if test x"$RPM_SPECSdir" = x"$RPM_SPECSdir";
 then
-  RPM_SPECSdir=/usr/src/packages/SPECS;
-elif test -d /usr/src/redhat/SPECS;
-then
-  RPM_SPECSdir=/usr/src/redhat/SPECS;
-elif test -d /usr/src/SPECS;
-then
-  RPM_SPECSdir=/usr/src/SPECS;
-elif test -d /usr/local/src/redhat/SPECS;
-then
-  RPM_SPECSdir=/usr/local/src/redhat/SPECS;
+# SuSE uses /usr/src/packages
+# redhat uses /usr/src/redhat
+# MDK is reported to use /usr/src/RPM
+# others might use /usr/src
+  rpmpath="/usr:/usr/local"
+  rpmdirs="src/packages:src/redhat:src/RPM:src"
+  save_IFS="$IFS"; IFS=":"
+  for d in $rpmdirs; do
+    for p in $rpmpath; do
+      list="$p/$d:$list"
+    done
+  done
+  for d in $list; do
+    if test -d $d/SPECS; then
+      RPM_SPECSdir="$d/SPECS";
+      break;
+    fi
+  done
+  IFS="$save_IFS"
 fi
+
 if test x"$RPM_SPECSdir" = x"" ; then
-AC_MSG_ERROR(not found)
+AC_MSG_ERROR([not found])
 fi
 AC_MSG_RESULT($RPM_SPECSdir)
 AC_SUBST(RPM_SPECSdir)

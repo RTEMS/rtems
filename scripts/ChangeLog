@@ -1,3 +1,13 @@
+2001-10-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mkbinutilsspec.in: Guard sed-pattern against autoconf.
+	* mkgccnewlibspec.in: Guard sed-pattern against autoconf, remove
+	Target_alias.
+	* mkgdbspec.in: Guard sed-pattern against autoconf.
+	* mkbspspec.in: Guard sed-pattern against autoconf.
+	* configure.ac: Rework check for RPM_SPECSdir.
+	* autotools/automake-rtems.spec: Update to automake-1.5.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

@@ -65,13 +65,13 @@ case ${target_alias} in
     ;;
 esac
 
-sed -e "s%@Release@%${gdb_rpm_release}%g" \
-    -e "s%@rpm_build_root@%${rpm_build_root}%g" \
-    -e "s%@target_alias@%${target_alias}%g" \
-    -e "s%@gdb_version@%${gdb_version}%g" \
-    -e "s%@gdb_patch_version@%${gdb_patch_version}%g" \
-    -e "s%@extra_configure_arguments@%${extra_configure_arguments}%g" \
-    -e "s%@exe_ext@%${exe_ext}%g" \
+sed -e "s%@Release\@%${gdb_rpm_release}%g" \
+    -e "s%@rpm_build_root\@%${rpm_build_root}%g" \
+    -e "s%@target_alias\@%${target_alias}%g" \
+    -e "s%@gdb_version\@%${gdb_version}%g" \
+    -e "s%@gdb_patch_version\@%${gdb_patch_version}%g" \
+    -e "s%@extra_configure_arguments\@%${extra_configure_arguments}%g" \
+    -e "s%@exe_ext\@%${exe_ext}%g" \
 < ${RTEMS_DIR}/gdb/gdb.spec.in \
 > ${specfile}
 

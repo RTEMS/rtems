@@ -57,14 +57,14 @@ target_alias=$1
 
 specfile=${dst}/${target_alias}-gcc-${gcc_version}-newlib-${newlib_version}.spec
 
-sed -e "s%@Release@%${gccnewlib_rpm_release}%g" \
-    -e "s%@Target_alias@%${target_alias}%g" \
-    -e "s%@rpm_build_root@%${rpm_build_root}%g" \
-    -e "s%@gcc_version@%${gcc_version}%g" \
-    -e "s%@gcc_patch_version@%${gcc_patch_version}%g" \
-    -e "s%@newlib_version@%${newlib_version}%g" \
-    -e "s%@newlib_patch_version@%${newlib_patch_version}%g" \
-    -e "s%@exe_ext@%${exe_ext}%g" \
+sed -e "s%@Release\@%${gccnewlib_rpm_release}%g" \
+    -e "s%@target_alias\@%${target_alias}%g" \
+    -e "s%@rpm_build_root\@%${rpm_build_root}%g" \
+    -e "s%@gcc_version\@%${gcc_version}%g" \
+    -e "s%@gcc_patch_version\@%${gcc_patch_version}%g" \
+    -e "s%@newlib_version\@%${newlib_version}%g" \
+    -e "s%@newlib_patch_version\@%${newlib_patch_version}%g" \
+    -e "s%@exe_ext\@%${exe_ext}%g" \
 < ${specsrc} \
 > ${specfile}
 
