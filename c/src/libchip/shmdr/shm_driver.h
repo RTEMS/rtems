@@ -136,6 +136,9 @@ extern "C" {
 #elif defined(hppa1_1)
 #define SHM_LOCK_VALUE    0
 #define SHM_UNLOCK_VALUE  1
+#elif defined(ppc)
+#define SHM_LOCK_VALUE    1
+#define SHM_UNLOCK_VALUE  0
 #elif defined(unix)
 #define SHM_LOCK_VALUE    0
 #define SHM_UNLOCK_VALUE  1
