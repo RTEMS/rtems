@@ -579,7 +579,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
                   "ORR  %0, %0, %2 \n"          \
                   "MSR  cpsr_c, %0 \n"          \
                   : "=r" (reg)                  \
-                  : "r" (reg), "0" (reg));      \
+                  : "0" (reg), "r" (new_level)); \
   }
 
 

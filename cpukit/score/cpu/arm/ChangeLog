@@ -1,3 +1,8 @@
+2004-08-23	Jay Monkman <jtm@lopingdog.com>
+
+	PR 671/bsps
+	* rtems/score/cpu.h: Fixed bug in _CPU_ISR_Set_level for ARM
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* asm.h, cpu.c, cpu_asm.S, rtems/score/arm.h, rtems/score/cpu.h,
