@@ -470,6 +470,7 @@ rtems_status_code rtems_termios_bufsize (
   rtems_termios_cbufsize        = cbufsize;
   rtems_termios_raw_input_size  = raw_input;
   rtems_termios_raw_output_size = raw_output;
+  return RTEMS_SUCCESSFUL;
 }
 
 static void 
