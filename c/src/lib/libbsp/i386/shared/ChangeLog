@@ -1,2 +1,14 @@
 
+	* shared/comm: Added "/dev/ttyS1" & "/dev/ttyS2" support for
+	the i386 BSPs.
+	* shared/comm/gdb_glue.c: New file.
+	* shared/comm/i386_io.c: New file.
+	* shared/comm/tty_drv.c: New file.
+	* shared/comm/tty_drv.h: New file.
+	* shared/comm/Makefile.am: Account for new files.
+	* shared/comm/uart.c: Adds support for sending characters to 
+	another "line discipline."
+
+2000-08-10	Joel Sherrill <joel@OARcorp.com>
+
 	* ChangeLog: New file.

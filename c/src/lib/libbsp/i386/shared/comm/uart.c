@@ -424,6 +424,28 @@ static void*	     termios_ttyp_com2           = NULL;
 static char          termios_tx_hold_com2        = 0;
 static volatile char termios_tx_hold_valid_com2  = 0;
 
+static void ( *driver_input_handler_com1 )( void *,  char *, int ) = 0;
+static void ( *driver_input_handler_com2 )( void *,  char *, int ) = 0;
+
+/*
+ * This routine sets the handler to handle the characters received
+ * from the serial port.
+ */
+void uart_set_driver_handler( int port, void ( *handler )( void *,  char *, int ) )
+{
+  switch( port )
+  {
+    case BSP_UART_COM1:
+     driver_input_handler_com1 = handler;
+     break;
+
+    case BSP_UART_COM2:
+     driver_input_handler_com2 = handler;
+     break;
+  }
+}
+
+
 /*
  * Set channel parameters 
  */
@@ -616,9 +638,15 @@ BSP_uart_termios_isr_com1(void)
 	  if(off != 0)
 	    {
 	      /* Update rx buffer */
-	      rtems_termios_enqueue_raw_characters(termios_ttyp_com1,
-						   (char *)buf,
-						   off);
+         if( driver_input_handler_com1 )
+         {
+             driver_input_handler_com1( termios_ttyp_com1, (char *)buf, off );
+         } 
+         else
+         {
+            /* Update rx buffer */
+	         rtems_termios_enqueue_raw_characters(termios_ttyp_com1, (char *)buf, off );
+         }
 	    }
 	  return;
 	case TRANSMITTER_HODING_REGISTER_EMPTY :
@@ -710,9 +738,14 @@ BSP_uart_termios_isr_com2()
 	  if(off != 0)
 	    {
 	      /* Update rx buffer */
-	      rtems_termios_enqueue_raw_characters(termios_ttyp_com2,
-						   (char *)buf,
-						   off);
+         if( driver_input_handler_com2 )
+         {
+             driver_input_handler_com2( termios_ttyp_com2, (char *)buf, off );
+         } 
+         else
+         {
+	        rtems_termios_enqueue_raw_characters(termios_ttyp_com2, (char *)buf, off);
+         }
 	    }
 	  return;
 	case TRANSMITTER_HODING_REGISTER_EMPTY :
