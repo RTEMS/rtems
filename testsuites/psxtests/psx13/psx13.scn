@@ -1,3 +1,4 @@
+*** POSIX TEST 13 ***
 
 Files initialized successfully.
 Testing device_lseek()... Success.

@@ -598,6 +598,8 @@ int main(
 )
 #endif
 {
+  puts( "*** POSIX TEST 13 ***" );
+
   if (InitFiles() == TRUE) {
     printf ("\nFiles initialized successfully.\n");
 
