@@ -64,13 +64,13 @@ Cross binutils for target solaris
 %dir %{prefix}/man/man1
 %doc %{prefix}/man/man1/sparc-solaris-*.1*
 
-%dir %{prefix}/include
-%{prefix}/include/*.h
+# %dir %{prefix}/include
+# %{prefix}/include/*.h
 
 %dir %{prefix}/lib
-%{prefix}/lib/libbfd*
-%{prefix}/lib/libiberty*
-%{prefix}/lib/libopcodes*
+# %{prefix}/lib/libbfd*
+# %{prefix}/lib/libiberty*
+# %{prefix}/lib/libopcodes*
 
 %dir %{prefix}/share
 %dir %{prefix}/share/locale

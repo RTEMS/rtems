@@ -1,3 +1,8 @@
+2003-01-27	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, sparc-solaris-binutils.spec.in: Updated and 
+	used to build sparc-solaris 3.2.1-1 C language only.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
