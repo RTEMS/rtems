@@ -69,13 +69,13 @@ struct rtems_bsdnet_ifconfig {
 	int		rbuf_count;
 	int		xbuf_count;
 
-  /*
-   * For external ethernet controller board the following
-   * parameters are needed
-   */
-  unsigned int 			port;   /* port of the board */
-  unsigned int			irno;   /* irq of the board */
-  unsigned int			bpar;   /* memory of the board */
+	/*
+	 * For external ethernet controller board the following
+	 * parameters are needed
+	 */
+	unsigned int	port;   /* port of the board */
+	unsigned int	irno;   /* irq of the board */
+	unsigned int	bpar;   /* memory of the board */
 
 };
 
