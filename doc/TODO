@@ -5,6 +5,19 @@
 This is a collection of things which need to be done to the various 
 manuals.
 
+General Issues
+==============
+More automatic handling of version, date, revision, release, etc.
+
+Eliminate use of gifs.
+
+Redraw pictures as appropriate in open source tools
+
+
+Getting Started (C and Ada versions)
+====================================
+Produce PDF
+
 POSIX User Notes
 ================
 
