@@ -18,6 +18,8 @@ include_HEADERS += include/coverhd.h
 
 all-local: $(PREINSTALL_FILES)
 
+PREINSTALL_DIRS =
+
 $(PROJECT_INCLUDE)/bare.h: include/bare.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bare.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bare.h
@@ -39,6 +41,7 @@ $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
