@@ -7,7 +7,7 @@
 #
 
 PROJECT=powerpc
-DISTRIBUTION_LEVEL=internal
+DISTRIBUTION_LEVEL=support
 
 include ../../Make.config
 
