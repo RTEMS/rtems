@@ -1,3 +1,7 @@
+2003-08-11	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac: Removed duplicate entry.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.

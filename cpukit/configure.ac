@@ -261,9 +261,9 @@ libmisc/rtmonuse/Makefile
 libmisc/serdbg/Makefile
 libmisc/stackchk/Makefile
 libmisc/capture/Makefile
+libmisc/fsmount/Makefile
 libmisc/untar/Makefile
 libmisc/mw-fb/Makefile
-libmisc/fsmount/Makefile
 libmisc/wrapup/Makefile
 
 wrapup/Makefile
