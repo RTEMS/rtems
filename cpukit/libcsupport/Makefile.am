@@ -3,7 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/amcompile.am
+include $(top_srcdir)/automake/compile.am
 
 include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h include/spurious.h \
@@ -131,10 +131,7 @@ CLEANFILES += libcsupport_g.a
 libcsupport_g_a_SOURCES = $(libcsupport_a_SOURCES)
 libcsupport_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-DOC_FILES = src/TODO src/CASES
-
-EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
-    $(UNIX_C_FILES)
+EXTRA_DIST = src/TODO src/CASES src/README
 
 PREINSTALL_FILES =
 
