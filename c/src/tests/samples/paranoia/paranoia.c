@@ -204,7 +204,7 @@ extern void BadCond ();
 extern void SqXMinX ();
 extern void TstCond ();
 extern void notify ();
-extern int read ();
+/* extern int read (); */
 extern void Characteristics ();
 extern void Heading ();
 extern void History ();

@@ -1,3 +1,11 @@
+2000-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	* POSIX include files merged into newlib.  This resulted in
+	some definitions moving to other files and thus some secondary
+	effects in RTEMS source code.
+	* paranoia/paranoia.c: Commented out incorrect and conflicting
+	prototype of read().
+
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
