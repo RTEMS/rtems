@@ -16,6 +16,8 @@
 pipe(), Function, Dummy Implementation
 @end example
 
+NOTE: pipe() returns ENOSYS.
+
 @section File Descriptor Manipulation
 
 @subsection Duplicate an Open File Descriptor
