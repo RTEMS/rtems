@@ -11,6 +11,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <string.h>
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
