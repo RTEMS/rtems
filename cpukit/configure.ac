@@ -285,8 +285,6 @@ libblock/Makefile
 libfs/Makefile
 libcsupport/Makefile
 libnetworking/Makefile
-libnetworking/lib/Makefile
-libnetworking/libc/Makefile
 librpc/Makefile
 libmisc/Makefile
 
