@@ -1,4 +1,4 @@
-/*  Task_1_through_3
+/*  Task_1
  *
  *  This routine serves as a test task.  It verifies the basic task
  *  switching capabilities of the executive.
@@ -22,7 +22,7 @@
 #include "system.h"
 #include <errno.h>
 
-void *Task_1_through_3(
+void *Task_1(
   void *argument
 )
 {
