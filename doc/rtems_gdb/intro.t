@@ -16,3 +16,7 @@ This paper documents @b{only} the RTEMS/GDB extensions to GNU
 GDB 4.17, as well as its use in the RTEMS environment. The reader is assumed
 to be familiar with GNU GDB.
 
+The RTEMS project would like to thank Emmanuel Raguet (raguet@crf.canon.fr)
+and Eric Valette (valette@crf.canon.fr) of the Canon Research Centre 
+France S.A. for developing and documenting RTEMS/GDB and submitting it.
+

@@ -7,13 +7,13 @@
 @c
 
 
-@section Troubleshooting
+@chapter Troubleshooting
 
 This section describes symptoms in some situations where the debugger does not
 work correctly, and it gives guidelines for resolving the problems encountered. 
 
 
-@subsection Target machine name unknown on the host
+@section Target machine name unknown on the host
 
 RTEMS/GDB fails to connect to target machine named my_target:
 
@@ -28,17 +28,15 @@ host address.
 Internet number of machine my_target in the file /etc/hosts on your host machine. }
 
 
-@subsection{Debug server not present
+@section Debug server not present
 
 The target rtems command fails:
 
 @example
-
-(gdb) target rtems my\_target
+(gdb) target rtems my_target
 
 Attaching remote machine across net... RPC timed out. Couldn't connect
 to remote target
-
 @end example
 
 

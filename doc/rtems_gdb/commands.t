@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@section Commands
+@chapter Commands
 
 The usual GDB commands are available to display or modify data structures and
 machine registers, disassemble code, display source listings, set and reset
@@ -18,26 +18,26 @@ for multi-threaded debugging within a RTEMS host-target environment. These comma
 are described in this section.
 
 
-@subsection Host-target connection control
+@section Host-target connection control
 
-@itemize
+@itemize @bullet
 @item (gdb) setrpcmode sun : specifies the SUN RPC type.
 @item (gdb) setdaemontype rdbg : specifies the RDBG debug server type.
 @item (gdb) target rtems target-name : specifies the target type.
 @end itemize
 
-@subsection System status information
+@section System status information
 
-@itemize
+@itemize @bullet
 @item (gdb) info threads : gives a list of all threads in the debuggee,
 their names, identifiers and states. It also indicates which thread is
 the target thread.
 @end itemize
 
 
-@subsection Thread control
+@section Thread control
 
-@itemize
+@itemize @bullet
 @item (gdb) thread target [id] : allows the user to get/set the target thread.
 The argument id is either the thread's symbolic name or its local identifier.
 @item (gdb) thread detach [id...] : all stops (breakpoints) of some specified

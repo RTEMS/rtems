@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@section Debug Session Example
+@chapter Debug Session Example
 
 @example
 GNU gdb 4.17 

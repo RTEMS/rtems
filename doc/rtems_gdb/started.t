@@ -7,32 +7,28 @@
 @c
 
 
-@section Getting Started
+@chapter Getting Started
 
 This section describes the steps which are necessary to set up a
 debugging session with RTEMS/GDB.
 
 
-@subsection Compiling The System Components
+@section Compiling The System Components
 
 The components that need to be debugged have to be compiled with the -g option
 in order the generated file to contain the required information for the debug
 session.
 
 
-@subsection Starting a debugging session
+@section Starting a debugging session
 
 After having launched GDB, the user must connect to the RTEMS target with the
 following commands:
 
 @example
-
 (gdb) setrpcmode sun
-
 (gdb) setdaemontype rdbg
-
 (gdb) target rtems target-name
-
 @end example
 
 Then he can use the file GDB command to specify the binary to be debugged.
@@ -42,7 +38,7 @@ file. Each time, the user will launch GDB, it will execute this initialization
 sequence.
 
 
-@subsection Attaching To The System
+@section Attaching To The System
 
 The entire target system is viewed as a single multi-threaded process,
 the identifier of which is 1. To attach, use:

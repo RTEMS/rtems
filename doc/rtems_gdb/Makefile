@@ -19,8 +19,7 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES= \
-    intro.t swarch.t started.t commands.t trouble.t example.t
-
+    intro.texi swarch.texi started.texi commands.texi trouble.texi example.texi
 
 FILES=$(PROJECT).texi $(GENERATED_FILES)
 
@@ -63,30 +62,30 @@ clean:
 intro.texi: intro.t Makefile
 	$(BMENU) -p "Top" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Software Architecture" ${*}.t
 
 swarch.texi: swarch.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -p "Introduction" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Getting Started" ${*}.t
 
 started.texi: started.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -p "Software Architecture" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Commands" ${*}.t
 
 commands.texi: commands.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -p "Getting Started Attaching To The System" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Troubleshooting" ${*}.t
 
 trouble.texi: trouble.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -p "Commands Thread control" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Debug Session Example" ${*}.t
 
 example.texi: example.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -p "Troubleshooting Debug server not present" \
 	    -u "Top" \
 	    -n "" ${*}.t
 

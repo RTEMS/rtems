@@ -64,43 +64,25 @@ END-INFO-DIR-ENTRY
 @c  The alternative is to rework a sentence to avoid this problem.
 
 @include intro.texi
-@include target.texi
-@include makefiles.texi
-@include linkcmds.texi
-@include support.texi
-@include init.texi
-@include console.texi
-@include clock.texi
-@include timer.texi
-@include rtc.texi
-@include nvmem.texi
-@include network.texi
-@include shmsupp.texi
-@include analog.texi
-@include discrete.texi
+@include swarch.texi
+@include started.texi
+@include commands.texi
+@include trouble.texi
+@include example.texi
 
 @ifinfo
 @node Top, Introduction, (dir), (dir)
 @top rtems_gdb
 
-This is the online version of the Getting Started with RTEMS for C/C++ Users.
+This is the online version of the RTEMS/GDB User's Guide.
 
 @menu
 * Introduction::
-* Target Dependent Files::
-* Makefiles::
-* Linker Script::
-* Miscellaneous Support Files::
-* Initialization Code::
-* Console Driver::
-* Clock Driver::
-* Timer Driver::
-* Real-Time Clock Driver::
-* Networking Driver::
-* Non-Volatile Memory Driver::
-* Shared Memory Support Driver::
-* Analog Driver::
-* Discrete Driver::
+* Software Architecture::
+* Getting Started::
+* Commands::
+* Troubleshooting::
+* Debug Session Example::
 @end menu
 
 @c * Command and Variable Index::
