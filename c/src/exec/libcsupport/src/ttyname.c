@@ -14,7 +14,8 @@
 #include <_syslist.h>
 #include <errno.h>
 
-#include <rtems/posix/seterr.h>
+#include "libio_.h"
+
 
 int ttyname_r(
   int   fd,
