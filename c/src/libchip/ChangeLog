@@ -1,5 +1,9 @@
 2003-06-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
+	* network/README.3com: New file missed in previous commit.
+
+2003-06-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
 	PR 405/bsps
 	PR 393/networking
 	* network/dec21140.c: Fix leak also known as PR393.
