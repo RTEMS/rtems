@@ -12,18 +12,16 @@
  * ------------------------------------------------------------------------
  * [22.05.2000,StWi/CWA] added support for the DEC/Intel 21143 chip
  *
- * The 21143 support is (for now) only available for the __i386 target,
- * because that's the only testing platform I have. It should (to my best
- * knowledge) work in the same way for the "__PPC" target, but someone
- * should test this first before it's put into the code. Thanks go to
- * Andrew Klossner who provided the vital information about the
- * Intel 21143 chip.
- * (FWIW: I tested this driver using a Kingston KNE100TX with 21143PD chip)
+ * Thanks go to Andrew Klossner who provided the vital information about the
+ * Intel 21143 chip.  FWIW: The 21143 additions to this driver were initially
+ * tested with a PC386 BSP using a Kingston KNE100TX with 21143PD chip.
  *
  * The driver will automatically detect whether there is a 21140 or 21143
  * network card in the system and activate support accordingly. It will
  * look for the 21140 first. If the 21140 is not found the driver will
  * look for the 21143.
+ *
+ * 2004-11-10, Joel/Richard - 21143 support works on MVME2100.
  * ------------------------------------------------------------------------
  *
  * 2003-03-13, Greg Menke, gregory.menke@gsfc.nasa.gov
@@ -62,7 +60,6 @@
 #include <pcibios.h>
 #endif
 #if defined(__PPC__)
-#include <bsp/pci.h>
 #include <libcpu/byteorder.h>
 #include <libcpu/io.h>
 #endif
@@ -629,6 +626,9 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    sc->irqInfo.off  = no_op;
    sc->irqInfo.isOn = dec21140IsOn;
 
+#ifdef DEC_DEBUG
+   printk( "dec2114x: Installing IRQ %d\n", sc->irqInfo.name );
+#endif
 #ifdef BSP_SHARED_HANDLER_SUPPORT
    st = BSP_install_rtems_shared_irq_handler( &sc->irqInfo );
 #else
@@ -1028,7 +1028,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
     * Get the instance number for the board we're going to configure
     * from the user.
     */
-   if( (unitNumber = rtems_bsdnet_parse_driver_name( config, &unitName)) == -1 )
+   if( (unitNumber = rtems_bsdnet_parse_driver_name(config, &unitName)) == -1 )
    {
       return 0;
    }
@@ -1079,8 +1079,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       if( BSP_pciFindDevice( PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21143,
                              unitNumber-1, &pbus, &pdev, &pfun) != -1 )
       {
-         printk("dec21143 : found device '%s', PPC support has not been tested.  Using it anyway.\n",
-                config->name );
 
          pci_write_config_dword(pbus,
                                 pdev,
@@ -1176,7 +1174,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                                &lvalue);
 
    tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK))
-      + (unsigned int)PCI_MEM_BASE;
+      + (unsigned int)PCI_MEM_BASE_ADJUSTMENT;
 
    sc->base = (unsigned int *)(tmp);
 
@@ -1209,7 +1207,9 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    sc->irqInfo.name = cvalue;
 
 
-   /* printk("dec2114x : unit %d base address %08x.\n", unitNumber, sc->base ); */
+#ifdef DEC_DEBUG
+   printk("dec2114x : unit %d base address %08x.\n", unitNumber, sc->base );
+#endif
 
 
    /*

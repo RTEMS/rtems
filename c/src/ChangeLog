@@ -1,3 +1,8 @@
+2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* libchip/network/dec21140.c: Cleanup a bit and remove message about
+	not supported on PowerPC since it works on the MVME2100 BSP.
+
 2004-11-05	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Remove check for libbsp/${RTEMS_CPU}.
