@@ -119,7 +119,7 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
      * because the eip points to the faulty instruction so...
      */
     printk("Exception while executing ISR!!!. System locked\n");
-    while(1);
+    _CPU_Fatal_halt(faultAddr);
   }
   else {
     /*
