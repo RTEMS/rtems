@@ -29,8 +29,6 @@ include $(top_srcdir)/../../../../automake/compile.am
 include $(RTEMS_ROOT)/make/leaf.cfg
 include $(top_srcdir)/sptests.am
 
-LD_LIBS += $(PROJECT_RELEASE)/lib/libtest$(LIBSUFFIX_VA)
-
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
