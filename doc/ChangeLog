@@ -7,6 +7,8 @@
 	Add rules to build common/rtems.texi.
 	* common/setup.texi: Remove RTEMS* VARs, moved to
 	common/rtems.texi.in.
+	* Makefile.am: Add common/rtems.texi to CLEANFILES.
+	Add common/rtems.sed to DISTCLEANFILES.
 
 2003-08-29	Joel Sherrill <joel@OARcorp.com>
 
