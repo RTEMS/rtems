@@ -41,10 +41,10 @@ The directives provided by the files and directories manager are:
 @item @code{chown} - Changes the owner and/ or group of a file
 @item @code{utime} - Change access and/or modification times of an inode
 @item @code{ftruncate} - Truncate a file to a specified length
-@itme @code{truncate} - Truncate a file to a specified length
+@item @code{truncate} - Truncate a file to a specified length
 @item @code{pathconf} - Gets configuration values for files
 @item @code{fpathconf} - Get configuration values for files
-@itme @code{mknod} - Create a directory
+@item @code{mknod} - Create a directory
 @end itemize
 
 @section Background
@@ -1390,13 +1390,33 @@ long getdents(
 
 @subheading STATUS CODES:
 
+on sucess, the number of bytes read is returned.  On end of directory,
+0 is returned.  On error, -1 is returned, and @code{errno} is set
+appropriately.
+
 @table @b
-@item E
-The
+@item EBADF
+Invalid file descriptor @code{fd}.
+
+@item EFAULT
+Argument points outside the calling process's address space.
+
+@item EINVAL
+Result buffer is too small.
+
+@item ENOENT
+No such directory.
+
+@item ENOTDIR
+File descriptor does not refer to a directory.
 
 @end table
 
 @subheading DESCRIPTION:
+
+@code{getdents} reads several @code{dirent} structures from the directory
+pointed by @code{fd} into the memory area pointed to by @code{dirp}.  The
+parameter @code{count} is the size of the memory area.  
 
 @subheading NOTES:
 
