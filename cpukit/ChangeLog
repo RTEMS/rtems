@@ -1,5 +1,8 @@
-2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Remove $(RTEMS_BSP_CFLAGS).
+
+2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 	* wrapup/Makefile.am: Fix path to libxdr and librpc (Another typo in
 	from the 2002-12-12 patch).
 
