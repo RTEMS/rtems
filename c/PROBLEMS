@@ -4,23 +4,21 @@
 
 This is the list of outstanding problems in this release.
 
-+   The POSIX threads and real time extensions code in this tree does
-    not work yet and is intentionally not in the normal build path.
++   The POSIX threads and real time extensions code in this tree are
+    not completely tested yet.  Some of the POSIX tests do run but none
+    of the POSIX code is in the normal build path.
 
 +   The test spfatal is out of date and as a result will NOT execute
     correctly.  The addition of POSIX and consequent ongoing initialization
     reorganization makes it pointless to fix this until the POSIX support
     is completely in place.
 
-+   The m68000 support is nearly complete now.  The missing piece
-    inside the executive proper is support for the software interrupt 
-    stack.  Also, the m68k family has become quite large and an 
-    understanding of the compatibility of the peripherals on the various 
-    members of the 683xx family would allow someone to designate some
-    of the drivers submitted for the gen683xx BSPs as useful on other
-    members.
++   The m68k family has become quite large and an understanding of the 
+    compatibility of the peripherals on the various members of the 683xx 
+    family would allow someone to designate some of the drivers submitted
+    for the gen683xx BSPs as useful on other members.
 
-+   The only i960 family member tested is the CA.  No support for the
++   The only supported i960 family member is the CA.  No support for the
     floating point support found in other family members is present.
     This also implies that RTEMS may "think" of something as generic
     across the i960 family when in fact it is specific to the CA.
