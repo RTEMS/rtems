@@ -845,7 +845,7 @@ handle_exception (int exceptionVector)
 		  if (mem_err)
 		    {
 		      strcpy (remcomOutBuffer, "E03");
-		      debug_error ("memory fault");
+		      debug_error ("memory fault", 0);
 		    }
 		}
 
@@ -871,7 +871,7 @@ handle_exception (int exceptionVector)
 		    if (mem_err)
 		      {
 			strcpy (remcomOutBuffer, "E03");
-			debug_error ("memory fault");
+			debug_error ("memory fault", 0);
 		      }
 		    else
 		      {

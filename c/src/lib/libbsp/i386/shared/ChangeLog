@@ -1,5 +1,10 @@
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
+	* comm/i386-stub.c: Fixed places where debug_error() was not called
+	with enough arguments.
+
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
 	* comm/i386-stub.c: Removed warnings.
 
 2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
