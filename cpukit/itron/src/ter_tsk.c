@@ -30,10 +30,10 @@ ER ter_tsk(
 
   the_thread = _ITRON_Task_Get( tskid, &location );
 
-  if ( !the_thread )
+  if ( location != OBJECTS_LOCAL )
     _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
 
-  if ( the_thread == _Thread_Executing )
+  if ( _Thread_Is_executing( the_thread ) )
     _ITRON_return_errorno( E_OBJ );
   
   if ( _States_Is_dormant( the_thread->current_state ) )
@@ -42,8 +42,7 @@ ER ter_tsk(
   _Thread_Restart( the_thread, NULL, 0 );
   _Thread_Set_state( the_thread, STATES_DORMANT );
 
-  _Thread_Enable_dispatch();
-  return E_OK;
+  _ITRON_return_errorno( E_OK );
 }
 
 
