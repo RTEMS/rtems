@@ -14,15 +14,6 @@ ASSOCIATION_C_FILES = assoc.c assocnamebad.c
 BASE_FS_C_FILES = base_fs.c mount.c unmount.c ioman.c libio.c \
     libio_sockets.c eval.c fs_null_handlers.c
 
-IMFS_C_FILES = imfs_chown.c imfs_creat.c imfs_directory.c imfs_eval.c \
-    imfs_free.c imfs_fsunmount.c imfs_gtkn.c imfs_init.c imfs_initsupp.c \
-    imfs_link.c imfs_mknod.c imfs_mount.c imfs_fchmod.c imfs_unlink.c \
-    imfs_unmount.c imfs_utime.c imfs_ntype.c imfs_stat.c imfs_getchild.c \
-    memfile.c deviceio.c imfs_handlers_device.c imfs_handlers_directory.c \
-    imfs_handlers_link.c imfs_handlers_memfile.c imfs_debug.c imfs_rmnod.c \
-    imfs_symlink.c imfs_readlink.c imfs_fdatasync.c imfs_fcntl.c \
-    miniimfs_init.c
-
 TERMIOS_C_FILES = cfgetispeed.c cfgetospeed.c cfsetispeed.c cfsetospeed.c \
     tcgetattr.c tcsetattr.c tcdrain.c tcflow.c tcflush.c tcgetprgrp.c \
     tcsendbreak.c tcsetpgrp.c termios.c termiosinitialize.c \
@@ -52,11 +43,11 @@ COMMON_C_FILES = gxx_wrappers.c printk.c $(BASE_FS_C_FILES) \
     $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
     $(ASSOCIATION_C_FILES)
 
-UNIX_C_FILES = $(UNIX_LIBC_C_FILES) imfs_unixstub.c
+UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
 
 EMBEDDED_C_FILES = $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
-    $(DIRECTORY_SCAN_C_FILES) $(IMFS_C_FILES)
+    $(DIRECTORY_SCAN_C_FILES)
 
 if UNIX
 C_FILES = $(COMMON_C_FILES) $(UNIX_C_FILES)
@@ -65,7 +56,7 @@ C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
 endif
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-H_FILES = libcsupport.h imfs.h
+H_FILES = libcsupport.h
 SYS_H_FILES =
 RTEMS_H_FILES = assoc.h error.h libio.h
 noinst_HEADERS = libio_.h

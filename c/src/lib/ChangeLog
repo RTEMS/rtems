@@ -1,4 +1,21 @@
 
+2000-10-18	Chris Johns <ccj@acm.org>
+
+	* libfs created.
+	* libc/deviceio.c, libc/imfs_getchild.c, libc/imfs_readlink.c,
+	libc/imfs.h, libc/imfs_gtkn.c, libc/imfs_rmnod.c, libc/imfs_chown.c,
+	libc/imfs_handlers_device.c, libc/imfs_stat.c, libc/imfs_creat.c,
+	libc/imfs_handlers_directory.c, libc/imfs_symlink.c, libc/imfs_debug.c,
+	libc/imfs_handlers_link.c, libc/imfs_unixstub.c, libc/imfs_directory.c,
+	libc/imfs_handlers_memfile.c, libc/imfs_unlink.c, libc/imfs_eval.c,
+	libc/imfs_init.c, libc/imfs_unmount.c, libc/imfs_fchmod.c,
+	libc/imfs_initsupp.c, libc/imfs_utime.c, libc/imfs_fcntl.c,
+	libc/imfs_link.c, libc/memfile.c, libc/imfs_fdatasync.c,
+	libc/imfs_mknod.c, libc/miniimfs_init.c, libc/imfs_free.c,
+	libc/imfs_mount.c, libc/imfs_fsunmount.c, libc/imfs_ntype.c:
+	Moved to libfs/src/imfs.
+	* Makefile.am: Modified to reflect above.
+
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/Makefile.am: Added mallocfreespace.c.
