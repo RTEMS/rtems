@@ -17,8 +17,9 @@
 
 /*
  * Declare some sizes.
+ * A heap size of 0 means `use all available memory for the heap'.
  */
-_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 /*
@@ -100,30 +101,27 @@ SECTIONS {
                 PROVIDE (etext = .);
         } >rom
         .data : AT(SIZEOF(.text)) {
-                copy_start = .;
+                _copy_start = .;
                 *(.data)
 		*(.gnu.linkonce.d*)
 		*(.gcc_except_table)
                 . = ALIGN (16);
-                PROVIDE (_edata = .);
-                copy_end = .;
+                PROVIDE (edata = .);
+                _copy_end = .;
         } >ram
         .bss : {
                 M68Kvec = .;
-                _M68Kvec = .;
                 . += (256 * 4);
-                clear_start = .;
+                _clear_start = .;
                 *(.bss)
                 *(COMMON)
                 . = ALIGN (16);
-                _end = .;
+                PROVIDE (end = .);
 
-                _HeapStart = .;
-                . += _HeapSize;
                 . += _StackSize;
                 . = ALIGN (16);
-                stack_init = .;
-                clear_end = .;
+                _stack_init = .;
+                _clear_end = .;
 
                 _WorkspaceBase = .;
         } >ram
@@ -133,8 +131,6 @@ SECTIONS {
          */
         dpram : {
                 m360 = .;
-                _m360 = .;
                 . += (8 * 1024);
-
         } >dpram
 }
