@@ -1,5 +1,10 @@
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/new-exceptions/cpu.h: *_swap_u32( uint32_t ).
+	* rtems/old-exceptions/cpu.h: *_swap_u32( uint32_t ).
+
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/types.h: #include <rtems/stdint.h>.
 
 2004-11-22	Joel Sherrill <joel@OARcorp.com>
@@ -22,7 +27,7 @@
 	* rtems/score/ppc.h: Add doxygen preamble.
 	* rtems/score/types.h: Add doxygen preamble.
 
-2004-10-20	Eric Norum <norume@aps.anl.gov
+2004-10-20	Eric Norum <norume@aps.anl.gov>
 
 	Add Kate Feng's MVME5500 BSP
 	* rtems/powerpc/registers.h, rtems/score/powerpc.h
