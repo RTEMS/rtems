@@ -3,7 +3,7 @@
 AC_DEFUN([RTEMS_CPUOPT],
 [
   if $2; then
-cat >>cpuopts.tmp <<\_ACEOF
+cat >>cpuopts.tmp <<_ACEOF
 
 /* $4 */
 #define $1 $3

@@ -32,6 +32,7 @@ else
 fi
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
+RTEMS_PROG_CCAS
 RTEMS_CANONICALIZE_TOOLS
 AM_PROG_CC_C_O
 AC_PROG_RANLIB
@@ -89,6 +90,22 @@ AC_CHECK_FUNCS([strsep strcasecmp snprintf])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
+AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
+## The code fragment below had been used in tools/cpu/unix/gensize.c.
+## FIXME: 
+## * The pad very likely is not necessary.
+AC_CHECK_SIZEOF([CPU_CONTEXT],[],[
+#include <stdio.h>
+#include <setjmp.h>
+
+typedef struct {
+  jmp_buf     regs;
+  int         isr_level;
+  int         pad[4]; /* just in case */
+} CPU_CONTEXT;
+])
+])
+
 cat >>cpuopts.tmp <<\_ACEOF
 /* target cpu dependent options file */
 /* automatically generated -- DO NOT EDIT!! */
@@ -145,6 +162,11 @@ RTEMS_CPUOPT([RTEMS_VERSION],
   [true],
   ["]_RTEMS_VERSION["],
   [RTEMS version string])
+
+RTEMS_CPUOPT([SIZEOF_CPU_CONTEXT],
+  [test x"$RTEMS_CPU" = x"unix"],
+  [$ac_cv_sizeof_CPU_CONTEXT],
+  [The size of a 'CPU_CONTEXT', as computed by sizeof])
 
 cat >>cpuopts.tmp <<\_ACEOF
 
