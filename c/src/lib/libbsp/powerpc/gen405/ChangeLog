@@ -1,5 +1,9 @@
 2001-11-13	Joel Sherrill <joel@OARcorp.com>
 
+	* startup/linkcmds: Added _init, and _fini symbols.
+
+2001-11-13	Joel Sherrill <joel@OARcorp.com>
+
 	* .cvsignore: New file.
 
 2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
