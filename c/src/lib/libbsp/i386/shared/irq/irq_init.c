@@ -15,7 +15,7 @@
 #include <libcpu/cpu.h>
 #include <irq.h>
 #include <bsp.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 /*
  * rtems prologue generated in irq_asm.S
