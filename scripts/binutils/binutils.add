@@ -7,6 +7,7 @@
 #
 
 %define _prefix	@prefix@
+%define _defaultbuildroot %{_tmppath}/%{name}-%{version}
 
 Vendor:       OAR Corporation
 Distribution: Linux
@@ -16,10 +17,10 @@ Group:        rtems
 Release:      @Release@
 License:      GPL/LGPL
 
-Autoreqprov:  	off
+Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Prefix:		%{_prefix}
-BuildRoot:	%{_tmppath}/@target_alias@-binutils
+BuildRoot:	%{_defaultbuildroot}
 BuildPreReq:	/sbin/install-info
 BuildPreReq:	texinfo >= 4.2
 
@@ -74,7 +75,7 @@ This is binutils sources with patches for RTEMS.
   ../binutils-@binutils_version@/mkinstalldirs \
     $RPM_BUILD_ROOT%{_prefix}/share/locale
 
-  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-c++filt
+  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-c++filt@exe_ext@
 # gzip info files
   gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
   gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info-* 2>/dev/null
@@ -97,6 +98,6 @@ This is binutils sources with patches for RTEMS.
 
 %clean
 # let rpm --clean remove BuildRoot iif using the default BuildRoot
-  test "$RPM_BUILD_ROOT" = "%{_tmppath}/@target_alias@-binutils" && \
+  test "$RPM_BUILD_ROOT" = "%{_defaultbuildroot}" && \
     rm -rf $RPM_BUILD_ROOT
 

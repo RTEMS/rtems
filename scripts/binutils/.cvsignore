@@ -3,3 +3,4 @@ Makefile
 Makefile.in
 binutils.spec
 binutils.spec.in
+mkspec

@@ -1,20 +1,21 @@
 #!/bin/sh 
 #
-#  Usage: mkbinutilspec CPU
+#  Usage: mkspec CPU
 #
 
 RTEMS_DIR=`dirname $0`/@top_srcdir@
 
-CFG=setup.cache
-dst=@RPM_SPECSdir@
+CFG=../setup.cache
 exe_ext=@EXEEXT@
+
+specsrc=${RTEMS_DIR}/binutils/binutils.spec.in
 
 usage()
 {
   echo "$0 [options] <target_alias>"
   echo "  options:"
   echo "    -cfg <setup.cache>"
-  echo "    -o <rpm-spec-dir>"
+  echo "    -a <alternate specs.in>"
   exit 1 ;
 }
 
@@ -25,9 +26,9 @@ case $1 in
   CFG=$1
   shift
   ;;
--o)
+-a)
   shift
-  dst=$1
+  specsrc=$1
   shift
   ;;
 -*)
@@ -48,8 +49,6 @@ target_alias=$1
 
 . ./$CFG
 
-specfile=${dst}/$target_alias-binutils-${binutils_version}.spec
-
 if test -n "${binutils_patch_version}"; then
 PATCH1="Patch0: binutils-${binutils_version}-rtems-${binutils_patch_version}.diff"
 PATCH2="%patch0 -p0"
@@ -58,13 +57,12 @@ fi
 sed -e "s%@Release\@%${binutils_rpm_release}%g" \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@target_alias\@%${target_alias}%g" \
+    -e "s%@build_alias\@%@build_alias@%g" \
+    -e "s%@host_alias\@%@host_alias@%g" \
     -e "s%@prefix\@%@prefix@%g" \
     -e "s%@binutils_version\@%${binutils_version}%g" \
     -e "s%@binutils_patch_version\@%${binutils_patch_version}%g" \
     -e "s%@exe_ext\@%${exe_ext}%g" \
     -e "s,@PATCH1\@,${PATCH1}," \
     -e "s,@PATCH2\@,${PATCH2}," \
-< ${RTEMS_DIR}/binutils/binutils.spec.in \
-> ${specfile}
-
-echo Generated ${specfile}
+< ${specsrc}

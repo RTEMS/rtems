@@ -12,7 +12,7 @@ gdb.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
 CLEANFILES = gdb.spec.in
 
-MKGDBSPEC_DEPS = $(top_builddir)/mkspec gdb.spec.in \
+MKGDBSPEC_DEPS = mkspec gdb.spec.in \
     $(top_builddir)/setup.cache
 
 arm-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)

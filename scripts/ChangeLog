@@ -1,3 +1,13 @@
+2003-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* binutils/mkspec.in: New.
+	* binutils/.cvsignore: Add mkspec.
+	* mkbinutilspec.in: Remove.
+	* gdb/Makefile.am: Depend on mkspec.
+	* binutils/binutils.add: Add @exe_ext@ to c++filt.
+	Add %_defaultbuildroot.
+	* configure.ac: Reflect changes above.
+
 2003-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gdb/.cvsignore: Add mkspec.
