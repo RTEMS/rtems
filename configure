@@ -85,7 +85,7 @@ ac_help="$ac_help
     --enable-rtemsbsp=bsp1 bsp2 ..   BSPs to include in build"
 ac_help="$ac_help
 \
-  --disble-tests 	     	    disble tests"
+  --enable-tests 	     	    enable tests (default:disabled)"
 ac_help="$ac_help
 \
   --enable-hwapi                 enable hardware API library"
@@ -3408,7 +3408,7 @@ if test "${enable_tests+set}" = set; then
     *)   { echo "configure: error: bad value ${enableval} for tests option" 1>&2; exit 1; } ;;
   esac
 else
-  echo "$ac_t""yes" 1>&6
+  echo "$ac_t""no" 1>&6
 
 fi
 
