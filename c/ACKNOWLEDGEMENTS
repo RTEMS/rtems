@@ -117,7 +117,8 @@ The following persons/organizations have made contributions:
 
 + Ralf Corsepius (corsepiu@faw.uni-ulm.de) of the Research Institute for
   Applied Knowledge Processing at the University of Ulm (FAW), Germany,
-  for introducing host.cfg to autoconf support.
+  for numerous enhancements to the RTEMS autoconf support as well as
+  for the Hitachi SH port.
 
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
