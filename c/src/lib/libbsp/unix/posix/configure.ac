@@ -38,11 +38,5 @@ RTEMS_BSPOPTS_HELP([HEAPSPACE_MB],
 [The BSP's heapspace RAM in MB.])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-shmsupp/Makefile
-startup/Makefile
-timer/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
