@@ -1,3 +1,10 @@
+2003-10-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 513/doc
+	* Makefile.am, index.html.in: Rename Getting Started to be non-language
+	specific and remove link to Ada Getting Started. Also install missing
+	graphic.
+
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* images/ChangeLog: Removed.
