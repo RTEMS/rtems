@@ -123,6 +123,7 @@ c/src/lib/libbsp/m68k/mvme162/consolex/Makefile \
 c/src/lib/libbsp/m68k/mvme162/include/Makefile \
 c/src/lib/libbsp/m68k/mvme162/startup/Makefile \
 c/src/lib/libbsp/m68k/mvme162/timer/Makefile \
+c/src/lib/libbsp/m68k/mvme162/tod/Makefile \
 c/src/lib/libbsp/m68k/mvme162/tools/Makefile \
 c/src/lib/libbsp/m68k/mvme162/wrapup/Makefile \
 c/src/lib/libbsp/m68k/ods68302/Makefile \
