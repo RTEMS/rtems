@@ -147,5 +147,9 @@ rtems_status_code rtems_termios_read (void *arg);
 rtems_status_code rtems_termios_write (void *arg);
 rtems_status_code rtems_termios_ioctl (void *arg);
 void rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len);
+void rtems_termios_reserve_resources(
+  rtems_configuration_table *configuration,
+  rtems_unsigned32           number_of_devices
+);
 
 #endif /* _RTEMS_LIBIO_H */
