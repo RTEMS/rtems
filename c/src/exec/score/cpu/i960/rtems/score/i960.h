@@ -28,18 +28,22 @@ extern "C" {
  *  which implementation dependent features are present
  *  in a particular member of the family.
  *
- *  NOTE: For now i960 is really the i960ca.  eventually need
- *        to put in at least support for FPU.
+ *  NOTE: For now i960 support is for models without an FPU.
+ *        The stubs for FP routines are in  place so only need to be filled in.
+ *
+ *  NOTE: RTEMS defines a canonical name for each cpu model.
  */
 
-#if defined(__i960CA__)
+#if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
 
 #define CPU_MODEL_NAME  "i960ca"
+#define __RTEMS__i960CA__
 #define I960_HAS_FPU 0
 
-#elif defined(i960ha)
+#elif defined(__i960HA__) || defined(__i960_HA__) || defined(__i960HA)
 
 #define CPU_MODEL_NAME  "i960ha"
+#define __RTEMS_I960HA__
 #define I960_HAS_FPU 0
 
 #else
@@ -61,7 +65,7 @@ extern "C" {
  * XXX    family members...
  */
  
-#if defined(__i960CA__)
+#if defined(__RTEMS_I960CA__)
  
 /* i960CA control structures */
  
@@ -126,7 +130,7 @@ typedef struct {
 typedef i960ca_control_table i960_control_table;
 typedef i960ca_PRCB i960_PRCB;
 
-#elif defined(__i960HA__) || defined(__i960_HA__) || defined(__i960HA)
+#elif defined(__RTEMS_I960HA__)
 
 /* i960HA control structures */
 
