@@ -404,8 +404,7 @@ AC_DEFUN(RTEMS_I386_GAS_CODE16,
          .code16
          data32
          addr32
-         lgdt
-         0
+         lgdt 0
 EOF
       if AC_TRY_COMMAND($AS_FOR_TARGET -o conftest.o conftest.s); then
         rtems_cv_prog_gas_code16=yes
