@@ -432,7 +432,6 @@ package body TMTEST is
                1, 
                0,
                RTEMS.NULL_ADDRESS,
-               RETURN_VALUE,
                STATUS
             );
          end loop;
@@ -453,7 +452,6 @@ package body TMTEST is
                1, 
                0,
                RTEMS.NULL_ADDRESS,
-               RETURN_VALUE,
                STATUS
             );
          end loop;
@@ -474,7 +472,6 @@ package body TMTEST is
                1, 
                0,
                RTEMS.NULL_ADDRESS,
-               RETURN_VALUE,
                STATUS
             );
          end loop;
@@ -495,7 +492,6 @@ package body TMTEST is
                1, 
                0,
                RTEMS.NULL_ADDRESS,
-               RETURN_VALUE,
                STATUS
             );
          end loop;
@@ -516,7 +512,6 @@ package body TMTEST is
                1, 
                0,
                RTEMS.NULL_ADDRESS,
-               RETURN_VALUE,
                STATUS
             );
          end loop;

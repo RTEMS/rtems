@@ -2651,6 +2651,7 @@ package body SPTEST is
 
    procedure SCREEN_13
    is
+      RESULT : RTEMS.Unsigned32;
       TIME   : RTEMS.TIME_OF_DAY;
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -2687,6 +2688,7 @@ package body SPTEST is
          RTEMS.DEVICE_MAJOR_NUMBER'LAST,
          0,
          RTEMS.NULL_ADDRESS,
+         RESULT,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -3024,7 +3026,6 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      STATUS : RTEMS.STATUS_CODES;
    begin
 
       SPTEST.SCREEN_1;

@@ -1,13 +1,16 @@
+2002-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sptests/sp09/sptest.adb: Add Result to SCREEN_13.
+	Remove Status from TASK_1.
+	* sptests/sp21/sptest.adb: Add Result to TASK_1.
+	* tmtests/tm20/tmtest.adb: Remove various RETURN_VALUEs.
+	* ada.am: Remove ADACOMPILE, ADAC. Add AM_LDFLAGS, LDFLAGS.
+	* configure.ac: Check for m4. Abort if HAS_GNAT = no.
+
 2002-08-26	Joel Sherrill <joel@OARcorp.com>
 
 	* tm27 and tm27 are irrelevant as Ada binding tests.
 	* tmtests/tm26/config.h, tmtests/tm26/config.h: Removed.
-
-2002-08-26	Joel Sherrill <joel@OARcorp.com>
-
-	* sptests/sp19/sptest.adb: Modified to follow pattern of SP01
-	even though this test is not supported.
-	* sptests/sp19/sp19.adb: New file.
 
 2002-08-26	Joel Sherrill <joel@OARcorp.com>
 

@@ -14,6 +14,7 @@ RTEMS_CANONICAL_HOST
 AM_INIT_AUTOMAKE([no-define foreign 1.6])
 AM_MAINTAINER_MODE
 
+AC_CHECK_PROGS([M4],[gm4 m4]) 
 RTEMS_PROG_GNAT
 RTEMS_CANONICALIZE_TOOLS
 
@@ -24,7 +25,11 @@ RTEMS_CHECK_CPU
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
-AM_CONDITIONAL([ADA],[test x"$HAVE_GNAT" = x"yes"])
+AS_IF([test x"$HAVE_GNAT" = x"no"],[
+  AC_MSG_ERROR([No acceptable GNATMAKE found.])
+])
+
+RTEMS_CHECK_TOOL([GNATPREP],[gnatprep],[])
 
 # FIXME: Enable building the examples which are known to be broken
 AM_CONDITIONAL([EXPADA],
