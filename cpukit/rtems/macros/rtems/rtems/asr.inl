@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_ASR_h
-#define __MACROS_ASR_h
+#ifndef _RTEMS_RTEMS_ASR_INL
+#define _RTEMS_RTEMS_ASR_INL
 
 #include <rtems/score/isr.h>
 

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_EVENT_inl
-#define __MACROS_EVENT_inl
+#ifndef _RTEMS_RTEMS_EVENT_INL
+#define _RTEMS_RTEMS_EVENT_INL
 
 #endif
 /* end of include file */

@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_MESSAGE_BUFFER_inl_
-#define __ITRON_MESSAGE_BUFFER_inl_
+#ifndef _RTEMS_ITRON_MSGBUFFER_INL
+#define _RTEMS_ITRON_MSGBUFFER_INL
 
 #ifdef __cplusplus
 extern "C" {

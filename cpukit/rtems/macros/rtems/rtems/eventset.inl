@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __EVENT_SET_inl
-#define __EVENT_SET_inl
+#ifndef _RTEMS_RTEMS_EVENTSET_INL
+#define _RTEMS_RTEMS_EVENTSET_INL
 
 /*PAGE
  *

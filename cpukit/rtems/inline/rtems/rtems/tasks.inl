@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_TASKS_inl
-#define __RTEMS_TASKS_inl
+#ifndef _RTEMS_RTEMS_TASKS_INL
+#define _RTEMS_RTEMS_TASKS_INL
 
 /*PAGE
  *

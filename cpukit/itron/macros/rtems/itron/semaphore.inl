@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_SEMAPHORE_inl_
-#define __ITRON_SEMAPHORE_inl_
+#ifndef _RTEMS_ITRON_SEMAPHORE_INL
+#define _RTEMS_ITRON_SEMAPHORE_INL
 
 #ifdef __cplusplus
 extern "C" {

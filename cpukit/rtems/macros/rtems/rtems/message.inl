@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __MESSAGE_QUEUE_inl
-#define __MESSAGE_QUEUE_inl
+#ifndef _RTEMS_RTEMS_MESSAGE_INL
+#define _RTEMS_RTEMS_MESSAGE_INL
 
 /*PAGE
  *

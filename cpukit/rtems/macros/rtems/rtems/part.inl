@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __PARTITION_inl
-#define __PARTITION_inl
+#ifndef _RTEMS_RTEMS_PART_INL
+#define _RTEMS_RTEMS_PART_INL
 
 /*PAGE
  *

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __OPTIONS_inl
-#define __OPTIONS_inl
+#ifndef _RTEMS_RTEMS_OPTIONS_INL
+#define _RTEMS_RTEMS_OPTIONS_INL
 
 /*PAGE
  *

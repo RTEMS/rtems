@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_DPMEM_h
-#define __MACROS_DPMEM_h
+#ifndef _RTEMS_RTEMS_DPMEM_INL
+#define _RTEMS_RTEMS_DPMEM_INL
 
 /*PAGE
  *

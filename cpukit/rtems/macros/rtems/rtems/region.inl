@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __REGION_inl
-#define __REGION_inl
+#ifndef _RTEMS_RTEMS_REGION_INL
+#define _RTEMS_RTEMS_REGION_INL
 
 /*PAGE
  *

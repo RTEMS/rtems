@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_EVENTFLAGS_inl_
-#define __ITRON_EVENTFLAGS_inl_
+#ifndef _RTEMS_ITRON_EVENTFLAGS_INL
+#define _RTEMS_ITRON_EVENTFLAGS_INL
 
 #ifdef __cplusplus
 extern "C" {

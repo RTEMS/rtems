@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_ATTRIBUTES_inl
-#define __INLINE_ATTRIBUTES_inl
+#ifndef _RTEMS_RTEMS_ATTR_INL
+#define _RTEMS_RTEMS_ATTR_INL
 
 /*PAGE
  *

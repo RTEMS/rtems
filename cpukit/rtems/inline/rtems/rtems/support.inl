@@ -16,8 +16,8 @@
  *  $Id$
  */
  
-#ifndef __RTEMS_SUPPORT_inl
-#define __RTEMS_SUPPORT_inl
+#ifndef _RTEMS_RTEMS_SUPPORT_INL
+#define _RTEMS_RTEMS_SUPPORT_INL
 
 /*PAGE
  *

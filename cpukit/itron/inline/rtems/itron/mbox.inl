@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_MAILBOX_inl_
-#define __ITRON_MAILBOX_inl_
+#ifndef _RTEMS_ITRON_MBOX_INL
+#define _RTEMS_ITRON_MBOX_INL
 
 #ifdef __cplusplus
 extern "C" {

@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ITRON_NETWORK_inl_
-#define __ITRON_NETWORK_inl_
+#ifndef _RTEMS_ITRON_NETWORK_INL
+#define _RTEMS_ITRON_NETWORK_INL
 
 #ifdef __cplusplus
 extern "C" {

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RATE_MONOTONIC_inl
-#define __RATE_MONOTONIC_inl
+#ifndef _RTEMS_RTEMS_RATEMON_INL
+#define _RTEMS_RTEMS_RATEMON_INL
 
 /*PAGE
  *

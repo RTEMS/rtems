@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __MODES_inl
-#define __MODES_inl
+#ifndef _RTEMS_RTEMS_MODES_INL
+#define _RTEMS_RTEMS_MODES_INL
 
 /*PAGE
  *

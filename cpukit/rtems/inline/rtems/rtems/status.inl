@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_STATUS_inl
-#define __INLINE_STATUS_inl
+#ifndef _RTEMS_RTEMS_STATUS_INL
+#define _RTEMS_RTEMS_STATUS_INL
 
 /*PAGE
  *
