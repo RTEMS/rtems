@@ -7,6 +7,7 @@
 #include <pthread.h>
 #include <limits.h>
 
+#include <rtems/system.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
 #include <rtems/posix/pthread.h>
@@ -188,13 +189,13 @@ int pthread_attr_getschedpolicy(
 
 int pthread_attr_setschedparam(
   pthread_attr_t            *attr,
-  const struct sched_param   param
+  const struct sched_param  *param
 )
 {
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  attr->schedparam = param;
+  attr->schedparam = *param;
   return 0;
 }
 

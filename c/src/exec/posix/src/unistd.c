@@ -5,6 +5,8 @@
 
 #include <unistd.h>
 
+#include <rtems/system.h>
+
 #ifdef NOT_IMPLEMENTED_YET
 
 /*

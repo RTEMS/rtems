@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include <errno.h>
 
+#include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/score/states.h>
 #include <rtems/score/watchdog.h>

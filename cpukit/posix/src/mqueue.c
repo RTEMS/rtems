@@ -21,8 +21,8 @@
 #include <limits.h>
 #include <errno.h>
 #include <fcntl.h>
-
 #include <mqueue.h>
+
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/mqueue.h>

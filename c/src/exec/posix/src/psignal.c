@@ -5,6 +5,7 @@
 
 #include <signal.h>
 
+#include <rtems/system.h>
 #include <rtems/score/thread.h>
 
 #ifdef NOT_IMPLEMENTED_YET
@@ -16,7 +17,7 @@
  */
 
 int kill(
-  int   pid_t,
+  pid_t pid,
   int   sig
 )
 {

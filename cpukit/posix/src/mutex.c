@@ -6,11 +6,10 @@
 #include <errno.h>
 #include <pthread.h>
 
-#include <rtems/score/system.h>
+#include <rtems/system.h>
 #include <rtems/score/coremutex.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/score/mpci.h>
-
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>

@@ -4,6 +4,8 @@
  */
 
 #include <time.h>
+
+#include <rtems/system.h>
 #include <rtems/score/tod.h>
 
 /*

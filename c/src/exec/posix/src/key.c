@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <string.h>
 
+#include <rtems/system.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>

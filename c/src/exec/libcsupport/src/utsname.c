@@ -8,6 +8,7 @@
 
 #include <sys/utsname.h>
 
+#include <rtems/system.h>
 #include <rtems/score/system.h>
 #include <rtems/score/object.h>
 

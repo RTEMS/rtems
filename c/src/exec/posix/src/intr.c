@@ -9,8 +9,9 @@
 
 #include <errno.h>
 #include <intr.h>
-
 #include <pthread.h>
+
+#include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/coresem.h>
 #include <rtems/score/thread.h>
