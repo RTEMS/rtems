@@ -5,11 +5,6 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 if HAS_MP
-GENERIC_MP_REL_PIECES = shmdr
-endif
-GENERIC_PIECES += $(GENERIC_MP_REL_PIECES)
-
-if HAS_MP
 MP_BSP_O_FILES = shmsupp
 endif
 
@@ -18,8 +13,7 @@ CPU_FILES = clock timer
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_FILES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(foreach piece, $(CPU_FILES), ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel) \
-    $(foreach piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
+    $(foreach piece, $(CPU_FILES), ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel)
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
