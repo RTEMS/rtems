@@ -1,4 +1,3 @@
-#define SONIC_DEBUG
 /*
  *******************************************************************
  *******************************************************************
@@ -40,6 +39,18 @@
 #include <ka9q/netuser.h>
 #include <ka9q/trace.h>
 #include <ka9q/commands.h>
+
+/*
+ * Debug levels
+ *
+ */
+
+#define SONIC_DEBUG_NONE             0x0000
+#define SONIC_DEBUG_ALL              0xFFFF
+#define SONIC_DEBUG_PRINT_REGISTERS  0x0001
+#define SONIC_DEBUG_MEMORY           0x0002
+
+#define SONIC_DEBUG      SONIC_DEBUG_ALL
 
 /*
  * XXX
@@ -249,7 +260,7 @@ SONIC_STATIC void * sonic_allocate (unsigned int nbytes)
     if ((a1 >> 16) == (a2 >> 16))
       break;
   }
-#ifdef SONIC_DEBUG
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
   printf( "sonic_allocate %d bytes at %p\n", nbytes, p );
 #endif
   return p;
@@ -699,7 +710,8 @@ SONIC_STATIC void sonic_rda_wait(
        * reuse the receive buffer holding the giant packet.
        */
       for (i = 0 ; i < 2 ; i++) {
-        if (sonic_read_register( rp, SONIC_REG_RRP ) == sonic_read_register( rp, SONIC_REG_RSA ))
+        if (sonic_read_register( rp, SONIC_REG_RRP ) ==
+            sonic_read_register( rp, SONIC_REG_RSA ))
           sonic_write_register(
             rp,
             SONIC_REG_RRP,
@@ -909,7 +921,6 @@ SONIC_STATIC void sonic_initialize_hardware(
   int i;
   ReceiveDescriptor_t *rda;
   unsigned char *hwaddr;
-  rtems_status_code sc;
   rtems_isr_entry old_handler;
   TransmitDescriptorPointer_t otdp, tdp;
   ReceiveDescriptorPointer_t ordp, rdp;
@@ -936,6 +947,9 @@ SONIC_STATIC void sonic_initialize_hardware(
 
   dp->tdaActiveCount = 0;
   dp->tdaTail = sonic_allocate (dp->tdaCount * sizeof *tdp);
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
+  printf( "tdaTail = %p\n", dp->tdaTail );
+#endif
   otdp = tdp = dp->tdaTail;
   for (i = 0 ; i < dp->tdaCount ; i++) {
     if (i & 1)
@@ -960,6 +974,9 @@ SONIC_STATIC void sonic_initialize_hardware(
    */
 
   rda = sonic_allocate (dp->rdaCount * sizeof *rda);
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
+  printf( "rda area = %p\n", rda );
+#endif
   ordp = rdp = rda;
   for (i = 0 ; i < dp->rdaCount ; i++) {
     /*
@@ -984,8 +1001,9 @@ SONIC_STATIC void sonic_initialize_hardware(
    * This has the useful side effect of making the receive resource
    * area big enough to hold the CAM descriptor area.
    */
+
   dp->rsa = sonic_allocate ((dp->rdaCount + RRA_EXTRA_COUNT) * sizeof *dp->rsa);
-#ifdef SONIC_DEBUG
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
   printf( "rsa area = %p\n", dp->rsa );
 #endif
 
@@ -1150,9 +1168,6 @@ SONIC_STATIC void sonic_initialize_hardware(
    */
   sonic_write_register( rp, SONIC_REG_IMR, 0 );
   old_handler = set_vector(sonic_interrupt_handler, dp->vector, 0);
-  if (sc != RTEMS_SUCCESSFUL)
-    rtems_panic ("Can't attach SONIC interrupt handler: %s\n",
-              rtems_status_text (sc));
 
   /*
    * Remainder of hardware initialization is
@@ -1302,7 +1317,7 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
   return 0;
 }
 
-#ifdef SONIC_DEBUG
+#if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
 #include <stdio.h>
 
 char SONIC_Reg_name[64][6]= {
@@ -1380,9 +1395,9 @@ void sonic_write_register(
 {
   volatile unsigned32 *p = base;
 
-#ifdef SONIC_DEBUG
-  printf( "%p ", &p[regno] );
-  printf( "Write 0x%04x to %s (0x%02x)\n", value, SONIC_Reg_name[regno], regno );
+#if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
+  printf( "%p Write 0x%04x to %s (0x%02x)\n",
+      &p[regno], value, SONIC_Reg_name[regno], regno );
   fflush( stdout );
 #endif
   p[regno] = value;
@@ -1397,9 +1412,9 @@ unsigned32 sonic_read_register(
   unsigned32           value;
 
   value = p[regno];
-#ifdef SONIC_DEBUG
-  printf( "%p ", &p[regno] );
-  printf( "Read 0x%04x from %s (0x%02x)\n", value, SONIC_Reg_name[regno], regno );
+#if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
+  printf( "%p Read 0x%04x from %s (0x%02x)\n",
+      &p[regno], value, SONIC_Reg_name[regno], regno );
   fflush( stdout );
 #endif
   return value;
