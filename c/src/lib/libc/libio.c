@@ -134,6 +134,7 @@ rtems_assoc_t errno_assoc[] = {
     { "OK",        RTEMS_SUCCESSFUL,       0 },
     { "TIMEOUT",   RTEMS_TIMEOUT,          ETIME },
     { "NO MEMORY", RTEMS_NO_MEMORY,        ENOMEM },
+    { "NO DEVICE", RTEMS_UNSATISFIED,      ENOSYS },
     { 0, 0, 0 },
 };
 
