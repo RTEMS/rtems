@@ -16,7 +16,7 @@
 #include <pthread.h>
  
 #ifndef _POSIX_THREAD_PRIORITY_SCHEDULING
-#error "RTEMS is support to have pthread_getschedparam"
+#error "RTEMS is supposed to have pthread_getschedparam"
 #endif
 
 void test( void )
