@@ -58,7 +58,7 @@ stat( /dev ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    28
+   st_size    268
    st_atime   Fri Jan 01 00:00:00 1988
    st_mtime   Fri Jan 01 00:00:00 1988
    st_ctime   Fri Jan 01 00:00:00 1988
@@ -142,7 +142,7 @@ stat( /dir1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    168
+   st_size    1608
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -190,7 +190,7 @@ stat( /dir1/dir1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    56
+   st_size    536
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -214,7 +214,7 @@ stat( /\/\/\/\/\/\/links\/\/\/\/\/\ ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    728
+   st_size    6968
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -228,7 +228,7 @@ stat( dev ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    28
+   st_size    268
    st_atime   Fri Jan 01 00:00:00 1988
    st_mtime   Fri Jan 01 00:00:00 1988
    st_ctime   Fri Jan 01 00:00:00 1988
@@ -312,7 +312,7 @@ stat( dir1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    168
+   st_size    1608
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -360,7 +360,7 @@ stat( dir1/dir1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    56
+   st_size    536
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -418,7 +418,7 @@ stat( dir1/dir1/../../links/dir1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    168
+   st_size    1608
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -466,7 +466,7 @@ stat( links/dir1_dir1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    56
+   st_size    536
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -490,7 +490,7 @@ stat( links/../links/../links/links ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    728
+   st_size    6968
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -574,7 +574,7 @@ stat( links/links/links/links_dir1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    168
+   st_size    1608
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -622,7 +622,7 @@ stat( links//links_dir1_d1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    56
+   st_size    536
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -646,7 +646,7 @@ stat( links//links_links ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    728
+   st_size    6968
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -725,24 +725,26 @@ stat( links///links_r1_d1 f1 ) returned
 chmod of /dir1/dir1 to Read/Write
 
 Doing the stat() on all the bad paths
-stat( /links/ENAMETOOLONG___ ) returned : File or path name too long
+stat( /links/ENAMETOOLONG__________________________ ) returned : File or path name too long
 stat( /dir1/file4/NOTADIR ) returned : Not a directory
 stat( /dir1/dir1/EACCES__ ) returned : Permission denied
-Making file /links/ENAMETOOLONG___ : File or path name too long
+Making file /links/ENAMETOOLONG__________________________ : File or path name too long
 Making file /dir1/file4/NOTADIR : Not a directory
 Making file /dir1/dir1/EACCES__ : Permission denied
 
 Return /dir1/dir1 to RWX
 Making file /symlinks/a_file_symlink
-
+Verify with readlink
 Making file /symlinks/a_dir_symlink
-
+Verify with readlink
 Making file /symlinks/a_link_symlink
-
+Verify with readlink
 Making file ../symlinks/no_file
-
+Verify with readlink
+Making file /symlinks/a_dir_symlink/a_file_symlink
+Verify with readlink
 Making file /symlinks/links
-
+Verify with readlink
 stat( /symlinks/a_file_symlink ) returned 
    st_dev     (0x0:0x0)
    st_ino     c
@@ -763,7 +765,7 @@ stat( /symlinks/a_dir_symlink ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    168
+   st_size    1876
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
@@ -775,29 +777,41 @@ stat( /symlinks/a_link_symlink ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    168
+   st_size    1876
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:05 1988
 stat( ../symlinks/no_file ) returned : No such file or directory
+stat( /symlinks/a_dir_symlink/a_file_symlink ) returned 
+   st_dev     (0x0:0x0)
+   st_ino     4
+   st_mode    40700
+   st_nlink   3
+   st_uid     0
+   st_gid     0
+   st_rdev    (0x0:0x0)
+   st_size    1876
+   st_atime   Sat Dec 31 09:00:00 1988
+   st_mtime   Sat Dec 31 09:00:00 1988
+   st_ctime   Sat Dec 31 09:00:05 1988
 Making file 1
-
+Verify with readlink
 Making file 2
-
+Verify with readlink
 Making file 3
-
+Verify with readlink
 Making file 4
-
+Verify with readlink
 Making file 5
-
+Verify with readlink
 Making file 6
-
+Verify with readlink
 Making file 7
-
+Verify with readlink
 Making file 8
-
+Verify with readlink
 Making file 9
-
+Verify with readlink
 stat( 1 ) returned 
    st_dev     (0x0:0x0)
    st_ino     b
@@ -806,7 +820,7 @@ stat( 1 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    140
+   st_size    1340
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:00 1988
@@ -818,7 +832,7 @@ stat( 2 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    140
+   st_size    1340
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:00 1988
@@ -830,7 +844,7 @@ stat( 3 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    140
+   st_size    1340
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:00 1988
@@ -842,7 +856,7 @@ stat( 4 ) returned
    st_uid     0
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    140
+   st_size    1340
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:00 1988
@@ -917,6 +931,8 @@ rmdir /dir1/my_mount_point should fail with EBUSY
 Unmount /dir1/my_mount_point
 chmod of ////dir1/\//file1\\// to group and other execute
 Open ////dir1/\//file1\\// for write should fail with EACCES
+chmod of /dir4 to User Execute and Read
+Mkdir of /dir4/NewFile should fail with EACCES
  Making too many hard links.
 Making file /LinkName1
 Making file /LinkName2
@@ -1119,7 +1135,7 @@ stat( dir1/dir1/../../links/dir1 ) returned
    st_uid     0
    st_gid     1
    st_rdev    (0x0:0x0)
-   st_size    196
+   st_size    1876
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:30 1988
@@ -1181,7 +1197,7 @@ Change group of links/dir4
 stat( links/dir4 ) returned 
    st_dev     (0x0:0x0)
    st_ino     7
-   st_mode    40700
+   st_mode    40500
    st_nlink   3
    st_uid     0
    st_gid     1
@@ -1194,7 +1210,7 @@ Change owner of links/dir4
 stat( links/dir4 ) returned 
    st_dev     (0x0:0x0)
    st_ino     7
-   st_mode    40700
+   st_mode    40500
    st_nlink   3
    st_uid     1
    st_gid     0
@@ -1212,7 +1228,7 @@ stat( links/dir1_dir1 ) returned
    st_uid     0
    st_gid     1
    st_rdev    (0x0:0x0)
-   st_size    56
+   st_size    536
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:30 1988
@@ -1225,7 +1241,7 @@ stat( links/dir1_dir1 ) returned
    st_uid     1
    st_gid     0
    st_rdev    (0x0:0x0)
-   st_size    56
+   st_size    536
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:30 1988
@@ -1242,7 +1258,7 @@ stat( links/../links/../links/links ) returned
    st_uid     0
    st_gid     1
    st_rdev    (0x0:0x0)
-   st_size    924
+   st_size    8844
    st_atime   Sat Dec 31 09:00:00 1988
    st_mtime   Sat Dec 31 09:00:00 1988
    st_ctime   Sat Dec 31 09:00:30 1988
