@@ -51,6 +51,35 @@ unsigned32 rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
 #endif
 
 /*
+ *  Mount Table Configuration
+ */
+
+#include <imfs.h>
+
+#ifdef CONFIGURE_INIT
+
+#ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
+rtems_filesystem_mount_table_t configuration_mount_table = {
+#define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM /* XXX for now */
+#ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
+  &IMFS_ops,
+#else  /* using miniIMFS as base filesystem */
+  &miniIMFS_ops,
+#endif
+  RTEMS_FILESYSTEM_READ_WRITE,
+  NULL,
+  NULL
+};
+
+rtems_filesystem_mount_table_t 
+    *rtems_filesystem_mount_table = &configuration_mount_table;
+int rtems_filesystem_mount_table_size = 1;
+#endif
+
+#endif
+
+
+/*
  *  Stack Checker Requirements
  */
 
