@@ -9,7 +9,6 @@ include $(top_srcdir)/../../bsp.am
 
 EXTRA_PROGRAMS =
 CLEANFILES =
-EXTRA_DIST =
 noinst_DATA =
 
 SUBDIRS = . tools
@@ -17,7 +16,7 @@ SUBDIRS = . tools
 include_HEADERS += include/erc32.h
 include_HEADERS += include/coverhd.h
 
-EXTRA_DIST += ../../sparc/shared/start.S
+EXTRA_DIST = ../../sparc/shared/start.S
 start$(LIB_VARIANT).$(OBJEXT): ../../sparc/shared/start.S
 	${CCASCOMPILE} -DASM -o $@ -c $<
 project_lib_DATA = start$(LIB_VARIANT).$(OBJEXT)
@@ -99,19 +98,19 @@ timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_DATA += timer$(LIB_VARIANT).rel
 
 if HAS_NETWORKING
-erc32_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+erc32sonic_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 EXTRA_PROGRAMS += erc32sonic.rel
 CLEANFILES += erc32sonic.rel
 erc32sonic_rel_SOURCES = erc32sonic/erc32sonic.c
 erc32sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
-    $(erc32_CPPFLAGS)
+    $(erc32sonic_CPPFLAGS)
 erc32sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_PROGRAMS += erc32sonic_g.rel
 CLEANFILES += erc32sonic_g.rel
 erc32sonic_g_rel_SOURCES = $(erc32sonic_rel_SOURCES)
 erc32sonic_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
-    $(erc32_CPPFLAGS)
+    $(erc32sonic_CPPFLAGS)
 erc32sonic_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += erc32sonic$(LIB_VARIANT).rel

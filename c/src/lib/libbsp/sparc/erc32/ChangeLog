@@ -1,3 +1,7 @@
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+
 2004-01-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in clock/Makefile.am, erc32sonic/Makefile.am,
