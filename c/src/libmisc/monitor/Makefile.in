@@ -54,4 +54,4 @@ ${LIB}: ${SRCS} ${OBJS}
 all:	preinstall ${ARCH} $(SRCS) $(LIB)
 
 preinstall: $(INSTALLED_H_FILES)
-	$(INSTALL) -m 444 ${INSTALLED_H_FILES} ${PROJECT_RELEASE}/include
+	$(INSTALL) -m 444 ${INSTALLED_H_FILES} ${PROJECT_RELEASE}/include/rtems

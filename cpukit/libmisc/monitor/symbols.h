@@ -31,12 +31,10 @@ typedef struct rtems_symbol_string_block_s {
 
 typedef struct {
 
-    rtems_unsigned32 sorted;            /* are symbols sorted right now? */
-
-    rtems_unsigned32 growth_factor;     /* % to grow by when needed */
-
-    rtems_unsigned32 next;              /* next symbol slot to use when adding */
-    rtems_unsigned32 size;              /* max # of symbols */
+    rtems_unsigned32 sorted;          /* are symbols sorted right now? */
+    rtems_unsigned32 growth_factor;   /* % to grow by when needed */
+    rtems_unsigned32 next;            /* next symbol slot to use when adding */
+    rtems_unsigned32 size;            /* max # of symbols */
 
     /*
      * Symbol list -- sorted by address (when we do a lookup)

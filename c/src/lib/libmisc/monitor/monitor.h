@@ -12,7 +12,7 @@
 #ifndef __MONITOR_H
 #define __MONITOR_H
 
-#include "symbols.h"
+#include <rtems/symbols.h>
 #include <rtems/error.h>		/* rtems_error() */
 
 #ifdef __cplusplus

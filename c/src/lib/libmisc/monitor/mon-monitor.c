@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "monitor.h"
+#include <rtems/monitor.h>
 
 /* set by trap handler */
 extern rtems_tcb       *debugger_interrupted_task;

@@ -17,13 +17,11 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
-#include "monitor.h"
+#include <rtems/monitor.h>
 
 #include <stdio.h>
 #include <stdlib.h>             /* strtoul() */
 #include <string.h>             /* memcpy() */
-
-#include <monitor.h>
 
 #define NUMELEMS(arr)	(sizeof(arr) / sizeof(arr[0]))
 

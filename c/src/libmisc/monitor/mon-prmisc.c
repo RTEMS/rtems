@@ -8,7 +8,7 @@
  */
 
 #include <rtems.h>
-#include "monitor.h"
+#include <rtems/monitor.h>
 
 #include <rtems/assoc.h>
 

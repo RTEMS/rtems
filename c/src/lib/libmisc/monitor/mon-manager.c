@@ -6,11 +6,9 @@
  */
 
 #include <rtems.h>
-#include "monitor.h"
+#include <rtems/monitor.h>
 
 #include <stdio.h>
-
-#include <monitor.h>
 
 /*
  * "next" routine for all objects that are RTEMS manager objects

@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "monitor.h"
+#include <rtems/monitor.h>
 
 /*
  * Various id's for the server

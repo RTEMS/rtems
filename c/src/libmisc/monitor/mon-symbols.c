@@ -17,8 +17,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "monitor.h"
-#include "symbols.h"
+#include <rtems/monitor.h>
+#include <rtems/symbols.h>
 
 
 rtems_symbol_table_t *

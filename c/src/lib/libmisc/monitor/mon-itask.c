@@ -6,7 +6,7 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
-#include "monitor.h"
+#include <rtems/monitor.h>
 
 #include <stdio.h>
 
