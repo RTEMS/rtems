@@ -232,6 +232,11 @@ typedef struct _mc68681_context
  */
 static boolean mc68681_probe(int minor);
 
+static int mc68681_set_attributes( 
+  int minor,
+  const struct termios *t
+);
+
 static void mc68681_init(int minor);
 
 static int mc68681_open(
