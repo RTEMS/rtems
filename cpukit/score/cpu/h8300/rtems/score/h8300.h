@@ -32,22 +32,6 @@ extern "C" {
  *  of the family.
  */
 
-/*
- *  RTEMS compiles for the base H8 with numerous warnings but has never
- *  been tested on a CPU with 16 bit address space.
- *
- *  FIXME:
- *  This macro is defined to handle a couple of places where 
- *  addresses are cast to pointers.  There really should be 
- *  a "int-pointer" type that pointers are cast to before being
- *  mathematcically manipulated.  When that is added, search
- *  for all references to this macro and remove them.
- */
-
-#if defined(__H8300__)
-#define RTEMS_CPU_HAS_16_BIT_ADDRESSES 1
-#endif
- 
 #define CPU_NAME  "Hitachi H8300"
 #define CPU_MODEL_NAME  "h8300"
 #define H8300_HAS_FPU     0
