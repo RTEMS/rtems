@@ -1,3 +1,7 @@
+2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove build-variant support.
+
 2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Use __rtems_score_types_h as preprocessor

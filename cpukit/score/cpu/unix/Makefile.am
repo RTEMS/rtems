@@ -13,17 +13,11 @@ include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/types.h rtems/score/cpu.h \
     rtems/score/unix.h
 
-EXTRA_LIBRARIES = libscorecpu.a
-CLEANFILES = libscorecpu.a
+noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += libscorecpu_g.a
-CLEANFILES += libscorecpu_g.a
-libscorecpu_g_a_SOURCES = $(libscorecpu_a_SOURCES)
-libscorecpu_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
-all-local: $(PREINSTALL_FILES) libscorecpu$(LIB_VARIANT).a
+all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
@@ -54,7 +48,7 @@ $(PROJECT_INCLUDE)/rtems/score/unix.h: rtems/score/unix.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/unix.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/unix.h
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

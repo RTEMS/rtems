@@ -1,3 +1,7 @@
+2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove build-variant support.
+
 2004-12-02	Greg Menke <gregory.menke@gsfc.nasa.gov>
 	PR 730 
 	* cpu_asm.S: Collected PR 601 changes for commit to cvshead

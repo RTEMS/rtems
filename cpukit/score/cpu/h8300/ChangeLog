@@ -1,3 +1,7 @@
+2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove build-variant support.
+
 2004-12-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 733/rtems
