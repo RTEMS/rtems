@@ -31,7 +31,8 @@ IMFS_jnode_t *IMFS_find_match_in_dir(
   IMFS_jnode_t      *the_jnode;
 
   /*
-   *  Check for fatal errors
+   *  Check for fatal errors.  A NULL directory show a problem in the
+   *  the IMFS code.
    */
 
   assert( directory );

@@ -20,7 +20,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include "imfs.h"
 #include "libio_.h"
@@ -52,7 +51,6 @@ int IMFS_mknod(
     type = IMFS_DEVICE;
     rtems_filesystem_split_dev_t( dev, info.device.major, info.device.minor );
   } else  {
-    assert( 0 );
     set_errno_and_return_minus_one( EINVAL );
   }
  
