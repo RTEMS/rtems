@@ -1,0 +1,12 @@
+2000-11-25	Joel Sherrill <joel@OARcorp.com>
+
+	* The JMR BSP is for a Toshiba TX39 evaluation board but
+	can also be used with the mips simulator in gdb.
+	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs,
+	configure.in, clock/.cvsignore, clock/Makefile.am,
+	clock/clockdrv.c, console/.cvsignore, console/Makefile.am,
+	console/console-io.c, include/.cvsignore,
+	include/Makefile.am, include/bsp.h, start/.cvsignore,
+	start/Makefile.am, start/regs.S, start/start.S,
+	startup/.cvsignore, startup/Makefile.am, startup/bspstart.c,
+	startup/linkcmds, wrapup/.cvsignore, wrapup/Makefile.am: New files.
