@@ -18,6 +18,9 @@ ac_help="$ac_help
   --disable-posix 	     	    disable posix interface"
 ac_help="$ac_help
 \
+  --disable-ka9q                disable KA9Q TCP/IP stack"
+ac_help="$ac_help
+\
   --disable-rtems-inlines 	    disable RTEMS inline functions (use macros)"
 ac_help="$ac_help
 \
@@ -764,6 +767,8 @@ c/src/lib/libbsp/unix/posix/startup/Makefile \
 c/src/lib/libbsp/unix/posix/timer/Makefile \
 c/src/lib/libbsp/unix/posix/wrapup/Makefile"
 
+ka9q_mk="c/src/lib/libka9q/Makefile"
+
 hwapi_mk="\
 c/src/lib/libhwapi/Makefile \
 c/src/lib/libhwapi/eeprom/Makefile \
@@ -952,7 +957,7 @@ c/src/tests/tools/unix/Makefile \
 c/src/tests/tools/unix/posix/Makefile"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:956: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:961: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -1025,7 +1030,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:1029: checking host system type" >&5
+echo "configure:1034: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -1046,7 +1051,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:1050: checking target system type" >&5
+echo "configure:1055: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -1064,7 +1069,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:1068: checking build system type" >&5
+echo "configure:1073: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -1105,6 +1110,20 @@ case "${enableval}" in
 esac
 else
   RTEMS_HAS_POSIX_API=yes
+fi
+
+
+# Check whether --enable-ka9q or --disable-ka9q was given.
+if test "${enable_ka9q+set}" = set; then
+  enableval="$enable_ka9q"
+  \
+case "${enableval}" in
+  yes) RTEMS_HAS_KA9Q=yes ;;
+  no) RTEMS_HAS_KA9Q=no ;;
+  *)  { echo "configure: error: bad value ${enableval} for disable-ka9q option" 1>&2; exit 1; } ;;
+esac
+else
+  RTEMS_HAS_KA9Q=yes
 fi
 
 
@@ -1241,7 +1260,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1245: checking for $ac_word" >&5
+echo "configure:1264: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AWK'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1270,7 +1289,7 @@ test -n "$AWK" && break
 done
 
 echo $ac_n "checking whether ln -s works""... $ac_c" 1>&6
-echo "configure:1274: checking whether ln -s works" >&5
+echo "configure:1293: checking whether ln -s works" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_LN_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1295,6 +1314,9 @@ RTEMS_BSP=$rtems_bsp
 RTEMS_HOST=$host_os
 RTEMS_ROOT=`cd $srcdir/c; pwd`
 PROJECT_ROOT=`pwd;`
+
+# For now always generate the KA9Q TCP/IP Makefiles
+makefiles="$makefiles $ka9q_mk"
 
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
@@ -1322,6 +1344,7 @@ if test "${enable_rtemsbsp+set}" = set; then
   \
 RTEMS_BSP=$enableval
 fi
+
 
 
 
@@ -1559,6 +1582,7 @@ s%@RTEMS_HOST@%$RTEMS_HOST%g
 s%@RTEMS_LIBC_DIR@%$RTEMS_LIBC_DIR%g
 s%@RTEMS_ROOT@%$RTEMS_ROOT%g
 s%@RTEMS_HAS_POSIX_API@%$RTEMS_HAS_POSIX_API%g
+s%@RTEMS_HAS_KA9Q@%$RTEMS_HAS_KA9Q%g
 s%@RTEMS_USE_MACROS@%$RTEMS_USE_MACROS%g
 s%@RTEMS_USE_GCC272@%$RTEMS_USE_GCC272%g
 s%@PROJECT_ROOT@%$PROJECT_ROOT%g

@@ -7,7 +7,11 @@ srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH=@srcdir@
 
-BSP_PIECES=startup clock console timer
+# We only build the ka9q device driver if HAS_KA9Q was defined
+KA9Q_DRIVER_yes_V = network
+KA9Q_DRIVER = $(KA9Q_DRIVER_$(HAS_KA9Q)_V)
+
+BSP_PIECES=startup clock console timer $(KA9Q_DRIVER)
 CPU_PIECES=
 GENERIC_PIECES=
 

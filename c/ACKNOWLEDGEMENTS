@@ -97,6 +97,10 @@ The following persons/organizations have made contributions:
   mode with a m68040 and a port of the Motorola MC68040 Floating Point
   Support Package (FPSP) to RTEMS.
 
++ Eric Norum (eric@skatter.usask.ca) of the Saskatchewan Accelerator
+  Laboratory submitted a port of the KA9Q TCP/IP stack to RTEMS as
+  well as a network device driver for the gen68360 BSP.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
