@@ -1,3 +1,42 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/posix/cond.h, include/rtems/posix/condmp.h,
+	include/rtems/posix/config.h, include/rtems/posix/intr.h,
+	include/rtems/posix/key.h, include/rtems/posix/mqueue.h,
+	include/rtems/posix/mqueuemp.h, include/rtems/posix/mutex.h,
+	include/rtems/posix/mutexmp.h, include/rtems/posix/posixapi.h,
+	include/rtems/posix/pthread.h, include/rtems/posix/pthreadmp.h,
+	include/rtems/posix/ptimer.h, include/rtems/posix/semaphore.h,
+	include/rtems/posix/semaphoremp.h, inline/rtems/posix/cond.inl,
+	inline/rtems/posix/intr.inl, inline/rtems/posix/key.inl,
+	inline/rtems/posix/mqueue.inl, inline/rtems/posix/mutex.inl,
+	inline/rtems/posix/pthread.inl, inline/rtems/posix/semaphore.inl,
+	inline/rtems/posix/timer.inl, macros/rtems/posix/cond.inl,
+	macros/rtems/posix/intr.inl, macros/rtems/posix/key.inl,
+	macros/rtems/posix/mqueue.inl, macros/rtems/posix/mutex.inl,
+	macros/rtems/posix/pthread.inl, macros/rtems/posix/semaphore.inl,
+	macros/rtems/posix/timer.inl, src/alarm.c, src/kill.c,
+	src/killinfo.c, src/mqueuetranslatereturncode.c, src/pause.c,
+	src/pthreadattrdestroy.c, src/pthreadattrgetdetachstate.c,
+	src/pthreadattrgetinheritsched.c, src/pthreadattrgetschedparam.c,
+	src/pthreadattrgetschedpolicy.c, src/pthreadattrgetscope.c,
+	src/pthreadattrgetstackaddr.c, src/pthreadattrgetstacksize.c,
+	src/pthreadattrinit.c, src/pthreadattrsetdetachstate.c,
+	src/pthreadattrsetinheritsched.c, src/pthreadattrsetschedparam.c,
+	src/pthreadattrsetschedpolicy.c, src/pthreadattrsetscope.c,
+	src/pthreadattrsetstackaddr.c, src/pthreadattrsetstacksize.c,
+	src/pthreadcreate.c, src/pthreaddetach.c, src/pthreadequal.c,
+	src/pthreadexit.c, src/pthreadgetcpuclockid.c,
+	src/pthreadgetcputime.c, src/pthreadgetschedparam.c,
+	src/pthreadjoin.c, src/pthreadkill.c, src/pthreadonce.c,
+	src/pthreadself.c, src/pthreadsetcputime.c,
+	src/pthreadsetschedparam.c, src/pthreadsigmask.c, src/sigaction.c,
+	src/sigaddset.c, src/sigdelset.c, src/sigemptyset.c,
+	src/sigfillset.c, src/sigismember.c, src/signal_2.c,
+	src/sigpending.c, src/sigprocmask.c, src/sigqueue.c,
+	src/sigsuspend.c, src/sigtimedwait.c, src/sigwait.c,
+	src/sigwaitinfo.c, src/ualarm.c: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 449/rtems:
