@@ -47,8 +47,17 @@ void _ITRON_Message_buffer_Manager_initialization(
 );
 
 /*
- *  XXX insert private stuff here
- */
+ *  _ITRON_Message_buffer_Translate_core_message_buffer_return_code
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine translates a core message buffer object status
+ *  into the appropriate ITRON status code. 
+ */ 
+
+ER _ITRON_Message_buffer_Translate_core_message_buffer_return_code(
+  CORE_message_queue_Status status
+);
 
 #include <rtems/itron/msgbuffer.inl>
 
