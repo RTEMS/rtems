@@ -192,6 +192,7 @@ union mcluster {
 		(void)m_mballoc(1, (_how)); \
 	  if (((_m) = mmbfree) != 0) { \
 		mmbfree = (_m)->m_next; \
+/* printf( "MGET: %p\n", (_m) ); */ \
 		mbstat.m_mtypes[MT_FREE]--; \
 		(_m)->m_type = (_type); \
 		mbstat.m_mtypes[_type]++; \
@@ -212,6 +213,7 @@ union mcluster {
 		(void)m_mballoc(1, (_how)); \
 	  if (((_m) = mmbfree) != 0) { \
 		mmbfree = (_m)->m_next; \
+/* printf( "MGETHDR: %p\n", (_m) ); */ \
 		mbstat.m_mtypes[MT_FREE]--; \
 		(_m)->m_type = (_type); \
 		mbstat.m_mtypes[_type]++; \
@@ -272,6 +274,7 @@ union mcluster {
  */
 #define	MFREE(_m, _n) \
 	MBUFLOCK(  \
+/* printf( "MFREE: %p\n", (_m) ); */ \
 	  mbstat.m_mtypes[(_m)->m_type]--; \
 	  if ((_m)->m_flags & M_EXT) { \
 		if ((_m)->m_ext.ext_free) \
