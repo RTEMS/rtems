@@ -1,9 +1,6 @@
 2002-12-06	Joel Sherrill <joel@OARcorp.com>
 
-	* setup.def: Updated patch to fix m68k cut and paste bug which turned
-	a tab into spaces in a Makefile fragment.
-	* gcc3newlib/gccnewlib.add: If building gnat for the mips, the library
-	must be built with a -G0 option.
+	* ChangeLog: Removed duplicate entry.
 
 2002-12-06	Joel Sherrill <joel@OARcorp.com>
 
