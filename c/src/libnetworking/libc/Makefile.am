@@ -7,14 +7,15 @@ AUTOMAKE_OPTIONS = foreign 1.4 no-installman
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
-C_FILES = base64.c gethostbydns.c gethostbyht.c gethostbynis.c \
-    gethostnamadr.c getnetbydns.c getnetbyht.c getnetbynis.c getnetnamadr.c \
-    getproto.c getprotoent.c getprotoname.c getservbyname.c getservbyport.c \
-    getservent.c herror.c inet_addr.c inet_lnaof.c inet_makeaddr.c \
-    inet_netof.c inet_network.c inet_ntoa.c inet_ntop.c inet_pton.c map_v4v6.c \
-    nsap_addr.c ns_name.c ns_netint.c ns_parse.c ns_print.c ns_ttl.c \
-    res_comp.c res_data.c res_debug.c res_init.c res_mkquery.c \
-    res_mkupdate.c res_query.c res_send.c res_stubs.c res_update.c strsep.c
+C_FILES = addr2ascii.c ascii2addr.c base64.c gethostbydns.c gethostbyht.c \
+    gethostbynis.c gethostnamadr.c getnetbydns.c getnetbyht.c getnetbynis.c \
+    getnetnamadr.c getproto.c getprotoent.c getprotoname.c getservbyname.c \
+    getservbyport.c getservent.c herror.c inet_addr.c inet_lnaof.c \
+    inet_makeaddr.c inet_netof.c inet_network.c inet_ntoa.c inet_ntop.c \
+    inet_pton.c linkaddr.c map_v4v6.c nsap_addr.c ns_name.c ns_netint.c \
+    ns_parse.c ns_print.c ns_ttl.c res_comp.c res_data.c res_debug.c \
+    res_init.c res_mkquery.c res_mkupdate.c res_query.c res_send.c \
+    res_stubs.c res_update.c strsep.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
