@@ -1,0 +1,6 @@
+2004-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog, configure.ac, setup, setup.def,
+	sparc-solaris-binutils.spec.in, sparc-solaris-gcc.spec.in,
+	sparc-solaris-libs.spec.in: New files.
+

@@ -1,0 +1,50 @@
+#
+# spec file for package sparc-solaris-libs
+# 
+
+%define solaris_version @SOLARIS_VERS@
+%define solaris_rpmvers @SOLARIS_RPMVERS@
+
+Vendor:       Ralf Corsepius
+Distribution: Linux
+Name:         sparc-solaris-libs
+Release:      @SOLARIS_RPMREL@
+Copyright:    SUN Microsystems
+Group:        solaris
+Provides:     sparc-solaris-libs
+
+Autoreqprov:  	off
+Packager:     	joel@OARcorp.com
+Prefix:		/opt/solaris
+BuildRoot:	@RPM_BUILD_ROOT@
+
+Version:      	%solaris_rpmvers
+Summary:      	solaris
+
+Source0:	solaris-libs-%{solaris_version}.tar.bz2
+NoSource:	0
+
+%description
+Cygwin libs
+
+%prep
+%setup -c
+
+%build
+  rm -rf usr/bin
+  rm -rf usr/info
+  mv usr/include usr/sys-include
+  mv usr sparc-solaris
+
+%install
+  mkdir -p $RPM_BUILD_ROOT%{prefix}
+  cp -a sparc-solaris $RPM_BUILD_ROOT%{prefix}
+
+%clean
+# let rpm --clean remove BuildRoot iff using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "@RPM_BUILD_ROOT@" && \
+    rm -rf $RPM_BUILD_ROOT
+
+
+%files
+%{prefix}/sparc-solaris

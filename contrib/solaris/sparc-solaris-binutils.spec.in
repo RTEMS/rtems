@@ -1,0 +1,86 @@
+#
+# spec file for binutils package targetting solaris
+# 
+
+%define binutils_version @BINUTILS_VERS@
+%define binutils_rpmvers @BINUTILS_RPMVERS@
+
+Vendor:       OAR Corporation
+Distribution: Linux
+Name:         sparc-solaris-binutils
+Summary:      binutils for target sparc-solaris
+Group:        solaris
+Release:      @BINUTILS_RPMREL@
+Summary:      binutils for sparc-solaris
+License:      GPL/LGPL
+Autoreqprov:  	off
+Packager:     	joel@OARcorp.com
+Prefix:		/opt/solaris
+BuildRoot:	@RPM_BUILD_ROOT@
+
+Version:      	%binutils_rpmvers
+Source0:	ftp://ftp.gnu.org.com/pub/gnu/binutils/binutils-%{binutils_version}.tar.gz
+NoSource: 	0
+%description
+
+Cross binutils for target solaris
+
+%prep
+# untar the sources inside sparc-solaris-binutils
+%setup -c -n sparc-solaris-binutils -a 0
+
+%build
+  test -d build || mkdir build
+  cd build
+  ../binutils-%{binutils_version}/configure --target=sparc-solaris \
+    --disable-nls --disable-win32-registry \
+    --verbose --prefix=%{prefix}
+
+  make all
+
+%install
+  cd build
+  make prefix=$RPM_BUILD_ROOT%{prefix} install
+
+# A bug in binutils: binutils does not install share/locale
+# however it uses it
+  ../binutils-%{binutils_version}/mkinstalldirs \
+    $RPM_BUILD_ROOT%{prefix}/share/locale
+
+# We don't want info files
+  rm -rf $RPM_BUILD_ROOT%{prefix}/info
+
+# c++filt now comes from gcc
+  rm -f $RPM_BUILD_ROOT%{prefix}/bin/sparc-solaris-c++filt
+
+%clean
+# let rpm --clean remove BuildRoot iff using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "@RPM_BUILD_ROOT@" && \
+    rm -rf $RPM_BUILD_ROOT
+
+%files
+
+%dir %{prefix}/man
+%dir %{prefix}/man/man1
+%doc %{prefix}/man/man1/sparc-solaris-*.1*
+
+%dir %{prefix}/include
+%{prefix}/include/*.h
+
+%dir %{prefix}/lib
+%{prefix}/lib/libbfd*
+%{prefix}/lib/libiberty*
+%{prefix}/lib/libopcodes*
+
+%dir %{prefix}/share
+%dir %{prefix}/share/locale
+
+%dir %{prefix}/bin
+%{prefix}/bin/*
+
+%dir %{prefix}/sparc-solaris
+%dir %{prefix}/sparc-solaris/bin
+%{prefix}/sparc-solaris/bin/*
+
+%dir %{prefix}/sparc-solaris/lib
+%{prefix}/sparc-solaris/lib/ldscripts

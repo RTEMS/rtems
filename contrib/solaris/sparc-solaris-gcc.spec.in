@@ -1,0 +1,98 @@
+#
+# spec file for building gcc for solaris
+# 
+
+%define gcc_version @GCC_VERS@
+%define gcc_rpmvers @GCC_RPMVERS@
+
+Vendor:       	OAR Corporation
+Distribution: 	Linux
+Name:         	sparc-solaris-gcc
+Summary:      	sparc-solaris gcc.
+Requires: 	sparc-solaris-binutils
+Requires:	sparc-solaris-libs
+Group:	      	solaris
+Release:      	@GCC_RPMREL@
+License:      	gcc is GPL/LGPL
+Prefix:	      	/opt/solaris
+Autoreqprov:  	on
+Packager:     	joel@OARcorp.com
+Version:        %gcc_rpmvers
+
+Source0: 	ftp://sourceware.cygnus.com/pub/solaris/latest/gcc/gcc-everything-%{gcc_version}.tar.gz
+NoSource:	0
+
+BuildRoot:	@RPM_BUILD_ROOT@
+
+%description
+Cross gcc for target solaris
+
+%prep
+# untar the sources inside sparc-solaris-gcc
+%setup -c -n %{name} -a 0 
+
+  test -d build || mkdir build
+
+%build
+  cd build
+
+  ../gcc-%{gcc_version}/configure --target=sparc-solaris \
+    --with-gnu-as --with-gnu-ld --verbose \
+    --disable-nls --enable-languages=c,c++ \
+    --prefix=%{prefix} 
+
+  make all
+# We don't want info files
+#  make info
+
+%install
+  cd build
+  # Bug in gcc-2.95.1: It doesn't build this installation directory
+  # If it doesn't find it, gcc doesn't install sparc-solaris/bin/gcc
+  ../gcc-%{gcc_version}/mkinstalldirs \
+    $RPM_BUILD_ROOT%{prefix}/sparc-solaris/bin
+
+  make prefix=$RPM_BUILD_ROOT%{prefix} install
+  # cd back to build/
+  cd ../..
+
+  # We don't want info files
+  rm -rf $RPM_BUILD_ROOT%{prefix}/info
+
+  # libiberty comes from solaris-libs
+  rm -f $RPM_BUILD_ROOT%{prefix}/sparc-solaris/lib/libiberty.a
+
+%clean
+# let rpm --clean remove BuildRoot iff using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "@RPM_BUILD_ROOT@" && \
+    rm -rf $RPM_BUILD_ROOT
+
+%files
+
+%dir %{prefix}/bin
+%{prefix}/bin/cpp
+%{prefix}/bin/gcov
+
+%dir %{prefix}/man
+%dir %{prefix}/man/man1
+%doc %{prefix}/man/man1/cccp.1*
+%doc %{prefix}/man/man1/sparc-solaris-gcc.1*
+%doc %{prefix}/man/man1/sparc-solaris-g++.1*
+
+%dir %{prefix}/include
+
+%{prefix}/include/g++-3
+%{prefix}/bin/sparc-solaris-c++
+%{prefix}/bin/sparc-solaris-c++filt
+%{prefix}/bin/sparc-solaris-g++
+%{prefix}/bin/sparc-solaris-gcc
+%{prefix}/bin/sparc-solaris-protoize
+%{prefix}/bin/sparc-solaris-unprotoize
+
+# %dir %{prefix}/lib/gcc-lib/sparc-solaris/%{gcc_version}/include
+
+%{prefix}/sparc-solaris
+%dir %{prefix}/lib
+%dir %{prefix}/lib/gcc-lib
+%dir %{prefix}/lib/gcc-lib/sparc-solaris
+%{prefix}/lib/gcc-lib/sparc-solaris/%{gcc_version}
