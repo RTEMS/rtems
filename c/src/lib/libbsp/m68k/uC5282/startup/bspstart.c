@@ -316,15 +316,17 @@ int BSP_disableVME_int_lvl(unsigned int level) { return 0; }
 /*
  * VME interrupt support
  */
+#define NVECTOR 256
+
 static struct handlerTab {
     BSP_VME_ISR_t func;
     void         *arg;
-} handlerTab[256];
+} handlerTab[NVECTOR];
 
 BSP_VME_ISR_t
 BSP_getVME_isr(unsigned long vector, void **pusrArg)
 {
-    if (vector > 255)
+    if (vector >= NVECTOR)
         return (BSP_VME_ISR_t)NULL;
     if (pusrArg)
         *pusrArg = handlerTab[vector].arg;
@@ -332,9 +334,9 @@ BSP_getVME_isr(unsigned long vector, void **pusrArg)
 }
 
 static rtems_isr
-trampoline (int v)
+trampoline (rtems_vector_number v)
 {
-    if (*handlerTab[v].func) 
+    if (handlerTab[v].func) 
         (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
 }
 
@@ -343,45 +345,54 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
 {
     rtems_isr_entry old_handler;
 
-    if (vector > 255)
+    if (vector >= NVECTOR)
         return -1;
     handlerTab[vector].func = handler;
     handlerTab[vector].arg = usrArg;
     rtems_interrupt_catch(trampoline, vector, &old_handler);
 
     /*
-     * Find an unused level/priority
+     * Find an unused level/priority if this is an on-chip (INTC0)
+     * source and this is the first time the source is being used.
+     * Interrupt sources 1 through 7 are fixed level/priority
      */
     if ((vector >= 65) && (vector <= 127)) {
         int l, p;
-        int voffset = vector - 64;
+        int source = vector - 64;
         rtems_interrupt_level level;
+        static unsigned char installed[8];
 
+        if (installed[source/8] & (1 << (source % 8)))
+            return 0;
+        installed[source/8] |= (1 << (source % 8));
         for (l = 1 ; l < 7 ; l++) {
             for (p = 0 ; p < 7 ; p++) {
-                if (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL) {
-                    *(&MCF5282_INTC0_ICR1 + (vector - 65)) = 
+                if ((source < 8)
+                 || (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL)) {
+                    if (source < 8)
+                        *(&MCF5282_INTC0_ICR1 + (source - 1)) = 
                                                        MCF5282_INTC_ICR_IL(l) |
                                                        MCF5282_INTC_ICR_IP(p);
                     rtems_interrupt_disable(level);
-                    if (voffset >= 32)
-                        MCF5282_INTC0_IMRH &= ~(1 << (voffset - 32));
+                    if (source >= 32)
+                        MCF5282_INTC0_IMRH &= ~(1 << (source - 32));
                     else
-                        MCF5282_INTC0_IMRL &= ~((1 << voffset) |
+                        MCF5282_INTC0_IMRL &= ~((1 << source) |
                                                 MCF5282_INTC_IMRL_MASKALL);
                     rtems_interrupt_enable(level);
                     return 0;
                 }
             }
         }
+        return -1;
     }
-    return -1;
+    return 0;
 }
 
 int
 BSP_removeVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
 {
-    if (vector > 255)
+    if (vector >= NVECTOR)
         return -1;
     if ((handlerTab[vector].func != handler)
      || (handlerTab[vector].arg != usrArg))
