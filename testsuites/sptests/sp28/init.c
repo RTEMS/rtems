@@ -60,7 +60,8 @@ subtask (rtems_task_argument arg)
 			rtems_task_suspend (RTEMS_SELF);
 		}
 		if ((arg == 3) && (i == 100)) {
-			printf ("Task variables test succeeded.\n");
+			puts ("Task variables test succeeded.");
+			puts ("*** END OF TEST SP28 ***");
 			exit (0);
 		}
 	}
@@ -74,7 +75,7 @@ starttask (int arg)
 
 	sc = rtems_task_create (rtems_build_name ('S', 'R', 'V', arg + 'A'),
 		100,
-		10000,
+                RTEMS_MINIMUM_STACK_SIZE * 3,
 		RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
 		RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
 		&tid);
@@ -92,6 +93,7 @@ starttask (int arg)
 rtems_task
 Init (rtems_task_argument ignored)
 {
+	puts ("*** START OF TEST SP28 ***");
 	starttask (1);
 	starttask (2);
 	starttask (3);
