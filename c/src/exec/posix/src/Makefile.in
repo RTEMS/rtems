@@ -22,7 +22,11 @@ BUILD_FOR_NOW_C_PIECES = aio cancel utsname
 ENOSYS_C_PIECES = execl execle execlp execv execve execvp fork pthreadatfork \
     wait waitpid
 
-MESSAGE_QUEUE_PIECES= mqueue mqueueclose mqueuecreatesupp mqueuedeletesupp \
+CONDITION_VARIABLE_C_PIECES= cond condattrdestroy condattrgetpshared \
+    condattrinit condattrsetpshared condbroadcast conddefaultattributes \
+    condmp condsignal condsignalsupp condtimedwait condwait condwaitsupp
+
+MESSAGE_QUEUE_C_PIECES= mqueue mqueueclose mqueuecreatesupp mqueuedeletesupp \
     mqueuegetattr mqueuenametoid mqueuenotify mqueueopen mqueuereceive \
     mqueuerecvsupp mqueuesend mqueuesendsupp mqueuesetattr \
     mqueuetimedreceive mqueuetimedsend mqueueunlink \
@@ -58,7 +62,8 @@ SEMAPHORE_C_PIECES= semaphore semaphorecreatesupp semaphoredeletesupp \
     semgetvalue seminit semopen sempost semtimedwait semtrywait \
     semunlink semwait
 
-C_PIECES = adasupp cond getpid key $(MESSAGE_QUEUE_PIECES) \
+C_PIECES = adasupp $(CONDITION_VARIABLE_C_PIECES) \
+    getpid key $(MESSAGE_QUEUE_C_PIECES) \
     $(MUTEX_C_PIECES) $(PTHREAD_C_PIECES) \
     $(PSIGNAL_C_PIECES) ptimer sched $(SEMAPHORE_C_PIECES) \
     time types unistd $(ENOSYS_C_PIECES) \

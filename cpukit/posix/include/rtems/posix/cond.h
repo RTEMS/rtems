@@ -48,6 +48,12 @@ typedef struct {
  */
  
 POSIX_EXTERN Objects_Information  _POSIX_Condition_variables_Information;
+
+/*
+ *  The default condition variable attributes structure.
+ */
+
+extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
  
 /*
  *  _POSIX_Condition_variables_Manager_initialization
@@ -116,6 +122,36 @@ RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *_POSIX_Condition_variabl
  
 RTEMS_INLINE_ROUTINE boolean _POSIX_Condition_variables_Is_null (
   POSIX_Condition_variables_Control *the_condition_variable
+);
+
+/*
+ *  _POSIX_Condition_variables_Signal_support
+ *
+ *  DESCRIPTION:
+ *
+ *  A support routine which implements guts of the broadcast and single task
+ *  wake up version of the "signal" operation.
+ */
+
+int _POSIX_Condition_variables_Signal_support(
+  pthread_cond_t            *cond,
+  boolean                    is_broadcast
+);
+
+/*
+ *  _POSIX_Condition_variables_Wait_support
+ *
+ *  DESCRIPTION:
+ *
+ *  A support routine which implements guts of the blocking, non-blocking, and
+ *  timed wait version of condition variable wait routines.
+ */
+
+int _POSIX_Condition_variables_Wait_support(
+  pthread_cond_t            *cond,
+  pthread_mutex_t           *mutex,
+  Watchdog_Interval          timeout,
+  boolean                    already_timedout
 );
 
 #include <rtems/posix/cond.inl>
