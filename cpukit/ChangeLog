@@ -1,3 +1,13 @@
+2004-11-08	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
+	* libcsupport/include/sys/_stdint.h: Remove.
+	* libcsupport/include/sys/_inttypes.h: Remove.
+	* libcsupport/include/stdint.h: Replace with former sys/_stdint.h.
+	Add INT<N>_C, various additions.
+	* libcsupport/include/inttypes.h: Replace with former
+	sys/_inttypes.h.
+	* libcsupport/Makefile.am: Reflect changes above.
+
 2004-11-07	Ralf Corsepius <ralf.corsepiu@rtems.org>
 
 	* backward/asm.h: Add doxygen preamble.
