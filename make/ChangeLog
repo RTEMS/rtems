@@ -1,6 +1,11 @@
 
 2000-09-12	Joel Sherrill <joel@OARcorp.com>
 
+	* custom/mvme167.cfg (CPP_CFLAGS): Corrected to only include
+	compiler arguments that specify CPU model options.
+
+2000-09-12	Joel Sherrill <joel@OARcorp.com>
+
 	* custom/mbx860_005b.cfg (make-target-options): Add lines to 
 	define PRINTK_MINOR SMC1_MINOR and PRINTK_IO_MODE.  The settings
 	may be incorrect but the BSP now compiles.
