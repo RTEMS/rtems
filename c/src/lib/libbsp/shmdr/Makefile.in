@@ -53,7 +53,7 @@ all:	preinstall ${ARCH} $(SRCS) $(PGM)
 	$(INSTALL_VARIANT) -m 644 $(PGM) ${PROJECT_RELEASE}/lib
 
 # the .rel file built here will be put into libbsp.a by
-#   ../$(RTEMS_BSP)/wrapup/Makefile
+#   ../$(RTEMS_BSP_FAMILY)/wrapup/Makefile
 
 preinstall:
 	$(INSTALL) -m 444 $(H_FILES) ${PROJECT_RELEASE}/include

@@ -10,5 +10,5 @@ VPATH=@srcdir@
 include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/directory.cfg
 
-# Descend into the $(RTEMS_BSP) directory if it exists
-SUB_DIRS=$(wildcard $(RTEMS_BSP))
+# Descend into the $(RTEMS_BSP_FAMILY) directory
+SUB_DIRS=$(RTEMS_BSP_FAMILY)
