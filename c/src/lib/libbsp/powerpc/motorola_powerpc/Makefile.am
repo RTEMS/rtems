@@ -25,33 +25,34 @@ all-local: $(PREINSTALL_FILES)
 EXTRA_DIST = BOOTING README.MVME2300 README.OTHERBOARDS README.dec21140
 EXTRA_DIST += times.mcp750 times.mvme2307
 
-$(PROJECT_INCLUDE)/bsp:
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
-$(PROJECT_INCLUDE)/bsp/consoleIo.h: ../shared/console/consoleIo.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
-
-$(PROJECT_INCLUDE)/bsp/uart.h: ../shared/console/uart.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
-
-$(PROJECT_INCLUDE)/bsp/irq.h: ../shared/irq/irq.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
-
-$(PROJECT_INCLUDE)/bsp/motorola.h: ../shared/motorola/motorola.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
-
-$(PROJECT_INCLUDE)/nvram.h: ../shared/include/nvram.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nvram.h: ../shared/include/nvram.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nvram.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nvram.h
 
-$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+
+$(PROJECT_INCLUDE)/bsp/consoleIo.h: ../shared/console/consoleIo.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
+
+$(PROJECT_INCLUDE)/bsp/uart.h: ../shared/console/uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
+
+$(PROJECT_INCLUDE)/bsp/irq.h: ../shared/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
+
+$(PROJECT_INCLUDE)/bsp/motorola.h: ../shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

@@ -2,14 +2,15 @@
 ## $Id$
 ##
 
-BSP_PIECES = clock console irq openpic pci residual startup vectors motorola vme
+BSP_PIECES = clock console irq openpic pci residual startup vectors motorola \
+    vme
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/*/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/$(ARCH)/rtems-cpu.rel \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.$(OBJEXT))
+    ../@exceptions@/$(ARCH)/rtems-cpu.rel $(wildcard \
+    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/compile.am

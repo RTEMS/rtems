@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../shared/console:@srcdir@/../../../shared
 
 C_FILES = polled_io.c uart.c console.c inch.c reboot.c

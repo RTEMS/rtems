@@ -15,7 +15,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-bsplib_DATA =  $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
 bsplib_DATA += $(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT)
 
 $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)

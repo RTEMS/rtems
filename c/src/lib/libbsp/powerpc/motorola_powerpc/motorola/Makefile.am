@@ -24,15 +24,18 @@ include $(top_srcdir)/../../../../automake/lib.am
 
 all-local: $(OBJS)
 
-PREINSTALL_FILES =
-
-$(PROJECT_INCLUDE)/bsp:
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp
-
-$(PROJECT_INCLUDE)/bsp/motorola.h: \
     $(top_srcdir)/../shared/motorola/motorola.h
 	$(INSTALL_DATA) $< $@
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
+$(PROJECT_INCLUDE)/bsp/motorola.h: $(top_srcdir)/../shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
 
 include $(top_srcdir)/../../../../automake/local.am

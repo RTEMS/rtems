@@ -16,7 +16,6 @@ bootloader_SOURCES = head.S exception.S em86real.S
 bootloader_SOURCES += misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
 bootloader_SOURCES += bootldr.h zlib.h pci.h keyboard.h
 
-
 NM = @NM@
 LD = @LD@
 
@@ -26,14 +25,11 @@ DEFAULT_INCLUDES =
 # Remove references to EABI when compiling bootloader
 BOOTLOADER_CPU_FLAGS=$(subst -msdata=eabi,,$(subst -meabi,,$(CPU_CFLAGS)))
 AM_CPPFLAGS = -D__BOOT__ -DDEBUG
-AM_CFLAGS = \
-    $(GCC_SPECS) -specs bsp_specs -qrtems -mrelocatable \
-    -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
-    -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata \
-    $(BOOTLOADER_CPU_CFLAGS)
-AM_CCASFLAGS = $(AM_CPPFLAGS) \
-    $(GCC_SPECS) -specs bsp_specs -qrtems -mrelocatable \
-    -DASM $(BOOTLOADER_CPU_CFLAGS)
+AM_CFLAGS = $(GCC_SPECS) -specs bsp_specs -qrtems -mrelocatable -msoft-float \
+    -mstrict-align -fno-builtin -Wall -mmultiple -mstring -O2 \
+    -fomit-frame-pointer -ffixed-r13 -mno-sdata $(BOOTLOADER_CPU_CFLAGS)
+AM_CCASFLAGS = $(AM_CPPFLAGS) $(GCC_SPECS) -specs bsp_specs -qrtems \
+    -mrelocatable -DASM $(BOOTLOADER_CPU_CFLAGS)
 
 #
 # CAUTION :
