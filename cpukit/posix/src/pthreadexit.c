@@ -17,6 +17,7 @@
 
 #include <pthread.h>
 #include <errno.h>
+#include <assert.h>
 
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
@@ -29,6 +30,9 @@ void pthread_exit(
   Objects_Information     *the_information;
 
   the_information = _Objects_Get_information( _Thread_Executing->Object.id );
+
+  /* This should never happen if _Thread_Get() works right */
+  assert( the_information );
 
   _Thread_Disable_dispatch();
 
