@@ -193,8 +193,10 @@ void *malloc(
 #ifdef MALLOC_STATS
   if (return_this)
   {
+      unsigned32 actual_size;
       unsigned32 current_depth;
-      MSBUMP(lifetime_allocated, size);
+      status = rtems_region_get_segment_size(RTEMS_Malloc_Heap, return_this, &actual_size);
+      MSBUMP(lifetime_allocated, actual_size);
       current_depth = malloc_stats.lifetime_allocated - malloc_stats.lifetime_freed;
       if (current_depth > malloc_stats.max_depth)
           malloc_stats.max_depth = current_depth;
