@@ -52,6 +52,9 @@ SECTIONS
   .rela.sbss      : { *(.rela.sbss)     }	> CODE
   .rela.sdata2    : { *(.rela.sdata2)   }	> CODE
   .rela.sbss2     : { *(.rela.sbss2)    }	> CODE
+
+  .init		  : { _init = .; KEEP(*(.init))	} > CODE
+
   .text      :	
   {
     *(.text)	
@@ -59,13 +62,14 @@ SECTIONS
     *(.gnu.warning)
     *(.gnu.linkonce.t*)
   }  > CODE
-  .init		  : { _init = .; KEEP(*(.init))	} >CODE
-  .fini		  : { _fini = .; KEEP(*(.fini))	} >CODE
-  .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
-  .rodata1        : { *(.rodata1) }	> CODE
-  .eh_frame	  : { *.(eh_frame)		} >CODE
+
+  .fini		  : { _fini = .; KEEP(*(.fini))	} > CODE
+
   _etext = .;
   PROVIDE (etext = .);
+
+  .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
+  .rodata1        : { *(.rodata1) }	> CODE
 
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  */
@@ -87,6 +91,8 @@ SECTIONS
 
   .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >CODE
   .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >CODE
+  .eh_frame	  : { *.(eh_frame)		} >CODE
+
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  It would
      be more correct to do this:
@@ -113,23 +119,12 @@ SECTIONS
   .gcc_except_table   : { *(.gcc_except_table) } > CODE
   PROVIDE (__EXCEPT_END__ = .);
   .got1           : { *(.got1) }	> CODE
-  .dynamic        : { *(.dynamic) }	> CODE
   /* Put .ctors and .dtors next to the .got2 section, so that the pointers
      get relocated with -mrelocatable. Also put in the .fixup pointers.
      The current compiler no longer needs this, but keep it around for 2.7.2  */
                 PROVIDE (_GOT2_START_ = .);
   .got2           :  { *(.got2) }	> CODE
-
-
-/* removed 11/14, gregm
-                PROVIDE (__CTOR_LIST__ = .);
-  .ctors          : { *(.ctors) }	> CODE
-                PROVIDE (__CTOR_END__ = .);
-                PROVIDE (__DTOR_LIST__ = .);
-  .dtors          : { *(.dtors) }	> CODE
-                PROVIDE (__DTOR_END__ = .);
-*/
-
+  .dynamic        : { *(.dynamic) }	> CODE
 
   .ctors          :
   {

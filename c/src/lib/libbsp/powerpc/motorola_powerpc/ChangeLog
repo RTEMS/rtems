@@ -1,3 +1,8 @@
+2002-12-08      Greg Menke <gregory.menke@gsfc.nasa.gov>
+  
+	* startup/linkcmds: Shifted .init, .fini to match better with
+	crtbegin/crtend linking.
+
 2002-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootloader/Makefile.am: Don't include @RTEMS_BSP@.cfg.
