@@ -91,6 +91,9 @@ int memfile_open(
 
   the_jnode = iop->file_info;
 
+  if (iop->flags & LIBIO_FLAGS_APPEND)
+    iop->offset = the_jnode->info.file.size;
+
   return 0;
 }
 
