@@ -1,3 +1,8 @@
+2003-08-22	Joel Sherrill <joel@OARcorp.com>
+
+	* basic.t, entry: Reconcile differences between CVS trunk and 4.6
+	branch.
+
 2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* build45.t: Fix typo (config.long).

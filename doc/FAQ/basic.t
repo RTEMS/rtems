@@ -103,6 +103,8 @@ RTEMS is available for the following processor families:
 @item Motorola MC68xxx
 @item Motorola MC683xx
 @item Motorola ColdFire
+@item ARM
+@item Hitachi H8/300
 @item Hitachi SH
 @item Intel i386
 @item Intel i960
@@ -111,6 +113,8 @@ RTEMS is available for the following processor families:
 @item SPARC
 @item AMD A29K
 @item Hewlett-Packard PA-RISC
+@item Texas Instruments C3x/C4x
+@item OpenCores OR32
 @end itemize
 
 In addition, there is a port to UNIX which can be used as a prototyping
