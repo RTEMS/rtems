@@ -14,16 +14,15 @@ all: README
 
 # mptests are the multiprocessing test suite
 # We only build them if HAS_MP was defined
- 
 MP_TESTS_yes_V = mptests
 MP_TESTS = $(MP_TESTS_$(HAS_MP)_V)
 
 # psxtests are the POSIX API test suite
 # We only build them if HAS_POSIX_API was defined
- 
 POSIX_TESTS_yes_V = psxtests
 POSIX_TESTS = $(POSIX_TESTS_$(HAS_POSIX_API)_V)
  
-SUB_DIRS=tools support samples libtests \
-         sptests $(MP_TESTS) $(POSIX_TESTS) tmtests
+# wildcard on this lets ALL test suites be optional
+SUB_DIRS=$(wildcard tools support samples libtests \
+         sptests $(MP_TESTS) $(POSIX_TESTS) tmtests)
 
