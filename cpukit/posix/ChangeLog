@@ -1,3 +1,8 @@
+2000-08-15	Joel Sherrill <joel@OARcorp.com>
+
+	* posix/src/ptimer1.c (timer_settime): Converted use of rtems_clock_get
+	to use SuperCore _TOD_Current variable.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.

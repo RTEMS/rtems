@@ -260,8 +260,7 @@ rtems_timer_service_routine FIRE_TIMER_S (rtems_id timer, void *data)
 
      /* Stores the time when the timer was started again */ 
 
-     return_v = rtems_clock_get ( RTEMS_CLOCK_GET_TOD, 
-                                 &timer_struct[timer_pos].time );
+     timer_struct[timer_pos].time = _TOD_Current;
      
      /* The state has not to be actualized, because nothing modifies it */
 
@@ -394,12 +393,11 @@ int timer_create(
         return 0;
     
 
-     case RTEMS_INVALID_NAME : /* The assigned name is not valid*/
+     case RTEMS_INVALID_NAME : /* The assigned name is not valid */
 
        PRINT_MSG_S ("ERROR: rtems create timer RTEMS_INVALID_NAME");
 
        errno = EINVAL;
-
        return (-1);
 
 
@@ -610,9 +608,7 @@ int timer_settime(
 
               /* Stores the time in which the timer was started again */
 
-              return_v = rtems_clock_get ( RTEMS_CLOCK_GET_TOD,
-                                          &timer_struct[timer_pos].time );
-
+              timer_struct[timer_pos].time = _TOD_Current;
               return 0;
 
               break;
@@ -686,8 +682,7 @@ int timer_settime(
 
               /* Stores the time in which the timer was started again */
 
-              return_v = rtems_clock_get ( RTEMS_CLOCK_GET_TOD,
-                                          &timer_struct[timer_pos].time );
+              timer_struct[timer_pos].time = _TOD_Current;
  
               return 0;
 
@@ -780,7 +775,7 @@ int timer_gettime(
 
   /* Reads the current time */
 
-  return_v = rtems_clock_get ( RTEMS_CLOCK_GET_TOD, &current_time );
+  current_time = _TOD_Current;
 
   timer_pos = TIMER_POSITION_F ( timerid );
 
