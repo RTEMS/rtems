@@ -29,7 +29,9 @@ int main(
   char **argv
 )
 {
+#if defined(__hpux__) && defined(__hppa__)
   unsigned int size = 0;
+#endif
 
   /*
    * Print the file header
