@@ -1,3 +1,9 @@
+2004-04-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 610/bsps
+	* Makefile.am: Add include/tm27.h, Cosmetics.
+	* include/tm27.h: Final cosmetics.
+
 2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* include/bsp.h: Split out tmtest27 support.

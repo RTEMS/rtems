@@ -8,7 +8,7 @@
  *  $Id$
  */
 
-#ifndef _TMTEST27
+#ifndef _RTEMS_TMTEST27
 #error "This is an RTEMS internal file you must not include directly."
 #endif
 
@@ -53,7 +53,5 @@
 { \
     sh_set_interrupt_level((SH7750_IPRB & 0xf000) << SH4_SR_IMASK_S); \
 }
-
-
 
 #endif

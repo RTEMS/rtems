@@ -8,7 +8,7 @@
  *  $Id$
  */
 
-#ifndef _TMTEST27
+#ifndef _RTEMS_TMTEST27
 #error "This is an RTEMS internal file you must not include directly."
 #endif
 
@@ -27,8 +27,6 @@
 
 #define Clear_tm27_intr()  i960_clear_intr( 6 )
 
-#define Lower_tm27_intr()
-
-
+#define Lower_tm27_intr() /* empty */
 
 #endif

@@ -8,7 +8,7 @@
  *  $Id$
  */
 
-#ifndef _TMTEST27
+#ifndef _RTEMS_TMTEST27
 #error "This is an RTEMS internal file you must not include directly."
 #endif
 
@@ -40,7 +40,5 @@
   do { \
     c4x_global_interrupts_enable(); \
   } while (0)
-
-
 
 #endif

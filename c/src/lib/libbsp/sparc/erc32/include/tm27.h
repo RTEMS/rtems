@@ -8,7 +8,7 @@
  *  $Id$
  */
 
-#ifndef _TMTEST27
+#ifndef _RTEMS_TMTEST27
 #error "This is an RTEMS internal file you must not include directly."
 #endif
 
@@ -41,9 +41,9 @@
 #define Cause_tm27_intr() \
   asm volatile( "ta 0x10; nop " );
 
-#define Clear_tm27_intr()
+#define Clear_tm27_intr() /* empty */
 
-#define Lower_tm27_intr()
+#define Lower_tm27_intr() /* empty */
 
 /*
  *  The asynchronous trap is an arbitrarily chosen ERC32 interrupt source.
@@ -73,7 +73,7 @@
 #define Clear_tm27_intr() \
   ERC32_Clear_interrupt( TEST_INTERRUPT_SOURCE )
 
-#define Lower_tm27_intr()
+#define Lower_tm27_intr() /* empty */
 
 #endif
 

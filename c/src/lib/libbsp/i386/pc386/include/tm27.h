@@ -8,7 +8,7 @@
  *  $Id$
  */
 
-#ifndef _TMTEST27
+#ifndef _RTEMS_TMTEST27
 #error "This is an RTEMS internal file you must not include directly."
 #endif
 
@@ -29,8 +29,8 @@
 
 #define Cause_tm27_intr() asm volatile("int $0x90" : :);
 
-#define Clear_tm27_intr()
+#define Clear_tm27_intr() /* empty */
 
-#define Lower_tm27_intr()
+#define Lower_tm27_intr() /* empty */
 
 #endif

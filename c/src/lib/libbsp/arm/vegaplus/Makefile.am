@@ -10,6 +10,7 @@ include $(top_srcdir)/../../bsp.am
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
+include_HEADERS += include/tm27.h
 nodist_include_HEADERS = include/bspopts.h
 
 EXTRA_PROGRAMS =
@@ -141,6 +142,10 @@ PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
+
+$(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h

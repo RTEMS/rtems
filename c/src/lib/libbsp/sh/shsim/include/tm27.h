@@ -8,7 +8,7 @@
  *  $Id$
  */
 
-#ifndef _TMTEST27
+#ifndef _RTEMS_TMTEST27
 #error "This is an RTEMS internal file you must not include directly."
 #endif
 
@@ -23,10 +23,9 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler )
-#define Cause_tm27_intr()
-#define Clear_tm27_intr()
+#define Install_tm27_vector( handler ) /* empty */
 
-
+#define Cause_tm27_intr() /* empty */
+#define Clear_tm27_intr() /* empty */
 
 #endif

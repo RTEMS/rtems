@@ -8,7 +8,7 @@
  *  $Id$
  */
 
-#ifndef _TMTEST27
+#ifndef _RTEMS_TMTEST27
 #error "This is an RTEMS internal file you must not include directly."
 #endif
 
@@ -27,12 +27,10 @@
   rtems_interrupt_catch( (handler), 0, &ignored ) ; \
 }
 
-#define Cause_tm27_intr()
+#define Cause_tm27_intr() /* empty */
 
-#define Clear_tm27_intr()
+#define Clear_tm27_intr() /* empty */
 
-#define Lower_tm27_intr()
-
-
+#define Lower_tm27_intr() /* empty */
 
 #endif
