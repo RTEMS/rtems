@@ -24,8 +24,6 @@
 
 void BSP_vme_config(void) __attribute__ (( weak, alias("__BSP_default_vme_config") ));
 
-int _BSP_vme_bridge_irq = -1;
-
 SPR_RO(DBAT0U)
 
 void

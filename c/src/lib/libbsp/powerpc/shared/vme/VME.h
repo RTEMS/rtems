@@ -88,11 +88,10 @@ typedef void (*BSP_VME_ISR_t)(void *usrArg, unsigned long vector);
  * must be omitted.
  */
 #define BSP_PCI_VME_DRIVER_DOES_EOI
-extern int _BSP_vme_bridge_irq;
 /* don't reference vmeUniverse0PciIrqLine directly here - leave it up to
  * bspstart() to set BSP_vme_bridge_irq. That way, we can generate variants
  * of the BSP with / without the universe driver...
  */
-#define BSP_PCI_VME_BRIDGE_IRQ _BSP_vme_bridge_irq
+extern int _BSP_vme_bridge_irq;
 
 #endif
