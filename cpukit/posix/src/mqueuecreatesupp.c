@@ -19,6 +19,7 @@
 #endif
 
 #include <stdarg.h>
+#include <stdlib.h>
 
 #include <pthread.h>
 #include <limits.h>
@@ -149,8 +150,3 @@ int _POSIX_Message_queue_Create_support(
   _Thread_Enable_dispatch();
   return 0;
 }
-
-
-
-
-
