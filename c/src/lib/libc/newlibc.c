@@ -13,6 +13,10 @@
  *
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 
@@ -331,7 +335,7 @@ libc_init(int reentrant)
  *
  */
 
-#include <stdio.h>
+#include <unistd.h>
 
 #if !defined(RTEMS_UNIX)
 void _exit(int status)

@@ -40,6 +40,10 @@
 static char sccsid[] = "@(#)ttyname.c	5.10 (Berkeley) 5/6/91";
 #endif /* LIBC_SCCS and not lint */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

@@ -1,4 +1,11 @@
 
+2001-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add libc/config.h
+	* libc/Makefile.am: Add INCLUDES += -I. to pickup config.h
+	* libc/.cvsignore: Add config.h and stamp-h
+	* libc/*.c: Add config.h support.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/mallocfreespace.c: Name of routine is

@@ -40,6 +40,10 @@
 static char sccsid[] = "@(#)opendir.c	5.11 (Berkeley) 2/23/91";
 #endif /* LIBC_SCCS and not lint */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <dirent.h>
 #include <fcntl.h>
 #include <stdlib.h>

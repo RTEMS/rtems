@@ -18,6 +18,9 @@
 |  $Id$
 +--------------------------------------------------------------------------*/
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <stdarg.h>
 #include <stdio.h>

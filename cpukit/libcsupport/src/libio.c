@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/libio_.h>               /* libio_.h pulls in rtems */
 #include <rtems.h>
 #include <rtems/assoc.h>                /* assoc.h not included by rtems.h */

@@ -4,6 +4,10 @@
 
 /* creat() "system call" */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /* This is needed by f2c and therefore the SPEC benchmarks.  */
 
 #include <fcntl.h>

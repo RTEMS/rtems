@@ -5,6 +5,9 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 /*
  * These routines provide general purpose error reporting.

@@ -69,6 +69,7 @@ OBJS = $(C_O_FILES)
 #
 
 AM_CFLAGS += $(LIBC_DEFINES)
+INCLUDES += -I.
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 

@@ -4,6 +4,10 @@
  * $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems.h>
 
 #if 0

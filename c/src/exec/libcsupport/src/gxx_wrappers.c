@@ -16,6 +16,10 @@
  * 
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /* We might not need, defined just in case */
 #define  __RTEMS_INSIDE__  1
 

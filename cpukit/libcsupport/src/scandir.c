@@ -40,6 +40,10 @@
 static char sccsid[] = "@(#)scandir.c	5.10 (Berkeley) 2/23/91";
 #endif /* LIBC_SCCS and not lint */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  * Scan the directory dirname calling select to make a list of selected
  * directory entries then sort using qsort and compare routine dcomp.

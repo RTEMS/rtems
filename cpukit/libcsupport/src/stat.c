@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  *  lstat() and stat() share the same implementation with a minor
  *  difference on how links are evaluated.

@@ -40,6 +40,10 @@
 static char sccsid[] = "@(#)readdir.c	5.7 (Berkeley) 6/1/90";
 #endif /* LIBC_SCCS and not lint */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <dirent.h>
 
 int getdents(
