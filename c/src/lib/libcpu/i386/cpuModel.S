@@ -24,7 +24,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include <rtems/score/registers.h>
 
 BEGIN_CODE
