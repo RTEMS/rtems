@@ -7,7 +7,7 @@
 @c
 
 @ifinfo
-@node HP-7100 Timing Data, HP-7100 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node HP-7100 Timing Data, HP-7100 Timing Data Introduction, Timing Specification Terminology, Top
 @end ifinfo
 @chapter HP-7100 Timing Data
 @ifinfo

@@ -6,20 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node CPU Model Dependent Features, CPU Model Dependent Features Introduction, Preface, Top
-@end ifinfo
 @chapter CPU Model Dependent Features
-@ifinfo
-@menu
-* CPU Model Dependent Features Introduction::
-* CPU Model Dependent Features CPU Model Name::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node CPU Model Dependent Features Introduction, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features, CPU Model Dependent Features
-@end ifinfo
 @section Introduction
 
 Microprocessors are generally classified into
@@ -61,9 +49,6 @@ The set of CPU model feature macros are defined in the file
 c/src/exec/score/cpu/hppa1_1/hppa.h based upon the particular CPU
 model defined on the compilation command line.
 
-@ifinfo
-@node CPU Model Dependent Features CPU Model Name, Calling Conventions, CPU Model Dependent Features Introduction, CPU Model Dependent Features
-@end ifinfo
 @section CPU Model Name
 
 The macro CPU_MODEL_NAME is a string which designates
