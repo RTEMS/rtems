@@ -19,6 +19,8 @@ Available, and Serviceable Systems}.
 The directives provided by the event logging manager are:
 
 @itemize @bullet
+@item @code{log_create} - Create a log file
+@item @code{log_sys_create} - Create a system log file
 @item @code{log_write} - Write to the system Log
 @item @code{log_write_any} - Write to any log file
 @item @code{log_write_entry} - Write entry to any log file
@@ -1029,16 +1031,71 @@ int log_create(
 @subheading STATUS CODES:
 
 @table @b
-@item ENOMEM
-The is ????????????
+
+@item 
+EEXIST 
+The @code{path} already exists and O_CREAT and O_EXCL were used.
+
+@item
+EISDIR 
+The @code{path} refers to a directory and the access requested involved 
+writing.
+
+@item
+ETXTBSY
+The @code{path} refers to an executable image which is currently being  
+executed and write access was requested.
+
+@item
+EFAULT 
+The @code{path} points outside your accessible address space.
+
+@item
+EACCES 
+The requested access to the file is not allowed, or one of the 
+directories in @code{path} did not allow search (execute) permission.
+
+@item
+ENAMETOOLONG
+The @code{path} was too long.
+
+@item
+ENOENT 
+A directory component in @code{path} does not exist or is a dangling symbolic 
+link.
+
+@item       
+ENOTDIR
+A component used as a directory in @code{path} is not, in fact, a directory.
+
+@item
+EMFILE
+The process already has the maximum number of files open.
+
+@item
+ENFILE
+The limit on the total number of files open on the system has been reached.
+
+@item
+ENOMEM
+Insufficient kernel memory was available.
+
+@item
+EROFS
+The @code{path} refers to a file on a read-only filesystem and write access
+was requested.
+
+@item
+ELOOP
+The @code{path} contains a reference to a circular symbolic link, ie a 
+symbolic link whose expansion contains a reference to itself.
 
 @end table
 
 @subheading DESCRIPTION:
 
-This function dynamically allocates memory for the @code{ld}, associates 
-a directory path to the @code{ld}, and provides access permissions to the
-@code{ld}.
+This function attempts to create a file associated with the @code{logdes} 
+argument in the directory provided by the argument @code{path}.
 
 @subheading NOTES:
 
