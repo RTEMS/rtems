@@ -55,6 +55,8 @@ clean_wrapup: clean_tools clean_dirs clean_modules
 
 #  XXX The link is temporary while switching to -specs options.
 dirs:
+	-test -d $(PROJECT_ROOT)/c/src/lib/libhwapi && \
+	    (cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs)
 	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
 	-ln -s $(PROJECT_ROOT)/$(RTEMS_BSP)/include \
 		$(PROJECT_ROOT)/$(RTEMS_BSP)/lib/include 
@@ -91,14 +93,4 @@ tests:
 	cd src/tests; $(MAKE) all
 
 env:    $(SRCS) dirs
-
-
-
-
-
-
-
-
-
-
 

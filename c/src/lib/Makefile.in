@@ -14,4 +14,8 @@ include $(PROJECT_ROOT)/make/directory.cfg
 LIBKA9Q_yes_V = libka9q
 LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
 
-SUB_DIRS=start include libmisc libc libcpu libbsp $(LIBKA9Q) wrapup
+# General Hardware API library 
+LIBHWAPI=$(wildcard libhwapi)
+
+SUB_DIRS=start include libmisc libc libcpu libbsp \
+         $(LIBKA9Q) $(LIBHWAPI) wrapup
