@@ -139,6 +139,10 @@ typedef struct {
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
   unsigned32   extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( unsigned32 );
+  void       (*stack_free_hook)( void* );
+  /* end of fields required on all CPUs */
+
   m68k_isr    *interrupt_vector_table;
 }   rtems_cpu_table;
 
@@ -333,7 +337,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 /* duplicates BFFFO results for 16 bits (i.e., 15-(_priority) in
    _CPU_Priority_bits_index is not needed), handles the 0 case, and
    does not molest _value -- jsg */
-#ifndef m68000
+#if ( M68K_HAS_EXTB_L == 1 )
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
     extern const unsigned char __BFFFOtable[256]; \
@@ -371,7 +375,7 @@ unsigned32 _CPU_ISR_Get_level( void );
        : "d" ((_value)), "ao" ((__BFFFOtable)) \
        : "cc" ) ; \
   }
-#endif /* m68000 */
+#endif /* M68K_HAS_EXTB_L */
 
 #endif
 

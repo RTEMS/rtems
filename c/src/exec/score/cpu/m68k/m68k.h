@@ -76,8 +76,17 @@ extern "C" {
  *    (cause an indeterminate result).  The 68EC040 and 68LC040 do not
  *    implement the DLE or multiplexed bus modes.  The 68EC040 does not
  *    implement the output buffer impedance selection mode of operation."
+ *
+ *  M68K_HAS_EXTB_L is used to enable/disable usage of the extb.l instruction
+ *  which is not available for 68000 or 68ec000 cores (68000, 68001, 68008, 
+ *  68010, 68302, 68306, 68307).  This instruction is available on the 68020
+ *  up and the cpu32 based models.  
+ *
+ *  NOTE:
+ *    Eventually it would be nice to evaluate doing a lot of this section
+ *    by having each model specigy which core it uses and then go from there.
  */
- 
+
 #if defined(m68000)
  
 #define CPU_MODEL_NAME         "m68000"
@@ -86,6 +95,7 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
+#define M68K_HAS_EXTB_L          0
 
 #elif defined(m68020)
  
@@ -95,6 +105,7 @@ extern "C" {
 #define M68K_HAS_FPU             1
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
  
 #elif defined(m68020_nofp)
  
@@ -104,6 +115,7 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
  
 #elif defined(m68030)
  
@@ -113,6 +125,7 @@ extern "C" {
 #define M68K_HAS_FPU             1
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
  
 #elif defined(m68040)
 
@@ -122,6 +135,7 @@ extern "C" {
 #define M68K_HAS_FPU             1
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
  
 #elif defined(m68lc040)
 
@@ -131,6 +145,7 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
  
 #elif defined(m68ec040)
 
@@ -140,6 +155,7 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
 
 #elif defined(m68302)
  /* essentially a m68000 with onboard peripherals */
@@ -149,6 +165,7 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
+#define M68K_HAS_EXTB_L          0
 
 #elif defined(m68332)
  
@@ -158,6 +175,7 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
+#define M68K_HAS_EXTB_L          1
 
 #elif defined(m68360)
  
@@ -167,6 +185,7 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
 
 #else
 
