@@ -10,7 +10,6 @@
  *
  *  $Id$
  */
-/* @(#)cpu_asm.S       08/20/96     1.15 */
 
 #include <asm.h>
 #include "iregdef.h"

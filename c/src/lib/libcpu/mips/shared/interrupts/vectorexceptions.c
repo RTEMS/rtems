@@ -65,12 +65,25 @@ struct regdef dumpregs[]= {
   { R_EPC,"R_EPC"}, { -1, NULL }
 };
 
+void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
+{
+  unsigned int *frame_u32;
+  int   i, j;
+
+  frame_u32 = (unsigned32 *)frame;
+  for(i=0; dumpregs[i].offset > -1; i++)
+  {
+     printk("   %s", dumpregs[i].name);
+     for(j=0; j< 7-strlen(dumpregs[i].name); j++) printk(" ");
+     printk("  %08X%c", frame_u32[dumpregs[i].offset], (i%3) ? '\t' : '\n' );
+  }
+  printk( "\n" );
+}
 
 void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
 {
   unsigned int sr;
   unsigned int cause;
-  int   i, j;
 
   mips_get_sr( sr );
   mips_get_cause( cause );
@@ -78,19 +91,10 @@ void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
   printk( "Unhandled exception %d\n", exc );
   printk( "sr: 0x%08x  cause: 0x%08x --> %s\n", sr, cause,
      cause_strings[(cause >> 2) &0x1f] );
-
-  for(i=0; dumpregs[i].offset > -1; i++)
-  {
-     printk("   %s", dumpregs[i].name);
-     for(j=0; j< 7-strlen(dumpregs[i].name); j++) printk(" ");
-     printk("  %08X\n", frame->regs[dumpregs[i].offset] );
-  }
+  mips_dump_exception_frame( frame );
 
   rtems_fatal_error_occurred(1);
 }
-
-
-
 
 #define CALL_EXC(_vector,_frame) \
    do { \
@@ -99,9 +103,6 @@ void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
           else \
              mips_default_exception_code_handler( _vector, _frame ); \
    } while(0)
-
-
-
 
 /*
  *  There are constants defined for these but they should basically
