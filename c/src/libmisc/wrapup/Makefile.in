@@ -20,7 +20,8 @@ LIBS=../monitor/$(ARCH)/libmonitor-tmp.a \
      ../assoc/$(ARCH)/libassoc-tmp.a \
      ../stackchk/$(ARCH)/libstackchk-tmp.a \
      ../cpuuse/$(ARCH)/libcpuuse-tmp.a \
-     ../rtmonuse/$(ARCH)/librtmonuse-tmp.a
+     ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \
+     ../dumpbuf/$(ARCH)/libdumpbuf-tmp.a
 
 RELS=
 
