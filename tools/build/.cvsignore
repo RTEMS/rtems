@@ -13,8 +13,6 @@ configure
 depcomp
 install-if-change
 install-sh
-lock-directory
 missing
 mkinstalldirs
 stamp-h.in
-unlock-directory

@@ -23,7 +23,5 @@ AM_CONFIG_HEADER(config.h)
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 install-if-change
-lock-directory
-unlock-directory
 ])
 AC_OUTPUT

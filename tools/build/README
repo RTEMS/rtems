@@ -3,22 +3,8 @@
 #
 
 Misc. support tools for RTEMS workspaces.
-More will be added later as they are converted from Teamware
-to CVS.
 
 install-if-change
     Smart install script that also can append suffixes as it
     installs (suffixes used for debug and profile variants).
     Requires bash or ksh.
-
-rcs-clean
-    deletes all files from the current directory that can be
-    re-created from RCS.  Careful to not delete locked files.
-    May be used by 'gmake clobber'
-
-lock-directory
-unlock-directory
-    traverse a directory structure making it unwritable.
-    Useful to keep people from accidentally overwriting
-    "released" trees if they get confused about which
-    module they have loaded.
