@@ -108,15 +108,15 @@
 
 #define SYNCR SIM_VOLATILE_USHORT_POINTER(0x04 + SIM_CRB)
 				/* Clock Synthesizer Control Register */
-#define    W     0x8000		/*    Frequency Control (VCO) */
-#define    X     0x4000		/*    Frequency Control Bit (Prescale) */
-#define    Y     0x3f00		/*    Frequency Control Counter */
-#define    EDIV  0x0080		/*    ECLK Divide Rate */
-#define    SLIMP 0x0010		/*    Limp Mode Status */
-#define	   SLOCK 0x0008		/*    Synthesizer Lock */
-#define    RSTEN 0x0004		/*    Reset Enable */
-#define    STSIM 0x0002		/*    Stop Mode SIM Clock */
-#define    STEXT 0x0001		/*    Stop Mode External Clock */
+#define    VCO      0x8000	/*    Frequency Control (VCO) */
+#define    PRESCALE 0x4000	/*    Frequency Control Bit (Prescale) */
+#define    COUNTER  0x3f00	/*    Frequency Control Counter */
+#define    EDIV     0x0080	/*    ECLK Divide Rate */
+#define    SLIMP    0x0010	/*    Limp Mode Status */
+#define	   SLOCK    0x0008	/*    Synthesizer Lock */
+#define    RSTEN    0x0004	/*    Reset Enable */
+#define    STSIM    0x0002	/*    Stop Mode SIM Clock */
+#define    STEXT    0x0001	/*    Stop Mode External Clock */
 
 
 
