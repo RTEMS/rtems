@@ -69,8 +69,8 @@ extern int	_mrt_ioctl __P((int req, caddr_t data, struct proc *p));
  */
 
 struct socket  *ip_mrouter  = NULL;
-static u_int		ip_mrtproto = 0;
-static struct mrtstat	mrtstat;
+/* static u_int		ip_mrtproto = 0; */
+/* static struct mrtstat	mrtstat; */
 u_int		rsvpdebug = 0;
 
 int

@@ -1,6 +1,10 @@
 /*
  * Declarations to fit FreeBSD to RTEMS.
- * This include file should *never* be exposed to the application programmer.
+ *
+ *******************************************************************
+ *                            WARNING                              *
+ * This file should *never* be included by any application program *
+ *******************************************************************
  *
  *  $Id$
  */
@@ -154,5 +158,17 @@ extern int rtems_bsdnet_nameserver_count;
  * Internal IOCTL command
  */
 #define SIO_RTEMS_SHOW_STATS	_IO('i', 250)
+
+/*
+ * Some extra prototypes
+ */
+int sethostname (char *name, int namelen);
+void domaininit (void *);
+void ifinit (void *);
+void ipintr (void);
+void arpintr (void);
+void bootpc_init(void);
+int socket (int, int, int);
+int ioctl (int, unsigned long, ...);
 
 #endif /* _RTEMS_BSDNET_INTERNAL_H_ */

@@ -120,7 +120,7 @@ struct ipstat ipstat;
 #define IPREASS_NHASH           (1 << IPREASS_NHASH_LOG2)
 #define IPREASS_HMASK           (IPREASS_NHASH - 1)
 #define IPREASS_HASH(x,y) \
-	((((x) & 0xF | ((((x) >> 8) & 0xF) << 4)) ^ (y)) & IPREASS_HMASK)
+	(((((x) & 0xF) | ((((x) >> 8) & 0xF) << 4)) ^ (y)) & IPREASS_HMASK)
 
 static struct ipq ipq[IPREASS_NHASH];
 static int    nipq = 0;         /* total # of reass queues */
