@@ -295,7 +295,7 @@ console_initialize(rtems_device_major_number major,
         }
       else if(BSPPrintkPort != BSP_CONSOLE_PORT_CONSOLE)
         {
-           printk("illegal assignement of projtk channel");
+           printk("illegal assignement of printk channel");
          rtems_fatal_error_occurred (status);
         }
 
