@@ -1,3 +1,7 @@
+2001-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	* config.guess: No longer in CVS since installed by bootstrap.
+
 2001-09-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootstrap: remove/add automake added files.
