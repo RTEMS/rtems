@@ -20,8 +20,6 @@ noinst_MANS = xdr.3
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS += '-D__P(x)=x'
-
 if LIBRPC
 $(LIB): $(OBJS)
 	$(make-library)

@@ -1,3 +1,10 @@
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/rpc/Makefile.am: Remove __P from AM_CPPFLAGS.
+	Rely on sys/cdefs.h providing it.
+	* src/xdr/Makefile.am: Remove __P from AM_CPPFLAGS.
+	Rely on sys/cdefs.h providing it.
+
 2003-09-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in include/Makefile.am.
