@@ -1,3 +1,13 @@
+2003-01-27	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, configure.ac: Added new test loopback which shows how to
+	use the loopback interface. Thank you Eric Norum for a portable
+	target independent test which exercises the TCP/IP. This should
+	prevent massive failures in the TCP/IP stack from reaching the
+	street.
+	* loopback/.cvsignore, loopback/Makefile.am, loopback/README,
+	loopback/init.c, loopback/loopback.scn: New files.
+
 2003-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* unlimited/system.h, unlimited/test1.c: Backed off previous

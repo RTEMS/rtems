@@ -11,8 +11,11 @@ MP_TESTS = base_mp
 
 FP_TESTS = paranoia
 
+## loopback tests a network loopback interface
+NET_TESTS = loopback
+
 SUBDIRS = hello ticker base_sp unlimited minimum $(MP_TESTS) \
-    $(CPLUSPLUS_TESTS) $(FP_TESTS)
+    $(CPLUSPLUS_TESTS) $(FP_TESTS) $(NET_TESTS)
 
 AUTOMAKE_FILES = sample.am
 
