@@ -1,5 +1,9 @@
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
+	* sh7045/score/ispsh7045.c: Fixed typos.
+
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
 	* sh7045/score/cpu_asm.c: Fixed typo.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
