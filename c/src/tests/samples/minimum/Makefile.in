@@ -18,7 +18,7 @@ VPATH = @srcdir@
 SAMPLE=minimum
 PGM=${ARCH}/$(SAMPLE).exe
 
-MANAGERS=io
+MANAGERS=all
 
 # C source names, if any, go here -- minus the .c
 C_PIECES=init

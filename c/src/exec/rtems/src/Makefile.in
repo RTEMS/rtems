@@ -36,7 +36,7 @@ CLOCK_PIECES=\
 
 TIMER_PIECES=\
   timer timercancel timercreate timerdelete timerfireafter \
-  timerfirewhere timerident timerreset
+  timerfirewhen timerident timerreset
 
 MESSAGE_QUEUE_PIECES=\
   msg msgqallocate msgqbroadcast msgqcreate msgqdelete \
