@@ -1,3 +1,11 @@
+2002-08-21	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac, shared/misc/Makefile.am: PR217 required that the
+	idle task be moved to libcpu so it could be more acutely aware of
+	the CPU model.  This file was modified to pick up the idle task
+	from there.
+	* shared/misc/m68kidle.c: New file.
+
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* m68040/fpsp/Makefile.am: Use .$(OBJEXT) instead of .o.

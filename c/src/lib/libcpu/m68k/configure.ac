@@ -27,21 +27,8 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
-AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "m68020" \
-|| test "$RTEMS_CPU_MODEL" = "m68020" \
-|| test "$RTEMS_CPU_MODEL" = "m68030" \
-|| test "$RTEMS_CPU_MODEL" = "m68lc040" \
-|| test "$RTEMS_CPU_MODEL" = "m68040" \
-|| test "$RTEMS_CPU_MODEL" = "m68ec040" \
-|| test "$RTEMS_CPU_MODEL" = "m68lc040" \
-|| test "$RTEMS_CPU_MODEL" = "m68060" \
-|| test "$RTEMS_CPU_MODEL" = "m68340" \
-|| test "$RTEMS_CPU_MODEL" = "m68360" \
-|| test "$RTEMS_CPU_MODEL" = "m68331" \
-|| test "$RTEMS_CPU_MODEL" = "m68332" \
-|| test "$RTEMS_CPU_MODEL" = "mcpu32" \
-|| test "$RTEMS_CPU_MODEL" = "mcpu32p" \
-)
+# At this time all models should use the shared directory so do this
+AM_CONDITIONAL(shared, true)
 
 AM_CONDITIONAL(m68040, test "$RTEMS_CPU_MODEL" = "m68040")
 
@@ -58,6 +45,8 @@ AM_CONDITIONAL(mcpu32, test "$RTEMS_CPU_MODEL" = "m68340" \
 AM_CONDITIONAL(mcpu32p, test "$RTEMS_CPU_MODEL" = "m68360" \
 || test "$RTEMS_CPU_MODEL" = "mcpu32p" \
 )
+
+AM_CONDITIONAL(mcf5272, test "$RTEMS_CPU_MODEL" = "mcf5272" )
 
 case "$RTEMS_CPU_MODEL" in
 mcf5206 ) AC_CONFIG_SUBDIRS([mcf5206]);;
