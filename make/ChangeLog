@@ -1,3 +1,7 @@
+2004-07-15	Jay Monkman
+
+	* custom/csb336.cfg, custom/csb337.cfg: New files.
+
 2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* custom/FreeBSD-posix.cfg: Remove LIBC_DEFINES (Meaningless
