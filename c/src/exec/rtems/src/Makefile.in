@@ -23,7 +23,7 @@ MP_C_PIECES_yes_V = eventmp mp msgmp partmp regionmp semmp signalmp taskmp
 MP_C_PIECES = $(MP_C_PIECES_$(HAS_MP)_V)
 
 TASK_C_PIECES = tasks taskcreate taskdelete taskgetnote taskident \
-    taskinitusers taskmode taskrestart taskresume tasksetnote \
+    taskinitusers taskissuspended taskmode taskrestart taskresume tasksetnote \
     tasksetpriority taskstart tasksuspend taskwakeafter taskwakewhen
 
 RATEMON_C_PIECES = ratemon ratemoncancel ratemoncreate ratemondelete \
