@@ -24,28 +24,34 @@
 
 /*PAGE
  *
- *  _Timer_Manager_initialization
+ *  rtems_timer_ident
  *
- *  This routine initializes all timer manager related data structures.
+ *  This directive returns the system ID associated with
+ *  the timer name.
  *
  *  Input parameters:
- *    maximum_timers - number of timers to initialize
+ *    name - user defined message queue name
+ *    id   - pointer to timer id
  *
- *  Output parameters:  NONE
+ *  Output parameters:
+ *    *id               - message queue id
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code        - if unsuccessful
  */
 
-void _Timer_Manager_initialization(
-  unsigned32 maximum_timers
+rtems_status_code rtems_timer_ident(
+  rtems_name    name,
+  Objects_Id   *id
 )
 {
-  _Objects_Initialize_information(
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
     &_Timer_Information,
-    OBJECTS_RTEMS_TIMERS,
-    FALSE,
-    maximum_timers,
-    sizeof( Timer_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+    &name,
+    OBJECTS_SEARCH_LOCAL_NODE,
+    id
   );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
