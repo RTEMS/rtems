@@ -133,8 +133,8 @@ extern "C" {
 /*-------------------------------------------------------------------------+
 | External Variables.
 +--------------------------------------------------------------------------*/
-extern i386_IDT_slot Interrupt_descriptor_table[256];
-extern i386_GDT_slot Global_descriptor_table   [8192];
+extern i386_IDT_slot Interrupt_descriptor_table[];
+extern i386_GDT_slot Global_descriptor_table   [];
  
 extern rtems_configuration_table BSP_Configuration;
                                     /* User provided BSP configuration table. */
@@ -149,10 +149,22 @@ void          _IBMPC_initVideo(void);    /* from 'outch.c'  */
 void          _IBMPC_outch    (char);    /* from 'outch.c'  */
 rtems_boolean _IBMPC_chrdy    (char *);  /* from 'inch.c'   */
 char          _IBMPC_inch     (void);    /* from 'inch.c'   */ 
+char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */ 
 
 void printk(char *fmt, ...);             /* from 'printk.c' */
 
 void rtemsReboot(void);                  /* from 'exit.c'   */
+
+/* Definitions for PC386ConsolePort */
+#define PC386_CONSOLE_PORT_CONSOLE (-1)
+#define PC386_CONSOLE_PORT_COM1    (PC386_UART_COM1)
+#define PC386_CONSOLE_PORT_COM2    (PC386_UART_COM2)
+
+/* GDB stub stuff */
+void i386_stub_glue_init(int uart);
+void i386_stub_glue_init_breakin(void);
+void set_debug_traps(void);
+void breakpoint(void);
 
 #ifdef __cplusplus
 }
@@ -160,3 +172,9 @@ void rtemsReboot(void);                  /* from 'exit.c'   */
 
 #endif /* __BSP_H_ */
 /* end of include file */
+
+
+
+
+
+

@@ -22,7 +22,7 @@ VPATH=@srcdir@
 USE_HOST_COMPILER=yes
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bin2boot Header Image
+C_PIECES= bin2boot binpatch
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=$(ARCH)/%.o)
 
@@ -30,12 +30,12 @@ CC_PIECES=
 CC_FILES=$(CC_PIECES:%=%.cc)
 CC_O_FILES=$(CC_PIECES:%=$(ARCH)/%.o)
 
-H_FILES=bytetype.h Header.h Image.h
+H_FILES=
 
 SRCS=$(C_FILES) $(CC_FILES) $(H_FILES)
 OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
 
-PGMS=$(ARCH)/bin2boot
+PGMS=$(ARCH)/bin2boot $(ARCH)/binpatch
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
@@ -66,9 +66,10 @@ CLOBBER_ADDITIONS +=
 all:	$(ARCH) $(SRCS) $(PGMS)
 	$(INSTALL) -m 555 $(PGMS) ${PROJECT_RELEASE}/build-tools
 
-$(ARCH)/bin2boot: $(OBJS)
-	$(CC) $(LDFLAGS) $^ -o $@ $(LD_LIBS)
-$(ARCH)/bin2boot.o: bin2boot.c Header.h Image.h bytetype.h
-$(ARCH)/Header.o: Header.c Header.h bytetype.h
-$(ARCH)/Image.o: Image.c Image.h bytetype.h
+$(ARCH)/bin2boot: $(srcdir)/bin2boot.c
+	$(CC) $(LDFLAGS) -o $@ $(srcdir)/bin2boot.c $(LD_LIBS)
+
+$(ARCH)/binpatch: $(srcdir)/binpatch.c
+	$(CC) $(LDFLAGS) -o $@ $(srcdir)/binpatch.c $(LD_LIBS)
+
 

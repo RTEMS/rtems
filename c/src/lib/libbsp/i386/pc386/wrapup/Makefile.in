@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-BSP_PIECES=startup clock console timer
+BSP_PIECES=startup clock console timer pc386dev
 GENERIC_PIECES=
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x

@@ -70,6 +70,7 @@ static char shift_map[] =
 static char             kbd_buffer[KBD_BUF_SIZE];
 static rtems_unsigned16 kbd_first = 0;
 static rtems_unsigned16 kbd_last  = 0;
+static rtems_unsigned16 kbd_end   = KBD_BUF_SIZE - 1;
 
 /*-------------------------------------------------------------------------+
 |         Function: rtemsReboot
@@ -81,7 +82,7 @@ static rtems_unsigned16 kbd_last  = 0;
 void rtemsReboot(void)
 {
   /* shutdown and reboot */
-  outport_byte(0x64, 0xFE);        /* use keyboard controler to do the job... */
+  outport_byte(0x64, 0xFE);      /* use keyboard controler to do the job... */
 } /* rtemsReboot */
 
 /*-------------------------------------------------------------------------+
@@ -223,10 +224,12 @@ _IBMPC_keyboard_isr(rtems_vector_number vector)
   if (_IBMPC_scankey(&kbd_buffer[kbd_last]))
   {
     /* Got one; save it if there is enough room in buffer. */
-    unsigned int next = (kbd_last + 1) % KBD_BUF_SIZE;
+    unsigned int next = (kbd_last == kbd_end) ? 0 : kbd_last + 1;
 
     if (next != kbd_first)
-      kbd_last = next;
+      {
+	kbd_last = next;
+      }
   }
 
   PC386_ackIrq(vector - PC386_IRQ_VECTOR_BASE); /* Mark interrupt as handled. */
@@ -277,3 +280,38 @@ _IBMPC_inch(void)
 
     return c;
 } /* _IBMPC_inch */
+
+/*-------------------------------------------------------------------------+
+|         Function: _IBMPC_inch_sleep
+|      Description: If charcter is ready return it, otherwise sleep until 
+|                   it is ready
+| Global Variables: None.
+|        Arguments: None.
+|          Returns: character read from keyboard.
++--------------------------------------------------------------------------*/
+char
+_IBMPC_inch_sleep(void)
+{
+    char c;
+    extern rtems_interval _TOD_Ticks_per_second; /* XXX should not do this */ 
+    rtems_interval ticks_to_delay;
+
+    ticks_to_delay = (_TOD_Ticks_per_second + 24) / 25; 
+
+    for(;;)
+      {
+	if(_IBMPC_chrdy(&c))
+	  {
+	    return c;
+	  }
+	rtems_task_wake_after(ticks_to_delay);
+      }
+	
+    return c;
+} /* _IBMPC_inch */
+
+
+
+
+
+

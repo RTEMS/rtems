@@ -66,10 +66,10 @@ SYM(delay):
 |         Function: _load_segments
 |      Description: Current environment is standard PC booted by grub.
 |                   So, there is no value in saving current GDT and IDT
-|                   Settings we have to set it up ourseves. (Naturally
+|                   settings we have to set it up ourseves. (Naturally
 |	            it will be not so in case we are booted by some
 |                   boot monitor, however, then it will be different
-|                   BSP), After that we have to load board segment registers
+|                   BSP). After that we have to load board segment registers
 |                   with apropriate values +  reprogram PIC.
 | Global Variables: None.
 |        Arguments: None.

@@ -33,8 +33,14 @@
 
 
 #include <stdio.h>
-
 #include <bsp.h>
+#include <pc386uart.h>
+
+/*-------------------------------------------------------------------------+
+ | Which console is in use: either (-1) which means normal console or 
+ | uart id if uart was used
+ +-------------------------------------------------------------------------*/
+extern int PC386ConsolePort;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
@@ -50,11 +56,44 @@ extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 +--------------------------------------------------------------------------*/
 void _exit(int status)
 {
-  unsigned char ch;
-  puts("\nEXECUTIVE SHUTDOWN! Any key to reboot...");
+  unsigned char ch, *cp;
+  static   char line[]="EXECUTIVE SHUTDOWN! Any key to reboot...";
 
-  while(!_IBMPC_scankey(&ch))
-    ;
+  if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
+    {
+
+      printk("\n");
+      printk(line);
+      while(!_IBMPC_scankey(&ch))
+	;
+      printk("\n\n");
+    }
+  else
+    {
+      PC386_uart_intr_ctrl(PC386ConsolePort, PC386_UART_INTR_CTRL_DISABLE);
+      
+      PC386_uart_polled_write(PC386ConsolePort, '\r');
+      PC386_uart_polled_write(PC386ConsolePort, '\n');
+      
+      for(cp=line; *cp != 0; cp++)
+	{
+	  PC386_uart_polled_write(PC386ConsolePort, *cp);
+	}
+
+      PC386_uart_polled_read(PC386ConsolePort);
+
+      PC386_uart_polled_write(PC386ConsolePort, '\r');
+      PC386_uart_polled_write(PC386ConsolePort, '\n');
+      PC386_uart_polled_write(PC386ConsolePort, '\r');
+      PC386_uart_polled_write(PC386ConsolePort, '\n');
+    }
 
   rtemsReboot();
 } /* _exit */
+
+
+
+
+
+
+

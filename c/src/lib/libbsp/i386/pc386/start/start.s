@@ -70,7 +70,7 @@ BEGIN_CODE
  * to video mode set by the loader, you may try to define
  * the following variable:
  */
-#define DEBUG_EARLY_START
+/* #define DEBUG_EARLY_START */
 
 SYM (start):
         /*

@@ -33,8 +33,8 @@ static unsigned char  column;
 static unsigned short attribute;
 static unsigned int   nLines;
 
-    static void 
-scroll()
+static void 
+scroll(void)
 {
     int i, j;				    /* Counters	*/
     unsigned short *pt_scroll, *pt_bitmap;  /* Pointers on the bit-map	*/
@@ -55,8 +55,8 @@ scroll()
     }
 }
 
-    static void
-endColumn()
+static void
+endColumn(void)
 {
     if (++row == maxRow) { 
 	scroll(); 	/* Scroll the screen now */
@@ -70,7 +70,7 @@ endColumn()
 
 
 
-    static void 
+static void 
 videoPutChar(char car)
 {
     unsigned short *pt_bitmap = bitMapBaseAddr + row * maxCol;
@@ -117,8 +117,8 @@ videoPutChar(char car)
     }
 }	
 
-    void
-clear_screen()
+void
+clear_screen(void)
 {
     int i,j;
 

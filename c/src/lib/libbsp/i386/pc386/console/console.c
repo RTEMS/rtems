@@ -33,10 +33,17 @@
 
 
 #include <stdlib.h>
+#include <assert.h>
 
 #include <bsp.h>
 #include <irq.h>
 #include <rtems/libio.h>
+#include <termios.h>
+#include <pc386uart.h>
+
+int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
+
+static int conSetAttr(int minor, const struct termios *);
 
 /*-------------------------------------------------------------------------+
 | Constants
@@ -51,74 +58,25 @@ extern rtems_isr _IBMPC_keyboard_isr(rtems_vector_number);
        /* keyboard (IRQ 0x01) Interrupt Service Routine (defined in 'inch.c') */
 
 
-/*-------------------------------------------------------------------------+
-| Functions
-+--------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------+
-|         Function: console_cleanup
-|      Description: This routine is called at exit to clean up the console
-|                   hardware. 
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-void
-console_cleanup(void)
+void console_reserve_resources(rtems_configuration_table *conf)
 {
-  /* nothing */
-} /* console_cleanup */
+  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+    {
+      rtems_termios_reserve_resources(conf, 1);
+    }
+  return;
+}
 
-
-/*-------------------------------------------------------------------------+
-|         Function: is_character_ready
-|      Description: Check if a character is available for input, and if so
-|                   return it.
-| Global Variables: None.
-|        Arguments: c - character read if available, otherwise unchanged.
-|          Returns: TRUE if there was a character available for input,
-|                   FALSE otherwise. 
-+--------------------------------------------------------------------------*/
-rtems_boolean
-is_character_ready(char *c)
+void __assert(const char *file, int line, const char *msg)
 {
-  return (_IBMPC_chrdy(c) ? TRUE : FALSE);
-} /* is_character_ready */
+  printk("assert failed: %s: ", file);
+  printk("%d: ", line);
+  printk("%s\n", msg);
 
+  exit(1);
 
-/*-------------------------------------------------------------------------+
-|         Function: inbyte
-|      Description: Read a character from the console (keyboard).
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Caracter read from the console. 
-+--------------------------------------------------------------------------*/
-unsigned char
-inbyte(void)
-{
-  char c = _IBMPC_inch();
-
-  /* Echo character to screen */
-  _IBMPC_outch(c);
-  if (c == '\r')
-    _IBMPC_outch('\n');  /* CR = CR + LF */
-
-  return c;
-} /* inbyte */
-
-
-/*-------------------------------------------------------------------------+
-|         Function: outbyte
-|      Description: Write a character to the console (display).
-| Global Variables: None.
-|        Arguments: Character to be written.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-void
-outbyte(char c)
-{
-  _IBMPC_outch(c);
-} /* outbyte */
-
+  return;
+}
 
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.
@@ -135,26 +93,74 @@ console_initialize(rtems_device_major_number major,
   /* Initialize video */
   _IBMPC_initVideo();
 
-  /* Install keyboard interrupt handler */
-  status = PC386_installRtemsIrqHandler(KEYBOARD_IRQ, _IBMPC_keyboard_isr);
+  if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
+    {
 
-  if (status != RTEMS_SUCCESSFUL)
-  {
-    printk("Error installing keyboard interrupt handler!\n");
-    rtems_fatal_error_occurred(status);
-  }
+      /* Install keyboard interrupt handler */
+      status = PC386_installRtemsIrqHandler(KEYBOARD_IRQ, _IBMPC_keyboard_isr);
 
-  status =
-    rtems_io_register_name("/dev/console", major, (rtems_device_minor_number)0);
+      if (status != RTEMS_SUCCESSFUL)
+	{
+	  printk("Error installing keyboard interrupt handler!\n");
+	  rtems_fatal_error_occurred(status);
+	}
+      
+      status = rtems_io_register_name("/dev/console", major, 0);
+      if (status != RTEMS_SUCCESSFUL)
+	{
+	  printk("Error registering console device!\n");
+	  rtems_fatal_error_occurred(status);
+	}
+      printk("Initialized console on port CONSOLE\n\n");
+    }
+  else
+    {
+      /*
+       * Set up TERMIOS
+       */
+      rtems_termios_initialize ();
+      
+      /*
+       * Do device-specific initialization
+       */
+      
+      /* 9600-8-N-1 */
+      PC386_uart_init(PC386ConsolePort, 9600, 0);
+      
+      
+      /* Set interrupt handler */
+      if(PC386ConsolePort == PC386_UART_COM1)
+	{
+	  status = PC386_installRtemsIrqHandler(PC386_UART_COM1_IRQ,
+						PC386_uart_termios_isr_com1);
+	}
+      else
+	{
+          assert(PC386ConsolePort == PC386_UART_COM2);
+
+	  status = PC386_installRtemsIrqHandler(PC386_UART_COM2_IRQ,
+						PC386_uart_termios_isr_com2);
+	}
+      /*
+       * Register the device
+       */
+      status = rtems_io_register_name ("/dev/console", major, 0);
+      if (status != RTEMS_SUCCESSFUL)
+	{
+	  printk("Error registering console device!\n");
+	  rtems_fatal_error_occurred (status);
+	}
+
+      if(PC386ConsolePort == PC386_UART_COM1)
+	{
+	  printk("Initialized console on port COM1 9600-8-N-1\n\n");
+	}
+      else
+	{
+	  printk("Initialized console on port COM2 9600-8-N-1\n\n");
+	}
+    }
  
-  if (status != RTEMS_SUCCESSFUL)
-  {
-    printk("Error registering console device!\n");
-    rtems_fatal_error_occurred(status);
-  }
- 
-  atexit(console_cleanup);
-
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
 
@@ -164,12 +170,51 @@ console_initialize(rtems_device_major_number major,
 +--------------------------------------------------------------------------*/
 rtems_device_driver
 console_open(rtems_device_major_number major,
-             rtems_device_minor_number minor,
-             void                      *arg)
+                rtems_device_minor_number minor,
+                void                      *arg)
 {
-  return RTEMS_SUCCESSFUL;
-} /* console_open */
+  rtems_status_code              status;
+  static rtems_termios_callbacks cb = 
+  {
+    NULL,	              /* firstOpen */
+    NULL,	              /* lastClose */
+    NULL,	              /* pollRead */
+    PC386_uart_termios_write_com1, /* write */
+    conSetAttr,	              /* setAttributes */
+    NULL,	              /* stopRemoteTx */
+    NULL,	              /* startRemoteTx */
+    1		              /* outputUsesInterrupts */
+  };
 
+  if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
+    {
+      return RTEMS_SUCCESSFUL;
+    }
+
+  if(PC386ConsolePort == PC386_UART_COM2)
+    {
+      cb.write = PC386_uart_termios_write_com2;
+    }
+
+  status = rtems_termios_open (major, minor, arg, &cb);
+
+  if(status != RTEMS_SUCCESSFUL)
+    {
+      printk("Error openning console device\n");
+      return status;
+    }
+
+  /*
+   * Pass data area info down to driver
+   */
+  PC386_uart_termios_set(PC386ConsolePort, 
+			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
+  
+  /* Enable interrupts  on channel */
+  PC386_uart_intr_ctrl(PC386ConsolePort, PC386_UART_INTR_CTRL_TERMIOS);
+
+  return RTEMS_SUCCESSFUL;
+}
 
 /*-------------------------------------------------------------------------+
 | Console device driver CLOSE entry point
@@ -179,6 +224,11 @@ console_close(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void                      *arg)
 {
+  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+    {
+      return rtems_termios_close (arg);
+    }
+
   return RTEMS_SUCCESSFUL;
 } /* console_close */
 
@@ -196,10 +246,24 @@ console_read(rtems_device_major_number major,
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   char                  *buffer  = rw_args->buffer;
   int            count, maximum  = rw_args->count;
+
+  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+    {
+      return rtems_termios_read (arg);
+    }
  
   for (count = 0; count < maximum; count++)
   {
-    buffer[count] = inbyte();
+    /* Get character */
+    buffer[count] = _IBMPC_inch_sleep();
+
+    /* Echo character to screen */
+    _IBMPC_outch(buffer[count]);
+    if (buffer[count] == '\r')
+      {
+	_IBMPC_outch('\n');  /* CR = CR + LF */
+      }
+
     if (buffer[count] == '\n' || buffer[count] == '\r')
     {
       /* What if this goes past the end of the buffer?  We're hosed. [bhc] */
@@ -227,12 +291,17 @@ console_write(rtems_device_major_number major,
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   char                  *buffer  = rw_args->buffer;
   int            count, maximum  = rw_args->count;
+
+  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+    {
+      return rtems_termios_write (arg);
+    }
  
   for (count = 0; count < maximum; count++)
   {
-    outbyte(buffer[count]);
+    _IBMPC_outch(buffer[count]);
     if (buffer[count] == '\n')
-      outbyte('\r');            /* LF = LF + CR */
+      _IBMPC_outch('\r');            /* LF = LF + CR */
   }
 
   rw_args->bytes_moved = maximum;
@@ -240,13 +309,98 @@ console_write(rtems_device_major_number major,
 } /* console_write */
 
 
-/*-------------------------------------------------------------------------+
-| Console device driver CONTROL entry point
-+--------------------------------------------------------------------------*/
-rtems_device_driver
+ 
+/*
+ * Handle ioctl request.
+ */
+rtems_device_driver 
 console_control(rtems_device_major_number major,
-                rtems_device_minor_number minor,
-                void                      *arg)
-{
+		rtems_device_minor_number minor,
+		void                      * arg
+)
+{ 
+  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+    {
+      return rtems_termios_ioctl (arg);
+    }
+
   return RTEMS_SUCCESSFUL;
-} /* console_control */
+}
+
+static int
+conSetAttr(int minor, const struct termios *t)
+{
+  int baud;
+
+  switch (t->c_cflag & CBAUD) 
+    {
+    case B50:	
+      baud = 50;
+      break;
+    case B75:	
+      baud = 75;	
+      break;
+    case B110:	
+      baud = 110;	
+      break;
+    case B134:	
+      baud = 134;	
+      break;
+    case B150:	
+      baud = 150;	
+      break;
+    case B200:
+      baud = 200;	
+      break;
+    case B300:	
+      baud = 300;
+      break;
+    case B600:	
+      baud = 600;	
+      break;
+    case B1200:	
+      baud = 1200;
+      break;
+    case B1800:	
+      baud = 1800;	
+      break;
+    case B2400:	
+      baud = 2400;
+      break;
+    case B4800:	
+      baud = 4800;
+      break;
+    case B9600:	
+      baud = 9600;
+      break;
+    case B19200:
+      baud = 19200;
+      break;
+    case B38400:
+      baud = 38400;
+      break;
+    case B57600:	
+      baud = 57600;
+      break;
+    case B115200:
+      baud = 115200;
+      break;
+    default:
+      baud = 0;
+      rtems_fatal_error_occurred (RTEMS_INTERNAL_ERROR);
+      return 0;
+    }
+
+  PC386_uart_set_baud(PC386ConsolePort, baud);
+
+  return 0;
+}
+
+
+
+
+
+
+
+
+

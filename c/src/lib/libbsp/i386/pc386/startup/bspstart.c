@@ -126,6 +126,8 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;
   rtemsFreeMemStart += BSP_Configuration.work_space_size;
 
+  console_reserve_resources(&BSP_Configuration);
+
   /*
    *  The following information is very useful when debugging.
    */
