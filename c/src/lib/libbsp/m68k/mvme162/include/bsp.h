@@ -40,59 +40,10 @@ extern "C" {
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
-/*
- * Following defines must reflect the setup of the particular MVME162
- */
+#include <mvme16x_hw.h>
 
-#define GROUP_BASE_ADDRESS    0x0000F200
-#define BOARD_BASE_ADDRESS    0xFFFF0000
 
-/* Base for local interrupters' vectors (with enable bit set) */
-
-#define MASK_INT              0x00800000
-#define VBR0                  0x6
-#define VBR1                  0x7
-
-/* RAM limits */
-
-#define RAM_START             0x00100000
-#define RAM_END               0x00200000
-
-/*
- * ----------------------------------
- */
-
-typedef volatile struct {
-  unsigned long     slave_adr[2];
-  unsigned long     slave_trn[2];
-  unsigned long     slave_ctl;
-  unsigned long     mastr_adr[4];
-  unsigned long     mastr_trn;
-  unsigned long     mastr_att;
-  unsigned long     mastr_ctl;
-  unsigned long     dma_ctl_1;
-  unsigned long     dma_ctl_2;
-  unsigned long     dma_loc_cnt;
-  unsigned long     dma_vme_cnt;
-  unsigned long     dma_byte_cnt;
-  unsigned long     dma_adr_cnt;
-  unsigned long     dma_status;
-  unsigned long     to_ctl;
-  unsigned long     timer_cmp_1;
-  unsigned long     timer_cnt_1;
-  unsigned long     timer_cmp_2;
-  unsigned long     timer_cnt_2;
-  unsigned long     board_ctl;
-  unsigned long     prescaler_cnt;
-  unsigned long     intr_stat;
-  unsigned long     intr_ena;
-  unsigned long     intr_soft_set;
-  unsigned long     intr_clear;
-  unsigned long     intr_level[4];
-  unsigned long     vector_base;
-} lcsr_regs;
-
-#define lcsr      ((lcsr_regs * const) 0xFFF40000)
+/*----------------------------------------------------------------*/
 
 typedef volatile struct {
 
@@ -162,7 +113,7 @@ typedef volatile struct {
   unsigned long     prescaler_count;
   
 } mcchip_regs;
-
+ 
 #define mcchip      ((mcchip_regs * const) 0xFFF42000)
 
 /*----------------------------------------------------------------*/
@@ -211,22 +162,6 @@ typedef volatile struct {
 #define ZWRITED(port, v)  (scc[port].csr = 0x08, \
                            scc[port].csr = (unsigned char)(v))
 /*----------------------------------------------------------------*/
-
-/*
- * The following registers are located in the VMEbus short
- * IO space and respond to address modifier codes $29 and $2D.
- * On FORCE CPU use address gcsr_vme and device /dev/vme16d32.
-*/
-typedef volatile struct {
-  unsigned char       chip_revision;
-  unsigned char       chip_id;
-  unsigned char       lmsig;
-  unsigned char       board_scr;
-  unsigned short      gpr[6];
-} gcsr_regs;
-
-#define gcsr_vme ((gcsr_regs * const) (GROUP_BASE_ADDRESS + BOARD_BASE_ADDRESS))
-#define gcsr     ((gcsr_regs * const) 0xFFF40100)
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

@@ -41,112 +41,12 @@ extern "C" {
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 4
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
   
-/*
- * Network driver configuration
- */
- 
-struct rtems_bsdnet_ifconfig;
-int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig, int attaching );
-#define RTEMS_BSP_NETWORK_DRIVER_NAME   "uti1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH uti596_attach
+#include <mvme16x_hw.h>
 
-/*
- *  This is NOT the base address of local RAM!
- *  This is the base local address of the VMEbus short I/O space. A local
- *  access to this space results in a A16 VMEbus I/O cycle. This base address
- *  is NOT configurable on the MVME167, although the types of VMEbus short I/O
- *  cycles generated when a cycle in the local 0xFFFF0000-0xFFFFFFFF address
- *  range is generated is under control of bits 8-15 of LCSR 0xFFF4002C. The
- *  GCSRs of other boards are accessible only through the VMEbus short I/O
- *  space. See pages 2-45 and 2-7.
- */
-#define BOARD_BASE_ADDRESS 0xFFFF0000
-
-
-/*
- *  This address must be added to the BOARD_BASE_ADDRESS to access the GCSR of
- *  other MVMEs in the group, i.e. it represents the offset of the GCSRs in the
- *  VMEbus short I/O space. It also should represent the group address of this
- *  MVME167! The group address is configurable, and must match the address
- *  programmed into the MVME167 through the 167Bug monitor. 0xCC is the address
- *  recommended by Motorola. It is arbitrary.
- *  See pages 2-42 and 2-97 to 2-104.
- */
-#define GROUP_BASE_ADDRESS 0x0000CC00
-
-
-/* 
- *  Representation of the GCSR
- */
-typedef volatile struct gcsr_regs_ {
-  unsigned char     chip_revision;
-  unsigned char     chip_id;
-  unsigned char     lmsig;
-  unsigned char     board_scr;
-  unsigned short    gpr[6];
-} gcsr_regs;
-
-/* Address of GCSR in VMEbus space */
-#define gcsr_vme    ((gcsr_regs * const) (GROUP_BASE_ADDRESS + BOARD_BASE_ADDRESS))
-
-/* Address of GCSR in local space */
-#define gcsr        ((gcsr_regs * const) 0xFFF40100)
-
-/*
- *  Representation of the VMEchip2 LCSR.
- *  Could be made more detailed.
- */
-typedef volatile struct lcsr_regs_ {
-  unsigned long     slave_adr[2];       /* 0xFFF40000 */
-  unsigned long     slave_trn[2];       /* 0xFFF40008 */
-  unsigned long     slave_ctl;          /* 0xFFF40010 */
-  unsigned long     mastr_adr[4];       /* 0xFFF40014 */
-  unsigned long     mastr_trn;          /* 0xFFF40024 */
-  unsigned long     mastr_att;          /* 0xFFF40028 */
-  unsigned long     mastr_ctl;          /* 0xFFF4002C */
-  unsigned long     dma_ctl_1;          /* 0xFFF40030 */
-  unsigned long     dma_ctl_2;          /* 0xFFF40034 */
-  unsigned long     dma_loc_cnt;        /* 0xFFF40038 */
-  unsigned long     dma_vme_cnt;        /* 0xFFF4003C */
-  unsigned long     dma_byte_cnt;       /* 0xFFF40040 */
-  unsigned long     dma_adr_cnt;        /* 0xFFF40044 */
-  unsigned long     dma_status;         /* 0xFFF40048 */
-  unsigned long     to_ctl;             /* 0xFFF4004C */
-  unsigned long     timer_cmp_1;        /* 0xFFF40050 */
-  unsigned long     timer_cnt_1;        /* 0xFFF40054 */
-  unsigned long     timer_cmp_2;        /* 0xFFF40058 */
-  unsigned long     timer_cnt_2;        /* 0xFFF4005C */
-  unsigned long     board_ctl;          /* 0xFFF40060 */
-  unsigned long     prescaler_cnt;      /* 0xFFF40064 */
-  unsigned long     intr_stat;          /* 0xFFF40068 */
-  unsigned long     intr_ena;           /* 0xFFF4006C */
-  unsigned long     intr_soft_set;      /* 0xFFF40070 */
-  unsigned long     intr_clear;         /* 0xFFF40074 */
-  unsigned long     intr_level[4];      /* 0xFFF40078 */
-  unsigned long     vector_base;        /* 0xFFF40088 */
-} lcsr_regs;
-
-/*
- *  Base address of VMEchip2 LCSR
- *  Not configurable on the MVME167.
- */
-#define lcsr        ((lcsr_regs * const) 0xFFF40000)
-
-/* 
- *  Vector numbers for the interrupts from the VMEchip2. Use the values
- *  "recommended" by Motorola.
- *  See pages 2-70 to 2-92, and table 2-3.
- */
-
-/* MIEN (Master Interrupt Enable) bit in LCSR 0xFFF40088. */
-#define MASK_INT    0x00800000
-
-/* The content of VBR0 corresponds to "X" in table 2-3 */
-#define VBR0        0x6
-
-/* The content of VBR1 corresponds to "Y" in table 2-3 */
-#define VBR1        0x7
-
+/* GCSR is in mvme16x_hw.h */
+/* LCSR is in mvme16x_hw.h */
+/* i82596 is in mvme16x_hw.h */
+/* NVRAM is in mvme16x_hw.h */
 
 /*
  *  Representation of the PCCchip2
@@ -206,14 +106,6 @@ typedef volatile struct pccchip2_regs_ {
  *  This is not configurable in the MVME167.
  */
 #define pccchip2    ((pccchip2_regs * const) 0xFFF42000)
-
-/* 
- * Vector numbers for the interrupts from the PCCchip2. Use the values
- * "recommended" by Motorola.
- * See page 3-15.
- */
-#define PCCCHIP2_VBR    0x5
-
 
 /*
  * The MVME167 is equiped with one or two MEMC040 memory controllers at
@@ -415,44 +307,7 @@ typedef volatile struct cd2401_regs_ {
 /* 
  *  Debug print functions: implemented in console.c
  */
-void printk( char *fmt, ... );
 void BSP_output_string( char * buf );
-
-/*
- *  Representation of 82596CA LAN controller: Memory Map
- */
-typedef volatile struct i82596_regs_ {
-  unsigned short	port_lower;             /* 0xFFF46000 */
-  unsigned short	port_upper;             /* 0xFFF46002 */
-  unsigned long		chan_attn;              /* 0xFFF46004 */
-} i82596_regs;
-
-/*
- *  Base address of the 82596.
- */
-#define i82596    ((i82596_regs * const) 0xFFF46000)
-
-/*
- *  Representation of initialization data in NVRAM
- */
-typedef volatile struct nvram_config_ {
-  unsigned char	 dcache_enable;				/* 0xFFFC0000 */
-  unsigned char	 icache_enable;				/* 0xFFFC0001 */
-  unsigned short cache_mode;				/* 0xFFFC0002 */
-  unsigned long	 ipaddr;					/* 0xFFFC0004 */
-  unsigned long	 netmask;					/* 0xFFFC0008 */
-  unsigned char	 enaddr[6];					/* 0xFFFC000C */
-  unsigned short processor_id;				/* 0xFFFC0012 */
-  unsigned long	 rma_start;					/* 0xFFFC0014 */
-  unsigned long	 vma_start;					/* 0xFFFC0018 */
-  unsigned long	 ramsize;					/* 0xFFFC001C */
-} nvram_config;
-
-/*
- *  Pointer to the base of User Area NVRAM
- */
-#define nvram			((nvram_config * const) 0xFFFC0000)
-
 
 /* BSP-wide functions */
 
