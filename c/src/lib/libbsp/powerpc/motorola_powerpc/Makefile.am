@@ -22,12 +22,12 @@ include_HEADERS += ../../shared/include/coverhd.h
 
 EXTRA_DIST = ../../powerpc/shared/start/start.S
 start$(LIB_VARIANT).$(OBJEXT): ../../powerpc/shared/start/start.S
-	${CCASCOMPILE} -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA = start$(LIB_VARIANT).$(OBJEXT)
 
 EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti$(LIB_VARIANT).$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
-	${CCASCOMPILE} -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA += rtems_crti$(LIB_VARIANT).$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds

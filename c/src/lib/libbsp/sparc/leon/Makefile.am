@@ -20,7 +20,7 @@ include_HEADERS += include/coverhd.h
 
 EXTRA_DIST = ../../sparc/shared/start.S
 start$(LIB_VARIANT).$(OBJEXT): ../../sparc/shared/start.S
-	${CCASCOMPILE} -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
 project_lib_DATA = start$(LIB_VARIANT).$(OBJEXT)
 

@@ -1,3 +1,7 @@
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use CPPASCOMPILE instead of CCASCOMPILE.
+
 2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,

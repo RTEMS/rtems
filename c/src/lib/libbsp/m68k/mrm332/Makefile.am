@@ -18,7 +18,7 @@ EXTRA_DIST = times
 
 EXTRA_DIST += start/start.S
 start$(LIB_VARIANT).$(OBJEXT): start/start.S
-	$(CCASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
 project_lib_DATA = start$(LIB_VARIANT).$(OBJEXT)
 

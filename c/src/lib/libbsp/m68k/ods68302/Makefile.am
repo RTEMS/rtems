@@ -22,11 +22,11 @@ include_HEADERS += include/coverhd.h
 if ODS68302_DEBUG
 EXTRA_DIST += start/debugreset.S
 start$(LIB_VARIANT).$(OBJEXT): start/debugreset.S
-	${CCASCOMPILE} -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
 else
 EXTRA_DIST += start/reset.S
 start$(LIB_VARIANT).$(OBJEXT): start/reset.S
-	${CCASCOMPILE} -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
 endif
 
 project_lib_DATA = start$(LIB_VARIANT).$(OBJEXT)

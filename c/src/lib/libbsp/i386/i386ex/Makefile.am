@@ -16,7 +16,7 @@ include_HEADERS += include/coverhd.h
 noinst_HEADERS = start/80386ex.h start/80386ex.inc start/macros.inc
 EXTRA_DIST = start/start.S
 start$(LIB_VARIANT).$(OBJEXT): start/start.S
-	$(CCASCOMPILE) -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
 project_lib_DATA = start$(LIB_VARIANT).$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds

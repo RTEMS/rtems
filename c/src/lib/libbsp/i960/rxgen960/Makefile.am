@@ -16,7 +16,7 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 # FIXME: this file should be called start.S
 EXTRA_DIST = start/rxgen_romld.S
 rxgen_romld$(LIB_VARIANT).$(OBJEXT): start/rxgen_romld.S
-	${CCASCOMPILE} -DASM -o $@ -c $<
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA = rxgen_romld$(LIB_VARIANT).$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.real \
