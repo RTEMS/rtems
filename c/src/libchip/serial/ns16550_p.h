@@ -132,7 +132,8 @@ typedef struct _SP_INTERRUPT_ID {
  * Line speed divisor definition.
  */
 
-#define NS16550_Baud(baud_rate) (115200/baud_rate)
+#define NS16550_Baud(_clock, _baud_rate) \
+  ((((_clock) == 0) ? 115200 : (_clock))/(_baud_rate))
 
 /*
  * Define serial port modem control register structure.
