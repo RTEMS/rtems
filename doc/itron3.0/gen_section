@@ -126,7 +126,9 @@ echo "@itemize @bullet"
 
 for routine in ${ROUTINES}
 do
-  echo "@item @code{${routine}} - "
+  description=`grep ${routine} ../../itron_spec/itron3-1.txt | grep "]" | cut -d']' -f2`
+  description=`echo ${description}`
+  echo "@item @code{${routine}} - ${description}"
 done
 echo "@end itemize"
 
@@ -135,7 +137,7 @@ echo "@section Background"
 echo ""
 echo "@section Operations"
 echo ""
-echo "@section Directives"
+echo "@section System Calls"
 echo ""
 echo "This section details the ${CHAPTER_LOWER} manager's services."
 echo "A subsection is dedicated to each of this manager's services"
@@ -145,13 +147,15 @@ echo ""
 
 for routine in ${ROUTINES}
 do
+  description=`grep ${routine} ../../itron_spec/itron3-1.txt | grep "]" | cut -d']' -f2`
+  description=`echo ${description}`
   echo ""
   echo "@c"
   echo "@c  ${routine}"
   echo "@c"
   echo ""
   echo "@page"
-  echo "@subsection ${routine} - "
+  echo "@subsection ${routine} - ${description}"
   echo ""
   echo "@subheading CALLING SEQUENCE:"
   echo ""

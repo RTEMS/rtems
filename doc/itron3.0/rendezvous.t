@@ -16,24 +16,24 @@ rendezvous manager is ...
 The services provided by the rendezvous manager are:
 
 @itemize @bullet
-@item @code{cre_por} - 
-@item @code{del_por} - 
-@item @code{cal_por} - 
-@item @code{pcal_por} - 
-@item @code{tcal_por} - 
-@item @code{acp_por} - 
-@item @code{pacp_por} - 
-@item @code{tacp_por} - 
-@item @code{fwd_por} - 
-@item @code{rpl_rdv} - 
-@item @code{ref_por} - 
+@item @code{cre_por} - Create Port for Rendezvous
+@item @code{del_por} - Delete Port for Rendezvous
+@item @code{cal_por} - Call Port for Rendezvous Poll and Call Port for Rendezvous Call Port for Rendezvous with Timeout
+@item @code{pcal_por} - Poll and Call Port for Rendezvous
+@item @code{tcal_por} - Call Port for Rendezvous with Timeout
+@item @code{acp_por} - Accept Port for Rendezvous Poll and Accept Port for Rendezvous Accept Port for Rendezvous with Timeout
+@item @code{pacp_por} - Poll and Accept Port for Rendezvous
+@item @code{tacp_por} - Accept Port for Rendezvous with Timeout
+@item @code{fwd_por} - Forward Rendezvous to Other Port
+@item @code{rpl_rdv} - Reply Rendezvous
+@item @code{ref_por} - Reference Port Status
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the rendezvous manager's services.
 A subsection is dedicated to each of this manager's services
@@ -46,7 +46,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_por - 
+@subsection cre_por - Create Port for Rendezvous
 
 @subheading CALLING SEQUENCE:
 
@@ -74,7 +74,7 @@ int cre_por(
 @c
 
 @page
-@subsection del_por - 
+@subsection del_por - Delete Port for Rendezvous
 
 @subheading CALLING SEQUENCE:
 
@@ -102,7 +102,7 @@ int del_por(
 @c
 
 @page
-@subsection cal_por - 
+@subsection cal_por - Call Port for Rendezvous Poll and Call Port for Rendezvous Call Port for Rendezvous with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -130,7 +130,7 @@ int cal_por(
 @c
 
 @page
-@subsection pcal_por - 
+@subsection pcal_por - Poll and Call Port for Rendezvous
 
 @subheading CALLING SEQUENCE:
 
@@ -158,7 +158,7 @@ int pcal_por(
 @c
 
 @page
-@subsection tcal_por - 
+@subsection tcal_por - Call Port for Rendezvous with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -186,7 +186,7 @@ int tcal_por(
 @c
 
 @page
-@subsection acp_por - 
+@subsection acp_por - Accept Port for Rendezvous Poll and Accept Port for Rendezvous Accept Port for Rendezvous with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -214,7 +214,7 @@ int acp_por(
 @c
 
 @page
-@subsection pacp_por - 
+@subsection pacp_por - Poll and Accept Port for Rendezvous
 
 @subheading CALLING SEQUENCE:
 
@@ -242,7 +242,7 @@ int pacp_por(
 @c
 
 @page
-@subsection tacp_por - 
+@subsection tacp_por - Accept Port for Rendezvous with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -270,7 +270,7 @@ int tacp_por(
 @c
 
 @page
-@subsection fwd_por - 
+@subsection fwd_por - Forward Rendezvous to Other Port
 
 @subheading CALLING SEQUENCE:
 
@@ -298,7 +298,7 @@ int fwd_por(
 @c
 
 @page
-@subsection rpl_rdv - 
+@subsection rpl_rdv - Reply Rendezvous
 
 @subheading CALLING SEQUENCE:
 
@@ -326,7 +326,7 @@ int rpl_rdv(
 @c
 
 @page
-@subsection ref_por - 
+@subsection ref_por - Reference Port Status
 
 @subheading CALLING SEQUENCE:
 

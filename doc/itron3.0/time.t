@@ -16,22 +16,22 @@ time manager is ...
 The services provided by the time manager are:
 
 @itemize @bullet
-@item @code{get_tim} - 
-@item @code{set_tim} - 
-@item @code{dly_tsk} - 
-@item @code{def_cyc} - 
-@item @code{act_cyc} - 
-@item @code{ref_cyc} - 
-@item @code{def_alm} - 
-@item @code{ref_alm} - 
-@item @code{ret_tmr} - 
+@item @code{get_tim} - Get System Clock
+@item @code{set_tim} - Set System Clock
+@item @code{dly_tsk} - Delay Task
+@item @code{def_cyc} - Define Cyclic Handler
+@item @code{act_cyc} - Activate Cyclic Handler
+@item @code{ref_cyc} - Reference Cyclic Handler Status
+@item @code{def_alm} - Define Alarm Handler
+@item @code{ref_alm} - Reference Alarm Handler Status
+@item @code{ret_tmr} - Return from Timer Handler
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the time manager's services.
 A subsection is dedicated to each of this manager's services
@@ -44,7 +44,7 @@ and status codes.
 @c
 
 @page
-@subsection get_tim - 
+@subsection get_tim - Get System Clock
 
 @subheading CALLING SEQUENCE:
 
@@ -72,7 +72,7 @@ int get_tim(
 @c
 
 @page
-@subsection set_tim - 
+@subsection set_tim - Set System Clock
 
 @subheading CALLING SEQUENCE:
 
@@ -100,7 +100,7 @@ int set_tim(
 @c
 
 @page
-@subsection dly_tsk - 
+@subsection dly_tsk - Delay Task
 
 @subheading CALLING SEQUENCE:
 
@@ -128,7 +128,7 @@ int dly_tsk(
 @c
 
 @page
-@subsection def_cyc - 
+@subsection def_cyc - Define Cyclic Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -156,7 +156,7 @@ int def_cyc(
 @c
 
 @page
-@subsection act_cyc - 
+@subsection act_cyc - Activate Cyclic Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -184,7 +184,7 @@ int act_cyc(
 @c
 
 @page
-@subsection ref_cyc - 
+@subsection ref_cyc - Reference Cyclic Handler Status
 
 @subheading CALLING SEQUENCE:
 
@@ -212,7 +212,7 @@ int ref_cyc(
 @c
 
 @page
-@subsection def_alm - 
+@subsection def_alm - Define Alarm Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -240,7 +240,7 @@ int def_alm(
 @c
 
 @page
-@subsection ref_alm - 
+@subsection ref_alm - Reference Alarm Handler Status
 
 @subheading CALLING SEQUENCE:
 
@@ -268,7 +268,7 @@ int ref_alm(
 @c
 
 @page
-@subsection ret_tmr - 
+@subsection ret_tmr - Return from Timer Handler
 
 @subheading CALLING SEQUENCE:
 

@@ -16,22 +16,22 @@ interrupt manager is ...
 The services provided by the interrupt manager are:
 
 @itemize @bullet
-@item @code{def_int} - 
-@item @code{ret_int} - 
-@item @code{ret_wup} - 
-@item @code{loc_cpu} - 
-@item @code{unl_cpu} - 
-@item @code{dis_int} - 
-@item @code{ena_int} - 
-@item @code{chg_iXX} - 
-@item @code{ref_iXX} - 
+@item @code{def_int} - Define Interrupt Handler
+@item @code{ret_int} - Return from Interrupt Handler
+@item @code{ret_wup} - Return and Wakeup Task
+@item @code{loc_cpu} - Lock CPU
+@item @code{unl_cpu} - Unlock CPU
+@item @code{dis_int} - Disable Interrupt
+@item @code{ena_int} - Enable Interrupt
+@item @code{chg_iXX} - Change Interrupt Mask (Level or Priority)
+@item @code{ref_iXX} - Reference Interrupt Mask (Level or Priority)
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the interrupt manager's services.
 A subsection is dedicated to each of this manager's services
@@ -44,7 +44,7 @@ and status codes.
 @c
 
 @page
-@subsection def_int - 
+@subsection def_int - Define Interrupt Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -72,7 +72,7 @@ int def_int(
 @c
 
 @page
-@subsection ret_int - 
+@subsection ret_int - Return from Interrupt Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -100,7 +100,7 @@ int ret_int(
 @c
 
 @page
-@subsection ret_wup - 
+@subsection ret_wup - Return and Wakeup Task
 
 @subheading CALLING SEQUENCE:
 
@@ -128,7 +128,7 @@ int ret_wup(
 @c
 
 @page
-@subsection loc_cpu - 
+@subsection loc_cpu - Lock CPU
 
 @subheading CALLING SEQUENCE:
 
@@ -156,7 +156,7 @@ int loc_cpu(
 @c
 
 @page
-@subsection unl_cpu - 
+@subsection unl_cpu - Unlock CPU
 
 @subheading CALLING SEQUENCE:
 
@@ -184,7 +184,7 @@ int unl_cpu(
 @c
 
 @page
-@subsection dis_int - 
+@subsection dis_int - Disable Interrupt
 
 @subheading CALLING SEQUENCE:
 
@@ -212,7 +212,7 @@ int dis_int(
 @c
 
 @page
-@subsection ena_int - 
+@subsection ena_int - Enable Interrupt
 
 @subheading CALLING SEQUENCE:
 
@@ -240,7 +240,7 @@ int ena_int(
 @c
 
 @page
-@subsection chg_iXX - 
+@subsection chg_iXX - Change Interrupt Mask (Level or Priority)
 
 @subheading CALLING SEQUENCE:
 
@@ -268,7 +268,7 @@ int chg_iXX(
 @c
 
 @page
-@subsection ref_iXX - 
+@subsection ref_iXX - Reference Interrupt Mask (Level or Priority)
 
 @subheading CALLING SEQUENCE:
 

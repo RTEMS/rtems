@@ -16,20 +16,20 @@ mailbox manager is ...
 The services provided by the mailbox manager are:
 
 @itemize @bullet
-@item @code{cre_mbx} - 
-@item @code{del_mbx} - 
-@item @code{snd_msg} - 
-@item @code{rcv_msg} - 
-@item @code{prcv_msg} - 
-@item @code{trcv_msg} - 
-@item @code{ref_mbx} - 
+@item @code{cre_mbx} - Create Mailbox
+@item @code{del_mbx} - Delete Mailbox
+@item @code{snd_msg} - Send Message to Mailbox
+@item @code{rcv_msg} - Poll and Receive Message from Mailbox Receive Message from Mailbox Receive Message from Mailbox with Timeout
+@item @code{prcv_msg} - Poll and Receive Message from Mailbox
+@item @code{trcv_msg} - Receive Message from Mailbox with Timeout
+@item @code{ref_mbx} - Reference Mailbox Status
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the mailbox manager's services.
 A subsection is dedicated to each of this manager's services
@@ -42,7 +42,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_mbx - 
+@subsection cre_mbx - Create Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -70,7 +70,7 @@ int cre_mbx(
 @c
 
 @page
-@subsection del_mbx - 
+@subsection del_mbx - Delete Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -98,7 +98,7 @@ int del_mbx(
 @c
 
 @page
-@subsection snd_msg - 
+@subsection snd_msg - Send Message to Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -126,7 +126,7 @@ int snd_msg(
 @c
 
 @page
-@subsection rcv_msg - 
+@subsection rcv_msg - Poll and Receive Message from Mailbox Receive Message from Mailbox Receive Message from Mailbox with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -154,7 +154,7 @@ int rcv_msg(
 @c
 
 @page
-@subsection prcv_msg - 
+@subsection prcv_msg - Poll and Receive Message from Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -182,7 +182,7 @@ int prcv_msg(
 @c
 
 @page
-@subsection trcv_msg - 
+@subsection trcv_msg - Receive Message from Mailbox with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -210,7 +210,7 @@ int trcv_msg(
 @c
 
 @page
-@subsection ref_mbx - 
+@subsection ref_mbx - Reference Mailbox Status
 
 @subheading CALLING SEQUENCE:
 

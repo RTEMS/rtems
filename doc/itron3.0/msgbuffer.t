@@ -16,22 +16,22 @@ message buffer manager is ...
 The services provided by the message buffer manager are:
 
 @itemize @bullet
-@item @code{cre_mbf} - 
-@item @code{del_mbf} - 
-@item @code{snd_mbf} - 
-@item @code{psnd_mbf} - 
-@item @code{tsnd_mbf} - 
-@item @code{rcv_mbf} - 
-@item @code{prcv_mbf} - 
-@item @code{trcv_mbf} - 
-@item @code{ref_mbf} - 
+@item @code{cre_mbf} - Create MessageBuffer
+@item @code{del_mbf} - Delete MessageBuffer
+@item @code{snd_mbf} - Poll and Send Message to MessageBuffer Send Message to MessageBuffer Send Message to MessageBuffer with Timeout
+@item @code{psnd_mbf} - Poll and Send Message to MessageBuffer
+@item @code{tsnd_mbf} - Send Message to MessageBuffer with Timeout
+@item @code{rcv_mbf} - Poll and Receive Message from MessageBuffer Receive Message from MessageBuffer Receive Message from MessageBuffer with Timeout
+@item @code{prcv_mbf} - Poll and Receive Message from MessageBuffer
+@item @code{trcv_mbf} - Receive Message from MessageBuffer with Timeout
+@item @code{ref_mbf} - Reference MessageBuffer Status
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the message buffer manager's services.
 A subsection is dedicated to each of this manager's services
@@ -44,7 +44,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_mbf - 
+@subsection cre_mbf - Create MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
@@ -72,7 +72,7 @@ int cre_mbf(
 @c
 
 @page
-@subsection del_mbf - 
+@subsection del_mbf - Delete MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
@@ -100,7 +100,7 @@ int del_mbf(
 @c
 
 @page
-@subsection snd_mbf - 
+@subsection snd_mbf - Poll and Send Message to MessageBuffer Send Message to MessageBuffer Send Message to MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -128,7 +128,7 @@ int snd_mbf(
 @c
 
 @page
-@subsection psnd_mbf - 
+@subsection psnd_mbf - Poll and Send Message to MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
@@ -156,7 +156,7 @@ int psnd_mbf(
 @c
 
 @page
-@subsection tsnd_mbf - 
+@subsection tsnd_mbf - Send Message to MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -184,7 +184,7 @@ int tsnd_mbf(
 @c
 
 @page
-@subsection rcv_mbf - 
+@subsection rcv_mbf - Poll and Receive Message from MessageBuffer Receive Message from MessageBuffer Receive Message from MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -212,7 +212,7 @@ int rcv_mbf(
 @c
 
 @page
-@subsection prcv_mbf - 
+@subsection prcv_mbf - Poll and Receive Message from MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
@@ -240,7 +240,7 @@ int prcv_mbf(
 @c
 
 @page
-@subsection trcv_mbf - 
+@subsection trcv_mbf - Receive Message from MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -268,7 +268,7 @@ int trcv_mbf(
 @c
 
 @page
-@subsection ref_mbf - 
+@subsection ref_mbf - Reference MessageBuffer Status
 
 @subheading CALLING SEQUENCE:
 

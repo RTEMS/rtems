@@ -16,17 +16,17 @@ network support manager is ...
 The services provided by the network support manager are:
 
 @itemize @bullet
-@item @code{nrea_dat} - 
-@item @code{nwri_dat} - 
-@item @code{nget_nod} - 
-@item @code{nget_ver} - 
+@item @code{nrea_dat} - Read Data from another Node
+@item @code{nwri_dat} - Write Data to another Node
+@item @code{nget_nod} - Get Local Node Number
+@item @code{nget_ver} - Get Version Information of another Node
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the network support manager's services.
 A subsection is dedicated to each of this manager's services
@@ -39,7 +39,7 @@ and status codes.
 @c
 
 @page
-@subsection nrea_dat - 
+@subsection nrea_dat - Read Data from another Node
 
 @subheading CALLING SEQUENCE:
 
@@ -67,7 +67,7 @@ int nrea_dat(
 @c
 
 @page
-@subsection nwri_dat - 
+@subsection nwri_dat - Write Data to another Node
 
 @subheading CALLING SEQUENCE:
 
@@ -95,7 +95,7 @@ int nwri_dat(
 @c
 
 @page
-@subsection nget_nod - 
+@subsection nget_nod - Get Local Node Number
 
 @subheading CALLING SEQUENCE:
 
@@ -123,7 +123,7 @@ int nget_nod(
 @c
 
 @page
-@subsection nget_ver - 
+@subsection nget_ver - Get Version Information of another Node
 
 @subheading CALLING SEQUENCE:
 

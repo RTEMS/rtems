@@ -16,20 +16,20 @@ memory pool manager is ...
 The services provided by the memory pool manager are:
 
 @itemize @bullet
-@item @code{cre_mpl} - 
-@item @code{del_mpl} - 
-@item @code{get_blk} - 
-@item @code{pget_blk} - 
-@item @code{tget_blk} - 
-@item @code{rel_blk} - 
-@item @code{ref_mpl} - 
+@item @code{cre_mpl} - Create Variable-Size Memorypool
+@item @code{del_mpl} - Delete Variable-Size Memorypool
+@item @code{get_blk} - Get Variable-Size Memory Block Poll and Get Variable-Size Memory Block Get Variable-Size Memory Block with Timeout
+@item @code{pget_blk} - Poll and Get Variable-Size Memory Block
+@item @code{tget_blk} - Get Variable-Size Memory Block with Timeout
+@item @code{rel_blk} - Release Variable-Size Memory Block
+@item @code{ref_mpl} - Reference Variable-Size Memorypool Status
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the memory pool manager's services.
 A subsection is dedicated to each of this manager's services
@@ -42,7 +42,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_mpl - 
+@subsection cre_mpl - Create Variable-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
@@ -70,7 +70,7 @@ int cre_mpl(
 @c
 
 @page
-@subsection del_mpl - 
+@subsection del_mpl - Delete Variable-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
@@ -98,7 +98,7 @@ int del_mpl(
 @c
 
 @page
-@subsection get_blk - 
+@subsection get_blk - Get Variable-Size Memory Block Poll and Get Variable-Size Memory Block Get Variable-Size Memory Block with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -126,7 +126,7 @@ int get_blk(
 @c
 
 @page
-@subsection pget_blk - 
+@subsection pget_blk - Poll and Get Variable-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
@@ -154,7 +154,7 @@ int pget_blk(
 @c
 
 @page
-@subsection tget_blk - 
+@subsection tget_blk - Get Variable-Size Memory Block with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -182,7 +182,7 @@ int tget_blk(
 @c
 
 @page
-@subsection rel_blk - 
+@subsection rel_blk - Release Variable-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
@@ -210,7 +210,7 @@ int rel_blk(
 @c
 
 @page
-@subsection ref_mpl - 
+@subsection ref_mpl - Reference Variable-Size Memorypool Status
 
 @subheading CALLING SEQUENCE:
 

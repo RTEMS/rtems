@@ -16,18 +16,18 @@ system manager is ...
 The services provided by the system manager are:
 
 @itemize @bullet
-@item @code{get_ver} - 
-@item @code{ref_sys} - 
-@item @code{ref_cfg} - 
-@item @code{def_svc} - 
-@item @code{def_exc} - 
+@item @code{get_ver} - Get Version Information Get Version Information of another Node
+@item @code{ref_sys} - Reference Semaphore Status
+@item @code{ref_cfg} - Reference Configuration Information
+@item @code{def_svc} - Define Extended SVC Handler
+@item @code{def_exc} - Define Exception Handler
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the system manager's services.
 A subsection is dedicated to each of this manager's services
@@ -40,7 +40,7 @@ and status codes.
 @c
 
 @page
-@subsection get_ver - 
+@subsection get_ver - Get Version Information Get Version Information of another Node
 
 @subheading CALLING SEQUENCE:
 
@@ -68,7 +68,7 @@ int get_ver(
 @c
 
 @page
-@subsection ref_sys - 
+@subsection ref_sys - Reference Semaphore Status
 
 @subheading CALLING SEQUENCE:
 
@@ -96,7 +96,7 @@ int ref_sys(
 @c
 
 @page
-@subsection ref_cfg - 
+@subsection ref_cfg - Reference Configuration Information
 
 @subheading CALLING SEQUENCE:
 
@@ -124,7 +124,7 @@ int ref_cfg(
 @c
 
 @page
-@subsection def_svc - 
+@subsection def_svc - Define Extended SVC Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -152,7 +152,7 @@ int def_svc(
 @c
 
 @page
-@subsection def_exc - 
+@subsection def_exc - Define Exception Handler
 
 @subheading CALLING SEQUENCE:
 

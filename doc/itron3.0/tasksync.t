@@ -16,20 +16,20 @@ task-dependent synchronization manager is ...
 The services provided by the task-dependent synchronization manager are:
 
 @itemize @bullet
-@item @code{sus_tsk} - 
-@item @code{rsm_tsk} - 
-@item @code{frsm_tsk} - 
-@item @code{slp_tsk} - 
-@item @code{tslp_tsk} - 
-@item @code{wup_tsk} - 
-@item @code{can_wup} - 
+@item @code{sus_tsk} - Suspend Other Task
+@item @code{rsm_tsk} - Forcibly Resume Suspended Task Resume Suspended Task
+@item @code{frsm_tsk} - Forcibly Resume Suspended Task
+@item @code{slp_tsk} - Sleep Task Sleep Task with Timeout
+@item @code{tslp_tsk} - Sleep Task with Timeout
+@item @code{wup_tsk} - Wakeup Other Task
+@item @code{can_wup} - Cancel Wakeup Request
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the task-dependent synchronization manager's services.
 A subsection is dedicated to each of this manager's services
@@ -42,7 +42,7 @@ and status codes.
 @c
 
 @page
-@subsection sus_tsk - 
+@subsection sus_tsk - Suspend Other Task
 
 @subheading CALLING SEQUENCE:
 
@@ -70,7 +70,7 @@ int sus_tsk(
 @c
 
 @page
-@subsection rsm_tsk - 
+@subsection rsm_tsk - Forcibly Resume Suspended Task Resume Suspended Task
 
 @subheading CALLING SEQUENCE:
 
@@ -98,7 +98,7 @@ int rsm_tsk(
 @c
 
 @page
-@subsection frsm_tsk - 
+@subsection frsm_tsk - Forcibly Resume Suspended Task
 
 @subheading CALLING SEQUENCE:
 
@@ -126,7 +126,7 @@ int frsm_tsk(
 @c
 
 @page
-@subsection slp_tsk - 
+@subsection slp_tsk - Sleep Task Sleep Task with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -154,7 +154,7 @@ No polling function for slp_tsk is provided.  A similar function can be implemen
 @c  tslp_tsk
 @c
 
-@subsection tslp_tsk - 
+@subsection tslp_tsk - Sleep Task with Timeout
 @subsection tslp_tsk - Sleep Task with Timeout
 
 @subheading CALLING SEQUENCE:
@@ -182,7 +182,7 @@ If you simply wish to delay a task (make it wait for a while), use dly_tsk rathe
 @c  wup_tsk
 @c
 
-@subsection wup_tsk - 
+@subsection wup_tsk - Wakeup Other Task
 @subsection wup_tsk - Wakeup Other Task
 
 @subheading CALLING SEQUENCE:
@@ -210,7 +210,7 @@ An E_QOVR error will result if wup_tsk is issued more than the maximum value all
 @c  can_wup
 @c
 
-@subsection can_wup - 
+@subsection can_wup - Cancel Wakeup Request
 @subsection can_wup - Cancel Wakeup Request
 
 @subheading CALLING SEQUENCE:

@@ -16,21 +16,21 @@ eventflags manager is ...
 The services provided by the eventflags manager are:
 
 @itemize @bullet
-@item @code{cre_flg} - 
-@item @code{del_flg} - 
-@item @code{set_flg} - 
-@item @code{clr_flg} - 
-@item @code{wai_flg} - 
-@item @code{pol_flg} - 
-@item @code{twai_flg} - 
-@item @code{ref_flg} - 
+@item @code{cre_flg} - Create Eventflag
+@item @code{del_flg} - Delete Eventflag
+@item @code{set_flg} - Set Eventflag
+@item @code{clr_flg} - Clear Eventflag
+@item @code{wai_flg} - Wait on Eventflag with Timeout Wait on Eventflag
+@item @code{pol_flg} - Wait for Eventflag (Polling)
+@item @code{twai_flg} - Wait on Eventflag with Timeout
+@item @code{ref_flg} - Reference Eventflag Status
 @end itemize
 
 @section Background
 
 @section Operations
 
-@section Directives
+@section System Calls
 
 This section details the eventflags manager's services.
 A subsection is dedicated to each of this manager's services
@@ -43,7 +43,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_flg - 
+@subsection cre_flg - Create Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -71,7 +71,7 @@ int cre_flg(
 @c
 
 @page
-@subsection del_flg - 
+@subsection del_flg - Delete Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -99,7 +99,7 @@ int del_flg(
 @c
 
 @page
-@subsection set_flg - 
+@subsection set_flg - Set Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -127,7 +127,7 @@ int set_flg(
 @c
 
 @page
-@subsection clr_flg - 
+@subsection clr_flg - Clear Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -155,7 +155,7 @@ int clr_flg(
 @c
 
 @page
-@subsection wai_flg - 
+@subsection wai_flg - Wait on Eventflag with Timeout Wait on Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -183,7 +183,7 @@ int wai_flg(
 @c
 
 @page
-@subsection pol_flg - 
+@subsection pol_flg - Wait for Eventflag (Polling)
 
 @subheading CALLING SEQUENCE:
 
@@ -211,7 +211,7 @@ int pol_flg(
 @c
 
 @page
-@subsection twai_flg - 
+@subsection twai_flg - Wait on Eventflag with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -239,7 +239,7 @@ int twai_flg(
 @c
 
 @page
-@subsection ref_flg - 
+@subsection ref_flg - Reference Eventflag Status
 
 @subheading CALLING SEQUENCE:
 
