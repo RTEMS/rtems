@@ -44,8 +44,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa \
 
 ## kern
 
-kern_C_FILES = kern/kern_mib.c kern/kern_subr.c kern/uipc_domain.c \
-   kern/uipc_mbuf.c kern/uipc_socket.c kern/uipc_socket2.c
+kern_C_FILES = kern/kern_mib.c kern/kern_subr.c kern/kern_sysctl.c \
+   kern/uipc_domain.c kern/uipc_mbuf.c kern/uipc_socket.c kern/uipc_socket2.c
 OBJS = $(kern_C_FILES:kern/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): kern/%.c
