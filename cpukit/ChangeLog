@@ -1,5 +1,10 @@
 2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	PR 764/networking
+	* libnetworking/sys/sysctl.h: include <rtems/stdint.h>.
+
+2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* score/inline/rtems/score/address.inl,
 	score/inline/rtems/score/chain.inl,
 	score/inline/rtems/score/coremsg.inl,
