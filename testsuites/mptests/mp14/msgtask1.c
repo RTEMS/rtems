@@ -49,6 +49,7 @@ rtems_task Message_queue_task(
     if ( status == RTEMS_SUCCESSFUL )
       break;
     puts( "rtems_message_queue_ident FAILED!!" );
+    rtems_task_wake_after(2);
   }
 
   if ( Multiprocessing_configuration.node == 1 ) {

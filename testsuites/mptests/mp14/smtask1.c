@@ -40,10 +40,12 @@ rtems_task Semaphore_task(
     if ( status == RTEMS_SUCCESSFUL )
       break;
     puts( "rtems_semaphore_ident FAILED!!" );
+    rtems_task_wake_after(2);
   }
 
+  yield_count = 100;
+
   while ( Stop_Test == FALSE ) {
-    yield_count = 100;
 
     for ( count=SEMAPHORE_DOT_COUNT ; Stop_Test == FALSE && count ; count-- ) {
       status = rtems_semaphore_obtain(
@@ -56,12 +58,13 @@ rtems_task Semaphore_task(
       status = rtems_semaphore_release( Semaphore_id[ 1 ] );
       directive_failed( status, "rtems_semaphore_release" );
 
-      if ( Multiprocessing_configuration.node == 1 && --yield_count == 0 ) {
-        status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
-        directive_failed( status, "rtems_task_wake_after" );
+      if ( Stop_Test == FALSE )
+        if ( Multiprocessing_configuration.node == 1 && --yield_count == 0 ) {
+          status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+          directive_failed( status, "rtems_task_wake_after" );
 
-        yield_count = 100;
-      }
+          yield_count = 100;
+        }
     }
     put_dot( 's' );
   }

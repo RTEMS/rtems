@@ -29,6 +29,7 @@ rtems_task Partition_task(
 {
   rtems_unsigned32   count;
   rtems_status_code  status;
+  rtems_unsigned32   yield_count;
   void              *buffer;
 
   puts( "Getting ID of partition" );
@@ -43,7 +44,10 @@ rtems_task Partition_task(
       break;
 
     puts( "rtems_partition_ident FAILED!!" );
+    rtems_task_wake_after(2);
   }
+
+  yield_count = 100;
 
   while ( Stop_Test == FALSE ) {
     for ( count=PARTITION_DOT_COUNT ; Stop_Test == FALSE && count ; count-- ) {
@@ -53,10 +57,12 @@ rtems_task Partition_task(
       status = rtems_partition_return_buffer( Partition_id[ 1 ], buffer );
       directive_failed( status, "rtems_partition_return_buffer" );
 
-      if ( Multiprocessing_configuration.node == 1 ) {
-        status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
-        directive_failed( status, "rtems_task_wake_after" );
-      }
+      if (Stop_Test == FALSE)
+        if ( Multiprocessing_configuration.node == 1 && --yield_count == 0 ) {
+          status = rtems_task_wake_after( 1 );
+          directive_failed( status, "rtems_task_wake_after" );
+          yield_count = 100;
+        }
     }
     put_dot( 'p' );
   }

@@ -54,7 +54,8 @@ rtems_task Test_task(
 
     if ( status == RTEMS_SUCCESSFUL )
       break;
-    puts( "rtems_task_ident" );
+    puts( "rtems_task_ident FAILED!!" );
+    rtems_task_wake_after(2);
   }
 
   if ( Multiprocessing_configuration.node == 1 ) {
