@@ -49,9 +49,10 @@
 /*
  * Default limits
  */
-#define PACKET_REPLY_MILLISECONDS     6000
-#define OPEN_RETRY_LIMIT              10
-#define IO_RETRY_LIMIT                10
+#define PACKET_FIRST_TIMEOUT_MILLISECONDS  400
+#define PACKET_TIMEOUT_MILLISECONDS        6000
+#define OPEN_RETRY_LIMIT                   10
+#define IO_RETRY_LIMIT                     10
 
 /*
  * TFTP opcodes
@@ -305,13 +306,19 @@ sendStifle (struct tftpStream *tp, struct sockaddr_in *to)
  * Wait for a data packet
  */
 static int
-getPacket (struct tftpStream *tp)
+getPacket (struct tftpStream *tp, int retryCount)
 {
     int len;
     struct timeval tv;
 
-    tv.tv_sec = PACKET_REPLY_MILLISECONDS / 1000;
-    tv.tv_usec = (PACKET_REPLY_MILLISECONDS % 1000) * 1000;
+    if (retryCount == 0) {
+        tv.tv_sec = PACKET_FIRST_TIMEOUT_MILLISECONDS / 1000;
+        tv.tv_usec = (PACKET_FIRST_TIMEOUT_MILLISECONDS % 1000) * 1000;
+    }
+    else {
+        tv.tv_sec = PACKET_TIMEOUT_MILLISECONDS / 1000;
+        tv.tv_usec = (PACKET_TIMEOUT_MILLISECONDS % 1000) * 1000;
+    }
     setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
     for (;;) {
         union {
@@ -547,6 +554,7 @@ static int rtems_tftp_open(
      * Start the transfer
      */
     tp->firstReply = 1;
+    retryCount = 0;
     for (;;) {
         /*
          * Create the request
@@ -582,7 +590,7 @@ static int rtems_tftp_open(
         /*
          * Get reply
          */
-        len = getPacket (tp);
+        len = getPacket (tp, retryCount);
         if (len >= (int) sizeof tp->pkbuf.tftpACK) {
             int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
             if (!tp->writing
@@ -669,7 +677,7 @@ static int rtems_tftp_read(
          */
         retryCount = 0;
         for (;;) {
-            int len = getPacket (tp);
+            int len = getPacket (tp, retryCount);
             if (len >= (int)sizeof tp->pkbuf.tftpACK) {
                 int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
                 rtems_unsigned16 nextBlock = tp->blocknum + 1;
@@ -715,7 +723,7 @@ static int rtems_tftp_flush ( struct tftpStream *tp )
                                         (struct sockaddr *)&tp->farAddress,
                                         sizeof tp->farAddress) < 0)
             return EIO;
-        rlen = getPacket (tp);
+        rlen = getPacket (tp, retryCount);
         if (rlen >= (int)sizeof tp->pkbuf.tftpACK) {
             int opcode = ntohs (tp->pkbuf.tftpACK.opcode);
             if ((opcode == TFTP_OPCODE_ACK)

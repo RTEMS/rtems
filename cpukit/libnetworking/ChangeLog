@@ -1,3 +1,11 @@
+2001-01-25	Eric Norum <eric.norum@usask.ca>
+
+	* lib/tftpDriver.c: Reduce first timeout interval.  This
+	improves throughput on systems which are dropping packets.  
+	Only the first timeout is reduced.  This keeps the number
+	of extra packets down on networks that are very busy and
+	dropping lots of packets.
+
 2001-01-24	Sergei Organov <osv@javad.ru>
 
 	* rtems_servers/ftpd.c, rtems_servers/ftpd.h: Major enhancements
