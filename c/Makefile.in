@@ -67,8 +67,8 @@ dirs:
 	-test -d $(PROJECT_ROOT)/c/src/lib/libhwapi && \
 	    (cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs)
 	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
-	-rm -f $(PROJECT_ROOT)/$(RTEMS_BSP)/include
-	-ln -s $(PROJECT_ROOT)/$(RTEMS_BSP)/include \
+	test -d $(PROJECT_ROOT)/$(RTEMS_BSP)/lib/include || \
+	    ln -s $(PROJECT_ROOT)/$(RTEMS_BSP)/include \
 		$(PROJECT_ROOT)/$(RTEMS_BSP)/lib/include 
 
 distclean: clobber
@@ -91,6 +91,9 @@ install: all
 	-rm -rf $(prefix)/$(target)/rtems/$(RTEMS_BSP)
 	cd ../; tar cf - $(RTEMS_BSP)/[bilsu]* | \
 		(cd $(prefix)/$(target)/rtems; tar xpBf - )
+	-rm -f $(prefix)/$(target)/rtems/$(RTEMS_BSP)/lib/include
+	ln -s $(prefix)/$(target)/rtems/$(RTEMS_BSP)/include \
+	      $(prefix)/$(target)/rtems/$(RTEMS_BSP)/lib/include
 	cd $(srcdir); tar cf - make/compilers make/custom make/os \
 		make/leaf.cfg make/directory.cfg make/main.cfg | \
 		(cd $(prefix)/$(target)/rtems; tar xpBf - )
