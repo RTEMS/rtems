@@ -5,8 +5,7 @@
 include $(top_srcdir)/../../../automake/compile.am
 
 CLEANFILES =
-EXTRA_PROGRAMS =
-noinst_DATA =
+noinst_PROGRAMS =
 
 if sh7032
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
@@ -18,79 +17,34 @@ include_sh_HEADERS = include/sci.h include/sh7_pfc.h include/sh7_sci.h
 include_rtems_score_HEADERS = include/ispsh7032.h include/iosh7032.h
 
 # clock
-EXTRA_PROGRAMS += clock.rel
-CLEANFILES += clock.rel
+noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/ckinit.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += clock_g.rel
-CLEANFILES += clock_g.rel
-clock_g_rel_SOURCES = $(clock_rel_SOURCES)
-clock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-clock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += clock$(LIB_VARIANT).rel
-
 # delay
-EXTRA_PROGRAMS += delay.rel
-CLEANFILES += delay.rel
+noinst_PROGRAMS += delay.rel
 delay_rel_SOURCES = delay/delay.c
 delay_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 delay_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += delay_g.rel
-CLEANFILES += delay_g.rel
-delay_g_rel_SOURCES = $(delay_rel_SOURCES)
-delay_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-delay_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += delay$(LIB_VARIANT).rel
-
 # sci
-EXTRA_PROGRAMS += sci.rel
-CLEANFILES += sci.rel
+noinst_PROGRAMS += sci.rel
 sci_rel_SOURCES = sci/sci.c
 sci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 sci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += sci_g.rel
-CLEANFILES += sci_g.rel
-sci_g_rel_SOURCES = $(sci_rel_SOURCES)
-sci_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-sci_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += sci$(LIB_VARIANT).rel
-
 # score
-EXTRA_PROGRAMS += score.rel
-CLEANFILES += score.rel
+noinst_PROGRAMS += score.rel
 score_rel_SOURCES =score/cpu_asm.c score/ispsh7032.c
 score_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 score_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += score_g.rel
-CLEANFILES += score_g.rel
-score_g_rel_SOURCES = $(score_rel_SOURCES)
-score_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-score_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += score$(LIB_VARIANT).rel
-
 ## timer
-EXTRA_PROGRAMS += timer.rel
-CLEANFILES += timer.rel
+noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
 timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-EXTRA_PROGRAMS += timer_g.rel
-CLEANFILES += timer_g.rel
-timer_g_rel_SOURCES = $(timer_rel_SOURCES)
-timer_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += timer$(LIB_VARIANT).rel
 endif
 
 all-local: $(PREINSTALL_FILES)
