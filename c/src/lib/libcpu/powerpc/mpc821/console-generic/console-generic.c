@@ -417,7 +417,7 @@ m821_smc_initialize (int port)  /* port is the SMC number (i.e. 1 or 2) */
   RxBd[port-1]->status = M821_BD_EMPTY | M821_BD_WRAP | 
                                   M821_BD_INTERRUPT;
   RxBd[port-1]->length = 0;
-  RxBd[port+3]->buffer = malloc(RXBUFSIZE);
+  RxBd[port-1]->buffer = malloc(RXBUFSIZE);
          
   /*
    * Setup the Transmit Buffer Descriptor

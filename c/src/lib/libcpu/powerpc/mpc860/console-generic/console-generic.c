@@ -431,7 +431,7 @@ m860_smc_initialize (int port)  /* port is the SMC number (i.e. 1 or 2) */
   RxBd[port-1]->status = M860_BD_EMPTY | M860_BD_WRAP | 
                                   M860_BD_INTERRUPT;
   RxBd[port-1]->length = 0;
-  RxBd[port+3]->buffer = malloc(RXBUFSIZE);
+  RxBd[port-1]->buffer = malloc(RXBUFSIZE);
          
   /*
    * Setup the Transmit Buffer Descriptor
