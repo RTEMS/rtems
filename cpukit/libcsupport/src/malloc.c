@@ -62,6 +62,7 @@ void RTEMS_Malloc_Initialize(
    */
 
   starting_address = start;
+  RTEMS_Malloc_Sbrk_amount = sbrk_amount;
 
   if (!starting_address) {
     u32_address = (unsigned int)sbrk(length);

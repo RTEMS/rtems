@@ -57,32 +57,32 @@ void print_ipnd_imsk();
 
 unsigned int Xint_2_Group_Map[8] = { 0, 1, 2, 5, 7, 3, 6, 4 };
 
-i960_isr set_vector(                       /* returns old vector */
+i960_isr_entry set_vector(                 /* returns old vector */
   rtems_isr_entry func,                    /* isr routine */
   unsigned int    xint,                    /* XINT number */
   unsigned int    type                     /* RTEMS or RAW */
 )
 {
-  i960_isr        *intr_tbl, *cached_intr_tbl;
-  i960_isr         saved_intr;
+  i960_isr_entry  *intr_tbl, *cached_intr_tbl;
+  i960_isr_entry   saved_intr;
   unsigned int     vector, group, nibble;
   unsigned int    *imap;
 
   if ( xint > 7 )
     exit( 0x80 );
 
-  cached_intr_tbl = (i960_isr *) 0;
-  intr_tbl        = (i960_isr *) Prcb->intr_tbl;
+  cached_intr_tbl = (i960_isr_entry *) 0;
+  intr_tbl        = (i960_isr_entry *) Prcb->intr_tbl;
   group           = Xint_2_Group_Map[xint];  /* remap XINT to group */
   vector          = (group << 4) + 2;        /* direct vector num   */
 
   if ( type )
     rtems_interrupt_catch( func, vector, (rtems_isr_entry *) &saved_intr );
   else {
-    saved_intr    = (i960_isr) intr_tbl[ vector ];
-                                             /* return old vector   */
-    intr_tbl[ vector + 1 ]   =               /* normal vector table */
-    cached_intr_tbl[ group ] = (i960_isr) func;    /* cached vector */
+    saved_intr    = (i960_isr_entry) intr_tbl[ vector ];
+                                                   /* return old vector   */
+    intr_tbl[ vector + 1 ]   =                     /* normal vector table */
+    cached_intr_tbl[ group ] = (i960_isr_entry) func;    /* cached vector */
   }
 
   if       ( xint <= 3 ) imap = &Ctl_tbl->imap0;  /* updating IMAP0 */
