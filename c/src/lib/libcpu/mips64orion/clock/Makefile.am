@@ -10,7 +10,7 @@ C_FILES = ckinit.c
 
 S_FILES = clock.S
 
-H_FILES = clock.h
+noinst_HEADERS = clock.h
 
 clock_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
 
