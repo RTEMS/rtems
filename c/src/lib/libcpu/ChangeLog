@@ -1,3 +1,13 @@
+2003-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	AMD a29k is obsolete.
+	* Makefile.am: Removed reference.
+	* a29k/.cvsignore, a29k/ChangeLog, a29k/Makefile.am, a29k/configure.ac,
+	a29k/clock/.cvsignore, a29k/clock/Makefile.am, a29k/clock/ckinit.c,
+	a29k/clock/clock.S, a29k/clock/clock.h, a29k/timer/.cvsignore,
+	a29k/timer/Makefile.am, a29k/timer/timer.c, a29k/timer/timerisr.c:
+	Removed.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).

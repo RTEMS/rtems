@@ -13,7 +13,6 @@ shared/src/cache_manager.c
 SUBDIRS = @subdirs@
 
 DIST_SUBDIRS = \
-a29k \
 hppa1.1 \
 i386 \
 i960 \
@@ -22,6 +21,7 @@ mips \
 mips64orion \
 powerpc \
 sh \
+shared \
 sparc
 
 include $(top_srcdir)/../../../../automake/subdirs.am
