@@ -42,6 +42,8 @@ m68k-rtemself-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 
 mips64orion-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems
+mips-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . mips-rtems
 
 powerpc-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-rtems
@@ -62,7 +64,7 @@ RPM_SPECS_DATA = \
     hppa1.1-rtems-$(BINUTILSVERS).spec \
     i386-rtems-$(BINUTILSVERS).spec i960-rtems-$(BINUTILSVERS).spec \
     m68k-rtems-$(BINUTILSVERS).spec m68k-rtemself-$(BINUTILSVERS).spec \
-    mips64orion-rtems-$(BINUTILSVERS).spec \
+    mips-rtems-$(BINUTILSVERS).spec mips64orion-rtems-$(BINUTILSVERS).spec \
     powerpc-rtems-$(BINUTILSVERS).spec sh-rtems-$(BINUTILSVERS).spec \
     sh-rtemself-$(BINUTILSVERS).spec sparc-rtems-$(BINUTILSVERS).spec
 CLEANFILES += $(RPM_SPECS_DATA)

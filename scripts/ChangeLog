@@ -1,3 +1,10 @@
+2000-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	* buildall.in, mkgdbspec.in, setup.def, binutils/Makefile.am,
+	gccnewlib/HISTORY, gccnewlib/Makefile.am, gdb/Makefile.am:
+	Added mips-rtems, updated to include new patches and
+	gcc 2.95.2/newlib 1.8.2 revision 11 RPM.
+
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Remove trailing '/'s from setting up RPM_SPECdir.

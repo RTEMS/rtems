@@ -4,6 +4,24 @@
 #  $Id$
 #
 
+RPM Version gcc2.95.2newlib1.8.2-11
+===================================
++ fixes i386 soft float problem
++ mips-rtems target added 
++ newlib include files reworked to allow RTEMS to use standard newlib
+  .h files.
+
+  newlib_patch_version=20001027
+  gcc_patch_version=20001030
+
+RPM Version gcc2.95.2newlib1.8.2-10
+===================================
++ i386 soft floating point worked but incorrectly included two
+  copies of some libgcc.a routines.
++ added a29k-rtems support
+
+NOTE: Internal Only Number
+
 RPM Version gcc2.95.2newlib1.8.2-9
 ==================================
 + i386 multilibs and proper CPP_SPEC/CC1_SPEC handling.

@@ -57,6 +57,9 @@ case ${target_alias} in
   i960*)
     extra_configure_arguments="--enable-sim"
     ;;
+  mips*)
+    extra_configure_arguments="--enable-sim"
+    ;;
   powerpc*)
     extra_configure_arguments="--enable-sim --enable-sim-powerpc --enable-sim-timebase --enable-sim-hardware"
     #  Enabling this causes the program image to be huge and causes
