@@ -15,7 +15,7 @@ manager as defined by POSIX 1003.1b-1996.  This standard requires that
 a compliant operating system provide the facilties to manage multiple
 threads of control and defines the API that must be provided.
 
-The directives provided by the thread manager are:
+The services provided by the thread manager are:
 
 @itemize @bullet
 @item @code{pthread_attr_init} - Initialize a Thread Attribute Set
@@ -91,10 +91,10 @@ All policies utilize the thread priority parameter.
 
 There is currently no text in this section.
 
-@section Directives
+@section Services
 
-This section details the thread manager's directives.
-A subsection is dedicated to each of this manager's directives
+This section details the thread manager's services.
+A subsection is dedicated to each of this manager's services
 and describes the calling sequence, related constants, usage,
 and status codes.
 
