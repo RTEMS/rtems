@@ -19,7 +19,6 @@ SHELL=@SHELL@
 ECHO=echo
 
 CAT=cat
-## RM=@RM@ -f
 CP=@CP@
 MV=@MV@
 LN=@LN@
@@ -48,24 +47,6 @@ GCCSED = @GCCSED@
 #  unreliably on RTEMS shell scripts.  bash appears to be the most
 #  reliable but late model ksh's are usually OK.
 KSH=@KSH@
-
-#
-#  Rule to install a shell script with the proper shell to run it.
-#
-
-# when debugging, one may want to save the previous incarnation of the
-# installed script.  Replace the first line of this rule to do this.
-#
-#	-$(RM) $@.old
-#	-$(MV) $@ $@.old >/dev/null 2>&1
-
-# OBSOLETE: Don't use this anymore, this may be removed in future
-define make-script
-	-$(RM) $@
-	$(SED) -e '1,1s?^#!KSHELL?#!$(KSH)?' \
-               -e '1,1s?^#!SHELL?#!$(SHELL)?' < $< > $@
-	$(CHMOD) 0555 $@
-endef
 
 INSTBINFLAGS  = -m 0755
 INSTDATAFLAGS = -m 0644
