@@ -132,18 +132,6 @@ include ${DEPEND}
 endif
 depend: depend-am
 
-# spell out all the LINK_FILE's, rather than using -lbsp, so
-#  that $(LINK_FILES) can be a dependency
-
-LINK_OBJS = \
-    $(OBJS) \
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%$(LIB_VARIANT).rel)
-
-LINK_FILES =\
-    $(START_FILE) \
-    $(OBJS) \
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%$(LIB_VARIANT).rel)
-
 if RTEMS_USE_GCC
 ## gcc >= 2.8
 RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r

@@ -1,3 +1,8 @@
+2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-top.m4: Remove check for version.m4.
+	* automake/compile.am: Remove LINK_OBJS, LINK_FILES (Unused).
+
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Add RTEMS_RELLDFLAGS.
