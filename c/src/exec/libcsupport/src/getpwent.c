@@ -57,7 +57,7 @@ void init_etc_passwd_group(void)
     return;
   etc_passwd_initted = 1;
   
-  (void) mkdir( "/etc", S_IRWXU | S_IRWXG | S_IRWXO );
+  (void) mkdir( "/etc", 0777);
 
   /*
    *  Initialize /etc/passwd
@@ -66,8 +66,9 @@ void init_etc_passwd_group(void)
   if ((fp = fopen ("/etc/passwd", "w")) == NULL)
     return;
 
-  fprintf( fp, "root:*:0:0:root,,,,:/tmp:/bin/false\n"
-               "rtems:*:1:1:RTEMS Application,,,,:/tmp:/bin/false\n" );
+  fprintf( fp, "root:*:0:0:root,,,,:/:/bin/sh\n"
+               "rtems:*:1:1:RTEMS Application,,,,:/:/bin/sh\n"
+               "tty:!:2:2:tty owner,,,,:/:/bin/false\n" );
 
   fclose( fp );
 
@@ -78,8 +79,9 @@ void init_etc_passwd_group(void)
   if ((fp = fopen ("/etc/group", "w")) == NULL)
     return;
 
-  fprintf( fp, "root::0:root\n"
-               "rtems::0:rtems\n" );
+  fprintf( fp, "root:x:0:root\n"
+               "rtems:x:1:rtems\n" 
+               "tty:x:2:tty\n" );
 
   fclose( fp );
 }

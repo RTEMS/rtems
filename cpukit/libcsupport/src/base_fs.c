@@ -54,7 +54,8 @@ void rtems_filesystem_initialize( void )
    *  Set the default umask to "022".
    */
 
-  rtems_filesystem_umask = S_IWOTH | S_IROTH;
+  rtems_filesystem_umask = 022;
+
 
   init_fs_mount_table();
 
@@ -77,6 +78,7 @@ void rtems_filesystem_initialize( void )
   rtems_filesystem_root        = entry->mt_fs_root;
   rtems_filesystem_current     = rtems_filesystem_root;
 
+
   /*
    *  Traditionally RTEMS devices are under "/dev" so install this directory.
    *
@@ -84,8 +86,11 @@ void rtems_filesystem_initialize( void )
    *
    *  NOTE: UNIX root is 755 and owned by root/root (0/0).
    */
+  status=chmod("/", 0755);
+  if ( status != 0 )
+    rtems_fatal_error_occurred( 0xABCD0003 );
 
-  status = mkdir( "/dev", S_IRWXU | S_IRWXG | S_IRWXO );
+  status = mkdir( "/dev", 0777);
   if ( status != 0 )
     rtems_fatal_error_occurred( 0xABCD0003 );
 

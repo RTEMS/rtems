@@ -39,7 +39,7 @@ int ttyname_r(
     set_errno_and_return_minus_one(EBADF);
 
   /* Must be a character device. */
-  if (_fstat (fd, &sb) || !S_ISCHR (sb.st_mode))
+  if (fstat (fd, &sb) || !S_ISCHR (sb.st_mode))
     set_errno_and_return_minus_one(EBADF);
 
   if ((dp = opendir (_PATH_DEV)) == NULL)
@@ -53,7 +53,6 @@ int ttyname_r(
       if (stat (name, &dsb) || sb.st_dev != dsb.st_dev ||
 	  sb.st_ino != dsb.st_ino)
 	continue;
-      (void) closedir (dp);
       rval = name;
       break;
     }

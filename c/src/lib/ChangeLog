@@ -1,3 +1,10 @@
+2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
+
+	* libc/ttyname.c (ttyname_r): Removed duplicate call to closedir().
+	* libc/getpwent.c: Create a more robust /etc/passwd and /etc/group.
+	* libc/base_fs.c: Change permissions of files and directories.  Now uses
+	octal constants.
+
 2001-05-11	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/write.c: Change type of rc to match return type from
