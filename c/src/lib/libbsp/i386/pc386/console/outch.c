@@ -10,6 +10,10 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+ * Till Straumann <strauman@slac.stanford.edu>, 2003/9:
+ *  - added handling of basic escape sequences (cursor movement
+ *    and erasing; just enough for the line editor 'libtecla' to
+ *    work...)
  * $Id$
  */
 
@@ -56,27 +60,55 @@ scroll(void)
 }
 
 static void
-endColumn(void)
+doCRNL(int cr, int nl)
 {
+	if (nl) {
     if (++row == maxRow) { 
 	scroll(); 	/* Scroll the screen now */
 	row = maxRow - 1; 
     }
-    column = 0;
     nLines++;
+	}
+	if (cr)
+    	column = 0;
     /* Move cursor on the next location  */
-    wr_cursor(row * maxCol + column, ioCrtBaseAddr);
+	if (cr || nl)
+    	wr_cursor(row * maxCol + column, ioCrtBaseAddr);
 }
 
+
+int (*videoHook)(char, int *)=0;
+
+static void
+advanceCursor()
+{
+  if (++column == maxCol)
+	doCRNL(1,1);
+  else
+	wr_cursor(row * maxCol + column, ioCrtBaseAddr);
+}
+
+static void
+gotorc(int r, int c)
+{
+	column = c;
+	row    = r;
+
+  	wr_cursor(row * maxCol + column, ioCrtBaseAddr);
+}
+
+#define ESC		((char)27)
+/* erase current location without moving the cursor */
+#define BLANK	((char)0x7f)
 
 
 static void 
 videoPutChar(char car)
 {
-    unsigned short *pt_bitmap = bitMapBaseAddr + row * maxCol;
-  
+    unsigned short *pt_bitmap = bitMapBaseAddr + row * maxCol + column;
+
     switch (car) {
-        case '\b': {
+    case '\b': {
 	    if (column) column--;
 	    /* Move cursor on the previous location  */
 	    wr_cursor(row * maxCol + column, ioCrtBaseAddr);
@@ -86,10 +118,9 @@ videoPutChar(char car)
 	    int i;
 
 	    i = TAB_SPACE - (column & (TAB_SPACE - 1));
-	    pt_bitmap += column;
 	    column += i;
 	    if (column >= maxCol) {
-		endColumn();
+		doCRNL(1,1);
 		return;
 	    }
 	    while (i--)	*pt_bitmap++ = ' ' | attribute;		
@@ -97,25 +128,120 @@ videoPutChar(char car)
 	    return;
 	}
 	case '\n': {
-	    endColumn();
+	    doCRNL(0,1);
 	    return;
 	}
-        case 7: {	/* Bell code must be inserted here */
+    case 7:		{	/* Bell code must be inserted here */
 	    return;
 	}
-	case '\r' : {   /* Already handled via \n */
+	case '\r' : { 
+		doCRNL(1,0);
 	    return;
 	}
-    	default: {
-	    pt_bitmap += column;
+	case BLANK: {
+	    *pt_bitmap = ' ' | attribute;
+		/* DONT move the cursor... */
+		return;
+	}
+   	default: {
 	    *pt_bitmap = car | attribute;
-	    if (++column == maxCol) endColumn();
-	    else wr_cursor(row * maxCol + column, 
-			  ioCrtBaseAddr);
+		advanceCursor();
 	    return;
 	}
     }
 }	
+
+/* trivial state machine to handle escape sequences:
+ *
+ *                    ---------------------------------
+ *                   |                                 |
+ *                   |                                 |
+ * KEY:        esc   V    [          DCABHKJ       esc |
+ * STATE:   0 -----> 27 -----> '[' ----------> -1 -----
+ *          ^\        \          \               \
+ * KEY:     | \other   \ other    \ other         \ other
+ *           <-------------------------------------
+ *     
+ * in state '-1', the DCABHKJ cases are handled
+ * 
+ * (cursor motion and screen clearing)
+ */
+
+#define DONE  (-1)
+
+static int
+handleEscape(int oldState, char car)
+{
+int rval = 0;
+int ro,co;
+
+	switch ( oldState ) {
+		case DONE:	/*  means the previous char terminated an ESC sequence... */
+		case 0:
+			if ( 27 == car ) {
+				rval = 27;	 /* START of an ESC sequence */
+			}
+		break;
+
+		case 27:
+			if ( '[' == car ) {
+				rval = car;  /* received ESC '[', so far */
+			} else {
+				/* dump suppressed 'ESC'; outch will append the char */
+				videoPutChar(ESC);
+			}
+		break;
+
+		case '[':
+			/* handle 'ESC' '[' sequences here */
+			ro = row; co = column;
+			rval = DONE; /* done */
+
+			switch (car) {
+				case 'D': /* left */
+					if ( co > 0 )      co--;
+				break;
+				case 'C': /* right */
+					if ( co < maxCol ) co++;
+				break;
+				case 'A': /* up    */
+					if ( ro > 0 )      ro--;
+				break;
+				case 'B': /* down */
+					if ( ro < maxRow ) ro++;
+				break;
+				case 'H': /* home */
+					ro = co = 0;
+				break;
+				case 'K': /* clear to end of line */
+					while ( column < maxCol - 1 )
+                		videoPutChar(' ');
+            		videoPutChar(BLANK);
+        		break;
+        		case 'J': /* clear to end of screen */
+					while (  ((row < maxRow-1) || (column < maxCol-1)) )
+						videoPutChar(' ');
+					videoPutChar(BLANK);
+        		break;
+        		default:
+            		videoPutChar(ESC);
+            		videoPutChar('[');
+					/* DONT move the cursor */
+					ro   = -1;
+					rval = 0;
+        		break;
+			}
+			/* reset cursor */
+			if ( ro >= 0)
+				gotorc(ro,co);
+
+		default:
+		break;
+
+	}
+
+	return rval;
+}
 
 void
 clear_screen(void)
@@ -141,7 +267,10 @@ clear_screen(void)
 void
 _IBMPC_outch(char c)
 {
-  videoPutChar(c);
+static int escaped = 0;
+
+  if ( ! (escaped = handleEscape(escaped, c)) )
+  	videoPutChar(c);
 } /* _IBMPC_outch */
 
 
@@ -184,9 +313,7 @@ _IBMPC_initVideo(void)
 /* for old DOS compatibility n-curses type of applications */
 void gotoxy( int x, int y )
 {
-  row = x;
-  column = y;
-  wr_cursor(row * maxCol + column, ioCrtBaseAddr);
+  gotorc(y,x);
 }
 
 

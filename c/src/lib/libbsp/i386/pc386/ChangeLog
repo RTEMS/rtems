@@ -1,3 +1,9 @@
+2003-10-02	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 502/bsps
+	* console/outch.c: Add support for a few ANSI escape sequences to make
+	libetcl happy.
+
 2003-09-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in include/Makefile.am.
