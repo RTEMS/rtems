@@ -2,6 +2,7 @@ Makefile
 Makefile.in
 Makefile.inc
 aclocal.m4
+autom4te.cache
 bsp.cfg
 config.cache
 config.guess

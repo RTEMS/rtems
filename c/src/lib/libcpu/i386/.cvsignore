@@ -1,6 +1,8 @@
 Makefile
 Makefile.in
 aclocal.m4
+autom4te.cache
+cache.h
 config.cache
 config.guess
 config.log
@@ -11,4 +13,3 @@ depcomp
 install-sh
 missing
 mkinstalldirs
-cache.h
