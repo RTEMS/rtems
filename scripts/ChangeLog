@@ -1,3 +1,9 @@
+2004-04-08	Joel Sherrill <joel@OARcorp.com>
+
+	PR 594/tools
+	* setup.def, autotools/autoconf-rtems.spec.in: Increment and rebuild so
+	GNAT included.
+
 2004-09-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* autotools/autoconf-rtems.spec.in: Remove bogus BuildDep on
