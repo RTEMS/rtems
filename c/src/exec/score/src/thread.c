@@ -68,9 +68,11 @@ void _Thread_Handler_initialization(
   _Thread_Heir              = NULL;
   _Thread_Allocated_fp      = NULL;
 
+  _Thread_Do_post_task_switch_extension = 0;
+
   _Thread_Maximum_extensions = maximum_extensions;
 
-  _Thread_Ticks_per_timeslice          = ticks_per_timeslice;
+  _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
 
   _Thread_Ready_chain = _Workspace_Allocate_or_fatal_error(
     (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
@@ -288,7 +290,8 @@ void _Thread_Dispatch( void )
 
   _ISR_Enable( level );
 
-  if ( executing->do_post_task_switch_extension ) {
+  if ( _Thread_Do_post_task_switch_extension ||
+       executing->do_post_task_switch_extension ) {
     executing->do_post_task_switch_extension = FALSE;
     _API_extensions_Run_postswitch();
   }

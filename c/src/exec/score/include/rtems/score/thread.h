@@ -226,6 +226,13 @@ SCORE_EXTERN Context_Control _Thread_BSP_context;
 SCORE_EXTERN unsigned32 _Thread_Dispatch_disable_level;
 
 /*
+ *  If this is non-zero, then the post-task switch extension
+ *  is run regardless of the state of the per thread flag.
+ */
+
+SCORE_EXTERN unsigned32 _Thread_Do_post_task_switch_extension;
+
+/*
  *  The following holds how many user extensions are in the system.  This
  *  is used to determine how many user extension data areas to allocate
  *  per thread.
