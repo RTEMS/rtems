@@ -699,7 +699,9 @@ kmem_malloc (vm_map_t *map, vm_size_t size, boolean_t waitflag)
 	 */
 	if (networkDaemonTid) {
 		if (waitflag == M_WAITOK)
-			rtems_panic ("Someone is asking for more memory");
+			rtems_panic (
+"Network mbuf space can not be enlarged after rtems_bsdnet_initialize() has\n"
+"returned.  Enlarge the initial mbuf/cluster size in rtems_bsdnet_config.");
 		return 0;
 	}
 
