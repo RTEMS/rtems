@@ -36,7 +36,7 @@ directives provided by the message manager are:
 @item @code{message_queue_urgent} - Put message at front of a queue
 @item @code{message_queue_broadcast} - Broadcast N messages to a queue
 @item @code{message_queue_receive} - Receive message from a queue
-@item @code{rtems_message_queue_get_number_pending} - Get number of messages pending on a queue
+@item @code{message_queue_get_number_pending} - Get number of messages pending on a queue
 @item @code{message_queue_flush} - Flush all messages on a queue
 @end itemize
 
@@ -92,10 +92,10 @@ of the desired attribute components.  The set of valid message
 queue attributes is provided in the following table:
 
 @itemize @bullet
-@item FIFO - tasks wait by FIFO (default)
-@item PRIORITY - tasks wait by priority
-@item LOCAL - local message queue (default)
-@item GLOBAL - global message queue
+@item @code{FIFO} - tasks wait by FIFO (default)
+@item @code{PRIORITY} - tasks wait by priority
+@item @code{LOCAL} - local message queue (default)
+@item @code{GLOBAL} - global message queue
 @end itemize
 
 
@@ -110,11 +110,13 @@ This example demonstrates the attribute_set parameter
 needed to create a local message queue with the task priority
 waiting queue discipline.  The attribute_set parameter to the
 message_queue_create directive could be either 
-@code{PRIORITY} or @code{LOCAL @value{OR} PRIORITY}.  
+@code{PRIORITY} or
+@code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}PRIORITY}.  
 The attribute_set parameter can be set to @code{PRIORITY}
 because @code{LOCAL} is the default for all created message queues.  If
 a similar message queue were to be known globally, then the
-attribute_set parameter would be @code{GLOBAL @value{OR} PRIORITY}.
+attribute_set parameter would be
+@code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
 
 @ifinfo
 @node Building a MESSAGE_QUEUE_RECEIVE Option Set, Message Manager Operations, Building a Message Queue's Attribute Set, Message Manager Background
@@ -342,9 +344,9 @@ for the specified count of messages, each of max_message_size
 bytes in length.  The RTEMS-assigned queue id, returned in id,
 is used to access the message queue.
 
-Specifying PRIORITY in attribute_set causes tasks
+Specifying @code{PRIORITY} in attribute_set causes tasks
 waiting for a message to be serviced according to task priority.
-When FIFO is specified, waiting tasks are serviced in First
+When @code{FIFO} is specified, waiting tasks are serviced in First
 In-First Out order.
 
 @subheading NOTES:
@@ -356,10 +358,10 @@ The following message queue attribute constants are
 defined by RTEMS:
 
 @itemize @bullet
-@item FIFO - tasks wait by FIFO (default)
-@item PRIORITY - tasks wait by priority
-@item LOCAL - local message queue (default)
-@item GLOBAL - global message queue
+@item @code{FIFO} - tasks wait by FIFO (default)
+@item @code{PRIORITY} - tasks wait by priority
+@item @code{LOCAL} - local message queue (default)
+@item @code{GLOBAL} - global message queue
 @end itemize
 
 Message queues should not be made global unless
@@ -747,9 +749,9 @@ the queue is empty, then a status code indicating this condition
 is returned.  If the calling task chooses to wait at the message
 queue and the queue is empty, then the calling task is placed on
 the message wait queue and blocked.  If the queue was created
-with the PRIORITY option specified, then the calling task is
+with the @code{PRIORITY} option specified, then the calling task is
 inserted into the wait queue according to its priority.  But, if
-the queue was created with the FIFO option specified, then the
+the queue was created with the @code{FIFO} option specified, then the
 calling task is placed at the rear of the wait queue.
 
 A task choosing to wait at the queue can optionally

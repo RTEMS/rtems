@@ -111,7 +111,8 @@ This example demonstrates the signal parameter used
 when sending the signal set consisting of 
 @code{SIGNAL_6}, @code{SIGNAL_15}, and @code{SIGNAL_31}.  
 The signal parameter provided to the signal_send directive should be
-@code{SIGNAL_6 @value{OR} SIGNAL_15 @value{OR} SIGNAL_31}.
+@code{@value{RPREFIX}SIGNAL_6 @value{OR} 
+@value{RPREFIX}SIGNAL_15 @value{OR} @value{RPREFIX}SIGNAL_31}.
 
 @ifinfo
 @node Building an ASR's Mode, Signal Manager Operations, Building a Signal Set, Signal Manager Background
@@ -125,14 +126,29 @@ directives.  A complete list of mode options is provided in the
 following table:
 
 @itemize @bullet
-@item PREEMPT is masked by PREEMPT_MASK and enables preemption
-@item NO_PREEMPT is masked by PREEMPT_MASK and disables preemption
-@item NO_TIMESLICE is masked by TIMESLICE_MASK and disables timeslicing
-@item TIMESLICE is masked by TIMESLICE_MASK and enables timeslicing
-@item ASR is masked by ASR_MASK and enables ASR processing
-@item NO_ASR is masked by ASR_MASK and disables ASR processing
-@item INTERRUPT_LEVEL(0) is masked by INTERRUPT_MASK and enables all interrupts
-@item INTERRUPT_LEVEL(n) is masked by INTERRUPT_MASK and sets interrupts level n
+@item @code{PREEMPT} is masked by
+@code{PREEMPT_MASK} and enables preemption
+
+@item @code{NO_PREEMPT} is masked by
+@code{PREEMPT_MASK} and disables preemption
+
+@item @code{NO_TIMESLICE} is masked by
+@code{TIMESLICE_MASK} and disables timeslicing
+
+@item @code{TIMESLICE} is masked by
+@code{TIMESLICE_MASK} and enables timeslicing
+
+@item @code{ASR} is masked by
+@code{ASR_MASK} and enables ASR processing
+
+@item @code{NO_ASR} is masked by
+@code{ASR_MASK} and disables ASR processing
+
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} is masked by
+@code{INTERRUPT_MASK} and enables all interrupts
+
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL}(n)} is masked by
+@code{INTERRUPT_MASK} and sets interrupts level n
 @end itemize
 
 Mode values are specifically designed to be mutually
@@ -148,7 +164,8 @@ This example demonstrates the mode parameter used
 with the signal_catch to establish an ASR which executes at
 interrupt level three and is non-preemptible.  The mode should
 be set to
-@code{INTERRUPT_LEVEL(3) @value{OR} NO_PREEMPT} to indicate the
+@code{@value{RPREFIX}INTERRUPT_LEVEL(3) @value{OR} @value{RPREFIX}NO_PREEMPT}
+to indicate the
 desired processor mode and interrupt level.
 
 @ifinfo
@@ -322,14 +339,29 @@ preempted.
 The following task mode constants are defined by RTEMS:
 
 @itemize @bullet
-@item PREEMPT is masked by PREEMPT_MASK and enables preemption
-@item NO_PREEMPT is masked by PREEMPT_MASK and disables preemption
-@item NO_TIMESLICE is masked by TIMESLICE_MASK and disables timeslicing
-@item TIMESLICE is masked by TIMESLICE_MASK and enables timeslicing
-@item ASR is masked by ASR_MASK and enables ASR processing
-@item NO_ASR is masked by ASR_MASK and disables ASR processing
-@item INTERRUPT_LEVEL(0) is masked by INTERRUPT_MASK and enables all interrupts
-@item INTERRUPT_LEVEL(n) is masked by INTERRUPT_MASK and sets interrupts level n
+@item @code{PREEMPT} is masked by
+@code{PREEMPT_MASK} and enables preemption
+
+@item @code{NO_PREEMPT} is masked by
+@code{PREEMPT_MASK} and disables preemption
+
+@item @code{NO_TIMESLICE} is masked by
+@code{TIMESLICE_MASK} and disables timeslicing
+
+@item @code{TIMESLICE} is masked by
+@code{TIMESLICE_MASK} and enables timeslicing
+
+@item @code{ASR} is masked by
+@code{ASR_MASK} and enables ASR processing
+
+@item @code{NO_ASR} is masked by
+@code{ASR_MASK} and disables ASR processing
+
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} is masked by
+@code{INTERRUPT_MASK} and enables all interrupts
+
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL}(n)} is masked by
+@code{INTERRUPT_MASK} and sets interrupts level n
 @end itemize
 
 @page

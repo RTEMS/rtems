@@ -237,11 +237,13 @@ This example demonstrates the attribute_set parameter
 needed to create a local semaphore with the task priority
 waiting queue discipline.  The attribute_set parameter passed to
 the semaphore_create directive could be either
-@code{PRIORITY} or @code{LOCAL @value{OR} PRIORITY}.  
+@code{PRIORITY} or
+@code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}PRIORITY}.  
 The attribute_set parameter can be set to @code{PRIORITY}
 because @code{LOCAL} is the default for all created tasks.  If a
 similar semaphore were to be known globally, then the
-attribute_set parameter would be @code{GLOBAL @value{OR} PRIORITY}.
+attribute_set parameter would be
+@code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
 
 @ifinfo
 @node Building a SEMAPHORE_OBTAIN Option Set, Semaphore Manager Operations, Building a Semaphore's Attribute Set, Semaphore Manager Background
@@ -688,15 +690,15 @@ If the calling task chooses to wait for a semaphore and the
 current semaphore count is zero or negative, then it is
 decremented by one and the calling task is placed on the
 semaphore's wait queue and blocked.  If the semaphore was
-created with the PRIORITY attribute, then the calling task is
+created with the @code{PRIORITY} attribute, then the calling task is
 inserted into the queue according to its priority.  However, if
-the semaphore was created with the FIFO attribute, then the
+the semaphore was created with the @code{FIFO} attribute, then the
 calling task is placed at the rear of the wait queue.  If the
-binary semaphore was created with the INHERIT_PRIORITY
+binary semaphore was created with the @code{INHERIT_PRIORITY}
 attribute, then the priority of the task currently holding the
 binary semaphore is guaranteed to be greater than or equal to
 that of the blocking task.  If the binary semaphore was created
-with the PRIORITY_CEILING attribute, a task successfully obtains
+with the @code{PRIORITY_CEILING} attribute, a task successfully obtains
 the semaphore, and the priority of that task is greater than the
 ceiling priority for this semaphore, then the priority of the
 task obtaining the semaphore is elevated to that of the ceiling.

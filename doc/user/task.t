@@ -135,11 +135,11 @@ the task's TCB.
 A task may exist in one of the following five states:
 
 @itemize @bullet
-@item @code{executing} - Currently scheduled to the CPU 
-@item @code{ready} - May be scheduled to the CPU 
-@item @code{blocked} - Unable to be scheduled to the CPU 
-@item @code{dormant} - Created task that is not started 
-@item @code{non-existent} - Uncreated or deleted task 
+@item @b{executing} - Currently scheduled to the CPU 
+@item @b{ready} - May be scheduled to the CPU 
+@item @b{blocked} - Unable to be scheduled to the CPU 
+@item @b{dormant} - Created task that is not started 
+@item @b{non-existent} - Uncreated or deleted task 
 @end itemize
 
 An active task may occupy the executing, ready, blocked or
@@ -235,8 +235,8 @@ interrupt level n.
 @item @code{TIMESLICE} - enable timeslicing
 @item @code{ASR} - enable ASR processing (default) 
 @item @code{NO_ASR} - disable ASR processing
-@item @code{INTERRUPT_LEVEL(0)} - enable all interrupts (default) 
-@item @code{INTERRUPT_LEVEL(n)} - execute at interrupt level n
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} - enable all interrupts (default) 
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} - execute at interrupt level n
 @end itemize
 
 @ifinfo
@@ -352,12 +352,12 @@ defaults are desired, then @code{DEFAULT_ATTRIBUTES} should be used.
 This example demonstrates the attribute_set parameter needed to
 create a local task which utilizes the numeric coprocessor.  The
 attribute_set parameter could be @code{FLOATING_POINT} or
-@code{LOCAL @value{OR} FLOATING_POINT}.  
+@code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}FLOATING_POINT}.  
 The attribute_set parameter can be set to
 @code{FLOATING_POINT} because @code{LOCAL} is the default for all created
 tasks.  If the task were global and used the numeric
 coprocessor, then the attribute_set parameter would be
-@code{GLOBAL @value{OR} FLOATING_POINT}. 
+@code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}FLOATING_POINT}. 
 
 @ifinfo
 @node Building a Mode and Mask, Task Manager Operations, Building a Task's Attribute Set, Task Manager Background
@@ -371,14 +371,29 @@ listed below:
 
 @ifset use-ascii
 @itemize @bullet
-@item PREEMPT is masked by PREEMPT_MASK and enables preemption 
-@item NO_PREEMPT is masked by PREEMPT_MASK and disables preemption 
-@item NO_TIMESLICE is masked by TIMESLICE_MASK and disables timeslicing 
-@item TIMESLICE is masked by TIMESLICE_MASK and enables timeslicing 
-@item ASR is masked by ASR_MASK and enables ASR processing 
-@item NO_ASR is masked by ASR_MASK and disables ASR processing 
-@item INTERRUPT_LEVEL(0) is masked by INTERRUPT_MASK and enables all interrupts 
-@item INTERRUPT_LEVEL(n) is masked by INTERRUPT_MASK and sets interrupts level n 
+@item @code{PREEMPT} is masked by
+@code{PREEMPT_MASK} and enables preemption
+
+@item @code{NO_PREEMPT} is masked by
+@code{PREEMPT_MASK} and disables preemption
+
+@item @code{NO_TIMESLICE} is masked by
+@code{TIMESLICE_MASK} and disables timeslicing
+
+@item @code{TIMESLICE} is masked by
+@code{TIMESLICE_MASK} and enables timeslicing
+
+@item @code{ASR} is masked by
+@code{ASR_MASK} and enables ASR processing
+
+@item @code{NO_ASR} is masked by
+@code{ASR_MASK} and disables ASR processing
+
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} is masked by
+@code{INTERRUPT_MASK} and enables all interrupts
+
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL}(n)} is masked by
+@code{INTERRUPT_MASK} and sets interrupts level n
 @end itemize
 @end ifset
 
@@ -386,14 +401,29 @@ listed below:
 @sp 1
 @c this is temporary
 @itemize @bullet
-@item PREEMPT is masked by PREEMPT_MASK and enables preemption
-@item NO_PREEMPT is masked by PREEMPT_MASK and disables preemption
-@item NO_TIMESLICE is masked by TIMESLICE_MASK and disables timeslicing
-@item TIMESLICE is masked by TIMESLICE_MASK and enables timeslicing
-@item ASR is masked by ASR_MASK and enables ASR processing
-@item NO_ASR is masked by ASR_MASK and disables ASR processing
-@item INTERRUPT_LEVEL(0) is masked by INTERRUPT_MASK and enables all interrupts
-@item INTERRUPT_LEVEL(n) is masked by INTERRUPT_MASK and sets interrupts level n
+@item @code{PREEMPT} is masked by
+@code{PREEMPT_MASK} and enables preemption
+
+@item @code{NO_PREEMPT} is masked by
+@code{PREEMPT_MASK} and disables preemption
+
+@item @code{NO_TIMESLICE} is masked by
+@code{TIMESLICE_MASK} and disables timeslicing
+
+@item @code{TIMESLICE} is masked by
+@code{TIMESLICE_MASK} and enables timeslicing
+
+@item @code{ASR} is masked by
+@code{ASR_MASK} and enables ASR processing
+
+@item @code{NO_ASR} is masked by
+@code{ASR_MASK} and disables ASR processing
+
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} is masked by
+@code{INTERRUPT_MASK} and enables all interrupts
+
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL}(n)} is masked by
+@code{INTERRUPT_MASK} and sets interrupts level n
  
 @end itemize
 
@@ -452,9 +482,11 @@ should be used.
 The following example demonstrates the mode and mask parameters
 used with the task_mode directive to place a task at interrupt
 level 3 and make it non-preemptible.  The mode should be set to
-@code{INTERRUPT_LEVEL(3) @value{RTEMSOR} NO_PREEMPT} to indicate the desired
+@code{@value{RPREFIX}INTERRUPT_LEVEL(3)
+@value{OR} @value{RPREFIX}NO_PREEMPT} to indicate the desired
 preemption mode and interrupt level, while the mask parameter
-should be set to @code{INTERRUPT_MASK @value{RTEMSOR} NO_PREEMPT_MASK}
+should be set to
+@code{@value{RPREFIX}INTERRUPT_MASK @value{OR} @value{RPREFIX}NO_PREEMPT_MASK}
 to indicate that the calling task's interrupt level and preemption mode are
 being altered. 
 
@@ -711,7 +743,7 @@ procedure Task_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task created successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - task created successfully@*
 @code{INVALID_NAME} - invalid task name@*
 @code{INVALID_SIZE} - stack too small@*
 @code{INVALID_PRIORITY} - invalid task priority@*
@@ -768,8 +800,8 @@ The following task mode constants are defined by RTEMS:
 @item @code{TIMESLICE} - enable timeslicing
 @item @code{ASR} - enable ASR processing (default) 
 @item @code{NO_ASR} - disable ASR processing
-@item @code{INTERRUPT_LEVEL(0)} - enable all interrupts (default) 
-@item @code{INTERRUPT_LEVEL(n)} - execute at interrupt level n
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} - enable all interrupts (default) 
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} - execute at interrupt level n
 @end itemize
 
 Tasks should not be made global unless remote tasks must
@@ -1220,7 +1252,7 @@ a higher priority task is ready to run.
 Enabling timeslicing has no effect if preemption is enabled.
 
 A task can obtain its current execution mode, without modifying
-it, by calling this directive with a mask value of CURRENT_MODE.
+it, by calling this directive with a mask value of @code{CURRENT_MODE}.
 
 To temporarily disable the processing of a valid ASR, a task
 should call this directive with the NO_ASR indicator specified

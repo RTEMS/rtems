@@ -128,8 +128,8 @@ to a task.}
 
 Another way the user can alter the basic scheduling
 algorithm is by manipulating the preemption mode flag
-(PREEMPT_MASK) of individual tasks.  If preemption is disabled
-for a task (NO_PREEMPT), then the task will not relinquish
+(@code{PREEMPT_MASK}) of individual tasks.  If preemption is disabled
+for a task (@code{NO_PREEMPT}), then the task will not relinquish
 control of the processor until it terminates, blocks, or
 re-enables preemption.  Even tasks which become ready to run and
 possess higher priority levels will not be allowed to execute.
@@ -146,8 +146,8 @@ Timeslicing or round-robin scheduling is an
 additional method which can be used to alter the basic
 scheduling algorithm.  Like preemption, timeslicing is specified
 on a task by task basis using the timeslicing mode flag
-(TIMESLICE_MASK).  If timeslicing is enabled for a task
-(TIMESLICE), then RTEMS will limit the amount of time the task
+(@code{TIMESLICE_MASK}).  If timeslicing is enabled for a task
+(@code{TIMESLICE}), then RTEMS will limit the amount of time the task
 can execute before the processor is allocated to another task.
 Each tick of the real-time clock reduces the currently running
 task's timeslice.  When the execution time equals the timeslice,

@@ -101,7 +101,8 @@ exactly once in the event set list.
 For example, when sending the event set consisting of
 @code{EVENT_6}, @code{EVENT_15}, and @code{EVENT_31},
 the event parameter to the event_send directive should be 
-@code{EVENT_6 @value{OR} EVENT_15 @value{OR} EVENT_31}.
+@code{@value{RPREFIX}EVENT_6 @value{OR}
+@value{RPREFIX}EVENT_15 @value{OR} @value{RPREFIX}EVENT_31}.
 
 @ifinfo
 @node Building an EVENT_RECEIVE Option Set, Event Manager Operations, Building an Event Set or Condition, Event Manager Background
@@ -131,7 +132,8 @@ specified on this call.
 This example demonstrates the option parameter needed
 to poll for all events in a particular event condition to
 arrive.  The option parameter passed to the event_receive
-directive should be either @code{EVENT_ALL @value{OR} NO_WAIT}
+directive should be either
+@code{@value{RPREFIX}EVENT_ALL @value{OR} @value{RPREFIX}NO_WAIT}
 or @code{NO_WAIT}.  The option parameter can be set to
 @code{NO_WAIT} because @code{EVENT_ALL} is the
 default condition for event_receive.
@@ -223,7 +225,7 @@ the calling task but the event set is left unaltered.
 A task can receive all of the currently pending
 events by calling the event_receive directive with a value of
 @code{ALL_EVENTS} for the input event condition and
-@code{NO_WAIT @value{OR} EVENT_ANY}
+@code{@value{RPREFIX}NO_WAIT @value{OR} @value{RPREFIX}EVENT_ANY}
 for the option set.  The pending events are returned to the
 calling task and the event set is cleared.  If no events are
 pending then the @code{UNSATISFIED} status code will be returned.

@@ -360,7 +360,7 @@ NONE
 
 This directive disables all maskable interrupts and returns
 the previous @code{level}.  A later invocation of the
-@code{rtems_interrupt_enable} directive should be used to
+@code{interrupt_enable} directive should be used to
 restore the interrupt level.
 
 @subheading NOTES:
@@ -403,9 +403,9 @@ NONE
 @subheading DESCRIPTION:
 
 This directive enables maskable interrupts to the @code{level}
-which was returned by a previous call to @code{rtems_interrupt_disable}.
+which was returned by a previous call to @code{interrupt_disable}.
 Immediately prior to invoking this directive, maskable interrupts should
-be disabled by a call to @code{rtems_interrupt_disable} and will be enabled
+be disabled by a call to @code{interrupt_disable} and will be enabled
 when this directive returns to the caller.
 
 @subheading NOTES:
@@ -444,9 +444,9 @@ NONE
 @subheading DESCRIPTION:
 
 This directive temporarily enables maskable interrupts to the @code{level}
-which was returned by a previous call to @code{rtems_interrupt_disable}.  
+which was returned by a previous call to @code{interrupt_disable}.  
 Immediately prior to invoking this directive, maskable interrupts should
-be disabled by a call to @code{rtems_interrupt_disable} and will be redisabled
+be disabled by a call to @code{interrupt_disable} and will be redisabled
 when this directive returns to the caller.
 
 @subheading NOTES:

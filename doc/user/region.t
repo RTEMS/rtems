@@ -90,8 +90,8 @@ of the desired attribute components.  The set of valid region
 attributes is provided in the following table:
 
 @itemize @bullet
-@item FIFO - tasks wait by FIFO (default)
-@item PRIORITY - tasks wait by priority
+@item @code{FIFO} - tasks wait by FIFO (default)
+@item @code{PRIORITY} - tasks wait by priority
 @end itemize
 
 Attribute values are specifically designed to be
@@ -106,7 +106,7 @@ specified on this call.
 This example demonstrates the attribute_set parameter
 needed to create a region with the task priority waiting queue
 discipline.  The attribute_set parameter to the region_create
-directive should be PRIORITY.
+directive should be @code{PRIORITY}.
 
 @ifinfo
 @node Building an Option Set, Region Manager Operations, Building an Attribute Set, Region Manager Background
@@ -346,9 +346,9 @@ memory from the region is not used to store the RNCB.  However,
 some overhead within the region is required by RTEMS each time a
 segment is constructed in the region.
 
-Specifying PRIORITY in attribute_set causes tasks
+Specifying @code{PRIORITY} in attribute_set causes tasks
 waiting for a segment to be serviced according to task priority.
-Specifying FIFO in attribute_set or selecting
+Specifying @code{FIFO} in attribute_set or selecting
 @code{DEFAULT_ATTRIBUTES} will cause waiting tasks to be serviced in
 First In-First Out order.
 
@@ -569,9 +569,9 @@ indicating this fact is returned.  If the calling task chooses
 to wait for the segment and a segment large enough is not
 available, then the calling task is placed on the region's
 segment wait queue and blocked.  If the region was created with
-the PRIORITY option, then the calling task is inserted into the
+the @priority{PRIORITY} option, then the calling task is inserted into the
 wait queue according to its priority.  However, if the region
-was created with the FIFO option, then the calling task is
+was created with the @priority{FIFO} option, then the calling task is
 placed at the rear of the wait queue.
 
 The timeout parameter specifies the maximum interval
