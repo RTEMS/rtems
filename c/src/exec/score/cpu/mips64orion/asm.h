@@ -35,7 +35,7 @@
 #define ASM
 #endif
 #include <rtems/score/targopts.h>
-#include <rtems/score/no_cpu.h>
+#include <rtems/score/mips64orion.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the
