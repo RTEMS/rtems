@@ -41,7 +41,7 @@ static char _sccsid[] = "@(#)ckinit.c 08/20/96     1.3\n";
 #include <rtems/libio.h>
 #include <bsp.h>
 
-#include <excepthdr.h>
+#define CLOCK_VECTOR_MASK    0x8000  /* external interrupt 5 */
 
 #include "clock.h"
 
