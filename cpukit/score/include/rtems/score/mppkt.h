@@ -86,7 +86,8 @@ typedef struct {
  *  may a user message buffer which is not automatically endian swapped.
  */
 
-#define MP_PACKET_MINIMUN_HETERO_CONVERSION  ( sizeof( MP_packet_Prefix ) / 4 )
+#define MP_PACKET_MINIMUN_HETERO_CONVERSION  \
+  ( sizeof( MP_packet_Prefix ) / sizeof( unsigned32 ) )
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/mppkt.inl>
