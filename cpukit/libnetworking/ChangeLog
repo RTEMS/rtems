@@ -1,3 +1,7 @@
+2002-06-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/Makefile.am: include multilib.am instead of RTEMS_BSP.cfg.
+
 2002-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_POSIX_API.

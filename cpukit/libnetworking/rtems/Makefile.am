@@ -27,7 +27,7 @@ $(PROJECT_INCLUDE)/rtems:
 $(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/../../../../automake/multilib.am
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
