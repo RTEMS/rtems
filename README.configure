@@ -32,6 +32,7 @@ RTEMS-specific option are supported:
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 	--enable-tests
 	--enable-rdbg            (only valid for i386 and some PowerPC BSPs)
+        --enable-docs
 
 In addition, the following standard autoconf options are frequently
 used when configuring RTEMS installations:
@@ -87,10 +88,10 @@ unless directly specified. There are  two ways of changing this:
     bsps as the default bsps, or 
   + set the RTEMS_BSP variable during make (see below).
 
-The --enable-rtemsbsp= option configures RTEMS for a specific target
-architecture.  Remember that the target specifies the CPU family while
-the BSP specifies the precise board you will be using. The following
-targets are supported:
+The --enable-rtemsbsp= option configures RTEMS for a specific board
+within a target architecture.  Remember that the target specifies the
+CPU family while the BSP specifies the precise board you will be using. 
+The following targets are supported:
 
 	(none)			will build the host-based version on Linux,
 				Solaris and HPUX.
@@ -109,7 +110,7 @@ targets are supported:
 	sh-rtems
 	sparc-rtems
         bare                    see notes
-	
+
 The cross-compiler is set to $(target)-gcc by default. This can be
 overridden by:
 
@@ -134,6 +135,8 @@ As an example, to build and install the mvme136 and dmv152 bsps for m68k do:
 
 The sample tests are built by 'make all', do a 'make test' to build the full
 test suite.
+
+By default, --enable-docs is disabled and documentation is not built.
 
 2.2 Build with Cygnus one-tree release
 

@@ -1,3 +1,11 @@
+2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add --enable-docs support. Add
+	RTEMS_HOST_CONFIG_SUBDIRS(doc). Remove doc/Makefile.
+	* Makefile.am: Add HOST_SUBDIRS to SUBDIRS. Remove doc from
+	hard-coded SUBDIRS.
+	* README.configure: Added a bit of information on this new option.
+
 2002-01-18	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-ss-20020118.

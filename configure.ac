@@ -35,6 +35,10 @@ RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_RTEMSBSP(dummy)
 RTEMS_ENABLE_MULTILIB
 
+AC_ARG_ENABLE([docs],
+  [AC_HELP_STRING([--enable-docs],[enable building documentation
+    (default:disabled)])])
+
 if test $host != $build; then
 AC_MSG_WARN([]
 [*** *** *** WARNING *** *** ***]
@@ -59,6 +63,9 @@ RTEMS_BUILD_CONFIG_SUBDIRS([tools/update])
 RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
 RTEMS_HOST_CONFIG_SUBDIRS([tools/cpu])
 
+AS_IF([test x"${enable_docs}" = x"yes"],
+  [RTEMS_HOST_CONFIG_SUBDIRS([doc])])
+
 RTEMS_TARGET_CONFIG_SUBDIRS([c/make])
 if test x"$enable_multilib" = x"yes"; then
 RTEMS_TARGET_CONFIG_SUBDIRS([c/src/exec])
@@ -73,6 +80,6 @@ make/Makefile
 make/custom/Makefile
 make/Templates/Makefile
 make/compilers/Makefile 
-doc/Makefile])
+])
 
 AC_OUTPUT
