@@ -1,4 +1,8 @@
 
+2001-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	different flags.
+
 2001-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/shsim.cfg: Remove HZ, BSP_CPPFLAGS, make-target-options.
