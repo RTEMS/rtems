@@ -21,9 +21,9 @@ noinst_PROGRAMS =
 # from the individual .rel files built in other directories
 SUBDIRS = . tools
 
+include_HEADERS += ../../shared/tod.h
 include_HEADERS += include/coverhd.h
 include_HEADERS += include/page_table.h
-include_HEADERS += include/tod.h
 
 nodist_include_HEADERS += $(top_srcdir)/../shared/mvme/mvme16x_hw.h
 
@@ -68,8 +68,7 @@ if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = ../mvme167/network/network.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(network_CPPFLAGS)
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 #--
@@ -119,6 +118,10 @@ $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 
+$(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
+
 $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
@@ -126,10 +129,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 $(PROJECT_INCLUDE)/page_table.h: include/page_table.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/page_table.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/page_table.h
-
-$(PROJECT_INCLUDE)/tod.h: include/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
 $(PROJECT_INCLUDE)/mvme16x_hw.h: $(top_srcdir)/../shared/mvme/mvme16x_hw.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mvme16x_hw.h
