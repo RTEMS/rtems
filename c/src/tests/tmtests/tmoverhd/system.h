@@ -44,8 +44,8 @@ rtems_status_code Empty_directive();
 
 /* configuration information */
  
-#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_TEST_NEEDS_TIMER_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS              2
 #define CONFIGURE_TICKS_PER_TIMESLICE        0

@@ -22,7 +22,7 @@ void ITRON_Init( void );
 
 /* configuration information */
 
-#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_ITRON_INIT_TASK_TABLE
 

@@ -178,6 +178,29 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #endif
 
 /*
+ *  Map obsolete names to current ones
+ *
+ *  NOTE: These should be obsoleted in a future release.
+ */
+
+#ifdef CONFIGURE_TEST_NEEDS_TIMER_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
+#endif
+#ifdef CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#endif 
+#ifdef CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#endif 
+#ifdef CONFIGURE_TEST_NEEDS_RTC_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
+#endif 
+#ifdef CONFIGURE_TEST_NEEDS_STUB_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
+#endif
+
+
+/*
  *  Default Device Driver Table.  Each driver needed by the test is explicitly
  *  choosen by that test.  There is always a null driver entry.
  */
@@ -185,11 +208,11 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define NULL_DRIVER_TABLE_ENTRY \
  { NULL, NULL, NULL, NULL, NULL, NULL }
 
-#ifdef CONFIGURE_TEST_NEEDS_TIMER_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 #include <timerdrv.h>
 #endif
 
-#ifdef CONFIGURE_TEST_NEEDS_STUB_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 #include <stubdrv.h>
 #endif
 
@@ -197,13 +220,13 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 
 #ifdef CONFIGURE_INIT
 rtems_driver_address_table Device_drivers[] = {
-#ifdef CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
   CONSOLE_DRIVER_TABLE_ENTRY,
 #endif
-#ifdef CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
   CLOCK_DRIVER_TABLE_ENTRY,
 #endif
-#ifdef CONFIGURE_TEST_NEEDS_STUB_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
   STUB_DRIVER_TABLE_ENTRY,
 #endif
   NULL_DRIVER_TABLE_ENTRY
