@@ -183,7 +183,6 @@ LIBSUFFIX_PROFILE_V = _p
 LIBSUFFIX__V = $(LIBSUFFIX_OPTIMIZE_V)
 
 LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
-LIBSUFFIX_VA = $(LIB_VARIANT).a
 
 ## These are supposed to be set in make/custom/<bsp>.cfg
 CPU_CFLAGS = @CPU_CFLAGS@
