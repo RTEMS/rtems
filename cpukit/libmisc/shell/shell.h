@@ -2,9 +2,9 @@
  *
  *  Instantatiate a new terminal shell.
  *
- *  Author: 
+ *  Author:
  *
- *   WORK: fernando.ruiz@ctv.es 
+ *   WORK: fernando.ruiz@ctv.es
  *   HOME: correo@fernando-ruiz.com
  *
  *   Thanks at:
@@ -18,11 +18,11 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif	
+#endif
 
-#include <rtems.h>	
-#include <stdio.h>	
-#include <termios.h>	
+#include <rtems.h>
+#include <stdio.h>
+#include <termios.h>
 
 typedef int (*shell_command_t)(int argc,char * argv[]);
 
@@ -51,7 +51,7 @@ int shell_make_args(char * cmd,
                     char * argv[]);
 
 typedef struct  {
-  rtems_name magic; /* 'S','E','N','V': Shell Environment */	
+  rtems_name magic; /* 'S','E','N','V': Shell Environment */
   char * devname;
   char * taskname;
   tcflag_t tcflag;
@@ -65,24 +65,24 @@ typedef struct  {
 int shell_scanline(char * line,int size,FILE * in,FILE * out) ;
 void cat_file(FILE * out,char *name);
 void write_file(char *name,char * content);
-	
+
 rtems_status_code shell_init(char * task_name      ,
                               uint32_t      task_stacksize,/*0 default*/
 		              rtems_task_priority task_priority ,
                               char * devname      ,
 			      tcflag_t tcflag     ,
-			      int forever         );	
+			      int forever         );
 
 extern shell_env_t global_shell_env,
                 *  current_shell_env;
 /*--------*/
-/* cmds.c */ 
+/* cmds.c */
 /*--------*/
 int str2int(char * s);
 void register_cmds(void);
- 
+
 #ifdef __cplusplus
 }
-#endif	
+#endif
 
 #endif

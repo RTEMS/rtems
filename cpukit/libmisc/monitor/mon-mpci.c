@@ -38,7 +38,7 @@ rtems_monitor_mpci_canonical(
     if (m == 0)
         return;
     mt = m->User_mpci_table;
-    
+
     canonical_mpci->node = m->node;
     canonical_mpci->maximum_nodes = m->maximum_nodes;
     canonical_mpci->maximum_global_objects = m->maximum_global_objects;
@@ -58,7 +58,7 @@ rtems_monitor_mpci_canonical(
                                             (void *) mt->send_packet);
     rtems_monitor_symbol_canonical_by_value(&canonical_mpci->receive_packet,
                                             (void *) mt->receive_packet);
-}    
+}
 
 /*
  * This is easy, since there is only 1 (altho we could get them from
@@ -77,10 +77,10 @@ rtems_monitor_mpci_next(
 
     if (n >= 1)
         goto failed;
-    
+
     if ( ! c->User_multiprocessing_table)
         goto failed;
-    
+
     _Thread_Disable_dispatch();
 
     *next_id += 1;
@@ -102,7 +102,7 @@ rtems_monitor_mpci_dump_header(
    node   nodes  globals  proxies  timeout  pktsize\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
-           
+
     rtems_monitor_separator();
 }
 
@@ -119,10 +119,10 @@ rtems_monitor_mpci_dump(
     length += printf("  %d", monitor_mpci->node);
     length += rtems_monitor_pad(11, length);
     length += printf("%d", monitor_mpci->maximum_nodes);
-    
+
     length += rtems_monitor_pad(18, length);
     length += rtems_monitor_dump_decimal(monitor_mpci->maximum_global_objects);
-    
+
     length += rtems_monitor_pad(28, length);
     length += rtems_monitor_dump_decimal(monitor_mpci->maximum_proxies);
 

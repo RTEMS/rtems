@@ -16,7 +16,7 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | 04.04.02  creation                                         doe  |
 \*===============================================================*/
-/* 
+/*
  * $Id$
  */
 
@@ -60,11 +60,11 @@ int serdbg_init_dbg
     return RTEMS_SUCCESSFUL;
   }
   is_initialized = TRUE;
-  /* 
+  /*
    * try to open serial device
    */
   if (rc == RTEMS_SUCCESSFUL) {
-    if ((serdbg_conf.open_io != NULL) && 
+    if ((serdbg_conf.open_io != NULL) &&
 	(0 > serdbg_conf.open_io(serdbg_conf.devname,serdbg_conf.baudrate))) {
       fprintf(stderr,
 	      "remote_gdb_init: cannot open device %s "
@@ -81,7 +81,7 @@ int serdbg_init_dbg
   /*
    * now activate gdb stub
    */
-  if ((rc == RTEMS_SUCCESSFUL) && 
+  if ((rc == RTEMS_SUCCESSFUL) &&
       !serdbg_conf.skip_init_bkpt) {
     breakpoint();
   }

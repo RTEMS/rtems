@@ -529,8 +529,8 @@ void Stack_check_Dump_usage( void )
     "    ID      NAME       LOW        HIGH     AVAILABLE      USED\n"
   );
 
-  for ( api_index = 1 ; 
-        api_index <= OBJECTS_APIS_LAST ; 
+  for ( api_index = 1 ;
+        api_index <= OBJECTS_APIS_LAST ;
         api_index++ ) {
     if ( !_Objects_Information_table[ api_index ] )
       continue;

@@ -24,7 +24,7 @@ rtems_monitor_init_task_canonical(
 )
 {
     rtems_initialization_tasks_table *rtems_itask = itask_void;
-    
+
     rtems_monitor_symbol_canonical_by_value(&canonical_itask->entry,
                                             (void *) rtems_itask->entry_point);
 
@@ -48,7 +48,7 @@ rtems_monitor_init_task_next(
 
     if (n >= c->RTEMS_api_configuration->number_of_initialization_tasks)
         goto failed;
-    
+
     _Thread_Disable_dispatch();
 
     itask = c->RTEMS_api_configuration->User_initialization_tasks_table + n;
@@ -111,7 +111,7 @@ rtems_monitor_init_task_dump(
 
     length += rtems_monitor_pad(54, length);
     length += rtems_monitor_dump_attributes(monitor_itask->attributes);
-    
+
     length += rtems_monitor_pad(66, length);
     length += printf("%d [0x%x]", monitor_itask->stack_size, monitor_itask->stack_size);
 

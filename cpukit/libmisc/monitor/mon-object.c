@@ -126,7 +126,7 @@ rtems_monitor_id_fixup(
 )
 {
     uint32_t    node;
-    
+
     node = rtems_get_node(id);
     if (node == 0)
     {
@@ -171,7 +171,7 @@ rtems_monitor_object_canonical_next_remote(
     /*
      * Send request
      */
-    
+
     request.command = RTEMS_MONITOR_SERVER_CANONICAL;
     request.argument0 = (uint32_t  ) type;
     request.argument1 = (uint32_t  ) id;
@@ -183,7 +183,7 @@ rtems_monitor_object_canonical_next_remote(
     /*
      * process response
      */
-    
+
     next_id = (rtems_id) response.result0;
     if (next_id != RTEMS_OBJECT_ID_FINAL)
         (void) memcpy(canonical, &response.payload, response.result1);
@@ -213,7 +213,7 @@ rtems_monitor_object_canonical_next(
     else
     {
         next_id = id;
-        
+
         raw_item = (void *) info->next(info->object_information,
                                        canonical,
                                        &next_id);
@@ -222,8 +222,8 @@ rtems_monitor_object_canonical_next(
         {
             info->canonical(canonical, raw_item);
             _Thread_Enable_dispatch();
-        }    
-    }    
+        }
+    }
     return next_id;
 }
 
@@ -284,7 +284,7 @@ rtems_monitor_object_dump_1(
          *   of the canonical structures are almost too big for shared
          *   memory driver (eg: mpci)
          */
-        
+
         if ((info->next != rtems_monitor_manager_next) ||
             (id == canonical.generic.id))
             info->dump(&canonical, verbose);
@@ -322,7 +322,7 @@ rtems_monitor_object_cmd(
     int arg;
     rtems_monitor_object_info_t *info = 0;
     rtems_monitor_object_type_t  type ;
-    
+
     /* what is the default type? */
     type = command_arg->monitor_object;
 
@@ -333,7 +333,7 @@ rtems_monitor_object_cmd(
             printf("A type must be specified to \"dump all\"\n");
             goto done;
         }
-        
+
         info = rtems_monitor_object_lookup(type);
         if (info == 0)
             goto not_found;
@@ -364,7 +364,7 @@ rtems_monitor_object_cmd(
                 info = rtems_monitor_object_lookup(type);
                 if (info == 0)
                     goto not_found;
-            
+
                 if (info->dump_header)
                     info->dump_header(verbose);
             }
@@ -378,7 +378,7 @@ not_found:      printf("Invalid or unsupported type %d\n", type);
             rtems_monitor_object_dump_1(info, id, verbose);
 
             default_node = rtems_get_node(id);
-            
+
             last_type = type;
         }
     }

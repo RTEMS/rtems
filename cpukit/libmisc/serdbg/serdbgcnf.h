@@ -16,7 +16,7 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | 13.05.02  creation                                         doe  |
 \*===============================================================*/
-/* 
+/*
  * $Id$
  */
 #ifndef _SERDBGCNF_H
@@ -59,7 +59,7 @@ serdbg_conf_t serdbg_conf = {
 #endif
 
   CONFIGURE_SERDBG_DEVNAME,
-  
+
 #ifdef CONFIGURE_SERDBG_SKIP_INIT_BKPT
   TRUE,
 #else

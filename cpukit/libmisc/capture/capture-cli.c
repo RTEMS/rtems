@@ -2,7 +2,7 @@
   ------------------------------------------------------------------------
   $Id$
   ------------------------------------------------------------------------
-  
+
   Copyright Objective Design Systems Pty Ltd, 2002
   All rights reserved Objective Design Systems Pty Ltd, 2002
   Chris Johns (ccj@acm.org)
@@ -14,7 +14,7 @@
   found in the file LICENSE in this distribution.
 
   This software with is provided ``as is'' and with NO WARRANTY.
-  
+
   ------------------------------------------------------------------------
 
   RTEMS Performance Monitoring and Measurement Framework.
@@ -63,9 +63,9 @@ static const char* open_usage = "usage: copen [-i] size\n";
 
 static void
 rtems_capture_cli_open (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   uint32_t    size = 0;
@@ -112,7 +112,7 @@ rtems_capture_cli_open (
 
   if (!enable)
     return;
-  
+
   sc = rtems_capture_control (enable);
 
   if (sc != RTEMS_SUCCESSFUL)
@@ -135,9 +135,9 @@ rtems_capture_cli_open (
 
 static void
 rtems_capture_cli_close (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code sc;
@@ -164,9 +164,9 @@ rtems_capture_cli_close (
 
 static void
 rtems_capture_cli_enable (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code sc;
@@ -193,9 +193,9 @@ rtems_capture_cli_enable (
 
 static void
 rtems_capture_cli_disable (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code sc;
@@ -222,9 +222,9 @@ rtems_capture_cli_disable (
 
 static void
 rtems_capture_cli_task_list (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
@@ -313,12 +313,12 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
   rtems_task_priority ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority floor = rtems_capture_watch_get_floor ();
   int                 last_count = 0;
-  
+
   printf ("\x1b[2J Press ENTER to exit.\n\n");
   printf ("     PID NAME RPRI CPRI STATE  %%CPU     %%STK FLGS   EXEC TIME\n");
 
   for (;;)
-  { 
+  {
     rtems_capture_task_t* tasks[RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS + 1];
     unsigned long long    load[RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS + 1];
     rtems_capture_task_t* task;
@@ -328,18 +328,18 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
     int                   j;
 
     cli_load_thread_active = 1;
-    
+
     /*
      * Iterate over the tasks and sort the highest load tasks
      * into our local arrays. We only handle a limited number of
      * tasks.
      */
-   
+
     memset (tasks, 0, sizeof (tasks));
     memset (load, 0, sizeof (load));
 
     task = rtems_capture_get_task_list ();
-  
+
     while (task)
     {
       if (rtems_capture_task_valid (task))
@@ -366,14 +366,14 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
           load[i]  = l;
           break;
         }
-      }      
+      }
       task = rtems_capture_next_task (task);
     }
 
     printf ("\x1b[4;0H");
 
     total_time = 0;
-    
+
     for (i = 0; i < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS; i++)
       total_time += load[i];
 
@@ -391,7 +391,7 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
 
       if (!tasks[i])
         break;
-      
+
       j--;
 
       stack_used = rtems_capture_task_stack_usage (tasks[i]) * 100;
@@ -425,11 +425,11 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
         printf ("--");
       else
         printf ("%c%c",
-                rtems_capture_task_control (tasks[i]) ? 
+                rtems_capture_task_control (tasks[i]) ?
                 (rtems_capture_task_control_flags (tasks[i]) &
                  RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
                 rtems_capture_watch_global_on () ? 'g' : '-');
-      
+
       printf ("   %qi\n", rtems_capture_task_time (tasks[i]));
     }
 
@@ -442,7 +442,7 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
     last_count = count;
 
     cli_load_thread_active = 0;
-    
+
     rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (5000000));
   }
 }
@@ -458,16 +458,16 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
 
 static void
 rtems_capture_cli_task_load (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code   sc;
   rtems_task_priority priority;
   rtems_name          name;
   rtems_id            id;
-  
+
   sc = rtems_task_set_priority (RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &priority);
 
   if (sc != RTEMS_SUCCESSFUL)
@@ -475,23 +475,23 @@ rtems_capture_cli_task_load (
     printf ("error: cannot obtain the current priority: %s\n", rtems_status_text (sc));
     return;
   }
-  
+
   memcpy (&name, "CPlt", 4);
-  
+
   sc = rtems_task_create (name, priority, 1024,
                           RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
                           RTEMS_PREEMPT | RTEMS_TIMESLICE | RTEMS_NO_ASR,
                           &id);
-  
-  if (sc != RTEMS_SUCCESSFUL) 
+
+  if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: cannot create helper thread: %s\n", rtems_status_text (sc));
     return;
   }
 
   sc = rtems_task_start (id, rtems_capture_cli_task_load_thread, 0);
-  
-  if (sc != RTEMS_SUCCESSFUL) 
+
+  if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: cannot start helper thread: %s\n", rtems_status_text (sc));
     rtems_task_delete (id);
@@ -505,7 +505,7 @@ rtems_capture_cli_task_load (
     if ((c == '\r') || (c == '\n'))
     {
       int loops = 20;
-      
+
       while (loops && cli_load_thread_active)
         rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (100000));
 
@@ -529,15 +529,15 @@ rtems_capture_cli_task_load (
 
 static void
 rtems_capture_cli_watch_list (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
   rtems_task_priority      ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority      floor = rtems_capture_watch_get_floor ();
-  
+
   printf ("watch priority ceiling is %i\n", ceiling);
   printf ("watch priority floor is %i\n", floor);
   printf ("global watch is %s\n",
@@ -549,7 +549,7 @@ rtems_capture_cli_watch_list (
     int f;
     int fshowed;
     int lf;
-    
+
     printf (" ");
     rtems_monitor_dump_id (rtems_capture_control_id (control));
     printf (" ");
@@ -568,7 +568,7 @@ rtems_capture_cli_watch_list (
         printf ("\n");
         lf = 0;
       }
-      
+
       /*
        * FIXME: name test.
        */
@@ -619,7 +619,7 @@ rtems_capture_cli_get_name_id (char*          arg,
   /*
    * See if the arg is all hex digits.
    */
-  
+
   l = strlen (arg);
 
   for (i = 0; i < l; i++)
@@ -627,9 +627,9 @@ rtems_capture_cli_get_name_id (char*          arg,
       break;
 
   *id = strtoul (arg, 0, 16);
-      
+
   objclass = _Objects_Get_class (*id);
-  
+
   if ((i == l))
     *valid_id = 1;
   else
@@ -655,9 +655,9 @@ static char const * watch_add_usage = "usage: cwadd [task name] [id]\n";
 
 static void
 rtems_capture_cli_watch_add (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code sc;
@@ -717,9 +717,9 @@ static char const * watch_del_usage = "usage: cwdel [task name] [id]\n";
 
 static void
 rtems_capture_cli_watch_del (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code sc;
@@ -778,9 +778,9 @@ static char const * watch_control_usage = "usage: cwctl [task name] [id] on/off\
 
 static void
 rtems_capture_cli_watch_control (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code sc;
@@ -844,9 +844,9 @@ static char const * watch_global_usage = "usage: cwglob on/off\n";
 
 static void
 rtems_capture_cli_watch_global (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code sc;
@@ -898,9 +898,9 @@ static char const * watch_ceiling_usage = "usage: cwceil priority\n";
 
 static void
 rtems_capture_cli_watch_ceiling (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code   sc;
@@ -949,9 +949,9 @@ static char const * watch_floor_usage = "usage: cwfloor priority\n";
 
 static void
 rtems_capture_cli_watch_floor (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code   sc;
@@ -1000,9 +1000,9 @@ static char const *trigger_set_usage = "usage: ctrig type [from] [fromid] [to] [
 
 static void
 rtems_capture_cli_trigger_set (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code       sc;
@@ -1156,9 +1156,9 @@ rtems_capture_cli_trigger_set (
 
 static void
 rtems_capture_cli_trace_records (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code       sc;
@@ -1169,7 +1169,7 @@ rtems_capture_cli_trace_records (
   uint32_t          read;
   rtems_capture_record_t* rec;
   int                     arg;
-  
+
   for (arg = 1; arg < argc; arg++)
   {
     if (argv[arg][0] == '-')
@@ -1196,7 +1196,7 @@ rtems_capture_cli_trace_records (
             printf ("error: option -r requires number and currently it is not\n");
             return;
           }
-            
+
         dump_total = strtoul (argv[arg], 0, 0);
       }
       else
@@ -1205,7 +1205,7 @@ rtems_capture_cli_trace_records (
   }
 
   total = dump_total;
-  
+
   while (total)
   {
     sc = rtems_capture_read (0, 0, &read, &rec);
@@ -1219,7 +1219,7 @@ rtems_capture_cli_trace_records (
 
     if (read == 0)
       break;
-    
+
     for (count = 0; count < read; count++, rec++)
     {
       if (csv)
@@ -1236,7 +1236,7 @@ rtems_capture_cli_trace_records (
         int                e;
 
         event = rec->events >> RTEMS_CAPTURE_EVENT_START;
-        
+
         t  = rec->ticks;
         t *= rtems_capture_tick_time ();
         t += rec->tick_offset;
@@ -1281,9 +1281,9 @@ rtems_capture_cli_trace_records (
 
 static void
 rtems_capture_cli_flush (
-  int argc, 
+  int argc,
   char **argv,
-  rtems_monitor_command_arg_t *command_arg, 
+  rtems_monitor_command_arg_t *command_arg,
   boolean verbose )
 {
   rtems_status_code sc;
@@ -1458,7 +1458,7 @@ rtems_status_code
 rtems_capture_cli_init (rtems_capture_timestamp timestamp)
 {
   int cmd;
-  
+
   capture_timestamp = timestamp;
 
   for (cmd = 0;

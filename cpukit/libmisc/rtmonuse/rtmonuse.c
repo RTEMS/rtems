@@ -38,7 +38,7 @@ void Period_usage_Initialize( void )
   int             maximum;
 
   maximum = _Configuration_Table->RTEMS_api_configuration->maximum_periods;
- 
+
   Period_usage_Information = malloc( sizeof(Period_usage_t) * (maximum+1) );
 
   Period_usage_Reset();
@@ -58,7 +58,7 @@ void Period_usage_Reset( void )
         i<_Configuration_Table->RTEMS_api_configuration->maximum_periods ;
         i++ ) {
     the_usage = &Period_usage_Information[ i ];
- 
+
     the_usage->count           = 0;
     the_usage->missed_count    = 0;
     the_usage->min_cpu_time    = 0xFFFFFFFF;
@@ -67,7 +67,7 @@ void Period_usage_Reset( void )
     the_usage->min_wall_time   = 0xFFFFFFFF;
     the_usage->max_wall_time   = 0;
     the_usage->total_wall_time = 0;
- 
+
   }
 }
 
@@ -76,7 +76,7 @@ void Period_usage_Reset( void )
  *  Period_usage_Update
  */
 
-void Period_usage_Update( 
+void Period_usage_Update(
   rtems_id     id
 )
 {
@@ -135,13 +135,13 @@ void Period_usage_Dump( void )
   char                    name[5];
   uint32_t                api_index;
   Objects_Information    *information;
- 
+
   if ( !Period_usage_Information ) {
     printf( "Period statistics library is not initialized\n" );
     return;
   }
 
-  printf( "Period information by period\n" ); 
+  printf( "Period information by period\n" );
   printf( "   ID      OWNER   PERIODS  MISSED    CPU TIME    WALL TIME\n" );
 
   /*

@@ -48,7 +48,7 @@ rtems_monitor_config_canonical(
     canonical_config->microseconds_per_tick = c->microseconds_per_tick;
     canonical_config->ticks_per_timeslice = c->ticks_per_timeslice;
     canonical_config->number_of_initialization_tasks = r->number_of_initialization_tasks;
-}    
+}
 
 /*
  * This is easy, since there is only 1 (altho we could get them from
@@ -67,7 +67,7 @@ rtems_monitor_config_next(
 
     if (n >= 1)
         goto failed;
-    
+
     _Thread_Disable_dispatch();
 
     *next_id += 1;

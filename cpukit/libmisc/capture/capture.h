@@ -2,7 +2,7 @@
   ------------------------------------------------------------------------
   $Id$
   ------------------------------------------------------------------------
-  
+
   Copyright Objective Design Systems Pty Ltd, 2002
   All rights reserved Objective Design Systems Pty Ltd, 2002
   Chris Johns (ccj@acm.org)
@@ -14,7 +14,7 @@
   found in the file LICENSE in this distribution.
 
   This software with is provided ``as is'' and with NO WARRANTY.
-  
+
   ------------------------------------------------------------------------
 
   RTEMS Performance Monitoring and Measurement Framework.
@@ -42,7 +42,7 @@ extern "C" {
  *
  *  DESCRIPTION:
  *
- * RTEMS control holds the trigger and watch configuration for a group of 
+ * RTEMS control holds the trigger and watch configuration for a group of
  * tasks with the same name.
  */
 typedef struct rtems_capture_control_s
@@ -62,15 +62,15 @@ typedef struct rtems_capture_control_s
 #define RTEMS_CAPTURE_FROM_ANY      (1 << 1)
 #define RTEMS_CAPTURE_TO_ANY        (1 << 2)
 #define RTEMS_CAPTURE_FROM_TO       (1 << 3)
- 
+
 /*
  * rtems_capture_control_t
  *
  *  DESCRIPTION:
  *
- * RTEMS capture control provdes the information about a task, along 
+ * RTEMS capture control provdes the information about a task, along
  * with its trigger state. The control is referenced by each
- * capture record. This is* information neeed by the decoder. The 
+ * capture record. This is* information neeed by the decoder. The
  * capture record cannot assume the task will exist when the record is
  * dumped via the target interface so task info needed for tracing is
  * copied and held here.
@@ -79,7 +79,7 @@ typedef struct rtems_capture_control_s
  * contained in this structure.
  *
  * Note, the tracer code exploits the fact an rtems_name is a
- * 32bit value.  
+ * 32bit value.
  */
 typedef struct rtems_capture_task_s
 {
@@ -407,7 +407,7 @@ rtems_capture_release (uint32_t   count);
  *
  * This function returns the tick period in micro-seconds.
  */
-uint32_t  
+uint32_t
 rtems_capture_tick_time ();
 
 /*
@@ -417,7 +417,7 @@ rtems_capture_tick_time ();
  *
  * This function returns the tick period in micro-seconds.
  */
-uint32_t  
+uint32_t
 rtems_capture_tick_time ();
 
 /*
@@ -519,7 +519,7 @@ rtems_capture_task_name (rtems_capture_task_t* task)
  *
  * This function returns the task flags.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_flags (rtems_capture_task_t* task)
 {
   return task->flags;
@@ -545,7 +545,7 @@ rtems_capture_task_control (rtems_capture_task_t* task)
  *
  * This function returns the task control flags if a control is present.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_control_flags (rtems_capture_task_t* task)
 {
   if (!task->control)
@@ -561,7 +561,7 @@ rtems_capture_task_control_flags (rtems_capture_task_t* task)
  * This function returns the number of times the task has
  * been switched into context.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_switched_in (rtems_capture_task_t* task)
 {
   return task->in;
@@ -575,7 +575,7 @@ rtems_capture_task_switched_in (rtems_capture_task_t* task)
  * This function returns the number of times the task has
  * been switched out of context.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_switched_out (rtems_capture_task_t* task)
 {
   return task->out;
@@ -633,7 +633,7 @@ rtems_capture_task_curr_priority (rtems_capture_task_t* task)
  * This function updates the stack usage. The task control block
  * is updated.
  */
-uint32_t  
+uint32_t
 rtems_capture_task_stack_usage (rtems_capture_task_t* task);
 
 /*
@@ -643,7 +643,7 @@ rtems_capture_task_stack_usage (rtems_capture_task_t* task);
  *
  * This function returns the task's stack size.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_stack_size (rtems_capture_task_t* task)
 {
   return task->stack_size;
@@ -656,7 +656,7 @@ rtems_capture_task_stack_size (rtems_capture_task_t* task)
  *
  * This function returns the amount of stack used.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_stack_used (rtems_capture_task_t* task)
 {
   return task->stack_size - task->stack_clean;
@@ -669,7 +669,7 @@ rtems_capture_task_stack_used (rtems_capture_task_t* task)
  *
  * This function returns the current execution time as ticks.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_ticks (rtems_capture_task_t* task)
 {
   return task->ticks;
@@ -682,7 +682,7 @@ rtems_capture_task_ticks (rtems_capture_task_t* task)
  *
  * This function returns the current execution time tick offset.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_tick_offset (rtems_capture_task_t* task)
 {
   return task->tick_offset;
@@ -730,12 +730,12 @@ rtems_capture_task_delta_time (rtems_capture_task_t* task)
  * This function returns the number of tasks the capture
  * engine knows about.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_task_count ()
 {
   rtems_capture_task_t* task = rtems_capture_get_task_list ();
   uint32_t        count = 0;
-  
+
   while (task)
   {
     count++;
@@ -803,7 +803,7 @@ rtems_capture_control_name (rtems_capture_control_t* control)
  *
  * This function returns the control flags.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_control_flags (rtems_capture_control_t* control)
 {
   return control->flags;
@@ -847,7 +847,7 @@ rtems_capture_control_from_id (rtems_capture_control_t* control, int from)
  * This function returns the number of controls the capture
  * engine has.
  */
-static inline uint32_t  
+static inline uint32_t
 rtems_capture_control_count ()
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();

@@ -24,8 +24,8 @@
 
 /*
  * 2001-01-30 KJO (vac4050@cae597.rsc.raytheon.com):
- *  Fixed rtems_monitor_command_lookup() to accept partial 
- *  commands to uniqeness.  Added support for setting 
+ *  Fixed rtems_monitor_command_lookup() to accept partial
+ *  commands to uniqeness.  Added support for setting
  *  the monitor prompt via an environment variable:
  *  RTEMS_MONITOR_PROMPT
  *
@@ -47,9 +47,9 @@
 #define KEYS_LARROW      (4)
 #define KEYS_RARROW      (5)
 #define KEYS_HOME        (6)
-#define KEYS_END         (7) 
-#define KEYS_F1          (8) 
-#define KEYS_F2          (9) 
+#define KEYS_END         (7)
+#define KEYS_F1          (8)
+#define KEYS_F2          (9)
 #define KEYS_F3          (10)
 #define KEYS_F4          (11)
 #define KEYS_F5          (12)
@@ -233,7 +233,7 @@ rtems_monitor_line_editor (
   memset (buffer, 0, RTEMS_COMMAND_BUFFER_SIZE);
   history = history_next;
   pos     = 0;
-          
+
   if (!logged_in)
     printf ("\nMonitor ready, press enter to login.\n\n");
   else
@@ -248,7 +248,7 @@ rtems_monitor_line_editor (
      * Make the extended_key usable as a boolean.
      */
     extended_key &= ~KEYS_NORMAL_MASK;
-    
+
     if (!extended_key && !logged_in)
     {
       if (c == '\n')
@@ -276,7 +276,7 @@ rtems_monitor_line_editor (
             printf ("\r%s $ ", monitor_prompt);
             pos = 0;
             break;
-        
+
           case KEYS_LARROW:
             if (pos > 0)
             {
@@ -319,7 +319,7 @@ rtems_monitor_line_editor (
                 putchar ('\b');
             }
             break;
-                  
+
           case KEYS_DARROW:
             if (history < history_next)
             {
@@ -493,14 +493,14 @@ rtems_monitor_command_read(char *command,
    * put node number in the prompt if we are multiprocessing
    */
   if (!rtems_configuration_get_user_multiprocessing_table ())
-    sprintf (monitor_prompt, "%s",  
+    sprintf (monitor_prompt, "%s",
              (env_prompt == NULL) ? MONITOR_PROMPT: env_prompt);
   else if (rtems_monitor_default_node != rtems_monitor_node)
     sprintf (monitor_prompt, "%d-%s-%d", rtems_monitor_node,
              (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt,
              rtems_monitor_default_node);
   else
-    sprintf (monitor_prompt, "%d-%s", rtems_monitor_node, 
+    sprintf (monitor_prompt, "%d-%s", rtems_monitor_node,
              (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt);
 
 #if defined(RTEMS_UNIX)
@@ -535,7 +535,7 @@ rtems_monitor_command_lookup(
 
   if ((table == 0) || (argv[0] == 0))
     return 0;
-    
+
   while (table)
   {
     if (table->command)
@@ -550,7 +550,7 @@ rtems_monitor_command_lookup(
         {
           return 0;
         }
-       
+
         else
           found_it = table;
       }
@@ -596,11 +596,11 @@ rtems_monitor_show_help (
       printf (" - No help associated.\n");
       return;
     }
-  
+
     while (help_len)
     {
       printf ("%*c", spaces, ' ');
-      
+
       if (line_one)
         printf (" - ");
 
@@ -611,11 +611,11 @@ rtems_monitor_show_help (
        * See if greater then the line length if so, work back
        * from the end for a space, tab or lf or cr.
        */
-     
+
       if (help_len > MAX_HELP_LINE_LENGTH)
       {
-        for (show_this_line = MAX_HELP_LINE_LENGTH - 1; 
-             show_this_line; 
+        for (show_this_line = MAX_HELP_LINE_LENGTH - 1;
+             show_this_line;
              show_this_line--)
           if ((help[show_this_line] == ' ') ||
               (help[show_this_line] == '\n') ||
@@ -625,7 +625,7 @@ rtems_monitor_show_help (
         /*
          * If show_this_line is 0, it is a very long word !!
          */
-      
+
         if (show_this_line == 0)
           show_this_line = MAX_HELP_LINE_LENGTH - 1;
       }
@@ -639,14 +639,14 @@ rtems_monitor_show_help (
           putchar (help[c]);
 
       printf ("\n");
-                  
+
       help     += show_this_line;
       help_len -= show_this_line;
 
       /*
        * Move past the line feeds or what ever else is being skipped.
        */
-    
+
       while (help_len)
       {
         if ((*help != '\r') && (*help != '\n'))
@@ -673,16 +673,16 @@ rtems_monitor_command_usage(
 {
   rtems_monitor_command_entry_t *command = table;
   int                           max_cmd_len = 0;
-    
+
   /* if first entry in table is a usage, then print it out */
 
   if (command_string && (*command_string != '\0'))
   {
     char *argv[2];
-    
+
     argv[0] = command_string;
     argv[1] = 0;
-    
+
     command = rtems_monitor_command_lookup (table, 1, argv);
 
     if (command)
@@ -691,11 +691,11 @@ rtems_monitor_command_usage(
       printf ("Unrecognised command; try just 'help'\n");
     return;
   }
-  
+
   /*
    * Find the largest command size.
    */
-  
+
   while (command)
   {
     int len = command->command ? strlen (command->command) : 0 ;
@@ -734,7 +734,7 @@ rtems_monitor_help_cmd(
   rtems_monitor_command_entry_t *command;
 
   command = command_arg->monitor_command_entry;
-    
+
   if (argc == 1)
     rtems_monitor_command_usage(command, 0);
   else

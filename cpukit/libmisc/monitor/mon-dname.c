@@ -46,7 +46,7 @@ rtems_monitor_dname_canonical(
     (void) strncpy(canonical_dname->name_string, np->device_name, sizeof(canonical_dname->name_string));
     canonical_dname->major = np->major;
     canonical_dname->minor = np->minor;
-}    
+}
 
 void *
 rtems_monitor_dname_next(
@@ -63,7 +63,7 @@ rtems_monitor_dname_next(
     for (np = table + n ; n<_IO_Number_of_devices; n++, np++)
         if (np->device_name)
             goto done;
-    
+
     *next_id = RTEMS_OBJECT_ID_FINAL;
     return 0;
 
@@ -79,7 +79,7 @@ done:
 
     *next_id += 1;
     return np;
-}    
+}
 
 void
 rtems_monitor_dname_dump_header(

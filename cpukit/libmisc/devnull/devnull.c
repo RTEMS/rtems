@@ -45,7 +45,7 @@ rtems_device_driver null_initialize(
 )
 {
   rtems_device_driver status;
-  
+
   if ( !initialized ) {
     initialized = 1;
 
@@ -57,10 +57,10 @@ rtems_device_driver null_initialize(
 
     if (status != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred(status);
-      
+
     NULL_major = major;
   }
-  
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -153,10 +153,10 @@ rtems_device_driver null_write(
 )
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) pargp;
-  
+
   if ( rw_args )
     rw_args->bytes_moved = rw_args->count;
-  
+
   return NULL_SUCCESSFUL;
 }
 

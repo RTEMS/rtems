@@ -47,7 +47,7 @@
  *   345    167 bytes  Padding
  *   512   (s+p)bytes  File contents (s+p) := (((s) + 511) & ~511),
  *                     round up to 512 bytes
- * 
+ *
  *   Checksum:
  *   int i, sum;
  *   char* header = tar_header_pointer;
@@ -165,7 +165,7 @@ Untar_FromMemory(unsigned char *tar_buf, unsigned long size)
       file_size  = octal2ulong(&bufr[124], 12);
 
       /******************************************************************
-       * Compute the TAR checksum and check with the value in 
+       * Compute the TAR checksum and check with the value in
        * the archive.  The checksum is computed over the entire
        * header, but the checksum field is substituted with blanks.
        ******************************************************************/
@@ -312,7 +312,7 @@ Untar_FromFile(char *tar_name)
       size       = octal2ulong(&bufr[124], 12);
 
       /******************************************************************
-       * Compute the TAR checksum and check with the value in 
+       * Compute the TAR checksum and check with the value in
        * the archive.  The checksum is computed over the entire
        * header, but the checksum field is substituted with blanks.
        ******************************************************************/

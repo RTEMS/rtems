@@ -1,6 +1,6 @@
 /*
  * RTEMS monitor main body
- *	
+ *
  *  TODO:
  *      add stuff to RTEMS api
  *            rtems_get_name(id)
@@ -84,7 +84,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_INIT_TASK },
       &rtems_monitor_commands[2],
-    }, 
+    },
    { "mpci",
       "Show the MPCI system configuration, if configured.",
       0,
@@ -227,7 +227,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { 0 },
       &rtems_monitor_commands[19],
     },
-#endif            
+#endif
     { 0, 0, 0, 0, { 0 }, &rtems_registered_commands },
 };
 
@@ -237,7 +237,7 @@ rtems_monitor_suspend(rtems_interval timeout)
 {
     rtems_event_set event_set;
     rtems_status_code status;
-    
+
     status = rtems_event_receive(MONITOR_WAKEUP_EVENT,
                                  RTEMS_DEFAULT_OPTIONS,
                                  timeout,
@@ -249,7 +249,7 @@ void
 rtems_monitor_wakeup(void)
 {
     rtems_status_code status;
-    
+
     status = rtems_event_send(rtems_monitor_task_id, MONITOR_WAKEUP_EVENT);
 }
 
@@ -314,7 +314,7 @@ rtems_monitor_node_cmd(
 )
 {
     uint32_t   new_node = rtems_monitor_default_node;
-    
+
     switch (argc)
     {
         case 1: 		/* no node, just set back to ours */
@@ -370,13 +370,13 @@ rtems_monitor_symbols_loadup(void)
 
     if (rtems_monitor_symbols)
         rtems_symbol_table_destroy(rtems_monitor_symbols);
-    
+
     rtems_monitor_symbols = rtems_symbol_table_create(10);
     if (rtems_monitor_symbols == 0)
         return;
 
     fp = fopen("symbols", "r");
-    
+
     if (fp == 0)
         return;
 
@@ -441,7 +441,7 @@ rtems_monitor_erase_cmd (
 )
 {
     rtems_monitor_command_entry_t **p = & rtems_registered_commands.next;
-                                                                                
+
     while (*p) {
         if ( STREQ(command->command, (*p)->command) ) {
             *p = (*p)->next;
@@ -468,14 +468,14 @@ rtems_monitor_task(
     rtems_context_fp *fp;
     char command_buffer[513];
     int argc;
-    char *argv[64];        
+    char *argv[64];
     boolean verbose = FALSE;
     struct termios term;
 
     /*
      * Make the stdin stream characte not line based.
      */
-    
+
     if (tcgetattr (STDIN_FILENO, &term) < 0)
     {
       printf("rtems-monitor: cannot get terminal attributes.\n");
@@ -487,7 +487,7 @@ rtems_monitor_task(
        */
 
       term.c_lflag &= ~(ECHO | ICANON | IEXTEN);
-  
+
       /*
        * No sigint on BREAK, CR-to-NL off, input parity off,
        * don't strip 8th bit on input, output flow control off
@@ -502,7 +502,7 @@ rtems_monitor_task(
         printf("cannot set terminal attributes\n");
       }
     }
-    
+
     if (monitor_flags & RTEMS_MONITOR_SUSPEND)
         (void) rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
 
@@ -543,7 +543,7 @@ rtems_monitor_kill(void)
     if (rtems_monitor_task_id)
         rtems_task_delete(rtems_monitor_task_id);
     rtems_monitor_task_id = 0;
-    
+
     rtems_monitor_server_kill();
 }
 
@@ -553,7 +553,7 @@ rtems_monitor_init(
 )
 {
     rtems_status_code status;
-    
+
     rtems_monitor_kill();
 
     status = rtems_task_create(RTEMS_MONITOR_NAME,
@@ -579,7 +579,7 @@ rtems_monitor_init(
     /*
      * Start the monitor task itself
      */
-    
+
     status = rtems_task_start(rtems_monitor_task_id,
                               rtems_monitor_task,
                               monitor_flags);

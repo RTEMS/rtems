@@ -2,9 +2,9 @@
  *
  *  Instantatiate a new terminal shell.
  *
- *  Author: 
+ *  Author:
  *
- *   WORK: fernando.ruiz@ctv.es 
+ *   WORK: fernando.ruiz@ctv.es
  *   HOME: correo@fernando-ruiz.com
  *
  *   Thanks at:
@@ -22,8 +22,8 @@
 #include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/libio.h>
-#include <rtems/libio_.h> 
-#include <rtems/system.h> 
+#include <rtems/libio_.h>
+#include <rtems/system.h>
 #include <rtems/shell.h>
 
 #include <termios.h>
@@ -65,7 +65,7 @@ struct shell_topic_tt {
 static shell_cmd_t   * shell_first_cmd;
 static shell_topic_t * shell_first_topic;
 /* ----------------------------------------------- *
- * Using Chain I can reuse the rtems code. 
+ * Using Chain I can reuse the rtems code.
  * I am more comfortable with this, sorry.
  * ----------------------------------------------- */
 shell_topic_t * shell_lookup_topic(char * topic) {
@@ -81,7 +81,7 @@ shell_topic_t * shell_lookup_topic(char * topic) {
 shell_topic_t * shell_add_topic(char * topic) {
  shell_topic_t * current,*aux;
  if (!shell_first_topic) {
-  aux=malloc(sizeof(shell_topic_t));	
+  aux=malloc(sizeof(shell_topic_t));
   aux->topic=topic;
   aux->next=(shell_topic_t*)NULL;
   return shell_first_topic=aux;
@@ -91,8 +91,8 @@ shell_topic_t * shell_add_topic(char * topic) {
   while (current->next) {
    if (!strcmp(topic,current->next->topic)) return current->next;
    current=current->next;
-  }; 
-  aux=malloc(sizeof(shell_topic_t));	
+  };
+  aux=malloc(sizeof(shell_topic_t));
   aux->topic=topic;
   aux->next=(shell_topic_t*)NULL;
   current->next=aux;
@@ -185,7 +185,7 @@ int shell_help_cmd(shell_cmd_t * shell_cmd) {
   line=1;
   if (shell_cmd->alias) {
    printf("is an <alias> for command '%s'",shell_cmd->alias->name);
-  } else 
+  } else
   if (shell_cmd->usage) {
    pc=shell_cmd->usage;
    while (*pc) {
@@ -198,7 +198,7 @@ int shell_help_cmd(shell_cmd_t * shell_cmd) {
                col++;
                break;
     };
-    pc++;	    
+    pc++;
     if(col>78) { /* What daring... 78?*/
      if (*pc) {
       putchar('\n');
@@ -208,7 +208,7 @@ int shell_help_cmd(shell_cmd_t * shell_cmd) {
     if (!col && *pc) {
       printf("            ");
       col=12;line++;
-    };  
+    };
    };
   };
   puts("");
@@ -220,12 +220,12 @@ int shell_help_cmd(shell_cmd_t * shell_cmd) {
  * The same with all the commands....
  * ----------------------------------------------- */
 int shell_help(int argc,char * argv[]) {
-  int col,line,arg;	
+  int col,line,arg;
   shell_topic_t *topic;
   shell_cmd_t * shell_cmd=shell_first_cmd;
   if (argc<2) {
-   printf("help: ('r' repeat last cmd - 'e' edit last cmd)\n"	  
-          "  TOPIC? The topics are\n");	  
+   printf("help: ('r' repeat last cmd - 'e' edit last cmd)\n"
+          "  TOPIC? The topics are\n");
    topic=shell_first_topic;
    col=0;
    while (topic) {
@@ -237,7 +237,7 @@ int shell_help(int argc,char * argv[]) {
       col=printf("   %s",topic->topic);
      } else {
       col+=printf(", %s",topic->topic);
-     }; 
+     };
     };
     topic=topic->next;
    };
@@ -264,7 +264,7 @@ int shell_help(int argc,char * argv[]) {
    printf("help: list for the topic '%s'\n",argv[arg]);
    line++;
    while (shell_cmd) {
-    if (!strcmp(topic->topic,shell_cmd->topic)) 
+    if (!strcmp(topic->topic,shell_cmd->topic))
      line+=shell_help_cmd(shell_cmd);
     if (line>16) {
      printf("Press any key to continue...");getchar();
@@ -273,7 +273,7 @@ int shell_help(int argc,char * argv[]) {
     };
     shell_cmd=shell_cmd->next;
    };
-  }; 
+  };
   puts("");
   return 0;
 }
@@ -284,13 +284,13 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
   int c,col;
   col=0;
   if (*line) {
-   col=strlen(line);	  
+   col=strlen(line);
    if (out) fprintf(out,"%s",line);
   };
   tcdrain(fileno(in ));
   if (out) tcdrain(fileno(out));
   for (;;) {
-   line[col]=0;	  
+   line[col]=0;
    c=fgetc(in);
    switch (c) {
     case 0x04:/*Control-d*/
@@ -299,7 +299,7 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
     case '\n':break;
     case '\f':if (out) fputc('\f',out);
     case 0x03:/*Control-C*/
-	      line[0]=0; 
+	      line[0]=0;
     case '\r':if (out) fputc('\n',out);
 	      return 1;
     case  127:
@@ -316,13 +316,13 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
 	      break;
     default  :if (!iscntrl(c)) {
 		if (col<size-1) {
-		 line[col++]=c;	
+		 line[col++]=c;
 	         if (out) fputc(c,out);
 		} else {
 	          if (out) fputc('\a',out);
 		};
 	      } else {
-	        if (out) 
+	        if (out)
 		 if (c=='\a') fputc('\a',out);
 	      };
 	      break;
@@ -330,14 +330,14 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
   };
 }
 /* ----------------------------------------------- *
- * - The shell TASK                               
+ * - The shell TASK
  * Poor but enough..
  * TODO: Redirection. Tty Signals. ENVVARs. Shell language.
  * ----------------------------------------------- */
 shell_env_t global_shell_env ,
-          * current_shell_env=&global_shell_env; 
+          * current_shell_env=&global_shell_env;
 
-extern char **environ;	  
+extern char **environ;
 
 void cat_file(FILE * out,char * name) {
 	FILE * fd;
@@ -348,7 +348,7 @@ void cat_file(FILE * out,char * name) {
   	   while ((c=fgetc(fd))!=EOF) fputc(c,out);
 	   fclose(fd);
 	  };
-	};  
+	};
 }
 
 void write_file(char * name,char * content) {
@@ -357,7 +357,7 @@ void write_file(char * name,char * content) {
 	if (fd) {
   	 fwrite(content,1,strlen(content),fd);
 	 fclose(fd);
-	};  
+	};
 }
 
 void init_issue(void) {
@@ -366,11 +366,11 @@ void init_issue(void) {
  if (issue_inited) return;
  issue_inited=TRUE;
  getpwnam("root"); /* dummy call to init /etc dir */
- if (stat("/etc/issue",&buf)) 
+ if (stat("/etc/issue",&buf))
   write_file("/etc/issue",
  	     "Welcome to @V\\n"
 	     "Login into @S(@L)\\n");
- if (stat("/etc/issue.net",&buf)) 
+ if (stat("/etc/issue.net",&buf))
   write_file("/etc/issue.net",
  	     "Welcome to %v\n"
 	     "running on %m\n");
@@ -415,7 +415,7 @@ int shell_login(FILE * in,FILE * out) {
 	      default :fprintf(out,"@%c",c);
 		      break;
 	     };
- 	    } else 
+ 	    } else
  	    if (c=='\\')  {
              switch(c=fgetc(fd)) {
 	      case '\\':fprintf(out,"\\");
@@ -429,12 +429,12 @@ int shell_login(FILE * in,FILE * out) {
               case '@':fprintf(out,"@"); break;
 	     };
  	    } else {
-             fputc(c,out);				
-	    }; 
+             fputc(c,out);
+	    };
 	   };
 	   fclose(fd);
-	  } 
-	 } else {  
+	  }
+	 } else {
 	  fd=fopen("/etc/issue.net","r");
 	  if (fd) {
   	   while ((c=fgetc(fd))!=EOF) {
@@ -463,11 +463,11 @@ int shell_login(FILE * in,FILE * out) {
 		      break;
 	     };
  	    } else {
-             fputc(c,out);				
-	    }; 
+             fputc(c,out);
+	    };
 	   };
 	   fclose(fd);
-	  } 
+	  }
 	 };
  	};
 	times=0;
@@ -483,13 +483,13 @@ int shell_login(FILE * in,FILE * out) {
 		if (out) fprintf(out,"\n");
 		if ((passwd=getpwnam(name))) {
 		 if (strcmp(passwd->pw_passwd,"!")) { /* valid user */
-                  setuid(passwd->pw_uid);			
-                  setgid(passwd->pw_gid);			
+                  setuid(passwd->pw_uid);
+                  setgid(passwd->pw_gid);
 		  rtems_current_user_env->euid=
 		  rtems_current_user_env->egid=0;
 		  chown(current_shell_env->devname,passwd->pw_uid,0);
-		  rtems_current_user_env->euid=passwd->pw_uid;			
-		  rtems_current_user_env->egid=passwd->pw_gid;			
+		  rtems_current_user_env->euid=passwd->pw_uid;
+		  rtems_current_user_env->egid=passwd->pw_gid;
 		  if (!strcmp(passwd->pw_passwd,"*")) {
 		   /* /etc/shadow */
 		   return 0;
@@ -513,7 +513,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
 
   rtems_status_code sc;
 
-  struct termios term;	
+  struct termios term;
   char * devname;
 
   char curdir[256];
@@ -524,17 +524,17 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
 
   sc=rtems_task_variable_add(RTEMS_SELF,(void*)&current_shell_env,free);
   if (sc!=RTEMS_SUCCESSFUL) {
-   rtems_error(sc,"rtems_task_variable_add(current_shell_env):");	 
+   rtems_error(sc,"rtems_task_variable_add(current_shell_env):");
    rtems_task_delete(RTEMS_SELF);
-  }; 
+  };
 
-  current_shell_env=shell_env;  
-  
+  current_shell_env=shell_env;
+
   sc=rtems_libio_set_private_env();
   if (sc!=RTEMS_SUCCESSFUL) {
-   rtems_error(sc,"rtems_libio_set_private_env():");	 
+   rtems_error(sc,"rtems_libio_set_private_env():");
    rtems_task_delete(RTEMS_SELF);
-  }; 
+  };
 
 
   devname=shell_env->devname;
@@ -544,7 +544,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
   rtems_current_user_env->egid=0;
 
   stdin =fopen(devname,"r+");
-    
+
   if (!stdin) {
    fprintf(stderr,"shell:unable to open stdin.%s:%s\n",devname,strerror(errno));
    rtems_task_delete(RTEMS_SELF);
@@ -578,10 +578,10 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
   };
   shell_add_cmd(NULL,NULL,NULL,NULL); /* init the chain list*/
   do {
-   /* Set again root user and root filesystem, side effect of set_priv..*/	  
+   /* Set again root user and root filesystem, side effect of set_priv..*/
   sc=rtems_libio_set_private_env();
   if (sc!=RTEMS_SUCCESSFUL) {
-   rtems_error(sc,"rtems_libio_set_private_env():");	 
+   rtems_error(sc,"rtems_libio_set_private_env():");
    rtems_task_delete(RTEMS_SELF);
   };
   if (!shell_login(stdin,stdout))  {
@@ -593,30 +593,30 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
    chdir("/"); /* XXX: chdir to getpwent homedir */
    shell_env->exit_shell=FALSE;
    for (;;) {
-    /* Prompt section */	  
+    /* Prompt section */
     /* XXX: show_prompt user adjustable */
     getcwd(curdir,sizeof(curdir));
     printf("%s [%s] %c ",shell_env->taskname,curdir,geteuid()?'$':'#');
-    /* getcmd section */	  
+    /* getcmd section */
     if (!shell_scanline(cmd,sizeof(cmd),stdin,stdout)) break; /*EOF*/
-    /* evaluate cmd section */	  
+    /* evaluate cmd section */
     if (!strcmp(cmd,"e")) {  /* edit last command */
      strcpy(cmd,last_cmd);
      continue;
-    } else 
+    } else
     if (!strcmp(cmd,"r")) {  /* repeat last command */
      strcpy(cmd,last_cmd);
-    } else 
+    } else
     if (strcmp(cmd,"")) { /* only for get a new prompt */
      strcpy(last_cmd,cmd);
-    }; 
-    /* exec cmd section */	  
-    /* TODO: 
-     *  To avoid user crash catch the signals. 
+    };
+    /* exec cmd section */
+    /* TODO:
+     *  To avoid user crash catch the signals.
      *  Open a new stdio files with posibility of redirection *
      *  Run in a new shell task background. (unix &)
      *  Resuming. A little bash.
-     */	  
+     */
     if (shell_make_args(cmd,&argc,argv)) {
      if ((shell_cmd=shell_lookup_cmd(argv[0]))!=NULL) {
       shell_env->errorlevel=shell_cmd->command(argc,argv);
@@ -625,7 +625,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
       shell_env->errorlevel=-1;
      };
     };
-    /* end exec cmd section */	  
+    /* end exec cmd section */
     if (shell_env->exit_shell)  break;
     cmd[0]=0;
    };
@@ -633,7 +633,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
   };
   } while (shell_env->forever);
   fclose(stdin );
-  fclose(stdout); 
+  fclose(stdout);
   fclose(stderr);
   rtems_task_delete(RTEMS_SELF);
 }
@@ -654,14 +654,14 @@ rtems_status_code   shell_init (char * task_name,
 		     RTEMS_LOCAL | RTEMS_FLOATING_POINT,
 		     &task_id);
  if (sc!=RTEMS_SUCCESSFUL) {
-  rtems_error(sc,"creating task %s in shell_init()",task_name);	 
+  rtems_error(sc,"creating task %s in shell_init()",task_name);
   return sc;
- }; 
+ };
  shell_env=malloc(sizeof(shell_env_t));
  if (!shell_env) {
   rtems_task_delete(task_id);
-  sc=RTEMS_NO_MEMORY;	 
-  rtems_error(sc,"allocating shell_env %s in shell_init()",task_name);	 
+  sc=RTEMS_NO_MEMORY;
+  rtems_error(sc,"allocating shell_env %s in shell_init()",task_name);
   return sc;
  };
  if (global_shell_env.magic!=new_rtems_name("SENV")) {
@@ -671,8 +671,8 @@ rtems_status_code   shell_init (char * task_name,
   global_shell_env.tcflag    =0;
   global_shell_env.exit_shell=0;
   global_shell_env.forever   =TRUE;
- }; 
- shell_env->magic     =global_shell_env.magic; 
+ };
+ shell_env->magic     =global_shell_env.magic;
  shell_env->devname   =devname;
  shell_env->taskname  =task_name;
  shell_env->tcflag    =tcflag;

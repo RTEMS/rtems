@@ -50,7 +50,7 @@ rtems_monitor_extension_dump_header(
   ID       NAME\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
-           
+
     rtems_monitor_separator();
 }
 

@@ -17,13 +17,13 @@
 #include <string.h>
 #include <ctype.h>
 #include <rtems/dumpbuf.h>
- 
+
 /*
  *  Put the body below Dump_Buffer so it won't get inlined.
  */
 
 static inline void Dump_Line(
-  unsigned char *buffer, 
+  unsigned char *buffer,
   int            length
 );
 
@@ -32,18 +32,18 @@ void Dump_Buffer(
   int            length
 )
 {
- 
+
   int i, mod, max;
- 
+
   if ( !length ) return;
- 
+
   mod = length % 16;
- 
+
   max = length - mod;
- 
+
   for ( i=0 ; i<max ; i+=16 )
     Dump_Line( &buffer[ i ], 16 );
- 
+
   if ( mod )
     Dump_Line( &buffer[ max ], mod );
 }
@@ -53,27 +53,27 @@ static inline void Dump_Line(
   int            length
 )
 {
- 
+
   int  i;
   char line_buffer[120];
- 
+
   line_buffer[0] = '\0';
- 
+
   for( i=0 ; i<length ; i++ )
     sprintf( line_buffer, "%s%02x ", line_buffer, buffer[ i ] );
- 
+
   for( ; i<16 ; i++ )
     strcat( line_buffer, "   " );
- 
+
   strcat( line_buffer, "|" );
   for( i=0 ; i<length ; i++ )
     sprintf( line_buffer, "%s%c", line_buffer,
              isprint( buffer[ i ] ) ? buffer[ i ] : '.' );
- 
+
   for( ; i<16 ; i++ )
     strcat( line_buffer, " " );
- 
+
   strcat( line_buffer, "|\n" );
- 
+
   printf( line_buffer );
 }

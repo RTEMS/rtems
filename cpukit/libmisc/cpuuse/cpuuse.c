@@ -53,7 +53,7 @@ void CPU_usage_Dump( void )
     if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
- 
+
         if ( the_thread )
           total_units += the_thread->ticks_executed;
       }
@@ -67,8 +67,8 @@ void CPU_usage_Dump( void )
   printf( "   ID        NAME        TICKS\n" );
 #endif
 
-  for ( api_index = 1 ; 
-        api_index <= OBJECTS_APIS_LAST ; 
+  for ( api_index = 1 ;
+        api_index <= OBJECTS_APIS_LAST ;
         api_index++ ) {
     if ( !_Objects_Information_table[ api_index ] )
       continue;
@@ -76,7 +76,7 @@ void CPU_usage_Dump( void )
     if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
-        
+
         if ( !the_thread )
           continue;
 
@@ -106,7 +106,7 @@ void CPU_usage_Dump( void )
           the_thread->Object.id,
           name,
           the_thread->ticks_executed,
-          (total_units) ? 
+          (total_units) ?
             (double)the_thread->ticks_executed / (double)total_units :
             (double)total_units
         );

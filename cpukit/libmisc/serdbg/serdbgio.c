@@ -106,7 +106,7 @@ int serdbg_open
   * open device for serdbg operation
   * skip any fds that are between 0..2, because they are
   * reserved for stdin/out/err
-  */ 
+  */
   if (!err_occurred &&
       (dev_name != NULL) &&
       (dev_name[0] != '\0')) {
@@ -125,7 +125,7 @@ int serdbg_open
 	  }
 	}
       }
-    } while (!err_occurred && 
+    } while (!err_occurred &&
 	     (serdbg_fd < 3));
   }
   /*
@@ -137,14 +137,14 @@ int serdbg_open
   }
 
   /*
-   * capture tty structure 
+   * capture tty structure
    */
   if (!err_occurred) {
     iop = &rtems_libio_iops[serdbg_fd];
     serdbg_tty = iop->data1;
   }
   /*
-   * set device baudrate 
+   * set device baudrate
    * (and transp mode, this is not really needed)
    * ...
    */
@@ -156,12 +156,12 @@ int serdbg_open
       err_occurred = TRUE;
   }
   if (!err_occurred) {
-    act_termios.c_iflag 
+    act_termios.c_iflag
       &=  ~(IGNBRK|BRKINT|PARMRK|ISTRIP
 	    |INLCR|IGNCR|ICRNL|IXON);
-    act_termios.c_oflag 
+    act_termios.c_oflag
       &= ~OPOST;
-    
+
     act_termios.c_lflag
       &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
 
@@ -172,8 +172,8 @@ int serdbg_open
 	err_occurred = TRUE;
     }
   }
-  return (err_occurred 
-	  ? -1 
+  return (err_occurred
+	  ? -1
 	  : 0);
 }
 
@@ -197,7 +197,7 @@ void putDebugChar
 \*=========================================================================*/
 {
   /*
-   * call serdbg polling callout, if available 
+   * call serdbg polling callout, if available
    */
   if (serdbg_conf.callout != NULL) {
     serdbg_conf.callout();
@@ -205,7 +205,7 @@ void putDebugChar
   /*
    * check, whether debug serial port is available
    */
-  if ((serdbg_tty != NULL) && 
+  if ((serdbg_tty != NULL) &&
       (serdbg_tty->device.write != NULL)) {
     /*
      * send character to debug serial port
@@ -237,11 +237,11 @@ int getDebugChar
   /*
    * check, whether debug serial port is available
    */
-  if ((serdbg_tty != NULL) && 
+  if ((serdbg_tty != NULL) &&
       (serdbg_tty->device.pollRead != NULL)) {
     do {
       /*
-       * call serdbg polling callout, if available 
+       * call serdbg polling callout, if available
        */
       if (serdbg_conf.callout != NULL) {
 	serdbg_conf.callout();

@@ -9,7 +9,7 @@ void Period_usage_Initialize( void );
 
 void Period_usage_Reset( void );
 
-void Period_usage_Update( 
+void Period_usage_Update(
   rtems_id     id
 );
 

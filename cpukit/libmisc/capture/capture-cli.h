@@ -2,7 +2,7 @@
   ------------------------------------------------------------------------
   $Id$
   ------------------------------------------------------------------------
-  
+
   Copyright Objective Design Systems Pty Ltd, 2002
   All rights reserved Objective Design Systems Pty Ltd, 2002
   Chris Johns (ccj@acm.org)
@@ -14,7 +14,7 @@
   found in the file LICENSE in this distribution.
 
   This software with is provided ``as is'' and with NO WARRANTY.
-  
+
   ------------------------------------------------------------------------
 
   RTEMS Performance Monitoring and Measurement Framework.

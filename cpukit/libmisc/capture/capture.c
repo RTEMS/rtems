@@ -2,7 +2,7 @@
   ------------------------------------------------------------------------
   $Id$
   ------------------------------------------------------------------------
-  
+
   Copyright Objective Design Systems Pty Ltd, 2002
   All rights reserved Objective Design Systems Pty Ltd, 2002
   Chris Johns (ccj@acm.org)
@@ -14,7 +14,7 @@
   found in the file LICENSE in this distribution.
 
   This software with is provided ``as is'' and with NO WARRANTY.
-  
+
   ------------------------------------------------------------------------
 
   RTEMS Performance Monitoring and Measurement Framework.
@@ -236,7 +236,7 @@ static inline rtems_capture_control_t*
 rtems_capture_find_control (rtems_name name, rtems_id id)
 {
   rtems_capture_control_t* control;
-  
+
   for (control = capture_controls; control != NULL; control = control->next)
     if (rtems_capture_match_name_id (name, id, control->name, control->id))
       break;
@@ -262,7 +262,7 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
     return NULL;
 
   control = rtems_capture_find_control (name, id);
-  
+
   if (control == NULL)
   {
     control = _Workspace_Allocate (sizeof (rtems_capture_control_t));
@@ -272,14 +272,14 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
       capture_flags |= RTEMS_CAPTURE_NO_MEMORY;
       return NULL;
     }
-    
+
     control->name  = name;
     control->id    = id;
     control->flags = 0;
 
     memset (control->from,    0, sizeof (control->from));
     memset (control->from_id, 0, sizeof (control->from_id));
-    
+
     rtems_interrupt_disable (level);
 
     control->next    = capture_controls;
@@ -323,7 +323,7 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
   }
 
   rtems_capture_dup_name (&task->name, ((rtems_name) new_task->Object.name));
-  
+
   task->id               = new_task->Object.id;
   task->flags            = 0;
   task->in               = 0;
@@ -359,7 +359,7 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
     if (rtems_capture_match_name_id (control->name, control->id,
                                      task->name, task->id))
       task->control = control;
-  
+
   return task;
 }
 
@@ -398,9 +398,9 @@ rtems_capture_record (rtems_capture_task_t* task,
           (control && (control->flags & RTEMS_CAPTURE_WATCH)))))
     {
       rtems_interrupt_level level;
-      
+
       rtems_interrupt_disable (level);
-    
+
       if (capture_count < capture_size)
       {
         capture_count++;
@@ -417,7 +417,7 @@ rtems_capture_record (rtems_capture_task_t* task,
         if (capture_in == &capture_records[capture_size - 1])
           capture_in = capture_records;
         else
-          capture_in++;          
+          capture_in++;
       }
       else
         capture_flags |= RTEMS_CAPTURE_OVERFLOW;
@@ -500,7 +500,7 @@ rtems_capture_start_task (rtems_tcb* current_task,
 
   rtems_capture_record (ct, RTEMS_CAPTURE_STARTED_BY_EVENT);
   rtems_capture_record (st, RTEMS_CAPTURE_STARTED_EVENT);
-  
+
   rtems_capture_init_stack_usage (st);
 }
 
@@ -671,7 +671,7 @@ rtems_capture_switch_task (rtems_tcb* current_task,
   {
     uint32_t   ticks;
     uint32_t   tick_offset;
-      
+
     /*
      * Get the cpature task control block so we can update the
      * reference anbd perform any watch or trigger functions.
@@ -719,7 +719,7 @@ rtems_capture_switch_task (rtems_tcb* current_task,
       ht->ticks_in       = ticks;
       ht->tick_offset_in = tick_offset;
     }
- 
+
     if (ct)
     {
       ct->out++;
@@ -728,7 +728,7 @@ rtems_capture_switch_task (rtems_tcb* current_task,
       if (capture_timestamp)
       {
         tick_offset += capture_tick_period - ct->tick_offset_in;
- 
+
         if (tick_offset < capture_tick_period)
           ct->tick_offset = tick_offset;
         else
@@ -754,7 +754,7 @@ rtems_capture_switch_task (rtems_tcb* current_task,
       if (ct)
       {
         cc = ct->control;
-      
+
         /*
          * Check the current task for a TO_ANY trigger.
          */
@@ -854,7 +854,7 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp)
    * Get the tick period from the BSP Configuration Table.
    */
   capture_tick_period = _Configuration_Table->microseconds_per_tick;
-  
+
   /*
    * Register the user extension handlers for the CAPture Engine.
    */
@@ -922,7 +922,7 @@ rtems_capture_close ()
     return sc;
 
   task = capture_tasks;
-  
+
   while (task)
   {
     rtems_capture_task_t* delete = task;
@@ -933,7 +933,7 @@ rtems_capture_close ()
   capture_tasks = NULL;
 
   control = capture_controls;
-  
+
   while (control)
   {
     rtems_capture_control_t* delete = control;
@@ -1009,7 +1009,7 @@ rtems_capture_flush (rtems_boolean prime)
   capture_in     = capture_records;
   capture_out    = 0;
 
-  rtems_interrupt_enable (level); 
+  rtems_interrupt_enable (level);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -1074,7 +1074,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
     if (rtems_capture_match_name_id (name, id, control->name, control->id))
     {
       rtems_interrupt_disable (level);
-      
+
       for (task = capture_tasks; task != NULL; task = task->next)
         if (task->control == control)
           task->control = 0;
@@ -1116,7 +1116,7 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, rtems_boolean enable)
   rtems_interrupt_level    level;
   rtems_capture_control_t* control;
   rtems_boolean            found = 0;
-  
+
   /*
    * Find the control and then set the watch. It must exist before it can
    * be controlled.
@@ -1135,7 +1135,7 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, rtems_boolean enable)
       rtems_interrupt_enable (level);
 
       found = 1;
-    }    
+    }
   }
 
   if (found)
@@ -1157,7 +1157,7 @@ rtems_status_code
 rtems_capture_watch_global (rtems_boolean enable)
 {
   rtems_interrupt_level level;
-  
+
   rtems_interrupt_disable (level);
 
   /*
@@ -1278,7 +1278,7 @@ rtems_capture_set_trigger (rtems_name              from,
 {
   rtems_capture_control_t* control;
   int                      i;
-  
+
   /*
    * Find the capture control blocks for the from and to
    * tasks.
@@ -1297,7 +1297,7 @@ rtems_capture_set_trigger (rtems_name              from,
     control = rtems_capture_create_control (to, to_id);
     if (control == NULL)
       return RTEMS_NO_MEMORY;
-    
+
     if (trigger == rtems_capture_from_any)
       control->flags |= RTEMS_CAPTURE_FROM_ANY;
     else
@@ -1387,10 +1387,10 @@ rtems_capture_read (uint32_t           threshold,
      */
     if (count && ((capture_out + count) >= capture_size))
       *read = capture_size - capture_out;
-      
+
     /*
-     * Do we have a threshold and the current count has not wrapped 
-     * around the end of the capture record buffer ? 
+     * Do we have a threshold and the current count has not wrapped
+     * around the end of the capture record buffer ?
      */
     if ((*read == count) && threshold)
     {
@@ -1404,11 +1404,11 @@ rtems_capture_read (uint32_t           threshold,
         rtems_task_ident (RTEMS_SELF, RTEMS_LOCAL, &capture_reader);
 
         rtems_interrupt_disable (level);
-          
+
         capture_flags |= RTEMS_CAPTURE_READER_WAITING;
 
         rtems_interrupt_enable (level);
-          
+
         sc = rtems_event_receive (RTEMS_EVENT_0,
                                   RTEMS_WAIT | RTEMS_EVENT_ANY,
                                   TOD_MICROSECONDS_TO_TICKS (timeout),
@@ -1481,7 +1481,7 @@ rtems_capture_release (uint32_t   count)
  *
  * This function returns the tick period in nano-seconds.
  */
-uint32_t  
+uint32_t
 rtems_capture_tick_time ()
 {
   return capture_tick_period;
@@ -1526,7 +1526,7 @@ rtems_capture_get_task_list ()
  * This function updates the stack usage. The task control block
  * is updated.
  */
-uint32_t  
+uint32_t
 rtems_capture_task_stack_usage (rtems_capture_task_t* task)
 {
   if (task->tcb)

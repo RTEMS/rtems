@@ -78,7 +78,7 @@ int rtems_fsmount_create_mountpoint
        */
       if (0 != stat(tok_buffer,&file_info)) {
 	/*
-	 * if not, create directory 
+	 * if not, create directory
 	 */
 	rc = mknod(tok_buffer,S_IRWXU | S_IRWXG | S_IRWXO | S_IFDIR,0);
       }
@@ -86,7 +86,7 @@ int rtems_fsmount_create_mountpoint
   } while ((rc == 0) &&
 	   (token_type != IMFS_NO_MORE_PATH) &&
 	   (token_type != IMFS_INVALID_TOKEN));
-  
+
   /*
    * return token buffer to heap
    */
@@ -126,7 +126,7 @@ int rtems_fsmount
   /*
    * scan through all fstab entries;
    */
-  while (!terminate && 
+  while (!terminate &&
 	 (fstab_idx < fstab_count)) {
     tmp_rc = 0;
     /*
@@ -177,9 +177,9 @@ int rtems_fsmount
 	}
 	if (0 != (fstab_ptr->abort_reasons & FSMOUNT_MNT_OK)) {
 	  terminate = TRUE;
-	}	
+	}
       }
-    }    
+    }
     /*
      * proceed to next entry
      */

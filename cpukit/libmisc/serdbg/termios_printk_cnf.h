@@ -16,7 +16,7 @@
 | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
 | 13.05.02  creation                                         doe  |
 \*===============================================================*/
-/* 
+/*
  * $Id$
  */
 #ifndef _TERMIOS_PRINTK_CNF_H
@@ -52,7 +52,7 @@ termios_printk_conf_t termios_printk_conf = {
 #else
   NULL,
 #endif
-  CONFIGURE_TERMIOS_PRINTK_DEVNAME, 
+  CONFIGURE_TERMIOS_PRINTK_DEVNAME,
 };
 #endif
 

@@ -5,19 +5,19 @@
  *  Home: correo@fernando-ruiz.com
  *
  * This file is inspired in rtems_monitor & Chris John MyRightBoot
- * 
+ *
  * But I want to make it more user friendly
  * A 'monitor' command is added to adapt the call rtems monitor commands
  * at my call procedure
- * 
- * TODO: A lot of improvements of course. 
+ *
+ * TODO: A lot of improvements of course.
  *      cp, mv, ...
  *      hexdump,
- *      
+ *
  *      More? Say me it, please...
- *      
+ *
  *      The BSP Specific are not welcome here.
- *      
+ *
  * C&S welcome...
  *
  *  $Id$
@@ -53,7 +53,7 @@
   - str to int "0xaffe" "0b010010" "0123" "192939"
  * ----------------------------------------------- */
 int str2int(char * s) {
- int sign=1;	
+ int sign=1;
  int base=10;
  int value=0;
  int digit;
@@ -78,7 +78,7 @@ int str2int(char * s) {
     default :base=8;
 	     break;
    }
-  }; 
+  };
   while (*s) {
    switch(*s) {
     case '0':
@@ -92,28 +92,28 @@ int str2int(char * s) {
     case '8':
     case '9':digit=*s-'0';
  	     break;
-    case 'A':	   
-    case 'B':	   
-    case 'C':	   
-    case 'D':	   
-    case 'E':	   
+    case 'A':
+    case 'B':
+    case 'C':
+    case 'D':
+    case 'E':
     case 'F':digit=*s-'A'+10;
 	     break;
-    case 'a':	   
-    case 'b':	   
-    case 'c':	   
-    case 'd':	   
-    case 'e':	   
+    case 'a':
+    case 'b':
+    case 'c':
+    case 'd':
+    case 'e':
     case 'f':digit=*s-'a'+10;
 	     break;
-    default:return value*sign;	     
+    default:return value*sign;
    };
    if (digit>base) return value*sign;
    value=value*base+digit;
    s++;
   };
  };
- return value*sign;	
+ return value*sign;
 }
 /*----------------------------------------------------------------------------*
  * RAM MEMORY COMMANDS
@@ -219,8 +219,8 @@ int main_mmove(int argc,char * argv[]) {
 /*----------------------------------------------------------------------------*/
 #ifdef MALLOC_STATS  /* /rtems/s/src/lib/libc/malloc.c */
 int main_malloc_dump(int argc,char * argv[]) {
- void malloc_dump(void); 
- malloc_dump();	
+ void malloc_dump(void);
+ malloc_dump();
  return 0;
 }
 #endif
@@ -234,7 +234,7 @@ int main_reset (int argc, char **argv)
   tcdrain(fileno(stdout));
 
   rtems_interrupt_disable (level);
-  for (;;) 
+  for (;;)
       ;
   return 0;
 }
@@ -251,8 +251,8 @@ int main_alias (int argc, char **argv)
   printf("unable to make an alias(%s,%s)\n",argv[1],argv[2]);
  };
  return 0;
-}  
-/*-----------------------------------------------------------*  	
+}
+/*-----------------------------------------------------------*
  * Directory commands
  *-----------------------------------------------------------*/
 int main_ls(int argc, char *argv[])
@@ -286,7 +286,7 @@ int main_ls(int argc, char *argv[])
       strcat(nbuf,dp->d_name); /* always the fullpathname. Avoid ftpd problem.*/
       if (stat(nbuf, &stat_buf) == 0)
       { /* AWFUL buts works...*/
-	 strftime(sbuf,sizeof(sbuf)-1,"%b %d %H:%M",gmtime(&stat_buf.st_mtime));     
+	 strftime(sbuf,sizeof(sbuf)-1,"%b %d %H:%M",gmtime(&stat_buf.st_mtime));
 	 pwd=getpwuid(stat_buf.st_uid);
 	 user=pwd?pwd->pw_name:"nouser";
 	 grp=getgrgid(stat_buf.st_gid);
@@ -304,7 +304,7 @@ int main_ls(int argc, char *argv[])
                  (stat_buf.st_mode & S_IWOTH)?('w'):('-'),
                  (stat_buf.st_mode & S_IXOTH)?('x'):('-'),
                  (int)stat_buf.st_nlink,
-	 	 user,group, 
+	 	 user,group,
                  (int)stat_buf.st_size,
 		 sbuf,
                  dp->d_name,
@@ -317,14 +317,14 @@ int main_ls(int argc, char *argv[])
    closedir(dirp);
    return 0;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 int main_pwd (int argc, char *argv[]) {
    char dir[1024];
    getcwd(dir,1024);
    printf("%s\n",dir);
    return 0;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 int main_chdir (int argc, char *argv[]) {
    char *dir;
    dir="/";
@@ -332,10 +332,10 @@ int main_chdir (int argc, char *argv[]) {
    if (chdir(dir)) {
     printf("chdir to '%s' failed:%s\n",dir,strerror(errno));
     return errno;
-   }; 
+   };
    return 0;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 int main_mkdir (int argc, char *argv[]) {
    char *dir;
    int n;
@@ -344,11 +344,11 @@ int main_mkdir (int argc, char *argv[]) {
     dir=argv[n++];
     if (mkdir(dir,S_IRWXU|S_IRWXG|S_IRWXO)) {
       printf("mkdir '%s' failed:%s\n",dir,strerror(errno));
-    };  
-   };  
+    };
+   };
    return errno;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 int main_rmdir (int argc, char *argv[])
 {
    char *dir;
@@ -360,7 +360,7 @@ int main_rmdir (int argc, char *argv[])
    };
    return errno;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 int main_chroot(int argc,char * argv[]) {
  char * new_root="/";
  if (argc==2) new_root=argv[1];
@@ -370,7 +370,7 @@ int main_chroot(int argc,char * argv[]) {
  };
  return 0;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 int main_cat   (int argc, char *argv[])
 {
    int n;
@@ -378,7 +378,7 @@ int main_cat   (int argc, char *argv[])
    while (n<argc) cat_file(stdout,argv[n++]);
    return 0;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 int main_rm    (int argc, char *argv[])
 {
    int n;
@@ -392,10 +392,10 @@ int main_rm    (int argc, char *argv[])
    };
    return 0;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 /* date - print time and date */
 
-int main_date(int argc,char *argv[]) 
+int main_date(int argc,char *argv[])
 {
   time_t t;
   time(&t);
@@ -403,20 +403,20 @@ int main_date(int argc,char *argv[])
   return 0;
 }
 /*-----------------------------------------------------------*/
-int main_logoff(int argc,char *argv[]) 
+int main_logoff(int argc,char *argv[])
 {
-  printf("logoff from the system...");	
-  current_shell_env->exit_shell=TRUE;	
+  printf("logoff from the system...");
+  current_shell_env->exit_shell=TRUE;
   return 0;
 }
 /*-----------------------------------------------------------*/
-int main_tty   (int argc,char *argv[]) 
+int main_tty   (int argc,char *argv[])
 {
   printf("%s\n",ttyname(fileno(stdin)));
   return 0;
 }
 /*-----------------------------------------------------------*/
-int main_whoami(int argc,char *argv[]) 
+int main_whoami(int argc,char *argv[])
 {
    struct passwd     * pwd;
    pwd=getpwuid(getuid());
@@ -424,7 +424,7 @@ int main_whoami(int argc,char *argv[])
    return 0;
 }
 /*-----------------------------------------------------------*/
-int main_id    (int argc,char *argv[]) 
+int main_id    (int argc,char *argv[])
 {
    struct passwd     * pwd;
    struct group      * grp;
@@ -441,7 +441,7 @@ int main_id    (int argc,char *argv[])
    return 0;
 }
 /*-----------------------------------------------------------*/
-int main_umask(int argc,char *argv[]) 
+int main_umask(int argc,char *argv[])
 {
    mode_t msk=umask(0);
    if (argc == 2) msk=str2int(argv[1]);
@@ -452,7 +452,7 @@ int main_umask(int argc,char *argv[])
    return 0;
 }
 /*-----------------------------------------------------------*/
-int main_chmod(int argc,char *argv[]) 
+int main_chmod(int argc,char *argv[])
 {
    int n;
    mode_t mode;
@@ -463,10 +463,10 @@ int main_chmod(int argc,char *argv[])
    };
    return 0;
 }
-/*-----------------------------------------------------------*  	
+/*-----------------------------------------------------------*
  * with this you can call at all the rtems monitor commands.
  * Not all work fine but you can show the rtems status and more.
- *-----------------------------------------------------------*/  	
+ *-----------------------------------------------------------*/
 int main_monitor(int argc,char * argv[]) {
  rtems_monitor_command_entry_t *command;
  rtems_task_ident(RTEMS_SELF,0,&rtems_monitor_task_id);
@@ -476,7 +476,7 @@ int main_monitor(int argc,char * argv[]) {
   command->command_function(argc, argv, &command->command_arg, 0);
  return 0;
 }
-/*-----------------------------------------------------------*/  	
+/*-----------------------------------------------------------*/
 void register_cmds(void) {
   rtems_monitor_command_entry_t *command;
   /* monitor topic */
@@ -503,7 +503,7 @@ void register_cmds(void) {
 
   /* misc. topic */
   shell_add_cmd  ("logoff","misc","logoff from the system"                    ,main_logoff);
-  shell_alias_cmd("logoff","exit"); 
+  shell_alias_cmd("logoff","exit");
   shell_add_cmd  ("date" ,"misc","date"                                       ,main_date);
   shell_add_cmd  ("reset","misc","reset the BSP"                              ,main_reset);
   shell_add_cmd  ("alias","misc","alias old new"                              ,main_alias);
@@ -521,6 +521,6 @@ void register_cmds(void) {
   shell_add_cmd  ("mmove","mem"  ,"mmove dst src size"           ,main_mmove);
 #ifdef MALLOC_STATS  /* /rtems/s/src/lib/libc/malloc.c */
   shell_add_cmd  ("malloc","mem","mem  show memory malloc'ed"                 ,main_mem);
-#endif  
+#endif
 }
 /*-----------------------------------------------------------*/

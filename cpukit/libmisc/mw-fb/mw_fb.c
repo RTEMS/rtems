@@ -3,17 +3,20 @@
 // $Header$
 //
 // Copyright (c) 2000 - Rosimildo da Silva
-//  
-// MODULE DESCRIPTION: 
-// Wrapper API around the ioctls calls for the Micro FrameBuffer 
-// interface for Embedded Systems 
 //
-// All functions returns 0 on success. Any other value should be 
+// MODULE DESCRIPTION:
+// Wrapper API around the ioctls calls for the Micro FrameBuffer
+// interface for Embedded Systems
+//
+// All functions returns 0 on success. Any other value should be
 // decoded as an error. A list of errors will be created over time.
 //
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.3  2004/04/15 13:24:46  ralf
+// Remove stray white spaces.
+//
 // Revision 1.2  2003/07/08 08:38:48  ralf
 // 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 //
@@ -77,7 +80,7 @@
 #include <rtems/mw_fb.h>
 
 
-/* 
+/*
  * This function returns the information regarding the display.
  * It is called just after the driver be opened to get all needed
  * information about the driver. No change in the mode of operation
@@ -90,8 +93,8 @@
 
 
 
-/* 
- * Returns the mode of the graphics subsystem 
+/*
+ * Returns the mode of the graphics subsystem
  */
  int ufb_get_mode( int fd, int *mode )
  {
@@ -102,8 +105,8 @@
  }
 
 
-/* 
- * Returns the current collor pallete 
+/*
+ * Returns the current collor pallete
  */
  int ufb_get_palette( int fd, struct fb_cmap *color )
  {
@@ -111,17 +114,17 @@
  }
 
 
-/* 
- * Set the current collor pallete 
+/*
+ * Set the current collor pallete
  */
  int ufb_set_palette( int fd, struct fb_cmap *color )
  {
     return ioctl( fd, FB_SETPALETTE, ( void *)color );
  }
 
-/* 
- * Does all necessary initialization to put the device in 
- * graphics mode 
+/*
+ * Does all necessary initialization to put the device in
+ * graphics mode
  */
  int ufb_enter_graphics( int fd, int mode )
  {
@@ -132,7 +135,7 @@
  }
 
 
-/* 
+/*
  * Switch the device back to the default mode of operation.
  * In most cases it put the device back to plain text mode.
  */
@@ -144,10 +147,10 @@
     return ioctl( fd, FB_EXEC_FUNCTION , ( void *)&exec );
  }
 
-/* 
- * Tell the driver that the "virtual buffer" is dirty, and an update 
- * of it to the real device, maybe a serial/parallel LCD or whatever 
- * is required 
+/*
+ * Tell the driver that the "virtual buffer" is dirty, and an update
+ * of it to the real device, maybe a serial/parallel LCD or whatever
+ * is required
  */
  int ufb_buffer_is_dirty( int fd )
  {
@@ -159,7 +162,7 @@
 
 
 
-/* 
+/*
  * This function maps the physical ( kernel mode ) address of the framebuffer device
  * and maps it to the user space address.
  */
@@ -167,13 +170,13 @@
  {
  #ifdef __rtems__
     /* RTEMS runs in ring 0, and there is no distinction between
-       user space and kernel space, so we just return the same 
+       user space and kernel space, so we just return the same
        pointer to the caller.
      */
       *fb_addr = physical_addr;
       return 0;
  #else
- /* other kernels might want to map it to the user space, 
+ /* other kernels might want to map it to the user space,
     maybe using mmap()
   */
       return 0;
@@ -182,7 +185,7 @@
  }
 
 
-/* 
+/*
  * This function unmaps memory of the FB from the user's space
  */
  int ufb_unmmap_from_user_space( int fd, void *addr )

@@ -3,8 +3,8 @@
 // $Header$
 //
 // Copyright (c) 2000 - Rosimildo da Silva
-//  
-// MODULE DESCRIPTION: 
+//
+// MODULE DESCRIPTION:
 // This module implements the input devices interface used by MicroWindows
 // in an embedded system environment.
 // It uses the RTEMS message queue as the repository for the messages posted
@@ -13,6 +13,25 @@
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.6  2004/03/26 06:59:18  ralf
+// 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+//
+// 	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
+// 	libmisc/capture/capture.h, libmisc/cpuuse/cpuuse.c,
+// 	libmisc/devnull/devnull.c, libmisc/fsmount/fsmount.h,
+// 	libmisc/monitor/mon-config.c, libmisc/monitor/mon-dname.c,
+// 	libmisc/monitor/mon-driver.c, libmisc/monitor/mon-extension.c,
+// 	libmisc/monitor/mon-itask.c, libmisc/monitor/mon-monitor.c,
+// 	libmisc/monitor/mon-mpci.c, libmisc/monitor/mon-object.c,
+// 	libmisc/monitor/mon-prmisc.c, libmisc/monitor/mon-queue.c,
+// 	libmisc/monitor/mon-server.c, libmisc/monitor/mon-symbols.c,
+// 	libmisc/monitor/monitor.h, libmisc/monitor/symbols.h,
+// 	libmisc/mw-fb/mw_uid.c, libmisc/rtmonuse/rtmonuse.c,
+// 	libmisc/serdbg/serdbg.h, libmisc/serdbg/serdbgio.c,
+// 	libmisc/serdbg/termios_printk.c, libmisc/serdbg/termios_printk.h,
+// 	libmisc/shell/shell.c, libmisc/shell/shell.h, libmisc/stackchk/check.c,
+// 	libmisc/stackchk/internal.h: Convert to using c99 fixed size types.
+//
 // Revision 1.5  2003/07/08 08:38:48  ralf
 // 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 //
@@ -137,7 +156,7 @@ int uid_open_queue( const char *q_name, int flags, size_t max_msgs )
 #ifdef MW_DEBUG_ON
       printk( "UID_Queue: id=%X\n", queue_id );
 #endif
-   }  
+   }
    open_count++;
    return 0;
 }
@@ -186,7 +205,7 @@ int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
 }
 
 
-/* 
+/*
  * add a message to the queue of events. This method cna be used to
  * simulate hardware events, and it can be very handy during development
  * a new interface.
@@ -194,14 +213,14 @@ int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
 int uid_send_message( struct MW_UID_MESSAGE *m )
 {
   rtems_status_code status;
-  status = rtems_message_queue_send( queue_id, ( void * )m, 
+  status = rtems_message_queue_send( queue_id, ( void * )m,
                                     sizeof( struct MW_UID_MESSAGE ) );
   return status == RTEMS_SUCCESSFUL ? 0 : -1;
 }
 
-/* 
+/*
  * register the device to insert events to the message
- * queue named as the value passed in q_name 
+ * queue named as the value passed in q_name
  */
 int uid_register_device( int fd, const char *q_name )
 {
@@ -217,11 +236,11 @@ int uid_unregister_device( int fd )
 /* set the keyboard */
 int uid_set_kbd_mode( int fd, int mode, int *old_mode )
 {
-   if (ioctl( fd, MV_KDGKBMODE, old_mode) < 0) 
+   if (ioctl( fd, MV_KDGKBMODE, old_mode) < 0)
    {
       return -1;
    }
-   if (ioctl(fd, MV_KDSKBMODE, mode ) < 0 ) 
+   if (ioctl(fd, MV_KDSKBMODE, mode ) < 0 )
    {
       return -1;
    }

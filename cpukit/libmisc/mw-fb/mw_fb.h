@@ -3,13 +3,30 @@
 // $Header$
 //
 // Copyright (c) 2000 - Rosimildo da Silva
-//  
-// MODULE DESCRIPTION: 
+//
+// MODULE DESCRIPTION:
 // Micro FrameBuffer interface for Embedded Systems.
 //
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.1  2000/08/30 08:21:24  joel
+// 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
+//
+// 	* Added generic Micro FrameBuffer interface for MicroWindows.
+// 	This interface allows MicroWindows to under RTEMS. A sample
+// 	driver has been developed for the pc386 BSP. See
+// 	pc386/fb_vga.c as a sample.
+// 	* Added Uniform Input Device interface for MicroWindows.
+// 	See PC386 bsp for sample drivers for mouse and keyboard (console).
+// 	* mw-bf: New directory.
+// 	* Makefile.am, configure.in, wrapup/Makefile.am: Account for mw-fb.
+// 	* mw-fb/Makefile.am: New file.
+// 	* mw-fb/mw_fb.c: New file.
+// 	* mw-fb/mw_fb.h: New file.
+// 	* mw-fb/mw_uid.c: New file.
+// 	* mw-fb/mw_uid.h: New file.
+//
 //
 /////////////////////////////////////////////////////////////////////////////
 */
@@ -77,7 +94,7 @@ struct fb_cmap {
 #define FB_FUNC_IS_DIRTY         2
 #define FB_FUNC_GET_MODE         3
 
-struct fb_exec_function 
+struct fb_exec_function
 {
     int    func_no;
     void  *param;
@@ -86,7 +103,7 @@ struct fb_exec_function
 
 /* Micro Framebuffer API Wrapper */
 
-/* 
+/*
  * This function returns the information regarding the display.
  * It is called just after the driver be opened to get all needed
  * information about the driver. No change in the mode of operation
@@ -95,45 +112,45 @@ struct fb_exec_function
 extern int ufb_get_screen_info( int fd, struct fb_screeninfo *info );
 
 
-/* 
- * Returns the mode of the graphics subsystem 
+/*
+ * Returns the mode of the graphics subsystem
  */
 extern int ufb_get_mode( int fd, int *mode );
 
 
-/* 
- * Returns the current collor pallete 
+/*
+ * Returns the current collor pallete
  */
 extern int ufb_get_palette( int fd, struct fb_cmap *color );
 
-/* 
- * Set the current collor pallete 
+/*
+ * Set the current collor pallete
  */
 extern int ufb_set_palette( int fd, struct fb_cmap *color );
 
-/* 
- * Does all necessary initialization to put the device in 
- * graphics mode 
+/*
+ * Does all necessary initialization to put the device in
+ * graphics mode
  */
 extern int ufb_enter_graphics( int fd, int mode );
 
 
-/* 
+/*
  * Switch the device back to the default mode of operation.
  * In most cases it put the device back to plain text mode.
  */
 extern int ufb_exit_graphics( int fd );
 
 
-/* 
- * Tell the driver that the "virtual buffer" is dirty, and an update 
- * of it to the real device, maybe a serial/parallel LCD or whatever 
- * is required 
+/*
+ * Tell the driver that the "virtual buffer" is dirty, and an update
+ * of it to the real device, maybe a serial/parallel LCD or whatever
+ * is required
  */
 extern int ufb_buffer_is_dirty( int fd );
 
 
-/* 
+/*
  * This function maps the physical ( kernel mode ) address of the framebuffer device
  * and maps it to the user space address.
  */
@@ -141,7 +158,7 @@ extern int ufb_buffer_is_dirty( int fd );
 
 
 
-/* 
+/*
  * This function unmaps memory of the FB from the user's space
  */
  int ufb_unmmap_from_user_space( int fd, void *addr );

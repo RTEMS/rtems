@@ -47,7 +47,7 @@ rtems_monitor_server_request(
      * What is id of monitor on target node?
      * Look it up if we don't know it yet.
      */
-    
+
     server_id = rtems_monitor_server_request_queue_ids[server_node];
     if (server_id == 0)
     {
@@ -59,7 +59,7 @@ rtems_monitor_server_request(
             rtems_error(status, "ident of remote server failed");
             goto done;
         }
-        
+
         rtems_monitor_server_request_queue_ids[server_node] = server_id;
     }
 
@@ -71,7 +71,7 @@ rtems_monitor_server_request(
         rtems_error(status, "monitor server request send failed");
         goto done;
     }
-    
+
     /*
      * Await response, if requested
      */
@@ -97,9 +97,9 @@ rtems_monitor_server_request(
         {
             status = RTEMS_INCORRECT_STATE;
             goto done;
-        }            
+        }
     }
-    
+
 done:
     return status;
 }
@@ -134,13 +134,13 @@ rtems_monitor_server_task(
             rtems_error(status, "monitor server msg queue receive error");
             goto failed;
         }
-                                             
+
         if (size != sizeof(request))
         {
             rtems_error(0, "monitor server bad size on receive");
             goto failed;
         }
-        
+
         switch (request.command)
         {
             case RTEMS_MONITOR_SERVER_CANONICAL:
@@ -162,7 +162,7 @@ rtems_monitor_server_task(
 
 #define SERVER_OVERHEAD  (RTEMS_offsetof(rtems_monitor_server_response_t, \
                                          payload))
-                    
+
                 status = rtems_message_queue_send(request.return_id,
                                                   &response,
                                                   size + SERVER_OVERHEAD);
@@ -186,7 +186,7 @@ failed:
     rtems_task_delete(RTEMS_SELF);
 }
 
-    
+
 /*
  * Kill off any old server
  * Not sure if this is useful, but it doesn't help
@@ -219,12 +219,12 @@ rtems_monitor_server_init(
 )
 {
     rtems_status_code status;
-    
+
     if (_System_state_Is_multiprocessing    &&
         (_Configuration_MP_table->maximum_nodes > 1))
     {
         uint32_t   maximum_nodes = _Configuration_MP_table->maximum_nodes;
-        
+
         /*
          * create the msg que our server will listen
          * Since we only get msgs from other RTEMS monitors, we just
@@ -237,32 +237,32 @@ rtems_monitor_server_init(
                        sizeof(rtems_monitor_server_request_t),
                        RTEMS_GLOBAL,
                        &rtems_monitor_server_request_queue_id);
-        
+
         if (status != RTEMS_SUCCESSFUL)
         {
             rtems_error(status, "could not create monitor server message queue");
             goto done;
         }
-          
+
         /*
          * create the msg que our responses will come on
          * Since monitor just does one thing at a time, we only need 1 item
          * message queue.
          */
-        
+
         status = rtems_message_queue_create(
                        RTEMS_MONITOR_RESPONSE_QUEUE_NAME,
                        1, /* depth */
                        sizeof(rtems_monitor_server_response_t),
                        RTEMS_GLOBAL,
                        &rtems_monitor_server_response_queue_id);
-        
+
         if (status != RTEMS_SUCCESSFUL)
         {
             rtems_error(status, "could not create monitor response message queue");
             goto done;
         }
-          
+
         /* need an id for queue of each other server we might talk to */
         /* indexed by node, so add 1 to maximum_nodes */
         rtems_monitor_server_request_queue_ids =

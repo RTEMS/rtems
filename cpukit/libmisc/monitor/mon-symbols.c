@@ -245,7 +245,7 @@ rtems_symbol_value_lookup_exact(
         if (table == 0)
             return NULL;
     }
-    
+
     if (table->sorted)
     {
         sp = rtems_symbol_value_lookup(table, value);
@@ -254,7 +254,7 @@ rtems_symbol_value_lookup_exact(
         else
             return NULL;  /* not an exact match */
     }
- 
+
     for (s = 0, sp = table->addresses; s < table->next; s++, sp++)
     {
         if ( sp->value == value )
@@ -285,7 +285,7 @@ rtems_symbol_name_lookup(
         if (table == 0)
             return NULL;
     }
-    
+
     for (s = 0, sp = table->addresses; s < table->next; s++, sp++)
     {
         if ( strcasecmp(sp->name, name) == 0 )
@@ -313,7 +313,7 @@ rtems_monitor_symbol_next(
         goto failed;
 
     /* NOTE: symbols do not have id and name fields */
-      
+
     if (table->sorted == 0)
         rtems_symbol_sort(table);
 
@@ -380,7 +380,7 @@ rtems_monitor_symbol_canonical_by_value(
 }
 
 
-uint32_t  
+uint32_t
 rtems_monitor_symbol_dump(
     rtems_monitor_symbol_t *canonical_symbol,
     boolean                 verbose

@@ -25,14 +25,14 @@ rtems_monitor_separator(void)
     printf("------------------------------------------------------------------------------\n");
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_pad(
     uint32_t    destination_column,
     uint32_t    current_column
 )
 {
     int pad_length;
-    
+
     if (destination_column <= current_column)
         pad_length = 1;
     else
@@ -41,7 +41,7 @@ rtems_monitor_pad(
     return printf("%*s", pad_length, "");
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_char(uint8_t   ch)
 {
     if (isprint(ch))
@@ -50,25 +50,25 @@ rtems_monitor_dump_char(uint8_t   ch)
         return printf("%02x", ch);
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_decimal(uint32_t   num)
 {
     return printf("%4d", num);
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_hex(uint32_t   num)
 {
     return printf("0x%x", num);
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_assoc_bitfield(
     rtems_assoc_t *ap,
     char          *separator,
     uint32_t       value
   )
-{  
+{
     uint32_t   b;
     uint32_t   length = 0;
     const char *name;
@@ -80,23 +80,23 @@ rtems_monitor_dump_assoc_bitfield(
                 length += printf("%s", separator);
 
             name = rtems_assoc_name_by_local(ap, b);
-            
+
             if (name)
                 length += printf("%s", name);
             else
                 length += printf("0x%x", b);
         }
-        
+
     return length;
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_id(rtems_id id)
 {
     return printf("%08x", id);
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_name(rtems_name name)
 {
     uint32_t   i;
@@ -105,9 +105,9 @@ rtems_monitor_dump_name(rtems_name name)
         uint32_t   ui;
         char       c[4];
     } u;
-    
+
     u.ui = (uint32_t  ) name;
-    
+
 #if (CPU_BIG_ENDIAN == TRUE)
     for (i=0; i<sizeof(u.c); i++)
         length += rtems_monitor_dump_char(u.c[i]);
@@ -118,7 +118,7 @@ rtems_monitor_dump_name(rtems_name name)
     return length;
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_priority(rtems_task_priority priority)
 {
     return printf("%3d", priority);
@@ -146,14 +146,14 @@ rtems_assoc_t rtems_monitor_state_assoc[] = {
     { 0, 0, 0 },
 };
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_state(States_Control state)
 {
     uint32_t   length = 0;
 
     if (state == STATES_READY)  /* assoc doesn't deal with this as it is 0 */
         length += printf("READY");
-    
+
     length += rtems_monitor_dump_assoc_bitfield(rtems_monitor_state_assoc,
                                                 ":",
                                                 state);
@@ -169,14 +169,14 @@ rtems_assoc_t rtems_monitor_attribute_assoc[] = {
     { 0, 0, 0 },
 };
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_attributes(rtems_attribute attributes)
 {
     uint32_t   length = 0;
 
     if (attributes == RTEMS_DEFAULT_ATTRIBUTES)  /* value is 0 */
         length += printf("DEFAULT");
-    
+
     length += rtems_monitor_dump_assoc_bitfield(rtems_monitor_attribute_assoc,
                                                 ":",
                                                 attributes);
@@ -190,14 +190,14 @@ rtems_assoc_t rtems_monitor_modes_assoc[] = {
     { 0, 0, 0 },
 };
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_modes(rtems_mode modes)
 {
     uint32_t   length = 0;
 
     if (modes == RTEMS_DEFAULT_MODES)  /* value is 0 */
         length += printf("P:T:nA");
-    
+
     length += rtems_monitor_dump_assoc_bitfield(rtems_monitor_modes_assoc,
                                                 ":",
                                                 modes);
@@ -240,21 +240,21 @@ rtems_assoc_t rtems_monitor_events_assoc[] = {
     { 0, 0, 0 },
 };
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_events(rtems_event_set events)
 {
     uint32_t   length = 0;
 
     if (events == EVENT_SETS_NONE_PENDING)  /* value is 0 */
         length += printf("NONE");
-    
+
     length += rtems_monitor_dump_assoc_bitfield(rtems_monitor_events_assoc,
                                                 ":",
                                                 events);
     return length;
 }
 
-uint32_t  
+uint32_t
 rtems_monitor_dump_notepad(uint32_t   *notepad)
 {
     uint32_t   length = 0;

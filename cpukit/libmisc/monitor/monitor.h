@@ -38,7 +38,7 @@ typedef enum {
 
     /* following monitor objects are not known to RTEMS, but
      * we like to have "types" for them anyway */
-    
+
     RTEMS_MONITOR_OBJECT_DRIVER    =  OBJECTS_RTEMS_CLASSES_LAST+1,
     RTEMS_MONITOR_OBJECT_DNAME,
     RTEMS_MONITOR_OBJECT_CONFIG,
@@ -71,19 +71,19 @@ typedef enum {
 /*
  * Type of a pointer that may be a symbol
  */
-    
+
 #define MONITOR_SYMBOL_LEN 20
 typedef struct {
     char       name[MONITOR_SYMBOL_LEN];
     uint32_t   value;
     uint32_t   offset;
-} rtems_monitor_symbol_t;    
+} rtems_monitor_symbol_t;
 
 typedef struct {
     rtems_id            id;
     rtems_name          name;
   /* end of common portion */
-} rtems_monitor_generic_t;        
+} rtems_monitor_generic_t;
 
 /*
  * Task
@@ -347,7 +347,7 @@ void    rtems_monitor_server_kill(void);
 rtems_status_code rtems_monitor_server_request(uint32_t  , rtems_monitor_server_request_t *, rtems_monitor_server_response_t *);
 void    rtems_monitor_server_task(rtems_task_argument);
 void    rtems_monitor_server_init(uint32_t  );
-  
+
 /* command.c */
 int     rtems_monitor_make_argv(char *, int *, char **);
 int     rtems_monitor_command_read(char *, int *, char **);

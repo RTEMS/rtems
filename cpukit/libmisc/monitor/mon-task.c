@@ -24,7 +24,7 @@ rtems_monitor_task_canonical(
     RTEMS_API_Control    *api;
 
     api = rtems_thread->API_Extensions[ THREAD_API_RTEMS ];
-    
+
     canonical_task->entry = rtems_thread->Start.entry_point;
     canonical_task->argument = rtems_thread->Start.numeric_argument;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
@@ -56,7 +56,7 @@ rtems_monitor_task_dump_header(
   ID       NAME   PRIO   STAT   MODES  EVENTS   WAITID  WAITARG  NOTES\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
-           
+
     rtems_monitor_separator();
 }
 

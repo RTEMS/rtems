@@ -30,9 +30,9 @@
 /*
  * bits to define, what errors will cause reporting (via printf) and
  * abort of mount processing
- * Use a combination of these bits 
+ * Use a combination of these bits
  * for the fields "report_reasons" and "abort_reasons"
- */ 
+ */
 #define FSMOUNT_MNT_OK        0x0001 /* mounted ok                 */
 #define FSMOUNT_MNTPNT_CRTERR 0x0002 /* cannot create mount point  */
 #define FSMOUNT_MNT_FAILED    0x0004 /* mounting failed            */

@@ -73,10 +73,10 @@ void termios_printk_outputchar
    * check, whether printk serial port is available
    */
 
-  if ((termios_printk_tty != NULL) && 
+  if ((termios_printk_tty != NULL) &&
       (termios_printk_tty->device.write != NULL)) {
     /*
-     * call termios_printk polling callout, if available 
+     * call termios_printk polling callout, if available
      */
     if (termios_printk_conf.callout != NULL) {
       termios_printk_conf.callout();
@@ -84,7 +84,7 @@ void termios_printk_outputchar
     /*
      * send character to debug serial port
      */
-    if (c == '\n') {      
+    if (c == '\n') {
       termios_printk_tty->device.write(termios_printk_tty->minor,&cr,1);
     }
     termios_printk_tty->device.write(termios_printk_tty->minor,&c,1);
@@ -113,11 +113,11 @@ char termios_printk_inputchar
   /*
    * check, whether debug serial port is available
    */
-  if ((termios_printk_tty != NULL) && 
+  if ((termios_printk_tty != NULL) &&
       (termios_printk_tty->device.pollRead != NULL)) {
     do {
       /*
-       * call termios_printk polling callout, if available 
+       * call termios_printk polling callout, if available
        */
       if (termios_printk_conf.callout != NULL) {
 	termios_printk_conf.callout();
@@ -156,7 +156,7 @@ int termios_printk_open
   rtems_libio_t *iop = NULL;
   struct termios act_termios;
   tcflag_t baudcode = B0;
-  
+
   if (termios_printk_fd >= 0) {
     /*
      * already initialized
@@ -190,7 +190,7 @@ int termios_printk_open
   }
  /*
   * open device for serdbg operation
-  */ 
+  */
   if (!err_occurred &&
       (dev_name != NULL) &&
       (dev_name[0] != '\0')) {
@@ -200,14 +200,14 @@ int termios_printk_open
     }
   }
   /*
-   * capture tty structure 
+   * capture tty structure
    */
   if (!err_occurred) {
     iop = &rtems_libio_iops[termios_printk_fd];
     termios_printk_tty = iop->data1;
   }
   /*
-   * set device baudrate 
+   * set device baudrate
    * (and transp mode, this is not really needed)
    * ...
    */
@@ -231,7 +231,7 @@ int termios_printk_open
     BSP_output_char = termios_printk_outputchar;
     BSP_poll_char = termios_printk_inputchar;
   }
-  return (err_occurred 
-	  ? -1 
+  return (err_occurred
+	  ? -1
 	  : 0);
 }

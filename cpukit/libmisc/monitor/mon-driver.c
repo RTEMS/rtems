@@ -71,7 +71,7 @@ rtems_monitor_driver_next(
 
     if (n >= c->number_of_device_drivers)
         goto failed;
-    
+
     _Thread_Disable_dispatch();
 
     /*

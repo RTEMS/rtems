@@ -33,10 +33,10 @@ rtems_monitor_manager_next(
     /*
      * When we are called, it must be local
      */
-       
+
     if ( ! _Objects_Is_local_id(*next_id))
         goto done;
-    
+
     object = _Objects_Get_next(table, *next_id, &location, next_id);
 
     if (object)
