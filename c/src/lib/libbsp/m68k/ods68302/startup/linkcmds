@@ -14,6 +14,15 @@ _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 /*
+ * Memory map.
+ */
+RAM_BASE = DEFINED(RAM_BASE) ? RAM_BASE : 0x00000000;
+RAM_SIZE = DEFINED(RAM_SIZE) ? RAM_SIZE : 0x00100000;
+ROM_BASE = DEFINED(ROM_BASE) ? ROM_BASE : 0x00C00000;
+ROM_SIZE = DEFINED(ROM_SIZE) ? ROM_SIZE : 0x00100000;
+MC68302_BASE = DEFINED(MC68302_BASE) ? MC68302_BASE : 0x00700000;
+
+/*
  * Declare on-board memory.
  */
 MEMORY {
@@ -21,22 +30,26 @@ MEMORY {
 }
 SECTIONS
 {
-	ram : {
-		. = .;
-	} >ram
-
-	.vtable :
+	.vtable RAM_BASE :
 	{
 		vtable_start = .;
 		*(.vtable)
 		evtable = .;
 	} >ram
 
-
         /*
          * Text, data and bss segments
          */
-        .text : {
+        .text ROM_BASE : {
+                /*
+                 * Needs to be first. 8K limit on CS0 at reset.
+                 */
+		*(.resettext);
+                *cpuboot.o(.text)
+
+                /*
+                 * The reset of the text is entered once CS0 is remapped.
+                 */
                 *(.text)
 
 		/*
@@ -114,8 +127,10 @@ SECTIONS
 
                  . = ALIGN (16);
                 PROVIDE (_etext = .);
-        } >ram
-        .data : {
+        } >rom
+
+        .data (ADDR(.vtable) + SIZEOF(.vtable)) : 
+          AT (ADDR(.text) + SIZEOF(.text)) {
                 PROVIDE (_copy_start = .);
                 *(.data)
 		*(.gnu.linkonce.d*)
@@ -125,7 +140,7 @@ SECTIONS
                 PROVIDE (_edata = .);
                 PROVIDE (_copy_end = .);
         } >ram
-        .bss : {
+        .bss (ADDR(.data) + SIZEOF(.data)) : {
                 _clear_start = .;
                 *(.bss)
                 *(COMMON)
@@ -181,11 +196,6 @@ SECTIONS
   /* These must appear regardless of  .  */
 }
 
-RAM_BASE = DEFINED(RAM_BASE) ? RAM_BASE : 0x00000000;
-RAM_SIZE = DEFINED(RAM_SIZE) ? RAM_SIZE : 0x00100000;
-ROM_BASE = DEFINED(ROM_BASE) ? ROM_BASE : 0x00C00000;
-ROM_SIZE = DEFINED(ROM_SIZE) ? ROM_SIZE : 0x00100000;
-MC68302_BASE = DEFINED(MC68302_BASE) ? MC68302_BASE : 0x00700000;
 m302 = MC68302_BASE;
 _VBR = ADDR(.vtable);		/* location of the VBR table (in RAM) */
 

@@ -68,8 +68,9 @@ void boot_phase_1()
   WRITE_BR(CSEL_2, CSEL_2_BASE, BR_READ_WRITE, BR_FC_NULL, BR_ENABLED);
 #endif
   
-  m302.reg.gimr = m302.reg.ipr = m302.reg.imr = m302.reg.isr = 0;
-  
+  m302.reg.ipr = m302.reg.imr = m302.reg.isr = 0;
+  m302.reg.gimr = 0x0080;
+
   m302.reg.simode = 0;
 
   m302.reg.pacnt = CARD_PA_CONFIGURATION;
@@ -101,8 +102,8 @@ void boot_phase_2(void)
               LED_5_OFF, LED_6_OFF, LED_7_OFF, LED_8_OFF);
 #endif
   
-  WRITE_BR(CSEL_ROM, ROM_BASE, BR_READ_ONLY, BR_FC_NULL, BR_ENABLED);
-  WRITE_BR(CSEL_RAM, RAM_BASE, BR_READ_WRITE, BR_FC_NULL, BR_ENABLED);
+  WRITE_BR(CSEL_ROM, _ROM_BASE, BR_READ_ONLY, BR_FC_NULL, BR_ENABLED);
+  WRITE_BR(CSEL_RAM, _RAM_BASE, BR_READ_WRITE, BR_FC_NULL, BR_ENABLED);
   
 #if defined(LED_CONTROL)
   LED_CONTROL(LED_1_GREEN, LED_2_RED, LED_3_OFF, LED_4_OFF,
@@ -110,7 +111,7 @@ void boot_phase_2(void)
 #endif
 
   /* seems to want 2, looked at assember code output */
-  *(&stack + 2) |= ROM_BASE;
+  *((volatile rtems_unsigned32*) (&stack + 2)) |= ROM_BASE;
 }
 
 /*

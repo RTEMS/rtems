@@ -37,7 +37,7 @@
 |
 | Initial stack pointer is in the dual ported RAM
 |
-        .sect   .text
+        .sect   .resettext
 
         .global M68Kvec                 | Vector Table
         
@@ -469,8 +469,9 @@ zerobss_loop:
         cmpal   %a0,%a1
         jlt     zerobss_loop                    | loop until _end reached
 
-        movel   %d0,_stack_init                 | load stack top
-
+        movel   #stack_end,%d0
+        andl    #0xfffffffc,%d0                 | align it on 16 byte boundary
+ 
         movw    #0x3700,%sr                     | SUPV MODE,INTERRUPTS OFF!!!
         movel   %d0,%a7                         | set master stack pointer
         movel   %d0,%a6                         | set base pointer
@@ -493,7 +494,6 @@ zerobss_loop:
 unhandled_exception:
                 
 EXCEPTION_HANDLER(#, 0)
-#if 0
 EXCEPTION_HANDLER(#, 1)
 EXCEPTION_HANDLER(#, 2)
 EXCEPTION_HANDLER(#, 3)
@@ -775,13 +775,8 @@ EXCEPTION_HANDLER(#, 253)
 EXCEPTION_HANDLER(#, 254)
 EXCEPTION_HANDLER(#, 255)                                
 
-#endif
-
-
-
 common_exception_handler: 
 
-#if 0
         |
         | Need to put the format/vector above the PC and status register
         |
@@ -801,7 +796,6 @@ common_exception_handler:
         beq     ceh_10
 
         bra     ceh_20
-
 ceh_10:              
 
         move.w  %d0,12(%sp)                     | need to move the format/id
@@ -809,7 +803,7 @@ ceh_10:
         addq    #8,%sp                          | trash the stack
         move.l  %d0,-(%sp)                      | free a register, again
         move.w  4(%sp),%d0                      | get the format/vector id
-
+        
 ceh_20:
 
         move.w  6(%sp),4(%sp)
@@ -827,23 +821,25 @@ ceh_20:
         |
         | check to see if ROM is mapped to zero
         |
-        
-        move.l  #trace_exception,%d1            | get the linked address
-        and.l   #(ROM_SIZE - 1),%d1             | obtain the offset into the ROM
+
+        move.l  #(ROM_SIZE - 1),%d1
+        not.l   %d1
         lea.l   %pc@(0),%a0                     | were are we currently
         move.l  %a0,%d0                         | need to use a data register
-        and.l   #~(ROM_SIZE - 1),%d0            | keep the top part of the address
+        and.l   %d1,%d0                         | keep the top part of the address
+        move.l  #trace_exception,%d1            | get the linked address
+        and.l   #(ROM_SIZE - 1),%d1             | obtain the offset into the ROM
         or.l    %d1,%d0                         | apply it to the trace exception offset
         move.l  %d0,%a0                         | need an address register for jumping
         jsr     %a0@(0)
 
 ceh_30:                 
         jmp     ceh_30
+
 |
 | The RAM based vector table
 |
 
-#endif
         .sect   .vtable
 
         .global vector_table
@@ -862,10 +858,6 @@ vector_table:
 start_frame:
         .space  4,0
 
-        .global stack_start
-        
-stack_start:
-        .space  4,0
 
 |
 | Uninitialised data
@@ -884,5 +876,11 @@ environ:
 
         .global stack_size
         .set    stack_size,0x1000
-
-
+        .global stack_start
+        
+stack_start:
+stack_base:
+        .space  0x2000, 0
+stack_end:
+        .long   0
+ 
