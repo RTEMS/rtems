@@ -30,7 +30,7 @@ include $(top_srcdir)/libtests.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-LD_LIBS = -lrtems++$(LIB_VARIANT)
+LD_LIBS = -lrtems++
 
 if HAS_CXX
 
