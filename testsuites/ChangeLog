@@ -1,5 +1,11 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/lead-dot.m4: Remove (Provided by automake-1.8).
+	* aclocal/env-rtemsbsp.m4: Remove bsplibdir.
+	Cleanups.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/compila.am: Remove ARCH.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
