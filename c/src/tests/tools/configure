@@ -526,6 +526,32 @@ else
 fi
 
 
+
+# Check whether --with-target-subdir or --without-target-subdir was given.
+if test "${with_target_subdir+set}" = set; then
+  withval="$with_target_subdir"
+  TARGET_SUBDIR="$withval"
+else
+  TARGET_SUBDIR="."
+fi
+
+
+RTEMS_TOPdir="../../../..";
+
+
+echo $ac_n "checking for RTEMS Version""... $ac_c" 1>&6
+echo "configure:544: checking for RTEMS Version" >&5
+if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
+RTEMS_VERSION=`grep Version ${srcdir}/${RTEMS_TOPdir}/VERSION | \
+sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
+else
+{ echo "configure: error: Unable to find ${RTEMS_TOPdir}/VERSION" 1>&2; exit 1; }
+fi
+if test -z "$RTEMS_VERSION"; then
+{ echo "configure: error: Unable to determine version" 1>&2; exit 1; }
+fi
+echo "$ac_t""$RTEMS_VERSION" 1>&6
+
 ac_aux_dir=
 for ac_dir in ../../../.. $srcdir/../../../..; do
   if test -f $ac_dir/install-sh; then
@@ -545,31 +571,6 @@ ac_config_guess=$ac_aux_dir/config.guess
 ac_config_sub=$ac_aux_dir/config.sub
 ac_configure=$ac_aux_dir/configure # This should be Cygnus configure.
 
-
-# Check whether --with-target-subdir or --without-target-subdir was given.
-if test "${with_target_subdir+set}" = set; then
-  withval="$with_target_subdir"
-  TARGET_SUBDIR="$withval"
-else
-  TARGET_SUBDIR="."
-fi
-
-
-RTEMS_TOPdir="../../../..";
-
-
-echo $ac_n "checking for RTEMS Version""... $ac_c" 1>&6
-echo "configure:563: checking for RTEMS Version" >&5
-if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
-RTEMS_VERSION=`grep Version ${srcdir}/${RTEMS_TOPdir}/VERSION | \
-sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
-else
-{ echo "configure: error: Unable to find ${RTEMS_TOPdir}/VERSION" 1>&2; exit 1; }
-fi
-if test -z "$RTEMS_VERSION"; then
-{ echo "configure: error: Unable to determine version" 1>&2; exit 1; }
-fi
-echo "$ac_t""$RTEMS_VERSION" 1>&6
 
 
 
@@ -600,7 +601,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:604: checking host system type" >&5
+echo "configure:605: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -621,7 +622,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:625: checking target system type" >&5
+echo "configure:626: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -639,7 +640,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:643: checking build system type" >&5
+echo "configure:644: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -662,7 +663,7 @@ test "$host_alias" != "$target_alias" &&
   program_prefix=${target_alias}-
 
 echo $ac_n "checking rtems target cpu""... $ac_c" 1>&6
-echo "configure:666: checking rtems target cpu" >&5
+echo "configure:667: checking rtems target cpu" >&5
 case "${target}" in
   # hpux unix port should go here
   i[3456]86-go32-rtems*)
@@ -700,7 +701,7 @@ echo "$ac_t""$RTEMS_CPU" 1>&6
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install""... $ac_c" 1>&6
-echo "configure:704: checking for a BSD compatible install" >&5
+echo "configure:705: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if eval "test \"`echo '$''{'ac_cv_path_install'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -753,7 +754,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 echo $ac_n "checking whether build environment is sane""... $ac_c" 1>&6
-echo "configure:757: checking whether build environment is sane" >&5
+echo "configure:758: checking whether build environment is sane" >&5
 # Just in case
 sleep 1
 echo timestamp > conftestfile
@@ -810,7 +811,7 @@ test "$program_suffix" != NONE &&
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:814: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:815: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -850,7 +851,7 @@ fi
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
-echo "configure:854: checking for working aclocal" >&5
+echo "configure:855: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -863,7 +864,7 @@ else
 fi
 
 echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
-echo "configure:867: checking for working autoconf" >&5
+echo "configure:868: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -876,7 +877,7 @@ else
 fi
 
 echo $ac_n "checking for working automake""... $ac_c" 1>&6
-echo "configure:880: checking for working automake" >&5
+echo "configure:881: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -889,7 +890,7 @@ else
 fi
 
 echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
-echo "configure:893: checking for working autoheader" >&5
+echo "configure:894: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -902,7 +903,7 @@ else
 fi
 
 echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
-echo "configure:906: checking for working makeinfo" >&5
+echo "configure:907: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -916,7 +917,7 @@ fi
 
 
 echo $ac_n "checking whether to enable maintainer-specific portions of Makefiles""... $ac_c" 1>&6
-echo "configure:920: checking whether to enable maintainer-specific portions of Makefiles" >&5
+echo "configure:921: checking whether to enable maintainer-specific portions of Makefiles" >&5
     # Check whether --enable-maintainer-mode or --disable-maintainer-mode was given.
 if test "${enable_maintainer_mode+set}" = set; then
   enableval="$enable_maintainer_mode"

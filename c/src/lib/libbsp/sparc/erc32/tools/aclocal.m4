@@ -19,6 +19,9 @@ dnl $1 .. relative path from this configure.in to the toplevel configure.in
 dnl
 AC_DEFUN(RTEMS_TOP,
 [dnl
+AC_BEFORE([$0], [AC_CONFIG_AUX_DIR])dnl
+AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
+
 AC_ARG_WITH(target-subdir,
 [  --with-target-subdir=DIR],
 TARGET_SUBDIR="$withval",
@@ -43,47 +46,6 @@ AC_MSG_ERROR(Unable to determine version)
 fi
 AC_MSG_RESULT($RTEMS_VERSION)
 ])dnl
-
-dnl
-dnl $Id$
-dnl
-
-dnl canonicalize target cpu
-dnl NOTE: Most rtems targets do not fullfil autoconf's
-dnl target naming conventions "processor-vendor-os"
-dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
-dnl and we have to fix it for rtems ourselves 
-
-AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
-[
-AC_CANONICAL_SYSTEM
-AC_MSG_CHECKING(rtems target cpu)
-changequote(,)dnl
-case "${target}" in
-  # hpux unix port should go here
-  i[3456]86-go32-rtems*)
-	RTEMS_CPU=i386
-	;;
-  i[3456]86-pc-linux*)		# unix "simulator" port
-	RTEMS_CPU=unix
-	;;
-  i[3456]86-*freebsd2*) 	# unix "simulator" port
-	RTEMS_CPU=unix
-	;;
-  no_cpu-*rtems*)
-        RTEMS_CPU=no_cpu
-	;;
-  sparc-sun-solaris*)           # unix "simulator" port
-	RTEMS_CPU=unix
-	;;
-  *) 
-	RTEMS_CPU=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
-	;;
-esac
-changequote([,])dnl
-AC_SUBST(RTEMS_CPU)
-AC_MSG_RESULT($RTEMS_CPU)
-])
 
 # Do all the work for Automake.  This macro actually does too much --
 # some checks are only needed if your package does certain things.
@@ -178,6 +140,47 @@ else
    AC_MSG_RESULT(missing)
 fi
 AC_SUBST($1)])
+
+dnl
+dnl $Id$
+dnl
+
+dnl canonicalize target cpu
+dnl NOTE: Most rtems targets do not fullfil autoconf's
+dnl target naming conventions "processor-vendor-os"
+dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
+dnl and we have to fix it for rtems ourselves 
+
+AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
+[
+AC_CANONICAL_SYSTEM
+AC_MSG_CHECKING(rtems target cpu)
+changequote(,)dnl
+case "${target}" in
+  # hpux unix port should go here
+  i[3456]86-go32-rtems*)
+	RTEMS_CPU=i386
+	;;
+  i[3456]86-pc-linux*)		# unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  i[3456]86-*freebsd2*) 	# unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  no_cpu-*rtems*)
+        RTEMS_CPU=no_cpu
+	;;
+  sparc-sun-solaris*)           # unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  *) 
+	RTEMS_CPU=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
+	;;
+esac
+changequote([,])dnl
+AC_SUBST(RTEMS_CPU)
+AC_MSG_RESULT($RTEMS_CPU)
+])
 
 # Add --enable-maintainer-mode option to configure.
 # From Jim Meyering

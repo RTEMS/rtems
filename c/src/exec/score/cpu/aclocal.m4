@@ -19,6 +19,9 @@ dnl $1 .. relative path from this configure.in to the toplevel configure.in
 dnl
 AC_DEFUN(RTEMS_TOP,
 [dnl
+AC_BEFORE([$0], [AC_CONFIG_AUX_DIR])dnl
+AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
+
 AC_ARG_WITH(target-subdir,
 [  --with-target-subdir=DIR],
 TARGET_SUBDIR="$withval",
@@ -43,6 +46,100 @@ AC_MSG_ERROR(Unable to determine version)
 fi
 AC_MSG_RESULT($RTEMS_VERSION)
 ])dnl
+
+# Do all the work for Automake.  This macro actually does too much --
+# some checks are only needed if your package does certain things.
+# But this isn't really a big deal.
+
+# serial 1
+
+dnl Usage:
+dnl AM_INIT_AUTOMAKE(package,version, [no-define])
+
+AC_DEFUN(AM_INIT_AUTOMAKE,
+[AC_REQUIRE([AC_PROG_INSTALL])
+dnl We require 2.13 because we rely on SHELL being computed by configure.
+AC_PREREQ([2.13])
+PACKAGE=[$1]
+AC_SUBST(PACKAGE)
+VERSION=[$2]
+AC_SUBST(VERSION)
+dnl test to see if srcdir already configured
+if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
+  AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+fi
+ifelse([$3],,
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package]))
+AC_REQUIRE([AM_SANITY_CHECK])
+AC_REQUIRE([AC_ARG_PROGRAM])
+dnl FIXME This is truly gross.
+missing_dir=`cd $ac_aux_dir && pwd`
+AM_MISSING_PROG(ACLOCAL, aclocal, $missing_dir)
+AM_MISSING_PROG(AUTOCONF, autoconf, $missing_dir)
+AM_MISSING_PROG(AUTOMAKE, automake, $missing_dir)
+AM_MISSING_PROG(AUTOHEADER, autoheader, $missing_dir)
+AM_MISSING_PROG(MAKEINFO, makeinfo, $missing_dir)
+AC_REQUIRE([AC_PROG_MAKE_SET])])
+
+#
+# Check to make sure that the build environment is sane.
+#
+
+AC_DEFUN(AM_SANITY_CHECK,
+[AC_MSG_CHECKING([whether build environment is sane])
+# Just in case
+sleep 1
+echo timestamp > conftestfile
+# Do `set' in a subshell so we don't clobber the current shell's
+# arguments.  Must try -L first in case configure is actually a
+# symlink; some systems play weird games with the mod time of symlinks
+# (eg FreeBSD returns the mod time of the symlink's containing
+# directory).
+if (
+   set X `ls -Lt $srcdir/configure conftestfile 2> /dev/null`
+   if test "[$]*" = "X"; then
+      # -L didn't work.
+      set X `ls -t $srcdir/configure conftestfile`
+   fi
+   if test "[$]*" != "X $srcdir/configure conftestfile" \
+      && test "[$]*" != "X conftestfile $srcdir/configure"; then
+
+      # If neither matched, then we have a broken ls.  This can happen
+      # if, for instance, CONFIG_SHELL is bash and it inherits a
+      # broken ls alias from the environment.  This has actually
+      # happened.  Such a system could not be considered "sane".
+      AC_MSG_ERROR([ls -t appears to fail.  Make sure there is not a broken
+alias in your environment])
+   fi
+
+   test "[$]2" = conftestfile
+   )
+then
+   # Ok.
+   :
+else
+   AC_MSG_ERROR([newly created file is older than distributed files!
+Check your system clock])
+fi
+rm -f conftest*
+AC_MSG_RESULT(yes)])
+
+dnl AM_MISSING_PROG(NAME, PROGRAM, DIRECTORY)
+dnl The program must properly implement --version.
+AC_DEFUN(AM_MISSING_PROG,
+[AC_MSG_CHECKING(for working $2)
+# Run test in a subshell; some versions of sh will print an error if
+# an executable is not found, even if stderr is redirected.
+# Redirect stdin to placate older versions of autoconf.  Sigh.
+if ($2 --version) < /dev/null > /dev/null 2>&1; then
+   $1=$2
+   AC_MSG_RESULT(found)
+else
+   $1="$3/missing $2"
+   AC_MSG_RESULT(missing)
+fi
+AC_SUBST($1)])
 
 dnl
 dnl $Id$
@@ -136,6 +233,8 @@ dnl $Id$
 
 AC_DEFUN(RTEMS_ENABLE_POSIX,
 [
+AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
+
 AC_ARG_ENABLE(posix,
 [  --enable-posix                       enable posix interface],
 [case "${enableval}" in 
@@ -171,6 +270,55 @@ AC_SUBST(RTEMS_HAS_POSIX_API)
 ])
 
 dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_POSIX_API,
+[dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_ENABLE_POSIX])dnl
+
+AC_CACHE_CHECK([whether BSP supports libposix],
+  rtems_cv_HAS_POSIX_API,
+  [dnl
+    case "$RTEMS_CPU" in
+    unix*)
+      rtems_cv_HAS_POSIX_API="no"
+      ;;
+    *)
+      if test "${RTEMS_HAS_POSIX_API}" = "yes"; then
+        rtems_cv_HAS_POSIX_API="yes";
+      else
+        rtems_cv_HAS_POSIX_API="disabled";
+      fi
+      ;;
+    esac])
+if test "$rtems_cv_HAS_POSIX_API" = "yes"; then
+  HAS_POSIX_API="yes";
+else
+  HAS_POSIX_API="no";
+fi
+AC_SUBST(HAS_POSIX_API)dnl
+])
+
+dnl $Id$
+
+dnl check if RTEMS support a cpu
+AC_DEFUN(RTEMS_CHECK_CPU,
+[dnl
+AC_REQUIRE([RTEMS_TOP])
+AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])
+AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
+
+# Is this a supported CPU?
+AC_MSG_CHECKING([if cpu $RTEMS_CPU is supported])
+if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_ERROR(no)
+fi
+])dnl
+
+
+dnl $Id$
 
 AC_DEFUN(RTEMS_ENABLE_INLINES,
 [AC_ARG_ENABLE(rtems-inlines,
@@ -202,6 +350,7 @@ dnl used by the toplevel configure script
 dnl RTEMS_ENABLE_RTEMSBSP(rtems_bsp_list)
 AC_DEFUN(RTEMS_ENABLE_RTEMSBSP,
 [
+AC_BEFORE([$0], [RTEMS_ENV_RTEMSBSP])dnl
 AC_ARG_ENABLE(rtemsbsp,
 [  --enable-rtemsbsp=bsp1 bsp2 ..      BSPs to include in build],
 [case "${enableval}" in
@@ -214,6 +363,12 @@ dnl Pass a single BSP via an environment variable
 dnl used by per BSP configure scripts
 AC_DEFUN(RTEMS_ENV_RTEMSBSP,
 [dnl
+AC_BEFORE([$0], [RTEMS_ENABLE_RTEMSBSP])dnl
+AC_BEFORE([$0], [RTEMS_PROJECT_ROOT])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_CUSTOM_BSP])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_MULTIPROCESSING])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
+
 AC_MSG_CHECKING([for RTEMS_BSP])
 AC_CACHE_VAL(rtems_cv_RTEMS_BSP,
 [dnl
@@ -227,22 +382,111 @@ AC_MSG_RESULT(${RTEMS_BSP})
 AC_SUBST(RTEMS_BSP)
 ])
 
+dnl
 dnl $Id$
+dnl 
 
-dnl check if RTEMS support a cpu
-AC_DEFUN(RTEMS_CHECK_CPU,
+AC_DEFUN(RTEMS_PROJECT_ROOT,
 [dnl
 AC_REQUIRE([RTEMS_TOP])
-AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])
-# Is this a supported CPU?
-AC_MSG_CHECKING([if cpu $RTEMS_CPU is supported])
-if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
-  AC_MSG_RESULT(yes)
+if test "$TARGET_SUBDIR" = "." ; then
+PROJECT_ROOT=$RTEMS_TOPdir/'$(top_builddir)';
 else
-  AC_MSG_ERROR(no)
+PROJECT_ROOT=../$RTEMS_TOPdir/'$(top_builddir)'
+fi
+AC_SUBST(PROJECT_ROOT)
+
+RTEMS_ROOT=$RTEMS_TOPdir/'$(top_builddir)'/c/$RTEMS_BSP
+AC_SUBST(RTEMS_ROOT)
+
+INSTALL_CHANGE="\$(KSH) \$(PROJECT_ROOT)/tools/build/install-if-change"
+AC_SUBST(INSTALL_CHANGE)
+
+PACKHEX="\$(PROJECT_ROOT)/tools/build/packhex"
+AC_SUBST(PACKHEX)
+])
+
+
+dnl $Id$
+
+dnl Report all available bsps for a target,
+dnl check if a bsp-subdirectory is present for all bsps found
+dnl
+dnl RTEMS_CHECK_BSPS(bsp_list)
+AC_DEFUN(RTEMS_CHECK_BSPS,
+[
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl sets RTEMS_CPU, target
+AC_REQUIRE([RTEMS_TOP])dnl sets RTEMS_TOPdir
+AC_MSG_CHECKING([for bsps])
+case "${target}" in
+changequote(,)dnl
+  i[3456]86-go32-rtems*)
+changequote([,])dnl
+    $1="go32 go32_p5"
+    ;;
+  *)
+    files=`ls $srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU`
+    for file in $files; do
+      case $file in
+        shared*);;
+        Makefile*);;
+        READ*);;
+        CVS*);;
+        pxfl*);;
+        go32*);;       # so the i386 port can pick up the other Makefiles
+        # Now account for BSPs with build variants
+        gen68360)      rtems_bsp="$rtems_bsp gen68360 gen68360_040";;
+        p4000)         rtems_bsp="$rtems_bsp p4600 p4650";;
+        mvme162)       rtems_bsp="$rtems_bsp mvme162 mvme162lx";;
+        *) $1="[$]$1 $file";;
+      esac;
+    done
+    ;;
+esac
+AC_MSG_RESULT([[$]$1 .. done])
+])dnl
+
+AC_DEFUN(RTEMS_CHECK_CUSTOM_BSP,
+[dnl
+AC_REQUIRE([RTEMS_TOP])
+
+AC_MSG_CHECKING([for make/custom/[$]$1.cfg])
+if test -r "$srcdir/$RTEMS_TOPdir/make/custom/[$]$1.cfg"; then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_ERROR([no])
 fi
 ])dnl
 
+dnl
+dnl $Id$
+dnl
+
+AC_DEFUN(RTEMS_CHECK_MULTIPROCESSING,
+[dnl
+AC_REQUIRE([RTEMS_TOP])dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_ENABLE_MULTIPROCESSING])dnl
+
+AC_CACHE_CHECK([whether BSP supports multiprocessing],
+  rtems_cv_HAS_MP,
+  [dnl
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${$1}/shmsupp"; then
+      if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
+        rtems_cv_HAS_MP="yes" ;
+      else
+        rtems_cv_HAS_MP="disabled";
+      fi
+    else
+      rtems_cv_HAS_MP="no";
+    fi])
+if test "$rtems_cv_HAS_MP" = "yes"; then
+HAS_MP="yes"
+else
+HAS_MP="no"
+fi
+AC_SUBST(HAS_MP)
+])
 
 dnl $Id$
 
@@ -272,31 +516,6 @@ AC_SUBST(RTEMS_HOST)
 dnl
 dnl $Id$
 dnl 
-
-AC_DEFUN(RTEMS_PROJECT_ROOT,
-[dnl
-AC_REQUIRE([RTEMS_TOP])
-if test "$TARGET_SUBDIR" = "." ; then
-PROJECT_ROOT=$RTEMS_TOPdir/'$(top_builddir)';
-else
-PROJECT_ROOT=../$RTEMS_TOPdir/'$(top_builddir)'
-fi
-AC_SUBST(PROJECT_ROOT)
-
-RTEMS_ROOT=$RTEMS_TOPdir/'$(top_builddir)'/c/$RTEMS_BSP
-AC_SUBST(RTEMS_ROOT)
-
-INSTALL_CHANGE="\$(KSH) \$(PROJECT_ROOT)/tools/build/install-if-change"
-AC_SUBST(INSTALL_CHANGE)
-
-PACKHEX="\$(PROJECT_ROOT)/tools/build/packhex"
-AC_SUBST(PACKHEX)
-])
-
-
-dnl
-dnl $Id$
-dnl 
 dnl Check for target gcc
 dnl
 dnl 98/05/20 Ralf Corsepius 	(corsepiu@faw.uni-ulm.de)
@@ -306,6 +525,7 @@ AC_DEFUN(RTEMS_PROG_CC,
 [
 AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_BEFORE([$0], [AC_PROG_CC])dnl
+AC_BEFORE([$0], [RTEMS_CANONICALIZE_TOOLS])dnl
 AC_REQUIRE([RTEMS_TOOL_PREFIX])dnl
 
 dnl Only accept gcc and cc
@@ -383,82 +603,6 @@ case $host_os in
 *) ;;
 esac
 AC_SUBST(GCCSED)
-])
-
-dnl
-dnl  $Id$
-dnl 
-dnl Set program_prefix
-dnl
-dnl 98/05/20 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
-dnl				Extracted from configure
-
-AC_DEFUN(RTEMS_TOOL_PREFIX,
-[AC_REQUIRE([AC_CANONICAL_TARGET])dnl
-AC_REQUIRE([AC_CANONICAL_BUILD])dnl
-
-changequote(,)dnl
-if [ "${program_prefix}" = "NONE" ] ; then
-  if [ "${target}" = "${host}" ] ; then
-    program_prefix=
-  else
-    program_prefix=${target}-
-  fi
-fi
-changequote([,])dnl
-])
-
-dnl
-dnl $Id$
-dnl
-dnl Check whether the target compiler accepts -specs
-dnl
-dnl 98/02/11 Ralf Corsepius 	corsepiu@faw.uni-ulm.de
-dnl
-
-AC_DEFUN(RTEMS_GCC_SPECS,
-[AC_REQUIRE([RTEMS_PROG_CC])
-AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts -specs,rtems_cv_gcc_specs,
-[
-rtems_cv_gcc_specs=no
-if test "$rtems_cv_prog_gcc" = "yes"; then
-  touch confspec
-  echo 'void f(){}' >conftest.c
-  if test -z "`${CC_FOR_TARGET} -specs confspec -c conftest.c 2>&1`";then
-    rtems_cv_gcc_specs=yes
-  fi
-fi
-rm -f confspec conftest*
-])])
-
-dnl
-dnl $Id$
-dnl
-dnl Check whether the target compiler accepts -pipe
-dnl
-dnl 98/02/11 Ralf Corsepius     corsepiu@faw.uni-ulm.de
-dnl
-
-AC_DEFUN(RTEMS_GCC_PIPE,
-[AC_REQUIRE([RTEMS_PROG_CC]) 
-AC_REQUIRE([AC_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts --pipe,rtems_cv_gcc_pipe,
-[
-rtems_cv_gcc_pipe=no
-if test "$rtems_cv_prog_gcc" = "yes"; then
-case "$host_os" in
-  cygwin*)
-    ;;
-  *)
-    echo 'void f(){}' >conftest.c
-    if test -z "`${CC_FOR_TARGET} --pipe -c conftest.c 2>&1`";then
-      rtems_cv_gcc_pipe=yes
-    fi
-    rm -f conftest*
-    ;;
-esac
-fi
-])
 ])
 
 dnl
@@ -585,6 +729,80 @@ fi
 ])
 
 
+dnl
+dnl  $Id$
+dnl 
+dnl Set program_prefix
+dnl
+dnl 98/05/20 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
+dnl				Extracted from configure
+
+AC_DEFUN(RTEMS_TOOL_PREFIX,
+[AC_REQUIRE([AC_CANONICAL_TARGET])dnl
+AC_REQUIRE([AC_CANONICAL_BUILD])dnl
+
+changequote(,)dnl
+if [ "${program_prefix}" = "NONE" ] ; then
+  if [ "${target}" = "${host}" ] ; then
+    program_prefix=
+  else
+    program_prefix=${target}-
+  fi
+fi
+changequote([,])dnl
+])
+
+dnl
+dnl $Id$
+dnl
+dnl Check whether the target compiler accepts -specs
+dnl
+
+AC_DEFUN(RTEMS_GCC_SPECS,
+[AC_REQUIRE([RTEMS_PROG_CC])
+AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts -specs,rtems_cv_gcc_specs,
+[
+rtems_cv_gcc_specs=no
+if test "$rtems_cv_prog_gcc" = "yes"; then
+  touch confspec
+  echo 'void f(){}' >conftest.c
+  if test -z "`${CC_FOR_TARGET} -specs confspec -c conftest.c 2>&1`";then
+    rtems_cv_gcc_specs=yes
+  fi
+fi
+rm -f confspec conftest*
+])])
+
+dnl
+dnl $Id$
+dnl
+dnl Check whether the target compiler accepts -pipe
+dnl
+dnl 98/02/11 Ralf Corsepius     corsepiu@faw.uni-ulm.de
+dnl
+
+AC_DEFUN(RTEMS_GCC_PIPE,
+[AC_REQUIRE([RTEMS_PROG_CC]) 
+AC_REQUIRE([AC_CANONICAL_HOST])
+AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts --pipe,rtems_cv_gcc_pipe,
+[
+rtems_cv_gcc_pipe=no
+if test "$rtems_cv_prog_gcc" = "yes"; then
+case "$host_os" in
+  cygwin*)
+    ;;
+  *)
+    echo 'void f(){}' >conftest.c
+    if test -z "`${CC_FOR_TARGET} --pipe -c conftest.c 2>&1`";then
+      rtems_cv_gcc_pipe=yes
+    fi
+    rm -f conftest*
+    ;;
+esac
+fi
+])
+])
+
 dnl $Id$
 
 AC_DEFUN(RTEMS_CHECK_NEWLIB,
@@ -616,111 +834,6 @@ RTEMS_USE_NEWLIB="$rtems_cv_use_newlib"
 AC_SUBST(RTEMS_USE_NEWLIB)
 ])
 
-
-dnl $Id$
-
-dnl Report all available bsps for a target,
-dnl check if a bsp-subdirectory is present for all bsps found
-dnl
-dnl RTEMS_CHECK_BSPS(bsp_list)
-AC_DEFUN(RTEMS_CHECK_BSPS,
-[
-AC_REQUIRE([RTEMS_CHECK_CPU])dnl sets RTEMS_CPU, target
-AC_REQUIRE([RTEMS_TOP])dnl sets RTEMS_TOPdir
-AC_MSG_CHECKING([for bsps])
-case "${target}" in
-changequote(,)dnl
-  i[3456]86-go32-rtems*)
-changequote([,])dnl
-    $1="go32 go32_p5"
-    ;;
-  *)
-    files=`ls $srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU`
-    for file in $files; do
-      case $file in
-        shared*);;
-        Makefile*);;
-        READ*);;
-        CVS*);;
-        pxfl*);;
-        go32*);;       # so the i386 port can pick up the other Makefiles
-        # Now account for BSPs with build variants
-        gen68360)      rtems_bsp="$rtems_bsp gen68360 gen68360_040";;
-        p4000)         rtems_bsp="$rtems_bsp p4600 p4650";;
-        mvme162)       rtems_bsp="$rtems_bsp mvme162 mvme162lx";;
-        *) $1="[$]$1 $file";;
-      esac;
-    done
-    ;;
-esac
-AC_MSG_RESULT([[$]$1 .. done])
-])dnl
-
-AC_DEFUN(RTEMS_CHECK_CUSTOM_BSP,
-[dnl
-AC_MSG_CHECKING([for make/custom/[$]$1.cfg])
-if test -r "$srcdir/$RTEMS_TOPdir/make/custom/[$]$1.cfg"; then
-  AC_MSG_RESULT([yes])
-else
-  AC_MSG_ERROR([no])
-fi
-])dnl
-
-dnl
-dnl $Id$
-dnl
-
-AC_DEFUN(RTEMS_CHECK_MULTIPROCESSING,
-[dnl
-AC_REQUIRE([RTEMS_TOP])dnl
-AC_REQUIRE([RTEMS_CHECK_CPU])dnl
-AC_CACHE_CHECK([whether BSP supports multiprocessing],
-  rtems_cv_HAS_MP,
-  [dnl
-    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${$1}/shmsupp"; then
-      if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
-        rtems_cv_HAS_MP="yes" ;
-      else
-        rtems_cv_HAS_MP="disabled";
-      fi
-    else
-      rtems_cv_HAS_MP="no";
-    fi])
-if test "$rtems_cv_HAS_MP" = "yes"; then
-HAS_MP="yes"
-else
-HAS_MP="no"
-fi
-AC_SUBST(HAS_MP)
-])
-
-dnl $Id$
-dnl
-AC_DEFUN(RTEMS_CHECK_POSIX_API,
-[dnl
-AC_REQUIRE([RTEMS_CHECK_CPU])dnl
-AC_CACHE_CHECK([whether BSP supports libposix],
-  rtems_cv_HAS_POSIX_API,
-  [dnl
-    case "$RTEMS_CPU" in
-    unix*)
-      rtems_cv_HAS_POSIX_API="no"
-      ;;
-    *)
-      if test "${RTEMS_HAS_POSIX_API}" = "yes"; then
-        rtems_cv_HAS_POSIX_API="yes";
-      else
-        rtems_cv_HAS_POSIX_API="disabled";
-      fi
-      ;;
-    esac])
-if test "$rtems_cv_HAS_POSIX_API" = "yes"; then
-  HAS_POSIX_API="yes";
-else
-  HAS_POSIX_API="no";
-fi
-AC_SUBST(HAS_POSIX_API)dnl
-])
 
 dnl
 dnl $Id$

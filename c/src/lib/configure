@@ -546,6 +546,7 @@ else
 fi
 
 
+
 # Check whether --with-target-subdir or --without-target-subdir was given.
 if test "${with_target_subdir+set}" = set; then
   withval="$with_target_subdir"
@@ -559,7 +560,7 @@ RTEMS_TOPdir="../../..";
 
 
 echo $ac_n "checking for RTEMS Version""... $ac_c" 1>&6
-echo "configure:563: checking for RTEMS Version" >&5
+echo "configure:564: checking for RTEMS Version" >&5
 if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
 RTEMS_VERSION=`grep Version ${srcdir}/${RTEMS_TOPdir}/VERSION | \
 sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
@@ -620,7 +621,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:624: checking host system type" >&5
+echo "configure:625: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -641,7 +642,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:645: checking target system type" >&5
+echo "configure:646: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -659,7 +660,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:663: checking build system type" >&5
+echo "configure:664: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -682,7 +683,7 @@ test "$host_alias" != "$target_alias" &&
   program_prefix=${target_alias}-
 
 echo $ac_n "checking rtems target cpu""... $ac_c" 1>&6
-echo "configure:686: checking rtems target cpu" >&5
+echo "configure:687: checking rtems target cpu" >&5
 case "${target}" in
   # hpux unix port should go here
   i[3456]86-go32-rtems*)
@@ -707,9 +708,235 @@ esac
 
 echo "$ac_t""$RTEMS_CPU" 1>&6
 
-AM_INIT_AUTOMAKE(rtems-c-src-lib,RTEMS_VERSION,no)
+# Find a good install program.  We prefer a C program (faster),
+# so one script is as good as another.  But avoid the broken or
+# incompatible versions:
+# SysV /etc/install, /usr/sbin/install
+# SunOS /usr/etc/install
+# IRIX /sbin/install
+# AIX /bin/install
+# AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
+# AFS /usr/afsws/bin/install, which mishandles nonexistent args
+# SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+# ./install, which can be erroneously created by make from ./install.sh.
+echo $ac_n "checking for a BSD compatible install""... $ac_c" 1>&6
+echo "configure:724: checking for a BSD compatible install" >&5
+if test -z "$INSTALL"; then
+if eval "test \"`echo '$''{'ac_cv_path_install'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+    IFS="${IFS= 	}"; ac_save_IFS="$IFS"; IFS=":"
+  for ac_dir in $PATH; do
+    # Account for people who put trailing slashes in PATH elements.
+    case "$ac_dir/" in
+    /|./|.//|/etc/*|/usr/sbin/*|/usr/etc/*|/sbin/*|/usr/afsws/bin/*|/usr/ucb/*) ;;
+    *)
+      # OSF1 and SCO ODT 3.0 have their own names for install.
+      # Don't use installbsd from OSF since it installs stuff as root
+      # by default.
+      for ac_prog in ginstall scoinst install; do
+        if test -f $ac_dir/$ac_prog; then
+	  if test $ac_prog = install &&
+            grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
+	    # AIX install.  It has an incompatible calling convention.
+	    :
+	  else
+	    ac_cv_path_install="$ac_dir/$ac_prog -c"
+	    break 2
+	  fi
+	fi
+      done
+      ;;
+    esac
+  done
+  IFS="$ac_save_IFS"
+
+fi
+  if test "${ac_cv_path_install+set}" = set; then
+    INSTALL="$ac_cv_path_install"
+  else
+    # As a last resort, use the slow shell script.  We don't cache a
+    # path for INSTALL within a source directory, because that will
+    # break other packages using the cache if that directory is
+    # removed, or if the path is relative.
+    INSTALL="$ac_install_sh"
+  fi
+fi
+echo "$ac_t""$INSTALL" 1>&6
+
+# Use test -z because SunOS4 sh mishandles braces in ${var-val}.
+# It thinks the first close brace ends the variable substitution.
+test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
+
+test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
+
+test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
+
+echo $ac_n "checking whether build environment is sane""... $ac_c" 1>&6
+echo "configure:777: checking whether build environment is sane" >&5
+# Just in case
+sleep 1
+echo timestamp > conftestfile
+# Do `set' in a subshell so we don't clobber the current shell's
+# arguments.  Must try -L first in case configure is actually a
+# symlink; some systems play weird games with the mod time of symlinks
+# (eg FreeBSD returns the mod time of the symlink's containing
+# directory).
+if (
+   set X `ls -Lt $srcdir/configure conftestfile 2> /dev/null`
+   if test "$*" = "X"; then
+      # -L didn't work.
+      set X `ls -t $srcdir/configure conftestfile`
+   fi
+   if test "$*" != "X $srcdir/configure conftestfile" \
+      && test "$*" != "X conftestfile $srcdir/configure"; then
+
+      # If neither matched, then we have a broken ls.  This can happen
+      # if, for instance, CONFIG_SHELL is bash and it inherits a
+      # broken ls alias from the environment.  This has actually
+      # happened.  Such a system could not be considered "sane".
+      { echo "configure: error: ls -t appears to fail.  Make sure there is not a broken
+alias in your environment" 1>&2; exit 1; }
+   fi
+
+   test "$2" = conftestfile
+   )
+then
+   # Ok.
+   :
+else
+   { echo "configure: error: newly created file is older than distributed files!
+Check your system clock" 1>&2; exit 1; }
+fi
+rm -f conftest*
+echo "$ac_t""yes" 1>&6
+if test "$program_transform_name" = s,x,x,; then
+  program_transform_name=
+else
+  # Double any \ or $.  echo might interpret backslashes.
+  cat <<\EOF_SED > conftestsed
+s,\\,\\\\,g; s,\$,$$,g
+EOF_SED
+  program_transform_name="`echo $program_transform_name|sed -f conftestsed`"
+  rm -f conftestsed
+fi
+test "$program_prefix" != NONE &&
+  program_transform_name="s,^,${program_prefix},; $program_transform_name"
+# Use a double $ so make ignores it.
+test "$program_suffix" != NONE &&
+  program_transform_name="s,\$\$,${program_suffix},; $program_transform_name"
+
+# sed with no file args requires a program.
+test "$program_transform_name" = "" && program_transform_name="s,x,x,"
+
+echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
+echo "configure:834: checking whether ${MAKE-make} sets \${MAKE}" >&5
+set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftestmake <<\EOF
+all:
+	@echo 'ac_maketemp="${MAKE}"'
+EOF
+# GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
+if test -n "$ac_maketemp"; then
+  eval ac_cv_prog_make_${ac_make}_set=yes
+else
+  eval ac_cv_prog_make_${ac_make}_set=no
+fi
+rm -f conftestmake
+fi
+if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  SET_MAKE=
+else
+  echo "$ac_t""no" 1>&6
+  SET_MAKE="MAKE=${MAKE-make}"
+fi
+
+
+
+PACKAGE=rtems-c-src-lib
+
+VERSION=RTEMS_VERSION
+
+if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
+  { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
+fi
+
+
+
+missing_dir=`cd $ac_aux_dir && pwd`
+echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
+echo "configure:874: checking for working aclocal" >&5
+# Run test in a subshell; some versions of sh will print an error if
+# an executable is not found, even if stderr is redirected.
+# Redirect stdin to placate older versions of autoconf.  Sigh.
+if (aclocal --version) < /dev/null > /dev/null 2>&1; then
+   ACLOCAL=aclocal
+   echo "$ac_t""found" 1>&6
+else
+   ACLOCAL="$missing_dir/missing aclocal"
+   echo "$ac_t""missing" 1>&6
+fi
+
+echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
+echo "configure:887: checking for working autoconf" >&5
+# Run test in a subshell; some versions of sh will print an error if
+# an executable is not found, even if stderr is redirected.
+# Redirect stdin to placate older versions of autoconf.  Sigh.
+if (autoconf --version) < /dev/null > /dev/null 2>&1; then
+   AUTOCONF=autoconf
+   echo "$ac_t""found" 1>&6
+else
+   AUTOCONF="$missing_dir/missing autoconf"
+   echo "$ac_t""missing" 1>&6
+fi
+
+echo $ac_n "checking for working automake""... $ac_c" 1>&6
+echo "configure:900: checking for working automake" >&5
+# Run test in a subshell; some versions of sh will print an error if
+# an executable is not found, even if stderr is redirected.
+# Redirect stdin to placate older versions of autoconf.  Sigh.
+if (automake --version) < /dev/null > /dev/null 2>&1; then
+   AUTOMAKE=automake
+   echo "$ac_t""found" 1>&6
+else
+   AUTOMAKE="$missing_dir/missing automake"
+   echo "$ac_t""missing" 1>&6
+fi
+
+echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
+echo "configure:913: checking for working autoheader" >&5
+# Run test in a subshell; some versions of sh will print an error if
+# an executable is not found, even if stderr is redirected.
+# Redirect stdin to placate older versions of autoconf.  Sigh.
+if (autoheader --version) < /dev/null > /dev/null 2>&1; then
+   AUTOHEADER=autoheader
+   echo "$ac_t""found" 1>&6
+else
+   AUTOHEADER="$missing_dir/missing autoheader"
+   echo "$ac_t""missing" 1>&6
+fi
+
+echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
+echo "configure:926: checking for working makeinfo" >&5
+# Run test in a subshell; some versions of sh will print an error if
+# an executable is not found, even if stderr is redirected.
+# Redirect stdin to placate older versions of autoconf.  Sigh.
+if (makeinfo --version) < /dev/null > /dev/null 2>&1; then
+   MAKEINFO=makeinfo
+   echo "$ac_t""found" 1>&6
+else
+   MAKEINFO="$missing_dir/missing makeinfo"
+   echo "$ac_t""missing" 1>&6
+fi
+
+
 echo $ac_n "checking whether to enable maintainer-specific portions of Makefiles""... $ac_c" 1>&6
-echo "configure:713: checking whether to enable maintainer-specific portions of Makefiles" >&5
+echo "configure:940: checking whether to enable maintainer-specific portions of Makefiles" >&5
     # Check whether --enable-maintainer-mode or --disable-maintainer-mode was given.
 if test "${enable_maintainer_mode+set}" = set; then
   enableval="$enable_maintainer_mode"
@@ -747,6 +974,7 @@ fi
 
 
 
+
 # Check whether --enable-networking or --disable-networking was given.
 if test "${enable_networking+set}" = set; then
   enableval="$enable_networking"
@@ -758,6 +986,7 @@ esac
 else
   RTEMS_HAS_NETWORKING=yes
 fi
+
 
 
 
@@ -822,8 +1051,9 @@ fi
 
 
 
+
 echo $ac_n "checking for RTEMS_BSP""... $ac_c" 1>&6
-echo "configure:827: checking for RTEMS_BSP" >&5
+echo "configure:1057: checking for RTEMS_BSP" >&5
 if eval "test \"`echo '$''{'rtems_cv_RTEMS_BSP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -840,9 +1070,10 @@ echo "$ac_t""${RTEMS_BSP}" 1>&6
 
 
 
+
 # Is this a supported CPU?
 echo $ac_n "checking if cpu $RTEMS_CPU is supported""... $ac_c" 1>&6
-echo "configure:846: checking if cpu $RTEMS_CPU is supported" >&5
+echo "configure:1077: checking if cpu $RTEMS_CPU is supported" >&5
 if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
   echo "$ac_t""yes" 1>&6
 else
@@ -903,7 +1134,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:907: checking for $ac_word" >&5
+echo "configure:1138: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_CC_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -947,7 +1178,7 @@ rtems_save_CFLAGS=$CFLAGS
 CC=$CC_FOR_TARGET
 
 echo $ac_n "checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works""... $ac_c" 1>&6
-echo "configure:951: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works" >&5
+echo "configure:1182: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works" >&5
 
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -958,12 +1189,12 @@ cross_compiling=$ac_cv_prog_cc_cross
 
 cat > conftest.$ac_ext << EOF
 
-#line 962 "configure"
+#line 1193 "configure"
 #include "confdefs.h"
 
 main(){return(0);}
 EOF
-if { (eval echo configure:967: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:1198: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   ac_cv_prog_cc_works=yes
   # If we can't run a trivial program, we are probably using a cross compiler.
   if (./conftest; exit) 2>/dev/null; then
@@ -989,12 +1220,12 @@ if test $ac_cv_prog_cc_works = no; then
   { echo "configure: error: installation or configuration problem: C compiler cannot create executables." 1>&2; exit 1; }
 fi
 echo $ac_n "checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler""... $ac_c" 1>&6
-echo "configure:993: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler" >&5
+echo "configure:1224: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler" >&5
 echo "$ac_t""$ac_cv_prog_cc_cross" 1>&6
 cross_compiling=$ac_cv_prog_cc_cross
 
 echo $ac_n "checking whether we are using GNU C""... $ac_c" 1>&6
-echo "configure:998: checking whether we are using GNU C" >&5
+echo "configure:1229: checking whether we are using GNU C" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_gcc'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1003,7 +1234,7 @@ else
   yes;
 #endif
 EOF
-if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:1007: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
+if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:1238: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
@@ -1018,7 +1249,7 @@ if test $ac_cv_prog_gcc = yes; then
   ac_save_CFLAGS="$CFLAGS"
   CFLAGS=
   echo $ac_n "checking whether ${CC-cc} accepts -g""... $ac_c" 1>&6
-echo "configure:1022: checking whether ${CC-cc} accepts -g" >&5
+echo "configure:1253: checking whether ${CC-cc} accepts -g" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_cc_g'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1060,7 +1291,7 @@ unset ac_cv_prog_cc_cross
 
 
 echo $ac_n "checking whether $CC_FOR_TARGET accepts -specs""... $ac_c" 1>&6
-echo "configure:1064: checking whether $CC_FOR_TARGET accepts -specs" >&5
+echo "configure:1295: checking whether $CC_FOR_TARGET accepts -specs" >&5
 if eval "test \"`echo '$''{'rtems_cv_gcc_specs'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1081,7 +1312,7 @@ echo "$ac_t""$rtems_cv_gcc_specs" 1>&6
  
 
 echo $ac_n "checking whether $CC_FOR_TARGET accepts --pipe""... $ac_c" 1>&6
-echo "configure:1085: checking whether $CC_FOR_TARGET accepts --pipe" >&5
+echo "configure:1316: checking whether $CC_FOR_TARGET accepts --pipe" >&5
 if eval "test \"`echo '$''{'rtems_cv_gcc_pipe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1122,7 +1353,7 @@ esac
 
   
 echo $ac_n "checking target's ar""... $ac_c" 1>&6
-echo "configure:1126: checking target's ar" >&5
+echo "configure:1357: checking target's ar" >&5
 if eval "test \"`echo '$''{'ac_cv_path_AR_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1155,7 +1386,7 @@ else
     # will override the environment variable, which isn't what the user
     # intends
     echo $ac_n "checking whether environment variable AR_FOR_TARGET is an absolute path""... $ac_c" 1>&6
-echo "configure:1159: checking whether environment variable AR_FOR_TARGET is an absolute path" >&5
+echo "configure:1390: checking whether environment variable AR_FOR_TARGET is an absolute path" >&5
     case "$AR_FOR_TARGET" in
     /*) # valid
       echo "$ac_t"""yes"" 1>&6
@@ -1172,7 +1403,7 @@ echo "configure:1159: checking whether environment variable AR_FOR_TARGET is an 
   # Extract the first word of ""$program_prefix"ar", so it can be a program name with args.
 set dummy "$program_prefix"ar; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1176: checking for $ac_word" >&5
+echo "configure:1407: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_AR_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1209,7 +1440,7 @@ fi
 
   
 echo $ac_n "checking target's as""... $ac_c" 1>&6
-echo "configure:1213: checking target's as" >&5
+echo "configure:1444: checking target's as" >&5
 if eval "test \"`echo '$''{'ac_cv_path_AS_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1242,7 +1473,7 @@ else
     # will override the environment variable, which isn't what the user
     # intends
     echo $ac_n "checking whether environment variable AS_FOR_TARGET is an absolute path""... $ac_c" 1>&6
-echo "configure:1246: checking whether environment variable AS_FOR_TARGET is an absolute path" >&5
+echo "configure:1477: checking whether environment variable AS_FOR_TARGET is an absolute path" >&5
     case "$AS_FOR_TARGET" in
     /*) # valid
       echo "$ac_t"""yes"" 1>&6
@@ -1259,7 +1490,7 @@ echo "configure:1246: checking whether environment variable AS_FOR_TARGET is an 
   # Extract the first word of ""$program_prefix"as", so it can be a program name with args.
 set dummy "$program_prefix"as; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1263: checking for $ac_word" >&5
+echo "configure:1494: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_AS_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1296,7 +1527,7 @@ fi
 
   
 echo $ac_n "checking target's ld""... $ac_c" 1>&6
-echo "configure:1300: checking target's ld" >&5
+echo "configure:1531: checking target's ld" >&5
 if eval "test \"`echo '$''{'ac_cv_path_LD_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1329,7 +1560,7 @@ else
     # will override the environment variable, which isn't what the user
     # intends
     echo $ac_n "checking whether environment variable LD_FOR_TARGET is an absolute path""... $ac_c" 1>&6
-echo "configure:1333: checking whether environment variable LD_FOR_TARGET is an absolute path" >&5
+echo "configure:1564: checking whether environment variable LD_FOR_TARGET is an absolute path" >&5
     case "$LD_FOR_TARGET" in
     /*) # valid
       echo "$ac_t"""yes"" 1>&6
@@ -1346,7 +1577,7 @@ echo "configure:1333: checking whether environment variable LD_FOR_TARGET is an 
   # Extract the first word of ""$program_prefix"ld", so it can be a program name with args.
 set dummy "$program_prefix"ld; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1350: checking for $ac_word" >&5
+echo "configure:1581: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_LD_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1383,7 +1614,7 @@ fi
 
   
 echo $ac_n "checking target's nm""... $ac_c" 1>&6
-echo "configure:1387: checking target's nm" >&5
+echo "configure:1618: checking target's nm" >&5
 if eval "test \"`echo '$''{'ac_cv_path_NM_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1416,7 +1647,7 @@ else
     # will override the environment variable, which isn't what the user
     # intends
     echo $ac_n "checking whether environment variable NM_FOR_TARGET is an absolute path""... $ac_c" 1>&6
-echo "configure:1420: checking whether environment variable NM_FOR_TARGET is an absolute path" >&5
+echo "configure:1651: checking whether environment variable NM_FOR_TARGET is an absolute path" >&5
     case "$NM_FOR_TARGET" in
     /*) # valid
       echo "$ac_t"""yes"" 1>&6
@@ -1433,7 +1664,7 @@ echo "configure:1420: checking whether environment variable NM_FOR_TARGET is an 
   # Extract the first word of ""$program_prefix"nm", so it can be a program name with args.
 set dummy "$program_prefix"nm; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1437: checking for $ac_word" >&5
+echo "configure:1668: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_NM_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1471,7 +1702,7 @@ fi
 
   
 echo $ac_n "checking target's ranlib""... $ac_c" 1>&6
-echo "configure:1475: checking target's ranlib" >&5
+echo "configure:1706: checking target's ranlib" >&5
 if eval "test \"`echo '$''{'ac_cv_path_RANLIB_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1504,7 +1735,7 @@ else
     # will override the environment variable, which isn't what the user
     # intends
     echo $ac_n "checking whether environment variable RANLIB_FOR_TARGET is an absolute path""... $ac_c" 1>&6
-echo "configure:1508: checking whether environment variable RANLIB_FOR_TARGET is an absolute path" >&5
+echo "configure:1739: checking whether environment variable RANLIB_FOR_TARGET is an absolute path" >&5
     case "$RANLIB_FOR_TARGET" in
     /*) # valid
       echo "$ac_t"""yes"" 1>&6
@@ -1521,7 +1752,7 @@ echo "configure:1508: checking whether environment variable RANLIB_FOR_TARGET is
   # Extract the first word of ""$program_prefix"ranlib", so it can be a program name with args.
 set dummy "$program_prefix"ranlib; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1525: checking for $ac_word" >&5
+echo "configure:1756: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_RANLIB_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1560,7 +1791,7 @@ fi
     # ranlib wasn't found; check if ar -s is available
     
 echo $ac_n "checking whether $AR_FOR_TARGET -s works""... $ac_c" 1>&6
-echo "configure:1564: checking whether $AR_FOR_TARGET -s works" >&5
+echo "configure:1795: checking whether $AR_FOR_TARGET -s works" >&5
 if eval "test \"`echo '$''{'rtems_cv_AR_FOR_TARGET_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1569,8 +1800,8 @@ cat > conftest.$ac_ext <<EOF
 int foo( int b ) 
 { return b; }
 EOF
-if { ac_try='$CC_FOR_TARGET -o conftest.o -c conftest.$ac_ext'; { (eval echo configure:1573: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } \
-  && { ac_try='$AR_FOR_TARGET -sr conftest.a conftest.o'; { (eval echo configure:1574: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } \
+if { ac_try='$CC_FOR_TARGET -o conftest.o -c conftest.$ac_ext'; { (eval echo configure:1804: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } \
+  && { ac_try='$AR_FOR_TARGET -sr conftest.a conftest.o'; { (eval echo configure:1805: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } \
   && test -s conftest.a ; \
 then
   rtems_cv_AR_FOR_TARGET_S="yes"
@@ -1595,7 +1826,7 @@ echo "$ac_t""$rtems_cv_AR_FOR_TARGET_S" 1>&6
 
   
 echo $ac_n "checking target's objcopy""... $ac_c" 1>&6
-echo "configure:1599: checking target's objcopy" >&5
+echo "configure:1830: checking target's objcopy" >&5
 if eval "test \"`echo '$''{'ac_cv_path_OBJCOPY_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1628,7 +1859,7 @@ else
     # will override the environment variable, which isn't what the user
     # intends
     echo $ac_n "checking whether environment variable OBJCOPY_FOR_TARGET is an absolute path""... $ac_c" 1>&6
-echo "configure:1632: checking whether environment variable OBJCOPY_FOR_TARGET is an absolute path" >&5
+echo "configure:1863: checking whether environment variable OBJCOPY_FOR_TARGET is an absolute path" >&5
     case "$OBJCOPY_FOR_TARGET" in
     /*) # valid
       echo "$ac_t"""yes"" 1>&6
@@ -1645,7 +1876,7 @@ echo "configure:1632: checking whether environment variable OBJCOPY_FOR_TARGET i
   # Extract the first word of ""$program_prefix"objcopy", so it can be a program name with args.
 set dummy "$program_prefix"objcopy; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1649: checking for $ac_word" >&5
+echo "configure:1880: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_OBJCOPY_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1682,7 +1913,7 @@ fi
 
   
 echo $ac_n "checking target's size""... $ac_c" 1>&6
-echo "configure:1686: checking target's size" >&5
+echo "configure:1917: checking target's size" >&5
 if eval "test \"`echo '$''{'ac_cv_path_SIZE_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1715,7 +1946,7 @@ else
     # will override the environment variable, which isn't what the user
     # intends
     echo $ac_n "checking whether environment variable SIZE_FOR_TARGET is an absolute path""... $ac_c" 1>&6
-echo "configure:1719: checking whether environment variable SIZE_FOR_TARGET is an absolute path" >&5
+echo "configure:1950: checking whether environment variable SIZE_FOR_TARGET is an absolute path" >&5
     case "$SIZE_FOR_TARGET" in
     /*) # valid
       echo "$ac_t"""yes"" 1>&6
@@ -1732,7 +1963,7 @@ echo "configure:1719: checking whether environment variable SIZE_FOR_TARGET is a
   # Extract the first word of ""$program_prefix"size", so it can be a program name with args.
 set dummy "$program_prefix"size; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1736: checking for $ac_word" >&5
+echo "configure:1967: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_SIZE_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1769,7 +2000,7 @@ fi
 
   
 echo $ac_n "checking target's strip""... $ac_c" 1>&6
-echo "configure:1773: checking target's strip" >&5
+echo "configure:2004: checking target's strip" >&5
 if eval "test \"`echo '$''{'ac_cv_path_STRIP_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1802,7 +2033,7 @@ else
     # will override the environment variable, which isn't what the user
     # intends
     echo $ac_n "checking whether environment variable STRIP_FOR_TARGET is an absolute path""... $ac_c" 1>&6
-echo "configure:1806: checking whether environment variable STRIP_FOR_TARGET is an absolute path" >&5
+echo "configure:2037: checking whether environment variable STRIP_FOR_TARGET is an absolute path" >&5
     case "$STRIP_FOR_TARGET" in
     /*) # valid
       echo "$ac_t"""yes"" 1>&6
@@ -1819,7 +2050,7 @@ echo "configure:1806: checking whether environment variable STRIP_FOR_TARGET is 
   # Extract the first word of ""$program_prefix"strip", so it can be a program name with args.
 set dummy "$program_prefix"strip; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1823: checking for $ac_word" >&5
+echo "configure:2054: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_STRIP_FOR_TARGET'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1858,7 +2089,7 @@ fi
 
  if test "${target_cpu}" = "i386"; then
     echo $ac_n "checking for 16 bit mode assembler support""... $ac_c" 1>&6
-echo "configure:1862: checking for 16 bit mode assembler support" >&5
+echo "configure:2093: checking for 16 bit mode assembler support" >&5
 if eval "test \"`echo '$''{'rtems_cv_prog_gas_code16'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1868,7 +2099,7 @@ else
          addr32
          lgdt 0
 EOF
-      if { ac_try='$AS_FOR_TARGET -o conftest.o conftest.s'; { (eval echo configure:1872: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; }; then
+      if { ac_try='$AS_FOR_TARGET -o conftest.o conftest.s'; { (eval echo configure:2103: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; }; then
         rtems_cv_prog_gas_code16=yes
       else
         rtems_cv_prog_gas_code16=no
@@ -1890,16 +2121,19 @@ else
   RTEMS_GAS_CODE16_FALSE=
 fi;
 
+
+
 echo $ac_n "checking for make/custom/$RTEMS_BSP.cfg""... $ac_c" 1>&6
-echo "configure:1895: checking for make/custom/$RTEMS_BSP.cfg" >&5
+echo "configure:2128: checking for make/custom/$RTEMS_BSP.cfg" >&5
 if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$RTEMS_BSP.cfg"; then
   echo "$ac_t""yes" 1>&6
 else
   { echo "configure: error: no" 1>&2; exit 1; }
 fi
 
+
 echo $ac_n "checking whether BSP supports multiprocessing""... $ac_c" 1>&6
-echo "configure:1903: checking whether BSP supports multiprocessing" >&5
+echo "configure:2137: checking whether BSP supports multiprocessing" >&5
 if eval "test \"`echo '$''{'rtems_cv_HAS_MP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1922,8 +2156,9 @@ HAS_MP="no"
 fi
 
 
+
 echo $ac_n "checking whether BSP supports networking""... $ac_c" 1>&6
-echo "configure:1927: checking whether BSP supports networking" >&5
+echo "configure:2162: checking whether BSP supports networking" >&5
 if eval "test \"`echo '$''{'rtems_cv_HAS_NETWORKING'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1950,18 +2185,6 @@ fi
 
 
 
-    # account for "aliased" bsps which share source code
-    case ${RTEMS_BSP} in
-      mvme162lx)    bspdir=mvme162  ;;  # mvme162 board variant
-      gen68360_040) bspdir=gen68360 ;;  # 68360 in companion mode
-      go32_p5)      bspdir=go32     ;;  # go32 on Pentium class CPU
-      p4600)        bspdir=p4000    ;;  # p4000 board with IDT 4600
-      p4650)        bspdir=p4000    ;;  # p4000 board with IDT 4650
-      *)            bspdir=${RTEMS_BSP};;
-    esac
-
-
-
 
 if test "$RTEMS_CPU" = "unix"; then
   UNIX_TRUE=
@@ -1979,12 +2202,9 @@ subdirs="libcpu libbsp"
 
 # If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
 if test "$HAS_NETWORKING" = "yes"; then
-  cfg_subdirs="$cfg_subdirs libnetworking"
-  cfg_subdirs="$cfg_subdirs librpc"
-
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     echo $ac_n "checking whether BSP supports librdbg""... $ac_c" 1>&6
-echo "configure:1988: checking whether BSP supports librdbg" >&5
+echo "configure:2208: checking whether BSP supports librdbg" >&5
 if eval "test \"`echo '$''{'rtems_cv_HAS_RDBG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2003,7 +2223,6 @@ HAS_RDBG="$rtems_cv_HAS_RDBG"
 
   fi
 fi
-
 
 if test "$HAS_RDBG" = "yes"; then
   cfg_subdirs="$cfg_subdirs librdbg"
@@ -2191,19 +2410,18 @@ do
 done
 
 ac_given_srcdir=$srcdir
+ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile
 include/Makefile
 include/sys/Makefile
 include/motorola/Makefile
 include/zilog/Makefile
-include/rpc/Makefile
 include/rdbg/Makefile
 include/rdbg/i386/Makefile
 include/rdbg/powerpc/Makefile
 libc/Makefile
-start/Makefile
-wrapup/Makefile" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+start/Makefile" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -2252,6 +2470,17 @@ s%@build_cpu@%$build_cpu%g
 s%@build_vendor@%$build_vendor%g
 s%@build_os@%$build_os%g
 s%@RTEMS_CPU@%$RTEMS_CPU%g
+s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
+s%@INSTALL_SCRIPT@%$INSTALL_SCRIPT%g
+s%@INSTALL_DATA@%$INSTALL_DATA%g
+s%@PACKAGE@%$PACKAGE%g
+s%@VERSION@%$VERSION%g
+s%@ACLOCAL@%$ACLOCAL%g
+s%@AUTOCONF@%$AUTOCONF%g
+s%@AUTOMAKE@%$AUTOMAKE%g
+s%@AUTOHEADER@%$AUTOHEADER%g
+s%@MAKEINFO@%$MAKEINFO%g
+s%@SET_MAKE@%$SET_MAKE%g
 s%@MAINTAINER_MODE_TRUE@%$MAINTAINER_MODE_TRUE%g
 s%@MAINTAINER_MODE_FALSE@%$MAINTAINER_MODE_FALSE%g
 s%@MAINT@%$MAINT%g
@@ -2340,13 +2569,11 @@ include/Makefile
 include/sys/Makefile
 include/motorola/Makefile
 include/zilog/Makefile
-include/rpc/Makefile
 include/rdbg/Makefile
 include/rdbg/i386/Makefile
 include/rdbg/powerpc/Makefile
 libc/Makefile
-start/Makefile
-wrapup/Makefile"}
+start/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
@@ -2381,6 +2608,10 @@ for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
     top_srcdir="$ac_dots$ac_given_srcdir" ;;
   esac
 
+  case "$ac_given_INSTALL" in
+  [/$]*) INSTALL="$ac_given_INSTALL" ;;
+  *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
+  esac
 
   echo creating "$ac_file"
   rm -f "$ac_file"
@@ -2396,6 +2627,7 @@ for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
 s%@configure_input@%$configure_input%g
 s%@srcdir@%$srcdir%g
 s%@top_srcdir@%$top_srcdir%g
+s%@INSTALL@%$INSTALL%g
 " $ac_file_inputs | (eval "$ac_sed_cmds") > $ac_file
 fi; done
 rm -f conftest.s*
@@ -2491,6 +2723,10 @@ if test "$no_recursion" != yes; then
       *) # Relative path.
         ac_sub_cache_file="$ac_dots$cache_file" ;;
       esac
+  case "$ac_given_INSTALL" in
+        [/$]*) INSTALL="$ac_given_INSTALL" ;;
+        *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
+        esac
 
       echo "running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir"
       # The eval makes quoting arguments work.

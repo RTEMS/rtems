@@ -17,6 +17,8 @@ ac_help="$ac_help
   --enable-cxx                         enable C++ support,
                                        and build the rtems++ library"
 ac_help="$ac_help
+  --enable-networking                  enable TCP/IP stack"
+ac_help="$ac_help
   --enable-maintainer-mode enable make rules and dependencies not useful
                           (and sometimes confusing) to the casual installer"
 
@@ -529,6 +531,7 @@ else
 fi
 
 
+
 # Check whether --with-target-subdir or --without-target-subdir was given.
 if test "${with_target_subdir+set}" = set; then
   withval="$with_target_subdir"
@@ -542,7 +545,7 @@ RTEMS_TOPdir="../..";
 
 
 echo $ac_n "checking for RTEMS Version""... $ac_c" 1>&6
-echo "configure:546: checking for RTEMS Version" >&5
+echo "configure:549: checking for RTEMS Version" >&5
 if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
 RTEMS_VERSION=`grep Version ${srcdir}/${RTEMS_TOPdir}/VERSION | \
 sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
@@ -590,6 +593,21 @@ fi
 
 
 
+# Check whether --enable-networking or --disable-networking was given.
+if test "${enable_networking+set}" = set; then
+  enableval="$enable_networking"
+  case "${enableval}" in
+  yes) RTEMS_HAS_NETWORKING=yes ;;
+  no) RTEMS_HAS_NETWORKING=no ;;
+  *)  { echo "configure: error: bad value ${enableval} for enable-networking option" 1>&2; exit 1; } ;;
+esac
+else
+  RTEMS_HAS_NETWORKING=yes
+fi
+
+
+
+
 
 # Do some error checking and defaulting for the host and target type.
 # The inputs are:
@@ -618,7 +636,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:622: checking host system type" >&5
+echo "configure:640: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -639,7 +657,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:643: checking target system type" >&5
+echo "configure:661: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -657,7 +675,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:661: checking build system type" >&5
+echo "configure:679: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -680,7 +698,7 @@ test "$host_alias" != "$target_alias" &&
   program_prefix=${target_alias}-
 
 echo $ac_n "checking rtems target cpu""... $ac_c" 1>&6
-echo "configure:684: checking rtems target cpu" >&5
+echo "configure:702: checking rtems target cpu" >&5
 case "${target}" in
   # hpux unix port should go here
   i[3456]86-go32-rtems*)
@@ -706,6 +724,24 @@ esac
 echo "$ac_t""$RTEMS_CPU" 1>&6
 
 
+RTEMS_HOST=$host_os
+case "${target}" in
+  # hpux unix port should go here
+  i[3456]86-pc-linux*)         # unix "simulator" port
+        RTEMS_HOST=Linux
+	;;
+  i[3456]86-*freebsd2*) # unix "simulator" port
+        RTEMS_HOST=FreeBSD
+	;;
+  sparc-sun-solaris*)             # unix "simulator" port
+        RTEMS_HOST=Solaris
+	;;
+  *) 
+	;;
+esac
+
+
+
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -718,7 +754,7 @@ echo "$ac_t""$RTEMS_CPU" 1>&6
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install""... $ac_c" 1>&6
-echo "configure:722: checking for a BSD compatible install" >&5
+echo "configure:758: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if eval "test \"`echo '$''{'ac_cv_path_install'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -771,7 +807,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 echo $ac_n "checking whether build environment is sane""... $ac_c" 1>&6
-echo "configure:775: checking whether build environment is sane" >&5
+echo "configure:811: checking whether build environment is sane" >&5
 # Just in case
 sleep 1
 echo timestamp > conftestfile
@@ -828,7 +864,7 @@ test "$program_suffix" != NONE &&
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:832: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:868: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -868,7 +904,7 @@ fi
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
-echo "configure:872: checking for working aclocal" >&5
+echo "configure:908: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -881,7 +917,7 @@ else
 fi
 
 echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
-echo "configure:885: checking for working autoconf" >&5
+echo "configure:921: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -894,7 +930,7 @@ else
 fi
 
 echo $ac_n "checking for working automake""... $ac_c" 1>&6
-echo "configure:898: checking for working automake" >&5
+echo "configure:934: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -907,7 +943,7 @@ else
 fi
 
 echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
-echo "configure:911: checking for working autoheader" >&5
+echo "configure:947: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -920,7 +956,7 @@ else
 fi
 
 echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
-echo "configure:924: checking for working makeinfo" >&5
+echo "configure:960: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -934,7 +970,7 @@ fi
 
 
 echo $ac_n "checking whether to enable maintainer-specific portions of Makefiles""... $ac_c" 1>&6
-echo "configure:938: checking whether to enable maintainer-specific portions of Makefiles" >&5
+echo "configure:974: checking whether to enable maintainer-specific portions of Makefiles" >&5
     # Check whether --enable-maintainer-mode or --disable-maintainer-mode was given.
 if test "${enable_maintainer_mode+set}" = set; then
   enableval="$enable_maintainer_mode"
@@ -957,8 +993,9 @@ fi
   
 
 
+
 echo $ac_n "checking for RTEMS_BSP""... $ac_c" 1>&6
-echo "configure:962: checking for RTEMS_BSP" >&5
+echo "configure:999: checking for RTEMS_BSP" >&5
 if eval "test \"`echo '$''{'rtems_cv_RTEMS_BSP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -974,9 +1011,10 @@ echo "$ac_t""${RTEMS_BSP}" 1>&6
 
 
 
+
 # Is this a supported CPU?
 echo $ac_n "checking if cpu $RTEMS_CPU is supported""... $ac_c" 1>&6
-echo "configure:980: checking if cpu $RTEMS_CPU is supported" >&5
+echo "configure:1018: checking if cpu $RTEMS_CPU is supported" >&5
 if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
   echo "$ac_t""yes" 1>&6
 else
@@ -984,22 +1022,63 @@ else
 fi
 
 
-RTEMS_HOST=$host_os
-case "${target}" in
-  # hpux unix port should go here
-  i[3456]86-pc-linux*)         # unix "simulator" port
-        RTEMS_HOST=Linux
-	;;
-  i[3456]86-*freebsd2*) # unix "simulator" port
-        RTEMS_HOST=FreeBSD
-	;;
-  sparc-sun-solaris*)             # unix "simulator" port
-        RTEMS_HOST=Solaris
-	;;
-  *) 
-	;;
-esac
 
+echo $ac_n "checking for make/custom/$RTEMS_BSP.cfg""... $ac_c" 1>&6
+echo "configure:1028: checking for make/custom/$RTEMS_BSP.cfg" >&5
+if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$RTEMS_BSP.cfg"; then
+  echo "$ac_t""yes" 1>&6
+else
+  { echo "configure: error: no" 1>&2; exit 1; }
+fi
+
+
+
+echo $ac_n "checking whether BSP supports networking""... $ac_c" 1>&6
+echo "configure:1038: checking whether BSP supports networking" >&5
+if eval "test \"`echo '$''{'rtems_cv_HAS_NETWORKING'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+      case "$RTEMS_CPU" in
+    unix*)
+      rtems_cv_HAS_NETWORKING="no"
+      ;;
+    *)
+      if test "${RTEMS_HAS_NETWORKING}" = "yes"; then
+        rtems_cv_HAS_NETWORKING="yes";
+      else
+        rtems_cv_HAS_NETWORKING="disabled";
+      fi
+      ;;
+    esac
+fi
+
+echo "$ac_t""$rtems_cv_HAS_NETWORKING" 1>&6
+if test "$rtems_cv_HAS_NETWORKING" = "yes"; then
+  HAS_NETWORKING="yes";
+else
+  HAS_NETWORKING="no";
+fi
+
+
+## Note: the order of the directories below is essential
+subdirs="make"
+
+subdirs="make exec"
+
+subdirs="make exec lib"
+
+if test "$HAS_NETWORKING" = "yes"; then
+cfg_subdirs="libnetworking librpc"
+fi
+if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+cfg_subdirs="$cfg_subdirs librtems++";
+fi 
+subdirs="make exec lib $cfg_subdirs"
+
+subdirs="make exec lib $cfg_subdirs wrapup"
+
+
+subdirs="make exec lib $cfg_subdirs wrapup tests"
 
 
 
@@ -1018,30 +1097,6 @@ INSTALL_CHANGE="\$(KSH) \$(PROJECT_ROOT)/tools/build/install-if-change"
 
 PACKHEX="\$(PROJECT_ROOT)/tools/build/packhex"
 
-
-
-echo $ac_n "checking for make/custom/$RTEMS_BSP.cfg""... $ac_c" 1>&6
-echo "configure:1025: checking for make/custom/$RTEMS_BSP.cfg" >&5
-if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$RTEMS_BSP.cfg"; then
-  echo "$ac_t""yes" 1>&6
-else
-  { echo "configure: error: no" 1>&2; exit 1; }
-fi
-
-
-## Note: the order of the directories below is essential
-subdirs="make"
-
-subdirs="make exec"
-
-subdirs="make exec lib"
-
-if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-cfg_subdirs="librtems++";
-fi 
-subdirs="make exec lib $cfg_subdirs"
-
-subdirs="make exec lib $cfg_subdirs tests"
 
 
 trap '' 1 2 15
@@ -1158,6 +1213,7 @@ ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile
+wrapup/Makefile
 " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -1191,6 +1247,7 @@ s%@oldincludedir@%$oldincludedir%g
 s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
 s%@RTEMS_TOPdir@%$RTEMS_TOPdir%g
+s%@RTEMS_HAS_NETWORKING@%$RTEMS_HAS_NETWORKING%g
 s%@host@%$host%g
 s%@host_alias@%$host_alias%g
 s%@host_cpu@%$host_cpu%g
@@ -1207,6 +1264,7 @@ s%@build_cpu@%$build_cpu%g
 s%@build_vendor@%$build_vendor%g
 s%@build_os@%$build_os%g
 s%@RTEMS_CPU@%$RTEMS_CPU%g
+s%@RTEMS_HOST@%$RTEMS_HOST%g
 s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
 s%@INSTALL_SCRIPT@%$INSTALL_SCRIPT%g
 s%@INSTALL_DATA@%$INSTALL_DATA%g
@@ -1222,12 +1280,13 @@ s%@MAINTAINER_MODE_TRUE@%$MAINTAINER_MODE_TRUE%g
 s%@MAINTAINER_MODE_FALSE@%$MAINTAINER_MODE_FALSE%g
 s%@MAINT@%$MAINT%g
 s%@RTEMS_BSP@%$RTEMS_BSP%g
-s%@RTEMS_HOST@%$RTEMS_HOST%g
+s%@HAS_NETWORKING@%$HAS_NETWORKING%g
+s%@subdirs@%$subdirs%g
+s%@cfg_subdirs@%$cfg_subdirs%g
 s%@PROJECT_ROOT@%$PROJECT_ROOT%g
 s%@RTEMS_ROOT@%$RTEMS_ROOT%g
 s%@INSTALL_CHANGE@%$INSTALL_CHANGE%g
 s%@PACKHEX@%$PACKHEX%g
-s%@subdirs@%$subdirs%g
 
 CEOF
 EOF
@@ -1270,6 +1329,7 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile
+wrapup/Makefile
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
@@ -1366,7 +1426,7 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-  for ac_config_dir in make exec lib $cfg_subdirs tests; do
+  for ac_config_dir in make exec lib $cfg_subdirs wrapup tests; do
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.

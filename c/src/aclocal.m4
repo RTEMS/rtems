@@ -19,6 +19,9 @@ dnl $1 .. relative path from this configure.in to the toplevel configure.in
 dnl
 AC_DEFUN(RTEMS_TOP,
 [dnl
+AC_BEFORE([$0], [AC_CONFIG_AUX_DIR])dnl
+AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
+
 AC_ARG_WITH(target-subdir,
 [  --with-target-subdir=DIR],
 TARGET_SUBDIR="$withval",
@@ -43,61 +46,6 @@ AC_MSG_ERROR(Unable to determine version)
 fi
 AC_MSG_RESULT($RTEMS_VERSION)
 ])dnl
-
-dnl $Id$
-
-AC_DEFUN(RTEMS_ENABLE_CXX,
-[
-AC_ARG_ENABLE(cxx,
-[  --enable-cxx                         enable C++ support,]
-[                                       and build the rtems++ library],
-[case "${enableval}" in
-  yes) RTEMS_HAS_CPLUSPLUS=yes ;;
-  no) RTEMS_HAS_CPLUSPLUS=no   ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-cxx option) ;;
-esac], [RTEMS_HAS_CPLUSPLUS=no])
-])
-
-dnl
-dnl $Id$
-dnl
-
-dnl canonicalize target cpu
-dnl NOTE: Most rtems targets do not fullfil autoconf's
-dnl target naming conventions "processor-vendor-os"
-dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
-dnl and we have to fix it for rtems ourselves 
-
-AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
-[
-AC_CANONICAL_SYSTEM
-AC_MSG_CHECKING(rtems target cpu)
-changequote(,)dnl
-case "${target}" in
-  # hpux unix port should go here
-  i[3456]86-go32-rtems*)
-	RTEMS_CPU=i386
-	;;
-  i[3456]86-pc-linux*)		# unix "simulator" port
-	RTEMS_CPU=unix
-	;;
-  i[3456]86-*freebsd2*) 	# unix "simulator" port
-	RTEMS_CPU=unix
-	;;
-  no_cpu-*rtems*)
-        RTEMS_CPU=no_cpu
-	;;
-  sparc-sun-solaris*)           # unix "simulator" port
-	RTEMS_CPU=unix
-	;;
-  *) 
-	RTEMS_CPU=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
-	;;
-esac
-changequote([,])dnl
-AC_SUBST(RTEMS_CPU)
-AC_MSG_RESULT($RTEMS_CPU)
-])
 
 # Do all the work for Automake.  This macro actually does too much --
 # some checks are only needed if your package does certain things.
@@ -193,6 +141,259 @@ else
 fi
 AC_SUBST($1)])
 
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_CXX,
+[
+AC_ARG_ENABLE(cxx,
+[  --enable-cxx                         enable C++ support,]
+[                                       and build the rtems++ library],
+[case "${enableval}" in
+  yes) RTEMS_HAS_CPLUSPLUS=yes ;;
+  no) RTEMS_HAS_CPLUSPLUS=no   ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-cxx option) ;;
+esac], [RTEMS_HAS_CPLUSPLUS=no])
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_NETWORKING,
+[
+AC_BEFORE([$0], [RTEMS_CHECK_NETWORKING])dnl
+
+AC_ARG_ENABLE(networking,
+[  --enable-networking                  enable TCP/IP stack],
+[case "${enableval}" in
+  yes) RTEMS_HAS_NETWORKING=yes ;;
+  no) RTEMS_HAS_NETWORKING=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
+esac],[RTEMS_HAS_NETWORKING=yes])
+AC_SUBST(RTEMS_HAS_NETWORKING)dnl
+])
+
+dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_NETWORKING,
+[dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_ENABLE_NETWORKING])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_RDBG])dnl
+
+AC_CACHE_CHECK([whether BSP supports networking],
+  rtems_cv_HAS_NETWORKING,
+  [dnl
+    case "$RTEMS_CPU" in
+    unix*)
+      rtems_cv_HAS_NETWORKING="no"
+      ;;
+    *)
+      if test "${RTEMS_HAS_NETWORKING}" = "yes"; then
+        rtems_cv_HAS_NETWORKING="yes";
+      else
+        rtems_cv_HAS_NETWORKING="disabled";
+      fi
+      ;;
+    esac])
+if test "$rtems_cv_HAS_NETWORKING" = "yes"; then
+  HAS_NETWORKING="yes";
+else
+  HAS_NETWORKING="no";
+fi
+AC_SUBST(HAS_NETWORKING)dnl
+])
+
+dnl $Id$
+
+dnl check if RTEMS support a cpu
+AC_DEFUN(RTEMS_CHECK_CPU,
+[dnl
+AC_REQUIRE([RTEMS_TOP])
+AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])
+AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
+
+# Is this a supported CPU?
+AC_MSG_CHECKING([if cpu $RTEMS_CPU is supported])
+if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_ERROR(no)
+fi
+])dnl
+
+
+dnl
+dnl $Id$
+dnl
+
+dnl canonicalize target cpu
+dnl NOTE: Most rtems targets do not fullfil autoconf's
+dnl target naming conventions "processor-vendor-os"
+dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
+dnl and we have to fix it for rtems ourselves 
+
+AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
+[
+AC_CANONICAL_SYSTEM
+AC_MSG_CHECKING(rtems target cpu)
+changequote(,)dnl
+case "${target}" in
+  # hpux unix port should go here
+  i[3456]86-go32-rtems*)
+	RTEMS_CPU=i386
+	;;
+  i[3456]86-pc-linux*)		# unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  i[3456]86-*freebsd2*) 	# unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  no_cpu-*rtems*)
+        RTEMS_CPU=no_cpu
+	;;
+  sparc-sun-solaris*)           # unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  *) 
+	RTEMS_CPU=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
+	;;
+esac
+changequote([,])dnl
+AC_SUBST(RTEMS_CPU)
+AC_MSG_RESULT($RTEMS_CPU)
+])
+
+dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_POSIX_API,
+[dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_ENABLE_POSIX])dnl
+
+AC_CACHE_CHECK([whether BSP supports libposix],
+  rtems_cv_HAS_POSIX_API,
+  [dnl
+    case "$RTEMS_CPU" in
+    unix*)
+      rtems_cv_HAS_POSIX_API="no"
+      ;;
+    *)
+      if test "${RTEMS_HAS_POSIX_API}" = "yes"; then
+        rtems_cv_HAS_POSIX_API="yes";
+      else
+        rtems_cv_HAS_POSIX_API="disabled";
+      fi
+      ;;
+    esac])
+if test "$rtems_cv_HAS_POSIX_API" = "yes"; then
+  HAS_POSIX_API="yes";
+else
+  HAS_POSIX_API="no";
+fi
+AC_SUBST(HAS_POSIX_API)dnl
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_POSIX,
+[
+AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
+
+AC_ARG_ENABLE(posix,
+[  --enable-posix                       enable posix interface],
+[case "${enableval}" in 
+  yes) RTEMS_HAS_POSIX_API=yes ;;
+  no) RTEMS_HAS_POSIX_API=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-posix option) ;;
+esac],[RTEMS_HAS_POSIX_API=yes]) 
+AC_SUBST(RTEMS_HAS_POSIX_API)
+
+changequote(,)dnl
+case "${target}" in
+  # hpux unix port should go here
+  i[3456]86-go32-rtems*)
+	RTEMS_HAS_POSIX_API=no
+	;;
+  i[3456]86-pc-linux*)         # unix "simulator" port
+	RTEMS_HAS_POSIX_API=no
+	;;
+  i[3456]86-*freebsd2*) # unix "simulator" port
+	RTEMS_HAS_POSIX_API=no
+	;;
+  no_cpu-*rtems*)
+	RTEMS_HAS_POSIX_API=no
+	;;
+  sparc-sun-solaris*)             # unix "simulator" port
+	RTEMS_HAS_POSIX_API=no
+	;;
+  *) 
+	;;
+esac
+changequote([,])dnl
+AC_SUBST(RTEMS_HAS_POSIX_API)
+])
+
+dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_RDBG,
+[dnl
+AC_REQUIRE([RTEMS_TOP])dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_CHECK_NETWORKING])dnl
+AC_REQUIRE([RTEMS_ENABLE_RDBG])dnl
+AC_CACHE_CHECK([whether BSP supports librdbg],
+  rtems_cv_HAS_RDBG,
+  [
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/librdbg/${RTEMS_CPU}/${$1}"; then
+      rtems_cv_HAS_RDBG="yes" ;
+    else
+      rtems_cv_HAS_RDBG="no";
+    fi
+  ])
+HAS_RDBG="$rtems_cv_HAS_RDBG"
+AC_SUBST(HAS_RDBG)
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_RDBG,
+[
+AC_BEFORE([$0], [RTEMS_CHECK_RDBG])dnl
+
+AC_ARG_ENABLE(rdbg,
+[  --enable-rdbg                        enable remote debugger],
+[case "${enableval}" in
+  yes) RTEMS_HAS_RDBG=yes ;;
+  no) RTEMS_HAS_RDBG=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-rdbg option) ;;
+esac],[RTEMS_HAS_RDBG=no])
+AC_SUBST(RTEMS_HAS_RDBG)dnl
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_CANONICAL_HOST,
+[dnl
+AC_REQUIRE([AC_CANONICAL_HOST])
+RTEMS_HOST=$host_os
+changequote(,)dnl
+case "${target}" in
+  # hpux unix port should go here
+  i[3456]86-pc-linux*)         # unix "simulator" port
+        RTEMS_HOST=Linux
+	;;
+  i[3456]86-*freebsd2*) # unix "simulator" port
+        RTEMS_HOST=FreeBSD
+	;;
+  sparc-sun-solaris*)             # unix "simulator" port
+        RTEMS_HOST=Solaris
+	;;
+  *) 
+	;;
+esac
+changequote([,])dnl
+AC_SUBST(RTEMS_HOST)
+])dnl
+
 # Add --enable-maintainer-mode option to configure.
 # From Jim Meyering
 
@@ -233,6 +434,7 @@ dnl used by the toplevel configure script
 dnl RTEMS_ENABLE_RTEMSBSP(rtems_bsp_list)
 AC_DEFUN(RTEMS_ENABLE_RTEMSBSP,
 [
+AC_BEFORE([$0], [RTEMS_ENV_RTEMSBSP])dnl
 AC_ARG_ENABLE(rtemsbsp,
 [  --enable-rtemsbsp=bsp1 bsp2 ..      BSPs to include in build],
 [case "${enableval}" in
@@ -245,6 +447,12 @@ dnl Pass a single BSP via an environment variable
 dnl used by per BSP configure scripts
 AC_DEFUN(RTEMS_ENV_RTEMSBSP,
 [dnl
+AC_BEFORE([$0], [RTEMS_ENABLE_RTEMSBSP])dnl
+AC_BEFORE([$0], [RTEMS_PROJECT_ROOT])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_CUSTOM_BSP])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_MULTIPROCESSING])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
+
 AC_MSG_CHECKING([for RTEMS_BSP])
 AC_CACHE_VAL(rtems_cv_RTEMS_BSP,
 [dnl
@@ -257,48 +465,6 @@ RTEMS_BSP="$rtems_cv_RTEMS_BSP"
 AC_MSG_RESULT(${RTEMS_BSP})
 AC_SUBST(RTEMS_BSP)
 ])
-
-dnl $Id$
-
-dnl check if RTEMS support a cpu
-AC_DEFUN(RTEMS_CHECK_CPU,
-[dnl
-AC_REQUIRE([RTEMS_TOP])
-AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])
-# Is this a supported CPU?
-AC_MSG_CHECKING([if cpu $RTEMS_CPU is supported])
-if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_ERROR(no)
-fi
-])dnl
-
-
-dnl $Id$
-
-AC_DEFUN(RTEMS_CANONICAL_HOST,
-[dnl
-AC_REQUIRE([AC_CANONICAL_HOST])
-RTEMS_HOST=$host_os
-changequote(,)dnl
-case "${target}" in
-  # hpux unix port should go here
-  i[3456]86-pc-linux*)         # unix "simulator" port
-        RTEMS_HOST=Linux
-	;;
-  i[3456]86-*freebsd2*) # unix "simulator" port
-        RTEMS_HOST=FreeBSD
-	;;
-  sparc-sun-solaris*)             # unix "simulator" port
-        RTEMS_HOST=Solaris
-	;;
-  *) 
-	;;
-esac
-changequote([,])dnl
-AC_SUBST(RTEMS_HOST)
-])dnl
 
 dnl
 dnl $Id$
@@ -366,6 +532,8 @@ AC_MSG_RESULT([[$]$1 .. done])
 
 AC_DEFUN(RTEMS_CHECK_CUSTOM_BSP,
 [dnl
+AC_REQUIRE([RTEMS_TOP])
+
 AC_MSG_CHECKING([for make/custom/[$]$1.cfg])
 if test -r "$srcdir/$RTEMS_TOPdir/make/custom/[$]$1.cfg"; then
   AC_MSG_RESULT([yes])
@@ -373,4 +541,48 @@ else
   AC_MSG_ERROR([no])
 fi
 ])dnl
+
+dnl
+dnl $Id$
+dnl
+
+AC_DEFUN(RTEMS_CHECK_MULTIPROCESSING,
+[dnl
+AC_REQUIRE([RTEMS_TOP])dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_ENABLE_MULTIPROCESSING])dnl
+
+AC_CACHE_CHECK([whether BSP supports multiprocessing],
+  rtems_cv_HAS_MP,
+  [dnl
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${$1}/shmsupp"; then
+      if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
+        rtems_cv_HAS_MP="yes" ;
+      else
+        rtems_cv_HAS_MP="disabled";
+      fi
+    else
+      rtems_cv_HAS_MP="no";
+    fi])
+if test "$rtems_cv_HAS_MP" = "yes"; then
+HAS_MP="yes"
+else
+HAS_MP="no"
+fi
+AC_SUBST(HAS_MP)
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_MULTIPROCESSING,
+[
+AC_ARG_ENABLE(multiprocessing,
+[  --enable-multiprocessing             enable multiprocessing interface],
+[case "${enableval}" in 
+  yes) RTEMS_HAS_MULTIPROCESSING=yes ;;
+  no) RTEMS_HAS_MULTIPROCESSING=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-multiprocessing option) ;;
+esac],[RTEMS_HAS_MULTIPROCESSING=no])
+AC_SUBST(RTEMS_HAS_MULTIPROCESSING)dnl
+])
 
