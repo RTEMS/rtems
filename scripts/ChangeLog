@@ -1,3 +1,8 @@
+2004-11-02	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Include PowerPC patch to make C++ global constructors work
+	-- gcc 3.3.5/newlib-1.12.0 revision 2.
+
 2004-10-29	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Update gcc to 3.3.5 and binutils to 2.15.
