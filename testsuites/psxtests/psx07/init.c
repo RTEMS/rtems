@@ -14,19 +14,39 @@
 #include "system.h"
 #include <errno.h>
 
+void print_schedparam(
+  char               *prefix,
+  struct sched_param *schedparam
+)
+{
+  printf( "%ssched priority      = %d\n", prefix, schedparam->sched_priority ); 
+#if defined(_POSIX_SPORADIC_SERVER)
+  printf( "%sss_low_priority     = %d\n", prefix, schedparam->ss_low_priority );
+  printf( "%sss_replenish_period = (%ld, %ld)\n", prefix,
+     schedparam->ss_replenish_period.tv_sec,
+     schedparam->ss_replenish_period.tv_nsec );
+  printf( "%sss_initial_budget = (%ld, %ld)\n", prefix,
+     schedparam->ss_initial_budget.tv_sec,
+     schedparam->ss_initial_budget.tv_nsec );
+#else
+  printf( "%s_POSIX_SPORADIC_SERVER is not defined\n" );
+#endif
+}
+
 void *POSIX_Init(
   void *argument
 )
 {
-  int             status;
-  int             scope;
-  int             inheritsched;
-  int             schedpolicy;
-  size_t          stacksize;
-  void           *stackaddr;
-  int             detachstate;
-  pthread_attr_t  attr;
-  pthread_attr_t  destroyed_attr;
+  int                 status;
+  int                 scope;
+  int                 inheritsched;
+  int                 schedpolicy;
+  size_t              stacksize;
+  void               *stackaddr;
+  int                 detachstate;
+  struct sched_param  schedparam;
+  pthread_attr_t      attr;
+  pthread_attr_t      destroyed_attr;
 
   puts( "\n\n*** POSIX TEST 7 ***" );
 
@@ -266,6 +286,114 @@ void *POSIX_Init(
   status = pthread_attr_getdetachstate( &attr, &detachstate );
   assert( !status );
   printf( "Init: current detach state attribute = %d\n", detachstate );
+
+  /* exercise get and set scheduling parameters */
+
+  empty_line();
+
+  puts( "Init: pthread_attr_getschedparam - SUCCESSFUL" );
+  status = pthread_attr_getschedparam( &attr, &schedparam );
+  assert( !status );
+
+  print_schedparam( "Init: ", &schedparam );
+
+  puts( "Init: pthread_attr_setschedparam - EINVAL (NULL attr)" );
+  status = pthread_attr_setschedparam( NULL, &schedparam );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_attr_setschedparam - EINVAL (not initialized attr)" );
+  status = pthread_attr_setschedparam( &destroyed_attr, &schedparam );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_attr_setschedparam - EINVAL (NULL schedparam)" );
+  status = pthread_attr_setschedparam( &attr, NULL );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_attr_setschedparam - SUCCESSFUL" );
+  status = pthread_attr_setschedparam( &attr, &schedparam );
+  assert( !status );
+ 
+  puts( "Init: pthread_attr_getschedparam - EINVAL (NULL attr)" );
+  status = pthread_attr_getschedparam( NULL, &schedparam );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_attr_getschedparam - EINVAL (not initialized attr)" );
+  status = pthread_attr_getschedparam( &destroyed_attr, &schedparam );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_attr_getschedparam - EINVAL (NULL schedparam)" );
+  status = pthread_attr_getschedparam( &attr, NULL );
+  assert( status == EINVAL );
+ 
+  /* exercise pthread_getschedparam */
+
+  empty_line();
+
+  puts( "Init: pthread_getschedparam - EINVAL (NULL policy)" );
+  status = pthread_getschedparam( pthread_self(), NULL, &schedparam );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_getschedparam - EINVAL (NULL schedparam)" );
+  status = pthread_getschedparam( pthread_self(), &schedpolicy, NULL );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_getschedparam - ESRCH (bad thread)" );
+  status = pthread_getschedparam( -1, &schedpolicy, &schedparam );
+  assert( status == ESRCH );
+ 
+  puts( "Init: pthread_getschedparam - SUCCESSFUL" );
+  status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
+  assert( !status );
+ 
+  printf( "Init: policy = %d\n", schedpolicy );
+
+  print_schedparam( "Init: ", &schedparam );
+
+  /* exercise pthread_setschedparam */
+
+  empty_line();
+
+  puts( "Init: pthread_setschedparam - EINVAL (NULL schedparam)" );
+  status = pthread_setschedparam( pthread_self(), SCHED_OTHER, NULL );
+  assert( status == EINVAL );
+
+  schedparam.sched_priority = -1;
+
+  puts( "Init: pthread_setschedparam - EINVAL (invalid priority)" );
+  status = pthread_setschedparam( pthread_self(), SCHED_OTHER, NULL );
+  assert( status == EINVAL );
+
+  schedparam.sched_priority = 128;
+
+  puts( "Init: pthread_setschedparam - EINVAL (invalid policy)" );
+  status = pthread_setschedparam( pthread_self(), -1, &schedparam );
+  assert( status == EINVAL );
+
+  puts( "Init: pthread_setschedparam - ESRCH (invalid thread)" );
+  status = pthread_setschedparam( -1, SCHED_OTHER, &schedparam );
+  assert( status == ESRCH );
+
+  /* now get sporadic server errors */ 
+
+  schedparam.ss_replenish_period.tv_sec = 1;
+  schedparam.ss_replenish_period.tv_nsec = 0;
+  schedparam.ss_initial_budget.tv_sec = 1;
+  schedparam.ss_initial_budget.tv_nsec = 1;
+
+  puts( "Init: pthread_setschedparam - EINVAL (replenish < budget)" );
+  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  assert( status == EINVAL );
+
+  schedparam.ss_replenish_period.tv_sec = 2;
+  schedparam.ss_replenish_period.tv_nsec = 0;
+  schedparam.ss_initial_budget.tv_sec = 1;
+  schedparam.ss_initial_budget.tv_nsec = 0;
+  schedparam.ss_low_priority = -1;
+
+  puts( "Init: pthread_setschedparam - EINVAL (invalid priority)" );
+  status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
+  assert( status == EINVAL );
+
 
   puts( "*** END OF POSIX TEST 7 ***" );
   exit( 0 );
