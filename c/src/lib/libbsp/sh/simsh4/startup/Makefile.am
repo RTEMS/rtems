@@ -13,8 +13,8 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -45,4 +45,4 @@ all-local: $(ARCH) $(TMPINSTALL_FILES) $(OBJS) $(PGM)
 EXTRA_DIST = bspclean.c bspstart.c hw_init.c linkcmds linkcmds-le \
     linkcmds-le.coff
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
