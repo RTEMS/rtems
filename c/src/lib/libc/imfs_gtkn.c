@@ -36,7 +36,7 @@ IMFS_token_types IMFS_get_token(
 
      token[i] = c;
 
-     if (i == IMFS_NAME_MAX)
+     if ( i == IMFS_NAME_MAX )
        return IMFS_INVALID_TOKEN;
 
      if ( !IMFS_is_valid_name_char(c) )
