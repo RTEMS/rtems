@@ -29,7 +29,7 @@ where the tools were installed in the previous chapter:
 export PATH=$PATH:<INSTALL_POINT>/bin
 @end example
 
-NOTE:  The above command is in Bourne shell (@code{sh}) syntax and should
+@b{NOTE:}  The above command is in Bourne shell (@code{sh}) syntax and should
 work with the Korn (@code{ksh}) and GNU Bourne Again Shell (@code{bash}).  
 It will not work with the C Shell (@code{csh})or derivatives of the C Shell.
 
@@ -67,13 +67,51 @@ error messages.
 
 @section Generate RTEMS for a Specific Target and BSP
 
+@subsection Using the bit_rtems script
+
+The simplest way to build RTEMS is to use the @code{bit_rtems} script.
+This script interprets the settings in the @code{user.cfg} file to
+enable or disable the various RTEMS options.  
+
+This script is invoked as follows: 
+
+@example
+./bit_rtems CPU [BSP]
+@end example
+
+Where CPU is one of the RTEMS supported CPU families from the following
+list:
+
+@itemize @bullet
+@item hppa1.1
+@item i386
+@item i386-elf
+@item i386-go32
+@item i960
+@item m68k
+@item mips64orion
+@item powerpc
+@item sh
+@item sparc
+@end itemize
+
+BSP is a supported BSP for the selected CPU family.  The list of
+supported BSPs may be found in the file 
+tools/@value{RTEMS-UNTAR}/README.configure
+in the RTEMS source tree.  If the BSP parameter is not specified,
+then all supported BSPs for the selected CPU family will be built.
+
+@b{NOTE:}  The POSIX API must be enabled to use GNAT/RTEMS.
+
+@subsection Using the RTEMS configure Script Directly
+
 Make a build directory under tools and build the RTEMS product in this
 directory. The ../@value{RTEMS-UNTAR}/configure
 command has numerous command line
 arguments. These arguments are discussed in detail in documentation that
 comes with the RTEMS distribution. In the installation described in the
 section "Unpack the RTEMS source", these configuration options can be found
-in file tools/@value{RTEMS-UNTAR}/README.configure.
+in the file tools/@value{RTEMS-UNTAR}/README.configure.
 
 The GNAT/RTEMS run-time implementation is based on the POSIX API.  Thus
 the RTEMS configuration for a GNAT/RTEMS environment MUST include the

@@ -68,16 +68,52 @@ error messages.
 
 @section Generate RTEMS for a Specific Target and BSP
 
+@subsection Using the bit_rtems Script
+
+The simplest way to build RTEMS is to use the @code{bit_rtems} script.
+This script interprets the settings in the @code{user.cfg} file to
+enable or disable the various RTEMS options.
+
+This script is invoked as follows:
+
+@example
+./bit_rtems CPU [BSP]
+@end example
+
+Where CPU is one of the RTEMS supported CPU families from the following
+list:
+
+@itemize @bullet
+@item hppa1.1
+@item i386
+@item i386-elf
+@item i386-go32
+@item i960 
+@item m68k
+@item mips64orion
+@item powerpc
+@item sh
+@item sparc
+@end itemize
+
+BSP is a supported BSP for the selected CPU family.  The list of
+supported BSPs may be found in the file
+tools/@value{RTEMS-UNTAR}/README.configure
+in the RTEMS source tree.  If the BSP parameter is not specified,
+then all supported BSPs for the selected CPU family will be built.
+
+@subsection Using the RTEMS configure Script Directly
+
 Make a build directory under tools and build the RTEMS product in this
 directory. The ../@value{RTEMS-UNTAR}/configure
 command has numerous command line
 arguments. These arguments are discussed in detail in documentation that
 comes with the RTEMS distribution. In the installation described in the
 section "Unpack the RTEMS source", these configuration options can be found
-in file tools/@value{RTEMS-UNTAR}/README.configure.
+in the file tools/@value{RTEMS-UNTAR}/README.configure.
 
 The following shows the command sequence required to configure,
-compile, and install RTEMS with the POSIX API, KA9Q TCP/IP,
+compile, and install RTEMS with the POSIX API, FreeBSD TCP/IP,
 and C++ support disabled.  RTEMS will be built to target 
 the @code{BOARD_SUPPORT_PACKAGE} board.
 
@@ -85,7 +121,7 @@ the @code{BOARD_SUPPORT_PACKAGE} board.
 mkdir build-rtems
 cd build-rtems
 ../@value{RTEMS-UNTAR}/configure --target=<TARGET_CONFIGURATION> \
-    --disable-posix --disable-ka9q --disable-cxx \
+    --disable-posix --disable-tcpip --disable-cxx \
     --enable-rtemsbsp=<BOARD_SUPPORT_PACKAGE>\
     --prefix=<INSTALL_POINT>
 gmake all install
