@@ -584,7 +584,6 @@ void change_line_settings( struct termios *tp )
 
 void canonical_input( struct termios *tp )
 {
-    char buffer[256];
     char c, first_time = TRUE;
     
   printf( "\nTesting canonical input\n\n" );
@@ -708,7 +707,7 @@ void usage( void )
 rtems_task
 Init (rtems_task_argument ignored)
 {
-  char c, done;
+  char c;
   struct termios orig_termios, test_termios;
   
   printf( "\n\n*** TEST OF TERMIOS INPUT CAPABILITIES ***\n" );
