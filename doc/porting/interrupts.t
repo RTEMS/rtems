@@ -157,7 +157,7 @@ interrupt stack is managed by RTEMS in software or the CPU has direct
 support for an interrupt stack.  If RTEMS is to manage a dedicated
 interrupt stack in software, then this macro should be set to TRUE and the
 memory for the software managed interrupt stack is allocated in
-_Interrupt_Manager_initialization.  If this macro is set to FALSE, then
+@code{_ISR_Handler_initialization}.  If this macro is set to FALSE, then
 RTEMS assumes that the hardware managed interrupt stack is supported by
 this CPU.  If the CPU has a hardware managed interrupt stack, then the
 porter has the option of letting the BSP allcoate and initialize the
