@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared:@srcdir@/../../shared/gdbstub::@srcdir@/../../../shared/gdbstub
 
 PGM = $(ARCH)/startup.rel

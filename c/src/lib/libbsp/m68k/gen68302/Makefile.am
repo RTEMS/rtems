@@ -17,12 +17,12 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/m302_int.h: include/m302_int.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m302_int.h: include/m302_int.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m302_int.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m302_int.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am
