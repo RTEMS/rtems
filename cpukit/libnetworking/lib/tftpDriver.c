@@ -507,7 +507,7 @@ static int rtems_tftp_eval_path(
         /*
          * Reject attempts to open() directories
          */
-        if (flags)
+        if (flags & RTEMS_LIBIO_PERMS_RDWR)
             set_errno_and_return_minus_one( EISDIR );
         if (isRelative) {
             cp = malloc (strlen(pathloc->node_access)+strlen(pathname)+1);

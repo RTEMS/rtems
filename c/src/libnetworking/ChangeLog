@@ -1,3 +1,9 @@
+2001-12-18	Eric Norum <eric.norum@usask.ca>
+
+	* lib/tftpDriver.c: Allow chdir() to work on TFTP `directories'
+	(path names with a / at the end) while disallowing open() operations
+	on TFTP `directories'.
+
 2001-12-07	Eric Norum <eric.norum@usask.ca>
 
 	* lib/tftpDriver.c: Restore write capability.
