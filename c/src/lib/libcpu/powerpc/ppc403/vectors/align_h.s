@@ -1,4 +1,4 @@
-/*  align_h.s	1.0 - 95/09/26
+/*  align_h.s	1.1 - 95/12/04
  *
  *  This file contains the assembly code for the PowerPC 403
  *  alignment exception handler for RTEMS.
@@ -25,7 +25,7 @@
  *
  * Modifications:
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -121,17 +121,17 @@ align_h:
         stw     r8,Open_lr(r1)
         stw     r9,Open_cr(r1)
         stw     r10,Open_ctr(r1)
-        mfsrr2  r7
-        mfsrr3  r8
-        mfsrr0  r9
-        mfsrr1  r10
+        mfspr	r7, srr2		/* SRR 2 */
+        mfspr	r8, srr3		/* SRR 3 */
+        mfspr	r9, srr0		/* SRR 0 */
+        mfspr	r10, srr1		/* SRR 1 */
         stw     r7,Open_srr2(r1)
         stw     r8,Open_srr3(r1)
         stw     r9,Open_srr0(r1)
         stw     r10,Open_srr1(r1)
 
 /*      Set up common registers */
-        mfdear  r5                      /* R5 is data exception address */
+        mfspr	r5, dear		/* DEAR: R5 is data exception address */
         lwz     r9,Open_srr0(r1)        /* get faulting instruction */
         addi    r7,r9,4                 /* bump instruction */
         stw     r7,Open_srr0(r1)        /* restore to image */
@@ -425,12 +425,9 @@ align_complete:
         mtlr    r25
         mtctr   r26
         mtcrf   0xFF, r27
-        mtsrr2  r28
-        mtsrr3  r29
-        mtsrr0  r30
-        mtsrr1  r31
-        mttcr   r30
-        mtexier r31
+        mtspr	srr2, r28		/* SRR 2 */
+        mtspr	srr3, r29		/* SRR 3 */
+        mtspr	srr0, r30		/* SRR 0 */
+        mtspr	srr1, r31		/* SRR 1 */
         lmw     r0,Open_gpr0+ALIGN_REGS(r0)
         rfi
-

@@ -2,7 +2,7 @@
 #  $Id$
 #
 
-This hierachy contains support routines for the various
+This hierarchy contains support routines for the various
 PowerPC processors.
 
 Since these routines can differ amongst different members
@@ -10,4 +10,4 @@ of the PowerPC family, an entry per CPU type is provided.
 
 Currently only the PPC403 is supported.
 
-Andrew Bray 18/8/1995
+Andrew Bray 4/December/1995

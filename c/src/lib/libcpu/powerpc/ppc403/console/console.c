@@ -1,7 +1,7 @@
 /*
  *  This file contains the PowerPC 403GA console IO package.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -145,19 +145,19 @@ rtems_device_driver console_initialize(
   register unsigned tmp;
 
   /* Initialise the serial port */
-  asm volatile ("mfiocr %0" : "=r" (tmp));
+  asm volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
   tmp &= ~3;
   tmp |= (Cpu_table.serial_external_clock ? 2 : 0) |
       (Cpu_table.serial_cts_rts ? 1 : 0);
-  asm volatile ("mtiocr %0" : "=r" (tmp) : "0" (tmp));
+  asm volatile ("mtdcr 0xa0, %0" : "=r" (tmp) : "0" (tmp)); /* IOCR */
   port->SPLS = (LSRDataReady | LSRFramingError | LSROverrunError |
-	       LSRParityError | LSRBreakInterrupt);
+         LSRParityError | LSRBreakInterrupt);
   tmp = Cpu_table.serial_per_sec / Cpu_table.serial_rate;
   tmp = ((tmp + 8) >> 4) - 1;
   port->BRDL = tmp & 0x255;
   port->BRDH = tmp >> 8;
   port->SPCTL = (CRNormal | CRDtr | CRRts | CRWordLength8 | CRParityDisable |
-		 CRStopBitsOne);
+     CRStopBitsOne);
   port->SPRC = (RCREnable | RCRIntDisable | RCRPauseEnable);
   port->SPTC = (TCREnable | TCRIntDisable);
   port->SPHS = (HSRDsr | HSRCts);
@@ -228,15 +228,15 @@ char inbyte( void )
   while (1)
     {
       if ((status = port->SPLS) & LSRDataReady)
-	break;
+	      break;
 
       /* Clean any dodgy status */
       if ((status & (LSRFramingError | LSROverrunError | LSRParityError |
 		     LSRBreakInterrupt)) != 0)
-	{
-	  port->SPLS = (LSRFramingError | LSROverrunError | LSRParityError |
-			LSRBreakInterrupt);
-	}
+	    {
+	      port->SPLS = (LSRFramingError | LSROverrunError | LSRParityError |
+			    LSRBreakInterrupt);
+	    }
     }
 
   return port->SPRB;  
@@ -269,19 +269,17 @@ void outbyte(
       if (port->SPHS)
         port->SPHS = (HSRDsr | HSRCts);
       else if (status & LSRTxHoldEmpty)
-	break;
+	      break;
     }
 
   if (Cpu_table.serial_xon_xoff)
     while (is_character_ready(&status))
-      {
-	if (status == XOFFchar)
-	  do
-	    {
-	      while (!is_character_ready(&status));
-	    }
-	  while (status != XONchar);
-      }
+    {
+	    if (status == XOFFchar)
+	      do {
+	        while (!is_character_ready(&status));
+	      } while (status != XONchar);
+    }
 
   port->SPTB = ch;
 }

@@ -1,9 +1,9 @@
-/*  vectors.s	1.0 - 95/08/08
+/*  vectors.s	1.1 - 95/12/04
  *
  *  This file contains the assembly code for the PowerPC 403
  *  interrupt veneers for RTEMS.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -18,7 +18,6 @@
  *      i-cubed limited makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  $Id$
  */
 
 /*
@@ -37,6 +36,8 @@
  *  The variable 'PPC_VECTOR_FILE_BASE' must be defined to be the
  *  offset from 0x????0000 to the first location in the file.  This
  *  will usually be 0x0000 or 0x0100.
+ *
+ *  $Id$
  */
 
 #include "asm.h"
@@ -113,9 +114,6 @@ SYM (__vectors):
 	
 /* Critical error handling */
 	.org	crit_vector - file_base
-	mtsprg1	r0
-	mfsprg2 r0
-	mtmsr	r0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -125,7 +123,6 @@ SYM (__vectors):
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg1 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_CRIT
@@ -133,9 +130,6 @@ SYM (__vectors):
 	
 /* Machine check exception */
 	.org	mach_vector - file_base
-	mtsprg1	r0
-	mfsprg2 r0
-	mtmsr	r0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -145,7 +139,6 @@ SYM (__vectors):
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg1 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_MCHECK
@@ -153,9 +146,6 @@ SYM (__vectors):
 	
 /* Protection exception */
 	.org	prot_vector - file_base
-	mtsprg0	r0
-	mfsprg2 r0
-	mtmsr	r0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -165,7 +155,6 @@ SYM (__vectors):
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg0 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_PROTECT
@@ -173,9 +162,6 @@ SYM (__vectors):
 
 /* External interrupt */
 	.org	ext_vector - file_base
-	mtsprg0	r0
-	mfsprg2 r0
-	mtmsr	r0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -185,7 +171,6 @@ SYM (__vectors):
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg0 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_EXTERNAL
@@ -198,9 +183,6 @@ SYM (__vectors):
 	
 /* Program exception */
 	.org	prog_vector - file_base
-	mtsprg0	r0
-	mfsprg2 r0
-	mtmsr	r0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -210,7 +192,6 @@ SYM (__vectors):
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg0 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_PROGRAM
@@ -218,9 +199,6 @@ SYM (__vectors):
 	
 /* System call */
 	.org	sys_vector - file_base
-	mtsprg0	r0
-	mfsprg2 r0
-	mtmsr	r0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -230,7 +208,6 @@ SYM (__vectors):
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg0 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_SCALL
@@ -238,21 +215,6 @@ SYM (__vectors):
 			
 /* PIT interrupt */
 	.org	pit_vector - file_base
-	b	pit
-			
-/* FIT interrupt */
-	.org	fit_vector - file_base
-	b	fit
-			
-/* Watchdog interrupt */
-	.org	wadt_vector - file_base
-	b	watch
-		
-/* PIT interrupt */
-pit:
-	mtsprg0	r0
-	mfsprg2 r0
-	mtmsr	r0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -262,17 +224,13 @@ pit:
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg0 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_PIT
 	b       PROC (_ISR_Handler)
-	
+			
 /* FIT interrupt */
-fit:
-	mtsprg0	r0
-	mfsprg2 r0
-	mtmsr	r0
+	.org	fit_vector - file_base
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -282,17 +240,13 @@ fit:
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg0 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_FIT
 	b       PROC (_ISR_Handler)
-
+			
 /* Watchdog interrupt */
-watch:
-	mtsprg1	r0
-	mfsprg2 r0
-	mtmsr	r0
+	.org	wadt_vector - file_base
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -302,7 +256,6 @@ watch:
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg1 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_WATCHDOG
@@ -310,9 +263,6 @@ watch:
 	
 /* Debug exception */
 debug:
-	mtsprg1	r0
-	mfsprg2 r0
-	mtmsr	r0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -322,7 +272,6 @@ debug:
 #else
 	stwu	r1, -(IP_END)(r1)
 #endif
-	mfsprg1 r0
 	stw	r0, IP_0(r1)
 
 	li      r0, PPC_IRQ_DEBUG

@@ -6,7 +6,7 @@
  *  NOTE: It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -49,7 +49,7 @@ static INLINE rtems_unsigned32 get_itimer(void)
 {
    rtems_unsigned32 ret;
 
-   asm volatile ("mftblo %0" : "=r" ((ret)));
+   asm volatile ("mfspr %0, 0x3dd" : "=r" ((ret))); /* TBLO */
 
    return ret;
 }
@@ -58,10 +58,10 @@ void Timer_initialize()
 {
   rtems_unsigned32 iocr;
 
-  asm volatile ("mfiocr %0" : "=r" (iocr));
+  asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
   iocr &= ~4;
   iocr |= 4;  /* Select external timer clock */
-  asm volatile ("mtiocr %0" : "=r" (iocr) : "0" (iocr));
+  asm volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr)); /* IOCR */
 
   Timer_starting = get_itimer();
 }
