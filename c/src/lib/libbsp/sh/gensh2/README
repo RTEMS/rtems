@@ -3,7 +3,8 @@
 #
 #  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
 #  Adapted by: John Mills (jmills@tga.com)
-#
+#  Corrections: Radzislaw Galler (rgaller@et.put.poznan.pl)
+
 
 BSP NAME:           generic SH2 (gensh2)
 BOARD:              n/a
@@ -18,7 +19,7 @@ DEBUG MONITOR:      gdb
 PERIPHERALS
 ===========
 TIMERS:             on-chip
-  RESOLUTION:         cf. Hitachi SH 704X Hardware Manual (Phi/4)
+  RESOLUTION:         cf. Hitachi SH 704X Hardware Manual (Phi/16)
 SERIAL PORTS:       on-chip (with 2 ports)
 REAL-TIME CLOCK:    none
 DMA:                not used
@@ -32,11 +33,11 @@ CLOCK DRIVER:       on-chip timer
 IOSUPP DRIVER:      default
 SHMSUPP:            default
 TIMER DRIVER:       on-chip timer
-TTY DRIVER:         /dev/null (stub)
+TTY DRIVER:         /dev/console
 
 STDIO
 =====
-PORT:               /dev/null (stub)
+PORT:               /dev/sci1
 ELECTRICAL:         n/a
 BAUD:               n/a
 BITS PER CHARACTER: n/a
@@ -46,10 +47,7 @@ STOP BITS:          n/a
 NOTES
 =====
 
-(1) Only stub console driver available at the moment.
-    Driver for the on-chip serial devices (sci) will be available soon.
-
-(2) The present 'hw_init.c' file provides 'early_hw_init'(void) which
+(1) The present 'hw_init.c' file provides 'early_hw_init'(void) which
     is normally called from 'start.S' to provide such minimal HW setup
     as is conveniently written in 'C' and can make use of global
     symbols for 7045F processor elements. It also provides

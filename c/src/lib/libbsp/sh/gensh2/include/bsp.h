@@ -60,7 +60,7 @@ extern "C" {
 #define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVNULL_DRIVER_TABLE_ENTRY
 #else
 #include <sh/sci.h>
-#define BSP_CONSOLE_DEVNAME "/dev/sci1"
+#define BSP_CONSOLE_DEVNAME "/dev/sci0"
 #define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVSCI_DRIVER_TABLE_ENTRY
 #endif
 
