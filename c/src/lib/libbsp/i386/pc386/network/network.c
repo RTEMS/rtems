@@ -1,11 +1,12 @@
 /*
- * RTEMS driver for M68360 WD1 Ethernet
+ * RTEMS driver for WD800x
  *
- * W. Eric Norum
- * Saskatchewan Accelerator Laboratory
- * University of Saskatchewan
- * Saskatoon, Saskatchewan, CANADA
- * eric@skatter.usask.ca
+ *  Based on the 68360 Network Driver by:
+ *    W. Eric Norum
+ *    Saskatchewan Accelerator Laboratory
+ *    University of Saskatchewan
+ *    Saskatoon, Saskatchewan, CANADA
+ *    eric@skatter.usask.ca
  *
  *  $Id$
  */
