@@ -56,7 +56,7 @@ specific patches.
     Directory:   @value{GCC-FTPDIR}
     File:        @value{GCC-TAR}
 @ifset use-html
-    URL:         @href{Download @value{GCC-VERSION},,,ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR}}
+    URL:         @href{Download @value{GCC-VERSION},,,ftp://@value{GCC-FTPSITE}@value{GCC-HTTPDIR}}
 @end ifset
 @end example
 
@@ -226,7 +226,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GCC-UNTAR}
-zcat archive/@value{GCC-RTEMSPATCH} | patch -p1
+zcat ../../archive/@value{GCC-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -258,7 +258,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{BINUTILS-UNTAR}
-zcat archive/@value{BINUTILS-RTEMSPATCH} | patch -p1
+zcat ../../archive/@value{BINUTILS-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -291,7 +291,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{NEWLIB-UNTAR}
-zcat archive/@value{NEWLIB-RTEMSPATCH} | patch -p1
+zcat ../../archive/@value{NEWLIB-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
