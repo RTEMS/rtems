@@ -20,6 +20,8 @@ RTEMS-specific option are supported:
 	--disable-posix
 	--disable-tcpip
 	--disable-tests
+        --enable-gcc28
+        --enable-libcdir=<DIRECTORY>
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 
 By default, the RTEMS posix interface is built for targets that support
@@ -32,6 +34,12 @@ By default, the RTEMS test suites are configured.  The --disable-tests
 will not configure the RTEMS test suite. This is used only to speed-up
 configuration in case building the tests are not necessary.
 
+By default, RTEMS is built using arguments and build rules which are 
+compatible with gcc 2.7.2.2.  This requires that the user specify
+the location of the Standard C Library with the --enable-libcdir
+option.  If using a gcc which supports the -specs option, then
+the --enable-gcc28 option may be used to enable this feature.
+
 By default, all bsps for a target are built. There are  two ways of
 changing this:
 
@@ -39,18 +47,8 @@ changing this:
     bsps as the default bsps, or 
   + set the RTEMSBSP variable during make (see below).
 
-The cross-compiler is set to $(target)-gcc by default. This can be
-overriden by one of the following methods:
-
-  + running make with CC_FOR_TARGET=compiler_to_use. The same applies to
-    all the target specific tools (AS, AR, NM, OBJCOPY, SIZE, LD), or
-  + by using the --program-prefix option to configure to specify the
-    string which will prepended to the tool names.  Be sure to include
-    a trailing "-".  For example, to use a m68k-coff toolset, use the
-    --program-prefix=m68k-coff- option.
-
-The --target= option configures RTEMS for a specific target architecture.
-The following targets are supported:
+The --enable-rtemsbsp= option configures RTEMS for a specific target
+architecture.  The following targets are supported:
 
 	(none)			will build the host-based version on Linux,
 				Solaris and HPUX.
@@ -66,6 +64,16 @@ The following targets are supported:
 	powerpc-rtems
 	sparc-rtems
 	
+The cross-compiler is set to $(target)-gcc by default. This can be
+overriden by one of the following methods:
+
+  + running make with CC_FOR_TARGET=compiler_to_use. The same applies to
+    all the target specific tools (AS, AR, NM, OBJCOPY, SIZE, LD), or
+  + by using the --program-prefix option to configure to specify the
+    string which will prepended to the tool names.  Be sure to include
+    a trailing "-".  For example, to use a m68k-coff toolset, use the
+    --program-prefix=m68k-coff- option.
+
 To build, run make in the build directory. To specify which bsps to build,
 add the RTEMSBSP="bsp1 bsp2 .." to the make command.
 
@@ -207,7 +215,8 @@ The install-if-change script requires bash. On solaris systems, this should
 be changed to ksh, since ksh is provided with solaris (bash not).
 
 A fairly rescent version of gawk is needed to build RTEMS. This should be
-changed so that a plain vanilla awk also works.
+changed so that a plain vanilla awk also works. [NOTE: This dependency
+should disappear when the "gcc 2.8 -specs" is finished.]
 
 'make install' should only install necessary files, not the full
 PROJECT_RELEASE directory as now.
