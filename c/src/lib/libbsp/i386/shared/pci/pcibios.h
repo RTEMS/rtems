@@ -41,6 +41,10 @@ int pcib_conf_write8(int sig, int off, unsigned int data);
 int pcib_conf_write16(int sig, int off, unsigned int data);
 int pcib_conf_write32(int sig, int off, unsigned int data);
 
+int
+BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
+                   int instance, int *pbus, int *pdev, int *pfun );
+
 
 #endif /* _PCIB_H */
 
