@@ -44,6 +44,16 @@
  *  XXX
  */
 
+posix_api_configuration_table _POSIX_Default_configuration = {
+  0,                             /* maximum_threads */
+  0,                             /* maximum_mutexes */
+  0,                             /* maximum_condition_variables */
+  0,                             /* maximum_keys */
+  0,                             /* number_of_initialization_tasks */
+  NULL                           /* User_initialization_tasks_table */
+};
+
+
 void _POSIX_API_Initialize(
   rtems_configuration_table *configuration_table
 )
@@ -51,8 +61,10 @@ void _POSIX_API_Initialize(
   posix_api_configuration_table *api_configuration;
 
   api_configuration = configuration_table->POSIX_api_configuration;
+  if ( !api_configuration ) 
+    api_configuration = &_POSIX_Default_configuration;
+    
 
-  assert( api_configuration );
 
   _POSIX_Threads_Manager_initialization(
     api_configuration->maximum_threads,
