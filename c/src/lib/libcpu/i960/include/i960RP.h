@@ -366,9 +366,9 @@ typedef i960rp_PRCB i960_PRCB;
    register unsigned int _mask=(1<<(xint)); \
    register unsigned int *_ipnd = (int * ) IPND_ADDR; \
    register unsigned int          _rslt = 0; \
-asm volatile( "loop_til_cleared: mov 0, %0; \
+asm volatile( "99: mov 0, %0; \
                   atmod %1, %2, %0; \
-                  bbs    %3,%0, loop_til_cleared" \
+                  bbs    %3,%0, 99b" \
                   : "=d" (_rslt), "=d" (_ipnd), "=d" (_mask), "=d" (_xint) \
                   : "0"  (_rslt), "1"  (_ipnd), "2"  (_mask), "3"  (_xint) ); \
  }

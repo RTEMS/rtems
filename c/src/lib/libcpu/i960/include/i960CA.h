@@ -83,8 +83,8 @@ typedef i960ca_PRCB i960_PRCB;
 
 #define i960_clear_intr( xint ) \
  { register unsigned int _xint=(xint); \
-asm volatile( "loop_til_cleared: clrbit %0,sf0,sf0 ; \
-                  bbs    %0,sf0, loop_til_cleared" \
+asm volatile( "99: clrbit %0,sf0,sf0 ; \
+                  bbs    %0,sf0, 99b" \
                   : "=d" (_xint) : "0" (_xint) ); \
  }
 
