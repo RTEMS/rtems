@@ -1,3 +1,8 @@
+2002-07-30	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/vegaplus.cfg: Generate the Mapfile into $(ARCH) so it
+	will disappear when make clean is performed.
+
 2002-07-24	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/pc486.cfg, custom/pc586.cfg, custom/pc686.cfg: Updated
