@@ -1,5 +1,12 @@
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Merge-in posix/configure.ac.
+	Merge-in itron/configure.ac.
+	Misc. cosmetical changes.
+	* Makefile.am: Add posix, itron to SUBDIRS.
+
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Merge-in libnetworking/configure.ac.
 	Remove "rtems-" from RTEMS_VERSION.
 	Add AC_CHECK_FUNCS([strsep strcasecmp snprintf]).

@@ -45,27 +45,9 @@ AS_IF([test "$RTEMS_USE_MACROS" = "yes"],
   [INLINEdir="macros"],
   [INLINEdir="inline"])
 AC_SUBST(INLINEdir)
-AM_CONDITIONAL(INLINE,test x"$INLINEdir" = x"inline" )
-AM_CONDITIONAL(MACROS,test x"$INLINEdir" = x"macros" )
-AM_CONDITIONAL(HAS_MP,test x"$HAS_MP" = x"yes" )
-
 AC_DEFINE(RTEMS_VERSION,["][_RTEMS_VERSION]["],[RTEMS version string])
 
-AM_CONDITIONAL(HAS_POSIX,test x"$HAS_POSIX_API" = x"yes")
-AM_CONDITIONAL(HAS_ITRON,test x"$HAS_ITRON_API" = x"yes")
-AM_CONDITIONAL(HAS_NETWORKING,test x"$HAS_NETWORKING" = x"yes")
-
-AS_IF([test x"$HAS_POSIX_API" = x"yes"],
-  [AC_CONFIG_SUBDIRS([posix])]
-)
-AS_IF([test x"$HAS_ITRON_API" = x"yes"],
-  [AC_CONFIG_SUBDIRS(itron)]
-)
 RTEMS_CPU_SUBDIRS([score/cpu])
-# FIXME: All ports should have a libscorecpu.a - But the powerpc doesn't!
-AM_CONDITIONAL([LIBSCORECPU],
-[test -f "${srcdir}/score/cpu/${RTEMS_CPU}/cpu.c"])
-
 AC_CONFIG_SUBDIRS([libcsupport])
 
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
@@ -81,8 +63,6 @@ AC_MSG_RESULT([$LIBRPC])
     [AC_CONFIG_SUBDIRS([librpc])
   ])
 ])
-AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
-
 AC_ARG_ENABLE([ada],
 [AC_HELP_STRING([--enable-ada],[enable ada support])],
 [case "${enable_ada}" in
@@ -102,14 +82,18 @@ AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
   test -n "${enable_unixlib}" || enable_unixlib="yes"
 ])
 
-AM_CONDITIONAL(UNIX,[test x"${RTEMS_CPU}" = x"unix"])
 
 AS_IF([test x"${enable_unixlib}" = x"yes"],
   [AC_DEFINE_UNQUOTED([RTEMS_UNIXLIB],[1],
     [to indicate RTEMS using RTEMS's unixlib])]
 )
 
+# BSD-isms, used throughout the sources
+# Not really used by this configure script
+# FIXME: They should be eliminated if possible.
 AC_CHECK_FUNCS([strsep strcasecmp snprintf])
+AC_CHECK_FUNCS([bcopy bcmp])
+AC_CHECK_FUNCS([isascii fileno])
 
 AM_CONFIG_HEADER([score/include/rtems/score/cpuopts-tmp.h],[
 echo "/* target cpu dependent options file */"         >$tmp/config.h
@@ -167,6 +151,21 @@ AC_CACHE_CHECK([whether $CC supports function __attribute__((weak))],
     CFLAGS=$save_CFLAGS])
 ])
 
+AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
+AM_CONDITIONAL(UNIX,[test x"${RTEMS_CPU}" = x"unix"])
+
+AM_CONDITIONAL(INLINE,test x"$INLINEdir" = x"inline" )
+AM_CONDITIONAL(MACROS,test x"$INLINEdir" = x"macros" )
+AM_CONDITIONAL(HAS_MP,test x"$HAS_MP" = x"yes" )
+
+AM_CONDITIONAL(HAS_POSIX,test x"$HAS_POSIX_API" = x"yes")
+AM_CONDITIONAL(HAS_ITRON,test x"$HAS_ITRON_API" = x"yes")
+AM_CONDITIONAL(HAS_NETWORKING,test x"$HAS_NETWORKING" = x"yes")
+
+# FIXME: All ports should have a libscorecpu.a - But the powerpc doesn't!
+AM_CONDITIONAL([LIBSCORECPU],
+[test -f "${srcdir}/score/cpu/${RTEMS_CPU}/cpu.c"])
+
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
   && test x"$HAS_POSIX_API" = x"yes"])
 
@@ -174,29 +173,26 @@ AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
+AC_CONFIG_FILES([
+Makefile
 include/Makefile
+ada/Makefile
 rtems/Makefile
 sapi/Makefile
 score/Makefile
 score/cpu/Makefile
-])
-
-AC_CONFIG_FILES([libblock/Makefile])
-
-AC_CONFIG_FILES([libfs/Makefile
+posix/Makefile
+itron/Makefile
+libblock/Makefile
+libfs/Makefile
 libfs/src/Makefile
 libfs/src/imfs/Makefile
-libfs/src/dosfs/Makefile])
-
-AC_CONFIG_FILES([libnetworking/Makefile
+libfs/src/dosfs/Makefile
+libnetworking/Makefile
 libnetworking/lib/Makefile
 libnetworking/libc/Makefile
-libnetworking/wrapup/Makefile])
-
-AC_CONFIG_FILES([ada/Makefile])
-
-AC_CONFIG_FILES([libmisc/Makefile
+libnetworking/wrapup/Makefile
+libmisc/Makefile
 libmisc/cpuuse/Makefile
 libmisc/shell/Makefile
 libmisc/devnull/Makefile
@@ -210,8 +206,8 @@ libmisc/capture/Makefile
 libmisc/untar/Makefile
 libmisc/mw-fb/Makefile
 libmisc/wrapup/Makefile
-])
 
-AC_CONFIG_FILES([wrapup/Makefile])
+wrapup/Makefile
+])
 
 AC_OUTPUT
