@@ -33,6 +33,8 @@ __DYNAMIC  =  0;
 /*
  * Declare some sizes.
  */
+_RamBase = DEFINED(_RamBase) ? _RamBase : 0x80000;
+_RamSize = DEFINED(_RamSize) ? _RamSize : 0x80000;
 _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
@@ -40,9 +42,6 @@ MEMORY
 {
   ram     : ORIGIN = 0x80000, LENGTH = 512K
 }
-
-_RamBase = 0x80000;
-_RamSize = 0x80000;
 
 __end_of_ram = 0x100000;
 _copy_data_from_rom = 0;
