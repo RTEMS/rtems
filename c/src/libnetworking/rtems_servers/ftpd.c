@@ -1,28 +1,13 @@
-/*
- *  FTP Server Daemon
+/* FIXME: 1. Parse command is a hack.  We can do better.
+ *        2. chdir is a hack.  We can do better.
+ *        3. PWD doesn't work.
+ *        4. Some sort of access control?
+ *
+ *  FTP Server Daemon 
  *
  *  Submitted by: Jake Janovetz <janovetz@tempest.ece.uiuc.edu>
  *
  *  $Id$
- */
-
-/*
- * Current state:
- *   To untar, put as "untar"
- * CWD uses chdir
- *   This is bad due to global setting of chdir.
- *
- * Stored files come into RAM and are saved later.  This is an artifact
- *   of a previous implementation (no filesystem -- had to do stuff with
- *   the "files" later).  This can be eliminated once all of Jake's stuff
- *   is moved to devices/filesystems.
- *
- * CLOSE(S) doesn't seem to work.  This causes problems in 
- *          several areas.  It lets too many file descriptors pile up
- *          and it doesn't seem to flush the stream.
- *
- * Is 'recv' what I want to use to get commands from the control port?
- *
  */
 
 /**************************************************************************
@@ -31,9 +16,11 @@
  * Description:                                                           *
  *                                                                        *
  *    This file contains the daemon which services requests that appear   *
- *    on the 'FTP' port.  This server is compatible with FTP, but it      *
- *    also provides services specific to the Erithacus system.            *
- *    This server is started at boot-time and runs forever.               *
+ *    on the FTP port.  This server is compatible with FTP, but it        *
+ *    also provides 'hooks' to make it usable in situations where files   *
+ *    are not used/necessary.  Once the server is started, it runs        *
+ *    forever.                                                            *
+ *                                                                        *
  *                                                                        *
  *    Organization:                                                       *
  *                                                                        *
@@ -43,12 +30,6 @@
  *       session then interacts with the remote host.  When the session   *
  *       is complete, the session task deletes itself.  The daemon still  *
  *       runs, however.                                                   *
- *                                                                        *
- *    Implementation Notes:                                               *
- *                                                                        *
- *       The 'current working directory' implementation utilizes the      *
- *       RTEMS filesystem cwd.  This is no good since other processes     *
- *       inherit the same cwd.                                            *
  *                                                                        *
  *                                                                        *
  * Supported commands are:                                                *
@@ -70,50 +51,33 @@
  *                      and port (x*256 + y).                             *
  *                                                                        *
  *                                                                        *
- *                                                                        *
  * The public routines contained in this file are:                        *
  *                                                                        *
- *    FTPD_Start - Starts the server daemon, then returns to its caller.  *
+ *    rtems_initialize_ftpd_start - Starts the server daemon, then        *
+ *                                  returns to its caller.                *
  *                                                                        *
  *                                                                        *
  * The private routines contained in this file are:                       *
  *                                                                        *
- *    FTPD_SendReply    - Sends a reply code and text through the control *
- *                        port.                                           *
- *    FTPD_CommandStore - Performs the "STOR" command.                    *
- *    FTPD_CommandList  - Performs the "LIST" command.                    *
- *    FTPD_CommandPort  - Opens a data port (the "PORT" command).         *
- *    FTPD_ParseCommand - Parses an incoming command.                     *
- *    FTPD_Session      - Begins a service session.                       *
- *    FTPD_Daemon       - Listens on the FTP port for service requests.   *
- *                                                                        *
- *                                                                        *
+ *    rtems_ftpd_send_reply    - Sends a reply code and text through the  *
+ *                               control port.                            *
+ *    rtems_ftpd_command_retrieve - Performs to "RETR" command.           *
+ *    rtems_ftpd_command_store - Performs the "STOR" command.             *
+ *    rtems_ftpd_command_list  - Performs the "LIST" command.             *
+ *    rtems_ftpd_command_port  - Opens a data port (the "PORT" command).  *
+ *    rtems_ftpd_parse_command - Parses an incoming command.              *
+ *    rtmes_ftpd_session       - Begins a service session.                *
+ *    rtems_ftpd_daemon        - Listens on the FTP port for service      *
+ *                               requests.                                *
  *------------------------------------------------------------------------*
- *                                                                        *
  * Jake Janovetz                                                          *
  * University of Illinois                                                 *
  * 1406 West Green Street                                                 *
  * Urbana IL  61801                                                       *
- *                                                                        *
  **************************************************************************
  * Change History:                                                        *
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
-
-/* Revision Control Information:
- *
- * $Source$
- * $Id$
- * $Log$
- * Revision 1.3  1998/05/19 21:28:17  erithacus
- * Update control socket to file I/O.
- *
- * Revision 1.2  1998/05/19 20:13:50  erithacus
- * Remodeled to be entirely reentrant.
- *
- *
- */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -133,8 +97,9 @@
 #include <netinet/in.h>
 
 #include "ftpd.h"
-#include "untar.h"
 
+
+extern struct rtems_ftpd_configuration rtems_ftpd_configuration;
 
 /**************************************************************************
  * Meanings of first and second digits of reply codes:
@@ -164,14 +129,6 @@
 
 
 /**************************************************************************
- * Maximum buffer size for use by the transfer protocol.
- *  This will be eliminated when the filesystem is complete enough that
- *  we don't have to store the received data until we have something to
- *  do with it.
- *************************************************************************/
-#define FTPD_MAX_RECEIVESIZE  (512*1024)
-
-/**************************************************************************
  * SessionInfo structure.
  *
  * The following structure is allocated for each session.  The pointer
@@ -180,13 +137,14 @@
 typedef struct
 {
    struct sockaddr_in  data_addr;   /* Data address for PORT commands */
-   int                 ctrl_sock;   /* Control connection socker */
+   FILE                *ctrl_fp;    /* File pointer for control connection */
    char                cwd[255];    /* Current working directory */
                                     /* Login -- future use -- */
    int                 xfer_mode;   /* Transfer mode (ASCII/binary) */
 } FTPD_SessionInfo_t;
 
 
+#define FTPD_SERVER_MESSAGE  "RTEMS FTP server (Version 1.0-JWJ) ready."
 #define FTPD_WELCOME_MESSAGE \
    "Welcome to the RTEMS FTP server.\n" \
    "\n" \
@@ -194,7 +152,7 @@ typedef struct
 
 
 /**************************************************************************
- * Function: FTPD_SendReply                                               *
+ * Function: rtems_ftpd_send_reply                                        *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
@@ -216,7 +174,7 @@ typedef struct
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
 static void
-FTPD_SendReply(int code, char *text)
+rtems_ftpd_send_reply(int code, char *text)
 {
    rtems_status_code   sc;
    FTPD_SessionInfo_t  *info = NULL;
@@ -241,17 +199,19 @@ FTPD_SendReply(int code, char *text)
    if (text != NULL)
    {
       sprintf(str, "%d %.70s\r\n", code, text);
+      fprintf(info->ctrl_fp, "%d %.70s\r\n", code, text);
    }
    else
    {
       sprintf(str, "%d\r\n", code);
+      fprintf(info->ctrl_fp, "%d\r\n", code);
    }
-   send(info->ctrl_sock, str, strlen(str), 0);
+   fflush(info->ctrl_fp);
 }
 
 
 /**************************************************************************
- * Function: FTPD_CommandRetrieve                                         *
+ * Function: rtems_ftpd_command_retrieve                                  *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
@@ -274,12 +234,11 @@ FTPD_SendReply(int code, char *text)
  *  04/29/98 - Creation (JWJ)                                             *
  *************************************************************************/
 static int
-FTPD_CommandRetrieve(char *filename)
+rtems_ftpd_command_retrieve(char *filename)
 {
    int                 s;
    int                 n;
-
-   FILE                *fp;
+   int                 fd;
    unsigned char       *bufr;
    rtems_status_code   sc;
    FTPD_SessionInfo_t  *info = NULL;
@@ -288,32 +247,31 @@ FTPD_CommandRetrieve(char *filename)
    sc = rtems_task_get_note(RTEMS_SELF, RTEMS_NOTEPAD_0,
                             (rtems_unsigned32 *)&info);
 
-
-   if ((fp = fopen(filename, "r")) == NULL)
+   if ((fd = open(filename, O_RDONLY)) == -1)
    {
-      FTPD_SendReply(450, "Error opening file.");
+      rtems_ftpd_send_reply(450, "Error opening file.");
       return(0);
    }
 
    bufr = (unsigned char *)malloc(BUFSIZ);
    if (bufr == NULL)
    {
-      FTPD_SendReply(440, "Server error - malloc fail.");
-      fclose(fp);
+      rtems_ftpd_send_reply(440, "Server error - malloc fail.");
+      close(fd);
       return(0);
    }
 
    /***********************************************************************
     * Connect to the data connection (PORT made in an earlier PORT call).
     **********************************************************************/
-   FTPD_SendReply(150, "BINARY data connection.");
+   rtems_ftpd_send_reply(150, "BINARY data connection.");
    s = socket(AF_INET, SOCK_STREAM, 0);
    if (connect(s, (struct sockaddr *)&info->data_addr,
                sizeof(struct sockaddr)) < 0)
    {
-      FTPD_SendReply(420, "Server error - could not connect socket.");
+      rtems_ftpd_send_reply(420, "Server error - could not connect socket.");
       free(bufr);
-      fclose(fp);
+      close(fd);
       close(s);
       return(1);
    }
@@ -321,18 +279,19 @@ FTPD_CommandRetrieve(char *filename)
    /***********************************************************************
     * Send the data over the ether.
     **********************************************************************/
-   while ((n = fread(bufr, 1, BUFSIZ, fp)) != 0)
+   while ((n = read(fd, bufr, BUFSIZ)) > 0)
    {
       send(s, bufr, n, 0);
+      bufr[n-1] = '\0';
    }
 
-   if (feof(fp))
+   if (n == 0)
    {
-      FTPD_SendReply(210, "File sent successfully.");
+      rtems_ftpd_send_reply(210, "File sent successfully.");
    }
    else
    {
-      FTPD_SendReply(450, "Retrieve failed.");
+      rtems_ftpd_send_reply(450, "Retrieve failed.");
    }
 
    if (close(s) != 0)
@@ -341,13 +300,13 @@ FTPD_CommandRetrieve(char *filename)
    }
 
    free(bufr);
-   fclose(fp);
+   close(fd);
    return(0);
 }
 
 
 /**************************************************************************
- * Function: FTPD_CommandStore                                            *
+ * Function: rtems_ftpd_command_store                                     *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
@@ -370,15 +329,15 @@ FTPD_CommandRetrieve(char *filename)
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
 static int
-FTPD_CommandStore(char *filename)
+rtems_ftpd_command_store(char *filename)
 {
-   char                *bufr;
-   char                *bigBufr;
-   int                 s;
-   int                 n;
-   unsigned long       size = 0;
-   rtems_status_code   sc;
-   FTPD_SessionInfo_t  *info = NULL;
+   char                   *bufr;
+   int                    s;
+   int                    n;
+   unsigned long          size = 0;
+   rtems_status_code      sc;
+   FTPD_SessionInfo_t     *info = NULL;
+   struct rtems_ftpd_hook *usehook = NULL;
 
 
    sc = rtems_task_get_note(RTEMS_SELF, RTEMS_NOTEPAD_0,
@@ -387,26 +346,17 @@ FTPD_CommandStore(char *filename)
    bufr = (char *)malloc(BUFSIZ * sizeof(char));
    if (bufr == NULL)
    {
-      FTPD_SendReply(440, "Server error - malloc fail.");
+      rtems_ftpd_send_reply(440, "Server error - malloc fail.");
       return(1);
    }
 
-   bigBufr = (char *)malloc(FTPD_MAX_RECEIVESIZE * sizeof(char));
-   if (bigBufr == NULL)
-   {
-      FTPD_SendReply(440, "Server error - malloc fail.");
-      free(bufr);
-      return(1);
-   }
-
-   FTPD_SendReply(150, "BINARY data connection.");
+   rtems_ftpd_send_reply(150, "BINARY data connection.");
 
    s = socket(AF_INET, SOCK_STREAM, 0);
    if (connect(s, (struct sockaddr *)&info->data_addr,
                sizeof(struct sockaddr)) < 0)
    {
       free(bufr);
-      free(bigBufr);
       close(s);
       return(1);
    }
@@ -414,22 +364,57 @@ FTPD_CommandStore(char *filename)
 
    /***********************************************************************
     * File: "/dev/null" just throws the data away.
+    * Otherwise, search our list of hooks to see if we need to do something
+    *   special.
     **********************************************************************/
    if (!strncmp("/dev/null", filename, 9))
    {
       while ((n = read(s, bufr, BUFSIZ)) > 0);
    }
-   else
+   else if (rtems_ftpd_configuration.hooks != NULL)
    {
+      struct rtems_ftpd_hook *hook;
+      int i;
+
+      i = 0;
+      hook = &rtems_ftpd_configuration.hooks[i++];
+      while (hook->filename != NULL)
+      {
+         if (!strcmp(hook->filename, filename))
+         {
+            usehook = hook;
+            break;
+         }
+         hook = &rtems_ftpd_configuration.hooks[i++];
+      }
+   }
+
+   if (usehook != NULL)
+   {
+      char                *bigBufr;
+
+      /***********************************************************************
+       * Allocate space for our "file".
+       **********************************************************************/
+      bigBufr = (char *)malloc(
+                  rtems_ftpd_configuration.max_hook_filesize * sizeof(char));
+      if (bigBufr == NULL)
+      {
+         rtems_ftpd_send_reply(440, "Server error - malloc fail.");
+         free(bufr);
+         return(1);
+      }
+
       /***********************************************************************
        * Retrieve the file into our buffer space.
        **********************************************************************/
       size = 0;
       while ((n = read(s, bufr, BUFSIZ)) > 0)
       {
-         if (size + n > FTPD_MAX_RECEIVESIZE)
+         if (size + n >
+               rtems_ftpd_configuration.max_hook_filesize * sizeof(char))
          {
-            FTPD_SendReply(440, "Server error - Buffer size exceeded.");
+            rtems_ftpd_send_reply(440, "Server error - Buffer size exceeded.");
             free(bufr);
             free(bigBufr);
             close(s);
@@ -438,66 +423,60 @@ FTPD_CommandStore(char *filename)
          memcpy(&bigBufr[size], bufr, n);
          size += n;
       }
-   }
-   free(bufr);
-   close(s);
+      close(s);
 
-
-   /***********************************************************************
-    * Figure out what to do with the data we just received.
-    **********************************************************************/
-   if (!strncmp("untar", filename, 5))
-   {
-      Untar_FromMemory(bigBufr, size);
-      FTPD_SendReply(210, "Untar successful.");
-   }
-   else
-   {
-      FILE   *fp;
-      size_t len;
-      size_t written;
-
-      fp = fopen(filename, "w");
-      if (fp == NULL)
+      /***********************************************************************
+       * Call our hook.
+       **********************************************************************/
+      if ((usehook->hook_function)(bigBufr, size) == 0)
       {
-         FTPD_SendReply(440, "Could not open file.");
-         free(bigBufr);
-         return(1);
-      }
-      
-      n = 0;
-      written = 0;
-      while (n<size)
-      {
-         len = ((size-n>BUFSIZ)?(BUFSIZ):(size-n));
-         written = fwrite(&bigBufr[n], 1, len, fp);
-         n += written;
-         if (written != len)
-         {
-            break;
-         }
-      }
-      fclose(fp);
-
-      if (n == size)
-      {
-         FTPD_SendReply(226, "Transfer complete.");
+         rtems_ftpd_send_reply(210, "File transferred successfully.");
       }
       else
       {
-         FTPD_SendReply(440, "Error during write.");
-         free(bigBufr);
+         rtems_ftpd_send_reply(440, "File transfer failed.");
+      }
+      free(bigBufr);
+   }
+   else
+   {
+      int    fd;
+      size_t written;
+
+      fd = creat(filename, S_IRUSR | S_IWUSR |
+                           S_IRGRP | S_IWGRP |
+                           S_IROTH | S_IWOTH);
+      if (fd == -1)
+      {
+         rtems_ftpd_send_reply(450, "Could not open file.");
+         close(s);
+         free(bufr);
          return(1);
       }
+      while ((n = read(s, bufr, BUFSIZ)) > 0)
+      {
+         written = write(fd, bufr, n);
+         if (written == -1)
+         {
+            rtems_ftpd_send_reply(450, "Error during write.");
+            close(fd);
+            close(s);
+            free(bufr);
+            return(1);
+         }
+      }
+      close(fd);
+      close(s);
+      rtems_ftpd_send_reply(226, "Transfer complete.");
    }
 
-   free(bigBufr);
+   free(bufr);
    return(0);
 }
 
 
 /**************************************************************************
- * Function: FTPD_CommandList                                             *
+ * Function: rtems_ftpd_command_list                                      *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
@@ -518,7 +497,7 @@ FTPD_CommandStore(char *filename)
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
 static void
-FTPD_CommandList(char *fname)
+rtems_ftpd_command_list(char *fname)
 {
    int                 s;
    rtems_status_code   sc;
@@ -532,7 +511,7 @@ FTPD_CommandList(char *fname)
    sc = rtems_task_get_note(RTEMS_SELF, RTEMS_NOTEPAD_0,
                             (rtems_unsigned32 *)&info);
 
-   FTPD_SendReply(150, "ASCII data connection for LIST.");
+   rtems_ftpd_send_reply(150, "ASCII data connection for LIST.");
 
    s = socket(AF_INET, SOCK_STREAM, 0);
    if (connect(s, (struct sockaddr *)&info->data_addr,
@@ -548,7 +527,7 @@ FTPD_CommandList(char *fname)
               fname, (info->xfer_mode==TYPE_A)?("\r"):(""));
       send(s, dirline, strlen(dirline), 0);
       close(s);
-      FTPD_SendReply(226, "Transfer complete.");
+      rtems_ftpd_send_reply(226, "Transfer complete.");
       return;
    }
    while ((dp = readdir(dirp)) != NULL)
@@ -578,7 +557,7 @@ FTPD_CommandList(char *fname)
    closedir(dirp);
 
    close(s);
-   FTPD_SendReply(226, "Transfer complete.");
+   rtems_ftpd_send_reply(226, "Transfer complete.");
 }
 
 
@@ -586,7 +565,7 @@ FTPD_CommandList(char *fname)
  * Cheesy way to change directories
  */
 static void
-FTPD_CWD(char *dir)
+rtems_ftpd_CWD(char *dir)
 {
    rtems_status_code   sc;
    FTPD_SessionInfo_t  *info = NULL;
@@ -597,17 +576,17 @@ FTPD_CWD(char *dir)
 
    if (chdir(dir) == 0)
    {
-      FTPD_SendReply(250, "CWD command successful.");
+      rtems_ftpd_send_reply(250, "CWD command successful.");
    }
    else
    {
-      FTPD_SendReply(550, "CWD command failed.");
+      rtems_ftpd_send_reply(550, "CWD command failed.");
    }
 }
 
 
 /**************************************************************************
- * Function: FTPD_CommandPort                                             *
+ * Function: rtems_ftpd_command_port                                      *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
@@ -630,7 +609,7 @@ FTPD_CWD(char *dir)
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
 static void
-FTPD_CommandPort(char *bufr)
+rtems_ftpd_command_port(char *bufr)
 {
    char                *ip;
    char                *port;
@@ -656,13 +635,15 @@ FTPD_CommandPort(char *bufr)
 
 
 /**************************************************************************
- * Function: FTPD_ParseCommand                                            *
+ * Function: rtems_ftpd_parse_command                                     *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
  *    Here, we parse the commands that have come through the control      *
  *    connection.                                                         *
  *                                                                        *
+ * FIXME: This section is somewhat of a hack.  We should have a better    *
+ *        way to parse commands.                                          *
  *                                                                        *
  * Inputs:                                                                *
  *                                                                        *
@@ -678,7 +659,7 @@ FTPD_CommandPort(char *bufr)
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
 static void
-FTPD_ParseCommand(char *bufr)
+rtems_ftpd_parse_command(char *bufr)
 {
    char fname[255];
    rtems_status_code   sc;
@@ -690,71 +671,71 @@ FTPD_ParseCommand(char *bufr)
 
    if (!strncmp("PORT", bufr, 4))
    {
-      FTPD_SendReply(200, "PORT command successful.");
-      FTPD_CommandPort(&bufr[5]);
+      rtems_ftpd_send_reply(200, "PORT command successful.");
+      rtems_ftpd_command_port(&bufr[5]);
    }
    else if (!strncmp("RETR", bufr, 4))
    {
       sscanf(&bufr[5], "%254s", fname);
-      FTPD_CommandRetrieve(fname);
+      rtems_ftpd_command_retrieve(fname);
    }
    else if (!strncmp("STOR", bufr, 4))
    {
       sscanf(&bufr[5], "%254s", fname);
-      FTPD_CommandStore(fname);
+      rtems_ftpd_command_store(fname);
    }
    else if (!strncmp("LIST", bufr, 4))
    {
       if (bufr[5] == '\n')
       {
-         FTPD_CommandList(".");
+         rtems_ftpd_command_list(".");
       }
       else
       {
          sscanf(&bufr[5], "%254s", fname);
-         FTPD_CommandList(fname);
+         rtems_ftpd_command_list(fname);
       }
    }
    else if (!strncmp("USER", bufr, 4))
    {
-      FTPD_SendReply(230, "User logged in.");
+      rtems_ftpd_send_reply(230, "User logged in.");
    }
    else if (!strncmp("SYST", bufr, 4))
    {
-      FTPD_SendReply(240, "RTEMS");
+      rtems_ftpd_send_reply(240, "RTEMS");
    }
    else if (!strncmp("TYPE", bufr, 4))
    {
       if (bufr[5] == 'I')
       {
          info->xfer_mode = TYPE_I;
-         FTPD_SendReply(200, "Type set to I.");
+         rtems_ftpd_send_reply(200, "Type set to I.");
       }
       else if (bufr[5] == 'A')
       {
          info->xfer_mode = TYPE_A;
-         FTPD_SendReply(200, "Type set to A.");
+         rtems_ftpd_send_reply(200, "Type set to A.");
       } 
       else
       {
          info->xfer_mode = TYPE_I;
-         FTPD_SendReply(504, "Type not implemented.  Set to I.");
+         rtems_ftpd_send_reply(504, "Type not implemented.  Set to I.");
       }
    }
    else if (!strncmp("PASS", bufr, 4))
    {
-      FTPD_SendReply(230, "User logged in.");
+      rtems_ftpd_send_reply(230, "User logged in.");
    }
    else if (!strncmp("DELE", bufr, 4))
    {
       sscanf(&bufr[4], "%254s", fname);
       if (unlink(fname) == 0)
       {
-         FTPD_SendReply(257, "DELE successful.");
+         rtems_ftpd_send_reply(257, "DELE successful.");
       }
       else
       {
-         FTPD_SendReply(550, "DELE failed.");
+         rtems_ftpd_send_reply(550, "DELE failed.");
       }
    }
    else if (!strncmp("SITE CHMOD", bufr, 10))
@@ -764,11 +745,11 @@ FTPD_ParseCommand(char *bufr)
       sscanf(&bufr[11], "%o %254s", &mask, fname);
       if (chmod(fname, (mode_t)mask) == 0)
       {
-         FTPD_SendReply(257, "CHMOD successful.");
+         rtems_ftpd_send_reply(257, "CHMOD successful.");
       }
       else
       {
-         FTPD_SendReply(550, "CHMOD failed.");
+         rtems_ftpd_send_reply(550, "CHMOD failed.");
       }
    }
    else if (!strncmp("RMD", bufr, 3))
@@ -776,11 +757,11 @@ FTPD_ParseCommand(char *bufr)
       sscanf(&bufr[4], "%254s", fname);
       if (rmdir(fname) == 0)
       {
-         FTPD_SendReply(257, "RMD successful.");
+         rtems_ftpd_send_reply(257, "RMD successful.");
       }
       else
       {
-         FTPD_SendReply(550, "RMD failed.");
+         rtems_ftpd_send_reply(550, "RMD failed.");
       }
    }
    else if (!strncmp("MKD", bufr, 3))
@@ -788,33 +769,34 @@ FTPD_ParseCommand(char *bufr)
       sscanf(&bufr[4], "%254s", fname);
       if (mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
       {
-         FTPD_SendReply(257, "MKD successful.");
+         rtems_ftpd_send_reply(257, "MKD successful.");
       }
       else
       {
-         FTPD_SendReply(550, "MKD failed.");
+         rtems_ftpd_send_reply(550, "MKD failed.");
       }
    }
    else if (!strncmp("CWD", bufr, 3))
    {
       sscanf(&bufr[4], "%254s", fname);
-      FTPD_CWD(fname);
+      rtems_ftpd_CWD(fname);
    }
    else if (!strncmp("PWD", bufr, 3))
    {
       char *cwd = getcwd(0, 0);
       sprintf(bufr, "\"%s\" is the current directory.", cwd);
-      FTPD_SendReply(250, bufr);
+      rtems_ftpd_send_reply(250, bufr);
       free(cwd);
    }
    else
    {
-      FTPD_SendReply(500, "Unrecognized/unsupported command.");
+      rtems_ftpd_send_reply(500, "Unrecognized/unsupported command.");
    }
 }
 
+
 /**************************************************************************
- * Function: FTPD_Session                                                 *
+ * Function: rtems_ftpd_session                                           *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
@@ -827,7 +809,7 @@ FTPD_ParseCommand(char *bufr)
  *                                                                        *
  * Inputs:                                                                *
  *                                                                        *
- *    rtems_task_argument arg - The FTPD_Daemon task passes the socket    *
+ *    rtems_task_argument arg - The daemon task passes the socket         *
  *                              which serves as the control connection.   *
  *                                                                        *
  * Output:                                                                *
@@ -839,7 +821,7 @@ FTPD_ParseCommand(char *bufr)
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
 static void
-FTPD_Session(rtems_task_argument arg)
+rtems_ftpd_session(rtems_task_argument arg)
 {
    char                cmd[256];
    rtems_status_code   sc;
@@ -849,7 +831,7 @@ FTPD_Session(rtems_task_argument arg)
    sc = rtems_task_get_note(RTEMS_SELF, RTEMS_NOTEPAD_0,
                             (rtems_unsigned32 *)&info);
 
-   FTPD_SendReply(220, "Erithacus FTP server (Version 1.0) ready.");
+   rtems_ftpd_send_reply(220, FTPD_SERVER_MESSAGE);
 
    /***********************************************************************
     * Set initial directory to "/".
@@ -858,7 +840,7 @@ FTPD_Session(rtems_task_argument arg)
    info->xfer_mode = TYPE_A;
    while (1)
    {
-      if (recv(info->ctrl_sock, cmd, 256, 0) == -1)
+      if (fgets(cmd, 256, info->ctrl_fp) == NULL)
       {
          syslog(LOG_INFO, "ftpd: Connection aborted.");
          break;
@@ -866,16 +848,16 @@ FTPD_Session(rtems_task_argument arg)
 
       if (!strncmp("QUIT", cmd, 4))
       {
-         FTPD_SendReply(221, "Goodbye.");
+         rtems_ftpd_send_reply(221, "Goodbye.");
          break;
       }
       else
       {
-         FTPD_ParseCommand(cmd);
+         rtems_ftpd_parse_command(cmd);
       }
    }
 
-   if (close(info->ctrl_sock) < 0)
+   if (fclose(info->ctrl_fp) != 0)
    {
       syslog(LOG_ERR, "ftpd: Could not close session.");
    }
@@ -895,7 +877,7 @@ FTPD_Session(rtems_task_argument arg)
 
 
 /**************************************************************************
- * Function: FTPD_Daemon                                                  *
+ * Function: rtems_ftpd_daemon                                            *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
@@ -918,7 +900,7 @@ FTPD_Session(rtems_task_argument arg)
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
 static void
-FTPD_Daemon()
+rtems_ftpd_daemon()
 {
    int                 s;
    int                 s1;
@@ -941,7 +923,7 @@ FTPD_Daemon()
    }
 
    localAddr.sin_family      = AF_INET;
-   localAddr.sin_port        = FTPD_CONTROL_PORT;
+   localAddr.sin_port        = htons(rtems_ftpd_configuration.port);
    localAddr.sin_addr.s_addr = INADDR_ANY;
    memset(localAddr.sin_zero, '\0', sizeof(localAddr.sin_zero));
    if (bind(s, (struct sockaddr *)&localAddr,
@@ -1002,21 +984,28 @@ FTPD_Daemon()
       /********************************************************************
        * Send the socket on to the new session.
        *******************************************************************/
-      info->ctrl_sock = s1;
-      sc = rtems_task_set_note(tid, RTEMS_NOTEPAD_0,
-                               (rtems_unsigned32)info);
-      sc = rtems_task_start(tid, FTPD_Session, 0);
-      if (sc != RTEMS_SUCCESSFUL)
+      if ((info->ctrl_fp = fdopen(s1, "r+")) == NULL)
       {
-         syslog(LOG_ERR, "ftpd: Could not start FTPD session: %s",
-                rtems_status_text(sc));
+         syslog(LOG_ERR, "ftpd: fdopen() on socket failed.");
+         close(s1);
+      }
+      else
+      {
+         sc = rtems_task_set_note(tid, RTEMS_NOTEPAD_0,
+                                  (rtems_unsigned32)info);
+         sc = rtems_task_start(tid, rtems_ftpd_session, 0);
+         if (sc != RTEMS_SUCCESSFUL)
+         {
+            syslog(LOG_ERR, "ftpd: Could not start FTPD session: %s",
+                   rtems_status_text(sc));
+         }
       }
    }
 }
 
 
 /**************************************************************************
- * Function: FTPD_Start                                                   *
+ * Function: rtems_ftpd_start                                             *
  **************************************************************************
  * Description:                                                           *
  *                                                                        *
@@ -1031,21 +1020,33 @@ FTPD_Daemon()
  *                                                                        *
  * Output:                                                                *
  *                                                                        *
- *    none                                                                *
+ *    int - RTEMS_SUCCESSFUL on successful start of the daemon.           *
  *                                                                        *
  **************************************************************************
  * Change History:                                                        *
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
-void
-FTPD_Start(rtems_task_priority priority)
+int
+rtems_initialize_ftpd()
 {
    rtems_status_code   sc;
    rtems_id            tid;
 
 
+   if (rtems_ftpd_configuration.port == 0)
+   {
+      rtems_ftpd_configuration.port = FTPD_CONTROL_PORT;
+   }
+
+   /***********************************************************************
+    * Default FTPD priority.
+    **********************************************************************/
+   if (rtems_ftpd_configuration.priority == 0)
+   { 
+      rtems_ftpd_configuration.priority = 40;
+   }
    sc = rtems_task_create(rtems_build_name('F', 'T', 'P', 'D'),
-                          priority, 8*1024,
+                          rtems_ftpd_configuration.priority, 8*1024,
                           RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR |
                           RTEMS_INTERRUPT_LEVEL(0),
                           RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
@@ -1054,14 +1055,18 @@ FTPD_Start(rtems_task_priority priority)
    {
       syslog(LOG_ERR, "ftpd: Could not create FTP daemon: %s",
              rtems_status_text(sc));
+      return(RTEMS_UNSATISFIED);
    }
 
-   sc = rtems_task_start(tid, FTPD_Daemon, 0);
+   sc = rtems_task_start(tid, rtems_ftpd_daemon, 0);
    if (sc != RTEMS_SUCCESSFUL)
    {
       syslog(LOG_ERR, "ftpd: Could not start FTP daemon: %s",
              rtems_status_text(sc));
+      return(RTEMS_UNSATISFIED);
    }   
 
    syslog(LOG_INFO, "ftpd: FTP daemon started.");
+   return(RTEMS_SUCCESSFUL);
 }
+
