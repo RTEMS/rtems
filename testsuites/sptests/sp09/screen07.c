@@ -112,6 +112,14 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_ident - RTEMS_INVALID_NAME" );
 
+  status = rtems_message_queue_get_number_pending( 100, &count );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_message_queue_get_number_pending with illegal id"
+  );
+  puts( "TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ID" );
+
   status = rtems_message_queue_flush( 100, &count );
   fatal_directive_status(
     status,

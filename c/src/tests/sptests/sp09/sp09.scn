@@ -101,6 +101,7 @@ TA1 - rtems_message_queue_create - Q 2 - RTEMS_TOO_MANY
 TA1 - rtems_message_queue_delete - unknown RTEMS_INVALID_ID
 TA1 - rtems_message_queue_delete - local RTEMS_INVALID_ID
 TA1 - rtems_message_queue_ident - RTEMS_INVALID_NAME
+TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_flush - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_receive - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_receive - Q 1 - RTEMS_UNSATISFIED

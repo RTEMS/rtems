@@ -198,6 +198,10 @@ rtems_test_pause();
   status = rtems_message_queue_delete( Queue_id[ 2 ] );
   directive_failed( status, "rtems_message_queue_delete" );
 
+  puts( "TA1 - rtems_message_queue_get_number_pending - SUCCESSFUL\n" );
+  status = rtems_message_queue_get_number_pending( Queue_id[ 3 ], &count );
+  printf( "TA1 - %d messages are pending on Q 3\n", count );
+
   puts( "TA1 - rtems_message_queue_flush - empty Q 3" );
   status = rtems_message_queue_flush( Queue_id[ 3 ], &count );
   printf( "TA1 - %d messages were flushed from Q 3\n", count );
@@ -211,6 +215,10 @@ rtems_test_pause();
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 3" );
   status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
   directive_failed( status, "rtems_message_queue_send" );
+
+  puts( "TA1 - rtems_message_queue_get_number_pending - SUCCESSFUL\n" );
+  status = rtems_message_queue_get_number_pending( Queue_id[ 3 ], &count );
+  printf( "TA1 - %d messages are pending on Q 3\n", count );
 
   Fill_buffer( "BUFFER 3 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 3" );
