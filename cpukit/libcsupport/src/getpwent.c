@@ -23,6 +23,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <rtems/libio_.h>
+
 static struct passwd pw_passwd;  /* password structure */
 static FILE *passwd_fp;
 
@@ -56,7 +58,7 @@ void init_etc_passwd_group(void)
   if ( etc_passwd_initted )
     return;
   etc_passwd_initted = 1;
-  
+
   (void) mkdir( "/etc", 0777);
 
   /*
@@ -80,7 +82,7 @@ void init_etc_passwd_group(void)
     return;
 
   fprintf( fp, "root:x:0:root\n"
-               "rtems:x:1:rtems\n" 
+               "rtems:x:1:rtems\n"
                "tty:x:2:tty\n" );
 
   fclose( fp );
@@ -95,11 +97,14 @@ int getpwnam_r(
 )
 {
   FILE *fp;
+  rtems_user_env_t * aux=rtems_current_user_env; /* save */
 
   init_etc_passwd_group();
+  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if ((fp = fopen ("/etc/passwd", "r")) == NULL) {
     errno = EINVAL;
+    rtems_current_user_env=aux; /* restore */
     return -1;
   }
 
@@ -118,11 +123,13 @@ int getpwnam_r(
     if (!strcmp (logname, name)) {
       fclose (fp);
       *result = pwd;
+      rtems_current_user_env=aux; /* restore */
       return 0;
     }
   }
   fclose (fp);
   errno = EINVAL;
+    rtems_current_user_env=aux; /* restore */
   return -1;
 }
 
@@ -148,11 +155,14 @@ int getpwuid_r(
 )
 {
   FILE *fp;
+  rtems_user_env_t * aux=rtems_current_user_env; /* save */
 
   init_etc_passwd_group();
+  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if ((fp = fopen ("/etc/passwd", "r")) == NULL) {
     errno = EINVAL;
+    rtems_current_user_env=aux; /* restore */
     return -1;
   }
 
@@ -171,11 +181,13 @@ int getpwuid_r(
     if (uid == pwd->pw_uid) {
       fclose (fp);
       *result = pwd;
+      rtems_current_user_env=aux; /* restore */
       return 0;
     }
   }
   fclose (fp);
   errno = EINVAL;
+  rtems_current_user_env=aux; /* restore */
   return -1;
 }
 
@@ -218,12 +230,15 @@ struct passwd *getpwent()
 
 void setpwent( void )
 {
+  rtems_user_env_t * aux=rtems_current_user_env; /* save */
   init_etc_passwd_group();
+  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if (passwd_fp != NULL)
     fclose (passwd_fp);
 
   passwd_fp = fopen ("/etc/passwd", "r");
+  rtems_current_user_env=aux; /* restore */
 }
 
 void endpwent( void )

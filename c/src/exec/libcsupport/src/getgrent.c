@@ -21,6 +21,9 @@
 #include <string.h>
 #include <limits.h>
 
+#include <rtems/libio_.h>
+
+
 static struct group gr_group;    /* password structure */
 static FILE *group_fp;
 
@@ -47,11 +50,14 @@ int getgrnam_r(
 )
 {
   FILE *fp;
+  rtems_user_env_t * aux=rtems_current_user_env; /* save */
 
   init_etc_passwd_group();
+  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if ((fp = fopen ("/etc/group", "r")) == NULL) {
     errno = EINVAL;
+    rtems_current_user_env=aux; /* restore */
     return -1;
   }
 
@@ -66,11 +72,13 @@ int getgrnam_r(
     if (!strcmp (groupname, name)) {
       fclose (fp);
       *result = grp;
+      rtems_current_user_env=aux; /* restore */
       return 0;
     }
   }
   fclose (fp);
   errno = EINVAL;
+  rtems_current_user_env=aux; /* restore */
   return -1;
 }
 
@@ -96,11 +104,15 @@ int getgrgid_r(
 )
 {
   FILE *fp;
+  rtems_user_env_t * aux=rtems_current_user_env; /* save */
+
 
   init_etc_passwd_group();
+  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if ((fp = fopen ("/etc/group", "r")) == NULL) {
     errno = EINVAL;
+    rtems_current_user_env=aux; /* restore */
     return -1;
   }
 
@@ -116,11 +128,13 @@ int getgrgid_r(
     if (gid == gr_group.gr_gid) {
       fclose (fp);
       *result = grp;
+      rtems_current_user_env=aux; /* restore */
       return 0;
     }
   }
   fclose (fp);
   errno = EINVAL;
+  rtems_current_user_env=aux; /* restore */
   return -1;
 }
 
@@ -160,12 +174,15 @@ struct group *getgrent( void )
 void
 setgrent ()
 {
+  rtems_user_env_t * aux=rtems_current_user_env; /* save */
   init_etc_passwd_group();
+  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if (group_fp != NULL)
     fclose (group_fp);
 
   group_fp = fopen ("/etc/group", "r");
+  rtems_current_user_env=aux; /* restore */
 }
 
 void
