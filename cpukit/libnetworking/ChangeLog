@@ -1,3 +1,8 @@
+2001-09-27	Eric Norum <eric.norum@usask.ca>
+
+	* lib/tftpDriver.c: Add limited chdir() support to the TFTP 
+	filesystem.
+
 2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* machine/Makefile.am: Use 'PREINSTALL_FILES ='.

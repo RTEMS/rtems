@@ -24,6 +24,7 @@
 #include <fcntl.h>
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/libio_.h>
 #include <rtems/rtems_bsdnet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -433,27 +434,43 @@ static int rtems_tftp_eval_path(
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 )
 {
+    pathloc->handlers    = &rtems_tftp_handlers;
 
     /*
-     * Read-only or write-only for now
+     * Hack to provide the illusion of directories inside the TFTP file system.
+     * Paths ending in a / are assumed to be directories.
+     */
+    if (pathname[strlen(pathname)-1] == '/') {
+        char *cp;
+        
+        /*
+         * Reject attempts to open() directories
+         */
+        if (flags)
+            set_errno_and_return_minus_one( EISDIR );
+        cp = strdup (pathname);
+        if (cp == NULL)
+            set_errno_and_return_minus_one( ENOMEM );
+        pathloc->node_access = cp;
+        return 0;
+    }
+
+    /*
+     * Reject it if it's not read-only or write-only.
      */
     flags &= RTEMS_LIBIO_PERMS_READ | RTEMS_LIBIO_PERMS_WRITE;
     if ((flags != RTEMS_LIBIO_PERMS_READ) && (flags != RTEMS_LIBIO_PERMS_WRITE) )
         set_errno_and_return_minus_one( EINVAL );
-
-    /*
-     * The File system is mounted at TFTP_PATHNAME_PREFIX
-     * the caller of this routine has striped off this part of the
-     * name. Save the remainder of the name for use by the open routine.
-     */
-    pathloc->node_access = (void * ) pathname;
-    pathloc->handlers    = &rtems_tftp_handlers;
+    pathloc->node_access = NULL;
     return 0;
 }
 
-static int rtems_tftp_open(
+/*
+ * The routine which does most of the work for the IMFS open handler
+ */
+static int rtems_tftp_open_worker(
     rtems_libio_t *iop,
-    const char    *new_name,
+    char          *full_path_name,
     unsigned32     flags,
     unsigned32     mode
 )
@@ -471,21 +488,18 @@ static int rtems_tftp_open(
     char                 *hostname;
 
     /*
-     * This came from the evaluate path. 
-     * Extract host name component
+     * Extract the host name component
      */
-    cp1 = cp2 = iop->file_info;    
+    cp2 = full_path_name;
+    while (*cp2 == '/')
+        cp2++;
+    hostname = cp2;
     while (*cp2 != '/') {
         if (*cp2 == '\0')
             return ENOENT;
         cp2++;
     }
-    len = cp2 - cp1;
-    hostname = malloc (len + 1);
-    if (hostname == NULL)
-        return ENOMEM; 
-    strncpy (hostname, cp1, len);
-    hostname[len] = '\0';
+    *cp2++ = '\0';
 
     /*
      * Convert hostname to Internet address
@@ -494,7 +508,6 @@ static int rtems_tftp_open(
         farAddress = rtems_bsdnet_bootp_server_address;
     else
         farAddress.s_addr = inet_addr (hostname);
-    free (hostname);
     if ((farAddress.s_addr == 0) || (farAddress.s_addr == ~0))
         return ENOENT;
 
@@ -663,6 +676,63 @@ static int rtems_tftp_open(
         }
     }
     return 0;
+}
+
+/*
+ * The IMFS open handler
+ */
+static int rtems_tftp_open(
+    rtems_libio_t *iop,
+    const char    *new_name,
+    unsigned32     flags,
+    unsigned32     mode
+)
+{
+    char *full_path_name;
+    char *s1;
+    int err;
+
+    /*
+     * Tack the `current directory' on to relative paths.
+     * We know that the current directory ends in a / character.
+     */
+    if (*new_name == '/') {
+        /*
+         * Skip the TFTP filesystem prefix.
+         */
+        int len = strlen (TFTP_PATHNAME_PREFIX);
+        if (strncmp (new_name, TFTP_PATHNAME_PREFIX, len))
+            return ENOENT;
+        new_name += len;
+        s1 = "";
+    }
+    else {
+        /*
+         * Skip any leading ./ or ../ components.
+         */
+        for (;;) {
+            while (*new_name == '/')
+                new_name++;
+            if ((new_name[0] == '.') && (new_name[1] == '/')) {
+                new_name += 2;
+                continue;
+            }
+            if ((new_name[0] == '.') && (new_name[1] == '.') && (new_name[2] == '/')) {
+                new_name += 3;
+                continue;
+            }
+            break;
+        }
+        s1 = rtems_filesystem_current.node_access;
+    }
+    full_path_name = malloc (strlen (s1) + strlen (new_name) + 1);
+    if (full_path_name == NULL)
+        return ENOMEM;
+    strcpy (full_path_name, s1);
+    strcat (full_path_name, new_name);
+    err = rtems_tftp_open_worker (iop, full_path_name, flags, mode);
+    free (full_path_name);
+    return err;
 }
 
 /*
@@ -862,11 +932,24 @@ static int rtems_tftp_ftruncate(
     return 0;
 }
 
-rtems_filesystem_node_types_t rtems_tftp_node_type(
+static rtems_filesystem_node_types_t rtems_tftp_node_type(
      rtems_filesystem_location_info_t        *pathloc                 /* IN */
 )
 {
-    return RTEMS_FILESYSTEM_MEMORY_FILE;
+    if (pathloc->node_access == NULL)
+        return RTEMS_FILESYSTEM_MEMORY_FILE;
+    return RTEMS_FILESYSTEM_DIRECTORY;
+}
+
+static int rtems_tftp_free_node_info(
+     rtems_filesystem_location_info_t        *pathloc                 /* IN */
+)
+{
+    if (pathloc->node_access) {
+        free (pathloc->node_access);
+        pathloc->node_access = NULL;
+    }
+    return 0;
 }
 
 
@@ -878,7 +961,7 @@ rtems_filesystem_operations_table  rtems_tftp_ops = {
     rtems_tftp_node_type,            /* node_type */
     NULL,                            /* mknod */
     NULL,                            /* chown */
-    NULL,                            /* freenodinfo */
+    rtems_tftp_free_node_info,       /* freenodinfo */
     NULL,                            /* mount */
     rtems_tftp_mount_me,             /* initialize */
     NULL,                            /* unmount */
