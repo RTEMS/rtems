@@ -1,10 +1,12 @@
 2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in posix_users/ChangeLog.
+	* ChangeLog: Merge-in posix1003.1/ChangeLog.
+	* ChangeLog: Merge-in itron3.0/ChangeLog.
+	* posix_users/ChangeLog, posix1003.1/ChangeLog, itron3.0/ChangeLog:
+	Remove.
 	* ChangeLog: Merge-in FAQ/ChangeLog.
 	* FAQ/ChangeLog: Remove.
-
-2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* ChangeLog: Merge-in user/ChangeLog.
 	* user/ChangeLog: Remove.
 
@@ -38,6 +40,13 @@
 	../COPYING to EXTRA_DIST. Add rtems.html.in to EXTRA_DIST.
 	* develenv/Makefile.am: Add direct.t sample.t utils.t to EXTRA_DIST.
 
+2004-01-09	Joel Sherrill <joel@OARcorp.com>
+
+	PR 464/doc
+	* posix_users/clock.t, posix_users/signal.t: Add documentation for
+	usleep() and ualarm(). Also fixed a couple of calls which have the wrong
+	.h files per the OpenGroup site documentation.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac, index.html.in: mips64orion port removed as mips port
@@ -50,12 +59,18 @@
 	* develenv/Makefile.am: Cosmetics.
 	* user/Makefile.am: Cosmetics.
 	* FAQ/Makefile.am: Cosmetics.
+	* posix_users/Makefile.am: Cosmetics.
+	* posix1003.1/Makefile.am: Cosmetics.
+	* itron3.0/Makefile.am: Cosmetics.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* develenv/Makefile.am: Cosmetics.
 	* user/Makefile.am: Cosmetics.
 	* FAQ/Makefile.am: Cosmetics.
+	* posix_users/Makefile.am: Cosmetics.
+	* posix1003.1/Makefile.am: Cosmetics.
+	* itron3.0/Makefile.am: Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -66,6 +81,12 @@
 	* user/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 	* FAQ/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* posix_users/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* posix1003.1/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* itron3.0/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 
 2003-11-25	Joel Sherrill <joel@OARcorp.com>
@@ -113,6 +134,9 @@
 	* develenv/Makefile.am: Merger from rtems-4-6-branch.
 	* user/Makefile.am: Merger from rtems-4-6-branch.
 	* FAQ/Makefile.am: Merger from rtems-4-6-branch.
+	* posix_users/Makefile.am: Merger from rtems-4-6-branch.
+	* posix1003.1/Makefile.am: Merger from rtems-4-6-branch.
+	* itron3.0/Makefile.am: Merger from rtems-4-6-branch.
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -128,6 +152,15 @@
 	from branch.
 	* FAQ/FAQ.texi, FAQ/basic.t, FAQ/build45.t, FAQ/entry, FAQ/tools.t:
 	Merge from branch.
+	* posix_users/posix_users.texi: Merge from branch.
+	* posix1003.1/ch07.t, posix1003.1/posix1003_1.texi,
+	posix1003.1/preface.texi: Merge from branch.
+	* itron3.0/itron.texi: Merge from branch.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	PR 466/doc
+	* posix_users/io.t: Added sync().
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -202,6 +235,9 @@
 	* develenv/develenv.texi: Set @setfilename develenv.info.
 	* user/c_user.texi: Set @setfilename c_user.info.
 	* FAQ/FAQ.texi: Set @setfilename FAQ.info.
+	* posix_users/posix_users.texi: Set @setfilename posix_users.info.
+	* posix1003.1/posix1003_1.texi: Set @setfilename posix1003_1.info.
+	* itron3.0/itron.texi: Set @setfilename itron.info.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -211,6 +247,9 @@
 	automake's .dvi.ps:-rule.
 	* user/Makefile.am: Put GENERATED_FILES into $builddir.
 	* FAQ/Makefile.am: Put GENERATED_FILES into $builddir.
+	* posix_users/Makefile.am: Put GENERATED_FILES into $builddir.
+	* posix1003.1/Makefile.am: Put GENERATED_FILES into $builddir.
+	* itron3.0/Makefile.am: Put GENERATED_FILES into $builddir.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -234,12 +273,24 @@
 	* FAQ/version.texi: Remove from CVS.
 	* FAQ/stamp-vti: Remove from CVS.
 	* FAQ/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* posix_users/version.texi: Remove from CVS.
+	* posix_users/stamp-vti: Remove from CVS.
+	* posix_users/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* posix1003.1/version.texi: Remove from CVS.
+	* posix1003.1/stamp-vti: Remove from CVS.
+	* posix1003.1/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* itron3.0/version.texi: Remove from CVS.
+	* itron3.0/stamp-vti: Remove from CVS.
+	* itron3.0/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 	* user/stamp-vti, user/version.texi: Regenerated.
 	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
+	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
+	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
+	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -256,6 +307,9 @@
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 	* user/stamp-vti, user/version.texi: Regenerated.
 	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
+	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
+	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
+	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
@@ -263,6 +317,9 @@
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 	* user/stamp-vti, user/version.texi: Regenerated.
 	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
+	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
+	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
+	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -319,6 +376,9 @@
 	* develenv/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* user/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* FAQ/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* posix_users/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* posix1003.1/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* itron3.0/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-03-27	Eric Norum <eric.norum@usask.ca>
 
@@ -368,6 +428,9 @@
 	* develenv/Makefile.am: include main.am, require automake-1.5.
 	* user/Makefile.am: include main.am, require automake-1.5.
 	* FAQ/Makefile.am: include main.am, require automake-1.5.
+	* posix_users/Makefile.am: include main.am, require automake-1.5.
+	* posix1003.1/Makefile.am: include main.am, require automake-1.5.
+	* itron3.0/Makefile.am: include main.am, require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -377,6 +440,13 @@
 2001-10-30	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: New file.
+
+2001-06-28	Joel Sherrill <joel@OARcorp.com>
+
+	* posix_users/preface.texi, posix_users/procenv.t,
+	posix_users/process.t, posix_users/signal.t, posix_users/stamp-vti,
+	posix_users/version.texi: Updated as part of starting a sweep on the
+	POSIX User's Guide.
 
 2001-02-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -395,6 +465,9 @@
 	directives rtems_timer_initiate(), rtems_timer_server_fire_after(), and
 	rtems_timer_server_fire_when().
 	* FAQ/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* posix_users/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* posix1003.1/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* itron3.0/.cvsignore: Added rtems_header.html and rtems_footer.html.
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -407,4 +480,7 @@
 	* develenv/ChangeLog: New file.
 	* user/ChangeLog: New file.
 	* FAQ/ChangeLog: New file.
+	* posix_users/ChangeLog: New file.
+	* posix1003.1/ChangeLog: New file.
+	* itron3.0/ChangeLog: New file.
 
