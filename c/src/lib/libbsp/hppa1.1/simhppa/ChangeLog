@@ -1,3 +1,13 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+	include/Makefile.am: Reflect having moved automake.
+	shmsupp/Makefile.am: Reflect having moved automake.
+	start/Makefile.am: Reflect having moved automake.
+	startup/Makefile.am: Reflect having moved automake.
+	tty/Makefile.am: Reflect having moved automake.
+	wrapup/Makefile.am: Reflect having moved automake.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
