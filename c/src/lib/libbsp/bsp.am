@@ -1,0 +1,14 @@
+##
+## $Id$
+##
+
+PREINSTALL_FILES +=  \
+$(PROJECT_ROOT)/@RTEMS_BSP@/lib \
+$(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs
+
+$(PROJECT_ROOT)/@RTEMS_BSP@/lib:
+	@$(mkinstalldirs) $@
+
+$(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs: bsp_specs
+	$(INSTALL_DATA) $< $@
+
