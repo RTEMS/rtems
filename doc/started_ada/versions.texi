@@ -24,39 +24,39 @@
 @set GCC-VERSION     gcc 2.8.1
 @set GCC-TAR         gcc-2.8.1.tar.gz
 @set GCC-UNTAR       gcc-2.8.1
-@set GCC-FTPSITE     ftp.gnu.oar
+@set GCC-FTPSITE     ftp.gnu.org
 @set GCC-FTPDIR      /pub/gnu
-@set GCC-RTEMSPATCH  gcc-2.8.1-rtems-diff-980323.gz
+@set GCC-RTEMSPATCH  gcc-2.8.1-rtems-diff-19980527.gz
 
 @c
 @c  GNAT Version
 @c
 
-@set GNAT-VERSION     gnat 3.10p
-@set GNAT-TAR         gnat-3.10p.tar.gz
-@set GNAT-UNTAR       gnat-3.10p-src
-@set GNAT-FTPSITE     cs.nyu.edu
-@set GNAT-FTPDIR      /pub/gnat
-@set GNAT-RTEMSPATCH  gnat-3.10p-rtems-diff.971106.gz
+@set GNAT-VERSION     gnat 3.11a1
+@set GNAT-TAR         gnat-3.11a1-src.tar.gz
+@set GNAT-UNTAR       gnat-3.11a1-src
+@set GNAT-FTPSITE     ftp.no_ftp_site.com
+@set GNAT-FTPDIR      no_ftp_dir
+@set GNAT-RTEMSPATCH  gnat-3.11a1-rtems-diff-19980515.gz
 
 @c
 @c  BINUTILS Version
 @c
 
 @c The "official" binutils
-@set BINUTILS-VERSION     binutils 2.9
-@set BINUTILS-TAR         binutils-2.9.tar.gz
-@set BINUTILS-UNTAR       binutils-2.9
+@set BINUTILS-VERSION     binutils 2.9.1
+@set BINUTILS-TAR         binutils-2.9.1.tar.gz
+@set BINUTILS-UNTAR       binutils-2.9.1
 @set BINUTILS-FTPSITE     ftp.gnu.org
 @set BINUTILS-FTPDIR      /pub/gnu
-@c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
+@set BINUTILS-RTEMSPATCH  binutils-2.9.1-rtems-diff-19980515.gz
 
 @c When forced to use a snapshot
 @c @set BINUTILS-VERSION     gas 980314
 @c @set BINUTILS-TAR         gas-980314.tgz
 @c @set BINUTILS-UNTAR       gas-980314
 @c @set BINUTILS-FTPSITE     ftp.OARcorp.com
-@c @set BINUTILS-FTPDIR      /oarcorp/private/beta2/ada_tools
+@c @set BINUTILS-FTPDIR      /oarcorp/private/beta3/ada_tools
 @c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
 
 @c
@@ -68,27 +68,27 @@
 @set NEWLIB-UNTAR       newlib-1.8.0
 @set NEWLIB-FTPSITE     ftp.cygnus.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.8.0-rtems-diff-980331.gz
+@set NEWLIB-RTEMSPATCH   newlib-1.8.0-rtems-diff-19980707.gz
 
 @c
 @c  GDB Version
 @c
 
-@set GDB-VERSION     gdb 4.16.86
-@set GDB-TAR         gdb-4.16.86.tar.gz
-@set GDB-UNTAR       gdb-4.16.86
-@set GDB-FTPSITE     ftp.cygnus.com
-@set GDB-FTPDIR      /private/gdb
-@set GDB-RTEMSPATCH  GDB-RTEMS-PATCH-TBD
-@set GDB-GNATPATCH   GDB-GNAT-PATCH-TBD
+@set GDB-VERSION     gdb 4.17
+@set GDB-TAR         gdb-4.17.tar.gz
+@set GDB-UNTAR       gdb-4.17
+@set GDB-FTPSITE     ftp.gnu.org
+@set GDB-FTPDIR      /pub/gnu
+@set GDB-RTEMSPATCH  gdb-4.17-rtems-diff-19980521.gz
+@set GDB-GNATPATCH   gdb-ada-patch-1.17.8.gz
 
 @c
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION     RTEMS 4.0.0-beta2
-@set RTEMS-TAR         rtems-4.0.0-beta2.tgz
-@set RTEMS-UNTAR       rtems-4.0.0-beta2
+@set RTEMS-VERSION     RTEMS 4.0.0-beta3a
+@set RTEMS-TAR         rtems-4.0.0-beta3a.tgz
+@set RTEMS-UNTAR       rtems-4.0.0-beta3a
 @set RTEMS-FTPSITE     ftp.OARcorp.com
-@set RTEMS-FTPDIR      /OARcorp/private/beta2
+@set RTEMS-FTPDIR      /OARcorp/private/XXX
 
