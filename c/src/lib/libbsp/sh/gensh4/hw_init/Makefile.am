@@ -25,7 +25,7 @@ AM_CFLAGS += -fomit-frame-pointer
 $(PGM): $(OBJS)
 	$(make-rel)
 
-all-local: $(ARCH) $(OBJS) $(PGM)
+all-local: $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

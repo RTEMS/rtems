@@ -38,7 +38,7 @@ $(PGM): $(OBJS)
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds $(PROJECT_RELEASE)/lib/linkcmds.rom \
                     $(PROJECT_RELEASE)/lib/linkcmds.rom2ram
 
-all-local: $(ARCH) $(TMPINSTALL_FILES) $(OBJS) $(PGM)
+all-local: $(TMPINSTALL_FILES) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
