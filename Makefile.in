@@ -31,7 +31,7 @@ endif
 
 include $(RTEMS_ROOT)/make/main.cfg
 
-MTARGETS = all install $(TARGET_VARIANTS) $(TARGET_VARIANTS:%=%_all) \
+MTARGETS = pre_install_src all install $(TARGET_VARIANTS) $(TARGET_VARIANTS:%=%_all) \
   $(TARGET_VARIANTS:%=%_install) $(TARGET_VARIANTS:%=%_tests) \
   clean_wrapup distclean clean_dirs clean_tools tests clean depend
 

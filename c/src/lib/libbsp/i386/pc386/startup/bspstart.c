@@ -65,7 +65,8 @@ char            *rtems_progname;               /* Program name - from main(). */
 extern void _exit(int);  /* define in exit.c */
 void bsp_libc_init( void *, unsigned32, int );
 void bsp_postdriver_hook(void);
- 
+extern void rtems_irq_mngt_init();
+
 /*-------------------------------------------------------------------------+
 |         Function: bsp_pretasking_hook
 |      Description: BSP pretasking hook.  Called just before drivers are
@@ -128,6 +129,11 @@ void bsp_start( void )
 
   console_reserve_resources(&BSP_Configuration);
 
+  /*
+   * Init trems_interrupt_management
+   */
+  rtems_irq_mngt_init();
+  
   /*
    *  The following information is very useful when debugging.
    */

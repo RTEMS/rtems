@@ -45,12 +45,13 @@
 /*----------------------------------------------------------------------------+
 | CODE section
 +----------------------------------------------------------------------------*/
-
+EXTERN (rtems_i8259_masks)
+	
 BEGIN_CODE
 
         EXTERN (_establish_stack)
 	EXTERN (Timer_exit)
-	EXTERN (Clock_exit)
+	EXTERN (clockOff)
 
 	.p2align 4
 /*----------------------------------------------------------------------------+
@@ -95,25 +96,6 @@ next_step:
 	movw ax, fs
 	movw ax, gs
 
-	/* Set default interrupt handler */
-	movl  $0, ecx
-	movl  $Interrupt_descriptor_table, eax
-	movl  $_default_int_handler, ebx
-	movl  ebx, edx
-	sarl  $16, edx
-loop:
-	movw  bx, (eax)
-	movw  $0x8, 2(eax)
-	movw  $0x8e00, 4(eax)
-	movw  dx, 8(eax)
-	addl  $8, eax
-	addl  $1, ecx
-	cmpl  $255, ecx
-	jle   loop
-	
-	
-	
-
 /*---------------------------------------------------------------------+
 | Now we have to reprogram the interrupts :-(. We put them right after
 | the intel-reserved hardware interrupts, at int 0x20-0x2F. There they
@@ -157,6 +139,8 @@ loop:
 	outb	al, $0x21		/* is cascaded                      */
 	call	SYM(delay)
 
+	movw	$0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
+	
 	jmp	SYM (_establish_stack)	# return to the bsp entry code
 
 /*-------------------------------------------------------------------------+
@@ -185,10 +169,6 @@ SYM (_return_to_monitor):
 +--------------------------------------------------------------------------*/
 	.p2align 4
 	
-	PUBLIC (_default_int_handler)
-SYM (_default_int_handler):
-	iret
-
 /*---------------------------------------------------------------------------+
 | GDT itself
 +--------------------------------------------------------------------------*/

@@ -22,6 +22,8 @@ extern "C" {
 #endif
 
 #include <rtems/score/i386.h>              /* pick up machine definitions */
+#include <libcpu/cpu.h>
+
 #ifndef ASM
 #include <rtems/score/i386types.h>
 #endif

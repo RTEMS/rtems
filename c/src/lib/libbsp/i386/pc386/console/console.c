@@ -46,16 +46,19 @@ int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
 static int conSetAttr(int minor, const struct termios *);
 
 /*-------------------------------------------------------------------------+
-| Constants
-+--------------------------------------------------------------------------*/
-#define KEYBOARD_IRQ  0x01  /* Keyboard IRQ. */
-
-
-/*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern rtems_isr _IBMPC_keyboard_isr(rtems_vector_number);
-       /* keyboard (IRQ 0x01) Interrupt Service Routine (defined in 'inch.c') */
+extern void 	_IBMPC_keyboard_isr(void);
+extern void 	_IBMPC_keyboard_isr_on(const rtems_irq_connect_data*);
+extern void 	_IBMPC_keyboard_isr_off(const rtems_irq_connect_data*);
+extern int 	_IBMPC_keyboard_isr_is_on(const rtems_irq_connect_data*);
+
+static rtems_irq_connect_data console_isr_data = {PC_386_KEYBOARD,
+						   _IBMPC_keyboard_isr,
+						   _IBMPC_keyboard_isr_on,
+						   _IBMPC_keyboard_isr_off,
+						   _IBMPC_keyboard_isr_is_on};
+						   
 
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 
@@ -164,9 +167,9 @@ console_initialize(rtems_device_major_number major,
     {
 
       /* Install keyboard interrupt handler */
-      status = PC386_installRtemsIrqHandler(KEYBOARD_IRQ, _IBMPC_keyboard_isr);
-
-      if (status != RTEMS_SUCCESSFUL)
+  status = pc386_install_rtems_irq_handler(&console_isr_data);
+  
+  if (!status)
 	{
 	  printk("Error installing keyboard interrupt handler!\n");
 	  rtems_fatal_error_occurred(status);
@@ -198,16 +201,18 @@ console_initialize(rtems_device_major_number major,
       /* Set interrupt handler */
       if(PC386ConsolePort == PC386_UART_COM1)
 	{
-	  status = PC386_installRtemsIrqHandler(PC386_UART_COM1_IRQ,
-						PC386_uart_termios_isr_com1);
+	  console_isr_data.name = PC386_UART_COM1_IRQ;
+	  console_isr_data.hdl  = PC386_uart_termios_isr_com1;
+	  
 	}
       else
 	{
           assert(PC386ConsolePort == PC386_UART_COM2);
-
-	  status = PC386_installRtemsIrqHandler(PC386_UART_COM2_IRQ,
-						PC386_uart_termios_isr_com2);
+	  console_isr_data.name = PC386_UART_COM2_IRQ;
+	  console_isr_data.hdl  = PC386_uart_termios_isr_com2;
 	}
+
+      status =pc386_install_rtems_irq_handler(&console_isr_data);
       /*
        * Register the device
        */
@@ -291,12 +296,15 @@ console_close(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void                      *arg)
 {
+  rtems_device_driver res = RTEMS_SUCCESSFUL;
+  
   if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
     {
-      return rtems_termios_close (arg);
+      res =  rtems_termios_close (arg);
     }
-
-  return RTEMS_SUCCESSFUL;
+  pc386_remove_rtems_irq_handler (&console_isr_data);
+  
+  return res;
 } /* console_close */
 
  

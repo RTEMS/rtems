@@ -552,46 +552,6 @@ SYM (_ISR_Dispatch):
  */
 
 #ifndef __GO32__
-/*PAGE
- *
- *  void i386_Install_idt(
- *    unsigned32 source_offset,
- *    unsigned16 destination_segment,
- *    unsigned32 destination_offset
- *  );
- */
-
-        .p2align  2
-        PUBLIC (i386_Install_idt)
-
-.set INSTALL_IDT_SAVED_REGS,   8
-
-.set SOURCE_OFFSET_ARG,        INSTALL_IDT_SAVED_REGS + 4
-.set DESTINATION_SEGMENT_ARG,  INSTALL_IDT_SAVED_REGS + 8
-.set DESTINATION_OFFSET_ARG,   INSTALL_IDT_SAVED_REGS + 12
-
-SYM (i386_Install_idt):
-        push      esi
-        push      edi
-
-        movl      SOURCE_OFFSET_ARG(esp),esi
-        movl      DESTINATION_OFFSET_ARG(esp),edi
-
-        pushf                                  # save flags
-        cli                                    # DISABLE INTERRUPTS!!!
-
-        movw      DESTINATION_SEGMENT_ARG+4(esp),ax
-        push      es                           # save es
-        movw      ax,es
-        movsl                                  # copy 1st half of IDT entry
-        movsl                                  # copy 2nd half of IDT entry
-        pop       es                           # restore es
-
-        popf                                   # ENABLE INTERRUPTS!!!
-
-        pop       edi
-        pop       esi
-        ret
 
 /*
  *  void *i386_Logical_to_physical(

@@ -43,7 +43,6 @@
 /*-------------------------------------------------------------------------+
 | Constants
 +--------------------------------------------------------------------------*/
-#define TIMER_IRQ     0x00           /* Timer IRQ.                            */
 #define AVG_OVERHEAD  0              /* 0.1 microseconds to start/stop timer. */
 #define LEAST_VALID   1              /* Don't trust a value lower than this.  */
 
@@ -52,6 +51,13 @@
 +--------------------------------------------------------------------------*/
 volatile rtems_unsigned32 Ttimer_val;
          rtems_boolean    Timer_driver_Find_average_overhead = TRUE;
+
+/*-------------------------------------------------------------------------+
+| External Prototypes
++--------------------------------------------------------------------------*/
+extern void timerisr();
+       /* timer (int 08h) Interrupt Service Routine (defined in 'timerisr.s') */
+extern int clockIsOn(const rtems_irq_connect_data*);
 
 /*-------------------------------------------------------------------------+
 | Pentium optimized timer handling.
@@ -86,7 +92,6 @@ rdtsc(void)
 void
 Timer_exit(void)
 {
-  PC386_disableIrq(TIMER_IRQ);
 } /* Timer_exit */
 
 
@@ -107,8 +112,6 @@ Timer_initialize(void)
     First = FALSE;
 
     atexit(Timer_exit); /* Try not to hose the system at exit. */
-    PC386_enableIrq(TIMER_IRQ);
-                  /* Disable the programmable timer so ticks don't interfere. */
   }
   Ttimer_val = rdtsc(); /* read starting time */
 } /* Timer_initialize */
@@ -143,11 +146,48 @@ Read_timer(void)
 +--------------------------------------------------------------------------*/
 #define US_PER_ISR   250  /* Number of micro-seconds per timer interruption */
 
+
 /*-------------------------------------------------------------------------+
-| External Prototypes
+|         Function: Timer_exit
+|      Description: Timer cleanup routine at RTEMS exit. NOTE: This routine is
+|                   not really necessary, since there will be a reset at exit.
+| Global Variables: None.
+|        Arguments: None.
+|          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-extern rtems_isr timerisr(rtems_vector_number);
-       /* timer (int 08h) Interrupt Service Routine (defined in 'timerisr.s') */
+void
+timerOff(const rtems_raw_irq_connect_data* used)
+{
+    /*
+     * disable interrrupt at i8259 level
+     */
+     pc386_irq_disable_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);
+     /* reset timer mode to standard (DOS) value */
+     outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
+     outport_byte(TIMER_CNTR0, 0);
+     outport_byte(TIMER_CNTR0, 0);
+} /* Timer_exit */
+
+
+void timerOn(const rtems_raw_irq_connect_data* used)
+{
+     /* load timer for US_PER_ISR microsecond period */
+     outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
+     outport_byte(TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 0 & 0xff);
+     outport_byte(TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 8 & 0xff);
+    /*
+     * disable interrrupt at i8259 level
+     */
+     pc386_irq_enable_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);
+}
+
+static rtems_raw_irq_connect_data timer_raw_irq_data = {
+  PC_386_PERIODIC_TIMER + PC386_IRQ_VECTOR_BASE,
+  timerisr,
+  timerOn,
+  timerOff,
+  clockIsOn
+};
 
 /*-------------------------------------------------------------------------+
 |         Function: Timer_exit
@@ -160,12 +200,8 @@ extern rtems_isr timerisr(rtems_vector_number);
 void
 Timer_exit(void)
 {
-  /* reset timer mode to standard (DOS) value */
-  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
-  outport_byte(TIMER_CNTR0, 0);
-  outport_byte(TIMER_CNTR0, 0);
+  i386_delete_idt_entry (&timer_raw_irq_data);
 } /* Timer_exit */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: Timer_initialize
@@ -184,14 +220,10 @@ Timer_initialize(void)
     First = FALSE;
 
     atexit(Timer_exit); /* Try not to hose the system at exit. */
-
-    /* install a raw interrupt handler for timer */
-    PC386_installRawIrqHandler(TIMER_IRQ, timerisr);
-
-    /* load timer for US_PER_ISR microsecond period */
-    outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
-    outport_byte(TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 0 & 0xff);
-    outport_byte(TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 8 & 0xff);
+    if (!i386_set_idt_entry (&timer_raw_irq_data)) {
+      printk("raw handler connexion failed\n");
+      rtems_fatal_error_occurred(1);
+    }
   }
   /* wait for ISR to be called at least once */
   Ttimer_val = 0;

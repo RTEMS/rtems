@@ -329,6 +329,7 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
       if test $? -ne 0 ; then
         bspdirs="$bspdirs $bspdir"
         RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/$bspcpudir$bspdir)
+        RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/${bspcpudir}shared)
       fi
     else
       AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  $i])

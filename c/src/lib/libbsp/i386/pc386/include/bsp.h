@@ -51,7 +51,8 @@ extern "C" {
 #include <iosupp.h>
 #include <console.h>
 #include <clockdrv.h>
-
+#include <libcpu/cpu.h>
+  
 /*-------------------------------------------------------------------------+
 | Constants
 +--------------------------------------------------------------------------*/
@@ -133,8 +134,11 @@ extern "C" {
 /*-------------------------------------------------------------------------+
 | External Variables.
 +--------------------------------------------------------------------------*/
-extern i386_IDT_slot Interrupt_descriptor_table[];
-extern i386_GDT_slot Global_descriptor_table   [];
+#define IDT_SIZE 256
+#define GDT_SIZE 3
+
+extern interrupt_gate_descriptor Interrupt_descriptor_table[IDT_SIZE];
+extern segment_descriptors Global_descriptor_table   [GDT_SIZE];
  
 extern rtems_configuration_table BSP_Configuration;
                                     /* User provided BSP configuration table. */

@@ -39,11 +39,6 @@
 #include <rtems/libio.h>
 
 /*-------------------------------------------------------------------------+
-| Constants
-+--------------------------------------------------------------------------*/
-#define CLOCK_IRQ  0x00  /* Clock IRQ. */
-
-/*-------------------------------------------------------------------------+
 | Macros
 +--------------------------------------------------------------------------*/
 #if 0
@@ -67,13 +62,12 @@ rtems_device_minor_number rtems_clock_minor;
 
 /*-------------------------------------------------------------------------+
 |         Function: clockIsr
-|      Description: Interrupt Service Routine for clock (08h) interruption.
+|      Description: Interrupt Service Routine for clock (0h) interruption.
 | Global Variables: Clock_driver_ticks, Clock_isrs.
 |        Arguments: vector - standard RTEMS argument - see documentation.
 |          Returns: standard return value - see documentation. 
 +--------------------------------------------------------------------------*/
-static rtems_isr
-clockIsr(rtems_vector_number vector)
+static void clockIsr()
 {
   /*-------------------------------------------------------------------------+
   | PLEASE NOTE: The following is directly transcribed from the go32 BSP for
@@ -98,9 +92,7 @@ clockIsr(rtems_vector_number vector)
   else
     Clock_isrs--;
 
-  PC386_ackIrq(vector - PC386_IRQ_VECTOR_BASE);
 } /* clockIsr */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: Clock_exit
@@ -110,7 +102,7 @@ clockIsr(rtems_vector_number vector)
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-void Clock_exit(void)
+void clockOff(const rtems_irq_connect_data* unused)
 {
   if (BSP_Configuration.ticks_per_timeslice)
   {
@@ -129,13 +121,10 @@ void Clock_exit(void)
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-void
-Install_clock(rtems_isr_entry isr)
+static void clockOn(const rtems_irq_connect_data* unused)
 {
   rtems_unsigned32  microseconds_per_isr;
 
-  rtems_status_code status;
- 
 #if 0
   /* Initialize clock from on-board real time clock.  This breaks the  */
   /* test code which assumes which assumes the application will do it. */
@@ -175,22 +164,25 @@ Install_clock(rtems_isr_entry isr)
     /* 105/88 approximates TIMER_TICK * 1e-6 */
     rtems_unsigned32 count = US_TO_TICK(microseconds_per_isr);
 
-    status = PC386_installRtemsIrqHandler(CLOCK_IRQ, isr);
-
-    if (status != RTEMS_SUCCESSFUL)
-    {
-      printk("Error installing clock interrupt handler!\n");
-      rtems_fatal_error_occurred(status);
-    }
-
     outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
     outport_byte(TIMER_CNTR0, count >> 0 & 0xff);
     outport_byte(TIMER_CNTR0, count >> 8 & 0xff);
   } 
 
-  atexit(Clock_exit);
-} /* Install_clock */
+} 
 
+int clockIsOn(const rtems_irq_connect_data* unused)
+{
+  return ((i8259s_cache & 0x1) == 0);
+}
+
+static rtems_irq_connect_data clockIrqData = {PC_386_PERIODIC_TIMER,
+					      clockIsr,
+					      clockOn,
+					      clockOff,
+					      clockIsOn};
+					      
+					      
 
 /*-------------------------------------------------------------------------+
 | Clock device driver INITIALIZE entry point.
@@ -202,8 +194,11 @@ Clock_initialize(rtems_device_major_number major,
                  rtems_device_minor_number minor,
                  void                      *pargp)
 {
-  Install_clock(clockIsr); /* Install the interrupt handler */
- 
+
+  if (!pc386_install_rtems_irq_handler (&clockIrqData)) {
+    printk("Unable to initialize system clock\n");
+    rtems_fatal_error_occurred(1);
+  }
   /* make major/minor avail to others such as shared memory driver */
  
   rtems_clock_major = major;
@@ -212,7 +207,7 @@ Clock_initialize(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* Clock_initialize */
 
-
+					      
 /*-------------------------------------------------------------------------+
 | Console device driver CONTROL entry point
 +--------------------------------------------------------------------------*/
@@ -231,17 +226,12 @@ Clock_control(rtems_device_major_number major,
     +-------------------------------------------------------------------------*/
  
     if      (args->command == rtems_build_name('I', 'S', 'R', ' '))
-      clockIsr(PC386_IRQ_VECTOR_BASE + CLOCK_IRQ);
+      clockIsr();
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-      rtems_status_code status;
-      
-      status = PC386_installRtemsIrqHandler(CLOCK_IRQ, clockIsr);
-
-      if (status != RTEMS_SUCCESSFUL)
-      {
+      if (!pc386_install_rtems_irq_handler (&clockIrqData)) {
 	printk("Error installing clock interrupt handler!\n");
-	rtems_fatal_error_occurred(status);
+	rtems_fatal_error_occurred(1);
       }
     }
   }
@@ -249,6 +239,10 @@ Clock_control(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* Clock_control */
 
+void Clock_exit()
+{
+  pc386_remove_rtems_irq_handler (&clockIrqData);
+}
 
 /*-------------------------------------------------------------------------+
 | PLEASE NOTE: The following is directly transcribed from the go32 BSP for

@@ -16,6 +16,7 @@ include $(RTEMS_ROOT)/make/lib.cfg
 LIB=$(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
  
 SRCS=$(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
+     $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a \
      $(PROJECT_RELEASE)/lib/librtems$(LIB_VARIANT).a \
      $(wildcard $(PROJECT_RELEASE)/lib/libposix$(LIB_VARIANT).a) \
      $(wildcard $(PROJECT_RELEASE)/lib/libka9q$(LIB_VARIANT).a) \

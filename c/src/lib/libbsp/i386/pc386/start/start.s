@@ -104,7 +104,8 @@ speakl:	jmp	speakl             # and SPIN!!!
 	call	printk
 	addl	$4, esp
 
-	/*call	debugPollingGetChar */
+	call	debugPollingGetChar
+	
 #endif	
 
 /*----------------------------------------------------------------------------+

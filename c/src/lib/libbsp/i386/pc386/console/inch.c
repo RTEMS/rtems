@@ -210,6 +210,17 @@ _IBMPC_scankey(char *outChar)
   return TRUE;
 } /* _IBMPC_scankey */
 
+void _IBMPC_keyboard_isr_on(const rtems_irq_connect_data* unused)
+{}
+void _IBMPC_keyboard_isr_off(const rtems_irq_connect_data* unused)
+{}
+
+int _IBMPC_keyboard_isr_is_on(const rtems_irq_connect_data* irq)
+{
+  return pc386_irq_enabled_at_i8259s (irq->name);
+}
+
+
 
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_keyboard_isr
@@ -218,8 +229,7 @@ _IBMPC_scankey(char *outChar)
 |        Arguments: vector - standard RTEMS argument - see documentation.
 |          Returns: standard return value - see documentation.
 +--------------------------------------------------------------------------*/
-rtems_isr
-_IBMPC_keyboard_isr(rtems_vector_number vector)
+void _IBMPC_keyboard_isr()
 {
   if (_IBMPC_scankey(&kbd_buffer[kbd_last]))
   {
@@ -231,8 +241,6 @@ _IBMPC_keyboard_isr(rtems_vector_number vector)
 	kbd_last = next;
       }
   }
-
-  PC386_ackIrq(vector - PC386_IRQ_VECTOR_BASE); /* Mark interrupt as handled. */
 } /* _IBMPC_keyboard_isr */
 
 
@@ -280,6 +288,21 @@ _IBMPC_inch(void)
 
     return c;
 } /* _IBMPC_inch */
+
+ 
+ /*
+  * Routine that can be used before interrupt management is initialized.
+  */
+ 
+char
+debugPollingGetChar(void)
+{
+  char c;
+  while (!_IBMPC_scankey(&c))
+    continue;
+
+  return c;
+}
 
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_inch_sleep
