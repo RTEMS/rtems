@@ -31,7 +31,7 @@ C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
 endif
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-H_FILES = imfs.h
+include_HEADERS = imfs.h
 SYS_H_FILES =
 RTEMS_H_FILES = 
 noinst_HEADERS =
@@ -41,7 +41,7 @@ include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems \
-    $(PROJECT_INCLUDE)/sys $(H_FILES:%=$(PROJECT_INCLUDE)/%) \
+    $(PROJECT_INCLUDE)/sys $(include_HEADERS:%=$(PROJECT_INCLUDE)/%) \
     $(RTEMS_H_FILES:%=$(PROJECT_INCLUDE)/rtems/%) \
     $(SYS_H_FILES:%=$(PROJECT_INCLUDE)/sys/%)
 
@@ -75,6 +75,6 @@ $(LIB): ${OBJS}
 DOC_FILES = TODO CASES
 
 EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
-    $(UNIX_C_FILES) $(H_FILES) $(RTEMS_H_FILES) $(SYS_H_FILES)
+    $(UNIX_C_FILES) $(RTEMS_H_FILES) $(SYS_H_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

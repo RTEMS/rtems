@@ -1,3 +1,7 @@
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/imfs/Makefile.am: Apply include_*HEADERS instead of H_FILES.
+
 2001-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add src/imfs/config.h
