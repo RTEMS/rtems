@@ -1,16 +1,16 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved. 
+@c COPYRIGHT (c) 1988-1998.
+@c On-Line Applications Research Corporation (OAR).
+@c All rights reserved.
 @c
-@c  $Id$
+@c $Id$
 @c
 
 @chapter Memory Management Manager
 
 @section Introduction
 
-The 
+The
 memory management manager is ...
 
 The directives provided by the memory management manager are:
@@ -43,8 +43,14 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection mlockall - Lock the Address Space of a Process
+
+@findex mlockall
+@cindex  lock the address space of a process
 
 @subheading CALLING SEQUENCE:
 
@@ -70,8 +76,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection munlockall - Unlock the Address Space of a Process
+
+@findex munlockall
+@cindex  unlock the address space of a process
 
 @subheading CALLING SEQUENCE:
 
@@ -97,8 +109,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection mlock - Lock a Range of the Process Address Space
+
+@findex mlock
+@cindex  lock a range of the process address space
 
 @subheading CALLING SEQUENCE:
 
@@ -124,8 +142,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection munlock - Unlock a Range of the Process Address Space
+
+@findex munlock
+@cindex  unlock a range of the process address space
 
 @subheading CALLING SEQUENCE:
 
@@ -151,8 +175,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection mmap - Map Process Addresses to a Memory Object
+
+@findex mmap
+@cindex  map process addresses to a memory object
 
 @subheading CALLING SEQUENCE:
 
@@ -178,8 +208,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection munmap - Unmap Previously Mapped Addresses
+
+@findex munmap
+@cindex  unmap previously mapped addresses
 
 @subheading CALLING SEQUENCE:
 
@@ -205,8 +241,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection mprotect - Change Memory Protection
+
+@findex mprotect
+@cindex  change memory protection
 
 @subheading CALLING SEQUENCE:
 
@@ -232,8 +274,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection msync - Memory Object Synchronization
+
+@findex msync
+@cindex  memory object synchronization
 
 @subheading CALLING SEQUENCE:
 
@@ -259,8 +307,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection shm_open - Open a Shared Memory Object
+
+@findex shm_open
+@cindex  open a shared memory object
 
 @subheading CALLING SEQUENCE:
 
@@ -286,8 +340,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection shm_unlink - Remove a Shared Memory Object
+
+@findex shm_unlink
+@cindex  remove a shared memory object
 
 @subheading CALLING SEQUENCE:
 

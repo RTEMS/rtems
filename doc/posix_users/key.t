@@ -1,9 +1,9 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
+@c COPYRIGHT (c) 1988-1998.
+@c On-Line Applications Research Corporation (OAR).
+@c All rights reserved.
 @c
-@c  $Id$
+@c $Id$
 @c
 
 @chapter Key Manager
@@ -36,6 +36,9 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection pthread_key_create
 
@@ -45,8 +48,8 @@ and status codes.
 #include <pthread.h>
 
 int pthread_key_create(
-  pthread_key_t  *key,
-  void          (*destructor)( void * )
+pthread_key_t *key,
+void (*destructor)( void CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t )
 );
 @end example
 
@@ -61,31 +64,37 @@ Insufficient memory exists to create the key.
 
 @end table
 
+@c
+@c
+@c
 @page
 @subsection pthread_key_delete
- 
+
 @subheading CALLING SEQUENCE:
- 
+
 @example
 #include <pthread.h>
- 
+
 int pthread_key_delete(
-  pthread_key_t  key,
+pthread_key_t key,
 );
 @end example
- 
+
 @subheading STATUS CODES:
- 
+
 @table @b
 @item EINVAL
 The key was invalid
- 
+
 @end table
 
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection pthread_setspecific
 
@@ -95,8 +104,8 @@ The key was invalid
 #include <pthread.h>
 
 int pthread_setspecific(
-  pthread_key_t  key,
-  const void    *value
+pthread_key_t key,
+const void *value
 );
 @end example
 
@@ -111,6 +120,9 @@ The specified key is invalid.
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection pthread_getspecific
 
@@ -120,7 +132,7 @@ The specified key is invalid.
 #include <pthread.h>
 
 void *pthread_getspecific(
-  pthread_key_t  key
+pthread_key_t key
 );
 @end example
 

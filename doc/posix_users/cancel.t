@@ -1,16 +1,16 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved. 
+@c COPYRIGHT (c) 1988-1998.
+@c On-Line Applications Research Corporation (OAR).
+@c All rights reserved.
 @c
-@c  $Id$
+@c $Id$
 @c
 
 @chapter Thread Cancellation Manager
 
 @section Introduction
 
-The 
+The
 thread cancellation manager is ...
 
 The directives provided by the thread cancellation manager are:
@@ -39,8 +39,14 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection pthread_cancel - Cancel Execution of a Thread
+
+@findex pthread_cancel
+@cindex  cancel execution of a thread
 
 @subheading CALLING SEQUENCE:
 
@@ -66,8 +72,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection pthread_setcancelstate - Set Cancelability State
+
+@findex pthread_setcancelstate
+@cindex  set cancelability state
 
 @subheading CALLING SEQUENCE:
 
@@ -93,8 +105,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection pthread_setcanceltype - Set Cancelability Type
+
+@findex pthread_setcanceltype
+@cindex  set cancelability type
 
 @subheading CALLING SEQUENCE:
 
@@ -120,8 +138,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection pthread_testcancel - Create Cancellation Point
+
+@findex pthread_testcancel
+@cindex  create cancellation point
 
 @subheading CALLING SEQUENCE:
 
@@ -147,8 +171,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection pthread_cleanup_push - Establish Cancellation Handler
+
+@findex pthread_cleanup_push
+@cindex  establish cancellation handler
 
 @subheading CALLING SEQUENCE:
 
@@ -174,8 +204,14 @@ The
 
 @subheading NOTES:
 
+@c
+@c
+@c
 @page
 @subsection pthread_cleanup_pop - Remove Cancellation Handler
+
+@findex pthread_cleanup_pop
+@cindex  remove cancellation handler
 
 @subheading CALLING SEQUENCE:
 

@@ -1,9 +1,9 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved. 
+@c COPYRIGHT (c) 1988-1998.
+@c On-Line Applications Research Corporation (OAR).
+@c All rights reserved.
 @c
-@c  $Id$
+@c $Id$
 @c
 
 @chapter Files and Directories Manager
@@ -17,7 +17,7 @@ The directives provided by the files and directories manager are:
 @itemize @bullet
 @item @code{opendir} - Open a Directory
 @item @code{readdir} - Reads a directory
-@item @code{rewinddir} - Resets the @code{readdir()} pointer 
+@item @code{rewinddir} - Resets the @code{readdir()} pointer
 @item @code{scandir} - Scan a directory for matching entries
 @item @code{telldir} - Return current location in directory stream
 @item @code{closedir} - Ends directory read operation
@@ -32,9 +32,9 @@ The directives provided by the files and directories manager are:
 @item @code{readlink} - Obtain the name of the link destination
 @item @code{mkdir} - Makes a directory
 @item @code{mkfifo} - Makes a FIFO special file
-@item @code{unlink} - Removes a directory entry 
+@item @code{unlink} - Removes a directory entry
 @item @code{rmdir} - Delete a directory
-@item @code{rename} - Renames a file 
+@item @code{rename} - Renames a file
 @item @code{stat} - Gets information about a file.
 @item @code{fstat} - Gets file status
 @item @code{access} - Check permissions for a file.
@@ -54,16 +54,16 @@ The directives provided by the files and directories manager are:
 @subsection Path Name Evaluation
 
 A pathname is a string that consists of no more than @code{PATH_MAX}
-bytes, including the terminating null character.  A pathname has an optional
-beginning slash, followed by zero or more filenames separated by slashes.  
+bytes, including the terminating null character. A pathname has an optional
+beginning slash, followed by zero or more filenames separated by slashes.
 If the pathname refers to a directory, it may also have one or more trailing
-slashes.  Multiple successive slahes are considered to be the same as
-one slash.  
+slashes. Multiple successive slahes are considered to be the same as
+one slash.
 
 POSIX allows a pathname that begins with precisely two successive slashes to be
-interpreted in an implementation-defined manner.  RTEMS does not currently
-recognize this as a special condition.  Any number of successive 
-slashes is treated the same as a single slash.   POSIX requires that
+interpreted in an implementation-defined manner. RTEMS does not currently
+recognize this as a special condition. Any number of successive
+slashes is treated the same as a single slash. POSIX requires that
 an implementation treat more than two leading slashes as a single slash.
 
 @section Operations
@@ -77,8 +77,14 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection opendir - Open a Directory
+
+@findex opendir
+@cindex  open a directory
 
 @subheading CALLING SEQUENCE:
 
@@ -88,7 +94,7 @@ and status codes.
 #include <dirent.h>
 
 int opendir(
-  const char *dirname
+const char *dirname
 );
 @end example
 @end ifset
@@ -123,15 +129,21 @@ Insufficient memory to complete the operation.
 @subheading DESCRIPTION:
 
 This routine opens a directory stream corresponding to the
-directory specified by the @code{dirname} argument.  The 
+directory specified by the @code{dirname} argument. The
 directory stream is positioned at the first entry.
 
 @subheading NOTES:
 
 The routine is implemented in Cygnus newlib.
 
+@c
+@c
+@c
 @page
 @subsection readdir - Reads a directory
+
+@findex readdir
+@cindex  reads a directory
 
 @subheading CALLING SEQUENCE:
 
@@ -141,7 +153,7 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 int readdir(
-  DIR    *dirp
+DIR *dirp
 );
 @end example
 @end ifset
@@ -161,25 +173,31 @@ Invalid file descriptor
 
 The @code{readdir()} function returns a pointer to a structure @code{dirent}
 representing the next directory entry from the directory stream pointed to
-by @code{dirp}.  On end-of-file, NULL is returned.
+by @code{dirp}. On end-of-file, NULL is returned.
 
 The @code{readdir()} function may (or may not) return entries for . or .. Your
 program should tolerate reading dot and dot-dot but not require them.
 
 The data pointed to be @code{readdir()} may be overwritten by another call to
-@code{readdir()} for the same directory stream.  It will not be overwritten by 
+@code{readdir()} for the same directory stream. It will not be overwritten by
 a call for another directory.
 
-@subheading NOTES: 
+@subheading NOTES:
 
-If @code{ptr} is not a pointer returned by @code{malloc()}, @code{calloc()}, or 
+If @code{ptr} is not a pointer returned by @code{malloc()}, @code{calloc()}, or
 @code{realloc()} or has been deallocated with @code{free()} or
 @code{realloc()}, the results are not portable and are probably disastrous.
 
 The routine is implemented in Cygnus newlib.
 
+@c
+@c
+@c
 @page
 @subsection rewinddir - Resets the readdir() pointer
+
+@findex rewinddir
+@cindex  resets the readdir() pointer
 
 @subheading CALLING SEQUENCE:
 
@@ -189,7 +207,7 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 void rewinddir(
-  DIR *dirp
+DIR *dirp
 );
 @end example
 @end ifset
@@ -204,10 +222,10 @@ No value is returned.
 @subheading DESCRIPTION:
 
 The @code{rewinddir()} function resets the position associated with
-the directory stream pointed to by @code{dirp}.  It also causes the
+the directory stream pointed to by @code{dirp}. It also causes the
 directory stream to refer to the current state of the directory.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
@@ -216,8 +234,14 @@ undefined.
 
 The routine is implemented in Cygnus newlib.
 
+@c
+@c
+@c
 @page
 @subsection scandir - Scan a directory for matching entries
+
+@findex scandir
+@cindex  scan a directory for matching entries
 
 @subheading CALLING SEQUENCE:
 
@@ -226,10 +250,10 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 int scandir(
-  const char      *dir,
-  struct direct ***namelist,
-  int (*select)(const struct dirent *),
-  int (*compar)(const struct dirent **, const struct dirent **)
+const char *dir,
+struct direct ***namelist,
+int (*select)(const struct dirent *),
+int (*compar)(const struct dirent **, const struct dirent **)
 );
 @end example
 @end ifset
@@ -248,8 +272,8 @@ Insufficient memory to complete the operation.
 @subheading DESCRIPTION:
 
 The @code{scandir()} function scans the directory @code{dir}, calling
-@code{select()} on each directory entry.  Entries for which @code{select()}
-returns non-zero are stored in strings allocated via @code{malloc()}, 
+@code{select()} on each directory entry. Entries for which @code{select()}
+returns non-zero are stored in strings allocated via @code{malloc()},
 sorted using @code{qsort()} with the comparison function @code{compar()},
 and collected in array @code{namelist} which is allocated via @code{malloc()}.
 If @code{select} is NULL, all entries are selected.
@@ -258,8 +282,14 @@ If @code{select} is NULL, all entries are selected.
 
 The routine is implemented in Cygnus newlib.
 
+@c
+@c
+@c
 @page
 @subsection telldir - Return current location in directory stream
+
+@findex telldir
+@cindex  return current location in directory stream
 
 @subheading CALLING SEQUENCE:
 
@@ -268,7 +298,7 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 off_t telldir(
-  DIR *dir
+DIR *dir
 );
 @end example
 @end ifset
@@ -289,12 +319,18 @@ Invalid directory stream descriptor @code{dir}.
 The @code{telldir()} function returns the current location associated with the
 directory stream @code{dir}.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 The routine is implemented in Cygnus newlib.
 
+@c
+@c
+@c
 @page
-@subsection closedir - Ends directory read operation 
+@subsection closedir - Ends directory read operation
+
+@findex closedir
+@cindex  ends directory read operation
 
 @subheading CALLING SEQUENCE:
 
@@ -304,7 +340,7 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 int closedir(
-  DIR *dirp
+DIR *dirp
 );
 @end example
 @end ifset
@@ -326,18 +362,24 @@ The directory stream associated with @code{dirp} is closed.
 The value in @code{dirp} may not be usable after a call to
 @code{closedir()}.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
-The argument to @code{closedir()} must be a pointer returned by 
-@code{opendir()}.  If it is not, the results are not portable and
+The argument to @code{closedir()} must be a pointer returned by
+@code{opendir()}. If it is not, the results are not portable and
 most likely unpleasant.
 
 The routine is implemented in Cygnus newlib.
 
+@c
+@c
+@c
 @page
 @subsection chdir - Changes the current working directory
+
+@findex chdir
+@cindex  changes the current working directory
 
 @subheading CALLING SEQUENCE:
 
@@ -346,7 +388,7 @@ The routine is implemented in Cygnus newlib.
 #include <unistd.h>
 
 int chdir(
-  const char  *path
+const char *path
 );
 @end example
 @end ifset
@@ -361,7 +403,7 @@ int chdir(
 Search permission is denied for a directory in a file's path prefix.
 
 @item ENAMETOOLONG
-Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is 
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is
 in effect.
 
 @item ENOENT
@@ -379,15 +421,21 @@ The @code{chdir()} function causes the directory named by @code{path} to
 become the current working directory; that is, the starting point for
 searches of pathnames not beginning with a slash.
 
-If @code{chdir()} detects an error, the current working directory is not 
+If @code{chdir()} detects an error, the current working directory is not
 changed.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
-@subsection getcwd - Gets current working directory 
+@subsection getcwd - Gets current working directory
+
+@findex getcwd
+@cindex  gets current working directory
 
 @subheading CALLING SEQUENCE:
 
@@ -419,13 +467,13 @@ Search permission is denied for a directory in a file's path prefix.
 @subheading DESCRIPTION:
 
 The @code{getcwd()} function copies the absolute pathname of the current
-working directory to the character array pointed to by @code{buf}.  The
+working directory to the character array pointed to by @code{buf}. The
 @code{size} argument is the number of bytes available in @code{buf}
 
 @subheading NOTES:
 
 There is no way to determine the maximum string length that @code{fetcwd()}
-may need to return.  Applications should tolerate getting @code{ERANGE}
+may need to return. Applications should tolerate getting @code{ERANGE}
 and allocate a larger buffer.
 
 It is possible for @code{getcwd()} to return EACCES if, say, @code{login}
@@ -434,8 +482,14 @@ puts the process into a directory without read access.
 The 1988 standard uses @code{int} instead of @code{size_t} for the second
 parameter.
 
+@c
+@c
+@c
 @page
 @subsection open - Opens a file
+
+@findex open
+@cindex  opens a file
 
 @subheading CALLING SEQUENCE:
 
@@ -446,9 +500,9 @@ parameter.
 #include <fcntl.h>
 
 int open(
-   const char *path,
-   int         oflag,
-   mode_t      mode
+const char *path,
+int oflag,
+mode_t mode
 );
 @end example
 @end ifset
@@ -494,7 +548,7 @@ A component of the specified pathname was not a directory when a directory
 was expected.
 
 @item ENXIO
-No such device.  This error may also occur when a device is not ready, for 
+No such device. This error may also occur when a device is not ready, for
 example, a tape drive is off-line.
 
 @item EROFS
@@ -503,13 +557,13 @@ Read-only file system.
 
 @subheading DESCRIPTION:
 
-The @code{open} function establishes a connection between a file and a file 
-descriptor.  The file descriptor is a small integer that is used by I/O 
-functions to reference the file.  The @code{path} argument points to the 
+The @code{open} function establishes a connection between a file and a file
+descriptor. The file descriptor is a small integer that is used by I/O
+functions to reference the file. The @code{path} argument points to the
 pathname for the file.
 
-The @code{oflag} argument is the bitwise inclusive OR of the values of 
-symbolic constants.  The programmer must specify exactly one of the following
+The @code{oflag} argument is the bitwise inclusive OR of the values of
+symbolic constants. The programmer must specify exactly one of the following
 three symbols:
 
 @table @b
@@ -531,39 +585,45 @@ Any combination of the following symbols may also be used.
 Set the file offset to the end-of-file prior to each write.
 
 @item O_CREAT
-If the file does not exist, allow it to be created.  This flag indicates
+If the file does not exist, allow it to be created. This flag indicates
 that the @code{mode} argument is present in the call to @code{open}.
 
 @item O_EXCL
-This flag may be used only if O_CREAT is also set.  It causes the call
+This flag may be used only if O_CREAT is also set. It causes the call
 to @code{open} to fail if the file already exists.
 
 @item O_NOCTTY
 If @code{path} identifies a terminal, this flag prevents that teminal from
-becoming the controlling terminal for thi9s process.  See Chapter 8 for a
+becoming the controlling terminal for thi9s process. See Chapter 8 for a
 description of terminal I/O.
 
 @item O_NONBLOCK
-Do no wait for the device or file to be ready or available.  After the file
-is open, the @code{read} and @code{write} calls return immediately.  If the 
-process would be delayed in the read or write opermation, -1 is returned and 
+Do no wait for the device or file to be ready or available. After the file
+is open, the @code{read} and @code{write} calls return immediately. If the
+process would be delayed in the read or write opermation, -1 is returned and
 @code{errno} is set to @code{EAGAIN} instead of blocking the caller.
 
 @item O_TRUNC
-This flag should be used only on ordinary files opened for writing.  It 
+This flag should be used only on ordinary files opened for writing. It
 causes the file to be tuncated to zero length..
 
 @end table
 
-Upon successful completion, @code{open} returns a non-negative file 
+Upon successful completion, @code{open} returns a non-negative file
 descriptor.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
-@subsection creat - Create a new file or rewrite an existing one 
+@subsection creat - Create a new file or rewrite an existing one
+
+@findex creat
+@cindex  create a new file or rewrite an existing one
 
 @subheading CALLING SEQUENCE:
 
@@ -574,8 +634,8 @@ NONE
 #include <fcntl.h>
 
 int creat(
-  const char *path, 
-  mode_t      mode
+const char *path,
+mode_t mode
 );
 @end example
 @end ifset
@@ -601,7 +661,7 @@ executed and write access was requested
 @code{path} points outside your accessible address space
 
 @item EACCES
-The requested access to the file is not allowed, or one of the 
+The requested access to the file is not allowed, or one of the
 directories in @code{path} did not allow search (execute) permission.
 
 @item ENAMETOOLONG
@@ -612,14 +672,14 @@ A directory component in @code{path} does not exist or is a dangling
 symbolic link.
 
 @item ENOTDIR
-A component used as a directory in @code{path} is not, in fact, a 
+A component used as a directory in @code{path} is not, in fact, a
 directory.
 
 @item EMFILE
 The process alreadyh has the maximum number of files open.
 
 @item ENFILE
-The limit on the total number of files open on the system has been 
+The limit on the total number of files open on the system has been
 reached.
 
 @item ENOMEM
@@ -642,8 +702,14 @@ NONE
 
 The routine is implemented in Cygnus newlib.
 
+@c
+@c
+@c
 @page
 @subsection umask - Sets a file creation mask.
+
+@findex umask
+@cindex  sets a file creation mask.
 
 @subheading CALLING SEQUENCE:
 
@@ -653,7 +719,7 @@ The routine is implemented in Cygnus newlib.
 #include <sys/stat.h>
 
 mode_t umask(
-  mode_t cmask
+mode_t cmask
 );
 @end example
 @end ifset
@@ -671,20 +737,26 @@ The file creation mask is used during @code{open()}, @code{creat()}, @code{mkdir
 Bit positions that are set in @code{cmask} are cleared in the mode of the
 created file.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
-The @code{cmask} argument should have only permission bits set.  All other 
+The @code{cmask} argument should have only permission bits set. All other
 bits should be zero.
 
 In a system which supports multiple processes, the file creation mask is inherited
-across @code{fork()} and @code{exec()} calls.  This makes it possible to alter the
-default permission bits of created files.  RTEMS does not support multiple processes
+across @code{fork()} and @code{exec()} calls. This makes it possible to alter the
+default permission bits of created files. RTEMS does not support multiple processes
 so this behavior is not possible.
 
+@c
+@c
+@c
 @page
 @subsection link - Creates a link to a file
+
+@findex link
+@cindex  creates a link to a file
 
 @subheading CALLING SEQUENCE:
 
@@ -693,8 +765,8 @@ so this behavior is not possible.
 #include <unistd.h>
 
 int link(
-  const char *existing,
-  const char *new
+const char *existing,
+const char *new
 );
 @end example
 @end ifset
@@ -729,7 +801,7 @@ A component of the specified pathname was not a directory when a directory
 was expected.
 
 @item EPERM
-Operation is not permitted.  Process does not have the appropriate priviledges
+Operation is not permitted. Process does not have the appropriate priviledges
 or permissions to perform the requested operations.
 
 @item EROFS
@@ -755,8 +827,14 @@ The caller may (or may not) need permission to access the existing file.
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection symlink - Creates a symbolic link to a file
+
+@findex symlink
+@cindex  creates a symbolic link to a file
 
 @subheading CALLING SEQUENCE:
 
@@ -799,8 +877,8 @@ A component of the specified pathname was not a directory when a directory
 was expected.
 
 @item EPERM
-Operation is not permitted.  Process does not have the appropriate priviledges
-or permissions to perform the requested operations. 
+Operation is not permitted. Process does not have the appropriate priviledges
+or permissions to perform the requested operations.
 
 @item EROFS
 Read-only file system.
@@ -810,7 +888,7 @@ Read-only file system.
 @subheading DESCRIPTION:
 
 The @code{symlink()} function creates a symbolic link from the frombath to the
-topath.  The symbolic link will be interpreted at run-time.
+topath. The symbolic link will be interpreted at run-time.
 
 If the @code{symlink()} function fails, no directories are modified.
 
@@ -820,8 +898,14 @@ The caller may (or may not) need permission to access the existing file.
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection readlink - Obtain the name of a symbolic link destination
+
+@findex readlink
+@cindex  obtain the name of a symbolic link destination
 
 @subheading CALLING SEQUENCE:
 
@@ -830,9 +914,9 @@ NONE
 #include <unistd.h>
 
 int readlink(
-  const char *path,
-  char       *buf,
-  size_t      bufsize
+const char *path,
+char *buf,
+size_t bufsize
 );
 
 @end example
@@ -872,18 +956,24 @@ An invalid pointer was passed into the @code{readlink()} routine.
 
 @subheading DESCRIPTION:
 
-The @code{readlink()} function places the symbolic link destination into 
+The @code{readlink()} function places the symbolic link destination into
 @code{buf} argument and returns the number of characters copied.
 
-If the symbolic link destination is longer than bufsize characters the 
+If the symbolic link destination is longer than bufsize characters the
 name will be truncated.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection mkdir - Makes a directory
+
+@findex mkdir
+@cindex  makes a directory
 
 @subheading CALLING SEQUENCE:
 
@@ -893,8 +983,8 @@ NONE
 #include <sys/stat.h>
 
 int mkdir(
-  const char *path,
-  mode_t      mode
+const char *path,
+mode_t mode
 );
 @end example
 @end ifset
@@ -909,7 +999,7 @@ int mkdir(
 Search permission is denied for a directory in a file's path prefix
 
 @item EEXIST
-The name file already exist.  
+The name file already exist.
 
 @item EMLINK
 The number of links would exceed LINK_MAX
@@ -935,7 +1025,7 @@ Read-only file system.
 
 @subheading DESCRIPTION:
 
-The @code{mkdir()} function creates a new diectory named @code{path}.  The 
+The @code{mkdir()} function creates a new diectory named @code{path}. The
 permission bits (modified by the file creation mask) are set from @code{mode}.
 The owner and group IDs for the directory are set from the effective user ID
 and group ID.
@@ -947,8 +1037,14 @@ empty.
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection mkfifo - Makes a FIFO special file
+
+@findex mkfifo
+@cindex  makes a fifo special file
 
 @subheading CALLING SEQUENCE:
 
@@ -959,8 +1055,8 @@ NONE
 
 
 int mkfifo(
-  const char *path,
-  mode_t      mode
+const char *path,
+mode_t mode
 );
 @end example
 @end ifset
@@ -995,16 +1091,22 @@ Read-only file system.
 @subheading DESCRIPTION:
 
 The @code{mkfifo()} function creates a new FIFO special file named @code{path}.
-The permission bits (modified by the file creation mask) are set from 
-@code{mode}.  The owner and group IDs for the FIFO are set from the efective
+The permission bits (modified by the file creation mask) are set from
+@code{mode}. The owner and group IDs for the FIFO are set from the efective
 user ID and group ID.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection unlink - Removes a directory entry
+
+@findex unlink
+@cindex  removes a directory entry
 
 @subheading CALLING SEQUENCE:
 
@@ -1013,7 +1115,7 @@ NONE
 #include <unistd.h>
 
 int unlink(
-  const char path
+const char path
 );
 @end example
 @end ifset
@@ -1042,7 +1144,7 @@ A component of the specified @code{path} was not a directory when a directory
 was expected.
 
 @item EPERM
-Operation is not permitted.  Process does not have the appropriate priviledges
+Operation is not permitted. Process does not have the appropriate priviledges
 or permissions to perform the requested operations.
 
 @item EROFS
@@ -1053,16 +1155,22 @@ Read-only file system.
 @subheading DESCRIPTION:
 
 The @code{unlink} function removes the link named by @code{path} and decrements the
-link count of the file referenced by the link.  When the link count goes to zero
+link count of the file referenced by the link. When the link count goes to zero
 and no process has the file open, the space occupied by the file is freed and the
-file is no longer accessible. 
+file is no longer accessible.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
-@subsection rmdir - Delete a directory 
+@subsection rmdir - Delete a directory
+
+@findex rmdir
+@cindex  delete a directory
 
 @subheading CALLING SEQUENCE:
 
@@ -1071,7 +1179,7 @@ NONE
 #include <unistd.h>
 
 int rmdir(
-  const char *pathname
+const char *pathname
 );
 @end example
 @end ifset
@@ -1091,19 +1199,19 @@ of directories.
 
 @item EACCES
 Write access to the directory containing @code{pathname} was not
-allowed for the process's effective uid, or one of the directories in 
+allowed for the process's effective uid, or one of the directories in
 @code{pathname} did not allow search (execute) permission.
 
 @item EPERM
-The directory containing @code{pathname} has the stickybit (S_ISVTX) 
-set and the process's effective uid is neither the uid of the file to 
+The directory containing @code{pathname} has the stickybit (S_ISVTX)
+set and the process's effective uid is neither the uid of the file to
 be delected nor that of the director containing it.
 
 @item ENAMETOOLONG
 @code{pathname} was too long.
 
 @item ENOENT
-A dirctory component in @code{pathname} does not exist or is a 
+A dirctory component in @code{pathname} does not exist or is a
 dangling symbolic link.
 
 @item ENOTDIR
@@ -1114,11 +1222,11 @@ is not, in fact, a directory.
 @code{pathname} contains entries other than . and .. .
 
 @item EBUSY
-@code{pathname} is the current working directory or root directory of 
+@code{pathname} is the current working directory or root directory of
 some process
 
 @item EBUSY
-@code{pathname} is the current directory or root directory of some 
+@code{pathname} is the current directory or root directory of some
 process.
 
 @item ENOMEM
@@ -1141,8 +1249,14 @@ Insufficient kernel memory was available
 
 NONE
 
+@c
+@c
+@c
 @page
-@subsection rename - Renames a file 
+@subsection rename - Renames a file
+
+@findex rename
+@cindex  renames a file
 
 @subheading CALLING SEQUENCE:
 
@@ -1151,8 +1265,8 @@ NONE
 #include <unistd.h>
 
 int rename(
-  const char *old, 
-  const char *new
+const char *old,
+const char *new
 );
 @end example
 @end ifset
@@ -1176,7 +1290,7 @@ The named file already exists.
 Invalid argument.
 
 @item EISDIR
-Attempt to open a directory for writing or to rename a file to be a 
+Attempt to open a directory for writing or to rename a file to be a
 directory.
 
 @item EMLINK
@@ -1193,7 +1307,7 @@ A file or directory does no exist.
 No space left on disk.
 
 @item ENOTDIR
-A component of the specified pathname was not a directory when a 
+A component of the specified pathname was not a directory when a
 directory was expected.
 
 @item ENOTEMPTY
@@ -1208,19 +1322,19 @@ Attempt to link a file to another file system.
 
 @subheading DESCRIPTION:
 
-The @code{rename()} function causes the file known bo @code{old} to 
-now be known as @code{new}. 
+The @code{rename()} function causes the file known bo @code{old} to
+now be known as @code{new}.
 
 Ordinary files may be renamed to ordinary files, and directories may be
-renamed to directories; however, files cannot be converted using 
-@code{rename()}.  The @code{new} pathname may not contain a path prefix
+renamed to directories; however, files cannot be converted using
+@code{rename()}. The @code{new} pathname may not contain a path prefix
 of @code{old}.
 
 @subheading NOTES:
 
-If a file already exists by the name @code{new}, it is removed.  The 
-@code{rename()} function is atomic.  If the @code{rename()} detects an
-error, no files are removed.  This guarantees that the
+If a file already exists by the name @code{new}, it is removed. The
+@code{rename()} function is atomic. If the @code{rename()} detects an
+error, no files are removed. This guarantees that the
 @code{rename("x", "x")} does not remove @code{x}.
 
 You may not rename dot or dot-dot.
@@ -1228,8 +1342,14 @@ You may not rename dot or dot-dot.
 The routine is implemented in Cygnus newlib using @code{link()} and
 @code{unlink()}.
 
+@c
+@c
+@c
 @page
-@subsection stat - Gets information about a file 
+@subsection stat - Gets information about a file
+
+@findex stat
+@cindex  gets information about a file
 
 @subheading CALLING SEQUENCE:
 
@@ -1239,8 +1359,8 @@ The routine is implemented in Cygnus newlib using @code{link()} and
 #include <sys/stat.h>
 
 int stat(
-  const char  *path, 
-  struct stat *buf
+const char *path,
+struct stat *buf
 );
 @end example
 @end ifset
@@ -1265,16 +1385,16 @@ in effect.
 A file or directory does not exist.
 
 @item ENOTDIR
-A component of the specified pathname was not a directory when a 
+A component of the specified pathname was not a directory when a
 directory was expected.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{path} argument points to a pathname for a file.  Read, write, or
+The @code{path} argument points to a pathname for a file. Read, write, or
 execute permission for the file is not required, but all directories listed
-in @code{path} must be searchable.  The @code{stat()} function obtains 
+in @code{path} must be searchable. The @code{stat()} function obtains
 information about the named file and writes it to the area pointed to by
 @code{buf}.
 
@@ -1282,8 +1402,14 @@ information about the named file and writes it to the area pointed to by
 
 NONE
 
+@c
+@c
+@c
 @page
-@subsection fstat - Gets file status 
+@subsection fstat - Gets file status
+
+@findex fstat
+@cindex  gets file status
 
 @subheading CALLING SEQUENCE:
 
@@ -1293,8 +1419,8 @@ NONE
 #include <sys/stat.h>
 
 int fstat(
-  int fildes,
-  struct stat *buf
+int fildes,
+struct stat *buf
 );
 @end example
 @end ifset
@@ -1320,8 +1446,14 @@ to by the @code{buf} argument.
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection access - Check permissions for a file
+
+@findex access
+@cindex  check permissions for a file
 
 @subheading CALLING SEQUENCE:
 
@@ -1330,8 +1462,8 @@ NONE
 #include <unistd.h>
 
 int access(
-  const char *pathname,
-  int         mode
+const char *pathname,
+int mode
 );
 @end example
 @end ifset
@@ -1360,7 +1492,7 @@ A directory component in @code{pathname} would have been accessible but
 does not exist or was a dangling symbolic link.
 
 @item ENOTDIR
-A component used as a directory in @code{pathname} is not, in fact, 
+A component used as a directory in @code{pathname} is not, in fact,
 a directory.
 
 @item ENOMEM
@@ -1370,9 +1502,9 @@ Insufficient kernel memory was available.
 
 @subheading DESCRIPTION:
 
-@code{Access} checks whether the process would be allowed to read, write or 
-test for existence of the file (or other file system object) whose name is 
-@code{pathname}.  If @code{pathname} is a symbolic link permissions of the 
+@code{Access} checks whether the process would be allowed to read, write or
+test for existence of the file (or other file system object) whose name is
+@code{pathname}. If @code{pathname} is a symbolic link permissions of the
 file referred by this symbolic link are tested.
 
 @code{Mode} is a mask consisting of one or more of R_OK, W_OK, X_OK and F_OK.
@@ -1381,8 +1513,14 @@ file referred by this symbolic link are tested.
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection chmod - Changes file mode.
+
+@findex chmod
+@cindex  changes file mode.
 
 @subheading CALLING SEQUENCE:
 
@@ -1392,8 +1530,8 @@ NONE
 #include <sys/stat.h>
 
 int chmod(
-  const char *path,
-  mode_t      mode
+const char *path,
+mode_t mode
 );
 @end example
 @end ifset
@@ -1419,7 +1557,7 @@ A component of the specified pathname was not a directory when a directory
 was expected.
 
 @item EPERM
-Operation is not permitted.  Process does not have the appropriate priviledges
+Operation is not permitted. Process does not have the appropriate priviledges
 or permissions to perform the requested operations.
 
 @item EROFS
@@ -1429,9 +1567,9 @@ Read-only file system.
 
 @subheading DESCRIPTION:
 
-Set the file permission bits, the set user ID bit, and the set group ID bit 
-for the file named by @code{path} to @code{mode}.  If the effective user ID 
-does not match the owner of the file and the calling process does not have 
+Set the file permission bits, the set user ID bit, and the set group ID bit
+for the file named by @code{path} to @code{mode}. If the effective user ID
+does not match the owner of the file and the calling process does not have
 the appropriate privileges, @code{chmod()} returns -1 and sets @code{errno} to
 @code{EPERM}.
 
@@ -1439,8 +1577,14 @@ the appropriate privileges, @code{chmod()} returns -1 and sets @code{errno} to
 
 NONE
 
+@c
+@c
+@c
 @page
-@subsection fchmod - Changes permissions of a file 
+@subsection fchmod - Changes permissions of a file
+
+@findex fchmod
+@cindex  changes permissions of a file
 
 @subheading CALLING SEQUENCE:
 
@@ -1450,8 +1594,8 @@ NONE
 #include <sys/stat.h>
 
 int fchmod(
-  int    fildes, 
-  mode_t mode
+int fildes,
+mode_t mode
 );
 @end example
 @end ifset
@@ -1488,11 +1632,11 @@ A file or directory does no exist.
 Insufficient kernel memory was avaliable.
 
 @item ENOTDIR
-A component of the specified pathname was not a directory when a 
+A component of the specified pathname was not a directory when a
 directory was expected.
 
 @item EPERM
-The effective UID does not match the owner of the file, and is not 
+The effective UID does not match the owner of the file, and is not
 zero
 
 @item EROFS
@@ -1501,15 +1645,21 @@ Read-only file system
 
 @subheading DESCRIPTION:
 
-The mode of the file given by @code{path} or referenced by 
-@code{filedes} is changed. 
+The mode of the file given by @code{path} or referenced by
+@code{filedes} is changed.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection getdents - Get directory entries
+
+@findex getdents
+@cindex  get directory entries
 
 @subheading CALLING SEQUENCE:
 
@@ -1520,9 +1670,9 @@ NONE
 #include <linux/unistd.h>
 
 long getdents(
-  int   dd_fd,
-  char *dd_buf,
-  int   dd_len
+int dd_fd,
+char *dd_buf,
+int dd_len
 );
 @end example
 @end ifset
@@ -1532,8 +1682,8 @@ long getdents(
 
 @subheading STATUS CODES:
 
-A successful call to @code{getdents} returns th the number of bytes read.  
-On end of directory, 0 is returned.  When an error occurs, -1 is returned, 
+A successful call to @code{getdents} returns th the number of bytes read.
+On end of directory, 0 is returned. When an error occurs, -1 is returned,
 and @code{errno} is set appropriately.
 
 @table @b
@@ -1557,15 +1707,21 @@ File descriptor does not refer to a directory.
 @subheading DESCRIPTION:
 
 @code{getdents} reads several @code{dirent} structures from the directory
-pointed by @code{fd} into the memory area pointed to by @code{dirp}.  The
-parameter @code{count} is the size of the memory area.  
+pointed by @code{fd} into the memory area pointed to by @code{dirp}. The
+parameter @code{count} is the size of the memory area.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection chown - Changes the owner and/or group of a file.
+
+@findex chown
+@cindex  changes the owner and/or group of a file.
 
 @subheading CALLING SEQUENCE:
 
@@ -1575,9 +1731,9 @@ NONE
 #include <unistd.h>
 
 int chown(
-  const char *path,
-  uid_t       owner,
-  gid_t       group
+const char *path,
+uid_t owner,
+gid_t group
 );
 @end example
 @end ifset
@@ -1606,7 +1762,7 @@ A component of the specified pathname was not a directory when a directory
 was expected.
 
 @item EPERM
-Operation is not permitted.  Process does not have the appropriate priviledges
+Operation is not permitted. Process does not have the appropriate priviledges
 or permissions to perform the requested operations.
 
 @item EROFS
@@ -1616,27 +1772,33 @@ Read-only file system.
 
 @subheading DESCRIPTION:
 
-The user ID and group ID of the file named by @code{path} are set to 
+The user ID and group ID of the file named by @code{path} are set to
 @code{owner} and @code{path}, respectively.
 
 For regular files, the set group ID (S_ISGID) and set user ID (S_ISUID)
 bits are cleared.
 
 Some systems consider it a security violation to allow the owner of a file to
-be changed,  If users are billed for disk space usage, loaning a file to 
-another user could result in incorrect billing.  The @code{chown()} function
-may be restricted to privileged users for some or all files.  The group ID can
+be changed, If users are billed for disk space usage, loaning a file to
+another user could result in incorrect billing. The @code{chown()} function
+may be restricted to privileged users for some or all files. The group ID can
 still be changed to one of the supplementary group IDs.
 
 @subheading NOTES:
 
-This function may be restricted for some file.  The @code{pathconf} function
+This function may be restricted for some file. The @code{pathconf} function
 can be used to test the @code{_PC_CHOWN_RESTRICTED} flag.
 
 
 
+@c
+@c
+@c
 @page
-@subsection utime - Change access and/or modification times of an inode 
+@subsection utime - Change access and/or modification times of an inode
+
+@findex utime
+@cindex  change access and/or modification times of an inode
 
 @subheading CALLING SEQUENCE:
 
@@ -1645,8 +1807,8 @@ can be used to test the @code{_PC_CHOWN_RESTRICTED} flag.
 #include <sys/types.h>
 
 int utime(
-  const char     *filename,
-  struct utimbuf *buf
+const char *filename,
+struct utimbuf *buf
 );
 @end example
 @end ifset
@@ -1669,15 +1831,21 @@ Permission to write the file is denied
 
 @code{Utime} changes the access and modification times of the inode
 specified by @code{filename} to the @code{actime} and @code{modtime}
-fields of @code{buf} respectively.  If @code{buf} is NULL, then the 
-access and modification times of the file are set to the current time.  
+fields of @code{buf} respectively. If @code{buf} is NULL, then the
+access and modification times of the file are set to the current time.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection ftruncate - truncate a file to a specified length
+
+@findex ftruncate
+@cindex  truncate a file to a specified length
 
 @subheading CALLING SEQUENCE:
 
@@ -1686,8 +1854,8 @@ NONE
 #include <unistd.h>
 
 int ftrunctate(
-  int     fd,
-  size_t  length
+int fd,
+size_t length
 );
 @end example
 @end ifset
@@ -1718,7 +1886,7 @@ The named file is not writable by the user.
 Search permission is denied for a component of the path prefix.
 
 @item ELOOP
-Too many symbolic links were encountered in translating the 
+Too many symbolic links were encountered in translating the
 pathname
 
 @item EISDIR
@@ -1728,7 +1896,7 @@ The named file is a directory.
 The named file resides on a read-only file system
 
 @item ETXTBSY
-The file is a pure procedure (shared text) file that is being 
+The file is a pure procedure (shared text) file that is being
 executed
 
 @item EIO
@@ -1744,17 +1912,23 @@ The @code{fd} is not a valid descriptor.
 
 @subheading DESCRIPTION:
 
-@code{truncate()} causes the file named by @code{path} or referenced by 
-@code{fd} to be truncated to at most @code{length} bytes in size.  If the  
-file previously was larger than this size, the extra data is lost.  With 
+@code{truncate()} causes the file named by @code{path} or referenced by
+@code{fd} to be truncated to at most @code{length} bytes in size. If the
+file previously was larger than this size, the extra data is lost. With
 @code{ftruncate()}, the file must be open for writing.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection truncate - truncate a file to a specified length
+
+@findex truncate
+@cindex  truncate a file to a specified length
 
 @subheading CALLING SEQUENCE:
 
@@ -1763,8 +1937,8 @@ NONE
 #include <unistd.h>
 
 int trunctate(
-  const char *path,
-  size_t      length
+const char *path,
+size_t length
 );
 @end example
 @end ifset
@@ -1795,7 +1969,7 @@ The named file is not writable by the user.
 Search permission is denied for a component of the path prefix.
 
 @item ELOOP
-Too many symbolic links were encountered in translating the 
+Too many symbolic links were encountered in translating the
 pathname
 
 @item EISDIR
@@ -1805,7 +1979,7 @@ The named file is a directory.
 The named file resides on a read-only file system
 
 @item ETXTBSY
-The file is a pure procedure (shared text) file that is being 
+The file is a pure procedure (shared text) file that is being
 executed
 
 @item EIO
@@ -1821,17 +1995,23 @@ The @code{fd} is not a valid descriptor.
 
 @subheading DESCRIPTION:
 
-@code{truncate()} causes the file named by @code{path} or referenced by 
-@code{fd} to be truncated to at most @code{length} bytes in size.  If the  
-file previously was larger than this size, the extra data is lost.  With 
+@code{truncate()} causes the file named by @code{path} or referenced by
+@code{fd} to be truncated to at most @code{length} bytes in size. If the
+file previously was larger than this size, the extra data is lost. With
 @code{ftruncate()}, the file must be open for writing.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection pathconf - Gets configuration values for files
+
+@findex pathconf
+@cindex  gets configuration values for files
 
 @subheading CALLING SEQUENCE:
 
@@ -1840,8 +2020,8 @@ NONE
 #include <unistd.h>
 
 int pathconf(
-  const char *path,
-  int         name
+const char *path,
+int name
 );
 @end example
 @end ifset
@@ -1866,7 +2046,7 @@ is in effect.
 A file or directory does not exist
 
 @item ENOTDIR
-A component of the specified @code{path} was not a directory whan a 
+A component of the specified @code{path} was not a directory whan a
 directory was expected.
 
 @end table
@@ -1880,50 +2060,56 @@ The possible values for @code{name} are:
 
 @table @b
 @item _PC_LINK_MAX
-returns the maximum number of links to the file.  If @code{filedes} or 
+returns the maximum number of links to the file. If @code{filedes} or
 @code{path} refer to a directory, then the value applies to the whole
-directory.  The corresponding macro is @code{_POSIX_LINK_MAX}.
+directory. The corresponding macro is @code{_POSIX_LINK_MAX}.
 
 @item _PC_MAX_CANON
-returns  the maximum length of a formatted input line, where @code{filedes}
-or @code{path} must refer to a terminal.  The corresponding macro is 
+returns the maximum length of a formatted input line, where @code{filedes}
+or @code{path} must refer to a terminal. The corresponding macro is
 @code{_POSIX_MAX_CANON}.
 
 @item _PC_MAX_INPUT
-returns the maximum length of an input line, where @code{filedes} or 
-@code{path} must refer to a terminal.  The corresponding macro is 
+returns the maximum length of an input line, where @code{filedes} or
+@code{path} must refer to a terminal. The corresponding macro is
 @code{_POSIX_MAX_INPUT}.
 
 @item _PC_NAME_MAX
-returns the maximum length of a filename in the directory @code{path} or 
-@code{filedes}.  The process is allowed to create. The corresponding macro 
+returns the maximum length of a filename in the directory @code{path} or
+@code{filedes}. The process is allowed to create. The corresponding macro
 is @code{_POSIX_NAME_MAX}.
 
 @item _PC_PATH_MAX
-returns the maximum length of a relative pathname when @code{path} or 
-@code{filedes} is the current working directory.  The corresponding macro 
+returns the maximum length of a relative pathname when @code{path} or
+@code{filedes} is the current working directory. The corresponding macro
 is @code{_POSIX_PATH_MAX}.
 
 @item _PC_PIPE_BUF
-returns the size of the pipe buffer, where @code{filedes} must refer to a 
-pipe or FIFO and @code{path} must refer to a FIFO.  The corresponding macro 
+returns the size of the pipe buffer, where @code{filedes} must refer to a
+pipe or FIFO and @code{path} must refer to a FIFO. The corresponding macro
 is @code{_POSIX_PIPE_BUF}.
 
 @item _PC_CHOWN_RESTRICTED
-returns nonzero if the chown(2) call may not be used on this file.  If 
-@code{filedes} or @code{path} refer to a directory, then this applies to all 
-files in that directory.  The corresponding macro is
+returns nonzero if the chown(2) call may not be used on this file. If
+@code{filedes} or @code{path} refer to a directory, then this applies to all
+files in that directory. The corresponding macro is
 @code{_POSIX_CHOWN_RESTRICTED}.
 
 @end table
 
 @subheading NOTES:
 
-Files with name lengths longer than the value returned for @code{name} equal 
+Files with name lengths longer than the value returned for @code{name} equal
 @code{_PC_NAME_MAX} may exist in the given directory.
 
+@c
+@c
+@c
 @page
 @subsection fpathconf - Gets configuration values for files
+
+@findex fpathconf
+@cindex  gets configuration values for files
 
 @subheading CALLING SEQUENCE:
 
@@ -1932,8 +2118,8 @@ Files with name lengths longer than the value returned for @code{name} equal
 #include <unistd.h>
 
 int fpathconf(
-  int filedes, 
-  int name
+int filedes,
+int name
 );
 @end example
 @end ifset
@@ -1958,7 +2144,7 @@ is in effect.
 A file or directory does not exist
 
 @item ENOTDIR
-A component of the specified @code{path} was not a directory whan a 
+A component of the specified @code{path} was not a directory whan a
 directory was expected.
 
 @end table
@@ -1973,39 +2159,39 @@ The possible values for name are:
 
 @table @b
 @item _PC_LINK_MAX
-returns the maximum number of links to the file.  If @code{filedes} or 
+returns the maximum number of links to the file. If @code{filedes} or
 @code{path} refer to a directory, then the value applies to the whole
-directory.  The corresponding macro is _POSIX_LINK_MAX.
+directory. The corresponding macro is _POSIX_LINK_MAX.
 
 @item _PC_MAX_CANON
-returns  the maximum length of a formatted input line, where @code{filedes}
-or @code{path} must refer to a terminal.  The corresponding macro is 
+returns the maximum length of a formatted input line, where @code{filedes}
+or @code{path} must refer to a terminal. The corresponding macro is
 @code{_POSIX_MAX_CANON}.
 
 @item _PC_MAX_INPUT
-returns the maximum length of an input line, where @code{filedes} or 
-@code{path} must refer to a terminal.  The corresponding macro is 
+returns the maximum length of an input line, where @code{filedes} or
+@code{path} must refer to a terminal. The corresponding macro is
 @code{_POSIX_MAX_INPUT}.
 
 @item _PC_NAME_MAX
-returns the maximum length of a filename in the directory @code{path} or 
-@code{filedes}.  The process is allowed to create. The corresponding macro 
+returns the maximum length of a filename in the directory @code{path} or
+@code{filedes}. The process is allowed to create. The corresponding macro
 is @code{_POSIX_NAME_MAX}.
 
 @item _PC_PATH_MAX
-returns the maximum length of a relative pathname when @code{path} or 
-@code{filedes} is the current working directory.  The corresponding macro 
+returns the maximum length of a relative pathname when @code{path} or
+@code{filedes} is the current working directory. The corresponding macro
 is @code{_POSIX_PATH_MAX}.
 
 @item _PC_PIPE_BUF
-returns the size of the pipe buffer, where @code{filedes} must refer to a 
-pipe or FIFO and @code{path} must refer to a FIFO.  The corresponding macro 
+returns the size of the pipe buffer, where @code{filedes} must refer to a
+pipe or FIFO and @code{path} must refer to a FIFO. The corresponding macro
 is @code{_POSIX_PIPE_BUF}.
 
 @item _PC_CHOWN_RESTRICTED
-returns nonzero if the @code{chown()} call may not be used on this file.  If 
-@code{filedes} or @code{path} refer to a directory, then this applies to all 
-files in that directory.  The corresponding macro is
+returns nonzero if the @code{chown()} call may not be used on this file. If
+@code{filedes} or @code{path} refer to a directory, then this applies to all
+files in that directory. The corresponding macro is
 @code{_POSIX_CHOWN_RESTRICTED}.
 
 @end table
@@ -2014,8 +2200,14 @@ files in that directory.  The corresponding macro is
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection mknod - create a directory
+
+@findex mknod
+@cindex  create a directory
 
 @subheading CALLING SEQUENCE:
 
@@ -2027,9 +2219,9 @@ NONE
 #include <sys/stat.h>
 
 long mknod(
-  const char *pathname,
-  mode_t      mode,
-  dev_t       dev
+const char *pathname,
+mode_t mode,
+dev_t dev
 );
 @end example
 @end ifset
@@ -2039,7 +2231,7 @@ long mknod(
 
 @subheading STATUS CODES:
 
-@code{mknod} returns zero on success, or -1 if an error occurred (in which case, 
+@code{mknod} returns zero on success, or -1 if an error occurred (in which case,
 errno is set appropriately).
 
 @table @b
@@ -2078,21 +2270,21 @@ named pipe) named @code{pathname}, specified by @code{mode} and @code{dev}.
 It should be a combination (using bitwise OR) of one of the file types listed
 below and the permissions for the new node.
 
-The permissions are modified by the process's @code{umask} in the usual way: the 
+The permissions are modified by the process's @code{umask} in the usual way: the
 permissions of the created node are @code{(mode & ~umask)}.
 
-The file type should be one of @code{S_IFREG}, @code{S_IFCHR}, @code{S_IFBLK} and 
-@code{S_IFIFO} to specify a normal file (which will be created empty), character 
-special file, block special file or FIFO (named pipe), respectively, or zero, which 
+The file type should be one of @code{S_IFREG}, @code{S_IFCHR}, @code{S_IFBLK} and
+@code{S_IFIFO} to specify a normal file (which will be created empty), character
+special file, block special file or FIFO (named pipe), respectively, or zero, which
 will create a normal file.
 
-If the file type is @code{S_IFCHR} or @code{S_IFBLK} then @code{dev} specifies the major  
+If the file type is @code{S_IFCHR} or @code{S_IFBLK} then @code{dev} specifies the major
 and minor numbers of the newly created device special file; otherwise it is ignored.
 
-The newly created node will be owned by the effective uid of the process.  If the
+The newly created node will be owned by the effective uid of the process. If the
 directory containing the node has the set group id bit set, or if the filesystem
 is mounted with BSD group semantics, the new node will inherit the group ownership
-from its parent directory; otherwise it will be owned by the effective gid of the 
+from its parent directory; otherwise it will be owned by the effective gid of the
 process.
 
 

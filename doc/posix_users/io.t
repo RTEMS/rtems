@@ -1,9 +1,9 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved. 
+@c COPYRIGHT (c) 1988-1998.
+@c On-Line Applications Research Corporation (OAR).
+@c All rights reserved.
 @c
-@c  $Id$
+@c $Id$
 @c
 
 @chapter Input and Output Primitives Manager
@@ -52,8 +52,14 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection pipe - Create an Inter-Process Channel
+
+@findex pipe
+@cindex  create an inter
 
 @subheading CALLING SEQUENCE:
 
@@ -79,11 +85,17 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.
 
+@c
+@c
+@c
 @page
 @subsection dup - Duplicates an open file descriptor
+
+@findex dup
+@cindex  duplicates an open file descriptor
 
 @subheading CALLING SEQUENCE:
 
@@ -92,7 +104,7 @@ in a future version.
 #include <unistd.h>
 
 int dup(
-  int fildes
+int fildes
 );
 @end example
 @end ifset
@@ -110,22 +122,28 @@ Invalid file descriptor.
 Function was interrupted by a signal.
 
 @item EMFILE
-The process already has the maximum number of file descriptors open 
+The process already has the maximum number of file descriptors open
 and tried to open a new one.
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{dup} function returns the lowest numbered available file 
-descriptor.  This new desciptor refers to the same open file as the
+The @code{dup} function returns the lowest numbered available file
+descriptor. This new desciptor refers to the same open file as the
 original descriptor and shares any locks.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection dup2 - Duplicates an open file descriptor
+
+@findex dup2
+@cindex  duplicates an open file descriptor
 
 @subheading CALLING SEQUENCE:
 
@@ -134,8 +152,8 @@ NONE
 #include <unistd.h>
 
 int dup2(
-  int fildes,
-  int fildes2
+int fildes,
+int fildes2
 );
 @end example
 @end ifset
@@ -153,7 +171,7 @@ Invalid file descriptor.
 Function was interrupted by a signal.
 
 @item EMFILE
-The process already has the maximum number of file descriptors open 
+The process already has the maximum number of file descriptors open
 and tried to open a new one.
 @end table
 
@@ -161,16 +179,22 @@ and tried to open a new one.
 
 @code{Dup2} creates a copy of the file descriptor @code{oldfd}.
 
-The old and new descriptors may be used interchangeably.  They share locks, file
+The old and new descriptors may be used interchangeably. They share locks, file
 position pointers and flags; for example, if the file position is modified by using
 @code{lseek} on one of the descriptors, the position is also changed for the other.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
-@subsection close - Closes a file. 
+@subsection close - Closes a file.
+
+@findex close
+@cindex  closes a file.
 
 @subheading CALLING SEQUENCE:
 
@@ -179,7 +203,7 @@ NONE
 #include <unistd.h>
 
 int close(
-  int fildes
+int fildes
 );
 @end example
 @end ifset
@@ -200,17 +224,23 @@ Function was interrupted by a signal.
 @subheading DESCRIPTION:
 
 The @code{close()} function deallocates the file descriptor named by
-@code{fildes} and makes it available for reuse.  All outstanding 
+@code{fildes} and makes it available for reuse. All outstanding
 record locks owned by this process for the file are unlocked.
 
 @subheading NOTES:
 
-A signal can interrupt the @code{close()} function.  In that case,
-@code{close()} returns -1 with @code{errno} set to EINTR.  The file
+A signal can interrupt the @code{close()} function. In that case,
+@code{close()} returns -1 with @code{errno} set to EINTR. The file
 may or may not be closed.
 
+@c
+@c
+@c
 @page
 @subsection read - Reads from a file.
+
+@findex read
+@cindex  reads from a file.
 
 @subheading CALLING SEQUENCE:
 
@@ -219,9 +249,9 @@ may or may not be closed.
 #include <unistd.h>
 
 int read(
-  int           fildes,
-  void         *buf,
-  unsigned int  nbyte
+int fildes,
+void *buf,
+unsigned int nbyte
 );
 @end example
 @end ifset
@@ -233,7 +263,7 @@ int read(
 
 On error, this routine returns -1 and sets @code{errno} to one of
 the following:
- 
+
 @table @b
 @item EAGAIN
 The O_NONBLOCK flag is set for a file descriptor and the process
@@ -252,7 +282,7 @@ Input or output error
 
 @subheading DESCRIPTION:
 
-The @code{read()} function reads @code{nbyte} bytes from the file 
+The @code{read()} function reads @code{nbyte} bytes from the file
 associated with @code{fildes} into the buffer pointed to by @code{buf}.
 
 The @code{read()} function returns the number of bytes actually read
@@ -274,7 +304,7 @@ When attempting to read from any empty pipe or FIFO:
 
 @itemize @bullet
 
-@item If no process has the pipe open for writing, zero is returned to 
+@item If no process has the pipe open for writing, zero is returned to
 indicate end-of-file.
 
 @item If some process has the pipe open for writing and O_NONBLOCK is set,
@@ -293,7 +323,7 @@ is available.
 
 @item If O_NONBLOCK is set, -1 is returned and @code{errno} is set to EAGAIN.
 
-@item If O_NONBLOCK is clear, @code{read()} waits for some data to become 
+@item If O_NONBLOCK is clear, @code{read()} waits for some data to become
 available.
 
 @item The O_NONBLOCK flag is ignored if data is available.
@@ -304,8 +334,14 @@ available.
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection write - Writes to a file
+
+@findex write
+@cindex  writes to a file
 
 @subheading CALLING SEQUENCE:
 
@@ -314,9 +350,9 @@ NONE
 #include <unistd.h>
 
 int write(
-  int           fildes,
-  const void   *buf,
-  unsigned int  nbytes
+int fildes,
+const void *buf,
+unsigned int nbytes
 );
 @end example
 @end ifset
@@ -335,7 +371,7 @@ would be delayed in the I/O operation.
 Invalid file descriptor
 
 @item EFBIG
-An attempt was made to write to a file that exceeds the maximum file 
+An attempt was made to write to a file that exceeds the maximum file
 size
 
 @item EINTR
@@ -358,19 +394,25 @@ The @code{write()} function writes @code{nbyte} from the array pointed
 to by @code{buf} into the file associated with @code{fildes}.
 
 If @code{nybte} is zero and the file is a regular file, the @code{write()}
-function returns zero and has no other effect.  If @code{nbyte} is zero
+function returns zero and has no other effect. If @code{nbyte} is zero
 and the file is a special file, te results are not portable.
 
-The @code{write()} function returns the number of bytes written.  This 
-number will be less than @code{nbytes} if there is an error.  It will never
+The @code{write()} function returns the number of bytes written. This
+number will be less than @code{nbytes} if there is an error. It will never
 be greater than @code{nbytes}.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection fcntl - Manipulates an open file descriptor
+
+@findex fcntl
+@cindex  manipulates an open file descriptor
 
 @subheading CALLING SEQUENCE:
 
@@ -381,8 +423,8 @@ NONE
 #include <unistd.h>
 
 int fcntl(
-  int   fildes,
-  int   cmd
+int fildes,
+int cmd
 );
 @end example
 @end ifset
@@ -424,48 +466,48 @@ No locks available
 @subheading DESCRIPTION:
 
 @code{fcntl()} performs one of various miscellaneous operations on
-@code{fd}.  The operation in question is determined by @code{cmd}:
+@code{fd}. The operation in question is determined by @code{cmd}:
 
-@table @b 
+@table @b
 
-@item F_DUPFD  
+@item F_DUPFD
 Makes @code{arg} be a copy of @code{fd}, closing @code{fd} first if necessary.
 
 The same functionality can be more easily achieved by using @code{dup2()}.
 
-The old and new descriptors may be used interchangeably. They share locks, 
-file position pointers and flags;  for example, if the file position is 
-modified by using @code{lseek()} on one of the descriptors, the position is  
+The old and new descriptors may be used interchangeably. They share locks,
+file position pointers and flags; for example, if the file position is
+modified by using @code{lseek()} on one of the descriptors, the position is
 also changed for the other.
 
-The two descriptors do not share the close-on-exec flag, however.  The 
-close-on-exec flag of the copy is off, meaning that it will be closed on 
+The two descriptors do not share the close-on-exec flag, however. The
+close-on-exec flag of the copy is off, meaning that it will be closed on
 exec.
 
 On success, the new descriptor is returned.
 
-@item F_GETFD  
-Read the close-on-exec flag.  If the low-order bit is 0, the file will 
+@item F_GETFD
+Read the close-on-exec flag. If the low-order bit is 0, the file will
 remain open across exec, otherwise it will be closed.
 
-@item F_SETFD  
-Set the close-on-exec flag to the value specified by @code{arg} (only the least 
+@item F_SETFD
+Set the close-on-exec flag to the value specified by @code{arg} (only the least
 significant bit is used).
 
-@item F_GETFL  
+@item F_GETFL
 Read the descriptor's flags (all flags (as set by open()) are returned).
 
-@item F_SETFL  
-Set the descriptor's flags to the value specified by @code{arg}. Only  
+@item F_SETFL
+Set the descriptor's flags to the value specified by @code{arg}. Only
 @code{O_APPEND} and @code{O_NONBLOCK} may be set.
 
-The flags are shared between copies (made with @code{dup()} etc.) of the same 
+The flags are shared between copies (made with @code{dup()} etc.) of the same
 file descriptor.
 
 The flags and their semantics are described in @code{open()}.
 
 @item F_GETLK, F_SETLK and F_SETLKW
-Manage discretionary file locks.  The third argument @code{arg} is a pointer to a 
+Manage discretionary file locks. The third argument @code{arg} is a pointer to a
 struct flock (that may be overwritten by this call).
 
 @item F_GETLK
@@ -473,26 +515,26 @@ Return the flock structure that prevents us from obtaining the lock, or set the
 @code{l_type} field of the lock to @code{F_UNLCK} if there is no obstruction.
 
 @item F_SETLK
-The lock is set (when @code{l_type} is @code{F_RDLCK} or @code{F_WRLCK}) or 
-cleared (when it is @code{F_UNLCK}.  If lock is held by someone else, this
+The lock is set (when @code{l_type} is @code{F_RDLCK} or @code{F_WRLCK}) or
+cleared (when it is @code{F_UNLCK}. If lock is held by someone else, this
 call returns -1 and sets @code{errno} to EACCES or EAGAIN.
 
-@item F_SETLKW 
-Like @code{F_SETLK}, but instead of returning an error we wait for the lock to 
+@item F_SETLKW
+Like @code{F_SETLK}, but instead of returning an error we wait for the lock to
 be released.
 
-@item F_GETOWN 
+@item F_GETOWN
 Get the process ID (or process group) of the owner of a socket.
 
 Process groups are returned as negative values.
 
-@item F_SETOWN 
+@item F_SETOWN
 Set the process or process group that owns a socket.
 
 For these commands, ownership means receiving @code{SIGIO} or @code{SIGURG}
 signals.
 
-Process groups are specified using negative  values.
+Process groups are specified using negative values.
 
 @end table
 
@@ -501,8 +543,14 @@ Process groups are specified using negative  values.
 The errors returned by @code{dup2} are different from those returned by
 @code{F_DUPFD}.
 
+@c
+@c
+@c
 @page
 @subsection lseek - Reposition read/write file offset
+
+@findex lseek
+@cindex  reposition read/write file offset
 
 @subheading CALLING SEQUENCE:
 
@@ -512,9 +560,9 @@ The errors returned by @code{dup2} are different from those returned by
 #include <unistd.h>
 
 int lseek(
-  int   fildes,
-  off_t offset,
-  int whence
+int fildes,
+off_t offset,
+int whence
 );
 @end example
 @end ifset
@@ -529,30 +577,30 @@ int lseek(
 @code{Fildes} is not an open file descriptor.
 
 @item ESPIPE
-@code{Fildes} is associated with a pipe, socket or FIFO. 
+@code{Fildes} is associated with a pipe, socket or FIFO.
 
 @item EINVAL
-@code{Whence} is not a proper value. 
+@code{Whence} is not a proper value.
 
 @end table
 
 @subheading DESCRIPTION:
 
 The @code{lseek} function repositions the offset of the file descriptor
-@code{fildes} to the argument offset according to the directive whence.   
+@code{fildes} to the argument offset according to the directive whence.
 The argument @code{fildes} must be an open file descriptor. @code{Lseek}
 repositions the file pointer fildes as follows:
 
 @itemize @bullet
 
-@item 
+@item
 If @code{whence} is SEEK_SET, the offset is set to @code{offset} bytes.
 
-@item 
+@item
 If @code{whence} is SEEK_CUR, the offset is set to its current location
 plus offset bytes.
 
-@item 
+@item
 If @code{whence} is SEEK_END, the offset is set to the size of the
 file plus @code{offset} bytes.
 
@@ -563,22 +611,28 @@ of the existing end-of-file of the file. If data is later written at this
 point, subsequent reads of the data in the gap return bytes of zeros
 (until data is actually written into the gap).
 
-Some devices are incapable of seeking.  The value of the pointer associated
+Some devices are incapable of seeking. The value of the pointer associated
 with such a device is undefined.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection fsync - Synchronize file complete in-core state with that on disk
+
+@findex fsync
+@cindex  synchronize file complete in
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int fsync(
-  int fd
+int fd
 );
 @end example
 @end ifset
@@ -588,7 +642,7 @@ int fsync(
 
 @subheading STATUS CODES:
 
-On success, zero is returned.  On error, -1 is returned, and @code{errno}
+On success, zero is returned. On error, -1 is returned, and @code{errno}
 is set appropriately.
 
 @table @b
@@ -614,15 +668,21 @@ An error occurred during synchronization
 
 NONE
 
+@c
+@c
+@c
 @page
-@subsection fdatasync - Synchronize file in-core data with that on disk. 
+@subsection fdatasync - Synchronize file in-core data with that on disk.
+
+@findex fdatasync
+@cindex  synchronize file in
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int fdatasync(
-  int fd
+int fd
 );
 @end example
 @end ifset
@@ -632,7 +692,7 @@ int fdatasync(
 
 @subheading STATUS CODES:
 
-On success, zero is returned.  On error, -1 is returned, and @code{errno} is
+On success, zero is returned. On error, -1 is returned, and @code{errno} is
 set appropriately.
 
 @table @b
@@ -653,23 +713,29 @@ An error occurred during synchronization.
 @subheading DESCRIPTION:
 
 @code{fdatasync} flushes all data buffers of a file to disk (before the system call
-returns).  It resembles @code{fsync} but is not required to update the metadata such  
+returns). It resembles @code{fsync} but is not required to update the metadata such
 as access time.
 
 Applications that access databases or log files often write a tiny data fragment
-(e.g., one line in a log file) and then call @code{fsync} immediately in order to  
-ensure that the written data is physically stored on the harddisk.  Unfortunately, 
-fsync will always initiate two write operations: one for the newly written data and 
-another one in order to update the modification time stored in the inode.  If the 
-modification time is not a part of the transaction concept @code{fdatasync} can be 
+(e.g., one line in a log file) and then call @code{fsync} immediately in order to
+ensure that the written data is physically stored on the harddisk. Unfortunately,
+fsync will always initiate two write operations: one for the newly written data and
+another one in order to update the modification time stored in the inode. If the
+modification time is not a part of the transaction concept @code{fdatasync} can be
 used to avoid unnecessary inode disk write operations.
 
 @subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection mount - Mount a file system
+
+@findex mount
+@cindex  mount a file system
 
 @subheading CALLING SEQUENCE:
 
@@ -679,11 +745,11 @@ NONE
 #include <linux/fs.h>
 
 int mount(
-  const char *specialfile,
-  const char * dir,
-  const char * filesystemtype,
-  unsigned long rwflag,
-  const void * data
+const char *specialfile,
+const char CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t dir,
+const char CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t filesystemtype,
+unsigned long rwflag,
+const void CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t data
 );
 @end example
 @end ifset
@@ -704,14 +770,14 @@ The user is not the super-user.
 @code{specialfile} is not a block device (if a device was required).
 
 @item EBUSY
-@code{specialfile} is already mounted.  Or, it cannot be remounted
-read-only, because it still holds files open for writing.  Or, it 
+@code{specialfile} is already mounted. Or, it cannot be remounted
+read-only, because it still holds files open for writing. Or, it
 cannot be mounted on @code{dir} because @code{dir} is still busy
 (it is the working directory of some task, the mount point of another
 device, has open files, etc.).
 
 @item EINVAL
-@code{specialfile} had an invalid superblock.  Or, a remount was 
+@code{specialfile} had an invalid superblock. Or, a remount was
 attempted, while @code{specialfile} was not already mounted on @code{dir}.
 Or, an umount was attempted, while @code{dir} was not a mount point.
 
@@ -728,8 +794,8 @@ A pathname was longer than MAXPATHLEN.
 A pathname was empty or had a nonexistent component.
 
 @item EACCES
-A component of a path was not searchable.  Or, mounting a read-only 
-filesystem was attempted without giving the MS_RDONLY flag.  Or, the 
+A component of a path was not searchable. Or, mounting a read-only
+filesystem was attempted without giving the MS_RDONLY flag. Or, the
 block device @code{specialfile} is located on a filesystem mounted with
 the MS_NODEV option.
 
@@ -739,7 +805,7 @@ range.
 
 @item EMFILE
 (In case no block device is required:) Table of dummy devices is full.
-              
+
 @end table
 
 @subheading DESCRIPTION:
@@ -750,11 +816,11 @@ range.
 Only the super-user may mount filesystems.
 
 The @code{filesystemtype} argument may take one of the values listed in
-/proc/filesystems (link "minix", "ext2", "msdos", "proc", "nfs", 
+/proc/filesystems (link "minix", "ext2", "msdos", "proc", "nfs",
 "iso9660" etc.).
 
 The @code{rwflag} argument has the magic number 0xCOED in the top 16 bits,
-and various mount flags in the low order 16 bits.  If the magic number is
+and various mount flags in the low order 16 bits. If the magic number is
 absent, then the last two arguments are not used.
 
 The @code{data} argument is interpreted by the different file systems.
@@ -763,8 +829,14 @@ The @code{data} argument is interpreted by the different file systems.
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection umount - Umount file systems
+
+@findex umount
+@cindex  umount file systems
 
 @subheading CALLING SEQUENCE:
 
@@ -774,7 +846,7 @@ NONE
 #include <linux/fs.h>
 
 int umount(
-  const char *specialfile
+const char *specialfile
 );
 @end example
 @end ifset
@@ -795,14 +867,14 @@ The user is not the super-user.
 @code{Specialfile} is not a block device (if a device was required).
 
 @item EBUSY
-@code{Specialfile} is already mounted.  Or, it cannot be remounted
-read-only, because it still holds files open for writing.  Or, it 
+@code{Specialfile} is already mounted. Or, it cannot be remounted
+read-only, because it still holds files open for writing. Or, it
 cannot be mounted on @code{dir} because @code{dir} is still busy
 (it is the working directory of some task, the mount point of another
 device, has open files, etc.).
 
 @item EINVAL
-@code{specialfile} had an invalid superblock.  Or, a remount was 
+@code{specialfile} had an invalid superblock. Or, a remount was
 attempted, while @code{specialfile} was not already mounted on @code{dir}.
 Or, an umount was attempted, while @code{dir} was not a mount point.
 
@@ -819,8 +891,8 @@ A pathname was longer than MAXPATHLEN.
 A pathname was empty or had a nonexistent component.
 
 @item EACCES
-A component of a path was not searchable.  Or, mounting a read-only 
-filesystem was attempted without giving the MS_RDONLY flag.  Or, the 
+A component of a path was not searchable. Or, mounting a read-only
+filesystem was attempted without giving the MS_RDONLY flag. Or, the
 block device @code{specialfile} is located on a filesystem mounted with
 the MS_NODEV option.
 
@@ -840,12 +912,18 @@ by @code{specialfile} or @code{dir}.
 
 Only the super-user may umount filesystems.
 
-@subheading NOTES: 
+@subheading NOTES:
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection aio_read - Asynchronous Read
+
+@findex aio_read
+@cindex  asynchronous read
 
 @subheading CALLING SEQUENCE:
 
@@ -871,11 +949,17 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.
 
+@c
+@c
+@c
 @page
 @subsection aio_write - Asynchronous Write
+
+@findex aio_write
+@cindex  asynchronous write
 
 @subheading CALLING SEQUENCE:
 
@@ -901,11 +985,17 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.
 
+@c
+@c
+@c
 @page
 @subsection lio_listio - List Directed I/O
+
+@findex lio_listio
+@cindex  list directed i/o
 
 @subheading CALLING SEQUENCE:
 
@@ -931,11 +1021,17 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.
 
+@c
+@c
+@c
 @page
 @subsection aio_error - Retrieve Error Status of Asynchronous I/O Operation
+
+@findex aio_error
+@cindex  retrieve error status of asynchronous i/o operation
 
 @subheading CALLING SEQUENCE:
 
@@ -961,11 +1057,17 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.
 
+@c
+@c
+@c
 @page
 @subsection aio_return - Retrieve Return Status Asynchronous I/O Operation
+
+@findex aio_return
+@cindex  retrieve return status asynchronous i/o operation
 
 @subheading CALLING SEQUENCE:
 
@@ -991,11 +1093,17 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.
 
+@c
+@c
+@c
 @page
 @subsection aio_cancel - Cancel Asynchronous I/O Request
+
+@findex aio_cancel
+@cindex  cancel asynchronous i/o request
 
 @subheading CALLING SEQUENCE:
 
@@ -1021,11 +1129,17 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.
 
+@c
+@c
+@c
 @page
 @subsection aio_suspend - Wait for Asynchronous I/O Request
+
+@findex aio_suspend
+@cindex  wait for asynchronous i/o request
 
 @subheading CALLING SEQUENCE:
 
@@ -1051,11 +1165,17 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.
 
+@c
+@c
+@c
 @page
 @subsection aio_fsync - Asynchronous File Synchronization
+
+@findex aio_fsync
+@cindex  asynchronous file synchronization
 
 @subheading CALLING SEQUENCE:
 
@@ -1081,5 +1201,5 @@ The
 
 @subheading NOTES:
 
-This routine is not currently supported by RTEMS but could be 
+This routine is not currently supported by RTEMS but could be
 in a future version.

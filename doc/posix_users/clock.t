@@ -1,9 +1,9 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
+@c COPYRIGHT (c) 1988-1998.
+@c On-Line Applications Research Corporation (OAR).
+@c All rights reserved.
 @c
-@c  $Id$
+@c $Id$
 @c
 
 @chapter Clock Manager
@@ -41,13 +41,16 @@ and status codes.
 
 @subsection clock_gettime -Obtain Time of Day
 
+@findex clock_gettime
+@cindex obtain time of day
+
 @subheading CALLING SEQUENCE:
 
 @example
 #include <time.h>
 
 int clock_gettime(
-  clockid_t        clock_id,
+  clockid_t clock_id,
   struct timespec *tp
 );
 @end example
@@ -58,10 +61,10 @@ On error, this routine returns -1 and sets errno to one of the following:
 
 @table @b
 @item EINVAL
-The tp pointer parameter is invalid. 
+The tp pointer parameter is invalid.
 
 @item EINVAL
-The clock_id specified is invalid. 
+The clock_id specified is invalid.
 @end table
 
 @subheading DESCRIPTION:
@@ -70,27 +73,33 @@ The clock_id specified is invalid.
 
 NONE
 
+@c
+@c
+@c
 @page
 @subsection clock_settime - Set Time of Day
- 
+
+@findex clock_settime
+@cindex  set time of day
+
 @subheading CALLING SEQUENCE:
- 
+
 @example
 #include <time.h>
- 
+
 int clock_settime(
-  clockid_t              clock_id,
+  clockid_t clock_id,
   const struct timespec *tp
 );
 @end example
- 
+
 @subheading STATUS CODES:
- 
+
 On error, this routine returns -1 and sets errno to one of the following:
 
 @table @b
 @item EINVAL
-The tp pointer parameter is invalid. 
+The tp pointer parameter is invalid.
 
 @item EINVAL
 The clock_id specified is invalid.
@@ -99,86 +108,104 @@ The clock_id specified is invalid.
 The contents of the tp structure are invalid.
 
 @end table
- 
+
 @subheading DESCRIPTION:
- 
+
 @subheading NOTES:
 
 NONE
- 
+
+@c
+@c
+@c
 @page
 @subsection clock_getres - Get Clock Resolution
- 
+
+@findex clock_getres
+@cindex  get clock resolution
+
 @subheading CALLING SEQUENCE:
- 
+
 @example
 #include <time.h>
- 
+
 int clock_getres(
-  clockid_t        clock_id,
+  clockid_t clock_id,
   struct timespec *res
 );
 @end example
- 
+
 @subheading STATUS CODES:
- 
+
 On error, this routine returns -1 and sets errno to one of the following:
 
 @table @b
 @item EINVAL
-The res pointer parameter is invalid. 
+The res pointer parameter is invalid.
 
 @item EINVAL
 The clock_id specified is invalid.
 
 @end table
- 
+
 @subheading DESCRIPTION:
- 
+
 @subheading NOTES:
- 
+
 If res is NULL, then the resolution is not returned.
 
+@c
+@c
+@c
 @page
 @subsection sleep - Delay Process Execution
- 
+
+@findex sleep
+@cindex  delay process execution
+
 @subheading CALLING SEQUENCE:
- 
+
 @example
 #include <time.h>
- 
+
 unsigned int sleep(
   unsigned int seconds
 );
 @end example
- 
+
 @subheading STATUS CODES:
 
 This routine returns the number of unslept seconds.
 
 @subheading DESCRIPTION:
- 
+
 The @code{sleep()} function delays the calling thread by the specified
 number of @code{seconds}.
 
 @subheading NOTES:
 
 This call is interruptible by a signal.
- 
+
+@c
+@c
+@c
 @page
 @subsection nanosleep - Delay with High Resolution
- 
+
+@findex nanosleep
+@cindex  delay with high resolution
+
 @subheading CALLING SEQUENCE:
- 
+
 @example
 #include <time.h>
- 
+
 int nanosleep(
   const struct timespec *rqtp,
-  struct timespec       *rmtp
+  struct timespec *rmtp
 );
 @end example
- 
+
 @subheading STATUS CODES:
 
 On error, this routine returns -1 and sets errno to one of the following:
@@ -195,15 +222,21 @@ The requested sleep period specified an invalid number for the nanoseconds
 field.
 
 @end table
- 
+
 @subheading DESCRIPTION:
- 
+
 @subheading NOTES:
- 
+
 This call is interruptible by a signal.
 
+@c
+@c
+@c
 @page
 @subsection gettimeofday - Get the Time of Day
+
+@findex gettimeofday
+@cindex  get the time of day
 
 @subheading CALLING SEQUENCE:
 
@@ -212,7 +245,7 @@ This call is interruptible by a signal.
 #include <unistd.h>
 
 int gettimeofday(
-  struct timeval  *tp,
+  struct timeval *tp,
   struct timezone *tzp
 );
 @end example
@@ -229,7 +262,7 @@ On error, this routine returns -1 and sets @code{errno} as appropriate.
 Timezone (or something else) is invalid.
 
 @item EFAULT
-One of @code{tv} or @code{tz} pointed outside your accessible address 
+One of @code{tv} or @code{tz} pointed outside your accessible address
 space
 
 @end table
@@ -240,35 +273,41 @@ This routine returns the current time of day in the @code{tp} structure.
 
 @subheading NOTES:
 
-Currently, the timezone information is not supported.  The @code{tzp}
+Currently, the timezone information is not supported. The @code{tzp}
 argument is ignored.
 
+@c
+@c
+@c
 @page
 @subsection time - Get time in seconds
- 
+
+@findex time
+@cindex  get time in seconds
+
 @subheading CALLING SEQUENCE:
- 
+
 @example
 #include <time.h>
- 
+
 int time(
-  time_t  *tloc
+  time_t *tloc
 );
 @end example
- 
+
 @subheading STATUS CODES:
 
 This routine returns the number of seconds since the Epoch.
 
 @subheading DESCRIPTION:
 
-@code{time} returns the time since 00:00:00 GMT, January 1, 1970, 
+@code{time} returns the time since 00:00:00 GMT, January 1, 1970,
 measured in seconds
 
-If @code{tloc} in non null, the return value is also stored in the 
+If @code{tloc} in non null, the return value is also stored in the
 memory pointed to by @code{t}.
- 
+
 @subheading NOTES:
 
 NONE
- 
+

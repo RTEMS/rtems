@@ -142,15 +142,15 @@ This is the online version of the RTEMS POSIX API User's Guide
 @node Command and Variable Index, Concept Index, , Top
 @unnumbered Command and Variable Index
 
-There are currently no Command and Variable Index entries.
+@c There are currently no Command and Variable Index entries.
 
-@c @printindex fn
+@printindex fn
 
 @node Concept Index, , Command and Variable Index, Top
 @unnumbered Concept Index
 
-There are currently no Concept Index entries.
-@c @printindex cp
+@c There are currently no Concept Index entries.
+@printindex cp
 
 @contents
 @bye
