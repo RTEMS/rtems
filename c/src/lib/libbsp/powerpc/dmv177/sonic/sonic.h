@@ -329,6 +329,7 @@ struct ReceiveDescriptor {
    * Extra RTEMS stuff 
    */
   volatile struct ReceiveDescriptor  *next;  /* Circularly-linked list */
+  struct mbuf                        *mbufp; /* First mbuf in packet */
 };
 typedef struct ReceiveDescriptor ReceiveDescriptor_t;
 typedef volatile ReceiveDescriptor_t *ReceiveDescriptorPointer_t;
