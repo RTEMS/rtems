@@ -103,6 +103,16 @@ clean_modules:
 	rm -f src/Modules/rtems/.moduleavailcache
 	rm -f src/Modules/rtems/.moduleavailcachedir
 
+make/directory.cfg make/leaf.cfg make/lib.cfg make/main.cfg
 mlink:
-	test -d make || ln -s $(RTEMS_ROOT)/make make
+	if [ ! -d make ] ; then \
+	  (cd $(srcdir)/c; tar cf - make/compilers make/custom make/os \
+	        make/directory.cfg make/leaf.cfg make/lib.cfg make/main.cfg \
+		make/Templates/Makefile.dir \
+	        make/Templates/Makefile.leaf make/Templates/Makefile.lib) | \
+		tar xpBf - ; rm -rf make/CVS make/*/CVS ; \
+	  cp c/make/Templates/Makefile.inc make/Templates/Makefile.inc ; \
+	fi
+  	
+ 	
 
