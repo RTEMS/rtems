@@ -237,17 +237,6 @@ int clock_getres(
 }
 
 /*
- *  14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
- */
-
-int timer_getoverrun(
-  timer_t   timerid
-)
-{
-  return POSIX_NOT_IMPLEMENTED();
-}
-
-/*
  *  14.2.5 High Resolution Sleep, P1003.1b-1993, p. 269
  */
 
