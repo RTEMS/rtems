@@ -2,6 +2,10 @@
 /* systbl.h                            */
 /* Last change : 14.10.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _SYSTBL_H_
 #define _SYSTBL_H_
 

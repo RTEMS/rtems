@@ -2,6 +2,10 @@
 /* fault.c                             */
 /* Last change : 13. 7.95              */
 /*-------------------------------------*/  
+/*
+ *  $Id$
+ */
+
 #include "prcb.h"
 #include "i960.h"
 #include "flttbl.h"

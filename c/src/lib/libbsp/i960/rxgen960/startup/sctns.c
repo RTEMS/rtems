@@ -2,6 +2,10 @@
 /* sctns.c                             */
 /* Last change : 10.10.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #include "sctns.h"
 #include "pmc901_memmap.h"
 /*#include "led.h"*/

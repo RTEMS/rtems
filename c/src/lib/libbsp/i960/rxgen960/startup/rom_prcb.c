@@ -2,6 +2,10 @@
 /* prcb.c                              */
 /* Last change : 11.10.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #include "flttbl.h"
 #include "cntrltbl.h"
 #include "intrtbl.h"

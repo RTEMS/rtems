@@ -2,6 +2,10 @@
 /* systbl.c                            */
 /* Last change : 21. 3.95              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #include "prcb.h"
 /*#include "uart_access.h" */
 #include "fault.h"

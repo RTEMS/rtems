@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #include "asm.h" 
 
 	BEGIN_CODE

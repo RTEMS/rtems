@@ -1,4 +1,8 @@
 /*
+ *  $Id$
+ */
+
+/*
  * asmfault.s
  * Last change : 31. 1.95 
  */

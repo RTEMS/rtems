@@ -2,6 +2,10 @@
 /* fltbl.h                             */
 /* Last change :  3.11.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _FLTTBL_H_
 #define _FLTTBL_H_
 

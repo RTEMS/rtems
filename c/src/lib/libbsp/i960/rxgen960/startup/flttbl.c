@@ -2,6 +2,10 @@
 /* flttbl.c                            */
 /* Last change :  3.11.94              */
 /*-------------------------------------*/  
+/*
+ *  $Id$
+ */
+
 #include "i960.h"
 #include "string.h"
 #include "sctns.h"

@@ -2,6 +2,10 @@
 /* asmstub.h                           */
 /* Last change : 20. 1.95              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _ASMSTUB_H_
 #define _ASMSTUB_H_
 

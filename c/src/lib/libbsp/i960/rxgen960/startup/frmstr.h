@@ -1,8 +1,9 @@
-  
-  /* frmstr.h
-   * Interface to procedures used to implement
-   * the printf group.
-   */
+/* frmstr.h
+ * Interface to procedures used to implement
+ * the printf group.
+ *
+ *  $Id$
+ */
 
 #ifndef _FRMSTR_H_
 #define _FRMSTR_H_

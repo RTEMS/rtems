@@ -2,6 +2,10 @@
 /* ihandler.h                          */
 /* Last change : 12.10.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _IHANDLER_H_
 #define _IHANDLER_H_
 

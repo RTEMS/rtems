@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 int mach_error_expected = 0;
 void nmi_isr(void)
 {

@@ -2,6 +2,10 @@
 /* fault.h                             */
 /* Last change :  2.11.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _FAULT_H_
 #define _FAULT_H_
 

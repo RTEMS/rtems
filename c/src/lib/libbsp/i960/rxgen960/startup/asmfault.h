@@ -2,6 +2,10 @@
 /* asmfault.h                          */
 /* Last change :  3.11.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _ASMFAULT_H_
 #define _ASMFAULT_H_
 

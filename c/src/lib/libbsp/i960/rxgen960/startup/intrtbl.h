@@ -2,6 +2,10 @@
 /* intrtbl.h                           */
 /* Last change : 12.10.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _INTRTBL_H_
 #define _INTRTBL_H_
 

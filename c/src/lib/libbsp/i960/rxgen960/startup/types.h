@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 /* Type definitions for our use */
 #ifndef __TYPES_H
 #define __TYPES_H

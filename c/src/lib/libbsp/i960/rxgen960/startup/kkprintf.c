@@ -1,7 +1,10 @@
 /*
-	a safe version of printf that might be useful for debugging parts that
-	are known to have problems e.g. with printf() e.t.c.
-*/
+ *  a safe version of printf that might be useful for debugging parts that
+ *  are known to have problems e.g. with printf() e.t.c.
+ *
+ *  $Id$
+ */
+
 #include <_ansi.h>
 #ifdef _HAVE_STDC
 #include <stdarg.h>

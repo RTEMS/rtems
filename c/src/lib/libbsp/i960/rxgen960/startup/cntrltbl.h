@@ -2,6 +2,10 @@
 /* cntrltbl.h                          */
 /* Last change : 11. 1.95              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _CNTRLTBL_H_
 #define _CNTRLTBL_H_
 

@@ -1,4 +1,9 @@
-/* PMC901 specific configuration values */
+/*
+ *  PMC901 specific configuration values
+ *
+ *  $Id$
+ */
+
 #ifndef  __PMC901_CONFIG__
 #define __PMC901_CONFIG__
 /* The following define the PMC960 bus regions */

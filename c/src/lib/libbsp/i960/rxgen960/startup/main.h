@@ -2,6 +2,10 @@
 /* main.h                              */
 /* Last change :  2. 2.95              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _MAIN_H_
 #define _MAIN_H_
 

@@ -2,6 +2,10 @@
 /* memchnl.h                           */
 /* Last change : 16. 5.95              */
 /*-------------------------------------*/ 
+/*
+ *  $Id$
+ */
+
 #ifndef _MEMCHNL_H_
 #define _MEMCHNL_H_
 

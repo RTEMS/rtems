@@ -2,6 +2,10 @@
 /* rommon.h                            */
 /* Last change : 23. 1.95              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _ROMMON_H_
 #define _ROMMON_H_
 

@@ -2,6 +2,10 @@
 /* sctns.h                             */
 /* Last change : 10.10.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _SCTNS_H_
 #define _SCTNS_H_
 

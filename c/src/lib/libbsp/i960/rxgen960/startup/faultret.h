@@ -2,6 +2,10 @@
 /* faultret.h                          */
 /* Last change :  3.11.94              */
 /*-------------------------------------*/
+/*
+ *  $Id$
+ */
+
 #ifndef _FAULTRET_H_
 #define _FAULTRET_H_
 

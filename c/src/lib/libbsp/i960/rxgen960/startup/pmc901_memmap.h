@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 /* Memory map for the pmc901 ; works for most RAMiX PMC/CPCI modules as well */
 
 #define UART_REG 0xc0000100
