@@ -48,6 +48,9 @@ int _POSIX_Message_queue_Name_to_id(
   if ( !name[0] )
     return EINVAL;
 
+  if( strlen(name) > PATH_MAX )  /* XXX - Is strlen ok to use here ? */
+    return ENAMETOOLONG;
+
   status = _Objects_Name_to_id( 
     &_POSIX_Message_queue_Information, (char *)name, 0, id );
 
