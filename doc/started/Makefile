@@ -60,7 +60,7 @@ buildc.texi: buildc.t versions.texi
 	    -n "Building RTEMS" ${*}.t
 
 buildrt.texi: buildrt.t versions.texi
-	$(BMENU) -c -p "Running the bit Script" \
+	$(BMENU) -c -p "Error Messages Indicating Configuration Problems" \
 	    -u "Top" \
 	    -n "Building the Sample Application" ${*}.t
 
