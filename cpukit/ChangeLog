@@ -1,3 +1,11 @@
+2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* aclocal/rtems-cpu-subdirs.m4: Remove (Unused).
+	* configure.ac: Remove RTEMS_CPU_SUBDIRS([score/cpu]).
+	Add RTEMS_CHECK_SYSV_UNIX.
+	Add score/cpu/*/Makefile.
+	* score/cpu/Makefile.am: Add DIST_SUBDIRS.
+
 2004-04-05	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Add AC_CHECK_SIZEOF([CPU_CONTEXT]..).
