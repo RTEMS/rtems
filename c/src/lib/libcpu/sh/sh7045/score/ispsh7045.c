@@ -43,10 +43,6 @@
 #include <rtems/system.h>
 #include <rtems/score/shtypes.h>
 
-#if !defined (sh7045)
-#error Wrong CPU MODEL
-#endif
-
 /*
  * This is a exception vector table
  *

@@ -21,7 +21,7 @@ $(PROJECT_INCLUDE)/%.h: %.h
 $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
 	$(INSTALL_DATA) $< $@
 
-C_FILES = cpu.c cpu_asm.c isp$(RTEMS_CPU_MODEL).c
+C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 REL = $(ARCH)/rtems-cpu.rel
@@ -40,7 +40,7 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
 
 .PRECIOUS: $(REL)
 
-EXTRA_DIST = asm.h cpu.c cpu_asm.c ispsh7032.c ispsh7045.c rtems.c
+EXTRA_DIST = asm.h cpu.c rtems.c
 
 include $(top_srcdir)/../../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../../automake/local.am

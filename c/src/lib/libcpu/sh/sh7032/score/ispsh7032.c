@@ -32,10 +32,6 @@
 #include <rtems/score/shtypes.h>
 #include <rtems/score/ispsh7032.h>
 
-#if !defined(sh7032)
-#error Wrong CPU MODEL
-#endif
-
 /*
  * This is an exception vector table
  *

@@ -43,14 +43,8 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/sh.h>
 
-#if defined(sh7032)
 #include <rtems/score/ispsh7032.h>
 #include <rtems/score/iosh7032.h>
-#elif defined (sh7045)
-#include <rtems/score/ispsh7045.h>
-#include <rtems/score/iosh7045.h>
-#endif
-
 #include <rtems/score/sh_io.h>
 
 /* from cpu_isps.c */

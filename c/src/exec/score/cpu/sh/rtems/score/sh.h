@@ -40,6 +40,7 @@ extern "C" {
  */
  
 #if defined(rtems_multilib)
+
 /*
  *  Figure out all CPU Model Feature Flags based upon compiler 
  *  predefines. 
@@ -49,18 +50,18 @@ extern "C" {
 #define SH_HAS_FPU 	0
 #define SH_HAS_SEPARATE_STACKS 1
 
-#elif defined(sh7032)
-#define CPU_MODEL_NAME  "SH7032"
-#define SH_HAS_FPU 	0
-
-#elif defined (sh7045)
-#define CPU_MODEL_NAME  "SH7045"
-#define SH_HAS_FPU 	0
-
 #else
-#error "Unsupported CPU Model"
- 
+
+#if defined(__sh1__) || defined(__sh2__) || defined(__sh3__)
+#define SH_HAS_FPU	0
+#else
+#define SH_HAS_FPU	1
 #endif
+
+/* this should not be here */
+#define CPU_MODEL_NAME  "SH-Multilib"
+
+#endif /* multilib */
 
 /*
  * If the following macro is set to 0 there will be no software irq stack

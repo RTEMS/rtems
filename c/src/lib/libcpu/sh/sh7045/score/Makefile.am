@@ -4,9 +4,9 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = $(ARCH)/clock.rel
+PGM = $(ARCH)/score.rel
 
-C_FILES = ckinit.c
+C_FILES = cpu_asm.c ispsh7045.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -25,6 +25,6 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = ckinit.c
+EXTRA_DIST = ispsh7045.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

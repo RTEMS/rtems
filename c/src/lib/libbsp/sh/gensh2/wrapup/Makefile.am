@@ -9,7 +9,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 BSP_PIECES = startup scitab console
 
 # pieces to pick up out of libcpu/sh
-CPU_PIECES = null clock timer sci
+CPU_PIECES = null clock timer sci score
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \

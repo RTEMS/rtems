@@ -4,10 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = cpu.h shtypes.h sh.h sh_io.h isp$(RTEMS_CPU_MODEL).h \
-    io$(RTEMS_CPU_MODEL).h
-noinst_HEADERS = cpu.h shtypes.h sh.h sh_io.h iosh7032.h ispsh7032.h \
-    iosh7045.h ispsh7045.h
+H_FILES = cpu.h shtypes.h sh.h sh_io.h
+noinst_HEADERS = cpu.h shtypes.h sh.h sh_io.h
 
 #
 # (OPTIONAL) Add local stuff here using +=
