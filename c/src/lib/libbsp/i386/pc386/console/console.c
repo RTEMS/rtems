@@ -49,16 +49,17 @@ void __assert (const char *file, int line, const char *msg);
  *	BSP_CONSOLE_PORT_CONSOLE
  *	BSP_UART_COM1
  *	BSP_UART_COM2
- */
-
-/*
- * Possible value for console input/output :
- *	BSP_CONSOLE_PORT_CONSOLE
- *	BSP_UART_COM1
- *	BSP_UART_COM2
+ *
+ * Note:
+ *   1. Currently BSPPrintkPort, cannot be assigned to COM2,
+ *      it will be fixed soon.
+ *
+ *   2. If both BSPConsolePort and BSPPrintkport are assigned
+ *      to same serial device it does not work that great
  */
 
 int BSPConsolePort = BSP_CONSOLE_PORT_CONSOLE;
+int BSPPrintkPort  = BSP_CONSOLE_PORT_CONSOLE;
 
 /* int BSPConsolePort = BSP_UART_COM2;  */
 int BSPBaseBaud    = 115200;
@@ -231,17 +232,26 @@ console_initialize(rtems_device_major_number major,
 	{
 	  printk("Initialized console on port COM2 9600-8-N-1\n\n");
 	}
-#define  PRINTK_ON_SERIAL
-#ifdef PRINTK_ON_SERIAL
-      /*
-       * You can remove the follwoing tree lines if you want to have printk
-       * using the video console for output while printf use serial line.
-       * This may be convenient to debug the serial line driver itself...
-       */
-      /*      printk("Warning : This will be the last message displayed on console\n");*/
-      BSP_output_char = (BSP_output_char_function_type) BSP_output_char_via_serial;
-      BSP_poll_char   = (BSP_polling_getchar_function_type) BSP_poll_char_via_serial;
-#endif  
+
+      if(BSPPrintkPort == BSP_UART_COM1)
+        {
+          printk("Warning : This will be the last message on console\n");
+
+          /*
+           * FIXME: cast below defeats the very idea of having
+           * function pointer types defined
+           */
+          BSP_output_char = (BSP_output_char_function_type)
+                              BSP_output_char_via_serial;
+          BSP_poll_char   = (BSP_polling_getchar_function_type)
+                              BSP_poll_char_via_serial;
+        }
+      else if(BSPPrintkPort != BSP_CONSOLE_PORT_CONSOLE)
+        {
+           printk("illegal assignement of projtk channel");
+         rtems_fatal_error_occurred (status);
+        }
+
     }
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */

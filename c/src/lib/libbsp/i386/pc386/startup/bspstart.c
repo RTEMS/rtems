@@ -136,7 +136,7 @@ void bsp_pretasking_hook(void)
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-void bsp_start( void )
+void bsp_start_default( void )
 {
   /*
    * Calibrate variable for 1ms-loop (see timer.c)
@@ -207,3 +207,10 @@ void bsp_start( void )
   printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
 #endif
 } /* bsp_start */
+
+/*
+ *  By making this a weak alias for bsp_start_default, a brave soul
+ *  can override the actual bsp_start routine used.
+ */
+
+void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));
