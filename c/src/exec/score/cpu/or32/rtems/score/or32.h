@@ -45,7 +45,7 @@ extern "C" {
 #define CPU_MODEL_NAME  "rtems_multilib"
 #define OR32_HAS_FPU     1
 
-#elif defined(or32)
+#elif defined(__or1k__) || defined(__OR1K__)
  
 #define CPU_MODEL_NAME  "or32_model"
 #define OR32_HAS_FPU     1
