@@ -16,9 +16,6 @@
 |
 | This file is provided "AS IS" without warranty of any kind, either
 | expressed or implied.
-+--------------------------------------------------------------------------+
-| This code is partly based on (from the Linux source tree):
-|   video.S - Copyright (C) 1995, 1996 Martin Mares <mj@k332.feld.cvut.cz>
 +--------------------------------------------------------------------------*/
 
 

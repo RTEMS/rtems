@@ -56,10 +56,10 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    extern int end;
+    extern int _end;
     rtems_unsigned32        heap_start;
 
-    heap_start = (rtems_unsigned32) &end;
+    heap_start = (rtems_unsigned32) &_end;
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 

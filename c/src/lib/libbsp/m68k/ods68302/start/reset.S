@@ -438,9 +438,9 @@ copy_remap:
         |
 
 copy_data:
-        moveal  #etext,%a0                      | find the end of .text
-        moveal  #data_start,%a1                 | find the beginning of .data
-        moveal  #edata,%a2                      | find the end of .data
+        moveal  #_etext,%a0                     | find the end of .text
+        moveal  #_copy_start,%a1                | find the beginning of .data
+        moveal  #_edata,%a2                     | find the end of .data
         
 copy_data_loop:
         
@@ -454,7 +454,7 @@ copy_data_loop:
 
 zerobss:
         moveal  #end,%a0                        | find end of .bss
-        moveal  #bss_start,%a1                  | find beginning of .bss
+        moveal  #_bss_start,%a1                 | find beginning of .bss
         moveq   #0,%d0
         
 zerobss_loop:

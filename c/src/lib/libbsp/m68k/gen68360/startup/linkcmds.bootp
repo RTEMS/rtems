@@ -1,9 +1,9 @@
 /*
  * This file contains GNU linker directives for a generic MC68360 board.
- * Variations in hardware type and dynamic memory size can be made
- * by overriding some values with linker command-line arguments.
+ * Variations in memory size and allocation can be made by
+ * overriding some values with linker command-line arguments.
  *
- * These linker directives are for producing a PROM version.
+ * These linker directives are for producing a bootstrap PROM version.
  * The data segment is placed at the end of the text segment in the PROM.
  * The start-up code takes care of copying this region to RAM.
  *
@@ -11,15 +11,12 @@
  * University of Saskatchewan
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
- *
+ * 
  *  $Id$
  */
 
 /*
  * Declare some sizes.
- * XXX: The assignment of ". += XyzSize;" fails in older gld's if the
- *      number used there is not constant.  If this happens to you, edit
- *      the lines marked XXX below to use a constant value.
  */
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
@@ -43,7 +40,6 @@ SECTIONS {
          */
         rom : {
                 _RomBase = .;
-                __RomBase = .;
         } >rom
 
         /*
@@ -51,44 +47,66 @@ SECTIONS {
          */
         ram : {
                 _RamBase = .;
-                __RamBase = .;
         } >ram
 
         /*
          * Text, data and bss segments
          */
-        .text : AT (0x00000000) {
-                CREATE_OBJECT_SYMBOLS
+        .text : AT(0x0) {
                 *(.text)
-                . = ALIGN (16);
-
-		*(.eh_fram)
-		. = ALIGN (16);
 
 		/*
-		 * C++ constructors
+		 * C++ constructors/destructors
 		 */
-		__CTOR_LIST__ = .;
-		LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+		*(.gnu.linkonce.t.*)
+
+		/*
+		 * Initialization and finalization code.
+		 */
+		PROVIDE (_init = .);
+		*crti.o(.init)
+		*(.init)
+		*crtn.o(.init)
+		PROVIDE (_fini = .);
+		*crti.o(.fini)
+		*(.fini)
+		*crtn.o(.fini)
+
+		/*
+		 * C++ constructors/destructors
+		 */
+		. = ALIGN (16);
+		*crtbegin.o(.ctors)
 		*(.ctors)
-		LONG(0)
-		__CTOR_END__ = .;
-		__DTOR_LIST__ = .;
-		LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+		*crtend.o(.ctors)
+		*crtbegin.o(.dtors)
 		*(.dtors)
-		LONG(0)
-		__DTOR_END__ = .;
+		*crtend.o(.dtors)
 
-                . = ALIGN (16);
+		/*
+		 * Exception frame info
+		 */
+		. = ALIGN (16);
+		*(.eh_frame)
 
-                etext = .;
-                _etext = .;
-        } >rom 
+		/*
+		 * Read-only data
+		 */
+		. = ALIGN (16);
+		_rodata_start = . ;
+		*(.rodata)
+		*(.gnu.linkonce.r*)
+
+                 . = ALIGN (16);
+                PROVIDE (etext = .);
+        } >rom
         .data : AT(SIZEOF(.text)) {
                 copy_start = .;
                 *(.data)
+		*(.gnu.linkonce.d*)
+		*(.gcc_except_table)
                 . = ALIGN (16);
-                _edata = .;
+                PROVIDE (_edata = .);
                 copy_end = .;
         } >myram
         .bss : {
@@ -99,20 +117,16 @@ SECTIONS {
                 *(.bss)
                 *(COMMON)
                 . = ALIGN (16);
-                _end = .;
+                PROVIDE (end = .);
 
                 _HeapStart = .;
-                __HeapStart = .;
-                . += HeapSize;  /* XXX -- Old gld can't handle this */
-                . += StackSize; /* XXX -- Old gld can't handle this */
-                /* . += 0x10000; */ /* HeapSize for old gld */
-                /* . += 0x1000;  */ /* StackSize for old gld */
+                . += HeapSize;
+                . += StackSize;
                 . = ALIGN (16);
                 stack_init = .;
                 clear_end = .;
 
                 _WorkspaceBase = .;
-                __WorkspaceBase = .;
         } >myram
 
         /*

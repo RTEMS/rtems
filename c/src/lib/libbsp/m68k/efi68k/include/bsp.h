@@ -72,11 +72,11 @@ extern "C" {
 
 /* externals */
 
-extern char _endtext[];
-extern char _sdata[];
+extern char _etext[];
+extern char _copy_start[];
 extern char _edata[];
-extern char __bss_start[];
-extern char _end[];
+extern char _bss_start[];
+extern char end[];
 extern char _copy_data_from_rom[];
 extern char __end_of_ram[];
 

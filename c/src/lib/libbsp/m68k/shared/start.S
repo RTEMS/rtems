@@ -68,15 +68,15 @@ SYM (start_around):
         | zero out uninitialized data area
         |
 zerobss:
-        moveal  # SYM (end),a0          | find end of .bss
-        moveal  # SYM (bss_start),a1    | find beginning of .bss
+        moveal  # SYM (end),a0         | find end of .bss
+        moveal  # SYM (_bss_start),a1   | find beginning of .bss
         movel   #0,d0
 
 loop:   movel   #0,a1@+                 | to zero out uninitialized
         cmpal   a0,a1
         jlt     loop                    | loop until _end reached
 
-        movel   # SYM (stack_init),d0   | d0 = stop of stack
+        movel   # SYM (_stack_init),d0  | d0 = stop of stack
         andl    #0xffffffc0,d0          | align it on 16 byte boundary
         movw    #0x3700,sr              | SUPV MODE,INTERRUPTS OFF!!!
         movel   d0,a7                   | set master stack pointer

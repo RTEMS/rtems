@@ -1,0 +1,25 @@
+## 
+## $Id$
+## 
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+if HAS_NETWORKING
+NETWORK_H_FILES = wd80x3.h
+endif
+
+H_FILES = bsp.h coverhd.h $(NETWORK_H_FILES)
+noinst_HEADERS = $(H_FILES)
+
+$(PROJECT_INCLUDE):
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+$(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
+
+all-local: $(PREINSTALL_FILES)
+
+include $(top_srcdir)/../../../../../../automake/local.am

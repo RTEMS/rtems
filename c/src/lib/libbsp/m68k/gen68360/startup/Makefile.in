@@ -42,7 +42,7 @@ $(INSTALLDIRS):
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES +=
+DEFINES += -DUSE_INIT_FINI
 CPPFLAGS +=
 CFLAGS +=
 

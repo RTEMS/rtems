@@ -1,0 +1,37 @@
+## 
+## $Id$
+## 
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+PGM = ${ARCH}/3c509.rel
+
+## C source names
+C_FILES = 3c509.c elink.c
+X3c509_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.o)
+
+H_FILES = 3c509.h elink.h
+noinst_HEADERS = $(H_FILES)
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/lib.am
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+
+$(PGM): $(X3c509_rel_OBJECTS)
+	$(make-rel)
+
+if HAS_NETWORKING
+all-local: ${ARCH} $(PGM)
+endif
+
+# the .rel file built here will be put into libbsp.a by 
+# 	../wrapup/Makefile
+
+EXTRA_DIST = 3c509.c elink.c
+
+include $(top_srcdir)/../../../../../../automake/local.am

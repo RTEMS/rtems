@@ -394,7 +394,7 @@ ZEROLOOPTEST:
 	cmpl	a1,a0			| Done?
 	bcs.s	ZEROLOOP		| No, skip
 
-	movel	#stack_init,a7		| set master stack pointer
+	movel	#_stack_init,a7		| set master stack pointer
 	pea	env			| envp
 	pea	arg			| argv
 	movel	d0,a7@-			| argc

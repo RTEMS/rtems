@@ -501,8 +501,8 @@ sync_wait349:
 	/*--------------------------------------------------------*/
 	/* -- copy to address of the 68349 initialization code -- */
 
-	lea.l		_copy_start(%pc),crt0_ptr3
-	lea.l		_copy_end(%pc),crt0_ptr4
+	lea.l		_copy_start_code(%pc),crt0_ptr3
+	lea.l		_copy_end_code(%pc),crt0_ptr4
 	move.l		crt0_ptr4,crt0_temp
 	sub.l		crt0_ptr3,crt0_temp
 	add.l		#3,crt0_temp				| adjust to next long word
@@ -518,7 +518,7 @@ _copy_loop:
 	/*------------------------------------*/
 	/* -- start of initialization code -- */
 
-_copy_start:
+_copy_start_code:
 	bra.l		_begin_68349_init
 
 	/*----------------------------------------------------------*/
@@ -709,7 +709,7 @@ _init_cache_end:
 
 	jmp.l		(_fill_test)				| must be absolute long
 
-_copy_end:
+_copy_end_code:
 
 /*-------------------------------------------------
   initialization code for the 68340 board
@@ -812,11 +812,11 @@ _dont_fill:
  */
 	PUBLIC (_CopyDataClearBSSAndStart)
 SYM(_CopyDataClearBSSAndStart):
-	lea	copy_start,a0					| Get start of DATA in RAM
-	lea	SYM(etext),a2					| Get start of DATA in ROM
+	lea	SYM(_copy_start),a0				| Get start of DATA in RAM
+	lea	SYM(_etext),a2					| Get start of DATA in ROM
 	cmpl	a0,a2						| Are they the same?
 	beq.s	NOCOPY						| Yes, no copy necessary
-	lea	copy_end,a1					| Get end of DATA in RAM
+	lea	SYM(_copy_end),a1				| Get end of DATA in RAM
 	bra.s	COPYLOOPTEST					| Branch into copy loop
 COPYLOOP:
 	movel	a2@+,a0@+					| Copy word from ROM to RAM
@@ -825,8 +825,8 @@ COPYLOOPTEST:
 	bcs.s	COPYLOOP					| No, skip
 NOCOPY:
 
-	lea	clear_start,a0					| Get start of BSS
-	lea	clear_end,a1					| Get end of BSS
+	lea	_clear_start,a0					| Get start of BSS
+	lea	_clear_end,a1					| Get end of BSS
 	clrl	d0						| Value to set
 	bra.s	ZEROLOOPTEST					| Branch into clear loop
 ZEROLOOP:
@@ -835,7 +835,7 @@ ZEROLOOPTEST:
 	cmpl	a1,a0						| Done?
 	bcs.s	ZEROLOOP					| No, skip
 
-	movel	#stack_init,a7					| set master stack pointer
+	movel	#_stack_init,a7					| set master stack pointer
 	movel	d0,a7@-						| environp
 	movel	d0,a7@-						| argv
 	movel	d0,a7@-						| argc

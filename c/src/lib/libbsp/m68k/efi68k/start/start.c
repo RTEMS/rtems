@@ -30,7 +30,7 @@ void  boot_card();
 
   /* disable interrupts, load stack pointer */
   asm volatile ( "oriw  #0x0700, %sr;
-                  movel  #_end, %d0;
+                  movel  #end, %d0;
                   addl   " STACK_SIZE ",%d0;
                   movel  %d0,%sp;
                   link %a6, #0"
@@ -40,8 +40,8 @@ void  boot_card();
    * needed) and "zero-ing" the .bss section.
    */
   {
-    register char *src = _endtext;
-    register char *dst = _sdata;
+    register char *src = _etext;
+    register char *dst = _copy_start;
 
     if (_copy_data_from_rom)
       /* ROM has data at end of text; copy it. */
@@ -49,7 +49,7 @@ void  boot_card();
 	*dst++ = *src++;
     
     /* Zero bss */
-    for (dst = __bss_start; dst< _end; dst++)
+    for (dst = _bss_start; dst< end; dst++)
       *dst = 0;
   }
 

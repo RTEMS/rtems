@@ -3,21 +3,12 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-noinst_SCRIPTS = \
-coff2bin \
-elf2exe
-
-SUBDIRS = \
-ts_1325_ada \
-network_ada \
-debug_ada \
-debug_c \
-dos_sup
+SUBDIRS = adasockets listener tcprelay
 
 EXTRA_DIST = \
-$(noinst_SCRIPTS)
+README \
+networkconfig.h
 
 include $(top_srcdir)/../../../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../../../automake/local.am
