@@ -16,6 +16,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "libio_.h"
 
@@ -26,8 +27,12 @@ long telldir(
 {
   rtems_libio_t  *iop;
 
+  if ( !dirp )
+    set_errno_and_return_minus_one( EBADF ); 
+
   /*
-   *  Get the file control block structure associated with the file descriptor
+   *  Get the file control block structure associated with the
+   *  file descriptor
    */
 
   iop = rtems_libio_iop( dirp->dd_fd );

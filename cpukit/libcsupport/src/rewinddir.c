@@ -24,6 +24,9 @@ void rewinddir(
 {
   off_t status;
 
+  if ( !dirp )
+    return;
+
   status = lseek( dirp->dd_fd, 0, SEEK_SET );
  
   if( status == -1 )

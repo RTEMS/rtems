@@ -56,6 +56,9 @@ readdir(dirp)
 register DIR *dirp; {
   register struct dirent *dp;
   
+  if ( !dirp )
+    return NULL;
+
   for (;;) {
     if (dirp->dd_loc == 0) {
       dirp->dd_size = getdents (dirp->dd_fd,
