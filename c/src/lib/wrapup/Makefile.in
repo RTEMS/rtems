@@ -32,8 +32,10 @@ CLOBBER_ADDITIONS +=
 all:    $(ARCH) $(LIB)
  
 $(LIB):  $(SRCS)
-	$(PROJECT_RELEASE)/build-tools/rtems-glom \
-          -d $(PROJECT_HOME)/lib -v -V "$(LIB_VARIANT)" -a $(AR)
+	PROJECT_HOME=$(PROJECT_HOME) \
+	    $(PROJECT_RELEASE)/build-tools/rtems-glom \
+	        -d $(PROJECT_HOME)/lib -v -V "$(LIB_VARIANT)" \
+	        -a $(AR)
  
 install:  all
 
