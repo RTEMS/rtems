@@ -39,7 +39,7 @@ and status codes.
 @c
 
 @page
-@subsection nrea_dat - Read Data from another Node
+@subsection nrea_dat -  Read Data from another Node
 
 @subheading CALLING SEQUENCE:
 
@@ -68,7 +68,7 @@ ER nrea_dat (
 @c
 
 @page
-@subsection nwri_dat - Write Data to another Node
+@subsection nwri_dat -  Write Data to another Node
 
 @subheading CALLING SEQUENCE:
 
@@ -97,7 +97,7 @@ ER nwri_dat (
 @c
 
 @page
-@subsection nget_nod - Get Local Node Number
+@subsection nget_nod -  Get Local Node Number
 
 @subheading CALLING SEQUENCE:
 
@@ -126,7 +126,7 @@ ER nget_nod (
 @c
 
 @page
-@subsection nget_ver - Get Version Information of another Node
+@subsection nget_ver -  Get Version Information of another Node
 
 @subheading CALLING SEQUENCE:
 

@@ -126,7 +126,7 @@ echo "@itemize @bullet"
 
 for routine in ${ROUTINES}
 do
-  description=`grep ${routine} ../../itron_spec/itron3-1.txt | grep "]" | cut -d']' -f2`
+  description=`grep " ${routine} " ../../itron_spec/itron3-1.txt | grep "]" | cut -d']' -f2 `
   description=`echo ${description}`
   echo "@item @code{${routine}} - ${description}"
 done
@@ -148,14 +148,14 @@ echo ""
 for routine in ${ROUTINES}
 do
   description=`grep ${routine} ../../itron_spec/itron3-1.txt | grep "]" | cut -d']' -f2`
-  description=`echo ${description}`
+  description=`echo -n ${description}`
   echo ""
   echo "@c"
   echo "@c  ${routine}"
   echo "@c"
   echo ""
   echo "@page"
-  echo "@subsection ${routine} - ${description}"
+  echo "@subsection ${routine} - " ${description}
   echo ""
   echo "@subheading CALLING SEQUENCE:"
   echo ""
@@ -163,7 +163,7 @@ do
   echo "@example"
   proto=`grep "${routine} (" ../../itron_spec/itron3-6.txt | sed -e 's/ercd = //'`   # | sed -e 's/ \\(/(/'`
   
-  echo `echo ${proto} | cut -d'(' -f1`"("
+  echo `echo -n ${proto} | cut -d'(' -f1`"("
   echo ${proto} | cut -d'(' -f2 | sed -e 's/ .;//'
   echo ");"
   # echo "int ${routine}("

@@ -16,7 +16,7 @@ system manager is ...
 The services provided by the system manager are:
 
 @itemize @bullet
-@item @code{get_ver} - Get Version Information Get Version Information of another Node
+@item @code{get_ver} - Get Version Information
 @item @code{ref_sys} - Reference Semaphore Status
 @item @code{ref_cfg} - Reference Configuration Information
 @item @code{def_svc} - Define Extended SVC Handler
@@ -40,14 +40,14 @@ and status codes.
 @c
 
 @page
-@subsection get_ver - Get Version Information Get Version Information of another Node
+@subsection get_ver -  Get Version Information Get Version Information of another Node
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 ER get_ver (
- T_VER *pk_ver ER nget_ver 
+ T_VER *pk_ver ER nget_ver 
 );
 @end example
 @end ifset
@@ -69,7 +69,7 @@ ER get_ver (
 @c
 
 @page
-@subsection ref_sys - Reference Semaphore Status
+@subsection ref_sys -  Reference Semaphore Status
 
 @subheading CALLING SEQUENCE:
 
@@ -98,7 +98,7 @@ ER ref_sys (
 @c
 
 @page
-@subsection ref_cfg - Reference Configuration Information
+@subsection ref_cfg -  Reference Configuration Information
 
 @subheading CALLING SEQUENCE:
 
@@ -127,7 +127,7 @@ ER ref_cfg (
 @c
 
 @page
-@subsection def_svc - Define Extended SVC Handler
+@subsection def_svc -  Define Extended SVC Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -156,7 +156,7 @@ ER def_svc (
 @c
 
 @page
-@subsection def_exc - Define Exception Handler
+@subsection def_exc -  Define Exception Handler
 
 @subheading CALLING SEQUENCE:
 

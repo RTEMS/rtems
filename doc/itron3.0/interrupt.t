@@ -44,7 +44,7 @@ and status codes.
 @c
 
 @page
-@subsection def_int - Define Interrupt Handler
+@subsection def_int -  Define Interrupt Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -73,7 +73,7 @@ ER def_int (
 @c
 
 @page
-@subsection ret_int - Return from Interrupt Handler
+@subsection ret_int -  Return from Interrupt Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -102,7 +102,7 @@ void ret_int (
 @c
 
 @page
-@subsection ret_wup - Return and Wakeup Task
+@subsection ret_wup -  Return and Wakeup Task
 
 @subheading CALLING SEQUENCE:
 
@@ -131,7 +131,7 @@ void ret_wup (
 @c
 
 @page
-@subsection loc_cpu - Lock CPU
+@subsection loc_cpu -  Lock CPU
 
 @subheading CALLING SEQUENCE:
 
@@ -160,7 +160,7 @@ ER loc_cpu (
 @c
 
 @page
-@subsection unl_cpu - Unlock CPU
+@subsection unl_cpu -  Unlock CPU
 
 @subheading CALLING SEQUENCE:
 
@@ -189,7 +189,7 @@ ER unl_cpu (
 @c
 
 @page
-@subsection dis_int - Disable Interrupt
+@subsection dis_int -  Disable Interrupt
 
 @subheading CALLING SEQUENCE:
 
@@ -218,7 +218,7 @@ ER dis_int (
 @c
 
 @page
-@subsection ena_int - Enable Interrupt
+@subsection ena_int -  Enable Interrupt
 
 @subheading CALLING SEQUENCE:
 
@@ -247,7 +247,7 @@ ER ena_int (
 @c
 
 @page
-@subsection chg_iXX - Change Interrupt Mask (Level or Priority)
+@subsection chg_iXX -  Change Interrupt Mask (Level or Priority)
 
 @subheading CALLING SEQUENCE:
 
@@ -276,7 +276,7 @@ ER chg_iXX (
 @c
 
 @page
-@subsection ref_iXX - Reference Interrupt Mask (Level or Priority)
+@subsection ref_iXX -  Reference Interrupt Mask (Level or Priority)
 
 @subheading CALLING SEQUENCE:
 

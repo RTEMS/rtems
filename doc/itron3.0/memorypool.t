@@ -18,7 +18,7 @@ The services provided by the memory pool manager are:
 @itemize @bullet
 @item @code{cre_mpl} - Create Variable-Size Memorypool
 @item @code{del_mpl} - Delete Variable-Size Memorypool
-@item @code{get_blk} - Get Variable-Size Memory Block Poll and Get Variable-Size Memory Block Get Variable-Size Memory Block with Timeout
+@item @code{get_blk} - Get Variable-Size Memory Block
 @item @code{pget_blk} - Poll and Get Variable-Size Memory Block
 @item @code{tget_blk} - Get Variable-Size Memory Block with Timeout
 @item @code{rel_blk} - Release Variable-Size Memory Block
@@ -42,7 +42,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_mpl - Create Variable-Size Memorypool
+@subsection cre_mpl -  Create Variable-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
@@ -71,7 +71,7 @@ ER cre_mpl (
 @c
 
 @page
-@subsection del_mpl - Delete Variable-Size Memorypool
+@subsection del_mpl -  Delete Variable-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
@@ -100,14 +100,14 @@ ER del_mpl (
 @c
 
 @page
-@subsection get_blk - Get Variable-Size Memory Block Poll and Get Variable-Size Memory Block Get Variable-Size Memory Block with Timeout
+@subsection get_blk -  Get Variable-Size Memory Block Poll and Get Variable-Size Memory Block Get Variable-Size Memory Block with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 ER get_blk (
- VP *p_blk, ID mplid, INT blksz ER ercd =pget_blk 
+ VP *p_blk, ID mplid, INT blksz ER ercd =pget_blk 
 );
 @end example
 @end ifset
@@ -129,7 +129,7 @@ ER get_blk (
 @c
 
 @page
-@subsection pget_blk - Poll and Get Variable-Size Memory Block
+@subsection pget_blk -  Poll and Get Variable-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
@@ -158,7 +158,7 @@ ER ercd =pget_blk (
 @c
 
 @page
-@subsection tget_blk - Get Variable-Size Memory Block with Timeout
+@subsection tget_blk -  Get Variable-Size Memory Block with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -187,7 +187,7 @@ ER ercd =tget_blk (
 @c
 
 @page
-@subsection rel_blk - Release Variable-Size Memory Block
+@subsection rel_blk -  Release Variable-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
@@ -216,7 +216,7 @@ ER rel_blk (
 @c
 
 @page
-@subsection ref_mpl - Reference Variable-Size Memorypool Status
+@subsection ref_mpl -  Reference Variable-Size Memorypool Status
 
 @subheading CALLING SEQUENCE:
 

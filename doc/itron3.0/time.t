@@ -44,7 +44,7 @@ and status codes.
 @c
 
 @page
-@subsection get_tim - Get System Clock
+@subsection get_tim -  Get System Clock
 
 @subheading CALLING SEQUENCE:
 
@@ -73,7 +73,7 @@ ER get_tim (
 @c
 
 @page
-@subsection set_tim - Set System Clock
+@subsection set_tim -  Set System Clock
 
 @subheading CALLING SEQUENCE:
 
@@ -102,7 +102,7 @@ ER set_tim (
 @c
 
 @page
-@subsection dly_tsk - Delay Task
+@subsection dly_tsk -  Delay Task
 
 @subheading CALLING SEQUENCE:
 
@@ -131,7 +131,7 @@ ER dly_tsk (
 @c
 
 @page
-@subsection def_cyc - Define Cyclic Handler
+@subsection def_cyc -  Define Cyclic Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -160,7 +160,7 @@ ER def_cyc (
 @c
 
 @page
-@subsection act_cyc - Activate Cyclic Handler
+@subsection act_cyc -  Activate Cyclic Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -189,7 +189,7 @@ ER act_cyc (
 @c
 
 @page
-@subsection ref_cyc - Reference Cyclic Handler Status
+@subsection ref_cyc -  Reference Cyclic Handler Status
 
 @subheading CALLING SEQUENCE:
 
@@ -218,7 +218,7 @@ ER ref_cyc (
 @c
 
 @page
-@subsection def_alm - Define Alarm Handler
+@subsection def_alm -  Define Alarm Handler
 
 @subheading CALLING SEQUENCE:
 
@@ -247,7 +247,7 @@ ER def_alm (
 @c
 
 @page
-@subsection ref_alm - Reference Alarm Handler Status
+@subsection ref_alm -  Reference Alarm Handler Status
 
 @subheading CALLING SEQUENCE:
 
@@ -276,7 +276,7 @@ ER ref_alm (
 @c
 
 @page
-@subsection ret_tmr - Return from Timer Handler
+@subsection ret_tmr -  Return from Timer Handler
 
 @subheading CALLING SEQUENCE:
 

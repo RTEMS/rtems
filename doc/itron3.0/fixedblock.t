@@ -18,7 +18,7 @@ The services provided by the fixed block manager are:
 @itemize @bullet
 @item @code{cre_mpf} - Create Fixed-Size Memorypool
 @item @code{del_mpf} - Delete Fixed-Size Memorypool
-@item @code{get_blf} - Get Fixed-Size Memory Block Poll and Get Fixed-Size Memory Block Get Fixed-Size Memory Block with Timeout
+@item @code{get_blf} - Get Fixed-Size Memory Block
 @item @code{pget_blf} - Poll and Get Fixed-Size Memory Block
 @item @code{tget_blf} - Get Fixed-Size Memory Block with Timeout
 @item @code{rel_blf} - Release Fixed-Size Memory Block
@@ -42,7 +42,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_mpf - Create Fixed-Size Memorypool
+@subsection cre_mpf -  Create Fixed-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
@@ -71,7 +71,7 @@ ER cre_mpf (
 @c
 
 @page
-@subsection del_mpf - Delete Fixed-Size Memorypool
+@subsection del_mpf -  Delete Fixed-Size Memorypool
 
 @subheading CALLING SEQUENCE:
 
@@ -100,14 +100,14 @@ ER del_mpf (
 @c
 
 @page
-@subsection get_blf - Get Fixed-Size Memory Block Poll and Get Fixed-Size Memory Block Get Fixed-Size Memory Block with Timeout
+@subsection get_blf -  Get Fixed-Size Memory Block Poll and Get Fixed-Size Memory Block Get Fixed-Size Memory Block with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 ER get_blf (
- VP *p_blf, ID mpfid ER ercd =pget_blf 
+ VP *p_blf, ID mpfid ER ercd =pget_blf 
 );
 @end example
 @end ifset
@@ -129,7 +129,7 @@ ER get_blf (
 @c
 
 @page
-@subsection pget_blf - Poll and Get Fixed-Size Memory Block
+@subsection pget_blf -  Poll and Get Fixed-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
@@ -158,7 +158,7 @@ ER ercd =pget_blf (
 @c
 
 @page
-@subsection tget_blf - Get Fixed-Size Memory Block with Timeout
+@subsection tget_blf -  Get Fixed-Size Memory Block with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -187,7 +187,7 @@ ER ercd =tget_blf (
 @c
 
 @page
-@subsection rel_blf - Release Fixed-Size Memory Block
+@subsection rel_blf -  Release Fixed-Size Memory Block
 
 @subheading CALLING SEQUENCE:
 
@@ -216,7 +216,7 @@ ER rel_blf (
 @c
 
 @page
-@subsection ref_mpf - Reference Fixed-Size Memorypool Status
+@subsection ref_mpf -  Reference Fixed-Size Memorypool Status
 
 @subheading CALLING SEQUENCE:
 

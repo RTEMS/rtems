@@ -19,7 +19,7 @@ The services provided by the mailbox manager are:
 @item @code{cre_mbx} - Create Mailbox
 @item @code{del_mbx} - Delete Mailbox
 @item @code{snd_msg} - Send Message to Mailbox
-@item @code{rcv_msg} - Poll and Receive Message from Mailbox Receive Message from Mailbox Receive Message from Mailbox with Timeout
+@item @code{rcv_msg} - Receive Message from Mailbox
 @item @code{prcv_msg} - Poll and Receive Message from Mailbox
 @item @code{trcv_msg} - Receive Message from Mailbox with Timeout
 @item @code{ref_mbx} - Reference Mailbox Status
@@ -42,7 +42,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_mbx - Create Mailbox
+@subsection cre_mbx -  Create Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -71,7 +71,7 @@ ER cre_mbx (
 @c
 
 @page
-@subsection del_mbx - Delete Mailbox
+@subsection del_mbx -  Delete Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -100,7 +100,7 @@ ER del_mbx (
 @c
 
 @page
-@subsection snd_msg - Send Message to Mailbox
+@subsection snd_msg -  Send Message to Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -129,14 +129,14 @@ ER snd_msg (
 @c
 
 @page
-@subsection rcv_msg - Poll and Receive Message from Mailbox Receive Message from Mailbox Receive Message from Mailbox with Timeout
+@subsection rcv_msg -  Poll and Receive Message from Mailbox Receive Message from Mailbox Receive Message from Mailbox with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 ER rcv_msg (
- T_MSG **ppk_msg, ID mbxid ER ercd =prcv_msg 
+ T_MSG **ppk_msg, ID mbxid ER ercd =prcv_msg 
 );
 @end example
 @end ifset
@@ -158,7 +158,7 @@ ER rcv_msg (
 @c
 
 @page
-@subsection prcv_msg - Poll and Receive Message from Mailbox
+@subsection prcv_msg -  Poll and Receive Message from Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -187,7 +187,7 @@ ER ercd =prcv_msg (
 @c
 
 @page
-@subsection trcv_msg - Receive Message from Mailbox with Timeout
+@subsection trcv_msg -  Receive Message from Mailbox with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -216,7 +216,7 @@ ER ercd =trcv_msg (
 @c
 
 @page
-@subsection ref_mbx - Reference Mailbox Status
+@subsection ref_mbx -  Reference Mailbox Status
 
 @subheading CALLING SEQUENCE:
 

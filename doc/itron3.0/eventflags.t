@@ -20,7 +20,7 @@ The services provided by the eventflags manager are:
 @item @code{del_flg} - Delete Eventflag
 @item @code{set_flg} - Set Eventflag
 @item @code{clr_flg} - Clear Eventflag
-@item @code{wai_flg} - Wait on Eventflag with Timeout Wait on Eventflag
+@item @code{wai_flg} - Wait on Eventflag
 @item @code{pol_flg} - Wait for Eventflag (Polling)
 @item @code{twai_flg} - Wait on Eventflag with Timeout
 @item @code{ref_flg} - Reference Eventflag Status
@@ -43,7 +43,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_flg - Create Eventflag
+@subsection cre_flg -  Create Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -72,7 +72,7 @@ ER cre_flg (
 @c
 
 @page
-@subsection del_flg - Delete Eventflag
+@subsection del_flg -  Delete Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -101,7 +101,7 @@ ER del_flg (
 @c
 
 @page
-@subsection set_flg - Set Eventflag
+@subsection set_flg -  Set Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -130,7 +130,7 @@ ER set_flg (
 @c
 
 @page
-@subsection clr_flg - Clear Eventflag
+@subsection clr_flg -  Clear Eventflag
 
 @subheading CALLING SEQUENCE:
 
@@ -159,14 +159,14 @@ ER clr_flg (
 @c
 
 @page
-@subsection wai_flg - Wait on Eventflag with Timeout Wait on Eventflag
+@subsection wai_flg -  Wait on Eventflag with Timeout Wait on Eventflag
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 ER wai_flg (
- UINT *p_flgptn, ID flgid, UINT waiptn, UINT wfmode ER ercd =twai_flg 
+ UINT *p_flgptn, ID flgid, UINT waiptn, UINT wfmode ER ercd =twai_flg 
 );
 @end example
 @end ifset
@@ -188,7 +188,7 @@ ER wai_flg (
 @c
 
 @page
-@subsection pol_flg - Wait for Eventflag (Polling)
+@subsection pol_flg -  Wait for Eventflag (Polling)
 
 @subheading CALLING SEQUENCE:
 
@@ -217,7 +217,7 @@ ER pol_flg (
 @c
 
 @page
-@subsection twai_flg - Wait on Eventflag with Timeout
+@subsection twai_flg -  Wait on Eventflag with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -246,7 +246,7 @@ ER ercd =twai_flg (
 @c
 
 @page
-@subsection ref_flg - Reference Eventflag Status
+@subsection ref_flg -  Reference Eventflag Status
 
 @subheading CALLING SEQUENCE:
 

@@ -48,6 +48,7 @@ and passed an as argument to the @code{cre_sem} service.  The structure
 is defined as follows:
 
 @example
+@group
 typedef struct t_csem @{
         VP    exinf;    /* extended information */
         ATR   sematr;   /* semaphore attributes */
@@ -64,6 +65,7 @@ sematr:
     TA_TFIFO   H'0...00   /* waiting tasks are handled by FIFO */
     TA_TPRI    H'0...01   /* waiting tasks are handled by priority */
 
+@end group
 @end example
 
 where the meaning of each field is:
@@ -93,6 +95,7 @@ status and state information on a semaphore.  The structure
 is defined as follows:
 
 @example
+@group
 typedef struct t_rsem @{
         VP      exinf;    /* extended information */
         BOOL_ID wtsk;     /* indicates whether or not there is a
@@ -103,6 +106,7 @@ typedef struct t_rsem @{
        implementation */
                 ...
 @} T_RSEM;
+@end group
 @end example
 
 @table @b

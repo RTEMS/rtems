@@ -18,10 +18,10 @@ The services provided by the message buffer manager are:
 @itemize @bullet
 @item @code{cre_mbf} - Create MessageBuffer
 @item @code{del_mbf} - Delete MessageBuffer
-@item @code{snd_mbf} - Poll and Send Message to MessageBuffer Send Message to MessageBuffer Send Message to MessageBuffer with Timeout
+@item @code{snd_mbf} - Send Message to MessageBuffer
 @item @code{psnd_mbf} - Poll and Send Message to MessageBuffer
 @item @code{tsnd_mbf} - Send Message to MessageBuffer with Timeout
-@item @code{rcv_mbf} - Poll and Receive Message from MessageBuffer Receive Message from MessageBuffer Receive Message from MessageBuffer with Timeout
+@item @code{rcv_mbf} - Receive Message from MessageBuffer
 @item @code{prcv_mbf} - Poll and Receive Message from MessageBuffer
 @item @code{trcv_mbf} - Receive Message from MessageBuffer with Timeout
 @item @code{ref_mbf} - Reference MessageBuffer Status
@@ -44,7 +44,7 @@ and status codes.
 @c
 
 @page
-@subsection cre_mbf - Create MessageBuffer
+@subsection cre_mbf -  Create MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
@@ -73,7 +73,7 @@ ER cre_mbf (
 @c
 
 @page
-@subsection del_mbf - Delete MessageBuffer
+@subsection del_mbf -  Delete MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
@@ -102,14 +102,14 @@ ER del_mbf (
 @c
 
 @page
-@subsection snd_mbf - Poll and Send Message to MessageBuffer Send Message to MessageBuffer Send Message to MessageBuffer with Timeout
+@subsection snd_mbf -  Poll and Send Message to MessageBuffer Send Message to MessageBuffer Send Message to MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 ER snd_mbf (
- ID mbfid, VP msg, INT msgsz ER ercd =psnd_mbf 
+ ID mbfid, VP msg, INT msgsz ER ercd =psnd_mbf 
 );
 @end example
 @end ifset
@@ -131,7 +131,7 @@ ER snd_mbf (
 @c
 
 @page
-@subsection psnd_mbf - Poll and Send Message to MessageBuffer
+@subsection psnd_mbf -  Poll and Send Message to MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
@@ -160,7 +160,7 @@ ER ercd =psnd_mbf (
 @c
 
 @page
-@subsection tsnd_mbf - Send Message to MessageBuffer with Timeout
+@subsection tsnd_mbf -  Send Message to MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -189,14 +189,14 @@ ER ercd =tsnd_mbf (
 @c
 
 @page
-@subsection rcv_mbf - Poll and Receive Message from MessageBuffer Receive Message from MessageBuffer Receive Message from MessageBuffer with Timeout
+@subsection rcv_mbf -  Poll and Receive Message from MessageBuffer Receive Message from MessageBuffer Receive Message from MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 ER rcv_mbf (
- VP msg, INT *p_msgsz, ID mbfid ER ercd =prcv_mbf 
+ VP msg, INT *p_msgsz, ID mbfid ER ercd =prcv_mbf 
 );
 @end example
 @end ifset
@@ -218,7 +218,7 @@ ER rcv_mbf (
 @c
 
 @page
-@subsection prcv_mbf - Poll and Receive Message from MessageBuffer
+@subsection prcv_mbf -  Poll and Receive Message from MessageBuffer
 
 @subheading CALLING SEQUENCE:
 
@@ -247,7 +247,7 @@ ER ercd =prcv_mbf (
 @c
 
 @page
-@subsection trcv_mbf - Receive Message from MessageBuffer with Timeout
+@subsection trcv_mbf -  Receive Message from MessageBuffer with Timeout
 
 @subheading CALLING SEQUENCE:
 
@@ -276,7 +276,7 @@ ER ercd =trcv_mbf (
 @c
 
 @page
-@subsection ref_mbf - Reference MessageBuffer Status
+@subsection ref_mbf -  Reference MessageBuffer Status
 
 @subheading CALLING SEQUENCE:
 
