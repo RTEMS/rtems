@@ -52,11 +52,12 @@ typedef enum {
   RTEMS_NOT_OWNER_OF_RESOURCE    = 23, /* not owner of resource */
   RTEMS_NOT_IMPLEMENTED          = 24, /* directive not implemented */
   RTEMS_INTERNAL_ERROR           = 25, /* RTEMS inconsistency detected */
-  RTEMS_NO_MEMORY                = 26  /* could not get enough memory */
+  RTEMS_NO_MEMORY                = 26, /* could not get enough memory */
+  RTEMS_PROXY_BLOCKING           = 27  /* internal error only */
 } rtems_status_code;
 
 #define RTEMS_STATUS_CODES_FIRST RTEMS_SUCCESSFUL
-#define RTEMS_STATUS_CODES_LAST  RTEMS_NO_MEMORY
+#define RTEMS_STATUS_CODES_LAST  RTEMS_PROXY_BLOCKING
 
 extern rtems_status_code _Status_Object_name_errors_to_status[];
 

@@ -678,7 +678,7 @@ rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
     case CORE_MESSAGE_QUEUE_STATUS_TIMEOUT:
       return RTEMS_TIMEOUT;
     case THREAD_STATUS_PROXY_BLOCKING:
-      return THREAD_STATUS_PROXY_BLOCKING;
+      return RTEMS_PROXY_BLOCKING;
   }
   _Internal_error_Occurred(         /* XXX */
     INTERNAL_ERROR_RTEMS_API,

@@ -55,7 +55,7 @@ rtems_status_code rtems_interrupt_catch(
   if ( !_ISR_Is_vector_number_valid( vector ) )
     return RTEMS_INVALID_NUMBER;
 
-  if ( !_ISR_Is_valid_user_handler( new_isr_handler ) )
+  if ( !_ISR_Is_valid_user_handler( (void *) new_isr_handler ) )
     return RTEMS_INVALID_ADDRESS;
 
   _ISR_Install_vector(

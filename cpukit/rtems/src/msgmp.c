@@ -140,9 +140,11 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
           );
       }
 
-      return _MPCI_Send_request_packet(rtems_get_node(message_queue_id),
-                                       &the_packet->Prefix,
-                                       STATES_WAITING_FOR_MESSAGE);
+      return (rtems_status_code) _MPCI_Send_request_packet(
+        rtems_get_node(message_queue_id),
+        &the_packet->Prefix,
+        STATES_WAITING_FOR_MESSAGE
+      );
       break;
 
     case MESSAGE_QUEUE_MP_RECEIVE_REQUEST:
@@ -163,9 +165,11 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       _Thread_Executing->Wait.return_argument   = (unsigned32 *)buffer;
       _Thread_Executing->Wait.return_argument_1 = size_p;
       
-      return _MPCI_Send_request_packet(rtems_get_node(message_queue_id),
-                                       &the_packet->Prefix,
-                                       STATES_WAITING_FOR_MESSAGE);
+      return (rtems_status_code) _MPCI_Send_request_packet(
+        rtems_get_node(message_queue_id),
+        &the_packet->Prefix,
+        STATES_WAITING_FOR_MESSAGE
+      );
       break;
 
     case MESSAGE_QUEUE_MP_ANNOUNCE_CREATE:

@@ -58,7 +58,7 @@ rtems_status_code _Event_MP_Send_request_packet (
       the_packet->Prefix.id         = event_id;
       the_packet->event_in          = event_in;
 
-      return
+      return (rtems_status_code)
         _MPCI_Send_request_packet(
           rtems_get_node( event_id ),
           &the_packet->Prefix,

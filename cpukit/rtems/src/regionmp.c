@@ -105,7 +105,7 @@ rtems_status_code _Region_MP_Send_request_packet (
       the_packet->size              = size;
       the_packet->option_set        = option_set;
 
-      return _MPCI_Send_request_packet(
+      return (rtems_status_code) _MPCI_Send_request_packet(
           rtems_get_node( region_id ),
           &the_packet->Prefix,
           STATES_READY      /* Not used */

@@ -360,7 +360,7 @@ rtems_status_code rtems_region_get_segment(
       _Thread_queue_Enqueue( &the_region->Wait_queue, timeout );
 
       _Thread_Enable_dispatch();
-      return( executing->Wait.return_code );
+      return (rtems_status_code) executing->Wait.return_code;
   }
 
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
@@ -464,7 +464,7 @@ rtems_status_code rtems_region_return_segment(
         if ( the_thread == NULL )
            break;
 
-        the_segment = _Region_Allocate_segment(
+        the_segment = (void **) _Region_Allocate_segment(
            the_region, 
            the_thread->Wait.count
         );
