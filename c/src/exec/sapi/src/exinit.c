@@ -28,6 +28,7 @@
 #include <rtems/io.h>
 #include <rtems/sysstate.h>
 
+#include <rtems/core/apiext.h>
 #include <rtems/core/copyrt.h>
 #include <rtems/core/heap.h>
 #include <rtems/core/interr.h>
@@ -143,6 +144,8 @@ rtems_interrupt_level rtems_initialize_executive_early(
    */
 
   _Debug_Manager_initialization();
+
+  _API_extensions_Initialization();
 
   _Thread_Dispatch_initialization();
 

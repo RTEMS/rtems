@@ -26,7 +26,7 @@
 #include <rtems/core/tod.h>
 #include <rtems/core/userext.h>
 #include <rtems/core/wkspace.h>
-#include <rtems/core/intthrd.h>
+#include <rtems/core/apiext.h>
 #include <rtems/core/sysstate.h>
 
 /*PAGE
@@ -132,13 +132,13 @@ User_extensions_routine _RTEMS_tasks_Switch_extension(
 
 }
 
-Internal_threads_Extensions_control _RTEMS_tasks_Internal_thread_extensions = {
+API_extensions_Control _RTEMS_tasks_API_extensions = {
   { NULL, NULL },
   NULL,                                     /* predriver */
   _RTEMS_tasks_Initialize_user_tasks        /* postdriver */
 };
 
-User_extensions_Control _RTEMS_tasks_API_extensions = {
+User_extensions_Control _RTEMS_tasks_User_extensions = {
   { NULL, NULL },
   { _RTEMS_tasks_Create_extension,            /* create */
     _RTEMS_tasks_Start_extension,             /* start */
@@ -192,9 +192,9 @@ void _RTEMS_tasks_Manager_initialization(
    *  Add all the extensions for this API
    */
 
-  _User_extensions_Add_API_set( &_RTEMS_tasks_API_extensions );
+  _User_extensions_Add_API_set( &_RTEMS_tasks_User_extensions );
 
-  _Internal_threads_Add_extension( &_RTEMS_tasks_Internal_thread_extensions );
+  _API_extensions_Add( &_RTEMS_tasks_API_extensions );
 
   /*
    *  Register the MP Process Packet routine.
