@@ -49,7 +49,7 @@ void test_cat(
 
   for ( ;; ) {
     status = lseek( fd, offset, SEEK_SET );
-    assert( !status );
+    assert( status != -1 );
 
     status = read( fd, test_cat_buffer, sizeof(test_cat_buffer) );
     if ( status <= 0 ) {
