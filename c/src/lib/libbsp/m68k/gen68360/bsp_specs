@@ -1,0 +1,34 @@
+
+predefines:
+-D__embedded__ -Asystem(embedded)
+
+startfile: replace
+mrtems:
+pg: start360.o%s
+{!pg:
+g: start360.o%s
+{!g:
+p: start360.o%s
+!p: start360.o%s
+}}
+{!mrtems:
+pg: pgcrt0%O
+{!pg:
+g: gcrt0%O
+{!g:
+p: pcrt0%O
+!p: crt0%O
+}}}
+
+
+link: replace
+mrtems: -dc -dp -N -T linkcmds%s -e start
+
+lib: replace
+mrtems: -( -lc -lrtemsall -lgcc -)
+
+
+libgcc: replace
+
+
+
