@@ -62,6 +62,8 @@ extern int BSP_connect_clock_handler (void);
 
 #if defined(USE_ENHANCED_INTR_API) && defined(RTEMS_TM27)
 
+#include <bsp/irq.h>
+
 #define MUST_WAIT_FOR_INTERRUPT 1
 
 void nullFunc() {}
