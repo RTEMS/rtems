@@ -1,0 +1,4 @@
+$(top_builddir)/common/common.add: $(top_builddir)/config.status $(top_srcdir)/common/common.add.in
+	cd $(top_builddir) && $(SHELL) ./config.status common/common.add
+$(top_builddir)/common/clean.add: $(top_builddir)/config.status $(top_srcdir)/common/clean.add.in
+	cd $(top_builddir) && $(SHELL) ./config.status common/clean.add

@@ -4,7 +4,7 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-scripts],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils])
 RTEMS_TOP([..])
-AC_PREFIX_DEFAULT([/opt/rtems])
+
 AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 
 AC_CANONICAL_HOST

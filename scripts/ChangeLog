@@ -1,3 +1,19 @@
+2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* common/commom.am: New.
+	* Makefile.am: Remove TEMPLATES. 
+	Put setup.cache into CONFIG_STATUS_DEPENDENCIES instead of
+	CONFIGURE_DEPENDENCIES.
+	* configure.ac: Remove AC_PREFIX_DEFAULT.
+	* binutils/Makefile.am: include common.am.
+	* common/common.add.in: Use rtems.com gnats.
+	* cpukit/Makefile.am: include common.am.
+	* gcc3newlib/Makefile.am: include common.am.
+	* gccnewlib/Makefile.am: include common.am.
+	* gdb/Makefile.am: include common.am.
+	* rtems/Makefile.am: include common.am.
+	* rtemsdoc/Makefile.am: include common.am.
+
 2003-08-28	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Recovery effort.

@@ -2,6 +2,7 @@
 ## $Id$
 ##
 
+include $(top_srcdir)/common/common.am
 
 MKGCCNEWLIBSPEC = $(SHELL) $(top_builddir)/mkgccnewlibspec
 

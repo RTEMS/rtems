@@ -10,13 +10,11 @@ SUBDIRS += rtemsdoc
 noinst_SCRIPTS = setup buildall buildalltar mkbspspec \
     mkgccnewlibspec mkrpms mkspec
 
-TEMPLATES =
-
-noinst_DATA = setup.def $(TEMPLATES)
+noinst_DATA = setup.def
 
 EXTRA_DIST = $(noinst_DATA) $(noinst_SCRIPTS)
 
-CONFIGURE_DEPENDENCIES = setup.cache
+CONFIG_STATUS_DEPENDENCIES = setup.cache
 setup.cache: setup.def
 	cp setup.def $@
 
