@@ -1,3 +1,8 @@
+2002-07-24	Joel Sherrill <joel@OARcorp.com>
+
+	* wrapup/Makefile.am: Temporarily don't include serdbg since it
+	causes some BSPs to not link "main(){}" as required by autoconf.
+
 2002-07-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* capture/capture.c: include <string.h> for memset.
