@@ -20,8 +20,8 @@ RTEMS/GDB fails to connect to target machine named my_target:
 @example
 (gdb) target rtems my_target 
 
-Attaching remote machine across net... Invalid hostname. Couldn't find remote
-host address.
+Attaching remote machine across net... \
+      Invalid hostname. Couldn't find remote host address.
 @end example
 
 @i{==> Ask your system administrator to add an entry with the

@@ -66,15 +66,11 @@ queue.
 
 @example
 @group
-/backit /backit~ /bin /boot /dev /etc /home /lib /lost+found /mnt /proc /root /sbin /tmp /usr /usr1 /usr2 /usr3 /var
-CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t Create Message Queue (mq) Structure
-CVS/
-
 typedef struct mq_attr@{
-long mq_flags; /backit /backit~ /bin /boot /dev /etc /home /lib /lost+found /mnt /proc /root /sbin /tmp /usr /usr1 /usr2 /usr3 /var Message queue flags CVS/
-long mq_maxmsg; /backit /backit~ /bin /boot /dev /etc /home /lib /lost+found /mnt /proc /root /sbin /tmp /usr /usr1 /usr2 /usr3 /var Maximum number of messages for the queue CVS/
-long mq_msgsize; /backit /backit~ /bin /boot /dev /etc /home /lib /lost+found /mnt /proc /root /sbin /tmp /usr /usr1 /usr2 /usr3 /var Maximum message size CVS/
-long mq_curmsgs; /backit /backit~ /bin /boot /dev /etc /home /lib /lost+found /mnt /proc /root /sbin /tmp /usr /usr1 /usr2 /usr3 /var Number of messages currently queued CVS/
+  long mq_flags;
+  long mq_maxmsg;
+  long mq_msgsize;
+  long mq_curmsgs;
 @};
 @end group
 @end example

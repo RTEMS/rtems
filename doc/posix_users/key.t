@@ -48,8 +48,8 @@ and status codes.
 #include <pthread.h>
 
 int pthread_key_create(
-pthread_key_t *key,
-void (*destructor)( void CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t )
+  pthread_key_t *key,
+  void (*destructor)( void )
 );
 @end example
 

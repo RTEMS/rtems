@@ -45,10 +45,6 @@ The "sem_t" structure is used to represent semaphores. It is passed as an
 argument to the semaphore directives and is defined as follows:
 
 @example
-/backit /backit~ /bin /boot /dev /etc /home /lib /lost+found /mnt /proc /root /sbin /tmp /usr /usr1 /usr2 /usr3 /var
-CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t sem_t structure
-CVS/
-
 typedef int sem_t
 @end example
 

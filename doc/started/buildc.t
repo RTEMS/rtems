@@ -56,7 +56,7 @@ specific patches.
     Directory:   @value{GCC-FTPDIR}
     File:        @value{GCC-TAR}
 @ifset use-html
-    URL:         @uref{Download @value{GCC-VERSION},ftp://@value{GCC-FTPSITE}@value{GCC-HTTPDIR}}
+    URL:         @uref{Download @value{GCC-VERSION}, ftp://@value{GCC-FTPSITE}@value{GCC-HTTPDIR}}
 @end ifset
 @end example
 

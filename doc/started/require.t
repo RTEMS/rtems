@@ -13,14 +13,14 @@ GNU C/C++ Cross Compiler Tools for RTEMS. The following table may help in
 assessing the amount of disk space required for your installation: 
 
 @example
-+----------------------------------------+------------------------------+
-|                Component               |     Disk Space Required      |
-+----------------------------------------+------------------------------+
-|          archive directory             |          30 Mbytes           |
-|          tools src unzipped            |         100 Mbytes           |
-|    each individual build directory     |    300 Mbytes worst case     |
-|       each installation directory      |        20-400 Mbytes         |
-+----------------------------------------+------------------------------+
++------------------------------------+--------------------------+
+|              Component             |   Disk Space Required    |
++------------------------------------+--------------------------+
+|        archive directory           |        30 Mbytes         |
+|        tools src unzipped          |       100 Mbytes         |
+|  each individual build directory   |  300 Mbytes worst case   |
+|     each installation directory    |      20-400 Mbytes       |
++------------------------------------+--------------------------+
 @end example
 
 The disk space required for each installation directory depends 
