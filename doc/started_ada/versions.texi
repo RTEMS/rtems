@@ -25,7 +25,7 @@
 @set GCC-TAR         gcc-2.8.1.tar.gz
 @set GCC-UNTAR       gcc-2.8.1
 @set GCC-FTPSITE     ftp.gnu.oar
-@set GCC-FTPDIR      /pub/GNU
+@set GCC-FTPDIR      /pub/gnu
 @set GCC-RTEMSPATCH  gcc-2.8.1-rtems-diff-980323.gz
 
 @c
@@ -48,7 +48,7 @@
 @set BINUTILS-TAR         binutils-2.9.tar.gz
 @set BINUTILS-UNTAR       binutils-2.9
 @set BINUTILS-FTPSITE     ftp.gnu.org
-@set BINUTILS-FTPDIR      /pub/GNU
+@set BINUTILS-FTPDIR      /pub/gnu
 @c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
 
 @c When forced to use a snapshot
