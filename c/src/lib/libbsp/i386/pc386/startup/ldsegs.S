@@ -52,15 +52,34 @@ BEGIN_CODE
 	EXTERN (Timer_exit)
 	EXTERN (clockOff)
 
-	.p2align 4
 /*----------------------------------------------------------------------------+
 | delay
 +------------------------------------------------------------------------------
-| Delay is needed after doing I/O. We do it by writing to a non-existent port.
+| Delay is needed after doing I/O. 
+|
+| The outb version is OK on most machines BUT the loop version ...
+| 
+| will delay for 1us on 1Gz machine, it will take a little bit
+| longer on slower machines, however, it does not matter because we
+| are going to call this function only a few times
+
 +----------------------------------------------------------------------------*/
-SYM(delay):
-	outb	al, $0x80	# about 1uS delay
+	.p2align 4
+	.globl _delay
+	.globl delay
+delay:
+_delay:
+/*
+	outb	%al, $0xED	# about 1uS delay on most machines
+*/
+/*
+ 
+	movl	$0x200, %eax
+delay1:
+	dec	%eax
+	jnz	delay1
 	ret
+
 
 /*-------------------------------------------------------------------------+
 |         Function: _load_segments

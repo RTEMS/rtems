@@ -115,6 +115,10 @@ _start16:
 	outb	%al, $0x60
 	call	empty_8042
 
+	call	delay
+	call	delay
+	call	delay
+
 	movl	%cs:HDRSTART + HDROFF, %eax	#
 	pushl	%eax				# jump to start of 32 bit code
 	ret					#
@@ -122,13 +126,29 @@ _start16:
 /*----------------------------------------------------------------------------+
 | delay
 +------------------------------------------------------------------------------
-| Delay is needed after doing I/O. We do it by writing to a non-existent port.
+| Delay is needed after doing I/O. 
+|
+| The outb version is OK on most machines BUT the loop version ...
+| 
+| will delay for 1us on 1Gz machine, it will take a little bit
+| longer on slower machines, however, it does not matter because we
+| are going to call this function only a few times
+
 +----------------------------------------------------------------------------*/
+	.p2align 4
 	.globl _delay
 	.globl delay
 delay:
 _delay:
-	outb	%al, $0xED	# about 1uS delay
+/*
+	outb	%al, $0xED	# about 1uS delay on most machines
+*/
+/*
+ 
+	movl	$0x200, %eax
+delay1:
+	dec	%eax
+	jnz	delay1
 	ret
 
 /*----------------------------------------------------------------------------+
@@ -139,6 +159,7 @@ _delay:
 | No timeout is used - if this hangs there is something wrong with the machine,
 | and we probably couldn't proceed anyway.
 +----------------------------------------------------------------------------*/
+	.p2align 4
 	.globl _empty_8042
 	.globl empty_8042
 empty_8042:
