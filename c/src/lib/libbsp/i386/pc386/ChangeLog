@@ -1,5 +1,11 @@
 2000-10-20	Joel Sherrill <joel@OARcorp.com>
 
+	* include/wd80x3.h: Added file header and logic to prevent multiple
+	inclusions of this file.
+	* wd8003/wd8003.c: Corrected attach to include "int attach" parameter.
+
+2000-10-20	Joel Sherrill <joel@OARcorp.com>
+
 	* include/bsp.h: Cleaned up network driver name and attach defines.
 
 2000-10-20	Dmitry Kargapolov <dk@gentex.ru>

@@ -1,3 +1,11 @@
+/*
+ *  Information about the DP8390 Ethernet controller.
+ *
+ *  $Id$
+ */
+
+#ifndef __BSP_WD80x3_h
+#define __BSP_WD80x3_h
 
 /* Register descriptions */
 /* Controller DP8390.    */
@@ -121,3 +129,5 @@
 #define SMK_CDH   0x40		/* collision detect heartbeat */
 #define SMK_OWC	  0x80		/* out of window collision */
 
+#endif
+/* end of include */
