@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = no-dpmem.c no-event.c no-msg.c no-mp.c no-part.c no-region.c \
     no-rtmon.c no-sem.c no-signal.c no-timer.c

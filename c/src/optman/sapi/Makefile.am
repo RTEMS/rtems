@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = no-ext.c no-io.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
