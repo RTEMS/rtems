@@ -28,6 +28,10 @@ SECTIONS
 	text_start = . ;
         *(.text)
 	. = ALIGN (16);
+	*(.gnu.linkonce.t.*)
+	*(.descriptors)
+	/* .gnu.warning sections are handled specially by elf32.em.  */
+	*(.gnu.warning)
 
 	*(.eh_fram)
 	. = ALIGN (16);
@@ -47,10 +51,12 @@ SECTIONS
 	__DTOR_END__ = .;
 	etext = ALIGN( 0x10 ) ;
         } 
+	.rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) } >RAM
         .data 0x010000 : 
 	{
 	data_start = . ;
         *(.data)
+    	*(.gnu.linkonce.d.*)
 	edata = ALIGN( 0x10 ) ;
         }
         .bss ADDR( .data ) + SIZEOF( .data ): 
