@@ -66,7 +66,7 @@ extern "C" {
 #define CPU_SOFTWARE_FP     FALSE
 #else
 #define CPU_HARDWARE_FP     FALSE
-#if defined(__GCC__)
+#if defined(__GNUC__)
 #define CPU_SOFTWARE_FP     TRUE
 #else
 #define CPU_SOFTWARE_FP     FALSE
