@@ -1,3 +1,14 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
+	psx04/Makefile.am, psx05/Makefile.am, psx06/Makefile.am,
+	psx07/Makefile.am, psx08/Makefile.am, psx09/Makefile.am,
+	psx10/Makefile.am, psx11/Makefile.am, psx12/Makefile.am,
+	psx13/Makefile.am, psxcancel/Makefile.am, psxfile01/Makefile.am,
+	psxhdrs/Makefile.am, psxmount/Makefile.am, psxmsgq01/Makefile.am,
+	psxreaddir/Makefile.am, psxsem01/Makefile.am, psxstat/Makefile.am,
+	psxtime/Makefile.am, psxtimer/Makefile.am: Include compile.am
+
 2000-08-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
 	psx04/Makefile.am, psx05/Makefile.am, psx06/Makefile.am,
