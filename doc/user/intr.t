@@ -271,7 +271,7 @@ when the vector was first capture.
 @ifset is-C
 Passing a NULL pointer as the @code{old_handler} address and this parameter
 will be ignored.
-@endif
+@end ifset
 
 @subheading NOTES:
 

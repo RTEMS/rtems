@@ -139,14 +139,7 @@ bridge between two critical layers of typical real-time systems.
 As shown in the following figure, RTEMS serves as a buffer between the
 project dependent application code and the target hardware.
 Most hardware dependencies for real-time applications can be
-localized to the low level device drivers.  The RTEMS I/O
-interface manager provides an efficient tool for incorporating
-these hardware dependencies into the system while simultaneously
-providing a general mechanism to the application code that
-accesses them.  A well designed real-time system can benefit
-from this architecture by building a rich library of standard
-application components which can be used repeatedly in other
-real-time projects.
+localized to the low level device drivers.
 
 @ifset use-ascii
 @example
@@ -218,9 +211,17 @@ real-time projects.
 
 @ifset use-html
 @html
-<IMG SRC="rtemsarc.gif" WIDTH=500 HEIGHT=300 ALT="RTEMS Application Architecture">
+<IMG SRC="rtemsarc.png" WIDTH=500 HEIGHT=300 ALT="RTEMS Application Architecture">
 @end html
 @end ifset
+
+The RTEMS I/O interface manager provides an efficient tool for incorporating
+these hardware dependencies into the system while simultaneously
+providing a general mechanism to the application code that
+accesses them.  A well designed real-time system can benefit
+from this architecture by building a rich library of standard
+application components which can be used repeatedly in other
+real-time projects.
 
 @section RTEMS Internal Architecture
 
@@ -251,17 +252,18 @@ application systems.  The following figure illustrates this organization:
 
 @ifset use-tex
 @c for now use the ascii version
-@example
-@group
-           +-----------------------------------------------+
-           |          RTEMS Executive Interface            |
-           +-----------------------------------------------+
-           |                 RTEMS Core                    |
-           +-----------------------------------------------+
-           |              CPU Dependent Code               |
-           +-----------------------------------------------+
-@end group
-@end example
+@c @example
+@c @group
+@c            +-----------------------------------------------+
+@c            |          RTEMS Executive Interface            |
+@c            +-----------------------------------------------+
+@c            |                 RTEMS Core                    |
+@c            +-----------------------------------------------+
+@c            |              CPU Dependent Code               |
+@c            +-----------------------------------------------+
+@c @end group
+@c @end example
+@image{rtemspie,4in,3in}
 @tex
 @end tex
 @end ifset
