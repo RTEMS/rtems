@@ -1,3 +1,9 @@
+2003-05-08	Chris Johns  <cjohns@cybertec.com.au>
+
+	* HOWTO:
+	Updated the GRUB version info and how to build GRUB from source.
+	Added how to boot over the network with a PXE Netboot BIOS.
+
 2003-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ide/.cvsignore: New.
