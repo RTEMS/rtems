@@ -31,8 +31,13 @@
  *  $Id$
  */
 
+/*
+ * FIXME: This file is bsp-dependent.
+ */
+#include <bspopts.h>
+
 #include <asm.h>
-#include "ppc_offs.h"
+#include <rtems/score/ppc_offs.h>
 	
 	BEGIN_CODE
 /*

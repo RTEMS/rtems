@@ -20,6 +20,11 @@
  *  $Id$
  */
 
+/*
+ * FIXME: this file is bsp dependent.
+ */
+#include <bspopts.h>
+
 /*  void __ISR_Handler()
  *
  *  This routine provides the RTEMS interrupt management.

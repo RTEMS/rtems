@@ -1,3 +1,16 @@
+2001-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* support/new_exception_processing/Makefile.am,
+	support/old_exception_processing/Makefile.am,
+	support/old_exception_processing/cpu_asm.S,
+	support/old_exception_processing/irq_stub.S: Modified to reflect
+	old versus new exception processing being a per BSP option.
+	* support/new_exception_processing/c_isr.inl,
+	support/new_exception_processing/cpu.h,
+	support/old_exception_processing/c_isr.inl,
+	support/old_exception_processing/cpu.h,
+	support/old_exception_processing/ppc_offs.h: Removed.
+
 2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
 
 	This modification is part of the submitted modifications necessary to
