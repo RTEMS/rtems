@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
     }
   
   ofile = argv[optind];
-  ofp   = fopen(ofile, "w");
+  ofp   = fopen(ofile, "wb");
   if(ofp == NULL)
     {
       fprintf(stderr, "unable to open file %s\n", ofile);
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
   /* Copy the first image */
   optind++;
   ifile = argv[optind];
-  ifp   = fopen(ifile,"r");
+  ifp   = fopen(ifile,"rb");
   if(ifp == NULL)
     {
       fprintf(stderr, "unable to open output file %s\n", ifile);
@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
   /* Copy Second Image */
   optind++;
   ifile = argv[optind];
-  ifp   = fopen(ifile,"r");
+  ifp   = fopen(ifile,"rb");
   if(ifp == NULL)
     {
       fprintf(stderr, "unable to open output file %s\n", ifile);
