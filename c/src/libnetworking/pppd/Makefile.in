@@ -6,40 +6,39 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 top_builddir = ..
-subdir = wrapup
+subdir = pppd
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-NET_O_PIECES = kern lib libc net netinet nfs rtems rtems_servers \
-    pppd $(POSIX_PIECES)
-OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.o)
-LIB = $(ARCH)/libnetworking.a
+LIBNAME = lib.a
+LIB = ${ARCH}/${LIBNAME}
+
+# C and C++ source names, if any, go here -- minus the .c or .cc
+# What to do about main.c?
+C_PIECES = auth cbcp ccp chap chap_ms chat demand fsm ipcp \
+    ipxcp lcp magic options upap md4 md5 rtems-ppp
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
+
+SRCS = $(C_FILES)
+OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
-HAS_POSIX_API = @HAS_POSIX_API@
-
-ifeq ($(HAS_POSIX),yes)
-POSIX_PIECES = rtems_webserver
-endif 
-
 #
-# (OPTIONAL) Add local stuff here using +=
+# Add local stuff here using +=
 #
 
-DEFINES +=
+# DEFINES += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
+#     -DBOOTP_COMPAT
 CPPFLAGS +=
 CFLAGS +=
-
-LD_PATHS +=
-LD_LIBS +=
-LDFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -48,14 +47,13 @@ LDFLAGS +=
 #  'make clobber' already includes 'make clean'
 #
 
-CLEAN_ADDITIONS +=
+CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
-$(LIB): ${OBJS}
-	$(make-library)
+all: ${ARCH} $(LIB)
 
-all: ${ARCH} $(SRCS) $(LIB)
-	$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
+$(LIB): $(SRCS) ${OBJS}
+	$(make-library)
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

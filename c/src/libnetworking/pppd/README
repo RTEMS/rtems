@@ -1,0 +1,13 @@
+#
+#  $Id$
+#
+
+This directory contains a port of ppp-2.3.5.  The official site for 
+the original source for this PPP implementation is:
+
+ftp://cs.anu.edu.au/pub/software/ppp
+
+NOTE:  As of 11/30/1999, the current version of this source is 2.3.10.
+
+The port was performed by Tomasz Domin <dot@comarch.pl> of ComArch SA
+and has only been tested on the mpc823.

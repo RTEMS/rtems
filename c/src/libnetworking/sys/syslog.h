@@ -174,9 +174,10 @@ CODE facilitynames[] = {
 #define	LOG_NOWAIT	0x10	/* don't wait for console forks: DEPRECATED */
 #define	LOG_PERROR	0x20	/* log to stderr as well */
 
+/*
 #ifdef KERNEL
 
-#else /* not KERNEL */
+#else not KERNEL */
 
 #include <sys/cdefs.h>
 #include <stdarg.h>
@@ -189,6 +190,6 @@ void	syslog __P((int, const char *, ...));
 void	vsyslog __P((int, const char *, va_list));
 __END_DECLS
 
-#endif /* !KERNEL */
+/* #endif !KERNEL */
 
 #endif

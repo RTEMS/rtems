@@ -10,7 +10,7 @@ POSIX_SUBDIRS = rtems_webserver
 endif
 
 SUBDIRS = include kern lib libc net netinet nfs rtems rtems_servers \
-$(POSIX_SUBDIRS) wrapup
+pppd $(POSIX_SUBDIRS) wrapup
 
 EXTRA_DIST = \
 CHANGELOG \
