@@ -110,7 +110,7 @@ void initialize_exceptions()
    */
   exception_config.defaultRawEntry.hdl.raw_hdl_size = (unsigned) &default_exception_vector_code_prolog_size;
   for (i=0; i <= exception_config.exceptSize; i++) {
-    if (!mpc750_vector_is_valid (i)) {
+    if (!mpc60x_vector_is_valid (i)) {
       continue;
     }
     exception_table[i].exceptIndex	= i;

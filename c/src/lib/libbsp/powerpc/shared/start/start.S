@@ -63,11 +63,11 @@ __rtems_entry_point:
 	bl	clear_bats
 	bl	flush_tlbs
 /*
- * Use the first pair of BAT registers to map the 1st 64MB
+ * Use the first pair of BAT registers to map the 1st 256MB
  * of RAM to KERNELBASE. 
  */
 	lis	r11,KERNELBASE@h
-	ori	r11,r11,0x7fe		/* set up BAT registers for 604 */
+	ori	r11,r11,0x1ffe		/* set up BAT registers for 604 */
 	li	r8,2			/* R/W access */
 	isync
 	mtspr	DBAT0L,r8		/* N.B. 6xx (not 601) have valid */
@@ -77,7 +77,7 @@ __rtems_entry_point:
 	isync
 
 /*
- * we now have the 1st 64M of ram mapped with the bats. We are still 
+ * we now have the 1st 256M of ram mapped with the bats. We are still 
  * running on the bootloader stack and cannot switch to an RTEMS allocated 
  * init stack before copying the residual data that may have been set just after
  * rtems_end address. This bug has been experienced on MVME2304. Thank to

@@ -1,3 +1,12 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* console/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* residual/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* irq/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* motorola/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* vectors/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* pci/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* openpic/Makefile.am: Use 'PREINSTALL_FILES ='.
 
 2001-05-14	Tom Armistead <tom_armistead@phx.mcd.mot.com>
 
