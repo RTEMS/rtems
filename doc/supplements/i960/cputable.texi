@@ -48,6 +48,7 @@ typedef struct @{
   void        (*postdriver_hook)( void );
   void        (*idle_task)( void );
   boolean       do_zero_of_workspace;
+  unsigned32    idle_task_stack_size;
   unsigned32    interrupt_stack_size;
   unsigned32    extra_mpci_receive_server_stack;
   void       (*stack_free_hook)( void* );
@@ -100,6 +101,11 @@ is to be used.
 indicates whether RTEMS should
 zero the Workspace as part of its initialization.  If set to
 TRUE, the Workspace is zeroed.  Otherwise, it is not.
+
+@item idle_task_stack_size
+is the size of the RTEMS idle task stack in bytes.  
+If this number is less than MINIMUM_STACK_SIZE, then the 
+idle task's stack will be MINIMUM_STACK_SIZE in byte.
 
 @item interrupt_stack_size
 is the size of the RTEMS
