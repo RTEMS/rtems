@@ -27,18 +27,13 @@ dnl check if the compiler supports --specs
 RTEMS_GCC_SPECS
 dnl check if the target compiler may use --pipe
 RTEMS_GCC_PIPE
-dnl check if the compiler supports --specs if gcc28 is requested
-#  if test "$rtems_cv_gcc_specs" = "no"; then
-#    AC_MSG_WARN([*** disabling --enable-gcc28])
-#      RTEMS_USE_GCC272=yes
-#  fi
 test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 
 if test "$GCC" = yes; then
 ]
 m4_if([$1],,[],[CPPFLAGS="$CPPFLAGS $1"])
 [
-CFLAGS="-g -Wall"
+CFLAGS=${CFLAGS--g -Wall}
 fi
 
 dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*

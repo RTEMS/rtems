@@ -164,6 +164,10 @@ _RTEMS_ARG_VAR([CC_FOR_$2],
   [c-compiler to be used for $1 subdirs (default: auto-detected)])
 _RTEMS_ARG_VAR([CFLAGS_FOR_$2],
   [c-flags to be used for $1 subdirs (default: provided by autoconf)])
+_RTEMS_ARG_VAR([CXX_FOR_$2],
+  [c++-compiler to be used for $1 subdirs (default: auto-detected)])
+_RTEMS_ARG_VAR([CXXFLAGS_FOR_$2],
+  [c++-flags to be used for $1 subdirs (default: provided by autoconf)])
 if test "$no_recursion" != yes; then
 
  if test -n "${$2_SUBDIRS}"; then
@@ -229,8 +233,12 @@ if test "$no_recursion" != yes; then
       ac_sub_configure_vars=
       test -n "[$]CC_FOR_$2" && \
 	ac_sub_configure_vars="'CC=[$]CC_FOR_$2'"
+      test -n "[$]CXX_FOR_$2" && \
+        ac_sub_configure_vars="$ac_sub_configure_vars 'CXX=[$]CXX_FOR_$2'"
       test -n "[$]CFLAGS_FOR_$2" && \
         ac_sub_configure_vars="$ac_sub_configure_vars 'CFLAGS=[$]CFLAGS_FOR_$2'"
+      test -n "[$]CXXFLAGS_FOR_$2" && \
+        ac_sub_configure_vars="$ac_sub_configure_vars 'CXXFLAGS=[$]CXXFLAGS_FOR_$2'"
 
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args $ac_sub_configure_vars])
       eval $ac_sub_configure $ac_sub_configure_args $ac_sub_configure_vars ||
@@ -261,7 +269,7 @@ AC_DEFUN([_RTEMS_CONFIGURE_ARGS_PRUNE],
   for ac_arg in m4_if([$3],,[$ac_configure_args],[[$]$3]); do
     if test -n "$ac_prev"; then
       ac_prev=
-      configure
+      continue
     fi
     # the eval casts away sh quotes
     case `eval echo $ac_arg` in

@@ -1,3 +1,10 @@
+2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: Add CXX_FOR_*, CXXFLAGS_FOR_*.
+	Fix stupid typo (continue/configure).
+	* aclocal/prog-cc.m4: Remove obsolete comments.
+	Acknowledge CFLAGS.
+
 2002-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: _RTEMS_OUTPUT_SUBDIRS: Move ac_subconfigure_vars to the
