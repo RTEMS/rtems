@@ -140,9 +140,3 @@ rtems_device_driver console_control(
   return rtems_termios_ioctl (arg);
 }
 
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources( configuration, 1 );
-}

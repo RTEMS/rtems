@@ -1,3 +1,7 @@
+2000-12-01	Joel Sherrill <joel@OARcorp.com>
+
+	* console-polled.c: Remove warnings.
+
 2000-11-13	Joel Sherrill <joel@OARcorp.com>
 
 	* clock_driver_stub.c: This is a stub of a clock driver that
