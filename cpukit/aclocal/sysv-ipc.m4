@@ -20,13 +20,10 @@ AC_DEFUN(RTEMS_UNION_SEMUN,
 [
 AC_CACHE_CHECK([whether $host defines union semun],
   rtems_cv_HAS_UNION_SEMUN,
-  [AC_TRY_COMPILE([
+  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <sys/types.h>
 #include <sys/ipc.h>
-#include <sys/sem.h>],
-[union semun arg ;],
-[rtems_cv_HAS_UNION_SEMUN="yes"],
-[rtems_cv_HAS_UNION_SEMUN="no"])
+#include <sys/sem.h>]], [[union semun arg ;]])],[rtems_cv_HAS_UNION_SEMUN="yes"],[rtems_cv_HAS_UNION_SEMUN="no"])
 ])
 if test "$rtems_cv_HAS_UNION_SEMUN" = "yes"; then
     AC_DEFINE(HAS_UNION_SEMUN,[1],[if having union semum])
@@ -39,8 +36,7 @@ AC_DEFUN(RTEMS_SYSV_SEM,
 AC_CACHE_CHECK(whether $host supports System V semaphores,
 rtems_cv_sysv_sem,
 [
-AC_TRY_RUN(
-[
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
@@ -62,8 +58,7 @@ int main () {
     exit(1);
   exit(0);
 }
-],
-rtems_cv_sysv_sem="yes", rtems_cv_sysv_sem="no", :)
+]])],[rtems_cv_sysv_sem="yes"],[rtems_cv_sysv_sem="no"],[:])
 ])
 ])
 
@@ -73,7 +68,7 @@ AC_DEFUN(RTEMS_SYSV_SHM,
 AC_CACHE_CHECK(whether $host supports System V shared memory,
 rtems_cv_sysv_shm,
 [
-AC_TRY_RUN([
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -85,8 +80,7 @@ int main () {
     exit(1);
   exit(0);
 }
-],
-rtems_cv_sysv_shm="yes", rtems_cv_sysv_shm="no", :)
+]])],[rtems_cv_sysv_shm="yes"],[rtems_cv_sysv_shm="no"],[:])
 ])
 ])
 
@@ -96,7 +90,7 @@ AC_DEFUN(RTEMS_SYSV_MSG,
 AC_CACHE_CHECK(whether $host supports System V messages,
 rtems_cv_sysv_msg,
 [
-AC_TRY_RUN([
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -108,8 +102,7 @@ int main () {
     exit(1);
   exit(0);
 }
-],
-rtems_cv_sysv_msg="yes", rtems_cv_sysv_msg="no", :)
+]])],[rtems_cv_sysv_msg="yes"],[rtems_cv_sysv_msg="no"],[:])
 ])
 ])
 

@@ -1,6 +1,11 @@
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/sysv-ipc.m4: Adaptation to autoconf-2.5x.
+	* aclocal/check-newlib.m4: Sync with ../aclocal/check-newlib.m4.
+
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* include/rtems/libio.h: Remove.
+	* include/rtems/libio_.h: Remove.
 
 2002-11-18	Joel Sherrill <joel@OARcorp.com>
 
