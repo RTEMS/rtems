@@ -1,3 +1,9 @@
+2003-02-03	Steven Johnson <sjohnson@neurizon.net>
+
+	PR 338/filesystem
+	* io.t: Document the API change that fixed reentrancy problem with 
+	rtems_io_lookup_name().
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* c_user.texi: Set @setfilename c_user.info.
