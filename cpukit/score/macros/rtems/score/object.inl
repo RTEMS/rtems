@@ -96,9 +96,9 @@
  *
  */
 
-#define _Objects_Get_local_object( information, index ) \
-  ( ( index > information->maximum) ?  NULL : \
-                       information->local_table[ index ] )
+#define _Objects_Get_local_object( _information, _index ) \
+  ( ( (_index) > (_information)->maximum) ?  NULL : \
+                       (_information)->local_table[ (_index) ] )
 
 /*PAGE
  *
@@ -160,6 +160,14 @@
     (_information)->local_table[ _index ] = (Objects_Control *) NULL; \
     _Objects_Clear_name( (_the_object)->name, (_information)->name_length ); \
   }
+
+/*PAGE
+ *
+ *  _Objects_Namespace_remove
+ */
+
+#define _Objects_Namespace_remove( _information, _the_object ) \
+  _Objects_Clear_name( (_the_object)->name, (_information)->name_length )
 
 #endif
 /* end of include file */

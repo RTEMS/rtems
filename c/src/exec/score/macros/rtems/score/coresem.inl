@@ -27,25 +27,16 @@
 
 /*PAGE
  *
- *  _Core_semaphore_Get_count
+ *  _CORE_semaphore_Get_count
  *
  */
  
-#define _Core_semaphore_Get_count( _the_semaphore ) \
+#define _CORE_semaphore_Get_count( _the_semaphore ) \
   ( (_the_semaphore)->count )
 
 /*PAGE
  *
  *  _CORE_semaphore_Seize_isr_disable
- *
- *  DESCRIPTION:
- *
- *  This routine attempts to receive a unit from the_semaphore.
- *  If a unit is available or if the wait flag is FALSE, then the routine
- *  returns.  Otherwise, the calling task is blocked until a unit becomes
- *  available.
- *
- *  NOTE: There is currently no MACRO version of this routine.
  */
 
 #define _CORE_semaphore_Seize_isr_disable( \
@@ -76,7 +67,6 @@
     _Thread_Enable_dispatch(); \
   } \
 }
-
 
 #endif
 /* end of include file */

@@ -1,4 +1,12 @@
 
+2000-12-01	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/coresem.inl: Removed comments since convention
+	calls for comments to be in inline versin.
+	* macros/rtems/score/object.inl (Objects_Get_local_object): Fixed
+	style to use _ prefix on variable names and use parentheses.
+	* macros/rtems/score/object.inl (_Objects_Namespace_remove): Added.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* General effort to make things compile with macros not inlines
