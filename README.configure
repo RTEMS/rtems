@@ -92,14 +92,14 @@ The following targets are supported:
 				Solaris and HPUX.
 
         arm-rtems
+        c4x-rtems
         h8300-rtems
 	i386-rtems
 	i960-rtems
-	hppa1.1-rtems
 	m68k-rtems
 	mips-rtems
-	mips64orion-rtems
         no_cpu-rtems
+        or32-rtems
 	powerpc-rtems
 	sh-rtems
 	sparc-rtems
@@ -214,17 +214,9 @@ sparc 		: erc32 erc32nfp leon1 leon2
 
 any             : bare
 
-The following ports are considered deprecated and will be removed in
-a future release:
+The following ports were considered obsoleted after the 4.6 releases
+and were removed: a29k, hppa, and mips64orion.
 
-hppa1.1		: simhppa
-
-mips64orion 	: (deprecated)
-                  p4600 p4650 (p4000 port with either R4600 or R4650)
-
-                  NOTE: MIPS support is NOT being dropped.  This is a clean up
-                        effort and the mips64orion BSPs and CPUs will be
-                        supported by the mips port.
 
 5. Makefile structure
 =====================
