@@ -270,9 +270,9 @@ rtems_filesystem_options_t get_file_system_options(
   char *fsoptions
 )
 {
-  if ( strcmp( "RO", strupr( fsoptions ) ) == 0 )
+  if ( strcasecmp( "RO", fsoptions ) == 0 )
     return RTEMS_FILESYSTEM_READ_ONLY;
-  if ( strcmp( "RW", strupr( fsoptions ) ) == 0 )
+  if ( strcasecmp( "RW", fsoptions ) == 0 )
     return RTEMS_FILESYSTEM_READ_WRITE_ONLY;
   else
     return RTEMS_FILESYSTEM_BAD_OPTIONS;
