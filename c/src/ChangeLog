@@ -1,3 +1,8 @@
+2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Merge-in lib/libcpu/configure.ac.
+	Merge-in lib/libbsp/configure.ac.
+
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use relative dir to make/${RTEMS_BSP}.cache.

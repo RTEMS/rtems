@@ -119,14 +119,32 @@ AS_IF([test x"$multilib" = x"no"],[
 AC_CONFIG_SUBDIRS([make])
 BSP_SUBDIRS="$BSP_SUBDIRS make"
 BSP_SUBDIRS="$BSP_SUBDIRS optman"
-AC_CONFIG_SUBDIRS([lib/libcpu])
-BSP_SUBDIRS="$BSP_SUBDIRS lib/libcpu"
-AC_CONFIG_SUBDIRS([lib/libbsp])
-BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
+
+RTEMS_CPU_SUBDIRS(lib/libcpu)
+if test -d "lib/libcpu/${RTEMS_CPU}"; then
+  libcpu_cpu_subdir="${RTEMS_CPU}"
+  BSP_SUBDIRS="$BSP_SUBDIRS lib/libcpu/${RTEMS_CPU}"
+else
+  libcpu_cpu_subdir=
+fi
+AC_SUBST(libcpu_cpu_subdir)
+
+# Is there code where there should be for this BSP?
+# The bare bsp is a special case as it is not under the RTEMS_CPU path
+if test "$RTEMS_BSP_FAMILY" = "bare" ; then
+  AC_CONFIG_SUBDIRS([lib/libbsp/bare])
+  BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp/bare"
+  AC_SUBST(libbsp_cpu_subdir,bare)
+else
+  RTEMS_CPU_SUBDIRS([lib/libbsp])
+  BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp/${RTEMS_CPU}"
+  AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
+fi
+
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 BSP_SUBDIRS="$BSP_SUBDIRS libnetworking"
 BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
-
+                                                         
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
   AC_CONFIG_SUBDIRS([librtems++])
   BSP_SUBDIRS="$BSP_SUBDIRS librtems++"
@@ -163,6 +181,7 @@ AS_IF([test "$host_cpu" = "sparc"],[
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 AM_CONDITIONAL([HAS_RDBG],[test "$HAS_RDBG" = "yes"])
 AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
+AM_CONDITIONAL([HAS_MP],[test "$HAS_MP" = "yes"])
 
 # The posix bsp doesn't support libchip
 # FIXME: We should use a feature based check, here
@@ -214,6 +233,12 @@ libchip/serial/Makefile
 libchip/ide/Makefile
 
 optman/Makefile
+
+lib/libcpu/Makefile
+
+lib/libbsp/Makefile
+lib/libbsp/shmdr/Makefile
+lib/libbsp/shared/Makefile
 
 wrapup/Makefile
 ])
