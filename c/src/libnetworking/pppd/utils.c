@@ -62,45 +62,6 @@ struct buffer_info {
 };
 
 /*
- * strlcpy - like strcpy/strncpy, doesn't overflow destination buffer,
- * always leaves destination null-terminated (for len > 0).
- */
-size_t
-strlcpy(dest, src, len)
-    char *dest;
-    const char *src;
-    size_t len;
-{
-    size_t ret = strlen(src);
-
-    if (len != 0) {
-	if (ret < len)
-	    strcpy(dest, src);
-	else {
-	    strncpy(dest, src, len - 1);
-	    dest[len-1] = 0;
-	}
-    }
-    return ret;
-}
-
-/*
- * strlcat - like strcat/strncat, doesn't overflow destination buffer,
- * always leaves destination null-terminated (for len > 0).
- */
-size_t
-strlcat(dest, src, len)
-    char *dest;
-    const char *src;
-    size_t len;
-{
-    size_t dlen = strlen(dest);
-
-    return dlen + strlcpy(dest + dlen, src, (len > dlen? len - dlen: 0));
-}
-
-
-/*
  * slprintf - format a message into a buffer.  Like sprintf except we
  * also specify the length of the output buffer, and we handle
  * %r (recursive format), %m (error message), %v (visible string),
