@@ -64,8 +64,7 @@ int _POSIX_Semaphore_Create_support(
  
   if ( !the_semaphore ) {
     _Thread_Enable_dispatch();
-    seterrno( ENOMEM );
-    return -1;
+    set_errno_and_return_minus_one( ENOMEM );
   }
  
   if ( pshared == PTHREAD_PROCESS_SHARED &&
@@ -73,8 +72,7 @@ int _POSIX_Semaphore_Create_support(
                             the_semaphore->Object.id, FALSE ) ) ) {
     _POSIX_Semaphore_Free( the_semaphore );
     _Thread_Enable_dispatch();
-    seterrno( EAGAIN );
-    return -1;
+    set_errno_and_return_minus_one( EAGAIN );
   }
  
   the_semaphore->process_shared  = pshared;
@@ -382,10 +380,8 @@ int sem_unlink(
  
   status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id );
    
-  if ( !status ) {
-    seterrno( status );
-    return -1;
-  }
+  if ( !status )
+    set_errno_and_return_minus_one( status );
 
   the_semaphore = _POSIX_Semaphore_Get( &the_semaphore_id, &location );
   switch ( location ) {

@@ -9,6 +9,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
+#include <rtems/posix/seterr.h>
 
 pid_t _POSIX_types_Ppid = 0;
 uid_t _POSIX_types_Uid = 0;
@@ -175,8 +176,7 @@ pid_t getpgrp( void )
 
 pid_t setsid( void )
 {
-  errno = ENOSYS;
-  return -1;
+  set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -189,8 +189,7 @@ int setpgid(
   pid_t  pgid
 )
 {
-  errno = ENOSYS;
-  return -1;
+  set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*

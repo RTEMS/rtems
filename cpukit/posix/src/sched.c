@@ -9,6 +9,7 @@
 #include <rtems/system.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/thread.h>
+#include <rtems/posix/seterr.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
@@ -23,8 +24,7 @@ int sched_setparam(
   const struct sched_param *param
 )
 {
-  errno = ENOSYS;
-  return -1;
+  set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -37,8 +37,7 @@ int sched_getparam(
   const struct sched_param *param
 )
 {
-  errno = ENOSYS;
-  return -1;
+  set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -53,8 +52,7 @@ int sched_setscheduler(
   const struct sched_param *param
 )
 {
-  errno = ENOSYS;
-  return -1;
+  set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -66,8 +64,7 @@ int sched_getscheduler(
   pid_t                     pid
 )
 {
-  errno = ENOSYS;
-  return -1;
+  set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -87,8 +84,7 @@ int sched_get_priority_max(
       break;
  
     default:
-      errno = EINVAL;
-      return -1;
+      set_errno_and_return_minus_one( EINVAL );
   }
 
   return POSIX_SCHEDULER_MAXIMUM_PRIORITY;
@@ -111,8 +107,7 @@ int sched_get_priority_min(
       break;
  
     default:
-      errno = EINVAL;
-      return -1;
+      set_errno_and_return_minus_one( EINVAL );
   }
 
   return POSIX_SCHEDULER_MINIMUM_PRIORITY;

@@ -24,6 +24,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/posix/seterr.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
@@ -76,8 +77,7 @@ int _POSIX_Message_queue_Create_support(
  
   if ( !the_mq ) {
     _Thread_Enable_dispatch();
-    seterrno( ENFILE );
-    return -1;
+    set_errno_and_return_minus_one( ENFILE );
   }
  
   if ( pshared == PTHREAD_PROCESS_SHARED &&
@@ -85,8 +85,7 @@ int _POSIX_Message_queue_Create_support(
                             the_mq->Object.id, FALSE ) ) ) {
     _POSIX_Message_queue_Free( the_mq );
     _Thread_Enable_dispatch();
-    seterrno( ENFILE );
-    return -1;
+    set_errno_and_return_minus_one( ENFILE );
   }
  
   the_mq->process_shared  = pshared;
@@ -134,8 +133,7 @@ int _POSIX_Message_queue_Create_support(
  
     _POSIX_Message_queue_Free( the_mq );
     _Thread_Enable_dispatch();
-    seterrno( ENOSPC );
-    return -1;
+    set_errno_and_return_minus_one( ENOSPC );
   }
 
  
@@ -323,10 +321,8 @@ int mq_unlink(
  
   status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id );
  
-  if ( !status ) {
-    seterrno( status );
-    return -1;
-  }
+  if ( !status )
+    set_errno_and_return_minus_one( status );
  
   the_mq = _POSIX_Message_queue_Get( the_mq_id, &location );
   switch ( location ) {

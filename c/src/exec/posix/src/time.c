@@ -11,6 +11,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 
+#include <rtems/posix/seterr.h>
 #include <rtems/posix/time.h>
 
 /*PAGE
@@ -63,10 +64,8 @@ time_t time(
 {
   time_t  seconds_since_epoch;
 
-  if ( !_TOD_Is_set() ) {
-    errno = EINVAL;
-    return -1;
-  }
+  if ( !_TOD_Is_set() )
+    set_errno_and_return_minus_one( EINVAL );
 
   /*
    *  Internally the RTEMS epoch is 1988.  This must be taken into account.
@@ -118,10 +117,8 @@ int clock_settime(
       tod.ticks  = (tp->tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND) /
                       _TOD_Microseconds_per_tick;
 
-      if ( !_TOD_Validate( &tod ) ) {
-        errno = EINVAL;
-        return -1;
-      }
+      if ( !_TOD_Validate( &tod ) )
+        set_errno_and_return_minus_one( EINVAL );
  
       /*
        *  We can't use the tp->tv_sec field because it is based on 
@@ -146,8 +143,7 @@ int clock_settime(
       break;
 #endif
     default:
-      errno = EINVAL;
-      return -1;
+      set_errno_and_return_minus_one( EINVAL );
  
   }
   return 0;
@@ -171,10 +167,8 @@ int clock_gettime(
   switch ( clock_id ) {
 
     case CLOCK_REALTIME:
-      if ( !_TOD_Is_set() ) {  /* XXX does posix allow it to not be set? */
-        errno = EINVAL;
-        return -1;
-      }
+      if ( !_TOD_Is_set() )    /* XXX does posix allow it to not be set? */
+        set_errno_and_return_minus_one( EINVAL );
  
       _ISR_Disable( level );
         seconds = _TOD_Seconds_since_epoch;
@@ -199,8 +193,7 @@ int clock_gettime(
       break;
 #endif
     default:
-      errno = EINVAL;
-      return -1;
+      set_errno_and_return_minus_one( EINVAL );
 
   }
   return 0;
@@ -229,8 +222,7 @@ int clock_getres(
       break;
  
     default:
-      errno = EINVAL;
-      return -1;
+      set_errno_and_return_minus_one( EINVAL );
  
   }
   return 0;
@@ -247,10 +239,8 @@ int nanosleep(
 {
   Watchdog_Interval ticks;
 
-  if ( rqtp->tv_nsec < 0 || rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
-    errno = EINVAL;
-    return -1;
-  }
+  if ( rqtp->tv_nsec < 0 || rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
+    set_errno_and_return_minus_one( EINVAL );
  
 /* XXX this is interruptible by a posix signal */
 
