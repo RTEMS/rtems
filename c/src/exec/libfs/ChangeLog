@@ -1,3 +1,8 @@
+2001-11-07	Jennifer Averett <jennifer@OARcorp.com>
+
+	Reported by Ibragimov Ilya <ibr@oktet.ru> and tracked as PR49.
+	*  src/imfs/imfs_directory.c: Do not calculate the offset twice.
+
 2001-10-26	Victor V. Vengerov <vvv@oktet.ru>
 
 	* src/imfs/imfs_load_tar.c: Minor modification so this will
