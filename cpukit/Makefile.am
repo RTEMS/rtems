@@ -28,6 +28,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/bspIo.h: include/rtems/bspIo.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bspIo.h
@@ -44,6 +45,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fs.h
 $(PROJECT_INCLUDE)/rtems/stdint.h: include/rtems/stdint.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stdint.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stdint.h
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
