@@ -368,7 +368,7 @@ uninitialized =
                 (sizeof _Thread_MP_Inactive_proxies)      +
 #endif
 
-/*threadq.h*/   (sizeof _Thread_queue_Extract_table)      +
+/*threadq.h*/
 
 /*timer.h*/     (sizeof _Timer_Information)               +
 
