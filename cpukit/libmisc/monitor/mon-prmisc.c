@@ -42,7 +42,7 @@ rtems_monitor_pad(
 }
 
 uint32_t
-rtems_monitor_dump_char(uint8_t   ch)
+rtems_monitor_dump_char(char ch)
 {
     if (isprint(ch))
         return fprintf(stdout,"%c", ch);

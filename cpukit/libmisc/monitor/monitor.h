@@ -359,7 +359,7 @@ void    rtems_monitor_help_cmd(int, char **, rtems_monitor_command_arg_t *, bool
 /* prmisc.c */
 void       rtems_monitor_separator(void);
 uint32_t   rtems_monitor_pad(uint32_t   dest_col, uint32_t   curr_col);
-uint32_t   rtems_monitor_dump_char(uint8_t   ch);
+uint32_t   rtems_monitor_dump_char(char   ch);
 uint32_t   rtems_monitor_dump_decimal(uint32_t   num);
 uint32_t   rtems_monitor_dump_hex(uint32_t   num);
 uint32_t   rtems_monitor_dump_id(rtems_id id);
