@@ -1,3 +1,7 @@
+2003-03-24	Joel Sherrill <joel@OARcorp.com>
+
+	* direct.t, sample.t, utils.t: Significantly updated.
+
 2003-02-28	Joel Sherrill <joel@OARcorp.com>
 
 	* .cvsignore: Add newly generated .texi files.

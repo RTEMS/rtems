@@ -9,18 +9,11 @@
 @chapter RTEMS Specific Utilities
 
 This section describes the additional commands
-available within the RTEMS Development Environment.  Although
+available within the @b{RTEMS Development Environment}.  Although
 some of these commands are of general use, most are included to
 provide some capability necessary to perform a required function
 in the development of the RTEMS executive, one of its support
-components, or an RTEMS based application.  The commands have
-been classified into the following categories for clarity:
-
-@itemize @bullet
-@item C Language Specific Utilities
-
-@item Ada Language Specific Utilities
-@end itemize
+components, or an RTEMS based application.  
 
 Some of the commands are implemented as C programs.
 However, most commands are implemented as Bourne shell scripts.
@@ -92,16 +85,10 @@ For example, ls(1) means see the standard ls command
 in section 1 of the UNIX documentation.  gcc020(1G) means see
 the description of gcc020 in section 1 of the GNU documentation.
 
-@section C Language Specific Utilities
-
-The C language utilities provide a powerful set of
-tools which combine to allow operations within the RTEMS
-Development Environment to be consistent and easy to use.  Much
-effort was devoted to providing as close to the standard UNIX
-and GNU style of operations as possible.  Each of these
-utilities are described in the section below.
-
-@subsection packhex - Compress Hexadecimal File
+@c
+@c packhex
+@c
+@section packhex - Compress Hexadecimal File
 
 @subheading SYNOPSIS
 
@@ -144,7 +131,10 @@ issue of Embedded Systems magazine.  The code was downloaded
 from their BBS.  Unfortunately, the author's name was not
 provided in the listing.
 
-@subsection unhex - Convert Hexadecimal File into Binary Equivalent
+@c
+@c unhex
+@c
+@section unhex - Convert Hexadecimal File into Binary Equivalent
 
 @subheading SYNOPSIS
 
@@ -193,7 +183,10 @@ file binary.bin:
 unhex -o binary.bin downloadA.sr downloadB.sr
 @end example
 
-@subsection size_rtems - report RTEMS size information
+@c
+@c size_rtems
+@c
+@section size_rtems - report RTEMS size information
 
 @subheading SYNOPSIS
 

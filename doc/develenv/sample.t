@@ -10,38 +10,84 @@
 
 @section Introduction
 
-RTEMS is shipped with the following sample applications:
-
-@itemize @bullet
-@item Hello World - C and Ada
-
-@item Clock Tick - C and Ada
-
-@item Base Single Processor - C and Ada
-
-@item Base Multiple Processor - C and Ada
-
-@item Constructor/Destructor C++ Test - C only if C++
-enabled
-
-@item Paranoia Floating Point Test - C only
-@end itemize
-
-These applications are intended to illustrate the
+The RTEMS source distribution includes a set of sample applications
+that are located in the @code{$@{RTEMS_ROOT@}/c/src/tests/samples/}
+directory.  These applications are intended to illustrate the
 basic format of RTEMS single and multiple processor
-applications.  In addition, these relatively simple applications
-can be used to test locally developed board support packages and
-device drivers.
+applications and the use of some features.  In addition, these
+relatively simple applications can be used to test locally
+developed board support packages and device drivers as they
+exercise a critical subset of RTEMS functionality that is often
+broken in new BSPs.
 
-The reader should be familiar with the terms used and
-material presented in the RTEMS Applications User's Guide.
+Each of the following sample applications will be listed in
+more detail in the following sections:
+
+@table @b
+@item Hello World
+The RTEMS Hello World test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/c/src/tests/samples/hello/}.
+This test is helpful when testing new
+versions of RTEMS, BSPs, or modifications to any portion of the
+RTEMS development environment.  
+
+@item Clock Tick
+The @code{$@{RTEMS_ROOT@}/c/src/tests/samples/ticker/}
+subdirectory provides a test for verification of clock chip
+device drivers of BSPs.  
+
+@item Base Single Processor
+A simple single processor test similar to those in the
+single processor test suite is provided in
+@code{$@{RTEMS_ROOT@}/c/src/tests/samples/base_sp/}.
+
+@item Base Multiple Processor
+A simple two node multiprocessor test capable of testing an newly
+developed MPCI layer is provided in 
+@code{$@{RTEMS_ROOT@}/c/src/tests/samples/base_mp/}.
+
+@item Constructor/Destructor C++ Test
+The @code{$@{RTEMS_ROOT@}/c/src/tests/samples/cdtest/}
+subdirectory provides a simple C++ application using
+constructors and destructors.  It is only built when
+C++ is enabled.  
+
+
+@item Paranoia Floating Point Test
+The directory @code{$@{RTEMS_ROOT@}/c/src/tests/samples/paranoia/}
+contains the public domain floating point and math library test.
+
+@item Minimum Size Test
+The directory
+@code{$@{RTEMS_ROOT@}/c/src/tests/samples/minimum/}
+contains a simple RTEMS program that results in a non-functional 
+executable.  It is intended to show the size of a minimum footprint
+application based upon the current RTEMS configuration.  
+
+@item Unlimited Object Allocation
+The @code{$@{RTEMS_ROOT@}/c/src/tests/samples/unlimited/}
+directory contains a sample test that demonstrates the use of the
+@i{unlimited} object allocation configuration option to RTEMS.
+
+@item Network Loopback Test
+The @code{$@{RTEMS_ROOT@}/c/src/tests/samples/loopback/}
+directory contains a sample test that demonstrates the use of 
+sockets and the loopback network device.  It does not require
+the presence of network hardware in order to run.
+It is only built if RTEMS was configured with networking enabled.
+
+@end table
+
+The sample tests are written using the Classic API so the reader
+should be familiar with the terms used and
+material presented in the @b{RTEMS Applications Users Guide}.
 
 @section Hello World
 
 This sample application is in the following directory:
 
 @example
-$RTEMS_SRC_BASE/tests/samples/hello
+$@{RTEMS_ROOT@}/tests/samples/hello/
 @end example
 
 It provides a rudimentary test of the BSP start up
@@ -69,7 +115,7 @@ console output routine is not operating properly.
 This sample application is in the following directory:
 
 @example
-$RTEMS_SRC_BASE/tests/samples/ticker
+$@{RTEMS_ROOT@}/tests/samples/ticker/
 @end example
 
 This application is designed as a simple test of the
@@ -116,7 +162,7 @@ operating properly.
 This sample application is in the following directory:
 
 @example
-$RTEMS_SRC_BASE/tests/samples/base_sp
+$@{RTEMS_ROOT@}/tests/samples/base_sp/
 @end example
 
 It provides a framework from which a single processor
@@ -143,7 +189,7 @@ are printed from the single application task.
 This sample application is in the following directory:
 
 @example
-$RTEMS_SRC_BASE/tests/samples/base_mp
+$@{RTEMS_ROOT@}/tests/samples/base_mp/
 @end example
 
 It provides a framework from which a multiprocessor
@@ -192,7 +238,7 @@ must be unique on each node.
 This sample application is in the following directory:
 
 @example
-$RTEMS_SRC_BASE/tests/samples/cdtest
+$@{RTEMS_ROOT@}/tests/samples/cdtest/
 @end example
 
 This sample application demonstrates that RTEMS is
@@ -233,12 +279,28 @@ Hey I'M in base class constructor number 1 for 0x400010cc.
 @end group
 @end example
 
+@section Minimum Size Test
+
+This sample application is in the following directory:
+
+@example
+$@{RTEMS_ROOT@}/tests/samples/minimum/
+@end example
+
+This sample application is designed to produce the 
+minimum code space required for any RTEMS application
+based upon the current RTEMS configuration and
+BSP.  In many situations, the bulk of this executable
+consists of hardware and RTEMS initialization, basic
+infrastructure such as malloc(), and RTEMS and
+hardware shutdown support.
+
 @section Paranoia Floating Point Application
 
 This sample application is in the following directory:
 
 @example
-$RTEMS_SRC_BASE/tests/samples/paranoia
+$@{RTEMS_ROOT@}/tests/samples/paranoia/
 @end example
 
 This sample application uses a public domain floating
@@ -250,3 +312,17 @@ Paranoia is also very large and requires a long period of time
 to run.   Problems which commonly prevent this test from
 executing to completion include stack overflow and FPU exception
 handlers not installed.
+
+@section Network Loopback Test
+
+This sample application is in the following directory:
+
+@example
+$@{RTEMS_ROOT@}/tests/samples/loopback/
+@end example
+
+This sample application uses the network loopback device to
+demonstrate the use of the RTEMS TCP/IP stack.  This sample
+test illustrates the basic configuration and initialization
+of the TCP/IP stack as well as simple socket usage.
+
