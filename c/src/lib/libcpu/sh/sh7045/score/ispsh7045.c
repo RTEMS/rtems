@@ -123,9 +123,10 @@ asm (".global _"Str(name)"\n\t" \
      "    sts.l mach,@-r15 \n\t" \
      "    sts.l macl,@-r15 \n\t" \
      "    mov r15,r14      \n\t" \
+     "    mov.l "Str(name)"_v, r2 \n\t" \
      "    mov.l "Str(name)"_k, r1\n\t" \
      "    jsr @r1           \n\t" \
-     "    mov #"Str(number)", r4\n\t" \
+     "    mov   r2,r4      \n\t" \
      "    mov   r14,r15    \n\t" \
      "    lds.l @r15+,macl \n\t" \
      "    lds.l @r15+,mach \n\t" \
@@ -143,7 +144,9 @@ asm (".global _"Str(name)"\n\t" \
      "    nop              \n\t" \
      "    .align 2         \n\t" \
      #name"_k: \n\t" \
-     ".long "Str(func));
+     ".long "Str(func)"\n\t" \
+     #name"_v: \n\t" \
+     ".long "Str(number));
 
 /************************************************
  * Dummy interrupt service procedure for 

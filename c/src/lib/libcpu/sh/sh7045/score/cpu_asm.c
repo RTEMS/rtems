@@ -81,7 +81,7 @@ unsigned int sh_set_irq_priority(
   /*
    * first check for valid interrupt
    */
-  if(( irq > 113) || (_Hardware_isr_Table[irq] == _dummy_isp))
+  if(( irq > 156) || (irq < 64) || (_Hardware_isr_Table[irq] == _dummy_isp))
     return -1;
   /*
    * check for valid irq priority
@@ -102,6 +102,9 @@ unsigned int sh_set_irq_priority(
 	case 0: { prioreg = INTC_IPRC; break;}
 	case 1: { prioreg = INTC_IPRD; break;}
 	case 2: { prioreg = INTC_IPRE; break;}
+	case 3: { prioreg = INTC_IPRF; break;}
+	case 4: { prioreg = INTC_IPRG; break;}
+	case 5: { prioreg = INTC_IPRH; break;}
 	default: return -1;
 	}
     }

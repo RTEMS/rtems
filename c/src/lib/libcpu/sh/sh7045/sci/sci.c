@@ -42,6 +42,7 @@
 
 #include <rtems.h>
 
+
 #include <stdlib.h>
 
 #include <rtems/libio.h>
@@ -212,6 +213,14 @@ rtems_boolean rdSCI0(unsigned char *ch)
     /* Clear RDRF flag */
     temp = read8(SCI_SSR0) & ~SCI_RDRF;
     write8(temp, SCI_SSR0);
+    /* Check for transmission errors */
+    if(temp & (SCI_ORER | SCI_FER | SCI_PER)){
+        /* TODO: report to RTEMS transmission error */
+
+        /* clear error flags*/
+        temp &= ~(SCI_ORER | SCI_FER | SCI_PER);
+        write8(temp, SCI_SSR0);
+    }
     result = TRUE;
   }
   return result;
@@ -228,8 +237,16 @@ rtems_boolean rdSCI1(unsigned char *ch)
     /* Clear RDRF flag */
     temp= read8(SCI_SSR1) & ~SCI_RDRF;
     write8(temp, SCI_SSR1);
-    result = TRUE;
+    /* Check for transmission errors */
+    if(temp & (SCI_ORER | SCI_FER | SCI_PER)){
+        /* TODO: report to RTEMS transmission error */
+
+        /* clear error flags*/
+        temp &= ~(SCI_ORER | SCI_FER | SCI_PER);
+        write8(temp, SCI_SSR1);
     }
+    result = TRUE;
+  }
   return result;
 } /* rdSCI1 */
 
@@ -278,21 +295,33 @@ rtems_device_driver sh_sci_initialize(
   void                      *arg )
 {
   rtems_device_driver status ;
-  rtems_device_minor_number     i;
+  rtems_device_minor_number i;
+  rtems_driver_name_t *driver = NULL;
+  
   
   /*
    * register all possible devices.
    * the initialization of the hardware is done by sci_open
+   *
+   * One of devices could be previously registered by console
+   * initialization therefore we check it everytime
    */
 
   for ( i = 0 ; i < SCI_MINOR_DEVICES ; i++ )
   {
-    status = rtems_io_register_name(
-      sci_device[i].name,
-      major,
-      sci_device[i].minor );
-    if (status != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred(status);
+    status = rtems_io_lookup_name(
+        sci_device[i].name,
+        &driver);
+    if( status != RTEMS_SUCCESSFUL )
+    {
+        /* OK. We assume it is not registered yet. */
+        status = rtems_io_register_name(
+            sci_device[i].name,
+            major,
+            sci_device[i].minor );
+        if (status != RTEMS_SUCCESSFUL)
+            rtems_fatal_error_occurred(status);
+    }
   }
 
   /* non-default hardware setup occurs in sh_sci_open() */
@@ -304,7 +333,6 @@ rtems_device_driver sh_sci_initialize(
 /*
  *  Open entry point
  *   Sets up port and pins for selected sci.
- *   SCI0 setup is conditional on STANDALONE_EVB == 1
  */
 
 rtems_device_driver sh_sci_open(
@@ -332,7 +360,7 @@ rtems_device_driver sh_sci_open(
     
   /* set PFC registers to enable I/O pins */
 
-  if ((minor == 0) && (STANDALONE_EVB == 1)) {
+  if ((minor == 0)) {
     temp16 = read16(PFC_PACRL2);         /* disable SCK0, DMA, IRQ */
     temp16 &= ~(PA2MD1 | PA2MD0);
     temp16 |= (PA_TXD0 | PA_RXD0);       /* enable pins for Tx0, Rx0 */
@@ -347,8 +375,7 @@ rtems_device_driver sh_sci_open(
   } /* add other devices and pins as req'd. */
 
   /* set up SCI registers */
-  if ((minor != 0) || (STANDALONE_EVB == 1)) {
-    write8(0x00, sci_device[minor].addr + SCI_SCR);	 /* Clear SCR */
+      write8(0x00, sci_device[minor].addr + SCI_SCR);	 /* Clear SCR */
                                                    /* set SMR and BRR */
     _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
 
@@ -358,10 +385,17 @@ rtems_device_driver sh_sci_open(
 
     write8((SCI_RE | SCI_TE),              /* enable async. Tx and Rx */
 	   sci_device[minor].addr + SCI_SCR);
-    temp8 = read8(sci_device[minor].addr + SCI_RDR);   /* flush input */
+
+    /* clear error flags */
+    temp8 = read8(sci_device[minor].addr + SCI_SSR);
+    while(temp8 & (SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER)){
+        temp8 = read8(sci_device[minor].addr + SCI_RDR);   /* flush input */
+        temp8 = read8(sci_device[minor].addr + SCI_SSR); /* clear some flags */
+        write8(temp8 & ~(SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER), 
+               sci_device[minor].addr + SCI_SSR);
+        temp8 = read8(sci_device[minor].addr + SCI_SSR); /* check if everything is OK */
+    }    
     /* Clear RDRF flag */
-    temp8= read8(sci_device[minor].addr + SCI_SSR) & ~SCI_RDRF;
-    write8(temp8, sci_device[minor].addr + SCI_SSR);
     write8(0x00, sci_device[minor].addr + SCI_TDR);    /* force output */
      /* Clear the TDRE bit */
      temp8 = read8(sci_device[minor].addr + SCI_SSR) & ~SCI_TDRE;
@@ -369,8 +403,7 @@ rtems_device_driver sh_sci_open(
     
     /* add interrupt setup if required */
 
-  }
-
+  
   sci_device[minor].opened++ ;
 
   return RTEMS_SUCCESSFUL ;
@@ -470,4 +503,80 @@ rtems_device_driver sh_sci_control(
 {
   /* Not yet supported */
   return RTEMS_SUCCESSFUL ;
+}
+
+/*
+ * Termios polled first open
+ */
+static int _sh_sci_poll_first_open(int major, int minor, void *arg)
+{
+    return sh_sci_open(major, minor, arg);
+}
+
+/*
+ * Termios general last close
+ */
+static int _sh_sci_last_close(int major, int minor, void *arg)
+{
+    return sh_sci_close(major, minor, arg);
+}
+
+/*
+ * Termios polled read
+ */
+static int _sh_sci_poll_read(int minor)
+{
+    int value = -1;
+    char ch;
+    
+    if( minor == 0 ){
+        if( rdSCI0( &ch ) )
+            value = (int) ch;
+    }else if( minor == 1 ){
+        if( rdSCI1( &ch ) )
+            value = (int) ch;
+    }
+    return value;
+}
+
+/*
+ * Termios polled write 
+ */
+static int _sh_sci_poll_write(int minor, const char *buf, int len)
+{
+    int count;
+    
+    for(count = 0; count < len; count++)
+        outbyte( minor, buf[count] );
+    return count;
+}
+
+/*
+ * Termios set attributes
+ */
+static int _sh_sci_set_attributes( int minor, const struct termios *t)
+{
+    return _sci_set_cflags( &sci_device[ minor ], t->c_cflag);
+}
+
+
+const rtems_termios_callbacks sci_poll_callbacks = {
+    _sh_sci_poll_first_open,    /* FirstOpen*/
+    _sh_sci_last_close,         /* LastClose*/
+    _sh_sci_poll_read,          /* PollRead  */
+    _sh_sci_poll_write,         /* Write */
+    _sh_sci_set_attributes,     /* setAttributes */
+    NULL,                       /* stopRemoteTX */
+    NULL,                       /* StartRemoteTX */
+    0                           /* outputUsesInterrupts */
+};
+
+/* FIXME: not yet supported */
+const rtems_termios_callbacks sci_interrupt_callbacks;
+
+const rtems_termios_callbacks* sh_sci_get_termios_handlers( rtems_boolean poll )
+{
+    return poll ?
+        &sci_poll_callbacks :
+        &sci_interrupt_callbacks;
 }

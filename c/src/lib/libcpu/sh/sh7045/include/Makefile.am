@@ -9,7 +9,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 include_shdir = $(includedir)/sh
 include_rtems_scoredir = $(includedir)/rtems/score
 
-include_sh_HEADERS = io_types.h sci.h sh7_pfc.h sh7_sci.h
+include_sh_HEADERS = io_types.h sci.h sh7_pfc.h sh7_sci.h sci_termios.h
 include_rtems_score_HEADERS = ispsh7045.h iosh7045.h
 
 $(PROJECT_INCLUDE)/sh:
@@ -27,6 +27,6 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE)/sh \
 
 all-local: $(TMPINSTALL_FILES)
 
-EXTRA_DIST = io_types.h sci.h sh7_pfc.h sh7_sci.h
+EXTRA_DIST = io_types.h sci.h sh7_pfc.h sh7_sci.h sci_termios.h
 
 include $(top_srcdir)/../../../../../../automake/local.am

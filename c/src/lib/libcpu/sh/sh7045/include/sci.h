@@ -25,6 +25,8 @@
 #ifndef _sh_sci_h
 #define _sh_sci_h
 
+#include <rtems/libio.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -77,6 +79,11 @@ extern rtems_device_driver sh_sci_control(
   rtems_device_minor_number,
   void *
 );
+    
+extern const rtems_termios_callbacks * sh_sci_get_termios_handlers( 
+  rtems_boolean poll 
+);
+    
 
 #ifdef __cplusplus
 }

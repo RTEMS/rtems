@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/sci.rel
 
-C_FILES = sci.c
+C_FILES = sci.c sci_termios.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -26,6 +26,6 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = sci.c
+EXTRA_DIST = sci.c sci_termios.c
 
 include $(top_srcdir)/../../../../../../automake/local.am
