@@ -1,0 +1,10 @@
+#
+#  $Id$
+#
+
+BSP for the BSVC 68000 simulator.  This is definitely under construction. 
+The initialization/setup script for BSVC is the part that likely needs
+work.
+
+--joel
+1 August 2000

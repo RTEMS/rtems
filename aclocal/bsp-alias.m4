@@ -7,6 +7,7 @@ dnl Internal subroutine to RTEMS_BSP_ALIAS
 AC_DEFUN(_RTEMS_BSP_ALIAS,
 [# account for "aliased" bsps which share source code
   case $1 in
+    simcpu32)     $2=sim68000         ;; # BSVC CPU32 variant
     c3xsim)       $2=c4xsim           ;; # TI C3x Simulator in gdb
     mcp750)       $2=motorola_powerpc ;; # Motorola PPC board variant
     mvme2307)     $2=motorola_powerpc ;; # Motorola PPC board variant

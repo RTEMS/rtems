@@ -168,8 +168,10 @@ The following persons/organizations have made contributions:
 + Mark Bronson <mark@ramix.com> of RAMIX for submitting i960RP
   support and the rxgen960 board support package.
 
-+ Joel Sherrill <joel@OARcorp.com> for the i960sim BSP that works
-  with the i960 instruction set simulator in gdb.
++ Joel Sherrill <joel@OARcorp.com> for the BSPs that work with 
+  numerous simulators including psim, i960sim, c4xsim, h8sim, armulator,
+  sim68000, and simcpu32.  Most of these BSPs work with instruction
+  set simulators in gdb.
 
 + Darlene Stewart <Darlene.Stewart@nrc.ca> and Charles Gauthier
   <Charles.Gauthier@nrc.ca> of the Institute for Information Technology
