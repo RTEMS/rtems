@@ -1,3 +1,7 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* m68k-stub.c: Eliminated multi-line asm statements for gcc 3.x.
+
 2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	* Added m68k serial stub that is thread aware.

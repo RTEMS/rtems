@@ -261,35 +261,35 @@ void m68k_stub_dummy_asm_wrapper()
       * that the C compiler manages sections properly
       */
 {
-asm("
-.globl return_to_super
-return_to_super:
-        move.l   registers+60,%sp /* get new stack pointer */        
-        move.l   lastFrame,%a0   /* get last frame info  */              
-        bra     return_to_any
-
-.globl _return_to_user
-return_to_user:
-        move.l   registers+60,%a0 /* get usp */                          
-        move.l   %a0,%usp           /* set usp */				
-        move.l   superStack,%sp  /* get original stack pointer */        
-
-return_to_any:
-        move.l   lastFrame,%a0   /* get last frame info  */              
-        move.l   (%a0)+,lastFrame /* link in previous frame     */        
-        addq.l   #8,%a0           /* skip over pc, vector#*/              
-        move.w   (%a0)+,%d0         /* get # of words in cpu frame */       
-        add.w    %d0,%a0           /* point to end of data        */       
-        add.w    %d0,%a0           /* point to end of data        */       
-        move.l   %a0,%a1                                                   
-#                                                                       
-# copy the stack frame                                                  
-        subq.l   #1,%d0                                                   
-copyUserLoop:                                                               
-        move.w   -(%a1),-(%sp)
-        dbf     %d0,copyUserLoop                                             
-");                                                                     
-        RESTORE_FP_REGS()                                              
+asm("\n\
+.globl return_to_super 							\n\
+return_to_super:							\n\
+        move.l   registers+60,%sp /* get new stack pointer */         	\n\
+        move.l   lastFrame,%a0   /* get last frame info  */           	\n\
+        bra     return_to_any                                         	\n\
+									\n\
+.globl _return_to_user							\n\
+return_to_user:								\n\
+        move.l   registers+60,%a0 /* get usp */                       	\n\
+        move.l   %a0,%usp           /* set usp */		  	\n\
+        move.l   superStack,%sp  /* get original stack pointer */       \n\
+									\n\
+return_to_any: 								\n\
+        move.l   lastFrame,%a0   /* get last frame info  */             \n\
+        move.l   (%a0)+,lastFrame /* link in previous frame     */      \n\
+        addq.l   #8,%a0           /* skip over pc, vector#*/            \n\
+        move.w   (%a0)+,%d0         /* get # of words in cpu frame */   \n\
+        add.w    %d0,%a0           /* point to end of data        */    \n\
+        add.w    %d0,%a0           /* point to end of data        */    \n\
+        move.l   %a0,%a1                                                \n\
+#                                                                       \n\
+# copy the stack frame                                                  \n\
+        subq.l   #1,%d0                                                 \n\
+copyUserLoop:                                                           \n\
+        move.w   -(%a1),-(%sp) 						\n\
+        dbf     %d0,copyUserLoop                                        \n\
+");
+        RESTORE_FP_REGS() 
    asm("   movem.l  registers,%d0-%d7/%a0-%a6");			        
    asm("   rte");  /* pop and go! */                                    
 
@@ -300,22 +300,22 @@ copyUserLoop:
 /* if the previous interrupt level was 7 then we're already servicing  */
 /* this interrupt and an rte is in order to return to the debugger.    */
 /* For the 68000, the offset for sr is 6 due to the jsr return address */
-asm("
-.text
-.globl _debug_level7
-_debug_level7:
+asm("						\n\
+.text						\n\
+.globl _debug_level7				\n\
+_debug_level7:					\n\
 	move.w   %d0,-(%sp)");
 #if M68K_HAS_VBR
 asm("	move.w   2(%sp),%d0");
 #else
 asm("	move.w   6(%sp),%d0");
 #endif
-asm("	andi.w   #0x700,%d0
-	cmpi.w   #0x700,%d0
-	beq     already7
-        move.w   (%sp)+,%d0	
-        bra     _catchException
-already7:
+asm("	andi.w   #0x700,%d0			\n\
+	cmpi.w   #0x700,%d0			\n\
+	beq     already7			\n\
+        move.w   (%sp)+,%d0			\n\
+        bra     _catchException			\n\
+already7:					\n\
 	move.w   (%sp)+,%d0");
 #if !M68K_HAS_VBR
 asm("	lea     4(%sp),%sp");     /* pull off 68000 return address */
@@ -339,14 +339,14 @@ asm("	rte");
  *                                       
  *                                       
  */
-asm(" 
-.text
-.globl _catchException
+asm(" 						\n\
+.text						\n\
+.globl _catchException				\n\
 _catchException:");
 DISABLE_INTERRUPTS();
-asm("
-        movem.l  %d0-%d7/%a0-%a6,registers /* save registers        */
-	move.l	lastFrame,%a0	/* last frame pointer */
+asm("									\n\
+        movem.l  %d0-%d7/%a0-%a6,registers /* save registers        */	\n\
+	move.l	lastFrame,%a0	/* last frame pointer */		\n\
 ");
 SAVE_FP_REGS();        
 asm("
