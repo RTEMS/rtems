@@ -18,7 +18,7 @@ IMFS_PIECES= imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
     imfs_gtkn imfs_init imfs_link imfs_mknod imfs_mount imfs_fchmod \
     imfs_rmnod imfs_unlink imfs_unmount imfs_utime imfs_ntype imfs_stat \
     imfs_getchild memfile deviceio imfs_handlers imfs_debug imfs_symlink \
-    imfs_readlink
+    imfs_readlink imfs_fdatasync
 
 TERMIOS_PIECES= cfgetispeed cfgetospeed cfsetispeed cfsetospeed \
   tcgetattr tcsetattr tcdrain termios 
@@ -35,20 +35,15 @@ SYSTEM_CALL_PIECES=\
 DIRECTORY_SCAN_PIECES=\
   opendir closedir readdir rewinddir scandir seekdir telldir
 
-LIBC_GLUE_PIECES=\
+MALLOC_PIECES=\
   malloc __brk __sbrk \
+
+LIBC_GLUE_PIECES=\
   __gettod __times \
   truncate access stat pathconf \
-  newlibc no_libc unixlibc hosterr
+  newlibc no_libc
 
-# C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES=\
-    $(LIBC_GLUE_PIECES) \
-    $(TERMIOS_PIECES) \
-    $(SYSTEM_CALL_PIECES) \
-    $(DIRECTORY_SCAN_PIECES) \
-    $(BASE_FS_PIECES) \
-    $(IMFS_PIECES)
+UNIX_LIBC_PIECES=unixlibc hosterr 
 
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
@@ -63,6 +58,24 @@ OBJS=$(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/lib.cfg
+
+# C and C++ source names, if any, go here -- minus the .c or .cc
+ifeq ($(RTEMS_CPU),unix)
+C_PIECES=\
+    $(UNIX_LIBC_PIECES) \
+    $(BASE_FS_PIECES) \
+    $(MALLOC_PIECES) \
+    $(TERMIOS_PIECES)
+else
+C_PIECES=\
+    $(LIBC_GLUE_PIECES) \
+    $(BASE_FS_PIECES) \
+    $(MALLOC_PIECES) \
+    $(TERMIOS_PIECES) \
+    $(SYSTEM_CALL_PIECES) \
+    $(DIRECTORY_SCAN_PIECES) \
+    $(IMFS_PIECES)
+endif
 
 #
 # Add local stuff here using +=
@@ -94,5 +107,3 @@ preinstall:
 	$(INSTALL) -m 444 ${RTEMS_H_FILES} $(PROJECT_INCLUDE)/rtems
 	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
 	$(INSTALL) -m 444 $(SYS_H_FILES) $(PROJECT_INCLUDE)/sys
-
-
