@@ -1,0 +1,29 @@
+#
+# $Id$
+#
+# NOTE: This is just a stub.
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+libdir = @libdir@
+includedir = @includedir@
+target = @target@
+manext = 1
+mandir = @mandir@/man$(manext)
+program_prefix = @program_prefix@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+CLEAN_ADDITIONS += xxx-your-debris-goes-here
+CLOBBER_ADDITIONS +=
+
+all:	
+
+install:  all
