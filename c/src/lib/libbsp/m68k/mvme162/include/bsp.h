@@ -54,7 +54,7 @@ extern "C" {
  * ----------------------------------
  */
 
-typedef volatile struct lcsr_regs {
+typedef volatile struct {
   unsigned long     slave_adr[2];
   unsigned long     slave_trn[2];
   unsigned long     slave_ctl;
@@ -86,7 +86,7 @@ typedef volatile struct lcsr_regs {
 
 #define lcsr      ((lcsr_regs * const) 0xFFF40000)
 
-typedef volatile struct mcchip_regs {
+typedef volatile struct {
 
   unsigned char     chipID;
   unsigned char     chipREV;
@@ -184,7 +184,7 @@ void char_put(int port, char ch);
 #define RX_DATA_AVAILABLE 0x01
 #define SCC_VECTOR        0x40
 
-typedef volatile struct scc_regs {
+typedef volatile struct {
   unsigned char pad1;
   volatile unsigned char          csr;
   unsigned char pad2;
@@ -209,7 +209,7 @@ typedef volatile struct scc_regs {
  * IO space and respond to address modifier codes $29 and $2D.
  * On FORCE CPU use address gcsr_vme and device /dev/vme16d32.
 */
-typedef volatile struct gcsr_regs {
+typedef volatile struct {
   unsigned char       chip_revision;
   unsigned char       chip_id;
   unsigned char       lmsig;

@@ -41,8 +41,10 @@ SECTIONS
     *(.text)
     . = ALIGN (16);
 
-    *(.eh_fram)
+    *(.eh_frame)
     . = ALIGN (16);
+
+    *(.gnu.linkonce.t*)
 
     /*
      * C++ constructors
@@ -57,20 +59,22 @@ SECTIONS
     *(.dtors)
     LONG(0)
     __DTOR_END__ = .;
-    _etext = ALIGN( 0x10 ) ;
-  }
-  .rodata ADDR( .text ) + SIZEOF( .text ):
-  {
+
     _rodata_start = . ;
     *(.rodata)
     _erodata = ALIGN( 0x10 ) ;
+
+    _etext = ALIGN( 0x10 ) ;
   }
-  .data ADDR( .rodata ) + SIZEOF( .rodata ):
+  .data ADDR( .text ) + SIZEOF( .text ):
   {
     _data_start = . ;
     *(.data)
+    *(.gnu.linkonce.d*)
+    *(.gcc_except_table)
     _edata = ALIGN( 0x10 ) ;
   }
+
   .bss ADDR( .data ) + SIZEOF( .data ):
   {
     _bss_start = . ;
