@@ -31,17 +31,15 @@ C_FILES = src/debug.c $(EXTENSION_FILES) src/fatal.c src/exinit.c src/io.c \
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-EXTRA_LIBRARIES = o-optimize/libsapi.a
-o_optimize_libsapi_a_SOURCES = $(C_FILES)
-o_optimize_libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+EXTRA_LIBRARIES = libsapi.a
+libsapi_a_SOURCES = $(C_FILES)
+libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += o-debug/libsapi.a
-o_debug_libsapi_a_SOURCES = $(C_FILES)
-o_debug_libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+EXTRA_LIBRARIES += libsapi_g.a
+libsapi_g_a_SOURCES = $(C_FILES)
+libsapi_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-all-local: $(PREINSTALL_FILES) $(ARCH)/libsapi.a
-
-EXTRA_DIST += $(C_FILES)
+all-local: $(PREINSTALL_FILES) libsapi$(LIB_VARIANT).a
 
 PREINSTALL_FILES =
 
