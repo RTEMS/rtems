@@ -12,7 +12,7 @@ BSP_PIECES = startup clock console timer tod $(NETWORK) nvram universe pci \
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/$(ARCH)/rtems-cpu.rel
+    ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am

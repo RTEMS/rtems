@@ -8,7 +8,7 @@ BSP_PIECES = clock console irq openpic pci residual startup vectors motorola \
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/$(ARCH)/rtems-cpu.rel \
+    ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
     ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/clock$(LIB_VARIANT).rel \
     ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/exceptions$(LIB_VARIANT).rel \
     ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/mmu$(LIB_VARIANT).rel \

@@ -7,7 +7,7 @@ BSP_PIECES = startup dlentry flashentry
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/$(ARCH)/rtems-cpu.rel \
+    ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/ppc403/clock$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/ppc403/timer$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/ppc403/console$(LIB_VARIANT).rel \
