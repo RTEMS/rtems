@@ -12,38 +12,38 @@
 @end tex
 
 @ifinfo
-@node RTEMS_BSP Timing Data, RTEMS_BSP Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node DMV177 Timing Data, DMV177 Timing Data Introduction, PSIM Timing Data Rate Monotonic Manager, Top
 @end ifinfo
-@chapter RTEMS_BSP Timing Data
+@chapter DMV177 Timing Data
 @ifinfo
 @menu
-* RTEMS_BSP Timing Data Introduction::
-* RTEMS_BSP Timing Data Hardware Platform::
-* RTEMS_BSP Timing Data Interrupt Latency::
-* RTEMS_BSP Timing Data Context Switch::
-* RTEMS_BSP Timing Data Directive Times::
-* RTEMS_BSP Timing Data Task Manager::
-* RTEMS_BSP Timing Data Interrupt Manager::
-* RTEMS_BSP Timing Data Clock Manager::
-* RTEMS_BSP Timing Data Timer Manager::
-* RTEMS_BSP Timing Data Semaphore Manager::
-* RTEMS_BSP Timing Data Message Manager::
-* RTEMS_BSP Timing Data Event Manager::
-* RTEMS_BSP Timing Data Signal Manager::
-* RTEMS_BSP Timing Data Partition Manager::
-* RTEMS_BSP Timing Data Region Manager::
-* RTEMS_BSP Timing Data Dual-Ported Memory Manager::
-* RTEMS_BSP Timing Data I/O Manager::
-* RTEMS_BSP Timing Data Rate Monotonic Manager::
+* DMV177 Timing Data Introduction::
+* DMV177 Timing Data Hardware Platform::
+* DMV177 Timing Data Interrupt Latency::
+* DMV177 Timing Data Context Switch::
+* DMV177 Timing Data Directive Times::
+* DMV177 Timing Data Task Manager::
+* DMV177 Timing Data Interrupt Manager::
+* DMV177 Timing Data Clock Manager::
+* DMV177 Timing Data Timer Manager::
+* DMV177 Timing Data Semaphore Manager::
+* DMV177 Timing Data Message Manager::
+* DMV177 Timing Data Event Manager::
+* DMV177 Timing Data Signal Manager::
+* DMV177 Timing Data Partition Manager::
+* DMV177 Timing Data Region Manager::
+* DMV177 Timing Data Dual-Ported Memory Manager::
+* DMV177 Timing Data I/O Manager::
+* DMV177 Timing Data Rate Monotonic Manager::
 @end menu
 @end ifinfo
 
 @ifinfo
-@node RTEMS_BSP Timing Data Introduction, RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data, RTEMS_BSP Timing Data
+@node DMV177 Timing Data Introduction, DMV177 Timing Data Hardware Platform, DMV177 Timing Data, DMV177 Timing Data
 @end ifinfo
 @section Introduction
 
-The timing data for RTEMS on the RTEMS_BSP implementation
+The timing data for RTEMS on the DMV177 implementation
 of the PowerPC architecture is provided along with the target
 dependent aspects concerning the gathering of the timing data.
 The hardware platform used to gather the times is described to
@@ -53,13 +53,13 @@ latency and the context switch times as they pertain to the
 PowerPC version of RTEMS.
 
 @ifinfo
-@node RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data Introduction, RTEMS_BSP Timing Data
+@node DMV177 Timing Data Hardware Platform, DMV177 Timing Data Interrupt Latency, DMV177 Timing Data Introduction, DMV177 Timing Data
 @end ifinfo
 @section Hardware Platform
 
 All times reported in this chapter were measured using the PowerPC
 Instruction Simulator (PSIM). PSIM simulates a variety of PowerPC
-6xx models with the PPC603e being used as the basis for the measurements
+6xx models with the DMV177 being used as the basis for the measurements
 reported in this chapter.
 
 The PowerPC decrementer register was was used to gather
@@ -74,7 +74,7 @@ although traps were enabled and the interrupt level of the
 PowerPC allows all interrupts.
 
 @ifinfo
-@node RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data
+@node DMV177 Timing Data Interrupt Latency, DMV177 Timing Data Context Switch, DMV177 Timing Data Hardware Platform, DMV177 Timing Data
 @end ifinfo
 @section Interrupt Latency
 
@@ -103,7 +103,7 @@ decrementer register.  This register was programmed to generate
 an interrupt after one countdown.
 
 @ifinfo
-@node RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data Directive Times, RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data
+@node DMV177 Timing Data Context Switch, DMV177 Timing Data Directive Times, DMV177 Timing Data Interrupt Latency, DMV177 Timing Data
 @end ifinfo
 @section Context Switch
 
@@ -130,7 +130,7 @@ the numeric coprocessor.
 The following table summarizes the context switch
 times for the PSIM benchmark platform:
 
-@include timetbl.texi
+@include timetbldmv177.texi
 
 @tex
 \global\advance \smallskipamount by 4pt

@@ -73,6 +73,7 @@ END-INFO-DIR-ENTRY
 @include wksheets.texi
 @include ../../common/timing.texi
 @include timedata.texi
+@include timedatadmv177.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top c_powerpc
@@ -90,7 +91,8 @@ This is the online version of the RTEMS PowerPC Applications Supplement.
 * Processor Dependent Information Table::
 * Memory Requirements::
 * Timing Specification::
-* PPC603e Timing Data::
+* PSIM Timing Data::
+* DMV177 Timing Data::
 * Command and Variable Index::
 * Concept Index::
 @end menu
@@ -101,7 +103,7 @@ This is the online version of the RTEMS PowerPC Applications Supplement.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, PPC603e Timing Data Rate Monotonic Manager, Top
+@node Command and Variable Index, Concept Index, DMV177 Timing Data Rate Monotonic Manager, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.

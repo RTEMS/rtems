@@ -12,38 +12,38 @@
 @end tex
 
 @ifinfo
-@node PPC603e Timing Data, PPC603e Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node RTEMS_BSP Timing Data, RTEMS_BSP Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
 @end ifinfo
-@chapter PPC603e Timing Data
+@chapter RTEMS_BSP Timing Data
 @ifinfo
 @menu
-* PPC603e Timing Data Introduction::
-* PPC603e Timing Data Hardware Platform::
-* PPC603e Timing Data Interrupt Latency::
-* PPC603e Timing Data Context Switch::
-* PPC603e Timing Data Directive Times::
-* PPC603e Timing Data Task Manager::
-* PPC603e Timing Data Interrupt Manager::
-* PPC603e Timing Data Clock Manager::
-* PPC603e Timing Data Timer Manager::
-* PPC603e Timing Data Semaphore Manager::
-* PPC603e Timing Data Message Manager::
-* PPC603e Timing Data Event Manager::
-* PPC603e Timing Data Signal Manager::
-* PPC603e Timing Data Partition Manager::
-* PPC603e Timing Data Region Manager::
-* PPC603e Timing Data Dual-Ported Memory Manager::
-* PPC603e Timing Data I/O Manager::
-* PPC603e Timing Data Rate Monotonic Manager::
+* RTEMS_BSP Timing Data Introduction::
+* RTEMS_BSP Timing Data Hardware Platform::
+* RTEMS_BSP Timing Data Interrupt Latency::
+* RTEMS_BSP Timing Data Context Switch::
+* RTEMS_BSP Timing Data Directive Times::
+* RTEMS_BSP Timing Data Task Manager::
+* RTEMS_BSP Timing Data Interrupt Manager::
+* RTEMS_BSP Timing Data Clock Manager::
+* RTEMS_BSP Timing Data Timer Manager::
+* RTEMS_BSP Timing Data Semaphore Manager::
+* RTEMS_BSP Timing Data Message Manager::
+* RTEMS_BSP Timing Data Event Manager::
+* RTEMS_BSP Timing Data Signal Manager::
+* RTEMS_BSP Timing Data Partition Manager::
+* RTEMS_BSP Timing Data Region Manager::
+* RTEMS_BSP Timing Data Dual-Ported Memory Manager::
+* RTEMS_BSP Timing Data I/O Manager::
+* RTEMS_BSP Timing Data Rate Monotonic Manager::
 @end menu
 @end ifinfo
 
 @ifinfo
-@node PPC603e Timing Data Introduction, PPC603e Timing Data Hardware Platform, PPC603e Timing Data, PPC603e Timing Data
+@node RTEMS_BSP Timing Data Introduction, RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data, RTEMS_BSP Timing Data
 @end ifinfo
 @section Introduction
 
-The timing data for RTEMS on the PPC603e implementation
+The timing data for RTEMS on the RTEMS_BSP implementation
 of the PowerPC architecture is provided along with the target
 dependent aspects concerning the gathering of the timing data.
 The hardware platform used to gather the times is described to
@@ -53,7 +53,7 @@ latency and the context switch times as they pertain to the
 PowerPC version of RTEMS.
 
 @ifinfo
-@node PPC603e Timing Data Hardware Platform, PPC603e Timing Data Interrupt Latency, PPC603e Timing Data Introduction, PPC603e Timing Data
+@node RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data Introduction, RTEMS_BSP Timing Data
 @end ifinfo
 @section Hardware Platform
 
@@ -74,7 +74,7 @@ although traps were enabled and the interrupt level of the
 PowerPC allows all interrupts.
 
 @ifinfo
-@node PPC603e Timing Data Interrupt Latency, PPC603e Timing Data Context Switch, PPC603e Timing Data Hardware Platform, PPC603e Timing Data
+@node RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data
 @end ifinfo
 @section Interrupt Latency
 
@@ -103,7 +103,7 @@ decrementer register.  This register was programmed to generate
 an interrupt after one countdown.
 
 @ifinfo
-@node PPC603e Timing Data Context Switch, PPC603e Timing Data Directive Times, PPC603e Timing Data Interrupt Latency, PPC603e Timing Data
+@node RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data Directive Times, RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data
 @end ifinfo
 @section Context Switch
 

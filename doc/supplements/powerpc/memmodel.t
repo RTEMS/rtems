@@ -46,8 +46,8 @@ in the Block Address Translation (BAT) to convert these addresses.
 Implementations of the PowerPC architecture may be thirty-two or sixty-four bit.
 The PowerPC architecture supports a flat thirty-two or sixty-four bit address
 space with addresses ranging from 0x00000000 to 0xFFFFFFFF (4
-gigabytes) in thirty-two bit implementations or 0xFFFFFFFFFFFFFFFF 
-(XXX) in sixty-four bit implementations.  Each address is represented
+gigabytes) in thirty-two bit implementations or to 0xFFFFFFFFFFFFFFFF 
+in sixty-four bit implementations.  Each address is represented
 by either a thirty-two bit or sixty-four bit value and is byte addressable.  
 The address may be used to reference a single byte, half-word
 (2-bytes), word (4 bytes), or in sixty-four bit implementations a
