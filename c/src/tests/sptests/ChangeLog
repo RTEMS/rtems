@@ -1,3 +1,8 @@
+2002-07-04	Joel Sherrill <joel@OARcorp.com>
+
+	* Jump table for single entry point removed.
+	* spsize/size.c:  Modified to reflect above.
+
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
 	* sp29/init.c: Corrected definitions for task stack usage.

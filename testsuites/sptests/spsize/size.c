@@ -15,7 +15,6 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/directives.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/copyrt.h>
 #include <rtems/rtems/clock.h>
@@ -467,7 +466,6 @@ initialized +=
 
 /*sptables.h*/  (sizeof _Initialization_Default_multiprocessing_table)  +
                 (strlen(_RTEMS_version)+1)      +
-                (sizeof _Entry_points)          +
 
 
 /*tod.h*/       (sizeof _TOD_Days_per_month)    +
