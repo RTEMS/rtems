@@ -1,3 +1,11 @@
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use . instead of .o.
+
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c, irq.c, rtems/score/cpu.h: Filled in something that was

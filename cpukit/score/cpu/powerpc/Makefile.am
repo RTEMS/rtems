@@ -61,14 +61,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/new-exceptions \
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/powerpc \
     $(include_rtems_powerpc_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
-# $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
+# $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).$(OBJEXT): $(ARCH)/rtems.$(OBJEXT)
 #	$(INSTALL_DATA) $< $@
 
 # $(REL): $(rtems_cpu_rel_OBJECTS)
 #	$(make-rel)
 
 
-# TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
+# TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).$(OBJEXT)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
     $(TMPINSTALL_FILES)

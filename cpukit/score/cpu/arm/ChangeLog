@@ -1,3 +1,11 @@
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use . instead of .o.
+
 2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* rtems/score/cpu_asm.h: Enhanced to include register offsets.

@@ -38,10 +38,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
 REL = $(ARCH)/rtems-cpu.rel
 
 C_FILES = cpu.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 S_FILES = cpu_asm.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
