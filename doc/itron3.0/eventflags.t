@@ -76,7 +76,7 @@ typedef struct t_cflg @{
   VP exinf;     /* extended information */
   ATR flgatr;   /* eventflag attribute */
   UINT iflgptn; /* initial eventflag */
-  /* additional information may be included depending on the implementation */ 
+  /* additional implementation dependent information may be included */
 @} T_CFLG; 
 
 /* 
@@ -134,10 +134,10 @@ defined as follows:
 @example
 /* Reference Eventflags (ref_flg) Structure */ 
 typedef struct t_rflg @{
- VP exinf; /* extended information */
- BOOL_ID wtsk; /* indicates whether or not there is a waiting task */
- UINT flgptn; /* eventflag bit pattern */
- /* additional information may be included depending on the implementation */
+ VP       exinf; /* extended information */
+ BOOL_ID  wtsk; /* indicates whether there is a waiting task */
+ UINT     flgptn; /* eventflag bit pattern */
+ /* additional implementation dependent information may be included */
 @} T_RFLG; 
 @end example
 

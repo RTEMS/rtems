@@ -60,7 +60,7 @@ typedef struct t_csem @{
   /* Following is the extended function for [level X]. */
   INT   isemcnt;   /* initial semaphore count */
   INT   maxsem;    /* maximum semaphore count */
-  /* additional information may be included depending on the implementation */
+  /* additional implementation dependent information may be included */
 @} T_CSEM;
 
 /*
@@ -126,9 +126,9 @@ is defined as follows:
 
 typedef struct t_rsem @{
   VP      exinf;    /* extended information */
-  BOOL_ID wtsk;     /* indicates whether or not there is a waiting task */
+  BOOL_ID wtsk;     /* indicates whether there is a waiting task */
   INT     semcnt;   /* current semaphore count */
-  /* additional information may be included depending on the implementation */
+  /* additional implementation dependent information may be included */
 @} T_RSEM;
 @end group
 @end example
