@@ -28,11 +28,12 @@
 
 extern rtems_configuration_table Configuration;
 rtems_configuration_table  BSP_Configuration;
-unsigned long _RamSize;
-
 rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
+
+/* Amount of RAM on this board. Dynamically set in start.S */
+unsigned long _M68k_Ramsize;
 
 /*
  *  Use the shared implementations of the following routines

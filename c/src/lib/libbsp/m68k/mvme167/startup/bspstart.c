@@ -41,6 +41,9 @@ rtems_extensions_table user_extension_table;
 
 rtems_cpu_table Cpu_table;
 
+/* Amount of RAM on this board */
+unsigned long _M68k_Ramsize;
+
 /*
  *  Use the shared implementations of the following routines.
  *  Look in rtems/c/src/lib/libbsp/shared/bsppost.c and
@@ -79,14 +82,18 @@ void bsp_pretasking_hook(void);               /* m68k version */
  */
 void bsp_start( void )
 {
-  extern void *_WorkspaceBase;
-  extern m68k_isr_entry M68Kvec[];
-  
   void M68KFPSPInstallExceptionHandlers (void);
   
+  extern void *_WorkspaceBase;
+  extern m68k_isr_entry M68Kvec[];
+  extern void *_RamSize;
+  extern unsigned long _M68k_Ramsize;
+
   m68k_isr_entry *rom_monitor_vector_table;
   int index;
 
+  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
+  
   /*
    *  167Bug Vectors are at 0xFFE00000
    */

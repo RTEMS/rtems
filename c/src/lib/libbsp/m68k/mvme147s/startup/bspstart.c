@@ -37,6 +37,9 @@ rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
 
+/* Amount of RAM on this board */
+unsigned long _M68k_Ramsize;
+
 /*
  *  Use the shared implementations of the following routines
  */
@@ -57,6 +60,9 @@ void bsp_start( void )
   int             index;
   rtems_unsigned8 node_number;
   extern void    *_WorkspaceBase;
+  extern unsigned long _M68k_Ramsize;
+
+  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
 
   monitors_vector_table = (m68k_isr_entry *)0;   /* 147Bug Vectors are at 0 */
   m68k_set_vbr( monitors_vector_table );

@@ -34,6 +34,9 @@ rtems_interrupt_level bsp_isr_level;
 
 char *rtems_progname;
 
+/* Amount of RAM on this board */
+unsigned long _M68k_Ramsize;
+
 /*
  *  Use the shared implementations of the following routines
  */
@@ -51,7 +54,11 @@ void bsp_pretasking_hook(void);               /* m68k version */
 void bsp_start( void )
 {
   extern void *_WorkspaceBase;
+  extern void *_RamSize;
+  extern unsigned long _M68k_Ramsize;
 
+  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
+  
 #if 0
   Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
 #endif
