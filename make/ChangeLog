@@ -1,3 +1,31 @@
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/dmv177.cfg: Add -D_OLD_EXCEPTIONS -Dppc603e to CPU_CFLAGS.
+	Remove obsolete comments.
+	* custom/eth_comm.cfg: Remove make-target-options.
+	Add -Dmpc$(CPU_TYPE) -DPPC_ABI=PPC_ABI_EABI -DPPC_ASM=PPC_ASM_ELF to
+	CPU_CFLAGS.
+	* custom/gen405.cfg: Add -D_OLD_EXCEPTIONS -Dppc405 to CPU_CFLAGS.
+	* custom/helas403.cfg: Add -D_OLD_EXCEPTIONS -Dppc403 to CPU_CFLAGS.
+	* custom/mbx8xx.cfg: Remove make-target-options.
+	Add -Dmpc$(CPU_TYPE) -D$(RTEMS_MBX_MODEL) to CPU_CFLAGS.
+	Remove obsolete comments.
+	* custom/mcp750.cfg: Add -Dmpc750 to CPU_CFLAGS.
+	Remove obsolete comments.
+	* custom/mpc8260ads.cfg: Remove make-target-options.
+	Add -Dmpc8260 -DPPC_ABI=PPC_ABI_EABI -DPPC_ASM=PPC_ASM_ELF to
+	CPU_CFLAGS.
+	* custom/mvme2307.cfg: Add -Dmpc604 to CPU_CFLAGS.
+	Remove obsolete comments.
+	* custom/ppcn_60x.cfg: Add -D_OLD_EXCEPTIONS -Dppc603e to
+	CPU_CFLAGS.
+	Remove obsolete comments.
+	* custom/psim.cfg: Add -D_OLD_EXCEPTIONS -Dppc603e to CPU_CFLAGS.
+	Remove obsolete comments.
+	* custom/score603e.cfg: Add -D_OLD_EXCEPTIONS -Dppc603e to
+	CPU_CFLAGS.
+	Remove obsolete comments.
+
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/gen405.cfg: Remove -D__powerpc__.
