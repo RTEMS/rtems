@@ -21,8 +21,13 @@
 const char *rtems_status_text(rtems_status_code);
 int   rtems_error(int error_code, const char *printf_format, ...);
 #ifdef __GNUC__
-void  rtems_panic(const char *printf_format, ...) 
-                                         __attribute__ ((__noreturn__));
+void  rtems_panic(const char *printf_format, ...);
+/*
+ *  We should be able to use this attribute but gcc complains that
+ *  rtems_panic does in fact return. :(
+ *
+ *      __attribute__ ((__noreturn__));
+ */
 #else
 void  rtems_panic(const char *printf_format, ...);
 #endif
