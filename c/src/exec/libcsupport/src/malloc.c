@@ -13,6 +13,7 @@
  *  $Id$
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include "libcsupport.h"
 #ifdef RTEMS_NEWLIB
@@ -120,6 +121,7 @@ void RTEMS_Malloc_Initialize(
   MSBUMP(space_available, length);
 }
 
+#ifdef RTEMS_NEWLIB
 void *malloc(
   size_t  size
 )
@@ -163,7 +165,7 @@ void *malloc(
 
     the_size = ((size + sbrk_amount) / sbrk_amount * sbrk_amount);
 
-    if (((rtems_unsigned32)starting_address = sbrk(the_size)) == -1)
+    if (((rtems_unsigned32)starting_address = (void *)sbrk(the_size)) == -1)
       return (void *) 0;
 
     status = rtems_region_extend(
@@ -300,6 +302,8 @@ void free(
     assert( 0 );
   }
 }
+/* end if RTEMS_NEWLIB */
+#endif
 
 #ifdef MALLOC_STATS
 /*
@@ -320,14 +324,41 @@ void malloc_dump(void)
            (allocated * 100) / malloc_stats.space_available,
            (unsigned int) malloc_stats.max_depth / 1024,
            (malloc_stats.max_depth * 100) / malloc_stats.space_available,
-           (unsigned long long) malloc_stats.lifetime_allocated / 1024,
-           (unsigned long long) malloc_stats.lifetime_freed / 1024);
+           (unsigned64) malloc_stats.lifetime_allocated / 1024,
+           (unsigned64) malloc_stats.lifetime_freed / 1024);
     printf("  Call counts:   malloc:%d   free:%d   realloc:%d   calloc:%d\n",
            malloc_stats.malloc_calls,
            malloc_stats.free_calls,
            malloc_stats.realloc_calls,
            malloc_stats.calloc_calls);
-}        
+}
+
+
+void malloc_walk(size_t source, size_t printf_enabled)
+{
+   register Region_Control *the_region;
+   Objects_Locations        location;
+ 
+   the_region = _Region_Get( RTEMS_Malloc_Heap, &location );
+   if ( location == OBJECTS_LOCAL )
+   {
+      _Heap_Walk( &the_region->Memory, source, printf_enabled );
+      _Thread_Enable_dispatch();
+   }
+}
+
+#else
+
+void malloc_dump(void)
+{
+   return;
+}
+ 
+void malloc_walk(size_t source, size_t printf_enabled)
+{
+   return;
+}
+
 #endif
 
 /*
