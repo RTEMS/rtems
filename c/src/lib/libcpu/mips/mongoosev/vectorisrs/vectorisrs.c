@@ -119,7 +119,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
    unsigned32	cshifted;
 
    /* mips_get_sr( sr ); */
-   _ivsr = frame->regs[ R_SR ];
+   _ivsr = frame->c0_sr;
 
    cshifted = READ_CAUSE();
 
