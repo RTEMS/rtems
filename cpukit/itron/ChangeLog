@@ -1,3 +1,17 @@
+2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/itronsys/Makefile.am: Remove.
+	* include/rtems/Makefile.am: Remove.
+	* include/rtems/itron/Makefile.am: Remove.
+	* inline/rtems/Makefile.am: Remove.
+	* inline/rtems/itron/Makefile.am: Remove.
+	* macros/rtems/Makefile.am: Remove.
+	* macros/rtems/itron/Makefile.am: Remove.
+	* include/Makefile.am: handle subdirs.
+	* inline/Makefile.am: handle subdirs.
+	* macros/Makefile.am: handle subdirs.
+	* configure.ac: Reflect changes above.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
