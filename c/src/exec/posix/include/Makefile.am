@@ -8,7 +8,7 @@ noinst_HEADERS = devctl.h intr.h
 
 include_HEADERS = sched.h aio.h mqueue.h semaphore.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 $(PROJECT_INCLUDE):

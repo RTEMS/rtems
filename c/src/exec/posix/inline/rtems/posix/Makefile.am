@@ -13,7 +13,7 @@ I_FILES = cond.inl key.inl mqueue.inl mutex.inl pthread.inl priority.inl \
 if INLINE
 include_rtems_posix_HEADERS = $(I_FILES)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/posix \
     $(include_rtems_posix_HEADERS:%=$(PROJECT_INCLUDE)/rtems/posix/%)
 
 $(PROJECT_INCLUDE)/rtems/posix:

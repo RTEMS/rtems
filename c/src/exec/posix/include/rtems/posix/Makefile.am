@@ -20,7 +20,7 @@ else
 include_rtems_posix_HEADERS = $(STD_H_FILES)
 endif
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/posix \
     $(include_rtems_posix_HEADERS:%=$(PROJECT_INCLUDE)/rtems/posix/%)
 
 $(PROJECT_INCLUDE)/rtems/posix:
