@@ -32,5 +32,11 @@
 #define M48T08_MONTH       6
 #define M48T08_YEAR        7
  
+/*
+ *  Driver function table
+ */
+
+extern rtc_fns m48t08_fns;
+
 #endif
 /* end of include file */
