@@ -12,8 +12,8 @@ BSP_PIECES = startup console clock timer gnatsupp $(NETWORKING_DRIVER)
 CPU_PIECES = cache reg_win syscall
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(foreach piece, $(CPU_PIECES), \
+OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    $(foreach piece, $(CPU_PIECES), \
     ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 

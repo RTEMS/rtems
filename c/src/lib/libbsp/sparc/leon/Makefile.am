@@ -11,7 +11,7 @@ SUBDIRS = . start startup gnatsupp console clock timer leon_open_eth wrapup \
 
 include $(top_srcdir)/../../bsp.am
 
-include_HEADERS += include/leon.h 
+include_HEADERS += include/leon.h
 include_HEADERS += include/coverhd.h
 
 all-local: $(PREINSTALL_FILES)
