@@ -65,9 +65,8 @@ noinst_DATA += console$(LIB_VARIANT).rel
 EXTRA_LIBRARIES = libbsp.a
 CLEANFILES += libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup$(LIB_VARIANT).rel  console$(LIB_VARIANT).rel
-libbsp_a_LIBADD += \
-    ../../../libcpu/@RTEMS_CPU@/shared/misc$(LIB_VARIANT).rel \
+libbsp_a_LIBADD = startup$(LIB_VARIANT).rel console$(LIB_VARIANT).rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/misc$(LIB_VARIANT).rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5272/clock$(LIB_VARIANT).rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5272/timer$(LIB_VARIANT).rel
 

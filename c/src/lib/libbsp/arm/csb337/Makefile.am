@@ -29,10 +29,8 @@ dist_project_lib_DATA += startup/linkcmds
 EXTRA_PROGRAMS += startup.rel
 CLEANFILES += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    startup/bspstart.c startup/exit.c \
-    startup/memmap.c \
-    ../../shared/bootcard.c \
-    ../../shared/main.c ../../shared/sbrk.c \
+    startup/bspstart.c startup/exit.c startup/memmap.c \
+    ../../shared/bootcard.c ../../shared/main.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -48,13 +46,13 @@ noinst_DATA += startup$(LIB_VARIANT).rel
 EXTRA_PROGRAMS += console.rel
 CLEANFILES += console.rel
 console_rel_SOURCES = console/uarts.c ../../shared/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) 
+console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_PROGRAMS += console_g.rel
 CLEANFILES += console_g.rel
 console_g_rel_SOURCES = $(console_rel_SOURCES)
-console_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) 
+console_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 console_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += console$(LIB_VARIANT).rel
@@ -81,17 +79,17 @@ endif
 EXTRA_LIBRARIES = libbsp.a
 CLEANFILES += libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup$(LIB_VARIANT).rel  console$(LIB_VARIANT).rel  
+libbsp_a_LIBADD = startup$(LIB_VARIANT).rel console$(LIB_VARIANT).rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network$(LIB_VARIANT).rel
 endif
 libbsp_a_LIBADD += \
-	../../../libcpu/@RTEMS_CPU@/shared/arm920$(LIB_VARIANT).rel \
-	../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock$(LIB_VARIANT).rel \
-	../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/dbgu$(LIB_VARIANT).rel \
-	../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer$(LIB_VARIANT).rel \
-	../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/pmc$(LIB_VARIANT).rel \
-	../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq$(LIB_VARIANT).rel 
+    ../../../libcpu/@RTEMS_CPU@/shared/arm920$(LIB_VARIANT).rel \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock$(LIB_VARIANT).rel \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/dbgu$(LIB_VARIANT).rel \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer$(LIB_VARIANT).rel \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/pmc$(LIB_VARIANT).rel \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq$(LIB_VARIANT).rel
 
 EXTRA_LIBRARIES += libbsp_g.a
 CLEANFILES += libbsp_g.a
