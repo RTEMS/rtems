@@ -7,9 +7,9 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-noinst_HEADERS = config.h
-noinst_HEADERS += fat.h
+noinst_HEADERS = fat.h
 
+AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += $(LIBC_DEFINES) 
 
 FATFS_C_FILES = fat.c fat_fat_operations.c fat_file.c

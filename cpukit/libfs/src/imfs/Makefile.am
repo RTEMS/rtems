@@ -26,14 +26,13 @@ C_FILES = $(EMBEDDED_C_FILES)
 endif
 OBJS = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
-noinst_HEADERS = config.h
-
 include_HEADERS = imfs.h
 
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
+AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += $(LIBC_DEFINES)
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
