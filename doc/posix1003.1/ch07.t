@@ -45,9 +45,9 @@
 @example
 INTR, Constant, Unimplemented
 QUIT, Constant, Unimplemented
-ERASE, Constant, Unimplemented
-KILL, Constant, Unimplemented
-EOF, Constant, Unimplemented
+ERASE, Constant, Implemented
+KILL, Constant, Implemented
+EOF, Constant, Implemented
 NL, Constant, Unimplemented
 EOL, Constant, Unimplemented
 SUSP, Constant, Unimplemented
