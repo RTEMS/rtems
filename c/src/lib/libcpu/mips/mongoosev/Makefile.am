@@ -61,6 +61,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/mongoose-v.h: include/mongoose-v.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mongoose-v.h
@@ -69,9 +70,12 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mongoose-v.h
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libchip
 	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libchip/mg5uart.h: duart/mg5uart.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mg5uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mg5uart.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

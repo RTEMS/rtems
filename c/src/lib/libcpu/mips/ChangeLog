@@ -1,3 +1,10 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mongoosev/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* shared/Makefile.am: Ditto.
+	* tx39/Makefile.am: Ditto.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mongoosev/duart/Makefile.am: Remove.

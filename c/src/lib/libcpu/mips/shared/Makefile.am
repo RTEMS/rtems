@@ -70,14 +70,18 @@ CLEANDIRS += interrupts/o-optimize interrupts/o-debug
 noinst_DATA += interrupts/$(ARCH)/interrupts.rel
 
 ## --
+
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/cache.h: ../../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am
