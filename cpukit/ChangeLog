@@ -1,5 +1,35 @@
 2004-04-20	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/net/bpf.h, libnetworking/net/if.h,
+	libnetworking/net/if_dl.h, libnetworking/net/if_ppp.h,
+	libnetworking/net/netisr.h, libnetworking/net/pppcompress.c,
+	libnetworking/net/radix.c, libnetworking/net/radix.h,
+	libnetworking/net/raw_cb.h, libnetworking/net/route.h,
+	libnetworking/netinet/icmp_var.h, libnetworking/netinet/if_ether.h,
+	libnetworking/netinet/igmp_var.h, libnetworking/netinet/in.h,
+	libnetworking/netinet/in_pcb.h, libnetworking/netinet/in_systm.h,
+	libnetworking/netinet/in_var.h, libnetworking/netinet/ip_fw.h,
+	libnetworking/netinet/ip_icmp.h, libnetworking/netinet/ip_mroute.h,
+	libnetworking/netinet/ip_var.h, libnetworking/netinet/tcp_debug.h,
+	libnetworking/netinet/tcp_seq.h, libnetworking/netinet/tcp_timer.h,
+	libnetworking/netinet/tcp_var.h, libnetworking/netinet/udp_var.h,
+	libnetworking/nfs/nfs.h, libnetworking/rtems/rtems_bsdnet.h,
+	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/sys/buf.h, libnetworking/sys/callout.h,
+	libnetworking/sys/conf.h, libnetworking/sys/domain.h,
+	libnetworking/sys/malloc.h, libnetworking/sys/mbuf.h,
+	libnetworking/sys/mount.h, libnetworking/sys/protosw.h,
+	libnetworking/sys/queue.h, libnetworking/sys/rtprio.h,
+	libnetworking/sys/select.h, libnetworking/sys/signalvar.h,
+	libnetworking/sys/socket.h, libnetworking/sys/socketvar.h,
+	libnetworking/sys/sysctl.h, libnetworking/sys/syslog.h,
+	libnetworking/sys/ucred.h, libnetworking/sys/uio.h,
+	libnetworking/vm/vm.h, libnetworking/vm/vm_extern.h,
+	libnetworking/vm/vm_param.h: Use -D_KERNEL instead of -DKERNEL for
+	greater FreeBSD compliance.
+
+2004-04-20	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libnetworking/Makefile.am: Add -D_KERNEL to CPPFLAGS.
 
 2004-04-20	Ralf Corsepius <ralf_corsepius@rtems.org>
