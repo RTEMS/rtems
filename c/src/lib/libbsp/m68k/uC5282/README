@@ -134,8 +134,8 @@ CMDLINE    - Path to startup script (epics/iocBoot/iocNobody/st.cmd).
           .                                                  .
           |                                                  | 2FFF FFFF
           +--------------------------------------------------+
-3000 0000 |  CS1* space (First 'VME' A24/D16 space)          | 30FF FFFF
-3100 0000 |  CS2* space (Second 'VME' A24/D16 space)         | 31FF FFFF
+3000 0000 |  CS1* (devLib 'VME' A24 space)                   | 30FF FFFF
+3100 0000 |  CS2* (devLib 'VME' A32 and A16 space)           | 31FF FFFF
           .                                                  .
           .                                                  .
           .                                                  .

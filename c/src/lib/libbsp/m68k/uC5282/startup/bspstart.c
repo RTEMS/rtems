@@ -442,9 +442,9 @@ BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr
 
     switch (am) {
     default:    return -1;
-    case VME_AM_SUP_SHORT_IO: offset = 0x31000000; break; /* A16/D16 */
+    case VME_AM_SUP_SHORT_IO: offset = 0x31FF0000; break; /* A16/D16 */
     case VME_AM_STD_SUP_DATA: offset = 0x30000000; break; /* A24/D16 */
-    case VME_AM_EXT_SUP_DATA: return -1;                  /* A32/D32 */
+    case VME_AM_EXT_SUP_DATA: offset = 0x31000000; break; /* A32/D32 */
     }
     *plocaladdr = vmeaddr + offset;
     return 0;
