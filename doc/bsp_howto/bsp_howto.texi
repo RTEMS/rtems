@@ -79,14 +79,14 @@ END-INFO-DIR-ENTRY
 @include discrete.texi
 
 @ifinfo
-@node Top, , (dir), (dir)
+@node Top, Introduction, (dir), (dir)
 @top bsp_howto
 
 This is the online version of the Getting Started with RTEMS for C/C++ Users.
 
 @menu
 * Introduction::
-* CPU and Board Dependent Files::
+* Target Dependent Files::
 * Makefiles::
 * Linker Script::
 * Required Support Routines::
