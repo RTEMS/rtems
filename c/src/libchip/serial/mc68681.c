@@ -74,6 +74,12 @@ extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
  *  Console Device Driver Entry Points
  */
 
+/*
+ *  mc68681_probe
+ *
+ *  Default probe routine which simply say the port is present.
+ */
+
 static boolean mc68681_probe(int minor)
 {
   /*
@@ -82,6 +88,14 @@ static boolean mc68681_probe(int minor)
    */
   return(TRUE);
 }
+
+/*
+ *  mc68681_baud_rate
+ *
+ *  This routine returns the proper ACR bit and baud rate field values
+ *  based on the requested baud rate.  The baud rate set to be used
+ *  must be configured by the user.
+ */
 
 static int mc68681_baud_rate(
   int           minor,
@@ -166,6 +180,13 @@ static int mc68681_baud_rate(
   return status;
 }
 
+/*
+ *  mc68681_set_attributes
+ *
+ *  This function sets the DUART channel to reflect the requested termios
+ *  port settings.
+ */
+
 static int mc68681_set_attributes( 
   int minor,
   const struct termios *t
@@ -247,6 +268,12 @@ static int mc68681_set_attributes(
   return 0;
 }
 
+/*
+ *  mc68681_initialize_context
+ *
+ *  This function sets the default values of the per port context structure.
+ */
+
 static void mc68681_initialize_context(
   int               minor,
   mc68681_context  *pmc68681Context
@@ -268,6 +295,14 @@ static void mc68681_initialize_context(
 
   pmc68681Context->ucModemCtrl = 0x00;   /* XXX */
 }
+
+/*
+ *  mc68681_build_imr
+ *
+ *  This function returns the value for the interrupt mask register for this
+ *  DUART.  Since this is a shared register, we must look at the other port
+ *  on this chip to determine whether or not it is using interrupts.
+ */
 
 static unsigned int mc68681_build_imr(
   int minor
@@ -303,7 +338,6 @@ static unsigned int mc68681_build_imr(
       mate_mask <<= 4;
   }
 
-
   /*
    *  Add in minor's mask
    */
@@ -318,6 +352,12 @@ static unsigned int mc68681_build_imr(
 
   return mask | mate_mask;
 }
+
+/*
+ *  mc68681_init
+ *
+ *  This function initializes the DUART to a quiecsent state.
+ */
 
 static void mc68681_init(int minor)
 {
@@ -356,7 +396,11 @@ static void mc68681_init(int minor)
 }
 
 /*
- *  Initialize to 9600, 8, N, 1
+ *  mc68681_open
+ *
+ *  This function opens a port for communication.
+ *
+ *  Default state is 9600 baud, 8 bits, No parity, and 1 stop bit.
  */
 
 static int mc68681_open(
@@ -408,6 +452,12 @@ static int mc68681_open(
   return(RTEMS_SUCCESSFUL);
 }
 
+/*
+ *  mc68681_close
+ *
+ *  This function shuts down the requested port.
+ */
+
 static int mc68681_close(
   int      major,
   int      minor,
@@ -442,6 +492,8 @@ static int mc68681_close(
 
 /* 
  *  mc68681_write_polled
+ *
+ *  This routine polls out the requested character.
  */
 
 static void mc68681_write_polled(
@@ -524,6 +576,7 @@ static int mc68681_assert_RTS(int minor)
 /*
  *  mc68681_negate_RTS
  */
+
 static int mc68681_negate_RTS(int minor)
 {
 /* XXX */
@@ -550,7 +603,7 @@ static int mc68681_negate_RTS(int minor)
 }
 
 /*
- * These flow control routines utilise a connection from the local DTR
+ * These flow control routines utilize a connection from the local DTR
  * line to the remote CTS line
  */
 
@@ -616,13 +669,6 @@ static int mc68681_negate_DTR(int minor)
  *  mc68681_isr
  *
  *  This routine is the console interrupt handler.
- *
- *  Input parameters:
- *    vector - vector number
- *
- *  Output parameters: NONE
- *
- *  Return values:     NONE
  */
 
 static void mc68681_process(
@@ -713,6 +759,11 @@ static rtems_isr mc68681_isr(
 
 /*
  *  mc68681_flush
+ *
+ *  This routine waits before all output is completed before closing
+ *  the requested port.
+ *
+ *  NOTE:  This is the "interrupt mode" close entry point.
  */
 
 static int mc68681_flush(int major, int minor, void *arg)
@@ -732,10 +783,9 @@ static int mc68681_flush(int major, int minor, void *arg)
 }
 
 /*
- *  mc68681_initialize_interrupts
+ *  mc68681_enable_interrupts
  *
- *  This routine initializes the console's receive and transmit
- *  ring buffers and loads the appropriate vectors to handle the interrupts.
+ *  This function initializes the hardware for this port to use interrupts.
  */
 
 static void mc68681_enable_interrupts(
@@ -755,6 +805,13 @@ static void mc68681_enable_interrupts(
   (*setReg)( pMC68681, MC68681_INTERRUPT_MASK_REG, mc68681_build_imr( minor ));
 }
 
+/*
+ *  mc68681_initialize_interrupts
+ *
+ *  This routine initializes the console's receive and transmit
+ *  ring buffers and loads the appropriate vectors to handle the interrupts.
+ */
+
 static void mc68681_initialize_interrupts(int minor)
 {
   mc68681_init(minor);
@@ -771,7 +828,7 @@ static void mc68681_initialize_interrupts(int minor)
 /* 
  *  mc68681_write_support_int
  *
- *  Console Termios output entry point.
+ *  Console Termios output entry point when using interrupt driven output.
  */
 
 static int mc68681_write_support_int(
@@ -837,7 +894,7 @@ static int mc68681_write_support_int(
 /* 
  *  mc68681_write_support_polled
  *
- *  Console Termios output entry point.
+ *  Console Termios output entry point when using polled output.
  *
  */
 
