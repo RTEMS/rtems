@@ -162,6 +162,8 @@ m4_ifdef([_RTEMS_$2_CONFIGDIRS_LIST],
 [
 _RTEMS_ARG_VAR([CC_FOR_$2],
   [c-compiler to be used for $1 subdirs (default: auto-detected)])
+_RTEMS_ARG_VAR([CFLAGS_FOR_$2],
+  [c-flags to be used for $1 subdirs (default: provided by autoconf)])
 if test "$no_recursion" != yes; then
 
  if test -n "${$2_SUBDIRS}"; then
@@ -245,7 +247,12 @@ if test "$no_recursion" != yes; then
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args \
            --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir])
       # The eval makes quoting arguments work.
-      eval CC=[$]CC_FOR_$2 \
+      ac_sub_configure_vars=
+      test -n "[$]CC_FOR_$2" && \
+	ac_sub_configure_vars="CC='[$]CC_FOR_$2'"
+      test -n "[$]CFLAGS_FOR_$2" && \
+        ac_sub_configure_vars="$ac_sub_configure_vars CFLAGS='[$]CFLAGS_FOR_$2'"
+      eval $ac_sub_configure_vars \
 	$ac_sub_configure $ac_sub_configure_args \
           --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir ||
         AC_MSG_ERROR([$ac_sub_configure failed for $ac_dir])

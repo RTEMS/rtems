@@ -1,5 +1,10 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/subdirs.m4: Remove.
+	* acinclude.m4: New (Replaces aclocal/subdirs.m4).
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/check-cpu.m4: Peek into cpukit/score/cpu instead of
 	exec/score/cpu.
 
