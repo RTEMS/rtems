@@ -5,7 +5,8 @@
  */
 
 #include <rtems.h>
-#include <mc68681.h>
+#include <libchip/serial.h>
+#include <libchip/mc68681.h>
 
 /* major index of 0 : ACR[7] = 0, X = 0 -- 68c681 only has these */
 /* major index of 1 : ACR[7] = 1, X = 0 -- 68c681 only has these */
