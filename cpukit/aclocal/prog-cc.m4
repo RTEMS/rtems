@@ -18,8 +18,6 @@ test -z "$CC" && \
   AC_MSG_ERROR([no acceptable cc found in \$PATH])
 AC_PROG_CC
 AC_PROG_CPP
-
-AM_CONDITIONAL(RTEMS_USE_GCC,test x"$GCC" = x"yes")
 ])
 
 AC_DEFUN([RTEMS_PROG_CC_FOR_TARGET],

@@ -9,30 +9,8 @@
 ## Expect frequent changes -- It deserves to be cleaned up :(
 ## -------------------------------------------------------------------------
 
-## The section below is based on make/compilers/gcc-target-default.cfg
-## used in former versions of RTEMS.
-
-## 
-## Set up the flags for the toolchains:
-##
-## We are considering 3 different building schemes here:
-## * Using gcc's being able to accept -specs (aka gcc-2.8 building scheme)
-## * Using gcc's not being able to accept -specs (aka gcc-2.7.2 building
-##   scheme)
-## * Using third party toolchains (aka non-gcc building scheme)
-##
-## Automake conditionals in use:
-## RTEMS_USE_GCC     .. if we are using GCC
-
-## CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V are the values we
-## would want the corresponding macros to be set to.
-##
-## CFLAGS_OPTIMIZE, CFLAGS_DEBUG are set by the 
-## 'VARIANT=<OPTIMIZE|DEBUG>' targets to their _V values.
-
 CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES)
 CFLAGS   = @RTEMS_CFLAGS@
-ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS)
 
 depend:
 
