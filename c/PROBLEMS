@@ -4,12 +4,6 @@
 
 This is the list of outstanding problems in this release.
 
-+   The POSIX threads and real-time extensions are tested but this is
-    the first release with them included.  They are not enabled by 
-    default.  The environment variable RTEMS_HAS_POSIX_API must be
-    set to "yes" and the C language macro RTEMS_POSIX_API must be defined
-    before this api is included in the build.
-
 +   The shell scripts runtest and difftest do not work properly when 
     testing "debug" executables.
 
@@ -36,10 +30,6 @@ This is the list of outstanding problems in this release.
     It is better to define these in the linkcmds file.  It is also nice
     to use the linkcmds file to place overlays for on-board hardware.
 
-+   The __read(), __write(), etc. routines should be renamed __rtems_read(),
-    etc. to avoid potential naming conflicts.  [NOTE: This is already
-    necessary under some versions of Linux with the unix port.]
-
 +   The __read() system call in all of the BSPs using single
     character input/output needs to be smarter.  The following
     issues need to be addressed:
@@ -55,19 +45,14 @@ This is the list of outstanding problems in this release.
 
        + There are conflicts between the names of native library routines
          which MUST be used and those in the POSIX support.  This must
-         be addressed. 
+         be addressed.  The POSIX API cannot be used with this port as a
+         result of this.
 
 +   Some of the tests may execute correctly and not produce the exact
     ordering of lines in the screen file.  This appears to be a combination
     of a number of factors including buffering, processor speed, IO
     device overhead, and clock interrupt rate.
 
-+   The compiler configuration files (c/make/gcc-XYZ.cfg) are largely
-    the same when the different targets have the same CPU.  It would
-    be desirable to have a gcc-CPU.cfg or gcc-CPU_MODEL.cfg (e.g.
-    gcc-m68k.cfg or gcc-m68020.cfg) and have the file gcc-TARGET.cfg
-    include this and possibly override default settings.
- 
 +   The clock device drivers should really avoid doing the division
     by 1000 in the clock tick ISR to convert microseconds into
     milliseconds.  This only applies to clock drivers which generate
