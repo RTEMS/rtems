@@ -67,6 +67,7 @@ END-INFO-DIR-ENTRY
 @include makefiles.texi
 @include linkcmds.texi
 @include support.texi
+@include adaintr.texi
 @include init.texi
 @include console.texi
 @include clock.texi
@@ -90,6 +91,7 @@ This is the online version of the RTEMS BSP and Device Driver Development Guide.
 * Makefiles::
 * Linker Script::
 * Miscellaneous Support Files::
+* Ada95 Interrupt Support::
 * Initialization Code::
 * Console Driver::
 * Clock Driver::
@@ -100,27 +102,27 @@ This is the online version of the RTEMS BSP and Device Driver Development Guide.
 * Shared Memory Support Driver::
 * Analog Driver::
 * Discrete Driver::
+* Command and Variable Index::
+* Concept Index::
 @end menu
 
-@c * Command and Variable Index::
-@c * Concept Index::
 @end ifinfo
 @c 
 @c 
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@c @node Command and Variable Index, Concept Index, Installing EGCS AND NEWLIB, Top
-@c @unnumbered Command and Variable Index
+@node Command and Variable Index, Concept Index, , Top
+@unnumbered Command and Variable Index
 
-@c There are currently no Command and Variable Index entries.
+There are currently no Command and Variable Index entries.
 
 @c @printindex fn
 
-@c @node Concept Index, , Command and Variable Index, Top
-@c @unnumbered Concept Index
+@node Concept Index, , Command and Variable Index, Top
+@unnumbered Concept Index
 
-@c There are currently no Concept Index entries.
+There are currently no Concept Index entries.
 @c @printindex cp
 
 @contents

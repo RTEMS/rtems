@@ -121,13 +121,15 @@ BSP_PIECES=startup clock console timer
 CPU_PIECES=
 GENERIC_PIECES=
 
-# bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
-   $(foreach piece, $(CPU_PIECES), \
-       ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel) \
-   $(wildcard \
-  ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel) \
-   $(foreach piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
+# bummer; have to use $foreach since % pattern subst
+#              rules only replace 1x
+OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).o) \
+ $(foreach piece, $(CPU_PIECES), \
+   ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).o) \
+ $(wildcard \
+   ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel) \
+ $(foreach piece, \
+   $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).o)
 @end example
 
 The variable @code{OBJS} is the list of "pieces" expanded to include

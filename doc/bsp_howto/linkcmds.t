@@ -129,17 +129,18 @@ RamSize = DEFINED(RamSize) ? RamSize : 4M;
 
 /*
  *  Set the amount of RAM to be used for the application heap.  Objects
- *  allocated using malloc() come from this area.  Having a tight heap size
- *  is somewhat difficult and multiple attempts to squeeze it may be needed
- *  reducing memory usage is important.  If all objects are allocated from
- *  the heap at system initialization time, this eases the sizing of the
- *  application heap.  
+ *  allocated using malloc() come from this area.  Having a tight heap
+ *  size is somewhat difficult and multiple attempts to squeeze it may
+ *  be needed reducing memory usage is important.  If all objects are
+ *  allocated from the heap at system initialization time, this eases
+ *  the sizing of the application heap.  
  *
  *  NOTE 1: The default may be overridden by passing an argument to ld.
  *
  *  NOTE 2: The TCP/IP stack requires additional memory in the Heap.
  *  
- *  NOTE 3: The GNAT/RTEMS run-time requires additional memory in the Heap.
+ *  NOTE 3: The GNAT/RTEMS run-time requires additional memory in
+ *  the Heap.
  */
 
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
@@ -157,8 +158,9 @@ StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
 /*
  *  Starting addresses and length of RAM and ROM.
  *
- *  The addresses must be valid addresses on the board.  The Chip Selects
- *  should be initialized such that the code addresses are valid.
+ *  The addresses must be valid addresses on the board.  The
+ *  Chip Selects should be initialized such that the code addresses
+ *  are valid.
  */
 
 MEMORY @{
@@ -171,17 +173,18 @@ MEMORY @{
  *  for more details.
  */
 
-ETHERNET_ADDRESS = DEFINED(ETHERNET_ADDRESS) ? ETHERNET_ADDRESS : 0xDEAD12;
+ETHERNET_ADDRESS =
+   DEFINED(ETHERNET_ADDRESS) ? ETHERNET_ADDRESS : 0xDEAD12;
 
 /*
  *  The following defines the order in which the sections should go.
  *  It also defines a number of variables which can be used by the
  *  application program.
  *
- *  NOTE: Each variable appears with 1 or 2 leading underscores to insure
- *        that the variable is accessible from C code with a single
- *        underscore.  Some object formats automatically add a leading
- *        underscore to all C global symbols.
+ *  NOTE: Each variable appears with 1 or 2 leading underscores to
+ *        ensure that the variable is accessible from C code with a
+ *        single underscore.  Some object formats automatically add
+ *        a leading underscore to all C global symbols.
  */
 
 SECTIONS @{

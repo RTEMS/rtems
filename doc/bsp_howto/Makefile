@@ -19,8 +19,8 @@ COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES= \
     intro.texi target.texi makefiles.texi linkcmds.texi support.texi \
-    init.texi console.texi clock.texi timer.texi rtc.texi nvmem.texi \
-    network.texi shmsupp.texi analog.texi discrete.texi
+    adaintr.texi init.texi console.texi clock.texi timer.texi rtc.texi \
+    nvmem.texi network.texi shmsupp.texi analog.texi discrete.texi
 
 FILES=$(PROJECT).texi $(GENERATED_FILES)
 
@@ -89,10 +89,15 @@ makefiles.texi: makefiles.t Makefile
 linkcmds.texi: linkcmds.t Makefile
 	$(BMENU) -p "Makefiles Creating a New BSP Make Customization File" \
 	    -u "Top" \
+	    -n "Ada95 Interrupt Support" ${*}.t
+
+adaintr.texi: adaintr.t Makefile
+	$(BMENU) -p "Linker Script Initialized Data" \
+	    -u "Top" \
 	    -n "Miscellaneous Support Files" ${*}.t
 
 support.texi: support.t Makefile
-	$(BMENU) -p "Linker Script Initialized Data" \
+	$(BMENU) -p "Ada95 Interrupt Support Version Requirements" \
 	    -u "Top" \
 	    -n "" ${*}.t
 

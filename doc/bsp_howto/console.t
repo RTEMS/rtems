@@ -268,7 +268,8 @@ usually consists of:
 @item If interrupt driven, register the console interrupt routine to RTEMS:
 
 @example
-	rtems_interrupt_catch (InterruptHandler,CONSOLE_VECTOR,&old_handler);
+rtems_interrupt_catch(
+    InterruptHandler, CONSOLE_VECTOR, &old_handler);
 @end example
 
 @item enable the UART channels.

@@ -39,10 +39,10 @@ struct shm_config_info @{
   vol_u32           *base;       /* base address of SHM         */
   vol_u32            length;     /* length (in bytes) of SHM    */
   vol_u32            format;     /* SHM is big or little endian */
-  vol_u32          (*convert)(); /* neutral conversion routine */
-  vol_u32            poll_intr; /* POLLED or INTR driven mode  */
+  vol_u32          (*convert)(); /* neutral conversion routine  */
+  vol_u32            poll_intr;  /* POLLED or INTR driven mode  */
   void             (*cause_intr)( rtems_unsigned32 );
-  Shm_Interrupt_information   Intr;     /* cause intr information      */
+  Shm_Interrupt_information   Intr; /* cause intr information   */
 @};
 
 typedef struct shm_config_info shm_config_table;
