@@ -1,4 +1,5 @@
 
+
 /* uti596.h: Contains the defines and structures used by the uti596 driver */
 
 /*
@@ -26,30 +27,30 @@
 /* Ethernet statistics */
 
 struct enet_statistics{
-  int	rx_packets;							/* total packets received */
-  int	tx_packets;							/* total packets transmitted */
-  int	rx_errors;							/* bad packets received	*/
-  int	tx_errors;							/* packet transmit problems	*/
-  int	rx_dropped;							/* no space in buffers */
-  int	tx_dropped;
+  int   rx_packets;                                                     /* total packets received */
+  int   tx_packets;                                                     /* total packets transmitted */
+  int   rx_errors;                                                      /* bad packets received */
+  int   tx_errors;                                                      /* packet transmit problems     */
+  int   rx_dropped;                                                     /* no space in buffers */
+  int   tx_dropped;
   int   tx_retries_exceeded;  /* excessive retries */
-  int	multicast;							/* multicast packets received	*/
-  int	collisions;
+  int   multicast;                                                      /* multicast packets received   */
+  int   collisions;
 
   /* detailed rx_errors: */
-  int	rx_length_errors;
-  int	rx_over_errors;					/* receiver ring buff overflow	*/
-  int	rx_crc_errors;					/* recved pkt with crc error	*/
-  int	rx_frame_errors;				/* recv'd frame alignment error */
-  int	rx_fifo_errors;					/* recv'r fifo overrun		*/
-  int	rx_missed_errors;				/* receiver missed packet	*/
+  int   rx_length_errors;
+  int   rx_over_errors;                                 /* receiver ring buff overflow  */
+  int   rx_crc_errors;                                  /* recved pkt with crc error    */
+  int   rx_frame_errors;                                /* recv'd frame alignment error */
+  int   rx_fifo_errors;                                 /* recv'r fifo overrun          */
+  int   rx_missed_errors;                               /* receiver missed packet       */
 
   /* detailed tx_errors */
-  int	tx_aborted_errors;
-  int	tx_carrier_errors;
-  int	tx_fifo_errors;
-  int	tx_heartbeat_errors;
-  int	tx_window_errors;
+  int   tx_aborted_errors;
+  int   tx_carrier_errors;
+  int   tx_fifo_errors;
+  int   tx_heartbeat_errors;
+  int   tx_window_errors;
 
   /* NIC reset errors */
   int   nic_reset_count;      /* The number of times uti596reset() has been called. */
@@ -58,62 +59,62 @@ struct enet_statistics{
 #define UTI596_MUTEX   1
 
 
-#define CMD_EOL						0x8000		/* The last command of the list, stop. */
-#define CMD_SUSP					0x4000		/* Suspend after doing cmd. 					 */
-#define CMD_INTR					0x2000		/* Interrupt after doing cmd. 				 */
+#define CMD_EOL                                         0x8000          /* The last command of the list, stop. */
+#define CMD_SUSP                                        0x4000          /* Suspend after doing cmd.                                      */
+#define CMD_INTR                                        0x2000          /* Interrupt after doing cmd.                            */
 
-#define CMD_FLEX					0x0008		/* Enable flexible memory model */
+#define CMD_FLEX                                        0x0008          /* Enable flexible memory model */
 
-#define SCB_STAT_CX    		0x8000  	/* Cmd completes with 'I' bit set */
-#define SCB_STAT_FR    		0x4000  	/* Frame Received                 */
-#define SCB_STAT_CNA   		0x2000  	/* Cmd unit Not Active            */
-#define SCB_STAT_RNR   		0x1000  	/* Receiver Not Ready             */
+#define SCB_STAT_CX             0x8000          /* Cmd completes with 'I' bit set */
+#define SCB_STAT_FR             0x4000          /* Frame Received                 */
+#define SCB_STAT_CNA            0x2000          /* Cmd unit Not Active            */
+#define SCB_STAT_RNR            0x1000          /* Receiver Not Ready             */
 
 #define SCB_CUS_SUSPENDED 0x0100
 #define SCB_CUS_ACTIVE    0x0200
 
 
-#define STAT_C						0x8000		/* Set to 1 after execution              */
-#define STAT_B						0x4000		/* 1 : Cmd being executed, 0 : Cmd done. */
-#define STAT_OK						0x2000		/* 1: Command executed ok 0 : Error      */
-#define STAT_A    				0x1000  	/* command has been aborted              */
+#define STAT_C                                          0x8000          /* Set to 1 after execution              */
+#define STAT_B                                          0x4000          /* 1 : Cmd being executed, 0 : Cmd done. */
+#define STAT_OK                                         0x2000          /* 1: Command executed ok 0 : Error      */
+#define STAT_A                                  0x1000          /* command has been aborted              */
 
-#define STAT_S11       		0x0800
-#define STAT_S10        	0x0400
-#define STAT_S9         	0x0200
-#define STAT_S8         	0x0100
-#define STAT_S7         	0x0080
-#define STAT_S6         	0x0040
-#define STAT_S5         	0x0020
-#define STAT_MAX_COLLS  	0x000F
-
-
-
-#define RBD_STAT_P      	0x4000  	/* prefetch */
-#define RBD_STAT_F      	0x4000  	/* used */
-
-#define	CUC_START					0x0100
-#define	CUC_RESUME				0x0200
-#define	CUC_SUSPEND    		0x0300
-#define	CUC_ABORT					0x0400
-#define	RX_START					0x0010
-#define	RX_RESUME					0x0020
-#define	RX_SUSPEND				0x0030
-#define	RX_ABORT					0x0040
-
-#define RU_SUSPENDED    	0x0010
-#define RU_NO_RESOURCES 	0x0020
-#define RU_READY        	0x0040
+#define STAT_S11                0x0800
+#define STAT_S10                0x0400
+#define STAT_S9                 0x0200
+#define STAT_S8                 0x0100
+#define STAT_S7                 0x0080
+#define STAT_S6                 0x0040
+#define STAT_S5                 0x0020
+#define STAT_MAX_COLLS          0x000F
 
 
-#define IO_ADDR         	0x360
-#define PORT_ADDR       	IO_ADDR
-#define CHAN_ATTN       	PORT_ADDR + 4
-#define NIC_ADDR        	PORT_ADDR + 8
+
+#define RBD_STAT_P              0x4000          /* prefetch */
+#define RBD_STAT_F              0x4000          /* used */
+
+#define CUC_START                                       0x0100
+#define CUC_RESUME                              0x0200
+#define CUC_SUSPEND             0x0300
+#define CUC_ABORT                                       0x0400
+#define RX_START                                        0x0010
+#define RX_RESUME                                       0x0020
+#define RX_SUSPEND                              0x0030
+#define RX_ABORT                                        0x0040
+
+#define RU_SUSPENDED            0x0010
+#define RU_NO_RESOURCES         0x0020
+#define RU_READY                0x0040
+
+
+#define IO_ADDR                 0x360
+#define PORT_ADDR               IO_ADDR
+#define CHAN_ATTN               PORT_ADDR + 4
+#define NIC_ADDR                PORT_ADDR + 8
 
 #define I596_NULL ( ( void * ) 0xffffffff)
 #define UTI_596_END_OF_FRAME 0x8000
-#define SIZE_MASK	0x3fff
+#define SIZE_MASK       0x3fff
 
 struct i596_tbd;
 
@@ -271,9 +272,9 @@ typedef volatile struct uti596_softc {
   i596_cmd     *pCmdHead;
   i596_cmd     *pCmdTail;  /* unneeded, as chaining not used, but implemented */
 
-  rtems_id		rxDaemonTid;
-  rtems_id		txDaemonTid;
-  rtems_id		resetDaemonTid;
+  rtems_id              rxDaemonTid;
+  rtems_id              txDaemonTid;
+  rtems_id              resetDaemonTid;
 
   struct enet_statistics stats;
   int                  started;
@@ -281,7 +282,7 @@ typedef volatile struct uti596_softc {
   unsigned long        txInterrupts;
   volatile int         cmdOk;
   int                  resetDone;
-  unsigned long	       txRawWait;
+  unsigned long        txRawWait;
   i596_rfd            *pInboundFrameQueue;
   short int            rxBdCount;
   short int            txBdCount;
@@ -296,3 +297,4 @@ typedef volatile struct uti596_softc {
 } uti596_softc_;
 
 #endif /* UTI596_H */
+

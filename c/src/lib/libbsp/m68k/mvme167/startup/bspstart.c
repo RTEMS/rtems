@@ -81,7 +81,6 @@ void bsp_start( void )
 {
   extern void *_WorkspaceBase;
   extern m68k_isr_entry M68Kvec[];
-  extern void    *_WorkspaceBase;
   
   void M68KFPSPInstallExceptionHandlers (void);
   

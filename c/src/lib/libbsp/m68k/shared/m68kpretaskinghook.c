@@ -35,6 +35,7 @@ extern void bsp_libc_init( void *, unsigned long, int );
 extern rtems_configuration_table  BSP_Configuration;
 
 extern unsigned long  _RamSize;
+extern void          *_RamBase;
 extern void          *_WorkspaceBase;
 extern void          *_HeapSize;
 
@@ -46,7 +47,7 @@ void bsp_pretasking_hook(void)
 
     heapStart =  (void *)
        ((unsigned long)&_WorkspaceBase + BSP_Configuration.work_space_size);
-    ramSpace = _RamSize - (unsigned long) heapStart;
+    ramSpace = (unsigned long) &_RamBase + (unsigned long) &_RamSize - (unsigned long) heapStart;
 
     if (heapSize == 0)
         heapSize = ramSpace;

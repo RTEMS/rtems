@@ -2,18 +2,35 @@
 #  $Id$
 #
 
-This is a README file for the MVME167 port of RTEMS 4.0.0.
+This is a README file for the MVME167 port of RTEMS 4.5.0.
 
 Please send any comments, improvements, or bug reports to:
 
 Charles-Antoine Gauthier
+charles.gauthier@nrc.ca
+or
+
+Darlene Stewart
+Darlene.Stewart@nrc.ca
+
 Software Engineering Group
 Institute for Information Technology
 National Research Council of Canada
 Ottawa, ON, K1A 0R6
 Canada
 
-charles.gauthier@iit.nrc.ca
+
+WARNING:
+--------
+
+The network driver is currently being worked on. It is somewhat functional,
+but it does run out of buffers under certain conditions. The code is
+also undergoing a substantial reorganization. Before making any changes,
+you should check with us for the availability of updates.
+
+Note from Joel:  The ttcp performance reported is very nice even if the
+driver is still early in its life. :)
+
   
 
 Disclaimer
@@ -43,15 +60,15 @@ Installation
 Nothing unique to the MVME167. It uses the standard build process for
 m68k targets. You will need to edit linkcmds to put in the start address
 of your board. We do TFTP transfers to our target. The mvme167.cfg file
-builds only the coff images, which we download to the target, skipping over
-the first 0xA8 bytes; Motorola S-records are not generated. Edit this file
-if you want S-records.
+builds only the ELF images, which we download to the target, skipping
+over the first 0x54 bytes; Motorola S-records are not generated. Edit
+this file if you want S-records.
 
 
 Port Description
 Console driver
 
-----------------
+---------------
 
 This BSP includes an termios-capable console driver that supports all
 four serial ports on the MVME167 model. The RTEMS console, /dev/console,
@@ -60,27 +77,30 @@ corresponds to channel 1 in the CD2401. This corresponds to Serial Port
 do not open /dev/tty00 if you are debugging using 167Bug.
 
 The console is initialized with whatever parameters are set up in termios
-before it calls the firtOpen driver callback, EXCEPT THAT HARDWARE HANDSHAKING
-IS TURNED OFF, i.e. CLOCAL is set in the struct termios c_cflag field. We use
-3-wire cables for I/O, and find hardware handshaking a pain. If you enable
-hardware handshaking, you must drive CTS* low on the CD2401 for output to
-occur. If the port is in the DTE configuration, you must drive the RS-232 CTS
-line to space; if the port is in the DCE configuration, you must drive the
-RS-232 RTS line to space.
+before it calls the firtOpen driver callback, EXCEPT THAT HARDWARE
+HANDSHAKING IS TURNED OFF, i.e. CLOCAL is set in the struct termios
+c_cflag field. We use 3-wire cables for I/O, and find hardware handshaking
+a pain. If you enable hardware handshaking, you must drive CTS* low on the
+CD2401 for output to occur. If the port is in the DTE configuration, you
+must drive the RS-232 CTS line to space; if the port is in the DCE
+configuration, you must drive the RS-232 RTS line to space.
 
-Limited support is provided for polled terminal I/O. This is used when running
-the timing tests. Set the CD2401_POLLED_IO manifest constant to 1 in
-rtems/c/src/lib/libbsp/m68k/mvme167/console/console.c to enable polled I/O.
-In this case, I/O is done through 167Bug, usually to the Serial Port 1/Console
+Limited support is provided for polled terminal I/O. This is used when
+running the timing tests. Set the CD2401_POLLED_IO manifest constant to 1
+in rtems/c/src/lib/libbsp/m68k/mvme167/console/console.c to enable polled
+I/O. In this case, I/O is done through 167Bug, usually to the Serial Port
+1/Console port. Interrupt-driven and polled I/O cannot be mixed in the
+MVME167.
+
 
 Floating-point
 
 The MC68040 has a built-in FPU. This FPU does not implement all the
-instruction of the MC68881/MC68882 floating-point coprocessors in hardware.
-The -m68040 compilation options instructs gcc to not generate the missing
-instructions. All of the RTEMS code is built this way. Some of the missing
-functionality must be supplied by external libraries. The required functions
-are part of libgcc.a.
+instruction of the MC68881/MC68882 floating-point coprocessors in
+hardware. The -m68040 compilation options instructs gcc to not generate
+the missing instructions. All of the RTEMS code is built this way. Some
+of the missing functionality must be supplied by external libraries. The
+required functions are part of libgcc.a.
 
 The issue gets complicated because libc, libm and libgcc do not come as
 m68040-specific variants. The default variants of these libraries are for the
@@ -127,17 +147,28 @@ mvme167.cfg that redefine which variants of libc, libm and libgcc to link
 against.
 
 
-Miscellaneous
+Cache Control and Memory Mapping
 
-port. Interrupt-driven and polled I/O cannot be mixed in the MVME167.
+If Jumper J1-7 is installed, the data cache will be turned on. If Jumper
+J1-6 is installed, the instruction cache will be turned on. Removing the
+jumper causes the corresponding cache to be left disabled.
+
+If Jumper J1-5 is installed, the data cache will be placed in copyback
+mode. If it is removed, it will be placed in writethrough mode.
+
+Currently, block address translation is set up to map the virtual
+0x00000000--0x7FFFFFFF to the physical range 0x00000000--0x7FFFFFFF. The
+port relies on the hardware to raise exceptions when addressing
+non-existent memory. Caching is not controllable on a finer grain.
+
+
+Miscellaneous
 
 The timer and clock drivers were patterned after the MVME162 and MVME152
 ports.
 
 At this time, we do not have an MPCI layer for the MVME167. We are planning
 to write one.
-
-The port does not have a network driver.
 
 This port supplies its own fatal_error_handler, which attempts to print some
 error message through 167Bug (on the Serial Port 1/Console on the MVME712M).
@@ -153,17 +184,20 @@ tools were used:
       m68k-rtems target;
     - GNU binutils 2.9.1 configured for a powerpc-ibm-aix4.2.0.0 host and
       m68k-rtems target;
+
 It was also tested on a Pentium II-based PC running Windows NT Workstation 4.0
-and the Cygnus Cygwin32 release b20.1 environment, witht he following tools:
+and the Cygnus Cygwin32 release b20.1 environment, with the following tools:
 
     - EGCS 1.1.1 configured for a i586-cygwin32 host and m68k-rtems target;
     - GNU binutils 2.9.4 configured for a i586-cygwin32 host and m68k-rtems
       target;
-    - Cygnus newlib 1.8.0 with RTEMS 4.0.0 patches.
 
 With the latter environment, be patient; builds take a very looong time...
 
-    - Cygnus newlib 1.8.0 with RTEMS 4.0.0 patches.
+Current development is done on a Pentium III PC running RedHat Linux 6.1.
+At the time this README was composed, the latest working compiler that was
+used successfully was gcc version 2.96 20000213 (experimental). Both the C
+and C++ compilers were working. Binutils 2.9.1 are used.
 
 
 Known Problems
@@ -202,6 +236,11 @@ blown. This is one case were overwritting the first or last 16 bytes of the
 stack does cause problems (but hey, an exception occurred, which is better
 than propagating the error).
 
+In the stackchk test, an access fault exception is raised after the stack is
+blown. This is one case were overwritting the first or last 16 bytes of the
+stack does cause problems (but hey, an exception occurred, which is better
+than propagating the error).
+
 When using interrupt-driven I/O, psx08 produces all the expected output, but
 it does not return control to 167Bug. Is this test supposed to work with
 interrupt-driven console I/O?
@@ -209,6 +248,8 @@ interrupt-driven console I/O?
 
 What's new
 ----------
+
+Support for Java is being actively worked on.
 
 
 Thanks
@@ -459,11 +500,4 @@ Timing tests:
     rtems_rate_monotonic_period: conclude periods -- caller blocks 25
     rtems_rate_monotonic_period: obtain status 13
 
-
-Network tests:
-
-The driver is currently being worked on. It is somewhat functional,
-but it does run out of buffers under certain conditions. The code is
-also undergoing a substantial reorganization. Before making any changes,
-you should check with us for the availability of updates.  
 

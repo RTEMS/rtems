@@ -9,7 +9,7 @@ PGM = $(ARCH)/network.rel
 C_FILES = network.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = uti596.h
+H_FILES = netexterns.h uti596.h
 
 OBJS = $(C_O_FILES)
 
@@ -19,6 +19,8 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 #
 # (OPTIONAL) Add local stuff here using +=
 #
+
+AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 
 $(PGM): $(OBJS)
 	$(make-rel)
@@ -31,6 +33,6 @@ endif
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = network.c uti596.h
+EXTRA_DIST = network.c netexterns.h uti596.h
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -2,22 +2,24 @@
  *  console.c
  *
  *  This file contains the MVME167 termios console package. Only asynchronous
- *  I/O is supported. Normal I/O uses DMA for output, interrupts for input.
- *  Very limited support is provided for polled I/O. Polled I/O is intended
- *  only for running the RTEMS test suites, and uses the 167Bug console only.
+ *  I/O is supported.
  *
  *  /dev/tty0 is channel 0, Serial Port 1/Console on the MVME712M.
  *  /dev/tty1 is channel 1, Serial Port 2/TTY01 on the MVME712M.
  *  /dev/tty2 is channel 2, Serial Port 3 on the MVME712M.
  *  /dev/tty3 is channel 3, Serial Port 4 on the MVME712M.
  *
- *  /dev/console is fixed to be /dev/tty01, Serial Port 2. 167Bug is given
- *  Serial Port 1/Console. Do not open /dev/tty00.
+ *  Normal I/O uses DMA for output, interrupts for input. /dev/console is
+ *  fixed to be /dev/tty01, Serial Port 2. Very limited support is provided
+ *  for polled I/O. Polled I/O is intended only for running the RTEMS test
+ *  suites. In all cases, Serial Port 1/Console is allocated to 167Bug and
+ *  is the dedicated debugger port. We configure GDB to use 167Bug for
+ *  debugging. When debugging with GDB or 167Bug, do not open /dev/tty00.
  *
  *  Modern I/O chips often contain a number of I/O devices that can operate
  *  almost independently of each other. Typically, in RTEMS, all devices in
  *  an I/O chip are handled by a single device driver, but that need not be
- *  always the case. Each device driver must supply six entry  points in the
+ *  always the case. Each device driver must supply six entry points in the
  *  Device Driver Table: a device initialization function, as well as an open,
  *  close, read, write and a control function. RTEMS assigns a device major
  *  number to each device driver. This major device number is the index of the
@@ -59,7 +61,7 @@
  *  Worse, it requires that the sub-devices be initialized in some
  *  configuration, and that configuration then changed through a series of
  *  device driver control calls. There is no standard API in RTEMS to switch
- *   a serial line to some synchronous protocol.
+ *  a serial line to some synchronous protocol.
  *
  *  A better approach is to treat each channel as a separate device, each with
  *  its own device device driver. The application then supplies its own device
@@ -96,7 +98,7 @@
  *  THIS MODULE IS NOT RE-ENTRANT! Simultaneous access to a device from
  *  multiple tasks is likely to cause significant problems! Concurrency
  *  control is implemented in the termios package.
-*
+ *
  *  THE INTERRUPT LEVEL IS SET TO 1 FOR ALL CHANNELS.
  *  If the CD2401 is to be used for high speed synchronous serial I/O, the
  *  interrupt priority might need to be increased.
@@ -125,12 +127,11 @@
 
 #define M167_INIT
 
+#include <stdarg.h>
+#include <stdio.h>
 #include <termios.h>
 #include <bsp.h>                /* Must be before libio.h */
 #include <rtems/libio.h>
-
-#define CD2401_INT_LEVEL 1      /* Interrupt level for the CD2401 */
-#define CD2401_POLLED_IO 0      /* 0 for interrupt-driven, 1 for polled I/O */
 
 
 /* Channel info */
@@ -569,7 +570,7 @@ rtems_isr cd2401_tx_isr(
   if ( status & 0x20 ) {
     /* DMA done */
     cd2401->ier &= 0xFC;        /* Shut up the interrupts */
-    
+
     /* This call can result in a call to cd2401_write() */
     rtems_termios_dequeue_characters (
         CD2401_Channel_Info[ch].tty,
@@ -634,7 +635,7 @@ int cd2401_firstOpen(
   sc = rtems_termios_ioctl (&newarg);
   if (sc != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (sc);
-    
+
   /*
    *  Turn off hardware flow control. It is a pain with 3-wire cables.
    *  The rtems_termios_ioctl() call below results in a call to
@@ -646,7 +647,7 @@ int cd2401_firstOpen(
   sc = rtems_termios_ioctl (&newarg);
   if (sc != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (sc);
-  
+
   /* Mark that the channel as initialized */
   CD2401_Channel_Info[minor].tty = args->iop->data1;
 
@@ -876,10 +877,10 @@ int cd2401_setAttributes(
   else
     istrip = 0;                 /* Leave as 8 bits */
 
-  
+
   /* Clear channel and disable rx and tx */
   cd2401_chan_cmd (minor, 0x40, 1);
-  
+
   /* Write to the ports */
   cd2401->car = minor;          /* Select channel */
   cd2401->cmr = 0x42;           /* Interrupt Rx, DMA Tx, async mode */
@@ -1079,24 +1080,28 @@ int _167Bug_pollRead(
 {
   int char_not_available;
   unsigned char c;
-  
+
   /* Check for a char in the input FIFO */
-  asm volatile( "trap   #15       /* Trap to 167Bug (.INSTAT) */
-                 .short 0x01
-                 move   %%cc, %0  /* Get condition codes */
-                 andil  #4, %0"
-    : "=d" (char_not_available) :: "%%cc" );
-    
+  asm volatile( "movew  #0x1, -(%%sp)   /* Code for .INSTAT */
+                 movew  %1, -(%%sp)     /* Channel */
+                 trap   #15             /* Trap to 167Bug */
+                 .short 0x60            /* Code for .REDIR */
+                 move   %%cc, %0        /* Get condition codes */
+                 andil  #4, %0"         /* Keep the Zero bit */
+    : "=d" (char_not_available) : "d" (minor): "%%cc" );
+
   if (char_not_available)
     return -1;
-    
+
   /* Read the char and return it */
-  asm volatile( "subq.l #2,%%a7   /* Space for result */
-                 trap   #15       /* Trap to 167 Bug (.INCHR) */
-                 .short 0x00
-                 moveb  (%%a7)+, %0"
-    : "=d" (c) );
-    
+  asm volatile( "subq.l #2,%%a7         /* Space for result */
+                 movew  #0x0, -(%%sp)   /* Code for .INCHR */
+                 movew  %1, -(%%sp)     /* Channel */
+                 trap   #15             /* Trap to 167 Bug */
+                 .short 0x60            /* Code for .REDIR */
+                 moveb  (%%a7)+, %0"    /* Pop char into c */
+    : "=d" (c) : "d" (minor) );
+
   return (int)c;
 }
 
@@ -1105,7 +1110,7 @@ int _167Bug_pollRead(
  * _167Bug_pollWrite
  *
  *  Output buffer through 167Bug. Returns only once every character has been
- *  sent (polled output). 
+ *  sent (polled output).
  *
  *  Input parameters:
  *    minor - selected channel
@@ -1127,15 +1132,52 @@ int _167Bug_pollWrite(
 )
 {
   const char *endbuf = buf + len;
-  
-  asm volatile( "pea    (%0)
-                 pea    (%1)
-                 trap   #15     /* trap to 167Bug (.OUTSTR) */
-                 .short 0x21"
-    :: "a" (endbuf), "a" (buf) );
-    
+
+  asm volatile( "pea    (%0)            /* endbuf */
+                 pea    (%1)            /* buf */
+                 movew  #0x21, -(%%sp)  /* Code for .OUTSTR */
+                 movew  %2, -(%%sp)     /* Channel */
+                 trap   #15             /* Trap to 167Bug */
+                 .short 0x60"           /* Code for .REDIR */
+    :: "a" (endbuf), "a" (buf), "d" (minor) );
+
   /* Return something */
   return RTEMS_SUCCESSFUL;
+}
+
+
+/*
+ *  Print functions: prototyped in bsp.h
+ *  Debug printing on Channel 1
+ */
+ 
+void printk( char *fmt, ... )
+{
+  va_list  ap;      		/* points to each unnamed argument in turn */
+  static char buf[256];
+  unsigned int level;
+  
+  _CPU_ISR_Disable(level);
+  
+  va_start(ap, fmt); 		/* make ap point to 1st unnamed arg */
+  vsprintf(buf, fmt, ap);	/* send output to buffer */
+  
+  BSP_output_string(buf);	/* print buffer -- Channel 1 */
+  
+  va_end(ap);				/* clean up and re-enable interrupts */
+  _CPU_ISR_Enable(level);
+}
+
+
+void BSP_output_string( char * buf )
+{
+  int len = strlen(buf);			
+  rtems_status_code sc;
+  
+  /* The first argument forces a print to Port2 (ttyS1) */
+  sc = _167Bug_pollWrite(1, buf, len);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (sc);
 }
 
 
@@ -1229,7 +1271,7 @@ rtems_device_driver console_open(
     NULL,                       /* startRemoteTx */
     0                           /* outputUsesInterrupts */
   };
-  
+
 #else
 
   static const rtems_termios_callbacks callbacks = {
@@ -1242,7 +1284,7 @@ rtems_device_driver console_open(
     cd2401_startRemoteTx,       /* startRemoteTx */
     1                           /* outputUsesInterrupts */
   };
-  
+
 #endif
 
   return rtems_termios_open (major, minor, arg, &callbacks);
