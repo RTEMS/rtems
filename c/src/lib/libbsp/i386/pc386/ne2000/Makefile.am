@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/ne2000.rel
 
 C_FILES = ne2000.c

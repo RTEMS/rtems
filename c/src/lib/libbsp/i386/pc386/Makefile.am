@@ -30,17 +30,17 @@ all-local: $(PREINSTALL_FILES)
 EXTRA_DIST = HOWTO README.dec21140 STATUS times_i486dx times_p5
 
 if HAS_NETWORKING
-$(PROJECT_INCLUDE)/wd80x3.h: include/wd80x3.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/wd80x3.h: include/wd80x3.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/wd80x3.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/wd80x3.h
 endif
 
-$(PROJECT_INCLUDE)/crt.h: include/crt.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/crt.h: include/crt.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/crt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/crt.h
 
-$(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

@@ -2,7 +2,6 @@
 ## Makefile.am,v 1.5 2002/08/11 06:59:03 ralf Exp
 ##
 
-
 PGM = 
 
 C_FILES = idecfg.c ide.c

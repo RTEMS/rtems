@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/3c509.rel
 
 C_FILES = 3c509.c elink.c

@@ -26,10 +26,10 @@ install-data-local: $(START_O_FILES)
 	$(INSTALL_DATA) $$i $(DESTDIR)$(bsplibdir); \
 	done
 
-$(ARCH)/start16.$(OBJEXT): start16.S
+$(ARCH)/start16.$(OBJEXT): start16.S $(ARCH)/$(dirstamp)
 	$(COMPILE.S) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ $<
 
-$(ARCH)/start16.bin: $(ARCH)/start16.$(OBJEXT)
+$(ARCH)/start16.bin: $(ARCH)/start16.$(OBJEXT) $(ARCH)/$(dirstamp)
 	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
 	  --oformat=elf32-i386 \
 	-o $(basename $@)-elf32.$(OBJEXT) $(basename $@).$(OBJEXT)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/wd8003.rel
 
 C_FILES = wd8003.c
