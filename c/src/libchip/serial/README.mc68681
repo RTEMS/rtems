@@ -74,10 +74,12 @@ setData
 
 ulClock
 
-   This is either NULL or a pointer to a baud rate mapping table.  If
-   NULL, then the CSR/ACR/X bit mappings shown in the 68681 and 88681
-   manuals are used.  Otherwise, the board specific baud rate mapping
-   is used.
+   This is a pointer to a baud rate mapping table.  If set to
+   mc68681_baud_rate_table, then the CSR/ACR/X bit mappings shown
+   in the 68681 and 88681 manuals are used.  Otherwise, the board
+   specific baud rate mapping is used.
+
+   NULL is not a valid value.
 
 ulIntVector
 
