@@ -7,18 +7,15 @@ Init: sigismember - FALSE since SIGUSR1 is not a member
 Init: sigismember - TRUE since SIGUSR2 is a member
 Init: send SIGUSR1 to process
 Signal: 16 caught by 0xc010001 (1)
- 
 Init: Block SIGUSR1
 Init: send SIGUSR1 to process
 Signal: 16 caught by 0xc010001 (1)
- 
 Init: Block SIGUSR1
 Init: Signals pending 0x00000000
 Init: send SIGUSR1 to process
 Init: Signals pending 0x00008000
 Init: Unblock SIGUSR1
 Signal: 16 caught by 0xc010001 (2)
- 
 Init: create a thread interested in SIGUSR1
 Init: Block SIGUSR1
 Init: Signals pending 0x00000000
@@ -30,58 +27,49 @@ Init: sleep so the other task can catch signal
 Signal: 16 caught by 0xc010002 (3)
 Task_1: 4 seconds left
 Task_1: exit
- 
 Init: Unblock SIGALRM
 Init: Firing alarm in 5 seconds
 Init: 0 seconds left on previous alarm
 Init: Firing alarm in 2 seconds
-Init: 4 seconds left on previous alarm
+Init: 4 seconds left on previous alarm - MAY BE 5 SECONDS ALSO
 Init: Wait 4 seconds for alarm
 Signal: 14 caught by 0xc010001 (4)
 Init: 2 seconds left in sleep
- 
 Init: Block SIGUSR1 and SIGUSR2 only
 Init: Previous blocked set was 0x00008000
 Init: Current blocked set is 0x00018000
 Init: Unblock all signals
 Init: Previous blocked set was 0x00018000
- 
 Init: create a thread to send Init SIGUSR1
 Init: sigsuspend for any signal
 Task_2: sending SIGUSR1
 Task_2: exit
 Signal: 16 caught by 0xc010001 (5)
 Init: awakended from sigsuspend status=00000016 
- 
 Init: create a thread to sent Process SIGUSR1 with SA_SIGINFO
 Init: sleep so the Task_3 can sigqueue SIGUSR1
 Task_3: sigqueue SIGUSR1 with value= 16
 Signal_info: 16 caught by 0xc010004 (6) si_signo= 16 si_code= 1 value= 16
- 
 Task_3: sigwaitinfo SIGUSR1 with value= 16
 Init: sigqueue occurred
 Init: Block SIGUSR1
 Init: send SIGUSR1 to process
 Init: sleep so the Task_3 can receive SIGUSR1
 Task_3: si_signo= 16 si_code= 1 value= 0
- 
 Task_3: sigwait SIGUSR1
 Init: Block SIGUSR1
 Init: send SIGUSR1 to process
 Init: sleep so the Task_3 can receive SIGUSR1
 Task_3: signo= 16
- 
 Task_3: pause
 Init: Block SIGUSR2
 Init: send SIGUSR2 to process
 Init: sleep so the Task_3 can receive SIGUSR2
 Task_3: pause= 17
- 
 Task_3: sending SIGUSR2
 Task_3: sleep so the Init task can reguest a signal
 Init: sigsuspend for any signal
 Init: awakended from sigsuspend status=17 
- 
 Init: sigemptyset - EINVAL (set invalid)
 Init: sigfillset - EINVAL (set invalid)
 Init: sigaddset - EINVAL (set invalid)
