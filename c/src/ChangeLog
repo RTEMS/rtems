@@ -1,5 +1,10 @@
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-itron.m4: Remove.
+	* aclocal/enable-inlines.m4: Remove.
+
+2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Reflect having moved aclocal/.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
