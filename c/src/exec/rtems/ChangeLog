@@ -1,3 +1,8 @@
+2001-01-31	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/rtems/timer.h: Missed merging these modifications
+	in previous merge of new timer functionality.
+
 2001-01-29	Joel Sherrill <joel@OARcorp.com>
 
 	* Fixed bug where resetting a timer that was not at the head

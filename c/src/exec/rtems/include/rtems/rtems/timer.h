@@ -318,6 +318,27 @@ rtems_status_code rtems_timer_initiate_server(
   rtems_attribute      attribute_set
 );
 
+/*
+ *  rtems_timer_get_information
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_timer_get_information directive.
+ *  This directive returns information about the timer.
+ */
+
+typedef struct {
+  Timer_Classes      the_class;
+  Watchdog_Interval  initial; 
+  Watchdog_Interval  start_time; 
+  Watchdog_Interval  stop_time; 
+} rtems_timer_information;
+
+rtems_status_code rtems_timer_get_information(
+  Objects_Id               id,
+  rtems_timer_information *the_info
+);
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/timer.inl>
 #endif
