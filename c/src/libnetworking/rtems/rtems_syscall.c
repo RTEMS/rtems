@@ -262,12 +262,11 @@ shutdown (int s, int how)
               return -1;
       }
       error = soshutdown(so, how);
+      rtems_bsdnet_semaphore_release ();
       if (error) {
               errno = error;
-              rtems_bsdnet_semaphore_release ();
               return -1;
       }
-      rtems_bsdnet_semaphore_release ();
       return 0;
 }
 
