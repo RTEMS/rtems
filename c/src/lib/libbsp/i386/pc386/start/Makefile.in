@@ -18,10 +18,10 @@ C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES=
 
-# Assembly source names, if any, go here -- minus the .s
+# Assembly source names, if any, go here -- minus the .S
 S_PIECES=start16 start
-S_FILES=$(S_PIECES:%=%.s)
-S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+S_FILES=$(S_PIECES:%=%.S)
+S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 
 SRCS=$(C_FILES) $(H_FILES) $(S_FILES)
 OBJS=$(C_O_FILES) $(S_O_FILES)
@@ -64,7 +64,7 @@ LINKCMDS=$(srcdir)/../startup/linkcmds
 ${ARCH}/start16.o: start16.s
 	sed -e 's/\/\/.*$$//' < $< | $(CPP) $(ASMFLAGS) -I. -I$(srcdir) \
 	  -DASM -DHEADERADDR=$(HEADERADDR) - > $*.i
-	$(AS) $(ASFLAGS) -o $@ $*.i
+	$(AS) $(ASMFLAGS) -o $@ $*.i
 
 ${ARCH}/start16.bin: ${ARCH}/start16.o
 	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
