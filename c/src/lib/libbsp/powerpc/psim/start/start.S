@@ -17,6 +17,9 @@
  *  $Id$
  */
 
+#include <rtems/asm.h>
+#include <rtems/score/cpu.h>
+#include <libcpu/io.h>
 #include "ppc-asm.h"
 
 	.file	"startsim.s"
@@ -53,9 +56,14 @@ FUNC_NAME(__atexit):			/* tell C's eabi-ctor's we have an atexit function */
 .Lptr:
 	.long .LCTOC1-.Laddr
 
+	.globl	__rtems_entry_point
+	.type	__rtems_entry_point,@function
+__rtems_entry_point:
+#if 1
 	.globl	_start
 	.type	_start,@function
 _start:
+#endif
 	bl	.Laddr			/* get current address */
 .Laddr:
 	mflr	r4			/* real address of .Laddr */
@@ -100,6 +108,7 @@ _start:
         la	r5,environ@l(r5)	/* environp */
 	li	r4, 0			/* argv */
 	li	r3, 0			/* argc */
+
 	/* Let her rip */
 	bl	FUNC_NAME(boot_card)
 

@@ -36,8 +36,8 @@ echo "b _Internal_error_Occurred"                     >> ${GDB_FILE}
 echo "b rtems_fatal_error_occurred"                   >> ${GDB_FILE}
 echo "b __assert"                                     >> ${GDB_FILE}
 
-RUN=powerpc-rtems-run
-GDB=powerpc-rtems-gdb
+RUN=powerpc-rtems4.7-run
+GDB=powerpc-rtems4.7-gdb
 
 case $0 in
    *gdb*)

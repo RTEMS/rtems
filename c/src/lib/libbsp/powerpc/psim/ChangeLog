@@ -1,3 +1,13 @@
+2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
+
+	PR 581/bsps
+	* Makefile.am, bsp_specs, configure.ac, include/bsp.h, include/tm27.h,
+	start/start.S, startup/bspstart.c, startup/linkcmds,
+	tools/Makefile.am, tools/psim, vectors/vectors.S, wrapup/Makefile.am:
+	Convert PSIM to new exception model.
+	* irq/irq.c, irq/irq.h, irq/irq_asm.S, irq/irq_init.c: New files.
+	* startup/setvec.c, timer/timer.c: Removed.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

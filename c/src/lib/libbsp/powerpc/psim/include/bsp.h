@@ -54,11 +54,19 @@ extern "C" {
 #else
 #include <rtems.h>
 #include <rtems/console.h>
+#include <libcpu/io.h>
 #include <rtems/clockdrv.h>
-#include <rtems/console.h>
 #include <rtems/iosupp.h>
+#include <bsp/vectors.h>
 
 /* Constants */
+
+/*
+ *  Information placed in the linkcmds file.
+ */
+
+extern int   RAM_END;
+extern int   end;        /* last address in the program */
 
 /*
  *  Device Driver Table Entries
@@ -72,45 +80,14 @@ extern "C" {
  * NOTE: Use the standard Clock driver entry
  */
 
-/*
- *  Information placed in the linkcmds file.
- */
-
-extern int   RAM_START;
-extern int   RAM_END;
-extern int   RAM_SIZE;
-
-extern int   PROM_START;
-extern int   PROM_END;
-extern int   PROM_SIZE;
-
-extern int   CLOCK_SPEED;
-
-extern int   end;        /* last address in the program */
+#define BSP_Convert_decrementer( _value ) ( (unsigned long long) _value )
 
 /* functions */
 
-void bsp_start( void );
-
 void bsp_cleanup( void );
 
-rtems_isr_entry set_vector(                    /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
-);
-
-void DEBUG_puts( char *string );
-
-void BSP_fatal_return( void );
-
-void bsp_spurious_initialize( void );
-
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
-extern uint32_t                  bsp_isr_level;
 
 #endif /* ASM */
 

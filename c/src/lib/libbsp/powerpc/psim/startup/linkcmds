@@ -16,7 +16,7 @@ OUTPUT_ARCH(powerpc)
 ENTRY(_start)
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
-PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 100);
+PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 10000);   /* 100); */
 PROVIDE (CPU_PPC_CLICKS_PER_MS = 16667);
 MEMORY
   {
@@ -26,35 +26,55 @@ MEMORY
 
 SECTIONS
 {
-  .vectors 0xFFF00100 :
+  .entry_point_section :
   {
-    *(.vectors)
-  } >EPROM
+	*(.entry_point_section)
+  } > EPROM
 
   /* Read-only sections, merged into text segment: */
   /* . = 0x40000 + SIZEOF_HEADERS; */
   . = 0x4000;
-  .interp   	  : { *(.interp) } 
-  .hash		  : { *(.hash)		}
-  .dynsym	  : { *(.dynsym)		}
-  .dynstr	  : { *(.dynstr)		}
-  .rela.text	  : { *(.rela.text) 	}
-  .rela.data	  : { *(.rela.data) 	}
-  .rela.rodata	  : { *(.rela.rodata) 	}
-  .rela.got	  : { *(.rela.got)	}
-  .rela.got1	  : { *(.rela.got1)	}
-  .rela.got2	  : { *(.rela.got2)	}
-  .rela.ctors	  : { *(.rela.ctors)	}
-  .rela.dtors	  : { *(.rela.dtors)	}
-  .rela.init	  : { *(.rela.init)	}
-  .rela.fini	  : { *(.rela.fini)	}
-  .rela.bss	  : { *(.rela.bss)	}
-  .rela.plt	  : { *(.rela.plt)	}
-  .rela.sdata	  : { *(.rela.sdata2)	}
-  .rela.sbss	  : { *(.rela.sbss2)	}
-  .rela.sdata2	  : { *(.rela.sdata2)	}
-  .rela.sbss2	  : { *(.rela.sbss2)	}
-  .plt   	  : { *(.plt) 		}
+  .interp         : { *(.interp) }
+  .hash           : { *(.hash) }
+  .dynsym         : { *(.dynsym) }
+  .dynstr         : { *(.dynstr) }
+  .gnu.version    : { *(.gnu.version) }
+  .gnu.version_d  : { *(.gnu.version_d) }
+  .gnu.version_r  : { *(.gnu.version_r) }
+  .rel.init       : { *(.rel.init) }
+  .rela.init      : { *(.rela.init) }
+  .rel.text       : { *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*) }
+  .rela.text      : { *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*) }
+  .rel.fini       : { *(.rel.fini) }
+  .rela.fini      : { *(.rela.fini) }
+  .rel.rodata     : { *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*) }
+  .rela.rodata    : { *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*) }
+  .rel.data       : { *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*) }
+  .rela.data      : { *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*) }
+  .rel.tdata	  : { *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*) }
+  .rela.tdata	  : { *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*) }
+  .rel.tbss	  : { *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*) }
+  .rela.tbss	  : { *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*) }
+  .rel.ctors      : { *(.rel.ctors) }
+  .rela.ctors     : { *(.rela.ctors) }
+  .rel.dtors      : { *(.rel.dtors) }
+  .rela.dtors     : { *(.rela.dtors) }
+  .rel.got        : { *(.rel.got) }
+  .rela.got       : { *(.rela.got) }
+  .rela.got1           : { *(.rela.got1) }
+  .rela.got2           : { *(.rela.got2) }
+  .rel.sdata      : { *(.rel.sdata .rel.sdata.* .rel.gnu.linkonce.s.*) }
+  .rela.sdata     : { *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*) }
+  .rel.sbss       : { *(.rel.sbss .rel.sbss.* .rel.gnu.linkonce.sb.*) }
+  .rela.sbss      : { *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*) }
+  .rel.sdata2     : { *(.rel.sdata2 .rel.sdata2.* .rel.gnu.linkonce.s2.*) }
+  .rela.sdata2    : { *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*) }
+  .rel.sbss2      : { *(.rel.sbss2 .rel.sbss2.* .rel.gnu.linkonce.sb2.*) }
+  .rela.sbss2     : { *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*) }
+  .rel.bss        : { *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*) }
+  .rela.bss       : { *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*) }
+  .rel.plt        : { *(.rel.plt) }
+  .rela.plt       : { *(.rela.plt) }
   .text      :
   {
     *(.text)
@@ -74,17 +94,27 @@ SECTIONS
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
   } >RAM
-  .init		  : { _init = .; __init = .; *(.init)		} >RAM
-  .fini		  : { _fini = .; __fini = .; *(.fini)		} >RAM
+  .init           :
+  {
+    KEEP (*(.init))
+  } >RAM =0
+  .fini           :
+  {
+    _fini = .;
+    KEEP (*(.fini))
+  } >RAM =0
   .rodata  	  : { *(.rodata*) *(.gnu.linkonce.r*) } >RAM
   .rodata1	  : { *(.rodata1) 	} >RAM
+  PROVIDE (__FRAME_BEGIN__ = .);
   .eh_frame	  : { *.(eh_frame)		} >RAM
+  PROVIDE (__FRAME_END__ = .);
   PROVIDE (_etext = .);
   PROVIDE (etext = .);
   PROVIDE (__SDATA2_START__ = .);
   .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
   .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
   PROVIDE (__SBSS2_END__ = .);
+  /* .eh_frame_hdr : { *(.eh_frame_hdr) } >RAM */
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  It would
      be more correct to do this:
@@ -135,6 +165,8 @@ SECTIONS
   PROVIDE (_FIXUP_END_ = .);
   PROVIDE (__FIXUP_END__ = .);
 
+  .jcr            : { KEEP (*(.jcr))	} > RAM
+
   PROVIDE (__GOT_START__ = .);
   PROVIDE (_GOT_START_ = .);
   s.got = .;
@@ -155,9 +187,8 @@ SECTIONS
   .sbss      :
   {
     PROVIDE (__sbss_start = .);
-    *(.sbss)
-    *(.scommon)
-    *(.gnu.linkonce.sb.*)
+    *(.dynsbss)
+    *(.sbss .sbss.* .gnu.linkonce.sb.*)
     PROVIDE (__sbss_end = .);
   } >RAM
   PROVIDE (__SBSS_END__ = .);
@@ -166,10 +197,11 @@ SECTIONS
   {
    PROVIDE (__bss_start = .);
    *(.dynbss)
-   *(.bss)
+   *(.bss .bss.* .gnu.linkonce.b.*)
    *(COMMON)
   } >RAM
   . =  ALIGN(8) + 0x8000;
+  __rtems_end = . ;
   PROVIDE(__stack = .);
   PROVIDE(_end = .);
   PROVIDE(end = .);
