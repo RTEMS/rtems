@@ -3,7 +3,7 @@ dnl
 dnl $Id$
 
 AC_PREREQ(2.13)
-AC_INIT(erc32)
+AC_INIT(shared)
 RTEMS_TOP(../../../../..)
 AC_CONFIG_AUX_DIR(../../../../..)
 
@@ -21,4 +21,5 @@ AC_CONFIG_SUBDIRS($bspdir)
 
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
-Makefile)
+Makefile
+shared/Makefile)

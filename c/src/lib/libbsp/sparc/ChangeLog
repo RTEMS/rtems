@@ -1,3 +1,8 @@
+2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* Makefile.am, configure.in: Added shared directory as part
+	of enhancing ERC32 and adding LEON.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
