@@ -139,7 +139,7 @@ void break_when_you_get_here();
  *      No reject on CAM match
  */
 #define SONIC_DCR \
-   (DCR_DW32 | DCR_WAIT0 | DCR_PO0 | DCR_PO1  | DCR_RFT4 | DCR_TFT8)
+   (DCR_DW32 | DCR_WAIT0 | DCR_PO0 | DCR_PO1  | DCR_RFT24 | DCR_TFT28)
 #ifndef SONIC_DCR
 # define SONIC_DCR (DCR_DW32 | DCR_TFT28)
 #endif
@@ -151,7 +151,7 @@ void break_when_you_get_here();
  * Default sizes of transmit and receive descriptor areas
  */
 #define RDA_COUNT     20 /* 20 */
-#define TDA_COUNT     10 /* 10 */
+#define TDA_COUNT     20 /* 10 */
 
 /*
  * 
@@ -511,7 +511,12 @@ SONIC_STATIC void sonic_retire_tda (struct sonic_softc *sc)
 #endif
 
 #if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
-    if ( status != 0x0001 )
+    /*
+     *  If there is an error that was not a collision, 
+     *  then someone may want to see it.
+     */
+
+    if ( (status & ~(TDA_STATUS_COLLISION_MASK|TDA_STATUS_DEF)) != 0x0001 )
       printf( "ERROR: retire TDA %p (0x%08x)\n",
                 sc->tdaTail, sc->tdaTail->status );
 #endif
@@ -528,6 +533,10 @@ SONIC_STATIC void sonic_retire_tda (struct sonic_softc *sc)
        * packets waiting to go.
        */
       rtems_unsigned16 link;
+#if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
+      printf("restarting sonic after error\n");
+#endif
+
       link = *(sc->tdaTail->linkp);
 
       if ((link & TDA_LINK_EOL) == 0) {
@@ -599,6 +608,7 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
   int i;
   static char padBuf[64];
 
+  /* printf( "sonic_sendpacket %p\n", m ); */
   /*
    * Free up transmit descriptors.
    */
@@ -608,9 +618,10 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
    * Wait for transmit descriptor to become available.
    */
   if (sc->tdaActiveCount == sc->tdaCount) {
-#if (SONIC_DEBUG & SONIC_DEBUG_FRAGMENTS)
+#if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
     puts( "Wait for more TDAs" );
 #endif
+
     /*
      * Clear old events.
      */
@@ -627,6 +638,10 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
     sonic_retire_tda (sc);
     while (sc->tdaActiveCount == sc->tdaCount) {
       rtems_event_set events;
+
+#if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
+      printf("blocking until TDAs are available\n");
+#endif
       /*
        * Enable transmitter interrupts.
        */
@@ -726,8 +741,8 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
   sc->tdaActiveCount++;
   sc->tdaHead = tdp;
 
-/* XXX */
-/*   sonic_enable_interrupts( rp, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) ); */
+/* XXX not in KA9Q */
+  sonic_enable_interrupts( rp, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) );
   sonic_write_register( rp, SONIC_REG_CR, CR_TXP );
 }
 
@@ -984,6 +999,7 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
       Dump_Buffer( (void *) m, 96 /* m->m_len*/ );
 #endif
 
+      /* printf( "ether_input %p\n", m ); */
       ether_input (ifp, eh, m);
 
       /*
@@ -1124,9 +1140,9 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
      */
 
 /* XXX not used by the BSD drivers
+*/
     if (i & 1)
       tdp->pkt_config = TDA_CONFIG_PINT;
-*/
 
     tdp->frag_count        = 0;
     tdp->frag[0].frag_link = LSW(tdp + 1);
@@ -1446,7 +1462,8 @@ SONIC_STATIC void sonic_init (void *arg)
    * Enable receiver and transmitter
    */
   /* sonic_write_register( rp, SONIC_REG_IMR, 0 ); */
-  sonic_enable_interrupts( rp, (IMR_PRXEN | IMR_RBAEEN) );
+  sonic_enable_interrupts( rp,
+        (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) | (IMR_PRXEN | IMR_RBAEEN) );
 
   sonic_write_register(rp, SONIC_REG_CR, /* CR_TXP | */ CR_RXEN);
 }
@@ -1656,7 +1673,7 @@ char SONIC_Reg_name[64][6]= {
 };
 #endif
 
-inline void sonic_write_register(
+void sonic_write_register(
   void       *base,
   unsigned32  regno,
   unsigned32  value
@@ -1672,7 +1689,7 @@ inline void sonic_write_register(
   p[regno] = value;
 }
 
-inline unsigned32 sonic_read_register(
+unsigned32 sonic_read_register(
   void       *base,
   unsigned32  regno
 )
