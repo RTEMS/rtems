@@ -80,7 +80,7 @@ STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Allocate( void );
  *  inactive chain of free pthread control blocks.
  */
  
-STATIC INLINE void _POSIX_Threads_Free (
+STATIC INLINE void _POSIX_Threads_Free(
   POSIX_Threads_Control *the_pthread
 );
  
@@ -98,7 +98,7 @@ STATIC INLINE void _POSIX_Threads_Free (
  *  to OBJECTS_ERROR and the_pthread is undefined.
  */
  
-STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Get (
+STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Get(
   Objects_Id        *id,
   Objects_Locations *location
 );
@@ -111,7 +111,7 @@ STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Get (
  *  This function returns TRUE if the_pthread is NULL and FALSE otherwise.
  */
  
-STATIC INLINE boolean _POSIX_Threads_Is_null (
+STATIC INLINE boolean _POSIX_Threads_Is_null(
   POSIX_Threads_Control *the_pthread
 );
 

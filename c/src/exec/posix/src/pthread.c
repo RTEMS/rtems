@@ -14,6 +14,7 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/pthread.h>
+#include <rtems/posix/priority.h>
 #include <rtems/posix/config.h>
 
 /*PAGE
@@ -172,12 +173,12 @@ void _POSIX_Threads_Manager_initialization(
   _Objects_Initialize_information(
     &_POSIX_Threads_Information,
     OBJECTS_POSIX_THREADS,
-    TRUE,
+    FALSE,                               /* does not support global */
     maximum_pthreads,
     sizeof( POSIX_Threads_Control ),
     TRUE,
-    _POSIX_PATH_MAX,
-    TRUE
+    5,                                   /* length is arbitrary for now */
+    TRUE                                 /* this class is threads */
   );
 
   /*
@@ -538,6 +539,11 @@ int pthread_create(
 )
 {
   const pthread_attr_t  *local_attr;
+  Priority_Control       core_priority;
+  boolean                is_fp;
+  boolean                status;
+  Thread_Control        *the_thread;
+  char                  *default_name = "psx";
 
   local_attr = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
@@ -561,7 +567,69 @@ int pthread_create(
   int  detachstate;
 #endif
 
-  return POSIX_NOT_IMPLEMENTED();
+  /*
+   *  Validate the RTEMS API priority and convert it to the core priority range.
+   */
+ 
+  if ( !_POSIX_Priority_Is_valid( attr->schedparam.sched_priority ) )
+    return EINVAL;
+ 
+  core_priority = _POSIX_Priority_To_core( attr->schedparam.sched_priority );
+ 
+  /*
+   *  Currently all POSIX threads are floating point.
+   */
+
+  is_fp = TRUE;
+
+  /*
+   *  Disable dispatch for protection
+   */
+ 
+  _Thread_Disable_dispatch();
+ 
+  /*
+   *  Allocate the thread control block.
+   *
+   *  NOTE:  Global threads are not currently supported.
+   */
+
+  the_thread = _POSIX_Threads_Allocate();
+
+  if ( !the_thread ) {
+    _Thread_Enable_dispatch();
+    return EINVAL;
+  }
+
+  /*
+   *  Initialize the core thread for this task.
+   */
+ 
+  status = _Thread_Initialize(
+    &_POSIX_Threads_Information,
+    the_thread,
+    attr->stackaddr,
+    attr->stacksize,
+    is_fp,
+    core_priority,
+    TRUE,                 /* preemptible */
+    TRUE,                 /* timesliced */
+    0,                    /* isr level */
+    &default_name         /* posix threads don't have a name */
+  );
+ 
+  if ( !status ) {
+    _POSIX_Threads_Free( the_thread );
+    _Thread_Enable_dispatch();
+    return EINVAL;
+  }
+
+  *thread = the_thread->Object.id;
+
+ _Thread_Enable_dispatch();
+
+ return 0;
+
 }
 
 /*PAGE
