@@ -265,7 +265,7 @@ void _POSIX_Threads_Initialize_user_threads( void )
     status = pthread_create(
       &thread_id,
       &attr,
-      user_threads[ index ].entry,
+      user_threads[ index ].thread_entry,
       NULL
     );
     assert( !status );

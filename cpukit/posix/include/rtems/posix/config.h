@@ -38,7 +38,7 @@ extern "C" {
  */
 
 typedef struct {
-  void       *(*entry)(void *);
+  void       *(*thread_entry)(void *);
 } posix_initialization_threads_table;
 
 typedef struct {
