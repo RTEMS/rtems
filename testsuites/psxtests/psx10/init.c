@@ -54,27 +54,27 @@ void *POSIX_Init(
   status = pthread_condattr_setpshared( &attr, PTHREAD_PROCESS_PRIVATE );
   assert( !status );
 
-  puts( "Init: pthread_condattr_setpshared - EINVAL - attr" );
   status = pthread_condattr_setpshared( NULL, PTHREAD_PROCESS_PRIVATE );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
+  puts( "Init: pthread_condattr_setpshared - EINVAL - attr" );
 
-  puts( "Init: pthread_condattr_setpshared - EINVAL - pshared" );
   status = pthread_condattr_setpshared( &attr, 0xFFFFFF );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
+  puts( "Init: pthread_condattr_setpshared - EINVAL - pshared" );
 
   status = pthread_condattr_getpshared( &attr, &pshared );
   assert( !status );
-  printf( "Init: pthread_condattr_getpshared - %d", pshared );
+  printf( "Init: pthread_condattr_getpshared - %d\n", pshared );
 
-  puts( "Init: pthread_condattr_getpshared - EINVAL" );
   status = pthread_condattr_getpshared( NULL, &pshared );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
+  puts( "Init: pthread_condattr_getpshared - EINVAL" );
 
   Init_id = pthread_self();
   printf( "Init: ID is 0x%08x\n", Init_id );
@@ -88,7 +88,8 @@ void *POSIX_Init(
 
   /* exit this thread */
 
-  pthread_exit( NULL );
+  puts( "*** END OF POSIX TEST 5 ***" );
+  exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }
