@@ -21,11 +21,6 @@
  *         fd = open ("/TFTP/hostname/bootfiles/image", O_RDONLY);
  *
  * The `hostname' must be four dot-separated decimal values.
- *
- * To open a file on the host which supplied the BOOTP
- * information just leave the `hostname' part empty:
- *         fd = open ("/TFTP//bootfiles/image", O_RDONLY);
- *
  */
 
 #ifndef _TFTP_FILESYSTEM_h
