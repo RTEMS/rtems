@@ -145,8 +145,8 @@ rtems_task Init (rtems_task_argument ignored)
 		printf ("%d: Can't obtain non-recursive-lock semaphore: %s\n", __LINE__, rtems_status_text (sc));
 	}
         /*
-         *  Since this task is holding this, there is no reason to block.
-         *  It is obviously an error to reobtain it.
+         *  Since this task is holding this, this task will block and timeout.
+         *  Then the timeout error will be returned.
          */
 	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then);
 	sc = rtems_semaphore_obtain (semnorec, RTEMS_WAIT, 5);
