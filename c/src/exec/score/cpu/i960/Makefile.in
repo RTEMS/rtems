@@ -62,13 +62,8 @@ all:	${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
 # for include files, just use $(INSTALL)
 install:  all
 
-preinstall: $(ARCH) \
-            ${PROJECT_RELEASE}/lib/bsp_specs
+preinstall: $(ARCH)
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 # we will share the basic cpu file
 	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
 
-${PROJECT_RELEASE}/lib/bsp_specs: $(ARCH)/bsp_specs.tmp
-	$(INSTALL) -m 444 $(ARCH)/bsp_specs.tmp $@
-
-# $(ARCH)/bsp_specs.tmp rule is in leaf.cfg

@@ -64,6 +64,18 @@ CREATE_DIRS = \
 
 BUILD_DIRS = ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
 
+# bsp_specs should be installed by a bsp-specific configure script
+BSP_SPECS = $(PROJECT_RELEASE)/lib/bsp_specs
+ifeq ($(RTEMS_BSP),bare)
+BSP_SPECS_DIR = $(RTEMS_ROOT)/c/src/lib/libbsp/$(RTEMS_BSP_FAMILY)
+else        
+BSP_SPECS_DIR = $(RTEMS_ROOT)/c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)
+endif
+
+$(BSP_SPECS): $(BSP_SPECS_DIR)/bsp_specs
+	cp $< $@
+	chmod 444 $@
+
 # Make all/install must include 'env'
 # if something is added to TARGET_VARIANTS, then account for it here
 make_src_makefiles: Makefile.in Makefile
@@ -145,4 +157,5 @@ debug_tests: debug
 profile_tests: profile
 	cd src/tests; $(MAKE) profile
 
-env:    $(SRCS) dirs
+env:    $(SRCS) dirs $(BSP_SPECS)
+
