@@ -69,10 +69,6 @@
 #include <string.h>
 #include <fcntl.h>
  
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
-
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
