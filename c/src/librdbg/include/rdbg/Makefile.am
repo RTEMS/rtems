@@ -23,5 +23,5 @@ SUBDIRS = $(RTEMS_CPU)
 DIST_SUBDIRS = $(RTEMS_CPU)
 endif
 
-include $(top_srcdir)/../../automake/subdirs.am
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/subdirs.am
+include $(top_srcdir)/automake/local.am

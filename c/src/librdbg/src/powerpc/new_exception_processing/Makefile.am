@@ -34,8 +34,8 @@ OBJS = $(GEN_C_O_FILES) $(C_O_FILES) $(S_O_FILES)
 MAINTAINERCLEANFILES = $(H_FILES) $(GEN_C_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 #
 # Add local stuff here using +=
@@ -91,4 +91,4 @@ all-local: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = remdeb_f.x $(GEN_C_FILES)
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am
