@@ -2,7 +2,7 @@
  *
  *  This include file contains all SPARC simulator definitions.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,8 +19,8 @@
  *  $Id$
  */
 
-#ifndef __SIS_h
-#define __SIS_h
+#ifndef __ERC32_BSP_h
+#define __ERC32_BSP_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,13 +72,13 @@ extern int rtems_erc32_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config
  *        is included.
  */
 
-#define SIS_USE_SYNCHRONOUS_TRAP  0
+#define ERC32_BSP_USE_SYNCHRONOUS_TRAP  0
 
 /*
  *  The synchronous trap is an arbitrarily chosen software trap.
  */
 
-#if (SIS_USE_SYNCHRONOUS_TRAP == 1)
+#if (ERC32_BSP_USE_SYNCHRONOUS_TRAP == 1)
 
 #define TEST_VECTOR SPARC_SYNCHRONOUS_TRAP( 0x90 )
 
