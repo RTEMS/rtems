@@ -11,7 +11,9 @@
 This section describes other free software packages that are known to work
 with RTEMS.
 
-@section GNU Development Tools
+@section Development Tools
+
+@subsection Basic Development Environment
 
 The standard RTEMS development environment consists of the following GNU
 components:
@@ -28,8 +30,14 @@ Although not from the Free Software Foundation, the Cygnus newlib C
 library integrates well with the GNU tools and is a standard part of the
 RTEMS development environment.
 
+@subsection GNU Ada
+
 For those interested in using the Ada95 programming language, the GNU Ada
-compiler (GNAT) is available.  
+compiler (GNAT) is available and has excellent support for RTEMS.
+
+@subsection DDD
+
+XXX insert information from Charles Gauthier and Jiri Gaisler
 
 @section omniORB
 
@@ -67,4 +75,13 @@ ditto
 @section ncurses
 
 Free version of curses.
+
+ditto
+
+
+@section zlib
+
+Free compression/decompression library.
+
+ditto
 

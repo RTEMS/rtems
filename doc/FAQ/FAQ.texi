@@ -64,8 +64,10 @@ END-INFO-DIR-ENTRY
 
 @include basic.texi
 @include tools.texi
+@include concepts.texi
 @include debug.texi
 @include freesw.texi
+@include hwdebugaids.texi
 
 @ifinfo
 @node Top, Basic Information, (dir), (dir)
@@ -81,8 +83,10 @@ Common questions have been divided into the following categories.
 @menu
 * Basic Information::
 * General Development Tool Hints::
+* RTEMS Concepts::
 * Debugging Hints::
 * Free Software that Works with RTEMS::
+* Hardware to Ease Debugging::
 @end menu
 
 @c * Command and Variable Index::
