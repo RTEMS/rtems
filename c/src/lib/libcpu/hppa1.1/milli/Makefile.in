@@ -4,11 +4,16 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@
-RTEMS_ROOT = @top_srcdir@
-PROJECT_ROOT = @PROJECT_ROOT@
+top_srcdir = @top_srcdir@
+top_builddir = ../../../../../..
+subdir = c/src/lib/libcpu/hppa1.1/milli
 
 INSTALL = @INSTALL@
+
+RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+VPATH = @srcdir@
 
 PGM=${ARCH}/milli.rel
 
@@ -60,3 +65,7 @@ all:	${ARCH} $(SRCS) $(PGM)
 # the .rel file built here will be put into libbsp.a by
 #    libbsp/hppa/BSP/wrapup/Makefile
 install:  all
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

@@ -10,11 +10,16 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@
-RTEMS_ROOT = @top_srcdir@
-PROJECT_ROOT = @PROJECT_ROOT@
+top_srcdir = @top_srcdir@
+top_builddir = ../../../../../..
+subdir = c/src/lib/libbsp/hppa1.1/pxfl
 
 INSTALL = @INSTALL@
+
+RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+VPATH = @srcdir@
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
@@ -27,7 +32,6 @@ EXIT_CMD=exit 1
 ifeq (k, $(findstring k, $(MAKEFLAGS)))
 EXIT_CMD=true
 endif
-
 
 all install::
 	@$(ECHO); $(ECHO)
@@ -50,3 +54,7 @@ all install::
 	fi
 	@$(ECHO); $(ECHO)
 	$(INSTALL_CHANGE) -m 444 $(srcdir)/floss-bsp.h $(PROJECT_INCLUDE)/bsp.h
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

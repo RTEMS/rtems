@@ -8,6 +8,14 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+top_builddir = .
+
+INSTALL = @INSTALL@
+
+RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
@@ -19,11 +27,6 @@ mandir = @mandir@/man$(manext)
 program_prefix = @program_prefix@
 
 export bindir
-
-RTEMS_ROOT = @top_srcdir@
-PROJECT_ROOT = @PROJECT_ROOT@
-
-INSTALL = @INSTALL@
 
 VPATH=@srcdir@
 
@@ -65,9 +68,6 @@ ACLOCAL_M4 = aclocal.m4
 $(ACLOCAL_M4): configure.in $(ACLOCAL_FILES)
 	-cd $(RTEMS_ROOT) && $(ACLOCAL)
 
-Makefile: Makefile.in config.status
-	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
 config.status: $(RTEMS_ROOT)/configure
 	$(SHELL) ./config.status --recheck
 
@@ -76,3 +76,6 @@ $(RTEMS_ROOT)/configure: $(RTEMS_ROOT)/configure.in $(ACLOCAL_M4)
 
 .PRECIOUS: $(ACLOCAL_M4) configure Makefile config.status
 
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status

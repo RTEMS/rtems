@@ -4,11 +4,17 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@
-RTEMS_ROOT = @top_srcdir@
-PROJECT_ROOT = @PROJECT_ROOT@
+top_srcdir = @top_srcdir@
+top_builddir = ../../../../../../..
+subdir = c/src/lib/libbsp/i386/pc386/start
 
 INSTALL = @INSTALL@
+
+RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+VPATH = @srcdir@
+
 RTEMS_GAS_CODE16 = @RTEMS_GAS_CODE16@
 
 PGMS=${ARCH}/start.o ${ARCH}/start16.bin
@@ -69,3 +75,7 @@ ${ARCH}/start16.bin: ${ARCH}/start16.o
 	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
 	  --oformat=elf32-i386 -o $(basename $@).obj $(basename $@).o
 	$(OBJCOPY) -O binary $(basename $@).obj $@
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

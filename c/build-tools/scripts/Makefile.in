@@ -8,15 +8,19 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@
-RTEMS_ROOT = @top_srcdir@
-PROJECT_ROOT = @PROJECT_ROOT@
+top_srcdir = @top_srcdir@
+top_builddir = ../../..
+subdir = c/build-tools/scripts
 
 INSTALL = @INSTALL@
 
+RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+VPATH = @srcdir@
+
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
-include $(RTEMS_ROOT)/make/rtems.cfg
 
 DESTDIR=$(PROJECT_RELEASE)/build-tools
 
@@ -36,3 +40,7 @@ $(INSTALLED_PGMS): $(PGMS)
 	$(INSTALL) $(INSTBINFLAGS) $^ $(DESTDIR)
 
 install:  $(DESTDIR) $(INSTALLED_PGMS)
+
+%: $(srcdir)/%.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

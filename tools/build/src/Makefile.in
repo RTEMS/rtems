@@ -4,6 +4,15 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+top_builddir = ../../..
+subdir = c/build-tools/src
+
+INSTALL = @INSTALL@
+
+RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
 exec_prefix = @exec_prefix@
 bindir = @bindir@
 libdir = @libdir@
@@ -16,10 +25,6 @@ mandir = @mandir@/man$(manext)
 EXEEXT=@EXEEXT@
 
 VPATH = @srcdir@
-RTEMS_ROOT = @top_srcdir@
-PROJECT_ROOT = @PROJECT_ROOT@
-
-INSTALL = @INSTALL@
 
 # we use host compiler in this directory
 USE_HOST_COMPILER=yes
@@ -70,3 +75,7 @@ $(DESTDIR):
 
 all:	$(ARCH) $(DESTDIR) $(SRCS) $(PGMS)
 	$(INSTALL) $(INSTBINFLAGS) $(PGMS) $(DESTDIR)
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

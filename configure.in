@@ -4,6 +4,7 @@ dnl  $Id$
 
 AC_PREREQ(2.12)
 AC_INIT(README)
+RTEMS_TOP(.)
 
 dnl Checks for programs.
 AC_PROG_MAKE_SET

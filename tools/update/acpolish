@@ -1,0 +1,159 @@
+#!/usr/bin/perl
+
+#
+# Perl script to beautify and enhance RTEMS autoconf Makefile.ins
+#
+# Reads from stdin and writes to stdout
+#
+# usage: 
+# acpolish <Makefile.in >Makefile.in~
+# mv Makefile.in~ Makefile.in
+#
+# ATTENTION: This file contains embedded tabs
+
+if ( -f "Makefile.am" )
+{
+  # Refuse to work on autoconfiscated Makefile.ins;
+  # redirecting STDOUT to Makefile.in will trash the Makefile.in ;-
+
+  die "acpolish must not be run in autoconfiscated directories" ;
+}
+
+
+my $build_pgms_seen = "" ;
+my $top_builddir = "";
+my $subdir = "";
+
+sub find_root
+{
+  $top_builddir = "." ;
+  $subdir="";
+  my $pwd = `pwd`; chomp $pwd;
+  $pwd .= "/" ;
+  my $len ;
+
+  if ( -f "configure.in" )  { return $top_builddir ; }
+  my $i = rindex($pwd,'/');
+
+  $len = $i;
+  $pwd = substr($pwd,0,$len);
+  $i = rindex($pwd,'/');
+  $subdir = substr($pwd,$i+1,$len - 1);
+  $top_builddir = ".." ;  
+
+  while( -d "$top_builddir" ) 
+  {
+    if ( -f "${top_builddir}/configure.in" )  
+    { 
+      return $top_builddir ; 
+    }
+    $len=$i;
+    $pwd = substr($pwd,0,$len);
+    $i = rindex($pwd,'/');
+    $subdir = substr($pwd,$i+1,$len - 1) . "/$subdir";
+    $top_builddir .= "/.." ;  
+  } ;
+  die "Can't find configure.in\n" ;
+}
+
+find_root();
+
+my $nl_seen = 0 ;
+
+while( <> )
+{ 
+  if ( /^[ 	]*$/o )
+  {
+    $nl_seen = $nl_seen+1;
+  }
+
+  if ( /^[ 	]*srcdir[ 	]*=.*$/o ) 
+  {
+    print "\@SET_MAKE\@\n" ;
+    print "$_" ;
+    print "top_srcdir = \@top_srcdir\@\n" ; 
+    print "top_builddir = $top_builddir\n" ;
+    print "subdir = $subdir\n" if "$subdir" ;
+    print "\nINSTALL = \@INSTALL\@\n\n";
+    print "RTEMS_ROOT = \$(top_srcdir)/\@RTEMS_TOPdir\@\n" ;
+    print "PROJECT_ROOT = \@PROJECT_ROOT\@\n\n" ;
+    $nl_seen=1;
+  }
+  elsif ( /^[ 	]*top_srcdir[ 	]*=.*$/o )
+  {
+    # remove the line 
+  }
+  elsif ( /^[ 	]*top_builddir[ 	]*=.*$/o )
+  {
+    # remove the line
+  }
+  elsif ( /^[ 	]*Makefile:.*/o )
+  { # consume the block
+    while( <> ) { last if /^[ 	]*$/o ; }
+  }
+  elsif ( /^[ 	]*%:[ 	]\$\(srcdir\)\/%\.in.*$/o )
+  { # consume the block
+    while( <> ) { last if /^[ 	]*$/o ; }
+  }
+  elsif ( /^[ 	]*RTEMS_ROOT[ 	]*=.*$/o )
+  {
+    # remove the line
+  }
+  elsif ( /^[ 	]*PROJECT_ROOT[ 	]*=.*$/o )
+  {
+    # remove the line
+  }
+  elsif ( /^[ 	]*INSTALL[ 	]*=[ 	]*\@INSTALL\@.*$/o )
+  {
+    # remove the line
+  }
+  elsif ( /^[ 	]*subdir[ 	]*=.*$/o )
+  {
+    # remove the line
+  }
+  elsif ( /^[ 	]*\@SET_MAKE\@.*$/o )
+  {
+    # remove the line
+  }
+  elsif ( /^include[ 	]*.*rtems\.cfg.*$/o )
+  {
+    # remove the line
+  }
+  elsif ( /^[ 	]*BUILD_PGMS.*=.*$/o )
+  {
+    $build_pgms_seen = "true" ;
+    print "$_" ;
+    $nl_seen=0;
+  }
+  elsif ( /^[ 	]*$/o )
+  {
+    print "$_" if $nl_seen < 2 ;
+  }
+  else
+  {
+    print "$_" ;
+    $nl_seen = 0;
+  }
+} # while
+
+print "\n" if $nl_seen < 1 ;
+
+# Add rules for config.status generated files
+if ( "$build_pgms_seen" )
+{
+print "%: \$(srcdir)/%.in \$(top_builddir)/config.status\n" ;
+print "	cd \$(top_builddir) \\\n" ;
+print "	 && CONFIG_FILES=" ;
+print "\$(subdir)/" if ( "$subdir" );
+print "\$@ CONFIG_HEADERS= \$(SHELL) ./config.status\n";
+}
+else
+{
+print "Makefile: \$(srcdir)/Makefile.in \$(top_builddir)/config.status\n" ;
+print "	cd \$(top_builddir) \\\n" ;
+print "	 && CONFIG_FILES=" ;
+print "\$(subdir)/" if ( "$subdir" );
+print "\$@ CONFIG_HEADERS= \$(SHELL) ./config.status\n";
+}
+
+;1
