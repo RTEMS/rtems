@@ -1,3 +1,8 @@
+2005-02-12	Joel Sherrill <joel@OARcorp.com>
+
+	* pci/pci.h: Remove contents that are duplicates of the pci.h in cpukit
+	and include rtems/pci.h for the base set of PCI functionality.
+
 2005-01-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* tod/todcfg.c: size_t RTC_Count.
