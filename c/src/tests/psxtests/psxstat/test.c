@@ -655,7 +655,7 @@ void Cause_faults()
   status = mount(
      &mt_entry,
      &IMFS_ops,
-     "RW",
+     RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      "/dir1/my_mount_point" );
   assert( status == 0 );
