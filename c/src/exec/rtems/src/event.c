@@ -24,6 +24,26 @@
 
 /*PAGE
  *
+ *  _Event_Manager_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
+ 
+void _Event_Manager_initialization( void )
+{
+  _Event_Sync_state = EVENT_SYNC_SYNCHRONIZED;
+ 
+  /*
+   *  Register the MP Process Packet routine.
+   */
+ 
+  _MPCI_Register_packet_processor( MP_PACKET_EVENT, _Event_MP_Process_packet );
+}
+
+/*PAGE
+ *
  *  rtems_event_send
  *
  *  This directive allows a thread send an event set to another thread.

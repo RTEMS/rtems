@@ -170,6 +170,8 @@ rtems_status_code rtems_semaphore_create(
 
     /* Add priority ceiling code here ????? */
 
+    the_mutex_attributes.priority_ceiling = priority_ceiling;
+
     if ( count == 1 )
       lock = CORE_MUTEX_UNLOCKED;
     else
@@ -188,6 +190,13 @@ rtems_status_code rtems_semaphore_create(
       the_semaphore_attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_PRIORITY;
     else
       the_semaphore_attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
+
+    /*
+     *  The following are just to make Purify happy.
+     */
+
+    the_mutex_attributes.allow_nesting = TRUE;
+    the_mutex_attributes.priority_ceiling = PRIORITY_MINIMUM;
 
     _CORE_semaphore_Initialize(
       &the_semaphore->Core_control.semaphore,
