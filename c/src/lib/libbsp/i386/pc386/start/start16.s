@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------+
-| start16hi.s v1.0 - PC386 BSP - 1998/04/13
+| start16.s v1.0 - PC386 BSP - 1998/04/13
 +--------------------------------------------------------------------------+
 | This file contains the entry point for the application.
 | The name of this entry point is compiler dependent.
@@ -27,8 +27,11 @@
 +----------------------------------------------------------------------------*/
 
 .set PROT_CODE_SEG, 0x08	# offset of code segment descriptor into GDT
+.set PROT_DATA_SEG, 0x10	# offset of code segment descriptor into GDT
 .set CR0_PE,        1		# protected mode flag on CR0 register
-.set START32,       START32ADDR # address of protected mode code
+.set HDRSTART,      HEADERADDR	# address of start of bin2boot header
+.set HDROFF,        0x24	# offset into bin2boot header of start32 addr
+.set STACKOFF,      0x200-0x10  # offset to load into %esp, from start of image
 
 /*----------------------------------------------------------------------------+
 | A Descriptor table register has the following format:	
@@ -48,6 +51,20 @@
 	.globl start16
 start16:
 _start16:
+
+.code16
+
+	cli			# DISABLE INTERRUPTS!!!
+
+	movw	%cs, %ax	#
+	movw	%ax, %ds	# set the rest of real mode registers
+	movw	%ax, %es	#
+	movw	%ax, %ss	#
+
+.code32
+
+        movl    $STACKOFF, %esp # set stack pointer
+        movl    $STACKOFF, %ebp #
 
 .code16
 
@@ -72,29 +89,34 @@ _start16:
 
 #endif /* RTEMS_VIDEO_80x50 */
 
-        cli			# DISABLE INTERRUPTS!!!
-
 	/*---------------------------------------------------------------------+
 	| Bare PC machines boot in real mode! We have to turn protected mode on.
 	+---------------------------------------------------------------------*/
 
-	movl	$gdtptr, %eax
-	andl	$0x0000ffff, %eax	# get offset into segment
-	lgdt	%cs:(%eax)		# load Global Descriptor Table
-	movl	$idtptr, %eax
-	andl	$0x0000ffff, %eax	# get offset into segment
-	lidt	%cs:(%eax)		# load Interrupt Descriptor Table
+	lgdt	gdtptr - start16	# load Global Descriptor Table
+	lidt	idtptr - start16	# load Interrupt Descriptor Table
 	
 	movl	%cr0, %eax
 	orl	$CR0_PE, %eax
 	movl	%eax, %cr0		# turn on protected mode
-
-	ljmp	$PROT_CODE_SEG, $1f	# flush prefetch queue
+	
+	ljmp	$PROT_CODE_SEG, $1f	# flush prefetch queue, and reload %cs
 1:
 
 .code32
 
-        /*---------------------------------------------------------------------+        | we have to enable A20 in order to access memory above 1MByte
+        /*---------------------------------------------------------------------+
+        | load the other segment registers
+        +---------------------------------------------------------------------*/
+	movl	$PROT_DATA_SEG, %eax
+	movl	%ax, %ds
+	movl	%ax, %es
+	movl	%ax, %ss
+	addl	$start16, %esp		# fix up stack pointer
+	addl	$start16, %ebp		# fix up stack pointer
+
+        /*---------------------------------------------------------------------+
+        | we have to enable A20 in order to access memory above 1MByte
         +---------------------------------------------------------------------*/
 	call	empty_8042
 	movb	$0xD1, %al		# command write
@@ -104,7 +126,9 @@ _start16:
 	outb	%al, $0x60
 	call	empty_8042
 
-	ljmp	$PROT_CODE_SEG, $START32	# jump to start of 32 bit code
+	movl	%cs:HDRSTART + HDROFF, %eax	#
+	pushl	%eax				# jump to start of 32 bit code
+	ret					#
 
 /*----------------------------------------------------------------------------+
 | delay

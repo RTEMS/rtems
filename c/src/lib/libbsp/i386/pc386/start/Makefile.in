@@ -60,7 +60,7 @@ LINKCMDS=$(srcdir)/../startup/linkcmds
 
 ${ARCH}/start16.o: start16.s
 	sed -e 's/\/\/.*$$//' < $< | $(CPP) $(ASMFLAGS) -I. -I$(srcdir) \
-	  -DASM -DSTART32ADDR=$(RELOCADDR) - > $*.i
+	  -DASM -DHEADERADDR=$(HEADERADDR) - > $*.i
 	$(AS) $(ASFLAGS) -o $@ $*.i
 
 ${ARCH}/start16.bin: ${ARCH}/start16.o
