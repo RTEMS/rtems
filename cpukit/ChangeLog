@@ -1,3 +1,7 @@
+2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libmisc/untar/untar.c (_rtems_octal2ulong): Replace.
+
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* ftpd/Makefile.am: Split preinstallation rules in to separate

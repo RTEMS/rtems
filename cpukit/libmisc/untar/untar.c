@@ -70,18 +70,15 @@ _rtems_octal2ulong(const char *octascii, size_t len)
 {
    size_t        i;
    unsigned long num;
-   unsigned long mult;
 
    num = 0;
-   mult = 1;
-   for (i=len-1; i>=0; i--)
+   for (i=0; i < len; i++)
    {
       if ((octascii[i] < '0') || (octascii[i] > '9'))
       {
          continue;
       }
-      num  += mult*((unsigned long)(octascii[i] - '0'));
-      mult *= 8;
+      num  = num * 8 + ((unsigned long)(octascii[i] - '0'));
    }
    return(num);
 }
