@@ -29,7 +29,7 @@ i960:
 	i960-rtemscoff		COFF
 	i960-rtemself		ELF		Not currently in any tools
 
-	NOTE: i960-elf is in post binutils 2.9.1 snapshots.
+	NOTE: As of October 2002, i960 has been deprecated in gdb and gcc.
 
 m68k:
 	m68k-rtems		COFF		Switch to ELF when possible

@@ -1,3 +1,9 @@
+2002-11-07	Joel Sherrill <joel@OARcorp.com>
+
+	* TOOL_TARGETS: Updated.
+	* PROBLEMS, README, REQUIRES, TESTED, UPDATE_HELP: Removed
+	since they were obsolete.
+
 2002-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkinstalldirs instead of mkdir.
