@@ -34,6 +34,7 @@ extern "C" {
  *    i486dx
  *    i486sx
  *    pentium
+ *    pentiumpro
  *
  *  CPU Model Feature Flags:
  *
@@ -68,6 +69,10 @@ extern "C" {
 #elif defined(pentium)
 
 #define CPU_MODEL_NAME  "Pentium"
+
+#elif defined(pentiumpro)
+
+#define CPU_MODEL_NAME  "Pentium Pro"
 
 #else
 
