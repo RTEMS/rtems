@@ -1,4 +1,10 @@
 2001-02-01	Joel Sherrill <joel@OARcorp.com>
 
+	* rtems.ads, rtems.adb: Formatting cleaned up.  Task based timer
+	directives added.  This is Timer_Initiate_Server, 
+	Timer_Server_Fire_After, and Timer_Server_Fire_When. 
+
+2001-02-01	Joel Sherrill <joel@OARcorp.com>
+
 	* ChangeLog: New file.
 

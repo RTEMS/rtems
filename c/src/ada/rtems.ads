@@ -25,6 +25,7 @@ with Interfaces;
 with Interfaces.C;
 
 package RTEMS is
+pragma Elaborate_Body (RTEMS);
 
    Structure_Alignment : constant := 8;
 
@@ -35,10 +36,12 @@ package RTEMS is
    subtype Unsigned8  is Interfaces.Unsigned_8;
    subtype Unsigned16 is Interfaces.Unsigned_16;
    subtype Unsigned32 is Interfaces.Unsigned_32;
+   subtype Signed32   is Interfaces.Integer_32;
 
    type Unsigned32_Pointer     is access all RTEMS.Unsigned32;
    type Unsigned16_Pointer     is access all RTEMS.Unsigned16;
    type Unsigned8_Pointer      is access all RTEMS.Unsigned8;
+   type Signed32_Pointer       is access all RTEMS.Signed32;
 
    subtype Boolean             is RTEMS.Unsigned32;
    subtype Address             is System.Address;
@@ -235,7 +238,6 @@ package RTEMS is
       Level : in     RTEMS.Unsigned32
    ) return RTEMS.Attribute;
    pragma Import (C, Interrupt_Level, "rtems_interrupt_level_attribute");
-   
 
    Minimum_Stack_Size : RTEMS.Unsigned32;
    pragma Import (C, Minimum_Stack_Size, "rtems_minimum_stack_size");
@@ -697,19 +699,18 @@ package RTEMS is
 
    type Configuration_Table is
       record
-          Work_Space_Start             : RTEMS.Address;
-          Work_Space_Size              : RTEMS.Unsigned32;
-          Maximum_Extensions           : RTEMS.Unsigned32;
-          Microseconds_Per_Tick        : RTEMS.Unsigned32;
-          Ticks_Per_Timeslice          : RTEMS.Unsigned32;
-          Maximum_Devices              : RTEMS.Unsigned32;
-          Number_Of_Device_Drivers     : RTEMS.Unsigned32;
-          Device_Driver_Table          : RTEMS.Driver_Address_Table_Pointer;
-          Number_Of_Initial_Extensions : RTEMS.Unsigned32;
-          User_Extension_Table         : RTEMS.Extensions_Table_Pointer;
-          User_Multiprocessing_Table   : RTEMS.Multiprocessing_Table_Pointer;
-          RTEMS_API_Configuration      : RTEMS.API_Configuration_Table_Pointer;
-          POSIX_API_Configuration      : RTEMS.POSIX_API_Configuration_Table_Pointer;
+          Work_Space_Start           : RTEMS.Address;
+          Work_Space_Size            : RTEMS.Unsigned32;
+          Maximum_Extensions         : RTEMS.Unsigned32;
+          Microseconds_Per_Tick      : RTEMS.Unsigned32;
+          Ticks_Per_Timeslice        : RTEMS.Unsigned32;
+          Maximum_Devices            : RTEMS.Unsigned32;
+          Number_Of_Device_Drivers   : RTEMS.Unsigned32;
+          Device_Driver_Table        : RTEMS.Driver_Address_Table_Pointer;
+          User_Extension_Table       : RTEMS.Extensions_Table_Pointer;
+          User_Multiprocessing_Table : RTEMS.Multiprocessing_Table_Pointer;
+          RTEMS_API_Configuration    : RTEMS.API_Configuration_Table_Pointer;
+          POSIX_API_Configuration    : RTEMS.POSIX_API_Configuration_Table_Pointer;
       end record;
 
    type Configuration_Table_Pointer is access all Configuration_Table;
@@ -864,11 +865,6 @@ package RTEMS is
       Result :    out RTEMS.Status_Codes
    );
 
-   procedure Task_Is_Suspended (
-      ID     : in     RTEMS.ID;
-      Result :    out RTEMS.Status_Codes
-   );
-
    procedure Task_Set_Priority (
       ID           : in     RTEMS.ID;
       New_Priority : in     RTEMS.Task_Priority;
@@ -918,19 +914,26 @@ package RTEMS is
       Result          :    out RTEMS.Status_Codes
    );
 
-   function Interrupt_Disable
-   return RTEMS.ISR_Level;
+   function Interrupt_Disable return RTEMS.ISR_Level;
+   pragma Interface (C, Interrupt_Disable);
+   pragma Interface_Name (Interrupt_Disable, "rtems_interrupt_disable");
 
    procedure Interrupt_Enable (
       Level : in     RTEMS.ISR_Level
    );
+   pragma Interface (C, Interrupt_Enable);
+   pragma Interface_Name (Interrupt_Enable, "rtems_interrupt_enable");
 
    procedure Interrupt_Flash (
       Level : in     RTEMS.ISR_Level
    );
+   pragma Interface (C, Interrupt_Flash);
+   pragma Interface_Name (Interrupt_Flash, "rtems_interrupt_flash");
 
-   function Interrupt_Is_In_Progress
-   return RTEMS.Boolean;
+   function Interrupt_Is_In_Progress return RTEMS.Boolean;
+   pragma Interface (C, Interrupt_Is_In_Progress);
+   pragma Interface_Name
+     (Interrupt_Is_In_Progress, "rtems_interrupt_is_in_progress");
 
    --
    --  Clock Manager
@@ -1003,7 +1006,23 @@ package RTEMS is
       Result    :    out RTEMS.Status_Codes
    );
 
+   procedure Timer_Server_Fire_After (
+      ID        : in     RTEMS.ID;
+      Ticks     : in     RTEMS.Interval;
+      Routine   : in     RTEMS.Timer_Service_Routine;
+      User_Data : in     RTEMS.Address;
+      Result    :    out RTEMS.Status_Codes
+   );
+
    procedure Timer_Fire_When (
+      ID        : in     RTEMS.ID;
+      Wall_Time : in     RTEMS.Time_Of_Day;
+      Routine   : in     RTEMS.Timer_Service_Routine;
+      User_Data : in     RTEMS.Address;
+      Result    :    out RTEMS.Status_Codes
+   );
+
+   procedure Timer_Server_Fire_When (
       ID        : in     RTEMS.ID;
       Wall_Time : in     RTEMS.Time_Of_Day;
       Routine   : in     RTEMS.Timer_Service_Routine;
@@ -1019,6 +1038,13 @@ package RTEMS is
    procedure Timer_Cancel (
       ID     : in     RTEMS.ID;
       Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Timer_Initiate_Server (
+      Server_Priority : in     RTEMS.Task_Priority;
+      Stack_Size      : in     Unsigned32;
+      Attribute_Set   : in     RTEMS.Attribute;
+      Result          :    out RTEMS.Status_Codes
    );
 
    --
@@ -1058,10 +1084,6 @@ package RTEMS is
       Result :    out RTEMS.Status_Codes
    );
 
-   procedure Semaphore_Flush (
-      ID     : in     RTEMS.ID;
-      Result :    out RTEMS.Status_Codes
-   );
 
    --
    --  Message Queue Manager
@@ -1401,12 +1423,6 @@ package RTEMS is
       Result  :    out RTEMS.Status_Codes
    );
 
-   --
-   --  Multiprocessing Manager
-   --
-
-   procedure Multiprocessing_Announce;
-
 
    --
    --  Debug Manager
@@ -1434,6 +1450,4 @@ package RTEMS is
   Configuration : RTEMS.Configuration_Table_Pointer;
   pragma Import (C, Configuration, "_Configuration_Table");
 
-
-private
 end RTEMS;
