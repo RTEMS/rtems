@@ -14,11 +14,11 @@ include_rtems_HEADERS =
 
 EXTRA_LIBRARIES = libimfs.a
 CLEANFILES = libimfs.a
-libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_OPTIMIZE_V)
+libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libimfs_g.a
 CLEANFILES += libimfs_g.a
-libimfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_DEBUG_V)
+libimfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 UNUSED_FILES = src/imfs/imfs_load_tar.c
 
@@ -53,11 +53,11 @@ IMFSLIB = libimfs$(LIB_VARIANT).a
 if !UNIX
 EXTRA_LIBRARIES += libdosfs.a
 CLEANFILES += libdosfs.a
-libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_OPTIMIZE_V)
+libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libdosfs_g.a
 CLEANFILES += libdosfs_g.a
-libdosfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_DEBUG_V)
+libdosfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 # libdosfs_FATFS_C_FILES
 libdosfs_a_SOURCES = src/dosfs/fat.c src/dosfs/fat.h \

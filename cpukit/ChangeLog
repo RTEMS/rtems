@@ -1,3 +1,8 @@
+2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libblock/Makefile.am: Remove LIBC_DEFINES (Unsupported).
+	* libfs/Makefile.am: Remove LIBC_DEFINES (Unsupported).
+
 2004-04-08	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libcsupport/Makefile.am: Install sys/ioccom.h for NEWLIB only.

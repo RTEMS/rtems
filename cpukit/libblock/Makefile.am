@@ -11,11 +11,11 @@ include_rtemsdir = $(includedir)/rtems
 
 EXTRA_LIBRARIES = libblock.a
 CLEANFILES = libblock.a
-libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_OPTIMIZE_V)
+libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libblock_g.a
 CLEANFILES += libblock_g.a
-libblock_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_DEBUG_V)
+libblock_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 include_rtems_HEADERS = include/rtems/bdbuf.h include/rtems/blkdev.h \
     include/rtems/diskdevs.h include/rtems/ramdisk.h \
