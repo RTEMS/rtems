@@ -17,7 +17,7 @@ VPATH = @srcdir@
 # C_PIECES=aio cancel devctl intr utsname
 
 # These are really in the stand but not really functional
-BUILD_FOR_NOW_C_PIECES = aio utsname
+BUILD_FOR_NOW_C_PIECES = aio
 
 ENOSYS_C_PIECES = execl execle execlp execv execve execvp fork pthreadatfork \
     wait waitpid
@@ -74,7 +74,8 @@ SEMAPHORE_C_PIECES= semaphore semaphorecreatesupp semaphoredeletesupp \
 
 TIME_C_PIECES= time posixtimespecsubtract posixtimespectointerval \
     posixintervaltotimespec clockgetcpuclockid clockgetenableattr \
-    clockgetres clockgettime clocksetenableattr clocksettime nanosleep
+    clockgetres clockgettime clocksetenableattr clocksettime nanosleep \
+    sleep
 
 # the timer manager needs to be split further but only after its
 # dependence on the Classic API Timer Manager is removed.
@@ -83,9 +84,9 @@ TIMER_C_PIECES=ptimer ptimer1
 C_PIECES = adasupp $(CANCEL_C_PIECES) $(CONDITION_VARIABLE_C_PIECES) \
     $(ID_C_PIECES) $(KEY_C_PIECES) $(MESSAGE_QUEUE_C_PIECES) \
     $(MUTEX_C_PIECES) $(PTHREAD_C_PIECES) \
-    $(PSIGNAL_C_PIECES) sched $(SEMAPHORE_C_PIECES) sleep sysconf \
+    $(PSIGNAL_C_PIECES) sched $(SEMAPHORE_C_PIECES) sysconf \
     $(TIME_C_PIECES) $(TIMER_C_PIECES) types $(ENOSYS_C_PIECES) \
-    $(BUILD_FOR_NOW_C_PIECES)
+    $(BUILD_FOR_NOW_C_PIECES) utsname
 
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
