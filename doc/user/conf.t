@@ -576,7 +576,6 @@ typedef struct @{
   rtems_task_restart_extension     thread_restart;
   rtems_task_delete_extension      thread_delete;
   rtems_task_switch_extension      thread_switch;
-  rtems_task_post_switch_extension thread_post_switch;
   rtems_task_begin_extension       thread_begin;
   rtems_task_exitted_extension     thread_exitted;
   rtems_fatal_extension            fatal;
@@ -641,12 +640,6 @@ provided.  As this routine is invoked after saving the current
 task's context and before restoring the heir task's context, it
 is not necessary for this routine to save and restore any
 registers.
-
-@item thread_post_switch
-is the address of the
-user-supplied subroutine for the post task context switch
-extension.  This subroutine is called from RTEMS dispatcher in
-the context of the task which has just been swapped in.
 
 @item thread_begin
 is the address of the user-supplied
