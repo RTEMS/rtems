@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include <rtems/cpuuse.h>
 
@@ -74,13 +75,21 @@ void CPU_usage_Dump( void )
         if ( !the_thread )
           continue;
 
-        u32_name = *(unsigned32 *)the_thread->Object.name;
+        if ( information->is_string )
+          u32_name = *(unsigned32 *)the_thread->Object.name;
+        else
+          u32_name = (unsigned32)the_thread->Object.name;
 
         name[ 0 ] = (u32_name >> 24) & 0xff;
         name[ 1 ] = (u32_name >> 16) & 0xff;
         name[ 2 ] = (u32_name >>  8) & 0xff;
         name[ 3 ] = (u32_name >>  0) & 0xff;
         name[ 4 ] = '\0';
+
+        if ( !isprint(name[0]) ) name[0] = '*';
+        if ( !isprint(name[1]) ) name[1] = '*';
+        if ( !isprint(name[2]) ) name[2] = '*';
+        if ( !isprint(name[3]) ) name[3] = '*';
 
 #if defined(unix) || ( CPU_HARDWARE_FP == TRUE )
         printf( "0x%08x   %4s    %8d     %5.3f\n",
