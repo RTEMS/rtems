@@ -445,7 +445,8 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
   register unsigned msr;
   register unsigned new_msr;
-  register unsigned mainCause[2], selectCause;
+  unsigned mainCause[2];
+  register unsigned selectCause;
   register unsigned oldMask[2]={0,0};
   unsigned i, regNum, irq, bitNum, startIrqNum=0;
 

@@ -1,3 +1,7 @@
+2005-01-26	Joel Sherrill <joel@OARcorp.com>
+
+	* irq/irq.c, startup/bspstart.c: Now compiles with gcc 4.x.
+
 2005-01-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* tod/todcfg.c: size_t RTC_Count.

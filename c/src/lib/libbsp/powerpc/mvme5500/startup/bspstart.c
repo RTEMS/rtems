@@ -339,7 +339,8 @@ void bsp_start( void )
 #ifdef SHOW_LCR3_REGISTER
   unsigned l3cr;
 #endif
-  register unsigned char* intrStack;
+  register uint32_t  intrStack;
+  register uint32_t *intrStackPtr;
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
@@ -388,15 +389,18 @@ void bsp_start( void )
    * This could be done latter (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  intrStack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+  intrStack = ((uint32_t) __rtems_end) + 
+          INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
-  (uint32_t)intrStack &= ~(CPU_STACK_ALIGNMENT-1);
+  intrStack &= ~(CPU_STACK_ALIGNMENT-1);
 
   /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((uint32_t *)intrStack) = 0;
+  intrStackPtr = (uint32_t*) intrStack;
+  *intrStackPtr = 0;
 
-  _write_SPRG1((unsigned int)intrStack);
+  _write_SPRG1(intrStack);
+
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
   /*
