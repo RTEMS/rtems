@@ -4,7 +4,7 @@ dnl
 dnl Check for target gcc
 dnl
 
-AC_DEFUN(RTEMS_PROG_CC,
+AC_DEFUN([RTEMS_PROG_CC],
 [
 AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_BEFORE([$0], [AC_PROG_CC])dnl
@@ -22,7 +22,7 @@ AC_PROG_CPP
 AM_CONDITIONAL(RTEMS_USE_GCC,test x"$GCC" = x"yes")
 ])
 
-AC_DEFUN(RTEMS_PROG_CC_FOR_TARGET,
+AC_DEFUN([RTEMS_PROG_CC_FOR_TARGET],
 [
 dnl check target cc
 RTEMS_PROG_CC

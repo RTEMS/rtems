@@ -12,7 +12,7 @@ AS_IF([test "$enable_multiprocessing" = "yes"],
   [HAS_MP="no"])
 ])
 
-AC_DEFUN(RTEMS_DEFINE_MULTIPROCESSING,
+AC_DEFUN([RTEMS_DEFINE_MULTIPROCESSING],
 [AC_REQUIRE([RTEMS_CHECK_MULTIPROCESSING])dnl
 if test x"${HAS_MP}" = x"yes";
 then

@@ -1,3 +1,18 @@
+2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/canonicalize-tools.m4, aclocal/check-itron.m4,
+	aclocal/check-multiprocessing.m4, aclocal/check-newlib.m4,
+	aclocal/check-posix.m4, aclocal/check-rtems-debug.m4,
+	aclocal/check-tool.m4, aclocal/enable-bare.m4,
+	aclocal/enable-inlines.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4, aclocal/enable-rtems-debug.m4,
+	aclocal/env-rtemscpu.m4, aclocal/gcc-isystem.m4,
+	aclocal/gcc-pipe.m4, aclocal/multi.m4,
+	aclocal/multilib.m4, aclocal/prog-cc.m4,
+	aclocal/rtems-top.m4, aclocal/sysv-ipc.m4:
+	Fix underquoting to silence automake-1.8.
+
 2003-11-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use RTEMS_INLINES instead of USE_INLINES.

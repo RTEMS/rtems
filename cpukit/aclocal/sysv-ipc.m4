@@ -16,7 +16,7 @@ dnl All of the calls use IPC_PRIVATE, so tests will not unintentionally
 dnl modify any existing key sets.  See the man pages for semget, shmget, 
 dnl msgget, semctl, shmctl and msgctl for details.
 
-AC_DEFUN(RTEMS_UNION_SEMUN,
+AC_DEFUN([RTEMS_UNION_SEMUN],
 [
 AC_CACHE_CHECK([whether $host defines union semun],
   rtems_cv_HAS_UNION_SEMUN,
@@ -30,7 +30,7 @@ if test "$rtems_cv_HAS_UNION_SEMUN" = "yes"; then
 fi
 ])
 
-AC_DEFUN(RTEMS_SYSV_SEM,
+AC_DEFUN([RTEMS_SYSV_SEM],
 [AC_REQUIRE([AC_PROG_CC]) 
 AC_CACHE_CHECK(whether $host supports System V semaphores,
 rtems_cv_sysv_sem,
@@ -61,7 +61,7 @@ int main () {
 ])
 ])
 
-AC_DEFUN(RTEMS_SYSV_SHM,
+AC_DEFUN([RTEMS_SYSV_SHM],
 [AC_REQUIRE([AC_PROG_CC]) 
 # AC_REQUIRE([RTEMS_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $host supports System V shared memory,
@@ -83,7 +83,7 @@ int main () {
 ])
 ])
 
-AC_DEFUN(RTEMS_SYSV_MSG,
+AC_DEFUN([RTEMS_SYSV_MSG],
 [AC_REQUIRE([AC_PROG_CC]) 
 # AC_REQUIRE([RTEMS_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $host supports System V messages,
@@ -105,7 +105,7 @@ int main () {
 ])
 ])
 
-AC_DEFUN(RTEMS_CHECK_SYSV_UNIX,
+AC_DEFUN([RTEMS_CHECK_SYSV_UNIX],
 [# AC_REQUIRE([RTEMS_CANONICAL_HOST])
 if test "$RTEMS_CPU" = "unix" ; then
   RTEMS_UNION_SEMUN

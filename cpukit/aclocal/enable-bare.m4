@@ -1,4 +1,4 @@
-AC_DEFUN(RTEMS_ENABLE_BARE,
+AC_DEFUN([RTEMS_ENABLE_BARE],
 [
 AC_ARG_ENABLE(bare-cpu-cflags,
 AC_HELP_STRING([--enable-bare-cpu-cflags],[specify a particular cpu cflag (bare bsp specific)]),
