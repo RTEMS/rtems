@@ -1,5 +1,6 @@
 2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
 
+	PR 617/bsps
 	PR 581/bsps
 	* Makefile.am, bsp_specs, configure.ac, include/bsp.h, include/tm27.h,
 	start/start.S, startup/bspstart.c, startup/linkcmds,
