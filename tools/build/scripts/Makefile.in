@@ -16,8 +16,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 
 DESTDIR=$(PROJECT_RELEASE)/build-tools
 
-PGMS=hackspecs.awk install-if-change rcs-clean \
-     lock-directory unlock-directory rtems-glom
+PGMS=install-if-change rcs-clean lock-directory unlock-directory rtems-glom
 
 INSTALLED=$(PGMS:%=$(DESTDIR)/%)
 
