@@ -68,6 +68,9 @@ extern rtems_configuration_table BSP_Configuration;
 /* functions */
 
 unsigned32 get_CPU_clock_speed(void);
+unsigned const char *uC5282_gethwaddr(int a);
+char *uC5282_getbenv(const char *a);
+
 void bsp_cleanup(void);
 
 m68k_isr_entry set_vector(

@@ -26,6 +26,7 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <string.h>
+#include <errno.h>
  
 /*
  *  The original table from the application and our copy of it with
@@ -250,3 +251,33 @@ unsigned32 get_CPU_clock_speed(void)
     extern char _CPUClockSpeed[];
     return( (unsigned32)_CPUClockSpeed);
 }
+
+/*
+ * Arcturus routines for getting value from bootloader
+ */
+#define __bsc_return(type, res) \
+do { \
+   if ((unsigned long)(res) >= (unsigned long)(-64)) { \
+      errno = -(res); \
+      res = -1; \
+   } \
+   return (type)(res); \
+} while (0)
+#define _bsc1(type,name,atype,a) \
+type uC5282_##name(atype a) \
+{ \
+   long __res; \
+   register long __a __asm__ ("%d1") = (long)a; \
+   __asm__ __volatile__ ("move.l %0,%%d0\n\t"   \
+                         "trap #2\n\t"          \
+                         "move.l %%d0,%0"       \
+                         : "=d" (__res)         \
+                         : "0" (__BN_##name), "d" (__a) \
+                         : "d0" ); \
+   __bsc_return(type,__res); \
+}
+#define __BN_gethwaddr    12 /* get the hardware address of my interfaces */
+#define __BN_getbenv      14 /* get a bootloader envvar */
+#define __BN_setbenv      15 /* get a bootloader envvar */
+_bsc1(unsigned const char *, gethwaddr, int, a)
+_bsc1(char *, getbenv, const char *, a)

@@ -1,5 +1,10 @@
 2005-02-01  Eric Norum <norume@aps.anl.gov>
 
+	* include/bsp.h, network/network.c, startup/bspstart.c: Add some
+	  bootprom system calls.
+
+2005-02-01  Eric Norum <norume@aps.anl.gov>
+
 	* start/start.S, network/network.c: Place FEC buffer descriptors in SRAM.
 	  No longer need to worry about buffer descriptor caching.
 

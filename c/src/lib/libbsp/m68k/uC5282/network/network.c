@@ -139,22 +139,6 @@ mcf5282_bd_allocate(unsigned int count)
     return p;
 }
 
-/*
- * Retrieve MAC address from bootloader environment variable area.
- * Parameter is interface number (0 or 1).
- */
-static unsigned char *
-gethwaddr(int a)
-{
-   register long __res __asm__ ("%d2") = 12;
-   register long __a __asm__ ("%d1") = (long)a;
-   __asm__ __volatile__ ("trap #2" \
-                         : "=g" (__res) \
-                         : "0" (__res), "d" (__a) \
-                         : "%d0");
-   return (unsigned char *)(__res);
-}
-
 static void
 mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
 {
@@ -794,7 +778,7 @@ rtems_fec_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching )
     if (config->hardware_address)
         hwaddr = config->hardware_address;
     else
-        hwaddr = gethwaddr(unitNumber - 1);
+        hwaddr = uC5282_gethwaddr(unitNumber - 1);
     printf("%s%d: Ethernet address: %02x:%02x:%02x:%02x:%02x:%02x\n",
                                             unitName, unitNumber,
                                             hwaddr[0], hwaddr[1], hwaddr[2],
