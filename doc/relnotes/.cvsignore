@@ -1,0 +1,17 @@
+relnotes*.html
+Makefile.in
+Makefile
+relnotes
+relnotes.log
+relnotes.dvi
+relnotes.aux
+relnotes.cp
+relnotes.fn
+relnotes.vr
+relnotes.tp
+relnotes.ky
+relnotes.pg
+relnotes.toc
+index.html
+relnotes.pdf
+relnotes.ps

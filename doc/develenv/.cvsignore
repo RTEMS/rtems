@@ -1,0 +1,17 @@
+develenv*.html
+Makefile.in
+Makefile
+develenv
+develenv.log
+develenv.dvi
+develenv.aux
+develenv.cp
+develenv.fn
+develenv.vr
+develenv.tp
+develenv.ky
+develenv.pg
+develenv.toc
+index.html
+develenv.pdf
+develenv.ps
