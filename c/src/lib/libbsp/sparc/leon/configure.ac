@@ -13,6 +13,7 @@ RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
+RTEMS_PROG_CCAS
 
 RTEMS_CHECK_NETWORKING
 
@@ -37,12 +38,5 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
  the wall time required to execute the RTEMS test suites.])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-leon_open_eth/Makefile
-gnatsupp/Makefile
-startup/Makefile
-timer/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
