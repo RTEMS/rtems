@@ -61,6 +61,12 @@
  *    error code        - if unsuccessful
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
+#define SEMAPHORE_MP_WAS_DELETED       _Semaphore_MP_Send_object_was_deleted
+#else
+#define SEMAPHORE_MP_OBJECT_WAS_DELETED NULL
+#endif
+
 rtems_status_code rtems_semaphore_delete(
   Objects_Id id
 )
@@ -81,32 +87,25 @@ rtems_status_code rtems_semaphore_delete(
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
-      if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) { 
-        if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) ) {
+      if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
+        if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) &&
+             !_Attributes_Is_simple_binary_semaphore(
+                 the_semaphore->attribute_set ) ) {
           _Thread_Enable_dispatch();
           return RTEMS_RESOURCE_IN_USE;
         }
-        else
-          _CORE_mutex_Flush(
-            &the_semaphore->Core_control.mutex, 
-#if defined(RTEMS_MULTIPROCESSING)
-            _Semaphore_MP_Send_object_was_deleted,
-#else
-            NULL,
-#endif
-            CORE_MUTEX_WAS_DELETED
-          );
-      }
-      else
+        _CORE_mutex_Flush(
+          &the_semaphore->Core_control.mutex, 
+          SEMAPHORE_MP_OBJECT_WAS_DELETED,
+          CORE_MUTEX_WAS_DELETED
+        );
+      } else {
         _CORE_semaphore_Flush(
           &the_semaphore->Core_control.semaphore, 
-#if defined(RTEMS_MULTIPROCESSING)
-          _Semaphore_MP_Send_object_was_deleted,
-#else
-          NULL,
-#endif
+          SEMAPHORE_MP_OBJECT_WAS_DELETED,
           CORE_SEMAPHORE_WAS_DELETED
         );
+     }
 
       _Objects_Close( &_Semaphore_Information, &the_semaphore->Object );
 
