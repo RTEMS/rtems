@@ -11,6 +11,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/time.h>
+#include <rtems/posix/mutex.h>
 
 /*
  *  TEMPORARY
@@ -378,8 +379,8 @@ int _POSIX_Condition_variables_Wait_support(
         return EINVAL;
  
       status = pthread_mutex_unlock( mutex );
-      if ( !status )
-        return status;
+      if ( status )
+        return _POSIX_Mutex_From_core_mutex_status( status );
  
       the_cond->Mutex = *mutex;
  
@@ -390,8 +391,8 @@ int _POSIX_Condition_variables_Wait_support(
       _Thread_Enable_dispatch();
 
       status = pthread_mutex_lock( mutex );
-      if ( !status )
-        return status;
+      if ( status )
+        return _POSIX_Mutex_From_core_mutex_status( status );
     
       return _Thread_Executing->Wait.return_code;
   }
