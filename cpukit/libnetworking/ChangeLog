@@ -1,3 +1,9 @@
+2001-02-01	Mike Siers <mikes@poliac.com>
+
+	* pppd/rtemspppd.c (rtems_pppd_disconnect): Modified to avoid bringing
+	the link down too fast.
+	NOTE: Mike reports successfully running at 56K baud on a direct link.
+
 2001-01-31	Mike Siers <mikes@poliac.com>
 
 	* pppd/rtemsdialer.h: New file missed in previous commit.

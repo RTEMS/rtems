@@ -196,11 +196,18 @@ int rtems_pppd_connect(void)
   return ( 0 );
 }
 
-int rtems_pppd_disconnect(void)
+static void timeout_terminate(void *arg)
 {
   /* set pppd global variables to disconnect */
   persist   = 0;
   kill_link = 1;
+}
+
+int rtems_pppd_disconnect(void)
+{
+  /* need to wait a little time before we can bring the link down */
+  /* set up time out in 1 seconds */
+  TIMEOUT(timeout_terminate, NULL, 1);
 
   /* send event to wake up the pppd code */
   /* pretend its a serial interrput */
