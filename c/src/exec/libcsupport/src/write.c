@@ -31,7 +31,7 @@ ssize_t write(
   size_t      count
 )
 {
-  rtems_status_code  rc;
+  ssize_t  rc;
   rtems_libio_t     *iop;
 
   rtems_libio_check_fd( fd );

@@ -1,3 +1,8 @@
+2001-05-11	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/write.c: Change type of rc to match return type from
+	underlying function per report from Eric Norum.
+
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
