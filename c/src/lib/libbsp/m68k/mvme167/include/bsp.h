@@ -46,7 +46,7 @@ extern "C" {
  */
  
 struct rtems_bsdnet_ifconfig;
-extern int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig );
+int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig, int attaching );
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   "uti1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH uti596_attach
 

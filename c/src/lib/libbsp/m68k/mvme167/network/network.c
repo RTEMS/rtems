@@ -52,6 +52,8 @@
 
 #include <bsp.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
@@ -123,7 +125,7 @@ char uti596initSetup[] = {
 
 static unsigned long word_swap ( unsigned long );
 static void * malloc_16byte_aligned ( void **, void ** adjusted_pointer, size_t );
-RTEMS_INLINE_ROUTINE void uti596_writePortFunction ( void *, unsigned long );
+RTEMS_INLINE_ROUTINE void uti596_writePortFunction ( volatile void *, unsigned long );
 RTEMS_INLINE_ROUTINE void uti596_portReset( void );
 static unsigned long uti596_portSelfTest( i596_selftest * );
 static int uti596_portDump ( i596_dump_result * );
@@ -285,7 +287,7 @@ static i596_scp * uti596_scp_alloc(
  *  The Motorola manual swapped the high and low registers.
  */
 RTEMS_INLINE_ROUTINE void uti596_writePortFunction(
-  void * addr,
+  volatile void * addr,
   unsigned long cmd
 )
 {
@@ -745,7 +747,7 @@ static int uti596_diagnose( void )
 
   diagnose.command = CmdDiagnose;
   diagnose.status = 0;
-  uti596_softc.pCurrent_command_status = &diagnose.status;
+  uti596_softc.pCurrent_command_status = (unsigned short *)&diagnose.status;
   uti596_addPolledCmd(&diagnose);
   return (uti596_wait ( &uti596_softc, UTI596_WAIT_FOR_STAT_C ));
 
@@ -774,11 +776,11 @@ static int uti596_configure (
 )
 {
   sc->set_conf.cmd.command = CmdConfigure;
-  memcpy (sc->set_conf.data, uti596initSetup, 14);
+  memcpy ( (void *)sc->set_conf.data, uti596initSetup, 14);
   uti596_addPolledCmd( (i596_cmd *) &sc->set_conf);
 
   /* Poll for successful command completion */
-  sc->pCurrent_command_status = &(sc->set_conf.cmd.status);
+  sc->pCurrent_command_status = (unsigned short *)&(sc->set_conf.cmd.status);
   return ( uti596_wait ( sc, UTI596_WAIT_FOR_STAT_C ) );
 }
 
@@ -811,7 +813,7 @@ static int uti596_IAsetup (
   uti596_addPolledCmd((i596_cmd *)&sc->set_add);
 
   /* Poll for successful command completion */
-  sc->pCurrent_command_status = &(sc->set_add.cmd.status);
+  sc->pCurrent_command_status = (unsigned short *)&(sc->set_add.cmd.status);
   return ( uti596_wait ( sc, UTI596_WAIT_FOR_STAT_C ) );
 }
 
@@ -1433,7 +1435,7 @@ void uti596_supplyFD (
       */
      if (uti596_softc.pLastUnkRFD != I596_NULL ) {
 
-       uti596_append(&uti596_softc.pSavedRfdQueue, pRfd); /* Only here! saved Q */
+       uti596_append((i596_rfd **)&uti596_softc.pSavedRfdQueue, pRfd); /* Only here! saved Q */
        uti596_softc.pEndSavedQueue = pRfd;
        uti596_softc.savedCount++;
        uti596_softc.countRFD--;
@@ -1480,7 +1482,7 @@ void uti596_supplyFD (
     * too late , pLastRfd in use ( or NULL ),
     * in either case, EL bit has been read, and RNR condition will occur
     */
-   uti596_append( &uti596_softc.pSavedRfdQueue, pRfd); /* save it for RNR */
+   uti596_append( (i596_rfd **)&uti596_softc.pSavedRfdQueue, pRfd); /* save it for RNR */
 
    uti596_softc.pEndSavedQueue = pRfd;  /* reset end of saved queue */
    uti596_softc.savedCount++;
@@ -1649,30 +1651,31 @@ void send_packet(
  ***********************************************************************/
 
 int uti596_attach(
-  struct rtems_bsdnet_ifconfig * pConfig
+  struct rtems_bsdnet_ifconfig * pConfig,
+  int attaching
 )
 {
   uti596_softc_ *sc = &uti596_softc;				/* device dependent data structure */
-  struct ifnet * ifp = &sc->arpcom.ac_if;   /* ifnet structure */
-	int unitNumber;
-	char *unitName;
-	char *pAddr;
-	int addr;
+  struct ifnet * ifp = (struct ifnet *)&sc->arpcom.ac_if;       /* ifnet structure */
+  int unitNumber;
+  char *unitName;
+  char *pAddr;
+  int addr;
 
-	#ifdef DBG_ATTACH
+  #ifdef DBG_ATTACH
   printk(("uti596_attach: begins\n"))
-	#endif
+  #endif
 
   /* The NIC is not started yet */
   sc->started = 0;
 
   /* Indicate to ULCS that this is initialized */
-  ifp->if_softc = sc;
+  ifp->if_softc = (void *)sc;
   sc->pScp = NULL;
 
-        /* Parse driver name */
-        if ((unitNumber = rtems_bsdnet_parse_driver_name (pConfig, &unitName)) < 0)
-                return 0;
+  /* Parse driver name */
+  if ((unitNumber = rtems_bsdnet_parse_driver_name (pConfig, &unitName)) < 0)
+    return 0;
 
   ifp->if_name = unitName;
   ifp->if_unit = unitNumber;
@@ -1692,17 +1695,17 @@ int uti596_attach(
    * should be NULL because buffer memory allocated to hold the
    * structure values is unrecoverable and would be lost here.
    */
-  if ( addr = nvram->ipaddr ) {
-  	if ( pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT ) )
-			pConfig->ip_address = inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
-		else
-			rtems_panic("Can't allocate ip_address buffer!\n");
+  if ( (addr = nvram->ipaddr) ) {
+    if ( (pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT )) )
+      pConfig->ip_address = (char *)inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
+    else
+      rtems_panic("Can't allocate ip_address buffer!\n");
   }
-  if ( addr = nvram->netmask ) {
-  	if ( pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT ) )
-			pConfig->ip_netmask = inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
-		else
-			rtems_panic("Can't allocate ip_netmask buffer!\n");
+  if ( (addr = nvram->netmask) ) {
+    if ( (pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT )) )
+      pConfig->ip_netmask = (char *)inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
+    else
+      rtems_panic("Can't allocate ip_netmask buffer!\n");
   }
 
   /* Ethernet address can be specified in NVRAM, or in the ifconfig
@@ -1710,13 +1713,13 @@ int uti596_attach(
    * (6 bytes) mvme167 manual p. 1-47
    */
   if ( nvram->enaddr ) {
-  	memcpy (sc->arpcom.ac_enaddr, &nvram->enaddr, ETHER_ADDR_LEN);
+  	memcpy ((void *)sc->arpcom.ac_enaddr, &nvram->enaddr, ETHER_ADDR_LEN);
   }
   else if ( pConfig->hardware_address) {
-    memcpy (sc->arpcom.ac_enaddr, pConfig->hardware_address, ETHER_ADDR_LEN);
+    memcpy ((void *)sc->arpcom.ac_enaddr, pConfig->hardware_address, ETHER_ADDR_LEN);
   }
   else {
-    memcpy (sc->arpcom.ac_enaddr, (char *)0xFFFC1F2C, ETHER_ADDR_LEN);
+    memcpy ((void *)sc->arpcom.ac_enaddr, (char *)0xFFFC1F2C, ETHER_ADDR_LEN);
   }
 
   /* Possibly override default acceptance of broadcast packets */
@@ -1800,39 +1803,39 @@ void uti596_init(
 )
 {
   uti596_softc_ *sc = arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
+  struct ifnet *ifp = (struct ifnet *)&sc->arpcom.ac_if;
 
   if (sc->txDaemonTid == 0) {
 
     /*
      * Initialize the 82596
      */
-		#ifdef DBG_INIT
+    #ifdef DBG_INIT
     printk(("uti596_init: begins\nuti596_init: initializing the 82596...\n"))
-		#endif
+    #endif
     uti596_initialize_hardware(sc);
 
     /*
      * Start driver tasks
      */
-		#ifdef DBG_INIT
+    #ifdef DBG_INIT
     printk(("uti596_init: starting driver tasks...\n"))
-		#endif
-    sc->txDaemonTid = rtems_bsdnet_newproc ("UTtx", 2*4096, uti596_txDaemon, sc);
-    sc->rxDaemonTid = rtems_bsdnet_newproc ("UTrx", 2*4096, uti596_rxDaemon, sc);
-    sc->resetDaemonTid = rtems_bsdnet_newproc ("UTrt", 2*4096, uti596_resetDaemon, sc);
+    #endif
+    sc->txDaemonTid = rtems_bsdnet_newproc ("UTtx", 2*4096, uti596_txDaemon, (void *)sc);
+    sc->rxDaemonTid = rtems_bsdnet_newproc ("UTrx", 2*4096, uti596_rxDaemon, (void *)sc);
+    sc->resetDaemonTid = rtems_bsdnet_newproc ("UTrt", 2*4096, uti596_resetDaemon, (void *)sc);
 
-		#ifdef DBG_INIT
+    #ifdef DBG_INIT
     printk(("uti596_init: After attach, status of board = 0x%x\n", sc->scb.status ))
-		#endif
+    #endif
   }
 
   /*
    * Enable receiver
    */
-		#ifdef DBG_INIT
-    printk(("uti596_init: enabling the reciever...\n" ))
-		#endif
+  #ifdef DBG_INIT
+  printk(("uti596_init: enabling the reciever...\n" ))
+  #endif
   sc->scb.command = RX_START;
   uti596_issueCA ( sc, UTI596_WAIT_FOR_CU_ACCEPT );
   
@@ -1840,9 +1843,9 @@ void uti596_init(
    * Tell the world that we're running.
    */
   ifp->if_flags |= IFF_RUNNING;
-		#ifdef DBG_INIT
-    printk(("uti596_init: completed.\n"))
-		#endif  
+  #ifdef DBG_INIT
+  printk(("uti596_init: completed.\n"))
+  #endif  
 }
 
 /***********************************************************************
@@ -1864,19 +1867,19 @@ void uti596_init(
   uti596_softc_ *sc
 )
 {
-        struct ifnet *ifp = &sc->arpcom.ac_if;
+  struct ifnet *ifp = (struct ifnet *)&sc->arpcom.ac_if;
 
-        ifp->if_flags &= ~IFF_RUNNING;
+  ifp->if_flags &= ~IFF_RUNNING;
   sc->started = 0;
 
-		#ifdef DBG_STOP
-    printk(("uti596stop: %s: Shutting down ethercard, status was %4.4x.\n",
+  #ifdef DBG_STOP
+  printk(("uti596stop: %s: Shutting down ethercard, status was %4.4x.\n",
            uti596_softc.arpcom.ac_if.if_name, uti596_softc.scb.status))
-		#endif
+  #endif
 
-    printk(("Stopping interface\n"))
-    sc->scb.command = CUC_ABORT | RX_ABORT;
-    i82596->chan_attn = 0x00000000;
+  printk(("Stopping interface\n"))
+  sc->scb.command = CUC_ABORT | RX_ABORT;
+  i82596->chan_attn = 0x00000000;
 }
 
 
@@ -1895,7 +1898,7 @@ void uti596_txDaemon(
 )
 {
   uti596_softc_ *sc = (uti596_softc_ *)arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
+  struct ifnet *ifp = (struct ifnet *)&sc->arpcom.ac_if;
   struct mbuf *m;
   rtems_event_set events;
 
@@ -1940,7 +1943,7 @@ void uti596_txDaemon(
 )
 {
   uti596_softc_ *sc = (uti596_softc_ *)arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
+  struct ifnet *ifp = (struct ifnet *)&sc->arpcom.ac_if;
   struct mbuf *m;
 
   i596_rfd *pRfd;
@@ -1978,7 +1981,7 @@ void uti596_txDaemon(
       * While received frames are available. Note that the frame may be
       * a fragment, so it is NOT a complete packet.
       */
-     pRfd = uti596_dequeue( &sc->pInboundFrameQueue);
+     pRfd = uti596_dequeue( (i596_rfd **)&sc->pInboundFrameQueue);
      while ( pRfd &&
              pRfd != I596_NULL &&
              pRfd -> stat & STAT_C )
@@ -2004,7 +2007,7 @@ void uti596_txDaemon(
 
          m->m_pkthdr.rcvif = ifp;
          /* move everything into an mbuf */
-         memcpy(m->m_data, pRfd->data, pkt_len);
+         memcpy(m->m_data, (const char *)pRfd->data, pkt_len);
          m->m_len = m->m_pkthdr.len = pkt_len - sizeof(struct ether_header) - 4;
 
          /* move the header to an mbuf */
@@ -2059,7 +2062,7 @@ void uti596_txDaemon(
        uti596_supplyFD ( pRfd );   /* Return RFD to RFA. */
        _ISR_Enable(level);
 
-       pRfd = uti596_dequeue( &sc->pInboundFrameQueue); /* grab next frame */
+       pRfd = uti596_dequeue( (i596_rfd **)&sc->pInboundFrameQueue); /* grab next frame */
 
      } /* end while */
   } /* end for() */
@@ -2227,7 +2230,7 @@ void uti596_resetDaemon(
         /* the rfd next link is stored with upper and lower words swapped so read it that way */
         pIsrRfd = (i596_rfd *) word_swap ((unsigned long)uti596_softc.pBeginRFA->next);
         /* the append destroys the link */
-        uti596_append( &uti596_softc.pInboundFrameQueue , uti596_softc.pBeginRFA );
+        uti596_append( (i596_rfd **)&uti596_softc.pInboundFrameQueue , uti596_softc.pBeginRFA );
 
        /*
         * if we have just received the a frame in the last unknown RFD,
@@ -2461,7 +2464,7 @@ void uti596_resetDaemon(
 						#endif
             uti596_softc.pEndRFA -> next = I596_NULL;   /* added feb 16 */
           }
-          uti596_append( &uti596_softc.pSavedRfdQueue, uti596_softc.pLastUnkRFD );
+          uti596_append( (i596_rfd **)&uti596_softc.pSavedRfdQueue, uti596_softc.pLastUnkRFD );
           uti596_softc.savedCount++;
           uti596_softc.pEndSavedQueue = uti596_softc.pLastUnkRFD;
           uti596_softc.countRFD--;                    /* It was not in the RFA */
@@ -2575,7 +2578,8 @@ void uti596_resetDaemon(
  
 static int uti596_ioctl(
   struct ifnet *ifp,
-  int command, caddr_t data
+  int command,
+  caddr_t data
 )
 {
   uti596_softc_ *sc = ifp->if_softc;
@@ -2602,13 +2606,13 @@ static int uti596_ioctl(
 
         case IFF_UP:
           printk(("IFF_UP\n"))
-          uti596_init (sc);
+          uti596_init ( (void *)sc);
           break;
 
         case IFF_UP | IFF_RUNNING:
           printk(("IFF_UP and RUNNING\n"))
           uti596_stop (sc);
-          uti596_init (sc);
+          uti596_init ( (void *)sc);
           break;
 
         default:

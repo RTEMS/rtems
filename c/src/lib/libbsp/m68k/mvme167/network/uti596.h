@@ -208,7 +208,7 @@ typedef volatile struct i596_selftest {
 typedef volatile struct i596_cmd {
   unsigned short status;
   unsigned short command;
-  struct i596_cmd *next;
+  volatile struct i596_cmd *next;
 } i596_cmd;
 
 typedef volatile struct i596_nop {
@@ -227,7 +227,7 @@ typedef volatile struct i596_configure {
 
 typedef volatile struct i596_tx {
   i596_cmd cmd;
-  struct i596_tbd *pTbd;
+  volatile struct i596_tbd *pTbd;
   unsigned short count;
   unsigned short pad;
   char data[6];
@@ -250,7 +250,7 @@ typedef volatile struct i596_dump {
 typedef volatile struct i596_tbd {
 	  unsigned short size;
 	  unsigned short pad;
-	  struct i596_tbd *next;
+	  volatile struct i596_tbd *next;
 	  char *data; 
 } i596_tbd;
 
@@ -261,7 +261,7 @@ typedef volatile struct i596_tbd {
 typedef volatile struct i596_rbd {
 	  unsigned short count;
 	  unsigned short offset;
-	  struct i596_rbd *next;
+	  volatile struct i596_rbd *next;
 	  char *data; 
 	  unsigned short size;
 	  unsigned short pad;
@@ -273,7 +273,7 @@ typedef volatile struct i596_rbd {
 typedef volatile struct i596_rfd {
 	  unsigned short stat;
 	  unsigned short cmd;
-	  struct i596_rfd *next;
+	  volatile struct i596_rfd *next;
 	  i596_rbd *pRbd; 
 	  unsigned short count;
 	  unsigned short size;
