@@ -211,6 +211,10 @@ sub expand_xref
 	$topic = $manual = '';
     } elsif ($cmd eq 'href') {
 	($xrefname,$node,$infofile,$url) = split(/,/,$arg);
+    } elsif ($cmd eq 'email') {
+	($xrefname,$node,$infofile,$url) = split(/,/,$arg);
+	$xrefname = "mailto:$xrefname";
+	$url = $xrefname
     } elsif ($cmd eq 'uref') {
 	($url,$xrefname,$node,$infofile) = split(/,/,$arg);
     } else {
@@ -1149,6 +1153,7 @@ sub initialize_tables
 	'pxref',    'Xsee ',
 	'href',     'X',
 	'uref',     'X',
+	'email',    'X',
 	'inforef',  'XSee ',
     );
 
