@@ -1261,7 +1261,9 @@ mode parameter.
 The calling task will be preempted if it enables preemption and
 a higher priority task is ready to run.
 
-Enabling timeslicing has no effect if preemption is enabled.
+Enabling timeslicing has no effect if preemption is disabled.  For
+a task to be timesliced, that task must have both preemption and
+timeslicing enabled.
 
 A task can obtain its current execution mode, without modifying
 it, by calling this directive with a mask value of
