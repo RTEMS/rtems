@@ -8,6 +8,8 @@ VPATH = @srcdir@:@srcdir@/$(RTEMS_CPU)
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 LIBNAME=librdbg.a
 LIB=${ARCH}/${LIBNAME}
 
@@ -74,7 +76,7 @@ remdeb.h: $(X_FILES)
 	@rm -f $@
 	$(RPCGEN) -h remdeb.x -o $@
 	@rm -f $(PROJECT_INCLUDE)/rdbg/$@
-	$(INSTALL) -m 444 $@ $(PROJECT_INCLUDE)/rdbg
+	$(INSTALL_CHANGE) -m 444 $@ $(PROJECT_INCLUDE)/rdbg
 
 remdeb_xdr.c: $(X_FILES)
 	@rm -f $@

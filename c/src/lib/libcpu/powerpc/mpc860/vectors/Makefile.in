@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 PGM=${ARCH}/vectors.rel
 
 # C source names, if any, go here -- minus the .c

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 BSP_PIECES=startup tty
 # pieces to pick up out of libcpu/hppa
 CPU_PIECES=clock milli timer

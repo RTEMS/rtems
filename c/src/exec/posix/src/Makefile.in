@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # following are semi-implemented and untested
 # C_PIECES=aio cancel devctl intr mqueue semaphore time utsname
 

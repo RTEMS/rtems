@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 PGM=${ARCH}/start302.o
 
 ifeq ($(RTEMS_DEBUGGER),yes)
@@ -64,6 +66,6 @@ all:	${ARCH} $(SRCS) $(OBJS) $(PGM)
 	$(INSTALL_VARIANT) -m 555 ${PGM} ${PROJECT_RELEASE}/lib
 
 # Install the program(s), appending _g or _p as appropriate.
-# for include files, just use $(INSTALL)
+# for include files, just use $(INSTALL_CHANGE)
 
 

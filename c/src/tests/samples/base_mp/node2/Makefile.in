@@ -8,6 +8,8 @@ VPATH = @srcdir@:@srcdir@/..
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 NODE=2
 SAMPLE=base_mp
 PGM=${ARCH}/$(SAMPLE)-node$(NODE).exe

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 PGM=${ARCH}/shmdr.rel
 
 # C source names, if any, go here -- minus the .c
@@ -57,4 +59,4 @@ all:	preinstall ${ARCH} $(SRCS) $(PGM)
 #   ../$(RTEMS_BSP_FAMILY)/wrapup/Makefile
 
 preinstall:
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)

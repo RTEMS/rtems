@@ -54,7 +54,7 @@ RTEMS_CPU = @target_cpu@
 BARE_CPU_MODEL = @BARE_CPU_MODEL@
 BARE_CPU_CFLAGS = @BARE_CPU_CFLAGS@
  
-INSTALL=$(PROJECT_ROOT)/$(RTEMS_BSP)/build-tools/install-if-change
+INSTALL_CHANGE=$(PROJECT_ROOT)/$(RTEMS_BSP)/build-tools/install-if-change
 XCFLAGS=$(CFLAGS_FOR_TARGET)
  
 export RTEMS_BSP

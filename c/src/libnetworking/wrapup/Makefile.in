@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 NET_PIECES=kern lib libc net netinet nfs rtems
 OBJS=$(foreach piece, $(NET_PIECES), ../$(piece)/$(ARCH)/*.o)
 LIB=$(ARCH)/libnetworking.a

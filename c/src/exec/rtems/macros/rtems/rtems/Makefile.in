@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 I_PIECES=asr attr dpmem event eventset message modes options \
    part ratemon region sem status support tasks timer
 I_FILES=$(I_PIECES:%=$(srcdir)/%.inl)
@@ -28,4 +30,4 @@ CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 ${I_FILES} $(PROJECT_INCLUDE)/rtems/rtems
+	$(INSTALL_CHANGE) -m 444 ${I_FILES} $(PROJECT_INCLUDE)/rtems/rtems

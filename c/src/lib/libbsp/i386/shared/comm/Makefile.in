@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 H_FILES = $(srcdir)/uart.h 
 
 #
@@ -29,5 +31,5 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 preinstall all: $(SRCS)
-	$(INSTALL) -m 444 $(SRCS) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(SRCS) $(PROJECT_INCLUDE)
 

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 BSP_PIECES=startup console iic ethernet flash nvram
 CPU_PIECES=clock timer
 GENERIC_PIECES=

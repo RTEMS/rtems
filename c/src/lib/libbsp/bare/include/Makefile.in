@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 H_FILES = $(srcdir)/bsp.h
 
 #
@@ -31,4 +33,4 @@ CLOBBER_ADDITIONS +=
 all:	preinstall
 
 preinstall: $(SRCS)
-	@INSTALL@ $(INSTINCFLAGS) $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL) $(INSTINCFLAGS) $(H_FILES) $(PROJECT_INCLUDE)

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 PGM=${ARCH}/stubdr.rel
 
 # C source names, if any, go here -- minus the .c
@@ -54,5 +56,5 @@ ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
 all:	${ARCH} $(SRCS) $(PGM)
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
 	$(INSTALL_VARIANT) -m 644 $(PGM) ${PROJECT_RELEASE}/lib

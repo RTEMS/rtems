@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 #H_PIECES=utsname
 H_PIECES=utime 
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
@@ -28,4 +30,4 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/sys
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/sys

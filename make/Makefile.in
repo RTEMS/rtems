@@ -11,6 +11,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
@@ -58,7 +60,7 @@ get: retrieve
 all: 
 
 $(prefix)/rtems:
-	@INSTALL@ $(INSTDIRFLAGS) $@
+	@top_srcdir@/mkinstalldirs $@
 
 install: $(prefix)/rtems \
 	$(prefix)/rtems/make \
@@ -68,30 +70,30 @@ install: $(prefix)/rtems \
 	install_files
 
 $(prefix)/rtems/make:
-	@INSTALL@ $(INSTDIRFLAGS) $@
+	@top_srcdir@/mkinstalldirs $@
 
 install_files::	$(GENERIC_FILES) $(MAKEFILES)
-	@INSTALL@ $(INSTDATAFLAGS) $^ \
+	$(INSTALL) $(INSTDATAFLAGS) $^ \
 	$(prefix)/rtems/make
 
 $(prefix)/rtems/make/compilers:
-	@INSTALL@ $(INSTDIRFLAGS) $@
+	@top_srcdir@/mkinstalldirs $@
 
 install_files:: $(COMPILER_FILES)
-	@INSTALL@ $(INSTDATAFLAGS) $^ \
+	$(INSTALL) $(INSTDATAFLAGS) $^ \
 	$(prefix)/rtems/make/compilers
 
 $(prefix)/rtems/make/custom:
-	@INSTALL@ $(INSTDIRFLAGS) $@
+	@top_srcdir@/mkinstalldirs $@
 
 install_files:: $(CUSTOM_FILES) 
-	@INSTALL@ $(INSTDATAFLAGS) $^ \
+	$(INSTALL) $(INSTDATAFLAGS) $^ \
 	$(prefix)/rtems/make/custom
 
 $(prefix)/rtems/make/Templates:
-	@INSTALL@ $(INSTDIRFLAGS) $@
+	@top_srcdir@/mkinstalldirs $@
 
 
 install_files:: $(TEMPLATE_FILES)
-	@INSTALL@ $(INSTDATAFLAGS) $^ \
+	$(INSTALL) $(INSTDATAFLAGS) $^ \
 	$(prefix)/rtems/make/Templates

@@ -12,6 +12,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 include $(RTEMS_ROOT)/make/rtems.cfg
@@ -28,9 +30,9 @@ INSTALLED_PGMS=$(PGMS:%=$(DESTDIR)/%)
 all:	$(DESTDIR) $(PGMS) install
 
 $(DESTDIR):
-	@INSTALL@ $(INSTDIRFLAGS) $@
+	@top_srcdir@/mkinstalldirs $@
 
 $(INSTALLED_PGMS): $(PGMS)
-	@INSTALL@ $(INSTBINFLAGS) $^ $(DESTDIR)
+	$(INSTALL) $(INSTBINFLAGS) $^ $(DESTDIR)
 
 install:  $(DESTDIR) $(INSTALLED_PGMS)

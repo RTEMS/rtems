@@ -15,6 +15,8 @@ VPATH = @srcdir@/..
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 RELS=../$(ARCH)/rtems-cpu.rel
 
 # C source names, if any, go here -- minus the .c
@@ -65,8 +67,8 @@ CLOBBER_ADDITIONS +=
 all:    ${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
 
 # Install the program(s), appending _g or _p as appropriate.
-# for include files, just use $(INSTALL)
+# for include files, just use $(INSTALL_CHANGE)
 install:  all
 
 preinstall: ${ARCH}
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)

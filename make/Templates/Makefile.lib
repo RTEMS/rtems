@@ -54,6 +54,6 @@ $(LIB): ${OBJS}
 	$(make-library)
 
 # Install the library, appending _g or _p as appropriate.
-# for include files, just use $(INSTALL)
+# for include files, just use $(INSTALL_CHANGE)
 install:  all
 	$(INSTALL_VARIANT) -m 644 ${LIB} ${PROJECT_RELEASE}/lib

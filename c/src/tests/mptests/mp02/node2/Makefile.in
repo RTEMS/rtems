@@ -8,6 +8,8 @@ VPATH = @srcdir@:@srcdir@/..
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 NODE=2
 TEST=mp02
 PGM=${ARCH}/$(TEST)-node$(NODE).exe
@@ -56,7 +58,7 @@ CLOBBER_ADDITIONS +=
 
 all:	${ARCH} $(SRCS) $(PGM)
 	$(INSTALL_VARIANT) -m 555 ${PGM} ${PROJECT_RELEASE}/tests
-	$(INSTALL) $(srcdir)/$(TEST).scn \
+	$(INSTALL_CHANGE) $(srcdir)/$(TEST).scn \
 	    ${PROJECT_RELEASE}/tests/screens/mptests/node$(NODE)/$(TEST).scn
 
 ${PGM}: $(OBJS) $(LINK_FILES)

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 H_PIECES=debug system
 H_FILES=$(H_PIECES:%=$(srcdir)/../%.h)
 
@@ -17,4 +19,4 @@ include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems

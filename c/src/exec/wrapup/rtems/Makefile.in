@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 CPU_OBJS=$(wildcard ../../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.rel)
 CORE_OBJS=$(wildcard ../../score/src/$(ARCH)/*.o)
 SAPI_OBJS=$(wildcard ../../sapi/src/$(ARCH)/*.o)

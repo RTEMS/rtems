@@ -19,6 +19,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # we use host compiler in this directory
 USE_HOST_COMPILER=yes
 
@@ -64,7 +66,7 @@ CLOBBER_ADDITIONS +=
 DESTDIR=${PROJECT_RELEASE}/build-tools
 
 $(DESTDIR):
-	@INSTALL@ $(INSTDIRFLAGS) $@
+	@top_srcdir@/mkinstalldirs $@
 
 all:	$(ARCH) $(DESTDIR) $(SRCS) $(PGMS)
-	@INSTALL@ $(INSTBINFLAGS) $(PGMS) $(DESTDIR)
+	$(INSTALL) $(INSTBINFLAGS) $(PGMS) $(DESTDIR)

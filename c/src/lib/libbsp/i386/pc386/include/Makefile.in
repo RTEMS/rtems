@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # This driver needs to be reworked for the BSD stack.
 # We only install wd80x3.h if HAS_NETWORKING was defined
 WD80X3_yes_V = $(srcdir)/wd80x3.h
@@ -35,5 +37,5 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
-	$(INSTALL) -m 444 $(EQ_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(EQ_FILES) $(PROJECT_INCLUDE)

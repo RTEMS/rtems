@@ -10,6 +10,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # we use the host compiler here 
 USE_HOST_COMPILER=yes
 
@@ -55,8 +57,8 @@ ${PGMS}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
 $(DESTDIR):
-	@INSTALL@ $(INSTDIRFLAGS) $@
+	@top_srcdir@/mkinstalldirs $@
 
 # Install the program
 install:  $(DESTDIR) $(PGMS)
-	@INSTALL@ $(INSTBINFLAGS) ${PGMS} $(DESTDIR)
+	$(INSTALL) $(INSTBINFLAGS) ${PGMS} $(DESTDIR)

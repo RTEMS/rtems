@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 BSP_PIECES=startup clock console timer tod
 CPU_PIECES=
 GENERIC_PIECES=

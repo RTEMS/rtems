@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 PGMS=${ARCH}/start.o
 
 # C source names, if any, go here -- minus the .c
@@ -54,4 +56,4 @@ all:	${ARCH} $(SRCS) $(OBJS) $(PGM)
 	$(INSTALL_VARIANT) -m 555 ${PGMS} ${PROJECT_RELEASE}/lib
 
 # Install the program(s), appending _g or _p as appropriate.
-# for include files, just use $(INSTALL)
+# for include files, just use $(INSTALL_CHANGE)

@@ -7,6 +7,8 @@ srcdir = @srcdir@
 VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
+
+INSTALL = @INSTALL@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
 libdir = @libdir@
@@ -64,7 +66,7 @@ CLEAN_ADDITIONS += $(HOST_ARCH)
 CLOBBER_ADDITIONS +=
 
 all:	$(ARCH) $(SRCS) $(PGMS)
-	$(INSTALL) -m 555 $(PGMS) ${PROJECT_RELEASE}/build-tools
+	$(INSTALL_CHANGE) -m 555 $(PGMS) ${PROJECT_RELEASE}/build-tools
 
 $(ARCH)/bin2boot: $(srcdir)/bin2boot.c
 	$(CC) $(LDFLAGS) -o $@ $(srcdir)/bin2boot.c $(LD_LIBS)

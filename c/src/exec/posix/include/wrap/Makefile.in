@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 #H_PIECES= aio devctl intr limits mqueue pthread sched semaphore \
 #    signal time unistd
 H_PIECES= pthread sched
@@ -31,4 +33,4 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)

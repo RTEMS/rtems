@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 LIB=${ARCH}/libassoc-tmp.a
 
 # C source names, if any, go here -- minus the .c
@@ -49,4 +51,4 @@ ${LIB}: ${SRCS} ${OBJS}
 	$(make-library)
 
 all:	${ARCH} $(SRCS) $(LIB)
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems

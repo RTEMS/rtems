@@ -8,6 +8,8 @@ VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/irq:@srcdir@/../
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 PGM=${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
@@ -53,7 +55,7 @@ CLOBBER_ADDITIONS +=
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 all:	${ARCH} $(SRCS) $(PGM)
-	$(INSTALL) $(srcdir)/linkcmds ${PROJECT_RELEASE}/lib
+	$(INSTALL_CHANGE) $(srcdir)/linkcmds ${PROJECT_RELEASE}/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 

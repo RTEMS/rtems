@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 H_PIECES= config directives extension fatal init io mptables 
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
@@ -27,10 +29,10 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS) $(ARCH) $(PROJECT_INCLUDE)/rtems/sptables.h
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/
 
 $(PROJECT_INCLUDE)/rtems/sptables.h: $(ARCH)/sptables.h-tmp
-	$(INSTALL) -m 444 $(ARCH)/sptables.h-tmp $@
+	$(INSTALL_CHANGE) -m 444 $(ARCH)/sptables.h-tmp $@
 
 $(ARCH)/sptables.h-tmp: $(srcdir)/sptables.h
 	$(SED) -e 's?REPLACE_THIS_WITH_THE_BSP?$(RTEMS_BSP)?' \

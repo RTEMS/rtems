@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # Right now there are not macro implementation of the posix inline routines
 # So it won't build
 I_PIECES= 
@@ -29,4 +31,4 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	#$(INSTALL) -m 444 ${I_FILES} $(PROJECT_INCLUDE)/rtems/posix
+	#$(INSTALL_CHANGE) -m 444 ${I_FILES} $(PROJECT_INCLUDE)/rtems/posix

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 GENERIC_PIECES=stubdr
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x

@@ -8,6 +8,8 @@ VPATH=@srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 H_FILES = $(wildcard $(srcdir)/*.h)
 
 SRCS=$(H_FILES)
@@ -25,4 +27,4 @@ all:	install
 
 install:
 	test -d $(PROJECT_INCLUDE)/sh || $(MKDIR) $(PROJECT_INCLUDE)/sh 
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/sh
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/sh

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # We only build the network device driver if HAS_NETWORK was defined
 NETWORK_DRIVER_yes_V = network
 NETWORK_DRIVER = $(NETWORK_DRIVER_$(HAS_NETWORK)_V)

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # we use host compiler here for genoffsets.  Hopefully it has same alignment!!
 USE_HOST_COMPILER=yes
 
@@ -52,7 +54,7 @@ CLOBBER_ADDITIONS +=
 all:	${ARCH} $(SRCS) preinstall $(PGMS)
 
 preinstall: ${ARCH} $(SRCS) $(PGMS)
-	$(INSTALL) $(INSTBINFLAGS) ${PGMS} ${PROJECT_RELEASE}/bin
+	$(INSTALL_CHANGE) $(INSTBINFLAGS) ${PGMS} ${PROJECT_RELEASE}/bin
 
 # Install the program(s), appending _g or _p as appropriate.
-# for include files, just use $(INSTALL)
+# for include files, just use $(INSTALL_CHANGE)

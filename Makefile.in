@@ -23,6 +23,8 @@ export bindir
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 VPATH=@srcdir@
 
 ifeq ($(RTEMS_BSP),)

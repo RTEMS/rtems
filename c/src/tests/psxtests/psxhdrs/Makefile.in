@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # C source names, if any, go here -- minus the
 C_PIECES=\
   clock01 clock02 clock03 clock04 clock05 \

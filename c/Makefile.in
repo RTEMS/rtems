@@ -20,6 +20,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
@@ -73,8 +75,7 @@ BSP_SPECS_DIR = $(RTEMS_ROOT)/c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)
 endif
 
 $(BSP_SPECS): $(BSP_SPECS_DIR)/bsp_specs
-	cp $< $@
-	chmod 444 $@
+	$(INSTALL) $(INSTDATAFLAGS) $< $@
 
 # Make all/install must include 'env'
 # if something is added to TARGET_VARIANTS, then account for it here
@@ -141,8 +142,7 @@ $(PROJECT_ROOT)/$(RTEMS_BSP)/Makefile.inc: $(PROJECT_ROOT)/make/Templates/Makefi
 #       the tests directory.  This significantly minimizes the install size.
 
 install_files: $(PROJECT_ROOT)/$(RTEMS_BSP)/Makefile.inc
-	-$(MKDIR) $(prefix)/
-	-$(MKDIR) $(prefix)/rtems
+	@top_srcdir@/mkinstalldirs $(prefix)/rtems
 	-$(RM) -rf $(prefix)/rtems/$(RTEMS_BSP)
 	cd ../; tar cf - $(RTEMS_BSP)/[bilsuM]* | \
 		(cd $(prefix)/rtems; tar xpBf - )

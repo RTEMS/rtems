@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 LIB=${ARCH}/librtmonuse-tmp.a
 
 # C source names, if any, go here -- minus the .c
@@ -52,4 +54,4 @@ ${LIB}: ${SRCS} preinstall ${OBJS}
 all: ${ARCH} $(SRCS) preinstall $(LIB)
 
 preinstall:
-	$(INSTALL) -m 444 ${INSTALLED_H_FILES} $(PROJECT_INCLUDE)/rtems
+	$(INSTALL_CHANGE) -m 444 ${INSTALLED_H_FILES} $(PROJECT_INCLUDE)/rtems

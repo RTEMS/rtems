@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # We only build multiprocessing related files if HAS_MP was defined
 MP_PIECES_yes_V = mpci mppkt objectmp threadmp 
 MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
@@ -87,4 +89,4 @@ endif
 
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score

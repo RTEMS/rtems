@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 PGM=${ARCH}/ictrl.rel
 
 # C source names, if any, go here -- minus the .c
@@ -54,7 +56,7 @@ ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
 all:	${ARCH} $(SRCS) $(PGM)
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
 
 # the .rel file built here will be put into libbsp.a by
 #    libbsp/hppa/BSP/wrapup/Makefile

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 H_PIECES=bpfilter loop netdb opt_ipfw opt_mrouting \
     opt_tcpdebug poll resolv syslog
 H_FILES=$(H_PIECES:%=$(srcdir)/../%.h)
@@ -54,12 +56,12 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/networking
-	$(INSTALL) -m 444 $(SYS_H_FILES) $(PROJECT_INCLUDE)/networking/sys
-	$(INSTALL) -m 444 $(RTEMS_H_FILES) $(PROJECT_INCLUDE)/networking/rtems
-	$(INSTALL) -m 444 $(MACHINE_H_FILES) $(PROJECT_INCLUDE)/networking/machine
-	$(INSTALL) -m 444 $(VM_H_FILES) $(PROJECT_INCLUDE)/networking/vm
-	$(INSTALL) -m 444 $(NET_H_FILES) $(PROJECT_INCLUDE)/networking/net
-	$(INSTALL) -m 444 $(NETINET_H_FILES) $(PROJECT_INCLUDE)/networking/netinet
-	$(INSTALL) -m 444 $(ARPA_H_FILES) $(PROJECT_INCLUDE)/networking/arpa
-	$(INSTALL) -m 444 $(NFS_H_FILES) $(PROJECT_INCLUDE)/networking/nfs
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/networking
+	$(INSTALL_CHANGE) -m 444 $(SYS_H_FILES) $(PROJECT_INCLUDE)/networking/sys
+	$(INSTALL_CHANGE) -m 444 $(RTEMS_H_FILES) $(PROJECT_INCLUDE)/networking/rtems
+	$(INSTALL_CHANGE) -m 444 $(MACHINE_H_FILES) $(PROJECT_INCLUDE)/networking/machine
+	$(INSTALL_CHANGE) -m 444 $(VM_H_FILES) $(PROJECT_INCLUDE)/networking/vm
+	$(INSTALL_CHANGE) -m 444 $(NET_H_FILES) $(PROJECT_INCLUDE)/networking/net
+	$(INSTALL_CHANGE) -m 444 $(NETINET_H_FILES) $(PROJECT_INCLUDE)/networking/netinet
+	$(INSTALL_CHANGE) -m 444 $(ARPA_H_FILES) $(PROJECT_INCLUDE)/networking/arpa
+	$(INSTALL_CHANGE) -m 444 $(NFS_H_FILES) $(PROJECT_INCLUDE)/networking/nfs

@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 BUILT_SOURCES = unixsize.h
 
 # C source names, if any, go here -- minus the .c
@@ -57,10 +59,10 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS += $(BUILT_SOURCES)
 
 # Install the program(s), appending _g or _p as appropriate.
-# for include files, just use $(INSTALL)
+# for include files, just use $(INSTALL_CHANGE)
 all: install-headers
 
 install-headers: ${H_FILES}
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 
 preinstall: install-headers

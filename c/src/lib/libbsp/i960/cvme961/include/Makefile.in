@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h
 
 #
@@ -32,7 +34,7 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
-	$(INSTALL) -m 444 $(EQ_FILES) $(PROJECT_INCLUDE)/cpu
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(EQ_FILES) $(PROJECT_INCLUDE)/cpu
 
 install:  all

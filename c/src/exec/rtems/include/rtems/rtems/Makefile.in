@@ -8,6 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+INSTALL = @INSTALL@
+
 # We only build multiprocessing related files if HAS_MP was defined
 MP_PIECES_yes_V = eventmp mp msgmp partmp regionmp semmp signalmp taskmp
 MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
@@ -34,4 +36,4 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/rtems
+	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/rtems
