@@ -49,6 +49,7 @@ void rtems_filesystem_initialize( void )
   int                                   status;
   rtems_filesystem_mount_table_entry_t *entry;
   rtems_filesystem_mount_table_t       *mt;
+  rtems_filesystem_location_info_t		loc;
   
   /*
    *  Set the default umask to "022".
@@ -75,8 +76,38 @@ void rtems_filesystem_initialize( void )
     rtems_fatal_error_occurred( 0xABCD0002 );
 
   rtems_filesystem_link_counts = 0;
+
+  /* setup the 'current' and 'root' directories
+   *
+   * NOTE: cloning the pathlocs is not strictly
+   *       necessary. Since we implicitely let
+   *       all threads that don't call
+   *       libio_set_private_env() share the same
+   *       (initial) 'root' and 'current' locs,
+   *       we (also implicitely) assume that the
+   *       root filesystem doesn't care about
+   *       reference counts.
+   *       I just inserted the code snippet below
+   *       to remind everybody of the fact by
+   *       making it more explicit...
+   *       Ideally, every thread would have to
+   *       call either share_private_env() or
+   *       set_private_env() - but then: that's
+   *       gonna hit performance.
+   *
+   *       Till Straumann, 10/25/2002
+   */
   rtems_filesystem_root        = entry->mt_fs_root;
-  rtems_filesystem_current     = rtems_filesystem_root;
+  /* Clone the root pathloc */
+  rtems_filesystem_evaluate_path("/", 0, &loc, 0);
+  rtems_filesystem_root        = loc;
+  /* One more clone for the current node */
+  rtems_filesystem_evaluate_path("/", 0, &loc, 0);
+  rtems_filesystem_current     = loc;
+
+  /* Note: the global_env's refcnt doesn't matter
+   * as the global env is never released
+   */
 
 
   /*

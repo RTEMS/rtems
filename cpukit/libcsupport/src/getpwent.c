@@ -185,21 +185,17 @@ static int getpw_r(
 {
   FILE *fp;
   int match;
-  rtems_user_env_t * aux=rtems_current_user_env; /* save */
 
   init_etc_passwd_group();
-  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if ((fp = fopen("/etc/passwd", "r")) == NULL) {
     errno = EINVAL;
-    rtems_current_user_env=aux; /* restore */
     return -1;
   }
   for(;;) {
     if (!scanpw(fp, pwd, buffer, bufsize)) {
       errno = EINVAL;
       fclose(fp);
-      rtems_current_user_env=aux; /* restore */
       return -1;
     }
     if (name) {
@@ -211,13 +207,11 @@ static int getpw_r(
     if (match) {
       fclose(fp);
       *result = pwd;
-      rtems_current_user_env=aux; /* restore */
       return 0;
     }
   }
   fclose(fp);
   errno = EINVAL;
-  rtems_current_user_env=aux; /* restore */
   return -1;
 }
 
@@ -276,14 +270,11 @@ struct passwd *getpwent()
 
 void setpwent(void)
 {
-  rtems_user_env_t * aux=rtems_current_user_env; /* save */
   init_etc_passwd_group();
-  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if (passwd_fp != NULL)
     fclose(passwd_fp);
   passwd_fp = fopen("/etc/passwd", "r");
-  rtems_current_user_env=aux; /* restore */
 }
 
 void endpwent(void)
@@ -353,21 +344,17 @@ static int getgr_r(
 {
   FILE *fp;
   int match;
-  rtems_user_env_t * aux=rtems_current_user_env; /* save */
 
   init_etc_passwd_group();
-  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if ((fp = fopen("/etc/group", "r")) == NULL) {
     errno = EINVAL;
-    rtems_current_user_env=aux; /* restore */
     return -1;
   }
   for(;;) {
     if (!scangr(fp, grp, buffer, bufsize)) {
       errno = EINVAL;
       fclose(fp);
-      rtems_current_user_env=aux; /* restore */
       return -1;
     }
     if (name) {
@@ -379,13 +366,11 @@ static int getgr_r(
     if (match) {
       fclose(fp);
       *result = grp;
-      rtems_current_user_env=aux; /* restore */
       return 0;
     }
   }
   fclose(fp);
   errno = EINVAL;
-  rtems_current_user_env=aux; /* restore */
   return -1;
 }
 
@@ -444,14 +429,11 @@ struct group *getgrent()
 
 void setgrent(void)
 {
-  rtems_user_env_t * aux=rtems_current_user_env; /* save */
   init_etc_passwd_group();
-  rtems_current_user_env=&rtems_global_user_env; /* set root */
 
   if (group_fp != NULL)
     fclose(group_fp);
   group_fp = fopen("/etc/group", "r");
-  rtems_current_user_env=aux; /* restore */
 }
 
 void endgrent(void)
