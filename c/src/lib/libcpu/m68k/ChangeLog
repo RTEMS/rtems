@@ -1,3 +1,13 @@
+2002-08-05	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR260 eliminate use of make-target-options.  This impacted
+	RTEMS allowing a distinction between the CPU32 and CPU32+ in the
+	SuperCore and required that the m68k optimized memcpy be moved
+	to libcpu.
+	* shared/misc/memcpy.c: Moved from score/cpu/m68k.
+	* configure.ac, shared/Makefile.am: Modified to reflect new directory.
+	* shared/misc/.cvsignore, shared/misc/Makefile.am: New file.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

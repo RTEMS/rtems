@@ -41,6 +41,12 @@
 		 "cc", "memory")
 #endif
 
+/* gcc doesn't know that cpu32+ is better than cpu32 :( */
+#if defined(__mcpu32p__)
+#undef M68k_HAS_MISALIGNED
+#define M68k_HAS_MISALIGNED 1
+#endif
+
 void *
 memcpy(void *s1, const void *s2, size_t n)
 {
