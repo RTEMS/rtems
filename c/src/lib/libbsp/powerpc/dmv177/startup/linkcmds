@@ -7,13 +7,14 @@ ENTRY(_start)
  *  Number of Decrementer countdowns per millisecond
  *
  *  Calculated by:  (66.67 Mhz * 1000) / 4 cycles per click
- */
+ *
 
 PROVIDE(CPU_PPC_CLICKS_PER_MS = 16667);
+*/
 
 MEMORY
   {
-        RAM : ORIGIN = 0, LENGTH = 32M
+        RAM : ORIGIN = 0x41000, LENGTH = 32M
         EPROM : ORIGIN = 0xFFF00000, LENGTH = 0x20000
   }
 

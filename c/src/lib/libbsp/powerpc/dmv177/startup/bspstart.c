@@ -134,7 +134,8 @@ void bsp_start( void )
   Cpu_table.pretasking_hook   = bsp_pretasking_hook;    /* init libc, etc. */
   Cpu_table.predriver_hook    = bsp_predriver_hook;
   Cpu_table.postdriver_hook   = bsp_postdriver_hook;
-  Cpu_table.clicks_per_usec   = 66 / 4;  /* XXX get from linkcmds */
+  /* Cpu_table.clicks_per_usec   = 66666667 / 4000000; */
+  Cpu_table.clicks_per_usec   = 66666667 / 4000000 / 2;
 
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = (12 * 1024);
