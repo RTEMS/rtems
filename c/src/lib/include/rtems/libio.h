@@ -568,4 +568,18 @@ int mount(
   char                                 *mount_point
 );
 
+/*
+ *  Boot Time Mount Table Structure
+ */
+
+typedef struct {
+  rtems_filesystem_operations_table     *fs_ops;
+  rtems_filesystem_options_t             fsoptions;
+  char                                  *device;
+  char                                  *mount_point;
+} rtems_filesystem_mount_table_t;
+
+extern rtems_filesystem_mount_table_t *rtems_filesystem_mount_table;
+extern int                             rtems_filesystem_mount_table_size;
+
 #endif /* _RTEMS_LIBIO_H */
