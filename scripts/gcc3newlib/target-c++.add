@@ -22,11 +22,11 @@ This is the gcc/g++ compiler for @target_alias@
 %{_prefix}/bin/@target_alias@-g++%{_exeext}
 %{_prefix}/bin/@target_alias@-c++filt%{_exeext}
 
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/cc1plus%{_exeext}
-%dir %{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include
-%if "@gcc_version@" >= "3.2"
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include/c++
+%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/cc1plus%{_exeext}
+%dir %{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include
+%if "%{gcc_version}" >= "3.2"
+%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include/c++
 %else
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include/g++
+%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include/g++
 %endif
 %endif

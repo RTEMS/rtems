@@ -1,10 +1,13 @@
-2003-02-26	RTEMS
+2003-02-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* setup.def: Updated gdb revision to -2 so arm will build and
-	to fix psim build problem on NetBSD.   
-	* gcc3newlib/gccnewlib.add: Ignore dependency on GNAT RPM since
-	RedHat 7.3 doesn't have it available.  Maybe later.
-	* gdb/Makefile.am: Cleanup way the RPM_SPECS_DATA variable is built.
+	* gcc3newlib/gccnewlib.add: Add %gcc_version, %newlib_version.
+	Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-c++.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-g77.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-gcc.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-gcj.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-gnat.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-objc.add: Apply %gcc_version, %newlib_version.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
