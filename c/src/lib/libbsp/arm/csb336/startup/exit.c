@@ -17,7 +17,7 @@
 #include <rtems/libio.h>
 
 int uart_poll_read(int);
-void BSP_reset();
+void bsp_reset();
 
 void bsp_cleanup(void)
 {
