@@ -112,6 +112,14 @@ int sigtimedwait(
     _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, interval ); 
   _Thread_Enable_dispatch();
 
+  /*
+   * When the thread is set free by a signal, it is need to eliminate
+   * the signal.
+   */
+
+  _POSIX_signals_Clear_signals( api, the_info->si_signo, the_info,
+                                FALSE, FALSE );
+
   errno = _Thread_Executing->Wait.return_code;
   return the_info->si_signo;
 }

@@ -34,12 +34,10 @@ int pthread_kill(
   if ( sig && !is_valid_signo(sig) )
     set_errno_and_return_minus_one( EINVAL );
 
+/* commented out when posix timers added 
   if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO )
     set_errno_and_return_minus_one( ENOSYS );
-
-  /*
-   *  RTEMS does not support sending  a siginfo signal to a specific thread.
-   */
+*/
 
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {

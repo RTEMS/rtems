@@ -22,6 +22,12 @@
 #include <rtems/posix/seterr.h>
 #include <rtems/score/isr.h>
 
+/*
+ * PARAMETERS_PASSING_S is defined in ptimer.c
+ */
+
+extern void PARAMETERS_PASSING_S (int num_signal, const struct sigaction inf);
+
 int sigaction(
   int                     sig,
   const struct sigaction *act,
