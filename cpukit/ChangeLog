@@ -1,5 +1,10 @@
 2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/net/radix.h, libnetworking/net/radix.c: Partial
+	update from FreeBSD.
+
+2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libnetworking/sys/socket.h: Further update from FreeBSD
 	(Add sa_family_t).
 
