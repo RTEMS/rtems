@@ -52,7 +52,7 @@ rtems_status_code rtems_task_ident(
   Objects_Id   *id
 )
 {
-  Objects_Name_to_id_errors  status;
+  Objects_Name_or_id_lookup_errors  status;
 
   if ( name == OBJECTS_ID_OF_SELF ) {
     *id = _Thread_Executing->Object.id;

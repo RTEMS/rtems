@@ -45,7 +45,7 @@ rtems_status_code rtems_partition_ident(
   Objects_Id   *id
 )
 {
-  Objects_Name_to_id_errors  status;
+  Objects_Name_or_id_lookup_errors  status;
 
   status = _Objects_Name_to_id(
     &_Partition_Information,

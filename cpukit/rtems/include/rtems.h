@@ -115,6 +115,26 @@ extern "C" {
  
 #define RTEMS_MINIMUN_HETERO_CONVERSION  MP_PACKET_MINIMUN_HETERO_CONVERSION
 
+/*
+ *  rtems_object_id_to_name
+ *
+ *  This directive returns the name associated with the specified 
+ *  object ID.
+ *
+ *  Input parameters:
+ *    id   - message queue id
+ *
+ *  Output parameters:
+ *    *name            - user defined object name
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code       - if unsuccessful
+ */
+
+rtems_status_code rtems_object_id_to_name(
+  rtems_id      id,
+  rtems_name   *name
+);
+
 #ifdef __cplusplus
 }
 #endif
