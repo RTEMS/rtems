@@ -244,10 +244,18 @@ esac
 AC_SUBST(GCCSED)
 
 dnl FIXME: This is a kludge
+dnl Set flags to settings all gcc variants are assumed to accept.
+if test "$ac_cv_prog_gcc" = "yes"; then
 dnl Add -Wall if using gcc as host compiler
-test "$ac_cv_prog_gcc" = "yes" && CC_CFLAGS_DEFAULT=-Wall
+  CC_CFLAGS_DEFAULT=-Wall
+dnl Add -pg to profile flags, unless specified in the environment
+  CC_CFLAGS_PROFILE_V=${CC_CFLAGS_PROFILE_V-"-pg"}
+dnl propagate cflags to ldflags, unless specified in the environment
+  CC_LDFLAGS_PROFILE_V=${CC_LDFLAGS_PROFILE_V-$CC_CFLAGS_PROFILE_V}
+fi
+
 dnl Add -g if the host compiler accepts -g, assume -g means debugging
-test "$ac_cv_prog_cc_g" = "yes" && CC_CFLAGS_DEBUG_V=-g
+test "$ac_cv_prog_cc_g" = "yes" && CC_CFLAGS_DEBUG_V=${CC_CFLAGS_DEBUG_V-"-g"}
 
 dnl check for host library functions
 dnl NOTE: must be called after AC_PROG_CC
@@ -460,6 +468,8 @@ AC_SUBST(PROJECT_ROOT)
 AC_SUBST(program_prefix)
 AC_SUBST(CC_CFLAGS_DEFAULT)
 AC_SUBST(CC_CFLAGS_DEBUG_V)
+AC_SUBST(CC_CFLAGS_PROFILE_V)
+AC_SUBST(CC_LDFLAGS_PROFILE_V)
 
 # pick up all the Makefiles in required parts of the tree
 RTEMS_CHECK_MAKEFILE(c/build-tools)
