@@ -22,21 +22,23 @@ RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
 
-RTEMS_PROJECT_ROOT
-
 dnl check target cc
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
-AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen)
+AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen,no)
 AC_PROG_AWK
 
 if test "$RPCGEN" = "no"; then
-  AC_MSG_ERROR([missing rpcgen, required to build librdbg])
+  AC_MSG_WARN([** missing rpcgen, required to build librdbg **])
+  rpctools="no"
 fi
 if test "$AWK" = "no"; then
-  AC_MSG_ERROR([missing awk, required to build librdbg])
+  AC_MSG_WARN([** missing awk, required to build librdbg **])
+  rpctools="no"
 fi
+
+AM_CONDITIONAL(RPCTOOLS, test "$rpctools" != "no")
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
@@ -44,9 +46,6 @@ RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 RTEMS_CHECK_RDBG(bspdir)
 
 AM_CONDITIONAL(HAS_RDBG,test "$HAS_RDBG" = "yes")
-
-PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
-AC_SUBST(PROJECT_INCLUDE)
 
 RTEMS_PROJECT_ROOT
 

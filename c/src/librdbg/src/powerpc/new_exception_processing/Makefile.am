@@ -33,55 +33,61 @@ OBJS = $(GEN_C_O_FILES) $(C_O_FILES) $(S_O_FILES)
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/lib.am
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rdbg \
-$(PROJECT_INCLUDE)/rdbg/remdeb.h
-
-$(PROJECT_INCLUDE)/rdbg:
-	@$(mkinstalldirs) $@
-
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBVARIANT).a
-
 #
 # Add local stuff here using +=
 #
 
-CLEANFILES += $(LIB) $(H_FILES) $(GEN_C_FILES)
+MAINTAINERCLEANFILES += $(H_FILES) $(GEN_C_FILES)
 
 FRONTEND = \"$(RTEMS_CPU)/mcp750/remdeb_f.x\"
 
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBVARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
-all: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 $(LIB): ${OBJS}
 	$(make-library)
 
-remdeb.h: $(X_FILES)
+$(srcdir)/remdeb.h: $(X_FILES)
+if RPCTOOLS
 	@rm -f $@
-	( pwd=`pwd`; cd $(srcdir)/../..; \
+	( cd $(top_srcdir)/src; \
 	$(RPCGEN) -h -DFRONTEND=$(FRONTEND) \
-	  -o $$pwd/$@ remdeb.x )
+	  -o powerpc/mcp750/remdeb.h remdeb.x )
+endif
+$(srcdir)/remdeb_xdr.c: $(X_FILES)
+if RPCTOOLS
+	@rm -f $@
+	( cd $(top_srcdir)/src; \
+	$(RPCGEN) -c -DFRONTEND=$(FRONTEND) \
+	  -o powerpc/mcp750/remdeb_xdr.c remdeb.x )
+endif
 
-$(PROJECT_INCLUDE)/rdbg/remdeb.h: remdeb.h
+$(srcdir)/remdeb_svc.c: $(X_FILES)
+if RPCTOOLS
+	@rm -f $@ tmpSvc.c
+	( cd $(top_srcdir)/src; \
+	$(RPCGEN) -m -DFRONTEND=$(FRONTEND) \
+	  -o powerpc/mcp750/tmpSvc.c remdeb.x; \
+	$(AWK) -f ./awk.svc THEPROG="remdeb.h" powerpc/mcp750/tmpSvc.c \
+	  > powerpc/mcp750/remdeb_svc.c; \
+	rm -f powerpc/mcp750/tmpSvc.c )
+endif
+
+$(PROJECT_INCLUDE)/rdbg/remdeb.h: $(srcdir)/remdeb.h
 	$(INSTALL_DATA) $< $@
 
-remdeb_xdr.c: $(X_FILES)
-	@rm -f $@
-	( pwd=`pwd`; cd $(srcdir)/../..; \
-	$(RPCGEN) -c -DFRONTEND=$(FRONTEND) \
-	  -o $$pwd/$@ remdeb.x )
+$(PROJECT_INCLUDE)/rdbg:
+	@$(mkinstalldirs) $@
 
-remdeb_svc.c: $(X_FILES)
-	@rm -f $@ tmpSvc.c
-	( pwd=`pwd`; cd $(srcdir)/../..; \
-	$(RPCGEN) -s udp -DFRONTEND=$(FRONTEND) \
-	  -o $$pwd/tmpSvc.c remdeb.x )
-	$(AWK) -f $(srcdir)/../../awk.svc THEPROG="remdeb.h" tmpSvc.c >$@
-	@rm -f tmpSvc.c
+PREINSTALL_FILES = \
+$(PROJECT_INCLUDE)/rdbg \
+$(PROJECT_INCLUDE)/rdbg/remdeb.h
 
-EXTRA_DIST = remdeb_f.x
+TMPINSTALL_FILES += \
+$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBVARIANT).a
+
+all-local: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
+
+EXTRA_DIST = remdeb_f.x $(GEN_C_FILES)
 
 include $(top_srcdir)/../../../automake/local.am
