@@ -33,7 +33,7 @@ void  boot_card();
                   movel  #end, %d0;\n\
                   addl   " STACK_SIZE ",%d0;\n\
                   movel  %d0,%sp;\n\
-                  link %a6, #0"\n\
+                  link %a6, #0"
 		  );
   /*
    * Initialize RAM by copying the .data section out of ROM (if

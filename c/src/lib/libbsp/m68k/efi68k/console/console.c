@@ -134,13 +134,14 @@ void xmit_interrupt(void) {
 void modem_status(void) {
   register char a;
   
-  if ( ((a=*MDSR) & DCTS) != 0 )
+  if ( ((a=*MDSR) & DCTS) != 0 ) {
     if ( (a & CTS) == 0)
       _tx_stop = 1;
     else {
       _tx_stop = 0;
       xmit_interrupt();
     }
+  }
 }
 
 /* transfer character from the buffer */

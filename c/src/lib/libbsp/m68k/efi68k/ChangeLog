@@ -1,3 +1,7 @@
+2002-11-02	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c, start/start.c: Removed warnings.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
