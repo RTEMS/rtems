@@ -15,17 +15,17 @@ if HAS_NETWORKING
 libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
     -DDIAGNOSTIC -DBOOTP_COMPAT
 
-EXTRA_LIBRARIES = o-optimize/libnetworking.a
-o_optimize_libnetworking_a_SOURCES =
-o_optimize_libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
-$(libnetworking_CPPFLAGS)
+EXTRA_LIBRARIES = libnetworking.a
+libnetworking_a_SOURCES =
+libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+    $(libnetworking_CPPFLAGS)
 
-EXTRA_LIBRARIES += o-debug/libnetworking.a
-o_debug_libnetworking_a_SOURCES = 
-o_debug_libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
-$(libnetworking_CPPFLAGS)
+EXTRA_LIBRARIES += libnetworking_g.a
+libnetworking_g_a_SOURCES =
+libnetworking_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
+    $(libnetworking_CPPFLAGS)
 
-TMP_LIBS = $(ARCH)/libnetworking.a
+TMP_LIBS = libnetworking$(LIB_VARIANT).a
 
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
@@ -44,8 +44,8 @@ include_arpa_HEADERS = arpa/ftp.h arpa/inet.h arpa/nameser.h \
 kern_C_FILES = kern/kern_mib.c kern/kern_subr.c kern/kern_sysctl.c \
     kern/uipc_domain.c kern/uipc_mbuf.c kern/uipc_socket.c \
     kern/uipc_socket2.c
-o_optimize_libnetworking_a_SOURCES += $(kern_C_FILES)
-o_debug_libnetworking_a_SOURCES += $(kern_C_FILES)
+libnetworking_a_SOURCES += $(kern_C_FILES)
+libnetworking_g_a_SOURCES += $(kern_C_FILES)
 
 ## machine
 
@@ -66,8 +66,8 @@ include_net_HEADERS = net/bpf.h net/ethernet.h net/if.h net/if_arp.h \
 net_C_FILES = net/if.c net/if_ethersubr.c net/if_loop.c net/radix.c \
     net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c net/if_ppp.c \
     net/ppp_tty.c net/pppcompress.c
-o_optimize_libnetworking_a_SOURCES += $(net_C_FILES)
-o_debug_libnetworking_a_SOURCES += $(net_C_FILES)
+libnetworking_a_SOURCES += $(net_C_FILES)
+libnetworking_g_a_SOURCES += $(net_C_FILES)
 
 ## netinet
 
@@ -88,8 +88,8 @@ netinet_C_FILES = netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/tcp_debug.c netinet/tcp_input.c netinet/tcp_output.c \
     netinet/tcp_subr.c netinet/tcp_timer.c netinet/tcp_usrreq.c \
     netinet/udp_usrreq.c
-o_optimize_libnetworking_a_SOURCES += $(netinet_C_FILES)
-o_debug_libnetworking_a_SOURCES += $(netinet_C_FILES)
+libnetworking_a_SOURCES += $(netinet_C_FILES)
+libnetworking_g_a_SOURCES += $(netinet_C_FILES)
 
 ## nfs
 
@@ -99,8 +99,8 @@ include_nfs_HEADERS = nfs/krpc.h nfs/nfs.h nfs/nfsdiskless.h nfs/nfsproto.h \
     nfs/rpcv2.h nfs/xdr_subs.h
 
 nfs_C_FILES = nfs/bootp_subr.c
-o_optimize_libnetworking_a_SOURCES += $(nfs_C_FILES)
-o_debug_libnetworking_a_SOURCES += $(nfs_C_FILES)
+libnetworking_a_SOURCES += $(nfs_C_FILES)
+libnetworking_g_a_SOURCES += $(nfs_C_FILES)
 
 ## rtems
 
@@ -115,8 +115,8 @@ rtems_C_FILES = rtems/sghostname.c rtems/issetugid.c rtems/rtems_glue.c \
     rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c \
     rtems/rtems_showtcpstat.c rtems/rtems_showudpstat.c rtems/rtems_select.c \
     rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c
-o_optimize_libnetworking_a_SOURCES += $(rtems_C_FILES)
-o_debug_libnetworking_a_SOURCES += $(rtems_C_FILES)
+libnetworking_a_SOURCES += $(rtems_C_FILES)
+libnetworking_g_a_SOURCES += $(rtems_C_FILES)
 
 ## sys
 
@@ -139,15 +139,13 @@ include_vm_HEADERS = vm/vm.h vm/vm_extern.h vm/vm_kern.h vm/vm_param.h
 
 libc_CPPFLAGS = -DNOPOLL -DNOSELECT
 
-EXTRA_LIBRARIES += o-optimize/libc.a
-o_optimize_libc_a_SOURCES =
-o_optimize_libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
-$(libc_CPPFLAGS)
+EXTRA_LIBRARIES += libc.a
+libc_a_SOURCES =
+libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(libc_CPPFLAGS)
 
-EXTRA_LIBRARIES += o-debug/libc.a
-o_debug_libc_a_SOURCES =
-o_debug_libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
-$(libc_CPPFLAGS)
+EXTRA_LIBRARIES += libc_g.a
+libc_g_a_SOURCES =
+libc_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(libc_CPPFLAGS)
 
 libc_C_FILES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/gethostbydns.c libc/gethostbyht.c libc/gethostbynis.c \
@@ -162,15 +160,15 @@ libc_C_FILES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/res_comp.c libc/res_data.c libc/res_debug.c libc/res_init.c \
     libc/res_mkquery.c libc/res_mkupdate.c libc/res_query.c libc/res_send.c \
     libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c
-o_optimize_libc_a_SOURCES += $(libc_C_FILES)
-o_debug_libc_a_SOURCES += $(libc_C_FILES)
+libc_a_SOURCES += $(libc_C_FILES)
+libc_g_a_SOURCES += $(libc_C_FILES)
 
 man_MANS = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
     libc/getservent.3 libc/inet.3 libc/iso_addr.3 libc/linkaddr.3 libc/ns.3 \
     libc/rcmd.3 libc/resolver.3
 
-TMP_LIBS += $(ARCH)/libc.a
+TMP_LIBS += libc$(LIB_VARIANT).a
 
 EXTRA_DIST = libc/addr2ascii.3 libc/addr2ascii.c libc/ascii2addr.c \
     libc/base64.c libc/byteorder.3 libc/ether_addr.c libc/ethers.3 \
@@ -195,22 +193,20 @@ EXTRA_DIST = libc/addr2ascii.3 libc/addr2ascii.c libc/ascii2addr.c \
 
 lib_CPPFLAGS = -DNOPOLL -DNOSELECT
 
-EXTRA_LIBRARIES += o-optimize/lib.a
-o_optimize_lib_a_SOURCES =
-o_optimize_lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
-$(lib_CPPFLAGS)
+EXTRA_LIBRARIES += lib.a
+lib_a_SOURCES =
+lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(lib_CPPFLAGS)
 
-EXTRA_LIBRARIES += o-debug/lib.a
-o_debug_lib_a_SOURCES =
-o_debug_lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
-$(lib_CPPFLAGS)
+EXTRA_LIBRARIES += lib_g.a
+lib_g_a_SOURCES =
+lib_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(lib_CPPFLAGS)
 
 lib_C_FILES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c lib/ftpfs.c \
     lib/syslog.c lib/tftpDriver.c
-o_optimize_lib_a_SOURCES += $(lib_C_FILES)
-o_debug_lib_a_SOURCES += $(lib_C_FILES)
+lib_a_SOURCES += $(lib_C_FILES)
+lib_g_a_SOURCES += $(lib_C_FILES)
 
-TMP_LIBS += $(ARCH)/lib.a
+TMP_LIBS += lib$(LIB_VARIANT).a
 
 # ---
 all-local: $(PREINSTALL_FILES) $(TMP_LIBS)

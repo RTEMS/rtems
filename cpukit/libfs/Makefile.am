@@ -37,17 +37,17 @@ else
 libimfs_C_FILES = $(libimfs_EMBEDDED_C_FILES)
 endif
 
-EXTRA_LIBRARIES = o-optimize/libimfs.a
-o_optimize_libimfs_a_SOURCES = $(libimfs_C_FILES)
-o_optimize_libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+EXTRA_LIBRARIES = libimfs.a
+libimfs_a_SOURCES = $(libimfs_C_FILES)
+libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += o-debug/libimfs.a
-o_debug_libimfs_a_SOURCES = $(libimfs_C_FILES)
-o_debug_libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+EXTRA_LIBRARIES += libimfs_g.a
+libimfs_g_a_SOURCES = $(libimfs_C_FILES)
+libimfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 include_HEADERS += src/imfs/imfs.h
 
-IMFSLIB = $(ARCH)/libimfs.a
+IMFSLIB = libimfs$(LIB_VARIANT).a
 
 # dosfs
 
@@ -69,16 +69,15 @@ libdosfs_C_FILES = $(libdosfs_FATFS_C_FILES) $(libdosfs_DOSFS_C_FILES)
 
 include_HEADERS += src/dosfs/dosfs.h
 
-DOSFSLIB = $(ARCH)/libdosfs.a
+DOSFSLIB = libdosfs$(LIB_VARIANT).a
 
-EXTRA_LIBRARIES += o-optimize/libdosfs.a
-o_optimize_libdosfs_a_SOURCES = $(libdosfs_C_FILES)
-o_optimize_libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+EXTRA_LIBRARIES += libdosfs.a
+libdosfs_a_SOURCES = $(libdosfs_C_FILES)
+libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += o-debug/libdosfs.a
-o_debug_libdosfs_a_SOURCES = $(libdosfs_C_FILES)
-o_debug_libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
+EXTRA_LIBRARIES += libdosfs_g.a
+libdosfs_g_a_SOURCES = $(libdosfs_C_FILES)
+libdosfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 endif
 
 all-local: $(PREINSTALL_FILES) $(IMFSLIB) $(DOSFSLIB)
