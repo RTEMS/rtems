@@ -281,6 +281,7 @@ sapi/Makefile
 score/Makefile
 score/cpu/Makefile
 score/cpu/arm/Makefile
+score/cpu/avr/Makefile
 score/cpu/c4x/Makefile
 score/cpu/h8300/Makefile
 score/cpu/i386/Makefile
