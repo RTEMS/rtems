@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
+@c  COPYRIGHT (c) 1988-1999.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -22,13 +22,17 @@ getgrname(), Function, Implemented
 getgrnam_r(), Function, Implemented
 @end example
 
+NOTE: Creates /etc/group if none exists. 
+
 @subsection User Database Access
 
 @example
 struct passwd, Type, Implemented
-getpwuid(), Function, Implemented, assumes /etc/passwd exists
+getpwuid(), Function, Implemented
 getpwuid_r(), Function, Implemented
-getpwnam(), Function, Implemented, assumes /etc/passwd exists
+getpwnam(), Function, Implemented
 getpwnam_r(), Function, Implemented
 @end example
+
+NOTE: Creates /etc/passwd if none exists. 
 

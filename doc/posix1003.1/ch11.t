@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
+@c  COPYRIGHT (c) 1988-1999.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -10,8 +10,11 @@
 
 @section Semaphore Characteristics
 
+NOTE: Semaphores are implemented but only unnamed semaphores
+are currently tested.
+
 @example
-sem_t, Type, Untested Implementation
+sem_t, Type, Implemented
 @end example
 
 @section Semaphore Functions
@@ -19,51 +22,51 @@ sem_t, Type, Untested Implementation
 @subsection Initialize an Unnamed Semaphore
 
 @example
-sem_init(), Function, Untested Implementation
-SEM_FAILED, Constant, Unimplemented
+sem_init(), Function, Implemented
+SEM_FAILED, Constant, Implemented
 @end example
 
 @subsection Destroy an Unnamed Semaphore
 
 @example
-sem_destroy(), Function, Untested Implementation
+sem_destroy(), Function, Implemented
 @end example
 
 @subsection Initialize/Open a Named Semaphore
 
 @example
-sem_open(), Function, Untested Implementation
+sem_open(), Function, Implemented
 @end example
 
 @subsection Close a Named Semaphore
 
 @example
-sem_close(), Function, Untested Implementation
+sem_close(), Function, Implemented
 @end example
 
 @subsection Remove a Named Semaphore
 
 @example
-sem_unlink(), Function, Untested Implementation
+sem_unlink(), Function, Implemented
 @end example
 
 @subsection Lock a Semaphore
 
 @example
-sem_wait(), Function, Untested Implementation
-sem_trywait(), Function, Untested Implementation
+sem_wait(), Function, Implemented
+sem_trywait(), Function, Implemented
 @end example
 
 @subsection Unlock a Semaphore
 
 @example
-sem_post(), Function, Untested Implementation
+sem_post(), Function, Implemented
 @end example
 
 @subsection Get the Value of a Semaphore
 
 @example
-sem_getvalue(), Function, Untested Implementation
+sem_getvalue(), Function, Implemented
 @end example
 
 @section Mutexes

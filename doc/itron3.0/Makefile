@@ -1,5 +1,5 @@
 #
-#  COPYRIGHT (c) 1988-1998.
+#  COPYRIGHT (c) 1988-1999.
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 #
@@ -24,7 +24,7 @@ GENERATED_FILES= \
     fixedblock.texi time.texi config.texi network.texi
 
 FILES= $(PROJECT).texi \
-  $(COMMON_FILES) $(GENERATED_FILES)
+  $(COMMON_FILES) preface.texi $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 

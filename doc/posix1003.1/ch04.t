@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
+@c  COPYRIGHT (c) 1988-1999.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -13,8 +13,8 @@
 @subsection Get Process and Parent Process IDs
 
 @example
-getpid(), Function, Dummy Implementation
-getppid(), Function, Dummy Implementation
+getpid(), Function, Implemented, SUSP Functionality
+getppid(), Function, Implemented, SUSP Functionality
 @end example
 
 @section User Identification
@@ -22,30 +22,30 @@ getppid(), Function, Dummy Implementation
 @subsection Get Real User Effective User Real Group and Effective Group IDs
 
 @example
-getuid(), Function, Dummy Implementation
-geteuid(), Function, Dummy Implementation
-getgid(), Function, Dummy Implementation
-getegid(), Function, Dummy Implementation
+getuid(), Function, Implemented, SUSP Functionality
+geteuid(), Function, Implemented, SUSP Functionality
+getgid(), Function, Implemented, SUSP Functionality
+getegid(), Function, Implemented, SUSP Functionality
 @end example
 
 @subsection Set User and Group IDs
 
 @example
-setuid(), Function, Dummy Implementation
-setgid(), Function, Dummy Implementation
+setuid(), Function, Implemented, SUSP Functionality
+setgid(), Function, Implemented, SUSP Functionality
 @end example
 
 @subsection Get Supplementary Group IDs
 
 @example
-getgroups(), Function, Dummy Implementation
+getgroups(), Function, Implemented, SUSP Functionality
 @end example
 
 @subsection Get User Name
 
 @example
-getlogin(), Function, Dummy Implementation
-getlogin_r(), Function, Dummy Implementation
+getlogin(), Function, Implemented, SUSP Functionality
+getlogin_r(), Function, Implemented, SUSP Functionality
 @end example
 
 @section Process Groups
@@ -53,13 +53,13 @@ getlogin_r(), Function, Dummy Implementation
 @subsection Get Process Group ID
 
 @example
-getpgrp(), Function, Dummy Implementation
+getpgrp(), Function, Implemented, SUSP Functionality
 @end example
 
 @subsection Create Session and Set Process Group ID
 
 @example
-setsid(), Function, Dummy Implementation
+setsid(), Function, Implemented, SUSP Functionality
 @end example
 
 @subsection Set Process Group ID for Job Control
@@ -73,8 +73,8 @@ setpgid(), Function, Dummy Implementation
 @subsection Get System Name
 
 @example
-struct utsname, Type, Untested Implementation
-uname(), Function, Untested Implementation
+struct utsname, Type, Implemented
+uname(), Function, Implemented
 @end example
 
 @section Time
@@ -108,14 +108,14 @@ getenv(), Function, Implemented
 @subsection Generate Terminal Pathname
 
 @example
-ctermid(), Function, Unimplemented
+ctermid(), Function, Implemented
 @end example
 
 @subsection Determine Terminal Device Name
 
 @example
-ttyname(), Function, Untested Implementation, assumes directory services
-ttyname_r(), Function, Unimplemented
+ttyname(), Function, Implemented, untested
+ttyname_r(), Function, Implemented, untested
 isatty(), Function, Implemented
 @end example
 
@@ -124,7 +124,7 @@ isatty(), Function, Implemented
 @subsection Get Configurable System Variables
 
 @example
-sysconf(), Function, Not Implemented
+sysconf(), Function, Dummy Implementation
 _SC_AIO_LISTIO_MAX, Constant, Implemented
 _SC_AIO_MAX, Constant, Implemented
 _SC_AIO_PRIO_DELTA_MAX, Constant, Implemented

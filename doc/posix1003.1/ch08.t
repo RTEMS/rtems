@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
+@c  COPYRIGHT (c) 1988-1999.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -239,9 +239,9 @@ putchar_unlocked(), Function, Unimplemented
 @subsection Nonlocal Jumps
 
 @example
-sigjmp_buf, Type, Unimplemented
-sigsetjmp(), Function, Unimplemented
-siglongjmp(), Function, Unimplemented
+sigjmp_buf, Type, Implemented
+sigsetjmp(), Function, Implemented
+siglongjmp(), Function, Implemented
 @end example
 
 @subsection Set Time Zone

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
+@c  COPYRIGHT (c) 1988-1999.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -54,7 +54,7 @@ write(), Function, Implemented
 @subsection File Control
 
 @example
-struct flock, Type, Unimplemented
+struct flock, Type, Implemented
 fcntl(), Function, Implemented
 F_DUPFD, Constant, Implemented
 F_GETFD, Constant, Implemented

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1998.
+@c  COPYRIGHT (c) 1988-1999.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -43,17 +43,17 @@
 @subsubsection Special Characters
 
 @example
-INTR, Constant, Unimplemented
-QUIT, Constant, Unimplemented
+INTR, Constant, Implemented
+QUIT, Constant, Implemented
 ERASE, Constant, Implemented
 KILL, Constant, Implemented
 EOF, Constant, Implemented
-NL, Constant, Unimplemented
-EOL, Constant, Unimplemented
-SUSP, Constant, Unimplemented
-STOP, Constant, Unimplemented
-START, Constant, Unimplemented
-CR, Constant, Unimplemented
+NL, Constant, Implemented
+EOL, Constant, Implemented
+SUSP, Constant, Implemented
+STOP, Constant, Implemented
+START, Constant, Implemented
+CR, Constant, Implemented
 @end example
 
 @subsubsection Modem Disconnect
@@ -187,21 +187,21 @@ tcsetattr(), Function, Implemented
 @subsection Line Control Functions
 
 @example
-tcsendbreak(), Function, Unimplemented
+tcsendbreak(), Function, Dummy Implementation
 tcdrain(), Function, Implemented
-tcflush(), Function, Unimplemented
-tcflow(), Function, Unimplemented
+tcflush(), Function, Dummy Implementation
+tcflow(), Function, Dummy Implementation
 @end example
 
 @subsection Get Foreground Process Group ID
 
 @example
-tcgetprgrp(), Function, Unimplementable
+tcgetprgrp(), Function, Implemented, SUSP
 @end example
 
 @subsection Set Foreground Process Group ID
 
 @example
-tcsetprgrp(), Function, Unimplementable
+tcsetprgrp(), Function, Dummy Implementation
 @end example
 

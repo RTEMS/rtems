@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-1998.
+@c  COPYRIGHT (c) 1988-1999.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -77,14 +77,14 @@ END-INFO-DIR-ENTRY
 @subtitle Edition @value{edition}, for RTEMS @value{version}
 @sp 1
 @subtitle @value{update-month}
-@author UAH CS595
+@author On-Line Applications Research Corporation
 @page
 @end titlepage
 
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
-@include status.texi
+@include preface.texi
 @include task.texi
 @include tasksync.texi
 @include semaphore.texi
@@ -98,6 +98,7 @@ END-INFO-DIR-ENTRY
 @include time.texi
 @include config.texi
 @include network.texi
+@include status.texi
 @ifinfo
 @node Top, , (dir), (dir)
 @top itron
@@ -105,7 +106,7 @@ END-INFO-DIR-ENTRY
 This is the online version of the RTEMS ITRON 3.0 API User's Guide.
 
 @menu
-* ITRON Implementation Status::
+* Preface::
 * Task Manager::
 * Task-Dependent Synchronization Manager::
 * Semaphore Manager::
@@ -119,6 +120,7 @@ This is the online version of the RTEMS ITRON 3.0 API User's Guide.
 * Time Manager::
 * System Manager::
 * Network Support Manager::
+* ITRON Implementation Status::
 * Command and Variable Index::
 * Concept Index::
 @end menu
