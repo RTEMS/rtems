@@ -74,7 +74,7 @@ void Install_clock(rtems_isr_entry clock_isr)
   
   Clock_driver_ticks = 0;
   
-  pit_value = BSP_Configuration.microseconds_per_tick *
+  pit_value = BSP_Configuration.microseconds_per_tick /
                Cpu_table.clicks_per_usec;
   if (pit_value == 0) {
     pit_value = 0xffff;
