@@ -20,3 +20,5 @@ install-exec-local: $(bin_PROGRAMS)
 	  $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools
 
 preinstall: install-exec-local
+
+include $(top_srcdir)/../../automake/local.am

@@ -1,9 +1,9 @@
 #!/bin/sh
-
-# $Id$
-
+#
 # helps bootstrapping, when checked out from CVS
 # requires GNU autoconf and GNU automake
+#
+# $Id$
 
 # this is not meant to be exported outside the source tree
 

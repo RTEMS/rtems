@@ -28,7 +28,7 @@ usage:  print_dump  [ -v ] \n\
 #include <memory.h>
 #include <stdarg.h>
 
-#include "../../../../../../build-tools/src/config.h"
+#include "config.h"
 
 #ifndef VMS
 #ifndef HAVE_STRERROR

@@ -179,8 +179,14 @@ if test "$target_cpu" = "unix" ; then
   fi
 fi
 
+# Collect config subdirs for exec/score/tools
+t="c/src/exec/score/tools"
+scoretools_cfgdirs="$t/generic"
+if test -d $srcdir/$t/$target_cpu; then
+  scoretools_cfgdirs="$scoretools_cfgdirs $t/$target_cpu"
+fi
+
 # find all the Executive Makefiles
-RTEMS_CHECK_MAKEFILE(c/src/exec/score/tools/$target_cpu)
 RTEMS_CHECK_MAKEFILE(c/src/exec/rtems)
 RTEMS_CHECK_MAKEFILE(c/src/exec/sapi)
 RTEMS_CHECK_MAKEFILE(c/src/exec/score/cpu/$target_cpu)
@@ -260,6 +266,13 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
         bspdirs="$bspdirs $bspdir"
         RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/$bspcpudir$bspdir)
         RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/${bspcpudir}shared)
+
+        # HACK: sed out bsp-tools from makefiles
+        t="c/src/lib/libbsp/$bspcpudir$bspdir/tools"
+        if test -d "$srcdir/$t"; then
+          bsptools_cfgdirs="$bsptools_cfgdirs $t"
+          makefiles=`echo "$makefiles" | sed -e "s%$t/Makefile%%g"`
+        fi
       fi
     else
       AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  $i])
@@ -320,6 +333,7 @@ if test "$tests_enabled" = "yes"; then
    if test "$RTEMS_HAS_POSIX_API" = "yes"; then
      RTEMS_CHECK_MAKEFILE(c/src/tests/psxtests)
    fi
+   AC_CONFIG_SUBDIRS(c/src/tests/tools/generic)
 fi 
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
@@ -370,6 +384,9 @@ RTEMS_CHECK_MAKEFILE(c/src/lib/libmisc)
 RTEMS_CHECK_MAKEFILE(c/src/tests/samples)
 
 AC_CONFIG_SUBDIRS(c/build-tools)
+AC_CONFIG_SUBDIRS($scoretools_cfgdirs)
+AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
+
 # FIXME: libwapi needs a separate configure.in in future ;-
 # AC_CONFIG_SUBDIRS(c/src/lib/libwapi)
 
@@ -394,7 +411,6 @@ c/src/exec/score/${inline_dir}/rtems/Makefile
 c/src/exec/score/${inline_dir}/rtems/score/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
-c/src/exec/score/tools/generic/Makefile
 c/src/exec/wrapup/Makefile
 c/src/exec/wrapup/rtems/Makefile
 c/src/lib/Makefile
@@ -411,7 +427,6 @@ c/src/tests/support/include/Makefile
 c/src/tests/support/stubdr/Makefile
 c/src/tests/support/wrapup/Makefile
 c/src/tests/tools/Makefile
-c/src/tests/tools/generic/Makefile
 $makefiles
 c/update-tools/Makefile)
 
