@@ -72,4 +72,3 @@ typedef void ppc_isr;
 #endif  /* !ASM */
 
 #endif
-/* end of include file */

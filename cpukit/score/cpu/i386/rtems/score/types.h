@@ -57,4 +57,3 @@ typedef i386_isr ( *i386_isr_entry )( void );
 #endif  /* !ASM */
 
 #endif
-/* end of include file */

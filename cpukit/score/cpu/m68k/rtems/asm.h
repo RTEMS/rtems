@@ -144,4 +144,3 @@
 #define EXTERN(sym) .globl SYM (sym)
 
 #endif
-/* end of include file */

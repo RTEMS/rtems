@@ -56,4 +56,3 @@ typedef void ( *h8300_isr_entry )( void );
 #endif  /* !ASM */
 
 #endif
-/* end of include file */

@@ -417,4 +417,3 @@ static inline void * _CPU_virtual_to_physical (
 #endif
 
 #endif /* __M68K_h */
-/* end of include file */

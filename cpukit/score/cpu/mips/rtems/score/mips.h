@@ -271,4 +271,3 @@ extern "C" {
 #endif
 
 #endif /* ! _INCLUDE_MIPS_h */
-/* end of include file */

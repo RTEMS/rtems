@@ -266,4 +266,3 @@ extern "C" {
 #endif
 
 #endif /* ! _INCLUDE_SPARC_h */
-/* end of include file */

@@ -67,4 +67,3 @@ extern "C" {
 #endif
 
 #endif /* ! _INCLUDE_NO_CPU_h */
-/* end of include file */

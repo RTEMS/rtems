@@ -56,4 +56,3 @@ typedef void ( *sparc_isr_entry )( void );
 #endif  /* !ASM */
 
 #endif
-/* end of include file */

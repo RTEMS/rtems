@@ -81,4 +81,3 @@ extern "C" {
 #endif
 
 #endif /* ! _INCLUDE_ARM_h */
-/* end of include file */
