@@ -46,7 +46,7 @@ CLOBBER_ADDITIONS +=
 $(LIB): ${OBJS}
 	$(make-library)
 	cd $(PROJECT_ROOT) ; \
-	    $(PROJECT_RELEASE)/bin/size_rtems $(RTEMS_CPU) $(RTEMS_BSP) \
+	    $(PROJECT_RELEASE)/bin/size_rtems $(RTEMS_BSP) \
 		>$(PROJECT_RELEASE)/lib/sizeinfo.txt
 
 all:	${ARCH} $(SRCS) $(LIB)
