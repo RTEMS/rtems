@@ -113,8 +113,10 @@ rtems_httpd_daemon()
 /*
  *	Initialize the web server
  */
-	if (initWebs() < 0) {
-	  rtems_panic("Unable to initialize Web server !!\n");
+	while (initWebs() < 0) {
+		printf("\nUnable to initialize Web server !!\n"
+			" Suspending the task. Resume to try again.\n");
+		rtems_task_suspend( RTEMS_SELF);
 	}
 
 /*
@@ -137,7 +139,7 @@ rtems_httpd_daemon()
 	memLeaks();
 #endif
 	bclose();
-        rtems_task_delete( RTEMS_SELF );
+	rtems_task_delete( RTEMS_SELF );
 }
 
 /******************************************************************************/

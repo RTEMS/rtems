@@ -30,6 +30,10 @@ int emfInst;							/* Application instance handle */
 
 void error(E_ARGS_DEC, int flags, char_t *fmt, ...)
 {
+  va_list arglist;
+  
+  va_start(arglist, fmt);
+  
 	if (flags & E_LOG) {
 		/* Log error message */
 
@@ -40,6 +44,9 @@ void error(E_ARGS_DEC, int flags, char_t *fmt, ...)
 		/* Display message to the user */
 
 	}
+
+  vprintf (fmt, arglist);
+  va_end(arglist);
 }
 
 /******************************************************************************/
