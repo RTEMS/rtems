@@ -1,5 +1,14 @@
 2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/new-exceptions/cpu.h (CPU_HARDWARE_FP, CPU_ALL_TASKS_ARE_FP,
+	CPU_IDLE_TASK_IS_FP): Remove.
+	* rtems/old-exceptions/cpu.h (CPU_HARDWARE_FP, CPU_ALL_TASKS_ARE_FP,
+	CPU_IDLE_TASK_IS_FP): Remove.
+	* rtems/score/cpu.h (CPU_HARDWARE_FP, CPU_ALL_TASKS_ARE_FP,
+	CPU_IDLE_TASK_IS_FP, CPU_SOFTWARE_FP): New.
+
+2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/cpu.h: Derive CPU_{BIG|LITTLE}_ENDIAN from
 	__BIG_ENDIAN__.
 
