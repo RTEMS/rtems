@@ -6,7 +6,7 @@
 PGM = $(ARCH)/flashentry.rel
 
 S_FILES = flashentry.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(S_O_FILES)
 
