@@ -59,7 +59,9 @@ void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
+#if (PPC_USE_SPRG)
   int i;
+#endif
 #if (PPC_ABI != PPC_ABI_POWEROPEN)
   register unsigned32 r2 = 0;
 #if (PPC_ABI != PPC_ABI_GCC27)
