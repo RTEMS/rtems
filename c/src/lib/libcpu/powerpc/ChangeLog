@@ -1,5 +1,9 @@
 2001-04-17	Joel Sherrill <joel@OARcorp.com>
 
+	* shared/include/cpu.h: Added ifndef ASM.
+ 
+2001-04-17	Joel Sherrill <joel@OARcorp.com>
+
 	* ChangeLog: Corrected paths on past few commits.
  
 2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -23,6 +23,7 @@
 #include <rtems/score/cpu.h>
 #include <libcpu/raw_exception.h>
 #include <libcpu/cpu.h>
+#include <libcpu/cpuIdent.h>
 
 static rtems_raw_except_connect_data* 		raw_except_table;
 static rtems_raw_except_connect_data  		default_raw_except_entry;

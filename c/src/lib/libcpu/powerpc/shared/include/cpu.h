@@ -179,6 +179,7 @@ n:
  *  Routines to access the time base register
  */
 
+#ifndef ASM
 static inline unsigned long long PPC_Get_timebase_register( void )
 {
   unsigned long tbr_low;
@@ -209,7 +210,7 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
   asm volatile( "mtspr 285, %0" : : "r" (tbr_high));
   
 }
-#endif
+#endif /* ASM */
 
 #define _CPU_MSR_GET( _msr_value ) \
   do { \
