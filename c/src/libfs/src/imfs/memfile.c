@@ -197,10 +197,16 @@ int memfile_lseek(
 
   the_jnode = iop->file_info;
 
-  if (IMFS_memfile_extend( the_jnode, iop->offset ))
-    set_errno_and_return_minus_one( ENOSPC );
+  if (the_jnode->type == IMFS_LINEAR_FILE) {
+    if (iop->offset > the_jnode->info.linearfile.size)
+      iop->offset = the_jnode->info.linearfile.size;
+  }
+  else {  /* Must be a block file (IMFS_MEMORY_FILE). */
+    if (IMFS_memfile_extend( the_jnode, iop->offset ))
+      set_errno_and_return_minus_one( ENOSPC );
 
-  iop->size = the_jnode->info.file.size;
+    iop->size = the_jnode->info.file.size;
+  }
   return iop->offset;
 }
 
@@ -499,8 +505,6 @@ int IMFS_memfile_remove(
   if ( info->triply_indirect ) {
     for ( i=0 ; i<IMFS_MEMFILE_BLOCK_SLOTS ; i++ ) {
       p = (block_p *) info->triply_indirect[i];
-      if (!p)  /* ensure we have a valid pointer */
-        break;
       for ( j=0 ; j<IMFS_MEMFILE_BLOCK_SLOTS ; j++ ) {
         if ( p[j] ) {
           memfile_free_blocks_in_table( (block_p **)&p[j], to_free);
@@ -554,8 +558,10 @@ MEMFILE_STATIC int IMFS_memfile_read(
   if ( !the_jnode )
     set_errno_and_return_minus_one( EIO );
 
-  assert( the_jnode->type == IMFS_MEMORY_FILE );
-  if ( the_jnode->type != IMFS_MEMORY_FILE )
+  assert( the_jnode->type == IMFS_MEMORY_FILE ||
+          the_jnode->type == IMFS_LINEAR_FILE );
+  if ( the_jnode->type != IMFS_MEMORY_FILE &&
+       the_jnode->type != IMFS_LINEAR_FILE )
     set_errno_and_return_minus_one( EIO );
 
   /*
@@ -573,6 +579,25 @@ MEMFILE_STATIC int IMFS_memfile_read(
   my_length = length;
   if ( !my_length )
     set_errno_and_return_minus_one( EINVAL );
+
+  /*
+   *  Linear files (as created from a tar file are easier to handle
+   *  than block files).
+   */
+  if (the_jnode->type == IMFS_LINEAR_FILE) {
+    unsigned char  *file_ptr;
+
+    file_ptr = (unsigned char *)the_jnode->info.linearfile.direct;
+
+    if (my_length > (the_jnode->info.linearfile.size - start))
+      my_length = the_jnode->info.linearfile.size - start;
+
+    memcpy(dest, &file_ptr[start], my_length);
+
+    IMFS_update_atime( the_jnode );
+
+    return my_length;
+  }
 
   /*
    *  If the last byte we are supposed to read is past the end of this
@@ -1090,8 +1115,8 @@ int memfile_rmnod(
     /*
      * Free memory associated with a memory file.
      */
-
-    IMFS_memfile_remove( the_jnode );
+    if (the_jnode->type != IMFS_LINEAR_FILE)
+      IMFS_memfile_remove( the_jnode );
 
     free( the_jnode );
   }

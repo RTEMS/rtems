@@ -22,18 +22,18 @@
 rtems_filesystem_file_handlers_r IMFS_linearfile_handlers = {
   memfile_open,
   memfile_close,
-  linearfile_read,
+  memfile_read,
   NULL,                /* write */
   memfile_ioctl,
-  linearfile_lseek,
+  memfile_lseek,
   IMFS_stat,
-  NULL,                /* chmod */
+  IMFS_fchmod,
   NULL,                /* ftruncate */
   NULL,                /* fpathconf */
   IMFS_fdatasync,      /* fsync */
   IMFS_fdatasync,
   IMFS_fcntl,
-  NULL                 /* rmnod */
+  memfile_rmnod
 };
 
 rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {

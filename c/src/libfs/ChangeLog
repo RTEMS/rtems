@@ -1,3 +1,17 @@
+2001-01-12	Jake Janovetz <janovetz@uiuc.edu>
+
+	* src/imfs/imfs.h, src/imfs/imfs_creat.c, src/imfs/imfs_debug.c,
+	src/imfs/imfs_eval.c, src/imfs/imfs_fchmod.c,
+	src/imfs/imfs_handlers_memfile.c, src/imfs/imfs_init.c,
+	src/imfs/imfs_initsupp.c, src/imfs/imfs_stat.c, src/imfs/memfile.c,
+	src/imfs/miniimfs_init.c: Final developmental update to "tarfs".
+	When rtems_tarfs_load() is called, it checks the permissions
+	on each file.  If there is write permission, it just creates a 
+	standard file using "creat()" and therefore, uses the IMFS MEMORY_FILE.
+	If there is no write permission, it creates a LINEAR_FILE node
+	with the appropriate properties.  If the permission is ever changed
+	to writeable, IMFS_fchmod converts it to a regular memory file.
+
 2000-12-12	Jake Janovetz <janovetz@uiuc.edu>
 
 	*  src/imfs/linearfile.c, src/imfs/imfs_load_tar.c: New files.

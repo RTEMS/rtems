@@ -130,7 +130,7 @@ typedef struct {
 #define IMFS_HARD_LINK     RTEMS_FILESYSTEM_HARD_LINK
 #define IMFS_SYM_LINK      RTEMS_FILESYSTEM_SYM_LINK
 #define IMFS_MEMORY_FILE   RTEMS_FILESYSTEM_MEMORY_FILE
-#define IMFS_LINEAR_FILE   (RTEMS_FILESYSTEM_MEMORY_FILE + 1)
+#define IMFS_LINEAR_FILE   (IMFS_MEMORY_FILE + 1)
 
 #define IMFS_NUMBER_OF_TYPES  (IMFS_LINEAR_FILE + 1)
 
@@ -264,7 +264,7 @@ int IMFS_fsunmount(
    rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
-int rtems_tarfs_mount(
+int rtems_tarfs_load(
    char          *mountpoint,
    unsigned char *addr,
    unsigned long length

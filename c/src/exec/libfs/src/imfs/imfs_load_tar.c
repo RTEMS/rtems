@@ -4,13 +4,10 @@
  * Directories from the TAR file are created as usual in the IMFS.
  * File entries are created as IMFS_LINEAR_FILE nodes with their nods
  * pointing to addresses in the TAR image.
- *
- *  $Id$
- *
  *************************************************************************/
 
 #include <rtems.h>
-#include <rtems/libio.h>
+#include <rtems/libio_.h>
 #include <string.h>
 #include <chain.h>
 #include <imfs.h>
@@ -110,9 +107,9 @@ compute_tar_header_checksum(char *bufr)
 
 
 /**************************************************************************
- * rtems_tarfs_mount
+ * rtems_tarfs_load
  *
- * Here we create the mountpoint directory and mount the tarfs at
+ * Here we create the mountpoint directory and load the tarfs at
  * that node.  Once the IMFS has been mounted, we work through the
  * tar image and perform as follows:
  *  - For directories, simply call mkdir().  The IMFS creates nodes as
@@ -121,9 +118,9 @@ compute_tar_header_checksum(char *bufr)
  *    create_node.
  *************************************************************************/
 int
-rtems_tarfs_mount(char *mountpoint,
-                  unsigned char *tar_image,
-                  unsigned long tar_size)
+rtems_tarfs_load(char *mountpoint,
+                 unsigned char *tar_image,
+                 unsigned long tar_size)
 {
    rtems_filesystem_location_info_t root_loc;
    rtems_filesystem_location_info_t loc;
@@ -133,6 +130,7 @@ rtems_tarfs_mount(char *mountpoint,
    int             hdr_chksum;
    unsigned char   linkflag;
    unsigned long   file_size;
+   unsigned long   file_mode;
    int             offset;
    unsigned long   nblocks;
    IMFS_jnode_t    *node;
@@ -141,6 +139,9 @@ rtems_tarfs_mount(char *mountpoint,
 
    status = rtems_filesystem_evaluate_path(mountpoint, 0, &root_loc, 0);
    if (status != 0)
+      return(-1);
+
+   if (root_loc.ops != &IMFS_ops)
       return(-1);
 
    /***********************************************************************
@@ -164,9 +165,10 @@ rtems_tarfs_mount(char *mountpoint,
       filename[MAX_NAME_FIELD_SIZE] = '\0';
 
       linkflag   = hdr_ptr[156];
+      file_mode  = octal2ulong(&hdr_ptr[100], 8);
       file_size  = octal2ulong(&hdr_ptr[124], 12);
-
       hdr_chksum = (int)octal2ulong(&hdr_ptr[148], 8);
+
       if (compute_tar_header_checksum(hdr_ptr) != hdr_chksum)
          break;
 
@@ -179,14 +181,18 @@ rtems_tarfs_mount(char *mountpoint,
       if (linkflag == LF_DIR)
       {
          strcpy(full_filename, mountpoint);
-         strcat(full_filename, "/");
+         if (full_filename[strlen(full_filename)-1] != '/')
+            strcat(full_filename, "/");
          strcat(full_filename, filename);
          mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
       }
-      else if (linkflag == LF_NORMAL)
+      /******************************************************************
+       * Create a LINEAR_FILE node if no user write permission.
+       *****************************************************************/
+      else if ((linkflag == LF_NORMAL) &&
+               ((file_mode & 0200) == 0000))
       {
          const char  *name;
-
 
          loc = root_loc;
          if (IMFS_evaluate_for_make(filename, &loc, &name) == 0)
@@ -197,6 +203,36 @@ rtems_tarfs_mount(char *mountpoint,
                                     NULL);
             node->info.linearfile.size   = file_size;
             node->info.linearfile.direct = &tar_image[offset];
+         }
+
+         nblocks = (((file_size) + 511) & ~511) / 512;
+         offset += 512 * nblocks;
+      }
+      /******************************************************************
+       * Create a regular MEMORY_FILE if write permission exists.
+       *****************************************************************/
+      else if ((linkflag == LF_NORMAL) &&
+               ((file_mode & 0200) == 0200))
+      {
+         int fd;
+         int n, left, ptr;
+
+         strcpy(full_filename, mountpoint);
+         if (full_filename[strlen(full_filename)-1] != '/')
+            strcat(full_filename, "/");
+         strcat(full_filename, filename);
+
+         fd = creat(full_filename, S_IRUSR|S_IWUSR | S_IRGRP|S_IWGRP);
+         if (fd != -1)
+         {
+            left = file_size;
+            ptr  = offset;
+            while ((n = write(fd, &tar_image[ptr], left)) > 0)
+            {
+               left -= n;
+               ptr += n;
+            }
+            close(fd);
          }
 
          nblocks = (((file_size) + 511) & ~511) / 512;

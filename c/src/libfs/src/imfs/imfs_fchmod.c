@@ -44,6 +44,25 @@ int IMFS_fchmod(
   if ( mode & (~ (S_IRWXU | S_IRWXG | S_IRWXO ) ) )
     set_errno_and_return_minus_one( EPERM );
 
+  /*
+   * If we make a linear-file writeable, construct a block file
+   * from it first.
+   */
+  if ( (jnode->type == IMFS_LINEAR_FILE) &&
+       (mode & (S_IWUSR | S_IWGRP | S_IWOTH)) )
+  {
+    unsigned32 count = jnode->info.linearfile.size;
+    const unsigned char *buffer = jnode->info.linearfile.direct;
+
+    jnode->type = IMFS_MEMORY_FILE;
+    jnode->info.file.size            = 0;
+    jnode->info.file.indirect        = 0;
+    jnode->info.file.doubly_indirect = 0;
+    jnode->info.file.triply_indirect = 0;
+    if (IMFS_memfile_write(jnode, 0, buffer, count) == -1)
+       return(-1);
+  }
+
   jnode->st_mode &= ~(S_IRWXU | S_IRWXG | S_IRWXO);
   jnode->st_mode |= mode;
 
