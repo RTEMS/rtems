@@ -45,7 +45,6 @@ endif
 
 $(LIB): ${LIBS}
 	rm -f $@
-	test -d $(ARCH) || mkdir $(ARCH)
 	rm -rf $(ARCH)/*
 	for f in $(LIBS); do \
 	  case $$f in \
@@ -77,9 +76,10 @@ $(LIB): ${LIBS}
 
 TMPINSTALL_FILES += $(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a
 
-cpulibdir = $(libdir)
-cpulib_DATA = $(LIB)
+all-am: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
 
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+install-data-hook: $(LIB)
+	$(mkinstalldir) $(DESTDIR)/$(libdir)
+	$(INSTALL_DATA) $(LIB) $(DESTDIR)/$(libdir)
 
 include $(top_srcdir)/automake/local.am

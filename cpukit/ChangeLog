@@ -1,5 +1,10 @@
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Don't create $ARCH.
+	Use install-data-local to install librtemscpu.a
+
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Add libmisc.
 
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
