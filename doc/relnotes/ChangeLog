@@ -1,3 +1,7 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* intro.texi, status.texi: i960 obsoleted.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.

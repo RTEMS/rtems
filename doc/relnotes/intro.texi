@@ -116,15 +116,6 @@ The primary ftp site for the FSF GNU tools is
 prep.ai.mit.edu (18.71.0.38) in the /pub/gnu directory.  These
 tools are mirrored on numerous ftp sites.
 
-Intel maintains a toolset for their i960 processor
-family based on the GNU tools referred to as GNU/960.  The
-source code for this toolset is available from ftp.intel.com
-(143.185.65.2).  [NOTE: The GNU/960 toolset generally includes
-an older version of GCC than that available from the FSF.  When
-the FSF version of GNU C is significantly newer than that in the
-GNU/960 release, the RTEMS developers replace the GCC in the
-GNU/960 toolset with the FSF release.]
-
 Cygnus maintains an ftp site -- ftp.cygnus.com
 (205.180.83.42) -- which contains a source code which appeals to
 embedded developers.  Of especial interest on this site are the
