@@ -947,7 +947,6 @@ dodefaultroute(g, cmd)
     u_int32_t g;
     int cmd;
 {
-    int    status;
     struct sockaddr_in address;
     struct sockaddr_in netmask;
     struct sockaddr_in gateway;

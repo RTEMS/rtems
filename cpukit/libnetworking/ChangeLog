@@ -1,3 +1,8 @@
+2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* pppd/sys-rtems.c: Remove unused variable status from
+	dodefaultroute.
+
 2002-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* lib/tftpDriver.c: Remove set_errno_and_return_minus_one, include
