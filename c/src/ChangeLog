@@ -1,3 +1,7 @@
+2004-10-11	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libchip/network/dec21140.c: include <rtems/pci.h>.
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/rtems-cpu-subdirs.m4, libchip/shmdr/shm_driver.h,

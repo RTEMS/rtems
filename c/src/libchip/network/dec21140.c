@@ -57,6 +57,7 @@
 
 #if defined(DEC21140_SUPPORTED)
 #include <bsp.h>
+#include <rtems/pci.h>
 #if defined(__i386__)
 #include <pcibios.h>
 #endif
