@@ -37,7 +37,7 @@ directives provided by the rate monotonic manager are:
 The rate monotonic manager provides facilities to
 manage the execution of periodic tasks.  This manager was
 designed to support application designers who utilize the Rate
-Monotonic Scheduling Algorithm (RMS) to insure that their
+Monotonic Scheduling Algorithm (RMS) to ensure that their
 periodic tasks will meet their deadlines, even under transient
 overload conditions.  Although designed for hard real-time
 systems, the services provided by the rate monotonic manager may
@@ -82,7 +82,7 @@ interarrival time is the minimum period of time which exists
 between successive iterations of the task.  For example, a
 sporadic task could be used to process the pressing of a fire
 button on a joystick.  The mechanical action of the fire button
-insures a minimum time period between successive activations,
+ensures a minimum time period between successive activations,
 but the missile must be launched by a hard deadline.
 
 @subsection Rate Monotonic Scheduling Algorithm
@@ -210,7 +210,7 @@ schedulability is only guaranteed for the critical task set.
 
 @cindex RMS schedulability analysis
 
-RMS allows application designers to insure that tasks
+RMS allows application designers to ensure that tasks
 can meet all deadlines, even under transient overload, without
 knowing exactly when any given task will execute by applying
 proven schedulability analysis rules.
@@ -264,7 +264,7 @@ for index = 1 to maximum_tasks
 @end group
 @end example
 
-To insure schedulability even under transient
+To ensure schedulability even under transient
 overload, the processor utilization must adhere to the following
 rule:
 
@@ -379,16 +379,16 @@ combination of start times.
 A key point with this rule is that ALL periodic tasks
 are assumed to start at the exact same instant in time.
 Although this assumption may seem to be invalid,  RTEMS makes it
-quite easy to insure.  By having a non-preemptible user
+quite easy to ensure.  By having a non-preemptible user
 initialization task, all application tasks, regardless of
 priority, can be created and started before the initialization
-deletes itself.  This technique insures that all tasks begin to
+deletes itself.  This technique ensures that all tasks begin to
 compete for execution time at the same instant -- when the user
 initialization task deletes itself.
 
 @subsection First Deadline Rule Example
 
-The First Deadline Rule can insure schedulability
+The First Deadline Rule can ensure schedulability
 even when the Processor Utilization Rule fails.  The example
 below is a modification of the Processor Utilization Rule
 example where task execution time has been increased from 15 to
@@ -715,7 +715,7 @@ which, after initialization, executes every 100 clock ticks.
 
 @page
 @example
-rtems_task Periodic_task()
+rtems_task Periodic_task(rtems_task_argument arg)
 @{
   rtems_name        name;
   rtems_id          period;
@@ -777,7 +777,7 @@ used by this task.
 
 @page
 @example
-task Periodic_task()
+rtems_task Periodic_task(rtems_task_argument arg)
 @{
   rtems_name        name_1, name_2;
   rtems_id          period_1, period_2;
@@ -836,13 +836,13 @@ of the 100 tick period.  The period_2 period is used to control
 the execution time of the two sets of actions within each 100
 tick period established by period_1.  The
 @code{@value{DIRPREFIX}rate_monotonic_cancel( period_2 )}
-call is performed to insure that the period_2 period
+call is performed to ensure that the period_2 period
 does not expire while the task is blocked on the period_1
 period.  If this cancel operation were not performed, every time
-the @code{@value{DIRPREFIX}rate_monotonic_period( period_1, 40 )}
+the @code{@value{DIRPREFIX}rate_monotonic_period( period_2, 40 )}
 call is executed, except for the initial one, a directive status
 of @code{@value{RPREFIX}TIMEOUT} is returned.  It is important to
-note that every time this call is made, the period_1 period will be
+note that every time this call is made, the period_2 period will be
 initiated immediately and the task will not block.
 
 If, for any reason, the task misses any deadline, the
