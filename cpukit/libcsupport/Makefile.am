@@ -123,6 +123,10 @@ DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
     src/readdir_r.c src/rewinddir.c src/scandir.c src/seekdir.c \
     src/telldir.c src/getcwd.c
 
+ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
+    src/getlogin.c src/getpgrp.c \
+    src/getpid.c src/getppid.c src/getuid.c src/setpgid.c src/setsid.c
+
 MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c src/__sbrk.c
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
@@ -148,7 +152,7 @@ UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
 
 EMBEDDED_C_FILES = $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
-    $(DIRECTORY_SCAN_C_FILES)
+    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES)
 
 if UNIX
 C_FILES = $(COMMON_C_FILES) $(UNIX_C_FILES)

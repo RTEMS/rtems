@@ -2,8 +2,6 @@
  *  Marginal implementations of some POSIX API routines
  *  to be used when POSIX is disabled.
  *
- *    + getpid
- *    + _getpid_r
  *    + kill
  *    + _kill_r
  *    + __kill
@@ -27,25 +25,6 @@
 /*
  *  These are directly supported (and completely correct) in the posix api.
  */
-
-#if !defined(RTEMS_POSIX_API)
-pid_t getpid(void)
-{
-  return 0;
-}
-
-#if defined(RTEMS_NEWLIB)
-#include <reent.h>
-
-pid_t _getpid_r(
-  struct _reent *ptr
-)
-{
-  return getpid();
-}
-#endif
-
-#endif
 
 #if !defined(RTEMS_POSIX_API)
 int kill( pid_t pid, int sig )
