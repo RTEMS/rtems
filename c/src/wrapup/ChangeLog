@@ -1,3 +1,7 @@
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AC_CONFIG_SRCDIR([../libmisc]).
+
 2002-07-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove setting up bsplibdir.
