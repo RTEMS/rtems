@@ -32,7 +32,6 @@ $(LIB): ${LIBS} $(RELS)
 	cd $(ARCH); for lib in $(LIBS:%=../%); do \
                          $(AR) -xv $$lib; \
                     done
-	# cd $(ARCH); $(LN) -s $(RELS:%=../%) .
 	$(RM) $@
 	$(AR) ruv $@ $(ARCH)/*
 	$(MKLIB) $@
