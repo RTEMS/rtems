@@ -50,5 +50,5 @@ timer/Makefile
 tx39/Makefile
 tx39/include/Makefile
 tx39/vectorisrs/Makefile
-timer/Makefile])
+])
 AC_OUTPUT
