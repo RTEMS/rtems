@@ -15,6 +15,16 @@
 
 #include <tmacros.h>
 
+/* buffered IO */
+
+void buffered_io_initialize( void );
+
+void buffered_io_flush(void);
+
+void buffered_io_add_string( char *s );
+
+/* end of buffered IO */
+ 
 /* functions */
 
 rtems_task Init(

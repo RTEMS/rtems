@@ -1,3 +1,13 @@
+2003-12-16	Joel Sherrill <joel@OARcorp.com>
+
+	PR 544/tests
+	* sp07/Makefile.am, sp07/init.c, sp07/system.h, sp07/task4.c,
+	sp07/tcreate.c, sp07/tdelete.c, sp07/trestart.c, sp07/tstart.c,
+	sp09/system.h, sp19/system.h, sp20/system.h: Various modifications to
+	make tests account for resources and not print at inappropriate
+	times.
+	* sp07/buffered_io.c: New file.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.

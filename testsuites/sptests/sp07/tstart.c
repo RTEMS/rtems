@@ -25,9 +25,17 @@ rtems_extension Task_start_extension(
   rtems_tcb *started_task
 )
 {
+  char line[80];
+  rtems_name name;
+
   if ( task_number( started_task->Object.id ) > 0 ) {
-    puts_nocr( "TASK_START - " );
-    put_name( Task_name[ task_number( started_task->Object.id ) ], FALSE );
-    puts( " - started." );
+    name = Task_name[ task_number( started_task->Object.id ) ];
+    sprintf( line, "TASK_START - %c%c%c%c - started\n",
+      (name >> 24) & 0xff, 
+      (name >> 16) & 0xff,
+      (name >> 8) & 0xff,
+      name & 0xff
+    );
+    buffered_io_add_string( line );
   }
 }

@@ -25,9 +25,17 @@ void Task_restart_extension(
   rtems_tcb *restarted_task
 )
 {
+  char line[80];
+  rtems_name name;
+
   if ( task_number( restarted_task->Object.id ) > 0 ) {
-    puts_nocr( "TASK_RESTART - " );
-    put_name( Task_name[ task_number( restarted_task->Object.id ) ], FALSE );
-    puts( " - restarted." );
+    name = Task_name[ task_number( restarted_task->Object.id ) ];
+    sprintf( line, "TASK_RESTART - %c%c%c%c - restarted\n",
+      (name >> 24) & 0xff, 
+      (name >> 16) & 0xff,
+      (name >> 8) & 0xff,
+      name & 0xff
+    );
+    buffered_io_add_string( line );
   }
 }

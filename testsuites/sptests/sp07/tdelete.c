@@ -25,12 +25,29 @@ rtems_extension Task_delete_extension(
   rtems_tcb *deleted_task
 )
 {
+  char line[80];
+  rtems_name name;
+
   if ( task_number( running_task->Object.id ) > 0 ) {
+    name = Task_name[ task_number( running_task->Object.id ) ];
+    sprintf( line, "TASK_DELETE - %c%c%c%c",
+      (name >> 24) & 0xff, 
+      (name >> 16) & 0xff,
+      (name >> 8) & 0xff,
+      name & 0xff
+    );
+    buffered_io_add_string( line );
     puts_nocr( "TASK_DELETE - " );
     put_name( Task_name[ task_number( running_task->Object.id ) ], FALSE );
   }
   if ( task_number( deleted_task->Object.id ) > 0 ) {
-    puts_nocr( " deleting " );
-    put_name( Task_name[ task_number( deleted_task->Object.id ) ], TRUE );
+    name = Task_name[ task_number( deleted_task->Object.id ) ];
+    sprintf( line, "deleting - %c%c%c%c\n",
+      (name >> 24) & 0xff, 
+      (name >> 16) & 0xff,
+      (name >> 8) & 0xff,
+      name & 0xff
+    );
+    buffered_io_add_string( line );
   }
 }
