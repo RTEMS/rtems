@@ -58,7 +58,11 @@ static volatile int cli_load_thread_active;
 static const char* open_usage = "usage: copen [-i] size\n";
 
 static void
-rtems_capture_cli_open (int argc, char **argv)
+rtems_capture_cli_open (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_unsigned32  size = 0;
   rtems_boolean     enable = 0;
@@ -126,7 +130,11 @@ rtems_capture_cli_open (int argc, char **argv)
  */
 
 static void
-rtems_capture_cli_close (int argc, char **argv)
+rtems_capture_cli_close (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code sc;
 
@@ -151,7 +159,11 @@ rtems_capture_cli_close (int argc, char **argv)
  */
 
 static void
-rtems_capture_cli_enable (int argc, char **argv)
+rtems_capture_cli_enable (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code sc;
 
@@ -176,7 +188,11 @@ rtems_capture_cli_enable (int argc, char **argv)
  */
 
 static void
-rtems_capture_cli_disable (int argc, char **argv)
+rtems_capture_cli_disable (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code sc;
 
@@ -201,7 +217,11 @@ rtems_capture_cli_disable (int argc, char **argv)
  */
 
 static void
-rtems_capture_cli_task_list (int argc, char **argv)
+rtems_capture_cli_task_list (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority   floor = rtems_capture_watch_get_floor ();
@@ -433,7 +453,11 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
  */
 
 static void
-rtems_capture_cli_task_load (int argc, char **argv)
+rtems_capture_cli_task_load (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code   sc;
   rtems_task_priority priority;
@@ -472,7 +496,7 @@ rtems_capture_cli_task_load (int argc, char **argv)
 
   for (;;)
   {
-    char c = getchar ();
+    int c = getchar ();
 
     if ((c == '\r') || (c == '\n'))
     {
@@ -500,7 +524,11 @@ rtems_capture_cli_task_load (int argc, char **argv)
  */
 
 static void
-rtems_capture_cli_watch_list (int argc, char **argv)
+rtems_capture_cli_watch_list (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
   rtems_task_priority      ceiling = rtems_capture_watch_get_ceiling ();
@@ -622,7 +650,11 @@ rtems_capture_cli_get_name_id (char*          arg,
 static char const * watch_add_usage = "usage: cwadd [task name] [id]\n";
 
 static void
-rtems_capture_cli_watch_add (int argc, char **argv)
+rtems_capture_cli_watch_add (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code sc;
   int               arg;
@@ -680,7 +712,11 @@ rtems_capture_cli_watch_add (int argc, char **argv)
 static char const * watch_del_usage = "usage: cwdel [task name] [id]\n";
 
 static void
-rtems_capture_cli_watch_del (int argc, char **argv)
+rtems_capture_cli_watch_del (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code sc;
   int               arg;
@@ -737,7 +773,11 @@ rtems_capture_cli_watch_del (int argc, char **argv)
 static char const * watch_control_usage = "usage: cwctl [task name] [id] on/off\n";
 
 static void
-rtems_capture_cli_watch_control (int argc, char **argv)
+rtems_capture_cli_watch_control (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code sc;
   int               arg;
@@ -799,7 +839,11 @@ rtems_capture_cli_watch_control (int argc, char **argv)
 static char const * watch_global_usage = "usage: cwglob on/off\n";
 
 static void
-rtems_capture_cli_watch_global (int argc, char **argv)
+rtems_capture_cli_watch_global (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code sc;
   int               arg;
@@ -849,7 +893,11 @@ rtems_capture_cli_watch_global (int argc, char **argv)
 static char const * watch_ceiling_usage = "usage: cwceil priority\n";
 
 static void
-rtems_capture_cli_watch_ceiling (int argc, char **argv)
+rtems_capture_cli_watch_ceiling (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code   sc;
   int                 arg;
@@ -896,7 +944,11 @@ rtems_capture_cli_watch_ceiling (int argc, char **argv)
 static char const * watch_floor_usage = "usage: cwfloor priority\n";
 
 static void
-rtems_capture_cli_watch_floor (int argc, char **argv)
+rtems_capture_cli_watch_floor (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code   sc;
   int                 arg;
@@ -943,7 +995,11 @@ rtems_capture_cli_watch_floor (int argc, char **argv)
 static char const *trigger_set_usage = "usage: ctrig type [from] [fromid] [to] [to id]\n";
 
 static void
-rtems_capture_cli_trigger_set (int argc, char **argv)
+rtems_capture_cli_trigger_set (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code       sc;
   int                     arg;
@@ -1095,7 +1151,11 @@ rtems_capture_cli_trigger_set (int argc, char **argv)
  */
 
 static void
-rtems_capture_cli_trace_records (int argc, char **argv)
+rtems_capture_cli_trace_records (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code       sc;
   rtems_boolean           csv = 0;
@@ -1216,7 +1276,11 @@ rtems_capture_cli_trace_records (int argc, char **argv)
  */
 
 static void
-rtems_capture_cli_flush (int argc, char **argv)
+rtems_capture_cli_flush (
+  int argc, 
+  char **argv,
+  unsigned32 command_arg, 
+  boolean verbose )
 {
   rtems_status_code sc;
   rtems_boolean     prime = 1;
@@ -1250,7 +1314,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "copen",
     "usage: copen [-i] size\n",
     0,
-    (void*) rtems_capture_cli_open,
+    rtems_capture_cli_open,
     0,
     0
   },
@@ -1258,7 +1322,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cclose",
     "usage: cclose\n",
     0,
-    (void*) rtems_capture_cli_close,
+    rtems_capture_cli_close,
     0,
     0
   },
@@ -1266,7 +1330,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cenable",
     "usage: cenable\n",
     0,
-    (void*) rtems_capture_cli_enable,
+    rtems_capture_cli_enable,
     0,
     0
   },
@@ -1274,7 +1338,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cdisable",
     "usage: cdisable\n",
     0,
-    (void*) rtems_capture_cli_disable,
+    rtems_capture_cli_disable,
     0,
     0
   },
@@ -1282,7 +1346,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "ctlist",
     "usage: ctlist \n",
     0,
-    (void*) rtems_capture_cli_task_list,
+     rtems_capture_cli_task_list,
     0,
     0
   },
@@ -1290,7 +1354,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "ctload",
     "usage: ctload \n",
     0,
-    (void*) rtems_capture_cli_task_load,
+    rtems_capture_cli_task_load,
     0,
     0
   },
@@ -1298,7 +1362,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cwlist",
     "usage: cwlist\n",
     0,
-    (void*) rtems_capture_cli_watch_list,
+    rtems_capture_cli_watch_list,
     0,
     0
   },
@@ -1306,7 +1370,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cwadd",
     "usage: cwadd [task name] [id]\n",
     0,
-    (void*) rtems_capture_cli_watch_add,
+    rtems_capture_cli_watch_add,
     0,
     0
   },
@@ -1314,7 +1378,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cwdel",
     "usage: cwdel [task name] [id]\n",
     0,
-    (void*) rtems_capture_cli_watch_del,
+    rtems_capture_cli_watch_del,
     0,
     0
   },
@@ -1322,7 +1386,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cwctl",
     "usage: cwctl [task name] [id] on/off\n",
     0,
-    (void*) rtems_capture_cli_watch_control,
+    rtems_capture_cli_watch_control,
     0,
     0
   },
@@ -1330,7 +1394,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cwglob",
     "usage: cwglob on/off\n",
     0,
-    (void*) rtems_capture_cli_watch_global,
+    rtems_capture_cli_watch_global,
     0,
     0
   },
@@ -1338,7 +1402,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cwceil",
     "usage: cwceil priority\n",
     0,
-    (void*) rtems_capture_cli_watch_ceiling,
+    rtems_capture_cli_watch_ceiling,
     0,
     0
   },
@@ -1346,7 +1410,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cwfloor",
     "usage: cwfloor priority\n",
     0,
-    (void*) rtems_capture_cli_watch_floor,
+    rtems_capture_cli_watch_floor,
     0,
     0
   },
@@ -1354,7 +1418,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "ctrace",
     "usage: ctrace [-c] [-r records]\n",
     0,
-    (void*) rtems_capture_cli_trace_records,
+    rtems_capture_cli_trace_records,
     0,
     0
   },
@@ -1362,7 +1426,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "ctrig",
     "usage: ctrig type [from name] [from id] [to name] [to id]\n",
     0,
-    (void*) rtems_capture_cli_trigger_set,
+    rtems_capture_cli_trigger_set,
     0,
     0
   },
@@ -1370,7 +1434,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "cflush",
     "usage: cflush [-n]\n",
     0,
-    (void*) rtems_capture_cli_flush,
+    rtems_capture_cli_flush,
     0,
     0
   }
