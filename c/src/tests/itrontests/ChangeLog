@@ -1,3 +1,15 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* itronhello/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* itronmbf01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* itronmbox01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* itronsem01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* itrontask01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* itrontask02/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* itrontask03/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* itrontask04/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* itrontime01/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR47 add support for buffered test output.  This involved
