@@ -27,7 +27,7 @@ typedef enum
   PPC_750 = 0x8,
   PPC_604e = 0x9,
   PPC_604r = 0xA,
-  PPC_7400 = 0xA,
+  PPC_7400 = 0xC,
   PPC_620 = 0x16,
   PPC_860 = 0x50,
   PPC_821 = PPC_860,

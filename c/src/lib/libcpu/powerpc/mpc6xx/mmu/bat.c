@@ -43,7 +43,7 @@ void setdbat(int bat_index, unsigned long virt, unsigned long phys,
   int wimgxpp;
   ubat bat;
 
-  bl = (size >> 17) - 1;
+  bl = (size >= (1<<17)) ? (size >> 17) - 1 : 0;
   /* 603, 604, etc. */
   wimgxpp = flags & (_PAGE_WRITETHRU | _PAGE_NO_CACHE
 		     | _PAGE_COHERENT | _PAGE_GUARDED);
@@ -53,8 +53,13 @@ void setdbat(int bat_index, unsigned long virt, unsigned long phys,
   if (flags & _PAGE_USER)
     bat.bat.batu.vp = 1;
   bat_addrs[bat_index].start = virt;
-  bat_addrs[bat_index].limit = virt + ((bl + 1) << 17) - 1;
+  bat_addrs[bat_index].limit = virt + (bl ? ((bl + 1) << 17) - 1 : 0);
   bat_addrs[bat_index].phys = phys;
+  if ( 0 == bl ) {
+    /* size of 0 tells us to switch it off */
+	bat.bat.batu.vp = 0;
+	bat.bat.batu.vs = 0;
+  }
   switch (bat_index) {
   case 0 : asm_setdbat0(bat.word[0], bat.word[1]); break;
   case 1 : asm_setdbat1(bat.word[0], bat.word[1]); break;

@@ -5,12 +5,12 @@
 
 VPATH = @srcdir@:@srcdir@/../../../shared/src
 
-C_FILES = cache.c cache_aligned_malloc.c cache_manager.c
+C_FILES = cache.c cache_aligned_malloc.c cache_manager.c stack.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_libcpudir = $(includedir)/libcpu
 
-include_libcpu_HEADERS = cache_.h cache.h
+include_libcpu_HEADERS = cache_.h cache.h stackTrace.h
 
 OBJS = $(C_O_FILES)
 
