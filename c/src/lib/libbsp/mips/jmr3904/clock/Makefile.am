@@ -28,6 +28,6 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = ckinit.c
+EXTRA_DIST = clockdrv.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

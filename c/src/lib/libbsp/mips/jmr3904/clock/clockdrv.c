@@ -10,6 +10,8 @@
 #include <rtems.h>
 #include <libcpu/tx3904.h>
 
+#define CLOCK_DRIVER_USE_FAST_IDLE
+
 #define CLOCK_VECTOR TX3904_IRQ_TMR0
 
 #define Clock_driver_support_at_tick()

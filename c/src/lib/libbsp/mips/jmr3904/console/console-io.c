@@ -56,9 +56,15 @@
 
 static char initialized = 0;
 
-void board_serial_init (void)
+/*
+ *  console_initialize_hardware
+ *
+ *  This routine initializes the console hardware.
+ *
+ */
+
+void console_initialize_hardware(void)
 {
-  initialized = 1;
   WRITE_UINT16 (DIAG_SLCR, 0x0020);
   WRITE_UINT16 (DIAG_SLDICR, 0x0000);
   WRITE_UINT16 (DIAG_SFCR, 0x0000);
@@ -78,15 +84,11 @@ void console_outbyte_polled(
 {
   unsigned short disr;
 
-  if ( !initialized )
-    board_serial_init();
-
-  for (;;)
-    {
-      READ_UINT16 (DIAG_SLDISR, disr);
-      if (disr & 0x0002)
-        break;
-    }
+  for (;;) {
+    READ_UINT16 (DIAG_SLDISR, disr);
+    if (disr & 0x0002)
+      break;
+  }
   disr = disr & ~0x0002;
   WRITE_UINT8 (DIAG_TFIFO, (unsigned char) ch);
   WRITE_UINT16 (DIAG_SLDISR, disr);
@@ -104,9 +106,6 @@ int console_inbyte_nonblocking(
 {
   unsigned char c;
   unsigned short disr;
-
-  if ( !initialized )
-    board_serial_init();
 
   READ_UINT16 (DIAG_SLDISR, disr);
   if (disr & 0x0001) {
