@@ -129,7 +129,7 @@ int sched_rr_get_interval(
    *  Only supported for the "calling process" (i.e. this node).
    */
 
-  if ( pid != getpid() )
+  if ( pid && pid != getpid() )
     set_errno_and_return_minus_one( ESRCH );
 
   if ( !interval )
