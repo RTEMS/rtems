@@ -23,6 +23,8 @@ rtems_task Init(rtems_task_argument argument);
 #include <stdio.h>
 
 volatile void *taskvar;
+volatile int nRunning;
+volatile int nDeleted;
 
 rtems_task
 subtask (rtems_task_argument arg)
@@ -31,6 +33,9 @@ subtask (rtems_task_argument arg)
 	int i;
 	rtems_status_code sc;
 
+	nRunning++;
+	while (nRunning != 3)
+		rtems_task_wake_after (0);
 	sc = rtems_task_variable_add (RTEMS_SELF, &taskvar, NULL);
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't add task variable: %s\n", rtems_status_text (sc));
@@ -48,22 +53,35 @@ subtask (rtems_task_argument arg)
 		}
 	}
 	sc = rtems_task_variable_delete (RTEMS_SELF, &taskvar);
+	nDeleted++;
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't delete task variable: %s\n", rtems_status_text (sc));
+		nRunning--;
 		rtems_task_suspend (RTEMS_SELF);
 	}
-	for (i = 0 ; ; i++) {
+	if ((int)taskvar == localvar) {
+		printf ("Task:%d deleted taskvar:%d localvar:%d\n", arg, (int)taskvar, localvar);
+		nRunning--;
+		rtems_task_suspend (RTEMS_SELF);
+	}
+	while (nDeleted != 3)
+		rtems_task_wake_after (0);
+	for (i = 0 ; i < 1000 ; i++) {
 		taskvar = (void *)(localvar = 100 * arg);
 		rtems_task_wake_after (0);
+		if (nRunning <= 1)
+			break;
 		if ((int)taskvar == localvar) {
 			printf ("Task:%d taskvar:%d localvar:%d\n", arg, (int)taskvar, localvar);
+			nRunning--;
 			rtems_task_suspend (RTEMS_SELF);
 		}
-		if ((arg == 3) && (i == 100)) {
-			printf ("Task variables test succeeded.\n");
-			exit (0);
-		}
 	}
+	nRunning--;
+	while (nRunning)
+		rtems_task_wake_after (0);
+	printf ("Task variables test complete.\n");
+	exit (0);
 }
 
 void
@@ -92,6 +110,8 @@ starttask (int arg)
 rtems_task
 Init (rtems_task_argument ignored)
 {
+	printf ("Task variables test begins.  Any output between\n");
+	printf ("this line and the `Task variables test complete' line indicates an error.\n");
 	starttask (1);
 	starttask (2);
 	starttask (3);
