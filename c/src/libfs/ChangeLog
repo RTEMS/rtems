@@ -1,3 +1,11 @@
+2001-04-24	Joel Sherrill <joel@OARcorp.com>
+
+ 	* src/imfs/memfile.c (memfile_open): Did not set iop->size
+	and thus the value was incorrect.  Before this field was cleared,
+	this resulted in the value from the last time that IOP was used
+	being still in place.  Discovered by  Andrew Bythell
+	<abythell@nortelnetworks.com>.
+
 2001-04-20	Joel Sherrill <joel@OARcorp.com>
 
 	* src/imfs/imfs_debug.c (IMFS_print_jnode): Modified to print
