@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  regionmp.h,v 1.2 1995/05/31 16:47:09 joel Exp
  */
 
 #ifndef __RTEMS_REGION_MP_h
@@ -39,7 +39,7 @@ typedef enum {
   REGION_MP_GET_SEGMENT_REQUEST     =  3,
   REGION_MP_GET_SEGMENT_RESPONSE    =  4,
   REGION_MP_RETURN_SEGMENT_REQUEST  =  5,
-  REGION_MP_RETURN_SEGMENT_RESPONSE =  6,
+  REGION_MP_RETURN_SEGMENT_RESPONSE =  6
 }   Region_MP_Remote_operations;
 
 /*

@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  partmp.h,v 1.2 1995/05/31 16:47:02 joel Exp
  */
 
 #ifndef __RTEMS_PARTITION_MP_h
@@ -39,7 +39,7 @@ typedef enum {
   PARTITION_MP_GET_BUFFER_REQUEST     =  3,
   PARTITION_MP_GET_BUFFER_RESPONSE    =  4,
   PARTITION_MP_RETURN_BUFFER_REQUEST  =  5,
-  PARTITION_MP_RETURN_BUFFER_RESPONSE =  6,
+  PARTITION_MP_RETURN_BUFFER_RESPONSE =  6
 }   Partition_MP_Remote_operations;
 
 /*

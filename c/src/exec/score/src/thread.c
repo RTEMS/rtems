@@ -10,7 +10,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  thread.c,v 1.5 1995/07/31 22:22:38 joel Exp
  */
 
 #include <rtems/system.h>
@@ -628,8 +628,8 @@ void _Thread_Delay_ended(
   void       *ignored
 )
 {
-  Thread_Control *the_thread;
-  Objects_Locations      location;
+  Thread_Control    *the_thread;
+  Objects_Locations  location;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
@@ -791,8 +791,8 @@ boolean _Thread_Change_mode(
 #ifndef USE_INLINES
 
 STATIC INLINE Thread_Control *_Thread_Get (
-  Objects_Id  id,
-  unsigned32 *location
+  Objects_Id         id,
+  Objects_Locations *location
 )
 {
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ) {

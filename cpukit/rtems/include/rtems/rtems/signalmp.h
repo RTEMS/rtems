@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  signalmp.h,v 1.2 1995/05/31 16:47:18 joel Exp
  */
 
 #ifndef __RTEMS_SIGNAL_MP_h
@@ -34,7 +34,7 @@ extern "C" {
 
 typedef enum {
   SIGNAL_MP_SEND_REQUEST  = 0,
-  SIGNAL_MP_SEND_RESPONSE = 1,
+  SIGNAL_MP_SEND_RESPONSE = 1
 }   Signal_MP_Remote_operations;
 
 /*

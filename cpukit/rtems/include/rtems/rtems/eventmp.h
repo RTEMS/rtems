@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  eventmp.h,v 1.2 1995/05/31 16:46:25 joel Exp
  */
 
 #ifndef __RTEMS_EVENT_MP_h
@@ -34,7 +34,7 @@ extern "C" {
 
 typedef enum {
   EVENT_MP_SEND_REQUEST  =  0,
-  EVENT_MP_SEND_RESPONSE =  1,
+  EVENT_MP_SEND_RESPONSE =  1
 }   Event_MP_Remote_operations;
 
 /*

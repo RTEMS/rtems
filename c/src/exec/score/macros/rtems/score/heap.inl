@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  heap.inl,v 1.2 1995/05/31 16:49:10 joel Exp
  */
 
 #ifndef __HEAP_inl
@@ -44,6 +44,7 @@
   ( (Heap_Block *) _Addresses_Subtract_offset( \
       (void *)(_the_block), \
       (_the_block)->back_flag & ~ HEAP_BLOCK_USED \
+    ) \
   )
 
 /*PAGE
@@ -55,6 +56,7 @@
   ( (Heap_Block *) _Addresses_Add_offset( \
       (void *)(_the_block), \
       (_the_block)->front_flag & ~ HEAP_BLOCK_USED \
+    ) \
   )
 
 /*PAGE

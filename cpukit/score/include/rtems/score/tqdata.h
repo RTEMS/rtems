@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  tqdata.h,v 1.2 1995/05/31 16:47:42 joel Exp
  */
 
 #ifndef __RTEMS_THREAD_QUEUE_DATA_h
@@ -32,7 +32,7 @@ extern "C" {
 
 typedef enum {
   THREAD_QUEUE_DATA_FIFO_DISCIPLINE,     /* RTEMS_FIFO queue discipline */
-  THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE, /* RTEMS_PRIORITY queue discipline */
+  THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE  /* RTEMS_PRIORITY queue discipline */
 }   Thread_queue_Disciplines;
 
 /*

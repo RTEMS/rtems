@@ -1,12 +1,9 @@
 /*
  *  Workspace Handler
  *
- *  JUNK
+ *  XXX
  *
  *  NOTE:
- *
- *  This file only exists to contain the one function which cannot
- *  be written as a macro when "static inlines" are not used.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -16,14 +13,12 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  wkspace.c,v 1.4 1995/05/25 15:26:53 joel Exp
  */
 
 #include <rtems/system.h>
 #include <rtems/wkspace.h>
 #include <rtems/fatal.h>
-
-#ifndef USE_INLINES
 
 /*PAGE
  *
@@ -44,6 +39,3 @@ void *_Workspace_Allocate_or_fatal_error(
 
   return memory;
 }
-
-#endif   /* USE_INLINES */
-

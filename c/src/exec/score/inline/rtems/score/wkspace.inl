@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  wkspace.inl,v 1.2 1995/05/31 16:48:49 joel Exp
  */
 
 #ifndef __WORKSPACE_inl
@@ -65,26 +65,6 @@ STATIC INLINE void *_Workspace_Allocate(
 )
 {
    return _Heap_Allocate( &_Workspace_Area, size );
-}
-
-/*PAGE
- *
- *  _Workspace_Allocate_or_fatal_error
- *
- */
-
-STATIC INLINE void *_Workspace_Allocate_or_fatal_error(
-  unsigned32   size
-)
-{
-  void        *memory;
-
-  memory = _Workspace_Allocate( size );
-
-  if ( memory == NULL )
-    rtems_fatal_error_occurred( RTEMS_UNSATISFIED );
-
-  return memory;
 }
 
 /*PAGE

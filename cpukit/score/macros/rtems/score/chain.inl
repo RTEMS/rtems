@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  chain.inl,v 1.2 1995/05/31 16:48:59 joel Exp
  */
 
 #ifndef __MACROS_CHAIN_h
@@ -145,7 +145,7 @@
 
 #define _Chain_Get_unprotected( _the_chain ) \
   (( !_Chain_Is_empty( (_the_chain) ) ) \
-    ? _Chain_Get_unprotected( (_the_chain) ) \
+    ? _Chain_Get_first_unprotected( (_the_chain) ) \
     : NULL)
 
 /*PAGE

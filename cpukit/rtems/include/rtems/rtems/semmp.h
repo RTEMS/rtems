@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  semmp.h,v 1.2 1995/05/31 16:47:15 joel Exp
  */
 
 #ifndef __RTEMS_SEMAPHORE_MP_h
@@ -40,7 +40,7 @@ typedef enum {
   SEMAPHORE_MP_OBTAIN_REQUEST   =  3,
   SEMAPHORE_MP_OBTAIN_RESPONSE  =  4,
   SEMAPHORE_MP_RELEASE_REQUEST  =  5,
-  SEMAPHORE_MP_RELEASE_RESPONSE =  6,
+  SEMAPHORE_MP_RELEASE_RESPONSE =  6
 }   Semaphore_MP_Remote_operations;
 
 /*

@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  sysstate.inl,v 1.2 1995/05/31 16:49:39 joel Exp
  */
 
 #ifndef __SYSTEM_STATE_inl
@@ -30,7 +30,7 @@
  *  _System_state_Get
  */
 
-#define _System_state_Get( void ) \
+#define _System_state_Get() \
   (_System_state_Current)
 
 /*PAGE
