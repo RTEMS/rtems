@@ -104,6 +104,7 @@ SECTIONS
   /* Put .ctors and .dtors next to the .got2 section, so that the pointers
      get relocated with -mrelocatable. Also put in the .fixup pointers.
      The current compiler no longer needs this, but keep it around for 2.7.2  */
+		PROVIDE (__GOT2_START__ = .);
 		PROVIDE (_GOT2_START_ = .);
   .got2		  :  { *(.got2) }
 		PROVIDE (__GOT2_END__ = .);
@@ -113,11 +114,13 @@ SECTIONS
 		PROVIDE (__DTOR_LIST__ = .);
   .dtors	  : { *(.dtors) }
 		PROVIDE (__DTOR_END__ = .);
+		PROVIDE (__FIXUP_START__ = .);
 		PROVIDE (_FIXUP_START_ = .);
   .fixup	  : { *(.fixup) }
 		PROVIDE (_FIXUP_END_ = .);
 		PROVIDE (__FIXUP_END__ = .);
 		PROVIDE (_GOT2_END_ = .);
+		PROVIDE (__GOT_START__ = .);
 		PROVIDE (_GOT_START_ = .);
   s.got = .;
   .got		  : { *(.got) }

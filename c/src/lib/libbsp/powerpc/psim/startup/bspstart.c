@@ -214,6 +214,7 @@ void bsp_start( void )
   BSP_Configuration.work_space_size *= 3;
 #endif
 
+  BSP_Configuration.work_space_size += 32 * 1024;
 
 #if 0
   work_space_start = 
@@ -230,13 +231,11 @@ void bsp_start( void )
 
   BSP_Configuration.work_space_start = work_space_start;
 
-#ifdef STACK_CHECKER_ON
   /*
-   * Add 1 extension for stack checker
+   *  Account for the console's resources
    */
 
-  BSP_Configuration.maximum_extensions++;
-#endif
+  console_reserve_resources( &BSP_Configuration );
 
 #if PSIM_FAST_IDLE
   /*
