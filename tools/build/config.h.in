@@ -1,7 +1,0 @@
-/* config.h.in.  Generated automatically from configure.in by autoheader.  */
-
-/* Define if you have the strerror function.  */
-#undef HAVE_STRERROR
-
-/* Define if you have the strtol function.  */
-#undef HAVE_STRTOL
