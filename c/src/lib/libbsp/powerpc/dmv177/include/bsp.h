@@ -45,6 +45,15 @@ extern "C" {
 #endif
 
 /*
+ * Network driver configuration
+ */
+struct rtems_bsdnet_ifconfig;
+extern int rtems_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config);
+#define RTEMS_BSP_NETWORK_DRIVER_NAME   "sonic1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_sonic_driver_attach
+
+
+/*
  * The following macro calculates the Baud constant. For the Z8530 chip.
  */
 #define Z8530_Baud( _frequency, _clock_by, _baud_rate  )   \
