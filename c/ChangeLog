@@ -1,5 +1,9 @@
 2003-12-17	Joel Sherrill <joel@OARcorp.com>
 
+	* release_support: Removed -- accidentally added to wrong directory.
+
+2003-12-17	Joel Sherrill <joel@OARcorp.com>
+
 	* release_support: New file -- assistant to new cut_release script.
 
 2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
