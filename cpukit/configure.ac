@@ -141,11 +141,6 @@ RTEMS_CPUOPT([RTEMS_ITRON_API],
   [1],
   [if itron api is supported])
 
-RTEMS_CPUOPT([RTEMS_MULTILIBS],
-  [test x"$RTEMS_MULTILIBS" = x"yes"],
-  [1],
-  [using multilib'ed RTEMS])
-
 RTEMS_CPUOPT([RTEMS_MULTIPROCESSING],
   [test x"$enable_multiprocessing" = x"yes"],
   [1],

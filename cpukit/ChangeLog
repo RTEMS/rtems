@@ -1,3 +1,8 @@
+2004-10-28	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Remove RTEMS_CPUOPT([RTEMS_MULTILIBS],..).
+	(Unused).
+
 2004-10-27	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* monitor/mon-prmisc.c, monitor/monitor.h: Let rtems_monitor_dump
