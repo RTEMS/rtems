@@ -2,6 +2,7 @@
 ##  $Id$
 ##
 
+LIB=$(ARCH)/libitron.a
 
 INCLUDES = -I.
 
@@ -52,7 +53,10 @@ include $(top_srcdir)/../automake/lib.am
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: ${ARCH} ${OBJS}
+all-local: ${ARCH} ${LIB}
+
+$(LIB): ${OBJS}
+	$(make-library)
 
 UNUSED_C_FILES = cre_mbx.c del_mbx.c mboxtranslatereturncode.c network.c \
     prcv_mbx.c rcv_mbx.c ref_mbx.c snd_mbx.c sysmgmt.c trcv_mbx.c

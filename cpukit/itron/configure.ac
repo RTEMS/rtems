@@ -26,7 +26,7 @@ RTEMS_PROJECT_ROOT
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-RTEMS_CHECK_ITRON_API(RTEMS_BSP)
+RTEMS_CHECK_ITRON_API
 
 # If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
 if test "$RTEMS_USE_MACROS" = "yes"; then
