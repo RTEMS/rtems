@@ -24,7 +24,7 @@
 #define __EXTENSIONS__
 #endif
 
-#if defined(linux)
+#if defined(__linux__)
 #define MALLOC_0_RETURNS_NULL
 #endif
 
@@ -873,9 +873,10 @@ void _CPU_SHM_Init(
 
         help.val = 1;
         status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
-#endif
-#if defined(hpux)
+#elif defined(hpux) || defined(__linux__)
         status = semctl( _CPU_SHM_Semid, i, SETVAL, 1 );
+#else
+#error "Not a supported unix variant"
 #endif
 
         fix_syscall_errno(); /* in case of newlib */
