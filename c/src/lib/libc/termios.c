@@ -207,6 +207,9 @@ rtems_termios_open (
 		if (ttyTail == NULL)
 			ttyTail = tty;
 
+		tty->minor = minor;
+		tty->major = major;
+
 		/*
 		 * Set up mutex semaphores
 		 */
@@ -343,8 +346,10 @@ rtems_termios_ioctl (void *arg)
 
  	args->ioctl_return = 0;
 	sc = rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-	if (sc != RTEMS_SUCCESSFUL)
+	if (sc != RTEMS_SUCCESSFUL) {
+		args->ioctl_return = sc;
 		return sc;
+	}
 	switch (args->command) {
 	default:
 		sc = RTEMS_INVALID_NUMBER;
@@ -387,6 +392,7 @@ rtems_termios_ioctl (void *arg)
 		break;
 	}
 	rtems_semaphore_release (tty->osem);
+	args->ioctl_return = sc;
 	return sc;
 }
 
