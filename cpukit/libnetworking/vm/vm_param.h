@@ -13,10 +13,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -61,9 +57,13 @@
  * any improvements or extensions that they make and grant Carnegie the
  * rights to redistribute these changes.
  *
- * $Id$
+ * $FreeBSD: src/sys/vm/vm_param.h,v 1.21 2005/01/07 02:29:27 imp Exp $
  */
 
+/*
+ * $Id$
+ */
+ 
 /*
  *	Machine independent virtual memory parameters.
  */
@@ -74,40 +74,10 @@
 #include <machine/vmparam.h>
 
 /*
- *	The machine independent pages are refered to as PAGES.  A page
- *	is some number of hardware pages, depending on the target machine.
- */
-#define DEFAULT_PAGE_SIZE	4096
-
-#if 0
-
-/*
- *	All references to the size of a page should be done with PAGE_SIZE
- *	or PAGE_SHIFT.  The fact they are variables is hidden here so that
- *	we can easily make them constant if we so desire.
- */
-#ifndef PAGE_SIZE
-#define	PAGE_SIZE	cnt.v_page_size	/* size of page */
-#endif
-#ifndef PAGE_MASK
-#define PAGE_MASK	page_mask	/* size of page - 1 */
-#endif
-#ifndef PAGE_SHIFT
-#define PAGE_SHIFT	page_shift	/* bits to shift for pages */
-#endif
-
-#endif
-
-#ifdef _KERNEL
-extern vm_size_t page_mask;
-extern int page_shift;
-
-#endif
-
-/*
  * CTL_VM identifiers
  */
-#define	VM_METER		1	/* struct vmmeter */
+#define	VM_TOTAL		1	/* struct vmtotal */
+#define	VM_METER                VM_TOTAL/* deprecated, use VM_TOTAL */
 #define	VM_LOADAVG	 	2	/* struct loadavg */
 #define VM_V_FREE_MIN		3	/* cnt.v_free_min */
 #define VM_V_FREE_TARGET	4	/* cnt.v_free_target */
@@ -122,7 +92,7 @@ extern int page_shift;
 
 #define CTL_VM_NAMES { \
 	{ 0, 0 }, \
-	{ "vmmeter", CTLTYPE_STRUCT }, \
+	{ "vmtotal", CTLTYPE_STRUCT }, \
 	{ "loadavg", CTLTYPE_STRUCT }, \
 	{ "v_free_min", CTLTYPE_INT }, \
 	{ "v_free_target", CTLTYPE_INT }, \
@@ -149,17 +119,15 @@ extern int page_shift;
 #define	KERN_NO_ACCESS		8
 
 #ifndef ASSEMBLER
-/*
- *	Convert addresses to pages and vice versa.
- *	No rounding is used.
- */
 #ifdef _KERNEL
 #define num_pages(x) \
 	((vm_offset_t)((((vm_offset_t)(x)) + PAGE_MASK) >> PAGE_SHIFT))
-
-extern vm_size_t mem_size;	/* size of physical memory (bytes) */
-extern vm_offset_t first_addr;	/* first physical page */
-extern vm_offset_t last_addr;	/* last physical page */
+extern	unsigned long maxtsiz;
+extern	unsigned long dfldsiz;
+extern	unsigned long maxdsiz;
+extern	unsigned long dflssiz;
+extern	unsigned long maxssiz;
+extern	unsigned long sgrowsiz;
 #endif				/* _KERNEL */
 #endif				/* ASSEMBLER */
 #endif				/* _VM_PARAM_ */
