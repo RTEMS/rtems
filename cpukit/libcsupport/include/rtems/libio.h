@@ -56,13 +56,13 @@ typedef int (*rtems_filesystem_close_t)(
   rtems_libio_t *iop
 );
 
-typedef int (*rtems_filesystem_read_t)(
+typedef ssize_t (*rtems_filesystem_read_t)(
   rtems_libio_t *iop,
   void          *buffer,
   unsigned32     count
 );
 
-typedef int (*rtems_filesystem_write_t)(
+typedef ssize_t (*rtems_filesystem_write_t)(
   rtems_libio_t *iop,
   const void    *buffer,
   unsigned32    count

@@ -1,3 +1,9 @@
+2002-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/libio.h: Change rtems_filesystem_read_t and
+	rtems_filesystem_write_t to return ssize_t to match read(2)
+	and write(2) respectively.
+
 2002-09-14	Eric Norum <eric.norum@usask.ca>
 
 	* src/readdir_r.c: New file.
