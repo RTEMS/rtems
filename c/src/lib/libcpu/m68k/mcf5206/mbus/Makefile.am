@@ -6,7 +6,7 @@
 PGM = $(ARCH)/mbus.rel
 
 C_FILES = mcfmbus.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
