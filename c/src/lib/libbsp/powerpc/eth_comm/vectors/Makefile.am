@@ -33,6 +33,6 @@ $(PROJECT_INCLUDE)/bsp/%.h: %.h
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
    $(include_bsp_HEADERS:%=$(PROJECT_INCLUDE)/bsp/%)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(PREINSTALL_FILES) $(OBJS)
 
 include $(top_srcdir)/../../../../automake/local.am

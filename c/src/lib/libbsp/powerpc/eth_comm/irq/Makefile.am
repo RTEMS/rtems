@@ -34,7 +34,7 @@ $(PGM): $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(PGM)
+all-local: $(PREINSTALL_FILES) $(OBJS) $(PGM)
 
 EXTRA_DIST = irq.c irq_asm.S irq_init.c
 
