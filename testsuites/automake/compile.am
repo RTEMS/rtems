@@ -34,7 +34,6 @@ CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 
-CCAS = $(CC)
 CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
 
 ${ARCH}/%.o: %.c $(ARCH)/$(dirstamp)
