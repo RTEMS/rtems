@@ -147,14 +147,15 @@ AC_CACHE_CHECK([whether $CC supports function __attribute__((weak))],
     CFLAGS=$save_CFLAGS])
 ])
 
+AC_CHECK_HEADERS([sys/cdefs.h],[NEED_SYS_CDEFS_H=no],[NEED_SYS_CDEFS_H=yes])
+AC_CHECK_HEADERS([sys/queue.h],[NEED_SYS_QUEUE_H=no],[NEED_SYS_QUEUE_H=yes])
+
 AS_IF([test x"$RTEMS_USE_NEWLIB" != x"yes"],[
 ## Provide headers only if the host doesn't.
-  AC_CHECK_HEADERS([sys/cdefs.h],[NEED_SYS_CDEFS_H=no],[NEED_SYS_CDEFS_H=yes])
   AC_CHECK_HEADERS([stdint.h],[NEED_STDINT_H=no],[NEED_STDINT_H=yes])
   AC_CHECK_HEADERS([inttypes.h],[NEED_INTTYPES_H=no],[NEED_INTTYPES=yes])
 ],[
 ## Using newlib, we provide sys/cdefs.h
-  NEED_SYS_CDEFS_H=yes
   NEED_STDINT_H=yes
   NEED_INTTYPES_H=yes
 ])
@@ -218,6 +219,7 @@ AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
   && test x"$HAS_POSIX_API" = x"yes"])
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
+AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
 AM_CONDITIONAL([NEED_STDINT_H],[test x"$NEED_STDINT_H" = x"yes"])
 AM_CONDITIONAL([NEED_INTTYPES_H],[test x"$NEED_INTTYPES_H" = x"yes"])
 

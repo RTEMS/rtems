@@ -14,10 +14,10 @@ AC_DEFUN(RTEMS_ENV_RTEMSCPU,
       [MULTISUBDIR="/$with_multisubdir"])
     AC_SUBST(MULTISUBDIR)
  
-    PROJECT_INCLUDE="\$(PROJECT_ROOT)/lib/include"
+    project_includedir="\$(PROJECT_ROOT)/include"
     project_libdir="\$(PROJECT_ROOT)/lib\$(MULTISUBDIR)"
  
-    includedir="\${exec_prefix}/lib/include"
+    includedir="\${exec_prefix}/include"
     libdir="${libdir}\$(MULTISUBDIR)"
   ],
   [
@@ -39,7 +39,7 @@ AC_DEFUN(RTEMS_ENV_RTEMSCPU,
     AC_MSG_RESULT(${RTEMS_BSP})
     AC_SUBST(RTEMS_BSP)
  
-    PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
+    project_includedir="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
     project_libdir="${PROJECT_ROOT}/$RTEMS_BSP/lib"   
 
     includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
@@ -51,7 +51,10 @@ AC_DEFUN(RTEMS_ENV_RTEMSCPU,
   ])
 
   AC_SUBST(project_libdir)
-  AC_SUBST(PROJECT_INCLUDE)
+  AC_SUBST(project_includedir)
+
+  # FIXME: Deprecated, to be removed
+  AC_SUBST(PROJECT_INCLUDE,[$project_includedir])
  
   AM_CONDITIONAL([MULTILIB],[test x"$multilib" = x"yes"])
 ])

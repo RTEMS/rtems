@@ -1,3 +1,10 @@
+2003-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Check for sys/cdefs.h.
+	* aclocal/env-rtems-cpu.m4: Add project_includedir.
+	Deprecate PROJECT_INCLUDE.  Change project_includedir to
+	$(PROJECT_ROOT)/include for multilibs.
+
 2003-09-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in include/Makefile.am.
