@@ -9,7 +9,7 @@ AUTOMAKE_OPTIONS = no-exeext
 
 VPATH = @srcdir@:@srcdir@/../../shared/bootloader:@srcdir@/../../shared/console
 
-noinst_PROGRAMS = bootloader.o
+noinst_PROGRAMS = bootloader.$(OBJEXT)
 
 ## IMPORTANT: head.S must be first, T. Straumann 12/17/2001
 bootloader_o_SOURCES = head.S exception.S em86real.S
@@ -39,17 +39,17 @@ AM_CCASFLAGS = $(AM_CPPFLAGS) \
 #
 # As we use very specific compilation options in this directory
 # we shall not use any other code. This includes the newlib libc.a
-# as well as other code located in .o files in mcp750 directory.
+# as well as other code located in .$(OBJEXT) files in mcp750 directory.
 #
 # NEVER remove lib.c. You have been warned...
 #
-bootloader.o: $(bootloader_o_OBJECTS)
+bootloader.$(OBJEXT): $(bootloader_o_OBJECTS)
 	$(LD) -r -o $@ $(bootloader_o_OBJECTS)
 	$(NM)  $@ | grep ' U '
 	@echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
 
 ppcbootdir = $(bsplibdir)
-ppcboot_DATA = bootloader.o
+ppcboot_DATA = bootloader.$(OBJEXT)
 ppcboot_DATA += ../../shared/bootloader/ppcboot.lds
 
 # FIXME: Tmp-install stuff to make mcp750.cfg's make-exe happy.
@@ -59,7 +59,7 @@ ppcboot_DATA += ../../shared/bootloader/ppcboot.lds
 $(PROJECT_RELEASE)/lib/%: %
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib/bootloader.o \
+TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib/bootloader.$(OBJEXT) \
     $(PROJECT_RELEASE)/lib/ppcboot.lds
 
 all-local: $(TMPINSTALL_FILES)

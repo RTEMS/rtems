@@ -6,12 +6,12 @@
 VPATH = @srcdir@:@srcdir@/../console:@srcdir@/../../shared/vectors
 
 C_FILES = vectors_init.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 H_FILES = ../../shared/vectors/vectors.h
 
 S_FILES = vectors.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(S_O_FILES) $(C_O_FILES)
 

@@ -6,7 +6,7 @@
 VPATH = @srcdir@:@srcdir@/../../shared/residual
 
 C_FILES = residual.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 H_FILES = ../../shared/residual/pnp.h ../../shared/residual/residual.h
 

@@ -6,7 +6,7 @@
 VPATH = @srcdir@:@srcdir@/../../shared/motorola
 
 C_FILES = motorola.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 # FIXME: This doesn't give any sense here
 H_FILES = ../../shared/motorola/motorola.h

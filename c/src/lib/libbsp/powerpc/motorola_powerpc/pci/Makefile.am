@@ -6,7 +6,7 @@
 VPATH = @srcdir@:@srcdir@/../../shared/pci
 
 C_FILES = pci.c detect_raven_bridge.c pcifinddevice.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 H_FILES = ../../shared/pci/pci.h
 

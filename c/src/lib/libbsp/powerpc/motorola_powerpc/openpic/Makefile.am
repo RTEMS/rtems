@@ -9,7 +9,7 @@ C_FILES = openpic.c
 
 H_FILES = ../../shared/openpic/openpic.h
 
-OBJS = $(C_FILES:%.c=$(ARCH)/%.o)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
