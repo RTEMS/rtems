@@ -77,7 +77,8 @@ The following persons/organizations have made contributions:
 
 + Dominique le Campion (Dominique.LECAMPION@enst-bretagne.fr), for
   Telecom Bretagne and T.N.I. (Brest, France) submitted the BSP for
-  the Motorola MVME147 board (68030 CPU + 68881 FPU).
+  the Motorola MVME147 board (68030 CPU + 68881 FPU) and the MVME147s
+  variant of this board.
 
 + Craig Lebakken (lebakken@minn.net) and Derrick Ostertag
   (ostertag@transition.com) of Transition Networks of Eden Prairie, MN
