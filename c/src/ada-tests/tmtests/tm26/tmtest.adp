@@ -1,0 +1,650 @@
+--
+--  TMTEST / BODY
+--
+--  DESCRIPTION:
+--
+--  This package is the implementation of Test 26 of the RTEMS
+--  Timing Test Suite.
+--
+--  DEPENDENCIES: 
+--
+--  
+--
+--  COPYRIGHT (c) 1989-1997.
+--  On-Line Applications Research Corporation (OAR).
+--  Copyright assigned to U.S. Government, 1994.
+--
+--  The license and distribution terms for this file may in
+--  the file LICENSE in this distribution or at
+--  http://www.OARcorp.com/rtems/license.html.
+--
+--  $Id$
+--
+
+with INTERFACES; use INTERFACES;
+with RTEMS_CALLING_OVERHEAD;
+with RTEMS;
+with RTEMS_TEST_SUPPORT;
+with TEST_SUPPORT;
+with TEXT_IO;
+with TIME_TEST_SUPPORT;
+with UNSIGNED32_IO;
+
+include(../../support/fp.inc)
+
+package body TMTEST is
+
+--PAGE
+-- 
+--  INIT
+--
+
+   procedure INIT (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+      INDEX   : RTEMS.UNSIGNED32;
+      TASK_ID : RTEMS.ID;
+      STATUS  : RTEMS.STATUS_CODES;
+   begin
+
+      TEXT_IO.NEW_LINE( 2 );
+      TEXT_IO.PUT_LINE( "*** TIME TEST 26 ***" );
+
+      RTEMS.TASK_CREATE( 
+         RTEMS.BUILD_NAME(  'F', 'P', '1', ' ' ),
+         201, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.FLOATING_POINT,
+         TASK_ID,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF FP1" );
+
+      RTEMS.TASK_START(
+         TASK_ID,
+         TMTEST.FLOATING_POINT_TASK_1'ACCESS,
+         0,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF FP1" );
+
+      RTEMS.TASK_CREATE( 
+         RTEMS.BUILD_NAME(  'F', 'P', '2', ' ' ),
+         202, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.FLOATING_POINT,
+         TASK_ID,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF FP2" );
+
+      RTEMS.TASK_START(
+         TASK_ID,
+         TMTEST.FLOATING_POINT_TASK_2'ACCESS,
+         0,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF FP2" );
+
+      RTEMS.TASK_CREATE( 
+         RTEMS.BUILD_NAME(  'L', 'O', 'W', ' ' ),
+         200, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         TASK_ID,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF LOW" );
+
+      RTEMS.TASK_START( 
+         TASK_ID, 
+         TMTEST.LOW_TASK'ACCESS, 
+         0, 
+         STATUS 
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF LOW" );
+
+      RTEMS.TASK_CREATE( 
+         RTEMS.BUILD_NAME(  'M', 'I', 'D', ' ' ),
+         128, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         TASK_ID,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF MIDDLE" );
+
+      RTEMS.TASK_START( 
+         TASK_ID, 
+         TMTEST.MIDDLE_TASK'ACCESS, 
+         0, 
+         STATUS 
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF MIDDLE" );
+
+      RTEMS.TASK_CREATE( 
+         RTEMS.BUILD_NAME(  'H', 'I', 'G', 'H' ),
+         5, 
+         2048, 
+         RTEMS.DEFAULT_MODES,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         TASK_ID,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF HIGH" );
+
+      RTEMS.TASK_START( 
+         TASK_ID, 
+         TMTEST.HIGH_TASK'ACCESS, 
+         0, 
+         STATUS 
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF HIGH" );
+
+      RTEMS.SEMAPHORE_CREATE( 
+         RTEMS.BUILD_NAME(  'S', 'E', 'M', '1' ),
+         TIME_TEST_SUPPORT.OPERATION_COUNT, 
+         RTEMS.DEFAULT_ATTRIBUTES,
+         TMTEST.SEMAPHORE_ID,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_CREATE" );
+
+      for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
+      loop
+
+         RTEMS.TASK_CREATE( 
+            RTEMS.BUILD_NAME(  'N', 'U', 'L', 'L' ),
+            254, 
+            512, 
+            RTEMS.DEFAULT_MODES,
+            RTEMS.DEFAULT_ATTRIBUTES,
+            TASK_ID,
+            STATUS
+         );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE LOOP" );
+
+         RTEMS.TASK_START( 
+            TASK_ID, 
+            TMTEST.NULL_TASK'ACCESS, 
+            0, 
+            STATUS 
+         );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START LOOP" );
+
+      end loop;
+
+      RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
+
+   end INIT;
+
+--PAGE
+-- 
+--  NULL_TASK
+--
+
+   procedure NULL_TASK (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+   begin
+
+      NULL;
+
+   end NULL_TASK;
+
+--PAGE
+-- 
+--  HIGH_TASK
+--
+
+   procedure HIGH_TASK (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+   begin
+
+      TIMER_DRIVER.INITIALIZE;
+         RTEMS_TEST_SUPPORT.THREAD_ENABLE_DISPATCH;
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "THREAD_ENABLE_DISPATCH", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      TIMER_DRIVER.INITIALIZE;
+         RTEMS_TEST_SUPPORT.THREAD_SET_STATE( 
+            RTEMS_TEST_SUPPORT.THREAD_EXECUTING,
+            RTEMS.SUSPENDED
+         );
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "THREAD_SET_STATE", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      -- FORCE CONTEXT SWITCH
+
+      RTEMS_TEST_SUPPORT.CONTEXT_SWITCH_NECESSARY := TRUE;
+
+      TIMER_DRIVER.INITIALIZE;
+         RTEMS_TEST_SUPPORT.THREAD_DISPATCH; -- dispatches MIDDLE_TASK
+
+   end HIGH_TASK;
+
+--PAGE
+-- 
+--  MIDDLE_TASK
+--
+
+   procedure MIDDLE_TASK (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+   begin
+
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "THREAD_DISPATCH (NO FP)", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      RTEMS_TEST_SUPPORT.THREAD_SET_STATE( 
+         RTEMS_TEST_SUPPORT.THREAD_EXECUTING,
+         RTEMS.SUSPENDED
+      );
+
+      TMTEST.MIDDLE_TCB := RTEMS_TEST_SUPPORT.THREAD_EXECUTING;
+ 
+      RTEMS_TEST_SUPPORT.THREAD_EXECUTING :=
+          RTEMS_TEST_SUPPORT.THREAD_TO_CONTROL_POINTER(
+             RTEMS_TEST_SUPPORT.CHAIN_NODE_POINTER_TO_ADDRESS(
+                RTEMS_TEST_SUPPORT.THREAD_READY_CHAIN( 200 ).FIRST
+             )
+          );
+
+      -- do NOT force context switch
+
+      RTEMS_TEST_SUPPORT.CONTEXT_SWITCH_NECESSARY := FALSE;
+
+      RTEMS_TEST_SUPPORT.THREAD_DISABLE_DISPATCH;
+
+      TIMER_DRIVER.INITIALIZE;
+         RTEMS_TEST_SUPPORT.CONTEXT_SWITCH(
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               TMTEST.MIDDLE_TCB.REGISTERS'ADDRESS 
+            ),
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               RTEMS_TEST_SUPPORT.THREAD_EXECUTING.REGISTERS'ADDRESS 
+            )
+         );
+
+   end MIDDLE_TASK;
+
+--PAGE
+-- 
+--  LOW_TASK
+--
+
+   procedure LOW_TASK (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+      EXECUTING : RTEMS.TCB_POINTER;
+   begin
+
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "CONTEXT_SWITCH (NO FP)", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      EXECUTING := RTEMS_TEST_SUPPORT.THREAD_EXECUTING;
+   
+      RTEMS_TEST_SUPPORT.THREAD_EXECUTING :=
+          RTEMS_TEST_SUPPORT.THREAD_TO_CONTROL_POINTER(
+             RTEMS_TEST_SUPPORT.CHAIN_NODE_POINTER_TO_ADDRESS(
+                RTEMS_TEST_SUPPORT.THREAD_READY_CHAIN( 201 ).FIRST
+             )
+          );
+
+      -- do NOT force context switch
+
+      RTEMS_TEST_SUPPORT.CONTEXT_SWITCH_NECESSARY := FALSE;
+
+      RTEMS_TEST_SUPPORT.THREAD_DISABLE_DISPATCH;
+
+      TIMER_DRIVER.INITIALIZE;
+
+         RTEMS_TEST_SUPPORT.CONTEXT_RESTORE_FP(
+            RTEMS_TEST_SUPPORT.THREAD_EXECUTING.FP_CONTEXT'ADDRESS
+         );
+         RTEMS_TEST_SUPPORT.CONTEXT_SWITCH(
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               EXECUTING.REGISTERS'ADDRESS 
+            ),
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               RTEMS_TEST_SUPPORT.THREAD_EXECUTING.REGISTERS'ADDRESS 
+            )
+         );
+
+   end LOW_TASK;
+
+--PAGE
+-- 
+--  FLOATING_POINT_TASK_1
+--
+
+   procedure FLOATING_POINT_TASK_1 (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+      EXECUTING           : RTEMS.TCB_POINTER;
+      FP_DECLARE;
+   begin
+
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "CONTEXT_SWITCH (restore 1st FP)", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      EXECUTING := RTEMS_TEST_SUPPORT.THREAD_EXECUTING;
+   
+      RTEMS_TEST_SUPPORT.THREAD_EXECUTING :=
+          RTEMS_TEST_SUPPORT.THREAD_TO_CONTROL_POINTER(
+             RTEMS_TEST_SUPPORT.CHAIN_NODE_POINTER_TO_ADDRESS(
+                RTEMS_TEST_SUPPORT.THREAD_READY_CHAIN( 202 ).FIRST
+             )
+          );
+
+      -- do NOT force context switch
+
+      RTEMS_TEST_SUPPORT.CONTEXT_SWITCH_NECESSARY := FALSE;
+
+      RTEMS_TEST_SUPPORT.THREAD_DISABLE_DISPATCH;
+
+      TIMER_DRIVER.INITIALIZE;
+
+         RTEMS_TEST_SUPPORT.CONTEXT_SAVE_FP( EXECUTING.FP_CONTEXT'ADDRESS );
+         RTEMS_TEST_SUPPORT.CONTEXT_RESTORE_FP(
+            RTEMS_TEST_SUPPORT.THREAD_EXECUTING.FP_CONTEXT'ADDRESS
+         );
+         RTEMS_TEST_SUPPORT.CONTEXT_SWITCH(
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               EXECUTING.REGISTERS'ADDRESS 
+            ),
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               RTEMS_TEST_SUPPORT.THREAD_EXECUTING.REGISTERS'ADDRESS 
+            )
+         );
+
+      -- switch to FLOATING_POINT_TASK_2
+
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "CONTEXT_SWITCH (used->init FP)", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0 
+      );
+
+      FP_LOAD( 1.0 );
+
+      EXECUTING := RTEMS_TEST_SUPPORT.THREAD_EXECUTING;
+   
+      RTEMS_TEST_SUPPORT.THREAD_EXECUTING :=
+          RTEMS_TEST_SUPPORT.THREAD_TO_CONTROL_POINTER(
+             RTEMS_TEST_SUPPORT.CHAIN_NODE_POINTER_TO_ADDRESS(
+                RTEMS_TEST_SUPPORT.THREAD_READY_CHAIN( 202 ).FIRST
+             )
+          );
+
+      -- do NOT force context switch
+
+      RTEMS_TEST_SUPPORT.CONTEXT_SWITCH_NECESSARY := FALSE;
+
+      RTEMS_TEST_SUPPORT.THREAD_DISABLE_DISPATCH;
+
+      TIMER_DRIVER.INITIALIZE;
+
+         RTEMS_TEST_SUPPORT.CONTEXT_SAVE_FP( EXECUTING.FP_CONTEXT'ADDRESS );
+         RTEMS_TEST_SUPPORT.CONTEXT_RESTORE_FP(
+            RTEMS_TEST_SUPPORT.THREAD_EXECUTING.FP_CONTEXT'ADDRESS
+         );
+         RTEMS_TEST_SUPPORT.CONTEXT_SWITCH(
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               EXECUTING.REGISTERS'ADDRESS 
+            ),
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               RTEMS_TEST_SUPPORT.THREAD_EXECUTING.REGISTERS'ADDRESS 
+            )
+         );
+
+      -- switch to FLOATING_POINT_TASK_2
+
+   end FLOATING_POINT_TASK_1;
+
+--PAGE
+-- 
+--  FLOATING_POINT_TASK_2
+--
+
+   procedure FLOATING_POINT_TASK_2 (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+      EXECUTING           : RTEMS.TCB_POINTER;
+      FP_DECLARE;
+   begin
+
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "CONTEXT_SWITCH (init->init FP)", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0 
+      );
+
+      EXECUTING := RTEMS_TEST_SUPPORT.THREAD_EXECUTING;
+   
+      RTEMS_TEST_SUPPORT.THREAD_EXECUTING :=
+          RTEMS_TEST_SUPPORT.THREAD_TO_CONTROL_POINTER(
+             RTEMS_TEST_SUPPORT.CHAIN_NODE_POINTER_TO_ADDRESS(
+                RTEMS_TEST_SUPPORT.THREAD_READY_CHAIN( 201 ).FIRST
+             )
+          );
+
+      FP_LOAD( 1.0 );
+
+      -- do NOT force context switch
+
+      RTEMS_TEST_SUPPORT.CONTEXT_SWITCH_NECESSARY := FALSE;
+
+      RTEMS_TEST_SUPPORT.THREAD_DISABLE_DISPATCH;
+
+      TIMER_DRIVER.INITIALIZE;
+
+         RTEMS_TEST_SUPPORT.CONTEXT_SAVE_FP( EXECUTING.FP_CONTEXT'ADDRESS );
+         RTEMS_TEST_SUPPORT.CONTEXT_RESTORE_FP(
+            RTEMS_TEST_SUPPORT.THREAD_EXECUTING.FP_CONTEXT'ADDRESS
+         );
+         RTEMS_TEST_SUPPORT.CONTEXT_SWITCH(
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               EXECUTING.REGISTERS'ADDRESS 
+            ),
+            RTEMS_TEST_SUPPORT.CONTEXT_TO_CONTROL_POINTER( 
+               RTEMS_TEST_SUPPORT.THREAD_EXECUTING.REGISTERS'ADDRESS 
+            )
+         );
+
+      -- switch to FLOATING_POINT_TASK_1
+
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "CONTEXT_SWITCH (used->used FP)", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      TMTEST.COMPLETE_TEST;
+
+      RTEMS.SHUTDOWN_EXECUTIVE( 0 );
+
+   end FLOATING_POINT_TASK_2;
+
+--PAGE
+-- 
+--  COMPLETE_TEST
+--
+
+   procedure COMPLETE_TEST
+   is 
+      INDEX         : RTEMS.UNSIGNED32;
+      OVERHEAD      : RTEMS.UNSIGNED32;
+      TASK_ID       : RTEMS.ID;
+      LOCATION      : RTEMS_TEST_SUPPORT.OBJECTS_LOCATIONS;
+      THE_SEMAPHORE : RTEMS.TCB_POINTER;
+      THE_THREAD    : RTEMS.TCB_POINTER;
+   begin
+
+      TIMER_DRIVER.INITIALIZE;
+         RTEMS_TEST_SUPPORT.THREAD_RESUME( TMTEST.MIDDLE_TCB );
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "THREAD_RESUME", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      RTEMS_TEST_SUPPORT.THREAD_SET_STATE( 
+         TMTEST.MIDDLE_TCB,
+         RTEMS.WAITING_FOR_MESSAGE
+      );
+
+      TIMER_DRIVER.INITIALIZE;
+         RTEMS_TEST_SUPPORT.THREAD_UNBLOCK( TMTEST.MIDDLE_TCB );
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "THREAD_UNBLOCK", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      RTEMS_TEST_SUPPORT.THREAD_SET_STATE( 
+         TMTEST.MIDDLE_TCB,
+         RTEMS.WAITING_FOR_MESSAGE
+      );
+
+      TIMER_DRIVER.INITIALIZE;
+         RTEMS_TEST_SUPPORT.THREAD_READY( TMTEST.MIDDLE_TCB );
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "THREAD_READY", 
+         TMTEST.END_TIME, 
+         1, 
+         0,
+         0
+      );
+
+      TIMER_DRIVER.INITIALIZE;
+         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
+         loop
+            TIMER_DRIVER.EMPTY_FUNCTION;
+         end loop;
+      OVERHEAD := TIMER_DRIVER.READ_TIMER;
+
+      TIMER_DRIVER.INITIALIZE;
+         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
+         loop
+            RTEMS_TEST_SUPPORT.THREAD_GET( 
+               TASK_ID, 
+               LOCATION, 
+               THE_THREAD
+            );
+         end loop;
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "THREAD_GET", 
+         TMTEST.END_TIME, 
+         TIME_TEST_SUPPORT.OPERATION_COUNT, 
+         0,
+         0
+      );
+
+--      TIMER_DRIVER.INITIALIZE;
+--         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
+--         loop
+--            RTEMS_TEST_SUPPORT.SEMAPHORE_GET( 
+--               TMTEST.SEMAPHORE_ID, 
+--               LOCATION, 
+--               THE_SEMAPHORE
+--            );
+--         end loop;
+--      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+--      TIME_TEST_SUPPORT.PUT_TIME( 
+--         "SEMAPHORE_GET", 
+--         TMTEST.END_TIME, 
+--         TIME_TEST_SUPPORT.OPERATION_COUNT, 
+--         0,
+--         0
+--      );
+        TEXT_IO.PUT_LINE( "SEMAPHORE_GET NOT IN ADA" );
+
+      TIMER_DRIVER.INITIALIZE;
+         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
+         loop
+            RTEMS_TEST_SUPPORT.THREAD_GET( 
+               16#3#,
+               LOCATION, 
+               THE_THREAD
+            ); 
+         end loop;
+      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+      
+      TIME_TEST_SUPPORT.PUT_TIME( 
+         "THREAD_GET (invalid id)", 
+         TMTEST.END_TIME, 
+         TIME_TEST_SUPPORT.OPERATION_COUNT, 
+         0,
+         0
+      );
+
+   end COMPLETE_TEST;
+
+end TMTEST;
