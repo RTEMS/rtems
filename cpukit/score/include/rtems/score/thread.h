@@ -220,7 +220,7 @@ struct Thread_Control_struct {
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   void                                 *fp_context;
 #endif
-  void                                 *libc_reent;
+  struct _reent                        *libc_reent;
   void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
   void                                **extensions;
   rtems_task_variable_t                *task_variables;
@@ -323,8 +323,7 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
  * switch. The pointer points to that global pointer. The Thread control block
  * holds a pointer to the task specific data.
  */
-
-SCORE_EXTERN void **_Thread_libc_reent;
+SCORE_EXTERN struct _reent **_Thread_libc_reent;
 
 /*
  *  _Thread_Handler_initialization

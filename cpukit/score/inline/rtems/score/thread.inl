@@ -402,7 +402,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Internal_free (
  *  This routine returns the C library re-enterant pointer.
  */
  
-RTEMS_INLINE_ROUTINE void **_Thread_Get_libc_reent( void )
+RTEMS_INLINE_ROUTINE struct _reent **_Thread_Get_libc_reent( void )
 {
   return _Thread_libc_reent;
 }
@@ -417,7 +417,7 @@ RTEMS_INLINE_ROUTINE void **_Thread_Get_libc_reent( void )
  */
  
 RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
-  void **libc_reent
+  struct _reent **libc_reent
 )
 {
   _Thread_libc_reent = libc_reent;
