@@ -36,6 +36,10 @@ c4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache c4x-rtems@osversion@ > $@
 RPM_SPECS_DATA += c4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
+tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
+RPM_SPECS_DATA += tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+
 h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec
