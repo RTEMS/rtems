@@ -174,12 +174,17 @@ rtems_interrupt_level rtems_initialize_executive_early(
     multiprocessing_table->maximum_proxies
   );
 
+  /*
+   *  No threads should be created before this point!!! _Thread_Executing
+   *  and _Thread_Heir are not set yet.
+   */
+
+  _Internal_threads_Initialization();
+
   _MPCI_Handler_initialization(
     multiprocessing_table->User_mpci_table,
     RTEMS_TIMEOUT
   );
-
-  _Internal_threads_Initialization();
 
 /* MANAGERS */
 
@@ -199,6 +204,41 @@ rtems_interrupt_level rtems_initialize_executive_early(
   _Internal_threads_Start();
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
+
+  /*
+   *  Run the API and BSPs predriver hook.
+   */
+ 
+  _API_extensions_Run_predriver();
+ 
+  if ( _CPU_Table.predriver_hook )
+    (*_CPU_Table.predriver_hook)();
+ 
+  /*
+   *  Initialize all the device drivers and initialize the MPCI layer.
+   *
+   *  NOTE:  The MPCI may be build upon a device driver.
+   */
+ 
+  _IO_Initialize_all_drivers();
+ 
+  if ( _System_state_Is_multiprocessing ) {
+    _MPCI_Initialization();
+    _Internal_threads_MP_Send_process_packet(
+      INTERNAL_THREADS_MP_SYSTEM_VERIFY
+    );
+  }
+ 
+  /*
+   *  Run the APIs and BSPs postdriver hooks.
+   *
+   *  The API extensions are supposed to create user initialization tasks.
+   */
+ 
+  _API_extensions_Run_postdriver();
+ 
+  if ( _CPU_Table.postdriver_hook )
+    (*_CPU_Table.postdriver_hook)();
 
   return bsp_level;
 }
