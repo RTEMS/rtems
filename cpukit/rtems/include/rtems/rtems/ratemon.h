@@ -76,6 +76,7 @@ typedef struct {
   rtems_rate_monotonic_period_states  state;
   unsigned32                          owner_ticks_executed_at_period;
   unsigned32                          time_at_period;
+  unsigned32                          next_length;
   Thread_Control                     *owner;
 }   Rate_monotonic_Control;
 

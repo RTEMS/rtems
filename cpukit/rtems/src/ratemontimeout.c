@@ -44,6 +44,11 @@ void _Rate_monotonic_Timeout(
   Objects_Locations       location;
   Thread_Control         *the_thread;
 
+  /*
+   *  When we get here, the Timer is already off the chain so we do not
+   *  have to worry about that -- hence no _Watchdog_Remove().
+   */
+
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:  /* impossible */
@@ -60,14 +65,14 @@ void _Rate_monotonic_Timeout(
 
         the_period->time_at_period = _Watchdog_Ticks_since_boot;
 
-        _Watchdog_Reset( &the_period->Timer );
+        _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
       } else if ( the_period->state == RATE_MONOTONIC_OWNER_IS_BLOCKING ) {
         the_period->state = RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING;
         the_period->owner_ticks_executed_at_period =
           the_thread->ticks_executed;
 
         the_period->time_at_period = _Watchdog_Ticks_since_boot;
-        _Watchdog_Reset( &the_period->Timer );
+        _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
       } else
         the_period->state = RATE_MONOTONIC_EXPIRED;
       _Thread_Unnest_dispatch();

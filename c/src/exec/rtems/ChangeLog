@@ -1,3 +1,10 @@
+2000-09-29	Stephan Merker <merker@decrc.abb.de>
+
+	* include/rtems/rtems/ratemon.h, src/ratemonperiod.c,
+	src/ratemontimeout.c: Add next_length field so period length
+	can be changed by the the sequence period(X), period(not X)
+	with no intervening cancel or expiration.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* optman/Makefile.am, src/Makefile.am: Include compile.am.

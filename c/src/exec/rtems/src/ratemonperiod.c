@@ -95,6 +95,7 @@ rtems_status_code rtems_rate_monotonic_period(
             _Thread_Executing->ticks_executed;
 
           the_period->time_at_period = _Watchdog_Ticks_since_boot;
+          the_period->next_length = length;
 
           _Watchdog_Insert_ticks( &the_period->Timer, length );
           _Thread_Enable_dispatch();
@@ -103,10 +104,13 @@ rtems_status_code rtems_rate_monotonic_period(
         case RATE_MONOTONIC_ACTIVE:
           /*
            *  This tells the _Rate_monotonic_Timeout that this task is
-           *  in the process of blocking on the period.
+           *  in the process of blocking on the period and that we
+           *  may be changing the length of the next period.
            */
 
           the_period->state = RATE_MONOTONIC_OWNER_IS_BLOCKING;
+          the_period->next_length = length;
+
           _ISR_Enable( level );
 
           _Thread_Executing->Wait.id = the_period->Object.id;
@@ -140,6 +144,7 @@ rtems_status_code rtems_rate_monotonic_period(
           the_period->owner_ticks_executed_at_period =
             _Thread_Executing->ticks_executed;
           the_period->time_at_period = _Watchdog_Ticks_since_boot;
+          the_period->next_length = length;
 
           _Watchdog_Insert_ticks( &the_period->Timer, length );
           _Thread_Enable_dispatch();
