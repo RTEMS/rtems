@@ -42,8 +42,8 @@
  */
 
 
-#ifndef _RTEMS_SCORE_POWERPC_H
-#define _RTEMS_SCORE_POWERPC_H
+#ifndef _RTEMS_POWERPC_POWERPC_H
+#define _RTEMS_POWERPC_POWERPC_H
 
 #ifdef __cplusplus
 extern "C" {
