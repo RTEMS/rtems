@@ -341,9 +341,9 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( !status );
 
-  puts( "Init: pthread_mutex_init - ENOMEM (too many)" );
+  puts( "Init: pthread_mutex_init - EAGAIN (too many)" );
   status = pthread_mutex_init( &Mutex3_id, &attr );
-  assert( status == ENOMEM );
+  assert( status == EAGAIN );
 
   puts( "Init: pthread_mutexattr_destroy - SUCCESSFUL" );
   status = pthread_mutexattr_destroy( &attr );
