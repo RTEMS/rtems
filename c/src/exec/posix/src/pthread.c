@@ -77,7 +77,7 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 
   if ( the_thread->resource_count == 0 ||
        the_thread->current_priority > new_priority )
-    _Thread_Change_priority( the_thread, new_priority );
+    _Thread_Change_priority( the_thread, new_priority, TRUE );
 
   ticks = _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period );
 
@@ -114,7 +114,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
 
  if ( the_thread->resource_count == 0 ||
       the_thread->current_priority > new_priority )
-    _Thread_Change_priority( the_thread, new_priority );
+    _Thread_Change_priority( the_thread, new_priority, TRUE );
 }
 
 /*PAGE
@@ -656,7 +656,11 @@ int pthread_setschedparam(
           the_thread->real_priority =
             _POSIX_Priority_To_core( api->schedparam.sched_priority );
 
-          _Thread_Change_priority( the_thread, the_thread->real_priority );
+          _Thread_Change_priority(
+             the_thread,
+             the_thread->real_priority,
+             TRUE
+          );
           break;
  
         case SCHED_SPORADIC:

@@ -561,7 +561,8 @@ void _Thread_Delay_ended(
 
 void _Thread_Change_priority (
   Thread_Control   *the_thread,
-  Priority_Control  new_priority
+  Priority_Control  new_priority,
+  boolean           prepend_it
 );
 
 /*

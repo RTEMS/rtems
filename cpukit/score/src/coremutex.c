@@ -142,7 +142,8 @@ void _CORE_mutex_Seize(
                                            executing->current_priority ) {
         _Thread_Change_priority(
           the_mutex->holder,
-          the_mutex->Attributes.priority_ceiling
+          the_mutex->Attributes.priority_ceiling,
+          FALSE
         );
       }
     }
@@ -180,7 +181,8 @@ void _CORE_mutex_Seize(
       if ( the_mutex->holder->current_priority > executing->current_priority ) {
         _Thread_Change_priority(
           the_mutex->holder,
-          executing->current_priority
+          executing->current_priority,
+          FALSE
         );
       }
       break;
@@ -199,7 +201,8 @@ void _CORE_mutex_Seize(
                                            executing->current_priority ) {
           _Thread_Change_priority(
             executing,
-            the_mutex->Attributes.priority_ceiling
+            the_mutex->Attributes.priority_ceiling,
+            FALSE
           );
         };
         break;
@@ -262,10 +265,9 @@ CORE_mutex_Status _CORE_mutex_Surrender(
       break;
     case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
     case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-      if ( executing->resource_count == 0 &&
-           executing->real_priority !=
-           executing->current_priority ) {
-         _Thread_Change_priority( executing, executing->real_priority );
+      if ( executing->resource_count == 0 && 
+           executing->real_priority != executing->current_priority ) {
+         _Thread_Change_priority( executing, executing->real_priority, TRUE );
       }
       break;
   }
