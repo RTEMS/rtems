@@ -311,7 +311,12 @@ spurious_interrupt:
 	.align 2
 	.long	ETHERNET_ADDRESS	| Low-order 3 octets of ethernet address
 
-        .global start
+/*
+ *  For some reason, the symbol start must not be global.
+ *
+ *       .global start
+ */
+
 /*
  * Initial PC
  */
