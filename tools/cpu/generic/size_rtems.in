@@ -201,10 +201,26 @@ sizedir()
       done
 }
 
+# adds the numbers passed on the command line
+addit()
+{
+  sumx=0
+  for x in $*
+  do
+    sumx=`expr $sumx + $x`
+  done
+  echo $sumx
+}
+
 # adds a column from the output of sizedir
 addsizes()
 {
-  cut -d' ' -f${1} | sed -e '2,$s/$/ + /' -e '$,$s/$/ p/' | dc
+  # dc version is not portable enough -- It can be left out during
+  #  installing linux and may not be available on non-UNIX hosts.
+  #cut -d' ' -f${2} ${1} | sed -e '2,$s/$/ + /' -e '$,$s/$/ p/' | dc
+  
+  #  This may not be as fast but it is probably more portable.
+  addit `cut -d' ' -f${2} ${1}`
 }
 
 # calculates total size of a directory and prints report line
