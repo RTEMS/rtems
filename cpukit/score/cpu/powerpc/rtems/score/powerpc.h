@@ -223,11 +223,6 @@ extern "C" {
 #define PPC_INTERRUPT_MAX       71
 #define PPC_USE_MULTIPLE	1
 
-#define PPC_MSR_0		0x00009000
-#define PPC_MSR_1		0x00001000
-#define PPC_MSR_2		0x00001000
-#define PPC_MSR_3		0x00000000
-
 #elif defined(mpc821)
 /* 
  *  Added by Andrew Bray <andy@chaos.org.uk> 6/April/1999
@@ -239,11 +234,6 @@ extern "C" {
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_INTERRUPT_MAX       71
-
-#define PPC_MSR_0		0x00009000
-#define PPC_MSR_1		0x00001000
-#define PPC_MSR_2		0x00001000
-#define PPC_MSR_3		0x00000000
 
 #elif defined(mpc750)
 
@@ -675,48 +665,6 @@ extern "C" {
 #undef PPC_INTERRUPT_MAX
 #define PPC_INTERRUPT_MAX ((PPC_IRQ_LAST) + 1)
 #endif
-
-/*
- *  Machine Status Register (MSR) Constants Used by RTEMS
- */
-
-/*
- *  Some PPC model manuals refer to the Exception Prefix (EP) bit as
- *  IP for no apparent reason.
- */
-
-#define PPC_MSR_RI       0x000000002 /* bit 30 - recoverable exception */
-#define PPC_MSR_DR       0x000000010 /* bit 27 - data address translation */
-#define PPC_MSR_IR       0x000000020 /* bit 26 - instruction addr translation*/
-
-#if (PPC_HAS_EXCEPTION_PREFIX)
-#define PPC_MSR_EP       0x000000040 /* bit 25 - exception prefix */
-#else
-#define PPC_MSR_EP       0x000000000 /* bit 25 - exception prefix */
-#endif
-
-#if (PPC_HAS_FPU)
-#define PPC_MSR_FP       0x000002000 /* bit 18 - floating point enable */
-#else
-#define PPC_MSR_FP       0x000000000 /* bit 18 - floating point enable */
-#endif
-
-#if (PPC_LOW_POWER_MODE == PPC_LOW_POWER_MODE_NONE)
-#define PPC_MSR_POW      0x000000000 /* bit 13 - power management enable */
-#else
-#define PPC_MSR_POW      0x000040000 /* bit 13 - power management enable */
-#endif
-
-#define PPC_MSR_ME       0x000001000 /* bit 19 - machine check enable */
-#define PPC_MSR_EE       0x000008000 /* bit 16 - external interrupt enable */
-
-#if (PPC_HAS_RFCI)
-#define PPC_MSR_CE       0x000020000 /* bit 14 - critical interrupt enable */
-#else
-#define PPC_MSR_CE       0x000000000 /* bit 14 - critical interrupt enable */
-#endif
-
-#define PPC_MSR_DISABLE_MASK (PPC_MSR_ME|PPC_MSR_EE|PPC_MSR_CE)
 
 /*
  *  Initial value for the FPSCR register

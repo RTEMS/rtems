@@ -1,5 +1,9 @@
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/powerpc.h: Remove PPC_MSR_* defines.
+
+2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/old-exceptions/cpu.h: Add _PPC_MSR_DISABLE_MASK.
 	Use _PPC_MSR_DISABLE_MASK instead of PPC_MSR_DISABLE_MASK to set up
 	_disable_mask.
