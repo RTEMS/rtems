@@ -46,14 +46,14 @@ case $target in
       echo Not supported on unix port.
       exit 0
       ;;
-  i[3456]86-pc-linux-gnu)
+  i[34567]86-pc-linux-gnu)
       echo linux
       rtems_cpu=unix
       bsp=linux1
       echo Not supported on unix port.
       exit 0
       ;;
-  i[3456]86-unknown-freebsd2.[12]*)
+  i[34567]86-unknown-freebsd2.[12]*)
       echo freebsd
       rtems_cpu=unix
       bsp=freebsd2
