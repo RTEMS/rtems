@@ -1,5 +1,14 @@
 2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
+	startup/Makefile.am, timer/Makefile.am, wrapup/Makefile.am. Use automake
+	compilation rules.
+	* clock/Makefile.am, console/Makefile.am, startup/Makefile.am,
+	timer/Makefile.am, wrapup/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
+2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* start/start.S: Replace #-ASM-style comments with C-/**/ comments.
 	* start/reg.S: Remove //-comments
 
