@@ -62,7 +62,7 @@
 #endif
 
 rtems_status_code rtems_semaphore_flush(
-  Objects_Id      id
+  rtems_id        id
 )
 {
   register Semaphore_Control *the_semaphore;

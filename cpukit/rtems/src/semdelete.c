@@ -72,7 +72,7 @@
 #endif
 
 rtems_status_code rtems_semaphore_delete(
-  Objects_Id id
+  rtems_id   id
 )
 {
   register Semaphore_Control *the_semaphore;

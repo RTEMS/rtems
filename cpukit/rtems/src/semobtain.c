@@ -66,7 +66,7 @@
  */
 
 rtems_status_code rtems_semaphore_obtain(
-  Objects_Id      id,
+  rtems_id        id,
   uint32_t        option_set,
   rtems_interval  timeout
 )

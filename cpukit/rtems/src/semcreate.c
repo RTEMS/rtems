@@ -74,7 +74,7 @@ rtems_status_code rtems_semaphore_create(
   uint32_t             count,
   rtems_attribute      attribute_set,
   rtems_task_priority  priority_ceiling,
-  Objects_Id          *id
+  rtems_id            *id
 )
 {
   register Semaphore_Control *the_semaphore;

@@ -170,7 +170,7 @@ rtems_status_code rtems_semaphore_release(
  */
 
 rtems_status_code rtems_semaphore_flush(
-  Objects_Id      id
+  rtems_id	   id
 );
 
 /*
