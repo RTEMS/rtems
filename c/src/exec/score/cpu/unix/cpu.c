@@ -46,6 +46,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
+#include <string.h>   /* memset */
 
 #ifndef SA_RESTART
 #define SA_RESTART 0
@@ -180,8 +181,6 @@ void _CPU_Context_From_CPU_Init()
     /*
      * HACK - set the _SYSTEM_ID to 0x20c so that setjmp/longjmp
      * will handle the full 32 floating point registers.
-     * 
-     *  NOTE:  Is this a bug in HPUX9?
      */
 
     {
@@ -194,6 +193,18 @@ void _CPU_Context_From_CPU_Init()
   /*
    *  get default values to use in _CPU_Context_Initialize()
    */
+
+ 
+  (void) memset(
+    &_CPU_Context_Default_with_ISRs_enabled,
+    0,
+    sizeof(Context_Control)
+  );
+  (void) memset(
+    &_CPU_Context_Default_with_ISRs_disabled,
+    0,
+    sizeof(Context_Control)
+  );
 
   _CPU_ISR_Set_level( 0 );
   _CPU_Context_switch(
@@ -382,13 +393,16 @@ void _CPU_Context_Initialize(
    *  grow up, we build the stack based on the _stack_low address.  
    */
 
-  _stack_low = ((unsigned32)(_stack_base) + CPU_STACK_ALIGNMENT);
+  _stack_low = (unsigned32)(_stack_base) + CPU_STACK_ALIGNMENT - 1;
   _stack_low &= ~(CPU_STACK_ALIGNMENT - 1);
 
-  _stack_high = ((unsigned32)(_stack_base) + _size);
+  _stack_high = (unsigned32)(_stack_base) + _size;
   _stack_high &= ~(CPU_STACK_ALIGNMENT - 1);
 
-  _the_size = _size & ~(CPU_STACK_ALIGNMENT - 1);
+  if (_stack_high > _stack_low)
+    _the_size = _stack_high - _stack_low;
+  else
+    _the_size = _stack_low - _stack_high;
 
   /*
    * Slam our jmp_buf template into the context we are creating
@@ -399,7 +413,11 @@ void _CPU_Context_Initialize(
   else
     source = &_CPU_Context_Default_with_ISRs_disabled;
       
-  memcpy(_the_context, source, sizeof(Context_Control) ); /* sizeof(jmp_buf)); */
+  memcpy(
+    _the_context,
+    source, 
+    sizeof(Context_Control)                /* sizeof(jmp_buf)); */
+  );
 
   addr = (unsigned32 *)_the_context;
 
@@ -411,13 +429,12 @@ void _CPU_Context_Initialize(
    * See if we are using shared libraries by checking
    * bit 30 in 24 off of newp. If bit 30 is set then
    * we are using shared libraries and the jump address
-   * is at what 24 off of newp points to so shove that
-   * into 24 off of newp instead.
+   * points to the pointer, so we put that into rp instead.
    */
 
   if (jmp_addr & 0x40000000) {
     jmp_addr &= 0xfffffffc;
-     *(addr + RP_OFF) = (unsigned32)*(unsigned32 *)jmp_addr;
+     *(addr + RP_OFF) = *(unsigned32 *)jmp_addr;
   }
 #elif defined(sparc)
 
@@ -650,17 +667,31 @@ void _CPU_Stray_signal(int sig_num)
  
       default:
       {
-          /*
-           *  We avoid using the stdio section of the library.
-           *  The following is generally safe.
-           */
+        /*
+         *  We avoid using the stdio section of the library.
+         *  The following is generally safe
+         */
  
-          buffer[ 0 ] = (sig_num >> 4) + 0x30;
-          buffer[ 1 ] = (sig_num & 0xf) + 0x30;
-          buffer[ 2 ] = '\n';
+        int digit;
+        int number = sig_num;
+        int len = 0;
+
+        digit = number / 100;
+        number %= 100;
+        if (digit) buffer[len++] = '0' + digit;
+
+        digit = number / 10;
+        number %= 10;
+        if (digit || len) buffer[len++] = '0' + digit;
+
+        digit = number;
+        buffer[len++] = '0' + digit;
  
-          write( 2, "Stray signal 0x", 12 );
-          write( 2, buffer, 3 );
+        buffer[ len++ ] = '\n';
+ 
+        write( 2, "Stray signal ", 13 );
+        write( 2, buffer, len );
+
       }
   }
  
@@ -682,7 +713,7 @@ void _CPU_Stray_signal(int sig_num)
       case SIGBUS:
       case SIGSEGV:
       case SIGTERM:
-          _CPU_Fatal_error(0x100 + sig_num);
+        _CPU_Fatal_error(0x100 + sig_num);
   }
 }
 
@@ -741,13 +772,12 @@ void _CPU_Stop_clock( void )
    * vector.
    */
  
+  (void) memset(&act, 0, sizeof(act));
   act.sa_handler = SIG_IGN;
-
+ 
   sigaction(SIGALRM, &act, 0);
  
-  new.it_value.tv_sec = 0;
-  new.it_value.tv_usec = 0;
- 
+  (void) memset(&new, 0, sizeof(new));
   setitimer(ITIMER_REAL, &new, 0);
 }
 

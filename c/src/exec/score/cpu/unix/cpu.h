@@ -441,9 +441,22 @@ extern "C" {
  *
  *  Doing it this way avoids conflicts between the native stuff and the
  *  RTEMS stuff.
+ *
+ *  NOTE:
+ *      hpux9 setjmp is optimized for the case where the setjmp buffer
+ *      is 8 byte aligned.  In a RISC world, this seems likely to enable
+ *      8 byte copies, especially for the float registers.
+ *      So we always align them on 8 byte boundaries.
  */
+
+#ifdef __GNUC__
+#define CONTEXT_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (8)))
+#else
+#define CONTEXT_STRUCTURE_ALIGNMENT
+#endif
+
 typedef struct {
-  char      Area[ CPU_CONTEXT_SIZE_IN_BYTES ];
+  char      Area[ CPU_CONTEXT_SIZE_IN_BYTES ] CONTEXT_STRUCTURE_ALIGNMENT;
 } Context_Control;
 
 typedef struct {
@@ -455,13 +468,7 @@ typedef struct {
 
 /*
  *  The following table contains the information required to configure
- *  the XXX processor specific parameters.
- *
- *  NOTE: The interrupt_stack_size field is required if
- *        CPU_ALLOCATE_INTERRUPT_STACK is defined as TRUE.
- *
- *        The pretasking_hook, predriver_hook, and postdriver_hook,
- *        and the do_zero_of_workspace fields are required on ALL CPUs.
+ *  the UNIX Simulator specific parameters.
  */
 
 typedef struct {
@@ -472,6 +479,9 @@ typedef struct {
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
   unsigned32   extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( unsigned32 );
+  void       (*stack_free_hook)( void* );
+  /* end of required fields */
 }   rtems_cpu_table;
 
 /*
