@@ -88,6 +88,11 @@ void _Thread_Change_priority(
     _States_Clear( STATES_TRANSIENT, the_thread->current_state );
 
   if ( ! _States_Is_ready( the_thread->current_state ) ) {
+    /*
+     *  XXX If a task is to be reordered while blocked on a priority
+     *  XXX priority ordered thread queue, then this is where that
+     *  XXX should occur.
+     */
     _ISR_Enable( level );
     return;
   }
