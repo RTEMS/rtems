@@ -99,6 +99,13 @@ AS_IF([test x"${RTEMS_USE_NEWLIB}" = x"yes"],[
   RTEMS_USES_INTTYPES_H=$ac_cv_header_inttypes_h
 ])
 
+AM_CONDITIONAL(RTEMS_PROVIDES_STDINT_H,
+[test x"${RTEMS_USE_NEWLIB}" = x"yes" \
+&& test x"$ac_cv_header_stdint_h" = xno])
+AM_CONDITIONAL(RTEMS_PROVIDES_INTTYPES_H,
+[test x"${RTEMS_USE_NEWLIB}" = x"yes" \
+&& test x"$ac_cv_header_inttypes_h" = xno])
+
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 ## FIXME: This check is doubtful
 AS_IF([test "$HAS_MP" = "yes"],

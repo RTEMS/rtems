@@ -5,6 +5,7 @@
 	* libcsupport/include/sys/_inttypes.h: New.
 	* libcsupport/include/sys/_stdint.h: New.
 	* libcsupport/Makefile.am: Reflect changes above.
+	* configure.ac: Reflect changes above.
 
 2004-10-28	Ralf Corsepius <ralf_corsepius@rtems.org>
 
