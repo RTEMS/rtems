@@ -41,7 +41,7 @@ extern "C" {
  *  An API Mutex is an aggregration of an Object and a SuperCore Mutex.
  */
 typedef struct {
-  /** This field allows each API Mutex to be a full-fledged RTEMS object.
+  /** This field allows each API Mutex to be a full-fledged RTEMS object. */
   Objects_Control       Object;
   /** This field contains the SuperCore mutex information. */
   CORE_mutex_Control    Mutex;
