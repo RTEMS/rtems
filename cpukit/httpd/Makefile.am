@@ -6,6 +6,7 @@ include $(top_srcdir)/automake/compile.am
 
 noinst_LIBRARIES =
 CLEANFILES =
+DISTCLEANFILES =
 
 AM_CPPFLAGS += -DWEBS -DUEMF
 
@@ -26,75 +27,10 @@ libhttpd_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 endif
 
-all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
-
 EXTRA_DIST = webcomp.c webpage.c
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
-TMPINSTALL_FILES =
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
-
-if HAS_NETWORKING
-if HAS_POSIX
-$(PROJECT_INCLUDE)/goahead/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/goahead
-	@: > $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems_webserver.h: rtems_webserver.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems_webserver.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems_webserver.h
-
-$(PROJECT_INCLUDE)/goahead/ej.h: ej.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/ej.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/ej.h
-
-$(PROJECT_INCLUDE)/goahead/ejIntrn.h: ejIntrn.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/ejIntrn.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/ejIntrn.h
-
-$(PROJECT_INCLUDE)/goahead/emfdb.h: emfdb.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/emfdb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/emfdb.h
-
-$(PROJECT_INCLUDE)/goahead/md5.h: md5.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/md5.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/md5.h
-
-$(PROJECT_INCLUDE)/goahead/uemf.h: uemf.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/uemf.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/uemf.h
-
-$(PROJECT_INCLUDE)/goahead/um.h: um.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/um.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/um.h
-
-$(PROJECT_INCLUDE)/goahead/webs.h: webs.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/webs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/webs.h
-
-$(PROJECT_INCLUDE)/goahead/wsIntrn.h: wsIntrn.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/wsIntrn.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/wsIntrn.h
-
-$(PROJECT_LIB)/libhttpd.a: libhttpd.a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libhttpd.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libhttpd.a
-endif
-endif
-
-CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
-CLEANFILES += $(TMPINSTALL_FILES)
+include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/automake/local.am
