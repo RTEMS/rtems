@@ -140,7 +140,7 @@ rtems_isr bsp_spurious_handler(
       DEBUG_puts( "\nTrap: System management interrupt" );
       break;
 
-#elif defined(ppc604)
+#elif defined(mpc604)
 #error "Please fill in names. "                                  
     case PPC_IRQ_ADDR_BRK:
       DEBUG_puts( "0x1300" );

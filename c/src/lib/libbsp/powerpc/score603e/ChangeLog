@@ -1,3 +1,7 @@
+2002-04-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/spurious.c: Use defined(mpc604) instead of defined(ppc604).
+
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* vectors/vectors.S: Include <asm.h>.
