@@ -27,8 +27,6 @@ endif
 OBJS = $(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS) \
     $(POSIX_OBJS) $(ITRON_OBJS)
 
-SIZE_RTEMS = $(SHELL) $(PROJECT_TOPdir)/tools/cpu/generic/size_rtems
-
 $(LIB): ${OBJS}
 	$(make-library)
 
@@ -36,6 +34,10 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT
 
 $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
+
+install-hook: $(LIB)
+	@$(mkinstalldirs) $(libdir)
+	$(INSTALL_DATA) $(LIB) $(libdir)
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 

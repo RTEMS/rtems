@@ -1,3 +1,10 @@
+2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Add install-hook. 
+	Remove SIZE_RTEMS.
+	* include/rtems/fs.h: New, extracted from libio_.h.
+	* include/rtems/userenv.h: New. extracted from libio_.h.
+
 2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Readded reference to wrapup.
