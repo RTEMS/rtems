@@ -9,6 +9,8 @@
  *  $Id$
  */
 
+#include <stdio.h>                /* for puts */
+
 #undef	ADDCARRY
 #define ADDCARRY(x)     if ((x) > 0xffff) (x) -= 0xffff
 #define REDUCE          {sum = (sum & 0xffff) + (sum >> 16); ADDCARRY(sum);}
@@ -186,7 +188,7 @@ in_cksum(m, len)
 	}
 
 	if (len)
-		printf("cksum: out of data\n");
+		puts("cksum: out of data");
 	if (mlen == -1) {
 		/* The last mbuf has odd # of bytes. Follow the
 		   standard (the odd byte is shifted left by 8 bits) */
