@@ -32,7 +32,28 @@ LIBS += ../libfs/src/dosfs/$(ARCH)/libdosfs.a
 endif
 LIBS += ../libfs/src/imfs/$(ARCH)/libimfs.a
 
-LIBS += ../libmisc/wrapup/$(ARCH)/libmisc.a
+LIBS += ../libmisc/monitor/$(ARCH)/libmonitor.a
+LIBS += ../libmisc/untar/$(ARCH)/libuntar.a
+LIBS += ../libmisc/stackchk/$(ARCH)/libstackchk.a
+LIBS += ../libmisc/cpuuse/$(ARCH)/libcpuuse.a
+LIBS += ../libmisc/rtmonuse/$(ARCH)/librtmonuse.a
+
+## XXX temporarily removed because it causes a
+## XXX number of BSPs to not link "main(){}" used by autoconf
+# if LIBSERDBG
+# LIBS += ../libmisc/serdbg/$(ARCH)/libserdbg.a
+# endif
+
+if LIBSHELL
+LIBS += ../libmisc/shell/$(ARCH)/libshell.a
+endif
+
+LIBS += ../libmisc/dumpbuf/$(ARCH)/libdumpbuf.a
+LIBS += ../libmisc/devnull/$(ARCH)/libdevnull.a
+LIBS += ../libmisc/dummy/$(ARCH)/libdummy.a
+LIBS += ../libmisc/mw-fb/$(ARCH)/libmw-fb.a
+LIBS += ../libmisc/capture/$(ARCH)/libcapture.a
+LIBS += ../libmisc/fsmount/$(ARCH)/libfsmount.a
 
 if HAS_NETWORKING
 LIBS += ../libnetworking/$(ARCH)/libnetworking.a
