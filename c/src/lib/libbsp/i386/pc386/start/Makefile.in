@@ -62,10 +62,8 @@ all:	${ARCH} $(SRCS) $(OBJS) $(PGMS)
 
 LINKCMDS=$(srcdir)/../startup/linkcmds
 
-${ARCH}/start16.o: start16.s
-	sed -e 's/\/\/.*$$//' < $< | $(CPP) $(ASMFLAGS) -I. -I$(srcdir) \
-	  -DASM -DHEADERADDR=$(HEADERADDR) - > $*.i
-	$(AS) $(ASMFLAGS) -o $@ $*.i
+${ARCH}/start16.o: start16.S
+	${COMPILE.S} -DHEADERADDR=$(HEADERADDR) -o $@ $<
 
 ${ARCH}/start16.bin: ${ARCH}/start16.o
 	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
