@@ -1,3 +1,11 @@
+2004-04-12	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* acinclude.m4 (RTEMS_CPUOPT): Use AC_DEFINE_UNQUOTED.
+	* backward/motorola/mc68681.h, backward/motorola/mc68230.h,
+	backward/zilog/z8536.h, backward/zilog/z8036.h,
+	backward/zilog/z8030.h: New.
+	* Makefile.am: Reflect having added new files above.
+
 2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* wrapup/Makefile.am: Add libblock for !UNIX only.

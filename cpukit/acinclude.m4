@@ -10,7 +10,7 @@ cat >>cpuopts.tmp <<_ACEOF
 _ACEOF
 ## FIXME: Duplicate the define to the autoheader
 ## Sanity check - Should be removed in future
-    AC_DEFINE([$1],[$3],[$4])
+    AC_DEFINE_UNQUOTED([$1],[$3],[$4])
   else
 cat >>cpuopts.tmp <<\_ACEOF
 

@@ -28,6 +28,14 @@ include_HEADERS += backward/asm.h backward/chain.h backward/clockdrv.h \
     backward/ringbuf.h backward/rtc.h backward/spurious.h \
     backward/timerdrv.h backward/vmeintr.h
 
+include_motoroladir = $(includedir)/motorola
+include_motorola_HEADERS = backward/motorola/mc68681.h \
+    backward/motorola/mc68230.h
+
+include_zilogdir = $(includedir)/zilog
+include_zilog_HEADERS = backward/zilog/z8536.h backward/zilog/z8036.h \
+    backward/zilog/z8030.h
+
 if !UNIX
 include_HEADERS += backward/dosfs.h
 endif
@@ -98,6 +106,36 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/timerdrv.h
 $(PROJECT_INCLUDE)/vmeintr.h: backward/vmeintr.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vmeintr.h
+
+$(PROJECT_INCLUDE)/motorola/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/motorola
+	@: > $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+
+$(PROJECT_INCLUDE)/motorola/mc68681.h: backward/motorola/mc68681.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68681.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68681.h
+
+$(PROJECT_INCLUDE)/motorola/mc68230.h: backward/motorola/mc68230.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68230.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68230.h
+
+$(PROJECT_INCLUDE)/zilog/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/zilog
+	@: > $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+
+$(PROJECT_INCLUDE)/zilog/z8536.h: backward/zilog/z8536.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8536.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8536.h
+
+$(PROJECT_INCLUDE)/zilog/z8036.h: backward/zilog/z8036.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8036.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8036.h
+
+$(PROJECT_INCLUDE)/zilog/z8030.h: backward/zilog/z8030.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8030.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8030.h
 
 if !UNIX
 $(PROJECT_INCLUDE)/dosfs.h: backward/dosfs.h $(PROJECT_INCLUDE)/$(dirstamp)
