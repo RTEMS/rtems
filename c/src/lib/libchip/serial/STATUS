@@ -22,6 +22,11 @@ General
   functions which are strictly internal to each chip driver.  This
   should be a performance win.
 
++ Need a test which prompts you for termios settings and tests them.  Until
+  this happens, testing for the variety of settings possible will be limited.
+  This test should be able to test any serial port while prompts come to the
+  console.
+
 MC68681
 =======
 
@@ -38,14 +43,16 @@ NS16650
 + Interrupt code has been reworked to not use ring buffer and may be broken
   as it has not been tested since this was done.
 
-+ Missing set attributes function.
++ ns16550_set-attributes function is untested.
+
++ Hardware flow control included but is currently disabled in ISR.
 
 Z85C30
 ======
 
 + Works polled and interrupt.
 
-+ Hardware flow control included but is currently disabled.
++ Hardware flow control included but is currently disabled in ISR.
 
 + Needs to support mode where more specific vectors are generated.
 
