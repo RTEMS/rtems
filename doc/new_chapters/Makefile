@@ -8,7 +8,7 @@
 
 include ../Make.config
 
-PROJECT=posix_test_plan
+PROJECT=posix_users
 
 all:  
 
@@ -24,7 +24,7 @@ info: $(PROJECT)
 #	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
 	cp $(PROJECT) $(INFO_INSTALL)
 
-posix_test_plan: $(FILES)
+posix_users: $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
 vinfo: info
@@ -48,9 +48,9 @@ $(PROJECT).dvi: $(FILES)
 
 html:
 	-mkdir $(WWW_INSTALL)/$(PROJECT)
+	-cd .. ; gmake headers
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
-	cp ../rtems.html $(WWW_INSTALL)
 
 
 clean:

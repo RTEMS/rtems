@@ -1,6 +1,6 @@
 \input ../texinfo/texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename posix_test_plan
+@setfilename posix_users
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -31,7 +31,7 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS Posix Test Plan: (posix_test_plan).             Posix Test Plan
+* RTEMS Posix API User's Guide: (posix_users).   Posix API User's Guide Plan
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -48,21 +48,22 @@ END-INFO-DIR-ENTRY
 @c  Title Page Stuff
 @c
 
-@set edition 970904
-@set version 970904
-@set update-date 4 September 1997
-@set update-month September 1997
+@set edition @value{RTEMS-EDITION}
+@set version @value{RTEMS-VERSION}
+@set update-date @value{RTEMS-UPDATE-DATE}
+@set update-month @value{RTEMS-UPDATE-MONTH}
+
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage RTEMS POSIX API Test Plan
+@c @shorttitlepage RTEMS POSIX API User's Guide
 
 @setchapternewpage odd
-@settitle RTEMS POSIX API Test Plan
+@settitle RTEMS POSIX API User's Guide 
 @titlepage
 @finalout
 
-@title RTEMS POSIX API Test Plan
+@title RTEMS POSIX API User's Guide
 @subtitle Edition @value{edition}, for RTEMS @value{version}
 @sp 1
 @subtitle @value{update-month}
@@ -84,9 +85,9 @@ END-INFO-DIR-ENTRY
 @include sched.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top posix_test_plan
+@top posix_users
 
-This is the online version of the RTEMS POSIX API Test Plan.
+This is the online version of the RTEMS POSIX API User's Guide
 
 @menu
 * Preface::
