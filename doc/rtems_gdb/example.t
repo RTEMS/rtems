@@ -37,19 +37,19 @@ Id.               Name       Detached   Suspended
 134283273         Rini       No         No <= current target thread 
 0x22fe65 in enterRdbg () 
 134283272         Evnt       No         No
-_Thread_Dispatch () at /rtems4/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems4/cpukit/score/src/thread.c:315 
 134283271         SPE2       No         No 
-_Thread_Dispatch () at /rtems4/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems4/cpukit/score/src/thread.c:315 
 134283270         SPE1       No         No 
-_Thread_Handler () at /rtems4/c/src/exec/score/src/thread.c:1107 
+_Thread_Handler () at /rtems4/cpukit/score/src/thread.c:1107 
 134283269         RDBG       No         No 
 0x22fe65 in enterRdbg () 
 134283268         SCrx       No         No 
-_Thread_Dispatch () at /rtems4/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems4/cpukit/score/src/thread.c:315 
 134283267         SCtx       No         No 
-_Thread_Dispatch () at /rtems4/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems4/cpukit/score/src/thread.c:315 
 134283266         ntwk       No         No 
-_Thread_Dispatch () at /rtems4/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems4/cpukit/score/src/thread.c:315 
 (gdb) b init.c:92 
 Breakpoint 1 at 0x200180: file \
        /rtems4/c/src/tests/samples/debug/init.c, line 92. 
