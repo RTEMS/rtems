@@ -19,6 +19,8 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+#include <libcpu/mongoose-v.h>
+
 
 /*
  *  The original table from the application and our copy of it with
@@ -69,6 +71,7 @@ void bsp_pretasking_hook(void)
 #endif
 
 }
+
  
 /*
  *  bsp_start
@@ -92,6 +95,7 @@ void bsp_start( void )
 
   BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
 
+  MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER, 0 );
   mips_set_sr( 0xff00 );  /* all interrupts unmasked but globally off */
                           /* depend on the IRC to take care of things */
   mips_install_isr_entries();

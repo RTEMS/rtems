@@ -1,3 +1,9 @@
+2001-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* start/start.S, startup/bspstart.c, startup/linkcmds: 
+	Modifications made with Gregory Menke <gregory.menke@gsfc.nasa.gov>
+	as he debugged this BSP using a logic analyzer.
+
 2001-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/clockdrv.c, console/conscfg.c, include/bsp.h, start/start.S,
