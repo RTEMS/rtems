@@ -20,7 +20,7 @@ rtems_bspdir = $(rtemsdir)/@RTEMS_BSP@
 rtems_bsp_DATA = Makefile.inc
 
 rtems_bsp_makedir = $(rtems_bspdir)/make
-rtems_bsp_make_DATA = bsp.cfg
+rtems_bsp_make_DATA = bsp.cfg target.cfg
 
 if MAINTAINER_MODE
 $(srcdir)/host.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/host.cfg.in

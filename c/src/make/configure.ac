@@ -96,5 +96,5 @@ Makefile.inc
 host.cfg
 bsp.cfg
 ])
-
+AC_CONFIG_FILES([target.cfg])
 AC_OUTPUT

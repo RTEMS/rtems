@@ -1,0 +1,61 @@
+#
+# $Id$
+#
+# Target specific settings. 
+#
+
+CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
+LDFLAGS =
+LIBS = @LIBS@
+
+CC = @CC@
+AS = @AS@
+AR = @AR@
+NM = @NM@
+LD = @LD@
+SIZE = @SIZE@
+STRIP = @STRIP@
+OBJCOPY = @OBJCOPY@
+RANLIB = @RANLIB@
+
+CXX = @CXX@
+
+export CC
+export AS
+export LD
+export NM
+export AR
+export SIZE
+export OBJCOPY
+
+export CXX
+
+RTEMS_HAS_MULTIPROCESSING = @RTEMS_HAS_MULTIPROCESSING@
+RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
+RTEMS_HAS_ITRON_API = @RTEMS_HAS_ITRON_API@
+RTEMS_HAS_NETWORKING = @RTEMS_HAS_NETWORKING@
+RTEMS_HAS_RDBG = @RTEMS_HAS_RDBG@
+RTEMS_HAS_CPLUSPLUS = @RTEMS_HAS_CPLUSPLUS@
+RTEMS_USE_MACROS = @RTEMS_USE_MACROS@
+RTEMS_CPU = @RTEMS_CPU@
+
+XCFLAGS=$(CFLAGS_FOR_TARGET)
+ 
+export RTEMS_BSP
+export RTEMS_CUSTOM
+export PROJECT_ROOT
+
+# List (possibly empty) of required managers
+# We require:
+#    region  -- used by lib/libcsupport for malloc()
+#    ext     -- used by libc for libc reentrancy hooks
+
+MANAGERS_REQUIRED=region ext sem
+
+# Create a RTEMS executable based on MANAGERS which was set in
+#  app's Makefile
+
+MANAGERS_NOT_WANTED=$(filter-out $(MANAGERS) \
+	$(MANAGERS_REQUIRED), $(MANAGER_LIST))
+
