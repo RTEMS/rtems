@@ -150,14 +150,17 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
  *  FALSE otherwise.
  */
 
-#if defined(RTEMS_MULTIPROCESSING)
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_id(
   Objects_Id id
 )
 {
+#if defined(RTEMS_MULTIPROCESSING)
   return _Objects_Is_local_node( _Objects_Get_node(id) );
-}
+#else
+  return TRUE;
 #endif
+}
+
 
 /*PAGE
  *

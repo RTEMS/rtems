@@ -1,3 +1,11 @@
+2004-11-02	Joel Sherrill <joel@OARcorp.com>
+
+	* posix/src/mqueueunlink.c, posix/src/semunlink.c,
+	score/inline/rtems/score/object.inl,
+	score/macros/rtems/score/object.inl: _Objects_Is_local_id() should be
+	avoided in single CPU configurations but always available in the
+	Objects Handlers API.
+
 2004-11-02	Ralf Corsepius <ralf_corsepiu@rtems.org>
 
 	* rtems/include/rtems.h,

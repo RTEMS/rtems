@@ -58,10 +58,12 @@ int mq_unlink(
    *  Don't support unlinking a remote message queue.
    */
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id(the_mq_id) ) {
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( ENOSYS );
   }
+#endif
 
   the_mq = (POSIX_Message_queue_Control *) _Objects_Get_local_object(
     &_POSIX_Message_queue_Information,

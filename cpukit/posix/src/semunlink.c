@@ -50,10 +50,12 @@ int sem_unlink(
    *  Don't support unlinking a remote semaphore.
    */
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id((Objects_Id)the_semaphore_id) ) {
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( ENOSYS );
   }
+#endif
 
   the_semaphore = (POSIX_Semaphore_Control *) _Objects_Get_local_object(
     &_POSIX_Semaphore_Information,

@@ -93,6 +93,9 @@
 #if defined(RTEMS_MULTIPROCESSING)
 #define _Objects_Is_local_id( _id ) \
   _Objects_Is_local_node( _Objects_Get_node(_id) )
+#else
+#define _Objects_Is_local_id( _id ) \
+  TRUE
 #endif
 
 /*PAGE
