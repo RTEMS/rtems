@@ -100,6 +100,5 @@ score/include/Makefile
 score/inline/Makefile
 score/macros/Makefile
 score/src/Makefile
-wrapup/Makefile
 ])
 AC_OUTPUT

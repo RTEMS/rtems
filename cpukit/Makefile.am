@@ -15,7 +15,7 @@ if HAS_ITRON
 ITRON_SUBDIRS = itron
 endif
 
-SUBDIRS = include score rtems $(POSIX_SUBDIRS) $(ITRON_SUBDIRS) sapi wrapup
+SUBDIRS = include score rtems $(POSIX_SUBDIRS) $(ITRON_SUBDIRS) sapi
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
