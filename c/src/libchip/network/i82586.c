@@ -153,6 +153,7 @@ Mode of operation:
 
 #include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>

@@ -1,3 +1,8 @@
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* network/i82586.c: Include <string.h>.
+	* network/sonic.c: Ditto.
+
 2002-04-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AC_DEFINE(CPU_U32_FIX) for sparc.
