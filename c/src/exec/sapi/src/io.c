@@ -17,8 +17,45 @@
 #include <rtems/io.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
 
 #include <string.h>
+
+/*PAGE
+ *
+ *  _IO_Manager_initialization
+ *
+ */
+ 
+void _IO_Manager_initialization(
+  rtems_driver_address_table *driver_table,
+  unsigned32                  number_of_drivers,
+  unsigned32                  number_of_devices
+)
+{
+  void                *tmp;
+  unsigned32           index;
+  rtems_driver_name_t *np;
+ 
+  _IO_Driver_address_table = driver_table;
+  _IO_Number_of_drivers    = number_of_drivers;
+  _IO_Number_of_devices    = number_of_devices;
+ 
+  tmp = _Workspace_Allocate_or_fatal_error(
+    sizeof( rtems_driver_name_t ) * ( number_of_devices + 1 )
+  );
+ 
+  _IO_Driver_name_table = (rtems_driver_name_t *) tmp;
+ 
+  for( index=0, np = _IO_Driver_name_table ;
+       index < _IO_Number_of_devices ;
+       index++, np++ ) {
+    np->device_name = 0;
+    np->device_name_length = 0;
+    np->major = 0;
+    np->minor = 0;
+  }
+}
 
 /*PAGE
  *
