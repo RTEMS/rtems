@@ -1,11 +1,6 @@
-
-
 *** READDIR TEST ***
-
 chdir to the root directory
 chdir() status : 0
-
-
 Creating a series of directories under /
 Creating directory: a      0 0    Success
 Creating directory: b      0 0    Success
@@ -18,132 +13,204 @@ Creating directory: c/z      0 0    Success
 Creating directory: c/x      0 0    Success
 Creating directory: c/y/a3333      0 0    Success
 Creating directory: c/y/j123      0 0    Success
-
+Create a lot of files
+Create a
+Create b
+Create c
+Create d
+Create e
+Create f
+Create g
+Create h
+Create i
+Create j
+Create k
+Create l
+Create m
+Create n
+Create o
+Create p
+Create q
+Create r
+Create s
+Create t
+Create u
+Create v
+Create w
+Create x
+Create y
+Create z
+Create aa
+Create ab
+Create ac
+Create ad
+Create ae
+Create af
+Create ag
+Create ah
+Create ai
+Create aj
+Create ak
+Create al
+Create am
+Create an
+Create ao
+Create ap
+Create aq
+Create ar
+Open /many and print the directory
+name               inode   offset   reclen  type
+a                           1        0    268   0x010c
+b                           1      268    268   0x010c
+c                           1      536    268   0x010c
+d                           1      804    268   0x010c
+e                           1     1072    268   0x010c
+f                           1     1340    268   0x010c
+g                           1     1608    268   0x010c
+h                           1     1876    268   0x010c
+i                           1     2144    268   0x010c
+j                           1     2412    268   0x010c
+k                           1     2680    268   0x010c
+l                           1     2948    268   0x010c
+m                           1     3216    268   0x010c
+n                           1     3484    268   0x010c
+o                           1     3752    268   0x010c
+p                           1     4020    268   0x010c
+q                           1     4288    268   0x010c
+r                           1     4556    268   0x010c
+s                           1     4824    268   0x010c
+t                           1     5092    268   0x010c
+u                           1     5360    268   0x010c
+v                           1     5628    268   0x010c
+w                           1     5896    268   0x010c
+x                           1     6164    268   0x010c
+y                           1     6432    268   0x010c
+z                           1     6700    268   0x010c
+aa                          1     6968    268   0x010c
+ab                          1     7236    268   0x010c
+ac                          1     7504    268   0x010c
+ad                          1     7772    268   0x010c
+ae                          1     8040    268   0x010c
+af                          1     8308    268   0x010c
+ag                          1     8576    268   0x010c
+ah                          1     8844    268   0x010c
+ai                          1     9112    268   0x010c
+aj                          1     9380    268   0x010c
+ak                          1     9648    268   0x010c
+al                          1     9916    268   0x010c
+am                          1    10184    268   0x010c
+an                          1    10452    268   0x010c
+ao                          1    10720    268   0x010c
+ap                          1    10988    268   0x010c
+aq                          1    11256    268   0x010c
+ar                          1    11524    268   0x010c
+open /b/myfile
+scandir a file status: -1
+Open /b/new_file
+fcntl F_SETFD should return 0
+fcntl F_SETFD should return 1
+fcntl F_DUPFD should return 0 -- skip until implemented
+fcntl F_GETFL returns current flags
+fcntl F_GETFL returned 0x200
+fcntl F_SETFL to add O_APPEND and O_NONBLOCK
+fcntl F_GETFL return current flags to see changes
+fcntl F_GETFL returned 0x208
+fcntl F_GETLK should return -1
+fcntl F_SETLK should return -1
+fcntl F_SETLKW should return -1
+fcntl F_SETOWN should return -1
+fcntl F_GETOWN should return -1
+fcntl invalid argument should return -1
+Status -1
+opendir and readdir /b/myfile
+opendir and readdir
+chdir to /b/myfile
 Performing stat of directory /
-status for stat : 0, size of directory: 196
-
-
-Opening directory /
-         name               inode   offset   reclen  type
-    dev                         1        0     28   0x001c
-    a                           1       28     28   0x001c
-    b                           1       56     28   0x001c
-    c                           1       84     28   0x001c
-    d                           1      112     28   0x001c
-    e                           1      140     28   0x001c
-    f                           1      168     28   0x001c
-
+status for stat : 0, size of directory: 2144
+Open and print directory /
+name               inode   offset   reclen  type
+dev                         1        0    268   0x010c
+a                           1      268    268   0x010c
+b                           1      536    268   0x010c
+c                           1      804    268   0x010c
+d                           1     1072    268   0x010c
+e                           1     1340    268   0x010c
+f                           1     1608    268   0x010c
+many                        1     1876    268   0x010c
+mkdir /d/my_dir
+Open /d/my_dir
+remove /d/my_dir.
+close /d/my_dir.
 Opening directory /c
-         name               inode   offset   reclen  type
-    y                           1        0     28   0x001c
-    z                           1       28     28   0x001c
-    x                           1       56     28   0x001c
-
+name               inode   offset   reclen  type
+y                           1        0    268   0x010c
+z                           1      268    268   0x010c
+x                           1      536    268   0x010c
 Opening directory /c/y
-         name               inode   offset   reclen  type
-    a3333                       1        0     28   0x001c
-    j123                        1       28     28   0x001c
-
+name               inode   offset   reclen  type
+a3333                       1        0    268   0x010c
+j123                        1      268    268   0x010c
 LSEEK to the start of the open directory
-         name               inode   offset   reclen  type
-    dev                         1        0     28   0x001c
-    a                           1       28     28   0x001c
-    b                           1       56     28   0x001c
-    c                           1       84     28   0x001c
-    d                           1      112     28   0x001c
-    e                           1      140     28   0x001c
-    f                           1      168     28   0x001c
-
+name               inode   offset   reclen  type
+dev                         1        0    268   0x010c
+a                           1      268    268   0x010c
+b                           1      536    268   0x010c
+c                           1      804    268   0x010c
+d                           1     1072    268   0x010c
+e                           1     1340    268   0x010c
+f                           1     1608    268   0x010c
+many                        1     1876    268   0x010c
 Rewinding directory
-         name               inode   offset   reclen  type
-    dev                         1        0     28   0x001c
-    a                           1       28     28   0x001c
-    b                           1       56     28   0x001c
-    c                           1       84     28   0x001c
-    d                           1      112     28   0x001c
-    e                           1      140     28   0x001c
-    f                           1      168     28   0x001c
-
+name               inode   offset   reclen  type
+dev                         1        0    268   0x010c
+a                           1      268    268   0x010c
+b                           1      536    268   0x010c
+c                           1      804    268   0x010c
+d                           1     1072    268   0x010c
+e                           1     1340    268   0x010c
+f                           1     1608    268   0x010c
+many                        1     1876    268   0x010c
+Send rewinddir a NULL pointer
 Seek directory
-telldir() should report only sizeof(struct dirent) increments 
-in position. Sizeof(struct dirent): 28
+telldir() should report only sizeof(struct dirent) increments
+in position. Sizeof(struct dirent): 268
 seeked to  0 -- currently at  0
-seeked to  7 -- currently at  0
-seeked to 14 -- currently at  0
-seeked to 21 -- currently at  0
-seeked to 28 -- currently at 28
-seeked to 35 -- currently at 28
-seeked to 42 -- currently at 28
-seeked to 49 -- currently at 28
-seeked to 56 -- currently at 56
-seeked to 63 -- currently at 56
-seeked to 70 -- currently at 56
-seeked to 77 -- currently at 56
-seeked to 84 -- currently at 84
-seeked to 91 -- currently at 84
-seeked to 98 -- currently at 84
-seeked to 105 -- currently at 84
-seeked to 112 -- currently at 112
-seeked to 119 -- currently at 112
-seeked to 126 -- currently at 112
-seeked to 133 -- currently at 112
-seeked to 140 -- currently at 140
-seeked to 147 -- currently at 140
-seeked to 154 -- currently at 140
-seeked to 161 -- currently at 140
-seeked to 168 -- currently at 168
-seeked to 175 -- currently at 168
-seeked to 182 -- currently at 168
-seeked to 189 -- currently at 168
-seeked to 196 -- currently at 196
-
+seeked to 67 -- currently at  0
+seeked to 134 -- currently at  0
+Send seekdir a NULL pointer
 Closing directory
-
 SCANDIR TEST
-
 selection rule 1
 scanning for any entry under directory /c
-
 SCANDIR SELECT1 accepts  nodename: y
 SCANDIR SELECT1 accepts  nodename: z
 SCANDIR SELECT1 accepts  nodename: x
-
 scandir status: 3
 Selected Node Name: y
 Selected Node Name: z
 Selected Node Name: x
-
 selection rule 2
 scanning for any entry under directory /c whose name = y
-
 SCANDIR SELECT accepted nodename: y
 SCANDIR SELECT rejected nodename: z
 SCANDIR SELECT rejected nodename: x
-
 scandir status: 1
 Selected Node Name: y
-
 SCANDIR with sorting
-
 selection rule 1
 scanning for any entry under directory /c
 sort in ascending order
-
 SCANDIR SELECT1 accepts  nodename: y
 SCANDIR SELECT1 accepts  nodename: z
 SCANDIR SELECT1 accepts  nodename: x
-
 scandir status: 3
 Selected and Sorted Node Name: x
 Selected and Sorted Node Name: y
 Selected and Sorted Node Name: z
-
 SCANDIR with sorting
-
 selection rule 1
 scanning for any entry under directory /c
 sort in descending order
-
 SCANDIR SELECT1 accepts  nodename: y
 SCANDIR SELECT1 accepts  nodename: z
 SCANDIR SELECT1 accepts  nodename: x
@@ -151,6 +218,8 @@ scandir status: 3
 Selected and Sorted Node Name: z
 Selected and Sorted Node Name: y
 Selected and Sorted Node Name: x
-
-
 *** END OF READDIR TEST ***
+
+
+
+
