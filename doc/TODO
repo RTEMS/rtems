@@ -14,9 +14,11 @@ Need a description of hello world and writing an application.
 
 More automatic handling of version, date, revision, release, etc.
 
-Eliminate use of gifs.
+Eliminate use of gifs. [NOTE: ps, pdf, and dvi.gif are from
+http://www.cit.gu.edu.au/images and the various arrow and 
+bookshelf icons came with texi2www.]
 
-Redraw pictures as appropriate in open source tools
+Redraw pictures as appropriate in open source tools.
 
 
 Getting Started (C and Ada versions)
