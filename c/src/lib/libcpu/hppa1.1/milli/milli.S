@@ -344,10 +344,14 @@ previous_sp: .equ	64	; old stack pointer (locates previous frame)
 ; Statements commented out are used when building such things as operating
 ; system kernels.
 ;;;;;;;;;;;;;;;;
+#if 0
 	.SPACE	$TEXT$,		SPNUM=0,SORT=8
 	.subspa $MILLICODE$,	QUAD=0,ALIGN=8,ACCESS=0x2c,SORT=8
 	.subspa $LIT$,		QUAD=0,ALIGN=8,ACCESS=0x2c,SORT=16
 	.subspa $CODE$,		QUAD=0,ALIGN=8,ACCESS=0x2c,SORT=24
+#else
+	.text
+#endif
 ; Additional code subspaces should have ALIGN=8 for an interspace BV
 ; and should have SORT=24.
 ; 
@@ -355,6 +359,7 @@ previous_sp: .equ	64	; old stack pointer (locates previous frame)
 ; sort keys $GLOBAL$ -1 and $GLOBAL$ -2 are reserved for the $DLT$ 
 ; and $PLT$ subspaces respectively. 
 ;;;;;;;;;;;;;;;
+#if 0
 	.SPACE $PRIVATE$,	SPNUM=1,PRIVATE,SORT=16
 	.subspa $GLOBAL$,	QUAD=1,ALIGN=8,ACCESS=0x1f,SORT=40
 	.import $global$
@@ -362,7 +367,12 @@ previous_sp: .equ	64	; old stack pointer (locates previous frame)
 	.subspa $BSS$,		QUAD=1,ALIGN=8,ACCESS=0x1f,SORT=82,ZERO
 
 	.SPACE $TEXT$
+#else
+	.text
+#endif
+#if 0
 	.SUBSPA $MILLICODE$
+#endif
 
 	.align 8
 	.EXPORT $$remI,millicode
@@ -1224,7 +1234,11 @@ special_case:
 
 
 
+#if 0
 	.subspa $MILLICODE$
+#else
+	.text
+#endif
 	.align 16
 $$mulI: 
 
@@ -1992,7 +2006,11 @@ negative1:
 	.exit
 	.procend
 
+#if 0
 	.subspa $LIT$
+#else
+	.data
+#endif
 ___hp_free_copyright:
 	.export ___hp_free_copyright,data
 	.align 4
