@@ -728,7 +728,8 @@ MG5UART_STATIC void mg5uart_enable_interrupts(
 )
 {
   unsigned32            pMG5UART;
-  unsigned int          shift;
+  unsigned32            shifted_mask;
+  unsigned32            shifted_bits;
 
   pMG5UART = Console_Port_Tbl[minor].ulCtrlPort1;
 
@@ -736,15 +737,21 @@ MG5UART_STATIC void mg5uart_enable_interrupts(
    *  Enable interrupts on RX and TX -- not break
    */
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
-    shift = MONGOOSEV_UART0_IRQ_SHIFT;
-  else
-    shift = MONGOOSEV_UART1_IRQ_SHIFT;
+  shifted_bits = MONGOOSEV_UART_ALL_IRQ_BITS;
+  shifted_mask = mask;
 
-  MG5UART_SETREG(
-     pMG5UART,
-     MG5UART_INTERRUPT_MASK_REGISTER,
-     mask << shift
+  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 ) {
+    shifted_bits <<= MONGOOSEV_UART0_IRQ_SHIFT;
+    shifted_mask <<= MONGOOSEV_UART0_IRQ_SHIFT;
+  } else {
+    shifted_bits <<= MONGOOSEV_UART1_IRQ_SHIFT;
+    shifted_mask <<= MONGOOSEV_UART1_IRQ_SHIFT;
+  }
+
+  MONGOOSEV_ATOMIC_MASK(
+    MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER,
+    shifted_bits,
+    shifted_mask
   );
 }
 

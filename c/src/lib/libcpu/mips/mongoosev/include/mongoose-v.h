@@ -30,6 +30,17 @@
 #define MONGOOSEV_WRITE_REGISTER( _base, _register, _value ) \
   *((volatile unsigned32 *)((_base) + (_register))) = (_value)
 
+#define MONGOOSEV_ATOMIC_MASK( _addr, _mask, _new ) \
+  do { \
+    rtems_interrupt_level  Irql; \
+    rtems_unsigned32       tmp; \
+    \
+    rtems_interrupt_disable(Irql); \
+      tmp = *((volatile unsigned32 *)(_addr)) & ~(_mask); \
+      *((volatile unsigned32 *)(_addr)) = tmp | (_new); \
+    rtems_interrupt_enable(Irql); \
+  } while (0)
+
 /*
  *  BIU and DRAM Registers
  */
@@ -49,6 +60,19 @@
 #define MONGOOSEV_PERIPHERAL_STATUS_REGISTER                    0xFFFE0184
 #define MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER  0xFFFE0188
 #define MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER   0xFFFE018C
+
+#define MONGOOSEV_PFICR MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER
+#define MONGOOSEV_PFIMR MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER
+
+#define mongoosev_set_in_pficr( _mask, _bits ) \
+  MONGOOSEV_ATOMIC_MASK( MONGOOSEV_PFICR, _mask, _bits )
+#define mongoosev_clear_in_pficr( _mask, _bits ) \
+  MONGOOSEV_ATOMIC_MASK( MONGOOSEV_PFICR, _mask, ~(_bits) )
+
+#define mongoosev_set_in_pfimr( _mask, _bits ) \
+  MONGOOSEV_ATOMIC_MASK( MONGOOSEV_PFIMR, _mask, _bits )
+#define mongoosev_clear_in_pfimr( _mask, _bits ) \
+  MONGOOSEV_ATOMIC_MASK( MONGOOSEV_PFIMR, _mask, ~(_bits) )
 
 /* UART Bits in Peripheral Command Register Bits (TX/RX tied together here) */
 #define MONGOOSEV_UART_CMD_RESET_BOTH_PORTS   0x0001
@@ -107,6 +131,7 @@
 
 #define MONGOOSEV_UART_ALL_RX_STATUS_BITS          0x0003
 #define MONGOOSEV_UART_ALL_STATUS_BITS             0x001F
+#define MONGOOSEV_UART_ALL_IRQ_BITS                0x001F
 
 /* 
  *  The Peripheral Interrupt Status, Cause, and Mask registers have the 

@@ -1,3 +1,13 @@
+2001-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* mongoosev/duart/mg5uart.c (mg5uart_enable_interrupts): Honor
+	the other bits set in the Peripheral Function Interrupt Mask
+	Register when modifying those enabled for the DUART.
+	* mongoosev/include/mongoose-v.h (MONGOOSEV_ATOMIC_MASK,
+	MONGOOSEV_PFICR, MONGOOSEV_PFIMR, mongoosev_set_in_pficr,
+	mongoosev_clear_in_pficr, mongoosev_set_in_pfimr,
+	mongoosev_clear_in_pfimr, MONGOOSEV_UART_ALL_IRQ_BITS): New macros.
+
 2001-04-16	Joel Sherrill <joel@OARcorp.com>
 
 	* mongoosev/duart/mg5uart.c, mongoosev/duart/mg5uart.h
