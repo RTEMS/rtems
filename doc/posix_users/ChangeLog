@@ -1,3 +1,7 @@
+2003-09-19	Joel Sherrill <joel@OARcorp.com>
+
+	* posix_users.texi: Merge from branch.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	PR 466/doc
