@@ -1,3 +1,10 @@
+2003-03-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AC_CHECK_FUNCS(strlcpy strlcat).
+	* src/strlcat.c: New (extracted from pppd/utils.c).
+	* src/strlcpy.c: New (extracted from pppd/utils.c).
+	* Makefile.am: Add BSD_C_FILES, strlcat.c, strlcpy.c.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

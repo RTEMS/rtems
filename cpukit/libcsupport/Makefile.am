@@ -133,7 +133,11 @@ LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
 
 UNIX_LIBC_C_FILES = src/unixlibc.c src/hosterr.c
 
-COMMON_C_FILES = src/gxx_wrappers.c src/printk.c $(BASE_FS_C_FILES) \
+BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c
+
+COMMON_C_FILES = src/gxx_wrappers.c src/printk.c \
+    $(BSD_LIBC_C_FILES) \
+    $(BASE_FS_C_FILES) \
     $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
     $(ASSOCIATION_C_FILES)
 
