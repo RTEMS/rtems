@@ -281,11 +281,10 @@ int nanosleep(
   /* calculate time remaining */
 
   if ( rmtp ) {
+    ticks -= 
+      _Thread_Executing->Timer.stop_time - _Thread_Executing->Timer.start_time;
 
-    _POSIX_Interval_to_timespec(
-      _Thread_Executing->Timer.stop_time - _Thread_Executing->Timer.start_time,
-      rmtp
-    );
+    _POSIX_Interval_to_timespec( ticks, rmtp );
   }
 
   return 0;                    /* XXX should account for signal */
