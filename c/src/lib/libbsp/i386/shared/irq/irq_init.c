@@ -207,5 +207,4 @@ void  rtems_irq_mngt_init()
     printk("i8259s_cache = %x\n", * (unsigned short*) &i8259s_cache);
     BSP_wait_polled_input();
 #endif    
-    asm volatile ("sti");
 }
