@@ -35,5 +35,10 @@ rtems_id tcb_to_id(
   return tcb->Object.id;
 }
 
+/*
+ *  By putting this in brackets rather than quotes, we get the search
+ *  path and can get this file from ".." in the mptests.
+ */
+
 #define CONFIGURE_INIT
-#include "config.h"
+#include <config.h>
