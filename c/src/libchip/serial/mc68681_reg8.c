@@ -17,7 +17,7 @@
 
 #define _MC68681_MULTIPLIER 8
 #define _MC68681_NAME(_X) _X##_8
-#define _MC68681_TYPE unsigned8
+#define _MC68681_TYPE uint8_t  
 
 #include "mc68681_reg.c"
 

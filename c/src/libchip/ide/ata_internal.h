@@ -210,9 +210,9 @@
 
 /* Command block registers */
 typedef struct ata_registers_s {
-    unsigned16 regs[8];  /* command block registers */
-    unsigned16 to_read;  /* mask: which ata registers should be read */
-    unsigned16 to_write; /* mask: which ata registers should be written */
+    uint16_t   regs[8];  /* command block registers */
+    uint16_t   to_read;  /* mask: which ata registers should be read */
+    uint16_t   to_write; /* mask: which ata registers should be written */
 } ata_registers_t;
 
 /* ATA request */
@@ -220,9 +220,9 @@ typedef struct ata_req_s {
     Chain_Node        link;   /* link in requests chain */
     char              type;   /* request type */
     ata_registers_t   regs;   /* ATA command */
-    rtems_unsigned32  cnt;    /* Number of sectors to be exchanged */
-    rtems_unsigned32  cbuf;   /* number of current buffer from breq in use */
-    rtems_unsigned32  pos;    /* current position in 'cbuf' */
+    uint32_t    cnt;    /* Number of sectors to be exchanged */
+    uint32_t    cbuf;   /* number of current buffer from breq in use */
+    uint32_t    pos;    /* current position in 'cbuf' */
     blkdev_request   *breq;   /* blkdev_request which corresponds to the 
                                * ata request
                                */
@@ -295,21 +295,21 @@ typedef struct ata_ide_dev_s {
  * ATA device description
  */
 typedef struct ata_dev_s {
-    signed8     present;     /* 1 -- present, 0 -- not present, */
+    int8_t       present;     /* 1 -- present, 0 -- not present, */
                              /* -1 -- non-initialized */
-    unsigned16  cylinders;
-    unsigned16  heads;
-    unsigned16  sectors;
-    unsigned32  lba_sectors;  /* for small disk */
+    uint16_t    cylinders;
+    uint16_t    heads;
+    uint16_t    sectors;
+    uint32_t    lba_sectors;  /* for small disk */
                               /* == cylinders * heads * sectors */
 
-    unsigned8   lba_avaible;  /* 0 - CHS mode, 1 - LBA mode */
+    uint8_t     lba_avaible;  /* 0 - CHS mode, 1 - LBA mode */
 
-    unsigned8   max_multiple; /* 0 if READ/WRITE MULTIPLE is unsupported */
-    unsigned8   current_multiple;
+    uint8_t     max_multiple; /* 0 if READ/WRITE MULTIPLE is unsupported */
+    uint8_t     current_multiple;
 
-    unsigned8   modes_avaible; /* OR of values for this modes */
-    unsigned8   mode_active;
+    uint8_t     modes_avaible; /* OR of values for this modes */
+    uint8_t     mode_active;
 } ata_dev_t;
 
 /*

@@ -58,7 +58,7 @@
  *  XXX fix this 
  */
 
-void *set_vector(void *, unsigned32, unsigned32);
+void *set_vector(void *, uint32_t  , uint32_t  );
 
 #if (SONIC_DEBUG & SONIC_DEBUG_DUMP_MBUFS)
 #include <rtems/dumpbuf.h>
@@ -116,9 +116,9 @@ void *set_vector(void *, unsigned32, unsigned32);
 /*
  * Macros for manipulating 32-bit pointers as 16-bit fragments
  */
-#define LSW(p)   ((rtems_unsigned16)((rtems_unsigned32)(p)))
-#define MSW(p)   ((rtems_unsigned16)((rtems_unsigned32)(p) >> 16))
-#define PTR(m,l) ((void*)(((rtems_unsigned16)(m)<<16)|(rtems_unsigned16)(l)))
+#define LSW(p)   ((uint16_t  )((uint32_t  )(p)))
+#define MSW(p)   ((uint16_t  )((uint32_t  )(p) >> 16))
+#define PTR(m,l) ((void*)(((uint16_t  )(m)<<16)|(uint16_t  )(l)))
 
 /*
  * Hardware-specific storage
@@ -151,8 +151,8 @@ struct sonic_softc {
   /*
    * Data Configuration Register values
    */
-  rtems_unsigned32                dcr_value;
-  rtems_unsigned32                dc2_value;
+  uint32_t                  dcr_value;
+  uint32_t                  dc2_value;
 
   /*
    *  Indicates configuration
@@ -263,7 +263,7 @@ void sonic_print_rx_descriptor(
 
 void sonic_enable_interrupts(
   struct sonic_softc *sc,
-  unsigned32  mask
+  uint32_t    mask
 )
 {
   void *rp = sc->sonic;
@@ -280,7 +280,7 @@ void sonic_enable_interrupts(
 
 void sonic_disable_interrupts(
   struct sonic_softc *sc,
-  unsigned32  mask
+  uint32_t    mask
 )
 {
   void *rp = sc->sonic;
@@ -297,7 +297,7 @@ void sonic_disable_interrupts(
 
 void sonic_clear_interrupts(
   struct sonic_softc *sc,
-  unsigned32  mask
+  uint32_t    mask
 )
 {
   void *rp = sc->sonic;
@@ -310,7 +310,7 @@ void sonic_clear_interrupts(
 
 void sonic_command(
   struct sonic_softc *sc,
-  unsigned32  mask
+  uint32_t    mask
 )
 {
   void *rp = sc->sonic;
@@ -402,7 +402,7 @@ SONIC_STATIC void sonic_stats (struct sonic_softc *sc)
 SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
 {
   struct sonic_softc *sc = sonic_softc;
-  unsigned32 isr, imr;
+  uint32_t   isr, imr;
   void *rp;
 
 #if (NSONIC > 1)
@@ -465,7 +465,7 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
 
 SONIC_STATIC void sonic_retire_tda (struct sonic_softc *sc)
 {
-  rtems_unsigned16 status;
+  uint16_t   status;
   unsigned int collisions;
   struct mbuf *m, *n;
 
@@ -500,7 +500,7 @@ SONIC_STATIC void sonic_retire_tda (struct sonic_softc *sc)
        * Restart the transmitter if there are
        * packets waiting to go.
        */
-      rtems_unsigned16 link;
+      uint16_t   link;
 #if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
       printf("restarting sonic after error\n");
 #endif
@@ -930,10 +930,10 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
   struct ifnet *ifp = &sc->arpcom.ac_if;
   void *rp = sc->sonic;
   struct mbuf *m;
-  rtems_unsigned16 status;
+  uint16_t   status;
   ReceiveDescriptorPointer_t rdp;
   ReceiveResourcePointer_t rwp, rea;
-  rtems_unsigned16 newMissedTally, oldMissedTally;
+  uint16_t   newMissedTally, oldMissedTally;
 
   rwp = sc->rsa;
   rea = sc->rea;
@@ -985,7 +985,7 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
       rdp->byte_count &= 0x0ffff;    /* ERC32 pollutes msb of byte_count */
       m = rdp->mbufp;
       m->m_len = m->m_pkthdr.len = rdp->byte_count -
-                          sizeof(rtems_unsigned32) -
+                          sizeof(uint32_t  ) -
                           sizeof(struct ether_header);
       eh = mtod (m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);

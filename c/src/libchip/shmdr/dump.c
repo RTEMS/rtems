@@ -24,9 +24,9 @@
 void
 Shm_Print_statistics(void)
 {
-  rtems_unsigned32  ticks;
-  rtems_unsigned32  ticks_per_second;
-  rtems_unsigned32  seconds;
+  uint32_t    ticks;
+  uint32_t    ticks_per_second;
+  uint32_t    seconds;
   int               packets_per_second;
 
   (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &ticks );

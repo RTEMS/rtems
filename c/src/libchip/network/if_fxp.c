@@ -76,7 +76,7 @@
 #include <bsp.h>
 #include <pcibios.h>
 #include <irq.h>
-#include "pci.h"
+#include <rtems/pci.h>
 
 #ifdef NS
 #include <netns/ns.h>

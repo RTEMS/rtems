@@ -26,7 +26,7 @@
 
 void Shm_Poll()
 {
-  rtems_unsigned32 tmpfront;
+  uint32_t   tmpfront;
   rtems_libio_ioctl_args_t args;
 
   /* invoke clock isr */

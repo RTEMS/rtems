@@ -25,16 +25,16 @@
 #include "shm_driver.h"
 
 struct pkt_cpy {
-  rtems_unsigned32 packet[MAX_PACKET_SIZE/4];
+  uint32_t   packet[MAX_PACKET_SIZE/4];
 };
 
 rtems_mpci_entry Shm_Send_packet(
-  rtems_unsigned32 node,
+  uint32_t   node,
   rtems_packet_prefix *packet
 )
 {
   Shm_Envelope_control *ecb, *tmp_ecb;
-  rtems_unsigned32 nnum;
+  uint32_t   nnum;
 
   ecb = Shm_Packet_prefix_to_envelope_control_pointer( packet );
   if ( node ) {

@@ -20,7 +20,7 @@
 #ifndef _M48T08_MULTIPLIER
 #define _M48T08_MULTIPLIER 1
 #define _M48T08_NAME(_X) _X
-#define _M48T08_TYPE unsigned8
+#define _M48T08_TYPE uint8_t  
 #endif
 
 #define CALCULATE_REGISTER_ADDRESS( _base, _reg ) \
@@ -30,9 +30,9 @@
  *  M48T08 Get Register Routine
  */
 
-unsigned32 _M48T08_NAME(m48t08_get_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint32_t   _M48T08_NAME(m48t08_get_register)(
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 )
 {
   _M48T08_TYPE *port;
@@ -47,9 +47,9 @@ unsigned32 _M48T08_NAME(m48t08_get_register)(
  */
 
 void  _M48T08_NAME(m48t08_set_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned32  ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint32_t    ucData
 )
 {
   _M48T08_TYPE *port;

@@ -23,7 +23,7 @@
 void MPCI_Fatal(
   Internal_errors_Source  source,
   boolean                 is_internal,
-  rtems_unsigned32        error
+  uint32_t          error
 )
 {
    /*   Eventually need to attempt to broadcast a K_FATAL message

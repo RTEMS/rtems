@@ -162,7 +162,7 @@ static struct open_eth_softc oc;
 static rtems_isr
 open_eth_interrupt_handler (rtems_vector_number v)
 {
-    unsigned32 status;
+    uint32_t   status;
 
     /* read and clear interrupt cause */
 
@@ -190,7 +190,7 @@ open_eth_interrupt_handler (rtems_vector_number v)
       */
 }
 
-static unsigned32 read_mii(unsigned32 addr)
+static uint32_t   read_mii(uint32_t   addr)
 {
     while (oc.regs->miistatus & OETH_MIISTATUS_BUSY) {}
     oc.regs->miiaddress = addr << 8;
@@ -204,7 +204,7 @@ static unsigned32 read_mii(unsigned32 addr)
     }
 }
 
-static void write_mii(unsigned32 addr, unsigned32 data)
+static void write_mii(uint32_t   addr, uint32_t   data)
 {
     while (oc.regs->miistatus & OETH_MIISTATUS_BUSY) {}
     oc.regs->miiaddress = addr << 8;
@@ -300,7 +300,7 @@ open_eth_initialize_hardware (struct open_eth_softc *sc)
           MCLGET (m, M_WAIT);
 	  m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
 	  sc->rxdesc[i].m = m;
-	  sc->regs->xd[i + sc->txbufs].addr = mtod (m, unsigned32 *);
+	  sc->regs->xd[i + sc->txbufs].addr = mtod (m, uint32_t   *);
 	  sc->regs->xd[i + sc->txbufs].len_status =
 	      OETH_RX_BD_EMPTY | OETH_RX_BD_IRQ;
 #ifdef OPEN_ETH_DEBUG
@@ -418,7 +418,7 @@ open_eth_rxDaemon (void *arg)
 		      m->m_pkthdr.rcvif = ifp;
 		      dp->rxdesc[dp->rx_ptr].m = m;
 		      dp->regs->xd[dp->rx_ptr + dp->txbufs].addr =
-			  (unsigned32 *) mtod (m, void *);
+			  (uint32_t   *) mtod (m, void *);
 		      dp->rxPackets++;
 		  }
 
@@ -458,7 +458,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 
     len = 0;
     temp = (unsigned char *) dp->txdesc[dp->tx_ptr].buf;
-    dp->regs->xd[dp->tx_ptr].addr = (unsigned32 *) temp;
+    dp->regs->xd[dp->tx_ptr].addr = (uint32_t   *) temp;
 
 #ifdef OPEN_ETH_DEBUG
     printf("TXD: 0x%08x\n", (int) m->m_data);

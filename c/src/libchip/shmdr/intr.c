@@ -26,14 +26,14 @@
 #include "shm_driver.h"
 
 void Shm_Cause_interrupt(
-  rtems_unsigned32 node
+  uint32_t   node
 )
 {
   Shm_Interrupt_information *intr;
-  rtems_unsigned8  *u8;
-  rtems_unsigned16 *u16;
-  rtems_unsigned32 *u32;
-  rtems_unsigned32  value;
+  uint8_t    *u8;
+  uint16_t   *u16;
+  uint32_t   *u32;
+  uint32_t    value;
 
   intr = &Shm_Interrupt_table[node];
   value = intr->value;
@@ -42,16 +42,16 @@ void Shm_Cause_interrupt(
     case NO_INTERRUPT:
        break;
     case BYTE:
-      u8   = (rtems_unsigned8 *)intr->address;
-      *u8  = (rtems_unsigned8) value;
+      u8   = (uint8_t   *)intr->address;
+      *u8  = (uint8_t  ) value;
       break;
     case WORD:
-      u16   = (rtems_unsigned16 *)intr->address;
-      *u16  = (rtems_unsigned16) value;
+      u16   = (uint16_t   *)intr->address;
+      *u16  = (uint16_t  ) value;
       break;
     case LONG:
-      u32   = (rtems_unsigned32 *)intr->address;
-      *u32  = (rtems_unsigned32) value;
+      u32   = (uint32_t   *)intr->address;
+      *u32  = (uint32_t  ) value;
       break;
   }
 }

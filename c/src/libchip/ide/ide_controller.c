@@ -84,10 +84,10 @@ ide_controller_initialize(rtems_device_major_number  major,
  */
 void
 ide_controller_read_data_block(rtems_device_minor_number  minor,
-                               unsigned16                 block_size,
+                               uint16_t                   block_size,
                                blkdev_sg_buffer          *bufs,
-                               rtems_unsigned32          *cbuf,
-                               rtems_unsigned32          *pos)
+                               uint32_t            *cbuf,
+                               uint32_t            *pos)
 {
     IDE_Controller_Table[minor].fns->ctrl_read_block(minor, block_size, bufs,
                                                      cbuf, pos);
@@ -109,10 +109,10 @@ ide_controller_read_data_block(rtems_device_minor_number  minor,
  */
 void
 ide_controller_write_data_block(rtems_device_minor_number  minor,
-                                unsigned16                 block_size,
+                                uint16_t                   block_size,
                                 blkdev_sg_buffer          *bufs,
-                                rtems_unsigned32          *cbuf,
-                                rtems_unsigned32          *pos)
+                                uint32_t            *cbuf,
+                                uint32_t            *pos)
 
 {
     IDE_Controller_Table[minor].fns->ctrl_write_block(minor, block_size, bufs,
@@ -134,7 +134,7 @@ ide_controller_write_data_block(rtems_device_minor_number  minor,
 void
 ide_controller_read_register(rtems_device_minor_number  minor,
                              int                        reg, 
-                             unsigned16                *value)
+                             uint16_t                  *value)
 {
     IDE_Controller_Table[minor].fns->ctrl_reg_read(minor, reg, value);
 }
@@ -153,7 +153,7 @@ ide_controller_read_register(rtems_device_minor_number  minor,
  */
 void
 ide_controller_write_register(rtems_device_minor_number minor, int reg, 
-                              unsigned16 value)
+                              uint16_t   value)
 {
     IDE_Controller_Table[minor].fns->ctrl_reg_write(minor, reg, value);
 }
@@ -171,7 +171,7 @@ ide_controller_write_register(rtems_device_minor_number minor, int reg,
  *     error occured
  */
 rtems_status_code 
-ide_controller_config_io_speed(int minor, unsigned8 modes_avaible)
+ide_controller_config_io_speed(int minor, uint8_t   modes_avaible)
 {
     return IDE_Controller_Table[minor].fns->ctrl_config_io_speed(
                minor, 

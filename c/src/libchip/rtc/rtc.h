@@ -19,9 +19,9 @@
  *  Types for get and set register routines
  */
 
-typedef unsigned32 (*getRegister_f)(unsigned32 port, unsigned8 register);
+typedef uint32_t   (*getRegister_f)(uint32_t   port, uint8_t   register);
 typedef void       (*setRegister_f)(
-                            unsigned32 port, unsigned8 reg, unsigned32 value);
+                            uint32_t   port, uint8_t   reg, uint32_t   value);
 
 typedef struct _rtc_fns {
   void    (*deviceInitialize)(int minor);
@@ -64,8 +64,8 @@ typedef struct _rtc_tbl {
   rtc_fns       *pDeviceFns;
   boolean      (*deviceProbe)(int minor);
   void          *pDeviceParams;
-  unsigned32     ulCtrlPort1;
-  unsigned32     ulDataPort;
+  uint32_t       ulCtrlPort1;
+  uint32_t       ulDataPort;
   getRegister_f  getRegister;
   setRegister_f  setRegister;
 } rtc_tbl;

@@ -198,7 +198,7 @@ static const char *cs8900_trace_labels[] =
  * Assumes a micro-second timer such as the Coldfire.
  */
 
-rtems_unsigned32 rtems_read_timer ();
+uint32_t   rtems_read_timer ();
 
 static inline void
 cs8900_trace (cs8900_device *cs, unsigned short key, unsigned long var)

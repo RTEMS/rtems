@@ -160,7 +160,7 @@ typedef struct _SP_INTERRUPT_ID {
 
 typedef struct _ns16550_context
 {
-        unsigned8       ucModemCtrl;
+        uint8_t         ucModemCtrl;
 } ns16550_context;
 
 /*

@@ -84,7 +84,7 @@ extern "C" {
  *  "tas" instruction which is atomic.  All ports to other CPUs
  *  comply with the restrictive placement of lock bit by this
  *  instruction.  The lock bit is the most significant bit in a
- *  big-endian rtems_unsigned32.  On other processors, the lock is
+ *  big-endian uint32_t  .  On other processors, the lock is
  *  typically implemented via an atomic swap or atomic modify
  *  bits type instruction.
  */
@@ -254,7 +254,7 @@ extern "C" {
    ((void *)(ecb)->packet)
 
 #define Shm_Packet_prefix_to_envelope_control_pointer( pkt )   \
-   ((Shm_Envelope_control *)((rtems_unsigned8 *)(pkt) - \
+   ((Shm_Envelope_control *)((uint8_t   *)(pkt) - \
    (sizeof(Shm_Envelope_preamble) + SHM_ENVELOPE_PREFIX_OVERHEAD)))
 
 #define Shm_Build_preamble(ecb, node) \
@@ -264,8 +264,8 @@ extern "C" {
 
 /* volatile types */
 
-typedef volatile rtems_unsigned8  vol_u8;
-typedef volatile rtems_unsigned32 vol_u32;
+typedef volatile uint8_t    vol_u8;
+typedef volatile uint32_t   vol_u32;
 
 /* shm control information */
 
@@ -396,7 +396,7 @@ typedef struct {
  *  base       - The base address of the shared memory.  This
  *               address may be specific to this node.
  *  length     - The length of the shared memory in bytes.
- *  format     - The natural format for rtems_unsigned32's in the
+ *  format     - The natural format for uint32_t  's in the
  *               shared memory.  Valid values are currently
  *               only SHM_LITTLE and SHM_BIG.
  *  convert    - The address of the routine which converts
@@ -425,7 +425,7 @@ struct shm_config_info {
   vol_u32            format;   /* SHM is big or little endian */
   vol_u32          (*convert)();/* neutral conversion routine */
   vol_u32            poll_intr;/* POLLED or INTR driven mode  */
-  void             (*cause_intr)( rtems_unsigned32 );
+  void             (*cause_intr)( uint32_t   );
   Shm_Interrupt_information   Intr;     /* cause intr information      */
 };
 
@@ -446,24 +446,24 @@ SHM_EXTERN Shm_Locked_queue_Control     *Shm_Locked_queues;
 SHM_EXTERN Shm_Envelope_control         *Shm_Envelopes;
 SHM_EXTERN rtems_configuration_table    *Shm_RTEMS_Configuration;
 SHM_EXTERN rtems_multiprocessing_table  *Shm_RTEMS_MP_Configuration;
-SHM_EXTERN rtems_unsigned32              Shm_Receive_message_count;
-SHM_EXTERN rtems_unsigned32              Shm_Null_message_count;
-SHM_EXTERN rtems_unsigned32              Shm_Interrupt_count;
-SHM_EXTERN rtems_unsigned32              Shm_Local_node;
+SHM_EXTERN uint32_t                Shm_Receive_message_count;
+SHM_EXTERN uint32_t                Shm_Null_message_count;
+SHM_EXTERN uint32_t                Shm_Interrupt_count;
+SHM_EXTERN uint32_t                Shm_Local_node;
 SHM_EXTERN Shm_Locked_queue_Control      *Shm_Local_receive_queue;
 SHM_EXTERN Shm_Node_status_control       *Shm_Local_node_status;
-SHM_EXTERN rtems_unsigned32              Shm_isrstat;
+SHM_EXTERN uint32_t                Shm_isrstat;
                                                      /* reported by shmdr */
 
-SHM_EXTERN rtems_unsigned32 Shm_Pending_initialization;
-SHM_EXTERN rtems_unsigned32 Shm_Initialization_complete;
-SHM_EXTERN rtems_unsigned32 Shm_Active_node;
+SHM_EXTERN uint32_t   Shm_Pending_initialization;
+SHM_EXTERN uint32_t   Shm_Initialization_complete;
+SHM_EXTERN uint32_t   Shm_Active_node;
 
-SHM_EXTERN rtems_unsigned32 Shm_Maximum_nodes;
-SHM_EXTERN rtems_unsigned32 Shm_Maximum_envelopes;
+SHM_EXTERN uint32_t   Shm_Maximum_nodes;
+SHM_EXTERN uint32_t   Shm_Maximum_envelopes;
 
-SHM_EXTERN rtems_unsigned32 Shm_Locked_queue_End_of_list;
-SHM_EXTERN rtems_unsigned32 Shm_Locked_queue_Not_on_list;
+SHM_EXTERN uint32_t   Shm_Locked_queue_End_of_list;
+SHM_EXTERN uint32_t   Shm_Locked_queue_Not_on_list;
 
 /* functions */
 
@@ -472,7 +472,7 @@ void           Shm_Locked_queue_Add(
                   Shm_Locked_queue_Control *, Shm_Envelope_control * );
 Shm_Envelope_control *Shm_Locked_queue_Get( Shm_Locked_queue_Control * );
 void           Shm_Locked_queue_Initialize(
-                  Shm_Locked_queue_Control *, rtems_unsigned32 );
+                  Shm_Locked_queue_Control *, uint32_t   );
             /* Shm_Initialize_lock is CPU dependent */
             /* Shm_Lock is CPU dependent */
             /* Shm_Unlock is CPU dependent */
@@ -480,8 +480,8 @@ void           Shm_Locked_queue_Initialize(
 /* portable routines */
 void           Init_env_pool();
 void           Shm_Print_statistics( void );
-void           MPCI_Fatal( Internal_errors_Source, boolean, rtems_unsigned32 );
-rtems_task     Shm_Cause_interrupt( rtems_unsigned32 );
+void           MPCI_Fatal( Internal_errors_Source, boolean, uint32_t   );
+rtems_task     Shm_Cause_interrupt( uint32_t   );
 void           Shm_Poll();
 void           Shm_setclockvec();
 void           Shm_Convert_packet( rtems_packet_prefix * );
@@ -490,7 +490,7 @@ void           Shm_Convert_packet( rtems_packet_prefix * );
 
 /* target specific routines */
 void          *Shm_Convert_address( void * );
-void           Shm_Get_configuration( rtems_unsigned32, shm_config_table ** );
+void           Shm_Get_configuration( uint32_t  , shm_config_table ** );
 void           Shm_isr();
 void           Shm_setvec( void );
 
@@ -514,7 +514,7 @@ rtems_mpci_entry Shm_Return_packet(
 );
 
 rtems_mpci_entry Shm_Send_packet(
-  rtems_unsigned32,
+  uint32_t  ,
   rtems_packet_prefix *
 );
 

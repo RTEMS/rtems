@@ -310,7 +310,7 @@ extern "C" {
 
 typedef struct _z85c30_context
 {
-  unsigned8 ucModemCtrl;
+  uint8_t   ucModemCtrl;
 } z85c30_context;
 
 /*

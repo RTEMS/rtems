@@ -57,12 +57,12 @@ int m48t08_get_time(
   rtems_time_of_day *time
 )
 {
-  unsigned32     m48t08;
+  uint32_t       m48t08;
   getRegister_f  getReg;
   setRegister_f  setReg;
-  unsigned8      controlReg;
-  unsigned32     value1;
-  unsigned32     value2;
+  uint8_t        controlReg;
+  uint32_t       value1;
+  uint32_t       value2;
 
   m48t08 = RTC_Table[ minor ].ulCtrlPort1;
   getReg = RTC_Table[ minor ].getRegister;
@@ -117,10 +117,10 @@ int m48t08_set_time(
   rtems_time_of_day *time
 )
 {
-  unsigned32     m48t08;
+  uint32_t       m48t08;
   getRegister_f  getReg;
   setRegister_f  setReg;
-  unsigned8      controlReg;
+  uint8_t        controlReg;
 
   m48t08 = RTC_Table[ minor ].ulCtrlPort1;
   getReg = RTC_Table[ minor ].getRegister;

@@ -8,45 +8,45 @@
 /* Configuration Information */
 
 typedef struct {
-  unsigned32              base_address;
-  unsigned32              vector;
-  unsigned32              txd_count;
-  unsigned32              rxd_count;
+  uint32_t                base_address;
+  uint32_t                vector;
+  uint32_t                txd_count;
+  uint32_t                rxd_count;
 } open_eth_configuration_t;
 
 
 /* Ethernet buffer descriptor */
 
 typedef struct _oeth_rxtxdesc {
-    volatile unsigned32 len_status; /* Length and status */
-    volatile unsigned32 *addr;      /* Buffer pointer */
+    volatile uint32_t   len_status; /* Length and status */
+    volatile uint32_t   *addr;      /* Buffer pointer */
 } oeth_rxtxdesc;
 
 /* Ethernet configuration registers */
 
 typedef struct _oeth_regs {
-    volatile unsigned32 moder;       /* Mode Register */
-    volatile unsigned32 int_src;     /* Interrupt Source Register */
-    volatile unsigned32 int_mask;    /* Interrupt Mask Register */
-    volatile unsigned32 ipgt;        /* Back to Bak Inter Packet Gap Register */
-    volatile unsigned32 ipgr1;       /* Non Back to Back Inter Packet Gap Register 1 */
-    volatile unsigned32 ipgr2;       /* Non Back to Back Inter Packet Gap Register 2 */
-    volatile unsigned32 packet_len;  /* Packet Length Register (min. and max.) */
-    volatile unsigned32 collconf;    /* Collision and Retry Configuration Register */
-    volatile unsigned32 tx_bd_num;   /* Transmit Buffer Descriptor Number Register */
-    volatile unsigned32 ctrlmoder;   /* Control Module Mode Register */
-    volatile unsigned32 miimoder;    /* MII Mode Register */
-    volatile unsigned32 miicommand;  /* MII Command Register */
-    volatile unsigned32 miiaddress;  /* MII Address Register */
-    volatile unsigned32 miitx_data;  /* MII Transmit Data Register */
-    volatile unsigned32 miirx_data;  /* MII Receive Data Register */
-    volatile unsigned32 miistatus;   /* MII Status Register */
-    volatile unsigned32 mac_addr0;   /* MAC Individual Address Register 0 */
-    volatile unsigned32 mac_addr1;   /* MAC Individual Address Register 1 */
-    volatile unsigned32 hash_addr0;  /* Hash Register 0 */
-    volatile unsigned32 hash_addr1;  /* Hash Register 1 */
-    volatile unsigned32 txctrl;      /* Transmitter control register */
-    unsigned32 empty[235];	     /* Unused space */
+    volatile uint32_t   moder;       /* Mode Register */
+    volatile uint32_t   int_src;     /* Interrupt Source Register */
+    volatile uint32_t   int_mask;    /* Interrupt Mask Register */
+    volatile uint32_t   ipgt;        /* Back to Bak Inter Packet Gap Register */
+    volatile uint32_t   ipgr1;       /* Non Back to Back Inter Packet Gap Register 1 */
+    volatile uint32_t   ipgr2;       /* Non Back to Back Inter Packet Gap Register 2 */
+    volatile uint32_t   packet_len;  /* Packet Length Register (min. and max.) */
+    volatile uint32_t   collconf;    /* Collision and Retry Configuration Register */
+    volatile uint32_t   tx_bd_num;   /* Transmit Buffer Descriptor Number Register */
+    volatile uint32_t   ctrlmoder;   /* Control Module Mode Register */
+    volatile uint32_t   miimoder;    /* MII Mode Register */
+    volatile uint32_t   miicommand;  /* MII Command Register */
+    volatile uint32_t   miiaddress;  /* MII Address Register */
+    volatile uint32_t   miitx_data;  /* MII Transmit Data Register */
+    volatile uint32_t   miirx_data;  /* MII Receive Data Register */
+    volatile uint32_t   miistatus;   /* MII Status Register */
+    volatile uint32_t   mac_addr0;   /* MAC Individual Address Register 0 */
+    volatile uint32_t   mac_addr1;   /* MAC Individual Address Register 1 */
+    volatile uint32_t   hash_addr0;  /* Hash Register 0 */
+    volatile uint32_t   hash_addr1;  /* Hash Register 1 */
+    volatile uint32_t   txctrl;      /* Transmitter control register */
+    uint32_t   empty[235];	     /* Unused space */
     oeth_rxtxdesc xd[128];	     /* TX & RX descriptors */
 } oeth_regs;
 

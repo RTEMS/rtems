@@ -19,20 +19,20 @@
 #ifndef _Z85C30_MULTIPLIER
 #define _Z85C30_MULTIPLIER 1
 #define _Z85C30_NAME(_X) _X
-#define _Z85C30_TYPE unsigned8
+#define _Z85C30_TYPE uint8_t  
 #endif
 
 /*
  *  Z85C30 Get Register Routine
  */
 
-unsigned8 _Z85C30_NAME(z85c30_get_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t   _Z85C30_NAME(z85c30_get_register)(
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 )
 {
   _Z85C30_TYPE          *port;
-  unsigned8              data;
+  uint8_t                data;
   rtems_interrupt_level  level;
 
   port = (_Z85C30_TYPE *)ulCtrlPort;
@@ -53,9 +53,9 @@ unsigned8 _Z85C30_NAME(z85c30_get_register)(
  */
 
 void _Z85C30_NAME(z85c30_set_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 )
 {
   _Z85C30_TYPE          *port;

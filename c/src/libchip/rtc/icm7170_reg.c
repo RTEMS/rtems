@@ -20,7 +20,7 @@
 #ifndef _ICM7170_MULTIPLIER
 #define _ICM7170_MULTIPLIER 1
 #define _ICM7170_NAME(_X) _X
-#define _ICM7170_TYPE unsigned8
+#define _ICM7170_TYPE uint8_t  
 #endif
 
 #define CALCULATE_REGISTER_ADDRESS( _base, _reg ) \
@@ -30,9 +30,9 @@
  *  ICM7170 Get Register Routine
  */
 
-unsigned32 _ICM7170_NAME(icm7170_get_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint32_t   _ICM7170_NAME(icm7170_get_register)(
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 )
 {
   _ICM7170_TYPE *port;
@@ -47,9 +47,9 @@ unsigned32 _ICM7170_NAME(icm7170_get_register)(
  */
 
 void  _ICM7170_NAME(icm7170_set_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned32  ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint32_t    ucData
 )
 {
   _ICM7170_TYPE *port;

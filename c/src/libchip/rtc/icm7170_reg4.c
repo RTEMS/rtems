@@ -17,7 +17,7 @@
 
 #define _ICM7170_MULTIPLIER 4
 #define _ICM7170_NAME(_X) _X##_4
-#define _ICM7170_TYPE unsigned8
+#define _ICM7170_TYPE uint8_t  
 
 #include "icm7170_reg.c"
 

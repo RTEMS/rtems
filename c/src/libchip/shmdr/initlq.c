@@ -24,7 +24,7 @@
 
 void Shm_Locked_queue_Initialize(
   Shm_Locked_queue_Control *lq_cb,
-  rtems_unsigned32 owner
+  uint32_t   owner
 )
 {
   Shm_Initialize_lock( lq_cb );

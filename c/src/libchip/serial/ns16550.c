@@ -75,10 +75,10 @@ extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
 
 NS16550_STATIC void ns16550_init(int minor)
 {
-  unsigned32              pNS16550;
-  unsigned8               ucTrash;
-  unsigned8               ucDataByte;
-  unsigned32              ulBaudDivisor;
+  uint32_t                pNS16550;
+  uint8_t                 ucTrash;
+  uint8_t                 ucDataByte;
+  uint32_t                ulBaudDivisor;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
   getRegister_f           getReg;
@@ -103,8 +103,8 @@ NS16550_STATIC void ns16550_init(int minor)
   /* Set the divisor latch and set the baud rate. */
 
   ulBaudDivisor = NS16550_Baud(
-    (unsigned32) Console_Port_Tbl[minor].ulClock,
-    (unsigned32) Console_Port_Tbl[minor].pDeviceParams
+    (uint32_t  ) Console_Port_Tbl[minor].ulClock,
+    (uint32_t  ) Console_Port_Tbl[minor].pDeviceParams
   );
   ucDataByte = SP_LINE_DLAB;
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
@@ -185,7 +185,7 @@ NS16550_STATIC void ns16550_write_polled(
   char  cChar
 )
 {
-  unsigned32              pNS16550;
+  uint32_t                pNS16550;
   unsigned char           ucLineStatus;
   int                     iTimeout;
   getRegister_f           getReg;
@@ -231,8 +231,8 @@ NS16550_STATIC void ns16550_write_polled(
 
 NS16550_STATIC int ns16550_assert_RTS(int minor)
 {
-  unsigned32              pNS16550;
-  unsigned32              Irql;
+  uint32_t                pNS16550;
+  uint32_t                Irql;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
 
@@ -257,8 +257,8 @@ NS16550_STATIC int ns16550_assert_RTS(int minor)
 
 NS16550_STATIC int ns16550_negate_RTS(int minor)
 {
-  unsigned32              pNS16550;
-  unsigned32              Irql;
+  uint32_t                pNS16550;
+  uint32_t                Irql;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
 
@@ -288,8 +288,8 @@ NS16550_STATIC int ns16550_negate_RTS(int minor)
 
 NS16550_STATIC int ns16550_assert_DTR(int minor)
 {
-  unsigned32              pNS16550;
-  unsigned32              Irql;
+  uint32_t                pNS16550;
+  uint32_t                Irql;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
 
@@ -314,8 +314,8 @@ NS16550_STATIC int ns16550_assert_DTR(int minor)
 
 NS16550_STATIC int ns16550_negate_DTR(int minor)
 {
-  unsigned32              pNS16550;
-  unsigned32              Irql;
+  uint32_t                pNS16550;
+  uint32_t                Irql;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
 
@@ -346,13 +346,13 @@ NS16550_STATIC int ns16550_set_attributes(
   const struct termios *t
 )
 {
-  unsigned32              pNS16550;
-  unsigned32              ulBaudDivisor;
-  unsigned8               ucLineControl;
-  unsigned32              baud_requested;
+  uint32_t                pNS16550;
+  uint32_t                ulBaudDivisor;
+  uint8_t                 ucLineControl;
+  uint32_t                baud_requested;
   setRegister_f           setReg;
   getRegister_f           getReg;
-  unsigned32              Irql;
+  uint32_t                Irql;
 
   pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
   setReg   = Console_Port_Tbl[minor].setRegister;
@@ -367,7 +367,7 @@ NS16550_STATIC int ns16550_set_attributes(
     baud_requested = B9600;              /* default to 9600 baud */
 
   ulBaudDivisor = NS16550_Baud(
-    (unsigned32) Console_Port_Tbl[minor].ulClock,
+    (uint32_t  ) Console_Port_Tbl[minor].ulClock,
     termios_baud_to_number(baud_requested)
   );
 
@@ -443,9 +443,9 @@ NS16550_STATIC void ns16550_process(
         int             minor
 )
 {
-  unsigned32              pNS16550;
-  volatile unsigned8      ucLineStatus; 
-  volatile unsigned8      ucInterruptId;
+  uint32_t                pNS16550;
+  volatile uint8_t        ucLineStatus; 
+  volatile uint8_t        ucInterruptId;
   unsigned char           cChar;
   getRegister_f           getReg;
   setRegister_f           setReg;
@@ -539,7 +539,7 @@ NS16550_STATIC void ns16550_enable_interrupts(
   int mask
 )
 {
-  unsigned32     pNS16550;
+  uint32_t       pNS16550;
   setRegister_f  setReg;
 
   pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -577,8 +577,8 @@ NS16550_STATIC int ns16550_write_support_int(
   int   len
 )
 {
-  unsigned32     Irql;
-  unsigned32     pNS16550;
+  uint32_t       Irql;
+  uint32_t       pNS16550;
   setRegister_f  setReg;
 
   setReg   = Console_Port_Tbl[minor].setRegister;
@@ -649,7 +649,7 @@ NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
   int minor 
 )
 {
-  unsigned32           pNS16550;
+  uint32_t             pNS16550;
   unsigned char        ucLineStatus;
   char                 cChar;
   getRegister_f        getReg;

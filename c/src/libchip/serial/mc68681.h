@@ -70,48 +70,48 @@ extern console_fns mc68681_fns_polled;
  * Default register access routines
  */
 
-unsigned8 mc68681_get_register(     /* registers are at 1 byte boundaries */
-  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
-  unsigned8   ucRegNum
+uint8_t   mc68681_get_register(     /* registers are at 1 byte boundaries */
+  uint32_t    ulCtrlPort,           /*   and accessed as bytes            */
+  uint8_t     ucRegNum
 );
 
 void  mc68681_set_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 );
 
-unsigned8 mc68681_get_register_2(   /* registers are at 2 byte boundaries */
-  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
-  unsigned8   ucRegNum
+uint8_t   mc68681_get_register_2(   /* registers are at 2 byte boundaries */
+  uint32_t    ulCtrlPort,           /*   and accessed as bytes            */
+  uint8_t     ucRegNum
 );
 
 void  mc68681_set_register_2(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 );
 
-unsigned8 mc68681_get_register_4(   /* registers are at 4 byte boundaries */
-  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
-  unsigned8   ucRegNum
+uint8_t   mc68681_get_register_4(   /* registers are at 4 byte boundaries */
+  uint32_t    ulCtrlPort,           /*   and accessed as bytes            */
+  uint8_t     ucRegNum
 );
 
 void  mc68681_set_register_4(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 );
 
-unsigned8 mc68681_get_register_8(   /* registers are at 8 byte boundaries */
-  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
-  unsigned8   ucRegNum
+uint8_t   mc68681_get_register_8(   /* registers are at 8 byte boundaries */
+  uint32_t    ulCtrlPort,           /*   and accessed as bytes            */
+  uint8_t     ucRegNum
 );
 
 void  mc68681_set_register_8(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 );
 
 

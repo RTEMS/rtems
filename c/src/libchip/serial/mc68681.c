@@ -89,8 +89,8 @@ MC68681_STATIC int mc68681_set_attributes(
   const struct termios *t
 )
 {
-  unsigned32             pMC68681_port;
-  unsigned32             pMC68681;
+  uint32_t               pMC68681_port;
+  uint32_t               pMC68681;
   unsigned int           mode1;
   unsigned int           mode2;
   unsigned int           baud_mask;
@@ -219,8 +219,8 @@ MC68681_STATIC void mc68681_initialize_context(
 
 MC68681_STATIC void mc68681_init(int minor)
 {
-  unsigned32              pMC68681_port;
-  unsigned32              pMC68681;
+  uint32_t                pMC68681_port;
+  uint32_t                pMC68681;
   mc68681_context        *pmc68681Context;
   setRegister_f           setReg;
   getRegister_f           getReg;
@@ -273,8 +273,8 @@ MC68681_STATIC int mc68681_open(
   void    *arg
 )
 {
-  unsigned32             pMC68681;
-  unsigned32             pMC68681_port;
+  uint32_t               pMC68681;
+  uint32_t               pMC68681_port;
   unsigned int           baud;
   unsigned int           acr_bit;
   unsigned int           vector;
@@ -330,8 +330,8 @@ MC68681_STATIC int mc68681_close(
   void    *arg
 )
 {
-  unsigned32      pMC68681;
-  unsigned32      pMC68681_port;
+  uint32_t        pMC68681;
+  uint32_t        pMC68681_port;
   setRegister_f   setReg;
 
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -361,7 +361,7 @@ MC68681_STATIC void mc68681_write_polled(
   char  cChar
 )
 {
-  unsigned32              pMC68681_port;
+  uint32_t                pMC68681_port;
   unsigned char           ucLineStatus;
   int                     iTimeout;
   getRegister_f           getReg;
@@ -454,8 +454,8 @@ MC68681_STATIC int mc68681_write_support_int(
   int         len
 )
 {
-  unsigned32      Irql;
-  unsigned32      pMC68681_port;
+  uint32_t        Irql;
+  uint32_t        pMC68681_port;
   setRegister_f   setReg;
 
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
@@ -526,7 +526,7 @@ MC68681_STATIC int mc68681_inbyte_nonblocking_polled(
   int minor 
 )
 {
-  unsigned32           pMC68681_port;
+  uint32_t             pMC68681_port;
   unsigned char        ucLineStatus;
   unsigned char        cChar;
   getRegister_f        getReg;
@@ -623,10 +623,10 @@ MC68681_STATIC void mc68681_process(
   int  minor
 )
 {
-  unsigned32              pMC68681;
-  unsigned32              pMC68681_port;
-  volatile unsigned8      ucLineStatus; 
-  volatile unsigned8      ucISRStatus; 
+  uint32_t                pMC68681;
+  uint32_t                pMC68681_port;
+  volatile uint8_t        ucLineStatus; 
+  volatile uint8_t        ucISRStatus; 
   unsigned char           cChar;
   getRegister_f           getReg;
   setRegister_f           setReg;
@@ -762,7 +762,7 @@ MC68681_STATIC void mc68681_enable_interrupts(
   int imr_mask
 )
 {
-  unsigned32            pMC68681;
+  uint32_t              pMC68681;
   setRegister_f         setReg;
 
   pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;

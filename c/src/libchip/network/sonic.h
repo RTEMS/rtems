@@ -71,22 +71,22 @@ extern char SONIC_Reg_name[64][6];
 
 typedef void (*sonic_write_register_t)(
   void       *base,
-  unsigned32  regno,
-  unsigned32  value
+  uint32_t    regno,
+  uint32_t    value
 );
 
-typedef unsigned32 (*sonic_read_register_t)(
+typedef uint32_t   (*sonic_read_register_t)(
   void       *base,
-  unsigned32  regno
+  uint32_t    regno
 );
 
 typedef struct {
-  unsigned32              base_address;
-  unsigned32              vector;
-  unsigned32              dcr_value;
-  unsigned32              dc2_value;
-  unsigned32              tda_count;
-  unsigned32              rda_count;
+  uint32_t                base_address;
+  uint32_t                vector;
+  uint32_t                dcr_value;
+  uint32_t                dc2_value;
+  uint32_t                tda_count;
+  uint32_t                rda_count;
   sonic_write_register_t  write_register;
   sonic_read_register_t   read_register;
 } sonic_configuration_t;
@@ -302,32 +302,32 @@ typedef struct {
  */
 #define MAXIMUM_FRAGS_PER_DESCRIPTOR    6
 struct TransmitDescriptor {
-  rtems_unsigned32        status;
-  rtems_unsigned32        pkt_config;
-  rtems_unsigned32        pkt_size;
-  rtems_unsigned32        frag_count;
+  uint32_t          status;
+  uint32_t          pkt_config;
+  uint32_t          pkt_size;
+  uint32_t          frag_count;
 
   /*
    * Packet fragment pointers
    */
   struct TransmitDescriptorFragLink {
-      rtems_unsigned32 frag_lsw;  /* LSW of fragment address */
+      uint32_t   frag_lsw;  /* LSW of fragment address */
 #define                      frag_link frag_lsw
-      rtems_unsigned32 frag_msw;  /* MSW of fragment address */
-      rtems_unsigned32 frag_size;
+      uint32_t   frag_msw;  /* MSW of fragment address */
+      uint32_t   frag_size;
   }                       frag[MAXIMUM_FRAGS_PER_DESCRIPTOR];
 
   /*
    * Space for link if all fragment pointers are used.
    */
-  rtems_unsigned32        link_pad;
+  uint32_t          link_pad;
 
   /*
    * Extra RTEMS stuff 
    */
   struct TransmitDescriptor       *next;  /* Circularly-linked list */
   struct mbuf                     *mbufp; /* First mbuf in packet */
-  volatile rtems_unsigned32       *linkp; /* Pointer to un[xxx].link */
+  volatile uint32_t         *linkp; /* Pointer to un[xxx].link */
 };
 typedef struct TransmitDescriptor TransmitDescriptor_t;
 typedef volatile TransmitDescriptor_t *TransmitDescriptorPointer_t;
@@ -378,10 +378,10 @@ typedef volatile TransmitDescriptor_t *TransmitDescriptorPointer_t;
  * receive resource entry corresponds to one correctly-received packet.
  */
 struct ReceiveResource {
-  rtems_unsigned32        buff_ptr_lsw;   /* LSW of RBA address */
-  rtems_unsigned32        buff_ptr_msw;   /* MSW of RBA address */
-  rtems_unsigned32        buff_wc_lsw;    /* LSW of RBA size (16-bit words) */
-  rtems_unsigned32        buff_wc_msw;    /* MSW of RBA size (16-bit words) */
+  uint32_t          buff_ptr_lsw;   /* LSW of RBA address */
+  uint32_t          buff_ptr_msw;   /* MSW of RBA address */
+  uint32_t          buff_wc_lsw;    /* LSW of RBA size (16-bit words) */
+  uint32_t          buff_wc_msw;    /* MSW of RBA size (16-bit words) */
 };
 typedef struct ReceiveResource ReceiveResource_t;
 typedef volatile ReceiveResource_t *ReceiveResourcePointer_t;
@@ -391,13 +391,13 @@ typedef volatile ReceiveResource_t *ReceiveResourcePointer_t;
  * There is one receive descriptor for each packet received.
  */
 struct ReceiveDescriptor {
-  rtems_unsigned32        status;
-  rtems_unsigned32        byte_count;
-  rtems_unsigned32        pkt_lsw;        /* LSW of packet address */
-  rtems_unsigned32        pkt_msw;        /* MSW of packet address */
-  rtems_unsigned32        seq_no;
-  rtems_unsigned32        link;
-  rtems_unsigned32        in_use;
+  uint32_t          status;
+  uint32_t          byte_count;
+  uint32_t          pkt_lsw;        /* LSW of packet address */
+  uint32_t          pkt_msw;        /* MSW of packet address */
+  uint32_t          seq_no;
+  uint32_t          link;
+  uint32_t          in_use;
 
   /*
    * Extra RTEMS stuff 
@@ -409,11 +409,11 @@ typedef struct ReceiveDescriptor ReceiveDescriptor_t;
 typedef volatile ReceiveDescriptor_t *ReceiveDescriptorPointer_t;
 
 typedef struct {
-  rtems_unsigned32  cep;  /* CAM Entry Pointer */
-  rtems_unsigned32  cap0; /* CAM Address Port 0 xx-xx-xx-xx-YY-YY */
-  rtems_unsigned32  cap1; /* CAM Address Port 1 xx-xx-YY-YY-xxxx */
-  rtems_unsigned32  cap2; /* CAM Address Port 2 YY-YY-xx-xx-xx-xx */
-  rtems_unsigned32  ce;
+  uint32_t    cep;  /* CAM Entry Pointer */
+  uint32_t    cap0; /* CAM Address Port 0 xx-xx-xx-xx-YY-YY */
+  uint32_t    cap1; /* CAM Address Port 1 xx-xx-YY-YY-xxxx */
+  uint32_t    cap2; /* CAM Address Port 2 YY-YY-xx-xx-xx-xx */
+  uint32_t    ce;
 } CamDescriptor_t;
 
 typedef volatile CamDescriptor_t *CamDescriptorPointer_t;

@@ -1,15 +1,38 @@
+2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libchip/ide/ata.c, libchip/ide/ata_internal.h,
+	libchip/ide/ide_controller.c, libchip/ide/ide_ctrl_cfg.h,
+	libchip/ide/ide_ctrl_io.h, libchip/network/cs8900.c,
+	libchip/network/dec21140.c, libchip/network/elnk.c,
+	libchip/network/if_fxp.c, libchip/network/open_eth.c,
+	libchip/network/open_eth.h, libchip/network/sonic.c,
+	libchip/network/sonic.h, libchip/rtc/icm7170.c, libchip/rtc/icm7170.h,
+	libchip/rtc/icm7170_reg.c, libchip/rtc/icm7170_reg2.c,
+	libchip/rtc/icm7170_reg4.c, libchip/rtc/icm7170_reg8.c,
+	libchip/rtc/m48t08.c, libchip/rtc/m48t08.h, libchip/rtc/m48t08_reg.c,
+	libchip/rtc/m48t08_reg2.c, libchip/rtc/m48t08_reg4.c,
+	libchip/rtc/m48t08_reg8.c, libchip/rtc/rtc.h, libchip/serial/mc68681.c,
+	libchip/serial/mc68681.h, libchip/serial/mc68681_reg.c,
+	libchip/serial/mc68681_reg2.c, libchip/serial/mc68681_reg4.c,
+	libchip/serial/mc68681_reg8.c, libchip/serial/ns16550.c,
+	libchip/serial/ns16550_p.h, libchip/serial/serial.h,
+	libchip/serial/z85c30.c, libchip/serial/z85c30.h,
+	libchip/serial/z85c30_p.h, libchip/serial/z85c30_reg.c,
+	libchip/shmdr/addlq.c, libchip/shmdr/cnvpkt.c, libchip/shmdr/dump.c,
+	libchip/shmdr/fatal.c, libchip/shmdr/getlq.c, libchip/shmdr/init.c,
+	libchip/shmdr/initlq.c, libchip/shmdr/intr.c, libchip/shmdr/poll.c,
+	libchip/shmdr/send.c, libchip/shmdr/shm_driver.h: Convert to using c99
+	fixed-size types.
+
 2004-03-14	Chris Johns  <chrisj@rtems.org>
 
-	* cs8900.c.bsp, cs8900.h.bsp: Updated the BSP example code.
-
-	* cs8900.c, cs8900.h:
-	Changes made to support the DIMMPC. This is a pc396 target with IO port
-	support.
-	Minor formating clean up.
-	Add documentation to the header file.
-
-	* README.cs8900:
-	The CS8900 driver is documented in the cs8900.h header file.
+	* libchip/network/cs8900.c.bsp, libchip/network/cs8900.h.bsp: Updated
+	the BSP example code.
+	* libchip/network/cs8900.c, libchip/network/cs8900.h: Changes made to
+	support the DIMMPC. This is a pc386 target with IO port support. Minor
+	formating clean up. Add documentation to the header file.
+	* libchip/network/README.cs8900: The CS8900 driver is documented in the
+	cs8900.h header file.
 
 2004-03-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

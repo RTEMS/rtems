@@ -28,7 +28,7 @@ Shm_Envelope_control *Shm_Locked_queue_Get(
 )
 {
   Shm_Envelope_control *tmp_ecb;
-  rtems_unsigned32 tmpfront;
+  uint32_t   tmpfront;
 
   tmp_ecb = NULL;
   Shm_Lock( lq_cb );

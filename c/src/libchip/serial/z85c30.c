@@ -92,8 +92,8 @@ Z85C30_STATIC void z85c30_initialize_port(
   int minor
 )
 {
-  unsigned32      ulCtrlPort;
-  unsigned32      ulBaudDivisor;
+  uint32_t        ulCtrlPort;
+  uint32_t        ulBaudDivisor;
   setRegister_f   setReg;
 
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -137,8 +137,8 @@ Z85C30_STATIC void z85c30_initialize_port(
   );
 
   ulBaudDivisor = Z85C30_Baud( 
-    (unsigned32) Console_Port_Tbl[minor].ulClock,
-    (unsigned32) Console_Port_Tbl[minor].pDeviceParams
+    (uint32_t  ) Console_Port_Tbl[minor].ulClock,
+    (uint32_t  ) Console_Port_Tbl[minor].pDeviceParams
   );
 
   /*
@@ -253,8 +253,8 @@ Z85C30_STATIC int z85c30_close(
 
 Z85C30_STATIC void z85c30_init(int minor)
 {
-  unsigned32       ulCtrlPort;
-  unsigned8        dummy;
+  uint32_t         ulCtrlPort;
+  uint8_t          dummy;
   z85c30_context  *pz85c30Context;
   setRegister_f    setReg;
   getRegister_f    getReg;
@@ -430,11 +430,11 @@ Z85C30_STATIC int z85c30_set_attributes(
   const struct termios *t
 )
 {
-  unsigned32             ulCtrlPort;
-  unsigned32             ulBaudDivisor;
-  unsigned32             wr3;
-  unsigned32             wr4;
-  unsigned32             wr5;
+  uint32_t               ulCtrlPort;
+  uint32_t               ulBaudDivisor;
+  uint32_t               wr3;
+  uint32_t               wr4;
+  uint32_t               wr5;
   int                    baud_requested;
   setRegister_f          setReg;
   rtems_interrupt_level  Irql;
@@ -451,8 +451,8 @@ Z85C30_STATIC int z85c30_set_attributes(
     baud_requested = B9600;              /* default to 9600 baud */
 
   ulBaudDivisor = Z85C30_Baud( 
-    (unsigned32) Console_Port_Tbl[minor].ulClock,
-    (unsigned32) termios_baud_to_number( baud_requested )
+    (uint32_t  ) Console_Port_Tbl[minor].ulClock,
+    (uint32_t  ) termios_baud_to_number( baud_requested )
   );
 
   wr3 = SCC_WR3_RX_EN;
@@ -532,11 +532,11 @@ Z85C30_STATIC int z85c30_set_attributes(
 
 Z85C30_STATIC void z85c30_process(
   int        minor,
-  unsigned8  ucIntPend
+  uint8_t    ucIntPend
 )
 {
-  unsigned32          ulCtrlPort;
-  volatile unsigned8  z85c30_status;
+  uint32_t            ulCtrlPort;
+  volatile uint8_t    z85c30_status;
   unsigned char       cChar;
   setRegister_f       setReg;
   getRegister_f       getReg;
@@ -641,9 +641,9 @@ Z85C30_STATIC rtems_isr z85c30_isr(
 )
 {
   int                 minor;
-  unsigned32          ulCtrlPort;
-  volatile unsigned8  ucIntPend;
-  volatile unsigned8  ucIntPendPort;
+  uint32_t            ulCtrlPort;
+  volatile uint8_t    ucIntPend;
+  volatile uint8_t    ucIntPendPort;
   getRegister_f       getReg;
 
   for (minor=0;minor<Console_Port_Count;minor++) {
@@ -684,7 +684,7 @@ Z85C30_STATIC void z85c30_enable_interrupts(
   int interrupt_mask
 )
 {
-  unsigned32     ulCtrlPort;
+  uint32_t       ulCtrlPort;
   setRegister_f  setReg;
 
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -703,8 +703,8 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
   int minor
 )
 {
-  unsigned32     ulCtrlPort1;
-  unsigned32     ulCtrlPort2;
+  uint32_t       ulCtrlPort1;
+  uint32_t       ulCtrlPort2;
   setRegister_f  setReg;
 
   ulCtrlPort1 = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -748,8 +748,8 @@ Z85C30_STATIC int z85c30_write_support_int(
   const char *buf, 
   int   len)
 {
-  unsigned32     Irql;
-  unsigned32     ulCtrlPort;
+  uint32_t       Irql;
+  uint32_t       ulCtrlPort;
   setRegister_f  setReg;
 
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -791,8 +791,8 @@ Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
   int  minor
 )
 {
-  volatile unsigned8  z85c30_status;
-  unsigned32          ulCtrlPort;
+  volatile uint8_t    z85c30_status;
+  uint32_t            ulCtrlPort;
   getRegister_f       getReg;
 
   ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -852,8 +852,8 @@ Z85C30_STATIC void z85c30_write_polled(
   char  cChar
 )
 {
-  volatile unsigned8 z85c30_status;
-  unsigned32         ulCtrlPort;
+  volatile uint8_t   z85c30_status;
+  uint32_t           ulCtrlPort;
   getRegister_f      getReg;
   setRegister_f      setReg;
 

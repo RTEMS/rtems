@@ -134,7 +134,7 @@ ata_io_data_request(dev_t device, blkdev_request *req)
                                            * ata_devs array
                                            */
     rtems_device_minor_number  ctrl_minor;
-    unsigned8                  dev;
+    uint8_t                    dev;
     
     rel_minor = (rtems_filesystem_dev_minor_t(device)) / 
                 ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE;
@@ -217,15 +217,15 @@ ata_io_data_request(dev_t device, blkdev_request *req)
      */
     if (ATA_DEV_INFO(ctrl_minor, dev).lba_avaible)
     {
-        areq->regs.regs[IDE_REGISTER_LBA0] = (unsigned8)req->start;
-        areq->regs.regs[IDE_REGISTER_LBA1] = (unsigned8)(req->start >> 8);
-        areq->regs.regs[IDE_REGISTER_LBA2] = (unsigned8)(req->start >> 16);
-        areq->regs.regs[IDE_REGISTER_LBA3] |= (unsigned8) (req->start >> 24);
+        areq->regs.regs[IDE_REGISTER_LBA0] = (uint8_t  )req->start;
+        areq->regs.regs[IDE_REGISTER_LBA1] = (uint8_t  )(req->start >> 8);
+        areq->regs.regs[IDE_REGISTER_LBA2] = (uint8_t  )(req->start >> 16);
+        areq->regs.regs[IDE_REGISTER_LBA3] |= (uint8_t  ) (req->start >> 24);
         areq->regs.regs[IDE_REGISTER_LBA3] |= IDE_REGISTER_LBA3_L;
     }
     else
     {
-        unsigned32 count = req->start;
+        uint32_t   count = req->start;
 
         areq->regs.regs[IDE_REGISTER_SECTOR_NUMBER] =
                         (count % ATA_DEV_INFO(ctrl_minor, dev).sectors) + 1;
@@ -237,8 +237,8 @@ ata_io_data_request(dev_t device, blkdev_request *req)
 
         /* now count = number of cylinders */
         count %= ATA_DEV_INFO(ctrl_minor, dev).cylinders;
-        areq->regs.regs[IDE_REGISTER_CYLINDER_LOW] = (unsigned8)count;
-        areq->regs.regs[IDE_REGISTER_CYLINDER_HIGH] = (unsigned8)(count >> 8);
+        areq->regs.regs[IDE_REGISTER_CYLINDER_LOW] = (uint8_t  )count;
+        areq->regs.regs[IDE_REGISTER_CYLINDER_HIGH] = (uint8_t  )(count >> 8);
         areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &= 
                                                 ~IDE_REGISTER_DEVICE_HEAD_L;
     }
@@ -274,7 +274,7 @@ ata_non_data_request(dev_t device, int cmd, void *argp)
                                            * ata_devs array
                                            */
     rtems_device_minor_number  ctrl_minor;
-    unsigned8                  dev;
+    uint8_t                    dev;
     ata_queue_msg_t            msg;    
     
     rel_minor = (rtems_filesystem_dev_minor_t(device)) /
@@ -312,7 +312,7 @@ ata_non_data_request(dev_t device, int cmd, void *argp)
                                                 ATA_COMMAND_SET_MULTIPLE_MODE;
             areq->regs.to_write |= 
                                ATA_REGISTERS_VALUE(IDE_REGISTER_SECTOR_COUNT);
-            areq->regs.regs[IDE_REGISTER_SECTOR_COUNT] = *(unsigned8 *)argp;
+            areq->regs.regs[IDE_REGISTER_SECTOR_COUNT] = *(uint8_t   *)argp;
             break;
         
         default:
@@ -356,7 +356,7 @@ ata_non_data_request(dev_t device, int cmd, void *argp)
         { 
             case ATAIO_SET_MULTIPLE_MODE:
                 ATA_DEV_INFO(ctrl_minor, dev).current_multiple = 
-                                                           *(unsigned8 *)argp;
+                                                           *(uint8_t   *)argp;
                 break;
         
             default:
@@ -391,11 +391,11 @@ static void
 ata_process_request(rtems_device_minor_number ctrl_minor)
 {
     ata_req_t       *areq;
-    unsigned16       byte; /* emphasize that only 8 low bits is meaningful */
+    uint16_t         byte; /* emphasize that only 8 low bits is meaningful */
     ata_queue_msg_t  msg;
-    unsigned8        i, dev;
-    unsigned16       val;
-    unsigned16       data_bs; /* the number of 512-bytes sectors in one 
+    uint8_t          i, dev;
+    uint16_t         val;
+    uint16_t         data_bs; /* the number of 512-bytes sectors in one 
                                * data block 
                                */
     ISR_Level        level;                           
@@ -429,7 +429,7 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
     /* fill in all  necessary registers on the controller */
     for (i=0; i< ATA_MAX_CMD_REG_OFFSET; i++)
     {
-        unsigned32 reg = (1 << i);
+        uint32_t   reg = (1 << i);
         if (areq->regs.to_write & reg)
             ide_controller_write_register(ctrl_minor, i, areq->regs.regs[i]);
     }
@@ -554,7 +554,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
     Chain_Append(&ata_ide_ctrls[ctrl_minor].reqs, &areq->link);
     if (Chain_Has_only_one_node(&ata_ide_ctrls[ctrl_minor].reqs))
     {
-        unsigned16      val;
+        uint16_t        val;
         ata_queue_msg_t msg;
 
 #ifdef DEBUG
@@ -589,7 +589,7 @@ ata_interrupt_handler(rtems_vector_number vec)
 {
     Chain_Node      *the_node = ((Chain_Control *)(&ata_int_vec[vec]))->first;
     ata_queue_msg_t  msg;
-    unsigned16       byte; /* emphasize that only 8 low bits is meaningful */
+    uint16_t         byte; /* emphasize that only 8 low bits is meaningful */
     
     for ( ; !Chain_Is_tail(&ata_int_vec[vec], the_node) ; )
     {
@@ -621,9 +621,9 @@ ata_interrupt_handler(rtems_vector_number vec)
 static inline void
 ata_pio_in_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 {
-    unsigned16      bs, val;
-    unsigned8       dev;
-    unsigned32      min_val;
+    uint16_t        bs, val;
+    uint8_t         dev;
+    uint32_t        min_val;
     ata_queue_msg_t msg;
         
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] & 
@@ -664,9 +664,9 @@ ata_pio_in_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 static inline void
 ata_pio_out_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 {
-    unsigned16      bs, val;
-    unsigned8       dev;
-    unsigned32      min_val;
+    uint16_t        bs, val;
+    uint8_t         dev;
+    uint32_t        min_val;
     ata_queue_msg_t msg;
     
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] & 
@@ -715,11 +715,11 @@ static rtems_task
 ata_queue_task(rtems_task_argument arg)
 {
     ata_queue_msg_t            msg;
-    rtems_unsigned32           size;
+    uint32_t             size;
     ata_req_t                 *areq;
     rtems_device_minor_number  ctrl_minor;
-    unsigned16                 val;
-    unsigned16                 val1;
+    uint16_t                   val;
+    uint16_t                   val1;
     rtems_status_code          rc;
     ISR_Level                  level;
 
@@ -897,13 +897,13 @@ ata_initialize(rtems_device_major_number major,
                rtems_device_minor_number minor_arg, 
                void *args)
 {
-    unsigned32         ctrl_minor;
+    uint32_t           ctrl_minor;
     rtems_status_code  status;
     ata_req_t          areq;
     blkdev_request1    breq;     
-    unsigned8          i, dev = 0;
-    unsigned16        *buffer;
-    unsigned16         ec;
+    uint8_t            i, dev = 0;
+    uint16_t          *buffer;
+    uint16_t           ec;
     char               name[ATA_MAX_NAME_LENGTH];
     dev_t              device;
     ata_int_st_t      *int_st;
@@ -962,7 +962,7 @@ ata_initialize(rtems_device_major_number major,
         return status;
     }    
     
-    buffer = (unsigned16 *)malloc(ATA_SECTOR_SIZE);
+    buffer = (uint16_t   *)malloc(ATA_SECTOR_SIZE);
     if (buffer == NULL)
     {
         rtems_task_delete(ata_task_id);
@@ -1147,10 +1147,10 @@ ata_initialize(rtems_device_major_number major,
             ATA_DEV_INFO(ctrl_minor, dev).lba_avaible = 
                 (CF_LE_W(buffer[ATA_IDENT_WORD_CAPABILITIES]) >> 9) & 0x1;
             ATA_DEV_INFO(ctrl_minor, dev).max_multiple = 
-                (unsigned8) (CF_LE_W(buffer[ATA_IDENT_WORD_RW_MULT]));
+                (uint8_t  ) (CF_LE_W(buffer[ATA_IDENT_WORD_RW_MULT]));
             ATA_DEV_INFO(ctrl_minor, dev).current_multiple = 
                 (CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS]) & 0x100) ? 
-                (unsigned8)(CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS])) :
+                (uint8_t  )(CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS])) :
                  0;
 
             if ((CF_LE_W(buffer[ATA_IDENT_WORD_FIELD_VALIDITY]) & 
@@ -1236,10 +1236,10 @@ static void
 ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
                                   ata_req_t                 *areq)
 {
-    unsigned16         byte;/* emphasize that only 8 low bits is meaningful */
-    unsigned8          i, dev;
-    unsigned16         val, val1;
-    unsigned16         data_bs; /* the number of 512 bytes sectors into one 
+    uint16_t           byte;/* emphasize that only 8 low bits is meaningful */
+    uint8_t            i, dev;
+    uint16_t           val, val1;
+    uint16_t           data_bs; /* the number of 512 bytes sectors into one 
                                  * data block 
                                  */
     assert(areq);
@@ -1260,7 +1260,7 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
 
     for (i=0; i< ATA_MAX_CMD_REG_OFFSET; i++)
     {
-        unsigned32 reg = (1 << i);
+        uint32_t   reg = (1 << i);
         if (areq->regs.to_write & reg)
             ide_controller_write_register(ctrl_minor, i, 
                                           areq->regs.regs[i]);

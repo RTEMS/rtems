@@ -20,7 +20,7 @@
 #ifndef _MC68681_MULTIPLIER
 #define _MC68681_MULTIPLIER 1
 #define _MC68681_NAME(_X) _X
-#define _MC68681_TYPE unsigned8
+#define _MC68681_TYPE uint8_t  
 #endif
 
 #define CALCULATE_REGISTER_ADDRESS( _base, _reg ) \
@@ -30,9 +30,9 @@
  *  MC68681 Get Register Routine
  */
 
-unsigned8 _MC68681_NAME(mc68681_get_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t   _MC68681_NAME(mc68681_get_register)(
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 )
 {
   _MC68681_TYPE *port;
@@ -47,9 +47,9 @@ unsigned8 _MC68681_NAME(mc68681_get_register)(
  */
 
 void  _MC68681_NAME(mc68681_set_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 )
 {
   _MC68681_TYPE *port;

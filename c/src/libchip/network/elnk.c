@@ -204,12 +204,12 @@ extern void Wait_X_ms( unsigned int timeToWait );
 #define rtems_bsp_delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE
 
-inline void st_le32(volatile unsigned32 *addr, unsigned32 value)
+inline void st_le32(volatile uint32_t   *addr, uint32_t   value)
 {
   *(addr)=value ;
 }
 
-inline unsigned32 ld_le32(volatile unsigned32 *addr)
+inline uint32_t   ld_le32(volatile uint32_t   *addr)
 {
   return(*addr);
 }
@@ -879,10 +879,10 @@ static struct xl_type xl_devs[] = {
 struct RXMD 
 {
       /* used by hardware */
-      volatile unsigned32 next;
-      volatile unsigned32 status;
-      volatile unsigned32 addr;
-      volatile unsigned32 length;
+      volatile uint32_t   next;
+      volatile uint32_t   status;
+      volatile uint32_t   addr;
+      volatile uint32_t   length;
       /* used by software */
       struct mbuf       *mbuf;        /* scratch variable used in the tx ring */
       struct RXMD       *next_md;
@@ -900,15 +900,15 @@ struct RXMD
 
 struct tfrag
 {
-      volatile unsigned32 addr;
-      volatile unsigned32 length;
+      volatile uint32_t   addr;
+      volatile uint32_t   length;
 } __attribute__ ((packed));
 
 struct TXMD 
 {
       /* used by hardware */
-      volatile unsigned32 next;
-      volatile unsigned32 status;
+      volatile uint32_t   next;
+      volatile uint32_t   status;
       struct tfrag        txfrags[NUM_FRAGS];
       /* used by software */
       struct mbuf       *mbuf;        /* scratch variable used in the tx ring */
@@ -940,7 +940,7 @@ struct elnk_softc
       struct TXMD      *tx_ring, *last_tx_md, *last_txchain_head;
 
       rtems_id                  stat_timer_id;
-      unsigned32                stats_update_ticks;
+      uint32_t                  stats_update_ticks;
 
       struct xl_stats           xl_stats;
 
@@ -2047,7 +2047,7 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
 
 #if 0
    {
-      unsigned16 intstatus, intenable, indenable;
+      uint16_t   intstatus, intenable, indenable;
 
       intstatus = CSR_READ_2(sc, XL_STATUS );
 
@@ -2132,7 +2132,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
        */
       for(i=0 ; i<sc->numRxbuffers; i++)
       {
-         if( ((unsigned32)&sc->rx_ring[i] & 0x7) )
+         if( ((uint32_t  )&sc->rx_ring[i] & 0x7) )
          {
             rtems_panic ("etherlink : unit elnk%d rx ring entry %d not aligned to 8 bytes\n", sc->xl_unit, i );
          }
@@ -2151,8 +2151,8 @@ elnk_initialize_hardware (struct elnk_softc *sc)
          sc->rx_ring[i].mbuf = m;
 
          st_le32( &sc->rx_ring[i].status, 0);
-         st_le32( &sc->rx_ring[i].next, (unsigned32)phys_to_bus( nxtmd ));
-         st_le32( &sc->rx_ring[i].addr, (unsigned32)phys_to_bus( mtod(m, void *) ));
+         st_le32( &sc->rx_ring[i].next, (uint32_t  )phys_to_bus( nxtmd ));
+         st_le32( &sc->rx_ring[i].addr, (uint32_t  )phys_to_bus( mtod(m, void *) ));
          st_le32( &sc->rx_ring[i].length, XL_LAST_FRAG | XL_PACKET_SIZE );
       }
       sc->curr_rx_md = &sc->rx_ring[0];
@@ -2181,7 +2181,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
 
       for(i=0 ; i<sc->numTxbuffers; i++)
       {
-         if( ((unsigned32)&sc->tx_ring[i] & 0x7) )
+         if( ((uint32_t  )&sc->tx_ring[i] & 0x7) )
          {
             rtems_panic ("etherlink : unit elnk%d tx ring entry %d not aligned to 8 bytes\n", sc->xl_unit, i );
          }
@@ -2327,7 +2327,7 @@ elnk_rxDaemon (void *arg)
                         m->m_pkthdr.rcvif = ifp;
                         rmd->mbuf   = m;
                         st_le32( &rmd->status, 0 );
-                        st_le32( &rmd->addr, (unsigned32)phys_to_bus(mtod(m, void *)) );
+                        st_le32( &rmd->addr, (uint32_t  )phys_to_bus(mtod(m, void *)) );
                      }
                      else
                      {
@@ -2415,7 +2415,7 @@ elnk_txDaemon (void *arg)
                   */
                   {
                      struct TXMD *chainhead, *chaintail;
-                     unsigned32  esize;
+                     uint32_t    esize;
 
                      if( rtems_message_queue_receive( chainRecoveryQueue, &chainhead, &esize,
                                                       RTEMS_NO_WAIT, 0) == RTEMS_SUCCESSFUL )
@@ -2475,7 +2475,7 @@ elnk_txDaemon (void *arg)
                      for(i=0; i< NUM_FRAGS; i++)
                      {
                         st_le32( &nextmd->txfrags[i].length, ((m->m_next)?0:XL_LAST_FRAG) | ( m->m_len & XL_TXSTAT_LENMASK) );
-                        st_le32( &nextmd->txfrags[i].addr, (unsigned32)phys_to_bus( m->m_data ) );
+                        st_le32( &nextmd->txfrags[i].addr, (uint32_t  )phys_to_bus( m->m_data ) );
                         if ((m = m->m_next) == NULL)
                            break;
                      }
@@ -2491,7 +2491,7 @@ elnk_txDaemon (void *arg)
                   {
                      char *pkt = bus_to_phys( ld_le32( &nextmd->txfrags[i].addr )), *delim;
                      int  i;
-                     printk("unit %d queued  pkt (%08x) ", sc->xl_unit, (unsigned32)pkt );
+                     printk("unit %d queued  pkt (%08x) ", sc->xl_unit, (uint32_t  )pkt );
                      for(delim="", i=0; i < sizeof(struct ether_header); i++, delim=":")
                         printk("%s%02x", delim, (char) pkt[i] ); 
                      printk("\n");
@@ -2522,7 +2522,7 @@ elnk_txDaemon (void *arg)
                   else
                   {
                      /* hook this packet to the previous one */
-                     st_le32( &lastmd->next, (unsigned32)phys_to_bus( nextmd ));
+                     st_le32( &lastmd->next, (uint32_t  )phys_to_bus( nextmd ));
                   }
 
                   ++chainCount;
@@ -2574,7 +2574,7 @@ elnk_txDaemon (void *arg)
                   printk("unit %d queued %d pkts, lastpkt status %08X\n", 
                          sc->xl_unit, 
                          chainCount, 
-                         (unsigned32)ld_le32( &lastmd->status) );
+                         (uint32_t  )ld_le32( &lastmd->status) );
 #endif
 
                   if( sc->tx_idle == 0 && CSR_READ_4(sc, XL_DOWNLIST_PTR) == 0 ) 
@@ -2657,7 +2657,7 @@ elnk_init (void *arg)
       sc->tx_idle = -1;
 
       {
-         unsigned32 cr,sr;
+         uint32_t   cr,sr;
 
          xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_RESET );
    
@@ -2927,7 +2927,7 @@ elnk_stop (struct elnk_softc *sc)
    */
    {
       struct TXMD *chainhead;
-      unsigned32  esize;
+      uint32_t    esize;
 
       while( rtems_message_queue_receive( chainRecoveryQueue, &chainhead, &esize,
                                           RTEMS_NO_WAIT, 0) == RTEMS_SUCCESSFUL );
@@ -3329,7 +3329,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    */
    pci_write_config_word(pbus, pdev, pfun,
                          PCI_COMMAND,
-                         (unsigned16)( PCI_COMMAND_IO | 
+                         (uint16_t  )( PCI_COMMAND_IO | 
                                        PCI_COMMAND_MASTER | 
                                        PCI_COMMAND_INVALIDATE | 
                                        PCI_COMMAND_WAIT ) );
@@ -3340,7 +3340,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                          PCI_BASE_ADDRESS_0,
                          &lvalue);
 
-   sc->ioaddr = (unsigned32)lvalue & PCI_BASE_ADDRESS_IO_MASK;
+   sc->ioaddr = (uint32_t  )lvalue & PCI_BASE_ADDRESS_IO_MASK;
    /*
    ** Store the interrupt name, we'll use it later when we initialize
    ** the board.
@@ -3360,8 +3360,8 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    */
 
    {
-      unsigned8 pci_latency;
-      unsigned8 new_latency = 248;
+      uint8_t   pci_latency;
+      uint8_t   new_latency = 248;
 
       /* Check the PCI latency value.  On the 3c590 series the latency timer
          must be set to the maximum value to avoid data corruption that occurs

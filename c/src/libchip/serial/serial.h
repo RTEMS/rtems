@@ -22,11 +22,11 @@
  *  Types for get and set register routines
  */
 
-typedef unsigned8 (*getRegister_f)(unsigned32 port, unsigned8 register);
+typedef uint8_t   (*getRegister_f)(uint32_t   port, uint8_t   register);
 typedef void      (*setRegister_f)(
-                            unsigned32 port, unsigned8 reg, unsigned8 value);
-typedef unsigned8 (*getData_f)(unsigned32 port);
-typedef void      (*setData_f)(unsigned32 port, unsigned8 value);
+                            uint32_t   port, uint8_t   reg, uint8_t   value);
+typedef uint8_t   (*getData_f)(uint32_t   port);
+typedef void      (*setData_f)(uint32_t   port, uint8_t   value);
 
 typedef struct _console_fns {
   boolean (*deviceProbe)(int minor);
@@ -120,17 +120,17 @@ typedef struct _console_tbl {
   console_fns   *pDeviceFns;
   boolean      (*deviceProbe)(int minor);
   console_flow  *pDeviceFlow;
-  unsigned32     ulMargin;
-  unsigned32     ulHysteresis;
+  uint32_t       ulMargin;
+  uint32_t       ulHysteresis;
   void          *pDeviceParams;
-  unsigned32     ulCtrlPort1;
-  unsigned32     ulCtrlPort2;
-  unsigned32     ulDataPort;
+  uint32_t       ulCtrlPort1;
+  uint32_t       ulCtrlPort2;
+  uint32_t       ulDataPort;
   getRegister_f  getRegister;
   setRegister_f  setRegister;
   getData_f      getData;
   setData_f      setData;
-  unsigned32     ulClock;
+  uint32_t       ulClock;
   unsigned int   ulIntVector;
 } console_tbl;
 

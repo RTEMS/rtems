@@ -103,10 +103,10 @@ extern "C" {
  */
 void
 ide_controller_read_data_block(rtems_device_minor_number  minor,
-                               unsigned16                 block_size,
+                               uint16_t                   block_size,
                                blkdev_sg_buffer          *bufs,
-                               rtems_unsigned32          *cbuf,
-                               rtems_unsigned32          *pos);
+                               uint32_t            *cbuf,
+                               uint32_t            *pos);
 
 /*
  * ide_controller_write_data_block --
@@ -124,10 +124,10 @@ ide_controller_read_data_block(rtems_device_minor_number  minor,
  */
 void
 ide_controller_write_data_block(rtems_device_minor_number  minor,
-                                unsigned16                 block_size,
+                                uint16_t                   block_size,
                                 blkdev_sg_buffer          *bufs,
-                               rtems_unsigned32           *cbuf,
-                               rtems_unsigned32           *pos);
+                               uint32_t             *cbuf,
+                               uint32_t             *pos);
 
 /*
  * ide_controller_read_register --
@@ -144,7 +144,7 @@ ide_controller_write_data_block(rtems_device_minor_number  minor,
 void
 ide_controller_read_register(rtems_device_minor_number  minor,
                              int                        reg, 
-                             unsigned16                *value);
+                             uint16_t                  *value);
 
 /*
  * ide_controller_write_register --
@@ -160,7 +160,7 @@ ide_controller_read_register(rtems_device_minor_number  minor,
  */
 void
 ide_controller_write_register(rtems_device_minor_number minor,
-                              int reg, unsigned16 value);
+                              int reg, uint16_t   value);
 
 /*
  * ide_controller_config_io_speed --
@@ -175,7 +175,7 @@ ide_controller_write_register(rtems_device_minor_number minor,
  *     error occured
  */
 rtems_status_code 
-ide_controller_config_io_speed(int minor, unsigned8 modes_avaible);
+ide_controller_config_io_speed(int minor, uint8_t   modes_avaible);
 
 #ifdef __cplusplus
 }

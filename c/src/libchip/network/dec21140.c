@@ -170,9 +170,9 @@
 /* message descriptor entry */
 struct MD {
     /* used by hardware */
-    volatile unsigned32 status;
-    volatile unsigned32 counts;
-    volatile unsigned32 buf1, buf2;  
+    volatile uint32_t   status;
+    volatile uint32_t   counts;
+    volatile uint32_t   buf1, buf2;  
     /* used by software */
     volatile struct mbuf *m;
     volatile struct MD *next;
@@ -243,12 +243,12 @@ extern void Wait_X_ms( unsigned int timeToWait );
 #define rtems_bsp_delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE
 
-inline void st_le32(volatile unsigned32 *addr, unsigned32 value)
+inline void st_le32(volatile uint32_t   *addr, uint32_t   value)
 {
   *(addr)=value ;
 }
 
-inline unsigned32 ld_le32(volatile unsigned32 *addr)
+inline uint32_t   ld_le32(volatile uint32_t   *addr)
 {
   return(*addr);
 }
@@ -425,10 +425,10 @@ static int dec21140IsOn(const rtems_irq_connect_data* irq)
 static rtems_isr
 dec21140Enet_interrupt_handler ( struct dec21140_softc *sc )
 {
-   volatile unsigned32    *tbase;
-   unsigned32             status;
+   volatile uint32_t      *tbase;
+   uint32_t               status;
 
-   tbase = (unsigned32 *)(sc->base);
+   tbase = (uint32_t   *)(sc->base);
 
    /*
     * Read status
@@ -1190,7 +1190,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 #if defined(__PPC__)
    pci_write_config_word(pbus, pdev, pfun,
                          PCI_COMMAND,
-                         (unsigned16) ( PCI_COMMAND_MEMORY |
+                         (uint16_t  ) ( PCI_COMMAND_MEMORY |
                                         PCI_COMMAND_MASTER | 
                                         PCI_COMMAND_INVALIDATE | 
                                         PCI_COMMAND_WAIT |

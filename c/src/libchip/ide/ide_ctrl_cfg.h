@@ -38,29 +38,29 @@ typedef enum {
 typedef struct ide_ctrl_fns_s {
     boolean           (*ctrl_probe)(int minor); /* probe routine */
     void              (*ctrl_initialize)(int minor);
-    int               (*ctrl_control)(int minor, unsigned32 command, 
+    int               (*ctrl_control)(int minor, uint32_t   command, 
                                       void *arg);
     /*
      * Functions which allow read/write registers of a particular controller.
      * (these functions may be used from ide_controller_read_register, 
      * ide_controller_write_register)
      */
-    void    (*ctrl_reg_read)(int minor, int regist, unsigned16 *value);
-    void    (*ctrl_reg_write)(int minor, int regist, unsigned16 value);
+    void    (*ctrl_reg_read)(int minor, int regist, uint16_t   *value);
+    void    (*ctrl_reg_write)(int minor, int regist, uint16_t   value);
     
     /* 
      * The function allows to escape overhead for read/write register 
      * functions calls
      */
-    void  (*ctrl_read_block)(int minor, unsigned16 block_size, 
-                             blkdev_sg_buffer *bufs, rtems_unsigned32 *cbuf,
-                             rtems_unsigned32 *pos);
-    void  (*ctrl_write_block)(int minor, unsigned16 block_size,
-                              blkdev_sg_buffer *bufs, rtems_unsigned32 *cbuf,
-                              rtems_unsigned32 *pos);
+    void  (*ctrl_read_block)(int minor, uint16_t   block_size, 
+                             blkdev_sg_buffer *bufs, uint32_t   *cbuf,
+                             uint32_t   *pos);
+    void  (*ctrl_write_block)(int minor, uint16_t   block_size,
+                              blkdev_sg_buffer *bufs, uint32_t   *cbuf,
+                              uint32_t   *pos);
     
     rtems_status_code (*ctrl_config_io_speed)(int minor, 
-                                              unsigned8 modes_available);
+                                              uint8_t   modes_available);
 } ide_ctrl_fns_t;
 
 /* 
@@ -72,10 +72,10 @@ typedef struct ide_controller_bsp_table_s {
     ide_ctrl_devs_t      type;  /* chip type */
     ide_ctrl_fns_t      *fns;   /* pointer to the set of driver routines */
     boolean              (*probe)(int minor); /* general probe routine */
-    unsigned8            status; /* initialized/non initialized. Should be set 
+    uint8_t              status; /* initialized/non initialized. Should be set 
                                   * to zero by static initialization  
                                   */
-    unsigned32           port1; /* port number for the port of the device */
+    uint32_t             port1; /* port number for the port of the device */
     rtems_boolean        int_driven; /* interrupt/poll driven */
     rtems_vector_number  int_vec; /* the interrupt vector of the device */
     void                *params;  /* contains either device specific data or a 

@@ -50,24 +50,24 @@ extern console_flow z85c30_flow_DTRCTS;
  * Default register access routines
  */
 
-unsigned8 z85c30_get_register(   /* registers are byte-wide */
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t   z85c30_get_register(   /* registers are byte-wide */
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 );
 
 void z85c30_set_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 );
 
-unsigned8 z85c30_get_data(
-  unsigned32  ulDataPort
+uint8_t   z85c30_get_data(
+  uint32_t    ulDataPort
 );
 
 void z85c30_set_data(
-  unsigned32  ulDataPort,
-  unsigned8   ucData
+  uint32_t    ulDataPort,
+  uint8_t     ucData
 );
 
 #ifdef __cplusplus

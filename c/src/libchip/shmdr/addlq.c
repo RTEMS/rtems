@@ -26,7 +26,7 @@ void Shm_Locked_queue_Add(
   Shm_Envelope_control     *ecb
 )
 {
-  rtems_unsigned32 index;
+  uint32_t   index;
 
   ecb->next  = Shm_Locked_queue_End_of_list;
   ecb->queue = lq_cb->owner;
