@@ -31,10 +31,6 @@ RTEMS_CHECK_POSIX_API(RTEMS_BSP)
 # If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
 if test "$RTEMS_USE_MACROS" = "yes"; then
   INLINEdir="macros"
-  if test "$HAS_POSIX_API" = "yes"; then
-    # The problem is that there is currently no code in posix/macros :)
-    AC_MSG_ERROR(Macros are not implemented for the POSIX API)
-  fi
 else
   INLINEdir="inline"
 fi
@@ -48,12 +44,6 @@ RTEMS_CHECK_NEWLIB
 ## Refuse to build if bsp does not support libposix
 if test "$HAS_POSIX_API" != "yes"; then
 AC_MSG_ERROR([BSP $RTEMS_BSP does not support libposix])
-fi
-
-# If RTEMS macros are enabled, then use them.  Otherwise, refuse to build
-if test "$RTEMS_USE_MACROS" = "yes"; then
-# The problem is that there is currently no code in posix/macros :)
-AC_MSG_ERROR(Macros are not implemented for the POSIX API)
 fi
 
 # Explicitly list all Makefiles here

@@ -1,3 +1,16 @@
+2000-12-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Added macro support to POSIX API.  This is known to compile.
+	* macros/rtems/posix/cond.inl, macros/rtems/posix/intr.inl,
+	macros/rtems/posix/key.inl, macros/rtems/posix/mqueue.inl,
+	macros/rtems/posix/mutex.inl, macros/rtems/posix/priority.inl,
+	macros/rtems/posix/pthread.inl, macros/rtems/posix/semaphore.inl,
+	macros/rtems/posix/timer.inl: New files.
+	* configure.in: Removed error check for enabling macros.
+	* rtems/posix/mutex.h: #if 0'ed out prototypes for inlined routines
+	since you cannot have prototypes for macros.
+	* macros/rtems/posix/Makefile.am: Added files.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* inline/rtems/posix/mqueue.inl: Removed explicit dependency on abs().

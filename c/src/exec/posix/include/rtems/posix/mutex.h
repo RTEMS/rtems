@@ -82,6 +82,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
   POSIX_Mutex_Control *the_mutex
 );
  
+#if 0
 /*
  *  _POSIX_Mutex_Get
  *
@@ -112,6 +113,7 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
 RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
   POSIX_Mutex_Control *the_mutex
 );
+#endif
 
 /*
  *  _POSIX_Mutex_Lock_support
