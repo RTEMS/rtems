@@ -19,14 +19,6 @@
 
 /*PAGE
  *
- *  RTEMS_INTERRUPT_LEVEL
- */
-
-#define RTEMS_INTERRUPT_LEVEL( _mode_set ) \
-  ( (_mode_set) & RTEMS_INTERRUPT_MASK )
-
-/*PAGE
- *
  *  _Modes_Mask_changed
  *
  */

@@ -19,6 +19,11 @@
 /*PAGE
  *
  *  _Event_sets_Is_empty
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if on events are posted in the event_set,
+ *  and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Event_sets_Is_empty(
@@ -31,6 +36,11 @@ STATIC INLINE boolean _Event_sets_Is_empty(
 /*PAGE
  *
  *  _Event_sets_Post
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine posts the given new_events into the event_set
+ *  passed in.  The result is returned to the user in event_set.
  */
 
 STATIC INLINE void _Event_sets_Post(
@@ -44,6 +54,11 @@ STATIC INLINE void _Event_sets_Post(
 /*PAGE
  *
  *  _Event_sets_Get
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the events in event_condition which are
+ *  set in event_set.
  */
 
 STATIC INLINE rtems_event_set _Event_sets_Get(
@@ -57,6 +72,11 @@ STATIC INLINE rtems_event_set _Event_sets_Get(
 /*PAGE
  *
  *  _Event_sets_Clear
+ *
+ *  DESCRIPTION:
+ *
+ *  This function removes the events in mask from the event_set
+ *  passed in.  The result is returned to the user in event_set.
  */
 
 STATIC INLINE rtems_event_set _Event_sets_Clear(

@@ -145,62 +145,9 @@ rtems_status_code rtems_port_internal_to_external(
   void       **external
 );
 
-/*
- *  _Dual_ported_memory_Allocate
- *
- *  DESCRIPTION:
- *
- *  This routine allocates a port control block from the inactive chain
- *  of free port control blocks.
- */
-
-STATIC INLINE Dual_ported_memory_Control
-  *_Dual_ported_memory_Allocate ( void );
-
-/*
- *  _Dual_ported_memory_Free
- *
- *  DESCRIPTION:
- *
- *  This routine frees a port control block to the inactive chain
- *  of free port control blocks.
- */
-
-STATIC INLINE void _Dual_ported_memory_Free (
-   Dual_ported_memory_Control *the_port
-);
-
-/*
- *  _Dual_ported_memory_Get
- *
- *  DESCRIPTION:
- *
- *  This function maps port IDs to port control blocks.  If ID
- *  corresponds to a local port, then it returns the_port control
- *  pointer which maps to ID and location is set to OBJECTS_LOCAL.
- *  Global ports are not supported, thus if ID  does not map to a
- *  local port, location is set to OBJECTS_ERROR and the_port is
- *  undefined.
- */
-
-STATIC INLINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-);
-
-/*
- *  _Dual_ported_memory_Is_null
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_port is NULL and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Dual_ported_memory_Is_null(
-  Dual_ported_memory_Control *the_port
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/dpmem.inl>
+#endif
 
 #ifdef __cplusplus
 }

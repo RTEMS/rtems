@@ -77,62 +77,9 @@ typedef unsigned32 rtems_event_set;
 
 #define EVENT_SETS_NONE_PENDING 0
 
-/*
- *  _Event_sets_Is_empty
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if on events are posted in the event_set,
- *  and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Event_sets_Is_empty(
-  rtems_event_set the_event_set
-);
-
-/*
- *  _Event_sets_Post
- *
- *  DESCRIPTION:
- *
- *  This routine posts the given new_events into the event_set
- *  passed in.  The result is returned to the user in event_set.
- */
-
-STATIC INLINE void _Event_sets_Post(
-  rtems_event_set  the_new_events,
-  rtems_event_set *the_event_set
-);
-
-/*
- *  _Event_sets_Get
- *
- *  DESCRIPTION:
- *
- *  This function returns the events in event_condition which are
- *  set in event_set.
- */
-
-STATIC INLINE rtems_event_set _Event_sets_Get(
-  rtems_event_set the_event_set,
-  rtems_event_set the_event_condition
-);
-
-/*
- *  _Event_sets_Clear
- *
- *  DESCRIPTION:
- *
- *  This function removes the events in mask from the event_set
- *  passed in.  The result is returned to the user in event_set.
- */
-
-STATIC INLINE rtems_event_set _Event_sets_Clear(
- rtems_event_set the_event_set,
- rtems_event_set the_mask
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/eventset.inl>
+#endif
 
 #ifdef __cplusplus
 }

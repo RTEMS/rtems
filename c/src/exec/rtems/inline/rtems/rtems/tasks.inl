@@ -21,6 +21,10 @@
  *
  *  _RTEMS_tasks_Allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a task control block from
+ *  the inactive chain of free task control blocks.
  */
 
 STATIC INLINE Thread_Control *_RTEMS_tasks_Allocate( void )
@@ -32,6 +36,10 @@ STATIC INLINE Thread_Control *_RTEMS_tasks_Allocate( void )
  *
  *  _RTEMS_tasks_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees a task control block to the
+ *  inactive chain of free task control blocks.
  */
 
 STATIC INLINE void _RTEMS_tasks_Free (
@@ -47,6 +55,10 @@ STATIC INLINE void _RTEMS_tasks_Free (
 /*PAGE
  *
  *  _RTEMS_tasks_Priority_to_Core
+ *
+ *  DESCRIPTION:
+ *
+ *  This function converts an RTEMS API priority into a core priority.
  */
  
 STATIC INLINE Priority_Control _RTEMS_tasks_Priority_to_Core(
@@ -60,6 +72,10 @@ STATIC INLINE Priority_Control _RTEMS_tasks_Priority_to_Core(
  *
  *  _RTEMS_tasks_Priority_is_valid
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_priority is a valid user task priority
+ *  and FALSE otherwise.
  */
  
 STATIC INLINE boolean _RTEMS_tasks_Priority_is_valid (

@@ -19,20 +19,12 @@
 
 /*PAGE
  *
- *  RTEMS_INTERRUPT_LEVEL
- */
-
-STATIC INLINE unsigned32 RTEMS_INTERRUPT_LEVEL (
-  Modes_Control mode_set
-)
-{
-  return mode_set & RTEMS_INTERRUPT_MASK;
-}
-
-/*PAGE
- *
  *  _Modes_Mask_changed
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if any of the mode flags in mask
+ *  are set in mode_set, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Modes_Mask_changed (
@@ -47,6 +39,10 @@ STATIC INLINE boolean _Modes_Mask_changed (
  *
  *  _Modes_Is_asr_disabled
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if mode_set indicates that Asynchronous
+ *  Signal Processing is disabled, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Modes_Is_asr_disabled (
@@ -60,6 +56,10 @@ STATIC INLINE boolean _Modes_Is_asr_disabled (
  *
  *  _Modes_Is_preempt
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if mode_set indicates that preemption
+ *  is enabled, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Modes_Is_preempt (
@@ -73,6 +73,10 @@ STATIC INLINE boolean _Modes_Is_preempt (
  *
  *  _Modes_Is_timeslice
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if mode_set indicates that timeslicing
+ *  is enabled, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Modes_Is_timeslice (
@@ -86,6 +90,9 @@ STATIC INLINE boolean _Modes_Is_timeslice (
  *
  *  _Modes_Get_interrupt_level
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the interrupt level portion of the mode_set.
  */
 
 STATIC INLINE ISR_Level _Modes_Get_interrupt_level (
@@ -99,6 +106,10 @@ STATIC INLINE ISR_Level _Modes_Get_interrupt_level (
  *
  *  _Modes_Set_interrupt_level
  *
+ *  DESCRIPTION:
+ *
+ *  This routine sets the current interrupt level to that specified
+ *  in the mode_set.
  */
 
 STATIC INLINE void _Modes_Set_interrupt_level (
@@ -112,6 +123,12 @@ STATIC INLINE void _Modes_Set_interrupt_level (
  *
  *  _Modes_Change
  *
+ *  DESCRIPTION:
+ *
+ *  This routine changes the modes in old_mode_set indicated by
+ *  mask to the requested values in new_mode_set.  The resulting
+ *  mode set is returned in out_mode_set and the modes that changed
+ *  is returned in changed.
  */
 
 STATIC INLINE void _Modes_Change (

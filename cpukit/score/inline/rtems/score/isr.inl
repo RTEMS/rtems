@@ -21,6 +21,12 @@
  *
  *  _ISR_Is_in_progress
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the processor is currently servicing
+ *  and interrupt and FALSE otherwise.   A return value of TRUE indicates
+ *  that the caller is an interrupt service routine, NOT a thread.  The
+ *  directives available to an interrupt service routine are restricted.
  */
 
 STATIC INLINE boolean _ISR_Is_in_progress( void )
@@ -32,6 +38,10 @@ STATIC INLINE boolean _ISR_Is_in_progress( void )
  *
  *  _ISR_Is_vector_number_valid
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the vector is a valid vector number
+ *  for this processor and FALSE otherwise.
  */
 
 STATIC INLINE boolean _ISR_Is_vector_number_valid (
@@ -45,6 +55,11 @@ STATIC INLINE boolean _ISR_Is_vector_number_valid (
  *
  *  _ISR_Is_valid_user_handler
  *
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if handler is the entry point of a valid
+ *  use interrupt service routine and FALSE otherwise.
  */
 
 STATIC INLINE boolean _ISR_Is_valid_user_handler (

@@ -21,6 +21,9 @@
  *
  *  rtems_is_name_valid
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the name is valid, and FALSE otherwise.
  */
 
 STATIC INLINE rtems_boolean rtems_is_name_valid (
@@ -34,6 +37,10 @@ STATIC INLINE rtems_boolean rtems_is_name_valid (
  *
  *  rtems_name_to_characters
  *
+ *  DESCRIPTION:
+ *
+ *  This function breaks the object name into the four component
+ *  characters C1, C2, C3, and C4.
  */
 
 STATIC INLINE void rtems_name_to_characters(

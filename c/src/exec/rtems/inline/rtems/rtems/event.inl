@@ -19,6 +19,10 @@
 
 /*
  *  Event_Manager_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this manager.
  */
 
 STATIC INLINE void _Event_Manager_initialization( void )

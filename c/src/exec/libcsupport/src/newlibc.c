@@ -39,6 +39,7 @@
  *
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <libcsupport.h>
 #include <stdlib.h>             /* for free() */

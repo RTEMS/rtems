@@ -158,85 +158,9 @@ void _CORE_mutex_Flush(
   unsigned32                  status
 );
  
-/*
- *  _CORE_mutex_Is_locked
- *
- *  DESCRIPTION:
- *
- *  This routine returns TRUE if the mutex specified is locked and FALSE
- *  otherwise.
- */
- 
-STATIC INLINE boolean _CORE_mutex_Is_locked(
-  CORE_mutex_Control  *the_mutex
-);
-
-/*
- *  _CORE_mutex_Is_fifo
- *
- *  DESCRIPTION:
- *
- *  This routine returns TRUE if the mutex's wait discipline is FIFO and FALSE
- *  otherwise.
- */
- 
-STATIC INLINE boolean _CORE_mutex_Is_fifo(
-  CORE_mutex_Attributes *the_attribute
-);
-
-/*
- *  _CORE_mutex_Is_priority
- *
- *  DESCRIPTION:
- *
- *  This routine returns TRUE if the mutex's wait discipline is PRIORITY and
- *  FALSE otherwise.
- */
-
-STATIC INLINE boolean _CORE_mutex_Is_priority(
-  CORE_mutex_Attributes *the_attribute
-);
-
-/*
- *  _CORE_mutex_Is_inherit_priority
- *
- *  DESCRIPTION:
- *
- *  This routine returns TRUE if the mutex's wait discipline is
- *  INHERIT_PRIORITY and FALSE otherwise.
- */
-
-STATIC INLINE boolean _CORE_mutex_Is_inherit_priority(
-  CORE_mutex_Attributes *the_attribute
-);
-
-/*
- *  _CORE_mutex_Is_priority_ceiling
- *
- *  DESCRIPTION:
- *
- *  This routine returns TRUE if the mutex's wait discipline is
- *  PRIORITY_CEILING and FALSE otherwise.
- */
-
-STATIC INLINE boolean _CORE_mutex_Is_priority_ceiling(
-  CORE_mutex_Attributes *the_attribute
-);
-
-/*
- *  _CORE_mutex_Is_nesting_allowed
- *
- *  DESCRIPTION:
- *
- *  This routine returns TRUE if the mutex allows a task to obtain a
- *  semaphore more than once and nest.
- */
- 
-STATIC INLINE boolean _CORE_mutex_Is_nesting_allowed(
-  CORE_mutex_Attributes *the_attribute
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/coremutex.inl>
+#endif
 
 #ifdef __cplusplus
 }

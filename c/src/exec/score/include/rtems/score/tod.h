@@ -205,50 +205,6 @@ Watchdog_Interval _TOD_To_seconds(
 );
 
 /*
- *  _TOD_Is_set
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the application has set the current
- *  time of day, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _TOD_Is_set( void );
-
-/*
- *  _TOD_Tickle_ticks
- *
- *  DESCRIPTION:
- *
- *  This routine increments the ticks field of the current time of
- *  day at each clock tick.
- */
-
-STATIC INLINE void _TOD_Tickle_ticks( void );
-
-/*
- *  _TOD_Deactivate
- *
- *  DESCRIPTION:
- *
- *  This routine deactivates updating of the current time of day.
- */
-
-STATIC INLINE void _TOD_Deactivate( void );
-
-/*
- *  _TOD_Activate
- *
- *  DESCRIPTION:
- *
- *  This routine deactivates updating of the current time of day.
- */
-
-STATIC INLINE void _TOD_Activate(
-  Watchdog_Interval ticks
-);
-
-/*
  *  _TOD_Tickle
  *
  *  DESCRIPTION:
@@ -292,7 +248,9 @@ void _TOD_Tickle(
 #define TOD_MILLISECONDS_TO_TICKS(_ms) \
     (TOD_MILLISECONDS_TO_MICROSECONDS(_ms) / _TOD_Microseconds_per_tick)
 
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/tod.inl>
+#endif
 
 #ifdef __cplusplus
 }

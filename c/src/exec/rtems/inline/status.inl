@@ -21,6 +21,10 @@
  *
  *  rtems_is_status_successful
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the status code is equal to RTEMS_SUCCESSFUL,
+ *  and FALSE otherwise.
  */
 
 STATIC INLINE boolean rtems_is_status_successful(
@@ -34,6 +38,10 @@ STATIC INLINE boolean rtems_is_status_successful(
  *
  *  rtems_are_statuses_equal
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the status code1 is equal to code2,
+ *  and FALSE otherwise.
  */
 
 STATIC INLINE boolean rtems_are_statuses_equal(

@@ -26,25 +26,11 @@ extern "C" {
  *
  *  DESCRIPTION:
  *
- *  This package is the specification for the Thread Handler's
- *  multiprocessing specific support routines.
+ *  This routine initializes the multiprocessing portion of the Thread Handler.
  */
 
 void _Thread_MP_Handler_initialization (
   unsigned32 maximum_proxies
-);
-
-/*
- *  _Thread_MP_Is_receive
- *
- *  DESCRIPTION:
- *
- *  This function returns true if the thread in question is the
- *  multiprocessing receive thread.
- */
-
-STATIC INLINE boolean _Thread_MP_Is_receive (
-  Thread_Control *the_thread
 );
 
 /*
@@ -61,19 +47,6 @@ STATIC INLINE boolean _Thread_MP_Is_receive (
 
 Thread_Control *_Thread_MP_Allocate_proxy (
   States_Control the_state
-);
-
-/*
- *  _Thread_MP_Free_proxy
- *
- *  DESCRIPTION:
- *
- *  This routine frees a proxy control block to the
- *  inactive chain of free proxy control blocks.
- */
-
-STATIC INLINE void _Thread_MP_Free_proxy (
-  Thread_Control *the_thread
 );
 
 /*
@@ -104,7 +77,9 @@ EXTERN Thread_Control *_Thread_MP_Receive;
 EXTERN Chain_Control _Thread_MP_Active_proxies;
 EXTERN Chain_Control _Thread_MP_Inactive_proxies;
 
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/threadmp.inl>
+#endif
 
 #ifdef __cplusplus
 }

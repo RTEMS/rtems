@@ -21,6 +21,10 @@
  *
  *  _Thread_MP_Is_receive
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns true if the thread in question is the
+ *  multiprocessing receive thread.
  */
 
 STATIC INLINE boolean _Thread_MP_Is_receive (
@@ -34,6 +38,10 @@ STATIC INLINE boolean _Thread_MP_Is_receive (
  *
  *  _Thread_MP_Free_proxy
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees a proxy control block to the
+ *  inactive chain of free proxy control blocks.
  */
 
 STATIC INLINE void _Thread_MP_Free_proxy (

@@ -21,6 +21,9 @@
  *
  *  _Workspace_Handler_initialization
  *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this handler.
  */
 
 STATIC INLINE void _Workspace_Handler_initialization(
@@ -65,6 +68,11 @@ STATIC INLINE void _Workspace_Handler_initialization(
  *
  *  _Workspace_Allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns the address of a block of memory of size
+ *  bytes.  If a block of the appropriate size cannot be allocated
+ *  from the workspace, then NULL is returned.
  */
 
 STATIC INLINE void *_Workspace_Allocate(
@@ -78,6 +86,11 @@ STATIC INLINE void *_Workspace_Allocate(
  *
  *  _Workspace_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This function frees the specified block of memory.  If the block
+ *  belongs to the Workspace and can be successfully freed, then
+ *  TRUE is returned.  Otherwise FALSE is returned.
  */
 
 STATIC INLINE boolean _Workspace_Free(

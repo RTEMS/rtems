@@ -21,6 +21,11 @@
  *
  *  _Thread_Stop_multitasking
  *
+ *  DESCRIPTION:
+ *
+ *  This routine halts multitasking and returns control to
+ *  the "thread" (i.e. the BSP) which initially invoked the
+ *  routine which initialized the system.
  */
 
 STATIC INLINE void _Thread_Stop_multitasking( void )
@@ -32,6 +37,10 @@ STATIC INLINE void _Thread_Stop_multitasking( void )
  *
  *  _Thread_Is_executing
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_thread is the currently executing
+ *  thread, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Thread_Is_executing (
@@ -45,6 +54,10 @@ STATIC INLINE boolean _Thread_Is_executing (
  *
  *  _Thread_Is_heir
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_thread is the heir
+ *  thread, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Thread_Is_heir (
@@ -58,6 +71,10 @@ STATIC INLINE boolean _Thread_Is_heir (
  *
  *  _Thread_Is_executing_also_the_heir
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the currently executing thread
+ *  is also the heir thread, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Thread_Is_executing_also_the_heir( void )
@@ -69,6 +86,11 @@ STATIC INLINE boolean _Thread_Is_executing_also_the_heir( void )
  *
  *  _Thread_Resume
  *
+ *  DESCRIPTION:
+ *
+ *  This routine clears the SUSPENDED state for the_thread.  It performs
+ *  any necessary scheduling operations including the selection of
+ *  a new heir thread.
  */
 
 STATIC INLINE void _Thread_Resume (
@@ -82,6 +104,11 @@ STATIC INLINE void _Thread_Resume (
  *
  *  _Thread_Unblock
  *
+ *  DESCRIPTION:
+ *
+ *  This routine clears any blocking state for the_thread.  It performs
+ *  any necessary scheduling operations including the selection of
+ *  a new heir thread.
  */
 
 STATIC INLINE void _Thread_Unblock (
@@ -95,6 +122,10 @@ STATIC INLINE void _Thread_Unblock (
  *
  *  _Thread_Restart_self
  *
+ *  DESCRIPTION:
+ *
+ *  This routine resets the current context of the calling thread
+ *  to that of its initial state.
  */
 
 STATIC INLINE void _Thread_Restart_self( void )
@@ -109,6 +140,10 @@ STATIC INLINE void _Thread_Restart_self( void )
  *
  *  _Thread_Calculate_heir
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns a pointer to the highest priority
+ *  ready thread.
  */
 
 STATIC INLINE void _Thread_Calculate_heir( void )
@@ -121,6 +156,11 @@ STATIC INLINE void _Thread_Calculate_heir( void )
  *
  *  _Thread_Is_allocated_fp
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the floating point context of
+ *  the_thread is currently loaded in the floating point unit, and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Thread_Is_allocated_fp (
@@ -134,6 +174,10 @@ STATIC INLINE boolean _Thread_Is_allocated_fp (
  *
  *  _Thread_Deallocate_fp
  *
+ *  DESCRIPTION:
+ *
+ *  This routine is invoked when the currently loaded floating
+ *  point context is now longer associated with an active thread.
  */
 
 STATIC INLINE void _Thread_Deallocate_fp( void )
@@ -145,6 +189,9 @@ STATIC INLINE void _Thread_Deallocate_fp( void )
  *
  *  _Thread_Disable_dispatch
  *
+ *  DESCRIPTION:
+ *
+ *  This routine prevents dispatching.
  */
 
 STATIC INLINE void _Thread_Disable_dispatch( void )
@@ -156,6 +203,12 @@ STATIC INLINE void _Thread_Disable_dispatch( void )
  *
  *  _Thread_Enable_dispatch
  *
+ *  DESCRIPTION:
+ *
+ *  This routine allows dispatching to occur again.  If this is
+ *  the outer most dispatching critical section, then a dispatching
+ *  operation will be performed and, if necessary, control of the
+ *  processor will be transferred to the heir thread.
  */
 
 #if ( CPU_INLINE_ENABLE_DISPATCH == TRUE )
@@ -174,6 +227,11 @@ void _Thread_Enable_dispatch( void );
  *
  *  _Thread_Unnest_dispatch
  *
+ *  DESCRIPTION:
+ *
+ *  This routine allows dispatching to occur again.  However,
+ *  no dispatching operation is performed even if this is the outer
+ *  most dispatching critical section.
  */
 
 STATIC INLINE void _Thread_Unnest_dispatch( void )
@@ -185,6 +243,10 @@ STATIC INLINE void _Thread_Unnest_dispatch( void )
  *
  *  _Thread_Is_dispatching_enabled
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if dispatching is disabled, and FALSE
+ *  otherwise.
  */
 
 STATIC INLINE boolean _Thread_Is_dispatching_enabled( void )
@@ -196,6 +258,10 @@ STATIC INLINE boolean _Thread_Is_dispatching_enabled( void )
  *
  *  _Thread_Is_context_switch_necessary
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if dispatching is disabled, and FALSE
+ *  otherwise.
  */
 
 STATIC INLINE boolean _Thread_Is_context_switch_necessary( void )
@@ -207,6 +273,9 @@ STATIC INLINE boolean _Thread_Is_context_switch_necessary( void )
  *
  *  _Thread_Dispatch_initialization
  *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the thread dispatching subsystem.
  */
 
 STATIC INLINE void _Thread_Dispatch_initialization( void )
@@ -218,6 +287,9 @@ STATIC INLINE void _Thread_Dispatch_initialization( void )
  *
  *  _Thread_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_thread is NULL and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Thread_Is_null (
@@ -230,6 +302,17 @@ STATIC INLINE boolean _Thread_Is_null (
 /*PAGE
  *
  *  _Thread_Get
+ *
+ *  DESCRIPTION:
+ *
+ *  This function maps thread IDs to thread control
+ *  blocks.  If ID corresponds to a local thread, then it
+ *  returns the_thread control pointer which maps to ID
+ *  and location is set to OBJECTS_LOCAL.  If the thread ID is
+ *  global and resides on a remote node, then location is set
+ *  to OBJECTS_REMOTE, and the_thread is undefined.
+ *  Otherwise, location is set to OBJECTS_ERROR and
+ *  the_thread is undefined.
  *
  *  NOTE:  XXX... This routine may be able to be optimized.
  */
@@ -274,6 +357,10 @@ done:
 /*
  *  _Thread_Is_proxy_blocking
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the status code is equal to the
+ *  status which indicates that a proxy is blocking, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Thread_Is_proxy_blocking (
@@ -287,6 +374,9 @@ STATIC INLINE boolean _Thread_Is_proxy_blocking (
  *
  *  _Thread_Internal_allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This routine allocates an internal thread.
  */
  
 STATIC INLINE Thread_Control *_Thread_Internal_allocate( void )
@@ -298,6 +388,9 @@ STATIC INLINE Thread_Control *_Thread_Internal_allocate( void )
  *
  *  _Thread_Internal_free
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees an internal thread.
  */
  
 STATIC INLINE void _Thread_Internal_free (

@@ -21,6 +21,10 @@
  *
  *  _States_Set
  *
+ *  DESCRIPTION:
+ *
+ *  This function sets the given states_to_set into the current_state
+ *  passed in.  The result is returned to the user in current_state.
  */
 
 STATIC INLINE States_Control _States_Set (
@@ -35,6 +39,10 @@ STATIC INLINE States_Control _States_Set (
  *
  *  _States_Clear
  *
+ *  DESCRIPTION:
+ *
+ *  This function clears the given states_to_clear into the current_state
+ *  passed in.  The result is returned to the user in current_state.
  */
 
 STATIC INLINE States_Control _States_Clear (
@@ -49,6 +57,10 @@ STATIC INLINE States_Control _States_Clear (
  *
  *  _States_Is_ready
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_states indicates that the
+ *  state is READY, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_ready (
@@ -62,6 +74,10 @@ STATIC INLINE boolean _States_Is_ready (
  *
  *  _States_Is_only_dormant
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the DORMANT state is the ONLY state
+ *  set in the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_only_dormant (
@@ -75,6 +91,10 @@ STATIC INLINE boolean _States_Is_only_dormant (
  *
  *  _States_Is_dormant
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the DORMANT state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_dormant (
@@ -88,6 +108,10 @@ STATIC INLINE boolean _States_Is_dormant (
  *
  *  _States_Is_suspended
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the SUSPENDED state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_suspended (
@@ -101,6 +125,10 @@ STATIC INLINE boolean _States_Is_suspended (
  *
  *  _States_Is_Transient
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the TRANSIENT state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_transient (
@@ -114,6 +142,10 @@ STATIC INLINE boolean _States_Is_transient (
  *
  *  _States_Is_delaying
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the DELAYING state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_delaying (
@@ -127,6 +159,10 @@ STATIC INLINE boolean _States_Is_delaying (
  *
  *  _States_Is_waiting_for_buffer
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_BUFFER state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_for_buffer (
@@ -140,6 +176,10 @@ STATIC INLINE boolean _States_Is_waiting_for_buffer (
  *
  *  _States_Is_waiting_for_segment
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_SEGMENT state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_for_segment (
@@ -153,6 +193,10 @@ STATIC INLINE boolean _States_Is_waiting_for_segment (
  *
  *  _States_Is_waiting_for_message
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_MESSAGE state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_for_message (
@@ -166,6 +210,10 @@ STATIC INLINE boolean _States_Is_waiting_for_message (
  *
  *  _States_Is_waiting_for_event
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_EVENT state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_for_event (
@@ -179,6 +227,10 @@ STATIC INLINE boolean _States_Is_waiting_for_event (
  *
  *  _States_Is_waiting_for_mutex
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_MUTEX state
+ *  is set in the_states, and FALSE otherwise.
  */
  
 STATIC INLINE boolean _States_Is_waiting_for_mutex (
@@ -192,6 +244,10 @@ STATIC INLINE boolean _States_Is_waiting_for_mutex (
  *
  *  _States_Is_waiting_for_semaphore
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_SEMAPHORE state
+ *  is set in the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_for_semaphore (
@@ -205,6 +261,10 @@ STATIC INLINE boolean _States_Is_waiting_for_semaphore (
  *
  *  _States_Is_waiting_for_time
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_TIME state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_for_time (
@@ -218,6 +278,10 @@ STATIC INLINE boolean _States_Is_waiting_for_time (
  *
  *  _States_Is_waiting_for_rpc_reply
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_TIME state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_for_rpc_reply (
@@ -231,6 +295,10 @@ STATIC INLINE boolean _States_Is_waiting_for_rpc_reply (
  *
  *  _States_Is_waiting_for_period
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the WAITING_FOR_PERIOD state is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_for_period (
@@ -244,6 +312,11 @@ STATIC INLINE boolean _States_Is_waiting_for_period (
  *
  *  _States_Is_locally_blocked
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if one of the states which indicates
+ *  that a task is blocked waiting for a local resource is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_locally_blocked (
@@ -257,6 +330,11 @@ STATIC INLINE boolean _States_Is_locally_blocked (
  *
  *  _States_Is_waiting_on_thread_queue
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if one of the states which indicates
+ *  that a task is blocked waiting for a local resource is set in
+ *  the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_waiting_on_thread_queue (
@@ -270,6 +348,10 @@ STATIC INLINE boolean _States_Is_waiting_on_thread_queue (
  *
  *  _States_Is_blocked
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if one of the states which indicates
+ *  that a task is blocked is set in the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Is_blocked (
@@ -279,11 +361,15 @@ STATIC INLINE boolean _States_Is_blocked (
    return (the_states & STATES_BLOCKED);
 }
 
-/*PAGEPAGE
+/*PAGE
  *
  *
  *  _States_Are_set
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if any of the states in the mask
+ *  are set in the_states, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _States_Are_set (

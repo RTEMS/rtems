@@ -21,6 +21,10 @@
  *
  *  _Timer_Allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a timer control block from
+ *  the inactive chain of free timer control blocks.
  */
 
 STATIC INLINE Timer_Control *_Timer_Allocate( void )
@@ -32,6 +36,10 @@ STATIC INLINE Timer_Control *_Timer_Allocate( void )
  *
  *  _Timer_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees a timer control block to the
+ *  inactive chain of free timer control blocks.
  */
 
 STATIC INLINE void _Timer_Free (
@@ -45,6 +53,13 @@ STATIC INLINE void _Timer_Free (
  *
  *  _Timer_Get
  *
+ *  DESCRIPTION:
+ *
+ *  This function maps timer IDs to timer control blocks.
+ *  If ID corresponds to a local timer, then it returns
+ *  the timer control pointer which maps to ID and location
+ *  is set to OBJECTS_LOCAL.  Otherwise, location is set
+ *  to OBJECTS_ERROR and the returned value is undefined.
  */
 
 STATIC INLINE Timer_Control *_Timer_Get (
@@ -60,6 +75,10 @@ STATIC INLINE Timer_Control *_Timer_Get (
  *
  *  _Timer_Is_interval_class
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the class is that of an INTERVAL
+ *  timer, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Timer_Is_interval_class (
@@ -73,6 +92,10 @@ STATIC INLINE boolean _Timer_Is_interval_class (
  *
  *  _Timer_Is_time_of_day_class
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the class is that of an INTERVAL
+ *  timer, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Timer_Is_timer_of_day_class (
@@ -86,6 +109,10 @@ STATIC INLINE boolean _Timer_Is_timer_of_day_class (
  *
  *  _Timer_Is_dormant_class
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the class is that of a DORMANT
+ *  timer, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Timer_Is_dormant_class (
@@ -99,6 +126,9 @@ STATIC INLINE boolean _Timer_Is_dormant_class (
  *
  *  _Timer_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_timer is NULL and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Timer_Is_null (

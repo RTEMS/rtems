@@ -108,56 +108,6 @@ EXTERN User_extensions_Control _User_extensions_Initial;
 
 EXTERN Chain_Control _User_extensions_List;
 
-
-/*
- *  _User_extensions_Handler_initialization
- *
- *  DESCRIPTION:
- *
- *  This routine performs the initialization necessary for this handler.
- */
-
-STATIC INLINE void _User_extensions_Handler_initialization (
-    User_extensions_Table  *initial_extensions
-);
-
-/*
- *  _User_extensions_Add_set
- *
- *  DESCRIPTION:
- *
- *  This routine is used to add a user extension set to the active list.
- */
-
-STATIC INLINE void _User_extensions_Add_set (
-  User_extensions_Control  *the_extension,
-  User_extensions_Table    *extension_table
-);
-
-/*
- *  _User_extensions_Add_API_set
- *
- *  DESCRIPTION:
- *
- *  This routine is used to add an API extension set to the active list.
- */
- 
-STATIC INLINE void _User_extensions_Add_API_set (
-  User_extensions_Control  *the_extension
-);
-
-/*
- *  _User_extensions_Remove_set
- *
- *  DESCRIPTION:
- *
- *  This routine is used to remove a user extension set from the active list.
- */
-
-STATIC INLINE void _User_extensions_Remove_set (
-  User_extensions_Control  *the_extension
-);
-
 /*
  *  _User_extensions_Thread_create
  *
@@ -211,20 +161,6 @@ void _User_extensions_Thread_restart (
 );
 
 /*
- *  _User_extensions_Thread_switch
- *
- *  DESCRIPTION:
- *
- *  This routine is used to invoke the user extension which
- *  is invoked when a context switch occurs.
- */
-
-STATIC INLINE void _User_extensions_Thread_switch (
-  Thread_Control *executing,
-  Thread_Control *heir
-);
-
-/*
  *  _User_extensions_Thread_begin
  *
  *  DESCRIPTION:
@@ -265,7 +201,9 @@ void _User_extensions_Fatal (
   unsigned32              the_error
 );
 
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/userext.inl>
+#endif
 
 #ifdef __cplusplus
 }

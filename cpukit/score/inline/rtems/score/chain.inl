@@ -24,6 +24,11 @@
 /*PAGE
  *
  *  _Chain_Are_nodes_equal
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if LEFT and RIGHT are equal,
+ *  and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Are_nodes_equal(
@@ -37,6 +42,10 @@ STATIC INLINE boolean _Chain_Are_nodes_equal(
 /*PAGE
  *
  *  _Chain_Is_null
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_chain is NULL and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Is_null(
@@ -49,6 +58,10 @@ STATIC INLINE boolean _Chain_Is_null(
 /*PAGE
  *
  *  _Chain_Is_null_node
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_node is NULL and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Is_null_node(
@@ -61,6 +74,10 @@ STATIC INLINE boolean _Chain_Is_null_node(
 /*PAGE
  *
  *  _Chain_Head
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns a pointer to the first node on the chain.
  */
 
 STATIC INLINE Chain_Node *_Chain_Head(
@@ -73,6 +90,10 @@ STATIC INLINE Chain_Node *_Chain_Head(
 /*PAGE
  *
  *  _Chain_Tail
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns a pointer to the last node on the chain.
  */
 
 STATIC INLINE Chain_Node *_Chain_Tail(
@@ -85,6 +106,11 @@ STATIC INLINE Chain_Node *_Chain_Tail(
 /*PAGE
  *
  *  _Chain_Is_empty
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if there a no nodes on the_chain and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Is_empty(
@@ -97,6 +123,11 @@ STATIC INLINE boolean _Chain_Is_empty(
 /*PAGE
  *
  *  _Chain_Is_first
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_node is the first node on a chain and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Is_first(
@@ -109,6 +140,11 @@ STATIC INLINE boolean _Chain_Is_first(
 /*PAGE
  *
  *  _Chain_Is_last
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_node is the last node on a chain and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Is_last(
@@ -121,6 +157,11 @@ STATIC INLINE boolean _Chain_Is_last(
 /*PAGE
  *
  *  _Chain_Has_only_one_node
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if there is only one node on the_chain and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Has_only_one_node(
@@ -133,6 +174,11 @@ STATIC INLINE boolean _Chain_Has_only_one_node(
 /*PAGE
  *
  *  _Chain_Is_head
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_node is the head of the_chain and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Is_head(
@@ -146,6 +192,11 @@ STATIC INLINE boolean _Chain_Is_head(
 /*PAGE
  *
  *  _Chain_Is_tail
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_node is the tail of the_chain and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Chain_Is_tail(
@@ -159,6 +210,10 @@ STATIC INLINE boolean _Chain_Is_tail(
 /*PAGE
  *
  *  Chain_Initialize_empty
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the specified chain to contain zero nodes.
  */
 
 STATIC INLINE void _Chain_Initialize_empty(
@@ -173,6 +228,12 @@ STATIC INLINE void _Chain_Initialize_empty(
 /*PAGE
  *
  *  _Chain_Extract_unprotected
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine extracts the_node from the chain on which it resides.
+ *  It does NOT disable interrupts to insure the atomicity of the
+ *  extract operation.
  */
 
 STATIC INLINE void _Chain_Extract_unprotected(
@@ -191,6 +252,12 @@ STATIC INLINE void _Chain_Extract_unprotected(
 /*PAGE
  *
  *  _Chain_Get_first_unprotected
+ *
+ *  DESCRIPTION:
+ *
+ *  This function removes the first node from the_chain and returns
+ *  a pointer to that node.  It does NOT disable interrupts to insure
+ *  the atomicity of the get operation.
  */
 
 STATIC INLINE Chain_Node *_Chain_Get_first_unprotected(
@@ -211,6 +278,13 @@ STATIC INLINE Chain_Node *_Chain_Get_first_unprotected(
 /*PAGE
  *
  *  Chain_Get_unprotected
+ *
+ *  DESCRIPTION:
+ *
+ *  This function removes the first node from the_chain and returns
+ *  a pointer to that node.  If the_chain is empty, then NULL is returned.
+ *  It does NOT disable interrupts to insure the atomicity of the
+ *  get operation.
  */
 
 STATIC INLINE Chain_Node *_Chain_Get_unprotected(
@@ -226,6 +300,12 @@ STATIC INLINE Chain_Node *_Chain_Get_unprotected(
 /*PAGE
  *
  *  _Chain_Insert_unprotected
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine inserts the_node on a chain immediately following
+ *  after_node.  It does NOT disable interrupts to insure the atomicity
+ *  of the extract operation.
  */
 
 STATIC INLINE void _Chain_Insert_unprotected(
@@ -245,6 +325,12 @@ STATIC INLINE void _Chain_Insert_unprotected(
 /*PAGE
  *
  *  _Chain_Append_unprotected
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine appends the_node onto the end of the_chain.
+ *  It does NOT disable interrupts to insure the atomicity of the
+ *  append operation.
  */
 
 STATIC INLINE void _Chain_Append_unprotected(
@@ -264,6 +350,12 @@ STATIC INLINE void _Chain_Append_unprotected(
 /*PAGE
  *
  *  _Chain_Prepend_unprotected
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine prepends the_node onto the front of the_chain.
+ *  It does NOT disable interrupts to insure the atomicity of the
+ *  prepend operation.
  */
 
 STATIC INLINE void _Chain_Prepend_unprotected(
@@ -278,6 +370,12 @@ STATIC INLINE void _Chain_Prepend_unprotected(
 /*PAGE
  *
  *  _Chain_Prepend
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine prepends the_node onto the front of the_chain.
+ *  It disables interrupts to insure the atomicity of the
+ *  prepend operation.
  */
 
 STATIC INLINE void _Chain_Prepend(

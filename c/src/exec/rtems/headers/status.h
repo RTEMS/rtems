@@ -69,31 +69,8 @@ rtems_status_code _Status_Object_name_errors_to_status[] = {
 #endif
 
 /*
- *  rtems_is_status_successful
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the status code is equal to RTEMS_SUCCESSFUL,
- *  and FALSE otherwise.
+ *  Applications are allowed to use the macros to compare status codes.
  */
-
-STATIC INLINE boolean rtems_is_status_successful (
-  rtems_status_code code
-);
-
-/*
- *  rtems_are_statuses_equal
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the status code1 is equal to code2,
- *  and FALSE otherwise.
- */
-
-STATIC INLINE boolean rtems_are_statuses_equal (
-  rtems_status_code code1,
-  rtems_status_code code2
-);
 
 #include <rtems/rtems/status.inl>
 

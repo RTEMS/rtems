@@ -284,28 +284,6 @@ void _Thread_Create_idle( void );
 void _Thread_Start_multitasking( void );
 
 /*
- *  _Thread_Stop_multitasking
- *
- *  DESCRIPTION:
- *
- *  This routine halts multitasking and returns control to
- *  the "thread" (i.e. the BSP) which initially invoked the 
- *  routine which initialized the system.
- */
-
-STATIC INLINE void _Thread_Stop_multitasking( void );
-
-/*
- *  _Thread_Dispatch_initialization
- *
- *  DESCRIPTION:
- *
- *  This routine initializes the thread dispatching subsystem.
- */
-
-STATIC INLINE void _Thread_Dispatch_initialization( void );
-
-/*
  *  _Thread_Dispatch
  *
  *  DESCRIPTION:
@@ -487,43 +465,6 @@ void _Thread_Tickle_timeslice( void );
 void _Thread_Yield_processor( void );
 
 /*
- *  _Thread_Is_executing
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_thread is the currently executing
- *  thread, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Thread_Is_executing (
-  Thread_Control *the_thread
-);
-
-/*
- *  _Thread_Is_heir
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_thread is the heir
- *  thread, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Thread_Is_executing (
-  Thread_Control *the_thread
-);
-
-/*
- *  _Thread_Is_executing_also_the_heir
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the currently executing thread
- *  is also the heir thread, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Thread_Is_executing_also_the_heir( void );
-
-/*
  *  _Thread_Load_environment
  *
  *  DESCRIPTION:
@@ -604,215 +545,6 @@ void _Thread_Set_priority(
 boolean _Thread_Evaluate_mode( void );
 
 /*
- *  _Thread_Resume
- *
- *  DESCRIPTION:
- *
- *  This routine clears the SUSPENDED state for the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- */
-
-STATIC INLINE void _Thread_Resume (
-  Thread_Control *the_thread
-);
-
-/*
- *  _Thread_Unblock
- *
- *  DESCRIPTION:
- *
- *  This routine clears any blocking state for the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- */
-
-STATIC INLINE void _Thread_Unblock (
-  Thread_Control *the_thread
-);
-
-/*
- *  _Thread_Restart_self
- *
- *  DESCRIPTION:
- *
- *  This routine resets the current context of the calling thread
- *  to that of its initial state.
- */
-
-STATIC INLINE void _Thread_Restart_self( void );
-
-/*
- *  _Thread_Calculate_heir
- *
- *  DESCRIPTION:
- *
- *  This function returns a pointer to the highest priority
- *  ready thread.
- */
-
-STATIC INLINE void _Thread_Calculate_heir( void );
-
-/*
- *  _Thread_Is_allocated_fp
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the floating point context of
- *  the_thread is currently loaded in the floating point unit, and
- *  FALSE otherwise.
- */
-
-STATIC INLINE boolean _Thread_Is_allocated_fp (
-  Thread_Control *the_thread
-);
-
-/*
- *  _Thread_Deallocate_fp
- *
- *  DESCRIPTION:
- *
- *  This routine is invoked when the currently loaded floating
- *  point context is now longer associated with an active thread.
- */
-
-STATIC INLINE void _Thread_Deallocate_fp( void );
-
-/*
- *  _Thread_Disable_dispatch
- *
- *  DESCRIPTION:
- *
- *  This routine prevents dispatching.
- */
-
-STATIC INLINE void _Thread_Disable_dispatch( void );
-
-/*
- *  _Thread_Enable_dispatch
- *
- *  DESCRIPTION:
- *
- *  This routine allows dispatching to occur again.  If this is
- *  the outer most dispatching critical section, then a dispatching
- *  operation will be performed and, if necessary, control of the
- *  processor will be transferred to the heir thread.
- */
-
-#if ( CPU_INLINE_ENABLE_DISPATCH == TRUE )
-
-STATIC INLINE void _Thread_Enable_dispatch();
-
-#endif
-
-#if ( CPU_INLINE_ENABLE_DISPATCH == FALSE )
-
-void _Thread_Enable_dispatch( void );
-
-#endif
-
-/*
- *  _Thread_Unnest_dispatch
- *
- *  DESCRIPTION:
- *
- *  This routine allows dispatching to occur again.  However,
- *  no dispatching operation is performed even if this is the outer
- *  most dispatching critical section.
- */
-
-STATIC INLINE void _Thread_Unnest_dispatch( void );
-
-/*
- *  _Thread_Is_dispatching_enabled
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if dispatching is disabled, and FALSE
- *  otherwise.
- */
-
-STATIC INLINE boolean _Thread_Is_dispatching_enabled( void );
-
-/*
- *  _Thread_Is_context_switch_necessary
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if dispatching is disabled, and FALSE
- *  otherwise.
- */
-
-STATIC INLINE boolean _Thread_Is_context_switch_necessary( void );
-
-/*
- *  _Thread_Is_null
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_thread is NULL and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Thread_Is_null (
-  Thread_Control *the_thread
-);
-
-/*
- *  _Thread_Get
- *
- *  DESCRIPTION:
- *
- *  This function maps thread IDs to thread control
- *  blocks.  If ID corresponds to a local thread, then it
- *  returns the_thread control pointer which maps to ID
- *  and location is set to OBJECTS_LOCAL.  If the thread ID is
- *  global and resides on a remote node, then location is set
- *  to OBJECTS_REMOTE, and the_thread is undefined.
- *  Otherwise, location is set to OBJECTS_ERROR and
- *  the_thread is undefined.
- */
-
-STATIC INLINE Thread_Control *_Thread_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-);
-
-/*
- *  _Thread_Is_proxy_blocking
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the status code is equal to the
- *  status which indicates that a proxy is blocking, and FALSE otherwise.
- */
- 
-STATIC INLINE boolean _Thread_Is_proxy_blocking (
-  unsigned32 code
-);
-
-/*
- *  _Thread_Internal_allocate
- *
- *  DESCRIPTION:
- *
- *  This routine allocates an internal thread.
- */
- 
-STATIC INLINE Thread_Control *_Thread_Internal_allocate( void );
- 
-/*
- *  _Thread_Internal_free
- *
- *  DESCRIPTION:
- *
- *  This routine frees an internal thread.
- */
- 
-STATIC INLINE void _Thread_Internal_free (
-  Thread_Control *the_task
-);
-
-/*
  *  _Thread_Idle_body
  *
  *  DESCRIPTION:
@@ -826,7 +558,9 @@ Thread _Thread_Idle_body(
 );
 #endif
 
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/thread.inl>
+#endif
 #include <rtems/score/threadmp.h>
 
 #ifdef __cplusplus

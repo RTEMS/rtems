@@ -156,47 +156,6 @@ rtems_status_code rtems_rate_monotonic_period(
 );
 
 /*
- *  _Rate_monotonic_Allocate
- *
- *  DESCRIPTION:
- *
- *  This function allocates a period control block from
- *  the inactive chain of free period control blocks.
- */
-
-STATIC INLINE Rate_monotonic_Control *_Rate_monotonic_Allocate( void );
-
-/*
- *  _Rate_monotonic_Free
- *
- *  DESCRIPTION:
- *
- *  This routine allocates a period control block from
- *  the inactive chain of free period control blocks.
- */
-
-STATIC INLINE void _Rate_monotonic_Free (
-  Rate_monotonic_Control *the_period
-);
-
-/*
- *  _Rate_monotonic_Get
- *
- *  DESCRIPTION:
- *
- *  This function maps period IDs to period control blocks.
- *  If ID corresponds to a local period, then it returns
- *  the_period control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_period is undefined.
- */
-
-STATIC INLINE Rate_monotonic_Control *_Rate_monotonic_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-);
-
-/*
  *  _Rate_monotonic_Timeout
  *
  *  DESCRIPTION:
@@ -214,58 +173,9 @@ void _Rate_monotonic_Timeout (
   void       *ignored
 );
 
-/*
- *  _Rate_monotonic_Is_active
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_period is in the ACTIVE state,
- *  and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Rate_monotonic_Is_active (
-  Rate_monotonic_Control *the_period
-);
-
-/*
- *  _Rate_monotonic_Is_inactive
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_period is in the ACTIVE state,
- *  and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Rate_monotonic_Is_inactive (
-  Rate_monotonic_Control *the_period
-);
-
-/*
- *  _Rate_monotonic_Is_expired
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_period is in the EXPIRED state,
- *  and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Rate_monotonic_Is_expired (
-  Rate_monotonic_Control *the_period
-);
-
-/*
- *  _Rate_monotonic_Is_null
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_period is NULL and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Rate_monotonic_Is_null (
-  Rate_monotonic_Control *the_period
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/ratemon.inl>
+#endif
 
 #ifdef __cplusplus
 }

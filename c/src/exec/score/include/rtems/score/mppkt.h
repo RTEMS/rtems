@@ -88,33 +88,9 @@ typedef struct {
 
 #define MP_PACKET_MINIMUN_HETERO_CONVERSION  ( sizeof( MP_packet_Prefix ) / 4 )
 
-/*
- *  _Mp_packet_Is_valid_packet_class
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the the_packet_class is valid,
- *  and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Mp_packet_Is_valid_packet_class (
-  MP_packet_Classes the_packet_class
-);
-
-/*
- *  _Mp_packet_Is_null
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the the_packet_class is null,
- *  and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Mp_packet_Is_null (
-  MP_packet_Prefix   *the_packet
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/mppkt.inl>
+#endif
 
 #ifdef __cplusplus
 }

@@ -21,6 +21,10 @@
  *
  *  _CORE_semaphore_Is_priority
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the priority attribute is
+ *  enabled in the attribute_set and FALSE otherwise.
  */
 
 STATIC INLINE boolean _CORE_semaphore_Is_priority(
@@ -34,6 +38,9 @@ STATIC INLINE boolean _CORE_semaphore_Is_priority(
  *
  *  _CORE_semaphore_Get_count
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns the current count associated with the semaphore.
  */
  
 STATIC INLINE unsigned32 _CORE_semaphore_Get_count(

@@ -20,6 +20,11 @@
 /*PAGE
  *
  *  _Attributes_Set
+ *
+ *  DESCRIPTION:
+ *
+ *  This function sets the requested new_attributes in the attribute_set
+ *  passed in.  The result is returned to the user.
  */
 
 STATIC INLINE rtems_attribute _Attributes_Set (
@@ -33,6 +38,11 @@ STATIC INLINE rtems_attribute _Attributes_Set (
 /*PAGE
  *
  *  _Attributes_Clear
+ *
+ *  DESCRIPTION:
+ *
+ *  This function clears the requested new_attributes in the attribute_set
+ *  passed in.  The result is returned to the user.
  */
 
 STATIC INLINE rtems_attribute _Attributes_Clear (
@@ -47,6 +57,10 @@ STATIC INLINE rtems_attribute _Attributes_Clear (
  *
  *  _Attributes_Is_floating_point
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the floating point attribute is
+ *  enabled in the attribute_set and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Attributes_Is_floating_point(
@@ -60,6 +74,10 @@ STATIC INLINE boolean _Attributes_Is_floating_point(
  *
  *  _Attributes_Is_global
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the global object attribute is
+ *  enabled in the attribute_set and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Attributes_Is_global(
@@ -73,6 +91,10 @@ STATIC INLINE boolean _Attributes_Is_global(
  *
  *  _Attributes_Is_priority
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the priority attribute is
+ *  enabled in the attribute_set and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Attributes_Is_priority(
@@ -86,6 +108,10 @@ STATIC INLINE boolean _Attributes_Is_priority(
  *
  *  _Attributes_Is_binary_semaphore
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the binary semaphore attribute is
+ *  enabled in the attribute_set and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Attributes_Is_binary_semaphore(
@@ -99,6 +125,10 @@ STATIC INLINE boolean _Attributes_Is_binary_semaphore(
  *
  *  _Attributes_Is_inherit_priority
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the priority inheritance attribute
+ *  is enabled in the attribute_set and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Attributes_Is_inherit_priority(
@@ -112,6 +142,10 @@ STATIC INLINE boolean _Attributes_Is_inherit_priority(
  *
  *  _Attributes_Is_priority_ceiling
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the priority ceiling attribute
+ *  is enabled in the attribute_set and FALSE otherwise.
  */
  
 STATIC INLINE boolean _Attributes_Is_priority_ceiling(

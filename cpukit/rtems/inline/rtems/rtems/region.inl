@@ -21,6 +21,10 @@
  *
  *  _Region_Allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a region control block from
+ *  the inactive chain of free region control blocks.
  */
 
 STATIC INLINE Region_Control *_Region_Allocate( void )
@@ -32,6 +36,10 @@ STATIC INLINE Region_Control *_Region_Allocate( void )
  *
  *  _Region_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees a region control block to the
+ *  inactive chain of free region control blocks.
  */
 
 STATIC INLINE void _Region_Free (
@@ -45,6 +53,13 @@ STATIC INLINE void _Region_Free (
  *
  *  _Region_Get
  *
+ *  DESCRIPTION:
+ *
+ *  This function maps region IDs to region control blocks.
+ *  If ID corresponds to a local region, then it returns
+ *  the_region control pointer which maps to ID and location
+ *  is set to OBJECTS_LOCAL.  Otherwise, location is set
+ *  to OBJECTS_ERROR and the_region is undefined.
  */
 
 STATIC INLINE Region_Control *_Region_Get (
@@ -60,6 +75,11 @@ STATIC INLINE Region_Control *_Region_Get (
  *
  *  _Region_Allocate_segment
  *
+ *  DESCRIPTION:
+ *
+ *  This function attempts to allocate a segment from the_region.
+ *  If successful, it returns the address of the allocated segment.
+ *  Otherwise, it returns NULL.
  */
 
 STATIC INLINE void *_Region_Allocate_segment (
@@ -74,6 +94,9 @@ STATIC INLINE void *_Region_Allocate_segment (
  *
  *  _Region_Free_segment
  *
+ *  DESCRIPTION:
+ *
+ *  This function frees the_segment to the_region.
  */
 
 STATIC INLINE boolean _Region_Free_segment (
@@ -88,6 +111,9 @@ STATIC INLINE boolean _Region_Free_segment (
  *
  *  _Region_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_region is NULL and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Region_Is_null (

@@ -23,6 +23,9 @@
  *
  *  _Priority_Handler_initialization
  *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this handler.
  */
 
 STATIC INLINE void _Priority_Handler_initialization( void )
@@ -38,6 +41,10 @@ STATIC INLINE void _Priority_Handler_initialization( void )
  *
  *  _Priority_Is_valid
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_priority if valid for a
+ *  user task, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Priority_Is_valid (
@@ -56,6 +63,9 @@ STATIC INLINE boolean _Priority_Is_valid (
  *
  *  _Priority_Major
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the major portion of the_priority.
  */
 
 STATIC INLINE unsigned32 _Priority_Major (
@@ -69,6 +79,9 @@ STATIC INLINE unsigned32 _Priority_Major (
  *
  *  _Priority_Minor
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the minor portion of the_priority.
  */
 
 STATIC INLINE unsigned32 _Priority_Minor (
@@ -84,6 +97,10 @@ STATIC INLINE unsigned32 _Priority_Minor (
  *
  *  _Priority_Mask
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the mask associated with the major or minor
+ *  number passed to it.
  */
  
 STATIC INLINE unsigned32 _Priority_Mask (
@@ -98,6 +115,11 @@ STATIC INLINE unsigned32 _Priority_Mask (
  *
  *  _Priority_Bits_index
  *
+ *  DESCRIPTION:
+ *
+ *  This function translates the bit numbers returned by the bit scan
+ *  of a priority bit field into something suitable for use as
+ *  a major or minor component of a priority.
  */
  
 STATIC INLINE unsigned32 _Priority_Bits_index (
@@ -113,6 +135,10 @@ STATIC INLINE unsigned32 _Priority_Bits_index (
  *
  *  _Priority_Add_to_bit_map
  *
+ *  DESCRIPTION:
+ *
+ *  This routine uses the_priority_map to update the priority
+ *  bit maps to indicate that a thread has been readied.
  */
 
 STATIC INLINE void _Priority_Add_to_bit_map (
@@ -127,6 +153,11 @@ STATIC INLINE void _Priority_Add_to_bit_map (
  *
  *  _Priority_Remove_from_bit_map
  *
+ *  DESCRIPTION:
+ *
+ *  This routine uses the_priority_map to update the priority
+ *  bit maps to indicate that a thread has been removed from the
+ *  ready state.
  */
 
 STATIC INLINE void _Priority_Remove_from_bit_map (
@@ -142,6 +173,10 @@ STATIC INLINE void _Priority_Remove_from_bit_map (
  *
  *  _Priority_Get_highest
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the priority of the highest priority
+ *  ready thread.
  */
 
 STATIC INLINE Priority_Control _Priority_Get_highest( void )
@@ -160,6 +195,11 @@ STATIC INLINE Priority_Control _Priority_Get_highest( void )
  *
  *  _Priority_Initialize_information
  *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the_priority_map so that it
+ *  contains the information necessary to manage a thread
+ *  at new_priority.
  */
 
 STATIC INLINE void _Priority_Initialize_information(
@@ -190,6 +230,10 @@ STATIC INLINE void _Priority_Initialize_information(
  *
  *  _Priority_Is_group_empty
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the priority GROUP is empty, and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Priority_Is_group_empty (

@@ -21,6 +21,10 @@
  *
  *  _CORE_mutex_Is_locked
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns TRUE if the mutex specified is locked and FALSE
+ *  otherwise.
  */
  
 STATIC INLINE boolean _CORE_mutex_Is_locked(
@@ -34,6 +38,10 @@ STATIC INLINE boolean _CORE_mutex_Is_locked(
  *
  *  _CORE_mutex_Is_fifo
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns TRUE if the mutex's wait discipline is FIFO and FALSE
+ *  otherwise.
  */
  
 STATIC INLINE boolean _CORE_mutex_Is_fifo(
@@ -47,6 +55,10 @@ STATIC INLINE boolean _CORE_mutex_Is_fifo(
  *
  *  _CORE_mutex_Is_priority
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns TRUE if the mutex's wait discipline is PRIORITY and
+ *  FALSE otherwise.
  */
  
 STATIC INLINE boolean _CORE_mutex_Is_priority(
@@ -60,6 +72,10 @@ STATIC INLINE boolean _CORE_mutex_Is_priority(
  *
  *  _CORE_mutex_Is_inherit_priority
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns TRUE if the mutex's wait discipline is
+ *  INHERIT_PRIORITY and FALSE otherwise.
  */
  
 STATIC INLINE boolean _CORE_mutex_Is_inherit_priority(
@@ -73,6 +89,10 @@ STATIC INLINE boolean _CORE_mutex_Is_inherit_priority(
  *
  *  _CORE_mutex_Is_priority_ceiling
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns TRUE if the mutex's wait discipline is
+ *  PRIORITY_CEILING and FALSE otherwise.
  */
  
 STATIC INLINE boolean _CORE_mutex_Is_priority_ceiling(

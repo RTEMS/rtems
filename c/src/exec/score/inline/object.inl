@@ -21,6 +21,10 @@
  *
  *  _Objects_Build_id
  *
+ *  DESCRIPTION:
+ *
+ *  This function builds an object's id from the processor node and index
+ *  values specified.
  */
 
 STATIC INLINE Objects_Id _Objects_Build_id(
@@ -37,6 +41,10 @@ STATIC INLINE Objects_Id _Objects_Build_id(
 /*PAGE
  *
  *  _Objects_Get_class
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the class portion of the ID.
  */
  
 STATIC INLINE Objects_Classes _Objects_Get_class(
@@ -52,6 +60,9 @@ STATIC INLINE Objects_Classes _Objects_Get_class(
  *
  *  _Objects_Get_node
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the node portion of the ID.
  */
 
 STATIC INLINE unsigned32 _Objects_Get_node(
@@ -65,6 +76,9 @@ STATIC INLINE unsigned32 _Objects_Get_node(
  *
  *  _Objects_Get_index
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the index portion of the ID.
  */
 
 STATIC INLINE unsigned32 _Objects_Get_index(
@@ -78,6 +92,9 @@ STATIC INLINE unsigned32 _Objects_Get_index(
  *
  *  _Objects_Is_class_valid
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the class is valid.
  */
  
 STATIC INLINE boolean _Objects_Is_class_valid(
@@ -91,6 +108,10 @@ STATIC INLINE boolean _Objects_Is_class_valid(
  *
  *  _Objects_Is_local_node
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the node is of the local object, and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Objects_Is_local_node(
@@ -104,6 +125,10 @@ STATIC INLINE boolean _Objects_Is_local_node(
  *
  *  _Objects_Is_local_id
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the id is of a local object, and
+ *  FALSE otherwise.
  */
 
 STATIC INLINE boolean _Objects_Is_local_id(
@@ -117,6 +142,10 @@ STATIC INLINE boolean _Objects_Is_local_id(
  *
  *  _Objects_Are_ids_equal
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if left and right are equal,
+ *  and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Objects_Are_ids_equal(
@@ -131,6 +160,10 @@ STATIC INLINE boolean _Objects_Are_ids_equal(
  *
  *  _Objects_Allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a object control block from
+ *  the inactive chain of free object control blocks.
  */
 
 STATIC INLINE Objects_Control *_Objects_Allocate(
@@ -144,6 +177,10 @@ STATIC INLINE Objects_Control *_Objects_Allocate(
  *
  *  _Objects_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This function frees a object control block to the
+ *  inactive chain of free object control blocks.
  */
 
 STATIC INLINE void _Objects_Free(
@@ -158,6 +195,10 @@ STATIC INLINE void _Objects_Free(
  *
  *  _Objects_Open
  *
+ *  DESCRIPTION:
+ *
+ *  This function places the_object control pointer and object name
+ *  in the Local Pointer and Local Name Tables, respectively.
  */
 
 STATIC INLINE void _Objects_Open(
@@ -181,6 +222,10 @@ STATIC INLINE void _Objects_Open(
  *
  *  _Objects_Close
  *
+ *  DESCRIPTION:
+ *
+ *  This function removes the_object control pointer and object name
+ *  in the Local Pointer and Local Name Tables.
  */
 
 STATIC INLINE void _Objects_Close(

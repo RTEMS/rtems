@@ -21,6 +21,10 @@
  *
  *  _Options_Is_no_wait
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the RTEMS_NO_WAIT option is enabled in
+ *  option_set, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Options_Is_no_wait (
@@ -34,6 +38,10 @@ STATIC INLINE boolean _Options_Is_no_wait (
  *
  *  _Options_Is_any
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the RTEMS_EVENT_ANY option is enabled in
+ *  OPTION_SET, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Options_Is_any (

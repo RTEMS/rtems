@@ -21,6 +21,11 @@
  *
  *  _Stack_Initialize
  *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the_stack record to indicate that
+ *  size bytes of memory starting at starting_address have been
+ *  reserved for a stack.
  */
 
 STATIC INLINE void _Stack_Initialize (
@@ -37,6 +42,10 @@ STATIC INLINE void _Stack_Initialize (
  *
  *  _Stack_Is_enough
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if size bytes is enough memory for
+ *  a valid stack area on this processor, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Stack_Is_enough (
@@ -50,6 +59,15 @@ STATIC INLINE boolean _Stack_Is_enough (
  *
  *  _Stack_Adjust_size
  *
+ *  DESCRIPTION:
+ *
+ *  This function increases the stack size to insure that the thread
+ *  has the desired amount of stack space after the initial stack
+ *  pointer is determined based on alignment restrictions.
+ *
+ *  NOTE:
+ *
+ *  The amount of adjustment for alignment is CPU dependent.
  */
 
 STATIC INLINE unsigned32 _Stack_Adjust_size (

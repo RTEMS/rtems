@@ -24,7 +24,7 @@
  */
 
 #define _Thread_queue_Header_number( _the_priority ) \
-     ( (_the_priority) >> 6 )
+    ((_the_priority) / TASK_QUEUE_DATA_PRIORITIES_PER_HEADER)
 
 /*PAGE
  *
@@ -33,7 +33,7 @@
  */
 
 #define _Thread_queue_Is_reverse_search( _the_priority ) \
-     ( (_the_priority) & 0x20 )
+     ( (_the_priority) & TASK_QUEUE_DATA_REVERSE_SEARCH_MASK )
 
 /*PAGE
  *

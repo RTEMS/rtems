@@ -21,6 +21,10 @@
  *
  *  _Semaphore_Allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a semaphore control block from
+ *  the inactive chain of free semaphore control blocks.
  */
 
 STATIC INLINE Semaphore_Control *_Semaphore_Allocate( void )
@@ -32,6 +36,10 @@ STATIC INLINE Semaphore_Control *_Semaphore_Allocate( void )
  *
  *  _Semaphore_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees a semaphore control block to the
+ *  inactive chain of free semaphore control blocks.
  */
 
 STATIC INLINE void _Semaphore_Free (
@@ -45,6 +53,15 @@ STATIC INLINE void _Semaphore_Free (
  *
  *  _Semaphore_Get
  *
+ *  DESCRIPTION:
+ *
+ *  This function maps semaphore IDs to semaphore control blocks.
+ *  If ID corresponds to a local semaphore, then it returns
+ *  the_semaphore control pointer which maps to ID and location
+ *  is set to OBJECTS_LOCAL.  if the semaphore ID is global and
+ *  resides on a remote node, then location is set to OBJECTS_REMOTE,
+ *  and the_semaphore is undefined.  Otherwise, location is set
+ *  to OBJECTS_ERROR and the_semaphore is undefined.
  */
 
 STATIC INLINE Semaphore_Control *_Semaphore_Get (
@@ -60,6 +77,9 @@ STATIC INLINE Semaphore_Control *_Semaphore_Get (
  *
  *  _Semaphore_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Semaphore_Is_null (

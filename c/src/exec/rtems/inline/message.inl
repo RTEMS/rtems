@@ -23,6 +23,10 @@
  *
  *  _Message_queue_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function places the_message at the rear of the outstanding
+ *  messages on the_message_queue.
  */
 
 STATIC INLINE boolean _Message_queue_Is_null (
@@ -37,6 +41,10 @@ STATIC INLINE boolean _Message_queue_Is_null (
  *
  *  _Message_queue_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This routine deallocates a message queue control block into
+ *  the inactive chain of free message queue control blocks.
  */
 
 STATIC INLINE void _Message_queue_Free (
@@ -50,6 +58,16 @@ STATIC INLINE void _Message_queue_Free (
  *
  *  _Message_queue_Get
  *
+ *  DESCRIPTION:
+ *
+ *  This function maps message queue IDs to message queue control
+ *  blocks.  If ID corresponds to a local message queue, then it
+ *  returns the_message_queue control pointer which maps to ID
+ *  and location is set to OBJECTS_LOCAL.  If the message queue ID is
+ *  global and resides on a remote node, then location is set
+ *  to OBJECTS_REMOTE, and the_message_queue is undefined.
+ *  Otherwise, location is set to OBJECTS_ERROR and
+ *  the_message_queue is undefined.
  */
 
 STATIC INLINE Message_queue_Control *_Message_queue_Get (

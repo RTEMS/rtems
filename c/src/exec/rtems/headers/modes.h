@@ -59,7 +59,8 @@ typedef unsigned32 Modes_Control;
  *  RTEMS supports 0 to 256 levels in bits 0-7 of the mode.
  */
 
-/*
+/*PAGE
+ *
  *  RTEMS_INTERRUPT_LEVEL
  *
  *  DESCRIPTION:
@@ -72,108 +73,13 @@ typedef unsigned32 Modes_Control;
  *       particular CPU, fewer than 256 levels may be supported.
  */
 
-STATIC INLINE unsigned32 RTEMS_INTERRUPT_LEVEL (
-  Modes_Control mode_set
-);
+#define RTEMS_INTERRUPT_LEVEL( _mode_set ) \
+  ( (_mode_set) & RTEMS_INTERRUPT_MASK )
+ 
 
-/*
- *  _Modes_Mask_changed
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if any of the mode flags in mask
- *  are set in mode_set, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Modes_Mask_changed (
-  Modes_Control mode_set,
-  Modes_Control masks
-);
-
-/*
- *  _Modes_Is_asr_disabled
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if mode_set indicates that Asynchronous
- *  Signal Processing is disabled, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Modes_Is_asr_disabled (
-  Modes_Control mode_set
-);
-
-/*
- *  _Modes_Is_preempt
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if mode_set indicates that preemption
- *  is enabled, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Modes_Is_preempt (
-  Modes_Control mode_set
-);
-
-/*
- *  _Modes_Is_timeslice
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if mode_set indicates that timeslicing
- *  is enabled, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Modes_Is_timeslice (
-  Modes_Control mode_set
-);
-
-/*
- *  _Modes_Get_interrupt_level
- *
- *  DESCRIPTION:
- *
- *  This function returns the interrupt level portion of the mode_set.
- */
-
-STATIC INLINE ISR_Level _Modes_Get_interrupt_level (
-  Modes_Control mode_set
-);
-
-/*
- *  _Modes_Set_interrupt_level
- *
- *  DESCRIPTION:
- *
- *  This routine sets the current interrupt level to that specified
- *  in the mode_set.
- */
-
-STATIC INLINE void _Modes_Set_interrupt_level (
-  Modes_Control mode_set
-);
-
-/*
- *  _Modes_Change
- *
- *  DESCRIPTION:
- *
- *  This routine changes the modes in old_mode_set indicated by
- *  mask to the requested values in new_mode_set.  The resulting
- *  mode set is returned in out_mode_set and the modes that changed
- *  is returned in changed.
- */
-
-STATIC INLINE void _Modes_Change (
-  Modes_Control  old_mode_set,
-  Modes_Control  new_mode_set,
-  Modes_Control  mask,
-  Modes_Control *out_mode_set,
-  Modes_Control *changed
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/modes.inl>
+#endif
 
 #ifdef __cplusplus
 }

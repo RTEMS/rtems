@@ -47,42 +47,6 @@ void _Objects_MP_Handler_initialization (
   unsigned32 maximum_global_objects
 );
 
-/*
- *  _Objects_MP_Allocate_global_object
- *
- *  DESCRIPTION:
- *
- *  This function allocates a Global Object control block.
- */
-
-STATIC INLINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
-  void
-);
-
-/*
- *  _Objects_MP_Free_global_object
- *
- *  DESCRIPTION:
- *
- *  This routine deallocates a Global Object control block.
- */
-
-STATIC INLINE void _Objects_MP_Free_global_object (
-  Objects_MP_Control *the_object
-);
-
-/*
- *  _Objects_MP_Is_null_global_object
- *
- *  DESCRIPTION:
- *
- *  This function returns whether the global object is NULL or not.
- */
-
-STATIC INLINE boolean _Objects_MP_Is_null_global_object (
-  Objects_MP_Control *the_object
-);
-
 /*PAGE
  *
  *  _Objects_MP_Open
@@ -176,7 +140,9 @@ void _Objects_MP_Is_remote (
 EXTERN unsigned32     _Objects_MP_Maximum_global_objects;
 EXTERN Chain_Control  _Objects_MP_Inactive_global_objects;
 
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/objectmp.inl>
+#endif
 
 #ifdef __cplusplus
 }

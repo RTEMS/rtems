@@ -21,6 +21,10 @@
  *
  *  _TOD_Is_set
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the application has set the current
+ *  time of day, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _TOD_Is_set( void )
@@ -32,6 +36,10 @@ STATIC INLINE boolean _TOD_Is_set( void )
  *
  *  _TOD_Tickle_ticks
  *
+ *  DESCRIPTION:
+ *
+ *  This routine increments the ticks field of the current time of
+ *  day at each clock tick.
  */
 
 STATIC INLINE void _TOD_Tickle_ticks( void )
@@ -44,6 +52,9 @@ STATIC INLINE void _TOD_Tickle_ticks( void )
  *
  *  _TOD_Deactivate
  *
+ *  DESCRIPTION:
+ *
+ *  This routine deactivates updating of the current time of day.
  */
 
 STATIC INLINE void _TOD_Deactivate( void )
@@ -55,6 +66,9 @@ STATIC INLINE void _TOD_Deactivate( void )
  *
  *  _TOD_Activate
  *
+ *  DESCRIPTION:
+ *
+ *  This routine activates updating of the current time of day.
  */
 
 STATIC INLINE void _TOD_Activate(

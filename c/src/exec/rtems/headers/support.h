@@ -24,18 +24,6 @@ extern "C" {
 #include <rtems/rtems/types.h>
 
 /*
- *  rtems_is_name_valid
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the name is valid, and FALSE otherwise.
- */
-
-STATIC INLINE rtems_boolean rtems_is_name_valid (
-  rtems_name  name
-);
-
-/*
  *  rtems_build_name
  *
  *  DESCRIPTION:
@@ -52,24 +40,6 @@ STATIC INLINE rtems_boolean rtems_is_name_valid (
 #define rtems_build_name( _C1, _C2, _C3, _C4 ) \
   ( (_C1) << 24 | (_C2) << 16 | (_C3) << 8 | (_C4) )
  
-/*
- *  rtems_name_to_characters
- *
- *  DESCRIPTION:
- *
- *  This function breaks the object name into the four component
- *  characters C1, C2, C3, and C4.
- *
- */
- 
-STATIC INLINE void rtems_name_to_characters(
-  rtems_name    name,
-  char         *c1,
-  char         *c2,
-  char         *c3,
-  char         *c4
-);
-
 /*
  *  rtems_get_class
  *

@@ -21,6 +21,11 @@
  *
  *  _Mp_packet_Is_valid_packet_class
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the the_packet_class is valid,
+ *  and FALSE otherwise.
+ *
  *  NOTE: Check for lower bounds (MP_PACKET_CLASSES_FIRST ) is unnecessary
  *        because this enum starts at lower bound of zero.
  */
@@ -36,6 +41,10 @@ STATIC INLINE boolean _Mp_packet_Is_valid_packet_class (
  *
  *  _Mp_packet_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the the_packet_class is null,
+ *  and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Mp_packet_Is_null (

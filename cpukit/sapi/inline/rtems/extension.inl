@@ -21,6 +21,10 @@
  *
  *  _Extension_Allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a extension control block from
+ *  the inactive chain of free extension control blocks.
  */
 
 STATIC INLINE Extension_Control *_Extension_Allocate( void )
@@ -32,6 +36,10 @@ STATIC INLINE Extension_Control *_Extension_Allocate( void )
  *
  *  _Extension_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees a extension control block to the
+ *  inactive chain of free extension control blocks.
  */
 
 STATIC INLINE void _Extension_Free (
@@ -45,6 +53,13 @@ STATIC INLINE void _Extension_Free (
  *
  *  _Extension_Get
  *
+ *  DESCRIPTION:
+ *
+ *  This function maps extension IDs to extension control blocks.
+ *  If ID corresponds to a local extension, then it returns
+ *  the extension control pointer which maps to ID and location
+ *  is set to OBJECTS_LOCAL.  Otherwise, location is set
+ *  to OBJECTS_ERROR and the returned value is undefined.
  */
 
 STATIC INLINE Extension_Control *_Extension_Get (
@@ -60,6 +75,9 @@ STATIC INLINE Extension_Control *_Extension_Get (
  *
  *  _Extension_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_extension is NULL and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Extension_Is_null (

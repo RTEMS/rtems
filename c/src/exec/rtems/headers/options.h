@@ -41,35 +41,9 @@ typedef unsigned32 rtems_option;
 #define RTEMS_EVENT_ALL 0x00000000        /* wait for all events */
 #define RTEMS_EVENT_ANY 0x00000002        /* wait on any event */
 
-/*
- *  _Options_Is_no_wait
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the RTEMS_NO_WAIT option is enabled in
- *  option_set, and FALSE otherwise.
- *
- */
-
-STATIC INLINE boolean _Options_Is_no_wait (
-  rtems_option option_set
-);
-
-/*
- *  _Options_Is_any
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the RTEMS_EVENT_ANY option is enabled in
- *  OPTION_SET, and FALSE otherwise.
- *
- */
-
-STATIC INLINE boolean _Options_Is_any (
-  rtems_option option_set
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/options.inl>
+#endif
 
 #ifdef __cplusplus
 }

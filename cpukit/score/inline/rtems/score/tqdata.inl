@@ -21,32 +21,44 @@
  *
  *  _Thread_queue_Header_number
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the index of the priority chain on which
+ *  a thread of the_priority should be placed.
  */
 
 STATIC INLINE unsigned32 _Thread_queue_Header_number (
   Priority_Control the_priority
 )
 {
-  return ( the_priority >> 6 );
+  return (the_priority / TASK_QUEUE_DATA_PRIORITIES_PER_HEADER);
 }
 
 /*PAGE
  *
  *  _Thread_queue_Is_reverse_search
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_priority indicates that the
+ *  enqueue search should start at the front of this priority
+ *  group chain, and FALSE if the search should start at the rear.
  */
 
 STATIC INLINE boolean _Thread_queue_Is_reverse_search (
   Priority_Control the_priority
 )
 {
-  return ( the_priority & 0x20 );
+  return ( the_priority & TASK_QUEUE_DATA_REVERSE_SEARCH_MASK );
 }
 
 /*PAGE
  *
  *  _Thread_queue_Get_number_waiting
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns the number of threads waiting on this thread queue.
  */
  
 STATIC INLINE unsigned32 _Thread_queue_Get_number_waiting (
@@ -60,6 +72,10 @@ STATIC INLINE unsigned32 _Thread_queue_Get_number_waiting (
  *
  *  _Thread_queue_Enter_critical_section
  *
+ *  DESCRIPTION:
+ *
+ *  This routine is invoked to indicate that the specified thread queue is
+ *  entering a critical section.
  */
  
 STATIC INLINE void _Thread_queue_Enter_critical_section (

@@ -55,16 +55,6 @@ typedef enum {
 }  Event_Sync_states;
 
 /*
- *  _Event_Manager_initialization
- *
- *  DESCRIPTION:
- *
- *  This routine performs the initialization necessary for this manager.
- */
-
-STATIC INLINE void _Event_Manager_initialization( void );
-
-/*
  *  rtems_event_send
  *
  *  DESCRIPTION:
@@ -162,7 +152,9 @@ void _Event_Timeout (
 EXTERN volatile Event_Sync_states _Event_Sync_state;
 
 #include <rtems/rtems/eventmp.h>
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/event.inl>
+#endif
 
 #ifdef __cplusplus
 }

@@ -143,32 +143,9 @@ void _CORE_semaphore_Flush(
   unsigned32                      status
 );
 
-/*
- *  _CORE_semaphore_Get_count
- *
- *  DESCRIPTION:
- *
- *  This routine returns the current count associated with the semaphore.
- */
-
-STATIC INLINE unsigned32 _CORE_semaphore_Get_count(
-  CORE_semaphore_Control  *the_semaphore
-);
-
-/*
- *  _CORE_semaphore_Is_priority
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the priority attribute is
- *  enabled in the attribute_set and FALSE otherwise.
- */
-
-STATIC INLINE boolean _CORE_semaphore_Is_priority(
-  CORE_semaphore_Attributes *the_attribute
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/coresem.inl>
+#endif
 
 #ifdef __cplusplus
 }

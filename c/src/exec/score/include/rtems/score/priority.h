@@ -67,164 +67,26 @@ EXTERN Priority_Bit_map_control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
  */
 
 /*
- *  _Priority_Handler_initialization
+ *  Priority Bitfield Manipulation Routines
  *
- *  DESCRIPTION:
+ *  NOTE:
  *
- *  This routine performs the initialization necessary for this handler.
- */
-
-STATIC INLINE void _Priority_Handler_initialization( void );
-
-/*
- *  _Priority_Is_valid
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_priority if valid for a
- *  user task, and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Priority_Is_valid (
-  Priority_Control the_priority
-);
-
-/*
- *  _Priority_Major
- *
- *  DESCRIPTION:
- *
- *  This function returns the major portion of the_priority.
- */
-
-STATIC INLINE unsigned32 _Priority_Major (
-  Priority_Control the_priority
-);
-
-/*
- *  _Priority_Minor
- *
- *  DESCRIPTION:
- *
- *  This function returns the minor portion of the_priority.
- */
-
-STATIC INLINE unsigned32 _Priority_Minor (
-  Priority_Control the_priority
-);
-
-/*
- *  _Priority_Mask
- *
- *  DESCRIPTION:
- *
- *  This function returns the mask associated with the major or minor
- *  number passed to it.
+ *  These may simply be pass throughs to CPU dependent routines.
  */
  
-#if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
-
-STATIC INLINE unsigned32 _Priority_Mask (
-  unsigned32 bit_number
-);
-
-#else
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
 
 #define _Priority_Mask( _bit_number ) \
   _CPU_Priority_Mask( _bit_number )
  
-#endif
-
-/*
- *  _Priority_Bits_index
- *
- *  DESCRIPTION:
- *
- *  This function translates the bit numbers returned by the bit scan 
- *  of a priority bit field into something suitable for use as
- *  a major or minor component of a priority.
- */
- 
-#if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
-
-STATIC INLINE unsigned32 _Priority_Bits_index (
-  unsigned32 bit_number
-);
-
-#else
-
 #define _Priority_Bits_index( _priority ) \
   _CPU_Priority_bits_index( _priority )
 
 #endif
  
-/*
- *  _Priority_Add_to_bit_map
- *
- *  DESCRIPTION:
- *
- *  This routine uses the_priority_map to update the priority
- *  bit maps to indicate that a thread has been readied.
- */
-
-STATIC INLINE void _Priority_Add_to_bit_map (
-  Priority_Information *the_priority_map
-);
-
-/*
- *  _Priority_Remove_from_bit_map
- *
- *  DESCRIPTION:
- *
- *  This routine uses the_priority_map to update the priority
- *  bit maps to indicate that a thread has been removed from the
- *  ready state.
- */
-
-STATIC INLINE void _Priority_Remove_from_bit_map (
-  Priority_Information *the_priority_map
-);
-
-/*
- *  _Priority_Get_highest
- *
- *  DESCRIPTION:
- *
- *  This function returns the priority of the highest priority
- *  ready thread.
- */
-
-STATIC INLINE Priority_Control _Priority_Get_highest( void );
-
-/*
- *  _Priority_Initialize_information
- *
- *  DESCRIPTION:
- *
- *  This routine initializes the_priority_map so that it
- *  contains the information necessary to manage a thread
- *  at new_priority.
- */
-
-STATIC INLINE void _Priority_Initialize_information(
-  Priority_Information *the_priority_map,
-  Priority_Control      new_priority
-);
-
-/*
- *  _Priority_Is_group_empty
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the priority GROUP is empty, and
- *  FALSE otherwise.
- */
-
-STATIC INLINE boolean _Priority_Is_group_empty (
-  Priority_Control      the_priority
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/priority.inl>
+#endif
 
 #ifdef __cplusplus
 }

@@ -21,6 +21,11 @@
  *
  *  _Partition_Allocate_buffer
  *
+ *  DESCRIPTION:
+ *
+ *  This function attempts to allocate a buffer from the_partition.
+ *  If successful, it returns the address of the allocated buffer.
+ *  Otherwise, it returns NULL.
  */
 
 STATIC INLINE void *_Partition_Allocate_buffer (
@@ -34,6 +39,9 @@ STATIC INLINE void *_Partition_Allocate_buffer (
  *
  *  _Partition_Free_buffer
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees the_buffer to the_partition.
  */
 
 STATIC INLINE void _Partition_Free_buffer (
@@ -48,6 +56,10 @@ STATIC INLINE void _Partition_Free_buffer (
  *
  *  _Partition_Is_buffer_on_boundary
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_buffer is on a valid buffer
+ *  boundary for the_partition, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Partition_Is_buffer_on_boundary (
@@ -69,6 +81,10 @@ STATIC INLINE boolean _Partition_Is_buffer_on_boundary (
  *
  *  _Partition_Is_buffer_valid
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_buffer is a valid buffer from
+ *  the_partition, otherwise FALSE is returned.
  */
 
 STATIC INLINE boolean _Partition_Is_buffer_valid (
@@ -92,6 +108,11 @@ STATIC INLINE boolean _Partition_Is_buffer_valid (
  *
  *  _Partition_Is_buffer_size_aligned
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the use of the specified buffer_size
+ *  will result in the allocation of buffers whose first byte is
+ *  properly aligned, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Partition_Is_buffer_size_aligned (
@@ -105,6 +126,10 @@ STATIC INLINE boolean _Partition_Is_buffer_size_aligned (
  *
  *  _Partition_Allocate
  *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a partition control block from
+ *  the inactive chain of free partition control blocks.
  */
 
 STATIC INLINE Partition_Control *_Partition_Allocate ( void )
@@ -116,6 +141,10 @@ STATIC INLINE Partition_Control *_Partition_Allocate ( void )
  *
  *  _Partition_Free
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees a partition control block to the
+ *  inactive chain of free partition control blocks.
  */
 
 STATIC INLINE void _Partition_Free (
@@ -129,6 +158,15 @@ STATIC INLINE void _Partition_Free (
  *
  *  _Partition_Get
  *
+ *  DESCRIPTION:
+ *
+ *  This function maps partition IDs to partition control blocks.
+ *  If ID corresponds to a local partition, then it returns
+ *  the_partition control pointer which maps to ID and location
+ *  is set to OBJECTS_LOCAL.  If the partition ID is global and
+ *  resides on a remote node, then location is set to OBJECTS_REMOTE,
+ *  and the_partition is undefined.  Otherwise, location is set
+ *  to OBJECTS_ERROR and the_partition is undefined.
  */
 
 STATIC INLINE Partition_Control *_Partition_Get (
@@ -144,6 +182,10 @@ STATIC INLINE Partition_Control *_Partition_Get (
  *
  *  _Partition_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_partition is NULL
+ *  and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Partition_Is_null (

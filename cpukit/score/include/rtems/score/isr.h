@@ -141,19 +141,6 @@ void _ISR_Handler_initialization ( void );
         _CPU_ISR_Flash( _level )
 
 /*
- *  _ISR_Is_in_progress
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the processor is currently servicing
- *  and interrupt and FALSE otherwise.   A return value of TRUE indicates
- *  that the caller is an interrupt service routine, NOT a thread.  The
- *  directives available to an interrupt service routine are restricted.
- */
-
-STATIC INLINE boolean _ISR_Is_in_progress( void );
-
-/*
  *  _ISR_Install_vector
  *
  *  DESCRIPTION:
@@ -189,32 +176,6 @@ STATIC INLINE boolean _ISR_Is_in_progress( void );
 
 #define _ISR_Set_level( _new_level ) \
         _CPU_ISR_Set_level( _new_level )
-
-/*
- *  _ISR_Is_vector_number_valid
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the vector is a valid vector number
- *  for this processor and FALSE otherwise.
- */
-
-STATIC INLINE boolean _ISR_Is_vector_number_valid (
-  ISR_Vector_number   vector
-);
-
-/*
- *  _ISR_Is_valid_user_handler
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if handler is the entry point of a valid
- *  use interrupt service routine and FALSE otherwise.
- */
-
-STATIC INLINE boolean _ISR_Is_valid_user_handler (
-  void *handler
-);
 
 /*
  *  _ISR_Handler
@@ -253,7 +214,9 @@ void _ISR_Handler( void );
 
 void _ISR_Dispatch( void );
 
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/isr.inl>
+#endif
 
 #ifdef __cplusplus
 }

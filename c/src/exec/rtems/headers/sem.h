@@ -178,61 +178,6 @@ boolean _Semaphore_Seize(
 );
 
 /*
- *  _Semaphore_Allocate
- *
- *  DESCRIPTION:
- *
- *  This function allocates a semaphore control block from
- *  the inactive chain of free semaphore control blocks.
- */
-
-STATIC INLINE Semaphore_Control *_Semaphore_Allocate( void );
-
-/*
- *  _Semaphore_Free
- *
- *  DESCRIPTION:
- *
- *  This routine frees a semaphore control block to the
- *  inactive chain of free semaphore control blocks.
- */
-
-STATIC INLINE void _Semaphore_Free (
-  Semaphore_Control *the_semaphore
-);
-
-/*
- *  _Semaphore_Get
- *
- *  DESCRIPTION:
- *
- *  This function maps semaphore IDs to semaphore control blocks.
- *  If ID corresponds to a local semaphore, then it returns
- *  the_semaphore control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the semaphore ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_semaphore is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_semaphore is undefined.
- */
-
-STATIC INLINE Semaphore_Control *_Semaphore_Get (
-  rtems_id           id,
-  Objects_Locations *location
-);
-
-/*
- *  _Semaphore_Is_null
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
- */
-
-STATIC INLINE boolean _Semaphore_Is_null (
-  Semaphore_Control *the_semaphore
-);
-
-/*
  *  _Semaphore_Translate_core_mutex_return_code
  *
  *  DESCRIPTION:
@@ -290,7 +235,9 @@ void  _Semaphore_Core_semaphore_mp_support (
   rtems_id        id
 );
 
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/sem.inl>
+#endif
 #include <rtems/rtems/semmp.h>
 
 #ifdef __cplusplus

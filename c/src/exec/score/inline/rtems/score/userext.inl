@@ -21,6 +21,9 @@
  *
  *  _User_extensions_Handler_initialization
  *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this handler.
  */
 
 STATIC INLINE void _User_extensions_Handler_initialization (
@@ -38,6 +41,10 @@ STATIC INLINE void _User_extensions_Handler_initialization (
 /*PAGE
  *
  *  _User_extensions_Add_set
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine is used to add a user extension set to the active list.
  */
 
 STATIC INLINE void _User_extensions_Add_set (
@@ -53,6 +60,9 @@ STATIC INLINE void _User_extensions_Add_set (
 /*PAGE
  *
  *  _User_extensions_Add_API_set
+ *  DESCRIPTION:
+ *
+ *  This routine is used to add an API extension set to the active list.
  */
  
 STATIC INLINE void _User_extensions_Add_API_set (
@@ -65,6 +75,10 @@ STATIC INLINE void _User_extensions_Add_API_set (
 /*PAGE
  *
  *  _User_extensions_Remove_set
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine is used to remove a user extension set from the active list.
  */
 
 STATIC INLINE void _User_extensions_Remove_set (
@@ -78,6 +92,10 @@ STATIC INLINE void _User_extensions_Remove_set (
  *
  *  _User_extensions_Thread_switch
  *
+ *  DESCRIPTION:
+ *
+ *  This routine is used to invoke the user extension which
+ *  is invoked when a context switch occurs.
  */
 
 STATIC INLINE void _User_extensions_Thread_switch (

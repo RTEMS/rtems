@@ -21,6 +21,11 @@
  *
  *  _Watchdog_Initialize
  *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the specified watchdog.  The watchdog is
+ *  made inactive, the watchdog id and handler routine are set to the
+ *  specified values.
  */
 
 STATIC INLINE void _Watchdog_Initialize(
@@ -40,6 +45,10 @@ STATIC INLINE void _Watchdog_Initialize(
  *
  *  _Watchdog_Is_active
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns TRUE if the watchdog timer is in the ACTIVE
+ *  state, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _Watchdog_Is_active(
@@ -55,6 +64,10 @@ STATIC INLINE boolean _Watchdog_Is_active(
  *
  *  _Watchdog_Activate
  *
+ *  DESCRIPTION:
+ *
+ *  This routine activates THE_WATCHDOG timer which is already
+ *  on a watchdog chain.
  */
 
 STATIC INLINE void _Watchdog_Activate(
@@ -70,6 +83,10 @@ STATIC INLINE void _Watchdog_Activate(
  *
  *  _Watchdog_Deactivate
  *
+ *  DESCRIPTION:
+ *
+ *  This routine deactivates THE_WATCHDOG timer which will remain
+ *  on a watchdog chain.
  */
 
 STATIC INLINE void _Watchdog_Deactivate(
@@ -85,6 +102,10 @@ STATIC INLINE void _Watchdog_Deactivate(
  *
  *  _Watchdog_Tickle_ticks
  *
+ *  DESCRIPTION:
+ *
+ *  This routine is invoked at each clock tick to update the ticks
+ *  watchdog chain.
  */
 
 STATIC INLINE void _Watchdog_Tickle_ticks( void )
@@ -98,6 +119,10 @@ STATIC INLINE void _Watchdog_Tickle_ticks( void )
  *
  *  _Watchdog_Tickle_seconds
  *
+ *  DESCRIPTION:
+ *
+ *  This routine is invoked at each clock tick to update the seconds
+ *  watchdog chain.
  */
 
 STATIC INLINE void _Watchdog_Tickle_seconds( void )
@@ -111,6 +136,12 @@ STATIC INLINE void _Watchdog_Tickle_seconds( void )
  *
  *  _Watchdog_Insert_ticks
  *
+ *  DESCRIPTION:
+ *
+ *  This routine inserts THE_WATCHDOG into the ticks watchdog chain
+ *  for a time of UNITS ticks.  The INSERT_MODE indicates whether
+ *  THE_WATCHDOG is to be activated automatically or later, explicitly
+ *  by the caller.
  */
 
 STATIC INLINE void _Watchdog_Insert_ticks(
@@ -129,6 +160,12 @@ STATIC INLINE void _Watchdog_Insert_ticks(
  *
  *  _Watchdog_Insert_seconds
  *
+ *  DESCRIPTION:
+ *
+ *  This routine inserts THE_WATCHDOG into the seconds watchdog chain
+ *  for a time of UNITS seconds.  The INSERT_MODE indicates whether
+ *  THE_WATCHDOG is to be activated automatically or later, explicitly
+ *  by the caller.
  */
 
 STATIC INLINE void _Watchdog_Insert_seconds(
@@ -147,6 +184,11 @@ STATIC INLINE void _Watchdog_Insert_seconds(
  *
  *  _Watchdog_Adjust_seconds
  *
+ *  DESCRIPTION:
+ *
+ *  This routine adjusts the seconds watchdog chain in the forward
+ *  or backward DIRECTION for UNITS seconds.  This is invoked when the
+ *  current time of day is changed.
  */
 
 STATIC INLINE void _Watchdog_Adjust_seconds(
@@ -163,6 +205,10 @@ STATIC INLINE void _Watchdog_Adjust_seconds(
  *
  *  _Watchdog_Adjust_ticks
  *
+ *  DESCRIPTION:
+ *
+ *  This routine adjusts the ticks watchdog chain in the forward
+ *  or backward DIRECTION for UNITS ticks.
  */
 
 STATIC INLINE void _Watchdog_Adjust_ticks(
@@ -179,6 +225,12 @@ STATIC INLINE void _Watchdog_Adjust_ticks(
  *
  *  _Watchdog_Reset
  *
+ *  DESCRIPTION:
+ *
+ *  This routine resets THE_WATCHDOG timer to its state at INSERT
+ *  time.  This routine is valid only on interval watchdog timers
+ *  and is used to make an interval watchdog timer fire "every" so
+ *  many ticks.
  */
 
 STATIC INLINE void _Watchdog_Reset(
@@ -196,6 +248,10 @@ STATIC INLINE void _Watchdog_Reset(
  *
  *  _Watchdog_Next
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns a pointer to the watchdog timer following
+ *  THE_WATCHDOG on the watchdog chain.
  */
 
 STATIC INLINE Watchdog_Control *_Watchdog_Next(
@@ -211,6 +267,10 @@ STATIC INLINE Watchdog_Control *_Watchdog_Next(
  *
  *  _Watchdog_Previous
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns a pointer to the watchdog timer preceding
+ *  THE_WATCHDOG on the watchdog chain.
  */
 
 STATIC INLINE Watchdog_Control *_Watchdog_Previous(
@@ -226,6 +286,10 @@ STATIC INLINE Watchdog_Control *_Watchdog_Previous(
  *
  *  _Watchdog_First
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns a pointer to the first watchdog timer
+ *  on the watchdog chain HEADER.
  */
 
 STATIC INLINE Watchdog_Control *_Watchdog_First(
@@ -241,7 +305,12 @@ STATIC INLINE Watchdog_Control *_Watchdog_First(
  *
  *  _Watchdog_Last
  *
+ *  DESCRIPTION:
+ *
+ *  This routine returns a pointer to the last watchdog timer
+ *  on the watchdog chain HEADER.
  */
+
 STATIC INLINE Watchdog_Control *_Watchdog_Last(
   Chain_Control *header
 )

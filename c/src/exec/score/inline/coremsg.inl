@@ -23,6 +23,9 @@
  *
  *  _CORE_message_queue_Send
  *
+ *  DESCRIPTION:
+ *
+ *  This routine sends a message to the end of the specified message queue.
  */
  
 STATIC INLINE CORE_message_queue_Status _CORE_message_queue_Send(
@@ -47,6 +50,9 @@ STATIC INLINE CORE_message_queue_Status _CORE_message_queue_Send(
  *
  *  _CORE_message_queue_Urgent
  *
+ *  DESCRIPTION:
+ *
+ *  This routine sends a message to the front of the specified message queue.
  */
  
 STATIC INLINE CORE_message_queue_Status _CORE_message_queue_Urgent(
@@ -71,6 +77,10 @@ STATIC INLINE CORE_message_queue_Status _CORE_message_queue_Urgent(
  *
  *  _CORE_message_queue_Copy_buffer
  *
+ *  DESCRIPTION:
+ *
+ *  This routine copies the contents of the source message buffer
+ *  to the destination message buffer.
  */
 
 STATIC INLINE void _CORE_message_queue_Copy_buffer (
@@ -86,6 +96,10 @@ STATIC INLINE void _CORE_message_queue_Copy_buffer (
  *
  *  _CORE_message_queue_Allocate_message_buffer
  *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a message buffer from the inactive
+ *  message buffer chain.
  */
 
 STATIC INLINE CORE_message_queue_Buffer_control *
@@ -101,6 +115,10 @@ _CORE_message_queue_Allocate_message_buffer (
  *
  *  _CORE_message_queue_Free_message_buffer
  *
+ *  DESCRIPTION:
+ *
+ *  This routine frees a message buffer to the inactive
+ *  message buffer chain.
  */
 
 STATIC INLINE void _CORE_message_queue_Free_message_buffer (
@@ -115,6 +133,10 @@ STATIC INLINE void _CORE_message_queue_Free_message_buffer (
  *
  *  _CORE_message_queue_Get_pending_message
  *
+ *  DESCRIPTION:
+ *
+ *  This function removes the first message from the_message_queue
+ *  and returns a pointer to it.
  */
 
 STATIC INLINE
@@ -130,6 +152,10 @@ STATIC INLINE
  *
  *  _CORE_message_queue_Is_priority
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the priority attribute is
+ *  enabled in the attribute_set and FALSE otherwise.
  */
  
 STATIC INLINE boolean _CORE_message_queue_Is_priority(
@@ -143,6 +169,10 @@ STATIC INLINE boolean _CORE_message_queue_Is_priority(
  *
  *  _CORE_message_queue_Append
  *
+ *  DESCRIPTION:
+ *
+ *  This routine places the_message at the rear of the outstanding
+ *  messages on the_message_queue.
  */
 
 STATIC INLINE void _CORE_message_queue_Append (
@@ -157,6 +187,10 @@ STATIC INLINE void _CORE_message_queue_Append (
  *
  *  _CORE_message_queue_Prepend
  *
+ *  DESCRIPTION:
+ *
+ *  This routine places the_message at the front of the outstanding
+ *  messages on the_message_queue.
  */
 
 STATIC INLINE void _CORE_message_queue_Prepend (
@@ -174,6 +208,9 @@ STATIC INLINE void _CORE_message_queue_Prepend (
  *
  *  _CORE_message_queue_Is_null
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the_message_queue is TRUE and FALSE otherwise.
  */
 
 STATIC INLINE boolean _CORE_message_queue_Is_null (
@@ -187,6 +224,10 @@ STATIC INLINE boolean _CORE_message_queue_Is_null (
  *
  *  _CORE_message_queue_Is_notify_enabled
  *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if notification is enabled on this message
+ *  queue and FALSE otherwise.
  */
  
 STATIC INLINE boolean _CORE_message_queue_Is_notify_enabled (
@@ -200,6 +241,9 @@ STATIC INLINE boolean _CORE_message_queue_Is_notify_enabled (
  *
  *  _CORE_message_queue_Set_notify
  *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the notification information for the_message_queue.
  */
  
 STATIC INLINE void _CORE_message_queue_Set_notify (

@@ -48,11 +48,23 @@ typedef enum {
 }  Thread_queue_States;
 
 /*
- *  The following record defines the control block used
- *  to manage each thread.
+ *  The following constants are used to manage the priority queues.
+ *
+ *  There are four chains used to maintain a priority -- each chain
+ *  manages a distinct set of task priorities.  The number of chains
+ *  is determined by TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS.
+ *  The following set must be consistent.  
+ *
+ *  The set below configures 4 headers -- each contains 64 priorities.
+ *  Header x manages priority range (x*64) through ((x*64)+63).  If
+ *  the priority is more than half way through the priority range it
+ *  is in, then the search is performed from the rear of the chain.
+ *  This halves the search time to find the insertion point.
  */
 
-#define TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS 4   /* # of pri groups */
+#define TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS 4   
+#define TASK_QUEUE_DATA_PRIORITIES_PER_HEADER      64
+#define TASK_QUEUE_DATA_REVERSE_SEARCH_MASK        0x20
 
 typedef struct {
   union {
@@ -67,47 +79,9 @@ typedef struct {
   unsigned32               count;
 }   Thread_queue_Control;
 
-/*
- *  _Thread_queue_Header_number
- *
- *  DESCRIPTION:
- *
- *  This function returns the index of the priority chain on which
- *  a thread of the_priority should be placed.
- */
-
-STATIC INLINE unsigned32 _Thread_queue_Header_number (
-  Priority_Control the_priority
-);
-
-/*
- *  _Thread_queue_Is_reverse_search
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_priority indicates that the
- *  enqueue search should start at the front of this priority
- *  group chain, and FALSE if the search should start at the rear.
- */
-
-STATIC INLINE boolean _Thread_queue_Is_reverse_search (
-  Priority_Control the_priority
-);
-
-/*
- *  _Thread_queue_Enter_critical_section
- *
- *  DESCRIPTION:
- *
- *  This routine is invoked to indicate that the specified thread queue is
- *  entering a critical section.
- */
- 
-STATIC INLINE void _Thread_queue_Enter_critical_section (
-  Thread_queue_Control *the_thread_queue
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/tqdata.inl>
+#endif
 
 #ifdef __cplusplus
 }

@@ -20,6 +20,10 @@
 /*PAGE
  *
  *  _System_state_Handler_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the system state handler.
  */
  
 STATIC INLINE void _System_state_Handler_initialization (
@@ -33,6 +37,11 @@ STATIC INLINE void _System_state_Handler_initialization (
 /*PAGE
  *
  *  _System_state_Set
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine sets the current system state to that specified by
+ *  the called.
  */
 
 STATIC INLINE void _System_state_Set (
@@ -45,6 +54,10 @@ STATIC INLINE void _System_state_Set (
 /*PAGE
  *
  *  _System_state_Get
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the current system state.
  */
 
 STATIC INLINE System_state_Codes _System_state_Get ( void )
@@ -55,6 +68,11 @@ STATIC INLINE System_state_Codes _System_state_Get ( void )
 /*PAGE
  *
  *  _System_state_Is_before_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the state is equal to the
+ *  "before initialization" state, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _System_state_Is_before_initialization (
@@ -67,6 +85,11 @@ STATIC INLINE boolean _System_state_Is_before_initialization (
 /*PAGE
  *
  *  _System_state_Is_before_multitasking
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the state is equal to the
+ *  "before multitasking" state, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _System_state_Is_before_multitasking (
@@ -79,6 +102,11 @@ STATIC INLINE boolean _System_state_Is_before_multitasking (
 /*PAGE
  *
  *  _System_state_Is_begin_multitasking
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the state is equal to the
+ *  "begin multitasking" state, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _System_state_Is_begin_multitasking (
@@ -91,6 +119,11 @@ STATIC INLINE boolean _System_state_Is_begin_multitasking (
 /*PAGE
  *
  *  _System_state_Is_up
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the state is equal to the
+ *  "up" state, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _System_state_Is_up (
@@ -103,6 +136,11 @@ STATIC INLINE boolean _System_state_Is_up (
 /*PAGE
  *
  *  _System_state_Is_failed
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the state is equal to the
+ *  "failed" state, and FALSE otherwise.
  */
 
 STATIC INLINE boolean _System_state_Is_failed (

@@ -392,43 +392,6 @@ rtems_status_code rtems_task_wake_after(
   rtems_interval  ticks
 );
 
-/*
- *  _RTEMS_tasks_Allocate
- *
- *  DESCRIPTION:
- *
- *  This function allocates a task control block from
- *  the inactive chain of free task control blocks.
- */
-
-STATIC INLINE Thread_Control *_RTEMS_tasks_Allocate( void );
-
-/*
- *  _RTEMS_tasks_Free
- *
- *  DESCRIPTION:
- *
- *  This routine frees a task control block to the
- *  inactive chain of free task control blocks.
-
- */
-
-STATIC INLINE void _RTEMS_tasks_Free (
-  Thread_Control *the_task
-);
-
-/*
- *  _RTEMS_tasks_Priority_to_Core
- *
- *  DESCRIPTION:
- *
- *  This function converts an RTEMS API priority into a core priority.
- */
- 
-STATIC INLINE Priority_Control _RTEMS_tasks_Priority_to_Core(
-  rtems_task_priority   priority
-);
-
 /*PAGE
  *
  *  _RTEMS_tasks_Initialize_user_tasks
@@ -443,17 +406,9 @@ STATIC INLINE Priority_Control _RTEMS_tasks_Priority_to_Core(
  
 void _RTEMS_tasks_Initialize_user_tasks( void );
 
-/*PAGE
- *
- *  _RTEMS_tasks_Priority_is_valid
- *
- */
- 
-STATIC INLINE boolean _RTEMS_tasks_Priority_is_valid (
-  rtems_task_priority the_priority
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/tasks.inl>
+#endif
 #include <rtems/rtems/taskmp.h>
 
 #ifdef __cplusplus
