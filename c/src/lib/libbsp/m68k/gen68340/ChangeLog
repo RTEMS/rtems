@@ -1,3 +1,11 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, console/Modif_cpu_asm.S, console/console.c,
+	console/m340uart.c, include/bsp.h, include/m340timer.h,
+	include/m340uart.h, start/start.S, start/startfor340only.S,
+	startup/bspclean.c, startup/bspstart.c, startup/dumpanic.c,
+	timer/timer.c: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
