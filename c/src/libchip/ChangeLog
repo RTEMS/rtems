@@ -1,3 +1,8 @@
+2004-11-10	Joel Sherrill <joel@oarcorp.com>
+
+	PR 715/bsps
+	* rtc/mc146818a.c: Delete include of bsp.h
+
 2004-10-13      Eric Norum <norume@aps.anl.gov>
 
         PR 688/bsps
