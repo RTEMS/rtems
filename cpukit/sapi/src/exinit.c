@@ -250,10 +250,7 @@ void rtems_initialize_executive_late(
 
   _System_state_Set( SYSTEM_STATE_BEGIN_MULTITASKING );
 
-  _Thread_Start_multitasking(
-    _Internal_threads_System_initialization_thread,
-    _Internal_threads_Idle_thread
-  );
+  _Thread_Start_multitasking();
 
   /*
    *  Restore the interrupt level to what the BSP had.  Technically,
