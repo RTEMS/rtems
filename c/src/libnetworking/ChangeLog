@@ -1,3 +1,18 @@
+2001-01-31        Sergei Organov <osv@javad.ru>
+
+	* rtems_servers/ftp.d: Following changes:
+	  - Hacks with current dir and root dir removed in favor of new libio
+	    support for task-local current and root directories.
+	  - Bug in `close_data_socket()' introduced by previous change fixed.
+	  - `command_pasv()' changed to set timeout on socket we are listening
+	    on and code fixed to don't close socket twice on error.
+	  - `serr()' changed to clear `errno'.
+	  - `data_socket()' changed to clear `errno' before `bind()'.
+	  - `session()' changed to clear `errno' before processing session.
+	  - `close_data_socket()' fixed to close both active and passive sockets
+	  - Initialize info->data_socket to -1 in `daemon()'
+	  - Initialize `fname' to empty string  in `exec_command()'
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, arpa/Makefile.am, machine/Makefile.am, net/Makefile.am, 

@@ -15,6 +15,26 @@
  *
  *  Changes:
  *
+ *    2001-01-31        Sergei Organov <osv@javad.ru>
+ *
+ *      * Hacks with current dir and root dir removed in favor of new libio
+ *        support for task-local current and root directories.
+ *
+ *    2001-01-30        Sergei Organov <osv@javad.ru>
+ *
+ *      * Bug in `close_data_socket()' introduced by previous change fixed.
+ *      * `command_pasv()' changed to set timeout on socket we are listening on
+ *        and code fixed to don't close socket twice on error.
+ *      * `serr()' changed to clear `errno'.
+ *      * `data_socket()' changed to clear `errno' before `bind()'.
+ *      * `session()' changed to clear `errno' before processing session.
+ *
+ *    2001-01-29        Sergei Organov <osv@javad.ru>
+ *
+ *      * `close_data_socket()' fixed to close both active and passive sockets
+ *      * Initialize info->data_socket to -1 in `daemon()'
+ *      * Initialize `fname' to empty string  in `exec_command()'
+ *
  *    2001-01-22        Sergei Organov <osv@javad.ru>
  *
  *      * Timeouts on sockets implemented. 'idle' field added to
@@ -169,6 +189,7 @@
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/error.h>
+#include <rtems/libio.h>
 #include <syslog.h>
 
 #include <sys/types.h>
@@ -235,7 +256,6 @@ typedef struct
   int                 pasv_socket; /* Socket for PASV connection */
   int                 data_socket; /* Socket for data connection */
   int                 idle;        /* Timeout in seconds */
-  char                cwd[FTPD_BUFSIZE];  /* Current working directory */
   int                 xfer_mode;   /* Transfer mode (ASCII/binary) */
   rtems_id            tid;         /* Task id */
 } FTPD_SessionInfo_t;
@@ -261,10 +281,10 @@ typedef struct
 static FTPD_TaskPool_t task_pool;
 
 /*
- * Root node for FTPD without trailing slash.  Even '/' node is denoted as
- * empty string here.
+ * Root directory
  */
-static char ftpd_root[FTPD_BUFSIZE];
+
+static char const* ftpd_root = "/";
 
 /*
  * Default idle timeout for sockets in seconds.
@@ -286,7 +306,9 @@ static int ftpd_access = 0;
 static char const*
 serr(void)
 {
-  return strerror(errno);
+  int err = errno;
+  errno = 0;
+  return strerror(err);
 }
 
 /*PAGE
@@ -305,172 +327,6 @@ static int
 can_write(void)
 {
   return (ftpd_access & FTPD_NO_WRITE) == 0;
-}
-
-/*PAGE
- *
- *  Utility routines to manage root directory and session local
- *  current working directory.
- *
- */
-
-
-/*PAGE
- *
- * is_dir
- *
- * Return 1 if file with given 'name' exists and is directory, 0 otherwise.
- *
- */
-static int
-is_dir(char const* name)
-{
-  struct stat s;
-  int res = stat(name, &s) == 0 && S_ISDIR(s.st_mode);
-  return res;
-}
-
-/*PAGE
- *
- * squeeze_path
- *
- * Squeezes path according to OS rules, i.e., eliminates /./, /../, and //
- * from the path.  Does nothing if the path is relative, i.e. doesn't begin
- * with '/'.  The trailing slash is always removed, even when alone, i.e. "/"
- * will be "" after squeeze.
- *
- * Input parameters:
- *   path - the path to be squeezed
- *   full - full file name or NULL (assumed that it points to the beginning of
- *          buffer, and 'path' also points somewhere into the same buffer). Is
- *          used to check if intermediate names are directories.
- *
- * Output parameters:
- *   path - squeezed path
- *   returns 1 on success, 0 on failure (if any name that supposed to denote
- *     directory is not a directory).
- *
- */
-static int
-squeeze_path(char* path, char* full)
-{
-  if(path[0] == '/')
-  {
-    char* e = path + 1;
-    int rest = strlen(e);
-    while(rest >= 0)
-    {
-      int len;
-      char* s = e;
-      e = strchr(s, '/');
-      if(e)
-      {
-        char c = *e;
-        *e = '\0';
-        if(full && !is_dir(full))
-        {
-          *e = c;
-          return 0;
-        }
-        *e++ = c;
-      }
-      else
-        e = s + rest + 1;
-      len = e - s;
-      rest -= len;
-      if(len == 1 || (len == 2 && s[0] == '.'))
-      {
-        if(rest >= 0)
-          memmove(s, e, rest + 1);
-        else
-          *s++ = '\0';
-        e = s;
-      }
-      else if(len == 3 && s[0] == '.' && s[1] == '.')
-      {
-        char* ps = s;
-        if(ps - 1 > path) {
-          do
-            --ps;
-          while(ps[-1] != '/');
-        }
-        if(rest >= 0)
-          memmove(ps, e, rest + 1);
-        else
-          *ps++ = '\0';
-        e = ps;
-      }
-    }
-    if(e[-2] == '/')
-    {
-      e[-2] = '\0';
-      if(full && !is_dir(full))
-        return 0;
-    }
-  }
-  return 1;
-}
-
-
-/*PAGE
- *
- * make_path
- *
- * Makes full path given file name, current working directory and root
- * directory (file scope variable 'root').
- *
- * Input parameters:
- *   cwd  - current working directory
- *   name - file name
- *   root (file scope variable) - FTPD root directory
- *
- * Output parameters:
- *   buf - full path
- *   returns pointer to non-root part of the 'buf', i.e. to first character
- *           different from '/' after root part.
- *
- */
-static char const*
-make_path(char* buf, char const* cwd, char const* name)
-{
-  char* res = NULL;
-
-  int rlen = strlen(ftpd_root);
-  int clen = strlen(cwd);
-  int nlen = strlen(name);
-  int len = rlen + nlen;
-
-  if (name[0] != '/')
-  {
-    ++len;
-    if (clen > 0)
-      len += clen + 1;
-  }
-
-  if (FTPD_BUFSIZE > len)
-  {
-    char* b = buf;
-    memcpy(b, ftpd_root, rlen); b += rlen;
-    if (name[0] != '/')
-    {
-      *b++ = '/';
-      if (clen > 0)
-      {
-        memcpy(b, cwd, clen); b += clen;
-        *b++ = '/';
-      }
-    }
-    memcpy(b, name, nlen); b += nlen;
-    *b = '\0';
-
-    res = buf + rlen;
-    while(rlen-- > 0 && res[-1] == '/')
-      --res;
-    if(!squeeze_path(res, buf))
-      res = NULL;
-  }
-
-  return res;
 }
 
 /*PAGE
@@ -602,8 +458,6 @@ task_pool_init(int count, rtems_task_priority priority)
       return 0;
     }
     task_pool.queue[i] = task_pool.info + i;
-    info->ctrl_fp = NULL;
-    info->ctrl_socket  = -1;
     if (++id > 'z')
       id = 'a';
   }
@@ -637,8 +491,6 @@ task_pool_obtain()
     info = task_pool.queue[task_pool.head];
     if(++task_pool.head >= task_pool.count)
       task_pool.head = 0;
-    info->ctrl_socket = -1;
-    info->ctrl_fp = NULL;
     rtems_semaphore_release(task_pool.mutex);
   }
   return info;
@@ -800,6 +652,7 @@ data_socket(FTPD_SessionInfo_t *info)
       data_source.sin_port = htons(20); /* ftp-data port */
       for(tries = 1; tries < 10; ++tries)
       {
+        errno = 0;
         if(bind(s, (struct sockaddr *)&data_source, sizeof(data_source)) >= 0)
           break;
         if (errno != EADDRINUSE)
@@ -849,9 +702,11 @@ data_socket(FTPD_SessionInfo_t *info)
 static void
 close_data_socket(FTPD_SessionInfo_t *info)
 {
-  int s = info->pasv_socket;
+  /* As at most one data socket could be open simultaneously and in some cases
+     data_socket == pasv_socket, we select socket to close, then close it. */
+  int s = info->data_socket;
   if(0 > s)
-    s = info->data_socket;
+    s = info->pasv_socket;
   if(!close_socket(s))
     syslog(LOG_ERR, "ftpd: Error closing data socket.");
   info->data_socket = -1;
@@ -936,7 +791,6 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
   int                 fd = -1;
   char                buf[FTPD_DATASIZE];
   int                 res = 0;
-  char const* r = NULL;
 
   if(!can_read())
   {
@@ -944,9 +798,7 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
     return;
   }
 
-  r = make_path(buf, info->cwd, filename);
-
-  if (NULL == r || 0 > (fd = open(buf, O_RDONLY)))
+  if (0 > (fd = open(filename, O_RDONLY)))
   {
     send_reply(info, 550, "Error opening file.");
     return;
@@ -1030,6 +882,29 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
 
 /*PAGE
  *
+ * discard
+ *
+ * Analog of `write' routine that just discards passed data
+ *
+ * Input parameters:
+ *   fd    - file descriptor (ignored)
+ *   buf   - data to write (ignored)
+ *   count - number of bytes in `buf'
+ *
+ * Output parameters:
+ *   returns `count'
+ *
+ */
+static ssize_t
+discard(int fd, void const* buf, size_t count)
+{
+  (void)fd;
+  (void)buf;
+  return count;
+}
+
+/*PAGE
+ *
  * command_store
  *
  * Performs the "STOR" command (receive data from client).
@@ -1051,22 +926,14 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
   char                   buf[FTPD_DATASIZE];
   int                    res = 1;
   int                    bare_lfs = 0;
-
-  int null = !strcmp("/dev/null", filename);
+  int                    null = 0;
+  typedef ssize_t (*WriteProc)(int, void const*, size_t);
+  WriteProc              wrt = &write;
 
   if(!can_write())
   {
     send_reply(info, 550, "Access denied.");
     return;
-  }
-
-  if(!null)
-  {
-    if (NULL == make_path(buf, info->cwd, filename))
-    {
-      send_reply(info, 550, "Error creating file.");
-      return;
-    }
   }
 
   send_mode_reply(info);
@@ -1075,18 +942,17 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
   if(0 > s)
     return;
 
-
+  null = !strcmp("/dev/null", filename);
   if (null)
   {
     /* File "/dev/null" just throws data away.
-     *  FIXME: this is hack.  Using /dev/null filesystem entry would be
-     *  better.  However, it's not clear how to handle root directory other
-     *  than '/' then.
+     *  FIXME: this is hack.  Using `/dev/null' filesystem entry would be
+     *  better.
      */
-    while ((n = recv(s, buf, FTPD_DATASIZE, 0)) > 0)
-      ;
+    wrt = &discard;
   }
-  else if (rtems_ftpd_configuration.hooks != NULL)
+
+  if (!null && rtems_ftpd_configuration.hooks != NULL)
   {
 
     /* Search our list of hooks to see if we need to do something special. */
@@ -1159,9 +1025,12 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
   }
   else
   {
-    /* Data transfer to regular file. */
-    int fd =
-      creat(buf, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    /* Data transfer to regular file or /dev/null. */
+    int fd = 0;
+
+    if(!null)
+      fd = creat(filename,
+        S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 
     if (0 > fd)
     {
@@ -1174,7 +1043,7 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
     {
       while ((n = recv(s, buf, FTPD_DATASIZE, 0)) > 0)
       {
-        if (write(fd, buf, n) != n)
+        if (wrt(fd, buf, n) != n)
         {
           res = 0;
           break;
@@ -1196,7 +1065,7 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
         {
           char const lf = '\r';
           pended_cr = 0;
-          if(write(fd, &lf, 1) != 1)
+          if(wrt(fd, &lf, 1) != 1)
           {
             res = 0;
             break;
@@ -1231,12 +1100,12 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
           if(res == 0)
             break;
           count = i - sub - pended_cr;
-          if(count > 0 && write(fd, b, count) != count)
+          if(count > 0 && wrt(fd, b, count) != count)
           {
             res = 0;
             break;
           }
-          if(sub == 2 && write(fd, e - 1, 1) != 1)
+          if(sub == 2 && wrt(fd, e - 1, 1) != 1)
             res = 0;
         }
         while((rest -= i) > 0);
@@ -1384,10 +1253,7 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
   struct dirent       *dp = 0;
   struct stat         stat_buf;
   char                buf[FTPD_BUFSIZE];
-  char                path[FTPD_BUFSIZE];
   time_t curTime;
-  char const* res;
-  char const* cwd = info->cwd;
   int sc = 1;
 
   send_reply(info, 150, "Opening ASCII mode data connection for LIST.");
@@ -1402,15 +1268,13 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
   if(fname[0] == '\0')
     fname = ".";
 
-  res = make_path(path, cwd, fname);
-
-  if (NULL == res || 0 > stat(path, &stat_buf))
+  if (0 > stat(fname, &stat_buf))
   {
     snprintf(buf, FTPD_BUFSIZE,
       "%s: No such file or directory.\r\n", fname);
     send(s, buf, strlen(buf), 0);
   }
-  else if (S_ISDIR(stat_buf.st_mode) && (NULL == (dirp = opendir(path))))
+  else if (S_ISDIR(stat_buf.st_mode) && (NULL == (dirp = opendir(fname))))
   {
     snprintf(buf, FTPD_BUFSIZE,
       "%s: Can not open directory.\r\n", fname);
@@ -1420,15 +1284,15 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
   {
     time(&curTime);
     if(!dirp && *fname)
-      sc = sc && send_dirline(s, wide, curTime, path, "", fname, buf);
+      sc = sc && send_dirline(s, wide, curTime, fname, "", fname, buf);
     else {
       /* FIXME: need "." and ".." only when '-a' option is given */
-      sc = sc && send_dirline(s, wide, curTime, path, "", ".", buf);
-      sc = sc && send_dirline(s, wide, curTime, path,
-        (strcmp(path, ftpd_root) ? ".." : ""), "..", buf);
+      sc = sc && send_dirline(s, wide, curTime, fname, "", ".", buf);
+      sc = sc && send_dirline(s, wide, curTime, fname,
+        (strcmp(fname, ftpd_root) ? ".." : ""), "..", buf);
       while (sc && (dp = readdir(dirp)) != NULL)
         sc = sc &&
-          send_dirline(s, wide, curTime, path, dp->d_name, dp->d_name, buf);
+          send_dirline(s, wide, curTime, fname, dp->d_name, dp->d_name, buf);
     }
   }
 
@@ -1445,38 +1309,64 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
 
 /*PAGE
  *
- * rtems_ftpd_cwd
+ * command_cwd
  *
- * Change current working directory.  We use 'chdir' here only to validate the
- * new directory.  We keep track of current working directory ourselves because
- * current working directory in RTEMS isn't thread local, but we need it to be
- * session local.
+ * Change current working directory.
  *
  * Input parameters:
  *   info - corresponding SessionInfo structure
  *   dir  - directory name passed in CWD command
  *
  * Output parameters:
- *   info->cwd is set to new CWD value.
+ *   NONE
  *
  */
 static void
-rtems_ftpd_cwd(FTPD_SessionInfo_t  *info, char *dir)
+command_cwd(FTPD_SessionInfo_t  *info, char *dir)
 {
-  char buf[FTPD_BUFSIZE];
-  char const* cwd = make_path(buf, info->cwd, dir);
-  if(cwd && chdir(buf) == 0)
-  {
+  if(chdir(dir) == 0)
     send_reply(info, 250, "CWD command successful.");
-    strcpy(info->cwd, cwd);
-  }
   else
-  {
     send_reply(info, 550, "CWD command failed.");
-  }
 }
 
 
+/*PAGE
+ *
+ * command_pwd
+ *
+ * Send current working directory to client.
+ *
+ * Input parameters:
+ *   info - corresponding SessionInfo structure
+ *
+ * Output parameters:
+ *   NONE
+ */
+static void
+command_pwd(FTPD_SessionInfo_t  *info)
+{
+  char buf[FTPD_BUFSIZE];
+  char const* cwd;
+  errno = 0;
+  buf[0] = '"';
+  cwd = getcwd(buf + 1, FTPD_BUFSIZE - 4);
+  if(cwd)
+  {
+    int len = strlen(cwd);
+    static char const txt[] = "\" is the current directory.";
+    int size = sizeof(txt);
+    if(len + size + 1 >= FTPD_BUFSIZE)
+      size = FTPD_BUFSIZE - len - 2;
+    memcpy(buf + len + 1, txt, size);
+    buf[len + size] = '\0';
+    send_reply(info, 250, buf);
+  }
+  else {
+    snprintf(buf, FTPD_BUFSIZE, "Error: %s.", serr());
+    send_reply(info, 452, buf);
+  }
+}
 
 /*PAGE
  *
@@ -1497,7 +1387,7 @@ command_mdtm(FTPD_SessionInfo_t  *info, char const* fname)
   struct stat stbuf;
   char buf[FTPD_BUFSIZE];
 
-  if (NULL == make_path(buf, info->cwd, fname) || 0 > stat(buf, &stbuf))
+  if (0 > stat(fname, &stbuf))
   {
     snprintf(buf, FTPD_BUFSIZE, "%s: %s.", fname, serr());
     send_reply(info, 550, buf);
@@ -1614,7 +1504,7 @@ command_pasv(FTPD_SessionInfo_t *info)
       syslog(LOG_ERR, "ftpd: Error binding PASV socket: %s", serr());
     else if (0 > listen(s, 1))
       syslog(LOG_ERR, "ftpd: Error listening on PASV socket: %s", serr());
-    else
+    else if(set_socket_timeout(s, info->idle))
     {
       char buf[FTPD_BUFSIZE];
       unsigned char const *ip, *p;
@@ -1627,11 +1517,14 @@ command_pasv(FTPD_SessionInfo_t *info)
       send_reply(info, 227, buf);
 
       info->pasv_socket = accept(s, (struct sockaddr *)&addr, &addrLen);
-      close_socket(s);
       if (0 > info->pasv_socket)
         syslog(LOG_ERR, "ftpd: Error accepting PASV connection: %s", serr());
       else
+      {
+        close_socket(s);
+        s = -1;
         err = 0;
+      }
     }
   }
   if(err)
@@ -1746,16 +1639,17 @@ split_command(char *buf, char **cmd, char **opts, char **args)
  *   info - corresponding SessionInfo structure
  *   cmd  - command to be executed (upper-case)
  *   args - arguments of the command
- *   buf  - beginning of buffer where 'cmd' and 'args' reside.
  *
  * Output parameters:
  *    NONE
  */
 static void
-exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args, char* buf)
+exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
 {
   char fname[FTPD_BUFSIZE];
   int wrong_command = 0;
+
+  fname[0] = '\0';
 
   if (!strcmp("PORT", cmd))
   {
@@ -1824,8 +1718,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args, char* buf)
     }
     else if (
       1 == sscanf(args, "%254s", fname) &&
-      NULL != make_path(buf, info->cwd, fname) &&
-      unlink(buf) == 0)
+      unlink(fname) == 0)
     {
       send_reply(info, 257, "DELE successful.");
     }
@@ -1848,8 +1741,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args, char* buf)
       }
       else if(
         2 == sscanf(args, "%o %254s", &mask, fname) &&
-        NULL != make_path(buf, info->cwd, fname) &&
-        chmod(buf, (mode_t)mask) == 0)
+        chmod(fname, (mode_t)mask) == 0)
       {
         send_reply(info, 257, "CHMOD successful.");
       }
@@ -1869,8 +1761,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args, char* buf)
     }
     else if (
       1 == sscanf(args, "%254s", fname) &&
-      NULL != make_path(buf, info->cwd, fname) &&
-      rmdir(buf) == 0)
+      rmdir(fname) == 0)
     {
       send_reply(info, 257, "RMD successful.");
     }
@@ -1887,8 +1778,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args, char* buf)
     }
     else if (
       1 == sscanf(args, "%254s", fname) &&
-      NULL != make_path(buf, info->cwd, fname) &&
-      mkdir(buf, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
+      mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
     {
       send_reply(info, 257, "MKD successful.");
     }
@@ -1900,20 +1790,15 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args, char* buf)
   else if (!strcmp("CWD", cmd))
   {
     sscanf(args, "%254s", fname);
-    rtems_ftpd_cwd(info, fname);
+    command_cwd(info, fname);
   }
   else if (!strcmp("CDUP", cmd))
   {
-    rtems_ftpd_cwd(info, "..");
+    command_cwd(info, "..");
   }
   else if (!strcmp("PWD", cmd))
   {
-    char const* cwd = "/";
-    if(info->cwd[0])
-      cwd = info->cwd;
-    snprintf(buf, FTPD_BUFSIZE,
-      "\"%s\" is the current directory.", cwd);
-    send_reply(info, 250, buf);
+    command_pwd(info);
   }
   else
     wrong_command = 1;
@@ -1943,13 +1828,25 @@ static void
 session(rtems_task_argument arg)
 {
   FTPD_SessionInfo_t  *const info = (FTPD_SessionInfo_t  *)arg;
+  int chroot_made = 0;
+
+  rtems_libio_set_private_env();
+
+  /* chroot() can fail here because the directory may not exist yet. */
+  chroot_made = chroot(ftpd_root) == 0;
 
   while(1)
   {
     rtems_event_set set;
+    char buf[128];
 
     rtems_event_receive(FTPD_RTEMS_EVENT, RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT,
       &set);
+
+    chroot_made = chroot_made || chroot(ftpd_root) == 0;
+    chdir("/");
+
+    errno = 0;
 
     send_reply(info, 220, FTPD_SERVER_MESSAGE);
 
@@ -1973,7 +1870,7 @@ session(rtems_task_argument arg)
       }
       else
       {
-        exec_command(info, cmd, args, buf);
+        exec_command(info, cmd, args);
       }
     }
 
@@ -2061,8 +1958,8 @@ daemon()
             info->use_default = 1;
             info->ctrl_addr  = addr;
             info->pasv_socket = -1;
-            info->xfer_mode = TYPE_A;
-            info->cwd[0] = '\0';
+            info->data_socket = -1;
+            info->xfer_mode   = TYPE_A;
             info->data_addr.sin_port =
               htons(ntohs(info->ctrl_addr.sin_port) - 1);
             info->idle = ftpd_timeout;
@@ -2149,18 +2046,17 @@ rtems_initialize_ftpd()
     return RTEMS_UNSATISFIED;
   }
 
-  ftpd_root[0] = '\0';
+  ftpd_root = "/";
   if (
     rtems_ftpd_configuration.root &&
-    strlen(rtems_ftpd_configuration.root) < FTPD_BUFSIZE &&
-    rtems_ftpd_configuration.root[0] == '/')
-  {
-    strcpy(ftpd_root, rtems_ftpd_configuration.root);
-    squeeze_path(ftpd_root, NULL);
-    rtems_ftpd_configuration.root = ftpd_root;
-  }
+    rtems_ftpd_configuration.root[0] == '/'
+  )
+    ftpd_root = rtems_ftpd_configuration.root;
+
+  rtems_ftpd_configuration.root = ftpd_root;
 
   syslog(LOG_INFO, "ftpd: FTP daemon started (%d session%s max)",
     count, ((count > 1) ? "s" : ""));
+
   return RTEMS_SUCCESSFUL;
 }
