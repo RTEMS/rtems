@@ -11,8 +11,14 @@
 #
 
 progname=`basename $0`
+rootdir=`dirname $0`
 
-perltools=tools/update
+# Get the absolute path to the perltools
+pwd=`pwd`
+cd $rootdir
+perltools=`pwd`
+cd $pwd
+
 ac_do=""
 am_do=""
 ci_do=""
@@ -31,11 +37,15 @@ usage()
   exit 1;
 }
 
-if test ! -f VERSION; then
-  echo "${progname}:"
-  echo "        Please change directory to RTEMS's toplevel directory"
-  exit 1;
-fi
+# Check for auxillary files
+aux_files="../../VERSION ampolish acpolish cipolish"
+for i in ${aux_files}; do
+  if test ! -f ${perltools}/$i; then
+    echo "${progname}:"
+    echo "        Missing $perltools/$i"
+    exit 1;
+  fi
+done
 
 while test $# -gt 0; do
 case $1 in
@@ -72,7 +82,7 @@ for f in $ac_files; do
     echo "polishing : $dest/Makefile.in"
     ( cd $dest; 
       mv Makefile.in Makefile.in~;
-      ${pwd}/${perltools}/acpolish <Makefile.in~ >Makefile.in
+      ${perltools}/acpolish <Makefile.in~ >Makefile.in
       rm Makefile.in~
     )
   fi
@@ -87,7 +97,7 @@ for f in $am_files; do
     echo "polishing : $dest/Makefile.am"
     ( cd $dest; 
       mv Makefile.am Makefile.am~;
-      ${pwd}/${perltools}/ampolish <Makefile.am~ >Makefile.am
+      ${perltools}/ampolish <Makefile.am~ >Makefile.am
       rm Makefile.am~
     )
 done
@@ -101,7 +111,7 @@ for f in $ci_files; do
     echo "polishing : $dest/configure.in"
     ( cd $dest; 
       mv configure.in configure.in~;
-      ${pwd}/${perltools}/cipolish <configure.in~ >configure.in
+      ${perltools}/cipolish <configure.in~ >configure.in
       rm configure.in~
     )
 done

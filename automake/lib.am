@@ -10,9 +10,9 @@ $(AR) $(ARFLAGS) $@ $^
 $(RANLIB) $@
 endef
 
-TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib
-
 $(PROJECT_RELEASE)/lib:
 	@$(mkinstalldirs) $@
+
+TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib
 
 .PRECIOUS: $(LIB)

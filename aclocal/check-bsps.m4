@@ -17,6 +17,8 @@ AC_MSG_CHECKING([for bsps])
         READ*);;
         CVS*);;
         pxfl*);;
+        ac*);;
+        config*);;
         # Now account for BSPs with build variants
         gen68360)      rtems_bsp="$rtems_bsp gen68360 gen68360_040";;
         p4000)         rtems_bsp="$rtems_bsp p4600 p4650";;

@@ -58,9 +58,9 @@ tool's configuration applies standard automake Makefile.ams and
 configure.ins. RTEMS should contain enough examples which could serve as
 templates for this (My advice: Try to avoid preinstallation and
 installation to the temporary installation tree whenever possible; Don't
-forget to add all sources which do not get installed installed by automake
+forget to add all sources which do not get installed by automake
 to automake's EXTRA_DIST, e.g. noinst_SCRIPTS, noinst_DATA have to be added
-to EXTRA_DIST).
+to EXTRA_DIST.
 
 Please let me know if you meet problems and if we/I can fix them. I
 consider acpolish to be an internal developer's and maintainer's helper
