@@ -165,5 +165,6 @@ SECTIONS
   /* These must appear regardless of  .  */
 }
 
-_VBR = 0xFFFFFFFF;		/* indicates VBR table is in ROM */
+/* _VBR = 0xFFFFFFFF;		 * indicates VBR table is in ROM */
+_VBR = 0x0;		 	/* indicates VBR table is in RAM */
 

@@ -1,3 +1,9 @@
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Set _VBR to 0 to indicate that the vectors are
+	in RAM not ROM.  Thanks to Juan Zamorano <jzamora@fi.upm.es> for
+	debugging this.
+
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
 	* start/start.S, startup/bspstart.c: Not functional for CPU32
