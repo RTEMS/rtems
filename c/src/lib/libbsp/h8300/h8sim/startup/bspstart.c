@@ -58,7 +58,6 @@ void bsp_pretasking_hook(void)
 {
     void         *heapStart;
     unsigned long heapSize;
-    unsigned long ramSpace;
     extern int WorkspaceBase;
 
     heapStart =  (void *)
