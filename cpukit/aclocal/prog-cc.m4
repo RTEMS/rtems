@@ -33,7 +33,7 @@ if test "$GCC" = yes; then
 ]
 m4_if([$1],,[],[CPPFLAGS="$CPPFLAGS $1"])
 [
-CFLAGS="-g -Wall"
+CFLAGS=${CFLAGS--g -Wall}
 fi
 
 dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*

@@ -1,3 +1,9 @@
+2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/prog-cc.m4: Acknowledge configuration-time CFLAGS.
+	* automake/compile.am: Acknowledge configuration-time CFLAGS.
+	Remove CFLAGS_DEFAULT.
+
 2002-11-11	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-ss-20021111.
