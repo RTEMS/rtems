@@ -12,9 +12,19 @@
 
 @subsection Time Value Specification Structures
 
+@example
+struct timespec, Type, Implemented
+struct itimerspec, Type, Implemented
+@end example
+
 @subsection Timer Event Notification Control Block
 
 @subsection Type Definitions
+
+@example
+clockid_t, Type, Implemented
+timerid_t, Type, Implemented
+@end example
 
 @subsection Manifest Constants
 
@@ -23,34 +33,34 @@
 @subsection Clocks
 
 @example
-clock_settime(), Function
-clock_gettime(), Function
-clock_getres(), Function
+clock_settime(), Function, Partial Implementation
+clock_gettime(), Function, Partial Implementation
+clock_getres(), Function, Implemented
 @end example
 
 @subsection Create a Per-Process Timer
 
 @example
-timer_create(), Function
+timer_create(), Function, Dummy Implementation
 @end example
 
 @subsection Delete a Per-Process Timer
 
 @example
-timer_delete(), Function
+timer_delete(), Function, Dummy Implementation
 @end example
 
 @subsection Per-Process Timers
 
 @example
-timer_settime(), Function
-timer_gettime(), Function
-timer_getoverrun(), Function
+timer_settime(), Function, Dummy Implementation
+timer_gettime(), Function, Dummy Implementation
+timer_getoverrun(), Function, Dummy Implementation
 @end example
 
 @subsection High Resolution Sleep
 
 @example
-nanosleep(), Function
+nanosleep(), Function, Implemented
 @end example
 

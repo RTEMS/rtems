@@ -15,55 +15,55 @@
 @subsection Thread Creation Attributes
 
 @example
-pthread_attr_init(), Function
-pthread_attr_destroy(), Function
-pthread_attr_setstacksize(), Function
-pthread_attr_getstacksize(), Function
-pthread_attr_setstackaddr(), Function
-pthread_attr_getstackaddr(), Function
-pthread_attr_setdetachstate(), Function
-pthread_attr_getdetachstate(), Function
+pthread_attr_init(), Function, Implemented
+pthread_attr_destroy(), Function, Implemented
+pthread_attr_setstacksize(), Function, Implemented
+pthread_attr_getstacksize(), Function, Implemented
+pthread_attr_setstackaddr(), Function, Implemented
+pthread_attr_getstackaddr(), Function, Implemented
+pthread_attr_setdetachstate(), Function, Implemented
+pthread_attr_getdetachstate(), Function, Implemented
 @end example
 
 @subsection Thread Creation
 
 @example
-pthread_create(), Function
+pthread_create(), Function, Implemented
 @end example
 
 @subsection Wait for Thread Termination
 
 @example
-pthread_join(), Function
+pthread_join(), Function, Implemented
 @end example
 
 @subsection Detaching a Thread
 
 @example
-pthread_detach(), Function
+pthread_detach(), Function, Implemented
 @end example
 
 @subsection Thread Termination
 
 @example
-pthread_exit(), Function
+pthread_exit(), Function, Implemented
 @end example
 
 @subsection Get Thread ID
 
 @example
-pthread_self(), Function
+pthread_self(), Function, Implemented
 @end example
 
 @subsection Compare Thread IDs
 
 @example
-pthread_equal(), Function
+pthread_equal(), Function, Implemented
 @end example
 
 @subsection Dynamic Package Initialization
 
 @example
-pthread_once(), Function
+pthread_once(), Function, Implemented
 @end example
 

@@ -13,19 +13,19 @@
 @subsection Thread-Specific Data Key Creation
 
 @example
-pthread_key_create(), Function
+pthread_key_create(), Function, Implemented
 @end example
 
 @subsection Thread-Specific Data Management
 
 @example
-pthread_key_setspecific(), Function
-pthread_key_getspecific(), Function
+pthread_key_setspecific(), Function, Implemented
+pthread_key_getspecific(), Function, Implemented
 @end example
 
 @subsection Thread-Specific Data Key Deletion
 
 @example
-pthread_key_delete(), Function
+pthread_key_delete(), Function, Implemented
 @end example
 

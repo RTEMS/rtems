@@ -72,6 +72,7 @@ summarize_chapter()
   datatypes_unmplementable=`wc3 "Type," "Unimplementable" $*`
   datatypes_partial=`       wc3 "Type," "Partial Implementation" $*`
   datatypes_dummy=`         wc3 "Type," "Dummy Implementation" $*`
+  datatypes_untested=`      wc3 "Type," "Untested Implementation" $*`
 
   datatypes_sum=`addit ${datatypes_implemented} \
      ${datatypes_unimplemented} ${datatypes_unmplementable} \
@@ -103,6 +104,7 @@ summarize_chapter()
   echo "    Unimplementable : ${datatypes_unmplementable}"
   echo "    Partial         : ${datatypes_partial}"
   echo "    Dummy           : ${datatypes_dummy}"
+  echo "    Untested        : ${datatypes_untested}"
   echo "@end example"
   echo
   if [ ${datatypes_sum} -ne ${datatypes_total} ] ; then

@@ -10,6 +10,10 @@
 
 @section Scheduling Parameters
 
+@example
+struct sched_param, Type, Implemented
+@end example
+
 @section Scheduling Policies
 
 @subsection SCHED_FIFO
@@ -23,39 +27,39 @@
 @subsection Set Scheduling Parameters
 
 @example
-sched_setparam(), Function
+sched_setparam(), Function, Dummy Implementation
 @end example
 
 @subsection Get Scheduling Parameters
 
 @example
-sched_getparam(), Function
+sched_getparam(), Function, Dummy Implementation
 @end example
 
 @subsection Set Scheduling Policy and Scheduling Parameters
 
 @example
-sched_setscheduler(), Function
+sched_setscheduler(), Function, Dummy Implementation
 @end example
 
 @subsection Get Scheduling Policy
 
 @example
-sched_getscheduler(), Function
+sched_getscheduler(), Function, Dummy Implementation
 @end example
 
 @subsection Yield Processor
 
 @example
-sched_yield(), Function
+sched_yield(), Function, Implemented
 @end example
 
 @subsection Get Scheduling Parameter Limits
 
 @example
-sched_get_priority_max(), Function
-sched_get_priority_min(), Function
-sched_get_priority_rr_get_interval(), Function
+sched_get_priority_max(), Function, Implemented
+sched_get_priority_min(), Function, Implemented
+sched_get_priority_rr_get_interval(), Function, Implemented
 @end example
 
 @section Thread Scheduling
@@ -73,38 +77,38 @@ sched_get_priority_rr_get_interval(), Function
 @subsection Thread Creation Scheduling Attributes
 
 @example
-pthread_attr_setscope(), Function
-pthread_attr_getscope(), Function
-pthread_attr_setinheritsched(), Function
-pthread_attr_getinheritsched(), Function
-pthread_attr_setschedpolicy(), Function
-pthread_attr_getschedpolicy(), Function
-pthread_attr_setschedparam(), Function
-pthread_attr_getschedparam(), Function
+pthread_attr_setscope(), Function, Implemented
+pthread_attr_getscope(), Function, Implemented
+pthread_attr_setinheritsched(), Function, Implemented
+pthread_attr_getinheritsched(), Function, Implemented
+pthread_attr_setschedpolicy(), Function, Implemented
+pthread_attr_getschedpolicy(), Function, Implemented
+pthread_attr_setschedparam(), Function, Implemented
+pthread_attr_getschedparam(), Function, Implemented
 @end example
 
 @subsection Dynamic Thread Scheduling Parameters Access
 
 @example
-pthread_setschedparam(), Function
-pthread_getschedparam(), Function
+pthread_setschedparam(), Function, Implemented
+pthread_getschedparam(), Function, Implemented
 @end example
 
-@section Synchronization Scheduling
+@section Synchronization Scheduling, Implemented
 
 @subsection Mutex Initialization Scheduling Attributes
 
 @example
-pthread_mutexattr_setprotocol(), Function
-pthread_mutexattr_getprotocol(), Function
-pthread_mutexattr_setpriceiling(), Function
-pthread_mutexattr_getpriceiling(), Function
+pthread_mutexattr_setprotocol(), Function, Implemented
+pthread_mutexattr_getprotocol(), Function, Implemented
+pthread_mutexattr_setprioceiling(), Function, Implemented
+pthread_mutexattr_getprioceiling(), Function, Implemented
 @end example
 
 @subsection Change the Priority Ceiling of a Mutex
 
 @example
-pthread_mutex_setprioceiling(), Function
-pthread_mutex_getprioceiling(), Function
+pthread_mutex_setprioceiling(), Function, Implemented
+pthread_mutex_getprioceiling(), Function, Implemented
 @end example
 

@@ -66,25 +66,25 @@ sem_getvalue(), Function, Untested Implementation
 @subsection Mutex Initialization Attributes
 
 @example
-pthread_mutexattr_init(), Function
-pthread_mutexattr_destroy(), Function
-pthread_mutexattr_getpshared(), Function
-pthread_mutexattr_setpshared(), Function
+pthread_mutexattr_init(), Function, Implemented
+pthread_mutexattr_destroy(), Function, Implemented
+pthread_mutexattr_getpshared(), Function, Implemented
+pthread_mutexattr_setpshared(), Function, Implemented
 @end example
 
 @subsection Initializing and Destroying a Mutex
 
 @example
-pthread_mutex_init(), Function
-pthread_mutex_destroy(), Function
+pthread_mutex_init(), Function, Implemented
+pthread_mutex_destroy(), Function, Implemented
 @end example
 
 @subsection Locking and Unlocking a Mutex
 
 @example
-pthread_mutex_lock(), Function
-pthread_mutex_trylock(), Function
-pthread_mutex_unlock(), Function
+pthread_mutex_lock(), Function, Implemented
+pthread_mutex_trylock(), Function, Implemented
+pthread_mutex_unlock(), Function, Implemented
 @end example
 
 @section Condition Variables
@@ -92,30 +92,30 @@ pthread_mutex_unlock(), Function
 @subsection Condition Variable Initialization Attributes
 
 @example
-pthread_condattr_init(), Function
-pthread_condattr_destroy(), Function
-pthread_condattr_getpshared(), Function
-pthread_condattr_setpshared(), Function
+pthread_condattr_init(), Function, Implemented
+pthread_condattr_destroy(), Function, Implemented
+pthread_condattr_getpshared(), Function, Implemented
+pthread_condattr_setpshared(), Function, Implemented
 @end example
 
 @subsection Initialization and Destroying Condition Variables
 
 @example
-pthread_cond_init(), Function
-pthread_cond_destroy(), Function
+pthread_cond_init(), Function, Implemented
+pthread_cond_destroy(), Function, Implemented
 @end example
 
 @subsection Broadcasting and Signaling a Condition
 
 @example
-pthread_cond_signal(), Function
-pthread_cond_broadcast(), Function
+pthread_cond_signal(), Function, Implemented
+pthread_cond_broadcast(), Function, Implemented
 @end example
 
 @subsection Waiting on a Condition
 
 @example
-pthread_cond_wait(), Function
-pthread_cond_timedwait(), Function
+pthread_cond_wait(), Function, Implemented
+pthread_cond_timedwait(), Function, Implemented
 @end example
 
