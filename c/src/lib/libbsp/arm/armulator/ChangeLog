@@ -1,3 +1,10 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/bspstart.c: Removed unused variables ramSpace and _end.
+	Added prototype for initialize_monitor_handles().
+	* startup/syscalls.c: Added casts and removed unused variables to
+	eliminate warnings.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

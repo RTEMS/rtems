@@ -36,20 +36,18 @@ do_AngelSWI (int reason, void * arg)
 void
 initialize_monitor_handles (void)
 {
-  int i;
-  
 #ifdef ARM_RDI_MONITOR
   int volatile block[3];
   
   block[0] = (int) ":tt";
   block[2] = 3;     /* length of filename */
   block[1] = 0;     /* mode "r" */
-  armulator_stdin = do_AngelSWI (AngelSWI_Reason_Open, block);
+  armulator_stdin = do_AngelSWI (AngelSWI_Reason_Open, (void *)block);
 
   block[0] = (int) ":tt";
   block[2] = 3;     /* length of filename */
   block[1] = 4;     /* mode "w" */
-  armulator_stdout = armulator_stderr = do_AngelSWI (AngelSWI_Reason_Open, block);
+  armulator_stdout = armulator_stderr = do_AngelSWI (AngelSWI_Reason_Open, (void *)block);
 #else
   int fh;
   const char * name;
