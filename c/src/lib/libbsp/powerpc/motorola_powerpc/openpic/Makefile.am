@@ -7,6 +7,9 @@ VPATH = @srcdir@:@srcdir@/../../shared/openpic
 
 C_FILES = openpic.c
 
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS = ../../shared/openpic/openpic.h
+
 H_FILES = ../../shared/openpic/openpic.h
 
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))

@@ -1,3 +1,22 @@
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
+	* openpic/Makefile.am, pci/Makefile.am:
+	  - install the 'openpic.h' and 'pci.h' headers 
+	  - avoid a name clash by renaming 'vsprintf' & friends
+	    to 'k_vsprintf' etc.
+	  - let 'rtemsReboot' print a stack trace (in case an 'assert' failed)
+	  - irq.c:
+	     * fix: remove implicit assumption that ISA interrupt vectors start
+	            at 0
+	     * add BSP hook to let a VME interrupt acknowledge the PCI/openpic
+	       IRQ. (SEE ALSO THE ppc-sharedbsp-vme.diff patch)
+	  - fix: EABI compliance; isr/exception lowlevel handlers must not
+	         clobber R2 or R13
+	  - fix: openpic_init was called with the polarity/senses tables
+	         swapped (fixed wrong order of arguments)
+	  - cosmetics: use new _read_SPRXX() _write_SPRXX() macros
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
