@@ -1,3 +1,9 @@
+2003-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-cxx.m4: Remove LIBSUFFIX_VA.
+	* automake/compile.am: Remove LIBSUFFIX_VA.
+	Merger from rtems-4-6-branch.
+
 2003-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-ss-20030417.

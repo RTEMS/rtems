@@ -55,7 +55,10 @@ DEFS = @DEFS@
 
 CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES) $(XCPPFLAGS)
 CFLAGS   = @RTEMS_CFLAGS@ $(XCFLAGS)
-CXXFLAGS = @RTEMS_CXXFLAGS@ $(XCXXFLAGS)
+## FIXME: This should be correct, but is not supported, yet
+# CXXFLAGS = @RTEMS_CXXFLAGS@ $(XCXXFLAGS)
+## Fall back to using RTEMS_CFLAGS for C++
+CXXFLAGS = @RTEMS_CFLAGS@ $(XCXXFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
 LINK_LIBS = $(LD_LIBS)
@@ -107,9 +110,10 @@ DEPEND=Depends-${ARCH}
 # on 'make clean'
 #
 
+if RTEMS_USE_GCC
 ## HACK: Specific to gcc
 ## FIXME: The approach below is known to be conceptionally broken.
-depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
+depend-gcc: $(C_FILES) $(CC_FILES) $(S_FILES)
 ##       Use gcc -M to generate dependencies
 ##       Replace foo.o with $(ARCH)/foo.o
 ##       Replace $(ARCH) value with string $(ARCH)
@@ -118,13 +122,13 @@ depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
 	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
 	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
 	mv $(DEPEND).tmp $(DEPEND)
-depend: depend-am
 
 # pull in dependencies if they exist  
 ifeq (${DEPEND},$(wildcard ${DEPEND}))
 include ${DEPEND}
 @ENDIF@
-
+endif
+depend: depend-am
 
 # spell out all the LINK_FILE's, rather than using -lbsp, so
 #  that $(LINK_FILES) can be a dependency
@@ -179,7 +183,6 @@ LIBSUFFIX_PROFILE_V = _p
 LIBSUFFIX__V = $(LIBSUFFIX_OPTIMIZE_V)
 
 LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
-LIBSUFFIX_VA = $(LIB_VARIANT).a
 
 ## These are supposed to be set in make/custom/<bsp>.cfg
 CPU_CFLAGS = @CPU_CFLAGS@
@@ -219,3 +222,10 @@ AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
 AM_CFLAGS =
 AM_CXXFLAGS =
 AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
+
+${ARCH}:
+	mkdir ${ARCH}
+
+clean-local:
+	$(RM) -r o-optimize o-debug o-profile $(CLEANDIRS)
+	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp Depends-o-profile.tmp
