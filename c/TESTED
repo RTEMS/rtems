@@ -41,6 +41,7 @@ RedHat Linux 5.1 as the host environment:
  powerpc  ppc603e    Radstone PPCn_60x            (note 1, 8)
  powerpc  ppc603e    DY-4 DMV-177                 (note 1)
  powerpc  ppc603e    Vista Score603e              (note 1)
+ powerpc  mpc750     mcp750                       (note 1)
  powerpc  mpc821     no BSP                       (note 9)
  powerpc  mpc823     no BSP                       (note 9)
  powerpc  mpc860     eth_comm (custom)            (note 1, 6)
