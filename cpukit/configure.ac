@@ -60,12 +60,22 @@ AS_IF([test x"$HAS_ITRON_API" = x"yes"],
   [AC_CONFIG_SUBDIRS(itron)]
 )
 RTEMS_CPU_SUBDIRS([score/cpu])
+# FIXME: All ports should have a libscorecpu.a - But the powerpc doesn't!
+AM_CONDITIONAL([LIBSCORECPU],
+[test -f "${srcdir}/score/cpu/${RTEMS_CPU}/cpu.c"])
 
 AC_CONFIG_SUBDIRS([libcsupport])
 AC_CONFIG_SUBDIRS([libblock])
 AC_CONFIG_SUBDIRS([libfs])
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],
-  [AC_CONFIG_SUBDIRS(libnetworking librpc)])
+  [AC_CONFIG_SUBDIRS(libnetworking)
+  AS_IF([test x"$RTEMS_CPU" != x"c4x"],[
+    AC_CONFIG_SUBDIRS([librpc])
+    LIBRPC=yes],[
+    LIBRPC=no
+  ])
+])
+AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
 
 RTEMS_DEFINE_POSIX_API
 RTEMS_DEFINE_ITRON_API

@@ -8,7 +8,9 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-CPU_OBJS = $(wildcard ../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.$(OBJEXT))
+if LIBSCORECPU
+CPU_OBJS = ../score/cpu/$(RTEMS_CPU)/$(ARCH)/libscorecpu.a
+endif
 CORE_OBJS = $(wildcard ../score/src/$(ARCH)/*.$(OBJEXT))
 SAPI_OBJS = $(wildcard ../sapi/src/$(ARCH)/*.$(OBJEXT))
 RTEMS_OBJS = $(wildcard ../rtems/src/$(ARCH)/*.$(OBJEXT))
@@ -31,7 +33,11 @@ LIBIMFS_OBJS = ../libfs/src/imfs/$(ARCH)/libimfs.a
 
 if HAS_NETWORKING
 NETWORKING_OBJS = \
-    ../libnetworking/wrapup/$(ARCH)/libnetworking.a \
+    ../libnetworking/wrapup/$(ARCH)/libnetworking.a
+endif
+
+if LIBRPC
+LIBRPC_OBJS = \
     ../librpc/src/rpc/$(ARCH)/librpc.a \
     ../librpc/src/xdr/$(ARCH)/libxdr.a
 endif
@@ -39,7 +45,7 @@ endif
 OBJS = $(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS) \
     $(POSIX_OBJS) $(ITRON_OBJS) $(LIBCSUPPORT_OBJS) \
     $(LIBBLOCK_OBJS) $(LIBDOSFS_OBJS) $(LIBIMFS_OBJS) \
-    $(NETWORKING_OBJS)
+    $(NETWORKING_OBJS) $(LIBRPC_OBJS)
 
 $(LIB): ${OBJS}
 	rm -f $@
@@ -74,9 +80,6 @@ $(LIB): ${OBJS}
 	$(RANLIB) $@
 
 TMPINSTALL_FILES += $(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a
-
-#$(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a: $(LIB)
-#	$(INSTALL_DATA) $< $@
 
 cpulibdir = $(libdir)
 cpulib_DATA = $(LIB)
