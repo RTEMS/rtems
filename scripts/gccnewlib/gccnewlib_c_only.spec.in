@@ -38,7 +38,8 @@ Buildroot:	/tmp
 # your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
 # Or you can try the ftp options of rpm :-)
 #
-NoSource:      0, 1
+NoSource:	0
+NoSource:	1
 
 %description
 RTEMS is an open source operating system for embedded systems.
