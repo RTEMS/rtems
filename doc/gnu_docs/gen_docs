@@ -17,8 +17,16 @@
 # 
 #
 
-texi2www=/usr1/rtems/rtemsdoc-work/tools/texi2www/texi2www
-install=/usr3/rtems_cds/test_cd/doc/tools/html
+# Ralf... where do these come from using autoconf?
+srcdir=/usr1/rtems/work/rtems-doc/
+texi2www=${srcdir}/tools/texi2www/texi2www
+gnu_docs=${srcdir}/gnu_docs
+images=${srcdir}/images
+
+install_base=/home/httpd/html/rtems/rtemsdoc-4.5-beta3
+install_share=/home/httpd/html/rtems/rtemsdoc-4.5-beta3/share/toolsdoc
+install_info=/home/httpd/html/rtems/rtemsdoc-4.5-beta3/info
+
 
 #if [ $? -ne 1 ] ; then
 #  echo "Usage: $0 install_directory"
@@ -45,15 +53,24 @@ do
   
   if [ -d ${install}/${b} ] ; then
     echo "Cleaning install point for ${b}"
-    ${ECHO} rm -rf ${install}/${b}
+    ${ECHO} rm -rf ${install}/html/${b}
   fi
-  ${ECHO} mkdir ${install}/${b}
+
+  for dir_to_do in ${install_info} \
+    ${install_share}/ps \
+    ${install_share}/pdf ${install_share}/dvi \
+    ${install_share}/html/${b}
+  do
+    test -d ${dir_to_do} || mkdir -p ${dir_to_do}
+  done
 
   echo "Copying DVI for ${b}"
-  ${ECHO} cp ${b}.dvi ${install}/${b}
+  echo "+ cp ${b}.dvi ${install_share}/dvi/${b}.dvi"
+  ${ECHO} cp ${b}.dvi ${install_share}/dvi/${b}.dvi
 
   echo "Generating PS for ${b}"
-  ${ECHO} dvips -o ${install}/${b}/${b}.ps ${b}.dvi
+  echo "+ dvips -o ${install_share}/ps/${b}.ps ${b}.dvi"
+  ${ECHO} dvips -o ${install_share}/ps/${b}.ps ${b}.dvi
 
   # unfortunately the .dvi names are not always the same. :(
   case ${b} in
@@ -64,9 +81,12 @@ do
 
   case ${b} in
     refcard)
-      cp $d/gnu_docs/refcard.html ${install}/${b}
+      cp ${gnu_docs}/refcard.html ${install_share}/${b}
       ;;
     *)
+      # for some reason chill installs the dvi 1 directory up.
+      test ${b} = "chill" && cd ch
+
       if [ -r ${tsrc}.texi ] ; then
         ext=texi
       elif [ -r ${tsrc}.texinfo ] ; then
@@ -75,11 +95,11 @@ do
         echo "*** 
         echo "*** Cannot find a texi or texinfo file for ${b}"
         echo "*** 
-exit 1
+        exit 1
       fi
 
       echo "Copying INFO for ${b}"
-      ${ECHO} cp ${b}.info* ${install}/../info
+      ${ECHO} cp ${b}.info* ${install_info}
 
       case ${b} in 
         g77)  bad_for_pdf="yes" ;;
@@ -97,7 +117,7 @@ exit 1
       else
         echo "Generating PDF for ${b}"
         ${ECHO} texi2pdf ${extraargs_for_pdf} ${tsrc}.${ext} && \
-            ${ECHO} cp ${tsrc}.pdf ${install}/${b}/${b}.pdf
+            ${ECHO} cp ${tsrc}.pdf ${install_share}/pdf/${b}.pdf
       fi
 
       # until texi2www is modified to take a search path
@@ -116,10 +136,29 @@ exit 1
       echo "Generating HTML for ${b}"
       ${ECHO} ${texi2www} \
         -dirfile ../index.html \
-        -header $d/gnu_docs/gnu_header.html \
-        -footer $d/gnu_docs/gnu_footer.html \
-        -icons  .. -dir ${install}/${b} \
+        -header ${gnu_docs}/gnu_header.html \
+        -footer ${gnu_docs}/gnu_footer.html \
+        -icons  ../images -dir ${install_share}/html/${b} \
           ${tsrc}.${ext}
       ;;
    esac
 done
+
+echo "Installing graphics"
+
+test -d ${install_share}/html/images || mkdir ${install_share}/html/images
+cd ${images}
+for f in dir-arrow.gif dvi.gif missing-arrow.gif next-arrow.gif oaronly.jpg \
+  pdf.gif pdf1.gif prev-arrow.gif ps.gif up-arrow.gif
+do
+  cp ${f} ${install_share}/html/images/${f}
+done
+echo "Installing top level HTML indices"
+cp ${gnu_docs}/index.html ${install_share}/html/index.html
+cp ${gnu_docs}/rtems_tools_index.html ${install_share}/../index.html
+
+# Now deal with the reference card
+set -x
+test -d ${install_share}/html/refcard || mkdir ${install_share}/html/refcard
+cp ${gnu_docs}/refcard.html ${install_share}/html/refcard/refcard.html
+exit 0

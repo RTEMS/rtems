@@ -4,21 +4,31 @@
 
 Apparently, the tool documentation is tough to build without configuring
 in the tool source directory.  So you need to do some magic to make
-this happen.  In addition, the makefiles only support building dvi
-and info.
+this happen.  In addition, the makefiles included with the tools
+only support building dvi and info.  So this directory is
+trying to help finish out building the tool documentation.
 
+# Odd Notes:
+#
+# binutils/ld: May have to copy bfdsumm.texi from config/bfd to ld
+# gcc: no rule to build java.dvi
+
+# for binutils, gcc, and gdb
 mkdir doc_build
 cp -r binutils-XXX gcc-XXX gdb-XXX newlib-XXX doc_build
-
-# for each tool
-cd binutils-XXX
+cd TOOL-XXX
 ./configure --target=i386-rtems --prefix=/usr3/tmp/DOCTMP
 make info dvi
 
-# for newlib we have to do the build differently
+# for newlib we have to do the build differently.  It actually needs
+# to be configured and built for an RTEMS target so pick something
+# you have tools installed for.  Hopefully, this will be a target
+# without many multilib variants. The actual target is not relevant
+# since the documentation is always the same.
+
 mkdir b
 cd b
-../newlib-1.8.2/./configure --target=i386-rtems --prefix=/usr3/tmp/DOCTMP
+../newlib-1.8.2/configure --target=i386-rtems --prefix=/usr3/tmp/DOCTMP
 make 
 make info dvi 
 cd ../newlib-1.8.2
@@ -26,7 +36,5 @@ find newlib/ -name "*.t*" | cpio -pdum ../b/i386-rtems/
 find etc/ -name "*.t*" | cpio -pdum ../b
 
 
-NOTE: The actual target is not relevant since the documentation is
-always the same.
 
 
