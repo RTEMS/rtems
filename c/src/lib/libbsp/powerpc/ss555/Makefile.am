@@ -15,11 +15,11 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
-nodist_include_HEADERS = include/bspopts.h
 
-EXTRA_PROGRAMS =
-CLEANFILES =
-noinst_DATA =
+nodist_include_HEADERS = include/bspopts.h
+DISTCLEANFILES = include/bspopts.h
+
+noinst_PROGRAMS =
 
 include_bspdir = $(includedir)/bsp
 
@@ -30,36 +30,17 @@ EXTRA_DIST = times
 
 dist_project_lib_DATA += startup/linkcmds
 
-EXTRA_PROGRAMS += pclock.rel
-CLEANFILES += pclock.rel
+noinst_PROGRAMS += pclock.rel
 pclock_rel_SOURCES = clock/p_clock.c
 pclock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += pclock_g.rel
-CLEANFILES += pclock_g.rel
-pclock_g_rel_SOURCES = $(pclock_rel_SOURCES)
-pclock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-pclock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += pclock$(LIB_VARIANT).rel
-
-EXTRA_PROGRAMS += console.rel
-CLEANFILES += console.rel
+noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += console_g.rel
-CLEANFILES += console_g.rel
-console_g_rel_SOURCES = $(console_rel_SOURCES)
-console_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-console_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += console$(LIB_VARIANT).rel
-
-EXTRA_PROGRAMS += startup.rel
-CLEANFILES += startup.rel
+noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     startup/iss555.c ../../shared/main.c ../../shared/sbrk.c \
@@ -67,29 +48,10 @@ startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += startup_g.rel
-CLEANFILES += startup_g.rel
-startup_g_rel_SOURCES = $(startup_rel_SOURCES)
-startup_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-startup_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += startup$(LIB_VARIANT).rel
-
-EXTRA_PROGRAMS += tm27supp.rel
-CLEANFILES += tm27supp.rel
+noinst_PROGRAMS += tm27supp.rel
 tm27supp_rel_SOURCES = startup/tm27supp.c
 tm27supp_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 tm27supp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += tm27supp$(LIB_VARIANT).rel
-
-EXTRA_PROGRAMS += tm27supp_g.rel
-CLEANFILES += tm27supp_g.rel
-tm27supp_g_rel_SOURCES = $(tm27supp_rel_SOURCES)
-tm27supp_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-tm27supp_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += tm27supp$(LIB_VARIANT).rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
@@ -139,8 +101,8 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

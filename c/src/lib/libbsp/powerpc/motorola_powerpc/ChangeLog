@@ -1,3 +1,7 @@
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am, wrapup/Makefile.am: Remove build-variant support.
+
 2004-11-17	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Add sections required by gcc 3.3.x so it will link.

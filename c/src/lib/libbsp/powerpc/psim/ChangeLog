@@ -1,3 +1,7 @@
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am, wrapup/Makefile.am: Remove build-variant support.
+
 2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
 
 	PR 617/bsps

@@ -4,31 +4,22 @@
 
 include $(top_srcdir)/../../../../automake/compile.am
 
-EXTRA_LIBRARIES = ../libbsp.a
+noinst_LIBRARIES = ../libbsp.a
 CLEANFILES = ../libbsp.a
 ___libbsp_a_SOURCES =
-___libbsp_a_LIBADD = ../startup$(LIB_VARIANT).rel \
-    ../pclock$(LIB_VARIANT).rel ../console$(LIB_VARIANT).rel \
-    ../irq$(LIB_VARIANT).rel ../vectors$(LIB_VARIANT).rel
-___libbsp_a_LIBADD += \
-    ../../../../libcpu/@RTEMS_CPU@/shared/cpuIdent$(LIB_VARIANT).rel \
-    ../../../../libcpu/@RTEMS_CPU@/shared/stack$(LIB_VARIANT).rel \
-    ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
-    ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/clock$(LIB_VARIANT).rel \
-    ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/exceptions$(LIB_VARIANT).rel \
-    ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/mmu$(LIB_VARIANT).rel \
-    ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/timer$(LIB_VARIANT).rel
+___libbsp_a_LIBADD = ../startup.rel ../pclock.rel ../console.rel ../irq.rel \
+    ../vectors.rel
+___libbsp_a_LIBADD += ../../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
+    ../@exceptions@/rtems-cpu.rel \
+    ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/clock.rel \
+    ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/exceptions.rel \
+    ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/mmu.rel \
+    ../../../../libcpu/$(RTEMS_CPU)/mpc6xx/timer.rel
 
 if HAS_MP
-___libbsp_a_LIBADD += ../shmsupp$(LIB_VARIANT).rel
+___libbsp_a_LIBADD += ../shmsupp.rel
 endif
-___libbsp_a_LIBADD += ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel
-
-EXTRA_LIBRARIES += ../libbsp_g.a
-CLEANFILES += ../libbsp_g.a
-___libbsp_g_a_SOURCES = $(___libbsp_a_SOURCES)
-___libbsp_g_a_LIBADD = $(___libbsp_a_LIBADD)
-
-noinst_DATA = ../libbsp$(LIB_VARIANT).a
+___libbsp_a_LIBADD += ../@exceptions@/rtems-cpu.rel
 
 include $(top_srcdir)/../../../../automake/local.am

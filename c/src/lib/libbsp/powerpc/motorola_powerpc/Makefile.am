@@ -15,11 +15,11 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
-nodist_include_HEADERS = include/bspopts.h
 
-EXTRA_PROGRAMS =
-CLEANFILES =
-noinst_DATA =
+nodist_include_HEADERS = include/bspopts.h
+DISTCLEANFILES = include/bspopts.h
+
+noinst_PROGRAMS =
 
 include_bspdir = $(includedir)/bsp
 
@@ -28,19 +28,18 @@ include_HEADERS += ../../shared/include/coverhd.h
 include_HEADERS += ../../shared/tod.h
 
 EXTRA_DIST = ../../powerpc/shared/start/start.S
-start$(LIB_VARIANT).$(OBJEXT): ../../powerpc/shared/start/start.S
+start.$(OBJEXT): ../../powerpc/shared/start/start.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
-project_lib_DATA = start$(LIB_VARIANT).$(OBJEXT)
+project_lib_DATA = start.$(OBJEXT)
 
 EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
-rtems_crti$(LIB_VARIANT).$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
-project_lib_DATA += rtems_crti$(LIB_VARIANT).$(OBJEXT)
+project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-EXTRA_PROGRAMS += startup.rel
-CLEANFILES += startup.rel
+noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../powerpc/shared/startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
@@ -50,48 +49,21 @@ startup_rel_SOURCES = ../../powerpc/shared/startup/bspstart.c \
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += startup_g.rel
-CLEANFILES += startup_g.rel
-startup_g_rel_SOURCES = $(startup_rel_SOURCES)
-startup_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-startup_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += startup$(LIB_VARIANT).rel
-
-EXTRA_PROGRAMS += tod.rel
-CLEANFILES += tod.rel
+noinst_PROGRAMS += tod.rel
 tod_rel_SOURCES = ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
 tod_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += tod_g.rel
-CLEANFILES += tod_g.rel
-tod_g_rel_SOURCES = $(tod_rel_SOURCES)
-tod_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-tod_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += tod$(LIB_VARIANT).rel
-
-EXTRA_PROGRAMS += pclock.rel
-CLEANFILES += pclock.rel
+noinst_PROGRAMS += pclock.rel
 pclock_rel_SOURCES = ../../powerpc/shared/clock/p_clock.c
 pclock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-EXTRA_PROGRAMS += pclock_g.rel
-CLEANFILES += pclock_g.rel
-pclock_g_rel_SOURCES = $(pclock_rel_SOURCES)
-pclock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-pclock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += pclock$(LIB_VARIANT).rel
 
 include_bsp_HEADERS = ../../powerpc/shared/console/consoleIo.h
 include_bsp_HEADERS += ../../powerpc/shared/console/uart.h
 
 console_CPPFLAGS = -DSTATIC_LOG_ALLOC
-EXTRA_PROGRAMS += console.rel
-CLEANFILES += console.rel
+noinst_PROGRAMS += console.rel
 console_rel_SOURCES = ../../powerpc/shared/console/polled_io.c \
     ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
@@ -104,54 +76,26 @@ console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
     $(console_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += console_g.rel
-CLEANFILES += console_g.rel
-console_g_rel_SOURCES = $(console_rel_SOURCES)
-console_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
-    $(console_CPPFLAGS)
-console_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += console$(LIB_VARIANT).rel
-
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h
 
-EXTRA_PROGRAMS += irq.rel
-CLEANFILES += irq.rel
+noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = ../../powerpc/shared/irq/irq_init.c \
     ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.c \
     ../../powerpc/shared/irq/irq_asm.S ../../powerpc/shared/irq/irq.h
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += irq_g.rel
-CLEANFILES += irq_g.rel
-irq_g_rel_SOURCES = $(irq_rel_SOURCES)
-irq_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-irq_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += irq$(LIB_VARIANT).rel
-
 include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
 
-EXTRA_PROGRAMS += motorola.rel
-CLEANFILES += motorola.rel
+noinst_PROGRAMS += motorola.rel
 motorola_rel_SOURCES = ../../powerpc/shared/motorola/motorola.h \
     ../../powerpc/shared/motorola/motorola.c
 motorola_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 motorola_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += motorola_g.rel
-CLEANFILES += motorola_g.rel
-motorola_g_rel_SOURCES = $(motorola_rel_SOURCES)
-motorola_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-motorola_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += motorola$(LIB_VARIANT).rel
-
 include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
 
-EXTRA_PROGRAMS += openpic.rel
-CLEANFILES += openpic.rel
+noinst_PROGRAMS += openpic.rel
 openpic_rel_SOURCES = ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/openpic/openpic.c \
     ../../powerpc/shared/openpic/openpic.h
@@ -159,88 +103,44 @@ openpic_rel_SOURCES = ../../powerpc/shared/openpic/openpic.h \
 openpic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 openpic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += openpic_g.rel
-CLEANFILES += openpic_g.rel
-openpic_g_rel_SOURCES = $(openpic_rel_SOURCES)
-openpic_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-openpic_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += openpic$(LIB_VARIANT).rel
-
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
 
-EXTRA_PROGRAMS += pci.rel
-CLEANFILES += pci.rel
+noinst_PROGRAMS += pci.rel
 pci_rel_SOURCES = ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/detect_raven_bridge.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
 pci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += pci_g.rel
-CLEANFILES += pci_g.rel
-pci_g_rel_SOURCES = $(pci_rel_SOURCES)
-pci_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-pci_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += pci$(LIB_VARIANT).rel
-
 include_bsp_HEADERS += ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h
 
-EXTRA_PROGRAMS += residual.rel
-CLEANFILES += residual.rel
+noinst_PROGRAMS += residual.rel
 residual_rel_SOURCES = ../../powerpc/shared/residual/pnp.h \
     ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/residual.c
 residual_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 residual_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += residual_g.rel
-CLEANFILES += residual_g.rel
-residual_g_rel_SOURCES = $(residual_rel_SOURCES)
-residual_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-residual_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += residual$(LIB_VARIANT).rel
-
 include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
 
-EXTRA_PROGRAMS += vectors.rel
-CLEANFILES += vectors.rel
+noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors.h \
     ../../powerpc/shared/vectors/vectors_init.c \
     ../../powerpc/shared/vectors/vectors.S
 vectors_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += vectors_g.rel
-CLEANFILES += vectors_g.rel
-vectors_g_rel_SOURCES = $(vectors_rel_SOURCES)
-vectors_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-vectors_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += vectors$(LIB_VARIANT).rel
-
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../powerpc/shared/vme/VMEConfig.h ../../powerpc/shared/vme/VME.h
 
-EXTRA_PROGRAMS += vme.rel
-CLEANFILES += vme.rel
+noinst_PROGRAMS += vme.rel
 vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/vmeUniverse.h \
     ../../powerpc/shared/vme/vmeconfig.c \
     ../../powerpc/shared/vme/VMEConfig.h ../../powerpc/shared/vme/VME.h
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-EXTRA_PROGRAMS += vme_g.rel
-CLEANFILES += vme_g.rel
-vme_g_rel_SOURCES = $(vme_rel_SOURCES)
-vme_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-vme_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += vme$(LIB_VARIANT).rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
@@ -295,13 +195,13 @@ $(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
-$(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT): start$(LIB_VARIANT).$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
+$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 
-$(PROJECT_LIB)/rtems_crti$(LIB_VARIANT).$(OBJEXT): rtems_crti$(LIB_VARIANT).$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems_crti$(LIB_VARIANT).$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/rtems_crti$(LIB_VARIANT).$(OBJEXT)
+$(PROJECT_LIB)/rtems_crti.$(OBJEXT): rtems_crti.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
 
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
@@ -355,8 +255,8 @@ $(PROJECT_INCLUDE)/bsp/VME.h: ../../powerpc/shared/vme/VME.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VME.h
 
-CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/subdirs.am

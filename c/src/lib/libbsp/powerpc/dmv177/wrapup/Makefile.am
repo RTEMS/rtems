@@ -4,24 +4,16 @@
 
 include $(top_srcdir)/../../../../automake/compile.am
 
-EXTRA_LIBRARIES = ../libbsp.a
+noinst_LIBRARIES = ../libbsp.a
 CLEANFILES = ../libbsp.a
 ___libbsp_a_SOURCES =
 
-___libbsp_a_LIBADD = ../startup$(LIB_VARIANT).rel ../clock$(LIB_VARIANT).rel \
-    ../console$(LIB_VARIANT).rel ../scv64$(LIB_VARIANT).rel \
-    ../timer$(LIB_VARIANT).rel ../tod$(LIB_VARIANT).rel
+___libbsp_a_LIBADD = ../startup.rel ../clock.rel ../console.rel ../scv64.rel \
+    ../timer.rel ../tod.rel
 if HAS_NETWORKING
-___libbsp_a_LIBADD += ../sonic$(LIB_VARIANT).rel
+___libbsp_a_LIBADD += ../sonic.rel
 endif
-___libbsp_a_LIBADD += ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
-    ../../../../libcpu/@RTEMS_CPU@/shared/cache$(LIB_VARIANT).rel
-
-EXTRA_LIBRARIES += ../libbsp_g.a
-CLEANFILES += ../libbsp_g.a
-___libbsp_g_a_SOURCES = $(___libbsp_a_SOURCES)
-___libbsp_g_a_LIBADD = $(___libbsp_a_LIBADD)
-
-noinst_DATA = ../libbsp$(LIB_VARIANT).a
+___libbsp_a_LIBADD += ../@exceptions@/rtems-cpu.rel \
+    ../../../../libcpu/@RTEMS_CPU@/shared/cache.rel
 
 include $(top_srcdir)/../../../../automake/local.am
