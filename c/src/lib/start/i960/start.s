@@ -21,7 +21,7 @@
         BEGIN_CODE
         PUBLIC(start)                 # GNU960 default entry point
 
-start:
+SYM(start):
         mov     3, r12
         modpc   r12, r12, r12         # enable tracing/trace faults
         mov     g5, g5                # NOP
@@ -89,11 +89,15 @@ END_CODE
          BEGIN_DATA
 
         PUBLIC(_start_frame)
+        PUBLIC(start_frame)
 SYM (_start_frame):
+SYM (start_frame):
         .word   0                  # addr of first user frame: for gdb960
 
-SYM (_stack_start):
         PUBLIC(_stack_start)
+        PUBLIC(stack_start)
+SYM (_stack_start):
+SYM (stack_start):
         .word   0                  # addr of first user frame: for gdb960
 
 END_DATA
