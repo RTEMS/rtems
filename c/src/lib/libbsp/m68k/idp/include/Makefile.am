@@ -8,6 +8,10 @@ include_HEADERS = bsp.h coverhd.h leds.h bspopts.h
 
 coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 	cp $< $@
+
+$(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
 CLEANFILES += coverhd.h
 
 $(PROJECT_INCLUDE):
