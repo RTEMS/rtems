@@ -32,6 +32,7 @@ extern "C" {
  */
 #if defined(__sh__) \
   || defined(__mc68000__) \
+  || defined(__h8300__) \
   || defined(__i960__)
   /* these cpus are ready to apply cpuopts.h */
 #include <rtems/score/cpuopts.h>
