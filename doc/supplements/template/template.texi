@@ -70,7 +70,7 @@ END-INFO-DIR-ENTRY
 @include intr.texi
 @include fatalerr.texi
 @include bsp.texi
-@c @include cputable.texi
+@include cputable.texi
 @c @include wksheets.texi
 @c @include ../../common/timing.texi
 @c @include timedata.texi
@@ -89,7 +89,7 @@ Applications Supplement.
 * Interrupt Processing::
 * Default Fatal Error Processing::
 * Board Support Packages::
-** Processor Dependent Information Table::
+* Processor Dependent Information Table::
 ** Memory Requirements::
 ** Timing Specification::
 ** MVME136 Timing Data::

@@ -25,10 +25,9 @@ FILES= $(PROJECT).texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
 GENERATED_FILES=\
   cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
-  bsp.texi
+  bsp.texi cputable.texi
 
-#  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
-#  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi wksheets.texi 
+#  timetbl.texi timedata.texi wksheets.texi 
 
 info: dirs c_$(PROJECT)
 	@echo NEED TO INSTALL THE INFO FILES
@@ -48,6 +47,9 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
+#
+#  Chapters which get automatic processing
+#
 cpumodel.texi: cpumodel.t Makefile
 	$(BMENU) -p "Preface" \
 	    -u "Top" \
@@ -82,7 +84,11 @@ bsp.texi: bsp.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
-intr.texi: intr.t Makefile
+cputable.texi: cputable.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
 replace: timedata.texi
 
 timetbl.t: ../../common/timetbl.t
