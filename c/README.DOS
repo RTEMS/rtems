@@ -23,7 +23,20 @@ best advice which can be offered is:
 
 There is a special version (source and executable) of GNU make 3.71 for
 MS-DOS which minimizes the amount of memory used by recursive makes
-available on lancelot.gcs.redstone.army.mil in the directory: ... XXX
+available on lancelot.gcs.redstone.army.mil in the file: 
+
+/pub/msdos/gmake371.tgz
+
+Many of the RTEMS specific utilities used in the build and installation 
+are UNIX shell scripts.  On a UNIX host, these are normally interpreted
+by the Bourne Again Shell (BASH) or the Korn Shell (ksh).  Most of these
+scripts can be successfully executed with the following shell from the
+MS-DOS archives from Simtel. 
+
+SimTel/msdos/sysutil/ms_sh23b.zip
+
+Please be sure to use the 16-bit version.  The Simtel archives are 
+available from ftp.cdrom.com as well as a number of mirror sites.
 
 go32
 ----
