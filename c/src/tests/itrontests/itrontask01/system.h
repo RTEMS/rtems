@@ -15,11 +15,11 @@
  */
 
 #include <tmacros.h>
-#include <itron.h>
 
 /* functions */
 
 void ITRON_Init( void );
+void Task_2_through_4();
 
 /* configuration information */
 
@@ -28,12 +28,11 @@ void ITRON_Init( void );
 
 #define CONFIGURE_ITRON_INIT_TASK_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
-
 #include <confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-
 /* end of include file */
+
+
+

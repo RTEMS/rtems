@@ -19,20 +19,24 @@
 /* functions */
 
 void ITRON_Init( void );
-void Task_2_through_4();
+void Preempt_task();
 
 /* configuration information */
 
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
-
 #define CONFIGURE_ITRON_INIT_TASK_TABLE
 
 #include <confdefs.h>
 
 /* global variables */
 
+#define PREEMPT_TASK_ID         2
+
+TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
+
 /* end of include file */
+
+
 
 
 

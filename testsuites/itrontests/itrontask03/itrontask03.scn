@@ -1,0 +1,13 @@
+*** ITRON TEST 5 ***
+INIT - rot_rdq - yielding processor
+PREEMPT - exd_tsk
+INIT - suspending TA2 while middle task on a ready chain
+TA1 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 minute
+TA3 - rtems_task_wake_after - sleep 5 seconds
+TA1 - chg_pri - set TA3's priority to 2
+TA1 - rtems_task_suspend - suspend TA2
+TA1 -  - delete TA2
+TA1 - rtems_task_wake_after - sleep for 5 seconds
+TA3 - exd_tsk - exit and delete self
+*** END OF TEST 5 ***

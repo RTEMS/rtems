@@ -1,18 +1,14 @@
 /*  Init
  *
  *  This routine is the initialization task for this test program.
- *  It is a user initialization task and has the responsibility for creating
+ *  It is called from init_exec and has the responsibility for creating
  *  and starting the tasks that make up the test.  If the time of day
  *  clock is required for the test, it should also be set to a known
- *  value by this function.  This test is based off of sp01.
+ *  value by this function.
  *
  *  Input parameters:  NONE
  *
  *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1998.
- *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -21,52 +17,52 @@
  *  $Id$
  */
 
-
 #define TEST_INIT
 #include "system.h"
-
-#warning "Task_id is really an rtems_id"
-void Task_1_through_3( void ){}
+#include <stdio.h>
 
 void ITRON_Init( void )
 {
   rtems_time_of_day time;
   ER                status;
-  T_CTSK            values;
+  T_CTSK            pk_ctsk;
 
-  puts( "\n\n*** ITRONTASK01 - TICKER TEST ***" );
+  puts( "\n\n*** ITRON TEST 3 ***" );
+
+  /*
+   * XXX - Change this to an itron clock !!
+   */
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
-  values.exinf   = NULL;
-  values.tskatr  = TA_HLNG; 
-  values.task    = Task_1_through_3;
-  values.itskpri = 1;
-  values.stksz   = RTEMS_MINIMUM_STACK_SIZE;
+  pk_ctsk.exinf    = NULL;
+  pk_ctsk.tskatr   = TA_HLNG;
+  pk_ctsk.itskpri  = 1; 
+  pk_ctsk.task     = Task_2_through_4;
 
-  status = cre_tsk( Task_id[1], &values );
+  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
+  status = cre_tsk( 2, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA1" );
 
-  values.stksz   = RTEMS_MINIMUM_STACK_SIZE;
-  status = cre_tsk( Task_id[2], &values );
-  directive_failed( status, "cre_tsk of TA1" );
+  pk_ctsk.stksz = RTEMS_MINIMUM_STACK_SIZE * 2;
+  status = cre_tsk( 3, &pk_ctsk );
+  directive_failed( status, "cre_tsk of TA2" );
 
-  values.stksz   = RTEMS_MINIMUM_STACK_SIZE;
-  status = cre_tsk( Task_id[3], &values );
-  directive_failed( status, "cre_tsk of TA1" );
+  pk_ctsk.stksz = RTEMS_MINIMUM_STACK_SIZE * 3; 
+  status = cre_tsk( 4, &pk_ctsk );
+  directive_failed( status, "cre_tsk of TA3" );
 
-#if 0
-  status = sta_tsk( Task_id[1] );
-  directive_failed( status, "rtems_task_start of TA1" );
+  status  = sta_tsk( 2, 0 );
+  directive_failed( status, "sta_tsk of TA1" );
 
-  directive_failed( status, "rtems_task_start of TA2" );
+  status  = sta_tsk( 3, 0 );
+  directive_failed( status, "sta_tsk of TA1" );
 
-  status = rtems_task_start( Task_id[ 3 ], Task_1_through_3, 0 );
-  directive_failed( status, "rtems_task_start of TA3" );
+  status  = sta_tsk( 4, 0 );
+  directive_failed( status, "sta_tsk of TA1" );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
-#endif
+  exd_tsk();
+  directive_failed( 0, "exd_tsk" );
 }
