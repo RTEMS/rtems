@@ -1,3 +1,7 @@
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, rtems/score/Makefile.am: 

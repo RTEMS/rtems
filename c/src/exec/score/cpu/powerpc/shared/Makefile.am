@@ -13,7 +13,7 @@ include_rtems_score_HEADERS = ppc.h ppctypes.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
     $(include_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h) \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
