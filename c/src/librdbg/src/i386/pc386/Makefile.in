@@ -78,7 +78,7 @@ CLOBBER_ADDITIONS +=
 
 FRONTEND = \"$(RTEMS_CPU)/@RTEMS_BSP@/remdeb_f.x\"
 
-all: ${ARCH} $(LIB) 
+all: ${ARCH} $(LIB)
 	@$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
 
 $(LIB): $(SRCS) ${OBJS}

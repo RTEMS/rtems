@@ -25,11 +25,11 @@ C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
 # Asm source names, if any, go here -- minus the .s 
 S_PIECES = rdbg_cpu_asm
-S_FILES = $(ASM_PIECES:%=%.S)
-S_O_FILES = $(ASM_PIECES:%=${ARCH}/%.o)
+S_FILES = $(S_PIECES:%=%.S)
+S_O_FILES = $(S_PIECES:%=${ARCH}/%.o)
 
 # Generated C source names, if any, go here -- minus the .c
-GEN_C_PIECES= remdeb_xdr remdeb_svc
+GEN_C_PIECES = remdeb_xdr remdeb_svc
 GEN_C_FILES = $(GEN_C_PIECES:%=%.c)
 GEN_C_O_FILES = $(GEN_C_PIECES:%=${ARCH}/%.o)
 
@@ -38,9 +38,9 @@ H_PIECES = remdeb
 H_FILES = $(H_PIECES:%=%.h)
 
 # X source names
-X_FILES = remdeb.x remdeb_f.x 
+X_FILES = remdeb.x remdeb_f.x
 
-SRCS= $(C_FILES) $(S_FILES) $(GEN_C_FILES) $(H_FILES)
+SRCS = $(C_FILES) $(S_FILES) $(GEN_C_FILES) $(H_FILES)
 OBJS = $(GEN_C_O_FILES) $(C_O_FILES) $(S_O_FILES)
 
 RPCGEN = @RPCGEN@
