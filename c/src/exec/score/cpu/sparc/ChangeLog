@@ -1,3 +1,9 @@
+2002-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/Makefile.am: Removed.
+	* rtems/score/Makefile.am: Removed.
+	* configure.ac: Reflect changes above.
+
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add multilib support.
