@@ -84,7 +84,7 @@ and status codes.
 #include <sched.h>
 
 int sched_get_priority_min(
-int policy
+  int policy
 );
 @end example
 
@@ -122,7 +122,7 @@ NONE
 #include <sched.h>
 
 int sched_get_priority_max(
-int policy
+  int policy
 );
 @end example
 
@@ -160,8 +160,8 @@ NONE
 #include <sched.h>
 
 int sched_rr_get_interval(
-pid_t pid,
-struct timespec *interval
+  pid_t            pid,
+  struct timespec *interval
 );
 @end example
 

@@ -114,7 +114,7 @@ and status codes.
 #include <pthread.h>
 
 int pthread_attr_init(
-pthread_attr_t *attr
+  pthread_attr_t *attr
 );
 @end example
 
@@ -173,7 +173,7 @@ is set to @code{PTHREAD_CREATE_JOINABLE}.
 #include <pthread.h>
 
 int pthread_attr_destroy(
-pthread_attr_t *attr
+  pthread_attr_t *attr
 );
 @end example
 
@@ -213,8 +213,8 @@ NONE
 #include <pthread.h>
 
 int pthread_attr_setdetachstate(
-pthread_attr_t *attr,
-int detachstate
+  pthread_attr_t *attr,
+  int             detachstate
 );
 @end example
 
@@ -263,8 +263,8 @@ then the use of the ID with the @code{pthread_detach} or
 #include <pthread.h>
 
 int pthread_attr_getdetachstate(
-const pthread_attr_t *attr,
-int *detachstate
+  const pthread_attr_t *attr,
+  int                  *detachstate
 );
 @end example
 
@@ -307,8 +307,8 @@ NONE
 #include <pthread.h>
 
 int pthread_attr_setstacksize(
-pthread_attr_t *attr,
-size_t stacksize
+  pthread_attr_t *attr,
+  size_t          stacksize
 );
 @end example
 
@@ -354,8 +354,8 @@ for this CPU.
 #include <pthread.h>
 
 int pthread_attr_getstacksize(
-const pthread_attr_t *attr,
-size_t *stacksize
+  const pthread_attr_t *attr,
+  size_t               *stacksize
 );
 @end example
 
@@ -400,8 +400,8 @@ routine is supported.
 #include <pthread.h>
 
 int pthread_attr_setstackaddr(
-pthread_attr_t *attr,
-void *stackaddr
+  pthread_attr_t *attr,
+  void           *stackaddr
 );
 @end example
 
@@ -446,8 +446,8 @@ each thread have sufficient stack space.
 #include <pthread.h>
 
 int pthread_attr_getstackaddr(
-const pthread_attr_t *attr,
-void **stackaddr
+  const pthread_attr_t  *attr,
+  void                 **stackaddr
 );
 @end example
 
@@ -492,8 +492,8 @@ routine is supported.
 #include <pthread.h>
 
 int pthread_attr_setscope(
-pthread_attr_t *attr,
-int contentionscope
+  pthread_attr_t *attr,
+  int             contentionscope
 );
 @end example
 
@@ -546,8 +546,8 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_attr_getscope(
-const pthread_attr_t *attr,
-int *contentionscope
+  const pthread_attr_t *attr,
+  int                  *contentionscope
 );
 @end example
 
@@ -592,8 +592,8 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_attr_setinheritsched(
-pthread_attr_t *attr,
-int inheritsched
+  pthread_attr_t *attr,
+  int             inheritsched
 );
 @end example
 
@@ -647,8 +647,8 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_attr_getinheritsched(
-const pthread_attr_t *attr,
-int *inheritsched
+  const pthread_attr_t *attr,
+  int                  *inheritsched
 );
 @end example
 
@@ -692,8 +692,8 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_attr_setschedpolicy(
-pthread_attr_t *attr,
-int policy
+  pthread_attr_t *attr,
+  int             policy
 );
 @end example
 
@@ -752,8 +752,8 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_attr_getschedpolicy(
-const pthread_attr_t *attr,
-int *policy
+  const pthread_attr_t *attr,
+  int                  *policy
 );
 @end example
 
@@ -797,8 +797,8 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_attr_setschedparam(
-pthread_attr_t *attr,
-const struct sched_param param
+  pthread_attr_t           *attr,
+  const struct sched_param  param
 );
 @end example
 
@@ -842,8 +842,8 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_attr_getschedparam(
-const pthread_attr_t *attr,
-struct sched_param *param
+  const pthread_attr_t *attr,
+  struct sched_param   *param
 );
 @end example
 
@@ -976,7 +976,7 @@ creator and the set of pending signals for this thread is empty.
 #include <pthread.h>
 
 void pthread_exit(
-void *status
+  void *status
 );
 @end example
 
@@ -1036,7 +1036,7 @@ as the return value.
 #include <pthread.h>
 
 int pthread_detach(
-pthread_t thread
+  pthread_t thread
 );
 @end example
 
@@ -1077,8 +1077,8 @@ will remain joined with that thread. Any subsequent calls to
 #include <pthread.h>
 
 int pthread_join(
-pthread_t thread,
-void **value_ptr
+  pthread_t    thread,
+  void       **value_ptr
 );
 @end example
 
@@ -1158,8 +1158,8 @@ NONE
 #include <pthread.h>
 
 int pthread_equal(
-pthread_t t1,
-pthread_t t2
+   pthread_t t1,
+   pthread_t t2
 );
 @end example
 
@@ -1200,8 +1200,8 @@ The behavior is undefined if the thread IDs are not valid.
 pthread_once_t once_control = PTHREAD_ONCE_INIT;
 
 int pthread_once(
-pthread_once_t *once_control,
-void (*init_routine)(void)
+   pthread_once_t   *once_control,
+   void            (*init_routine)(void)
 );
 @end example
 
@@ -1241,9 +1241,9 @@ is automatic storage (i.e. on a task stack) or is not initialized using
 #include <pthread.h>
 
 int pthread_setschedparam(
-pthread_t thread,
-int policy,
-struct sched_param *param
+  pthread_t           thread,
+  int                 policy,
+  struct sched_param *param
 );
 @end example
 
@@ -1298,9 +1298,9 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_getschedparam(
-pthread_t thread,
-int *policy,
-struct sched_param *param
+  pthread_t           thread,
+  int                *policy,
+  struct sched_param *param
 );
 @end example
 
