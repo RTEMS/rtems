@@ -157,7 +157,7 @@ BreakPointExcHdl(CPU_Exception_frame *ctx)
     justSaveContext = 0;
   }
   else {
-    if (ctx->idtIndex != DEBUG){
+    if (ctx->idtIndex != I386_EXCEPTION_DEBUG){
       NbSerializedCtx++;
       rtems_semaphore_obtain(serializeSemId, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
       NbSerializedCtx--;
