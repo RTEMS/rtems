@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 C_FILES = cpuIdent.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
@@ -25,19 +24,45 @@ LIB = $(ARCH)/libcpuspec.a
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(PROJECT_INCLUDE)/libcpu:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/libcpu/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
-    $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
-
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
 EXTRA_DIST = cpuIdent.c
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libcpu
+	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+
+$(PROJECT_INCLUDE)/libcpu/spr.h: spr.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/spr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/spr.h
+
+$(PROJECT_INCLUDE)/libcpu/io.h: io.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/io.h
+
+$(PROJECT_INCLUDE)/libcpu/mmu.h: mmu.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
+
+$(PROJECT_INCLUDE)/libcpu/page.h: page.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/page.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/page.h
+
+$(PROJECT_INCLUDE)/libcpu/byteorder.h: byteorder.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/byteorder.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/byteorder.h
+
+$(PROJECT_INCLUDE)/libcpu/pgtable.h: pgtable.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/pgtable.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/pgtable.h
+
+$(PROJECT_INCLUDE)/libcpu/cpuIdent.h: cpuIdent.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
 
 include $(top_srcdir)/../../../automake/local.am

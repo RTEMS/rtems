@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = ${ARCH}/timer.rel
 
 ## C sources

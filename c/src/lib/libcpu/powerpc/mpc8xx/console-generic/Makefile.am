@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = ${ARCH}/console-generic.rel
 
 ## C sources

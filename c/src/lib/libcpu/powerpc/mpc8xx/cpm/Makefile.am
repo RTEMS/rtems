@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = ${ARCH}/cp.rel
 
 ## C sources

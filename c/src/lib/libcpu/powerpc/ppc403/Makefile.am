@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 if ppc403
 SUBDIRS = console clock timer vectors ictrl
 endif

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/exceptions.rel
 
 C_FILES = raw_exception.c
@@ -19,11 +18,6 @@ exceptions_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) \
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-$(PROJECT_INCLUDE)/libcpu:
-	$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/libcpu/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
 #
 # (OPTIONAL) Add local stuff here using +=
 #
@@ -31,13 +25,21 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 $(PGM): $(exceptions_rel_OBJECTS)
 	$(make-rel)
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
-    $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
-
 all-local: $(ARCH) $(PREINSTALL_FILES) $(exceptions_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
 EXTRA_DIST = asm_utils.S raw_exception.c raw_exception.h
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libcpu
+	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+
+$(PROJECT_INCLUDE)/libcpu/raw_exception.h: raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 
 include $(top_srcdir)/../../../automake/local.am

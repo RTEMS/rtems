@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = ${ARCH}/vectors.rel
 
 ## Assembly sources

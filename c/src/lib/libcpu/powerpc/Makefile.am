@@ -4,25 +4,9 @@
 
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
-nobase_include_HEADERS = rtems/powerpc/cache.h \
+include_rtems_powerpcdir = $(includedir)/rtems/powerpc
+include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
     rtems/powerpc/debugmod.h
-
-$(PROJECT_INCLUDE):
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/rtems:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/rtems/powerpc:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/%: %
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES = $(PROJECT_INCLUDE) \
-  $(PROJECT_INCLUDE)/rtems \
-  $(PROJECT_INCLUDE)/rtems/powerpc \
-  $(nobase_include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 ## Check configure.in for conditions to set the conditionals below
 if shared
@@ -52,6 +36,21 @@ endif
 SUBDIRS = $(SHARED_LIB) $(CPU_SUBDIR) wrapup
 
 all-local: $(TMPINSTALL_FILES)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/powerpc
+	@: > $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/powerpc/cache.h: rtems/powerpc/cache.h $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/powerpc/cache.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/powerpc/cache.h
+
+$(PROJECT_INCLUDE)/rtems/powerpc/debugmod.h: rtems/powerpc/debugmod.h $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/powerpc/debugmod.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/powerpc/debugmod.h
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

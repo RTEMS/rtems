@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/ictrl.rel
 
 C_FILES = ictrl.c
@@ -14,11 +13,6 @@ ictrl_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-$(PROJECT_INCLUDE):
-	$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
 #
 # (OPTIONAL) Add local stuff here using +=
 #
@@ -26,13 +20,21 @@ $(PROJECT_INCLUDE)/%.h: %.h
 $(PGM): $(ictrl_rel_OBJECTS)
 	$(make-rel)
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
-   $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
-
 all-local: $(ARCH) $(ictrl_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
 EXTRA_DIST = ictrl.c ictrl.h
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/ictrl.h: ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ictrl.h
 
 include $(top_srcdir)/../../../automake/local.am

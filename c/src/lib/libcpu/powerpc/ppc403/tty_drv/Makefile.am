@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/tty_drv.rel
 
 include_HEADERS = tty_drv.h
@@ -26,5 +25,16 @@ all-local: $(ARCH) $(tty_drv_rel_OBJECTS) $(PGM)
 .PRECIOUS: $(PGM)
 
 EXTRA_DIST = tty_drv.c tty_drv.h
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/tty_drv.h: tty_drv.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tty_drv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tty_drv.h
 
 include $(top_srcdir)/../../../automake/local.am

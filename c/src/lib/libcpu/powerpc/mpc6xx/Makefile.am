@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 SUBDIRS = exceptions mmu clock timer wrapup
 
 include $(top_srcdir)/../../../automake/subdirs.am

@@ -1,3 +1,42 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc505/Makefile.am: Reformat.
+	* mpc505/ictrl/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc505/timer/Makefile.am: Reformat.
+	* mpc505/vectors/Makefile.am: Reformat.
+	* mpc6xx/Makefile.am: Reformat.
+	* mpc6xx/clock/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc6xx/exceptions/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc6xx/mmu/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc6xx/timer/Makefile.am: Reformat.
+	* mpc6xx/wrapup/Makefile.am: Reformat.
+	* mpc8260/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc8260/clock/Makefile.am: Reformat.
+	* mpc8260/console-generic/Makefile.am: Reformat.
+	* mpc8260/cpm/Makefile.am: Reformat.
+	* mpc8260/exceptions/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc8260/mmu/Makefile.am: Reformat.
+	* mpc8260/timer/Makefile.am: Reformat.
+	* mpc8xx/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc8xx/clock/Makefile.am: Reformat.
+	* mpc8xx/console-generic/Makefile.am: Reformat.
+	* mpc8xx/cpm/Makefile.am: Reformat.
+	* mpc8xx/exceptions/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* mpc8xx/mmu/Makefile.am: Reformat.
+	* mpc8xx/timer/Makefile.am: Reformat.
+	* ppc403/Makefile.am: Reformat.
+	* ppc403/clock/Makefile.am: Reformat.
+	* ppc403/console/Makefile.am: Reformat.
+	* ppc403/ictrl/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* ppc403/timer/Makefile.am: Reformat.
+	* ppc403/tty_drv/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* ppc403/vectors/Makefile.am: Reformat.
+	* shared/Makefile.am: Reformat.
+	* shared/include/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* shared/src/Makefile.am: Reformat. Use dirstamp for preinstallation.
+	* wrapup/Makefile.am: Reformat.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.

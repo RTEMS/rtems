@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 SUBDIRS = include src
 
 include $(top_srcdir)/../../../automake/subdirs.am
