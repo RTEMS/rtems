@@ -11,8 +11,8 @@
  *  $Id$
  */
 
-#ifndef __rtems_userenv_h
-#define __rtems_userenv_h
+#ifndef _RTEMS_USERENV_H
+#define _RTEMS_USERENV_H
 
 #include <rtems.h>
 #include <rtems/fs.h>

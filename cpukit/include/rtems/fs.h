@@ -11,8 +11,8 @@
  *  $Id$
  */
 
-#ifndef __rtems_fstypes_h
-#define __rtems_fstypes_h
+#ifndef _RTEMS_FS_H
+#define _RTEMS_FS_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -11,8 +11,8 @@
  *
  *  $Id$
  */
-#ifndef _rtems_bspIo_h
-#define _rtems_bspIo_h
+#ifndef _RTEMS_BSPIO_H
+#define _RTEMS_BSPIO_H
 
 /*
  * All the functions declared as extern after this comment

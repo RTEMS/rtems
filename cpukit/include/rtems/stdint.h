@@ -9,8 +9,8 @@
  * $Id$
  */
 
-#ifndef __rtems_stdint_h
-#define __rtems_stdint_h
+#ifndef _RTEMS_STDINT_H
+#define _RTEMS_STDINT_H
 
 #include <rtems/score/cpuopts.h>
 

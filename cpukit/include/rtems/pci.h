@@ -15,8 +15,8 @@
  * $Id$
  */
 
-#ifndef RTEMS_PCI_H
-#define RTEMS_PCI_H
+#ifndef _RTEMS_PCI_H
+#define _RTEMS_PCI_H
 
 /*
  * Under PCI, each device has 256 bytes of configuration address space,
@@ -1150,4 +1150,4 @@ pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char func
 extern unsigned char BusCountPCI();
 extern void InitializePCI();
 
-#endif /* RTEMS_PCI_H */
+#endif /* _RTEMS_PCI_H */

@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef _rtems_concat_h
-#define _rtems_concat_h
+#ifndef _RTEMS_CONCAT_H
+#define _RTEMS_CONCAT_H
 
 /* ANSI concatenation macros.  */
 
