@@ -1,3 +1,7 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am: Adapt ASM4FLAGS to automake-1.5.
+
 2001-04-16	Joel Sherrill <joel@OARcorp.com>
 
 	* include/confdefs.h: Fix real-time clock support.
