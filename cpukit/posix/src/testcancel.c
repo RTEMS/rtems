@@ -27,5 +27,5 @@ void pthread_testcancel( void )
  
   if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
        thread_support->cancelation_requested )
-    POSIX_Thread_cancel_run( _Thread_Executing );
+    _POSIX_Thread_cancel_run( _Thread_Executing );
 }

@@ -16,11 +16,11 @@
 
 /*PAGE
  *
- *  POSIX_Thread_cancel_run
+ *  _POSIX_Thread_cancel_run
  *
  */
 
-void POSIX_Thread_cancel_run( 
+void _POSIX_Thread_cancel_run( 
   Thread_Control *the_thread
 )
 {

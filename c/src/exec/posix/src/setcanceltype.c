@@ -40,7 +40,7 @@ int pthread_setcanceltype(
   if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE && 
        thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS &&
        thread_support->cancelation_requested )
-    POSIX_Thread_cancel_run( _Thread_Executing );
+    _POSIX_Thread_cancel_run( _Thread_Executing );
 
   return 0;
 }

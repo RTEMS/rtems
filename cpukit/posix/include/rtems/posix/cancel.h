@@ -13,14 +13,15 @@ typedef struct {
 }  POSIX_Cancel_Handler_control;
 
 /*
- *  POSIX_Thread_cancel_run
+ *  _POSIX_Thread_cancel_run
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This support routine runs through the chain of cancel handlers that
+ *  have been registered and executes them.
  */
 
-void POSIX_Thread_cancel_run(
+void _POSIX_Thread_cancel_run(
   Thread_Control *the_thread
 );
 
