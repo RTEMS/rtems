@@ -175,8 +175,6 @@ n:
 #define SR14	14
 #define SR15	15
 
-#include <libcpu/cpuIdent.h>
-
 /*
  *  Routines to access the time base register
  */
