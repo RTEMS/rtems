@@ -26,7 +26,7 @@ PGM = ${ARCH}/$(TEST).exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../automake/compile.am
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../automake/leaf.am
 include $(top_srcdir)/libtests.am
 
 #
@@ -37,7 +37,7 @@ LD_LIBS += $(CPLUS_LD_LIBS)
 
 if HAS_CXX
 ${PGM}: $(OBJS) $(LINK_FILES)
-	$(make-exe)
+	$(make-cxx-exe)
 
 all-local: $(ARCH) $(TMPINSTALL_FILES)
 else
