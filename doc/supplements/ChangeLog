@@ -1,3 +1,12 @@
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* mips64orion/.cvsignore, mips64orion/BSP_TIMES, mips64orion/ChangeLog,
+	mips64orion/Makefile.am, mips64orion/bsp.t, mips64orion/callconv.t,
+	mips64orion/cpumodel.t, mips64orion/cputable.t,
+	mips64orion/fatalerr.t, mips64orion/intr_NOTIMES.t,
+	mips64orion/memmodel.t, mips64orion/mips64orion.texi,
+	mips64orion/preface.texi, mips64orion/timeBSP.t: Removed.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.
