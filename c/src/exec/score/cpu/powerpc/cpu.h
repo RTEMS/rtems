@@ -505,7 +505,7 @@ SCORE_EXTERN struct {
   unsigned32 Default_r13;
 #endif
 #endif
-  boolean *Switch_necessary;
+  volatile boolean *Switch_necessary;
   boolean *Signal;
 } _CPU_IRQ_info CPU_STRUCTURE_ALIGNMENT;
 
@@ -653,7 +653,7 @@ SCORE_EXTERN struct {
 
 #define _CPU_ISR_Set_level( new_level ) \
   { \
-    register unsigned32 tmp; \
+    register unsigned32 tmp = 0; \
     asm volatile ( \
 	"mfmsr %0; andc %0,%0,%1; and %2, %2, %1; or %0, %0, %2; mtmsr %0" : \
 	"=r" ((tmp)) : \
