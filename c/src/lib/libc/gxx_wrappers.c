@@ -58,7 +58,7 @@ static rtems_id get_tid( void )
 #endif
 
 
-int rtems_gxx_once(__gthread_once_t *once, void (*func) ())
+int rtems_gxx_once(__gthread_once_t *once, void (*func) (void))
 {
 #ifdef DEBUG_GXX_WRAPPERS
    printk( "gxx_wrappers: once=%x, func=%x\n", *once, func );

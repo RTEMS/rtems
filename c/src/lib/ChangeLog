@@ -1,3 +1,8 @@
+2001-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/gxx_wrappers.c: Fix to keep prototype same as in gcc and
+	remove warning.
+ 
 2002-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libc/scandir.c: Initialize nitems = 0.
