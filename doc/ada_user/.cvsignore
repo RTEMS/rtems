@@ -1,7 +1,4 @@
-Makefile
-Makefile.in
 ada_user
-ada_user*.html
 ada_user-?
 ada_user-??
 ada_user.aux
@@ -10,6 +7,7 @@ ada_user.cps
 ada_user.dvi
 ada_user.fn
 ada_user.fns
+ada_user*.html
 ada_user.ky
 ada_user.log
 ada_user.pdf
@@ -19,8 +17,12 @@ ada_user.toc
 ada_user.tp
 ada_user.vr
 index.html
+Makefile
+Makefile.in
 mdate-sh
-rtemspie.pdf
-states.pdf
-rtems_header.html
 rtems_footer.html
+rtems_header.html
+rtemspie.pdf
+stamp-vti
+states.pdf
+version.texi

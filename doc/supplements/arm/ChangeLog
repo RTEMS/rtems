@@ -1,5 +1,13 @@
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* version.texi: Remove from CVS.
+	* stamp-vti: Remove from CVS.
+	* .cvsignore: Add version.texi.
+	Add stamp-vti.
+	Re-sort.
+
+2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wksheets.texi: Remove from CVS.
 	* timing.texi: Remove from CVS.
 

@@ -1,5 +1,3 @@
-Makefile
-Makefile.in
 ch01.texi
 ch02.texi
 ch03.texi
@@ -21,15 +19,17 @@ ch18.texi
 ch19.t
 ch19.texi
 index.html
+Makefile
+Makefile.in
 mdate-sh
 posix1003_1
-posix1003_1*.html
 posix1003_1-?
 posix1003_1-??
 posix1003_1.aux
 posix1003_1.cp
 posix1003_1.dvi
 posix1003_1.fn
+posix1003_1*.html
 posix1003_1.ky
 posix1003_1.log
 posix1003_1.pdf
@@ -38,5 +38,7 @@ posix1003_1.ps
 posix1003_1.toc
 posix1003_1.tp
 posix1003_1.vr
-rtems_header.html
 rtems_footer.html
+rtems_header.html
+stamp-vti
+version.texi

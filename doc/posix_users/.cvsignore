@@ -1,5 +1,3 @@
-Makefile
-Makefile.in
 cancel.texi
 clock.texi
 cond.texi
@@ -11,12 +9,13 @@ io.texi
 key.texi
 libc.texi
 libm.texi
+Makefile
+Makefile.in
 mdate-sh
 memorymgmt.texi
 message.texi
 mutex.texi
 posix_users
-posix_users*.html
 posix_users-?
 posix_users-??
 posix_users.aux
@@ -25,6 +24,7 @@ posix_users.cps
 posix_users.dvi
 posix_users.fn
 posix_users.fns
+posix_users*.html
 posix_users.ky
 posix_users.log
 posix_users.pdf
@@ -35,12 +35,14 @@ posix_users.tp
 posix_users.vr
 procenv.texi
 process.texi
+rtems_footer.html
+rtems_header.html
 sched.texi
 semaphores.texi
 signal.texi
+stamp-vti
 status.texi
 systemdb.texi
 thread.texi
 timer.texi
-rtems_header.html
-rtems_footer.html
+version.texi

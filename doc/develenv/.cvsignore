@@ -1,11 +1,9 @@
-Makefile
-Makefile.in
 develenv
-develenv*.html
 develenv.aux
 develenv.cp
 develenv.dvi
 develenv.fn
+develenv*.html
 develenv.ky
 develenv.log
 develenv.pdf
@@ -15,6 +13,10 @@ develenv.toc
 develenv.tp
 develenv.vr
 index.html
+Makefile
+Makefile.in
 mdate-sh
-rtems_header.html
 rtems_footer.html
+rtems_header.html
+stamp-vti
+version.texi

@@ -1,4 +1,0 @@
-@set UPDATED 14 February 2002
-@set UPDATED-MONTH February 2002
-@set EDITION ss-20021118
-@set VERSION ss-20021118

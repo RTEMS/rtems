@@ -1,3 +1,11 @@
+2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* version.texi: Remove from CVS.
+	* stamp-vti: Remove from CVS.
+	* .cvsignore: Add version.texi.
+	Add stamp-vti.
+	Re-sort.
+
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
 	* stamp-vti, version.texi: Regenerated.
