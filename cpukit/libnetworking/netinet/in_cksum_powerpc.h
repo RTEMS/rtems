@@ -42,6 +42,7 @@ in_cksum(m, len)
 	register struct mbuf *m;
 	register int len;
 {
+	u_char junk;
 	register u_short *w;
 	register unsigned sum = 0;
 	register unsigned tmp;
@@ -91,30 +92,13 @@ in_cksum(m, len)
 				mlen -= 2;
 			}
 		}
-		/*
-		 * Advance to a cache line boundary.
-		 */
-		if (4 & (int) w && mlen >= 4) {
-			ADD(0);
-			MOP;
-			w += 2;
-			mlen -= 4;
-		}
-		if (8 & (int) w && mlen >= 8) {
-			ADD(0);
-			ADDC(4);
-			MOP;
-			w += 4;
-			mlen -= 8;
-		}
+
 		/*
 		 * Do as much of the checksum as possible 32 bits at at time.
-		 * In fact, this loop is unrolled to make overhead from
-		 * branches &c small.
+		 * In fact, this loop is unrolled to keep overhead from
+		 * branches small.
 		 */
-		mlen -= 1;
-		while ((mlen -= 32) >= 0) {
-			u_char junk;
+		while (mlen >= 32) {
 			/*
 			 * Add with carry 16 words and fold in the last
 			 * carry by adding a 0 with carry.
@@ -128,19 +112,6 @@ in_cksum(m, len)
 			ADDC(8);
 			ADDC(12);
 			LOAD(32);
-			ADDC(20);
-			ADDC(24);
-			ADDC(28);
-			MOP;
-			w += 16;
-		}
-		mlen += 32 + 1;
-		if (mlen >= 32) {
-			ADD(16);
-			ADDC(0);
-			ADDC(4);
-			ADDC(8);
-			ADDC(12);
 			ADDC(20);
 			ADDC(24);
 			ADDC(28);
