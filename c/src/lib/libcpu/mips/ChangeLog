@@ -1,3 +1,7 @@
+2001-05-24	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* clock/clock.S: Move placement of nop.
+
 2001-05-22	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* Assisted in design and debug by Joel Sherrill <joel@OARcorp.com>.

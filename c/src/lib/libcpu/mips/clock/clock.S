@@ -31,15 +31,15 @@ FRAME(mips_set_timer,sp,0,ra)
         nop
         addu t0,a0,t0
         mtc0 t0,C0_COMPARE
-        nop
         j ra
+	nop
 	.set reorder
 ENDFRAME(mips_set_timer)
 
 FRAME(mips_get_timer,sp,0,ra)
 	.set noreorder
         mfc0 v0,C0_COUNT
-        nop
         j ra
+	nop
 	.set reorder
 ENDFRAME(mips_get_timer)
