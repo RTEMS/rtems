@@ -144,18 +144,20 @@
  */
 
 #define _Objects_Open( _information, _the_object, _name ) \
-  { \
+  do { \
     unsigned32 _index; \
     \
     _index = _Objects_Get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = (_the_object); \
     \
     if ( (_information)->is_string ) \
-      _Objects_Copy_name_string( (_name), (_the_object)->name ); \
+      /* _Objects_Copy_name_string( (_name), (_the_object)->name ); */\
+      (_the_object)->name = name; \
     else \
-      _Objects_Copy_name_raw( \
-        (_name), (_the_object)->name, (_information)->name_length ); \
-  }
+      /* _Objects_Copy_name_raw( \
+        (_name), (_the_object)->name, (_information)->name_length ); */ \
+      (_the_object)->name = name; \
+  } while (0)
 
 /*PAGE
  *
@@ -164,13 +166,14 @@
  */
 
 #define _Objects_Close( _information, _the_object ) \
-  { \
+  do { \
     unsigned32 _index; \
     \
     _index = _Objects_Get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = (Objects_Control *) NULL; \
-    _Objects_Clear_name( (_the_object)->name, (_information)->name_length ); \
-  }
+    /* _Objects_Clear_name( (_the_object)->name, (_information)->name_length );  */ \
+    (_the_object)->name = 0; \
+  } while (0)
 
 /*PAGE
  *
@@ -178,6 +181,7 @@
  */
 
 #define _Objects_Namespace_remove( _information, _the_object ) \
+  (_the_object)->name = 0 \
   _Objects_Clear_name( (_the_object)->name, (_information)->name_length )
 
 #endif

@@ -1,3 +1,9 @@
+2002-07-05	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/object.inl: Corrected implementation of
+	_Objects_Open, _Objects_Close, and _Objects_Namespace_remove
+	to be consistent with the inline implementation.
+
 2002-07-01    Joel Sherrill <joel@OARcorp.com>
 
 	* Mega patch merge to change the format of the object IDs to
