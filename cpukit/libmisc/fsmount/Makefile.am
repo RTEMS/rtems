@@ -15,8 +15,8 @@ include_rtems_HEADERS = fsmount.h
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -39,4 +39,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 EXTRA_DIST = README fsmount.c
 
-include $(top_srcdir)/automake/local.am
+include $(top_srcdir)/../automake/local.am

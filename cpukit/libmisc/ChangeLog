@@ -1,5 +1,9 @@
 2003-08-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* fsmount/Makefile.am: Revert previous change.
+
+2003-08-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* fsmount/Makefile.am: Fix path to automake-includes.
 
 2003-08-13	Joel Sherrill <joel@OARcorp.com>
