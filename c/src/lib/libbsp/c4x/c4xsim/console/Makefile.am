@@ -1,12 +1,12 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = $(ARCH)/console.rel
-
 VPATH = @srcdir@:@srcdir@/../../../shared
+
+PGM = $(ARCH)/console.rel
 
 C_FILES = console.c consolereserveresources.c debugio.c simio.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
@@ -14,6 +14,7 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 #
