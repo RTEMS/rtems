@@ -1,4 +1,4 @@
-2004-11-20	Ralf Corsepius <ralf.corsepiu@rtems.org>
+2004-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 720/filesystem:
 	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.c,
@@ -10,7 +10,7 @@
 	libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos_format.c:
 	Adaptations to RTEMS-4.7.
 
-2004-11-20	Ralf Corsepius <ralf.corsepiu@rtems.org>
+2004-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 720/filesystem:
 	* libfs/src/dosfs/msdos_format.c: New 
@@ -32,7 +32,7 @@
 
 	* libcsupport/include/stdint.h: Fixed name in @file.
 
-2004-11-08	Ralf Corsepius <ralf.corsepiu@rtems.org>
+2004-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/sys/_stdint.h: Remove.
 	* libcsupport/include/sys/_inttypes.h: Remove.
@@ -42,7 +42,7 @@
 	sys/_inttypes.h.
 	* libcsupport/Makefile.am: Reflect changes above.
 
-2004-11-07	Ralf Corsepius <ralf.corsepiu@rtems.org>
+2004-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* backward/asm.h: Add doxygen preamble.
 	* backward/chain.h: Add doxygen preamble.
@@ -64,7 +64,7 @@
 	* backward/zilog/z8036.h: Add doxygen preamble.
 	* backward/zilog/z8536.h: Add doxygen preamble.
 
-2004-11-07	Ralf Corsepius <ralf.corsepiu@rtems.org>
+2004-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/sys/_stdint.h: Special-case int64_t (GCC has
 	__LONG_LONG_MAX__, while POSIX mandates LLONG_MAX. This break 
@@ -82,7 +82,7 @@
 	* libcsupport/include/inttypes.h: Cleanup.
 	* libcsupport/include/stdint.h: Cleanup.
 
-2004-11-04	Ralf Corsepius <ralf_corsepiu@rtems.org>
+2004-11-04	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* include/sys/_stdint.h: Various changes.
 	Add *leastN_t types. Add INTN_{MIN|MAX} macros.
@@ -101,7 +101,7 @@
 	avoided in single CPU configurations but always available in the
 	Objects Handlers API.
 
-2004-11-02	Ralf Corsepius <ralf_corsepiu@rtems.org>
+2004-11-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/include/rtems.h,
 	rtems/inline/rtems/rtems/asr.inl,
@@ -137,7 +137,7 @@
 	rtems/macros/rtems/rtems/tasks.inl,
 	rtems/macros/rtems/rtems/timer.inl: Add doxygen preamble.
 
-2004-11-02	Ralf Corsepius <ralf_corsepiu@rtems.org>
+2004-11-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/include/rtems.h,
 	rtems/include/rtems/rtems/asr.h,
