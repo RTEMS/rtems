@@ -1,3 +1,7 @@
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: add tests to the GNU canonicalized subdirectories, 
+
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: add lib/libcpu to the GNU canonicalized subdirectories, 

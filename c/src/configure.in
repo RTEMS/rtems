@@ -68,7 +68,7 @@ AC_SUBST(cfg_subdirs1)
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 AC_SUBST(cfg_subdirs)
 
-AC_CONFIG_SUBDIRS(tests)
+RTEMS_CONFIG_HOST_SUBDIRS(tests)
 
 RTEMS_PROJECT_ROOT
 
