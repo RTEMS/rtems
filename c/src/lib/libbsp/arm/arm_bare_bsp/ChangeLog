@@ -1,3 +1,10 @@
+2003-12-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* console/Makefile.am: Remove all: $(ARCH).
+	* irq/Makefile.am: Remove all: $(ARCH).
+	* startup/Makefile.am: Remove all: $(ARCH).
+	* wrapup/Makefile.am: Remove all: $(ARCH).
+
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add preinstallation dirstamp support.

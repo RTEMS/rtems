@@ -25,7 +25,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(irq_rel_OBJECTS)
 	$(make-rel)
 
-all: $(PREINSTALL_FILES) $(ARCH) $(irq_rel_OBJECTS) $(PGM)
+all: $(PREINSTALL_FILES) $(irq_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
