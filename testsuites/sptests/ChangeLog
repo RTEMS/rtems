@@ -1,3 +1,8 @@
+2001-01-22	Joel Sherrill <joel@OARcorp.com>
+
+	* sp09/screen14.c, sp09/sp09.scn, sp30/init.c, sp31/init.c: Modified
+	because priority added as argument to rtems_timer_initiate_server().
+
 2001-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* Added tests for task-based timers.  This included the new tests

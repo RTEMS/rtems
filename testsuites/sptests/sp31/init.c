@@ -39,6 +39,7 @@ rtems_task Init(
   directive_failed( status, "rtems_clock_set" );
 
   status = rtems_timer_initiate_server(
+    RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES
   );

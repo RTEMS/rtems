@@ -169,7 +169,17 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_server_fire_when - RTEMS_INCORRECT_STATE" );
 
-  status = rtems_timer_initiate_server( 0, 0 );
+  status =
+    rtems_timer_initiate_server( 0, 0, 0 );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_PRIORITY,
+    "rtems_timer_initiate_server invalid priority"
+  );
+  puts( "TA1 - rtems_timer_initiate_server - RTEMS_INVALID_PRIORITY" );
+
+  status =
+    rtems_timer_initiate_server( RTEMS_TIMER_SERVER_DEFAULT_PRIORITY, 0, 0 );
   directive_failed( status, "rtems_timer_initiate_server" );
   puts( "TA1 - rtems_timer_initiate_server" );
   
