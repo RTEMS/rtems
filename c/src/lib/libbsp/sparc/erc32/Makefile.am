@@ -25,8 +25,8 @@ dist_project_lib_DATA += startup/linkcmds
 
 EXTRA_PROGRAMS += startup.rel
 CLEANFILES += startup.rel
-startup_rel_SOURCES = ../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c ../shared/bspstart.c ../../shared/main.c \
+startup_rel_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
+    ../../shared/bsppost.c ../../sparc/shared/bspstart.c ../../shared/main.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
     startup/spurious.c startup/erc32mec.c startup/boardinit.S
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
@@ -42,7 +42,7 @@ noinst_DATA += startup$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += gnatsupp.rel
 CLEANFILES += gnatsupp.rel
-gnatsupp_rel_SOURCES = gnatsupp/gnatsupp.c ../shared/gnatcommon.c
+gnatsupp_rel_SOURCES = gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
