@@ -41,11 +41,11 @@
  *  NOTE:
  *
  *  On entry, it is assumed all interrupts are blocked and that this
- *  routine needs to set the initial isr level.  This may or may not 
+ *  routine needs to set the initial isr level.  This may or may not
  *  actually be needed by the context switch routine and as a result
  *  interrupts may already be at there proper level.  Either way,
  *  setting the initial isr level properly here is safe.
- *  
+ *
  *  Currently this is only really needed for the posix port,
  *  ref: _Context_Switch in unix/cpu.c
  *
@@ -120,7 +120,7 @@ void _Thread_Handler( void )
 
   switch ( executing->Start.prototype ) {
     case THREAD_START_NUMERIC:
-      executing->Wait.return_argument = 
+      executing->Wait.return_argument =
         (*(Thread_Entry_numeric) executing->Start.entry_point)(
           executing->Start.numeric_argument
       );
@@ -132,15 +132,15 @@ void _Thread_Handler( void )
         );
       break;
     case THREAD_START_BOTH_POINTER_FIRST:
-      executing->Wait.return_argument = 
-         (*(Thread_Entry_both_pointer_first) executing->Start.entry_point)( 
+      executing->Wait.return_argument =
+         (*(Thread_Entry_both_pointer_first) executing->Start.entry_point)(
            executing->Start.pointer_argument,
            executing->Start.numeric_argument
          );
       break;
     case THREAD_START_BOTH_NUMERIC_FIRST:
-      executing->Wait.return_argument = 
-         (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)( 
+      executing->Wait.return_argument =
+         (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)(
            executing->Start.numeric_argument,
            executing->Start.pointer_argument
          );
@@ -150,7 +150,7 @@ void _Thread_Handler( void )
   /*
    *  In the switch above, the return code from the user thread body
    *  was placed in return_argument.  This assumed that if it returned
-   *  anything (which is not supporting in all APIs), then it would be 
+   *  anything (which is not supporting in all APIs), then it would be
    *  able to fit in a (void *).
    */
 

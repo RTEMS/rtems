@@ -80,7 +80,7 @@ int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
   ISR_Level           *level_p
 )
-{ 
+{
   Thread_Control   *executing;
   ISR_Level         level = *level_p;
 

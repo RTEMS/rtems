@@ -52,7 +52,7 @@ void _Thread_Tickle_timeslice( void )
   executing->ticks_executed++;
 
   /*
-   *  If the thread is not preemptible or is not ready, then 
+   *  If the thread is not preemptible or is not ready, then
    *  just return.
    */
 

@@ -152,7 +152,7 @@ SCORE_EXTERN Thread_Control *_MPCI_Receive_server_tcb;
  *  by each object that supports MP operations.
  */
 
-SCORE_EXTERN MPCI_Packet_processor 
+SCORE_EXTERN MPCI_Packet_processor
                _MPCI_Packet_processors[MP_PACKET_CLASSES_LAST+1];
 
 /*
@@ -163,7 +163,7 @@ SCORE_EXTERN MPCI_Packet_processor
  *  This routine performs the initialization necessary for this handler.
  */
 
-void _MPCI_Handler_initialization( 
+void _MPCI_Handler_initialization(
   MPCI_Control            *users_mpci_table,
   uint32_t                 timeout_status
 );
@@ -172,7 +172,7 @@ void _MPCI_Handler_initialization(
  *  _MPCI_Create_server
  *
  *  DESCRIPTION:
- *  
+ *
  *  This routine creates the packet receive server used in MP systems.
  */
 
@@ -198,7 +198,7 @@ void _MPCI_Initialization ( void );
  *  designated object class.
  */
 
-void _MPCI_Register_packet_processor( 
+void _MPCI_Register_packet_processor(
   MP_packet_Classes      the_class,
   MPCI_Packet_processor  the_packet_processor
 

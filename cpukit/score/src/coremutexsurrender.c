@@ -59,7 +59,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  allowed when the mutex in quetion is FIFO or simple Priority
    *  discipline.  But Priority Ceiling or Priority Inheritance mutexes
    *  must be released by the thread which acquired them.
-   */ 
+   */
 
   if ( the_mutex->Attributes.only_owner_release ) {
     if ( !_Thread_Is_executing( holder ) )
@@ -68,7 +68,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   /* XXX already unlocked -- not right status */
 
-  if ( !the_mutex->nest_count ) 
+  if ( !the_mutex->nest_count )
     return CORE_MUTEX_STATUS_SUCCESSFUL;
 
   the_mutex->nest_count--;
@@ -100,7 +100,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
        _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
-    if ( holder->resource_count == 0 && 
+    if ( holder->resource_count == 0 &&
          holder->real_priority != holder->current_priority ) {
       _Thread_Change_priority( holder, holder->real_priority, TRUE );
     }
@@ -117,7 +117,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
       ( *api_mutex_mp_support)( the_thread, id );
 
-    } else 
+    } else
 #endif
     {
 

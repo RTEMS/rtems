@@ -67,7 +67,7 @@ void _Thread_Ready(
 
   heir = _Thread_Heir;
 
-  if ( !_Thread_Is_executing( heir ) && _Thread_Executing->is_preemptible ) 
+  if ( !_Thread_Is_executing( heir ) && _Thread_Executing->is_preemptible )
     _Context_Switch_necessary = TRUE;
 
   _ISR_Enable( level );

@@ -2,7 +2,7 @@
  *
  *  This include file contains all the constants and structures associated
  *  with the Mutex Handler.  A mutex is an enhanced version of the standard
- *  Dijkstra binary semaphore used to provide synchronization and mutual 
+ *  Dijkstra binary semaphore used to provide synchronization and mutual
  *  exclusion capabilities.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -101,7 +101,7 @@ typedef enum {
 #define CORE_MUTEX_LOCKED   0
 
 /*
- *  The following defines the control block used to manage the 
+ *  The following defines the control block used to manage the
  *  attributes of each mutex.
  */
 

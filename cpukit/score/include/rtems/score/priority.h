@@ -58,7 +58,7 @@ typedef struct {
  */
 
 SCORE_EXTERN volatile Priority_Bit_map_control _Priority_Major_bit_map;
-SCORE_EXTERN Priority_Bit_map_control 
+SCORE_EXTERN Priority_Bit_map_control
                _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
 /*

@@ -2,7 +2,7 @@
  *
  *  This include file contains all the constants and structures associated
  *  with the Object Handler.  This Handler provides mechanisms which
- *  can be used to initialize and manipulate all objects which have 
+ *  can be used to initialize and manipulate all objects which have
  *  ids.
  *
  *  COPYRIGHT (c) 1989-2002.
@@ -478,7 +478,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
  *
  *  This function implements the common portion of the object Id
  *  to name directives.  This function returns the name
- *  associated with object id.  
+ *  associated with object id.
  *
  *  NOTE:
  *
@@ -504,7 +504,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
  *  is undefined.  Otherwise, location is set to OBJECTS_ERROR
  *  and the_object is undefined.
  *
- *  NOTE: _Objects_Get returns with dispatching disabled for 
+ *  NOTE: _Objects_Get returns with dispatching disabled for
  *        local and remote objects.
  *        _Objects_Get_isr_disable returns with dispatching
  *        disabled for remote objects and interrupts for local

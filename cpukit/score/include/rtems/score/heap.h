@@ -245,7 +245,7 @@ void _Heap_Walk(
  *    the_heap  - pointer to heap header
  *    the_info  - pointer to information block
  *
- *  Output parameters: 
+ *  Output parameters:
  *    *the_info - status information
  *    return 0=success, otherwise heap is corrupt.
  */

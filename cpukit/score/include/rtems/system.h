@@ -30,7 +30,7 @@ extern "C" {
 #define __RTEMS_REVISION__ 0
 
 /*
- *  The cpu options include file defines all cpu dependent 
+ *  The cpu options include file defines all cpu dependent
  *  parameters for this build of RTEMS.  It must be included
  *  first so the basic macro definitions are in place.
  */
@@ -40,7 +40,7 @@ extern "C" {
 /*
  *  The following ensures that all data is declared in the space
  *  of the initialization routine for either the Initialization Manager
- *  or the initialization file for the appropriate API.  It is 
+ *  or the initialization file for the appropriate API.  It is
  *  referenced as "external" in every other file.
  */
 

@@ -52,7 +52,7 @@ typedef enum {
  *  There are four chains used to maintain a priority -- each chain
  *  manages a distinct set of task priorities.  The number of chains
  *  is determined by TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS.
- *  The following set must be consistent.  
+ *  The following set must be consistent.
  *
  *  The set below configures 4 headers -- each contains 64 priorities.
  *  Header x manages priority range (x*64) through ((x*64)+63).  If
@@ -61,7 +61,7 @@ typedef enum {
  *  This halves the search time to find the insertion point.
  */
 
-#define TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS 4   
+#define TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS 4
 #define TASK_QUEUE_DATA_PRIORITIES_PER_HEADER      64
 #define TASK_QUEUE_DATA_REVERSE_SEARCH_MASK        0x20
 

@@ -74,11 +74,11 @@ restart:
      delta_interval -= after->delta_interval;
 
      /*
-      *  If you experience problems comment out the _ISR_Flash line.  
+      *  If you experience problems comment out the _ISR_Flash line.
       *  3.2.0 was the first release with this critical section redesigned.
       *  Under certain circumstances, the PREVIOUS critical section algorithm
       *  used around this flash point allowed interrupts to execute
-      *  which violated the design assumptions.  The critical section 
+      *  which violated the design assumptions.  The critical section
       *  mechanism used here WAS redesigned to address this.
       */
 

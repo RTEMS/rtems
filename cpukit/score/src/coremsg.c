@@ -76,7 +76,7 @@ boolean _CORE_message_queue_Initialize(
   message_buffering_required = maximum_pending_messages *
        (allocated_message_size + sizeof(CORE_message_queue_Buffer_control));
 
-  the_message_queue->message_buffers = (CORE_message_queue_Buffer *) 
+  the_message_queue->message_buffers = (CORE_message_queue_Buffer *)
      _Workspace_Allocate( message_buffering_required );
 
   if (the_message_queue->message_buffers == 0)

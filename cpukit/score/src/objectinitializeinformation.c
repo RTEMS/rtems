@@ -36,7 +36,7 @@
  *    size                - size of this object's control block
  *    is_string           - TRUE if names for this object are strings
  *    maximum_name_length - maximum length of each object's name
- *    When multiprocessing is configured, 
+ *    When multiprocessing is configured,
  *      supports_global     - TRUE if this is a global object class
  *      extract_callout     - pointer to threadq extract callout if MP
  *
@@ -66,8 +66,8 @@ void _Objects_Initialize_information(
 #endif
 
   information->the_api            = the_api;
-  information->the_class          = the_class; 
-  information->is_string          = is_string; 
+  information->the_class          = the_class;
+  information->is_string          = is_string;
 
   information->local_table        = 0;
   information->name_table         = 0;
@@ -124,7 +124,7 @@ void _Objects_Initialize_information(
   name_length = maximum_name_length;
 
   if ( name_length & (OBJECTS_NAME_ALIGNMENT-1) )
-    name_length = (name_length + OBJECTS_NAME_ALIGNMENT) & 
+    name_length = (name_length + OBJECTS_NAME_ALIGNMENT) &
                   ~(OBJECTS_NAME_ALIGNMENT-1);
 
   information->name_length = name_length;

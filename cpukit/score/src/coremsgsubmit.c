@@ -151,12 +151,12 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
 
   /*
    *  WARNING!! executing should NOT be used prior to this point.
-   *  Thus the unusual choice to open a new scope and declare 
+   *  Thus the unusual choice to open a new scope and declare
    *  it as a variable.  Doing this emphasizes how dangerous it
    *  would be to use this variable prior to here.
    */
 
-  { 
+  {
     Thread_Control  *executing = _Thread_Executing;
 
     _ISR_Disable( level );

@@ -50,8 +50,8 @@
 void _Thread_Start_multitasking( void )
 {
   /*
-   *  The system is now multitasking and completely initialized.  
-   *  This system thread now either "goes away" in a single processor 
+   *  The system is now multitasking and completely initialized.
+   *  This system thread now either "goes away" in a single processor
    *  system or "turns into" the server thread in an MP system.
    */
 

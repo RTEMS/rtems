@@ -1,7 +1,7 @@
 /*  interr.h
  *
  *  This include file contains constants and prototypes related
- *  to the Internal Error Handler. 
+ *  to the Internal Error Handler.
  *
  *
  *  COPYRIGHT (c) 1989-1999.

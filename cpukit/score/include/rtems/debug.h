@@ -1,7 +1,7 @@
 /*  debug.h
  *
  *  This include file contains the information pertaining to the debug
- *  support within RTEMS.  It is currently cast in the form of a 
+ *  support within RTEMS.  It is currently cast in the form of a
  *  Manager since it is externally accessible.
  *
  *

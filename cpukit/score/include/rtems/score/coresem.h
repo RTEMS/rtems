@@ -59,7 +59,7 @@ typedef enum {
 }   CORE_semaphore_Status;
 
 /*
- *  The following defines the control block used to manage the 
+ *  The following defines the control block used to manage the
  *  attributes of each semaphore.
  */
 
@@ -69,7 +69,7 @@ typedef struct {
 }   CORE_semaphore_Attributes;
 
 /*
- *  The following defines the control block used to manage each 
+ *  The following defines the control block used to manage each
  *  counting semaphore.
  */
 

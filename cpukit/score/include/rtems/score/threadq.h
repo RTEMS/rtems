@@ -52,7 +52,7 @@ typedef void ( *Thread_queue_Extract_callout )(
                  Thread_Control *
              );
 
-SCORE_EXTERN Thread_queue_Extract_callout  
+SCORE_EXTERN Thread_queue_Extract_callout
   _Thread_queue_Extract_table[ OBJECTS_CLASSES_LAST + 1 ];
 #endif
 
@@ -105,7 +105,7 @@ void _Thread_queue_Extract(
  *  DESCRIPTION:
  *
  *  This routine extracts the_thread from the_thread_queue
- *  and ensures that if there is a proxy for this task on 
+ *  and ensures that if there is a proxy for this task on
  *  another node, it is also dealt with.
  */
 

@@ -35,7 +35,7 @@
  *  This subprogram performs the initialization necessary for this handler.
  */
 
-void _MPCI_Handler_initialization( 
+void _MPCI_Handler_initialization(
   MPCI_Control            *users_mpci_table,
   uint32_t                 timeout_status
 )

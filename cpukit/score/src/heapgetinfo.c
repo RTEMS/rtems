@@ -26,7 +26,7 @@
  *    the_heap  - pointer to heap header
  *    the_info  - pointer for information to be returned
  *
- *  Output parameters: 
+ *  Output parameters:
  *    *the_info  - contains information about heap
  *    return 0=success, otherwise heap is corrupt.
  */

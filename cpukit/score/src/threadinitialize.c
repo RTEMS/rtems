@@ -76,7 +76,7 @@ boolean _Thread_Initialize(
 
     actual_stack_size = _Thread_Stack_Allocate( the_thread, actual_stack_size );
 
-    if ( !actual_stack_size ) 
+    if ( !actual_stack_size )
       return FALSE;                     /* stack allocation failed */
 
     stack = the_thread->Start.stack;
@@ -139,7 +139,7 @@ boolean _Thread_Initialize(
 
       return FALSE;
     }
-  } else 
+  } else
     extensions_area = NULL;
 
   the_thread->extensions = (void **) extensions_area;

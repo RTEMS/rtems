@@ -26,7 +26,7 @@
  *  _Thread_queue_Extract_with_proxy
  *
  *  This routine extracts the_thread from the_thread_queue
- *  and ensures that if there is a proxy for this task on 
+ *  and ensures that if there is a proxy for this task on
  *  another node, it is also dealt with.
  *
  *  XXX
@@ -48,7 +48,7 @@ boolean _Thread_queue_Extract_with_proxy(
 
       the_information = _Objects_Get_information( the_thread->Wait.id );
 
-      proxy_extract_callout = 
+      proxy_extract_callout =
         (Objects_Thread_queue_Extract_callout) the_information->extract;
 
       if ( proxy_extract_callout )

@@ -52,7 +52,7 @@ void _CORE_message_queue_Flush_waiting_threads(
   /*
    *  IF there are no pending messages,
    *  THEN threads may be blocked waiting to RECEIVE a message,
-   *  
+   *
    *  IF the pending message queue is full
    *  THEN threads may be blocked waiting to SEND a message
    *

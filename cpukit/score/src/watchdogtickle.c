@@ -39,7 +39,7 @@ void _Watchdog_Tickle(
 
   /*
    * See the comment in watchdoginsert.c and watchdogadjust.c
-   * about why it's safe not to declare header a pointer to 
+   * about why it's safe not to declare header a pointer to
    * volatile data - till, 2003/7
    */
 
@@ -69,7 +69,7 @@ void _Watchdog_Tickle(
        case WATCHDOG_INACTIVE:
          /*
           *  This state indicates that the watchdog is not on any chain.
-          *  Thus, it is NOT on a chain being tickled.  This case should 
+          *  Thus, it is NOT on a chain being tickled.  This case should
           *  never occur.
           */
          break;

@@ -1,6 +1,6 @@
 /*  wkspace.h
  *
- *  This include file contains information related to the 
+ *  This include file contains information related to the
  *  RAM Workspace.  This Handler provides mechanisms which can be used to
  *  define, initialize and manipulate the workspace.
  *

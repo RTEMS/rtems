@@ -1,7 +1,7 @@
 /*  apimutex.h
  *
  *  This include file contains all the constants and structures associated
- *  with the API Mutex Handler.  This handler is used by API level 
+ *  with the API Mutex Handler.  This handler is used by API level
  *  routines to manage mutual exclusion.
  *
  *  COPYRIGHT (c) 1989-2002.

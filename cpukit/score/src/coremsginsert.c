@@ -96,7 +96,7 @@ void _CORE_message_queue_Insert_message(
    *  the message is actually in the queue at this point.
    */
 
-  if ( the_message_queue->number_of_pending_messages == 1 && 
+  if ( the_message_queue->number_of_pending_messages == 1 &&
        the_message_queue->notify_handler )
     (*the_message_queue->notify_handler)( the_message_queue->notify_argument );
 }

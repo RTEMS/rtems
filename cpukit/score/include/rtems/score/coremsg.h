@@ -41,7 +41,7 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
  *  the contents of message buffers.
  *
  *  NOTE:  The buffer field is normally longer than a single uint32_t  .
- *         but since messages are variable length we just make a ptr to 1.  
+ *         but since messages are variable length we just make a ptr to 1.
  */
 
 typedef struct {
@@ -100,7 +100,7 @@ typedef enum {
 }   CORE_message_queue_Status;
 
 /*
- *  The following defines the control block used to manage the 
+ *  The following defines the control block used to manage the
  *  attributes of each message queue.
  */
 
@@ -117,7 +117,7 @@ typedef struct {
 typedef void (*CORE_message_queue_Notify_Handler)( void * );
 
 /*
- *  The following defines the control block used to manage each 
+ *  The following defines the control block used to manage each
  *  counting message_queue.
  */
 
@@ -276,7 +276,7 @@ void _CORE_message_queue_Seize(
  *
  *  DESCRIPTION:
  *
- *  This kernel routine inserts the specified message into the 
+ *  This kernel routine inserts the specified message into the
  *  message queue.  It is assumed that the message has been filled
  *  in before this routine is called.
  */

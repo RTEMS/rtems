@@ -62,7 +62,7 @@ Objects_Control *_Objects_Get_no_protection(
   /* index = (uint16_t  ) id; */
 #endif
 
-   if ( information->maximum >= index ) { 
+   if ( information->maximum >= index ) {
     if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;
       return the_object;
@@ -72,7 +72,7 @@ Objects_Control *_Objects_Get_no_protection(
   }
   *location = OBJECTS_ERROR;
 
-/* 
+/*
  *  Not supported for multiprocessing
  */
 #if 0 && defined(RTEMS_MULTIPROCESSING)

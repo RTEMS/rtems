@@ -30,7 +30,7 @@
  *  This routine initializes a mutex at create time and set the control
  *  structure according to the values passed.
  *
- *  Input parameters: 
+ *  Input parameters:
  *    the_mutex             - the mutex control block to initialize
  *    the_mutex_attributes  - the mutex attributes specified at create time
  *    initial_lock          - mutex initial lock or unlocked status
@@ -45,7 +45,7 @@ void _CORE_mutex_Initialize(
 )
 {
 
-/* Add this to the RTEMS environment later ????????? 
+/* Add this to the RTEMS environment later ?????????
   rtems_assert( initial_lock == CORE_MUTEX_LOCKED ||
                 initial_lock == CORE_MUTEX_UNLOCKED );
  */

@@ -30,8 +30,8 @@
  *
  *  DESCRIPTION:
  *
- *  This function allocates the object control block 
- *  specified by the index from the inactive chain of 
+ *  This function allocates the object control block
+ *  specified by the index from the inactive chain of
  *  free object control blocks.
  */
 
@@ -61,8 +61,8 @@ Objects_Control *_Objects_Allocate_by_index(
     );
     _Chain_Extract( &the_object->Node );
 
-    return the_object;   
-  }    
+    return the_object;
+  }
 
   /*
    *  Autoextend will have to be thought out as it applies

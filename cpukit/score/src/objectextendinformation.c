@@ -84,7 +84,7 @@ void _Objects_Extend_information(
     uint32_t         *inactive_per_block;
     Objects_Control **local_table;
     uint32_t          maximum;
-    void             *old_tables;    
+    void             *old_tables;
 
     /*
      *  Growing the tables means allocating a new area, doing a copy and
@@ -130,7 +130,7 @@ void _Objects_Extend_information(
     else {
       object_blocks = (void**)
         _Workspace_Allocate_or_fatal_error(
-          block_count * 
+          block_count *
              (sizeof(void *) + sizeof(uint32_t  ) + sizeof(Objects_Name *)) +
           ((maximum + minimum_index) * sizeof(Objects_Control *))
         );
@@ -209,7 +209,7 @@ void _Objects_Extend_information(
     information->local_table = local_table;
     information->maximum = maximum;
     information->maximum_id = _Objects_Build_id(
-        information->the_api, 
+        information->the_api,
         information->the_class,
         _Objects_Local_node,
         information->maximum
@@ -228,7 +228,7 @@ void _Objects_Extend_information(
    */
 
   if ( information->auto_extend ) {
-    information->object_blocks[ block ] = 
+    information->object_blocks[ block ] =
       _Workspace_Allocate(
         (information->allocation_size * information->name_length) +
         (information->allocation_size * information->size)
@@ -238,7 +238,7 @@ void _Objects_Extend_information(
       return;
   }
   else {
-    information->object_blocks[ block ] = 
+    information->object_blocks[ block ] =
       _Workspace_Allocate_or_fatal_error(
         (information->allocation_size * information->name_length) +
         (information->allocation_size * information->size)
@@ -271,7 +271,7 @@ void _Objects_Extend_information(
   while ( (the_object = (Objects_Control *) _Chain_Get( &Inactive ) ) != NULL ) {
 
     the_object->id = _Objects_Build_id(
-        information->the_api, 
+        information->the_api,
         information->the_class,
         _Objects_Local_node,
         index

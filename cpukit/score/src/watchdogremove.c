@@ -38,7 +38,7 @@ Watchdog_States _Watchdog_Remove(
     case WATCHDOG_INACTIVE:
       break;
 
-    case WATCHDOG_BEING_INSERTED:  
+    case WATCHDOG_BEING_INSERTED:
 
       /*
        *  It is not actually on the chain so just change the state and

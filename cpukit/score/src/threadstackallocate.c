@@ -63,8 +63,8 @@ uint32_t   _Thread_Stack_Allocate(
      *  returned the workspace allocate must be directly stored in the
      *  stack control block because it is later used in the free sequence.
      *
-     *  Thus it is the responsibility of the CPU dependent code to 
-     *  get and keep the stack adjust factor, the stack alignment, and 
+     *  Thus it is the responsibility of the CPU dependent code to
+     *  get and keep the stack adjust factor, the stack alignment, and
      *  the context initialization sequence in sync.
      */
 

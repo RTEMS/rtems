@@ -65,13 +65,13 @@ void _Thread_Change_priority(
 
   /*
    *  Techically, the prepend should conditional on the thread lowering
-   *  its priority but that does allow cxd2004 of the acvc 2.0.1 to 
+   *  its priority but that does allow cxd2004 of the acvc 2.0.1 to
    *  pass with rtems 4.0.0.  This should change when gnat redoes its
    *  priority scheme.
    */
 /*
   if ( prepend_it &&
-       _Thread_Is_executing( the_thread ) && 
+       _Thread_Is_executing( the_thread ) &&
        new_priority >= the_thread->current_priority )
     prepend_it = TRUE;
 */

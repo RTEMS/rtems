@@ -38,7 +38,7 @@ Objects_Control *_Objects_Allocate(
   Objects_Information *information
 )
 {
-  Objects_Control *the_object =  
+  Objects_Control *the_object =
     (Objects_Control *) _Chain_Get( &information->Inactive );
 
   if ( information->auto_extend ) {

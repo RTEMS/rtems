@@ -40,7 +40,7 @@ typedef enum {
 #define SYSTEM_STATE_CODES_LAST  SYSTEM_STATE_FAILED
 
 /*
- *  The following variable indicates whether or not this is 
+ *  The following variable indicates whether or not this is
  *  an multiprocessing system.
  */
 

@@ -37,7 +37,7 @@ extern "C" {
  *  The following defines the "return type" of a thread.
  *
  *  NOTE:  This cannot always be right.  Some APIs have void
- *         tasks/threads, others return pointers, others may 
+ *         tasks/threads, others return pointers, others may
  *         return a numeric value.  Hopefully a pointer is
  *         always at least as big as an uint32_t  . :)
  */
@@ -141,7 +141,7 @@ typedef struct {
 
   /*
    *  NOTE: The following assumes that all API return codes can be
-   *        treated as an uint32_t  .  
+   *        treated as an uint32_t  .
    */
   uint32_t              return_code;     /* status for thread awakened   */
 
@@ -248,7 +248,7 @@ SCORE_EXTERN Thread_Control *_Thread_Idle;
 
 /*
  *  The following context area contains the context of the "thread"
- *  which invoked the start multitasking routine.  This context is 
+ *  which invoked the start multitasking routine.  This context is
  *  restored as the last action of the stop multitasking routine.  Thus
  *  control of the processor can be returned to the environment
  *  which initiated the system.
@@ -381,7 +381,7 @@ void _Thread_Dispatch( void );
 
 /*
  *  _Thread_Stack_Allocate
- *  
+ *
  *  DESCRIPTION:
  *
  *  Allocate the requested stack space for the thread.
@@ -608,11 +608,11 @@ void _Thread_Tickle_timeslice( void );
 
 void _Thread_Yield_processor( void );
 
-/*  
+/*
  *  _Thread_Rotate_Ready_Queue
- *  
+ *
  *  DESCRIPTION:
- *  
+ *
  *  This routine is invoked to rotate the ready queue for the
  *  given priority.  It can be used to yeild the processor
  *  by rotating the executing threads ready queue.
@@ -727,7 +727,7 @@ void _Thread_Resume(
  *  DESCRIPTION:
  *
  *  This routine evaluates the current scheduling information for the
- *  system and determines if a context switch is required.  This 
+ *  system and determines if a context switch is required.  This
  *  is usually called after changing an execution mode such as preemptability
  *  for a thread.
  */

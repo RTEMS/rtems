@@ -93,7 +93,7 @@ Heap_Extend_status _Heap_Extend(
 
   the_heap->final = new_final;
 
-  old_final->front_flag = 
+  old_final->front_flag =
   new_final->back_flag  = _Heap_Build_flag( size, HEAP_BLOCK_USED );
   new_final->front_flag = HEAP_DUMMY_FLAG;
 

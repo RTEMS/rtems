@@ -67,7 +67,7 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
 #endif
 
     return the_thread;
-  } 
+  }
 
   switch ( the_thread_queue->sync_state ) {
     case THREAD_QUEUE_SYNCHRONIZED:

@@ -70,7 +70,7 @@ void _Thread_Resume(
 
   current_state = the_thread->current_state;
   if ( current_state & STATES_SUSPENDED ) {
-    current_state = 
+    current_state =
     the_thread->current_state = _States_Clear(STATES_SUSPENDED, current_state);
 
     if ( _States_Is_ready( current_state ) ) {

@@ -54,14 +54,14 @@ void _Thread_queue_Enqueue_fifo (
   the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
 
   switch ( sync_state ) {
-    case THREAD_QUEUE_SYNCHRONIZED: 
+    case THREAD_QUEUE_SYNCHRONIZED:
       /*
        *  This should never happen.  It indicates that someone did not
        *  enter a thread queue critical section.
        */
       break;
 
-    case THREAD_QUEUE_NOTHING_HAPPENED: 
+    case THREAD_QUEUE_NOTHING_HAPPENED:
       _Chain_Append_unprotected(
         &the_thread_queue->Queues.Fifo,
         &the_thread->Object.Node
@@ -69,7 +69,7 @@ void _Thread_queue_Enqueue_fifo (
       _ISR_Enable( level );
       return;
 
-    case THREAD_QUEUE_TIMEOUT: 
+    case THREAD_QUEUE_TIMEOUT:
       the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
       _ISR_Enable( level );
       break;

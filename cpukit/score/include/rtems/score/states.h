@@ -38,7 +38,7 @@ typedef uint32_t   States_Control;
 #define STATES_TRANSIENT                       0x00004 /* in transition */
 #define STATES_DELAYING                        0x00008 /* wait for timeout */
 #define STATES_WAITING_FOR_TIME                0x00010 /* wait for TOD */
-#define STATES_WAITING_FOR_BUFFER              0x00020 
+#define STATES_WAITING_FOR_BUFFER              0x00020
 #define STATES_WAITING_FOR_SEGMENT             0x00040
 #define STATES_WAITING_FOR_MESSAGE             0x00080
 #define STATES_WAITING_FOR_EVENT               0x00100

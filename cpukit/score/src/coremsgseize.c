@@ -97,8 +97,8 @@ void _CORE_message_queue_Seize(
     }
 
     /*
-     *  There was a thread waiting to send a message.  This code 
-     *  puts the messages in the message queue on behalf of the 
+     *  There was a thread waiting to send a message.  This code
+     *  puts the messages in the message queue on behalf of the
      *  waiting task.
      */
 

@@ -41,6 +41,6 @@ void _Objects_Clear_name(
   uint32_t    maximum = length / OBJECTS_NAME_ALIGNMENT;
   uint32_t   *name_ptr = (uint32_t   *) name;
 
-  for ( index=0 ; index < maximum ; index++ ) 
+  for ( index=0 ; index < maximum ; index++ )
     *name_ptr++ = 0;
 }

@@ -38,7 +38,7 @@
  *  timeslice counter is reset.  The heir THREAD will be updated if the
  *  running is also the currently the heir.
  *
- *  Input parameters:  
+ *  Input parameters:
  *      Priority of the queue we wish to modify.
  *
  *  Output parameters:  NONE
@@ -48,7 +48,7 @@
  *    select heir
  */
 
-void _Thread_Rotate_Ready_Queue( 
+void _Thread_Rotate_Ready_Queue(
   Priority_Control  priority
 )
 {

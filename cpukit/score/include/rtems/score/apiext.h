@@ -30,7 +30,7 @@ typedef void (*API_extensions_Postswitch_hook)(
                  Thread_Control *
              );
 
- 
+
 typedef struct {
   Chain_Node                      Node;
   API_extensions_Predriver_hook   predriver_hook;

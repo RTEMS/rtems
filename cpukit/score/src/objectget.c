@@ -62,7 +62,7 @@ Objects_Control *_Objects_Get(
   /* index = (uint16_t  ) id; */
 #endif
 
-   if ( information->maximum >= index ) { 
+   if ( information->maximum >= index ) {
     _Thread_Disable_dispatch();
     if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;
