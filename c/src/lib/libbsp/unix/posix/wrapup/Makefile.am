@@ -18,8 +18,9 @@ endif
 GENERIC_FILES = $(GENERIC_MP_REL_FILES)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_FILES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
-    $(foreach piece, $(GENERIC_FILES), ../../../$(piece)/$(ARCH)/$(piece).rel)
+OBJS = $(foreach piece, $(BSP_FILES), $(wildcard \
+    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(foreach piece, $(GENERIC_FILES), \
+    ../../../$(piece)/$(ARCH)/$(piece).rel)
 LIB = $(ARCH)/libbsp.a
 
 #

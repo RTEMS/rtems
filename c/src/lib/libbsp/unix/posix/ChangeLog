@@ -1,5 +1,15 @@
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Add preinstallation dirstamp support.
+	* clock/Makefile.am: Cosmetics.
+	* console/Makefile.am: Cosmetics.
+	* shmsupp/Makefile.am: Cosmetics.
+	* startup/Makefile.am: Cosmetics.
+	* timer/Makefile.am: Cosmetics.
+	* wrapup/Makefile.am: Cosmetics.
+
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* clock/Makefile.am: Remove all-local: $(ARCH).
 	* console/Makefile.am: Remove all-local: $(ARCH).
 	* shmsupp/Makefile.am: Remove all-local: $(ARCH).
