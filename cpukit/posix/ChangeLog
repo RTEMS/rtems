@@ -1,3 +1,8 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am: Adapt ASM4FLAGS to automake-1.5 happy.
+	* src/Makefile.am: Adapt INCLUDES to make automake-1.5 happy.
+
 2001-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* src/sysconf.c: Fix typo syntax error accidentally committed.

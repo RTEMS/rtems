@@ -9,6 +9,9 @@ C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 PGMS = $(C_FILES:%.c=$(ARCH)/%.rel)
 
+## FIXME: Is this used anywhere?
+ASM4FLAGS = -I$(PROJECT_INCLUDE)/rtems
+
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
@@ -22,9 +25,6 @@ $(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%.rel
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-ASM4FLAGS += -I$(PROJECT_INCLUDE)/rtems
-
 all-local: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGMS)

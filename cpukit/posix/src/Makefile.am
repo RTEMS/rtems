@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-INCLUDES += -I.
+INCLUDES = -I.
 
 # following are semi-implemented and untested
 UNUSED_C_FILES = devctl.c intr.c
