@@ -27,8 +27,8 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 ** idtcpu.h -- cpu related defines
 */
 
-#ifndef _IDTCPU_H__
-#define _IDTCPU_H__
+#ifndef _RTEMS_MIPS_IDTCPU_H
+#define _RTEMS_MIPS_IDTCPU_H
 
 /*
  * 950313: Ketan added Register definition for XContext reg.

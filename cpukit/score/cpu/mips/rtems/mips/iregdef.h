@@ -30,8 +30,8 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 **	All Rights Reserved
 **
 */
-#ifndef __IREGDEF_H__
-#define __IREGDEF_H__
+#ifndef _RTEMS_MIPS_IREGDEF_H
+#define _RTEMS_MIPS_IREGDEF_H
 
 /*
  * 950313: Ketan added sreg/lreg and R_SZ for 64-bit saves
