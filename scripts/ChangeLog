@@ -1,3 +1,7 @@
+2003-10-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* autotools/automake-rtems.spec.in: Automake-1.7.8.
+
 2003-09-26	Joel Sherrill <joel@OARcorp.com>
 
 	* buildall.in, buildalltar.in, binutils/Makefile.am,
