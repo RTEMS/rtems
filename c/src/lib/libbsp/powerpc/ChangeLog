@@ -1,3 +1,9 @@
+2004-10-20	Eric Norum <norume@aps.anl.gov>
+
+	* acinclude.m4:        Add mvme5500 BSP
+	* configure.ac
+	* mvme5500/.......
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
