@@ -23,6 +23,10 @@
  *  INPUT PARAMETERS:
  *    cpu_table       - CPU table to initialize
  *    thread_dispatch - address of disptaching routine
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 
@@ -59,6 +63,10 @@ void _CPU_Initialize(
 /*PAGE
  *
  *  _CPU_ISR_Get_level
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
  
 unsigned32 _CPU_ISR_Get_level( void )
@@ -73,6 +81,10 @@ unsigned32 _CPU_ISR_Get_level( void )
 /*PAGE
  *
  *  _CPU_ISR_install_raw_handler
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
  
 void _CPU_ISR_install_raw_handler(
@@ -101,6 +113,10 @@ void _CPU_ISR_install_raw_handler(
  *
  *  Output parameters:  NONE
  *
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_ISR_install_vector(
@@ -130,6 +146,10 @@ void _CPU_ISR_install_vector(
 /*PAGE
  *
  *  _CPU_Install_interrupt_stack
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Install_interrupt_stack( void )
@@ -151,6 +171,10 @@ void _CPU_Install_interrupt_stack( void )
  *     to stop the DMA if the CPU were put in IDLE mode.  This might
  *     also be a problem with other on-chip peripherals.  So use this
  *     hook with caution.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Thread_Idle_body( void )

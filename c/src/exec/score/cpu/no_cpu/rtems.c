@@ -36,6 +36,10 @@
  *  preserving the arguments.  The directive should not realize
  *  it has been "wrapped" in this way.  The table "_Entry_points"
  *  is used to look up the directive.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void RTEMS()

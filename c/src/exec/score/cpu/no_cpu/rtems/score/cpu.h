@@ -42,6 +42,10 @@ extern "C" {
  *  something calls _Thread_Enable_dispatch which in turns calls
  *  _Thread_Dispatch.  If the enable dispatch is inlined, then
  *  one subroutine call is avoided entirely.]
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
@@ -62,6 +66,10 @@ extern "C" {
  *  to unroll the loop.  It is important to note that on some CPUs, this
  *  code is the longest interrupt disable period in RTEMS.  So it is
  *  necessary to strike a balance when setting this parameter.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
@@ -88,6 +96,10 @@ extern "C" {
  *  possible that both are FALSE for a particular CPU.  Although it
  *  is unclear what that would imply about the interrupt processing
  *  procedure on that CPU.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
@@ -105,6 +117,10 @@ extern "C" {
  *  possible that both are FALSE for a particular CPU.  Although it
  *  is unclear what that would imply about the interrupt processing
  *  procedure on that CPU.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_HAS_HARDWARE_INTERRUPT_STACK TRUE
@@ -117,6 +133,10 @@ extern "C" {
  *
  *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE
  *  or CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_ALLOCATE_INTERRUPT_STACK TRUE
@@ -125,6 +145,10 @@ extern "C" {
  *  Does the RTEMS invoke the user's ISR with the vector number and
  *  a pointer to the saved interrupt frame (1) or just the vector 
  *  number (0)?
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_ISR_PASSES_FRAME_POINTER 0
@@ -143,6 +167,16 @@ extern "C" {
  *  example, it would be possible to have an i386_nofp CPU model
  *  which set this to false to indicate that you have an i386 without
  *  an i387 and wish to leave floating point support out of RTEMS.
+ *
+ *  The CPU_SOFTWARE_FP is used to indicate whether or not there
+ *  is software implemented floating point that must be context 
+ *  switched.  The determination of whether or not this applies
+ *  is very tool specific and the state saved/restored is also
+ *  compiler specific.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #if ( NO_CPU_HAS_FPU == 1 )
@@ -150,6 +184,7 @@ extern "C" {
 #else
 #define CPU_HARDWARE_FP     FALSE
 #endif
+#define CPU_SOFTWARE_FP     FALSE
 
 /*
  *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
@@ -165,6 +200,10 @@ extern "C" {
  *  In this case, this option should be TRUE.
  *
  *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_ALL_TASKS_ARE_FP     TRUE
@@ -179,6 +218,10 @@ extern "C" {
  *  Setting this to TRUE negatively impacts the time required to preempt
  *  the IDLE task from an interrupt because the floating point context
  *  must be saved as part of the preemption.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_IDLE_TASK_IS_FP      FALSE
@@ -207,6 +250,10 @@ extern "C" {
  *  until a context switch is made to another, different FP task.
  *  Thus in a system with only one FP task, the FP context will never
  *  be saved or restored.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
@@ -230,6 +277,10 @@ extern "C" {
  *    1.  BSP provided
  *    2.  CPU dependent (if provided)
  *    3.  generic (if no BSP and no CPU dependent)
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
@@ -240,6 +291,10 @@ extern "C" {
  *
  *  If TRUE, then the grows upward.
  *  If FALSE, then the grows toward smaller addresses.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_STACK_GROWS_UP               TRUE
@@ -262,6 +317,10 @@ extern "C" {
  *         To benefit from using this, the data must be heavily
  *         used so it will stay in the cache and used frequently enough
  *         in the executive to justify turning this on.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_STRUCTURE_ALIGNMENT
@@ -269,6 +328,10 @@ extern "C" {
 /*
  *  Define what is required to specify how the network to host conversion
  *  routines are handled.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
@@ -279,6 +342,10 @@ extern "C" {
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_MODES_INTERRUPT_MASK   0x00000001
@@ -288,6 +355,10 @@ extern "C" {
  *
  *  Examples structures include the descriptor tables from the i386
  *  and the processor control structure on the i960ca.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 /* may need to put some structures here.  */
@@ -325,6 +396,10 @@ extern "C" {
  *  to figure out the exact format -- only the size.  Of course, although
  *  this is enough information for RTEMS, it is probably not enough for
  *  a debugger such as gdb.  But that is another problem.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 typedef struct {
@@ -344,6 +419,10 @@ typedef struct {
 /*
  *  The following table contains the information required to configure
  *  the XXX processor specific parameters.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 typedef struct {
@@ -364,10 +443,18 @@ typedef struct {
 /*
  *  Macros to access required entires in the CPU Table are in 
  *  the file rtems/system.h.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 /*
  *  Macros to access NO_CPU specific additions to the CPU Table
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 /* There are no CPU specific additions to the CPU Table for this port. */
@@ -377,6 +464,10 @@ typedef struct {
  *  to generate an "uninitialized" FP context.  It is filled in by
  *  _CPU_Initialize and copied into the task's FP context area during
  *  _CPU_Context_Initialize.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
@@ -392,6 +483,10 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  NOTE: These two variables are required if the macro
  *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
@@ -405,12 +500,20 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  and contains the address of the routine _Thread_Dispatch.  This
  *  can make it easier to invoke that routine at the end of the interrupt
  *  sequence (if a dispatch is necessary).
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 /* XXX: if needed, put more variables here */
@@ -420,6 +523,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  will not be a "sizeof" because the format of the floating point
  *  area is not defined -- only the size is.  This is usually on
  *  CPUs with a "floating point save context" instruction.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
@@ -428,6 +535,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  Amount of extra stack (above minimum stack size) required by
  *  MPCI receive server thread.  Remember that in a multiprocessor
  *  system this thread must exist and be able to process all directives.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
@@ -435,6 +546,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  This defines the number of entries in the ISR_Vector_table managed
  *  by RTEMS.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_INTERRUPT_NUMBER_OF_VECTORS      32
@@ -443,6 +558,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  Should be large enough to run all RTEMS tests.  This insures
  *  that a "reasonable" small application should not have any problems.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_STACK_MINIMUM_SIZE          (1024*4)
@@ -450,6 +569,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_ALIGNMENT              8
@@ -462,8 +585,20 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict enough for the heap,
  *  then this should be set to CPU_ALIGNMENT.
  *
- *  NOTE:  This does not have to be a power of 2.  It does have to
- *         be greater or equal to than CPU_ALIGNMENT.
+ *  NOTE:  This does not have to be a power of 2 although it should be
+ *         a multiple of 2 greater than or equal to 2.  The requirement
+ *         to be a multiple of 2 is because the heap uses the least 
+ *         significant field of the front and back flags to indicate
+ *         that a block is in use or free.  So you do not want any odd
+ *         length blocks really putting length data in that bit.
+ *
+ *         On byte oriented architectures, CPU_HEAP_ALIGNMENT normally will
+ *         have to be greater or equal to than CPU_ALIGNMENT to ensure that
+ *         elements allocated from the heap meet all restrictions.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
@@ -478,6 +613,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  NOTE:  This does not have to be a power of 2.  It does have to
  *         be greater or equal to than CPU_ALIGNMENT.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
@@ -489,6 +628,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  is strict enough for the stack, then this should be set to 0.
  *
  *  NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_STACK_ALIGNMENT        0
@@ -498,6 +641,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
@@ -509,6 +656,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
  *  This indicates the end of an RTEMS critical section.  The parameter
  *  _level is not modified.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_ISR_Enable( _isr_cookie )  \
@@ -520,6 +671,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  disabling them again.  This is used to divide long RTEMS critical
  *  sections into two or more parts.  The parameter _level is not
  * modified.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
@@ -537,6 +692,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  via the rtems_task_mode directive.
  *
  *  The get routine usually must be implemented as a subroutine.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_ISR_Set_level( new_level ) \
@@ -568,6 +727,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *        point thread.  This is typically only used on CPUs where the
  *        FPU may be easily disabled by software such as on the SPARC
  *        where the PSR contains an enable FPU bit.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
@@ -583,6 +746,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  case.  Context_Restore should work most of the time.  It will
  *  not work if restarting self conflicts with the stack frame
  *  assumptions of restoring a context.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Context_Restart_self( _the_context ) \
@@ -600,6 +767,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  from the base of the context area.  Finally some FP units provide
  *  a "dump context" instruction which could fill in from high to low
  *  or low to high based on the whim of the CPU designers.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Context_Fp_start( _base, _offset ) \
@@ -615,6 +786,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *
  *  Other models include (1) not doing anything, and (2) putting
  *  a "null FP status word" in the correct place in the FP context.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Context_Initialize_fp( _destination ) \
@@ -630,6 +805,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  This routine copies _error into a known place -- typically a stack
  *  location or a register, optionally disables interrupts, and
  *  halts/stops the CPU.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Fatal_halt( _error ) \
@@ -693,6 +872,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *
  *    where bit_set_table[ 16 ] has values which indicate the first
  *      bit set
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
@@ -713,6 +896,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  This routine builds the mask which corresponds to the bit fields
  *  as searched by _CPU_Bitfield_Find_first_bit().  See the discussion
  *  for that routine.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
@@ -727,6 +914,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  _CPU_Bitfield_Find_first_bit() into something suitable for use as
  *  a major or minor component of a priority.  See the discussion
  *  for that routine.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
@@ -744,6 +935,10 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  _CPU_Initialize
  *
  *  This routine performs CPU dependent initialization.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Initialize(
@@ -756,6 +951,10 @@ void _CPU_Initialize(
  *
  *  This routine installs a "raw" interrupt handler directly into the 
  *  processor's vector table.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
  
 void _CPU_ISR_install_raw_handler(
@@ -768,6 +967,10 @@ void _CPU_ISR_install_raw_handler(
  *  _CPU_ISR_install_vector
  *
  *  This routine installs an interrupt vector.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_ISR_install_vector(
@@ -783,6 +986,10 @@ void _CPU_ISR_install_vector(
  *
  *  NOTE:  It need only be provided if CPU_HAS_HARDWARE_INTERRUPT_STACK
  *         is TRUE.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Install_interrupt_stack( void );
@@ -794,6 +1001,10 @@ void _CPU_Install_interrupt_stack( void );
  *
  *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
  *         is TRUE.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Thread_Idle_body( void );
@@ -802,6 +1013,10 @@ void _CPU_Thread_Idle_body( void );
  *  _CPU_Context_switch
  *
  *  This routine switches from the run context to the heir context.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_switch(
@@ -816,6 +1031,10 @@ void _CPU_Context_switch(
  *  efficient manner.  It may simply be a label in _CPU_Context_switch.
  *
  *  NOTE: May be unnecessary to reload some registers.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_restore(
@@ -826,6 +1045,10 @@ void _CPU_Context_restore(
  *  _CPU_Context_save_fp
  *
  *  This routine saves the floating point context passed to it.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_save_fp(
@@ -836,6 +1059,10 @@ void _CPU_Context_save_fp(
  *  _CPU_Context_restore_fp
  *
  *  This routine restores the floating point context passed to it.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_restore_fp(
@@ -860,6 +1087,10 @@ void _CPU_Context_restore_fp(
  *  endian.  Another good reason is that on some CPUs, the endian bit
  *  endianness for ALL fetches -- both code and data -- so the code
  *  will be fetched incorrectly.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
  
 static inline unsigned int CPU_swap_u32(

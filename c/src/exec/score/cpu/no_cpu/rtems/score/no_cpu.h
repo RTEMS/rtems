@@ -1,6 +1,6 @@
 /*  no_cpu.h
  *
- *  This file is an example (i.e. "no CPU") of the file which is
+ *  This file is an example (i.e. no CPU) of the file which is
  *  created for each CPU family port of RTEMS.
  *
  *
@@ -24,16 +24,19 @@ extern "C" {
 
 /*
  *  This file contains the information required to build
- *  RTEMS for a particular member of the "no cpu"
- *  family when executing in protected mode.  It does
- *  this by setting variables to indicate which implementation
- *  dependent features are present in a particular member
- *  of the family.
+ *  RTEMS for a particular member of the no CPU family.
+ *  It does this by setting variables to indicate which
+ *  implementation dependent features are present in a particular
+ *  member of the family.
+ *
+ *  This is a good place to list all the known CPU models
+ *  that this port supports and which RTEMS CPU model they correspond
+ *  to.
  */
  
 #if defined(no_cpu)
  
-#define CPU_MODEL_NAME  "no_cpu"
+#define CPU_MODEL_NAME  "no_cpu_model"
 #define NOCPU_HAS_FPU     1
  
 #else
