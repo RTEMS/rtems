@@ -1,3 +1,8 @@
+2002-04-26	Eric Norum <eric.norum@usask.ca>
+
+	* netinet/in_cksum_i386.c: Add volatile so the more agressive
+	optimization in gcc 3.1 does not reorder things.
+
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* pppd/utils.c: Adapt to gcc-3.x.

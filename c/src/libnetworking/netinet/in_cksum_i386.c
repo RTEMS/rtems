@@ -19,10 +19,14 @@
  * Thanks to gcc we don't have to guess
  * which registers contain sum & w.
  */
-#define ADD(n)	asm("addl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (w))
-#define ADDC(n)	asm("adcl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (w))
-#define LOAD(n)	asm volatile("movb " #n "(%1), %0" : "=r" (junk) : "r" (w))
-#define MOP	asm("adcl         $0, %0" : "=r" (sum) : "0" (sum))
+#define ADD(n)	__asm__ volatile \
+    ("addl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (w))
+#define ADDC(n)	__asm__ volatile \
+    ("adcl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (w))
+#define LOAD(n)	__asm__ volatile \
+     ("movb " #n "(%1), %0" : "=r" (junk) : "r" (w))
+#define MOP	__asm__ volatile \
+    ("adcl         $0, %0" : "=r" (sum) : "0" (sum))
 
 int
 in_cksum(m, len)
