@@ -45,6 +45,8 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/score/thread.h>
+#include <rtems/bspIo.h>
+#include <libcpu/cpuIdent.h>
 
 #include <string.h>
 

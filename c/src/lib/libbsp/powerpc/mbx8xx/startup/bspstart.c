@@ -23,6 +23,8 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+#include <rtems/bspIo.h>
+#include <libcpu/cpuIdent.h>
 
 /*
  *  The original table from the application (in ROM) and our copy of it with
