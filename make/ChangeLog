@@ -1,4 +1,9 @@
 
+2001-11-25	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/papyrus.cfg: Removed.
+	* custom/Makefile.am, custom/helas403.cfg: Removed reference to above.
+
 2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/mvme2307.cfg: Reflect changes to motorola_powerpc/configure.ac.
