@@ -1,3 +1,7 @@
+2001-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.inc.in: Remove RTEMS_HOST.
+
 2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.inc.in: Use * instead of *_FOR_TARGET (BUG-FIX).

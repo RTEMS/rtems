@@ -30,7 +30,6 @@ export AR
 export SIZE
 export OBJCOPY
 
-RTEMS_HOST = @RTEMS_HOST@
 RTEMS_CUSTOM = $(prefix)/make/custom/$(RTEMS_BSP).cfg
 PROJECT_ROOT = $(prefix)/
 RTEMS_USE_OWN_PDIR = no
