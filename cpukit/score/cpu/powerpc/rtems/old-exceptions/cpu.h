@@ -33,16 +33,17 @@
 #ifndef __CPU_h
 #define __CPU_h
 
+#ifndef _rtems_score_cpu_h
+#error "You should include <rtems/score/cpu.h>"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/score/ppc.h>               /* pick up machine definitions */
 #ifndef ASM
 struct CPU_Interrupt_frame;
 typedef void ( *ppc_isr_entry )( int, struct CPU_Interrupt_frame * );
-
-#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
@@ -722,8 +723,6 @@ void _CPU_Initialize_vectors(void);
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _isr_cookie.
  */
-
-#define loc_string(a,b)	a " (" #b ")\n"
 
 #define _CPU_MSR_Value( _msr_value ) \
   do { \

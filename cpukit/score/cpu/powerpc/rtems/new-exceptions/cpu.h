@@ -36,15 +36,14 @@
 #ifndef __CPU_h
 #define __CPU_h
 
-#ifdef __cplusplus
-extern "C" {
+#ifndef _rtems_score_cpu_h
+#error "You should include <rtems/score/cpu.h>"
 #endif
 
-#include <rtems/score/ppc.h>               /* pick up machine definitions */
-#include <libcpu/cpu.h>
-  
-#ifndef ASM
-#include <rtems/score/types.h>
+#include <rtems/powerpc/registers.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /* conditional compilation parameters */
@@ -454,7 +453,7 @@ typedef struct {
   boolean      timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 #endif
 
-#if (defined(mpc860) || defined(mpc821) || defined( mpc8260))
+#if (defined(mpc860) || defined(mpc821) || defined(mpc8260))
   unsigned32   clock_speed;            /* Speed of CPU in Hz */
 #endif
 }   rtems_cpu_table;
@@ -646,8 +645,6 @@ SCORE_EXTERN struct {
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _isr_cookie.
  */
-
-#define loc_string(a,b)	a " (" #b ")\n"
 
 #ifndef ASM
   
