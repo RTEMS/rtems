@@ -1,3 +1,18 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* cpuuse/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* malloctest/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* monitor/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* putenvtest/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtems++/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtmonuse/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* stackchk/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* termios/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems++/Makefile.am: Make sure debug variant of librtems++ 
