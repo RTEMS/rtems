@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 #include <rtems/libio.h>
-#include <iosupp.h>
+#include <rtems/iosupp.h>
 
 /* exported entries */
 extern void bsp_hw_init (void);
