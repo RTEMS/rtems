@@ -35,6 +35,7 @@ static inline unsigned long long rdtsc( void )
     return result;
 }
 #else
+#define US_PER_ISR  250
 extern rtems_isr timerisr();
 static rtems_isr_entry Old_Ticker;
 #endif
@@ -83,10 +84,10 @@ void Timer_initialize()
         while ( Ttimer_val == 0 )
             continue;
 
-        /* load timer for 250 microsecond period */
+        /* load timer for US_PER_ISR microsecond period */
         outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
-        outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 0 & 0xff );
-        outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 8 & 0xff );
+        outport_byte( TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 0 & 0xff );
+        outport_byte( TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 8 & 0xff );
 #endif /* PENTIUM */
     }
 #if defined(pentium)
@@ -117,7 +118,7 @@ int Read_timer()
     inport_byte( TIMER_CNTR0, lsb );
     inport_byte( TIMER_CNTR0, msb );
     clicks = msb << 8 | lsb;
-    total = Ttimer_val + 250 - TICK_TO_US( clicks );
+    total = (Ttimer_val * US_PER_ISR) + (US_PER_ISR - TICK_TO_US( clicks ));
 #endif /* pentium */
 
     if ( Timer_driver_Find_average_overhead == 1 )
