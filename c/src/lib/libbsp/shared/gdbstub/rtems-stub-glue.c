@@ -371,9 +371,12 @@ int rtems_gdb_stub_get_thread_info(
       tmp_buf[8] = 0;
 
       strcat(info->display, tmp_buf);
-  
+#if 0
       name = *(unsigned32 *)(obj_info->local_table[thread]->name);
-      
+#else
+      name = *(unsigned32 *)(obj_info->local_table[thread - 
+						   first_rtems_id + 1]->name);
+#endif
       info->name[0] = (name >> 24) & 0xff;
       info->name[1] = (name >> 16) & 0xff;
       info->name[2] = (name >> 8) & 0xff;
@@ -1382,6 +1385,67 @@ void rtems_gdb_stub_get_registers_from_context(
 
    registers[SR] = (unsigned)th->Registers.c0_sr;
    registers[PC] = (unsigned)th->Registers.c0_epc;
+}
+
+
+int rtems_gdb_stub_get_offsets(
+  unsigned char **text_addr,
+  unsigned char **data_addr, 
+  unsigned char **bss_addr
+)
+{ 
+/*
+  extern unsigned32 _ftext;
+  extern unsigned32 _fdata;
+  extern unsigned32 _bss_start;
+
+  *text_addr = &_ftext;
+  *data_addr = &_fdata;
+  *bss_addr  = &_bss_start;
+*/
+  *text_addr = 0;
+  *data_addr = 0;
+  *bss_addr  = 0;
+  return 1;
+}
+
+#elif defined(__mc68000__)
+
+
+void rtems_gdb_stub_get_registers_from_context( 
+  int            *registers,
+  Thread_Control *th
+)
+{
+  /*
+   * how about register D0/D1/A0/A1
+   * they are located on thread stack ...
+   * -> they are not needed for context switch
+   */
+  registers[D0] = 0; 
+  registers[D1] = 0;
+  registers[D2] = (unsigned32)th->Registers.d2;
+  registers[D3] = (unsigned32)th->Registers.d3;
+  registers[D4] = (unsigned32)th->Registers.d4;
+  registers[D5] = (unsigned32)th->Registers.d5;
+  registers[D6] = (unsigned32)th->Registers.d6;
+  registers[D7] = (unsigned32)th->Registers.d7;
+
+  registers[A0] = 0;
+  registers[A1] = 0;
+  registers[A2] = (unsigned32)th->Registers.a2;
+  registers[A3] = (unsigned32)th->Registers.a3;
+  registers[A4] = (unsigned32)th->Registers.a4;
+  registers[A5] = (unsigned32)th->Registers.a5;
+  registers[A6] = (unsigned32)th->Registers.a6;
+  registers[A7] = (unsigned32)th->Registers.a7_msp;
+  
+  registers[PS] = (unsigned32)th->Registers.sr;
+#if 0
+  registers[PC] = *(unsigned32 *)th->Registers.a7_msp; /* *SP = ret adr */
+#else
+  registers[PC] = (unsigned32)_CPU_Context_switch;
+#endif
 }
 
 
