@@ -26,8 +26,8 @@ by hand.  bootstrap does not have to be run after modifying this file.
 Making the Documentation
 ========================
 
-cvs co rtems-doc
-./bootstrap
+cd rtems-XXX/doc
+../bootstrap
 ./configure --enable-maintainer-mode
 cd tools ; make
 cd ..
