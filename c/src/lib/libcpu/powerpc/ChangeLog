@@ -1,3 +1,10 @@
+2001-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc8260/clock/.cvsignore, mpc8260/console-generic/.cvsignore,
+	mpc8260/cpm/.cvsignore, mpc8260/exceptions/.cvsignore,
+	mpc8260/include/.cvsignore, mpc8260/mmu/.cvsignore,
+	mpc8260/timer/.cvsignore, mpc8260/.cvsignore: New files.
+
 2001-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc8260/exceptions/Makefile.am, mpc8260/include/Makefile.am,
