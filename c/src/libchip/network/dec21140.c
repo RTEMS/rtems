@@ -10,6 +10,23 @@
  * $Id$
  */
 
+#include <rtems.h>
+
+/*
+ *  This driver only supports architectures with the new style
+ *  exception processing.  The following checks try to keep this
+ *  from being compiled on systems which can't support this driver.
+ */
+
+#if defined(__i386)
+#define DEC21140_SUPPORTED
+#endif
+
+#if defined(__PPC) && (defined(mpc604) || defined(mpc750))
+#define DEC21140_SUPPORTED
+#endif
+
+#if defined(DEC21140_SUPPORTED)
 #include <bsp.h>
 #if defined(i386)
 #include <pcibios.h>
@@ -901,4 +918,5 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 
 	return 1;
 };
+#endif /* DEC21140_SUPPORTED */
 
