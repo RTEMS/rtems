@@ -1,3 +1,8 @@
+2003-01-28	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, sparc-solaris-gcc.spec.in: Update and enable gnat. You
+	must build and install a C only toolset first though.
+
 2003-01-27	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, sparc-solaris-binutils.spec.in: Updated and 

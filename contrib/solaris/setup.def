@@ -8,5 +8,5 @@ binutils_rpm_release=1
 solaris_version=8
 solaris_rpm_release=2
 gcc_version=3.2.1
-gcc_rpm_release=1
+gcc_rpm_release=2
 rpm_build_root=/var/tmp

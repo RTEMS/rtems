@@ -30,6 +30,10 @@ Cross gcc for target solaris
 %prep
 # untar the sources inside sparc-solaris-gcc
 %setup -c -n %{name} -a 0 
+  touch gcc-%{gcc_version}/gcc/ada/treeprs.ads
+  touch gcc-%{gcc_version}/gcc/ada/[es]info.h
+  touch gcc-%{gcc_version}/gcc/ada/nmake.ad[bs]
+
 
   test -d build || mkdir build
 
@@ -38,13 +42,16 @@ Cross gcc for target solaris
 
   ../gcc-%{gcc_version}/configure --target=sparc-solaris \
     --with-gnu-as --with-gnu-ld --without-newlib --verbose \
-    --disable-shared --disable-nls --enable-languages=c \
+    --disable-shared --disable-nls --enable-languages=c,ada \
     --prefix=%{prefix} 
 
   make all
-# We don't want info files
-  make info
 
+  make -C gcc cross-gnattools
+  make -C gcc ada.all.cross
+
+# We don't want info files
+#  make info
 %install
   cd build
   # Bug in gcc-2.95.1: It doesn't build this installation directory
