@@ -29,6 +29,7 @@ int fchdir(
 )
 {
   rtems_libio_t *iop;
+  rtems_filesystem_location_info_t loc, saved;
   
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
@@ -57,7 +58,6 @@ int fchdir(
     rtems_set_errno_and_return_minus_one( ENOTDIR );
   }
   
-  rtems_filesystem_freenode( &rtems_filesystem_current );
 
   /*
    * FIXME : I feel there should be another call to
@@ -65,10 +65,26 @@ int fchdir(
    *         this node which we are making here. I can
    *         see the freenode interface but do not see
    *         allocnode node interface. It maybe node_type.
+   *
+   * FIXED:  T.Straumann: it is evaluate_path()
+   *         but note the race condition. Threads who
+   *         share their rtems_filesystem_current better
+   *         be synchronized!
    */
   
+  saved                    = rtems_filesystem_current;
   rtems_filesystem_current = iop->pathinfo;
+  
+  /* clone the current node */
+  if (rtems_filesystem_evaluate_path(".", 0, &loc, 0)) {
+    /* cloning failed; restore original and bail out */
+    rtems_filesystem_current = saved;
+	return -1;
+  }
+  /* release the old one */
+  rtems_filesystem_freenode( &saved );
+
+  rtems_filesystem_current = loc;
   
   return 0;
 }
-
