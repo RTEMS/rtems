@@ -1,4 +1,8 @@
 
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/bare.cfg: Add @ to make-exe, make make-exe more verbose.
+
 2000-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/p4600.cfg, custom/p4650.cfg: Commented out RTEMS_CPU
