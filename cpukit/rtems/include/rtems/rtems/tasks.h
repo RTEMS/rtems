@@ -394,8 +394,19 @@ rtems_status_code rtems_task_wake_after(
   rtems_interval  ticks
 );
 
-/*PAGE
+/*
+ *  rtems_task_is_suspended
  *
+ *  This directive returns a status indicating whether or not
+ *  the specified task is suspended.
+ */
+
+rtems_status_code rtems_task_is_suspended(
+  Objects_Id id
+);
+
+
+/*
  *  _RTEMS_tasks_Initialize_user_tasks
  *
  *  This routine creates and starts all configured user
