@@ -87,7 +87,7 @@ target_subdirs = @target_subdirs@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-EXTRA_DIST =  Makefile.dir Makefile.inc.in Makefile.leaf Makefile.lib
+EXTRA_DIST =  Makefile.dir Makefile.leaf Makefile.lib
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
@@ -207,8 +207,6 @@ preinstall: preinstall-am
 depend-am:
 depend: depend-am
 .PHONY: depend depend-am
-
-# -------------------------------------------------------
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

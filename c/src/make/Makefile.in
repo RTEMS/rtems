@@ -87,7 +87,10 @@ CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXX_FOR_TARGET = @CXX_FOR_TARGET@
 GCCSED = @GCCSED@
+HAS_CPLUSPLUS = @HAS_CPLUSPLUS@
 HAS_MP = @HAS_MP@
+HAS_NETWORKING = @HAS_NETWORKING@
+HAS_POSIX_API = @HAS_POSIX_API@
 HAS_RDBG = @HAS_RDBG@
 INSTALL_CHANGE = @INSTALL_CHANGE@
 KSH = @KSH@
@@ -480,11 +483,6 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 @MAINTAINER_MODE_TRUE@$(srcdir)/main.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/main.cfg
 @MAINTAINER_MODE_TRUE@	sed -e 's%\$$(RTEMS_BSP)%\@RTEMS_BSP\@%g' < $< >$@
-
-@MAINTAINER_MODE_TRUE@$(srcdir)/Makefile.inc.in: $(top_srcdir)/@RTEMS_TOPdir@/make/Templates/Makefile.inc.in
-@MAINTAINER_MODE_TRUE@	echo "RTEMS_BSP = @""RTEMS_BSP@" > $@
-@MAINTAINER_MODE_TRUE@	echo "" >> $@
-@MAINTAINER_MODE_TRUE@	cat $< >> $@
 
 @MAINTAINER_MODE_TRUE@$(srcdir)/host.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/host.cfg.in
 @MAINTAINER_MODE_TRUE@	cp $< $@

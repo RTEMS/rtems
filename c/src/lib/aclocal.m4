@@ -134,44 +134,6 @@ AC_SUBST(RTEMS_HAS_MULTIPROCESSING)dnl
 
 dnl $Id$
 
-AC_DEFUN(RTEMS_ENABLE_POSIX,
-[
-AC_ARG_ENABLE(posix,
-[  --enable-posix                       enable posix interface],
-[case "${enableval}" in 
-  yes) RTEMS_HAS_POSIX_API=yes ;;
-  no) RTEMS_HAS_POSIX_API=no ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-posix option) ;;
-esac],[RTEMS_HAS_POSIX_API=yes]) 
-AC_SUBST(RTEMS_HAS_POSIX_API)
-
-changequote(,)dnl
-case "${target}" in
-  # hpux unix port should go here
-  i[3456]86-go32-rtems*)
-	RTEMS_HAS_POSIX_API=no
-	;;
-  i[3456]86-pc-linux*)         # unix "simulator" port
-	RTEMS_HAS_POSIX_API=no
-	;;
-  i[3456]86-*freebsd2*) # unix "simulator" port
-	RTEMS_HAS_POSIX_API=no
-	;;
-  no_cpu-*rtems*)
-	RTEMS_HAS_POSIX_API=no
-	;;
-  sparc-sun-solaris*)             # unix "simulator" port
-	RTEMS_HAS_POSIX_API=no
-	;;
-  *) 
-	;;
-esac
-changequote([,])dnl
-AC_SUBST(RTEMS_HAS_POSIX_API)
-])
-
-dnl $Id$
-
 AC_DEFUN(RTEMS_ENABLE_NETWORKING,
 [
 AC_ARG_ENABLE(networking,
@@ -196,20 +158,6 @@ AC_ARG_ENABLE(rdbg,
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-rdbg option) ;;
 esac],[RTEMS_HAS_RDBG=no])
 AC_SUBST(RTEMS_HAS_RDBG)dnl
-])
-
-dnl $Id$
-
-AC_DEFUN(RTEMS_ENABLE_INLINES,
-[AC_ARG_ENABLE(rtems-inlines,
-[  --enable-rtems-inlines               enable RTEMS inline functions]
-[                                       (default:enabled, disable to use macros)],
-[case "${enableval}" in
-  yes) RTEMS_USE_MACROS=no ;;
-  no) RTEMS_USE_MACROS=yes ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
-esac],[RTEMS_USE_MACROS=no])
-AC_SUBST(RTEMS_USE_MACROS)dnl
 ])
 
 dnl $Id$
@@ -948,7 +896,9 @@ else
 fi
 ])dnl
 
+dnl
 dnl $Id$
+dnl
 
 AC_DEFUN(RTEMS_CHECK_MULTIPROCESSING,
 [dnl
@@ -965,14 +915,52 @@ AC_CACHE_CHECK([whether BSP supports multiprocessing],
       fi
     else
       rtems_cv_HAS_MP="no";
-    fi
-  ])
+    fi])
 if test "$rtems_cv_HAS_MP" = "yes"; then
 HAS_MP="yes"
 else
 HAS_MP="no"
 fi
 AC_SUBST(HAS_MP)
+])
+
+dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_CXX,
+[dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_PROG_CXX_FOR_TARGET])dnl
+AC_CACHE_VAL(rtems_cv_HAS_CPLUSPLUS,
+  [dnl
+    if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+      if test -n "$CXX_FOR_TARGET"; then
+        rtems_cv_HAS_CPLUSPLUS="yes";
+      else
+        rtems_cv_HAS_CPLUSPLUS="no";
+      fi
+    else
+      rtems_cv_HAS_CPLUSPLUS="no";
+    fi
+  ])dnl
+HAS_CPLUSPLUS="$rtems_cv_HAS_CPLUSPLUS";
+AC_SUBST(HAS_CPLUSPLUS)dnl
+])
+
+dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_NETWORKING,
+[dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_CACHE_VAL(rtems_cv_HAS_NETWORKING,
+  [dnl
+    if test "$RTEMS_HAS_NETWORKING" = "yes"; then
+      rtems_cv_HAS_NETWORKING="yes";
+    else
+      rtems_cv_HAS_NETWORKING="no";
+    fi
+  ])dnl
+HAS_NETWORKING="$rtems_cv_HAS_NETWORKING";
+AC_SUBST(HAS_NETWORKING)dnl
 ])
 
 dnl
@@ -1032,6 +1020,8 @@ fi
 ])
 
 
+dnl $Id$
+dnl
 AC_DEFUN(RTEMS_CHECK_RDBG,
 [dnl
 AC_REQUIRE([RTEMS_TOP])dnl

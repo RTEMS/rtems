@@ -1,3 +1,5 @@
+dnl $Id$
+dnl
 AC_DEFUN(RTEMS_CHECK_RDBG,
 [dnl
 AC_REQUIRE([RTEMS_TOP])dnl

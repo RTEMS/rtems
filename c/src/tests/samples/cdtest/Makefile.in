@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../..
-subdir = samples/cdtest
+top_builddir = ..
+subdir = cdtest
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -20,12 +20,12 @@ MANAGERS = all
 
 # C source names, if any, go here -- minus the .c
 C_PIECES = init
-C_FILES = $(C_PIECES:%=%.c)
+C_FILES = @HAS_CXX_TRUE@$(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
 # C++ source names, if any, go here -- minus the .cc
 CC_PIECES = main
-CC_FILES = $(CC_PIECES:%=%.cc)
+CC_FILES = @HAS_CXX_TRUE@$(CC_PIECES:%=%.cc)
 CC_O_FILES = $(CC_PIECES:%=${ARCH}/%.o)
 H_FILES = system.h
 
@@ -67,9 +67,9 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all: ${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
-	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/samples
+all: @HAS_CXX_TRUE@ ${ARCH} $(SRCS) $(PGM)
+@HAS_CXX_TRUE@	@$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
+@HAS_CXX_TRUE@	@$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/samples
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

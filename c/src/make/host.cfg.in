@@ -48,11 +48,6 @@ GCCSED = @GCCSED@
 KSH=@KSH@
 
 #
-# RCS support
-#
-RCS_CLEAN=$(PROJECT_BIN)/rcs-clean
-
-#
 #  Rule to install a shell script with the proper shell to run it.
 #
 

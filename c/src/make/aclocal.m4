@@ -937,7 +937,9 @@ else
 fi
 ])dnl
 
+dnl
 dnl $Id$
+dnl
 
 AC_DEFUN(RTEMS_CHECK_MULTIPROCESSING,
 [dnl
@@ -954,8 +956,7 @@ AC_CACHE_CHECK([whether BSP supports multiprocessing],
       fi
     else
       rtems_cv_HAS_MP="no";
-    fi
-  ])
+    fi])
 if test "$rtems_cv_HAS_MP" = "yes"; then
 HAS_MP="yes"
 else
@@ -964,6 +965,8 @@ fi
 AC_SUBST(HAS_MP)
 ])
 
+dnl $Id$
+dnl
 AC_DEFUN(RTEMS_CHECK_RDBG,
 [dnl
 AC_REQUIRE([RTEMS_TOP])dnl
@@ -979,5 +982,72 @@ AC_CACHE_CHECK([whether BSP supports librdbg],
   ])
 HAS_RDBG="$rtems_cv_HAS_RDBG"
 AC_SUBST(HAS_RDBG)
+])
+
+dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_POSIX_API,
+[dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_CACHE_CHECK([whether BSP supports libposix],
+  rtems_cv_HAS_POSIX_API,
+  [dnl
+    case "$RTEMS_CPU" in
+    unix*)
+      rtems_cv_HAS_POSIX_API="no"
+      ;;
+    *)
+      if test "${RTEMS_HAS_POSIX_API}" = "yes"; then
+        rtems_cv_HAS_POSIX_API="yes";
+      else
+        rtems_cv_HAS_POSIX_API="disabled";
+      fi
+      ;;
+    esac])
+if test "$rtems_cv_HAS_POSIX_API" = "yes"; then
+  HAS_POSIX_API="yes";
+else
+  HAS_POSIX_API="no";
+fi
+AC_SUBST(HAS_POSIX_API)dnl
+])
+
+dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_CXX,
+[dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_PROG_CXX_FOR_TARGET])dnl
+AC_CACHE_VAL(rtems_cv_HAS_CPLUSPLUS,
+  [dnl
+    if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+      if test -n "$CXX_FOR_TARGET"; then
+        rtems_cv_HAS_CPLUSPLUS="yes";
+      else
+        rtems_cv_HAS_CPLUSPLUS="no";
+      fi
+    else
+      rtems_cv_HAS_CPLUSPLUS="no";
+    fi
+  ])dnl
+HAS_CPLUSPLUS="$rtems_cv_HAS_CPLUSPLUS";
+AC_SUBST(HAS_CPLUSPLUS)dnl
+])
+
+dnl $Id$
+dnl
+AC_DEFUN(RTEMS_CHECK_NETWORKING,
+[dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_CACHE_VAL(rtems_cv_HAS_NETWORKING,
+  [dnl
+    if test "$RTEMS_HAS_NETWORKING" = "yes"; then
+      rtems_cv_HAS_NETWORKING="yes";
+    else
+      rtems_cv_HAS_NETWORKING="no";
+    fi
+  ])dnl
+HAS_NETWORKING="$rtems_cv_HAS_NETWORKING";
+AC_SUBST(HAS_NETWORKING)dnl
 ])
 

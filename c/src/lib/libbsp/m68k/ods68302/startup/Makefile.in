@@ -68,7 +68,7 @@ $(srcdir)/rom:
 $(srcdir)/debugger: 
 
 all: ${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(srcdir)/rom $(srcdir)/debugger $(PROJECT_RELEASE)/lib
+	$(INSTALL_CHANGE) -m 644 $(srcdir)/linkcmds $(srcdir)/rom $(srcdir)/debugger $(PROJECT_RELEASE)/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 

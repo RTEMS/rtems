@@ -64,7 +64,7 @@ CLOBBER_ADDITIONS +=
 
 all: ${ARCH} $(SRCS) $(OBJS)
 	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/lib
-	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
+	$(INSTALL_CHANGE) -m 644 $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
 
 $(PROJECT_RELEASE)/lib/libbsp.a: 
 	cd ../wrapup; $(MAKE) $(AM_MAKEFLAGS)

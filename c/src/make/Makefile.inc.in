@@ -1,19 +1,16 @@
-RTEMS_BSP = @RTEMS_BSP@
-
 #
-#
-# Target specific settings. To be included in application Makefiles.
+# BSP specific settings. To be included in application Makefiles
 #
 
 prefix = @prefix@
 
-CC_FOR_TARGET = @program_prefix@gcc
-AS_FOR_TARGET = @program_prefix@as
-AR_FOR_TARGET = @program_prefix@ar
-NM_FOR_TARGET = @program_prefix@nm
-LD_FOR_TARGET = @program_prefix@ld
-SIZE_FOR_TARGET = @program_prefix@size
-OBJCOPY_FOR_TARGET = @program_prefix@objcopy
+CC_FOR_TARGET = @CC_FOR_TARGET@
+AS_FOR_TARGET = @AS_FOR_TARGET@
+AR_FOR_TARGET = @AR_FOR_TARGET@
+NM_FOR_TARGET = @NM_FOR_TARGET@
+LD_FOR_TARGET = @LD_FOR_TARGET@
+SIZE_FOR_TARGET = @SIZE_FOR_TARGET@
+OBJCOPY_FOR_TARGET = @OBJCOPY_FOR_TARGET@
 
 CC= $(CC_FOR_TARGET)
 AS= $(AS_FOR_TARGET)

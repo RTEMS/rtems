@@ -70,7 +70,7 @@ CLOBBER_ADDITIONS +=
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 all: ${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
+	$(INSTALL_CHANGE) -m 644 $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 

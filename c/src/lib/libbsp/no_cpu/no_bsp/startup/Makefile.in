@@ -71,7 +71,7 @@ all: ${ARCH} $(SRCS) $(PGM)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all
-	$(INSTALL_CHANGE) linkcmds $(PROJECT_RELEASE)/lib
+	$(INSTALL_CHANGE) -m 644 linkcmds $(PROJECT_RELEASE)/lib
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

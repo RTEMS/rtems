@@ -17,10 +17,9 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 INSTALL_CHANGE = @INSTALL_CHANGE@
 mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-INSTALLDIRS = $(PROJECT_INCLUDE)/sys $(PROJECT_INCLUDE)/motorola \
-    $(PROJECT_INCLUDE)/zilog $(LIBRPCdir) $(LIBRDBGdir) \
-    $(LIBRTEMSCPLUSPLUSdir) $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems++ \
-    $(PROJECT_INCLUDE)/rpc $(PROJECT_INCLUDE)/rdbg
+INSTALLDIRS = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/sys \
+    $(PROJECT_INCLUDE)/motorola $(PROJECT_INCLUDE)/zilog $(LIBRPCdir) \
+    $(LIBRDBGdir) $(LIBRTEMSCPLUSPLUSdir)
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)
@@ -80,13 +79,13 @@ preinstall: $(INSTALLDIRS) $(SRCS)
 	@$(INSTALL_CHANGE) -m 644 $(MOTOROLA_H_FILES) $(PROJECT_INCLUDE)/motorola
 	@$(INSTALL_CHANGE) -m 644 $(ZILOG_H_FILES) $(PROJECT_INCLUDE)/zilog
 	@if test "$(HAS_CPLUSPLUS)" = "yes"; then \
-	$(INSTALL_CHANGE) -m 644 $(RTEMSCPLUSPLUS_H_FILES) $(PROJECT_INCLUDE)/rtems++; \
+	$(INSTALL_CHANGE) -m 644 $(RTEMSCPLUSPLUS_H_FILES) $(LIBRTEMSCPLUSPLUSdir); \
 	fi
 	@if test "$(HAS_NETWORKING)" = "yes"; then \
-	$(INSTALL_CHANGE) -m 644 $(RPC_H_FILES) $(PROJECT_INCLUDE)/rpc; \
+	$(INSTALL_CHANGE) -m 644 $(RPC_H_FILES) $(LIBRPCdir); \
 	fi
 	@if test "$(HAS_RDBG)" = "yes"; then \
-	$(INSTALL_CHANGE) -m 644 $(RDBG_H_FILES) $(PROJECT_INCLUDE)/rdbg; \
+	$(INSTALL_CHANGE) -m 644 $(RDBG_H_FILES) $(LIBRDBGdir); \
 	fi
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status

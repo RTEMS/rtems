@@ -186,6 +186,11 @@ sub subst_line
      $line .= "\n" ;
      $_ = "$line" ;
   }
+  if ( /^(.*)RTEMS_HAS_([A-Z]+)(.*)$/o )
+  {
+     print STDERR "WARNING: Replacing RTEMS_HAS_$2 with HAS_$2\n" ;
+     $_ = "$1HAS_$2$3\n" ;
+  }
   if ( /^.*\$\(make\-exe\).*$/o )
   {
     $make_exe_seen = 1 ;

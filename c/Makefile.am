@@ -2,12 +2,11 @@
 # $Id$
 #
 
+AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 ## NOTE: This Makefile.am is rather fragile to the value of RTEMS_BSP
 ## Esp. make clean and make distclean have unwanted side-effects 
 ## if RTEMS_BSP is not properly set up.
-
-AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 RTEMS_BSP = $(RTEMS_BSP_LIST)
 ## The '.' in SUBDIRS ensures that local make-targets (xxx-am) will be 
@@ -15,7 +14,6 @@ RTEMS_BSP = $(RTEMS_BSP_LIST)
 SUBDIRS= \
 . \
 $(RTEMS_BSP)
-
 
 ## Use @RTEMS_BSP_LIST@ here, using $(RTEMS_BSP_LIST) would trigger
 ## this rule for invalid BSPs

@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../..
-subdir = tmtests/tm16
+top_builddir = ..
+subdir = tm16
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -45,7 +45,7 @@ PACKHEX = @PACKHEX@
 #
 
 DEFINES +=
-CPPFLAGS +=
+CPPFLAGS += -I$(srcdir)/../include
 CFLAGS +=
 
 LD_PATHS +=
@@ -63,7 +63,7 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all: ${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
+	@$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

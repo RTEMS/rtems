@@ -1,4 +1,6 @@
+dnl
 dnl $Id$
+dnl
 
 AC_DEFUN(RTEMS_CHECK_MULTIPROCESSING,
 [dnl
@@ -15,8 +17,7 @@ AC_CACHE_CHECK([whether BSP supports multiprocessing],
       fi
     else
       rtems_cv_HAS_MP="no";
-    fi
-  ])
+    fi])
 if test "$rtems_cv_HAS_MP" = "yes"; then
 HAS_MP="yes"
 else

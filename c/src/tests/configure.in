@@ -3,35 +3,26 @@ dnl
 dnl  $Id$
 
 AC_PREREQ(2.13)
-AC_INIT(libtests)
+AC_INIT(samples)
 RTEMS_TOP(../../..)
 AC_CONFIG_AUX_DIR(../../..)
 
-AC_PROG_MAKE_SET
 RTEMS_CANONICAL_TARGET_CPU
 
+AM_INIT_AUTOMAKE(rtems-c-src-tests,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_NETWORKING
-RTEMS_ENABLE_RDBG
 RTEMS_ENABLE_INLINES
 RTEMS_ENABLE_CXX
 RTEMS_ENABLE_GCC28
 RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_BARE
-dnl RTEMS_ENABLE_RTEMSBSP
 RTEMS_ENABLE_TESTS
 
 RTEMS_ENV_RTEMSBSP
-
-dnl BEGIN configure.host.in
-
-AC_PROG_INSTALL
-
-dnl BEGIN configure.target.in
-
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
 
@@ -47,66 +38,30 @@ fi
 
 RTEMS_CANONICALIZE_TOOLS
 
-dnl if this is an i386, does gas have good code16 support?
-RTEMS_I386_GAS_CODE16
-
-RTEMS_CHECK_SYSV_UNIX
-
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
-
-# always build the test tools
-testtools_cfgdirs="tools/generic"
-
-if test "$HAS_MP" = "yes"; then
-    makefiles="$makefiles samples/base_mp/Makefile"
-    makefiles="$makefiles samples/base_mp/node1/Makefile"
-    makefiles="$makefiles samples/base_mp/node2/Makefile"
-    makefiles="$makefiles samples/base_sp/Makefile"
-fi
+RTEMS_CHECK_POSIX_API(RTEMS_BSP)
 
 if test "$tests_enabled" = "yes"; then
-  RTEMS_CHECK_MAKEFILE(libtests)
-  RTEMS_CHECK_MAKEFILE(sptests)
-  RTEMS_CHECK_MAKEFILE(tmtests)
+  cfg_subdirs="libtests sptests"
   if test "$HAS_MP" = "yes"; then
-    RTEMS_CHECK_MAKEFILE(mptests)
+    cfg_subdirs="$cfg_subdirs mptests"
   fi
-  if test "$RTEMS_HAS_POSIX_API" = "yes"; then
-    RTEMS_CHECK_MAKEFILE(psxtests)
+  if test "$HAS_POSIX_API" = "yes"; then
+    cfg_subdirs="$cfg_subdirs psxtests"
   fi
-   if test -d "$srcdir/tools/$RTEMS_CPU"; then
-     testtools_cfgdirs="$testtools_cfgdirs tools/$RTEMS_CPU"
-   fi
-fi 
+  cfg_subdirs="$cfg_subdirs tmtests"
+fi
 
-AC_SUBST(rtems_cv_prog_cc_cross)
-AC_SUBST(RTEMS_HAS_CPLUSPLUS)
-AC_SUBST(RTEMS_USE_GCC272)
 AC_SUBST(BARE_CPU_CFLAGS)
 AC_SUBST(BARE_CPU_MODEL)
-AC_SUBST(program_prefix)
-AC_SUBST(CC_CFLAGS_DEFAULT)
-AC_SUBST(CC_CFLAGS_DEBUG_V)
-AC_SUBST(CC_CFLAGS_PROFILE_V)
-AC_SUBST(CC_LDFLAGS_PROFILE_V)
 
-AC_CONFIG_SUBDIRS($testtools_cfgdirs)
+AC_CONFIG_SUBDIRS(tools)
+AC_CONFIG_SUBDIRS(support)
+AC_CONFIG_SUBDIRS(samples)
+AC_CONFIG_SUBDIRS($cfg_subdirs)
 
 # Try to explicitly list a Makefile here
 AC_OUTPUT( 
 Makefile
-support/Makefile
-support/include/Makefile
-support/stubdr/Makefile
-support/wrapup/Makefile
-tools/Makefile
-samples/Makefile
-samples/base_sp/Makefile
-samples/cdtest/Makefile
-samples/hello/Makefile
-samples/minimum/Makefile
-samples/paranoia/Makefile
-samples/ticker/Makefile
-samples/unlimited/Makefile
-$makefiles)
+)

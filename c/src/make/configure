@@ -2943,7 +2943,6 @@ else
     else
       rtems_cv_HAS_MP="no";
     fi
-  
 fi
 
 echo "$ac_t""$rtems_cv_HAS_MP" 1>&6
@@ -2955,7 +2954,7 @@ fi
 
 
 echo $ac_n "checking whether BSP supports librdbg""... $ac_c" 1>&6
-echo "configure:2959: checking whether BSP supports librdbg" >&5
+echo "configure:2958: checking whether BSP supports librdbg" >&5
 if eval "test \"`echo '$''{'rtems_cv_HAS_RDBG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2971,6 +2970,60 @@ fi
 echo "$ac_t""$rtems_cv_HAS_RDBG" 1>&6
 HAS_RDBG="$rtems_cv_HAS_RDBG"
 
+
+echo $ac_n "checking whether BSP supports libposix""... $ac_c" 1>&6
+echo "configure:2976: checking whether BSP supports libposix" >&5
+if eval "test \"`echo '$''{'rtems_cv_HAS_POSIX_API'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+      case "$RTEMS_CPU" in
+    unix*)
+      rtems_cv_HAS_POSIX_API="no"
+      ;;
+    *)
+      if test "${RTEMS_HAS_POSIX_API}" = "yes"; then
+        rtems_cv_HAS_POSIX_API="yes";
+      else
+        rtems_cv_HAS_POSIX_API="disabled";
+      fi
+      ;;
+    esac
+fi
+
+echo "$ac_t""$rtems_cv_HAS_POSIX_API" 1>&6
+if test "$rtems_cv_HAS_POSIX_API" = "yes"; then
+  HAS_POSIX_API="yes";
+else
+  HAS_POSIX_API="no";
+fi
+
+if eval "test \"`echo '$''{'rtems_cv_HAS_CPLUSPLUS'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+      if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+      if test -n "$CXX_FOR_TARGET"; then
+        rtems_cv_HAS_CPLUSPLUS="yes";
+      else
+        rtems_cv_HAS_CPLUSPLUS="no";
+      fi
+    else
+      rtems_cv_HAS_CPLUSPLUS="no";
+    fi
+  
+fi
+HAS_CPLUSPLUS="$rtems_cv_HAS_CPLUSPLUS";
+
+if eval "test \"`echo '$''{'rtems_cv_HAS_NETWORKING'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+      if test "$RTEMS_HAS_NETWORKING" = "yes"; then
+      rtems_cv_HAS_NETWORKING="yes";
+    else
+      rtems_cv_HAS_NETWORKING="no";
+    fi
+  
+fi
+HAS_NETWORKING="$rtems_cv_HAS_NETWORKING";
 
 
 
@@ -3243,6 +3296,9 @@ s%@STRIP_FOR_TARGET@%$STRIP_FOR_TARGET%g
 s%@RTEMS_GAS_CODE16@%$RTEMS_GAS_CODE16%g
 s%@HAS_MP@%$HAS_MP%g
 s%@HAS_RDBG@%$HAS_RDBG%g
+s%@HAS_POSIX_API@%$HAS_POSIX_API%g
+s%@HAS_CPLUSPLUS@%$HAS_CPLUSPLUS%g
+s%@HAS_NETWORKING@%$HAS_NETWORKING%g
 s%@rtems_cv_prog_cc_cross@%$rtems_cv_prog_cc_cross%g
 s%@RTEMS_HAS_CPLUSPLUS@%$RTEMS_HAS_CPLUSPLUS%g
 s%@RTEMS_USE_GCC272@%$RTEMS_USE_GCC272%g

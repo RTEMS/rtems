@@ -1,3 +1,5 @@
+## BSP configuration flags for BSP "@RTEMS_BSP@"
+
 ##
 ## Does this BSP support multiprocessing ?
 ##
@@ -7,3 +9,18 @@ HAS_MP = @HAS_MP@
 ## Does this BSP support RTEMS's remote debugger ?
 ##
 HAS_RDBG = @HAS_RDBG@
+
+##
+## Does this BSP support RTEMS's posix API ?
+##
+HAS_POSIX_API = @HAS_POSIX_API@
+
+##
+## Does this BSP support RTEMS's CXX API ?
+##
+HAS_CPLUSPLUS = @HAS_CPLUSPLUS@
+
+##
+## Does this BSP support RTEMS's networking ?
+##
+HAS_NETWORKING = @HAS_NETWORKING@

@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../..
-subdir = samples/base_mp/node2
+top_builddir = ../..
+subdir = base_mp/node2
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -21,7 +21,7 @@ MANAGERS = io mp
 
 # C source names, if any, go here -- minus the .c
 C_PIECES = init apptask
-C_FILES = $(C_PIECES:%=%.c)
+C_FILES = @HAS_MP_TRUE@$(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES = system.h
@@ -62,9 +62,9 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all: ${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
-	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/samples
+all: @HAS_MP_TRUE@${ARCH} $(SRCS) $(PGM)
+@HAS_MP_TRUE@	@$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
+@HAS_MP_TRUE@	@$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/samples
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

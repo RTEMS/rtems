@@ -34,11 +34,6 @@ if MAINTAINER_MODE
 $(srcdir)/main.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/main.cfg
 	sed -e 's%\$$(RTEMS_BSP)%\@RTEMS_BSP\@%g' < $< >$@
 
-$(srcdir)/Makefile.inc.in: $(top_srcdir)/@RTEMS_TOPdir@/make/Templates/Makefile.inc.in
-	echo "RTEMS_BSP = @""RTEMS_BSP@" > $@
-	echo "" >> $@
-	cat $< >> $@
-
 $(srcdir)/host.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/host.cfg.in
 	cp $< $@
 

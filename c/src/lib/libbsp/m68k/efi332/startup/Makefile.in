@@ -68,9 +68,9 @@ ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
 all: ${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
-	$(INSTALL_CHANGE) $(srcdir)/linkcmds_ROM $(PROJECT_RELEASE)/lib
-	$(INSTALL_CHANGE) ${ARCH}/except_vect_332_ROM.o $(PROJECT_RELEASE)/lib
+	$(INSTALL_CHANGE) -m 644 $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
+	$(INSTALL_CHANGE) -m 644 $(srcdir)/linkcmds_ROM $(PROJECT_RELEASE)/lib
+	$(INSTALL_CHANGE) -m 644 ${ARCH}/except_vect_332_ROM.o $(PROJECT_RELEASE)/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
