@@ -207,7 +207,7 @@ extern "C" {
  *  must be saved as part of the preemption.
  */
 
-#define CPU_IDLE_TASK_IS_FP      TRUE
+#define CPU_IDLE_TASK_IS_FP      FALSE
 
 /*
  *  Should the saving of the floating point registers be deferred

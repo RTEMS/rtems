@@ -1,3 +1,8 @@
+2001-02-04	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: IDLE task should not be FP.  This was a mistake
+	in the previous patch that has now been confirmed.
+
 2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* cpu.c: Enhancements and fixes for modifying the SR when changing
