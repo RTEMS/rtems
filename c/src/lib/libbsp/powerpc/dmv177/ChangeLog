@@ -1,4 +1,13 @@
-2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
+2001-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add bspopts.h, AC_DEFINE CONSOLE_USE_INTERRUPTS,
+	CONSOLE_USE_POLLED, HAS_RTC.
+	* include/.cvsignore: Add bspopts.h*, stamp-h*, coverhd.h, tod.h.
+	* include/Makefile.am: Use *_HEADERS instead of *H_FILES, New
+	treatment of tod.h, coverhd.h.
+	* include/bsp.h: Add include bspopts.h.
+
+2001-05-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
 
