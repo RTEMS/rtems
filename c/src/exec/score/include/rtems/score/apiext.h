@@ -1,6 +1,6 @@
 /*  apiext.h
  *
- *  XXX
+ *  This is the API Extensions Handler.
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
