@@ -1,3 +1,8 @@
+2002-08-05	Chris Ziomkowski <chris@asics.ws>
+
+	* asm.h, cpu.c, cpu_asm.c, rtems/score/cpu.h, rtems/score/or32.h,
+	rtems/score/types.h: Merged from OpenCores CVS repository.
+
 2002-07-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Build libscorecpu.a instead of rtems-cpu.rel.

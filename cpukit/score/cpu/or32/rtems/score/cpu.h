@@ -1,7 +1,7 @@
 /*  cpu.h
  *
- *  This include file contains information pertaining to the XXX
- *  processor.
+ *  This include file contains macros pertaining to the Opencores
+ *  or1k processor family.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -10,19 +10,22 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  $Id$
+ *  This file adapted from no_cpu example of the RTEMS distribution.
+ *  The body has been modified for the Opencores Or1k implementation by
+ *  Chris Ziomkowski. <chris@asics.ws>
+ *
  */
 
-#ifndef __CPU_h
-#define __CPU_h
+#ifndef _OR1K_CPU_h
+#define _OR1K_CPU_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/score/or32.h>            /* pick up machine definitions */
+#include "rtems/score/or1k.h"            /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/types.h>
+#include "rtems/score/or1ktypes.h"
 #endif
 
 /* conditional compilation parameters */
@@ -43,9 +46,6 @@ extern "C" {
  *  _Thread_Dispatch.  If the enable dispatch is inlined, then
  *  one subroutine call is avoided entirely.]
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
@@ -67,9 +67,6 @@ extern "C" {
  *  code is the longest interrupt disable period in RTEMS.  So it is
  *  necessary to strike a balance when setting this parameter.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
@@ -97,9 +94,13 @@ extern "C" {
  *  is unclear what that would imply about the interrupt processing
  *  procedure on that CPU.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
+ *  For the first cut of an Or1k implementation, let's not worry
+ *  about this, and assume that our C code will autoperform any
+ *  frame/stack allocation for us when the procedure is entered.
+ *  If we write assembly code, we may have to deal with this manually.
+ *  This can be changed later if we find it is impossible. This
+ *  behavior is desireable as it allows us to work in low memory
+ *  environments where we don't have room for a dedicated stack.
  */
 
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
@@ -118,12 +119,9 @@ extern "C" {
  *  is unclear what that would imply about the interrupt processing
  *  procedure on that CPU.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK TRUE
+#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
 
 /*
  *  Does RTEMS allocate a dedicated interrupt stack in the Interrupt Manager?
@@ -134,21 +132,15 @@ extern "C" {
  *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE
  *  or CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-#define CPU_ALLOCATE_INTERRUPT_STACK TRUE
+#define CPU_ALLOCATE_INTERRUPT_STACK FALSE
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
  *  a pointer to the saved interrupt frame (1) or just the vector 
  *  number (0)?
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_ISR_PASSES_FRAME_POINTER 0
@@ -162,7 +154,7 @@ extern "C" {
  *  If there is a FP coprocessor such as the i387 or mc68881, then
  *  the answer is TRUE.
  *
- *  The macro name "OR32_HAS_FPU" should be made CPU specific.
+ *  The macro name "OR1K_HAS_FPU" should be made CPU specific.
  *  It indicates whether or not this CPU model has FP support.  For
  *  example, it would be possible to have an i386_nofp CPU model
  *  which set this to false to indicate that you have an i386 without
@@ -174,17 +166,22 @@ extern "C" {
  *  is very tool specific and the state saved/restored is also
  *  compiler specific.
  *
- *  OR32 Specific Information:
+ *  Or1k Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  At this time there are no implementations of Or1k that are
+ *  expected to implement floating point. More importantly, the
+ *  floating point architecture is expected to change significantly
+ *  before such chips are fabricated.
  */
 
-#if ( OR32_HAS_FPU == 1 )
+#if ( OR1K_HAS_FPU == 1 )
 #define CPU_HARDWARE_FP     TRUE
+#define CPU_SOFTWARE_FP     FALSE
 #else
 #define CPU_HARDWARE_FP     FALSE
+#define CPU_SOFTWARE_FP     TRUE
 #endif
-#define CPU_SOFTWARE_FP     FALSE
+
 
 /*
  *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
@@ -201,12 +198,9 @@ extern "C" {
  *
  *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-#define CPU_ALL_TASKS_ARE_FP     TRUE
+#define CPU_ALL_TASKS_ARE_FP     FALSE
 
 /*
  *  Should the IDLE task have a floating point context?
@@ -219,9 +213,6 @@ extern "C" {
  *  the IDLE task from an interrupt because the floating point context
  *  must be saved as part of the preemption.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_IDLE_TASK_IS_FP      FALSE
@@ -251,9 +242,6 @@ extern "C" {
  *  Thus in a system with only one FP task, the FP context will never
  *  be saved or restored.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
@@ -278,12 +266,9 @@ extern "C" {
  *    2.  CPU dependent (if provided)
  *    3.  generic (if no BSP and no CPU dependent)
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
 /*
  *  Does the stack grow up (toward higher addresses) or down
@@ -292,12 +277,15 @@ extern "C" {
  *  If TRUE, then the grows upward.
  *  If FALSE, then the grows toward smaller addresses.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
+ *  Or1k Specific Information:
+ *  
+ *  Previously I had misread the documentation and set this
+ *  to true. Surprisingly, it seemed to work anyway. I'm
+ *  therefore not 100% sure exactly what this does. It should
+ *  be correct as it is now, however. 
  */
 
-#define CPU_STACK_GROWS_UP               TRUE
+#define CPU_STACK_GROWS_UP               FALSE
 
 /*
  *  The following is the variable attribute used to force alignment
@@ -318,20 +306,21 @@ extern "C" {
  *         used so it will stay in the cache and used frequently enough
  *         in the executive to justify turning this on.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-#define CPU_STRUCTURE_ALIGNMENT
+#define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned (32)))
 
 /*
  *  Define what is required to specify how the network to host conversion
  *  routines are handled.
  *
- *  OR32 Specific Information:
+ *  Or1k Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  This version of RTEMS is designed specifically to run with
+ *  big endian architectures. If you want little endian, you'll
+ *  have to make the appropriate adjustments here and write
+ *  efficient routines for byte swapping. The Or1k architecture
+ *  doesn't do this very well.
  */
 
 #define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
@@ -343,9 +332,6 @@ extern "C" {
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_MODES_INTERRUPT_MASK   0x00000001
@@ -356,12 +342,8 @@ extern "C" {
  *  Examples structures include the descriptor tables from the i386
  *  and the processor control structure on the i960ca.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-/* may need to put some structures here.  */
 
 /*
  * Contexts
@@ -397,32 +379,85 @@ extern "C" {
  *  this is enough information for RTEMS, it is probably not enough for
  *  a debugger such as gdb.  But that is another problem.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
+ *  
  */
 
+#ifdef OR1K_64BIT_ARCH
+#define or1kreg unsigned64
+#else
+#define or1kreg unsigned32
+#endif
+
+/* SR_MASK is the mask of values that will be copied to/from the status
+   register on a context switch. Some values, like the flag state, are
+   specific on the context, while others, such as interrupt enables,
+   are global. The currently defined global bits are:
+
+   0x00001 SUPV:     Supervisor mode
+   0x00002 EXR:      Exceptions on/off
+   0x00004 EIR:      Interrupts enabled/disabled
+   0x00008 DCE:      Data cache enabled/disabled
+   0x00010 ICE:      Instruction cache enabled/disabled
+   0x00020 DME:      Data MMU enabled/disabled
+   0x00040 IME:      Instruction MMU enabled/disabled
+   0x00080 LEE:      Little/Big Endian enable
+   0x00100 CE:       Context ID/shadow regs enabled/disabled
+   0x01000 OVE:      Overflow causes exception
+   0x04000 EP:       Exceptions @ 0x0 or 0xF0000000
+   0x08000 PXR:      Partial exception recognition enabled/disabled
+   0x10000 SUMRA:    SPR's accessible/inaccessible
+
+   The context specific bits are:
+
+   0x00200 F         Branch flag indicator
+   0x00400 CY        Carry flag indicator
+   0x00800 OV        Overflow flag indicator
+   0x02000 DSX       Delay slot exception occurred
+   0xF8000000 CID    Current Context ID
+*/
+
+#define SR_MASK 0xF8002E00
+
+typedef enum {
+  SR_SUPV = 0x00001,
+  SR_EXR = 0x00002,
+  SR_EIR = 0x00004,
+  SR_DCE = 0x00008,
+  SR_ICE = 0x00010,
+  SR_DME = 0x00020,
+  SR_IME = 0x00040,
+  SR_LEE = 0x00080,
+  SR_CE = 0x00100,
+  SR_F = 0x00200,
+  SR_CY = 0x00400,
+  SR_OV = 0x00800,
+  SR_OVE = 0x01000,
+  SR_DSX = 0x02000,
+  SR_EP = 0x04000,
+  SR_PXR = 0x08000,
+  SR_SUMRA = 0x10000,
+  SR_CID = 0xF8000000,
+} StatusRegisterBits;
+
 typedef struct {
-    unsigned32 some_integer_register;
-    unsigned32 some_system_register;
+  unsigned32  sr;     /* Current status register non persistent values */
+  unsigned32  esr;    /* Saved exception status register */
+  unsigned32  ear;    /* Saved exception effective address register */
+  unsigned32  epc;    /* Saved exception PC register    */
+  or1kreg     r[31];  /* Registers */
+  or1kreg     pc;     /* Context PC 4 or 8 bytes for 64 bit alignment */
 } Context_Control;
 
-typedef struct {
-    double      some_float_register;
-} Context_Control_fp;
-
-typedef struct {
-    unsigned32 special_interrupt_register;
-} CPU_Interrupt_frame;
-
+typedef int Context_Control_fp;
+typedef Context_Control CPU_Interrupt_frame;
+#define _CPU_Null_fp_context 0
+#define _CPU_Interrupt_stack_low 0
+#define _CPU_Interrupt_stack_high 0
 
 /*
  *  The following table contains the information required to configure
  *  the XXX processor specific parameters.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 typedef struct {
@@ -437,24 +472,17 @@ typedef struct {
   void *     (*stack_allocate_hook)( unsigned32 );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
-
 }   rtems_cpu_table;
 
 /*
  *  Macros to access required entires in the CPU Table are in 
  *  the file rtems/system.h.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 /*
- *  Macros to access OR32 specific additions to the CPU Table
+ *  Macros to access OR1K specific additions to the CPU Table
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 /* There are no CPU specific additions to the CPU Table for this port. */
@@ -465,12 +493,9 @@ typedef struct {
  *  _CPU_Initialize and copied into the task's FP context area during
  *  _CPU_Context_Initialize.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
+/* SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context; */
 
 /*
  *  On some CPUs, RTEMS supports a software managed interrupt stack.
@@ -484,13 +509,12 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *  NOTE: These two variables are required if the macro
  *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
+/*
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
+*/
 
 /*
  *  With some compilation systems, it is difficult if not impossible to
@@ -501,9 +525,6 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  can make it easier to invoke that routine at the end of the interrupt
  *  sequence (if a dispatch is necessary).
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
@@ -511,9 +532,6 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 /* XXX: if needed, put more variables here */
@@ -524,21 +542,18 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  area is not defined -- only the size is.  This is usually on
  *  CPUs with a "floating point save context" instruction.
  *
- *  OR32 Specific Information:
+ *  Or1k Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  We don't support floating point in this version, so the size is 0
  */
 
-#define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
+#define CPU_CONTEXT_FP_SIZE 0
 
 /*
  *  Amount of extra stack (above minimum stack size) required by
  *  MPCI receive server thread.  Remember that in a multiprocessor
  *  system this thread must exist and be able to process all directives.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
@@ -547,39 +562,23 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  This defines the number of entries in the ISR_Vector_table managed
  *  by RTEMS.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS      32
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      16
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
-
-/*
- *  This is defined if the port has a special way to report the ISR nesting
- *  level.  Most ports maintain the variable _ISR_Nest_level.
- */
-
-#define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
 /*
  *  Should be large enough to run all RTEMS tests.  This insures
  *  that a "reasonable" small application should not have any problems.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (1024*4)
+#define CPU_STACK_MINIMUM_SIZE          4096
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_ALIGNMENT              8
@@ -603,9 +602,6 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *         have to be greater or equal to than CPU_ALIGNMENT to ensure that
  *         elements allocated from the heap meet all restrictions.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
@@ -621,9 +617,6 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  NOTE:  This does not have to be a power of 2.  It does have to
  *         be greater or equal to than CPU_ALIGNMENT.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
@@ -636,34 +629,16 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define CPU_STACK_ALIGNMENT        0
 
-/*
- *  ISR handler macros
- */
-
-/*
- *  Support routine to initialize the RTEMS vector table after it is allocated.
- *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
- 
-#define _CPU_Initialize_vectors()
+/* ISR handler macros */
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
@@ -676,9 +651,6 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  This indicates the end of an RTEMS critical section.  The parameter
  *  _level is not modified.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_ISR_Enable( _isr_cookie )  \
@@ -691,9 +663,6 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  sections into two or more parts.  The parameter _level is not
  * modified.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
@@ -712,9 +681,6 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  The get routine usually must be implemented as a subroutine.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_ISR_Set_level( new_level ) \
@@ -747,14 +713,16 @@ unsigned32 _CPU_ISR_Get_level( void );
  *        FPU may be easily disabled by software such as on the SPARC
  *        where the PSR contains an enable FPU bit.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                  _isr, _entry_point, _is_fp ) \
   { \
+  memset(_the_context,'\0',sizeof(Context_Control)); \
+  (_the_context)->r[1] = (unsigned32*) ((unsigned32) (_stack_base) + (_size) ); \
+  (_the_context)->r[2] = (unsigned32*) ((unsigned32) (_stack_base)); \
+  (_the_context)->sr  = (_isr) ? 0x0000001B : 0x0000001F; \
+  (_the_context)->pc  = (unsigned32*) _entry_point ; \
   }
 
 /*
@@ -766,9 +734,6 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  not work if restarting self conflicts with the stack frame
  *  assumptions of restoring a context.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Context_Restart_self( _the_context ) \
@@ -787,9 +752,6 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  a "dump context" instruction which could fill in from high to low
  *  or low to high based on the whim of the CPU designers.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Context_Fp_start( _base, _offset ) \
@@ -806,9 +768,6 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  Other models include (1) not doing anything, and (2) putting
  *  a "null FP status word" in the correct place in the FP context.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Context_Initialize_fp( _destination ) \
@@ -825,9 +784,6 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  location or a register, optionally disables interrupts, and
  *  halts/stops the CPU.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #define _CPU_Fatal_halt( _error ) \
@@ -892,23 +848,26 @@ unsigned32 _CPU_ISR_Get_level( void );
  *    where bit_set_table[ 16 ] has values which indicate the first
  *      bit set
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
-#define CPU_USE_GENERIC_BITFIELD_CODE TRUE
+  /* #define CPU_USE_GENERIC_BITFIELD_CODE FALSE */
+#define CPU_USE_GENERIC_BITFIELD_CODE TRUE 
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
+  /* Get a value between 0 and N where N is the bit size */
+  /* This routine makes use of the fact that CPUCFGR defines
+     OB32S to have value 32, and OB64S to have value 64. If
+     this ever changes then this routine will fail. */
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  { \
-    (_output) = 0;   /* do something to prevent warnings */ \
-  }
+     asm volatile ("l.mfspr %0,r0,0x2   \n\t"\
+                   "l.andi  %0,%0,0x60  \n\t"\
+                   "l.ff1   %1,%1,r0    \n\t"\
+                   "l.sub   %0,%0,%1    \n\t" : "=&r" (_output), "+r" (_value));
 
 #endif
-
+   
 /* end of Bitfield handler macros */
 
 /*
@@ -916,15 +875,12 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  as searched by _CPU_Bitfield_Find_first_bit().  See the discussion
  *  for that routine.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
 #define _CPU_Priority_Mask( _bit_number ) \
-  ( 1 << (_bit_number) )
+    (1 << _bit_number)
 
 #endif
 
@@ -934,9 +890,6 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  a major or minor component of a priority.  See the discussion
  *  for that routine.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
@@ -955,9 +908,6 @@ unsigned32 _CPU_ISR_Get_level( void );
  *
  *  This routine performs CPU dependent initialization.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Initialize(
@@ -971,9 +921,6 @@ void _CPU_Initialize(
  *  This routine installs a "raw" interrupt handler directly into the 
  *  processor's vector table.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
  
 void _CPU_ISR_install_raw_handler(
@@ -987,7 +934,7 @@ void _CPU_ISR_install_raw_handler(
  *
  *  This routine installs an interrupt vector.
  *
- *  OR32 Specific Information:
+ *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -1006,9 +953,6 @@ void _CPU_ISR_install_vector(
  *  NOTE:  It need only be provided if CPU_HAS_HARDWARE_INTERRUPT_STACK
  *         is TRUE.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Install_interrupt_stack( void );
@@ -1021,9 +965,6 @@ void _CPU_Install_interrupt_stack( void );
  *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
  *         is TRUE.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Thread_Idle_body( void );
@@ -1033,9 +974,10 @@ void _CPU_Thread_Idle_body( void );
  *
  *  This routine switches from the run context to the heir context.
  *
- *  OR32 Specific Information:
+ *  Or1k Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  Please see the comments in the .c file for a description of how
+ *  this function works. There are several things to be aware of.
  */
 
 void _CPU_Context_switch(
@@ -1051,9 +993,6 @@ void _CPU_Context_switch(
  *
  *  NOTE: May be unnecessary to reload some registers.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_restore(
@@ -1065,9 +1004,6 @@ void _CPU_Context_restore(
  *
  *  This routine saves the floating point context passed to it.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_save_fp(
@@ -1079,9 +1015,6 @@ void _CPU_Context_save_fp(
  *
  *  This routine restores the floating point context passed to it.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_restore_fp(
@@ -1107,9 +1040,6 @@ void _CPU_Context_restore_fp(
  *  endianness for ALL fetches -- both code and data -- so the code
  *  will be fetched incorrectly.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
  
 static inline unsigned int CPU_swap_u32(

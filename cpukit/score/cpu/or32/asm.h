@@ -23,8 +23,8 @@
  *  $Id$
  */
 
-#ifndef __OR32_ASM_h
-#define __OR32_ASM_h
+#ifndef __OR1K_ASM_h
+#define __OR1K_ASM_h
 
 /*
  *  Indicate we are in an assembly file and get the basic CPU definitions.
@@ -33,8 +33,8 @@
 #ifndef ASM
 #define ASM
 #endif
-#include <rtems/score/cpuopts.h>
-#include <rtems/score/or32.h>
+#include <rtems/score/targopts.h>
+#include <rtems/score/or1k.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the
@@ -92,8 +92,8 @@
  *  They may need to put underscores in front of the symbols.
  */
 
-#define PUBLIC(sym) .globl SYM (sym)
-#define EXTERN(sym) .globl SYM (sym)
+#define PUBLIC(sym) .global SYM (sym)
+#define EXTERN(sym) .global SYM (sym)
 
 #endif
 /* end of include file */

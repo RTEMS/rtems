@@ -1,5 +1,5 @@
 /*
- *  XXX CPU Dependent Source
+ *  Opencore Or1k CPU Dependent Source
  *
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -9,7 +9,9 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  $Id$
+ *  This file adapted from no_bsp board library of the RTEMS distribution.
+ *  The body has been modified for the Bender Or1k implementation by
+ *  Chris Ziomkowski. <chris@asics.ws>
  */
 
 #include <rtems/system.h>
@@ -24,15 +26,12 @@
  *    cpu_table       - CPU table to initialize
  *    thread_dispatch - address of disptaching routine
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
-  void      (*thread_dispatch)      /* ignored on this CPU */
+  void      (*thread_dispatch)  
 )
 {
   /*
@@ -64,27 +63,33 @@ void _CPU_Initialize(
  *
  *  _CPU_ISR_Get_level
  *
- *  OR32 Specific Information:
+ *  or1k Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  There are only 2 interrupt levels for the or1k architecture.
+ *  Either interrupts are enabled or disabled. They are considered
+ *  enabled if both exceptions are enabled (SR_EXR) and interrupts
+ *  are enabled (SR_EIR). If either of these conditions are not
+ *  met, interrupts are disabled, and a level of 1 is returned.
  */
- 
-unsigned32 _CPU_ISR_Get_level( void )
-{
-  /*
-   *  This routine returns the current interrupt level.
-   */
 
-  return 0;
+inline unsigned32 _CPU_ISR_Get_level( void )
+{
+  register unsigned32 sr;
+  asm("l.mfspr %0,r0,0x17" : "=r" (sr));
+  return !((sr & SR_EXR) && (sr & SR_EIR));
 }
 
 /*PAGE
  *
  *  _CPU_ISR_install_raw_handler
  *
- *  OR32 Specific Information:
+ *  or1k Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  As a general rule the following is done for interrupts:
+ *  
+ *  For normal exceptions, exceptions are immediately reenabled
+ *  by setting the SR_EXR bit. For interrupt exceptions, the
+ *  SR_EIR bit is first cleared, and then exceptions are reenabled.
  */
  
 void _CPU_ISR_install_raw_handler(
@@ -93,10 +98,16 @@ void _CPU_ISR_install_raw_handler(
   proc_ptr   *old_handler
 )
 {
-  /*
-   *  This is where we install the interrupt handler into the "raw" interrupt
-   *  table used by the CPU to dispatch interrupt handlers.
-   */
+  register unsigned32 sr;
+  register unsigned32 tmp;
+  extern unsigned32 Or1k_Interrupt_Vectors[];
+
+  asm volatile ("l.mfspr %0,r0,0x11\n\t"
+	       "l.addi  %1,r0,-5\n\t"
+	       "l.and   %1,%1,%0\n\t": "=r" (sr) : "r" (tmp));
+  *old_handler = *((proc_ptr*)&Or1k_Interrupt_Vectors[vector]);
+  *((proc_ptr*)&Or1k_Interrupt_Vectors[vector]) = new_handler;
+  asm volatile ("l.mtspr r0,%0,0x11\n\t":: "r" (sr));
 }
 
 /*PAGE
@@ -114,7 +125,7 @@ void _CPU_ISR_install_raw_handler(
  *  Output parameters:  NONE
  *
  *
- *  OR32 Specific Information:
+ *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -146,10 +157,9 @@ void _CPU_ISR_install_vector(
 /*PAGE
  *
  *  _CPU_Install_interrupt_stack
+ *  
+ *  We don't use a separate interrupt stack.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Install_interrupt_stack( void )
@@ -172,9 +182,6 @@ void _CPU_Install_interrupt_stack( void )
  *     also be a problem with other on-chip peripherals.  So use this
  *     hook with caution.
  *
- *  OR32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Thread_Idle_body( void )
