@@ -22,11 +22,12 @@ extern "C" {
 #endif
 
 /*
- * Major and minor version number of RTEMS.
+ * Major, minor, revision version numbers of RTEMS.
  * Use these macros to test for features in specific releases.
  */
 #define __RTEMS_MAJOR__	4
 #define __RTEMS_MINOR__	6
+#define __RTEMS_REVISION__ 0
 
 /*
  *  The cpu options include file defines all cpu dependent 
