@@ -216,6 +216,9 @@ specifies that the task will execute at interrupt level n.
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} - execute at interrupt level n
 @end itemize
 
+The set of default modes may be selected by specifying the
+@code{@value{RPREFIX}DEFAULT_MODES} constant.
+
 @subsection Accessing Task Arguments
 
 @cindex task arguments
