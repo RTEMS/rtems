@@ -1,3 +1,7 @@
+2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* support/Makefile.am: Pass @RTEMS_BSP@ to AM_CPPFLAGS.
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/env-rtemsbsp.m4: Add PROJECT_LIB.
