@@ -19,8 +19,12 @@ if [ ! -f ${TOOLSBASE}/ctags ]; then
   exit 1
 fi
 
-cfiles=`ls -1 $1/*.[ch] $1/*.inl 2>/dev/null | grep -v "/no-"`
+cfiles=`find $1 -name "*.[ch]" -o "*.inl" 2>/dev/null | grep -v "/no-"`
+adafiles=`find $1 -name "*.ad[sb]" 2>/dev/null | grep -v "/no-"`
 adafiles=`ls -1 $1/*.ad[sb] 2>/dev/null`
+
+#cfiles=`ls -1 $1/*.[ch] $1/*.inl 2>/dev/null | grep -v "/no-"`
+#adafiles=`ls -1 $1/*.ad[sb] 2>/dev/null`
 
 if [ "x${cfiles}" != x ] ; then
   ${TOOLSBASE}/ctags-new -d -t -w -y ${cfiles}

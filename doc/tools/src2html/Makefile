@@ -9,7 +9,7 @@
 CC=gcc
 CFLAGS=-g 
 
-PROGS=ctags-wr ctags-new ctags-emacs src2html
+PROGS=ctags-wr ctags-new ctags src2html
 
 SRC2HTMLDIR=src2html1.4a
 
@@ -25,7 +25,8 @@ ctags-new:
 	cd ../$(SRC2HTMLDIR)/Ctags ; gmake 
 	cp ../$(SRC2HTMLDIR)/Ctags/ctags-new .
 
-ctags-emacs:
+# EMACS ctags with Ada awareness
+ctags:
 	cp ../$(SRC2HTMLDIR)/ctags-emacs/ctags ctags
 
 src2html:
