@@ -31,6 +31,11 @@
 #include "m68360.h"
 
 /*
+ * Declare clock speed -- may be overwritten by downloader or debugger
+ */
+int m360_clock_rate	= 25000000;
+
+/*
  * Interrupt-driven input buffer
  */
 #define RXBUFSIZE	16
@@ -49,6 +54,62 @@ static volatile m360BufferDescriptor_t *smcRxBd, *smcTxBd;
 
 /*
  * Device-specific routines
+ */
+
+/*
+ * Compute baud-rate-generator configuration register value
+ */
+static int
+smc1BRGC (int baud)
+{
+	int divisor;
+	int div16 = 0;
+
+	divisor = ((m360_clock_rate / 16) + (baud / 2)) / baud;
+	if (divisor > 4096) {
+		div16 = 1;
+		divisor = (divisor + 8) / 16;
+	}
+	return M360_BRG_EN | M360_BRG_EXTC_BRGCLK | ((divisor - 1) << 1) | div16;
+}
+
+/*
+ * Hardware-dependent portion of tcsetattr().
+ */
+static int
+smc1SetAttributes (int minor, const struct termios *t)
+{
+	int baud;
+
+	switch (t->c_cflag & CBAUD) {
+	default:	baud = -1;	break;
+	case B50:	baud = 50;	break;
+	case B75:	baud = 75;	break;
+	case B110:	baud = 110;	break;
+	case B134:	baud = 134;	break;
+	case B150:	baud = 150;	break;
+	case B200:	baud = 200;	break;
+	case B300:	baud = 300;	break;
+	case B600:	baud = 600;	break;
+	case B1200:	baud = 1200;	break;
+	case B1800:	baud = 1800;	break;
+	case B2400:	baud = 2400;	break;
+	case B4800:	baud = 4800;	break;
+	case B9600:	baud = 9600;	break;
+	case B19200:	baud = 19200;	break;
+	case B38400:	baud = 38400;	break;
+	case B57600:	baud = 57600;	break;
+	case B115200:	baud = 115200;	break;
+	case B230400:	baud = 230400;	break;
+	case B460800:	baud = 460800;	break;
+	}
+	if (baud > 0)
+		m360.brgc1 = smc1BRGC (baud);
+	return 0;
+}
+
+/*
+ * Interrupt handler
  */
 static rtems_isr
 smc1InterruptHandler (rtems_vector_number v)
@@ -97,7 +158,7 @@ smc1Initialize (void)
 	 * Set up BRG1 (9,600 baud)
 	 */
 	m360.brgc1 = M360_BRG_RST;
-	m360.brgc1 = M360_BRG_EN | M360_BRG_EXTC_BRGCLK | M360_BRG_9600;
+	m360.brgc1 = smc1BRGC (9600);
 
 	/*
 	 * Put SMC1 in NMSI mode, connect SMC1 to BRG1
@@ -166,7 +227,7 @@ smc1Initialize (void)
 }
 
 static int
-smc1Read (int minor)
+smc1PollRead (int minor)
 {
 	unsigned char c;
 
@@ -264,25 +325,35 @@ rtems_device_driver console_open(
 )
 {
 	rtems_status_code sc;
+	static const rtems_termios_callbacks intrCallbacks = {
+		NULL,			/* firstOpen */
+		NULL,			/* lastClose */
+		NULL,			/* pollRead */
+		smc1InterruptWrite,	/* write */
+		smc1SetAttributes,	/* setAttributes */
+		NULL,			/* stopRemoteTx */
+		NULL,			/* startRemoteTx */
+		1			/* outputUsesInterrupts */
+	};
+	static const rtems_termios_callbacks pollCallbacks = {
+		NULL,			/* firstOpen */
+		NULL,			/* lastClose */
+		smc1PollRead,		/* pollRead */
+		smc1PollWrite,		/* write */
+		smc1SetAttributes,	/* setAttributes */
+		NULL,			/* stopRemoteTx */
+		NULL,			/* startRemoteTx */
+		0			/* outputUsesInterrupts */
+	};
 
 	if (m360_smc1_interrupt) {
 		rtems_libio_open_close_args_t *args = arg;
 
-		sc = rtems_termios_open (major, minor, arg,
-					NULL,
-					NULL,
-					NULL,
-					smc1InterruptWrite,
-					1);
+		sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
 		smc1ttyp = args->iop->data1;
 	}
 	else {
-		sc = rtems_termios_open (major, minor, arg,
-					NULL,
-					NULL,
-					smc1Read,
-					smc1PollWrite,
-					0);
+		sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
 	}
 	return sc;
 }
@@ -325,7 +396,6 @@ rtems_device_driver console_write(
 
 /*
  * Handle ioctl request.
- * Should set hardware line speed, bits/char, etc.
  */
 rtems_device_driver console_control(
   rtems_device_major_number major,
