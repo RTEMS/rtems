@@ -104,6 +104,7 @@ void *POSIX_Init(
 
   /* check the time remaining */
 
+  printf( "sec (%d), nsec (%d) remaining\n", (int)tr.tv_sec, (int)tr.tv_nsec );
   assert( !tr.tv_sec && !tr.tv_nsec );
 
   /* create a thread */
