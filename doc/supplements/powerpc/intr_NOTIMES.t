@@ -37,12 +37,12 @@ special control mechanisms to return to the normal processing
 stream.  Although RTEMS hides many of the processor dependent
 details of interrupt processing, it is important to understand
 how the RTEMS interrupt manager is mapped onto the processor's
-unique architecture. Discussed in this chapter are the PPC's
+unique architecture. Discussed in this chapter are the PowerPC's
 interrupt response and control mechanisms as they pertain to
 RTEMS.
 
 RTEMS and associated documentation uses the terms
-interrupt and vector.  In the PPC architecture, these terms
+interrupt and vector.  In the PowerPC architecture, these terms
 correspond to exception and exception handler, respectively.  The terms will
 be used interchangeably in this manual.
 
@@ -51,7 +51,7 @@ be used interchangeably in this manual.
 @end ifinfo
 @section Synchronous Versus Asynchronous Exceptions
 
-In the PPC architecture exceptions can be either precise or 
+In the PowerPC architecture exceptions can be either precise or 
 imprecise and either synchronous or asynchronous.  Asynchronous 
 exceptions occur when an external event interrupts the processor.
 Synchronous exceptions are caused by the actions of an 
@@ -77,7 +77,7 @@ exceptions conforms to the requirements for context synchronization.
 @end ifinfo
 @section Vectoring of Interrupt Handler
 
-Upon determining that an exception can be taken the PPC  automatically
+Upon determining that an exception can be taken the PowerPC automatically
 performs the following actions:
 
 @itemize @bullet
@@ -95,7 +95,6 @@ bits from the MSR.
 
 @end itemize
 
-
 If the interrupt handler was installed as an RTEMS
 interrupt handler, then upon receipt of the interrupt, the
 processor passes control to the RTEMS interrupt handler which
@@ -104,8 +103,9 @@ performs the following actions:
 @itemize @bullet
 @item saves the state of the interrupted task on it's stack,
 
-@item insures that a register window is available for
-subsequent exceptions,
+@item saves all registers which are not normally preserved
+by the calling sequence so the user's interrupt service
+routine can be written in a high-level language.
 
 @item if this is the outermost (i.e. non-nested) interrupt,
 then the RTEMS interrupt handler switches from the current stack
@@ -117,7 +117,7 @@ to the interrupt stack,
 @end itemize
 
 Asynchronous interrupts are ignored while exceptions are
-disabled.  Synchronous interrupts which occur while  are
+disabled.  Synchronous interrupts which occur while are
 disabled result in the CPU being forced into an error mode.
 
 A nested interrupt is processed similarly with the
@@ -129,16 +129,39 @@ interrupt stack.
 @end ifinfo
 @section Interrupt Levels
 
-TBD levels (0-TBD) of interrupt priorities are
-supported by the PowerPC architecture with level TBD (TBD)
-being the highest priority.  Level zero (0) indicates that
-interrupts are fully enabled.  Interrupt requests for interrupts
-with priorities less than or equal to the current interrupt mask
-level are ignored.
+The PowerPC architecture supports only a single external
+asynchronous interrupt source.  This interrupt source
+may be enabled and disabled via the External Interrupt Enable (EE)
+bit in the Machine State Register (MSR).  Thus only two level (enabled
+and disabled) of external device interrupt priorities are 
+directly supported by the PowerPC architecture.  
 
-TBD
-All other RTEMS interrupt levels are undefined and their behavior is
-unpredictable.
+Some PowerPC implementations include a Critical Interrupt capability
+which is often used to receive interrupts from high priority external
+devices.
+
+The RTEMS interrupt level mapping scheme for the PowerPC is not 
+a numeric level as on most RTEMS ports.  It is a bit mapping in
+which the least three significiant bits of the interrupt level
+are mapped directly to the enabling of specific interrupt 
+sources as follows:
+
+@table @b
+
+@item Critical Interrupt
+Setting bit 0 (the least significant bit) of the interrupt level
+enables the Critical Interrupt source, if it is available on this
+CPU model.
+
+@item Machine Check
+Setting bit 1 of the interrupt level enables Machine Check execptions.
+
+@item External Interrupt
+Setting bit 2 of the interrupt level enables External Interrupt execptions.
+
+@end table
+
+All other bits in the RTEMS task interrupt level are ignored.
 
 @ifinfo
 @node Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing Interrupt Stack, Interrupt Processing Interrupt Levels, Interrupt Processing
@@ -147,9 +170,9 @@ unpredictable.
 
 During the execution of directive calls, critical
 sections of code may be executed.  When these sections are
-encountered, RTEMS disables interrupts to level TBD (TBD)
-before the execution of this section and restores them to the
-previous level upon completion of the section.  RTEMS has been
+encountered, RTEMS disables Critical Interrupts, External Interrupts
+and Machine Checks before the execution of this section and restores
+them to the previous level upon completion of the section.  RTEMS has been
 optimized to insure that interrupts are disabled for less than
 RTEMS_MAXIMUM_DISABLE_PERIOD microseconds on a 
 RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ Mhz PowerPC 603e with zero
@@ -159,17 +182,12 @@ states and processor speed present on the target board.
 calculation was last performed for Release 
 RTEMS_RELEASE_FOR_MAXIMUM_DISABLE_PERIOD.]
 
-[NOTE: It is thought that the length of time at which
-the processor interrupt level is elevated to fifteen by RTEMS is
-not anywhere near as long as the length of time ALL exceptions are
-disabled as part of the "flush all register windows" operation.]
-
-Non-maskable interrupts (NMI) cannot be disabled, and
-ISRs which execute at this level MUST NEVER issue RTEMS system
-calls.  If a directive is invoked, unpredictable results may
-occur due to the inability of RTEMS to protect its critical
-sections.  However, ISRs that make no system calls may safely
-execute as non-maskable interrupts.
+If a PowerPC implementation provides non-maskable interrupts (NMI)
+which cannot be disabled, ISRs which process these interrupts
+MUST NEVER issue RTEMS system calls.  If a directive is invoked,
+unpredictable results may occur due to the inability of RTEMS
+to protect its critical sections.  However, ISRs that make no
+system calls may safely execute as non-maskable interrupts.
 
 @ifinfo
 @node Interrupt Processing Interrupt Stack, Default Fatal Error Processing, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing

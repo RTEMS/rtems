@@ -33,12 +33,47 @@ corresponds to that processor.
 @subheading PowerPC Architecture Documents
 
 For information on the PowerPC architecture, refer to
-the following documents available from Motorola
-(http://www.moto.com):
+the following documents available from Motorola and IBM:
 
 @itemize @bullet
-@item some PowerPC document shere
+
+@item @cite{PowerPC Microprocessor Family: The Programming Environment}
+(Motorola Document MPRPPCFPE-01).
+
+@item @cite{IBM PPC403GB Embedded Controller User's Manual}.
+
+@item @cite{PoweRisControl MPC500 Family RCPU RISC Central Processing
+Unit Reference Manual} (Motorola Document RCPUURM/AD).
+
+@item @cite{PowerPC 601 RISC Microprocessor User's Manual}
+(Motorola Document MPR601UM/AD).
+
+@item @cite{PowerPC 603 RISC Microprocessor User's Manual}
+(Motorola Document MPR603UM/AD).
+
+@item @cite{PowerPC 603e RISC Microprocessor User's Manual}
+(Motorola Document MPR603EUM/AD).
+
+@item @cite{PowerPC 604 RISC Microprocessor User's Manual}
+(Motorola Document MPR604UM/AD).
+
+@item @cite{PowerPC MPC821 Portable Systems Microprocessor User's Manual}
+(Motorola Document MPC821UM/AD).
+
+@item @cite{PowerQUICC MPC860 User's Manual} (Motorola Document MPC860UM/AD).
+
+
 @end itemize
+
+Motorola maintains an on-line electronic library for the PowerPC
+at the following URL:
+
+@itemize @code{ }
+@item @cite{http://www.mot.com/powerpc/library/library.html}
+@end itemize
+
+This site has a a wealth of information and examples.  Many of the
+manuals are available from that site in electronic format.
 
 @subheading PowerPC Processor Simulator Information
 

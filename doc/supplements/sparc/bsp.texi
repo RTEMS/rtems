@@ -70,7 +70,7 @@ management.  However, interrupts should be disabled by setting
 the Processor Interrupt Level (pil) field of the psr to 15.
 RTEMS installs it's own Trap Table as part of initialization
 which is initialized with the contents of the Trap Table in
-place when the rtems_initialize_executive directive was invoked.
+place when the @code{rtems_initialize_executive} directive was invoked.
 Upon completion of executive initialization, interrupts are
 enabled.
 
@@ -82,7 +82,7 @@ In addition to the requirements described in the
 Board Support Packages chapter of the @value{LANGUAGE}
 Applications User's Manual for the reset code
 which is executed before the call to
-rtems_initialize executive, the SPARC version has the following
+@code{rtems_initialize_executive}, the SPARC version has the following
 specific requirements:
 
 @itemize @bullet
@@ -91,7 +91,7 @@ the SPARC remains in the supervisor state.
 
 @item Must set stack pointer (sp) such that a minimum stack
 size of MINIMUM_STACK_SIZE bytes is provided for the
-rtems_initialize executive directive.
+@code{rtems_initialize_executive} directive.
 
 @item Must disable all external interrupts (i.e. set the pil
 to 15).

@@ -7,14 +7,13 @@
 @c
 
 @ifinfo
-@node Calling Conventions, Calling Conventions Introduction, CPU Model Dependent Features CPU Model Implementation Notes, Top
+@node Calling Conventions, Calling Conventions Introduction, CPU Model Dependent Features Low Power Model, Top
 @end ifinfo
 @chapter Calling Conventions
 @ifinfo
 @menu
 * Calling Conventions Introduction::
 * Calling Conventions Programming Model::
-* Calling Conventions Register Windows::
 * Calling Conventions Call and Return Mechanism::
 * Calling Conventions Calling Mechanism::
 * Calling Conventions Register Usage::
@@ -53,14 +52,14 @@ calling convention.  Documentation for EABI is available by sending
 a message with a subject line of "EABI" to eabi@@goth.sis.mot.com.
 
 @ifinfo
-@node Calling Conventions Programming Model, Non-Floating Point Registers, Calling Conventions Introduction, Calling Conventions
+@node Calling Conventions Programming Model, Calling Conventions Non-Floating Point Registers, Calling Conventions Introduction, Calling Conventions
 @end ifinfo
 @section Programming Model
 @ifinfo
 @menu
-* Non-Floating Point Registers::
-* Floating Point Registers::
-* Special Registers::
+* Calling Conventions Non-Floating Point Registers::
+* Calling Conventions Floating Point Registers::
+* Calling Conventions Special Registers::
 @end menu
 @end ifinfo
 
@@ -68,7 +67,7 @@ This section discusses the programming model for the
 PowerPC architecture.
 
 @ifinfo
-@node Non-Floating Point Registers, Floating Point Registers, Calling Conventions Programming Model, Calling Conventions Programming Model
+@node Calling Conventions Non-Floating Point Registers, Calling Conventions Floating Point Registers, Calling Conventions Programming Model, Calling Conventions Programming Model
 @end ifinfo
 @subsection Non-Floating Point Registers
 
@@ -85,18 +84,19 @@ The following table describes the role of each of these registers:
 @ifset use-ascii
 @example
 @group
-     +---------------+----------------+----------------------+
-     | Register Name | Alternate Name |      Description     |
-     +---------------+----------------+----------------------+
-     |     g0        |      na        |    reads return 0    |
-     |               |                |  writes are ignored  |
-     +---------------+----------------+----------------------+
-     |     o6        |      sp        |     stack pointer    |
-     +---------------+----------------+----------------------+
-     |     i6        |      fp        |     frame pointer    |
-     +---------------+----------------+----------------------+
-     |     i7        |      na        |    return address    |
-     +---------------+----------------+----------------------+
+     +---------------+----------------+------------------------------+
+     | Register Name | Alternate Name |         Description          |
+     +---------------+----------------+------------------------------+
+     |      r1       |      sp        |         stack pointer        |
+     +---------------+----------------+------------------------------+
+     |               |                |  global pointer to the Small |
+     |      r2       |      na        |     Constant Area (SDA2)     |
+     +---------------+----------------+------------------------------+
+     |    r3 - r12   |      na        | parameter and result passing |
+     +---------------+----------------+------------------------------+
+     |               |                |  global pointer to the Small |
+     |      r13      |      na        |         Data Area (SDA)      |
+     +---------------+----------------+------------------------------+
 @end group
 @end example
 @end ifset
@@ -110,15 +110,16 @@ The following table describes the role of each of these registers:
 \vrule#&
 \hbox to 1.75in{\enskip\hfil#\hfil}&
 \vrule#&
-\hbox to 1.75in{\enskip\hfil#\hfil}&
+\hbox to 2.50in{\enskip\hfil#\hfil}&
 \vrule#\cr
 \noalign{\hrule}
 &\bf Register Name &&\bf Alternate Names&&\bf Description&\cr\noalign{\hrule}
-&g0&&NA&&reads return 0; &\cr
-&&&&&writes are ignored&\cr\noalign{\hrule}
-&o6&&sp&&stack pointer&\cr\noalign{\hrule}
-&i6&&fp&&frame pointer&\cr\noalign{\hrule}
-&i7&&NA&&return address&\cr\noalign{\hrule}
+&r1&&sp&&stack pointer&\cr\noalign{\hrule}
+&r2&&NA&&global pointer to the Small&\cr
+&&&&&Constant Area (SDA2)&\cr\noalign{\hrule}
+&r3 - r12&&NA&&parameter and result passing&\cr\noalign{\hrule}
+&r13&&NA&&global pointer to the Small&\cr
+&&&&&Data Area (SDA2)&\cr\noalign{\hrule}
 }}\hfil}
 @end tex
 @end ifset
@@ -130,18 +131,18 @@ The following table describes the role of each of these registers:
 <TR><TD ALIGN=center><STRONG>Register Name</STRONG></TD>
     <TD ALIGN=center><STRONG>Alternate Name</STRONG></TD>
     <TD ALIGN=center><STRONG>Description</STRONG></TD></TR>
-<TR><TD ALIGN=center>g0</TD>
-    <TD ALIGN=center>NA</TD>
-    <TD ALIGN=center>reads return 0 ; writes are ignored</TD></TR>
-<TR><TD ALIGN=center>o6</TD>
+<TR><TD ALIGN=center>r1</TD>
     <TD ALIGN=center>sp</TD>
     <TD ALIGN=center>stack pointer</TD></TR>
-<TR><TD ALIGN=center>i6</TD>
-    <TD ALIGN=center>fp</TD>
-    <TD ALIGN=center>frame pointer</TD></TR>
-<TR><TD ALIGN=center>i7</TD>
+<TR><TD ALIGN=center>r2</TD>
+    <TD ALIGN=center>na</TD>
+    <TD ALIGN=center>global pointer to the Small Constant Area (SDA2)</TD></TR>
+<TR><TD ALIGN=center>r3 - r12</TD>
     <TD ALIGN=center>NA</TD>
-    <TD ALIGN=center>return address</TD></TR>
+    <TD ALIGN=center>parameter and result passing</TD></TR>
+<TR><TD ALIGN=center>r13</TD>
+    <TD ALIGN=center>NA</TD>
+    <TD ALIGN=center>global pointer to the Small Data Area (SDA)</TD></TR>
   </TABLE>
 </CENTER>
 @end html
@@ -149,13 +150,13 @@ The following table describes the role of each of these registers:
 
 
 @ifinfo
-@node Floating Point Registers, Special Registers, Non-Floating Point Registers, Calling Conventions Programming Model
+@node Calling Conventions Floating Point Registers, Calling Conventions Special Registers, Calling Conventions Non-Floating Point Registers, Calling Conventions Programming Model
 @end ifinfo
 @subsection Floating Point Registers
 
-The PowerPC architecture includes thirty-two,
-sixty-four bit registers.  All PowwerPC floating point instructions 
-interprete these registers as 32 double precision floating point registers,
+The PowerPC architecture includes thirty-two, sixty-four bit
+floating point registers.  All PowerPC floating point instructions 
+interpret these registers as 32 double precision floating point registers,
 regardless of whether the processor has 64-bit or 32-bit implementation.
 
 The floating point status and control register (fpscr) records exceptions
@@ -163,159 +164,66 @@ and the type of result generated by floating-point operations.
 Additionally, it controls the rounding mode of operations and allows the
 reporting of floating exceptions to be enabled or disabled.
 
-XXXXXX
-A queue of the floating point instructions which have
-started execution but not yet completed is maintained.  This
-queue is needed to support the multiple cycle nature of floating
-point operations and to aid floating point exception trap
-handlers.  Once a floating point exception has been encountered,
-the queue is frozen until it is emptied by the trap handler.
-The floating point queue is loaded by launching instructions.
-It is emptied normally when the floating point completes all
-outstanding instructions and by floating point exception
-handlers with the store double floating point queue (stdfq)
-instruction.
-XXX
-
 @ifinfo
-@node Special Registers, Calling Conventions Register Windows, Floating Point Registers, Calling Conventions Programming Model
+@node Calling Conventions Special Registers, Calling Conventions Call and Return Mechanism, Calling Conventions Floating Point Registers, Calling Conventions Programming Model
 @end ifinfo
 @subsection Special Registers
 
-The PowerPC architecture includes XXX special registers
-which are critical to the programming model: the Machine State
-Register (msr) and XXX the Window Invalid Mask (wim) XXX.  The msr
-contains the processor mode, power management mode, endian mode, exception
-information, privlige level, floating point available and floating point 
-excepiton mode, address translation information and the exception prefix.
+The PowerPC architecture includes a number of special registers
+which are critical to the programming model:
 
-XXX
-condition codes, processor interrupt level, trap
-enable bit, supervisor mode and previous supervisor mode bits,
-version information, floating point unit and coprocessor enable
-bits, and the current window pointer (cwp).  The cwp field of
-the psr and wim register are used to manage the register windows
-in the SPARC architecture.  The register windows are discussed
-in more detail below.
-XXX
+@table @b
 
-@ifinfo
-@node Calling Conventions Register Windows, Calling Conventions Call and Return Mechanism, Special Registers, Calling Conventions
-@end ifinfo
-@section Register Windows
+@item Machine State Register
 
-The SPARC architecture includes the concept of
-register windows.  An overly simplistic way to think of these
-windows is to imagine them as being an infinite supply of
-"fresh" register sets available for each subroutine to use.  In
-reality, they are much more complicated.
+The MSR contains the processor mode, power management mode, endian mode,
+exception information, privilege level, floating point available and
+floating point excepiton mode, address translation information and
+the exception prefix.
 
-The save instruction is used to obtain a new register
-window.  This instruction decrements the current window pointer,
-thus providing a new set of registers for use.  This register
-set includes eight fresh local registers for use exclusively by
-this subroutine.  When done with a register set, the restore
-instruction increments the current window pointer and the
-previous register set is once again available.
+@item Link Register
 
-The two primary issues complicating the use of
-register windows are that (1) the set of register windows is
-finite, and (2) some registers are shared between adjacent
-registers windows.
+The LR contains the return address after a function call.  This register
+must be saved before a subsequent subroutine call can be made.  The
+use of this register is discussed further in the @b{Call and Return
+Mechanism} section below.
 
-Because the set of register windows is finite, it is
-possible to execute enough save instructions without
-corresponding restore's to consume all of the register windows.
-This is easily accomplished in a high level language because
-each subroutine typically performs a save instruction upon
-entry.  Thus having a subroutine call depth greater than the
-number of register windows will result in a window overflow
-condition.  The window overflow condition generates a trap which
-must be handled in software.  The window overflow trap handler
-is responsible for saving the contents of the oldest register
-window on the program stack.
+@item Count Register
 
-Similarly, the subroutines will eventually complete
-and begin to perform restore's.  If the restore results in the
-need for a register window which has previously been written to
-memory as part of an overflow, then a window underflow condition
-results.  Just like the window overflow, the window underflow
-condition must be handled in software by a trap handler.  The
-window underflow trap handler is responsible for reloading the
-contents of the register window requested by the restore
-instruction from the program stack.
+The CTR contains the iteration variable for some loops.  It may also be used
+for indirect function calls and jumps.
 
-The Window Invalid Mask (wim) and the Current Window
-Pointer (cwp) field in the psr are used in conjunction to manage
-the finite set of register windows and detect the window
-overflow and underflow conditions.  The cwp contains the index
-of the register window currently in use.  The save instruction
-decrements the cwp modulo the number of register windows.
-Similarly, the restore instruction increments the cwp modulo the
-number of register windows.  Each bit in the  wim represents
-represents whether a register window contains valid information.
-The value of 0 indicates the register window is valid and 1
-indicates it is invalid.  When a save instruction causes the cwp
-to point to a register window which is marked as invalid, a
-window overflow condition results.  Conversely, the restore
-instruction may result in a window underflow condition.
-
-Other than the assumption that a register window is
-always available for trap (i.e. interrupt) handlers, the SPARC
-architecture places no limits on the number of register windows
-simultaneously marked as invalid (i.e. number of bits set in the
-wim).  However, RTEMS assumes that only one register window is
-marked invalid at a time (i.e. only one bit set in the wim).
-This makes the maximum possible number of register windows
-available to the user while still meeting the requirement that
-window overflow and underflow conditions can be detected.
-
-The window overflow and window underflow trap
-handlers are a critical part of the run-time environment for a
-SPARC application.  The SPARC architectural specification allows
-for the number of register windows to be any power of two less
-than or equal to 32.  The most common choice for SPARC
-implementations appears to be 8 register windows.  This results
-in the cwp ranging in value from 0 to 7 on most implementations.
-
-
-The second complicating factor is the sharing of
-registers between adjacent register windows.  While each
-register window has its own set of local registers, the input
-and output registers are shared between adjacent windows.  The
-output registers for register window N are the same as the input
-registers for register window ((N - 1) modulo RW) where RW is
-the number of register windows.  An alternative way to think of
-this is to remember how parameters are passed to a subroutine on
-the SPARC.  The caller loads values into what are its output
-registers.  Then after the callee executes a save instruction,
-those parameters are available in its input registers.  This is
-a very efficient way to pass parameters as no data is actually
-moved by the save or restore instructions.
+@end table
 
 @ifinfo
-@node Calling Conventions Call and Return Mechanism, Calling Conventions Calling Mechanism, Calling Conventions Register Windows, Calling Conventions
+@node Calling Conventions Call and Return Mechanism, Calling Conventions Calling Mechanism, Calling Conventions Special Registers, Calling Conventions
 @end ifinfo
 @section Call and Return Mechanism
 
-The SPARC architecture supports a simple yet
-effective call and return mechanism.  A subroutine is invoked
-via the call (call) instruction.  This instruction places the
-return address in the caller's output register 7 (o7).  After
-the callee executes a save instruction, this value is available
-in input register 7 (i7) until the corresponding restore
-instruction is executed.
+The PowerPC architecture supports a simple yet effective call
+and return mechanism.  A subroutine is invoked
+via the "branch and link" (@code{bl}) and
+"brank and link absolute" (@code{bla})
+instructions.  This instructions place the return address
+in the Link Register (LR).  The callee returns to the caller by 
+executing a "branch unconditional to the link register" (@code{blr})
+instruction.  Thus the callee returns to the caller via a jump
+to the return address which is stored in the LR.
 
-The callee returns to the caller via a jmp to the
-return address.  There is a delay slot following this
-instruction which is commonly used to execute a restore
-instruction -- if a register window was allocated by this
-subroutine.
+The previous contents of the LR are not automatically saved 
+by either the @code{bl} or @code{bla}.  It is the responsibility
+of the callee to save the contents of the LR before invoking
+another subroutine.  If the callee invokes another subroutine,
+it must restore the LR before executing the @code{blr} instruction
+to return to the caller.
 
-It is important to note that the SPARC subroutine
+It is important to note that the PowerPC subroutine
 call and return mechanism does not automatically save and
-restore any registers.  This is accomplished via the save and
-restore instructions which manage the set of registers windows.
+restore any registers.
+
+The LR may be accessed as special purpose register 8 (@code{SPR8}) using the
+"move from special register" (@code{mfspr}) and
+"move to special register" (@code{mtspr}) instructions.
 
 @ifinfo
 @node Calling Conventions Calling Mechanism, Calling Conventions Register Usage, Calling Conventions Call and Return Mechanism, Calling Conventions
@@ -323,7 +231,8 @@ restore instructions which manage the set of registers windows.
 @section Calling Mechanism
 
 All RTEMS directives are invoked using the regular
-SPARC calling convention via the call instruction.
+PowerPC EABI calling convention via the @code{bl} or
+@code{bla} instructions.
 
 @ifinfo
 @node Calling Conventions Register Usage, Calling Conventions Parameter Passing, Calling Conventions Calling Mechanism, Calling Conventions
@@ -331,11 +240,11 @@ SPARC calling convention via the call instruction.
 @section Register Usage
 
 As discussed above, the call instruction does not
-automatically save any registers.  The save and restore
-instructions are used to allocate and deallocate register
-windows.  When a register window is allocated, the new set of
-local registers are available for the exclusive use of the
-subroutine which allocated this register set.
+automatically save any registers.  It is the responsibility
+of the callee to save and restore any registers which must be preserved
+across subroutine calls.  The callee is responsible for saving 
+callee-preserved registers to the program stack and restoring them
+before returning to the caller.
 
 @ifinfo
 @node Calling Conventions Parameter Passing, Calling Conventions User-Provided Routines, Calling Conventions Register Usage, Calling Conventions
@@ -343,19 +252,19 @@ subroutine which allocated this register set.
 @section Parameter Passing
 
 RTEMS assumes that arguments are placed in the
-caller's output registers with the first argument in output
-register 0 (o0), the second argument in output register 1 (o1),
-and so forth.  Until the callee executes a save instruction, the
-parameters are still visible in the output registers.  After the
-callee executes a save instruction, the parameters are visible
-in the corresponding input registers.  The following pseudo-code
+general purpose registers with the first argument in 
+register 3 (@code{r3}), the second argument in general purpose
+register 4 (@code{r4}), and so forth until the seventh
+argument is in general purpose register 10 (@code{r10}).  
+If there are more than seven arguments, then subsequent arguments
+are placed on the program stack.  The following pseudo-code
 illustrates the typical sequence used to call a RTEMS directive
 with three (3) arguments:
 
 @example
-load third argument into o2
-load second argument into o1
-load first argument into o0
+load third argument into r5
+load second argument into r4
+load first argument into r3
 invoke directive
 @end example
 
@@ -366,7 +275,6 @@ invoke directive
 
 All user-provided routines invoked by RTEMS, such as
 user extensions, device drivers, and MPCI routines, must also
-adhere to these calling conventions.
-
+adhere to these same calling conventions.
 
 

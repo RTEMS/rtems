@@ -50,18 +50,19 @@ typedef struct @{
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-  unsigned32   clicks_per_usec; /* Timer clicks per microsecond */
+  unsigned32   clicks_per_usec;       /* Timer clicks per microsecond */
   void       (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
-  unsigned32   serial_per_sec;  /* Serial clocks per second */
+
+#if defined(ppc403)
+  unsigned32   serial_per_sec;        /* Serial clocks per second */
   boolean      serial_external_clock;
   boolean      serial_xon_xoff;
   boolean      serial_cts_rts;
   unsigned32   serial_rate;
-  unsigned32   timer_average_overhead; /* Average overhead of timer in ticks */
-  unsigned32   timer_least_valid; /* Least valid number from timer */
-  void (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
-
+  unsigned32   timer_average_overhead; /* in ticks */
+  unsigned32   timer_least_valid;      /* Least valid number from timer */
+#endif
 @};
 @end example
 
@@ -132,31 +133,33 @@ they are located in RAM dynamic vector installation occurs, otherwise
 it does not.
 
 @item serial_per_sec
-is the number of clock ticks per second for the PPC403 serial timer.
+is a PPC403 specific field which specifies the number of clock
+ticks per second for the PPC403 serial timer.
 
 @item serial_rate
-is the baud rate for the PPC403 serial timer.
+is a PPC403 specific field which specifies the baud rate for the
+PPC403 serial port.
 
 @item serial_external_clock
-is a flag used by the BSP to indicate whether or not to mask in a 0x2 into
+is a PPC403 specific field which indicates whether or not to mask in a 0x2 into
 the Input/Output Configuration Register (IOCR) during initialization of the
-PPC403 console.  XXX This bit is defined as "reserved" 6-12?
+PPC403 console.  (NOTE: This bit is defined as "reserved" 6-12?)
 
 @item serial_xon_xoff
-is a flag used by the BSP to indicate whether or not  XON/XOFF flow control 
-is supported for the PPC403 serial timer.
+is a PPC403 specific field which indicates whether or not
+XON/XOFF flow control is supported for the PPC403 serial port.
 
 @item serial_cts_rts
-is a flag used by the BSP to indicate whether or not to set the lsb of the 
-Input/Output Configuration Register (IOCR) during initialization of the
-PPC403 console.  XXX This bit is defined as "reserved" 6-12?
-
+is a PPC403 specific field which indicates whether or not to set the 
+least significant bit of the Input/Output Configuration Register
+(IOCR) during initialization of the PPC403 console.  (NOTE: This
+bit is defined as "reserved" 6-12?)
 
 @item timer_average_overhead
-is the average number of overhead ticks that occur on the PPC403 timer.
+is a PPC403 specific field which specifies the average number of overhead ticks that occur on the PPC403 timer.
 
 @item timer_least_valid
-is the maximum valid PPC403 timer value.
+is a PPC403 specific field which specifies the maximum valid PPC403 timer value.
 
 @end table
 

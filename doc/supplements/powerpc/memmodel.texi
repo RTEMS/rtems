@@ -41,7 +41,7 @@ RTEMS supports the PowerPC using a flat memory model with
 paging disabled.  In this mode, the PowerPC automatically
 converts every address from a logical to a physical address
 each time it is used.  The PowerPC uses information provided
-in the XXX to convert these addresses.
+in the Block Address Translation (BAT) to convert these addresses.
 
 Implementations of the PowerPC architecture may be thirty-two or sixty-four bit.
 The PowerPC architecture supports a flat thirty-two or sixty-four bit address
@@ -119,7 +119,7 @@ of data accesses:
 Doubleword load and store operations are only available in 
 PowerPC CPU models which are sixty-four bit implementations.
 
-RTEMS does not directly support any PowerPC  Memory Management
+RTEMS does not directly support any PowerPC Memory Management
 Units, therefore, virtual memory or segmentation systems
 involving the PowerPC  are not supported.
 

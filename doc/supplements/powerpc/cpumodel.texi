@@ -14,7 +14,6 @@
 @menu
 * CPU Model Dependent Features Introduction::
 * CPU Model Dependent Features CPU Model Feature Flags::
-* CPU Model Dependent Features CPU Model Implementation Notes::
 @end menu
 @end ifinfo
 
@@ -55,7 +54,6 @@ across the entire family.
 * CPU Model Dependent Features Maximum Interrupts::
 * CPU Model Dependent Features Has Double Precision Floating Point::
 * CPU Model Dependent Features Critical Interrupts::
-* CPU Model Dependent Features MSR Values::
 * CPU Model Dependent Features Use Multiword Load/Store Instructions::
 * CPU Model Dependent Features Instruction Cache Size::
 * CPU Model Dependent Features Data Cache Size::
@@ -146,7 +144,7 @@ important because the floating point registers need only be four bytes
 wide (not eight) if double precision is not supported.
 
 @ifinfo
-@node CPU Model Dependent Features Critical Interrupts, CPU Model Dependent Features MSR Values, CPU Model Dependent Features Has Double Precision Floating Point, CPU Model Dependent Features CPU Model Feature Flags
+@node CPU Model Dependent Features Critical Interrupts, CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features Has Double Precision Floating Point, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Critical Interrupts
 
@@ -154,14 +152,7 @@ The macro PPC_HAS_RFCI is set to 1 to indicate that the PowerPC model
 has the Critical Interrupt capability as defined by the IBM 403 models.
 
 @ifinfo
-@node CPU Model Dependent Features MSR Values, CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features Critical Interrupts, CPU Model Dependent Features CPU Model Feature Flags
-@end ifinfo
-@subsection MSR Values
-
-The macro PPC_MSR_INITIAL is set to
-
-@ifinfo
-@node CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features Instruction Cache Size, CPU Model Dependent Features MSR Values, CPU Model Dependent Features CPU Model Feature Flags
+@node CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features Instruction Cache Size, CPU Model Dependent Features Critical Interrupts, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Use Multiword Load/Store Instructions
 
@@ -190,42 +181,43 @@ The macro PPC_D_CACHE is set to the size in bytes of the data cache.
 @end ifinfo
 @subsection Debug Model
 
-The macro PPC_DEBUG_MODEL
+The macro PPC_DEBUG_MODEL is set to indicate the debug support features 
+present in this CPU model.  The following debug support feature sets
+are currently supported:
 
 @table @b
 
 @item @code{PPC_DEBUG_MODEL_STANDARD}
-indicates XXX
+indicates that the single-step trace enable (SE) and branch trace
+enable (BE) bits in the MSR are supported by this CPU model.
 
 @item @code{PPC_DEBUG_MODEL_SINGLE_STEP_ONLY}
-indicates XXX
+indicates that only the single-step trace enable (SE) bit in the MSR
+is supported by this CPU model. 
 
 @item @code{PPC_DEBUG_MODEL_IBM4xx}
-indicates XXX
+indicates that the debug exception enable (DE) bit in the MSR is supported
+by this CPU model.  At this time, this particular debug feature set 
+has only been seen in the IBM 4xx series.
 
 @end table
 
 @ifinfo
-@node CPU Model Dependent Features Low Power Model, CPU Model Dependent Features CPU Model Implementation Notes, CPU Model Dependent Features Debug Model, CPU Model Dependent Features CPU Model Feature Flags
+@node CPU Model Dependent Features Low Power Model, Calling Conventions, CPU Model Dependent Features Debug Model, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Low Power Model
 
-The macro PPC_LOW_POWER_MODE
+The macro PPC_LOW_POWER_MODE is set to indicate the low power model
+supported by this CPU model.  The following low power modes are currently
+supported.
 
 @table @b
 
 @item @code{PPC_LOW_POWER_MODE_NONE}
-indicates XXX
+indicates that this CPU model has no low power mode support.
 
 @item @code{PPC_LOW_POWER_MODE_STANDARD}
-indicates XXX
+indicates that this CPU model follows the low power model defined for
+the PPC603e.
 
 @end table
-
-
-@ifinfo
-@node CPU Model Dependent Features CPU Model Implementation Notes, Calling Conventions, CPU Model Dependent Features Low Power Model, CPU Model Dependent Features
-@end ifinfo
-@section CPU Model Implementation Notes 
-
-TBD
