@@ -51,6 +51,7 @@ console_fns mc68681_fns =
   mc68681_write_support_int,      /* deviceWrite */
   mc68681_initialize_interrupts,  /* deviceInitialize */
   mc68681_write_polled,           /* deviceWritePolled */
+  mc68681_set_attributes,         /* deviceSetAttributes */
   FALSE,                          /* deviceOutputUsesInterrupts */
 };
 
@@ -63,6 +64,7 @@ console_fns mc68681_fns_polled =
   mc68681_write_support_polled,        /* deviceWrite */
   mc68681_init,                        /* deviceInitialize */
   mc68681_write_polled,                /* deviceWritePolled */
+  mc68681_set_attributes,              /* deviceSetAttributes */
   FALSE,                               /* deviceOutputUsesInterrupts */
 };
 
@@ -81,21 +83,183 @@ static boolean mc68681_probe(int minor)
   return(TRUE);
 }
 
+static int mc68681_baud_rate(
+  int           minor,
+  int           baud,
+  unsigned int *baud_mask_p,
+  unsigned int *acr_bit_p
+)
+{
+  unsigned int baud_mask;
+  unsigned int acr_bit;
+  int          status;
+
+  baud_mask = 0;
+  acr_bit = 0;
+  status = 0;
+
+  if ( !(Console_Port_Tbl[minor].ulDataPort & MC68681_DATA_BAUD_RATE_SET_1) )
+    acr_bit = 1;
+
+  if (!(baud & CBAUD)) {
+    *baud_mask_p = 0x0B;     /* default to 9600 baud */
+    *acr_bit_p   = acr_bit;
+    return status;
+  }
+
+  if ( !acr_bit ) {
+    switch (baud & CBAUD) {
+      case B50:    baud_mask = 0x00; break;
+      case B110:   baud_mask = 0x01; break;
+      case B134:   baud_mask = 0x02; break;
+      case B200:   baud_mask = 0x03; break;
+      case B300:   baud_mask = 0x04; break;
+      case B600:   baud_mask = 0x05; break;
+      case B1200:  baud_mask = 0x06; break;
+      case B2400:  baud_mask = 0x08; break;
+      case B4800:  baud_mask = 0x09; break;
+      case B9600:  baud_mask = 0x0B; break;
+      case B38400: baud_mask = 0x0C; break;
+
+      case B0:
+      case B75:
+      case B150:
+      case B1800:
+      case B19200:
+      case B57600:
+      case B115200:
+      case B230400:
+      case B460800:
+        status = -1;
+        break;
+    }
+  } else {
+    switch (baud & CBAUD) {
+      case B75:    baud_mask = 0x00; break;
+      case B110:   baud_mask = 0x01; break;
+      case B134:   baud_mask = 0x02; break;
+      case B150:   baud_mask = 0x03; break;
+      case B300:   baud_mask = 0x04; break;
+      case B600:   baud_mask = 0x05; break;
+      case B1200:  baud_mask = 0x06; break;
+      case B1800:  baud_mask = 0x0A; break;
+      case B2400:  baud_mask = 0x08; break;
+      case B4800:  baud_mask = 0x09; break;
+      case B9600:  baud_mask = 0x0B; break;
+      case B19200: baud_mask = 0x0C; break;
+
+      case B0:
+      case B50:
+      case B200:
+      case B38400:
+      case B57600:
+      case B115200:
+      case B230400:
+      case B460800:
+        status = -1;
+        break;
+    }
+  }
+
+  *baud_mask_p = baud_mask;
+  *acr_bit_p   = acr_bit;
+  return status;
+}
+
+#define MC68681_PORT_MASK( _port, _bits ) \
+  ((_port) ? ((_bits) << 4) : (_bits))
+
+static int mc68681_set_attributes( 
+  int minor,
+  const struct termios *t
+)
+{
+  unsigned32             pMC68681_port;
+  unsigned32             pMC68681;
+  unsigned int           mode1;
+  unsigned int           mode2;
+  unsigned int           baud_mask;
+  unsigned int           acr_bit;
+  setRegister_f          setReg;
+  rtems_interrupt_level  Irql;
+
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor].setRegister;
+
+  /*
+   *  Set the baud rate
+   */
+
+  if ( mc68681_baud_rate( minor, t->c_cflag, &baud_mask, &acr_bit ) == -1 )
+    return -1;
+
+  baud_mask |=  baud_mask << 4;
+  acr_bit   <<= 7;
+
+  /*
+   *  Parity
+   */
+
+  mode1 = 0;
+  mode2 = 0;
+
+  if (t->c_cflag & PARENB) {
+    if (t->c_cflag & PARODD)
+      mode1 |= 0x04;
+    else
+      mode1 |= 0x04;
+  } else {
+   mode1 |= 0x10;
+  }
+
+  /*
+   *  Character Size
+   */
+
+  if (t->c_cflag & CSIZE) {
+    switch (t->c_cflag & CSIZE) {
+      case CS5:  break;
+      case CS6:  mode1 |= 0x01;  break;
+      case CS7:  mode1 |= 0x02;  break;
+      case CS8:  mode1 |= 0x03;  break;
+    }
+  } else {
+    mode1 |= 0x03;       /* default to 9600,8,N,1 */
+  }
+
+  /*
+   *  Stop Bits
+   */
+  
+  if (t->c_cflag & CSTOPB) {
+    mode2 |= 0x07;                      /* 2 stop bits */
+  } else {
+    if ((t->c_cflag & CSIZE) == CS5)    /* CS5 and 2 stop bits not supported */
+      return -1;
+    mode2 |= 0x0F;                      /* 1 stop bit */
+  }
+
+  rtems_interrupt_disable(Irql);
+    (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr_bit );
+    (*setReg)( pMC68681_port, MC68681_CLOCK_SELECT, baud_mask );
+    (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_MR_PTR );
+    (*setReg)( pMC68681_port, MC68681_MODE, mode1 );
+    (*setReg)( pMC68681_port, MC68681_MODE, mode2 );
+  rtems_interrupt_enable(Irql);
+  return 0;
+}
+
 static void mc68681_init(int minor)
 {
 /* XXX */
   unsigned32              pMC68681_port;
   unsigned32              pMC68681;
-  unsigned8               ucTrash;
-  unsigned8               ucDataByte;
-  unsigned32              ulBaudDivisor;
   mc68681_context        *pmc68681Context;
   setRegister_f           setReg;
   getRegister_f           getReg;
+  unsigned int            port;
 
-#if 1
-ulBaudDivisor = ucDataByte = ucTrash =  0;
-#endif
   pmc68681Context = (mc68681_context *) malloc(sizeof(mc68681_context));
 
   Console_Port_Data[minor].pDeviceContext = (void *)pmc68681Context;
@@ -107,78 +271,74 @@ ulBaudDivisor = ucDataByte = ucTrash =  0;
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
   getReg        = Console_Port_Tbl[minor].getRegister;
-
+  port          = Console_Port_Tbl[minor].ulDataPort;
 
   /*
-   *  Reset Receiver
+   *  Reset everything and leave this port disabled.
    */
 
   (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_RX );
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_RX );
-
-  /*
-   *  Reset Transmitter
-   */
-
   (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_TX );
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_TX );
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_ERROR );
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_BREAK );
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_STOP_BREAK );
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_TX );
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_RX );
+
 
   (*setReg)( pMC68681, MC68681_MODE_REG_1A, 0x00 );
   (*setReg)( pMC68681, MC68681_MODE_REG_2A, 0x02 );
-
-  
-#if 0
-  /* FOM NS16550 */
-  /* Clear the divisor latch, clear all interrupt enables,
-   * and reset and
-   * disable the FIFO's.
-   */
-
-  (*setReg)(pMC68681, MC68681_LINE_CONTROL, 0x0);
-  (*setReg)(pMC68681, MC68681_INTERRUPT_ENABLE, 0x0);
-
-  /* Set the divisor latch and set the baud rate. */
-
-  ulBaudDivisor=MC68681_Baud((unsigned32)Console_Port_Tbl[minor].pDeviceParams);
-  ucDataByte = SP_LINE_DLAB;
-  (*setReg)(pMC68681, MC68681_LINE_CONTROL, ucDataByte);
-  (*setReg)(pMC68681, MC68681_TRANSMIT_BUFFER, ulBaudDivisor&0xff);
-  (*setReg)(pMC68681, MC68681_INTERRUPT_ENABLE, (ulBaudDivisor>>8)&0xff);
-
-  /* Clear the divisor latch and set the character size to eight bits */
-  /* with one stop bit and no parity checking. */
-  ucDataByte = EIGHT_BITS;
-  (*setReg)(pMC68681, MC68681_LINE_CONTROL, ucDataByte);
-
-  /* Enable and reset transmit and receive FIFOs. TJA     */
-  ucDataByte = SP_FIFO_ENABLE;
-  (*setReg)(pMC68681, MC68681_FIFO_CONTROL, ucDataByte);
-
-  ucDataByte = SP_FIFO_ENABLE | SP_FIFO_RXRST | SP_FIFO_TXRST;
-  (*setReg)(pMC68681, MC68681_FIFO_CONTROL, ucDataByte);
-
-  /*
-   * Disable interrupts
-   */
-  ucDataByte = 0;
-  (*setReg)(pMC68681, MC68681_INTERRUPT_ENABLE, ucDataByte);
-
-  /* Set data terminal ready. */
-  /* And open interrupt tristate line */
-  (*setReg)(pMC68681, MC68681_MODEM_CONTROL,pmc68681Context->ucModemCtrl);
-
-  ucTrash = (*getReg)(pMC68681, MC68681_LINE_STATUS );
-  ucTrash = (*getReg)(pMC68681, MC68681_RECEIVE_BUFFER );
-#endif
 }
+
+/*
+ *  Initialize to 9600, 8, N, 1
+ */
 
 static int mc68681_open(
   int      major,
   int      minor,
-  void    * arg
+  void    *arg
 )
 {
 /* XXX */
+  unsigned32             pMC68681;
+  unsigned32             pMC68681_port;
+  unsigned int           baud;
+  unsigned int           acr;
+  unsigned int           port;
+  unsigned int           vector;
+  rtems_interrupt_level  Irql;
+  setRegister_f          setReg;
+  getRegister_f          getReg;
+
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  getReg        = Console_Port_Tbl[minor].getRegister;
+  setReg        = Console_Port_Tbl[minor].setRegister;
+  port          = Console_Port_Tbl[minor].ulDataPort;
+  vector        = Console_Port_Tbl[minor].ulIntVector;
+
+  (void) mc68681_baud_rate( minor, B9600, &baud, &acr );
+
+  rtems_interrupt_disable(Irql);
+    (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr );
+    (*setReg)( pMC68681_port, MC68681_CLOCK_SELECT, baud );
+    (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_MR_PTR );
+    (*setReg)( pMC68681_port, MC68681_MODE, 0x13 );
+    (*setReg)( pMC68681_port, MC68681_MODE, 0x07 );
+  rtems_interrupt_enable(Irql);
+
+  (*setReg)(
+     pMC68681,
+     MC68681_INTERRUPT_MASK_REG,
+     MC68681_PORT_MASK( port, 0x03 )  /* intr on RX and TX -- not break */
+  );
+
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_ENABLE_TX );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_ENABLE_RX );
+
+  (*setReg)( pMC68681, MC68681_INTERRUPT_VECTOR_REG, vector );
+
   /*
    * Assert DTR
    */
@@ -193,7 +353,7 @@ static int mc68681_open(
 static int mc68681_close(
   int      major,
   int      minor,
-  void    * arg
+  void    *arg
 )
 {
 /* XXX */
@@ -216,21 +376,21 @@ static void mc68681_write_polled(
   char  cChar
 )
 {
-  unsigned32              pMC68681;
+  unsigned32              pMC68681_port;
   unsigned char           ucLineStatus;
   int                     iTimeout;
   getRegister_f           getReg;
-  setData_f               setData;
+  setRegister_f           setReg;
 
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  getReg   = Console_Port_Tbl[minor].getRegister;
-  setData  = Console_Port_Tbl[minor].setData;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  getReg        = Console_Port_Tbl[minor].getRegister;
+  setReg        = Console_Port_Tbl[minor].setRegister;
 
   /*
    * wait for transmitter holding register to be empty
    */
   iTimeout = 1000;
-  ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS);
+  ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
   while ((ucLineStatus & MC68681_TX_READY) == 0) {
 
     /*
@@ -240,7 +400,7 @@ static void mc68681_write_polled(
      if(_System_state_Is_up(_System_state_Get())) {
        rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
      }
-     ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS);
+     ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
      if(!--iTimeout) {
        break;
      }
@@ -250,7 +410,7 @@ static void mc68681_write_polled(
    * transmit character
    */
 
-  (*setData)(pMC68681, cChar);
+  (*setReg)(pMC68681_port, MC68681_TX_BUFFER, cChar);
 }
 
 /*
@@ -656,21 +816,19 @@ static int mc68681_inbyte_nonblocking_polled(
   int minor 
 )
 {
-  unsigned32           pMC68681;
+  unsigned32           pMC68681_port;
   unsigned char        ucLineStatus;
   char                 cChar;
   getRegister_f        getReg;
-  getData_f            getData;
 
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  getReg   = Console_Port_Tbl[minor].getRegister;
-  getData  = Console_Port_Tbl[minor].getData;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  getReg        = Console_Port_Tbl[minor].getRegister;
 
-  ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS);
+  ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
   if(ucLineStatus & MC68681_RX_READY) {
-    cChar = (*getData)(pMC68681);
+    cChar = (*getReg)(pMC68681_port, MC68681_RX_BUFFER);
     return (int)cChar;
   } else {
-    return(-1);
+    return -1;
   }
 }
