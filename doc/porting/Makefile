@@ -62,50 +62,50 @@ clean:
 developtools.texi: developtools.t
 	$(BMENU) -p "Preface" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Source Code Organization" ${*}.t
 
 sourcecode.texi: sourcecode.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "Development Tools" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "CPU Model Variations" ${*}.t
 
 cpumodels.texi: cpumodels.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "Source Code Organization Introduction" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "CPU Initialization" ${*}.t
 
 cpuinit.texi: cpuinit.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "CPU Model Variations Introduction" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Interrupts" ${*}.t
 
 interrupts.texi: interrupts.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "CPU Initialization Initializing the CPU" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Task Context Management" ${*}.t
 
 taskcontext.texi: taskcontext.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "Interrupts Pointer to _Thread_Dispatch Routine" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "IDLE Thread" ${*}.t
 
 idlethread.texi: idlethread.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "Task Context Management Restoring a Floating Point Context" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Priority Bitmap Manipulation" ${*}.t
 
 prioritybitmap.texi: prioritybitmap.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "IDLE Thread Idle Thread Body" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Code Tuning Parameters" ${*}.t
 
 codetuning.texi: codetuning.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "Priority Bitmap Manipulation Bit Scan Support" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Miscellaneous" ${*}.t
 
 miscellaneous.texi: miscellaneous.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "Code Tuning Parameters Partition Element Alignment" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Command and Variable Index" ${*}.t
 

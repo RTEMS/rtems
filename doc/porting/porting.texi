@@ -121,7 +121,7 @@ This is the online version of the RTEMS Porting Guide.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, , Top
+@node Command and Variable Index, Concept Index, Miscellaneous Endian Swap Unsigned Integers, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.
