@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 #include <bsp.h>
-#include <bspio.h>
+#include <bspIo.h>
 #include <rtems/libio.h>
 
 void rtemsReboot (void)

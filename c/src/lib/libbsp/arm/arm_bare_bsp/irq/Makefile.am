@@ -32,7 +32,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): $(startup_rel_OBJECTS)
+$(PGM): $(irq_rel_OBJECTS)
 	$(make-rel)
 
 all: $(PREINSTALL_FILES) $(ARCH) $(irq_rel_OBJECTS) $(PGM)

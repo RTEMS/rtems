@@ -1,19 +1,15 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@/../../shared/comm:@srcdir@/../../shared/io
+PGM = $(ARCH)/clock.rel
 
-PGM = $(ARCH)/console.rel
-
-C_FILES = uart.c console.c
+C_FILES = clockdrv.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = uart.h
-
-console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
+OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am
@@ -22,11 +18,15 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): $(console_rel_OBJECTS)
+$(PGM): $(OBJS)
 	$(make-rel)
 
-all: $(ARCH) $(console_rel_OBJECTS) $(PGM)
+# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+
+all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
+
+EXTRA_DIST = ckinit.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

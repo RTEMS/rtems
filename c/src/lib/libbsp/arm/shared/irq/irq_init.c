@@ -15,7 +15,7 @@
 
 #include <irq.h>
 #include <bsp.h>
-#include <bspio.h>
+#include <bspIo.h>
 #include <registers.h>
 
 /*
@@ -32,6 +32,7 @@ void  rtems_irq_mngt_init()
 {
     int 			i;
     long			*vectorTable;
+    rtems_interrupt_level       level;
     
     vectorTable = VECTOR_TABLE;
     
