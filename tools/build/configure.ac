@@ -6,7 +6,6 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-tools-build],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([install-if-change.in])
 RTEMS_TOP(../..)
-AC_CONFIG_AUX_DIR(../..)
 
 AC_CANONICAL_HOST
 
