@@ -1,3 +1,8 @@
+2003-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	AMD a29k obsolete.
+	* custom/portsw.cfg: Removed.
+
 2003-01-20	Duane Gustavus <duane@unt.edu>
 
 	* custom/m2m332.cfg: Fix path to linkcmds_ROM.
