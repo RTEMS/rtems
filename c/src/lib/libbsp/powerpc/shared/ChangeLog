@@ -1,3 +1,7 @@
+2004-03-03	Joel Sherrill <joel@OARcorp.com>
+
+	* vectors/vectors.h, vectors/vectors_init.c: Undo previous change.
+
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove startup/linkcmds.

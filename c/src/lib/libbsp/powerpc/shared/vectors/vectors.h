@@ -137,8 +137,7 @@ typedef struct {
 
 
 typedef void (*exception_handler_t) (BSP_Exception_frame* excPtr);
-extern exception_handler_t globalExceptHdl
-  __attribute__ ((section (".bss")));
+extern exception_handler_t globalExceptHdl;
 /*
  * Compatibility with pc386
  */
