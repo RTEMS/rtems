@@ -66,7 +66,7 @@ EMBEDDED_C_PIECES = $(LIBC_GLUE_C_PIECES) $(BASE_FS_C_PIECES) \
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES = $(srcdir)/libcsupport.h
+H_FILES = $(srcdir)/libcsupport.h $(srcdir)/imfs.h
 SYS_H_FILES =
 RTEMS_H_FILES = $(srcdir)/assoc.h $(srcdir)/error.h $(srcdir)/libio.h
 
