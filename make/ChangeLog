@@ -1,6 +1,10 @@
 
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
+	* custom/jmr3904.cfg: Fix incorrect reference to i960.
+
+2000-11-27	Joel Sherrill <joel@OARcorp.com>
+
 	* custom/shsim.cfg: New file.
 	* custom/Makefile.am: Modified to reflect addition of shsim.cfg.
 	The shsim is for the SH simulator in gdb. It should be able
