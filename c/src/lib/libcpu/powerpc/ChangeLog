@@ -1,3 +1,7 @@
+2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove ppc603e from old_exception_processing.
+
 2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove mpc8xx from new_exception_processing.
