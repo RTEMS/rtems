@@ -1,3 +1,17 @@
+2004-08-18	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* aclocal/canonical-host.m4, aclocal/canonical-target-name.m4,
+	aclocal/canonicalize-tools.m4, aclocal/check-cpu.m4,
+	aclocal/check-itron.m4, aclocal/check-multiprocessing.m4,
+	aclocal/check-networking.m4, aclocal/check-newlib.m4,
+	aclocal/check-posix.m4, aclocal/check-tool.m4, aclocal/enable-bare.m4,
+	aclocal/enable-inlines.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4, aclocal/env-rtemscpu.m4,
+	aclocal/gcc-isystem.m4, aclocal/gcc-pipe.m4, aclocal/multi.m4,
+	aclocal/multilib.m4, aclocal/prog-cc.m4, aclocal/rtems-debug.m4,
+	aclocal/rtems-top.m4, aclocal/sysv-ipc.m4: Fix m4-underquoting.
+
 2004-04-08	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-4.6.1.
