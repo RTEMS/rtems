@@ -1,3 +1,8 @@
+2003-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* unlimited/system.h, unlimited/test1.c: Backed off previous
+	modification as it does not compile.
+
 2002-10-31	Chris Johns <ccj@acm.org>
 
 	* unlimited/test1.c: PR296. Only fails if more tasks than allowed

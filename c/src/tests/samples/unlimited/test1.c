@@ -27,7 +27,6 @@ void test1()
   boolean           auto_extend;
   rtems_status_code result;
   rtems_unsigned32  task_count = 0;
-  rtems_unsigned32  expected_count;
   Objects_Information *the_information;
   
   char              c1 = 'a';
@@ -46,8 +45,7 @@ void test1()
     _Objects_Information_table[OBJECTS_CLASSIC_API][OBJECTS_RTEMS_TASKS];
   auto_extend = the_information->auto_extend;
   the_information->auto_extend = FALSE;
-  expected_count = the_information->inactive;
-
+  
   while (task_count < MAX_TASKS)
   {
     rtems_name name;
@@ -88,7 +86,7 @@ void test1()
   if (task_count >= MAX_TASKS)
     printf( "\nMAX_TASKS too small for work-space size, please make larger !!\n\n" );
     
-  if (task_count != expected_count) {
+  if (task_count != (TASK_ALLOCATION_SIZE - 1)) {
     printf( " FAIL1 : the number of tasks does not equal the expected size -\n"
             "           task created = %i, required number = %i\n",
             task_count, TASK_ALLOCATION_SIZE);
@@ -101,3 +99,8 @@ void test1()
   
   printf( " TEST1 : completed\n" );
 }
+
+
+
+
+
