@@ -53,24 +53,25 @@ void _POSIX_signals_Abormal_termination_handler( int signo )
 #define SIG_ARRAY_MAX  (SIGRTMAX + 1)
 struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ] = {
   /* NO SIGNAL 0 */  SIGACTION_IGNORE,
-  /* SIGABRT     */  SIGACTION_TERMINATE,
-  /* SIGALRM     */  SIGACTION_TERMINATE,
-  /* SIGFPE      */  SIGACTION_TERMINATE,
-  /* SIGHUP      */  SIGACTION_TERMINATE,
-  /* SIGILL      */  SIGACTION_TERMINATE,
-  /* SIGINT      */  SIGACTION_TERMINATE,
-  /* SIGKILL     */  SIGACTION_TERMINATE,
-  /* SIGPIPE     */  SIGACTION_TERMINATE,
-  /* SIGQUIT     */  SIGACTION_TERMINATE,
-  /* SIGSEGV     */  SIGACTION_TERMINATE,
-  /* SIGTERM     */  SIGACTION_TERMINATE,
-  /* SIGUSR1     */  SIGACTION_TERMINATE,
-  /* SIGUSR2     */  SIGACTION_TERMINATE,
-  /* SIGRTMIN 14 */  SIGACTION_IGNORE,
-  /* SIGRT    15 */  SIGACTION_IGNORE,
-  /* SIGRT    16 */  SIGACTION_IGNORE,
-  /* SIGRT    17 */  SIGACTION_IGNORE,
-  /* SIGRT    18 */  SIGACTION_IGNORE,
+  /* SIGHUP    1 */  SIGACTION_TERMINATE,
+  /* SIGINT    2 */  SIGACTION_TERMINATE,
+  /* SIGQUIT   3 */  SIGACTION_TERMINATE,
+  /* SIGILL    4 */  SIGACTION_TERMINATE,
+  /* SIGTRAP   5 */  SIGACTION_TERMINATE,
+  /* SIGIOT    6 */  SIGACTION_TERMINATE,
+  /* SIGABRT   6     SIGACTION_TERMINATE, -- alias for SIGIOT */
+  /* SIGEMT    7 */  SIGACTION_TERMINATE,
+  /* SIGFPE    8 */  SIGACTION_TERMINATE,
+  /* SIGKILL   9 */  SIGACTION_TERMINATE,
+  /* SIGBUS   10 */  SIGACTION_TERMINATE,
+  /* SIGSEGV  11 */  SIGACTION_TERMINATE,
+  /* SIGSYS   12 */  SIGACTION_TERMINATE,
+  /* SIGPIPE  13 */  SIGACTION_TERMINATE,
+  /* SIGALRM  14 */  SIGACTION_TERMINATE,
+  /* SIGTERM  15 */  SIGACTION_TERMINATE,
+  /* SIGUSR1  16 */  SIGACTION_TERMINATE,
+  /* SIGUSR2  17 */  SIGACTION_TERMINATE,
+  /* SIGRTMIN 18 */  SIGACTION_IGNORE,
   /* SIGRT    19 */  SIGACTION_IGNORE,
   /* SIGRT    20 */  SIGACTION_IGNORE,
   /* SIGRT    21 */  SIGACTION_IGNORE,
@@ -217,39 +218,40 @@ void _POSIX_signals_Clear_process_signals(
 
 /*PAGE
  *
- *  _POSIX_signals_Check_signal
+ *  _POSIX_signals_Clear_signals
  */
-
-boolean _POSIX_signals_Check_signal(
+ 
+boolean _POSIX_signals_Clear_signals(
   POSIX_API_Control  *api,
   int                 signo,
-  boolean             is_global
+  siginfo_t          *info,
+  boolean             is_global,
+  boolean             check_blocked
 )
 {
   sigset_t                    mask;
   ISR_Level                   level;
   boolean                     do_callout;
   POSIX_signals_Siginfo_node *psiginfo;
-  siginfo_t                   siginfo_struct;
-  sigset_t                    saved_signals_blocked;
-
+ 
   mask = signo_to_mask( signo );
-
+ 
   do_callout = FALSE;
-
+ 
   /* XXX this is not right for siginfo type signals yet */
   /* XXX since they can't be cleared the same way */
-
+ 
   _ISR_Disable( level );
     if ( is_global ) {
-       if ( mask & (_POSIX_signals_Pending & ~api->signals_blocked ) ) {
+       if ( mask & (_POSIX_signals_Pending & 
+                       (~api->signals_blocked & check_blocked) ) ) {
          if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
            psiginfo = (POSIX_signals_Siginfo_node *)
              _Chain_Get_unprotected( &_POSIX_signals_Siginfo[ signo ] );
            if ( _Chain_Is_empty( &_POSIX_signals_Siginfo[ signo ] ) )
              _POSIX_signals_Clear_process_signals( mask );
            if ( psiginfo ) {
-             siginfo_struct = psiginfo->Info;
+             *info = psiginfo->Info;
              _Chain_Append_unprotected(
                &_POSIX_signals_Inactive_siginfo,
                &psiginfo->Node
@@ -261,14 +263,33 @@ boolean _POSIX_signals_Check_signal(
          do_callout = TRUE;
        }
     } else {
-      if ( mask & (api->signals_pending & ~api->signals_blocked ) ) {
+      if ( mask & (api->signals_pending & 
+                      (~api->signals_blocked & check_blocked) ) ) {
         api->signals_pending &= ~mask;
         do_callout = TRUE;
       }
     }
   _ISR_Enable( level );
+  return do_callout; 
+}
 
-  if ( !do_callout )
+
+/*PAGE
+ *
+ *  _POSIX_signals_Check_signal
+ */
+
+boolean _POSIX_signals_Check_signal(
+  POSIX_API_Control  *api,
+  int                 signo,
+  boolean             is_global
+)
+{
+  siginfo_t                   siginfo_struct;
+  sigset_t                    saved_signals_blocked;
+
+  if ( ! _POSIX_signals_Clear_signals( api, signo, &siginfo_struct,
+                                       is_global, TRUE ) )
     return FALSE;
 
   /*
@@ -582,14 +603,17 @@ int sigaction(
 
   if ( act ) {
 
+    /*
+     *  Unless the user is installing the default signal actions, then
+     *  we can just copy the provided sigaction structure into the vectors.
+     */
+
     _ISR_Disable( level );
       if ( act->sa_handler == SIG_DFL ) {
         _POSIX_signals_Vectors[ sig ] = _POSIX_signals_Default_vectors[ sig ];
-      } else if ( act->sa_handler == SIG_DFL ) {
-         _POSIX_signals_Clear_process_signals( signo_to_mask(sig) );
       } else {
          _POSIX_signals_Clear_process_signals( signo_to_mask(sig) );
-        _POSIX_signals_Vectors[ sig ] = *act;
+         _POSIX_signals_Vectors[ sig ] = *act;
       }
     _ISR_Enable( level );
   }
@@ -792,6 +816,8 @@ int sigtimedwait(
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
     the_info->si_signo = _POSIX_signals_Get_highest( api->signals_pending );
+    _POSIX_signals_Clear_signals( api, the_info->si_signo, the_info,
+                                  FALSE, FALSE );
     the_info->si_code = SI_USER;
     the_info->si_value.sival_int = 0;
     return the_info->si_signo;
@@ -799,18 +825,14 @@ int sigtimedwait(
 
   /* Process pending signals? */
 
-#warning "Mark fix me"
   if ( *set & _POSIX_signals_Pending) {
     signo = _POSIX_signals_Get_highest( _POSIX_signals_Pending );
-    if ( !info || ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) ) {
+    _POSIX_signals_Clear_signals( api, signo, the_info, TRUE, FALSE );
+
+    if ( !info ) {
       the_info->si_signo = signo;
       the_info->si_code = SI_USER;
       the_info->si_value.sival_int = 0;
-    } else {
-#warning "_POSIX_signals_Siginfo is an array of chains.... "
-#if 0
-      *the_info = *_POSIX_signals_Siginfo[ signo ];
-#endif
     }
   }
 
