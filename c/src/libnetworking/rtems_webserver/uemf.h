@@ -316,7 +316,7 @@ typedef struct stat gstat_t;
 /*
  *	These values are not prefixed so as to aid code readability
  */
-#ifndef UW
+#if !defined(UW) && !defined(__rtems__)
 #pragma pack(2)
 #endif
 
@@ -361,7 +361,7 @@ typedef struct {
 #define value_strget(v) \
 	(((v)->type == bytes) ? (v)->value.bytes : (v)->value.string)
 
-#ifndef UW 
+#if !defined(UW) && !defined(__rtems__)
 #pragma pack()
 #endif
 
