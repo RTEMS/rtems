@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/m68k.h>
+#include <rtems/score/m68k.h>              /* pick up machine definitions */
 #ifndef ASM
 #include <rtems/score/m68ktypes.h>
 #endif
@@ -75,6 +75,7 @@ extern "C" {
 #define CPU_STACK_GROWS_UP               FALSE
 #define CPU_STRUCTURE_ALIGNMENT
 
+#ifndef ASM
 /* structures */
 
 /*
@@ -170,6 +171,7 @@ typedef struct {
 SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256]; 
 
 #endif /* M68K_HAS_VBR */
+#endif /* ASM */
 
 /* constants */
 
@@ -220,6 +222,8 @@ SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256];
  */
 
 #define CPU_STACK_ALIGNMENT        0
+
+#ifndef ASM
 
 /* macros */
 
@@ -474,6 +478,7 @@ void _CPU_Context_restore_fp(
 void _CPU_Context_save_fp(
   void **fp_context_ptr
 );
+#endif
 
 #ifdef __cplusplus
 }
