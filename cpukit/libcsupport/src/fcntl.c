@@ -23,13 +23,12 @@
 #include <rtems.h>
 #include <rtems/libio_.h>
 
-int fcntl(
+static int vfcntl(
   int fd,
   int cmd,
-  ...
+  va_list ap
 )
 {
-  va_list        ap;
   rtems_libio_t *iop;
   rtems_libio_t *diop;
   int            fd2;
@@ -37,8 +36,6 @@ int fcntl(
   int            mask;
   int            ret = 0;
   
-  va_start( ap, cmd );
-
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
@@ -153,3 +150,40 @@ int fcntl(
   }
   return ret;
 }
+
+int fcntl(
+  int fd,
+  int cmd,
+  ...
+)
+{
+  int            ret;
+  va_list        ap;
+  va_start( ap, cmd );
+  ret = vfcntl(fd,cmd,ap);
+  va_end(ap);
+  return ret;
+}
+
+
+/*
+ *  _fcntl_r
+ *
+ *  This is the Newlib dependent reentrant version of fcntl().
+ */
+
+#if defined(RTEMS_NEWLIB)
+
+#include <reent.h>
+
+int _fcntl_r(
+  struct _reent *ptr,
+  int fd,
+  int cmd,
+  int arg
+)
+{
+  return fcntl( fd, cmd, arg );
+}
+#endif
+
