@@ -699,18 +699,22 @@ pragma Elaborate_Body (RTEMS);
 
    type Configuration_Table is
       record
-          Work_Space_Start           : RTEMS.Address;
-          Work_Space_Size            : RTEMS.Unsigned32;
-          Maximum_Extensions         : RTEMS.Unsigned32;
-          Microseconds_Per_Tick      : RTEMS.Unsigned32;
-          Ticks_Per_Timeslice        : RTEMS.Unsigned32;
-          Maximum_Devices            : RTEMS.Unsigned32;
-          Number_Of_Device_Drivers   : RTEMS.Unsigned32;
-          Device_Driver_Table        : RTEMS.Driver_Address_Table_Pointer;
-          User_Extension_Table       : RTEMS.Extensions_Table_Pointer;
-          User_Multiprocessing_Table : RTEMS.Multiprocessing_Table_Pointer;
-          RTEMS_API_Configuration    : RTEMS.API_Configuration_Table_Pointer;
-          POSIX_API_Configuration    : RTEMS.POSIX_API_Configuration_Table_Pointer;
+          Work_Space_Start             : RTEMS.Address;
+          Work_Space_Size              : RTEMS.Unsigned32;
+          Maximum_Extensions           : RTEMS.Unsigned32;
+          Microseconds_Per_Tick        : RTEMS.Unsigned32;
+          Ticks_Per_Timeslice          : RTEMS.Unsigned32;
+          Maximum_Devices              : RTEMS.Unsigned32;
+          Maximum_Drivers              : RTEMS.Unsigned32;
+          Number_Of_Device_Drivers     : RTEMS.Unsigned32;
+          Device_Driver_Table          : RTEMS.Driver_Address_Table_Pointer;
+          Number_Of_Initial_Extensions : RTEMS.Unsigned32;
+          User_Extension_Table         : RTEMS.Extensions_Table_Pointer;
+          User_Multiprocessing_Table   : RTEMS.Multiprocessing_Table_Pointer;
+
+          RTEMS_API_Configuration : RTEMS.API_Configuration_Table_Pointer;
+          POSIX_API_Configuration : RTEMS.POSIX_API_Configuration_Table_Pointer;
+          ITRON_API_Configuration : RTEMS.Address; -- XXX FIX ME
       end record;
 
    type Configuration_Table_Pointer is access all Configuration_Table;

@@ -1,3 +1,8 @@
+2003-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems.ads: Corrected Configuration_Table record definition to 
+	match current RTEMS source. sp01 now runs.
+
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Fix package name.
