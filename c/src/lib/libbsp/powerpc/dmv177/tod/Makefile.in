@@ -4,7 +4,7 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@
+VPATH = @srcdir@:@srcdir@/../../../shared
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
