@@ -36,8 +36,6 @@ include $(top_srcdir)/sample.am
 #
 
 if HAS_CXX
-LD_LIBS += $(CPLUS_LD_LIBS)
-
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-cxx-exe)
 
