@@ -173,20 +173,20 @@ in_cksum_hdr(const struct ip *ip)
    __asm__ volatile (" \
      ld [%0], %1 ; \
      ld [%0+4], %2 ; \
+     ld [%0+8], %3 ; \
      addcc %1, %2, %1 ; \
-     ld [%0+8], %2 ; \
-     addxcc %1, %2, %1 ; \
      ld [%0+12], %2 ; \
+     addxcc %1, %3, %1 ; \
+     ld [%0+16], %3 ; \
      addxcc %1, %2, %1 ; \
-     ld [%0+16], %2 ; \
-     addxcc %1, %2, %1 ; \
+     addxcc %1, %3, %1 ; \
      set 0x0ffff, %3 ; \
      srl %1, 16, %2 ; \
      and %1, %3, %1 ; \
      addx %1, %2, %1 ; \
-     srl %1, 16, %1 ; \
-     add %1, %%g0, %1 ; \
-     neg %1 ; \
+     srl %1, 16, %2 ; \
+     add %1, %2, %1 ; \
+     not %1 ; \
      and %1, %3, %1 ; \
     " : "=r" (ip), "=r" (sum), "=r" (tmp_o2), "=r" (tmp_o3)
       : "0" (ip), "1" (sum)
