@@ -14,7 +14,7 @@ LIBCHIP = libchip
 endif
 
 SUBDIRS = start include libmisc libc libcpu libbsp \
-    $(LIBRDBG) $(LIBCHIP) $(LIBHWAPI) wrapup
+    $(LIBRDBG) $(LIBCHIP) $(LIBHWAPI)
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

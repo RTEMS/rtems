@@ -97,5 +97,4 @@ include/rdbg/Makefile
 include/rdbg/i386/Makefile
 include/rdbg/powerpc/Makefile
 libc/Makefile
-start/Makefile
-wrapup/Makefile)
+start/Makefile)

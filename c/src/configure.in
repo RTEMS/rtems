@@ -33,10 +33,12 @@ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
 cfg_subdirs="$cfg_subdirs librtems++";
 fi 
 AC_CONFIG_SUBDIRS($cfg_subdirs)
+AC_SUBST(cfg_subdirs)
 AC_CONFIG_SUBDIRS(tests)
 
 RTEMS_PROJECT_ROOT
 
 AC_OUTPUT( 
 Makefile
+wrapup/Makefile
 )
