@@ -29,8 +29,6 @@ extern "C" {
 #if defined(solaris2)
 #undef  _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 3
-#undef  __STRICT_ANSI__
-#define __STRICT_ANSI__
 #endif
 
 #if defined(linux)
