@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 # This driver needs to be reworked for the BSD stack.
 # We only install wd80x3.h if HAS_NETWORKING was defined

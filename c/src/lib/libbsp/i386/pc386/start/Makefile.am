@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 PGMS = $(ARCH)/start.o $(ARCH)/start16.bin
 
