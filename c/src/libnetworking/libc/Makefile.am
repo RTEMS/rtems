@@ -11,7 +11,7 @@ C_FILES = base64.c gethostbydns.c gethostbyht.c gethostbynis.c \
     gethostnamadr.c getnetbydns.c getnetbyht.c getnetbynis.c getnetnamadr.c \
     getproto.c getprotoent.c getprotoname.c getservbyname.c getservbyport.c \
     getservent.c herror.c inet_addr.c inet_lnaof.c inet_makeaddr.c \
-    inet_network.c inet_ntoa.c inet_ntop.c inet_pton.c map_v4v6.c \
+    inet_netof.c inet_network.c inet_ntoa.c inet_ntop.c inet_pton.c map_v4v6.c \
     nsap_addr.c ns_name.c ns_netint.c ns_parse.c ns_print.c ns_ttl.c \
     res_comp.c res_data.c res_debug.c res_init.c res_mkquery.c \
     res_mkupdate.c res_query.c res_send.c res_stubs.c res_update.c strsep.c
@@ -46,7 +46,7 @@ EXTRA_DIST = addr2ascii.3 addr2ascii.c ascii2addr.c base64.c byteorder.3 \
     getprotoent.c getprotoname.c getservbyname.c getservbyport.c \
     getservent.3 getservent.c herror.c inet.3 inet_addr.c inet_lnaof.c \
     inet_makeaddr.c inet_net_ntop.c inet_net_pton.c inet_neta.c inet_netof.c \
-    inet_network.c inet_ntoa.c inet_ntop.c inet_pton.c iso_addr.3 iso_addr.c \
+    inet_netof.c inet_network.c inet_ntoa.c inet_ntop.c inet_pton.c map_v4v6.c \
     linkaddr.3 linkaddr.c map_v4v6.c ns.3 ns_addr.c ns_name.c ns_netint.c \
     ns_ntoa.c ns_parse.c ns_print.c ns_ttl.c nsap_addr.c rcmd.3 rcmd.c \
     recv.c res_comp.c res_config.h res_data.c res_debug.c res_init.c \
