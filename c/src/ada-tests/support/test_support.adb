@@ -133,11 +133,11 @@ package body Test_Support is
       Text_IO.Put_Line( "<pause> " );
       -- Text_IO.Get_Line( Ignored_String, Ignored_Last );
 
-   exception
+   -- exception
 
-      when Text_IO.End_Error =>
-      -- ignore this error.  It happens when redirecting input from /dev/null 
-      return;
+   --    when Text_IO.End_Error =>
+   --    -- ignore this error.  It happens when redirecting input from /dev/null 
+   --    return;
 
    end Pause;
 
@@ -159,13 +159,13 @@ package body Test_Support is
       Text_IO.Put( "<pause - screen  " );
       Unsigned32_IO.Put( SCREEN, Width=>2 );
       Text_IO.Put_Line( "> " );
-      Text_IO.Get_Line( Ignored_String, Ignored_Last );
+   --    Text_IO.Get_Line( Ignored_String, Ignored_Last );
  
-   exception
+   -- exception
 
-      when Text_IO.End_Error =>
-      -- ignore this error.  It happens when redirecting input from /dev/null 
-      return;
+   --    when Text_IO.End_Error =>
+   --    -- ignore this error.  It happens when redirecting input from /dev/null 
+   --    return;
 
    end Pause_And_Screen_Number;
 
