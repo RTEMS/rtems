@@ -83,7 +83,7 @@ sh4uart_init(sh4uart *uart, void *tty, int chn, int int_driven)
 uint32_t  
 sh4uart_get_Pph(void)
 {
-    uint16_t   frqcr = *(volatile uint16_t   *)SH7750_FRQCR;
+    uint16_t   frqcr = *(volatile uint16_t*)SH7750_FRQCR;
     uint32_t   Pph = CPU_CLOCK_RATE_HZ;
 
     switch (frqcr & SH7750_FRQCR_IFC)
@@ -360,7 +360,7 @@ sh4uart_set_attributes(sh4uart *uart, const struct termios *t)
     speed_t baud;
     uint16_t   smr;
    
-    smr = (uint16_t  )(*(uint8_t   *)SH7750_SCSMR(uart->chn));
+    smr = (uint16_t)(*(uint8_t*)SH7750_SCSMR(uart->chn));
 
     baud = cfgetospeed(t);
 
@@ -403,7 +403,7 @@ sh4uart_set_attributes(sh4uart *uart, const struct termios *t)
     SCSCR(uart->chn) &= ~(SH7750_SCSCR_TE | SH7750_SCSCR_RE);
 
     sh4uart_set_baudrate(uart, baud);
-    SCSMR(uart->chn) = (uint8_t  )smr;
+    SCSMR(uart->chn) = (uint8_t)smr;
 
     /* enable operations */
     SCSCR(uart->chn) |= SH7750_SCSCR_TE | SH7750_SCSCR_RE;

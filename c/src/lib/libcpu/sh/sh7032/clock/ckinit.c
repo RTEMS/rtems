@@ -103,7 +103,7 @@ static unsigned int sh_clicks_per_tick(
 #else
   double fclicks_per_tick = 
     ((double) clicks_per_sec * (double) usec_per_tick) / 1000000.0 ;
-  return (uint32_t  ) fclicks_per_tick ;
+  return (uint32_t) fclicks_per_tick ;
 #endif
 }
 
