@@ -29,7 +29,7 @@ rtems_timer_service_routine Signal_3_to_task_1(
   rtems_status_code status;
 
   status = rtems_signal_send( Task_id[ 1 ], RTEMS_SIGNAL_3 );
-  directive_failed( status, "rtems_signal_send of 3" );
+  directive_failed_with_level( status, "rtems_signal_send of 3", 1 );
 
   Timer_got_this_id  = id;
   Timer_got_this_pointer = pointer;

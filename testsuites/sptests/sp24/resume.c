@@ -30,5 +30,5 @@ rtems_timer_service_routine Resume_task(
 
   task_to_resume = Task_id[ rtems_get_index( timer_id ) ];
   status = rtems_task_resume( task_to_resume );
-  directive_failed( status, "rtems_task_resume" );
+  directive_failed_with_level( status, "rtems_task_resume", 1 );
 }
