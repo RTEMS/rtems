@@ -52,8 +52,8 @@ posix_api_configuration_table _POSIX_Default_configuration = {
   0,                             /* maximum_condition_variables */
   0,                             /* maximum_keys */
   0,                             /* maximum_queued_signals */
-  0,                             /* number_of_initialization_tasks */
-  NULL                           /* User_initialization_tasks_table */
+  0,                             /* number_of_initialization_threads */
+  NULL                           /* User_initialization_threads_table */
 };
 
 
@@ -77,8 +77,8 @@ void _POSIX_API_Initialize(
 
   _POSIX_Threads_Manager_initialization(
     api_configuration->maximum_threads,
-    api_configuration->number_of_initialization_tasks,
-    api_configuration->User_initialization_tasks_table
+    api_configuration->number_of_initialization_threads,
+    api_configuration->User_initialization_threads_table
   );
  
   _POSIX_Condition_variables_Manager_initialization(
