@@ -1,0 +1,85 @@
+#
+#  $Id$
+#
+
+#
+# Please send any comments, improvements, or bug reports to:
+#	Chris Johns
+#	Objective Design Systems
+#	35 Cairo Street
+#	Cammeray
+#	Sydney, NSW 2062
+# ccj@acm.org
+#
+
+#
+# This board support package is not a board support package at all, but
+# a means to build the RTEMS kernel without using a specific BSP.
+#
+# You should be able to build to build this BSP for any cpu type.
+#
+# You must provide the standard BSP type functions and support yourself
+# externally to RTEMS.
+#
+# This BSP is intended to be used by people who fit one or more of the 
+# categories below :
+#
+# 1) using custom hardware of little use or interest to others. If you 
+#    intend to use hardware available to others, please create a BSP 
+#    and send to OARCorp.
+#
+# 2) production code cannot depend on software which can change. BSP code
+#    can change with-out notice, while RTEMS has very tightly defined 
+#    interfaces which do not change.
+#
+# 3) the need to extend or change an existing BSP in ways which are not
+#    of interest to others or the BSP maintainer.
+#
+# I fit all the above.
+#
+
+BSP NAME:	    bare
+BOARD:              not applicable
+BUS:                not applicable
+CPU FAMILY:         all
+COPROCESSORS:       not applicable
+MODE:               not applicable
+
+DEBUG MONITOR:      not applicable
+
+PERIPHERALS
+===========
+not applicable
+
+DRIVER INFORMATION
+==================
+not applicable
+
+STDIO
+=====
+not applicable
+
+NOTES
+=====
+
+Board description
+-----------------
+not applicable
+
+Host System
+-----------
+Linux (RedHat 4.0/5.0)
+egcs-1.0.2
+binutils-2.8.1, with rtems patches
+newlib-1.8.0, with rtems patches
+
+Verification
+-------------------------------
+Single processor tests:  not applicable
+Multi-processort tests:  not applicable
+Timing tests:
+        not applicable
+
+Porting
+-------
+        not applicable
