@@ -1,7 +1,13 @@
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
-	* start/preload.S, include/bsp.h, vectors/exceptionhandler.c, 
-	startup/bspstart.c: Misc. adaptations to rtems-4.7.
+	* configure.ac: Adaptations to rtems-4.7.
+	* Makefile.am, wrapup/Makefile.am: Reworked.
+
+2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* start/preload.S, start/start.S, include/bsp.h, 
+	vectors/exceptionhandler.c, startup/bspstart.c: Misc. 
+	adaptations to rtems-4.7.
 
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
