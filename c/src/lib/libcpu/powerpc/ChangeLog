@@ -1,3 +1,8 @@
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc6xx/mmu/pte121.c: Add missing ifdef DEBUG to remove warning for
+	unused static routine.
+
 2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc505/Makefile.am: Fix typo.

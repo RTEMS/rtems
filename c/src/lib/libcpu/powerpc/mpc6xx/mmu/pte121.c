@@ -125,6 +125,7 @@
 
 
 /* Horrible Macros */
+#ifdef DEBUG
 #ifdef __rtems__
 /* must not use printf until multitasking is up */
 typedef void (*PrintF)(char *,...);
@@ -138,6 +139,7 @@ static PrintF whatPrintf(void)
 #define PRINTF(args...) ((void)(whatPrintf())(args))
 #else
 #define PRINTF(args...) printf(args)
+#endif
 #endif
 
 #ifdef DEBUG
