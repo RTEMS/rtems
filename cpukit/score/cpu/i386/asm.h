@@ -43,6 +43,10 @@
  *  have to define these as appropriate.
  */
 
+#ifndef __USER_LABEL_PREFIX__
+#define __USER_LABEL_PREFIX__
+#endif
+
 /*
  *  Looks like there is a bug in gcc 2.6.2 where this is not
  *  defined correctly when configured as i386-coff and
@@ -63,13 +67,16 @@
 #define CONCAT1(a, b) CONCAT2(a, b)
 #define CONCAT2(a, b) a ## b
 
+#define EVAL(x) x
+#define CONCAT0(a, b) EVAL(a)EVAL(b)
+
 /* Use the right prefix for global labels.  */
 
-#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
+#define SYM(x) CONCAT0 (__USER_LABEL_PREFIX__, x)
 
 /* Use the right prefix for registers.  */
 
-#define REG(x) CONCAT1 (__REGISTER_PREFIX__, x)
+#define REG(x) CONCAT0 (__REGISTER_PREFIX__, x)
 
 #define eax REG (eax)
 #define ebx REG (ebx)
@@ -134,5 +141,3 @@
 
 #endif
 /* end of include file */
-
-

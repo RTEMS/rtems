@@ -1,3 +1,8 @@
+2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 565/rtems
+	* asm.h: Various hacks.
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Move RTEMS_TOP one subdir down.
