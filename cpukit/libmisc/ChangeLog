@@ -1,3 +1,7 @@
+2002-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shell/shell.c: Remove #undef __STRICT_ANSI__.
+
 2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rootfs/Makefile.am: Use include_rtems_HEADERS instead of H_FILES.
