@@ -23,6 +23,7 @@
 #include <sys/proc.h>
 #include <sys/fcntl.h>
 #include <sys/filio.h>
+#include <sys/sysctl.h>
 
 #include <net/if.h>
 #include <net/route.h>
