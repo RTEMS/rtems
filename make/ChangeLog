@@ -1,5 +1,11 @@
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
+	Per John S. Gwynne <jgwynne@mrcday.com>, there are no longer any
+	users of these boards so we are removing them.
+	* custom/efi332.cfg, custom/efi68k.cfg: Removed.
+
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
 	* custom/p4000.cfg, custom/p4600.cfg, custom/p4650.cfg: Removed.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
