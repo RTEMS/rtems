@@ -40,5 +40,19 @@ int _POSIX_Message_queue_Name_to_id(
   Objects_Id          *id
 )
 {
-  return 0; /* XXX fill me in */
+  Objects_Name_to_id_errors  status;
+
+   if ( !name )
+     return EINVAL;
+
+  if ( !name[0] )
+    return EINVAL;
+
+  status = _Objects_Name_to_id( 
+    &_POSIX_Message_queue_Information, (char *)name, 0, id );
+
+  if ( status == OBJECTS_SUCCESSFUL )
+    return 0;
+
+  return ENOENT;
 }
