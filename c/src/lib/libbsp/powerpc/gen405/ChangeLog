@@ -1,5 +1,13 @@
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Merge-in dlentry/Makefile.am, startup/Makefile.am. Use
+	automake compilation rules.
+	* dlentry/Makefile.am, startup/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+	* wrapup/Makefile.am: Reflect changes above.
+
+2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect changes to
 	../support/*exception_processing/*.
 

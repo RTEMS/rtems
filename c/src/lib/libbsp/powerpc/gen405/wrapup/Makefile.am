@@ -2,12 +2,9 @@
 ## $Id$
 ##
 
-BSP_PIECES = startup dlentry
-# pieces to pick up out of libcpu/ppc
+OBJS = ../startup$(LIB_VARIANT).rel ../dlentry$(LIB_VARIANT).rel
 
-# bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
+OBJS += ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/ppc403/clock$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/ppc403/timer$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/ppc403/console$(LIB_VARIANT).rel \
