@@ -80,7 +80,7 @@ esac
       ac_prev=srcdir ;;
     -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
       ;;
-    --enable-rtemsbsp*) ;;
+    -enable-rtemsbsp=* | --enable-rtemsbsp=*) ;;
     -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
       ;;
     *) rtems_bsp_configure_args="$rtems_bsp_configure_args $ac_arg" ;;

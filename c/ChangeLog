@@ -1,3 +1,8 @@
+2000-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: catch -enable-rtemsbsp (Allowed by autoconf).
+	Autoconf allows one to pass -enable-*, but this file expected --enable*.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
