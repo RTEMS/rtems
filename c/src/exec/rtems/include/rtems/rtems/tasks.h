@@ -150,11 +150,15 @@ typedef struct {
  *  Per task variable structure
  */
 
-typedef struct {
-  struct rtems_task_variable_t  *next;
-  int                           *ptr;
-  int                            var;
-} rtems_task_variable_t;
+struct rtems_task_variable_tt;
+
+struct rtems_task_variable_tt {
+  struct rtems_task_variable_tt  *next;
+  int                            *ptr;
+  int                             var;
+};
+
+typedef struct rtems_task_variable_tt   rtems_task_variable_t;
 
 /*
  *  This is the API specific information required by each thread for

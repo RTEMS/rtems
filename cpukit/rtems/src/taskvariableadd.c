@@ -67,8 +67,8 @@ rtems_status_code rtems_task_variable_add(
      *  Now allocate memory for this task variable.
      */
 
-    new = (struct rtems_task_variable_t *)
-       _Workspace_Allocate(sizeof(struct rtems_task_variable_t));
+    new = (rtems_task_variable_t *)
+       _Workspace_Allocate(sizeof(rtems_task_variable_t));
     if (new == NULL) {
       _Thread_Enable_dispatch();
       return RTEMS_NO_MEMORY;
