@@ -1,5 +1,10 @@
 2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add pppd.
+	* Makefile.am: Add pppd.
+
+2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	Adding pppd:
 	* pppd/Makefile-user: New, copied over from libnetworking/pppd/example.
 	* pppd/README: New, copied over from libnetworking/pppd/example.

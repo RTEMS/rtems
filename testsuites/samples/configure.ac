@@ -50,5 +50,6 @@ base_mp/Makefile
 base_mp/node1/Makefile
 base_mp/node2/Makefile
 cdtest/Makefile
+pppd/Makefile
 ])
 AC_OUTPUT
