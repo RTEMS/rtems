@@ -43,12 +43,12 @@ AC_ARG_ENABLE(rtems-inlines, \
   *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
 esac],[RTEMS_USE_MACROS=no])
 
-AC_ARG_ENABLE(cpp, \
-[  --enable-cpp            enable C++ support, and build the rtems++ library], \
+AC_ARG_ENABLE(cxx, \
+[  --enable-cxx            enable C++ support, and build the rtems++ library], \
 [case "${enableval}" in 
   yes) RTEMS_HAS_CPLUSPLUS=yes ;;
   no) RTEMS_HAS_CPLUSPLUS=no   ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-cpp option) ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-cxx option) ;;
 esac], [RTEMS_HAS_CPLUSPLUS=no])
 
 AC_ARG_ENABLE(gcc28, \
@@ -76,7 +76,6 @@ AC_PATH_PROG(LN,ln)
 AC_PROG_LN_S
 AC_PATH_PROG(CHMOD,chmod)
 AC_PATH_PROG(SORT,sort)
-AC_CHECK_FUNCS(strerror)
 
 dnl check mkdir behaviour, try to get mkdir -p -m 0755
 RTEMS_PATH_MKDIR
@@ -101,8 +100,6 @@ AC_MSG_ERROR(
 [    Cannot determine a usable shell bash/ksh/sh]
 [    Please contact your system administrator] );
 fi
-
-dnl END configure.host.in
 
 dnl BEGIN configure.target.in
 
@@ -171,6 +168,51 @@ if test -d "$srcdir/c/src/exec/score/cpu/$target_cpu"; then
 else
   AC_MSG_ERROR(no)
 fi
+
+dnl NOTE: host_os is automatically set by autoconf
+
+if [[ "${program_prefix}" = "NONE" ]] ; then
+  if [[ "${target}" = "${host}" ]] ; then
+    program_prefix=
+  else
+    program_prefix=${target}-
+  fi
+fi
+
+dnl check target cc
+CC="$program_prefix"gcc
+RTEMS_PROG_CC
+
+dnl check if the compiler supports --specs if gcc28 is requested
+if test "$RTEMS_USE_GCC272" != "yes" ; then
+  RTEMS_GCC_SPECS
+  if test "$rtems_cv_gcc_specs" = "no"; then
+    AC_MSG_WARN([*** disabling --enable-gcc28])
+     RTEMS_USE_GCC272=yes
+  fi
+fi
+
+dnl check if the target compiler may use --pipe
+RTEMS_GCC_PIPE
+
+dnl check for g++
+if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+  CXX="$program_prefix"g++
+  RTEMS_PROG_CXX
+  AC_PATH_PROG(CXX_FOR_TARGET,"$program_prefix"g++,no)
+else
+  CXX_FOR_TARGET="no"
+fi
+
+RTEMS_CANONICALIZE_TOOLS
+test "$rtems_cv_gcc_pipe" = "yes" && CC_FOR_TARGET="$CC_FOR_TARGET --pipe"
+
+dnl check host cc
+AC_PROG_CC
+
+dnl check for host library functions
+dnl NOTE: must be called after AC_PROG_CC
+AC_CHECK_FUNCS(strerror)
 
 # find all the Executive Makefiles
 RTEMS_CHECK_MAKEFILE(c/src/exec/score/tools/$target_cpu)
@@ -250,21 +292,6 @@ fi
 
 dnl END configure.target.in
 
-
-#
-#  Target configurations are listed in alphabetical order.  
-#  The BSPs for a target configuration are also listed in alphabetical order.
-#
-
-dnl NOTE: host_os is automatically set by autoconf
-
-if [[ "${program_prefix}" = "NONE" ]] ; then
-  if [[ "${target}" = "${host}" ]] ; then
-    program_prefix=
-  else
-    program_prefix=${target}-
-  fi
-fi
 
 PROJECT_ROOT=`pwd;`
 
@@ -359,11 +386,12 @@ RTEMS_CHECK_MAKEFILE(c/src/tests/samples)
 
 AC_CONFIG_HEADER(c/build-tools/src/config.h)
 
-AC_CONFIG_HEADER(c/build-tools/src/config.h)
-
 # try not to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile
+make/host.cfg
+make/target.cfg
+make/Templates/Makefile.inc
 c/Makefile
 c/src/Makefile
 c/src/exec/Makefile
@@ -393,9 +421,6 @@ c/src/tests/support/wrapup/Makefile
 c/src/tests/tools/Makefile
 c/src/tests/tools/generic/Makefile
 $makefiles
-make/host.cfg
-make/target.cfg
-make/Templates/Makefile.inc
 c/update-tools/Makefile)
 
 echo
