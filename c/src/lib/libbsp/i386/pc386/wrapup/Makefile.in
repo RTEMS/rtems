@@ -16,7 +16,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 VPATH = @srcdir@
 
 # We only build the Network library if HAS_NETWORKING was defined
-NETWORK_yes_V = dec21140 ne2000 wd8003
+NETWORK_yes_V = dec21140 ne2000 wd8003 3c509
 NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 BSP_PIECES=startup clock console timer $(NETWORK) 
