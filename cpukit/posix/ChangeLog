@@ -4,24 +4,21 @@
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
-	Add PREINSTALL_FILES to CLEANFILES.
+	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
 
-2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am, again.
 
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Add libs to CLEANFILES
-	Set lib*_g_a_SOURCES = lib*_a_SOURCES.
-
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* Makefile.am: Add libs to CLEANFILES Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
 	* Makefile.am: Build libposix$(LIB_VARIANT).a instead of
 	$(ARCH)/libposix.a.
 
-2004-01-07  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Build library using EXTRA_LIBRARIES and automake rules.
 
@@ -32,11 +29,7 @@
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add $(dirstamp) to compilation rules.
-
-2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Add $(dirstamp) to preinstallation rules.
-	Remove MACROS.
+	* Makefile.am: Add $(dirstamp) to preinstallation rules. Remove MACROS.
 
 2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -45,8 +38,7 @@
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/config.h: Remove.
-	* Makefile.am: Remove src/config.h
-	AM_CPPFLAGS += -I$(top_builddir).
+	* Makefile.am: Remove src/config.h AM_CPPFLAGS += -I$(top_builddir).
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -76,27 +68,25 @@
 	macros/rtems/posix/intr.inl, macros/rtems/posix/key.inl,
 	macros/rtems/posix/mqueue.inl, macros/rtems/posix/mutex.inl,
 	macros/rtems/posix/pthread.inl, macros/rtems/posix/semaphore.inl,
-	macros/rtems/posix/timer.inl, src/alarm.c, src/kill.c,
-	src/killinfo.c, src/mqueuetranslatereturncode.c, src/pause.c,
-	src/pthreadattrdestroy.c, src/pthreadattrgetdetachstate.c,
-	src/pthreadattrgetinheritsched.c, src/pthreadattrgetschedparam.c,
-	src/pthreadattrgetschedpolicy.c, src/pthreadattrgetscope.c,
-	src/pthreadattrgetstackaddr.c, src/pthreadattrgetstacksize.c,
-	src/pthreadattrinit.c, src/pthreadattrsetdetachstate.c,
-	src/pthreadattrsetinheritsched.c, src/pthreadattrsetschedparam.c,
-	src/pthreadattrsetschedpolicy.c, src/pthreadattrsetscope.c,
-	src/pthreadattrsetstackaddr.c, src/pthreadattrsetstacksize.c,
-	src/pthreadcreate.c, src/pthreaddetach.c, src/pthreadequal.c,
-	src/pthreadexit.c, src/pthreadgetcpuclockid.c,
-	src/pthreadgetcputime.c, src/pthreadgetschedparam.c,
-	src/pthreadjoin.c, src/pthreadkill.c, src/pthreadonce.c,
-	src/pthreadself.c, src/pthreadsetcputime.c,
-	src/pthreadsetschedparam.c, src/pthreadsigmask.c, src/sigaction.c,
-	src/sigaddset.c, src/sigdelset.c, src/sigemptyset.c,
-	src/sigfillset.c, src/sigismember.c, src/signal_2.c,
-	src/sigpending.c, src/sigprocmask.c, src/sigqueue.c,
-	src/sigsuspend.c, src/sigtimedwait.c, src/sigwait.c,
-	src/sigwaitinfo.c, src/ualarm.c: URL for license changed.
+	macros/rtems/posix/timer.inl, src/alarm.c, src/kill.c, src/killinfo.c,
+	src/mqueuetranslatereturncode.c, src/pause.c, src/pthreadattrdestroy.c,
+	src/pthreadattrgetdetachstate.c, src/pthreadattrgetinheritsched.c,
+	src/pthreadattrgetschedparam.c, src/pthreadattrgetschedpolicy.c,
+	src/pthreadattrgetscope.c, src/pthreadattrgetstackaddr.c,
+	src/pthreadattrgetstacksize.c, src/pthreadattrinit.c,
+	src/pthreadattrsetdetachstate.c, src/pthreadattrsetinheritsched.c,
+	src/pthreadattrsetschedparam.c, src/pthreadattrsetschedpolicy.c,
+	src/pthreadattrsetscope.c, src/pthreadattrsetstackaddr.c,
+	src/pthreadattrsetstacksize.c, src/pthreadcreate.c, src/pthreaddetach.c,
+	src/pthreadequal.c, src/pthreadexit.c, src/pthreadgetcpuclockid.c,
+	src/pthreadgetcputime.c, src/pthreadgetschedparam.c, src/pthreadjoin.c,
+	src/pthreadkill.c, src/pthreadonce.c, src/pthreadself.c,
+	src/pthreadsetcputime.c, src/pthreadsetschedparam.c,
+	src/pthreadsigmask.c, src/sigaction.c, src/sigaddset.c, src/sigdelset.c,
+	src/sigemptyset.c, src/sigfillset.c, src/sigismember.c, src/signal_2.c,
+	src/sigpending.c, src/sigprocmask.c, src/sigqueue.c, src/sigsuspend.c,
+	src/sigtimedwait.c, src/sigwait.c, src/sigwaitinfo.c, src/ualarm.c: URL
+	for license changed.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -112,34 +102,27 @@
 	* src/getuid.c: Remove (Moved to ../libcsupport/src).
 	* src/setpgid.c: Remove (Moved to ../libcsupport/src).
 	* src/setsid.c: Remove (Moved to ../libcsupport/src).
-	* Makefile.am: Reflect changes above
+	* Makefile.am: Reflect changes above.
 
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
-	* src/mqueuenametoid.c, src/semaphorenametoid.c: Added ID to name
-	lookup service and changed name of id/name translation status code.
-	This propagated to multiple functions. The user API service added was
-	rtems_object_id_to_name()
-
-2003-08-14	Joel Sherrill <joel@OARcorp.com>
-
+	* src/mqueuenametoid.c, src/semaphorenametoid.c: Added ID to name lookup
+	service and changed name of id/name translation status code. This
+	propagated to multiple functions. The user API service added was
+	rtems_object_id_to_name().
 	PR 92/rtems
 	* Makefile.am, src/alarm.c, src/psignal.c: Added ualarm() and usleep().
 	* src/ualarm.c, src/usleep.c: New files.
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Remove (Merged-in into ../configure.ac)
-	* Makefile.am:
-	Reflect having merged configure.ac into ../configure.ac.
+	* configure.ac: Remove (Merged-in into ../configure.ac).
+	* Makefile.am: Reflect having merged configure.ac into ../configure.ac.
 	* src/config.h: New.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2003-01-27	Juan Zamorano <jzamora@fi.upm.es>
@@ -153,8 +136,8 @@
 
 2003-01-03	Jay Monkman <jtm@smoothsmoothie.com>
 
-	* src/mqueueopen.c: Actually open the message queue descriptor
-	so it is available for others to use.
+	* src/mqueueopen.c: Actually open the message queue descriptor so it is
+	available for others to use.
 
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -176,34 +159,25 @@
 
 2002-12-06	Vladimir Nesic <vnesic@dkts.co.yu>
 
-	* inline/rtems/posix/cond.inl, macros/rtems/posix/cond.inl:
-	Implemented PTHREAD_COND_INITIALIZER support.  Vladimir implemented
-	the inline version and Joel adapted it to the macro version.
+	* inline/rtems/posix/cond.inl, macros/rtems/posix/cond.inl: Implemented
+	PTHREAD_COND_INITIALIZER support.  Vladimir implemented the inline
+	version and Joel adapted it to the macro version.
 
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/posix/timer.h, src/keygetspecific.c,
-	src/posixtimespecsubtract.c, src/ptimer1.c, src/semunlink.c:
-	Added casts to eliminate warnings on 16-bit targets like the h8300.
+	src/posixtimespecsubtract.c, src/ptimer1.c, src/semunlink.c: Added casts
+	to eliminate warnings on 16-bit targets like the h8300.
 
 2002-11-29	Eric Norum <eric.norum@usask.ca>
 
-	* src/sysconf.c: Add support for _SC_GETPW_R_SIZE_MAX.
-        Return error rather than panic if argument is unsupported.
-	This was tracked as PR316.
+	* src/sysconf.c: Add support for _SC_GETPW_R_SIZE_MAX. Return error
+	rather than panic if argument is unsupported. This was tracked as PR316.
 
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Cosmetical fixes.
-
-2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Fix package name.
-
-2002-10-30	Eric Norum <eric.norum@usask.ca>
-
-	* src/psignal.c: Fix counting problem which resulted in too many
-	entries being in the POSIX signals default behavior table.
 
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -211,6 +185,8 @@
 
 2002-10-30	Eric Norum <eric.norum@usask.ca>
 
+	* src/psignal.c: Fix counting problem which resulted in too many entries
+	being in the POSIX signals default behavior table.
 	* src/psignal.c: Reflect changes to signal names in newlib.
 
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -219,9 +195,7 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -229,8 +203,8 @@
 
 2002-08-21	Joel Sherrill <joel@OARcorp.com>
 
-	* src/adjtime.c: New file -- adjtime() support required by the
-	Network Time Protocol (NTP) port to RTEMS.
+	* src/adjtime.c: New file -- adjtime() support required by the Network
+	Time Protocol (NTP) port to RTEMS.
 	* src/Makefile.am: Modified to reflect above.
 
 2002-08-09	Joel Sherrill <joel@OARcorp.com>
@@ -245,10 +219,11 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/Makefile.am: Use .$(OBJEXT) instead of .o.
-
-2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* src/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES.
+
+2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: RTEMS_TOP(../..).
 
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
@@ -257,42 +232,35 @@
 	src/setcanceltype.c, src/testcancel.c:  Per PR164, corrected the
 	behavior of thread cancellation and did some cleanup as a side-effect.
 
-2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: RTEMS_TOP(../..).
+	* configure.ac: Remove RTEMS_PROJECT_ROOT.
 
-2002-07-01    Joel Sherrill <joel@OARcorp.com>
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
-	* Mega patch merge to change the format of the object IDs to
-	loosen the dependency between the SCORE and the various APIs.
-	There was considerable work to simplify the object name management
-        and it appears that the name_table field is no longer needed.
-	This patch also includes the addition of the internal mutex
-	which is currently only used to protect some types of allocation
-	and deallocation.  This significantly can reduce context 
-	switch latency under certain circumstances.  In particular,
-	some heap/region operations were O(n) and had dispatching
-	disabled.  This should help enormously.  With this merge,
-	the patch is not as clean as it should be.  In particular,
-	the documentation has not been modified to reflect the new object
-	ID layout, the IDs in the test screens are not updated, and
-	_Objects_Get_information needs to be a real routine not inlined.
-	As part of this patch a lot of MP code for thread/proxy blocking
-	was made conditional and cleaned up.
+	* Mega patch merge to change the format of the object IDs to loosen the
+	dependency between the SCORE and the various APIs. There was
+	considerable work to simplify the object name management and it appears
+	that the name_table field is no longer needed. This patch also includes
+	the addition of the internal mutex which is currently only used to
+	protect some types of allocation and deallocation.  This significantly
+	can reduce context  switch latency under certain circumstances.  In
+	particular, some heap/region operations were O(n) and had dispatching
+	disabled.  This should help enormously.  With this merge, the patch is
+	not as clean as it should be.  In particular, the documentation has not
+	been modified to reflect the new object ID layout, the IDs in the test
+	screens are not updated, and _Objects_Get_information needs to be a real
+	routine not inlined. As part of this patch a lot of MP code for
+	thread/proxy blocking was made conditional and cleaned up.
 	* include/rtems/posix/key.h, src/cond.c, src/condinit.c, src/intr.c,
 	src/key.c, src/keycreate.c, src/keydelete.c, src/killinfo.c,
 	src/mqueue.c, src/mqueuecreatesupp.c, src/mutex.c, src/mutexinit.c,
 	src/psignal.c, src/pthread.c, src/semaphore.c,
 	src/semaphorecreatesupp.c:  Modified as part of above.
 
-2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Remove RTEMS_PROJECT_ROOT.
-
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use AC_CONFIG_AUX_DIR(../..).
-	Add AC_PROG_RANLIB.
+	* configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -302,16 +270,10 @@
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	Use ../aclocal.
+	* Makefile.am: Include $(top_srcdir)/../automake/*.am. Use ../aclocal.
 	* inline/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	* macros/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	* src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-
-2001-05-17	Joel Sherrill <joel@OARcorp.com>
-
-	* macros/rtems/posix/mqueue.inl: Implemented missing routines
-	to support message queue FDs.
 
 2002-05-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>	
 
@@ -320,24 +282,14 @@
 	* src/utsname.c: Remove.
 	* src/Makefile.am: Reflect changes above.
 
-2001-04-26	Joel Sherrill <joel@OARcorp.com>
-
-	* include/rtems/posix/mqueue.h, inline/rtems/posix/mqueue.inl,
-	src/mqueue.c, src/mqueueclose.c, src/mqueuecreatesupp.c,
-	src/mqueuegetattr.c, src/mqueuenotify.c, src/mqueueopen.c,
-	src/mqueuerecvsupp.c, src/mqueuesendsupp.c, src/mqueuesetattr.c:
-	Per PR81 reworked to add a message queue descriptor separate from
-	the underlying message queue.  This allows non-blocking to follow
-	the "open" not the underlying queue.
- 
-2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* src/psignal.c: Include <stdlib.h>.
-
 2002-04-08	Chris Johns <ccj@acm.org>
 
 	* Per PR142, make task switch extension its own list.
 	* src/pthread.c (_POSIX_Threads_User_extensions): Reflect above.
+
+2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/psignal.c: Include <stdlib.h>.
 
 2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -349,8 +301,7 @@
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* src/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
@@ -361,33 +312,27 @@
 2002-03-01	Eric Norum <eric.norum@usask.ca>
 
 	* src/pthreadonce.c: Task is not preemptable while running a 
-	pthread_once init function.  This is slightly less heavy handed
-	than disabling dispatching and seems better than consuming a mutex.
+	pthread_once init function.  This is slightly less heavy handed than
+	disabling dispatching and seems better than consuming a mutex.
 
 2002-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* src/getegid.c: Add #include <rtems/userenv.h>.
-	Remove #include <rtems/libio_.h>.
+	* src/getegid.c: Add #include <rtems/userenv.h>. Remove #include
+	<rtems/libio_.h>.
 	* src/geteuid.c: Ditto.
 	* src/getgid.c: Ditto.
 	* src/getlogin.c: Ditto.
 	* src/getuid.c: Ditto.
 
+2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-2001-01-16	Joel Sherrill <joel@OARcorp.com>
-
-	* inline/rtems/posix/mutex.inl (_POSIX_Mutex_Get_support): Corrected
-	name of routine in header.
+	* configure.ac: AC_CONFIG_SRCDIR([src/pthreads.c]).
+	* src/psignal.c: #include <string.h>.
 
 2002-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* optman/, optman/.cvsignore, optman/Makefile.am: Removed entire
 	contents of optman/ directory since it has been moved.
-
-2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: AC_CONFIG_SRCDIR([src/pthreads.c])
-	* src/psignal.c: #include <string.h>.
 
 2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -439,9 +384,6 @@
 2001-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* src/sysconf.c: Fix typo syntax error accidentally committed.
-
-2001-09-13	Joel Sherrill <joel@OARcorp.com>
-
 	* src/mprotect.c: New file. Stub required by some gcc's to pass tests.
 	In particular, about 350 ACATS tests fail if this is not present.
 	* src/getpagesize.c: Ditto.
@@ -455,24 +397,34 @@
 
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
-	* src/mqueuesendsupp.c: Account for possibly blocking during the
-	core send operation.
+	* src/mqueuesendsupp.c: Account for possibly blocking during the core
+	send operation.
 
 2001-08-09	Joel Sherrill <joel@OARcorp.com>
 
-	* src/mqueuesendsupp.c: Unblocking message queue operations should
-	NOT use _Thread_Executing for return status since it is permissible
-	to invoke message send operations from an ISR.  This was reported
-	by Suvrat Gupta <suvrat@utstar.com>.
+	* src/mqueuesendsupp.c: Unblocking message queue operations should NOT
+	use _Thread_Executing for return status since it is permissible to
+	invoke message send operations from an ISR.  This was reported by Suvrat
+	Gupta <suvrat@utstar.com>.
 
-2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
+2001-05-17	Joel Sherrill <joel@OARcorp.com>
 
-	* src/getegid.c, src/geteuid.c, src/getgid.c, src/getlogin.c,
-	src/getuid.c: Now save their values in private user environment.
+	* macros/rtems/posix/mqueue.inl: Implemented missing routines to support
+	message queue FDs.
 
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
+
+2001-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/posix/mqueue.h, inline/rtems/posix/mqueue.inl,
+	src/mqueue.c, src/mqueueclose.c, src/mqueuecreatesupp.c,
+	src/mqueuegetattr.c, src/mqueuenotify.c, src/mqueueopen.c,
+	src/mqueuerecvsupp.c, src/mqueuesendsupp.c, src/mqueuesetattr.c: Per
+	PR81 reworked to add a message queue descriptor separate from the
+	underlying message queue.  This allows non-blocking to follow the "open"
+	not the underlying queue.
 
 2001-03-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -482,42 +434,43 @@
 
 	* include/Makefile.am, include/rtems/posix/Makefile.am,
 	include/sys/Makefile.am, inline/rtems/posix/Makefile.am,
-	macros/rtems/posix/Makefile.am: 
-	Apply include_*HEADERS instead of H_FILES.
+	macros/rtems/posix/Makefile.am:  Apply include_*HEADERS instead of
+	H_FILES.
 
 2001-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: Add src/config.h
-	* src/Makefile.am: Add INCLUDES += -I. to pickup config.h
-	* src/.cvsignore: Add config.h and stamp-h
+	* configure.in: Add src/config.h.
+	* src/Makefile.am: Add INCLUDES += -I. to pickup config.h.
+	* src/.cvsignore: Add config.h and stamp-h.
 	* src/*.c: Add config.h support.
 
 2001-01-23	Joel Sherrill <joel@OARcorp.com>
 
 	* src/alarm.c: Eliminated use of C++ style comments.
 
-2001-01-12	Joel Sherrill <joel@OARcorp.com>
-
-	* src/clockgetres.c: Fixed match problem.  We are not converting
-	an interval to a timespec -- it is actually a real number of
-	microseconds.
-
 2001-01-22	Michael Hamel <mhamel@adi.co.nz>
 
 	* include/rtems/posix/semaphore.h, inline/rtems/posix/semaphore.inl, 
 	src/ptimer1.c, include/rtems/posix/semaphore.h,
 	inline/rtems/posix/semaphore.inl, src/alarm.c, src/ptimer1.c,
-	src/semaphorenametoid.c, src/semopen.c, src/semunlink.c:
-	Modifications to make CodeWarrior happy.
+	src/semaphorenametoid.c, src/semopen.c, src/semunlink.c: Modifications
+	to make CodeWarrior happy.
+
+2001-01-16	Joel Sherrill <joel@OARcorp.com>
+
+	* inline/rtems/posix/mutex.inl (_POSIX_Mutex_Get_support): Corrected
+	name of routine in header.
 
 2001-01-12	Joel Sherrill <joel@OARcorp.com>
 
+	* src/clockgetres.c: Fixed match problem.  We are not converting an
+	interval to a timespec -- it is actually a real number of microseconds.
 	* src/README.mqueue: Enhanced example.
 
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
-	* src/pthreadgetschedparam.c: Do not set output parameters if
-	the pointers are NULL.
+	* src/pthreadgetschedparam.c: Do not set output parameters if the
+	pointers are NULL.
 
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
@@ -529,9 +482,6 @@
 	* include/rtems/posix/cond.h: #if 0'ed out prototype of 
 	_POSIX_Condition_variables_Get to avoid conflict with macro
 	implementation.
-
-2000-12-01	Joel Sherrill <joel@OARcorp.com>
-
 	* Added macro support to POSIX API.  This is known to compile.
 	* macros/rtems/posix/cond.inl, macros/rtems/posix/intr.inl,
 	macros/rtems/posix/key.inl, macros/rtems/posix/mqueue.inl,
@@ -560,22 +510,22 @@
 	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
 
 2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
- 
+
 	* configure.in: Cleanup comments.
 
 2000-10-30	Joel Sherrill <joel@OARcorp.com>
 
-	* include/Makefile.am: Updated to reflect files merged into newlib.
-	This resulted in some definitions moving to other files and thus
-	some secondary effects in RTEMS source code.
+	* include/Makefile.am: Updated to reflect files merged into newlib. This
+	resulted in some definitions moving to other files and thus some
+	secondary effects in RTEMS source code.
 	* include/unistd.h: Removed.  Now use newlib's.
 	* include/rtems/posix/mqueue.h: Add include of <signal.h>.
-	* include/rtems/posix/threadsup.h: Add include of <sys/signal.h>
+	* include/rtems/posix/threadsup.h: Add include of <sys/signal.h>.
 	* src/execv.c: Corrected prototype to agree with newlib.
 	* src/execve.c: Corrected prototype to agree with newlib.
 	* src/execvp.c: Corrected prototype to agree with newlib.
-	* src/psignal.c: Rewrote reference to <siginfo.h> in comment since
-	that file no longer exists.
+	* src/psignal.c: Rewrote reference to <siginfo.h> in comment since that
+	file no longer exists.
 	* src/pthreadkill.c: Added include of <signal.h>.
 	* src/sigaction.c: Added include of <signal.h>.
 	* src/sigtimedwait.c: Rewrote reference to <siginfo.h> in comment since
@@ -583,8 +533,8 @@
 
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-	Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
+	canonicalization.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -593,39 +543,35 @@
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* Many files: Moved posix/include/rtems/posix/seterr.h to 
-	score/include/rtems/seterr.h so it would be available within
-	all APIs.
+	score/include/rtems/seterr.h so it would be available within all APIs.
 
 2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* inline/rtems/posix/timer.inl, include/rtems/posix/timer.h, 
-	inline/rtems/posix/Makefile.am, src/ptimer1.c: Redid the
-	style of src/ptimer1.c.  Continued effort to make the
-	POSIX Timer implementation match that of other managers.
-	Added data structures required to use SuperCore Object Handler.
+	inline/rtems/posix/Makefile.am, src/ptimer1.c: Redid the style of
+	src/ptimer1.c.  Continued effort to make the POSIX Timer implementation
+	match that of other managers. Added data structures required to use
+	SuperCore Object Handler.
 
 2000-08-15	Joel Sherrill <joel@OARcorp.com>
 
 	* src/ptimer1.c: Minor formatting fixes.
-
-2000-08-15	Joel Sherrill <joel@OARcorp.com>
-
 	* src/ptimer1.c: Removed unused routine PRINT_ERRNO_S.
-	* src/ptimer1.c: Removed unnecessary routine COPY_ITIMERSPEC_S
-	and used structure copy instead.
+	* src/ptimer1.c: Removed unnecessary routine COPY_ITIMERSPEC_S and used
+	structure copy instead.
 	* src/ptimer1.c: Renamed timer_alive_t to POSIX_Timer_Control.
 	* include/rtems/posix/timer.h: Ditto.
-
-2000-08-15	Joel Sherrill <joel@OARcorp.com>
-
-	* src/ptimer1.c: Switched to using set_errno_and_return_minus_one()
-	to ensure that errno was always set.
-
-2000-08-15	Joel Sherrill <joel@OARcorp.com>
-
-	* src/ptimer1.c (timer_settime): Converted use of rtems_clock_get
-	to use SuperCore _TOD_Current variable.
+	* src/ptimer1.c: Switched to using set_errno_and_return_minus_one() to
+	ensure that errno was always set.
+	* src/ptimer1.c (timer_settime): Converted use of rtems_clock_get to use
+	SuperCore _TOD_Current variable.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+
+2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
+
+	* src/getegid.c, src/geteuid.c, src/getgid.c, src/getlogin.c,
+	src/getuid.c: Now save their values in private user environment.
+
