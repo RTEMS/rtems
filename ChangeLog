@@ -1,3 +1,11 @@
+2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-cpu-subdirs.m4: Add PREFIX arg to RTEMS_CPU_SUBDIRS,
+	add 2nd arg to _RTEMS_CPU_SUBDIR.
+	* aclocal/target.m4: Replace ac_configure_args with
+	rtems_configure_args, add rtems_configure_args to INIT-CMDS.
+	* Makefile.am: Require automake-1.5.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

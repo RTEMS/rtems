@@ -6,7 +6,7 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 ACLOCAL_AMFLAGS = -I aclocal
 
 SUBDIRS = doc make tools $(BUILD_SUBDIRS) $(TARGET_SUBDIRS)

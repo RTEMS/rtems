@@ -23,7 +23,7 @@ if test "$no_recursion" != yes; then
   # Remove --cache-file and --srcdir arguments so they do not pile up.
   ac_sub_configure_args=
   rtems_prev=
-  for rtems_arg in $ac_configure_args; do
+  for rtems_arg in $rtems_configure_args; do
     if test -n "$rtems_prev"; then
       rtems_prev=
       continue
@@ -82,6 +82,7 @@ if test "$no_recursion" != yes; then
 fi],
 [
 RTEMS_BUILD_SUBDIRS="$RTEMS_BUILD_SUBDIRS"
+rtems_configure_args="$ac_configure_args"
 ])
 ])
 
