@@ -63,7 +63,7 @@ rtems_status_code rtems_io_register_name(
 /* 
  *  rtems_io_lookup_name
  *
- *  This version is not reentrant.
+ *  This version is reentrant.
  *
  *  XXX - This is dependent upon IMFS and should not be.  
  *        Suggest adding a filesystem routine to fill in the device_info.
@@ -71,13 +71,12 @@ rtems_status_code rtems_io_register_name(
 
 rtems_status_code rtems_io_lookup_name(
   const char           *name,
-  rtems_driver_name_t **device_info
+  rtems_driver_name_t  *device_info
 )
 {
 #if !defined(RTEMS_UNIX)
   IMFS_jnode_t                      *the_jnode;
   rtems_filesystem_location_info_t   loc;
-  static rtems_driver_name_t         device;
   int                                result;
   rtems_filesystem_node_types_t      node_type;
 
@@ -92,16 +91,14 @@ rtems_status_code rtems_io_lookup_name(
   node_type = (*loc.ops->node_type_h)( &loc );
 
   if ( (result != 0) || node_type != RTEMS_FILESYSTEM_DEVICE ) {
-    *device_info = 0;
     rtems_filesystem_freenode( &loc );
     return RTEMS_UNSATISFIED;
   }
 
-  device.device_name        = (char *) name;
-  device.device_name_length = strlen( name );
-  device.major              = the_jnode->info.device.major;
-  device.minor              = the_jnode->info.device.minor;
-  *device_info              = &device;
+  device_info->device_name        = (char *) name;
+  device_info->device_name_length = strlen( name );
+  device_info->major              = the_jnode->info.device.major;
+  device_info->minor              = the_jnode->info.device.minor;
 
   rtems_filesystem_freenode( &loc );
    

@@ -1,3 +1,9 @@
+2003-02-03	Steven Johnson <sjohnson@neurizon.net>
+
+	PR 338/filesystem
+	* src/imfs/ioman.c: Fix reentrancy problem with 
+	rtems_io_lookup_name() (API change).
+
 2003-01-03	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
 	* src/dosfs/msdos_initsupp.c: Specify inherited priority as 0 since this
