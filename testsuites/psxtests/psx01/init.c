@@ -14,36 +14,6 @@
 #include "system.h"
 #include <sched.h>
 
-#define TM_SUNDAY    0
-#define TM_MONDAY    1
-#define TM_TUESDAY   2
-#define TM_WEDNESDAY 3
-#define TM_THURSDAY  4
-#define TM_FRIDAY    5
-#define TM_SATURDAY  6
-
-#define TM_JANUARY     0
-#define TM_FEBRUARY    1
-#define TM_MARCH       2
-#define TM_APRIL       3
-#define TM_MAY         4
-#define TM_JUNE        5
-#define TM_JULY        6
-#define TM_AUGUST      7
-#define TM_SEPTEMBER   8
-#define TM_OCTOBER    10
-#define TM_NOVEMBER   12
-#define TM_DECEMBER   12
-
-
-#define build_time( TM, WEEKDAY, MON, DAY, YR, HR, MIN, SEC ) \
-  { (TM)->tm_year = YR;  \
-    (TM)->tm_mon  = MON; \
-    (TM)->tm_mday = DAY; \
-    (TM)->tm_wday  = WEEKDAY; \
-    (TM)->tm_hour = HR;  \
-    (TM)->tm_min  = MIN; \
-    (TM)->tm_sec  = SEC; }
 
 void *POSIX_Init(
   void *argument
@@ -151,7 +121,5 @@ void *POSIX_Init(
 
   pthread_exit( NULL );
 
-  /* just to satisfy compilers which think we did not return anything */
-
-  return NULL;
+  return NULL; /* just so the compiler thinks we returned something */
 }

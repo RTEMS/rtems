@@ -25,7 +25,6 @@ void *Task_1_through_3(
   void *argument
 )
 {
-  int seconds;
   int status;
 
   /* XXX temporary */
@@ -47,4 +46,6 @@ void *Task_1_through_3(
 
   puts( "*** END OF POSIX TEST 1 ***" );
   exit( 0 );
+
+  return NULL; /* just so the compiler thinks we returned something */
 }

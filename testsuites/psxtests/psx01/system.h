@@ -16,10 +16,7 @@
 
 /* functions */
 
-#include <bsp.h>
-#include <pthread.h>
-#include <assert.h>
-#include <stdio.h>
+#include <pmacros.h>
 #include <unistd.h>
 
 void *POSIX_Init(
