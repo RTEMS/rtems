@@ -1,18 +1,20 @@
 dnl $Id$
 
-dnl Report all available bsps for a target,
-dnl check if a bsp-subdirectory is present for all bsps found
+dnl Report all available bsps for a target within the source tree
 dnl
 dnl RTEMS_CHECK_BSPS(bsp_list)
 AC_DEFUN([RTEMS_CHECK_BSPS],
 [
-AC_REQUIRE([RTEMS_CHECK_CPU])dnl sets RTEMS_CPU, target
+AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])dnl sets RTEMS_CPU, target
 AC_REQUIRE([RTEMS_TOP])dnl sets RTEMS_TOPdir
-AC_MSG_CHECKING([for bsps])
-    files=`ls $srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU`
-    for bsp_family in $files; do
-      if test -r $srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$bsp_family/bsp_specs; then
-        case $bsp_family in
+
+AC_MSG_CHECKING([for available BSPs])
+  $1=
+  for bsp_spec in "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU"/*/bsp_specs; do
+    bsp_family=`echo "$bsp_spec" | sed \
+        -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/,," \
+        -e "s,/bsp_specs$,,"`
+    case $bsp_family in
         # Now account for BSPs with build variants
           c4xsim)            bsps="c4xsim c3xsim";;
           gen68360)          bsps="gen68360 gen68360_040";;
@@ -26,12 +28,10 @@ AC_MSG_CHECKING([for bsps])
 	  sim68000)          bsps="sim68000 simcpu32";;
 	  shsim)             bsps="simsh7032 simsh7045";;
 	  *) 		     bsps="$bsp_family";;
-        esac;
-        for bsp in $bsps; do
-          AS_IF([test -r $srcdir/$RTEMS_TOPdir/make/custom/$bsp.cfg],
-	    [$1="[$]$1 $bsp"])
-        done
-      fi
-    done
-AC_MSG_RESULT([[$]$1 .. done])
+    esac;
+    $1="[$]$1 $bsps"
+  done
+  AS_IF([test -z "[$]$1"],
+    [AC_MSG_RESULT([none])],
+    [AC_MSG_RESULT([$]$1)])
 ])dnl

@@ -1,5 +1,11 @@
 2004-10-18	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* aclocal/check-bsps.m4: Add bspkit support. Don't check for
+	presence of *.cfg.
+	* aclocal/check-custom-bsp.m4: Add bspkit support.
+
+2004-10-18	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* aclocal/enable-bare.m4: Remove.
 
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
