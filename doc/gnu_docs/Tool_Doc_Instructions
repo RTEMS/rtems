@@ -34,6 +34,8 @@ make info dvi
 cd ../newlib-1.8.2
 find newlib/ -name "*.t*" | cpio -pdum ../b/i386-rtems/
 find etc/ -name "*.t*" | cpio -pdum ../b
+cd ../b
+# run the script
 
 
 
