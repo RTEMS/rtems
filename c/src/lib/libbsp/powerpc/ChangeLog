@@ -1,5 +1,9 @@
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* acinclude.m4: Regenerate.
+
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: RTEMS_CHECK_BSPDIR([$RTEMS_BSP_FAMILY]).
 
 2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

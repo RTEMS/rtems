@@ -1,7 +1,7 @@
-# RTEMS_CHECK_BSPDIR(RTEMS_BSP)
+# RTEMS_CHECK_BSPDIR(RTEMS_BSP_FAMILY)
 AC_DEFUN([RTEMS_CHECK_BSPDIR],
 [
-  case "$RTEMS_BSP_FAMILY" in
+  case "$1" in
   arm_bare_bsp )
     AC_CONFIG_SUBDIRS([arm_bare_bsp]);;
   armulator )

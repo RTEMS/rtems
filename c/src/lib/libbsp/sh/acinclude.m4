@@ -1,7 +1,7 @@
-# RTEMS_CHECK_BSPDIR(RTEMS_BSP)
+# RTEMS_CHECK_BSPDIR(RTEMS_BSP_FAMILY)
 AC_DEFUN([RTEMS_CHECK_BSPDIR],
 [
-  case "$RTEMS_BSP_FAMILY" in
+  case "$1" in
   gensh1 )
     AC_CONFIG_SUBDIRS([gensh1]);;
   gensh2 )
