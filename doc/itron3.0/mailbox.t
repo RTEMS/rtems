@@ -1,4 +1,4 @@
-@c
+@c@*
 @c  This is the chapter from the RTEMS ITRON User's Guide that
 @c  documents the services provided by the mailbox
 @c  manager.
@@ -63,16 +63,18 @@ ER cre_mbx(
 
 @subheading STATUS CODES:
 
-@code{E_OK} - Normal completion
-@code{E_NOMEM} - Insufficient memory
-@code{E_ID} - Invalid ID number
-@code{E_RSATR} - Reserved attribute
-@code{E_OBJ} - Invalid object state
-@code{E_OACV} - Object access violation
+@code{E_OK} - Normal completion@*
+@code{E_NOMEM} - Insufficient memory@*
+@code{E_ID} - Invalid ID number@*
+@code{E_RSATR} - Reserved attribute@*
+@code{E_OBJ} - Invalid object state@*
+@code{E_OACV} - Object access violation@*
 @code{E_PAR} - Parameter error
 
 
-@subheading DESCRIPTION: Allocated a control area/buffer space for mailbox with some ID.
+@subheading DESCRIPTION:
+
+Allocated a control area/buffer space for mailbox with some ID.
 		User area: 	+ve ids
 		System area: 	-ve ids
 User may specify if its FIFO or priority level queue.
@@ -80,6 +82,8 @@ Assumes shared memory b/w communicating processes.
 Initializes core message queue for this mbox.
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -105,14 +109,18 @@ ER del_mbx(
 
 @subheading STATUS CODES:
 
-@code{E_OK} - Normal completion
-@code{E_ID} - Invalid ID number
-@code{E_NOEXS} - Object does not exist
+@code{E_OK} - Normal completion@*
+@code{E_ID} - Invalid ID number@*
+@code{E_NOEXS} - Object does not exist@*
 @code{E_OACV} - Object access violation
 
-@subheading DESCRIPTION: Specified by the ID, cleans up all data structures and control blocks.
+@subheading DESCRIPTION:
+
+Specified by the ID, cleans up all data structures and control blocks.
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -139,15 +147,19 @@ ER snd_msg(
 
 @subheading STATUS CODES:
 
-@code{E_OK} - Normal completion
-@code{E_ID} - Invalid ID number
-@code{E_NOEXS} - Object does not exist
-@code{E_OACV} - Object access violation
+@code{E_OK} - Normal completion@*
+@code{E_ID} - Invalid ID number@*
+@code{E_NOEXS} - Object does not exist@*
+@code{E_OACV} - Object access violation@*
 @code{E_QOVR} - Queueing or nesting overflow
 
-@subheading DESCRIPTION: Sends the address of message to mbox having a given id, any waiting tasks (blocked tasks) will be woken up. It supports non-blocking send.
+@subheading DESCRIPTION:
+
+Sends the address of message to mbox having a given id, any waiting tasks (blocked tasks) will be woken up. It supports non-blocking send.
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -174,18 +186,22 @@ ER rcv_msg(
 
 @subheading STATUS CODES:
 
-@code{E_OK} - Normal completion
-@code{E_ID} - Invalid ID number
-@code{E_NOEXS} - Object does not exist
-@code{E_OACV} - Object access violation
-@code{E_PAR} - Parameter error
-@code{E_DLT} - The object being waited for was deleted
-@code{E_RLWAI} - WAIT state was forcibly released
+@code{E_OK} - Normal completion@*
+@code{E_ID} - Invalid ID number@*
+@code{E_NOEXS} - Object does not exist@*
+@code{E_OACV} - Object access violation@*
+@code{E_PAR} - Parameter error@*
+@code{E_DLT} - The object being waited for was deleted@*
+@code{E_RLWAI} - WAIT state was forcibly released@*
 @code{E_CTX} - Context error
 
-@subheading DESCRIPTION: If there is no message then receiver blocks, if not empty then it takes the first message of the queue.
+@subheading DESCRIPTION:
+
+If there is no message then receiver blocks, if not empty then it takes the first message of the queue.
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -212,18 +228,22 @@ ER prcv_msg(
 
 @subheading STATUS CODES:
 
-@code{E_OK} - Normal completion
-@code{E_ID} - Invalid ID number
-@code{E_NOEXS} - Object does not exist
-@code{E_OACV} - Object access violation
-@code{E_PAR} - Parameter error
-@code{E_DLT} - The object being waited for was deleted
-@code{E_RLWAI} - WAIT state was forcibly released
-@code{E_CTX} - Context error
+@code{E_OK} - Normal completion@*
+@code{E_ID} - Invalid ID number@*
+@code{E_NOEXS} - Object does not exist@*
+@code{E_OACV} - Object access violation@*
+@code{E_PAR} - Parameter error@*
+@code{E_DLT} - The object being waited for was deleted@*
+@code{E_RLWAI} - WAIT state was forcibly released@*
+@code{E_CTX} - Context error@*
 
-@subheading DESCRIPTION: Poll and receive message from mailbox.
+@subheading DESCRIPTION:
+
+Poll and receive message from mailbox.
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -251,18 +271,22 @@ ER trcv_msg(
 
 @subheading STATUS CODES:
 
-@code{E_OK} - Normal completion
-@code{E_ID} - Invalid ID number
-@code{E_NOEXS} - Object does not exist
-@code{E_OACV} - Object access violation
-@code{E_PAR} - Parameter error
-@code{E_DLT} - The object being waited for was deleted
-@code{E_RLWAI} - WAIT state was forcibly released
+@code{E_OK} - Normal completion@*
+@code{E_ID} - Invalid ID number@*
+@code{E_NOEXS} - Object does not exist@*
+@code{E_OACV} - Object access violation@*
+@code{E_PAR} - Parameter error@*
+@code{E_DLT} - The object being waited for was deleted@*
+@code{E_RLWAI} - WAIT state was forcibly released@*
 @code{E_CTX} - Context error
 
-@subheading DESCRIPTION: Blocking receive with a maximum timeout.
+@subheading DESCRIPTION:
+
+Blocking receive with a maximum timeout.
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -289,14 +313,18 @@ ER ref_mbx(
 
 @subheading STATUS CODES:
 
-@code{E_OK} - Normal completion
-@code{E_ID} - Invalid ID number
-@code{E_NOEXS} - Object does not exist
-@code{E_OACV} - Object access violation
+@code{E_OK} - Normal completion@*
+@code{E_ID} - Invalid ID number@*
+@code{E_NOEXS} - Object does not exist@*
+@code{E_OACV} - Object access violation@*
 @code{E_PAR} - Parameter error
 
-@subheading DESCRIPTION: Supports non-blocking receive. If there are no messages, it returns -1. Also returns id of the next process waiting on a message.
+@subheading DESCRIPTION:
+
+Supports non-blocking receive. If there are no messages, it returns -1. Also returns id of the next process waiting on a message.
 
 @subheading NOTES:
+
+NONE
 
 
