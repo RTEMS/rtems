@@ -27,7 +27,6 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-start/Makefile
 startup/Makefile
 timer/Makefile
 network/Makefile
