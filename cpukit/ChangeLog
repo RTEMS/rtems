@@ -1,5 +1,12 @@
 2004-11-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* configure.ac: Remove -ansi (Cygwin breaks with it).
+	* libcsupport/include/stdint.h: Use sys/_stdint.h to setup fixed
+	size types.
+	* libcsupport/include/sys/_inttypes.h: Add SCN*N macros.
+
+2004-11-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libcsupport/src/utsname.c: Revert yesterdays patch.
 
 2004-10-31	Joel Sherrill <joel@OARcorp.com>
