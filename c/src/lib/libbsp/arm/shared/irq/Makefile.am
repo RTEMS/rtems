@@ -1,13 +1,13 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = irq_init.c
 S_FILES = irq_asm.S
 
-all: 
+all:
 
 EXTRA_DIST = irq_asm.S irq_init.c
 

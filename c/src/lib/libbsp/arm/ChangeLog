@@ -1,3 +1,8 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, shared/Makefile.am, shared/comm/Makefile.am,
+	shared/irq/Makefile.am: Include compile.am
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
