@@ -24,11 +24,6 @@
  *
  */
 
-#if !defined(PTHREAD_CANCELED)
-#warning "PTHREAD_CANCELED NOT DEFINED -- patch newlib"
-#define PTHREAD_CANCELED ((void *) -1)
-#endif
-
 void _POSIX_Threads_cancel_run( 
   Thread_Control *the_thread
 )
