@@ -343,14 +343,6 @@ static inline  void PPC_Set_timebase_register (uint64_t tbr)
 
 /* end of ISR handler macros */
 
-#define PPC_Set_decrementer( _clicks ) \
-  do { \
-    asm volatile( "mtdec %0" : : "r" ((_clicks)) ); \
-  } while (0)
-
-#define PPC_Get_decrementer( _clicks ) \
-    asm volatile( "mfdec  %0" : "=r" (_clicks) )
-
 #ifdef __cplusplus
 }
 #endif
