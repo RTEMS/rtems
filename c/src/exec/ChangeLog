@@ -1,3 +1,10 @@
+2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/posix/Makefile.am: Add multilib support.
+	* wrapup/itron/Makefile.am: Add multilib support.
+	* wrapup/rtems/Makefile.am: Add multilib support.
+	* Makefile.am: Add multilib support.
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use RTEMS_CPU_SUBDIRS to make autoconf-2.52 happy.

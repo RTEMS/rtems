@@ -5,6 +5,8 @@
 AUTOMAKE_OPTIONS = foreign 1.5
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
+include $(top_srcdir)/../../../automake/multilib.am
+
 if HAS_POSIX
 POSIX_SUBDIRS = posix
 endif

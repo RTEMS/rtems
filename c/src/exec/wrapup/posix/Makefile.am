@@ -9,7 +9,7 @@ LIBNAME = libposix
 LIB = $(ARCH)/$(LIBNAME).a
 endif
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/multilib.am
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
@@ -22,9 +22,9 @@ OBJS = $(POSIX_OBJS)
 $(LIB): ${OBJS}
 	$(make-library)
 
-POSIX_LIB = $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
+POSIX_LIB = $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a
 
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
+$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
 all-local: ${ARCH} $(LIB) $(TMPINSTALL_FILES)

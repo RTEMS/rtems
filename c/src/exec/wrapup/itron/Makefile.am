@@ -9,7 +9,7 @@ LIBNAME = libitron
 LIB = $(ARCH)/$(LIBNAME).a
 endif
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/multilib.am
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
@@ -22,9 +22,9 @@ OBJS = $(ITRON_OBJS)
 $(LIB): ${OBJS}
 	$(make-library)
 
-ITRON_LIB = $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
+ITRON_LIB = $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a
 
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
+$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
 all-local: ${ARCH} $(LIB) $(TMPINSTALL_FILES)
