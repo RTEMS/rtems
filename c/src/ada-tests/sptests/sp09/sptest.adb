@@ -21,7 +21,6 @@
 --  $Id$
 --
 
-with BSP;
 with INTERFACES; use INTERFACES;
 with RTEMS;
 with TEST_SUPPORT;
@@ -585,7 +584,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE(
          TASK_NAME,
          1,
-         BSP.CONFIGURATION.WORKSPACE_SIZE,
+         RTEMS.CONFIGURATION.WORKSPACE_SIZE,
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
