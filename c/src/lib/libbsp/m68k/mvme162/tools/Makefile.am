@@ -14,5 +14,5 @@ install-exec-local: $(PROGRAMS)
 	$(mkinstalldirs) $(PROJECT_ROOT)/@RTEMS_BSP@/bin
 	$(INSTALL_PROGRAM) $(PROGRAMS) $(PROJECT_ROOT)/@RTEMS_BSP@/bin
 endif
-include $(top_srcdir)/../../../../../automake/host.am
 
+include $(top_srcdir)/../../../../../automake/host.am
