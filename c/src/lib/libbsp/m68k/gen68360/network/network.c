@@ -12,6 +12,7 @@
 #include <bsp.h>
 #include <rtems/m68k/m68360.h>
 #include <stdio.h>
+#include <errno.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
