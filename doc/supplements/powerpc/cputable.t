@@ -131,9 +131,11 @@ indicates whether the exception vectors are located in RAM or ROM.  If
 they are located in RAM dynamic vector installation occurs, otherwise
 it does not.
 
-
 @item serial_per_sec
-is the XXX
+is the number of clock ticks per second for the PPC403 serial timer.
+
+@item serial_rate
+is the baud rate for the PPC403 serial timer.
 
 @item serial_external_clock
 is a flag used by the BSP to indicate whether or not to mask in a 0x2 into
@@ -141,16 +143,14 @@ the Input/Output Configuration Register (IOCR) during initialization of the
 PPC403 console.  XXX This bit is defined as "reserved" 6-12?
 
 @item serial_xon_xoff
-is the XXX
+is a flag used by the BSP to indicate whether or not  XON/XOFF flow control 
+is supported for the PPC403 serial timer.
 
 @item serial_cts_rts
 is a flag used by the BSP to indicate whether or not to set the lsb of the 
 Input/Output Configuration Register (IOCR) during initialization of the
 PPC403 console.  XXX This bit is defined as "reserved" 6-12?
 
-
-@item serial_rate
-is the XXX
 
 @item timer_average_overhead
 is the average number of overhead ticks that occur on the PPC403 timer.
