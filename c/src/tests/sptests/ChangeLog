@@ -1,3 +1,8 @@
+2003-08-18	Eiichiro Kawaguchi <e-kawaguchi@ct.jp.nec.com>
+
+	PR 458/tests
+	* sp30/task1.c: Correct indexing problem.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
