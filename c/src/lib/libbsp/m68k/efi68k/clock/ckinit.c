@@ -82,27 +82,20 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
-    *MSR = RS;			/* enable 1mS interrupts */
-    *ICR0 |= OME;
+  *MSR = RS;			/* enable 1mS interrupts */
+  *ICR0 |= OME;
 
-    atexit( Clock_exit );
-  }
+  atexit( Clock_exit );
 }
 
 void Clock_exit( void )
 {
-
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-
-    /* shutdown periodic interrupt */
-    *MSR = RS;
-    *ICR0 &= 0xc0;
-    /* do not restore old vector */
-
-  }
+  /* shutdown periodic interrupt */
+  *MSR = RS;
+  *ICR0 &= 0xc0;
+  /* do not restore old vector */
 }
 
 rtems_device_driver Clock_initialize(

@@ -51,24 +51,20 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = set_vector( clock_isr, CLOCK_VECTOR, 1 );
-    victimer = (volatile unsigned char *) 0xa00000c3;
-    *victimer = 0x12;
-    *victimer = 0x92;      /* 1000 HZ */
-  }
+  Old_ticker = set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  victimer = (volatile unsigned char *) 0xa00000c3;
+  *victimer = 0x12;
+  *victimer = 0x92;      /* 1000 HZ */
 }
 
 void Clock_exit()
 {
   unsigned char *victimer;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    victimer = (unsigned char *) 0xa00000c3;
-    *victimer = 0x12;
-    i960_mask_intr( 5 );
-    /* do not restore old vector */
-  }
+  victimer = (unsigned char *) 0xa00000c3;
+  *victimer = 0x12;
+  i960_mask_intr( 5 );
+  /* do not restore old vector */
 }
 
 rtems_device_driver Clock_initialize(

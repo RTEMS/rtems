@@ -128,27 +128,24 @@ void Install_clock(
 {
   Clock_driver_ticks = 0;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
-    /* approximately 1 us per countdown */
-    ERC32_MEC.Real_Time_Clock_Scalar  = CLOCK_SPEED - 1;
-    ERC32_MEC.Real_Time_Clock_Counter = CPU_SPARC_CLICKS_PER_TICK;
+  /* approximately 1 us per countdown */
+  ERC32_MEC.Real_Time_Clock_Scalar  = CLOCK_SPEED - 1;
+  ERC32_MEC.Real_Time_Clock_Counter = CPU_SPARC_CLICKS_PER_TICK;
 
-    ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
-      ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | 
-        ERC32_MEC_TIMER_COUNTER_LOAD_SCALER | 
-        ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER 
-    );
+  ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
+    ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | 
+      ERC32_MEC_TIMER_COUNTER_LOAD_SCALER | 
+      ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER 
+  );
  
-    ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
-      ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
-        ERC32_MEC_TIMER_COUNTER_RELOAD_AT_ZERO 
-    );
+  ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
+    ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
+      ERC32_MEC_TIMER_COUNTER_RELOAD_AT_ZERO 
+  );
 
-    atexit( Clock_exit );
-  }
-
+  atexit( Clock_exit );
 }
 
 /*
@@ -167,15 +164,13 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    ERC32_Mask_interrupt( ERC32_INTERRUPT_REAL_TIME_CLOCK );
+  ERC32_Mask_interrupt( ERC32_INTERRUPT_REAL_TIME_CLOCK );
 
-    ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
-      ERC32_MEC_TIMER_COUNTER_DISABLE_COUNTING 
-    );
+  ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
+    ERC32_MEC_TIMER_COUNTER_DISABLE_COUNTING 
+  );
 
-    /* do not restore old vector */
-  }
+  /* do not restore old vector */
 }
  
 /*

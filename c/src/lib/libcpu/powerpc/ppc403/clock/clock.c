@@ -132,6 +132,7 @@ void Install_clock(rtems_isr_entry clock_isr)
 {
     rtems_isr_entry previous_isr;
     rtems_unsigned32 pvr, iocr;
+    register rtems_unsigned32 tcr;
  
     Clock_driver_ticks = 0;
  
@@ -164,31 +165,29 @@ void Install_clock(rtems_isr_entry clock_isr)
     pit_value = rtems_configuration_get_microseconds_per_tick() *
       rtems_cpu_configuration_get_clicks_per_usec();
  
-    if ( rtems_configuration_get_ticks_per_timeslice() ) {
-      register rtems_unsigned32 tcr;
 
-        /*
-         * initialize the interval here
-         * First tick is set to right amount of time in the future
-         * Future ticks will be incremented over last value set
-         * in order to provide consistent clicks in the face of
-         * interrupt overhead
-         */
+    /*
+     * initialize the interval here
+     * First tick is set to right amount of time in the future
+     * Future ticks will be incremented over last value set
+     * in order to provide consistent clicks in the face of
+     * interrupt overhead
+     */
+
+    rtems_interrupt_catch(clock_isr, PPC_IRQ_PIT, &previous_isr);
+
+    asm volatile ("mtspr 0x3db, %0" : : "r" (pit_value)); /* PIT */
  
-      rtems_interrupt_catch(clock_isr, PPC_IRQ_PIT, &previous_isr);
+    asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
  
-      asm volatile ("mtspr 0x3db, %0" : : "r" (pit_value)); /* PIT */
+    tcr &= ~ 0x04400000;
  
-      asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
+    tcr |= (auto_restart ? 0x04400000 : 0x04000000);
  
-      tcr &= ~ 0x04400000;
+    tick_time = get_itimer() + pit_value;
  
-      tcr |= (auto_restart ? 0x04400000 : 0x04000000);
- 
-      tick_time = get_itimer() + pit_value;
- 
-      asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
-    }
+    asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
+
     atexit(Clock_exit);
 }
 
@@ -214,18 +213,15 @@ ReInstall_clock(rtems_isr_entry new_clock_isr)
 void
 Clock_exit(void)
 {
-    if ( rtems_configuration_get_ticks_per_timeslice() ) {
-      register rtems_unsigned32 tcr;
+    register rtems_unsigned32 tcr;
  
-      asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
+    asm volatile ("mfspr %0, 0x3da" : "=r" ((tcr))); /* TCR */
  
-      tcr &= ~ 0x04400000;
+    tcr &= ~ 0x04400000;
  
-      asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
+    asm volatile ("mtspr 0x3da, %0" : "=r" ((tcr)) : "0" ((tcr))); /* TCR */
  
-      (void) set_vector(0, PPC_IRQ_PIT, 1);
-    }
-
+    (void) set_vector(0, PPC_IRQ_PIT, 1);
 }
 
 rtems_device_driver Clock_initialize(

@@ -161,61 +161,52 @@ void Install_clock(
 
   Clock_MHZ = rtems_cpu_configuration_get_clicks_per_second() / 1000000 ;
 
+  rtems_interrupt_catch( Clock_isr, CLOCK_VECTOR, &Old_ticker );
+
   /*
-   *  If ticks_per_timeslice is configured as non-zero, then the user
-   *  wants a clock tick.
+   *  Hardware specific initialize goes here
    */
-
-  if ( rtems_configuration_get_ticks_per_timeslice() ) {
-    rtems_interrupt_catch( Clock_isr, CLOCK_VECTOR, &Old_ticker );
-    /*
-     *  Hardware specific initialize goes here
-     */
     
-    /* stop Timer 0 */
-    temp8 = read8( MTU_TSTR) & MTU0_STARTMASK;
-    write8( temp8, MTU_TSTR);
+  /* stop Timer 0 */
+  temp8 = read8( MTU_TSTR) & MTU0_STARTMASK;
+  write8( temp8, MTU_TSTR);
 
-    /* set initial counter value to 0 */
-    write16( 0, MTU_TCNT0);
+  /* set initial counter value to 0 */
+  write16( 0, MTU_TCNT0);
 
-    /* Timer 0 runs independent */
-    temp8 = read8( MTU_TSYR) & MTU0_SYNCMASK;
-    write8( temp8, MTU_TSYR);
+  /* Timer 0 runs independent */
+  temp8 = read8( MTU_TSYR) & MTU0_SYNCMASK;
+  write8( temp8, MTU_TSYR);
 
-    /* Timer 0 normal mode */
-    temp8 = read8( MTU_TMDR0) & MTU0_MODEMASK;
-    write8( temp8, MTU_TMDR0);
+  /* Timer 0 normal mode */
+  temp8 = read8( MTU_TMDR0) & MTU0_MODEMASK;
+  write8( temp8, MTU_TMDR0);
 
-    /* TCNT is cleared by GRA ; internal clock /4 */
-    write8( MTU0_TCRMASK , MTU_TCR0);
+  /* TCNT is cleared by GRA ; internal clock /4 */
+  write8( MTU0_TCRMASK , MTU_TCR0);
 
-    /* use GRA without I/O - pins  */
-    write8( MTU0_TIORVAL, MTU_TIORL0); 
+  /* use GRA without I/O - pins  */
+  write8( MTU0_TIORVAL, MTU_TIORL0); 
     
-    /* reset flags of the status register */
-    temp8 = read8( MTU_TSR0) & MTU0_STAT_MASK;
-    write8( temp8, MTU_TSR0);
+  /* reset flags of the status register */
+  temp8 = read8( MTU_TSR0) & MTU0_STAT_MASK;
+  write8( temp8, MTU_TSR0);
 
-    /* Irq if is equal GRA */
-    temp8 = read8( MTU_TIER0) | MTU0_TIERMASK;
-    write8( temp8, MTU_TIER0);
+  /* Irq if is equal GRA */
+  temp8 = read8( MTU_TIER0) | MTU0_TIERMASK;
+  write8( temp8, MTU_TIER0);
 
-    /* set interrupt priority */
-    if( sh_set_irq_priority( CLOCK_VECTOR, CLOCKPRIO ) != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
+  /* set interrupt priority */
+  if( sh_set_irq_priority( CLOCK_VECTOR, CLOCKPRIO ) != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
 
-    /* set counter limits */
-    write16( _MTU_COUNTER0_MICROSECOND * 
-      rtems_configuration_get_microseconds_per_tick(),
-
-	     MTU_GR0A);
+  /* set counter limits */
+  write16( _MTU_COUNTER0_MICROSECOND * 
+    rtems_configuration_get_microseconds_per_tick(), MTU_GR0A);
    
-    /* start counter */
-    temp8 = read8( MTU_TSTR) |~MTU0_STARTMASK;
-    write8( temp8, MTU_TSTR);
-    
-  }
+  /* start counter */
+  temp8 = read8( MTU_TSTR) |~MTU0_STARTMASK;
+  write8( temp8, MTU_TSTR);
 
   /*
    *  Schedule the clock cleanup routine to execute if the application exits.
@@ -231,24 +222,22 @@ void Install_clock(
 void Clock_exit( void )
 {
   unsigned8 temp8 = 0;
-  if ( rtems_configuration_get_ticks_per_timeslice() ) {
 
-    /* turn off the timer interrupts */
-    /* set interrupt priority to 0 */
-    if( sh_set_irq_priority( CLOCK_VECTOR, 0 ) != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred( RTEMS_UNSATISFIED);
+  /* turn off the timer interrupts */
+  /* set interrupt priority to 0 */
+  if( sh_set_irq_priority( CLOCK_VECTOR, 0 ) != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred( RTEMS_UNSATISFIED);
 
 /*
  *   temp16 = read16( MTU_TIER0) & IPRC_MTU0_IRQMASK;
  *   write16( temp16, MTU_TIER0);
  */
 
-    /* stop counter */
-    temp8 = read8( MTU_TSTR) & MTU0_STARTMASK;
-    write8( temp8, MTU_TSTR);
+  /* stop counter */
+  temp8 = read8( MTU_TSTR) & MTU0_STARTMASK;
+  write8( temp8, MTU_TSTR);
 
-    /* old vector shall not be installed */
-  }
+  /* old vector shall not be installed */
 }
 
 /*

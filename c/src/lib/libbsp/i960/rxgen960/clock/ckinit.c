@@ -65,12 +65,6 @@ void Install_clock(
   Reload_Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
   Clock_isrs = Reload_Clock_isrs;
 
-/* Not for our case
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-     *icon = 0x6000; 
-
-    Old_ticker = set_vector( (((unsigned int) clock_isr) | 0x2), CLOCK_VECTOR, 1 );
-*/
     #define BUS_CLOCK_1 0
     #define TMR_WRITE_CNTL 8
     #define TMR_AUTO_RELOAD 4
@@ -78,9 +72,6 @@ void Install_clock(
     #define TMR_TERM_CNT_STAT 1
 
     Old_ticker = set_vector( (((unsigned int) clock_isr) | 0x2), CLOCK_VECTOR, 1 );
-/*
-    *(unsigned int *)(CLOCK_VECTOR >>2) = (unsigned int )clockHandler;
-*/
 
     /* initialize the i960RP timer 0 here */
     
@@ -102,13 +93,11 @@ void Clock_exit()
 {
   volatile unsigned int *tmr0 = (unsigned int *) TMR0_ADDR;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    /* shut down the timer */
-    *tmr0 = *tmr0 & ~TMR_ENABLE;
+  /* shut down the timer */
+  *tmr0 = *tmr0 & ~TMR_ENABLE;
 
-    i960_mask_intr( 12 );
-    /* do not restore old vector */
-  }
+  i960_mask_intr( 12 );
+  /* do not restore old vector */
 }
 
 rtems_device_driver Clock_initialize(

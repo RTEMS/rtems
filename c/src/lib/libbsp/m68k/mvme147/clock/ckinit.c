@@ -67,26 +67,21 @@ void Install_clock(rtems_isr_entry clock_isr )
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = 
-      (rtems_isr_entry) set_vector( clock_isr, TIMER_2_VECTOR, 1 );
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, TIMER_2_VECTOR, 1 );
 
-    pcc->timer2_int_control = 0x00; /* Disable T2 Interr. */
-    pcc->timer2_preload = MS_COUNT;
-    /* write preload value */
-    pcc->timer2_control = 0x07; /* clear T2 overflow counter, enable counter */
-    pcc->timer2_int_control = CLOCK_INT_LEVEL|0x08;
-    /* Enable Timer 2 and set its int. level */
+  pcc->timer2_int_control = 0x00; /* Disable T2 Interr. */
+  pcc->timer2_preload = MS_COUNT;
+  /* write preload value */
+  pcc->timer2_control = 0x07; /* clear T2 overflow counter, enable counter */
+  pcc->timer2_int_control = CLOCK_INT_LEVEL|0x08;
+  /* Enable Timer 2 and set its int. level */
     
-    atexit( Clock_exit );
-  } 
+  atexit( Clock_exit );
 }
 
 void Clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    pcc->timer2_int_control = 0x00; /* Disable T2 Interr. */
-  }
+  pcc->timer2_int_control = 0x00; /* Disable T2 Interr. */
 }
 
 rtems_device_driver Clock_initialize(

@@ -81,44 +81,39 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-    timer = (struct z8036_map *) 0xfffb0000;
-    timer->MASTER_INTR        = MICRVAL;
-    timer->CT1_MODE_SPEC      = T1MSRVAL;
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  timer = (struct z8036_map *) 0xfffb0000;
+  timer->MASTER_INTR        = MICRVAL;
+  timer->CT1_MODE_SPEC      = T1MSRVAL;
 
-    *((rtems_unsigned16 *)0xfffb0016) = MS_COUNT;  /* write countdown value */
+  *((rtems_unsigned16 *)0xfffb0016) = MS_COUNT;  /* write countdown value */
 
-    /*
-     *  timer->CT1_TIME_CONST_MSB = (MS_COUNT >> 8);
-     *  timer->CT1_TIME_CONST_LSB = (MS_COUNT &  0xff);
-     */
+  /*
+   *  timer->CT1_TIME_CONST_MSB = (MS_COUNT >> 8);
+   *  timer->CT1_TIME_CONST_LSB = (MS_COUNT &  0xff);
+   */
 
-    timer->MASTER_CFG         = MCCRVAL;
-    timer->CT1_CMD_STATUS     = T1CSRVAL;
+  timer->MASTER_CFG         = MCCRVAL;
+  timer->CT1_CMD_STATUS     = T1CSRVAL;
 
-    /*
-     * Enable interrupt via VME interrupt mask register
-     */
-    (*(rtems_unsigned8 *)0xfffb0038) &= 0xfd;
+  /*
+   * Enable interrupt via VME interrupt mask register
+   */
+  (*(rtems_unsigned8 *)0xfffb0038) &= 0xfd;
 
-    atexit( Clock_exit );
-  }
-
+  atexit( Clock_exit );
 }
 
 void Clock_exit( void )
 {
   volatile struct z8036_map *timer;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    timer = (struct z8036_map *) 0xfffb0000;
-    timer->MASTER_INTR        = 0x62;
-    timer->CT1_MODE_SPEC      = 0x00;
-    timer->MASTER_CFG         = 0xf4;
-    timer->CT1_CMD_STATUS     = 0x00;
-    /* do not restore old vector */
-  }
+  timer = (struct z8036_map *) 0xfffb0000;
+  timer->MASTER_INTR        = 0x62;
+  timer->CT1_MODE_SPEC      = 0x00;
+  timer->MASTER_CFG         = 0xf4;
+  timer->CT1_CMD_STATUS     = 0x00;
+  /* do not restore old vector */
 }
 
 rtems_device_driver Clock_initialize(

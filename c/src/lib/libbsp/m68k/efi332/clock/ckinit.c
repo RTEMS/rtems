@@ -57,31 +57,24 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
-    /* enable 1mS interrupts */
-    *PITR = (unsigned short int)( SAM(0x09,0,PITM) );/* load counter */
-    *PICR = (unsigned short int)                     /* enable interrupt */
-      ( SAM(ISRL_PIT,8,PIRQL) | SAM(CLOCK_VECTOR,0,PIV) );
-    
-    atexit( Clock_exit );
-  }
+  /* enable 1mS interrupts */
+  *PITR = (unsigned short int)( SAM(0x09,0,PITM) );/* load counter */
+  *PICR = (unsigned short int)                     /* enable interrupt */
+    ( SAM(ISRL_PIT,8,PIRQL) | SAM(CLOCK_VECTOR,0,PIV) );
+  
+  atexit( Clock_exit );
 }
 
 void Clock_exit( void )
 {
+  /* shutdown the periodic interrupt */
+  *PICR = (unsigned short int)
+    ( SAM(0,8,PIRQL) | SAM(CLOCK_VECTOR,0,PIV) );
+  /*     ^^ zero disables interrupt */
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-
-    /* shutdown the periodic interrupt */
-    *PICR = (unsigned short int)
-      ( SAM(0,8,PIRQL) | SAM(CLOCK_VECTOR,0,PIV) );
-    /*     ^^ zero disables interrupt */
-
-    /* do not restore old vector */
-
-  }
+  /* do not restore old vector */
 }
 
 rtems_device_driver Clock_initialize(

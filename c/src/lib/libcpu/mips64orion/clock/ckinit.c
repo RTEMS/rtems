@@ -160,21 +160,15 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = rtems_configuration_get_milliseconds_per_tick();
 
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
   /*
-   *  If ticks_per_timeslice is configured as non-zero, then the user
-   *  wants a clock tick.
+   *  Hardware specific initialize goes here
    */
 
-  if ( rtems_configuration_get_ticks_per_timeslice() ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-    /*
-     *  Hardware specific initialize goes here
-     */
-
-    mips_timer_rate = rtems_configuration_get_microseconds_per_tick() * CLOCKS_PER_MICROSECOND;
-    mips_set_timer( mips_timer_rate );
-    enable_int(CLOCK_VECTOR_MASK);
-  }
+  mips_timer_rate =
+     rtems_configuration_get_microseconds_per_tick() * CLOCKS_PER_MICROSECOND;
+  mips_set_timer( mips_timer_rate );
+  enable_int(CLOCK_VECTOR_MASK);
 
   /*
    *  Schedule the clock cleanup routine to execute if the application exits.
@@ -189,10 +183,8 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  if ( rtems_configuration_get_ticks_per_timeslice() ) {
-    /* mips: turn off the timer interrupts */
-    disable_int(~CLOCK_VECTOR_MASK);
-  }
+  /* mips: turn off the timer interrupts */
+  disable_int(~CLOCK_VECTOR_MASK);
 }
 
 /*

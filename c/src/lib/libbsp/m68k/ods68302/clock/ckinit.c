@@ -87,26 +87,22 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-   set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
-    m302.reg.trr1 = TRR1_VAL;		/* set timer reference register */
-    m302.reg.tmr1 = TMR1_VAL;		/* set timer mode register & enable */
-    /*
-     * Enable TIMER1 interrupts only.
-     */
-    m302.reg.imr  = RBIT_IMR_TIMER1;	/* set 68302 int-mask to allow ints */
+  m302.reg.trr1 = TRR1_VAL;		/* set timer reference register */
+  m302.reg.tmr1 = TMR1_VAL;		/* set timer mode register & enable */
+  /*
+   * Enable TIMER1 interrupts only.
+   */
+  m302.reg.imr  = RBIT_IMR_TIMER1;	/* set 68302 int-mask to allow ints */
 
-    atexit( Clock_exit );
-  }
+  atexit( Clock_exit );
 }
 
 void Clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    /* TODO: figure out what to do here */
-    /* do not restore old vector */
-  }
+  /* TODO: figure out what to do here */
+  /* do not restore old vector */
 }
 
 rtems_device_driver Clock_initialize(

@@ -48,12 +48,10 @@ rtems_device_minor_number rtems_clock_minor;
 
 void clockOff(void* unused)
 {
-  if (BSP_Configuration.ticks_per_timeslice)    {
-    /*
-     * Nothing to do as we cannot disable all interrupts and
-     * the decrementer interrupt enable is MSR_EE
-     */
-  }
+  /*
+   * Nothing to do as we cannot disable all interrupts and
+   * the decrementer interrupt enable is MSR_EE
+   */
 }
 void clockOn(void* unused)
 {
@@ -116,9 +114,7 @@ int clockIsOn(void* unused)
 
 void Clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-   (void) BSP_disconnect_clock_handler ();
-  }
+  (void) BSP_disconnect_clock_handler ();
 }
  
 /*

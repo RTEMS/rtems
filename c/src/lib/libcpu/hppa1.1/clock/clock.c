@@ -101,20 +101,18 @@ void Install_clock(rtems_isr_entry clock_isr)
 
     Clock_isrs = rtems_configuration_get_milliseconds_per_tick();
 
-    if ( rtems_configuration_get_ticks_per_timeslice() ) {
-        /*
-         * initialize the interval here
-         * First tick is set to right amount of time in the future
-         * Future ticks will be incremented over last value set
-         * in order to provide consistent clicks in the face of
-         * interrupt overhead
-         */
+    /*
+     * initialize the interval here
+     * First tick is set to right amount of time in the future
+     * Future ticks will be incremented over last value set
+     * in order to provide consistent clicks in the face of
+     * interrupt overhead
+     */
 
-        Clock_clicks_interrupt = Clock_read_itimer() + CPU_HPPA_CLICKS_PER_TICK;
-        set_itimer((rtems_unsigned32) Clock_clicks_interrupt);
+    Clock_clicks_interrupt = Clock_read_itimer() + CPU_HPPA_CLICKS_PER_TICK;
+    set_itimer((rtems_unsigned32) Clock_clicks_interrupt);
 
-        (void) set_vector(clock_isr, HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER, 1);
-    }
+    (void) set_vector(clock_isr, HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER, 1);
     atexit(Clock_exit);
 }
 
@@ -186,9 +184,7 @@ Clock_isr(rtems_vector_number vector)
 void
 Clock_exit(void)
 {
-    if ( rtems_configuration_get_ticks_per_timeslice() ) {
-        (void) set_vector(0, HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER, 1);
-    }
+  (void) set_vector(0, HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER, 1);
 }
 
 /*

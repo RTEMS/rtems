@@ -98,19 +98,12 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
   /*
-   *  If ticks_per_timeslice is configured as non-zero, then the user
-   *  wants a clock tick.
+   *  Hardware specific initialize goes here
    */
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-    /*
-     *  Hardware specific initialize goes here
-     */
-
-    /* XXX */
-  }
+  /* XXX */
 
   /*
    *  Schedule the clock cleanup routine to execute if the application exits.
@@ -125,12 +118,9 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
+  /* XXX: turn off the timer interrupts */
 
-    /* XXX: turn off the timer interrupts */
-
-    /* XXX: If necessary, restore the old vector */
-  }
+  /* XXX: If necessary, restore the old vector */
 }
 
 /*

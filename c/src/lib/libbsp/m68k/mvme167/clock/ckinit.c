@@ -156,21 +156,19 @@ void VMEchip2_T2_initialize( void )
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    lcsr->intr_ena &= 0xFDFFFFFF;   /* Disable tick timer 2 interrupt */
-    lcsr->intr_clear = 0x02000000;  /* Clear tick timer 2 interrupt */
-    lcsr->intr_level[0] =           /* Set tick timer 2 interrupt level */
-        (lcsr->intr_level[0] & 0xFFFFFF0F ) | (CLOCK_INT_LEVEL << 4);
-    lcsr->timer_cmp_2 = MS_COUNT;   /* Period in compare register */
-    lcsr->timer_cnt_2 = 0;          /* Clear tick timer 2 counter */
-    Old_ticker =                    /* Install C ISR */
-        (rtems_isr_entry) set_vector( VMEchip2_T2_isr, CLOCK_VECTOR, 1 );
-    lcsr->board_ctl |= 0x700;       /* Start tick timer 2, reset-on-compare, */
-                                    /*  and clear tick timer 2 overflow counter */
-    lcsr->intr_ena |= 0x02000000;   /* Enable tick timer 2 interrupt */
-    lcsr->vector_base |= 0x00800000;/* Unmask VMEchip2 interrupts */
-    atexit( clock_exit );           /* Turn off T2 interrupts when we exit */
-  } 
+  lcsr->intr_ena &= 0xFDFFFFFF;   /* Disable tick timer 2 interrupt */
+  lcsr->intr_clear = 0x02000000;  /* Clear tick timer 2 interrupt */
+  lcsr->intr_level[0] =           /* Set tick timer 2 interrupt level */
+      (lcsr->intr_level[0] & 0xFFFFFF0F ) | (CLOCK_INT_LEVEL << 4);
+  lcsr->timer_cmp_2 = MS_COUNT;   /* Period in compare register */
+  lcsr->timer_cnt_2 = 0;          /* Clear tick timer 2 counter */
+  Old_ticker =                    /* Install C ISR */
+      (rtems_isr_entry) set_vector( VMEchip2_T2_isr, CLOCK_VECTOR, 1 );
+  lcsr->board_ctl |= 0x700;       /* Start tick timer 2, reset-on-compare, */
+                                  /*  and clear tick timer 2 overflow counter */
+  lcsr->intr_ena |= 0x02000000;   /* Enable tick timer 2 interrupt */
+  lcsr->vector_base |= 0x00800000;/* Unmask VMEchip2 interrupts */
+  atexit( clock_exit );           /* Turn off T2 interrupts when we exit */
 }
 
 
@@ -189,13 +187,11 @@ void VMEchip2_T2_initialize( void )
  */
 void clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    lcsr->board_ctl &= 0xFFFFFEFF;  /* Stop tick timer 2 */
-    lcsr->intr_ena &= 0xFDFFFFFF;   /* Disable tick timer 2 interrupt */
-    lcsr->intr_clear = 0x02000000;  /* Clear tick timer 2 interrupt */
+  lcsr->board_ctl &= 0xFFFFFEFF;  /* Stop tick timer 2 */
+  lcsr->intr_ena &= 0xFDFFFFFF;   /* Disable tick timer 2 interrupt */
+  lcsr->intr_clear = 0x02000000;  /* Clear tick timer 2 interrupt */
 
-    set_vector( Old_ticker, CLOCK_VECTOR, 1 );
-  }
+  set_vector( Old_ticker, CLOCK_VECTOR, 1 );
 }
 
 

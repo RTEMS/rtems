@@ -77,12 +77,10 @@ Clock_isr (rtems_vector_number vector)
 void
 Clock_exit (void)
 {
-	if (BSP_Configuration.ticks_per_timeslice ) {
-		/*
-		 * Turn off periodic interval timer
-		 */		
-		SIMPITR = 0;
-	}
+	/*
+	 * Turn off periodic interval timer
+	 */		
+	SIMPITR = 0;
 }
 
 /******************************************************
@@ -96,34 +94,33 @@ static void
 Install_clock (rtems_isr_entry clock_isr)
 {
 	unsigned32 pitr_tmp;
+	unsigned32 usecs_per_tick;
 
 	Clock_driver_ticks = 0;
-	if ( BSP_Configuration.ticks_per_timeslice ) {
 
-		set_vector (clock_isr, CLOCK_VECTOR, 1);
+	set_vector (clock_isr, CLOCK_VECTOR, 1);
 		
-		/* sets the Periodic Interrupt Control Register PICR */
-		/* voir a quoi correspond exactement le Clock Vector */
+	/* sets the Periodic Interrupt Control Register PICR */
+	/* voir a quoi correspond exactement le Clock Vector */
 
-		SIMPICR = ( CLOCK_IRQ_LEVEL << 8 ) | ( CLOCK_VECTOR );		
-				  
-		/* sets the PITR count value */
-		/* this assumes a 32.765 kHz crystal */
+	SIMPICR = ( CLOCK_IRQ_LEVEL << 8 ) | ( CLOCK_VECTOR );		
+			  
+	/* sets the PITR count value */
+	/* this assumes a 32.765 kHz crystal */
 		
-		/* find out whether prescaler should be enabled or not */
-		if ( BSP_Configuration.microseconds_per_tick <= 31128 ) {
-		   pitr_tmp = ( BSP_Configuration.microseconds_per_tick * 8192 ) / 1000000 ;
-		}
-		else {
-		   pitr_tmp = ( BSP_Configuration.microseconds_per_tick / 1000000 ) * 16;
-		   /* enable it */		   
-		   pitr_tmp |= 0x100; 		   
-		}
-
-		SIMPITR = (unsigned char) pitr_tmp;
-
-		atexit (Clock_exit);
+        usecs_per_tick = BSP_Configuration.microseconds_per_tick;
+	/* find out whether prescaler should be enabled or not */
+	if ( usecs_per_tick <= 31128 ) {
+	   pitr_tmp = ( usecs_per_tick * 8192 ) / 1000000 ;
+	} else {
+	   pitr_tmp = ( usecs_per_tick / 1000000 ) * 16;
+	   /* enable it */		   
+	   pitr_tmp |= 0x100; 		   
 	}
+
+	SIMPITR = (unsigned char) pitr_tmp;
+
+	atexit (Clock_exit);
 }
 
 /******************************************************

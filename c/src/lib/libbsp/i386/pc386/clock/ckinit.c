@@ -103,13 +103,10 @@ static void clockIsr()
 +--------------------------------------------------------------------------*/
 void clockOff(const rtems_irq_connect_data* unused)
 {
-  if (BSP_Configuration.ticks_per_timeslice)
-  {
-    /* reset timer mode to standard (BIOS) value */
-    outport_byte(TIMER_MODE, TIMER_SEL0 | TIMER_16BIT | TIMER_RATEGEN);
-    outport_byte(TIMER_CNTR0, 0);
-    outport_byte(TIMER_CNTR0, 0);
-  }
+  /* reset timer mode to standard (BIOS) value */
+  outport_byte(TIMER_MODE, TIMER_SEL0 | TIMER_16BIT | TIMER_RATEGEN);
+  outport_byte(TIMER_CNTR0, 0);
+  outport_byte(TIMER_CNTR0, 0);
 } /* Clock_exit */
 
 
@@ -158,7 +155,6 @@ static void clockOn(const rtems_irq_connect_data* unused)
 
   Clock_isrs = Clock_isrs_per_tick; /* Initialize Clock_isrs */
 
-  if (BSP_Configuration.ticks_per_timeslice)
   {
     /* 105/88 approximates TIMER_TICK * 1e-6 */
     rtems_unsigned32 count = US_TO_TICK(microseconds_per_isr);

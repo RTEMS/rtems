@@ -71,21 +71,18 @@ void Install_clock(rtems_isr_entry clock_isr )
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = 
-      (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-    lcsr->vector_base |= MASK_INT;   /* unmask VMEchip2 interrupts */
-    lcsr->to_ctl = 0xE7;             /* prescaler to 1 MHz (see Appendix A1) */
-    lcsr->timer_cmp_2 = MS_COUNT;
-    lcsr->timer_cnt_2 = 0;           /* clear counter */
-    lcsr->board_ctl |= 0x700;        /* increment, reset-on-compare, and */
-                                     /*   clear-overflow-cnt */
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  lcsr->vector_base |= MASK_INT;   /* unmask VMEchip2 interrupts */
+  lcsr->to_ctl = 0xE7;             /* prescaler to 1 MHz (see Appendix A1) */
+  lcsr->timer_cmp_2 = MS_COUNT;
+  lcsr->timer_cnt_2 = 0;           /* clear counter */
+  lcsr->board_ctl |= 0x700;        /* increment, reset-on-compare, and */
+                                   /*   clear-overflow-cnt */
 
-    lcsr->intr_level[0] |= CLOCK_INT_LEVEL * 0x10;      /* set int level */
-    lcsr->intr_ena |= 0x02000000;       /* enable tick timer 2 interrupt */
+  lcsr->intr_level[0] |= CLOCK_INT_LEVEL * 0x10;      /* set int level */
+  lcsr->intr_ena |= 0x02000000;       /* enable tick timer 2 interrupt */
 
-    atexit( Clock_exit );
-  } 
+  atexit( Clock_exit );
 }
 
 void Clock_exit( void )

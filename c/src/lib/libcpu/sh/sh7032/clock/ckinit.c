@@ -223,58 +223,50 @@ void Install_clock(
   Clock_limit = cclicks_per_tick / Clock_isrs_const ;
   Clock_isrs = Clock_isrs_const;
 
+  rtems_interrupt_catch( Clock_isr, CLOCK_VECTOR, &Old_ticker );
   /*
-   *  If ticks_per_timeslice is configured as non-zero, then the user
-   *  wants a clock tick.
+   *  Hardware specific initialize goes here
    */
+  
+  /* stop Timer 0 */
+  temp8 = read8( ITU_TSTR) & ITU0_STARTMASK;
+  write8( temp8, ITU_TSTR);
 
-  if ( rtems_configuration_get_ticks_per_timeslice() ) {
-    rtems_interrupt_catch( Clock_isr, CLOCK_VECTOR, &Old_ticker );
-    /*
-     *  Hardware specific initialize goes here
-     */
+  /* set initial counter value to 0 */
+  write16( 0, ITU_TCNT0);
+
+  /* Timer 0 runs independent */
+  temp8 = read8( ITU_TSNC) & ITU0_SYNCMASK;
+  write8( temp8, ITU_TSNC);
+
+  /* Timer 0 normal mode */
+  temp8 = read8( ITU_TMDR) & ITU0_MODEMASK;
+  write8( temp8, ITU_TMDR);
+
+  /* TCNT is cleared by GRA ; internal clock /4 */
+  write8( ITU0_TCRMASK , ITU_TCR0);
+
+  /* use GRA without I/O - pins  */
+  write8( ITU0_TIORVAL, ITU_TIOR0); 
     
-    /* stop Timer 0 */
-    temp8 = read8( ITU_TSTR) & ITU0_STARTMASK;
-    write8( temp8, ITU_TSTR);
+  /* reset flags of the status register */
+  temp8 = read8( ITU_TSR0) & ITU_STAT_MASK;
+  write8( temp8, ITU_TSR0);
 
-    /* set initial counter value to 0 */
-    write16( 0, ITU_TCNT0);
+  /* Irq if is equal GRA */
+  temp8 = read8( ITU_TIER0) | ITU0_TIERMASK;
+  write8( temp8, ITU_TIER0);
 
-    /* Timer 0 runs independent */
-    temp8 = read8( ITU_TSNC) & ITU0_SYNCMASK;
-    write8( temp8, ITU_TSNC);
+  /* set interrupt priority */
+  if( sh_set_irq_priority( CLOCK_VECTOR, CLOCKPRIO ) != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
 
-    /* Timer 0 normal mode */
-    temp8 = read8( ITU_TMDR) & ITU0_MODEMASK;
-    write8( temp8, ITU_TMDR);
-
-    /* TCNT is cleared by GRA ; internal clock /4 */
-    write8( ITU0_TCRMASK , ITU_TCR0);
-
-    /* use GRA without I/O - pins  */
-    write8( ITU0_TIORVAL, ITU_TIOR0); 
-    
-    /* reset flags of the status register */
-    temp8 = read8( ITU_TSR0) & ITU_STAT_MASK;
-    write8( temp8, ITU_TSR0);
-
-    /* Irq if is equal GRA */
-    temp8 = read8( ITU_TIER0) | ITU0_TIERMASK;
-    write8( temp8, ITU_TIER0);
-
-    /* set interrupt priority */
-    if( sh_set_irq_priority( CLOCK_VECTOR, CLOCKPRIO ) != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
-
-    /* set counter limits */
-    write16( Clock_limit, ITU_GRA0);
+  /* set counter limits */
+  write16( Clock_limit, ITU_GRA0);
    
-    /* start counter */
-    temp8 = read8( ITU_TSTR) |~ITU0_STARTMASK;
-    write8( temp8, ITU_TSTR);
-    
-  }
+  /* start counter */
+  temp8 = read8( ITU_TSTR) |~ITU0_STARTMASK;
+  write8( temp8, ITU_TSTR);
 
   /*
    *  Schedule the clock cleanup routine to execute if the application exits.
@@ -290,24 +282,22 @@ void Install_clock(
 void Clock_exit( void )
 {
   unsigned8 temp8 = 0;
-  if ( rtems_configuration_get_ticks_per_timeslice() ) {
 
-    /* turn off the timer interrupts */
-    /* set interrupt priority to 0 */
-    if( sh_set_irq_priority( CLOCK_VECTOR, 0 ) != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred( RTEMS_UNSATISFIED);
+  /* turn off the timer interrupts */
+  /* set interrupt priority to 0 */
+  if( sh_set_irq_priority( CLOCK_VECTOR, 0 ) != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred( RTEMS_UNSATISFIED);
 
 /*
  *   temp16 = read16( ITU_TIER0) & IPRC_ITU0_IRQMASK;
  *   write16( temp16, ITU_TIER0);
  */
 
-    /* stop counter */
-    temp8 = read8( ITU_TSTR) & ITU0_STARTMASK;
-    write8( temp8, ITU_TSTR);
+  /* stop counter */
+  temp8 = read8( ITU_TSTR) & ITU0_STARTMASK;
+  write8( temp8, ITU_TSTR);
 
-    /* old vector shall not be installed */
-  }
+  /* old vector shall not be installed */
 }
 
 /*

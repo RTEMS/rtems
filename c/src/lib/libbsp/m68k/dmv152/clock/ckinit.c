@@ -69,44 +69,38 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
-    Z8x36_WRITE( TIMER, MASTER_CFG, 0xd4 );
-    Z8x36_READ ( TIMER, MASTER_INTR, data );
-    Z8x36_WRITE( TIMER, MASTER_INTR, (data & 0x7E) );
-    Z8x36_WRITE( TIMER, CT1_TIME_CONST_MSB, 0x04 );
-    Z8x36_WRITE( TIMER, CT1_TIME_CONST_LSB, 0xCE );
-    Z8x36_WRITE( TIMER, CT1_MODE_SPEC, 0x83 );
-    Z8x36_WRITE( TIMER, CNT_TMR_VECTOR, CLOCK_VECTOR );
-    Z8x36_WRITE( TIMER, CT1_CMD_STATUS, 0x20 );
-    Z8x36_READ ( TIMER, MASTER_INTR, data );
-    Z8x36_WRITE( TIMER, MASTER_INTR, (data & 0xDA) | 0x80 );
+  Z8x36_WRITE( TIMER, MASTER_CFG, 0xd4 );
+  Z8x36_READ ( TIMER, MASTER_INTR, data );
+  Z8x36_WRITE( TIMER, MASTER_INTR, (data & 0x7E) );
+  Z8x36_WRITE( TIMER, CT1_TIME_CONST_MSB, 0x04 );
+  Z8x36_WRITE( TIMER, CT1_TIME_CONST_LSB, 0xCE );
+  Z8x36_WRITE( TIMER, CT1_MODE_SPEC, 0x83 );
+  Z8x36_WRITE( TIMER, CNT_TMR_VECTOR, CLOCK_VECTOR );
+  Z8x36_WRITE( TIMER, CT1_CMD_STATUS, 0x20 );
+  Z8x36_READ ( TIMER, MASTER_INTR, data );
+  Z8x36_WRITE( TIMER, MASTER_INTR, (data & 0xDA) | 0x80 );
 
-    /*
-     * ACC_IC54 - interrupt 5 will be vectored and mapped to level 6
-     */
+  /*
+   * ACC_IC54 - interrupt 5 will be vectored and mapped to level 6
+   */
 
-    data = (*(rtems_unsigned8 *)0x0D00000B);
-    (*(rtems_unsigned8 *)0x0D00000B) = (data & 0x7F) | 0x60;
+  data = (*(rtems_unsigned8 *)0x0D00000B);
+  (*(rtems_unsigned8 *)0x0D00000B) = (data & 0x7F) | 0x60;
 
-    Z8x36_WRITE( TIMER, CT1_CMD_STATUS, 0xC6 );
+  Z8x36_WRITE( TIMER, CT1_CMD_STATUS, 0xC6 );
 
-    atexit( Clock_exit );
-  }
+  atexit( Clock_exit );
 }
 
 void Clock_exit( void )
 {
   rtems_unsigned8 data;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-
-    Z8x36_READ ( TIMER, MASTER_INTR, data );
-    Z8x36_WRITE( TIMER, MASTER_INTR, (data & 0x01) );
-    /* do not restore old vector */
-
-  }
+  Z8x36_READ ( TIMER, MASTER_INTR, data );
+  Z8x36_WRITE( TIMER, MASTER_INTR, (data & 0x01) );
+  /* do not restore old vector */
 }
 
 rtems_device_driver Clock_initialize(

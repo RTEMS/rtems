@@ -101,54 +101,50 @@ Clock_isr (rtems_vector_number vector)
 void
 Clock_exit (void)
 {
-	if (BSP_Configuration.ticks_per_timeslice ) {
-		/*
-		 * Turn off periodic interval timer
-		 */
-		m360.pitr &= ~0xFF;
-	}
+	/*
+	 * Turn off periodic interval timer
+	 */
+	m360.pitr &= ~0xFF;
 }
 
 static void
 Install_clock (rtems_isr_entry clock_isr)
 {
-	Clock_driver_ticks = 0;
-	if ( BSP_Configuration.ticks_per_timeslice ) {
-		/*
-		 * Choose periodic interval timer register value
-		 * The rate at which the periodic interval timer
-		 * can generate interrupts is almost certainly not
-		 * the same as desired by the BSP configuration.
-		 * Handle the difference by choosing the largest PIT
-		 * interval which is less than or equal to the RTEMS
-		 * interval and skipping some hardware interrupts.
-		 * To reduce the jitter in the calls to RTEMS the
-		 * hardware interrupt interval is never less than
-		 * the maximum non-prescaled value from the PIT.
-		 * 
-		 * For a 25 MHz external clock the basic clock rate is
-		 *	40 nsec * 128 * 4 = 20.48 usec/tick
-		 */
-		int divisor;
-		extern int m360_clock_rate; /* This should be somewhere in a config file */
-		unsigned long nsec_per_chip_tick = 1000000000 / m360_clock_rate;
-		unsigned long nsec_per_pit_tick = 512 * nsec_per_chip_tick;
+	int divisor;
+	extern int m360_clock_rate; /* This should be somewhere in a config file */
+	unsigned long nsec_per_chip_tick = 1000000000 / m360_clock_rate;
+	unsigned long nsec_per_pit_tick = 512 * nsec_per_chip_tick;
 
-		rtems_nsec_per_tick = BSP_Configuration.microseconds_per_tick * 1000;
-		divisor = rtems_nsec_per_tick / nsec_per_pit_tick;
-		if (divisor >= 256) {
-			divisor = 255;
-		}
-		else if (divisor == 0) {
-			divisor = 1;
-		}
-		pit_nsec_per_tick = nsec_per_pit_tick * divisor;
-		m360.pitr &= ~0x1FF;
-		m360.picr = (CLOCK_IRQ_LEVEL << 8) | CLOCK_VECTOR;
-		set_vector (clock_isr, CLOCK_VECTOR, 1);
-		m360.pitr |= divisor;
-		atexit (Clock_exit);
+	Clock_driver_ticks = 0;
+	/*
+	 * Choose periodic interval timer register value
+	 * The rate at which the periodic interval timer
+	 * can generate interrupts is almost certainly not
+	 * the same as desired by the BSP configuration.
+	 * Handle the difference by choosing the largest PIT
+	 * interval which is less than or equal to the RTEMS
+	 * interval and skipping some hardware interrupts.
+	 * To reduce the jitter in the calls to RTEMS the
+	 * hardware interrupt interval is never less than
+	 * the maximum non-prescaled value from the PIT.
+	 * 
+	 * For a 25 MHz external clock the basic clock rate is
+	 *	40 nsec * 128 * 4 = 20.48 usec/tick
+	 */
+
+	rtems_nsec_per_tick = BSP_Configuration.microseconds_per_tick * 1000;
+	divisor = rtems_nsec_per_tick / nsec_per_pit_tick;
+	if (divisor >= 256) {
+		divisor = 255;
+	} else if (divisor == 0) {
+		divisor = 1;
 	}
+	pit_nsec_per_tick = nsec_per_pit_tick * divisor;
+	m360.pitr &= ~0x1FF;
+	m360.picr = (CLOCK_IRQ_LEVEL << 8) | CLOCK_VECTOR;
+	set_vector (clock_isr, CLOCK_VECTOR, 1);
+	m360.pitr |= divisor;
+	atexit (Clock_exit);
 }
 
 rtems_device_driver

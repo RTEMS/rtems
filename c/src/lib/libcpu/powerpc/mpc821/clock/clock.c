@@ -81,28 +81,26 @@ void Install_clock(rtems_isr_entry clock_isr)
   if (pit_value > 0xffff) {           /* pit is only 16 bits long */
     rtems_fatal_error_occurred(-1);
   }  
-  if ( rtems_configuration_get_ticks_per_timeslice() ) {
+
+  /*
+   * initialize the interval here
+   * First tick is set to right amount of time in the future
+   * Future ticks will be incremented over last value set
+   * in order to provide consistent clicks in the face of
+   * interrupt overhead
+   */
+  
+  rtems_interrupt_catch(clock_isr, PPC_IRQ_LVL0, &previous_isr);
     
-    /*
-     * initialize the interval here
-     * First tick is set to right amount of time in the future
-     * Future ticks will be incremented over last value set
-     * in order to provide consistent clicks in the face of
-     * interrupt overhead
-     */
+  m821.sccr &= ~(1<<24);
+  m821.pitc = pit_value;
     
-    rtems_interrupt_catch(clock_isr, PPC_IRQ_LVL0, &previous_isr);
+  /* set PIT irq level, enable PIT, PIT interrupts */
+  /*  and clear int. status */
+  m821.piscr = M821_PISCR_PIRQ(0) |
+    M821_PISCR_PTE | M821_PISCR_PS | M821_PISCR_PIE; 
     
-    m821.sccr &= ~(1<<24);
-    m821.pitc = pit_value;
-    
-    /* set PIT irq level, enable PIT, PIT interrupts */
-    /*  and clear int. status */
-    m821.piscr = M821_PISCR_PIRQ(0) |
-      M821_PISCR_PTE | M821_PISCR_PS | M821_PISCR_PIE; 
-    
-    m821.simask |= M821_SIMASK_LVM0;
-  }
+  m821.simask |= M821_SIMASK_LVM0;
   atexit(Clock_exit);
 }
 
@@ -127,12 +125,10 @@ ReInstall_clock(rtems_isr_entry new_clock_isr)
 void
 Clock_exit(void)
 {
-  if ( rtems_configuration_get_ticks_per_timeslice() ) {
-    /* disable PIT and PIT interrupts */
-    m821.piscr &= ~(M821_PISCR_PTE | M821_PISCR_PIE); 
-    
-    (void) set_vector(0, PPC_IRQ_LVL0, 1);
-  }
+  /* disable PIT and PIT interrupts */
+  m821.piscr &= ~(M821_PISCR_PTE | M821_PISCR_PIE); 
+  
+  (void) set_vector(0, PPC_IRQ_LVL0, 1);
 }
 
 rtems_device_driver Clock_initialize(

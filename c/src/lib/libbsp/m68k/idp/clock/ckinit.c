@@ -96,37 +96,35 @@ rtems_isr_entry clock_isr;
   Clock_driver_ticks = 0;
   Clock_isrs = (int)(Configuration.microseconds_per_tick / 1000);
 
-  if ( Configuration.ticks_per_timeslice ) {
 /*    led_putnum('c'); * for debugging purposes */
     Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
-	/* Disable timer for initialization */
-	MC68230_WRITE (TCR, 0x00);
+  /* Disable timer for initialization */
+  MC68230_WRITE (TCR, 0x00);
 
-	/* some PI/T initialization stuff here -- see comment in the ckisr.c
-	   file in this directory to understand why I use the values that I do */
-	/* Set up the interrupt vector on the MC68230 chip:
-		TIVR = CLOCK_VECTOR; */
-	MC68230_WRITE (TIVR, CLOCK_VECTOR);
+  /* some PI/T initialization stuff here -- see comment in the ckisr.c
+     file in this directory to understand why I use the values that I do */
+  /* Set up the interrupt vector on the MC68230 chip:
+  TIVR = CLOCK_VECTOR; */
+  MC68230_WRITE (TIVR, CLOCK_VECTOR);
 
-	/* Set CPRH through CPRL to 193 (not 203) decimal for countdown--see ckisr.c
-		CPRH = 0x00;
-		CPRM = 0x00;
-		CPRL = 0xC1; */
-	MC68230_WRITE (CPRH, 0x00);
-	MC68230_WRITE (CPRM, 0x00);
-	MC68230_WRITE (CPRL, 0xC1);
+  /* Set CPRH through CPRL to 193 (not 203) decimal for countdown--see ckisr.c
+  	CPRH = 0x00;
+  	CPRM = 0x00;
+  	CPRL = 0xC1; */
+  MC68230_WRITE (CPRH, 0x00);
+  MC68230_WRITE (CPRM, 0x00);
+  MC68230_WRITE (CPRL, 0xC1);
 
-	/* Enable timer and use it as an external periodic interrupt generator
-		TCR = 0xA1; */
+  /* Enable timer and use it as an external periodic interrupt generator
+  	TCR = 0xA1; */
 /*    led_putnum('a'); * for debugging purposes */
-	MC68230_WRITE (TCR, 0xA1);
+  MC68230_WRITE (TCR, 0xA1);
 
-	/*
-	 *  Schedule the clock cleanup routine to execute if the application exits.
-	 */
-    atexit( Clock_exit );
-  } 
+  /*
+   *  Schedule the clock cleanup routine to execute if the application exits.
+   */
+  atexit( Clock_exit );
 }
 
 /* The following was added for debugging purposes */
@@ -134,16 +132,13 @@ void Clock_exit( void )
 {
   rtems_unsigned8 data;
 
-  if ( Configuration.ticks_per_timeslice ) {
+  /* disable timer
+  	data = TCR;
+  	TCR = (data & 0xFE); */
+  MC68230_READ (TCR, data);
+  MC68230_WRITE (TCR, (data & 0xFE));
 
-	/* disable timer
-		data = TCR;
-		TCR = (data & 0xFE); */
-	MC68230_READ (TCR, data);
-	MC68230_WRITE (TCR, (data & 0xFE));
-
-    /* do not restore old vector */
-  }
+  /* do not restore old vector */
 }
 
 rtems_device_driver Clock_initialize(

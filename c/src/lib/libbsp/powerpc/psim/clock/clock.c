@@ -122,14 +122,11 @@ void Install_clock(
 {
   Clock_driver_ticks = 0;
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
-    PPC_Set_decrementer( CPU_PPC_CLICKS_PER_TICK );
+  PPC_Set_decrementer( CPU_PPC_CLICKS_PER_TICK );
 
-    atexit( Clock_exit );
-  }
-
+  atexit( Clock_exit );
 }
 
 /*
@@ -148,12 +145,9 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
+  /* nothing to do */; 
 
-    /* nothing to do */; 
-
-    /* do not restore old vector */
-  }
+  /* do not restore old vector */
 }
  
 /*
