@@ -131,6 +131,12 @@ int fcntl(
       ret = -1;
       break;
   }
+
+  /*
+   *  If we got this far successfully, then we give the optional
+   *  filesystem specific handler a chance to process this.  
+   */
+
   if (ret >= 0) {    
     if (iop->handlers->fcntl_h) {
       int err = (*iop->handlers->fcntl_h)( cmd, iop );
@@ -138,10 +144,6 @@ int fcntl(
         errno = err;
         ret = -1;
       }
-    }
-    else {
-      errno = ENOTSUP;
-      ret = -1;
     }
   }
   return ret;
