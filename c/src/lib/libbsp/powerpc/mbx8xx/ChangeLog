@@ -1,3 +1,13 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* console/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* irq/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* network/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* startup/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* vectors/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* include/coverhd.h: Per PR261 removed include of
