@@ -770,7 +770,7 @@ dec21140_ioctl (struct ifnet *ifp, int command, caddr_t data)
  * Attach an DEC21140 driver to the system
  */
 int
-rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
+rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 {
 	struct dec21140_softc *sc;
 	struct ifnet *ifp;

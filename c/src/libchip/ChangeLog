@@ -1,3 +1,8 @@
+2000-10-20	Joel Sherrill <joel@OARcorp.com>
+
+	* network/dec21140.c: Corrected attach to include "int attach"
+	parameter.
+
 2000-09-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* network/Makefile.am: Use AM_*FLAGS += .. .
