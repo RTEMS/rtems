@@ -5,7 +5,8 @@
 	Thomas Doerfler <Thomas.Doerfler@imd-systems.de> who ensured it did
 	not negatively impact the ppc403 BSPs.  The submission and tracking
 	process was captured as PR50.
-	* aclocal.m4: Added gen405 BSP.
+	* acinclude.m4: Added gen405 BSP.
+	* ChangeLog: Removed bogus comment on edit of generated file.
 
 2001-10-22	Joel Sherrill <joel@OARcorp.com>
 
