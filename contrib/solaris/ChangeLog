@@ -1,3 +1,7 @@
+2001-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: New file, missed previously.
+
 2004-02-05	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog, configure.ac, setup, setup.def,
