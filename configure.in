@@ -204,7 +204,7 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
       esac;
     done
 
-    AC_MSG_RESULT([$rtems_bsp])
+    AC_MSG_RESULT([$rtems_bsp done])
   fi
 
   # collect makefiles for each bsp

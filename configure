@@ -1428,7 +1428,7 @@ echo "configure:1414: checking for bsps" >&5
       esac;
     done
 
-    echo "$ac_t""$rtems_bsp" 1>&6
+    echo "$ac_t""$rtems_bsp done" 1>&6
   fi
 
   # collect makefiles for each bsp
