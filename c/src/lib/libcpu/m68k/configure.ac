@@ -53,8 +53,6 @@ esac
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 shared/Makefile
-shared/cache/Makefile
-shared/misc/Makefile
 m68040/Makefile
 m68040/fpsp/Makefile])
 AC_OUTPUT
