@@ -42,7 +42,7 @@ typedef struct
  *        handlers at a later time.
  */
 EE_ISR_Type       ISR_Nodes [NUM_LIRQ_HANDLERS];
-rtems_unsigned16  Nodes_Used; 
+uint16_t    Nodes_Used; 
 Chain_Control     ISR_Array  [NUM_LIRQ];
 
 /*PAGE
@@ -63,9 +63,9 @@ rtems_isr external_exception_ISR (
   rtems_vector_number   vector             /* IN  */
 )
 { 
-  rtems_unsigned16      index;
+  uint16_t        index;
   rtems_boolean         is_active=FALSE;
-  rtems_unsigned32      scv64_status;
+  uint32_t        scv64_status;
   Chain_Node           *node;
   EE_ISR_Type          *ee_isr;
   
@@ -177,8 +177,8 @@ rtems_isr_entry  set_EE_vector(
   rtems_vector_number vector        /* vector number      */
 )
 {
-  rtems_unsigned16 vec_idx  = vector - DMV170_IRQ_FIRST;
-  rtems_unsigned32 index;
+  uint16_t   vec_idx  = vector - DMV170_IRQ_FIRST;
+  uint32_t   index;
   
   /* 
    *  Verify that all of the nodes have not been used.

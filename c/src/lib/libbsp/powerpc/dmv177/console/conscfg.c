@@ -160,7 +160,7 @@ console_tbl	Console_Port_Tbl[] = {
 		mc68681_set_register_8,		/* setRegister */
 		NULL, /* unused */		/* getData */
 		NULL, /* unused */		/* setData */
-                (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
+                (uint32_t)dmv177_mc68681_baud_table, /* ulClock */
 		DMV170_DUART_IRQ		/* ulIntVector */
 	},
 	{
@@ -179,7 +179,7 @@ console_tbl	Console_Port_Tbl[] = {
 		mc68681_set_register_8,		/* setRegister */
 		NULL, /* unused */		/* getData */
 		NULL, /* unused */		/* setData */
-                (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
+                (uint32_t)dmv177_mc68681_baud_table, /* ulClock */
 		DMV170_DUART_IRQ		/* ulIntVector */
 	},
 	{
@@ -241,11 +241,11 @@ rtems_device_minor_number  Console_Port_Minor;
 
 boolean dmv177_z85c30_probe(int minor)
 {
-  volatile unsigned32 *dma_control_status_reg;
-  volatile unsigned16 *card_resource_reg;
-  unsigned16 v;
+  volatile uint32_t   *dma_control_status_reg;
+  volatile uint16_t   *card_resource_reg;
+  uint16_t   v;
 
-  card_resource_reg = (volatile unsigned16 *) DMV170_CARD_RESORCE_REG;
+  card_resource_reg = (volatile uint16_t*) DMV170_CARD_RESORCE_REG;
 
   v = *card_resource_reg & DMV170_SCC_INST_MASK;
 
@@ -256,7 +256,7 @@ boolean dmv177_z85c30_probe(int minor)
    *  Figure out the clock speed of the Z85C30 SCC
    */
 
-  dma_control_status_reg = (volatile unsigned32 *)DMV170_DMA_CONTROL_STATUS_REG;
+  dma_control_status_reg = (volatile uint32_t*)DMV170_DMA_CONTROL_STATUS_REG;
 
   if ( *dma_control_status_reg & DMV170_SCC_10MHZ )
     Console_Port_Tbl[minor].ulClock = Z85C30_CLOCK_10;
@@ -268,10 +268,10 @@ boolean dmv177_z85c30_probe(int minor)
 
 boolean dmv177_mc68681_probe(int minor)
 {
-  volatile unsigned16 *card_resource_reg;
-  unsigned16 v;
+  volatile uint16_t   *card_resource_reg;
+  uint16_t   v;
 
-  card_resource_reg = (volatile unsigned16 *) DMV170_CARD_RESORCE_REG;
+  card_resource_reg = (volatile uint16_t*) DMV170_CARD_RESORCE_REG;
 
   v = *card_resource_reg & DMV170_DUART_INST_MASK;
 

@@ -34,8 +34,8 @@ void VME_interrupt_Disable (
   VME_interrupt_Mask                mask                        /* IN  */
 )
 {
-  volatile rtems_unsigned8  *VME_interrupt_enable;
-  rtems_unsigned8  value;
+  volatile uint8_t    *VME_interrupt_enable;
+  uint8_t    value;
 
 #if 0
   VME_interrupt_enable = ACC_VIE;
@@ -67,8 +67,8 @@ void VME_interrupt_Enable (
   VME_interrupt_Mask                mask                        /* IN  */
 )
 {
-  volatile rtems_unsigned8  *VME_interrupt_enable;
-  rtems_unsigned8  value;
+  volatile uint8_t    *VME_interrupt_enable;
+  uint8_t    value;
 
 #if 0
   VME_interrupt_enable = ACC_VIE;

@@ -63,10 +63,10 @@ rtems_device_minor_number  RTC_Minor;
 
 boolean dmv177_icm7170_probe(int minor)
 {
-  volatile unsigned16 *card_resource_reg;
-  unsigned16 v;
+  volatile uint16_t   *card_resource_reg;
+  uint16_t   v;
 
-  card_resource_reg = (volatile unsigned16 *) DMV170_CARD_RESORCE_REG;
+  card_resource_reg = (volatile uint16_t*) DMV170_CARD_RESORCE_REG;
 
   v = *card_resource_reg & DMV170_RTC_INST_MASK;
 

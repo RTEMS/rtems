@@ -79,10 +79,10 @@ extern "C" {
 #define DMV170_CARD_RESORCE_REG                           0xf2400040
 
 #define DMV170_WRITE( _reg, _data ) \
-   *((volatile rtems_unsigned16 *)(_reg)) = (_data)
+   *((volatile uint16_t*)(_reg)) = (_data)
 
 #define DMV170_READ( _reg, _data ) \
-   (_data) = *((volatile rtems_unsigned16 *)(_reg))
+   (_data) = *((volatile uint16_t*)(_reg))
 
 /*
  *  The following defines the bits in the DMA Control and Status Register
@@ -277,8 +277,8 @@ extern "C" {
  */
 
 void SCV64_Generate_DUART_Interrupts();
-rtems_unsigned32 SCV64_Get_Interrupt();
-rtems_unsigned32 SCV64_Get_Interrupt_Enable();
+uint32_t   SCV64_Get_Interrupt();
+uint32_t   SCV64_Get_Interrupt_Enable();
 
 #ifdef __cplusplus
 }

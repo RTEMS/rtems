@@ -14,70 +14,70 @@
 
 typedef struct {
   /* DARF Registers */
-  volatile rtems_unsigned32  DMALAR;             /* 0x00 */       
-  volatile rtems_unsigned32  DMAVAR;             /* 0x04 */       
-  volatile rtems_unsigned32  DMATC;              /* 0x08 */      
-  volatile rtems_unsigned32  DCSR;               /* 0x0c */     
-  volatile rtems_unsigned32  VMEBAR;             /* 0x10 */       
-  volatile rtems_unsigned32  RXDATA;             /* 0x14 */       
-  volatile rtems_unsigned32  RXADDR;             /* 0x18 */                           
-  volatile rtems_unsigned32  RXCTL;              /* 0x1c */      
-  volatile rtems_unsigned32  BUSSEL;             /* 0x20 */       
-  volatile rtems_unsigned32  IVECT;              /* 0x24 */      
-  volatile rtems_unsigned32  APBR;               /* 0x28 */     
-  volatile rtems_unsigned32  TXDATA;             /* 0x2c */       
-  volatile rtems_unsigned32  TXADDR;             /* 0x30 */       
-  volatile rtems_unsigned32  TXCTL;              /* 0x34 */      
-  volatile rtems_unsigned32  LMFIFO;             /* 0x38 */       
-  volatile rtems_unsigned32  MODE;               /* 0x3c */     
-  volatile rtems_unsigned32  SA64BAR;            /* 0x40 */        
-  volatile rtems_unsigned32  MA64BAR;            /* 0x44 */
-  volatile rtems_unsigned32  LAG;                /* 0x48 */
-  volatile rtems_unsigned32  DMAVTC;             /* 0x4c */
+  volatile uint32_t    DMALAR;             /* 0x00 */       
+  volatile uint32_t    DMAVAR;             /* 0x04 */       
+  volatile uint32_t    DMATC;              /* 0x08 */      
+  volatile uint32_t    DCSR;               /* 0x0c */     
+  volatile uint32_t    VMEBAR;             /* 0x10 */       
+  volatile uint32_t    RXDATA;             /* 0x14 */       
+  volatile uint32_t    RXADDR;             /* 0x18 */                           
+  volatile uint32_t    RXCTL;              /* 0x1c */      
+  volatile uint32_t    BUSSEL;             /* 0x20 */       
+  volatile uint32_t    IVECT;              /* 0x24 */      
+  volatile uint32_t    APBR;               /* 0x28 */     
+  volatile uint32_t    TXDATA;             /* 0x2c */       
+  volatile uint32_t    TXADDR;             /* 0x30 */       
+  volatile uint32_t    TXCTL;              /* 0x34 */      
+  volatile uint32_t    LMFIFO;             /* 0x38 */       
+  volatile uint32_t    MODE;               /* 0x3c */     
+  volatile uint32_t    SA64BAR;            /* 0x40 */        
+  volatile uint32_t    MA64BAR;            /* 0x44 */
+  volatile uint32_t    LAG;                /* 0x48 */
+  volatile uint32_t    DMAVTC;             /* 0x4c */
 
   /* Reserved */
-  volatile rtems_unsigned32  reserved_50_7F[12];
+  volatile uint32_t    reserved_50_7F[12];
 
   /* ACC Registers */
-  volatile rtems_unsigned8   STAT0_pad[3];       /* 0x80 */       
-  volatile rtems_unsigned8   STAT0;                        
-  volatile rtems_unsigned8   STAT1_pad[3];       /* 0x84 */       
-  volatile rtems_unsigned8   STAT1;                        
-  volatile rtems_unsigned8   GENCTL_pad[3];      /* 0x88 */        
-  volatile rtems_unsigned8   GENCTL;                        
-  volatile rtems_unsigned8   VINT_pad[3];        /* 0x8c */      
-  volatile rtems_unsigned8   VINT;                        
-  volatile rtems_unsigned8   VREQ_pad[3];        /* 0x90 */      
-  volatile rtems_unsigned8   VREQ;                        
-  volatile rtems_unsigned8   VARB_pad[3];        /* 0x94 */      
-  volatile rtems_unsigned8   VARB;                        
-  volatile rtems_unsigned8   ID_pad[3];          /* 0x98 */    
-  volatile rtems_unsigned8   ID;                        
-  volatile rtems_unsigned8   NA_pad[3];          /* 0x9c */    
-  volatile rtems_unsigned8   NA;                        
-  volatile rtems_unsigned8   _7IS_pad[3];        /* 0xa0 */      
-  volatile rtems_unsigned8   _7IS;                        
-  volatile rtems_unsigned8   LIS_pad[3];         /* 0xa4 */     
-  volatile rtems_unsigned8   LIS;                        
-  volatile rtems_unsigned8   UIE_pad[3];         /* 0xa8 */     
-  volatile rtems_unsigned8   UIE;                        
-  volatile rtems_unsigned8   LIE_pad[3];         /* 0xac */     
-  volatile rtems_unsigned8   LIE;                        
-  volatile rtems_unsigned8   VIE_pad[3];         /* 0xb0 */     
-  volatile rtems_unsigned8   VIE;                        
-  volatile rtems_unsigned8   IC10_pad[3];        /* 0xb4 */      
-  volatile rtems_unsigned8   IC10;                        
-  volatile rtems_unsigned8   IC32_pad[3];        /* 0xb8 */      
-  volatile rtems_unsigned8   IC32;                        
-  volatile rtems_unsigned8   IC54_pad[3];        /* 0xbc */      
-  volatile rtems_unsigned8   IC54;                        
+  volatile uint8_t     STAT0_pad[3];       /* 0x80 */       
+  volatile uint8_t     STAT0;                        
+  volatile uint8_t     STAT1_pad[3];       /* 0x84 */       
+  volatile uint8_t     STAT1;                        
+  volatile uint8_t     GENCTL_pad[3];      /* 0x88 */        
+  volatile uint8_t     GENCTL;                        
+  volatile uint8_t     VINT_pad[3];        /* 0x8c */      
+  volatile uint8_t     VINT;                        
+  volatile uint8_t     VREQ_pad[3];        /* 0x90 */      
+  volatile uint8_t     VREQ;                        
+  volatile uint8_t     VARB_pad[3];        /* 0x94 */      
+  volatile uint8_t     VARB;                        
+  volatile uint8_t     ID_pad[3];          /* 0x98 */    
+  volatile uint8_t     ID;                        
+  volatile uint8_t     NA_pad[3];          /* 0x9c */    
+  volatile uint8_t     NA;                        
+  volatile uint8_t     _7IS_pad[3];        /* 0xa0 */      
+  volatile uint8_t     _7IS;                        
+  volatile uint8_t     LIS_pad[3];         /* 0xa4 */     
+  volatile uint8_t     LIS;                        
+  volatile uint8_t     UIE_pad[3];         /* 0xa8 */     
+  volatile uint8_t     UIE;                        
+  volatile uint8_t     LIE_pad[3];         /* 0xac */     
+  volatile uint8_t     LIE;                        
+  volatile uint8_t     VIE_pad[3];         /* 0xb0 */     
+  volatile uint8_t     VIE;                        
+  volatile uint8_t     IC10_pad[3];        /* 0xb4 */      
+  volatile uint8_t     IC10;                        
+  volatile uint8_t     IC32_pad[3];        /* 0xb8 */      
+  volatile uint8_t     IC32;                        
+  volatile uint8_t     IC54_pad[3];        /* 0xbc */      
+  volatile uint8_t     IC54;                        
   /* Utility Registers */
-  volatile rtems_unsigned32  MISC;
-  volatile rtems_unsigned32  delay_line[3];
-  volatile rtems_unsigned32  MBOX0;
-  volatile rtems_unsigned32  MBOX1;
-  volatile rtems_unsigned32  MBOX2;
-  volatile rtems_unsigned32  MBOX3;
+  volatile uint32_t    MISC;
+  volatile uint32_t    delay_line[3];
+  volatile uint32_t    MBOX0;
+  volatile uint32_t    MBOX1;
+  volatile uint32_t    MBOX2;
+  volatile uint32_t    MBOX3;
 } SCV64_Registers;
 
 /*
@@ -120,7 +120,7 @@ void SCV64_Initialize() {
  */
 void SCV64_Generate_DUART_Interrupts() {
 
-  rtems_unsigned8 data;
+  uint8_t   data;
  
   /*
    * Set Local Interrupt 5 enable
@@ -143,9 +143,9 @@ void SCV64_Generate_DUART_Interrupts() {
  *
  *  This routine returns the SCV64 status register.
  */
-rtems_unsigned32 SCV64_Get_Interrupt()
+uint32_t   SCV64_Get_Interrupt()
 {
-  rtems_unsigned8 data;
+  uint8_t   data;
  
   /*
    * Put the LIS data into the lower byte of the result
@@ -161,7 +161,7 @@ rtems_unsigned32 SCV64_Get_Interrupt()
  *
  * This routine returns the interrupt enable mask.
  */
-rtems_unsigned32 SCV64_Get_Interrupt_Enable()
+uint32_t   SCV64_Get_Interrupt_Enable()
 {
   /*
    * Return the set of interrupts enabled.

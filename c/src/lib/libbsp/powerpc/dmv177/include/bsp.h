@@ -89,14 +89,14 @@ int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config);
 
 #define Cause_tm27_intr()  \
   do { \
-    unsigned32 _clicks = 1; \
+    uint32_t   _clicks = 1; \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
 #define Clear_tm27_intr() \
   do { \
-    unsigned32 _clicks = 0xffffffff; \
-    unsigned32 _msr = 0; \
+    uint32_t   _clicks = 0xffffffff; \
+    uint32_t   _msr = 0; \
     _ISR_Set_level( 0 ); \
     asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
     _msr &=  ~0x8000; \
@@ -106,7 +106,7 @@ int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config);
 
 #define Lower_tm27_intr() \
   do { \
-    unsigned32 _msr = 0; \
+    uint32_t   _msr = 0; \
     _ISR_Set_level( 0 ); \
     asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
     _msr |=  0x8002; \
@@ -188,7 +188,7 @@ extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
-extern rtems_unsigned32          bsp_isr_level;
+extern uint32_t            bsp_isr_level;
 
 extern int   CPU_PPC_CLICKS_PER_MS;
 
