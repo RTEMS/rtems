@@ -342,22 +342,21 @@ structure has the following fields:
 @end example
 
 These options are used to set a function to be called when there is
-data available from the socket (@code{SO_SNDWAKEUP}) and when there is space
-available to accept data written to the socket (@code{SO_RCVWAKEUP}).
+data available from the socket (@code{SO_RCVWAKEUP}) and when there is space
+available to accept data written to the socket (@code{SO_SNDWAKEUP}).
 
-If @code{setsockopt} is called with the @code{SO_SNDWAKEUP} option, and the
+If @code{setsockopt} is called with the @code{SO_RCVWAKEUP} option, and the
 @code{sw_pfn} field is not zero, then when there is data
 available to be read from
 the socket, the function pointed to by the @code{sw_pfn} field will be
 called.  A pointer to the socket structure will be passed as the first
-argument to the function.  The @code{sw_arg} field
-set by the @code{SO_SNDWAKEUP}
-call will be passed as the second argument to the function.
+argument to the function.  The @code{sw_arg} field set by the
+@code{SO_RCVWAKEUP} call will be passed as the second argument to the function.
 
-If @code{setsockopt} is called with the @code{SO_RCVWAKEUP}
-function, and the @code{sw_pfn}
-field is not zero, then when there is space available to accept data
-written to the socket, the function pointed to by the @code{sw_pfn} field
+If @code{setsockopt} is called with the @code{SO_SNDWAKEUP}
+function, and the @code{sw_pfn} field is not zero, then when
+there is space available to accept data written to the socket,
+the function pointed to by the @code{sw_pfn} field
 will be called.  The arguments passed to the function will be as with
 @code{SO_SNDWAKEUP}.
 
