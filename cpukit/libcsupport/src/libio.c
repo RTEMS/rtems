@@ -155,9 +155,12 @@ rtems_libio_init(void)
 
 rtems_assoc_t errno_assoc[] = {
     { "OK",                 RTEMS_SUCCESSFUL,                0 },
-    { "TIMEOUT",            RTEMS_TIMEOUT,                   ETIME },
+    { "BUSY",               RTEMS_RESOURCE_IN_USE,           EBUSY },
+    { "INVALID NAME",       RTEMS_INVALID_NAME,              EINVAL },
+    { "NOT IMPLEMENTED",    RTEMS_NOT_IMPLEMENTED,           ENOSYS },
+    { "TIMEOUT",            RTEMS_TIMEOUT,                   ETIMEDOUT },
     { "NO MEMORY",          RTEMS_NO_MEMORY,                 ENOMEM },
-    { "NO DEVICE",          RTEMS_UNSATISFIED,               ENOSYS },
+    { "NO DEVICE",          RTEMS_UNSATISFIED,               ENODEV },
     { "INVALID NUMBER",     RTEMS_INVALID_NUMBER,            EBADF},
     { "NOT RESOURCE OWNER", RTEMS_NOT_OWNER_OF_RESOURCE,     EPERM},
     { "IO ERROR",           RTEMS_IO_ERROR,                  EIO},

@@ -53,12 +53,16 @@ int __rtems_fstat(int _fd, struct stat* _sbuf)
     _sbuf->st_mode = S_IFCHR;
   } else {
     switch (rtems_file_descriptor_type (_fd)) {
+    case RTEMS_FILE_DESCRIPTOR_TYPE_FILE:
+      _sbuf->st_mode = S_IFREG;
+      break;
+
     case RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET:
       _sbuf->st_mode = S_IFSOCK;
       break;
 
     default:
-      puts( "__rtems_fstat -- unknown socket type" );
+      puts( "__rtems_fstat -- unknown file descriptor type" );
       assert( 0 );
     }
   }
