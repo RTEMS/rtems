@@ -24,12 +24,12 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
 ## Note: the order of the directories below is essential
-AC_CONFIG_SUBDIRS(make)
-AC_CONFIG_SUBDIRS(exec)
-AC_CONFIG_SUBDIRS(lib)
+cfg_subdirs="make"
+cfg_subdirs="$cfg_subdirs exec"
+cfg_subdirs="$cfg_subdirs lib"
 
 if test "$HAS_NETWORKING" = "yes"; then
-  cfg_subdirs="libnetworking librpc"
+  cfg_subdirs="$cfg_subdirs libnetworking librpc"
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
   fi
@@ -44,7 +44,6 @@ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
 fi 
 
 AC_CONFIG_SUBDIRS($cfg_subdirs)
-AC_CONFIG_SUBDIRS(wrapup)
 AC_SUBST(cfg_subdirs)
 AC_CONFIG_SUBDIRS(tests)
 
