@@ -136,7 +136,8 @@ void _Thread_Create_idle( void )
     CPU_IDLE_TASK_IS_FP,
     PRIORITY_MAXIMUM,
     TRUE,        /* preemptable */
-    FALSE,       /* not timesliced */
+    THREAD_CPU_BUDGET_ALGORITHM_NONE,
+    NULL,        /* no budget algorithm callout */
     0,           /* all interrupts enabled */
     _Thread_Idle_name
   );
@@ -243,7 +244,8 @@ void _Thread_Dispatch( void )
 
     _User_extensions_Thread_switch( executing, heir );
 
-    heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
+    if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
+      heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
 
     /*
      *  If the CPU has hardware floating point, then we must address saving
@@ -383,17 +385,17 @@ static void _Thread_Stack_Free(
  */
 
 boolean _Thread_Initialize(
-  Objects_Information *information,
-  Thread_Control      *the_thread,
-  void                *stack_area,    /* NULL if to be allocated */
-  unsigned32           stack_size,    /* insure it is >= min */
-  boolean              is_fp,         /* TRUE if thread uses FP */
-  Priority_Control     priority,
-  boolean              is_preemptible,
-  boolean              is_timeslice,
-  unsigned32           isr_level,
-  Objects_Name         name
-  
+  Objects_Information                  *information,
+  Thread_Control                       *the_thread,
+  void                                 *stack_area,
+  unsigned32                            stack_size,
+  boolean                               is_fp,
+  Priority_Control                      priority,
+  boolean                               is_preemptible,
+  Thread_CPU_budget_algorithms          budget_algorithm,
+  Thread_CPU_budget_algorithm_callout   budget_callout,
+  unsigned32                            isr_level,
+  Objects_Name                          name
 )
 {
   unsigned32           actual_stack_size = 0;
@@ -480,9 +482,10 @@ boolean _Thread_Initialize(
    *  General initialization
    */
 
-  the_thread->Start.is_preemptible = is_preemptible;
-  the_thread->Start.is_timeslice   = is_timeslice;
-  the_thread->Start.isr_level      = isr_level;
+  the_thread->Start.is_preemptible   = is_preemptible;
+  the_thread->Start.budget_algorithm = budget_algorithm;
+  the_thread->Start.budget_callout   = budget_callout;
+  the_thread->Start.isr_level        = isr_level;
 
   the_thread->current_state          = STATES_DORMANT;
   the_thread->resource_count         = 0;
@@ -573,8 +576,9 @@ boolean _Thread_Restart(
  
     _Thread_Set_transient( the_thread );
     the_thread->resource_count = 0;
-    the_thread->is_preemptible = the_thread->Start.is_preemptible;
-    the_thread->is_timeslice   = the_thread->Start.is_timeslice;
+    the_thread->is_preemptible   = the_thread->Start.is_preemptible;
+    the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
+    the_thread->budget_callout   = the_thread->Start.budget_callout;
 
     the_thread->Start.pointer_argument = pointer_argument;
     the_thread->Start.numeric_argument = numeric_argument;
@@ -874,7 +878,6 @@ void _Thread_Reset_timeslice( void )
   _ISR_Disable( level );
     if ( _Chain_Has_only_one_node( ready ) ) {
       _ISR_Enable( level );
-      executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       return;
     }
     _Chain_Extract_unprotected( &executing->Object.Node );
@@ -905,13 +908,32 @@ void _Thread_Reset_timeslice( void )
 
 void _Thread_Tickle_timeslice( void )
 {
-  if ( !_Thread_Executing->is_timeslice  ||
-       !_Thread_Executing->is_preemptible ||
-       !_States_Is_ready( _Thread_Executing->current_state ) ) 
+  Thread_Control *executing;
+
+  executing = _Thread_Executing;
+
+  if ( !executing->is_preemptible )
     return;
 
-  if ( --_Thread_Executing->cpu_time_budget == 0 ) {
-      _Thread_Reset_timeslice();
+  if ( !_States_Is_ready( executing->current_state ) )
+    return;
+
+  switch ( executing->budget_algorithm ) {
+    case THREAD_CPU_BUDGET_ALGORITHM_NONE:
+      break;
+
+    case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
+    case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
+      if ( --executing->cpu_time_budget == 0 ) {
+        _Thread_Reset_timeslice();
+        executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
+      }
+      break;
+
+    case THREAD_CPU_BUDGET_ALGORITHM_CALLOUT:
+      if ( --executing->cpu_time_budget == 0 )
+        (*executing->budget_callout)( executing );
+      break;
   }
 }
 
@@ -986,8 +1008,9 @@ void _Thread_Load_environment(
   }
 
   the_thread->do_post_task_switch_extension = FALSE;
-  the_thread->is_preemptible = the_thread->Start.is_preemptible;
-  the_thread->is_timeslice   = the_thread->Start.is_timeslice;
+  the_thread->is_preemptible   = the_thread->Start.is_preemptible;
+  the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
+  the_thread->budget_callout   = the_thread->Start.budget_callout;
 
   _Context_Initialize(
     &the_thread->Registers,

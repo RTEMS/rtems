@@ -115,7 +115,8 @@ void _MPCI_Create_server( void )
     CPU_ALL_TASKS_ARE_FP,
     PRIORITY_MINIMUM,
     FALSE,       /* no preempt */
-    FALSE,       /* not timesliced */
+    THREAD_CPU_BUDGET_ALGORITHM_NONE,
+    NULL,        /* no budget algorithm callout */
     0,           /* all interrupts enabled */
     _MPCI_Internal_name
   );

@@ -354,7 +354,10 @@ rtems_status_code rtems_task_create(
     is_fp,
     core_priority,
     _Modes_Is_preempt(initial_modes)   ? TRUE : FALSE,
-    _Modes_Is_timeslice(initial_modes) ? TRUE : FALSE,
+    _Modes_Is_timeslice(initial_modes) ?
+      THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE :
+      THREAD_CPU_BUDGET_ALGORITHM_NONE,
+    NULL,        /* no budget algorithm callout */
     _Modes_Get_interrupt_level(initial_modes),
     &name
   );
@@ -777,7 +780,12 @@ rtems_status_code rtems_task_mode(
   asr = &api->Signal;
 
   old_mode  = (executing->is_preemptible) ? RTEMS_PREEMPT : RTEMS_NO_PREEMPT;
-  old_mode |= (executing->is_timeslice) ? RTEMS_TIMESLICE : RTEMS_NO_TIMESLICE;
+
+  if ( executing->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_NONE )
+    old_mode |= RTEMS_NO_TIMESLICE;
+  else
+    old_mode |= RTEMS_TIMESLICE;
+
   old_mode |= (asr->is_enabled) ? RTEMS_ASR : RTEMS_NO_ASR;
   old_mode |= _ISR_Get_level();
 
@@ -790,8 +798,12 @@ rtems_status_code rtems_task_mode(
   if ( mask & RTEMS_PREEMPT_MASK )
     executing->is_preemptible = _Modes_Is_preempt(mode_set) ? TRUE : FALSE;
 
-  if ( mask & RTEMS_TIMESLICE_MASK )
-    executing->is_timeslice = _Modes_Is_timeslice(mode_set) ? TRUE : FALSE;
+  if ( mask & RTEMS_TIMESLICE_MASK ) {
+    if ( _Modes_Is_timeslice(mode_set) ) 
+      executing->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
+    else
+      executing->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+  }
 
   /*
    *  Set the new interrupt level
