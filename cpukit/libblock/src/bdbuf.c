@@ -19,7 +19,7 @@
 #include "rtems/bdbuf.h"
 
 /* Fatal errors: */
-#define BLKDEV_FATAL_ERROR(n) (('B' << 24) | ((n) & 0x00FFFFFF))
+#define BLKDEV_FATAL_ERROR(n) (((unsigned32)'B' << 24) | ((unsigned32)(n) & (unsigned32)0x00FFFFFF))
 #define BLKDEV_FATAL_BDBUF_CONSISTENCY BLKDEV_FATAL_ERROR(1)
 #define BLKDEV_FATAL_BDBUF_SWAPOUT     BLKDEV_FATAL_ERROR(2)
 
