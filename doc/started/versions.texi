@@ -21,13 +21,13 @@
 @c  GCC/EGCS Version
 @c
 
-@set GCC-VERSION     egcs 1.1b
-@set GCC-TAR         egcs-1.1b.tar.gz
-@set GCC-UNTAR       egcs-1.1b
+@set GCC-VERSION     egcs 1.1.1
+@set GCC-TAR         egcs-1.1.1.tar.gz
+@set GCC-UNTAR       egcs-1.1.1
 @set GCC-FTPSITE     egcs.cygnus.com
-@set GCC-FTPDIR      /pub/egcs/releases/egcs-1.1b
+@set GCC-FTPDIR      /pub/egcs/releases/egcs-1.1.1
 @set GCC-HTTPDIR     /pub/egcs/releases/index.html
-@set GCC-RTEMSPATCH  egcs-1.1b-rtems-diff-19981027.gz
+@set GCC-RTEMSPATCH  egcs-1.1.1-rtems-diff-19990121.gz
 
 @c
 @c  BINUTILS Version
@@ -53,12 +53,12 @@
 @c  NEWLIB Version
 @c
 
-@set NEWLIB-VERSION     newlib 1.8.0
-@set NEWLIB-TAR         newlib-1.8.0.tar.gz
-@set NEWLIB-UNTAR       newlib-1.8.0
+@set NEWLIB-VERSION     newlib 1.8.1
+@set NEWLIB-TAR         newlib-1.8.1.tar.gz
+@set NEWLIB-UNTAR       newlib-1.8.1
 @set NEWLIB-FTPSITE     ftp.cygnus.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.8.0-rtems-diff-19981027.gz
+@set NEWLIB-RTEMSPATCH  newlib-1.8.1-rtems-diff-19990121.gz
 
 @c
 @c  GDB Version
@@ -76,11 +76,11 @@
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS 4.0.0
-@set RTEMS-TAR       rtems-4.0.0.tgz
-@set RTEMS-UNTAR     rtems-4.0.0
+@set RTEMS-VERSION   RTEMS 19990121
+@set RTEMS-TAR       rtems-19990121.tgz
+@set RTEMS-UNTAR     rtems-19990121
 @set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/4.0.0
-@set BUILDTOOLS-TAR  c_build_scripts-4.0.0.tgz
+@set RTEMS-FTPDIR    /pub/rtems/19990121
+@set BUILDTOOLS-TAR  c_build_scripts-19990121.tgz
 
 
