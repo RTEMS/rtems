@@ -56,7 +56,6 @@ clock/Makefile
 console/Makefile
 fatal/Makefile
 network/Makefile
-start/Makefile
 startup/Makefile
 timer/Makefile
 wrapup/Makefile])
