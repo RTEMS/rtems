@@ -1,3 +1,7 @@
+	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
+
+2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
