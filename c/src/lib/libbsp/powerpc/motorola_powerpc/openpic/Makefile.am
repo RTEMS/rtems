@@ -14,7 +14,7 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(PREINSTALL_FILES) $(OBJS)
 
 PREINSTALL_FILES =
 

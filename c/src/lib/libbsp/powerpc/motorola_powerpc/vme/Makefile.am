@@ -36,7 +36,7 @@ $(PROJECT_INCLUDE)/bsp/VMEConfig.h: VMEConfig.h
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
     $(addprefix $(PROJECT_INCLUDE)/bsp/,$(notdir $(include_bsp_HEADERS)))
 
-all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS)
+all-local: $(PREINSTALL_FILES) $(OBJS)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am

@@ -22,7 +22,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(PREINSTALL_FILES) $(OBJS)
 
 PREINSTALL_FILES =
 

@@ -25,7 +25,7 @@ $(PGM): $(OBJS)
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS = $(top_srcdir)/../shared/vectors/vectors.h
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(PREINSTALL_FILES) $(OBJS)
 
 PREINSTALL_FILES =
 

@@ -1,3 +1,18 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am: Remove all-local: $(ARCH).
+	* console/Makefile.am: Remove all-local: $(ARCH).
+	* irq/Makefile.am: Remove all-local: $(ARCH).
+	* motorola/Makefile.am: Remove all-local: $(ARCH).
+	* openpic/Makefile.am: Remove all-local: $(ARCH).
+	* pci/Makefile.am: Remove all-local: $(ARCH).
+	* residual/Makefile.am: Remove all-local: $(ARCH).
+	* start/Makefile.am: Remove all-local: $(ARCH).
+	* startup/Makefile.am: Remove all-local: $(ARCH).
+	* vectors/Makefile.am: Remove all-local: $(ARCH).
+	* vme/Makefile.am: Remove all-local: $(ARCH).
+	* wrapup/Makefile.am: Remove all-local: $(ARCH).
+
 2003-10-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* vectors/Makefile.am: Fix header installation.

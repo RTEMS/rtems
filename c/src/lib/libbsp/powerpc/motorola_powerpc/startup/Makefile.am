@@ -29,7 +29,7 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
-all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
+all-local: $(OBJS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = linkcmds
 

@@ -19,7 +19,7 @@ AM_CFLAGS += -O2
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(PREINSTALL_FILES) $(OBJS)
 
 PREINSTALL_FILES =
 

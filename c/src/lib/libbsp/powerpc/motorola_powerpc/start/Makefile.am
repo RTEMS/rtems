@@ -27,7 +27,7 @@ $(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT): $(ARCH)/rtems_crti.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT)
 
-all-local: $(ARCH) $(OBJS) $(ARCH)/start.$(OBJEXT) $(ARCH)/rtems_crti.$(OBJEXT) $(TMPINSTALL_FILES)
+all-local: $(OBJS) $(ARCH)/start.$(OBJEXT) $(ARCH)/rtems_crti.$(OBJEXT) $(TMPINSTALL_FILES)
 
 $(OBJS): $(ARCH)
 
