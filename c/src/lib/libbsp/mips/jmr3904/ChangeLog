@@ -1,3 +1,9 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console-io.c, include/bsp.h, startup/bspclean.c,
+	startup/bspstart.c, timer/timer.c, tools/runtest: URL for license
+	changed.
+
 2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 452/bsps
