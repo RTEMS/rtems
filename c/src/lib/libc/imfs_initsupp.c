@@ -47,7 +47,7 @@ int IMFS_initialize_support(
     NULL,
     IMFS_DIRECTORY,
     "",
-    ( S_IRWXO | S_IRWXG| S_IRWXU ),
+    ( S_IFDIR | S_IRWXO | S_IRWXG| S_IRWXU ),
     NULL
   );
 
