@@ -30,12 +30,9 @@ CHMOD=@CHMOD@
 SED=@SED@
 M4=@M4@
 
+BSDINSTALL=@INSTALL@
 INSTALL=$(PROJECT_TOOLS)/install-if-change
 INSTALL_VARIANT=$(PROJECT_TOOLS)/install-if-change -V "$(LIB_VARIANT)"
-
-FGREP=@FGREP@
-GREP=@GREP@
-EGREP=@EGREP@
 
 # FIXME: HACK for a bug in cygwin-hosted egcs which returns a mixture
 #        of '\\' and '/' as path separators.
@@ -70,3 +67,9 @@ define make-script
                -e '1,1s?^#!SHELL?#!$(SHELL)?' < $< > $@
 	$(CHMOD) 0555 $@
 endef
+
+INSTBINFLAGS  = -m 0755
+INSTDATAFLAGS = -m 0644
+INSTLIBFLAGS  = -m 0644 
+INSTDIRFLAGS  = -m 0755 -d
+INSTINCFLAGS  = -m 0644

@@ -22,13 +22,12 @@ PGMS=size_rtems
 INSTALLED=$(PGMS:%=$(DESTDIR)/%)
 
 all:	$(DESTDIR) $(PGMS) install
-	echo $(DESTDIR)
 
 $(DESTDIR):
-	[ -d $@ ] || $(MKDIR) $@
+	$(BSDINSTALL) $(INSTDIRFLAGS) $@
 
 install:  $(INSTALLED)
 
 # Install the program
 $(DESTDIR)/%: %
-	$(make-script)
+	$(BSDINSTALL) $(INSTBINFLAGS) $^ $@

@@ -24,15 +24,15 @@ INSTALL_LIST= $(PGMS) $(MISC_SUPPORT)
 INSTALLED=$(INSTALL_LIST:%=$(DESTDIR)/%)
 
 all:  $(DESTDIR)
-	echo $(DESTDIR)
 
 $(DESTDIR):
-	[ -d $@ ] || $(MKDIR) $@
+	$(BSDINSTALL) $(INSTDIRFLAGS) $@
 
 install:  $(INSTALLED)
 
 # Install the program
+# FIXME: This isn't correct
 $(DESTDIR)/%: %
 	$(make-script)
-	$(INSTALL)  -m 555 $(PERL_PGMS) ${DESTDIR}
-	$(INSTALL)  -m 444 $(srcdir)/$(MISC_SUPPORT) ${DESTDIR}
+	$(BSDINSTALL)  $(INSTBINFLAGS) $(PERL_PGMS) ${DESTDIR}
+	$(BSDINSTALL)  $(INSTDATAFLAGS) $(MISC_SUPPORT) ${DESTDIR}

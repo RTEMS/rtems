@@ -94,6 +94,7 @@ AC_PATH_PROG(LN,ln)
 AC_PROG_LN_S
 AC_PATH_PROG(CHMOD,chmod)
 AC_PATH_PROG(SORT,sort)
+AC_PROG_INSTALL
 
 dnl check mkdir behaviour, try to get mkdir -p -m 0755
 RTEMS_PATH_MKDIR

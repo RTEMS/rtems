@@ -18,10 +18,9 @@ INSTALLED=$(DESTDIR)/ifc.exe \
           $(DESTDIR)/fixtimer.exe
 
 all:	$(DESTDIR) $(PGMS) install
-	echo $(DESTDIR)
 
 $(DESTDIR):
-	[ -d $@ ] || $(MKDIR) $@
+	$(BSDINSTALL) $(INSTDIRFLAGS) $@
 
 install:  $(INSTALLED)
 

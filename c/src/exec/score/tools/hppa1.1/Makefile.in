@@ -50,7 +50,7 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	${ARCH} $(SRCS) preinstall $(PGMS)
-	$(INSTALL) -m 555 ${PGMS} ${PROJECT_RELEASE}/bin
+	$(INSTALL) $(INSTBINFLAGS) ${PGMS} ${PROJECT_RELEASE}/bin
 
 # Hack
 # we are #including files that haven't been installed yet.

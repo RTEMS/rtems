@@ -23,10 +23,9 @@ PGMS=install-if-change rcs-clean lock-directory unlock-directory \
 INSTALLED=$(PGMS:%=$(DESTDIR)/%)
 
 all:	$(DESTDIR) $(PGMS) install
-	echo $(DESTDIR)
 
 $(DESTDIR):
-	[ -d $@ ] || $(MKDIR) $@
+	$(BSDINSTALL) $(INSTDIRFLAGS) $@
 
 install:  $(INSTALLED)
 
