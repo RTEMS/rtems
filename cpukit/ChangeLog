@@ -1,3 +1,7 @@
+2003-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Remove LIBSUFFIX_VA (unused).
+
 2003-05-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/env-rtemscpu.m4: Merge-in env-rtemsbsp.m4.
