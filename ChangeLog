@@ -1,4 +1,8 @@
-2004-07-14      Jay Monkman
+2004-08-17	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* acinclude.m4 (_RTEMS_CONFIG_SUBDIR): Quote ac_popdir uses.
+
+2004-07-14      Joel Sherrill <joel@OARcorp.com>
 
         * MAINTAINERS: Added Jay Monkman as ARM architecture maintainer
 
