@@ -32,9 +32,9 @@ C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 include_HEADERS = imfs.h
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/multilib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
@@ -63,4 +63,4 @@ DOC_FILES = TODO CASES
 EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
     $(UNIX_C_FILES)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

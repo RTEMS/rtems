@@ -1,3 +1,13 @@
+2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Move from c/src/libfs to c/src/exec/libfs
+	* configure.ac: Reflect move.
+	* Makefile.am: Ditto.
+	* src/Makefile.am: Ditto.
+	* src/dosfs/Makefile.am: Ditto.
+	* src/imfs/Makefile.am: Ditto.
+	* wrapup/Makefile.am: Ditto.
+
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/imfs/imfs_getchild.c: include <string.h>.
