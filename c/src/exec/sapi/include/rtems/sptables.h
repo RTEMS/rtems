@@ -61,7 +61,7 @@ const rtems_multiprocessing_table
  *  This is the version string.
  */
 
-#define RTEMS_VERSION "rtems-4.0.0"
+#define RTEMS_VERSION "rtems-4.0.0-AFCC"
 
 const char _RTEMS_version[] =
   "RTEMS RELEASE " RTEMS_VERSION
