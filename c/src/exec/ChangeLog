@@ -1,5 +1,9 @@
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Install by using cpulibdir, cpulib_DATA.
+
+2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/check-bsp-cache.m4: Remove RTEMS_BSP_FAMILY.
 
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

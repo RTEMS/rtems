@@ -79,9 +79,8 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT
 #$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 #	$(INSTALL_DATA) $< $@
 
-install-hook: $(LIB)
-	@$(mkinstalldirs) $(libdir)
-	$(INSTALL_DATA) $(LIB) $(libdir)
+cpulibdir = $(libdir)
+cpulib_DATA = $(LIB)
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 
