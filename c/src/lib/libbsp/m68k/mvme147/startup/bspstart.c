@@ -80,6 +80,7 @@ void bsp_start( void )
       /* make VME access round-robin */
 
   rtems_cache_enable_instruction();
+  rtems_cache_enable_data();
 
   /*
    *  we only use a hook to get the C library initialized.

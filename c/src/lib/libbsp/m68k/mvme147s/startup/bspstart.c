@@ -140,6 +140,7 @@ void bsp_start( void )
   /* Disable D32 transfers : they don't work on my VMEbus rack */
 
   rtems_cache_enable_instruction();
+  rtems_cache_enable_data();
 
   /*
    *  we only use a hook to get the C library initialized.
