@@ -1,3 +1,9 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
+	Add PREINSTALL_FILES to CLEANFILES.
+	* netinet/in_cksum.c: #include netinet/in_cksum_<cpu>.h.
+
 2004-01-13  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR/549 networking

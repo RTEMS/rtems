@@ -44,18 +44,18 @@
 
 #if (defined(__GNUC__) && defined(__arm__))
 
-#include "in_cksum_arm.c"
+#include "in_cksum_arm.h"
 
 #elif (defined(__GNUC__) && defined(__i386__))
 
-#include "in_cksum_i386.c"
+#include "in_cksum_i386.h"
 
 #elif (defined(__GNUC__) && (defined(__mc68000__) || defined(__m68k__)))
 
-#include "in_cksum_m68k.c"
+#include "in_cksum_m68k.h"
 #elif (defined(__GNUC__) && defined(__PPC__))
 
-#include "in_cksum_powerpc.c"
+#include "in_cksum_powerpc.h"
 
 #else
 

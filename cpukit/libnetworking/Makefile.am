@@ -10,6 +10,7 @@ include $(top_srcdir)/automake/compile.am
 AM_CPPFLAGS += -I$(top_builddir)
 
 EXTRA_DIST = README
+CLEANFILES =
 
 UNUSED_FILES = poll.h
 
@@ -22,7 +23,7 @@ libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
     -DDIAGNOSTIC -DBOOTP_COMPAT
 
 EXTRA_LIBRARIES = libnetworking.a
-CLEANFILES = libnetworking.a
+CLEANFILES += libnetworking.a
 libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
     $(libnetworking_CPPFLAGS)
 
@@ -207,6 +208,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/bpfilter.h: bpfilter.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -248,6 +250,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/memory.h
 $(PROJECT_INCLUDE)/arpa/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/arpa
 	@: > $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 
 $(PROJECT_INCLUDE)/arpa/ftp.h: arpa/ftp.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/ftp.h
@@ -272,6 +275,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/telnet.h
 $(PROJECT_INCLUDE)/machine/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/machine
 	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/$(dirstamp)
 
 $(PROJECT_INCLUDE)/machine/conf.h: machine/conf.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/conf.h
@@ -300,6 +304,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/vmparam.h
 $(PROJECT_INCLUDE)/net/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/net
 	@: > $(PROJECT_INCLUDE)/net/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/$(dirstamp)
 
 $(PROJECT_INCLUDE)/net/bpf.h: net/bpf.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/bpf.h
@@ -368,6 +373,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/pppcompress.h
 $(PROJECT_INCLUDE)/netinet/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/netinet
 	@: > $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 
 $(PROJECT_INCLUDE)/netinet/icmp_var.h: netinet/icmp_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/icmp_var.h
@@ -460,6 +466,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/udp_var.h
 $(PROJECT_INCLUDE)/nfs/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/nfs
 	@: > $(PROJECT_INCLUDE)/nfs/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 
 $(PROJECT_INCLUDE)/nfs/krpc.h: nfs/krpc.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/krpc.h
@@ -488,6 +495,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/xdr_subs.h
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h: rtems/rtems_bsdnet.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h
@@ -512,6 +520,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mkrootfs.h
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
 $(PROJECT_INCLUDE)/sys/buf.h: sys/buf.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/buf.h
@@ -624,6 +633,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/un.h
 $(PROJECT_INCLUDE)/vm/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/vm
 	@: > $(PROJECT_INCLUDE)/vm/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/$(dirstamp)
 
 $(PROJECT_INCLUDE)/vm/vm.h: vm/vm.h $(PROJECT_INCLUDE)/vm/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vm/vm.h
@@ -641,6 +651,8 @@ $(PROJECT_INCLUDE)/vm/vm_param.h: vm/vm_param.h $(PROJECT_INCLUDE)/vm/$(dirstamp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vm/vm_param.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/vm_param.h
 endif
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
