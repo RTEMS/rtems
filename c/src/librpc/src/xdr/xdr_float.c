@@ -56,8 +56,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_float.c,v 1.7 1999/08/28 00
 
 #if defined(__m68k__) || defined(__sparc__) || defined(__i386__) || \
     defined(__mips__) || defined(__ns32k__) || defined(__alpha__) || \
-    defined(__arm32__) || defined(__ppc__)
-/* #include <FLEEB> */
+    defined(__arm32__) || defined(__ppc__) || defined(__m68000__)
 #include <machine/endian.h>
 #if !defined(IEEEFP)
 #define IEEEFP

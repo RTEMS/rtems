@@ -373,15 +373,12 @@ readunix(xprt, buf, len)
 	struct timeval start, delta, tv;
 	struct timeval tmp1, tmp2;
 	fd_set *fds;
-	extern fd_set		*__svc_fdset;
-	extern int		__svc_fdsetsize;
 
 	delta = wait_per_try;
 	fds = NULL;
 	gettimeofday(&start, NULL);
 	do {
-		int bytes = howmany(__svc_fdsetsize, NFDBITS) *
-				sizeof(fd_mask);
+		int bytes = sizeof (fd_set);
 		if (fds != NULL)
 			free(fds);
 		fds = (fd_set *)malloc(bytes);

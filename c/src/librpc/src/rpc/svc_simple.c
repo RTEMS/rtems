@@ -48,16 +48,17 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_simple.c,v 1.9 1999/08/28 0
 #include <sys/socket.h>
 #include <netdb.h>
 
-static struct proglst {
+struct prog_lst {
 	char *(*p_progname)();
 	int  p_prognum;
 	int  p_procnum;
 	xdrproc_t p_inproc, p_outproc;
-	struct proglst *p_nxt;
-} *proglst;
+	struct prog_lst *p_nxt;
+};
 static void universal();
-static SVCXPRT *transp;
-struct proglst *pl;
+#define proglst ((struct prog_lst *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_simple_proglst)
+#define pl ((struct prog_lst *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_simple_pl)
+#define transp ((SVCXPRT *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_simple_transp)
 
 int
 registerrpc(prognum, versnum, procnum, progname, inproc, outproc)
@@ -85,7 +86,7 @@ registerrpc(prognum, versnum, procnum, progname, inproc, outproc)
 		    prognum, versnum);
 		return (-1);
 	}
-	pl = (struct proglst *)malloc(sizeof(struct proglst));
+	pl = (struct prog_lst *)malloc(sizeof(struct prog_lst));
 	if (pl == NULL) {
 		(void) fprintf(stderr, "registerrpc: out of memory\n");
 		return (-1);
@@ -101,20 +102,20 @@ registerrpc(prognum, versnum, procnum, progname, inproc, outproc)
 }
 
 static void
-universal(rqstp, transp)
+universal(rqstp, atransp)
 	struct svc_req *rqstp;
-	SVCXPRT *transp;
+	SVCXPRT *atransp;
 {
 	int prog, proc;
 	char *outdata;
 	char xdrbuf[UDPMSGSIZE];
-	struct proglst *pl;
+	struct prog_lst *lpl;
 
 	/*
 	 * enforce "procnum 0 is echo" convention
 	 */
 	if (rqstp->rq_proc == NULLPROC) {
-		if (svc_sendreply(transp, xdr_void, NULL) == FALSE) {
+		if (svc_sendreply(atransp, xdr_void, NULL) == FALSE) {
 			(void) fprintf(stderr, "xxx\n");
 			exit(1);
 		}
@@ -122,26 +123,26 @@ universal(rqstp, transp)
 	}
 	prog = rqstp->rq_prog;
 	proc = rqstp->rq_proc;
-	for (pl = proglst; pl != NULL; pl = pl->p_nxt)
-		if (pl->p_prognum == prog && pl->p_procnum == proc) {
+	for (lpl = proglst; lpl != NULL; lpl = lpl->p_nxt)
+		if (lpl->p_prognum == prog && lpl->p_procnum == proc) {
 			/* decode arguments into a CLEAN buffer */
 			memset(xdrbuf, 0, sizeof(xdrbuf)); /* required ! */
-			if (!svc_getargs(transp, pl->p_inproc, xdrbuf)) {
-				svcerr_decode(transp);
+			if (!svc_getargs(atransp, lpl->p_inproc, xdrbuf)) {
+				svcerr_decode(atransp);
 				return;
 			}
-			outdata = (*(pl->p_progname))(xdrbuf);
-			if (outdata == NULL && pl->p_outproc != xdr_void)
+			outdata = (*(lpl->p_progname))(xdrbuf);
+			if (outdata == NULL && lpl->p_outproc != xdr_void)
 				/* there was an error */
 				return;
-			if (!svc_sendreply(transp, pl->p_outproc, outdata)) {
+			if (!svc_sendrelply(atransp, lpl->p_outproc, outdata)) {
 				(void) fprintf(stderr,
 				    "trouble replying to prog %d\n",
-				    pl->p_prognum);
+				    lpl->p_prognum);
 				exit(1);
 			}
 			/* free the decoded arguments */
-			(void)svc_freeargs(transp, pl->p_inproc, xdrbuf);
+			(void)svc_freeargs(atransp, lpl->p_inproc, xdrbuf);
 			return;
 		}
 	(void) fprintf(stderr, "never registered prog %d\n", prog);

@@ -53,13 +53,14 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_raw.c,v 1.10 1999/08/28 00
 /*
  * This is the "network" we will be moving stuff over.
  */
-static struct clntraw_private {
+struct clnt_raw_private {
 	CLIENT	client_object;
 	XDR	xdr_stream;
 	char	_raw_buf[UDPMSGSIZE];
 	char	mashl_callmsg[MCALL_MSG_SIZE];
 	u_int	mcnt;
-} *clntraw_private;
+};
+#define clntraw_private ((struct clnt_raw_private *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->clnt_raw_private)
 
 static enum clnt_stat	clntraw_call();
 static void		clntraw_abort();
@@ -87,13 +88,13 @@ clntraw_create(prog, vers)
 	u_long prog;
 	u_long vers;
 {
-	register struct clntraw_private *clp = clntraw_private;
+	register struct clnt_raw_private *clp = clntraw_private;
 	struct rpc_msg call_msg;
 	XDR *xdrs = &clp->xdr_stream;
 	CLIENT	*client = &clp->client_object;
 
 	if (clp == 0) {
-		clp = (struct clntraw_private *)calloc(1, sizeof (*clp));
+		clp = (struct clnt_raw_private *)calloc(1, sizeof (*clp));
 		if (clp == 0)
 			return (0);
 		clntraw_private = clp;
@@ -135,7 +136,7 @@ clntraw_call(h, proc, xargs, argsp, xresults, resultsp, timeout)
 	caddr_t resultsp;
 	struct timeval timeout;
 {
-	register struct clntraw_private *clp = clntraw_private;
+	register struct clnt_raw_private *clp = clntraw_private;
 	register XDR *xdrs = &clp->xdr_stream;
 	struct rpc_msg msg;
 	enum clnt_stat status;
@@ -212,7 +213,7 @@ clntraw_freeres(cl, xdr_res, res_ptr)
 	xdrproc_t xdr_res;
 	caddr_t res_ptr;
 {
-	register struct clntraw_private *clp = clntraw_private;
+	register struct clnt_raw_private *clp = clntraw_private;
 	register XDR *xdrs = &clp->xdr_stream;
 	bool_t rval;
 

@@ -49,8 +49,8 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc.c,v 1.14 1999/08/28 00:00:4
 #include <rpc/rpc.h>
 #include <rpc/pmap_clnt.h>
 
-static SVCXPRT **xports;
-static int xportssize;
+#define xports ((SVCXPRT **)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_xports)
+#define xportssize (((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_xportssize)
 
 #define NULL_SVC ((struct svc_callout *)0)
 #define	RQCRED_SIZE	400		/* this size is excessive */
@@ -63,17 +63,15 @@ static int xportssize;
  * The dispatch routine takes request structs and runs the
  * apropriate procedure.
  */
-static struct svc_callout {
+struct svc_callout {
 	struct svc_callout *sc_next;
 	u_long		    sc_prog;
 	u_long		    sc_vers;
 	void		    (*sc_dispatch)();
-} *svc_head;
+};
+#define svc_head (struct svc_callout *)(((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_svc_head)
 
 static struct svc_callout *svc_find();
-
-int __svc_fdsetsize = 0;
-fd_set *__svc_fdset = NULL;
 
 /* ***************  SVCXPRT related stuff **************** */
 
@@ -87,18 +85,17 @@ xprt_register(xprt)
 	register int sock = xprt->xp_sock;
 
 	if (sock + 1 > __svc_fdsetsize) {
-		int bytes = howmany(sock + 1, NFDBITS) * sizeof(fd_mask);
+		int bytes = sizeof (fd_set);
 		fd_set *fds;
 
 		fds = (fd_set *)malloc(bytes);
 		memset(fds, 0, bytes);
 		if (__svc_fdset) {
-			memcpy(fds, __svc_fdset, howmany(__svc_fdsetsize,
-				NFDBITS) * sizeof(fd_mask));
+			memcpy(fds, __svc_fdset, bytes);
 			free(__svc_fdset);
 		}
 		__svc_fdset = fds;
-		__svc_fdsetsize = howmany(sock+1, NFDBITS) * NFDBITS;
+		__svc_fdsetsize = bytes * NBBY;
 	}
 
 	if (sock < FD_SETSIZE)

@@ -48,12 +48,13 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_raw.c,v 1.7 1999/08/28 00:0
 /*
  * This is the "network" that we will be moving data over
  */
-static struct svcraw_private {
+struct svc_raw_private {
 	char	_raw_buf[UDPMSGSIZE];
 	SVCXPRT	server;
 	XDR	xdr_stream;
 	char	verf_body[MAX_AUTH_BYTES];
-} *svcraw_private;
+};
+#define svcraw_private ((struct svc_raw_private *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_raw_private)
 
 static bool_t		svcraw_recv();
 static enum xprt_stat 	svcraw_stat();
@@ -74,10 +75,10 @@ static struct xp_ops server_ops = {
 SVCXPRT *
 svcraw_create()
 {
-	register struct svcraw_private *srp = svcraw_private;
+	register struct svc_raw_private *srp = svcraw_private;
 
 	if (srp == 0) {
-		srp = (struct svcraw_private *)calloc(1, sizeof (*srp));
+		srp = (struct svc_raw_private *)calloc(1, sizeof (*srp));
 		if (srp == 0)
 			return (0);
 	}
@@ -101,7 +102,7 @@ svcraw_recv(xprt, msg)
 	SVCXPRT *xprt;
 	struct rpc_msg *msg;
 {
-	register struct svcraw_private *srp = svcraw_private;
+	register struct svc_raw_private *srp = svcraw_private;
 	register XDR *xdrs;
 
 	if (srp == 0)
@@ -119,7 +120,7 @@ svcraw_reply(xprt, msg)
 	SVCXPRT *xprt;
 	struct rpc_msg *msg;
 {
-	register struct svcraw_private *srp = svcraw_private;
+	register struct svc_raw_private *srp = svcraw_private;
 	register XDR *xdrs;
 
 	if (srp == 0)
@@ -139,7 +140,7 @@ svcraw_getargs(xprt, xdr_args, args_ptr)
 	xdrproc_t xdr_args;
 	caddr_t args_ptr;
 {
-	register struct svcraw_private *srp = svcraw_private;
+	register struct svc_raw_private *srp = svcraw_private;
 
 	if (srp == 0)
 		return (FALSE);
@@ -152,7 +153,7 @@ svcraw_freeargs(xprt, xdr_args, args_ptr)
 	xdrproc_t xdr_args;
 	caddr_t args_ptr;
 {
-	register struct svcraw_private *srp = svcraw_private;
+	register struct svc_raw_private *srp = svcraw_private;
 	register XDR *xdrs;
 
 	if (srp == 0)

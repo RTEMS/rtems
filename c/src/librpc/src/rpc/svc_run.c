@@ -46,9 +46,6 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_run.c,v 1.10 1999/08/28 00:
 #include <stdlib.h>
 #include <string.h>
 
-extern int __svc_fdsetsize;
-extern fd_set *__svc_fdset;
-
 void
 svc_run()
 {
@@ -56,8 +53,7 @@ svc_run()
 
 	for (;;) {
 		if (__svc_fdset) {
-			int bytes = howmany(__svc_fdsetsize, NFDBITS) *
-				sizeof(fd_mask);
+			int bytes = sizeof (fd_set);
 			fds = (fd_set *)malloc(bytes);
 			memcpy(fds, __svc_fdset, bytes);
 		} else

@@ -49,12 +49,13 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_simple.c,v 1.12 2000/01/27
 #include <sys/socket.h>
 #include <netdb.h>
 
-static struct callrpc_private {
+struct call_rpc_private {
 	CLIENT	*client;
 	int	socket;
 	int	oldprognum, oldversnum, valid;
 	char	*oldhost;
-} *callrpc_private;
+};
+#define callrpc_private ((struct call_rpc_private *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->call_rpc_private)
 
 int
 callrpc(host, prognum, versnum, procnum, inproc, in, outproc, out)
@@ -63,14 +64,14 @@ callrpc(host, prognum, versnum, procnum, inproc, in, outproc, out)
 	xdrproc_t inproc, outproc;
 	char *in, *out;
 {
-	register struct callrpc_private *crp = callrpc_private;
+	register struct call_rpc_private *crp = callrpc_private;
 	struct sockaddr_in server_addr;
 	enum clnt_stat clnt_stat;
 	struct hostent *hp;
 	struct timeval timeout, tottimeout;
 
 	if (crp == 0) {
-		crp = (struct callrpc_private *)calloc(1, sizeof (*crp));
+		crp = (struct call_rpc_private *)calloc(1, sizeof (*crp));
 		if (crp == 0)
 			return (0);
 		callrpc_private = crp;

@@ -39,8 +39,9 @@ static char sccsid[] = "@(#)rpcdname.c 1.7 91/03/11 Copyr 1989 Sun Micro";
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <rpc/rpc.h>
 
-static char *default_domain = 0;
+#define default_domain ((char *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->rpcdname_default_domain)
 
 static char *
 get_default_domain()

@@ -38,6 +38,4 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/rpc_commondata.c,v 1.7 1999/08/
  * by public interfaces
  */
 struct opaque_auth _null_auth;
-fd_set svc_fdset;
-int svc_maxfd = -1;
 struct rpc_createerr rpc_createerr;

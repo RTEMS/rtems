@@ -59,9 +59,10 @@ clnt_create(hostname, prog, vers, proto)
 	struct sockaddr_in sin;
 	struct sockaddr_un sun;
 	int sock;
-	static struct timeval tv;
+	struct timeval tv;
 	CLIENT *client;
 
+#ifndef __rtems__
 	if (!strcmp(proto, "unix")) {
 		bzero((char *)&sun, sizeof(sun));
 		sun.sun_family = AF_UNIX;
@@ -77,6 +78,7 @@ clnt_create(hostname, prog, vers, proto)
 		clnt_control(client, CLSET_TIMEOUT, &tv);
 		return(client);
 	}
+#endif
 
 	h = gethostbyname(hostname);
 	if (h == NULL) {

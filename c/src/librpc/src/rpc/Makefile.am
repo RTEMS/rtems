@@ -15,7 +15,7 @@ C_FILES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c \
     pmap_clnt.c pmap_getmaps.c pmap_getport.c pmap_prot.c pmap_prot2.c \
     pmap_rmt.c rpc_callmsg.c rpc_commondata.c rpc_dtablesize.c rpc_prot.c \
     rpcdname.c rtime.c svc.c svc_auth.c svc_auth_unix.c svc_raw.c svc_run.c \
-    svc_simple.c svc_tcp.c svc_udp.c
+    svc_simple.c svc_tcp.c svc_udp.c rtems_portmapper.c rtems_rpc.c
 UNUSED_C_FILES = auth_des.c auth_time.c authdes_prot.c clnt_unix.c \
     crypt_client.c des_crypt.c des_soft.c getpublickey.c key_call.c \
     key_prot_xdr.c svc_auth_des.c svc_unix.c
@@ -33,7 +33,7 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS += '-D__P(x)=x' -D_read=read -D_write=write -D_close=close
+AM_CPPFLAGS += '-D__P(x)=x' -D_read=read -D_write=write -D_close=close -D_RTEMS_RPC_INTERNAL_
 
 $(LIB): $(OBJS)
 	$(make-library)

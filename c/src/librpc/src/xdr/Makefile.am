@@ -24,7 +24,7 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -DIEEEFP '-D__P(x)=x'
+AM_CPPFLAGS += '-D__P(x)=x'
 
 $(LIB): $(OBJS)
 	$(make-library)
