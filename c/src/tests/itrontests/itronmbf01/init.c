@@ -47,9 +47,8 @@ void TestPrcv();
 
 void ITRON_Init( void )
 {
-    puts( "\n\n*** ITRONMBF01 -- ITRON MESSAGE BUFFER TEST ***" );
+    printf( "\n\n*** ITRONMBF01 -- ITRON MESSAGE BUFFER TEST ***\n" );
 
-#if 0
     TestCre();
     TestDel();
     TestPsnd();
@@ -58,11 +57,8 @@ void ITRON_Init( void )
     TestRef();
     TestPrcv();
     TestTrcv();
-#else
-    puts("Enable the code in this test when messages buffers are implemented"); 
-#endif
 
-    printf("*** ITRONMBF01 --- ITRON MESSAGE BUFFER TEST ***");
+    printf("\n\n*** ITRONMBF01 --- ITRON MESSAGE BUFFER TEST ***\n");
     exit(0);
 }
 
