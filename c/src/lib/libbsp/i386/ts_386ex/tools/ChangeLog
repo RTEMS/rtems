@@ -1,3 +1,15 @@
+2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+	* debug_ada/Makefile.am: Cosmetics.
+	* debug_c/Makefile.am: Cosmetics.
+	* dos_sup/Makefile.am: Cosmetics.
+	* network_ada/Makefile.am: Cosmetics.
+	* network_ada/adasockets/Makefile.am: Cosmetics.
+	* network_ada/listener/Makefile.am: Cosmetics.
+	* network_ada/tcprelay/Makefile.am: Cosmetics.
+	* ts_1325_ada/Makefile.am: Cosmetics.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 SUBDIRS = adasockets listener tcprelay
 
 EXTRA_DIST = README networkconfig.h
