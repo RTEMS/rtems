@@ -1,6 +1,13 @@
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 349/bsps
+	* Makefile.am, configure.ac: Add glue to the powerpc/shared BSP
+	to use the vmeUniverse VME-PCI bridge driver.
+	* vme/.cvsignore, vme/Makefile.am, wrapup/Makefile.am: New files.
+
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
 	* openpic/Makefile.am, pci/Makefile.am:
 	  - install the 'openpic.h' and 'pci.h' headers 
 	  - avoid a name clash by renaming 'vsprintf' & friends
