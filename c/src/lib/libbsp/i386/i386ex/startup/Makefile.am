@@ -33,6 +33,8 @@ AM_CPPFLAGS += -DBSP_IS_I386EX=1
 $(PGM): $(startup_rel_OBJECTS)
 	$(make-rel)
 
+bsplib_DATA = linkcmds
+
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
