@@ -534,6 +534,11 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  This routine generally does not set any unnecessary register
  *  in the context.  The state of the "general data" registers is
  *  undefined at task start time.
+ *
+ *  NOTE: This is_fp parameter is TRUE if the thread is to be a floating
+ *        point thread.  This is typically only used on CPUs where the
+ *        FPU may be easily disabled by software such as on the SPARC
+ *        where the PSR contains an enable FPU bit.
  */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
