@@ -251,10 +251,10 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 int scandir(
-  const char *dir,
+  const char       *dir,
   struct dirent ***namelist,
-  int (*select)(const struct dirent *),
-  int (*compar)(const struct dirent **, const struct dirent **)
+  int            (*select)(const struct dirent *),
+  int            (*compar)(const struct dirent **, const struct dirent **)
 );
 @end example
 @end ifset
@@ -1420,7 +1420,7 @@ NONE
 #include <sys/stat.h>
 
 int fstat(
-  int fildes,
+  int          fildes,
   struct stat *buf
 );
 @end example
@@ -1497,7 +1497,7 @@ link, then the information returned in @code{buf} refers
 to the link itself.  This is in contrast to @code{fstat()}
 which follows the link.
 
-The @code{lstat()} routine is defined by BSD 4.3 and SVR4 
+The @code{lstat()} routine is defined by BSD 4.3 and SVR4
 and not included in POSIX 1003.1b-1996.
 
 @c

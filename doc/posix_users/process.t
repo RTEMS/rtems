@@ -95,9 +95,9 @@ NONE
 @ifset is-C
 @example
 int execl(
-const char *path,
-const char *arg,
-...
+  const char *path,
+  const char *arg,
+  ...
 );
 @end example
 @end ifset
@@ -135,9 +135,9 @@ NONE
 @ifset is-C
 @example
 int execv(
-const char *path,
-char const *argv[],
-...
+  const char *path,
+  char const *argv[],
+  ...
 );
 @end example
 @end ifset
@@ -175,9 +175,9 @@ NONE
 @ifset is-C
 @example
 int execle(
-const char *path,
-const char *arg,
-...
+  const char *path,
+  const char *arg,
+  ...
 );
 @end example
 @end ifset
@@ -215,9 +215,9 @@ NONE
 @ifset is-C
 @example
 int execve(
-const char *path,
-char *const argv[],
-char *const envp[]
+  const char *path,
+  char *const argv[],
+  char *const envp[]
 );
 @end example
 @end ifset
@@ -255,9 +255,9 @@ NONE
 @ifset is-C
 @example
 int execlp(
-const char *file,
-const char *arg,
-...
+  const char *file,
+  const char *arg,
+  ...
 );
 @end example
 @end ifset
@@ -295,9 +295,9 @@ NONE
 @ifset is-C
 @example
 int execvp(
-const char *file,
-char *const argv[]
-...
+  const char *file,
+  char *const argv[]
+  ...
 );
 @end example
 @end ifset
@@ -337,9 +337,9 @@ NONE
 #include <sys/types.h>
 
 int pthread_atfork(
-void (*prepare)(void),
-void (*parent)(void),
-void (*child)(void)
+  void (*prepare)(void),
+  void (*parent)(void),
+  void (*child)(void)
 );
 @end example
 @end ifset
@@ -380,7 +380,7 @@ NONE
 #include <sys/wait.h>
 
 int wait(
-int *stat_loc
+  int *stat_loc
 );
 @end example
 @end ifset
@@ -418,9 +418,9 @@ NONE
 @ifset is-C
 @example
 int wait(
-pid_t pid,
-int *stat_loc,
-int options
+  pid_t  pid,
+  int   *stat_loc,
+  int    options
 );
 @end example
 @end ifset
@@ -458,7 +458,7 @@ NONE
 @ifset is-C
 @example
 void _exit(
-int status
+  int status
 );
 @end example
 @end ifset

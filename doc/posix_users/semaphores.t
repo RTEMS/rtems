@@ -85,9 +85,9 @@ and status codes.
 @ifset is-C
 @example
 int sem_init(
-sem_t *sem,
-int pshared,
-unsigned int value
+  sem_t        *sem,
+  int           pshared,
+  unsigned int  value
 );
 @end example
 @end ifset
@@ -141,7 +141,7 @@ Multiprocessing is currently not supported in this implementation.
 @ifset is-C
 @example
 int sem_destroy(
-sem_t *sem
+  sem_t *sem
 );
 @end example
 @end ifset
@@ -189,9 +189,9 @@ Multiprocessing is currently not supported in this implementation.
 
 @ifset is-C
 @example
-int sem_open)
-const char *name,
-int oflag
+int sem_open(
+  const char *name,
+  int         oflag
 );
 @end example
 @end ifset
@@ -269,7 +269,7 @@ determining if the semaphore is created or accessed by a call to sem_open().
 @ifset is-C
 @example
 int sem_close(
-sem_t *sem_close
+  sem_t *sem_close
 );
 @end example
 @end ifset
@@ -311,7 +311,7 @@ return and errno is set.
 @ifset is-C
 @example
 int sem_unlink(
-const char *name
+  const char *name
 );
 @end example
 @end ifset
@@ -366,7 +366,7 @@ is returned and the errno is set.
 @ifset is-C
 @example
 int sem_wait(
-sem_t *sem
+  sem_t *sem
 );
 @end example
 @end ifset
@@ -410,7 +410,7 @@ Multiprocessing is not supported in this implementation.
 @ifset is-C
 @example
 int sem_trywait(
-sem_t *sem
+  sem_t *sem
 );
 @end example
 @end ifset
@@ -458,8 +458,8 @@ Multiprocessing is not supported in this implementation.
 @ifset is-C
 @example
 int sem_timedwait(
-sem_t *sem,
-const struct timespec *timeout
+  sem_t                 *sem,
+  const struct timespec *timeout
 );
 @end example
 @end ifset
@@ -510,7 +510,7 @@ Multiprocessing is not supported in this implementation.
 @ifset is-C
 @example
 int sem_post(
-sem_t *sem
+  sem_t *sem
 );
 @end example
 @end ifset
@@ -555,8 +555,8 @@ Multiprocessing is not supported in this implementation.
 @ifset is-C
 @example
 int sem_getvalue(
-sem_t *sem,
-int *sval
+  sem_t *sem,
+  int   *sval
 );
 @end example
 @end ifset

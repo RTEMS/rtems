@@ -95,8 +95,8 @@ and status codes.
 #include <signal.h>
 
 int sigaddset(
-sigset_t *set,
-int signo
+  sigset_t *set,
+  int       signo
 );
 @end example
 
@@ -131,8 +131,8 @@ NONE
 #include <signal.h>
 
 int sigdelset(
-sigset_t *set,
-int signo
+  sigset_t *set,
+  int       signo
 );
 @end example
 
@@ -167,7 +167,7 @@ NONE
 #include <signal.h>
 
 int sigfillset(
-sigset_t *set
+  sigset_t *set
 );
 @end example
 
@@ -204,8 +204,8 @@ NONE
 #include <signal.h>
 
 int sigismember(
-const sigset_t *set,
-int signo
+  const sigset_t *set,
+  int             signo
 );
 @end example
 
@@ -242,7 +242,7 @@ NONE
 #include <signal.h>
 
 int sigemptyset(
-sigset_t *set
+  sigset_t *set
 );
 @end example
 
@@ -279,9 +279,9 @@ NONE
 #include <signal.h>
 
 int sigaction(
-int sig,
-const struct sigaction *act,
-struct sigaction *oact
+  int                     sig,
+  const struct sigaction *act,
+  struct sigaction       *oact
 );
 @end example
 
@@ -322,8 +322,8 @@ The signal number cannot be SIGKILL.
 #include <signal.h>
 
 int pthread_kill(
-pthread_t thread,
-int sig
+  pthread_t thread,
+  int       sig
 );
 @end example
 
@@ -362,9 +362,9 @@ NONE
 #include <signal.h>
 
 int sigprocmask(
-int how,
-const sigset_t *set,
-sigset_t *oset
+  int             how,
+  const sigset_t *set,
+  sigset_t       *oset
 );
 @end example
 
@@ -421,9 +421,9 @@ It is not an error to unblock a signal which is not blocked.
 #include <signal.h>
 
 int pthread_sigmask(
-int how,
-const sigset_t *set,
-sigset_t *oset
+  int             how,
+  const sigset_t *set,
+  sigset_t       *oset
 );
 @end example
 
@@ -479,8 +479,8 @@ It is not an error to unblock a signal which is not blocked.
 #include <signal.h>
 
 int kill(
-pid_t pid,
-int sig
+  pid_t pid,
+  int   sig
 );
 @end example
 
@@ -520,7 +520,7 @@ NONE
 #include <signal.h>
 
 int sigpending(
-const sigset_t *set
+  const sigset_t *set
 );
 @end example
 
@@ -561,7 +561,7 @@ NONE
 #include <signal.h>
 
 int sigsuspend(
-const sigset_t *sigmask
+  const sigset_t *sigmask
 );
 @end example
 
@@ -640,8 +640,8 @@ NONE
 #include <signal.h>
 
 int sigwait(
-const sigset_t *set,
-int *sig
+  const sigset_t *set,
+  int            *sig
 );
 @end example
 
@@ -681,8 +681,8 @@ NONE
 #include <signal.h>
 
 int sigwaitinfo(
-const sigset_t *set,
-siginfo_t *info
+  const sigset_t *set,
+  siginfo_t      *info
 );
 @end example
 
@@ -718,9 +718,9 @@ NONE
 #include <signal.h>
 
 int sigtimedwait(
-const sigset_t *set,
-siginfo_t *info,
-const struct timespec *timeout
+  const sigset_t        *set,
+  siginfo_t             *info,
+  const struct timespec *timeout
 );
 @end example
 
@@ -764,9 +764,9 @@ the specified signal set.
 #include <signal.h>
 
 int sigqueue(
-pid_t pid,
-int signo,
-const union sigval value
+  pid_t              pid,
+  int                signo,
+  const union sigval value
 );
 @end example
 
@@ -816,7 +816,7 @@ NONE
 #include <signal.h>
 
 unsigned int alarm(
-unsigned int seconds
+  unsigned int seconds
 );
 @end example
 

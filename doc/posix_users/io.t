@@ -249,9 +249,9 @@ may or may not be closed.
 #include <unistd.h>
 
 int read(
-  int fildes,
-  void *buf,
-  unsigned int nbyte
+  int           fildes,
+  void         *buf,
+  unsigned int  nbyte
 );
 @end example
 @end ifset
@@ -350,9 +350,9 @@ NONE
 #include <unistd.h>
 
 int write(
-  int fildes,
-  const void *buf,
-  unsigned int nbytes
+  int           fildes,
+  const void   *buf,
+  unsigned int  nbytes
 );
 @end example
 @end ifset
@@ -560,9 +560,9 @@ The errors returned by @code{dup2} are different from those returned by
 #include <unistd.h>
 
 int lseek(
-  int fildes,
-  off_t offset,
-  int whence
+  int    fildes,
+  off_t  offset,
+  int    whence
 );
 @end example
 @end ifset

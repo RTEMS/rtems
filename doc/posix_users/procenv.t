@@ -565,7 +565,7 @@ The
 #include <sys/time.h>
 
 clock_t times(
-struct tms *buf
+  struct tms *buf
 );
 @end example
 

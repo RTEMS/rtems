@@ -887,10 +887,10 @@ family of routines to which this routine belongs is supported.
 #include <pthread.h>
 
 int pthread_create(
-  pthread_t *thread,
-  const pthread_attr_t *attr,
-  void (*start_routine)( void *),
-  void *arg
+  pthread_t             *thread,
+  const pthread_attr_t  *attr,
+  void                 (*start_routine)( void *),
+  void                  *arg
 );
 @end example
 

@@ -50,7 +50,7 @@ and status codes.
 #include <time.h>
 
 int clock_gettime(
-  clockid_t clock_id,
+  clockid_t        clock_id,
   struct timespec *tp
 );
 @end example
@@ -88,7 +88,7 @@ NONE
 #include <time.h>
 
 int clock_settime(
-  clockid_t clock_id,
+  clockid_t              clock_id,
   const struct timespec *tp
 );
 @end example
@@ -130,7 +130,7 @@ NONE
 #include <time.h>
 
 int clock_getres(
-  clockid_t clock_id,
+  clockid_t        clock_id,
   struct timespec *res
 );
 @end example
@@ -202,7 +202,7 @@ This call is interruptible by a signal.
 
 int nanosleep(
   const struct timespec *rqtp,
-  struct timespec *rmtp
+  struct timespec       *rmtp
 );
 @end example
 
@@ -245,7 +245,7 @@ This call is interruptible by a signal.
 #include <unistd.h>
 
 int gettimeofday(
-  struct timeval *tp,
+  struct timeval  *tp,
   struct timezone *tzp
 );
 @end example

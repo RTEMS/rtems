@@ -57,7 +57,7 @@ and status codes.
 #include <pthread.h>
 
 int pthread_condattr_init(
-pthread_condattr_t *attr
+  pthread_condattr_t *attr
 );
 @end example
 
@@ -88,7 +88,7 @@ attributes object.
 #include <pthread.h>
 
 int pthread_condattr_destroy(
-pthread_condattr_t *attr
+  pthread_condattr_t *attr
 );
 @end example
 
@@ -118,8 +118,8 @@ The attribute object specified is invalid.
 #include <pthread.h>
 
 int pthread_condattr_setpshared(
-pthread_condattr_t *attr,
-int pshared
+  pthread_condattr_t *attr,
+  int                 pshared
 );
 @end example
 
@@ -150,8 +150,8 @@ Invalid argument passed.
 #include <pthread.h>
 
 int pthread_condattr_getpshared(
-const pthread_condattr_t *attr,
-int *pshared
+  const pthread_condattr_t *attr,
+  int                      *pshared
 );
 @end example
 
@@ -183,8 +183,8 @@ Invalid argument passed.
 #include <pthread.h>
 
 int pthread_cond_init(
-pthread_cond_t *cond,
-const pthread_condattr_t *attr
+  pthread_cond_t           *cond,
+  const pthread_condattr_t *attr
 );
 @end example
 
@@ -224,7 +224,7 @@ The specified attribute value is invalid.
 #include <pthread.h>
 
 int pthread_cond_destroy(
-pthread_cond_t *cond
+  pthread_cond_t *cond
 );
 @end example
 
@@ -257,7 +257,7 @@ The specified condition variable is currently in use.
 #include <pthread.h>
 
 int pthread_cond_signal(
-pthread_cond_t *cond
+  pthread_cond_t *cond
 );
 @end example
 
@@ -290,7 +290,7 @@ handler or an interrupt service routine.
 #include <pthread.h>
 
 int pthread_cond_broadcast(
-pthread_cond_t *cond
+  pthread_cond_t *cond
 );
 @end example
 
@@ -323,8 +323,8 @@ handler or an interrupt service routine.
 #include <pthread.h>
 
 int pthread_cond_wait(
-pthread_cond_t *cond,
-pthread_mutex_t *mutex
+  pthread_cond_t *cond,
+  pthread_mutex_t *mutex
 );
 @end example
 
@@ -357,9 +357,9 @@ the mutex was not owned by the current thread at the time of the call.
 #include <pthread.h>
 
 int pthread_cond_timedwait(
-pthread_cond_t *cond,
-pthread_mutex_t *mutex,
-const struct timespec *abstime
+  pthread_cond_t        *cond,
+  pthread_mutex_t       *mutex,
+  const struct timespec *abstime
 );
 @end example
 

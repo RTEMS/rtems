@@ -61,7 +61,7 @@ and status codes.
 #include <termios.h>
 
 int cfgetispeed(
-const struct termios *p
+  const struct termios *p
 );
 @end example
 @end ifset
@@ -104,7 +104,7 @@ number returned for any given speed may change from system to system.
 #include <termios.h>
 
 int cfgetospeed(
-const struct termios *p
+  const struct termios *p
 );
 @end example
 @end ifset
@@ -147,8 +147,8 @@ number returned for any given speed may change from system to system.
 #include <termios.h>
 
 int cfsetispeed(
-struct termios *p,
-speed_t speed
+  struct termios *p,
+  speed_t         speed
 );
 @end example
 @end ifset
@@ -190,8 +190,8 @@ It does not detect impossible terminal speeds.
 #include <termios.h>
 
 int cfsetospeed(
-struct termios *p,
-speed_t speed
+  struct termios *p,
+  speed_t         speed
 );
 @end example
 @end ifset
@@ -238,8 +238,8 @@ It does not detect impossible terminal speeds.
 #include <unistd.h>
 
 int tcgetattr(
-int fildes,
-struct termios *p
+  int             fildes,
+  struct termios *p
 );
 @end example
 @end ifset
@@ -284,9 +284,9 @@ NONE
 #include <unistd.h>
 
 int tcsetattr(
-int fildes,
-int options,
-const struct termios *tp
+  int                   fildes,
+  int                   options,
+  const struct termios *tp
 );
 @end example
 @end ifset
@@ -320,6 +320,7 @@ The
 @ifset is-C
 @example
 int tcsendbreak(
+  int fd
 );
 @end example
 @end ifset
@@ -359,7 +360,7 @@ in a future version.
 #include <unistd.h>
 
 int tcdrain(
-int fildes
+  int fildes
 );
 @end example
 @end ifset
@@ -404,6 +405,7 @@ NONE
 @ifset is-C
 @example
 int tcflush(
+  int fd
 );
 @end example
 @end ifset
@@ -440,6 +442,7 @@ in a future version.
 @ifset is-C
 @example
 int tcflow(
+  int fd
 );
 @end example
 @end ifset

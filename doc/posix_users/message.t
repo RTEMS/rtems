@@ -256,10 +256,10 @@ the calling sequence, related constants, usage, and status codes.
 #include <mqueue.h>
 
 mqd_t mq_open(
-const char *name,
-int oflag,
-mode_t mode,
-struct mq_attr *attr
+  const char     *name,
+  int             oflag,
+  mode_t          mode,
+  struct mq_attr *attr
 );
 @end example
 
@@ -348,7 +348,9 @@ attribute structure is not used.
 @example
 #include <mqueue.h>
 
-int mq_close(mqd_t mqdes);
+int mq_close(
+  mqd_t mqdes
+);
 @end example
 
 @subheading STATUS CODES:
@@ -385,7 +387,9 @@ messages that were in the queue remain in the queue.
 @example
 #include <mqueue.h>
 
-int mq_unlink(const char *name);
+int mq_unlink(
+  const char *name
+);
 @end example
 
 @subheading STATUS CODES:
@@ -425,10 +429,10 @@ block until all references have been closed; it may return immediately.
 @example
 #include<mqueue.h>
 int mq_send(
-mqd_t mqdes,
-const char *msg_ptr,
-size_t msg_len,
-unsigned int msg_prio
+  mqd_t        mqdes,
+  const char  *msg_ptr,
+  size_t       msg_len,
+  unsigned int msg_prio
 );
 @end example
 
@@ -480,10 +484,10 @@ the position indicated by the msg_prio argument.
 #include <mqueue.h>
 
 size_t mq_receive(
-mqd_t mqdes,
-char *msg_ptr,
-size_t msg_len,
-unsigned int *msg_prio
+  mqd_t         mqdes,
+  char         *msg_ptr,
+  size_t        msg_len,
+  unsigned int *msg_prio
 );
 @end example
 
@@ -536,8 +540,8 @@ fails and returns an error
 #include <mqueue.h>
 
 int mq_notify(
-mqd_t mqdes,
-const struct sigevent *notification
+  mqd_t                  mqdes,
+  const struct sigevent *notification
 );
 @end example
 
@@ -594,9 +598,9 @@ It is possible for another process to receive the message after the notification
 #include <mqueue.h>
 
 int mq_setattr(
-mqd_t mqdes,
-const struct mq_attr *mqstat,
-struct mq_attr *omqstat
+  mqd_t                 mqdes,
+  const struct mq_attr *mqstat,
+  struct mq_attr       *omqstat
 );
 @end example
 
@@ -644,7 +648,10 @@ All other fields in the mq_attr are ignored by this call.
 
 @example
 #include <mqueue.h>
-int mq_getattr(mqd_t mqdes, struct mq_attr *mqstat);
+int mq_getattr(
+  mqd_t mqdes,
+  struct mq_attr *mqstat
+);
 @end example
 
 @subheading STATUS CODES:

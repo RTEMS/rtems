@@ -99,7 +99,7 @@ and status codes.
 #include <pthread.h>
 
 int pthread_mutexattr_init(
-pthread_mutexattr_t *attr
+  pthread_mutexattr_t *attr
 );
 @end example
 
@@ -136,7 +136,7 @@ XXX insert list of default attributes here.
 #include <pthread.h>
 
 int pthread_mutexattr_destroy(
-pthread_mutexattr_t *attr
+  pthread_mutexattr_t *attr
 );
 @end example
 
@@ -176,8 +176,8 @@ NONE
 #include <pthread.h>
 
 int pthread_mutexattr_setprotocol(
-pthread_mutexattr_t *attr,
-int protocol
+  pthread_mutexattr_t *attr,
+  int                  protocol
 );
 @end example
 
@@ -238,8 +238,8 @@ with POSIX mutexes even though this could easily by supported by RTEMS.
 #include <pthread.h>
 
 int pthread_mutexattr_getprotocol(
-pthread_mutexattr_t *attr,
-int *protocol
+  pthread_mutexattr_t *attr,
+  int                 *protocol
 );
 @end example
 
@@ -282,8 +282,8 @@ NONE
 #include <pthread.h>
 
 int pthread_mutexattr_setprioceiling(
-pthread_mutexattr_t *attr,
-int prioceiling
+  pthread_mutexattr_t *attr,
+  int                  prioceiling
 );
 @end example
 
@@ -328,8 +328,8 @@ NONE
 #include <pthread.h>
 
 int pthread_mutexattr_getprioceiling(
-const pthread_mutexattr_t *attr,
-int *prioceiling
+  const pthread_mutexattr_t *attr,
+  int                       *prioceiling
 );
 @end example
 
@@ -373,8 +373,8 @@ NONE
 #include <pthread.h>
 
 int pthread_mutexattr_setpshared(
-pthread_mutexattr_t *attr,
-int pshared
+  pthread_mutexattr_t *attr,
+  int                  pshared
 );
 @end example
 
@@ -411,8 +411,8 @@ The pshared argument is invalid.
 #include <pthread.h>
 
 int pthread_mutexattr_getpshared(
-const pthread_mutexattr_t *attr,
-int *pshared
+  const pthread_mutexattr_t *attr,
+  int                       *pshared
 );
 @end example
 
@@ -449,8 +449,8 @@ The pshared pointer argument is invalid.
 #include <pthread.h>
 
 int pthread_mutex_init(
-pthread_mutex_t *mutex,
-const pthread_mutexattr_t *attr
+  pthread_mutex_t           *mutex,
+  const pthread_mutexattr_t *attr
 );
 @end example
 
@@ -494,7 +494,7 @@ initialized, but not yet destroyed.
 #include <pthread.h>
 
 int pthread_mutex_destroy(
-pthread_mutex_t *mutex
+  pthread_mutex_t *mutex
 );
 @end example
 
@@ -529,7 +529,7 @@ referenced by another thread.
 #include <pthread.h>
 
 int pthread_mutex_lock(
-pthread_mutex_t *mutex
+  pthread_mutex_t *mutex
 );
 @end example
 
@@ -568,7 +568,7 @@ The current thread already owns the mutex.
 #include <pthread.h>
 
 int pthread_mutex_trylock(
-pthread_mutex_t *mutex
+  pthread_mutex_t *mutex
 );
 @end example
 
@@ -608,8 +608,8 @@ The current thread already owns the mutex.
 #include <time.h>
 
 int pthread_mutex_timedlock(
-pthread_mutex_t *mutex,
-const struct timespec *timeout
+  pthread_mutex_t       *mutex,
+  const struct timespec *timeout
 );
 @end example
 
@@ -652,7 +652,7 @@ The current thread already owns the mutex.
 #include <pthread.h>
 
 int pthread_mutex_unlock(
-pthread_mutex_t *mutex
+  pthread_mutex_t *mutex
 );
 @end example
 
@@ -683,9 +683,9 @@ The specified mutex is invalid.
 #include <pthread.h>
 
 int pthread_mutex_setprioceiling(
-pthread_mutex_t *mutex,
-int prioceiling,
-int *oldceiling
+  pthread_mutex_t *mutex,
+  int              prioceiling,
+  int             *oldceiling
 );
 @end example
 
@@ -722,8 +722,8 @@ The specified mutex is invalid.
 #include <pthread.h>
 
 int pthread_mutex_getprioceiling(
-pthread_mutex_t *mutex,
-int *prioceiling
+  pthread_mutex_t *mutex,
+  int             *prioceiling
 );
 @end example
 
