@@ -1,3 +1,7 @@
+2001-09-19	Eric Norum <eric.norum@usask.ca>
+
+	* lib/tftpDriver.c: Add some debugging capability.
+
 2001-09-19	Chris Johns <ccj@acm.org>
 
 	* nfs/bootp_subr.c, rtems/rtems_bootp.c, rtems/rtems_bsdnet.h,

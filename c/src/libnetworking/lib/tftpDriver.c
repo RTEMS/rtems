@@ -35,6 +35,9 @@
   do { errno = (_error); return -1; } while(0)
 #endif
 
+#ifdef RTEMS_TFTP_DRIVER_DEBUG
+int rtems_tftp_driver_debug = 1;
+#endif
 
 /*
  * Range of UDP ports to try
@@ -349,6 +352,29 @@ getPacket (struct tftpStream *tp, int retryCount)
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+#ifdef RTEMS_TFTP_DRIVER_DEBUG
+    if (rtems_tftp_driver_debug) {
+        if (len >= (int) sizeof tp->pkbuf.tftpACK) {
+            int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
+            switch (opcode) {
+            default:
+                printf ("TFTP: OPCODE %d\n", opcode);
+                break;
+
+            case TFTP_OPCODE_DATA:
+                printf ("TFTP: RECV %d\n", ntohs (tp->pkbuf.tftpDATA.blocknum));
+                break;
+
+            case TFTP_OPCODE_ACK:
+                printf ("TFTP: GOT ACK %d\n", ntohs (tp->pkbuf.tftpACK.blocknum));
+                break;
+            }
+        }
+        else {
+            printf ("TFTP: %d0-byte packet\n", len);
+        }
+    }
+#endif
     return len;
 }
 
@@ -358,6 +384,11 @@ getPacket (struct tftpStream *tp, int retryCount)
 static int
 sendAck (struct tftpStream *tp)
 {
+#ifdef RTEMS_TFTP_DRIVER_DEBUG
+    if (rtems_tftp_driver_debug)
+        printf ("TFTP: ACK %d\n", tp->blocknum);
+#endif
+
     /*
      * Create the acknowledgement
      */
@@ -719,6 +750,10 @@ static int rtems_tftp_flush ( struct tftpStream *tp )
     for (;;) {
         tp->pkbuf.tftpDATA.opcode = htons (TFTP_OPCODE_DATA);
         tp->pkbuf.tftpDATA.blocknum = htons (tp->blocknum);
+#ifdef RTEMS_TFTP_DRIVER_DEBUG
+        if (rtems_tftp_driver_debug)
+            printf ("TFTP: SEND %d\n", tp->blocknum);
+#endif
         if (sendto (tp->socket, (char *)&tp->pkbuf, wlen, 0, 
                                         (struct sockaddr *)&tp->farAddress,
                                         sizeof tp->farAddress) < 0)
