@@ -21,7 +21,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <zilog/z8036.h>
+#include <rtems/zilog/z8036.h>
 #include <page_table.h>
 
 void bsp_return_to_monitor_trap()
