@@ -1,3 +1,7 @@
+/**
+ * @file rtems/score/idtr.h
+ */
+
 /*
  * This file contains definitions for data structure related
  *          to Intel system programming. More information can be found

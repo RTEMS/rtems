@@ -1,5 +1,8 @@
-/* registers.h
- *
+/**
+ * @file rtems/score/registers.h
+ */
+
+/*
  *  This file contains definition and constants related to Intel Cpu
  *
  *  COPYRIGHT (c) 1998 valette@crf.canon.fr

@@ -1,5 +1,8 @@
-/*  i386.h
- *
+/**
+ * @file rtems/score/i386.h
+ */
+
+/*
  *  This include file contains information pertaining to the Intel
  *  i386 processor.
  *

@@ -1,3 +1,12 @@
+2004-10-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* rtems/score/cpu.h: Add doxygen preamble.
+	* rtems/score/i386.h: Add doxygen preamble.
+	* rtems/score/idtr.h: Add doxygen preamble.
+	* rtems/score/interrupts.h: Add doxygen preamble.
+	* rtems/score/registers.h: Add doxygen preamble.
+	* rtems/score/types.h: Add doxygen preamble.
+
 2004-04-16	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/score/i386.h: Rename i386_swap_U* to i386_swap_u* (API

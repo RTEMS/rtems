@@ -1,3 +1,7 @@
+/**
+ * @file rtems/score/interrupts.h
+ */
+
 /*
  *  i386 interrupt macros.
  *
