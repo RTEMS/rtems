@@ -27,7 +27,15 @@ Linux and control a Motorola CPU32+ (68360) or Coldfire (5206, 5206e, or
 
 Information on this BDM driver is available at the following URL:
 
-http://www.calm.hw.ac.uk/davidf/coldfire/gdb-bdm-linux.htm.
+@example
+http://www.calm.hw.ac.uk/davidf/coldfire/gdb-bdm-linux.htm
+@end example
+
+The package is officially hosted at Eric Norum's ftp site:
+
+@example
+ftp://skatter.usask.ca/pub/eric/BDM-Linux-gdb/
+@end example
 
 Peter Shoebridge (peter@@zeecube.com) has ported the Linux
 parallel port BDM driver from Eric Norum to Windows NT.  It is
