@@ -1,3 +1,7 @@
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpu/Makefile.am: Add DIST_SUBDIRS = $(RTEMS_CPU).
+
 2003-07-07	Joel Sherrill <joel@OARcorp.com>
 
 	PR 417/rtems
