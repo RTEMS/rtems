@@ -37,7 +37,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include "mc68360.h"
+#include "m68360.h"
 
 void
 Timer_initialize (void)

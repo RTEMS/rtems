@@ -33,7 +33,7 @@
 #include <stdlib.h>			/* for atexit() */
 #include <bsp.h>
 #include <rtems/libio.h>
-#include "mc68360.h"
+#include "m68360.h"
 
 #define CLOCK_VECTOR	120
 #define CLOCK_IRQ_LEVEL	6

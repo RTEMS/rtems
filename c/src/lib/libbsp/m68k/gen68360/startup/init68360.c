@@ -12,7 +12,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include "mc68360.h"
+#include "m68360.h"
 
 void
 _Init68360 (void)

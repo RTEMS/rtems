@@ -28,7 +28,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
-#include "mc68360.h"
+#include "m68360.h"
 
 /*  console_initialize
  *
