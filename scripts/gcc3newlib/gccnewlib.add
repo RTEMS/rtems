@@ -2,9 +2,11 @@
 %define gcc_version	@gcc_version@
 %define newlib_version	@newlib_version@
 
-Name:         @target_alias@-gcc-newlib
-Summary:      gcc and newlib C Library for @target_alias@.
-Group:	      rtems
+%define gcc_target	@target_alias@
+
+Name:         %{rpmprefix}%{gcc_target}-gcc-newlib
+Summary:      gcc and newlib C Library for %{gcc_target}.
+Group: %{rpmgroup}
 Release:      @Release@
 License:      gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
@@ -12,16 +14,20 @@ Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      	gcc%{gcc_version}newlib%{newlib_version}
-# gcc 3.x and gcc 2.9
-# Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
-Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.bz2
-# gcc 2.95.x
-# Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}.tar.bz2
+%if "%{gcc_version}" >= "3.2.2"
+Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.bz2
+%else
+%if "%{gcc_version}" >= "3.0"
+Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.gz
+%else
+Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}-everything.tar.gz
+%endif
+%endif
 Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 @PATCH1@
 @PATCH3@
 BuildPreReq:	texinfo >= 4.2
-BuildPreReq:	@target_alias@-binutils
+BuildPreReq:	%{rpmprefix}%{gcc_target}-binutils
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
@@ -55,7 +61,7 @@ NoSource:	1
 %define _gcj	%{?gcj:%gcj}%{!?gcj:1}
 %else
 # default to not building gcj
-%define _gcj	%{?gnat:%gcj}%{!?gcj:0}
+%define _gcj	%{?gcj:%gcj}%{!?gcj:0}
 %endif
 
 
@@ -65,38 +71,38 @@ NoSource:	1
 %define build_gcj	0
 %define build_gnat	0
 
-%if "@target_alias@" == "arm-rtems"
+%if "%{gcc_target}" == "arm-rtems"
 %define build_gcj	%_gcj
 %endif
 
-%if "@target_alias@" == "c4x-rtems"
+%if "%{gcc_target}" == "c4x-rtems"
 %define build_cxx	0
 %endif
 
-%if "@target_alias@" == "i386-rtems"
+%if "%{gcc_target}" == "i386-rtems"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
 %endif
 
-%if "@target_alias@" == "i960-rtems"
+%if "%{gcc_target}" == "i960-rtems"
 %define build_cxx	0
 %endif
 
-%if "@target_alias@" == "m68k-rtems"
+%if "%{gcc_target}" == "m68k-rtems"
 %define build_gcj	%_gcj
 %endif
 
-%if "@target_alias@" == "mips-rtems"
+%if "%{gcc_target}" == "mips-rtems"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
 %endif
 
-%if "@target_alias@" == "powerpc-rtems"
+%if "%{gcc_target}" == "powerpc-rtems"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
 %endif
 
-%if "@target_alias@" == "sparc-rtems"
+%if "%{gcc_target}" == "sparc-rtems"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
 %endif
@@ -133,7 +139,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
  Or you can try the ftp options of rpm :-)
 
 %prep
-# untar the sources inside @target_alias@-gcc-newlib
+# untar the sources inside %{gcc_target}-gcc-newlib
 %setup -c -T -n %{name} -a0 -a1
 
 @PATCH2@
@@ -175,9 +181,11 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %if %build_gnat
   languages="$languages,ada"
 %endif
+
+  export PATH="%{_bindir}:${PATH}"
   ../gcc-%{gcc_version}/configure \
     --build=%_build --host=%_host \
-    --target=@target_alias@ \
+    --target=%{gcc_target} \
     --with-gnu-as --with-gnu-ld --with-newlib --verbose \
     --with-system-zlib --disable-nls \
     --enable-version-specific-runtime-libs \
@@ -189,6 +197,12 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # Somehow, gcc doesn't get syslimits.h right for Cdn-Xs
   test -d gcc/include || mkdir -p gcc/include
   cp ../gcc-%{gcc_version}/gcc/gsyslimits.h gcc/include/syslimits.h
+%endif
+
+%if %build_cxx
+%if "%{gcc_version}" >= "3.3"
+  make -C %{gcc_target}/libiberty CFLAGS="$RPM_OPT_FLAGS" c++filt
+%endif
 %endif
 
 %if %build_gnat
@@ -212,11 +226,11 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 # but what we override below
   GNATLIBCFLAGS="-g -O2"
 # Let gnatlib building find newlib's headers
-  GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/@target_alias@/newlib/targ-include"
+  GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/%{gcc_target}/newlib/targ-include"
   GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/../newlib-%{newlib_version}/newlib/libc/include"
 # Without this xgcc doesn't find the target's binutils.
-  GNATLIBCFLAGS="$GNATLIBCFLAGS -B%{_prefix}/@target_alias@/bin/"
-%if "@target_alias@" == "mips-rtems"
+  GNATLIBCFLAGS="$GNATLIBCFLAGS -B%{_prefix}/%{gcc_target}/bin/"
+%if "%{gcc_target}" == "mips-rtems"
   GNATLIBCFLAGS="$GNATLIBCFLAGS -G0"
 %endif
   make -C gcc GNATLIBCFLAGS="${GNATLIBCFLAGS}" gnatlib
@@ -224,17 +238,18 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   make info
 
 %install
+  export PATH="%{_bindir}:${PATH}"
   cd build
 # Bug in gcc-2.95.1: It doesn't build this installation directory
-# If it doesn't find it, gcc doesn't install @target_alias@/bin/gcc
+# If it doesn't find it, gcc doesn't install %{gcc_target}/bin/gcc
 %if "%{gcc_version}" < "3.0"
   ../gcc-%{gcc_version}/mkinstalldirs \
-    $RPM_BUILD_ROOT%{_prefix}/@target_alias@/bin
+    $RPM_BUILD_ROOT%{_prefix}/%{gcc_target}/bin
 %endif
 
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} install
-  cd @target_alias@/newlib
+  cd %{gcc_target}/newlib
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} install-info
   # cd back to build/
@@ -243,9 +258,9 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %if %build_gnat
 # Install a copy of gcc as gnatgcc
 # Enables us to mix different versions of gnat and gnatgcc
-  rm -f $RPM_BUILD_ROOT%{_bindir}/@target_alias@-gnatgcc%{_exeext}
-  ln $RPM_BUILD_ROOT%{_bindir}/@target_alias@-gcc%{_exeext} \
-    $RPM_BUILD_ROOT%{_bindir}/@target_alias@-gnatgcc%{_exeext}
+  rm -f $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-gnatgcc%{_exeext}
+  ln $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-gcc%{_exeext} \
+    $RPM_BUILD_ROOT%{_bindir}/%{gcc_target}-gnatgcc%{_exeext}
 %endif
 
   # Bug in gcc-3.x: It puts the build dirs into *.la files
@@ -259,25 +274,36 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   if test -f $RPM_BUILD_ROOT%{_prefix}/bin/cpp%{_exeext};
   then
     mv $RPM_BUILD_ROOT%{_prefix}/bin/cpp%{_exeext} \
-      $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-cpp%{_exeext}
+      $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-cpp%{_exeext}
   fi
+%endif
+
+%if %build_cxx
+%if "%{gcc_version}" >= "3.3"
+  install -d $RPM_BUILD_ROOT%{_prefix}/bin
+  install -c -m 755 %{gcc_target}/libiberty/c++filt%{_exeext} \
+     $RPM_BUILD_ROOT%{_prefix}/bin/%{target_alias}-c++filt%{_exeext}
+%endif
 %endif
 
   # gzip info files
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
+%if "%{gcc_version}" < "3.3"
+  # gcc-3.3 ships monolytic *.infos
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-? 2>/dev/null
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-?? 2>/dev/null
+%endif
 
   rm -f dirs ;
   echo "%defattr(-,root,root)" >> dirs
   echo "%dir %{_prefix}/lib" >> dirs ;
   echo "%dir %{_prefix}/lib/gcc-lib" >> dirs ;
-  echo "%dir %{_prefix}/lib/gcc-lib/@target_alias@" >> dirs ;
+  echo "%dir %{_prefix}/lib/gcc-lib/%{gcc_target}" >> dirs ;
 
   # Collect multilib subdirectories
   f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
-  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}"
+  TGTDIR="%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -287,7 +313,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     esac
   done
 
-  TGTDIR="%{_prefix}/@target_alias@/lib"
+  TGTDIR="%{_prefix}/%{gcc_target}/lib"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -304,7 +330,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   cp dirs files.gcj
   cp dirs files.g++
 
-  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}"
+  TGTDIR="%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
@@ -327,7 +353,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     esac
   done
 
-  TGTDIR="%{_prefix}/@target_alias@/lib"
+  TGTDIR="%{_prefix}/%{gcc_target}/lib"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in

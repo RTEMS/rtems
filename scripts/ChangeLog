@@ -1,5 +1,18 @@
 2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* base-g77.add, base-gcc.add, base-gcj.add, base-gnat.add,
+	target-c++.add, target-g77.add, target-gcc.add, target-gcj.add,
+	target-gnat.add, target-objc.add
+	Add support for %{rpmprefix}, %{rpmgroup}.
+	Use %{gcc_target and %{gcc_version}.
+	Remove "Provides:".
+	* gccnewlib.add: Ditto.
+	Correct setting up _gcj.
+	Explicitly build c++filt for gcc >= 3.3.
+	* mkspec.in: Add support for %{rpmprefix}, %{rpmgroup}.
+
+2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* binutils/Makefile.am: Minor cleanups.
 	* binutils/binutils.add, binutils/base-binutils.add,
 	binutils/target-binutils.add: Add support for %{rpmprefix}, 
