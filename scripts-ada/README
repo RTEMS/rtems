@@ -1,0 +1,5 @@
+#
+# $Id$
+#
+
+This directory contains the scripts used to build RPMS for GNAT/RTEMS.
