@@ -188,11 +188,12 @@ rtems_termios_open (
 			rtems_semaphore_release (rtems_termios_ttyMutex);
 			return RTEMS_NO_MEMORY;
 		}
+		if (rtems_termios_ttyHead)
+			rtems_termios_ttyHead->back = tty;
 		tty->forw = rtems_termios_ttyHead;
 		rtems_termios_ttyHead = tty;
 		if (rtems_termios_ttyTail == NULL)
 			rtems_termios_ttyTail = tty;
-
 		tty->minor = minor;
 		tty->major = major;
 
