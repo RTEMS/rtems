@@ -1,3 +1,21 @@
+2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* mpc5xx/include/mpc5xx.h, mpc5xx/include/console.h,
+	mpc5xx/exceptions/raw_exception.h, mpc5xx/irq/irq.h,
+	mpc5xx/vectors/vectors.h, mpc6xx/exceptions/raw_exception.h,
+	mpc6xx/mmu/bat.h, mpc6xx/mmu/pte121.h,
+	mpc6xx/clock/c_clock.h, mpc8260/include/mpc8260.h,
+	mpc8260/include/console.h, mpc8260/include/cpm.h,
+	mpc8260/exceptions/raw_exception.h, mpc8260/include/mmu.h,
+	mpc8xx/include/mpc8xx.h, mpc8xx/include/console.h,
+	mpc8xx/include/cpm.h, mpc8xx/exceptions/raw_exception.h,
+	mpc8xx/include/mmu.h, ppc403/ictrl/ictrl.h,
+	ppc403/tty_drv/tty_drv.h, shared/include/io.h,
+	shared/include/mmu.h, shared/include/page.h,
+	shared/include/byteorder.h, shared/include/pgtable.h,
+	shared/include/cpuIdent.h,shared/include/spr.h,
+	shared/src/stackTrace.h: New header guards.
+
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Build exception processing in  old-exceptions rsp.
