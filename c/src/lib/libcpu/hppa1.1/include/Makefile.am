@@ -13,9 +13,9 @@ $(PROJECT_INCLUDE)/hppa1.1:
 	$(mkinstalldirs) $@
 
 $(PROJECT_INCLUDE)/hppa1.1/%.h: %.h
-	$(INSTALL_DATA) $@ $<
+	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE)/hppa1.1 \
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/hppa1.1 \
     $(H_FILES:%.h=$(PROJECT_INCLUDE)/hppa1.1/%.h)
 
 all-local: $(TMPINSTALL_FILES)
