@@ -1,0 +1,5 @@
+2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* ChangeLog, .cvsignore, Makefile.am, bspclean.c, bspstart.c,
+	gnatcommon.c, start.S:  New files.  Largely moved from ERC32
+	BSP to be able to be shared with LEON and other SPARC BSPs.
