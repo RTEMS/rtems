@@ -37,7 +37,7 @@
 #define ASM
 #endif
 #include <rtems/score/cpuopts.h>
-#include <rtems/score/ppc.h>
+#include <rtems/score/powerpc.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the

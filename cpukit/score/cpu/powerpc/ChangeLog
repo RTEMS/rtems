@@ -1,5 +1,10 @@
 2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* asm.h: Include rtems/score/powerpc.h instead of
+	rtems/score/ppc.h.
+
+2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* rtems/score/powerpc.h: New (Copied and renamed from rtems/score/ppc.h)
 	for consistency with other ports.
 	* rtems/score/ppc.h: Deprecation wrapper to rtems/score/powerpc.h.
