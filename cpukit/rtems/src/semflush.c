@@ -52,6 +52,12 @@
  *    error code        - if unsuccessful
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
+#define SEND_OBJECT_WAS_DELETED _Semaphore_MP_Send_object_was_deleted
+#else
+#define SEND_OBJECT_WAS_DELETED NULL
+#endif
+
 rtems_status_code rtems_semaphore_flush(
   Objects_Id      id
 )
@@ -75,16 +81,17 @@ rtems_status_code rtems_semaphore_flush(
       if ( _Attributes_Is_binary_semaphore(the_semaphore->attribute_set) ) { 
         _CORE_mutex_Flush(
           &the_semaphore->Core_control.mutex, 
-          NULL,
+          SEND_OBJECT_WAS_DELETED,
           CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT
         );
       } else {
         _CORE_semaphore_Flush(
           &the_semaphore->Core_control.semaphore, 
-          NULL,
+          SEND_OBJECT_WAS_DELETED,
           CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT
         );
       }
+      _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
   }
 
