@@ -4,7 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-SUBDIRS = @exec@ @subdirs@
+SUBDIRS = @exec@ @subdirs@ wrapup
 
 clean-local:
 	$(RM) -r $(PROJECT_RELEASE)

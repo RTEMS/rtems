@@ -18,6 +18,9 @@ RTEMS_CANONICAL_HOST
 AM_INIT_AUTOMAKE([no-define foreign 1.6])
 AM_MAINTAINER_MODE
 
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
+
 RTEMS_ENABLE_MULTILIB
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENV_RTEMSBSP
@@ -60,44 +63,51 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 AC_SUBST(CUSTOM_CFG_FILES)
 AC_SUBST(cfg_dir)
 
-## Note: the order of the directories below is essential
-AC_CONFIG_SUBDIRS([make])
-
 ## Configure ${srcdir}/../../cpukit as exec/ if multilibs are enabled
 AS_IF([test x"$multilib" = x"no"],[
   RTEMS_CHECK_MULTIPROCESSING
-  RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],[--with-project-root="../../"])
+  RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],
+  [--with-project-root="../../" --enable-rtemsbsp=$RTEMS_BSP
+  ])
   AC_SUBST([exec],[exec])
 ])
 
-AC_CONFIG_SUBDIRS(optman)
-AC_CONFIG_SUBDIRS(lib/libcpu)
-AC_CONFIG_SUBDIRS(lib/libbsp)
-AC_CONFIG_SUBDIRS(libmisc)
+## Note: the order of the directories below is essential
+AC_CONFIG_SUBDIRS([make])
+AC_CONFIG_SUBDIRS([optman])
+AC_CONFIG_SUBDIRS([lib/libcpu])
+AC_CONFIG_SUBDIRS([lib/libbsp])
+AC_CONFIG_SUBDIRS([libmisc])
 
 AS_IF([test "$RTEMS_CPU" != "unix"],[
 ## HACK: Suppress libchip for unix
   AC_CONFIG_SUBDIRS(libchip)
 ])
 
-if test "$HAS_NETWORKING" = "yes"; then
+AS_IF([test "$HAS_NETWORKING" = "yes"],[
   AC_CONFIG_SUBDIRS(libnetworking)
-  if test "$RTEMS_HAS_RDBG" = "yes"; then
+  AS_IF([test "$RTEMS_HAS_RDBG" = "yes"],[
     RTEMS_CHECK_RDBG(RTEMS_BSP)
-  fi
-fi
+  ])
+])
 
-if test "$HAS_RDBG" = "yes"; then
+AS_IF([test "$HAS_RDBG" = "yes"],[
   AC_CONFIG_SUBDIRS(librdbg)
-fi
+])
+
+AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
+  AC_CONFIG_SUBDIRS(librtems++)
+])
+
+AC_CONFIG_SUBDIRS(wrapup tests)
+
 AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes" )
 AM_CONDITIONAL(HAS_RDBG, test "$HAS_RDBG" = "yes" )
 
-if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-  AC_CONFIG_SUBDIRS(librtems++)
-fi 
-
-AC_CONFIG_SUBDIRS(wrapup tests)
+# The bare bsp doesn't have libbsp.a
+# FIXME: We should use a feature based check, here
+AM_CONDITIONAL(HAS_LIBBSP,[! test "$RTEMS_BSP_FAMILY" = "bare"])
+AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
 
 RTEMS_PROJECT_ROOT
 
@@ -106,5 +116,7 @@ AC_CONFIG_FILES([Makefile],
 [${MAKE} make/${RTEMS_BSP}.cache],
 [RTEMS_BSP=${RTEMS_BSP}
  MAKE=${MAKE}])
+
+AC_CONFIG_FILES([wrapup/Makefile])
 
 AC_OUTPUT

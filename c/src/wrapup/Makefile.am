@@ -4,11 +4,9 @@
 ##  build and install "glommed" librtemsbsp.a
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../aclocal
-
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../automake/compile.am
+include $(top_srcdir)/../../automake/lib.am
 
 LIB = $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
 
@@ -32,7 +30,7 @@ SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
     ../libmisc/wrapup/$(ARCH)/libmisc.a \
     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
+TMPINSTALL_FILES += $(LIB)
 
 all-local: $(ARCH) $(TMPINSTALL_FILES)
 
@@ -69,4 +67,4 @@ $(LIB): $(SRCS)
 
 bsplib_DATA = $(LIB)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../automake/local.am
