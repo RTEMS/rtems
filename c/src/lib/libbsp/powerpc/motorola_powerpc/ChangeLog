@@ -1,3 +1,7 @@
+	* configure.ac: Add bspopts.h.
+	* include/.cvsignore: Add stamp-h* and bspopts.h*.
+	* include/Makefile.am: Add bspopts.h.
+	* pci/Makefile.am: Append -O2 to AM_CFLAGS.
 
 2001-11-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

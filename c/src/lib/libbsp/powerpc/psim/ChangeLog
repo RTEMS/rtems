@@ -1,3 +1,7 @@
+2001-10-25	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Added _init and _fini.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* shmsupp/lock.c, shmsupp/mpisr.c: Fixed typo.

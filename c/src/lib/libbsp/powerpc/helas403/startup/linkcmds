@@ -56,8 +56,8 @@ SECTIONS
 
      *(.lit)
      *(.shdata)
-     *(.init)
-     *(.fini)
+     _init = .; *(.init)
+     _fini = .; *(.fini)
      . = ALIGN(0x10);
      _endtext = .;
      text.end = .;

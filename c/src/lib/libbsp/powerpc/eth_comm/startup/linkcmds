@@ -64,8 +64,8 @@ SECTIONS
 	
 	     *(.lit)
 	     *(.shdata)
-	     *(.init)
-	     *(.fini)
+  	     .init : { _init = .; *(.init)	}
+  	     .fini : { _fini = .; *(.fini)	}
 	     _endtext = .;
 	     text.end = .;
 	} > ram

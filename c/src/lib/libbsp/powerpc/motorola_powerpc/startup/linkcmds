@@ -59,8 +59,8 @@ SECTIONS
     *(.gnu.warning)
     *(.gnu.linkonce.t*)
   }  > CODE
-  .init           : { *(.init)          } 	> CODE
-  .fini           : { *(.fini)          } 	> CODE
+  .init		  : { _init = .; *(.init)	} >CODE
+  .fini		  : { _fini = .; *(.fini)	} >CODE
   .rodata         : { *(.rodata) *(.gnu.linkonce.r*) }	> CODE
   .rodata1        : { *(.rodata1) }	> CODE
   _etext = .;

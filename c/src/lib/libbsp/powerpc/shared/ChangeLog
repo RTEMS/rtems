@@ -1,3 +1,7 @@
+	* startup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* vectors/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2001-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Use _HEADER instead of H_FILES.
 	* irq/Makefile.am: Ditto.

@@ -60,8 +60,8 @@ SECTIONS
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
   } 
-  .init		  : { __init = .; *(.init)		}
-  .fini		  : { __fini = .; *(.fini)		}
+  .init		  : { _init = .; __init = .; *(.init)		}
+  .fini		  : { _fini = .; __fini = .; *(.fini)		}
   .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) }
   .rodata1	  : {
      *(.rodata1)

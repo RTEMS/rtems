@@ -53,8 +53,8 @@ SECTIONS
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
   } >RAM
-  .init		  : { *(.init)		} >RAM
-  .fini		  : { *(.fini)		} >RAM
+  .init		  : { _init = .; *(.init)	} >RAM
+  .fini		  : { _fini = .; *(.fini)	} >RAM
   .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) } >RAM
   .rodata1	  : { *(.rodata1) 	} >RAM
   _etext = .;
