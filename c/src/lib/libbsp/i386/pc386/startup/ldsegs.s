@@ -240,9 +240,3 @@ SYM(idtdesc):
 END_CODE
 
 END
-
-
-
-
-
-
