@@ -59,9 +59,7 @@ int cre_flg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -91,9 +89,7 @@ int del_flg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -123,9 +119,7 @@ int set_flg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -155,9 +149,7 @@ int clr_flg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -187,9 +179,7 @@ int wai_flg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -219,9 +209,7 @@ int pol_flg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -251,9 +239,7 @@ int twai_flg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -283,9 +269,7 @@ int ref_flg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 

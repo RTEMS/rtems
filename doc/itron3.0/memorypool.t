@@ -58,9 +58,7 @@ int cre_mpl(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -90,9 +88,7 @@ int del_mpl(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -122,9 +118,7 @@ int get_blk(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -154,9 +148,7 @@ int pget_blk(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -186,9 +178,7 @@ int tget_blk(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -218,9 +208,7 @@ int rel_blk(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -250,9 +238,7 @@ int ref_mpl(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 

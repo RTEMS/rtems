@@ -56,9 +56,7 @@ int get_ver(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -88,9 +86,7 @@ int ref_sys(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -120,9 +116,7 @@ int ref_cfg(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -152,9 +146,7 @@ int def_svc(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -184,9 +176,7 @@ int def_exc(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 

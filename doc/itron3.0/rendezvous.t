@@ -62,9 +62,7 @@ int cre_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -94,9 +92,7 @@ int del_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -126,9 +122,7 @@ int cal_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -158,9 +152,7 @@ int pcal_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -190,9 +182,7 @@ int tcal_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -222,9 +212,7 @@ int acp_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -254,9 +242,7 @@ int pacp_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -286,9 +272,7 @@ int tacp_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -318,9 +302,7 @@ int fwd_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -350,9 +332,7 @@ int rpl_rdv(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -382,9 +362,7 @@ int ref_por(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 

@@ -60,9 +60,7 @@ int cre_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -92,9 +90,7 @@ int del_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -124,9 +120,7 @@ int snd_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -156,9 +150,7 @@ int psnd_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -188,9 +180,7 @@ int tsnd_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -220,9 +210,7 @@ int rcv_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -252,9 +240,7 @@ int prcv_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -284,9 +270,7 @@ int trcv_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -316,9 +300,7 @@ int ref_mbf(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 

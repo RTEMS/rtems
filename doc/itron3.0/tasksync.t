@@ -58,9 +58,7 @@ int sus_tsk(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -90,9 +88,7 @@ int rsm_tsk(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -122,9 +118,7 @@ int frsm_tsk(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -154,9 +148,7 @@ int slp_tsk(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 
@@ -186,9 +178,7 @@ int tslp_tsk(
 @end ifset
 
 @subheading STATUS CODES:
-@table @b
-@item E
-The
+@code{EXXX} - 
 @code{E_CTX} - Context error (issued from task-independent portions or a task in dispatch disabled state)
 @end table
 
@@ -218,9 +208,7 @@ int wup_tsk(
 @end ifset
 
 @subheading STATUS CODES:
-@table @b
-@item E
-The
+@code{EXXX} - 
 @code{EN_CTXID} - Specified an object on another node when the system call was issued from a task in dispatch disabled state or from a task-independent portion
 @end table
 
@@ -250,9 +238,7 @@ int can_wup(
 @end ifset
 
 @subheading STATUS CODES:
-@table @b
-@item E
-The
+@code{EXXX} - 
 
 @end table
 @code{EN_RPAR} - A value outside the range supported by the issuing node and/or transmission packet format was returned as a return parameter (a value outside supported range was returned for wupcnt)
