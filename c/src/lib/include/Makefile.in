@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-H_PIECES=console clockdrv iosupp ringbuf \
+H_PIECES=chain console clockdrv iosupp ringbuf \
    spurious timerdrv vmeintr
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
