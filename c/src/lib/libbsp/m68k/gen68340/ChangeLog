@@ -1,3 +1,8 @@
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* start/start.S: Include <rtems/asm.h> instead of <asm.h>.
+	* start/startfor340only.S: Include <rtems/asm.h> instead of <asm.h>.
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* console/Modif_cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.

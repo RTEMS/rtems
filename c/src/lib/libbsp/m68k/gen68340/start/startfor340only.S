@@ -25,7 +25,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #include <m68340.inc>
 
 BEGIN_CODE

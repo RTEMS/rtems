@@ -25,7 +25,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #include <m68349.inc>
 
 #define	_OLD_ASTECC 1 /* old addresses for AST68340 only, undefine for AST68349 */
