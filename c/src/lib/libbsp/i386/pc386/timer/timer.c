@@ -368,7 +368,6 @@ inline unsigned short readCurrentTimer()
  +--------------------------------------------------------------------------*/
 unsigned int clockbits(void)
 {
-	int i_state;
 	unsigned int stat,count1, count;
 
 	do 
@@ -399,10 +398,8 @@ Calibrate_loop_1ms(void)
 {
   unsigned int i;
   unsigned short loadedValue, offset;
-  unsigned int timerValue, t1_ref, t2_ref;
+  unsigned int timerValue, t1_ref, t2_ref=0;
   rtems_interrupt_level  level;
-  unsigned short lsb, msb;
-  unsigned char status;
   
 
   printk( "Calibrate_loop_1ms is starting,  please wait ( but not too loooong. )\n" ); 
