@@ -1,3 +1,9 @@
+2003-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	PR 338/filesystem
+	* sci/sci.c: Side-effect of fixing reentrancy problem with 
+	rtems_io_lookup_name() (API change).
+
 2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in subdir Makefile.ams

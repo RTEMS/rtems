@@ -293,9 +293,9 @@ rtems_device_driver sh_sci_initialize(
   rtems_device_minor_number  minor,
   void                      *arg )
 {
-  rtems_device_driver status ;
+  rtems_device_driver status;
   rtems_device_minor_number i;
-  rtems_driver_name_t *driver = NULL;
+  rtems_driver_name_t driver;
   
   
   /*
