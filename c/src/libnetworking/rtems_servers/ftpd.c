@@ -963,7 +963,7 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
     hook = &rtems_ftpd_configuration.hooks[i++];
     while (hook->filename != NULL)
     {
-      if (!strcmp(hook->filename, buf))
+      if (!strcmp(hook->filename, filename))
       {
         usehook = hook;
         break;

@@ -1,3 +1,7 @@
+2001-04-20	Jake Janovetz <janovetz@uiuc.edu>
+
+ 	* rtems_servers/ftpd.c: Correct argument so hooks work again.
+
 2001-03-15      Ralf Corsepiu <corsepius@faw.uni-ulm.de>
 
 	* include/.cvsignore: Remove danlgling file.
