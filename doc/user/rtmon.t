@@ -104,7 +104,7 @@ RMS calls for the static assignment of task
 priorities based upon their period.  The shorter a task's
 period, the higher its priority.  For example, a task with a 1
 millisecond period has higher priority than a task with a 100
-millisecond period.  If two tasks have the same period, than RMS
+millisecond period.  If two tasks have the same period, then RMS
 does not distinguish between the tasks.  However, RTEMS
 specifies that when given tasks of equal priority, the task
 which has been ready longest will execute first.  RMS's priority
