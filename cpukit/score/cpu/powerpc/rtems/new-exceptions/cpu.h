@@ -422,16 +422,6 @@ typedef struct {
  */
 
 /*
- *  Macros to access PowerPC MPC750 specific additions to the CPU Table
- */
-
-#define rtems_cpu_configuration_get_clicks_per_usec() \
-   (_CPU_Table.clicks_per_usec)
-
-#define rtems_cpu_configuration_get_exceptions_in_ram() \
-   (_CPU_Table.exceptions_in_RAM)
-
-/*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
  *  _CPU_Initialize and copied into the task's FP context area during

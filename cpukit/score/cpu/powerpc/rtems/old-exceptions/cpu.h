@@ -451,14 +451,8 @@ typedef struct {
  */
 
 #ifndef ASM
-#define rtems_cpu_configuration_get_clicks_per_usec() \
-   (_CPU_Table.clicks_per_usec)
-
 #define rtems_cpu_configuration_get_spurious_handler() \
    (_CPU_Table.spurious_handler)
-
-#define rtems_cpu_configuration_get_exceptions_in_ram() \
-   (_CPU_Table.exceptions_in_RAM)
 
 #if (defined(ppc403) || defined(ppc405) || defined(mpc860) || defined(mpc821))
 
