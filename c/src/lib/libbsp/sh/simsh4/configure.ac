@@ -35,11 +35,5 @@ AC_DEFINE_UNQUOTED(
   [Whether to call early_hw_init from start.S])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-console/Makefile
-startup/Makefile
-clock/Makefile
-timer/Makefile
-wrapup/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
