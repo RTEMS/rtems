@@ -95,7 +95,7 @@ rtems_monitor_dump_id(rtems_id id)
 unsigned32
 rtems_monitor_dump_name(rtems_name name)
 {
-    int i;
+    unsigned32 i;
     unsigned32 length = 0;
     union {
         unsigned32 ui;
