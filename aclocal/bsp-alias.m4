@@ -11,6 +11,7 @@ AC_DEFUN(_RTEMS_BSP_ALIAS,
     c3xsim)       $2=c4xsim           ;; # TI C3x Simulator in gdb
     mcp750)       $2=motorola_powerpc ;; # Motorola PPC board variant
     mvme2307)     $2=motorola_powerpc ;; # Motorola PPC board variant
+    mtx603e)      $2=motorola_powerpc ;; # Motorola PPC board variant
     mvme162lx)    $2=mvme162          ;; # m68k - mvme162 board variant
     gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
     p4600)        $2=p4000            ;; # mips64orion - p4000 board w/IDT 4600

@@ -1,3 +1,8 @@
+2002-11-17	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Added support for
+	Motorola MTX603e.
+
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Use AS_IF instead of if/then/else/endif.
