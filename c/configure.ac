@@ -65,7 +65,20 @@ AC_SUBST(rtems_bsp_configure)
 AC_SUBST(RTEMS_BSP_LIST)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile],[
+for bsp in : $RTEMS_BSP_LIST; do test "x$bsp" = x: && continue
+cat >> Makefile << BSPEOF
+
+$bsp: src/configure
+	@set fnord \$(MAKEFLAGS); amf=\[$]\[$]2; \\
+	  echo "Configuring RTEMS_BSP=$bsp"; \\
+	  \$(mkdir_p) $bsp; \\
+	  ( cd $bsp && \\
+	    CONFIG_SHELL=\$(SHELL) RTEMS_BSP=$bsp \$(rtems_bsp_configure) ) \\
+	  || case "\$\$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac;
+BSPEOF
+done
+],[RTEMS_BSP_LIST="$RTEMS_BSP_LIST"])
 AC_OUTPUT
 
 echo

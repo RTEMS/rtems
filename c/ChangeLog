@@ -1,3 +1,9 @@
+2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove RTEMS_BSP-subdir rule.
+	* configure.ac: Let AC_CONFIG_FILES(Makefile..) append explictit
+	rules for RTEMS_BSP-subdirs.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkdir_p instead of mkinstalldirs.
