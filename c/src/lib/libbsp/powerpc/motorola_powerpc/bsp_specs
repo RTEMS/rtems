@@ -9,7 +9,7 @@
 
 *lib:
 %{!qrtems: %(old_lib)} %{qrtems: --start-group \
-%{!qrtems_debug: -lrtemsall} %{qrtems_debug: -lrtemsall_g} \
+%{!qrtems_debug: -lrtemsbsp -lrtemscpu} %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
 -lc -lgcc --end-group  ecrtn%O%s \
 %{!qnolinkcmds: -T linkcmds%s}}
 

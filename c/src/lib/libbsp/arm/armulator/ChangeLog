@@ -1,3 +1,8 @@
+2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Replace -lrtemsall with -lrtemsbsp -lrtemscpu,
+	replace -lrtemsall_g with -lrtemsbsp_g -lrtemscpu_g.
+
 2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add RTEMS_BSPOPTS_*(ARM_RDP_MONITOR).
