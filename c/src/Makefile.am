@@ -12,7 +12,7 @@ clean-local:
 make/@RTEMS_BSP@.cache: make/bsp.mak @CUSTOM_CFG_FILES@
 	$(RM) make/@RTEMS_BSP@.cache
 	$(MAKE) -f ${srcdir}/make/bsp.mak \
-	RTEMS_BSP=@RTEMS_BSP@ RTEMS_ROOT=. \
+	RTEMS_BSP=@RTEMS_BSP@ RTEMS_ROOT=. BARE_CPU_MODEL=${BARE_CPU_MODEL} \
 	make/@RTEMS_BSP@.cache
 
 noinst_DATA = make/@RTEMS_BSP@.cache
