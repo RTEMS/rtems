@@ -1,3 +1,7 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* include/chain.h: Fixed typo.
+
 2001-10-11	Mike Siers <mikes@poliac.com>
 
 	* libc/termios.c: Fixed a memory leak in the termios
