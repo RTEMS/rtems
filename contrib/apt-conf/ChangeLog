@@ -1,3 +1,7 @@
+2004-02-21	Joel Sherrill <joel@OARcorp.com>
+
+	* README: New file.
+
 2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems-apt-conf.spec.in: Add @VERSION@ to Source0.
