@@ -6,8 +6,10 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/console.rel
 
-C_FILES = console.c
+C_FILES = console.c sci.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+
+H_FILES = sci.h
 
 OBJS = $(C_O_FILES)
 

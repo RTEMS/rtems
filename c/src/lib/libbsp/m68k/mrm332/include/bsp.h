@@ -22,6 +22,7 @@ extern "C" {
 #include <bspopts.h>
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <clockdrv.h>
 #include <console.h>
 #include <iosupp.h>
@@ -35,6 +36,7 @@ extern "C" {
  *   - Interrupt stack space is not minimum if defined.
  */
 
+#define CONSOLE_SCI
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
 /* #define CONFIGURE_INTERRUPT_STACK_MEMORY  (TBD * 1024) */
 
@@ -102,7 +104,7 @@ extern char _copy_data_from_rom[];
 
 #define RAW_PUTS(str) \
   { register char *ptr = str; \
-    while (*ptr) outbyte(*ptr++); \
+    while (*ptr) SCI_output_char(*ptr++); \
   }
 
 #define RAW_PUTI(n) { \
@@ -111,7 +113,7 @@ extern char _copy_data_from_rom[];
     RAW_PUTS("0x"); \
     for (i=28;i>=0;i -= 4) { \
       j = (n>>i) & 0xf; \
-      outbyte( (j>9 ? j-10+'a' : j+'0') ); \
+      SCI_output_char( (j>9 ? j-10+'a' : j+'0') ); \
     } \
   }
 

@@ -23,5 +23,5 @@ void bsp_cleanup(void)
 {
     /* interrupt driven stdio must be flushed */
     _CPU_ISR_Set_level( 7 );
-    _UART_flush();
+    //_UART_flush();
 }

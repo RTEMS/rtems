@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
 
-C_FILES = bsplibc.c bsppost.c bspstart.c bspclean.c bootcard.c \
+C_FILES = start_c.c bsplibc.c bsppost.c bspstart.c bspclean.c bootcard.c \
     m68kpretaskinghook.c main.c sbrk.c setvec.c gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 

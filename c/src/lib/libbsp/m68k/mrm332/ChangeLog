@@ -1,3 +1,14 @@
+2002-02-28	Mike Panetta <ahuitzot@mindspring.com>
+
+	* console/sci.c, console/sci.h, 
+	console/console.c: Added new SCI driver.
+	* start/start.c: Removed file.
+	* start/start.S: New file, the asm portion of the updated start code.
+	* start/configure.am: Added start.S, removed start.c
+	* startup/start_c.c: New file, the C portion of the updated start code. 	Contains most of the code that was in the old start.c. 
+	* startup/configure.am: Added start_c.c to C_FILES.
+	* include/bsp.h: Added include <rtems/bspIo.h>
+
 2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.

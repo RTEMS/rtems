@@ -6,10 +6,10 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/start.o
 
-C_FILES = start.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+S_FILES = start.S
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
-OBJS = $(C_O_FILES)
+OBJS = $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
@@ -28,6 +28,6 @@ all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = start.c
+EXTRA_DIST = start.S
 
 include $(top_srcdir)/../../../../../../automake/local.am

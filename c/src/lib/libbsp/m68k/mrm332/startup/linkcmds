@@ -34,10 +34,10 @@ __DYNAMIC  =  0;
  * Declare some sizes.
  */
 _RamBase = DEFINED(_RamBase) ? _RamBase : 0x03000;
-_RamSize = DEFINED(_RamSize) ? _RamSize : 0x80000;
+_RamSize = DEFINED(_RamSize) ? _RamSize : 0x7d000;
 _RamEnd = _RamBase + _RamSize;
 _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x2000;
 
 MEMORY
 {

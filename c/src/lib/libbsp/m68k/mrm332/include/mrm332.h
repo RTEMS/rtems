@@ -33,7 +33,7 @@
 /* System Clock definitions */
 #define XTAL 32768.0		/* crystal frequency in Hz */
 
-#if 0
+#if 1
 /* Default MRM clock rate (8.388688 MHz) set by CPU32: */
 #define MRM_W 0			/* system clock parameters */
 #define MRM_X 0
@@ -47,7 +47,7 @@
 #define MRM_Y 0x0f
 #endif
 
-#if 1
+#if 0
 /* 25.16582 MHz: */
 #define MRM_W 1			/* system clock parameters */
 #define MRM_X 1
@@ -60,6 +60,8 @@
 
 /* macros/functions */
 
+#ifndef ASM
+
 /*
  *  This prototype really should have the noreturn attribute but
  *  that causes a warning. Not sure how to fix that. 
@@ -67,5 +69,7 @@
 /*   static void reboot(void) __attribute__ ((noreturn)); */
 static void reboot(void);
 __inline__ static void reboot() {asm("trap #15; .word 0x0063");}
+
+#endif /* ASM */
 
 #endif /* _MRM_H_ */
