@@ -1,3 +1,12 @@
+2003-09-26	Cedric Aubert <cedric_aubert@yahoo.fr>
+
+	PR 501/rtems_misc
+	* console.c: console_open disables ICANON on non-console port, which
+	should be ok for the first open but not for subsequent ones. If you
+	open one serial port, you will configure it, when you reopen it you
+	will lost the ICANON parameters if you had put it. Should be done by
+	console only at first open.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* bootcard.c, bspclean.c, clockdrv_shell.c, console-polled.c,
