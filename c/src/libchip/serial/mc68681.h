@@ -63,6 +63,55 @@ typedef mc68681_baud_t mc68681_baud_table_t[RTEMS_TERMIOS_NUMBER_BAUD_RATES];
 extern console_fns mc68681_fns;
 extern console_fns mc68681_fns_polled;
 
+/*
+ * Default register access routines
+ */
+
+unsigned8 mc68681_default_read_register(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum
+);
+
+void  mc68681_default_write_register(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned8   ucData
+);
+
+unsigned8 mc68681_default_read_register_with_multiplier_2(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum
+);
+
+void  mc68681_default_write_register_with_multiplier_2(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned8   ucData
+);
+
+unsigned8 mc68681_default_read_register_with_multiplier_4(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum
+);
+
+void  mc68681_default_write_register_with_multiplier_4(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned8   ucData
+);
+
+unsigned8 mc68681_default_read_register_with_multiplier_8(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum
+);
+
+void  mc68681_default_write_register_with_multiplier_8(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned8   ucData
+);
+
+
 #ifdef __cplusplus
 }
 #endif
