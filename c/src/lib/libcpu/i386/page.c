@@ -1,5 +1,3 @@
-/*
- * page.c :- This file contains implementation of C function to
  *           Instanciate paging. More detailled information
  *	     can be found on Intel site and more precisely in
  *           the following book :
@@ -439,8 +437,7 @@ int _CPU_change_memory_mapping_attribute
  * CACHE_DISABLE of the whole memory
  */
 
-/* hack to avoid dependency on bsp.h */
-void printk(char *fmt, ...);             /* from 'printk.c' */
+#include <bspIo.h>
 
 int  _CPU_display_memory_attribute(){ 
   unsigned int dirCount, pageCount;

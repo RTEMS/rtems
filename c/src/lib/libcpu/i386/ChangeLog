@@ -1,3 +1,7 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* page.c: Replaced prototype of printk() with include of <bspIo.h>.
+
 2000-10-17	Joel Sherrill <joel@OARcorp.com>
 
 	* idt.c, Makefile.am: Moved idt.c to libbsp/i386/shared so 
