@@ -1,5 +1,9 @@
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
+	* console/console-io.c: Removed unused variable initialized.
+
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
 	* clock/Makefile.am: Fixed reference to ckinit.c.
 	* clock/clockdrv.c: Enabled fast idle.
 	* console/console-io.c: Added console_initialize_hardware().

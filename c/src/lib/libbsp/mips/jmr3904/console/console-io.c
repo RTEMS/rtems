@@ -54,8 +54,6 @@
  *  Eventually console-polled.c should hook to this better.
  */
 
-static char initialized = 0;
-
 /*
  *  console_initialize_hardware
  *
