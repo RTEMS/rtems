@@ -29,6 +29,7 @@
 
 #include <sys/types.h>
 #include <rtems/config.h>
+#include <rtems/score/object.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
@@ -60,11 +61,13 @@ void _POSIX_API_Initialize(
 {
   posix_api_configuration_table *api_configuration;
 
+  /* XXX need to assert here based on size assumptions */
+
+  assert( sizeof(pthread_t) == sizeof(Objects_Id) );
+
   api_configuration = configuration_table->POSIX_api_configuration;
   if ( !api_configuration ) 
     api_configuration = &_POSIX_Default_configuration;
-    
-
 
   _POSIX_Threads_Manager_initialization(
     api_configuration->maximum_threads,
