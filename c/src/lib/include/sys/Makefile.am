@@ -20,7 +20,7 @@ include_sys_HEADERS = ioccom.h ttycom.h utime.h \
 
 noinst_HEADERS = utime.h termios.h ioctl.h ioccom.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/sys \
     $(include_sys_HEADERS:%=$(PROJECT_INCLUDE)/sys/%)
 
 $(PROJECT_INCLUDE)/sys:

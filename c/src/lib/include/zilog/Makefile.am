@@ -8,7 +8,7 @@ include_zilogdir = ${includedir}/zilog
 
 include_zilog_HEADERS = z8036.h z8530.h z8536.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/zilog \
     $(include_zilog_HEADERS:%=$(PROJECT_INCLUDE)/zilog/%)
 
 $(PROJECT_INCLUDE)/zilog:

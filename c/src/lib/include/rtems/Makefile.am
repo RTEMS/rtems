@@ -8,7 +8,7 @@ include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = assoc.h error.h libcsupport.h libio.h libio_.h termiostypes.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:

@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 include_HEADERS = bspIo.h chain.h console.h clockdrv.h iosupp.h ringbuf.h rtc.h \
     spurious.h timerdrv.h vmeintr.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 $(PROJECT_INCLUDE):

@@ -1,3 +1,11 @@
+2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/zilog/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/motorola/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/sys/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/sys/Makefile.am: Use = instead of += to setup
