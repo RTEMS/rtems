@@ -1,3 +1,19 @@
+2001-10-17      Till Straumann <strauman@SLAC.Stanford.EDU>
+		
+	* These changes were discussed and reviewed by many people but the
+	primary people were Jennifer Averett <jennifer@OARcorp.com> 
+	and Eugeny Mints <jack@oktet.ru>.
+        * libc/utime.c: Add missing call to rtems_filesystem_freenode()
+	at verification that utime is supported by the filesystem.
+        * libc/link.c: Remove calls to freenode when the node was
+	not successfully allocated.
+        * libc/unmount.c: In the method file_systems_below_this_mountpoint()
+	added calls to correctly free fs_root_loc when a failure occurs.
+	* libc/open.c: Add freenode calls upon failure.
+	* libc/open.c, lib/libc/close.c: (PENDING -- NOT INCLUDED THIS TIMER)
+	Modifications the move the freenode from open() to close() (also part
+	of this patch) are pending further discussion.
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/zilog/Makefile.am: Remove.

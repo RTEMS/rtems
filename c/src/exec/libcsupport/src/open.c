@@ -66,6 +66,7 @@ int open(
   rtems_libio_t                      *iop = 0;
   int                                 status;
   rtems_filesystem_location_info_t    loc;
+  rtems_filesystem_location_info_t   *loc_to_free = NULL;
   int                                 eval_flags;
 
 
@@ -138,8 +139,11 @@ int open(
   } else if ((flags & (O_EXCL|O_CREAT)) == (O_EXCL|O_CREAT)) {
     /* We were trying to create a file that already exists */
     rc = EEXIST;
+    loc_to_free = &loc;
     goto done;
   }
+
+  loc_to_free = &loc;
 
   /*
    *  Fill in the file control block based on the loc structure
@@ -178,6 +182,8 @@ done:
   if ( rc ) {
     if ( iop )
       rtems_libio_free( iop );
+    if ( loc_to_free )
+      rtems_filesystem_freenode( loc_to_free );
     set_errno_and_return_minus_one( rc );
   }
 

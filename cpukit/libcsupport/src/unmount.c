@@ -168,8 +168,10 @@ int file_systems_below_this_mountpoint(
    */
 
   *fs_to_unmount = *fs_root_loc->mt_entry;
-  if ( fs_to_unmount->mt_fs_root.node_access != fs_root_loc->node_access )
+  if ( fs_to_unmount->mt_fs_root.node_access != fs_root_loc->node_access ){
+    rtems_filesystem_freenode(fs_root_loc);
     set_errno_and_return_minus_one( EACCES );
+  }
 
   /*
    * Search the mount table for any mount entries referencing this
@@ -181,7 +183,8 @@ int file_systems_below_this_mountpoint(
         the_node = the_node->next ) {
      the_mount_entry = ( rtems_filesystem_mount_table_entry_t * )the_node;
      if (the_mount_entry->mt_point_node.mt_entry  == fs_root_loc->mt_entry ) {
-          set_errno_and_return_minus_one( EBUSY );
+        rtems_filesystem_freenode(fs_root_loc);  
+        set_errno_and_return_minus_one( EBUSY );
      }
   }
 

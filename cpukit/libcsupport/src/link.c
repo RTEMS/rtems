@@ -48,14 +48,12 @@ int link(
 
   if ( !parent_loc.ops->evalformake_h ) {
     rtems_filesystem_freenode( &existing_loc );
-    rtems_filesystem_freenode( &parent_loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*parent_loc.ops->evalformake_h)( &new[i], &parent_loc, &name_start );
   if ( result != 0 ) {
     rtems_filesystem_freenode( &existing_loc );
-    rtems_filesystem_freenode( &parent_loc );
     set_errno_and_return_minus_one( result );
   }
 
