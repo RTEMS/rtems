@@ -1,3 +1,11 @@
+2005-03-03	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* acinclude.m4: Remove arm_bare_bsp.
+
+	PR bsps/771
+	* configure.ac: Remove reference to arm_bare_bsp in
+	AC_CONFIG_SRCDIR. Use ../arm instead.
+
 2005-02-25	Joel Sherrill <joel@OARcorp.com>
 
 	* arm_bare_bsp/.cvsignore, arm_bare_bsp/ChangeLog,
