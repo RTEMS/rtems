@@ -1,3 +1,35 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx01/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx02/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx03/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx04/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx05/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx06/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx07/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx08/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx09/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx10/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx11/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx12/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psx13/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxcancel/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxchroot01/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxfile01/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxhdrs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxmount/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxmsgq01/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxreaddir/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxsem01/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxstat/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxtime/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* psxtimer/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-11-07	Jennifer Averett <jennifer@OARcorp.com>
 
 	Reported by Ibragimov Ilya <ibr@oktet.ru> and tracked as PR63.
