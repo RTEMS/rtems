@@ -1309,29 +1309,55 @@ static char initialized;   /* 0 means we are not initialized */
 
 void mips_gdb_stub_install(void) 
 {
-  rtems_isr_entry old;
-  int i;
+   /*
+     These are the RTEMS-defined vectors for all the MIPS exceptions
+   */
+   int exceptionVector[]= { MIPS_EXCEPTION_MOD, \
+                            MIPS_EXCEPTION_TLBL, \
+                            MIPS_EXCEPTION_TLBS, \
+                            MIPS_EXCEPTION_ADEL, \
+                            MIPS_EXCEPTION_ADES, \
+                            MIPS_EXCEPTION_IBE, \
+                            MIPS_EXCEPTION_DBE, \
+                            MIPS_EXCEPTION_SYSCALL, \
+                            MIPS_EXCEPTION_BREAK, \
+                            MIPS_EXCEPTION_RI, \
+                            MIPS_EXCEPTION_CPU, \
+                            MIPS_EXCEPTION_OVERFLOW, \
+                            MIPS_EXCEPTION_TRAP, \
+                            MIPS_EXCEPTION_VCEI, \
+                            MIPS_EXCEPTION_FPE, \
+                            MIPS_EXCEPTION_C2E, \
+                            MIPS_EXCEPTION_WATCH, \
+                            MIPS_EXCEPTION_VCED, \
+                            -1 };
+   int  i;
+   rtems_isr_entry old;
 
-  if (initialized) {
-    ASSERT(0);
-    return;
-  }
+   if (initialized) {
+      ASSERT(0);
+      return;
+   }
 
-  /* z0breaks */
-  for (i=0; i<(sizeof(z0break_arr)/sizeof(z0break_arr[0]))-1; i++) {
-    z0break_arr[i].next = &z0break_arr[i+1];
-  }
+   /* z0breaks */
+   for (i=0; i<(sizeof(z0break_arr)/sizeof(z0break_arr[0]))-1; i++) {
+      z0break_arr[i].next = &z0break_arr[i+1];
+   }
 
-  z0break_arr[i].next = NULL;
-  z0break_avail       = &z0break_arr[0];
-  z0break_list        = NULL;
+   z0break_arr[i].next = NULL;
+   z0break_avail       = &z0break_arr[0];
+   z0break_list        = NULL;
 
 
-  rtems_interrupt_catch( (rtems_isr_entry) handle_exception, MIPS_EXCEPTION_SYSCALL, &old );
-  /* rtems_interrupt_catch( handle_exception, MIPS_EXCEPTION_BREAK, &old ); */
+   for(i=0; exceptionVector[i] > -1; i++)
+   {
+      rtems_interrupt_catch( (rtems_isr_entry) handle_exception, exceptionVector[i], &old );
+   }
 
-  initialized = 1;
-  /* get the attention of gdb */
-  mips_break(1);
+   initialized = 1;
+   /* get the attention of gdb */
+   mips_break(1);
 }
+
+
 
