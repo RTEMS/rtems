@@ -13,7 +13,7 @@
  * Eric sent some e-mail in the rtems-list as a start point for this
  * module implementation.
  *
- *
+ * $Id$
  */
 
 /*
@@ -87,7 +87,7 @@ int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))
 {
   /* Ok, this can be a bit tricky. We are going to return a "key" as a
    * pointer to the buffer that will hold the value of the key itself.
-   * We have to to this, becuase the others functions on this interface
+   * We have to to this, because the others functions on this interface
    * deal with the value of the key, as used with the POSIX API.
    */
    /* Do not pull your hair, trust me this works. :-) */
