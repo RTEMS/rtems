@@ -10,17 +10,21 @@ C_FILES = auth.c ccp.c chap.c chap_ms.c chat.c demand.c fsm.c ipcp.c lcp.c \
     rtemspppd.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../automake/compile.am
+include $(top_srcdir)/../../automake/lib.am
 
 #
 # Add local stuff here using +=
 #
 
+if HAS_NETWORKING
+include_HEADERS = rtemspppd.h rtemsdialer.h
+
 $(LIB): $(OBJS)
 	$(make-library)
 
 all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
+endif
 
 .PRECIOUS: $(LIB)
 
@@ -30,12 +34,9 @@ lcp.c lcp.h magic.c magic.h md4.c md4.h md5.c md5.h options.c \
 patchlevel.h pathnames.h pppd.h rtemsdialer.h rtemsmain.c rtemspppd.c \
 rtemspppd.h sys-rtems.c upap.c upap.h utils.c
 
-include_HEADERS = rtemspppd.h rtemsdialer.h
-
-
 PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../automake/local.am

@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-include_goaheaddir = $(includedir)/goahead
-
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
@@ -15,8 +13,8 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 H_FILES = ej.h ejIntrn.h emfdb.h md5.h uemf.h um.h webs.h wsIntrn.h
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../automake/compile.am
+include $(top_srcdir)/../../automake/lib.am
 
 #
 # Add local stuff here using +=
@@ -42,11 +40,15 @@ $(PROJECT_INCLUDE)/rtems_webserver.h: rtems_webserver.h
 PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems_webserver.h \
     $(PROJECT_INCLUDE)/goahead $(H_FILES:%.h=$(PROJECT_INCLUDE)/goahead/%.h)
 
+if HAS_NETWORKING
 if HAS_POSIX
+include_goaheaddir = $(includedir)/goahead
+
 include_HEADERS = rtems_webserver.h
 include_goahead_HEADERS = $(H_FILES)
 
 all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
+endif
 endif
 
 .PRECIOUS: $(LIB)
@@ -56,4 +58,4 @@ EXTRA_DIST = asp.c balloc.c default.c ej.h ejlex.c ejparse.c form.c h.c \
     sock.c socket.c sym.c uemf.c uemf.h um.h url.c value.c wbase64.c webcomp.c \
     webmain.c webpage.c webrom.c webs.c webs.h websuemf.c wsIntrn.h
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../automake/local.am

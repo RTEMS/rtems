@@ -1,3 +1,11 @@
+2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove (Merged into ../configure.ac).
+	* .cvsignore, Makefile.am, pppd/Makefile.am,
+	rtems_servers/Makefile.am, rtems_telnetd/Makefile.am,
+	rtems_webserver/Makefile.am, wrapup/Makefile.am:
+	Reflect having merged configure.ac into ../configure.ac
+
 2003-06-13	Joel Sherrill <joel@OARcorp.com>
 
 	* pppd/chat.c: Removed warnings.

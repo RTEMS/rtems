@@ -12,16 +12,18 @@ NET_O_PIECES = rtems_servers \
 OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libnetapps.a
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../automake/compile.am
+include $(top_srcdir)/../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
+if HAS_NETWORKING
 $(LIB): $(OBJS)
 	$(make-library)
 
 all-local: $(ARCH) $(OBJS) $(LIB)
+endif
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../automake/local.am
