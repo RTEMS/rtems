@@ -210,7 +210,7 @@ DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (18)
 
 /*
  *  void *i386_Logical_to_physical(
- *     rtems_unsigned16  segment,
+ *     uint16_t    segment,
  *     void             *address
  *  );
  *
@@ -240,7 +240,7 @@ SYM (i386_Logical_to_physical):
 
 /*
  *  void *i386_Physical_to_logical(
- *     rtems_unsigned16  segment,
+ *     uint16_t    segment,
  *     void             *address
  *  );
  *

@@ -37,7 +37,7 @@ void _CPU_Initialize(
 )
 {
 #if CPU_HARDWARE_FP
-  register unsigned16  fp_status asm ("ax");
+  register uint16_t    fp_status asm ("ax");
   register void       *fp_context;
 #endif
 
@@ -77,9 +77,9 @@ void _CPU_Initialize(
  *  _CPU_ISR_Get_level
  */
  
-unsigned32 _CPU_ISR_Get_level( void )
+uint32_t   _CPU_ISR_Get_level( void )
 {
-  unsigned32 level;
+  uint32_t   level;
  
   i386_get_interrupt_level( level );
  

@@ -97,12 +97,12 @@ extern "C" {
  */
 
 typedef struct {
-  unsigned32  eflags;   /* extended flags register                   */
+  uint32_t    eflags;   /* extended flags register                   */
   void       *esp;      /* extended stack pointer register           */
   void       *ebp;      /* extended base pointer register            */
-  unsigned32  ebx;      /* extended bx register                      */
-  unsigned32  esi;      /* extended source index register            */
-  unsigned32  edi;      /* extended destination index flags register */
+  uint32_t    ebx;      /* extended bx register                      */
+  uint32_t    esi;      /* extended source index register            */
+  uint32_t    edi;      /* extended destination index flags register */
 }   Context_Control;
 
 /*
@@ -110,7 +110,7 @@ typedef struct {
  */
 
 typedef struct {
-  unsigned8   fp_save_area[108];    /* context size area for I80387 */
+  uint8_t     fp_save_area[108];    /* context size area for I80387 */
                                     /*  28 bytes for environment    */
 } Context_Control_fp;
 
@@ -124,19 +124,19 @@ typedef struct {
  */
 
 typedef struct {
-  unsigned32  edi;
-  unsigned32  esi;
-  unsigned32  ebp;
-  unsigned32  esp0;
-  unsigned32  ebx;
-  unsigned32  edx;
-  unsigned32  ecx;
-  unsigned32  eax;
-  unsigned32  idtIndex;
-  unsigned32  faultCode;
-  unsigned32  eip;
-  unsigned32  cs;
-  unsigned32  eflags;
+  uint32_t    edi;
+  uint32_t    esi;
+  uint32_t    ebp;
+  uint32_t    esp0;
+  uint32_t    ebx;
+  uint32_t    edx;
+  uint32_t    ecx;
+  uint32_t    eax;
+  uint32_t    idtIndex;
+  uint32_t    faultCode;
+  uint32_t    eip;
+  uint32_t    cs;
+  uint32_t    eflags;
 } CPU_Exception_frame;
 
 typedef void (*cpuExcHandlerType) (CPU_Exception_frame*);
@@ -187,14 +187,14 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-  unsigned32   interrupt_table_segment;
+  uint32_t     interrupt_table_segment;
   void        *interrupt_table_offset;
 }   rtems_cpu_table;
 
@@ -305,7 +305,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
     else              asm volatile ( "sti" ); \
   }
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -325,12 +325,12 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                    _isr, _entry_point, _is_fp ) \
   do { \
-    unsigned32 _stack; \
+    uint32_t   _stack; \
     \
     if ( (_isr) ) (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_OFF; \
     else          (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_ON; \
     \
-    _stack = ((unsigned32)(_stack_base)) + (_size) - 4; \
+    _stack = ((uint32_t  )(_stack_base)) + (_size) - 4; \
     \
     *((proc_ptr *)(_stack)) = (_entry_point); \
     (_the_context)->ebp     = (void *) _stack; \
@@ -345,9 +345,9 @@ unsigned32 _CPU_ISR_Get_level( void );
 
 #define _CPU_Context_Initialize_fp( _fp_area ) \
   { \
-    unsigned32 *_source      = (unsigned32 *) &_CPU_Null_fp_context; \
-    unsigned32 *_destination = *(_fp_area); \
-    unsigned32  _index; \
+    uint32_t   *_source      = (uint32_t   *) &_CPU_Null_fp_context; \
+    uint32_t   *_destination = *(_fp_area); \
+    uint32_t    _index; \
     \
     for ( _index=0 ; _index < CPU_CONTEXT_FP_SIZE/4 ; _index++ ) \
       *_destination++ = *_source++; \
@@ -385,7 +385,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    register unsigned16 __value_in_register = (_value); \
+    register uint16_t   __value_in_register = (_value); \
     \
     _output = 0; \
     \
@@ -434,7 +434,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -446,7 +446,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
