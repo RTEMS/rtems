@@ -118,7 +118,6 @@ struct wd_softc {
 #define MAXSIZ 	1536		/*(MAXBUF - MESSH_SZ)*/
 #define OUTPAGE ((SHATOT-(MAXSIZ+SHAPAGE-1))/SHAPAGE)
 
-static unsigned long loopc;
 static volatile unsigned long overrun;
 static volatile unsigned long resend;
 static struct wd_softc wd_softc[NWDDRIVER];
