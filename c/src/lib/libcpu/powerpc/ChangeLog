@@ -1,5 +1,10 @@
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Build exception processing in  old-exceptions rsp.
+	new-exceptions subdirs (Merge-in former libbsp/powerpc/support/*).
+
+2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: subdir-objects.
 	Add compiler check for old/new-style exception processing.
 
