@@ -75,7 +75,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
     case CORE_MUTEX_TIMEOUT:
       return RTEMS_TIMEOUT;
     case THREAD_STATUS_PROXY_BLOCKING:
-      return THREAD_STATUS_PROXY_BLOCKING;
+      return RTEMS_PROXY_BLOCKING;
   }
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
