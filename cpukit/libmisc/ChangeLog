@@ -1,3 +1,12 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* cpuuse/cpuuse.c, cpuuse/cpuuse.h, devnull/devnull.c,
+	devnull/devnull.h, dummy/dummy.c, dumpbuf/dumpbuf.c,
+	dumpbuf/dumpbuf.h, fsmount/fsmount.c, fsmount/fsmount.h,
+	serdbg/serdbgio.c, serdbg/termios_printk.c, stackchk/check.c,
+	stackchk/internal.h, stackchk/stackchk.h, untar/untar.c,
+	untar/untar.h: URL for license changed.
+
 2003-08-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* fsmount/Makefile.am: Revert previous change.
