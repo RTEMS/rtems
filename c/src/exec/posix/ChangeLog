@@ -1,3 +1,7 @@
+2001-01-12	Joel Sherrill <joel@OARcorp.com>
+
+	* src/README.mqueue: Enhanced example.
+
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* src/pthreadgetschedparam.c: Do not set output parameters if
