@@ -282,7 +282,7 @@ extern "C" {
 #if defined(__ARMEL__)
 #define CPU_BIG_ENDIAN          FALSE
 #define CPU_LITTLE_ENDIAN       TRUE
-#elif define(__ARMEB__)
+#elif defined(__ARMEB__)
 #define CPU_BIG_ENDIAN          TRUE
 #define CPU_LITTLE_ENDIAN       FALSE
 #else

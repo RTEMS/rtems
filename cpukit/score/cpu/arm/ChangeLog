@@ -1,3 +1,7 @@
+2003-04-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/cpu.h: Fix typo in __ARMEB__ handling.
+
 2003-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use "all-local:" instead of "all:".
