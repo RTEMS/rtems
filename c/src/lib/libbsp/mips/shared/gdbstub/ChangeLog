@@ -1,0 +1,43 @@
+2002-02-08	Joel Sherrill <joel@OARcorp.com>
+
+	* Merged r46kstub.c into RTEMS distribution without modification.
+	I got the code from Franz Fischer <Franz.Fischer@franz-fischer.de>
+	who had used this with an old version of RTEMS with the mips64orion
+	port of RTEMS.  After adding this to the repository, I will tailor
+	this to work with the RTEMS exception processing model and trim
+	no longer needed parts.
+	* ChangeLog, gdb_if.h, ioaddr.h, limits.h, Makefile, mips_opcode.h,
+	r4600.h, r46kstub.c, r46kstub.ld, README, stubinit.S:
+
+Sun Sep 29 16:34:53 1996  C. M. Heard <heard@vvnet.com>
+
+	* Updated snapshot posted.
+
+	* stubinit.S (_reset_exception, _general_exception): Reorder
+	instructions or insert nops as necessary to ensure that the
+	target register of mfc0, mfc1, and cfc1 instructions is not
+	used as a source register in the load delay slot of those 
+	instructions and to ensure that the instruction following
+	mtc0 is always something other than mfc0.  Insert .eject
+	directives and reformat some of the comments to make the
+	assembler listing more readable.
+
+	* ioaddr.h:  add comments pointing out implementation-
+	specific address definitions.
+
+	* limits.h:  add comments describing what the implementation-
+	specific macros in this file are supposed to do. 
+
+Tue Aug 06 14:43:04 1995  C. M. Heard <heard@vvnet.com>
+
+	* Updated snapshot posted.
+
+	* stubinit.S (_general_exception): Use virtual adresses from
+	kseg0 (cached, unmapped space) instead of kseg1 (uncached,
+	unmapped space) in cache instructions.
+	(_reset_exception): Likewise, and use the right
+	mask to clean the K0 field in the config register.
+
+Fri Jul 26 14:41:49 1995  C. M. Heard <heard@vvnet.com>
+
+	* Initial snapshot posted.
