@@ -42,7 +42,7 @@
 
 #define Clock_driver_support_initialize_hardware() \
    do { \
-    unsigned32 _clicks = CPU_CLOCK_RATE_MHZ * rtems_configuration_get_microseconds_per_tick(); \
+    uint32_t   _clicks = CPU_CLOCK_RATE_MHZ * rtems_configuration_get_microseconds_per_tick(); \
     MONGOOSEV_WRITE_REGISTER( CLOCK_BASE, MONGOOSEV_TIMER_INITIAL_COUNTER_REGISTER, _clicks ); \
     Clock_driver_support_at_tick(); \
    } while(0)

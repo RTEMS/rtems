@@ -133,7 +133,7 @@ void putDebugChar (char c)
 /*
    {
       * initialize hardware pc and data breakpoints to quiet state*
-      unsigned32 dcic, reg, mask;
+      uint32_t   dcic, reg, mask;
 
       reg = 0xffffffff;
       mask = 0xffffffff;

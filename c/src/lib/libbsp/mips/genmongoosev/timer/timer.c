@@ -58,9 +58,9 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned32  clicks;
-  rtems_unsigned32  total;
-  rtems_unsigned32  tcr;
+  uint32_t          clicks;
+  uint32_t          total;
+  uint32_t          tcr;
 
   clicks = MONGOOSEV_READ_REGISTER( TIMER_BASE,
 				    MONGOOSEV_TIMER_INITIAL_COUNTER_REGISTER );

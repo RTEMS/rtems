@@ -50,7 +50,7 @@ extern "C" {
  * userspace code can get to it directly.
  *  */
 
-extern void assertSoftwareInterrupt(unsigned32);
+extern void assertSoftwareInterrupt(uint32_t);
 
 
 
