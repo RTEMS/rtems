@@ -38,6 +38,7 @@ dummy/Makefile
 dumpbuf/Makefile
 monitor/Makefile
 rtmonuse/Makefile
+serdbg/Makefile
 stackchk/Makefile
 capture/Makefile
 untar/Makefile

@@ -1,0 +1,138 @@
+#
+#  $Id$
+#
+
+This directory contains three useful packages related to the termios I/O
+system:
+
+PACKAGE SERDBGIO
+================
+"serdbgio" provides the "serial gdb" standard I/O functions "getDebugChar"
+and "putDebugChar" for any device driver supporting polled termios mode. 
+
+The initialization function "serdbg_open" opens the v.24 port intended
+for the serial debug connection, and sets the desired baud rate. The
+"getDebugChar" and "putDebugChar" functions then interact with the
+corresponding driver using the calls intended for polled termios
+operation.
+
+Specification for the debug device, baud rate and other parameters is
+done in a global structure of type "serdbg_conf_t". A configuration
+mechanism quite similar to the overall RTEMS configuration is available.
+
+PACKAGE SERDBG
+==============
+"serdbg" provides a means to optionally initialize and/or start a
+serial gdb session as soon as possible, this means as soon as all
+drivers have been initialized. The serial debug I/O functions can
+either be integrated as special routines of the BSP drivers, or using
+the package "serdbgio"
+
+PACKAGE TERMIOS_PRINTK
+======================
+"termios_printk" provides a standard output function suitable to use
+with "printk". It uses the same technique as serdbgio, hooking the
+interface between a polled device driver and the termios system. 
+
+
+REQUIREMENTS
+============
+
+- These two packages can be used with any polled termios device
+driver. 
+- For standard initialization, they need a modified "bsppost.c"
+to perform the initialization calls.
+
+USAGE
+=====
+
+For using these packages add the following to your "init" module or
+your "system.h" file (Note: most macro settings fall back to a
+default, if not set.):
+
+/*
+ * CONFIGURE_USE_SERDBG
+ * set this macro, if you want to connect gdb over a serial line
+ * when set, the debug stub will be connected after driver
+ * initialization in "bsppost.c"
+ */
+#define CONFIGURE_USE_SERDBG
+
+
+/*
+ * CONFIGURE_SERDBG_SKIP_INIT_BKPT
+ * set this macro, if you do not want the gdb interface to wait for a
+ * debugger connection directly after initialization
+ * If you set this macro, the gdb stub will only hook various
+ * exception vectors when called from "bsppost.c".
+ */
+/* #define CONFIGURE_SERDBG_SKIP_INIT_BKPT */
+
+/*
+ * CONFIGURE_SERDBG_USE_POLLED_TERMIOS
+ * set this macro, if you want "serdbgio" to provide the I/O 
+ * functions for the serial gdb connection
+ */
+#define CONFIGURE_SERDBG_USE_POLLED_TERMIOS
+
+/*
+ * CONFIGURE_SERDBG_DEVNAME
+ * use this macro to specify the serial device to use
+ * for "serdbgio". 
+ * Only used, when CONFIGURE_SERDBG_USE_POLLED_TERMIOS is set
+ */
+#define CONFIGURE_SERDBG_DEVNAME "/dev/tty03"
+
+/*
+ * CONFIGURE_SERDBG_BAUDRATE
+ * use this macro to specify the baud rate to use
+ * for "serdbgio". 
+ * Only used, when CONFIGURE_SERDBG_USE_POLLED_TERMIOS is set
+ */
+#define CONFIGURE_SERDBG_BAUDRATE 57600
+
+/*
+ * CONFIGURE_SERDBG_CALLOUT
+ * use this macro to specify a routine that will called during I/O polling
+ * Only used, when CONFIGURE_SERDBG_USE_POLLED_TERMIOS is set
+ * This function of type "void pollfnc(void)" can be used for e.g.
+ * tickling a watchdog
+ */
+/* #define CONFIGURE_SERDBG_CALLOUT tickle_my_watchdog_fnc */
+
+#include <serdbgcnf.h>
+
+/*
+ * CONFIGURE_USE_TERMIOS_PRINTK
+ * set this macro, if you want printk output to be sent to a serial
+ * driver using the polled termios interface
+ * when set, the printk output function will be connected after driver
+ * initialization in "bsppost.c"
+ */
+#define CONFIGURE_USE_TERMIOS_PRINTK
+
+/*
+ * CONFIGURE_TERMIOS_PRINTK_DEVNAME
+ * use this macro to specify the serial device to use
+ * for printk output. 
+ * Only used, when CONFIGURE_USE_TERMIOS_PRINTK is set
+ */
+#define CONFIGURE_TERMIOS_PRINTK_DEVNAME "/dev/console"
+
+/*
+ * CONFIGURE_TERMIOS_PRINTK_BAUDRATE
+ * use this macro to specify the baudrate to use
+ * for printk output. 
+ * Only used, when CONFIGURE_USE_TERMIOS_PRINTK is set
+ */
+#define CONFIGURE_TERMIOS_PRINTK_BAUDRATE 9600
+
+/*
+ * CONFIGURE_TERMIOS_PRINTK_CALLOUT
+ * use this macro to specify a routine that will called during I/O polling
+ * This function of type "void pollfnc(void)" can be used for e.g.
+ * tickling a watchdog
+ */
+/* #define CONFIGURE_TERMIOS_PRINTK_CALLOUT tickle_my_watchdog_fnc */
+
+#include <termios_printk_cnf.h>

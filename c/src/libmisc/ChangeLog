@@ -1,3 +1,15 @@
+2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* With the addition of serdbg, the standard polled I/O functions
+	for gdbstub and/or printk are optionally routed to any termios-aware
+	device driver, that supports polled mode. See libmisc/serdbg/README.
+	* serdbg/Makefile.am, serdbg/README, serdbg/serdbg.c, serdbg/serdbg.h,
+	serdbg/serdbgcnf.h, serdbg/serdbgio.c, serdbg/termios_printk.c,
+	serdbg/termios_printk.h, serdbg/termios_printk_cnf.h,
+	serdbg/.cvsignore: New files.
+	* configure.ac, Makefile.am, wrapup/Makefile.am: Modified to
+	reflect addition.
+
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Don't preinstall libmisc.a.
