@@ -44,10 +44,16 @@ boolean _Heap_Size_of_user_area(
   Heap_Block        *next_block;
   uint32_t           the_size;
 
-  the_block = _Heap_User_block_at( starting_address );
+  if ( !_Addresses_Is_in_range(
+         starting_address, (void *)the_heap->start, (void *)the_heap->final ) )
+    return( FALSE );
 
-  if ( !_Heap_Is_block_in( the_heap, the_block ) ||
-        _Heap_Is_block_free( the_block ) )
+  the_block = _Heap_User_block_at( starting_address );
+  
+  if ( !_Heap_Is_block_in( the_heap, the_block ) )
+    return( FALSE );
+
+  if ( _Heap_Is_block_free( the_block ) )
     return( FALSE );
 
   the_size   = _Heap_Block_size( the_block );
@@ -60,3 +66,4 @@ boolean _Heap_Size_of_user_area(
   *size = the_size;
   return( TRUE );
 }
+

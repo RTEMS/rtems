@@ -1,5 +1,11 @@
 2004-07-24	Joel Sherrill <joel@OARcorp.com>
 
+	PR 659/rtems
+	* score/src/heapsizeofuserarea.c: Check that address specified is in
+	the heap.
+
+2004-07-24	Joel Sherrill <joel@OARcorp.com>
+
 	PR 652/rtems
 	* rtems/src/signalsend.c: Return RTEMS_INVALID_NUMBER when sending an
 	empty signal set.
