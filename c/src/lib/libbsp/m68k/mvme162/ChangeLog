@@ -1,3 +1,10 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/.cvsignore: Remove.
+	* start/Makefile.am: Remove.
+	* Makefile.am: Merge-in start/Makefile.am.
+	* configure.ac: Reflect changes above.
+
 2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Eliminate $(LIB). 
