@@ -65,6 +65,7 @@ void _Event_Surrender(
         api->pending_events =
            _Event_sets_Clear( pending_events, seized_events );
         *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
+        (rtems_event_set) the_thread->Wait.count = 0; /* FIX 26MAR01 */
 
         _ISR_Flash( level );
 
