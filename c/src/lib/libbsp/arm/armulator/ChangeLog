@@ -1,5 +1,11 @@
 2002-07-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* start/Makefile.am: 
+	Add bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o 
+	(Didn't make it into cvs at 2002-07-20 :( )
+
+2002-07-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* start/Makefile.am: Remove leftover from eliminating PGM.
 
 2002-07-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
