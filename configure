@@ -1775,7 +1775,7 @@ else
       # native tools or uses prefixes for gnutools (e.g. gas instead of as)
        case $host_os in
   *cygwin32*)
-            AR_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ar | sed -e "s%\\\\%/%g" `
+            AR_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ar | sed -e 's%\\\\%/%g' `
     ;;
   *)
     AR_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ar`
@@ -1858,7 +1858,7 @@ else
       # native tools or uses prefixes for gnutools (e.g. gas instead of as)
        case $host_os in
   *cygwin32*)
-            AS_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=as | sed -e "s%\\\\%/%g" `
+            AS_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=as | sed -e 's%\\\\%/%g' `
     ;;
   *)
     AS_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=as`
@@ -1941,7 +1941,7 @@ else
       # native tools or uses prefixes for gnutools (e.g. gas instead of as)
        case $host_os in
   *cygwin32*)
-            LD_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ld | sed -e "s%\\\\%/%g" `
+            LD_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ld | sed -e 's%\\\\%/%g' `
     ;;
   *)
     LD_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ld`
@@ -2024,7 +2024,7 @@ else
       # native tools or uses prefixes for gnutools (e.g. gas instead of as)
        case $host_os in
   *cygwin32*)
-            NM_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=nm | sed -e "s%\\\\%/%g" `
+            NM_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=nm | sed -e 's%\\\\%/%g' `
     ;;
   *)
     NM_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=nm`
@@ -2108,7 +2108,7 @@ else
       # native tools or uses prefixes for gnutools (e.g. gas instead of as)
        case $host_os in
   *cygwin32*)
-            RANLIB_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ranlib | sed -e "s%\\\\%/%g" `
+            RANLIB_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ranlib | sed -e 's%\\\\%/%g' `
     ;;
   *)
     RANLIB_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=ranlib`
@@ -2228,7 +2228,7 @@ else
       # native tools or uses prefixes for gnutools (e.g. gas instead of as)
        case $host_os in
   *cygwin32*)
-            OBJCOPY_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=objcopy | sed -e "s%\\\\%/%g" `
+            OBJCOPY_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=objcopy | sed -e 's%\\\\%/%g' `
     ;;
   *)
     OBJCOPY_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=objcopy`
@@ -2311,7 +2311,7 @@ else
       # native tools or uses prefixes for gnutools (e.g. gas instead of as)
        case $host_os in
   *cygwin32*)
-            SIZE_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=size | sed -e "s%\\\\%/%g" `
+            SIZE_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=size | sed -e 's%\\\\%/%g' `
     ;;
   *)
     SIZE_FOR_TARGET=`$CC_FOR_TARGET --print-prog-name=size`
