@@ -1,3 +1,7 @@
+2002-05-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* coinfigure.ac, Makefile.am: Remove references to rootfs.
+
 2002-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rootfs/.cvsignore: Remove.
