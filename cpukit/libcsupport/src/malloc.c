@@ -245,7 +245,7 @@ void *malloc(
 #ifdef MALLOC_STATS
   if (return_this)
   {
-      uint32_t   actual_size;
+      size_t     actual_size;
       uint32_t   current_depth;
       status = rtems_region_get_segment_size(
                    RTEMS_Malloc_Heap, return_this, &actual_size);
@@ -369,7 +369,7 @@ void free(
  
 #ifdef MALLOC_STATS
   {
-      uint32_t          size;
+      size_t size;
       status = rtems_region_get_segment_size( RTEMS_Malloc_Heap, ptr, &size );
       if ( status == RTEMS_SUCCESSFUL ) {
           MSBUMP(lifetime_freed, size);

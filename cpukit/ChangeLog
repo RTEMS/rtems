@@ -1,5 +1,13 @@
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* rtems/include/rtems/rtems/region.h:
+	Include stddef.h for size_t.
+	(rtems_region_get_segment_size):  Use size_t instead of uint32_t for "size" (3rd arg).
+	* rtems/src/regiongetsegmentsize.c: Reflect changes above.
+	* libcsupport/src/malloc.c: Reflect changes above.
+
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* aclocal/rtems-top.m4: Don't AC_SUBST(PROJECT_ROOT).
 	Add project_libdir, project_include and libdir.
 	* aclocal/env-rtemscpu.m4: Remove all references to RTEMS_BSP.
