@@ -32,20 +32,18 @@
 /*
  * Flow control is only supported when using interrupts
  */
-console_flow ns16550_flow_RTSCTS =
-{
+
+console_flow ns16550_flow_RTSCTS = {
   ns16550_negate_RTS,             /* deviceStopRemoteTx */
   ns16550_assert_RTS              /* deviceStartRemoteTx */
 };
 
-console_flow ns16550_flow_DTRCTS =
-{
+console_flow ns16550_flow_DTRCTS = {
   ns16550_negate_DTR,             /* deviceStopRemoteTx */
   ns16550_assert_DTR              /* deviceStartRemoteTx */
 };
 
-console_fns ns16550_fns =
-{
+console_fns ns16550_fns = {
   libchip_serial_default_probe,   /* deviceProbe */
   ns16550_open,                   /* deviceFirstOpen */
   NULL,                           /* deviceLastClose */
@@ -57,8 +55,7 @@ console_fns ns16550_fns =
   TRUE                            /* deviceOutputUsesInterrupts */
 };
 
-console_fns ns16550_fns_polled =
-{
+console_fns ns16550_fns_polled = {
   libchip_serial_default_probe,        /* deviceProbe */
   ns16550_open,                        /* deviceFirstOpen */
   ns16550_close,                       /* deviceLastClose */
@@ -71,6 +68,10 @@ console_fns ns16550_fns_polled =
 };
 
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
+
+/*
+ *  ns16550_init
+ */
 
 NS16550_STATIC void ns16550_init(int minor)
 {
@@ -131,6 +132,10 @@ NS16550_STATIC void ns16550_init(int minor)
   ucTrash = (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER );
 }
 
+/*
+ *  ns16550_open
+ */
+
 NS16550_STATIC int ns16550_open(
   int      major,
   int      minor,
@@ -147,6 +152,10 @@ NS16550_STATIC int ns16550_open(
 
   return(RTEMS_SUCCESSFUL);
 }
+
+/*
+ *  ns16550_close
+ */
 
 NS16550_STATIC int ns16550_close(
   int      major,
@@ -210,9 +219,11 @@ NS16550_STATIC void ns16550_write_polled(
 /*
  * These routines provide control of the RTS and DTR lines
  */
+
 /*
  *  ns16550_assert_RTS
  */
+
 NS16550_STATIC int ns16550_assert_RTS(int minor)
 {
   unsigned32              pNS16550;
@@ -238,6 +249,7 @@ NS16550_STATIC int ns16550_assert_RTS(int minor)
 /*
  *  ns16550_negate_RTS
  */
+
 NS16550_STATIC int ns16550_negate_RTS(int minor)
 {
   unsigned32              pNS16550;
@@ -264,9 +276,11 @@ NS16550_STATIC int ns16550_negate_RTS(int minor)
  * These flow control routines utilise a connection from the local DTR
  * line to the remote CTS line
  */
+
 /*
  *  ns16550_assert_DTR
  */
+
 NS16550_STATIC int ns16550_assert_DTR(int minor)
 {
   unsigned32              pNS16550;
@@ -411,16 +425,9 @@ NS16550_STATIC int ns16550_set_attributes(
 }
 
 /*
- *  ns16550_isr
+ *  ns16550_process
  *
- *  This routine is the console interrupt handler for COM1 and COM2
- *
- *  Input parameters:
- *    vector - vector number
- *
- *  Output parameters: NONE
- *
- *  Return values:     NONE
+ *  This routine is the console interrupt handler for A port.
  */
 
 NS16550_STATIC void ns16550_process(
@@ -492,6 +499,10 @@ NS16550_STATIC void ns16550_process(
     }
   } while((ucInterruptId&0xf)!=0x1);
 }
+
+/*
+ *  ns16550_isr
+ */
 
 NS16550_STATIC rtems_isr ns16550_isr(
   rtems_vector_number vector
