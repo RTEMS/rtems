@@ -120,7 +120,7 @@ void RTEMS_Malloc_Initialize(
     rtems_build_name( 'H', 'E', 'A', 'P' ),
     starting_address,
     length,
-    CPU_ALIGNMENT,
+    CPU_HEAP_ALIGNMENT,
     RTEMS_DEFAULT_ATTRIBUTES,
     &RTEMS_Malloc_Heap
   );
