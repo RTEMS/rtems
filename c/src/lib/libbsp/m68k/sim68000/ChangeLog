@@ -1,3 +1,8 @@
+2001-06-19	Joel Sherrill <joel@OARcorp.com>
+
+ 	* start/start.S: Reverse sense of conditional compilation so the
+	code will compile for a cpu32.
+
 2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add bspopts.h.
