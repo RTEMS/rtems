@@ -263,6 +263,8 @@ procedure Region_Create (
 
 @code{@value{RPREFIX}SUCCESSFUL} - region created successfully@*
 @code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{starting_address} is NULL@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
 @code{@value{RPREFIX}TOO_MANY} - too many regions created@*
 @code{@value{RPREFIX}INVALID_SIZE} - invalid page size
@@ -339,6 +341,7 @@ procedure Region_Ident (
 @subheading DIRECTIVE STATUS CODES:
 
 @code{@value{RPREFIX}SUCCESSFUL} - region identified successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - region name not found
 
 @subheading DESCRIPTION:
@@ -439,6 +442,7 @@ procedure Region_Extend (
 @subheading DIRECTIVE STATUS CODES:
 
 @code{@value{RPREFIX}SUCCESSFUL} - region extended successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{starting_address} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid region id@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - invalid address of area to add
 
@@ -494,6 +498,7 @@ procedure Region_Get_Segment (
 @subheading DIRECTIVE STATUS CODES:
 
 @code{@value{RPREFIX}SUCCESSFUL} - segment obtained successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{segment} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid region id@*
 @code{@value{RPREFIX}INVALID_SIZE} - request is for zero bytes or exceeds
 the size of maximum segment which is possible for this region@*
@@ -581,6 +586,7 @@ procedure Region_Return_Segment (
 @subheading DIRECTIVE STATUS CODES:
 
 @code{@value{RPREFIX}SUCCESSFUL} - segment returned successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{segment} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid region id@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - segment address not in region
 
@@ -642,6 +648,8 @@ procedure Region_Get_Segment_Size (
 @subheading DIRECTIVE STATUS CODES:
 
 @code{@value{RPREFIX}SUCCESSFUL} - segment obtained successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{segment} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{size} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid region id@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - segment address not in region
 

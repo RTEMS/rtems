@@ -139,6 +139,7 @@ procedure Port_Create (
 @code{@value{RPREFIX}SUCCESSFUL} - port created successfully@*
 @code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}TOO_MANY} - too many DP memory areas created
 
 @subheading DESCRIPTION:
@@ -195,6 +196,7 @@ procedure Port_Ident (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - port identified successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - port name not found
 
 @subheading DESCRIPTION:
@@ -291,7 +293,8 @@ procedure Port_External_To_Internal (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} -  always successful
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{internal} is NULL@*
+@code{@value{RPREFIX}SUCCESSFUL} - successful conversion
 
 @subheading DESCRIPTION:
 
@@ -341,7 +344,8 @@ procedure Port_Internal_To_External (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} -  always successful
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{external} is NULL@*
+@code{@value{RPREFIX}SUCCESSFUL} - successful conversion
 
 @subheading DESCRIPTION:
 

@@ -255,6 +255,7 @@ procedure Message_Queue_Create (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - queue created successfully@*
 @code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NUMBER} - invalid message count@*
 @code{@value{RPREFIX}INVALID_SIZE} - invalid message size@*
 @code{@value{RPREFIX}TOO_MANY} - too many queues created@*
@@ -341,6 +342,7 @@ procedure Message_Queue_Ident (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - queue identified successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - queue name not found@*
 @code{@value{RPREFIX}INVALID_NODE} - invalid node id
 
@@ -473,6 +475,7 @@ procedure Message_Queue_Send (
 @code{@value{RPREFIX}SUCCESSFUL} - message sent successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
 @code{@value{RPREFIX}INVALID_SIZE} - invalid message size@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{buffer} is NULL@*
 @code{@value{RPREFIX}UNSATISFIED} - out of message buffers@*
 @code{@value{RPREFIX}TOO_MANY} - queue's limit has been reached
 
@@ -537,6 +540,7 @@ procedure Message_Queue_Urgent (
 @code{@value{RPREFIX}SUCCESSFUL} - message sent successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
 @code{@value{RPREFIX}INVALID_SIZE} - invalid message size@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{buffer} is NULL@*
 @code{@value{RPREFIX}UNSATISFIED} - out of message buffers@*
 @code{@value{RPREFIX}TOO_MANY} - queue's limit has been reached
 
@@ -603,6 +607,8 @@ procedure Message_Queue_Broadcast (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - message broadcasted successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{buffer} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{count} is NULL@*
 @code{@value{RPREFIX}INVALID_SIZE} - invalid message size
 
 @subheading DESCRIPTION:
@@ -674,6 +680,8 @@ procedure Message_Queue_Receive (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - message received successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{buffer} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{count} is NULL@*
 @code{@value{RPREFIX}UNSATISFIED} - queue is empty@*
 @code{@value{RPREFIX}TIMEOUT} - timed out waiting for message@*
 @code{@value{RPREFIX}OBJECT_WAS_DELETED} - queue deleted while waiting
@@ -759,6 +767,7 @@ procedure Message_Queue_Get_Number_Pending (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - number of messages pending returned successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{count} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid queue id
 
 @subheading DESCRIPTION:
@@ -807,6 +816,7 @@ procedure Message_Queue_Flush (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - message queue flushed successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{count} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid queue id
 
 @subheading DESCRIPTION:

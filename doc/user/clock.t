@@ -262,6 +262,7 @@ procedure Clock_Set (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - date and time set successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL@*
 @code{@value{RPREFIX}INVALID_TIME_OF_DAY} - invalid time of day
 
 @subheading DESCRIPTION:
@@ -320,7 +321,8 @@ procedure Clock_Get (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - current time obtained successfully@*
-@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL
 
 @subheading DESCRIPTION:
 
@@ -414,7 +416,7 @@ procedure Clock_Tick (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - current time obtained successfully
+@code{@value{RPREFIX}SUCCESSFUL} - clock tick processed successfully
 
 @subheading DESCRIPTION:
 

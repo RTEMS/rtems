@@ -233,6 +233,7 @@ procedure Timer_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - timer created successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - invalid timer name@*
 @code{@value{RPREFIX}TOO_MANY} - too many timers created
 
@@ -281,6 +282,7 @@ procedure Timer_Ident (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - timer identified successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - timer name not found
 
 @subheading DESCRIPTION:
@@ -422,6 +424,7 @@ procedure Timer_Fire_After (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - timer initiated successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{routine} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid timer id@*
 @code{@value{RPREFIX}INVALID_NUMBER} - invalid interval
 
@@ -475,6 +478,8 @@ procedure Timer_Fire_When (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - timer initiated successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{routine} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{wall_time} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid timer id@*
 @code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set@*
 @code{@value{RPREFIX}INVALID_CLOCK} - invalid time of day
@@ -583,6 +588,7 @@ procedure Timer_Fire_Server_After (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - timer initiated successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{routine} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid timer id@*
 @code{@value{RPREFIX}INVALID_NUMBER} - invalid interval@*
 @code{@value{RPREFIX}INCORRECT_STATE} - Timer Server not initiated
@@ -639,6 +645,8 @@ procedure Timer_Fire_Server_When (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - timer initiated successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{routine} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{wall_time} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid timer id@*
 @code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set@*
 @code{@value{RPREFIX}INVALID_CLOCK} - invalid time of day@*
