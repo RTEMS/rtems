@@ -22,6 +22,7 @@ void *POSIX_Init(
   int             priority;
   pthread_t       thread_id;
   time_t          seconds;
+  time_t          seconds1;
   time_t          remaining;
   struct tm       tm;
   struct timespec tv;
@@ -58,6 +59,11 @@ void *POSIX_Init(
 
   seconds = time( NULL );
   printf( ctime( &seconds ) );
+
+  /*  just to have the value copied out through the parameter */
+  
+  seconds = time( &seconds1 );
+  assert( seconds == seconds1 );
 
   /* check the time remaining */
 
