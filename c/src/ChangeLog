@@ -1,3 +1,7 @@
+2004-07-28  
+
+    * aclocal/version.m4: Updated to rtems-4.6.99.1.
+
 2004-07-25	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/network/if_fxp.c: Add include of <sys/errno.h>.
