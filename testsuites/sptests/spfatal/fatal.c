@@ -58,8 +58,8 @@ void Process_case();
 
 rtems_extension Fatal_extension(
   rtems_unsigned32 source,
-  rtems_unsigned32 error,
-  boolean          is_internal
+  boolean          is_internal,
+  rtems_unsigned32 error
 )
 {
   int index;

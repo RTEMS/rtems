@@ -29,8 +29,8 @@ void put_error(
  
 rtems_extension Fatal_extension(
   rtems_unsigned32 source,
-  rtems_unsigned32 error,
-  boolean          is_internal
+  boolean          is_internal,
+  rtems_unsigned32 error
 );
  
 rtems_task Task_1(
@@ -41,18 +41,17 @@ rtems_task Task_1(
 
 extern rtems_extensions_table initial_extensions;
 
-#ifdef TEST_INIT
-rtems_extensions_table initial_extensions = {
-    NULL,                    /* create */
-    NULL,                    /* start */
-    NULL,                    /* restart */
-    NULL,                    /* delete */
-    NULL,                    /* switch */
-    NULL,                    /* begin */
-    NULL,                    /* exitted */
-    Fatal_extension          /* fatal */
-};
-#endif
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { \
+    NULL,                    /* create  */ \
+    NULL,                    /* start   */ \
+    NULL,                    /* restart */ \
+    NULL,                    /* delete  */ \
+    NULL,                    /* switch  */ \
+    NULL,                    /* begin   */ \
+    NULL,                    /* exitted */ \
+    Fatal_extension          /* fatal   */ \
+  }
 
 #define CONFIGURE_SPTEST
 
@@ -61,8 +60,6 @@ rtems_extensions_table initial_extensions = {
 
 #define CONFIGURE_MICROSECONDS_PER_TICK RTEMS_MILLISECONDS_TO_MICROSECONDS(0)
 #define CONFIGURE_TICKS_PER_TIMESLICE   0
-
-#define CONFIGURE_INITIAL_EXTENSIONS    &initial_extensions
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
