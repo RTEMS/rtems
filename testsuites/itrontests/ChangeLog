@@ -1,3 +1,11 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* itronhello/Makefile.am, itronmbf01/Makefile.am,
+	itronmbox01/Makefile.am, itronsem01/Makefile.am,
+	itrontask01/Makefile.am, itrontask02/Makefile.am,
+	itrontask03/Makefile.am, itrontask04/Makefile.am,
+	itrontime01/Makefile.am: Include compile.am
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
