@@ -1,3 +1,7 @@
+2002-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* VERSION: Updated to rtems-ss-20020205.
+
 2002-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/sysv-ipc.m4: Use 3-args AC_DEFINE for autoconf-2.5x
