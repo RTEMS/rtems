@@ -145,6 +145,7 @@ boolean dmv177_z85c30_probe(int minor);
 
 console_tbl	Console_Port_Tbl[] = {
 #if (0)
+#endif
 	{
 		"/dev/com0",			/* sDeviceName */
                 SERIAL_MC68681,                 /* deviceType */
@@ -183,7 +184,6 @@ console_tbl	Console_Port_Tbl[] = {
                 (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
 		DMV170_DUART_IRQ		/* ulIntVector */
 	},
-#endif
 	{
 		"/dev/com3",			/* sDeviceName */
                 SERIAL_Z85C30,                  /* deviceType */
@@ -195,11 +195,11 @@ console_tbl	Console_Port_Tbl[] = {
 		(void *)9600,	/* baud rate */	/* pDeviceParams */
 		Z85C30_CTRL_A,			/* ulCtrlPort1 */
 		Z85C30_CTRL_A,			/* ulCtrlPort2 */
-		Z85C30_DATA_A,			/* ulDataPort */
+		0,				/* ulDataPort */
 		z85c30_get_register,		/* getRegister */
 		z85c30_set_register,		/* setRegister */
-		z85c30_get_data,		/* getData */
-		z85c30_set_data,		/* setData */
+		NULL,				/* getData */
+		NULL,				/* setData */
                 0, /* filled in by probe */     /* ulClock */
 		DMV170_SCC_IRQ			/* ulIntVector */
 	},
@@ -214,11 +214,11 @@ console_tbl	Console_Port_Tbl[] = {
 		(void *)9600,	/* baud rate */	/* pDeviceParams */
 		Z85C30_CTRL_B,			/* ulCtrlPort1 */
 		Z85C30_CTRL_A,			/* ulCtrlPort2 */
-		Z85C30_DATA_B,			/* ulDataPort */
+		0,				/* ulDataPort */
 		z85c30_get_register,		/* getRegister */
 		z85c30_set_register,		/* setRegister */
-		z85c30_get_data,		/* getData */
-		z85c30_set_data,		/* setData */
+		NULL,				/* getData */
+		NULL,				/* setData */
                 0, /* filled in by probe */     /* ulClock */
 		DMV170_SCC_IRQ			/* ulIntVector */
 	}
