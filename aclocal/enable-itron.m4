@@ -11,7 +11,6 @@ AC_ARG_ENABLE(itron,
   no) RTEMS_HAS_ITRON_API=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-itron option) ;;
 esac],[RTEMS_HAS_ITRON_API=yes]) 
-AC_SUBST(RTEMS_HAS_ITRON_API)
 
 changequote(,)dnl
 case "${target}" in
