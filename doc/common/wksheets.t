@@ -1,3 +1,5 @@
+@c ******   This comment is here to remind you not to edit the wksheets.t
+@c ******   in any directory but common.
 @c
 @c Figures ...
 @c   RTEMS RAM Workspace Worksheet
@@ -247,6 +249,10 @@ number is "NA", then the component must always be included.
 @end ifset
 
 @page
+
+@c ******   Next node is set by a sed script in the document Makefile.
+@c ******   This comment is here to remind you not to edit the wksheets.t
+@c ******   in any directory but common.
 
 @ifinfo
 @node Memory Requirements RTEMS RAM Workspace Worksheet, WORKSHEETS_NEXT_LINK, Memory Requirements RTEMS Code Space Worksheet, Memory Requirements

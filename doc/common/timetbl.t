@@ -1,3 +1,5 @@
+@c ******   This comment is here to remind you not to edit the timetbl.t
+@c ******   in any directory but common.
 @c 
 @c Time Table Template
 @c
