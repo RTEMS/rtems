@@ -29,7 +29,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 AM_CFLAGS += $(CFLAGS_V)
 
-bsplib_DATA = $(ARCH)/start.o
+bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
 $(ARCH)/start.o: $(OBJS)
 	$(make-rel)
