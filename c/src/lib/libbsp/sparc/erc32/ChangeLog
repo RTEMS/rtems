@@ -1,3 +1,12 @@
+2000-11-21	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* erc32sonic/erc32sonic.c: Minor modifications which enable
+	network interface to come up and work for some time before 
+	getting an error in the SONIC driver.  The error is a bit random,
+	sometimes MCLGET (m, M_WAIT) tries to access memory way outside the
+	available ram (and traps) while sometimes there is a panic due
+	to RBAE/RXEN.
+
 2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cleanup.

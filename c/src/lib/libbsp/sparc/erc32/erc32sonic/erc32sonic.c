@@ -101,10 +101,9 @@ int rtems_erc32_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config)
 {
 
   ERC32_MEC.IO_Configuration |= (0x15 << (((SONIC_BASE_ADDRESS >> 24) & 0x3) * 8));
-  ERC32_MEC.Control &= ~0xe0000;	/* Disable DMA time-out and parity */
-  ERC32_MEC.Control |= 0x10001; 		/* Enable DMA */
-  ERC32_MEC.Interrupt_Mask &= ~0x000340;
-  *((volatile int *) 0x10000300) = 0;
+  ERC32_MEC.Control &= ~0x60001; /* Disable DMA time-out, parity & power-down */
+  ERC32_MEC.Control |= 0x10000; 		/* Enable DMA */
+  ERC32_MEC.Interrupt_Mask &= ~(1 << (SONIC_VECTOR - 0x10));
   return(rtems_sonic_driver_attach( config, &erc32_sonic_configuration ));
   
 }
