@@ -631,11 +631,21 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
   tdp->status = 0;
 
   /*
+   * Let KA9Q know the packet is on the way before we give it to the SONIC.
+   */
+
+  dp->txWaitTid = 0;
+  *bpp = NULL;
+
+  /*
    * Chain onto list and start transmission.
    */
   tdp->linkp = &(fp+1)->frag_link;
   *tdp->linkp = LSW(tdp->next) | TDA_LINK_EOL;
   *dp->tdaHead->linkp &= ~TDA_LINK_EOL;
+  dp->tdaActiveCount++;
+  dp->tdaHead = tdp;
+
   sonic_write_register(
      rp,
      SONIC_REG_IMR,
@@ -643,14 +653,7 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
             (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN)
   );
   sonic_write_register( rp, SONIC_REG_CR, CR_TXP );
-  dp->tdaActiveCount++;
-  dp->tdaHead = tdp;
 
-  /*
-   * Let KA9Q know the packet is on the way.
-   */
-  dp->txWaitTid = 0;
-  *bpp = NULL;
   return 0;
 }
 
