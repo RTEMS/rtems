@@ -13,7 +13,7 @@ $(project_bspdir)/samples/$(SAMPLE)$(LIB_VARIANT).exe: $(PGM)
 $(project_bspdir)/tests/$(SAMPLE)$(LIB_VARIANT).exe: $(PGM)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES += \
+TMPINSTALL_FILES = \
 $(project_bspdir)/tests \
 $(project_bspdir)/tests/$(SAMPLE)$(LIB_VARIANT).exe \
 $(project_bspdir)/samples \

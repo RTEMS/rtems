@@ -30,7 +30,7 @@ include $(top_srcdir)/sample.am
 #
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
-	# This test should not be executed
+# 	This test should not be executed
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
