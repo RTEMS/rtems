@@ -179,7 +179,7 @@ static void nopOn(const rtems_irq_connect_data* notUsed)
 
 static int wdIsOn(const rtems_irq_connect_data* irq)
 {
-  return pc386_irq_enabled_at_i8259s (irq->name);
+  return BSP_irq_enabled_at_i8259s (irq->name);
 }
 
 /*
@@ -262,7 +262,7 @@ wd8003Enet_initialize_hardware (struct wd_softc *sc)
   sc->irqInfo.off = nopOn;
   sc->irqInfo.isOn = wdIsOn;
   
-  st = pc386_install_rtems_irq_handler (&sc->irqInfo);
+  st = BSP_install_rtems_irq_handler (&sc->irqInfo);
   if (!st)
     rtems_panic ("Can't attach WD interrupt handler for irq %d\n",
 		  sc->irqInfo.name);
