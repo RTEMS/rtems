@@ -1,5 +1,29 @@
 2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/motorola/mc68230.h,
+	libcsupport/include/motorola/mc68681.h,
+	libcsupport/include/chain.h,
+	libcsupport/include/clockdrv.h,
+	libcsupport/include/console.h,
+	libcsupport/include/iosupp.h,
+	libcsupport/include/ringbuf.h,
+	libcsupport/include/rtc.h,
+	libcsupport/include/spurious.h,
+	libcsupport/include/timerdrv.h,
+	libcsupport/include/vmeintr.h,
+	libcsupport/include/rtems/libio.h,
+	libcsupport/include/rtems/assoc.h,
+	libcsupport/include/rtems/error.h,
+	libcsupport/include/rtems/libcsupport.h,
+	libcsupport/include/rtems/libio_.h,
+	libcsupport/include/rtems/termiostypes.h,
+	libcsupport/include/rtems/cdefs.h,
+	libcsupport/include/zilog/z8036.h,
+	libcsupport/include/zilog/z8530.h,
+	libcsupport/include/zilog/z8536.h: New header guards.
+
+2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* include/rtems/bspIo.h, include/rtems/concat.h,
 	include/rtems/fs.h, include/rtems/pci.h,
 	include/rtems/stdint.h, include/rtems/userenv.h:
