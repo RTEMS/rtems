@@ -545,6 +545,20 @@ void _Thread_Set_priority(
 boolean _Thread_Evaluate_mode( void );
 
 /*
+ *  _Thread_Get
+ *
+ *  NOTE:  If we are not using static inlines, this must be a real
+ *         subroutine call.
+ */
+ 
+#ifndef USE_INLINES
+Thread_Control *_Thread_Get (
+  Objects_Id           id,
+  Objects_Locations   *location
+);
+#endif
+
+/*
  *  _Thread_Idle_body
  *
  *  DESCRIPTION:

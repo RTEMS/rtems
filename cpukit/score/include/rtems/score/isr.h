@@ -214,9 +214,7 @@ void _ISR_Handler( void );
 
 void _ISR_Dispatch( void );
 
-#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/isr.inl>
-#endif
 
 #ifdef __cplusplus
 }
