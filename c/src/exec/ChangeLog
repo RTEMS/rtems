@@ -1,3 +1,7 @@
+2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use AC_CONFIG_AUX_DIR(..).
+
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove references to RTEMS_BSP.
