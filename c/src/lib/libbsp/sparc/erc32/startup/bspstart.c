@@ -288,7 +288,7 @@ void bsp_start( void )
    *  This should be enough interrupt stack.
    */
 
-  Cpu_table.interrupt_stack_size = (12 * 1024);
+  Cpu_table.interrupt_stack_size = (24 * 1024);
 
   /*
    *  SIS does not support MP configurations so there is really no way
