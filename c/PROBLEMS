@@ -43,7 +43,9 @@ This is the list of outstanding problems in this release.
 +   Some of the tests may execute correctly and not produce the exact
     ordering of lines in the screen file.  This appears to be a combination
     of a number of factors including buffering, processor speed, IO
-    device overhead, and clock interrupt rate.
+    device overhead, and clock interrupt rate.  The biggest problem is that
+    some tests depend on polled IO with no unexpected context switches.
+    These may not be resolvable while maintaining the spirit of the test.
 
 +   The clock device drivers should really avoid doing the division
     by 1000 in the clock tick ISR to convert microseconds into
@@ -55,5 +57,3 @@ This is the list of outstanding problems in this release.
    + warn/refuse to configure when --enable-libcdir and
      --enable-gcc28 are given.
    + force --enable-libcdir when --disable-gcc28 is given
-   + Check for bare bsp getting CPU model set.
-

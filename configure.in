@@ -318,8 +318,18 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
     # Is there code where there should be for this BSP?
     # The bare bsp is a special case as it is not under the target_cpu path
     case $i in
-      bare)    bspcpudir= ;;
-      *)       bspcpudir=$target_cpu/ ;;
+      bare)
+        bspcpudir=
+        if test "X${BARE_CPU_CFLAGS}" = "X" ; then
+          AC_MSG_ERROR([--enable-bare-cpu-flags not specified for bare bsp])
+        fi
+        if test "X${BARE_CPU_MODEL}" = "X" ; then
+          AC_MSG_ERROR([--enable-bare-cpu-model not specified for bare bsp])
+        fi
+        ;;
+      *)
+        bspcpudir=$target_cpu/
+        ;;
     esac
      
     if test -d "$srcdir/c/src/lib/libbsp/$bspcpudir$bspdir"; then
