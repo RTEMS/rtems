@@ -821,6 +821,8 @@ int kill(
    */
 
 process_it:
+  /* XXX what if the thread is blocked? -- need code from pthread_kill */
+  /* XXX and it needs to be in a subroutine */
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   the_thread->do_post_task_switch_extension = TRUE;
