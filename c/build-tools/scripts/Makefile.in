@@ -25,7 +25,7 @@ INSTALLED=$(PGMS:%=$(DESTDIR)/%)
 all:	$(DESTDIR) $(PGMS) install
 
 $(DESTDIR):
-	$(BSDINSTALL) $(INSTDIRFLAGS) $@
+	@INSTALL@ $(INSTDIRFLAGS) $@
 
 install:  $(INSTALLED)
 

@@ -20,7 +20,7 @@ INSTALLED=$(DESTDIR)/ifc.exe \
 all:	$(DESTDIR) $(PGMS) install
 
 $(DESTDIR):
-	$(BSDINSTALL) $(INSTDIRFLAGS) $@
+	@INSTALL@ $(INSTDIRFLAGS) $@
 
 install:  $(INSTALLED)
 

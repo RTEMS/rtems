@@ -2743,7 +2743,15 @@ else
 #include <sys/ipc.h>
 #include <sys/sem.h>
 int main () {
-  union semun arg ;
+#if !defined(sun)
+  union semun arg;
+#else
+  union semun {
+    int val;
+    struct semid_ds *buf;
+    ushort *array;
+  } arg;
+#endif
   int id=semget(IPC_PRIVATE,1,IPC_CREAT|0400);
   if (id == -1)
     exit(1);

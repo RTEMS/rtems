@@ -24,10 +24,10 @@ INSTALLED=$(PGMS:%=$(DESTDIR)/%)
 all:	$(DESTDIR) $(PGMS) install
 
 $(DESTDIR):
-	$(BSDINSTALL) $(INSTDIRFLAGS) $@
+	@INSTALL@ $(INSTDIRFLAGS) $@
 
 install:  $(INSTALLED)
 
 # Install the program
 $(DESTDIR)/%: %
-	$(BSDINSTALL) $(INSTBINFLAGS) $^ $@
+	@INSTALL@ $(INSTBINFLAGS) $^ $@

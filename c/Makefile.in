@@ -51,7 +51,7 @@ CREATE_DIRS = \
 # if something is added to TARGET_VARIANTS, then account for it here
 make_src_makefiles: Makefile.in Makefile
 	-find . -name Makefile \
-           -exec grep -q ^preinstall {} \; -print > make_src_makefiles.tmp
+	    -exec grep -l "^preinstall" {} \; > make_src_makefiles.tmp
 	-grep tools make_src_makefiles.tmp > make_src_makefiles
 	-grep -v tools make_src_makefiles.tmp >> make_src_makefiles
 	-rm make_src_makefiles.tmp

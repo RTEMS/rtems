@@ -55,8 +55,8 @@ ${PGMS}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
 $(DESTDIR):
-	$(BSDINSTALL) $(INSTDIRFLAGS) $@
+	@INSTALL@ $(INSTDIRFLAGS) $@
 
 # Install the program
 install:  $(DESTDIR) $(PGMS)
-	$(BSDINSTALL) $(INSTBINFLAGS) ${PGMS} $(DESTDIR)
+	@INSTALL@ $(INSTBINFLAGS) ${PGMS} $(DESTDIR)
