@@ -25,6 +25,8 @@ rgdb_specs_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
 JPEG_FILES = layers.jpg process.jpg seqinit.jpg seqbreak.jpg seqdetach.jpg
 
+PDF_IMAGES = layers.pdf process.pdf seqdetach.pdf seqbreak.pdf seqinit.pdf
+
 if USE_HTML
 html_project_DATA += $(JPEG_FILES)
 endif
@@ -74,10 +76,10 @@ conclusion.texi: conclusion.t
 	    -n "" $<
 
 noinst_DATA = \
-layers.eps layers.pdf \
-process.eps process.pdf \
-seqdetach.eps seqdetach.pdf \
-seqbreak.eps seqbreak.pdf \
-seqinit.eps seqinit.pdf
+layers.eps \
+process.eps \
+seqdetach.eps \
+seqbreak.eps \
+seqinit.eps
 
 EXTRA_DIST = *.t $(noinst_DATA) $(JPEG_FILES)

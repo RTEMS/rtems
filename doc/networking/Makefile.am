@@ -27,7 +27,7 @@ networking_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
 $(PROJECT).dvi: networkflow.eps PCIreg.eps recvbd.eps
 
-$(PROJECT).pdf: networkflow.pdf PCIreg.pdf recvbd.pdf
+PDF_IMAGES = networkflow.pdf PCIreg.pdf recvbd.pdf
 
 if USE_HTML
 html_project_DATA += networkflow.jpg networkflow.png PCIreg.jpg recvbd.jpg

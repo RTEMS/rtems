@@ -26,6 +26,12 @@ info_TEXINFOS = c_user.texi
 c_user_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)   
 
 PNG_FILES = rtemsarc.png rtemspie.png states.png
+
+EPS_IMAGES = rtemspie.eps states.eps
+$(PROJECT).dvi: $(EPS_IMAGES)
+
+PDF_IMAGES = rtemspie.pdf states.pdf
+
 if USE_HTML
 html_project_DATA += $(PNG_FILES)
 endif
@@ -151,7 +157,6 @@ mp.texi: mp.t
 	    -n "Directive Status Codes" $<
 
 noinst_DATA = \
-states.gif states.eps \
-rtemspie.gif rtemspie.eps
+states.gif rtemspie.gif
 
-EXTRA_DIST = *.t $(PNG_FILES) $(noinst_DATA)
+EXTRA_DIST = *.t $(PNG_FILES) $(EPS_IMAGES) $(noinst_DATA)

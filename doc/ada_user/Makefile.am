@@ -48,5 +48,5 @@ html_project_DATA += rtemsarc.png rtemspie.png states.png
 endif
 
 $(PROJECT).dvi: rtemspie.eps states.eps
-$(PROJECT).pdf: rtemspie.pdf states.pdf
+PDF_IMAGES = rtemspie.pdf states.pdf
 

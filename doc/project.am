@@ -35,7 +35,10 @@ if TEXI2PDF
           MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2PDF) $<
 endif
 
+$(PROJECT).pdf: $(PROJECT).texi $($(PROJECT)_TEXINFOS) $(PDF_IMAGES)
 CLEANFILES += $(PROJECT).pdf
+
+MOSTLYCLEANFILES += $(PDF_IMAGES)
 
 ## HTML 
 SUFFIXES += .html
