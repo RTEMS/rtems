@@ -618,7 +618,7 @@ SCORE_EXTERN struct {
   { \
     asm volatile ( \
 	"mfmsr %0; andc %1,%0,%1; mtmsr %1" : \
-	"=r" ((_isr_cookie)) : "r" ((PPC_MSR_DISABLE_MASK)) \
+	"=&r" ((_isr_cookie)) : "r" ((PPC_MSR_DISABLE_MASK)) \
 	); \
   }
 
@@ -631,7 +631,7 @@ SCORE_EXTERN struct {
 #define _CPU_ISR_Enable( _isr_cookie )  \
   { \
      asm volatile ( "mtmsr %0" : \
-		   "=r" ((_isr_cookie)) : "0" ((_isr_cookie))); \
+		   "=&r" ((_isr_cookie)) : "0" ((_isr_cookie))); \
   }
 
 /*
@@ -1015,7 +1015,7 @@ static inline unsigned int CPU_swap_u32(
 	       "rlwimi %0,%1,24,16,23;"
 	       "rlwimi %0,%1,8,8,15;"
 	       "rlwimi %0,%1,24,0,7;" :
-	       "=r" ((swapped)) : "r" ((value)));
+	       "=&r" ((swapped)) : "r" ((value)));
 
   return( swapped );
 }

@@ -106,12 +106,12 @@ void _CPU_Initialize(
   {
     unsigned32 tmp;
 
-    asm volatile ("mfmsr %0" : "=r" (tmp));
+    asm volatile ("mfmsr %0" : "=&r" (tmp));
     msr = tmp;
 #ifdef ppc403
-    asm volatile ("mfspr %0, 0x3d6" : "=r" (tmp)); /* EVPR */
+    asm volatile ("mfspr %0, 0x3d6" : "=&r" (tmp)); /* EVPR */
     evpr = tmp;
-    asm volatile ("mfdcr %0, 0x42" : "=r" (tmp)); /* EXIER */
+    asm volatile ("mfdcr %0, 0x42" : "=&r" (tmp)); /* EXIER */
     exier = tmp;
     asm volatile ("mtspr 0x3d6, %0" :: "r" (0)); /* EVPR */
 #endif
