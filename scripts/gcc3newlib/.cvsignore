@@ -1,0 +1,7 @@
+*.spec
+Makefile
+Makefile.in
+gccnewlib.spec
+gccnewlib.spec.in
+gccnewlib_c_only.spec
+gccnewlib_c_only.spec.in
