@@ -1,0 +1,44 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl $Id$
+
+AC_PREREQ(2.13)
+AC_INIT(new_exception_processing)
+RTEMS_TOP(../../../../../..)
+AC_CONFIG_AUX_DIR(../../../../../..)
+
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_INIT_AUTOMAKE(rtems-c-src-exec-score-cpu-powerpc,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_ENABLE_LIBCDIR
+
+RTEMS_ENV_RTEMSBSP
+
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
+
+RTEMS_PROJECT_ROOT
+
+dnl check target cc
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
+
+RTEMS_CHECK_NEWLIB
+
+# Check if there is custom/*.cfg for this BSP
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
+
+PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
+AC_SUBST(PROJECT_INCLUDE)
+
+AM_CONDITIONAL(PPC_NEW_EXCEPTION_PROCESSING,test "$RTEMS_CPU_MODEL" = "mpc750" -o "$RTEMS_CPU_MODEL" = "mpc604")
+
+# Try to explicitly list a Makefile here 
+AC_OUTPUT( 
+Makefile
+shared/Makefile
+new_exception_processing/Makefile
+old_exception_processing/Makefile)
