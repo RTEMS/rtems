@@ -230,17 +230,22 @@ int pthread_mutex_init(
   if ( !mutex )
     return EINVAL;
 
-  /* EBUSY if *mutex is a valid id */
+  /* avoid infinite recursion on call to this routine in _POSIX_Mutex_Get */
 
-  mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
-  switch ( location ) {
-    case OBJECTS_ERROR:
-      break;
-    case OBJECTS_REMOTE:
-    case OBJECTS_LOCAL:
-      _Thread_Enable_dispatch();
-      return EBUSY;
-  };
+  if ( *mutex != PTHREAD_MUTEX_INITIALIZER ) {
+
+    /* EBUSY if *mutex is a valid id */
+
+    mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
+    switch ( location ) {
+      case OBJECTS_ERROR:
+        break;
+      case OBJECTS_REMOTE:
+      case OBJECTS_LOCAL:
+        _Thread_Enable_dispatch();
+        return EBUSY;
+    }
+  }
  
   if ( !the_attr->is_initialized ) 
     return EINVAL;
