@@ -406,12 +406,14 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
   
   cp = (char *)malloc((NRXBUFS+NTXBUFS)*(sizeof(struct MD)+ RBUF_SIZE) + PG_SIZE);
   sc->bufferBase = cp;
-  cp += (PG_SIZE - (int)cp) & MASK_OFFSET ;
+  cp += (PG_SIZE - (int)cp) & MASK_OFFSET;
+#ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA 
   if (_CPU_is_paging_enabled())
     _CPU_change_memory_mapping_attribute
                    (NULL, cp,
 		    (NRXBUFS+NTXBUFS)*(sizeof(struct MD)+ RBUF_SIZE),
 		    PTE_CACHE_DISABLE | PTE_WRITABLE);
+#endif
   rmd = (struct MD*)cp;
   sc->MDbase = rmd;
   buffer = cp + ((NRXBUFS+NTXBUFS)*sizeof(struct MD));
