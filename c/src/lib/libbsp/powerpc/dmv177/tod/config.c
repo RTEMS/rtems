@@ -11,7 +11,7 @@
 #include <bsp.h>
 
 #include <libchip/rtc.h>
-#include <libchip/m48t08.h>
+#include <libchip/icm7170.h>
 
 /*
  * Configuration specific probe routines
@@ -34,16 +34,14 @@
 rtc_tbl	RTC_Table[] = {
 	{
 		"/dev/rtc0",			/* sDeviceName */
-                RTC_M48T08,                     /* deviceType */
-		MC68681_FUNCTIONS,		/* pDeviceFns */
+                RTC_ICM7170,                    /* deviceType */
+		&icm7170_fns,			/* pDeviceFns */
 		rtc_probe,			/* deviceProbe */
-		NULL,				/* pDeviceParams */
+		(void *) ICM7170_AT_32_KHZ,	/* pDeviceParams */
 		DMV170_RTC_ADDRESS,		/* ulCtrlPort1 */
-		NULL,				/* ulCtrlPort2 */
 		NULL,				/* ulDataPort */
-		m48t08_get_register,         	/* getRegister */
-		m48t08_set_register,		/* setRegister */
-		NULL, /* unused */		/* setData */
+		icm7170_get_register_4,        	/* getRegister */
+		icm7170_set_register_4,		/* setRegister */
 	}
 };
 
