@@ -27,10 +27,23 @@
 
 @chapter Configuring a System
 
+@section Introduction
+
+RTEMS must be configured for an application.  This configuration
+information encompasses a variety of information including 
+the length of each clock tick, the maximum number of each RTEMS
+object that can be created, the application initialization tasks,
+and the device drivers in the application.  This information
+is placed in data structures that are given to RTEMS at
+system initialization time.  This chapter details the 
+format of these data structures as well as a simpler
+mechanism to automate the generation of these structures.
+
+
 @section Automatic Generation of System Configuration
 
 @cindex confdefs.h
-@fnindex confdefs.h
+@findex confdefs.h
 
 RTEMS provides the @code{confdefs.h} C language header file that
 based on the setting of a variety of macros can automatically
@@ -78,11 +91,13 @@ related configuration parameters supported by
 @code{confdefs.h}.
 
 @itemize @bullet
+@findex CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
 @item @code{CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS} is set to the
 maximum number of files that can be concurrently open.  Libio requires
 a Classic RTEMS semaphore for each file descriptor as well as one 
 global one.  The default value is 20 file descriptors.  
 
+@findex CONFIGURE_HAS_OWN_MOUNT_TABLE
 @item @code{CONFIGURE_HAS_OWN_MOUNT_TABLE} is defined when the
 application provides their own filesystem mount table.  The
 mount table is an array of @code{rtems_filesystem_mount_table_t}
@@ -91,6 +106,7 @@ entries pointed to by the global variable
 entries in this table is in an integer variable named
 @code{rtems_filesystem_mount_table_t}.
 
+@findex CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 @item @code{CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM} is defined
 if the application wishes to use a minimal functionality subset
 of the In-Memory FileSystem (IMFS).  The miniIMFS is comparable
@@ -100,6 +116,7 @@ only directories and device nodes and is smaller in executable
 code size than the full IMFS.  By default, this is not
 defined and the full functionality IMFS is used.
 
+@findex STACK_CHECKER_ON
 @item @code{STACK_CHECKER_ON} is defined when the application 
 wishes to enable run-time stack bounds checking.  This increases
 the time required to create tasks as well as adding overhead
@@ -114,33 +131,40 @@ This section defines the general system configuration parameters supported by
 @code{confdefs.h}.
 
 @itemize @bullet
+@findex CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
 @item @code{CONFIGURE_HAS_OWN_CONFIGURATION_TABLE} should only be defined
 if the application is providing their own complete set of configuration 
 tables.
 
+@findex CONFIGURE_INTERRUPT_STACK_MEMORY
 @item @code{CONFIGURE_INTERRUPT_STACK_MEMORY} is set to the 
 size of the interrupt stack.  The interrupt stack size is
 usually set by the BSP but since this memory is allocated
 from the RTEMS Ram Workspace, it must be accounted for.  The
 default for this field is RTEMS_MINIMUM_STACK_SIZE.
 
+@findex CONFIGURE_EXECUTIVE_RAM_WORK_AREA
 @item @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA} is the base 
 address of the RTEMS RAM Workspace.  By default, this value
 is NULL indicating that the BSP is to determine the location
 of the RTEMS RAM Workspace.
 
+@findex CONFIGURE_MICROSECONDS_PER_TICK
 @item @code{CONFIGURE_MICROSECONDS_PER_TICK} is the length
 of time between clock ticks.  By default, this is set to
 10000 microseconds.
 
+@findex CONFIGURE_TICKS_PER_TIMESLICE
 @item @code{CONFIGURE_TICKS_PER_TIMESLICE} is the number
 of ticks per each task's timeslice.  By default, this is
 50.
 
+@findex CONFIGURE_MEMORY_OVERHEAD
 @item @code{CONFIGURE_MEMORY_OVERHEAD} is set to the number of
 bytes the applications wishes to add to the requirements calculated
 by @code{confdefs.h}.  The default value is 0.
 
+@findex CONFIGURE_EXTRA_TASK_STACKS
 @item @code{CONFIGURE_EXTRA_TASK_STACKS} is set to the number of
 bytes the applications wishes to add to the task stack requirements
 calculated by @code{confdefs.h}.  This parameter is very important.
@@ -163,6 +187,7 @@ Table is suitable for simple applications with no
 custom device drivers.
 
 @itemize @bullet
+@findex CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
 @item @code{CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE} is defined if
 the application wishes to provide their own Device Driver Table.
 The table generated is an array of @code{rtems_driver_address_table}
@@ -170,10 +195,12 @@ entries named @code{Device_drivers}.  By default, this is not
 defined indicating the @code{confdefs.h} is providing the
 device driver table.
 
+@findex CONFIGURE_MAXIMUM_DEVICES
 @item @code{CONFIGURE_MAXIMUM_DEVICES} is defined
 to the number of individual devices that may be registered
 in the system.  By default, this is set to 20.
 
+@findex CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER}
 is defined
 if the application wishes to include the Console Device Driver.
@@ -181,6 +208,7 @@ This device driver is responsible for providing standard input
 and output using "/dev/console".  By default, this is not
 defined.
 
+@findex CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER}
 is defined
 if the application wishes to include the Console Device Driver.
@@ -188,6 +216,7 @@ This device driver is responsible for providing standard input
 and output using "/dev/console".  By default, this is not
 defined.
 
+@findex CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER}
 is defined if the application wishes to include the Timer Driver.
 This device driver is used to benchmark execution times
@@ -199,6 +228,7 @@ defined.
 @c if the application wishes to include the Real-Time Clock Driver.
 @c By default, this is not defined.
 
+@findex CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER}
 is defined if the application wishes to include the Stub Device Driver.
 This device driver simply provides entry points that return
@@ -215,28 +245,34 @@ This class of Configuration Constants are only applicable if
 @code{CONFIGURE_MP_APPLICATION} is defined.
 
 @itemize @bullet
+@findex CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
 @item @code{CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE} is defined
 if the application wishes to provide their own Multiprocessing
 Configuration Table.  The generated table is named
 @code{Multiprocessing_configuration}.  By default, this
 is not defined.
 
+@findex CONFIGURE_MP_NODE_NUMBER
 @item @code{CONFIGURE_MP_NODE_NUMBER} is the node number of
 this node in a multiprocessor system.  The default node number
 is @code{NODE_NUMBER} which is set directly in RTEMS test Makefiles.
 
+@findex CONFIGURE_MP_MAXIMUM_NODES
 @item @code{CONFIGURE_MP_MAXIMUM_NODES} is the maximum number
 of nodes in a multiprocessor system.  The default is 2.
 
+@findex CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
 @item @code{CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS}
 is the maximum number
 of concurrently active global objects in a multiprocessor
 system.  The default is 32.
 
+@findex CONFIGURE_MP_MAXIMUM_PROXIES
 @item @code{CONFIGURE_MP_MAXIMUM_PROXIES} is the maximum number
 of concurrently active thread/task proxies in a multiprocessor
 system.  The default is 32.
 
+@findex CONFIGURE_MP_MPCI_TABLE_POINTER
 @item @code{CONFIGURE_MP_MPCI_TABLE_POINTER} is the pointer
 to the MPCI Configuration Table.  The default value of
 this field is @code{&MPCI_table}.
@@ -248,38 +284,47 @@ This section defines the Classic API related
 system configuration parameters supported by @code{confdefs.h}.
 
 @itemize @bullet
+@findex CONFIGURE_MAXIMUM_TASKS
 @item @code{CONFIGURE_MAXIMUM_TASKS} is the maximum number of
 Classic API tasks that can be concurrently active. 
 The default for this field is 10.
 
+@findex CONFIGURE_MAXIMUM_TIMERS
 @item @code{CONFIGURE_MAXIMUM_TIMERS} is the maximum number of
 Classic API timers that can be concurrently active. 
 The default for this field is 0.
 
+@findex CONFIGURE_MAXIMUM_SEMAPHORES
 @item @code{CONFIGURE_MAXIMUM_SEMAPHORES} is the maximum number of
 Classic API semaphores that can be concurrently active. 
 The default for this field is 0.
 
+@findex CONFIGURE_MAXIMUM_MESSAGE_QUEUES
 @item @code{CONFIGURE_MAXIMUM_MESSAGE_QUEUES} is the maximum number of
 Classic API message queues that can be concurrently active. 
 The default for this field is 0.
 
+@findex CONFIGURE_MAXIMUM_PARTITIONS
 @item @code{CONFIGURE_MAXIMUM_PARTITIONS} is the maximum number of
 Classic API partitions that can be concurrently active. 
 The default for this field is 0.
 
+@findex CONFIGURE_MAXIMUM_REGIONS
 @item @code{CONFIGURE_MAXIMUM_REGIONS} is the maximum number of
 Classic API regions that can be concurrently active. 
 The default for this field is 0.
 
+@findex CONFIGURE_MAXIMUM_PORTS
 @item @code{CONFIGURE_MAXIMUM_PORTS} is the maximum number of
 Classic API ports that can be concurrently active. 
 The default for this field is 0.
 
+@findex CONFIGURE_MAXIMUM_PERIODS
 @item @code{CONFIGURE_MAXIMUM_PERIODS} is the maximum number of
 Classic API rate monotonic periods that can be concurrently active. 
 The default for this field is 0.
 
+@findex CONFIGURE_MAXIMUM_USER_EXTENSIONS
 @item @code{CONFIGURE_MAXIMUM_USER_EXTENSIONS} is the maximum number of
 Classic API user extensions that can be concurrently active. 
 The default for this field is 0.
@@ -294,6 +339,7 @@ generate an Initialization Tasks Table named
 parameters control the generation of that table.
 
 @itemize @bullet
+@findex CONFIGURE_RTEMS_INIT_TASKS_TABLE
 @item @code{CONFIGURE_RTEMS_INIT_TASKS_TABLE} is defined
 if the user wishes to use a Classic RTEMS API Initialization
 Task Table.  The application may choose to use the initialization
@@ -301,22 +347,26 @@ tasks or threads table from another API.  By default, this
 field is not defined as the user MUST select their own
 API for initialization tasks.
 
+@findex CONFIGURE_HAS_OWN_INIT_TASK_TABLE
 @item @code{CONFIGURE_HAS_OWN_INIT_TASK_TABLE} is defined
 if the user wishes to define their own Classic API Initialization
 Tasks Table.  This table should be named @code{Initialization_tasks}.
 By default, this is not defined.
 
+@findex CONFIGURE_INIT_TASK_NAME
 @item @code{CONFIGURE_INIT_TASK_NAME} is the name
 of the single initialization task defined by the
 Classic API Initialization Tasks Table.  By default
 the value is @code{rtems_build_name( 'U', 'I', '1', ' ' )}.
 
+@findex CONFIGURE_INIT_TASK_STACK_SIZE
 @item @code{CONFIGURE_INIT_TASK_STACK_SIZE}
 is the stack size
 of the single initialization task defined by the
 Classic API Initialization Tasks Table.  By default
 the value is @code{RTEMS_MINIMUM_STACK_SIZE}.
 
+@findex CONFIGURE_INIT_TASK_PRIORITY
 @item @code{CONFIGURE_INIT_TASK_PRIORITY}
 is the initial priority
 of the single initialization task defined by the
@@ -324,24 +374,28 @@ Classic API Initialization Tasks Table.  By default
 the value is 1 which is the highest priority
 in the Classic API.
 
+@findex CONFIGURE_INIT_TASK_ATTRIBUTES
 @item @code{CONFIGURE_INIT_TASK_ATTRIBUTES}
 is the task attributes
 of the single initialization task defined by the
 Classic API Initialization Tasks Table.  By default
 the value is @code{RTEMS_DEFAULT_ATTRIBUTES}.
 
+@findex CONFIGURE_INIT_TASK_ENTRY_POINT
 @item @code{CONFIGURE_INIT_TASK_ENTRY_POINT}
 is the entry point (a.k.a. function name)
 of the single initialization task defined by the
 Classic API Initialization Tasks Table.  By default
 the value is @code{Init}.
 
+@findex CONFIGURE_INIT_TASK_INITIAL_MODES
 @item @code{CONFIGURE_INIT_TASK_INITIAL_MODES}
 is the initial execution mode
 of the single initialization task defined by the
 Classic API Initialization Tasks Table.  By default
 the value is @code{RTEMS_NO_PREEMPT}.
 
+@findex CONFIGURE_INIT_TASK_ARGUMENTS
 @item @code{CONFIGURE_INIT_TASK_ARGUMENTS}
 is the task argument
 of the single initialization task defined by the
@@ -358,34 +412,42 @@ for the RTEMS POSIX API.  They are only relevant if the POSIX API
 is enabled at configure time using the @code{--enable-posix} option.
 
 @itemize @bullet
+@findex CONFIGURE_MAXIMUM_POSIX_THREADS
 @item @code{CONFIGURE_MAXIMUM_POSIX_THREADS} is the maximum number of
 POSIX API threads that can be concurrently active.
 The default is 10.
 
+@findex CONFIGURE_MAXIMUM_POSIX_MUTEXES
 @item @code{CONFIGURE_MAXIMUM_POSIX_MUTEXES} is the maximum number of
 POSIX API mutexes that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
 @item @code{CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES} is the maximum number of
 POSIX API condition variables that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_POSIX_KEYS
 @item @code{CONFIGURE_MAXIMUM_POSIX_KEYS} is the maximum number of
 POSIX API keys that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_POSIX_TIMERS
 @item @code{CONFIGURE_MAXIMUM_POSIX_TIMERS} is the maximum number of
 POSIX API timers that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
 @item @code{CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS} is the maximum number of
 POSIX API queued signals that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
 @item @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES} is the maximum number of
 POSIX API message queues that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
 @item @code{CONFIGURE_MAXIMUM_POSIX_SEMAPHORES} is the maximum number of
 POSIX API semaphores that can be concurrently active.
 The default is 0.
@@ -400,6 +462,7 @@ generate a POSIX Initialization Threads Table named
 parameters control the generation of that table.
 
 @itemize @bullet
+@findex CONFIGURE_POSIX_INIT_THREAD_TABLE
 @item @code{CONFIGURE_POSIX_INIT_THREAD_TABLE}
 is defined
 if the user wishes to use a POSIX API Initialization
@@ -408,17 +471,20 @@ tasks or threads table from another API.  By default, this
 field is not defined as the user MUST select their own
 API for initialization tasks.
 
+@findex CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
 @item @code{CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE}
 is defined if the user wishes to define their own POSIX API Initialization
 Threads Table.  This table should be named @code{POSIX_Initialization_threads}.
 By default, this is not defined.
 
+@findex CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
 @item @code{CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT}
 is the entry point (a.k.a. function name)
 of the single initialization thread defined by the
 POSIX API Initialization Threads Table.  By default
 the value is @code{POSIX_Init}.
 
+@findex CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
 @item @code{CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE}
 is the stack size of the single initialization thread defined by the
 POSIX API Initialization Threads Table.  By default
@@ -433,41 +499,49 @@ for the RTEMS ITRON API.  They are only relevant if the POSIX API
 is enabled at configure time using the @code{--enable-itron} option.
 
 @itemize @bullet
+@findex CONFIGURE_MAXIMUM_ITRON_TASKS
 @item @code{CONFIGURE_MAXIMUM_ITRON_TASKS}
 is the maximum number of
 ITRON API tasks that can be concurrently active.
 The default is 10.
 
+@findex CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
 @item @code{CONFIGURE_MAXIMUM_ITRON_SEMAPHORES}
 is the maximum number of
 ITRON API semaphores that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS
 @item @code{CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS}
 is the maximum number of
 ITRON API eventflags that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_ITRON_MAILBOXES
 @item @code{CONFIGURE_MAXIMUM_ITRON_MAILBOXES}
 is the maximum number of
 ITRON API mailboxes that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS
 @item @code{CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS}
 is the maximum number of
 ITRON API message buffers that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_ITRON_PORTS
 @item @code{CONFIGURE_MAXIMUM_ITRON_PORTS}
 is the maximum number of
 ITRON API ports that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS
 @item @code{CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS}
 is the maximum number of
 ITRON API memory pools that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS
 @item @code{CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS}
 is the maximum number of
 ITRON API fixed memory pools that can be concurrently active.
@@ -483,6 +557,7 @@ generate an ITRON Initialization Tasks Table named
 parameters control the generation of that table.
 
 @itemize @bullet
+@findex CONFIGURE_ITRON_INIT_TASK_TABLE
 @item @code{CONFIGURE_ITRON_INIT_TASK_TABLE} is defined
 if the user wishes to use a ITRON API Initialization
 Tasks Table.  The application may choose to use the initialization
@@ -490,23 +565,27 @@ tasks or threads table from another API.  By default, this
 field is not defined as the user MUST select their own
 API for initialization tasks.
 
+@findex CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE
 @item @code{CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE}
 is defined if the user wishes to define their own ITRON API Initialization
 Tasks Table.  This table should be named @code{ITRON_Initialization_tasks}.
 By default, this is not defined.
 
+@findex CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT
 @item @code{CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT}
 is the entry point (a.k.a. function name)
 of the single initialization task defined by the
 ITRON API Initialization Tasks Table.  By default
 the value is @code{ITRON_Init}.
 
+@findex CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES
 @item @code{CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES}
 is the attribute set
 of the single initialization task defined by the
 ITRON API Initialization Tasks Table.  By default
 the value is @code{TA_HLNG}.
 
+@findex CONFIGURE_ITRON_INIT_TASK_PRIORITY
 @item @code{CONFIGURE_ITRON_INIT_TASK_PRIORITY}
 is the initial priority
 of the single initialization task defined by the
@@ -514,6 +593,7 @@ ITRON API Initialization Tasks Table.  By default
 the value is @code{1} which is the highest priority
 in the ITRON API.
 
+@findex CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
 @item @code{CONFIGURE_ITRON_INIT_TASK_STACK_SIZE}
 is the stack size of the single initialization task defined by the
 ITRON API Initialization Tasks Table.  By default
@@ -528,6 +608,7 @@ by @code{confdefs.h} related to configuring RTEMS to support
 a task using Ada tasking with GNAT.
 
 @itemize @bullet
+@findex CONFIGURE_GNAT_RTEMS
 @item @code{CONFIGURE_GNAT_RTEMS} is defined to inform
 RTEMS that the GNAT Ada run-time is to be used by the 
 application.  This configuration parameter is critical
@@ -535,11 +616,13 @@ as it makes @code{confdefs.h} configure the resources
 (mutexes and keys) used implicitly by the GNAT run-time.
 By default, this parameter is not defined.
 
+@findex CONFIGURE_MAXIMUM_ADA_TASKS
 @item @code{CONFIGURE_MAXIMUM_ADA_TASKS} is the 
 number of Ada tasks that can be concurrently active
 in the system.  By default, when @code{CONFIGURE_GNAT_RTEMS}
 is defined, this is set to 20.
 
+@findex CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
 @item @code{CONFIGURE_MAXIMUM_FAKE_ADA_TASKS} is
 the number of "fake" Ada tasks that can be concurrently
 active in the system.  A "fake" Ada task is a non-Ada
@@ -672,6 +755,7 @@ to the following macros:
 
 @itemize @bullet
 
+@item @code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER}
 @item @code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER}
 @item @code{CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER}
 @item @code{CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER}
