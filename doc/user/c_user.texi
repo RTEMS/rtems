@@ -1,0 +1,159 @@
+\input ../texinfo/texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename c_user
+@syncodeindex vr fn
+@synindex ky cp
+@paragraphindent 0
+@c @smallbook
+@c %**end of header
+
+@c
+@c  COPYRIGHT (c) 1988-1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@c
+@c   Master file for the C User's Guide
+@c
+
+@c Joel's Questions
+@c
+@c  1.  Why does paragraphindent only impact makeinfo?
+@c  2.  Why does paragraphindent show up in HTML?
+@c
+
+@include ../common/setup.texi
+
+@ignore
+@ifinfo
+@format
+START-INFO-DIR-ENTRY
+* RTEMS C User: (c_user).             The C User's Guide
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+@end ignore
+
+@c variable substitution info:
+@c
+@c @set RTEMS-LANGUAGE C
+@c the language is @value{RTEMS-LANGUAGE}
+@c NOTE:  don't use underscore in the name
+@c
+
+@c
+@c  Title Page Stuff
+@c
+
+@set edition 4.0.0a
+@set update-date 25 April 1997
+@set update-month April 1997
+
+@c
+@c  I don't really like having a short title page.  --joel
+@c
+@c @shorttitlepage RTEMS Applications C User's Guide
+
+@setchapternewpage odd
+@settitle RTEMS C User's Guide
+@titlepage
+@finalout
+
+@title RTEMS Applications C User's Guide
+@subtitle Edition @value{edition}, for RTEMS 4.0.0
+@sp 1
+@subtitle @value{update-month}
+@author On-Line Applications Research Corporation
+@page
+@include ../common/cpright.texi
+@end titlepage
+
+@c  This prevents a black box from being printed on "overflow" lines.
+@c  The alternative is to rework a sentence to avoid this problem.
+
+@include preface.texi
+@include overview.texi
+@include concepts.texi
+@include init.texi
+@include task.texi
+@include intr.texi
+@include clock.texi
+@include timer.texi
+@include sem.texi
+@include msg.texi
+@include event.texi
+@include signal.texi
+@include part.texi
+@include region.texi
+@include dpmem.texi
+@include io.texi
+@include fatal.texi
+@include schedule.texi
+@include rtmon.texi
+@include bsp.texi
+@include userext.texi
+@include conf.texi
+@include mp.texi
+@include dirstat.texi
+@include example.texi
+@include glossary.texi
+@ifinfo
+@node Top, Preface, (dir), (dir)
+@top c_user
+
+This is the online version of the RTEMS C User's Guide.
+
+@menu
+* Preface::
+* Overview::
+* Key Concepts::
+* Initialization Manager::
+* Task Manager::
+* Interrupt Manager::
+* Clock Manager::
+* Timer Manager::
+* Semaphore Manager::
+* Message Manager::
+* Event Manager::
+* Signal Manager::
+* Partition Manager::
+* Region Manager::
+* Dual-Ported Memory Manager::
+* I/O Manager::
+* Fatal Error Manager::
+* Scheduling Concepts::
+* Rate Monotonic Manager::
+* Board Support Packages::
+* User Extensions Manager::
+* Configuring a System::
+* Multiprocessing Manager::
+* Directive Status Codes::
+* Example Application::
+* Glossary::
+* Command and Variable Index::
+* Concept Index::
+@end menu
+
+@end ifinfo
+@c 
+@c 
+@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
+@c
+
+@node Command and Variable Index, Concept Index, Glossary, Top
+@unnumbered Command and Variable Index
+
+There are currently no Command and Variable Index entries.
+
+@c @printindex fn
+
+@node Concept Index, , Command and Variable Index, Top
+@unnumbered Concept Index
+
+There are currently no Concept Index entries.
+@c @printindex cp
+
+@contents
+@bye
+

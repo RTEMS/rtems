@@ -1,0 +1,18 @@
+#! /bin/sh
+
+basedir=$1
+shift
+manuals="develenv hppa1_1 i386 i960 m68k relnotes sparc user"
+# posix_test_plan manual left out in 4.0.0
+
+for action in $*
+do
+  for manual in $manuals
+  do
+    echo
+    echo "*** make $action on ${basedir}/${manual} ***"
+    echo
+    cd ${basedir}/${manual}
+    gmake $action || exit $?
+  done
+done

@@ -1,0 +1,40 @@
+@c
+@c  COPYRIGHT (c) 1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@ifinfo
+@node Directive Status Codes, Example Application, MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet, Top
+@end ifinfo
+@chapter Directive Status Codes
+@table @b
+@item @b{SUCCESSFUL} - successful completion
+@item @b{TASK_EXITTED} - returned from a task
+@item @b{MP_NOT_CONFIGURED} - multiprocessing not configured
+@item @b{INVALID_NAME} - invalid object name
+@item @b{INVALID_ID} - invalid object id
+@item @b{TOO_MANY} - too many
+@item @b{TIMEOUT} - timed out waiting
+@item @b{OBJECT_WAS_DELETED} - object was deleted while waiting
+@item @b{INVALID_SIZE} - invalid specified size
+@item @b{INVALID_ADDRESS} - invalid address specified
+@item @b{INVALID_NUMBER} - number was invalid
+@item @b{NOT_DEFINED} - item not initialized
+@item @b{RESOURCE_IN_USE} - resources outstanding
+@item @b{UNSATISFIED} - request not satisfied
+@item @b{INCORRECT_STATE} - task is in wrong state
+@item @b{ALREADY_SUSPENDED} - task already in state
+@item @b{ILLEGAL_ON_SELF} - illegal for calling task
+@item @b{ILLEGAL_ON_REMOTE_OBJECT} - illegal for remote object
+@item @b{CALLED_FROM_ISR} - invalid environment
+@item @b{INVALID_PRIORITY} - invalid task priority
+@item @b{INVALID_CLOCK} - invalid time buffer
+@item @b{INVALID_NODE} - invalid node id
+@item @b{NOT_CONFIGURED} - directive not configured
+@item @b{NOT_OWNER_OF_RESOURCE} - not owner of resource
+@item @b{NOT_IMPLEMENTED} - directive not implemented
+@item @b{INTERNAL_ERROR} - RTEMS inconsistency detected
+@item @b{NO_MEMORY} - could not get enough memory
+@end table
+

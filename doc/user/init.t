@@ -1,0 +1,408 @@
+@c
+@c  COPYRIGHT (c) 1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@ifinfo
+@node Initialization Manager, Initialization Manager Introduction, Key Concepts Memory Management, Top
+@end ifinfo
+@chapter Initialization Manager
+@ifinfo
+@menu
+* Initialization Manager Introduction::
+* Initialization Manager Background::
+* Initialization Manager Operations::
+* Initialization Manager Directives::
+@end menu
+@end ifinfo
+
+@ifinfo
+@node Initialization Manager Introduction, Initialization Manager Background, Initialization Manager, Initialization Manager
+@end ifinfo
+@section Introduction
+
+The initialization manager is responsible for
+initiating and shutting down RTEMS.  Initiating RTEMS involves
+creating and starting all configured initialization tasks, and
+for invoking the initialization routine for each user-supplied
+device driver.  In a multiprocessor configuration, this manager
+also initializes the interprocessor communications layer.  The
+directives provided by the initialization manager are:
+
+@itemize @bullet
+@item @code{initialize_executive} - Initialize RTEMS
+@item @code{initialize_executive_early} - Initialize RTEMS and do NOT Start Multitasking
+@item @code{initialize_executive_late} - Complete Initialization and Start Multitasking
+@item @code{shutdown_executive} - Shutdown RTEMS
+@end itemize
+
+@ifinfo
+@node Initialization Manager Background, Initialization Tasks, Initialization Manager Introduction, Initialization Manager
+@end ifinfo
+@section Background
+@ifinfo
+@menu
+* Initialization Tasks::
+* The System Initialization Task::
+* The Idle Task::
+* Initialization Manager Failure::
+@end menu
+@end ifinfo
+
+@ifinfo
+@node Initialization Tasks, The System Initialization Task, Initialization Manager Background, Initialization Manager Background
+@end ifinfo
+@subsection Initialization Tasks
+
+Initialization task(s) are the mechanism by which
+RTEMS transfers initial control to the user's application.
+Initialization tasks differ from other application tasks in that
+they are defined in the User Initialization Tasks Table and
+automatically created and started by RTEMS as part of its
+initialization sequence.  Since the initialization tasks are
+scheduled using the same algorithm as all other RTEMS tasks,
+they must be configured at a priority and mode which will insure
+that they will complete execution before other application tasks
+execute.  Although there is no upper limit on the number of
+initialization tasks, an application is required to define at
+least one.
+
+A typical initialization task will create and start
+the static set of application tasks.  It may also create any
+other objects used by the application.  Initialization tasks
+which only perform initialization should delete themselves upon
+completion to free resources for other tasks.  Initialization
+tasks may transform themselves into a "normal" application task.
+This transformation typically involves changing priority and
+execution mode.  RTEMS does not automatically delete the
+initialization tasks.
+
+@ifinfo
+@node The System Initialization Task, The Idle Task, Initialization Tasks, Initialization Manager Background
+@end ifinfo
+@subsection The System Initialization Task
+
+The System Initialization Task is responsible for
+initializing all device drivers.  As a result, this task has a
+higher priority than all other tasks to insure that no
+application tasks executes until all device drivers are
+initialized.  After device initialization in a single processor
+system, this task will delete itself.
+
+The System Initialization Task must have enough stack
+space to successfully execute the initialization routines for
+all device drivers and, in multiprocessor configurations, the
+Multiprocessor Communications Interface Layer initialization
+routine.  The CPU Configuration Table contains a field which
+allows the application or BSP to increase the default amount of
+stack space allocated for this task.
+
+In multiprocessor configurations, the System
+Initialization Task does not delete itself after initializing
+the device drivers.  Instead it transforms itself into the
+Multiprocessing Server which initializes the Multiprocessor
+Communications Interface Layer, verifies multiprocessor system
+consistency, and processes all requests from remote nodes.
+
+@ifinfo
+@node The Idle Task, Initialization Manager Failure, The System Initialization Task, Initialization Manager Background
+@end ifinfo
+@subsection The Idle Task
+
+The Idle Task is the lowest priority task in a system
+and executes only when no other task is ready to execute.  This
+task consists of an infinite loop and will be preempted when any
+other task is made ready to execute.
+
+@ifinfo
+@node Initialization Manager Failure, Initialization Manager Operations, The Idle Task, Initialization Manager Background
+@end ifinfo
+@subsection Initialization Manager Failure
+
+The fatal_error_occurred directive will be called
+from initialize_executive for any of the following reasons:
+
+@itemize @bullet
+@item If either the Configuration Table or the CPU Dependent
+Information Table is not provided.
+
+@item If the starting address of the RTEMS RAM Workspace,
+supplied by the application in the Configuration Table, is NULL
+or is not aligned on a four-byte boundary.
+
+@item If the size of the RTEMS RAM Workspace is not large
+enough to initialize and configure the system.
+
+@item If the interrupt stack size specified is too small.
+
+@item If multiprocessing is configured and the node entry in
+the Multiprocessor Configuration Table is not between one and
+the maximum_nodes entry.
+
+@item If a multiprocessor system is being configured and no
+Multiprocessor Communications Interface is specified.
+
+@item If no user initialization tasks are configured.  At
+least one initialization task must be configured to allow RTEMS
+to pass control to the application at the end of the executive
+initialization sequence.
+
+@item If any of the user initialization tasks cannot be
+created or started successfully.
+@end itemize
+
+@ifinfo
+@node Initialization Manager Operations, Initializing RTEMS, Initialization Manager Failure, Initialization Manager
+@end ifinfo
+@section Operations
+@ifinfo
+@menu
+* Initializing RTEMS::
+* Shutting Down RTEMS::
+@end menu
+@end ifinfo
+
+@ifinfo
+@node Initializing RTEMS, Shutting Down RTEMS, Initialization Manager Operations, Initialization Manager Operations
+@end ifinfo
+@subsection Initializing RTEMS
+
+The initialize_executive directive is called by the
+board support package at the completion of its initialization
+sequence.  RTEMS assumes that the board support package
+successfully completed its initialization activities.  The
+initialize_executive directive completes the initialization
+sequence by performing the following actions:
+
+@itemize @bullet
+@item Initializing internal RTEMS variables;
+@item Allocating system resources;
+@item Creating and starting the System Initialization Task;
+@item Creating and starting the Idle Task;
+@item Creating and starting the user initialization task(s); and
+@item Initiating multitasking.
+@end itemize
+
+This directive MUST be called before any other RTEMS
+directives.  The effect of calling any RTEMS directives before
+initialize_executive is unpredictable.  Many of RTEMS actions
+during initialization are based upon the contents of the
+Configuration Table and CPU Dependent Information Table.  For
+more information regarding the format and contents of these
+tables, please refer to the chapter Configuring a System.
+
+The final step in the initialization sequence is the
+initiation of multitasking.  When the scheduler and dispatcher
+are enabled, the highest priority, ready task will be dispatched
+to run.  Control will not be returned to the board support
+package after multitasking is enabled until shutdown_executive
+the directive is called.
+
+The initialize_executive directive provides a
+conceptually simple way to initialize RTEMS.  However, in
+certain cases, this mechanism cannot be used.  The
+initialize_executive_early and initialize_executive_late
+directives are provided as an alternative mechanism for
+initializing RTEMS.  The initialize_executive_early directive
+returns to the caller BEFORE initiating multitasking.  The
+initialize_executive_late directive is invoked to start
+multitasking.  It is critical that only one of the RTEMS
+initialization sequences be used in an application.
+
+@ifinfo
+@node Shutting Down RTEMS, Initialization Manager Directives, Initializing RTEMS, Initialization Manager Operations
+@end ifinfo
+@subsection Shutting Down RTEMS
+
+The shutdown_executive directive is invoked by the
+application to end multitasking and return control to the board
+support package.  The board support package resumes execution at
+the code immediately following the invocation of the
+initialize_executive directive.
+
+@ifinfo
+@node Initialization Manager Directives, INITIALIZE_EXECUTIVE - Initialize RTEMS, Shutting Down RTEMS, Initialization Manager
+@end ifinfo
+@section Directives
+@ifinfo
+@menu
+* INITIALIZE_EXECUTIVE - Initialize RTEMS::
+* INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking::
+* INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking::
+* SHUTDOWN_EXECUTIVE - Shutdown RTEMS::
+@end menu
+@end ifinfo
+
+This section details the initialization manager's
+directives.  A subsection is dedicated to each of this manager's
+directives and describes the calling sequence, related
+constants, usage, and status codes.
+
+@page
+@ifinfo
+@node INITIALIZE_EXECUTIVE - Initialize RTEMS, INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking, Initialization Manager Directives, Initialization Manager Directives
+@end ifinfo
+@subsection INITIALIZE_EXECUTIVE - Initialize RTEMS
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_interrupt_level rtems_initialize_executive_early(
+  rtems_configuration_table *configuration_table,
+  rtems_cpu_table           *cpu_table
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive is called when the board support
+package has completed its initialization to allow RTEMS to
+initialize the application environment based upon the
+information in the Configuration Table, CPU Dependent
+Information Table, User Initialization Tasks Table, Device
+Driver Table, User Extension Table, Multiprocessor Configuration
+Table, and the Multiprocessor Communications Interface (MPCI)
+Table.  This directive starts multitasking and does not return
+to the caller until the shutdown_executive directive is invoked.
+
+@subheading NOTES:
+
+This directive MUST be the first RTEMS directive
+called and it DOES NOT RETURN to the caller until the
+shutdown_executive is invoked.
+
+This directive causes all nodes in the system to
+verify that certain configuration parameters are the same as
+those of the local node.  If an inconsistency is detected, then
+a fatal error is generated.
+
+The application must use only one of the two
+initialization sequences: initialize_executive or
+initialize_executive_early and initialize_executive_late.  The
+initialize_executive directive is logically equivalent to
+invoking initialize_executive_early and
+initialize_executive_late with no intervening actions.
+
+@page
+@ifinfo
+@node INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking, INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking, INITIALIZE_EXECUTIVE - Initialize RTEMS, Initialization Manager Directives
+@end ifinfo
+@subsection INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_interrupt_level rtems_initialize_executive_early(
+  rtems_configuration_table *configuration_table,
+  rtems_cpu_table           *cpu_table
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive is called when the board support
+package has completed its initialization to allow RTEMS to
+initialize the application environment based upon the
+information in the Configuration Table, CPU Dependent
+Information Table, User Initialization Tasks Table, Device
+Driver Table, User Extension Table, Multiprocessor Configuration
+Table, and the Multiprocessor Communications Interface (MPCI)
+Table.  This directive returns to the caller after completing
+the basic RTEMS initialization but before multitasking is
+initiated.  The interrupt level in place when the directive is
+invoked is returned to the caller.  This interrupt level should
+be the same one passed to initialize_executive_late.
+
+@subheading NOTES:
+
+The application must use only one of the two
+initialization sequences: initialize_executive or
+initialize_executive_early and initialize_executive_late.
+
+@page
+@ifinfo
+@node INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking, SHUTDOWN_EXECUTIVE - Shutdown RTEMS, INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking, Initialization Manager Directives
+@end ifinfo
+@subsection INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking
+
+@subheading CALLING SEQUENCE:
+
+@example
+void rtems_initialize_executive_late(
+  rtems_interrupt_level  bsp_level
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive is called after the
+initialize_executive_early directive has been called to complete
+the RTEMS initialization sequence and initiate multitasking.
+The interrupt level returned by the initialize_executive_early
+directive should be in bsp_level and this value is restored as
+part of this directive returning to the caller after the
+shutdown_executive directive is invoked.
+
+@subheading NOTES:
+
+This directive MUST be the second RTEMS directive
+called and it DOES NOT RETURN to the caller until the
+shutdown_executive is invoked.
+
+This directive causes all nodes in the system to
+verify that certain configuration parameters are the same as
+those of the local node.  If an inconsistency is detected, then
+a fatal error is generated.
+
+The application must use only one of the two
+initialization sequences: initialize_executive or
+initialize_executive_early and initialize_executive_late.
+
+
+
+@page
+@ifinfo
+@node SHUTDOWN_EXECUTIVE - Shutdown RTEMS, Task Manager, INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking, Initialization Manager Directives
+@end ifinfo
+@subsection SHUTDOWN_EXECUTIVE - Shutdown RTEMS
+
+@subheading CALLING SEQUENCE:
+
+@example
+void rtems_shutdown_executive(
+  rtems_unsigned32 result
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive is called when the application wishes
+to shutdown RTEMS and return control to the board support
+package.  The board support package resumes execution at the
+code immediately following the invocation of the
+initialize_executive directive.
+
+@subheading NOTES:
+
+This directive MUST be the last RTEMS directive
+invoked by an application and it DOES NOT RETURN to the caller.
+
+This directive should not be invoked until the
+executive has successfully completed initialization.

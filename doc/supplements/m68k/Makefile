@@ -1,0 +1,87 @@
+#
+#  COPYRIGHT (c) 1996.
+#  On-Line Applications Research Corporation (OAR).
+#  All rights reserved.
+#
+
+include ../Make.config
+
+PROJECT=m68k
+REPLACE=../tools/word-replace
+
+all:  
+
+COMMON_FILES=../common/cpright.texi ../common/setup.texi \
+  ../common/timing.texi
+
+FILES= $(PROJECT).texi \
+  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
+  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi wksheets.texi 
+
+all:
+
+info: c_m68k
+	cp c_$(PROJECT) c_$(PROJECT)-* $(INFO_INSTALL)
+
+c_m68k: $(FILES)
+	$(MAKEINFO) $(PROJECT).texi
+
+vinfo: info
+	$(INFO) -f c_m68k
+
+dvi: $(PROJECT).dvi
+ps: $(PROJECT).ps
+	
+$(PROJECT).ps: $(PROJECT).dvi
+	dvips -o $(PROJECT).ps $(PROJECT).dvi
+	cp $(PROJECT).ps $(PS_INSTALL)
+
+dv: dvi
+	$(XDVI) $(PROJECT).dvi
+
+view: ps
+	$(GHOSTVIEW) $(PROJECT).ps
+
+$(PROJECT).dvi: $(FILES)
+	$(TEXI2DVI) $(PROJECT).texi
+
+replace: timedata.texi
+
+intr.texi: intr.t MVME136_TIMES
+	${REPLACE} -p MVME136_TIMES intr.t
+	mv intr.t.fixed intr.texi
+
+timetbl.t: ../common/timetbl.t
+	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
+            <../common/timetbl.t >timetbl.t
+
+timetbl.texi: timetbl.t MVME136_TIMES
+	${REPLACE} -p MVME136_TIMES timetbl.t
+	mv timetbl.t.fixed timetbl.texi
+
+timedata.texi: timedata.t MVME136_TIMES
+	${REPLACE} -p MVME136_TIMES timedata.t
+	mv timedata.t.fixed timedata.texi
+
+wksheets.t: ../common/wksheets.t
+	sed -e 's/WORKSHEETS_PREVIOUS_LINK/Processor Dependent Information Table CPU Dependent Information Table/' \
+            -e 's/WORKSHEETS_NEXT_LINK/MC68020 Timing Data/' \
+            <../common/wksheets.t >wksheets.t
+
+wksheets.texi: wksheets.t MVME136_TIMES
+	${REPLACE} -p MVME136_TIMES wksheets.t
+	mv wksheets.t.fixed wksheets.texi
+
+html: $(FILES)
+	-mkdir $(WWW_INSTALL)/c_m68k
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
+ 	    $(PROJECT).texi
+
+clean:
+	rm -f *.o $(PROG) *.txt core 
+	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
+	rm -f $(PROJECT) $(PROJECT)-*
+	rm -f c_m68k c_m68k-*
+	rm -f timedata.texi timetbl.texi intr.texi wksheets.texi
+	rm -f timetbl.t wksheets.t
+	rm -f *.fixed _*

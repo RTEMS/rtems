@@ -1,0 +1,258 @@
+@c
+@c  COPYRIGHT (c) 1988-1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@ifinfo
+@node Development Environment Status, Development Environment Status RTEMS Executive Status, Installation Procedure Installing RTEMS, Top
+@end ifinfo
+@chapter Development Environment Status
+@ifinfo
+@menu
+* Development Environment Status RTEMS Executive Status::
+* Development Environment Status Development Environment Status::
+* Development Environment Status Known Problems::
+@end menu
+@end ifinfo
+
+This chapter will describe the current status of
+release version @value{RTEMS-RELEASE} of the RTEMS Development Environment.
+
+@ifinfo
+@node Development Environment Status RTEMS Executive Status, Development Environment Status Development Environment Status, Development Environment Status, Development Environment Status
+@end ifinfo
+@section RTEMS Executive Status
+
+Release @value{RTEMS-RELEASE} of the RTEMS Executive contains support
+for both the classic RTEMS API based on the RTEID specification as well
+as support for POSIX threads and real-time extensions.
+
+The classic RTEMS API has the following managers based upon the RTEID
+specification:
+
+@itemize @bullet
+@item Task
+@item Initialization
+@item Clock
+@item Timer
+@item Interrupt
+@item Fatal Error
+@item Message
+@item Semaphore
+@item Event
+@item Signal
+@item Region
+@item Partition
+@item Dual Ported Memory
+@item I/O
+@item Multiprocessing
+@item Rate Monotonic
+@item User Extensions
+@end itemize
+
+RTEMS also has support for the following managers based upon the POSIX threads
+and real-time extensions:
+
+@itemize @bullet
+@item Thread
+@item Clock
+@item Key
+@item Condition Variable
+@item Mutex
+@item Signal 
+@item Scheduler
+@end itemize
+
+This release of the C implementation supports the
+following processors and target boards:
+
+@itemize @bullet
+@item Motorola M68k family
+@itemize -
+@item DY-4 DMV152, SVME153
+@item Motorola IDP
+@item Motorola MVME135, MVME136
+@item Motorola MVME147, MVME147S
+@item Motorola MVME162
+@item EFI 68000 and 68332
+@item Generic 68302
+@item Generic 68360 and 68360 in companion mode with 68040
+@end itemize
+
+@item Intel i386 family
+@itemize -
+@item Force CPU386
+@item Intel i386ex eval board
+@item PC-AT i386 and above (go32)
+@end itemize
+
+@item Intel i960 family
+@itemize -
+@item Cyclone CVME960, CVME961
+@end itemize
+
+@item Hewlett Packard PA-RISC family
+@itemize -
+@item Processor Simulator
+@end itemize
+
+@item PowerPC
+@itemize -
+@item Papyrus (proprietary controller)
+@end itemize
+
+@item SPARC
+@itemize -
+@item ERC32 (space-hardened V7)
+@end itemize
+
+@item MIPS
+@itemize -
+@item P4000 with R4600 or R4650
+@end itemize
+
+@item AMD 29K
+@itemize -
+@item Portsw
+@end itemize
+
+@item UNIX
+@itemize -
+@item Hewlett Packard HPUX (PA-RISC)
+@item Sun Solaris 2.x (SPARC)
+@item Linux (i386)
+@end itemize
+
+@end itemize
+
+Support for the Cygnus NEWLIB Standard C Library is
+provided with this release which may be used on any of the RTEMS
+supported targets.  The BSPs only provide support for console
+I/O only using this library.  Support for the reentrancy
+capabilities of newlib is provided in the RTEMS distribution.
+
+@ifinfo
+@node Development Environment Status Development Environment Status, Development Environment Status Known Problems, Development Environment Status RTEMS Executive Status, Development Environment Status
+@end ifinfo
+@section Development Environment Status
+
+This section details the versions of the tools used
+to develop and maintain RTEMS @value{RTEMS-RELEASE}:
+
+@itemize @bullet
+@item Cross Tools
+@itemize -
+@item gcc - 2.7.2.2 with rtems patch
+@item binutils - 2.7 with rtems patch
+@item zip - 1.2.4
+@item make - 3.74
+@end itemize
+@end itemize
+
+
+@ifinfo
+@node Development Environment Status Known Problems, Executive Problems, Development Environment Status Development Environment Status, Development Environment Status
+@end ifinfo
+@section Known Problems
+@ifinfo
+@menu
+* Executive Problems::
+* Development Environment Problems::
+* RTEMS Problem Reporting::
+@end menu
+@end ifinfo
+
+Problems which are known to exist at the time of
+release are described in the following sections.  These are
+provided as warnings to the user and where possible, workarounds
+are provided until the problem is corrected.
+
+@ifinfo
+@node Executive Problems, Development Environment Problems, Development Environment Status Known Problems, Development Environment Status Known Problems
+@end ifinfo
+@subsection Executive Problems
+
+There are no known bugs in the executive itself.
+
+@ifinfo
+@node Development Environment Problems, RTEMS Problem Reporting, Executive Problems, Development Environment Status Known Problems
+@end ifinfo
+@subsection Development Environment Problems
+
+There are no known major problems with the
+development environment.
+
+@ifinfo
+@node RTEMS Problem Reporting, RTEMS PROBLEM REPORT, Development Environment Problems, Development Environment Status Known Problems
+@end ifinfo
+@subsection RTEMS Problem Reporting
+
+A problem report is provided at the end of this
+document and may be copied by the RTEMS user.  Please fill out
+the form completely to assure a speedy response to the problem.
+In filling out the problem report the following instructions
+apply:
+
+@table @code
+@item User Name and Address:
+The full name
+and mailing address of the customer or company where
+correspondence from RTEMS support personnel may be shipped.
+
+@item Contact Name:
+The name of the person with whom
+RTEMS support personnel will correspond with concerning the
+reported problem.
+
+@item Telephone Voice/FAX:
+The telephone numbers which
+will enable RTEMS support personnel to reach the designated
+contact name.
+
+@item Product/Version:
+The RTEMS product and the version that is currently in use.
+
+@item Target Processor/System:
+The processor and board type that is the target.
+
+@item Host Computer System:
+The manufacturer and model
+number of the system on which RTEMS has been installed.
+
+@item Host Operating System/Version:
+The operating system and version under which RTEMS has been installed.
+
+@c @item Report Type:
+@c Check the most appropriate description of the reported problem.
+
+@item Customer Impact:
+Indicate the severity of the impact of the reported problem.
+
+@item Detailed Description:
+A written description of the
+problem including the area of the RTEMS development environment
+where the problem is located and its behavior.  Please feel free
+to provide source code listings, makefiles, possible solutions,
+and any other information describing the problem.  This
+additional information may be submitted via email or anonymous
+ftp.
+
+Support, training, ports, and custom development are provided
+by On-Line Applications Research Corporation (OAR).  Correspondence
+regarding any aspect of RTEMS should be addressed as follows
+(magnetic tapes should be marked: DO NOT X-RAY):
+@end table
+
+@example
+@group
+RTEMS
+On-Line Applications Research Corporation
+4910-L Corporate Drive
+Huntsville, AL 35805
+Voice: (205) 722-9985
+FAX: (205) 722-0985
+EMAIL: rtems@@OARcorp.com
+@end group
+@end example
+

@@ -1,0 +1,103 @@
+@c
+@c  COPYRIGHT (c) 1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@ifinfo
+@node Example Application, Glossary, Directive Status Codes, Top
+@end ifinfo
+@chapter Example Application
+
+@example
+/*  example.c
+ *
+ *  This file contains an example of a simple RTEMS
+ *  application.  It contains a Configuration Table, a
+ *  user initialization task, and a simple task.
+ *
+ *  This example assumes that a board support package exists
+ *  and invokes the initialize_executive() directive.
+ */
+
+#include "rtems.h"
+
+rtems_task init_task();
+
+#define INIT_NAME      build_name( 'A', 'B', 'C', ' ' ' )
+
+rtems_initialization_tasks_table init_task = @{
+  @{ INIT_NAME,          /* init task name  "ABC" */
+    1024,               /* init task stack size */
+    1,                  /* init task priority */
+    DEFAULT_ATTRIBUTES, /* init task attributes */
+    init_task,          /* init task entry point */
+    TIMESLICE,          /* init task initial mode */
+    0                   /* init task argument */
+  @}
+@};
+
+rtems_configuration_table User_Configuration_Table = @{
+  NULL,                 /* filled in by the BSP */
+  65536,                /* executive RAM size */
+  2,                    /* maximum tasks */
+  0,                    /* maximum timers */
+  0,                    /* maximum semaphores */
+  0,                    /* maximum message queues */
+  0,                    /* maximum messages */
+  0,                    /* maximum partitions */
+  0,                    /* maximum regions */
+  0,                    /* maximum ports */
+  0,                    /* maximum periods */
+  0,                    /* maximum extensions */
+  RTEMS_MILLISECONDS_TO_MICROSECONDS(10), /* number of ms in a tick */
+  1,                    /* num of ticks in a timeslice  */
+  1,                    /* number of user init tasks    */
+  init_task_tbl,        /* user init task(s) table      */
+  0,                    /* number of device drivers     */
+  NULL,                 /* ptr to driver address table  */
+  NULL,                 /* ptr to extension table */
+  NULL                  /* ptr to MP config table */
+@};
+
+task user_application(
+  rtems_task_argument ignored
+);
+
+#define USER_APP_NAME  1  /* any 32-bit name; unique helps */
+
+rtems_task init_task(
+  rtems_task_argument ignored
+)
+@{
+  rtems_id tid;
+
+  /* example assumes SUCCESSFUL return value */
+
+  (void) rtems_task_create( USER_APP_NAME, 1, 1024,
+                        RTEMS_NO_PREEMPT, RTEMS_FLOATING_POINT, &tid );
+  (void) rtems_task_start( tid, user_application, 0 );
+  (void) rtems_task_delete( SELF );
+@}
+
+
+
+rtems_task user_application()
+
+@{
+  /* application specific initialization goes here */
+
+  while ( 1 )  @{              /* infinite loop */
+
+    /*  APPLICATION CODE GOES HERE
+     *
+     *  This code will typically include at least one
+     *  directive which causes the calling task to
+     *  give up the processor.
+     */
+  @}
+@}
+@end example
+
+
+

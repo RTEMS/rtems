@@ -1,0 +1,12 @@
+@c
+@c  COPYRIGHT (c) 1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@ifinfo
+@node Preface, Thread Manager, Top, Top
+@end ifinfo
+@unnumbered Preface
+
+This is the test plan document for the POSIX API support for RTEMS.

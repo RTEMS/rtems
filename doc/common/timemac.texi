@@ -1,0 +1,34 @@
+@c
+@c  COPYRIGHT (c) 1988-1997.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c
+@c  Macros to help with the tables in this file
+@c
+
+@tex
+\global\advance \smallskipamount by -4pt
+ 
+\global\def\rtemstimetable{
+\vrule\strut##&
+\hbox to 3.0in{\enskip##\hfil}&
+\hbox to 0.75in{\enskip##\hfil}&
+\vrule##\cr
+\noalign{\hrule}
+}
+
+\global\def\rtemsendtimetable{}
+\global\def\rtemsonecase#1#2{
+& \bf #1\hfil& #2 & \cr\noalign{\hrule}
+}
+
+\global\def\rtemsdirective#1{
+& \bf #1 \hfil& & \cr\noalign{\hrule}
+}
+
+\global\def\rtemscase#1#2{
+& \hskip 0.3in #1\hfil& #2 & \cr\noalign{\hrule}
+}
+
+@end tex

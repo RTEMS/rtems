@@ -1,0 +1,38 @@
+@c
+@c  COPYRIGHT (c) 1988-1997.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@ifinfo
+@node Preface, CPU Model Dependent Features, Top, Top
+@end ifinfo
+@unnumbered Preface
+
+The Real Time Executive for Multiprocessor Systems
+(RTEMS) is designed to be portable across multiple processor
+architectures.  However, the nature of real-time systems makes
+it essential that the application designer understand certain
+processor dependent implementation details.  These processor
+dependencies include calling convention, board support package
+issues, interrupt processing, exact RTEMS memory requirements,
+performance data, header files, and the assembly language
+interface to the executive.
+
+For information on the i960CA and the i960 processor
+family in general, refer to the following documents:
+
+@itemize @bullet
+@item @cite{80960CA User's Manual, Intel, Order No. 270710}.
+
+@item @cite{32-Bit Embedded Controller Handbook, Intel, Order No.  270647}.
+
+@item @cite{Glenford J. Meyers and David L. Budde. The 80960
+Microprocessor Architecture. Wiley. New York. 1988}.
+@end itemize
+
+It is highly recommended that the i960CA RTEMS
+application developer obtain and become familiar with Intel's
+i960CA User's Manual.
+
+

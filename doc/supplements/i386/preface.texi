@@ -1,0 +1,39 @@
+@c
+@c  COPYRIGHT (c) 1988-1997.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@ifinfo
+@node Preface, CPU Model Dependent Features, Top, Top
+@end ifinfo
+@unnumbered Preface
+
+The Real Time Executive for Multiprocessor Systems
+(RTEMS) is designed to be portable across multiple processor
+architectures.  However, the nature of real-time systems makes
+it essential that the application designer understand certain
+processor dependent implementation details.  These processor
+dependencies include calling convention, board support package
+issues, interrupt processing, exact RTEMS memory requirements,
+performance data, header files, and the assembly language
+interface to the executive.
+
+For information on the i386 processor, refer to the
+following documents:
+
+@itemize @bullet
+@item @cite{386 Programmer's Reference Manual, Intel, Order No.  230985-002}.
+
+@item @cite{386 Microprocessor Hardware Reference Manual, Intel,
+Order No. 231732-003}.
+
+@item @cite{80386 System Software Writer's Guide, Intel, Order No.  231499-001}.
+
+@item @cite{80387 Programmer's Reference Manual, Intel, Order No.  231917-001}.
+@end itemize
+
+It is highly recommended that the i386 RTEMS
+application developer obtain and become familiar with Intel's
+386 Programmer's Reference Manual.
+

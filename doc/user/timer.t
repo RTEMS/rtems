@@ -1,0 +1,441 @@
+@c
+@c  COPYRIGHT (c) 1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@ifinfo
+@node Timer Manager, Timer Manager Introduction, CLOCK_TICK - Announce a clock tick, Top
+@end ifinfo
+@chapter Timer Manager
+@ifinfo
+@menu
+* Timer Manager Introduction::
+* Timer Manager Background::
+* Timer Manager Operations::
+* Timer Manager Directives::
+@end menu
+@end ifinfo
+
+@ifinfo
+@node Timer Manager Introduction, Timer Manager Background, Timer Manager, Timer Manager
+@end ifinfo
+@section Introduction
+
+The timer manager provides support for timer
+facilities.  The directives provided by the timer manager are:
+
+@itemize @bullet
+@item @code{timer_create} - Create a timer
+@item @code{timer_ident} - Get ID of a timer
+@item @code{timer_cancel} - Cancel a timer
+@item @code{timer_delete} - Delete a timer
+@item @code{timer_fire_after} - Fire timer after interval
+@item @code{timer_fire_when} - Fire timer when specified
+@item @code{timer_reset} - Reset an interval timer
+@end itemize
+
+
+@ifinfo
+@node Timer Manager Background, Timers, Timer Manager Introduction, Timer Manager
+@end ifinfo
+@section Background
+@ifinfo
+@menu
+* Timers::
+* Timer Service Routines::
+@end menu
+@end ifinfo
+
+@ifinfo
+@node Timers, Timer Service Routines, Timer Manager Background, Timer Manager Background
+@end ifinfo
+@subsection Timers
+
+A timer is an RTEMS object which allows the
+application to schedule operations to occur at specific times in
+the future.  User supplied timer service routines are invoked by
+the clock_tick directive when the timer fires.  Timer service
+routines may perform any operations or directives which normally
+would be performed by the application code which invoked the
+clock_tick directive.
+
+The timer can be used to implement watchdog routines
+which only fire to denote that an application error has
+occurred.  The timer is reset at specific points in the
+application to insure that the watchdog does not fire.  Thus, if
+the application does not reset the watchdog timer, then the
+timer service routine will fire to indicate that the application
+has failed to reach a reset point.  This use of a timer is
+sometimes referred to as a "keep alive" or a "deadman" timer.
+
+@ifinfo
+@node Timer Service Routines, Timer Manager Operations, Timers, Timer Manager Background
+@end ifinfo
+@subsection Timer Service Routines
+
+The timer service routine should adhere to C calling
+conventions and have a prototype similar to the following::
+
+@example
+rtems_timer_service_routine user_routine(
+  rtems_id   timer_id,
+  void      *user_data
+);
+@end example
+
+
+
+Where the timer_id parameter is the RTEMS object ID
+of the timer which is being fired and user_data is a pointer to
+user-defined information which may be utilized by the timer
+service routine.  The argument user_data may be NULL.
+
+@ifinfo
+@node Timer Manager Operations, Creating a Timer, Timer Service Routines, Timer Manager
+@end ifinfo
+@section Operations
+@ifinfo
+@menu
+* Creating a Timer::
+* Obtaining Timer IDs::
+* Initiating an Interval Timer::
+* Initiating a Time of Day Timer::
+* Canceling a Timer::
+* Resetting a Timer::
+* Deleting a Timer::
+@end menu
+@end ifinfo
+
+@ifinfo
+@node Creating a Timer, Obtaining Timer IDs, Timer Manager Operations, Timer Manager Operations
+@end ifinfo
+@subsection Creating a Timer
+
+The timer_create directive creates a timer by
+allocating a Timer Control Block (TMCB), assigning the timer a
+user-specified name, and assigning it a timer ID.  Newly created
+timers do not have a timer service routine associated with them
+and are not active.
+
+@ifinfo
+@node Obtaining Timer IDs, Initiating an Interval Timer, Creating a Timer, Timer Manager Operations
+@end ifinfo
+@subsection Obtaining Timer IDs
+
+When a timer is created, RTEMS generates a unique
+timer ID and assigns it to the created timer until it is
+deleted.  The timer ID may be obtained by either of two methods.
+First, as the result of an invocation of the timer_create
+directive, the timer ID is stored in a user provided location.
+Second, the timer ID may be obtained later using the timer_ident
+directive.  The timer ID is used by other directives to
+manipulate this timer.
+
+@ifinfo
+@node Initiating an Interval Timer, Initiating a Time of Day Timer, Obtaining Timer IDs, Timer Manager Operations
+@end ifinfo
+@subsection Initiating an Interval Timer
+
+The timer_fire_after directive initiates a timer to
+fire a user provided timer service routine after the specified
+number of clock ticks have elapsed.  When the interval has
+elapsed, the timer service routine will be invoked from the
+clock_tick directive.
+
+@ifinfo
+@node Initiating a Time of Day Timer, Canceling a Timer, Initiating an Interval Timer, Timer Manager Operations
+@end ifinfo
+@subsection Initiating a Time of Day Timer
+
+The timer_fire_when directive initiates a timer to
+fire a user provided timer service routine when the specified
+time of day has been reached.  When the interval has elapsed,
+the timer service routine will be invoked from the clock_tick
+directive.
+
+@ifinfo
+@node Canceling a Timer, Resetting a Timer, Initiating a Time of Day Timer, Timer Manager Operations
+@end ifinfo
+@subsection Canceling a Timer
+
+The timer_cancel directive is used to halt the
+specified timer.  Once canceled, the timer service routine will
+not fire unless the timer is reinitiated.  The timer can be
+reinitiated using the timer_reset, timer_fire_after, and
+timer_fire_when directives.
+
+@ifinfo
+@node Resetting a Timer, Deleting a Timer, Canceling a Timer, Timer Manager Operations
+@end ifinfo
+@subsection Resetting a Timer
+
+The timer_reset directive is used to restore an
+interval timer initiated by a previous invocation of
+timer_fire_after to its original interval length.  The timer
+service routine is not changed or fired by this directive.
+
+@ifinfo
+@node Deleting a Timer, Timer Manager Directives, Resetting a Timer, Timer Manager Operations
+@end ifinfo
+@subsection Deleting a Timer
+
+The timer_delete directive is used to delete a timer.
+If the timer is running and has not expired, the timer is
+automatically canceled.  The timer's control block is returned
+to the TMCB free list when it is deleted.  A timer can be
+deleted by a task other than the task which created the timer.
+Any subsequent references to the timer's name and ID are invalid.
+
+@ifinfo
+@node Timer Manager Directives, TIMER_CREATE - Create a timer, Deleting a Timer, Timer Manager
+@end ifinfo
+@section Directives
+@ifinfo
+@menu
+* TIMER_CREATE - Create a timer::
+* TIMER_IDENT - Get ID of a timer::
+* TIMER_CANCEL - Cancel a timer::
+* TIMER_DELETE - Delete a timer::
+* TIMER_FIRE_AFTER - Fire timer after interval::
+* TIMER_FIRE_WHEN - Fire timer when specified::
+* TIMER_RESET - Reset an interval timer::
+@end menu
+@end ifinfo
+
+This section details the timer manager's directives.
+A subsection is dedicated to each of this manager's directives
+and describes the calling sequence, related constants, usage,
+and status codes.
+
+@page
+@ifinfo
+@node TIMER_CREATE - Create a timer, TIMER_IDENT - Get ID of a timer, Timer Manager Directives, Timer Manager Directives
+@end ifinfo
+@subsection TIMER_CREATE - Create a timer
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_status_code rtems_timer_create(
+  rtems_name  name,
+  rtems_id   *id
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+@code{SUCCESSFUL} - timer created successfully@*
+@code{INVALID_NAME} - invalid timer name@*
+@code{TOO_MANY} - too many timers created
+
+@subheading DESCRIPTION:
+
+This directive creates a timer.  The assigned timer
+id is returned in id.  This id is used to access the timer with
+other timer manager directives.  For control and maintenance of
+the timer, RTEMS allocates a TMCB from the local TMCB free pool
+and initializes it.
+
+@subheading NOTES:
+
+This directive will not cause the calling task to be
+preempted.
+
+@page
+@ifinfo
+@node TIMER_IDENT - Get ID of a timer, TIMER_CANCEL - Cancel a timer, TIMER_CREATE - Create a timer, Timer Manager Directives
+@end ifinfo
+@subsection TIMER_IDENT - Get ID of a timer
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_status_code rtems_timer_ident(
+  rtems_name  name,
+  rtems_id   *id
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+@code{SUCCESSFUL} - timer identified successfully@*
+@code{INVALID_NAME} - timer name not found
+
+@subheading DESCRIPTION:
+
+This directive obtains the timer id associated with
+the timer name to be acquired.  If the timer name is not unique,
+then the timer id will match one of the timers with that name.
+However, this timer id is not guaranteed to correspond to the
+desired timer.  The timer id is used to access this timer in
+other timer related directives.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be
+preempted.
+
+@page
+@ifinfo
+@node TIMER_CANCEL - Cancel a timer, TIMER_DELETE - Delete a timer, TIMER_IDENT - Get ID of a timer, Timer Manager Directives
+@end ifinfo
+@subsection TIMER_CANCEL - Cancel a timer
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_status_code rtems_timer_cancel(
+  rtems_id id
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+@code{SUCCESSFUL} - timer canceled successfully@*
+@code{INVALID_ID} - invalid timer id
+
+@subheading DESCRIPTION:
+
+This directive cancels the timer id.  This timer will
+be reinitiated by the next invocation of timer_reset,
+timer_fire_after, or timer_fire_when with id.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be preempted.
+
+@page
+@ifinfo
+@node TIMER_DELETE - Delete a timer, TIMER_FIRE_AFTER - Fire timer after interval, TIMER_CANCEL - Cancel a timer, Timer Manager Directives
+@end ifinfo
+@subsection TIMER_DELETE - Delete a timer
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_status_code rtems_timer_delete(
+  rtems_id id
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+@code{SUCCESSFUL} - timer deleted successfully@*
+@code{INVALID_ID} - invalid timer id
+
+@subheading DESCRIPTION:
+
+This directive deletes the timer specified by id.  If
+the timer is running, it is automatically canceled.  The TMCB
+for the deleted timer is reclaimed by RTEMS.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be
+preempted.
+
+A timer can be deleted by a task other than the task
+which created the timer.
+
+@page
+@ifinfo
+@node TIMER_FIRE_AFTER - Fire timer after interval, TIMER_FIRE_WHEN - Fire timer when specified, TIMER_DELETE - Delete a timer, Timer Manager Directives
+@end ifinfo
+@subsection TIMER_FIRE_AFTER - Fire timer after interval
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_status_code rtems_timer_fire_after(
+  rtems_id                           id,
+  rtems_interval                     ticks,
+  rtems_timer_service_routine_entry  routine,
+  void                              *user_data
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+@code{SUCCESSFUL} - timer initiated successfully@*
+@code{INVALID_ID} - invalid timer id@*
+@code{INVALID_NUMBER} - invalid interval
+
+@subheading DESCRIPTION:
+
+This directive initiates the timer specified by id.
+If the timer is running, it is automatically canceled before
+being initiated.  The timer is scheduled to fire after an
+interval ticks clock ticks has passed.  When the timer fires,
+the timer service routine routine will be invoked with the
+argument user_data.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be
+preempted.
+
+@page
+@ifinfo
+@node TIMER_FIRE_WHEN - Fire timer when specified, TIMER_RESET - Reset an interval timer, TIMER_FIRE_AFTER - Fire timer after interval, Timer Manager Directives
+@end ifinfo
+@subsection TIMER_FIRE_WHEN - Fire timer when specified
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_status_code rtems_timer_fire_when(
+  rtems_id                           id,
+  rtems_time_of_day                 *wall_time,
+  rtems_timer_service_routine_entry  routine,
+  void                              *user_data
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+@code{SUCCESSFUL} - timer initiated successfully@*
+@code{INVALID_ID} - invalid timer id@*
+@code{NOT_DEFINED} - system date and time is not set@*
+@code{INVALID_CLOCK} - invalid time of day
+
+@subheading DESCRIPTION:
+
+This directive initiates the timer specified by id.
+If the timer is running, it is automatically canceled before
+being initiated.  The timer is scheduled to fire at the time of
+day specified by wall_time.  When the timer fires, the timer
+service routine routine will be invoked with the argument
+user_data.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be
+preempted.
+
+@page
+@ifinfo
+@node TIMER_RESET - Reset an interval timer, Semaphore Manager, TIMER_FIRE_WHEN - Fire timer when specified, Timer Manager Directives
+@end ifinfo
+@subsection TIMER_RESET - Reset an interval timer
+
+@subheading CALLING SEQUENCE:
+
+@example
+rtems_status_code rtems_timer_reset(
+  rtems_id   id
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+@code{SUCCESSFUL} - timer reset successfully@*
+@code{INVALID_ID} - invalid timer id@*
+@code{NOT_DEFINED} - attempted to reset a when timer
+
+@subheading DESCRIPTION:
+
+This directive resets the timer associated with id.
+This timer must have been previously initiated with a
+timer_fire_after directive.  If active the timer is canceled,
+after which the timer is reinitiated using the same interval and
+timer service routine which the original timer_fire_after
+directive used.
+
+@subheading NOTES:
+
+This directive will not cause the running task to be preempted.
+

@@ -1,0 +1,33 @@
+
+Tools Required
+==============
+The following tools are used in the production of this documentation:
+
+TeX
+texinfo 3.7
+texi2www-960103
+
+This was used by the authors to generate the directory tree figure
+in the texinfo printed version:
+
+tree (from the CTAN Archives -- see http://jasper.ora.com/ctan.html)
+
+Installation
+============
+1.  Edit replace-word so it references perl in the correct location.
+
+2.  Edit Make.config and localize it.
+
+3.  Edit do_docs and fix basedir
+
+4.  Create the installation point for the html and info files.
+
+5.  Copy texi2www gif files into the main rtems html install directory.
+
+
+Use do_docs to:
+
+do_docs info
+do_docs html
+do_docs clean
+
