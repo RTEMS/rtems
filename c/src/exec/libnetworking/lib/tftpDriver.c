@@ -378,7 +378,7 @@ getPacket (struct tftpStream *tp, int retryCount)
             }
         }
         else {
-            printf ("TFTP: %d0-byte packet\n", len);
+            printf ("TFTP: %d-byte packet\n", len);
         }
     }
 #endif
@@ -725,9 +725,10 @@ static int rtems_tftp_open_worker(
             }
             if (tp->writing
              && (opcode == TFTP_OPCODE_ACK)
-             && (ntohs (tp->pkbuf.tftpACK.blocknum) == 0)) {
+             && ((ntohs (tp->pkbuf.tftpACK.blocknum) == 0)
+              || (ntohs (tp->pkbuf.tftpACK.blocknum) == 1))) {
                 tp->nused = 0;
-                tp->blocknum = 1;
+                tp->blocknum = ntohs (tp->pkbuf.tftpACK.blocknum);
                 break;
             }
             if (opcode == TFTP_OPCODE_ERROR) {
@@ -879,17 +880,22 @@ static int rtems_tftp_flush ( struct tftpStream *tp )
         tp->pkbuf.tftpDATA.blocknum = htons (tp->blocknum);
 #ifdef RTEMS_TFTP_DRIVER_DEBUG
         if (rtems_tftp_driver_debug)
-            printf ("TFTP: SEND %d\n", tp->blocknum);
+            printf ("TFTP: SEND %d (%d)\n", tp->blocknum, tp->nused);
 #endif
         if (sendto (tp->socket, (char *)&tp->pkbuf, wlen, 0, 
                                         (struct sockaddr *)&tp->farAddress,
                                         sizeof tp->farAddress) < 0)
             return EIO;
         rlen = getPacket (tp, retryCount);
+        /*
+         * Our last packet won't necessarily be acknowledged!
+         */
+        if ((rlen < 0) && (tp->nused < sizeof tp->pkbuf.tftpDATA.data))
+                return 0;
         if (rlen >= (int)sizeof tp->pkbuf.tftpACK) {
             int opcode = ntohs (tp->pkbuf.tftpACK.opcode);
             if ((opcode == TFTP_OPCODE_ACK)
-             && (ntohs (tp->pkbuf.tftpACK.blocknum) == tp->blocknum)) {
+             && (ntohs (tp->pkbuf.tftpACK.blocknum) == (tp->blocknum + 1))) {
                 tp->nused = 0;
                 tp->blocknum++;
                 return 0;
@@ -993,7 +999,8 @@ static rtems_filesystem_node_types_t rtems_tftp_node_type(
      rtems_filesystem_location_info_t        *pathloc                 /* IN */
 )
 {
-    if (pathloc->node_access == NULL)
+    if ((pathloc->node_access == NULL)
+     || (pathloc->node_access == ROOT_NODE_ACCESS))
         return RTEMS_FILESYSTEM_MEMORY_FILE;
     return RTEMS_FILESYSTEM_DIRECTORY;
 }
