@@ -1,3 +1,9 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Fixed comments and renamed
+	CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK to
+	CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK to be consistent with other code.
+
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_PROJECT_ROOT.

@@ -513,10 +513,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  H8300 Specific Information:
  *
- *  XXX
+ *  It is highly unlikely the H8300 will get used in a multiprocessor system.
  */
 
-#define CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK 0
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0 
 
 /*
  *  This defines the number of entries in the ISR_Vector_table managed
