@@ -16,7 +16,7 @@ AS_IF([test -f aclocal/version.m4],[
 ])
 
 AC_CANONICAL_TARGET([])
-AM_INIT_AUTOMAKE([no-define foreign 1.8])
+AM_INIT_AUTOMAKE([no-define foreign 1.8.1])
 AM_MAINTAINER_MODE
 
 ## These option are only in here to let --help report all supported

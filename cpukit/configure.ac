@@ -9,7 +9,7 @@ RTEMS_TOP(..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define nostdinc subdir-objects foreign 1.8])
+AM_INIT_AUTOMAKE([no-define nostdinc subdir-objects foreign 1.8.1])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTILIB

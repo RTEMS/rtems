@@ -1,3 +1,7 @@
+2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Requires automake >= 1.8.1.
+
 2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-top.m4: Don't AC_SUBST PROJECT_ROOT.
