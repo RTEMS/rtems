@@ -511,6 +511,40 @@ This is required for POSIX Message Queues as well.]
 @item ena_int - Stub, Needs to be Fleshed Out
 @item chg_iXX - Stub, Needs to be Fleshed Out
 @item ref_iXX - Stub, Needs to be Fleshed Out
+
+@item Notes:
+@itemize @bullet
+@item This quote from the ITRON specification needs to be thought about:@*
+@*@i{"When an interrupt is invoked, the interrupt handler defined with
+this system call is started directly by the
+interrupt processing mechanism of the CPU hardware.  Accordingly, code at the
+beginning and end of an interrupt handler must save and restore any registers
+used by the interrupt handler."}@*@*
+Based on another comment, in the ret_int description, I think this means
+that RTEMS will not support the TA_ASM style of interrupt handlers -- 
+only the TA_HLNG style.@*@*
+@i{When TA_HLNG is specified, a high-level language environment setting
+program (a high-level language support routine) is called before branching
+to the inthdr address.  The least significant bit (LSB) of the system
+attribute bits is used for this specification.}
+
+@item Specification allows special "interrupt-only" versions of system
+calls named i???_??? (i.e. sig_sem and isig_sem).  This does not seem
+to be something that would be implemented with RTEMS.  We could provide
+macros mapping them onto the default versions if this is an issue.
+
+@item How this operates versus the behavior of a true TRON chip is
+up for discussion.
+
+@item ret_wup is questionable in only high-level language ISRs.
+
+@item dis_int and ena_int refer to a specific interrupt number.  These
+may require hooking back out to the BSP.
+
+@item for chg_iXX and reg_iXX, the XX should be replaced with something
+that is meaningful on a particular CPU.
+@end itemize
+
 @end itemize
 
 @item Executive Modifications
@@ -565,6 +599,16 @@ This is required for POSIX Message Queues as well.]
 @item tget_blk - Stub, Needs to be Fleshed Out
 @item rel_blk - Stub, Needs to be Fleshed Out
 @item ref_mpl - Stub, Needs to be Fleshed Out
+
+@item Notes:
+@itemize @bullet
+@item Implement Using SuperCore Heap Handler
+@item Similar to Region in Classic API with Blocking
+@item FIFO or Priority Task Blocking
+@item Specification Deliberately Open on Allocation Algorithm
+@item Multiple Tasks Can be Unblocked by a single rel_blk
+@end itemize
+
 @end itemize
 
 @item Executive Modifications
@@ -619,6 +663,16 @@ This is required for POSIX Message Queues as well.]
 @item tget_blf - Stub, Needs to be Fleshed Out
 @item rel_blf - Stub, Needs to be Fleshed Out
 @item ref_mpf - Stub, Needs to be Fleshed Out
+
+@item Notes:
+@itemize @bullet
+@item Implement Using SuperCore Chain Handler
+@item Similar to Partition in Classic API with Blocking
+@item FIFO or Priority Task Blocking
+@item Specification Deliberately Open on Allocation Algorithm
+@item Should add Blocking to Classic API Partition at Same Time
+@end itemize
+
 @end itemize
 
 @item Executive Modifications
@@ -675,6 +729,17 @@ This is required for POSIX Message Queues as well.]
 @item def_alm - Stub, Needs to be Fleshed Out
 @item ref_alm - Stub, Needs to be Fleshed Out
 @item ret_tmr - Stub, Needs to be Fleshed Out
+
+@item Notes:
+@itemize @bullet
+@item Need to Implement Time Conversion Routines
+@item Epoch is January 1, 1985, 00:00:00 am (GMT).
+@item Cyclic and Alarm Handlers may be TA_ASM or TA_HLNG.
+@item Alarms may be Absolute or Relative Time based.
+@item May Want to Implement a Timer Server Task
+@item Termination via ret_tmr is Not Consistent with Current RTEMS Timers.
+@end itemize
+
 @end itemize
 
 @item Executive Modifications
@@ -727,6 +792,14 @@ This is required for POSIX Message Queues as well.]
 @item ref_cfg - Stub, Needs to be Fleshed Out
 @item def_svc - Stub, Needs to be Fleshed Out
 @item def_exc - Stub, Needs to be Fleshed Out
+
+@item Notes:
+@itemize @bullet
+@item May Have to Obtain ITRON "OS Maker" Id
+@item - def_svc seems to imply a trap handler interface
+@item - def_exc needs to be examined.
+@end itemize
+
 @end itemize
 
 @item Executive Modifications
@@ -778,6 +851,13 @@ This is required for POSIX Message Queues as well.]
 @item nwri_dat - Stub, Needs to be Fleshed Out
 @item nget_nod - Stub, Needs to be Fleshed Out
 @item nget_ver - Stub, Needs to be Fleshed Out
+
+@item Notes:
+@itemize @bullet
+@item None of these are difficult to implement on top of MPCI
+@item MP Packet formats are well-defined.
+@end itemize
+
 @end itemize
 
 @item Executive Modifications
