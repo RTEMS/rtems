@@ -14,7 +14,7 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 #include <rtems/core/chain.h>
 #include <rtems/core/isr.h>
 #include <rtems/core/coremsg.h>

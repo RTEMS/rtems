@@ -40,7 +40,7 @@
 #include <rtems/core/thread.h>
 #include <rtems/core/threadq.h>
 #include <rtems/core/mpci.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 #include <rtems/core/interr.h>
 

@@ -27,7 +27,7 @@
 #include <rtems/core/userext.h>
 #include <rtems/core/wkspace.h>
 #include <rtems/core/intthrd.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 /*PAGE
  *

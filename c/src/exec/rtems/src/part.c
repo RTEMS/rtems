@@ -20,7 +20,7 @@
 #include <rtems/core/object.h>
 #include <rtems/rtems/part.h>
 #include <rtems/core/thread.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 /*PAGE
  *
