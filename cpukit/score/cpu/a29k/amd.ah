@@ -3,7 +3,7 @@
 ;		 Initialization values for registers after RESET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-'  /* $Id */
+:  /* $Id$ */
 ;* File information and includes.
 
         .file   "amd.ah"
