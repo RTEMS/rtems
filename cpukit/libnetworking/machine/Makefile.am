@@ -5,8 +5,8 @@
 
 include_machinedir = $(includedir)/machine
 
-include_machine_HEADERS = conf.h cpu.h cpufunc.h endian.h in_cksum.h limits.h param.h \
-    types.h vmparam.h
+include_machine_HEADERS = conf.h cpu.h cpufunc.h endian.h in_cksum.h limits.h \
+    param.h vmparam.h
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/machine \
     $(include_machine_HEADERS:%=$(PROJECT_INCLUDE)/machine/%)

@@ -24,8 +24,8 @@ typedef	unsigned int		vm_size_t;
 #define _BSD_VA_LIST_	char *
 
 /* make sure we get the network versions of these */
-#include "../machine/types.h"
-#include "../machine/param.h"
+#include <machine/types.h>
+#include <machine/param.h>
 
 #include <sys/time.h>
 /*

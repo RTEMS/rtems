@@ -42,6 +42,7 @@
 #ifndef _SYS_SYSTM_H_
 #define	_SYS_SYSTM_H_
 
+#include <rtems/rtems_bsdnet_internal.h> /* for __BSD_VA_LIST__ */
 #include <machine/cpufunc.h>
 
 extern int securelevel;		/* system security level (see init(8)) */

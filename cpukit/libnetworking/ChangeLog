@@ -1,3 +1,13 @@
+2002-07-30	Joel Sherrill <joel@OARcorp.com>
+
+	* machine/types.h: Removed as a simpler version of this file is
+	now part of the RTEMS newlib support.
+	* machine/Makefile.am, machine/endian.h, nfs/bootp_subr.c,
+	rtems/rtems_bsdnet_internal.h, sys/Makefile.am, sys/systm.h:
+	Minor modifications to use the simpler machine/types.h.  Mostly
+	more complete sets of #include's to account for machine/types.h
+	no longer doing this.
+
 2002-07-30	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* netinet/in_cksum.c, netinet/in_cksum_arm.c: Added ARM in_cksum

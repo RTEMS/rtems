@@ -4,8 +4,9 @@
 
 include_sysdir = $(includedir)/sys
 
+# param.h now in newlib 30 July 2002 Joel
 include_sys_HEADERS = buf.h callout.h conf.h domain.h kernel.h libkern.h \
-    malloc.h mbuf.h mount.h param.h proc.h protosw.h queue.h reboot.h \
+    malloc.h mbuf.h mount.h proc.h protosw.h queue.h reboot.h \
     resourcevar.h rtprio.h select.h signalvar.h socket.h socketvar.h \
     sysctl.h syslimits.h syslog.h systm.h ttydefaults.h ucred.h \
     uio.h un.h

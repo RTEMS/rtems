@@ -5,7 +5,7 @@
 #ifndef _MACHINE_ENDIAN_H_
 #define _MACHINE_ENDIAN_H_
 
-#include <rtems/score/cpu.h>
+#include <rtems.h>
 
 /*
  * BSD-style endian declaration
