@@ -60,7 +60,7 @@ BEGIN_CODE
 | Delay is needed after doing I/O. We do it by writing to a non-existent port.
 +----------------------------------------------------------------------------*/
 SYM(delay):
-	outb	al, $0xED	# about 1uS delay
+	outb	al, $0x80	# about 1uS delay
 	ret
 
 /*-------------------------------------------------------------------------+
