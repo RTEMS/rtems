@@ -14,6 +14,7 @@
  *
  *  $Id$
  */
+
 #include <bsp/consoleIo.h>
 #include <libcpu/io.h>
 #include <libcpu/spr.h>
@@ -24,6 +25,7 @@
 #include <bsp.h>
 #include <libcpu/raw_exception.h>
 #include <bsp/motorola.h>
+#include <rtems/bspIo.h>
 
 /*
 #define SHOW_ISA_PCI_BRIDGE_SETTINGS

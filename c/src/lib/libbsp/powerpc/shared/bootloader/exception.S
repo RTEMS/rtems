@@ -104,8 +104,8 @@
  */
 #define DIRTY_MEANS_WRITABLE 	
 	
-#include <libcpu/cpu.h>
-#include "asm.h"	
+#include <asm.h>
+#include <rtems/score/cpu.h>
 #include "bootldr.h"
 
 /* 

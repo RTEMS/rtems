@@ -15,10 +15,10 @@
  * $Id$
  */
 
+#include <rtems/system.h>
 #include <sys/types.h>
 #include <libcpu/byteorder.h>
 #include <libcpu/page.h>
-#include <libcpu/cpu.h>
 #include <libcpu/mmu.h>
 #include "keyboard.h"
 #include <libcpu/io.h>

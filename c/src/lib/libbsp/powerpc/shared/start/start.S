@@ -11,10 +11,9 @@
  *
  */
 
-#include <libcpu/cpu.h>
+#include <asm.h>
+#include <rtems/score/cpu.h>
 #include <libcpu/io.h>
-#include <asm.h>               /* for targopts.h and PPC_HAS_FPU */
-#include <rtems/score/cpu.h>   /* for CPU_MINIMUM_STACK_FRAME_SIZE */
 
 #define SYNC \
 	sync; \

@@ -15,14 +15,15 @@
  * $Id$
  */
 
+#include <rtems/system.h>
 #include <sys/types.h>
 #include <string.h>
-#include <libcpu/cpu.h>
 #include "bootldr.h"
 #include <libcpu/spr.h>
 #include "zlib.h"
 #include <libcpu/page.h>
 #include <libcpu/byteorder.h>
+#include <rtems/bspIo.h>
 
 SPR_RW(DEC)
 SPR_RO(PVR)

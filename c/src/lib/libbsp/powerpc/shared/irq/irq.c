@@ -11,6 +11,7 @@
  *  $Id$
  */
   
+#include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/openpic.h>
@@ -18,7 +19,6 @@
 #include <rtems/score/apiext.h>
 #include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
-#include <libcpu/cpu.h>
 
 #define RAVEN_INTR_ACK_REG 0xfeff0030
 

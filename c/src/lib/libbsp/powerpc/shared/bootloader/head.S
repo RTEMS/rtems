@@ -15,10 +15,9 @@
  * $Id$
  */
 
+#include <asm.h>
+#include <rtems/score/cpu.h>
 #include "bootldr.h"
-#include <libcpu/cpu.h>
-#include <rtems/score/targopts.h>
-#include "asm.h"
 		
 #undef TEST_PPCBUG_CALLS	
 #define FRAME_SIZE 32
