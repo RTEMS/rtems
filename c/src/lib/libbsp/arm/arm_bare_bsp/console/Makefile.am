@@ -8,11 +8,11 @@ VPATH = @srcdir@:@srcdir@/../../shared/comm:@srcdir@/../../shared/io
 PGM = $(ARCH)/console.rel
 
 C_FILES = uart.c console.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 noinst_HEADERS = uart.h
 
-console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
+console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am

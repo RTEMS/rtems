@@ -5,7 +5,7 @@
 BSP_PIECES = clock console startup timer irq
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.o)
+OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
