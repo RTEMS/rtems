@@ -42,7 +42,6 @@ clock/Makefile
 console/Makefile
 leon_open_eth/Makefile
 gnatsupp/Makefile
-include/Makefile
 start/Makefile
 startup/Makefile
 timer/Makefile

@@ -40,7 +40,6 @@ RTEMS_BSPOPTS_HELP([HEAPSPACE_MB],
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 shmsupp/Makefile
 startup/Makefile
 timer/Makefile

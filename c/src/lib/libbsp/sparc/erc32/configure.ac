@@ -42,7 +42,6 @@ clock/Makefile
 console/Makefile
 erc32sonic/Makefile
 gnatsupp/Makefile
-include/Makefile
 start/Makefile
 startup/Makefile
 timer/Makefile
