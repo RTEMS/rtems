@@ -13,52 +13,52 @@ RTEMS is an open source operating system for embedded systems.
 This is the base for binutils regardless of target CPU.
 
 %post -n rtems-base-binutils
-  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test x"$f" != x"" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 
 %postun -n rtems-base-binutils
-  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test x"$f" != x"" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 
 %files -n rtems-base-binutils -f files
-%dir /opt/rtems/info
-%doc /opt/rtems/info/dir
-%doc /opt/rtems/info/as.info.gz
-%doc /opt/rtems/info/as.info-?.gz
-%doc /opt/rtems/info/bfd.info.gz
-%doc /opt/rtems/info/bfd.info-?.gz
-%doc /opt/rtems/info/binutils.info.gz
-%doc /opt/rtems/info/binutils.info-?.gz
-%doc /opt/rtems/info/ld.info.gz
-%doc /opt/rtems/info/ld.info-?.gz
-%doc /opt/rtems/info/gasp.info.gz
-%doc /opt/rtems/info/standards.info.gz
+%dir %{_prefix}/info
+%doc %{_prefix}/info/dir
+%doc %{_prefix}/info/as.info.gz
+%doc %{_prefix}/info/as.info-?.gz
+%doc %{_prefix}/info/bfd.info.gz
+%doc %{_prefix}/info/bfd.info-?.gz
+%doc %{_prefix}/info/binutils.info.gz
+%doc %{_prefix}/info/binutils.info-?.gz
+%doc %{_prefix}/info/ld.info.gz
+%doc %{_prefix}/info/ld.info-?.gz
+%doc %{_prefix}/info/gasp.info.gz
+%doc %{_prefix}/info/standards.info.gz
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
+%dir %{_prefix}/man
+%dir %{_prefix}/man/man1
 
-%dir /opt/rtems/include
-/opt/rtems/include/bfd.h
-/opt/rtems/include/ansidecl.h
-/opt/rtems/include/bfdlink.h
+%dir %{_prefix}/include
+%{_prefix}/include/bfd.h
+%{_prefix}/include/ansidecl.h
+%{_prefix}/include/bfdlink.h
 
-%dir /opt/rtems/lib
-/opt/rtems/lib/libbfd*
-/opt/rtems/lib/libiberty*
-/opt/rtems/lib/libopcodes*
+%dir %{_prefix}/lib
+%{_prefix}/lib/libbfd*
+%{_prefix}/lib/libiberty*
+%{_prefix}/lib/libopcodes*
 
-%dir /opt/rtems/share
-%dir /opt/rtems/share/locale
+%dir %{_prefix}/share
+%dir %{_prefix}/share/locale
 

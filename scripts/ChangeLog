@@ -1,3 +1,19 @@
+2002-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add AC_PREFIX_DEFAULT([/opt/rtems]).
+	* mkbinutilsspec.in: Add propagation of @prefix@.
+	* binutils/base-binutils.add: 
+	Let %post and %unpost apply %{_prefix}.
+	Apply %{_prefix} instead of /opt/rtems.
+	* binutils/binutils.add: Update copyright notice.
+	Add _prefix. 
+	Apply %{_prefix} instead of /opt/rtems.
+	Remove -a 0 in %setup.
+ 	Rework hack to SuSE's rpm screwing up %{_target}.
+	Replace ARGS with CONFIGURE_ARGS.
+	* binutils/target-binutils.add:
+	Apply %{_prefix} instead of /opt/rtems.
+
 2002-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* binutils/binutils.add: Add initial support for building

@@ -1,10 +1,12 @@
 #
 # spec file for binutils package targetting rtems
 # 
-# Copyright  (c)  1999,2000 OARCorp, Huntsville, AL
+# Copyright  (c)  1999,2000,2002 OARCorp, Huntsville, AL
 #
 # please send bugfixes or comments to joel@OARcorp.com
 #
+
+%define _prefix	@prefix@
 
 Vendor:       OAR Corporation
 Distribution: Linux
@@ -16,7 +18,7 @@ License:      GPL/LGPL
 
 Autoreqprov:  	off
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
-Prefix:		/opt
+Prefix:		%{_prefix}
 BuildRoot:	%{_tmppath}/@target_alias@-binutils
 
 Version:      	@binutils_version@
@@ -43,19 +45,20 @@ This is binutils sources with patches for RTEMS.
 
 %prep
 # untar the sources inside @target_alias@-binutils
-%setup -c -n @target_alias@-binutils -a 0
+%setup -c -n @target_alias@-binutils
 
 %patch0 -p0
   test -d build || mkdir build
 
 %build
-  cd build
-# Ugly hack to work around a bug in SuSE's rpm
-%if "${_build_cpu}-%{_build_os}" != "%{_target_cpu}-%{_target_os}"
-  ARGS="--build=%{_build} --host=%{_target}"   
+# HACK: This should be %{target} != %{build}, but SuSE's rpm screws it.
+%if "%{target_os}" != "%{build_os}"
+  CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
 %endif
-  ../binutils-@binutils_version@/configure $ARGS --target=@target_alias@ \
-    --verbose --prefix=/opt/rtems 
+
+  cd build
+  ../binutils-@binutils_version@/configure ${CONFIGURE_ARGS} --target=@target_alias@ \
+    --verbose --prefix=%{_prefix}
 
   make all
   make info
@@ -63,31 +66,31 @@ This is binutils sources with patches for RTEMS.
 
 %install
   cd build
-  make prefix=$RPM_BUILD_ROOT/opt/rtems install
-  make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
+  make prefix=$RPM_BUILD_ROOT%{_prefix} install
+  make prefix=$RPM_BUILD_ROOT%{_prefix} install-info
 # A bug in binutils: binutils does not install share/locale
 # however it uses it
   ../binutils-@binutils_version@/mkinstalldirs \
-    $RPM_BUILD_ROOT/opt/rtems/share/locale
+    $RPM_BUILD_ROOT%{_prefix}/share/locale
 
 # gzip info files
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-? 2>/dev/null
 
-  if test -f $RPM_BUILD_ROOT/opt/rtems/info/configure.info.gz;
+  if test -f $RPM_BUILD_ROOT%{_prefix}/info/configure.info.gz;
   then
 # These are only present in binutils >= 2.9.5
-    find $RPM_BUILD_ROOT/opt/rtems/info -name 'configure.*' | \
+    find $RPM_BUILD_ROOT%{_prefix}/info -name 'configure.*' | \
       sed -e "s,^$RPM_BUILD_ROOT,,g" > ../files
   else
     touch ../files
   fi
 
 # We assume that info/dir exists when building the RPMs
-  rm -f $RPM_BUILD_ROOT/opt/rtems/info/dir
-  f=`find $RPM_BUILD_ROOT/opt/rtems/info -name '*.info.gz'`
+  rm -f $RPM_BUILD_ROOT%{_prefix}/info/dir
+  f=`find $RPM_BUILD_ROOT%{_prefix}/info -name '*.info.gz'`
   test x"$f" != x"" && for i in $f; do
-    install-info $i $RPM_BUILD_ROOT/opt/rtems/info/dir
+    install-info $i $RPM_BUILD_ROOT%{_prefix}/info/dir
   done
 
 %clean

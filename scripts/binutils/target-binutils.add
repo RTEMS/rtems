@@ -15,32 +15,32 @@ RTEMS is an open source operating system for embedded systems.
 This is the GNU binutils for RTEMS targetting @target_alias@.
 
 %files -n @target_alias@-binutils
-%doc /opt/rtems/man/man1/@target_alias@-*.1
+%doc %{_prefix}/man/man1/@target_alias@-*.1
 
-%dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-addr2line@exe_ext@
-/opt/rtems/bin/@target_alias@-ar@exe_ext@
-/opt/rtems/bin/@target_alias@-as@exe_ext@
-/opt/rtems/bin/@target_alias@-c++filt@exe_ext@
-/opt/rtems/bin/@target_alias@-gasp@exe_ext@
-/opt/rtems/bin/@target_alias@-ld@exe_ext@
-/opt/rtems/bin/@target_alias@-nm@exe_ext@
-/opt/rtems/bin/@target_alias@-objcopy@exe_ext@
-/opt/rtems/bin/@target_alias@-objdump@exe_ext@
-/opt/rtems/bin/@target_alias@-ranlib@exe_ext@
-/opt/rtems/bin/@target_alias@-readelf@exe_ext@
-/opt/rtems/bin/@target_alias@-size@exe_ext@
-/opt/rtems/bin/@target_alias@-strings@exe_ext@
-/opt/rtems/bin/@target_alias@-strip@exe_ext@
+%dir %{_prefix}/bin
+%{_prefix}/bin/@target_alias@-addr2line@exe_ext@
+%{_prefix}/bin/@target_alias@-ar@exe_ext@
+%{_prefix}/bin/@target_alias@-as@exe_ext@
+%{_prefix}/bin/@target_alias@-c++filt@exe_ext@
+%{_prefix}/bin/@target_alias@-gasp@exe_ext@
+%{_prefix}/bin/@target_alias@-ld@exe_ext@
+%{_prefix}/bin/@target_alias@-nm@exe_ext@
+%{_prefix}/bin/@target_alias@-objcopy@exe_ext@
+%{_prefix}/bin/@target_alias@-objdump@exe_ext@
+%{_prefix}/bin/@target_alias@-ranlib@exe_ext@
+%{_prefix}/bin/@target_alias@-readelf@exe_ext@
+%{_prefix}/bin/@target_alias@-size@exe_ext@
+%{_prefix}/bin/@target_alias@-strings@exe_ext@
+%{_prefix}/bin/@target_alias@-strip@exe_ext@
 
-%dir /opt/rtems/@target_alias@
-%dir /opt/rtems/@target_alias@/bin
-/opt/rtems/@target_alias@/bin/ar@exe_ext@
-/opt/rtems/@target_alias@/bin/as@exe_ext@
-/opt/rtems/@target_alias@/bin/ld@exe_ext@
-/opt/rtems/@target_alias@/bin/nm@exe_ext@
-/opt/rtems/@target_alias@/bin/ranlib@exe_ext@
-/opt/rtems/@target_alias@/bin/strip@exe_ext@
+%dir %{_prefix}/@target_alias@
+%dir %{_prefix}/@target_alias@/bin
+%{_prefix}/@target_alias@/bin/ar@exe_ext@
+%{_prefix}/@target_alias@/bin/as@exe_ext@
+%{_prefix}/@target_alias@/bin/ld@exe_ext@
+%{_prefix}/@target_alias@/bin/nm@exe_ext@
+%{_prefix}/@target_alias@/bin/ranlib@exe_ext@
+%{_prefix}/@target_alias@/bin/strip@exe_ext@
 
-%dir /opt/rtems/@target_alias@/lib
-/opt/rtems/@target_alias@/lib/ldscripts
+%dir %{_prefix}/@target_alias@/lib
+%{_prefix}/@target_alias@/lib/ldscripts
