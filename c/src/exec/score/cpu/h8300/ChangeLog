@@ -1,3 +1,7 @@
+2002-07-04	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Remove reference to deprecated rtems.c.
+
 2002-07-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems.c: Remove.

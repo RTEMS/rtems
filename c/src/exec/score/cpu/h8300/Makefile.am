@@ -31,7 +31,7 @@ include_rtems_score_HEADERS = \
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
-C_FILES = cpu.c rtems.c
+C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 S_FILES = cpu_asm.S
