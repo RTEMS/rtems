@@ -166,6 +166,34 @@ void *POSIX_Init(
   assert( siginfo.si_code == SI_USER );
   assert( siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
  
+  /* try out a process signal */
+
+  empty_line();
+  puts( "Init: kill with SIGUSR2." );
+  status = kill( getpid(), SIGUSR2 );
+  assert( !status );
+
+  siginfo.si_code = -1;
+  siginfo.si_signo = -1;
+  siginfo.si_value.sival_int = -1;
+
+  status = sigemptyset( &waitset );
+  assert( !status );
+
+  status = sigaddset( &waitset, SIGUSR1 );
+  assert( !status );
+
+  status = sigaddset( &waitset, SIGUSR2 );
+  assert( !status );
+
+  puts( "Init: waiting on any signal for 3 seconds." );
+  signo = sigtimedwait( &waitset, &siginfo, &timeout );
+  printf( "Init: received (%d) SIGUSR2=%d\n", siginfo.si_signo, SIGUSR2 );
+  assert( signo == SIGUSR2 );
+  assert( siginfo.si_signo == SIGUSR2 );
+  assert( siginfo.si_code == SI_USER );
+  assert( siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
+
   /* exit this thread */
 
   puts( "*** END OF POSIX TEST 3 ***" );
