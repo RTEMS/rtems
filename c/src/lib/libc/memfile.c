@@ -734,6 +734,9 @@ MEMFILE_STATIC int IMFS_memfile_write(
     assert( block_ptr );
     if ( !block_ptr )
       return copied;
+#if 0
+printf( "write %d at %d in %d: %*s\n", to_copy, start_offset, block, to_copy, src );
+#endif
     memcpy( &(*block_ptr)[ start_offset ], src, to_copy );
     src += to_copy;
     block++;
@@ -751,6 +754,9 @@ MEMFILE_STATIC int IMFS_memfile_write(
     assert( block_ptr );
     if ( !block_ptr )
       return copied;
+#if 0
+printf( "write %d in %d: %*s\n", to_copy, block, to_copy, src );
+#endif
     memcpy( &(*block_ptr)[ 0 ], src, to_copy );
     src += to_copy;
     block++;
@@ -770,6 +776,9 @@ MEMFILE_STATIC int IMFS_memfile_write(
     assert( block_ptr );
     if ( !block_ptr )
       return copied;
+#if 0
+printf( "write %d in %d: %*s\n", to_copy, block, to_copy, src );
+#endif
     memcpy( &(*block_ptr)[ 0 ], src, my_length );
     my_length = 0;
     copied += to_copy;
@@ -788,7 +797,30 @@ MEMFILE_STATIC int IMFS_memfile_write(
  *  TRUE, then the block is allocated.  Otherwise, it is an error.
  */
 
+#if 0
+block_p *IMFS_memfile_get_block_pointer_DEBUG(
+   IMFS_jnode_t   *the_jnode,
+   unsigned int    block,
+   int             malloc_it
+);
+
 block_p *IMFS_memfile_get_block_pointer(
+   IMFS_jnode_t   *the_jnode,
+   unsigned int    block,
+   int             malloc_it
+)
+{
+  block_p *p;
+
+  p = IMFS_memfile_get_block_pointer_DEBUG( the_jnode, block, malloc_it );
+  printf( "(%d -> %p) ", block, p );
+  return p;
+}
+
+block_p *IMFS_memfile_get_block_pointer_DEBUG(
+#else
+block_p *IMFS_memfile_get_block_pointer(
+#endif
    IMFS_jnode_t   *the_jnode,
    unsigned int    block,
    int             malloc_it
@@ -880,7 +912,7 @@ fflush(stdout);
         p[ doubly ] = (block_p) p1;
       }
 
-      return (block_p *)&p[ singly ];
+      return (block_p *)&p1[ singly ];
     }
 
     if ( !p )
@@ -987,7 +1019,7 @@ void *memfile_alloc_block(void)
 }
 
 /*
- *  memfile_free_blocK
+ *  memfile_free_block
  *
  *  Free a block from an in-memory file.
  */
