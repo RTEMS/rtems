@@ -1,3 +1,9 @@
+2004-07-14	Joel Sherrill <joel@OARcorp.com>
+
+	PR 650/rtems
+	* src/coremsg.c: Check for mathemathical overflow when calculating
+	amount of memory to allocate for message buffers.
+
 2004-05-06	Joel Sherrill <joel@OARcorp.com>
 
 	PR 618/rtems
