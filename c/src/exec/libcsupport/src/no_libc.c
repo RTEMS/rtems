@@ -1,4 +1,3 @@
-#if  !defined(RTEMS_NEWLIB) && !defined(RTEMS_UNIX)
 
 /*  no_libc.h
  *
@@ -18,6 +17,7 @@
 
 
 #include <rtems.h>
+#if  !defined(RTEMS_NEWLIB) && !defined(RTEMS_UNIX)
 
 #include "libcsupport.h"
 #include "internal.h"

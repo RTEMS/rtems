@@ -349,7 +349,8 @@ int get_errno()
 
 #include <stdio.h>
 
-#if !defined(RTEMS_UNIX) && !defined(__GO32__) && !defined(_AM29K)
+/* #if !defined(RTEMS_UNIX) && !defined(__GO32__) && !defined(_AM29K) */
+#if !defined(RTEMS_UNIX) && !defined(_AM29K)
 void _exit(int status)
 {
     rtems_shutdown_executive(status);
@@ -376,14 +377,16 @@ pid_t __getpid(void)
 }
 #endif
 
-#if !defined(RTEMS_POSIX_API) || defined(__GO32__)
+/* #if !defined(RTEMS_POSIX_API) || defined(__GO32__) */
+#if !defined(RTEMS_POSIX_API)
 pid_t getpid(void)
 {
   return __getpid();
 }
 #endif
 
-#if !defined(RTEMS_POSIX_API) || defined(__GO32__)
+/* #if !defined(RTEMS_POSIX_API) || defined(__GO32__) */
+#if !defined(RTEMS_POSIX_API)
 int kill( pid_t pid, int sig )
 {
   return 0;
