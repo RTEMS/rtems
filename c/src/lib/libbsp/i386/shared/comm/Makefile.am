@@ -22,4 +22,4 @@ all-local: $(PREINSTALL_FILES)
 EXTRA_DIST = GDB.HOWTO i386-stub-glue.c i386-stub.c uart.c uart.h tty_drv.h \
     i386_io.h tty_drv.c gdb_glue.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am
