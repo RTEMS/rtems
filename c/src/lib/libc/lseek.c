@@ -22,15 +22,25 @@ off_t lseek(
 )
 {
   rtems_libio_t *iop;
+  off_t          old_offset;
+  off_t          status;
 
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
 
   /*
+   *  Check as many errors as possible before touching iop->offset.
+   */
+
+  if ( !iop->handlers->lseek )
+    set_errno_and_return_minus_one( ENOTSUP );
+
+  /*
    *  Now process the lseek().
    */
 
+  old_offset = iop->offset;
   switch ( whence ) {
     case SEEK_SET:
       iop->offset = offset;
@@ -41,18 +51,28 @@ off_t lseek(
       break;
 
     case SEEK_END:
-      iop->offset = iop->size - offset;
+      iop->offset = iop->size + offset;
       break;
 
     default:
-      errno = EINVAL;
-      return -1;
+      set_errno_and_return_minus_one( EINVAL );
   }
 
-  if ( !iop->handlers->lseek )
-    set_errno_and_return_minus_one( ENOTSUP );
+  /*
+   *  At this time, handlers assume iop->offset has the desired
+   *  new offset.
+   */
 
-  return (*iop->handlers->lseek)( iop, offset, whence );
+  status = (*iop->handlers->lseek)( iop, offset, whence );
+  if ( !status )
+    return 0;
+
+  /*
+   *  So if the operation failed, we have to restore iop->offset.
+   */
+
+  iop->offset = old_offset;
+  return status;
 }
 
 /*
