@@ -91,7 +91,11 @@ void DEBUG_puts(
  *
  */
 
-int console_write_support (int minor, const void *bufarg, int len)
+int console_write_support (
+  int minor,
+  const char *bufarg,
+  int len
+)
 {
   int nwrite = 0;
   const char *buf = bufarg;
