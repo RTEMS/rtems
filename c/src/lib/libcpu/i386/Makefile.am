@@ -16,17 +16,17 @@ include_libcpu_HEADERS += ../shared/include/cache.h
 noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = cache.c cache_.h ../shared/src/cache_aligned_malloc.c \
     ../shared/src/cache_manager.c ../shared/include/cache.h
-cache_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+cache_rel_CPPFLAGS = $(AM_CPPFLAGS)
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += score.rel
 score_rel_SOURCES = displayCpu.c cpuModel.S cpuModel.h idtr.S cpu.h
-score_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+score_rel_CPPFLAGS = $(AM_CPPFLAGS)
 score_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += page.rel
 page_rel_SOURCES = page.c cpu.h
-page_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+page_rel_CPPFLAGS = $(AM_CPPFLAGS)
 page_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 all-local: $(PREINSTALL_FILES)
