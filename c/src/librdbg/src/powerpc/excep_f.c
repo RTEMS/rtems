@@ -56,6 +56,18 @@ BreakPointExcHdl(CPU_Exception_frame *ctx)
   rtems_status_code status;
   rtems_id continueSemId;
 
+  /* T. Straumann, 1/16/2002: we must re-enable the floating point engine
+   *                          if the interrupted thread is FP. Otherwise,
+   *                          the semaphore primitives may crash when they
+   *                          try to save FP context while switching this
+   *                          thread...
+   */
+  if (ctx->EXC_SRR1 & 0x2000) {
+	register unsigned long msr;
+	__asm__ __volatile__("mfmsr %0":"=r"(msr));
+	__asm__ __volatile__("mtmsr %0"::"r"(msr|MSR_FP));
+  }
+
   if ( (justSaveContext) && (ctx->_EXC_number == ASM_SYS_VECTOR) ) {
     PushSavedExceptCtx (_Thread_Executing->Object.id, ctx);
     justSaveContext = 0;
@@ -114,7 +126,7 @@ BreakPointExcHdl(CPU_Exception_frame *ctx)
     printk("\t CTR = %x\n", ctx->EXC_CTR);
     printk("\t XER = %x\n", ctx->EXC_XER);
     printk("\t LR = %x\n", ctx->EXC_LR);
-    printk("\t MSR = %x\n", ctx->EXC_MSR);
+    printk("\t MSR = %x\n", ctx->EXC_SRR1);
 #endif
 
     status = rtems_semaphore_create (rtems_build_name('D', 'B', 'G', 'c'),
@@ -151,6 +163,11 @@ BreakPointExcHdl(CPU_Exception_frame *ctx)
 
     default:
       DPRINTF((" OTHER EXCEPTION !!!\n"));
+#ifdef DDEBUG
+	{ extern void BSP_printStackTrace();
+		BSP_printStackTrace(ctx);
+	}
+#endif
       rtems_semaphore_release( wakeupEventSemId );
       break;
     }

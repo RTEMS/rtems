@@ -1,3 +1,14 @@
+2002-01-18	Till Straumann <strauman@slac.stanford.edu>
+
+	* src/powerpc/excep_f.c: This patch addresses the following issues:
+	    - exception handler needs to enable MSR_FP if the interrupted
+	      thread is FP enabled.
+	    - printk message for MSR fixed and added stacktrace
+
+   	NOTE: this requires the stacktrace patch to
+	lib/libbsp/powerpc/shared/vectors/vector_init.c
+	(#ifdef DDEBUG only, however)
+
 2001-01-18	Joel Sherrill <joel@OARcorp.com>
 
 	* src/powerpc/new_exception_processing/remdeb_svc.c: Corrected 
