@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.4 no-installman
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 noinst_PROGRAMS=shgen
@@ -12,4 +12,11 @@ sci.h \
 sci.c \
 shgen.c
 
-include $(top_srcdir)/../../../automake/local.am
+if HELP2MAN
+man_MANS = shgen.1
+
+shgen.1: $(srcdir)/shgen.c
+	$(HELP2MAN) -N shgen >$@
+endif
+
+include $(top_srcdir)/../../../automake/host.am

@@ -12,4 +12,4 @@ Makefile.dir \
 Makefile.leaf \
 Makefile.lib
 
-include $(top_srcdir)/automake/local.am
+include $(top_srcdir)/automake/host.am

@@ -9,4 +9,4 @@ noinst_PROGRAMS=gensize
 
 gensize_SOURCES=gensize.c
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../../automake/host.am

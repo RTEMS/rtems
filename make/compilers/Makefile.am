@@ -10,4 +10,4 @@ gcc-portsw.cfg \
 gcc-target-default.cfg
 
 ## -------------------------------------------------------
-include $(top_srcdir)/automake/local.am
+include $(top_srcdir)/automake/host.am

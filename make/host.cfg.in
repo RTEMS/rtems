@@ -26,8 +26,6 @@ LN=@LN@
 MKDIR=mkdir
 CHMOD=chmod
 SED=sed
-# Anybody using this?
-# M4=@M4@
 
 # Global tools
 ifndef PACKHEX
@@ -74,7 +72,3 @@ INSTDATAFLAGS = -m 0644
 INSTLIBFLAGS  = -m 0644 
 INSTDIRFLAGS  = -m 0755 -d
 INSTINCFLAGS  = -m 0644
-
-ifndef INSTALL_DATA
-INSTALL_DATA = $(INSTALL) $(INSTDATAFLAGS)
-endif

@@ -32,7 +32,7 @@ OBJS = $(C_O_FILES)
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
-all-local: ${ARCH} ${OBJS}
+all: ${ARCH} ${OBJS}
 
 EXTRA_DIST = $(C_FILES)
 

@@ -39,7 +39,7 @@ AM_CPPFLAGS += -DNOSIGNAL -DCYGNUS -DNOMAIN
 
 LD_LIBS += -lm
 
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all: ${ARCH} $(TMPINSTALL_FILES)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

@@ -1,10 +1,8 @@
 #!/usr/bin/perl
 
-# use strict 'subs' ;
-# use strict 'vars' ;
-# use strict 'refs' ;
+use strict ;
 
-# use strict ;
+sub print_macro($$);
 
 #
 # Perl script to beautify and enhance RTEMS autoconf Makefile.ins
@@ -39,27 +37,6 @@ my @pieces = () ;
 my @files = () ;
 my @variants = () ;
 my @vars = () ;
-
-sub print_macro($$)
-{
-  my $line = $_[0] ;
-  my $input  = $_[1] ;
-  $input =~ s/\\\\/ /g;
-  my @l = split(' ',$input);
-
-  foreach (@l) { 
-    if ( ( length($line) + length($_) ) < 76 )
-    {
-          $line .= " $_";
-    }
-    else
-    {
-           print "$line \\\n";
-           $line = "    $_" ; 
-    }
-  }
-  print "$line\n" ;
-}
 
 # Strip off duplicate entries from a list
 sub purge($)
@@ -180,8 +157,8 @@ sub subst_line
   {
      my $files =`ls *.h 2>/dev/null`;
      print STDERR "WARNING: Replacing \"\(wildcard... in $_\n" ;
-     $line = "H_FILES =";
-     @l = split(' ',$files) ;
+     my $line = "H_FILES =";
+     my @l = split(' ',$files) ;
      foreach(@l) { $line .= " \$\(srcdir\)/$_"; }
      $line .= "\n" ;
      $_ = "$line" ;
@@ -618,7 +595,7 @@ if ( $experimental > 1 )
       {
         print "mkinstalldirs = \$(SHELL) \$(top_srcdir)/\@RTEMS_TOPdir\@/mkinstalldirs\n\n" ;
         my $line = join( ' ',@installdirs );
-        print_macro "INSTALLDIRS =", $line ;
+        &print_macro( "INSTALLDIRS =", $line );
 	print "\n\$(INSTALLDIRS):\n\t\@\$(mkinstalldirs) \$(INSTALLDIRS)\n\n" ;
 	$nl_seen = 1 ;
       }
@@ -633,12 +610,12 @@ if ( $experimental > 1 )
     }
     elsif ( /^\§4(.*)$/o  )
     { # pretty print a make variable
-      print_macro "$1 =", ${"var_$1"} ;
+      &print_macro( "$1 =", ${"var_$1"} );
       $nl_seen = 0 ;
     }
     elsif ( /^\§5(.*)$/o  )
     { # pretty print an addition to a make variable
-      print_macro "$1 +=", ${"var_$1+"} ;
+      &print_macro( "$1 +=", ${"var_$1+"}) ;
       $nl_seen = 0 ;
     }
     else
@@ -678,4 +655,25 @@ print " \$(ACLOCAL_M4)\n" ;
 print "\tcd \$(srcdir) && \$(AUTOCONF)\n"
 }
 
-;1
+exit 0 ;
+
+sub print_macro($$)
+{
+  my ($line,$input) = @_ ;
+  $input =~ s/\\\\/ /g;
+  my @l = split(' ',$input);
+
+  foreach (@l) { 
+    if ( ( length($line) + length($_) ) < 76 )
+    {
+          $line .= " $_";
+    }
+    else
+    {
+           print "$line \\\n";
+           $line = "    $_" ; 
+    }
+  }
+  print "$line\n" ;
+}
+

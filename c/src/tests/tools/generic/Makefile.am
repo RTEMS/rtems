@@ -23,6 +23,6 @@ $(project_bspdir)/tests/difftest: difftest
 $(project_bspdir)/tests/sorttimes: sorttimes
 	$(INSTALL_SCRIPT) $< $@
 
-all-local: $(PREINSTALL_FILES)
+all: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../automake/local.am

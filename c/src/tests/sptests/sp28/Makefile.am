@@ -28,7 +28,7 @@ include $(top_srcdir)/sptests.am
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES)
+all: $(ARCH) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES) $(DOCS)
 

@@ -34,7 +34,7 @@ $(PROJECT_INCLUDE)/%.h: %.h
 $(PGM): ${OBJS}
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM) $(TMPINSTALL_FILES)
+all: ${ARCH} $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES)
 

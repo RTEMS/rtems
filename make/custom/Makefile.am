@@ -55,4 +55,4 @@ simhppa.cfg \
 ts_386ex.cfg
 
 ## -------------------------------------------------------
-include $(top_srcdir)/automake/local.am
+include $(top_srcdir)/automake/host.am

@@ -44,4 +44,4 @@ ampolish \
 cipolish \
 rtems-polish.sh
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/../../automake/host.am

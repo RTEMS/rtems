@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+use strict ;
+
 #
 # Perl script to beautify and enhance RTEMS automake Makefile.ams
 #
@@ -22,7 +24,7 @@ sub find_file
   my $top = "." ;
   if (not "$pre") { $pre = "." ; }
 
-  for ( $str = "$pre" . "/" . "$top" ;
+  for ( my $str = "$pre" . "/" . "$top" ;
     ( -d "$str" ) ;
     $str = "$pre" . "/" . "$top" )
   {

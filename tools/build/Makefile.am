@@ -22,4 +22,4 @@ unlock-directory
 
 noinst_SCRIPTS = search-id.sh
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/../../automake/host.am

@@ -41,8 +41,6 @@ $(PROJECT_RELEASE)/lib/$(LIBNAME)${LIB_VARIANT}.a
 
 all: $(ARCH) $(TMPINSTALL_FILES)
 
-install: all
-
 $(LIB): $(SRCS)
 	rm -f $@
 	rm -rf $(ARCH)/*

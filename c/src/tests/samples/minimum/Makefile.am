@@ -30,7 +30,7 @@ include $(top_srcdir)/sample.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all: ${ARCH} $(TMPINSTALL_FILES)
 	# This test should not be executed
 
 ${PGM}: $(OBJS) $(LINK_FILES)

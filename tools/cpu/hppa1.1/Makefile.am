@@ -14,8 +14,8 @@ genoffsets.c
 
 CPU_DIR=../../cpu/$(RTEMS_CPU)
 
-INCLUDES = \
+AM_CPPFLAGS = \
 -I$(PROJECT_INCLUDE) \
 -I$(CPU_DIR)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../../automake/host.am
