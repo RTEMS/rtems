@@ -1,3 +1,21 @@
+2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: New, Cygnus/GNU style configuration.
+	* Makefile.am: Add macros/, reflect new configure.in,
+	ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
+	* automake/compile.am: BSP_SPECS, remove RTEMS_CANONICALIZATION.
+	* automake/lib.am: Remove RTEMS_CANONICALIZATION.
+	* macros/tool-prefix.m4: Remove.
+	* macros/target.m4: Remove RTEMS_CONFIG_SUBDIRS, RTEMS_OUTPUT_SUBDIRS.
+	* macros/enable-rtemsbsp.m4: Add RTEMS_CONFIG_PER_BSP, add setting 
+	RTEMS_ROOT.
+	* macros/i386-gas-code16.m4: Define NEW_GAS only for 16bit mode-
+	* macros/multilib.m4: Various minor fixes.
+	* macros/project-root.m4: Remove setting PROJECT_TOPdir,
+	PROJECT_ROOT, RTEMS_ROOT.
+	* macros/rtems-top.m4: Remove RTEMS_CANONICALIZATION, TARGET_SUBDIRS;
+	Add with_target_subdirs, PROJECT_TOPdir, PROJECT_ROOT.
+
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
  	* automake/multilib.am: New file.

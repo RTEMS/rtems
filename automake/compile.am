@@ -64,8 +64,11 @@ LINK_LIBS_RTEMS = $(PROJECT_RELEASE)/lib/librtemsall$(LIBSUFFIX_VA)
 LINK_LIBS_GCC272 = $(LINK_LIBS_RTEMS) $(LIBC_LIBC) $(LIBC_LIBGCC)
 else
 ## gcc >= 2.8.x
-## FIXME: This is BSP-specific and will fail for BSP-independent directories
-GCCSPECS = -B$(PROJECT_RELEASE)/lib/ -specs bsp_specs -qrtems
+if RTEMS_CONFIG_PER_BSP
+BSP_SPECS = -specs bsp_specs -qrtems
+endif
+
+GCCSPECS = -B$(PROJECT_RELEASE)/lib/ $(BSP_SPECS)
 endif
 else
 ## fall back to the old style compilers/*.cfg
@@ -273,36 +276,12 @@ RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
 
 ## -------------------------------------------------------------------------
 
-## FIXME: This will probably vanish, when GNU canonicalization will be
-## introduced
-if RTEMS_CANONICALIZATION
-
-CC = $(CC_FOR_TARGET) $(GCCSPECS)
-CXX = $(CXX_FOR_TARGET) $(GCCSPECS)
-AR_FOR_TARGET = @AR_FOR_TARGET@
-AR = $(AR_FOR_TARGET)
-AS_FOR_TARGET = @AS_FOR_TARGET@
-AS = $(AS_FOR_TARGET)
-RANLIB_FOR_TARGET = @RANLIB_FOR_TARGET@
-RANLIB = $(RANLIB_FOR_TARGET)
-LD_FOR_TARGET = @LD_FOR_TARGET@
-LD = $(LD_FOR_TARGET)
-NM_FOR_TARGET = @NM_FOR_TARGET@
-NM = $(NM_FOR_TARGET)
-OBJCOPY_FOR_TARGET = @OBJCOPY_FOR_TARGET@
-OBJCOPY = $(OBJCOPY_FOR_TARGET)
-SIZE_FOR_TARGET = @SIZE_FOR_TARGET@
-SIZE = $(SIZE_FOR_TARGET)
-STRIP_FOR_TARGET = @STRIP_FOR_TARGET@
-STRIP = $(STRIP_FOR_TARGET)
-else
 CC = @CC@ $(GCCSPECS)
 CXX = @CXX@ $(GCCSPECS)
 OBJCOPY = @OBJCOPY@
 NM = @NM@
 SIZE = @SIZE@
 STRIP = @STRIP@
-endif
 
 ##
 ## FIXME: DEFS and INCLUDES should not be passed as AM_CPPFLAGS

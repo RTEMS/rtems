@@ -15,25 +15,6 @@ dnl
 AC_DEFUN(RTEMS_PROJECT_ROOT,
 [dnl
 AC_REQUIRE([RTEMS_TOP])
-if test "$TARGET_SUBDIR" = "." ; then
-# Native
-PROJECT_TOPdir=${RTEMS_TOPdir}/'$(top_builddir)'
-PROJECT_ROOT=${RTEMS_TOPdir}/'$(top_builddir)';
-else
-# FIXME: Moving the build-tree
-# PROJECT_TOPdir=../${RTEMS_TOPdir}/'$(top_builddir)'
-# PROJECT_ROOT=${RTEMS_TOPdir}/'$(top_builddir)'
-
-# FIXME: Old, per-bsp building style
-PROJECT_TOPdir=../${RTEMS_TOPdir}/'$(top_builddir)'
-PROJECT_ROOT=../${RTEMS_TOPdir}/'$(top_builddir)'
-fi
-AC_SUBST(PROJECT_ROOT)
-AC_SUBST(PROJECT_TOPdir)
-
-# FIXME: This should not be here
-RTEMS_ROOT=$RTEMS_TOPdir/'$(top_builddir)'/c/$RTEMS_BSP
-AC_SUBST(RTEMS_ROOT)
 
 PACKHEX="\$(PROJECT_TOPdir)/tools/build/packhex"
 AC_SUBST(PACKHEX)

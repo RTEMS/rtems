@@ -2,11 +2,8 @@
 ##  $Id$
 ##
 
-if RTEMS_CANONICALIZATION
-else
 AR = @AR@
 RANLIB = @RANLIB@
-endif
 
 define make-library
 $(RM) $@
