@@ -43,7 +43,7 @@
 //	Modified for RTEMS 4.0.0 by Eric Norum (eric@skatter.usask.ca)
 //
 
-#include <asm.h>
+#include <rtems/asm.h>
 
 //SKELETON	idnt    2,1 | Motorola 040 Floating Point Software Package
 
