@@ -300,6 +300,7 @@ libcsupport/Makefile
 libnetworking/Makefile
 librpc/Makefile
 libmisc/Makefile
+httpd/Makefile
 
 wrapup/Makefile
 ])

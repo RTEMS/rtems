@@ -11,6 +11,7 @@ SUBDIRS = . ada score rtems sapi posix itron
 SUBDIRS += libcsupport libblock libfs
 SUBDIRS += libnetworking librpc
 SUBDIRS += libmisc
+SUBDIRS += httpd
 SUBDIRS += wrapup
 
 noinst_DATA = preinstall-stamp
