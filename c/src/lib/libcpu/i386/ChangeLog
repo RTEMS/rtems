@@ -1,3 +1,8 @@
+2004-02-09	Joel Sherrill <joel@OARcorp.com>
+
+	PR make_build/574
+	* Makefile.am: Re-added since missing for some reason.
+
 2004-02-03	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Removed.
