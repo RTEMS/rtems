@@ -1,3 +1,9 @@
+2002-08-06	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Updating gcc3/newlib patches and tool versions.  The 
+	focus of this round of patches was ot eliminate header file name
+	conflicts between RTEMS and newlib.
+
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Updated to gcc3.1/newlib 1.10.0 RPM revision 5 with
