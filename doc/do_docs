@@ -15,7 +15,14 @@ extra_manuals="hwapi"
 # posix_users manual left out until finished
 # ada_user manual left out until bindings released
 
+if [ x${MANUAL_SET} = x ] ; then
+  MANUAL_SET=public
+fi
+
 case ${MANUAL_SET} in
+  public)
+    manuals="$public_docs"
+    ;;
   support)
     manuals="$public_docs $support_docs"
     ;;
@@ -26,7 +33,7 @@ case ${MANUAL_SET} in
     manuals="$public_docs $support_docs $partners_docs $extra_manuals"
     ;;
   *)
-    echo "ERROR: Unknown manual set $(MANUAL_SET)"
+    echo "ERROR: Unknown manual set ${MANUAL_SET}"
     exit 1
     ;;
 esac
