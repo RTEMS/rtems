@@ -4,6 +4,7 @@
 
 2003-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 397/pppd
 	* pppd/fsm.c: Make peer_mru global again.
 
 2003-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
