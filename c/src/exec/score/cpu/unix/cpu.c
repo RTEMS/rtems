@@ -50,10 +50,8 @@ void  _CPU_Stray_signal(int);
 void  _CPU_ISR_Handler(int);
 
 static sigset_t _CPU_Signal_mask;
-static Context_Control_overlay
-          _CPU_Context_Default_with_ISRs_enabled CPU_STRUCTURE_ALIGNMENT;
-static Context_Control_overlay
-          _CPU_Context_Default_with_ISRs_disabled CPU_STRUCTURE_ALIGNMENT;
+static Context_Control_overlay _CPU_Context_Default_with_ISRs_enabled;
+static Context_Control_overlay _CPU_Context_Default_with_ISRs_disabled;
 
 /*
  * Sync IO support, an entry for each fd that can be set
@@ -200,18 +198,18 @@ void _CPU_Context_From_CPU_Init()
    *  get default values to use in _CPU_Context_Initialize()
    */
 
-  if ( sizeof(Context_Control_overlay) < sizeof(Context_Control) )
-    _CPU_Fatal_halt( 0xdeadfood );
+  if ( sizeof(Context_Control_overlay) > sizeof(Context_Control) )
+    _CPU_Fatal_halt( 0xdeadf00d );
   
   (void) memset(
     &_CPU_Context_Default_with_ISRs_enabled,
     0,
-    sizeof(Context_Control)
+    sizeof(Context_Control_overlay)
   );
   (void) memset(
     &_CPU_Context_Default_with_ISRs_disabled,
     0,
-    sizeof(Context_Control)
+    sizeof(Context_Control_overlay)
   );
 
   _CPU_ISR_Set_level( 0 );
