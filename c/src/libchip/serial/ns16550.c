@@ -1,5 +1,8 @@
 /*
- *  This file contains the TTY driver for the NS16550
+ *  This file contains the TTY driver for the National Semiconductor NS16550.
+ *
+ *  This part is widely cloned and second sourced.  It is found in a number 
+ *  of "Super IO" controllers.
  *
  *  COPYRIGHT (c) 1998 by Radstone Technology
  *
