@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@chapter Linkcmds
+@chapter Linker Script
 
 @section What is a "linkcmds" file?
 
@@ -25,27 +25,46 @@ one generally doesn't care about them , because a program is always put in
 RAM and is executed in RAM. That's a bit different in embedded
 development: the target will execute the program each time it's reboot or
 switched on, which means the program is stored in ROM. On the other hand,
-data pr ocessing occurs in RAM. 
+data processing occurs in RAM. 
 
+The following example shows a simple layout of program sections.  With
+some object formats, there are many more sections but the basic 
+layout is conceptually similar.
+
+@example
+@group
+          +-----------------+
+          |     .text       |  RAM or ROM
+          +-----------------+
+          |     .data       |  RAM
+          +-----------------+
+          |     .bss        |  RAM
+          +-----------------+
+@end group
+@end example
 
 
 That leads us to the structure of an embedded program: it's roughly made
 of sections, for instance for the Motorola 68k family of microprocessors : 
 
-@itemize @bullet
+@table @b
 
-@item the code section (aka ".txt" section): it holds the program's main
-code, so that it doesn't have to be modified. It's placed in ROM. 
+@item the code (@code{.text}) section
+holds the program's main
+code, so that it doesn't have to be modified. This section
+may be placed in ROM. 
 
-@item the non-initialized data section (aka ".bss" section): it holds non
-initialized variables of the program. It can stay in RAM. 
+@item the non-initialized data (@code{.bss}) section
+holds uninitialized variables of the program. It can stay in RAM. 
+XXX 
 
-@item the initialized data section (aka ".data" section): it holds the
+@item the initialized data (@code{.data}) section 
+holds the
 program data which are to be modified during the program's life, which
 means they have to be in RAM. On another hand, these variables must be set
 to predefined values, which have to be stored in ROM... 
 
-@end itemize
+@end table
 
 That brings us up to the notion of the image of an executable: it consists
 in the set of the program sections. 
@@ -230,7 +249,7 @@ chip with an address (see the Initialization sequence chapter).
 
 Start address of ROM and its length.  Same remarks as above. 
 
-this is for the network driver (see KA9Q documentation for more details) 
+this is for the network driver (see Networking documentation for more details) 
 
 define where the sections should go: 
 
@@ -242,7 +261,7 @@ set the RamBase variable to the start of the RAM.
 
 states that a symbol shall be created for each object (.o)
 
-insert the .text sections of every object
+insert the @code{.text} sections of every object
 
 go to a frontier of 16 bytes (just keep it as is)
 
@@ -250,9 +269,9 @@ reserve some place for C++ constructors and destructors.
 
 just keep it as is (or see CROSSGCC mailing-list FAQ for more details)
 
-declares where the .txt section ends.
+declares where the @code{.text} section ends.
 
-the .txt section goes in ROM!
+the @code{.text} section goes in ROM!
 
 this section is created by GCC
 
@@ -338,7 +357,7 @@ we want to move the start of the section .data
 
 in the resulting image
 
-the address is given by extracting the address of the end of the .text
+the address is given by extracting the address of the end of the @code{.text}
 section (i.e. in ROM) with an awk script (don't care about it) 
 
 process the image which have just been linked
