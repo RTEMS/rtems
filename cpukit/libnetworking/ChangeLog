@@ -1,3 +1,7 @@
+2000-11-27	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/res_init.c: Fix typo - adding missing # on include.
+
 2000-11-25	Eric Norum <eric.norum@usask.ca>
 
 	* libc/res_init.c: Move include to avoid compiler dumping core.
