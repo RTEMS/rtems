@@ -1,3 +1,13 @@
+2001-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/score/object.h, inline/rtems/score/object.inl, 
+	src/objectcomparenamestring.c: Address PR81 that
+	reworked POSIX message queues to add a descriptor separate from
+	the underlying message queue.  This allows non-blocking to follow
+	the "open" not the underlying queue.   As part of debugging this
+	it became clear that _Objects_Compare_name_string was broken
+	and a simple version using strncmp() was substituted.
+ 
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/system.h: Remove targopts.h.

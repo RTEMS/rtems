@@ -5,7 +5,7 @@
  *  can be used to initialize and manipulate all objects which have 
  *  ids.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -99,17 +99,18 @@ typedef enum {
   OBJECTS_RTEMS_EXTENSIONS            = 12,
   OBJECTS_POSIX_KEYS                  = 13,
   OBJECTS_POSIX_INTERRUPTS            = 14,
-  OBJECTS_POSIX_MESSAGE_QUEUES        = 15,
-  OBJECTS_POSIX_MUTEXES               = 16,
-  OBJECTS_POSIX_SEMAPHORES            = 17,
-  OBJECTS_POSIX_CONDITION_VARIABLES   = 18,
-  OBJECTS_ITRON_EVENTFLAGS            = 19,
-  OBJECTS_ITRON_MAILBOXES             = 20,
-  OBJECTS_ITRON_MESSAGE_BUFFERS       = 21,
-  OBJECTS_ITRON_PORTS                 = 22,
-  OBJECTS_ITRON_SEMAPHORES            = 23,
-  OBJECTS_ITRON_VARIABLE_MEMORY_POOLS = 24,
-  OBJECTS_ITRON_FIXED_MEMORY_POOLS    = 25
+  OBJECTS_POSIX_MESSAGE_QUEUE_FDS     = 15,
+  OBJECTS_POSIX_MESSAGE_QUEUES        = 16,
+  OBJECTS_POSIX_MUTEXES               = 17,
+  OBJECTS_POSIX_SEMAPHORES            = 18,
+  OBJECTS_POSIX_CONDITION_VARIABLES   = 19,
+  OBJECTS_ITRON_EVENTFLAGS            = 10,
+  OBJECTS_ITRON_MAILBOXES             = 21,
+  OBJECTS_ITRON_MESSAGE_BUFFERS       = 22,
+  OBJECTS_ITRON_PORTS                 = 23,
+  OBJECTS_ITRON_SEMAPHORES            = 24,
+  OBJECTS_ITRON_VARIABLE_MEMORY_POOLS = 25,
+  OBJECTS_ITRON_FIXED_MEMORY_POOLS    = 26
 } Objects_Classes;
  
 #define OBJECTS_CLASSES_FIRST               OBJECTS_NO_CLASS

@@ -2,7 +2,7 @@
  *  Object Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,7 +28,15 @@
  *
  *  _Objects_Compare_name_string
  *
- *  XXX
+ * This routine compares the name of an object with the specified string.
+ *
+ * Input parameters:
+ *   name_1 - one name
+ *   name_2 - other name
+ *   length - maximum length to compare
+ *
+ * Output parameters:
+ *   returns  - TRUE on a match
  */
  
 boolean _Objects_Compare_name_string(
@@ -37,16 +45,7 @@ boolean _Objects_Compare_name_string(
   unsigned32  length
 )
 {
-  unsigned8 *name_1_p = (unsigned8 *) name_1;
-  unsigned8 *name_2_p = (unsigned8 *) name_2;
-  unsigned32 tmp_length = length;
- 
-  do {
-    if ( *name_1_p++ != *name_2_p++ )
-      return FALSE;
-    if ( !tmp_length-- )
-      return FALSE;
-  } while ( *name_1_p );
-
-  return TRUE;
+  if ( !strncmp( name_1_p, name_2_p, length ) )
+    return TRUE;
+  return FALSE;
 }

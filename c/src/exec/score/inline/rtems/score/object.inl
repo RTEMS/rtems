@@ -242,7 +242,8 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
   _Objects_Set_local_object( information, index, the_object );
 
   if ( information->is_string ) 
-    _Objects_Copy_name_string( name, the_object->name );
+    /* _Objects_Copy_name_string( name, the_object->name ); */
+    the_object->name = name;
   else
     _Objects_Copy_name_raw( name, the_object->name, information->name_length );
 }
@@ -266,7 +267,8 @@ RTEMS_INLINE_ROUTINE void _Objects_Close(
 
   index = _Objects_Get_index( the_object->id );
   _Objects_Set_local_object( information, index, NULL );
-  _Objects_Clear_name( the_object->name, information->name_length );
+  /* _Objects_Clear_name( the_object->name, information->name_length ); */
+  the_object->name = 0;
 }
 
 /*PAGE
@@ -283,7 +285,8 @@ RTEMS_INLINE_ROUTINE void _Objects_Namespace_remove(
   Objects_Control      *the_object
 )
 {
-  _Objects_Clear_name( the_object->name, information->name_length );
+  /* _Objects_Clear_name( the_object->name, information->name_length ); */
+  the_object->name = 0;
 }
 
 #endif
