@@ -20,7 +20,7 @@ $(project_bspdir)/tests/screens/mptests/node$(NODE):
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn: $(TEST).scn
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += \
+TMPINSTALL_FILES = \
 $(project_bspdir)/tests \
 $(project_bspdir)/tests/$(TEST)-node$(NODE)$(LIB_VARIANT).exe \
 $(project_bspdir)/tests/screens \

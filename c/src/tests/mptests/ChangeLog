@@ -1,3 +1,7 @@
+	* mptests.am: Use TMPINSTALL_FILES = to make automake-1.5 happy.
+
+2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mp02/node2/Makefile.am: include leaf.am instead of leaf.cfg.
 	* mp02/node1/Makefile.am: include leaf.am instead of leaf.cfg.
 	* mp04/node2/Makefile.am: include leaf.am instead of leaf.cfg.
