@@ -65,7 +65,7 @@ dvi_DATA = $(PROJECT).dvi
 if USE_PS
 ps_DATA = $(PROJECT).ps
 .dvi.ps:
-	TEXINPUTS=$(srcdir):$$TEXINPUTS \
+	TEXINPUTS="$(srcdir)$(PATH_SEPARATOR)$$TEXINPUTS" \
 	$(DVIPS) $< -o $@
 endif # USE_PS
 

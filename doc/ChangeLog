@@ -1,3 +1,7 @@
+2002-06-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* project.am: Use PATH_SEPARATOR to setup TEXINPUTS.
+
 2002-04-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* VERSION, bootstrap: Removed as unneeded.
