@@ -239,6 +239,9 @@ StackBase:	.word	0
 StackLimit:	.word	0
 CommandLine:	.space	256,0	/*  Maximum length of 255 chars handled */
 #endif
+	.globl SWI_Handler
+SWI_Handler:	
+        B       SWI_Handler 
 	
 #ifdef __pe__
 	.section .idata$3
