@@ -623,7 +623,7 @@ uint32_t    ppc_exception_vector_addr(
       Offset = 0x02000;
       break;
 
-#elif defined(ppc603)
+#elif defined(ppc603) || defined(ppc603e)
     case PPC_IRQ_TRANS_MISS:
       Offset = 0x1000;
       break;
@@ -634,23 +634,6 @@ uint32_t    ppc_exception_vector_addr(
       Offset = 0x1200;
       break;
     case PPC_IRQ_ADDR_BRK:
-      Offset = 0x1300;
-      break;
-    case PPC_IRQ_SYS_MGT:
-      Offset = 0x1400;
-      break;
-
-#elif defined(ppc603e)
-    case PPC_TLB_INST_MISS:
-      Offset = 0x1000;
-      break;
-    case PPC_TLB_LOAD_MISS:
-      Offset = 0x1100;
-      break;
-    case PPC_TLB_STORE_MISS:
-      Offset = 0x1200;
-      break;
-    case PPC_IRQ_ADDRBRK:
       Offset = 0x1300;
       break;
     case PPC_IRQ_SYS_MGT:

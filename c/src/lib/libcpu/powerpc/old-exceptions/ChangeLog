@@ -1,5 +1,9 @@
 2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* cpu.c (ppc_exception_vector_addr): Merge ppc603 and ppc603e cases.
+
+2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* cpu.c, cpu_asm.S, irq_stub.S: #include <rtems/powerpc/powerpc.h>.
 
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
