@@ -1,3 +1,9 @@
+2003-09-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 489/rtems
+	* src/newlibc.c: Reflect struct Thread_Control_struct.libc_reent 
+	having changed from void * to struct _reent*.
+
 2003-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 486/rtems
