@@ -5,14 +5,12 @@ AC_DEFUN(RTEMS_ENV_RTEMSCPU,
 
 if test x"$multilib" = x"yes"; then
 ## FIXME: There is no multilib BSP
-  if test -n "$with_multisubdir"; then
-    MULTIBUILDTOP=`echo "/$with_multisubdir" | sed 's,/[[^\\/]]*,../,g'`
-  fi
+  AS_IF([test -n "$with_multisubdir"],
+    [MULTIBUILDTOP=`echo "/$with_multisubdir" | sed 's,/[[^\\/]]*,../,g'`])
   AC_SUBST(MULTIBUILDTOP)
 
-  if test -n "$with_multisubdir"; then
-    MULTISUBDIR="/$with_multisubdir"
-  fi
+  AS_IF([test -n "$with_multisubdir"],
+    [MULTISUBDIR="/$with_multisubdir"])
   AC_SUBST(MULTISUBDIR)
 
   GCC_SPECS="-isystem \$(PROJECT_INCLUDE)"
@@ -29,7 +27,6 @@ if test x"$multilib" = x"yes"; then
 
   includedir="\${exec_prefix}/lib/include"
   libdir="${libdir}\$(MULTISUBDIR)"
-  AM_CONDITIONAL([RTEMS_CONFIG_PER_BSP],[false])
 else
   RTEMS_ENV_RTEMSBSP
   RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
