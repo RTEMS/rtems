@@ -31,5 +31,6 @@ include/Makefile
 irq/Makefile
 start/Makefile
 startup/Makefile
+timer/Makefile
 wrapup/Makefile])
 AC_OUTPUT

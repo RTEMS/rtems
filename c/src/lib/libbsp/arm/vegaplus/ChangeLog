@@ -1,3 +1,13 @@
+2001-10-17	Joel Sherrill <joel@OARcorp.com>
+
+	* timer: New subdirectory.
+	* timer/Makefile.am: New file.
+	* timer/.cvsignore: New file.
+	* Makefile.am: Modified to reflect above.
+	* configure.ac: Ditto.
+	* wrapup/Makefile.am: Ditto.
+	* include/bsp.h: Stubs to let tm27 compile and link.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
