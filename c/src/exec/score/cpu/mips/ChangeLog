@@ -1,3 +1,11 @@
+2001-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* idtcpu.h: Commented out definition of "wait".  It was stupid to
+	use such a common word as a macro.
+	* rtems/score/cpu.h (_CPU_ISR_Disable): Fixed for mips ISA 3.
+	* rtems/score/mips.h: Added include of <idtcpu.h>.
+	* rtems/score/mips.h (mips_enable_in_interrupt_mask): Corrected.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Added _CPU_Initialize_vectors().

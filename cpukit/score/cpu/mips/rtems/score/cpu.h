@@ -40,7 +40,6 @@ extern "C" {
 
 #include <rtems/score/mips.h>       /* pick up machine definitions */
 #ifndef ASM
-#include <idtcpu.h>
 #include <rtems/score/mipstypes.h>
 #endif
 
@@ -600,7 +599,7 @@ extern unsigned int mips_interrupt_number_of_vectors;
 #define _CPU_ISR_Disable( _level ) \
   do { \
     mips_get_sr( _level ); \
-    mips_set_sr( (_level) & ~SR_IEC ); \
+    mips_set_sr( (_level) & ~SR_IMASK ); \
   } while(0)
 
 /*

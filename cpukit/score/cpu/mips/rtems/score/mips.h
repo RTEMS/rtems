@@ -18,6 +18,10 @@
 extern "C" {
 #endif
 
+#ifndef ASM
+#include <idtcpu.h>
+#endif
+
 /*
  *  This file contains the information required to build
  *  RTEMS for a particular member of the "no cpu"
@@ -89,7 +93,7 @@ extern "C" {
   do { \
     unsigned int _sr; \
     mips_get_sr( _sr ); \
-    _sr |= (_mask) | SR_IEC; \
+    _sr |= (_mask); \
     mips_set_sr( _sr ); \
   } while (0)
 
