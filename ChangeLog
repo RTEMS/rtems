@@ -1,3 +1,7 @@
+2003-04-23	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/version.m4: Updated to rtems-4.6.0pre3.
+
 2003-04-18	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-4.6.0pre2.
