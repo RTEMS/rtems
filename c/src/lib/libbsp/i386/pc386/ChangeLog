@@ -1,3 +1,9 @@
+2002-07-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/ldsegs.S: #include <asm.h>.
+	* include/bsp.h: Remove _IBMPC_chrdy (is not a public function).
+	Remove printk (Now in bspIo.h).
+
 2002-07-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Eliminate PGM.

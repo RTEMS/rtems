@@ -199,11 +199,8 @@ extern rtems_unsigned32          rtemsFreeMemStart;
 +--------------------------------------------------------------------------*/
 void          _IBMPC_initVideo(void);    /* from 'outch.c'  */
 void          _IBMPC_outch    (char);    /* from 'outch.c'  */
-rtems_boolean _IBMPC_chrdy    (char *);  /* from 'inch.c'   */
 char          _IBMPC_inch     (void);    /* from 'inch.c'   */ 
 char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */ 
-
-void printk(char *fmt, ...);             /* from 'printk.c' */
 
 void rtemsReboot(void);                  /* from 'exit.c'   */
 
