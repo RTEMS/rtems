@@ -1,4 +1,8 @@
-2004-02-17	RTEMS
+2004-02-19	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Replace RTEMS user account with Joel.
+
+2004-02-17	Joel Sherrill <joel@oarcorp.com>
 
 	* setup.def, gdb/base-gdb.add, gdb/gdb.add: Building a gcc 3.2.3 i960
 	gcc and updating gdb to 5.3.
@@ -60,14 +64,14 @@
 
 	* configure.ac: Use RTEMS_ENABLE_RPMPREFIX.
 
-2004-01-28	RTEMS
+2004-01-28	Joel Sherrill <joel@oarcorp.com>
 
 	* buildall.in, buildalltar.in, binutils/Makefile.am,
 	cpukit/Makefile.am, gcc3newlib/Makefile.am, gccnewlib/Makefile.am,
 	gdb/Makefile.am: Attempt to convert all c4x-rtems references to
 	tic4x-rtems. Left the rtems documentation alone.
 
-2004-01-28	RTEMS
+2004-01-28	Joel Sherrill <joel@oarcorp.com>
 
 	* configure.ac: Enable OS versioning by default for 4.7 branch.
 	* setup.def: Update binutils RPM version and build new gcc 3.2.3 RPMs.
