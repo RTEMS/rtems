@@ -11,8 +11,8 @@
  * @(#) $Id$
  */
 
-#ifndef __RTEMS_LIBBLOCK_BDBUF_H__
-#define __RTEMS_LIBBLOCK_BDBUF_H__
+#ifndef _RTEMS_BDBUF_H
+#define _RTEMS_BDBUF_H
 
 #ifdef __cplusplus
 extern "C" {

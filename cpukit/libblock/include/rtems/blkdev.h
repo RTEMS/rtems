@@ -10,8 +10,8 @@
  * @(#) $Id$
  */
 
-#ifndef __RTEMS_LIBBLOCK_BLKDEV_H__
-#define __RTEMS_LIBBLOCK_BLKDEV_H__
+#ifndef _RTEMS_BLKDEV_H
+#define _RTEMS_BLKDEV_H
 
 #include <rtems.h>
 #include <sys/ioctl.h>

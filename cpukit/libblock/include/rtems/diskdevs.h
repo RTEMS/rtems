@@ -10,8 +10,8 @@
  * @(#) $Id$
  */
 
-#ifndef __RTEMS_LIBBLOCK_LOGDISK_H__
-#define __RTEMS_LIBBLOCK_LOGDISK_H__
+#ifndef _RTEMS_DISKDEVS_H
+#define _RTEMS_DISKDEVS_H
 
 #ifdef __cplusplus
 extern "C" {

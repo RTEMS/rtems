@@ -15,8 +15,8 @@
  *  @(#) $Id$
  */
  
-#ifndef __DOSFS_DOSFS_H__
-#define __DOSFS_DOSFS_H__
+#ifndef _RTEMS_DOSFS_H
+#define _RTEMS_DOSFS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,4 +78,4 @@ int msdos_format
 }
 #endif
 
-#endif /* __DOSFS_DOSFS_H__ */
+#endif

@@ -11,8 +11,8 @@
  *  $Id$
  */
 
-#ifndef __IMFS_h
-#define __IMFS_h
+#ifndef _RTEMS_IMFS_H
+#define _RTEMS_IMFS_H
 
 #ifdef __cplusplus
 extern "C" {

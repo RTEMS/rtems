@@ -18,8 +18,8 @@
  *
  *****************************************************************************/
 
-#ifndef __RTEMS_IDE_PART_TABLE_H__
-#define __RTEMS_IDE_PART_TABLE_H__
+#ifndef _RTEMS_IDE_PART_TABLE_H
+#define _RTEMS_IDE_PART_TABLE_H
 
 #include <assert.h>
 #include <rtems/chain.h>
