@@ -1,3 +1,7 @@
+2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* macros/rtems/score/README: Remove (Redundant with macros/README).
+
 2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add libs to CLEANFILES
