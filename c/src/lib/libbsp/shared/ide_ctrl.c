@@ -14,7 +14,7 @@
  * $Id$
  *
  */
-#include <chain.h>
+#include <rtems/chain.h>
 #include <assert.h>
 #include <rtems/blkdev.h>
 
