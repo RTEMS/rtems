@@ -13,6 +13,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <rtems/rtems/cache.h>
 
 /*
  *  This initializes the set of opcodes placed in each trap 

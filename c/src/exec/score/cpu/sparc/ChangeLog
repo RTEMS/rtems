@@ -1,3 +1,7 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Added include of <rtems/rtems/cache.h> to eliminate warning.
+
 2000-11-21	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* cpu_asm.S: Fix for CPUs with FPU revision B or C.
