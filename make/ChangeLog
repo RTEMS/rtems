@@ -1,6 +1,11 @@
 
 2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* custom/gensh1.cfg: remove make-target-options.
+	* custom/gensh2.cfg: remove make-target-options.
+
+2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* custom/dmv152: Remove USE_CONSOLE_A, Remove USE_CONSOLE_B, 
 	remove make-target-options, remove BSP_CPPFLAGS.
 
