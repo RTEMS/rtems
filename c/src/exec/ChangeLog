@@ -1,5 +1,28 @@
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Include $(top_srcdir)/automake/*.am.
+	Use aclocal.
+	* sapi/include/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* sapi/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* sapi/inline/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* sapi/macros/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* sapi/src/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* score/include/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* score/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* score/cpu/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* score/inline/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* score/macros/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* score/src/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* wrapup/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* include/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* rtems/include/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* rtems/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* rtems/inline/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* rtems/macros/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* rtems/src/Makefile.am: Include $(top_srcdir)/automake/*.am.
+
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/bsp-alias.m4: Copied over from aclocal/.
 	* aclocal/canonical-host.m4: Ditto.
 	* aclocal/canonical-target-name.m4: Ditto.
