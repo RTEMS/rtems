@@ -21,15 +21,14 @@
  *  blocking tasks to determine the execution time of blocking
  *  services.  By default, the blocking time of 100 tasks will
  *  be measured.  Small targets often do not have enough memory
- *  to create 100 tasks.  By setting the BSP_MAXIMUM_OPERATION_COUNT
- *  to a lower number (typically 10), all of the time tests can be
- *  run.
+ *  to create 100 tasks.  By overriding the default OPERATION_COUNT
+ *  with a lower number (typically 10 or less), all of the time tests
+ *  can usually be run.  This is stil not very fine-grained but
+ *  is enough to significantly reduce memory consumption.
  */
 
-#ifndef BSP_MAXIMUM_OPERATION_COUNT
+#ifndef OPERATION_COUNT
 #define OPERATION_COUNT 100
-#else
-#define OPERATION_COUNT BSP_MAXIMUM_OPERATION_COUNT
 #endif
 
 /*
@@ -41,10 +40,8 @@
  *  not increase memory usage -- only execution time.
  */
 
-#ifndef BSP_ITERATION_COUNT
+#ifndef IT_COUNT
 #define IT_COUNT        100
-#else
-#define IT_COUNT BSP_ITERATION_COUNT
 #endif
 
 /* functions */

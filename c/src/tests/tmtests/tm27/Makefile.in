@@ -44,8 +44,9 @@ PACKHEX = @PACKHEX@
 # (OPTIONAL) Add local stuff here using +=
 #
 
+OPERATION_COUNT = @OPERATION_COUNT@
 DEFINES +=
-CPPFLAGS += -I$(srcdir)/../include
+CPPFLAGS += -I$(srcdir)/../include -DOPERATION_COUNT=$(OPERATION_COUNT)
 
 # since we essentially are building an interrupt handler, must use CFLAGS_OS_V
 
