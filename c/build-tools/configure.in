@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ(2.13)
-AC_INIT(scripts)
+AC_INIT(README)
 AC_CONFIG_AUX_DIR(../..)
 RTEMS_TOP(../..)
 
@@ -17,14 +17,12 @@ AC_CHECK_FUNCS(strerror)
 
 RTEMS_PATH_KSH
 
-AM_CONFIG_HEADER(src/config.h)
+AM_CONFIG_HEADER(config.h)
 
 AC_OUTPUT(
 Makefile
-src/Makefile
-scripts/Makefile
-scripts/install-if-change
-scripts/lock-directory
-scripts/rcs-clean
-scripts/unlock-directory
+install-if-change
+lock-directory
+rcs-clean
+unlock-directory
 )
