@@ -1,3 +1,8 @@
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_ENV_RTEMS_BSP, add
+	AC_ARG_VAR(RTEMS_BSP)-hack instead.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
