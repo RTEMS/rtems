@@ -755,7 +755,7 @@ m_copyback(m0, off, len, cp)
 		off = 0;
 		totlen += mlen;
 		if (len == 0) {
-			m->m_len = mlen;
+			/* m->m_len = mlen; */
 			break;
 		}
 		if (m->m_next == 0) {
@@ -767,7 +767,7 @@ m_copyback(m0, off, len, cp)
 			n->m_len = min(MLEN, len);
 			m->m_next = n;
 		}
-		m->m_len = mlen;
+		/* m->m_len = mlen; */
 		m = m->m_next;
 	}
 /*out:*/

@@ -1,3 +1,13 @@
+2003-02-06	Mike Siers <mikes@poliac.com>
+
+	PR 342/networking
+	* kern/uipc_mbuf.c: The RTEMS version of the m_copyback is changing
+	the m_len value of the mbuf.  I looked into the source from another
+	BSD system and the mbuf length is not changed inside this function. 
+	The m_copyback function is only being used in the net/rtsock.c file. 
+	So I think this problem is only visable under certain routing table
+	conditions.  
+
 2003-02-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 341/networking
