@@ -40,6 +40,12 @@ typedef struct {
  */
  
 POSIX_EXTERN Objects_Information  _POSIX_Mutex_Information;
+
+/*
+ *  The default mutex attributes structure.
+ */
+
+extern const pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
  
 /*
  *  _POSIX_Mutex_Manager_initialization
@@ -107,6 +113,35 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
 RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
   POSIX_Mutex_Control *the_mutex
 );
+
+/*
+ *  _POSIX_Mutex_Lock_support
+ *
+ *  DESCRIPTION:
+ *  
+ *  A support routine which implements guts of the blocking, non-blocking, and
+ *  timed wait version of mutex lock.
+ */
+
+int _POSIX_Mutex_Lock_support(
+  pthread_mutex_t           *mutex,
+  boolean                    blocking,
+  Watchdog_Interval          timeout
+);
+
+/*
+ *  _POSIX_Mutex_From_core_mutex_status
+ *
+ *  DESCRIPTION:
+ *
+ *  A support routine which converts core mutex status codes into the
+ *  appropriate POSIX status values.
+ */
+
+int _POSIX_Mutex_From_core_mutex_status(
+  CORE_mutex_Status  status
+);
+
 
 #include <rtems/posix/mutex.inl>
 #if defined(RTEMS_MULTIPROCESSING)

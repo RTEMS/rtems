@@ -27,6 +27,13 @@ MESSAGE_QUEUE_PIECES= mqueue mqueueclose mqueuecreatesupp mqueuedeletesupp \
     mqueuerecvsupp mqueuesend mqueuesendsupp mqueuesetattr \
     mqueuetimedreceive mqueuetimedsend mqueueunlink \
 
+MUTEX_C_PIECES= mutex mutexattrdestroy mutexattrgetprioceiling \
+    mutexattrgetprotocol mutexattrgetpshared mutexattrinit \
+    mutexattrsetprioceiling mutexattrsetprotocol mutexattrsetpshared \
+    mutexdefaultattributes mutexdestroy mutexfromcorestatus \
+    mutexgetprioceiling mutexinit mutexlock mutexlocksupp mutexmp \
+    mutexsetprioceiling mutextimedlock mutextrylock mutexunlock
+
 PTHREAD_C_PIECES = pthread pthreadsetcputime pthreadgetcputime \
     pthreadgetcpuclockid pthreadonce pthreadequal pthreadself pthreadexit \
     pthreaddetach pthreadjoin pthreadcreate pthreadattrsetdetachstate \
@@ -44,7 +51,7 @@ PSIGNAL_C_PIECES = psignal alarm kill killinfo pause pthreadkill \
     sigwait sigwaitinfo signal_2
 
 C_PIECES = adasupp cond getpid key $(MESSAGE_QUEUE_PIECES) \
-    mutex $(PTHREAD_C_PIECES) \
+    $(MUTEX_C_PIECES) $(PTHREAD_C_PIECES) \
     $(PSIGNAL_C_PIECES) ptimer sched time types unistd $(ENOSYS_C_PIECES) \
     $(BUILD_FOR_NOW_C_PIECES)
 
