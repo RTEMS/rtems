@@ -1660,8 +1660,10 @@ int uti596_attach(
   unsigned char j1;    /* State of J1 jumpers */
   int unitNumber;
   char *unitName;
+#if defined(mvme167)
   char *pAddr;
   int addr;
+#endif
 
   #ifdef DBG_ATTACH
   printk(("uti596_attach: begins\n"))

@@ -35,6 +35,7 @@
 static void bsp_return_to_monitor_trap( void )
 {
   extern void start( void );
+  extern void page_table_teardown( void );
 
   register volatile void *start_addr;
 
