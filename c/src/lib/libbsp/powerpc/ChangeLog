@@ -1,3 +1,7 @@
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Reflect having removed shared/*/Makefile.am
+
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use @RTEMS_BSP_FAMILY@ instead of

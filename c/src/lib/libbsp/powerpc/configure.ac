@@ -21,18 +21,5 @@ AM_CONDITIONAL(need_shared, test "$RTEMS_BSP_FAMILY" = "motorola_powerpc")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-shared/Makefile
-shared/bootloader/Makefile
-shared/clock/Makefile
-shared/console/Makefile
-shared/include/Makefile
-shared/irq/Makefile
-shared/motorola/Makefile
-shared/openpic/Makefile
-shared/pci/Makefile
-shared/residual/Makefile
-shared/start/Makefile
-shared/startup/Makefile
-shared/vectors/Makefile
-shared/vme/Makefile])
+shared/Makefile])
 AC_OUTPUT
