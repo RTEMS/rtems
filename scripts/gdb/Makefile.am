@@ -10,7 +10,7 @@ SUBPACKAGES = gdb.add base-gdb.add target-gdb.add
 
 gdb.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
-CLEANFILES += gdb.spec.in
+CLEANFILES = gdb.spec.in
 
 MKGDBSPEC_DEPS = $(top_builddir)/mkgdbspec gdb.spec.in \
     $(top_builddir)/setup.cache

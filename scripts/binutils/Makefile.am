@@ -11,7 +11,7 @@ SUBPACKAGES = binutils.add \
 
 binutils.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
-CLEANFILES += binutils.spec.in
+CLEANFILES = binutils.spec.in
 
 MKBINUTILSSPEC_DEPS = $(top_builddir)/mkbinutilspec binutils.spec.in \
     $(top_builddir)/setup.cache

@@ -1,3 +1,9 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gdb/Makefile.am, gccnewlib/Makefile.am, binutils/Makefile.am:
+	Initially setup CLEANFILES using = instead of += to make
+	automake-1.5 happy.
+
 2001-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, gccnewlib/gccnewlib.add, gccnewlib/target-gcc.add:

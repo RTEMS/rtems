@@ -16,7 +16,7 @@ SUBPACKAGES = gccnewlib.add \
 gccnewlib.spec.in: $(SUBPACKAGES)
 	cat $^ \
 	| sed -e 's%@GCCLANGS@%%g' > $@
-CLEANFILES += gccnewlib.spec.in
+CLEANFILES = gccnewlib.spec.in
 
 gccnewlib_c_only.spec.in: gccnewlib.add base-gcc.add target-gcc.add
 	cat $^ \
