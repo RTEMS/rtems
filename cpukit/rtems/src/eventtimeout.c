@@ -39,8 +39,9 @@ void _Event_Timeout(
   void       *ignored
 )
 {
-  Thread_Control *the_thread;
-  Objects_Locations      location;
+  Thread_Control    *the_thread;
+  Objects_Locations  location;
+  ISR_Level          level;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
@@ -61,14 +62,25 @@ void _Event_Timeout(
        *  a timeout is not allowed to occur.
        */
 
-      if ( _Event_Sync_state != EVENT_SYNC_SYNCHRONIZED && 
-           _Thread_Is_executing( the_thread ) ) {
-        if ( _Event_Sync_state != EVENT_SYNC_SATISFIED )
-          _Event_Sync_state = EVENT_SYNC_TIMEOUT;
-      } else {
-        the_thread->Wait.return_code = RTEMS_TIMEOUT;
-        _Thread_Unblock( the_thread );
+      _ISR_Disable( level );
+      if ( the_thread->Wait.count ) {  /* verify thread is waiting */
+        the_thread->Wait.count = 0;
+        if ( _Event_Sync_state != EVENT_SYNC_SYNCHRONIZED && 
+             _Thread_Is_executing( the_thread ) ) {
+          if ( _Event_Sync_state != EVENT_SYNC_SATISFIED ) {
+            _Event_Sync_state = EVENT_SYNC_TIMEOUT;
+            }
+          _ISR_Enable( level );
+        } else {
+            the_thread->Wait.return_code = RTEMS_TIMEOUT;
+            _ISR_Enable( level );
+            _Thread_Unblock( the_thread );
+        }
       }
+      else {
+        _ISR_Enable( level );
+      } 
+
       _Thread_Unnest_dispatch();
       break;
   }
