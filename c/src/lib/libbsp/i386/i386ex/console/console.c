@@ -293,4 +293,3 @@ rtems_device_driver console_control(
 BSP_output_char_function_type 		BSP_output_char = outbyte;
 BSP_polling_getchar_function_type 	BSP_poll_char = BSP_wait_polled_input;
 
-void BSP_emergency_output_init() {}
