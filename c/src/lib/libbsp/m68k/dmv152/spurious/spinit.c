@@ -36,7 +36,7 @@ rtems_device_driver Spurious_Initialize(
   rtems_device_minor_number minor,
   void *pargp,
   rtems_id tid,
-  rtems_unsigned32 *rval
+  uint32_t         *rval
 )
 {
   rtems_vector_number vector;

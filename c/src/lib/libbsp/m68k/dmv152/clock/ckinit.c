@@ -22,8 +22,8 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 
-rtems_unsigned32 Clock_isrs;        /* ISRs until next tick */
-volatile rtems_unsigned32 Clock_driver_ticks;
+uint32_t         Clock_isrs;        /* ISRs until next tick */
+volatile uint32_t         Clock_driver_ticks;
                                     /* ticks since initialization */
 rtems_isr_entry  Old_ticker;
 
@@ -64,7 +64,7 @@ void Install_clock(
   rtems_isr_entry clock_isr
 )
 {
-  rtems_unsigned8 data;
+  uint8_t         data;
 
   Clock_driver_ticks = 0;
   Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
@@ -86,8 +86,8 @@ void Install_clock(
    * ACC_IC54 - interrupt 5 will be vectored and mapped to level 6
    */
 
-  data = (*(rtems_unsigned8 *)0x0D00000B);
-  (*(rtems_unsigned8 *)0x0D00000B) = (data & 0x7F) | 0x60;
+  data = (*(uint8_t*)0x0D00000B);
+  (*(uint8_t*)0x0D00000B) = (data & 0x7F) | 0x60;
 
   Z8x36_WRITE( TIMER, CT1_CMD_STATUS, 0xC6 );
 
@@ -96,7 +96,7 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  rtems_unsigned8 data;
+  uint8_t         data;
 
   Z8x36_READ ( TIMER, MASTER_INTR, data );
   Z8x36_WRITE( TIMER, MASTER_INTR, (data & 0x01) );
@@ -127,7 +127,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)

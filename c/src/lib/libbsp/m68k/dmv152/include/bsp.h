@@ -69,12 +69,12 @@ extern "C" {
 #define Install_tm27_vector( handler ) \
   { \
     set_vector( (handler), 0x50, 1 );  \
-    (*(volatile rtems_unsigned32 *)0x0d800024) = 0x50; /* set IVECT reg */ \
-    (*(volatile rtems_unsigned8  *)0x0d00000c) = 0x40; /* set VIE reg */ \
+    (*(volatile uint32_t*)0x0d800024) = 0x50; /* set IVECT reg */ \
+    (*(volatile uint8_t*)0x0d00000c) = 0x40; /* set VIE reg */ \
   }
 
 #define Cause_tm27_intr()  \
-  (*(volatile rtems_unsigned8 *)0x0d000003) = 0x0f  /* set VINT */
+  (*(volatile uint8_t*)0x0d000003) = 0x0f  /* set VINT */
 
 #define Clear_tm27_intr()  /* no operation necessary */
 
@@ -86,8 +86,8 @@ extern "C" {
  */
 
 #define rtems_bsp_delay( microseconds ) \
-  { register rtems_unsigned32 _delay=(microseconds); \
-    register rtems_unsigned32 _tmp=123; \
+  { register uint32_t         _delay=(microseconds); \
+    register uint32_t         _tmp=123; \
     asm volatile( "0: \
                      nbcd      %0 ; \
                      nbcd      %0 ; \
@@ -121,22 +121,22 @@ extern "C" {
 
 #define ACC_BASE    0x0D000000
 
-#define ACC_STAT0   ((volatile rtems_unsigned8 *) (ACC_BASE + 0x00))
-#define ACC_STAT1   ((volatile rtems_unsigned8 *) (ACC_BASE + 0x01))
-#define ACC_GENCTL  ((volatile rtems_unsigned8 *) (ACC_BASE + 0x02))
-#define ACC_VINT    ((volatile rtems_unsigned8 *) (ACC_BASE + 0x03))
-#define ACC_VREQ    ((volatile rtems_unsigned8 *) (ACC_BASE + 0x04))
-#define ACC_VARB    ((volatile rtems_unsigned8 *) (ACC_BASE + 0x05))
-#define ACC_ID      ((volatile rtems_unsigned8 *) (ACC_BASE + 0x06))
-#define ACC_CTL2    ((volatile rtems_unsigned8 *) (ACC_BASE + 0x07))
-#define ACC_7IS     ((volatile rtems_unsigned8 *) (ACC_BASE + 0x08))
-#define ACC_LIS     ((volatile rtems_unsigned8 *) (ACC_BASE + 0x09))
-#define ACC_7IE     ((volatile rtems_unsigned8 *) (ACC_BASE + 0x0A))
-#define ACC_LIE     ((volatile rtems_unsigned8 *) (ACC_BASE + 0x0B))
-#define ACC_VIE     ((volatile rtems_unsigned8 *) (ACC_BASE + 0x0C))
-#define ACC_IC10    ((volatile rtems_unsigned8 *) (ACC_BASE + 0x0D))
-#define ACC_IC32    ((volatile rtems_unsigned8 *) (ACC_BASE + 0x0E))
-#define ACC_IC54    ((volatile rtems_unsigned8 *) (ACC_BASE + 0x0F))
+#define ACC_STAT0   ((volatile uint8_t*) (ACC_BASE + 0x00))
+#define ACC_STAT1   ((volatile uint8_t*) (ACC_BASE + 0x01))
+#define ACC_GENCTL  ((volatile uint8_t*) (ACC_BASE + 0x02))
+#define ACC_VINT    ((volatile uint8_t*) (ACC_BASE + 0x03))
+#define ACC_VREQ    ((volatile uint8_t*) (ACC_BASE + 0x04))
+#define ACC_VARB    ((volatile uint8_t*) (ACC_BASE + 0x05))
+#define ACC_ID      ((volatile uint8_t*) (ACC_BASE + 0x06))
+#define ACC_CTL2    ((volatile uint8_t*) (ACC_BASE + 0x07))
+#define ACC_7IS     ((volatile uint8_t*) (ACC_BASE + 0x08))
+#define ACC_LIS     ((volatile uint8_t*) (ACC_BASE + 0x09))
+#define ACC_7IE     ((volatile uint8_t*) (ACC_BASE + 0x0A))
+#define ACC_LIE     ((volatile uint8_t*) (ACC_BASE + 0x0B))
+#define ACC_VIE     ((volatile uint8_t*) (ACC_BASE + 0x0C))
+#define ACC_IC10    ((volatile uint8_t*) (ACC_BASE + 0x0D))
+#define ACC_IC32    ((volatile uint8_t*) (ACC_BASE + 0x0E))
+#define ACC_IC54    ((volatile uint8_t*) (ACC_BASE + 0x0F))
 
 /* constants */
 

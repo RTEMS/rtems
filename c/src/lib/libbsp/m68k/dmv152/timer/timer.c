@@ -28,7 +28,7 @@ rtems_isr timerisr();
 
 void Timer_initialize()
 {
-  rtems_unsigned8 data;
+  uint8_t         data;
 
   (void) set_vector( timerisr, TIMER_VECTOR, 0 );  /* install ISR */
 
@@ -54,8 +54,8 @@ void Timer_initialize()
    * ACC_IC54 - interrupt 5 will be vectored and mapped to level 6
    */
 
-  data = (*(rtems_unsigned8 *)0x0D00000B);
-  (*(rtems_unsigned8 *)0x0D00000B) = (data & 0x0F) | 0x60;
+  data = (*(uint8_t*)0x0D00000B);
+  (*(uint8_t*)0x0D00000B) = (data & 0x0F) | 0x60;
 
 }
 
@@ -65,9 +65,9 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned8 data;
-  rtems_unsigned8  msb, lsb;
-  rtems_unsigned32 remaining, total;
+  uint8_t         data;
+  uint8_t          msb, lsb;
+  uint32_t         remaining, total;
 
   Z8x36_WRITE( TIMER, CT1_CMD_STATUS,  0xce ); /* read the counter value */
   Z8x36_READ(  TIMER, CT1_CUR_CNT_MSB, msb );

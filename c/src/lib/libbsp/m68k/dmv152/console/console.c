@@ -31,9 +31,9 @@ void console_outbyte_polled(
   char ch
 )
 {
-  rtems_unsigned32 control;
-  rtems_unsigned32 data;
-  rtems_unsigned8  rr_0;
+  uint32_t         control;
+  uint32_t         data;
+  uint8_t          rr_0;
 
   if ( port == 0 ) {
     control = CONSOLE_CONTROL_A;
@@ -60,9 +60,9 @@ void console_outbyte_polled(
 
 int console_inbyte_nonblocking(int port)
 {
-  rtems_unsigned32 control;
-  rtems_unsigned32 data;
-  rtems_unsigned8  rr_0;
+  uint32_t         control;
+  uint32_t         data;
+  uint8_t          rr_0;
   char             ch;
 
   if ( port == 0 ) {
