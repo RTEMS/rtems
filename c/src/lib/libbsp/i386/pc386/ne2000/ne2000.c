@@ -365,7 +365,6 @@ static void
 ne_init_hardware (struct ne_softc *sc)
 {
   unsigned int port = sc->port;
-  unsigned char prom[16];
   int i;
   rtems_irq_connect_data irq;
 
@@ -386,15 +385,6 @@ ne_init_hardware (struct ne_softc *sc)
   outport_byte (port + PSTOP, NE_STOP_PAGE);
   outport_byte (port + PSTART, NE_FIRST_RX_PAGE);
   outport_byte (port + BNRY, NE_STOP_PAGE - 1);
-
-  /* Read the PROM to get the Ethernet hardware address.  FIXME: We
-     should let config->hardware_address from rtems_ne_driver_attach
-     override this.  */
-
-  ne_read_data (sc, 0, sizeof prom, prom);
-
-  for (i = 0; i < ETHER_ADDR_LEN; ++i)
-    sc->arpcom.ac_enaddr[i] = prom[i * 2];
 
   /* Set the Ethernet hardware address.  */
 
@@ -909,12 +899,6 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config)
 
   /* Handle the options passed in by the caller.  */
 
-  if (config->hardware_address != NULL)
-    memcpy (sc->arpcom.ac_enaddr, config->hardware_address,
-	    ETHER_ADDR_LEN);
-  else
-    memset (sc->arpcom.ac_enaddr, 0, ETHER_ADDR_LEN);
-
   if (config->mtu != 0)
     mtu = config->mtu;
   else
@@ -935,6 +919,33 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config)
   }
 
   sc->accept_broadcasts = ! config->ignore_broadcast;
+
+  if (config->hardware_address != NULL)
+    memcpy (sc->arpcom.ac_enaddr, config->hardware_address,
+	    ETHER_ADDR_LEN);
+  else
+    {
+      unsigned char prom[16];
+      int ia;
+
+      /* Read the PROM to get the Ethernet hardware address.  */
+
+      outport_byte (sc->port + CMDR, MSK_PG0 | MSK_RD2 | MSK_STP);
+      outport_byte (sc->port + DCR, MSK_FT10 | MSK_BMS | MSK_WTS);
+      outport_byte (sc->port + RBCR0, 0);
+      outport_byte (sc->port + RBCR1, 0);
+      outport_byte (sc->port + RCR, MSK_MON);
+      outport_byte (sc->port + TCR, MSK_LOOP);
+      outport_byte (sc->port + IMR, 0);
+      outport_byte (sc->port + ISR, 0xff);
+
+      ne_read_data (sc, 0, sizeof prom, prom);
+
+      outport_byte (sc->port + CMDR, MSK_PG0 | MSK_RD2 | MSK_STP);
+
+      for (ia = 0; ia < ETHER_ADDR_LEN; ++ia)
+	sc->arpcom.ac_enaddr[ia] = prom[ia * 2];
+    }
 
   /* Set up the network interface.  */
 
