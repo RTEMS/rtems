@@ -159,7 +159,6 @@ This is the online version of the RTEMS C User's Guide.
 
 @c There are currently no Command and Variable Index entries.
 
-
 @node Concept Index, , Command and Variable Index, Top
 @unnumbered Concept Index
 
