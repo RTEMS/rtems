@@ -28,10 +28,9 @@
 rtems_device_driver
 console_initialize(rtems_device_major_number major,
                    rtems_device_minor_number minor,
-                   void                    * arg,
-                   rtems_id                  self,
-                   rtems_unsigned32        * status)
+                   void                    * arg
+)
 {
-    *status = RTEMS_SUCCESSFUL;
+    return RTEMS_SUCCESSFUL;
 }
 

@@ -14,14 +14,22 @@
  *  $Id$
  */
 
+#include <rtems.h>
 #include <bsp.h>
-#include <clockdrv.h>
+#include <rtems/libio.h>
 
 #include <stdlib.h>                     /* for atexit() */
 
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
 typedef unsigned long long hppa_click_count_t;
+
+/*
+ * These are set by clock driver during its init
+ */
+
+rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_minor_number rtems_clock_minor;
 
 /*
  * CPU_HPPA_CLICKS_PER_TICK is either a #define or an rtems_unsigned32
@@ -41,16 +49,7 @@ rtems_unsigned64   Clock_clicks;        /* running total of cycles */
 
 rtems_unsigned32   Clock_clicks_interrupt;
 
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id tid,
-  rtems_unsigned32 *rval
-)
-{
-    Install_clock(Clock_isr);
-}
+void  Clock_exit(void);
 
 void
 ReInstall_clock(rtems_isr_entry new_clock_isr)
@@ -218,3 +217,48 @@ Clock_delay(rtems_unsigned32 microseconds)
     }
 }
 
+rtems_device_driver Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    Install_clock(Clock_isr);
+
+    /*
+     * make major/minor avail to others such as shared memory driver
+     */
+    rtems_clock_major = major;
+    rtems_clock_minor = minor;
+
+    return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    rtems_libio_ioctl_args_t *args = pargp;
+
+    if (args == 0)
+        goto done;
+
+    /*
+     * This is hokey, but until we get a defined interface
+     * to do this, it will just be this simple...
+     */
+
+    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
+    {
+        Clock_isr(HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER);
+    }
+    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
+    {
+        ReInstall_clock(args->buffer);
+    }
+    
+done:
+    return RTEMS_SUCCESSFUL;
+}

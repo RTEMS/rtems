@@ -23,11 +23,27 @@ void _IO_Initialize_all_drivers( void )
 {
 }
 
+rtems_status_code rtems_io_register_name(
+    char *device_name,
+    rtems_device_major_number major,
+    rtems_device_minor_number minor
+  )
+{
+  return RTEMS_NOT_CONFIGURED;
+}
+
+rtems_status_code rtems_io_lookup_name(
+    const char *pathname,
+    rtems_driver_name_t **rnp
+  )
+{
+  return RTEMS_NOT_CONFIGURED;
+}
+
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
   return( RTEMS_NOT_CONFIGURED );
@@ -36,8 +52,7 @@ rtems_status_code rtems_io_initialize(
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
   return( RTEMS_NOT_CONFIGURED );
@@ -46,8 +61,7 @@ rtems_status_code rtems_io_open(
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
   return( RTEMS_NOT_CONFIGURED );
@@ -56,8 +70,7 @@ rtems_status_code rtems_io_close(
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
   return( RTEMS_NOT_CONFIGURED );
@@ -66,8 +79,7 @@ rtems_status_code rtems_io_read(
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
   return( RTEMS_NOT_CONFIGURED );
@@ -76,19 +88,7 @@ rtems_status_code rtems_io_write(
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
-)
-{
-  return( RTEMS_NOT_CONFIGURED );
-}
-
-rtems_status_code _IO_Handler_routine(
-  IO_operations     operation,
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
   return( RTEMS_NOT_CONFIGURED );

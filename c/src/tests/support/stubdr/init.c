@@ -6,8 +6,6 @@
  *    major - device major number
  *    minor - device minor number
  *    pargp - pointer to parameter block
- *    tid   - calling task's id
- *    rval  - pointer to return value
  *
  *  Output parameters:
  *    rval       - STUB_SUCCESSFUL
@@ -31,11 +29,9 @@ rtems_unsigned32 STUB_major;
 rtems_device_driver Stub_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id tid,
-  rtems_unsigned32 *rval
+  void *pargp
 )
 {
   STUB_major = major;
-  *rval = STUB_SUCCESSFUL;
+  return STUB_SUCCESSFUL;
 }

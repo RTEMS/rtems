@@ -32,14 +32,14 @@ extern "C" {
  */
 
 typedef struct {
-  Objects_Name       name;              /* task name */
-  unsigned32         stack_size;        /* task stack size */
+  Objects_Name          name;              /* task name */
+  unsigned32            stack_size;        /* task stack size */
   rtems_task_priority   initial_priority;  /* task priority */
-  rtems_attribute attribute_set;     /* task attributes */
-  rtems_task_entry       entry_point;       /* task entry point */
-  rtems_mode      mode_set;          /* task initial mode */
-  unsigned32         argument;          /* task argument */
-}   rtems_initialization_tasks_table;
+  rtems_attribute       attribute_set;     /* task attributes */
+  rtems_task_entry      entry_point;       /* task entry point */
+  rtems_mode            mode_set;          /* task initial mode */
+  unsigned32            argument;          /* task argument */
+} rtems_initialization_tasks_table;
 
 /*
  *
@@ -56,14 +56,12 @@ typedef struct {
 typedef unsigned32 rtems_device_major_number;
 typedef unsigned32 rtems_device_minor_number;
 
-typedef void rtems_device_driver;
+typedef rtems_status_code rtems_device_driver;
 
 typedef rtems_device_driver ( *rtems_device_driver_entry )(
                  rtems_device_major_number,
                  rtems_device_minor_number,
-                 void *,
-                 Objects_Id,
-                 unsigned32 *
+                 void *
              );
 
 typedef struct {
@@ -173,12 +171,13 @@ typedef rtems_mpci_entry ( *rtems_mpci_receive_entry )(
 
 typedef struct {
   unsigned32                      default_timeout;        /* in ticks */
+  unsigned32                      maximum_packet_size;
   rtems_mpci_initialization_entry initialization;
   rtems_mpci_get_packet_entry     get_packet;
   rtems_mpci_return_packet_entry  return_packet;
   rtems_mpci_send_entry           send_packet;
   rtems_mpci_receive_entry        receive_packet;
-}  rtems_mpci_table;
+} rtems_mpci_table;
 
 /*
  *  The following records define the Multiprocessor Configuration
@@ -192,8 +191,7 @@ struct Configuration_Table_MP {
   unsigned32  maximum_nodes;          /* maximum # nodes in system */
   unsigned32  maximum_global_objects; /* maximum # global objects */
   unsigned32  maximum_proxies;        /* maximum # proxies */
-  rtems_mpci_table *User_mpci_table;
-                                      /* pointer to MPCI table */
+  rtems_mpci_table *User_mpci_table;  /* pointer to MPCI table */
 };
 
 /*
@@ -209,25 +207,24 @@ struct Configuration_Table_MP {
  */
 
 struct Configuration_Table {
-  void                                     *work_space_start;
-  unsigned32                                work_space_size;
-  unsigned32                                maximum_tasks;
-  unsigned32                                maximum_timers;
-  unsigned32                                maximum_semaphores;
-  unsigned32                                maximum_message_queues;
-  unsigned32                                maximum_messages;
-  unsigned32                                maximum_partitions;
-  unsigned32                                maximum_regions;
-  unsigned32                                maximum_ports;
-  unsigned32                                maximum_periods;
-  unsigned32                                maximum_extensions;
-  unsigned32                                microseconds_per_tick;
-  unsigned32                                ticks_per_timeslice;
-  unsigned32                                number_of_initialization_tasks;
+  void                             *work_space_start;
+  unsigned32                        work_space_size;
+  unsigned32                        maximum_tasks;
+  unsigned32                        maximum_timers;
+  unsigned32                        maximum_semaphores;
+  unsigned32                        maximum_message_queues;
+  unsigned32                        maximum_partitions;
+  unsigned32                        maximum_regions;
+  unsigned32                        maximum_ports;
+  unsigned32                        maximum_periods;
+  unsigned32                        maximum_extensions;
+  unsigned32                        microseconds_per_tick;
+  unsigned32                        ticks_per_timeslice;
+  unsigned32                        number_of_initialization_tasks;
   rtems_initialization_tasks_table *User_initialization_tasks_table;
-  unsigned32                                number_of_device_drivers;
+  unsigned32                        number_of_device_drivers;
   rtems_driver_address_table       *Device_driver_table;
-  rtems_extensions_table            *User_extension_table;
+  rtems_extensions_table           *User_extension_table;
   rtems_multiprocessing_table      *User_multiprocessing_table;
 };
 
@@ -244,7 +241,7 @@ extern const rtems_multiprocessing_table
  *  configuration information.
  */
 
-EXTERN rtems_configuration_table                 *_Configuration_Table;
+EXTERN rtems_configuration_table   *_Configuration_Table;
 EXTERN rtems_multiprocessing_table *_Configuration_MP_table;
 EXTERN rtems_mpci_table            *_Configuration_MPCI_table;
 
@@ -258,7 +255,7 @@ EXTERN rtems_mpci_table            *_Configuration_MPCI_table;
  */
 
 STATIC INLINE void _Configuration_Handler_initialization(
-  rtems_configuration_table                 *configuration_table,
+  rtems_configuration_table   *configuration_table,
   rtems_multiprocessing_table *multiprocessing_table,
   rtems_mpci_table            *users_mpci_table
 );

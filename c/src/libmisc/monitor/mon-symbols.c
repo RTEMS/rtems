@@ -1,6 +1,7 @@
 /*
- *      @(#)symbols.c	1.3 - 95/04/24
+ *      @(#)symbols.c	1.10 - 95/08/02
  *      
+ *  $Id$
  */
 
 /* #define qsort _quicksort */
@@ -21,34 +22,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "monitor.h"
 #include "symbols.h"
 
-extern rtems_symbol_table_t *rtems_monitor_symbols;
-
-#ifdef RTEMS_DEBUG
-#define CHK_ADR_PTR(p)  \
-do { \
-    if (((p) < rtems_monitor_symbols->addresses) || \
-        ((p) >= (rtems_monitor_symbols->addresses + rtems_monitor_symbols->next))) \
-    { \
-        printf("bad address pointer %p\n", (p)); \
-        rtems_fatal_error_occurred(RTEMS_INVALID_ADDRESS); \
-    } \
-} while (0)
-
-#define CHK_NAME_PTR(p) \
-do { \
-    if (((p) < rtems_monitor_symbols->symbols) || \
-        ((p) >= (rtems_monitor_symbols->symbols + rtems_monitor_symbols->next))) \
-    { \
-        printf("bad symbol pointer %p\n", (p)); \
-        rtems_fatal_error_occurred(RTEMS_INVALID_ADDRESS); \
-    } \
-} while (0)
-#else
-#define CHK_ADR_PTR(p)
-#define CHK_NAME_PTR(p)
-#endif
 
 rtems_symbol_table_t *
 rtems_symbol_table_create()
@@ -178,9 +154,6 @@ rtems_symbol_compare(const void *e1,
     s1 = (rtems_symbol_t *) e1;
     s2 = (rtems_symbol_t *) e2;
 
-    CHK_ADR_PTR(s1);
-    CHK_ADR_PTR(s2);
-
     if (s1->value < s2->value)
         return -1;
     if (s1->value > s2->value)
@@ -199,9 +172,6 @@ rtems_symbol_string_compare(const void *e1,
     rtems_symbol_t *s1, *s2;
     s1 = (rtems_symbol_t *) e1;
     s2 = (rtems_symbol_t *) e2;
-
-    CHK_NAME_PTR(s1);
-    CHK_NAME_PTR(s2);
 
     return strcasecmp(s1->name, s2->name);
 }
@@ -252,6 +222,9 @@ rtems_symbol_value_lookup(
     rtems_unsigned32 best_distance = ~0;
     rtems_unsigned32 elements;
 
+    if (table == 0)
+        table = rtems_monitor_symbols;
+
     if ((table == 0) || (table->size == 0))
         return 0;
 
@@ -300,13 +273,14 @@ rtems_symbol_name_lookup(
     rtems_symbol_t *sp = 0;
     rtems_symbol_t  key;
 
+    if (table == 0)
+        table = rtems_monitor_symbols;
+
     if ((table == 0) || (name == 0))
         goto done;
 
     if (table->sorted == 0)
-    {
         rtems_symbol_sort(table);
-    }
 
     /*
      * dummy up one for bsearch()
@@ -325,3 +299,192 @@ done:
     return sp;
 }
 
+void *
+rtems_monitor_symbol_next(
+    void                   *object_info,
+    rtems_monitor_symbol_t *canonical,
+    rtems_id               *next_id
+)
+{
+    rtems_symbol_table_t *table;
+    int n = rtems_get_index(*next_id);
+
+    table = *(rtems_symbol_table_t **) object_info;
+    if (table == 0)
+        goto failed;
+
+    if (n >= table->next)
+        goto failed;
+
+    /* NOTE: symbols do not have id and name fields */
+      
+    if (table->sorted == 0)
+        rtems_symbol_sort(table);
+
+    _Thread_Disable_dispatch();
+
+    *next_id += 1;
+    return (void *) (table->symbols + n);
+
+failed:
+    *next_id = RTEMS_OBJECT_ID_FINAL;
+    return 0;
+}
+
+void
+rtems_monitor_symbol_canonical(
+    rtems_monitor_symbol_t *canonical_symbol,
+    rtems_symbol_t *sp
+)
+{
+    canonical_symbol->value = sp->value;
+    canonical_symbol->offset = 0;
+    strncpy(canonical_symbol->name, sp->name, sizeof(canonical_symbol->name));
+}
+
+
+void
+rtems_monitor_symbol_canonical_by_name(
+    rtems_monitor_symbol_t *canonical_symbol,
+    char                   *name
+)
+{
+    rtems_symbol_t *sp;
+
+    sp = rtems_symbol_name_lookup(0, name);
+
+    canonical_symbol->value = sp ? sp->value : 0;
+
+    strncpy(canonical_symbol->name, name, sizeof(canonical_symbol->name));
+    canonical_symbol->offset = 0;
+}
+
+void
+rtems_monitor_symbol_canonical_by_value(
+    rtems_monitor_symbol_t *canonical_symbol,
+    void                   *value_void_p
+)
+{
+    unsigned32 value = (unsigned32) value_void_p;
+    rtems_symbol_t *sp;
+
+    sp = rtems_symbol_value_lookup(0, value);
+    if (sp)
+    {
+        canonical_symbol->value = sp->value;
+        canonical_symbol->offset = value - sp->value;
+        strncpy(canonical_symbol->name, sp->name, sizeof(canonical_symbol->name));
+    }
+    else
+    {
+        canonical_symbol->value = value;
+        canonical_symbol->offset = 0;
+        canonical_symbol->name[0] = '\0';
+    }
+}
+
+
+unsigned32
+rtems_monitor_symbol_dump(
+    rtems_monitor_symbol_t *canonical_symbol,
+    boolean                 verbose
+)
+{
+    unsigned32 length = 0;
+
+    /*
+     * print the name if it exists AND if value is non-zero
+     * Ie: don't print some garbage symbol for address 0
+     */
+
+    if (canonical_symbol->name[0] && (canonical_symbol->value != 0))
+    {
+        if (canonical_symbol->offset == 0)
+            length += printf("%.*s",
+                             sizeof(canonical_symbol->name),
+                             canonical_symbol->name);
+        else
+            length += printf("<%.*s+0x%x>",
+                             sizeof(canonical_symbol->name),
+                             canonical_symbol->name,
+                             canonical_symbol->offset);
+        if (verbose)
+            length += printf(" [0x%x]", canonical_symbol->value);
+    }
+    else
+        length += printf("[0x%x]", canonical_symbol->value);
+
+    return length;
+}
+
+
+void
+rtems_monitor_symbol_dump_all(
+    rtems_symbol_table_t *table,
+    boolean               verbose
+)
+{
+    int s;
+    rtems_symbol_t *sp;
+
+    if (table == 0)
+    {
+        table = rtems_monitor_symbols;
+        if (table == 0)
+            return;
+    }
+
+    if (table->sorted == 0)
+        rtems_symbol_sort(table);
+
+    for (s = 0, sp = table->symbols; s < table->next; s++, sp++)
+    {
+        rtems_monitor_symbol_t canonical_symbol;
+
+        rtems_monitor_symbol_canonical(&canonical_symbol, sp);
+        rtems_monitor_symbol_dump(&canonical_symbol, TRUE);
+        printf("\n");
+    }
+}
+
+
+/*
+ * 'symbol' command
+ */
+
+void
+rtems_monitor_symbol_cmd(
+    int        argc,
+    char     **argv,
+    unsigned32 command_arg,
+    boolean    verbose
+)
+{
+    int arg;
+    rtems_symbol_table_t *table;
+
+    table = *(rtems_symbol_table_t **) command_arg;
+    if (table == 0)
+    {
+        table = rtems_monitor_symbols;
+        if (table == 0)
+            return;
+    }
+
+    /*
+     * Use object command to dump out whole symbol table
+     */
+    if (argc == 1)
+        rtems_monitor_symbol_dump_all(table, verbose);
+    else
+    {
+        rtems_monitor_symbol_t canonical_symbol;
+
+        for (arg=1; argv[arg]; arg++)
+        {
+            rtems_monitor_symbol_canonical_by_name(&canonical_symbol, argv[arg]);
+            rtems_monitor_symbol_dump(&canonical_symbol, verbose);
+            printf("\n");
+        }
+    }
+}

@@ -177,8 +177,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
   _Event_Manager_initialization();
 
   _Message_queue_Manager_initialization(
-    configuration_table->maximum_message_queues,
-    configuration_table->maximum_messages
+    configuration_table->maximum_message_queues
   );
 
   _Semaphore_Manager_initialization(

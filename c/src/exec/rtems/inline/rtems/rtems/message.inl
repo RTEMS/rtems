@@ -17,6 +17,8 @@
 #ifndef __MESSAGE_QUEUE_inl
 #define __MESSAGE_QUEUE_inl
 
+#include <rtems/wkspace.h>
+
 /*PAGE
  *
  *  _Message_queue_Copy_buffer
@@ -24,11 +26,12 @@
  */
 
 STATIC INLINE void _Message_queue_Copy_buffer (
-  Message_queue_Buffer *source,
-  Message_queue_Buffer *destination
+  void      *source,
+  void      *destination,
+  unsigned32 size
 )
 {
-  *destination = *source;
+  memcpy(destination, source, size);
 }
 
 /*PAGE
@@ -38,10 +41,12 @@ STATIC INLINE void _Message_queue_Copy_buffer (
  */
 
 STATIC INLINE Message_queue_Buffer_control *
-  _Message_queue_Allocate_message_buffer ( void )
+_Message_queue_Allocate_message_buffer (
+    Message_queue_Control *the_message_queue
+)
 {
    return (Message_queue_Buffer_control *)
-     _Chain_Get( &_Message_queue_Inactive_messages );
+     _Chain_Get( &the_message_queue->Inactive_messages );
 }
 
 /*PAGE
@@ -51,10 +56,11 @@ STATIC INLINE Message_queue_Buffer_control *
  */
 
 STATIC INLINE void _Message_queue_Free_message_buffer (
-  Message_queue_Buffer_control *the_message
+    Message_queue_Control        *the_message_queue,
+    Message_queue_Buffer_control *the_message
 )
 {
- _Chain_Append( &_Message_queue_Inactive_messages, &the_message->Node );
+  _Chain_Append( &the_message_queue->Inactive_messages, &the_message->Node );
 }
 
 /*PAGE
@@ -116,17 +122,6 @@ STATIC INLINE boolean _Message_queue_Is_null (
   return ( the_message_queue == NULL  );
 }
 
-/*PAGE
- *
- *  _Message_queue_Allocate
- *
- */
-
-STATIC INLINE Message_queue_Control *_Message_queue_Allocate ( void )
-{
-  return (Message_queue_Control *)
-     _Objects_Allocate( &_Message_queue_Information );
-}
 
 /*PAGE
  *
@@ -138,6 +133,12 @@ STATIC INLINE void _Message_queue_Free (
   Message_queue_Control *the_message_queue
 )
 {
+  if (the_message_queue->message_buffers)
+  {
+      _Workspace_Free((void *) the_message_queue->message_buffers);
+      the_message_queue->message_buffers = 0;
+  }
+  
   _Objects_Free( &_Message_queue_Information, &the_message_queue->Object );
 }
 

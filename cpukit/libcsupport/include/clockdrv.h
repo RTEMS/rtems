@@ -23,31 +23,24 @@ extern "C" {
 /* variables */
 
 extern volatile rtems_unsigned32 Clock_driver_ticks;
+extern rtems_device_major_number rtems_clock_major;
+extern rtems_device_minor_number rtems_clock_minor;
 
-/* functions */
-
-rtems_task Exit_task();
-void exit_task_init();
-
-void Install_clock( rtems_isr_entry );
-void ReInstall_clock( rtems_isr_entry );
-void Clock_exit();
-
-rtems_isr Clock_isr(
-  rtems_vector_number
-);
-
-/* driver entries */
+/* default clock driver entry */
 
 #define CLOCK_DRIVER_TABLE_ENTRY \
-  { Clock_initialize, NULL, NULL, NULL, NULL, NULL }
-
+  { Clock_initialize, NULL, NULL, NULL, NULL, Clock_control }
+ 
 rtems_device_driver Clock_initialize(
   rtems_device_major_number,
   rtems_device_minor_number,
-  void *,
-  rtems_id,
-  rtems_unsigned32 *
+  void *
+);
+
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
 );
 
 #ifdef __cplusplus

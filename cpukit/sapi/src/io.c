@@ -18,6 +18,9 @@
 #include <rtems/io.h>
 #include <rtems/isr.h>
 #include <rtems/thread.h>
+#include <rtems/intr.h>
+
+#include <string.h>
 
 /*PAGE
  *
@@ -33,11 +36,81 @@
 void _IO_Initialize_all_drivers( void )
 {
    rtems_device_major_number major;
-   unsigned32                ignored;
 
    for ( major=0 ; major < _IO_Number_of_drivers ; major ++ )
-     (void) rtems_io_initialize( major, 0, _Configuration_Table, &ignored );
+     (void) rtems_io_initialize( major, 0, _Configuration_Table);
 }
+
+/*PAGE
+ *
+ *  rtems_io_register_name
+ *
+ *  Associate a name with a driver
+ *
+ *  Input Paramters:
+ *
+ *  Output Parameters: 
+ */
+
+rtems_status_code rtems_io_register_name(
+    char *device_name,
+    rtems_device_major_number major,
+    rtems_device_minor_number minor
+  )
+{
+    rtems_driver_name_t *np;
+    unsigned32 level;
+
+    /* find an empty slot */
+    for (np = rtems_driver_name_table; np < &rtems_driver_name_table[RTEMS_MAX_DRIVER_NAMES]; np++)
+    {
+        rtems_interrupt_disable(level);
+        if (np->device_name == 0)
+        {
+            np->device_name = device_name;
+            np->device_name_length = strlen(device_name);
+            np->major = major;
+            np->minor = minor;
+            rtems_interrupt_enable(level);
+
+            return RTEMS_SUCCESSFUL;
+        }
+        rtems_interrupt_enable(level);
+    }
+
+    return RTEMS_TOO_MANY;
+}
+
+/*PAGE
+ *
+ *  rtems_io_lookup_name
+ *
+ *  Find what driver "owns" this name
+ *
+ *  Input Paramters:
+ *
+ *  Output Parameters: 
+ */
+
+rtems_status_code rtems_io_lookup_name(
+    const char *pathname,
+    rtems_driver_name_t **rnp
+  )
+{
+    rtems_driver_name_t *np;
+
+    for (np = rtems_driver_name_table; np < &rtems_driver_name_table[RTEMS_MAX_DRIVER_NAMES]; np++)
+        if (np->device_name)
+            if (strncmp(np->device_name, pathname, np->device_name_length) == 0)
+            {                
+                *rnp = np;
+                return RTEMS_SUCCESSFUL;
+            }
+    
+    *rnp = 0;
+    return RTEMS_UNSATISFIED;
+}
+
 
 /*PAGE
  *
@@ -49,27 +122,24 @@ void _IO_Initialize_all_drivers( void )
  *    major        - device driver number
  *    minor        - device number
  *    argument     - pointer to argument(s)
- *    return_value - pointer to driver's return value
  *
  *  Output Parameters:
  *    returns       - return code
- *    *return_value - driver's return code
  */
 
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
-  return _IO_Handler_routine(
-            IO_INITIALIZE_OPERATION,
-            major,
-            minor,
-            argument,
-            return_value
-         );
+    rtems_device_driver_entry callout;
+    
+    if ( major >= _IO_Number_of_drivers )
+        return RTEMS_INVALID_NUMBER;
+
+    callout = _IO_Driver_address_table[major].initialization;
+    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -82,27 +152,24 @@ rtems_status_code rtems_io_initialize(
  *    major        - device driver number
  *    minor        - device number
  *    argument     - pointer to argument(s)
- *    return_value - pointer to driver's return value
  *
  *  Output Parameters:
  *    returns       - return code
- *    *return_value - driver's return code
  */
 
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
-  return _IO_Handler_routine(
-            IO_OPEN_OPERATION,
-            major,
-            minor,
-            argument,
-            return_value
-         );
+    rtems_device_driver_entry callout;
+    
+    if ( major >= _IO_Number_of_drivers )
+        return RTEMS_INVALID_NUMBER;
+
+    callout = _IO_Driver_address_table[major].open;
+    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -115,27 +182,24 @@ rtems_status_code rtems_io_open(
  *    major        - device driver number
  *    minor        - device number
  *    argument     - pointer to argument(s)
- *    return_value - pointer to driver's return value
  *
  *  Output Parameters:
  *    returns       - return code
- *    *return_value - driver's return code
  */
 
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
-  return _IO_Handler_routine(
-            IO_CLOSE_OPERATION,
-            major,
-            minor,
-            argument,
-            return_value
-         );
+    rtems_device_driver_entry callout;
+    
+    if ( major >= _IO_Number_of_drivers )
+        return RTEMS_INVALID_NUMBER;
+
+    callout = _IO_Driver_address_table[major].close;
+    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -148,27 +212,24 @@ rtems_status_code rtems_io_close(
  *    major        - device driver number
  *    minor        - device number
  *    argument     - pointer to argument(s)
- *    return_value - pointer to driver's return value
  *
  *  Output Parameters:
  *    returns       - return code
- *    *return_value - driver's return code
  */
 
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
-  return _IO_Handler_routine(
-            IO_READ_OPERATION,
-            major,
-            minor,
-            argument,
-            return_value
-         );
+    rtems_device_driver_entry callout;
+    
+    if ( major >= _IO_Number_of_drivers )
+        return RTEMS_INVALID_NUMBER;
+
+    callout = _IO_Driver_address_table[major].read;
+    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -181,27 +242,24 @@ rtems_status_code rtems_io_read(
  *    major        - device driver number
  *    minor        - device number
  *    argument     - pointer to argument(s)
- *    return_value - pointer to driver's return value
  *
  *  Output Parameters:
  *    returns       - return code
- *    *return_value - driver's return code
  */
 
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
-  return _IO_Handler_routine(
-            IO_WRITE_OPERATION,
-            major,
-            minor,
-            argument,
-            return_value
-         );
+    rtems_device_driver_entry callout;
+    
+    if ( major >= _IO_Number_of_drivers )
+        return RTEMS_INVALID_NUMBER;
+
+    callout = _IO_Driver_address_table[major].write;
+    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -214,103 +272,23 @@ rtems_status_code rtems_io_write(
  *    major        - device driver number
  *    minor        - device number
  *    argument     - pointer to argument(s)
- *    return_value - pointer to driver's return value
  *
  *  Output Parameters:
  *    returns       - return code
- *    *return_value - driver's return code
  */
 
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 )
 {
-  return _IO_Handler_routine(
-            IO_CONTROL_OPERATION,
-            major,
-            minor,
-            argument,
-            return_value
-         );
+    rtems_device_driver_entry callout;
+    
+    if ( major >= _IO_Number_of_drivers )
+        return RTEMS_INVALID_NUMBER;
+
+    callout = _IO_Driver_address_table[major].control;
+    return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
 
-/*PAGE
- *
- *  _IO_Handler_routine
- *
- *  This routine implements all IO manager directives.
- *
- *  Input Paramters:
- *    operation    - I/O operation to be performed
- *    major        - device driver number
- *    minor        - device number
- *    argument     - pointer to argument(s)
- *    return_value - pointer to driver's return value
- *
- *  Output Parameters:
- *    returns       - return code
- *    *return_value - driver's return code
- */
-
-rtems_status_code _IO_Handler_routine(
-  IO_operations              operation,
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument,
-  unsigned32                *return_value
-)
-{
-  rtems_device_driver_entry io_callout;
-
-  /*
-   *  NOTE:  There is no range checking as in Ada because:
-   *           + arrays in Ada are not always zero based.
-   *           + with zero based arrays, a comparison of an unsigned
-   *             number being less than zero would be necessary to
-   *             check it as a range.  This would cause a warning for
-   *             checking an unsigned number for being negative.
-   */
-
-  if ( major >= _IO_Number_of_drivers )
-    return ( RTEMS_INVALID_NUMBER );
-
-  switch ( operation ) {
-     case IO_INITIALIZE_OPERATION:
-        io_callout = _IO_Driver_address_table[ major ].initialization;
-        break;
-     case IO_OPEN_OPERATION:
-        io_callout = _IO_Driver_address_table[ major ].open;
-        break;
-     case IO_CLOSE_OPERATION:
-        io_callout = _IO_Driver_address_table[ major ].close;
-        break;
-     case IO_READ_OPERATION:
-        io_callout = _IO_Driver_address_table[ major ].read;
-        break;
-     case IO_WRITE_OPERATION:
-        io_callout = _IO_Driver_address_table[ major ].write;
-        break;
-     case IO_CONTROL_OPERATION:
-        io_callout = _IO_Driver_address_table[ major ].control;
-        break;
-     default:             /* unreached -- only to remove warnings */
-        io_callout = NULL;
-        break;
-  }
-
-  if ( io_callout != NULL )
-     (*io_callout)(
-        major,
-        minor,
-        argument,
-        _Thread_Executing->Object.id,
-        return_value
-     );
-  else
-     *return_value = 0;
-
-  return( RTEMS_SUCCESSFUL );
-}

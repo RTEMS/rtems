@@ -100,6 +100,18 @@ EXTERN unsigned32  _Objects_Local_node;
 #define RTEMS_WHO_AM_I           0
 
 /*
+ * Parameters and return id's for _Objects_Get_next
+ */
+
+#define RTEMS_OBJECT_ID_INITIAL_INDEX   (0)
+#define RTEMS_OBJECT_ID_FINAL_INDEX     (0xffff)
+
+#define RTEMS_OBJECT_ID_INITIAL(node)   (_Objects_Build_id(      \
+                                            node, \
+                                            RTEMS_OBJECT_ID_INITIAL_INDEX))
+#define RTEMS_OBJECT_ID_FINAL           ((Objects_Id) ~0)
+
+/*
  *  _Objects_Handler_initialization
  *
  *  DESCRIPTION:
@@ -176,6 +188,22 @@ Objects_Control *_Objects_Get (
   Objects_Information *information,
   Objects_Id           id,
   Objects_Locations   *location
+);
+
+/*
+ *  _Objects_Get_next
+ *
+ *  DESCRIPTION:
+ *
+ *  Like _Objects_Get, but is used to find "next" open object.
+ *
+ */
+
+Objects_Control *_Objects_Get_next(
+    Objects_Information *information,
+    Objects_Id           id,
+    unsigned32          *location_p,
+    Objects_Id          *next_id_p
 );
 
 /*

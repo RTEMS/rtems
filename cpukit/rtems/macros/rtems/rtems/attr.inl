@@ -62,15 +62,6 @@
 
 /*PAGE
  *
- *  _Attributes_Is_limit
- *
- */
-
-#define _Attributes_Is_limit( _attribute_set ) \
-  ( (_attribute_set) & RTEMS_LIMIT )
-
-/*PAGE
- *
  *  _Attributes_Is_binary_semaphore
  *
  */

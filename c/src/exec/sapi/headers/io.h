@@ -35,27 +35,30 @@ extern "C" {
 #include <rtems/config.h>
 
 /*
- *  The following type defines the set of IO operations which are
- *  recognized by _IO_Handler and can be supported by a RTEMS
- *  device driver.
- */
-
-typedef enum {
-  IO_INITIALIZE_OPERATION = 0,
-  IO_OPEN_OPERATION       = 1,
-  IO_CLOSE_OPERATION      = 2,
-  IO_READ_OPERATION       = 3,
-  IO_WRITE_OPERATION      = 4,
-  IO_CONTROL_OPERATION    = 5
-}  IO_operations;
-
-/*
  *  The following declare the data required to manage the Device Driver
  *  Address Table.
  */
 
-EXTERN unsigned32                          _IO_Number_of_drivers;
+EXTERN unsigned32                  _IO_Number_of_drivers;
 EXTERN rtems_driver_address_table *_IO_Driver_address_table;
+
+/*
+ * Table for the io device names
+ */
+
+typedef struct {
+    char                     *device_name;
+    unsigned32                device_name_length;
+    rtems_device_major_number major;
+    rtems_device_minor_number minor;
+} rtems_driver_name_t;
+
+/*XXX this really should be allocated some better way... */
+/*XXX it should probably be a chain and use a 'maximum' drivers field
+ * in config table */
+#define RTEMS_MAX_DRIVER_NAMES 20
+EXTERN rtems_driver_name_t rtems_driver_name_table[RTEMS_MAX_DRIVER_NAMES];
+
 
 /*
  *  _IO_Manager_initialization
@@ -71,6 +74,36 @@ STATIC INLINE void _IO_Manager_initialization(
 );
 
 /*
+ *  rtems_io_register_name
+ *
+ *  DESCRIPTION:
+ *
+ *  Associate a name with a driver.
+ *
+ */
+
+rtems_status_code rtems_io_register_name(
+    char *device_name,
+    rtems_device_major_number major,
+    rtems_device_minor_number minor
+);
+
+
+/*
+ *  rtems_io_lookup_name
+ *
+ *  DESCRIPTION:
+ *
+ *  Find what driver "owns" this name
+ */
+
+rtems_status_code rtems_io_lookup_name(
+    const char *pathname,
+    rtems_driver_name_t **rnp
+);
+
+
+/*
  *  rtems_io_initialize
  *
  *  DESCRIPTION:
@@ -82,8 +115,7 @@ STATIC INLINE void _IO_Manager_initialization(
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 );
 
 /*
@@ -98,8 +130,7 @@ rtems_status_code rtems_io_initialize(
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 );
 
 /*
@@ -114,8 +145,7 @@ rtems_status_code rtems_io_open(
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 );
 
 /*
@@ -130,8 +160,7 @@ rtems_status_code rtems_io_close(
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 );
 
 /*
@@ -146,8 +175,7 @@ rtems_status_code rtems_io_read(
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 );
 
 /*
@@ -162,8 +190,7 @@ rtems_status_code rtems_io_write(
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument,
-  unsigned32       *return_value
+  void             *argument
 );
 
 /*
@@ -176,23 +203,6 @@ rtems_status_code rtems_io_control(
  */
 
 void _IO_Initialize_all_drivers( void );
-
-/*
- *  _IO_Handler_routine
- *
- *  DESCRIPTION:
- *
- *  This routine provides the common foundation for all of the IO
- *  Manager's directives.
- */
-
-rtems_status_code _IO_Handler_routine(
-  IO_operations              operation,
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument,
-  unsigned32                *return_value
-);
 
 #include <rtems/io.inl>
 

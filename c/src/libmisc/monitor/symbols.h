@@ -1,5 +1,8 @@
 /*
- *  File:       symbols.h
+ *	@(#)symbols.h	1.3 - 95/06/09
+ *	
+ *
+ *  RTEMS monitor symbol table functions
  *
  *  Description:
  *      Entry points for symbol table routines.
@@ -8,6 +11,7 @@
  *
  *  TODO:
  *
+ *  $Id$
  */
 
 #ifndef _INCLUDE_SYMBOLS_H
@@ -60,15 +64,6 @@ typedef struct {
     rtems_unsigned32 strings_next;      /* next byte to use in this block */
 
 } rtems_symbol_table_t;
-
-void                  rtems_symbol_table_destroy(rtems_symbol_table_t *table);
-rtems_symbol_table_t *rtems_symbol_table_create();
-rtems_symbol_t       *rtems_symbol_create(rtems_symbol_table_t *,
-                                          char *, rtems_unsigned32);
-rtems_symbol_t       *rtems_symbol_value_lookup(rtems_symbol_table_t *,
-                                                rtems_unsigned32);
-rtems_symbol_t       *rtems_symbol_name_lookup(rtems_symbol_table_t *,
-                                                char *);
 
 #define rtems_symbol_name(sp)   ((sp)->name)
 #define rtems_symbol_value(sp)  ((sp)->value)

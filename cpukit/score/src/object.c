@@ -12,6 +12,7 @@
  *
  *  $Id$
  */
+
 #include <rtems/system.h>
 #include <rtems/chain.h>
 #include <rtems/config.h>
@@ -225,4 +226,70 @@ Objects_Control *_Objects_Get(
   *location = OBJECTS_ERROR;
   _Objects_MP_Is_remote( information, id, location, &the_object );
   return the_object;
+}
+
+
+/*PAGE
+ *
+ * _Objects_Get_next
+ *
+ * Like _Objects_Get, but considers the 'id' as a "hint" and
+ * finds next valid one after that point.
+ * Mostly used for monitor and debug traversal of an object.
+ *
+ * Input parameters:
+ *   information - pointer to entry in table for this class
+ *   id          - object id to search for
+ *   location    - address of where to store the location
+ *   next_id     - address to store next id to try
+ *
+ * Output parameters:
+ *   returns     - address of object if local
+ *   location    - one of the following:
+ *                  OBJECTS_ERROR  - invalid object ID
+ *                  OBJECTS_REMOTE - remote object
+ *                  OBJECTS_LOCAL  - local object
+ *   next_id     - will contain a reasonable "next" id to continue traversal
+ *
+ * NOTE:
+ *      assumes can add '1' to an id to get to next index.
+ */
+
+Objects_Control *
+_Objects_Get_next(
+    Objects_Information *information,
+    Objects_Id           id,
+    unsigned32          *location_p,
+    Objects_Id          *next_id_p
+)
+{
+    Objects_Control *object;
+    Objects_Id       next_id;
+    
+    if (rtems_get_index(id) == RTEMS_OBJECT_ID_INITIAL_INDEX)
+        next_id = information->minimum_id;
+    else
+        next_id = id;
+
+    do {
+        /* walked off end of list? */
+        if (next_id > information->maximum_id)
+        {
+            *location_p = OBJECTS_ERROR;
+            goto final;
+        }
+        
+        /* try to grab one */
+        object = _Objects_Get(information, next_id, location_p);
+
+        next_id++;
+
+    } while (*location_p != OBJECTS_LOCAL);
+
+    *next_id_p = next_id;
+    return object;
+
+final:
+    *next_id_p = RTEMS_OBJECT_ID_FINAL;
+    return 0;
 }

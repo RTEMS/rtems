@@ -1,7 +1,7 @@
 /*  Clock
  *
- *  This routine initializes the interval timer on the
- *  PA-RISC CPU.  The tick frequency is specified by the bsp.
+ *  This routine generates clock ticks using standard POSIX services.
+ *  The tick frequency is specified by the bsp.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,62 +15,44 @@
  */
 
 #include <rtems.h>
+#include <rtems/libio.h>
+#include <bsp.h>
 
+/*
+ *  In order to get the types and prototypes used in this file under
+ *  Solaris 2.3, it is necessary to pull the following magic.
+ */
+ 
+#if defined(solaris)
+#warning "Ignore the undefining __STDC__ warning"
+#undef __STDC__
+#define __STDC__ 0
+#undef  _POSIX_C_SOURCE
+#endif
+ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
 #include <time.h>
-#include <sys/time.h>
 
 extern rtems_configuration_table Configuration;
-extern sigset_t                  UNIX_SIGNAL_MASK;
 
-/*
- * Function prototypes
- */
-
-void Install_clock();
-void Clock_isr();
-void Clock_exit();
-
-/*
- * CPU_HPPA_CLICKS_PER_TICK is either a #define or an rtems_unsigned32
- *   allocated and set by bsp_start()
- */
-
-#ifndef CPU_HPPA_CLICKS_PER_TICK
-extern rtems_unsigned32 CPU_HPPA_CLICKS_PER_TICK;
-#endif
+void Clock_exit(void);
 
 volatile rtems_unsigned32 Clock_driver_ticks;
 
-struct itimerval  new;
+/*
+ * These are set by clock driver during its init
+ */
 
-rtems_device_driver
-Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp,
-  rtems_id tid,
-  rtems_unsigned32 *rval
-)
-{
-    Install_clock(Clock_isr);
-}
-
-void
-ReInstall_clock(rtems_isr_entry new_clock_isr)
-{
-    rtems_unsigned32  isrlevel = 0;
-
-    rtems_interrupt_disable(isrlevel);
-    (void)set_vector(new_clock_isr, SIGALRM, 1);
-    rtems_interrupt_enable(isrlevel);
-}
+rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_minor_number rtems_clock_minor;
 
 void
 Install_clock(rtems_isr_entry clock_isr)
 {
+    struct itimerval  new;
+
     Clock_driver_ticks = 0;
 
     new.it_value.tv_sec = 0;
@@ -86,10 +68,19 @@ Install_clock(rtems_isr_entry clock_isr)
 }
 
 void
+ReInstall_clock(rtems_isr_entry new_clock_isr)
+{
+    rtems_unsigned32  isrlevel = 0;
+
+    rtems_interrupt_disable(isrlevel);
+    (void)set_vector(new_clock_isr, SIGALRM, 1);
+    rtems_interrupt_enable(isrlevel);
+}
+
+void
 Clock_isr(int vector)
 {
     Clock_driver_ticks++;
-
     rtems_clock_tick();
 }
 
@@ -101,6 +92,7 @@ Clock_isr(int vector)
 void
 Clock_exit(void)
 {
+    struct itimerval  new;
      struct sigaction  act;
 
      /*
@@ -120,4 +112,51 @@ Clock_exit(void)
     setitimer(ITIMER_REAL, &new, 0);
 
     (void)set_vector(0, SIGALRM, 1);
+}
+
+rtems_device_driver
+Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    Install_clock((rtems_isr_entry) Clock_isr);
+
+    /*
+     * make major/minor avail to others such as shared memory driver
+     */
+    rtems_clock_major = major;
+    rtems_clock_minor = minor;
+
+    return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver Clock_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+    rtems_libio_ioctl_args_t *args = pargp;
+
+    if (args == 0)
+        goto done;
+
+    /*
+     * This is hokey, but until we get a defined interface
+     * to do this, it will just be this simple...
+     */
+
+    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
+    {
+        Clock_isr(SIGALRM);
+    }
+    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
+    {
+        ReInstall_clock(args->buffer);
+    }
+    
+done:
+    return RTEMS_SUCCESSFUL;
 }

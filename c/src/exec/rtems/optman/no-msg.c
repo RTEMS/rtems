@@ -26,8 +26,7 @@
 #include <rtems/wkspace.h>
 
 void _Message_queue_Manager_initialization(
-  unsigned32 maximum_message_queues,
-  unsigned32 maximum_messages
+  unsigned32 maximum_message_queues
 )
 {
 }
@@ -35,7 +34,8 @@ void _Message_queue_Manager_initialization(
 rtems_status_code rtems_message_queue_create(
   Objects_Name        name,
   unsigned32          count,
-  rtems_attribute  attribute_set,
+  unsigned32          max_message_size,
+  rtems_attribute     attribute_set,
   Objects_Id         *id
 )
 {
@@ -60,7 +60,8 @@ rtems_status_code rtems_message_queue_delete(
 
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
-  void                 *buffer
+  void                 *buffer,
+  unsigned32            size
 )
 {
   return( RTEMS_NOT_CONFIGURED );
@@ -68,7 +69,8 @@ rtems_status_code rtems_message_queue_send(
 
 rtems_status_code rtems_message_queue_urgent(
   Objects_Id            id,
-  void                 *buffer
+  void                 *buffer,
+  unsigned32            size
 )
 {
   return( RTEMS_NOT_CONFIGURED );
@@ -77,6 +79,7 @@ rtems_status_code rtems_message_queue_urgent(
 rtems_status_code rtems_message_queue_broadcast(
   Objects_Id            id,
   void                 *buffer,
+  unsigned32            size,
   unsigned32           *count
 )
 {
@@ -86,8 +89,9 @@ rtems_status_code rtems_message_queue_broadcast(
 rtems_status_code rtems_message_queue_receive(
   Objects_Id            id,
   void                 *buffer,
+  unsigned32           *size_p,
   unsigned32            option_set,
-  rtems_interval     timeout
+  rtems_interval        timeout
 )
 {
   return( RTEMS_NOT_CONFIGURED );
@@ -110,8 +114,9 @@ unsigned32 _Message_queue_Flush_support(
 
 boolean _Message_queue_Seize(
   Message_queue_Control  *the_message_queue,
-  rtems_option         option_set,
-  Message_queue_Buffer   *buffer
+  rtems_option            option_set,
+  void                   *buffer,
+  unsigned32             *size_p
 )
 {
   _Thread_Executing->Wait.return_code = RTEMS_UNSATISFIED;
@@ -120,7 +125,8 @@ boolean _Message_queue_Seize(
 
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
-  Message_queue_Buffer       *buffer,
+  void                       *buffer,
+  unsigned32                  size,
   Message_queue_Submit_types  submit_type
 )
 {

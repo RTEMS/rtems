@@ -10,10 +10,12 @@
  *  This material may be reproduced by or for the U.S. Government pursuant
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
+ *
+ *  $Id$
  */
 
 #ifndef __RTEMS_DIRECTIVES_h
-#define RTEMS___DIRECTIVES_h
+#define __RTEMS_DIRECTIVES_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -85,20 +87,24 @@ extern "C" {
 #define RTEMS_DUAL_PORTED_MEMORY_EXTERNAL_TO_INTERNAL   63
 #define RTEMS_DUAL_PORTED_MEMORY_INTERNAL_TO_EXTERNAL   64
 #define RTEMS_IO_INITIALIZE                             65
-#define RTEMS_IO_OPEN                                   66
-#define RTEMS_IO_CLOSE                                  67
-#define RTEMS_IO_READ                                   68
-#define RTEMS_IO_WRITE                                  69
-#define RTEMS_IO_CONTROL                                70
-#define RTEMS_FATAL_ERROR_OCCURRED                      71
-#define RTEMS_RATE_MONOTONIC_CREATE                     72
-#define RTEMS_RATE_MONOTONIC_NAME_TO_ID                 73
-#define RTEMS_RATE_MONOTONIC_DELETE                     74
-#define RTEMS_RATE_MONOTONIC_CANCEL                     75
-#define RTEMS_RATE_MONOTONIC_PERIOD                     76
-#define RTEMS_MULTIPROCESSING_ANNOUNCE                  77
-#define RTEMS_DEBUG_ENABLE                              78
-#define RTEMS_DEBUG_DISABLE                             79
+#define RTEMS_IO_REGISTER_NAME                          66
+#define RTEMS_IO_LOOKUP_NAME                            67
+#define RTEMS_IO_OPEN                                   68
+#define RTEMS_IO_CLOSE                                  69
+#define RTEMS_IO_READ                                   70
+#define RTEMS_IO_WRITE                                  71
+#define RTEMS_IO_CONTROL                                72
+#define RTEMS_FATAL_ERROR_OCCURRED                      73
+#define RTEMS_RATE_MONOTONIC_CREATE                     74
+#define RTEMS_RATE_MONOTONIC_NAME_TO_ID                 75
+#define RTEMS_RATE_MONOTONIC_DELETE                     76
+#define RTEMS_RATE_MONOTONIC_CANCEL                     77
+#define RTEMS_RATE_MONOTONIC_PERIOD                     78
+#define RTEMS_MULTIPROCESSING_ANNOUNCE                  79
+#define RTEMS_DEBUG_ENABLE                              80
+#define RTEMS_DEBUG_DISABLE                             81
+
+#define RTEMS_NUMBER_OF_ENTRY_POINTS                    82
 
 #ifdef __cplusplus
 }

@@ -115,6 +115,7 @@ typedef struct {
   union {
     unsigned32          segment_size;    /* size of segment requested    */
     rtems_event_set     event_condition;
+    unsigned32         *message_size_p;  /* ptr for return size of message */
   } Extra;
   void                 *return_argument; /* address of user return param */
   rtems_status_code     return_code;     /* status for thread awakened   */

@@ -49,7 +49,7 @@ const char _RTEMS_version[] =
  *  This table is used by the single entry point code.
  */
 
-const void * _Entry_points[ NUMBER_OF_ENTRY_POINTS + 1 ] = {
+const void * _Entry_points[ RTEMS_NUMBER_OF_ENTRY_POINTS ] = {
   (void *) rtems_initialize_executive,                      /*  0 */
   (void *) rtems_initialize_executive_early,                /*  1 */
   (void *) rtems_initialize_executive_late,                 /*  2 */
@@ -116,20 +116,22 @@ const void * _Entry_points[ NUMBER_OF_ENTRY_POINTS + 1 ] = {
   (void *) rtems_port_external_to_internal,                 /* 63 */
   (void *) rtems_port_internal_to_external,                 /* 64 */
   (void *) rtems_io_initialize,                             /* 65 */
-  (void *) rtems_io_open,                                   /* 66 */
-  (void *) rtems_io_close,                                  /* 67 */
-  (void *) rtems_io_read,                                   /* 68 */
-  (void *) rtems_io_write,                                  /* 69 */
-  (void *) rtems_io_control,                                /* 70 */
-  (void *) rtems_fatal_error_occurred,                      /* 71 */
-  (void *) rtems_rate_monotonic_create,                     /* 72 */
-  (void *) rtems_rate_monotonic_ident,                      /* 73 */
-  (void *) rtems_rate_monotonic_delete,                     /* 74 */
-  (void *) rtems_rate_monotonic_cancel,                     /* 75 */
-  (void *) rtems_rate_monotonic_period,                     /* 76 */
-  (void *) rtems_multiprocessing_announce,                  /* 77 */
-  (void *) rtems_debug_enable,                              /* 78 */
-  (void *) rtems_debug_disable                              /* 79 */
+  (void *) rtems_io_register_name,                          /* 66 */
+  (void *) rtems_io_lookup_name,                            /* 67 */
+  (void *) rtems_io_open,                                   /* 68 */
+  (void *) rtems_io_close,                                  /* 69 */
+  (void *) rtems_io_read,                                   /* 70 */
+  (void *) rtems_io_write,                                  /* 71 */
+  (void *) rtems_io_control,                                /* 72 */
+  (void *) rtems_fatal_error_occurred,                      /* 73 */
+  (void *) rtems_rate_monotonic_create,                     /* 74 */
+  (void *) rtems_rate_monotonic_ident,                      /* 75 */
+  (void *) rtems_rate_monotonic_delete,                     /* 76 */
+  (void *) rtems_rate_monotonic_cancel,                     /* 77 */
+  (void *) rtems_rate_monotonic_period,                     /* 78 */
+  (void *) rtems_multiprocessing_announce,                  /* 79 */
+  (void *) rtems_debug_enable,                              /* 80 */
+  (void *) rtems_debug_disable                              /* 81 */
 };
 
 #ifdef __cplusplus

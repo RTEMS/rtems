@@ -28,49 +28,37 @@ extern "C" {
 rtems_device_driver Stub_initialize(
   rtems_device_major_number,
   rtems_device_minor_number,
-  void *,
-  rtems_id,
-  rtems_unsigned32 *
+  void *
 );
 
 rtems_device_driver Stub_open(
   rtems_device_major_number,
   rtems_device_minor_number,
-  void *,
-  rtems_id,
-  rtems_unsigned32 *
+  void *
 );
 
 rtems_device_driver Stub_close(
   rtems_device_major_number,
   rtems_device_minor_number,
-  void *,
-  rtems_id,
-  rtems_unsigned32 *
+  void *
 );
 
 rtems_device_driver Stub_read(
   rtems_device_major_number,
   rtems_device_minor_number,
-  void *,
-  rtems_id,
-  rtems_unsigned32 *
+  void *
 );
 
 rtems_device_driver Stub_write(
   rtems_device_major_number,
   rtems_device_minor_number,
-  void *,
-  rtems_id,
-  rtems_unsigned32 *
+  void *
 );
 
 rtems_device_driver Stub_control(
   rtems_device_major_number,
   rtems_device_minor_number,
-  void *,
-  rtems_id,
-  rtems_unsigned32 *
+  void *
 );
 
 #ifdef __cplusplus

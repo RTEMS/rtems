@@ -55,15 +55,14 @@ typedef enum {
  */
 
 typedef struct {
-  rtems_packet_prefix                   Prefix;
+  rtems_packet_prefix                Prefix;
   Message_queue_MP_Remote_operations operation;
   Objects_Name                       name;
-  rtems_option                    option_set;
+  rtems_option                       option_set;
   Objects_Id                         proxy_id;
   unsigned32                         count;
+  unsigned32                         size;
   unsigned32                         pad0;
-  unsigned32                         pad1;
-  unsigned32                         pad2;
   Message_queue_Buffer               Buffer;
 }   Message_queue_MP_Packet;
 
@@ -95,9 +94,10 @@ void _Message_queue_MP_Send_process_packet (
 rtems_status_code _Message_queue_MP_Send_request_packet (
   Message_queue_MP_Remote_operations  operation,
   Objects_Id                          message_queue_id,
-  Message_queue_Buffer               *buffer,
-  rtems_option                     option_set,
-  rtems_interval                   timeout
+  void                               *buffer,
+  unsigned32                         *size_p,
+  rtems_option                        option_set,
+  rtems_interval                      timeout
 );
 
 /*

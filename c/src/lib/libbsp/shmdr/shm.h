@@ -20,6 +20,8 @@
 #ifndef __SHM_h
 #define __SHM_h
 
+#include <clockdrv.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -518,6 +520,7 @@ extern rtems_mpci_table MPCI_table;
 
 rtems_mpci_table MPCI_table  = {
   100000,                     /* default timeout value in ticks */
+  MAX_PACKET_SIZE,            /* maximum packet size */
   Shm_Initialization,         /* initialization procedure   */
   Shm_Get_packet,             /* get packet procedure       */
   Shm_Return_packet,          /* return packet procedure    */

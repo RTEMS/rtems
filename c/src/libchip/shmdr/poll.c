@@ -16,20 +16,24 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  poll.c,v 1.2 1995/05/09 20:22:57 joel Exp
+ *  $Id$
  */
 
 #include <rtems.h>
 #include <rtems/sysstate.h>
+#include <rtems/libio.h>
+
 #include "shm.h"
-#include "clockdrv.h"
 
 void Shm_Poll()
 {
   rtems_unsigned32 tmpfront;
+  rtems_libio_ioctl_args_t args;
 
-  Clock_isr( 0 );             /* invoke standard clock ISR */
-
+  /* invoke clock isr */
+  args.iop = 0;
+  args.command = rtems_build_name('I', 'S', 'R', ' ');
+  (void) rtems_io_control(rtems_clock_major, rtems_clock_minor, &args);
 
   /*
    * Check for msgs only if we are "up"
@@ -39,14 +43,11 @@ void Shm_Poll()
   
   if (_System_state_Is_up(_System_state_Get()))
   {
-      /* enable_tracing(); */
-      /* ticks += 1; */
-      Shm_Lock( Shm_Local_receive_queue );
       tmpfront = Shm_Local_receive_queue->front;
-      Shm_Unlock( Shm_Local_receive_queue );
-      if ( Shm_Convert(tmpfront) != Shm_Locked_queue_End_of_list ) {
-        rtems_multiprocessing_announce();
-        Shm_Interrupt_count++;
+      if ( Shm_Convert(tmpfront) != Shm_Locked_queue_End_of_list )
+      {
+          rtems_multiprocessing_announce();
+          Shm_Interrupt_count++;
       }
   }
 }

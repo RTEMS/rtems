@@ -1,6 +1,5 @@
 /*
- *	@(#)bspstart.c	1.14 - 95/05/16
- *	
+ *	@(#)bspstart.c	1.16 - 95/06/28
  */
 
 /*  bsp_start()
@@ -24,13 +23,17 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  bspstart.c,v 1.2 1995/05/09 20:17:33 joel Exp
+ *  $Id$
  */
 
+#include <rtems.h>
 #include <bsp.h>
+#include <rtems/libio.h>
+
 #include <libcsupport.h>
 
 #include <string.h>
+#include <fcntl.h>
 
 #ifdef STACK_CHECKER_ON
 #include <stackchk.h>
@@ -128,7 +131,16 @@ bsp_libc_init(void)
     RTEMS_Malloc_Initialize((void *) heap_start, 64 * 1024, 0);
 
     /*
+     * Init the RTEMS libio facility to provide UNIX-like system
+     *  calls for use by newlib (ie: provide __open, __close, etc)
+     *  Uses malloc() to get area for the iops, so must be after malloc init
+     */
+
+    rtems_libio_init();
+
+    /*
      * Set up for the libc handling.
+     * XXX; this should allow for case of some other non-clock interrupts
      */
 
     if (BSP_Configuration.ticks_per_timeslice > 0)
@@ -220,6 +232,32 @@ bsp_pretasking_hook(void)
 }
 
 /*
+ * After drivers are setup, register some "filenames"
+ * and open stdin, stdout, stderr files
+ *
+ * Newlib will automatically associate the files with these
+ * (it hardcodes the numbers)
+ */
+
+void
+bsp_postdriver_hook(void)
+{
+    int stdin_fd, stdout_fd, stderr_fd;
+    
+    if ((stdin_fd = __open("/dev/tty00", O_RDONLY, 0)) == -1)
+        rtems_fatal_error_occurred('STD0');
+
+    if ((stdout_fd = __open("/dev/tty00", O_WRONLY, 0)) == -1)
+        rtems_fatal_error_occurred('STD1');
+
+    if ((stderr_fd = __open("/dev/tty00", O_WRONLY, 0)) == -1)
+        rtems_fatal_error_occurred('STD2');
+
+    if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
+        rtems_fatal_error_occurred('STIO');
+}
+
+/*
  *  Function:   bsp_start
  *  Created:    94/12/6
  *
@@ -289,7 +327,7 @@ bsp_start(void)
 
     Cpu_table.predriver_hook = NULL;
 
-    Cpu_table.postdriver_hook = NULL;
+    Cpu_table.postdriver_hook = bsp_postdriver_hook;    /* register drivers */
 
     Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
 
@@ -342,20 +380,26 @@ bsp_start(void)
 #endif
 
 #ifdef STACK_CHECKER_ON
-  /*
-   * Add 1 extension for stack checker
-   */
+    /*
+     * Add 1 extension for stack checker
+     */
 
     BSP_Configuration.maximum_extensions++;
 #endif
 
 #if SIMHPPA_FAST_IDLE
-  /*
-   * Add 1 extension for fast idle
-   */
+    /*
+     * Add 1 extension for fast idle
+     */
 
     BSP_Configuration.maximum_extensions++;
 #endif
+
+    /*
+     * Tell libio how many fd's we want and allow it to tweak config
+     */
+
+    rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
     /*
      * Add 1 extension for MPCI_fatal

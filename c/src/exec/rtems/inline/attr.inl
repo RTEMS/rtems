@@ -84,19 +84,6 @@ STATIC INLINE boolean _Attributes_Is_priority(
 
 /*PAGE
  *
- *  _Attributes_Is_limit
- *
- */
-
-STATIC INLINE boolean _Attributes_Is_limit(
-  rtems_attribute attribute_set
-)
-{
-   return ( attribute_set & RTEMS_LIMIT );
-}
-
-/*PAGE
- *
  *  _Attributes_Is_binary_semaphore
  *
  */

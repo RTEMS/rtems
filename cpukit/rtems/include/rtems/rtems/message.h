@@ -41,14 +41,22 @@ extern "C" {
 /*
  *  The following defines the data types needed to manipulate
  *  the contents of message buffers.
+ *  Since msgs are variable length we just make a ptr to 1.
  */
 
 typedef struct {
-  unsigned32 field1;
-  unsigned32 field2;
-  unsigned32 field3;
-  unsigned32 field4;
-}  Message_queue_Buffer;
+    unsigned32  size;
+
+#ifndef __cplusplus
+                               /* NOTE:   [0] is gcc specific,
+                                *   but specifically disallowed by ANSI STD C++
+                                * g++ warns about it, so we #ifdef it out to
+                                * get rid of warnings when compiled by g++.
+                                */
+    unsigned32  buffer[0];
+#endif
+
+} Message_queue_Buffer;
 
 /*
  *  The following records define the organization of a message
@@ -68,10 +76,13 @@ typedef struct {
 typedef struct {
   Objects_Control      Object;
   Thread_queue_Control Wait_queue;
-  rtems_attribute   attribute_set;
+  rtems_attribute      attribute_set;
   unsigned32           maximum_pending_messages;
   unsigned32           number_of_pending_messages;
+  unsigned32           maximum_message_size;
   Chain_Control        Pending_messages;
+  Message_queue_Buffer *message_buffers;
+  Chain_Control        Inactive_messages;
 }   Message_queue_Control;
 
 /*
@@ -80,13 +91,6 @@ typedef struct {
  */
 
 EXTERN Objects_Information  _Message_queue_Information;
-
-/*
- *  The following defines the data structures used to
- *  manage the pool of inactive message buffers.
- */
-
-EXTERN Chain_Control _Message_queue_Inactive_messages;
 
 /*
  *  The following enumerated type details the modes in which a message
@@ -108,8 +112,7 @@ typedef enum {
  */
 
 void _Message_queue_Manager_initialization(
-  unsigned32 maximum_message_queues,
-  unsigned32 maximum_messages
+  unsigned32 maximum_message_queues
 );
 
 /*
@@ -126,10 +129,11 @@ void _Message_queue_Manager_initialization(
  */
 
 rtems_status_code rtems_message_queue_create(
-  Objects_Name        name,
-  unsigned32          count,
+  Objects_Name     name,
+  unsigned32       count,
+  unsigned32       max_message_size,
   rtems_attribute  attribute_set,
-  Objects_Id         *id
+  Objects_Id      *id
 );
 
 /*
@@ -183,7 +187,8 @@ rtems_status_code rtems_message_queue_delete(
 
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
-  void                 *buffer
+  void                 *buffer,
+  unsigned32            size
 );
 
 /*
@@ -204,7 +209,8 @@ rtems_status_code rtems_message_queue_send(
 
 rtems_status_code rtems_message_queue_urgent(
   Objects_Id            id,
-  void                 *buffer
+  void                 *buffer,
+  unsigned32            size
 );
 
 /*
@@ -226,6 +232,7 @@ rtems_status_code rtems_message_queue_urgent(
 rtems_status_code rtems_message_queue_broadcast(
   Objects_Id            id,
   void                 *buffer,
+  unsigned32            size,
   unsigned32           *count
 );
 
@@ -246,8 +253,9 @@ rtems_status_code rtems_message_queue_broadcast(
 rtems_status_code rtems_message_queue_receive(
   Objects_Id            id,
   void                 *buffer,
+  unsigned32           *size_p,
   unsigned32            option_set,
-  rtems_interval     timeout
+  rtems_interval        timeout
 );
 
 /*
@@ -276,8 +284,9 @@ rtems_status_code rtems_message_queue_flush(
  */
 
 STATIC INLINE void _Message_queue_Copy_buffer (
-  Message_queue_Buffer *source,
-  Message_queue_Buffer *destination
+  void      *source,
+  void      *destination,
+  unsigned32 size
 );
 
 /*
@@ -295,7 +304,8 @@ STATIC INLINE void _Message_queue_Copy_buffer (
 boolean _Message_queue_Seize(
   Message_queue_Control *the_message_queue,
   unsigned32             option_set,
-  Message_queue_Buffer  *buffer
+  void                  *buffer,
+  unsigned32            *size_p
 );
 
 /*
@@ -322,7 +332,8 @@ unsigned32 _Message_queue_Flush_support(
 
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
-  Message_queue_Buffer       *buffer,
+  void                       *buffer,
+  unsigned32                  size,
   Message_queue_Submit_types  submit_type
 );
 
@@ -336,7 +347,9 @@ rtems_status_code _Message_queue_Submit(
  */
 
 STATIC INLINE Message_queue_Buffer_control *
-  _Message_queue_Allocate_message_buffer ( void );
+  _Message_queue_Allocate_message_buffer (
+   Message_queue_Control *the_message_queue
+);
 
 /*
  *  _Message_queue_Free_message_buffer
@@ -348,6 +361,7 @@ STATIC INLINE Message_queue_Buffer_control *
  */
 
 STATIC INLINE void _Message_queue_Free_message_buffer (
+  Message_queue_Control        *the_message_queue,
   Message_queue_Buffer_control *the_message
 );
 
@@ -415,14 +429,17 @@ STATIC INLINE boolean _Message_queue_Is_null (
  *  the inactive chain of free message queue control blocks.
  */
 
-STATIC INLINE Message_queue_Control *_Message_queue_Allocate ( void );
+Message_queue_Control *_Message_queue_Allocate (
+    unsigned32          count,
+    unsigned32          max_message_size
+);
 
 /*
  *  _Message_queue_Free
  *
  *  DESCRIPTION:
  *
- *  This routine allocates a message queue control block from
+ *  This routine deallocates a message queue control block into
  *  the inactive chain of free message queue control blocks.
  */
 

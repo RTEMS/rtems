@@ -35,27 +35,6 @@ __isatty(int _fd)
   return 1;
 }
 
-int
-__close(int _fd)
-{
-  /* return value usually ignored anyhow */
-  return 0;
-}
-
-int
-__open(const char *filename)
-{
-  /* always fail */
-  return -1;
-}
-
-int
-__lseek(int _fd, off_t offset, int whence)
-{
-  /* nothing is ever seekable */
-  return -1;
-}
-
 int stat( const char *path, struct stat *buf )
 {
   /* always fail */
