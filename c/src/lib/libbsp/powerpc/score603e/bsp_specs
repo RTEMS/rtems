@@ -1,4 +1,3 @@
-
 %rename cpp old_cpp
 %rename lib old_lib
 %rename endfile old_endfile
