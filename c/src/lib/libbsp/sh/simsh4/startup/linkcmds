@@ -86,10 +86,10 @@ SECTIONS
      * Special FreeBSD sysctl sections.
      */
     . = ALIGN (16);
-    __start_set_sysctl_set = .;
-    *(set_sysctl_*);
-    __stop_set_sysctl_set = ABSOLUTE(.);
-    *(set_domain_*);
+    ___start_set_sysctl_set = .;
+    *(set_sysc*);   /* set_sysctl_* but name is truncated by SH-coff */
+    ___stop_set_sysctl_set = ABSOLUTE(.);
+    *(set_doma*);   /* set_domain_* but name is truncated by SH-coff */
     *(set_pseudo_*);
 
     /* .gnu.warning sections are handled specially by elf32.em.  */
@@ -107,7 +107,11 @@ SECTIONS
   .data  .  :
   {
     *(.data)
-    *(.gcc_exc)
+    *(.gcc_exc*)
+    ___EH_FRAME_BEGIN__ = .;
+    *(.eh_fram*)
+    ___EH_FRAME_END__ = .;
+    LONG(0);
     *(.gcc_except_table)
     *(.gnu.linkonce.d*)
     CONSTRUCTORS

@@ -1,3 +1,8 @@
+2003-01-28	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/Makefile.am, startup/linkcmds, startup/linkcmds-le,
+	startup/linkcmds-le.coff: Fix to work around truncated section names.
+
 2003-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Fix typo in CPU_PIECES handling.
