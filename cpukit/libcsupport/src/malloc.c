@@ -279,8 +279,13 @@ void *realloc(
  
   MSBUMP(malloc_calls, -1);   /* subtract off the malloc */
 
+  /*
+   *  There used to be a free on this error case but it is wrong to 
+   *  free the memory per OpenGroup Single UNIX Specification V2
+   *  and the C Standard.
+   */
+
   if ( !new_area ) {
-    free( ptr );
     return (void *) 0;
   }
 
