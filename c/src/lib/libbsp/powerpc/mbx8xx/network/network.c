@@ -367,10 +367,8 @@ m8xx_enet_initialize (struct m8xx_enet_struct *sc)
   /*
    * Set up interrupts
    */
-  status = BSP_install_rtems_irq_handler (&ethernetSCC1IrqData);
-  if (status != RTEMS_SUCCESSFUL) {
-    rtems_panic ("Can't attach M8xx SCC1 interrupt handler: %s\n",
-		 rtems_status_text (status));
+  if (!BSP_install_rtems_irq_handler (&ethernetSCC1IrqData)) {
+    rtems_panic ("Can't attach M8xx SCC1 interrupt handler\n");
   }
   m8xx.scc1.sccm = 0;     /* No interrupts unmasked till necessary */
   
@@ -586,10 +584,8 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   /*
    * Set up interrupts
    */
-  status = BSP_install_rtems_irq_handler (&ethernetFECIrqData);
-  if (status != RTEMS_SUCCESSFUL)
-    rtems_panic ("Can't attach M860 FEC interrupt handler: %s\n",
-                 rtems_status_text (status));
+  if (!BSP_install_rtems_irq_handler (&ethernetFECIrqData))
+    rtems_panic ("Can't attach M860 FEC interrupt handler\n");
 
 }
 #endif
