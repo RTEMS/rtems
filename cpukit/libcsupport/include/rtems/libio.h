@@ -267,10 +267,6 @@ typedef struct {
     rtems_filesystem_readlink_t      readlink_h;
 } rtems_filesystem_operations_table;
 
-#define IMFS_FILE_SYSTEM IMFS_ops
-extern rtems_filesystem_operations_table  IMFS_ops;
-
-
 /*
  * Structure used to determine a location/filesystem in the tree.
  */

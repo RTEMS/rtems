@@ -31,28 +31,8 @@
 
 Chain_Control rtems_filesystem_mount_table_control;
 
-#include "imfs.h"
-
-/* XXX this structure should be in an IMFS specific file */
-/* XXX this structure should use real constants */
-
-rtems_filesystem_limits_and_options_t IMFS_LIMITS_AND_OPTIONS = {
-   5,	/* link_max */
-   6,	/* max_canon */
-   7,	/* max_input */
-   IMFS_NAME_MAX,	/* name_max */
-   255,	/* path_max */
-   2,	/* pipe_buf */
-   1,	/* posix_async_io */
-   2,	/* posix_chown_restrictions */
-   3,	/* posix_no_trunc */
-   4,	/* posix_prio_io */
-   5,	/* posix_sync_io */
-   6	/* posix_vdisable */
-};
-
 /*
- *  XXX
+ *  Prototypes that probably should be somewhere else.
  */
 
 int search_mt_for_mount_point(

@@ -13,7 +13,6 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include "imfs.h"
 #include "libio_.h"
 
 /*
@@ -33,8 +32,10 @@ mode_t rtems_filesystem_umask;
 /*
  *  rtems_filesystem_initialize
  *
- *  Initialize the foundation of the file system with one instantiation
- *  of the IMFS with a single "/dev" directory in it.
+ *  Initialize the foundation of the file system.  This is specified
+ *  by the structure rtems_filesystem_mount_table.  The usual 
+ *  configuration is a single instantiation of the IMFS or miniIMFS with
+ *  a single "/dev" directory in it.
  */
 
 void rtems_filesystem_initialize( void )

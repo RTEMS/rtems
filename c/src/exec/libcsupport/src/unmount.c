@@ -26,7 +26,6 @@
 #include <string.h>
 #include <assert.h>
 
-#include "imfs.h"
 #include "libio_.h"
 
 /*
@@ -99,10 +98,6 @@ int unmount(
   
   /*
    * Allow the file system being mounted on to do its cleanup.
-   * XXX - Did I change these correctly ??? It looks like either I did
-   * XXX   this backwards or the IMFS_unmount and IMFS_fsumount are swapped.
-   * XXX   Add to the mt_point_node unmount to set the mt_entry back to null
-   * XXX   I will step off in space when evaluating past the end of the node.
    */
 
   if ((temp_mt_entry.mt_point_node.ops->unmount_h )( temp_loc.mt_entry ) != 0 ) {

@@ -1,3 +1,15 @@
+   
+2000-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/ioman.c: Moved to libfs.
+	* libc/Makefile.am: Removed ioman.c as part of moving it to libfs.
+	* libc/base_fs.c: Removed include of imfs.h and reworded comment
+	to avoid being IMFS specific.
+	* libc/libio.h: Removed prototype of IMFS_ops since it should 
+	not be in this file.
+	* libc/mount.c: Removed IMFS specific configuration information.
+	* libc/unmount.c: Removed include of imfs.h and reworded comment
+	to avoid being IMFS specific.
 
 2000-10-18	Chris Johns <ccj@acm.org>
 
