@@ -7,7 +7,6 @@
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994, 1997.
  *  On-Line Applications Research Corporation (OAR).
- *  All rights assigned to U.S. Government, 1994.
  *
  *  $Id$
  */
