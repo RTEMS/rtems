@@ -1,32 +1,33 @@
 AUTOMAKE_OPTIONS = foreign
 
-MKGDBSPEC = $(SHELL) $(top_srcdir)/mkgdbspec
+MKGDBSPEC = $(SHELL) $(top_builddir)/mkgdbspec
 
-MKGDBSPEC_DEPS = ../mkgdbspec gdb.spec.in ../setup.cache
+MKGDBSPEC_DEPS = \
+$(top_builddir)/mkgdbspec gdb.spec.in $(top_builddir)/setup.cache
 
 i386-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . i386-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems
 
 sh-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . sh-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtems
 
 powerpc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . powerpc-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-rtems
 
 sparc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . sparc-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
 m68k-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . m68k-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems
 
 mips64orion-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . mips64orion-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems
 
 i960-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . i960-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i960-rtems
 
 hppa1.1-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . hppa1.1-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
 
 TEMPLATES = \
 gdb.spec.in

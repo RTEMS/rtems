@@ -3,16 +3,16 @@
 #  Usage: mktoolspec CPU
 #
 
-RTEMS_DIR=`dirname $0`
+RTEMS_DIR=`dirname $0`/@top_srcdir@
 
-CFG=user.cfg
+CFG=setup.cache
 dst=@RPM_SPECSdir@
 
 usage()
 {
   echo "$0 [options] <target_alias>"
   echo "  options:"
-  echo "    -cfg <user.cfg>"
+  echo "    -cfg <setup.cache>"
   echo "    -o <rpm-spec-dir>"
   exit 1 ;
 }

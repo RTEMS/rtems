@@ -93,7 +93,7 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
   fi
 
 %files -f files
-%dir /opt/rtems/info
+%docdir /opt/rtems/info
 %doc /opt/rtems/info/dir
 %doc /opt/rtems/info/as.info.gz
 %doc /opt/rtems/info/as.info-?.gz
@@ -106,8 +106,8 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 %doc /opt/rtems/info/gasp.info.gz
 %doc /opt/rtems/info/standards.info.gz
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
+%docdir /opt/rtems/man
+%docdir /opt/rtems/man/man1
 %doc /opt/rtems/man/man1/@target_alias@-*.1
 
 %dir /opt/rtems/bin

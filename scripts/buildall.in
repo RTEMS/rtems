@@ -4,14 +4,14 @@
 #
 
 RTEMS_DIR=`dirname $0`
-CFG=./user.cfg
+CFG=./setup.cache
 dst=@RPM_SPECSdir@
 
 usage()
 {
   echo "$0 [options] <target_alias>"
   echo "  options:"
-  echo "    -cfg <user.cfg>"
+  echo "    -cfg <setup.cache>"
   echo "    -o <rpm-spec-dir>"
   exit 1 ;
 }
@@ -60,12 +60,12 @@ gcc=${gcc_version}
 gdb=${gdb_version}
 newlib=${newlib_version}
 # also use binutils_rpm_release
-buildroot=/opt/tmp
+buildroot=/tmp
 
 testing=no
-do_binutils=yes
-do_gdb=yes
-do_gccnewlib=yes
+do_binutils=no
+do_gdb=no
+do_gccnewlib=no
 
 #
 #  Now get started
@@ -100,6 +100,10 @@ if [ ${testing} = no ] ; then
   for target in ${TARGETS}
   do
     tspecs=`find . -name "${target}*"`
+    if [ "X${tspecs}" = "X" ] ; then
+      echo RPM specifications were not generated for ${tspec}.
+      exit 1
+    fi
     ${ECHO} cp -r ${tspecs} ${dst}
   done
 fi
@@ -119,7 +123,7 @@ do
       rpm -ba ${specfile} >${logfile} 2>&1
     fi
     ${ECHO} rm -rf ${dst}/../BUILD/${target}-binutils*
-    ${ECHO} rm -rf ${buildroot}/opt
+    ${ECHO} rm -rf ${buildroot}/opt/rtems
   else
     echo Skipping binutils for ${target}
   fi
@@ -144,9 +148,10 @@ do
     echo "rpm -ba ${specfile} >${logfile} 2>&1"
     if [ ${testing} = no ] ; then
       rpm -ba ${specfile} >${logfile} 2>&1
+exit 0
     fi
     ${ECHO} rm -rf ${dst}/../BUILD/${target}-gcc*
-    ${ECHO} rm -rf ${buildroot}/opt
+    ${ECHO} rm -rf ${buildroot}/opt/rtems
 
     echo uninstalling binutils for ${target} 
     if [ ${testing} = no ] ; then
@@ -169,7 +174,7 @@ do
       rpm -ba ${specfile} >${logfile} 2>&1
     fi
     ${ECHO} rm -rf ${dst}/../BUILD/${target}-gdb*
-    ${ECHO} rm -rf ${buildroot}/opt
+    ${ECHO} rm -rf ${buildroot}/opt/rtems
   else
     echo Skipping gdb for ${target}
   fi

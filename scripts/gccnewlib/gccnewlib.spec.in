@@ -74,17 +74,46 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
   make prefix=$RPM_BUILD_ROOT/opt/rtems install
   cd @target_alias@/newlib
   make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
-# gzip info files
+
+  # cd back to build/
+  cd ../..
+
+  # gzip info files
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
- 
+
+  rm -f files
+
+  # collect c++ headers
+  if test -d $RPM_BUILD_ROOT/opt/rtems/include/g++-3; then
+    find $RPM_BUILD_ROOT/opt/rtems/include/g++-3 \
+      -type d | \
+      sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> files
+    find $RPM_BUILD_ROOT/opt/rtems/include/g++-3 \
+      \( -type f -o -type l \) | \
+      sed -e "s,^$RPM_BUILD_ROOT,,g" >> files
+  fi
+
+  # collect target gcc-lib
   if test -d "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@"; \
   then
-    find "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@" -type d | \
-      sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" > files.gcc-lib
-    find "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@" -type f | \
-      sed -e "s,^$RPM_BUILD_ROOT,,g" >> files.gcc-lib
+    find "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@" \
+      -type d | sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> files
+    find "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@" \
+      \( -type f -o -type l \) \
+      | sed -e "s,^$RPM_BUILD_ROOT,,g" >> files
+  fi
+
+  # collect target files
+  if test -d "$RPM_BUILD_ROOT/opt/rtems/@target_alias@"; \
+  then
+    find "$RPM_BUILD_ROOT/opt/rtems/@target_alias@" \
+      -type d | \
+      sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> files
+    find "$RPM_BUILD_ROOT/opt/rtems/@target_alias@" \
+      \( -type f -o -type l \) | \
+      sed -e "s,^$RPM_BUILD_ROOT,,g" >> files
   fi
 
 %post
@@ -107,7 +136,7 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
     done
   fi
 
-%files -f files.g++ -f files.gcc-lib
+%files -f build/files
 %docdir /opt/rtems/info
 %doc /opt/rtems/info/dir
 %doc /opt/rtems/info/chill.info*
@@ -126,18 +155,23 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 
 %dir /opt/rtems/bin
 /opt/rtems/bin/cpp
+/opt/rtems/bin/jv-scan
+/opt/rtems/bin/gcov
+/opt/rtems/bin/jcf-dump
+/opt/rtems/bin/gcjh
 /opt/rtems/bin/@target_alias@-c++
 /opt/rtems/bin/@target_alias@-g++
 /opt/rtems/bin/@target_alias@-gcc
 /opt/rtems/bin/@target_alias@-gcj
+/opt/rtems/bin/@target_alias@-chill
+/opt/rtems/bin/@target_alias@-g77
+/opt/rtems/bin/@target_alias@-protoize
+/opt/rtems/bin/@target_alias@-unprotoize
 
 %dir /opt/rtems/lib
 /opt/rtems/lib/libiberty*
-%dir /opt/rtems/lib/include
+%dir /opt/rtems/include
 
 %dir /opt/rtems/lib/gcc-lib
 %dir /opt/rtems/lib/gcc-lib/@target_alias@
-# /opt/rtems/@target_alias@/include
-# /opt/rtems/@target_alias@/sys-include
-/opt/rtems/@target_alias@/lib
 

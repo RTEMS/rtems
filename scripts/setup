@@ -4,11 +4,16 @@ CFG=setup.cache
 
 # RTEMS tools setup
 
-test -f ./CFG || echo "restoring default setup.cache" && cp ./setup.def ./$CFG
+if test ! -f ./$CFG;
+then
+ echo -n "restoring default setup.cache .." 
+ cp ./setup.def ./$CFG
+ echo " done"
+fi
 
 echo -n "loading setup from ./$CFG .."
 . ./$CFG
-echo "done"
+echo " done"
 echo
 
 menu_setup()

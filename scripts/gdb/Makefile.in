@@ -76,7 +76,7 @@ MKGDBSPEC_DEPS = ../mkgdbspec gdb.spec.in ../setup.cache
 TEMPLATES =  gdb.spec.in
 
 
-RPM_SPECS_DATA =  i386-rtems-$(GDBVERS).spec sh-rtems-$(GDBVERS).spec powerpc-rtems-$(GDBVERS).spec sparc-rtems-$(GDBVERS).spec m68k-rtems-$(GDBVERS).spec mips64orion-rtems-$(GDBVERS).spec i960-rtems-$(GDBVERS).spec hppa1.1-rtems-$(GDBVERS).spec
+RPM_SPECS_DATA =  i386-rtems-$(GDBVERS).spec sh-rtems-$(GDBVERS).spec sh-rtemself-$(GDBVERS).spec powerpc-rtems-$(GDBVERS).spec sparc-rtems-$(GDBVERS).spec m68k-rtems-$(GDBVERS).spec m68k-rtemself-$(GDBVERS).spec mips64orion-rtems-$(GDBVERS).spec i960-rtems-$(GDBVERS).spec hppa1.1-rtems-$(GDBVERS).spec
 
 
 noinst_DATA =  $(TEMPLATES)
@@ -218,6 +218,9 @@ i386-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 sh-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg ../setup.cache -o . sh-rtems
 
+sh-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg ../setup.cache -o . sh-rtemself
+
 powerpc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg ../setup.cache -o . powerpc-rtems
 
@@ -226,6 +229,9 @@ sparc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 
 m68k-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg ../setup.cache -o . m68k-rtems
+
+m68k-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg ../setup.cache -o . m68k-rtemself
 
 mips64orion-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg ../setup.cache -o . mips64orion-rtems

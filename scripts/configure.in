@@ -1,7 +1,11 @@
-AC_INIT(binutils)
-AM_INIT_AUTOMAKE(scripts,19991020-1,no)
+## $Id$
 
-test -f ./setup.cache || cp ./setup.def ./setup.cache
+AC_INIT(binutils)
+AM_INIT_AUTOMAKE(scripts,19991021-0,no)
+
+RTEMS_CHECK_VERSION(..)
+
+test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
 
 # Some linux distributions use /usr/src/packages
@@ -18,7 +22,7 @@ elif test -d /usr/src/SPECS/;
 then
   RPM_SPECSdir=/usr/src/SPECS;
 fi
-if test x"$RPM_SPECSdir" = x; then
+if test x"$RPM_SPECSdir" = x"" ; then
 AC_MSG_ERROR(not found)
 fi
 AC_MSG_RESULT($RPM_SPECSdir)
@@ -30,7 +34,7 @@ BINUTILSVERS="binutils-${binutils_version}"
 AC_SUBST(BINUTILSVERS)
 GDBVERS="gdb-${gdb_version}"
 AC_SUBST(GDBVERS)
-BSPVERS="RTEMS-no_version_yet"
+BSPVERS="${RTEMS_VERSION}"
 AC_SUBST(BSPVERS)
 
 AC_OUTPUT(

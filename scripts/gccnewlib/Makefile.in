@@ -77,7 +77,7 @@ MKGCCNEWLIBSPEC_DEPS =    ../mkgccnewlibspec gccnewlib.spec.in ../setup.cache
 TEMPLATES =  gccnewlib.spec.in
 
 
-RPM_SPECS_DATA =  i386-rtems-$(GCCNEWLIBVERS).spec sh-rtems-$(GCCNEWLIBVERS).spec powerpc-rtems-$(GCCNEWLIBVERS).spec sparc-rtems-$(GCCNEWLIBVERS).spec m68k-rtems-$(GCCNEWLIBVERS).spec mips64orion-rtems-$(GCCNEWLIBVERS).spec i960-rtems-$(GCCNEWLIBVERS).spec hppa1.1-rtems-$(GCCNEWLIBVERS).spec
+RPM_SPECS_DATA =  i386-rtems-$(GCCNEWLIBVERS).spec sh-rtems-$(GCCNEWLIBVERS).spec sh-rtemself-$(GCCNEWLIBVERS).spec powerpc-rtems-$(GCCNEWLIBVERS).spec sparc-rtems-$(GCCNEWLIBVERS).spec m68k-rtems-$(GCCNEWLIBVERS).spec m68k-rtemself-$(GCCNEWLIBVERS).spec mips64orion-rtems-$(GCCNEWLIBVERS).spec i960-rtems-$(GCCNEWLIBVERS).spec hppa1.1-rtems-$(GCCNEWLIBVERS).spec
 
 
 noinst_DATA =  $(TEMPLATES)
@@ -219,6 +219,9 @@ i386-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 sh-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg ../setup.cache -o . sh-rtems
 
+sh-rtemself-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+	$(MKGCCNEWLIBSPEC) -cfg ../setup.cache -o . sh-rtemself
+
 powerpc-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg ../setup.cache -o . powerpc-rtems
 
@@ -227,6 +230,9 @@ sparc-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 
 m68k-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg ../setup.cache -o . m68k-rtems
+
+m68k-rtemself-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+	$(MKGCCNEWLIBSPEC) -cfg ../setup.cache -o . m68k-rtemself
 
 mips64orion-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg ../setup.cache -o . mips64orion-rtems

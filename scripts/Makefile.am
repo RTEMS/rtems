@@ -27,5 +27,3 @@ setup.cache: setup.def
 	cp setup.def $@
 
 DISTCLEANFILES = setup.cache
-
-CLEANFILES = buildall

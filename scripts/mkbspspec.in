@@ -1,31 +1,59 @@
 #!/bin/sh 
 #
 
-RTEMS_DIR=`dirname $0`
-RTEMS_VERSION=`grep Version ${RTEMS_DIR}/../VERSION | \
-sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
+RTEMS_DIR=`dirname $0`/@top_srcdir@
+RTEMS_VERSION=@RTEMS_VERSION@
 
-bsp=$1
-target_alias=$2
-release=0
+CFG=setup.cache
+dst=@RPM_SPECSdir@
 
-# Some linux distributions use /usr/src/packages
-# redhat uses /usr/src/redhat
-# others might use /usr/src
-if test -d /usr/src/packages/SPECS; 
+usage()
+{
+  echo "$0 [options] <target_alias> <bsp>"
+  echo "  options:"
+  echo "    -cfg <setup.cache>"
+  echo "    -o <rpm-spec-dir>"
+  exit 1 ;
+}
+
+while test $# -ge 3; do
+case $1 in
+-cfg) 
+  shift
+  CFG=$1
+  shift
+  ;;
+-o)
+  shift
+  dst=$1
+  shift
+  ;;
+-*)
+  echo "invalid option $1";
+  usage
+  ;;
+esac
+done
+
+if test ! $# -eq 2;
 then
-dst=/usr/src/packages/SPECS;
-elif test -d /usr/src/redhat/SPECS;
- then
-dst=/usr/src/redhat/SPECS;
-elif test -d /usr/src/SPECS/; 
-then
-dst=/usr/src/SPECS;
+  echo "Invalid number of arguments"
+  usage
 fi
+
+# target to build for
+target_alias=$1
+bsp=$2
+
+. ./$CFG
+
+specfile=${dst}/$target_alias-$bsp-$RTEMS_VERSION.spec
 
 sed -e "s%@Version@%${RTEMS_VERSION}%g" \
 -e "s%@bsp@%${bsp}%g" \
--e "s%@Release@%${release}%g" \
+-e "s%@Release@%${rtems_release}%g" \
 -e "s%@target_alias@%${target_alias}%g" \
-< ${RTEMS_DIR}/rtems.spec.in \
-> ${dst}/rtems-$target_alias-$bsp.spec
+< ${RTEMS_DIR}/rtems/rtems.spec.in \
+> ${specfile}
+
+echo Generated ${specfile}

@@ -49,11 +49,6 @@ test -d build || mkdir build
   ../gdb-@gdb_version@/configure --target=@target_alias@ \
     --verbose --prefix=/opt/rtems 
 
-  test -d $RPM_BUILD_ROOT/opt \
-    || mkdir $RPM_BUILD_ROOT/opt
-  test -d $RPM_BUILD_ROOT/opt/rtems \
-    || mkdir $RPM_BUILD_ROOT/opt/rtems
-
   make all
   make info
 
@@ -83,22 +78,25 @@ test -d build || mkdir build
   fi
 
 %files
-%dir /opt/rtems/info
+%docdir /opt/rtems/info
 %doc /opt/rtems/info/gdb.info*
 %doc /opt/rtems/info/mmalloc.info*
 %doc /opt/rtems/info/readline.info*
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
+%docdir /opt/rtems/man
+%docdir /opt/rtems/man/man1
 %doc /opt/rtems/man/man1/@target_alias@-gdb.1
 
 %dir /opt/rtems/include
-/opt/rtems/include/bfd.h
-/opt/rtems/include/bfdlink.h
+# We install libbfd from binutils
+# /opt/rtems/include/bfd.h
+# /opt/rtems/include/bfdlink.h
 
 %dir /opt/rtems/lib
-/opt/rtems/lib/libbfd*
-/opt/rtems/lib/libiberty*
+# We install libbfd from binutils
+# /opt/rtems/lib/libbfd*
+# We use libiberty from gcc
+# /opt/rtems/lib/libiberty*
 
 %dir /opt/rtems/bin
 /opt/rtems/bin/@target_alias@-gdb
