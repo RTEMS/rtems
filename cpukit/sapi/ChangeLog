@@ -1,3 +1,15 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/confdefs.h, include/rtems/config.h,
+	include/rtems/extension.h, include/rtems/fatal.h,
+	include/rtems/init.h, include/rtems/io.h, include/rtems/mptables.h,
+	include/rtems/sptables.h, include/rtems/sptables.h.in,
+	inline/rtems/extension.inl, macros/rtems/extension.inl, src/debug.c,
+	src/exinit.c, src/extension.c, src/extensioncreate.c,
+	src/extensiondelete.c, src/extensionident.c, src/fatal.c, src/io.c,
+	src/itronapi.c, src/posixapi.c, src/rtemsapi.c: URL for license
+	changed.
+
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
 	* src/extensionident.c: Added ID to name lookup service and changed
