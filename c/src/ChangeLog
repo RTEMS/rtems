@@ -1,3 +1,8 @@
+2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add RTEMS_PROG_CC_FOR_TARGET,
+	RTEMS_CANONICALIZE_TOOLS.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Include compile.am.

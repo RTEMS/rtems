@@ -62,6 +62,9 @@ AC_CONFIG_SUBDIRS(tests)
 
 RTEMS_PROJECT_ROOT
 
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
+
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
