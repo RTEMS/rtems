@@ -1,3 +1,11 @@
+2003-07-18	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 415/bsps
+	* pci/detect_raven_bridge.c, startup/bspstart.c:
+	This patch reverts enabling MCP interrupts for the motorola_powerpc
+	BSPs. REASON: pci config space scanning (as e.g. done by the DEC
+	Ethernet driver) would raise machine check exceptions.
+
 2003-07-16      Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	PR 428/bsps

@@ -13,8 +13,6 @@
 
 #include <rtems/bspIo.h>
 
-SPR_RW(HID0)
-
 #define RAVEN_MPIC_IOSPACE_ENABLE	0x1
 #define RAVEN_MPIC_MEMSPACE_ENABLE	0x2
 #define RAVEN_MASTER_ENABLE		0x4
@@ -22,15 +20,10 @@ SPR_RW(HID0)
 #define RAVEN_SYSTEM_ERROR_ENABLE	0x100
 #define RAVEN_CLEAR_EVENTS_MASK		0xf9000000
 
-#define RAVEN_MPIC_MEREN		0xfeff0020
-#define RAVEN_MPIC_MERST		0xfeff0024
-/* enable machine check on all conditions
- * EXCEPT for signalled master abort (which
- * can be caused by PCI configuration space
- * accesses to non-present devices)
- * - of course, this is sort of a hack :-(
- */
-#define MEREN_VAL				0x2d00
+#define RAVEN_MPIC_MEREN		((volatile unsigned *)0xfeff0020)
+#define RAVEN_MPIC_MERST		((volatile unsigned *)0xfeff0024)
+/* enable machine check on all conditions */
+#define MEREN_VAL				0x2f00
 
 #define pci BSP_pci_configuration
 
@@ -50,8 +43,8 @@ unsigned merst;
 			if (!quiet)
 				printk("Enabling MCP generation on hostbridge errors\n");
 			out_be32(RAVEN_MPIC_MEREN, MEREN_VAL);
-			_write_HID0(_read_HID0() | HID0_EMCP );
 		} else {
+			out_be32(RAVEN_MPIC_MEREN, 0);
 			if ( !quiet && enableMCP ) {
 				printk("leaving MCP interrupt disabled\n");
 			}

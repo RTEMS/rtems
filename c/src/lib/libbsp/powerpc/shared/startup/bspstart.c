@@ -336,8 +336,10 @@ void bsp_start( void )
   BSP_time_base_divisor			= (residualCopy.VitalProductData.TimeBaseDivisor?
 					   residualCopy.VitalProductData.TimeBaseDivisor : 4000);
 
-  /* clear hostbridge errors and enable MCP */
-  _BSP_clear_hostbridge_errors(1/*enableMCP*/, 0/*quiet*/);
+  /* clear hostbridge errors but leave MCP disabled -
+   * PCI config space scanning code will trip otherwise :-(
+   */
+  _BSP_clear_hostbridge_errors(0 /* enableMCP */, 0/*quiet*/);
 
 
   /* Allocate and set up the page table mappings
