@@ -124,7 +124,7 @@ void _MPCI_Create_server( void )
   _Thread_Start(
     _MPCI_Receive_server_tcb,
     THREAD_START_NUMERIC,
-    _MPCI_Receive_server,
+    (void *) _MPCI_Receive_server,
     NULL,
     0
   );

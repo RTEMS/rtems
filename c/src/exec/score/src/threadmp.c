@@ -132,7 +132,7 @@ restart:
            !_Chain_Is_tail( &_Thread_MP_Active_proxies, proxy_node ) ;
         ) {
 
-      the_thread = _Addresses_Subtract_offset(
+      the_thread = (Thread_Control *) _Addresses_Subtract_offset(
                      proxy_node,
                      _Thread_MP_Proxy_Active_offset
                    );

@@ -74,7 +74,7 @@ void _Thread_Handler_initialization(
 
   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
 
-  _Thread_Ready_chain = _Workspace_Allocate_or_fatal_error(
+  _Thread_Ready_chain = (Chain_Control *) _Workspace_Allocate_or_fatal_error(
     (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
   );
 
@@ -122,9 +122,9 @@ void _Thread_Create_idle( void )
    */
  
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
-  idle = _CPU_Thread_Idle_body;
+  idle = (void *) _CPU_Thread_Idle_body;
 #else
-  idle = _Thread_Idle_body;
+  idle = (void *) _Thread_Idle_body;
 #endif
  
   if ( _CPU_Table.idle_task )
@@ -503,7 +503,7 @@ boolean _Thread_Initialize(
   } else 
     extensions_area = NULL;
   
-  the_thread->extensions = extensions_area;
+  the_thread->extensions = (void **) extensions_area;
 
   /*
    *  General initialization
@@ -540,7 +540,7 @@ boolean _Thread_Initialize(
     if ( fp_area )
       (void) _Workspace_Free( fp_area );
 
-    _Thread_Stack_Free( the_thread->Start.stack );
+    _Thread_Stack_Free( the_thread );
 
     return FALSE;
   }
@@ -567,7 +567,7 @@ boolean _Thread_Start(
 {
   if ( _States_Is_dormant( the_thread->current_state ) ) {
  
-    the_thread->Start.entry_point      = entry_point;
+    the_thread->Start.entry_point      = (Thread_Entry) entry_point;
    
     the_thread->Start.prototype        = the_prototype;
     the_thread->Start.pointer_argument = pointer_argument;
@@ -1131,19 +1131,23 @@ void _Thread_Handler( void )
  
   switch ( executing->Start.prototype ) {
     case THREAD_START_NUMERIC:
-      (*executing->Start.entry_point)( executing->Start.numeric_argument );
+      (*(Thread_Entry_numeric) executing->Start.entry_point)(
+        executing->Start.numeric_argument
+      );
       break;
     case THREAD_START_POINTER:
-      (*executing->Start.entry_point)( executing->Start.pointer_argument );
+      (*(Thread_Entry_pointer) executing->Start.entry_point)(
+        executing->Start.pointer_argument
+      );
       break;
     case THREAD_START_BOTH_POINTER_FIRST:
-      (*executing->Start.entry_point)( 
+      (*(Thread_Entry_both_pointer_first) executing->Start.entry_point)( 
         executing->Start.pointer_argument,
         executing->Start.numeric_argument
       );
       break;
     case THREAD_START_BOTH_NUMERIC_FIRST:
-      (*executing->Start.entry_point)( 
+      (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)( 
         executing->Start.numeric_argument,
         executing->Start.pointer_argument
       );

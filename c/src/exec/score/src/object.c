@@ -121,9 +121,10 @@ void _Objects_Initialize_information(
    *  Allocate local pointer table
    */
 
-  information->local_table = _Workspace_Allocate_or_fatal_error(
-    (maximum + 1) * sizeof(Objects_Control *)
-  );
+  information->local_table =
+    (Objects_Control **) _Workspace_Allocate_or_fatal_error(
+      (maximum + 1) * sizeof(Objects_Control *)
+    );
 
   /*
    *  Allocate name table
@@ -137,7 +138,8 @@ void _Objects_Initialize_information(
 
   information->name_length = name_length;
 
-  name_area = _Workspace_Allocate_or_fatal_error( (maximum + 1) * name_length );
+  name_area = (Objects_Name *)
+    _Workspace_Allocate_or_fatal_error( (maximum + 1) * name_length );
   information->name_table = name_area;
 
   /*
@@ -183,9 +185,10 @@ void _Objects_Initialize_information(
 
   if ( supports_global == TRUE && _System_state_Is_multiprocessing ) {
 
-    information->global_table = _Workspace_Allocate_or_fatal_error(
-      (_Objects_Maximum_nodes + 1) * sizeof(Chain_Control)
-    );
+    information->global_table =
+      (Chain_Control *) _Workspace_Allocate_or_fatal_error(
+        (_Objects_Maximum_nodes + 1) * sizeof(Chain_Control)
+      );
 
     for ( index=1; index <= _Objects_Maximum_nodes ; index++ )
       _Chain_Initialize_empty( &information->global_table[ index ] );
@@ -208,7 +211,7 @@ void _Objects_Clear_name(
 {
   unsigned32  index;
   unsigned32  maximum = length / OBJECTS_NAME_ALIGNMENT;
-  unsigned32 *name_ptr = name;
+  unsigned32 *name_ptr = (unsigned32 *) name;
 
   for ( index=0 ; index < maximum ; index++ ) 
     *name_ptr++ = 0;
@@ -226,8 +229,8 @@ void _Objects_Copy_name_string(
   void       *destination
 )
 {
-  unsigned8 *source_p = source;
-  unsigned8 *destination_p = destination;
+  unsigned8 *source_p = (unsigned8 *) source;
+  unsigned8 *destination_p = (unsigned8 *) destination;
  
   do {
     *destination_p++ = *source_p;
@@ -247,8 +250,8 @@ void _Objects_Copy_name_raw(
   unsigned32  length
 )
 {
-  unsigned32 *source_p = source;
-  unsigned32 *destination_p = destination;
+  unsigned32 *source_p = (unsigned32 *) source;
+  unsigned32 *destination_p = (unsigned32 *) destination;
   unsigned32  tmp_length = length / OBJECTS_NAME_ALIGNMENT;
  
   while ( tmp_length-- )
@@ -268,8 +271,8 @@ boolean _Objects_Compare_name_string(
   unsigned32  length
 )
 {
-  unsigned8 *name_1_p = name_1;
-  unsigned8 *name_2_p = name_2;
+  unsigned8 *name_1_p = (unsigned8 *) name_1;
+  unsigned8 *name_2_p = (unsigned8 *) name_2;
   unsigned32 tmp_length = length;
  
   do {
@@ -295,8 +298,8 @@ boolean _Objects_Compare_name_raw(
   unsigned32  length
 )
 {
-  unsigned32 *name_1_p = name_1;
-  unsigned32 *name_2_p = name_2;
+  unsigned32 *name_1_p = (unsigned32 *) name_1;
+  unsigned32 *name_2_p = (unsigned32 *) name_2;
   unsigned32  tmp_length = length / OBJECTS_NAME_ALIGNMENT;
  
   while ( tmp_length-- )
