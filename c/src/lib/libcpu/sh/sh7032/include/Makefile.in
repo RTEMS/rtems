@@ -1,0 +1,36 @@
+#
+# $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH=@srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+H_FILES = \
+	$(srcdir)/null.h \
+	$(srcdir)/sh7_pfc.h \
+	$(srcdir)/sh7_sci.h \
+	$(srcdir)/termbits.h \
+	$(srcdir)/ioqueue.h
+
+SRCS=$(H_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	install
+
+# NOTE: Unlike other CPUS, we install into a subdirectory to avoid 
+#       file name conflicts
+
+install:
+	test -d $(PROJECT_INCLUDE)/sh || $(MKDIR) $(PROJECT_INCLUDE)/sh 
+	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/sh
+
+all: FORCEIT
+	cd ../../../../libbsp/$(RTEMS_CPU)/$(RTEMS_BSP)/include; $(MAKE) all

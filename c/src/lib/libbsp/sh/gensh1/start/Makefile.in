@@ -1,0 +1,59 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH=@srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+PGMS=${ARCH}/start.o
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES=
+
+# Assembly source names, if any, go here -- minus the .s
+S_PIECES=start
+S_FILES=$(S_PIECES:%=%.s)
+S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+
+SRCS=$(C_FILES) $(H_FILES) $(S_FILES)
+OBJS=$(C_O_FILES) $(S_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+# force optimization, unless start.o will not work
+# CFLAGS_PROFILE=
+# CFLAGS_DEBUG=-O3
+# CFLAGS_OPTIMIZE=-O3
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	${ARCH} $(SRCS) $(OBJS) $(PGM)
+	$(INSTALL_VARIANT) -m 555 ${PGMS} ${PROJECT_RELEASE}/lib
