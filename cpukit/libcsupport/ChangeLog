@@ -1,3 +1,10 @@
+2003-11-25	Jennifer Averett <jennifer@OARcorp.com>
+
+	PR 519/filesystem
+	* include/rtems/libio_.h, src/eval.c, src/rmdir.c, src/unlink.c: 
+	Check write permissions in parent directory for file or 
+	directory delete
+
 2003-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 511/filesystem

@@ -39,6 +39,12 @@ int rmdir(
   if ( result != 0 )
      return -1;
 
+  result = rtems_filesystem_evaluate_parent(RTEMS_LIBIO_PERMS_WRITE, &loc );
+  if (result != 0){
+    rtems_filesystem_freenode( &loc );
+    return -1;
+  }
+
   /*
    * Verify you can remove this node as a directory.
    */
