@@ -1,3 +1,9 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* unlimited/init.c, unlimited/system.h, unlimited/test1.c,
+	unlimited/test2.c, unlimited/test3.c, unlimited/unlimited.doc:
+	Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
