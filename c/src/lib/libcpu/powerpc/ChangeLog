@@ -1,3 +1,8 @@
+2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 368/filesystems
+	* mpc8xx/include/mpc8xx.h: Add PCMCIA registers.
+
 2003-03-25	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 349/bsps
