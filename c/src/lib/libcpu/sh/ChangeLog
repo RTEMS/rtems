@@ -1,3 +1,7 @@
+2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add sh7750.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
