@@ -1,5 +1,11 @@
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/canonicalize-tools.m4: Remove LD.
+	* automake/lib.am: Remove LD.
+	* Makefile.am: Put preinstall-stamp into CLEANFILES.
+
+2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/rtems-top.m4: Use with_project_root and MULTIBUILDTOP to 
 	compose PROJECT_TOPdir (Fixes hppa1.1/genoffset problem).
 

@@ -13,7 +13,7 @@ noinst_DATA = preinstall-stamp
 preinstall-stamp:
 	$(MAKE) $(AM_MAKEFLAGS) preinstall
 	touch preinstall-stamp
-DISTCLEANFILES = preinstall-stamp
+CLEANFILES = preinstall-stamp
 
 AUTOMAKE_FILES = automake/compile.am automake/lib.am automake/local.am \
     automake/multilib.am automake/subdirs.am
