@@ -12,7 +12,8 @@ LIB=${ARCH}/${LIBNAME}
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
 C_PIECES=__gettod __brk __times malloc syscalls \
-	 no_libc newlibc newlibif support unixlibc libio hosterr tcattr
+    no_libc newlibc newlibif newlibifr support unixlibc \
+    libio hosterr tcattr
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
