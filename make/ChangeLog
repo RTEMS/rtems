@@ -1,3 +1,8 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/Makefile.am: Remove.
+	* Makefile.am: Merge-in former custom/Makefile.am
+
 2003-11-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/HPUX9-posix.cfg: Remove INLINE, INLINE_UPCASE.
