@@ -17,6 +17,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+#include <termios.h>
+
 #include "internal.h"
 #include "libio.h"
 
