@@ -53,7 +53,7 @@ extern "C" {
  */
 
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
