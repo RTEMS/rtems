@@ -6,8 +6,8 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 SUBDIRS = . binutils gccnewlib gdb rtems
 
-noinst_SCRIPTS = setup buildall mkbinutilspec mkbspspec mkgccnewlibspec \
-    mkgdbspec mkrpms mkspec
+noinst_SCRIPTS = setup buildall buildalltar mkbinutilspec mkbspspec \
+    mkgccnewlibspec mkgdbspec mkrpms mkspec
 
 TEMPLATES =
 

@@ -67,6 +67,7 @@ AC_SUBST(RPM_CPU)
 AC_OUTPUT(
 Makefile
 buildall
+buildalltar
 mkbinutilspec
 mkgccnewlibspec
 mkgdbspec
@@ -76,4 +77,5 @@ gccnewlib/Makefile
 gdb/Makefile
 rtems/Makefile,
 chmod 755 buildall
+chmod 755 buildalltar
 )

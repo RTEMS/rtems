@@ -1,0 +1,295 @@
+#! /bin/sh
+#
+#  Generate all the specs and then cycle through building them.
+#
+
+RTEMS_DIR=`dirname $0`
+CFG=./setup.cache
+#dst=/usr/src/redhat/SPECS
+dst=`pwd`
+target=@target@
+rpm_cpu=i386
+
+usage()
+{
+  echo "$0 [options] <target_alias>"
+  echo "  options:"
+  echo "    -b                  -- build binutils"
+  echo "    -g                  -- build gcc/newlib"
+  echo "    -d                  -- build gdb"
+  echo "    -t                  -- enable test/debug mode"
+  echo "    -cfg <setup.cache>"
+  echo "    -o <rpm-spec-dir>"
+  exit 1 ;
+}
+
+testing=no
+do_binutils=no
+do_gccnewlib=no
+do_gdb=no
+
+while test $# -ge 1; do
+  case $1 in
+    -b) do_binutils=yes  ; shift;;
+    -g) do_gccnewlib=yes ; shift;; 
+    -d) do_gdb=yes       ; shift;; 
+    -t) do_test=yes      ; shift;; 
+    -cfg)
+      test $# -ge 2 || usage
+      shift
+      CFG=$1
+      shift
+      ;;
+    -o)
+      test $# -ge 2 || usage
+      shift
+      dst=$1
+      shift
+      ;;
+    -*)
+      echo "invalid option $1";
+      usage
+      ;;
+    *)
+      TARGETS="${TARGETS} $1"
+      shift
+      ;;
+  esac
+done
+
+if test ${do_binutils} = no -a ${do_gccnewlib} = no -a ${do_gdb} = no ; then
+  echo "You must request building binutils, gcc/newlib, or gdb."
+  usage
+fi
+
+
+# This is the full list .. hppa1.1 does not build now.
+#ALL_TARGETS="hppa1.1-rtems i386-rtems i960-rtems m68k-rtems \
+#  m68k-rtemself mips-rtems mips64orion-rtems \
+#  powerpc-rtems sh-rtems sh-rtemself sparc-rtems"
+
+# This is the full buildable set.
+if [ "X${TARGETS}" = "X" ] ; then
+  # do not include c4x or hppa primary targets
+  # do not include sh-elf or i960-elf secondary targets
+  TARGETS="arm-rtems h8300-rtems i386-rtems i960-rtems m68k-rtems \
+    mips-rtems mips64orion-rtems powerpc-rtems sh-rtems sparc-rtems"
+fi
+
+. $CFG
+
+binutils=${binutils_version}
+gcc=${gcc_version}
+gdb=${gdb_version}
+newlib=${newlib_version}
+# also use binutils_rpm_release
+buildroot=/tmp
+
+#
+#  Now get started
+#
+start=`date`
+
+echo PATH=$PATH
+
+if [ ${testing} = yes ] ; then
+  ECHO=echo
+fi
+
+#installed_count=`rpm -q -g rtems | wc -l`
+#if [ ${installed_count} -ne 0 ] ; then
+#  echo This script should be run with NO rtems RPMs installed.
+#  echo It appears that the following rtems RPMs are installed:
+#  echo
+#  rpm -qa | grep rtems
+#  echo
+#  echo Please remove these and restart this script.
+#  exit 1
+#fi
+
+#echo Copying specs files.
+#if [ ${testing} = no ] ; then
+#  cd ${RTEMS_DIR}
+#  
+#  # ./configure || exit 1
+#  make        || exit 1
+#
+#  #  Now generate all the specs
+#  for target in ${TARGETS}
+#  do
+#    tspecs=`find . -name "${target}*"`
+#    if [ "X${tspecs}" = "X" ] ; then
+#      echo RPM specifications were not generated for ${tspec}.
+#      exit 1
+#    fi
+#    ${ECHO} cp -r ${tspecs} ${dst}
+#  done
+#fi
+
+# clean up a bit before we start
+cd ${dst}
+test -d log || mkdir log
+
+#  do all the tools
+for target in ${TARGETS}
+do
+  bintarfile=${PWD}/${target}-binutils-${binutils}-${binutils_rpm_release}.tar
+  if [ ${do_binutils} = yes ] ; then
+    # this part is for RPMS
+    logfile=log/${target}-binutils
+    #specfile=${dst}/${target}-binutils-${binutils}.spec
+    #echo "rpm -ba ${specfile} >${logfile} 2>&1"
+    #if [ ${testing} = no ] ; then
+    #  rpm -ba ${specfile} >${logfile} 2>&1
+    #fi
+    #${ECHO} rm -rf ${dst}/../BUILD/${target}-binutils*
+
+
+    # this part is for tar.bz2
+    PWD=`pwd`
+    mkdir b-${target}
+    cd b-${target}
+    ../binutils-${binutils}/configure --target=${target} \
+      --verbose --prefix=/opt/rtems 
+    make all
+    make info
+    make prefix=${rpm_build_root}/opt/rtems install
+    make prefix=${rpm_build_root}/opt/rtems install-info         
+    cd ${buildroot}
+    tar cf ${PWD}/${target}-binutils-${binutils}-${binutils_rpm_release}.tar opt
+    cd ${PWD}
+    bzip2 -9 ${target}-binutils-${binutils}.tar
+    ${ECHO} rm -rf ${rpm_build_root}/opt
+    rm -rf ${rpm_build_root}/opt/rtems
+    rm -rf b-${target}
+  else
+    echo Skipping binutils for ${target}
+  fi
+
+  #
+  #  build gcc/newlib
+  #
+
+  if [ ${do_gccnewlib} = yes ] ; then
+    # now build gcc/newlib
+    #    NOTE: This requires having binutils installed and we immediately
+    #          remove it once finished.
+    #base_binutils_rpm=${dst}/../RPMS/${rpm_cpu}/rtems-base-binutils-${binutils}-${binutils_rpm_release}.${rpm_cpu}.rpm
+    #binutils_rpm=${dst}/../RPMS/${rpm_cpu}/${target}-binutils-${binutils}-${binutils_rpm_release}.${rpm_cpu}.rpm
+    #if [ ! -f ${binutils_rpm} ] ; then
+    #  echo There is no RPM for binutils for ${target}.
+    #  echo Looked for ${binutils_rpm}.
+    #fi
+    #${ECHO} rpm -i ${base_binutils_rpm}
+    #${ECHO} rpm -i ${binutils_rpm}
+
+    #logfile=log/${target}-gccnewlib
+    #specfile=${dst}/${target}-gcc-${gcc}-newlib-${newlib}.spec
+    #echo "rpm -ba ${specfile} >${logfile} 2>&1"
+    #if [ ${testing} = no ] ; then
+    #  rpm -ba ${specfile} >${logfile} 2>&1
+    #fi
+    #${ECHO} rm -rf ${dst}/../BUILD/${target}-gcc*
+    #${ECHO} rm -rf ${buildroot}/opt/rtems
+
+    #echo uninstalling binutils for ${target} 
+    #if [ ${testing} = no ] ; then
+    #  rpm -e `rpm -qa | grep rtems`
+    #  rm -rf /opt/rtems/*
+    #fi
+ 
+    # this part is for tar.bz2
+    PWD=`pwd`
+
+    gcctarfile=${PWD}/${target}-gcc-${gcc}-newlib-${newlib}-${gccnewlib_rpm_release}.tar
+    bintarfile=${dst}/binaries/binutils-${binutils}-${binutils_rpm_release}/${target}-binutils-${binutils}-${binutils_rpm_release}.tar
+    cd /
+    rm -rf /opt/*
+    bzcat ${bintarfile}.bz2 | tar xf -
+
+    cd ${PWD}
+    rm -rf b-${target}
+    mkdir b-${target}
+    cd b-${target}
+    ../gcc-${gcc}/configure --target=${target} \
+      --with-gnu-as --with-gnu-ld --with-newlib --verbose \
+      --enable-threads --prefix=/opt/rtems '--enable-languages=c,c++'
+    make all
+    make info
+    make prefix=${rpm_build_root}/opt/rtems install
+    make prefix=${rpm_build_root}/opt/rtems install-info         
+    cd ${target}/newlib
+    make prefix=${rpm_build_root}/opt/rtems install-info         
+    cd ${buildroot}
+    tar cf ${gcctarfile} opt
+    cd ${PWD}
+    bzip2 -9 ${gcctarfile}
+    rm -rf ${rpm_build_root}/opt
+    rm -rf ${rpm_build_root}/opt/rtems
+    rm -rf b-${target}
+  else
+    echo Skipping gcc/newlib for ${target}
+  fi
+
+  #
+  # build gdb
+  #
+
+  if [ ${do_gdb} = yes ] ; then
+    # now build gdb
+    #logfile=log/${target}-gdb
+    #specfile=${dst}/${target}-gdb-${gdb}.spec
+    #echo "rpm -ba ${specfile} >${logfile} 2>&1"
+    #if [ ${testing} = no ] ; then
+    #  rpm -ba ${specfile} >${logfile} 2>&1
+    #fi
+    #${ECHO} rm -rf ${dst}/../BUILD/${target}-gdb*
+    #${ECHO} rm -rf ${buildroot}/opt/rtems
+
+    # this part is for tar.bz2
+    
+    PWD=`pwd`
+    mkdir b-${target}
+    cd b-${target}
+    case ${target} in
+      arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | i960* | \
+      m32r* | mcore* | mips* | mn10200* | mn10300* | sh* | sparc*| v850* | \
+      w65* | z8k*)
+        extra_configure_arguments="--enable-sim"
+        ;;
+     powerpc*)
+        extra_configure_arguments="--enable-sim --enable-sim-powerpc --enable-sim-timebase --enable-sim-hardware"
+        #  Enabling this causes the program image to be huge and causes
+        #  some gcc/hosts combinations to run out of memory.
+        #          --enable-sim-inline
+        ;;
+      *)
+        ;;
+esac 
+    ../gdb-${gdb}/configure --target=${target} \
+      ${extra_configure_arguments} --verbose --prefix=/opt/rtems 
+    make all
+    make info
+    make prefix=${rpm_build_root}/opt/rtems install
+    make prefix=${rpm_build_root}/opt/rtems install-info         
+    cd ${buildroot}
+    tar cf ${PWD}/${target}-gdb-${gdb}-${gdb_rpm_release}.tar opt
+    cd ${PWD}
+    bzip2 -9 ${target}-gdb-${gdb}.tar
+    ${ECHO} rm -rf ${rpm_build_root}/opt
+    rm -rf ${rpm_build_root}/opt/rtems
+    rm -rf b-${target}
+  else
+    echo Skipping gdb for ${target}
+  fi
+
+done
+
+# Now we are done
+
+stop=`date`
+
+echo
+echo "Started:  " $start
+echo "Finished: " $stop
+exit 0
