@@ -18,13 +18,13 @@ ac_help="$ac_help
   --enable-gmake-print-directory    enable GNU Make's print directory"
 ac_help="$ac_help
 \
-  --disable-posix 	     	    disable posix interface"
+  --enable-posix 	     	    enable posix interface"
 ac_help="$ac_help
 \
-  --disable-ka9q                disable KA9Q TCP/IP stack"
+  --enable-ka9q                enable KA9Q TCP/IP stack"
 ac_help="$ac_help
 \
-  --disable-rtems-inlines 	    disable RTEMS inline functions (use macros)"
+  --enable-rtems-inlines 	    enable RTEMS inline functions (use macros)"
 ac_help="$ac_help
 \
   --enable-cpp            enable C++ support, and build the rtems++ library"
@@ -715,7 +715,7 @@ if test "${enable_posix+set}" = set; then
 case "${enableval}" in 
   yes) RTEMS_HAS_POSIX_API=yes ;;
   no) RTEMS_HAS_POSIX_API=no ;;
-  *)  { echo "configure: error: bad value ${enableval} for disable-posix option" 1>&2; exit 1; } ;;
+  *)  { echo "configure: error: bad value ${enableval} for enable-posix option" 1>&2; exit 1; } ;;
 esac
 else
   RTEMS_HAS_POSIX_API=yes
@@ -729,7 +729,7 @@ if test "${enable_ka9q+set}" = set; then
 case "${enableval}" in
   yes) RTEMS_HAS_KA9Q=yes ;;
   no) RTEMS_HAS_KA9Q=no ;;
-  *)  { echo "configure: error: bad value ${enableval} for disable-ka9q option" 1>&2; exit 1; } ;;
+  *)  { echo "configure: error: bad value ${enableval} for enable-ka9q option" 1>&2; exit 1; } ;;
 esac
 else
   RTEMS_HAS_KA9Q=yes
@@ -741,8 +741,8 @@ if test "${enable_rtems_inlines+set}" = set; then
   enableval="$enable_rtems_inlines"
   \
 case "${enableval}" in 
-  yes) RTEMS_USE_MACROS=yes ;;
-  no) RTEMS_USE_MACROS=no ;;
+  yes) RTEMS_USE_MACROS=no ;;
+  no) RTEMS_USE_MACROS=yes ;;
   *)  { echo "configure: error: bad value ${enableval} for disable-rtems-inlines option" 1>&2; exit 1; } ;;
 esac
 else
@@ -1366,7 +1366,7 @@ fi
 
 
 
-if test "$RTEMS_HAS_POSIX" = "yes"; then
+if test "$RTEMS_HAS_POSIX_API" = "yes"; then
   
 echo $ac_n "checking for Makefile.in in c/src/exec/posix""... $ac_c" 1>&6
 echo "configure:1373: checking for Makefile.in in c/src/exec/posix" >&5
@@ -1382,7 +1382,7 @@ else
 fi
 
 
-  makefiles="$makefiles c/src/exec/posix/Makefile"
+  makefiles="$makefiles c/src/exec/wrapup/posix/Makefile"
 fi
 
 # find all the Makefiles for the BSPs
