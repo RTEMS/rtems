@@ -24,6 +24,7 @@ headers:
 	    <$(SRCDIR)/rtems_header.html >$(WWW_INSTALL)/rtems_header.html
 	sed -e 's/RTEMS_VERSION/$(RTEMS_VERSION)/' \
 	    <$(SRCDIR)/rtems_footer.html >$(WWW_INSTALL)/rtems_footer.html
+	cp common/*.gif $(WWW_INSTALL)
 
 info: env
 	./do_docs $(BASEDIR) info
