@@ -75,6 +75,7 @@ static int	icmpbmcastecho = 1;
 SYSCTL_INT(_net_inet_icmp, OID_AUTO, bmcastecho, CTLFLAG_RW, &icmpbmcastecho,
 	   0, "");
 
+/* #define ICMPPRINTFS 1 */
 #ifdef ICMPPRINTFS
 int	icmpprintfs = 0;
 #endif
