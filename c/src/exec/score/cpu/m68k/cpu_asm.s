@@ -202,9 +202,11 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
         movec   a0,msp                   | set master stack pointer
 #else
 
-        movew   a7@(16+SR_OFFSET),sr
-        jsr     SYM (_Thread_Dispatch)
-
+| filter out the trace bit to stop single step debugging breaking
+        movew   a7@(16+SR_OFFSET),d0
+        andw    #0x7FFF,d0
+        movew   d0,sr
+        jsr SYM (_Thread_Dispatch)
 #endif
 
 exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
