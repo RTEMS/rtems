@@ -31,7 +31,8 @@
  *
  *  $Id$
  */
-#include <rtems/score/targopts.h>
+
+#include <rtems/score/targopts.h> /* for PPC_USE_DATA_CACHE */
 #include "ppc-asm.h"
 #include "bsp.h"
 

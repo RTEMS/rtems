@@ -16,7 +16,8 @@
  *
  *  $Id$
  */
-#include <rtems/score/targopts.h>
+
+#include <rtems/score/targopts.h> /* for SCORE603E_GENERATION */
 #include "ppc-asm.h"
 
 	.file	"start.s"
