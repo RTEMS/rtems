@@ -1,3 +1,8 @@
+2004-10-18	RTEMS
+
+	* autotools/autoconf-rtems.spec.in: Comment out line giving trouble. It
+	only references unneeded documentation.
+
 2004-04-08	Joel Sherrill <joel@OARcorp.com>
 
 	PR 594/tools

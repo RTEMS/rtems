@@ -88,7 +88,7 @@ fi
 
 %files
 %defattr(-,root,root)
-%doc AUTHORS COPYING ChangeLog NEWS README THANKS
+# %doc AUTHORS COPYING ChangeLog NEWS README THANKS
 %{_bindir}/*
 %{_infodir}/autoconf.info*
 #%{_infodir}/standards.info*
