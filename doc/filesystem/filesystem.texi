@@ -64,6 +64,7 @@ END-INFO-DIR-ENTRY
 
 @include preface.texi
 @include basefs.texi
+@include applayering.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top filesystem
@@ -73,6 +74,7 @@ This is the online version of the RTEMS Filesystem Design Guide.
 @menu
 * Preface::
 * Base File System::
+* Applications and Functional Layering::
 * Command and Variable Index::
 * Concept Index::
 @end menu

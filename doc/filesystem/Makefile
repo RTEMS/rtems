@@ -21,7 +21,7 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
-GENERATED_FILES=basefs.texi
+GENERATED_FILES=basefs.texi applayering.texi
 
 FILES= $(PROJECT).texi \
   preface.texi $(GENERATED_FILES)
@@ -53,6 +53,11 @@ $(PROJECT).dvi: $(FILES)
 
 basefs.texi: basefs.t Makefile
 	$(BMENU) -p "Preface" \
+	   -u "Top" \
+	   -n "" ${*}.t
+
+applayering.texi: applayering.t Makefile
+	$(BMENU) -p "" \
 	   -u "Top" \
 	   -n "" ${*}.t
 
