@@ -413,7 +413,7 @@ scc_rxDaemon (void *arg)
 	struct ifnet *ifp = &sc->arpcom.ac_if;
 	struct mbuf *m;
 	rtems_unsigned16 status;
-	m360BufferDescriptor_t *rxBd;
+	volatile m360BufferDescriptor_t *rxBd;
 	int rxBdIndex;
 
 	/*
@@ -426,11 +426,11 @@ scc_rxDaemon (void *arg)
 		m->m_pkthdr.rcvif = ifp;
 		sc->rxMbuf[rxBdIndex] = m;
 		rxBd->buffer = mtod (m, void *);
-		rxBd->status = M360_BD_EMPTY | M360_BD_INTERRUPT;
 		if (++rxBdIndex == sc->rxBdCount) {
-			rxBd->status |= M360_BD_WRAP;
+			rxBd->status = M360_BD_EMPTY | M360_BD_INTERRUPT | M360_BD_WRAP;
 			break;
 		}
+		rxBd->status = M360_BD_EMPTY | M360_BD_INTERRUPT;
 	}
 
 	/*
@@ -457,12 +457,15 @@ scc_rxDaemon (void *arg)
 			 * `if' above, and the clearing of the event register.
 			 */
 			while ((status = rxBd->status) & M360_BD_EMPTY) {
+				rtems_interrupt_level level;
 				rtems_event_set events;
 
 				/*
 				 * Unmask RXF (Full frame received) event
 				 */
+				rtems_interrupt_disable (level);
 				m360.scc1.sccm |= 0x8;
+				rtems_interrupt_enable (level);
 
 				rtems_bsdnet_event_receive (INTERRUPT_EVENT,
 						RTEMS_WAIT|RTEMS_EVENT_ANY,
@@ -590,13 +593,16 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 			 */
 			m360Enet_retire_tx_bd (sc);
 			while ((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
+				rtems_interrupt_level level;
 				rtems_event_set events;
 
 				/*
 				 * Unmask TXB (buffer transmitted) and
 				 * TXE (transmitter error) events.
 				 */
+				rtems_interrupt_disable (level);
 				m360.scc1.sccm |= 0x12;
+				rtems_interrupt_enable (level);
 				rtems_bsdnet_event_receive (INTERRUPT_EVENT,
 						RTEMS_WAIT|RTEMS_EVENT_ANY,
 						RTEMS_NO_TIMEOUT,
