@@ -15,13 +15,13 @@
  *  $Id$
  */
   
+#include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apiext.h>
 #include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
-#include <libcpu/cpu.h>
 /*#include <bsp/8xx_immap.h>*/
 #include <mpc8260.h>
 /*#include <bsp/commproc.h>*/

@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/bspIo.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>

@@ -1,3 +1,11 @@
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* irq/irq.c: Reflect changes to <rtems/score/cpu.h>.
+	* irq/irq_asm.S: Ditto.
+	* network/network.c: Include <rtems/bspIo.h>.
+	* start/start.S: Include <asm.h> instead of "asm.h".
+	* vectors/vectors.S: Reflect changes to <rtems/score/cpu.h>.
+
 2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/bspstart.c: Include <libcpu/cpuIdent.h>, <rtems/bspIo.h>.

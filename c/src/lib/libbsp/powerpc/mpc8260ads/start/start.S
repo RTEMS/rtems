@@ -31,7 +31,7 @@
  *
  */
 
-#include "asm.h"
+#include <asm.h>
 
 /*
  *  The initial stack is set to run BELOW the code base address.
