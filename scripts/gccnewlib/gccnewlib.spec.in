@@ -45,50 +45,47 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 %patch0 -p0
 %patch1 -p0
 
-( cd gcc-@gcc_version@
-
   # Now link the C library into the source tree 
-  ln -s ../newlib-1.8.2/newlib .
-)
+  ln -s ../newlib-1.8.2/newlib gcc-@gcc_version@
 
 %build
-test -d build || mkdir build
-( cd build
+  test -d build || mkdir build
+  cd build
   ../gcc-@gcc_version@/configure --target=@target_alias@ \
     --with-gnu-as --with-gnu-ld --with-newlib --verbose \
     --prefix=/opt/rtems
-  ../gcc-@gcc_version@/mkinstalldirs \
-    $RPM_BUILD_ROOT/opt/rtems/@target_alias@/sys-include \
-    $RPM_BUILD_ROOT/opt/rtems/@target_alias@/include
 
-  srclimits=../gcc-@gcc_version@/newlib/libc/sys/rtems/include/limits.h
-  for dir in $RPM_BUILD_ROOT/opt/rtems/@target_alias@/include \
-             $RPM_BUILD_ROOT/opt/rtems/@target_alias@/sys-include
-  do
-    cp ${srclimits} ${dir}
-  done
+  # for now we are building all the languages
+  #  '--enable-languages=c c++'
 
-  #make LANGUAGES="c c++" all
   make all
   make info
 
-  cd gcc
-    rm -f stmp-multilib
-    find . -name "*.a" -print | xargs -e rm -f
-
-    make all
-  cd ..
-)
+#  Since gcc now finds the RTEMS limits.h, this should not be needed
+#  cd gcc
+#    rm -f stmp-multilib
+#    find . -name "*.a" -print | xargs -e rm -f
+#
+#    make all
+#  cd ..
 
 %install
-( cd build
+  cd build
   make prefix=$RPM_BUILD_ROOT/opt/rtems install
   cd @target_alias@/newlib
   make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
 # gzip info files
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
-)
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
+ 
+  if test -d "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@"; \
+  then
+    find "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@" -type d | \
+      sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" > files.gcc-lib
+    find "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@" -type f | \
+      sed -e "s,^$RPM_BUILD_ROOT,,g" >> files.gcc-lib
+  fi
 
 %post
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -110,8 +107,8 @@ test -d build || mkdir build
     done
   fi
 
-%files
-%dir /opt/rtems/info
+%files -f files.g++ -f files.gcc-lib
+%docdir /opt/rtems/info
 %doc /opt/rtems/info/dir
 %doc /opt/rtems/info/chill.info*
 %doc /opt/rtems/info/cpp.info*
@@ -120,11 +117,12 @@ test -d build || mkdir build
 %doc /opt/rtems/info/libc.info*
 %doc /opt/rtems/info/libm.info*
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
+%docdir /opt/rtems/man
+%docdir /opt/rtems/man/man1
 %doc /opt/rtems/man/man1/cccp.1
 %doc /opt/rtems/man/man1/@target_alias@-gcc.1
 %doc /opt/rtems/man/man1/@target_alias@-g++.1
+%doc /opt/rtems/man/man1/@target_alias@-g77.1
 
 %dir /opt/rtems/bin
 /opt/rtems/bin/cpp
@@ -132,10 +130,14 @@ test -d build || mkdir build
 /opt/rtems/bin/@target_alias@-g++
 /opt/rtems/bin/@target_alias@-gcc
 /opt/rtems/bin/@target_alias@-gcj
+
 %dir /opt/rtems/lib
+/opt/rtems/lib/libiberty*
+%dir /opt/rtems/lib/include
+
 %dir /opt/rtems/lib/gcc-lib
 %dir /opt/rtems/lib/gcc-lib/@target_alias@
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@
-/opt/rtems/@target_alias@/include
-/opt/rtems/@target_alias@/sys-include
+# /opt/rtems/@target_alias@/include
+# /opt/rtems/@target_alias@/sys-include
 /opt/rtems/@target_alias@/lib
+
