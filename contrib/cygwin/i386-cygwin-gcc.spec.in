@@ -70,25 +70,21 @@ Cross gcc for target cygwin
 
 %files
 
-%dir %{prefix}/bin
-%{prefix}/bin/cpp
-%{prefix}/bin/gcov
-
-%dir %{prefix}/man
-%dir %{prefix}/man/man1
-%doc %{prefix}/man/man1/cccp.1*
-%doc %{prefix}/man/man1/i386-cygwin-gcc.1*
-%doc %{prefix}/man/man1/i386-cygwin-g++.1*
-
-%dir %{prefix}/include
-
-%{prefix}/include/g++-3
+%{prefix}/bin/i386-cygwin-cpp
+%{prefix}/bin/i386-cygwin-gcov
 %{prefix}/bin/i386-cygwin-c++
 %{prefix}/bin/i386-cygwin-c++filt
 %{prefix}/bin/i386-cygwin-g++
 %{prefix}/bin/i386-cygwin-gcc
-%{prefix}/bin/i386-cygwin-protoize
-%{prefix}/bin/i386-cygwin-unprotoize
+
+%dir %{prefix}/man
+%dir %{prefix}/man/man1
+%doc %{prefix}/man/man1/i386-cygwin-gcc.1*
+%doc %{prefix}/man/man1/i386-cygwin-g++.1*
+
+%dir %{prefix}/include
+%{prefix}/include
+%dir %{prefix}/bin
 
 # %dir %{prefix}/lib/gcc-lib/i386-cygwin/%{gcc_version}/include
 
@@ -96,4 +92,4 @@ Cross gcc for target cygwin
 %dir %{prefix}/lib
 %dir %{prefix}/lib/gcc-lib
 %dir %{prefix}/lib/gcc-lib/i386-cygwin
-%{prefix}/lib/gcc-lib/i386-cygwin/%{gcc_version}
+%{prefix}/lib/gcc-lib/i386-cygwin

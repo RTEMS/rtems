@@ -1,3 +1,9 @@
+2003-01-27	Joel Sherrill <joel@OARcorp.com>
+
+	* i386-cygwin-gcc.spec.in, i386-cygwin-mingw.spec.in, setup.def:
+	Updated to current Cygwin versions and fixed some minor nits in
+	the specifications.
+
 2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* setup.def: Update to binutils-20021117-1.
