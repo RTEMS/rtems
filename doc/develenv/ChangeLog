@@ -12,8 +12,8 @@
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Add *.info to CLEANFILES to accomodate
-	automake-1.7f/1.8 breaking building infos.
+	* Makefile.am: Add *.info to CLEANFILES to accomodate automake-1.7f/1.8
+	breaking building infos.
 
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -31,9 +31,6 @@
 
 	* Makefile.am, develenv.texi: Remove unused file.
 	* compile.texi: Removed.
-
-2003-04-16	Joel Sherrill <joel@OARcorp.com>
-
 	* Makefile.am: Fix next/previous section names.
 
 2003-03-24	Joel Sherrill <joel@OARcorp.com>
@@ -49,8 +46,9 @@
 	* Makefile.am, develenv.texi: Relect generating .texi from .t's.
 	* direct.t, sample.t, utils.t: New files.
 	* direct.texi, sample.texi, utils.texi: Removed. Now generated from
-	corresponding .t files which are in the process of being updated.
-	This commit is a anspshot of the update effort.
+	corresponding .t files which are in the process of being updated. This
+	commit is a anspshot of the update effort.
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* develenv.texi: Set @setfilename develenv.info.
@@ -59,9 +57,7 @@
 
 	* version.texi: Remove from CVS.
 	* stamp-vti: Remove from CVS.
-	* .cvsignore: Add version.texi.
-	Add stamp-vti.
-	Re-sort.
+	* .cvsignore: Add version.texi. Add stamp-vti. Re-sort.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -94,3 +90,4 @@
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+

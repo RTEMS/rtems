@@ -1,8 +1,7 @@
 2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Remove AUTOMAKE_FILES.
-	Add ../scripts/setup.def ../COPYING to EXTRA_DIST.
-	Add rtems.html.in to EXTRA_DIST.
+	* Makefile.am: Remove AUTOMAKE_FILES. Add ../scripts/setup.def
+	../COPYING to EXTRA_DIST. Add rtems.html.in to EXTRA_DIST.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -16,8 +15,8 @@
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* project.am: Remove $(PROJECT).info* from CLEANFILES (Doesn't work
-	with automake-1.7f/1.8 anymore).
+	* project.am: Remove $(PROJECT).info* from CLEANFILES (Doesn't work with
+	automake-1.7f/1.8 anymore).
 
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -34,21 +33,11 @@
 
 	* images/ChangeLog: Removed.
 	* ChangeLog: Merge images/ChangeLog.
-
-2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* common/ChangeLog: Removed.
 	* ChangeLog: Merge common/ChangeLog.
-
-2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* common/.cvsignore: Add rtems.texi, rtems.sed.
-
-2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* Makefile.am: Merger from rtems-4-6-branch.
-	* configure.ac: Merger from rtems-4-6-branch.
-	Purge hppa1.1.
+	* configure.ac: Merger from rtems-4-6-branch. Purge hppa1.1.
 	* index.html.in: Purge hppa1.1.
 	* project.am: Merger from rtems-4-6-branch.
 	* rtems_support.html.in: Purge hppa1.1.
@@ -59,9 +48,6 @@
 	rtems_support.html.in, ada_user/ada_user.texi: Merge from branch.
 	* acinclude.m4, images/rtems_logo.jpg: New files.
 	* SUPPORT, tools/texi2www/archive/texi2www-960103.tgz: Removed.
-
-2003-09-19	Joel Sherrill <joel@OARcorp.com>
-
 	* common/cpright.texi, common/setup.texi: Merge from branch.
 	* common/rtems.texi.in: New file.
 
@@ -72,10 +58,6 @@
 2003-04-11	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Development Environment Guide should be updated now.
-
-2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* common/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2003-02-18	Joel Sherrill <joel@OARcorp.com>
 
@@ -94,35 +76,24 @@
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* index.html.in: Add c4x.
-
-2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Add c4x.
 	* project.am: Add version.texi hack.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* main.am: Remove AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF.
-	Append -I $(top_builddir) to TEXI2WWW_ARGS.
-	* project.am: Add AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF.
-	Override automake's .dvi.ps:-rule.
+	* main.am: Remove AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF. Append -I
+	$(top_builddir) to TEXI2WWW_ARGS.
+	* project.am: Add AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF. Override
+	automake's .dvi.ps:-rule.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* project.am, main.am: Use automake rules to build ps, pdf, info.
 	Various minor changes.
-
-2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* project.am: Append $($(PROJECT)_TEXINFOS) to
-	html-dependencies.
-
-2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Require autoconf-2.57.
-	Require automake-1.7.2.
-	Remove started/pictures/Makefile.
-	* started/Makefile.am: Merge-in pictures/Makefile.am	
+	* project.am: Append $($(PROJECT)_TEXINFOS) to html-dependencies.
+	* configure.ac: Require autoconf-2.57. Require automake-1.7.2. Remove
+	started/pictures/Makefile.
+	* started/Makefile.am: Merge-in pictures/Makefile.am	.
 	* started/pictures/Makefile.am: Remove.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -135,8 +106,8 @@
 
 2002-11-13	Joel Sherrill <joel@OARcorp.com>
 
-	* index.html.in: Note that the Getting Started with GNAT/RTEMS 
-	manual is largely obsolete now that GNAT is in GCC.
+	* index.html.in: Note that the Getting Started with GNAT/RTEMS  manual
+	is largely obsolete now that GNAT is in GCC.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
@@ -144,16 +115,11 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: Added supplements/arm/Makefile.
-
-2002-07-30	Joel Sherrill <joel@OARcorp.com>
-
 	* README: Updated.
 
 2002-06-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -168,35 +134,26 @@
 
 	* bootstrap: Remove.
 	* VERSION: Remove.
-	* Makefile.am: 
-	Remove bootstrap.
-	Add ACLOCAL_AMFLAGS.
+	* Makefile.am:  Remove bootstrap. Add ACLOCAL_AMFLAGS.
 	* configure.ac: Add RTEMS_TOP.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* common/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
-
-2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* images/Makefile.am: Remove AUTOMAKE_OPTIONS.
-
-2001-02-14	Joel Sherrill <joel@OARcorp.com>
-
-	* configure.ac: New mips supplement.
 
 2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reworked.
-	* Makefile.am: Remove texinfo/texinfo.tex
+	* Makefile.am: Remove texinfo/texinfo.tex.
 	* bootstrap: Removed.
 	* configure.ac: Add pkgdocdir. Let htmldir be rooted at pkgdocdir.
 	* main.am: Remove TEXINFO_TEX.
-	* project.am: Let dvidir, psdir, pdfdir be rooted at pkgdocdir.
-	Remove commented out make-variables.
+	* project.am: Let dvidir, psdir, pdfdir be rooted at pkgdocdir. Remove
+	commented out make-variables.
 
 2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -215,34 +172,29 @@
 	* configure.ac: New.
 	* configure.in: Removed.
 	* bootstrap: Sync with RTEMS's toplevel bootstrap.sh.
-
-2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* common/Makefile.am: Require automake-1.5.
 	* images/Makefile.am: Require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-doc-ss-20010117.
-
-2002-01-17	Joel Sherrill <joel@OARcorp.com>
-
 	* VERSION: Updated to rtems-doc-eng-20010816b-d1.
-
-2001-01-17	Joel Sherrill <joel@OARcorp.com>
-
-	* configure.in: Changed the version to eng-20010816b.
-
-2001-01-17	Joel Sherrill <joel@OARcorp.com>
-
-	* SUPPORT, LICENSE: New files.
-	* Numerous files touched as part of merging the 4.5 branch
-	onto the mainline development trunk and ensuring that the
-	script that cuts snapshots and releases works on the documentation.
 
 2001-10-30	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: New file.
+
+2001-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac: New mips supplement.
+
+2001-01-17	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.in: Changed the version to eng-20010816b.
+	* SUPPORT, LICENSE: New files.
+	* Numerous files touched as part of merging the 4.5 branch onto the
+	mainline development trunk and ensuring that the script that cuts
+	snapshots and releases works on the documentation.
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -251,3 +203,4 @@
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+
