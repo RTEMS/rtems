@@ -27,22 +27,20 @@ extern "C" {
  *  first so the basic macro definitions are in place.
  */
 
-/*
- * FIXME: cpuopts.h should be included here.
- */
-#if defined(_AM29K) \
-  || defined(__hppa__) \
-  || defined(__h8300__) \
-  || defined(__i960__) \
-  || defined(__mc68000__) \
-  || defined(__sh__) \
-  || defined(__sparc__) \
-  || defined(__i386__)
-  /* these cpus are ready to apply cpuopts.h */
 #include <rtems/score/cpuopts.h>
-#else
-  /* fallback to targopts.h for mips and powerpc */
+
+/*
+ * FIXME: No port should have to include targopts.h
+ *
+ *  Most cpus are ready to apply only cpuopts.h but these ports
+ *  unfortunately still need targopts.h.  This means these ports
+ *  are not ready to be built multilib yet. 
+ */
+
+#if !defined(RTEMS_MULTILIB)
+#if defined(__PPC__) || defined(__sparc__) || defined(__i386__)
 #include <rtems/score/targopts.h>
+#endif
 #endif
 
 /*

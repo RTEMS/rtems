@@ -1,3 +1,10 @@
+2001-01-18	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/system.h: Only include cpuopts.h when building a
+	multilib configuration.  Some ports still need targopts.h but this
+	small modification lets those ports work non-multilib while 
+	fixing being fixed for multilib.
+	
 2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/seterr.h: Add do {..} while (0) in defines.
