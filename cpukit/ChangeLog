@@ -1,3 +1,11 @@
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* httpd/Makefile.am, itron/Makefile.am, libblock/Makefile.am,
+	libcsupport/Makefile.am, libfs/Makefile.am, libmisc/Makefile.am,
+	libnetworking/Makefile.am, librpc/Makefile.am, posix/Makefile.am,
+	rtems/Makefile.am, sapi/Makefile.am, score/Makefile.am:
+	Eliminate CFLAGS_OPTIMIZE_V.
+
 2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-flags.m4: Remove (Unused).

@@ -152,7 +152,7 @@ AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = libposix.a
 libposix_a_SOURCES = $(C_FILES)
-libposix_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 all-local: $(PREINSTALL_FILES)
 endif

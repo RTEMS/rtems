@@ -19,7 +19,7 @@ include_rtems_HEADERS += capture/capture.h capture/capture-cli.h
 
 noinst_LIBRARIES += libcapture.a
 libcapture_a_SOURCES = capture/capture.c capture/capture-cli.c
-libcapture_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libcapture_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 ## cpuuse
 EXTRA_DIST += cpuuse/README
@@ -27,28 +27,28 @@ include_rtems_HEADERS += cpuuse/cpuuse.h
 
 noinst_LIBRARIES += libcpuuse.a
 libcpuuse_a_SOURCES = cpuuse/cpuuse.c
-libcpuuse_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libcpuuse_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 ## devnull
 include_rtems_HEADERS += devnull/devnull.h
 
 noinst_LIBRARIES += libdevnull.a
 libdevnull_a_SOURCES = devnull/devnull.c
-libdevnull_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libdevnull_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 ## dummy
 EXTRA_DIST += dummy/README
 
 noinst_LIBRARIES += libdummy.a
 libdummy_a_SOURCES = dummy/dummy.c
-libdummy_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libdummy_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 ## dumpbuf
 include_rtems_HEADERS += dumpbuf/dumpbuf.h
 
 noinst_LIBRARIES += libdumpbuf.a
 libdumpbuf_a_SOURCES = dumpbuf/dumpbuf.c
-libdumpbuf_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libdumpbuf_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 ## monitor
 
@@ -64,7 +64,7 @@ libmonitor_a_SOURCES += monitor/mon-mpci.c
 endif
 
 noinst_LIBRARIES += libmonitor.a
-libmonitor_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libmonitor_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 EXTRA_DIST += monitor/README
 
@@ -73,7 +73,7 @@ include_rtems_HEADERS += mw-fb/mw_fb.h mw-fb/mw_uid.h
 
 noinst_LIBRARIES += libmw-fb.a
 libmw_fb_a_SOURCES = mw-fb/mw_fb.c mw-fb/mw_uid.c
-libmw_fb_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libmw_fb_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 ## shell
 
@@ -82,7 +82,7 @@ include_rtems_HEADERS += shell/shell.h
 
 noinst_LIBRARIES += libshell.a
 libshell_a_SOURCES = shell/cmds.c shell/shell.c
-libshell_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libshell_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 EXTRA_DIST += shell/README
@@ -92,7 +92,7 @@ include_rtems_HEADERS += rtmonuse/rtmonuse.h
 
 noinst_LIBRARIES += librtmonuse.a
 librtmonuse_a_SOURCES = rtmonuse/rtmonuse.c
-librtmonuse_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+librtmonuse_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 ## serdbg
 
@@ -103,7 +103,7 @@ include_rtems_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h \
 noinst_LIBRARIES += libserdbg.a
 libserdbg_a_SOURCES = serdbg/serdbg.c serdbg/serdbgio.c \
     serdbg/termios_printk.c
-libserdbg_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libserdbg_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 EXTRA_DIST += serdbg/README
@@ -114,7 +114,7 @@ include_rtems_HEADERS += stackchk/stackchk.h
 
 noinst_LIBRARIES += libstackchk.a
 libstackchk_a_SOURCES = stackchk/check.c stackchk/internal.h
-libstackchk_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libstackchk_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 EXTRA_DIST += stackchk/README
 
@@ -124,7 +124,7 @@ include_rtems_HEADERS += untar/untar.h
 
 noinst_LIBRARIES += libuntar.a
 libuntar_a_SOURCES = untar/untar.c
-libuntar_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libuntar_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 EXTRA_DIST += untar/README
 
@@ -133,7 +133,7 @@ include_rtems_HEADERS += fsmount/fsmount.h
 
 noinst_LIBRARIES += libfsmount.a
 libfsmount_a_SOURCES = fsmount/fsmount.c
-libfsmount_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libfsmount_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 EXTRA_DIST += fsmount/README
 

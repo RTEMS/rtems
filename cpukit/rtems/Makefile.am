@@ -9,7 +9,7 @@ AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = librtems.a
-librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+librtems_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # include
 

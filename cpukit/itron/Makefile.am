@@ -108,7 +108,7 @@ AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = libitron.a
 libitron_a_SOURCES = $(C_FILES)
-libitron_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libitron_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 all-local: $(PREINSTALL_FILES)
 endif

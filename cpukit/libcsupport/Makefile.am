@@ -8,7 +8,7 @@ include $(top_srcdir)/automake/compile.am
 AM_CPPFLAGS += -I$(top_builddir)
 
 noinst_LIBRARIES = libcsupport.a
-libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/chain.h include/console.h include/clockdrv.h \

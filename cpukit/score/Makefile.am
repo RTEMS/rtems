@@ -148,7 +148,7 @@ AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = libscore.a
 libscore_a_SOURCES = $(C_FILES)
-libscore_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
 

@@ -22,7 +22,7 @@ libhttpd_a_SOURCES = asp.c balloc.c default.c ejlex.c ejparse.c emfdb.c \
     form.c h.c handler.c md5c.c mime.c misc.c webpage.c ringq.c rom.c \
     security.c sock.c socket.c sym.c uemf.c um.c url.c value.c wbase64.c \
     webrom.c webs.c websuemf.c webmain.c
-libhttpd_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libhttpd_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 endif
 

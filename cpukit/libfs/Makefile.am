@@ -13,7 +13,7 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS =
 
 noinst_LIBRARIES = libimfs.a
-libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libimfs_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 UNUSED_FILES = src/imfs/imfs_load_tar.c
 
@@ -43,7 +43,7 @@ include_rtems_HEADERS += src/imfs/imfs.h
 
 if !UNIX
 noinst_LIBRARIES += libdosfs.a
-libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # libdosfs_FATFS_C_FILES
 libdosfs_a_SOURCES = src/dosfs/fat.c src/dosfs/fat.h \

@@ -28,7 +28,7 @@ noinst_LIBRARIES = libsapi.a
 libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/extensiondelete.c src/extensionident.c src/fatal.c src/exinit.c \
     src/io.c src/itronapi.c src/posixapi.c src/rtemsapi.c
-libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 all-local: $(PREINSTALL_FILES)
 

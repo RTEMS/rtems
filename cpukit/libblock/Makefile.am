@@ -13,7 +13,7 @@ if !UNIX
 include_rtemsdir = $(includedir)/rtems
 
 noinst_LIBRARIES = libblock.a
-libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libblock_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include_rtems_HEADERS = include/rtems/bdbuf.h include/rtems/blkdev.h \
     include/rtems/diskdevs.h include/rtems/ramdisk.h \
