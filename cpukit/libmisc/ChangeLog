@@ -1,3 +1,10 @@
+2001-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* devnull/devnull.c (null_initialize): Added check to 
+	ensure that the driver is only initialized once.  Otherwise,
+	it will abort when the device /dev/null is present.
+	(null_write): Do not dereference a NULL pointer.
+
 2001-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* monitor/mon-command.c: Use #if defined(RTEMS_UNIX).

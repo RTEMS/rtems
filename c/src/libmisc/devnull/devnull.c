@@ -32,6 +32,7 @@
  */
 
 rtems_unsigned32 NULL_major;
+static initialized;
 
 rtems_device_driver null_initialize(
   rtems_device_major_number major,
@@ -39,18 +40,22 @@ rtems_device_driver null_initialize(
   void *pargp
 )
 {
-  rtems_device_driver status ;
+  rtems_device_driver status;
   
-  status = rtems_io_register_name(
-    "/dev/null",
-    major,
-    (rtems_device_minor_number) 0
+  if ( !initialized ) {
+    initialized = 1;
+
+    status = rtems_io_register_name(
+      "/dev/null",
+      major,
+      (rtems_device_minor_number) 0
     );
 
-  if (status != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(status);
+    if (status != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred(status);
       
-  NULL_major = major;
+    NULL_major = major;
+  }
   
   return RTEMS_SUCCESSFUL;
 }
@@ -143,9 +148,10 @@ rtems_device_driver null_write(
   void *pargp
 )
 {
-  rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) pargp ;
+  rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) pargp;
   
-  rw_args->bytes_moved = rw_args->count ;
+  if ( rw_args )
+    rw_args->bytes_moved = rw_args->count;
   
   return NULL_SUCCESSFUL;
 }
