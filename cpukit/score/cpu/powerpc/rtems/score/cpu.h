@@ -115,5 +115,35 @@ static inline uint32_t CPU_swap_u32(
 
 #endif /* ASM */
 
+#ifndef /* ASM */
+/*
+ *  Simple spin delay in microsecond units for device drivers.
+ *  This is very dependent on the clock speed of the target.
+ */
+
+#define CPU_Get_timebase_low( _value ) \
+    asm volatile( "mftb  %0" : "=r" (_value) )
+
+#define rtems_bsp_delay( _microseconds ) \
+  do { \
+    uint32_t   start, ticks, now; \
+    CPU_Get_timebase_low( start ) ; \
+    ticks = (_microseconds) * rtems_cpu_configuration_get_clicks_per_usec(); \
+    do \
+      CPU_Get_timebase_low( now ) ; \
+    while (now - start < ticks); \
+  } while (0)
+
+#define rtems_bsp_delay_in_bus_cycles( _cycles ) \
+  do { \
+    uint32_t   start, now; \
+    CPU_Get_timebase_low( start ); \
+    do \
+      CPU_Get_timebase_low( now ); \
+    while (now - start < (_cycles)); \
+  } while (0)
+
+#endif /* ASM */
+
 #endif /* _RTEMS_SCORE_CPU_H */
 
