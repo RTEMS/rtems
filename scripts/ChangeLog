@@ -1,3 +1,7 @@
+2001-01-24	Joel Sherrill <joel@OARcorp.com>
+
+	* README: Added Canadian Cross instructions.
+
 2002-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add AC_PREFIX_DEFAULT([/opt/rtems]).

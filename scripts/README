@@ -199,6 +199,23 @@ rpm -ba /usr/src/[packages|redhat]/SPECS/rtems-<target_alias>-<bsp>.spec
 Note: a BSP's src.rpm contains its spec-file and the tar-archive of the
 sources (approx. 4-5MB per BSP). 
 
+Canadian Cross RPMS
+-------------------
+Normally one uses a GNU/Linux host computer to produce RPMs that are
+to be installed and run on another GNU/Linux host computer.  When
+building Canadian Cross RPMs, we build *-rtems tools that are to be
+installed on a non-GNU/Linux host.  
+
+To build cygwin-rpms on a GNU/Linux host, you will to have a GNU/Linux ->
+i386-cygwin cross-toolset installed and in your PATH before executing the
+following commands:
+
+  cd scripts
+  ./configure --build=`../config.guess` --host=i386-cygwin \
+    --target=<target>
+  make
+  rpm --target=<i386-cygwin> -b[b|a] binutils/<target>-....spec
+
 Known Bugs/Deficiencies
 -----------------------
 
