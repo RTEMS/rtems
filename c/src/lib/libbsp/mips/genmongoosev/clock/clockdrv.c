@@ -40,7 +40,7 @@
 
 extern int ClockRate;
 
-#define CLICKS (unsigned32) &ClockRate
+#define CLICKS (((unsigned32) &ClockRate) / 1000000 )
 #define Clock_driver_support_initialize_hardware() \
   do { \
     unsigned32 _clicks; \

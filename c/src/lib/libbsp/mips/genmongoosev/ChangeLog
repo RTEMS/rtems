@@ -1,3 +1,8 @@
+2001-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clockdrv.c: Account for the fact that ClockRate is
+	in cycles not megahertz.
+
 2001-04-16	Joel Sherrill <joel@OARcorp.com>
 
 	* start/start.S, startup/bspstart.c, startup/linkcmds:
