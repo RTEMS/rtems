@@ -41,6 +41,14 @@ make clean
 make distclean
 make maintainer-clean
 
+Making a Source Distribution
+============================
+This generates a rtems-<version>.tar.gz in the toplevel directory.
+
+Making a Preformatted Distribution
+==================================
+Install and tar it up. :)
+
 Common Problems
 ===============
 
