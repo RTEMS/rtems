@@ -159,7 +159,7 @@ SYM (_ISR_Handler):
 	oriw	#0x700,sr		| Disable interrupts
   #else
 	move.l  d0,a7@-			| Save d0 value
-	move.l  0x700,d0		| Load in disable ints value
+	move.l  #0x700,d0		| Load in disable ints value
 	move.w  sr,d1			| Grab SR
 	or.l    d1,d0			| Create new SR
 	move.w  d0,sr			| Disable interrupts
@@ -196,7 +196,7 @@ SYM (_ISR_Handler):
 	movew	sr,d0			| Save status register
 	oriw	#0x700,sr		| Disable interrupts
   #else
-	move.l  0x700,d1		| Load in disable int value
+	move.l  #0x700,d1		| Load in disable int value
 	move.w  sr,d0			| Grab SR
 	or.l    d0,d1			| Create new SR
 	move.w  d1,sr			| Load to disable interrupts
