@@ -17,14 +17,31 @@
  *  $Id$
  */
 
+#include <libchip/serial.h>
+#include <libchip/mc68681.h>
+#include <libchip/z85c30.h>
 #include "i8042vga.h"
-#include "ns16550.h"
-#include "z85c30.h"
+
+#include "ns16550cfg.h"
+#include "z85c30cfg.h"
 
 #include <pci.h>
 
 #define PMX1553_BUS	2
 #define PMX1553_SLOT	1
+
+/*
+ *  Based on BSP configuration information decide whether to do polling IO
+ *  or interrupt driven IO.
+ */
+
+#if (CONSOLE_USE_INTERRUPTS)
+#define NS16550_FUNCTIONS &ns16550_fns
+#define Z85C30_FUNCTIONS  &z85c30_fns
+#else
+#define NS16550_FUNCTIONS &ns16550_fns_polled
+#define Z85C30_FUNCTIONS  &z85c30_fns_polled
+#endif
 
 /*
  * Configuration specific probe routines
@@ -73,6 +90,7 @@ static boolean config_z85c30_probe(int minor);
 console_tbl	Console_Port_Tbl[] = {
 	{
 		"/dev/vga",			/* sDeviceName */
+		SERIAL_CUSTOM,			/* deviceType */
 		&i8042vga_fns,			/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
@@ -82,11 +100,17 @@ console_tbl	Console_Port_Tbl[] = {
 		I8042_CS,			/* ulCtrlPort1 */
 		0,				/* ulCtrlPort2 */
 		I8042_DATA,			/* ulDataPort */
+		Read_ns16550_register,		/* getRegister */
+		Write_ns16550_register,		/* setRegister */
+		NULL,				/* getData */
+		NULL,				/* setData */
+		0,				/* ulClock */
 		PPCN_60X_IRQ_KBD		/* ulIntVector */
 	},
 	{
 		"/dev/com1",			/* sDeviceName */
-		&ns16550_fns,			/* pDeviceFns */
+		SERIAL_NS16550,			/* deviceType */
+		NS16550_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		&ns16550_flow_RTSCTS,		/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -95,11 +119,17 @@ console_tbl	Console_Port_Tbl[] = {
 		NS16550_PORT_A,			/* ulCtrlPort1 */
 		0,				/* ulCtrlPort2 */
 		NS16550_PORT_A,			/* ulDataPort */
+		Read_ns16550_register,		/* getRegister */
+		Write_ns16550_register,		/* setRegister */
+		NULL,				/* getData */
+		NULL,				/* setData */
+		0,				/* ulClock */
 		PPCN_60X_IRQ_COM1		/* ulIntVector */
 	},
 	{
 		"/dev/ser1",			/* sDeviceName */
-		&ns16550_fns,			/* pDeviceFns */
+		SERIAL_NS16550,			/* deviceType */
+		NS16550_FUNCTIONS,		/* pDeviceFns */
 		config_PMX1553_probe,		/* deviceProbe */
 		&ns16550_flow_RTSCTS,		/* pDeviceFlow */
 		80,				/* ulMargin */
@@ -108,11 +138,17 @@ console_tbl	Console_Port_Tbl[] = {
 		PMX1553_BUS,	/* PCI bus */	/* ulCtrlPort1 */
 		PMX1553_SLOT,	/* PCI slot */	/* ulCtrlPort2 */
 		1,	/* Channel 1-4 */	/* ulDataPort */
+		NULL,				/* getRegister */
+		NULL,				/* setRegister */
+		NULL,				/* getData */
+		NULL,				/* setData */
+		0,				/* ulClock */
 		0	/* RS232 */		/* ulIntVector */
 	},
 	{
 		"/dev/ser2",			/* sDeviceName */
-		&ns16550_fns,			/* pDeviceFns */
+		SERIAL_NS16550,			/* deviceType */
+		NS16550_FUNCTIONS,		/* pDeviceFns */
 		config_PMX1553_probe,		/* deviceProbe */
 		&ns16550_flow_RTSCTS,		/* pDeviceFlow */
 		80,				/* ulMargin */
@@ -121,11 +157,17 @@ console_tbl	Console_Port_Tbl[] = {
 		PMX1553_BUS,	/* PCI bus */	/* ulCtrlPort1 */
 		PMX1553_SLOT,	/* PCI slot */	/* ulCtrlPort2 */
 		2,	/* Channel 1-4 */	/* ulDataPort */
+		Read_ns16550_register,		/* getRegister */
+		Write_ns16550_register,		/* setRegister */
+		NULL,				/* getData */
+		NULL,				/* setData */
+		0,				/* ulClock */
 		0	/* RS232 */		/* ulIntVector */
 	},
 	{
 		"/dev/ser3",			/* sDeviceName */
-		&ns16550_fns,			/* pDeviceFns */
+		SERIAL_NS16550,			/* deviceType */
+		NS16550_FUNCTIONS,		/* pDeviceFns */
 		config_PMX1553_probe,		/* deviceProbe */
 		&ns16550_flow_RTSCTS,		/* pDeviceFlow */
 		96,				/* ulMargin */
@@ -134,11 +176,17 @@ console_tbl	Console_Port_Tbl[] = {
 		PMX1553_BUS,	/* PCI bus */	/* ulCtrlPort1 */
 		PMX1553_SLOT,	/* PCI slot */	/* ulCtrlPort2 */
 		3,	/* Channel 1-4 */	/* ulDataPort */
+		Read_ns16550_register,		/* getRegister */
+		Write_ns16550_register,		/* setRegister */
+		NULL,				/* getData */
+		NULL,				/* setData */
+		0,				/* ulClock */
 		0	/* RS232 */		/* ulIntVector */
 	},
 	{
 		"/dev/ser4",			/* sDeviceName */
-		&ns16550_fns,			/* pDeviceFns */
+		SERIAL_NS16550,			/* deviceType */
+		NS16550_FUNCTIONS,		/* pDeviceFns */
 		config_PMX1553_probe,		/* deviceProbe */
 		&ns16550_flow_RTSCTS,		/* pDeviceFlow */
 		96,				/* ulMargin */
@@ -147,12 +195,18 @@ console_tbl	Console_Port_Tbl[] = {
 		PMX1553_BUS,	/* PCI bus */	/* ulCtrlPort1 */
 		PMX1553_SLOT,	/* PCI slot */	/* ulCtrlPort2 */
 		4,	/* Channel 1-4 */	/* ulDataPort */
+		Read_ns16550_register,		/* getRegister */
+		Write_ns16550_register,		/* setRegister */
+		NULL,				/* getData */
+		NULL,				/* setData */
+		0,				/* ulClock */
 		0	/* RS232 */		/* ulIntVector */
 	},
 #if !PPCN_60X_USE_DINK
 	{
 		"/dev/com2",			/* sDeviceName */
-		&ns16550_fns,			/* pDeviceFns */
+		SERIAL_NS16550,			/* deviceType */
+		NS16550_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		&ns16550_flow_RTSCTS,		/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -161,12 +215,18 @@ console_tbl	Console_Port_Tbl[] = {
 		NS16550_PORT_B,			/* ulCtrlPort1 */
 		0,				/* ulCtrlPort2 */
 		NS16550_PORT_B,			/* ulDataPort */
+		Read_ns16550_register,		/* getRegister */
+		Write_ns16550_register,		/* setRegister */
+		NULL,				/* getData */
+		NULL,				/* setData */
+		0,				/* ulClock */
 		PPCN_60X_IRQ_COM2		/* ulIntVector */
 	},
 #endif
 	{
 		"/dev/com3",			/* sDeviceName */
-		&z85c30_fns,			/* pDeviceFns */
+		SERIAL_Z85C30,			/* deviceType */
+		Z85C30_FUNCTIONS,		/* pDeviceFns */
 		config_z85c30_probe,		/* deviceProbe */
 		&z85c30_flow_RTSCTS,		/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -175,11 +235,17 @@ console_tbl	Console_Port_Tbl[] = {
 		Z85C30_CTRL_A,			/* ulCtrlPort1 */
 		Z85C30_CTRL_A,			/* ulCtrlPort2 */
 		Z85C30_DATA_A,			/* ulDataPort */
+		Read_85c30_register,		/* getRegister */
+		Write_85c30_register,		/* setRegister */
+		Read_85c30_data,		/* getData */
+		Write_85c30_data,		/* setData */
+		0,				/* ulClock */
 		PPCN_60X_IRQ_COM3_4		/* ulIntVector */
 	},
 	{
 		"/dev/com4",			/* sDeviceName */
-		&z85c30_fns,			/* pDeviceFns */
+		SERIAL_Z85C30,			/* deviceType */
+		Z85C30_FUNCTIONS,		/* pDeviceFns */
 		config_z85c30_probe,		/* deviceProbe */
 		&z85c30_flow_RTSCTS,		/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -188,6 +254,11 @@ console_tbl	Console_Port_Tbl[] = {
 		Z85C30_CTRL_B,			/* ulCtrlPort1 */
 		Z85C30_CTRL_A,			/* ulCtrlPort2 */
 		Z85C30_DATA_B,			/* ulDataPort */
+		Read_85c30_register,		/* getRegister */
+		Write_85c30_register,		/* setRegister */
+		Read_85c30_data,		/* getData */
+		Write_85c30_data,		/* setData */
+		0,				/* ulClock */
 		PPCN_60X_IRQ_COM3_4		/* ulIntVector */
 	}
 };

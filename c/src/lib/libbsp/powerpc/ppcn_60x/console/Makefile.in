@@ -16,7 +16,7 @@ VPATH = @srcdir@
 PGM = ${ARCH}/console.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = console ns16550 z85c30 i8042vga i8042 vga
+C_PIECES = console i8042vga i8042 ns16550cfg z85c30cfg vga
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

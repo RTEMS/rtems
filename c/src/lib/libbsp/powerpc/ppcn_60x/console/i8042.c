@@ -24,6 +24,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <libchip/serial.h>
 #include <ringbuf.h>
 
 #include "console.h"
