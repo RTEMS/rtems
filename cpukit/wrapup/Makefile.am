@@ -11,7 +11,7 @@ include $(top_srcdir)/automake/lib.am
 if LIBSCORECPU
 CPU_OBJS = ../score/cpu/$(RTEMS_CPU)/$(ARCH)/libscorecpu.a
 endif
-CORE_OBJS = ../score/src/$(ARCH)/libscore.a
+CORE_OBJS = ../score/$(ARCH)/libscore.a
 SAPI_OBJS = ../sapi/$(ARCH)/libsapi.a
 RTEMS_OBJS = ../rtems/$(ARCH)/librtems.a
 

@@ -151,10 +151,6 @@ sapi/Makefile
 sapi/include/rtems/sptables.h
 score/Makefile
 score/cpu/Makefile
-score/include/Makefile
-score/inline/Makefile
-score/macros/Makefile
-score/src/Makefile
 wrapup/Makefile
 ])
 AC_OUTPUT

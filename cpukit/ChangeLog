@@ -1,5 +1,15 @@
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Reflect changes to score/.
+	* configure.ac: Reflect changes to score/.
+
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Reflect changes to sapi/.
+	* configure.ac: Reflect changes to sapi/.
+
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add AC_SUBST(INLINEdir).
 
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
