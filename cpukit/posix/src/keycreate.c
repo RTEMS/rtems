@@ -28,7 +28,7 @@ int pthread_key_create(
 {
   POSIX_Keys_Control  *the_key;
   void                *table;
-  unsigned32           the_class;
+  unsigned32           the_api;
   unsigned32           bytes_to_allocate;
 
 
@@ -49,29 +49,30 @@ int pthread_key_create(
    *  for.  [NOTE: Currently RTEMS Classic API tasks are not always enabled.]
    */
 
-  for ( the_class = OBJECTS_CLASSES_FIRST_THREAD_CLASS;
-        the_class <= OBJECTS_CLASSES_LAST_THREAD_CLASS;
-        the_class++ ) {
+  for ( the_api = 1;
+        the_api <= OBJECTS_APIS_LAST;
+        the_api++ ) {
 
-    if ( _Objects_Information_table[ the_class ] ) {
+    if ( _Objects_Information_table[ the_api ] &&
+         _Objects_Information_table[ the_api ][ 1 ] ) {
       bytes_to_allocate = sizeof( void * ) * 
-        (_Objects_Information_table[ the_class ]->maximum + 1);
+        (_Objects_Information_table[ the_api ][ 1 ]->maximum + 1);
       table = _Workspace_Allocate( bytes_to_allocate );
       if ( !table ) {
-        for ( --the_class;
-              the_class >= OBJECTS_CLASSES_FIRST_THREAD_CLASS;
-              the_class-- )
-          _Workspace_Free( the_key->Values[ the_class ] );
+        for ( --the_api;
+              the_api >= 1;
+              the_api-- )
+          _Workspace_Free( the_key->Values[ the_api ] );
   
         _POSIX_Keys_Free( the_key );
         _Thread_Enable_dispatch();
         return ENOMEM;
       }
 
-      the_key->Values[ the_class ] = table;
+      the_key->Values[ the_api ] = table;
       memset( table, '\0', bytes_to_allocate ); 
     } else {
-      the_key->Values[ the_class ] = NULL;
+      the_key->Values[ the_api ] = NULL;
     }
 
 

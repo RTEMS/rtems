@@ -31,7 +31,7 @@ typedef struct {
    Objects_Control     Object;
    boolean             is_active;
    void              (*destructor)( void * );
-   void              **Values[ OBJECTS_CLASSES_LAST_THREAD_CLASS + 1 ];
+   void              **Values[ OBJECTS_APIS_LAST + 1 ];
 }  POSIX_Keys_Control;
 
 /*

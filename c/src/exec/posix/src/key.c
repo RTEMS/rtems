@@ -29,13 +29,18 @@ void _POSIX_Key_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_POSIX_Keys_Information,
-    OBJECTS_POSIX_KEYS,
-    FALSE,
-    maximum_keys,
+    &_POSIX_Keys_Information,   /* object information table */
+    OBJECTS_POSIX_API,          /* object API */
+    OBJECTS_POSIX_KEYS,         /* object class */
+    maximum_keys,               /* maximum objects of this class */
     sizeof( POSIX_Keys_Control ),
-    FALSE,
-    0,
-    FALSE
+                                /* size of this object's control block */
+    FALSE,                      /* TRUE if names for this object are strings */
+    0                           /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                      /* TRUE if this is a global object class */
+    NULL                        /* Proxy extraction support callout */
+#endif
   );
 }

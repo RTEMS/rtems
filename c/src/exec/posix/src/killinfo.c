@@ -44,7 +44,7 @@ int killinfo(
 {
   sigset_t                     mask;
   POSIX_API_Control           *api;
-  unsigned32                   the_class;
+  unsigned32                   the_api;
   unsigned32                   index;
   unsigned32                   maximum;
   Objects_Information         *the_info;
@@ -170,14 +170,17 @@ int killinfo(
   interested_thread = NULL;
   interested_priority = PRIORITY_MAXIMUM + 1;
 
-  for ( the_class = OBJECTS_CLASSES_FIRST_THREAD_CLASS;
-        the_class <= OBJECTS_CLASSES_LAST_THREAD_CLASS;
-        the_class++ ) {
+  for ( the_api = 2;
+        the_api <= OBJECTS_APIS_LAST;
+        the_api++ ) {
 
-    if ( the_class == OBJECTS_INTERNAL_THREADS )
+    if ( the_api == OBJECTS_INTERNAL_THREADS )
       continue;
 
-    the_info = _Objects_Information_table[ the_class ];
+    if ( !_Objects_Information_table[ the_api ] )  /* API not installed */
+      continue;
+
+    the_info = _Objects_Information_table[ the_api ][ 1 ];
 
     if ( !the_info )                        /* manager not installed */
       continue;

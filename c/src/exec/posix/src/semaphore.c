@@ -37,13 +37,18 @@ void _POSIX_Semaphore_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_POSIX_Semaphore_Information,
-    OBJECTS_POSIX_SEMAPHORES,
-    TRUE,
-    maximum_semaphores,
+    &_POSIX_Semaphore_Information, /* object information table */
+    OBJECTS_POSIX_API,             /* object API */
+    OBJECTS_POSIX_SEMAPHORES,      /* object class */
+    maximum_semaphores             /* maximum objects of this class */,
     sizeof( POSIX_Semaphore_Control ),
-    TRUE,
-    _POSIX_PATH_MAX,
-    FALSE
+                                /* size of this object's control block */
+    FALSE,                      /* TRUE if names for this object are strings */
+    _POSIX_PATH_MAX             /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                      /* TRUE if this is a global object class */
+    NULL                        /* Proxy extraction support callout */
+#endif
   );
 }

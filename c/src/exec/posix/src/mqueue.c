@@ -49,23 +49,33 @@ void _POSIX_Message_queue_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_POSIX_Message_queue_Information,
-    OBJECTS_POSIX_MESSAGE_QUEUES,
-    TRUE,
-    maximum_message_queues,
+    &_POSIX_Message_queue_Information, /* object information table */
+    OBJECTS_POSIX_API,                 /* object API */
+    OBJECTS_POSIX_MESSAGE_QUEUES,      /* object class */
+    maximum_message_queues,            /* maximum objects of this class */
     sizeof( POSIX_Message_queue_Control ),
-    TRUE,
-    _POSIX_PATH_MAX,
-    FALSE
+                                /* size of this object's control block */
+    FALSE,                      /* TRUE if names for this object are strings */
+    _POSIX_PATH_MAX             /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                      /* TRUE if this is a global object class */
+    NULL                        /* Proxy extraction support callout */
+#endif
   );
   _Objects_Initialize_information(
     &_POSIX_Message_queue_Information_fds,
+    OBJECTS_POSIX_API,
     OBJECTS_POSIX_MESSAGE_QUEUE_FDS,
-    FALSE,
     maximum_message_queues,
     sizeof( POSIX_Message_queue_Control_fd ),
-    FALSE,
-    0,
-    FALSE
+                                /* size of this object's control block */
+    FALSE,                      /* TRUE if names for this object are strings */
+    0                           /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                      /* TRUE if this is a global object class */
+    NULL                        /* Proxy extraction support callout */
+#endif
   );
 }

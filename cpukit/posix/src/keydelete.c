@@ -27,7 +27,7 @@ int pthread_key_delete(
 {
   register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
-  unsigned32                   the_class;
+  unsigned32                   the_api;
  
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
@@ -39,11 +39,11 @@ int pthread_key_delete(
 
       the_key->is_active = FALSE;
 
-      for ( the_class = OBJECTS_CLASSES_FIRST_THREAD_CLASS;
-            the_class <= OBJECTS_CLASSES_LAST_THREAD_CLASS;
-            the_class++ )
-        if ( the_key->Values[ the_class ] )
-          _Workspace_Free( the_key->Values[ the_class ] );
+      for ( the_api = 1;
+            the_api <= OBJECTS_APIS_LAST;
+            the_api++ )
+        if ( the_key->Values[ the_api ] )
+          _Workspace_Free( the_key->Values[ the_api ] );
 
       /*
        *  NOTE:  The destructor is not called and it is the responsibility

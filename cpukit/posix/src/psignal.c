@@ -225,10 +225,8 @@ void _POSIX_signals_Manager_Initialization(
  
   _Thread_queue_Initialize(
     &_POSIX_signals_Wait_queue,
-    OBJECTS_NO_CLASS,
     THREAD_QUEUE_DISCIPLINE_PRIORITY,
     STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
-    NULL,
     EAGAIN
   );
 

@@ -41,14 +41,19 @@ void _POSIX_Interrupt_Manager_initialization(
   POSIX_Interrupt_Control  *the_vector;
 
   _Objects_Initialize_information(
-    &_POSIX_Interrupt_Handlers_Information,
-    OBJECTS_POSIX_INTERRUPTS,
-    FALSE,
-    maximum_interrupt_handlers,
+    &_POSIX_Interrupt_Handlers_Information,  /* object information table */
+    OBJECTS_POSIX_API,                       /* object API */
+    OBJECTS_POSIX_INTERRUPTS,                /* object class */
+    maximum_interrupt_handlers,              /* maximum objects of this class */
     sizeof( POSIX_Interrupt_Handler_control ),
-    FALSE,
-    0,
-    FALSE
+                                /* size of this object's control block */
+    FALSE,                      /* TRUE if names for this object are strings */
+    0                           /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                      /* TRUE if this is a global object class */
+    NULL                        /* Proxy extraction support callout */
+#endif
   );
 
   for ( index=0 ; index < CPU_INTERRUPT_NUMBER_OF_VECTORS ; index++ ) {

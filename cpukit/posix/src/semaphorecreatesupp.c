@@ -100,13 +100,7 @@ int _POSIX_Semaphore_Create_support(
 
   the_sem_attr->maximum_count = 0xFFFFFFFF;
 
-  _CORE_semaphore_Initialize(
-    &the_semaphore->Semaphore,
-    OBJECTS_POSIX_SEMAPHORES,
-    the_sem_attr,
-    value,
-    NULL                 /* multiprocessing is not supported */
-  );
+  _CORE_semaphore_Initialize( &the_semaphore->Semaphore, the_sem_attr, value );
 
   /*
    *  Make the semaphore available for use.

@@ -111,15 +111,9 @@ int _POSIX_Message_queue_Create_support(
 
   if ( ! _CORE_message_queue_Initialize(
            &the_mq->Message_queue,
-           OBJECTS_POSIX_MESSAGE_QUEUES,
            the_mq_attr,
            attr.mq_maxmsg,
-           attr.mq_msgsize,
-#if 0 && defined(RTEMS_MULTIPROCESSING)
-           _POSIX_Message_queue_MP_Send_extract_proxy
-#else
-           NULL
-#endif
+           attr.mq_msgsize
       ) ) {
 
 #if 0 && defined(RTEMS_MULTIPROCESSING)

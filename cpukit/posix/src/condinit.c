@@ -70,14 +70,8 @@ int pthread_cond_init(
 /* XXX some more initialization might need to go here */
   _Thread_queue_Initialize(
     &the_cond->Wait_queue,
-    OBJECTS_POSIX_CONDITION_VARIABLES,
     THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_CONDITION_VARIABLE,
-#if defined(RTEMS_MULTIPROCESSING)
-    _POSIX_Condition_variables_MP_Send_extract_proxy,
-#else
-    NULL,
-#endif
     ETIMEDOUT
   );
 

@@ -167,20 +167,17 @@ boolean _POSIX_Threads_Create_extension(
 
   /* XXX use signal constants */
   api->signals_pending = 0;
-  if ( _Objects_Get_class( created->Object.id ) == OBJECTS_POSIX_THREADS ) {
+  if ( _Objects_Get_API( created->Object.id ) == OBJECTS_POSIX_API &&
+       _Objects_Get_class( created->Object.id ) == 1 ) {
     executing_api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
     api->signals_blocked = api->signals_blocked;
   } else
     api->signals_blocked = 0xffffffff;
 
-/* XXX set signal parameters -- block all signals for non-posix threads */
-
   _Thread_queue_Initialize(
     &api->Join_List,
-    OBJECTS_NO_CLASS,                 /* only used for proxy operations */
     THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_JOIN_AT_EXIT,
-    NULL,                             /* no extract proxy handler */
     0
   );
  
@@ -356,14 +353,19 @@ void _POSIX_Threads_Manager_initialization(
 #endif
 
   _Objects_Initialize_information(
-    &_POSIX_Threads_Information,
-    OBJECTS_POSIX_THREADS,
-    FALSE,                               /* does not support global */
-    maximum_pthreads,
+    &_POSIX_Threads_Information, /* object information table */
+    OBJECTS_POSIX_API,           /* object API */
+    OBJECTS_POSIX_THREADS,       /* object class */
+    maximum_pthreads,            /* maximum objects of this class */
     sizeof( Thread_Control ),
-    FALSE,
-    0,                                   /* length is arbitrary for now */
-    TRUE                                 /* this class is threads */
+                                 /* size of this object's control block */
+    FALSE,                       /* TRUE if names for this object are strings */
+    0                            /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                       /* TRUE if this is a global object class */
+    NULL                         /* Proxy extraction support callout */
+#endif
   );
 
   /*

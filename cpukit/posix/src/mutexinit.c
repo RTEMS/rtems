@@ -163,10 +163,8 @@ int pthread_mutex_init(
 
   _CORE_mutex_Initialize(
     &the_mutex->Mutex,
-    OBJECTS_POSIX_MUTEXES,
     the_mutex_attr,
-    CORE_MUTEX_UNLOCKED,
-    NULL                      /* proxy_extract_callout */
+    CORE_MUTEX_UNLOCKED
   );
 
   _Objects_Open( &_POSIX_Mutex_Information, &the_mutex->Object, 0 );

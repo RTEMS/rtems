@@ -35,13 +35,18 @@ void _POSIX_Condition_variables_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_POSIX_Condition_variables_Information,
-    OBJECTS_POSIX_CONDITION_VARIABLES,
-    TRUE,
-    maximum_condition_variables,
+    &_POSIX_Condition_variables_Information, /* object information table */
+    OBJECTS_POSIX_API,                       /* object API */
+    OBJECTS_POSIX_CONDITION_VARIABLES,       /* object class */
+    maximum_condition_variables,             /* maximum objects of this class */
     sizeof( POSIX_Condition_variables_Control ),
-    FALSE,
-    0,
-    FALSE
-  );
+                                /* size of this object's control block */
+    FALSE,                      /* TRUE if names for this object are strings */
+    0                           /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                      /* TRUE if this is a global object class */
+    NULL                        /* Proxy extraction support callout */
+#endif
+  ); 
 }
