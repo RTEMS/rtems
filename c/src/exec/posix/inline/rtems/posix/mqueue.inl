@@ -102,7 +102,8 @@ RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
   CORE_message_queue_Submit_types priority
 )
 {
-  return abs( priority );
+  /* absolute value without a library dependency */
+  return ((priority >= 0) ? priority : -priority);
 }
 
 #endif

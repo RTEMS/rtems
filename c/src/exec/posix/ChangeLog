@@ -1,3 +1,7 @@
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* inline/rtems/posix/mqueue.inl: Removed explicit dependency on abs().
+
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
 	* src/sysconf.c: Add support for _SC_CLK_TCK and _SC_OPEN_MAX.
