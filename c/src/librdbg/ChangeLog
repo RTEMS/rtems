@@ -1,3 +1,16 @@
+2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/powerpc/new_exception_processing/Makefile.am: Remove.
+	* src/powerpc/Makefile.am: Merge-in former
+	new_exception_processing/Makefile.am.
+	* src/m68k/any/Makefile.am: Remove.
+	* src/m68k/Makefile.am: Merge-in former any/Makefile.am.
+	* src/i386/any/Makefile.am: Remove.
+	* src/i386/Makefile.am: Merge-in former any/Makefile.am.
+	* src/Makefile.am: Cosmetics.
+	* include/Makefile.am: Cosmetics.
+	* Makefile.am: Cosmetics.
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/i386/any/Makefile.am: Remove all-local: $(ARCH).
