@@ -37,6 +37,8 @@
 #ifndef _SYS_SOCKET_H_
 #define	_SYS_SOCKET_H_
 
+#include <sys/cdefs.h>
+
 /*
  * Definitions related to sockets: types, address families, options.
  */
@@ -79,11 +81,26 @@
 #define	SO_PRIVSTATE	0x1009		/* get/deny privileged state */
 
 /*
+ * RTEMS addition: get and set wakeup functions.
+ */
+#define SO_SNDWAKEUP	0x1020		/* wakeup when ready to send */
+#define SO_RCVWAKEUP	0x1021		/* wakeup when ready to receive */
+
+/*
  * Structure used for manipulating linger option.
  */
 struct	linger {
 	int	l_onoff;		/* option on/off */
 	int	l_linger;		/* linger time */
+};
+
+/*
+ * RTEMS addition: structure used to get and set wakeup function.
+ */
+struct socket;
+struct	sockwakeup {
+	void	(*sw_pfn) __P((struct socket *, caddr_t));
+	caddr_t	sw_arg;
 };
 
 /*
@@ -326,8 +343,6 @@ struct omsghdr {
 };
 
 #ifndef	KERNEL
-
-#include <sys/cdefs.h>
 
 __BEGIN_DECLS
 int	accept __P((int, struct sockaddr *, int *));

@@ -345,6 +345,9 @@ sowakeup(so, sb)
 		sb->sb_flags &= ~SB_WAIT;
 		rtems_event_send (sb->sb_sel.si_pid, SBWAIT_EVENT);
 	}
+	if (sb->sb_wakeup) {
+		(*sb->sb_wakeup) (so, sb->sb_wakeuparg);
+	}
 }
 
 /*

@@ -979,6 +979,31 @@ sosetopt(so, level, optname, m0)
 			so->so_state &= ~SS_PRIV;
 			break;
 
+		case SO_SNDWAKEUP:
+		case SO_RCVWAKEUP:
+		    {
+			/* RTEMS addition.  */
+			struct sockwakeup *sw;
+			struct sockbuf *sb;
+
+			if (m == NULL
+			    || m->m_len != sizeof (struct sockwakeup)) {
+				error = EINVAL;
+				goto bad;
+			}
+			sw = mtod(m, struct sockwakeup *);
+			sb = (optname == SO_SNDWAKEUP
+			      ? &so->so_snd
+			      : &so->so_rcv);
+			sb->sb_wakeup = sw->sw_pfn;
+			sb->sb_wakeuparg = sw->sw_arg;
+			if (sw->sw_pfn)
+				sb->sb_flags |= SB_ASYNC;
+			else
+				sb->sb_flags &=~ SB_ASYNC;
+			break;
+		    }
+
 		default:
 			error = ENOPROTOOPT;
 			break;
@@ -1073,6 +1098,23 @@ sogetopt(so, level, optname, mp)
 			mtod(m, struct timeval *)->tv_sec = val / hz;
 			mtod(m, struct timeval *)->tv_usec =
 			    (val % hz) * tick;
+			break;
+		    }
+
+		case SO_SNDWAKEUP:
+		case SO_RCVWAKEUP:
+		    {
+			struct sockbuf *sb;
+			struct sockwakeup *sw;
+
+			/* RTEMS additions.  */
+			sb = (optname == SO_SNDWAKEUP
+			      ? &so->so_snd
+			      : &so->so_rcv);
+			m->m_len = sizeof (struct sockwakeup);
+			sw = mtod(m, struct sockwakeup *);
+			sw->sw_pfn = sb->sb_wakeup;
+			sw->sw_arg = sb->sb_wakeuparg;
 			break;
 		    }
 
