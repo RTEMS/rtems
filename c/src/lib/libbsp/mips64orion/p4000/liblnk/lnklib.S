@@ -1,5 +1,5 @@
-#include "iregdef.h"
-#include "idtcpu.h"
+#include <rtems/score/iregdef.h>
+#include <rtems/score/idtcpu.h>
 
 #define FRAME(name,frm_reg,offset,ret_reg)      \
         .globl  name;                           \
