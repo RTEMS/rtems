@@ -77,6 +77,7 @@ void *POSIX_Init(
 {
   int                  status;
   pthread_mutexattr_t  attr;
+  pthread_mutexattr_t  destroyed_attr;
   struct timespec      times;
   struct sched_param   param;
   int                  policy;
@@ -94,7 +95,7 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
   
-  /* basic checkout of mutex attributes */
+  /* tes pthread_mutex_attr_init */
 
   puts( "Init: pthread_mutexattr_init - EINVAL (NULL attr)" );
   status = pthread_mutexattr_init( NULL );
@@ -105,6 +106,25 @@ void *POSIX_Init(
   assert( !status );
 
   Print_mutexattr( "Init: ", &attr );
+
+  /* create an "uninitialized" attribute structure */
+
+  status = pthread_mutexattr_init( &destroyed_attr );
+  assert( !status );
+
+  puts( "Init: pthread_mutexattr_destroy - SUCCESSFUL" );
+  status = pthread_mutexattr_destroy( &destroyed_attr );
+  assert( !status );
+
+  puts( "Init: pthread_mutexattr_destroy - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_destroy( NULL );
+  assert( status == EINVAL );
+
+  puts( "Init: pthread_mutexattr_destroy - EINVAL (not initialized)" );
+  status = pthread_mutexattr_destroy( &destroyed_attr );
+  assert( status == EINVAL );
+
+  /* change the attributes structure */
 
   puts( "Init: Changing mutex attributes" );
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_INHERIT );
