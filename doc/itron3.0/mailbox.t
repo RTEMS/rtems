@@ -56,8 +56,8 @@ and status codes.
 @ifset is-C
 @example
 ER cre_mbx(
-  ID mbxid,
-  T_CMBX* pk_cmbx
+  ID      mbxid,
+  T_CMBX *pk_cmbx
 );
 @end example
 @end ifset
@@ -79,8 +79,12 @@ ER cre_mbx(
 @subheading DESCRIPTION:
 
 Allocated a control area/buffer space for mailbox with some ID.
+
+@example
 		User area: 	+ve ids
 		System area: 	-ve ids
+@end example
+
 User may specify if its FIFO or priority level queue.
 Assumes shared memory b/w communicating processes.
 Initializes core message queue for this mbox.
@@ -140,7 +144,7 @@ NONE
 @ifset is-C
 @example
 ER snd_msg(
-  ID mbxid,
+  ID     mbxid,
   T_MSG *pk_msg
 );
 @end example
@@ -180,7 +184,7 @@ NONE
 @example
 ER rcv_msg(
   T_MSG **ppk_msg,
-  ID mbxid
+  ID      mbxid
 );
 @end example
 @end ifset
@@ -222,7 +226,7 @@ NONE
 @example
 ER prcv_msg(
   T_MSG **ppk_msg,
-  ID mbxid
+  ID      mbxid
 );
 @end example
 @end ifset
@@ -264,8 +268,8 @@ NONE
 @example
 ER trcv_msg(
   T_MSG **ppk_msg,
-  ID mbxid,
-  TMO tmout
+  ID      mbxid,
+  TMO     tmout
 );
 @end example
 @end ifset
@@ -307,7 +311,7 @@ NONE
 @example
 ER ref_mbx(
   T_RMBX *pk_rmbx,
-  ID mbxid
+  ID      mbxid
 );
 @end example
 @end ifset
