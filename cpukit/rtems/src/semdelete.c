@@ -81,7 +81,7 @@ rtems_status_code rtems_semaphore_delete(
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
-      if ( _Attributes_Is_binary_semaphore( the_semaphore->attribute_set) ) { 
+      if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) { 
         if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) ) {
           _Thread_Enable_dispatch();
           return RTEMS_RESOURCE_IN_USE;

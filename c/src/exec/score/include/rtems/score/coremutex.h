@@ -63,6 +63,35 @@ typedef enum {
 }   CORE_mutex_Status;
 
 /*
+ *  Mutex lock nesting behavior
+ *
+ *  CORE_MUTEX_NESTING_ACQUIRES:
+ *    This sequence has no blocking or errors:
+ *         lock(m)
+ *         lock(m)
+ *         unlock(m)
+ *         unlock(m)
+ *
+ *  CORE_MUTEX_NESTING_IS_ERROR
+ *    This sequence returns an error at the indicated point:
+ *        lock(m)
+ *        lock(m)   - already locked error
+ *        unlock(m)
+ *
+ *  CORE_MUTEX_NESTING_BLOCKS
+ *    This sequence performs as indicated:
+ *        lock(m)
+ *        lock(m)   - deadlocks or timeouts
+ *        unlock(m) - releases
+ */
+
+typedef enum {
+  CORE_MUTEX_NESTING_ACQUIRES,
+  CORE_MUTEX_NESTING_IS_ERROR,
+  CORE_MUTEX_NESTING_BLOCKS
+}  CORE_mutex_Nesting_behaviors;
+ 
+/*
  *  Locked and unlocked values
  */
 
@@ -75,9 +104,10 @@ typedef enum {
  */
 
 typedef struct {
-  boolean                 allow_nesting;
-  CORE_mutex_Disciplines  discipline;
-  Priority_Control        priority_ceiling;
+  CORE_mutex_Nesting_behaviors lock_nesting_behavior;
+  boolean                      only_owner_release;
+  CORE_mutex_Disciplines       discipline;
+  Priority_Control             priority_ceiling;
 }   CORE_mutex_Attributes;
  
 /*

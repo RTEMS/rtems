@@ -92,7 +92,7 @@ rtems_status_code rtems_semaphore_obtain(
       else
         wait = TRUE;
 
-      if ( _Attributes_Is_binary_semaphore( the_semaphore->attribute_set ) ) {
+      if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         _CORE_mutex_Seize(
           &the_semaphore->Core_control.mutex,
           id, 

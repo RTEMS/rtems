@@ -94,15 +94,19 @@ void _CORE_mutex_Seize(
     return;
   }
 
-  if ( _Objects_Are_ids_equal(
-              _Thread_Executing->Object.id, the_mutex->holder_id ) ) {
-    if ( _CORE_mutex_Is_nesting_allowed( &the_mutex->Attributes ) )
-      the_mutex->nest_count++;
-    else 
-      executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
-
-    _ISR_Enable( level );
-    return;
+  if ( _Thread_Is_executing( the_mutex->holder ) ) {
+    switch ( the_mutex->Attributes.lock_nesting_behavior ) {
+      case CORE_MUTEX_NESTING_ACQUIRES:
+        the_mutex->nest_count++;
+        _ISR_Enable( level );
+        return;
+      case CORE_MUTEX_NESTING_IS_ERROR:
+        executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
+        _ISR_Enable( level );
+        return;
+      case CORE_MUTEX_NESTING_BLOCKS:
+        break;
+    }
   }
 
   if ( !wait ) {

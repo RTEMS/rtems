@@ -49,9 +49,9 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 )
 {
   Thread_Control *the_thread;
-  Thread_Control *executing;
+  Thread_Control *holder;
 
-  executing = _Thread_Executing;
+  holder    = the_mutex->holder;
 
   /*
    *  The following code allows a thread (or ISR) other than the thread
@@ -61,20 +61,9 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  must be released by the thread which acquired them.
    */ 
 
-  if ( the_mutex->Attributes.allow_nesting ) {
-    if ( !_Objects_Are_ids_equal(
-             _Thread_Executing->Object.id, the_mutex->holder_id ) ) {
-  
-      switch ( the_mutex->Attributes.discipline ) {
-        case CORE_MUTEX_DISCIPLINES_FIFO:
-        case CORE_MUTEX_DISCIPLINES_PRIORITY:
-          break;
-        case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-        case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-          return( CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE );
-          break;
-      }
-    }
+  if ( the_mutex->Attributes.only_owner_release ) {
+    if ( !_Thread_Is_executing( holder ) )
+      return( CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE );
   }
 
   /* XXX already unlocked -- not right status */
@@ -85,9 +74,15 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   the_mutex->nest_count--;
 
   if ( the_mutex->nest_count != 0 ) {
-    if ( the_mutex->Attributes.allow_nesting )
-      return( CORE_MUTEX_STATUS_SUCCESSFUL );
-    return( CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED );
+    switch ( the_mutex->Attributes.lock_nesting_behavior ) {
+      case CORE_MUTEX_NESTING_ACQUIRES:
+        return CORE_MUTEX_STATUS_SUCCESSFUL;
+      case CORE_MUTEX_NESTING_IS_ERROR:
+        /* should never occur */
+        return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
+      case CORE_MUTEX_NESTING_BLOCKS:
+        break;
+    }
   }
 
   _Thread_Executing->resource_count--;
@@ -106,9 +101,9 @@ CORE_mutex_Status _CORE_mutex_Surrender(
       break;
     case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
     case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-      if ( executing->resource_count == 0 && 
-           executing->real_priority != executing->current_priority ) {
-         _Thread_Change_priority( executing, executing->real_priority, TRUE );
+      if ( holder->resource_count == 0 && 
+           holder->real_priority != holder->current_priority ) {
+         _Thread_Change_priority( holder, holder->real_priority, TRUE );
       }
       break;
   }

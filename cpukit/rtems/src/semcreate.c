@@ -96,13 +96,15 @@ rtems_status_code rtems_semaphore_create(
   if ( _Attributes_Is_inherit_priority( attribute_set ) || 
               _Attributes_Is_priority_ceiling( attribute_set ) ) {
 
-    if ( ! ( _Attributes_Is_binary_semaphore( attribute_set ) &&
+    if ( ! ( (_Attributes_Is_binary_semaphore( attribute_set ) ||
+              _Attributes_Is_simple_binary_semaphore( attribute_set )) &&
+             
              _Attributes_Is_priority( attribute_set ) ) )
       return RTEMS_NOT_DEFINED;
 
   }
 
-  if ( _Attributes_Is_binary_semaphore( attribute_set ) && ( count > 1 ) )
+  if ( !_Attributes_Is_counting_semaphore( attribute_set ) && ( count > 1 ) )
     return RTEMS_INVALID_NUMBER;
 
   _Thread_Disable_dispatch();             /* prevents deletion */
@@ -126,7 +128,13 @@ rtems_status_code rtems_semaphore_create(
 
   the_semaphore->attribute_set = attribute_set;
 
-  if ( _Attributes_Is_binary_semaphore( attribute_set ) ) {
+  /*
+   *  If it is not a counting, semaphore, then it is either a 
+   *  simple binary semaphore or a more powerful lmutex style binary
+   *  semaphore.
+   */
+
+  if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
     if ( _Attributes_Is_inherit_priority( attribute_set ) )
       the_mutex_attributes.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
     else if ( _Attributes_Is_priority_ceiling( attribute_set ) )
@@ -136,12 +144,24 @@ rtems_status_code rtems_semaphore_create(
     else
       the_mutex_attributes.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
 
-    if ( _Attributes_Is_nesting_allowed( attribute_set ) )
-      the_mutex_attributes.allow_nesting = TRUE;
-    else
-      the_mutex_attributes.allow_nesting = FALSE;
 
-    /* Add priority ceiling code here ????? */
+    if ( _Attributes_Is_binary_semaphore( attribute_set ) ) {
+      the_mutex_attributes.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
+
+      switch ( the_mutex_attributes.discipline ) {
+        case CORE_MUTEX_DISCIPLINES_FIFO:
+        case CORE_MUTEX_DISCIPLINES_PRIORITY:
+          the_mutex_attributes.only_owner_release = FALSE;
+          break;
+        case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
+        case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
+          the_mutex_attributes.only_owner_release = TRUE;
+          break;
+      }
+    } else {
+      the_mutex_attributes.lock_nesting_behavior = CORE_MUTEX_NESTING_BLOCKS;
+      the_mutex_attributes.only_owner_release = FALSE;
+    }
 
     the_mutex_attributes.priority_ceiling = priority_ceiling;
 
@@ -161,8 +181,7 @@ rtems_status_code rtems_semaphore_create(
       NULL
 #endif
     );
-  }
-  else {
+  } else {
     if ( _Attributes_Is_priority( attribute_set ) )
       the_semaphore_attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_PRIORITY;
     else
@@ -178,7 +197,7 @@ rtems_status_code rtems_semaphore_create(
      *  The following are just to make Purify happy.
      */
 
-    the_mutex_attributes.allow_nesting = TRUE;
+    the_mutex_attributes.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
     the_mutex_attributes.priority_ceiling = PRIORITY_MINIMUM;
 
     _CORE_semaphore_Initialize(

@@ -144,7 +144,11 @@ int pthread_mutex_init(
 
   the_mutex_attr = &the_mutex->Mutex.Attributes;
 
-  the_mutex_attr->allow_nesting = the_attr->recursive;
+  if ( the_attr->recursive )
+    the_mutex_attr->lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
+  else
+    the_mutex_attr->lock_nesting_behavior = CORE_MUTEX_NESTING_IS_ERROR;
+  the_mutex_attr->only_owner_release = TRUE;
   the_mutex_attr->priority_ceiling =
     _POSIX_Priority_To_core( the_attr->prio_ceiling );
   the_mutex_attr->discipline = the_discipline;

@@ -85,7 +85,7 @@ rtems_status_code rtems_semaphore_release(
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
-      if ( _Attributes_Is_binary_semaphore( the_semaphore->attribute_set ) ) {
+      if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         mutex_status = _CORE_mutex_Surrender(
                          &the_semaphore->Core_control.mutex,
                          id,

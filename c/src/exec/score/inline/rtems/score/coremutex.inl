@@ -101,23 +101,5 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
 }
  
-/*PAGE
- *
- *  _CORE_mutex_Is_nesting_allowed
- *
- *  DESCRIPTION:
- *
- *  This routine returns TRUE if the mutex allows a task to obtain a
- *  semaphore more than once and nest.
- */
- 
-RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_nesting_allowed(
-  CORE_mutex_Attributes *the_attribute
-)
-{
-  return the_attribute->allow_nesting == TRUE;
- 
-}
- 
 #endif
 /* end of include file */

@@ -68,7 +68,25 @@
  */
 
 #define _Attributes_Is_binary_semaphore( _attribute_set ) \
-  ( (_attribute_set) & RTEMS_BINARY_SEMAPHORE )
+  (((_attribute_set) & RTEMS_SEMAPHORE_CLASS) == RTEMS_BINARY_SEMAPHORE)
+
+/*PAGE
+ *
+ *  _Attributes_Is_simple_binary_semaphore
+ *
+ */
+
+#define _Attributes_Is_simple_binary_semaphore( _attribute_set ) \
+  (((_attribute_set) & RTEMS_SEMAPHORE_CLASS) == RTEMS_SIMPLE_BINARY_SEMAPHORE)
+
+/*PAGE
+ *
+ *  _Attributes_Is_counting_semaphore
+ *
+ */
+
+#define _Attributes_Is_counting_semaphore( _attribute_set ) \
+  (((_attribute_set) & RTEMS_SEMAPHORE_CLASS) == RTEMS_COUNTING_SEMAPHORE)
 
 /*PAGE
  *
@@ -87,15 +105,6 @@
  
 #define _Attributes_Is_priority_ceiling( _attribute_set ) \
   ( (_attribute_set) & RTEMS_PRIORITY_CEILING )
-
-/*PAGE
- *
- *  _Attributes_Is_nesting_allowed
- *
- */
-
-#define _Attributes_Is_nesting_allowed( _attribute_set ) \
-   ( !((_attribute_set) & RTEMS_NO_NESTING_ALLOWED) )
 
 /*PAGE
  *

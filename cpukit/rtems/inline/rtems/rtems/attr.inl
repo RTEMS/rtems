@@ -119,7 +119,42 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_binary_semaphore(
   rtems_attribute attribute_set
 )
 {
-  return ( attribute_set & RTEMS_BINARY_SEMAPHORE );
+  return ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_BINARY_SEMAPHORE);
+}
+
+/*PAGE
+ *
+ *  _Attributes_Is_simple_binary_semaphore
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the simple binary semaphore attribute is
+ *  enabled in the attribute_set and FALSE otherwise.
+ */
+
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_simple_binary_semaphore(
+  rtems_attribute attribute_set
+) 
+{
+  return
+    ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_SIMPLE_BINARY_SEMAPHORE);
+}  
+
+/*PAGE
+ *
+ *  _Attributes_Is_counting_semaphore
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the counting semaphore attribute is
+ *  enabled in the attribute_set and FALSE otherwise.
+ */
+
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_counting_semaphore(
+  rtems_attribute attribute_set
+)
+{
+  return ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_COUNTING_SEMAPHORE);
 }
 
 /*PAGE
@@ -154,23 +189,6 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority_ceiling(
 )
 {
    return ( attribute_set & RTEMS_PRIORITY_CEILING );
-}
-
-/*PAGE
- *
- *  _Attributes_Is_nesting_allowed
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the nesting allowed attribute
- *  is enabled in the attribute_set and FALSE otherwise.
- */
- 
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_nesting_allowed(
-  rtems_attribute attribute_set
-)
-{
-   return ( !(attribute_set & RTEMS_NO_NESTING_ALLOWED) );
 }
 
 /*PAGE

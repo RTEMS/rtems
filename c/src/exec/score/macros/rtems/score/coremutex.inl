@@ -63,14 +63,5 @@
 #define _CORE_mutex_Is_priority_ceiling( _the_attribute )\
   ( (_the_attribute)->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING )
  
-/*PAGE
- *
- *  _CORE_mutex_Is_nesting_allowed
- *
- */
- 
-#define _CORE_mutex_Is_nesting_allowed( _the_attribute ) \
-  ( (_the_attribute)->allow_nesting == TRUE )
-
 #endif
 /* end of include file */

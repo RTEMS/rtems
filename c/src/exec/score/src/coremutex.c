@@ -55,7 +55,18 @@ void _CORE_mutex_Initialize(
  */
 
   the_mutex->Attributes = *the_mutex_attributes;
-  the_mutex->lock          = initial_lock;
+  the_mutex->lock       = initial_lock;
+
+#if 0
+  if ( !the_mutex_attributes->only_owner_release &&
+       the_mutex_attributes->nesting_allowed ) {
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_BAD_ATTRIBUTES
+    );
+  }
+#endif
 
   if ( initial_lock == CORE_MUTEX_LOCKED ) {
     the_mutex->nest_count = 1;
