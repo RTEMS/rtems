@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 BSP_PIECES = startup console clock timer
 # pieces to pick up out of libcpu/sparc

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 include_HEADERS = bsp.h coverhd.h m340uart.h m340timer.h m68340.h m68340.inc \
     bspopts.h m68349.inc
