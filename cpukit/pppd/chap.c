@@ -609,7 +609,7 @@ static void
 ChapReceiveSuccess(cstate, inp, id, len)
     chap_state *cstate;
     u_char *inp;
-    u_char id;
+    int id;  /* was u_char id */
     int len;
 {
 
@@ -647,7 +647,7 @@ static void
 ChapReceiveFailure(cstate, inp, id, len)
     chap_state *cstate;
     u_char *inp;
-    u_char id;
+    int id;  /* was u_char id; */
     int len;
 {
     CHAPDEBUG((LOG_INFO, "ChapReceiveFailure: Rcvd id %d.", id));
