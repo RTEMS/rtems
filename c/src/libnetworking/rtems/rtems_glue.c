@@ -809,7 +809,7 @@ rtems_bsdnet_setup (void)
 		broadcast.sin_addr.s_addr = address.sin_addr.s_addr | ~netmask.sin_addr.s_addr;
 		memcpy (&ifreq.ifr_broadaddr, &broadcast, sizeof broadcast);
 		if (ioctl (s, SIOCSIFBRDADDR, &ifreq) < 0)
-			rtems_panic ("Can't set %s broadcast address: %s", ifp->name, strerror (errno));
+			printf ("Can't set %s broadcast address: %s\n", ifp->name, strerror (errno));
 	}
 
 	/*

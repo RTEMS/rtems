@@ -37,7 +37,7 @@ rtems_bsdnet_show_if_stats (void)
 {
 	struct ifnet *ifp;
 	struct ifaddr *ifa;
-	unsigned int bit, flags;
+	unsigned short bit, flags;
 	int printed;
 
 	printf ("************ INTERFACE STATISTICS ************\n");
@@ -57,8 +57,9 @@ rtems_bsdnet_show_if_stats (void)
 		printf ("Flags:");
 		for (bit = 1, flags = ifp->if_flags ; flags ; bit <<= 1) {
 			char *cp;
+			char xbuf[20];
 			switch (flags & bit) {
-			default:		cp = NULL;		break;
+			case 0:			cp = NULL;		break;
 			case IFF_UP:		cp = "Up";		break;
 			case IFF_BROADCAST:	cp = "Broadcast";	break;
 			case IFF_DEBUG:		cp = "Debug";		break;
@@ -74,6 +75,7 @@ rtems_bsdnet_show_if_stats (void)
 			case IFF_LINK1:		cp = "Link1";		break;
 			case IFF_LINK2:		cp = "Link2";		break;
 			case IFF_MULTICAST:	cp = "Multicast";	break;
+			default: sprintf (xbuf, "%#x", bit); cp = xbuf;	break;
 			}
 			if (cp) {
 				flags &= ~bit;
