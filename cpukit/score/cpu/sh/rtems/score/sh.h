@@ -38,30 +38,40 @@ extern "C" {
  *  It does  this by setting variables to indicate which implementation
  *  dependent features are present in a particular member of the family.
  */
- 
-#if defined(rtems_multilib)
 
 /*
  *  Figure out all CPU Model Feature Flags based upon compiler 
  *  predefines. 
  */
 
-#define CPU_MODEL_NAME  "rtems_multilib"
-#define SH_HAS_FPU 	0
-#define SH_HAS_SEPARATE_STACKS 1
+#if defined(__SH3E__) || defined(__SH4__) || defined(__SH4_SINGLE_ONLY__)
 
-#else
+/* 
+ * Define this if you want to use XD-registers.
+ * Then this registers will be saved/restored on context switch.
+ * ! They will not be saved/restored on interrupts!
+ */
+#define SH4_USE_X_REGISTERS	0
 
-#if defined(__sh1__) || defined(__sh2__) || defined(__sh3__)
-#define SH_HAS_FPU	0
+#if defined(__LITTLE_ENDIAN__)
+#define SH_HAS_FPU 1
 #else
-#define SH_HAS_FPU	1
+/* FIXME: Context_Control_fp does not support big endian */
+#warning FPU not supported
+#define SH_HAS_FPU 0
+#endif
+
+#elif defined(__sh1__) || defined(__sh2__) || defined(__sh3__)
+#define SH_HAS_FPU 0
+#else
+#warning Cannot detect FPU support, assuming no FPU
+#define SH_HAS_FPU 0
 #endif
 
 /* this should not be here */
+#ifndef CPU_MODEL_NAME
 #define CPU_MODEL_NAME  "SH-Multilib"
-
-#endif /* multilib */
+#endif
 
 /*
  * If the following macro is set to 0 there will be no software irq stack
@@ -78,6 +88,8 @@ extern "C" {
 #define CPU_NAME "Hitachi SH"
 
 #ifndef ASM
+
+#if defined(__sh1__) || defined(__sh2__)
 
 /*
  * Mask for disabling interrupts
@@ -110,6 +122,44 @@ extern "C" {
     "ldc %0,sr\n\t" \
     "nop\n\t" \
     : : "r" (SH_IRQDIS_VALUE), "r" (_level) );
+
+#else
+
+#define SH_IRQDIS_MASK 0xf0
+
+#define sh_disable_interrupts( _level ) \
+  asm volatile ( \
+    "stc sr,%0\n\t" \
+    "mov %0,r5\n\t" \
+    "or %1,r5\n\t" \
+    "ldc r5,sr\n\t"\
+  : "=&r" (_level ) \
+  : "r" (SH_IRQDIS_MASK) \
+  : "r5" ); 
+
+#define sh_enable_interrupts( _level ) \
+  asm volatile( "ldc %0,sr\n\t" \
+    "nop\n\t" \
+    :: "r" (_level) );
+
+/*
+ *  This temporarily restores the interrupt to _level before immediately
+ *  disabling them again.  This is used to divide long RTEMS critical
+ *  sections into two or more parts.  The parameter _level is not
+ *  modified.
+ */
+     
+#define sh_flash_interrupts( _level ) \
+  asm volatile( \
+    "stc sr,r5\n\t" \
+    "ldc %1,sr\n\t" \
+    "nop\n\t" \
+    "or %0,r5\n\t" \
+    "ldc r5,sr\n\t" \
+    "nop\n\t" \
+    : : "r" (SH_IRQDIS_MASK), "r" (_level) : "r5");
+
+#endif
 
 #define sh_get_interrupt_level( _level ) \
 { \

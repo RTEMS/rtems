@@ -34,6 +34,9 @@ extern "C" {
 #ifndef ASM
 #include <rtems/score/shtypes.h>
 #endif
+#if 0 && defined(__SH4__)
+#include <rtems/score/sh4_regs.h>
+#endif
 
 /* conditional compilation parameters */
 
@@ -131,8 +134,13 @@ extern "C" {
  *  an i387 and wish to leave floating point support out of RTEMS.
  */
 
-#define CPU_HARDWARE_FP     FALSE
-#define CPU_SOFTWARE_FP     FALSE
+#if SH_HAS_FPU
+/* FIXME: What about CPU_SOFTWARE_FP ? */
+#define CPU_HARDWARE_FP	TRUE
+#else
+#define CPU_SOFTWARE_FP	FALSE
+#define CPU_HARDWARE_FP	FALSE
+#endif
 
 /*
  *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
@@ -150,7 +158,11 @@ extern "C" {
  *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
  */
 
+#if SH_HAS_FPU
+#define CPU_ALL_TASKS_ARE_FP     TRUE
+#else
 #define CPU_ALL_TASKS_ARE_FP     FALSE
+#endif
 
 /*
  *  Should the IDLE task have a floating point context?
@@ -164,7 +176,11 @@ extern "C" {
  *  must be saved as part of the preemption.
  */
 
+#if SH_HAS_FPU
+#define CPU_IDLE_TASK_IS_FP 	TRUE
+#else
 #define CPU_IDLE_TASK_IS_FP      FALSE
+#endif
 
 /*
  *  Should the saving of the floating point registers be deferred
@@ -192,7 +208,14 @@ extern "C" {
  *  be saved or restored.
  */
 
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#if SH_HAS_FPU
+#define CPU_USE_DEFERRED_FP_SWITCH	FALSE
+#else
+/* FIXME: Is this needed? 
+ * Only here for backward compatibility with previous versions
+ */
+#define CPU_USE_DEFERRED_FP_SWITCH	TRUE
+#endif
 
 /*
  *  Does this port provide a CPU dependent IDLE task implementation?
@@ -355,6 +378,20 @@ typedef struct {
 } Context_Control;
 
 typedef struct {
+#if SH_HAS_FPU
+#ifdef SH4_USE_X_REGISTERS
+  union {
+    float f[16];
+    double d[8];
+  } x;
+#endif
+  union {
+    float f[16];
+    double d[8];
+  } r;
+  float fpul;       /* fp communication register */
+  unsigned32 fpscr; /* fp control register */
+#endif /* SH_HAS_FPU */
 } Context_Control_fp;
 
 typedef struct {
@@ -400,9 +437,9 @@ typedef struct {
  *  _CPU_Context_Initialize.
  */
 
-/*
+#if SH_HAS_FPU
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
-*/
+#endif
 
 /*
  *  On some CPUs, RTEMS supports a software managed interrupt stack.
@@ -478,8 +515,12 @@ SCORE_EXTERN void CPU_delay( unsigned32 microseconds );
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.
  */
-
+#if defined(__SH4__)
+/* FIXME: sh3 and SH3E? */
+#define CPU_ALIGNMENT              8
+#else
 #define CPU_ALIGNMENT              4
+#endif
 
 /*
  *  This number corresponds to the byte alignment requirement for the
@@ -654,8 +695,15 @@ SCORE_EXTERN void _CPU_Context_Initialize(
  *  SH1, SH2, SH3 have no FPU, but the SH3e and SH4 have.
  */
 
+#if SH_HAS_FPU
+#define _CPU_Context_Initialize_fp( _destination ) \
+  do { \
+     *((Context_Control_fp *) *((void **) _destination)) = _CPU_Null_fp_context;\
+  } while(0)
+#else
 #define _CPU_Context_Initialize_fp( _destination ) \
   {  }
+#endif
 
 /* end of Context handler macros */
 
@@ -678,6 +726,7 @@ SCORE_EXTERN void _CPU_Context_Initialize(
 #define _CPU_Fatal_halt( _error)\
 { \
   asm volatile("mov.l %0,r0"::"m" (_error)); \
+  asm volatile("mov #1, r4"); \
   asm volatile("trapa #34"); \
 }
 #endif

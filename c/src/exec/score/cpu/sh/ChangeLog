@@ -1,3 +1,9 @@
+2001-10-12	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* cpu.c, rtems/score/cpu.h, rtems/score/sh.h: Modified to
+	support SH4.  Reviewed by Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+	who did the original SH port.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

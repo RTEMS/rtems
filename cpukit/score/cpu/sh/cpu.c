@@ -29,6 +29,10 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/sh.h>
 
+/* FIXME: This should not be here */
+#if defined(__SH4__)
+#include <rtems/score/sh4_regs.h>
+#endif
 
 /* referenced in start.S */
 extern proc_ptr vectab[] ;
@@ -75,6 +79,14 @@ void _CPU_Initialize(
    */
 
   /* FP context initialization support goes here */
+  /* FIXME: When not to use SH4_FPSCR_PR ? */
+#ifdef __SH4__
+  _CPU_Null_fp_context.fpscr = SH4_FPSCR_DN | SH4_FPSCR_RM | SH4_FPSCR_PR;
+#endif
+#ifdef __SH3E__
+  /* FIXME: Wild guess :) */
+  _CPU_Null_fp_context.fpscr = SH4_FPSCR_DN | SH4_FPSCR_RM;
+#endif
 
   _CPU_Table = *cpu_table;
 
@@ -151,6 +163,7 @@ void _CPU_ISR_install_raw_handler(
  *
  */
 
+#if defined(sh1) || defined(sh2)
 void _CPU_ISR_install_vector(
   unsigned32  vector,
   proc_ptr    new_handler,
@@ -230,6 +243,18 @@ void _CPU_Context_Initialize(
   int			_is_fp )
 {
   _the_context->r15 = (unsigned32*) ((unsigned32) (_stack_base) + (_size) );
+#if defined(__sh1__) || defined(__sh2__)
   _the_context->sr  = (_isr << 4) & 0x00f0 ;
+#else
+  _the_context->sr  = SH4_SR_MD | ((_isr << 4) & 0x00f0);
+#endif
   _the_context->pr  = (unsigned32*) _entry_point ;
+
+
+#if 0 && SH_HAS_FPU
+   /* Disable FPU if it is non-fp task */
+  if(!_is_fp)
+    _the_context->sr |= SH4_SR_FD;
+#endif
 }
+
