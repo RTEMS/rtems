@@ -35,9 +35,11 @@ changes:
 	
  */
 
+
 #include "asm.h"
 #include "macros.inc"
 #include "80386ex.inc"
+
 
 /*
  * NEW_GAS Needed for binutils 2.9.1.0.7 and higher
@@ -49,7 +51,7 @@ changes:
 
         PUBLIC (Interrupt_descriptor_table)
 	PUBLIC ( SYM(IDTR) )
-	PUBLIC( SYM(_initInternalRegisters) )
+/*	PUBLIC( SYM(_initInternalRegisters) )  */
 	
 BEGIN_DATA 
 SYM(IDTR):	DESC3( SYM(Interrupt_descriptor_table), 0x07ff );
@@ -80,39 +82,40 @@ END_DATA
    correct vector offsets.  It is for symbol definition only.
 */
 	
-
+	.code16
 	.section .reset                        
-
 		PUBLIC ( SYM(reset) ) 
-SYM(reset):	
+SYM(reset):
 	nop
 	cli
 	jmp     SYM(_initInternalRegisters) /* different section in this file */
-	.code32                             /* in case this section moves     */
+/*	.code32                              in case this section moves     */
 	nop                                 /* required by CHIP LAB to pad out size */
 	nop
 	nop
 	nop
 	nop
-
-	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
 	
 	.section .initial
-	nop     /* nops required to correct 32 bit jmp relative */
-	nop     /*    offset from .reset section */
-	
+	/* nop */		/* required for linker -- initial jump is to "label - 2"   */
+	/* nop */		/* ie. _initInternalRegisters -2 ( which now == .initial ) */ 	
 /*
  * Enable access to peripheral register at expanded I/O addresses
  */
 SYM(_initInternalRegisters):	
-	.code16
+
+	/* .code16 */
 	movw    $0x8000	, ax           
 	outb	al	, $REMAPCFGH
 	xchg	al	, ah
         outb    al,$REMAPCFGL
 	outw    ax,      $REMAPCFG ;
-	
-
 /*
  * Configure operation of the A20 Address Line
  */	
@@ -123,6 +126,7 @@ SYM(A20):
 	andb    $0xfe	, al   # b0 Fast Reset(0)=disabled,(1)=reset triggered
 	orb	$0x02	, al   # Bit 1 Fast A20 = 0 (always 0) else enabled.
 	outb	al	, dx
+
 
 SYM(Watchdog):
 	movw	$WDTSTATUS	, dx    # address the WDT status port
@@ -242,7 +246,7 @@ SYM(InitSIO):
 	SetExRegByte( SIOCFG, 0xC3 ) # SIOn clocked internally
 
 	SetExRegByte( LCR0,	0x80 )  # latch DLL0, DLH0
-	SetExRegByte( DLL0, 0x51 )	# 0x51 sets to 9600 baud 0x7 -> 115,200
+	SetExRegByte( DLL0, 0x51 )	# 0x51 sets to 9600 baud, 0x28=19.2k, 0x7 -> 115.2k
 	SetExRegByte( DLH0, 0x00 )  # 0x145 is 2400 baud
 	SetExRegByte( LCR0, 0x03 )  # enable r/w buffers, IER0 accessible
 			            # mode 8-n-1
@@ -310,7 +314,15 @@ SYM(InitTimer):
 SYM(InitInt):
 	
 	cli				  # !
-	
+/*	SetExRegByte(OCW3S, 0x20)  # address the Slave status port
+	movw	$OCW3S	, dx    
+	inb	dx	, al	# Read the IRR.
+
+	SetExRegByte(OCW3M, 0x20)  # address the Master status port 
+	movw	$OCW3M	, dx    
+	inb	dx	, al	# Read the IRR.
+*/	
+		
 	SetExRegByte(ICW1S  , 0x11 ) # EDGE TRIGGERED
 	SetExRegByte(ICW2S  , 0x28 ) # Slave base vector after Master
 	SetExRegByte(ICW3S  , 0x02 ) # slave cascaded to IR2 on master
@@ -319,21 +331,13 @@ SYM(InitInt):
 	SetExRegByte(ICW1M  , 0x11 ) # edge triggered
 	SetExRegByte(ICW2M  , 0x20 ) # base vector starts at byte 32
 	SetExRegByte(ICW3M  , 0x04)  # IR2 is cascaded internally
-	SetExRegByte(ICW4M  , 0x01 ) # idem
+	SetExRegByte(ICW4M  , 0x01 ) # fully nested mode
 	
-	SetExRegByte(OCW1M  , 0xde ) # IR0  only = 0xfe.  for IR5 and IR0 active use 0xde
+	SetExRegByte(OCW1M  , 0xde )	# IR0  only = 0xfe.  
+					# for IR5 and IR0 active use 0xde
+					# for IR0 and IR2 use 0xfa
 	SetExRegByte(INTCFG , 0x00 )
 	
-	/*
-	 *  The addr32 override should ensure that the address for
-	 *  i8259s_cache is put in 32-bit address space.
-	 */
-
-#if defined(NEW_GAS)
-	addr32 movw $0xFFFB, SYM(i8259s_cache) # set up same values in cache
-#else
-	movw    $0xFFFB, SYM(i8259s_cache)     # set up same values in cache
-#endif
 	
 SYM(SetCS4):	
 	SetExRegWord(CS4ADL , 0x702)         #Configure chip select 4
@@ -351,7 +355,7 @@ SYM(SetUCS1):
 * The GDT must be in RAM since it must be writeable,
 * So, move the whole data section down.
 ********************************************************/
-
+ 
 	movw $ _ram_data_offset	, di
 	movw $ _ram_data_segment, cx 
 	mov  cx                 , es
@@ -381,10 +385,41 @@ SYM(SetUCS):
  	SetExRegWord(UCSADH, 0x03f8)
 	SetExRegWord(UCSMSKH, 0x0007)	
 	SetExRegWord(UCSMSKL, 0xFC01)     # configure upper chip select
+	
+	/*
+	 * SRAM chip select:	 16 bit bus size,starting 16Mb, size 512k,
+	 *			 4 waits
+	 */
+	
+#ifdef UT_I386EX
 
+SYM(SetCS1):
+	SetExRegWord(CS1ADL,  0x0000)
+	SetExRegWord(CS1ADH,  0x000E)
+	SetExRegWord(CS1MSKH, 0x0000)
+	SetExRegWord(CS1MSKL, 0x0001)
+
+SYM(SetCS2):
+	SetExRegWord(CS2ADL,  0x0704)
+	SetExRegWord(CS2ADH,  0x0100)
+	SetExRegWord(CS2MSKH, 0x0003)
+	SetExRegWord(CS2MSKL, 0xfc01)
+
+	/*
+	 * Real-time clock:	8 bit bus size, starting@16Mb+512K, size 32k
+	 *                       4 waits  
+	 */
+SYM(SetCS3):
+	SetExRegWord(CS3ADL,  0x0504)
+	SetExRegWord(CS3ADH,  0x0108)
+	SetExRegWord(CS3MSKH, 0x0000)
+	SetExRegWord(CS3MSKL, 0x7c01)
+
+#endif
 /***************************
  * Switch to Protected Mode
  ***************************/
+
 	mov	cr0, eax
 	orw	$0x1, ax
 	mov	eax, cr0
@@ -418,6 +453,7 @@ SYM (_establish_stack):
 	movl	$end, eax               # stack starts right after bss
 	movl	$stack_origin, esp      # this is the high starting address
 	movl	$stack_origin, ebp
+
 /*
  *  Zero out the BSS segment
  */
@@ -432,12 +468,16 @@ SYM (zero_bss):
         repne                           # while ecx != 0
         stosl                           #   clear a long in the bss
 
+
 /*
  *  Transfer control to User's Board Support Package
  */
         pushl   $0                       # environp
         pushl   $0                       # argv
         pushl   $0                       # argc
+
+	movw    $0xFFFB, SYM(i8259s_cache)	# ICU mask values reflect
+						# initial ICU state 
 	call SYM(boot_card)
         addl    $12,esp
 
