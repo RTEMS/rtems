@@ -1,3 +1,8 @@
+2004-11-12	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 717/bsps
+	* bootloader/Makefile.am: Set up BOOTLOADER_CPU_CFLAGS.
+
 2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
 
 	* Makefile.am, configure.ac, bootloader/Makefile.am, include/bsp.h,
