@@ -1,0 +1,7 @@
+Makefile
+Makefile.in
+config.status
+config.log
+configure
+*.tar.bz2
+autom4te*
