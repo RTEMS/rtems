@@ -1,3 +1,9 @@
+2001-11-07	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac: Delete the commented out line that said that
+	the mpc8260 used the old exception processing model.  This line
+	also appears to have caused ppc603e to miss this test.
+
 2001-10-29	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc8xx/timer/timer.c: Added hack for two macros that are not defined
