@@ -241,6 +241,8 @@ i8042_inbyte_raw(
 	return RTEMS_SUCCESSFUL;
 }
 
+#if CONSOLE_USE_INTERRUPTS
+
 /*
  * Send a command to the keyboard controller
  */
@@ -270,6 +272,7 @@ i8042_outbyte_cmd_polled(
 	}
 	return RTEMS_TIMEOUT;
 }
+#endif
 
 void EnqueueKbdChar(
 	int minor,
