@@ -40,6 +40,7 @@ void CPU_usage_Dump( void )
   Thread_Control      *the_thread;
   Objects_Information *information;
   unsigned32           u32_name;
+  char                *cname;
   char                 name[5];
   unsigned32           total_units = 0;
 
@@ -79,16 +80,21 @@ void CPU_usage_Dump( void )
         if ( !the_thread )
           continue;
 
-        if ( information->is_string )
-          u32_name = *(unsigned32 *)the_thread->Object.name;
-        else
+        if ( information->is_string ) {
+          cname = the_thread->Object.name;
+          name[ 0 ] = cname[0];
+          name[ 1 ] = cname[1];
+          name[ 2 ] = cname[2];
+          name[ 3 ] = cname[3];
+          name[ 4 ] = '\0';
+        } else {
           u32_name = (unsigned32)the_thread->Object.name;
-
-        name[ 0 ] = (u32_name >> 24) & 0xff;
-        name[ 1 ] = (u32_name >> 16) & 0xff;
-        name[ 2 ] = (u32_name >>  8) & 0xff;
-        name[ 3 ] = (u32_name >>  0) & 0xff;
-        name[ 4 ] = '\0';
+          name[ 0 ] = (u32_name >> 24) & 0xff;
+          name[ 1 ] = (u32_name >> 16) & 0xff;
+          name[ 2 ] = (u32_name >>  8) & 0xff;
+          name[ 3 ] = (u32_name >>  0) & 0xff;
+          name[ 4 ] = '\0';
+        }
 
         if ( !isprint(name[0]) ) name[0] = '*';
         if ( !isprint(name[1]) ) name[1] = '*';

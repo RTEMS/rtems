@@ -1,5 +1,10 @@
 2003-12-11	Joel Sherrill <joel@OARcorp.com>
 
+	PR 540/rtems_misc
+	* cpuuse/cpuuse.c, rtmonuse/rtmonuse.c: Correct object name printing.
+
+2003-12-11	Joel Sherrill <joel@OARcorp.com>
+
 	PR 531/rtems_misc
 	* rtmonuse/rtmonuse.c: Correct indexing.
 
