@@ -65,8 +65,11 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   search_local_node = FALSE;
 
   if ( information->maximum != 0 &&
-      (node == OBJECTS_SEARCH_ALL_NODES || node == OBJECTS_SEARCH_LOCAL_NODE ||
-      _Objects_Is_local_node( node ) ) )
+      (node == OBJECTS_SEARCH_ALL_NODES || node == OBJECTS_SEARCH_LOCAL_NODE
+#if defined(RTEMS_MULTIPROCESSING)
+       || _Objects_Is_local_node( node )
+#endif
+      ))
    search_local_node = TRUE;
 
   if ( search_local_node ) {
@@ -87,10 +90,10 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
     }
   }
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Objects_Is_local_node( node ) || node == OBJECTS_SEARCH_LOCAL_NODE )
     return OBJECTS_INVALID_NAME;
 
-#if defined(RTEMS_MULTIPROCESSING)
   return ( _Objects_MP_Global_name_search( information, name, node, id ) );
 #else
   return OBJECTS_INVALID_NAME;

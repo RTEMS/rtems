@@ -1,3 +1,9 @@
+2004-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* score/src/coresemsurrender.c, score/src/objectnametoid.c: All
+	_Objects_Is_Local... should only be called if multiprocessing is
+	enabled.
+
 2004-11-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/include/rtems/rtems/tasks.h, rtems/src/taskstart.c:

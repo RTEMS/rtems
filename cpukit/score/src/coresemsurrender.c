@@ -57,8 +57,10 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
 
   if ( (the_thread = _Thread_queue_Dequeue(&the_semaphore->Wait_queue)) ) {
 
+#if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       (*api_semaphore_mp_support) ( the_thread, id );
+#endif
 
   } else {
     _ISR_Disable( level );
