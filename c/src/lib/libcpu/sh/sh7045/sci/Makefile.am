@@ -6,7 +6,7 @@
 PGM = $(ARCH)/sci.rel
 
 C_FILES = sci.c sci_termios.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

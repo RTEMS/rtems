@@ -1,3 +1,10 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* sci/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* score/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2001-04-03	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
