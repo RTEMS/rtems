@@ -171,7 +171,7 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
   unsigned32           index
 )
 {
-  if ( index > information->maximum)
+  if ( index > information->maximum )
     return NULL;
   return ( information->local_table[ index ] );
 }
@@ -192,7 +192,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
   Objects_Control     *the_object
 )
 {
-  if ( index <= information->maximum)
+  if ( index <= information->maximum )
     information->local_table[ index ] = the_object;
 }
 
