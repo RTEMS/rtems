@@ -16,7 +16,7 @@ have a background in Unix these instructions should provide the bare
 essentials for performing a setup of the following items: 
 
 @itemize @bullet
-@item GNU C/C++ Cross Compilation Tools for RTEMS on your host system
+@item GNAT/RTEMS Cross Compilation Tools on your host system
 @item RTEMS OS for the target host
 @item GDB Debugger
 @end itemize
