@@ -1,5 +1,9 @@
 2001-04-02	Joel Sherrill <joel@OARcorp.com>
 
+	* sh/COPYING: Deleted.
+
+2001-04-02	Joel Sherrill <joel@OARcorp.com>
+
 	* sh/Makefile.am: Use "./shgen" not "shgen" so current directory 
 	does not have to be in the PATH.
 
