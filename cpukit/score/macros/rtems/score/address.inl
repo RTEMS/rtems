@@ -52,12 +52,14 @@
  */
 
 #if (CPU_ALIGNMENT == 0)
+#define _Addresses_Is_aligned( _address ) \
     (TRUE)
 #elif defined(RTEMS_CPU_HAS_16_BIT_ADDRESSES)
+#define _Addresses_Is_aligned( _address ) \
     ( ( (unsigned short)(_address) % CPU_ALIGNMENT ) == 0 )
+#else
 #define _Addresses_Is_aligned( _address ) \
     ( ( (unsigned32)(_address) % CPU_ALIGNMENT ) == 0 )
-#else
 #endif
 
 /*PAGE

@@ -34,6 +34,49 @@
 #define _Core_semaphore_Get_count( _the_semaphore ) \
   ( (_the_semaphore)->count )
 
+/*PAGE
+ *
+ *  _CORE_semaphore_Seize_isr_disable
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine attempts to receive a unit from the_semaphore.
+ *  If a unit is available or if the wait flag is FALSE, then the routine
+ *  returns.  Otherwise, the calling task is blocked until a unit becomes
+ *  available.
+ *
+ *  NOTE: There is currently no MACRO version of this routine.
+ */
+
+#define _CORE_semaphore_Seize_isr_disable( \
+  _the_semaphore, _id, _wait, _timeout, _level_p) \
+{ \
+  Thread_Control *executing; \
+  ISR_Level       level = *(_level_p); \
+ \
+  /* disabled when you get here */ \
+ \
+  executing = _Thread_Executing; \
+  executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL; \
+  if ( (_the_semaphore)->count != 0 ) { \
+    (_the_semaphore)->count -= 1; \
+    _ISR_Enable( level ); \
+  } else if ( !(_wait) ) { \
+    _ISR_Enable( level ); \
+    executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT; \
+  } else { \
+    _Thread_Disable_dispatch(); \
+    _ISR_Enable( level ); \
+    _Thread_queue_Enter_critical_section( &(_the_semaphore)->Wait_queue ); \
+    executing->Wait.queue          = &(_the_semaphore)->Wait_queue; \
+    executing->Wait.id             = (_id); \
+    _ISR_Enable( level ); \
+ \
+    _Thread_queue_Enqueue( &(_the_semaphore)->Wait_queue, (_timeout) ); \
+    _Thread_Enable_dispatch(); \
+  } \
+}
+
 
 #endif
 /* end of include file */

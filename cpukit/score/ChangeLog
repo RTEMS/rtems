@@ -1,3 +1,21 @@
+
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* General effort to make things compile with macros not inlines
+	* inline/rtems/score/coremutex.inl: Added comment indicating
+	for macros there is another copy of
+	_CORE_mutex_Seize_interrupt_trylock() in src/coremutexseize.c.
+	* src/coremutexseize.c: Added body of
+	_CORE_mutex_Seize_interrupt_trylock() for macro case.
+	* macros/rtems/score/coremutex.inl: Added prototype for 
+	_CORE_mutex_Seize_interrupt_trylock() since there is a real
+	body when macros are enabled.
+	* macros/rtems/score/coresem.inl: Added macro implementation of
+	_CORE_semaphore_Seize_isr_disable.
+	* macros/score/Makefile.am: Fixed typos.
+	* rtems/score/address.inl: Correct macro implementation of
+	_Addresses_Is_aligned() so it would compile.
+	* macros/rtems/score/coremsg.inl: Added closing parentheses.
 	
 2000-11-28	Chris Johns <ccj@acm.org>
 

@@ -18,11 +18,11 @@ if MACROS
 if HAS_MP
 I_FILES = $(STD_I_FILES) $(MP_I_FILES)
 else
-I_FILES = $(STD_I_FILES
+I_FILES = $(STD_I_FILES)
 endif
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
-    $(I_FILES:%=$(PROJECT_INCLUDE)/rtems/score%)
+    $(I_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
 $(PROJECT_INCLUDE)/rtems/score:
 	@$(mkinstalldirs) $@

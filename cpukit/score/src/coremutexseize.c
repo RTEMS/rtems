@@ -82,3 +82,63 @@ void _CORE_mutex_Seize_interrupt_blocking(
   }
   _Thread_Enable_dispatch();
 }
+
+#if !defined(USE_INLINES)
+int _CORE_mutex_Seize_interrupt_trylock(
+  CORE_mutex_Control  *the_mutex,
+  ISR_Level           *level_p
+)
+{ 
+  Thread_Control   *executing;
+  ISR_Level         level = *level_p;
+  
+  /* disabled when you get here */
+    
+  executing = _Thread_Executing;
+  executing->Wait.return_code = CORE_MUTEX_STATUS_SUCCESSFUL;
+  if ( !_CORE_mutex_Is_locked( the_mutex ) ) {
+    the_mutex->lock       = CORE_MUTEX_LOCKED;
+    the_mutex->holder     = executing;
+    the_mutex->holder_id  = executing->Object.id;
+    the_mutex->nest_count = 1;
+    executing->resource_count++;
+    if ( the_mutex->Attributes.discipline !=
+           CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING ) {
+        _ISR_Enable( level );
+        return 0;
+    }
+    /* else must be CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING */
+    {
+       Priority_Control  ceiling;
+       Priority_Control  current;
+
+       ceiling = the_mutex->Attributes.priority_ceiling;
+       current = executing->current_priority;
+       if ( current == ceiling ) {
+         _ISR_Enable( level );
+         return 0;
+       }
+       if ( current > ceiling ) {
+        _Thread_Disable_dispatch();
+        _ISR_Enable( level );
+        _Thread_Change_priority(
+          the_mutex->holder,
+          the_mutex->Attributes.priority_ceiling,
+          FALSE
+        );
+        _Thread_Enable_dispatch();
+        return 0;
+      }
+      /* if ( current < ceiling ) */ {
+        executing->Wait.return_code = CORE_MUTEX_STATUS_CEILING_VIOLATED;
+        the_mutex->nest_count = 0;     /* undo locking above */
+        executing->resource_count--;   /* undo locking above */
+        _ISR_Enable( level );
+        return 0;
+      }
+    }
+    return 0;
+  }
+  return 1;
+}
+#endif

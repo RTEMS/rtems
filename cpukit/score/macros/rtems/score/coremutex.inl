@@ -63,5 +63,19 @@
 #define _CORE_mutex_Is_priority_ceiling( _the_attribute )\
   ( (_the_attribute)->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING )
  
+/*PAGE
+ *
+ *  _CORE_mutex_Seize_interrupt_trylock
+ *
+ *  NOTE: This is not really a MACRO version of this routine.
+ *        A body is in coremutexseize.c that is duplicated
+ *        from the .inl by hand.
+ */
+
+int _CORE_mutex_Seize_interrupt_trylock(
+  CORE_mutex_Control  *the_mutex,
+  ISR_Level           *level_p
+);
+
 #endif
 /* end of include file */

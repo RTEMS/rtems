@@ -113,6 +113,8 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
  *  the mutex and will have to block to do so.
  *
  *  NOTE: There is no MACRO version of this routine.
+ *        A body is in coremutexseize.c that is duplicated
+ *        from the .inl by hand.
  */
 
 RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
