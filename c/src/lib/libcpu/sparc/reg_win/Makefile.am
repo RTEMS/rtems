@@ -6,7 +6,7 @@
 PGM = $(ARCH)/reg_win.rel
 
 S_FILES = window.S
-reg_win_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.o)
+reg_win_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am
