@@ -17,10 +17,3 @@
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
-
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources( configuration, 2 );
-}

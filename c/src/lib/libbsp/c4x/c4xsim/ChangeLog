@@ -1,3 +1,7 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* console/consolereserveresources.c: Removed code NOT file (YET).
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
