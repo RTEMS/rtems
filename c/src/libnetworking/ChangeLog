@@ -1,3 +1,8 @@
+2002-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove headers. Remove CHANGELOG.
+	* configure.ac: Use AC_CONFIG_SRCDIR([pppd]).
+
 2002-05-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	Move networking libraries to c/src/exec/libnetworking
