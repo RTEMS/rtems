@@ -27,6 +27,8 @@ rtems_task Init(
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+
 #include <confdefs.h>
 
 /* global variables */
