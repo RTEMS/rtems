@@ -1,4 +1,8 @@
 @c
+@c  COPYRIGHT (c) 1988-1999.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
 @c  This is the chapter from the RTEMS ITRON User's Guide that
 @c  documents the services provided by the network support
 @c  manager.

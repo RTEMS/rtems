@@ -1,4 +1,8 @@
 @c
+@c  COPYRIGHT (c) 1988-1999.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
 @c  This is the chapter from the RTEMS ITRON User's Guide that
 @c  documents the services provided by the task
 @c  manager.
@@ -19,7 +23,7 @@ The services provided by the task manager are:
 @item @code{del_tsk} - Delete Task
 @item @code{sta_tsk} - Start Task
 @item @code{ext_tsk} - Exit Issuing Task
-@item @code{exd_tsk} - Exit and Delete Task
+@item @code{exd_tsk} - Exit and Delete Issuing Task
 @item @code{ter_tsk} - Terminate Other Task
 @item @code{dis_dsp} - Disable Dispatch
 @item @code{ena_dsp} - Enable Dispatch
@@ -61,7 +65,7 @@ typedef struct t_ctsk @{
   FP    task;      /* task start address */
   PRI   itskpri;   /* initial task priority */
   INT   stksz;     /* stack size */
-  /* additional information may be included depending on the implementation */
+  /* additional implementation dependent information may be included */
 @} T_CTSK;
 
 @end example
@@ -335,15 +339,13 @@ In principle, information concerning a task recorded in the TCB, such as task pr
 @page
 @subsection exd_tsk - Exit and Delete Issuing Task
 
-@subsection exd_tsk - Exit and Delete Task
+@subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 void exd_tsk(void);
 @end example
-void exd_tsk(
-
-);
+@end ifset
 
 @ifset is-Ada
 @end ifset
@@ -427,9 +429,7 @@ In principle, information concerning a task recorded in the TCB, such as task pr
 @example
 ER dis_dsp(void);
 @end example
-ER dis_dsp(
-
-);
+@end ifset
 
 @ifset is-Ada
 @end ifset
@@ -478,9 +478,7 @@ Only if the system is not a multiprocessor configuration, system can take advant
 @example
 ER ena_dsp(void);
 @end example
-ER ena_dsp(
-
-);
+@end ifset
 
 @ifset is-Ada
 @end ifset
