@@ -167,34 +167,12 @@ _RTEMS_ARG_VAR([CFLAGS_FOR_$2],
 if test "$no_recursion" != yes; then
 
  if test -n "${$2_SUBDIRS}"; then
-  ac_sub_configure_args=
-  ac_prev=
-  for ac_arg in $$1args; do
-    if test -n "$ac_prev"; then
-      ac_prev=
-      continue
-    fi
-    case $ac_arg in
-    -cache-file | --cache-file | --cache-fil | --cache-fi \
-    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
-      ac_prev=cache_file ;;
-    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
-    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
-    | --c=*)
-      ;;
-    --config-cache | -C)
-      ;;
-    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
-      ac_prev=srcdir ;;
-    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-      ;;
-    -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
-      ac_prev=prefix ;;
-    -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
-      ;;
-    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
-    esac
-  done
+   RTEMS_CONFIGURE_ARGS_QUOTE([ac_sub_configure_args],[
+     -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+       ac_prev=prefix ;;
+     -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
+       ;;
+   ],[$1args])
 
   # Always prepend --prefix to ensure using the same prefix
   # in subdir configurations.
