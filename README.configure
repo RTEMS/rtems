@@ -18,14 +18,22 @@ RTEMS-specific option are supported:
 
 	--disable-rtems-inlines
 	--disable-posix
+	--disable-tcpip
 	--disable-tests
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 
 By default, the RTEMS posix interface is built for targets that support
-it. It can be disabled with the --disable-posix option. The --disable-tests
+it. It can be disabled with the --disable-posix option.
+
+By default, the RTEMS port of the KA9Q TCP/IP stack is build for targets
+that support it.  It can be disabled with the --disable-tcpip option.
+
+By default, the RTEMS test suites are configured.  The --disable-tests
 will not configure the RTEMS test suite. This is used only to speed-up
-configuration in case building the tests are not necessary. By default,
-all bsps for a target are built. There is two ways of changing this:
+configuration in case building the tests are not necessary.
+
+By default, all bsps for a target are built. There are  two ways of
+changing this:
 
   + use the --enable-rtemsbsp otion which will set the specified
     bsps as the default bsps, or 
@@ -49,6 +57,7 @@ The following targets are supported:
 
 	a29k-rtems		only standalone, uses non-gnu compiler
 	i386-rtems
+	i386-go32-rtems         see notes
 	i960-rtems
 	hppa1_1-rtems
 	m68k-rtems
@@ -81,6 +90,36 @@ directory to the tree. The one-tree configure.in and Makefile.in has to be
 replaced with the RTEMS-aware versions. The build options are the same as 
 for the standalone build.
 
+2.3 Target Dependent Notes
+
+i386-go32-rtems:
+
+  1.  This is based on djgpp v1.xx.  It needs to be updated to v2.xx.
+  2.  This cannot be built one-tree style since RTEMS requires some
+      files which must be obtained from the binary distribution of the
+      djgpp library.  DJGPP can be obtained from
+      http://www.delorie.com/djgpp/dl/ofc.
+  3.  You will need to manually install a number of files from the
+      binary distribution of the DJGPP library doing something
+      like the following:
+
+      # unzip the djgpp distribution
+      cd include
+      cp dpmi.h INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/include
+      cp go32.h INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/include
+      cp dos.h INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/include
+      cp pc.h INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/include
+
+      cd ../lib
+      cp crt* INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2
+      cp libpc* INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2
+
+      # Make sure about destination on the next lines.  It keeps the newlib
+      # libc.a and the binary djgpp libc.a from conflicting.
+      cp libc.a INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/libcgo32.a
+      cp libc_p.a INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/libcgo32_p.a
+
+
 3. To use the installed RTEMS library
 =====================================
 
@@ -105,10 +144,11 @@ host-based	: posix (on linux, solaris and hpux)
 
 a29k		: portsw
 i386		: force386 i386ex
+i386-go32	: go32 go32_p5
 i960		: cvme961
 hppa1_1		: simhppa
-m68k		: efi332 gen68302 idp mvme147 mvme162 dmv152 efi68k gen68360 
-		  mvme136 mvme147s go32
+m68k		: dmv152 efi332 efi68k gen68302 gen68360 gen68360_040 idp
+		  mvme136 mvme147 mvme147s mvme162
 no_cpu          : no_bsp
 mips64orion 	: p4600 p4650 (p4000 port with either R4600 or R4650)
 powerpc		: papyrus
