@@ -26,7 +26,7 @@
  *
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 
 /*
  *  The initial stack is set to run BELOW the code base address.

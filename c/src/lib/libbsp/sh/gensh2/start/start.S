@@ -30,7 +30,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 
 	BEGIN_CODE
 	PUBLIC(start)

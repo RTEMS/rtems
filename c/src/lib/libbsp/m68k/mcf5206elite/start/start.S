@@ -25,7 +25,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #include "bsp.h"
 
 BEGIN_CODE

@@ -3,7 +3,7 @@
  */
 
 #include "mrm332.h"
-#include "asm.h"
+#include <rtems/asm.h>
 #include <sim.h>
 
 BEGIN_CODE

@@ -36,7 +36,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #include "rtems/score/sh4_regs.h"
 
 	BEGIN_CODE

@@ -15,7 +15,7 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 	
-#include "asm.h"
+#include <rtems/asm.h>
 
 
 /* Since we don't yet have a memory map for Bender, I am
