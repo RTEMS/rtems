@@ -15,8 +15,16 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 
 %files -n rtems-base-gcj
 %dir %{_prefix}/bin
-%{_prefix}/bin/jcf-dump@exe_ext@
-%{_prefix}/bin/jv-scan@exe_ext@
-%{_prefix}/bin/gcjh@exe_ext@
+%{_prefix}/bin/jar@exe_ext@
+%{_prefix}/bin/grepjar@exe_ext@
+
+%dir %{_prefix}/man/man1
+%{_prefix}/man/man1/gcjh.1
+%{_prefix}/man/man1/jv-scan.1
+%{_prefix}/man/man1/jcf-dump.1
+%{_prefix}/man/man1/gij.1
+%{_prefix}/man/man1/jv-convert.1
+%{_prefix}/man/man1/rmic.1
+%{_prefix}/man/man1/rmiregistry.1
 
 %endif

@@ -61,24 +61,40 @@ NoSource:	1
 %define build_gcj	0
 %define build_gnat	0
 
-%if "@target_alias@"     == "c4x-rtems"
+%if "@target_alias@" == "arm-rtems"
+%define build_gcj 	1
+%endif
+
+%if "@target_alias@" == "c4x-rtems"
 %define build_cxx	0
 %endif
 
 %if "@target_alias@" == "i386-rtems"
 %define build_gnat 	%_gnat
+%define build_gcj 	1
 %endif
 
 %if "@target_alias@" == "i960-rtems"
 %define build_cxx	0
 %endif
 
+%if "@target_alias@" == "m68k-rtems"
+%define build_gcj 	1
+%endif
+
+%if "@target_alias@" == "mips-rtems"
+%define build_gnat      %_gnat
+%define build_gcj 	1
+%endif
+
 %if "@target_alias@" == "powerpc-rtems"
 %define build_gnat      %_gnat
+%define build_gcj 	1
 %endif
 
 %if "@target_alias@" == "sparc-rtems"
 %define build_gnat      %_gnat
+%define build_gcj 	1
 %endif
 
 %description
@@ -119,6 +135,9 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 # %if "%{_target_os}" != "%{_build_os}"
 #    CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
 # %endif
+#  ALERT: GCJ would be better if we could add this flag and build
+#  it's libraries but this code isn't ready to be embedded.
+#  libgcj_flag="--enable-libgcj"
 
   languages="c"
 %if %build_cxx
@@ -128,7 +147,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   languages="$languages,g77"
 %endif
 %if %build_gcj
-  languages="$languages,gcj"
+  languages="$languages,java"
 %endif
 %if %build_objc
   languages="$languages,objc"
@@ -141,7 +160,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     --with-system-zlib --disable-nls \
     --enable-version-specific-runtime-libs \
     --enable-threads=rtems --prefix=%{_prefix} \
-    --enable-languages=$languages
+    --enable-languages=$languages ${libgcj_flag}
 %if %build_gnat
   cd ../gcc-@gcc_version@/gcc/ada
   touch treeprs.ads [es]info.h nmake.ad[bs]
