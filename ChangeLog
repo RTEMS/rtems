@@ -1,3 +1,10 @@
+2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: DIST_SUBDIRS = $(SUBDIRS).
+	Rework dist-hook.
+	* configure.ac: Reflect changes to RTEMS_ENABLE_RTEMSBSP.
+	* aclocal/enable-rtemsbsp.m4: Add support for --disable-rtemsbsp.
+
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_BUILD_CONFIG_SUBDIRS([testsuites/tools]).

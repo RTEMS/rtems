@@ -8,6 +8,7 @@
 ACLOCAL_AMFLAGS = -I aclocal
 
 SUBDIRS = make $(build_SUBDIRS) $(host_SUBDIRS) $(target_SUBDIRS)
+DIST_SUBDIRS = $(SUBDIRS)
 
 ACLOCAL_FILES =
 ACLOCAL_FILES += aclocal/bsp-alias.m4
@@ -27,16 +28,19 @@ EXTRA_DIST = README.configure SUPPORT VERSION LICENSE $(noinst_SCRIPTS)
 EXTRA_DIST += $(ACLOCAL_FILES)
 EXTRA_DIST += config-ml.in
 
-DIST_SUBDIRS = make
+
 dist-hook:
-	cp -pR $(srcdir)/doc $(distdir)/doc
-	find $(distdir)/doc -name '*.t' -print | while read a; do \
-	  if test -f $${a}exi; then echo "rm $${a}exi"; rm -f $${a}exi; fi; done
-	cp -pR $(srcdir)/tools $(distdir)/tools
-	cp -pR $(srcdir)/c $(distdir)/c
-	cp -pR $(srcdir)/cpukit $(distdir)/cpukit
-	cp -pR $(srcdir)/testsuites $(distdir)/testsuites
-	cp -pR $(srcdir)/scripts $(distdir)/scripts
+	@files=`(cd $(srcdir); find doc cpukit c scripts testsuites tools \
+	   -name configure.ac -print | sed 's,/configure.ac,,' | sort)`; \
+	for i in $$files; do \
+	  if test -f $(distdir)/$$i/configure.ac; then : ; \
+	  else \
+	    d=`dirname $(distdir)/$$i`; \
+	    $(mkdir_p) $$d;\
+	    echo "cp -pR $(srcdir)/$$i $(distdir)/$$i"; \
+	    cp -pR $(srcdir)/$$i $(distdir)/$$i; \
+	  fi; \
+	done
 	rm -f $(distdir)/scripts/setup.cache
 	rm -f $(distdir)/scripts/*/*.spec
 	rm -rf `find $(distdir) -name 'autom4te*'`
