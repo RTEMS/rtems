@@ -1,3 +1,8 @@
+2002-12-02	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/score/object.h, include/rtems/score/tod.h:
+	Added casts to eliminate warnings on 16 bit targets like the h8300.
+
 2002-11-14	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/score/object.inl: Keep consistent with inline version.

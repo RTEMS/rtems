@@ -74,15 +74,15 @@ typedef unsigned32 Objects_Id;
 #define OBJECTS_API_START_BIT   24
 #define OBJECTS_CLASS_START_BIT 27
 
-#define OBJECTS_INDEX_MASK      0x0000ffff
-#define OBJECTS_NODE_MASK       0x00ff0000
-#define OBJECTS_API_MASK        0x07000000
-#define OBJECTS_CLASS_MASK      0xf8000000
+#define OBJECTS_INDEX_MASK      (Objects_Id)0x0000ffff
+#define OBJECTS_NODE_MASK       (Objects_Id)0x00ff0000
+#define OBJECTS_API_MASK        (Objects_Id)0x07000000
+#define OBJECTS_CLASS_MASK      (Objects_Id)0xf8000000
 
-#define OBJECTS_INDEX_VALID_BITS  0x0000ffff
-#define OBJECTS_NODE_VALID_BITS   0x000000ff
-#define OBJECTS_API_VALID_BITS    0x00000007
-#define OBJECTS_CLASS_VALID_BITS  0x0000001f
+#define OBJECTS_INDEX_VALID_BITS  (Objects_Id)0x0000ffff
+#define OBJECTS_NODE_VALID_BITS   (Objects_Id)0x000000ff
+#define OBJECTS_API_VALID_BITS    (Objects_Id)0x00000007
+#define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x0000001f
 
 /*
  *  This enumerated type is used in the class field of the object ID.

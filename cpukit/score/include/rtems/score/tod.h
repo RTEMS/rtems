@@ -27,21 +27,21 @@ extern "C" {
  *  The following constants are related to the time of day.
  */
 
-#define TOD_SECONDS_PER_MINUTE 60
-#define TOD_MINUTES_PER_HOUR   60
-#define TOD_MONTHS_PER_YEAR    12
-#define TOD_DAYS_PER_YEAR      365
-#define TOD_HOURS_PER_DAY      24
-#define TOD_SECONDS_PER_DAY    (TOD_SECONDS_PER_MINUTE * \
+#define TOD_SECONDS_PER_MINUTE (unsigned32)60
+#define TOD_MINUTES_PER_HOUR   (unsigned32)60
+#define TOD_MONTHS_PER_YEAR    (unsigned32)12
+#define TOD_DAYS_PER_YEAR      (unsigned32)365
+#define TOD_HOURS_PER_DAY      (unsigned32)24
+#define TOD_SECONDS_PER_DAY    (unsigned32) (TOD_SECONDS_PER_MINUTE * \
                                 TOD_MINUTES_PER_HOUR   * \
                                 TOD_HOURS_PER_DAY)
 
 #define TOD_SECONDS_PER_NON_LEAP_YEAR (365 * TOD_SECONDS_PER_DAY)
 
-#define TOD_MILLISECONDS_PER_SECOND     1000
-#define TOD_MICROSECONDS_PER_SECOND     1000000
-#define TOD_NANOSECONDS_PER_SECOND      1000000000
-#define TOD_NANOSECONDS_PER_MICROSECOND 1000
+#define TOD_MILLISECONDS_PER_SECOND     (unsigned32)1000
+#define TOD_MICROSECONDS_PER_SECOND     (unsigned32)1000000
+#define TOD_NANOSECONDS_PER_SECOND      (unsigned32)1000000000
+#define TOD_NANOSECONDS_PER_MICROSECOND (unsigned32)1000
 
 /*
  *  The following constant define the earliest year to which an
