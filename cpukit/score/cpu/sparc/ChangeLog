@@ -1,3 +1,8 @@
+2004-02-26	Andreas Karlsson <andreas.karlsson@space.se>
+
+	* cpu_asm.S: Close window while restoring interrupted task state which
+	resulted in CWP corruption.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c, cpu_asm.S, rtems/score/cpu.h, rtems/score/sparc.h,
