@@ -12,7 +12,7 @@
 
 @section Makefile changes
 @subsection Including the required managers
-The KA9Q networking code requires several RTEMS managers
+The FreeBSD networking code requires several RTEMS managers
 in the application:
 
 @example
@@ -119,6 +119,17 @@ will be sent.
 @item char *name_server[3]
 The Internet host numbers of up to three machines to be used as
 Internet Domain Name Servers.
+
+@item int port
+The I/O port number (ex: 0x240) on which the external Ethernet
+can be accessed.
+
+@item int irno
+The interrupt number of the external Ethernet controller.
+
+@item int bpar
+The address of the shared memory on the external Ethernet controller.
+
 
 @end table
 
