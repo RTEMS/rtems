@@ -835,8 +835,8 @@ rtems_device_driver m860_console_read(rtems_device_major_number major,
       if (rxBufList[minor]->pos == rxBufList[minor]->len) {
         if (rxBufList[minor]->next) {
           tmp_buf=rxBufList[minor]->next;
-          free (rxBufList[minor]->buf);
-          free (rxBufList[minor]);
+          free ((void *) rxBufList[minor]->buf);
+          free ((void *) rxBufList[minor]);
           rxBufList[minor]=tmp_buf;
         }
         else {
@@ -882,9 +882,11 @@ rtems_device_driver m860_console_write(rtems_device_major_number major,
    *   that used the other module won't work correctly.
    *   Put this comment in each module that sets these 2 registers
    */
-/*  m860.cicr = 0x00e43e80;   /* SCaP=SCC1, SCbP=SCC2, SCcP=SCC3, 
+#if 0
+    m860.cicr = 0x00e43e80;   /* SCaP=SCC1, SCbP=SCC2, SCcP=SCC3, 
 			       SCdP=SCC4, IRL=1, HP=SCC1, IEN=1 */
-/*  m860.simask |= M860_SIMASK_LVM1;  */
+    m860.simask |= M860_SIMASK_LVM1;
+#endif
 
   rw_args = (rtems_libio_rw_args_t *) arg;
 
