@@ -170,6 +170,7 @@ cat << EOF > common/rtems.sed~
 s/@RTEMSAPI@/RTEMS_API/;t t
 s,@RTEMSPREFIX@,$prefix,;t t
 s,@RTEMSRPMPREFIX@,$rpmprefix,;t t
+s,@RTEMSRPMGROUP@,RTEMS/]RTEMS_API[,;t t
 EOF
 _RTEMS_UPDATE_CONDITIONAL([common/rtems.sed],[common/rtems.sed~])
 ])

@@ -82,7 +82,7 @@ The following command will report which RTEMS RPMs are currently
 installed:
 
 @example
-rpm -q -g rtems
+rpm -q -g @value{RTEMSRPMGROUP}
 @end example
 
 @subsection Removing RPMs
