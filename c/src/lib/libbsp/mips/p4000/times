@@ -22,8 +22,8 @@ Wait States:
 Times Reported in: cycles
 Timer Source: on-CPU cycle counter
 
-Column A:RTEMS compiled with 64 bit pointers and 64 bit unsigned32 types
-Column B:RTEMS compiled with 32 bit pointers and 32 bit unsigned32 types
+Column A:RTEMS compiled with 64 bit pointers and 64 bit uint32_t   types
+Column B:RTEMS compiled with 32 bit pointers and 32 bit uint32_t   types
 
 #                          DESCRIPTION                                 A    B
 == =================================================================  ==== ====

@@ -64,7 +64,7 @@ extern void WriteDisplay( char * string );
 
 #define Lower_tm27_intr()
 
-extern unsigned32 mips_get_timer( void );
+extern uint32_t   mips_get_timer( void );
 
 #define CPU_CLOCK_RATE_MHZ     (50)
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ ) /* equivalent to CPU clock speed in MHz */
@@ -74,15 +74,15 @@ extern unsigned32 mips_get_timer( void );
  *  This is very dependent on the clock speed of the target.
  *
  *  NOTE: This macro generates a warning like "integer constant out 
- *        of range" which is safe to ignore.  In 64 bit mode, unsigned32
+ *        of range" which is safe to ignore.  In 64 bit mode, uint32_t  
  *        types are actually 64 bits long so that comparisons between
- *        unsigned32 types and pointers are valid.  The warning is caused
+ *        uint32_t   types and pointers are valid.  The warning is caused
  *        by code in the delay macro that is necessary for 64 bit mode.
  */
 
 #define rtems_bsp_delay( microseconds ) \
   { \
-     unsigned32 _end_clock = \
+     uint32_t   _end_clock = \
           mips_get_timer() + microseconds * CLOCKS_PER_MICROSECOND; \
      _end_clock %= 0x100000000;  /* make sure result is 32 bits */ \
      \
