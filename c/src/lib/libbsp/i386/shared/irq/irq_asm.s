@@ -14,48 +14,12 @@
 #include "asm.h"	
 #include <irq_asm.h>
 
-.set SAVED_REGS     , 32                   # space consumed by saved regs
-.set EIP_OFFSET     , SAVED_REGS           # offset of tasks eip
-.set CS_OFFSET      , EIP_OFFSET+4         # offset of tasks code segment
-.set EFLAGS_OFFSET  , CS_OFFSET+4          # offset of tasks eflags
-	
-
-/*PAGE
- *  void _New_ISR_Displatch()
- *
- *  Entry point from the outermost interrupt service routine exit.
- *  The current stack is the supervisor mode stack.
- */
-
-        PUBLIC (_New_ISR_Displatch)
-SYM (_New_ISR_Displatch):
-
-        call      SYM (_Thread_Dispatch)   # invoke Dispatcher
-
-       /*
-        * BEGINNING OF DE-ESTABLISH SEGMENTS
-        *
-        *  NOTE:  Make sure there is code here if code is added to
-        *         load the segment registers.
-        *
-        */
-
-       /***** DE-ESTABLISH SEGMENTS CODE GOES HERE ****/
-
-       /*
-        * END OF DE-ESTABLISH SEGMENTS
-        */
-
-        popa                                # restore general registers
-        iret                                # return to interrupted thread
-
-		
-SYM (_New_ISR_Handler):	
+SYM (_ISR_Handler):	
        /*
         *  Before this was point is reached the vectors unique
         *  entry point did the following:
         *
-        *     1. saved sctach registers registers eax edx ecx"
+        *     1. saved scratch registers registers eax edx ecx"
         *     2. put the vector number in ecx.
         *
         * BEGINNING OF ESTABLISH SEGMENTS
@@ -176,29 +140,48 @@ nested:
 
         cmpl      $0, SYM (_Context_Switch_necessary)
                                             # Is task switch necessary?
-        jne       bframe                    # Yes, then build stack
+        jne	  .schedule		    # Yes, then call the scheduler
 
         cmpl      $0, SYM (_ISR_Signals_to_thread_executing)
                                             # signals sent to Run_thread
                                             #   while in interrupt handler?
         je        .exit                     # No, exit
 
-bframe:
+	
+.bframe:
         movl      $0, SYM (_ISR_Signals_to_thread_executing)
 	/*
-	 * complete code as if a pusha had been executed on entry
+	 * This code is the less critical path. In order to have a single
+	 * Thread Context, we take the same frame than the one pushed on 
+	 * exceptions. This makes sense because Signal is a software 
+	 * exception.
 	 */
-	pushl	  ebx
-	pushl	  esp
-	pushl	  ebp
-	pushl	  esi
-	pushl	  edi
-                                            # push the isf for Isr_dispatch
-        pushl     EFLAGS_OFFSET(esp)        # push tasks eflags
-        push      cs                        # cs of Isr_dispatch
-        pushl     $ SYM (_New_ISR_Displatch)# entry point
-        iret
+	popl	edx
+	popl	ecx
+	popl	eax
 
+	pushl	$0	# fake fault code
+	pushl	$0	# fake exception number
+
+	pusha
+	pushl	esp
+	call	_ThreadProcessSignalsFromIrq
+	addl	$4, esp
+	popa
+	addl	$8, esp
+	iret
+			
+.schedule:
+	/*
+	 * the scratch registers have already been saved and we are already
+	 * back on the thread system stack. So we can call _Thread_Displatch 
+	 * directly
+	 */
+	call _Thread_Dispatch
+	/*
+	 * fall through exit to restore complete contex (scratch registers
+	 * eip, CS, Flags).
+	 */
 .exit:
        /*
         * BEGINNING OF DE-ESTABLISH SEGMENTS
@@ -217,7 +200,8 @@ bframe:
 	popl	ecx
 	popl	eax
 	iret
-		
+
+				
 #define DISTINCT_INTERRUPT_ENTRY(_vector) \
         .p2align 4                         ; \
         PUBLIC (rtems_irq_prologue_ ## _vector ) ; \
@@ -226,7 +210,7 @@ SYM (rtems_irq_prologue_ ## _vector ):             \
 	pushl	ecx		; \
 	pushl	edx		; \
 	movl	$ _vector, ecx  ; \
-        jmp   SYM (_New_ISR_Handler) ;
+        jmp   SYM (_ISR_Handler) ;
 
 DISTINCT_INTERRUPT_ENTRY(0)
 DISTINCT_INTERRUPT_ENTRY(1)

@@ -75,4 +75,11 @@ unsigned32 _CPU_ISR_Get_level( void )
  
   return level;
 }
- 
+
+void _CPU_Thread_Idle_body ()
+{
+  while(1){
+    asm volatile ("hlt");
+  }
+}
+     

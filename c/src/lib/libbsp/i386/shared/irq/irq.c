@@ -356,3 +356,15 @@ int pc386_rtems_irq_mngt_get(rtems_irq_global_settings** config)
     *config = internal_config;
     return 0;
 }    
+
+void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
+{
+  /*
+   * If I understand the _Thread_Dispatch routine correctly
+   * I do not see how this routine can be called given the
+   * actual code. I plan to use this so far unused feature
+   * to implement remote debugger ptrace("attach", ...)
+   * command.
+   */
+  printk(" _ThreadProcessSignalsFromIrq called! mail valette@crf.canon.fr\n");
+}

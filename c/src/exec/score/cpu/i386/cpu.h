@@ -64,7 +64,7 @@ extern "C" {
 #define CPU_IDLE_TASK_IS_FP              FALSE
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    YES
 #define CPU_STACK_GROWS_UP               FALSE
 #define CPU_STRUCTURE_ALIGNMENT
 
@@ -101,14 +101,39 @@ typedef struct {
                                     /*  28 bytes for environment    */
 } Context_Control_fp;
 
+
 /*
  *  The following structure defines the set of information saved
- *  on the current stack by RTEMS upon receipt of each interrupt.
+ *  on the current stack by RTEMS upon receipt of execptions.
+ *
+ * idtIndex is either the interrupt number or the trap/exception number.
+ * faultCode is the code pushed by the processor on some exceptions.
  */
 
 typedef struct {
-  unsigned32   TBD;   /* XXX Fix for this CPU */
-} CPU_Interrupt_frame;
+
+    unsigned32	    edi,
+    	    	    esi,
+    	    	    ebp,
+    		    esp0,
+		    ebx,
+		    edx,
+		    ecx,
+		    eax,
+    	    	    idtIndex,
+		    faultCode,
+      		    eip,
+		    cs,
+		    eflags;
+}CPU_Exception_frame;
+
+/*
+ *  The following structure defines the set of information saved
+ *  on the current stack by RTEMS upon receipt of each interrupt
+ *  that will lead to re-enter the kernel to signal the thread.
+ */
+
+typedef CPU_Exception_frame CPU_Interrupt_frame;
 
 /*
  *  The following table contains the information required to configure
