@@ -1,3 +1,10 @@
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
+	* shared/README.universe, shared/vmeUniverse/README.porting
+	shared/vmeUniverse/README.universe, shared/vmeUniverse/vmeUniverse.c,
+	shared/vmeUniverse/vmeUniverse.h: Update of the VME universe driver.
+
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
 	* ide_ctrl.c: New file.

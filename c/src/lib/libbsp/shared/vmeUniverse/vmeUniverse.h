@@ -14,16 +14,25 @@
 #include <vme.h>
 #else
 /* vxworks compatible addressing modes */
+#define	VME_AM_STD_SUP_ASCENDING	0x3f
 #define	VME_AM_STD_SUP_PGM	0x3e
+#define	VME_AM_STD_USR_ASCENDING	0x3b
 #define	VME_AM_STD_USR_PGM	0x3a
 #define	VME_AM_STD_SUP_DATA	0x3d
 #define	VME_AM_STD_USR_DATA	0x39
+#define	VME_AM_EXT_SUP_ASCENDING	0x0f
 #define	VME_AM_EXT_SUP_PGM	0x0e
+#define	VME_AM_EXT_USR_ASCENDING	0x0b
 #define	VME_AM_EXT_USR_PGM	0x0a
 #define	VME_AM_EXT_SUP_DATA	0x0d
 #define	VME_AM_EXT_USR_DATA	0x09
 #define	VME_AM_SUP_SHORT_IO	0x2d
 #define	VME_AM_USR_SHORT_IO	0x29
+
+#define VME_AM_IS_SHORT(a)	(((a) & 0xf0) == 0x20)
+#define VME_AM_IS_STD(a)	(((a) & 0xf0) == 0x30)
+#define VME_AM_IS_EXT(a)	(((a) & 0xf0) == 0x00)
+
 #endif
 
 typedef unsigned long LERegister; /* emphasize contents are little endian */
@@ -338,6 +347,18 @@ typedef struct VmeUniverseDMAPacketRec_ {
 # define	UNIV_MISC_CTL_SYSCON		(1<<17)	/* (R/W) 1:universe is system controller */
 # define	UNIV_MISC_CTL_V64AUTO		(1<<16)	/* (R/W) 1:initiate VME64 auto id slave participation */
 
+/* U2SPEC described in VGM manual */
+/* NOTE: the Joerger vtr10012_8 needs the timing to be tweaked!!!! READt27 must be _no_delay_
+ */
+#define		UNIV_REGOFF_U2SPEC		0x4fc
+# define	UNIV_U2SPEC_DTKFLTR			(1<<12)	/* DTAck filter: 0: slow, better filter; 1: fast, poorer filter */
+# define	UNIV_U2SPEC_MASt11			(1<<10)	/* Master parameter t11 (DS hi time during BLT and MBLTs) */
+# define	UNIV_U2SPEC_READt27_DEFAULT	(0<<8)	/* VME master parameter t27: (latch data after DTAck + 25ns) */
+# define	UNIV_U2SPEC_READt27_FAST	(1<<8)	/* VME master parameter t27: (latch data faster than 25ns)  */
+# define	UNIV_U2SPEC_READt27_NODELAY	(2<<8)	/* VME master parameter t27: (latch data without any delay)  */
+# define	UNIV_U2SPEC_POSt28_FAST		(1<<2)	/* VME slave parameter t28: (faster time of DS to DTAck for posted write) */
+# define	UNIV_U2SPEC_PREt28_FAST		(1<<0)	/* VME slave parameter t28: (faster time of DS to DTAck for prefetch read) */
+
 /* Location Monitor control register */
 #define		UNIV_REGOFF_LM_CTL		0xf64
 # define	UNIV_LM_CTL_EN				(1<<31)	/* image enable */ 
@@ -489,14 +510,20 @@ vmeUniverseMasterPortCfg(
 
 /* translate an address through the bridge
  *
- * vmeUniverseLocalToBusAdrs() yields a VME a address that reflects
+ * vmeUniverseXlateAddr(0,0,addr,as,&result)
+ * yields a VME a address that reflects
  * a local memory location as seen from the VME bus through the universe
  * VME slave.
  *
- * likewise does vmeUniverseBusToLocalAdrs() translate a VME bus addr
- * (through the VME master) to the PCI side of the bridge.
+ * likewise does vmeUniverseXlateAddr(1,0,addr,as,&result)
+ * translate a VME bus addr (through the VME master) to the
+ * PCI side of the bridge.
  *
  * a valid address space modifier must be specified.
+ *
+ * The 'reverse' parameter may be used to find a reverse
+ * mapping, i.e. the pci address in a master window can be
+ * found if the respective vme address is known etc.
  *
  * RETURNS: translated address in *pbusAdrs / *plocalAdrs
  *
@@ -505,11 +532,13 @@ vmeUniverseMasterPortCfg(
  *          -2: invalid modifier
  */
 int
-vmeUniverseLocalToBusAdrs(unsigned long am, unsigned long localAdrs, unsigned long *pbusAdrs);
-
-int
-vmeUniverseBusToLocalAdrs(unsigned long am, unsigned long busAdrs, unsigned long *plocalAdrs);
-
+vmeUniverseXlateAddr(
+	int master, 		/* look in the master windows */
+	int reverse,		/* reverse mapping; for masters: map local to VME */
+	unsigned long as,	/* address space */
+	unsigned long addr,	/* address to look up */
+	unsigned long *paOut/* where to put result */
+	);
 
 /* configure a VME slave (PCI master) port */
 int
@@ -556,7 +585,7 @@ vmeUniverseResetBus(void)
 		UNIV_REGOFF_MISC_CTL);
 }
 
-#ifdef __rtems
+#ifdef __rtems__
 /* VME Interrupt Handler functionality */
 
 /* we dont use the current RTEMS/BSP interrupt API for the
@@ -608,15 +637,38 @@ int
 vmeUniverseIntDisable(unsigned int level);
 
 
-/* use this special vector to connect a handler to the
+/* use these special vectors to connect a handler to the
  * universe specific interrupts (such as "DMA done", 
  * VOWN, error irqs etc.)
  * NOTE: The wrapper clears all status LINT bits (except
  * for regular VME irqs). Also note that it is the user's
  * responsibility to enable the necessary interrupts in
  * LINT_EN
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * DO NOT CHANGE THE ORDER OF THESE VECTORS - THE DRIVER
+ * DEPENDS ON IT
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * 
  */
-#define UNIV_SPECIAL_IRQ_VECTOR	256
+#define UNIV_VOWN_INT_VEC			256
+#define UNIV_DMA_INT_VEC			257
+#define UNIV_LERR_INT_VEC			258
+#define UNIV_VERR_INT_VEC			259
+#define UNIV_VME_SW_IACK_INT_VEC	260
+#define UNIV_PCI_SW_INT_VEC			261
+#define UNIV_SYSFAIL_INT_VEC		262
+#define UNIV_ACFAIL_INT_VEC			263
+#define UNIV_MBOX0_INT_VEC			264
+#define UNIV_MBOX1_INT_VEC			265
+#define UNIV_MBOX2_INT_VEC			266
+#define UNIV_MBOX3_INT_VEC			267
+#define UNIV_LM0_INT_VEC			268
+#define UNIV_LM1_INT_VEC			269
+#define UNIV_LM2_INT_VEC			270
+#define UNIV_LM3_INT_VEC			271
+
+#define UNIV_NUM_INT_VECS			272
 
 /* the universe interrupt handler is capable of routing all sorts of
  * (VME) interrupts to 8 different lines (some of) which may be hooked up
@@ -634,13 +686,18 @@ vmeUniverseIntDisable(unsigned int level);
  *
  * Hence the manager sets up routing VME interrupts to 1 or 2 universe
  * OUTPUTS. However, it must also be told to which PIC INPUTS they
- * are wired. The first PIC input line is read from PCI config space
- * but the second must be passed to this routine. 
+ * are wired.
+ * Optionally, the first PIC input line can be read from PCI config space
+ * but the second must be passed to this routine. Note that the info read
+ * from PCI config space is wrong for many boards! 
  *
  * PARAMETERS:
- *       vmeIRQunivOut: to which output pin (of the universe) should the 7
+ *       vmeIrqUnivOut: to which output pin (of the universe) should the 7
  *       				VME irq levels be routed.
- *   specialIRQunivOut: to which output pin (of the universe) should the
+ *       vmeIrqPicLine: specifies to which PIC input the 'main' output is
+ *                      wired. If passed a value < 0, the driver reads this
+ *                      information from PCI config space ("IRQ line").
+ *   specialIrqUnivOut: to which output pin (of the universe) should the
  *                      internally irqs be routed. Use 'vmeIRQunivOut'
  *                      if < 0.
  *   specialIrqPicLine: specifies to which PIC input the 'special' output
@@ -651,7 +708,10 @@ vmeUniverseIntDisable(unsigned int level);
  *						
  */
 int
-vmeUniverseInstallIrqMgr(int vmeIrqUnivOut, int specialIrqUnivOut, int specialIrqPicLine);
+vmeUniverseInstallIrqMgr(int vmeIrqUnivOut,
+						 int vmeIrqPicLine,
+						 int specialIrqUnivOut,
+						 int specialIrqPicLine);
 
 #endif
 

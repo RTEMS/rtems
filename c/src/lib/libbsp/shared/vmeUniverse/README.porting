@@ -1,0 +1,88 @@
+#
+#  $Id$
+#
+
+The vmeUniverse driver needs some support from the BSP for
+
+a) PCI configuration space access
+b) PCI interrupt acknowledgement
+c) PCI interrupt handler installation
+
+The driver was developed using the powerpc/shared/ BSP
+(it also supports vxWorks) and by default uses that BSP's
+a) PCI access API
+b,c) irq handling API (AKA 'new' style BSP_install_rtems_irq_handler()
+   API).
+
+Some hooks exist in the driver to ease porting to other BSPs.
+The following information has been assembled when answering a
+question regarding a ppcn_60x BSP port:
+
+I looked through the ppcn_60x BSP. Here's what I found:
+
+ - this BSP does NOT adhere to neither the 'old' nor the 'new' API
+   but provides its own (startup/setvec.c: set_vector()).
+ - the BSP has a 'driver' for vmeUniverse although mine is far more
+   complete (including support for VME interrupts, DMA etc.).
+ - Porting my driver to your BSP should not be too hard:
+  
+   1) vmeUniverse needs PCI configuration space support from the
+      BSP:
+        a) a routine 'pciFindDevice' (need to be macro-aliased
+           to the proper routine/wrapper of your BSP) who scans
+           PCI config space for the universe bridge.
+           You could add 'libbsp/powerpc/shared/pci/pcifinddevice.c'
+           to your BSP substituting the pci_read_config_xxx calls
+           by the ones present on your BSP (see step 2))
+        b) routines to read PCI config registers (byte and longword)
+           [on your BSP these are PCIConfigRead32/PCIConfigRead8;
+           hence you could replace the macros on top with
+            #define pciConfigInLong PCIConfigRead32
+   2) vmeUniverse needs to know how to acknowledge a PCI interrupt
+      In your case, nothing needs to be done
+            #define BSP_PIC_DO_EOI do {} while (0)
+   3) Install the VME ISR dispatcher: replace the 'new' style
+      interrupt installer (BSP_install_rtems_irq_handler()) by
+      a proper call to 'set_vector()'
+   4) I might have missed something... 
+
+I attach the latest version of the vmeUniverse driver in case you want
+to try to do the port (should be easy).
+
+For the sake of ease of maintenance, I just added a few hooks making it
+possible to override some things without having to modify the driver code.
+
+ 1,2) PCI config space access macros may be overriden via CFLAGS
+      when compiling vmeUniverse.c, hence:
+      CFLAGS += -DBSP_PIC_DO_EOI=do{}while(0)
+      CFLAGS += -DBSP_PCI_CONFIG_IN_LONG=PCIConfigRead32
+      CFLAGS += -DBSP_PCI_CONFIG_IN_BYTE=PCIConfigRead8
+      (you still need to supply BSP_pciFindDevice)
+ 3)   create your own version of vmeUniverseInstallIrqMgr():
+      copy to a separate file and replace   
+      BSP_rtems_install_irq_handler() by a proper call to set_vector.
+ 
+ 4)   Send me email :-)
+
+USAGE NOTE: To fully initialize the driver, the following steps can/must
+be performed:
+
+ vmeUniverseInit();  /* MANDATORY: Driver Initialization */
+ vmeUniverseReset(); /* OPTIONAL: Reset most registers to a known state; 
+                      * if this step is omitted, firmware setup is
+                      * preserved
+                      */
+ vmeUniverseMasterPortCfg(...); /* OPTIONAL: setup the master windows
+                                 * (current setup preserved if omitted)
+                                 */
+ vmeUniverseSlavePortCfg(...);  /* OPTIONAL: setup the slave windows
+                                 * (current setup preserved if omitted)
+                                 */
+ vmeUniverseInstallIrqMgr();    /* NEEDED FOR VME INTERRUPT SUPPRORT
+                                 * initialize the interrupt manager.
+                                 * NOTE: you need to call your own
+                                 * version of this routine here
+                                 */
+
+For an example of init/setup, consult libbsp/powerpc/shared/vme/vmeconfig.c
+
