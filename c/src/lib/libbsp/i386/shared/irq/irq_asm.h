@@ -15,7 +15,7 @@
 #ifndef __IRQ_ASM_H__
 #define __IRQ_ASM_H__
 
-#define PC386_ASM_IRQ_VECTOR_BASE 0x20
+#define BSP_ASM_IRQ_VECTOR_BASE 0x20
     /* PIC's command and mask registers */
 #define PIC_MASTER_COMMAND_IO_PORT		0x20	/* Master PIC command register */
 #define PIC_SLAVE_COMMAND_IO_PORT		0xa0	/* Slave PIC command register */

@@ -55,9 +55,9 @@ static rtems_raw_irq_connect_data 	idtHdl[IDT_SIZE];
 /*
  * Table used to store rtems managed interrupt handlers.
  * Borrow the table to store raw handler entries at the beginning.
- * The table will be reinitialized before the call to pc386_rtems_irq_mngt_set().
+ * The table will be reinitialized before the call to BSP_rtems_irq_mngt_set().
  */
-static rtems_irq_connect_data     	rtemsIrq[PC_386_IRQ_LINES_NUMBER] = {
+static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_LINES_NUMBER] = {
   {0,(rtems_irq_hdl)rtems_irq_prologue_0},
   {0,(rtems_irq_hdl)rtems_irq_prologue_1},
   {0,(rtems_irq_hdl)rtems_irq_prologue_2},
@@ -86,7 +86,7 @@ static rtems_irq_connect_data     	defaultIrq = {
   0, 			 nop_func	, nop_func	, nop_func	, not_connected
 };
 
-static rtems_irq_prio irqPrioTable[PC_386_IRQ_LINES_NUMBER]={
+static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={
   /*
    * actual rpiorities for interrupt :
    *	0   means that only current interrupt is masked
@@ -155,9 +155,9 @@ void  rtems_irq_mngt_init()
      * Patch the entry that will be used by RTEMS for interrupt management
      * with RTEMS prologue.
      */
-    for (i = 0; i < PC_386_IRQ_LINES_NUMBER; i++) {
+    for (i = 0; i < BSP_IRQ_LINES_NUMBER; i++) {
       create_interrupt_gate_descriptor(&idtEntry,(rtems_raw_irq_hdl) rtemsIrq[i].hdl);
-      idt_entry_tbl[i + PC386_ASM_IRQ_VECTOR_BASE] = idtEntry;
+      idt_entry_tbl[i + BSP_ASM_IRQ_VECTOR_BASE] = idtEntry;
     }
     /*
      * At this point we have completed the initialization of IDT
@@ -167,20 +167,20 @@ void  rtems_irq_mngt_init()
     /*
      * re-init the rtemsIrq table
      */
-    for (i = 0; i < PC_386_IRQ_LINES_NUMBER; i++) {
+    for (i = 0; i < BSP_IRQ_LINES_NUMBER; i++) {
       rtemsIrq[i]      = defaultIrq;
       rtemsIrq[i].name = i;
     }
     /*
      * Init initial Interrupt management config
      */
-    initial_config.irqNb 	= PC_386_IRQ_LINES_NUMBER;
+    initial_config.irqNb 	= BSP_IRQ_LINES_NUMBER;
     initial_config.defaultEntry = defaultIrq;
     initial_config.irqHdlTbl	= rtemsIrq;
-    initial_config.irqBase	= PC386_ASM_IRQ_VECTOR_BASE;
+    initial_config.irqBase	= BSP_ASM_IRQ_VECTOR_BASE;
     initial_config.irqPrioTbl	= irqPrioTable;
 
-    if (!pc386_rtems_irq_mngt_set(&initial_config)) {
+    if (!BSP_rtems_irq_mngt_set(&initial_config)) {
       /*
        * put something here that will show the failure...
        */
@@ -200,7 +200,7 @@ void  rtems_irq_mngt_init()
 
       printk("idt_entry_tbl =  %x Interrupt_descriptor_table addr = %x\n",
 	     idt_entry_tbl, &Interrupt_descriptor_table);
-      tmp = (unsigned) get_hdl_from_vector (PC386_ASM_IRQ_VECTOR_BASE + PC_386_PERIODIC_TIMER);
+      tmp = (unsigned) get_hdl_from_vector (BSP_ASM_IRQ_VECTOR_BASE + BSP_PERIODIC_TIMER);
       printk("clock isr address from idt = %x should be %x\n",
 	     tmp, (unsigned) rtems_irq_prologue_0);
     }

@@ -34,29 +34,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#undef __assert
+void __assert (const char *file, int line, const char *msg);
 
 #include <bsp.h>
 #include <irq.h>
 #include <rtems/libio.h>
 #include <termios.h>
-#include <pc386uart.h>
+#include <uart.h>
 #include <libcpu/cpuModel.h>
 
 /*
  * Possible value for console input/output :
- *	PC386_CONSOLE_PORT_CONSOLE
- *	PC386_UART_COM1
- *	PC386_UART_COM2
+ *	BSP_CONSOLE_PORT_CONSOLE
+ *	BSP_UART_COM1
+ *	BSP_UART_COM2
  */
 
 /*
  * Possible value for console input/output :
- *	PC386_CONSOLE_PORT_CONSOLE
- *	PC386_UART_COM1
- *	PC386_UART_COM2
+ *	BSP_CONSOLE_PORT_CONSOLE
+ *	BSP_UART_COM1
+ *	BSP_UART_COM2
  */
 
-int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
+int BSPConsolePort = BSP_CONSOLE_PORT_CONSOLE;
+
+/* int BSPConsolePort = BSP_UART_COM2;  */
+int BSPBaseBaud    = 115200;
 
 extern BSP_polling_getchar_function_type BSP_poll_char;
 
@@ -66,6 +71,7 @@ extern BSP_polling_getchar_function_type BSP_poll_char;
 extern void _IBMPC_keyboard_isr(void);
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 extern char BSP_wait_polled_input(void);
+extern void _IBMPC_initVideo(void);
 
 static int  conSetAttr(int minor, const struct termios *);
 static void isr_on(const rtems_irq_connect_data *);
@@ -73,7 +79,7 @@ static void isr_off(const rtems_irq_connect_data *);
 static int  isr_is_on(const rtems_irq_connect_data *);
 
 
-static rtems_irq_connect_data console_isr_data = {PC_386_KEYBOARD,
+static rtems_irq_connect_data console_isr_data = {BSP_KEYBOARD,
 						   _IBMPC_keyboard_isr,
 						   isr_on,
 						   isr_off,
@@ -94,28 +100,30 @@ isr_off(const rtems_irq_connect_data *unused)
 static int
 isr_is_on(const rtems_irq_connect_data *irq)
 {
-  return pc386_irq_enabled_at_i8259s(irq->name);
+  return BSP_irq_enabled_at_i8259s(irq->name);
 }
 
 void console_reserve_resources(rtems_configuration_table *conf)
 {
-  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+    if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
     {
       rtems_termios_reserve_resources(conf, 1);
     }
+   
   return;
 }
 
-void __assert(const char *file, int line, const char *msg)
+void __assert (const char *file, int line, const char *msg)
 {
-  static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
+    static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
   unsigned char  ch;
- 
+   
   /*
    * Note we cannot call exit or printf from here, 
    * assert can fail inside ISR too
    */
-  /*
+
+   /*
    * Close console
    */
   __rtems_close(2);
@@ -129,6 +137,7 @@ void __assert(const char *file, int line, const char *msg)
   ch = BSP_poll_char();
   printk("\n\n");
   rtemsReboot();
+
 }
 
 
@@ -149,11 +158,11 @@ console_initialize(rtems_device_major_number major,
    *  to be reinitialized.
    */
 
-  if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
-    {
 
+  if(BSPConsolePort == BSP_CONSOLE_PORT_CONSOLE)
+    {
       /* Install keyboard interrupt handler */
-      status = pc386_install_rtems_irq_handler(&console_isr_data);
+      status = BSP_install_rtems_irq_handler(&console_isr_data);
   
       if (!status)
 	{
@@ -181,24 +190,24 @@ console_initialize(rtems_device_major_number major,
        */
       
       /* 9600-8-N-1 */
-      PC386_uart_init(PC386ConsolePort, 9600, 0);
+      BSP_uart_init(BSPConsolePort, 9600, 0);
       
       
       /* Set interrupt handler */
-      if(PC386ConsolePort == PC386_UART_COM1)
+      if(BSPConsolePort == BSP_UART_COM1)
 	{
-	  console_isr_data.name = PC386_UART_COM1_IRQ;
-	  console_isr_data.hdl  = PC386_uart_termios_isr_com1;
+	  console_isr_data.name = BSP_UART_COM1_IRQ;
+	  console_isr_data.hdl  = BSP_uart_termios_isr_com1;
 	  
 	}
       else
 	{
-          assert(PC386ConsolePort == PC386_UART_COM2);
-	  console_isr_data.name = PC386_UART_COM2_IRQ;
-	  console_isr_data.hdl  = PC386_uart_termios_isr_com2;
+          assert(BSPConsolePort == BSP_UART_COM2);
+	  console_isr_data.name = BSP_UART_COM2_IRQ;
+	  console_isr_data.hdl  = BSP_uart_termios_isr_com2;
 	}
 
-      status = pc386_install_rtems_irq_handler(&console_isr_data);
+      status = BSP_install_rtems_irq_handler(&console_isr_data);
 
       if (!status){
 	  printk("Error installing serial console interrupt handler!\n");
@@ -214,7 +223,7 @@ console_initialize(rtems_device_major_number major,
 	  rtems_fatal_error_occurred (status);
 	}
 
-      if(PC386ConsolePort == PC386_UART_COM1)
+      if(BSPConsolePort == BSP_UART_COM1)
 	{
 	  printk("Initialized console on port COM1 9600-8-N-1\n\n");
 	}
@@ -229,7 +238,7 @@ console_initialize(rtems_device_major_number major,
        * using the video console for output while printf use serial line.
        * This may be convenient to debug the serial line driver itself...
        */
-      printk("Warning : This will be the last message displayed on console\n");
+      /*      printk("Warning : This will be the last message displayed on console\n");*/
       BSP_output_char = (BSP_output_char_function_type) BSP_output_char_via_serial;
       BSP_poll_char   = (BSP_polling_getchar_function_type) BSP_poll_char_via_serial;
 #endif  
@@ -242,7 +251,7 @@ static int console_open_count = 0;
 
 static int console_last_close(int major, int minor, void *arg)
 {
-  pc386_remove_rtems_irq_handler (&console_isr_data);
+  BSP_remove_rtems_irq_handler (&console_isr_data);
 
   return 0;
 }
@@ -261,22 +270,22 @@ console_open(rtems_device_major_number major,
     NULL,	              /* firstOpen */
     console_last_close,       /* lastClose */
     NULL,	              /* pollRead */
-    PC386_uart_termios_write_com1, /* write */
+    BSP_uart_termios_write_com1, /* write */
     conSetAttr,	              /* setAttributes */
     NULL,	              /* stopRemoteTx */
     NULL,	              /* startRemoteTx */
     1		              /* outputUsesInterrupts */
   };
 
-  if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
+  if(BSPConsolePort == BSP_CONSOLE_PORT_CONSOLE)
     {
       ++console_open_count;
       return RTEMS_SUCCESSFUL;
     }
 
-  if(PC386ConsolePort == PC386_UART_COM2)
+  if(BSPConsolePort == BSP_UART_COM2)
     {
-      cb.write = PC386_uart_termios_write_com2;
+      cb.write = BSP_uart_termios_write_com2;
     }
 
   status = rtems_termios_open (major, minor, arg, &cb);
@@ -290,11 +299,11 @@ console_open(rtems_device_major_number major,
   /*
    * Pass data area info down to driver
    */
-  PC386_uart_termios_set(PC386ConsolePort, 
+  BSP_uart_termios_set(BSPConsolePort, 
 			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
   
   /* Enable interrupts  on channel */
-  PC386_uart_intr_ctrl(PC386ConsolePort, PC386_UART_INTR_CTRL_TERMIOS);
+  BSP_uart_intr_ctrl(BSPConsolePort, BSP_UART_INTR_CTRL_TERMIOS);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -309,7 +318,7 @@ console_close(rtems_device_major_number major,
 {
   rtems_device_driver res = RTEMS_SUCCESSFUL;
 
-  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+  if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
     {
       res =  rtems_termios_close (arg);
     }
@@ -337,7 +346,7 @@ console_read(rtems_device_major_number major,
   char                  *buffer  = rw_args->buffer;
   int            count, maximum  = rw_args->count;
 
-  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+  if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
     {
       return rtems_termios_read (arg);
     }
@@ -382,7 +391,7 @@ console_write(rtems_device_major_number major,
   char                  *buffer  = rw_args->buffer;
   int            count, maximum  = rw_args->count;
 
-  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+  if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
     {
       return rtems_termios_write (arg);
     }
@@ -409,7 +418,7 @@ console_control(rtems_device_major_number major,
 		void                      * arg
 )
 { 
-  if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
+  if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
     {
       return rtems_termios_ioctl (arg);
     }
@@ -481,7 +490,7 @@ conSetAttr(int minor, const struct termios *t)
       return 0;
     }
 
-  PC386_uart_set_baud(PC386ConsolePort, baud);
+  BSP_uart_set_baud(BSPConsolePort, baud);
 
   return 0;
 }

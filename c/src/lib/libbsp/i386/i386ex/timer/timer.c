@@ -55,7 +55,7 @@ void TimerOn(const rtems_raw_irq_connect_data* used)
   /*
    * enable interrrupt at i8259 level
    */
-  pc386_irq_enable_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);
+  BSP_irq_enable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
 void TimerOff(const rtems_raw_irq_connect_data* used)
@@ -63,12 +63,12 @@ void TimerOff(const rtems_raw_irq_connect_data* used)
     /*
      * disable interrrupt at i8259 level
      */
-     pc386_irq_disable_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);
+     BSP_irq_disable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
      /* reset timer mode to standard (DOS) value */
 }
 
 static rtems_raw_irq_connect_data timer_raw_irq_data = {
-  PC_386_RT_TIMER3 + PC386_IRQ_VECTOR_BASE,
+  BSP_RT_TIMER3 + BSP_IRQ_VECTOR_BASE,
   timerisr,
   TimerOn,
   TimerOff,

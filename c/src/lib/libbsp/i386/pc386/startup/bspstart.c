@@ -146,6 +146,7 @@ void bsp_start( void )
   /*
    * Initialize printk channel
    */
+  
   _IBMPC_initVideo();
 
   rtemsFreeMemStart = (rtems_unsigned32)&_end + _stack_size;

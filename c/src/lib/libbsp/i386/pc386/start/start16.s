@@ -33,7 +33,7 @@
 .set HDROFF,        0x24	# offset into bin2boot header of start32 addr
 .set STACKOFF,      0x200-0x10  # offset to load into %esp, from start of image
 
-/* #define NEW_GAS*/
+ /* #define NEW_GAS */
 /*----------------------------------------------------------------------------+
 | CODE section
 +----------------------------------------------------------------------------*/

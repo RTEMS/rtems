@@ -37,27 +37,27 @@ extern "C" {
 
 typedef enum {
     /* Base vector for our IRQ handlers. */
-  PC386_IRQ_VECTOR_BASE		=	PC386_ASM_IRQ_VECTOR_BASE,       
-  PC_386_IRQ_LINES_NUMBER    	= 	16,
-  PC_386_LOWEST_OFFSET		= 	0,
-  PC_386_MAX_OFFSET		= 	PC_386_IRQ_LINES_NUMBER - 1,
+  BSP_IRQ_VECTOR_BASE		=	BSP_ASM_IRQ_VECTOR_BASE,       
+  BSP_IRQ_LINES_NUMBER    	= 	16,
+  BSP_LOWEST_OFFSET		= 	0,
+  BSP_MAX_OFFSET		= 	BSP_IRQ_LINES_NUMBER - 1,
     /*
-     * Interrupt offset in comparison to PC386_ASM_IRQ_VECTOR_BASE
-     * NB : 1) Interrupt vector number in IDT = offset + PC386_ASM_IRQ_VECTOR_BASE
+     * Interrupt offset in comparison to BSP_ASM_IRQ_VECTOR_BASE
+     * NB : 1) Interrupt vector number in IDT = offset + BSP_ASM_IRQ_VECTOR_BASE
      * 	    2) The same name should be defined on all architecture
      *	       so that handler connexion can be unchanged.
      */	       
-  PC_386_PERIODIC_TIMER      	= 	0,
+  BSP_PERIODIC_TIMER      	= 	0,
 
-  PC_386_KEYBOARD          	= 	1,
+  BSP_KEYBOARD          	= 	1,
 
-  PC386_UART_COM2_IRQ		=	3,
+  BSP_UART_COM2_IRQ		=	3,
 
-  PC386_UART_COM1_IRQ		=	4,
+  BSP_UART_COM1_IRQ		=	4,
 
-  PC_386_RT_TIMER1	      	= 	8,
+  BSP_RT_TIMER1	      	= 	8,
   
-  PC_386_RT_TIMER3		= 	10
+  BSP_RT_TIMER3		= 	10
 }rtems_irq_symbolic_name;
 
     
@@ -127,7 +127,7 @@ typedef struct {
    */
   rtems_irq_connect_data*	irqHdlTbl;
   /*
-   * actual value of PC386_IRQ_VECTOR_BASE...
+   * actual value of BSP_IRQ_VECTOR_BASE...
    */
   rtems_irq_symbolic_name	irqBase;
   /*
@@ -155,13 +155,13 @@ typedef struct {
  * this function, even if the device asserts the interrupt line it will
  * not be propagated further to the processor
  */
-int pc386_irq_disable_at_i8259s        (const rtems_irq_symbolic_name irqLine);
+int BSP_irq_disable_at_i8259s        (const rtems_irq_symbolic_name irqLine);
 /*
  * function to enable a particular irq at 8259 level. After calling
  * this function, if the device asserts the interrupt line it will
  * be propagated further to the processor
  */
-int pc386_irq_enable_at_i8259s		(const rtems_irq_symbolic_name irqLine);
+int BSP_irq_enable_at_i8259s		(const rtems_irq_symbolic_name irqLine);
 /*
  * function to acknoledge a particular irq at 8259 level. After calling
  * this function, if a device asserts an enabled interrupt line it will
@@ -169,11 +169,11 @@ int pc386_irq_enable_at_i8259s		(const rtems_irq_symbolic_name irqLine);
  * writting raw handlers as this is automagically done for rtems managed
  * handlers.
  */
-int pc386_irq_ack_at_i8259s           	(const rtems_irq_symbolic_name irqLine);
+int BSP_irq_ack_at_i8259s           	(const rtems_irq_symbolic_name irqLine);
 /*
  * function to check if a particular irq is enabled at 8259 level. After calling
  */
-int pc386_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine);
+int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine);
 /*
  * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
  */
@@ -211,18 +211,18 @@ int pc386_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine);
  *	6) restore initial execution flow
  * 
  */
-int pc386_install_rtems_irq_handler   	(const rtems_irq_connect_data*);
+int BSP_install_rtems_irq_handler   	(const rtems_irq_connect_data*);
 /*
  * function to get the current RTEMS irq handler for ptr->name. It enables to
  * define hanlder chain...
  */
-int pc386_get_current_rtems_irq_handler	(rtems_irq_connect_data* ptr);
+int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* ptr);
 /*
  * function to get disconnect the RTEMS irq handler for ptr->name.
  * This function checks that the value given is the current one for safety reason.
  * The user can use the previous function to get it.
  */
-int pc386_remove_rtems_irq_handler    	(const rtems_irq_connect_data*);
+int BSP_remove_rtems_irq_handler    	(const rtems_irq_connect_data*);
 
 /*
  * ------------------------ RTEMS Global Irq Handler Mngt Routines ----------------
@@ -233,10 +233,10 @@ int pc386_remove_rtems_irq_handler    	(const rtems_irq_connect_data*);
  * The result of calling this function will be the same as if each individual
  * handler (config->irqHdlTbl[i].hdl)  different from "config->defaultEntry.hdl"
  * has been individualy connected via
- *	pc386_install_rtems_irq_handler(&config->irqHdlTbl[i])
+ *	BSP_install_rtems_irq_handler(&config->irqHdlTbl[i])
  * And each handler currently equal to config->defaultEntry.hdl
  * has been previously disconnected via
- * 	 pc386_remove_rtems_irq_handler (&config->irqHdlTbl[i])
+ * 	 BSP_remove_rtems_irq_handler (&config->irqHdlTbl[i])
  *
  * This is to say that all information given will be used and not just
  * only the space.
@@ -247,11 +247,11 @@ int pc386_remove_rtems_irq_handler    	(const rtems_irq_connect_data*);
  *	     not be modified or declared on a stack.
  */
 
-int pc386_rtems_irq_mngt_set(rtems_irq_global_settings* config);
+int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config);
 /*
  * (Re) get info on current RTEMS interrupt management.
  */
-int pc386_rtems_irq_mngt_get(rtems_irq_global_settings**);
+int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
   
 #ifdef __cplusplus
 }

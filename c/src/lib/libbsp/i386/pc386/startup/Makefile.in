@@ -4,14 +4,14 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/irq
+VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/irq:@srcdir@/../../shared/comm:@srcdir@/../../shared/pci
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 PGM=${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bsplibc bsppost bspstart exit irq irq_init main sbrk 
+C_PIECES=bsplibc bsppost bspstart exit irq irq_init main sbrk i386-stub i386-stub-glue uart pcibios
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

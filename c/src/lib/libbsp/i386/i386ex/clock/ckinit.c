@@ -77,7 +77,7 @@ int ClockIsOn(const rtems_irq_connect_data* unused)
   return ((i8259s_cache & 0x1) == 0);
 }
 
-static rtems_irq_connect_data clockIrqData = {PC_386_PERIODIC_TIMER,
+static rtems_irq_connect_data clockIrqData = {BSP_PERIODIC_TIMER,
 					      Clock_isr,
 					      ClockOn,
 					      ClockOff,
@@ -114,7 +114,7 @@ rtems_device_driver Clock_initialize(
   outport_byte	( TMR0   , clock_lsb );       /* load LSB first */
   outport_byte  ( TMR0   , clock_msb );  /* then MSB       */
  
-  if (!pc386_install_rtems_irq_handler (&clockIrqData)) {
+  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
     printk("Unable to initialize system clock\n");
     rtems_fatal_error_occurred(1);
   }
@@ -151,7 +151,7 @@ rtems_device_driver Clock_control(
     }
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-      if (!pc386_install_rtems_irq_handler (&clockIrqData)) {
+      if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
 	printk("Error installing clock interrupt handler!\n");
 	rtems_fatal_error_occurred(1);
       }
@@ -168,5 +168,5 @@ done:
 void Clock_exit()
 {
   ClockOff(&clockIrqData);  
-  pc386_remove_rtems_irq_handler (&clockIrqData);
+  BSP_remove_rtems_irq_handler (&clockIrqData);
 }

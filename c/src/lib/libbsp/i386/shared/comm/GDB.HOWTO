@@ -1,0 +1,177 @@
+1. Add GDB initilization to your target's code:
+
+a) include file:
+
+#include <uart.h>
+
+b) declare this variable:   
+
+extern int BSPConsolePort;
+
+c) To start-up GDB, run this:
+
+ /* Init GDB glue  */
+
+  if(BSPConsolePort != BSP_UART_COM2)
+    {
+      /*
+       * If com2 is not used as console use it for
+       * debugging
+       */
+      i386_stub_glue_init(BSP_UART_COM2);
+    }
+  else
+    {
+      /* Otherwise use com1 */
+      i386_stub_glue_init(BSP_UART_COM1);
+    }
+
+  /* Init GDB stub itself */
+  set_debug_traps();
+
+  /*
+   * Init GDB break in capability,
+   * has to be called after
+   * set_debug_traps
+   */
+  i386_stub_glue_init_breakin();
+
+  /* Put breakpoint in */
+  breakpoint();
+
+d) This is all you need to do for the target.
+
+2. Edit cmds: specify path to current directory and device used for debugging
+   example of cmds is attached below.  Make sure your paths are correct.
+3. type 'make'
+4. Boot o-pc386/<test>.exe on target computer, where <test> has the code from step 1. ( I modified and recompiled base_sp as the <test> )
+5. run 'i396-rtems-gdb --nx --command=./cmds o-pc386/<test>.coff
+
+=========================== example cmds ==============================
+dir /home/cross-19980908/tools/rtems-980923
+dir /home/cross-19980908/tools/rtems-980923/aclocal
+dir /home/cross-19980908/tools/rtems-980923/c
+dir /home/cross-19980908/tools/rtems-980923/c/build-tools
+dir /home/cross-19980908/tools/rtems-980923/c/build-tools/os
+dir /home/cross-19980908/tools/rtems-980923/c/build-tools/os/msdos
+dir /home/cross-19980908/tools/rtems-980923/c/build-tools/scripts
+dir /home/cross-19980908/tools/rtems-980923/c/build-tools/src
+dir /home/cross-19980908/tools/rtems-980923/c/src
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/posix
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/posix/base
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/posix/headers
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/posix/inline
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/posix/macros
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/posix/optman
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/posix/src
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/posix/sys
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/sapi
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/sapi/headers
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/sapi/src
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/sapi/inline
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/sapi/macros
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/sapi/optman
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/rtems
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/rtems/headers
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/rtems/src
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/rtems/inline
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/rtems/macros
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/rtems/optman
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/a29k
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/hppa1.1
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/i386
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/i960
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/m68k
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/mips64orion
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/no_cpu
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/powerpc
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/sh
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/sparc
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/cpu/unix
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/headers
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/inline
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/macros
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/src
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/tools
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/tools/generic
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/tools/unix
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/score/tools/hppa1.1
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/wrapup
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/wrapup/posix
+dir /home/cross-19980908/tools/rtems-980923/c/src/exec/wrapup/rtems
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/include
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/include/motorola
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/include/rtems++
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/include/sys
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/include/zilog
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libc
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386/clock
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386/console
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386/include
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386/start
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386/startup
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386/timer
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386/tools
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/pc386/wrapup
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/shared/comm
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libbsp/i386/shared/pci
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/hppa1.1
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/hppa1.1/clock
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/hppa1.1/include
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/hppa1.1/milli
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/hppa1.1/runway
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/hppa1.1/semaphore
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/hppa1.1/timer
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/m68k
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/m68k/m68040
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/m68k/m68040/fpsp
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/mips64orion
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/mips64orion/clock
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/mips64orion/include
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/mips64orion/timer
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/powerpc
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/powerpc/ppc403
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/powerpc/ppc403/clock
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/powerpc/ppc403/console
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/powerpc/ppc403/include
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/powerpc/ppc403/timer
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/powerpc/ppc403/vectors
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sh
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sh/sh7032
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sh/sh7032/clock
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sh/sh7032/null
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sh/sh7032/console
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sh/sh7032/include
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sh/sh7032/timer
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sparc
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libcpu/sparc/reg_win
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libnetworking
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libmisc
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libmisc/assoc
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libmisc/cpuuse
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libmisc/error
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libmisc/monitor
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libmisc/rtmonuse
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libmisc/stackchk
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/libmisc/wrapup
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/librtems++
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/start
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/start/a29k
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/start/i960
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/start/m68k
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/start/mips64orion
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/start/sh
+dir /home/cross-19980908/tools/rtems-980923/c/src/lib/wrapup
+dir /home/cross-19980908/tools/rtems-980923/c/src/tests
+dir /home/cross-19980908/tools/rtems-980923/c/src/tests/samples
+dir /home/cross-19980908/tools/rtems-980923/c/src/tests/samples/base_sp
+set remotebaud 38400
+target remote /dev/ttyS1

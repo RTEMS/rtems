@@ -21,19 +21,19 @@
  * pointer to the mask representing the additionnal irq vectors
  * that must be disabled when a particular entry is activated.
  * They will be dynamically computed from teh prioruty table given
- * in pc386_rtems_irq_mngt_set();
+ * in BSP_rtems_irq_mngt_set();
  * CAUTION : this table is accessed directly by interrupt routine
  * 	     prologue.
  */
-rtems_i8259_masks 	irq_mask_or_tbl[PC_386_IRQ_LINES_NUMBER];
+rtems_i8259_masks 	irq_mask_or_tbl[BSP_IRQ_LINES_NUMBER];
 
 /*
- * Copy of data given via initial pc386_rtems_irq_mngt_set() for
+ * Copy of data given via initial BSP_rtems_irq_mngt_set() for
  * the sake of efficiency.
  * CAUTION : this table is accessed directly by interrupt routine
  * 	     prologue.
  */
-rtems_irq_hdl		current_irq[PC_386_IRQ_LINES_NUMBER];
+rtems_irq_hdl		current_irq[BSP_IRQ_LINES_NUMBER];
 /*
  * default handler connected on each irq after bsp initialization
  */
@@ -56,19 +56,19 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
 rtems_i8259_masks i8259s_cache;
 
 /*-------------------------------------------------------------------------+
-|         Function:  PC386_irq_disable_at_i8259s
+|         Function:  BSP_irq_disable_at_i8259s
 |      Description: Mask IRQ line in appropriate PIC chip.
 | Global Variables: i8259s_cache
 |        Arguments: vector_offset - number of IRQ line to mask.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-int pc386_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
+int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
 {
   unsigned short mask;
   unsigned int 	level;
 
-  if ( ((int)irqLine < PC_386_LOWEST_OFFSET) ||
-       ((int)irqLine > PC_386_MAX_OFFSET )
+  if ( ((int)irqLine < BSP_LOWEST_OFFSET) ||
+       ((int)irqLine > BSP_MAX_OFFSET )
        )
     return 1;
   
@@ -91,19 +91,19 @@ int pc386_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
 } 
 
 /*-------------------------------------------------------------------------+
-|         Function:  pc386_irq_enable_at_i8259s
+|         Function:  BSP_irq_enable_at_i8259s
 |      Description: Unmask IRQ line in appropriate PIC chip.
 | Global Variables: i8259s_cache
 |        Arguments: irqLine - number of IRQ line to mask.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-int pc386_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
+int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
 {
   unsigned short mask;
   unsigned int 	level;
 
-  if ( ((int)irqLine < PC_386_LOWEST_OFFSET) ||
-       ((int)irqLine > PC_386_MAX_OFFSET )
+  if ( ((int)irqLine < BSP_LOWEST_OFFSET) ||
+       ((int)irqLine > BSP_MAX_OFFSET )
        )
     return 1;
 
@@ -125,12 +125,12 @@ int pc386_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
   return 0;
 } /* mask_irq */
 
-int pc386_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
+int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
 {
   unsigned short mask;
 
-  if ( ((int)irqLine < PC_386_LOWEST_OFFSET) ||
-       ((int)irqLine > PC_386_MAX_OFFSET )
+  if ( ((int)irqLine < BSP_LOWEST_OFFSET) ||
+       ((int)irqLine > BSP_MAX_OFFSET )
      )
     return 1;
 
@@ -140,16 +140,16 @@ int pc386_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
   
 
 /*-------------------------------------------------------------------------+
-|         Function: pc386_irq_ack_at_i8259s
+|         Function: BSP_irq_ack_at_i8259s
 |      Description: Signal generic End Of Interrupt (EOI) to appropriate PIC.
 | Global Variables: None.
 |        Arguments: irqLine - number of IRQ line to acknowledge.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-int pc386_irq_ack_at_i8259s  	(const rtems_irq_symbolic_name irqLine)
+int BSP_irq_ack_at_i8259s  	(const rtems_irq_symbolic_name irqLine)
 {
-  if ( ((int)irqLine < PC_386_LOWEST_OFFSET) ||
-       ((int)irqLine > PC_386_MAX_OFFSET )
+  if ( ((int)irqLine < BSP_LOWEST_OFFSET) ||
+       ((int)irqLine > BSP_MAX_OFFSET )
        )
     return 1;
 
@@ -212,7 +212,7 @@ static void make_copy_of_handlers ()
 
 static int isValidInterrupt(int irq)
 {
-  if ( (irq < PC_386_LOWEST_OFFSET) || (irq > PC_386_MAX_OFFSET))
+  if ( (irq < BSP_LOWEST_OFFSET) || (irq > BSP_MAX_OFFSET))
     return 0;
   return 1;
 }
@@ -221,7 +221,7 @@ static int isValidInterrupt(int irq)
  * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
  */
 
-int pc386_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
+int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     unsigned int level;
   
@@ -251,7 +251,7 @@ int pc386_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt at PIC level
      */
-    pc386_irq_enable_at_i8259s (irq->name);
+    BSP_irq_enable_at_i8259s (irq->name);
     /*
      * Enable interrupt on device
      */
@@ -263,7 +263,7 @@ int pc386_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 }
 
 
-int pc386_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
+int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
      if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -272,7 +272,7 @@ int pc386_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
      return 1;
 }
 
-int pc386_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
+int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     unsigned int level;
   
@@ -294,7 +294,7 @@ int pc386_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * disable interrupt at PIC level
      */
-    pc386_irq_disable_at_i8259s (irq->name);
+    BSP_irq_disable_at_i8259s (irq->name);
 
     /*
      * Disable interrupt on device
@@ -317,7 +317,7 @@ int pc386_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
  * ------------------------ RTEMS Global Irq Handler Mngt Routines ----------------
  */
 
-int pc386_rtems_irq_mngt_set(rtems_irq_global_settings* config)
+int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 {
     int i;
     unsigned int level;
@@ -337,23 +337,23 @@ int pc386_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 
     for (i=0; i < internal_config->irqNb; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	pc386_irq_enable_at_i8259s (i);
+	BSP_irq_enable_at_i8259s (i);
 	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
       }
       else {
 	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	pc386_irq_disable_at_i8259s (i);
+	BSP_irq_disable_at_i8259s (i);
       }
     }
     /*
      * must disable slave pic anyway
      */
-    pc386_irq_enable_at_i8259s (2);
+    BSP_irq_enable_at_i8259s (2);
     _CPU_ISR_Enable(level);
     return 1;
 }
 
-int pc386_rtems_irq_mngt_get(rtems_irq_global_settings** config)
+int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 {
     *config = internal_config;
     return 0;

@@ -36,6 +36,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 ifeq ($(RTEMS_GAS_CODE16),yes)
 DEFINES  += -DNEXT_GAS
 endif
+
 CPPFLAGS +=
 CFLAGS   +=
 

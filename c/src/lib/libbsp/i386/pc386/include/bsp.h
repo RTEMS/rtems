@@ -160,10 +160,10 @@ void printk(char *fmt, ...);             /* from 'printk.c' */
 
 void rtemsReboot(void);                  /* from 'exit.c'   */
 
-/* Definitions for PC386ConsolePort */
-#define PC386_CONSOLE_PORT_CONSOLE (-1)
-#define PC386_CONSOLE_PORT_COM1    (PC386_UART_COM1)
-#define PC386_CONSOLE_PORT_COM2    (PC386_UART_COM2)
+/* Definitions for BSPConsolePort */
+#define BSP_CONSOLE_PORT_CONSOLE (-1)
+#define BSP_CONSOLE_PORT_COM1    (BSP_UART_COM1)
+#define BSP_CONSOLE_PORT_COM2    (BSP_UART_COM2)
 
 /* GDB stub stuff */
 void i386_stub_glue_init(int uart);

@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <bsp.h>
 #include <rtems/libio.h>
-#include <pc386uart.h>
+#include <uart.h>
 
 void bsp_cleanup(void)
 {

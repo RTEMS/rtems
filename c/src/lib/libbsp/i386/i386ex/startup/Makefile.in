@@ -4,17 +4,15 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@:@srcdir@/../../../shared
+VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/comm:@srcdir@/../../shared/irq:@srcdir@/../../shared/io
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 PGM=${ARCH}/startup.rel
 
-IMPORT_SRC=$(srcdir)/../../shared/irq/irq.c \
-   $(srcdir)/../../shared/irq/irq_init.c $(srcdir)/../../shared/irq/irq_asm.s
-
 # C source names, if any, go here -- minus the .c
-C_PIECES=bspclean bsplibc bsppost bspstart main sbrk irq irq_init
+C_PIECES=bspclean bsplibc bsppost bspstart main sbrk irq irq_init i386-stub-glue uart i386-stub
+
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
@@ -37,7 +35,8 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 #
 
 #DEFINES  += -DPRINTON
-DEFINES  += -I$(srcdir)
+
+DEFINES  += -I$(srcdir) -DBSP_IS_I386EX=1 
 CPPFLAGS +=
 CFLAGS   += -g 
 
@@ -56,7 +55,9 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 preinstall:
-	${CP} ${IMPORT_SRC} .
+	$(INSTALL) ${IMPORT_SRC} .
+
+#	${CP} ${IMPORT_SRC} .
 
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
