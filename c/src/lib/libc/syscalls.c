@@ -101,11 +101,11 @@ int unlink( const char *path )
 
 char *getcwd( char *_buf, size_t _size)
 {
-
 /*  assert( FALSE ); */
   errno = ENOSYS;
   return 0;
 }
+
 int fork() {
   puts( "fork -- not supported!!!" );
   assert( 0 );
