@@ -330,8 +330,10 @@ MC68681_STATIC int mc68681_close(
    *  Disable interrupts from this channel and then disable it totally.
    */
 
+#if 0
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_TX );
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_RX );
+#endif
 
   return(RTEMS_SUCCESSFUL);
 }
@@ -728,7 +730,7 @@ MC68681_STATIC unsigned int mc68681_build_imr(
 /*
  *  mc68681_enable_interrupts
  *
- *  This function initializes the hardware for this port to use interrupts.
+ *  This function enables specific interrupt sources on the DUART.
  */
 
 MC68681_STATIC void mc68681_enable_interrupts(
@@ -752,4 +754,3 @@ MC68681_STATIC void mc68681_enable_interrupts(
      mc68681_build_imr(minor, imr_mask)
   );
 }
-
