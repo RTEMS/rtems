@@ -1,3 +1,7 @@
+2005-01-28	Eric Norum <norume@aps.anl.gov>
+
+	* libnetworking/rtems/rtems_glue.c: Remove dead variable.
+
 2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* itron/include/itron.h,

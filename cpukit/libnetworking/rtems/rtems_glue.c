@@ -48,11 +48,6 @@ static int nmbuf	= (64 * 1024) / MSIZE;
        int nmbclusters	= (128 * 1024) / MCLBYTES;
 
 /*
- * Socket buffering parameters
- */
-unsigned long sb_efficiency = 8;
-
-/*
  * Network task synchronization
  */
 static rtems_id networkSemaphore;
