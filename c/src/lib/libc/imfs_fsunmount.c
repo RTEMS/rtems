@@ -58,6 +58,14 @@ int IMFS_fsunmount(
     */
     
    jnode = (IMFS_jnode_t *)temp_mt_entry->mt_fs_root.node_access;
+   loc = temp_mt_entry->mt_fs_root;
+
+   
+   /*
+    *  Set this to null to indicate that it is being unmounted.
+    */
+
+   temp_mt_entry->mt_fs_root.node_access = NULL;
 
    do {
      next = jnode->Parent;
