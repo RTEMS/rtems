@@ -1,5 +1,11 @@
 2002-08-21	Joel Sherrill <joel@OARcorp.com>
 
+	* wrapup/Makefile.am: PR217 required that the idle task be moved to
+	libcpu so it could be more acutely aware of the CPU model.  This
+	file was modified to pick up the idle task from there.
+
+2002-08-21	Joel Sherrill <joel@OARcorp.com>
+
 	* bsp_specs: Added support for -nostdlibs.
 
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
