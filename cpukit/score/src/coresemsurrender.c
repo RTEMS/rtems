@@ -62,7 +62,7 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
 
   } else {
     _ISR_Disable( level );
-      if ( the_semaphore->count <= the_semaphore->Attributes.maximum_count )
+      if ( the_semaphore->count < the_semaphore->Attributes.maximum_count )
         the_semaphore->count += 1;
       else
         status = CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED;
