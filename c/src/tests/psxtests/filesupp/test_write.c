@@ -40,7 +40,7 @@ void test_write(
   }
 
   status = lseek( fd, offset, SEEK_SET );
-  assert( !status );
+  assert( status != -1 );
 
   status = write( fd, buffer, length );
   if ( status == -1 ) {

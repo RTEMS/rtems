@@ -41,7 +41,7 @@ void test_extend(
   }
 
   status = lseek( fd, offset - 1, SEEK_SET );
-  assert( !status );
+  assert( status != -1 );
 
   status = write( fd, &c, 1 );
   if ( status == -1 ) {
