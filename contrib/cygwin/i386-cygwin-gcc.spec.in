@@ -2,8 +2,10 @@
 # spec file for building gcc for cygwin
 # 
 
+%define _prefix	/opt/cygwin
+
 %define gcc_version @GCC_VERS@
-%define gcc_rpmvers @GCC_RPMVERS@
+%define gcc_rpmvers %{expand: %%(echo %gcc_version | tr - _ )}
 
 Vendor:       	OAR Corporation
 Distribution: 	Linux
@@ -14,10 +16,13 @@ Requires:	i386-cygwin-libs
 Group:	      	cygwin
 Release:      	@GCC_RPMREL@
 License:      	gcc is GPL/LGPL
-Prefix:	      	/opt/cygwin
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de
 Version:        %gcc_rpmvers
+
+Provides:	i386-cygwin-c++
+Provides:	i386-cygwin-g++
+Provides:	i386-cygwin-gnat
 
 Source0: 	ftp://sourceware.cygnus.com/pub/cygwin/latest/gcc/gcc-%{gcc_version}-src.tar.bz2
 NoSource:	0
@@ -44,11 +49,14 @@ Cross gcc for target cygwin
     --with-gnu-as --with-gnu-ld --verbose \
     --disable-nls --disable-win32-registry \
     --with-newlib --enable-languages=c,c++,ada \
-    --prefix=%{prefix} 
+    --prefix=%{_prefix} 
 
   make all
+# Building with an external libc -> the nominal way to building gnat works!
   make -C gcc cross-gnattools
   make -C gcc ada.all.cross
+  make -C gcc gnatlib
+
 # We don't want info files
 #  make info
 
@@ -57,17 +65,17 @@ Cross gcc for target cygwin
   # Bug in gcc-2.95.1: It doesn't build this installation directory
   # If it doesn't find it, gcc doesn't install i386-cygwin/bin/gcc
   ../gcc-%{gcc_version}/mkinstalldirs \
-    $RPM_BUILD_ROOT%{prefix}/i386-cygwin/bin
+    $RPM_BUILD_ROOT%{_prefix}/i386-cygwin/bin
 
-  make prefix=$RPM_BUILD_ROOT%{prefix} install
+  make prefix=$RPM_BUILD_ROOT%{_prefix} install
   # cd back to build/
   cd ../..
 
   # We don't want info files
-  rm -rf $RPM_BUILD_ROOT%{prefix}/info
+  rm -rf $RPM_BUILD_ROOT%{_prefix}/info
 
   # libiberty comes from cygwin-libs
-  rm -f $RPM_BUILD_ROOT%{prefix}/i386-cygwin/lib/libiberty.a
+  rm -f $RPM_BUILD_ROOT%{_prefix}/i386-cygwin/lib/libiberty.a
 
 %clean
 # let rpm --clean remove BuildRoot iff using the default BuildRoot
@@ -75,27 +83,28 @@ Cross gcc for target cygwin
     rm -rf $RPM_BUILD_ROOT
 
 %files
+%defattr(-,root,root)
+%{_prefix}/bin/i386-cygwin-cpp
+%{_prefix}/bin/i386-cygwin-gcov
+%{_prefix}/bin/i386-cygwin-c++
+%{_prefix}/bin/i386-cygwin-c++filt
+%{_prefix}/bin/i386-cygwin-g++
+%{_prefix}/bin/i386-cygwin-gcc
+%{_prefix}/bin/i386-cygwin-gnat*
 
-%{prefix}/bin/i386-cygwin-cpp
-%{prefix}/bin/i386-cygwin-gcov
-%{prefix}/bin/i386-cygwin-c++
-%{prefix}/bin/i386-cygwin-c++filt
-%{prefix}/bin/i386-cygwin-g++
-%{prefix}/bin/i386-cygwin-gcc
+%dir %{_prefix}/man
+%dir %{_prefix}/man/man1
+%doc %{_prefix}/man/man1/i386-cygwin-gcc.1*
+%doc %{_prefix}/man/man1/i386-cygwin-g++.1*
 
-%dir %{prefix}/man
-%dir %{prefix}/man/man1
-%doc %{prefix}/man/man1/i386-cygwin-gcc.1*
-%doc %{prefix}/man/man1/i386-cygwin-g++.1*
+%dir %{_prefix}/include
+%{_prefix}/include
+%dir %{_prefix}/bin
 
-%dir %{prefix}/include
-%{prefix}/include
-%dir %{prefix}/bin
+# %dir %{_prefix}/lib/gcc-lib/i386-cygwin/%{gcc_version}/include
 
-# %dir %{prefix}/lib/gcc-lib/i386-cygwin/%{gcc_version}/include
-
-%{prefix}/i386-cygwin
-%dir %{prefix}/lib
-%dir %{prefix}/lib/gcc-lib
-%dir %{prefix}/lib/gcc-lib/i386-cygwin
-%{prefix}/lib/gcc-lib/i386-cygwin
+%{_prefix}/i386-cygwin
+%dir %{_prefix}/lib
+%dir %{_prefix}/lib/gcc-lib
+%dir %{_prefix}/lib/gcc-lib/i386-cygwin
+%{_prefix}/lib/gcc-lib/i386-cygwin

@@ -1,3 +1,10 @@
+2003-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* i386-cygwin-gcc.spec.in: Use %_prefix instead of %prefix.
+	Add gnatlib.
+	Add %defattr(-,root,root).
+	Provide virtual packages i386-cygwin-[c++|g++|gnat].
+
 2003-01-28	Joel Sherrill <joel@OARcorp.com>
 
 	* .cvsignore: Add entries to .cvsignore.
