@@ -1,3 +1,8 @@
+2002-04-08	Chris Johns <ccj@acm.org>
+
+	* Per PR142, make task switch extension its own list.
+	* src/pthread.c (_POSIX_Threads_User_extensions): Reflect above.
+
 2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/getegid.c: Remove <errno.h>.

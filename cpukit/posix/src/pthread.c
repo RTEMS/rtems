@@ -311,6 +311,7 @@ API_extensions_Control _POSIX_Threads_API_extensions = {
  
 User_extensions_Control _POSIX_Threads_User_extensions = {
   { NULL, NULL },
+  { { NULL, NULL }, NULL },
   { _POSIX_Threads_Create_extension,          /* create */
     NULL,                                     /* start */
     NULL,                                     /* restart */
