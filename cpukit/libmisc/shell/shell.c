@@ -651,7 +651,7 @@ rtems_status_code   shell_init (char * task_name,
  		     task_priority,
 		     task_stacksize?task_stacksize:RTEMS_MINIMUM_STACK_SIZE,
 		     RTEMS_DEFAULT_MODES,
-		     RTEMS_DEFAULT_ATTRIBUTES,
+		     RTEMS_LOCAL | RTEMS_FLOATING_POINT,
 		     &task_id);
  if (sc!=RTEMS_SUCCESSFUL) {
   rtems_error(sc,"creating task %s in shell_init()",task_name);	 
