@@ -1,3 +1,7 @@
+2002-09-07	Joel Sherrill <joel@OARcorp.com>
+
+	* samples/base_mp/config.h: New file previously missed.
+
 2002-09-03	Joel Sherrill <joel@OARcorp.com>
 
 	* base_mp now builds and can be considered a bit of an example for
