@@ -30,8 +30,6 @@ manager is:
 @item @code{fatal_error_occurred} - Invoke the fatal error handler
 @end itemize
 
-
-
 @ifinfo
 @node Fatal Error Manager Background, Fatal Error Manager Operations, Fatal Error Manager Introduction, Fatal Error Manager
 @end ifinfo
@@ -148,11 +146,21 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 void volatile rtems_fatal_error_occurred(
   rtems_unsigned32        the_error
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Fatal_Error_Occurred (
+   The_Error : in     RTEMS.Unsigned32
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES
 

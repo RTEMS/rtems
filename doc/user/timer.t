@@ -74,17 +74,26 @@ sometimes referred to as a "keep alive" or a "deadman" timer.
 @end ifinfo
 @subsection Timer Service Routines
 
-The timer service routine should adhere to C calling
+The timer service routine should adhere to @value{RTEMS-LANGUAGE} calling
 conventions and have a prototype similar to the following::
 
+@ifset is-C
 @example
 rtems_timer_service_routine user_routine(
   rtems_id   timer_id,
   void      *user_data
 );
 @end example
+@end ifset
 
-
+@ifset is-Ada
+@example
+procedure User_Routine(
+  Timer_ID  : in     RTEMS.ID;
+  User_Data : in     System.Address
+);
+@end example
+@end ifset
 
 Where the timer_id parameter is the RTEMS object ID
 of the timer which is being fired and user_data is a pointer to
@@ -216,12 +225,24 @@ and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_timer_create(
   rtems_name  name,
   rtems_id   *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Timer_Create (
+   Name   : in     RTEMS.Name;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - timer created successfully@*
@@ -249,12 +270,24 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_timer_ident(
   rtems_name  name,
   rtems_id   *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Timer_Ident (
+   Name   : in     RTEMS.Name;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - timer identified successfully@*
@@ -282,11 +315,22 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_timer_cancel(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Timer_Cancel (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - timer canceled successfully@*
@@ -310,11 +354,22 @@ This directive will not cause the running task to be preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_timer_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Timer_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - timer deleted successfully@*
@@ -342,6 +397,7 @@ which created the timer.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_timer_fire_after(
   rtems_id                           id,
@@ -350,6 +406,19 @@ rtems_status_code rtems_timer_fire_after(
   void                              *user_data
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Timer_Fire_After (
+   ID        : in     RTEMS.ID;
+   Ticks     : in     RTEMS.Interval;
+   Routine   : in     RTEMS.Timer_Service_Routine;
+   User_Data : in     RTEMS.Address;
+   Result    :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - timer initiated successfully@*
@@ -378,6 +447,7 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_timer_fire_when(
   rtems_id                           id,
@@ -386,6 +456,19 @@ rtems_status_code rtems_timer_fire_when(
   void                              *user_data
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Timer_Fire_When (
+   ID        : in     RTEMS.ID;
+   Wall_Time : in     RTEMS.Time_Of_Day;
+   Routine   : in     RTEMS.Timer_Service_Routine;
+   User_Data : in     RTEMS.Address;
+   Result    :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - timer initiated successfully@*
@@ -415,11 +498,22 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_timer_reset(
   rtems_id   id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Timer_Reset (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - timer reset successfully@*

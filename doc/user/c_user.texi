@@ -37,7 +37,11 @@ END-INFO-DIR-ENTRY
 
 @c variable substitution info:
 @c
-@c @set RTEMS-LANGUAGE C
+@set is-C
+@clear is-Ada
+@set RTEMS-LANGUAGE C
+@set RTEMS-STRUCTURE structure
+@set RTEMS-ROUTINE function
 @c the language is @value{RTEMS-LANGUAGE}
 @c NOTE:  don't use underscore in the name
 @c

@@ -936,12 +936,24 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_rate_monotonic_create(
   rtems_name  name,
   rtems_id   *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Rate_Monotonic_Create (
+   Name   : in     RTEMS.Name;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - rate monotonic period created successfully@*
@@ -970,12 +982,24 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_rate_monotonic_ident(
   rtems_name  name,
   rtems_id   *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Rate_Monotonic_Ident (
+   Name   : in     RTEMS.Name;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - period identified successfully@*
@@ -1003,11 +1027,22 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_rate_monotonic_cancel(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Rate_Monotonic_Cancel (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - period canceled successfully@*
@@ -1036,11 +1071,22 @@ been created by the calling task.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_rate_monotonic_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Rate_Monotonic_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - period deleted successfully@*
@@ -1068,12 +1114,24 @@ other than the task which created the period.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_rate_monotonic_period(
   rtems_id       id,
   rtems_interval length
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Rate_Monotonic_Period (
+   ID      : in     RTEMS.ID;
+   Length  : in     RTEMS.Interval;
+   Result  :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - period initiated successfully@*
@@ -1109,12 +1167,24 @@ This directive will not cause the running task to be preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
-rtems_status_code rtems_rate_monotonic_period(
+rtems_status_code rtems_rate_monotonic_get_status(
   rtems_id                            id,
   rtems_rate_monotonic_period_status *status
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Rate_Monotonic_Get_Status (
+   ID      : in     RTEMS.ID;
+   Status  :    out RTEMS.Rate_Monotonic_Period_Status;
+   Result  :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - period initiated successfully@*
@@ -1126,6 +1196,7 @@ rtems_status_code rtems_rate_monotonic_period(
 This directive returns status information associated with 
 the rate monotonic period id in the following data structure:
 
+@ifset is-C
 @example
 typedef struct @{
   rtems_rate_monotonic_period_states  state;
@@ -1133,6 +1204,18 @@ typedef struct @{
   unsigned32                          ticks_executed_since_last_period;
 @}  rtems_rate_monotonic_period_status;
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type Rate_Monotonic_Period_Status is
+   begin
+      State                            : RTEMS.Rate_Monotonic_Period_States;
+      Ticks_Since_Last_Period          : RTEMS.Unsigned32;
+      Ticks_Executed_Since_Last_Period : RTEMS.Unsigned32;
+   end record;
+@end example
+@end ifset
 
 If the period's state is RATE_MONOTONIC_INACTIVE, both
 ticks_since_last_period and ticks_executed_since_last_period 

@@ -254,11 +254,21 @@ commonly used to communicate startup information to the task.
 The simplest manner in which to define a task which accesses it
 argument is:
 
+@ifset is-C
 @example
 rtems_task user_task( 
   rtems_task_argument argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task (
+  Argument : in    RTEMS.Task_Argument_Ptr
+);
+@end example
+@end ifset
 
 Application tasks requiring more information may view this
 single argument as an index into an array of parameter blocks.
@@ -672,6 +682,8 @@ status codes.
 @subsection TASK_CREATE - Create a task
 
 @subheading CALLING SEQUENCE:
+
+@ifset is-C
 @example
 rtems_status_code rtems_task_create(
   rtems_name           name,
@@ -682,6 +694,21 @@ rtems_status_code rtems_task_create(
   rtems_id            *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Create (
+   Name             : in     RTEMS.Name;
+   Initial_Priority : in     RTEMS.Task_Priority;
+   Stack_Size       : in     RTEMS.Unsigned32;
+   Initial_Modes    : in     RTEMS.Mode;
+   Attribute_Set    : in     RTEMS.Attribute;
+   ID               :    out RTEMS.ID;
+   Result           :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task created successfully@*
@@ -763,6 +790,8 @@ by the maximum_global_objects field in the Configuration Table.
 @subsection TASK_IDENT - Get ID of a task
 
 @subheading CALLING SEQUENCE:
+
+@ifset is-C
 @example
 rtems_status_code rtems_task_ident(
   rtems_name        name,
@@ -770,6 +799,18 @@ rtems_status_code rtems_task_ident(
   rtems_id         *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Ident (
+   Name   : in     RTEMS.Name;
+   Node   : in     RTEMS.Node;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task identified successfully@*
@@ -807,6 +848,7 @@ accesses only the local copy of the global object table.
 @subsection TASK_START - Start a task
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_start(
   rtems_id            id,
@@ -814,6 +856,18 @@ rtems_status_code rtems_task_start(
   rtems_task_argument argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Start (
+   ID          : in     RTEMS.ID;
+   Entry_Point : in     System.Address;
+   Argument    : in     RTEMS.Task_Argument_PTR;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - ask started successfully@*
@@ -846,12 +900,24 @@ the task_start directive.
 @subsection TASK_RESTART - Restart a task
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_restart(
   rtems_id            id,
   rtems_task_argument argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Restart (
+   ID       : in     RTEMS.ID;
+   Argument : in     RTEMS.Task_Argument_PTR;
+   Result   :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task restarted successfully@*
@@ -895,11 +961,22 @@ created with the GLOBAL option.
 @subsection TASK_DELETE - Delete a task
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task restarted successfully@*
@@ -943,11 +1020,22 @@ created with the GLOBAL option.
 @subsection TASK_SUSPEND - Suspend a task
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_suspend(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Suspend (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task restarted successfully@*
@@ -979,11 +1067,22 @@ specified task.
 @subsection TASK_RESUME - Resume a task
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_resume(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Resume (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task restarted successfully@*
@@ -1013,6 +1112,7 @@ specified task.
 @subsection TASK_SET_PRIORITY - Set task priority
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_set_priority(
   rtems_id             id,
@@ -1020,6 +1120,18 @@ rtems_status_code rtems_task_set_priority(
   rtems_task_priority *old_priority
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Set_Priority (
+   ID           : in     RTEMS.ID;
+   New_Priority : in     RTEMS.Task_Priority;
+   Old_Priority :    out RTEMS.Task_Priority;
+   Result       :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task priority set successfully@*
@@ -1062,6 +1174,7 @@ binary semaphores.
 @subsection TASK_MODE - Change current task's mode
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_mode(
   rtems_mode  mode_set,
@@ -1069,6 +1182,18 @@ rtems_status_code rtems_task_mode(
   rtems_mode *previous_mode_set
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Delete (
+   Mode_Set          : in     RTEMS.Mode;
+   Mask              : in     RTEMS.Mode;
+   Previous_Mode_Set : in     RTEMS.Mode;
+   Result            :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task mode set successfully
@@ -1175,6 +1300,7 @@ mask constant is provided in the following table:
 @subsection TASK_GET_NOTE - Get task notepad entry
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_get_note(
   rtems_id          id,
@@ -1182,6 +1308,18 @@ rtems_status_code rtems_task_get_note(
   rtems_unsigned32 *note
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Get_Note (
+   ID      : in     RTEMS.ID;
+   Notepad : in     RTEMS.Notepad_Index;
+   Note    :    out RTEMS.Unsigned32;
+   Result  :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - note obtained successfully@*
@@ -1216,6 +1354,7 @@ the notepad entry of the specified task.
 @subsection TASK_SET_NOTE - Set task notepad entry
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_set_note(
   rtems_id         id,
@@ -1223,6 +1362,18 @@ rtems_status_code rtems_task_set_note(
   rtems_unsigned32 note
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Set_Note (
+   ID      : in     RTEMS.ID;
+   Notepad : in     RTEMS.Notepad_Index;
+   Note    : in     RTEMS.Unsigned32;
+   Result  :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - task's note set successfully@*
@@ -1258,11 +1409,22 @@ node to set the specified notepad entry.
 @subsection TASK_WAKE_AFTER - Wake up after interval
 
 @subheading CALLING SEQUENCE:
+@ifset is-C
 @example
 rtems_status_code rtems_task_wake_after(
   rtems_interval ticks
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Wake_After (
+   Ticks  : in     RTEMS.Interval;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - always successful
@@ -1292,11 +1454,22 @@ value which can be represented by the rtems_unsigned32 type.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_task_wake_when(
   rtems_time_of_day *time_buffer
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Wake_When (
+   Time_Buffer : in     RTEMS.Time_Of_Day;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - awakened at date/time successfully@*

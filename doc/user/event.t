@@ -247,12 +247,24 @@ and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_event_send (
   rtems_id         id,
   rtems_event_set  event_in
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Event_Send (
+   ID       : in     RTEMS.ID;
+   Event_In : in     RTEMS.Event_Set;
+   Result   :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - event set sent successfully@*
@@ -293,6 +305,7 @@ remote node to send the event set to the appropriate task.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_event_receive (
   rtems_event_set  event_in,
@@ -301,6 +314,19 @@ rtems_status_code rtems_event_receive (
   rtems_event_set *event_out
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Event_Receive (
+   Event_In   : in     RTEMS.Event_Set;
+   Option_Set : in     RTEMS.Option;
+   Ticks      : in     RTEMS.Interval;
+   Event_Out  :    out RTEMS.Event_Set;
+   Result     :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - event received successfully@*

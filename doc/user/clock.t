@@ -69,6 +69,7 @@ The clock facilities of the clock manager operate
 upon calendar time.  These directives utilize the following date
 and time structure for the native time and date format:
 
+@ifset is-C
 @example
 struct rtems_tod_control @{
   rtems_unsigned32 year;   /* greater than 1987 */
@@ -82,6 +83,22 @@ struct rtems_tod_control @{
 
 typedef struct rtems_tod_control rtems_time_of_day;
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type Time_Of_Day is
+   record
+      Year    : RTEMS.Unsigned32; -- year, A.D.
+      Month   : RTEMS.Unsigned32; -- month, 1 .. 12
+      Day     : RTEMS.Unsigned32; -- day, 1 .. 31
+      Hour    : RTEMS.Unsigned32; -- hour, 0 .. 23
+      Minute  : RTEMS.Unsigned32; -- minute, 0 .. 59
+      Second  : RTEMS.Unsigned32; -- second, 0 .. 59
+      Ticks   : RTEMS.Unsigned32; -- elapsed ticks between seconds
+   end record;
+@end example
+@end ifset
 
 
 The native date and time format is the only format
@@ -91,15 +108,26 @@ clock_get directive.  Some applications expect to operate on a
 directive can optionally return the current date and time in the
 following structure:
 
+@ifset is-C
 @example
 @group
 typedef struct @{
   rtems_unsigned32 seconds;       /* seconds since RTEMS epoch*/
   rtems_unsigned32 microseconds;  /* since last second        */
-@} rtems_clock_time_value_control;
+@} rtems_clock_time_value;
 @end group
 @end example
+@end ifset
 
+@ifset is-Ada
+@example
+type Clock_Time_Value is
+   record
+      Seconds      : Unsigned32;
+      Microseconds : Unsigned32;
+   end record;
+@end example
+@end ifset
 
 The seconds field in this structure is the number of
 seconds since the RTEMS epoch of January 1, 1988.
@@ -246,11 +274,22 @@ and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_clock_set(
   rtems_time_of_day *time_buffer
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Clock_Set (
+   Time_Buffer : in     RTEMS.Time_Of_Day;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - date and time set successfully@*
@@ -288,12 +327,24 @@ to application specific specifications.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_clock_get(
   rtems_clock_get_options  option,
   void                    *time_buffer
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Clock_Get (
+   Option      : in     RTEMS.Clock_Get_Options;
+   Time_Buffer : in     RTEMS.Address;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - current time obtained successfully@*
@@ -329,9 +380,19 @@ to application specific specifications.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_clock_tick( void );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Clock_Tick (
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - current time obtained successfully

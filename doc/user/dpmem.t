@@ -147,6 +147,7 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_port_create(
   rtems_name        name,
@@ -156,6 +157,20 @@ rtems_status_code rtems_port_create(
   rtems_id         *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Port_Create (
+   Name           : in     RTEMS.Name;
+   Internal_Start : in     RTEMS.Address;
+   External_Start : in     RTEMS.Address;
+   Length         : in     RTEMS.Unsigned32;
+   ID             :    out RTEMS.ID;
+   Result         :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - port created successfully@*
@@ -192,12 +207,24 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_port_ident(
   rtems_name  name,
   rtems_id   *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Port_Ident (
+   Name   : in     RTEMS.Name;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - port identified successfully@*
@@ -225,11 +252,22 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_port_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Port_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - port deleted successfully@*
@@ -258,6 +296,7 @@ delete the port.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_port_external_to_internal(
   rtems_id   id,
@@ -265,6 +304,18 @@ rtems_status_code rtems_port_external_to_internal(
   void     **internal
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Port_External_To_Internal (
+   ID       : in     RTEMS.ID;
+   External : in     RTEMS.Address;
+   Internal :    out RTEMS.Address;
+   Result   :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} -  always successful
@@ -292,6 +343,7 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_port_internal_to_external(
   rtems_id   id,
@@ -299,6 +351,18 @@ rtems_status_code rtems_port_internal_to_external(
   void     **external
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Port_Internal_To_External (
+   ID       : in     RTEMS.ID;
+   Internal : in     RTEMS.Address;
+   External :    out RTEMS.Address;
+   Result   :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} -  always successful
@@ -317,8 +381,4 @@ This directive is callable from an ISR.
 
 This directive will not cause the calling task to be
 preempted.
-
-
-
-
 

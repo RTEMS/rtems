@@ -83,7 +83,6 @@ called the object index, ranges in value from 1 to the maximum
 number of objects configured for this object type.
 
 @ifset use-ascii
-ASCII
 @example
 @group
      31        26 25              16 15                             0

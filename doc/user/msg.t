@@ -293,6 +293,7 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_message_queue_create(
   rtems_name        name,
@@ -302,6 +303,20 @@ rtems_status_code rtems_message_queue_create(
   rtems_id         *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Create (
+   Name             : in     RTEMS.Name;
+   Count            : in     RTEMS.Unsigned32;
+   Max_Message_Size : in     RTEMS.Unsigned32;
+   Attribute_Set    : in     RTEMS.Attribute;
+   ID               :    out RTEMS.ID;
+   Result           :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - queue created successfully@*
@@ -366,6 +381,7 @@ configuration table.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_message_queue_ident(
   rtems_name        name,
@@ -373,6 +389,18 @@ rtems_status_code rtems_message_queue_ident(
   rtems_id         *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Ident (
+   Name   : in     RTEMS.Name;
+   Node   : in     RTEMS.Unsigned32;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - queue identified successfully@*
@@ -413,11 +441,22 @@ table.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_message_queue_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - queue deleted successfully@*
@@ -466,6 +505,7 @@ reclaimed when the message queue is deleted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_message_queue_send(
   rtems_id           id,
@@ -473,6 +513,18 @@ rtems_status_code rtems_message_queue_send(
   rtems_unsigned32   size
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Send (
+   ID     : in     RTEMS.ID;
+   Buffer : in     RTEMS.Address;
+   Size   : in     RTEMS.Unsigned32;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - message sent successfully@*
@@ -514,6 +566,7 @@ proxy used to represent the task is reclaimed.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_message_queue_urgent(
   rtems_id           id,
@@ -521,6 +574,18 @@ rtems_status_code rtems_message_queue_urgent(
   rtems_unsigned32   size
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Urgent (
+   ID     : in     RTEMS.ID;
+   Buffer : in     RTEMS.Address;
+   Size   : in     RTEMS.Unsigned32;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - message sent successfully@*
@@ -563,6 +628,7 @@ proxy used to represent the task is reclaimed.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_message_queue_broadcast(
   rtems_id           id,
@@ -571,6 +637,19 @@ rtems_status_code rtems_message_queue_broadcast(
   rtems_unsigned32  *count
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Broadcast (
+   ID     : in     RTEMS.ID;
+   Buffer : in     RTEMS.Address;
+   Size   : in     RTEMS.Unsigned32;
+   Count  :    out RTEMS.Unsigned32;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - message broadcasted successfully@*
@@ -615,6 +694,7 @@ proxy used to represent the task is reclaimed.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_message_queue_receive(
   rtems_id           id,
@@ -624,6 +704,20 @@ rtems_status_code rtems_message_queue_receive(
   rtems_interval     timeout
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Receive (
+   ID         : in     RTEMS.ID;
+   Buffer     : in     RTEMS.Address;
+   Option_Set : in     RTEMS.Option;
+   Timeout    : in     RTEMS.Interval;
+   Size       :    out RTEMS.Unsigned32;
+   Result     :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - message received successfully@*
@@ -686,12 +780,24 @@ message is posted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_message_queue_flush(
   rtems_id          id,
   rtems_unsigned32 *count
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Flush (
+   ID     : in     RTEMS.ID;
+   Count  :    out RTEMS.Unsigned32;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - message received successfully@*

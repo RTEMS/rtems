@@ -194,6 +194,7 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_partition_create(
   rtems_name        name,
@@ -204,6 +205,21 @@ rtems_status_code rtems_partition_create(
   rtems_id         *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Partition_Create (
+   Name             : in     RTEMS.Name;
+   Starting_Address : in     RTEMS.Address;
+   Length           : in     RTEMS.Unsigned32;
+   Buffer_Size      : in     RTEMS.Unsigned32;
+   Attribute_Set    : in     RTEMS.Attribute;
+   ID               :    out RTEMS.ID;
+   Result           :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - partition created successfully@*
@@ -267,6 +283,7 @@ the Configuration Table.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_partition_ident(
   rtems_name        name,
@@ -274,6 +291,18 @@ rtems_status_code rtems_partition_ident(
   rtems_id         *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Partition_Ident (
+   Name   : in     RTEMS.Name;
+   Node   : in     RTEMS.Unsigned32;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - partition identified successfully@*
@@ -314,11 +343,22 @@ table.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_partition_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Partition_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - partition deleted successfully@*
@@ -357,12 +397,24 @@ the partition was created with the GLOBAL option.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_partition_get_buffer(
   rtems_id   id,
   void     **buffer
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Partition_Get_Buffer (
+   ID     : in     RTEMS.ID;
+   Buffer :    out RTEMS.Address;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - buffer obtained successfully@*
@@ -396,12 +448,24 @@ remote node to allocate a buffer from the specified partition.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_partition_return_buffer(
   rtems_id  id,
   void     *buffer
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Partition_Return_Buffer (
+   ID     : in     RTEMS.ID;
+   Buffer : in     RTEMS.Address;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - buffer returned successfully@*

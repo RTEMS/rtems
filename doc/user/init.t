@@ -247,12 +247,23 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
-rtems_interrupt_level rtems_initialize_executive_early(
+void rtems_initialize_executive(
   rtems_configuration_table *configuration_table,
   rtems_cpu_table           *cpu_table
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Initialize_Executive(
+  Configuration_Table : in     RTEMS.Configuration_Table_Pointer;
+  CPU_Table           : in     RTEMS.CPU_Table
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -296,12 +307,24 @@ initialize_executive_late with no intervening actions.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_interrupt_level rtems_initialize_executive_early(
   rtems_configuration_table *configuration_table,
   rtems_cpu_table           *cpu_table
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure rtems.initialize_executive_early(
+  Configuration_Table : in     RTEMS.Configuration_Table_Pointer;
+  CPU_Table           : in     RTEMS.Cpu_Table;
+  Level               :    out RTEMS.ISR_Level
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -336,11 +359,21 @@ initialize_executive_early and initialize_executive_late.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 void rtems_initialize_executive_late(
   rtems_interrupt_level  bsp_level
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Initialize_Executive_Late(
+  BSP_Level : in    RTEMS.ISR_Level
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -381,11 +414,21 @@ initialize_executive_early and initialize_executive_late.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 void rtems_shutdown_executive(
   rtems_unsigned32 result
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Shutdown_Executive(
+  result : in     RTEMS.Unsigned32
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 

@@ -35,7 +35,7 @@ configure the number of device drivers or which APIs may be used.
 THe address of the user-defined Configuration Table is passed as an
 argument to the initialize_executive directive, which MUST be
 the first RTEMS directive called.  The RTEMS Configuration Table
-is defined in the following C structure:
+is defined in the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
 @example
 @group
@@ -126,7 +126,7 @@ The RTEMS API Configuration Table is used to configure the
 managers which constitute the RTEMS API for a particular application.  
 For example, the user can configure the maximum number of tasks for 
 this application. The RTEMS API Configuration Table is defined in 
-the following C structure:
+the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
 @example
 @group
@@ -196,7 +196,7 @@ The POSIX API Configuration Table is used to configure the
 managers which constitute the POSIX API for a particular application.
 For example, the user can configure the maximum number of threads for
 this application. The POSIX API Configuration Table is defined in
-the following C structure:
+the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
  
 @example
 @group
@@ -351,7 +351,8 @@ configured in the system.  The table contains one entry for each
 device driver required by the application.  The number of
 entries is defined in the number_of_device_drivers entry in the
 Configuration Table.  The format of each entry in the Device
-Driver Table is defined in the following C structure:
+Driver Table is defined in 
+the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
 @example
 typedef struct @{
@@ -541,7 +542,8 @@ User_multiprocessing_table entry in the primary Configuration
 Table.  Further details regarding many of the entries in the
 Multiprocessor Configuration Table will be provided in the
 Multiprocessing chapter.  The format of the Multiprocessor
-Configuration Table is defined in the following C structure:
+Configuration Table is defined in 
+the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
 @example
 typedef struct @{
@@ -598,7 +600,8 @@ regarding its entries can be found in the next section.
 @end ifinfo
 @section Multiprocessor Communications Interface Table
 
-The format of this table is defined in the following C structure:
+The format of this table is defined in 
+the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
 @example
 typedef struct @{

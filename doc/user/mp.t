@@ -340,6 +340,7 @@ It is invoked immediately after all of the device drivers have
 been initialized.  This component should be adhere to the
 following prototype:
 
+@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_initialization(
@@ -347,6 +348,15 @@ rtems_mpci_entry user_mpci_initialization(
 );
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_MPCI_Initialization (
+   Configuration : in     RTEMS.Configuration_Table_Pointer
+);
+@end example
+@end ifset
 
 where configuration is the address of the user's
 Configuration Table.  Operations on global objects cannot be
@@ -371,6 +381,7 @@ layer is called when RTEMS must obtain a packet buffer to send
 or broadcast a message.  This component should be adhere to the
 following prototype:
 
+@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_get_packet(
@@ -378,6 +389,15 @@ rtems_mpci_entry user_mpci_get_packet(
 );
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_MPCI_Get_Packet (
+   Packet : access RTEMS.Packet_Prefix_Pointer
+);
+@end example
+@end ifset
 
 where packet is the address of a pointer to a packet.
 This routine always succeeds and, upon return, packet will
@@ -401,6 +421,7 @@ layer is called when RTEMS needs to release a packet to the free
 packet buffer pool.  This component should be adhere to the
 following prototype:
 
+@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_return_packet(
@@ -408,6 +429,15 @@ rtems_mpci_entry user_mpci_return_packet(
 );
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_MPCI_Return_Packet (
+   Packet : in     RTEMS.Packet_Prefix_Pointer
+);
+@end example
+@end ifset
 
 where packet is the address of a packet.  If the
 packet cannot be successfully returned, the fatal error manager
@@ -423,6 +453,7 @@ MPCI layer is called when RTEMS needs to obtain a packet which
 has previously arrived.  This component should be adhere to the
 following prototype:
 
+@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_receive_packet(
@@ -430,6 +461,15 @@ rtems_mpci_entry user_mpci_receive_packet(
 );
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_MPCI_Receive_Packet (
+   Packet : access RTEMS.Packet_Prefix_Pointer
+);
+@end example
+@end ifset
 
 where packet is a pointer to the address of a packet
 to place the message from another node.  If a message is
@@ -447,6 +487,7 @@ layer is called when RTEMS needs to send a packet containing a
 message to another node.  This component should be adhere to the
 following prototype:
 
+@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_send_packet(
@@ -455,6 +496,16 @@ rtems_mpci_entry user_mpci_send_packet(
 );
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_MPCI_Send_Packet (
+   Node   : in     RTEMS.Unsigned32;
+   Packet : access RTEMS.Packet_Prefix_Pointer
+);
+@end example
+@end ifset
 
 where node is the node number of the destination and packet is the 
 address of a packet which containing a message.  If the packet cannot 
@@ -603,9 +654,17 @@ status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 void rtems_multiprocessing_announce( void );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Multiprocessing_Announce;
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 

@@ -294,6 +294,7 @@ and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_region_create(
   rtems_name        name,
@@ -304,6 +305,21 @@ rtems_status_code rtems_region_create(
   rtems_id         *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Region_Create (
+   Name             : in     RTEMS.Name;
+   Starting_Address : in     RTEMS.Address;
+   Length           : in     RTEMS.Unsigned32;
+   Page_Size        : in     RTEMS.Unsigned32;
+   Attribute_Set    : in     RTEMS.Attribute;
+   ID               :    out RTEMS.ID;
+   Result           :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -359,12 +375,24 @@ by RTEMS:
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_region_ident(
   rtems_name  name,
   rtems_id   *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Region_Ident (
+   Name   : in     RTEMS.Name;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -392,11 +420,22 @@ This directive will not cause the running task to be preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_region_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Region_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -427,6 +466,7 @@ delete the region.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_region_extend(
   rtems_id            id,
@@ -434,6 +474,18 @@ rtems_status_code rtems_region_extend(
   rtems_unsigned32    length
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Region_Extend (
+   ID               : in     RTEMS.ID;
+   Starting_Address : in     RTEMS.Address;
+   Length           : in     RTEMS.Unsigned32;
+   Result           :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -462,6 +514,7 @@ extend the region.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_region_get_segment(
   rtems_id            id,
@@ -471,6 +524,20 @@ rtems_status_code rtems_region_get_segment(
   void              **segment
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Region_Get_Segment (
+   ID         : in     RTEMS.ID;
+   Size       : in     RTEMS.Unsigned32;
+   Option_Set : in     RTEMS.Option;
+   Timeout    : in     RTEMS.Interval;
+   Segment    :    out RTEMS.Address;
+   Result     :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -531,12 +598,24 @@ are defined by RTEMS:
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_region_return_segment(
   rtems_id  id,
   void     *segment
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Region_Return_Segment (
+   ID      : in     RTEMS.ID;
+   Segment : in     RTEMS.Address;
+   Result  :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 
@@ -575,6 +654,7 @@ is less than or equal to the size of the segment returned.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_region_get_segment_size(
   rtems_id            id,
@@ -582,6 +662,18 @@ rtems_status_code rtems_region_get_segment_size(
   rtems_unsigned32   *size
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Region_Get_Segment_Size (
+   ID         : in     RTEMS.ID;
+   Segment    : in     RTEMS.Address;
+   Size       :    out RTEMS.Unsigned32;
+   Result     :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 

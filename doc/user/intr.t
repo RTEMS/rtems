@@ -56,7 +56,8 @@ The interrupt manager allows the application to
 connect a function to a hardware interrupt vector.  When an
 interrupt occurs, the processor will automatically vector to
 RTEMS.  RTEMS saves and restores all registers which are not
-preserved by the normal C calling convention for the target
+preserved by the normal @value{RTEMS-LANGUAGE} calling convention
+for the target
 processor and invokes the user's ISR.  The user's ISR is
 responsible for processing the interrupt, clearing the interrupt
 if necessary, and device specific manipulation.
@@ -66,11 +67,21 @@ an interrupt vector.  The interrupt service routine is assumed
 to abide by these conventions and have a prototype similar to
 the following:
 
+@ifset is-C
 @example
 rtems_isr user_isr(
   rtems_vector_number vector
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_ISR (
+  vector : in     RTEMS.Vector_Number
+);
+@end example
+@end ifset
 
 The vector number argument is provided by RTEMS to
 allow the application to identify the interrupt source.  This
@@ -99,7 +110,7 @@ directives which have been invoked by an ISR.
 Applications must adhere to the following rule if
 proper task scheduling and dispatching is to be performed:
 
-@itemize @code{ }
+@itemize @b{ }
 
 @item @b{The interrupt manager must be used for all ISRs which
 may be interrupted by the highest priority ISR which invokes an
@@ -119,8 +130,6 @@ during the execution of another ISR.  RTEMS supports efficient
 interrupt nesting by allowing the nested ISRs to terminate
 without performing any dispatch processing.  Only when the
 outermost ISR terminates will the postponed dispatching occur.
-
-
 
 @ifinfo
 @node RTEMS Interrupt Levels, Disabling of Interrupts by RTEMS, Processing an Interrupt, Interrupt Manager Background
@@ -272,6 +281,7 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_interrupt_catch(
   rtems_isr_entry      new_isr_handler,
@@ -279,6 +289,18 @@ rtems_status_code rtems_interrupt_catch(
   rtems_isr_entry     *old_isr_handler
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Interrupt_Catch (
+   New_ISR_handler : in     RTEMS.Address;
+   Vector          : in     RTEMS.Vector_Number;
+   Old_ISR_Handler :    out RTEMS.Address;
+   Result          :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - ISR established successfully@*

@@ -426,6 +426,7 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
@@ -435,6 +436,19 @@ rtems_status_code rtems_semaphore_create(
   rtems_id            *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Semaphore_Create (
+   Name          : in     RTEMS.Name;
+   Count         : in     RTEMS.Unsigned32;
+   Attribute_Set : in     RTEMS.Attribute;
+   ID            :    out RTEMS.ID;
+   Result        :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - semaphore created successfully@*
@@ -506,6 +520,7 @@ the Configuration Table.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_semaphore_ident(
   rtems_name        name,
@@ -513,6 +528,18 @@ rtems_status_code rtems_semaphore_ident(
   rtems_id         *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Semaphore_Ident (
+   Name   : in     RTEMS.Name;
+   Node   : in     RTEMS.Unsigned32;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - semaphore identified successfully@*
@@ -553,11 +580,22 @@ table.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_semaphore_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Semaphore_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} -  semaphore deleted successfully@*
@@ -603,6 +641,7 @@ reclaimed when the semaphore is deleted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_semaphore_obtain(
   rtems_id         id,
@@ -610,6 +649,18 @@ rtems_status_code rtems_semaphore_obtain(
   rtems_interval   timeout
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Semaphore_Obtain (
+   ID         : in     RTEMS.ID;
+   Option_Set : in     RTEMS.Option;
+   Timeout    : in     RTEMS.Interval;
+   Result     :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - semaphore obtained successfully@*
@@ -679,11 +730,22 @@ node to represent the task until the semaphore is released.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_semaphore_release(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Semaphore_Release (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - semaphore released successfully@*

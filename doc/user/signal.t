@@ -231,13 +231,23 @@ software interrupts parallels that of hardware interrupts.  As a
 result, the differences between the formats of ASRs and ISRs is
 limited to the meaning of the single argument passed to an ASR.
 The ASR should have the following calling sequence and adhere to
-C calling conventions:
+@value{RTEMS-LANGUAGE} calling conventions:
 
+@ifset is-C
 @example
 rtems_asr user_routine(
   rtems_signal_set signals
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Routine (
+  Signals : in     RTEMS.Signal_Set
+);
+@end example
+@end ifset
 
 When the ASR returns to RTEMS the mode and execution
 path of the interrupted task (or ASR) is restored to the context
@@ -267,12 +277,24 @@ and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry  asr_handler,
   rtems_mode mode
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Signal_Catch (
+   ASR_Handler : in     RTEMS.ASR_Handler;
+   Mode_Set    : in     RTEMS.Mode;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - always successful
@@ -314,12 +336,24 @@ The following task mode constants are defined by RTEMS:
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_signal_send(
   rtems_id         id,
   rtems_signal_set signal_set
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Signal_Send (
+   ID         : in     RTEMS.ID;
+   Signal_Set : in     RTEMS.Signal_Set;
+   Result     :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - signal sent successfully@*

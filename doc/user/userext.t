@@ -87,21 +87,40 @@ performance monitoring or debugger support.  RTEMS is informed of
 the entry points which constitute an extension set via the
 following structure:
 
+@ifset is-C
 @example
 @group
 typedef struct @{
-  User_extensions_thread_create_extension thread_create;
-  User_extensions_thread_start_extension thread_start;
-  User_extensions_thread_restart_extension thread_restart;
-  User_extensions_thread_delete_extension thread_delete;
-  User_extensions_thread_switch_extension thread_switch;
+  User_extensions_thread_create_extension      thread_create;
+  User_extensions_thread_start_extension       thread_start;
+  User_extensions_thread_restart_extension     thread_restart;
+  User_extensions_thread_delete_extension      thread_delete;
+  User_extensions_thread_switch_extension      thread_switch;
   User_extensions_thread_post_switch_extension thread_post_switch;
-  User_extensions_thread_begin_extension thread_begin;
-  User_extensions_thread_exitted_extension thread_exitted;
-  User_extensions_fatal_error_extension fatal;
+  User_extensions_thread_begin_extension       thread_begin;
+  User_extensions_thread_exitted_extension     thread_exitted;
+  User_extensions_fatal_error_extension        fatal;
 @} User_extensions_Table;
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type Extensions_Table is
+   record
+      Task_Create      : RTEMS.Task_Create_Extension;
+      Task_Start       : RTEMS.Task_Start_Extension;
+      Task_Restart     : RTEMS.Task_Restart_Extension;
+      Task_Delete      : RTEMS.Task_Delete_Extension;
+      Task_Switch      : RTEMS.Task_Switch_Extension;
+      Task_Post_Switch : RTEMS.Task_Post_Switch_Extension;
+      Task_Begin       : RTEMS.Task_Begin_Extension;
+      Task_Exitted     : RTEMS.Task_Exitted_Extension;
+      Fatal            : RTEMS.Fatal_Error_Extension;
+   end record;
+@end example
+@end ifset
 
 
 RTEMS allows the user to have multiple extension sets
@@ -179,7 +198,8 @@ directives to obtain and release the extension buffers.
 The sections that follow will contain a description
 of each extension.  Each section will contain a prototype of a
 function with the appropriate calling sequence for the
-corresponding extension.  The names given for the C function and
+corresponding extension.  The names given for the @value{RTEMS-LANGUAGE} 
+@value{RTEMS-ROUTINE} and
 its arguments are all defined by the user.  The names used in
 the examples were arbitrarily chosen and impose no naming
 conventions on the user.
@@ -196,12 +216,23 @@ then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
 following:
 
+@ifset is-C
 @example
 rtems_extension user_task_create(
   rtems_tcb *current_task,
   rtems_tcb *new_task
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task_Create (
+   Current_Task : in     RTEMS.TCB_Pointer;
+   New_Task     : in     RTEMS.TCB_Pointer
+);
+@end example
+@end ifset
 
 where current_task can be used to access the TCB for
 the currently executing task, and new_task can be used to access
@@ -222,12 +253,23 @@ then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
 following:
 
+@ifset is-C
 @example
 rtems_extension user_task_start(
   rtems_tcb *current_task,
   rtems_tcb *started_task
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task_Start (
+   Current_Task : in     RTEMS.TCB_Pointer;
+   Started_Task : in     RTEMS.TCB_Pointer
+);
+@end example
+@end ifset
 
 where current_task can be used to access the TCB for
 the currently executing task, and started_task can be used to
@@ -247,12 +289,23 @@ static or dynamic extension set and a task is being restarted,
 then the extension should have a prototype similar to the
 following:
 
+@ifset is-C
 @example
 rtems_extension user_task_restart(
   rtems_tcb *current_task,
   rtems_tcb *restarted_task
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task_Restart (
+   Current_Task   : in     RTEMS.TCB_Pointer;
+   Restarted_Task : in     RTEMS.TCB_Pointer
+);
+@end example
+@end ifset
 
 where current_task can be used to access the TCB for
 the currently executing task, and restarted_task can be used to
@@ -273,12 +326,23 @@ then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
 following:
 
+@ifset is-C
 @example
 rtems_extension user_task_delete(
   rtems_tcb *current_task,
   rtems_tcb *deleted_task
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task_Delete (
+   Current_Task : in     RTEMS.TCB_Pointer;
+   Deleted_Task : in     RTEMS.TCB_Pointer
+);
+@end example
+@end ifset
 
 where current_task can be used to access the TCB for
 the currently executing task, and deleted_task can be used to
@@ -301,12 +365,23 @@ then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
 following:
 
+@ifset is-C
 @example
 rtems_extension user_task_switch(
   rtems_tcb *current_task,
   rtems_tcb *heir_task
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task_Switch (
+   Current_Task : in     RTEMS.TCB_Pointer;
+   Heir_Task    : in     RTEMS.TCB_Pointer
+);
+@end example
+@end ifset
 
 where current_task can be used to access the TCB for
 the task that is being swapped out, and heir_task can be used to
@@ -328,11 +403,21 @@ completed, then the extension routine will automatically be
 invoked by RTEMS.  The extension should have a prototype similar
 to the following:
 
+@ifset is-C
 @example
 rtems_extension user_task_post_switch(
   rtems_tcb *current_task
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task_Post_Switch (
+   Current_Task : in     RTEMS.TCB_Pointer
+);
+@end example
+@end ifset
 
 where current_task can be used to access the TCB for
 the task that is being swapped out, and heir_task can be used to
@@ -351,11 +436,21 @@ begins execution.  It is invoked immediately before the body of
 the starting procedure and executes in the context in the task.
 This user extension have a prototype similar to the following:
 
+@ifset is-C
 @example
 rtems_extension user_task_begin(
   rtems_tcb *current_task
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task_Begin (
+   Current_Task : in     RTEMS.TCB_Pointer
+);
+@end example
+@end ifset
 
 where current_task can be used to access the TCB for
 the currently executing task which has begun.  The distinction
@@ -375,11 +470,21 @@ exits the body of the starting procedure by either an implicit
 or explicit return statement.  This user extension have a
 prototype similar to the following:
 
+@ifset is-C
 @example
 rtems_extension user_task_exitted(
   rtems_tcb *current_task
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Task_Exitted (
+   Current_Task : in     RTEMS.TCB_Pointer
+);
+@end example
+@end ifset
 
 where current_task can be used to access the TCB for
 the currently executing task which has just exitted.
@@ -406,13 +511,23 @@ any static or dynamic extension set and the fatal_error_occurred
 directive has been invoked, then this extension will be called.
 This extension should have a prototype similar to the following:
 
+@ifset is-C
 @example
-rtems_extension user_fatal_error_extension(
+rtems_extension user_fatal_error(
   Internal_errors_Source  the_source,
   rtems_boolean           is_internal,
   rtems_unsigned32        the_error
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure User_Fatal_Error (
+   Error : in     RTEMS.Unsigned32
+);
+@end example
+@end ifset
 
 where the_error is the error code passed to the
 fatal_error_occurred directive. This extension is invoked from
@@ -549,6 +664,7 @@ constants, usage, and status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_extension_create(
   rtems_name              name,
@@ -556,6 +672,18 @@ rtems_status_code rtems_extension_create(
   rtems_id               *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Extension_Create (
+   Name   : in     RTEMS.Name;
+   Table  : in     RTEMS.Extensions_Table_Pointer;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} -  extension set created successfully@*
@@ -584,12 +712,24 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_extension_ident(
   rtems_name  name,
   rtems_id   *id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Extension_Ident (
+   Name   : in     RTEMS.Name;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} -  extension set identified successfully@*
@@ -618,11 +758,22 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_extension_delete(
   rtems_id id
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Extension_Delete (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} -  extension set deleted successfully@*

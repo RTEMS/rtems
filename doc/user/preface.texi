@@ -146,12 +146,24 @@ interrupts, time, and multiple processors in addition to those
 features typical of generic operating systems.  The code is
 Government owned, so no licensing fees are necessary.  RTEMS has
 been implemented in both the Ada and C programming languages.
-It has been ported to the Motorola MC68xxx family, the Intel
-i80386 and above, and the Intel i80960 family.  Support for
-other processor families, including RISC, CISC, and DSP, is
-planned.  Since almost all of RTEMS is written in a high level
-language, ports to additional processor families require minimal
-effort.
+It has been ported to the following processor families:
+
+@itemize @bullet
+@item Intel i80386 and above 
+@item Intel i80960
+@item Motorola MC68xxx 
+@item Motorola MC683xx
+@item MIPS
+@item PowerPC
+@item SPARC
+@item Hewlett Packard PA-RISC
+@item AMD A29K
+@item UNIX
+@end itemize
+
+Support for other processor families, including RISC, CISC, and DSP, is
+planned.  Since almost all of RTEMS is written in a high level language,
+ports to additional processor families require minimal effort.
 
 RTEMS multiprocessor support is capable of handling
 either homogeneous or heterogeneous systems.  The kernel
@@ -169,5 +181,6 @@ Once approved, RTEMS will be made compliant.
 This document is a detailed users guide for a
 functionally compliant real-time multiprocessor executive.  It
 describes the user interface and run-time behavior of Release
-@value{RTEMS-RELEASE} of the C implementation of RTEMS.
+@value{RTEMS-RELEASE} of the @value{RTEMS-LANGUAGE} interface
+to RTEMS.
 

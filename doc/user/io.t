@@ -149,6 +149,7 @@ then passed to the correct device driver entry point.  RTEMS
 will invoke each device driver entry point assuming it is
 compatible with the following prototype:
 
+@ifset is-C
 @example
 rtems_device_driver io_entry(
   rtems_device_major_number  major,
@@ -156,8 +157,17 @@ rtems_device_driver io_entry(
   void                      *argument_block
 );
 @end example
+@end ifset
 
-
+@ifset is-Ada
+@example
+function IO_Entry (
+  Major          : in     RTEMS.Device_Major_Number;
+  Minor          : in     RTEMS.Device_Major_Number;
+  Argument_Block : in     RTEMS.Address
+) return RTEMS.Status_Code;
+@end example
+@end ifset
 
 The format and contents of the parameter block are
 device driver and entry point dependent.
@@ -263,6 +273,7 @@ status codes.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
@@ -270,6 +281,19 @@ rtems_status_code rtems_io_initialize(
   void                      *argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure IO_Initialize (
+   Major        : in     RTEMS.Device_Major_Number;
+   Minor        : in     RTEMS.Device_Minor_Number;
+   Argument     : in     RTEMS.Address;
+   Return_Value :    out RTEMS.Unsigned32;
+   Result       :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - successfully initialized@*
@@ -302,6 +326,7 @@ initialized.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_io_register_name(
   char                      *name,
@@ -309,6 +334,18 @@ rtems_status_code rtems_io_register_name(
   rtems_device_minor_number  minor
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure IO_Register_Name (
+   Name   : in     String;
+   Major  : in     RTEMS.Device_Major_Number;
+   Minor  : in     RTEMS.Device_Minor_Number;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - successfully initialized@*
@@ -332,12 +369,23 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
-rtems_status_code rtems_io_lookup(
+rtems_status_code rtems_io_lookup_name(
   const char                *name,
   rtems_driver_name_t      **device_info
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure IO_Lookup_Name (
+   Name         : in     String;
+   Device_Info  :    out RTEMS.Driver_Name_t;
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - successfully initialized@*
@@ -361,6 +409,7 @@ preempted.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
@@ -368,6 +417,19 @@ rtems_status_code rtems_io_open(
   void                      *argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure IO_Open (
+   Major        : in     RTEMS.Device_Major_Number;
+   Minor        : in     RTEMS.Device_Minor_Number;
+   Argument     : in     RTEMS.Address;
+   Return_Value :    out RTEMS.Unsigned32;
+   Result       :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - successfully initialized@*
@@ -394,6 +456,7 @@ invoked.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
@@ -401,6 +464,19 @@ rtems_status_code rtems_io_close(
   void                      *argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure IO_Close (
+   Major        : in     RTEMS.Device_Major_Number;
+   Minor        : in     RTEMS.Device_Minor_Number;
+   Argument     : in     RTEMS.Address;
+   Return_Value :    out RTEMS.Unsigned32;
+   Result       :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - successfully initialized@*
@@ -427,6 +503,7 @@ invoked.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
@@ -434,6 +511,19 @@ rtems_status_code rtems_io_read(
   void                      *argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure IO_Read (
+   Major        : in     RTEMS.Device_Major_Number;
+   Minor        : in     RTEMS.Device_Minor_Number;
+   Argument     : in     RTEMS.Address;
+   Return_Value :    out RTEMS.Unsigned32;
+   Result       :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - successfully initialized@*
@@ -461,6 +551,7 @@ invoked.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
@@ -468,6 +559,19 @@ rtems_status_code rtems_io_write(
   void                      *argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure IO_Write (
+   Major        : in     RTEMS.Device_Major_Number;
+   Minor        : in     RTEMS.Device_Minor_Number;
+   Argument     : in     RTEMS.Address;
+   Return_Value :    out RTEMS.Unsigned32;
+   Result       :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - successfully initialized@*
@@ -495,6 +599,7 @@ invoked.
 
 @subheading CALLING SEQUENCE:
 
+@ifset is-C
 @example
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,
@@ -502,6 +607,19 @@ rtems_status_code rtems_io_control(
   void                      *argument
 );
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure IO_Control (
+   Major        : in     RTEMS.Device_Major_Number;
+   Minor        : in     RTEMS.Device_Minor_Number;
+   Argument     : in     RTEMS.Address;
+   Return_Value :    out RTEMS.Unsigned32;
+   Result       :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - successfully initialized@*
