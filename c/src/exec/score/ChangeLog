@@ -1,5 +1,11 @@
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* inline/rtems/score/object.inl, macros/rtems/score/object.inl: Add
+	add casts to Objects_Id in _Objects_Build_ids to avoid implicit
+	typecasts from enum to int16 on bit16 targets (here: h8300).
+
+2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* src/Makefile.am: Add multilib support.
 
 2001-11-28	Joel Sherrill <joel@OARcorp.com>,

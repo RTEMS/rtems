@@ -23,9 +23,9 @@
  */
 
 #define _Objects_Build_id( _the_class, _node, _index ) \
-  ( ((_the_class) << OBJECTS_CLASS_START_BIT) | \
-    ((_node) << OBJECTS_NODE_START_BIT)       | \
-    ((_index) << OBJECTS_INDEX_START_BIT) )
+  ( (( (Objects_Id) the_class ) << OBJECTS_CLASS_START_BIT) | \
+    (( (Objects_Id) node ) << OBJECTS_NODE_START_BIT)       | \
+    (( (Objects_Id) index ) << OBJECTS_INDEX_START_BIT) )
 
 /*PAGE
  *

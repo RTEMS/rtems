@@ -32,9 +32,9 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
   unsigned32       index
 )
 {
-  return (the_class << OBJECTS_CLASS_START_BIT) |
-         (node << OBJECTS_NODE_START_BIT)       |
-         (index << OBJECTS_INDEX_START_BIT);
+  return (( (Objects_Id) the_class ) << OBJECTS_CLASS_START_BIT) |
+         (( (Objects_Id) node ) << OBJECTS_NODE_START_BIT)       |
+         (( (Objects_Id) index ) << OBJECTS_INDEX_START_BIT);
 }
 
 /*PAGE
