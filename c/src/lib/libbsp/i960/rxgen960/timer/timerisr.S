@@ -19,7 +19,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 
 .set PORT_A,     0xc00000a8                 # port A
 .set PORT_B,     0xc00000a4                 # port B
