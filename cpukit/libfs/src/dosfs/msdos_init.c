@@ -21,7 +21,11 @@
 rtems_filesystem_operations_table  msdos_ops = {
     msdos_eval_path,
     msdos_eval4make,
-    NULL,                 /* msdos_link */
+#if 0
+     NULL,                 /* msdos_link */
+#else
+    msdos_file_link,      /* msdos_link (pseudo-functionality) */
+#endif
     msdos_file_rmnod,    
     msdos_node_type,
     msdos_mknod,

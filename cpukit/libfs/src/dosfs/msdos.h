@@ -77,6 +77,7 @@ extern rtems_filesystem_file_handlers_r  msdos_file_handlers;
 /* Node types */
 #define MSDOS_DIRECTORY     RTEMS_FILESYSTEM_DIRECTORY
 #define MSDOS_REGULAR_FILE  RTEMS_FILESYSTEM_MEMORY_FILE
+#define MSDOS_HARD_LINK     RTEMS_FILESYSTEM_HARD_LINK /* pseudo type */
    
 typedef rtems_filesystem_node_types_t msdos_node_type_t;
 
@@ -301,6 +302,11 @@ int
 msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc /* IN */);
  
 int 
+msdos_file_link(rtems_filesystem_location_info_t *to_loc,
+		rtems_filesystem_location_info_t *pa_loc,
+		const char                       *token);
+
+int 
 msdos_dir_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
@@ -341,7 +347,8 @@ int
 msdos_creat_node(rtems_filesystem_location_info_t  *parent_loc,
                  msdos_node_type_t                  type,
                  char                              *name,
-                 mode_t                             mode);
+                 mode_t                             mode,
+                 const fat_file_fd_t               *link_fd);
 
 /* Misc prototypes */
 msdos_token_types_t msdos_get_token(const char *path,

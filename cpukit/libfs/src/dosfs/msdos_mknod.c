@@ -83,7 +83,7 @@ msdos_mknod(
         set_errno_and_return_minus_one(EIO);
 
     /* Create an MSDOS node */
-    rc = msdos_creat_node(pathloc, type, new_name, mode);
+    rc = msdos_creat_node(pathloc, type, new_name, mode, NULL);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;
