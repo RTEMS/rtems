@@ -13,7 +13,10 @@ include ../Make.config
 
 REPLACE=../tools/word-replace
 
-all:  
+all: html info ps
+
+dirs:
+	$(make-dirs)
 
 COMMON_FILES=../common/cpright.texi ../common/setup.texi \
   ../common/timing.texi
@@ -22,31 +25,20 @@ FILES= $(PROJECT).texi \
   bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
   intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi wksheets.texi 
 
-all:
-
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: c_$(PROJECT)
+info: dirs c_$(PROJECT)
 	cp c_$(PROJECT) c_$(PROJECT)-* $(INFO_INSTALL)
 
 c_$(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
-vinfo: info
-	$(INFO) -f c_$(PROJECT)
-
 dvi: $(PROJECT).dvi
-ps: $(PROJECT).ps
+ps: dirs $(PROJECT).ps
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
-
-dv: dvi
-	$(XDVI) $(PROJECT).dvi
-
-view: ps
-	$(GHOSTVIEW) $(PROJECT).ps
 
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
@@ -78,7 +70,7 @@ wksheets.texi: wksheets.t PSIM_TIMES
 	${REPLACE} -p PSIM_TIMES wksheets.t
 	mv wksheets.t.fixed wksheets.texi
 
-html: $(FILES)
+html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
  	    $(PROJECT).texi

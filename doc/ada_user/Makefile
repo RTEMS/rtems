@@ -11,7 +11,7 @@ DISTRIBUTION_LEVEL=internal
 
 include ../Make.config
 
-all:  
+all: html info ps
 
 COMMON_FILES=../common/cpright.texi ../user/bsp.texi ../user/clock.texi \
   ../user/concepts.texi ../user/conf.texi ../user/dirstat.texi \
@@ -24,37 +24,28 @@ COMMON_FILES=../common/cpright.texi ../user/bsp.texi ../user/clock.texi \
   ../user/timer.texi ../user/userext.texi 
 FILES= ada_user.texi example.texi $(COMMON_FILES)
 
-all:
+dirs:
+	$(make-dirs)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: ada_user
+info: dirs ada_user
 	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
 
 ada_user: $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
-vinfo: info
-	$(INFO) -f $(PROJECT)
-
 dvi: $(PROJECT).dvi
-ps: $(PROJECT).ps
+ps: dirs $(PROJECT).ps
 	
-$(PROJECT).ps: $(PROJECT).dvi
+$(PROJECT).ps: dirs $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
-
-dv: dvi
-	$(XDVI) $(PROJECT).dvi
-
-view: ps
-	$(GHOSTVIEW) $(PROJECT).ps
 
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-html:
-	-mkdir -p $(WWW_INSTALL)/ada_user
+html: dirs $(FILES)
 	cp ../user/rtemsarc.gif ../user/rtemspie.gif ../user/states.gif \
            $(WWW_INSTALL)/ada_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \

@@ -11,7 +11,10 @@ DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 
-all:  
+all: html info ps
+
+dirs:
+	$(make-dirs)
 
 COMMON_FILES=../common/cpright.texi
 FILES= bsp.texi c_user.texi clock.texi concepts.texi conf.texi \
@@ -26,36 +29,25 @@ GENERATED_FILES=overview.texi concepts.texi init.texi task.texi \
     dpmem.texi io.texi fatal.texi schedule.texi rtmon.texi \
     bsp.texi userext.texi conf.texi mp.texi 
 
-all:
-
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: c_user
+info: dirs c_user
 	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
 
 c_user: $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
-vinfo: info
-	$(INFO) -f $(PROJECT)
-
 dvi: $(PROJECT).dvi
-ps: $(PROJECT).ps
+ps: dirs $(PROJECT).ps
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
 
-dv: dvi
-	$(XDVI) $(PROJECT).dvi
-
-view: ps
-	$(GHOSTVIEW) $(PROJECT).ps
-
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-html: $(FILES)
+html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_user
 	cp rtemsarc.gif rtemspie.gif states.gif $(WWW_INSTALL)/c_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \

@@ -13,13 +13,6 @@ all: env info html ps
 env: tools dirs headers
 
 dirs:
-	-mkdir $(DOC_INSTALL_BASE)
-	-mkdir $(WWW_INSTALL)
-	-mkdir $(WWW_INSTALL)/partners
-	-mkdir $(WWW_INSTALL)/support
-	-mkdir $(WWW_INSTALL)/internal
-	-mkdir $(INFO_INSTALL)
-	-mkdir $(PS_INSTALL)
 
 headers:
 	sed -e 's/RTEMS_VERSION/$(RTEMS_VERSION)/' \
@@ -36,7 +29,7 @@ html: env
 	cp common/*.gif common/*.jpg $(WWW_INSTALL)
 	./do_docs $(BASEDIR) html
 
-ps: env
+ps: dirs env
 	./do_docs $(BASEDIR) ps
 
 clean:

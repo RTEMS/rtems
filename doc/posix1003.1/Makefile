@@ -11,7 +11,10 @@ DISTRIBUTION_LEVEL=partners
 
 include ../Make.config
 
-all:  
+all: html info ps
+
+dirs:
+	$(make-dirs)
 
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
@@ -23,32 +26,21 @@ GENERATED_FILES=ch01.texi ch02.texi ch03.texi ch04.texi ch05.texi \
 FILES= $(PROJECT).texi \
   preface.texi $(GENERATED_FILES)
 
-all:
-
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: $(PROJECT)
+info: dirs $(PROJECT)
 	#cp $(wildcard $(PROJECT) $(PROJECT)-*) $(INFO_INSTALL)
 	cp $(PROJECT) $(INFO_INSTALL)
 
 $(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
-vinfo: info
-	$(INFO) -f $(PROJECT)
-
 dvi: $(PROJECT).dvi
-ps: $(PROJECT).ps
+ps: dirs $(PROJECT).ps
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
-
-dv: dvi
-	$(XDVI) $(PROJECT).dvi
-
-view: ps
-	$(GHOSTVIEW) $(PROJECT).ps
 
 # run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
@@ -155,7 +147,7 @@ ch19.texi: ch19.t
 	    -u "Top" \
 	    -n "Command and Variable Index" ${*}.t
 	
-html: $(FILES)
+html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
