@@ -1,6 +1,6 @@
 /*
  *  This file contains the hardware specific portions of the TTY driver
- *  for the serial ports on the erc32.
+ *  for the simulated serial port on the PowerPC simulator.
  *
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
