@@ -1,3 +1,7 @@
+2001-11-13	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Made to compile again.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
