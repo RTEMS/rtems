@@ -51,13 +51,8 @@ target_alias=$1
 specfile=${dst}/$target_alias-gdb-${gdb_version}.spec
 
 case ${target_alias} in
-  h8300*)
-    extra_configure_arguments="--enable-sim"
-    ;;
-  i960*)
-    extra_configure_arguments="--enable-sim"
-    ;;
-  mips*)
+  arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | i960* | m32r* | \
+  mcore* | mips* | mn10200* | mn10300* | sh* | sparc*| v850* | w65* | z8k*)
     extra_configure_arguments="--enable-sim"
     ;;
   powerpc*)
@@ -65,9 +60,6 @@ case ${target_alias} in
     #  Enabling this causes the program image to be huge and causes
     #  some gcc/hosts combinations to run out of memory.
     #          --enable-sim-inline
-    ;;
-  sparc*)
-    extra_configure_arguments="--enable-sim"
     ;;
   *)
     ;;
@@ -84,10 +76,8 @@ sed -e "s%@Release@%${gdb_rpm_release}%g" \
 > ${specfile}
 
 case ${target_alias} in
-  mipstx39*)
-     echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
-     ;;
-  powerpc*)
+  arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | i960* | m32r* | \
+  mcore* | mips* | mn10200* | mn10300* | powerpc* | sh* | v850* | w65* | z8k*)
      echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
      ;;
   sparc*)

@@ -1,3 +1,8 @@
+2001-08-10	Joel Sherrill <joel@OARcorp.com>
+
+	* mkgdbspec.in: Make list of simulators very complete.
+	* setup.def: Update versions.
+
 2001-07-03	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, binutils.add, gccnewlib.add: Updated to build
