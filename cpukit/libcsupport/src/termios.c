@@ -213,7 +213,6 @@ rtems_termios_open (
 		}
 		tty->forw = ttyHead;
 		ttyHead = tty;
-		tty->back = NULL;
 		if (ttyTail == NULL)
 			ttyTail = tty;
 
@@ -247,9 +246,6 @@ rtems_termios_open (
 			&tty->rawOutBufSemaphore);
 		if (sc != RTEMS_SUCCESSFUL)
 			rtems_fatal_error_occurred (sc);
-		tty->rawOutBufHead = 0;
-		tty->rawOutBufTail = 0;
-		tty->refcount = 0;
 		tty->rawOutBufState = rob_idle;
 
 		/*
@@ -265,15 +261,7 @@ rtems_termios_open (
 				&tty->rawInBufSemaphore);
 			if (sc != RTEMS_SUCCESSFUL)
 				rtems_fatal_error_occurred (sc);
-			tty->rawInBufHead = 0;
-			tty->rawInBufTail = 0;
 		}
-
-		/*
-		 * Initialize variables
-		 */
-		tty->column = 0;
-		tty->cindex = tty->ccount = 0;
 
 		/*
 		 * Set default parameters
@@ -481,9 +469,9 @@ osend (const char *buf, int len, struct rtems_termios_tty *tty)
 		tty->rawOutBuf[tty->rawOutBufHead] = *buf++;
 		tty->rawOutBufHead = newHead;
 		if (tty->rawOutBufState == rob_idle) {
-			tty->rawOutBufState = rob_busy;
 			(*tty->device.write)(tty->minor,
 				(char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
+			tty->rawOutBufState = rob_busy;
 		}
 		rtems_interrupt_enable (level);
 		len--;
@@ -935,12 +923,12 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 		/*
 		 * Buffer not empty, start tranmitter
 		 */
-		tty->rawOutBufState = rob_busy;
 		if (newTail > tty->rawOutBufHead)
 			nToSend = RAW_OUTPUT_BUFFER_SIZE - newTail;
 		else
 			nToSend = tty->rawOutBufHead - newTail;
 		(*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[newTail], nToSend);
+		tty->rawOutBufState = rob_busy;
 	}
 	tty->rawOutBufTail = newTail;
 }
