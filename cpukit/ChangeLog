@@ -1,5 +1,11 @@
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/rtems-debug.m4: Remove.
+	* aclocal/enable-rtems-debug.m4: New (Split out from rtems-debug.m4).
+	* aclocal/check-rtems-debug.m4: New (Split out from rtems-debug.m4).
+
+2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/local.am: Remove "debug".
 
 2003-08-11	Joel Sherrill <joel@OARcorp.com>
