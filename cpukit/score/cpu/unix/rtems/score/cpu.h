@@ -276,13 +276,12 @@ extern "C" {
  *         To benefit from using this, the data must be heavily
  *         used so it will stay in the cache and used frequently enough
  *         in the executive to justify turning this on.
+ *
+ *  This is really not critical on the POSIX simulator ports as 
+ *  performance is not the goal here.
  */
 
-#ifdef __GNUC__
-#define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (32)))
-#else
 #define CPU_STRUCTURE_ALIGNMENT
-#endif
 
 /*
  *  Define what is required to specify how the network to host conversion
