@@ -79,10 +79,10 @@
 #define UTI596_DUMP_PORT_FUNCTION     	3
 
 /* Types of waiting for commands */
-#define UTI596_NO_WAIT  								0
-#define UTI596_WAIT_FOR_CU_ACCEPT  			1
+#define UTI596_NO_WAIT  				0
+#define UTI596_WAIT_FOR_CU_ACCEPT  		1
 #define UTI596_WAIT_FOR_INITIALIZATION  2
-#define UTI596_WAIT_FOR_STAT_C 					3
+#define UTI596_WAIT_FOR_STAT_C 			3
 
 /* Device dependent data structure */
 static uti596_softc_ uti596_softc;
@@ -106,7 +106,7 @@ char uti596initSetup[] = {
   0x60,   /* Byte 5: interframe spacing */
   0x00,   /* Byte 6: slot time LSB */
   0xf2,   /* Byte 7: slot time and retries */
-  0x0E,   /* Byte 8: not promisc, disable bcast, tx no crs, crc inserted 32bit, 802.3 framing */
+  0x0C,   /* Byte 8: not promisc, enable bcast, tx no crs, crc inserted 32bit, 802.3 framing */
   0x08,   /* Byte 9: collision detect */
   0x40,   /* Byte 10: minimum frame length */
   0xfb,   /* Byte 11: tried C8 same as byte 1 in bits 6-7, else ignored*/
@@ -1689,12 +1689,15 @@ int uti596_attach(
   else
     ifp->if_mtu = ETHERMTU;
 
-  /* For now the ethernet address must be specified in the ifconfig structure,
-   * else FIXME so it can be read in from BBRAM at $FFFC1F2C (6 bytes)
+  /* Ethernet address can be specified in the ifconfig structure or
+   * it can be read in from BBRAM at $FFFC1F2C (6 bytes)
    * mvme167 manual p. 1-47
    */
   if ( pConfig->hardware_address) {
     memcpy (sc->arpcom.ac_enaddr, pConfig->hardware_address, ETHER_ADDR_LEN);
+  }
+  else {
+    memcpy (sc->arpcom.ac_enaddr, (char *)0xFFFC1F2C, ETHER_ADDR_LEN);
   }
 
   /* Assign requested receive buffer descriptor count */
