@@ -370,6 +370,12 @@ int _POSIX_Condition_variables_Wait_support(
   Objects_Locations                           location;
   int                                         status;
  
+  if ( !_POSIX_Mutex_Get( mutex, &location ) ) {
+     return EINVAL;
+  }
+
+  _Thread_Unnest_dispatch();
+
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
@@ -388,10 +394,12 @@ int _POSIX_Condition_variables_Wait_support(
       the_cond->Mutex = *mutex;
  
       status = pthread_mutex_unlock( mutex );
+/* XXX ignore this for now 
       if ( status ) {
         _Thread_Enable_dispatch();
         return EINVAL;
       }
+*/
  
       _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
       _Thread_Executing->Wait.return_code = 0;
