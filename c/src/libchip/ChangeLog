@@ -1,3 +1,12 @@
+2003-07-18      Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 429/bsps
+	PR 432/bsps
+	* network/elnk.c: Due to a bug in the driver, if multiple packets
+	are queued onto an elnk board, the ISR will deadlock the device with
+	a tx complete interrupt.  Lighter tx loads are not affected as they
+	end up submitting single packets to the device.
+
 2003-07-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove (Merged into ../configure.ac).
