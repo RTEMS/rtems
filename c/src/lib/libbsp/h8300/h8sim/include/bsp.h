@@ -1,7 +1,7 @@
 /*  bsp.h
  *
  *  This include file contains some definitions specific to the
- *  i960 simulator in gdb.
+ *  h8 simulator in gdb.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __CVME961_h
-#define __CVME961_h
+#ifndef __H8SIM_h
+#define __H8SIM_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -65,10 +65,6 @@ extern rtems_configuration_table BSP_Configuration;
 /* functions */
 
 void bsp_cleanup( void );
-
-/*
-i960_isr_entry set_vector( rtems_isr_entry, unsigned int, unsigned int );
-*/
 
 #ifdef __cplusplus
 }
