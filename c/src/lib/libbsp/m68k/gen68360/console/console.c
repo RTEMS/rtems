@@ -1,10 +1,10 @@
 /*
  *  SMC1 raw console serial I/O.
  *
- *  This driver is an example of `POLLING' or `INTERRUPT' input.
+ *  This driver is an example of `POLLING' or `INTERRUPT' I/O.
  *
- *  To compile with interrupt-driven input, define M360_SMC1_INTERRUPT
- *  in the make customization file for this bsp (gen68360.cfg).
+ *  To run with interrupt-driven I/O, ensure m360_smc1_interrupt
+ *  is set before calling the initialization routine.
  *
  *  Author:
  *    W. Eric Norum
@@ -30,12 +30,16 @@
 #include <rtems/libio.h>
 #include "m68360.h"
 
-#if (defined (M360_SMC1_INTERRUPT))
-# define RXBUFSIZE	16
+/*
+ * Interrupt-driven input buffer
+ */
+#define RXBUFSIZE	16
+
+/*
+ * Interrupt-driven callback
+ */
+static int m360_smc1_interrupt = 1;
 static void *smc1ttyp;
-#else
-# define RXBUFSIZE	1
-#endif
 
 /*
  * I/O buffers and pointers to buffer descriptors
@@ -46,7 +50,6 @@ static volatile m360BufferDescriptor_t *smcRxBd, *smcTxBd;
 /*
  * Device-specific routines
  */
-#if (defined (M360_SMC1_INTERRUPT))
 static rtems_isr
 smc1InterruptHandler (rtems_vector_number v)
 {
@@ -73,8 +76,6 @@ smc1InterruptHandler (rtems_vector_number v)
 	}
 	m360.cisr = 1UL << 4;	/* Clear SMC1 interrupt-in-service bit */
 }
-
-#endif
 
 static void
 smc1Initialize (void)
@@ -110,7 +111,10 @@ smc1Initialize (void)
 	m360.smc1p.tbase = (char *)smcTxBd - (char *)&m360;
 	m360.smc1p.rfcr = M360_RFCR_MOT | M360_RFCR_DMA_SPACE;
 	m360.smc1p.tfcr = M360_TFCR_MOT | M360_TFCR_DMA_SPACE;
-	m360.smc1p.mrblr = RXBUFSIZE;
+	if (m360_smc1_interrupt)
+		m360.smc1p.mrblr = RXBUFSIZE;
+	else
+		m360.smc1p.mrblr = 1;
 	 
 	/*
 	 * Set up SMC1 parameter RAM UART-specific parameters
@@ -149,8 +153,7 @@ smc1Initialize (void)
 	 */
 	m360.smc1.smcmr |= M360_SMCMR_TEN | M360_SMCMR_REN;
 
-#if (defined (M360_SMC1_INTERRUPT))
-	{
+	if (m360_smc1_interrupt) {
 	rtems_isr_entry old_handler;
 	rtems_status_code sc;
 
@@ -160,7 +163,6 @@ smc1Initialize (void)
 	m360.smc1.smcm = 3;	/* Enable SMC1 TX and RX interrupts */
 	m360.cimr |= 1UL << 4;	/* Enable SMC1 interrupts */
 	}
-#endif
 }
 
 static int
@@ -183,13 +185,17 @@ smc1Read (int minor)
  *	Transmit all characters.
  */
 static int
-smc1Write (int minor, const char *buf, int len)
+smc1InterruptWrite (int minor, const char *buf, int len)
 {
-#if (defined (M360_SMC1_INTERRUPT))
 	smcTxBd->buffer = (char *)buf;
 	smcTxBd->length = len;
 	smcTxBd->status = M360_BD_READY | M360_BD_WRAP | M360_BD_INTERRUPT;
-#else
+	return 0;
+}
+
+static int
+smc1PollWrite (int minor, const char *buf, int len)
+{
 	while (len--) {
 		static char txBuf;
 		while (smcTxBd->status & M360_BD_READY)
@@ -199,7 +205,6 @@ smc1Write (int minor, const char *buf, int len)
 		smcTxBd->length = 1;
 		smcTxBd->status = M360_BD_READY | M360_BD_WRAP;
 	}
-#endif
 	return 0;
 }
 
@@ -260,24 +265,25 @@ rtems_device_driver console_open(
 {
 	rtems_status_code sc;
 
-#if (defined (M360_SMC1_INTERRUPT))
-	rtems_libio_open_close_args_t *args = arg;
+	if (m360_smc1_interrupt) {
+		rtems_libio_open_close_args_t *args = arg;
 
-	sc = rtems_termios_open (major, minor, arg,
-			NULL,
-			NULL,
-			NULL,
-			smc1Write,
-			1);
-	smc1ttyp = args->iop->data1;
-#else
-	sc = rtems_termios_open (major, minor, arg,
-			NULL,
-			NULL,
-			smc1Read,
-			smc1Write,
-			0);
-#endif
+		sc = rtems_termios_open (major, minor, arg,
+					NULL,
+					NULL,
+					NULL,
+					smc1InterruptWrite,
+					1);
+		smc1ttyp = args->iop->data1;
+	}
+	else {
+		sc = rtems_termios_open (major, minor, arg,
+					NULL,
+					NULL,
+					smc1Read,
+					smc1PollWrite,
+					0);
+	}
 	return sc;
 }
  
