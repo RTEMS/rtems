@@ -65,8 +65,7 @@ structures and calls the network initialization function must include
 @subsection Network configuration
 The network configuration is specified by declaring
 and initializing the @code{rtems_bsdnet_configuration}
-structure.  This structure may be declared @code{const} since the
-network initialization functions do not write to any of the entries.
+structure.
 
 The structure entries are described in the following table.
 If your application uses BOOTP to obtain network configuration
@@ -131,8 +130,6 @@ rtems_task_set_priority (RTEMS_SELF, 30, &oldPri);
 @subsection Network device configuration
 Network devices are specified and configured by declaring and initializing a
 @code{struct rtems_bsdnet_ifcontig} structure for each network device.
-These structures may be declared @code{const} since the
-network initialization functions do not write to any of the entries.
 
 The structure entries are described in the following table.  An application
 which uses a single network interface, gets network configuration information
@@ -144,11 +141,15 @@ structure.
 @item char *name
 The full name of the network device.  This name consists of the
 driver name and the unit number (e.g. @code{"scc1"}).
+The @code{bsp.h} include file usually defines RTEMS_BSP_NETWORK_DRIVER_NAME as
+the name of the primary (or only) network driver.
 
 @item int (*attach)(struct rtems_bsdnet_ifconfig *conf)
 The address of the driver @code{attach} function.   The network 
 initialization function calls this function to configure the driver and
 attach it to the network stack.
+The @code{bsp.h} include file usually defines RTEMS_BSP_NETWORK_DRIVER_ATTACH as
+the name of the  attach function of the primary (or only) network driver.
 
 @item struct rtems_bsdnet_ifconfig *next
 A pointer to the network device configuration structure for the next network 
@@ -192,6 +193,24 @@ Keep in mind that some network devices may use 4 or more
 transmit descriptors for a single transmit buffer.
 
 @end table
+
+A complete network configuration specification can be as simple as the one
+shown in the following example.
+This configuration uses a single network interface, gets
+network configuration information
+from a BOOTP server, and uses the default values for all driver
+parameters.
+
+@example
+static struct rtems_bsdnet_ifconfig netdriver_config = @{
+	RTEMS_BSP_NETWORK_DRIVER_NAME,
+	RTEMS_BSP_NETWORK_DRIVER_ATTACH
+@};
+struct rtems_bsdnet_config rtems_bsdnet_config = @{
+	&netdriver_config,
+	rtems_bsdnet_do_bootp,
+@};
+@end example
 
 
 @subsection Network initialization
