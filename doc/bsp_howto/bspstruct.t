@@ -1,3 +1,11 @@
+@c
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
 @chapter = Board Support Package Structure
 
 The BSP are all kept in the $RTEMS_ROOT/c/src/lib/libbsp directory. They
