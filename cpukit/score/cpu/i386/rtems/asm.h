@@ -103,7 +103,14 @@
 #define bp REG (bp)
 
 #define ah REG (ah)
+#define bh REG (bh)
+#define ch REG (ch)
+#define dh REG (dh)
+
 #define al REG (al)
+#define bl REG (bl)
+#define cl REG (cl)
+#define dl REG (dl)
 
 #define cs REG (cs)
 #define ds REG (ds)
