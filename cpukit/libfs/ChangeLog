@@ -1,3 +1,9 @@
+2003-06-10	Phil Torre <ptorre@zetron.com>
+
+	PR 411/filesystem
+	* src/imfs/imfs_unlink.c: Fix bug where renaming a memfile and
+	then unlinking it causes a memory leak.
+
 2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 367/filesystem

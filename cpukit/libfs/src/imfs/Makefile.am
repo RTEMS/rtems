@@ -11,7 +11,9 @@ IMFS_C_FILES = imfs_chown.c imfs_config.c imfs_creat.c imfs_directory.c \
     imfs_getchild.c memfile.c linearfile.c deviceio.c imfs_handlers_device.c \
     imfs_handlers_directory.c imfs_handlers_link.c imfs_handlers_memfile.c \
     imfs_debug.c imfs_rmnod.c imfs_symlink.c imfs_readlink.c imfs_fdatasync.c \
-    imfs_fcntl.c ioman.c miniimfs_init.c imfs_load_tar.c
+    imfs_fcntl.c ioman.c miniimfs_init.c 
+
+# imfs_load_tar.c
 
 UNIX_C_FILES = imfs_unixstub.c
 
