@@ -1,3 +1,8 @@
+2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/prog-cxx.m4: Remove RTEMS_PROG_CXX.
+	Rework RTEMS_PROG_CXX_FOR_TARGET.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Remove creating $(ARCH) in compilation rules.
