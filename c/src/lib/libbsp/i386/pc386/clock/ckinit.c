@@ -50,9 +50,9 @@
 | Global Variables
 +--------------------------------------------------------------------------*/
 
-volatile rtems_unsigned32 Clock_driver_ticks;   /* Tick (interrupt) counter. */
-         rtems_unsigned32 Clock_isrs_per_tick;  /* ISRs per tick.            */
-         rtems_unsigned32 Clock_isrs;           /* ISRs until next tick.     */
+volatile uint32_t         Clock_driver_ticks;   /* Tick (interrupt) counter. */
+         uint32_t         Clock_isrs_per_tick;  /* ISRs per tick.            */
+         uint32_t         Clock_isrs;           /* ISRs until next tick.     */
 
 /* The following variables are set by the clock driver during its init */
 
@@ -119,7 +119,7 @@ void clockOff(const rtems_irq_connect_data* unused)
 +--------------------------------------------------------------------------*/
 static void clockOn(const rtems_irq_connect_data* unused)
 {
-  rtems_unsigned32  microseconds_per_isr;
+  uint32_t          microseconds_per_isr;
 
 #if 0
   /* Initialize clock from on-board real time clock.  This breaks the  */
@@ -157,7 +157,7 @@ static void clockOn(const rtems_irq_connect_data* unused)
 
   {
     /* 105/88 approximates TIMER_TICK * 1e-6 */
-    rtems_unsigned32 count = US_TO_TICK(microseconds_per_isr);
+    uint32_t         count = US_TO_TICK(microseconds_per_isr);
 
     outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
     outport_byte(TIMER_CNTR0, count >> 0 & 0xff);
@@ -260,7 +260,7 @@ volatile long long Last_RDTSC;
 
 long long Kernel_Time_ns( void )
 {
-  extern rtems_unsigned32 _TOD_Ticks_per_second;
+  extern uint32_t         _TOD_Ticks_per_second;
 
   unsigned  isrs_per_second = Clock_isrs_per_tick * _TOD_Ticks_per_second;
   long long now;

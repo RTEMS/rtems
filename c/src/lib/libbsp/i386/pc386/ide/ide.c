@@ -92,15 +92,15 @@ void pc386_ide_read_reg
 \*-------------------------------------------------------------------------*/
  int                        minor,  /* controller minor number       */
  int                        reg,    /* register index to access      */
- unsigned16                *value   /* ptr to return value location  */
+ uint16_t                  *value   /* ptr to return value location  */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  unsigned32  port = IDE_Controller_Table[minor].port1;
-  unsigned8 bval1,bval2;
+  uint32_t    port = IDE_Controller_Table[minor].port1;
+  uint8_t   bval1,bval2;
 
   if (reg == IDE_REGISTER_DATA_WORD) {
     inport_byte(port+reg, bval1);
@@ -129,14 +129,14 @@ void pc386_ide_write_reg
 \*-------------------------------------------------------------------------*/
  int                        minor,  /* controller minor number       */
  int                        reg,    /* register index to access      */
- unsigned16                 value   /* value to write                */
+ uint16_t                   value   /* value to write                */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  unsigned32  port = IDE_Controller_Table[minor].port1;
+  uint32_t    port = IDE_Controller_Table[minor].port1;
 
 #ifdef DEBUG_OUT
   printk("pc386_ide_write_reg(0x%x,0x%x)\r\n",reg,value & 0xff);
@@ -161,22 +161,22 @@ void pc386_ide_read_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor, 
- unsigned16 block_size, 
+ uint16_t   block_size, 
  blkdev_sg_buffer *bufs, 
- rtems_unsigned32 *cbuf,
- rtems_unsigned32 *pos
+ uint32_t         *cbuf,
+ uint32_t         *pos
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  unsigned32  port = IDE_Controller_Table[minor].port1;
-  unsigned16  cnt = 0;
-  unsigned32  llength = bufs[(*cbuf)].length;
-  unsigned8 status_val;
-  unsigned16 *lbuf = (unsigned16 *)
-    ((unsigned8 *)(bufs[(*cbuf)].buffer) + (*pos));
+  uint32_t    port = IDE_Controller_Table[minor].port1;
+  uint16_t    cnt = 0;
+  uint32_t    llength = bufs[(*cbuf)].length;
+  uint8_t   status_val;
+  uint16_t   *lbuf = (uint16_t*)
+    ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 
   inport_byte(port+IDE_REGISTER_STATUS,status_val);
   while ((status_val & IDE_REGISTER_STATUS_DRQ) && 
@@ -214,22 +214,22 @@ void pc386_ide_write_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor, 
- unsigned16 block_size, 
+ uint16_t   block_size, 
  blkdev_sg_buffer *bufs, 
- rtems_unsigned32 *cbuf,
- rtems_unsigned32 *pos
+ uint32_t         *cbuf,
+ uint32_t         *pos
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  unsigned32  port = IDE_Controller_Table[minor].port1;
-  unsigned16  cnt = 0;
-  unsigned32  llength = bufs[(*cbuf)].length;
-  unsigned8   status_val;
-  unsigned16 *lbuf = (unsigned16 *)
-    ((unsigned8 *)(bufs[(*cbuf)].buffer) + (*pos));
+  uint32_t    port = IDE_Controller_Table[minor].port1;
+  uint16_t    cnt = 0;
+  uint32_t    llength = bufs[(*cbuf)].length;
+  uint8_t     status_val;
+  uint16_t   *lbuf = (uint16_t*)
+    ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
     
 #ifdef DEBUG_OUT
   printk("pc386_ide_write_block()\r\n");
@@ -266,7 +266,7 @@ int pc386_ide_control
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int  minor,                        /* controller minor number       */
- unsigned32 cmd,                    /* command to send               */
+ uint32_t   cmd,                    /* command to send               */
  void * arg                         /* optional argument             */
  )
 /*-------------------------------------------------------------------------*\
@@ -289,7 +289,7 @@ rtems_status_code pc386_ide_config_io_speed
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int       minor,                   /* controller minor number       */
- unsigned8 modes_avail              /* optional argument             */
+ uint8_t   modes_avail              /* optional argument             */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |

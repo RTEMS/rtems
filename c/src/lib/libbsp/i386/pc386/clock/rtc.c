@@ -81,8 +81,8 @@
 |        Arguments: i - Number to convert.
 |          Returns: BCD representation of number. 
 +--------------------------------------------------------------------------*/
-static inline rtems_unsigned8
-bcd(rtems_unsigned8 i)
+static inline uint8_t        
+bcd(uint8_t         i)
 {
   return ((i / 16) * 10 + (i % 16));
 } /* bcd */
@@ -101,8 +101,8 @@ bcd(rtems_unsigned8 i)
 |        Arguments: y - year to convert (1970 <= y <= 2100).
 |          Returns: number of seconds since 1970. 
 +--------------------------------------------------------------------------*/
-static inline rtems_unsigned32
-ytos(rtems_unsigned16 y)
+static inline uint32_t        
+ytos(uint16_t         y)
 {                                       /* v NUM LEAP YEARS v */
   return ((y - 1970) * SECS_PER_REG_YEAR + (y - 1970 + 1) / 4 * SECS_PER_DAY);
 } /* ytos */
@@ -115,10 +115,10 @@ ytos(rtems_unsigned16 y)
 |        Arguments: m - month to convert, leap - is this a month of a leap year.
 |          Returns: number of seconds since January. 
 +--------------------------------------------------------------------------*/
-static inline rtems_unsigned32
-mtos(rtems_unsigned8 m, rtems_boolean leap)
+static inline uint32_t        
+mtos(uint8_t         m, rtems_boolean leap)
 {
-  static rtems_unsigned16 daysMonth[] = { 0, 0, 31,  59,  90, 120, 151, 181,
+  static uint16_t         daysMonth[] = { 0, 0, 31,  59,  90, 120, 151, 181,
 				               212, 243, 273, 304, 334, 365 };
     /* Days since beginning of year until beginning of month. */
 
@@ -134,10 +134,10 @@ mtos(rtems_unsigned8 m, rtems_boolean leap)
 |        Arguments: what - what to write to RTC port (what to do).
 |          Returns: result received from RTC port after action performed. 
 +--------------------------------------------------------------------------*/
-static inline rtems_unsigned8
-rtcin(rtems_unsigned8 what)
+static inline uint8_t        
+rtcin(uint8_t         what)
 {
-    rtems_unsigned8 r;
+    uint8_t         r;
 
     outport_byte(IO_RTC,   what);
     inport_byte (IO_RTC+1, r);
@@ -158,7 +158,7 @@ rtcin(rtems_unsigned8 what)
 void
 init_rtc(void)
 {
-  rtems_unsigned8 s;
+  uint8_t         s;
 
   /* initialize brain-dead battery powered clock */
   outport_byte(IO_RTC,   RTC_STATUSA);
@@ -186,8 +186,8 @@ init_rtc(void)
 long int
 rtc_read(rtems_time_of_day *tod)
 {
-  rtems_unsigned8  sa;
-  rtems_unsigned32 sec = 0;
+  uint8_t          sa;
+  uint32_t         sec = 0;
 
   memset(tod, 0, sizeof *tod); /* zero tod structure */
 

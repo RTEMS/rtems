@@ -51,7 +51,7 @@
 #define LEAST_VALID   1              /* Don't trust a value lower than this.  */
 #define SLOW_DOWN_IO  0x80     	/* io which does nothing */
 
-#define TWO_MS	(rtems_unsigned32)(2000)     /* TWO_MS = 2000us (sic!) */
+#define TWO_MS	(uint32_t)(2000)     /* TWO_MS = 2000us (sic!) */
 
 #define MSK_NULL_COUNT 0x40	/* bit counter available for reading */
 
@@ -59,7 +59,7 @@
 /*-------------------------------------------------------------------------+
 | Global Variables
 +--------------------------------------------------------------------------*/
-volatile rtems_unsigned32 Ttimer_val;
+volatile uint32_t         Ttimer_val;
 rtems_boolean    	  Timer_driver_Find_average_overhead = TRUE;
 volatile unsigned int     fastLoop1ms, slowLoop1ms;
 
@@ -134,12 +134,12 @@ Timer_initialize(void)
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-rtems_unsigned32
+uint32_t        
 Read_timer(void)
 {
-  register rtems_unsigned32 total;
+  register uint32_t         total;
 
-  total =  (rtems_unsigned32)(rdtsc() - Ttimer_val);
+  total =  (uint32_t)(rdtsc() - Ttimer_val);
 
   if (Timer_driver_Find_average_overhead)
     return total;
@@ -256,11 +256,11 @@ Timer_initialize(void)
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-rtems_unsigned32
+uint32_t        
 Read_timer(void)
 {
-  register rtems_unsigned32 total, clicks;
-  register rtems_unsigned8  lsb, msb;
+  register uint32_t         total, clicks;
+  register uint8_t          lsb, msb;
 
   outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);
   inport_byte(TIMER_CNTR0, lsb);

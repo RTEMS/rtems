@@ -68,9 +68,9 @@ static char shift_map[] =
 
 
 static unsigned short   kbd_buffer[KBD_BUF_SIZE];
-static rtems_unsigned16 kbd_first = 0;
-static rtems_unsigned16 kbd_last  = 0;
-static rtems_unsigned16 kbd_end   = KBD_BUF_SIZE - 1;
+static uint16_t         kbd_first = 0;
+static uint16_t         kbd_last  = 0;
+static uint16_t         kbd_end   = KBD_BUF_SIZE - 1;
 
 /*-------------------------------------------------------------------------+
 |         Function: rtemsReboot

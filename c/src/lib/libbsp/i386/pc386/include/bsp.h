@@ -173,7 +173,7 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 +--------------------------------------------------------------------------*/
 #define rtems_bsp_delay(_microseconds) \
 { \
-  rtems_unsigned32 _cnt = _microseconds; \
+  uint32_t         _cnt = _microseconds; \
   asm volatile ("0: nop; mov %0,%0; loop 0b" : "=c"(_cnt) : "0"(_cnt)); \
 }
 #endif
@@ -195,7 +195,7 @@ extern segment_descriptors Global_descriptor_table   [GDT_SIZE];
  
 extern rtems_configuration_table BSP_Configuration;
                                     /* User provided BSP configuration table. */
-extern rtems_unsigned32          rtemsFreeMemStart;
+extern uint32_t                  rtemsFreeMemStart;
   /* Address of start of free memory - should be used when creating new
      partitions or regions and updated afterwards. */
 
