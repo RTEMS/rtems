@@ -18,7 +18,9 @@ C_PIECES = polled_io uart console inch
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES = $(srcdir)/../../shared/console/consoleIo.h $(srcdir)/../../shared/console/keyboard.h $(srcdir)/../../shared/console/uart.h
+H_FILES = $(srcdir)/../../shared/console/consoleIo.h \
+    $(srcdir)/../../shared/console/keyboard.h \
+    $(srcdir)/../../shared/console/uart.h
 
 # Assembly source names, if any, go here -- minus the .s
 S_PIECES =

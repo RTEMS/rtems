@@ -17,8 +17,7 @@ H_FILES = $(srcdir)/../../shared/include/nvram.h \
     $(srcdir)/../../shared/include/bsp.h
 
 BSP_H_FILES = $(srcdir)/../../shared/console/consoleIo.h \
-    $(srcdir)/../../shared/console/uart.h \
-    $(srcdir)/../../shared/irq/irq.h \
+    $(srcdir)/../../shared/console/uart.h $(srcdir)/../../shared/irq/irq.h \
     $(srcdir)/../../shared/motorola/motorola.h
 
 #
@@ -39,7 +38,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 INSTALL_CHANGE = @INSTALL_CHANGE@
 mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-INSTALLDIRS = $(PROJECT_INCLUDE)
+INSTALLDIRS = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)
