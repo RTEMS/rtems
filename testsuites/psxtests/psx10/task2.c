@@ -40,6 +40,7 @@ void *Task_2(
   status = pthread_mutex_unlock( &Mutex_id );
   assert( !status );
 
+  puts( "Task_2: task exit" );
   pthread_exit( NULL );
 
   return NULL; /* just so the compiler thinks we returned something */
