@@ -106,8 +106,13 @@ NoSource:	1
 %define build_gcj	%_gcj
 %endif
 
+# gcc 3.4.0 is broken for embedded sparc and gnat trips it.
 %if "%{gcc_target}" == "sparc-rtems@osversion@"
+%if "%{gcc_version}" >= "3.4"
+%define build_gnat      0
+%else
 %define build_gnat      %_gnat
+%endif
 %define build_gcj	%_gcj
 %endif
 

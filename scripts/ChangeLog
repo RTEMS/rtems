@@ -1,5 +1,10 @@
 2004-05-23	Joel Sherrill <joel@OARcorp.com>
 
+	* gcc3newlib/gccnewlib.add: gcc 3.4.0 is broken for embedded SPARC and
+	Ada. Until we can fix it, it is disabled.
+
+2004-05-23	Joel Sherrill <joel@OARcorp.com>
+
 	* gcc3newlib/target-gnat.add: Fix path to gnat1.
 
 2004-05-18	Ralf Corsepius <ralf_corsepius@rtems.org>
