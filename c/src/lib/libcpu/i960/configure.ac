@@ -5,7 +5,7 @@
 AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-lib-libcpu-i960],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([i960ca])
-RTEMS_TOP(../../../../..)
+RTEMS_TOP([../../../../..],[../../..])
 
 RTEMS_CANONICAL_TARGET_CPU
 

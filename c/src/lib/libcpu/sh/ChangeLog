@@ -1,5 +1,9 @@
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* configure.ac: Add 2nd argument (rtems_updir) to RTEMS_TOP.
+
+2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* sh7032/score/cpu_asm.c, sh7045/score/cpu_asm.c,
 	sh7750/score/cpu_asm.c: Use asm constraint "i" instead of "I" to
 	pass sizeof(Context_Control) to context switch.

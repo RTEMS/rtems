@@ -1,3 +1,7 @@
+2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Add 2nd argument (rtems_updir) to RTEMS_TOP.
+
 2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Index: m68040/Makefile.am, mcf5206/Makefile.am, shared/Makefile.am:
