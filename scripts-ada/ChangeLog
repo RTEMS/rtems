@@ -1,3 +1,14 @@
+2001-09-13	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.in: Add RTEMS specific version of EXEEXT test.
+	* mkgdbspec.in, mkgnatnewlibspec.in, gdb/gdb.spec.in,
+	gnatnewlib/gnatnewlib.spec.in: Change to Target_alias to avoid
+	conflicts with new autoconf/automake.
+	* setup, setup.def, mkgnatnewlibspec.in: Add gnat_newlib_patch_version
+	variable.
+	* gnatnewlib/Makefile.am: Add i386-rtemscoff target in attempt to
+	build it.
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, gnatnewlib/gnatnewlib.spec.in: Modified to properly

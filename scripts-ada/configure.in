@@ -3,7 +3,15 @@
 AC_INIT(binutils)
 AM_INIT_AUTOMAKE(rtems-scripts_ada,20000125-0,no)
 
-AC_EXEEXT
+# Check for .exe suffix.
+# With autoconf > 2.13 AC_EXEEXT is not what we want to use.
+AC_MSG_CHECKING([for executable suffix])
+case "$host" in
+i?86-*cygwin*)
+  EXEEXT=.exe ;;
+esac
+AC_SUBST(EXEEXT)
+AC_MSG_RESULT([$EXEEXT])
 
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache

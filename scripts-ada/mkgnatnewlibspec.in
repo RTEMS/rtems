@@ -58,7 +58,7 @@ target_alias=$1
 specfile=${dst}/${target_alias}-gnat-${gnat_version}-newlib-${newlib_version}.spec
 
 sed -e "s%@Release@%${gnatnewlib_rpm_release}%g" \
-    -e "s%@target_alias@%${target_alias}%g" \
+    -e "s%@Target_alias@%${target_alias}%g" \
     -e "s%@rpm_build_root@%${rpm_build_root}%g" \
     -e "s%@binutils_version@%${binutils_version}%g" \
     -e "s%@binutils_patch_version@%${binutils_patch_version}%g" \
@@ -68,6 +68,7 @@ sed -e "s%@Release@%${gnatnewlib_rpm_release}%g" \
     -e "s%@gnat_patch_version@%${gnat_patch_version}%g" \
     -e "s%@newlib_version@%${newlib_version}%g" \
     -e "s%@newlib_patch_version@%${newlib_patch_version}%g" \
+    -e "s%@gnat_newlib_patch_version@%${gnat_newlib_patch_version}%g" \
     -e "s%@exe_ext@%${exe_ext}%g" \
 < ${specsrc} \
 > ${specfile}

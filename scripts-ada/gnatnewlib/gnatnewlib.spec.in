@@ -8,15 +8,15 @@
 
 Vendor:       OAR Corporation
 Distribution: Linux
-Name:         @target_alias@-gnat-newlib
-Summary:      gnat, gcc, and newlib C Library for @target_alias@.
+Name:         @Target_alias@-gnat-newlib
+Summary:      gnat, gcc, and newlib C Library for @Target_alias@.
 Group:	      gnatrtems
 Release:      @Release@
 License:      gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
-Provides:     	rtems-base-gnat @target_alias@-gnat 
-Provides:       rtems-base-gnat-binutils @target_alias@-gnat-binutils
-# Requires:     	@target_alias@-binutils
+Provides:     	rtems-base-gnat @Target_alias@-gnat 
+Provides:       rtems-base-gnat-binutils @Target_alias@-gnat-binutils
+# Requires:     	@Target_alias@-binutils
 
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
@@ -30,7 +30,7 @@ Patch0:		gcc-@gcc_version@-rtems-gnat-@gnat_version@-@gcc_patch_version@.diff
 Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
 Patch2:		gnat-@gnat_version@-rtems-@gnat_patch_version@.diff
 Patch3:		binutils-@binutils_version@-rtems-gnat-@gnat_version@-@binutils_patch_version@.diff
-Patch4:		newlib-@newlib_version@-rtems-gnat-@gnat_version@-@newlib_patch_version@.diff
+Patch4:		newlib-@newlib_version@-rtems-gnat-@gnat_version@-@gnat_newlib_patch_version@.diff
 #
 Buildroot:	/tmp
 
@@ -94,30 +94,30 @@ RTEMS is an open source operating system for embedded systems.
 
 This is the base for binutils regardless of target CPU.
 
-%package -n @target_alias@-gnat-binutils
-Summary:      rtems binutils for @target_alias@
+%package -n @Target_alias@-gnat-binutils
+Summary:      rtems binutils for @Target_alias@
 Group: gnatrtems
 Requires: rtems-base-gnat-binutils
 
-%description -n @target_alias@-gnat-binutils
+%description -n @Target_alias@-gnat-binutils
 
 RTEMS is an open source operating system for embedded systems.
 
-This is the GNU binutils for RTEMS targetting @target_alias@.
+This is the GNU binutils for RTEMS targetting @Target_alias@.
 
-%package -n @target_alias@-gnat
-Summary:      rtems gnat, gcc, and newlib C Library for @target_alias@
+%package -n @Target_alias@-gnat
+Summary:      rtems gnat, gcc, and newlib C Library for @Target_alias@
 Group: gnatrtems
-Requires: @target_alias@-gnat-binutils rtems-base-gnat
+Requires: @Target_alias@-gnat-binutils rtems-base-gnat
 
-%description -n @target_alias@-gnat
+%description -n @Target_alias@-gnat
 RTEMS is an open source operating system for embedded systems.
 
-This is gnat, gcc, and newlib C Library for @target_alias@.
+This is gnat, gcc, and newlib C Library for @Target_alias@.
 
 %prep
-# untar the sources inside @target_alias@-gnat-newlib
-%setup -c -n @target_alias@-gnat-newlib -a 0 -a 1 -a 2 -a 3
+# untar the sources inside @Target_alias@-gnat-newlib
+%setup -c -n @Target_alias@-gnat-newlib -a 0 -a 1 -a 2 -a 3
 
 %patch0 -p0
 %patch2 -p0
@@ -178,7 +178,7 @@ cd ..
   cd build
   # after we switch off gcc 2.8.1, configure using gcc not a src directory
   # and build binutils separately.
-  ../src/configure --target=@target_alias@ \
+  ../src/configure --target=@Target_alias@ \
     --with-gnu-as --with-gnu-ld --with-newlib --verbose \
     --prefix=/opt/gnatrtems
 
@@ -186,10 +186,10 @@ cd ..
   #  '--enable-languages=c,c++'
 
 #  #  This is a hack that is only because gnat still uses gcc 2.8.1
-#  test -d ${RPM_BUILD_ROOT}/opt/gnatrtems/@target_alias@ || 
-#    mkdir -p ${RPM_BUILD_ROOT}/opt/gnatrtems/@target_alias@
-#  for dir in ${RPM_BUILD_ROOT}/opt/gnatrtems/@target_alias@/include \
-#             ${RPM_BUILD_ROOT}/opt/gnatrtems/@target_alias@/sys-include
+#  test -d ${RPM_BUILD_ROOT}/opt/gnatrtems/@Target_alias@ || 
+#    mkdir -p ${RPM_BUILD_ROOT}/opt/gnatrtems/@Target_alias@
+#  for dir in ${RPM_BUILD_ROOT}/opt/gnatrtems/@Target_alias@/include \
+#             ${RPM_BUILD_ROOT}/opt/gnatrtems/@Target_alias@/sys-include
 #  do
 #    test -d ${dir} || mkdir -p ${dir}
 #    cp ../newlib-@newlib_version@/newlib/libc/sys/rtems/include/limits.h ${dir}
@@ -234,9 +234,9 @@ cd ..
 %install
   cd build
   # Bug in gcc-2.95.1: It doesn't build this installation directory
-  # If it doesn't find it, gcc doesn't install @target_alias@/bin/gcc
+  # If it doesn't find it, gcc doesn't install @Target_alias@/bin/gcc
   # ../gcc-@gcc_version@/mkinstalldirs \
-  #   $RPM_BUILD_ROOT/opt/gnatrtems/@target_alias@/bin
+  #   $RPM_BUILD_ROOT/opt/gnatrtems/@Target_alias@/bin
 
   cd gcc
   echo "Starting install of gnat"
@@ -261,7 +261,7 @@ cd ..
   rm -f dirs ;
   echo "%dir /opt/gnatrtems/lib" >> dirs ;
   echo "%dir /opt/gnatrtems/lib/gcc-lib" >> dirs ;
-  echo "%dir /opt/gnatrtems/lib/gcc-lib/@target_alias@" >> dirs ;
+  echo "%dir /opt/gnatrtems/lib/gcc-lib/@Target_alias@" >> dirs ;
 
   touch ../files
   # if test -f $RPM_BUILD_ROOT/opt/gnatrtems/info/configure.info.gz;
@@ -273,15 +273,15 @@ cd ..
   #   touch ../files
   # fi
 # These target specific files are only present in binutils >= 2.9.5
-  if test -f /opt/gnatrtems/bin/@target_alias@-readelf@exe_ext@;
+  if test -f /opt/gnatrtems/bin/@Target_alias@-readelf@exe_ext@;
   then
-    echo /opt/gnatrtems/bin/@target_alias@-readelf@exe_ext@ > ../files.target
+    echo /opt/gnatrtems/bin/@Target_alias@-readelf@exe_ext@ > ../files.target
   else
     touch ../files.target
   fi
 
   # Collect multilib subdirectories
-  TGTDIR="$RPM_BUILD_ROOT/opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@"
+  TGTDIR="$RPM_BUILD_ROOT/opt/gnatrtems/lib/gcc-lib/@Target_alias@/@gcc_version@"
   find $TGTDIR \
     \( -type d -a ! -path "$TGTDIR/include*" \) -print | \
     sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> dirs
@@ -327,37 +327,37 @@ cd ..
 # %dir /opt/gnatrtems/share
 # %dir /opt/gnatrtems/share/locale
 
-%files -n @target_alias@-gnat-binutils -f files.target
-%doc /opt/gnatrtems/man/man1/@target_alias@-*.1
+%files -n @Target_alias@-gnat-binutils -f files.target
+%doc /opt/gnatrtems/man/man1/@Target_alias@-*.1
 
 %dir /opt/gnatrtems/bin
-/opt/gnatrtems/bin/@target_alias@-addr2line@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-ar@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-as@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-c++filt@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-gasp@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-ld@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-nm@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-objcopy@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-objdump@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-ranlib@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-addr2line@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-ar@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-as@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-c++filt@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-gasp@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-ld@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-nm@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-objcopy@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-objdump@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-ranlib@exe_ext@
 # readelf is not in older binutils so get it from file list
-# /opt/gnatrtems/bin/@target_alias@-readelf@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-size@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-strings@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-strip@exe_ext@
+# /opt/gnatrtems/bin/@Target_alias@-readelf@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-size@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-strings@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-strip@exe_ext@
 
-%dir /opt/gnatrtems/@target_alias@
-%dir /opt/gnatrtems/@target_alias@/bin
-/opt/gnatrtems/@target_alias@/bin/ar@exe_ext@
-/opt/gnatrtems/@target_alias@/bin/as@exe_ext@
-/opt/gnatrtems/@target_alias@/bin/ld@exe_ext@
-/opt/gnatrtems/@target_alias@/bin/nm@exe_ext@
-/opt/gnatrtems/@target_alias@/bin/ranlib@exe_ext@
-/opt/gnatrtems/@target_alias@/bin/strip@exe_ext@
+%dir /opt/gnatrtems/@Target_alias@
+%dir /opt/gnatrtems/@Target_alias@/bin
+/opt/gnatrtems/@Target_alias@/bin/ar@exe_ext@
+/opt/gnatrtems/@Target_alias@/bin/as@exe_ext@
+/opt/gnatrtems/@Target_alias@/bin/ld@exe_ext@
+/opt/gnatrtems/@Target_alias@/bin/nm@exe_ext@
+/opt/gnatrtems/@Target_alias@/bin/ranlib@exe_ext@
+/opt/gnatrtems/@Target_alias@/bin/strip@exe_ext@
 
-%dir /opt/gnatrtems/@target_alias@/lib
-/opt/gnatrtems/@target_alias@/lib/ldscripts
+%dir /opt/gnatrtems/@Target_alias@/lib
+/opt/gnatrtems/@Target_alias@/lib/ldscripts
 %files -n rtems-base-gnat 
 %dir /opt/gnatrtems/info
 # %doc /opt/gnatrtems/info/dir
@@ -369,7 +369,7 @@ cd ..
 # %dir /opt/gnatrtems/man
 # %dir /opt/gnatrtems/man/man1
 %doc /opt/gnatrtems/man/man1/cccp.1
-%doc /opt/gnatrtems/man/man1/@target_alias@-gcc.1
+%doc /opt/gnatrtems/man/man1/@Target_alias@-gcc.1
 
 %dir /opt/gnatrtems/bin
 # /opt/gnatrtems/bin/cpp@exe_ext@
@@ -377,28 +377,28 @@ cd ..
 %dir /opt/gnatrtems/include
 # /opt/gnatrtems/include/g++-3
 
-%files -n @target_alias@-gnat -f files.gcc
-/opt/gnatrtems/bin/@target_alias@-gcc@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-gnatbind
-/opt/gnatrtems/bin/@target_alias@-gnatbl
-/opt/gnatrtems/bin/@target_alias@-gnatchop
-/opt/gnatrtems/bin/@target_alias@-gnatfind
-/opt/gnatrtems/bin/@target_alias@-gnatkr
-/opt/gnatrtems/bin/@target_alias@-gnatlink
-/opt/gnatrtems/bin/@target_alias@-gnatls
-/opt/gnatrtems/bin/@target_alias@-gnatmake
-/opt/gnatrtems/bin/@target_alias@-gnatmem
-/opt/gnatrtems/bin/@target_alias@-gnatprep
-/opt/gnatrtems/bin/@target_alias@-gnatpsta
-/opt/gnatrtems/bin/@target_alias@-gnatpsys
-/opt/gnatrtems/bin/@target_alias@-gnatxref
+%files -n @Target_alias@-gnat -f files.gcc
+/opt/gnatrtems/bin/@Target_alias@-gcc@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-gnatbind
+/opt/gnatrtems/bin/@Target_alias@-gnatbl
+/opt/gnatrtems/bin/@Target_alias@-gnatchop
+/opt/gnatrtems/bin/@Target_alias@-gnatfind
+/opt/gnatrtems/bin/@Target_alias@-gnatkr
+/opt/gnatrtems/bin/@Target_alias@-gnatlink
+/opt/gnatrtems/bin/@Target_alias@-gnatls
+/opt/gnatrtems/bin/@Target_alias@-gnatmake
+/opt/gnatrtems/bin/@Target_alias@-gnatmem
+/opt/gnatrtems/bin/@Target_alias@-gnatprep
+/opt/gnatrtems/bin/@Target_alias@-gnatpsta
+/opt/gnatrtems/bin/@Target_alias@-gnatpsys
+/opt/gnatrtems/bin/@Target_alias@-gnatxref
 
 
-%dir /opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
+%dir /opt/gnatrtems/lib/gcc-lib/@Target_alias@/@gcc_version@/include
 
-/opt/gnatrtems/@target_alias@
+/opt/gnatrtems/@Target_alias@
 
-%post -n @target_alias@-gnat
+%post -n @Target_alias@-gnat
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
@@ -408,7 +408,7 @@ cd ..
     done
   fi
 
-%postun -n @target_alias@-gnat
+%postun -n @Target_alias@-gnat
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir

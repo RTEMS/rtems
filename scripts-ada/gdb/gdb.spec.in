@@ -10,17 +10,17 @@
 
 Vendor:       OAR Corporation
 Distribution: Linux
-Name:         @target_alias@-gnat-gdb-collection
+Name:         @Target_alias@-gnat-gdb-collection
 Release:      @Release@
 License:      GPL/LGPL
 Group:        gnatrtems
-Provides:     rtems-base-gnat-gdb @target_alias@-gnat-gdb
+Provides:     rtems-base-gnat-gdb @Target_alias@-gnat-gdb
 
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      gnat@gnat_version@
-Summary:      gdb for target @target_alias@
+Summary:      gdb for target @Target_alias@
 Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
 Source1:	ftp://cs.nyu.edu/pub/gnat/gnat-@gnat_version@-src.tar.gz
 Patch0:	      gdb-@gdb_version@-rtems-gnat-@gnat_version@-@gdb_patch_version@.diff
@@ -43,7 +43,7 @@ NoSource:      1
 %description
 RTEMS is an open source operating system for embedded systems.
 
-This is the GNU gdb for RTEMS targetting @target_alias@.
+This is the GNU gdb for RTEMS targetting @Target_alias@.
 
 %package -n rtems-base-gnat-gdb
 Summary:      base package for rtems gdb
@@ -55,16 +55,16 @@ RTEMS is an open source operating system for embedded systems.
 
 This is the base for gdb regardless of target CPU.
 
-%package -n @target_alias@-gnat-gdb
-Summary:      rtems gdb for @target_alias@
+%package -n @Target_alias@-gnat-gdb
+Summary:      rtems gdb for @Target_alias@
 Group: rtems
 Requires: rtems-base-gnat-gdb
 
-%description -n @target_alias@-gnat-gdb
+%description -n @Target_alias@-gnat-gdb
 
 RTEMS is an open source operating system for embedded systems.
 
-This is the GNU gdb for RTEMS targetting @target_alias@.
+This is the GNU gdb for RTEMS targetting @Target_alias@.
 
 Authors:
 --------
@@ -74,8 +74,8 @@ Authors:
 
 %prep
 echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
-# untar the sources inside @target_alias@-gnat-gdb
-%setup -c -n @target_alias@-gnat-gdb -a 0 -a 1
+# untar the sources inside @Target_alias@-gnat-gdb
+%setup -c -n @Target_alias@-gnat-gdb -a 0 -a 1
 
   cd gdb-@gdb_version@
   patch -p0 <../gnat-@gnat_version@-src/src/gdb-@gdb_version@.gnat.diff
@@ -85,7 +85,7 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 %build
 test -d build || mkdir build
   cd build
-  ../gdb-@gdb_version@/configure --target=@target_alias@ \
+  ../gdb-@gdb_version@/configure --target=@Target_alias@ \
     --verbose --prefix=/opt/gnatrtems @extra_configure_arguments@
 
   make CC=gcc CFLAGS="-O2 -g -DRTEMS_TARGET" all
@@ -144,9 +144,9 @@ test -d build || mkdir build
 # We use libiberty from gcc
 # /opt/gnatrtems/lib/libiberty*
 
-%files -n @target_alias@-gnat-gdb
-%doc /opt/gnatrtems/man/man1/@target_alias@-gdb.1
+%files -n @Target_alias@-gnat-gdb
+%doc /opt/gnatrtems/man/man1/@Target_alias@-gdb.1
 
 %dir /opt/gnatrtems/bin
-/opt/gnatrtems/bin/@target_alias@-gdb@exe_ext@
+/opt/gnatrtems/bin/@Target_alias@-gdb@exe_ext@
 
