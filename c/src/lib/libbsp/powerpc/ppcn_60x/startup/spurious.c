@@ -20,8 +20,6 @@
 
 #include <string.h>
 
-static const char digits[16] = "0123456789abcdef";
-
 rtems_isr bsp_stub_handler(
    rtems_vector_number trap
 )
@@ -107,35 +105,17 @@ rtems_isr bsp_spurious_handler(
       DEBUG_puts( "0x02000" );
       break;
 
-#elif defined(ppc603)
-#error "Please fill in names. "
-    case PPC_IRQ_TRANS_MISS :
-      DEBUG_puts( "0x1000" );
-      break;
-    case PPC_IRQ_DATA_LOAD:
-      DEBUG_puts( "0x1100" );
-      break;
-    case PPC_IRQ_DATA_STORE:
-      DEBUG_puts( "0x1200" );
-      break;
-    case PPC_IRQ_ADDR_BRK:
-      DEBUG_puts( "0x1300" );
-      break;
-    case PPC_IRQ_SYS_MGT:
-      DEBUG_puts( "0x1400" );
-      break;
-
-#elif defined(ppc603e)
-    case PPC_TLB_INST_MISS:
+#elif defined(ppc603) || defined(ppc603e)
+    case PPC_IRQ_TRANS_MISS:
       DEBUG_puts( "Instruction Translation Miss" );
       break;
-    case PPC_TLB_LOAD_MISS:
+    case PPC_IRQ_DATA_LOAD:
       DEBUG_puts( "Data Load Translation Miss" );
       break;
-    case PPC_TLB_STORE_MISS :
+    case PPC_IRQ_DATA_STORE:
       DEBUG_puts( "Data store Translation Miss");
       break;
-    case PPC_IRQ_ADDRBRK:
+    case PPC_IRQ_ADDR_BRK:
       DEBUG_puts( "Instruction address break point" );
       break;
     case PPC_IRQ_SYS_MGT:
