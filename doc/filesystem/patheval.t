@@ -1,6 +1,15 @@
-Pathname Evaluation
+@c
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
 
-? Include graphic of the path evaluation process with Jennifer's explanations ???XXX
+@chapter Pathname Evaluation
+
+XXX Include graphic of the path evaluation process with Jennifer's explanations 
+
 ? There are two pathname evaluation routines.  The handler patheval() is called to find, 
 verify privlages on and return information on a node that exists.  The handler 
 evalformake() is called to find, verify permissions, and return information on a node 
