@@ -70,7 +70,9 @@ void _POSIX_API_Initialize(
   if ( !api_configuration ) 
     api_configuration = &_POSIX_Default_configuration;
 
-  _POSIX_signals_Manager_Initialization();
+  _POSIX_signals_Manager_Initialization(
+    api_configuration->maximum_queued_signals
+  );
 
   _POSIX_Threads_Manager_initialization(
     api_configuration->maximum_threads,
