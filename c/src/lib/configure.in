@@ -58,13 +58,7 @@ RTEMS_CPU_STARTdir="$RTEMS_CPU"
 fi
 AC_SUBST(RTEMS_CPU_STARTdir)
 
-if test "$RTEMS_CPU" != "unix"; then
-## HACK: Suppress libchip for unix
-cfg_subdirs="$cfg_subdirs libchip"
-fi
-
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
-AM_CONDITIONAL(HAS_LIBCHIP,test "$RTEMS_CPU" != "unix")
 
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 
