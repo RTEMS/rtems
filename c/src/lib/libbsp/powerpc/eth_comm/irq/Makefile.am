@@ -44,6 +44,6 @@ $(PGM): $(OBJS)
 
 all-local: SORDID_HACK $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(PGM)
 
-EXTRA_DIST = irq.c irq.h irq_asm.S irq_init.c
+EXTRA_DIST = irq.c irq_asm.S irq_init.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

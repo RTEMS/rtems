@@ -21,10 +21,11 @@ $(PROJECT_INCLUDE)/%.h: %.h
  $(PROJECT_INCLUDE)/bsp/%.h : %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp \
+TMPINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp \
 	$(include_HEADERS:%=$(PROJECT_INCLUDE)/%) \
 	$(include_bsp_HEADERS:%=$(PROJECT_INCLUDE)/bsp/%)
 
-all-local: $(PREINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
+include $(top_srcdir)/../../../../../../automake/force-preinstall.am
 include $(top_srcdir)/../../../../../../automake/local.am
