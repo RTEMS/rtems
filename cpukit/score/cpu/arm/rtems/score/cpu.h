@@ -540,9 +540,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 #define _CPU_ISR_Disable( _level ) \
   { \
     (_level) = 0; \
-    asm volatile ("MRS	r0, cpsr \n" ); \
-    asm volatile ("ORR  r0, r0, #0xc0 \n" ); \
-    asm volatile ("MSR  cpsr, r0 \n" ); \
+   asm volatile ("MRS r0, cpsr		\n"  \
+                 "ORR  r0, r0, #0xc0	\n" \
+                 "MSR  cpsr, r0 	\n" \
+                   : : : "r0"); \
   }
 
 /*
@@ -553,9 +554,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 #define _CPU_ISR_Enable( _level )  \
   { \
-    asm volatile ("MRS	r0, cpsr \n" ); \
-    asm volatile ("AND  r0, r0, #0xFFFFFF3F \n" ); \
-    asm volatile ("MSR  cpsr, r0 \n" ); \
+   asm volatile ("MRS r0, cpsr			\n"  \
+                 "AND  r0, r0, #0xFFFFFF3F	\n" \
+                 "MSR  cpsr, r0			\n" \
+                 : : : "r0" ); \
   }
   
 /*
