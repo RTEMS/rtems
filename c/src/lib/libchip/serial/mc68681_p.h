@@ -17,6 +17,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
 typedef struct _mc68681_context
 {
         unsigned8       ucModemCtrl;

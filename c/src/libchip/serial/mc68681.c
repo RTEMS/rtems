@@ -28,6 +28,7 @@
 /*
  * Flow control is only supported when using interrupts
  */
+
 console_flow mc68681_flow_RTSCTS =
 {
   mc68681_negate_RTS,             /* deviceStopRemoteTx */
@@ -76,6 +77,7 @@ typedef void      (*setRegister_f)(
 /*
  *  Console Device Driver Entry Points
  */
+
 static boolean mc68681_probe(int minor)
 {
   /*
@@ -182,6 +184,7 @@ static int mc68681_close(
 /* 
  *  mc68681_write_polled
  */
+
 static void mc68681_write_polled(
   int   minor, 
   char  cChar
