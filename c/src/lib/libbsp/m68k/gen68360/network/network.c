@@ -30,8 +30,9 @@
  * The number of transmit buffer descriptors has to be quite large
  * since a single frame often uses four or more buffer descriptors.
  */
-#define RX_BD_COUNT     15
-#define TX_BD_COUNT     12
+#define RX_BUF_COUNT     15
+#define TX_BUF_COUNT     4
+#define TX_BD_PER_BUF    4
 
 /*
  * RTEMS event used by interrupt handler to signal daemons.
@@ -95,6 +96,7 @@ m360Enet_interrupt_handler (rtems_vector_number v)
 	 */
 	if ((m360.scc1.sccm & 0x8) && (m360.scc1.scce & 0x8)) {
 		m360.scc1.scce = 0x8;
+		m360.scc1.sccm &= ~0x8;
 		m360EnetDriver[0].rxInterrupts++;
 		rtems_event_send (m360EnetDriver[0].iface->rxproc, INTERRUPT_EVENT);
 	}
@@ -104,6 +106,7 @@ m360Enet_interrupt_handler (rtems_vector_number v)
 	 */
 	if ((m360.scc1.sccm & 0x12) && (m360.scc1.scce & 0x12)) {
 		m360.scc1.scce = 0x12;
+		m360.scc1.sccm &= ~0x12;
 		m360EnetDriver[0].txInterrupts++;
 		rtems_event_send (m360EnetDriver[0].txWaitTid, INTERRUPT_EVENT);
 	}
@@ -456,19 +459,12 @@ m360Enet_raw (struct iface *iface, struct mbuf **bpp)
 			m360.scc1.scce = 0x12;
 
 			/*
-			 * Unmask TXB (buffer transmitted) and
-			 * TXE (transmitter error) events.
-			 */
-			m360.scc1.sccm |= 0x12;
-
-			/*
 			 * Wait for buffer descriptor to become available.
 			 * Note that the buffer descriptors are checked
 			 * *before* * entering the wait loop -- this catches
 			 * the possibility that a buffer descriptor became
 			 * available between the `if' above, and the clearing
 			 * of the event register.
-			 * Also, the event receive doesn't wait forever.
 			 * This is to catch the case where the transmitter
 			 * stops in the middle of a frame -- and only the
 			 * last buffer descriptor in a frame can generate
@@ -476,23 +472,16 @@ m360Enet_raw (struct iface *iface, struct mbuf **bpp)
 			 */
 			m360Enet_retire_tx_bd (dp);
 			while ((dp->txBdActiveCount + nAdded) == dp->txBdCount) {
-				rtems_ka9q_event_receive (INTERRUPT_EVENT,
-					RTEMS_WAIT|RTEMS_EVENT_ANY,
-					1 + 1000000/BSP_Configuration.microseconds_per_tick);
-				m360Enet_retire_tx_bd (dp);
-			}
+				/*
+				 * Unmask TXB (buffer transmitted) and
+				 * TXE (transmitter error) events.
+				 */
+				m360.scc1.sccm |= 0x12;
 
-			/*
-			 * Mask TXB and TXE events.
-			 * This eliminates the load of interupts happening
-			 * when the daemon is not interested.
-			 */
-			{
-			ISR_Level level;
-			_ISR_Disable (level);
-			m360.scc1.sccm &= ~0x12;
-			m360.scc1.scce = 0x12;
-			_ISR_Enable (level);
+				rtems_ka9q_event_receive (INTERRUPT_EVENT,
+						RTEMS_WAIT|RTEMS_EVENT_ANY,
+						RTEMS_NO_TIMEOUT);
+				m360Enet_retire_tx_bd (dp);
 			}
 		}
 
@@ -588,11 +577,6 @@ m360Enet_rx (int dev, void *p1, void *p2)
 			m360.scc1.scce = 0x8;
 
 			/*
-			 * Unmask RXF (Full frame received) event
-			 */
-			m360.scc1.sccm |= 0x8;
-
-			/*
 			 * Wait for packet
 			 * Note that the buffer descriptor is checked
 			 * *before* the event wait -- this catches the
@@ -600,23 +584,14 @@ m360Enet_rx (int dev, void *p1, void *p2)
 			 * `if' above, and the clearing of the event register.
 			 */
 			while ((status = rxBd->status) & M360_BD_EMPTY) {
+				/*
+				 * Unmask RXF (Full frame received) event
+				 */
+				m360.scc1.sccm |= 0x8;
+
 				rtems_ka9q_event_receive (INTERRUPT_EVENT,
 						RTEMS_WAIT|RTEMS_EVENT_ANY,
 						RTEMS_NO_TIMEOUT);
-			}
-
-			/*
-			 * Mask RXF (Full frame received) event
-			 * By doing so, we avoid the overhead of
-			 * receive interupts happening while the receive
-			 * daemon is busy elsewhere
-			 */
-			{
-			ISR_Level level;
-			_ISR_Disable (level);
-			m360.scc1.sccm &= ~0x8;
-			m360.scc1.scce = 0x8;
-			_ISR_Enable (level);
 			}
 		}
 
@@ -757,20 +732,18 @@ m360Enet_show (struct iface *iface)
  * Attach an SCC driver to the system
  * This is the only `extern' function in the driver.
  *
- * argv[0]: interface label, e.g., "m360scc1"
- * argv[1]: maximum transmission unit, bytes, e.g., "1500"
- * argv[2]: accept ("broadcast") or ignore ("nobroadcast") broadcast packets
- * Following arguments are optional, but if present, must appear in
- * the following order:
- * rxbdcount ##      -- Set number of receive buffer descriptors
- * txbdcount ##      -- Set number of transmit buffer descriptors
- * Following arguments are optional, but if Ethernet address is
- * specified, Internet address must also be specified. 
- * ###.###.###.###   -- IP address
- * ##:##:##:##:##:## -- Ethernet address
+ * argv[0]: interface label, e.g., "rtems"
+ * The remainder of the arguemnts are key/value pairs:
+ * mtu ##                  --  maximum transmission unit, default 1500
+ * broadcast y/n           -- accept or ignore broadcast packets, default yes
+ * rbuf ##                 -- Set number of receive buffer descriptors
+ * rbuf ##                 -- Set number of transmit buffer descriptors
+ * ip ###.###.###.###      -- IP address
+ * ether ##:##:##:##:##:## -- Ethernet address
+ * ether prom              -- Get Ethernet address from bootstrap PROM
  */
 int
-m360Enet_attach (int argc, char *argv[], void *p)
+rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
 {
 	struct iface *iface;
 	struct m360EnetDriver *dp;
@@ -778,6 +751,7 @@ m360Enet_attach (int argc, char *argv[], void *p)
 	int i;
 	int argIndex;
 	int broadcastFlag;
+	char cbuf[30];
 
 	/*
 	 * Find a free driver
@@ -801,116 +775,104 @@ m360Enet_attach (int argc, char *argv[], void *p)
 	 */
 	iface = callocw (1, sizeof *iface);
 	iface->name = strdup (argv[0]);
-	iface->mtu = atoi (argv[1]);
 
 	/*
-	 * Select broadcast packet handling
+	 * Set default values
 	 */
-	cp = argv[2];
-	if (strnicmp (cp, "broadcast", strlen (cp)) == 0) {
-		broadcastFlag = 1;
-	}
-	else if (strnicmp (cp, "nobroadcast", strlen (cp)) == 0) {
-		broadcastFlag = 0;
-	}
-	else {
-		printf ("Argument `%s' is neither `broadcast' nor `nobroadcast'.\n", cp);
-		return -1;
-	}
-	argIndex = 3;
-
-	/*
-	 * Set receive buffer descriptor count
-	 */
-	dp->rxBdCount = RX_BD_COUNT;
-	if (argIndex < (argc - 1)) {
-		cp = argv[argIndex];
-		if (strnicmp (argv[argIndex], "rxbdcount", strlen (cp)) == 0) {
-			dp->rxBdCount = atoi (argv[argIndex + 1]);
-			argIndex += 2;
-		}
-	}
-		
-	/*
-	 * Set transmit buffer descriptor count
-	 */
+	broadcastFlag = 1;
 	dp->txWaitTid = 0;
-	dp->txBdCount = TX_BD_COUNT;
-	if (argIndex < (argc - 1)) {
-		cp = argv[argIndex];
-		if (strnicmp (argv[argIndex], "txbdcount", strlen (cp)) == 0) {
-			dp->txBdCount = atoi (argv[argIndex + 1]);
-			argIndex += 2;
-		}
-	}
-
-	/*
-	 * Set Internet address
-	 */
-	if (argIndex < argc)
-		iface->addr = resolve (argv[argIndex++]);
-	else
-		iface->addr = Ip_addr;
-
-	/*
-	 * Set Ethernet address
-	 */
+	dp->rxBdCount = RX_BUF_COUNT;
+	dp->txBdCount = TX_BUF_COUNT * TX_BD_PER_BUF;
+	iface->mtu = 1500;
+	iface->addr = Ip_addr;
 	iface->hwaddr = mallocw (EADDR_LEN);
-	if (argIndex < argc) {
-		gether (iface->hwaddr, argv[argIndex++]);
-	}
-	else {
-		/*
-		 * The first 4 bytes of the bootstrap prom contain
-		 * the value loaded into the stack pointer as part
-		 * of the CPU32's hardware reset exception handler.
-		 * The following 4 bytes contain the value loaded
-		 * into the program counter.
-		 * The low order three octets of the boards' Ethernet
-		 * address are stored in the three bytes immediately
-		 * preceding this initial program counter value.
-		 *
-		 * See startup/linkcmds and start360/start360.s for
-		 * details on how this is done.
-		 *
-		 * The high order three octets of the Ethernet address
-		 * are fixed and indicate that the address is that
-		 * of a Motorola device.
-		 */
-		{
-		extern void *_RomBase;	/* Value provided by linkcmds script */
-		const unsigned long *ExceptionVectors;
-		const unsigned char *entryPoint;
-		char cbuf[30];
+	memset (iface->hwaddr, 0x08, EADDR_LEN);
 
-		/*
-		 * Set up the fixed portion of the hardware address
-		 */
-		iface->hwaddr[0] = 0x08;
-		iface->hwaddr[1] = 0x00;
-		iface->hwaddr[2] = 0x3e;
+	/*
+	 * Parse arguments
+	 */
+	for (argIndex = 1 ; argIndex < (argc - 1) ; argIndex++) {
+		if (strcmp ("mtu", argv[argIndex]) == 0) {
+			iface->mtu = atoi (argv[++argIndex]);
+		}
+		else if (strcmp ("broadcast", argv[argIndex]) == 0) {
+			if (*argv[++argIndex] == 'n')
+				broadcastFlag = 0;
+		}
+		else if (strcmp ("rbuf", argv[argIndex]) == 0) {
+			dp->rxBdCount = atoi (argv[++argIndex]);
+		}
+		else if (strcmp ("tbuf", argv[argIndex]) == 0) {
+			dp->txBdCount = atoi (argv[++argIndex]) * TX_BD_PER_BUF;
+		}
+		else if (strcmp ("ip", argv[argIndex]) == 0) {
+			iface->addr = resolve (argv[++argIndex]);
+		}
+		else if (strcmp ("ether", argv[argIndex]) == 0) {
+			argIndex++;
+			if (strcmp (argv[argIndex], "prom") == 0) {
+				/*
+				 * The first 4 bytes of the bootstrap prom
+				 * contain the value loaded into the stack
+				 * pointer as part of the CPU32's hardware
+				 * reset exception handler.  The following
+				 * 4 bytes contain the value loaded into the
+				 * program counter.  The low order three
+				 * octets of the boards' Ethernet address are
+				 * stored in the three bytes immediately
+				 * preceding this initial program counter value.
+				 *
+				 * See startup/linkcmds and start360/start360.s
+				 * for details on how this is done.
+				 *
+				 * The high order three octets of the Ethernet
+				 * address are fixed and indicate that the
+				 * address is that of a Motorola device.
+				 */
+				extern void *_RomBase;	/* From linkcmds */
+				const unsigned long *ExceptionVectors;
+				const unsigned char *entryPoint;
 
-		/*
-		 * Sanity check -- assume entry point must be
-		 * within 1 MByte of beginning of boot ROM.
-		 */
-		ExceptionVectors = (const unsigned long *)&_RomBase;
-		entryPoint = (const unsigned char *)ExceptionVectors[1];
-		if (((unsigned long)entryPoint - (unsigned long)ExceptionVectors)
+				/*
+				 * Set up the fixed portion of the address
+				 */
+				iface->hwaddr[0] = 0x08;
+				iface->hwaddr[1] = 0x00;
+				iface->hwaddr[2] = 0x3e;
+
+				/*
+				 * Sanity check -- assume entry point must be
+				 * within 1 MByte of beginning of boot ROM.
+				 */
+				ExceptionVectors = (const unsigned long *)&_RomBase;
+				entryPoint = (const unsigned char *)ExceptionVectors[1];
+				if (((unsigned long)entryPoint - (unsigned long)ExceptionVectors)
 							>= (1 * 1024 * 1024)) {
-			printf ("Warning -- Ethernet address can not be found in bootstrap PROM.\n");
-			iface->hwaddr[3] = 0x12;
-			iface->hwaddr[4] = 0xE2;
-			iface->hwaddr[5] = 0x05;
+					printf ("Warning -- Ethernet address can not be found in bootstrap PROM.\n");
+					iface->hwaddr[3] = 0xC2;
+					iface->hwaddr[4] = 0xE7;
+					iface->hwaddr[5] = 0x08;
+				}
+				else {
+					iface->hwaddr[3] = entryPoint[-3];
+					iface->hwaddr[4] = entryPoint[-2];
+					iface->hwaddr[5] = entryPoint[-1];
+				}
+			}
+			else {
+				gether (iface->hwaddr, argv[argIndex]);
+			}
 		}
 		else {
-			iface->hwaddr[3] = entryPoint[-3];
-			iface->hwaddr[4] = entryPoint[-2];
-			iface->hwaddr[5] = entryPoint[-1];
-		}
-		printf ("Ethernet address: %s\n", pether (cbuf, iface->hwaddr));
+			printf ("Argument %d (%s) is invalid.\n", argIndex, argv[argIndex]);
+			return -1;
 		}
 	}
+	printf ("Ethernet address: %s\n", pether (cbuf, iface->hwaddr));
+
+	/*
+	 * Fill in remainder of interface configuration
+	 */
 	iface->dev = i;
 	iface->raw = m360Enet_raw;
 	iface->stop = m360Enet_stop;
