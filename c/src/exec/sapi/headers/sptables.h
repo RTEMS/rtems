@@ -61,8 +61,11 @@ const rtems_multiprocessing_table
  *  This is the version string.
  */
 
+#define RTEMS_VERSION "980204"
+
 const char _RTEMS_version[] =
-  "RTEMS RELEASE V4.1.0 (" CPU_NAME "/" CPU_MODEL_NAME ")";
+  "RTEMS RELEASE " RTEMS_VERSION
+     "(" CPU_NAME "/" CPU_MODEL_NAME "/REPLACE_THIS_WITH_THE_BSP)";
 
 
 /*

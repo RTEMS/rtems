@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-H_PIECES= config directives extension fatal init io mptables sptables
+H_PIECES= config directives extension fatal init io mptables 
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
 # H_FILES that get installed externally
@@ -30,6 +30,14 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all:	$(SRCS)
+all:	$(SRCS) $(ARCH) $(PROJECT_INCLUDE)/rtems/score/sptables.h
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/
 	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
+
+$(PROJECT_INCLUDE)/rtems/score/sptables.h: $(ARCH)/sptables.h-tmp
+	$(INSTALL) -m 444 $(ARCH)/sptables.h-tmp $@
+
+$(ARCH)/sptables.h-tmp: $(ARCH) sptables.h
+	$(SED) -e 's?REPLACE_THIS_WITH_THE_BSP?$(RTEMS_BSP)?' \
+	    < $< >$(ARCH)/sptables.h-tmp
+
