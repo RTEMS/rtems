@@ -18,13 +18,9 @@ rtems-cpukit.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
 CLEANFILES = rtems-cpukit.spec.in
 
-c4x-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . c4x-rtems@osversion@ > $@
-RPM_SPECS_DATA = c4x-rtems@osversion@-cpukit.spec
-
 h8300-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . h8300-rtems@osversion@ > $@
-RPM_SPECS_DATA += h8300-rtems@osversion@-cpukit.spec
+RPM_SPECS_DATA = h8300-rtems@osversion@-cpukit.spec
 
 i386-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems@osversion@ > $@
@@ -57,6 +53,10 @@ RPM_SPECS_DATA += sh-rtemself@osversion@-cpukit.spec
 sparc-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems@osversion@ > $@
 RPM_SPECS_DATA += sparc-rtems@osversion@-cpukit.spec
+
+tic4x-rtems@osversion@-cpukit.spec: $(MKSPEC_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . tic4x-rtems@osversion@ > $@
+RPM_SPECS_DATA += tic4x-rtems@osversion@-cpukit.spec
 
 EXTRA_DIST = $(SUBPACKAGES)
 

@@ -1,5 +1,12 @@
 2004-01-28	RTEMS
 
+	* buildall.in, buildalltar.in, binutils/Makefile.am,
+	cpukit/Makefile.am, gcc3newlib/Makefile.am, gccnewlib/Makefile.am,
+	gdb/Makefile.am: Attempt to convert all c4x-rtems references to
+	tic4x-rtems. Left the rtems documentation alone.
+
+2004-01-28	RTEMS
+
 	* configure.ac: Enable OS versioning by default for 4.7 branch.
 	* setup.def: Update binutils RPM version and build new gcc 3.2.3 RPMs.
 	* autotools/autoconf-rtems.spec.in, autotools/automake-rtems.spec.in:

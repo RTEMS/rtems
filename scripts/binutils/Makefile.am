@@ -22,10 +22,6 @@ arm-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@
 RPM_SPECS_DATA += arm-rtems@osversion@-$(BINUTILSVERS).spec
 
-c4x-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
-	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache c4x-rtems@osversion@ > $@
-RPM_SPECS_DATA += c4x-rtems@osversion@-$(BINUTILSVERS).spec
-
 h8300-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(BINUTILSVERS).spec

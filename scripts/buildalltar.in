@@ -101,7 +101,7 @@ fi
 
 # This is the full buildable set.
 if [ "X${TARGETS}" = "X" ] ; then
-  # do not include c4x as primary targets
+  # do not include tic4x as primary targets
   # do not include sh-elf or i960-elf secondary targets
   TARGETS="arm-rtems h8300-rtems i386-rtems \
      m68k-rtems mips-rtems powerpc-rtems  \

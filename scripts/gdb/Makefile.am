@@ -26,11 +26,6 @@ arm-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@
 RPM_SPECS_DATA += arm-rtems@osversion@-$(GDBVERS).spec
 
-# does not build with 5.2
-# c4x-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-# 	$(MKSPEC) -cfg $(top_builddir)/setup.cache c4x-rtems@osversion@ > $@
-# RPM_SPECS_DATA += c4x-rtems@osversion@-$(GDBVERS).spec
-
 h8300-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(GDBVERS).spec
@@ -80,6 +75,12 @@ RPM_SPECS_DATA += sh-rtemself@osversion@-$(GDBVERS).spec
 sparc-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems@osversion@ > $@
 RPM_SPECS_DATA += sparc-rtems@osversion@-$(GDBVERS).spec
+
+# does not build with 5.2
+# tic4x-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+# 	$(MKSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
+# RPM_SPECS_DATA += tic4x-rtems@osversion@-$(GDBVERS).spec
+
 
 CLEANFILES += $(RPM_SPECS_DATA)
 

@@ -28,14 +28,6 @@ arm-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@
 RPM_SPECS_DATA += arm-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
-c4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache c4x-rtems@osversion@ > $@
-RPM_SPECS_DATA += c4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec
-
-tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
-RPM_SPECS_DATA += tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec
-
 h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec
@@ -71,6 +63,10 @@ RPM_SPECS_DATA += sh-rtemself@osversion@-$(GCC3NEWLIBVERS).spec
 sparc-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems@osversion@ > $@
 RPM_SPECS_DATA += sparc-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+
+tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
+RPM_SPECS_DATA += tic4x-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
 CLEANFILES += $(RPM_SPECS_DATA)
 
