@@ -52,7 +52,7 @@ CLOBBER_ADDITIONS +=
 all:	preinstall
 
 preinstall: ${ARCH} $(SRCS) $(PGMS)
-	$(BSDINSTALL) $(INSTBINFLAGS) $(PGMS) ${PROJECT_RELEASE}/bin
+	@INSTALL@ $(INSTBINFLAGS) $(PGMS) ${PROJECT_RELEASE}/bin
 
 # Install the program(s), appending _g or _p as appropriate.
 # for include files, just use $(INSTALL)
