@@ -567,11 +567,11 @@ precsize_ntoa(prec)
 /* converts ascii size/precision X * 10**Y(cm) to 0xXY.  moves pointer. */
 static u_int8_t
 precsize_aton(strptr)
-	char **strptr;
+	const char **strptr;
 {
 	unsigned int mval = 0, cmval = 0;
 	u_int8_t retval = 0;
-	char *cp;
+	const char *cp;
 	int exponent;
 	int mantissa;
 
