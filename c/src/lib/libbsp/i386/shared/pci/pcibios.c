@@ -537,13 +537,3 @@ pcib_convert_err(int err)
     }
   return PCIB_ERR_NOFUNC;
 }
-	
-      
-
-
-  
-      
-  
-
-
-
