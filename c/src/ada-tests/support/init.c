@@ -10,6 +10,7 @@
  *  $Id$
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <bsp.h>
 
 void *POSIX_Init(
@@ -21,6 +22,17 @@ void *POSIX_Init(
   (void) gnat_main ( 0, 0, 0 );
 
   exit( 0 );
+}
+
+/*
+ *  Only for sp04
+ */
+
+rtems_id tcb_to_id(
+  Thread_Control *tcb
+)
+{
+  return tcb->Object.id;
 }
 
 #define CONFIGURE_INIT

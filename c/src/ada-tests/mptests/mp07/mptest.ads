@@ -21,7 +21,6 @@
 --  $Id$
 --
 
-with CLOCK_DRIVER;
 with BSP_MPCI;
 with RTEMS;
 

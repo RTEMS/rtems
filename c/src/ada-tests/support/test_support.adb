@@ -131,7 +131,7 @@ package body Test_Support is
       --  Really should be a "put" followed by a "flush."
       -- 
       Text_IO.Put_Line( "<pause> " );
-      Text_IO.Get_Line( Ignored_String, Ignored_Last );
+      -- Text_IO.Get_Line( Ignored_String, Ignored_Last );
 
    exception
 
