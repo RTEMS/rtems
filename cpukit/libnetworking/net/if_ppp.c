@@ -1,6 +1,8 @@
 /*
  * if_ppp.c - Point-to-Point Protocol (PPP) Asynchronous driver.
- *
+ */
+
+/*-
  * Copyright (c) 1989 Carnegie Mellon University.
  * All rights reserved.
  *
@@ -125,14 +127,14 @@
 #include <net/ppp-comp.h>
 #endif
 
-static int	pppsioctl __P((struct ifnet *, int, caddr_t));
-static void	ppp_requeue __P((struct ppp_softc *));
+static int	pppsioctl(struct ifnet *, int, caddr_t);
+static void	ppp_requeue(struct ppp_softc *);
 #ifdef PPP_COMPRESS
-static void	ppp_ccp __P((struct ppp_softc *, struct mbuf *m, int rcvd));
-static void	ppp_ccp_closed __P((struct ppp_softc *));
+static void	ppp_ccp(struct ppp_softc *, struct mbuf *m, int rcvd);
+static void	ppp_ccp_closed(struct ppp_softc *);
 #endif
-static struct mbuf *ppp_inproc __P((struct ppp_softc *, struct mbuf *));
-static void	pppdumpm __P((struct mbuf *m0));
+static struct mbuf *ppp_inproc(struct ppp_softc *, struct mbuf *);
+static void	pppdumpm(struct mbuf *m0);
 
 /*
  * Some useful mbuf macros not in mbuf.h.
@@ -1111,7 +1113,7 @@ bad:
 /*
  * After a change in the NPmode for some NP, move packets from the
  * npqueue to the send queue or the fast queue as appropriate.
- * Should be called at splsoftnet.
+ * Should be called at spl[soft]net.
  */
 static void
 ppp_requeue(sc)
@@ -1170,10 +1172,7 @@ struct mbuf *
 ppp_dequeue(sc)
     struct ppp_softc *sc;
 {
-    struct mbuf *m;
-#ifdef VJC
-    struct mbuf *mp;
-#endif
+    struct mbuf *m, *mp;
     u_char *cp;
     int address, control, protocol;
 
@@ -1565,6 +1564,9 @@ ppp_inproc(sc, m)
 		goto bad;	/* lose if big headers and no clusters */
 	    }
 	}
+#ifdef MAC
+	mac_create_mbuf_from_mbuf(m, mp);
+#endif
 	cp = mtod(mp, u_char *);
 	cp[0] = adrs;
 	cp[1] = ctrl;

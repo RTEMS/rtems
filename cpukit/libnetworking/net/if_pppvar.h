@@ -94,9 +94,9 @@ struct ppp_softc {
 	char	*sc_mp;			     /* ptr to next char in input mbuf */
 	short	sc_ilen;		     /* length of input packet so far */
 	u_short	sc_fcs;			     /* FCS so far (input) */
+	u_short	sc_outfcs;		     /* FCS so far for output packet */
 	u_char	sc_rawin[16];		     /* chars as received */
 	int	sc_rawin_count;		     /* # in sc_rawin */
-	u_short	sc_outfcs;		     /* FCS so far for output packet */
 
 	struct	ifqueue sc_freeq;            /* free packets */
 	short	sc_outoff;		     /* output packet byte offset */

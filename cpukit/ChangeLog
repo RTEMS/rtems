@@ -1,3 +1,8 @@
+2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/if_ppp.c, libnetworking/net/if_pppvar.h:
+	Ansification, cosmetics from FreeBSD.
+
 2005-02-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_load_tar.c,
