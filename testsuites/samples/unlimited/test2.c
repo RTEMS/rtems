@@ -27,10 +27,10 @@
 void test2()
 {
   rtems_status_code   result;
-  rtems_unsigned32    remove_task;
-  rtems_unsigned32    task;
-  rtems_unsigned32    block;
-  rtems_unsigned32    task_count = 0;
+  uint32_t      remove_task;
+  uint32_t      task;
+  uint32_t      block;
+  uint32_t      task_count = 0;
   rtems_id            removed_ids[TASK_ALLOCATION_SIZE * 2];
   
   char               c1 = 'a';
@@ -126,7 +126,7 @@ void test2()
   for (task = 0; task < (TASK_ALLOCATION_SIZE * 2); task++)
   {
     rtems_name       name;
-    rtems_unsigned32 id_slot;
+    uint32_t   id_slot;
 
     /*
      *  Find a free slot in the task id table.
@@ -202,7 +202,7 @@ void test2()
     
     if (remove_task == (TASK_ALLOCATION_SIZE * 2))
     {
-      rtems_unsigned32 allocated_id;
+      uint32_t   allocated_id;
       
       for (allocated_id = 0; allocated_id < MAX_TASKS; allocated_id++)
         if ((task_id[id_slot] == task_id[allocated_id]) && (id_slot != allocated_id))

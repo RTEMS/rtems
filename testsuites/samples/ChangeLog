@@ -1,3 +1,9 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* fileio/init.c, fileio/system.h, ticker/system.h, ticker/tasks.c,
+	unlimited/init.c, unlimited/test1.c, unlimited/test2.c,
+	unlimited/test3.c: Convert to using c99 fixed size types.
+
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add 2nd arg to RTEMS_TOP.

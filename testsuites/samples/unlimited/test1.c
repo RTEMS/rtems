@@ -26,7 +26,7 @@ void test1()
 {
   boolean           auto_extend;
   rtems_status_code result;
-  rtems_unsigned32  task_count = 0;
+  uint32_t    task_count = 0;
   Objects_Information *the_information;
   
   char              c1 = 'a';

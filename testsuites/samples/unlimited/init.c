@@ -37,7 +37,7 @@ rtems_task Init(
 {
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
-  rtems_unsigned32    task;
+  uint32_t      task;
 
   /* lower the task priority to allow created tasks to execute */
   
@@ -80,7 +80,7 @@ void destory_all_tasks(
   const char *who
 )
 {
-  rtems_unsigned32 task;
+  uint32_t   task;
   
   /*
    *  If the id is not zero, signal the task to delete.

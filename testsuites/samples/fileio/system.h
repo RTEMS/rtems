@@ -93,7 +93,7 @@ int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
 
 #define put_name( _name, _crlf ) \
   do { \
-    rtems_unsigned32 c0, c1, c2, c3; \
+    uint32_t   c0, c1, c2, c3; \
     \
     c0 = ((_name) >> 24) & 0xff; \
     c1 = ((_name) >> 16) & 0xff; \
@@ -111,7 +111,7 @@ int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
  *  static inline routine to make obtaining ticks per second easier.
  */
 
-static inline rtems_unsigned32 get_ticks_per_second( void )
+static inline uint32_t   get_ticks_per_second( void )
 {
   rtems_interval ticks_per_second;
   (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );  return ticks_per_second;

@@ -163,7 +163,7 @@ void fileio_list_file(void)
 {
   char fname[1024];
   char *buf_ptr = NULL;
-  unsigned32 flen = 0;
+  uint32_t   flen = 0;
   int fd = -1;
   ssize_t n;
   size_t buf_size = 100;
@@ -225,7 +225,7 @@ void fileio_list_file(void)
 /*
  * convert a size string (like 34K or 12M) to actual byte count
  */
-boolean fileio_str2size(const char *str,unsigned32 *res_ptr)
+boolean fileio_str2size(const char *str,uint32_t   *res_ptr)
 {
   boolean failed = FALSE;
   unsigned long size;
@@ -254,8 +254,8 @@ void fileio_write_file(void)
 {
   char fname[1024];
   char tmp_str[32];
-  unsigned32 file_size = 0;
-  unsigned32 buf_size  = 0;
+  uint32_t   file_size = 0;
+  uint32_t   buf_size  = 0;
   size_t curr_pos,bytes_to_copy;
   int fd = -1;
   ssize_t n;
@@ -415,7 +415,7 @@ void fileio_read_file(void)
 {
   char fname[1024];
   char tmp_str[32];
-  unsigned32 buf_size  = 0;
+  uint32_t   buf_size  = 0;
   size_t curr_pos;
   int fd = -1;
   ssize_t n;

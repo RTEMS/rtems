@@ -27,9 +27,9 @@
 void test3()
 {
   rtems_status_code   result;
-  rtems_unsigned32    remove_task;
-  rtems_unsigned32    block;
-  rtems_unsigned32    task_count = 0;
+  uint32_t      remove_task;
+  uint32_t      block;
+  uint32_t      task_count = 0;
   
   char               c1 = 'a';
   char               c2 = 'a';
