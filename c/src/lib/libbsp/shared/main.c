@@ -57,8 +57,6 @@ int boot_card(int argc, char **argv)
 
   bsp_cleanup();  
 
-  exit( status );
-
   return status;
 }
 
