@@ -2,7 +2,7 @@
  *  Timer Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,4 +47,11 @@ void _Timer_Manager_initialization(
     RTEMS_MAXIMUM_NAME_LENGTH,
     FALSE
   );
+
+  /*
+   *  Initialize the pointer to the Timer Server TCB to NULL indicating
+   *  that task-based timer support is not initialized.
+   */
+
+  _Timer_Server = NULL;
 }

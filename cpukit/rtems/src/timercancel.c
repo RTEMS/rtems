@@ -1,8 +1,8 @@
 /*
- *  Timer Manager
+ *  Timer Manager - rtems_timer_cancel directive
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,7 +32,7 @@
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_timer_cancel(

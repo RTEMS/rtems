@@ -1,5 +1,25 @@
 2001-01-16	Joel Sherrill <joel@OARcorp.com>
 
+	* Added task-based timers to the Timer Manager.  This added three
+	new directives: 
+	    - rtems_timer_initiate_server
+	    - rtems_timer_server_fire_after
+	    - rtems_timer_server_fire_when
+	In the process of doing this, a number of cleanups were made.
+	* src/timerserver.c, src/timerserverfireafter.c,
+	src/timerserverfirewhen.c: New files.
+	* include/timer/timer.h: Added new prototypes and supporting types.
+	* inline/rtems/rtems/timer.h, macros/rtems/rtems/timer.h: Enhanced
+	_Timer_Is_interval_class() to cover the class TIMER_INTERVAL_ON_TASK.
+	* src/Makefile.am: Accounted for new files.
+	* src/rtemstimer.c: Added initialization of _Timer_Server variable.
+	* src/timercancel.c, src/timerreset.c: Account for addition
+	of timer classes.  Also corrected the headers.
+	* src/timercreate.c, src/timerdelete.c, src/timerfireafter.c, 
+	src/timerfireafter.c, src/timerident.c: Corrected header.
+
+2001-01-16	Joel Sherrill <joel@OARcorp.com>
+
 	* src/taskmode.c: Ensure the this service does not dispatch before
 	tasking is enabled at initialization time.
 

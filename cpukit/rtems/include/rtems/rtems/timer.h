@@ -10,12 +10,17 @@
  *     + create a timer
  *     + get an ID of a timer
  *     + delete a timer
- *     + set a timer to fire after a number of ticks have passed
- *     + set a timer to fire when a specified date and time has been reached
+ *     + set timer to fire in context of clock tick 
+ *        - after a number of ticks have passed
+ *        - when a specified date and time has been reached
+ *     + initiate the timer server task
+ *     + set timer to fire in context of the timer server task
+ *        - after a number of ticks have passed
+ *        - when a specified date and time has been reached
  *     + reset a timer
  *     + cancel a time
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,6 +40,7 @@ extern "C" {
 #include <rtems/score/object.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/rtems/attr.h>
 
 /*
  *  The following enumerated type details the classes to which a timer
@@ -43,7 +49,9 @@ extern "C" {
 
 typedef enum {
   TIMER_INTERVAL,
+  TIMER_INTERVAL_ON_TASK,
   TIMER_TIME_OF_DAY,
+  TIMER_TIME_OF_DAY_ON_TASK,
   TIMER_DORMANT
 } Timer_Classes;
 
@@ -66,6 +74,29 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
 RTEMS_EXTERN Objects_Information  _Timer_Information;
 
 /*
+ *  Pointer to TCB of the Timer Server.  This is NULL before the
+ *  server is executing and task-based timers are not allowed to be
+ *  initiated until the server is started.
+ */
+
+RTEMS_EXTERN Thread_Control *_Timer_Server;
+
+/*  
+ *  The following chains contain the list of interval timers that are
+ *  executed in the context of the Timer Server.
+ *
+ *  NOTE: These are extern'ed because they do not have to be in the
+ *        minimum footprint.  They are only really required when 
+ *        task-based timers are used.  Since task-based timers can
+ *        not be started until the server is initiated, these structures
+ *        do not have to be initialized until then.  They are declared
+ *        in the same file as _Timer_Server_body.
+ */   
+
+extern Chain_Control _Timer_Ticks_chain;
+extern Chain_Control _Timer_Seconds_chain;
+
+/*
  *  The following records define the control block used to manage
  *  each timer.
  */
@@ -86,6 +117,39 @@ typedef struct {
 
 void _Timer_Manager_initialization(
   unsigned32 maximum_timers
+);
+
+/*
+ *  _Timer_Server_body
+ *
+ *  DESCRIPTION:
+ *
+ *  This is the server for task based timers.  This task executes whenever
+ *  a task-based timer should fire.  It services both "after" and "when"
+ *  timers.  It is not created automatically but must be created explicitly
+ *  by the application before task-based timers may be initiated.
+ */
+
+Thread _Timer_Server_body(
+  unsigned32 ignored
+);
+
+/*
+ *  _Timer_Server_reset
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine resets the timers which determine when the Timer Server
+ *  will wake up next to service task-based timers.
+ */
+
+typedef enum {
+  TIMER_SERVER_RESET_TICKS,
+  TIMER_SERVER_RESET_SECONDS
+} Timer_Server_reset_mode;
+
+void _Timer_Server_reset(
+  Timer_Server_reset_mode  reset_mode
 );
 
 /*
@@ -151,11 +215,32 @@ rtems_status_code rtems_timer_delete(
  *  DESCRIPTION:
  *
  *  This routine implements the rtems_timer_fire_after directive.  It
- *  initiates the timer associated with ID to fire in ticks clock
- *  ticks.  When the timer fires, the routine will be invoked.
+ *  initiates the timer associated with ID to fire in ticks clock ticks.
+ *  When the timer fires, the routine will be invoked in the context
+ *  of the rtems_clock_tick directive which is normally invoked as
+ *  part of servicing a periodic interupt.
  */
 
 rtems_status_code rtems_timer_fire_after(
+  Objects_Id                         id,
+  rtems_interval                     ticks,
+  rtems_timer_service_routine_entry  routine,
+  void                              *user_data
+);
+
+/*
+ *  rtems_timer_server_fire_after
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_timer_server_fire_after directive.  It
+ *  initiates the timer associated with ID to fire in ticks clock
+ *  ticks.  When the timer fires, the routine will be invoked by the
+ *  Timer Server in the context of a task NOT IN THE CONTEXT of the
+ *  clock tick interrupt.
+ */
+
+rtems_status_code rtems_timer_server_fire_after(
   Objects_Id                         id,
   rtems_interval                     ticks,
   rtems_timer_service_routine_entry  routine,
@@ -169,10 +254,31 @@ rtems_status_code rtems_timer_fire_after(
  *
  *  This routine implements the rtems_timer_fire_when directive.  It
  *  initiates the timer associated with ID to fire at wall_time
- *  When the timer fires, the routine will be invoked.
+ *  When the timer fires, the routine will be invoked in the context
+ *  of the rtems_clock_tick directive which is normally invoked as
+ *  part of servicing a periodic interupt.
  */
 
 rtems_status_code rtems_timer_fire_when(
+  Objects_Id                          id,
+  rtems_time_of_day                  *wall_time,
+  rtems_timer_service_routine_entry   routine,
+  void                               *user_data
+);
+
+/*
+ *  rtems_timer_server_fire_when
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_timer_server_fire_when directive.  It
+ *  initiates the timer associated with ID to fire at wall_time
+ *  When the timer fires, the routine will be invoked by the
+ *  Timer Server in the context of a task NOT IN THE CONTEXT of the
+ *  clock tick interrupt.
+ */
+
+rtems_status_code rtems_timer_server_fire_when(
   Objects_Id                          id,
   rtems_time_of_day                  *wall_time,
   rtems_timer_service_routine_entry   routine,
@@ -192,6 +298,21 @@ rtems_status_code rtems_timer_fire_when(
 
 rtems_status_code rtems_timer_reset(
   Objects_Id id
+);
+
+/*
+ *  rtems_timer_initiate_server
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_timer_initiate_server directive.
+ *  It creates and starts the server that executes task-based timers.
+ *  It must be invoked before any task-based timers can be initiated.
+ */
+
+rtems_status_code rtems_timer_initiate_server(
+  unsigned32           stack_size,
+  rtems_attribute      attribute_set
 );
 
 #ifndef __RTEMS_APPLICATION__

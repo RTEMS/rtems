@@ -1,8 +1,8 @@
 /*
- *  Timer Manager
+ *  Timer Manager - rtems_timer_reset directive
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,7 +32,7 @@
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_timer_reset(
@@ -51,13 +51,23 @@ rtems_status_code rtems_timer_reset(
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
-      if ( _Timer_Is_interval_class( the_timer->the_class ) ) {
-        _Watchdog_Reset( &the_timer->Ticker );
-        _Thread_Enable_dispatch();
-        return RTEMS_SUCCESSFUL;
+      switch ( the_timer->the_class ) {
+        case TIMER_INTERVAL:
+          _Watchdog_Remove( &the_timer->Ticker );
+          _Watchdog_Insert( &_Watchdog_Ticks_chain, &the_timer->Ticker );
+          break;
+        case TIMER_INTERVAL_ON_TASK:
+          _Watchdog_Remove( &the_timer->Ticker );
+          _Watchdog_Insert( &_Timer_Ticks_chain, &the_timer->Ticker );
+          break;
+        case TIMER_TIME_OF_DAY:
+        case TIMER_TIME_OF_DAY_ON_TASK:
+        case TIMER_DORMANT:
+          _Thread_Enable_dispatch();
+          return RTEMS_NOT_DEFINED;
       }
       _Thread_Enable_dispatch();
-      return RTEMS_NOT_DEFINED;
+      return RTEMS_SUCCESSFUL;
   }
 
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */

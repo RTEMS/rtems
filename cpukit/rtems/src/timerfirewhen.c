@@ -1,8 +1,8 @@
 /*
- *  Timer Manager
+ *  Timer Manager - rtems_timer_fire_when directive
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,10 +31,11 @@
  *    id        - timer id
  *    wall_time - time of day to fire timer
  *    routine   - routine to schedule
+ *    user_data - passed as argument to routine when it is fired
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_timer_fire_when(

@@ -26,7 +26,8 @@ INTR_C_FILES = intr.c intrbody.c intrcatch.c
 CLOCK_C_FILES = rtclock.c clockget.c clockset.c clocktick.c
 
 TIMER_C_FILES = rtemstimer.c timercancel.c timercreate.c timerdelete.c \
-    timerfireafter.c timerfirewhen.c timerident.c timerreset.c
+    timerfireafter.c timerfirewhen.c timerident.c timerreset.c timerserver.c \
+    timerserverfireafter.c timerserverfirewhen.c
 
 MESSAGE_QUEUE_C_FILES = msg.c msgqallocate.c msgqbroadcast.c msgqcreate.c \
     msgqdelete.c msgqflush.c msgqgetnumberpending.c msgqident.c \

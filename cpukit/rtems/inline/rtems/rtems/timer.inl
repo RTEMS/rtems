@@ -84,7 +84,7 @@ RTEMS_INLINE_ROUTINE boolean _Timer_Is_interval_class (
   Timer_Classes the_class
 )
 {
-  return ( the_class == TIMER_INTERVAL );
+  return (the_class == TIMER_INTERVAL) || (the_class == TIMER_INTERVAL_ON_TASK);
 }
 
 /*PAGE

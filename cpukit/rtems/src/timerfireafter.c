@@ -1,8 +1,8 @@
 /*
- *  Timer Manager
+ *  Timer Manager - rtems_timer_fire_after directive
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,13 +28,14 @@
  *  This directive allows a thread to start a timer.
  *
  *  Input parameters:
- *    id      - timer id
- *    ticks   - interval until routine is fired
- *    routine - routine to schedule
+ *    id        - timer id
+ *    ticks     - interval until routine is fired
+ *    routine   - routine to schedule
+ *    user_data - passed as argument to routine when it is fired
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_timer_fire_after(
