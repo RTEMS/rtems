@@ -82,15 +82,15 @@ The directory entry specified resides on a read-only file system.
 @subheading DESCRIPTION:
 
 The @code{dump_setpath} function defines the pathname where process
-dumps are written.  The pathname pointed to by @code{path} shall 
-define where a process dump file will be written if the calling 
-process terminates with a dump file.  The @code{path} argument 
-shall not name a directory.
+dumps are written.  The pathname pointed to by @code{path} defines 
+where a process dump file is written if the calling process 
+terminates with a dump file.  The @code{path} argument does not 
+name a directory.
 
-If the @code{path} argument is NULL, the system shall not write a
+If the @code{path} argument is NULL, the system does not write a
 process dump file if the calling process terminates with a dump 
 file.  If the @code{dump_setpath} function fails, the pathname for
-writing process dumps shall not change.
+writing process dumps does not change.
 
 @subheading NOTES:
 
