@@ -42,4 +42,4 @@ case ${target} in
   *) ;;
 esac >> ${dst}/$target_alias-gdb.spec
 
-echo Generated ${dst}/rtems-$target_alias-gdb.spec.
+echo Generated ${dst}/$target_alias-gdb.spec.

@@ -91,6 +91,7 @@ test -d build || mkdir build
 %install
 ( cd build
   make prefix=$RPM_BUILD_ROOT/opt/rtems install
+  cd @target_alias@/newlib
   make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
 )
 

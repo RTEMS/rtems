@@ -31,4 +31,4 @@ sed -e "s%@Version@%${RTEMS_VERSION}%g" \
 < ${RTEMS_DIR}/binutils.spec.in \
 > ${dst}/$target_alias-binutils.spec
 
-echo Generated ${dst}/rtems-$target_alias-binutils.spec.
+echo Generated ${dst}/$target_alias-binutils.spec.
