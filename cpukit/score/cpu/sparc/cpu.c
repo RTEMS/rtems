@@ -83,9 +83,9 @@ void _CPU_Initialize(
  *    returns the current interrupt level (PIL field of the PSR)
  */
  
-unsigned32 _CPU_ISR_Get_level( void )
+uint32_t   _CPU_ISR_Get_level( void )
 {
-  unsigned32 level;
+  uint32_t   level;
  
   sparc_get_interrupt_level( level );
  
@@ -131,16 +131,16 @@ unsigned32 _CPU_ISR_Get_level( void )
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
 {
-  unsigned32             real_vector;
+  uint32_t               real_vector;
   CPU_Trap_table_entry  *tbr;
   CPU_Trap_table_entry  *slot;
-  unsigned32             u32_tbr;
-  unsigned32             u32_handler;
+  uint32_t               u32_tbr;
+  uint32_t               u32_handler;
 
   /*
    *  Get the "real" trap number for this vector ignoring the synchronous
@@ -187,7 +187,7 @@ void _CPU_ISR_install_raw_handler(
 
   *slot = _CPU_Trap_slot_template;
 
-  u32_handler = (unsigned32) new_handler;
+  u32_handler = (uint32_t  ) new_handler;
 
   slot->mov_vector_l3 |= vector;
   slot->sethi_of_handler_to_l4 |= 
@@ -218,12 +218,12 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
 {
-   unsigned32 real_vector;
+   uint32_t   real_vector;
    proc_ptr   ignored;
 
   /*
@@ -273,23 +273,23 @@ void _CPU_ISR_install_vector(
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
-  unsigned32       *stack_base,
-  unsigned32        size,
-  unsigned32        new_level,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
   void             *entry_point,
   boolean           is_fp
 )
 {
-    unsigned32   stack_high;  /* highest "stack aligned" address */
-    unsigned32   the_size;
-    unsigned32   tmp_psr;
+    uint32_t     stack_high;  /* highest "stack aligned" address */
+    uint32_t     the_size;
+    uint32_t     tmp_psr;
  
     /*
      *  On CPUs with stacks which grow down (i.e. SPARC), we build the stack
      *  based on the stack_high address.  
      */
  
-    stack_high = ((unsigned32)(stack_base) + size);
+    stack_high = ((uint32_t  )(stack_base) + size);
     stack_high &= ~(CPU_STACK_ALIGNMENT - 1);
  
     the_size = size & ~(CPU_STACK_ALIGNMENT - 1);
@@ -298,7 +298,7 @@ void _CPU_Context_Initialize(
      *  See the README in this directory for a diagram of the stack.
      */
  
-    the_context->o7    = ((unsigned32) entry_point) - 8;
+    the_context->o7    = ((uint32_t  ) entry_point) - 8;
     the_context->o6_sp = stack_high - CPU_MINIMUM_STACK_FRAME_SIZE;
     the_context->i6_fp = stack_high;
 

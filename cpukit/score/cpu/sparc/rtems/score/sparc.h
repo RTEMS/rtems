@@ -228,7 +228,7 @@ extern "C" {
   
 #define sparc_flash_interrupts( _level ) \
   do { \
-    register unsigned32 _ignored = 0; \
+    register uint32_t   _ignored = 0; \
     \
     sparc_enable_interrupts( (_level) ); \
     sparc_disable_interrupts( _ignored ); \
@@ -237,7 +237,7 @@ extern "C" {
 /*
 #define sparc_set_interrupt_level( _new_level ) \
   do { \
-    register unsigned32 _new_psr_level = 0; \
+    register uint32_t   _new_psr_level = 0; \
     \
     sparc_get_psr( _new_psr_level ); \
     _new_psr_level &= ~SPARC_PSR_PIL_MASK; \
@@ -249,7 +249,7 @@ extern "C" {
 
 #define sparc_get_interrupt_level( _level ) \
   do { \
-    register unsigned32 _psr_level = 0; \
+    register uint32_t   _psr_level = 0; \
     \
     sparc_get_psr( _psr_level ); \
     (_level) = \

@@ -210,34 +210,34 @@ extern "C" {
 #ifndef ASM
 
 typedef struct {
-  unsigned32  l0;
-  unsigned32  l1;
-  unsigned32  l2;
-  unsigned32  l3;
-  unsigned32  l4;
-  unsigned32  l5;
-  unsigned32  l6;
-  unsigned32  l7;
-  unsigned32  i0;
-  unsigned32  i1;
-  unsigned32  i2;
-  unsigned32  i3;
-  unsigned32  i4;
-  unsigned32  i5;
-  unsigned32  i6_fp;
-  unsigned32  i7;
+  uint32_t    l0;
+  uint32_t    l1;
+  uint32_t    l2;
+  uint32_t    l3;
+  uint32_t    l4;
+  uint32_t    l5;
+  uint32_t    l6;
+  uint32_t    l7;
+  uint32_t    i0;
+  uint32_t    i1;
+  uint32_t    i2;
+  uint32_t    i3;
+  uint32_t    i4;
+  uint32_t    i5;
+  uint32_t    i6_fp;
+  uint32_t    i7;
   void       *structure_return_address;
   /*
    *  The following are for the callee to save the register arguments in
    *  should this be necessary.
    */
-  unsigned32  saved_arg0;
-  unsigned32  saved_arg1;
-  unsigned32  saved_arg2;
-  unsigned32  saved_arg3;
-  unsigned32  saved_arg4;
-  unsigned32  saved_arg5;
-  unsigned32  pad0;
+  uint32_t    saved_arg0;
+  uint32_t    saved_arg1;
+  uint32_t    saved_arg2;
+  uint32_t    saved_arg3;
+  uint32_t    saved_arg4;
+  uint32_t    saved_arg5;
+  uint32_t    pad0;
 }  CPU_Minimum_stack_frame;
 
 #endif /* ASM */
@@ -296,41 +296,41 @@ typedef struct {
      *  and stores safely in the context switch.
      */
     double     g0_g1;
-    unsigned32 g2;
-    unsigned32 g3;
-    unsigned32 g4;
-    unsigned32 g5;
-    unsigned32 g6;
-    unsigned32 g7;
+    uint32_t   g2;
+    uint32_t   g3;
+    uint32_t   g4;
+    uint32_t   g5;
+    uint32_t   g6;
+    uint32_t   g7;
 
-    unsigned32 l0;
-    unsigned32 l1;
-    unsigned32 l2;
-    unsigned32 l3;
-    unsigned32 l4;
-    unsigned32 l5;
-    unsigned32 l6;
-    unsigned32 l7;
+    uint32_t   l0;
+    uint32_t   l1;
+    uint32_t   l2;
+    uint32_t   l3;
+    uint32_t   l4;
+    uint32_t   l5;
+    uint32_t   l6;
+    uint32_t   l7;
 
-    unsigned32 i0;
-    unsigned32 i1;
-    unsigned32 i2;
-    unsigned32 i3;
-    unsigned32 i4;
-    unsigned32 i5;
-    unsigned32 i6_fp;
-    unsigned32 i7;
+    uint32_t   i0;
+    uint32_t   i1;
+    uint32_t   i2;
+    uint32_t   i3;
+    uint32_t   i4;
+    uint32_t   i5;
+    uint32_t   i6_fp;
+    uint32_t   i7;
 
-    unsigned32 o0;
-    unsigned32 o1;
-    unsigned32 o2;
-    unsigned32 o3;
-    unsigned32 o4;
-    unsigned32 o5;
-    unsigned32 o6_sp;
-    unsigned32 o7;
+    uint32_t   o0;
+    uint32_t   o1;
+    uint32_t   o2;
+    uint32_t   o3;
+    uint32_t   o4;
+    uint32_t   o5;
+    uint32_t   o6_sp;
+    uint32_t   o7;
 
-    unsigned32 psr;
+    uint32_t   psr;
 } Context_Control;
 
 #endif /* ASM */
@@ -402,7 +402,7 @@ typedef struct {
     double      f26_f27;
     double      f28_f29;
     double      f30_f31;
-    unsigned32  fsr;
+    uint32_t    fsr;
 } Context_Control_fp;
 
 #endif /* ASM */
@@ -442,26 +442,26 @@ typedef struct {
 
 typedef struct {
   CPU_Minimum_stack_frame  Stack_frame;
-  unsigned32               psr;
-  unsigned32               pc;
-  unsigned32               npc;
-  unsigned32               g1;
-  unsigned32               g2;
-  unsigned32               g3;
-  unsigned32               g4;
-  unsigned32               g5;
-  unsigned32               g6;
-  unsigned32               g7;
-  unsigned32               i0;
-  unsigned32               i1;
-  unsigned32               i2;
-  unsigned32               i3;
-  unsigned32               i4;
-  unsigned32               i5;
-  unsigned32               i6_fp;
-  unsigned32               i7;
-  unsigned32               y;
-  unsigned32               tpc;
+  uint32_t                 psr;
+  uint32_t                 pc;
+  uint32_t                 npc;
+  uint32_t                 g1;
+  uint32_t                 g2;
+  uint32_t                 g3;
+  uint32_t                 g4;
+  uint32_t                 g5;
+  uint32_t                 g6;
+  uint32_t                 g7;
+  uint32_t                 i0;
+  uint32_t                 i1;
+  uint32_t                 i2;
+  uint32_t                 i3;
+  uint32_t                 i4;
+  uint32_t                 i5;
+  uint32_t                 i6_fp;
+  uint32_t                 i7;
+  uint32_t                 y;
+  uint32_t                 tpc;
 } CPU_Interrupt_frame;
 
 #endif /* ASM */
@@ -506,10 +506,10 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
@@ -560,10 +560,10 @@ SCORE_EXTERN void *_CPU_Interrupt_stack_high;
  */
  
 typedef struct {
-  unsigned32   mov_psr_l0;                     /* mov   %psr, %l0           */
-  unsigned32   sethi_of_handler_to_l4;         /* sethi %hi(_handler), %l4  */
-  unsigned32   jmp_to_low_of_handler_plus_l4;  /* jmp   %l4 + %lo(_handler) */
-  unsigned32   mov_vector_l3;                  /* mov   _vector, %l3        */
+  uint32_t     mov_psr_l0;                     /* mov   %psr, %l0           */
+  uint32_t     sethi_of_handler_to_l4;         /* sethi %hi(_handler), %l4  */
+  uint32_t     jmp_to_low_of_handler_plus_l4;  /* jmp   %l4 + %lo(_handler) */
+  uint32_t     mov_vector_l3;                  /* mov   _vector, %l3        */
 } CPU_Trap_table_entry;
  
 /*
@@ -748,7 +748,7 @@ extern void sparc_enable_interrupts();
 #define _CPU_ISR_Set_level( _newlevel ) \
    sparc_enable_interrupts( _newlevel << 8)
  
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
  
 /* end of ISR handler macros */
 
@@ -770,9 +770,9 @@ unsigned32 _CPU_ISR_Get_level( void );
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
-  unsigned32       *stack_base,
-  unsigned32        size,
-  unsigned32        new_level,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
   void             *entry_point,
   boolean           is_fp
 );
@@ -823,7 +823,7 @@ void _CPU_Context_Initialize(
 
 #define _CPU_Fatal_halt( _error ) \
   do { \
-    unsigned32 level; \
+    uint32_t   level; \
     \
     level = sparc_disable_interrupts(); \
     asm volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) ); \
@@ -882,7 +882,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -894,7 +894,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -977,7 +977,7 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-  unsigned32 byte1, byte2, byte3, byte4, swapped;
+  uint32_t   byte1, byte2, byte3, byte4, swapped;
  
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
