@@ -689,6 +689,7 @@ else
 fi
 
 
+
 PACKAGE=scripts
 
 VERSION=19991022-0
@@ -701,7 +702,7 @@ fi
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
-echo "configure:705: checking for working aclocal" >&5
+echo "configure:706: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -714,7 +715,7 @@ else
 fi
 
 echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
-echo "configure:718: checking for working autoconf" >&5
+echo "configure:719: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -727,7 +728,7 @@ else
 fi
 
 echo $ac_n "checking for working automake""... $ac_c" 1>&6
-echo "configure:731: checking for working automake" >&5
+echo "configure:732: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -740,7 +741,7 @@ else
 fi
 
 echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
-echo "configure:744: checking for working autoheader" >&5
+echo "configure:745: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -753,7 +754,7 @@ else
 fi
 
 echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
-echo "configure:757: checking for working makeinfo" >&5
+echo "configure:758: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -777,7 +778,7 @@ test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 # redhat uses /usr/src/redhat
 # others might use /usr/src
 echo $ac_n "checking for rpm SPECS directory""... $ac_c" 1>&6
-echo "configure:781: checking for rpm SPECS directory" >&5
+echo "configure:782: checking for rpm SPECS directory" >&5
 if test -d /usr/src/packages/SPECS;
 then
   RPM_SPECSdir=/usr/src/packages/SPECS;
