@@ -1,3 +1,8 @@
+2005-01-19	Joel Sherrill <joel@OARcorp.com>
+
+	* pc386/console/vgainit.c, pc386/wd8003/wd8003.c, shared/comm/uart.c:
+	Fix errors caught by gcc 4.x.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

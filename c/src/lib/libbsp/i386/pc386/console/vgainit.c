@@ -170,7 +170,7 @@ setmode(MODE mode)
 
 /* VGA 800x600 16-color graphics (BIOS mode 0x29).
  */
-static REGIO graphics_on[] = {
+REGIO graphics_on[] = {
   /* Reset attr F/F */
   IN, ATTRREG, 0, 0, 0,
 

@@ -281,7 +281,8 @@ wd_rxDaemon (void *arg)
   unsigned int i2;
   unsigned int len;
   volatile unsigned char start, next, current;
-  char *shp, *temp;
+  unsigned char *shp, *temp;
+  unsigned short *real_short_ptr;
   rtems_event_set events;
 
   tport = wd_softc[0].port ;
@@ -308,9 +309,11 @@ wd_rxDaemon (void *arg)
       if (current == start)
 	break;
 
+      /* real_short_ptr avoids cast on lvalue which gcc no longer allows */
       shp = dp->base + 1 + (SHAPAGE * start);
       next = *shp++;
-      len = *((short *)shp)++ - 4;
+      real_short_ptr = (unsigned short *)shp;
+      len = *(real_short_ptr)++ - 4;
 
       if (next >= OUTPAGE){
 	next = 0;
