@@ -30,7 +30,14 @@ The directives provided by the configuration space manager are:
 @item @code{cfg_read} - Read a Configuration Space
 @item @code{cfg_children} - Get Node Entries
 @item @code{cfg_mark} - Set Configuration Space Option
-@item @code{cfg_close} - Close a Configuration Space
+@item @code{readdir} - Reads a directory
+@item @code{umask} - Sets a file creation mask
+@item @code{link} - Creates a link to a file
+@item @code{unlink} - Removes a directory entry
+@item @code{mkdir} - Makes a directory
+@item @code{open} - Opens a file
+@item @code{chmod} - Changes file mode
+@item @code{chown} - Changes the owner and/or group of a file
 @end itemize
 
 @section Background
@@ -1123,3 +1130,483 @@ traversal stream should be deallocated.  Upon return, the value of
 
 The @code{_POSIX_CFG} feature flag is defined to indicate
 this service is available.
+
+@page
+@subsection readdir - Reads a directory
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/types.h>
+#include <dirent.h>
+
+struct dirent *readdir(
+  DIR   *dirp
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EBADF
+Invalid file descriptor
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{readdir} function returns a pointer to a structure @code{dirent}
+representing the next directory entry from the directory stream pointed to
+by @code{dirp}.  On end-of-file, NULL is returned.
+
+The @code{readdir} function may (or may not) return entries for . or .. Your
+program should tolerate reading dot and dot-dot but not require them.
+
+The data pointed to be @code{readdir} may be overwritten by another call to
+@code{readdir} for the same directory stream.  It will not be overwritten by 
+a call for another directory.
+
+@subheading NOTES:
+
+If ptr is not a pointer returned by @code{malloc}, @code{calloc}, or 
+@code{realloc} or has been deallocated with @code{free} or @code{realloc}, 
+the results are not portable and are probably disastrous.
+
+@page
+@subsection open - Opens a file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+int open(
+   const char *path,
+   int         oflag,
+   mode_t      mode
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+@item EEXIST
+The named file already exists.
+@item EINTR
+Function was interrupted by a signal.
+@item EISDIR
+Attempt to open a directory for writing or to rename a file to be a
+directory.
+@item EMFILE
+Too many file descriptors are in use by this process.
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
+effect.
+@item ENFILE
+Too many files are currently open in the system.
+@item ENOENT
+A file or directory does not exist.
+@item ENOSPC
+No space left on disk.
+@item ENOTDIR
+A component of the specified pathname was not a directory when a directory
+was expected.
+@item ENXIO
+No such device.  This error may also occur when a device is not ready, for 
+example, a tape drive is off-line.
+@item EROFS
+Read-only file system.
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{open} function establishes a connection between a file and a file 
+descriptor.  The file descriptor is a small integer that is used by I/O 
+functions to reference the file.  The @code{path} argument points to the 
+pathname for the file.
+
+The @code{oflag} argument is the bitwise inclusive OR of the values of 
+symbolic constants.  The programmer must specify exactly one of the following
+three symbols:
+
+@table @b
+@item O_RDONLY
+Open for reading only.
+
+@item O_WRONLY
+Open for writing only.
+
+@item O_RDWR
+Open for reading and writing.
+
+@end table
+
+Any combination of the following symbols may also be used.
+
+@table @b
+@item O_APPEND
+Set the file offset to the end-of-file prior to each write.
+
+@item O_CREAT
+If the file does not exist, allow it to be created.  This flag indicates
+that the @code{mode} argument is present in the call to @code{open}.
+
+@item O_EXCL
+This flag may be used only if O_CREAT is also set.  It causes the call
+to @code{open} to fail if the file already exists.
+
+@item O_NOCTTY
+If @code{path} identifies a terminal, this flag prevents that teminal from
+becoming the controlling terminal for thi9s process.  See Chapter 8 for a
+description of terminal I/O.
+
+@item O_NONBLOCK
+Do no wait for the device or file to be ready or available.  After the file
+is open, the @code{read} and @code{write} calls return immediately.  If the 
+process would be delayed in the read or write opermation, -1 is returned and 
+@code{errno} is set to @code{EAGAIN} instead of blocking the caller.
+
+@item O_TRUNC
+This flag should be used only on ordinary files opened for writing.  It 
+causes the file to be tuncated to zero length..
+
+@end table
+
+Upon successful completion, @code{open} returns a non-negative file 
+descriptor.
+
+@subheading NOTES:
+
+@page
+@subsection umask - Sets a file creation mask.
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/types.h>
+#include <sys/stat.h>
+
+mode_t umask(
+  mode_t cmask
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@subheading DESCRIPTION:
+
+The @code{umask} function sets the process file creation mask to @code{cmask}.
+The file creation mask is used during @code{open}, @code{creat}, @code{mkdir},
+@code{mkfifo} calls to turn off permission bits in the @code{mode} argument.
+Bit positions that are set in @code{cmask} are cleared in the mode of the
+created file.
+
+The file creation mask is inherited across @code{fork} and @code{exec} calls.
+This makes it possible to alter the default permission bits of created files.
+
+@subheading NOTES:
+
+The @code{cmask} argument should have only permission bits set.  All other 
+bits should be zero.
+
+@page
+@subsection link - Creates a link to a file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <unistd.h>
+
+int link(
+  const char *existing,
+  const char *new
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+@item EEXIST
+The named file already exists.
+@item EMLINK
+The number of links would exceed @code{LINK_MAX}.
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
+effect.
+@item ENOENT
+A file or directory does not exist.
+@item ENOSPC
+No space left on disk.
+@item ENOTDIR
+A component of the specified pathname was not a directory when a directory
+was expected.
+@item EPERM
+Operation is not permitted.  Process does not have the appropriate priviledges
+or permissions to perform the requested operations.
+@item EROFS
+Read-only file system.
+@item EXDEV
+Attempt to link a file to another file system.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{link} function atomically creates a new link for an existing file
+and increments the link count for the file.
+
+If the @code{link} function fails, no directories are modified.
+
+The @code{existing} argument should not be a directory.
+
+The callder may (or may not) need permission to access the existing file.
+
+@subheading NOTES:
+
+@page
+@subsection unlink - Removes a directory entry
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <unistd.h>
+
+int unlink(
+  const char path
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+@item EBUSY
+The directory is in use.
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
+effect.
+@item ENOENT
+A file or directory does not exist.
+@item ENOTDIR
+A component of the specified pathname was not a directory when a directory
+was expected.
+@item EPERM
+Operation is not permitted.  Process does not have the appropriate priviledges
+or permissions to perform the requested operations.
+@item EROFS
+Read-only file system.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{unlink} function removes the link named by @{code} and decrements the
+link count of the file referenced by the link.  When the link count goes to zero
+and no process has the file open, the space occupied by the file is freed and the
+file is no longer accessible. 
+
+@subheading NOTES:
+
+@page
+@subsection mkdir - Makes a directory
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int mkdir(
+  const char *path,
+  mode_t      mode
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+@item EEXIST
+The name file already exist.  
+@item EMLINK
+The number of links would exceed LINK_MAX
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
+effect.
+@item ENOENT
+A file or directory does not exist.
+@item ENOSPC
+No space left on disk.
+@item ENOTDIR
+A component of the specified pathname was not a directory when a directory
+was expected.
+@item EROFS
+Read-only file system.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{mkdir} function creates a new diectory named @code{path}.  The 
+permission bits (modified by the file creation mask) are set from @code{mode}.
+The owner and group IDs for the directory are set from the effective user ID
+and group ID.
+
+The new directory may (or may not) contain entries for. and .. but is otherwise
+empty.
+
+@subheading NOTES:
+
+@page
+@subsection chmod - Changes file mode.
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int chmod(
+  const char *path,
+  mode_t      mode
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
+effect.
+@item ENOENT
+A file or directory does not exist.
+@item ENOTDIR
+A component of the specified pathname was not a directory when a directory
+was expected.
+@item EPERM
+Operation is not permitted.  Process does not have the appropriate priviledges
+or permissions to perform the requested operations.
+@item EROFS
+Read-only file system.
+
+@end table
+
+@subheading DESCRIPTION:
+
+Set the file permission bits, the set user ID bit, and the set group ID bit 
+for the file named by @code{path} to @code{mode}.  If the effective user ID 
+does not match the owner of the file and the calling process does not have 
+the appropriate privileges, @code{chmod} returns -1 and sets @code{errno} to
+@code{EPERM}.
+
+@subheading NOTES:
+
+@page
+@subsection chown - Changes the owner and/or group of a file.
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/types.h>
+#include <unistd.h>
+
+int chown(
+  const char *path,
+  uid_t       owner,
+  gid_t       group
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+@item EINVAL
+Invalid argument
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
+effect.
+@item ENOENT
+A file or directory does not exist.
+@item ENOTDIR
+A component of the specified pathname was not a directory when a directory
+was expected.
+@item EPERM
+Operation is not permitted.  Process does not have the appropriate priviledges
+or permissions to perform the requested operations.
+@item EROFS
+Read-only file system.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The user ID and group ID of the file named by @code{path} are set to 
+@cdoe{owner} and @code{path}, respectively.
+
+For regular files, the set group ID (S_ISGID) and set user ID (S_ISUID)
+bits are cleared.
+
+Some systems consider it a security violation to allow the owner of a file to
+be changed,  If users are billed for disk space usage, loaning a file to 
+another user could result in incorrect billing.  The @code{chown} function
+may be restricted to privileged users for some or all files.  The group ID can
+still be changed to one of the supplementary group IDs.
+
+@subheading NOTES:
+
+This function may be restricted for some file.  The @code{pathconf} function
+can be used to test the _PC_CHOWN_RESTRICTED flag.
+
+
