@@ -1,3 +1,13 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* librdbg/src/i386/rdbg_cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.
+	* librdbg/src/m68k/rdbg_cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.
+	* librdbg/src/powerpc/rdbg_cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.
+	* libchip/ide/ata.c: Include <rtems/chain.h> instead of <chain.h>.
+	* libchip/ide/ide_controller.c: Include <rtems/chain.h> instead of <chain.h>.
+	* libchip/shmdr/shm_driver.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* libchip/serial/ns16550.c: Include <rtems/ringbuf.h> instead of <ringbuf.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libchip/ide/ata.c, libchip/network/dec21140.c,

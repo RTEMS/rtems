@@ -23,7 +23,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
 
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>

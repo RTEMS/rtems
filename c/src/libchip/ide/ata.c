@@ -16,7 +16,7 @@
  * 
  */
 #include <errno.h>
-#include <chain.h>
+#include <rtems/chain.h>
 #include <assert.h>
 #include <string.h> /* for "memset" declaration */
 

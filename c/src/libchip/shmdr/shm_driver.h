@@ -19,7 +19,7 @@
 #ifndef __SHM_h
 #define __SHM_h
 
-#include <clockdrv.h>
+#include <rtems/clockdrv.h>
 
 #ifdef __cplusplus
 extern "C" {

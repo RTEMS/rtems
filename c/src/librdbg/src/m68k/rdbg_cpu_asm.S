@@ -7,7 +7,7 @@
  *
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include <rtems/score/cpu.h>    
 
         BEGIN_CODE
