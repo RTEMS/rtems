@@ -1,3 +1,8 @@
+2003-12-16	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Update gcc/newlib for 4.7 series to 3.3.2 with 20031022
+	gcc patch (RPM revision 4.7-1).
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
