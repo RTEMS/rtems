@@ -18,7 +18,7 @@
 
 pid_t setsid( void )
 {
-  set_errno_and_return_minus_one( ENOSYS );
+  set_errno_and_return_minus_one( EPERM );
 }
 
 
