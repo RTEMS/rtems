@@ -1,5 +1,11 @@
 2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
+	* include/lr33000.h, include/lr330x0.h, include/r3000.h, start/mg5.h:
+	New files missed in previous commit.
+	* timer/timer.c: Use rtems/bspIo.h not just bspIo.h.
+
+2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
 	* Update of BSP to address problems restarting, provide more
 	information during boot, and better handle ROM vs RAM images.
 	* README, include/bsp.h, start/regs.S, start/start.S,

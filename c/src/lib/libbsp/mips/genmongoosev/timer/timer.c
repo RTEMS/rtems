@@ -54,7 +54,7 @@ void Timer_initialize()
 
 #define LEAST_VALID       1  /* Don't trust a value lower than this */
                              /* mongoose-v can count cycles. :) */
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 int Read_timer()
 {
