@@ -2,7 +2,6 @@
 ## $Id$
 ## 
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 include_HEADERS = bsp.h coverhd.h i2c.h \
           i2cdrv.h ds1307.h nvram.h \
