@@ -1,3 +1,8 @@
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+	Add mvme/mvme16x_hw.h.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* bspspuriousinit.c, m68000spurious.c, m68kpretaskinghook.c, setvec.c,
