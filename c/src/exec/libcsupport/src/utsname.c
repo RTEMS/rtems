@@ -5,10 +5,15 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <errno.h>
 #include <sys/utsname.h>
+
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
+#include <rtems/sptables.h>
+
+#include <rtems/posix/seterr.h>
 
 /*PAGE
  *
@@ -27,30 +32,18 @@ int uname(
           machine = sun4m
   */
 
+  if ( !name )
+    set_errno_and_return_minus_one( EFAULT );
+
   strcpy( name->sysname, "RTEMS" );
 
-  sprintf( name->nodename, "Node %d\n", _Objects_Local_node );
+  sprintf( name->nodename, "Node %d", _Objects_Local_node );
 
-  /* XXX release string is in BAD format for this routine!!! */ 
-  strcpy( name->release, "4.0.0+" );
+  strcpy( name->release, RTEMS_VERSION );
+
+  strcpy( name->version, "" );
  
-  /* XXX does this have any meaning for RTEMS */
-   
-  strcpy( name->release, "" );
-
   sprintf( name->machine, "%s/%s", CPU_NAME, CPU_MODEL_NAME );
 
   return 0;
-}
-
-/*PAGE
- *
- *  4.5.2 Get Process Times, P1003.1b-1993, p. 92
- */
-
-clock_t times(
-  struct tms   *buffer
-)
-{
-  return POSIX_NOT_IMPLEMENTED();
 }
