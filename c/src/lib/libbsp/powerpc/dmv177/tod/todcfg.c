@@ -41,7 +41,7 @@ rtc_tbl	RTC_Table[] = {
 		dmv177_icm7170_probe,		/* deviceProbe */
 		(void *) ICM7170_AT_1_MHZ,	/* pDeviceParams */
 		DMV170_RTC_ADDRESS,		/* ulCtrlPort1 */
-		NULL,				/* ulDataPort */
+		0,				/* ulDataPort */
 		icm7170_get_register_8,        	/* getRegister */
 		icm7170_set_register_8,		/* setRegister */
 	}

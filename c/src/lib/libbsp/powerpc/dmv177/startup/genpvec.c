@@ -66,7 +66,6 @@ rtems_isr external_exception_ISR (
   rtems_unsigned16      index;
   rtems_boolean         is_active=FALSE;
   rtems_unsigned32      scv64_status;
-  rtems_vector_number   chained_vector;
   Chain_Node           *node;
   EE_ISR_Type          *ee_isr;
   
@@ -135,6 +134,7 @@ void initialize_external_exception_vector ()
   int i;
   rtems_isr_entry previous_isr;
   rtems_status_code status;
+  extern void SCV64_Initialize( void ); 
 
   Nodes_Used = 0;
 
