@@ -12,8 +12,7 @@ This chapter describes the pathname evaluation process for the
 RTEMS Filesystem Infrastructure.
 
 @example
-XXX Include graphic of the path evaluation process with Jennifer's
-XXX explanations
+XXX Include graphic of the path evaluation process 
 @end example
 
 @section Pathname Evaluation Handlers
