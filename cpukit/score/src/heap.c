@@ -418,6 +418,18 @@ boolean _Heap_Free(
  *  Output parameters: NONE
  */
 
+#ifndef RTEMS_DEBUG
+
+void _Heap_Walk(
+  Heap_Control  *the_heap,
+  int            source,
+  boolean        do_dump
+)
+{
+}
+
+#else
+
 #include <stdio.h>
 #include <unistd.h>
 
@@ -522,3 +534,4 @@ void _Heap_Walk(
   if (error)
       abort();
 }
+#endif
