@@ -42,3 +42,23 @@ int unlink(
 
   return (*loc.ops->unlink)( &loc );
 }
+
+/*
+ *  _unlink_r
+ *
+ *  This is the Newlib dependent reentrant version of unlink().
+ */
+
+#if defined(RTEMS_NEWLIB)
+
+#include <reent.h>
+
+int _unlink_r(
+  struct _reent *ptr,
+  const char    *path
+)
+{
+  return unlink( path );
+}
+#endif
+

@@ -58,3 +58,24 @@ int link(
 
   return (*parent_loc.ops->link)( &existing_loc, &parent_loc, name_start );
 }
+
+/*
+ *  _link_r
+ *
+ *  This is the Newlib dependent reentrant version of link().
+ */
+
+#if defined(RTEMS_NEWLIB)
+
+#include <reent.h>
+
+int _link_r(
+  struct _reent *ptr,
+  const char    *existing,
+  const char    *new
+)
+{
+  return link( existing, new );
+}
+#endif
+
