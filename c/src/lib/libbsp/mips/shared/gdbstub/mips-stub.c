@@ -1269,10 +1269,10 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
          case 'Z':  /* Add breakpoint */
          { 
             int ret, type, len;
-            unsigned char *address;
+            unsigned *address;
             struct z0break *z0;
 
-            ret = parse_zbreak(inBuffer, &type, &address, &len);
+            ret = parse_zbreak(inBuffer, &type, (unsigned char **)&address, &len);
             if (!ret) {
                strcpy(outBuffer, "E01");
                break;
@@ -1328,7 +1328,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             /* Fill it */
             z0->address = address;
 
-            if( z0->address == (unsigned char *) frame->epc )
+            if( z0->address == (unsigned *) frame->epc )
             {
                /* re-asserting the breakpoint that put us in here, so
                we'll add the breakpoint but leave the code in place
@@ -1396,10 +1396,11 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             else
             {
                int ret, type, len;
-               unsigned char *address;
+               unsigned *address;
                struct z0break *z0;
               
-               ret = parse_zbreak(inBuffer, &type, &address, &len);
+
+               ret = parse_zbreak(inBuffer, &type, (unsigned char **)&address, &len);
                if (!ret) {
                   strcpy(outBuffer, "E01");
                   break;

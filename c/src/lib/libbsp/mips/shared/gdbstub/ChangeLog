@@ -1,3 +1,7 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* mips-stub.c: Removed warnings.
+
 2002-10-02	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems-stub-glue.c: Removed should only be common copy.
