@@ -68,6 +68,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 1 ), 
          1,
          RTEMS.DEFAULT_ATTRIBUTES,
+         RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 1 ),
          STATUS
       );
@@ -77,6 +78,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 2 ), 
          0,
          RTEMS.PRIORITY,
+         RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 2 ),
          STATUS
       );
@@ -86,6 +88,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 3 ), 
          1,
          RTEMS.DEFAULT_ATTRIBUTES,
+         RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 3 ),
          STATUS
       );
@@ -113,6 +116,7 @@ TEST_SUPPORT.PAUSE;
          SPTEST.SEMAPHORE_NAME( 2 ), 
          0,
          RTEMS.BINARY_SEMAPHORE + RTEMS.PRIORITY + RTEMS.INHERIT_PRIORITY,
+         RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 2 ),
          STATUS
       );
@@ -134,6 +138,7 @@ TEST_SUPPORT.PAUSE;
          SPTEST.SEMAPHORE_NAME( 2 ), 
          1,
          RTEMS.BINARY_SEMAPHORE + RTEMS.PRIORITY + RTEMS.INHERIT_PRIORITY,
+         RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 2 ),
          STATUS
       );
@@ -150,6 +155,7 @@ TEST_SUPPORT.PAUSE;
          SPTEST.SEMAPHORE_NAME( 2 ), 
          0,
          RTEMS.PRIORITY,
+         RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 2 ),
          STATUS
       );

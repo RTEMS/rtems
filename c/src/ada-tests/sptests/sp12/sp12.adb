@@ -20,6 +20,7 @@
 --  $Id$
 --
 
+with Interfaces; use Interfaces;
 with RTEMS;
 with SPTEST;
 with TEST_SUPPORT;
@@ -32,7 +33,7 @@ begin
    RTEMS.TASK_CREATE(
       RTEMS.BUILD_NAME(  'I', 'N', 'I', 'T' ),
       1,
-      RTEMS.MINIMUM_STACK_SIZE,
+      RTEMS.MINIMUM_STACK_SIZE * 2,
       RTEMS.NO_PREEMPT,
       RTEMS.DEFAULT_ATTRIBUTES,
       INIT_ID,
