@@ -112,6 +112,8 @@ Thread _Timer_Server_body(
       _Timer_Server_process_ticks_chain();
       _Timer_Server_process_seconds_chain();
   }
+
+  return 0;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
