@@ -165,13 +165,13 @@ This is the gcc/objc compiler for @target_alias@
 %doc /opt/rtems/man/man1/@target_alias@-g++.1
 
 %dir /opt/rtems/bin
-/opt/rtems/bin/cpp
-/opt/rtems/bin/gcov
-/opt/rtems/bin/@target_alias@-c++
-/opt/rtems/bin/@target_alias@-g++
-/opt/rtems/bin/@target_alias@-gcc
-/opt/rtems/bin/@target_alias@-protoize
-/opt/rtems/bin/@target_alias@-unprotoize
+/opt/rtems/bin/cpp@exe_ext@
+/opt/rtems/bin/gcov@exe_ext@
+/opt/rtems/bin/@target_alias@-c++@exe_ext@
+/opt/rtems/bin/@target_alias@-g++@exe_ext@
+/opt/rtems/bin/@target_alias@-gcc@exe_ext@
+/opt/rtems/bin/@target_alias@-protoize@exe_ext@
+/opt/rtems/bin/@target_alias@-unprotoize@exe_ext@
 
 %dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
 
@@ -202,7 +202,7 @@ This is the gcc/objc compiler for @target_alias@
 
 %files -n @target_alias@-chill -f build/files.chill
 %dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-chill
+/opt/rtems/bin/@target_alias@-chill@exe_ext@
 
 %dir /opt/rtems/info
 %doc /opt/rtems/info/dir
@@ -231,18 +231,18 @@ This is the gcc/objc compiler for @target_alias@
 
 %files -n @target_alias@-gcj -f build/files.gcj
 %dir /opt/rtems/bin
-/opt/rtems/bin/jcf-dump
-/opt/rtems/bin/jv-scan
-/opt/rtems/bin/gcjh
-/opt/rtems/bin/@target_alias@-gcj
+/opt/rtems/bin/jcf-dump@exe_ext@
+/opt/rtems/bin/jv-scan@exe_ext@
+/opt/rtems/bin/gcjh@exe_ext@
+/opt/rtems/bin/@target_alias@-gcj@exe_ext@
 
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jc1
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jc1@exe_ext@
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain@exe_ext@
 
 
 %files -n @target_alias@-g77 -f build/files.g77
 %dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-g77
+/opt/rtems/bin/@target_alias@-g77@exe_ext@
 
 %dir /opt/rtems/info
 %doc /opt/rtems/info/g77.info*
@@ -251,7 +251,7 @@ This is the gcc/objc compiler for @target_alias@
 %dir /opt/rtems/man/man1
 %doc /opt/rtems/man/man1/@target_alias@-g77.1
 
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/f771
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/f771@exe_ext@
 
 %post -n @target_alias@-g77
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -275,5 +275,5 @@ This is the gcc/objc compiler for @target_alias@
 
 
 %files -n @target_alias@-objc -f build/files.objc
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj@exe_ext@
 /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc

@@ -121,20 +121,20 @@ Authors:
 %doc /opt/rtems/man/man1/@target_alias@-*.1
 
 %dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-addr2line
-/opt/rtems/bin/@target_alias@-ar
-/opt/rtems/bin/@target_alias@-as
-/opt/rtems/bin/@target_alias@-c++filt
-/opt/rtems/bin/@target_alias@-gasp
-/opt/rtems/bin/@target_alias@-ld
-/opt/rtems/bin/@target_alias@-nm
-/opt/rtems/bin/@target_alias@-objcopy
-/opt/rtems/bin/@target_alias@-objdump
-/opt/rtems/bin/@target_alias@-ranlib
-/opt/rtems/bin/@target_alias@-readelf
-/opt/rtems/bin/@target_alias@-size
-/opt/rtems/bin/@target_alias@-strings
-/opt/rtems/bin/@target_alias@-strip
+/opt/rtems/bin/@target_alias@-addr2line@exe_ext@
+/opt/rtems/bin/@target_alias@-ar@exe_ext@
+/opt/rtems/bin/@target_alias@-as@exe_ext@
+/opt/rtems/bin/@target_alias@-c++filt@exe_ext@
+/opt/rtems/bin/@target_alias@-gasp@exe_ext@
+/opt/rtems/bin/@target_alias@-ld@exe_ext@
+/opt/rtems/bin/@target_alias@-nm@exe_ext@
+/opt/rtems/bin/@target_alias@-objcopy@exe_ext@
+/opt/rtems/bin/@target_alias@-objdump@exe_ext@
+/opt/rtems/bin/@target_alias@-ranlib@exe_ext@
+/opt/rtems/bin/@target_alias@-readelf@exe_ext@
+/opt/rtems/bin/@target_alias@-size@exe_ext@
+/opt/rtems/bin/@target_alias@-strings@exe_ext@
+/opt/rtems/bin/@target_alias@-strip@exe_ext@
 
 %dir /opt/rtems/include
 /opt/rtems/include/bfd.h
@@ -151,12 +151,12 @@ Authors:
 
 %dir /opt/rtems/@target_alias@
 %dir /opt/rtems/@target_alias@/bin
-/opt/rtems/@target_alias@/bin/ar
-/opt/rtems/@target_alias@/bin/as
-/opt/rtems/@target_alias@/bin/ld
-/opt/rtems/@target_alias@/bin/nm
-/opt/rtems/@target_alias@/bin/ranlib
-/opt/rtems/@target_alias@/bin/strip
+/opt/rtems/@target_alias@/bin/ar@exe_ext@
+/opt/rtems/@target_alias@/bin/as@exe_ext@
+/opt/rtems/@target_alias@/bin/ld@exe_ext@
+/opt/rtems/@target_alias@/bin/nm@exe_ext@
+/opt/rtems/@target_alias@/bin/ranlib@exe_ext@
+/opt/rtems/@target_alias@/bin/strip@exe_ext@
 
 %dir /opt/rtems/@target_alias@/lib
 /opt/rtems/@target_alias@/lib/ldscripts

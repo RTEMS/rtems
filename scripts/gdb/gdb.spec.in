@@ -115,5 +115,5 @@ test -d build || mkdir build
 # /opt/rtems/lib/libiberty*
 
 %dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-gdb
+/opt/rtems/bin/@target_alias@-gdb@exe_ext@
 

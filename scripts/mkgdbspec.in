@@ -7,6 +7,7 @@ RTEMS_DIR=`dirname $0`/@top_srcdir@
 
 CFG=setup.cache
 dst=@RPM_SPECSdir@
+exe_ext=@EXEEXT@
 
 usage()
 {
@@ -69,16 +70,17 @@ sed -e "s%@Release@%${gdb_rpm_release}%g" \
     -e "s%@gdb_version@%${gdb_version}%g" \
     -e "s%@gdb_patch_version@%${gdb_patch_version}%g" \
     -e "s%@extra_configure_arguments@%${extra_configure_arguments}%g" \
+    -e "s%@ext_ext@%${ext_ext}%g" \
 < ${RTEMS_DIR}/gdb/gdb.spec.in \
 > ${specfile}
 
 case ${target_alias} in
   powerpc*)
-     echo "/opt/rtems/bin/${target_alias}-run" 
+     echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
      ;;
   sparc*)
-     echo "/opt/rtems/bin/${target_alias}-run" 
-     echo "/opt/rtems/bin/${target_alias}-sis" 
+     echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
+     echo "/opt/rtems/bin/${target_alias}-sis${exe_ext}" 
      ;;
   *) ;;
 esac >> ${specfile}

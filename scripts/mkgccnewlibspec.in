@@ -7,6 +7,7 @@ RTEMS_DIR=`dirname $0`/@top_srcdir@
 
 CFG=setup.cache
 dst=@RPM_SPECSdir@
+exe_ext=@EXEEXT@
 
 usage()
 {
@@ -63,6 +64,7 @@ sed -e "s%@Release@%${gccnewlib_rpm_release}%g" \
     -e "s%@gcc_patch_version@%${gcc_patch_version}%g" \
     -e "s%@newlib_version@%${newlib_version}%g" \
     -e "s%@newlib_patch_version@%${newlib_patch_version}%g" \
+    -e "s%@ext_ext@%${ext_ext}%g" \
 < ${specsrc} \
 > ${specfile}
 

@@ -6,6 +6,7 @@ RTEMS_VERSION=@RTEMS_VERSION@
 
 CFG=setup.cache
 dst=@RPM_SPECSdir@
+exe_ext=@EXEEXT@
 
 usage()
 {
@@ -54,6 +55,7 @@ sed -e "s%@Release@%${rtems_rpm_release}%g" \
     -e "s%@rtems_version@%${rtems_version}%g" \
     -e "s%@rpm_build_root@%${rpm_build_root}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
+    -e "s%@ext_ext@%${ext_ext}%g" \
 < ${RTEMS_DIR}/rtems/rtems.spec.in \
 > ${specfile}
 

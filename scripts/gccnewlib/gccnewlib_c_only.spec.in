@@ -137,13 +137,13 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %doc /opt/rtems/man/man1/@target_alias@-g++.1
 
 %dir /opt/rtems/bin
-/opt/rtems/bin/cpp
-/opt/rtems/bin/gcov
-/opt/rtems/bin/@target_alias@-c++
-/opt/rtems/bin/@target_alias@-g++
-/opt/rtems/bin/@target_alias@-gcc
-/opt/rtems/bin/@target_alias@-protoize
-/opt/rtems/bin/@target_alias@-unprotoize
+/opt/rtems/bin/cpp@exe_ext@
+/opt/rtems/bin/gcov@exe_ext@
+/opt/rtems/bin/@target_alias@-c++@exe_ext@
+/opt/rtems/bin/@target_alias@-g++@exe_ext@
+/opt/rtems/bin/@target_alias@-gcc@exe_ext@
+/opt/rtems/bin/@target_alias@-protoize@exe_ext@
+/opt/rtems/bin/@target_alias@-unprotoize@exe_ext@
 
 %dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
 

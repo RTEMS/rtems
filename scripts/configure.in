@@ -3,6 +3,8 @@
 AC_INIT(binutils)
 AM_INIT_AUTOMAKE(scripts,19991025-0,no)
 
+AC_EXEEXT
+
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
 
