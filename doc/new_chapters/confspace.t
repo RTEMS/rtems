@@ -35,7 +35,21 @@ The directives provided by the configuration space manager are:
 
 @section Background
 
+@subsection Configuration Nodes
+
+@subsection Configuration Space
+
 @section Operations
+
+@subsection Mount and Unmounting
+
+@subsection Creating a Configuration Node
+
+@subsection Removing a Configuration Node
+
+@subsection Manipulating a Configuration Node
+
+@subsection Traversing a Configuration Space
 
 @section Directives
 

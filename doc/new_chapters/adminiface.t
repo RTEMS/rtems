@@ -69,6 +69,8 @@ This field ...
 
 @section Operations
 
+@subsection Shutting Down the System
+
 @section Directives
 
 This section details the administration interface manager's directives.
