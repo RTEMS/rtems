@@ -56,7 +56,7 @@ rtems_device_minor_number rtems_clock_minor;
  *  Clock_driver_ticks is a monotonically increasing counter of the number of
  *  VMEchip2 timer #2 ticks since the driver was initialized.
  */
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t         Clock_driver_ticks;
 
 
 /* 
@@ -68,7 +68,7 @@ volatile rtems_unsigned32 Clock_driver_ticks;
  *  cannot tick faster than the hardware clock. Therefore, the kernel clock
  *  ticks cannot occur more frequently than every 1 millisecond.
  */
-rtems_unsigned32 Clock_isrs;
+uint32_t         Clock_isrs;
 
 
 /*
@@ -126,7 +126,7 @@ rtems_isr VMEchip2_T2_isr(
       rtems_clock_tick();
     }
     /* Reset the counter */
-    Clock_isrs = (rtems_unsigned32)-i;
+    Clock_isrs = (uint32_t)-i;
   }
   else 
     Clock_isrs -= overflow;
@@ -249,7 +249,7 @@ rtems_device_driver Clock_control(
   rtems_device_minor_number minor,
   void *pargp)
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if ( args == 0 )

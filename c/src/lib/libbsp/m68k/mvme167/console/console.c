@@ -135,8 +135,8 @@
 
 /* Utility functions */
 void cd2401_udelay( unsigned long delay );
-void cd2401_chan_cmd( rtems_unsigned8 channel, rtems_unsigned8 cmd, rtems_unsigned8 wait );
-rtems_unsigned16 cd2401_bitrate_divisor( rtems_unsigned32 clkrate, rtems_unsigned32* bitrate );
+void cd2401_chan_cmd( uint8_t         channel, uint8_t         cmd, uint8_t         wait );
+uint16_t         cd2401_bitrate_divisor( uint32_t         clkrate, uint32_t        * bitrate );
 void cd2401_initialize( void );
 void cd2401_interrupts_initialize( rtems_boolean enable );
 
@@ -168,13 +168,13 @@ BSP_output_char_function_type BSP_output_char = _BSP_output_char;
   void *tty;                    /* Really a struct rtems_termios_tty * */
   int len;                      /* Record nb of chars being TX'ed */
   const char *buf;              /* Record where DMA is coming from */
-  rtems_unsigned32 spur_cnt;    /* Nb of spurious ints so far */
-  rtems_unsigned32 spur_dev;    /* Indo on last spurious int */
-  rtems_unsigned32 buserr_addr; /* Faulting address */
-  rtems_unsigned32 buserr_type; /* Reason of bus error during DMA */
-  rtems_unsigned8  own_buf_A;   /* If true, buffer A belongs to the driver */
-  rtems_unsigned8  own_buf_B;   /* If true, buffer B belongs to the driver */
-  rtems_unsigned8  txEmpty;     /* If true, the output FIFO should be empty */
+  uint32_t         spur_cnt;    /* Nb of spurious ints so far */
+  uint32_t         spur_dev;    /* Indo on last spurious int */
+  uint32_t         buserr_addr; /* Faulting address */
+  uint32_t         buserr_type; /* Reason of bus error during DMA */
+  uint8_t          own_buf_A;   /* If true, buffer A belongs to the driver */
+  uint8_t          own_buf_B;   /* If true, buffer B belongs to the driver */
+  uint8_t          txEmpty;     /* If true, the output FIFO should be empty */
 } CD2401_Channel_Info[4];
 
 /*
@@ -186,7 +186,7 @@ BSP_output_char_function_type BSP_output_char = _BSP_output_char;
  *  be allocated in the .bss section, and rely on RTEMS to zero the .bss
  *  section on every startup.
  */
-rtems_unsigned8 Init_count;
+uint8_t         Init_count;
 
 
 /* Record previous handlers */
@@ -255,9 +255,9 @@ rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
  *  Return values: NONE
  */
 void cd2401_chan_cmd(
-  rtems_unsigned8 channel,
-  rtems_unsigned8 cmd,
-  rtems_unsigned8 wait
+  uint8_t         channel,
+  uint8_t         cmd,
+  uint8_t         wait
 )
 {
   if ( channel < 4 ) {
@@ -291,13 +291,13 @@ void cd2401_chan_cmd(
  *    Returns divisor in lower byte and clock source in upper byte for the
  *    specified bitrate.
  */
-rtems_unsigned16 cd2401_bitrate_divisor(
-  rtems_unsigned32 clkrate,
-  rtems_unsigned32* bitrate
+uint16_t         cd2401_bitrate_divisor(
+  uint32_t         clkrate,
+  uint32_t        * bitrate
 )
 {
-  rtems_unsigned32 divisor;
-  rtems_unsigned16 clksource;
+  uint32_t         divisor;
+  uint16_t         clksource;
 
   divisor = *bitrate << 3;          /* temporary; multiply by 8 for CLK/8 */
   divisor = (clkrate + (divisor>>1)) / divisor; /* divisor for clk0 (CLK/8) */
@@ -465,7 +465,7 @@ rtems_isr cd2401_modem_isr(
   rtems_vector_number vector
 )
 {
-  rtems_unsigned8 ch;
+  uint8_t         ch;
 
   /* Get interrupting channel ID */
   ch = cd2401->licr >> 2;
@@ -501,7 +501,7 @@ rtems_isr cd2401_re_isr(
   rtems_vector_number vector
 )
 {
-  rtems_unsigned8 ch;
+  uint8_t         ch;
 
   /* Get interrupting channel ID */
   ch = cd2401->licr >> 2;
@@ -537,7 +537,7 @@ rtems_isr cd2401_rx_isr(
 )
 {
   char c;
-  rtems_unsigned8 ch, status, nchars, i, total;
+  uint8_t         ch, status, nchars, i, total;
   char buffer[256];
 
   status = cd2401->u5.b.risrl;
@@ -584,7 +584,7 @@ rtems_isr cd2401_tx_isr(
   rtems_vector_number vector
 )
 {
-  rtems_unsigned8 ch, status, buserr, initial_ier, final_ier;
+  uint8_t         ch, status, buserr, initial_ier, final_ier;
 
   status = cd2401->tisr;
   ch = cd2401->licr >> 2;
@@ -615,7 +615,7 @@ rtems_isr cd2401_tx_isr(
     CD2401_Channel_Info[ch].buserr_type =
          (vector << 24) | (buserr << 16) | (cd2401->tir << 8) | cd2401->tisr;
     CD2401_Channel_Info[ch].buserr_addr =
-        (((rtems_unsigned32)cd2401->tcbadru) << 16) | cd2401->tcbadrl;
+        (((uint32_t)cd2401->tcbadru) << 16) | cd2401->tcbadrl;
 
     cd2401->teoir = 0x80;           /* EOI - terminate bad buffer */
     CD2401_RECORD_TX_ISR_BUSERR_INFO(( ch, status, initial_ier, buserr,
@@ -820,13 +820,13 @@ int cd2401_setAttributes(
   const struct termios *t
 )
 {
-  rtems_unsigned8 csize, cstopb, parodd, parenb, ignpar, inpck;
-  rtems_unsigned8 hw_flow_ctl, sw_flow_ctl, extra_flow_ctl;
-  rtems_unsigned8 icrnl, igncr, inlcr, brkint, ignbrk, parmrk, istrip;
-  rtems_unsigned8 need_reinitialization = FALSE;
-  rtems_unsigned8 read_enabled;
-  rtems_unsigned16 tx_period, rx_period;
-  rtems_unsigned32 out_baud, in_baud;
+  uint8_t         csize, cstopb, parodd, parenb, ignpar, inpck;
+  uint8_t         hw_flow_ctl, sw_flow_ctl, extra_flow_ctl;
+  uint8_t         icrnl, igncr, inlcr, brkint, ignbrk, parmrk, istrip;
+  uint8_t         need_reinitialization = FALSE;
+  uint8_t         read_enabled;
+  uint16_t         tx_period, rx_period;
+  uint32_t         out_baud, in_baud;
   rtems_interrupt_level level;
 
   /* Determine what the line parameters should be */
@@ -1202,8 +1202,8 @@ int cd2401_write(
     CD2401_Channel_Info[minor].own_buf_A = FALSE;
     CD2401_Channel_Info[minor].len = len;
     CD2401_Channel_Info[minor].buf = buf;
-    cd2401->atbadru = (rtems_unsigned16)( ( (rtems_unsigned32) buf ) >> 16 );
-    cd2401->atbadrl = (rtems_unsigned16)( (rtems_unsigned32) buf );
+    cd2401->atbadru = (uint16_t)( ( (uint32_t) buf ) >> 16 );
+    cd2401->atbadrl = (uint16_t)( (uint32_t) buf );
     cd2401->atbcnt = len;
     CD2401_RECORD_WRITE_INFO(( len, buf, 'A' ));
     cd2401->atbsts = 0x03;          /* CD2401 owns buffer, int when empty */
@@ -1215,8 +1215,8 @@ int cd2401_write(
     CD2401_Channel_Info[minor].own_buf_B = FALSE;
     CD2401_Channel_Info[minor].len = len;
     CD2401_Channel_Info[minor].buf = buf;
-    cd2401->btbadru = (rtems_unsigned16)( ( (rtems_unsigned32) buf ) >> 16 );
-    cd2401->btbadrl = (rtems_unsigned16)( (rtems_unsigned32) buf );
+    cd2401->btbadru = (uint16_t)( ( (uint32_t) buf ) >> 16 );
+    cd2401->btbadrl = (uint16_t)( (uint32_t) buf );
     cd2401->btbcnt = len;
     CD2401_RECORD_WRITE_INFO(( len, buf, 'B' ));
     cd2401->btbsts = 0x03;          /* CD2401 owns buffer, int when empty */
@@ -1396,7 +1396,7 @@ rtems_status_code do_poll_read(
   int c;
 
   while( (c = _167Bug_pollRead (minor)) == -1 );
-  rw_args->buffer[0] = (unsigned8)c;
+  rw_args->buffer[0] = (uint8_t)c;
   if( rw_args->buffer[0] == '\r' )
       rw_args->buffer[0] = '\n';
   rw_args->bytes_moved = 1;
@@ -1431,7 +1431,7 @@ rtems_status_code do_poll_write(
 )
 {
   rtems_libio_rw_args_t *rw_args = arg;
-  unsigned32 i;
+  uint32_t   i;
   char cr ='\r';
 
   for( i = 0; i < rw_args->count; i++ ) {

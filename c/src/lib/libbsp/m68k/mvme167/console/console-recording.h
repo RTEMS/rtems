@@ -139,7 +139,7 @@ struct cd2401_debug_info {
       unsigned char status;
       unsigned char initial_ier;
       unsigned char final_ier;
-      rtems_unsigned8 txEmpty;
+      uint8_t         txEmpty;
     } tx_isr_info;
     struct cd2401_tx_isr_spurious_info {
       unsigned char channel;
@@ -180,11 +180,11 @@ struct cd2401_debug_info {
     } modem_isr_spurious_info;
     struct cd2401_first_open_info {
       unsigned char channel;
-      rtems_unsigned8 init_count;
+      uint8_t         init_count;
     } first_open_info;
     struct cd2401_last_close_info {
       unsigned char channel;
-      rtems_unsigned8 init_count;
+      uint8_t         init_count;
     } last_close_info;
     struct cd2401_start_remote_tx_info {
       unsigned char channel;
@@ -194,33 +194,33 @@ struct cd2401_debug_info {
     } stop_remote_tx_info;
     struct cd2401_set_attribute_info {
       int minor;
-      rtems_unsigned8 need_reinit;
-      rtems_unsigned8 txEmpty;
-      rtems_unsigned8 csize;
-      rtems_unsigned8 cstopb;
-      rtems_unsigned8 parodd;
-      rtems_unsigned8 parenb;
-      rtems_unsigned8 ignpar;
-      rtems_unsigned8 inpck;
-      rtems_unsigned8 hw_flow_ctl;
-      rtems_unsigned8 sw_flow_ctl;
-      rtems_unsigned8 extra_flow_ctl;
-      rtems_unsigned8 icrnl;
-      rtems_unsigned8 igncr;
-      rtems_unsigned8 inlcr;
-      rtems_unsigned8 brkint;
-      rtems_unsigned8 ignbrk;
-      rtems_unsigned8 parmrk;
-      rtems_unsigned8 istrip;
-      rtems_unsigned16 tx_period;
-      rtems_unsigned16 rx_period;
-      rtems_unsigned32 out_baud;
-      rtems_unsigned32 in_baud;
+      uint8_t         need_reinit;
+      uint8_t         txEmpty;
+      uint8_t         csize;
+      uint8_t         cstopb;
+      uint8_t         parodd;
+      uint8_t         parenb;
+      uint8_t         ignpar;
+      uint8_t         inpck;
+      uint8_t         hw_flow_ctl;
+      uint8_t         sw_flow_ctl;
+      uint8_t         extra_flow_ctl;
+      uint8_t         icrnl;
+      uint8_t         igncr;
+      uint8_t         inlcr;
+      uint8_t         brkint;
+      uint8_t         ignbrk;
+      uint8_t         parmrk;
+      uint8_t         istrip;
+      uint16_t         tx_period;
+      uint16_t         rx_period;
+      uint32_t         out_baud;
+      uint32_t         in_baud;
     } set_attribute_info;
     struct cd2401_drain_output_info {
-      rtems_unsigned8 txEmpty;
-      rtems_unsigned8 own_buf_A;
-      rtems_unsigned8 own_buf_B;
+      uint8_t         txEmpty;
+      uint8_t         own_buf_A;
+      uint8_t         own_buf_B;
     } drain_output_info;
     struct cd2401_delay_info {
       rtems_interval start;
@@ -272,7 +272,7 @@ void cd2401_record_tx_isr_info(
   unsigned char status,
   unsigned char initial_ier,
   unsigned char final_ier,
-  rtems_unsigned8 txEmpty
+  uint8_t         txEmpty
 )
 { 
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
@@ -361,8 +361,8 @@ void cd2401_record_rx_isr_info(
 void cd2401_record_rx_isr_spurious_info(
   unsigned char ch,
   unsigned char status,
-  rtems_unsigned32 spur_dev,
-  rtems_unsigned32 spur_cnt
+  uint32_t         spur_dev,
+  uint32_t         spur_cnt
 )
 {
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
@@ -380,8 +380,8 @@ void cd2401_record_rx_isr_spurious_info(
 
 void cd2401_record_re_isr_spurious_info(
   unsigned char ch,
-  rtems_unsigned32 spur_dev,
-  rtems_unsigned32 spur_cnt
+  uint32_t         spur_dev,
+  uint32_t         spur_cnt
 )
 {
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
@@ -398,8 +398,8 @@ void cd2401_record_re_isr_spurious_info(
 
 void cd2401_record_modem_isr_spurious_info(
   unsigned char ch,
-  rtems_unsigned32 spur_dev,
-  rtems_unsigned32 spur_cnt
+  uint32_t         spur_dev,
+  uint32_t         spur_cnt
 )
 {
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
@@ -416,7 +416,7 @@ void cd2401_record_modem_isr_spurious_info(
 
 void cd2401_record_first_open_info(
   unsigned char ch,
-  rtems_unsigned8 init_count
+  uint8_t         init_count
 )
 {
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
@@ -432,7 +432,7 @@ void cd2401_record_first_open_info(
 
 void cd2401_record_last_close_info(
   unsigned char ch,
-  rtems_unsigned8 init_count
+  uint8_t         init_count
 )
 {
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
@@ -476,27 +476,27 @@ void cd2401_record_stop_remote_tx_info(
 
 void cd2401_record_set_attributes_info( 
   int minor,
-  rtems_unsigned8 need_reinit,
-  rtems_unsigned8 csize,
-  rtems_unsigned8 cstopb,
-  rtems_unsigned8 parodd,
-  rtems_unsigned8 parenb,
-  rtems_unsigned8 ignpar,
-  rtems_unsigned8 inpck,
-  rtems_unsigned8 hw_flow_ctl,
-  rtems_unsigned8 sw_flow_ctl,
-  rtems_unsigned8 extra_flow_ctl,
-  rtems_unsigned8 icrnl,
-  rtems_unsigned8 igncr,
-  rtems_unsigned8 inlcr,
-  rtems_unsigned8 brkint,
-  rtems_unsigned8 ignbrk,
-  rtems_unsigned8 parmrk,
-  rtems_unsigned8 istrip,
-  rtems_unsigned16 tx_period,
-  rtems_unsigned16 rx_period,
-  rtems_unsigned32 out_baud,
-  rtems_unsigned32 in_baud
+  uint8_t         need_reinit,
+  uint8_t         csize,
+  uint8_t         cstopb,
+  uint8_t         parodd,
+  uint8_t         parenb,
+  uint8_t         ignpar,
+  uint8_t         inpck,
+  uint8_t         hw_flow_ctl,
+  uint8_t         sw_flow_ctl,
+  uint8_t         extra_flow_ctl,
+  uint8_t         icrnl,
+  uint8_t         igncr,
+  uint8_t         inlcr,
+  uint8_t         brkint,
+  uint8_t         ignbrk,
+  uint8_t         parmrk,
+  uint8_t         istrip,
+  uint16_t         tx_period,
+  uint16_t         rx_period,
+  uint32_t         out_baud,
+  uint32_t         in_baud
 )
 {
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
@@ -532,9 +532,9 @@ void cd2401_record_set_attributes_info(
 
 
 void cd2401_record_drain_output_info(
-  rtems_unsigned8 txEmpty,
-  rtems_unsigned8 own_buf_A,
-  rtems_unsigned8 own_buf_B
+  uint8_t         txEmpty,
+  uint8_t         own_buf_A,
+  uint8_t         own_buf_B
 )
 {
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );

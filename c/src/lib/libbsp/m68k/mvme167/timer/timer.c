@@ -39,7 +39,7 @@
 #define TIMER_VECTOR (VBR0 * 0x10 + 0x8)  /* T1 is vector $X8 (p. 2-71)*/
 
 /* Number of interrupts since timer was re-initialized */
-rtems_unsigned32    Ttimer_val;
+uint32_t            Ttimer_val;
 
 /*
  *  Set to TRUE to return raw value. Normally zero. Depends on being allocated
@@ -108,7 +108,7 @@ void Timer_initialize()
  */
 int Read_timer() 
 {
-  rtems_unsigned32    total;
+  uint32_t            total;
 
   total = (Ttimer_val * TICK_INTERVAL) + lcsr->timer_cnt_1;
 

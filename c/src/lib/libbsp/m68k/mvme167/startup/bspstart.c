@@ -45,7 +45,7 @@ rtems_cpu_table Cpu_table;
  *  rtems/c/src/lib/libbsp/shared/bsplibc.c.
  */
 void bsp_postdriver_hook( void );
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */
 
 /*

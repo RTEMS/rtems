@@ -15,5 +15,5 @@
 User_extensions_routine bsp_fatal_error_occurred(
   Internal_errors_Source  the_source,
   rtems_boolean           is_internal,
-  rtems_unsigned32        the_error
+  uint32_t                the_error
 );

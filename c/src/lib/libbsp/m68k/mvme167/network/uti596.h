@@ -304,8 +304,8 @@ typedef volatile struct i596_scb {
  * Intermediate System Configuration Pointer
  */
 typedef volatile struct i596_iscp {
-    unsigned8 null1;            			/* Always zero */
-    unsigned8 busy;										/* Busy byte */
+    uint8_t   null1;            			/* Always zero */
+    uint8_t   busy;										/* Busy byte */
     unsigned short scb_offset;  			/* Not used in linear mode */
     unsigned long scb_pointer;      	/* Swapped pointer to scb */
     i596_scb *scb;										/* Real pointer to scb */

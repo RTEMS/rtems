@@ -133,8 +133,8 @@ static unsigned long uti596_portSelfTest( i596_selftest * );
 static int uti596_portDump ( i596_dump_result * );
 static void uti596_CU_dump ( i596_dump_result * );
 #endif
-static int uti596_wait ( uti596_softc_ *, unsigned8 );
-static int uti596_issueCA ( uti596_softc_ *, unsigned8 );
+static int uti596_wait ( uti596_softc_ *, uint8_t);
+static int uti596_issueCA ( uti596_softc_ *, uint8_t);
 static void uti596_addCmd ( i596_cmd * );
 static void uti596_addPolledCmd ( i596_cmd * );
 static void uti596_dump_scb ( void );
@@ -444,7 +444,7 @@ static int uti596_portDump(
  */
 static int uti596_wait(
   uti596_softc_ *sc,
-  unsigned8 waitType
+  uint8_t   waitType
 )
 {
   rtems_interval ticks_per_second, start_ticks, end_ticks;
@@ -541,7 +541,7 @@ static int uti596_wait(
  */
 static int uti596_issueCA(
   uti596_softc_ *sc,
-  unsigned8 waitType
+  uint8_t   waitType
 )
 {
   /* Issue Channel Attention */
