@@ -36,6 +36,9 @@
 * $Id$
 *
 * $Log$
+* Revision 1.8  2004/04/21 16:01:35  ralf
+* Remove duplicate white lines.
+*
 * Revision 1.7  2004/04/21 10:42:52  ralf
 * Remove stray white spaces.
 *
@@ -316,7 +319,7 @@ static uint8_t   SciRcvBufPutIndex = 0;     // array index to put in next char
 
 static uint8_t   SciRcvBufGetIndex = 0;     // array index to take out next char
 
-static uint8_t   SciRcvBufCount = 0;        // how many bytes are in the buffer
+static uint16_t  SciRcvBufCount = 0;        // how many bytes are in the buffer
 
 
 
