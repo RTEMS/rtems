@@ -1,3 +1,7 @@
+2005-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* sh7750/sci/sh4uart.c: Now compiles under gcc 4.x and reformatted.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* sh7032/Makefile.am, sh7045/Makefile.am, sh7750/Makefile.am:
