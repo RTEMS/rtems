@@ -18,17 +18,34 @@
 
 /*PAGE
  *
- *  13.6.1 Mutex Initialization Scheduling Attributes, P1003.1c/Draft 10, p. 128
+ *  13.6.2 Change the Priority Ceiling of a Mutex, P1003.1c/Draft 10, p. 131
  */
- 
-int pthread_mutexattr_getprioceiling(
-  const pthread_mutexattr_t   *attr,
-  int                         *prioceiling
+
+int pthread_mutex_getprioceiling(
+  pthread_mutex_t   *mutex,
+  int               *prioceiling
 )
 {
-  if ( !attr || !attr->is_initialized || !prioceiling )
+  register POSIX_Mutex_Control *the_mutex;
+  Objects_Locations             location;
+
+  if ( !prioceiling )
     return EINVAL;
 
-  *prioceiling = attr->prio_ceiling;
-  return 0;
+  the_mutex = _POSIX_Mutex_Get( mutex, &location );
+  switch ( location ) {
+    case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
+      return POSIX_MP_NOT_IMPLEMENTED();   /* XXX feels questionable */
+#endif
+    case OBJECTS_ERROR:
+      return EINVAL;
+    case OBJECTS_LOCAL:
+      *prioceiling = _POSIX_Priority_From_core(
+        the_mutex->Mutex.Attributes.priority_ceiling
+      );
+      _Thread_Enable_dispatch();
+      return 0;
+  }
+  return POSIX_BOTTOM_REACHED();
 }

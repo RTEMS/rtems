@@ -62,11 +62,15 @@ SEMAPHORE_C_PIECES= semaphore semaphorecreatesupp semaphoredeletesupp \
     semgetvalue seminit semopen sempost semtimedwait semtrywait \
     semunlink semwait
 
+TIME_C_PIECES= time posixtimespecsubtract posixtimespectointerval \
+    posixintervaltotimespec clockgetcpuclockid clockgetenableattr \
+    clockgetres clockgettime clocksetenableattr clocksettime nanosleep
+
 C_PIECES = adasupp $(CONDITION_VARIABLE_C_PIECES) \
     getpid key $(MESSAGE_QUEUE_C_PIECES) \
     $(MUTEX_C_PIECES) $(PTHREAD_C_PIECES) \
     $(PSIGNAL_C_PIECES) ptimer sched $(SEMAPHORE_C_PIECES) \
-    time types unistd $(ENOSYS_C_PIECES) \
+    $(TIME_C_PIECES) types unistd $(ENOSYS_C_PIECES) \
     $(BUILD_FOR_NOW_C_PIECES)
 
 C_FILES = $(C_PIECES:%=%.c)
