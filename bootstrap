@@ -13,6 +13,8 @@
 # source tree
 
 progname=`basename $0`
+top_srcdir=`dirname $0`
+
 verbose="";
 quiet="false"
 mode="generate"
@@ -31,9 +33,9 @@ usage()
   exit 1;
 }
 
-if test ! -f VERSION; then
+if test ! -f $top_srcdir/VERSION; then
   echo "${progname}:"
-  echo "	Please change directory to RTEMS's toplevel directory"
+  echo "	Installation problem: Can't find file VERSION"
   exit 1;
 fi
 
@@ -57,12 +59,17 @@ case $1 in
 esac
 done
 
-pwd=`pwd`;
-
 case $mode in
 generate)
+
+  case $top_srcdir in
+  /* ) aclocal_dir=$top_srcdir/aclocal
+    ;;
+  *) aclocal_dir=`pwd`/$top_srcdir/aclocal
+    ;;
+  esac
+
   confs=`find . -name 'configure.in' -print`
-  aclocal_dir=$pwd/aclocal
   for i in $confs; do
   dir=`dirname $i`;
   ( test "$quiet" = "true" || echo "$dir";
@@ -76,6 +83,7 @@ generate)
   )
   done
   ;;
+
 clean)
   test "$quiet" = "true" || echo "removing automake generated Makefile.in files"
   files=`find . -name 'Makefile.am' -print | sed -e 's%\.am%\.in%g'` ;

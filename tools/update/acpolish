@@ -191,7 +191,7 @@ sub subst_line
   my @ibuf = () ;
   my $line = "" ;
 
-  while ( <> )
+  while ( <STDIN> )
   {
     &subst_line ;
     if ( /^(#.*)$/o )
