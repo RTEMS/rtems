@@ -150,7 +150,7 @@ extern "C" {
 #define M68K_HAS_MISALIGNED      1
 # if defined (__HAVE_68881__)
 # define M68K_HAS_FPU            1
-# define M68K_HAS_FPSP_PACKAGE   1
+# define M68K_HAS_FPSP_PACKAGE   0
 # else
 # define M68K_HAS_FPU            0
 # define M68K_HAS_FPSP_PACKAGE   0
