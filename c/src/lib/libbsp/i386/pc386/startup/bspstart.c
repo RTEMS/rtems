@@ -1,6 +1,4 @@
 /*-------------------------------------------------------------------------+
-| bspstart.c v1.1 - PC386 BSP - 1997/08/07
-+--------------------------------------------------------------------------+
 | This file contains the PC386 BSP startup package. It includes application,
 | board, and monitor specific initialization and configuration. The generic CPU
 | dependent initialization has been performed before this routine is invoked. 
@@ -38,12 +36,12 @@
 #include <libcsupport.h>
 #include <rtems/libio.h>
 #include <libcpu/cpuModel.h>
+#include <pc386uart.h>
 
 /*-------------------------------------------------------------------------+
 | Global Variables
 +--------------------------------------------------------------------------*/
 extern rtems_unsigned32 _end;         /* End of BSS. Defined in 'linkcmds'. */
-
 /* 
  * Size of heap if it is 0 it will be dynamically defined by memory size, 
  * otherwise the value should be changed by binary patch 
@@ -75,6 +73,7 @@ extern void _exit(int);  /* define in exit.c */
 void bsp_libc_init( void *, unsigned32, int );
 void bsp_postdriver_hook(void);
 extern void rtems_irq_mngt_init();
+extern void _IBMPC_initVideo(void);
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_pretasking_hook
@@ -151,6 +150,10 @@ void bsp_start( void )
    * Calibrate variable for 1ms-loop (see timer.c)
    */
   Calibrate_loop_1ms();
+  /*
+   * Initialize printk channel
+   */
+  _IBMPC_initVideo();
 
   rtemsFreeMemStart = (rtems_unsigned32)&_end + _stack_size;
                                     /* set the value of start of free memory. */

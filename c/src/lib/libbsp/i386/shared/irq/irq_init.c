@@ -119,16 +119,18 @@ void  rtems_irq_mngt_init()
     unsigned			limit;
     unsigned int 		level;
 
-    
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
-    
+    /* Convert limit into number of entries */
+    limit = (limit + 1) / sizeof(interrupt_gate_descriptor);    
+
     _CPU_ISR_Disable(level);
 
     /*
      * Init the complete IDT vector table with defaultRawIrq value
      */
-    for (i = 0; i < IDT_SIZE; i++) {
-      idtHdl[i] = defaultRawIrq;
+    for (i = 0; i < limit; i++) {
+      idtHdl[i] 	 = defaultRawIrq;
+      idtHdl[i].idtIndex = i;
     }
     raw_initial_config.idtSize = IDT_SIZE;
     raw_initial_config.defaultRawEntry = defaultRawIrq;
@@ -138,7 +140,6 @@ void  rtems_irq_mngt_init()
       /*
        * put something here that will show the failure...
        */
-      BSP_emergency_output_init();
       printk("Unable to initialize IDT!!! System locked\n");
       while (1);
     }
@@ -159,7 +160,8 @@ void  rtems_irq_mngt_init()
      * re-init the rtemsIrq table
      */
     for (i = 0; i < PC_386_IRQ_LINES_NUMBER; i++) {
-      rtemsIrq[i] = defaultIrq;
+      rtemsIrq[i]      = defaultIrq;
+      rtemsIrq[i].name = i;
     }
     /*
      * Init initial Interrupt management config
@@ -169,11 +171,11 @@ void  rtems_irq_mngt_init()
     initial_config.irqHdlTbl	= rtemsIrq;
     initial_config.irqBase	= PC386_ASM_IRQ_VECTOR_BASE;
     initial_config.irqPrioTbl	= irqPrioTable;
+
     if (!pc386_rtems_irq_mngt_set(&initial_config)) {
       /*
        * put something here that will show the failure...
        */
-      BSP_emergency_output_init();
       printk("Unable to initialize RTEMS interrupt Management!!! System locked\n");
       while (1);
     }
@@ -188,8 +190,6 @@ void  rtems_irq_mngt_init()
        */
       unsigned tmp;
 
-      BSP_emergency_output_init();
-      
       printk("idt_entry_tbl =  %x Interrupt_descriptor_table addr = %x\n",
 	     idt_entry_tbl, &Interrupt_descriptor_table);
       tmp = (unsigned) get_hdl_from_vector (PC386_ASM_IRQ_VECTOR_BASE + PC_386_PERIODIC_TIMER);

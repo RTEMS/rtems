@@ -26,7 +26,6 @@ typedef char 	(*BSP_polling_getchar_function_type) 	(void);
 
 extern 	BSP_output_char_function_type 		BSP_output_char;
 extern 	BSP_polling_getchar_function_type 	BSP_poll_char;
-extern	void BSP_emergency_output_init(void);
 /*
  * All the function declared as extern after this comment
  * are available for each ix86 BSP by compiling and linking

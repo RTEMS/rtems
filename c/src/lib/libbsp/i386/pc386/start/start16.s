@@ -92,10 +92,8 @@ _start16:
 #else
 	ljmp	$PROT_CODE_SEG, $1f	# flush prefetch queue, and reload %cs
 #endif	
-1:
-
 .code32
-
+1:
         /*---------------------------------------------------------------------+
         | load the other segment registers
         +---------------------------------------------------------------------*/
