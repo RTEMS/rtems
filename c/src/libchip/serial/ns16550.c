@@ -52,6 +52,7 @@ console_fns ns16550_fns =
   ns16550_write_support_int,      /* deviceWrite */
   ns16550_initialize_interrupts,  /* deviceInitialize */
   ns16550_write_polled,           /* deviceWritePolled */
+  NULL,                           /* deviceSetAttributes */
   FALSE,                          /* deviceOutputUsesInterrupts */
 };
 
@@ -64,6 +65,7 @@ console_fns ns16550_fns_polled =
   ns16550_write_support_polled,        /* deviceWrite */
   ns16550_init,                        /* deviceInitialize */
   ns16550_write_polled,                /* deviceWritePolled */
+  NULL,                                /* deviceSetAttributes */
   FALSE,                               /* deviceOutputUsesInterrupts */
 };
 
@@ -598,8 +600,8 @@ static int ns16550_inbyte_nonblocking_polled(
   ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
   if(ucLineStatus & SP_LSR_RDY) {
     cChar = (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER);
-    return((int)cChar);
+    return (int)cChar;
   } else {
-    return(-1);
+    return -1;
   }
 }
