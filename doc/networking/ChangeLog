@@ -1,3 +1,7 @@
+2003-09-19	Joel Sherrill <joel@OARcorp.com>
+
+	* networking.texi: Merge from branch.
+
 2003-02-11	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* networkapp.t: Add an example code snippet for adding a default route.
