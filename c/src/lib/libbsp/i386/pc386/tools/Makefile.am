@@ -27,4 +27,4 @@ TMPINSTALL_FILES = @PROJECT_RELEASE@/build-tools \
 ## HACK: install into build-tree
 all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../../automake/host.am
+include $(top_srcdir)/../../../../../automake/host.am

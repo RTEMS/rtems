@@ -11,5 +11,5 @@ DIST_SUBDIRS = @all_subdirs@ \
 support/old_exception_processing \
 support/new_exception_processing
 
-include $(top_srcdir)/../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/subdirs.am
+include $(top_srcdir)/../../../automake/local.am

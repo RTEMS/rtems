@@ -13,4 +13,4 @@ install-exec-local: $(PROGRAMS)
 	$(mkinstalldirs) $(PROJECT_ROOT)/simhppa/bin
 	$(INSTALL_PROGRAM) print_dump $(PROJECT_ROOT)/simhppa/bin
 
-include $(top_srcdir)/../../../../../../../automake/local.am
+include $(top_srcdir)/../../../../../automake/local.am

@@ -1,3 +1,7 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+
 2003-08-11      Thomas Doerfler<Thomas.Doerfler@imd-systems.de>
 
         PR 369/filesystem

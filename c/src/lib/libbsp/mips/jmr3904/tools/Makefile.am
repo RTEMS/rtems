@@ -18,4 +18,4 @@ $(PROJECT_ROOT)/jmr3904/tests/runtest: runtest
 ## HACK: install to build-tree
 all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../../automake/host.am
+include $(top_srcdir)/../../../../../automake/host.am

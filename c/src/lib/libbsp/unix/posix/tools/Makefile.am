@@ -33,4 +33,4 @@ TMPINSTALL_FILES = $(PROJECT_ROOT)/posix/tests \
 ## HACK: install to build-tree
 all-local: $(TMPINSTALL_FILES) $(PERL_TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../../automake/host.am
+include $(top_srcdir)/../../../../../automake/host.am

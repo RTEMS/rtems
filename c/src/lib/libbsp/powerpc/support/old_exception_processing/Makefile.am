@@ -15,8 +15,8 @@ include_rtems_score_HEADERS = rtems/score/ppc_offs.h
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../../automake/compile.am
+include $(top_srcdir)/../../../../../automake/lib.am
 
 AM_CPPFLAGS += -I$(srcdir)
 
@@ -43,4 +43,4 @@ UNUSED_FILES = irq_stub.S
 
 EXTRA_DIST = TODO $(C_FILES) $(S_FILES) $(UNUSED_FILES)
 
-include $(top_srcdir)/../../../../../../../automake/local.am
+include $(top_srcdir)/../../../../../automake/local.am

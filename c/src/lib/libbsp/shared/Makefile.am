@@ -11,4 +11,4 @@ EXTRA_DIST += include/coverhd.h
 
 EXTRA_DIST += gdbstub/rtems-stub-glue.c
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am

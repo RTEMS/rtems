@@ -10,5 +10,5 @@ ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 ## Currently no shared
 SUBDIRS = $(RTEMS_BSP_FAMILY)
 
-include $(top_srcdir)/../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/subdirs.am
+include $(top_srcdir)/../../../automake/local.am

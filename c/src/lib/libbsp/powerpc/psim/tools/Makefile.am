@@ -27,4 +27,4 @@ $(PROJECT_ROOT)/psim/tests/psim-gdb: psim
 ## HACK: install to build-tree
 all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../../automake/host.am
+include $(top_srcdir)/../../../../../automake/host.am

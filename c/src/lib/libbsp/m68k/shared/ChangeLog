@@ -1,3 +1,7 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+
 2002-06-25	Joel Sherrill <joel@OARcorp.com>
 
 	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k

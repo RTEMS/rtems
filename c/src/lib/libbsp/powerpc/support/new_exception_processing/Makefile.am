@@ -15,8 +15,8 @@ include_rtems_score_HEADERS =
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../../automake/compile.am
+include $(top_srcdir)/../../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -43,4 +43,4 @@ all-local: $(ARCH) $(TMPINSTALL_FILES) $(REL)
 
 EXTRA_DIST = $(C_FILES) $(S_FILES)
 
-include $(top_srcdir)/../../../../../../../automake/local.am
+include $(top_srcdir)/../../../../../automake/local.am

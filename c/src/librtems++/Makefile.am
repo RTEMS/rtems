@@ -4,8 +4,8 @@
 
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 include_rtems__dir = $(includedir)/rtems++
 
@@ -50,4 +50,4 @@ $(PROJECT_RELEASE)/lib/librtems++$(LIB_VARIANT).a: $(LIB)
 
 all-local: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../automake/local.am
