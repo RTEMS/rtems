@@ -34,8 +34,10 @@ extern Chain_Control rtems_filesystem_mount_table_control;
  *       thread dispatching disabled!
  */
 static void
-free_user_env(rtems_user_env_t *env)
+free_user_env(void *venv)
 {
+  rtems_user_env_t *env = (rtems_user_env_t*) venv ;
+
 	if (env != &rtems_global_user_env 
 #ifdef HAVE_USERENV_REFCNT
 		&& --env->refcnt <= 0

@@ -4,6 +4,10 @@
 	* src/termios.c (rtems_termios_open):  Fixed code the incorrectly
 	checked that the wrong pointer during allocation was NULL.
 
+2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/privateenv.c: Fix prototype for free_user_env.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
