@@ -1,3 +1,11 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* m68040/fpsp/rtems_fpsp.c, mcf5206/clock/ckinit.c,
+	mcf5206/console/mcfuart.c, mcf5206/include/mcf5206e.h,
+	mcf5206/include/mcfmbus.h, mcf5206/include/mcfuart.h,
+	mcf5206/mbus/mcfmbus.c, mcf5206/timer/timer.c: Convert to using c99
+	fixed size types.
+
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Add 2nd argument (rtems_updir) to RTEMS_TOP.

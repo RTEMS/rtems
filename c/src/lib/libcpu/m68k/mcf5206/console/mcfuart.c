@@ -51,8 +51,8 @@ mcfuart_interrupt_handler(rtems_vector_number vec);
  *     RTEMS_SUCCESSFUL if all parameters are valid, or error code
  */
 rtems_status_code
-mcfuart_init(mcfuart *uart, void *tty, rtems_unsigned8 intvec,
-             rtems_unsigned32 chn)
+mcfuart_init(mcfuart *uart, void *tty, uint8_t   intvec,
+             uint32_t   chn)
 {
     if (uart == NULL)
         return RTEMS_INVALID_ADDRESS;
@@ -80,8 +80,8 @@ mcfuart_init(mcfuart *uart, void *tty, rtems_unsigned8 intvec,
 static void
 mcfuart_set_baudrate(mcfuart *uart, speed_t baud)
 {
-    rtems_unsigned32 div;
-    rtems_unsigned32 rate;
+    uint32_t   div;
+    uint32_t   rate;
     switch (baud)
     {
         case B50:     rate = 50; break;
@@ -110,8 +110,8 @@ mcfuart_set_baudrate(mcfuart *uart, speed_t baud)
         
     div = SYSTEM_CLOCK_FREQUENCY / (rate * 32);
     
-    *MCF5206E_UBG1(MBAR,uart->chn) = (rtems_unsigned8)((div >> 8) & 0xff);
-    *MCF5206E_UBG2(MBAR,uart->chn) = (rtems_unsigned8)(div & 0xff);
+    *MCF5206E_UBG1(MBAR,uart->chn) = (uint8_t  )((div >> 8) & 0xff);
+    *MCF5206E_UBG2(MBAR,uart->chn) = (uint8_t  )(div & 0xff);
 }
 
 /*
@@ -134,7 +134,7 @@ mcfuart_set_baudrate(mcfuart *uart, speed_t baud)
 rtems_status_code
 mcfuart_reset(mcfuart *uart)
 {
-    register rtems_unsigned32 chn;
+    register uint32_t   chn;
     rtems_status_code rc;
     
     if (uart == NULL)
@@ -246,7 +246,7 @@ mcfuart_set_attributes(mcfuart *uart, const struct termios *t)
 {
     int level;
     speed_t baud;
-    rtems_unsigned8 umr1, umr2;
+    uint8_t   umr1, umr2;
     
     baud = cfgetospeed(t);
     umr1 = 0;
@@ -349,7 +349,7 @@ mcfuart_set_attributes(mcfuart *uart, const struct termios *t)
 int
 mcfuart_poll_read(mcfuart *uart)
 {
-    rtems_unsigned8 usr;
+    uint8_t   usr;
     int ch;
     if (uart->parerr_mark_flag == 1)
     {
@@ -419,8 +419,8 @@ static rtems_isr
 mcfuart_interrupt_handler(rtems_vector_number vec)
 {
     mcfuart *uart;
-    register rtems_unsigned8 usr;
-    register rtems_unsigned8 uisr;
+    register uint8_t   usr;
+    register uint8_t   uisr;
     register int chn;
     register int bp = 0;
     

@@ -30,7 +30,7 @@
  * Clock_driver_ticks is a monotonically increasing counter of the
  * number of clock ticks since the driver was initialized.
  */
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t   Clock_driver_ticks;
 
 
 /*
@@ -193,7 +193,7 @@ Clock_control(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void *pargp)
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t   isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
 
     if (args)

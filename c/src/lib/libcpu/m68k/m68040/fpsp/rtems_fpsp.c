@@ -17,7 +17,7 @@ proc_ptr M68040FPSPUserExceptionHandlers[9];
  * FPSP exceptions get special treatment.
  */
 static int
-FPSP_install_raw_handler (unsigned32 vector, proc_ptr new_handler, proc_ptr *old_handler)
+FPSP_install_raw_handler (uint32_t   vector, proc_ptr new_handler, proc_ptr *old_handler)
 {
   int fpspVector;
 

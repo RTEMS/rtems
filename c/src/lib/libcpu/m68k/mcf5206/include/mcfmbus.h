@@ -28,7 +28,7 @@ typedef enum mcfmbus_i2c_state {
 } mcfmbus_i2c_state;
 
 typedef struct mcfmbus {
-    rtems_unsigned32       base; /* ColdFire internal peripherial base
+    uint32_t         base; /* ColdFire internal peripherial base
                                     address */
     enum mcfmbus_i2c_state state;/* State of I2C machine */
     i2c_message           *msg;  /* Pointer to the first message in transfer */
@@ -38,7 +38,7 @@ typedef struct mcfmbus {
     rtems_isr_entry        oldisr; /* Old interrupt handler */
     rtems_id               sema; /* MBUS semaphore */
     i2c_transfer_done      done; /* Transfer done function */
-    rtems_unsigned32       done_arg; /* Done function argument */
+    uint32_t         done_arg; /* Done function argument */
 } mcfmbus;
 
 /* mcfmbus_initialize --
@@ -52,7 +52,7 @@ typedef struct mcfmbus {
  *     RTEMS_SUCCESSFUL, or RTEMS error code when initialization failed.
  */
 rtems_status_code
-mcfmbus_initialize(mcfmbus *i2c_bus, rtems_unsigned32 base);
+mcfmbus_initialize(mcfmbus *i2c_bus, uint32_t   base);
 
 /* mcfmbus_select_clock_divider --
  *     Select divider for system clock which is used for I2C bus clock
@@ -88,7 +88,7 @@ mcfmbus_select_clock_divider(mcfmbus *i2c_bus, int divider);
  */
 rtems_status_code
 mcfmbus_i2c_transfer(mcfmbus *bus, int nmsg, i2c_message *msg,
-                     i2c_transfer_done done, rtems_unsigned32 done_arg);
+                     i2c_transfer_done done, uint32_t   done_arg);
 
 /* mcfmbus_i2c_done --
  *     Close ColdFire MBUS I2C bus controller and release all resources.

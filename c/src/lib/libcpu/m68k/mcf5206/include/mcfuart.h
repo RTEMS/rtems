@@ -33,14 +33,14 @@
  * current operating values
  */
 typedef struct mcfuart {
-   rtems_unsigned32          chn;      /* UART channel number */
-   rtems_unsigned8           intvec;   /* UART interrupt vector number, or
+   uint32_t            chn;      /* UART channel number */
+   uint8_t             intvec;   /* UART interrupt vector number, or
                                           0 if polled I/O */
    void                     *tty;      /* termios channel descriptor */
    
    volatile const char      *tx_buf;    /* Transmit buffer from termios */
-   volatile rtems_unsigned32 tx_buf_len;/* Transmit buffer length */
-   volatile rtems_unsigned32 tx_ptr;    /* Index of next char to transmit*/
+   volatile uint32_t   tx_buf_len;/* Transmit buffer length */
+   volatile uint32_t   tx_ptr;    /* Index of next char to transmit*/
    rtems_isr_entry           old_handler;/* Saved interrupt handler */
    
    tcflag_t                  c_iflag;  /* termios input mode flags */
@@ -54,8 +54,8 @@ typedef struct mcfuart {
  *
  */
 rtems_status_code
-mcfuart_init(mcfuart *uart, void *tty, rtems_unsigned8 intvec,
-             rtems_unsigned32 chn);
+mcfuart_init(mcfuart *uart, void *tty, uint8_t   intvec,
+             uint32_t   chn);
 
 /* mcfuart_reset --
  *     This function perform the hardware initialization of Motorola

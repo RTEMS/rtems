@@ -112,7 +112,7 @@ static i2c_event
 mcfmbus_get_event(mcfmbus *bus)
 {
     i2c_event event;
-    rtems_unsigned8 status, control;
+    uint8_t   status, control;
     rtems_interrupt_level level;
     rtems_interrupt_disable(level);
     status = *MCF5206E_MBSR(bus->base);
@@ -172,7 +172,7 @@ mcfmbus_machine_error(mcfmbus *bus, i2c_event event)
 static void
 mcfmbus_machine(mcfmbus *bus, i2c_event event)
 {
-    rtems_unsigned8 b;
+    uint8_t   b;
     switch (bus->state)
     {
         case STATE_IDLE:
@@ -282,7 +282,7 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
             {
                 case EVENT_ACK:
                 {
-                    rtems_unsigned8 b = (bus->cmsg->addr & 0xff);
+                    uint8_t   b = (bus->cmsg->addr & 0xff);
                     mcfmbus_send(bus, b);
                     if (bus->state == STATE_ADDR_1_W)
                     {
@@ -504,7 +504,7 @@ mcfmbus_select_clock_divider(mcfmbus *i2c_bus, int divider)
  *     RTEMS_SUCCESSFUL, or RTEMS error code when initialization failed.
  */
 rtems_status_code
-mcfmbus_initialize(mcfmbus *i2c_bus, rtems_unsigned32 base)
+mcfmbus_initialize(mcfmbus *i2c_bus, uint32_t   base)
 {
     rtems_interrupt_level level;
     rtems_status_code sc;
@@ -561,7 +561,7 @@ mcfmbus_initialize(mcfmbus *i2c_bus, rtems_unsigned32 base)
  */
 rtems_status_code
 mcfmbus_i2c_transfer(mcfmbus *bus, int nmsg, i2c_message *msg,
-                     i2c_transfer_done done, rtems_unsigned32 done_arg)
+                     i2c_transfer_done done, uint32_t   done_arg)
 {
     if (bus != mbus)
         return RTEMS_NOT_CONFIGURED;
@@ -591,7 +591,7 @@ rtems_status_code
 mcfmbus_i2c_done(mcfmbus *i2c_bus)
 {
     rtems_status_code sc;
-    rtems_unsigned32 base;
+    uint32_t   base;
     if (mbus == NULL)
         return RTEMS_NOT_CONFIGURED;
     

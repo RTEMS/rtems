@@ -23,11 +23,11 @@
 #define MCF5206E_REG32(base,ofs) (ofs+base)
 #else
 #define MCF5206E_REG8(base,ofs) \
-    (volatile rtems_unsigned8 *)((rtems_unsigned8 *)(base) + (ofs))
+    (volatile uint8_t   *)((uint8_t   *)(base) + (ofs))
 #define MCF5206E_REG16(base,ofs) \
-    (volatile rtems_unsigned16 *)((rtems_unsigned8 *)(base) + (ofs))
+    (volatile uint16_t   *)((uint8_t   *)(base) + (ofs))
 #define MCF5206E_REG32(base,ofs) \
-    (volatile rtems_unsigned32 *)((rtems_unsigned8 *)(base) + (ofs))
+    (volatile uint32_t   *)((uint8_t   *)(base) + (ofs))
 #endif
 
 /*** Instruction Cache -- MCF5206e User's Manual, Chapter 4 ***/
