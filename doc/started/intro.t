@@ -130,7 +130,7 @@ use to RTEMS users.
 rtems-list@@OARcorp.com
 
 This mailing list is dedicated to discussion of issues related
-to RTEMS.  If you have questions about RTEMS, which to make
+to RTEMS.  If you have questions about RTEMS, wish to make
 suggestions, or just want to pick up hints, this is a good
 list to subscribe to.  Subscribe by sending a message with
 the one line "subscribe" to rtems-list-request@@OARcorp.com.

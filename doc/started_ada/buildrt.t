@@ -33,6 +33,38 @@ NOTE:  The above command is in Bourne shell (@code{sh}) syntax and should
 work with the Korn (@code{ksh}) and GNU Bourne Again Shell (@code{bash}).  
 It will not work with the C Shell (@code{csh})or derivatives of the C Shell.
 
+@section Verifying the Operation of the Cross Toolset
+
+In order to insure that the cross-compiler is invoking the correct
+subprograms (like @code{as} and @code{ld}), one can test assemble
+a small program.  When in verbose more, @code{gcc} prints out information
+showing where it found the subprograms it invokes.  Place the following
+function in a file named @code{f.c}:
+
+@example
+int f( int x )
+{
+  return x + 1; 
+}
+@end example
+
+Then assemble the file using a command similar to the following:
+
+@example 
+m68k-rtems-gcc -v -S f.c
+@end example
+
+Where @code{m68k-rtems-gcc} should be changed to match the installed
+name of your cross compiler.  The result of this command will be
+a sequence of output showing where the cross-compiler searched for
+and found its subcomponents.  Verify that these paths correspond
+to your <INSTALL_POINT>.
+
+@b{NOTE:} One of the most common installation errors is for the
+cross-compiler not to be able to find the cross assembler and default
+to using the native @code{as}.  This can result in very confusing
+error messages.
+
 @section Generate RTEMS for a Specific Target and BSP
 
 Make a build directory under tools and build the RTEMS product in this
