@@ -1,3 +1,26 @@
+2001-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/bare.cfg: Remove make-target-options.
+	* custom/c4xsim.cfg: Ditto.
+	* custom/cvme961.cfg: Ditto.
+	* custom/efi68k.cfg: Ditto.
+	* custom/gen68302.cfg: Ditto.
+	* custom/gen68340.cfg: Ditto.
+	* custom/genmongoosev.cfg: Ditto.
+	* custom/gensh4.cfg: Remove make-target-options, remove GCC272
+	make-exe, remove empty lines.
+	* custom/h8sim.cfg: Remove make-target-options.
+	* custom/mcf5206elite.cfg: Ditto.
+	* custom/mrm332.cfg: Ditto.
+	* custom/mvme147.cfg: Ditto.
+	* custom/ods68302.cfg: Ditto.
+	* custom/p4000.cfg: Ditto.
+	* custom/p4600.cfg: Ditto.
+	* custom/p4650.cfg: Ditto.
+	* custom/pc386.cfg: Ditto.
+	* custom/portsw.cfg: Ditto.
+	* custom/simsh4.cfg: Ditto.
+
 2001-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/efi332.cfg: Remove make-target-options.
