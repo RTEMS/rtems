@@ -126,25 +126,47 @@ rtems_bsdnet_free (void *addr, int type)
 
 /*
  * Do the initializations required by the BSD code
- * FIXME: Maybe we should use a different memory allocation scheme that
- * would let us share space between mbufs and mbuf clusters.
- * For now, we'll just take the easy way out!
  */
 static void
 bsd_init ()
 {
+	int i;
+	char *p;
+
 	/*
-	 * Set up mbuf data strutures
-	 * Cluster allocation *must* come first -- see comment on kmem_malloc().
+	 * Set up mbuf cluster data strutures
 	 */
-	m_clalloc (nmbclusters, M_DONTWAIT);
+	p = malloc ((nmbclusters*MCLBYTES)+MCLBYTES-1);
+	p = (char *)(((unsigned long)p + (MCLBYTES-1)) & ~(MCLBYTES-1));
+	if (p == NULL)
+		rtems_panic ("Can't get network cluster memory.");
+	mbutl = (struct mbuf *)p;
+	for (i = 0; i < nmbclusters; i++) {
+		((union mcluster *)p)->mcl_next = mclfree;
+		mclfree = (union mcluster *)p;
+		p += MCLBYTES;
+		mbstat.m_clfree++;
+	}
+	mbstat.m_clusters = nmbclusters;
 	mclrefcnt = malloc (nmbclusters);
 	if (mclrefcnt == NULL)
-		rtems_panic ("No memory for mbuf cluster reference counts.");
+		rtems_panic ("Can't get mbuf cluster reference counts memory.");
 	memset (mclrefcnt, '\0', nmbclusters);
-	m_mballoc (nmbuf, M_DONTWAIT);
-	mbstat.m_mtypes[MT_FREE] = nmbuf;
 
+	/*
+	 * Set up mbuf data structures
+	 */
+
+	p = malloc(nmbuf * MSIZE);
+	if (p == NULL)
+		rtems_panic ("Can't get network memory.");
+	for (i = 0; i < nmbuf; i++) {
+		((struct mbuf *)p)->m_next = mmbfree;
+		mmbfree = (struct mbuf *)p;
+		p += MSIZE;
+	}
+	mbstat.m_mbufs = nmbuf;
+	mbstat.m_mtypes[MT_FREE] = nmbuf;
 
 	/*
 	 * Set up domains
@@ -663,41 +685,8 @@ rtems_bsdnet_log (int priority, const char *fmt, ...)
 }
 
 /*
- * Hack alert: kmem_malloc `knows' that its
- * first invocation is to get mbuf clusters!
- */
-int mb_map_full;
-vm_map_t mb_map;
-vm_offset_t
-kmem_malloc (vm_map_t *map, vm_size_t size, boolean_t waitflag)
-{
-	void *p;
-	
-	/*
-	 * Can't get memory if we're already running.
-	 */
-	if (networkDaemonTid) {
-		if (waitflag == M_WAITOK)
-			rtems_panic (
-"Network mbuf space can not be enlarged after rtems_bsdnet_initialize() has\n"
-"returned.  Enlarge the initial mbuf/cluster size in rtems_bsdnet_config.");
-		return 0;
-	}
-
-#define ROUNDSIZE 2048
-	p = malloc (size+ROUNDSIZE);
-	p = (void *)((unsigned long)p & ~(ROUNDSIZE-1));
-	if ((p == NULL) && (waitflag == M_WAITOK))
-		rtems_panic ("Can't get initial network memory!");
-	if (mbutl == NULL)
-		mbutl = p;
-	return (vm_offset_t)p;
-}
-
-/*
  * IP header checksum routine for processors which don't have an inline version
  */
-
 u_int
 in_cksum_hdr (const void *ip)
 {
@@ -925,4 +914,58 @@ rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char
 	}
 	printf ("Bad network driver name `%s'", config->name);
 	return -1;
+}
+
+/*
+ * Handle requests for more network memory
+ * XXX: Another possibility would be to use a semaphore here with
+ *      a release in the mbuf free macro.  I have chosen this `polling'
+ *      approach because:
+ *      1) It is simpler.
+ *      2) It adds no complexity to the free macro.
+ *      3) Running out of mbufs should be a rare
+ *         condition -- predeployment testing of
+ *         an application should indicate the
+ *         required mbuf pool size.
+ * XXX: Should there be a panic if a task is stuck in the loop for
+ *      more than a minute or so?
+ */
+int
+m_mballoc (int nmb, int nowait)
+{
+	if (nowait)
+		return 0;
+	m_reclaim ();
+	if (mmbfree == NULL) {
+		mbstat.m_wait++;
+		do {
+			rtems_bsdnet_semaphore_release ();
+			rtems_task_wake_after (1);
+			rtems_bsdnet_semaphore_obtain ();
+		} while (mmbfree == NULL);
+	}
+	else {
+		mbstat.m_drops++;
+	}
+	return 1;
+}
+
+int
+m_clalloc(ncl, nowait)
+{
+	if (nowait)
+		return 0;
+	m_reclaim ();
+	if (mclfree == NULL) {
+		mbstat.m_wait++;
+		do {
+			rtems_bsdnet_semaphore_release ();
+			rtems_task_wake_after (1);
+			rtems_bsdnet_semaphore_obtain ();
+		} while (mclfree == NULL);
+	}
+	else {
+		mbstat.m_drops++;
+	}
+	return 1;
 }

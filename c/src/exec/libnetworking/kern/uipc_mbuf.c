@@ -63,113 +63,10 @@ int	max_protohdr;
 int	max_hdr;
 int	max_datalen;
 
-static void	m_reclaim __P((void));
-
 /* "number of clusters of pages" */
 #define NCL_INIT	1
 
 #define NMB_INIT	16
-
-/* ARGSUSED*/
-static void
-mbinit(dummy)
-	void *dummy;
-{
-	int s;
-
-	mmbfree = NULL; mclfree = NULL;
-	s = splimp();
-	if (m_mballoc(NMB_INIT, M_DONTWAIT) == 0)
-		goto bad;
-	if (m_clalloc(NCL_INIT, M_DONTWAIT) == 0)
-		goto bad;
-	splx(s);
-	return;
-bad:
-	panic("mbinit");
-}
-
-/*
- * Allocate at least nmb mbufs and place on mbuf free list.
- * Must be called at splimp.
- */
-/* ARGSUSED */
-int
-m_mballoc(nmb, nowait)
-	register int nmb;
-	int nowait;
-{
-	register caddr_t p;
-	register int i;
-	int nbytes;
-
-	/* Once we run out of map space, it will be impossible to get
-	 * any more (nothing is ever freed back to the map) (XXX which
-	 * is dumb). (however you are not dead as m_reclaim might
-	 * still be able to free a substantial amount of space).
-	 */
-	if (mb_map_full)
-		return (0);
-
-	nbytes = round_page(nmb * MSIZE);
-	p = (caddr_t)kmem_malloc(mb_map, nbytes, nowait ? M_NOWAIT : M_WAITOK);
-	/*
-	 * Either the map is now full, or this is nowait and there
-	 * are no pages left.
-	 */
-	if (p == NULL)
-		return (0);
-
-	nmb = nbytes / MSIZE;
-	for (i = 0; i < nmb; i++) {
-		((struct mbuf *)p)->m_next = mmbfree;
-		mmbfree = (struct mbuf *)p;
-		p += MSIZE;
-	}
-	mbstat.m_mbufs += nmb;
-	return (1);
-}
-
-/*
- * Allocate some number of mbuf clusters
- * and place on cluster free list.
- * Must be called at splimp.
- */
-/* ARGSUSED */
-int
-m_clalloc(ncl, nowait)
-	register int ncl;
-	int nowait;
-{
-	register caddr_t p;
-	register int i;
-
-	/*
-	 * Once we run out of map space, it will be impossible
-	 * to get any more (nothing is ever freed back to the
-	 * map).
-	 */
-	if (mb_map_full)
-		return (0);
-
-	p = (caddr_t)kmem_malloc(mb_map, ncl*MCLBYTES,
-				 nowait ? M_NOWAIT : M_WAITOK);
-	/*
-	 * Either the map is now full, or this is nowait and there
-	 * are no pages left.
-	 */
-	if (p == NULL)
-		return (0);
-
-	for (i = 0; i < ncl; i++) {
-		((union mcluster *)p)->mcl_next = mclfree;
-		mclfree = (union mcluster *)p;
-		p += MCLBYTES;
-		mbstat.m_clfree++;
-	}
-	mbstat.m_clusters += ncl;
-	return (1);
-}
 
 /*
  * When MGET failes, ask protocols to free space when short of memory,
@@ -212,8 +109,8 @@ m_retryhdr(i, t)
 	return (m);
 }
 
-static void
-m_reclaim()
+void
+m_reclaim(void)
 {
 	register struct domain *dp;
 	register struct protosw *pr;

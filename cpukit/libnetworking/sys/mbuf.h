@@ -410,6 +410,7 @@ int	m_clalloc __P((int, int));
 void	m_copyback __P((struct mbuf *, int, int, caddr_t));
 void	m_copydata __P((struct mbuf *,int,int,caddr_t));
 void	m_freem __P((struct mbuf *));
+void	m_reclaim __P((void));
 
 #ifdef MBTYPES
 int mbtypes[] = {				/* XXX */
