@@ -188,9 +188,10 @@ the set of valid semaphore attributes:
 @item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
 
 @item @code{@value{RPREFIX}BINARY_SEMAPHORE} - restrict values to
-0 and 1 (default)
+0 and 1
 
 @item @code{@value{RPREFIX}COUNTING_SEMAPHORE} - no restriction on values
+(default)
 
 @item @code{@value{RPREFIX}SIMPLE_BINARY_SEMAPHORE} - restrict values to
 0 and 1, do not allow nested access, allow deletion of locked semaphore.
@@ -447,9 +448,10 @@ defined by RTEMS:
 @item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
 
 @item @code{@value{RPREFIX}BINARY_SEMAPHORE} - restrict values to
-0 and 1 (default)
+0 and 1
 
 @item @code{@value{RPREFIX}COUNTING_SEMAPHORE} - no restriction on values
+(default)
 
 @item @code{@value{RPREFIX}SIMPLE_BINARY_SEMAPHORE} - restrict values to
 0 and 1, block on nested access, allow deletion of locked semaphore.
