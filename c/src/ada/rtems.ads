@@ -415,7 +415,7 @@ package RTEMS is
       Internal_Error,           -- RTEMS inconsistency detected
       No_Memory,                -- no memory left in heap
       IO_Error,                 -- driver IO error
-      Proxy_Blocking,           -- internal multiprocessing only
+      Proxy_Blocking            -- internal multiprocessing only
    );
 
    for Status_Codes'Size use 32;
