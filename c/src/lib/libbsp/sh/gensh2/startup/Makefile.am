@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
@@ -24,13 +23,12 @@ bsplib_DATA = linkcmds
 
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
 $(PGM): $(OBJS)
 	$(make-rel)
 
-PREINSTALL_FILES = $(PROJECT_RELEASE)/lib/linkcmds
-
-all-local: $(PREINSTALL_FILES) $(OBJS) $(PGM)
+all-local: $(PREINSTALL_FILES) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
