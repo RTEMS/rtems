@@ -98,6 +98,12 @@ if test $config -eq 0 && test $custom -eq 0; then
   exit 1
 fi
 
+if test ! -r $rtems_srcdir/VERSION; then
+  echo "Can't find rtems"
+  echo "Check value passed to --rtems=<DIR>"
+  exit 1
+fi
+
 if test x$target != x ;then
 target_prefix=$target-
 fi
