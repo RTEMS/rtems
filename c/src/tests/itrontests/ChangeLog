@@ -1,3 +1,8 @@
+2004-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 721/tests
+	* itronsem01/init.c: Fix bogus assert.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* itronhello/init.c, itronhello/itronhello.doc, itronhello/system.h,

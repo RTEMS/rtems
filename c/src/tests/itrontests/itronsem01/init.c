@@ -284,7 +284,7 @@ void ITRON_Init( void )
 
   puts( "Init - sig_sem - semaphore 1 (count > maximum) - E_QOVR" );
   status = sig_sem( 1 );
-  assert( status == E_OK );
+  assert( status == E_QOVR );
 
   /*
    *  Exercise ref_sem
