@@ -18,7 +18,7 @@ then
 elif test -d /usr/src/redhat/SPECS;
 then
   RPM_SPECSdir=/usr/src/redhat/SPECS;
-elif test -d /usr/src/SPECS/;
+elif test -d /usr/src/SPECS;
 then
   RPM_SPECSdir=/usr/src/SPECS;
 fi

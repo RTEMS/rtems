@@ -1,3 +1,7 @@
+2000-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Remove trailing '/' from RPM_SPECSdir.
+
 2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove ACLOCAL_AMFLAGS.
