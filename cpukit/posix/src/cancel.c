@@ -1,5 +1,6 @@
 /*  cancel.c
  *
+ *  $Id$
  */
 
 #include <pthread.h>

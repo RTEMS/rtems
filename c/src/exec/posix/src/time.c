@@ -1,5 +1,6 @@
 /* time.c
  *
+ *  $Id$
  */
 
 #include <time.h>

@@ -1,5 +1,6 @@
 /* types.c
  *
+ *  $Id$
  */
 
 #include <sys/types.h>

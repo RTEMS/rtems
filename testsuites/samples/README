@@ -7,6 +7,8 @@
 #  to the copyright license under the clause at DFARS 252.227-7013.  This
 #  notice must appear in all copies of this file and its derivatives.
 #
+#  $Id$
+#
 
 This directory contains the RTEMS Sample Application Suite.
 The tests in this directory perform two functions:

@@ -28,7 +28,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  ppctypes.h,v 1.3 1995/05/31 14:57:15 joel Exp
+ *  $Id$
  */
 
 #ifndef __PPC_TYPES_h

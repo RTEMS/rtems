@@ -1,5 +1,6 @@
 /* mqueue.h
  *
+ *  $Id$
  */
 
 #ifndef __POSIX_MESSAGE_QUEUE_h

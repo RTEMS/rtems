@@ -1,5 +1,6 @@
 /*  sys/utsname.h 
  *
+ *  $Id$
  */
 
 #ifndef __POSIX_SYS_UTSNAME_h

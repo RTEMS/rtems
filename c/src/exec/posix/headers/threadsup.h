@@ -1,5 +1,6 @@
 /* threadsup.h
  *
+ *  $Id$
  */
 
 #ifndef __RTEMS_POSIX_THREAD_SUPPORT_h

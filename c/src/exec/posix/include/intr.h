@@ -2,6 +2,8 @@
  *
  *  XXX: It is unclear if the type "intr_t" should be defined when
  *       _POSIX_INTERRUPT_CONTROL is not.
+ *
+ *  $Id$
  */
 
 #ifndef __POSIX_INTERRUPTS_h

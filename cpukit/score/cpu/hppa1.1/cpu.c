@@ -14,7 +14,7 @@
  *      Division Incorporated makes no representations about the
  *      suitability of this software for any purpose.
  *
- *  cpu.c,v 1.7 1995/09/19 14:49:35 joel Exp
+ *  $Id$
  */
 
 #include <rtems/system.h>

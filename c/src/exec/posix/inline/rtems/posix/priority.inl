@@ -1,3 +1,6 @@
+/*  
+ *  $Id$
+ */
 
 #ifndef __RTEMS_POSIX_PRIORITY_inl
 #define __RTEMS_POSIX_PRIORITY_inl

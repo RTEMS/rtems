@@ -1,5 +1,6 @@
 /*  cond.c
  *
+ *  $Id$
  */
 
 #include <pthread.h>

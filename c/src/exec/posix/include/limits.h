@@ -7,6 +7,8 @@
  *       to segregrate the variables below based on their "class" according
  *       to our implementation.  We also need to set the Run-Time Invariant
  *       and other related values.
+ *
+ *  $Id$
  */
 
 #ifndef __POSIX_LIMITS_h

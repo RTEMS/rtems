@@ -1,5 +1,6 @@
 /* signal.c
  *
+ *  $Id$
  */
 
 #include <signal.h>

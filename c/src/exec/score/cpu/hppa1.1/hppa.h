@@ -24,7 +24,7 @@
  * Note:
  *      This file is included by both C and assembler code ( -DASM )
  *
- *  hppa.h,v 1.4 1995/09/19 14:49:37 joel Exp
+ *  $Id$
  */
 
 #ifndef _INCLUDE_HPPA_H

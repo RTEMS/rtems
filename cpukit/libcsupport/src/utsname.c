@@ -1,5 +1,6 @@
 /*  utsname.c 
  *
+ *  $Id$
  */
 
 #include <stdio.h>

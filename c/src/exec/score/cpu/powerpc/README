@@ -1,3 +1,7 @@
+#
+#  $Id$
+#
+
 There are various issues regarding this port:
 
 
@@ -17,6 +21,8 @@ code.  I am seeking a release from IBM for this file.  In the
 mean time this file is excluded (but still included in the Makefile
 as a place-holder).
 
+NOTE: IBM released the alignment exception handler under generous enough
+      terms where it could be included in this distribution.
 
 
 2) CPU support.

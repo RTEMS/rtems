@@ -1,5 +1,6 @@
 /*  semaphore.c
  *
+ *  $Id$
  */
 
 #include <stdarg.h>

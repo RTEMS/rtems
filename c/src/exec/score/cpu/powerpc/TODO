@@ -1,3 +1,7 @@
+#
+#  $Id$
+#
+
 Todo list:
 
 Maybe decode external interrupts like the HPPA does.

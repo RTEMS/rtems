@@ -11,6 +11,8 @@
  *
  *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
  *         time.
+ *
+ *  $Id$
  */
 
 #include <stdarg.h>

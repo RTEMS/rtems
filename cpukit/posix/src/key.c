@@ -1,5 +1,6 @@
 /*  key.c
  *
+ *  $Id$
  */
 
 #include <errno.h>
