@@ -39,7 +39,16 @@ END-INFO-DIR-ENTRY
 
 @c variable substitution info:
 @c
-@c @set LANGUAGE C
+@c Note: At the moment we do not document the Ada interface but by building
+@c       in the infrastructure Florist support should be simple to add.
+@set is-C
+@clear is-Ada
+@set LANGUAGE C 
+@set STRUCTURE structure
+@set ROUTINE function
+@set OR |
+@set RPREFIX RTEMS_
+@set DIRPREFIX rtems_
 @c the language is @value{LANGUAGE}
 @c NOTE:  don't use underscore in the name
 @c
@@ -76,6 +85,8 @@ END-INFO-DIR-ENTRY
 @c  The alternative is to rework a sentence to avoid this problem.
 
 @include preface.texi
+@include process.texi
+@include procenv.texi
 @include thread.texi
 @include signal.texi
 @include mutex.texi
@@ -91,6 +102,8 @@ This is the online version of the RTEMS POSIX API User's Guide
 
 @menu
 * Preface::
+* Process Creation and Execution Manager::
+* Process Environment Manager::
 * Thread Manager::
 * Signal Manager::
 * Mutex Manager::
