@@ -73,7 +73,7 @@ rtems_isr external_exception_ISR (
   * Read vector.
   */
  chained_vector = Get_interrupt();
- index = chained_vector - DMV170_IRQ_FIRST
+ index = chained_vector - DMV170_IRQ_FIRST;
  node = ISR_Array[ index ].first;
  while ( !_Chain_Is_tail( &ISR_Array[ index ], node ) ) {
    ee_isr = (EE_ISR_Type *) node;
@@ -120,6 +120,8 @@ void initialize_external_exception_vector ()
 
   status = rtems_interrupt_catch( external_exception_ISR, 
            PPC_IRQ_EXTERNAL , (rtems_isr_entry *) &previous_isr );
+
+  Init_Css();
 }
 
 /*PAGE
