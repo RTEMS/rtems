@@ -1,0 +1,64 @@
+#
+#  $Id$
+#
+
+#
+# This board support package works with a target PC
+#
+# Decisions to be made a link-edit time are:
+#     - The size of the memory allocator heap.  The default value is
+#       64 kbytes.  If the network package is used the heap
+#       should be at least 256 kbytes.  If your network is large, or
+#       busy, the heap should be even larger.
+#       To choose a heap size of 256 kbytes,
+#       CFLAGS_LD += -Wl,--defsym -Wl,HeapSize=0x40000
+
+BSP NAME:           pc386
+BOARD:              PC 
+BUS:                none
+CPU FAMILY:         386, 486, 586, 686
+COPROCESSORS:       none
+MODE:               not applicable
+
+DEBUG MONITOR:      
+
+PERIPHERALS
+===========
+TIMERS:             8254 Programmable Interval Timer
+RESOLUTION:         
+SERIAL PORTS:       COM1, COM2
+REAL-TIME CLOCK:
+DMA:                
+VIDEO:              VGA
+SCSI:               
+NETWORKING:         external Ethernet controller based on WD8003.
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       8254 Programmable Interval Timer
+IOSUPP DRIVER:      
+SHMSUPP:            
+TIMER DRIVER:       
+
+STDIO
+=====
+PORT:               
+ELECTRICAL:         
+BAUD:               
+BITS PER CHARACTER: 
+PARITY:             
+STOP BITS:          
+
+NOTES
+=====
+
+Board description
+-----------------
+clock rate:     
+bus width:      
+ROM:            
+RAM:            
+
+Host System
+-----------
+Linux
