@@ -2,8 +2,6 @@
 ##  $Id$
 ##
 
-include $(RTEMS_ROOT)/make/leaf.cfg
-
 define make-library
 $(RM) $@
 $(AR) $(ARFLAGS) $@ $^

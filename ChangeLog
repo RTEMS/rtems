@@ -1,5 +1,9 @@
 2000-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/lib.am: Remove leaf.cfg.
+
+2000-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/rtems-top.m4: Add ENDIF-hack.
 	* automake/compile.am: Add include $(DEPENDS) + ENDIF-hack.
 
