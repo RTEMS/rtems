@@ -139,12 +139,12 @@ depend: depend-am
 
 LINK_OBJS = \
     $(OBJS) \
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_RELEASE)/lib/no-%$(LIB_VARIANT).rel)
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%$(LIB_VARIANT).rel)
 
 LINK_FILES =\
     $(START_FILE) \
     $(OBJS) \
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_RELEASE)/lib/no-%$(LIB_VARIANT).rel)
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%$(LIB_VARIANT).rel)
 
 if RTEMS_USE_GCC
 ## gcc >= 2.8

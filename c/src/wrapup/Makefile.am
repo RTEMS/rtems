@@ -24,7 +24,7 @@ if HAS_RDBG
 SRCS += ../librdbg/src/$(RTEMS_CPU)/$(ARCH)/librdbg.a
 endif
 
-SRCS += $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a)
+SRCS += $(wildcard $(PROJECT_LIB)/libcpu$(LIB_VARIANT).a)
 
 if LIBCHIP
 SRCS += ../libchip/rtc/$(ARCH)/librtcio.a
@@ -36,7 +36,7 @@ endif
 endif
 
 SRCS += $(wildcard \
-    $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
+    $(PROJECT_LIB)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
 all-local: $(TMPINSTALL_FILES)
 

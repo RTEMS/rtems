@@ -1,5 +1,12 @@
 2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+	* wrapup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+	* acinclude.m4: Rework RTEMS_CONFIG_SUBDIR.
+	* Makefile.am: Reflect changes to RTEMS_CONFIG_SUBDIR.
+
+2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* support/Makefile.am: Pass @RTEMS_BSP@ to AM_CPPFLAGS.
 
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -5,18 +5,16 @@
 # Note: Consider this file a temporary band-aid until a better, more general
 # subdirectory handling solution is introduced to RTEMS.
 
+AC_DEFUN([RTEMS_SUBCONFIGURE_ARGS_QUOTE],
+[
+   RTEMS_CONFIGURE_ARGS_QUOTE([ac_sub_configure_args])
+])
+
 AC_DEFUN([RTEMS_CONFIG_SUBDIR],
-[
-AC_CONFIG_COMMANDS_POST(
-[
-if test "$multilib" != "yes"; then
- ac_sub_sourcedir=$2
- ac_sub_builddir=$1
-
+[AC_REQUIRE([RTEMS_SUBCONFIGURE_ARGS_QUOTE])
 if test "$no_recursion" != yes; then
-  RTEMS_CONFIGURE_ARGS_QUOTE([ac_sub_configure_args])
-
-  ac_sub_configure_args="$ac_sub_configure_args $3"
+  ac_sub_sourcedir=$2
+  ac_sub_builddir=$1
 
   for ac_subdir in : $ac_sub_sourcedir; do test "x$ac_subdir" = x: && continue
 
@@ -72,9 +70,9 @@ if test "$no_recursion" != yes; then
         ac_sub_cache_file=$ac_dots$cache_file ;;
       esac
 
-      AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir])
+      AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args $3 --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir])
       # The eval makes quoting arguments work.
-      eval $ac_sub_configure $ac_sub_configure_args \
+      eval $ac_sub_configure $ac_sub_configure_args $3 \
            --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir ||
         AC_MSG_ERROR([$ac_sub_configure failed for $ac_subdir])
     fi
@@ -82,6 +80,4 @@ if test "$no_recursion" != yes; then
     cd $ac_popdir
   done
 fi
-fi
-])
 ])
