@@ -35,6 +35,7 @@ RTEMS_PROJECT_ROOT
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
+clock/Makefile
 console/Makefile
 include/Makefile
 irq/Makefile
