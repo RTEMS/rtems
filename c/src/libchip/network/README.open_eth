@@ -1,0 +1,73 @@
+
+Driver for opencores ethernet MAC - README
+------------------------------------------
+
+The device name for the driver is 'open_eth1', the attach
+function for the leon bsp is rtems_leon_open_eth_driver_attach().
+
+No cache flushing is made when a frame is received. On leon,
+this means that cache snooping must be configured in the
+vhdl model and enabled by software.
+
+TX interrupts are not used and masked in the interrupt mask
+register. 
+
+For now, only 10 Mbit/s half-duplex is supported.
+100 Mbit/s operations does not work reliably, the transmitter
+locks up or skips frames. Seems to depend on the TX fifo
+implementation in the opencores MAC. Send a mail to
+jiri@gaisler.com if you know how to fix this.
+
+Tested only on leon, using the GR-PCI-XC2V board @ 40 MHz.
+Output from ttcp receiving 1 Mbyte file:
+
+>>> ttcp -r -s
+ttcp-r: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp
+ttcp-r: socket
+ttcp-r: accept from 192.168.0.2
+ttcp-r: 1145339 bytes in 1.18 real seconds = 947.88 KB/sec +++
+ttcp-r: 792 I/O calls, msec/call = 1.53, calls/sec = 671.19
+ttcp-r: 0.0user 1.1sys 0:01real 100% 0i+0d 0maxrss 0+0pf 0+0csw
+************ MBUF STATISTICS ************
+mbufs:1024    clusters: 128    free: 112
+drops:   0       waits:   0  drains:   0
+      free:1007          data:17          header:0           socket:0
+       pcb:0           rtable:0           htable:0           atable:0
+    soname:0           soopts:0           ftable:0           rights:0
+    ifaddr:0          control:0          oobdata:0
+
+************ INTERFACE STATISTICS ************
+***** open_eth1 *****
+Address:192.168.0.66    Broadcast Address:192.168.0.255
+Flags: Up Broadcast Running Simplex
+Send queue limit:50   length:0    Dropped:0
+         Rx Packets:796           Rx Interrupts:796               Length:0
+            Bad CRC:0                Overrun:0                   Miss:0
+      Tx Interrupts:0               Deferred:0        Missed Hearbeat:0
+         No Carrier:0       Retransmit Limit:0         Late Collision:0
+           Underrun:0        Raw output wait:0
+
+************ IP Statistics ************
+             total packets received         795
+ datagrams delivered to upper level         795
+    total ip packets generated here         401
+
+************ TCP Statistics ************
+               connections accepted           1
+            connections established           1
+      conn. closed (includes drops)           1
+     segs where we tried to get rtt           2
+                 times we succeeded           2
+                  delayed acks sent           4
+                 total packets sent         401
+              ack-only packets sent           6
+    window update-only packets sent         394
+ control (SYN|FIN|RST) packets sent           1
+             total packets received         795
+       packets received in sequence         792
+         bytes received in sequence     1145339
+                   rcvd ack packets           2
+           bytes acked by rcvd acks           2
+ times hdr predict ok for data pkts         791
+
+
