@@ -41,8 +41,5 @@ PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
 AC_SUBST(PROJECT_ROOT)
 
 AC_MSG_CHECKING([for RTEMS Version])
-AS_IF([test -r "${srcdir}/${RTEMS_TOPdir}/aclocal/version.m4"],
-[],
-[AC_MSG_ERROR([Unable to find ${RTEMS_TOPdir}/aclocal/version.m4])])
 AC_MSG_RESULT([_RTEMS_VERSION])
 ])dnl

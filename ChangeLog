@@ -1,6 +1,12 @@
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rpm.m4: Make osversions the default.
+	* aclocal/rtems-top.m4: Remove check for version.m4 (Breaks make
+	distcheck).
+
 2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* aclocal/rpms.m4: New (extracted from scripts/configure.ac).
+	* aclocal/rpm.m4: New (extracted from scripts/configure.ac).
 
 2004-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

@@ -16,5 +16,5 @@ AC_ARG_ENABLE([osversions],
 yes ) osversion=RTEMS_API;;
 * ) osversion=;;
 esac],
-[osversion=])
+[osversion=RTEMS_API])
 ])
