@@ -388,7 +388,7 @@ int _POSIX_Condition_variables_Wait_support(
       status = pthread_mutex_unlock( mutex );
       if ( status ) {
         _Thread_Enable_dispatch();
-        return status;
+        return EINVAL;
       }
  
       _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
@@ -410,7 +410,7 @@ int _POSIX_Condition_variables_Wait_support(
 
       status = pthread_mutex_lock( mutex );
       if ( status )
-        return status;
+        return EINVAL;
     
       return _Thread_Executing->Wait.return_code;
   }
