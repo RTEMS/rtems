@@ -40,4 +40,4 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = $(STD_I_FILES) $(MP_I_FILES) README
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/automake/local.am

@@ -6,9 +6,9 @@
 LIBNAME = librtemscpu
 LIB = $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a
 
-include $(top_srcdir)/../../../automake/multilib.am
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 CPU_OBJS = $(wildcard ../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.rel)
 CORE_OBJS = $(wildcard ../score/src/$(ARCH)/*.o)
@@ -83,4 +83,4 @@ install-hook: $(LIB)
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/automake/local.am

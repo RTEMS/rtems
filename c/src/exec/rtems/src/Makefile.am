@@ -3,9 +3,9 @@
 ##
 
 
-include $(top_srcdir)/../../../automake/multilib.am
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 # We only build multiprocessing related files if HAS_MP was defined
 MP_C_FILES = eventmp.c mp.c msgmp.c partmp.c regionmp.c semmp.c signalmp.c \
@@ -76,4 +76,4 @@ all-local: ${ARCH} ${OBJS}
 
 EXTRA_DIST = $(STD_C_FILES) $(MP_C_FILES)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/automake/local.am
