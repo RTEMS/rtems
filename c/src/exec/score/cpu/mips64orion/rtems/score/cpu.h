@@ -40,7 +40,7 @@ extern "C" {
 
 #include <rtems/score/mips64orion.h>       /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/mipstypes.h>
+#include <rtems/score/types.h>
 #endif
 
 extern int mips_disable_interrupts( void );

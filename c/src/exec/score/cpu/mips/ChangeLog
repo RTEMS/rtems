@@ -1,3 +1,10 @@
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* rtems/score/mipstypes.h: Removed.
+	* rtems/score/types.h: New file via CVS magic.
+	* Makefile.am, rtems/score/cpu.h: Account for name change.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
