@@ -26,7 +26,14 @@ $(PGM): $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all-local: $(ARCH) $(OBJS) $(PGM)
+bsplib_DATA = linkcmds
+
+$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
+	$(INSTALL_DATA) $< $@
+
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
+
+all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

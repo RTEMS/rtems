@@ -1,6 +1,11 @@
 2002-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* start/start.S: Per PR329 now compiles with GNU tools.
+	* startup/linkcmds: New file.  Now almost links.
+
+2002-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* start/start.S: Per PR329 now compiles with GNU tools.
 
 2002-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
