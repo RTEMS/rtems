@@ -1,0 +1,163 @@
+/*  linkcmds
+ *
+ *  $Id$
+ */
+
+OUTPUT_ARCH(m68k)
+STARTUP(except_vect_332_ROM.o)
+__DYNAMIC  =  0;
+
+/*
+ * ROM:
+ * +--------------------+ <- low memory
+ * | .text              |
+ * |        etext       |
+ * |        ctor list   | the ctor and dtor lists are for
+ * |        dtor list   | C++ support
+ * |        _endtext    |
+ * | temporary .data    | .data is moved to RAM by crt0
+ * |                    |
+ * +--------------------+ <- high memory
+ *
+ *
+ * RAM:
+ * +--------------------+ <- low memory
+ * | .data              | initialized data goes here
+ * |        _sdata      |
+ * |        _edata      |
+ * +--------------------+
+ * | .bss               |
+ * |        __bss_start | start of bss, cleared by crt0
+ * |        _end        | start of heap, used by sbrk()
+ * +--------------------+
+ * |    heap space      |
+ * |        _ENDHEAP    |
+ * |    stack space     | 
+ * |        __stack     | top of stack
+ * +--------------------+ <- high memory
+ */
+
+MEMORY
+{
+  rom     : ORIGIN = 0x90000, LENGTH = 0x70000
+  ram     : ORIGIN = 0x03000, LENGTH = 0x7d000
+}
+
+_RamBase = DEFINED(_RamBase) ? _RamBase : 0x003000;
+_RamSize = DEFINED(_RamSize) ? _RamSize : 0x7d000;
+_RamEnd = _RamBase + _RamSize;
+
+__end_of_ram = 0x080000;
+_copy_data_from_rom = 1;
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
+
+/*
+ * 
+ */
+SECTIONS
+{
+  .text :
+  {
+    . = .;
+    CREATE_OBJECT_SYMBOLS
+    text_start = .;
+    _text_start = .;
+    *(.text)
+    . = ALIGN (16);
+
+
+    /*
+     * Initialization and finalization code.
+     *
+     * Various files can provide initialization and finalization
+     * functions.  crtbegin.o and crtend.o are two instances. The
+     * body of these functions are in .init and .fini sections. We
+     * accumulate the bodies here, and prepend function prologues
+     * from crti.o and function epilogues from crtn.o. crti.o must
+     * be linked first; crtn.o must be linked last.  Because these
+     * are wildcards, it doesn't matter if the user does not
+     * actually link against crti.o and crtn.o; the linker won't
+     * look for a file to match a wildcard.  The wildcard also
+     * means that it doesn't matter which directory crti.o and
+     * crtn.o are in. 
+     */
+    PROVIDE (_init = .);
+    *crti.o(.init)
+    *(.init)
+    *crtn.o(.init)
+    PROVIDE (_fini = .);
+    *crti.o(.fini)
+    *(.fini)
+    *crtn.o(.fini)
+
+    *(.eh_fram)
+    . = ALIGN (16);
+
+    /*
+     * Read-only data
+     */
+    . = ALIGN (16);
+    _rodata_start = . ;
+    *(.rodata)
+    *(.gnu.linkonce.r*)
+
+    etext = ALIGN(0x10);
+    __CTOR_LIST__ = .;
+    LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+    *(.ctors)
+    LONG(0)
+    __CTOR_END__ = .;
+    __DTOR_LIST__ = .;
+    LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+    *(.dtors)
+    LONG(0)
+    __DTOR_END__ = .;
+    *(.lit)
+    *(.shdata)
+    _etext = .;
+    _endtext = .;
+  } > rom
+  .gcc_exc :
+  AT ( ADDR(.text) + SIZEOF( .text ) )
+  {
+    *(.gcc_exc)
+  } > ram
+  .data :
+  {
+    data_start = .;
+    _data_start = .;
+    _copy_start = .;
+    _sdata = . ;
+    *(.data)
+    CONSTRUCTORS
+    edata = ALIGN(0x10);
+    _edata = .;
+  } > ram
+  .shbss :
+  {
+    *(.shbss)
+  } > ram
+  .bss :
+  {
+    __bss_start = ALIGN(0x8);
+    bss_start = .;
+    _bss_start = .;
+    _clear_start = .;
+    *(.bss)
+    *(COMMON)
+    end = .;
+    _end = ALIGN(0x8);
+    __end = ALIGN(0x8);
+
+    _WorkspaceBase = . + _StackSize;
+  } > ram
+  .stab . (NOLOAD) :
+  {
+    [ .stab ]
+  }
+  .stabstr . (NOLOAD) :
+  {
+    [ .stabstr ]
+  }
+}

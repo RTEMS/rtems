@@ -1,0 +1,17 @@
+2000-05-25	Matt Cross <profesor@gweep.net>
+
+	* New MRM332 BSP for the Mini RoboMind board based
+	on the 68332 microcontroller designed and build by Mark
+	Castelluccio.  For details on the MRM see http://www.robominds.com.
+	* .cvsignore, ChangeLog Makefile.am, README, bsp_specs,
+	clock/.cvsignore, clock/Makefile.am, clock/ckinit.c, configure.in,
+	console/.cvsignore, console/Makefile.am, console/console.c,
+	include/.cvsignore, include/Makefile.am, include/bsp.h,
+	include/mrm332.h, misc/dotests, misc/gdbinit68, misc/interr.c,
+	spurious/.cvsignore, spurious/Makefile.am, spurious/spinit.c,
+	start/.cvsignore, start/Makefile.am, start/start.c, startup/.cvsignore,
+	startup/Makefile.am, startup/bspclean.c, startup/bspstart.c,
+	startup/except_vect_332_ROM.S, startup/linkcmds, startup/linkcmds_ROM,
+	timer/.cvsignore, timer/Makefile.am, timer/timer.c, times,
+	wrapup/.cvsignore, wrapup/Makefile.am: Initial files.
+
