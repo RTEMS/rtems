@@ -59,86 +59,6 @@
 #define SONIC_REG_MDT     0x2F /* TX Maximum Deferral */
 #define SONIC_REG_DCR2    0x3F /* Data configuration 2 */
 
-#if 0
-struct SonicRegisters {
-  /*
-   * Command and status registers
-   */
-  rtems_unsigned32     cr;     /* 0x00 - Command */
-  rtems_unsigned32     dcr;    /* 0x01 - Data configuration */
-  rtems_unsigned32     rcr;    /* 0x02 - Receive control */
-  rtems_unsigned32     tcr;    /* 0x03 - Transmit control */
-  rtems_unsigned32     imr;    /* 0x04 - Interrupt mask */
-  rtems_unsigned32     isr;    /* 0x05 - Interrupt status */
-
-  /*
-   * Transmit registers
-   */
-  rtems_unsigned32     utda;   /* 0x06 - Upper transmit descriptor address */
-  rtems_unsigned32     ctda;   /* 0x07 - Current transmit descriptor address */
-
-  /*
-   * Receive registers
-   */
-  rtems_unsigned32 pad0[5];    /* 0x08 - 0x0C */
-  rtems_unsigned32     urda;   /* 0x0D - Upper receive descriptor address */
-  rtems_unsigned32     crda;   /* 0x0E - Current receive descriptor address */
-  rtems_unsigned32 pad1[4];    /* 0x0F - 0x12 */
-  rtems_unsigned32     eobc;   /* 0x13 - End of buffer word count */
-  rtems_unsigned32     urra;   /* 0x14 - Upper receive resource */
-  rtems_unsigned32     rsa;    /* 0x15 - Resource start address */
-  rtems_unsigned32     rea;    /* 0x16 - Resource end address */
-  rtems_unsigned32     rrp;    /* 0x17 - Resouce read pointer */
-  rtems_unsigned32     rwp;    /* 0x18 - Resouce write pointer */
-
-  /*
-   * Content-addressable memory registers
-   */
-  rtems_unsigned32 pad2[8];    /* 0x19 - 0x20 */
-  rtems_unsigned32     cep;    /* 0x21 - CAM entry pointer */
-  rtems_unsigned32     cap2;   /* 0x22 - CAM address port 2 */
-  rtems_unsigned32     cap1;   /* 0x23 - CAM address port 1 */
-  rtems_unsigned32     cap0;   /* 0x24 - CAM address port 0 */
-  rtems_unsigned32     ce;     /* 0x25 - CAM enable */
-  rtems_unsigned32     cdp;    /* 0x26 - CAM descriptor pointer */
-  rtems_unsigned32     cdc;    /* 0x27 - CAM descriptor count */
-
-  /*
-   * Silicon revision
-   */
-  rtems_unsigned32     sr;     /* 0x28 - Silicon revision */
-
-  /*
-   * Watchdog counters
-   */
-  rtems_unsigned32     wt0;    /* 0x29 - Watchdog timer 0 */
-  rtems_unsigned32     wt1;    /* 0x2A - Watchdog timer 1 */
-
-  /*
-   * Another receive register
-   */
-  rtems_unsigned32     rsc;    /* 0x2B - Receive sequence counter */
-
-  /*
-   * Tally counters
-   */
-  rtems_unsigned32     crct;   /* 0x2C - CRC error tally */
-  rtems_unsigned32     faet;   /* 0x2D - FAE tally */
-  rtems_unsigned32     mpt;    /* 0x2E - Missed packet tally */
-
-  /*
-   * Another Transmitter register
-   */
-  rtems_unsigned32     mdt;    /* 0x2F - TX Maximum Deferral */
-
-  /*
-   * Another command and status register
-   */
-  rtems_unsigned32 pad3[15];   /* 0x30 - 0x3E */
-  rtems_unsigned32     dcr2;   /* 0x3F - Data configuration 2 */
-};
-#endif
-
 /*
  * Command register
  */
@@ -285,6 +205,13 @@ struct SonicRegisters {
 #define DCR2_RJCM       0x0001
 
 /*
+ *  Known values for the Silicon Revision Register
+ */
+
+#define SONIC_REVISION_B   4
+#define SONIC_REVISION_C   6
+
+/*
  ******************************************************************
  *                                                                *
  *                   Transmit Buffer Management                   *
@@ -356,7 +283,8 @@ typedef volatile TransmitDescriptor_t *TransmitDescriptorPointer_t;
 #define TDA_STATUS_BCM          0x0002
 #define TDA_STATUS_PTX          0x0001
 
-#define TDA_LINK_EOL 0x1
+#define TDA_LINK_EOL      0x0001
+#define TDA_LINK_EOL_MASK 0xFFFE
 
 
 
@@ -399,7 +327,7 @@ struct ReceiveDescriptor {
   /*
    * Extra RTEMS/KA9Q stuff 
    */
-  struct ReceiveDescriptor        *next;  /* Circularly-linked list */
+  volatile struct ReceiveDescriptor  *next;  /* Circularly-linked list */
 };
 typedef struct ReceiveDescriptor ReceiveDescriptor_t;
 typedef volatile ReceiveDescriptor_t *ReceiveDescriptorPointer_t;
@@ -424,6 +352,10 @@ typedef volatile ReceiveDescriptor_t *ReceiveDescriptorPointer_t;
 #define RDA_STATUS_LBK          0x0002
 #define RDA_STATUS_PRX          0x0001
 
-#define RDA_LINK_EOL 0x1
+#define RDA_LINK_EOL        0x0001
+#define RDA_LINK_EOL_MASK   0xFFFE
+#define RDA_IN_USE          0x0000  /* SONIC has finished with the packet */
+                                    /*   and the driver can process it */
+#define RDA_FREE            0xFFFF  /* SONIC can use it */
   
 #endif /* _SONIC_DP83932_ */
