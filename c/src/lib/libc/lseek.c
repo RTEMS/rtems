@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 
-#include <rtems/libio_.h>
+#include "libio_.h"
 
 off_t lseek(
   int     fd,
@@ -37,7 +37,7 @@ off_t lseek(
    *  Check as many errors as possible before touching iop->offset.
    */
 
-  if ( !iop->handlers->lseek_h )
+  if ( !iop->handlers->lseek )
     set_errno_and_return_minus_one( ENOTSUP );
 
   /*
@@ -67,7 +67,7 @@ off_t lseek(
    *  new offset.
    */
 
-  status = (*iop->handlers->lseek_h)( iop, offset, whence );
+  status = (*iop->handlers->lseek)( iop, offset, whence );
   if ( status == (off_t) -1 )
     iop->offset = old_offset;
 
