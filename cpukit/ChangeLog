@@ -1,5 +1,13 @@
 2005-02-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Add include/rtems/tar.h.
+	Merge-in header rules from libmisc/Makefile.am
+	* libmisc/Makefile.am: Remove header rules.
+	Remove lib-specific CPPFLAGS.
+	* configure.ac: Add checks for <tar.h>
+
+2005-02-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* include/rtems/tar.h: New.
 
 2005-02-05	Ralf Corsepius <ralf.corsepius@rtems.org>

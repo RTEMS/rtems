@@ -91,6 +91,7 @@ AC_CHECK_FUNCS([isascii fileno])
 ## Check if the installed toolchain has these headers
 AC_CHECK_HEADER([stdint.h])
 AC_CHECK_HEADER([inttypes.h])
+AC_CHECK_HEADER([tar.h])
 
 ## if using newlib, we provide stdint.h and inttypes.h
 AM_CONDITIONAL([RTEMS_PROVIDES_STDINT_H],[test x"${RTEMS_USE_NEWLIB}" = xyes])
@@ -100,6 +101,10 @@ AM_CONDITIONAL([RTEMS_PROVIDES_INTTYPES_H],[test x"${RTEMS_USE_NEWLIB}" = xyes])
 AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
 [RTEMS_USES_STDINT_H=yes],
 [RTEMS_USES_STDINT_H=$ac_cv_header_stdint_h])
+
+AS_IF([test x"${RTEMS_USE_NEWLIB}" = xyes],
+[RTEMS_USES_TAR_H=yes],
+[RTEMS_USES_TAR_H=$ac_cv_header_tar_h])
 
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 ## FIXME: This check is doubtful
@@ -175,6 +180,11 @@ RTEMS_CPUOPT([RTEMS_USES_STDINT_H],
   [test x"${RTEMS_USES_STDINT_H}" = x"yes"],
   [1],
   [if RTEMS uses stdint.h])
+
+RTEMS_CPUOPT([RTEMS_USES_TAR_H],
+  [test x"${RTEMS_USES_TAR_H}" = x"yes"],
+  [1],
+  [if RTEMS uses tar.h])
 
 RTEMS_CPUOPT([RTEMS_VERSION],
   [true],

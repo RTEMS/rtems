@@ -69,7 +69,50 @@ endif
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/rtems/bspIo.h include/rtems/userenv.h \
     include/rtems/fs.h include/rtems/pci.h include/rtems/stdint.h \
-    include/rtems/concat.h
+    include/rtems/concat.h include/rtems/tar.h
+
+## capture
+include_rtems_HEADERS += libmisc/capture/capture.h \
+    libmisc/capture/capture-cli.h
+
+## cpuuse
+include_rtems_HEADERS += libmisc/cpuuse/cpuuse.h
+
+## devnull
+include_rtems_HEADERS += libmisc/devnull/devnull.h
+
+## dumpbuf
+include_rtems_HEADERS += libmisc/dumpbuf/dumpbuf.h
+
+## monitor
+
+include_rtems_HEADERS += libmisc/monitor/monitor.h
+
+## mw-fb
+include_rtems_HEADERS += libmisc/mw-fb/mw_fb.h libmisc/mw-fb/mw_uid.h
+
+## shell
+if LIBSHELL
+include_rtems_HEADERS += libmisc/shell/shell.h
+endif
+
+## rtmonuse
+include_rtems_HEADERS += libmisc/rtmonuse/rtmonuse.h
+
+## serdbg
+if LIBSERDBG
+include_rtems_HEADERS += libmisc/serdbg/serdbgcnf.h libmisc/serdbg/serdbg.h \
+    libmisc/serdbg/termios_printk_cnf.h libmisc/serdbg/termios_printk.h
+endif
+
+## stackchk
+include_rtems_HEADERS += libmisc/stackchk/stackchk.h
+
+## libuntar
+include_rtems_HEADERS += libmisc/untar/untar.h
+
+## fsmount
+include_rtems_HEADERS += libmisc/fsmount/fsmount.h
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
@@ -256,6 +299,82 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stdint.h
 $(PROJECT_INCLUDE)/rtems/concat.h: include/rtems/concat.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/concat.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/concat.h
+
+$(PROJECT_INCLUDE)/rtems/tar.h: include/rtems/tar.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tar.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tar.h
+
+$(PROJECT_INCLUDE)/rtems/capture.h: libmisc/capture/capture.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/capture.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/capture.h
+
+$(PROJECT_INCLUDE)/rtems/capture-cli.h: libmisc/capture/capture-cli.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/capture-cli.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/capture-cli.h
+
+$(PROJECT_INCLUDE)/rtems/cpuuse.h: libmisc/cpuuse/cpuuse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cpuuse.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cpuuse.h
+
+$(PROJECT_INCLUDE)/rtems/devnull.h: libmisc/devnull/devnull.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/devnull.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/devnull.h
+
+$(PROJECT_INCLUDE)/rtems/dumpbuf.h: libmisc/dumpbuf/dumpbuf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dumpbuf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dumpbuf.h
+
+$(PROJECT_INCLUDE)/rtems/monitor.h: libmisc/monitor/monitor.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/monitor.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/monitor.h
+
+$(PROJECT_INCLUDE)/rtems/mw_fb.h: libmisc/mw-fb/mw_fb.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mw_fb.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mw_fb.h
+
+$(PROJECT_INCLUDE)/rtems/mw_uid.h: libmisc/mw-fb/mw_uid.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mw_uid.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mw_uid.h
+
+if LIBSHELL
+$(PROJECT_INCLUDE)/rtems/shell.h: libmisc/shell/shell.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/shell.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/shell.h
+endif
+
+$(PROJECT_INCLUDE)/rtems/rtmonuse.h: libmisc/rtmonuse/rtmonuse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtmonuse.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtmonuse.h
+
+if LIBSERDBG
+$(PROJECT_INCLUDE)/rtems/serdbgcnf.h: libmisc/serdbg/serdbgcnf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/serdbgcnf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/serdbgcnf.h
+
+$(PROJECT_INCLUDE)/rtems/serdbg.h: libmisc/serdbg/serdbg.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/serdbg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/serdbg.h
+
+$(PROJECT_INCLUDE)/rtems/termios_printk_cnf.h: libmisc/serdbg/termios_printk_cnf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/termios_printk_cnf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/termios_printk_cnf.h
+
+$(PROJECT_INCLUDE)/rtems/termios_printk.h: libmisc/serdbg/termios_printk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/termios_printk.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/termios_printk.h
+endif
+
+$(PROJECT_INCLUDE)/rtems/stackchk.h: libmisc/stackchk/stackchk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stackchk.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stackchk.h
+
+$(PROJECT_INCLUDE)/rtems/untar.h: libmisc/untar/untar.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/untar.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/untar.h
+
+$(PROJECT_INCLUDE)/rtems/fsmount.h: libmisc/fsmount/fsmount.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fsmount.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fsmount.h
 
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
