@@ -1,11 +1,11 @@
 /*  timer.c
  *
- *  This file manages the interval timer on the PA-RISC.
+ *  This file manages the interval timer on a UNIX BSP.
  *
  *  NOTE: It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2003.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
