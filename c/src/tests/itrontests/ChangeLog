@@ -1,3 +1,9 @@
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+        Switch to GNU canonicalization.
+	* itrontests.am: Remove DEFS.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* itronhello/Makefile.am, itronmbf01/Makefile.am,
