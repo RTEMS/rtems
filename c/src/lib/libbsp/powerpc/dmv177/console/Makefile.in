@@ -11,7 +11,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 PGM=${ARCH}/console.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=console duart
+C_PIECES=config console debugio mc68681cfg z85c30cfg
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
