@@ -1,3 +1,8 @@
+2000-10-18	 Chris Johns <ccj@acm.org>
+
+	* libfs created.
+	* configure.in: Added libfs subdirectory.
+
 2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add RTEMS_PROG_CC_FOR_TARGET,

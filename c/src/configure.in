@@ -32,7 +32,7 @@ cfg_subdirs="$cfg_subdirs exec"
 fi
 cfg_subdirs="$cfg_subdirs lib"
 cfg_subdirs="$cfg_subdirs lib/libcpu lib/libbsp"
-cfg_subdirs="$cfg_subdirs libmisc"
+cfg_subdirs="$cfg_subdirs libfs libmisc"
 
 if test "$RTEMS_CPU" != "unix"; then
 ## HACK: Suppress libchip for unix
