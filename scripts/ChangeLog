@@ -1,3 +1,16 @@
+2002-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* binutils/binutils.add: Add initial support for building
+	Canadian cross RPMs.  It should work like this:
+	    cd rtems/scripts
+	    ./configure --build=`../config.guess` --host=i386-cygwin
+	    make install
+	    rpm --target=i386-cygwin \
+	        /usr/src/redhat/SPECS/<target>-binutils-..spec.
+
+	    alien -t /usr/src/redhat/RPMS/....i386.rpm
+	.. and voila ... your tarball, with rpm-consistency checks etc. applied.
+
 2001-01-22	Joel Sherrill <joel@OARcorp.com>
 
 	* buildalltar.in: Modified to support Canadian cross builds.

@@ -17,7 +17,7 @@ License:      GPL/LGPL
 Autoreqprov:  	off
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Prefix:		/opt
-BuildRoot:	/tmp/@target_alias@-binutils
+BuildRoot:	%{_tmppath}/@target_alias@-binutils
 
 Version:      	@binutils_version@
 Source0:      	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.gz
@@ -50,7 +50,11 @@ This is binutils sources with patches for RTEMS.
 
 %build
   cd build
-  ../binutils-@binutils_version@/configure --target=@target_alias@ \
+# Ugly hack to work around a bug in SuSE's rpm
+%if "${_build_cpu}-%{_build_os}" != "%{_target_cpu}-%{_target_os}"
+  ARGS="--build=%{_build} --host=%{_target}"   
+%endif
+  ../binutils-@binutils_version@/configure $ARGS --target=@target_alias@ \
     --verbose --prefix=/opt/rtems 
 
   make all
@@ -88,6 +92,6 @@ This is binutils sources with patches for RTEMS.
 
 %clean
 # let rpm --clean remove BuildRoot iif using the default BuildRoot
-  test "$RPM_BUILD_ROOT" = "/tmp/@target_alias@-binutils" && \
+  test "$RPM_BUILD_ROOT" = "%{_tmppath}/@target_alias@-binutils" && \
     rm -rf $RPM_BUILD_ROOT
 
