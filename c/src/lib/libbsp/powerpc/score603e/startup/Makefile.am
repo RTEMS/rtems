@@ -29,18 +29,15 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-bsplib_DATA = linkcmds
+project_lib_DATA = linkcmds
 
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
-
-all-local: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(PGM)
+all-local: $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = FPGA.c Hwr_init.c bspclean.c bspstart.c genpvec.c linkcmds \
     setvec.c spurious.c vmeintr.c
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -11,9 +11,8 @@ endif
 BSP_PIECES = startup clock console scv64 timer tod $(NETWORKING)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) ../@exceptions@/$(ARCH)/rtems-cpu.rel \
-    $(wildcard \
+OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    ../@exceptions@/$(ARCH)/rtems-cpu.rel $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 

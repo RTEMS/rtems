@@ -13,9 +13,8 @@ BSP_PIECES = clock irq startup start canbus vectors console $(NETWORKING)
 #    mpc860/vectors
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(wildcard \
-    ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
+OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
     ../@exceptions@/$(ARCH)/rtems-cpu.rel $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
