@@ -1,3 +1,7 @@
+2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-flags.m4: New.
+
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Remove CFLAGS_DEBUG_OPTIMIZE_V (Unused).
