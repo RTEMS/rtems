@@ -66,7 +66,7 @@ one shown in the following figure:
 @end html
 @end ifset
 
-@section Get all the Pieces 
+@section Get All the Pieces 
 
 This section lists the components of an RTEMS cross development system.  
 Included are the locations of each component as well as any required RTEMS
@@ -77,6 +77,9 @@ specific patches.
     FTP Site:    @value{GCC-FTPSITE}
     Directory:   @value{GCC-FTPDIR}
     File:        @value{GCC-TAR}
+@ifset use-html
+    URL:         @href{Download @value{GCC-VERSION},,,ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR}}
+@end ifset
 @end example
 
 @subheading @value{BINUTILS-VERSION}
@@ -84,6 +87,9 @@ specific patches.
     FTP Site:    @value{BINUTILS-FTPSITE}
     Directory:   @value{BINUTILS-FTPDIR}
     File:        @value{BINUTILS-TAR}
+@ifset use-html
+    URL:         @href{Download @value{BINUTILS-VERSION},,,ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}}
+@end ifset
 @end example
 
 @subheading @value{NEWLIB-VERSION}
@@ -91,6 +97,9 @@ specific patches.
     FTP Site:    @value{NEWLIB-FTPSITE}
     Directory:   @value{NEWLIB-FTPDIR}
     File:        @value{NEWLIB-TAR}
+@ifset use-html
+    URL:         @href{Download @value{NEWLIB-VERSION},,,ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}}
+@end ifset
 @end example
 
 @subheading @value{RTEMS-VERSION}
@@ -100,6 +109,9 @@ specific patches.
     File:        @value{RTEMS-TAR}
     File:        hello_world_c.tgz
     File:        bit
+@ifset use-html
+    URL:         @href{Download RTEMS components,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}}
+@end ifset
 @end example
 
 @subheading RTEMS Specific Tool Patches
@@ -115,15 +127,15 @@ specific patches.
 @ifset GCC-RTEMSPATCH
     File:        @value{GCC-RTEMSPATCH}
 @end ifset
+    URL:         @href{Download RTEMS patches,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools}
 @c Just in case there are ever no patches
-@ifset BINUTILS-RTEMSPATCH
-@ifset GCC-RTEMSPATCH
-@ifset NEWLIB-RTEMSPATCH
+@ifclear BINUTILS-RTEMSPATCH
+@ifclear GCC-RTEMSPATCH
+@ifclear NEWLIB-RTEMSPATCH
     No RTEMS specific patches are required.
-@end ifset
-@end ifset
-@end ifset
-
+@end ifclear
+@end ifclear
+@end ifclear
 @end example
 
 @section Unarchiving the Tools
