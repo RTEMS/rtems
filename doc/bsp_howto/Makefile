@@ -47,10 +47,9 @@ $(PROJECT).dvi: $(FILES)
 	texi2dvi -v $(PROJECT).texi
 
 html: dirs $(FILES)
-	@echo NOT BUILDING HTML
-	#-mkdir -p $(WWW_INSTALL)/$(PROJECT)
-	#$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
- 	#    $(PROJECT).texi
+	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
+ 	    $(PROJECT).texi
 
 clean:
 	rm -f *.o $(PROG) *.txt core 
@@ -63,17 +62,17 @@ clean:
 #
 
 intro.texi: intro.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Top" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Target Dependent Files" ${*}.t
 
 target.texi: target.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Introduction" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Makefiles" ${*}.t
 
 makefiles.texi: makefiles.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Target Dependent Files Board Support Package Structure" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
