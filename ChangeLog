@@ -1,3 +1,8 @@
+2002-03-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/env-rtemscpu.m4: automake-1.6 preparations:
+	Add AM_CONDITIONAL([RTEMS_CONFIG_PER_BSP],[false]).
+
 2002-03-08	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-mg5-20020808.

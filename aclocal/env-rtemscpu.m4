@@ -33,6 +33,7 @@ if test x"$multilib" = x"yes"; then
 
   includedir="\${exec_prefix}/lib/include"
   libdir="${libdir}\$(MULTISUBDIR)"
+  AM_CONDITIONAL([RTEMS_CONFIG_PER_BSP],[false])
 else
   RTEMS_ENV_RTEMSBSP
   RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
