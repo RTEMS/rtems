@@ -159,7 +159,8 @@ SECTIONS
   {
     clear_start = . ;
     *(.shbss)
-    *(.bss)
+    *(.dynbss)
+    *(.bss .bss.* .gnu.linkonce.b.*)
     *(COMMON)
     . = ALIGN(0x10);
     _end = .;
