@@ -1,5 +1,8 @@
-/*  options.inl
- *
+/**
+ * @file rtems/rtems/options.inl
+ */
+
+/*
  *  This file contains the static inline implementation of the inlined
  *  routines from the Options Handler.
  *

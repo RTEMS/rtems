@@ -1,5 +1,8 @@
-/*  part.inl
- *
+/**
+ * @file rtems/rtems/part.inl
+ */
+
+/*
  *  This file contains the macro implementation of all inlined routines
  *  in the Partition Manager.
  *

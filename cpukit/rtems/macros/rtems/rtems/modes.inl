@@ -1,5 +1,8 @@
-/*  modes.inl
- *
+/**
+ * @file rtems/rtems/modes.inl
+ */
+
+/*
  *  This include file contains the macro implementation of the
  *  inlined routines in the Mode Handler.
  *

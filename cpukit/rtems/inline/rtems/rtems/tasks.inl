@@ -1,5 +1,8 @@
-/*  tasks.inl
- *
+/**
+ * @file rtems/rtems/tasks.inl
+ */
+
+/*
  *  This file contains the static inline implementation of all inlined
  *  routines in the with RTEMS Tasks Manager.
  *

@@ -1,5 +1,8 @@
-/*  eventset.inl
- *
+/**
+ * @file rtems/rtems/eventset.inl
+ */
+
+/*
  *  This include file contains the macro implementation of inlined
  *  routines in the event set object.
  *

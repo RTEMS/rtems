@@ -1,5 +1,8 @@
-/*  inline/event.inl
- *
+/**
+ * @file rtems/rtems/event.inl
+ */
+
+/*
  *  This include file contains the static inline implementation of
  *  macros for the Event Manager.
  *

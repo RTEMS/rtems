@@ -1,5 +1,8 @@
-/*  region.inl
- *
+/**
+ * @file rtems/rtems/region.inl
+ */
+
+/*
  *  This file contains the macro implementation of the inlined
  *  routines from the Region Manager.
  *

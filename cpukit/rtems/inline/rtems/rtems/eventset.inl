@@ -1,5 +1,8 @@
-/*  inline/eventset.inl
- *
+/**
+ * @file rtems/rtems/eventset.inl
+ */
+
+/*
  *  This include file contains the information pertaining to event sets.
  *
  *  COPYRIGHT (c) 1989-1999.

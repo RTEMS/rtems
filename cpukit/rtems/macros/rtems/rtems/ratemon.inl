@@ -1,5 +1,8 @@
-/*  ratemon.inl
- *
+/**
+ * @file rtems/rtems/ratemon.inl
+ */
+
+/*
  *  This file contains the macro implementation of the inlined
  *  routines in the Rate Monotonic Manager.
  *

@@ -1,5 +1,8 @@
-/*  rtems.h
- *
+/**
+ * @file  rtems.h
+ */
+ 
+/*
  *  This include file contains information about RTEMS executive that
  *  is required by the application and is CPU independent.  It includes
  *  two (2) CPU dependent files to tailor its data structures for a

@@ -1,5 +1,8 @@
-/*  macros/attr.h
- *
+/**
+ * @file rtems/rtems/attr.inl
+ */
+
+/*
  *  This include file contains all of the inlined routines associated
  *  with attributes.
  *

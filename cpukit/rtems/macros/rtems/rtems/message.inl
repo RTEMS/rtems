@@ -1,5 +1,8 @@
-/*  message.inl
- *
+/**
+ * @file rtems/rtems/message.inl
+ */
+
+/*
  *  This include file contains the macro implementation of all
  *  inlined routines in the Message Manager.
  *

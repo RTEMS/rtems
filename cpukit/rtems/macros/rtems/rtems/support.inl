@@ -1,5 +1,8 @@
-/*  support.inl
- *
+/**
+ * @file rtems/rtems/support.inl
+ */
+
+/*
  *  This include file contains the macros implementation of all
  *  of the inlined routines specific to the RTEMS API.
  *

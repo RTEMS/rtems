@@ -1,5 +1,8 @@
-/*  sem.inl
- *
+/**
+ * @file rtems/rtems/sem.inl
+ */
+
+/*
  *  This file contains the macro implementation of the inlined
  *  routines from the Semaphore Manager.
  *

@@ -1,5 +1,8 @@
-/*  macros/event.h
- *
+/**
+ * @file rtems/rtems/event.inl
+ */
+
+/*
  *  This include file contains the implementation of macros for
  *  the Event Manager.
  *

@@ -1,5 +1,8 @@
-/*  inline/asr.inl
- *
+/**
+ * @file rtems/rtems/asr.inl
+ */
+
+/*
  *  This include file contains the implemenation of all routines
  *  associated with the asynchronous signal handler which are inlined.
  *

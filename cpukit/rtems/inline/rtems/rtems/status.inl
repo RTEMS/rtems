@@ -1,5 +1,8 @@
-/*  inline/status.inl
- *
+/**
+ * @file rtems/rtems/status.inl
+ */
+
+/*
  *  This include file contains the implementations of the inlined
  *  routines for the status package.
  *

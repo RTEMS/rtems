@@ -1,5 +1,8 @@
-/*  macros/dpmem.h
- *
+/**
+ * @file rtems/rtems/dpmem.inl
+ */
+
+/*
  *  This include file contains the inline routine used in conjunction
  *  with the Dual Ported Memory Manager
  *

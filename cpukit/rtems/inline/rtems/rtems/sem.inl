@@ -1,5 +1,8 @@
-/*  sem.inl
- *
+/**
+ * @file rtems/rtems/sem.inl
+ */
+
+/*
  *  This file contains the static inlin implementation of the inlined
  *  routines from the Semaphore Manager.
  *

@@ -1,5 +1,8 @@
-/*  timer.inl
- *
+/**
+ * @file rtems/rtems/timer.inl
+ */
+
+/*
  *  This file contains the macro implementation of the inlined routines
  *  from the Timer Manager.
  *
