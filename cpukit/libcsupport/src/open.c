@@ -45,7 +45,7 @@
  *               is in effect.
  *    ENFILE   - Too many files are open in the system.
  *    ENOENT   - O_CREAT is not set and and the anmed file does not exist,
- *               or O_CREAT is set and eitehr the path prefix does not exist
+ *               or O_CREAT is set and either the path prefix does not exist
  *               or the path argument points to an empty string.
  *    ENOSPC   - The directory or file system that would contain the new file
  *               cannot be extended.

@@ -1,5 +1,9 @@
 2003-09-02	Joel Sherrill <joel@OARcorp.com>
 
+	* src/open.c: Fix typo.
+
+2003-09-02	Joel Sherrill <joel@OARcorp.com>
+
 	* src/malloc.c: Remove test define left in.
 
 2003-09-02	Ilya Alexeev <ilya@continuum.ru>
