@@ -1,3 +1,14 @@
+2005-03-11	Philippe Simons <loki_666@fastmail.fm>
+
+	* acinclude.m4: Added gp32 BSP.
+	* gp32/.cvsignore, gp32/Makefile.am, gp32/README, gp32/bsp_specs,
+	gp32/configure.ac, gp32/console/.cvsignore, gp32/console/conio.c,
+	gp32/console/console.c, gp32/console/defaultfont.c,
+	gp32/include/.cvsignore, gp32/include/bsp.h, gp32/include/conio.h,
+	gp32/include/tm27.h, gp32/start/.cvsignore, gp32/start/start.S,
+	gp32/startup/.cvsignore, gp32/startup/bspstart.c,
+	gp32/startup/exit.c, gp32/startup/linkcmds, gp32/startup/memmap.c: New files.
+
 2005-03-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* acinclude.m4: Remove arm_bare_bsp.

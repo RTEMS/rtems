@@ -10,6 +10,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([csb337]);;
   edb7312 )
     AC_CONFIG_SUBDIRS([edb7312]);;
+  gp32 )
+    AC_CONFIG_SUBDIRS([gp32]);;
   vegaplus )
     AC_CONFIG_SUBDIRS([vegaplus]);;
   *)
