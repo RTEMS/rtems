@@ -11,13 +11,6 @@ H_PIECES=console clockdrv iosupp ringbuf \
    spurious timerdrv vmeintr z8036 z8530 z8536
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
-KA9Q_H_PIECES= arp asy ax25 ax25mail bootp cmdparse commands config \
-  daemon dialer domain enet ftp ftpcli global hardware icmp iface \
-  internet ip kiss lapb lzw mailbox mbuf netuser nospc nr4 nr4mail \
-  nrs ping pktdrvr ppp proc rip rtems_ka9q sb session slhc slip smtp \
-  sockaddr socket tcp telnet tftp timer tipmail trace udp usock
-KA9Q_H_FILES=$(KA9Q_H_PIECES:%=$(srcdir)/ka9q/%.h)
-
 SYS_H_FILES=
 
 SRCS=$(H_FILES) $(SYS_H_FILES)
@@ -31,6 +24,3 @@ CLOBBER_ADDITIONS +=
 all:	$(SRCS)
 	$(INSTALL) -m 444 $(H_FILES) ${PROJECT_RELEASE}/include
 	$(INSTALL) -m 444 $(SYS_H_FILES) ${PROJECT_RELEASE}/include/sys
-ifeq ($(HAS_KA9Q),yes)
-	$(INSTALL) -m 444 $(KA9Q_H_FILES) ${PROJECT_RELEASE}/include/ka9q
-endif

@@ -18,7 +18,6 @@ RTEMS-specific option are supported:
 
 	--disable-rtems-inlines
 	--disable-posix
-	--disable-tcpip
 	--disable-tests
         --enable-gcc28
         --enable-libcdir=<DIRECTORY>
@@ -26,9 +25,6 @@ RTEMS-specific option are supported:
 
 By default, the RTEMS posix interface is built for targets that support
 it. It can be disabled with the --disable-posix option.
-
-By default, the RTEMS port of the KA9Q TCP/IP stack is build for targets
-that support it.  It can be disabled with the --disable-tcpip option.
 
 By default, the RTEMS test suites are configured.  The --disable-tests
 will not configure the RTEMS test suite. This is used only to speed-up
