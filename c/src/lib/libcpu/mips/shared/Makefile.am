@@ -3,8 +3,9 @@
 ##
 
 EXTRA_DIST =
-CLEANDIRS =
+CLEANFILES =
 noinst_DATA =
+EXTRA_PROGRAMS =
 
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
@@ -12,62 +13,51 @@ include $(top_srcdir)/../../../automake/lib.am
 ## cache
 include_libcpudir = $(includedir)/libcpu
 
-noinst_HEADERS = cache/cache_.h
 include_libcpu_HEADERS = ../../shared/include/cache.h
 
-cache_C_FILES = cache/cache.c
-common_C_FILES = ../../shared/src/cache_aligned_malloc.c
-common_C_FILES += ../../shared/src/cache_manager.c
+EXTRA_PROGRAMS += cache.rel
+CLEANFILES += cache.rel
+cache_rel_SOURCES = cache/cache.c ../../shared/src/cache_aligned_malloc.c \
+    ../../shared/src/cache_manager.c cache/cache_.h
+cache_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -I$(srcdir)/cache
+cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-cache_rel_OBJECTS = $(cache_C_FILES:cache/%.c=cache/$(ARCH)/%.$(OBJEXT))
-cache_rel_OBJECTS += \
-    $(common_C_FILES:../../shared/src/%.c=cache/$(ARCH)/%.$(OBJEXT))
+EXTRA_PROGRAMS += cache_g.rel
+CLEANFILES += cache_g.rel
+cache_g_rel_SOURCES = $(cache_rel_SOURCES)
+cache_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) -I$(srcdir)/cache
+cache_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-AM_CPPFLAGS += -I$(srcdir)/cache
-
-cache/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) cache/$(ARCH)
-	@: > cache/$(ARCH)/$(dirstamp)
-cache/$(ARCH)/%.$(OBJEXT): cache/%.c cache/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-cache/$(ARCH)/%.$(OBJEXT): ../../shared/src/%.c cache/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-cache/$(ARCH)/cache.rel: $(cache_rel_OBJECTS)
-	$(make-rel)
-CLEANDIRS += cache/o-optimize cache/o-debug
-noinst_DATA += cache/$(ARCH)/cache.rel
+noinst_DATA += cache$(LIB_VARIANT).rel
 
 ## interrupts
 
-interrupts_C_FILES = interrupts/installisrentries.c \
-    interrupts/vectorexceptions.c
-interrupts_S_FILES = interrupts/isr_entries.S
-
-interrupts_rel_OBJECTS = \
-    $(interrupts_C_FILES:interrupts/%.c=interrupts/$(ARCH)/%.$(OBJEXT)) \
-    $(interrupts_S_FILES:interrupts/%.S=interrupts/$(ARCH)/%.$(OBJEXT))
-
 if tx39
-EXTRA_FLAGS = -DTX39
+interrupts_CPPFLAGS = -DTX39
 endif
 
 if mongoosev
-EXTRA_FLAGS = -DMONGOOSEV
+interrupts_CPPFLAGS = -DMONGOOSEV
 endif
 
-AM_CPPFLAGS += $(EXTRA_FLAGS)
+EXTRA_PROGRAMS += interrupts.rel
+CLEANFILES += interrupts.rel
+interrupts_rel_SOURCES = interrupts/installisrentries.c \
+    interrupts/vectorexceptions.c interrupts/isr_entries.S
+interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+    $(interrupts_CPPFLAGS)
+interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-interrupts/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) interrupts/$(ARCH)
-	@: > interrupts/$(ARCH)/$(dirstamp)
-interrupts/$(ARCH)/%.$(OBJEXT): interrupts/%.c interrupts/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-interrupts/$(ARCH)/%.$(OBJEXT): interrupts/%.S interrupts/$(ARCH)/$(dirstamp)
-	${CCASCOMPILE} -o $@ -c $<
-interrupts/$(ARCH)/interrupts.rel: $(interrupts_rel_OBJECTS)
-	$(make-rel)
-CLEANDIRS += interrupts/o-optimize interrupts/o-debug
-noinst_DATA += interrupts/$(ARCH)/interrupts.rel
+EXTRA_PROGRAMS += interrupts_g.rel
+CLEANFILES += interrupts_g.rel
+interrupts_g_rel_SOURCES = $(interrupts_rel_SOURCES)
+interrupts_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
+    $(interrupts_CPPFLAGS)
+interrupts_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += interrupts$(LIB_VARIANT).rel
+
+all-local: $(PREINSTALL_FILES)
 
 ## --
 
@@ -82,6 +72,6 @@ $(PROJECT_INCLUDE)/libcpu/cache.h: ../../shared/include/cache.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

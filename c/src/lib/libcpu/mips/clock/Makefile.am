@@ -2,31 +2,27 @@
 ## $Id$
 ##
 
-PGM = $(ARCH)/clock.rel
-
-C_FILES = ckinit.c
-
-S_FILES = clock.S
-
-noinst_HEADERS = clock.h
-
-clock_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) \
-    $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
+EXTRA_PROGRAMS =
+CLEANFILES =
+noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+if r46xx
+EXTRA_PROGRAMS += clock.rel
+CLEANFILES += clock.rel
+clock_rel_SOURCES = ckinit.c clock.S clock.h
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-$(PGM): $(clock_rel_OBJECTS)
-	$(make-rel)
+EXTRA_PROGRAMS += clock_g.rel
+CLEANFILES += clock_g.rel
+clock_g_rel_SOURCES = $(clock_rel_SOURCES)
+clock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+clock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-all-local: $(clock_rel_OBJECTS) $(PGM)
-
-.PRECIOUS: $(PGM)
-
-EXTRA_DIST = ckinit.c clock.S clock.h
+noinst_DATA += clock$(LIB_VARIANT).rel
+endif
 
 include $(top_srcdir)/../../../automake/local.am

@@ -2,29 +2,27 @@
 ## $Id$
 ##
 
-PGM = $(ARCH)/timer.rel
-
-C_FILES = timer.c
-
-S_FILES = gettime.S
-
-timer_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) \
-    $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
+EXTRA_PROGRAMS =
+CLEANFILES =
+noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+if r46xx
+EXTRA_PROGRAMS += timer.rel
+CLEANFILES += timer.rel
+timer_rel_SOURCES = timer.c gettime.S
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-$(PGM): $(timer_rel_OBJECTS)
-	$(make-rel)
+EXTRA_PROGRAMS += timer_g.rel
+CLEANFILES += timer_g.rel
+timer_g_rel_SOURCES = $(timer_rel_SOURCES)
+timer_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-all-local: $(timer_rel_OBJECTS) $(PGM)
-
-.PRECIOUS: $(PGM)
-
-EXTRA_DIST = gettime.S timer.c
+noinst_DATA += timer$(LIB_VARIANT).rel
+endif
 
 include $(top_srcdir)/../../../automake/local.am

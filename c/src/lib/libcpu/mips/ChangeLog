@@ -1,3 +1,15 @@
+2004-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am: Convert to using automake compilation rules.
+	* mongoosev/Makefile.am: Ditto.
+	* r46xx/Makefile.am: Ditto.
+	* shared/Makefile.am: Ditto.
+	* timer/Makefile.am: Ditto.
+	* tx39/Makefile.am: Ditto.
+	* Makefile.am: Remove conditional subdirs.
+	* configure.ac: Add subdir-object to AUTOMAKE_OPTIONS.
+	Require automake-1.8.2. Add AM_PROG_CC_C_O.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mongoosev/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
