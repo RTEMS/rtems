@@ -4,6 +4,11 @@
 #  $Id$
 #
 
+RPM Version gcc2.95.2newlib1.8.2-9
+==================================
++ i386 multilibs and proper CPP_SPEC/CC1_SPEC handling.
++ newlib patch includes or32.
+
 RPM Version gcc2.95.2newlib1.8.2-8
 ==================================
 + arm
