@@ -381,7 +381,6 @@ int chkCount=0 ;
                 if (((status = rxBd->status) & MCF5282_FEC_RxBD_E) == 0)
                     break;
 
-if(chkCount++)printf("ACK -- CACHE WOES\n");
                 rtems_interrupt_disable(level);
                 MCF5282_FEC_EIMR |= MCF5282_FEC_EIMR_RXF;
                 rtems_interrupt_enable(level);
@@ -791,7 +790,7 @@ rtems_fec_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching )
      * Is driver free?
      */
     if ((unitNumber <= 0) || (unitNumber > NIFACES)) {
-        printf("Bad FECC unit number.\n");
+        printf("Bad FEC unit number.\n");
         return 0;
     }
     sc = &enet_driver[unitNumber - 1];
