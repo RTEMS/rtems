@@ -9,7 +9,7 @@ noinst_SCRIPTS = difftest sorttimes
 
 project_bspdir = $(PROJECT_ROOT)/@RTEMS_BSP@
 
-PREINSTALL_FILES += $(project_bspdir)/tests $(project_bspdir)/tests/difftest \
+PREINSTALL_FILES = $(project_bspdir)/tests $(project_bspdir)/tests/difftest \
     $(project_bspdir)/tests/sorttimes
 
 $(project_bspdir)/tests:
