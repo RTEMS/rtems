@@ -10,7 +10,7 @@ RedHat Linux 5.1 as the host environment:
    CPU      CPU
   FAMILY   MODEL             TARGET               SUITES
  ========  ========= =======================   ===============
-   m66k    mfc5200   no BSP                       (note 9)
+   m68k    mfc5200   no BSP                       (note 9)
    m68k    m68000    efi68k                       (note 1)
    m68k    m68020    Motorola MVME136             (note 1, 6)
    m68k    m68030    Motorola MVME147             (note 1)
@@ -33,15 +33,20 @@ RedHat Linux 5.1 as the host environment:
    i386   Pentium    PC clone (pc586)             (note 1, 6)
    i386    i486      DJGPP/PC-AT                  (note 7)
    i386   pentium    DJGPP/PC-AT                  (note 7)
+   i960   i960ca     i960sim (in gdb)             (note 5)
    i960   i960ca     Cyclone CVME961              (note 4)
    i960   i960ha     no BSP                       (note 9)
    i960   i960rp     rxgen960                     (note 1)
+   h8     h8300h     no BSP                       (note 9)
+   h8     h8300s     no BSP                       (note 9)
+   h8     h8300      BUILDS - NEEDS WORK
    hppa   hppa7100   simhppa                      (note 1)
    mips   idt4600    p4000                        (note 1)
    mips   idt4650    p4000                        (note 1)
  powerpc  ppc403     helas403                     (note 1, 6)
  powerpc  ppc403     Papyrus                      (note 1)
- powerpc  ppc403     psim                         (note 5)
+ powerpc  ppc5xx     BUILDS - NEEDS WORK
+ powerpc  ppc403     psim (in gdb)                (note 5)
  powerpc  ppc603e    Radstone PPCn_60x            (note 1, 8)
  powerpc  ppc603e    DY-4 DMV-177                 (note 1)
  powerpc  ppc603e    Vista Score603e              (note 1)
@@ -49,6 +54,7 @@ RedHat Linux 5.1 as the host environment:
  powerpc  mpc750     Motorola MCP750              (note 1)
  powerpc  mpc821     no BSP                       (note 9)
  powerpc  mpc823     no BSP                       (note 9)
+ powerpc  mpc850     no BSP                       (note 9)
  powerpc  mpc860     eth_comm (custom)            (note 1, 6)
    sh     sh7032     generic sh1                  (note 1)
    sh     sh7035     generic sh2                  (note 1)

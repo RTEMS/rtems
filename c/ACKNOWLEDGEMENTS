@@ -182,6 +182,10 @@ The following persons/organizations have made contributions:
   Technology for the National Research Council of Canada
   submitted the RTEMS Cache Manager.
 
++ Philip Quaife <philip@qs.co.nz> of Q Solutions ported 
+  RTEMS to the Hitachi H8300H.  This effort was sponsored by
+  Comnet Technologies Ltd.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
