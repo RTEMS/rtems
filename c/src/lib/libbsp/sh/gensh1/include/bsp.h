@@ -68,8 +68,39 @@ extern "C" {
 #define Lower_tm27_intr()
 
 /* Constants */
+#ifndef MHZ
+#error Missing MHZ
+#endif
 
-#define MHZ 20
+/*
+ *  Simple spin delay in microsecond units for device drivers.
+ *  This is very dependent on the clock speed of the target.
+ *
+ *  Since we don't have a real time clock, this is a very rough
+ *  approximation, assuming that each cycle of the delay loop takes
+ *  approx. 4 machine cycles.
+ *
+ *  e.g.: MHZ = 20 =>     5e-8 secs per instruction
+ *                 => 4 * 5e-8 secs per delay loop
+ */
+
+#define delay( microseconds ) \
+{ register unsigned int _delay = (microseconds) * (MHZ / 4 ); \
+  asm volatile ( \
+"0:	add  #-1,%0\n \
+	nop\n \
+	cmp/pl %0\n \
+	bt 0b\
+	nop" \
+    :: "r" (_delay) );  \
+}
+
+/*
+ * For backward compatibility only.
+ * Do not rely on them being present in future
+ */
+#define CPU_delay( microseconds ) delay( microseconds )
+#define sh_deley( microseconds ) delay( microseconds )
 
 /*
  * Defined in the linker script 'linkcmds'

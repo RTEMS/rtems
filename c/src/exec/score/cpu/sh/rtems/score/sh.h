@@ -148,31 +148,6 @@ static inline unsigned int sh_swap_u16(
 #define CPU_swap_u32( value ) sh_swap_u32( value )
 #define CPU_swap_u16( value ) sh_swap_u16( value )
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- *
- *  Since we don't have a real time clock, this is a very rough
- *  approximation, assuming that each cycle of the delay loop takes
- *  approx. 4 machine cycles.
- *
- *  e.g.: MHZ = 20 =>     5e-8 secs per instruction
- *                 => 4 * 5e-8 secs per delay loop
- */
-
-#define sh_delay( microseconds ) \
-{ register unsigned int _delay = (microseconds) * (MHZ / 4 ); \
-  asm volatile ( \
-"0:	add  #-1,%0\n \
-	nop\n \
-	cmp/pl %0\n \
-	bt 0b\
-	nop" \
-    :: "r" (_delay) );  \
-}
-
-#define CPU_delay( microseconds ) sh_delay( microseconds )
-
 extern unsigned int sh_set_irq_priority( 
   unsigned int irq, 
   unsigned int prio );
