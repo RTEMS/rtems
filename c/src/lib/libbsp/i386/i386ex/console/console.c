@@ -1,5 +1,5 @@
 /*
- *  This file contains the Force CPU386 console IO package.
+ *  This file contains the i386ex console IO package.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -14,12 +14,11 @@
 
 #define F386_INIT
 
+#include <bsp.h>
+#include <rtems/libio.h>
+ 
 #include <stdlib.h>
-#include <stdio.h>   /* to be removed */
 
-#include <rtems.h>
-#include "console.h"
-#include "bsp.h"
 #include "../startup/80386ex.h"
 
 /*  console_cleanup
@@ -41,12 +40,6 @@ void console_cleanup( void )
 
    inport_byte( RBR0, ignored );
 
-/*  inport_byte( RBR0, ignored );
- *  inport_byte( RBR0, ignored );
- *  inport_byte( RBR0, ignored );
- *  inport_byte( RBR0, ignored );
- */
-
 }
 
 /*  console_initialize
@@ -63,18 +56,29 @@ void console_cleanup( void )
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void                      *arg,
-  rtems_id                   self,
-  rtems_unsigned32          *status
+  void                      *arg
 )
 {
-   /*
-    *  flush the console now and at exit.  Just in case.
-    */
+  rtems_status_code status;
 
-   console_cleanup();
+  /*
+   *  flush the console now and at exit.  Just in case.
+   */
 
-   atexit( console_cleanup );
+  console_cleanup();
+
+  status = rtems_io_register_name(
+    "/dev/console",
+    major,
+    (rtems_device_minor_number) 0
+  );
+ 
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+ 
+  atexit( console_cleanup );
+
+  return RTEMS_SUCCESSFUL;
 }
 
 
@@ -173,48 +177,104 @@ void outbyte(
 }
 
 /*
- * __read  -- read bytes from the serial port. Ignore fd, since
- *            we only have stdin.
+ *  Open entry point
  */
-
-int __read(
-  int fd,
-  char *buf,
-  int nbytes
+ 
+rtems_device_driver console_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
 )
 {
-  int i = 0;
-
-  for (i = 0; i < nbytes; i++) {
-    *(buf + i) = inbyte();
-    if ((*(buf + i) == '\n') || (*(buf + i) == '\r')) {
-      (*(buf + i++)) = '\n';
-      (*(buf + i)) = 0;
+  return RTEMS_SUCCESSFUL;
+}
+ 
+/*
+ *  Close entry point
+ */
+ 
+rtems_device_driver console_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+ 
+/*
+ * read bytes from the serial port. We only have stdin.
+ */
+ 
+rtems_device_driver console_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  rtems_libio_rw_args_t *rw_args;
+  char *buffer;
+  int maximum;
+  int count = 0;
+ 
+  rw_args = (rtems_libio_rw_args_t *) arg;
+ 
+  buffer = rw_args->buffer;
+  maximum = rw_args->count;
+ 
+  for (count = 0; count < maximum; count++) {
+    buffer[ count ] = inbyte();
+    if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
+      buffer[ count++ ]  = '\n';
+      buffer[ count ]  = 0;
       break;
     }
   }
-  return (i);
+ 
+  rw_args->bytes_moved = count;
+  return (count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
 }
 
 /*
- * __write -- write bytes to the serial port. Ignore fd, since
- *            stdout and stderr are the same. Since we have no filesystem,
- *            open will only return an error.
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
-
-int __write(
-  int fd,
-  char *buf,
-  int nbytes
+ 
+rtems_device_driver console_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
 )
 {
-  int i;
-
-  for (i = 0; i < nbytes; i++) {
-    if (*(buf + i) == '\n') {
-      outbyte ('\r');
+  int count;
+  int maximum;
+  rtems_libio_rw_args_t *rw_args;
+  char *buffer;
+ 
+  rw_args = (rtems_libio_rw_args_t *) arg;
+ 
+  buffer = rw_args->buffer;
+  maximum = rw_args->count;
+ 
+  for (count = 0; count < maximum; count++) {
+    if ( buffer[ count ] == '\n') {
+      outbyte('\r');
     }
-    outbyte (*(buf + i));
+    outbyte( buffer[ count ] );
   }
-  return (nbytes);
+ 
+  rw_args->bytes_moved = maximum;
+  return 0;
+}
+ 
+/*
+ *  IO Control entry point
+ */
+ 
+rtems_device_driver console_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return RTEMS_SUCCESSFUL;
 }
