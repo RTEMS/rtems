@@ -36,6 +36,7 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AC_OUTPUT( 
 Makefile
 include/Makefile
+include/rtems/Makefile
 include/sys/Makefile
 include/motorola/Makefile
 include/zilog/Makefile
