@@ -1,5 +1,7 @@
 2003-06-22	Chris Johns <cjohns@cybertec.com.au>
 
+	PR 264/bsps
+	PR 414/bsps
 	* start/reset.S, startup/cpuboot.c, startup/linkcmds:
 	PR264 - Stopped the core dump by removing the bad instruction.
 	PR414 - Fixed the global interupt vector register.
