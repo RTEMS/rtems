@@ -445,14 +445,14 @@ int rtems_tftp_open(
     cp1 = cp2;
     while (*cp2 != '/') {
       if (*cp2 == '\0')
-        set_errno_and_return_minus_one( ENOENT );
-       cp2++;
+        return ENOENT;
+      cp2++;
     }
 
     len = cp2 - cp1;
     hostname = malloc (len + 1);
     if (hostname == NULL)
-      set_errno_and_return_minus_one( ENOMEM );
+      return ENOMEM; 
 
     strncpy (hostname, cp1, len);
     hostname[len] = '\0';
@@ -461,14 +461,14 @@ int rtems_tftp_open(
   }
 
   if ((farAddress == 0) || (farAddress == ~0))
-    set_errno_and_return_minus_one( ENOENT );
+    return ENOENT;
 
   if (*++cp2 == '\0')
-    set_errno_and_return_minus_one( ENOENT );
+    return ENOENT;
 
   remoteFilename = cp2;
   if (strlen (remoteFilename) > (TFTP_BUFSIZE - 10))
-    set_errno_and_return_minus_one( ENOENT );
+    return ENOENT;    
 
   /*
    * Find a free stream
@@ -476,7 +476,7 @@ int rtems_tftp_open(
 
   sc = rtems_semaphore_obtain (tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   if (sc != RTEMS_SUCCESSFUL)
-    set_errno_and_return_minus_one( EBUSY );
+    return EBUSY;
 
   for (s = 0 ; s < nStreams ; s++) {
     if (tftpStreams[s] == NULL)
@@ -493,7 +493,7 @@ int rtems_tftp_open(
     np = realloc (tftpStreams, ++nStreams * sizeof *tftpStreams);
     if (np == NULL) {
       rtems_semaphore_release (tftp_mutex);
-      set_errno_and_return_minus_one( ENOMEM );
+      return ENOMEM;
     }
     tftpStreams = np;
   }
@@ -501,7 +501,7 @@ int rtems_tftp_open(
   tp = tftpStreams[s] = malloc (sizeof (struct tftpStream));
   rtems_semaphore_release (tftp_mutex);
   if (tp == NULL)
-    set_errno_and_return_minus_one( ENOMEM );
+    return ENOMEM;
   iop->data0 = s;
   iop->data1 = tp;
 
@@ -511,7 +511,7 @@ int rtems_tftp_open(
 
   if ((tp->socket = socket (AF_INET, SOCK_DGRAM, 0)) < 0) {
     releaseStream (s);
-    set_errno_and_return_minus_one( ENOMEM );
+    return ENOMEM;
   }
 
   /*
@@ -538,7 +538,7 @@ int rtems_tftp_open(
        *  XXX Eric .. how do we get the minor information to release this???
         releaseStream (minor);
        */
-      set_errno_and_return_minus_one( EBUSY );
+      return EBUSY;
     }
   }
 
@@ -583,7 +583,7 @@ int rtems_tftp_open(
        *  XXX Eric .. how do we get the minor information to release this???
         releaseStream (minor);
        */
-      set_errno_and_return_minus_one( EIO );
+      return EIO;
     }
 
     /*
@@ -605,7 +605,7 @@ int rtems_tftp_open(
           releaseStream (minor);
        */
 
-          set_errno_and_return_minus_one( EIO );
+          return EIO;
         }
         break;
       }
@@ -616,7 +616,7 @@ int rtems_tftp_open(
        *  XXX Eric .. how do we get the minor information to release this???
        *  releaseStream (minor);
        */
-        set_errno_and_return_minus_one( EIO );
+        return EIO;
       }
     }
 
@@ -629,7 +629,7 @@ int rtems_tftp_open(
        *  XXX Eric .. how do we get the minor information to release this???
         releaseStream (minor);
        */
-      set_errno_and_return_minus_one( EIO );
+      return EIO;
     }
   }
 
