@@ -30,32 +30,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 
-/*
- *  Stuff for Time Test 27
- */
-
-#include <rtems/c4x/c4xio.h>
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-/* XXX */
-#define Install_tm27_vector( _handler ) \
-  set_vector( (_handler), 0x20, 1 )
-
-#define Cause_tm27_intr()  \
-  do { \
-     __asm__ volatile ( "trapu 0" ); \
-  } while (0)
-
-#define Clear_tm27_intr() \
-  do { \
-     ; \
-  } while (0)
-
-#define Lower_tm27_intr() \
-  do { \
-    c4x_global_interrupts_enable(); \
-  } while (0)
-
 /* Constants */
 
 /*
