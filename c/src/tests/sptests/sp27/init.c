@@ -23,6 +23,7 @@ rtems_task Init (rtems_task_argument argument);
 
 #include <rtems/error.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define NTASK 4
 

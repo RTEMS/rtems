@@ -47,7 +47,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <tmacros.h>
+
+/* external function prototypes */
+int getint( void );
 
 /* These are always defined by the executive.
  *
