@@ -1,0 +1,468 @@
+*** MALLOC TEST ***
+TA1  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 513 bytes
+TA2  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 513 bytes
+TA3  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 513 bytes
+TA4  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 513 bytes
+TA5  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 513 bytes
+TA1  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 175 bytes
+TA2  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 175 bytes
+TA1  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 308 bytes
+TA3  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 175 bytes
+TA1  - rtems_clock_get - 09:00:00   12/31/1988
+mallocing 534 bytes
+TA2  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 308 bytes
+TA4  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 175 bytes
+TA1  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 947 bytes
+TA5  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 175 bytes
+TA1  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 171 bytes
+TA2  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 534 bytes
+TA3  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 308 bytes
+TA1  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 702 bytes
+TA1  - rtems_clock_get - 09:00:01   12/31/1988
+mallocing 226 bytes
+TA2  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 947 bytes
+TA4  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 308 bytes
+TA1  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 494 bytes
+TA3  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 534 bytes
+TA1  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 124 bytes
+TA2  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 171 bytes
+TA5  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 308 bytes
+TA1  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 83 bytes
+TA1  - rtems_clock_get - 09:00:02   12/31/1988
+mallocing 389 bytes
+TA2  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 702 bytes
+TA4  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 534 bytes
+TA3  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 947 bytes
+TA1  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 277 bytes
+TA1  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 368 bytes
+TA2  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 226 bytes
+TA1  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 983 bytes
+TA5  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 534 bytes
+TA3  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 171 bytes
+TA1  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 535 bytes
+TA2  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 494 bytes
+TA4  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 947 bytes
+TA1  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 765 bytes
+TA1  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 646 bytes
+TA2  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 124 bytes
+TA3  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 702 bytes
+TA1  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 767 bytes
+TA1  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 780 bytes
+TA2  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 83 bytes
+TA4  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 171 bytes
+TA5  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 947 bytes
+TA1  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 822 bytes
+TA3  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 226 bytes
+TA1  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 151 bytes
+TA2  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 389 bytes
+TA1  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 625 bytes
+TA1  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 314 bytes
+TA2  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 277 bytes
+TA4  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 702 bytes
+TA3  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 494 bytes
+TA1  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 346 bytes
+TA5  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 171 bytes
+TA1  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 917 bytes
+TA2  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 368 bytes
+TA1  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 519 bytes
+TA3  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 124 bytes
+TA1  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 401 bytes
+TA2  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 983 bytes
+TA4  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 226 bytes
+TA1  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 606 bytes
+TA1  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 785 bytes
+TA2  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 535 bytes
+TA5  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 702 bytes
+TA3  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 83 bytes
+TA1  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 931 bytes
+TA1  - rtems_clock_get - 09:00:07   12/31/1988
+mallocing 869 bytes
+TA2  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 765 bytes
+TA4  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 494 bytes
+TA1  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 866 bytes
+TA3  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 389 bytes
+TA1  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 674 bytes
+TA2  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 646 bytes
+TA1  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 758 bytes
+TA5  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 226 bytes
+TA1  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 581 bytes
+TA2  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 767 bytes
+TA4  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 124 bytes
+TA3  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 277 bytes
+TA1  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 389 bytes
+TA1  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 355 bytes
+TA2  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 780 bytes
+TA1  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 200 bytes
+TA3  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 368 bytes
+TA1  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 826 bytes
+TA2  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 822 bytes
+TA4  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 83 bytes
+TA5  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 494 bytes
+TA1  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 415 bytes
+TA1  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 463 bytes
+TA2  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 151 bytes
+TA3  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 983 bytes
+TA1  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 979 bytes
+TA1  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 126 bytes
+TA2  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 625 bytes
+TA4  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 389 bytes
+TA1  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 212 bytes
+TA5  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 124 bytes
+TA3  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 535 bytes
+TA1  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 958 bytes
+TA2  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 314 bytes
+TA1  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 737 bytes
+TA1  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 409 bytes
+TA2  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 346 bytes
+TA4  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 277 bytes
+TA3  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 765 bytes
+TA1  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 780 bytes
+TA1  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 757 bytes
+TA2  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 917 bytes
+TA5  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 83 bytes
+TA1  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 956 bytes
+TA3  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 646 bytes
+TA1  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 28 bytes
+TA2  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 519 bytes
+TA4  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 368 bytes
+TA1  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 318 bytes
+TA1  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 756 bytes
+TA2  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 401 bytes
+TA3  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 767 bytes
+TA1  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 242 bytes
+TA5  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 389 bytes
+TA1  - rtems_clock_get - 09:00:13   12/31/1988
+mallocing 589 bytes
+TA2  - rtems_clock_get - 09:00:14   12/31/1988
+mallocing 606 bytes
+TA4  - rtems_clock_get - 09:00:14   12/31/1988
+mallocing 983 bytes
+TA1  - rtems_clock_get - 09:00:14   12/31/1988
+mallocing 43 bytes
+TA3  - rtems_clock_get - 09:00:14   12/31/1988
+mallocing 780 bytes
+TA1  - rtems_clock_get - 09:00:14   12/31/1988
+mallocing 956 bytes
+TA2  - rtems_clock_get - 09:00:14   12/31/1988
+mallocing 785 bytes
+TA1  - rtems_clock_get - 09:00:14   12/31/1988
+mallocing 319 bytes
+TA1  - rtems_clock_get - 09:00:14   12/31/1988
+mallocing 59 bytes
+TA2  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 931 bytes
+TA4  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 535 bytes
+TA5  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 277 bytes
+TA3  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 822 bytes
+TA1  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 441 bytes
+TA1  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 915 bytes
+TA2  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 869 bytes
+TA1  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 572 bytes
+TA3  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 151 bytes
+TA1  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 118 bytes
+TA2  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 866 bytes
+TA4  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 765 bytes
+TA1  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 569 bytes
+TA5  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 368 bytes
+TA1  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 252 bytes
+TA2  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 674 bytes
+TA3  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 625 bytes
+TA1  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 495 bytes
+TA1  - rtems_clock_get - 09:00:16   12/31/1988
+mallocing 236 bytes
+TA2  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 758 bytes
+TA4  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 646 bytes
+TA1  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 476 bytes
+TA3  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 314 bytes
+TA1  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 406 bytes
+TA2  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 581 bytes
+TA5  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 983 bytes
+TA1  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 872 bytes
+TA1  - rtems_clock_get - 09:00:17   12/31/1988
+mallocing 426 bytes
+TA2  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 389 bytes
+TA4  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 767 bytes
+TA3  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 346 bytes
+TA1  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 358 bytes
+TA1  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 381 bytes
+TA2  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 355 bytes
+TA1  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 43 bytes
+TA5  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 535 bytes
+TA3  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 917 bytes
+TA1  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 160 bytes
+TA2  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 200 bytes
+TA4  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 780 bytes
+TA1  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 522 bytes
+TA1  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 696 bytes
+TA2  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 826 bytes
+TA3  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 519 bytes
+TA1  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 97 bytes
+TA1  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 400 bytes
+TA2  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 415 bytes
+TA4  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 822 bytes
+TA5  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 765 bytes
+TA1  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 773 bytes
+TA3  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 401 bytes
+TA1  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 244 bytes
+TA2  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 463 bytes
+TA1  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 342 bytes
+TA1  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 229 bytes
+TA2  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 979 bytes
+TA4  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 151 bytes
+TA3  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 606 bytes
+TA1  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 297 bytes
+TA5  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 646 bytes
+TA1  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 304 bytes
+TA2  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 126 bytes
+TA1  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 887 bytes
+TA3  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 785 bytes
+TA1  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 36 bytes
+TA2  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 212 bytes
+TA4  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 625 bytes
+TA1  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 651 bytes
+TA1  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 398 bytes
+TA2  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 958 bytes
+TA5  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 767 bytes
+TA3  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 931 bytes
+TA1  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 676 bytes
+TA1  - rtems_clock_get - 09:00:22   12/31/1988
+mallocing 732 bytes
+TA2  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 737 bytes
+TA4  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 314 bytes
+TA1  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 937 bytes
+TA3  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 869 bytes
+TA1  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 233 bytes
+TA2  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 409 bytes
+TA1  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 838 bytes
+TA5  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 780 bytes
+TA1  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 967 bytes
+TA2  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 780 bytes
+TA4  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 346 bytes
+TA3  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 866 bytes
+TA1  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 778 bytes
+TA1  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 431 bytes
+TA2  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 757 bytes
+TA1  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 674 bytes
+TA3  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 674 bytes
+TA1  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 809 bytes
+TA2  - rtems_clock_get - 09:00:25   12/31/1988
+mallocing 956 bytes
+TA4  - rtems_clock_get - 09:00:25   12/31/1988
+mallocing 917 bytes
+TA5  - rtems_clock_get - 09:00:25   12/31/1988
+mallocing 822 bytes
+TA1  - rtems_clock_get - 09:00:25   12/31/1988
+mallocing 158 bytes
+*** END OF MALLOC TEST ***
