@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/no_cpu.h>               /* pick up machine definitions */
+#include <rtems/score/no_cpu.h>            /* pick up machine definitions */
 #ifndef ASM
 #include <rtems/score/no_cputypes.h>
 #endif
