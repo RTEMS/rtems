@@ -154,6 +154,7 @@ void _CORE_mutex_Initialize(
  *         a macro that uses two support routines.
  */
 
+#ifndef __RTEMS_APPLICATION__
 RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
   ISR_Level           *level_p
@@ -214,7 +215,6 @@ void _CORE_mutex_Flush(
   unsigned32                  status
 );
  
-#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/coremutex.inl>
 #endif
 
