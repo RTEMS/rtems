@@ -6,7 +6,7 @@
 PGM = $(ARCH)/fatal.rel
 
 C_FILES = bspfatal.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
