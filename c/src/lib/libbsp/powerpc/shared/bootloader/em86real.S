@@ -1182,7 +1182,7 @@ _eval_above:	andis. r3,flags,ZF_IN_CR>>16
 _eval_signed:	andis. r3,flags,SF_IN_CR>>16
 		mflr r0
 		beql+ _eval_sf_zf
-# SF_IN_CR and ZF_IN_CR are set, SIGNED_IN_CR is clear
+/* SF_IN_CR and ZF_IN_CR are set, SIGNED_IN_CR is clear */
 		rlwinm. r3,flags,5,0,1
 		xoris flags,flags,(SIGNED_IN_CR|SF_IN_CR)>>16
 		bngl+ _eval_of
