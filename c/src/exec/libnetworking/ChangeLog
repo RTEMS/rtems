@@ -1,3 +1,7 @@
+2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems_servers/Makefile.am: Deleted blank lines.
+
 2001-06-14	Joel Sherrill <joel@OARcorp.com>
 
  	* rtems_servers/telnetd.c, shell/telnetd.h: Moved from libmisc/shell
