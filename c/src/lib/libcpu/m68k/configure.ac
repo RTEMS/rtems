@@ -26,7 +26,6 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
 # At this time all models should use the shared directory so do this
 AM_CONDITIONAL(shared, true)

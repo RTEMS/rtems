@@ -1,3 +1,7 @@
+2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
+
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/soft_reset_asm.S: Removed.
