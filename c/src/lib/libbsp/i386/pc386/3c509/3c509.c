@@ -58,6 +58,9 @@
  *
  * MODIFICATION/HISTORY:
  * $Log$
+ * Revision 1.1  1999/05/14 16:23:42  joel
+ * Added 3COM 3C509 driver from Rosimildo DaSilva <rdasilva@connecttel.com>.
+ *
  *
  **********************************************************************************/
 
@@ -384,7 +387,7 @@ void __inline outb( unsigned short io_addr, unsigned char out_data )
  **********************************************************************************/
 static __inline unsigned char inb( unsigned short io_addr )
 {
-  unsigned short in_data;
+  unsigned char in_data;
   inport_byte( io_addr, in_data );
   return in_data;
 }

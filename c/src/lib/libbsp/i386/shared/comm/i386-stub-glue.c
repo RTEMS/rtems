@@ -21,6 +21,7 @@ int  getDebugChar(void);       /* read and return a single char */
 /* assign an exception handler */
 void exceptionHandler(int, void (*handler)(void));   
 
+void BSP_loop(int uart);
 
 /* Current uart used by gdb stub */
 static int uart_current = 0;

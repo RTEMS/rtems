@@ -68,7 +68,7 @@ extern BSP_polling_getchar_function_type BSP_poll_char;
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern void _IBMPC_keyboard_isr(void);
+extern void _IBMPC_keyboard_isr(rtems_vector_number);
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 extern char BSP_wait_polled_input(void);
 extern void _IBMPC_initVideo(void);

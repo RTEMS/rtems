@@ -35,14 +35,11 @@ uread(int uart, unsigned int reg)
 {
   register unsigned char val;
 
-  if(uart == 0)
-    {
-      i386_inport_byte(COM1_BASE_IO+reg, val);
-    }
-  else
-    {
-      i386_inport_byte(COM2_BASE_IO+reg, val);
-    }
+  if (uart == 0) {
+    inport_byte(COM1_BASE_IO+reg, val);
+  } else {
+    inport_byte(COM2_BASE_IO+reg, val);
+  }
 
   return val;
 }
@@ -50,14 +47,11 @@ uread(int uart, unsigned int reg)
 static inline void      
 uwrite(int uart, int reg, unsigned int val)
 {
-  if(uart == 0)
-    {
-      i386_outport_byte(COM1_BASE_IO+reg, val);
-    } 
-  else
-    {
-      i386_outport_byte(COM2_BASE_IO+reg, val);
-    }
+  if (uart == 0) {
+    outport_byte(COM1_BASE_IO+reg, val);
+  } else {
+    outport_byte(COM2_BASE_IO+reg, val);
+  }
 }
 
 #ifdef UARTDEBUG

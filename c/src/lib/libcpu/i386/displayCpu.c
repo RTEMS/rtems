@@ -67,7 +67,8 @@ static const char * Cx86model(void)
 	}
 
 	/* We must get the stepping number by reading DIR1 */
-	i386_outport_byte(0x22,0xff) ; i386_inport_byte(0x23, x86_mask);
+	outport_byte(0x22,0xff);
+        inport_byte(0x23, x86_mask);
 	switch (x86_mask) {
 		case 0x03:
 			Cx86_step =  1;	/* 6x86MX Rev 1.3 */

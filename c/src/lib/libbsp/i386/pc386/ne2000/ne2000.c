@@ -186,6 +186,11 @@ struct ne_softc {
 
 static struct ne_softc ne_softc[NNEDRIVER];
 
+/* Forward declarations to avoid warnings */
+
+static void ne_stop (struct ne_softc *sc);
+static void ne_init (void *arg);
+
 /* Find the NE2000 device which is attached at a particular interrupt
    vector.  */
 
