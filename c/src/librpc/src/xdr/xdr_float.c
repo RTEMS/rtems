@@ -56,6 +56,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_float.c,v 1.7 1999/08/28 00
 
 #if defined(__alpha__) || \
     defined(__arm32__) || \
+    defined(__H8300__) || defined(__H8300H__) || defined(__H8300S__) || \
     defined(__hppa__) || \
     defined(__i386__) || \
     defined(__i960__) || \
