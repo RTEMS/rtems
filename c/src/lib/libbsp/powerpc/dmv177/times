@@ -175,7 +175,7 @@ Column B:             unused
    interrupt entry overhead: returns to nested interrupt               201
    interrupt exit overhead: returns to nested interrupt                186
    interrupt entry overhead: returns to preempting task                202
-   interrupt exit overhead: returns to preempting task              267875 ??????????
+   interrupt exit overhead: returns to preempting task                 857
 
 28 rtems_port_create                                                   428
    rtems_port_external_to_internal                                     339
