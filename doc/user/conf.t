@@ -241,6 +241,7 @@ typedef struct @{
   int                                 maximum_mutexes;
   int                                 maximum_condition_variables;
   int                                 maximum_keys;
+  int                                 maximum_timers;
   int                                 maximum_queued_signals;
   int                                 number_of_initialization_tasks;
   posix_initialization_threads_table *User_initialization_tasks_table;
@@ -273,6 +274,7 @@ typedef struct @{
          Maximum_Mutexes                 : Interfaces.C.Int;
          Maximum_Condition_Variables     : Interfaces.C.Int;
          Maximum_Keys                    : Interfaces.C.Int;
+         Maximum_Timers                  : Interfaces.C.Int;
          Maximum_Queued_Signals          : Interfaces.C.Int;
          Number_Of_Initialization_Tasks  : Interfaces.C.Int;
          User_Initialization_Tasks_Table : 
@@ -303,6 +305,10 @@ concurrently active in the system.
 
 @item maximum_keys
 is the maximum number of keys that can be concurrently active in the system.
+
+@item maximum_keys
+is the maximum number of POSIX timers that can be concurrently active
+in the system.
 
 @item maximum_queued_signals
 is the maximum number of queued signals that can be concurrently 
