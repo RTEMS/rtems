@@ -34,15 +34,21 @@ Cross gcc for target cygwin
   test -d build || mkdir build
 
 %build
+  touch gcc-%{gcc_version}/gcc/ada/treeprs.ads
+  touch gcc-%{gcc_version}/gcc/ada/[es]info.h
+  touch gcc-%{gcc_version}/gcc/ada/nmake.ad[bs]
+
   cd build
 
   ../gcc-%{gcc_version}/configure --target=i386-cygwin \
     --with-gnu-as --with-gnu-ld --verbose \
     --disable-nls --disable-win32-registry \
-    --with-newlib --enable-languages=c,c++ \
+    --with-newlib --enable-languages=c,c++,ada \
     --prefix=%{prefix} 
 
   make all
+  make -C gcc cross-gnattools
+  make -C gcc ada.all.cross
 # We don't want info files
 #  make info
 

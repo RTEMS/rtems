@@ -12,5 +12,5 @@ w32api_rpm_release=1
 cygwin_version=1.3.18-1
 cygwin_rpm_release=1
 gcc_version=3.2-3
-gcc_rpm_release=1
+gcc_rpm_release=2
 rpm_build_root=/var/tmp

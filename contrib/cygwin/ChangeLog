@@ -1,5 +1,10 @@
 2003-01-27	Joel Sherrill <joel@OARcorp.com>
 
+	* i386-cygwin-gcc.spec.in, setup.def: Enabled building of GNAT for
+	revision 2.
+
+2003-01-27	Joel Sherrill <joel@OARcorp.com>
+
 	* i386-cygwin-gcc.spec.in, i386-cygwin-mingw.spec.in, setup.def:
 	Updated to current Cygwin versions and fixed some minor nits in
 	the specifications.
