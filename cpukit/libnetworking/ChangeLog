@@ -1,3 +1,9 @@
+2002-06-27	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* Addition of a ftp client filesystem, comparable to the tftp one.
+	* lib/ftpfs.c, rtems/ftpfs.h: New files.
+	* lib/Makefile.am, rtems/Makefile.am: Modified to reflect above.
+
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use AC_CONFIG_AUX_DIR(../..).
