@@ -1,3 +1,8 @@
+2002-07-30	Joel Sherrill <joel@OARcorp.com>
+
+	* spsize/size.c: Don't reference the RTEMS allocated interrupt
+	stack if the port doesn't configure using it.
+
 2002-07-04	Joel Sherrill <joel@OARcorp.com>
 
 	* Jump table for single entry point removed.
