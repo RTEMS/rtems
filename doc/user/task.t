@@ -31,6 +31,8 @@ by the task manager are:
 @item @code{@value{DIRPREFIX}task_set_note} - Set task notepad entry 
 @item @code{@value{DIRPREFIX}task_wake_after} - Wake up after interval 
 @item @code{@value{DIRPREFIX}task_wake_when} - Wake up when specified  
+@item @code{@value{DIRPREFIX}task_variable_add} - Associate per task variable
+@item @code{@value{DIRPREFIX}task_variable_delete} - Remove per task variable
 @end itemize
 
 @section Background
@@ -285,6 +287,35 @@ for tasks which are created with the @code{@value{RPREFIX}FLOATING_POINT}
 attribute.  The consequence of a @code{@value{RPREFIX}NO_FLOATING_POINT}
 task attempting to access the floating point unit is CPU dependent but will
 generally result in an exception condition. 
+
+@subsection Per Task Variables
+
+@cindex per task variables
+
+Per task variables are used to support global variables whose value
+may be unique to a task. After indicating that a variable should be
+treated as private or pre-task.  The task can access and modify the
+variable, but the modifications will not appear to other tasks, and
+other tasks' modifications to that variable will not affect the value
+seen by the task.  This is accomplished by saving and restoring the
+variable's value each time a task switch occurs to or from the calling task.
+
+This feature can be used when a routine is to be spawned repeatedly as
+several independent tasks.  Although each task will have its own stack,
+and thus separate stack variables, they will all share the same static and
+global variables.  To make a variable not shareable (i.e. a "global" variable
+that is specific to a single task), the tasks can call
+@code{rtems_task_variable_add} to make a separate copy of the variable
+for each task, but all at the same physical address.
+
+Task variables increase the context switch time to and from the
+tasks that own them so it is desirable to minimize the number of
+task variables.  One efficient method is to have a single task
+variable that is a pointer to a dynamically allocated structure
+containing the task's private "global" data.
+
+A critical point with per-task variables is that each task must separately
+request that the same global variable is per-task private.
 
 @subsection Building a Task Attribute Set
 
@@ -1544,3 +1575,102 @@ The ticks portion of time_buffer @value{STRUCTURE} is ignored.  The
 timing granularity of this directive is a second.
 
 A clock tick is required to support the functionality of this directive.
+
+@page
+
+@subsection TASK_VARIABLE_ADD - Associate per task variable
+
+@cindex per-task variable
+@cindex task private variable
+@cindex task private data
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_task_variable_add
+@example
+rtems_status_code rtems_task_variable_add(
+  rtems_id  tid,
+  int      *ptr
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Variable_Add (
+   Id          : in     RTEMS.ID;
+   Ptr         : in     RTEMS.Address;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
+
+@subheading DESCRIPTION:
+This directive adds the memory location specified by the
+ptr argument to the context of the given task.  The variable will
+then be private to the task.  The task can access and modify the
+variable, but the modifications will not appear to other tasks, and
+other tasks' modifications to that variable will not affect the value
+seen by the task.  This is accomplished by saving and restoring the
+variable's value each time a task switch occurs to or from the calling task.
+
+@subheading NOTES:
+
+Task variables increase the context switch time to and from the
+tasks that own them so it is desirable to minimize the number of
+task variables.  One efficient method
+is to have a single task variable that is a pointer to a dynamically
+allocated structure containing the task's private `global' data.
+
+@page
+
+@subsection TASK_VARIABLE_DELETE - Remove per task variable
+
+@cindex per-task variable
+@cindex task private variable
+@cindex task private data
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_task_variable_delete
+@example
+rtems_status_code rtems_task_variable_delete(
+  rtems_id  tid,
+  int      *ptr
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Variable_Delete (
+   Id          : in     RTEMS.ID;
+   Ptr         : in     RTEMS.Address;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
+
+@subheading DESCRIPTION:
+This directive removes the given location from a task's context.
+
+@subheading NOTES:
+
+NONE
+

@@ -95,7 +95,7 @@ task.texi: task.t
 	    -n "Interrupt Manager" ${*}.t
 
 intr.texi: intr.t
-	$(BMENU) -p "Task Manager TASK_WAKE_WHEN - Wake up when specified" \
+	$(BMENU) -p "Task Manager TASK_VARIABLE_DELETE - Remove per task variable" \
 	    -u "Top" \
 	    -n "Clock Manager" ${*}.t
 
