@@ -32,7 +32,7 @@ rtems_unsigned32 argument;
 
   if ( pass == 5 ) {
     puts( "*** END OF TEST 6 ***" );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   if ( pass == 1 ) {

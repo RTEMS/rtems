@@ -236,5 +236,5 @@ rtems_test_pause();
   rtems_region_delete(Region_id[ 1 ]);
 
   puts( "*** END OF TEST 25 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

@@ -36,7 +36,7 @@ rtems_task Task_2(
 
     if ( time.second >= 17 ) {
       puts( "*** END OF TEST 3 *** " );
-      exit( 0 );
+      rtems_test_exit( 0 );
     }
 
     put_name( Task_name[ 2 ], FALSE );

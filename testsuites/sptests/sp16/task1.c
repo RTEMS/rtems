@@ -277,5 +277,5 @@ rtems_test_pause();
   directive_failed( status, "rtems_region_delete" );
 
   puts( "*** END OF TEST 16 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

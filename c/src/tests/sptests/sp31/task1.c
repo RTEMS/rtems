@@ -73,7 +73,7 @@ rtems_task Task_1(
 
   if ( TSR_fired ) {
     puts( "TA1 - TSR fired and should not have!" );
-    exit(1); 
+    rtems_test_exit(1); 
   }
 
   puts( "TA1 - rtems_timer_cancel - timer 1" );
@@ -270,5 +270,5 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_delete" );
 
   puts( "*** END OF TEST 31 *** " );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

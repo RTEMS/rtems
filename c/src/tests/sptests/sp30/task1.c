@@ -45,7 +45,7 @@ rtems_task Task_1_through_3(
 
     if ( time.second >= 35 ) {
       puts( "*** END OF TEST 30 ***" );
-      exit( 0 );
+      rtems_test_exit( 0 );
     }
 
     put_name( Task_name[ task_number( tid ) - 1 ], FALSE );

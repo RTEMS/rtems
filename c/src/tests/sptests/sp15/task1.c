@@ -124,5 +124,5 @@ rtems_task Task_1(
   directive_failed( status, "rtems_partition_delete" );
 
   puts( "*** END OF TEST 15 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

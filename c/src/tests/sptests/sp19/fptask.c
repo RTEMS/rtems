@@ -71,7 +71,7 @@ rtems_task FP_task(
       directive_failed( status, "rtems_task_delete of TA3" );
 
       puts( "*** END OF TEST 19 *** " );
-      exit( 0 );
+      rtems_test_exit( 0 );
     }
 
     if (previous_seconds != time.second)

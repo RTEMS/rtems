@@ -46,6 +46,8 @@
 #include <rtems/score/wkspace.h>
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <tmacros.h>
 
 /* These are always defined by the executive.
  *
@@ -126,12 +128,6 @@
 
 rtems_unsigned32 sys_req;
 
-/* to avoid warnings */
-int puts();
-int printf();
-int getint();
-#undef getchar
-int getchar();
 void help_size();
 void print_formula();
 

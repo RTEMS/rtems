@@ -48,7 +48,7 @@ rtems_task Priority_task(
 
   if ( its_priority < 64 ) {
     printf( "PRI%d - WHY AM I HERE? (pri=%d)", its_index, its_priority );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   if ( its_index == 5 )

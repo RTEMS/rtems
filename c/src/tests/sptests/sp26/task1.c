@@ -17,6 +17,8 @@ static rtems_id taskId1;
 static rtems_id taskId2;
 rtems_interval ticksPerSecond;
 
+#include "system.h"
+
 static int
 isSuspended (rtems_id tid)
 {
@@ -74,7 +76,7 @@ subTask2 (rtems_task_argument arg)
      isSuspended (taskId1));
   
   puts( "*** END OF TEST 26 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 static void

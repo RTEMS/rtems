@@ -101,5 +101,5 @@ rtems_task Task_1(
   puts( "TA1 - rtems_io_open        - RTEMS_INVALID_NUMBER" );
 
   puts( "*** END OF TEST 21 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

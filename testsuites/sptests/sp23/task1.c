@@ -91,5 +91,5 @@ rtems_task Task_1(
   puts( "TA1 - rtems_port_delete - DP1" );
 
   puts( "*** END OF TEST 23 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

@@ -335,13 +335,13 @@ rtems_test_pause();
       if (size != queue_size)
       {
           puts("TA1 - exact size size match failed");
-          exit(1);
+          rtems_test_exit(1);
       }
 
       if (memcmp(big_send_buffer, big_receive_buffer, size) != 0)
       {
           puts("TA1 - exact size data match failed");
-          exit(1);
+          rtems_test_exit(1);
       }
 
       for (cp = (big_receive_buffer + size);
@@ -350,7 +350,7 @@ rtems_test_pause();
           if (*cp != 'Z')
           {
               puts("TA1 - exact size overrun match failed");
-              exit(1);
+              rtems_test_exit(1);
           }
           
       /* all done with this one; delete it */
@@ -359,5 +359,5 @@ rtems_test_pause();
   }
   
   puts( "*** END OF TEST 13 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

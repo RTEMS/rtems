@@ -28,5 +28,5 @@ rtems_extension Task_exit_extension(
   }
 
   puts("*** END OF TEST 7 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

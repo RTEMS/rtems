@@ -111,7 +111,7 @@ rtems_task Task_1(
       while ( !testsFinished );
       showTaskSwitches ();
       puts( "*** END OF TEST 4 ***" );
-      exit (0);
+      rtems_test_exit (0);
     }
   }
 }

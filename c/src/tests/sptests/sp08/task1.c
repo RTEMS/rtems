@@ -251,5 +251,5 @@ rtems_task Task_1(
 /* END OF CURRENT MODE */
 
   puts( "*** END OF TEST 8 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

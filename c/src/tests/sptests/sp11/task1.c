@@ -405,5 +405,5 @@ rtems_test_pause();
   directive_failed( status, "rtems_timer_fire_after 200 ticks" );
 
   puts( "*** END OF TEST 11 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

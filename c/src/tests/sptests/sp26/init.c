@@ -34,5 +34,5 @@ rtems_task Init(
   task1();
   /* does not return */
   puts( "Init - task1 should not have returned" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

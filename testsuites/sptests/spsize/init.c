@@ -42,7 +42,7 @@ rtems_task Init(
   puts( "\n*** RTEMS SIZE PROGRAM ***" );
   size_rtems( 1 );
   puts( "*** END OF RTEMS SIZE PROGRAM ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 #if defined(HAVE_MENU)
   do {
     printf( "\n\nPlease select program mode:\n" );
@@ -55,7 +55,7 @@ rtems_task Init(
     switch( choice ) {
       case 1: size_rtems( 1 );  break;
       case 2: size_rtems( 0 );  break;
-      case 3: exit( 0 );
+      case 3: rtems_test_exit( 0 );
       default:  continue;
     }
   } while ( FOREVER );

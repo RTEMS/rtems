@@ -159,5 +159,5 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_delete" );
 
   puts( "*** END OF TEST 22 *** " );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

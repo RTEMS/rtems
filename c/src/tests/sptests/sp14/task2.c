@@ -43,5 +43,5 @@ rtems_task Task_2(
   directive_failed( status, "rtems_task_wake_after" );
 
   puts( "*** END OF TEST 14 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
