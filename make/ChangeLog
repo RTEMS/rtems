@@ -1,3 +1,7 @@
+2004-10-26	Eric Norum <norume@aps.anl.gov
+
+	* custom/mvme5500.cfg: -Wa,-m7450 until gcc/gas get their acts together
+
 2004-10-20	Eric Norum <norume@aps.anl.gov
 
 	* custom/mvme5500.cfg: New BSP.
