@@ -1,3 +1,10 @@
+2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add bspopts.h.
+	* include/.cvsignore: Add bspopts.h*, stamp-h*.
+	* include/Makefile.am: Use *_HEADERS instead of *H_FILES.
+	* include/bsp.h: Include bspopts.h.
+
 2001-05-25	Joel Sherrill <joel@OARcorp.com>
 
  	* clock/Makefile.am, console/Makefile.am, spurious/Makefile.am,
