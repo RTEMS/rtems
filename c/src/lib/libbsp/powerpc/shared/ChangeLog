@@ -1,3 +1,8 @@
+2003-04-15	Joel Sherrill <joel@OARcorp.com>
+
+	PR 386/bsps
+	* vme/vmeconfig.c: Removed declaration of _BSP_vme_bridge_irq.
+
 2003-04-10  Till Straumann <strauman@slac.stanford.edu>
 
 	PR 379/bsps
