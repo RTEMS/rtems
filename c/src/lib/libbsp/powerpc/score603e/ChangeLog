@@ -1,3 +1,12 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* PCI_bus/PCI.h, clock/clock.c, console/85c30.c, console/console.c,
+	console/consolebsp.h, console/consolereserveresources.c,
+	console/tbl85c30.c, include/bsp.h, include/coverhd.h, include/gen1.h,
+	include/gen2.h, startup/82378zb.c, startup/FPGA.c,
+	startup/bspstart.c, startup/genpvec.c, startup/setvec.c,
+	startup/vmeintr.c, timer/timer.c: Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
