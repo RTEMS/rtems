@@ -11,8 +11,8 @@
  *  $Id$
  */
 
-#ifndef _INCLUDE_ASSOC_H
-#define _INCLUDE_ASSOC_H
+#ifndef _RTEMS_RTEMS_ASSOC_H
+#define _RTEMS_RTEMS_ASSOC_H
 
 typedef struct {
     const char   *name;

@@ -8,8 +8,8 @@
  *  $Id$
  */
 
-#ifndef __RINGBUF_H__
-#define __RINGBUF_H__
+#ifndef _RTEMS_RINGBUF_H
+#define _RTEMS_RINGBUF_H
 
 #ifndef RINGBUF_QUEUE_LENGTH
 #define RINGBUF_QUEUE_LENGTH 128

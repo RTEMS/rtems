@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __SPURIOUS_h
-#define __SPURIOUS_h
+#ifndef _RTEMS_SPURIOUS_H
+#define _RTEMS_SPURIOUS_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __CLOCK_DRIVER_h
-#define __CLOCK_DRIVER_h
+#ifndef _RTEMS_CLOCKDRV_H
+#define _RTEMS_CLOCKDRV_H
 
 #ifdef __cplusplus
 extern "C" {

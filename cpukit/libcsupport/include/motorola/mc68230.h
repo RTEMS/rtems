@@ -21,8 +21,8 @@
  *  $Id$
  */
 
-#ifndef __MC68230_H__
-#define __MC68230_H__
+#ifndef _RTEMS_MOTOROLA_MC68230_H
+#define _RTEMS_MOTOROLA_MC68230_H
 
 /* Some Motorola IDP User manual defines: */
 #define PIT_ADDR	0x00c01003		/* base address of the PIT */

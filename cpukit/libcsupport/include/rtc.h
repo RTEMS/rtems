@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef _RTC_DRIVER_h
-#define _RTC_DRIVER_h
+#ifndef _RTEMS_RTC_H
+#define _RTEMS_RTC_H
 
 #ifdef __cplusplus
 extern "C" {

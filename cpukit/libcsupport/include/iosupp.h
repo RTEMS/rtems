@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __IOSUPP_h
-#define __IOSUPP_h
+#ifndef _RTEMS_IOSUPP_H
+#define _RTEMS_IOSUPP_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -20,8 +20,8 @@
  *  $Id$
  */
 
-#ifndef _RTEMS_LIBIO_H
-#define _RTEMS_LIBIO_H
+#ifndef _RTEMS_RTEMS_LIBIO_H
+#define _RTEMS_RTEMS_LIBIO_H
 
 #include <rtems.h>
 #include <sys/types.h>

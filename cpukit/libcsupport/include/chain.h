@@ -18,8 +18,8 @@
  * $ld:
  */
 
-#ifndef __CHAIN_h
-#define __CHAIN_h
+#ifndef _RTEMS_CHAIN_H
+#define _RTEMS_CHAIN_H
 
 #include <rtems.h>
 

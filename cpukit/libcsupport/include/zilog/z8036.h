@@ -19,8 +19,8 @@
  *  $Id$
  */
 
-#ifndef __Z8036_h
-#define __Z8036_h
+#ifndef _RTEMS_ZILOG_Z8036_H
+#define _RTEMS_ZILOG_Z8036_H
 
 #ifdef __cplusplus
 extern "C" {

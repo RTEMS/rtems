@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef _CONSOLE_DRIVER_h
-#define _CONSOLE_DRIVER_h
+#ifndef _RTEMS_CONSOLE_H
+#define _RTEMS_CONSOLE_H
 
 #ifdef __cplusplus
 extern "C" {

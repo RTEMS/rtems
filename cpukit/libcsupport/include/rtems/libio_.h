@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_LIBIO_INTERNAL__h
-#define __RTEMS_LIBIO_INTERNAL__h
+#ifndef _RTEMS_RTEMS_LIBIO__H
+#define _RTEMS_RTEMS_LIBIO__H
 
 #ifdef __cplusplus
 extern "C" {

@@ -14,8 +14,8 @@
  *  $Id$
  */
 
-#ifndef __MC68681_H__
-#define __MC68681_H__
+#ifndef _RTEMS_MOTOROLA_MC68681_H
+#define _RTEMS_MOTOROLA_MC68681_H
 
 /*
  *  In the dark ages when this controller was designed, it was actually

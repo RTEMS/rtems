@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __LIBC_SUPPORT_h
-#define __LIBC_SUPPORT_h
+#ifndef _RTEMS_RTEMS_LIBCSUPPORT_H
+#define _RTEMS_RTEMS_LIBCSUPPORT_H
 
 #ifdef __cplusplus
 extern "C" {

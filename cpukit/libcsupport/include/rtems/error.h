@@ -8,8 +8,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_ERROR_h
-#define __RTEMS_ERROR_h
+#ifndef _RTEMS_RTEMS_ERROR_H
+#define _RTEMS_RTEMS_ERROR_H
 
 #ifdef __cplusplus
 extern "C" {
