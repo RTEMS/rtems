@@ -1,3 +1,15 @@
+2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/new-exceptions/cpu.h (CPU_STACK_MINIMUM_SIZE,
+	CPU_ALIGNMENT, CPU_HEAP_ALIGNMENT,
+	CPU_PARTITION_ALIGNMENT, CPU_STACK_ALIGNMENT): Remove.
+	* rtems/old-exceptions/cpu.h (CPU_STACK_MINIMUM_SIZE,
+	CPU_ALIGNMENT, CPU_HEAP_ALIGNMENT,
+	CPU_PARTITION_ALIGNMENT, CPU_STACK_ALIGNMENT): Remove.
+	* rtems/score/cpu.h (CPU_STACK_MINIMUM_SIZE,
+	CPU_ALIGNMENT, CPU_HEAP_ALIGNMENT,
+	CPU_PARTITION_ALIGNMENT, CPU_STACK_ALIGNMENT): Add.
+
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/new-exceptions/cpu.h: Remove CPU_MINIMUM_STACK_FRAME_SIZE.
