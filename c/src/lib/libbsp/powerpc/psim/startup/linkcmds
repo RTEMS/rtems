@@ -103,9 +103,8 @@ SECTIONS
   /* . =  ALIGN(8) + 0x40000; */
   .data    :
   {
-    *(.data)
-    *(.gnu.linkonce.d.*)
-    CONSTRUCTORS
+    *(.data .data.* .gnu.linkonce.d.*)
+    SORT(CONSTRUCTORS)
   } >RAM
   PROVIDE (__EXCEPT_START__ = .);
   .gcc_except_table   : { *(.gcc_except_table) } >RAM

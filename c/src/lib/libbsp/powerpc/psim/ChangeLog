@@ -1,3 +1,10 @@
+2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am: Misc cleanups and fixes.
+	* startup/Makefile.am: Misc cleanups and fixes.
+	* startup/linkcmds: Preparations for gcc-3.3.x.
+	* wrapup/Makefile.am: Misc cleanups and fixes.
+
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add preinstallation dirstamp support.
