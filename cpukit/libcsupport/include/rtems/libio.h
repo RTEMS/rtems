@@ -455,6 +455,7 @@ typedef int (*rtems_libio_lseek_t)(
  *  Macros
  */
 
+#if 0
 #define rtems_filesystem_make_dev_t( _major, _minor ) \
   ((((dev_t)(_major)) << 32) | (dev_t)(_minor))
 
@@ -463,6 +464,52 @@ typedef int (*rtems_libio_lseek_t)(
 
 #define rtems_filesystem_dev_minor_t( _dev ) \
   (rtems_device_minor_number) ((_dev) & 0xFFFFFFFF)
+#else
+
+#include <unistd.h>
+
+union __dev_t {
+  dev_t device;
+  struct {
+     rtems_device_major_number major;
+     rtems_device_minor_number minor;
+  } __overlay;
+};
+
+static inline dev_t rtems_filesystem_make_dev_t( 
+  rtems_device_major_number _major, 
+  rtems_device_minor_number _minor
+)
+{
+  union __dev_t temp;
+
+  temp.__overlay.major = _major;
+  temp.__overlay.minor = _minor;
+  return temp.device;
+}
+
+static inline rtems_device_major_number rtems_filesystem_dev_major_t(
+  dev_t device
+)
+{
+  union __dev_t temp;
+
+  temp.device = device;
+  return temp.__overlay.major;
+}
+
+
+static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
+  dev_t device
+)
+{
+  union __dev_t temp;
+
+  temp.device = device;
+  return temp.__overlay.minor;
+}
+
+#endif
 
 #define rtems_filesystem_split_dev_t( _dev, _major, _minor ) \
   do { \
