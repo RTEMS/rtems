@@ -1,3 +1,8 @@
+2003-08-05	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 442/filesystem
+	* src/open.c: file never closed if ftruncate() fails in open()
+
 2003-07-08	Joel Sherrill <joel@OARcorp.com>
 
 	PR 419/rtems

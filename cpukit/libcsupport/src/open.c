@@ -173,6 +173,12 @@ int open(
 
   if ( (flags & O_TRUNC) == O_TRUNC ) {
     rc = ftruncate( iop - rtems_libio_iops, 0 );
+    if ( rc ) {
+      close( iop - rtems_libio_iops );
+      /* those are released by close(): */
+      iop = 0;
+      loc_to_free = NULL;
+    }
   }
     
   /*
