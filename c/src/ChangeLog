@@ -1,8 +1,11 @@
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Reflect new location of librdbg.a.
+
+2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* librdbg/src/i386/Makefile.am, librdbg/src/m68k/Makefile.am,
-	librdbg/src/powerpc/Makefile.am:
-	Remove.
+	librdbg/src/powerpc/Makefile.am: Remove.
 	* librdbg/src/Makefile.am: Merge-in librdbg/src/i386/Makefile.am, 
 	librdbg/src/m68k/Makefile.am, librdbg/src/powerpc/Makefile.am.
 	* configure.ac: Reflect changes above.
