@@ -14,8 +14,8 @@ Group:	      rtems
 Release:      @Release@
 Copyright:    1999 OARCorp
 
-Provides:     	@target_alias@-gcc @target_alias@-chill @target_alias@-gcj
-Provides:	@target_alias@-g77 @target_alias@-objc
+Provides:     	rtems-base-gcc @target_alias@-gcc @target_alias@-chill
+Provides:	@target_alias@-gcj @target_alias@-g77 @target_alias@-objc
 Requires:     	@target_alias@-binutils
 
 Autoreqprov:  	on
@@ -56,10 +56,20 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
  your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
  Or you can try the ftp options of rpm :-)
 
+%package -n rtems-base-gcc
+Summary:      base package for rtems gcc and newlib C Library 
+Group: rtems
+
+%description -n rtems-base-gcc
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the files for gcc and newlib that are shared by all targets.
+
 %package -n @target_alias@-gcc
 Summary:      rtems gcc and newlib C Library for @target_alias@
 Group: rtems
-Requires: @target_alias@-binutils
+Requires: @target_alias@-binutils rtems-base-gcc
 
 %description -n @target_alias@-gcc
 RTEMS is an open source operating system for embedded systems.
@@ -188,23 +198,30 @@ This is the gcc/objc compiler for @target_alias@
     esac
   done
 
-%files -n @target_alias@-gcc -f build/files.gcc
+%files -n rtems-base-gcc
 %dir /opt/rtems/info
-%doc /opt/rtems/info/dir
+# %doc /opt/rtems/info/dir
 %doc /opt/rtems/info/cpp.info*
 %doc /opt/rtems/info/gcc.info*
 %doc /opt/rtems/info/libc.info*
 %doc /opt/rtems/info/libm.info*
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
-%doc /opt/rtems/man/man1/cccp.1
-%doc /opt/rtems/man/man1/@target_alias@-gcc.1
-%doc /opt/rtems/man/man1/@target_alias@-g++.1
-
 %dir /opt/rtems/bin
 /opt/rtems/bin/cpp@exe_ext@
 /opt/rtems/bin/gcov@exe_ext@
+
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
+%doc /opt/rtems/man/man1/cccp.1
+
+%dir /opt/rtems/include
+/opt/rtems/include/g++-3
+
+%files -n @target_alias@-gcc -f build/files.gcc
+
+%doc /opt/rtems/man/man1/@target_alias@-gcc.1
+%doc /opt/rtems/man/man1/@target_alias@-g++.1
+
 /opt/rtems/bin/@target_alias@-c++@exe_ext@
 /opt/rtems/bin/@target_alias@-g++@exe_ext@
 /opt/rtems/bin/@target_alias@-gcc@exe_ext@
@@ -213,8 +230,6 @@ This is the gcc/objc compiler for @target_alias@
 
 %dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
 
-%dir /opt/rtems/include
-/opt/rtems/include/g++-3
 /opt/rtems/@target_alias@
 
 %post -n @target_alias@-gcc

@@ -1,5 +1,5 @@
 #
-# spec file for package rtems
+# spec file for binutils package targetting rtems
 # 
 # Copyright  (c)  1999  OARCorp, Huntsville, AL
 #
@@ -8,18 +8,19 @@
 
 Vendor:       OAR Corporation
 Distribution: Linux
-Name:         @target_alias@-binutils
+Name:         @target_alias@-binutils-collection
+Summary:      binutils for target @target_alias@
+Group:        rtems
 Release:      @Release@
 Copyright:    1999 OARCorp
-Group:        rtems
-Provides:     @target_alias@-binutils
+
+Provides:     rtems-base-binutils @target_alias@-binutils
 
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Prefix:		/opt
 
 Version:      	@binutils_version@
-Summary:      	binutils for target @target_alias@
 Source0:      	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.gz
 Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
 #
@@ -36,6 +37,28 @@ Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
 NoSource:      0
 
 %description
+
+RTEMS is an open source operating system for embedded systems.
+
+This is binutils sources with patches for RTEMS.
+
+%package -n rtems-base-binutils
+Summary:      base package for rtems binutils
+Group: rtems
+
+%description -n rtems-base-binutils
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the base for binutils regardless of target CPU.
+
+%package -n @target_alias@-binutils
+Summary:      rtems gcc and newlib C Library for @target_alias@
+Group: rtems
+Requires: rtems-base-binutils
+
+%description -n @target_alias@-binutils
+
 RTEMS is an open source operating system for embedded systems.
 
 This is the GNU binutils for RTEMS targetting @target_alias@.
@@ -102,9 +125,9 @@ Authors:
     done
   fi
 
-%files -f files
+%files -n rtems-base-binutils
 %dir /opt/rtems/info
-%doc /opt/rtems/info/dir
+# %doc /opt/rtems/info/dir
 %doc /opt/rtems/info/as.info.gz
 %doc /opt/rtems/info/as.info-?.gz
 %doc /opt/rtems/info/bfd.info.gz
@@ -118,6 +141,21 @@ Authors:
 
 %dir /opt/rtems/man
 %dir /opt/rtems/man/man1
+
+%dir /opt/rtems/include
+/opt/rtems/include/bfd.h
+/opt/rtems/include/ansidecl.h
+/opt/rtems/include/bfdlink.h
+
+%dir /opt/rtems/lib
+/opt/rtems/lib/libbfd*
+/opt/rtems/lib/libiberty*
+/opt/rtems/lib/libopcodes*
+
+%dir /opt/rtems/share
+%dir /opt/rtems/share/locale
+
+%files -n @target_alias@-binutils -f files
 %doc /opt/rtems/man/man1/@target_alias@-*.1
 
 %dir /opt/rtems/bin
@@ -135,19 +173,6 @@ Authors:
 /opt/rtems/bin/@target_alias@-size@exe_ext@
 /opt/rtems/bin/@target_alias@-strings@exe_ext@
 /opt/rtems/bin/@target_alias@-strip@exe_ext@
-
-%dir /opt/rtems/include
-/opt/rtems/include/bfd.h
-/opt/rtems/include/ansidecl.h
-/opt/rtems/include/bfdlink.h
-
-%dir /opt/rtems/lib
-/opt/rtems/lib/libbfd*
-/opt/rtems/lib/libiberty*
-/opt/rtems/lib/libopcodes*
-
-%dir /opt/rtems/share
-%dir /opt/rtems/share/locale
 
 %dir /opt/rtems/@target_alias@
 %dir /opt/rtems/@target_alias@/bin

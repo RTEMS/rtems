@@ -1,7 +1,7 @@
 ## $Id$
 
 AC_INIT(binutils)
-AM_INIT_AUTOMAKE(scripts,19991025-0,no)
+AM_INIT_AUTOMAKE(scripts,20000124-0,no)
 
 AC_EXEEXT
 
