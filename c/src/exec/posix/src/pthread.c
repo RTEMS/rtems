@@ -363,6 +363,7 @@ int pthread_attr_setscope(
       return 0;
 
     case PTHREAD_SCOPE_SYSTEM:
+/* XXX needs to be ENOTSUP */
       return ENOSYS;
 
     default:
