@@ -278,3 +278,31 @@ Display mbuf statistics.
 Display the routing table.
 
 @end table
+
+In addition, RTEMS add two new ioctls to the BSD networking code:
+SIOCSIFTAP and SIOCGIFTAP.  These may be used to set and get a
+@i{tap function}.  The tap function will be called for every
+Ethernet packet received by the interface.
+
+These are called like other interface ioctls, such as SIOCSIFADDR.
+When setting the tap function with SIOCSIFTAP, set the ifr_tap field
+of the ifreq struct to the tap function.  When retrieving the tap
+function with SIOCGIFTAP, the current tap function will be returned in
+the ifr_tap field.  To stop tapping packets, call SIOCSIFTAP with a
+ifr_tap field of 0.
+
+The tap function is called like this:
+
+@example
+int tap (struct ifnet *, struct ether_header *, struct mbuf *)
+@end example
+
+The tap function should return 1 if the packet was fully handled, in
+which case the caller will simply discard the mbuf.  The tap function
+should return 0 if the packet should be passed up to the higher
+networking layers.
+
+The tap function is called with the network semaphore locked.  It must
+not make any calls on the application levels of the networking level
+itself.  It is safe to call other non-networking RTEMS functions.
+
