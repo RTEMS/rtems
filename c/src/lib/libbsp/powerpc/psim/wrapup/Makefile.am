@@ -7,9 +7,9 @@ include $(top_srcdir)/../../../../automake/compile.am
 EXTRA_LIBRARIES = ../libbsp.a
 CLEANFILES = ../libbsp.a
 ___libbsp_a_SOURCES =
-___libbsp_a_LIBADD = ../startup$(LIB_VARIANT).rel ../pclock$(LIB_VARIANT).rel \
-    ../console$(LIB_VARIANT).rel ../irq$(LIB_VARIANT).rel \
-    ../vectors$(LIB_VARIANT).rel
+___libbsp_a_LIBADD = ../startup$(LIB_VARIANT).rel \
+    ../pclock$(LIB_VARIANT).rel ../console$(LIB_VARIANT).rel \
+    ../irq$(LIB_VARIANT).rel ../vectors$(LIB_VARIANT).rel
 ___libbsp_a_LIBADD += \
     ../../../../libcpu/@RTEMS_CPU@/shared/cpuIdent$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/shared/stack$(LIB_VARIANT).rel \

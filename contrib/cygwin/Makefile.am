@@ -3,7 +3,8 @@
 ##
 
 RPM_SPECS_DATA = i686-pc-cygwin-binutils.spec i686-pc-cygwin-libs.spec \
-    i686-pc-cygwin-mingw.spec i686-pc-cygwin-w32api.spec i686-pc-cygwin-gcc.spec
+    i686-pc-cygwin-mingw.spec i686-pc-cygwin-w32api.spec \
+    i686-pc-cygwin-gcc.spec
 
 CONFIGURE_DEPENDENCIES = setup.cache
 setup.cache: setup.def
