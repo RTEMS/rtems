@@ -162,6 +162,10 @@
 
 /******************************* Per O/S Defines *****************************/
 
+#if defined(__rtems__)
+#define		__NO_PACK		1
+#endif
+
 #if UW
 	#define		__NO_PACK		1
 #endif /* UW */
@@ -877,9 +881,7 @@ extern void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...));
 #define B_USE_MALLOC		0x1				/* Okay to use malloc if required */
 #define B_USER_BUF			0x2				/* User supplied buffer for mem */
 
-
 #if !LINUX && !__rtems__
-#define		__NO_PACK		1
 extern char_t	*basename(char_t *name);
 #endif /* !LINUX */
 

@@ -168,7 +168,9 @@ static int  null_login __P((int));
 static int  get_pap_passwd __P((char *));
 static int  have_pap_secret __P((int *));
 static int  have_chap_secret __P((char *, char *, int, int *));
+#if 0
 static int  ip_addr_check __P((u_int32_t, struct permitted_ip *));
+#endif
 static void free_wordlist __P((struct wordlist *));
 static void auth_script __P((enum script_state s));
 static void set_allowed_addrs __P((int, struct wordlist *, struct wordlist *));
@@ -1052,6 +1054,7 @@ auth_ip_addr(unit, addr)
 #endif
 }
 
+#if 0
 static int
 ip_addr_check(addr, addrs)
     u_int32_t addr;
@@ -1061,6 +1064,7 @@ ip_addr_check(addr, addrs)
 	if ((addr & addrs->mask) == addrs->base)
 	    return addrs->permit;
 }
+#endif
 
 /*
  * bad_ip_adrs - return 1 if the IP address is one we don't want

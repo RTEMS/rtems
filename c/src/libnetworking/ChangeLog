@@ -1,3 +1,7 @@
+2002-11-04	Joel Sherrill <joel@OARcorp.com>
+
+	* pppd/auth.c, rtems_webserver/uemf.h: Removed warnings.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems_webserver/socket.c, rtems_webserver/uemf.h: Removed
