@@ -102,9 +102,8 @@ If a value of 0 is specified, 128 kbytes will be allocated.
 
 @item char *hostname
 The host name of the system.
-If this entry is @code{NULL} the host name,
-and all the remaining values specified by the @code{rtems_bsdnet_configuration}
-structure will be obtained from a BOOTP server.
+If this, or any of the following, entries are @code{NULL} the value
+may be obtained from a BOOTP server.
 
 @item char *domainname
 The name of the Internet domain to which the system belongs.
@@ -117,15 +116,11 @@ specified in `dotted decimal' (@code{129.128.4.1}) form.
 The Internet host number of the machine to which @code{syslog} messages
 will be sent.
 
-@item char *name_server
-The Internet host number of up to three machines to be used as
+@item char *name_server[3]
+The Internet host numbers of up to three machines to be used as
 Internet Domain Name Servers.
 
 @end table
-
-@example
-rtems_task_set_priority (RTEMS_SELF, 30, &oldPri);
-@end example
 
 @subsection Network device configuration
 Network devices are specified and configured by declaring and initializing a
@@ -220,6 +215,9 @@ network I/O operations can be performed.  This is done by calling:
 rtems_bsdnet_initialize_network ();
 @end example
 
+This function is declared in @code{rtems/rtems_bsdnet.h}.
+
+
 
 @section Application code
 The RTEMS network package provides almost a complete set of BSD network
@@ -243,7 +241,8 @@ buffer which remains valid only until the next call:
 @end itemize
 
 @subsection Network Statistics
-There are a number of functions to print statistics gathered by the network stack:
+There are a number of functions to print statistics gathered by the network stack.
+These function are declared in @code{rtems/rtems_bsdnet.h}.
 @table @code
 @item rtems_bsdnet_show_if_stats
 Display statistics gathered by network interfaces.
