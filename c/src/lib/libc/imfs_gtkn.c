@@ -25,24 +25,25 @@ IMFS_token_types IMFS_get_token(
   int              *token_len
 )
 {
-  int               i = 0;
+  register int i = 0;
   IMFS_token_types  type = IMFS_NAME;
+  register char c;
 
   /* 
    *  Copy a name into token.  (Remember NULL is a token.)
    */
+  c = path[i];
+  while ( (!IMFS_is_separator(c)) && (i <= IMFS_NAME_MAX) ) {
 
-  while ( !IMFS_is_separator( path[i] ) && (i <= IMFS_NAME_MAX) ) {
-
-     token[i] = path[i];
+     token[i] = c;
 
      if (i == IMFS_NAME_MAX)
        return IMFS_INVALID_TOKEN;
 
-     if ( !IMFS_is_valid_name_char( token[i] ) )
+     if ( !IMFS_is_valid_name_char(c) )
        type = IMFS_INVALID_TOKEN;   
 
-     i++;
+     c = path [++i];
   }
 
   /*
@@ -50,7 +51,7 @@ IMFS_token_types IMFS_get_token(
    */
 
   if ( i == 0 ) {
-    token[i] = path[i];
+    token[i] = c;
 
     if ( token[i] != '\0' ) {
       i++;
