@@ -1,3 +1,9 @@
+2001-09-19	Chris Johns <ccj@acm.org>
+
+	* network/README.i82586, network/i82586.c, network/i82586reg.h,
+	network/i82586var.h: New files.  Network driver for Intel
+	i82586.
+
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
