@@ -48,6 +48,16 @@ rpm -i rtems-base-gdb-4.18-2.i386.rpm
 rpm -i sparc-rtems-gdb-4.18-2.i386.rpm
 @end example
 
+Upon successful completion of the above command sequence, a 
+C/C++ cross development toolset targetting the SPARC is
+installed in @code{/opt/rtems}.  In order to use this toolset,
+the directory @code{/opt/rtems/bin} must be included in your
+PATH.
+
+NOTE: This process does not install RTEMS itself, only the tools
+required to build RTEMS.  See @ref{Building RTEMS} for the next
+step in the process.
+
 @section Removing RPMs
 
 The following is a sample session illustrating the removal
