@@ -11,6 +11,9 @@
  *
  * $Id$
  * $Log$
+ * Revision 1.4  1995/10/06  20:00:38  joel
+ * SPARC merged and successfully tested w/o interrupt support
+ *
  * Revision 1.3  1995/10/06 16:32:20  joel
  * moved to new development machine and went to gcc 2.7.0
  *

@@ -5,6 +5,9 @@
  *  supports page table initialization.
  *
  *  $Log$
+ * Revision 1.1  1995/12/19  19:22:36  joel
+ * file lost in crash and re-added
+ *
  * Revision 1.1  1995/12/05  15:29:19  joel
  * added.. submitted by  Eric Vaitl <vaitl@viasat.com>
  *
