@@ -1,3 +1,8 @@
+2004-02-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: dist_rtems_make_DATA = main.cfg leaf.cfg.
+	dist_rtems_make_custom_DATA = custom/default.cfg.
+
 2004-02-05	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/p4000.cfg, custom/p4600.cfg, custom/p4650.cfg: Re-added

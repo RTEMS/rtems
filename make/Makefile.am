@@ -4,13 +4,13 @@
 
 rtems_makedir = $(prefix)/make
 
-rtems_make_DATA = main.cfg leaf.cfg
+dist_rtems_make_DATA = main.cfg leaf.cfg
 
-EXTRA_DIST = host.cfg.in leaf.cfg
+EXTRA_DIST = host.cfg.in
 
 rtems_make_Templatesdir = $(rtems_makedir)/Templates
 
-rtems_make_Templates_DATA = Templates/Makefile.dir Templates/Makefile.leaf \
+dist_rtems_make_Templates_DATA = Templates/Makefile.dir Templates/Makefile.leaf \
     Templates/Makefile.lib
 
 EXTRA_DIST += compilers/gcc-no_bsp.cfg compilers/gcc-portsw.cfg \
@@ -18,7 +18,7 @@ EXTRA_DIST += compilers/gcc-no_bsp.cfg compilers/gcc-portsw.cfg \
 
 rtems_make_customdir = $(rtems_makedir)/custom
 
-rtems_make_custom_DATA = custom/default.cfg
+dist_rtems_make_custom_DATA = custom/default.cfg
 
 EXTRA_DIST += custom/Cygwin-posix.cfg custom/FreeBSD-posix.cfg \
     custom/HPUX9-posix.cfg custom/Linux-posix.cfg custom/Solaris-posix.cfg \
