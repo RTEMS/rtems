@@ -175,7 +175,7 @@ The directory tree should look something like the following figure:
 @example
 @group
 /whatever/prefix/you/choose/
-        bit
+        bit_ada
         archive/
             @value{GCC-TAR}
             @value{GNAT-TAR}
@@ -194,15 +194,15 @@ The directory tree should look something like the following figure:
 @ifset GNAT-RTEMSPATCH
             @value{GNAT-RTEMSPATCH}
 @end ifset
-            hello_world_c.tgz
-            bit
+            hello_world_ada.tgz
+            bit_ada
         tools/
             @value{BINUTILS-UNTAR}/
             @value{GCC-UNTAR}/
             @value{GNAT-UNTAR}/
             @value{NEWLIB-UNTAR}/
             @value{RTEMS-UNTAR}/
-            bit
+            bit_ada
 
 @end group
 @end example
@@ -241,7 +241,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GCC-UNTAR}
-zcat archive/@value{GCC-RTEMSPATCH} | patch -p1
+zcat ../../archive/@value{GCC-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -273,7 +273,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{BINUTILS-UNTAR}
-zcat archive/@value{BINUTILS-RTEMSPATCH} | patch -p1
+zcat ../../archive/@value{BINUTILS-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -306,7 +306,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{NEWLIB-UNTAR}
-zcat archive/@value{NEWLIB-RTEMSPATCH} | patch -p1
+zcat ../../archive/@value{NEWLIB-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -339,7 +339,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GNAT-UNTAR}
-zcat archive/@value{GNAT-RTEMSPATCH} | patch -p1
+zcat ../../archive/@value{GNAT-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -368,7 +368,7 @@ tools/@value{GCC-UNTAR} directory:
 
 @example
 cd tools/@value{GNAT-UNTAR}/src
-cp -r ada ../../../@value{GCC-UNTAR}
+cp -r ada ../../@value{GCC-UNTAR}
 @end example
 
 @c
@@ -423,6 +423,10 @@ is the location where you wish the GNU C/C++ cross compilation tools for
 RTEMS to be built. It is recommended that the directory chosen to receive
 these tools be named so that it is clear from which egcs distribution it
 was generated and for which target system the tools are to produce code for.
+
+@b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory 
+under the build directory.  The build directory will be removed
+automatically upon successful completion of the build procedure.
 
 @item BINUTILS
 is the directory under tools that contains @value{BINUTILS-UNTAR}. 
