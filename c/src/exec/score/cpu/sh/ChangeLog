@@ -2,6 +2,10 @@
 
 	* Makefile.am: Reflect 2002-01-23 changes.
 
+2002-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Reflect 2002-01-23 changes.
+
 2002-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/Makefile.am: Removed.
