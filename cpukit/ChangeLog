@@ -1,3 +1,7 @@
+2002-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-bsp-cache.m4: Remove.
+
 2002-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/multilib.m4: Remove RTEMS_ENABLE_MULTILIB_MASTER.
