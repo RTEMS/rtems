@@ -148,13 +148,14 @@ n:
 #define THRM1	1020
 #define THRM2	1021
 #define THRM3	1022
-#define THRM1_TIN 0x1
-#define THRM1_TIV 0x2
-#define THRM1_THRES (0x7f<<2)
-#define THRM1_TID (1<<29)
-#define THRM1_TIE (1<<30)
-#define THRM1_V   (1<<31)
-#define THRM3_E   (1<<31)
+#define THRM1_TIN (1<<(31-0))
+#define THRM1_TIV (1<<(31-1))
+#define THRM1_THRES (0x7f<<(31-8))
+#define THRM1_TID (1<<(31-29))
+#define THRM1_TIE (1<<(31-30))
+#define THRM1_V   (1<<(31-31))
+#define THRM3_SITV (0x1fff << (31-30))
+#define THRM3_E   (1<<(31-31))
 
 /* Segment Registers */
 #define SR0	0
