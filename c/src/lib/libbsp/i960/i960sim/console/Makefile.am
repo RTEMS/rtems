@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+VPATH = @srcdir@:@srcdir@/../../../shared
+
 PGM = $(ARCH)/console.rel
 
 C_FILES = console-io.c console-polled.c
