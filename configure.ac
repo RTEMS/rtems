@@ -8,7 +8,7 @@ AC_CONFIG_SRCDIR([c])
 RTEMS_TOP([.])
 
 # Abort if trying to build inside of the source tree.
-if test -f VERSION; then
+if test -f aclocal/version.m4; then
   rm -f config.cache config.log confdefs.h
   AC_MSG_ERROR([***]
     [Attempt to build inside of the source tree]

@@ -33,9 +33,9 @@ usage()
   exit 1;
 }
 
-if test ! -f $top_srcdir/VERSION; then
+if test ! -f $top_srcdir/aclocal/version.m4; then
   echo "${progname}:"
-  echo "	Installation problem: Can't find file VERSION"
+  echo "	Installation problem: Can't find file aclocal/version.m4"
   exit 1;
 fi
 

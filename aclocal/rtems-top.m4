@@ -7,6 +7,7 @@ dnl $1 .. relative path from this configure.in to the toplevel configure.in
 dnl
 AC_DEFUN(RTEMS_TOP,
 [dnl
+AC_REQUIRE([RTEMS_VERSIONING])
 AC_CHECK_PROGS(MAKE, gmake make)
 AC_BEFORE([$0], [AC_CONFIG_AUX_DIR])dnl
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
@@ -43,17 +44,9 @@ PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
 fi
 AC_SUBST(PROJECT_ROOT)
 
-dnl Determine RTEMS Version string from the VERSION file
-dnl Hopefully, Joel never changes its format ;-
 AC_MSG_CHECKING([for RTEMS Version])
-if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
-RTEMS_VERSION=`grep 'RTEMS Version' ${srcdir}/${RTEMS_TOPdir}/VERSION | \
-sed -e 's%RTEMS[[ 	]]*Version[[ 	]]*\(.*\)[[ 	]]*%\1%g'`
-else
-AC_MSG_ERROR(Unable to find ${RTEMS_TOPdir}/VERSION)
-fi
-if test -z "$RTEMS_VERSION"; then
-AC_MSG_ERROR(Unable to determine version)
-fi
-AC_MSG_RESULT($RTEMS_VERSION)
+AS_IF([test -r "${srcdir}/${RTEMS_TOPdir}/aclocal/version.m4"],
+[],
+[AC_MSG_ERROR([Unable to find ${RTEMS_TOPdir}/aclocal/version.m4])])
+AC_MSG_RESULT([_RTEMS_VERSION])
 ])dnl
