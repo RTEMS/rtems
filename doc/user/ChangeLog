@@ -1,3 +1,8 @@
+2003-11-21	Joel Sherrill <joel@OARcorp.com>
+
+	PR 521/doc
+	* sem.t: Default attributes were wrong for semaphores.
+
 2003-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* preface.texi: Eliminate references to HPPA.
