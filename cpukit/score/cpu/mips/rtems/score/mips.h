@@ -9,7 +9,6 @@
  *
  *  $Id$
  */
-/* @(#)mips64orion.h       08/29/96     1.3 */
 
 #ifndef _INCLUDE_MIPS_h
 #define _INCLUDE_MIPS_h

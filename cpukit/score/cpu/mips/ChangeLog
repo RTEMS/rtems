@@ -1,3 +1,7 @@
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/mips.h: Removed junk revision line.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkdir_p. Remove dirs from PREINSTALL_FILES.
