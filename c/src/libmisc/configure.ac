@@ -43,6 +43,7 @@ monitor/Makefile
 rtmonuse/Makefile
 rootfs/Makefile
 stackchk/Makefile
+capture/Makefile
 untar/Makefile
 mw-fb/Makefile
 wrapup/Makefile

@@ -4,8 +4,8 @@
 
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
-SUBDIRS = devnull dummy dumpbuf stackchk monitor cpuuse shell rtmonuse rootfs untar \
-    mw-fb wrapup
+SUBDIRS = capture cpuuse devnull dummy dumpbuf monitor mw-fb shell rootfs \
+          rtmonuse stackchk untar wrapup
 
 EXTRA_DIST = README
 

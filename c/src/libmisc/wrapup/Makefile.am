@@ -19,7 +19,7 @@ TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a \
     ../cpuuse/$(ARCH)/libcpuuse-tmp.a ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \
     ../shell/$(ARCH)/libshell-tmp.a ../dumpbuf/$(ARCH)/libdumpbuf-tmp.a \
     ../devnull/$(ARCH)/libdevnull-tmp.a ../dummy/$(ARCH)/libdummy-tmp.a \
-    ../mw-fb/$(ARCH)/libmw-fb-tmp.a $(NETLIBS)
+    ../mw-fb/$(ARCH)/libmw-fb-tmp.a ../capture/$(ARCH)/libcapture-tmp.a
 
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@

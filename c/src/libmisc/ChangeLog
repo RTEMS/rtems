@@ -1,3 +1,12 @@
+2002-05-16	Chris Johns <ccj@acm.org>
+
+	* Per PR194, added the Capture engine.  
+	* capture/Makefile.am, capture/README, capture/capture-cli.c,
+	capture/capture-cli.h, capture/capture.c, capture/capture.h,
+	capture/.cvsignore: New files.
+	* Makefile.am, configure.ac, wrapup/Makefile.am: Modified to
+	reflect addition.
+
 2001-05-14	Joel Sherrill <joel@OARcorp.com>
 
 	* dummy/Makefile.am, wrapup/Makefile.am: Fixed to generate
