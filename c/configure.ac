@@ -15,38 +15,39 @@ AM_MAINTAINER_MODE
 ## These options are used within this file.
 RTEMS_ENABLE_RTEMSBSP
 
+# Set up rtems_bsp
 AS_IF([test x"$enable_rtemsbsp" = x"no"],[
+# --disable-rtemsbsp
   rtems_bsp=""
 ],[
   AS_IF([test -z "$enable_rtemsbsp"],
-    [RTEMS_CHECK_BSPS(rtems_bsp)],
-    [rtems_bsp="$enable_rtemsbsp"])
+    [# --enable-rtemsbsp=""
+    RTEMS_CHECK_BSPS(rtems_bsp)],
+    [# --enable-rtemsbsp="list"
+    rtems_bsp="$enable_rtemsbsp"])
+])
 
-for i in $rtems_bsp; do
+# Check sanity of BSPs in $rtems_bsp
+for _rtems_bsp in : $rtems_bsp; do test "x$_rtems_bsp" = x: && continue
+  # make sure there is a make/custom file for the bsp
+  _RTEMS_CHECK_CUSTOM_BSP([$_rtems_bsp.cfg],[bsp_cfg])
 
-    # make sure there is a make/custom file for the bsp
-    RTEMS_CHECK_CUSTOM_BSP(i)
- 
-    RTEMS_BSP_ALIAS($i,bspdir)
+  AS_IF([test -n "$bsp_cfg"],
+  [
+    # retrieve bsp_family
+    RTEMS_BSP_ALIAS([$_rtems_bsp],[rtems_bsp_family])
 
     # Is there code where there should be for this BSP?
-    # The bare bsp is a special case as it is not under the RTEMS_CPU path
-    case $bspdir in
-      bare)
-        bspcpudir=
-        ;;
-      *)
-        bspcpudir=$RTEMS_CPU/
-        ;;
+    case $rtems_bsp_family in
+    bare ) rtems_libbspdir="$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/bare" ;;
+    * )    rtems_libbspdir="$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$rtems_bsp_family";;
     esac
-     
-    if test -d "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$bspcpudir$bspdir"; then
-      RTEMS_BSP_LIST="$RTEMS_BSP_LIST $i"
-    else
-      AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  $i])
-    fi
+
+    # Is there a configure script for the BSP?    
+    AS_IF([test -r "$rtems_libbspdir/configure"],
+      [RTEMS_BSP_LIST="$RTEMS_BSP_LIST $_rtems_bsp"])
+  ])
 done
-])
 
 #
 # Compose the configuration arguments to be passed to c/src/configure
@@ -84,10 +85,11 @@ BSPEOF
 done
 ],[RTEMS_BSP_LIST="$RTEMS_BSP_LIST"])
 AC_OUTPUT
-
+AS_IF([test -n "$RTEMS_BSP_LIST"],[
 echo
 echo target architecture: $target_cpu.
-echo available BSPs: $rtems_bsp.
+echo available BSPs: $RTEMS_BSP_LIST.
 echo \'${MAKE} all\' will build the following BSPs: $RTEMS_BSP_LIST.
 echo other BSPs can be built with \'${MAKE} RTEMS_BSP=\"bsp1 bsp2 ...\"\'
 echo
+])
