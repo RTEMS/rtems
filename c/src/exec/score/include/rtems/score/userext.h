@@ -60,6 +60,11 @@ typedef User_extensions_routine ( *User_extensions_thread_switch_extension )(
                  Thread_Control *
              );
  
+typedef User_extensions_routine (
+                                *User_extensions_thread_post_switch_extension )(
+                 Thread_Control *
+             );
+ 
 typedef User_extensions_routine ( *User_extensions_thread_begin_extension )(
                  Thread_Control *
              );
