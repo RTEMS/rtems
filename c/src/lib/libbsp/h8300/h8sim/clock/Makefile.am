@@ -20,6 +20,6 @@ all-local: $(OBJS)
 
 .PRECIOUS:
 
-EXTRA_DIST = 
+EXTRA_DIST = $(C_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
