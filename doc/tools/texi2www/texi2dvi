@@ -94,7 +94,9 @@ foreach $raw_texi (@ARGV) {
 	opendir(DIR,".") || die "Couldn't read current directory -- $!\n";
 	@possible_index_files = ();
 	while ($_ = readdir(DIR)) {
-	    push(@possible_index_files,$_) if (/^$base\...$/);
+	    if (/^$base\...$/) {
+	      push(@possible_index_files,$_);
+            }
 	}
 	closedir(DIR);
 
