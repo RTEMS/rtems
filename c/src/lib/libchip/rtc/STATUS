@@ -24,7 +24,7 @@ General
 Harris ICM7170
 ==============
 
-+ Untested.
++ Tested on a DMV177.
 
 + Interrupt capabilities are ignored.
 
