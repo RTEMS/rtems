@@ -39,6 +39,10 @@ int IMFS_stat(
       buf->st_size = the_jnode->info.file.size;
       break;
    
+    case IMFS_SYM_LINK:
+      buf->st_size = 0;
+      break;
+   
     default:
       set_errno_and_return_minus_one( ENOTSUP );
       break;
