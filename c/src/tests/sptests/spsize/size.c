@@ -309,6 +309,7 @@ uninitialized =
 
 /*thread.h*/    (sizeof _Thread_BSP_context)              +
                 (sizeof _Thread_Dispatch_disable_level)   +
+                (sizeof _Thread_Do_post_task_switch_extension) +
                 (sizeof _Thread_Maximum_extensions)       +
                 (sizeof _Thread_Ticks_per_timeslice)      +
                 (sizeof _Thread_Ready_chain)              +
