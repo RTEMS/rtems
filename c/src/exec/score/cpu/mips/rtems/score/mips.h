@@ -76,6 +76,38 @@ extern "C" {
 #define CPU_NAME "MIPS"
 
 /*
+ *  RTEMS Vector numbers for exception conditions.  This is a direct
+ *  map to the causes.
+ */
+
+#define MIPS_EXCEPTION_BASE 0
+
+#define MIPS_EXCEPTION_INT              MIPS_EXCEPTION_BASE+0
+#define MIPS_EXCEPTION_MOD              MIPS_EXCEPTION_BASE+1
+#define MIPS_EXCEPTION_TLBL             MIPS_EXCEPTION_BASE+2
+#define MIPS_EXCEPTION_TLBS             MIPS_EXCEPTION_BASE+3
+#define MIPS_EXCEPTION_ADEL             MIPS_EXCEPTION_BASE+4
+#define MIPS_EXCEPTION_ADES             MIPS_EXCEPTION_BASE+5
+#define MIPS_EXCEPTION_IBE              MIPS_EXCEPTION_BASE+6
+#define MIPS_EXCEPTION_DBE              MIPS_EXCEPTION_BASE+7
+#define MIPS_EXCEPTION_SYSCALL          MIPS_EXCEPTION_BASE+8
+#define MIPS_EXCEPTION_BREAK            MIPS_EXCEPTION_BASE+9
+#define MIPS_EXCEPTION_RI               MIPS_EXCEPTION_BASE+10
+#define MIPS_EXCEPTION_CPU              MIPS_EXCEPTION_BASE+11
+#define MIPS_EXCEPTION_OVERFLOW         MIPS_EXCEPTION_BASE+12
+#define MIPS_EXCEPTION_TRAP             MIPS_EXCEPTION_BASE+13
+#define MIPS_EXCEPTION_VCEI             MIPS_EXCEPTION_BASE+14
+/* FPE only on mips2 and higher */
+#define MIPS_EXCEPTION_FPE              MIPS_EXCEPTION_BASE+15
+#define MIPS_EXCEPTION_C2E              MIPS_EXCEPTION_BASE+16
+/* 17-22 reserved */
+#define MIPS_EXCEPTION_WATCH            MIPS_EXCEPTION_BASE+23
+/* 24-30 reserved */
+#define MIPS_EXCEPTION_VCED             MIPS_EXCEPTION_BASE+31
+
+#define MIPS_INTERRUPT_BASE             MIPS_EXCEPTION_BASE+32
+
+/*
  *  Some macros to access registers
  */
 
@@ -91,8 +123,9 @@ extern "C" {
   } while (0)
 
 
-
-
+/*
+ *  Access the Cause register
+ */
 
 #define mips_get_cause( _x ) \
   do { \
@@ -107,8 +140,9 @@ extern "C" {
   } while (0)
 
 
-
-
+/*
+ *  Access FCR31
+ */
 
 #define mips_get_fcr31( _x ) \
   do { \
@@ -121,9 +155,6 @@ extern "C" {
     register unsigned int __x = (_x); \
     asm volatile( "ctc1 %0, $31; nop" : : "r" (__x) ); \
   } while(0)
-
-
-
 
 
 /*
