@@ -26,8 +26,12 @@ noinst_SCRIPTS = search-id.sh
 install-exec-local: $(bin_PROGRAMS) $(bin_SCRIPTS)
 	if test -n "${RTEMS_BSP}"; then \
 	  $(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
-	  $(INSTALL_SCRIPT) $(bin_SCRIPTS) $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
-	  $(INSTALL_PROGRAM) $(bin_PROGRAMS) $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
+	  for i in $(bin_SCRIPTS); do \
+	  $(INSTALL_SCRIPT) $$i $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
+	  done; \
+	  for i in $(bin_PROGRAMS); do \
+	  $(INSTALL_PROGRAM) $$i $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
+	  done; \
 	fi
 
 preinstall: install-exec-local
