@@ -1,3 +1,9 @@
+2003-02-18	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, configure.ac: Remove src2html references.
+	* index.html.in: Update to reflect partial update of Development
+	Environment Guide.
+
 2003-02-14	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Removed a29k reference.

@@ -169,6 +169,5 @@ supplements/sh/Makefile
 supplements/sparc/Makefile
 supplements/template/Makefile
 gnu_docs/Makefile
-src2html/Makefile
 ])
 AC_OUTPUT

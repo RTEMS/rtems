@@ -102,7 +102,7 @@
             <A HREF="../dvi/develenv.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="develenv/index.html">
-               RTEMS Development Environment Guide</A> (out of date)
+               RTEMS Development Environment Guide</A> (partially updated)
             </LI>
 
         <LI><A HREF="../pdf/rtems_gdb.pdf">
