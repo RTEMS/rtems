@@ -65,7 +65,7 @@ rtems_task Test_task(
       );
       puts( "\nGlobal semaphore deleted" );
       puts( "*** END OF TEST 8 ***" );
-      exit( 0 );
+      rtems_test_exit( 0 );
     }
 
     if ( Multiprocessing_configuration.node == 1 && ++count == 1000 ) {
@@ -77,7 +77,7 @@ rtems_task Test_task(
       directive_failed( status, "rtems_semaphore_delete" );
 
       puts( "*** END OF TEST 8 ***" );
-      exit( 0 );
+      rtems_test_exit( 0 );
     }
     else {
       put_dot( 'v' );

@@ -98,5 +98,5 @@ rtems_task Test_task(
   rtems_task_wake_after(10);
 
   puts( "\n*** END OF TEST 7 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

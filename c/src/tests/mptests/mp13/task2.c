@@ -101,5 +101,5 @@ rtems_task Test_task2(
   puts( "rtems_semaphore_obtain correctly returned RTEMS_TIMEOUT" );
 
   puts( "*** END OF TEST 13 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

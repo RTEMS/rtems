@@ -100,5 +100,5 @@ rtems_task Init(
     puts( "rtems_partition_create correctly returned RTEMS_TOO_MANY" );
   }
   puts( "*** END OF TEST 11 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

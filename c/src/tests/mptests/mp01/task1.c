@@ -78,6 +78,6 @@ rtems_task Test_task(
     directive_failed( status, "rtems_task_delete of Task 2" );
 
     puts( "*** END OF TEST 1 ***" );
-    exit(0);
+    rtems_test_exit(0);
   }
 }

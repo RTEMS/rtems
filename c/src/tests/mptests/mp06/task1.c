@@ -171,5 +171,5 @@ rtems_task Test_task(
     puts( "rtems_event_receive - correctly returned RTEMS_TIMEOUT" );
   }
   puts( "*** END OF TEST 6 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

@@ -106,7 +106,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_wake_after" );
 
     puts( "*** END OF TEST 13 ***" );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
   puts( "Deleting initialization task" );
   status = rtems_task_delete( RTEMS_SELF );

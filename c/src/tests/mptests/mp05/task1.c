@@ -101,5 +101,5 @@ rtems_task Test_task(
     }
   }
   puts( "\n*** END OF TEST 5 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

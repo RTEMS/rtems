@@ -63,7 +63,7 @@ rtems_task Test_task(
       previous_priority,
       remote_node
     );
-    exit( 0xf0000 );
+    rtems_test_exit( 0xf0000 );
   }
 
   do {
@@ -78,5 +78,5 @@ rtems_task Test_task(
   puts( "Local task priority has been set" );
 
   puts( "*** END OF TEST 4 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
