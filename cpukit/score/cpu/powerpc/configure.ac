@@ -27,5 +27,6 @@ RTEMS_CHECK_NEWLIB
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-shared/Makefile])
+rtems/Makefile
+rtems/score/Makefile])
 AC_OUTPUT

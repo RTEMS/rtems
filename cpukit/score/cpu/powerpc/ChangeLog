@@ -1,3 +1,20 @@
+2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/Makefile.am: New.
+	* rtems/.cvsignore: New.
+	* rtems/score/Makefile.am: New.
+	* rtems/score/.cvsignore: New.
+	* rtems/score/ppc.h: Relocated from shared/.
+	* rtems/score/ppctypes.h: Relocated from shared/.
+	* asm.h: Relocated from shared/.
+	* shared/Makefile.am: Removed.
+	* shared/asm.h: Removed.
+	* shared/ppc.h: Removed.
+	* shared/ppctypes.h: Removed.
+	* shared/.cvsignore: Removed.
+	* Makefile.am: Reflect changes above.
+	* configure.ac: Reflect changes above.
+
 2001-11-28	Joel Sherrill <joel@OARcorp.com>,
 
 	This was tracked as PR91.
