@@ -31,8 +31,8 @@ rtems_filesystem_file_handlers_r memfile_handlers = {
   IMFS_fchmod,
   memfile_ftruncate,
   NULL,
-  NULL,
-  NULL
+  IMFS_fdatasync,
+  IMFS_fdatasync
 };
 
 /*
@@ -49,9 +49,8 @@ rtems_filesystem_file_handlers_r dir_handlers = {
   imfs_dir_fstat,
   IMFS_fchmod,
   NULL,
-  NULL,
-  NULL,
-  NULL
+  IMFS_fdatasync,
+  IMFS_fdatasync
 };
 
 /*

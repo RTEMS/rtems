@@ -437,6 +437,10 @@ int IMFS_readlink(
  size_t                             bufsize    
 );
 
+int IMFS_fdatasync(
+  rtems_libio_t *iop
+);
+
 #ifdef __cplusplus
 }
 #endif
