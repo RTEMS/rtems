@@ -1,5 +1,9 @@
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Use relative dir to make/${RTEMS_BSP}.cache.
+
+2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Merge-in librdbg/configure.ac.
 
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

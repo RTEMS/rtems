@@ -65,35 +65,35 @@ RTEMS_ROOT=. make/${RTEMS_BSP}.cache
 
 # Read back the cache
 AC_CACHE_CHECK([for RTEMS_CPU_MODEL], [ac_cv_env_RTEMS_CPU_MODEL],
-[. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
+[. ./make/${RTEMS_BSP}.cache])
 RTEMS_CPU_MODEL=$ac_cv_env_RTEMS_CPU_MODEL
 AC_SUBST(RTEMS_CPU_MODEL)
 test -n "${RTEMS_CPU_MODEL}" && \
   ac_configure_args="$ac_configure_args 'RTEMS_CPU_MODEL=${RTEMS_CPU_MODEL}'"
 
 AC_CACHE_CHECK([for RTEMS_BSP_FAMILY],[ac_cv_env_RTEMS_BSP_FAMILY],
-[. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
+[. ./make/${RTEMS_BSP}.cache])
 RTEMS_BSP_FAMILY=$ac_cv_env_RTEMS_BSP_FAMILY
 AC_SUBST(RTEMS_BSP_FAMILY)
 test -n "${RTEMS_BSP_FAMILY}" && \
   ac_configure_args="$ac_configure_args 'RTEMS_BSP_FAMILY=${RTEMS_BSP_FAMILY}'"
 
 AC_CACHE_CHECK([for CPU_CFLAGS],[ac_cv_env_CPU_CFLAGS],
-[. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
+[. ./make/${RTEMS_BSP}.cache])
 CPU_CFLAGS=$ac_cv_env_CPU_CFLAGS
 AC_SUBST(CPU_CFLAGS)
 test -n "${CPU_CFLAGS}" && \
   ac_configure_args="$ac_configure_args 'CPU_CFLAGS=${CPU_CFLAGS}'"
 
 AC_CACHE_CHECK([for CFLAGS_OPTIMIZE_V],[ac_cv_env_CFLAGS_OPTIMIZE_V],
-[. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
+[. ./make/${RTEMS_BSP}.cache])
 CFLAGS_OPTIMIZE_V=$ac_cv_env_CFLAGS_OPTIMIZE_V
 AC_SUBST(CFLAGS_OPTIMIZE_V)
 test -n "${CFLAGS_OPTIMIZE_V}" && \
   ac_configure_args="$ac_configure_args 'CFLAGS_OPTIMIZE_V=${CFLAGS_OPTIMIZE_V}'"
 
 AC_CACHE_CHECK([for CFLAGS_DEBUG_V],[ac_cv_env_CFLAGS_DEBUG_V],
-[. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
+[. ./make/${RTEMS_BSP}.cache])
 CFLAGS_DEBUG_V=$ac_cv_env_CFLAGS_DEBUG_V
 AC_SUBST(CFLAGS_DEBUG_V)
 test -n "${CFLAGS_DEBUG_V}" && \
