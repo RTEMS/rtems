@@ -1,10 +1,14 @@
+2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Convert to automake-building rules.
+
 2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Merge-in clock/.cvsignore, console/.cvsignore,
-	irq/.cvsignore, network/.cvsignore, startup/.cvsignore,
-	vectors/.cvsignore. Use automake compilation rules.
-	* clock/.cvsignore, console/.cvsignore, irq/.cvsignore,
-	network/.cvsignore, startup/.cvsignore, vectors/.cvsignore: Remove.
+	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
+	irq/Makefile.am, network/Makefile.am, startup/Makefile.am,
+	vectors/Makefile.am. Use automake compilation rules.
+	* clock/Makefile.am, console/Makefile.am, irq/Makefile.am,
+	network/Makefile.am, startup/Makefile.am, vectors/Makefile.am: Remove.
 	* configure.ac: Reflect changes above.
 	* wrapup/Makefile: Reflect changes above.
 
