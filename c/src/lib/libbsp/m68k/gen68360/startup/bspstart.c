@@ -97,6 +97,12 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
 
   /*
+   *  Account for the console's resources
+   */
+
+  console_reserve_resources( &BSP_Configuration );
+
+  /*
    *  initialize the CPU table for this BSP
    */
 
