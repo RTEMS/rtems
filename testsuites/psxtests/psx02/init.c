@@ -23,8 +23,8 @@ void Signal_handler(
   Signal_count++;
   printf(
     "Signal: %d caught by 0x%x (%d)\n",
-    signo,
-    pthread_self(),
+    (int) signo,
+    (unsigned int) pthread_self(),
     Signal_count
   );
   Signal_occurred = 1;
@@ -86,7 +86,7 @@ void *POSIX_Init(
 
   status = sigpending( &pending_set );
   assert( !status );
-  printf( "Init: Signals pending 0x%08x\n", pending_set );
+  printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
   
   
   printf( "Init: send SIGUSR1 to self\n" );
@@ -95,7 +95,7 @@ void *POSIX_Init(
 
   status = sigpending( &pending_set );
   assert( !status );
-  printf( "Init: Signals pending 0x%08x\n", pending_set );
+  printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
   
   printf( "Init: Unblock SIGUSR1\n" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );

@@ -95,7 +95,8 @@ void * task_a (void *arg)
      clock = time(NULL);
      printf("Executing task A %s", ctime(&clock));
    }
- }
+   return NULL;
+}
 
 /* task B  */
 
@@ -152,6 +153,7 @@ void * task_b (void *arg)
      pthread_mutex_unlock (&data.mutex);
      x++;
    }
+   return NULL;
 }
 
 /* task C */
@@ -209,7 +211,8 @@ void * task_c (void *arg)
      printf("Executing task C with x = %i %s", x, ctime(&clock));
      pthread_mutex_unlock (&data.mutex);
    }
- }
+   return NULL;
+}
 
 
 /* main */

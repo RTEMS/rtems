@@ -156,7 +156,7 @@ int select2 ( struct dirent *entry )
    return 0;
 }
 
-int compare_ascending( struct dirent **a, struct dirent **b )
+int compare_ascending(const struct dirent **a, const struct dirent **b )
 {
    int i;
 
@@ -180,7 +180,7 @@ int compare_descending( struct dirent **a, struct dirent **b )
    return i;
 }
 
-int test_across_mount()
+void test_across_mount()
 {
   rtems_filesystem_mount_table_entry_t *mt_entry;
   int                                  status;

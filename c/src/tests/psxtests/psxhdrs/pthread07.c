@@ -24,6 +24,7 @@ void *test_task(
 {
   for ( ; ; )
     ;
+  return NULL;
 }
 
 void test( void )

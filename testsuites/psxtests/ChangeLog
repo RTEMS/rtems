@@ -1,3 +1,9 @@
+2003-05-29	Joel Sherrill <joel@OARcorp.com>
+
+	* psx02/init.c, psx04/init.c, psx13/test.c, psxchroot01/test.c,
+	psxhdrs/pthread07.c, psxmsgq01/init.c, psxreaddir/test.c,
+	psxtimer/psxtimer.c: Removed warnings.
+
 2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove CC_CFLAGS_DEBUG_V.

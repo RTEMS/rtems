@@ -77,19 +77,20 @@ void *POSIX_Init(
 
   status = sigemptyset( &act.sa_mask );
   assert( !status );
-  printf( "Init: sigemptyset -  set= 0x%08x\n", act.sa_mask );
+  printf( "Init: sigemptyset -  set= 0x%08x\n", (unsigned int) act.sa_mask );
 
   /* test sigfillset following the above sigemptyset */
 
   status = sigfillset( &act.sa_mask );
   assert( !status );
-  printf( "Init: sigfillset -  set= 0x%08x\n", act.sa_mask );
+  printf( "Init: sigfillset -  set= 0x%08x\n", (unsigned int) act.sa_mask );
 
   /* test sigdelset */
 
   status = sigdelset( &act.sa_mask, SIGUSR1 );
   assert( !status );
-  printf( "Init: sigdelset - delete SIGUSR1 set= 0x%08x\n", act.sa_mask );
+  printf( "Init: sigdelset - delete SIGUSR1 set= 0x%08x\n",
+      (unsigned int) act.sa_mask );
 
   /* test sigismember - FALSE */
 
@@ -166,7 +167,7 @@ void *POSIX_Init(
 
   status = sigpending( &pending_set );
   assert( !status );
-  printf( "Init: Signals pending 0x%08x\n", pending_set );
+  printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
   
   puts( "Init: send SIGUSR1 to process" );
   status = kill( getpid(), SIGUSR1 );
@@ -174,7 +175,7 @@ void *POSIX_Init(
 
   status = sigpending( &pending_set );
   assert( !status );
-  printf( "Init: Signals pending 0x%08x\n", pending_set );
+  printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
   
   puts( "Init: Unblock SIGUSR1" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
@@ -194,7 +195,7 @@ void *POSIX_Init(
  
   status = sigpending( &pending_set );
   assert( !status );
-  printf( "Init: Signals pending 0x%08x\n", pending_set );
+  printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
 
   puts( "Init: sleep so the other task can block" ); 
   status = sleep( 1 );
@@ -208,7 +209,7 @@ void *POSIX_Init(
  
   status = sigpending( &pending_set );
   assert( !status );
-  printf( "Init: Signals pending 0x%08x\n", pending_set );
+  printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
 
   puts( "Init: sleep so the other task can catch signal" ); 
   status = sleep( 1 );
@@ -272,13 +273,13 @@ void *POSIX_Init(
 
   puts( "Init: Block SIGUSR1 and SIGUSR2 only" );
   status = pthread_sigmask( SIG_SETMASK, &mask, &oset );
-  printf( "Init: Previous blocked set was 0x%08x\n", oset );
+  printf( "Init: Previous blocked set was 0x%08x\n", (unsigned int) oset );
   assert( !status );
 
   /* test inquiry about current blocked set with pthread_sigmask */
   
   status = pthread_sigmask( 0, NULL, &oset );
-  printf( "Init: Current blocked set is 0x%08x\n", oset );
+  printf( "Init: Current blocked set is 0x%08x\n", (unsigned int) oset );
   assert( !status );
 
   /* return blocked mask to no signals blocked */
@@ -288,7 +289,7 @@ void *POSIX_Init(
  
   puts( "Init: Unblock all signals" );
   status = pthread_sigmask( SIG_SETMASK, &mask, &oset );
-  printf( "Init: Previous blocked set was 0x%08x\n", oset );
+  printf( "Init: Previous blocked set was 0x%08x\n", (unsigned int) oset );
   assert( !status );
 
   /* test sigsuspend */

@@ -66,10 +66,7 @@ int main(
 )
 #endif
 {
-  int fd;
-  int i;
   int status;
-  struct stat s;
 
 /*
  *  This test is the C equivalent of this sequence.
