@@ -1,3 +1,10 @@
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	* bootloader/pci.c: Remove warnings by adding include <string.h>.
+	* irq/irq.c: Clean up includes to remove warnings.
+	* pci/pci.c, pci/pci.h, startup/bspstart.c: Better use of const
+	on struct _int_map.
+
 2004-03-03	Joel Sherrill <joel@OARcorp.com>
 
 	* vectors/vectors.h, vectors/vectors_init.c: Undo previous change.

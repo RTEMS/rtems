@@ -309,7 +309,7 @@ void bsp_start( void )
   InitializePCI();
 
  {
-    struct _int_map     *bspmap   = motorolaIntMap(currentBoard);
+    const struct _int_map     *bspmap   = motorolaIntMap(currentBoard);
     if( bspmap )
     {
        printk("pci : Configuring interrupt routing for '%s'\n", motorolaBoardToString(currentBoard));

@@ -10,14 +10,14 @@
  *
  *  $Id$
  */
+
+#include <stdlib.h>
   
-#include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/VME.h>
 #include <bsp/openpic.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apiext.h>
+#include <rtems/score/apiext.h>  /* for post ISR signal processing */
 #include <libcpu/raw_exception.h>
 #include <libcpu/io.h>
 #include <bsp/vectors.h>

@@ -236,7 +236,8 @@ const pci_config_access_functions pci_direct_functions = {
 ** Validate a test interrupt name and print a warning if its not one of
 ** the names defined in the routing record.
 */
-static int test_intname( struct _int_map *row, int pbus, int pslot, int int_pin, int int_name )
+static int test_intname(
+  const struct _int_map *row, int pbus, int pslot, int int_pin, int int_name )
 {
    int j,k;
    int _nopin= -1, _noname= -1;
@@ -333,7 +334,7 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
 
 
 
-void FixupPCI( struct _int_map *bspmap, int (*swizzler)(int,int) )
+void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 {
    unsigned char        cvalue;
    unsigned16           devid;

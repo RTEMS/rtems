@@ -25,6 +25,7 @@
 #include <libcpu/page.h>
 #include <bsp/consoleIo.h>
 
+#include <string.h>
 
 
 typedef unsigned int u32;
