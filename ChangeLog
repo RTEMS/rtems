@@ -1,5 +1,9 @@
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Reflect having removed aclocal/sysv-ipc.m4.
+
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/sysv-ipc.m4: Remove (Unused).
 	* aclocal/target.m4: Sync with acinclude.m4 (Part of fix to PR 312).
 
