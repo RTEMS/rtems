@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 if HAS_POSIX
 POSIX_PIECES = rtems_webserver

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)

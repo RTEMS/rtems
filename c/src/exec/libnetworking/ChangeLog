@@ -1,3 +1,26 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* arpa/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* kern/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* lib/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* machine/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* net/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* netinet/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* nfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* pppd/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtems/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtems_servers/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtems_telnetd/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtems_webserver/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sys/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* vm/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-03-27	Thomas.Doerfler@imd-systems.de
 
 	* PR144
