@@ -1,3 +1,8 @@
+2002-08-06	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/efi332.cfg, custom/gen68340.cfg, custom/gen68360.cfg,
+	custom/mrm332.cfg: Use more proper CPU models so libcpu knows more.
+
 2002-08-06	Chris Ziomkowski <chris@asics.ws>
 
 	* custom/or32sim.cfg: New file added as part of merge from
