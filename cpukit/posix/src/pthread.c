@@ -13,6 +13,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/posix/cancel.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/psignal.h>
