@@ -29,7 +29,7 @@
 
 #define ASM
 
-#include <rtems/score/sparc.h>
+#include <rtems/score/targopts.h>
 #include <rtems/score/cpu.h>
 
 /*

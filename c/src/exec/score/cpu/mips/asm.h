@@ -32,6 +32,7 @@
  */
 
 #define ASM
+#include <rtems/score/targopts.h>
 #include <rtems/score/no_cpu.h>
 
 /*

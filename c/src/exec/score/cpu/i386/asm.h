@@ -31,6 +31,7 @@
  */
 
 #define ASM
+#include <rtems/score/targopts.h>
 #include <rtems/score/i386.h>
 
 /*
