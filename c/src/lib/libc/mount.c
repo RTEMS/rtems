@@ -95,6 +95,7 @@ int mount(
   rtems_filesystem_location_info_t      loc;
   rtems_filesystem_mount_table_entry_t *temp_mt_entry;
   rtems_filesystem_location_info_t     *loc_to_free = NULL;
+  size_t size;
 
 /* XXX add code to check for required operations */
 
@@ -121,7 +122,10 @@ int mount(
    * Allocate a mount table entry 
    */
 
-   temp_mt_entry = malloc( sizeof(rtems_filesystem_mount_table_entry_t) );
+   size = sizeof(rtems_filesystem_mount_table_entry_t);
+   if ( device )
+     size += strlen( device ) + 1;
+   temp_mt_entry = malloc( size );
 
    if ( !temp_mt_entry ) {
      errno = ENOMEM;
@@ -130,9 +134,11 @@ int mount(
 
    temp_mt_entry->mt_fs_root.mt_entry = temp_mt_entry;
    temp_mt_entry->options = options;
-   if ( device )
+   if ( device ) {
+     temp_mt_entry->dev =
+       (char *)temp_mt_entry + sizeof( rtems_filesystem_mount_table_entry_t );
      strcpy( temp_mt_entry->dev, device );
-   else
+   } else
      temp_mt_entry->dev = 0;
 
   /*
