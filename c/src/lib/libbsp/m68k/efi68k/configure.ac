@@ -19,7 +19,6 @@ AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
 spurious/Makefile
-start/Makefile
 startup/Makefile
 timer/Makefile
 wrapup/Makefile])
