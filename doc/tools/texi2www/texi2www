@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 # (Works with both perl 4 and perl 5)
+#
+#  $Id$
+#
+
 $version = 'Jan 2 1996';
 $copyright = <<EOT;
 texi2www - converts texinfo to HTML

@@ -1,7 +1,7 @@
 \input texinfo @c -*-texinfo-*-
 
 @comment %**start of header
-@setfilename texi2wwwdoc.info
+@setfilename texi2www
 @settitle texi2www user's guide
 @comment %**end of header
 

@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+#
+#  $Id$
+#
 
 $version = <<END_VERSION;
 Jan 2 1996
