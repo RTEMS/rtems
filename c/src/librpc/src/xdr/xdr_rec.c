@@ -55,6 +55,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_rec.c,v 1.12 2000/01/19 06:
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 #include <netinet/in.h>
+#include <unistd.h>   /* for lseek() */
 
 static u_int	fix_buf_size();
 static bool_t	flush_out();
@@ -352,6 +353,8 @@ xdrrec_setpos(xdrs, pos)
 				return (TRUE);
 			}
 			break;
+		case XDR_FREE:  /* to avoid warning */
+			break;
 		}
 	return (FALSE);
 }
@@ -380,6 +383,8 @@ xdrrec_inline(xdrs, len)
 			rstrm->fbtbc -= len;
 			rstrm->in_finger += len;
 		}
+		break;
+	case XDR_FREE:  /* to avoid warning */
 		break;
 	}
 	return (buf);

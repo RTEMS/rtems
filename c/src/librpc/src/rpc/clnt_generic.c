@@ -57,7 +57,9 @@ clnt_create(hostname, prog, vers, proto)
 	struct hostent *h;
 	struct protoent *p;
 	struct sockaddr_in sin;
+#ifndef __rtems__
 	struct sockaddr_un sun;
+#endif
 	int sock;
 	struct timeval tv;
 	CLIENT *client;

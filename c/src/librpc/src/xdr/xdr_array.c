@@ -102,6 +102,8 @@ xdr_array(xdrs, addrp, sizep, maxsize, elsize, elproc)
 
 		case XDR_FREE:
 			return (TRUE);
+		case XDR_ENCODE:  /* to avoid warning */
+			break;
 	}
 
 	/*

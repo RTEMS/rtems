@@ -52,7 +52,9 @@ static char sccsid[] = "@(#)netnamer.c 1.13 91/03/11 Copyr 1986 Sun Micro";
 #include <unistd.h>
 
 static char    *OPSYS = "unix";
+#ifdef YP
 static char    *NETID = "netid.byname";
+#endif
 static char    *NETIDFILE = "/etc/netid";
 
 static int getnetid __P(( char *, char * ));

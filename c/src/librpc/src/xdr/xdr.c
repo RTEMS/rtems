@@ -724,6 +724,8 @@ xdr_string(xdrs, cpp, maxsize)
 	case XDR_ENCODE:
 		size = strlen(sp);
 		break;
+	case XDR_DECODE:  /* to avoid warning */
+		break;
 	}
 	if (! xdr_u_int(xdrs, &size)) {
 		return (FALSE);

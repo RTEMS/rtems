@@ -83,6 +83,8 @@ xdr_reference(xdrs, pp, size, proc)
 			}
 			memset(loc, 0, (int)size);
 			break;
+		case XDR_ENCODE:  /* to avoid warning */
+			break;
 	}
 
 	stat = (*proc)(xdrs, loc, LASTUNSIGNED);

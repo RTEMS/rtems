@@ -242,7 +242,7 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
 	int outlen, inlen, fromlen, nets;
 	register int sock;
 	int on = 1;
-	fd_set *fds, readfds;
+	fd_set *fds = 0, readfds; /* initialized to avoid warning */
 	register int i;
 	bool_t done = FALSE;
 	register u_long xid;

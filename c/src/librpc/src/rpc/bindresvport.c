@@ -58,7 +58,9 @@ bindresvport_sa(sd, sa)
 	int old, error, af;
 	struct sockaddr myaddr;
 	struct sockaddr_in *sin;
+#if (defined(AF_INET6) && defined(IPPROTO_IPV6))
 	struct sockaddr_in6 *sin6;
+#endif
 	int proto, portrange, portlow;
 	u_int16_t port;
 	int salen;
