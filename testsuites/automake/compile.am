@@ -86,10 +86,6 @@ CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 CCAS = $(CC)
 CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
 
-# OBSOLETE: Don't use
-AS = $(CC)
-ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
-
 ${ARCH}/%.o: %.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
@@ -146,62 +142,12 @@ LINK_FILES =\
     $(OBJS) \
     $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%$(LIB_VARIANT).rel)
 
-if RTEMS_USE_GCC
-## gcc >= 2.8
-define make-rel
-	$(LINK) -qnolinkcmds -nostdlib -Wl,-r $(XLDFLAGS) $^
-endef
-else
-## non-gcc
-define make-rel
-	$(LINK) $(XLDFLAGS) $^
-endef
-endif
-
 ## -------------------------------------------------------------------------
-
-## translate VARIANT into VARIANT_V
-VARIANT = OPTIMIZE
-
-VARIANT_OPTIMIZE_V = OPTIMIZE
-VARIANT_DEBUG_V = DEBUG
-VARIANT_optimize_V = OPTIMIZE
-VARIANT_debug_V = DEBUG
-
-VARIANT_V = $(VARIANT_$(VARIANT)_V)
-
 ## Setup the variant build subdirectory
-ARCH_OPTIMIZE_V = o-optimize
-ARCH_DEBUG_V = o-debug
-
-ARCH__V = $(ARCH_OPTIMIZE_V)
-ARCH = $(ARCH_$(VARIANT_V)_V)
-
-## Setup the library suffix
-LIBSUFFIX_OPTIMIZE_V =
-LIBSUFFIX_DEBUG_V = _g
-LIBSUFFIX__V = $(LIBSUFFIX_OPTIMIZE_V)
-
-LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
+ARCH = o-optimize
 
 ## These are supposed to be set in make/custom/<bsp>.cfg
 CPU_CFLAGS = @CPU_CFLAGS@
-CFLAGS_OPTIMIZE_V = @CFLAGS_OPTIMIZE_V@
-CFLAGS_DEBUG_V = @CFLAGS_DEBUG_V@
-CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
-
-## ------------------------------------------------------------------------
-## Setup hard-coded flags
-if RTEMS_USE_GCC
-## gcc >= gcc-2.8
-RTEMS_CFLAGS_OPTIMIZE_V =
-RTEMS_CFLAGS_DEBUG_V = -qrtems_debug -Wno-unused
-
-## non-gcc
-## We can't guess what flags might be required here.
-## Pass the values from the environment if you want to apply them.
-endif
-RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
 
 ## -------------------------------------------------------------------------
 
@@ -222,5 +168,5 @@ AM_CXXFLAGS =
 AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
 
 clean-local:
-	$(RM) -r o-optimize o-debug $(CLEANDIRS)
-	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp
+	$(RM) -r o-optimize $(CLEANDIRS)
+	$(RM) Depends-o-optimize.tmp
