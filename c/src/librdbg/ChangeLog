@@ -1,3 +1,9 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/i386/any/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* src/m68k/any/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* src/powerpc/new_exception_processing/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
 	* src/_servtgt.c, src/ptrace.c: Corrected use of

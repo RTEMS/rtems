@@ -11,15 +11,15 @@ LIB = ${ARCH}/${LIBNAME}.a
 # C and C++ source names
 C_FILES = rdbg.c servcon.c servbkpt.c servrpc.c excep.c excep_f.c servtgt.c \
     servtsp.c servutil.c _servtgt.c rdbg_f.c ptrace.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 # Asm source names
 S_FILES = rdbg_cpu_asm.S
-S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
+S_O_FILES = $(S_FILES:%.S=${ARCH}/%.$(OBJEXT))
 
 # Generated C source names
 GEN_C_FILES = remdeb_xdr.c remdeb_svc.c
-GEN_C_O_FILES = $(GEN_C_FILES:%.c=${ARCH}/%.o)
+GEN_C_O_FILES = $(GEN_C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 # H source names
 H_FILES = remdeb.h
