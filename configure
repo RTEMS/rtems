@@ -36,13 +36,13 @@ ac_help="$ac_help
   --enable-libcdir=directory	    set the directory for the C library"
 ac_help="$ac_help
 \
-  --disable-tests 	     	    disable tests"
-ac_help="$ac_help
-\
-    --enable-hwapi		    enable hardware API library"
-ac_help="$ac_help
-\
     --enable-rtemsbsp=bsp1 bsp2 ..   BSPs to include in build"
+ac_help="$ac_help
+\
+  --enable-tests 	     	    enable tests"
+ac_help="$ac_help
+\
+  --enable-hwapi                 enable hardware API library"
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -1314,9 +1314,19 @@ echo "$ac_t""$target_cpu" 1>&6
 	;;
 esac
 
+# Override the set of BSPs to be built.
+# Check whether --enable-rtemsbsp or --disable-rtemsbsp was given.
+if test "${enable_rtemsbsp+set}" = set; then
+  enableval="$enable_rtemsbsp"
+  \
+      rtems_bsp=$enableval \
+
+fi
+
+
 # Is this a supported CPU?
 echo $ac_n "checking if cpu $target_cpu is supported""... $ac_c" 1>&6
-echo "configure:1320: checking if cpu $target_cpu is supported" >&5
+echo "configure:1330: checking if cpu $target_cpu is supported" >&5
 if test -d "$srcdir/c/src/exec/score/cpu/$target_cpu"; then
   echo "$ac_t""yes" 1>&6
   makefiles="$makefiles c/src/exec/score/cpu/$target_cpu/Makefile"
@@ -1327,7 +1337,7 @@ fi
 # find all the Executive Makefiles
 
 echo $ac_n "checking for Makefile.in in c/src/exec/rtems""... $ac_c" 1>&6
-echo "configure:1331: checking for Makefile.in in c/src/exec/rtems" >&5
+echo "configure:1341: checking for Makefile.in in c/src/exec/rtems" >&5
 if test -d $srcdir/c/src/exec/rtems; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1341,23 +1351,8 @@ fi
 
 
 
-echo $ac_n "checking for Makefile.in in c/src/exec/posix""... $ac_c" 1>&6
-echo "configure:1346: checking for Makefile.in in c/src/exec/posix" >&5
-if test -d $srcdir/c/src/exec/posix; then
-  rtems_av_save_dir=`pwd`;
-  cd $srcdir;
-  rtems_av_tmp=`find c/src/exec/posix -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
-  makefiles="$makefiles $rtems_av_tmp";
-  cd $rtems_av_save_dir;
-  echo "$ac_t""done" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-
-
 echo $ac_n "checking for Makefile.in in c/src/exec/sapi""... $ac_c" 1>&6
-echo "configure:1361: checking for Makefile.in in c/src/exec/sapi" >&5
+echo "configure:1356: checking for Makefile.in in c/src/exec/sapi" >&5
 if test -d $srcdir/c/src/exec/sapi; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1371,12 +1366,14 @@ fi
 
 
 
-echo $ac_n "checking for Makefile.in in c/src/exec/wrapup""... $ac_c" 1>&6
-echo "configure:1376: checking for Makefile.in in c/src/exec/wrapup" >&5
-if test -d $srcdir/c/src/exec/wrapup; then
+if test "$RTEMS_HAS_POSIX" = "yes"; then
+  
+echo $ac_n "checking for Makefile.in in c/src/exec/posix""... $ac_c" 1>&6
+echo "configure:1373: checking for Makefile.in in c/src/exec/posix" >&5
+if test -d $srcdir/c/src/exec/posix; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/exec/wrapup -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/exec/posix -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1385,6 +1382,8 @@ else
 fi
 
 
+  makefiles="$makefiles c/src/exec/posix/Makefile"
+fi
 
 # find all the Makefiles for the BSPs
 if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
@@ -1392,7 +1391,7 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
 
   if test -z "$rtems_bsp"; then
     echo $ac_n "checking for bsps""... $ac_c" 1>&6
-echo "configure:1396: checking for bsps" >&5
+echo "configure:1395: checking for bsps" >&5
     files=`ls $srcdir/c/src/lib/libbsp/$target_cpu`
     for file in $files; do
       case $file in
@@ -1409,13 +1408,35 @@ echo "configure:1396: checking for bsps" >&5
 
   # collect makefiles for each bsp
   for i in $rtems_bsp; do
-    
-echo $ac_n "checking for Makefile.in in c/src/lib/libbsp/$target_cpu/$i""... $ac_c" 1>&6
-echo "configure:1415: checking for Makefile.in in c/src/lib/libbsp/$target_cpu/$i" >&5
-if test -d $srcdir/c/src/lib/libbsp/$target_cpu/$i; then
+    # make sure there is a make/custom file for the bsp
+    if test ! -r "$srcdir/c/make/custom/${i}.cfg"; then
+      { echo "configure: error: no make/custom/${i}.cfg file for BSP $i" 1>&2; exit 1; }
+    fi
+
+    # account for "aliased" bsps which share source code
+    case $i in 
+      mvme162lx)    bspdir=mvme162  ;;  # mvme162 board variant
+      gen68360_040) bspdir=gen68360 ;;  # 68360 in companion mode
+      go32_p5)      bspdir=go32     ;;  # go32 on Pentium class CPU
+      p4600)        bspdir=p4000    ;;  # p4000 board with IDT 4600
+      p4650)        bspdir=p4000    ;;  # p4000 board with IDT 4650
+      *)            bspdir=$i;;
+    esac
+
+    # Is there code where there should be for this BSP?
+    if test -d "$srcdir/c/src/lib/libbsp/$target_cpu/$bspdir"; then
+      RTEMS_BSP="$RTEMS_BSP $i"
+      # make sure the Makefiles in a bsp directory are only done once
+      echo $bspdirs | grep $bspdir >/dev/null 2>&1
+      if test $? -ne 0 ; then
+        bspdirs="$bspdirs $bspdir"
+        
+echo $ac_n "checking for Makefile.in in c/src/lib/libbsp/$target_cpu/$bspdir""... $ac_c" 1>&6
+echo "configure:1436: checking for Makefile.in in c/src/lib/libbsp/$target_cpu/$bspdir" >&5
+if test -d $srcdir/c/src/lib/libbsp/$target_cpu/$bspdir; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/lib/libbsp/$target_cpu/$i -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/lib/libbsp/$target_cpu/$bspdir -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1424,13 +1445,17 @@ else
 fi
 
 
+      fi
+    else
+      { echo "configure: error: unable to find libbsp directory ($bspdir) for  $i" 1>&2; exit 1; }
+    fi
   done
 fi
 
 # find all the CPU dependent library Makefiles
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libcpu/$target_cpu""... $ac_c" 1>&6
-echo "configure:1434: checking for Makefile.in in c/src/lib/libcpu/$target_cpu" >&5
+echo "configure:1459: checking for Makefile.in in c/src/lib/libcpu/$target_cpu" >&5
 if test -d $srcdir/c/src/lib/libcpu/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1447,7 +1472,7 @@ fi
 if test "$skip_startfiles" != "yes"; then
   
 echo $ac_n "checking for Makefile.in in c/src/lib/start/$target_cpu""... $ac_c" 1>&6
-echo "configure:1451: checking for Makefile.in in c/src/lib/start/$target_cpu" >&5
+echo "configure:1476: checking for Makefile.in in c/src/lib/start/$target_cpu" >&5
 if test -d $srcdir/c/src/lib/start/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1479,7 +1504,6 @@ if [ "${program_prefix}" = "NONE" ] ; then
 fi
 
 
-RTEMS_BSP=$rtems_bsp
 RTEMS_HOST=$host_os
 RTEMS_ROOT=`cd $srcdir/c; pwd`
 PROJECT_ROOT=`pwd;`
@@ -1492,18 +1516,27 @@ makefiles="$makefiles c/src/lib/librtems++/Makefile"
 
 # If the tests are enabled, then find all the test suite Makefiles
 echo $ac_n "checking Are the test suites enabled? ""... $ac_c" 1>&6
-echo "configure:1496: checking Are the test suites enabled? " >&5
+echo "configure:1520: checking Are the test suites enabled? " >&5
+tests_enabled=yes
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
   enableval="$enable_tests"
   \
-   { echo "configure: error: no" 1>&2; exit 1; }
+  case "${enableval}" in
+    yes) echo "$ac_t""yes" 1>&6 ;;
+    no)  echo "$ac_t""no" 1>&6 ; tests_enabled=no ;;
+    *)   { echo "configure: error: bad value ${enableval} for tests option" 1>&2; exit 1; } ;;
+  esac
 else
-  \
-   echo "$ac_t""yes" 1>&6 \
-     
+  echo "$ac_t""yes" 1>&6
+
+fi
+
+
+if test "$tests_enabled" = "yes"; then
+   
 echo $ac_n "checking for Makefile.in in c/src/tests/tools/$target_cpu""... $ac_c" 1>&6
-echo "configure:1507: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
+echo "configure:1540: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
 if test -d $srcdir/c/src/tests/tools/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1515,10 +1548,10 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
- \
-     
+
+   
 echo $ac_n "checking for Makefile.in in c/src/tests/libtests""... $ac_c" 1>&6
-echo "configure:1522: checking for Makefile.in in c/src/tests/libtests" >&5
+echo "configure:1555: checking for Makefile.in in c/src/tests/libtests" >&5
 if test -d $srcdir/c/src/tests/libtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1530,10 +1563,10 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
- \
-     
+
+   
 echo $ac_n "checking for Makefile.in in c/src/tests/sptests""... $ac_c" 1>&6
-echo "configure:1537: checking for Makefile.in in c/src/tests/sptests" >&5
+echo "configure:1570: checking for Makefile.in in c/src/tests/sptests" >&5
 if test -d $srcdir/c/src/tests/sptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1545,10 +1578,10 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
- \
-     
+
+   
 echo $ac_n "checking for Makefile.in in c/src/tests/tmtests""... $ac_c" 1>&6
-echo "configure:1552: checking for Makefile.in in c/src/tests/tmtests" >&5
+echo "configure:1585: checking for Makefile.in in c/src/tests/tmtests" >&5
 if test -d $srcdir/c/src/tests/tmtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1560,10 +1593,10 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
- \
-     
+
+   
 echo $ac_n "checking for Makefile.in in c/src/tests/mptests""... $ac_c" 1>&6
-echo "configure:1567: checking for Makefile.in in c/src/tests/mptests" >&5
+echo "configure:1600: checking for Makefile.in in c/src/tests/mptests" >&5
 if test -d $srcdir/c/src/tests/mptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1575,10 +1608,11 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
- \
+
+   if test "$RTEMS_HAS_POSIX" = "yes"; then
      
 echo $ac_n "checking for Makefile.in in c/src/tests/psxtests""... $ac_c" 1>&6
-echo "configure:1582: checking for Makefile.in in c/src/tests/psxtests" >&5
+echo "configure:1616: checking for Makefile.in in c/src/tests/psxtests" >&5
 if test -d $srcdir/c/src/tests/psxtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1590,22 +1624,22 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
- \
 
-fi
-
+   fi
+fi 
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
 echo $ac_n "checking Is the HWAPI enabled? ""... $ac_c" 1>&6
-echo "configure:1601: checking Is the HWAPI enabled? " >&5
+echo "configure:1634: checking Is the HWAPI enabled? " >&5
 # Check whether --enable-hwapi or --disable-hwapi was given.
 if test "${enable_hwapi+set}" = set; then
   enableval="$enable_hwapi"
   \
-      echo "$ac_t""yes" 1>&6 \
-        
+  case "${enableval}" in
+    yes) echo "$ac_t""yes" 1>&6 
+         
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi""... $ac_c" 1>&6
-echo "configure:1609: checking for Makefile.in in c/src/lib/libhwapi" >&5
+echo "configure:1643: checking for Makefile.in in c/src/lib/libhwapi" >&5
 if test -d $srcdir/c/src/lib/libhwapi; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1617,19 +1651,12 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
-
+;;
+    no)  echo "$ac_t""no" 1>&6 ;;
+    *)  { echo "configure: error: bad value ${enableval} for hwapi option" 1>&2; exit 1; } ;;
+  esac
 else
-  \
-      { echo "configure: error: no" 1>&2; exit 1; } \
-
-fi
-
-
-# Check whether --enable-rtemsbsp or --disable-rtemsbsp was given.
-if test "${enable_rtemsbsp+set}" = set; then
-  enableval="$enable_rtemsbsp"
-  \
-      RTEMS_BSP=$enableval \
+  echo "$ac_t""no" 1>&6
 
 fi
 
@@ -1651,7 +1678,7 @@ fi
 # pick up all the Makefiles in required parts of the tree
 
 echo $ac_n "checking for Makefile.in in c/build-tools""... $ac_c" 1>&6
-echo "configure:1655: checking for Makefile.in in c/build-tools" >&5
+echo "configure:1682: checking for Makefile.in in c/build-tools" >&5
 if test -d $srcdir/c/build-tools; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1666,7 +1693,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/make""... $ac_c" 1>&6
-echo "configure:1670: checking for Makefile.in in c/make" >&5
+echo "configure:1697: checking for Makefile.in in c/make" >&5
 if test -d $srcdir/c/make; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1681,7 +1708,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libmisc""... $ac_c" 1>&6
-echo "configure:1685: checking for Makefile.in in c/src/lib/libmisc" >&5
+echo "configure:1712: checking for Makefile.in in c/src/lib/libmisc" >&5
 if test -d $srcdir/c/src/lib/libmisc; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1696,7 +1723,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/tests/samples""... $ac_c" 1>&6
-echo "configure:1700: checking for Makefile.in in c/src/tests/samples" >&5
+echo "configure:1727: checking for Makefile.in in c/src/tests/samples" >&5
 if test -d $srcdir/c/src/tests/samples; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1834,6 +1861,8 @@ c/src/exec/score/inline/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile
+c/src/exec/wrapup/Makefile
+c/src/exec/wrapup/rtems/Makefile
 c/src/lib/Makefile
 c/src/lib/include/Makefile
 c/src/lib/libbsp/Makefile
@@ -1976,6 +2005,8 @@ c/src/exec/score/inline/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile
+c/src/exec/wrapup/Makefile
+c/src/exec/wrapup/rtems/Makefile
 c/src/lib/Makefile
 c/src/lib/include/Makefile
 c/src/lib/libbsp/Makefile
