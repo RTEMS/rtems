@@ -1,3 +1,8 @@
+2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: Merge-in mcf5206/ChangeLog.
+	* mcf5206/ChangeLog: Remove.
+
 2004-01-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* m68040/Makefile.am: Merge-in m68040/fpsp/Makefile.am. Use
@@ -7,10 +12,15 @@
 	* Makefile.am: Reflect changes above. Remove CPU_SUBDIR.
 	* configure.ac: Require automake >= 1.8.2. Add subdir-objects to
 	AUTOMAKE_OPTIONS. Remove CHECK_CUSTOM_BSP. Reflect changes above.
+	* mcf5206/Makefile.am: Convert to automake compilation rules.
+	* mcf5206/configure.ac: Remove.
+	* mcf5206/.cvsignore: Reflect changes above.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shared/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
+	* mcf5206/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
 	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -26,12 +36,35 @@
 	* shared/cache/Makefile.am: Use mkdir_p. Remove dirs from
 	PRE/TMPINSTALL_FILES.
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+	* mcf5206/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* mcf5206/configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+
+2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mcf5206/configure.ac: Cosmetics.
+	* mcf5206/clock/Makefile.am: Remove.
+	* mcf5206/console/Makefile.am: Remove.
+	* mcf5206/include/Makefile.am: Remove.
+	* mcf5206/mbus/Makefile.am: Remove.
+	* mcf5206/timer/Makefile.am: Remove.
+	* mcf5206/Makefile.am: Merge-in former clock/Makefile.am,
+	console/Makefile.am, include/Makefile.am, mbus/Makefile.am,
+	timer/Makefile.am.
+	* mcf5206/configure.ac: Reflect changes above.
+
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mcf5206/clock/Makefile.am: Cosmetics.
+	* mcf5206/mbus/Makefile.am: Cosmetics.
+	* mcf5206/timer/Makefile.am: Cosmetics.
 
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* m68040/fpsp/Makefile.am: Remove all-local: $(ARCH).
 	* shared/cache/Makefile.am: Remove all-local: $(ARCH).
 	* shared/misc/Makefile.am: Remove all-local: $(ARCH).
+	* mcf5206/console/Makefile.am: Remove all-local: $(ARCH).
 
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -40,14 +73,22 @@
 	* shared/Makefile.am: Reformat.
 	* shared/cache/Makefile.am: Reformat. Use dirstamps for preinstallation.
 	* shared/misc/Makefile.am: Reformat.
+	* mcf5206/Makefile.am: Reformat.
+	* mcf5206/clock/Makefile.am: Reformat.
+	* mcf5206/console/Makefile.am: Reformat.
+	* mcf5206/include/Makefile.am: Reformat. Use dirstamps for
+	preinstallation.
+	* mcf5206/timer/Makefile.am: Reformat.
 
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.
+	* mcf5206/configure.ac: Remove RTEMS_CANONICAL_HOST.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_CPU.
+	* mcf5206/configure.ac: Remove RTEMS_CHECK_CPU.
 
 2003-09-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -57,10 +98,21 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/misc/m68kidle.c: URL for license changed.
+	* mcf5206/clock/ckinit.c, mcf5206/console/mcfuart.c,
+	mcf5206/include/mcf5206e.h, mcf5206/include/mcfmbus.h,
+	mcf5206/include/mcfuart.h, mcf5206/mbus/mcfmbus.c,
+	mcf5206/timer/timer.c, mcf5206/timer/timerisr.S: URL for license changed.
+
+2003-08-20	Joel Sherrill <joel@OARcorp.com>
+
+	* mcf5206/clock/ckinit.c, mcf5206/console/mcfuart.c,
+	mcf5206/timer/timer.c, mcf5206/timer/timerisr.S: Correct copyright
+	statements.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
+	* mcf5206/Makefile.am: Reflect having moved aclocal/.
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -70,31 +122,59 @@
 	* shared/Makefile.am: Reflect having moved automake/.
 	* shared/cache/Makefile.am: Reflect having moved automake/.
 	* shared/misc/Makefile.am: Reflect having moved automake/.
+	* mcf5206/Makefile.am: Reflect having moved automake/.
+	* mcf5206/clock/Makefile.am: Reflect having moved automake/.
+	* mcf5206/console/Makefile.am: Reflect having moved automake/.
+	* mcf5206/include/Makefile.am: Reflect having moved automake/.
+	* mcf5206/mbus/Makefile.am: Reflect having moved automake/.
+	* mcf5206/timer/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+	* mcf5206/configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* mcf5206/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* configure.ac: AC_PREREQ(2.57).
+	* mcf5206/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* mcf5206/configure.ac: AC_PREREQ(2.57).
+
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mcf5206/clock/Makefile.am: Eliminate *_O_FILES. Don't include
+	@RTEMS_BSP@.cfg.
+	* mcf5206/console/Makefile.am: Likewise.
+	* mcf5206/mbus/Makefile.am: Likewise.
+	* mcf5206/timer/Makefile.am: Likewise.
+
+2003-01-03	Victor V. Vengerov <vvv@oktet.ru>
+
+	* mcf5206/mbus/mcfmbus.c: Per PR323, move the mbus_send command on line
+	232 to after the state has been set.
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
+	* mcf5206/configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
 
 2002-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add RTEMS_PROG_CCAS.
+	* mcf5206/configure.ac: Add RTEMS_PROG_CCAS.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+	* mcf5206/.cvsignore: Reformat. Add autom4te*cache. Remove
+	autom4te.cache.
 
 2002-08-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -141,6 +221,14 @@
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* shared/cache/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* shared/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mcf5206/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* mcf5206/clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mcf5206/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mcf5206/console/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mcf5206/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mcf5206/mbus/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mcf5206/timer/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -148,6 +236,27 @@
 	*_O_FILES.
 	* shared/cache/Makefile.am: Ditto.
 	* shared/misc/Makefile.am: Ditto.
+
+2001-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mcf5206/include/Makefile.am: Fix TMPINSTALL_FILES to make automake-1.5
+	happy.
+
+2001-10-29	Joel Sherrill <joel@OARcorp.com>
+
+	* mcf5206/.cvsignore: Add more entries.
+
+2001-10-26	Victor V. Vengerov <vvv@oktet.ru>
+
+	* New libcpu support for mcf5206e.
+	* mcf5206/ChangeLog, mcf5206/clock/ckinit.c, mcf5206/clock/.cvsignore,
+	mcf5206/configure.ac, mcf5206/console/mcfuart.c,
+	mcf5206/console/.cvsignore, mcf5206/include/mcf5206e.h,
+	mcf5206/include/mcfmbus.h, mcf5206/include/mcfuart.h,
+	mcf5206/include/.cvsignore, mcf5206/mbus/mcfmbus.c,
+	mcf5206/mbus/.cvsignore, mcf5206/timer/timer.c,
+	mcf5206/timer/timerisr.S, mcf5206/timer/.cvsignore, mcf5206/.cvsignore:
+	New files.
 
 2001-10-26	Joel Sherrill <joel@OARcorp.com>
 
