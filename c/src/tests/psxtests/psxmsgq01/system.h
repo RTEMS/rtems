@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sched.h>
+#include <tmacros.h>
 
 void *POSIX_Init(
   void *argument
@@ -53,3 +54,5 @@ TEST_EXTERN pthread_t        Init_id;
 TEST_EXTERN pthread_t        Task_id;
 
 /* end of include file */
+
+
