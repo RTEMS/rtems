@@ -1,3 +1,8 @@
+2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: Merge-in user/ChangeLog.
+	* user/ChangeLog: Remove.
+
 2004-02-03	Joel Sherrill <joel@OARcorp.com>
 
 	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,
@@ -5,24 +10,16 @@
 	gnu_docs/refcard.html, gnu_docs/rtems_tools_index.html,
 	started/binaries.t, started/buildc.t, started/buildrt.t,
 	started/intro.t, started/require.t, started/sample.t,
-	started/tversions.texi.in: Incorporating changes from pre-4.6.0
-	review.
+	started/tversions.texi.in: Incorporating changes from pre-4.6.0 review.
 
 2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add RTEMSRPMGROUP.
 	* common/rtems.texi.in: Add RTEMSRPMGROUP.
 	* started/binaries.t: Add RTEMSRPMGROUP.
-
-2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* ChangeLog: Merge-in started/ChangeLog.
 	* started/ChangeLog: Remove.
-
-2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Add RTEMS_ENABLE_RPMPREFIX.
-	Add RTEMSRPMPREFIX.
+	* configure.ac: Add RTEMS_ENABLE_RPMPREFIX. Add RTEMSRPMPREFIX.
 	* common/rtems.texi.in: Add RTEMSRPMPREFIX.
 
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -46,10 +43,12 @@
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 	* develenv/Makefile.am: Cosmetics.
+	* user/Makefile.am: Cosmetics.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* develenv/Makefile.am: Cosmetics.
+	* user/Makefile.am: Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -57,10 +56,22 @@
 	automake-1.7f/1.8 anymore).
 	* develenv/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
+	* user/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+
+2003-11-25	Joel Sherrill <joel@OARcorp.com>
+
+	PR 528/rtems_misc
+	* user/task.t: Fix Ada binding for task variable calls.
 
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add missing '\'. Reformat.
+
+2003-11-21	Joel Sherrill <joel@OARcorp.com>
+
+	PR 521/doc
+	* user/sem.t: Default attributes were wrong for semaphores.
 
 2003-10-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -68,6 +79,10 @@
 	* Makefile.am, index.html.in: Rename Getting Started to be non-language
 	specific and remove link to Ada Getting Started. Also install missing
 	graphic.
+
+2003-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* user/preface.texi: Eliminate references to HPPA.
 
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -82,6 +97,7 @@
 	* project.am: Merger from rtems-4-6-branch.
 	* rtems_support.html.in: Purge hppa1.1.
 	* develenv/Makefile.am: Merger from rtems-4-6-branch.
+	* user/Makefile.am: Merger from rtems-4-6-branch.
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -93,10 +109,16 @@
 	* common/rtems.texi.in: New file.
 	* develenv/develenv.texi, develenv/direct.t, develenv/sample.t,
 	develenv/utils.t: Merge from branch.
+	* user/c_user.texi, user/fatal.t, user/preface.texi, user/rtmon.t: Merge
+	from branch.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+
+2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* user/fatal.t: Reflect c/src/exec having moved to cpukit.
 
 2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -137,6 +159,18 @@
 
 	* index.html.in: Removed a29k reference.
 
+2003-02-03	Steven Johnson <sjohnson@neurizon.net>
+
+	PR 338/filesystem
+	* user/io.t: Document the API change that fixed reentrancy problem with 
+	rtems_io_lookup_name().
+
+2003-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	PR 338/filesystem
+	* user/io.t: Fix Ada binding as side-effect of fixing reentrancy problem
+	with rtems_io_lookup_name() (API change).
+
 2003-01-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* index.html.in: Fix duplicate c4x entry.
@@ -147,6 +181,7 @@
 	* configure.ac: Add c4x.
 	* project.am: Add version.texi hack.
 	* develenv/develenv.texi: Set @setfilename develenv.info.
+	* user/c_user.texi: Set @setfilename c_user.info.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -154,6 +189,7 @@
 	$(top_builddir) to TEXI2WWW_ARGS.
 	* project.am: Add AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF. Override
 	automake's .dvi.ps:-rule.
+	* user/Makefile.am: Put GENERATED_FILES into $builddir.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -167,10 +203,14 @@
 	* develenv/version.texi: Remove from CVS.
 	* develenv/stamp-vti: Remove from CVS.
 	* develenv/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* user/version.texi: Remove from CVS.
+	* user/stamp-vti: Remove from CVS.
+	* user/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
+	* user/stamp-vti, user/version.texi: Regenerated.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -185,24 +225,43 @@
 	* index.html.in: Note that the Getting Started with GNAT/RTEMS  manual
 	is largely obsolete now that GNAT is in GCC.
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
+	* user/stamp-vti, user/version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Add links to multiple missing CPU supplements.
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
+	* user/stamp-vti, user/version.texi: Regenerated.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
+2002-08-27	Joel Sherrill <joel@OARcorp.com>
+
+	* user/io.t: Correct Ada bindings.
+
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: Added supplements/arm/Makefile.
 	* README: Updated.
+	* user/stamp-vti, user/version.texi: Regenerated.
+
+2002-06-28	Joel Sherrill <joel@OARcorp.com>
+
+	* user/userext.t: Per PR228, correct the prototype of the task create
+	user extension to indicate it returns a boolean and augment the
+	documentation to explain the purpose of the boolean return value.
 
 2002-06-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* project.am: Use PATH_SEPARATOR to setup TEXINPUTS.
+
+2002-04-12	Chris Johns <ccj@acm.org>
+
+	* user/doc/user/userext.t: Per PR138, updated the documentation to show
+	how to obtain an extension table index. Also provided some extra
+	background on the user extension API.
 
 2002-04-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -215,6 +274,10 @@
 	* Makefile.am:  Remove bootstrap. Add ACLOCAL_AMFLAGS.
 	* configure.ac: Add RTEMS_TOP.
 
+2002-04-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* user/io.t: Fix typo @sybsection.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* common/Makefile.am: Remove AUTOMAKE_OPTIONS.
@@ -223,6 +286,23 @@
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* images/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* develenv/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* user/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-03-27	Eric Norum <eric.norum@usask.ca>
+
+	* user/intr.t: Per PR165, now correctly states that passing a NULL 
+	pointer for the return argument is an error.
+	* PR161
+	* user/rtmon.t: Add rtems_ prefix to directives in the example.
+
+2002-03-22	Chris Johns <ccj@acm.org>
+
+	* user/io.t, user/conf.t: PR 160. Added the IO Manager's register and 
+	unregister interface documentation.
+
+2002-03-15	Eric Norum <eric.norum@usask.ca>
+
+	* user/rtmon.t: Correct example and correctly used ensure not insure.
 
 2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -254,6 +334,7 @@
 	* common/Makefile.am: Require automake-1.5.
 	* images/Makefile.am: Require automake-1.5.
 	* develenv/Makefile.am: include main.am, require automake-1.5.
+	* user/Makefile.am: include main.am, require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -276,6 +357,10 @@
 	mainline development trunk and ensuring that the script that cuts
 	snapshots and releases works on the documentation.
 	* develenv/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* user/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* user/timer.t: Added task-based timer information including the new
+	directives rtems_timer_initiate(), rtems_timer_server_fire_after(), and
+	rtems_timer_server_fire_when().
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -286,4 +371,5 @@
 
 	* ChangeLog: New file.
 	* develenv/ChangeLog: New file.
+	* user/ChangeLog: New file.
 
