@@ -41,8 +41,11 @@ PC386 BSP of RTEMS is covered in detail in the 'RTEMS 4.0.0 On-Line
 Library' -> 'Getting Started with RTEMS for C/C++ Users' -> 'Building
 the GNU C/C++ Cross Compiler Toolset'.
 
-    When running the 'bit' script you should use the 'i386-elf'
-configuration.
+    When running the 'bit' script you should specift the argumetn as
+either:
+
+   +  'i386-elf' to indicate an 'i386-rtemself' toolset, or
+   +  'i386' to indicate an 'i386-rtems' toolset.
 
 
 4. Building RTEMS
@@ -54,11 +57,13 @@ PC386 BSP is covered in detail in the 'RTEMS 4.0.0 On-Line Library' ->
     When running configure, use the following values for the listed
 options:
 
-      --target=i386-rtems
+      + with an i386-rtemself toolset
+          --target=i386-rtemself
+          --enable-rtemsbsp=pc386
 
-      --enable-rtemsbsp=pc386
-
-      --prefix=i386-rtems
+      + with an i386-rtems toolset
+          --target=i386-rtems
+          --enable-rtemsbsp=pc386
 
  
 5. RTEMS Tests
