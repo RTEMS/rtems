@@ -12,6 +12,7 @@
  */
 
 #include <libcpu/spr.h>
+#include <bspIo.h>
 
 /*
  * Generate inline code to read Processor Version Register
@@ -29,9 +30,8 @@ ppc_cpu_id_t get_ppc_cpu_type()
   switch (pvr) {
     case PPC_601:
     case PPC_603:
-    case PPC_604:
-    case PPC_603:
     case PPC_603ev:
+    case PPC_604:
     case PPC_750:
     case PPC_604e:
     case PPC_604r:
