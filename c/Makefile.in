@@ -28,21 +28,22 @@ export PROJECT_HOME
 SUB_DIRS=build-tools src
 
 # We only make the install point for the KA9Q header files if it is enabled.
-LIBKA9Q_yes_V = include/ka9q
+LIBKA9Q_yes_V = lib/include/ka9q
 LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
 
 # We only make the rtems++ install point if it is enabled.
-LIBRTEMSCPLUSPLUS_yes_V = include/rtems++
+LIBRTEMSCPLUSPLUS_yes_V = lib/include/rtems++
 LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 
 # directories to be created in install point
-CREATE_DIRS = 	include include/sys \
-    include/rtems include/rtems/score include/rtems/rtems include/rtems/posix \
-    include/netinet include/libc include/libc/sys \
-    include/motorola include/zilog \
+CREATE_DIRS = \
+    lib lib/include lib/include/sys lib/include/rtems \
+    lib/include/rtems/score lib/include/rtems/rtems lib/include/rtems/posix \
+    lib/include/netinet lib/include/libc lib/include/libc/sys \
+    lib/include/motorola lib/include/zilog \
     $(LIBKA9Q) \
     $(LIBRTEMSCPLUSPLUS) \
-    lib bin samples \
+    bin samples \
     tests tests/screens tests/screens/sptests \
     tests/screens/psxtests tests/screens/mptests \
     tests/screens/mptests/node1 tests/screens/mptests/node2 \
@@ -67,9 +68,6 @@ dirs:
 	-test -d $(PROJECT_ROOT)/c/src/lib/libhwapi && \
 	    (cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs)
 	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
-	test -d $(PROJECT_ROOT)/$(RTEMS_BSP)/lib/include || \
-	    ln -s $(PROJECT_ROOT)/$(RTEMS_BSP)/include \
-		$(PROJECT_ROOT)/$(RTEMS_BSP)/lib/include 
 
 distclean: clobber
 
@@ -89,18 +87,10 @@ install: all
 	 -$(MKDIR) $(prefix)/$(target)/rtems/make/custom
 	 -$(MKDIR) $(prefix)/$(target)/rtems/make/os
 	-rm -rf $(prefix)/$(target)/rtems/$(RTEMS_BSP)
-	cd ../; tar cf - $(RTEMS_BSP)/[bilsu]* | \
+	cd ../; tar cf - make $(RTEMS_BSP)/[bilsu]* | \
 		(cd $(prefix)/$(target)/rtems; tar xpBf - )
-	-rm -f $(prefix)/$(target)/rtems/$(RTEMS_BSP)/lib/include
-	ln -s $(prefix)/$(target)/rtems/$(RTEMS_BSP)/include \
-	      $(prefix)/$(target)/rtems/$(RTEMS_BSP)/lib/include
-	cd $(srcdir); tar cf - make/compilers make/custom make/os \
-		make/leaf.cfg make/directory.cfg make/main.cfg | \
-		(cd $(prefix)/$(target)/rtems; tar xpBf - )
-	echo RTEMS_BSP = $(RTEMS_BSP) > \
-		$(prefix)/$(target)/rtems/$(RTEMS_BSP)/Makefile.inc
-	cat make/Templates/Makefile.inc >> \
-		$(prefix)/$(target)/rtems/$(RTEMS_BSP)/Makefile.inc
+	(echo RTEMS_BSP = $(RTEMS_BSP) ; cat make/Templates/Makefile.inc ) \
+		> $(prefix)/$(target)/rtems/$(RTEMS_BSP)/Makefile.inc
 
 tests:
 	cd src/tests; $(MAKE) all
