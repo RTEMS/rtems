@@ -1,5 +1,4 @@
 OUTPUT_FORMAT("coff-a29k-big")
- SEARCH_DIR(/opt/a29k-rtems/a29k-rtems/lib);
 SECTIONS
 {
   .text : {

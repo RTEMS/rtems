@@ -2,7 +2,6 @@
 OUTPUT_FORMAT("elf32-hppa")
 OUTPUT_ARCH(hppa)
 ENTRY("$START$")
-SEARCH_DIR("/opt/rtems/hppa1.1-rtems/lib");
 SECTIONS
 {
   .text 0x1000 +0x1000:

@@ -2,7 +2,6 @@ OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm",
 	      "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
-SEARCH_DIR(/usr/local/rtems-arm-dev-tools/arm-rtems/lib);
 MEMORY {
 	FLASH (rx)  : ORIGIN = 0x200000, LENGTH = 512K
 	RAM   (!rx) : ORIGIN = 0x400000, LENGTH = 128K
