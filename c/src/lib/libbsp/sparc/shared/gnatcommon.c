@@ -17,8 +17,8 @@
 rtems_isr __gnat_exception_handler
   (rtems_vector_number trap)
 {
-  rtems_unsigned32 real_trap;
-  rtems_unsigned32 signal;
+  uint32_t         real_trap;
+  uint32_t         signal;
 
   real_trap = SPARC_REAL_TRAP_NUMBER (trap);
   switch (real_trap)
@@ -47,7 +47,7 @@ rtems_isr __gnat_exception_handler
 rtems_isr __gnat_interrupt_handler
   (rtems_vector_number trap)
 {
-  rtems_unsigned32 real_trap;
+  uint32_t         real_trap;
 
   real_trap = SPARC_REAL_TRAP_NUMBER (trap);
 
@@ -84,7 +84,7 @@ const struct sigaction __gnat_error_vector =
 void
 __gnat_install_handler_common (int t1, int t2)
 {
-  rtems_unsigned32 trap;
+  uint32_t         trap;
   rtems_isr_entry previous_isr;
 
   sigaction (SIGSEGV, &__gnat_error_vector, NULL);

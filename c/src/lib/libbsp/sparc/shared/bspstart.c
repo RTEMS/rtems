@@ -44,7 +44,7 @@ rtems_cpu_table   Cpu_table;
  *  Tells us where to put the workspace in case remote debugger is present.
  */
 
-extern rtems_unsigned32  rdb_start;
+extern uint32_t          rdb_start;
 
 /*
  * Amount to increment itimer by each pass
@@ -52,7 +52,7 @@ extern rtems_unsigned32  rdb_start;
  * script to bump it without recompiling rtems
  */
 
-rtems_unsigned32 CPU_SPARC_CLICKS_PER_TICK;
+uint32_t         CPU_SPARC_CLICKS_PER_TICK;
 
 #if SIMSPARC_FAST_IDLE
 
@@ -71,8 +71,8 @@ rtems_extension fast_idle_switch_hook(
   rtems_tcb *heir_task
 )
 {
-    static rtems_unsigned32 normal_clock = ~0;
-    static rtems_unsigned32 fast_clock;
+    static uint32_t         normal_clock = ~0;
+    static uint32_t         fast_clock;
 
     /* init our params on first call */
     if (normal_clock == ~0)
@@ -100,7 +100,7 @@ rtems_extension fast_idle_switch_hook(
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 extern void bsp_spurious_initialize();
 
 /*
@@ -113,10 +113,10 @@ extern void bsp_spurious_initialize();
 void bsp_pretasking_hook(void)
 {
   extern int end;
-  rtems_unsigned32 heap_start;
-  rtems_unsigned32 heap_size;
+  uint32_t         heap_start;
+  uint32_t         heap_size;
 
-  heap_start = (rtems_unsigned32) &end;
+  heap_start = (uint32_t) &end;
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
