@@ -141,13 +141,14 @@ EXTRA_DIST += shmdr/README
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 TMPINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
@@ -158,7 +159,7 @@ if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libchip
 	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 endif
 
 if LIBCHIP
@@ -266,6 +267,7 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

@@ -36,6 +36,7 @@ endif
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 TMPINSTALL_FILES =
 
@@ -48,7 +49,7 @@ if HAS_CXX
 $(PROJECT_INCLUDE)/rtems++/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems++
 	@: > $(PROJECT_INCLUDE)/rtems++/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems++/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems++/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems++/rtemsEvent.h: include/rtems++/rtemsEvent.h $(PROJECT_INCLUDE)/rtems++/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems++/rtemsEvent.h
@@ -88,6 +89,7 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/librtems++$(LIB_VARIANT).a
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../automake/local.am
