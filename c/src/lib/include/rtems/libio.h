@@ -28,15 +28,7 @@
  *  Define data types which must be constructed using forward references.
  */
 
-typedef struct rtems_libio_tt rtems_libio_t;
-
-struct rtems_filesystem_location_info_tt;
-typedef struct rtems_filesystem_location_info_tt
-    rtems_filesystem_location_info_t;
-
-struct rtems_filesystem_mount_table_entry_tt;
-typedef struct rtems_filesystem_mount_table_entry_tt
-    rtems_filesystem_mount_table_entry_t;
+#include <rtems/fs.h>
 
 /*
  * Valid RTEMS file types.
@@ -125,7 +117,7 @@ typedef int (*rtems_filesystem_rmnod_t)(
  rtems_filesystem_location_info_t      *pathloc       /* IN */
 );
 
-typedef struct {
+struct _rtems_filesystem_file_handlers_r {
     rtems_filesystem_open_t         open_h;
     rtems_filesystem_close_t        close_h;
     rtems_filesystem_read_t         read_h;
@@ -140,7 +132,7 @@ typedef struct {
     rtems_filesystem_fdatasync_t    fdatasync_h;
     rtems_filesystem_fcntl_t        fcntl_h;
     rtems_filesystem_rmnod_t        rmnod_h;
-} rtems_filesystem_file_handlers_r;
+};
 
 /*
  *  File System Operations Table
@@ -248,7 +240,7 @@ typedef int (*rtems_filesystem_readlink_t)(
 /*
  * File system types
  */
-typedef struct {
+struct _rtems_filesystem_operations_table {
     rtems_filesystem_evalpath_t      evalpath_h;
     rtems_filesystem_evalmake_t      evalformake_h;
     rtems_filesystem_link_t          link_h;
@@ -265,7 +257,10 @@ typedef struct {
     rtems_filesystem_evaluate_link_t eval_link_h;
     rtems_filesystem_symlink_t       symlink_h;
     rtems_filesystem_readlink_t      readlink_h;
-} rtems_filesystem_operations_table;
+};
+
+#if 0
+/* Now in exec/include/rtems/fs.h */
 
 /*
  * Structure used to determine a location/filesystem in the tree.
@@ -278,6 +273,7 @@ struct rtems_filesystem_location_info_tt
   rtems_filesystem_operations_table      *ops;
   rtems_filesystem_mount_table_entry_t   *mt_entry;
 };
+#endif
 
 /*
  *  Structure used to contain file system specific information which

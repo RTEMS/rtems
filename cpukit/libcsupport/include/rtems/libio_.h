@@ -20,33 +20,10 @@ extern "C" {
 
 #include <rtems.h>
 #include <rtems/libio.h>                /* include before standard IO */
-#include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
 
 #include <sys/types.h>                  
-	
-#include <stdio.h>                      /* O_RDONLY, et.al. */
-#include <fcntl.h>                      /* O_RDONLY, et.al. */
-#include <assert.h>
-#include <stdarg.h>
-#include <limits.h>
-#include <errno.h>
-
-#if ! defined(O_NDELAY)
-# if defined(solaris2)
-#  define O_NDELAY O_NONBLOCK
-# elif defined(RTEMS_NEWLIB)
-#  define O_NDELAY _FNBIO
-# endif
-#endif
-
-#if !defined(ENOTSUP)
-#define ENOTSUP EOPNOTSUPP
-#endif
 
 #include <errno.h>
-#include <string.h>                     /* strcmp */
-#include <unistd.h>
-#include <stdlib.h>                     /* calloc() */
 
 /*
  *  Semaphore to protect the io table
@@ -201,44 +178,10 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
 /*
  *  External structures
  */
-#if !defined(LOGIN_NAME_MAX)
-#if defined(__linux__)
-#define LOGIN_NAME_MAX _POSIX_LOGIN_NAME_MAX
-#else
-#error "don't know how to set LOGIN_NAME_MAX"
-#endif
-#endif
-
-typedef struct {
- rtems_id                         task_id;	
- rtems_filesystem_location_info_t current_directory;
- rtems_filesystem_location_info_t root_directory;
- /* Default mode for all files. */
- mode_t                           umask;
- nlink_t                          link_counts;
- /* _POSIX_types */
- uid_t                            uid;
- gid_t                            gid;
- uid_t                            euid;
- gid_t                            egid;
- char      login_buffer[LOGIN_NAME_MAX];
-
- pid_t                            pgrp; /* process group id */
-} rtems_user_env_t;
+#include <rtems/userenv.h>
 
 extern rtems_user_env_t * rtems_current_user_env; 
 extern rtems_user_env_t   rtems_global_user_env; 
-
-#define rtems_filesystem_current     (rtems_current_user_env->current_directory)
-#define rtems_filesystem_root        (rtems_current_user_env->root_directory)
-#define rtems_filesystem_link_counts (rtems_current_user_env->link_counts)
-#define rtems_filesystem_umask       (rtems_current_user_env->umask)
-
-#define _POSIX_types_Uid             (rtems_current_user_env->uid)
-#define _POSIX_types_Gid             (rtems_current_user_env->gid)
-#define _POSIX_types_Euid            (rtems_current_user_env->euid)
-#define _POSIX_types_Egid            (rtems_current_user_env->egid)
-#define _POSIX_types_Getlogin_buffer (rtems_current_user_env->login_buffer)
 
 /*
  *  Instantiate a private copy of the per user information for the calling task.
@@ -247,8 +190,6 @@ extern rtems_user_env_t   rtems_global_user_env;
 rtems_status_code rtems_libio_set_private_env(void);
 rtems_status_code rtems_libio_share_private_env(rtems_id task_id) ;
 	
-
-
 /*
  *  File Descriptor Routine Prototypes
  */
@@ -296,6 +237,3 @@ int init_fs_mount_table();
 
 #endif
 /* end of include file */
-
-
-
