@@ -100,13 +100,23 @@ typedef struct {
 /*
  * Set the registers pointer to the base address of the SCV64
  */
-
 SCV64_Registers *SCV64 =  (void *)DMV170_SCV64_BASE_ADDRESS;
 
+/*
+ *  SCV64_Initialize
+ *
+ *  This routine initializes the SCV64.
+ */
 void SCV64_Initialize() {
   SCV64->LIE = 0;
 }
   
+/*
+ *  SCV64_Generate_DUART_Interrupts
+ *
+ *  This sets the SCV64 to generate duart interrupts for
+ *  the DMV177 board.
+ */
 void SCV64_Generate_DUART_Interrupts() {
 
   rtems_unsigned8 data;
@@ -126,6 +136,11 @@ void SCV64_Generate_DUART_Interrupts() {
   SCV64->IC54 = data;
 }
 
+/*
+ *  SCV64_Get_Interrupt
+ *
+ *  This routine returns the SCV64 status register.
+ */
 rtems_unsigned32 SCV64_Get_Interrupt()
 {
   rtems_unsigned8 data;
@@ -138,5 +153,15 @@ rtems_unsigned32 SCV64_Get_Interrupt()
   return data;
 }
 
-
-
+/*
+ * SCV64_Get_Interrupt_Enable
+ *
+ * This routine returns the interrupt enable mask.
+ */
+rtems_unsigned32 SCV64_Get_Interrupt_Enable()
+{
+  /*
+   * Return the set of interrupts enabled.
+   */
+  return SCV64->LIE;
+}
