@@ -129,7 +129,7 @@ static struct wd_softc wd_softc[NWDDRIVER];
 static rtems_isr
 wd8003Enet_interrupt_handler (rtems_vector_number v)
 {
-  unsigned int tport, nowTicks, bootTicks;
+  unsigned int tport;
   unsigned char status, status2;
 
   tport = wd_softc[0].port ;
@@ -146,9 +146,7 @@ wd8003Enet_interrupt_handler (rtems_vector_number v)
 
   if (status & MSK_OVW){
     outport_byte(tport+CMDR, MSK_STP + MSK_RD2);	/* stop 8390 */
-    rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &bootTicks );
-    while(nowTicks < bootTicks+loopc)               /* 2ms delay */
-      rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &nowTicks );
+    Wait_X_ms(2);
     outport_byte(tport+RBCR0, 0);			/* clear byte count */
     outport_byte(tport+RBCR1, 0);
     inport_byte(tport+ISR, status2);
@@ -361,11 +359,16 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	struct wd_softc *dp = ifp->if_softc;
 	struct mbuf *n;
 	unsigned int len, tport;
-	char *shp;
+	char *shp, txReady;
 
 	tport = dp->port;
 
-
+  /*
+   * Waiting for Transmitter ready
+   */	
+  inport_byte(tport+CMDR, txReady); 
+  while(txReady & MSK_TXP)
+    inport_byte(tport+CMDR, txReady); 
 
   len = 0;
   shp = dp->base + (SHAPAGE * OUTPAGE);
@@ -638,10 +641,6 @@ rtems_wd_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
 	if (ifp->if_snd.ifq_maxlen == 0)
 		ifp->if_snd.ifq_maxlen = ifqmaxlen;
-
-	/* calibrate a delay loop for 2 milliseconds */
-	rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &loopc );
-	loopc /= 500;
 
 	/*
 	 * init some variables

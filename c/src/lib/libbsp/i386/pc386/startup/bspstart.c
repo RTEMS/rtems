@@ -146,6 +146,12 @@ void bsp_pretasking_hook(void)
 +--------------------------------------------------------------------------*/
 void bsp_start( void )
 {
+
+  /*
+   * Calibrate variable for 1ms-loop (see timer.c)
+   */
+  Calibrate_loop_1ms();
+
   rtemsFreeMemStart = (rtems_unsigned32)&_end + _stack_size;
                                     /* set the value of start of free memory. */
 

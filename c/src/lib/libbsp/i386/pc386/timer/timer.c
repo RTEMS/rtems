@@ -45,12 +45,19 @@
 +--------------------------------------------------------------------------*/
 #define AVG_OVERHEAD  0              /* 0.1 microseconds to start/stop timer. */
 #define LEAST_VALID   1              /* Don't trust a value lower than this.  */
+#define SLOW_DOWN_IO  0x80     	/* io which does nothing */
 
+#define TWO_MS	(rtems_unsigned32)(2000)     /* TWO_MS = 2000us (sic!) */
+
+#define MSK_NULL_COUNT 0x40	/* bit counter available for reading */
+
+#define CMD_READ_BACK_STATUS 0xE2   /* command read back status */
 /*-------------------------------------------------------------------------+
 | Global Variables
 +--------------------------------------------------------------------------*/
 volatile rtems_unsigned32 Ttimer_val;
          rtems_boolean    Timer_driver_Find_average_overhead = TRUE;
+         unsigned int     loop1ms;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
@@ -293,3 +300,95 @@ Set_find_average_overhead(rtems_boolean find_flag)
 {
   Timer_driver_Find_average_overhead = find_flag;
 } /* Set_find_average_overhead */
+
+/*-------------------------------------------------------------------------+
+|         Function: Calibrate_loop_1ms
+|      Description: Set loop variable to calibrate a 1ms loop
+| Global Variables: loop1ms
+|        Arguments: none
+|          Returns: Nothing. 
++--------------------------------------------------------------------------*/
+void
+Calibrate_loop_1ms(void){
+  unsigned int i;
+  unsigned short loadedValue, offset;
+  unsigned int timerValue;
+  rtems_interrupt_level  level;
+  unsigned short lsb, msb;
+  unsigned char status;
+  
+  
+  loop1ms = 100 ;
+  timerValue = 2000;
+  loadedValue = US_TO_TICK(2000);
+  
+  rtems_interrupt_disable(level);
+
+  /*
+   * Compute the offset to apply due to read counter register
+   */
+  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
+  outport_byte(TIMER_CNTR0, loadedValue >> 0 & 0xff);
+  outport_byte(TIMER_CNTR0, loadedValue >> 8 & 0xff);
+
+  outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS); /* read Status counter 0 */
+  inport_byte(TIMER_CNTR0, status);
+  while (status & MSK_NULL_COUNT){ 	/* wait for counter ready */ 	
+    outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS);
+    inport_byte(TIMER_CNTR0, status);
+  }
+  
+  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);
+  inport_byte(TIMER_CNTR0, lsb);
+  inport_byte(TIMER_CNTR0, msb);
+  offset = loadedValue - (unsigned short)((msb << 8) | lsb);
+
+  while (timerValue > 1000){
+    loop1ms++;
+
+    /* load timer for 2ms+offset period */
+    outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
+    outport_byte(TIMER_CNTR0, (loadedValue+offset) >> 0 & 0xff);
+    outport_byte(TIMER_CNTR0, (loadedValue+offset) >> 8 & 0xff);
+
+    outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS); /* read Status counter 0 */
+    inport_byte(TIMER_CNTR0, status);
+    while (status & MSK_NULL_COUNT) {	/* wait for counter ready */ 
+      outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS);
+      inport_byte(TIMER_CNTR0, status);
+    }
+    
+    for (i=0; i<loop1ms; i++)
+      outport_byte(SLOW_DOWN_IO, 0);	/* write is # 1us */
+
+    outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);
+    inport_byte(TIMER_CNTR0, lsb);
+    inport_byte(TIMER_CNTR0, msb);
+    timerValue = TICK_TO_US((msb << 8) | lsb);
+  }
+
+  rtems_interrupt_enable(level);
+}
+
+/*-------------------------------------------------------------------------+
+|         Function: Wait_X_1ms
+|      Description: loop which waits at least timeToWait ms
+| Global Variables: loop1ms
+|        Arguments: timeToWait
+|          Returns: Nothing. 
++--------------------------------------------------------------------------*/
+void
+Wait_X_ms( unsigned int timeToWait){
+
+  unsigned int i, j;
+
+  for (j=0; j<timeToWait ; j++)
+    for (i=0; i<loop1ms; i++)
+      outport_byte(SLOW_DOWN_IO, 0);	/* write is # 1us */
+}
+
+
+
+
+
+
