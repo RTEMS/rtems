@@ -200,7 +200,7 @@ int pthread_cond_init(
  
   the_cond->process_shared  = the_attr->process_shared;
 
-  the_cond->Mutex = (unsigned32) NULL;
+  the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
 
 /* XXX some more initialization might need to go here */
   _Thread_queue_Initialize(
@@ -316,8 +316,11 @@ int _POSIX_Condition_variables_Signal_support(
       do { 
         the_thread = _Thread_queue_Dequeue( &the_cond->Wait_queue );
         if ( !the_thread )
-          the_cond->Mutex = (unsigned32) NULL;
+          the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
       } while ( is_broadcast && the_thread );
+
+      _Thread_Enable_dispatch();
+
       return 0;
   }
   return POSIX_BOTTOM_REACHED();
@@ -375,20 +378,35 @@ int _POSIX_Condition_variables_Wait_support(
       return EINVAL;
     case OBJECTS_LOCAL:
  
-      if ( the_cond->Mutex && ( the_cond->Mutex != *mutex ) )
+      if ( the_cond->Mutex && ( the_cond->Mutex != *mutex ) ) {
+        _Thread_Enable_dispatch();
         return EINVAL;
- 
-      status = pthread_mutex_unlock( mutex );
-      if ( status )
-        return status;
+      }
  
       the_cond->Mutex = *mutex;
  
+      status = pthread_mutex_unlock( mutex );
+      if ( status ) {
+        _Thread_Enable_dispatch();
+        return status;
+      }
+ 
       _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
+      _Thread_Executing->Wait.return_code = 0;
+      _Thread_Executing->Wait.queue       = &the_cond->Wait_queue;
+      _Thread_Executing->Wait.id          = *cond;
 
-      _Thread_queue_Enqueue( &the_cond->Wait_queue, 0 );
+      _Thread_queue_Enqueue( &the_cond->Wait_queue, timeout );
 
       _Thread_Enable_dispatch();
+
+      /*
+       *  Switch ourself out because we blocked as a result of the 
+       *  _Thread_queue_Enqueue.
+       */
+
+      if ( _Thread_Executing->Wait.return_code )
+        return _Thread_Executing->Wait.return_code;
 
       status = pthread_mutex_lock( mutex );
       if ( status )
