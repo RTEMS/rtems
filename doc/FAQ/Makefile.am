@@ -29,57 +29,57 @@ FAQ_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 #  Process Automatically Generated Files
 #
 
-$(srcdir)/basic.texi: basic.t
+basic.texi: basic.t
 	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/tools.texi: tools.t
+tools.texi: tools.t
 	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/concepts.texi: concepts.t
+concepts.texi: concepts.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/build45.texi: build45.t
+build45.texi: build45.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/bsp.texi: bsp.t
+bsp.texi: bsp.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/debug.texi: debug.t
+debug.texi: debug.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/freesw.texi: freesw.t
+freesw.texi: freesw.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/embeddedinfo.texi: embeddedinfo.t
+embeddedinfo.texi: embeddedinfo.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/hwdebugaids.texi: hwdebugaids.t
+hwdebugaids.texi: hwdebugaids.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/projects.texi: projects.t
+projects.texi: projects.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/endoftime.texi: endoftime.t
+endoftime.texi: endoftime.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@

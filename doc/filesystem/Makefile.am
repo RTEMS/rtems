@@ -25,42 +25,42 @@ FILES = preface.texi
 info_TEXINFOS = filesystem.texi
 filesystem_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(srcdir)/patheval.texi: patheval.t
+patheval.texi: patheval.t
 	$(BMENU2) -p "" \
 	   -u "Top" \
 	   -n "" < $< > $@
 
-$(srcdir)/init.texi: init.t
+init.texi: init.t
 	$(BMENU2) -p "" \
 	   -u "Top" \
 	   -n "" < $< > $@
 
-$(srcdir)/mounting.texi: mounting.t
+mounting.texi: mounting.t
 	$(BMENU2) -p "" \
 	   -u "Top" \
 	   -n "" < $< > $@
 
-$(srcdir)/syscalls.texi: syscalls.t
+syscalls.texi: syscalls.t
 	$(BMENU2) -p "" \
 	   -u "Top" \
 	   -n "" < $< > $@
 
-$(srcdir)/fsrequirements.texi: fsrequirements.t
+fsrequirements.texi: fsrequirements.t
 	$(BMENU2) -p "" \
 	   -u "Top" \
 	   -n "" < $< > $@
 
-$(srcdir)/imfs.texi: imfs.t
+imfs.texi: imfs.t
 	$(BMENU2) -p "" \
 	   -u "Top" \
 	   -n "" < $< > $@
 
-$(srcdir)/miniimfs.texi: miniimfs.t
+miniimfs.texi: miniimfs.t
 	$(BMENU2) -p "" \
 	   -u "Top" \
 	   -n "" < $< > $@
 
-$(srcdir)/tftp.texi: tftp.t
+tftp.texi: tftp.t
 	$(BMENU2) -p "" \
 	   -u "Top" \
 	   -n "" < $< > $@

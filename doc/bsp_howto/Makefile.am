@@ -30,94 +30,94 @@ bsp_howto_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 #  Process Automatically Generated Files
 #
 
-$(srcdir)/intro.texi: intro.t
+intro.texi: intro.t
 	$(BMENU2) -p "Top" \
 	    -u "Top" \
 	    -n "Target Dependent Files" < $< > $@
 
-$(srcdir)/target.texi: target.t
+target.texi: target.t
 	$(BMENU2) -p "Introduction" \
 	    -u "Top" \
 	    -n "Makefiles" < $< > $@
 
-$(srcdir)/makefiles.texi: makefiles.t
+makefiles.texi: makefiles.t
 	$(BMENU2) -p "Target Dependent Files Board Support Package Structure" \
 	    -u "Top" \
 	    -n "Linker Script" < $< > $@
 
-$(srcdir)/linkcmds.texi: linkcmds.t
+linkcmds.texi: linkcmds.t
 	$(BMENU2) -p "Makefiles Creating a New BSP Make Customization File" \
 	    -u "Top" \
 	    -n "Ada95 Interrupt Support" < $< > $@
 
-$(srcdir)/adaintr.texi: adaintr.t
+adaintr.texi: adaintr.t
 	$(BMENU2) -p "Linker Script Initialized Data" \
 	    -u "Top" \
 	    -n "Miscellaneous Support Files" < $< > $@
 
-$(srcdir)/support.texi: support.t
+support.texi: support.t
 	$(BMENU2) -p "Ada95 Interrupt Support Version Requirements" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/init.texi: init.t
+init.texi: init.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/console.texi: console.t
+console.texi: console.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/clock.texi: clock.t
+clock.texi: clock.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/timer.texi: timer.t
+timer.texi: timer.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/rtc.texi: rtc.t
+rtc.texi: rtc.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/ata.texi: ata.t
+ata.texi: ata.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/ide-ctrl.texi: ide-ctrl.t
+ide-ctrl.texi: ide-ctrl.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/nvmem.texi: nvmem.t
+nvmem.texi: nvmem.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 #
 #  Grab the chapter on writing a network device driver.
 #
-$(srcdir)/network.texi: ../networking/driver.t
+network.texi: ../networking/driver.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/shmsupp.texi: shmsupp.t
+shmsupp.texi: shmsupp.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/analog.texi: analog.t
+analog.texi: analog.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/discrete.texi: discrete.t
+discrete.texi: discrete.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
