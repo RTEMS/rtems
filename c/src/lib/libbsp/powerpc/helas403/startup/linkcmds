@@ -34,9 +34,11 @@ SECTIONS
      text.start = . ;
      *(.entry2)
      *(.text)
+     *(.gnu.linkonce.t.*)
      *(.rodata*)
+     *(.gnu.linkonce.r.*)
      *(.rodata1)
-     *.(eh_frame)
+     *(.eh_frame)
      *(.descriptors)
      *(rom_ver)
      etext = ALIGN(0x10);
@@ -88,6 +90,7 @@ SECTIONS
   {
     *(.data)
     *(.data1)
+    *(.gnu.linkonce.d*)
     PROVIDE (__SDATA_START__ = .);
     *(.sdata)
     *(.gnu.linkonce.s.*)
