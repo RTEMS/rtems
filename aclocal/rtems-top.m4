@@ -1,0 +1,13 @@
+dnl $Id$
+
+AC_DEFUN(RTEMS_TOP,
+[dnl
+RTEMS_TOPdir="$1";
+AC_SUBST(RTEMS_TOPdir)
+
+PROJECT_ROOT=`pwd`/$RTEMS_TOPdir;
+AC_SUBST(PROJECT_ROOT)
+
+RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
+AC_SUBST(RTEMS_ROOT)
+])dnl

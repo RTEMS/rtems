@@ -1,4 +1,27 @@
-dnl aclocal.m4 generated automatically by aclocal 1.2
+dnl aclocal.m4 generated automatically by aclocal 1.4
+
+dnl Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+dnl even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+dnl PARTICULAR PURPOSE.
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_PATH_PERL,
+[
+AC_PATH_PROG(PERL,perl)
+if test -z "$PERL" ; then
+AC_MSG_WARN(
+[***]
+[   perl was not found]
+[   Note: Some tools will not be built.])
+fi
+])
 
 dnl
 dnl $Id$
@@ -42,21 +65,61 @@ AC_MSG_RESULT($rtems_cv_prog_MKDIR_M)
 ])
 
 
+dnl $Id$
+
+AC_DEFUN(RTEMS_PATH_KSH,
+[
+dnl NOTE: prefer bash over ksh over sh
+AC_PATH_PROGS(KSH,bash ksh sh)
+if test -z "$KSH"; then
+dnl NOTE: This cannot happen -- /bin/sh must always exist
+AC_MSG_ERROR(
+[***]
+[    Cannot determine a usable shell bash/ksh/sh]
+[    Please contact your system administrator] );
+fi
+])
+
 dnl
 dnl $Id$
 dnl
 
-dnl canonicalize target name
+dnl canonicalize target cpu
 dnl NOTE: Most rtems targets do not fullfil autoconf's
 dnl target naming conventions "processor-vendor-os"
 dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
 dnl and we have to fix it for rtems ourselves 
 
 AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
-[AC_MSG_CHECKING(rtems target cpu)
-changequote(<<, >>)dnl
-target_cpu=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
-changequote([, ])dnl
+[
+AC_REQUIRE([AC_CANONICAL_SYSTEM])
+AC_MSG_CHECKING(rtems target cpu)
+changequote(,)dnl
+case "${target}" in
+  # hpux unix port should go here
+  i[3456]86-go32-rtems*)
+	target_cpu=i386
+	;;
+  i[3456]86-pc-linux*)		# unix "simulator" port
+	target_cpu=unix
+	;;
+  i[3456]86-*freebsd2*) 	# unix "simulator" port
+	target_cpu=unix
+	;;
+  no_cpu-*rtems*)
+        target_cpu=no_cpu
+	;;
+  ppc*-*rtems*)
+	target_cpu=powerpc
+	;;
+  sparc-sun-solaris*)           # unix "simulator" port
+	target_cpu=unix
+	;;
+  *) 
+	target_cpu=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
+	;;
+esac
+changequote([,])dnl
 AC_MSG_RESULT($target_cpu)
 ])
 
