@@ -69,27 +69,6 @@ BEGIN_CODE
         EXTERN (establish_stack)
 
 /*----------------------------------------------------------------------------+
-| empty_8042
-+------------------------------------------------------------------------------
-| This routine checks that the keyboard command queue is empty (after emptying
-| the output buffers).
-| No timeout is used - if this hangs there is something wrong with the machine,
-| and we probably couldn't proceed anyway.
-+----------------------------------------------------------------------------*/
-SYM(empty_8042):
-	call	delay
-	inb	$0x64, al	# 8042 status port
-	testb	$0x01, al	# output buffer?
-	jz	SYM(no_output)
-	call	SYM(delay)
-	in	$0x60, al	# read it
-	jmp	SYM(empty_8042)
-SYM(no_output):
-	test	$0x02, al	# is input buffer full?
-	jnz	SYM(empty_8042)	# yes - loop
-	ret
-
-/*----------------------------------------------------------------------------+
 | delay
 +------------------------------------------------------------------------------
 | Delay is needed after doing I/O. We do it by writing to a non-existent port.
@@ -100,8 +79,8 @@ SYM(delay):
 
 /*-------------------------------------------------------------------------+
 |         Function: _load_segments
-|      Description: Load board segment registers with apropriate values + enable
-	            A20 line + reprogram PIC.
+|      Description: Load board segment registers with apropriate values +
+|	            reprogram PIC.
 | Global Variables: None.
 |        Arguments: None.
 |          Returns: Nothing. 
@@ -114,18 +93,6 @@ SYM (_load_segments):
 	LOAD_SEGMENTS(RESET_ES, es)
 	LOAD_SEGMENTS(RESET_FS, fs)
 	LOAD_SEGMENTS(RESET_GS, gs)
-
-	/*---------------------------------------------------------------------+
-	| we have to enable A20 in order to access memory above 1MByte
-	+---------------------------------------------------------------------*/
-
-	call	SYM(empty_8042)
-	movb	$0xD1, al		# command write
-	outb	al, $0x64
-	call	SYM(empty_8042)
-        movb	$0xDF, al		# A20 on
-	outb	al, $0x60
-	call	SYM(empty_8042)
 
 	/*---------------------------------------------------------------------+
 	| Now we have to reprogram the interrupts :-(. We put them right after

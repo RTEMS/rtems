@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-PGMS=${ARCH}/start.o
+PGMS=${ARCH}/start.o ${ARCH}/start16.bin
 
 # C source names, if any, go here -- minus the .c
 C_PIECES=
@@ -18,7 +18,7 @@ C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 H_FILES=
 
 # Assembly source names, if any, go here -- minus the .s
-S_PIECES=start
+S_PIECES=start16 start
 S_FILES=$(S_PIECES:%=%.s)
 S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
 
@@ -50,8 +50,21 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all:	${ARCH} $(SRCS) $(OBJS) $(PGM)
+all:	${ARCH} $(SRCS) $(OBJS) $(PGMS)
 	$(INSTALL_VARIANT) -m 555 ${PGMS} ${PROJECT_RELEASE}/lib
 
 # Install the program(s), appending _g or _p as appropriate.
 # for include files, just use $(INSTALL)
+
+LINKCMDS=$(srcdir)/../startup/linkcmds
+
+${ARCH}/start16.o: start16.s
+	sed -e 's/\/\/.*$$//' < $< | $(CPP) $(ASMFLAGS) -I. -I$(srcdir) \
+	  -DASM -DSTART32ADDR=$(RELOCADDR) - > $*.i
+	$(AS) $(ASFLAGS) -o $@ $*.i
+
+${ARCH}/start16.bin: ${ARCH}/start16.o
+	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
+	  --oformat=elf32-i386 -o $(basename $@).obj $(basename $@).o
+	$(OBJCOPY) -O binary $(basename $@).obj $@
+

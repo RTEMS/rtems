@@ -46,4 +46,6 @@ $(LIB): ${OBJS}
 
 all:	${ARCH} $(SRCS) $(LIB)
 	$(INSTALL_VARIANT) -m 644 $(LIB) ${PROJECT_RELEASE}/lib
-
+# we create here a directory specific to the PC386 BSP to store the BootImage
+# files so they can be easily found
+	mkdir -p ${PROJECT_RELEASE}/BootImgs

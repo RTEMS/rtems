@@ -19,5 +19,5 @@
 %{qrtems_debug: start_g.o%s}}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e start}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e start --oformat=elf32-i386}
 

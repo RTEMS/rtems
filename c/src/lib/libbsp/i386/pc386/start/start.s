@@ -30,25 +30,11 @@
 | *  http://www.OARcorp.com/rtems/license.html.
 | **************************************************************************
 |
-| Also based on (from the Linux source tree):
-|   video.S - Copyright (C) 1995, 1996 Martin Mares <mj@k332.feld.cvut.cz>
-|
 |  $Id$
 +--------------------------------------------------------------------------*/
 
 
 #include "asm.h"
-
-/*----------------------------------------------------------------------------+
-| Constants
-+----------------------------------------------------------------------------*/
-
-#ifdef pc386
-
-.set PROT_CODE_SEG, 0x08	# offset of code segment descriptor into GDT
-.set CR0_PE,        1		# protected mode flag on CR0 register
-
-#endif /* pc386 */
 
 /*----------------------------------------------------------------------------+
 | A Descriptor table register has the following format:	
@@ -57,6 +43,13 @@
 .set DTR_LIMIT, 0		# offset of two byte limit
 .set DTR_BASE,  2		# offset of four byte base address
 .set DTR_SIZE,  6		# size of DTR register
+
+/*----------------------------------------------------------------------------+
+| Size of heap and stack:	
++----------------------------------------------------------------------------*/
+
+.set HEAP_SIZE,  0x2000
+.set STACK_SIZE, 0x1000
 
 /*----------------------------------------------------------------------------+
 | CODE section
@@ -72,64 +65,8 @@ BEGIN_CODE
 
 SYM (start):
 
-/*----------------------------------------------------------------------------+
-| Switch VGA video to 80 lines x 50 columns mode. Has to be done before turning
-| protected mode on since it uses BIOS int 10h (video) services.
-+----------------------------------------------------------------------------*/
-
-#if defined(pc386) && defined(RTEMS_VIDEO_80x50)
-	
-.code16
-
-	movw	$0x0003, ax	# forced set
-	int	$0x10
-	movw	$0x1112, ax	# use 8x8 font
-	xorb	%bl, %bl
-	int	$0x10
-	movw	$0x1201, ax	# turn off cursor emulation
-	movb	$0x34, %bl
-	int	$0x10
-	movb	$0x01, ah	# define cursor (scan lines 0 to 7)
-	movw	$0x0007, cx
-	int	$0x10
-
-.code32
-
-#endif /* pc386 && RTEMS_VIDEO_80x50 */
-
         nop
         cli			# DISABLE INTERRUPTS!!!
-
-/*----------------------------------------------------------------------------+
-| Bare PC machines boot in real mode! We have to turn protected mode on.
-+----------------------------------------------------------------------------*/
-
-#ifdef pc386
-
-	data16
-	movl	$ SYM(gdtptr), eax
-	data16
-	andl	$0x0000ffff, eax	# get offset into segment
-	addr16
-	lgdt	cs:(eax)		# load Global Descriptor Table
-	data16
-	movl	$ SYM(idtptr), eax
-	data16
-	andl	$0x0000ffff, eax	# get offset into segment
-	addr16
-	lidt	cs:(eax)		# load Interrupt Descriptor Table
-	
-	movl	%cr0, eax
-	data16
-	orl	$CR0_PE, eax
-	movl	eax, %cr0		# turn on protected mode
-
-	data16
-	ljmp	$PROT_CODE_SEG, $ SYM(next)	# flush prefetch queue
-
-SYM(next):
-
-#endif /* pc386 */
 
 /*----------------------------------------------------------------------------+
 | Load the segment registers (this is done by the board's BSP) and perform any
@@ -149,9 +86,9 @@ SYM(next):
 SYM (_establish_stack):
 
 	movl	$_end, eax		# eax = end of bss/start of heap
-	addl	$heap_size, eax		# eax = end of heap
+	addl	$HEAP_SIZE, eax		# eax = end of heap
 	movl	eax, stack_start	# Save for brk() routine
-	addl	$stack_size, eax	# make room for stack
+	addl	$STACK_SIZE, eax	# make room for stack
 	andl	$0xffffffc0, eax	# align it on 16 byte boundary
 	movl	eax, esp		# set stack pointer
 	movl	eax, ebp		# set base pointer
@@ -262,6 +199,7 @@ SYM (no_gdt_load):
 	cmpb	$0, SYM (_Do_Load_IDT)	# Should the new IDT be loaded?
 	je	SYM (no_idt_load)	# NO, then branch
 	lidt	SYM (_New_IDTR)		# load the new IDT
+
 SYM (no_idt_load):
 
 	/*---------------------------------------------------------------------+
@@ -315,41 +253,6 @@ END_CODE
 
 BEGIN_DATA
 
-#ifdef pc386
-
-/**************************
-* GLOBAL DESCRIPTOR TABLE *
-**************************/
-
-	.align	4
-SYM(gdtptr):
-	/* we use the NULL descriptor to store the GDT pointer - a trick quite
-	   nifty due to: Robert Collins (rcollins@x86.org) */
-	.word	gdtlen - 1
-	.long	gdtptr
-	.word   0x0000
-
-	/* code segment */
-	.word	0xffff, 0
-	.byte	0, 0x9f, 0xcf, 0
-
-        /* data segment */
-	.word	0xffff, 0
-	.byte	0, 0x93, 0xcf, 0
-
-	.set	gdtlen, . - gdtptr	# length of GDT
-	
-/*************************************
-* INTERRUPT DESCRIPTOR TABLE POINTER *
-*************************************/
-
-	.align	4
-SYM(idtptr):
-	.word	0x07ff	# limit at maximum (allows all 256 interrupts)
-	.word	0, 0	# base at 0
-
-#endif /* pc386 */
-
 	EXTERN (Do_Load_IDT)	# defined in the BSP
 	EXTERN (Do_Load_GDT)	# defined in the BSP
 
@@ -370,11 +273,13 @@ END_DATA
 
 BEGIN_BSS
 
-	PUBLIC (heap_size)
-	.set	heap_size, 0x2000
+	PUBLIC (_heap_size)
+SYM (_heap_size):
+	.long	HEAP_SIZE
 
-	PUBLIC (stack_size)
-	.set	stack_size, 0x1000
+	PUBLIC (_stack_size)
+SYM (_stack_size):
+	.long	STACK_SIZE
 
 	PUBLIC (Interrupt_descriptor_table)
 SYM (Interrupt_descriptor_table):
@@ -390,14 +295,8 @@ SYM (_New_IDTR):
 
 	PUBLIC (_Global_descriptor_table)
 SYM (_Global_descriptor_table):
-#ifdef pc386
-	
 	.space (3 * 8)	# the PC386 bsp only needs 3 segment descriptors:
-#else			#   NULL, CODE and DATA
-	.space (8192 * 8)
-	
-#endif /* pc386 */
-
+			#   NULL, CODE and DATA
 	PUBLIC (_Original_GDTR)
 SYM (_Original_GDTR):
 	.space DTR_SIZE

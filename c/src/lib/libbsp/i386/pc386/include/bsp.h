@@ -52,18 +52,6 @@ extern "C" {
 /*-------------------------------------------------------------------------+
 | Memory related constants.
 +--------------------------------------------------------------------------*/
-#ifdef RTEMS_SMALL_MEMORY                /* We only have low (640K) memory.   */
-
-#define RAM_START 0x00000
-#define RAM_END	  0xA0000
-
-#else                                    /* We have at least 2048K of memory. */
-
-#define RAM_START 0x100000
-#define RAM_END   0x200000
-
-#endif /* RTEMS_SMALL_MEMORY */
-
 #define HEAP_SIZE 64  /* Size of libc Heap (used for malloc et al) in KBytes. */
 
 /*-------------------------------------------------------------------------+

@@ -1,37 +1,87 @@
-#
-#  $Id$
-#
 
-Joel's Note:
++-----------------------------------------------------------------------------+
+| RTEMS 4.0.0 PC386 BSP HOWTO - 1998/04/21                                    |
++-----------------------------------------------------------------------------+
+| (C) Copyright 1998 -                                                        |
+| - NavIST Group - Real-Time Distributed Systems and Industrial Automation    |
+|                                                                             |
+| http://pandora.ist.utl.pt                                                   |
+|                                                                             |
+| Instituto Superior Tecnico * Lisboa * PORTUGAL                              |
++-----------------------------------------------------------------------------+
+| Disclaimer:                                                                 |
+|                                                                             |
+| This file is provided "AS IS" without warranty of any kind, either          |
+| expressed or implied.                                                       |
++-----------------------------------------------------------------------------+
 
-This has some information which is specific to 3.6.0.  Other parts of the
-document should be merged with the main RTEMS READMEs.  Procedures for
-building a boot floppy, from a network server, and other information
-specific to this BSP should remain in this file.
-
------------
-
-RTEMS PC386 BSP HOWTO:
 
 1. Introduction
 ---------------
 
-    This howto tries to explain how to setup the RTEMS host
-environment on a Linux based PC so that RTEMS applications can be
-built for and run in a bare PC 386+.
+    This tries to explain how to setup the RTEMS host environment so
+that RTEMS applications can be built for and run in a bare PC 386 or
+above.
+
+    It covers essentially the aspects of loading images, since
+information concerning other issues such as building the development
+tools and the RTEMS distribution can be found in the 'RTEMS 4.0.0
+On-Line Library' under 'Getting Started with RTEMS for C/C++ Users'.
 
     Please note that everything in the following text using the
 notation '<...>' is just an alias to something and should always be
 substituted by the real thing!
 
-2. Unarchiving
+
+2. Building the GNU C/C++ Cross Compiler Toolset
+------------------------------------------------
+
+    Obtaining, building and installing the tools for building the
+PC386 BSP of RTEMS is covered in detail in the 'RTEMS 4.0.0 On-Line
+Library' -> 'Getting Started with RTEMS for C/C++ Users' -> 'Building
+the GNU C/C++ Cross Compiler Toolset'.
+
+    When running the 'bit' script you should use the 'i386-elf'
+configuration.
+
+
+4. Building RTEMS
+-----------------
+    Obtaining, building and installing the tools for building the
+PC386 BSP is covered in detail in the 'RTEMS 4.0.0 On-Line Library' ->
+'Getting Started with RTEMS for C/C++ Users' -> 'Building RTEMS'.
+
+    When running configure, use the following values for the listed
+options:
+
+      --target=i386-rtems
+
+      --enable-rtemsbsp=pc386
+
+      --prefix=i386-rtems
+
+ 
+5. RTEMS Tests
 --------------
 
-    Files which have been "tarred, zipped" (i.e. .tar.gz or .tgz
+    If you've completed the last step successfully, you'll find the
+RTEMS sample and test files that can be loaded with GRUB in the
+'<build_point>/pc386/tests' directory, RTEMS sample and test files in
+a format suitable for use with NetBoot in the
+'<build_point>/pc386/BootImgs' directory.
+
+
+6. Loading RTEMS PC386 applications
+-----------------------------------
+
+6.1. Unarchiving
+----------------
+
+    Files which have been "tarred, gzipped" (i.e. .tar.gz or .tgz
 extension) may be unarchived with a command similar to one of the
 following:
 
-      gzcat <file>.tgz | tar xvof -
+      zcat <file>.tgz | tar xvof -
 
     OR
 
@@ -39,455 +89,215 @@ following:
 
     OR
 
-      gtar xzvf <file>.tgz
+      tar xzvf <file>.tgz
 
-    NOTE: gunzip -c is equivalent to gzcat, while gtar is GNU tar.
+    NOTE: gunzip -c is equivalent to zcat. On commercial (non-Linux)
+Unices, since the GNU utilities are not the standard 'tar' will be
+gtar (GNU tar) and 'zcat' will be 'gzcat'.
 
     Given that the necessary utility programs are installed, any of
 the above commands will extract the contents of <file>.tar.gz into the
-current directory. All of the RTEMS components will be extracted into
-the subdirectory rtems-3.2.0. To view the contents of a component
-without restoring any files, use a command similar to the following:
-
-      gzcat <file>.tgz | tar tvf -
-
-3. The building tools (gcc, binutils, et al.)
----------------------------------------------
-
-    The PC386 BSP was developed so that the Linux native building
-tools can be used to build the RTEMS binaries.
-
-    With this in mind all you have to do is check if you have gcc +
-binutils (as, ld, ar, objcopy) installed in your system (which most
-probably you'll have) and check their versions. You can do so with:
-
-    - 'gcc -v' (for gcc);      --> version 2.7.2.1
-    - 'ld -v'  (for binutils). --> version 2.8.1 (with BFD linux-2.8.1.0.1)
-
-    The above mentioned versions of gcc and binutils are almost
-certainly guaranteed to work (their the ones we've been using). More
-recent versions should also be ok, and older versions may be ok too.
+current directory. To view the contents of an archive without
+restoring any files, use a command similar to the following:
 
-    The only known problem is with older versions of binutils which
-still don't have a 'binary' target in 'objcopy'. We need objcopy's
-binary target to produce our final binaries (this will probably be
-enhanced in the future, so we get them directly from the 'elf32-i386'
-object, but for now this is how we do it). There's a possible
-workaround this, using older versions of 'objdump' with the flags used
-to produce the Linux kernel binary. You can investigate this in the
-Linux source makefiles. This hasn't been tested.
+      zcat <file>.tgz | tar tvf -
 
-    It should be ok to build a cross-compilation environment (gcc +
-binutils) that supports the 'elf32-i386' target, so that you can use a
-host system other than Linux. This hasn't been tested.
 
-    You can get 'gcc' and 'binutils', both pre-compiled binaries for
-Linux and sources from:
+6.2 Using GRUB to load RTEMS PC386 applications
+-----------------------------------------------
 
-    ftp://sunsite.unc.edu/pub/Linux/GCC/
+    Using GRUB (GRand Unified Bootloader) is the simplest way to load
+and run your PC386 BSP samples, tests and programs.
 
-      binutils-2.8.1.0.1.bin.tar.gz
-      binutils-2.8.1.0.1.tar.gz
-      gcc-2.7.2.1.bin.tar.gz
+    You can get the latest release of GRUB from its homepage:
 
-as well as from several other mirrors and sites.
+    - http://www.uruk.org/grub/
 
-4. Creating aliases for gcc and the binutils
---------------------------------------------
+or alternatively by ftp from:
 
-    The NEWLIB expects to be compiled by a cross-compiler. The easiest
-(as far as we could find out) way to do this, short of changing the
-configuration files is to make symbolic links from cross-compiler
-style names (the usual names with a 'i386-elf32-rtems-' prefix) to the
-real name.
+    - ftp://ftp.uruk.org/public/grub/
 
-    You can use the following shell script to create these links
-quickly. It assumes that the native Linux 'gcc' and 'binutils' reside
-in their usual place (i.e. '/usr/bin/'). It also assumes that you're
-running it in the directory where the aliases will reside (which we
-will refer to as <elf32-tools>). You should then add <elf32-tools> to
-you path. This is necessary for building the NEWLIB package.
+    Once you obtain the .tar.gz archive 'grub-0.4.tar.gz', change to a
+temporary directory (you won't need the grub files after this and can
+just go ahead and delete the whole directory structure that was
+generated) and unarchive 'grub-0.4.tar.gz' following the instructions
+given above in [2. Unarchiving].
 
---- CUT HERE --- CUT HERE --- CUT HERE --- CUT HERE --- CUT HERE ---
+    After this is done change the directory to:
 
-#!sh
-ln -sf /usr/bin/ar i386-elf32-rtems-ar
-ln -sf /usr/bin/as i386-elf32-rtems-as
-ln -sf /usr/bin/cpp i386-elf32-rtems-cpp
-ln -sf /usr/bin/gasp i386-elf32-rtems-gasp
-ln -sf /usr/bin/gcc i386-elf32-rtems-gcc
-ln -sf /usr/bin/ld i386-elf32-rtems-ld
-ln -sf /usr/bin/objcopy i386-elf32-rtems-objcopy
-ln -sf /usr/bin/objdump i386-elf32-rtems-objdump
-ln -sf /usr/bin/ranlib i386-elf32-rtems-ranlib
+      grub-0.4/bin_std
 
---- CUT HERE --- CUT HERE --- CUT HERE --- CUT HERE --- CUT HERE ---
- 
-5. Building Newlib
-------------------
+and there you'll find the two files you'll need from this archive:
+'stage1' and 'stage2'.
 
-    The next step is to build and install the NEWLIB package. The
-version we've been using and have tested is:
+    You should have two (2) formatted diskettes available. One of
+these will only be used temporarily to create the other one, and we'll
+refer to it as 'RAW GRUB' diskette (you can label it accordingly if
+you wish). The other diskette, which we will refer to as 'GRUB FS'
+should be high-level formatted with one of GRUB's supported file
+systems, which are: DOS FAT, BSD FFS, and Linux ext2fs.
 
-      newlib-1.7.0-posix-rtems-3.6.0.tgz
+    A DOS FAT diskette can, obviously, be created under DOS with the
+'FORMAT' command. Under Linux, the following commands are available to
+add file systems to low-level formatted diskettes:
 
-    You can get it from:
+    1. To add a DOS FAT file system to a low-level formatted diskette:
 
-      ftp://lancelot.gcs.redstone.army.mil/pub/rtems/releases/current/c/
+      a) If you have mtools installed:
 
-    After unarchiving the NEWLIB distribution (discussed earlier), the
-NEWLIB package must be configured for the desired host and target.
+           'mformat a:'.
 
-    This is accomplished by changing the current directory to the top
-level of the NEWLIB source tree and executing the configure script
-with the appropriate arguments. This step configures the NEWLIB source
-for the 'i386-elf32-rtems' target configuration. The libraries and
-include files will be installed at <install_point>. The --verbose
-option to the ./configure script is recommended so you can check how
-the configuration process is progressing. Meanwhile we must do a
-little patching: 'install.sh' and 'config.sub' are missing from the
-'libgloss' sub-directory. A command sequence similar to the following
-should be used:
+      b) Assuming that you are formatting the diskette in the first
+         floppy disk drive ('/dev/fd0' under Linux):
 
-      cd newlib-<NEWLIB_Version>
+           'mkdosfs /dev/fd0' or
 
-      cp configure.sub libgloss
-      cp install.sh libgloss
+           'mkfs.msdos /dev/fd0'.
 
-      CC=gcc CFLAGS="-O4 -g" ./configure --verbose \
-             --target=i386-elf32-rtems \
-             --prefix=<install_point>
+    2. To add a Linux ext2fs file system to a low-level formatted
+       diskette, assuming that you are formatting the diskette in the
+       first floppy disk drive ('/dev/fd0' under Linux):
 
-    If the configure script successfully completes, then NEWLIB may be
-built. This step builds the NEWLIB package in the local directory and
-does NOT install any files. The example commands specifies that gcc
-should be used as the C compiler and the arguments to be used by gcc.
+         'mke2fs /dev/fd0' or
 
-    A command similar to the following should be used:
+         'mkfs.ext2 /dev/fd0'.
 
-      make CC="gcc" CFLAGS="-O4 -g"
+   Next we will install using 'rawrite' or 'dd' to the 'GRUB RAW'
+diskette.
 
-    If the build process successfully completes, then the NEWLIB
-package is ready to install. A command similar to the following should
-be used:
+   NOTE: This will destroy any data currently on the diskette.
 
-      make CC="gcc" CFLAGS="-O4 -g" install
+   Execute your OS's equivalent of (this should work for recent
+FreeBSD versions and Linux just fine):
 
-    If this successfully completes, then the NEWLIB package has been
-installed at <install_point>.
+     dd if=stage1 of=/dev/fd0 bs=512 count=1
+     dd if=stage2 of=/dev/fd0 bs=512 seek=1
 
-    The documentation for the NEWLIB package is formatted using
-TeX. If TeX and some supporting tools are installed on the development
-system, then the following command may be used to produce the
-documentation in the "DVI" format:
+   Under DOS/Windows/NT, courtesy of Eric Hanchrow (erich@microsoft.com):
 
-      gmake CC="gcc" CFLAGS="-O4 -g" dvi
+     * Use the copy /b command to binary concatenate the stage1 and
+       stage2 files together via:
 
-    If while the documentation is being formatted, the message "Cross reference values unknown; you must run TeX again." is printed, then the "DVI" files generated by this command (e.g. *.dvi in every subdirectory with documentation) must be removed and the command reexecuted.
+         copy /b stage1 stage2 grub.raw
 
-6. Modules
-----------
+     * Use rawrite.exe (which is available in many places on the net and
+       in some Linux distributions) to write grub.raw to a diskette.
 
-    Modules eases the process of manipulating the environment
-variables required to build RTEMS. If, for whatever reason, you do not
-wish to use Modules, then it will be necessary to manually modify
-shell initialization files and set the required RTEMS shell variables
-"manually." In this case, the Modules files are still the best place
-to look for information on what variables to set and example values.
+   Next stage: copy the 'stage1' and 'stage2' files to the 'GRUB FS'
+diskette (if you are using Linux you can mount the diskette in an
+appropriate mount point and then 'cp' the files to it, if it is either
+a DOS FAT or an EXT2FS diskette, or in the case of a DOS FAT diskette
+you can use 'mcopy' from 'mtools'.)
 
-    The Modules package was utilized by the RTEMS developers to make
-the initialization process shell independent. The Modules files used
-by the RTEMS developers to configure their user environment while
-working on a particular target board are included in the
-distribution. These require only simple modifications to be
-"localized" for the RTEMS developer. The modifications to these ASCII
-files can be made with an editor such as vi or emacs.
+   After this is done boot a PC using the 'GRUB RAW' diskette. After
+this is done, you will get GRUB's command line interface. Exchange
+'GRUB RAW' with the 'GRUB FS' diskette in the drive and issue the
+following command from GRUB's prompt:
 
-    The Modules Homepage is:
+     install=(fd0)/stage1 (fd0) (fd0)/stage2 0x8000 (fd0)/grubmenu
 
-      http://www.modules.org/
+   This command will make the 'GRUB FS' diskette bootable. After this
+is done, you won't require the 'GRUB RAW' diskette anymore and you can
+delete the 'stage1' file from the 'GRUB FS' diskette.
 
-    You can get the Modules distribution (the latest version, which
-we've been using, is '3.0pre') via the homepage or directly from:
+   Next copy all the files you wish to load to the diskette. The GRUB
+loadable test and sample files in the RTEMS distribution have '.exe'
+extension and can be found under the build point in the 'pc386/tests'
+directory. You can compress this files with gzip to save space if you
+wish. GRUB loads 'gzipped' files transparently.
 
-      ftp://ftp.modules.org/pub/distrib/Modules-3.0pre.tar.gz
+   Finally you have to create a GRUB menu configuration file. We will
+call this file 'grubmenu'. You can call it anything as long as you use
+the correct name in the 'install' command where we used 'grubmenu'.
 
+   The 'grubmenu' file, as far as we are interested has the following
+syntax:
 
-    6.1. New Modules users
-    ----------------------
+     title=  Hello World Test
+     kernel= (fd0)/hello.exe.gz
 
-    Install Modules on the development system following the
-instructions in the file README in the main Modules directory. When
-Modules has been installed and a user account setup to use Modules,
-then proceed to the section Current Modules Users.
+   You can add as many of this entries as you want to the 'grubmenu'
+file. There should be one for each program you wish to load. The
+'title=' line provides a description for the program that will appear
+after boot in the GRUB menu for the user to choose and the 'kernel='
+line describes where the file can be found by GRUB (you should leave
+the '(fd0)/' part and just substitute the rest if you've copied the
+files to the root directory of the diskette.
 
-    6.2. Current Modules users
-    --------------------------
+   Just boot the PC with the 'GRUB FS' diskette and you will be able
+to choose which program you want to load from GRUB's menu.
 
-    If the host computer already utilizes the Modules package, then
-the assistance of the system administrator responsible for the Modules
-package will be required to perform the modifications described below.
+   The GRUB documentation is available in HTML format in the 'docs'
+directory of the GRUB tree starting with the 'index.html' file.
 
-    The system administrator must integrate the RTEMS modules into the
-existing Modules configuration. A first alternative is to copy all of
-the module files provided with RTEMS into an existing modulefiles
-directory. This requires that future updates of RTEMS modules will
-also have to be integrated into the existing modulefiles
-directory. This alternative is not recommended.
 
-    The more preferable alternative is to add the RTEMS modulefiles
-directory to the MODULEPATH. This can be accomplished on an individual
-user or system wide basis. For individual users, the RTEMS modules
-directory can be added to the MODULEPATH of those users requiring
-access to RTEMS. The default MODULEPATH is established by the Modules
-initialization routine. Thus, the RTEMS modules directory must be
-added to the MODULEPATH in the user's shell initialization file
-(~/.profile or ~/.cshrc for example) following the Modules
-initialization statement. The proper way to accomplish this is to use
-the Modules use statement. For example, the following line should be
-added to the user's shell initialization file:
+6.3  Using NetBoot to load RTEMS PC386 applications
+---------------------------------------------------
 
-      module use <rtems_path>/modules/modulefiles
-
-    For system wide access, the RTEMS modulefiles directory can be
-added to each of the shell initialization scripts in the existing
-Modules package. This will require modifying the initialization of
-MODULEPATH in each shell initialization file.
-
-    After integrating RTEMS modules with the existing modules, one may
-proceed to the Configuring An RTEMS User section.
-
-7. RTEMS
---------
-
-    You can get the latest free release of the C distribuition of
-RTEMS (version 3.6.0), from:
-
-      ftp://lancelot.gcs.redstone.army.mil/pub/rtems/releases/current/c/
-
-    Where you'll find:
-
-      rtems-3.6.0.tgz    or    rtems-c_src.tgz - RTEMS sources;
-
-      rtems-3.5.1-c_doc.tgz or rtems-c_doc.tgz - RTEMS documentation;
-
-      individual_manuals/ - Sub-directory where you can get the
-                            manuals individually.
-
-    Please note that the RTEMS documentation is slightly outdated
-(most noticeably some RTEMS primitives have different protoypes) since
-it refers to the previous release (3.5.1.) of RTEMS.
-
-    After unarchiving the RTEMS distribution (discussed earlier), it
-is necessary to add the PC386 BSP to the source tree. This is done in
-two steps.
-
-    The first step consists in unarchiving the
-'rtems-3.6.0-PC386-BSP.tgz' archive over the standard rtems-3.6.0
-distribution. It should be done in the same directory where
-'rtems-3.6.0.tgz' was unarchived.
-
-    Next you'll need to apply the patch in
-'rtems-3.6.0-PC386-BSP.diff.gz' to the RTEMS source tree. The
-following command should be used:
-
-      gzip -d -c rtems-3.6.0-PC386-BSP.diff.gz | patch
-
-also from the same directory where 'rtems-3.6.0.tgz' was unarchived.
-
-    At this stage we have RTEMS + PC386 BSP, the user environment must
-be setup to build and install RTEMS.
-
-    Using this process, you'll know which files are patched and which
-files are new.
-
-    7.1. Board Support Package
-    --------------------------
-
-    A Board Support Package (BSP) is a collection of device drivers,
-initialization code, and linker scripts necessary to execute RTEMS on
-a particular target board. The minimum set of device drivers for a
-single processor target includes a Clock, Console I/O, and Benchmark
-Timer device drivers.
-
-    The source code for the PC386 BSP can be found in the directory 'c/src/lib/libbsp/i386/pc386.
-
-    7.2. Makefile Configuration Files
-    ---------------------------------
-
-    There are two target specific configuration files used by the
-Makefile system. These configuration files specify detailed
-information about the toolset, the compilation process, as well as
-some general configuration information regarding the target and the
-development environment. The following is a list of these
-configuration files:
-
-      c/make/compilers/gcc-pc386.cfg
-
-      c/make/custom/pc386.cfg
-
-    If you're compiling to a i386+ with FPU in a standard Linux
-environment, you shouldn't require any changes to these files in order
-to build RTEMS (though you'll probably want to fine tune them later
-on).
-
-    7.3 Creating a Customized Modules File
-    --------------------------------------
-
-    Files which the Modules packages may use to customize a user's
-environment for building, installing, and modifying RTEMS are found in
-the c/Modules/rtems directory. Each of the files in this directory
-corresponds to the configuration used by the RTEMS developers for
-building and installing RTEMS for a particular target board. These
-files contain the Modules commands necessary to set the following
-environment variables:
-
-       Variable                      Description
-
-      RTEMS_BSP            The name of the target BSP (e.g.
-                                 mvme136 or cvme961).
-
-      RTEMS_ROOT        The full path of root directory of the
-                                  RTEMS source code.
-
-    RTEMS_GNUTOOLS     The full path of the root directory for
-                         the cross-development toolset to be
-                                        used.
-
-      RTEMS_HOST         The name of the operating system for
-                               the development system.
-
-    RTEMS_LIBC_DIR     The full path of the root directory for
-                          the Standard C Library to be used.
-
-
-    The Modules file for the PC386 BSP is: 'c/Modules/rtems/nav-pc386'.
-
-    You MUST edit this file and set the following variables to the
-correct values in your system:
-
-      - RTEMS_ROOT;
-      - RTEMS_GNUTOOLS (this is the directory where the links in 4.
-                        were created);
-      - RTEMS_LIBC_DIR (this is the directory where the Newlib target
-                        specific root is installed, and with reference
-                        to 5. should be '<install_point>/i386-elf32-rtems').
- 
-    7.4 Configuring an RTEMS User Using Modules
-    -------------------------------------------
-
-    Each user building and installing RTEMS must have their
-environment configured. The user environment must have a set of
-variables set in it which indicate the target BSP, host operating
-system, and numerous paths.
-
-    If you'll just be using the PC386 BSP then a line of the following
-type may be added to the initialization file for your shell after the
-Modules initialization statement.
-
-     module load nav-pc386
-
-    Note that you must logout and login before any changes to the shell
-initialization files will take effect.
-
-    If you don't wish the RTEMS environment configuration to be added
-to your shell initialization file, then the "module load" statement
-may be entered at the command line.
-
-    You may switch from one RTEMS configuration to another with either
-of the following command sequences:
-
-      module unload <old_rtems_modulefile>
-      module load <new_rtems_modulefile>
-
-    OR
-
-      module switch <old_rtems_modulefile> <new_rtems_modulefile>
-
-    The command "module avail" may be used to obtain a list of the
-Module files which are available to be loaded using the "module load"
-command.
-
-    The command "module list" provides a list of the currently loaded
-Modules.
- 
-    7.5. Building RTEMS
-    -------------------
-
-    See the file README.configure in the top level directory for
-    more information.
-
-
-8. RTEMS Tests
---------------
-
-    If you've completed the last step successfully, you'll find the
-RTEMS sample and test files in the 'c/pc386_i386/tests' directory.
-
-    The 'sp*.bt' are the single processor tests and should all work
-correctly. The same applies to the 'tm*.bt' which are the timing
-tests.
-
-    The other sample ('*.bt') files should also work with the
-exception of 'spfatal.bt' and 'stackchk.bt' (see 9.).
-
-8.1  Using Diskboot or NetBoot
-------------------------------
-    To load the '*.bt' files you can either run the 'diskboot.exe'
-(which can be found in 'c/pc386_i386/build-tools') under DOS with a
-command line like (this is just a quick and dirty loader - you'll have
-to press return twice after entering it):
-
-      diskboot sp01.bt
+    To load the '*.bt' files you can
 
     Alternatively, if you have a PC connected to a network with a
 BOOTP server and a TFTP server (this can very well be you're Linux
-RTEMS host system), you can use Gero Kuhlmann's netboot loader, to
+RTEMS host system), you can use Gero Kuhlmann's NetBoot loader, to
 load RTEMS to a diskless PC across a network. You can get it from:
 
-      ftp://sunsite.unc.edu/pub/Linux/system/boot/netboot-0.7.2.tar.gz
+      ftp://sunsite.unc.edu/pub/Linux/system/boot/netboot-0.7.3.tar.gz
 
-    Follow the instructions contained in the package to setup the
+or in any of Sunsite's mirrors. It is also available from NetBoot's
+homepage:
+
+      http://www.han.de/~gero/netboot
+
+    After unarchiving 'netboot-0.7.3.tar.gz' you should change to the
+base directory of this and run:
+
+      ./configure --disable-mknbi-dos --disable-mknbi-linux --disable-mknbi-mgl
+
+    Afterwards, you should follow the instructions contained in the
+'INSTALL' file also contained in the base directory, on how to setup the
 server(s) and to build a boot ROM for the client PC network card, or a
-boot diskette, and the client should be able to load the '*.bt' files
+boot diskette, and the PC client should be able to load the '*.bt' files
 from the server.
 
-    For the network loader every relocation address from 0x10200 to
-0x80200 are known to work correctly. For the DOS loader, relocation
-addresses 0x20200, 0x40200 and 0x80200 are known to work under DOS
-5.00, DOS 6.xx and DOS 7.00. You can set the relocation address in
-'c/make/compilers/gcc-pc386.cfg' by setting the value of the
-'RELOCADDR' variable.
+    The important sections to check in the 'INSTALL FILE' are the last two:
 
-8.2  Using GRUB
----------------
+    - Setup of the server (only the BOOTP and TFTP parts - ignore NFS).
+      ===================
 
-GRUB is another boot loader which may be used with pc386.  It is
-available from:
+    - Setup of the client including building the bootrom
+      ==================================================
 
-  ftp://ftp.uruk.org/public/grub/
-  http://www.uruk.org/grub/
+all the rest can be safely ignored if you don't care to examine it.
 
  
-9. Important Notes
-------------------
+7. Technical Information
+------------------------
 
-    The optional stack checker extension ('stackchk') doesn't seem to
-be working properly. It reports blown task stacks even if everything
-seems to work properly when 'stackchk' isn't activated... This should
-be properly investigated: the problem can reside with the 'PC386 BSP',
-or in the interface between 'stackchk' and the BSP (maybe something
-isn't being correctly initialized...). Since this doesn't seem to be a
-serious BSP problem, it hasn't been dealt with, due to more prioritary
-problems.
+    NOTE: All the following paths are relative to the base directory
+of the RTEMS distribution.
 
-    The tests which exercise the fatal error mecanisms don't work
-correctly either. I've been told by Joe that 'spfatal' is outdated, and
-so this really isn't surprising.
+    As of the writing of this HOWTO, PC386 images can be loaded either
+in low memory 0x10000 (64KB) until 0x97C00 (607K) using NetBoot or in
+high memory from 0x100000 (1024KB) until the top of the available
+memory using either NetBoot or GRUB.
 
-    This issues may be important and should be investigated as soon as
-possible.
+    If you want to change the default loading address from 1024KB to
+something else, just change the value of the variable RELOCADDR in the
+'make/custom/pc386.cfg' file to the new value you want (make sure you
+follow the instructions indicated before the definition of RELOCADDR).
+
+    Remember that GRUB restricts the loading addresses to values above
+0x100000 (1024KB), only NetBoot can load images in low memory.
+
+    After you make any changes to RELOCADDR and if you are using
+NetLoader, you'll have to recompile the
+'c/src/lib/libbsp/i386/pc386/start/start16.s' file. The easiest way to
+achieve this is just to 'make clean' and the 'make all' again. The
+quickest way is to change to
+'<build_point>/c/src/lib/libbsp/i386/pc386/start' and 'make
+RTEMS_BSP=pc386 clean all'.
 
     When programming interrupt handlers take into account that the PIC
 is reprogrammed and so you should use the interface functions provided
-to garantee that everything works ok.
+in '<build_point>/pc386/lib/include/irq.h> to guarantee that everything
+works ok.

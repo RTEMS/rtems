@@ -41,16 +41,13 @@
 /*-------------------------------------------------------------------------+
 | Global Variables
 +--------------------------------------------------------------------------*/
-#ifdef RTEMS_SMALL_MEMORY
 extern rtems_unsigned32 _end;           /* End of BSS. Defined in 'linkcmds'. */
+extern rtems_unsigned32 _heap_size;   /* Size of stack. Defined in 'start.s'. */
+extern rtems_unsigned32 _stack_size;  /* Size of heap. Defined in 'start.s'.  */
 
-rtems_unsigned32 rtemsFreeMemStart = (rtems_unsigned32)&_end;
+rtems_unsigned32 rtemsFreeMemStart;
                          /* Address of start of free memory - should be updated
                             after creating new partitions or regions.         */
-#else
-rtems_unsigned32 rtemsFreeMemStart = RAM_START;
-                                             /* RAM_START defined in 'bsp.h'. */
-#endif /* RTEMS_SMALL_MEMORY */
 
 /* The original BSP configuration table from the application and our copy of it
    with some changes. */
@@ -105,6 +102,9 @@ void bsp_pretasking_hook(void)
 +--------------------------------------------------------------------------*/
 void bsp_start( void )
 {
+  rtemsFreeMemStart = (rtems_unsigned32)&_end + _heap_size + _stack_size;
+                                    /* set the value of start of free memory. */
+
   /* If we don't have command line arguments set default program name. */
 
   Cpu_table.pretasking_hook         = bsp_pretasking_hook; /* init libc, etc. */
@@ -118,8 +118,11 @@ void bsp_start( void )
   Cpu_table.interrupt_stack_size    = 4096;
   Cpu_table.extra_mpci_receive_server_stack = 0;
 
-  /* Place RTEMS workspace at top of physical RAM (RAM_END defined in 'bsp.h' */
+  /* Place RTEMS workspace at beginning of free memory. */
 
-  BSP_Configuration.work_space_start =
-                          (void *)(RAM_END - BSP_Configuration.work_space_size);
+  if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
+    rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+
+  BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;
+  rtemsFreeMemStart += BSP_Configuration.work_space_size;
 } /* bsp_start */
