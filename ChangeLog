@@ -1,3 +1,18 @@
+2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/bsp-alias.m4, aclocal/canonical-target-name.m4,
+	aclocal/check-bsps.m4, aclocal/check-custom-bsp.m4,
+	aclocal/enable-bare.m4, aclocal/enable-cxx.m4,
+	aclocal/enable-inlines.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4, aclocal/enable-rdbg.m4,
+	aclocal/enable-rtems-debug.m4, aclocal/enable-rtemsbsp.m4,
+	aclocal/enable-tests.m4, aclocal/multilib.m4,
+	aclocal/path-ksh.m4, aclocal/project-root.m4,
+	aclocal/rtems-top.m4, aclocal/tool-paths.m4,
+	acinclude.m4:
+	Fix underquoting to silence automake-1.8.
+
 2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* config-ml.in: Don't built multilib variant normal (-mn) for

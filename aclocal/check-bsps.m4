@@ -4,7 +4,7 @@ dnl Report all available bsps for a target,
 dnl check if a bsp-subdirectory is present for all bsps found
 dnl
 dnl RTEMS_CHECK_BSPS(bsp_list)
-AC_DEFUN(RTEMS_CHECK_BSPS,
+AC_DEFUN([RTEMS_CHECK_BSPS],
 [
 AC_REQUIRE([RTEMS_CHECK_CPU])dnl sets RTEMS_CPU, target
 AC_REQUIRE([RTEMS_TOP])dnl sets RTEMS_TOPdir
