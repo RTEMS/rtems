@@ -1,4 +1,10 @@
 
+	* irq/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* comm/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* pci/Makefile.am: Use 'PREINSTALL_FILES ='.
+
+2001-08-16	Mike Siers <mikes@poliac.com>
+
 	* comm/tty_drv.c, comm/uart.c: Correct some minor cut and paste bugs.
 
 2001-07-03	Mike Seirs <mike@poliac.com>
