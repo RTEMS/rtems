@@ -1,3 +1,8 @@
+2002-10-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/enable-rtemsbsp.m4: Remove '\' in AC_MSG_ERROR 
+	(autoconf > 2.54 complains about).
+
 2002-10-21	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-20021021-test.

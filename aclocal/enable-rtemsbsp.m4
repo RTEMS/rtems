@@ -10,7 +10,7 @@ AC_ARG_ENABLE(rtemsbsp,
 AC_HELP_STRING([--enable-rtemsbsp="bsp1 bsp2 .."],
 [BSPs to include in build]),
 [case "${enableval}" in
-  yes|no) AC_MSG_ERROR([missing argument to --enable-rtemsbsp=\"bsp1 bsp2\"]);;
+  yes|no) AC_MSG_ERROR([missing argument to --enable-rtemsbsp="bsp1 bsp2"]);;
   *) $1=$enableval;;
 esac],[$1=""])
 ])
