@@ -32,7 +32,6 @@
 #include <netinet/if_ether.h>
 #include <bsp/irq.h>
 
-extern void rtems_panic(char *,int);
 
 /*
  * Number of interfaces supported by this driver
@@ -427,7 +426,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
 {
   int i;
   unsigned char *hwaddr;
-  rtems_status_code status;
 
   /*
    * Issue reset to FEC
