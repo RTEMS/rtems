@@ -37,6 +37,8 @@
 /* define a shortcut */
 #define pci	BSP_pci_configuration
 
+
+
 /*
  * Bit encode for PCI_CONFIG_HEADER_TYPE register
  */
