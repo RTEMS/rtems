@@ -1,3 +1,7 @@
+2001-10-22	Andy Dachs <a.dachs@sstl.co.uk>
+
+	* shared/ppc.h: Added mpc8260 support.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/ppctypes.h: Fixed typo.
