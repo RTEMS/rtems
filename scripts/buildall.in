@@ -4,7 +4,7 @@
 #
 
 RTEMS_DIR=`dirname $0`
-CFG=user.cfg
+CFG=./user.cfg
 dst=@RPM_SPECSdir@
 
 usage()
@@ -53,7 +53,7 @@ if [ "X${TARGETS}" = "X" ] ; then
     powerpc-rtems sh-rtems sh-rtemself sparc-rtems"
 fi
 
-. ./$CFG
+. $CFG
 
 binutils=${binutils_version}
 gcc=${gcc_version}
@@ -89,10 +89,11 @@ if [ ${installed_count} -ne 0 ] ; then
   exit 1
 fi
 
-echo Generating specs files.
+echo Copying specs files.
 if [ ${testing} = no ] ; then
   cd ${RTEMS_DIR}
-  ./configure || exit 1
+  
+  # ./configure || exit 1
   make        || exit 1
 
   #  Now generate all the specs
@@ -101,7 +102,6 @@ if [ ${testing} = no ] ; then
     tspecs=`find . -name "${target}*"`
     ${ECHO} cp -r ${tspecs} ${dst}
   done
-  ${ECHO} make distclean
 fi
 
 # clean up a bit before we start

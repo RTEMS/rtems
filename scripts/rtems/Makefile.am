@@ -1,6 +1,7 @@
 AUTOMAKE_OPTIONS = foreign
 
-MKBSPSPEC = $(SHELL) $(top_srcdir)/mkbspspec
+# MKBSPSPEC = $(SHELL) $(top_srcdir)/mkbspspec
+MKBSPSPEC = @echo $(top_srcdir)/mkbspspec
 
 MKBSPSPEC_DEPS = ../mkbspspec rtems.spec.in ../setup.cache
 
