@@ -1,3 +1,7 @@
+2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove ACLOCAL_AMFLAGS.
+
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, gdb/gdb.spec.in,gnatnewlib/gnatnewlib.spec.in:
