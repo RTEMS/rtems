@@ -165,8 +165,6 @@ typedef struct {
   void *     (*stack_allocate_hook)( unsigned32 );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
-
-  i960_PRCB *Prcb;
 }   rtems_cpu_table;
 
 /*
@@ -176,10 +174,9 @@ typedef struct {
 
 /*
  *  Macros to access i960 specific additions to the CPU Table
+ *
+ *  NONE
  */
-
-#define rtems_cpu_configuration_get_prcb() \
-   (_CPU_Table.Prcb)
 
 /* variables */
 

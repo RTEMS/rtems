@@ -6,7 +6,7 @@
  *  $Id$
  */
 
-#include "i960RP.h"
+#include <bsp.h>
 #include "cntrltbl.h"
 /*-------------------------------------*/
   /* Control Table.

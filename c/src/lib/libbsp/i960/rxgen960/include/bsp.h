@@ -22,6 +22,7 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <libcpu/i960RP.h>
 #include <iosupp.h>
 #include <console.h>
 #include <clockdrv.h>

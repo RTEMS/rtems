@@ -1,0 +1,25 @@
+##
+## $Id$
+##
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+H_FILES = i960CA.h i960HA.h i960KA.h i960RP.h i960JX_RP_common.h
+
+# NOTE: Unlike other CPUS, we install into a subdirectory to avoid
+#       file name conflicts
+
+$(PROJECT_INCLUDE)/libcpu:
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/libcpu/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
+    $(H_FILES:%=$(PROJECT_INCLUDE)/libcpu/%)
+
+all-local: $(TMPINSTALL_FILES)
+
+EXTRA_DIST = i960CA.h i960HA.h i960KA.h i960RP.h i960JX_RP_common.h
+
+include $(top_srcdir)/../../../../../automake/local.am

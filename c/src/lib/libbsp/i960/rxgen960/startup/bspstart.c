@@ -28,13 +28,8 @@
 #include <string.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include "i960RP.h"
 #include <rtems/libio.h>
  
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
-
 #define HEAP_SIZE 1024*1024*2
 
 /*
@@ -84,16 +79,6 @@ bsp_pretasking_hook(void)
     bsp_libc_init((void *) heap_start, 64 * 1024, 0);
 
 
-#ifdef STACK_CHECKER_ON
-    /*
-     *  Initialize the stack bounds checker
-     *  We can either turn it on here or from the app.
-     */
- 
-*(unsigned char *)(0x120f) = 0xe;
-    Stack_check_Initialize();
-#endif
- 
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -134,7 +119,6 @@ bsp_start(void)
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   Cpu_table.extra_mpci_receive_server_stack = 0;
-  Cpu_table.Prcb = Prcb;
 
   /* just trying to get along */
   Cpu_table.stack_allocate_hook = 0;

@@ -9,7 +9,7 @@
 #include "rom_ibr.h"
 #include "prcb.h"
 #include "cntrltbl.h"
-#include <i960RP.h>
+#include <bsp.h>
 #include "../include/rxgen960_config.h"
 /*-------------------------------------*/
 extern void romStart(void);

@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __CVME961_h
-#define __CVME961_h
+#ifndef __I960SIM_h
+#define __I960SIM_h
 
 #ifdef __cplusplus
 extern "C" {

@@ -22,7 +22,6 @@
 #include <stdlib.h>
 
 #include <bsp.h>
-#include <i960RP.h>
 #include <rtems/libio.h>
 
 #define CLOCK_VECTOR 0x92

@@ -10,7 +10,7 @@ SUBDIRS = rtems
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = asm.h i960RP.h
+H_FILES = asm.h
 
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)

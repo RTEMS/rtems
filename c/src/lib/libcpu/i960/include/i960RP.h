@@ -10,46 +10,74 @@
 #ifndef __I960RP_h
 #define __I960RP_h
 
-/*----------------------------------------------------------*/
-/*  Example 6. Include File (evrp.h)                        */
-/*----------------------------------------------------------*/
-/* Define JX Core memory mapped register addresses */
-/* Common to Jx and RP: */
-#define    DLMCON_ADDR    0xff008100
-#define    LMAR0_ADDR     0xff008108
-#define    LMMR0_ADDR     0xff00810c
-#define    LMAR1_ADDR     0xff008110
-#define    LMMR1_ADDR     0xff008114
-#define    IPB0_ADDR      0xff008400
-#define    IPB1_ADDR      0xff008404
-#define    DAB0_ADDR      0xff008420
-#define    DAB1_ADDR      0xff008424
-#define    BPCON_ADDR     0xff008440
-#define    IPND_ADDR      0xff008500
-#define    IMSK_ADDR      0xff008504
-#define    ICON_ADDR      0xff008510
-#define    IMAP0_ADDR     0xff008520
-#define    IMAP1_ADDR     0xff008524
-#define    IMAP2_ADDR     0xff008528
-#define    PMCON0_ADDR    0xff008600
-#define    PMCON2_ADDR    0xff008608
-#define    PMCON4_ADDR    0xff008610
-#define    PMCON6_ADDR    0xff008618
-#define    PMCON8_ADDR    0xff008620
-#define    PMCON10_ADDR   0xff008628
-#define    PMCON12_ADDR   0xff008630
-#define    PMCON14_ADDR   0xff008638
-#define    BCON_ADDR      0xff0086fc
-#define    PRCB_ADDR      0xff008700
-#define    ISP_ADDR       0xff008704
-#define    SSP_ADDR       0xff008708
-#define    DEVID_ADDR     0xff008710
-#define    TRR0_ADDR      0xff000300
-#define    TCR0_ADDR      0xff000304
-#define    TMR0_ADDR      0xff000308
-#define    TRR1_ADDR      0xff000310
-#define    TCR1_ADDR      0xff000314
-#define    TMR1_ADDR      0xff000318
+/* i960RP control structures */
+
+/* Intel i960RP Control Table */
+
+typedef struct {
+                            /* Control Group 0 */
+  unsigned int rsvd00;
+  unsigned int rsvd01;
+  unsigned int rsvd02;
+  unsigned int rsvd03;
+                            /* Control Group 1 */
+  unsigned int imap0;             /* interrupt map 0 */
+  unsigned int imap1;             /* interrupt map 1 */
+  unsigned int imap2;             /* interrupt map 2 */
+  unsigned int icon;              /* interrupt control */
+                            /* Control Group 2 */
+  unsigned int pmcon0;            /* memory region 0 configuration */
+  unsigned int rsvd1;
+  unsigned int pmcon2;            /* memory region 2 configuration */
+  unsigned int rsvd2;
+                            /* Control Group 3 */
+  unsigned int pmcon4;            /* memory region 4 configuration */
+  unsigned int rsvd3;
+  unsigned int pmcon6;            /* memory region 6 configuration */
+  unsigned int rsvd4;
+                            /* Control Group 4 */
+  unsigned int pmcon8;            /* memory region 8 configuration */
+  unsigned int rsvd5;
+  unsigned int pmcon10;           /* memory region 10 configuration */
+  unsigned int rsvd6;
+                            /* Control Group 5 */
+  unsigned int pmcon12;           /* memory region 12 configuration */
+  unsigned int rsvd7;
+  unsigned int pmcon14;           /* memory region 14 configuration */
+  unsigned int rsvd8;
+                            /* Control Group 6 */
+  unsigned int rsvd9;
+  unsigned int rsvd10;
+  unsigned int tc;                /* trace control */
+  unsigned int bcon;              /* bus configuration control */
+}   i960rp_control_table;
+
+/* Intel i960RP Processor Control Block */
+
+/* Intel i960RP Processor Control Block */
+
+typedef struct {  
+  unsigned int    *fault_tbl;     /* fault table base address */
+  i960rp_control_table
+                  *control_tbl;   /* control table base address */
+  unsigned int     initial_ac;    /* AC register initial value */
+  unsigned int     fault_config;  /* fault configuration word */
+  void           **intr_tbl;      /* interrupt table base address */
+  void            *sys_proc_tbl;  /* system procedure table
+                                     base address */
+  unsigned int     reserved;      /* reserved */
+  unsigned int    *intr_stack;    /* interrupt stack pointer */
+  unsigned int     ins_cache_cfg; /* instruction cache
+                                     configuration word */
+  unsigned int     reg_cache_cfg; /* register cache configuration word */
+}   i960rp_PRCB;
+
+typedef i960rp_control_table i960_control_table;
+typedef i960rp_PRCB i960_PRCB;
+
+/* Addresses shared with JX */
+
+#include <libcpu/i960JX_RP_common.h>
 
 /* RP-only addresses: */
 /* RP MMRs */
@@ -313,6 +341,66 @@
 #define RP_SEC_IO_WIND_BASE	0x90010000
 #define RP_SEC_MEM_WIND_BASE	0x88000000
 #define RP_PRI_MEM_WIND_BASE	0x80000000
+
+#define i960_unmask_intr( xint ) \
+ { register unsigned int _mask= (1<<(xint)); \
+   register unsigned int *_imsk = (int * ) IMSK_ADDR; \
+   register unsigned int _val= *_imsk; \
+   asm volatile( "or %0,%2,%0; \
+                  st %0,(%1)" \
+                    : "=d" (_val), "=d" (_imsk), "=d" (_mask) \
+                    : "0" (_val), "1" (_imsk), "2" (_mask) ); \
+ }
+
+#define i960_mask_intr( xint ) \
+ { register unsigned int _mask= (1<<(xint)); \
+   register unsigned int *_imsk = (int * ) IMSK_ADDR; \
+   register unsigned int _val = *_imsk; \
+   asm volatile( "andnot %2,%0,%0; \
+                  st %0,(%1)" \
+                    : "=d" (_val), "=d" (_imsk), "=d" (_mask) \
+                    : "0" (_val), "1" (_imsk), "2" (_mask) ); \
+ }
+#define i960_clear_intr( xint ) \
+ { register unsigned int _xint=xint; \
+   register unsigned int _mask=(1<<(xint)); \
+   register unsigned int *_ipnd = (int * ) IPND_ADDR; \
+   register unsigned int          _rslt = 0; \
+asm volatile( "loop_til_cleared: mov 0, %0; \
+                  atmod %1, %2, %0; \
+                  bbs    %3,%0, loop_til_cleared" \
+                  : "=d" (_rslt), "=d" (_ipnd), "=d" (_mask), "=d" (_xint) \
+                  : "0"  (_rslt), "1"  (_ipnd), "2"  (_mask), "3"  (_xint) ); \
+ }
+
+static inline unsigned int i960_pend_intrs()
+{ register unsigned int _intr= *(unsigned int *) IPND_ADDR;
+  /*register unsigned int *_ipnd = (int * ) IPND_ADDR; \
+   asm volatile( "mov (%0),%1" \
+                    : "=d" (_ipnd), "=d" (_mask) \
+                    : "0" (_ipnd), "1" (_mask) ); \ */
+  return ( _intr );
+}
+
+static inline unsigned int i960_mask_intrs()
+{ register unsigned int _intr= *(unsigned int *) IMSK_ADDR;
+  /*asm volatile( "mov sf1,%0" : "=d" (_intr) : "0" (_intr) );*/
+  return( _intr );
+}
+
+#define I960_SOFT_RESET_COMMAND 0x300
+
+#define i960_soft_reset( prcb ) \
+ { register i960_PRCB    *_prcb = (prcb); \
+   register unsigned int *_next=0; \
+   register unsigned int  _cmd  = I960_SOFT_RESET_COMMAND; \
+   asm volatile( "lda    next,%1; \
+                  sysctl %0,%1,%2; \
+            next: mov    g0,g0" \
+                  : "=d" (_cmd), "=d" (_next), "=d" (_prcb) \
+                  : "0"  (_cmd), "1"  (_next), "2"  (_prcb) ); \
+ }
+
 
 #endif
 /* end of include file */

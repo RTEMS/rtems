@@ -77,6 +77,10 @@ void bsp_pretasking_hook(void)
  *  This routine does the bulk of the system initialization.
  */
 
+#include <libcpu/i960KA.h>
+
+i960_PRCB *Prcb; /* to satisfy linking */
+
 void bsp_start( void )
 {
   extern int _end;
@@ -86,7 +90,6 @@ void bsp_start( void )
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = 4096;
-  Cpu_table.Prcb = 0; /* Prcb; */
 
   if ( BSP_Configuration.work_space_size >(512*1024) )
    _sys_exit( 1 );

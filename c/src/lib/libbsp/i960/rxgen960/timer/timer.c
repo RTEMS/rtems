@@ -27,10 +27,8 @@
  */
 
 
-#include <rtems.h>
 #include <bsp.h>
 #include <stdlib.h>
-#include <i960RP.h>
 #include <rtems/libio.h>
 
 
