@@ -59,5 +59,5 @@ CLOBBER_ADDITIONS +=
 
 all:	$(ARCH) $(SRCS) $(PGMS)
 	$(INSTALL_VARIANT) -m 555 $(PGMS) ${PROJECT_RELEASE}/build-tools
-	cd ${PROJECT_RELEASE}/build-tools/diskboot.exe ; \
-	  uudecode < $(srcdir)/diskboot.uue
+	uudecode -p < $(srcdir)/diskboot.uue \
+	    > $(PROJECT_RELEASE)/build-tools/diskboot.exe
