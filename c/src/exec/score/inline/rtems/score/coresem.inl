@@ -94,7 +94,6 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   }
 
   _Thread_Disable_dispatch();
-  _ISR_Enable( level );
   _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
   executing->Wait.queue          = &the_semaphore->Wait_queue;
   executing->Wait.id             = id;

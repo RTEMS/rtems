@@ -57,7 +57,6 @@
     executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT; \
   } else { \
     _Thread_Disable_dispatch(); \
-    _ISR_Enable( level ); \
     _Thread_queue_Enter_critical_section( &(_the_semaphore)->Wait_queue ); \
     executing->Wait.queue          = &(_the_semaphore)->Wait_queue; \
     executing->Wait.id             = (_id); \
