@@ -29,7 +29,8 @@ int chdir(
    *  Get the node where we wish to go.
    */
 
-  result = rtems_filesystem_evaluate_path( pathname, 0, &loc, TRUE );
+  result = rtems_filesystem_evaluate_path( 
+    pathname, RTEMS_LIBIO_PERMS_SEARCH, &loc, TRUE );
   if ( result != 0 )
      return -1;
 
