@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c: Removed incorrect statement about copyright
+	assignment.
+
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 445/bsps
