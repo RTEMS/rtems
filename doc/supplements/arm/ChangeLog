@@ -1,3 +1,9 @@
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* BSP_TIMES, wksheets.texi: Updated to reflect ARM times
+	reported by Jay Monkman <jmonkman@adventnetworks.com>. These
+	times are subject to change as he tunes the ARM port and their BSP.
+
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
 
 	* .cvsignore: Corrected by  tailoring for the ARM.
