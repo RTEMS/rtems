@@ -37,6 +37,7 @@ The directives provided by the files and directories manager are:
 @item @code{rename} - Renames a file
 @item @code{stat} - Gets information about a file.
 @item @code{fstat} - Gets file status
+@item @code{lstat} - Gets file status
 @item @code{access} - Check permissions for a file.
 @item @code{chmod} - Changes file mode
 @item @code{fchmod} - Changes permissions of a file
@@ -1419,8 +1420,8 @@ NONE
 #include <sys/stat.h>
 
 int fstat(
-int fildes,
-struct stat *buf
+  int fildes,
+  struct stat *buf
 );
 @end example
 @end ifset
@@ -1444,7 +1445,60 @@ to by the @code{buf} argument.
 
 @subheading NOTES:
 
-NONE
+If the filesystem object referred to by @code{fildes} is a
+link, then the information returned in @code{buf} refers
+to the destination of that link.  This is in contrast to
+@code{lstat()} which does not follow the link.
+
+@c
+@c
+@c
+@page
+@subsection lstat - Gets file status
+
+@findex lstat
+@cindex  gets file status
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int lstat(
+  int          fildes,
+  struct stat *buf
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EBADF
+Invalid file descriptor
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{lstat()} function obtains information about the file
+associated with @code{fildes} and writes it to the area pointed
+to by the @code{buf} argument.
+
+@subheading NOTES:
+
+If the filesystem object referred to by @code{fildes} is a
+link, then the information returned in @code{buf} refers
+to the link itself.  This is in contrast to @code{fstat()}
+which follows the link.
+
+The @code{lstat()} routine is defined by BSD 4.3 and SVR4 
+and not included in POSIX 1003.1b-1996.
 
 @c
 @c
