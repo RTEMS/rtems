@@ -39,13 +39,6 @@ RTEMS_BSPOPTS_HELP([DISPATCH_HANDLER_STAT],
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-clock/Makefile
-canbus/Makefile
-console/Makefile
-irq/Makefile
-network/Makefile
-startup/Makefile
-vectors/Makefile
 wrapup/Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])

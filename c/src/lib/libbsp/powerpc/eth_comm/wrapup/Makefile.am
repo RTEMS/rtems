@@ -2,19 +2,13 @@
 ## $Id$
 ##
 
-# We only build the networking device driver if HAS_NETWORKING was defined
+OBJS = ../startup$(LIB_VARIANT).rel ../canbus$(LIB_VARIANT).rel \
+    ../console$(LIB_VARIANT).rel ../irq$(LIB_VARIANT).rel \
+    ../pclock$(LIB_VARIANT).rel ../vectors$(LIB_VARIANT).rel
 if HAS_NETWORKING
-NETWORKING = network
+OBJS += ../network$(LIB_VARIANT).rel
 endif
-
-BSP_PIECES = clock irq startup start canbus vectors console $(NETWORKING)
-# pieces to pick up out of libcpu/ppc
-# CPU_PIECES = mpc860/clock mpc860/timer mpc860/console-generic \
-#    mpc860/vectors
-
-# bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    ../../../../libcpu/@RTEMS_CPU@/shared/cpuIdent$(LIB_VARIANT).rel \
+OBJS += ../../../../libcpu/@RTEMS_CPU@/shared/cpuIdent$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/shared/cache$(LIB_VARIANT).rel \
     ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
     ../../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock$(LIB_VARIANT).rel \
