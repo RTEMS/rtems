@@ -5,8 +5,8 @@
 
 PGM = $(ARCH)/tod.rel
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 # TOD for Generation 2 or later
 TOD_C_FILES = tod.c
@@ -31,4 +31,4 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 EXTRA_DIST = tod.c
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
