@@ -15,9 +15,20 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-RTEMS_BSPOPTS_SET([ARM_RDI_MONITOR],[*],[])
+# From newlib
+# Select which debug protocol is being used.
+# ARM_RDP_MONITOR selects the Demon monitor.
+# ARM_RDI_MONITOR selects the Angel monitor.
+# If neither are defined, then hard coded defaults will be used
+# to create the program's environment.
+
+RTEMS_BSPOPTS_SET([ARM_RDI_MONITOR],[*],[1])
 RTEMS_BSPOPTS_HELP([ARM_RDI_MONITOR],
-[If defined enable ARM_RDI_MONITOR support])
+[If defined enable Angel monitor support])
+
+RTEMS_BSPOPTS_SET([ARM_RDP_MONITOR],[*],[])
+RTEMS_BSPOPTS_HELP([ARM_RDP_MONITOR],
+[If defined enable Demon monitor support])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
