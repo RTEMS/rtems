@@ -1,3 +1,9 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* i960ca/Makefile.am: Remove all-local: $(ARCH).
+	* i960ka/Makefile.am: Remove all-local: $(ARCH).
+	* i960rp/Makefile.am: Remove all-local: $(ARCH).
+
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reformat. Use dirstamps for preinstallation.

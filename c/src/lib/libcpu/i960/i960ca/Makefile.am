@@ -13,7 +13,7 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 #
 
 if i960ca
-all-local: $(ARCH) $(OBJS)
+all-local: $(OBJS)
 endif
 
 EXTRA_DIST = cpu_install_intr_stack.c cpu_install_raw_isr.c
