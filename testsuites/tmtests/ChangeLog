@@ -1,3 +1,38 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Reformat.
+	* tm01/Makefile.am: Remove all-local: $(ARCH).
+	* tm02/Makefile.am: Remove all-local: $(ARCH).
+	* tm03/Makefile.am: Remove all-local: $(ARCH).
+	* tm04/Makefile.am: Remove all-local: $(ARCH).
+	* tm05/Makefile.am: Remove all-local: $(ARCH).
+	* tm06/Makefile.am: Remove all-local: $(ARCH).
+	* tm07/Makefile.am: Remove all-local: $(ARCH).
+	* tm08/Makefile.am: Remove all-local: $(ARCH).
+	* tm09/Makefile.am: Remove all-local: $(ARCH).
+	* tm10/Makefile.am: Remove all-local: $(ARCH).
+	* tm11/Makefile.am: Remove all-local: $(ARCH).
+	* tm12/Makefile.am: Remove all-local: $(ARCH).
+	* tm13/Makefile.am: Remove all-local: $(ARCH).
+	* tm14/Makefile.am: Remove all-local: $(ARCH).
+	* tm15/Makefile.am: Remove all-local: $(ARCH).
+	* tm16/Makefile.am: Remove all-local: $(ARCH).
+	* tm17/Makefile.am: Remove all-local: $(ARCH).
+	* tm18/Makefile.am: Remove all-local: $(ARCH).
+	* tm19/Makefile.am: Remove all-local: $(ARCH).
+	* tm20/Makefile.am: Remove all-local: $(ARCH).
+	* tm21/Makefile.am: Remove all-local: $(ARCH).
+	* tm22/Makefile.am: Remove all-local: $(ARCH).
+	* tm23/Makefile.am: Remove all-local: $(ARCH).
+	* tm24/Makefile.am: Remove all-local: $(ARCH).
+	* tm25/Makefile.am: Remove all-local: $(ARCH).
+	* tm26/Makefile.am: Remove all-local: $(ARCH).
+	* tm27/Makefile.am: Remove all-local: $(ARCH).
+	* tm28/Makefile.am: Remove all-local: $(ARCH).
+	* tm29/Makefile.am: Remove all-local: $(ARCH).
+	* tmck/Makefile.am: Remove all-local: $(ARCH).
+	* tmoverhd/Makefile.am: Remove all-local: $(ARCH).
+
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having moved to testsuites/.
