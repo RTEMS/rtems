@@ -81,7 +81,7 @@ The directory entry specified resides on a read-only file system.
 
 @subheading DESCRIPTION:
 
-The @code{dump_setpath} function defines the pathname where process
+The @code{dump_setpath()} function defines the pathname where process
 dumps are written.  The pathname pointed to by @code{path} defines 
 where a process dump file is written if the calling process 
 terminates with a dump file.  The @code{path} argument does not 
