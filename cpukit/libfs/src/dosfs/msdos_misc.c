@@ -264,7 +264,7 @@ msdos_get_name_node(
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = parent_loc->mt_entry->fs_info;
     fat_file_fd_t   *fat_fd = parent_loc->node_access;
-    unsigned32       dotdot_cln = 0;
+    uint32_t         dotdot_cln = 0;
 
     /* find name in fat-file which correspondes to the directory */
     rc = msdos_find_name_in_fat_file(parent_loc->mt_entry, fat_fd, name, paux,
@@ -377,7 +377,7 @@ msdos_get_name_node(
 int
 msdos_get_dotdot_dir_info_cluster_num_and_offset(
     rtems_filesystem_mount_table_entry_t *mt_entry, 
-    unsigned32                            cln,
+    uint32_t                              cln,
     fat_auxiliary_t                      *paux,
     char                                 *dir_entry
     )
@@ -388,7 +388,7 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
     unsigned char    dot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     unsigned char    dotdot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     unsigned char    cur_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
-    unsigned32       cl4find = 0;
+    uint32_t         cl4find = 0;
   
     memset(dot_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);  
     memset(dotdot_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
@@ -515,8 +515,8 @@ msdos_set_dir_wrt_time_and_date(
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
     unsigned short   time_val;
     unsigned short   date;
-    unsigned32       sec = 0;
-    unsigned32       byte = 0;
+    uint32_t         sec = 0;
+    uint32_t         byte = 0;
   
     msdos_date_unix2dos(fat_fd->mtime, &time_val, &date);
   
@@ -562,11 +562,11 @@ msdos_set_first_cluster_num(
 {
     ssize_t          ret1 = 0, ret2 = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32       new_cln = fat_fd->cln;
-    unsigned16       le_cl_low = 0;
-    unsigned16       le_cl_hi = 0;  
-    unsigned32       sec = 0;
-    unsigned32       byte = 0;
+    uint32_t         new_cln = fat_fd->cln;
+    uint16_t         le_cl_low = 0;
+    uint16_t         le_cl_hi = 0;  
+    uint32_t         sec = 0;
+    uint32_t         byte = 0;
 
     /* 
      * calculate input for _fat_block_write: convert (cluster num, offset) to
@@ -577,11 +577,11 @@ msdos_set_first_cluster_num(
     /* byte from points to start of 32bytes structure */
     byte = fat_fd->info_ofs & (fs_info->fat.vol.bps - 1);
  
-    le_cl_low = CT_LE_W((unsigned16)(new_cln & 0x0000FFFF));
+    le_cl_low = CT_LE_W((uint16_t  )(new_cln & 0x0000FFFF));
     ret1 = _fat_block_write(mt_entry, sec, 
                             byte + MSDOS_FIRST_CLUSTER_LOW_OFFSET, 2,
                             (char *)(&le_cl_low));
-    le_cl_hi = CT_LE_W((unsigned16)((new_cln & 0xFFFF0000) >> 16));
+    le_cl_hi = CT_LE_W((uint16_t  )((new_cln & 0xFFFF0000) >> 16));
     ret2 = _fat_block_write(mt_entry, sec,
                             byte + MSDOS_FIRST_CLUSTER_HI_OFFSET, 2,
                             (char *)(&le_cl_hi));
@@ -611,9 +611,9 @@ msdos_set_file_size(
 {
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32       le_new_length = 0;
-    unsigned32       sec = 0;
-    unsigned32       byte = 0;
+    uint32_t         le_new_length = 0;
+    uint32_t         sec = 0;
+    uint32_t         byte = 0;
 
     sec = fat_cluster_num_to_sector_num(mt_entry, fat_fd->info_cln);
     sec += (fat_fd->info_ofs >> fs_info->fat.vol.sec_log2);
@@ -650,15 +650,15 @@ msdos_set_file_size(
 int 
 msdos_set_first_char4file_name(
     rtems_filesystem_mount_table_entry_t *mt_entry, 
-    unsigned32                            cl,
-    unsigned32                            ofs,
+    uint32_t                              cl,
+    uint32_t                              ofs,
     unsigned char                         fchar
     )
 {
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32       sec = 0;
-    unsigned32       byte = 0;
+    uint32_t         sec = 0;
+    uint32_t         byte = 0;
 
     sec = fat_cluster_num_to_sector_num(mt_entry, cl);
     sec += (ofs >> fs_info->fat.vol.sec_log2);
@@ -694,7 +694,7 @@ msdos_dir_is_empty(
 {
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32       j = 0, i = 0;
+    uint32_t         j = 0, i = 0;
   
     /* dir is not empty */
     *ret_val = FALSE;
@@ -775,8 +775,8 @@ msdos_find_name_in_fat_file(
     int              rc = RC_OK;
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32       i = 0, j = 0;
-    unsigned32       bts2rd = 0;
+    uint32_t         i = 0, j = 0;
+    uint32_t         bts2rd = 0;
 
     if (FAT_FD_OF_ROOT_DIR(fat_fd) && 
        (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16)))
@@ -884,7 +884,7 @@ int
 msdos_find_node_by_cluster_num_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
-    unsigned32                            cl4find, 
+    uint32_t                              cl4find, 
     fat_auxiliary_t                      *paux,
     char                                 *dir_entry
     )
@@ -892,8 +892,8 @@ msdos_find_node_by_cluster_num_in_fat_file(
     int              rc = RC_OK;
     ssize_t          ret = 0;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32       bts2rd = 0;  
-    unsigned32       i = 0, j = 0;
+    uint32_t         bts2rd = 0;  
+    uint32_t         i = 0, j = 0;
 
     if (FAT_FD_OF_ROOT_DIR(fat_fd) && 
        (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16)))

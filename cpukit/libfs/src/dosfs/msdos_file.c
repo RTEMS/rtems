@@ -42,8 +42,8 @@
  *     and errno set appropriately
  */
 int 
-msdos_file_open(rtems_libio_t *iop, const char *pathname, unsigned32 flag,
-                unsigned32 mode)
+msdos_file_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
+                uint32_t   mode)
 {
     int                rc = RC_OK; 
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -144,7 +144,7 @@ msdos_file_close(rtems_libio_t *iop)
  *     appropriately)
  */
 ssize_t 
-msdos_file_read(rtems_libio_t *iop, void *buffer, unsigned32 count)
+msdos_file_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
 {
     ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -177,7 +177,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, unsigned32 count)
  *     and errno set appropriately
  */
 ssize_t 
-msdos_file_write(rtems_libio_t *iop,const void *buffer, unsigned32 count)
+msdos_file_write(rtems_libio_t *iop,const void *buffer, uint32_t   count)
 {
     ssize_t            ret = 0; 
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -230,7 +230,7 @@ msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info; 
     fat_file_fd_t     *fat_fd = iop->file_info;
-    unsigned32         real_size = 0;
+    uint32_t           real_size = 0;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -437,7 +437,7 @@ msdos_file_datasync(rtems_libio_t *iop)
  *
  */
 int 
-msdos_file_ioctl(rtems_libio_t *iop,unsigned32 command, void *buffer)
+msdos_file_ioctl(rtems_libio_t *iop,uint32_t   command, void *buffer)
 {
     int rc = RC_OK;
 

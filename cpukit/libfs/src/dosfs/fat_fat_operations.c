@@ -44,19 +44,19 @@
 int 
 fat_scan_fat_for_free_clusters(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                           *chain,
-    unsigned32                            count,
-    unsigned32                           *cls_added,
-    unsigned32                           *last_cl 
+    uint32_t                             *chain,
+    uint32_t                              count,
+    uint32_t                             *cls_added,
+    uint32_t                             *last_cl 
     )
 {
     int            rc = RC_OK;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     cl4find = 2;
-    unsigned32     next_cln = 0;
-    unsigned32     save_cln = 0; 
-    unsigned32     data_cls_val = fs_info->vol.data_cls + 2;
-    unsigned32     i = 2;
+    uint32_t       cl4find = 2;
+    uint32_t       next_cln = 0;
+    uint32_t       save_cln = 0; 
+    uint32_t       data_cls_val = fs_info->vol.data_cls + 2;
+    uint32_t       i = 2;
   
     *cls_added = 0;    
 
@@ -166,14 +166,14 @@ fat_scan_fat_for_free_clusters(
 int 
 fat_free_fat_clusters_chain(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            chain
+    uint32_t                              chain
     )
 {
     int            rc = RC_OK, rc1 = RC_OK;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     cur_cln = chain; 
-    unsigned32     next_cln = 0; 
-    unsigned32     freed_cls_cnt = 0;
+    uint32_t       cur_cln = chain; 
+    uint32_t       next_cln = 0; 
+    uint32_t       freed_cls_cnt = 0;
     
     while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {
@@ -223,15 +223,15 @@ fat_free_fat_clusters_chain(
 int
 fat_get_fat_cluster(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            cln,
-    unsigned32                           *ret_val
+    uint32_t                              cln,
+    uint32_t                             *ret_val
     )
 {
     int                     rc = RC_OK;
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
     bdbuf_buffer           *block0 = NULL;
-    unsigned32              sec = 0;
-    unsigned32              ofs = 0;
+    uint32_t                sec = 0;
+    uint32_t                ofs = 0;
 
     /* sanity check */
     if ( (cln < 2) || (cln > (fs_info->vol.data_cls + 1)) )
@@ -252,7 +252,7 @@ fat_get_fat_cluster(
              * we are enforced in complex computations for FAT12 to escape CPU
              * align problems for some architectures
              */
-            *ret_val = (*((unsigned8 *)(block0->buffer + ofs)));
+            *ret_val = (*((uint8_t   *)(block0->buffer + ofs)));
             if ( ofs == (fs_info->vol.bps - 1) )
             {
                 rc = fat_buf_access(fs_info, sec + 1, FAT_OP_TYPE_READ, 
@@ -260,11 +260,11 @@ fat_get_fat_cluster(
                 if (rc != RC_OK)
                     return rc;
 
-                *ret_val |= (*((unsigned8 *)(block0->buffer)))<<8;
+                *ret_val |= (*((uint8_t   *)(block0->buffer)))<<8;
             }
             else
             {  
-                *ret_val |= (*((unsigned8 *)(block0->buffer + ofs + 1)))<<8;
+                *ret_val |= (*((uint8_t   *)(block0->buffer + ofs + 1)))<<8;
             }
 
             if ( FAT_CLUSTER_IS_ODD(cln) )
@@ -274,12 +274,12 @@ fat_get_fat_cluster(
             break;
 
         case FAT_FAT16:
-            *ret_val = *((unsigned16 *)(block0->buffer + ofs));
+            *ret_val = *((uint16_t   *)(block0->buffer + ofs));
             *ret_val = CF_LE_W(*ret_val);
             break;
 
         case FAT_FAT32:
-            *ret_val = *((unsigned32 *)(block0->buffer + ofs));
+            *ret_val = *((uint32_t   *)(block0->buffer + ofs));
             *ret_val = CF_LE_L(*ret_val);
             break;
 
@@ -307,16 +307,16 @@ fat_get_fat_cluster(
 int
 fat_set_fat_cluster(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            cln,
-    unsigned32                            in_val
+    uint32_t                              cln,
+    uint32_t                              in_val
     )
 {
     int                rc = RC_OK;
     fat_fs_info_t     *fs_info = mt_entry->fs_info;
-    unsigned32         sec = 0;
-    unsigned32         ofs = 0;
-    unsigned16         fat16_clv = 0;
-    unsigned32         fat32_clv = 0;
+    uint32_t           sec = 0;
+    uint32_t           ofs = 0;
+    uint16_t           fat16_clv = 0;
+    uint32_t           fat32_clv = 0;
     bdbuf_buffer      *block0 = NULL;  
 
     /* sanity check */
@@ -336,13 +336,13 @@ fat_set_fat_cluster(
         case FAT_FAT12:
             if ( FAT_CLUSTER_IS_ODD(cln) )
             {
-                fat16_clv = ((unsigned16)in_val) << FAT_FAT12_SHIFT;
-                *((unsigned8 *)(block0->buffer + ofs)) = 
-                        (*((unsigned8 *)(block0->buffer + ofs))) & 0x0F;
+                fat16_clv = ((uint16_t  )in_val) << FAT_FAT12_SHIFT;
+                *((uint8_t   *)(block0->buffer + ofs)) = 
+                        (*((uint8_t   *)(block0->buffer + ofs))) & 0x0F;
 
-                *((unsigned8 *)(block0->buffer + ofs)) = 
-                        (*((unsigned8 *)(block0->buffer + ofs))) | 
-                        (unsigned8)(fat16_clv & 0x00FF);
+                *((uint8_t   *)(block0->buffer + ofs)) = 
+                        (*((uint8_t   *)(block0->buffer + ofs))) | 
+                        (uint8_t  )(fat16_clv & 0x00FF);
 
                 fat_buf_mark_modified(fs_info);
                 
@@ -353,31 +353,31 @@ fat_set_fat_cluster(
                     if (rc != RC_OK)
                         return rc;
 
-                     *((unsigned8 *)(block0->buffer)) &= 0x00;
+                     *((uint8_t   *)(block0->buffer)) &= 0x00;
   
-                     *((unsigned8 *)(block0->buffer)) = 
-                            (*((unsigned8 *)(block0->buffer))) | 
-                            (unsigned8)((fat16_clv & 0xFF00)>>8);
+                     *((uint8_t   *)(block0->buffer)) = 
+                            (*((uint8_t   *)(block0->buffer))) | 
+                            (uint8_t  )((fat16_clv & 0xFF00)>>8);
                      
                      fat_buf_mark_modified(fs_info);
                 }
                 else
                 {
-                    *((unsigned8 *)(block0->buffer + ofs + 1)) &= 0x00;
+                    *((uint8_t   *)(block0->buffer + ofs + 1)) &= 0x00;
               
-                    *((unsigned8 *)(block0->buffer + ofs + 1)) = 
-                            (*((unsigned8 *)(block0->buffer + ofs + 1))) | 
-                            (unsigned8)((fat16_clv & 0xFF00)>>8);
+                    *((uint8_t   *)(block0->buffer + ofs + 1)) = 
+                            (*((uint8_t   *)(block0->buffer + ofs + 1))) | 
+                            (uint8_t  )((fat16_clv & 0xFF00)>>8);
                 }  
             }
             else
             {
-                fat16_clv = ((unsigned16)in_val) & FAT_FAT12_MASK;
-                *((unsigned8 *)(block0->buffer + ofs)) &= 0x00;
+                fat16_clv = ((uint16_t  )in_val) & FAT_FAT12_MASK;
+                *((uint8_t   *)(block0->buffer + ofs)) &= 0x00;
 
-                *((unsigned8 *)(block0->buffer + ofs)) = 
-                        (*((unsigned8 *)(block0->buffer + ofs))) | 
-                        (unsigned8)(fat16_clv & 0x00FF);
+                *((uint8_t   *)(block0->buffer + ofs)) = 
+                        (*((uint8_t   *)(block0->buffer + ofs))) | 
+                        (uint8_t  )(fat16_clv & 0x00FF);
                         
                 fat_buf_mark_modified(fs_info);         
  
@@ -388,41 +388,41 @@ fat_set_fat_cluster(
                     if (rc != RC_OK)
                         return rc;
 
-                    *((unsigned8 *)(block0->buffer)) = 
-                            (*((unsigned8 *)(block0->buffer))) & 0xF0;
+                    *((uint8_t   *)(block0->buffer)) = 
+                            (*((uint8_t   *)(block0->buffer))) & 0xF0;
   
-                    *((unsigned8 *)(block0->buffer)) = 
-                            (*((unsigned8 *)(block0->buffer))) | 
-                            (unsigned8)((fat16_clv & 0xFF00)>>8);
+                    *((uint8_t   *)(block0->buffer)) = 
+                            (*((uint8_t   *)(block0->buffer))) | 
+                            (uint8_t  )((fat16_clv & 0xFF00)>>8);
                             
                     fat_buf_mark_modified(fs_info);        
                 }
                 else
                 {
-                    *((unsigned8 *)(block0->buffer + ofs + 1)) =   
-                      (*((unsigned8 *)(block0->buffer + ofs + 1))) & 0xF0;
+                    *((uint8_t   *)(block0->buffer + ofs + 1)) =   
+                      (*((uint8_t   *)(block0->buffer + ofs + 1))) & 0xF0;
 
-                    *((unsigned8 *)(block0->buffer + ofs+1)) = 
-                           (*((unsigned8 *)(block0->buffer + ofs+1))) | 
-                           (unsigned8)((fat16_clv & 0xFF00)>>8);
+                    *((uint8_t   *)(block0->buffer + ofs+1)) = 
+                           (*((uint8_t   *)(block0->buffer + ofs+1))) | 
+                           (uint8_t  )((fat16_clv & 0xFF00)>>8);
                 }  
             }
             break;
 
         case FAT_FAT16:
-            *((unsigned16 *)(block0->buffer + ofs)) = 
-                    (unsigned16)(CT_LE_W(in_val));
+            *((uint16_t   *)(block0->buffer + ofs)) = 
+                    (uint16_t  )(CT_LE_W(in_val));
             fat_buf_mark_modified(fs_info);        
             break;
 
         case FAT_FAT32:
             fat32_clv = CT_LE_L((in_val & FAT_FAT32_MASK));
 
-            *((unsigned32 *)(block0->buffer + ofs)) = 
-            (*((unsigned32 *)(block0->buffer + ofs))) & (CT_LE_L(0xF0000000));
+            *((uint32_t   *)(block0->buffer + ofs)) = 
+            (*((uint32_t   *)(block0->buffer + ofs))) & (CT_LE_L(0xF0000000));
 
-            *((unsigned32 *)(block0->buffer + ofs)) = 
-                   fat32_clv | (*((unsigned32 *)(block0->buffer + ofs)));
+            *((uint32_t   *)(block0->buffer + ofs)) = 
+                   fat32_clv | (*((uint32_t   *)(block0->buffer + ofs)));
             
             fat_buf_mark_modified(fs_info);
             break;

@@ -58,7 +58,7 @@ typedef struct msdos_fs_info_s
                                                            * associated with 
                                                            * the volume
                                                            */
-    unsigned8                        *cl_buf;              /* 
+    uint8_t                          *cl_buf;              /* 
                                                             * just placeholder
                                                             * for anything 
                                                             */ 
@@ -87,22 +87,22 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
  */
 #define MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE    32 /* 32 bytes */
 
-#define MSDOS_DIR_NAME(x)                 (unsigned8 *)((x) + 0)
-#define MSDOS_DIR_ATTR(x)                 (unsigned8 *)((x) + 11)
-#define MSDOS_DIR_NT_RES(x)               (unsigned8 *)((x) + 12)
-#define MSDOS_DIR_CRT_TIME_TENTH(x)       (unsigned8 *)((x) + 13)
-#define MSDOS_DIR_CRT_TIME(x)             (unsigned16 *)((x) + 14)
-#define MSDOS_DIR_CRT_DATE(x)             (unsigned16 *)((x) + 16)
-#define MSDOS_DIR_LAST_ACCESS_DATE(x)     (unsigned16 *)((x) + 18)
-#define MSDOS_DIR_FIRST_CLUSTER_HI(x)     (unsigned16 *)((x) + 20)
-#define MSDOS_DIR_WRITE_TIME(x)           (unsigned16 *)((x) + 22)
-#define MSDOS_DIR_WRITE_DATE(x)           (unsigned16 *)((x) + 24)
-#define MSDOS_DIR_FIRST_CLUSTER_LOW(x)    (unsigned16 *)((x) + 26)
-#define MSDOS_DIR_FILE_SIZE(x)            (unsigned32 *)((x) + 28)
+#define MSDOS_DIR_NAME(x)                 (uint8_t   *)((x) + 0)
+#define MSDOS_DIR_ATTR(x)                 (uint8_t   *)((x) + 11)
+#define MSDOS_DIR_NT_RES(x)               (uint8_t   *)((x) + 12)
+#define MSDOS_DIR_CRT_TIME_TENTH(x)       (uint8_t   *)((x) + 13)
+#define MSDOS_DIR_CRT_TIME(x)             (uint16_t   *)((x) + 14)
+#define MSDOS_DIR_CRT_DATE(x)             (uint16_t   *)((x) + 16)
+#define MSDOS_DIR_LAST_ACCESS_DATE(x)     (uint16_t   *)((x) + 18)
+#define MSDOS_DIR_FIRST_CLUSTER_HI(x)     (uint16_t   *)((x) + 20)
+#define MSDOS_DIR_WRITE_TIME(x)           (uint16_t   *)((x) + 22)
+#define MSDOS_DIR_WRITE_DATE(x)           (uint16_t   *)((x) + 24)
+#define MSDOS_DIR_FIRST_CLUSTER_LOW(x)    (uint16_t   *)((x) + 26)
+#define MSDOS_DIR_FILE_SIZE(x)            (uint32_t   *)((x) + 28)
 
 #define MSDOS_EXTRACT_CLUSTER_NUM(p)                                         \
-            (unsigned32)( (CF_LE_W(*MSDOS_DIR_FIRST_CLUSTER_LOW(p))) |       \
-                          ((unsigned32)(CF_LE_W((*MSDOS_DIR_FIRST_CLUSTER_HI(p))))<<16) )
+            (uint32_t  )( (CF_LE_W(*MSDOS_DIR_FIRST_CLUSTER_LOW(p))) |       \
+                          ((uint32_t  )(CF_LE_W((*MSDOS_DIR_FIRST_CLUSTER_HI(p))))<<16) )
 
 /*
  * Fields offset in 32 bytes long FAT Directory Entry
@@ -247,8 +247,8 @@ int
 msdos_file_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
-  unsigned32     flag,            /* IN  */
-  unsigned32     mode             /* IN  */
+  uint32_t       flag,            /* IN  */
+  uint32_t       mode             /* IN  */
 );
 
 int 
@@ -258,14 +258,14 @@ ssize_t
 msdos_file_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
-  unsigned32     count             /* IN  */
+  uint32_t       count             /* IN  */
 );
 
 ssize_t 
 msdos_file_write(
   rtems_libio_t *iop,             /* IN  */
   const void    *buffer,          /* IN  */
-  unsigned32     count            /* IN  */
+  uint32_t       count            /* IN  */
 );
 
 int 
@@ -294,7 +294,7 @@ msdos_file_datasync(rtems_libio_t *iop);
 int 
 msdos_file_ioctl(
   rtems_libio_t *iop,             /* IN  */
-  unsigned32     command,         /* IN  */
+  uint32_t       command,         /* IN  */
   void          *buffer           /* IN  */
 );
 
@@ -310,8 +310,8 @@ int
 msdos_dir_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
-  unsigned32     flag,            /* IN  */
-  unsigned32     mode             /* IN  */
+  uint32_t       flag,            /* IN  */
+  uint32_t       mode             /* IN  */
 );
 
 int 
@@ -321,7 +321,7 @@ ssize_t
 msdos_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
-  unsigned32     count             /* IN  */
+  uint32_t       count             /* IN  */
 );
 
 int 
@@ -388,8 +388,8 @@ msdos_set_file_size(rtems_filesystem_mount_table_entry_t *mt_entry,
 
 int 
 msdos_set_first_char4file_name(rtems_filesystem_mount_table_entry_t *mt_entry,
-                               unsigned32  cl,
-                               unsigned32  ofs,
+                               uint32_t    cl,
+                               uint32_t    ofs,
                                unsigned char first_char);
 
 int
@@ -416,7 +416,7 @@ int
 msdos_find_node_by_cluster_num_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
-    unsigned32                            cl4find, 
+    uint32_t                              cl4find, 
     fat_auxiliary_t                      *paux,
     char                                 *dir_entry
 );
@@ -424,7 +424,7 @@ msdos_find_node_by_cluster_num_in_fat_file(
 int
 msdos_get_dotdot_dir_info_cluster_num_and_offset(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            cln,
+    uint32_t                              cln,
     fat_auxiliary_t                      *paux,
     char                                 *dir_entry
 );

@@ -57,7 +57,7 @@ msdos_initialize_support(
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = NULL;
     fat_file_fd_t     *fat_fd = NULL;
-    unsigned32         cl_buf_size;
+    uint32_t           cl_buf_size;
 
     fs_info = (msdos_fs_info_t *)calloc(1, sizeof(msdos_fs_info_t));
     if (!fs_info)

@@ -62,14 +62,14 @@ msdos_creat_node(
     fat_file_fd_t   *parent_fat_fd = parent_loc->node_access;
     fat_file_fd_t   *fat_fd = NULL; 
     time_t           time_ret = 0;
-    unsigned16       time_val = 0;
-    unsigned16       date = 0;
+    uint16_t         time_val = 0;
+    uint16_t         date = 0;
     fat_auxiliary_t  aux;
     unsigned char    new_node  [MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     unsigned char    dot_dotdot[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2];
     unsigned char    link_node [MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
-    unsigned32       sec = 0;
-    unsigned32       byte = 0;
+    uint32_t         sec = 0;
+    uint32_t         byte = 0;
     
     memset(new_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
     memset(dot_dotdot, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2);
@@ -202,9 +202,9 @@ msdos_creat_node(
         else
         {
             *MSDOS_DIR_FIRST_CLUSTER_LOW(DOTDOT_NODE_P(dot_dotdot)) = 
-                CT_LE_W((unsigned16)((parent_fat_fd->cln) & 0x0000FFFF));
+                CT_LE_W((uint16_t  )((parent_fat_fd->cln) & 0x0000FFFF));
             *MSDOS_DIR_FIRST_CLUSTER_HI(DOTDOT_NODE_P(dot_dotdot)) = 
-                CT_LE_W((unsigned16)(((parent_fat_fd->cln) & 0xFFFF0000)>>16));
+                CT_LE_W((uint16_t  )(((parent_fat_fd->cln) & 0xFFFF0000)>>16));
         }        
     
         /* 
@@ -226,9 +226,9 @@ msdos_creat_node(
 
         /* set up cluster num for dot entry */
         *MSDOS_DIR_FIRST_CLUSTER_LOW(DOT_NODE_P(dot_dotdot)) =
-                CT_LE_W((unsigned16)((fat_fd->cln) & 0x0000FFFF));
+                CT_LE_W((uint16_t  )((fat_fd->cln) & 0x0000FFFF));
         *MSDOS_DIR_FIRST_CLUSTER_HI(DOT_NODE_P(dot_dotdot)) =
-                CT_LE_W((unsigned16)(((fat_fd->cln) & 0xFFFF0000) >> 16));
+                CT_LE_W((uint16_t  )(((fat_fd->cln) & 0xFFFF0000) >> 16));
 
         /* rewrite dot entry */
         ret = fat_file_write(parent_loc->mt_entry, fat_fd, 0, 

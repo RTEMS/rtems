@@ -48,7 +48,7 @@ rtems_deviceio_errno(rtems_status_code code)
 {
     int rc;
     
-    if ((rc = rtems_assoc_remote_by_local(errno_assoc, (unsigned32) code)))
+    if ((rc = rtems_assoc_remote_by_local(errno_assoc, (uint32_t  ) code)))
     {
         errno = rc;
         return -1;
@@ -65,8 +65,8 @@ rtems_deviceio_errno(rtems_status_code code)
 int device_open(
   rtems_libio_t *iop,
   const char    *pathname,
-  unsigned32     flag,
-  unsigned32     mode
+  uint32_t       flag,
+  uint32_t       mode
 )
 {
   rtems_libio_open_close_args_t  args;
@@ -130,7 +130,7 @@ int device_close(
 ssize_t device_read(
   rtems_libio_t *iop,
   void          *buffer,
-  unsigned32     count
+  uint32_t       count
 )
 {
   rtems_libio_rw_args_t   args;
@@ -167,7 +167,7 @@ ssize_t device_read(
 ssize_t device_write(
   rtems_libio_t *iop,
   const void    *buffer,
-  unsigned32     count
+  uint32_t       count
 )
 {
   rtems_libio_rw_args_t   args;
@@ -203,7 +203,7 @@ ssize_t device_write(
 
 int device_ioctl(
   rtems_libio_t *iop,
-  unsigned32     command,
+  uint32_t       command,
   void          *buffer
 )
 {

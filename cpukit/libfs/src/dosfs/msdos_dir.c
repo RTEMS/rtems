@@ -45,8 +45,8 @@
  *     set apropriately)
  */
 int 
-msdos_dir_open(rtems_libio_t *iop, const char *pathname, unsigned32 flag,
-               unsigned32 mode)
+msdos_dir_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
+               uint32_t   mode)
 {
     int                rc = RC_OK;  
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -196,7 +196,7 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
  *     set apropriately).
  */
 ssize_t 
-msdos_dir_read(rtems_libio_t *iop, void *buffer, unsigned32 count)
+msdos_dir_read(rtems_libio_t *iop, void *buffer, uint32_t   count)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -204,12 +204,12 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, unsigned32 count)
     fat_file_fd_t     *fat_fd = iop->file_info;
     fat_file_fd_t     *tmp_fat_fd = NULL;
     struct dirent      tmp_dirent;
-    unsigned32         start = 0;
+    uint32_t           start = 0;
     ssize_t            ret = 0;
-    unsigned32         cmpltd = 0;
-    unsigned32         j = 0, i = 0;
-    unsigned32         bts2rd = 0;
-    unsigned32         cur_cln = 0;
+    uint32_t           cmpltd = 0;
+    uint32_t           j = 0, i = 0;
+    uint32_t           bts2rd = 0;
+    uint32_t           cur_cln = 0;
   
     /* 
      * cast start and count - protect against using sizes that are not exact 

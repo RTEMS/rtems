@@ -28,27 +28,27 @@ extern "C" {
 
 int
 fat_get_fat_cluster(rtems_filesystem_mount_table_entry_t *mt_entry,
-                    unsigned32                            cln,
-                    unsigned32                           *ret_val);
+                    uint32_t                              cln,
+                    uint32_t                             *ret_val);
 
 int
 fat_set_fat_cluster(rtems_filesystem_mount_table_entry_t *mt_entry,
-                    unsigned32                            cln,
-                    unsigned32                            in_val);
+                    uint32_t                              cln,
+                    uint32_t                              in_val);
 
 int
 fat_scan_fat_for_free_clusters(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                           *chain,
-    unsigned32                            count,
-    unsigned32                           *cls_added,
-    unsigned32                           *last_cl 
+    uint32_t                             *chain,
+    uint32_t                              count,
+    uint32_t                             *cls_added,
+    uint32_t                             *last_cl 
 );
 
 int
 fat_free_fat_clusters_chain(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            chain
+    uint32_t                              chain
 );
 
 #ifdef __cplusplus

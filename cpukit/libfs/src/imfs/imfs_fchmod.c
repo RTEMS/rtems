@@ -63,7 +63,7 @@ int IMFS_fchmod(
   if ( (jnode->type == IMFS_LINEAR_FILE) &&
        (mode & (S_IWUSR | S_IWGRP | S_IWOTH)) )
   {
-    unsigned32 count = jnode->info.linearfile.size;
+    uint32_t   count = jnode->info.linearfile.size;
     const unsigned char *buffer = jnode->info.linearfile.direct;
 
     jnode->type = IMFS_MEMORY_FILE;

@@ -91,8 +91,8 @@ void memfile_free_block(
 int memfile_open(
   rtems_libio_t *iop,
   const char    *pathname,
-  unsigned32     flag,
-  unsigned32     mode
+  uint32_t       flag,
+  uint32_t       mode
 )
 {
   IMFS_jnode_t  *the_jnode;
@@ -137,7 +137,7 @@ int memfile_close(
 ssize_t memfile_read(
   rtems_libio_t *iop,
   void          *buffer,
-  unsigned32     count
+  uint32_t       count
 )
 {
   IMFS_jnode_t   *the_jnode;
@@ -156,7 +156,7 @@ ssize_t memfile_read(
 ssize_t memfile_write(
   rtems_libio_t *iop,
   const void    *buffer,
-  unsigned32     count
+  uint32_t       count
 )
 {
   IMFS_jnode_t   *the_jnode;
@@ -180,7 +180,7 @@ ssize_t memfile_write(
 
 int memfile_ioctl(
   rtems_libio_t *iop,
-  unsigned32     command,
+  uint32_t       command,
   void          *buffer
 )
 {

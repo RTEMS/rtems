@@ -51,10 +51,10 @@ extern "C" {
  */
 
 #if (CPU_BIG_ENDIAN == TRUE)
-#    define CF_LE_W(v) CPU_swap_u16((unsigned16)v)
-#    define CF_LE_L(v) CPU_swap_u32((unsigned32)v)
-#    define CT_LE_W(v) CPU_swap_u16((unsigned16)v)
-#    define CT_LE_L(v) CPU_swap_u32((unsigned32)v)
+#    define CF_LE_W(v) CPU_swap_u16((uint16_t  )v)
+#    define CF_LE_L(v) CPU_swap_u32((uint32_t  )v)
+#    define CT_LE_W(v) CPU_swap_u16((uint16_t  )v)
+#    define CT_LE_L(v) CPU_swap_u32((uint32_t  )v)
 #else  
 #    define CF_LE_W(v) (v)
 #    define CF_LE_L(v) (v)
@@ -81,41 +81,41 @@ extern "C" {
 #define FAT_FAT16              0x02
 #define FAT_FAT32              0x04
  
-#define FAT_UNDEFINED_VALUE     (unsigned32)0xFFFFFFFF 
+#define FAT_UNDEFINED_VALUE     (uint32_t  )0xFFFFFFFF 
 
 #define FAT_FAT12_EOC          0x0FF8
 #define FAT_FAT16_EOC          0xFFF8
-#define FAT_FAT32_EOC          (unsigned32)0x0FFFFFF8
+#define FAT_FAT32_EOC          (uint32_t  )0x0FFFFFF8
 
 #define FAT_FAT12_FREE         0x0000
 #define FAT_FAT16_FREE         0x0000
 #define FAT_FAT32_FREE         0x00000000
 
-#define FAT_GENFAT_EOC         (unsigned32)0xFFFFFFFF
-#define FAT_GENFAT_FREE        (unsigned32)0x00000000
+#define FAT_GENFAT_EOC         (uint32_t  )0xFFFFFFFF
+#define FAT_GENFAT_FREE        (uint32_t  )0x00000000
 
 #define FAT_FAT12_SHIFT        0x04
 
 #define FAT_FAT12_MASK         0x00000FFF
 #define FAT_FAT16_MASK         0x0000FFFF
-#define FAT_FAT32_MASK         (unsigned32)0x0FFFFFFF
+#define FAT_FAT32_MASK         (uint32_t  )0x0FFFFFFF
 
 #define FAT_MAX_BPB_SIZE       90
 
 /* size of useful information in FSInfo sector */
 #define FAT_USEFUL_INFO_SIZE   12
 
-#define FAT_VAL8(x, ofs)       (unsigned8)(*((unsigned8 *)(x) + (ofs)))
+#define FAT_VAL8(x, ofs)       (uint8_t  )(*((uint8_t   *)(x) + (ofs)))
  
 #define FAT_VAL16(x, ofs)                                   \
-    (unsigned16)( (*((unsigned8 *)(x) + (ofs))) |           \
-                  ((*((unsigned8 *)(x) + (ofs) + 1)) << 8) )
+    (uint16_t  )( (*((uint8_t   *)(x) + (ofs))) |           \
+                  ((*((uint8_t   *)(x) + (ofs) + 1)) << 8) )
 
 #define FAT_VAL32(x, ofs)                                                 \
-    (unsigned32)( (unsigned32)(*((unsigned8 *)(x) + (ofs))) |             \
-                  ((unsigned32)(*((unsigned8 *)(x) + (ofs) + 1)) << 8)  | \
-                  ((unsigned32)(*((unsigned8 *)(x) + (ofs) + 2)) << 16) | \
-                  ((unsigned32)(*((unsigned8 *)(x) + (ofs) + 3)) << 24) )
+    (uint32_t  )( (uint32_t  )(*((uint8_t   *)(x) + (ofs))) |             \
+                  ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 1)) << 8)  | \
+                  ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 2)) << 16) | \
+                  ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 3)) << 24) )
                     
 /* macros to access boot sector fields */
 #define FAT_BR_BYTES_PER_SECTOR(x)       FAT_VAL16(x, 11)
@@ -170,33 +170,33 @@ extern "C" {
  */
 typedef struct fat_vol_s 
 {
-    unsigned16   bps;            /* bytes per sector */
-    unsigned8    sec_log2;       /* log2 of bps */
-    unsigned8    sec_mul;        /* log2 of 512bts sectors number per sector */
-    unsigned8    spc;            /* sectors per cluster */
-    unsigned8    spc_log2;       /* log2 of spc */
-    unsigned16   bpc;            /* bytes per cluster */
-    unsigned8    bpc_log2;       /* log2 of bytes per cluster */
-    unsigned8    fats;           /* number of FATs */
-    unsigned8    type;           /* FAT type */
-    unsigned32   mask;
-    unsigned32   eoc_val;
-    unsigned16   fat_loc;        /* FAT start */
-    unsigned32   fat_length;     /* sectors per FAT */
-    unsigned32   rdir_loc;       /* root directory start */
-    unsigned16   rdir_entrs;     /* files per root directory */
-    unsigned32   rdir_secs;      /* sectors per root directory */
-    unsigned32   rdir_size;      /* root directory size in bytes */
-    unsigned32   tot_secs;       /* total count of sectors */
-    unsigned32   data_fsec;      /* first data sector */
-    unsigned32   data_cls;       /* count of data clusters */
-    unsigned32   rdir_cl;        /* first cluster of the root directory */
-    unsigned16   info_sec;       /* FSInfo Sector Structure location */
-    unsigned32   free_cls;       /* last known free clusters count */
-    unsigned32   next_cl;        /* next free cluster number */
-    unsigned8    mirror;         /* mirroring enabla/disable */
-    unsigned32   afat_loc;       /* active FAT location */
-    unsigned8    afat;           /* the number of active FAT */
+    uint16_t     bps;            /* bytes per sector */
+    uint8_t      sec_log2;       /* log2 of bps */
+    uint8_t      sec_mul;        /* log2 of 512bts sectors number per sector */
+    uint8_t      spc;            /* sectors per cluster */
+    uint8_t      spc_log2;       /* log2 of spc */
+    uint16_t     bpc;            /* bytes per cluster */
+    uint8_t      bpc_log2;       /* log2 of bytes per cluster */
+    uint8_t      fats;           /* number of FATs */
+    uint8_t      type;           /* FAT type */
+    uint32_t     mask;
+    uint32_t     eoc_val;
+    uint16_t     fat_loc;        /* FAT start */
+    uint32_t     fat_length;     /* sectors per FAT */
+    uint32_t     rdir_loc;       /* root directory start */
+    uint16_t     rdir_entrs;     /* files per root directory */
+    uint32_t     rdir_secs;      /* sectors per root directory */
+    uint32_t     rdir_size;      /* root directory size in bytes */
+    uint32_t     tot_secs;       /* total count of sectors */
+    uint32_t     data_fsec;      /* first data sector */
+    uint32_t     data_cls;       /* count of data clusters */
+    uint32_t     rdir_cl;        /* first cluster of the root directory */
+    uint16_t     info_sec;       /* FSInfo Sector Structure location */
+    uint32_t     free_cls;       /* last known free clusters count */
+    uint32_t     next_cl;        /* next free cluster number */
+    uint8_t      mirror;         /* mirroring enabla/disable */
+    uint32_t     afat_loc;       /* active FAT location */
+    uint8_t      afat;           /* the number of active FAT */
     dev_t        dev;            /* device ID */
     disk_device *dd;             /* disk device (see libblock) */
     void        *private_data;   /* reserved */
@@ -205,9 +205,9 @@ typedef struct fat_vol_s
 
 typedef struct fat_cache_s
 {
-    unsigned32     blk_num;
+    uint32_t       blk_num;
     rtems_boolean  modified;
-    unsigned8      state;
+    uint8_t        state;
     bdbuf_buffer   *buf;
 } fat_cache_t;
     
@@ -221,11 +221,11 @@ typedef struct fat_fs_info_s
     Chain_Control *vhash;         /* "vhash" of fat-file descriptors */
     Chain_Control *rhash;         /* "rhash" of fat-file descriptors */
     char          *uino;          /* array of unique ino numbers */
-    unsigned32     index;
-    unsigned32     uino_pool_size; /* size */
-    unsigned32     uino_base;
+    uint32_t       index;
+    uint32_t       uino_pool_size; /* size */
+    uint32_t       uino_base;
     fat_cache_t    c;             /* cache */
-    unsigned8     *sec_buf; /* just placeholder for anything */
+    uint8_t       *sec_buf; /* just placeholder for anything */
 } fat_fs_info_t;
 
 /* 
@@ -235,8 +235,8 @@ typedef struct fat_fs_info_s
  */
 typedef struct fat_auxiliary_s
 {
-    unsigned32 cln;
-    unsigned32 ofs;
+    uint32_t   cln;
+    uint32_t   ofs;
 } fat_auxiliary_t;
 
 #define FAT_FAT_OFFSET(fat_type, cln)                  \
@@ -258,10 +258,10 @@ typedef struct fat_auxiliary_s
 #define FAT_OP_TYPE_READ  0x1
 #define FAT_OP_TYPE_GET   0x2
 
-static inline unsigned32
+static inline uint32_t  
 fat_cluster_num_to_sector_num(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            cln
+    uint32_t                              cln
     )
 {
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
@@ -273,10 +273,10 @@ fat_cluster_num_to_sector_num(
             fs_info->vol.data_fsec);
 } 
 
-static inline unsigned32
+static inline uint32_t  
 fat_cluster_num_to_sector512_num(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            cln
+    uint32_t                              cln
     )
 {
     fat_fs_info_t *fs_info = mt_entry->fs_info;
@@ -289,11 +289,11 @@ fat_cluster_num_to_sector512_num(
 } 
 
 static inline int
-fat_buf_access(fat_fs_info_t *fs_info, unsigned32 blk, int op_type, 
+fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type, 
                bdbuf_buffer **buf)
 {
     rtems_status_code sc = RTEMS_SUCCESSFUL;
-    unsigned8         i;
+    uint8_t           i;
     rtems_boolean     sec_of_fat;
     
 
@@ -372,7 +372,7 @@ static inline int
 fat_buf_release(fat_fs_info_t *fs_info)
 {
     rtems_status_code sc = RTEMS_SUCCESSFUL;
-    unsigned8         i;
+    uint8_t           i;
     rtems_boolean     sec_of_fat;
         
     if (fs_info->c.state == FAT_CACHE_EMPTY)
@@ -430,26 +430,26 @@ fat_buf_mark_modified(fat_fs_info_t *fs_info)
 
 ssize_t
 _fat_block_read(rtems_filesystem_mount_table_entry_t *mt_entry,
-                unsigned32                            start,
-                unsigned32                            offset,
-                unsigned32                            count,
+                uint32_t                              start,
+                uint32_t                              offset,
+                uint32_t                              count,
                 void                                 *buff);
 
 ssize_t
 _fat_block_write(rtems_filesystem_mount_table_entry_t *mt_entry,
-                 unsigned32                            start,
-                 unsigned32                            offset,
-                 unsigned32                            count,
+                 uint32_t                              start,
+                 uint32_t                              offset,
+                 uint32_t                              count,
                  const void                           *buff);
 
 ssize_t
 fat_cluster_read(rtems_filesystem_mount_table_entry_t *mt_entry,
-                  unsigned32                           cln,
+                  uint32_t                             cln,
                   void                                *buff);
 
 ssize_t
 fat_cluster_write(rtems_filesystem_mount_table_entry_t *mt_entry,
-                   unsigned32                           cln,
+                   uint32_t                             cln,
                    const void                          *buff);
 
 int
@@ -457,32 +457,32 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry);
 
 int
 fat_init_clusters_chain(rtems_filesystem_mount_table_entry_t *mt_entry,
-                        unsigned32                            start_cln);
+                        uint32_t                              start_cln);
 
-unsigned32
+uint32_t  
 fat_cluster_num_to_sector_num(rtems_filesystem_mount_table_entry_t *mt_entry,
-                              unsigned32                            cln);
+                              uint32_t                              cln);
 
 int
 fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry);
 
 
-unsigned32
+uint32_t  
 fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry);
                                                            
 rtems_boolean
 fat_ino_is_unique(rtems_filesystem_mount_table_entry_t *mt_entry,
-                  unsigned32                            ino);
+                  uint32_t                              ino);
 
 void
 fat_free_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry,
-                    unsigned32                            ino);
+                    uint32_t                              ino);
 
 int
 fat_fat32_update_fsinfo_sector(
   rtems_filesystem_mount_table_entry_t *mt_entry,
-  unsigned32                            free_count,
-  unsigned32                            next_free
+  uint32_t                              free_count,
+  uint32_t                              next_free
   );
                        
 #ifdef __cplusplus

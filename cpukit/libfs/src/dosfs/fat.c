@@ -46,19 +46,19 @@
 ssize_t
 _fat_block_read(
     rtems_filesystem_mount_table_entry_t *mt_entry, 
-    unsigned32                            start, 
-    unsigned32                            offset,
-    unsigned32                            count, 
+    uint32_t                              start, 
+    uint32_t                              offset,
+    uint32_t                              count, 
     void                                 *buff
     )
 {
     int                     rc = RC_OK;
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
     ssize_t                 cmpltd = 0;
-    unsigned32              blk = start;
-    unsigned32              ofs = offset;
+    uint32_t                blk = start;
+    uint32_t                ofs = offset;
     bdbuf_buffer           *block = NULL;
-    unsigned32              c = 0;
+    uint32_t                c = 0;
   
     while (count > 0)
     {
@@ -97,18 +97,18 @@ _fat_block_read(
 ssize_t
 _fat_block_write(
     rtems_filesystem_mount_table_entry_t *mt_entry, 
-    unsigned32                            start, 
-    unsigned32                            offset,
-    unsigned32                            count, 
+    uint32_t                              start, 
+    uint32_t                              offset,
+    uint32_t                              count, 
     const void                           *buff)
 {
     int            rc = RC_OK;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
     ssize_t        cmpltd = 0;
-    unsigned32     blk  = start;
-    unsigned32     ofs = offset;
+    uint32_t       blk  = start;
+    uint32_t       ofs = offset;
     bdbuf_buffer  *block = NULL;
-    unsigned32     c = 0;
+    uint32_t       c = 0;
   
     while(count > 0)
     {
@@ -151,12 +151,12 @@ _fat_block_write(
 ssize_t 
 fat_cluster_read(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            cln,
+    uint32_t                              cln,
     void                                 *buff
     )
 {
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     fsec = 0; 
+    uint32_t       fsec = 0; 
   
     fsec = fat_cluster_num_to_sector_num(mt_entry, cln); 
 
@@ -179,12 +179,12 @@ fat_cluster_read(
 ssize_t 
 fat_cluster_write(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            cln,
+    uint32_t                              cln,
     const void                           *buff
     )
 {
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     fsec = 0;
+    uint32_t       fsec = 0;
   
     fsec = fat_cluster_num_to_sector_num(mt_entry, cln); 
  
@@ -208,7 +208,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     int                 rc = RC_OK;
     fat_fs_info_t      *fs_info = mt_entry->fs_info;     
     register fat_vol_t *vol = &fs_info->vol;
-    unsigned32          data_secs = 0;
+    uint32_t            data_secs = 0;
     char                boot_rec[FAT_MAX_BPB_SIZE];
     char                fs_info_sector[FAT_USEFUL_INFO_SIZE];
     ssize_t             ret = 0;
@@ -526,13 +526,13 @@ fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry)
 int
 fat_init_clusters_chain(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            start_cln
+    uint32_t                              start_cln
     )
 {
     int                     rc = RC_OK;
     ssize_t                 ret = 0;
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32              cur_cln = start_cln;
+    uint32_t                cur_cln = start_cln;
     char                   *buf;
   
     buf = calloc(fs_info->vol.bpc, sizeof(char));
@@ -585,11 +585,11 @@ fat_init_clusters_chain(
  *     0 means FAILED !!!
  *     
  */
-unsigned32
+uint32_t  
 fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry)
 {
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32              j = 0;
+    uint32_t                j = 0;
     rtems_boolean           resrc_unsuff = FALSE;
 
     while (!resrc_unsuff)
@@ -634,7 +634,7 @@ fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry)
 void
 fat_free_unique_ino(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            ino
+    uint32_t                              ino
     )
 {
     fat_fs_info_t *fs_info = mt_entry->fs_info;
@@ -655,7 +655,7 @@ fat_free_unique_ino(
 inline rtems_boolean
 fat_ino_is_unique(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            ino
+    uint32_t                              ino
     )
 {
     fat_fs_info_t *fs_info = mt_entry->fs_info;
@@ -677,14 +677,14 @@ fat_ino_is_unique(
 int
 fat_fat32_update_fsinfo_sector(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            free_count,
-    unsigned32                            next_free
+    uint32_t                              free_count,
+    uint32_t                              next_free
     )
 {
     ssize_t                 ret1 = 0, ret2 = 0;
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32              le_free_count = 0;
-    unsigned32              le_next_free = 0;
+    uint32_t                le_free_count = 0;
+    uint32_t                le_next_free = 0;
 
     le_free_count = CT_LE_L(free_count);
     le_next_free = CT_LE_L(next_free);

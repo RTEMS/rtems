@@ -46,9 +46,9 @@ typedef rtems_filesystem_node_types_t fat_file_type_t;
 
 typedef struct fat_file_map_s
 {
-    unsigned32 file_cln;
-    unsigned32 disk_cln;
-    unsigned32 last_cln;
+    uint32_t   file_cln;
+    uint32_t   disk_cln;
+    uint32_t   last_cln;
 } fat_file_map_t;
 /* 
  * descriptor of a fat-file 
@@ -62,19 +62,19 @@ typedef struct fat_file_fd_s
                                     * collision lists are handled via link 
                                     * field
                                     */
-    unsigned32      links_num;     /* 
+    uint32_t        links_num;     /* 
                                     * the number of fat_file_open call on 
                                     * this fat-file
                                     */
-    unsigned32      ino;           /* inode, file serial number :)))) */                                
+    uint32_t        ino;           /* inode, file serial number :)))) */                                
     fat_file_type_t fat_file_type;
-    unsigned32      size_limit;
-    unsigned32      fat_file_size; /* length  */
-    unsigned32      info_cln;
-    unsigned32      cln;
-    unsigned16      info_ofs;     
+    uint32_t        size_limit;
+    uint32_t        fat_file_size; /* length  */
+    uint32_t        info_cln;
+    uint32_t        cln;
+    uint16_t        info_ofs;     
     unsigned char   first_char;
-    unsigned8       flags;
+    uint8_t         flags;
     fat_file_map_t  map;
     time_t          mtime;
     
@@ -119,11 +119,11 @@ typedef struct fat_file_fd_s
  * RETURNS:
  *     constructed key
  */
-static inline unsigned32 
+static inline uint32_t   
 fat_construct_key(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    unsigned32                            cl, 
-    unsigned32                            ofs)
+    uint32_t                              cl, 
+    uint32_t                              ofs)
 {
     return ( ((fat_cluster_num_to_sector512_num(mt_entry, cl) + 
               (ofs >> FAT_SECTOR512_BITS)) << 4)              + 
@@ -133,8 +133,8 @@ fat_construct_key(
 /* Prototypes for "fat-file" operations */
 int 
 fat_file_open(rtems_filesystem_mount_table_entry_t  *mt_entry,
-              unsigned32                             cln, 
-              unsigned32                             ofs,
+              uint32_t                               cln, 
+              uint32_t                               ofs,
               fat_file_fd_t                        **fat_fd);
 
 int
@@ -147,27 +147,27 @@ fat_file_close(rtems_filesystem_mount_table_entry_t *mt_entry,
 ssize_t
 fat_file_read(rtems_filesystem_mount_table_entry_t *mt_entry,
               fat_file_fd_t                        *fat_fd,
-              unsigned32                            start,
-              unsigned32                            count,
+              uint32_t                              start,
+              uint32_t                              count,
               char                                 *buf);
 
 ssize_t
 fat_file_write(rtems_filesystem_mount_table_entry_t *mt_entry,
                fat_file_fd_t                        *fat_fd,
-               unsigned32                            start,
-               unsigned32                            count,
+               uint32_t                              start,
+               uint32_t                              count,
                const char                            *buf);
 
 int
 fat_file_extend(rtems_filesystem_mount_table_entry_t *mt_entry,
                 fat_file_fd_t                        *fat_fd,
-                unsigned32                            new_length,
-                unsigned32                           *a_length);
+                uint32_t                              new_length,
+                uint32_t                             *a_length);
 
 int
 fat_file_truncate(rtems_filesystem_mount_table_entry_t *mt_entry,
                   fat_file_fd_t                        *fat_fd,
-                  unsigned32                            new_length);
+                  uint32_t                              new_length);
                   
 int
 fat_file_datasync(rtems_filesystem_mount_table_entry_t *mt_entry,

@@ -1,3 +1,16 @@
+2004-03-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libfs/src/dosfs/fat.c, libfs/src/dosfs/fat.h,
+	libfs/src/dosfs/fat_fat_operations.c,
+	libfs/src/dosfs/fat_fat_operations.h, libfs/src/dosfs/fat_file.c,
+	libfs/src/dosfs/fat_file.h, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_dir.c,
+	libfs/src/dosfs/msdos_file.c, libfs/src/dosfs/msdos_initsupp.c,
+	libfs/src/dosfs/msdos_misc.c, libfs/src/imfs/deviceio.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_directory.c,
+	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/linearfile.c,
+	libfs/src/imfs/memfile.c: Convert to using c99 fixed-size types.
+
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/net/radix.c: Remove warning.

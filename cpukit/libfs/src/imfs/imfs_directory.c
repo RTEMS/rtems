@@ -41,8 +41,8 @@
 int imfs_dir_open( 
   rtems_libio_t  *iop,
   const char *pathname,
-  unsigned32 flag,
-  unsigned32 mode
+  uint32_t   flag,
+  uint32_t   mode
 )
 {
   IMFS_jnode_t      *the_jnode;
@@ -75,7 +75,7 @@ int imfs_dir_open(
 ssize_t imfs_dir_read(
   rtems_libio_t  *iop,
   void *buffer,
-  unsigned32 count
+  uint32_t   count
 )
 {
   /*

@@ -387,8 +387,8 @@ int memfile_ftruncate(
 int imfs_dir_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
-  unsigned32     flag,            /* IN  */
-  unsigned32     mode             /* IN  */
+  uint32_t       flag,            /* IN  */
+  uint32_t       mode             /* IN  */
 );
 
 int imfs_dir_close(
@@ -398,7 +398,7 @@ int imfs_dir_close(
 ssize_t imfs_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
-  unsigned32     count             /* IN  */
+  uint32_t       count             /* IN  */
 );
 
 int imfs_dir_lseek(
@@ -419,7 +419,7 @@ int imfs_dir_rmnod(
 int linearfile_read(
   rtems_libio_t *iop,             /* IN  */
   void          *buffer,          /* IN  */
-  unsigned32     count            /* IN  */
+  uint32_t       count            /* IN  */
 );
 
 int linearfile_lseek(
@@ -431,8 +431,8 @@ int linearfile_lseek(
 int memfile_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
-  unsigned32     flag,            /* IN  */
-  unsigned32     mode             /* IN  */
+  uint32_t       flag,            /* IN  */
+  uint32_t       mode             /* IN  */
 );
 
 int memfile_close(
@@ -442,18 +442,18 @@ int memfile_close(
 ssize_t memfile_read(
   rtems_libio_t *iop,             /* IN  */
   void          *buffer,          /* IN  */
-  unsigned32     count            /* IN  */
+  uint32_t       count            /* IN  */
 );
 
 ssize_t memfile_write(
   rtems_libio_t *iop,             /* IN  */
   const void    *buffer,          /* IN  */
-  unsigned32     count            /* IN  */
+  uint32_t       count            /* IN  */
 );
 
 int memfile_ioctl(
   rtems_libio_t *iop,             /* IN  */
-  unsigned32     command,         /* IN  */
+  uint32_t       command,         /* IN  */
   void          *buffer           /* IN  */
 );
 
@@ -470,8 +470,8 @@ int memfile_rmnod(
 int device_open(
   rtems_libio_t *iop,            /* IN  */
   const char    *pathname,       /* IN  */
-  unsigned32     flag,           /* IN  */
-  unsigned32     mode            /* IN  */
+  uint32_t       flag,           /* IN  */
+  uint32_t       mode            /* IN  */
 );
 
 int device_close(
@@ -481,18 +481,18 @@ int device_close(
 ssize_t device_read(
   rtems_libio_t *iop,            /* IN  */
   void          *buffer,         /* IN  */
-  unsigned32     count           /* IN  */
+  uint32_t       count           /* IN  */
 );
 
 ssize_t device_write(
   rtems_libio_t *iop,               /* IN  */
   const void    *buffer,            /* IN  */
-  unsigned32     count              /* IN  */
+  uint32_t       count              /* IN  */
 );
 
 int device_ioctl(
   rtems_libio_t *iop,               /* IN  */
-  unsigned32     command,           /* IN  */
+  uint32_t       command,           /* IN  */
   void          *buffer             /* IN  */
 );
 

@@ -40,7 +40,7 @@
 int linearfile_read(
   rtems_libio_t *iop,
   void          *buffer,
-  unsigned32     count
+  uint32_t       count
 )
 {
   IMFS_jnode_t   *the_jnode;

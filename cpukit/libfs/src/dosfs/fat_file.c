@@ -31,19 +31,19 @@
 #include "fat_file.h"
 
 static inline void
-_hash_insert(Chain_Control *hash, unsigned32 key1, unsigned32 key2, 
+_hash_insert(Chain_Control *hash, uint32_t   key1, uint32_t   key2, 
              fat_file_fd_t *el);
 
 static inline void
-_hash_delete(Chain_Control *hash, unsigned32 key1, unsigned32 key2, 
+_hash_delete(Chain_Control *hash, uint32_t   key1, uint32_t   key2, 
              fat_file_fd_t *el);
 
 static inline int 
 _hash_search(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
     Chain_Control                         *hash, 
-    unsigned32                             key1, 
-    unsigned32                             key2, 
+    uint32_t                               key1, 
+    uint32_t                               key2, 
     fat_file_fd_t			   **ret
 );
 
@@ -51,8 +51,8 @@ static int
 fat_file_lseek(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
     fat_file_fd_t                         *fat_fd,
-    unsigned32                             file_cln,
-    unsigned32                            *disk_cln
+    uint32_t                               file_cln,
+    uint32_t                              *disk_cln
 );
 
 /* fat_file_open --
@@ -84,15 +84,15 @@ fat_file_lseek(
 int
 fat_file_open(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
-    unsigned32                             cln,
-    unsigned32                             ofs,  
+    uint32_t                               cln,
+    uint32_t                               ofs,  
     fat_file_fd_t                        **fat_fd
     )
 {
     int            rc = RC_OK; 
     fat_fs_info_t *fs_info = mt_entry->fs_info;
     fat_file_fd_t *lfat_fd = NULL;
-    unsigned32     key = 0;
+    uint32_t       key = 0;
   
     /* construct key */
     key = fat_construct_key(mt_entry, cln, ofs);
@@ -189,7 +189,7 @@ fat_file_close(
 {
     int            rc = RC_OK;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     key = 0;
+    uint32_t       key = 0;
 
     /*
      * if links_num field of fat-file descriptor is greater than 1  
@@ -256,23 +256,23 @@ ssize_t
 fat_file_read(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
-    unsigned32                            start,
-    unsigned32                            count,
+    uint32_t                              start,
+    uint32_t                              count,
     char                                 *buf
     )
 {
     int            rc = RC_OK;
     ssize_t        ret = 0;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     cmpltd = 0;
-    unsigned32     cur_cln = 0;
-    unsigned32     cl_start = 0;
-    unsigned32     save_cln = 0;
-    unsigned32     ofs = 0;
-    unsigned32     save_ofs;
-    unsigned32     sec = 0;
-    unsigned32     byte = 0;
-    unsigned32     c = 0;
+    uint32_t       cmpltd = 0;
+    uint32_t       cur_cln = 0;
+    uint32_t       cl_start = 0;
+    uint32_t       save_cln = 0;
+    uint32_t       ofs = 0;
+    uint32_t       save_ofs;
+    uint32_t       sec = 0;
+    uint32_t       byte = 0;
+    uint32_t       c = 0;
 
     /* it couldn't be removed - otherwise cache update will be broken */
     if (count == 0)
@@ -361,23 +361,23 @@ ssize_t
 fat_file_write(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
-    unsigned32                            start,
-    unsigned32                            count,
+    uint32_t                              start,
+    uint32_t                              count,
     const char                            *buf
     )
 {
     int            rc = 0;
     ssize_t        ret = 0;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     cmpltd = 0;
-    unsigned32     cur_cln = 0;
-    unsigned32     save_cln = 0; /* FIXME: This might be incorrect, cf. below */
-    unsigned32     cl_start = 0;
-    unsigned32     ofs = 0;  
-    unsigned32     save_ofs;
-    unsigned32     sec = 0;
-    unsigned32     byte = 0;
-    unsigned32     c = 0;
+    uint32_t       cmpltd = 0;
+    uint32_t       cur_cln = 0;
+    uint32_t       save_cln = 0; /* FIXME: This might be incorrect, cf. below */
+    uint32_t       cl_start = 0;
+    uint32_t       ofs = 0;  
+    uint32_t       save_ofs;
+    uint32_t       sec = 0;
+    uint32_t       byte = 0;
+    uint32_t       c = 0;
   
     if ( count == 0 )
         return cmpltd;
@@ -472,19 +472,19 @@ int
 fat_file_extend(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd, 
-    unsigned32                            new_length,
-    unsigned32                           *a_length
+    uint32_t                              new_length,
+    uint32_t                             *a_length
     )
 {
     int            rc = RC_OK;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     chain = 0; 
-    unsigned32     bytes2add = 0;
-    unsigned32     cls2add = 0;
-    unsigned32     old_last_cl;
-    unsigned32     last_cl = 0;
-    unsigned32     bytes_remain = 0;
-    unsigned32     cls_added;
+    uint32_t       chain = 0; 
+    uint32_t       bytes2add = 0;
+    uint32_t       cls2add = 0;
+    uint32_t       old_last_cl;
+    uint32_t       last_cl = 0;
+    uint32_t       bytes_remain = 0;
+    uint32_t       cls_added;
   
     *a_length = new_length;
 
@@ -600,14 +600,14 @@ int
 fat_file_truncate(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,     
-    unsigned32                            new_length
+    uint32_t                              new_length
     )
 {
     int            rc = RC_OK;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     cur_cln = 0;
-    unsigned32     cl_start = 0;
-    unsigned32     new_last_cln = FAT_UNDEFINED_VALUE;
+    uint32_t       cur_cln = 0;
+    uint32_t       cl_start = 0;
+    uint32_t       new_last_cln = FAT_UNDEFINED_VALUE;
   
     
     if ( new_length >= fat_fd->fat_file_size )
@@ -671,10 +671,10 @@ fat_file_ioctl(
 {
     int            rc = RC_OK;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     cur_cln = 0;
-    unsigned32     cl_start = 0;
-    unsigned32     pos = 0;
-    unsigned32    *ret;
+    uint32_t       cur_cln = 0;
+    uint32_t       cl_start = 0;
+    uint32_t       pos = 0;
+    uint32_t      *ret;
     va_list        ap; 
   
     va_start(ap, cmd);
@@ -682,8 +682,8 @@ fat_file_ioctl(
     switch (cmd)
     {
         case F_CLU_NUM:
-            pos = va_arg(ap, unsigned32);
-            ret = va_arg(ap, unsigned32 *);
+            pos = va_arg(ap, uint32_t  );
+            ret = va_arg(ap, uint32_t   *);
 
             /* sanity check */
             if ( pos >= fat_fd->fat_file_size )
@@ -732,7 +732,7 @@ fat_file_mark_removed(
     )
 {
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     key = 0;
+    uint32_t       key = 0;
   
     key = fat_construct_key(mt_entry, fat_fd->info_cln, fat_fd->info_ofs);
   
@@ -762,10 +762,10 @@ fat_file_datasync(
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     fat_fs_info_t     *fs_info = mt_entry->fs_info;
-    unsigned32         cur_cln = fat_fd->cln; 
+    uint32_t           cur_cln = fat_fd->cln; 
     bdbuf_buffer      *block = NULL;
-    unsigned32         sec = 0;
-    unsigned32         i = 0;
+    uint32_t           sec = 0;
+    uint32_t           i = 0;
   
     if (fat_fd->fat_file_size == 0)
         return RC_OK;
@@ -826,8 +826,8 @@ fat_file_size(
 {
     int            rc = RC_OK;
     fat_fs_info_t *fs_info = mt_entry->fs_info;
-    unsigned32     cur_cln = fat_fd->cln; 
-    unsigned32     save_cln = 0;
+    uint32_t       cur_cln = fat_fd->cln; 
+    uint32_t       save_cln = 0;
   
     /* Have we requested root dir size for FAT12/16? */
     if ((FAT_FD_OF_ROOT_DIR(fat_fd)) && 
@@ -867,7 +867,7 @@ fat_file_size(
  *     None
  */
 static inline void
-_hash_insert(Chain_Control *hash, unsigned32 key1, unsigned32 key2, 
+_hash_insert(Chain_Control *hash, uint32_t   key1, uint32_t   key2, 
              fat_file_fd_t *el)
 {
     _Chain_Append((hash) + ((key1) % FAT_HASH_MODULE), &(el)->link);
@@ -887,7 +887,7 @@ _hash_insert(Chain_Control *hash, unsigned32 key1, unsigned32 key2,
  *     None
  */
 static inline void
-_hash_delete(Chain_Control *hash, unsigned32 key1, unsigned32 key2, 
+_hash_delete(Chain_Control *hash, uint32_t   key1, uint32_t   key2, 
              fat_file_fd_t *el)
 {
     _Chain_Extract(&(el)->link);
@@ -911,18 +911,18 @@ static inline int
 _hash_search(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
     Chain_Control                         *hash, 
-    unsigned32                             key1, 
-    unsigned32                             key2, 
+    uint32_t                               key1, 
+    uint32_t                               key2, 
     fat_file_fd_t                          **ret
     )
 {                          
-    unsigned32 mod = (key1) % FAT_HASH_MODULE;
+    uint32_t   mod = (key1) % FAT_HASH_MODULE;
     Chain_Node *the_node = ((Chain_Control *)((hash) + mod))->first;
 
     for ( ; !_Chain_Is_tail((hash) + mod, the_node) ; ) 
     {
         fat_file_fd_t *ffd = (fat_file_fd_t *)the_node;
-        unsigned32 ck = 
+        uint32_t   ck = 
                 fat_construct_key(mt_entry, ffd->info_cln, ffd->info_ofs);
 
         if ( (key1) == ck)
@@ -942,8 +942,8 @@ static int
 fat_file_lseek(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
     fat_file_fd_t                         *fat_fd,
-    unsigned32                             file_cln,
-    unsigned32                            *disk_cln
+    uint32_t                               file_cln,
+    uint32_t                              *disk_cln
     )
 {
     int rc = RC_OK;
@@ -954,9 +954,9 @@ fat_file_lseek(
         *disk_cln = fat_fd->map.disk_cln;
     else
     {
-        unsigned32 cur_cln;
-        unsigned32 count;
-        unsigned32 i;
+        uint32_t   cur_cln;
+        uint32_t   count;
+        uint32_t   i;
         
         if (file_cln > fat_fd->map.file_cln)
         {
