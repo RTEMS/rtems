@@ -318,7 +318,7 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
     return NULL;
   }
 
-  rtems_capture_dup_name (&task->name, *((rtems_name*) new_task->Object.name));
+  rtems_capture_dup_name (&task->name, ((rtems_name) new_task->Object.name));
   
   task->id               = new_task->Object.id;
   task->flags            = 0;

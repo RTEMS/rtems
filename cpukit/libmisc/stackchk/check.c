@@ -314,7 +314,7 @@ void Stack_check_report_blown_task(void)
         "BLOWN STACK!!! Offending task(%p): id=0x%08x; name=0x%08x",
         running,
         running->Object.id,
-        *(unsigned32 *)running->Object.name
+        (unsigned32)running->Object.name
     );
     fflush(stderr);
 

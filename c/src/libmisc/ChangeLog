@@ -1,3 +1,8 @@
+2002-10-24	Fabrizio Pirovano <pirovano.thysys@tiscalinet.it>
+
+	* capture/capture.c, monitor/mon-manager.c, stackchk/check.c:
+	Patch to remove problems introduced by object name rework.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
