@@ -18,8 +18,13 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/thread.h>
 
-  void
-CtxToRegs (const CPU_Exception_frame * ctx, xdr_regs * regs)
+m68k_isr_entry set_vector(
+  rtems_isr_entry     handler,
+  rtems_vector_number vector,
+  int                 type
+);
+
+void CtxToRegs (const CPU_Exception_frame * ctx, xdr_regs * regs)
 {
   regs->r_dreg[0] = ctx->d0;
   regs->r_dreg[1] = ctx->d1;

@@ -1,3 +1,9 @@
+2002-11-04	Joel Sherrill <joel@OARcorp.com>
+
+	* src/_servtgt.c: Removed warning by adding support for ITRON
+	tasks and rolling multiple loops into 1.
+	* src/m68k/rdbg_f.c: Removed warning.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* src/i386/any/remdeb_xdr.c: Removed warnings.

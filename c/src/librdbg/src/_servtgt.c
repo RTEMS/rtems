@@ -285,35 +285,24 @@ TgtThreadList (PID_LIST * plst, /* Process entry */
                unsigned size)
 {                               /* Output buffer size */
   int curr = 0;
-  Objects_Id id;
+  int api;
+  Objects_Id id, min_id, max_id;
   unsigned index;
 
-  id = _Objects_Information_table[OBJECTS_CLASSIC_API][1]->minimum_id;
+  for ( api=OBJECTS_CLASSIC_API ; api <= OBJECTS_ITRON_API ; api++ ) {
+    min_id = _Objects_Information_table[api][1]->minimum_id;
+    max_id = _Objects_Information_table[api][1]->maximum_id;
+    id = min_id;
 
-  while (id < _Objects_Information_table[OBJECTS_CLASSIC_API][1]->maximum_id) {
-    index = id - _Objects_Information_table[OBJECTS_CLASSIC_API][1]->minimum_id;
-    if (_Objects_Information_table[OBJECTS_CLASSIC_API][1]->
-        local_table[1 + index] != NULL) {
-      threads[curr] = (unsigned) id;
-      curr++;
+    while (id < max_id) {
+      index = id - min_id;
+      if (_Objects_Information_table[api][1]->local_table[1 + index] != NULL) {
+        threads[curr] = (unsigned) id;
+        curr++;
+      }
+      id++;
     }
-    id++;
   }
-
-  id = _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
-
-  while (id < _Objects_Information_table[OBJECTS_POSIX_API][1]->maximum_id) {
-    index =
-      id - _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
-    if (_Objects_Information_table[OBJECTS_POSIX_API][1]->
-        local_table[1 + index] != NULL) {
-      threads[curr] = (unsigned) id;
-      curr++;
-    }
-    id++;
-  }
-
-#warning "ignores ITRON tasks and could be a single loop"
 
   return curr;
 }
