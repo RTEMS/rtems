@@ -1,6 +1,6 @@
 2004-07-24	Joel Sherrill <joel@OARcorp.com>
 
-	PR rtems/652
+	PR 652/rtems
 	* user/signal.t: Return RTEMS_INVALID_NUMBER when sending an empty
 	signal set.
 
