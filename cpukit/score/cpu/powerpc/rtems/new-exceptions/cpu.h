@@ -539,10 +539,12 @@ SCORE_EXTERN struct {
 
 /*
  *  This is defined if the port has a special way to report the ISR nesting
- *  level.  Most ports maintain the variable _ISR_Nest_level.
+ *  level.  Most ports maintain the variable _ISR_Nest_level. Note that
+ *  this is not an option - RTEMS/score _relies_ on _ISR_Nest_level
+ *  being maintained (e.g. watchdog queues).
  */
 
-#define CPU_PROVIDES_ISR_IS_IN_PROGRESS TRUE
+#define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
 /*
  *  Should be large enough to run all RTEMS tests.  This insures
@@ -830,7 +832,16 @@ extern const unsigned32 _CPU_msrs[4];
  *  _CPU_Initialize
  *
  *  This routine performs CPU dependent initialization.
+ *
+ *  Until all new-exception processing BSPs have fixed
+ *  PR288, we let the good BSPs pass
+ *
+ *  PPC_BSP_HAS_FIXED_PR288
+ *
+ *  in SPRG0 and let _CPU_Initialize assert this.
  */
+
+#define PPC_BSP_HAS_FIXED_PR288	0x600dbabe
 
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
