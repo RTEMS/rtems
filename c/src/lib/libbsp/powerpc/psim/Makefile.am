@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUBDIRS = include start irq clock console startup shmsupp timer vectors\
+SUBDIRS = include start irq clock console startup shmsupp timer vectors \
     @exceptions@ wrapup \
     tools
 

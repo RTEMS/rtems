@@ -1,5 +1,9 @@
 2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
 
+	* Makefile.am, wrapup/Makefile.am: Pick up SHM driver when MP enabled.
+
+2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
+
 	PR 581/bsps
 	* Makefile.am, bsp_specs, configure.ac, clock/Makefile.am,
 	include/bsp.h, start/Makefile.am, start/start.S, startup/Makefile.am,
