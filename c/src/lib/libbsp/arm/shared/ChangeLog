@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* comm/console.c, comm/uart.c, comm/uart.h, irq/irq_asm.S,
+	irq/irq_init.c: URL for license changed.
+
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved automake/.
