@@ -78,15 +78,15 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
 
-libbsp_a_LIBADD += ../../../libcpu/powerpc/shared/cpuIdent.rel \
-    ../../../libcpu/powerpc/shared/cache.rel \
-    ../../../libcpu/powerpc/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/powerpc/mpc8xx/clock.rel \
-    ../../../libcpu/powerpc/mpc8xx/console-generic.rel \
-    ../../../libcpu/powerpc/mpc8xx/cpm.rel \
-    ../../../libcpu/powerpc/mpc8xx/mmu.rel \
-    ../../../libcpu/powerpc/mpc8xx/timer.rel \
-    ../../../libcpu/powerpc/mpc8xx/exceptions.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/exceptions.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

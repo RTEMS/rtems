@@ -141,8 +141,9 @@ libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel ide.rel \
 if HAS_NETWORKING
 libbsp_a_LIBADD += ne2000.rel wd8003.rel 3c509.rel
 endif
-libbsp_a_LIBADD += ../../../libcpu/i386/cache.rel \
-    ../../../libcpu/i386/page.rel ../../../libcpu/i386/score.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/page.rel \
+    ../../../libcpu/@RTEMS_CPU@/score.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

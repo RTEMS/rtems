@@ -48,11 +48,11 @@ liblnk_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel console.rel liblnk.rel
-libbsp_a_LIBADD += ../../../libcpu/mips/shared/cache.rel \
-    ../../../libcpu/mips/shared/interrupts.rel \
-    ../../../libcpu/mips/r46xx/clock.rel \
-    ../../../libcpu/mips/r46xx/timer.rel \
-    ../../../libcpu/mips/r46xx/vectorisrs.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel \
+    ../../../libcpu/@RTEMS_CPU@/r46xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/r46xx/timer.rel \
+    ../../../libcpu/@RTEMS_CPU@/r46xx/vectorisrs.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

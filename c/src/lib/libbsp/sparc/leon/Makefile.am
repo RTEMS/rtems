@@ -77,8 +77,9 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += leon_open_eth.rel
 endif
 
-libbsp_a_LIBADD += ../../../libcpu/sparc/cache.rel \
-    ../../../libcpu/sparc/reg_win.rel ../../../libcpu/sparc/syscall.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
+    ../../../libcpu/@RTEMS_CPU@/syscall.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

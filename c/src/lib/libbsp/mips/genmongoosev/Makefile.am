@@ -59,10 +59,10 @@ timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
-libbsp_a_LIBADD += ../../../libcpu/mips/shared/cache.rel \
-    ../../../libcpu/mips/shared/interrupts.rel \
-    ../../../libcpu/mips/mongoosev/duart.rel \
-    ../../../libcpu/mips/mongoosev/vectorisrs.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel \
+    ../../../libcpu/@RTEMS_CPU@/mongoosev/duart.rel \
+    ../../../libcpu/@RTEMS_CPU@/mongoosev/vectorisrs.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
