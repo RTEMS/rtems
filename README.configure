@@ -11,7 +11,7 @@ tools in the Cygnus one-tree structure. Using autoconf also means
 that RTEMS now can be built in a separate build directory.
 
 To re-generate auto*tool generated files (configure, Makefile.in etc),
-autoconf-2.52 and automake-1.6.* are required.
+autoconf-2.57 and automake-1.7.2 are required.
 
 2. Installation
 ===============
@@ -176,29 +176,58 @@ following:
 
 The following bsps are supported:
 
-host-based	: posix (on Linux, Solaris and HPUX)
+host-based	: posix (on Linux, FreeBSD, Cygwin, Solaris, and HPUX)
 
-a29k		: portsw
-arm             : arm_bare_bsp armulator vegaplus
+arm             : arm_bare_bsp armulator edb7312 vegaplus
+
 c4x             : c4xsim
+
 h8300           : h8sim
-i386		: i386ex pc386 ts_386ex
+
+i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
+                  NOTE: The "pc386" BSP can be compiled to support a 
+                        variety of PC configurations including PC-104
+                        based solutions.
+
 i960		: cvme961 i960sim rxgen960
-hppa1.1		: simhppa
+
 m68k		: dmv152 efi332 efi68k gen68302 gen68340 gen68360 
-                  gen68360_040 idp mvme136 mvme147 mvme147s mvme162 ods68302
-                  mrm332
-no_cpu          : no_bsp
+                  gen68360_040 idp mcf5206elite mrm332 mvme136 mvme147
+                  mvme147s mvme162 mvme162lx ods68302
+
+no_cpu          : no_bsp  (porting example)
+
 mips            : p4600 p4650 (p4000 port with either R4600 or R4650)
                   jmr3904 genmongoosev
+
+or32:           : orp
+
+powerpc		: dmv177 eth_comm gen405 helas403 mcp750 mbx8xx mtx603e
+                  mvme230x ppcn_60x psim score603e
+
+                  NOTE: The "motorola_powerpc" BSP is a single BSP which
+                  can be conditionally compiled to support most Motorola
+                  VMEbus, CompactPCI, and MTX boards.)
+
+sh              : gensh1 gensh2 shsim simsh4 gensh4
+
+sparc 		: erc32 erc32nfp leon1 leon2
+
+any             : bare
+
+The following ports are considered deprecated and will be removed in
+a future release:
+
+a29k		: portsw
+
+hppa1.1		: simhppa
+
 mips64orion 	: (deprecated)
                   p4600 p4650 (p4000 port with either R4600 or R4650)
-powerpc		: dmv177 eth_comm helas403 gen405 mbx8xx motorola_powerpc (covers
-                  most Motorola VMEbus and CompactPCI boards) ppcn_60x
-                  psim score603e
-sh              : gensh1 gensh2
-sparc 		: erc32 erc32nfp leon1 leon2
-any             : bare
+
+                  NOTE: MIPS support is NOT being dropped.  This is a clean up
+                        effort and the mips64orion BSPs and CPUs will be
+                        supported by the mips port.
 
 5. Makefile structure
 =====================
@@ -214,51 +243,34 @@ Default.cfg sets the default values of certain common build options.
 Bsp.cfg set bsp-specific build options and can also override the
 default settings.
 
-Gcc-target-default.cfg contains the common gcc definitions. Some targets
-(a29k, no_cpu, and posix) still use the old structure.
+Gcc-target-default.cfg contains the common gcc definitions.
 
 6. Adding a bsp
 ===============
 
-[OBSOLETE: This section below does not apply anymore.]
-The top-level configure.in has to be modified if a new target is added
-or if a new bsp is to be built by default. The additions required is
-basically to add which makefiles are to be created by configure and
-to add the target to the selection statement. 
+Please refer to the BSP and Device Driver Guide.
 
 
 7. Tested configurations
 ========================
 
 All gnu-based bsps have been built on Linux. 
+
 The native (posix) ports have been built and run only on Linux.
 
 The following configurations have NOT been tested:
 
     + Anything on Nextstep, HPUX and Irix.
-    + The a29k port.
+    + The a29k port
+    + The C4x and OR32 ports (requires specially patched toolchain)
 
-8. Pre-requisites
-=================
+8. Prerequisites
+================
 
 Gawk version 2 or higher.
 GNU make version 3.72 or higher.
 Bash.
 gcc version > 2.8
 
-TODO
-====
-
-The install-if-change script requires bash. On Solaris systems, this should
-be changed to ksh, since ksh is provided with Solaris (bash not). This
-script is not used by RTEMS and only is provided for convenience.
-
-A fairly recent version of gawk is needed to build RTEMS. This should be
-changed so that a plain vanilla awk also works. [NOTE: This dependency
-should disappear when the "gcc 2.8 -specs" is finished.]
-
-Posix port on Solaris-2.5 fails due to undefined built-in functions
-(gcc-2.7.2, might be my installation).
-
-Improve support for 'make CFLAGS=xxx'. 
-
+NOTE: These prerequisites are probably out of date but autoconf should detect
+      any problems.
