@@ -61,7 +61,6 @@ rtems_status_code _Message_queue_Submit(
 {
   register Message_queue_Control  *the_message_queue;
   Objects_Locations                location;
-  CORE_message_queue_Status        core_status;
 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location )
@@ -98,39 +97,43 @@ rtems_status_code _Message_queue_Submit(
     case OBJECTS_LOCAL:
       switch ( submit_type ) {
         case MESSAGE_QUEUE_SEND_REQUEST:
-          core_status = _CORE_message_queue_Send(
-                          &the_message_queue->message_queue,
-                          buffer,
-                          size,
-                          id,
+          _CORE_message_queue_Send(
+            &the_message_queue->message_queue,
+            buffer,
+            size,
+            id,
 #if defined(RTEMS_MULTIPROCESSING)
-                          _Message_queue_Core_message_queue_mp_support
+            _Message_queue_Core_message_queue_mp_support,
 #else
-                          NULL
+            NULL,
 #endif
-                        );
+            FALSE,   /* sender does not block */
+            0        /* no timeout */
+          );
           break;
         case MESSAGE_QUEUE_URGENT_REQUEST:
-          core_status = _CORE_message_queue_Urgent(
-                          &the_message_queue->message_queue,
-                          buffer,
-                          size,
-                          id,
+          _CORE_message_queue_Urgent(
+            &the_message_queue->message_queue,
+            buffer,
+            size,
+            id,
 #if defined(RTEMS_MULTIPROCESSING)
-                          _Message_queue_Core_message_queue_mp_support
+            _Message_queue_Core_message_queue_mp_support,
 #else
-                          NULL
+            NULL,
 #endif
-                        );
+            FALSE,   /* sender does not block */
+            0        /* no timeout */
+          );
           break;
         default:
-          core_status = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
           return RTEMS_INTERNAL_ERROR;   /* should never get here */
       }
 
       _Thread_Enable_dispatch();
       return _Message_queue_Translate_core_message_queue_return_code(
-                core_status );
+        _Thread_Executing->Wait.return_code
+      );
           
   }
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */

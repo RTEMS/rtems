@@ -166,13 +166,12 @@ void _CORE_message_queue_Close(
 );
 
 /*
- *
  *  _CORE_message_queue_Flush
  *
  *  DESCRIPTION:
  *
- *  This function flushes the message_queue's task wait queue.  The number
- *  messages flushed from the queue is returned.
+ *  This function flushes the message_queue's pending message queue.  The
+ *  number of messages flushed from the queue is returned.
  *
  */
 
@@ -194,7 +193,20 @@ unsigned32 _CORE_message_queue_Flush_support(
 );
  
 /*
+ *  _CORE_message_queue_Flush_waiting_threads
  *
+ *  DESCRIPTION:
+ *
+ *  This function flushes the threads which are blocked on this
+ *  message_queue's pending message queue.  They are unblocked whether
+ *  blocked sending or receiving.
+ */
+
+void _CORE_message_queue_Flush_waiting_threads(
+  CORE_message_queue_Control *the_message_queue
+);
+
+/*
  *  _CORE_message_queue_Broadcast
  *
  *  DESCRIPTION:
@@ -214,7 +226,6 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
 );
 
 /*
- *
  *  _CORE_message_queue_Submit
  *
  *  DESCRIPTION:
@@ -228,17 +239,18 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  *
  */
  
-CORE_message_queue_Status _CORE_message_queue_Submit(
+void _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
   unsigned32                                 size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
-  CORE_message_queue_Submit_types            submit_type
+  CORE_message_queue_Submit_types            submit_type,
+  boolean                                    wait,
+  Watchdog_Interval                          timeout
 );
 
 /*
- *
  *  _CORE_message_queue_Seize
  *
  *  DESCRIPTION:
@@ -248,6 +260,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  *  inactive message pool.  The thread will be blocked if wait is TRUE,
  *  otherwise an error will be given to the thread if no messages are available.
  *
+ *  NOTE: Returns message priority via return are in TCB.
  */
  
 void _CORE_message_queue_Seize(
@@ -256,8 +269,23 @@ void _CORE_message_queue_Seize(
   void                            *buffer,
   unsigned32                      *size,
   boolean                          wait,
-  CORE_message_queue_Submit_types *priority,
   Watchdog_Interval                timeout
+);
+
+/*
+ *  _CORE_message_queue_Insert_message
+ *
+ *  DESCRIPTION:
+ *
+ *  This kernel routine inserts the specified message into the 
+ *  message queue.  It is assumed that the message has been filled
+ *  in before this routine is called.
+ */
+
+void _CORE_message_queue_Insert_message(
+  CORE_message_queue_Control        *the_message_queue,
+  CORE_message_queue_Buffer_control *the_message,
+  CORE_message_queue_Submit_types    submit_type
 );
 
 #ifndef __RTEMS_APPLICATION__

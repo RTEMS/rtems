@@ -59,7 +59,7 @@ rtems_status_code rtems_message_queue_create(
 )
 {
   register Message_queue_Control *the_message_queue;
-  CORE_message_queue_Attributes   the_message_queue_attributes;
+  CORE_message_queue_Attributes   the_msgq_attributes;
   void                           *handler;
 #if defined(RTEMS_MULTIPROCESSING)
   boolean                         is_global;
@@ -74,10 +74,10 @@ rtems_status_code rtems_message_queue_create(
     return RTEMS_MP_NOT_CONFIGURED;
 #endif
 
-  if (count == 0)
+  if ( count == 0 )
       return RTEMS_INVALID_NUMBER;
 
-  if (max_message_size == 0)
+  if ( max_message_size == 0 )
       return RTEMS_INVALID_SIZE;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -115,11 +115,9 @@ rtems_status_code rtems_message_queue_create(
   the_message_queue->attribute_set = attribute_set;
 
   if (_Attributes_Is_priority( attribute_set ) )
-    the_message_queue_attributes.discipline = 
-                                      CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY;
+    the_msgq_attributes.discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY;
   else
-    the_message_queue_attributes.discipline =
-                                      CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
+    the_msgq_attributes.discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
 
   handler = NULL;
 #if defined(RTEMS_MULTIPROCESSING)
@@ -129,7 +127,7 @@ rtems_status_code rtems_message_queue_create(
   if ( ! _CORE_message_queue_Initialize(
            &the_message_queue->message_queue,
            OBJECTS_RTEMS_MESSAGE_QUEUES,
-           &the_message_queue_attributes,
+           &the_msgq_attributes,
            count,
            max_message_size,
            handler ) ) {

@@ -27,15 +27,17 @@
  *  This routine sends a message to the end of the specified message queue.
  */
  
-RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Send(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
   unsigned32                                 size,
   Objects_Id                                 id,
-  CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support
+  CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
+  boolean                                    wait,
+  Watchdog_Interval                          timeout
 )
 {
-  return _CORE_message_queue_Submit(
+  _CORE_message_queue_Submit(
     the_message_queue,
     buffer,
     size,
@@ -45,7 +47,9 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
 #else
     NULL,
 #endif
-    CORE_MESSAGE_QUEUE_SEND_REQUEST
+    CORE_MESSAGE_QUEUE_SEND_REQUEST,
+    wait,     /* sender may block */
+    timeout   /* timeout interval */
   );
 }
  
@@ -58,15 +62,17 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
  *  This routine sends a message to the front of the specified message queue.
  */
  
-RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
+RTEMS_INLINE_ROUTINE void _CORE_message_queue_Urgent(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
   unsigned32                                 size,
   Objects_Id                                 id,
-  CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support
+  CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
+  boolean                                    wait,
+  Watchdog_Interval                          timeout
 )
 {
-  return _CORE_message_queue_Submit(
+  _CORE_message_queue_Submit(
     the_message_queue,
     buffer,
     size,
@@ -76,7 +82,9 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
 #else
     NULL,
 #endif
-    CORE_MESSAGE_QUEUE_URGENT_REQUEST
+    CORE_MESSAGE_QUEUE_URGENT_REQUEST,
+    wait,     /* sender may block */
+    timeout   /* timeout interval */
  );
 }
 

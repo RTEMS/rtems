@@ -92,12 +92,12 @@ rtems_status_code rtems_message_queue_receive(
         buffer,
         size,
         wait,
-        &core_priority,
         timeout
       );
       _Thread_Enable_dispatch();
-      return( _Message_queue_Translate_core_message_queue_return_code(
-                  _Thread_Executing->Wait.return_code ) );
+      return _Message_queue_Translate_core_message_queue_return_code(
+        _Thread_Executing->Wait.return_code
+      );
 
   }
 

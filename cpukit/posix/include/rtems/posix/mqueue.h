@@ -32,10 +32,8 @@ extern "C" {
 typedef struct {
    Objects_Control             Object;
    int                         process_shared;
-   int                         flags;
    boolean                     named;
    boolean                     linked;
-   boolean                     blocking;
    int                         oflag;
    unsigned32                  open_count;
    CORE_message_queue_Control  Message_queue;

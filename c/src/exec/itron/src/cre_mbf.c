@@ -25,7 +25,7 @@ ER cre_mbf(
   T_CMBF *pk_cmbf
 )
 {
-  CORE_message_queue_Attributes   the_message_queue_attributes;
+  CORE_message_queue_Attributes    the_msgq_attributes;
   ITRON_Message_buffer_Control    *the_message_buffer;
 
   /*
@@ -57,16 +57,14 @@ ER cre_mbf(
   }
 
   if ( pk_cmbf->mbfatr & TA_TPRI )
-    the_message_queue_attributes.discipline =
-        CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY;
+    the_msgq_attributes.discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY;
   else
-    the_message_queue_attributes.discipline =
-        CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
+    the_msgq_attributes.discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
 
   _CORE_message_queue_Initialize(
     &the_message_buffer->message_queue,
     OBJECTS_ITRON_MESSAGE_BUFFERS,
-    &the_message_queue_attributes,
+    &the_msgq_attributes,
     pk_cmbf->bufsz / pk_cmbf->maxmsz,
     pk_cmbf->maxmsz,
     NULL                           /* Multiprocessing not supported */

@@ -64,6 +64,25 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
   Thread_Wait_information *waitp;
   unsigned32               constrained_size;
 
+  /*
+   *  If there are pending messages, then there can't be threads
+   *  waiting for us to send them a message.
+   *
+   *  NOTE: This check is critical because threads can block on
+   *        send and receive and this ensures that we are broadcasting
+   *        the message to threads waiting to receive -- not to send.
+   */
+
+  if ( the_message_queue->number_of_pending_messages != 0 ) {
+    *count = 0;
+    return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
+  }
+
+  /*
+   *  There must be no pending messages if there is a thread waiting to
+   *  receive a message.
+   */
+
   number_broadcasted = 0;
   while ((the_thread = _Thread_queue_Dequeue(&the_message_queue->Wait_queue))) {
     waitp = &the_thread->Wait;

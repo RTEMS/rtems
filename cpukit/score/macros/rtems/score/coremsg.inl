@@ -23,9 +23,10 @@
  */
  
 #define _CORE_message_queue_Send( _the_message_queue, _buffer, _size, \
-_id, _api_message_queue_mp_support ) \
+       _id, _api_message_queue_mp_support, _wait, _timeout ) \
   _CORE_message_queue_Submit( (_the_message_queue), (_buffer), (_size), \
-     (_id), (_api_message_queue_mp_support), CORE_MESSAGE_QUEUE_SEND_REQUEST )
+     (_id), (_api_message_queue_mp_support), \
+     CORE_MESSAGE_QUEUE_SEND_REQUEST, (_wait), (_timeout)
  
 /*PAGE
  *
@@ -34,9 +35,10 @@ _id, _api_message_queue_mp_support ) \
  */
  
 #define _CORE_message_queue_Urgent( _the_message_queue, _buffer, _size, \
-_id, _api_message_queue_mp_support ) \
+       _id, _api_message_queue_mp_support, _wait, _timeout ) \
   _CORE_message_queue_Submit( (_the_message_queue), (_buffer), (_size), \
-     (_id), (_api_message_queue_mp_support), CORE_MESSAGE_QUEUE_URGENT_REQUEST )
+     (_id), (_api_message_queue_mp_support), \
+     CORE_MESSAGE_QUEUE_URGENT_REQUEST, (_wait), (_timeout)
 
 /*PAGE
  *

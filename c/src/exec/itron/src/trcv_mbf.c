@@ -32,7 +32,6 @@ ER trcv_mbf(
   CORE_message_queue_Status       status;
   boolean                         wait;
   Watchdog_Interval               interval;
-  CORE_message_queue_Submit_types core_priority;
 
   interval = 0;
   if (tmout == TMO_POL) {
@@ -62,7 +61,6 @@ ER trcv_mbf(
           msg,
           p_msgsz,
           wait,
-          &core_priority,
           interval
       );
       _Thread_Enable_dispatch();

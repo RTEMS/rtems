@@ -27,7 +27,6 @@ ER snd_msg(
 {
   register ITRON_Mailbox_Control *the_mailbox;
   Objects_Locations                location;
-  CORE_message_queue_Status        status = E_OK;
   unsigned32                       message_priority;
   void                            *message_contents;
 
@@ -47,17 +46,22 @@ ER snd_msg(
         message_priority = CORE_MESSAGE_QUEUE_SEND_REQUEST;
 
       message_contents = pk_msg;
-      status = _CORE_message_queue_Submit(
+      _CORE_message_queue_Submit(
         &the_mailbox->message_queue,
         &message_contents,
         sizeof(T_MSG *),
         the_mailbox->Object.id,
         NULL,          /* multiprocessing not supported */
-        message_priority
+        message_priority,
+        FALSE,     /* do not allow sender to block */
+        0          /* no timeout */
      );
      break;
   }
 
   _ITRON_return_errorno( 
-     _ITRON_Mailbox_Translate_core_message_queue_return_code(status) );
+     _ITRON_Mailbox_Translate_core_message_queue_return_code(
+          _Thread_Executing->Wait.return_code
+     )
+  );
 }
