@@ -1,3 +1,8 @@
+2000-12-08	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, gnatnewlib/gnatnewlib.in: Modified to pick up
+	all GNAT components.  
+
 2000-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Remove trailing '/' from RPM_SPECSdir.

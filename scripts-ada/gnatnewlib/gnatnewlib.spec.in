@@ -383,6 +383,20 @@ cd ..
 
 %files -n @target_alias@-gnat -f files.gcc
 /opt/gnatrtems/bin/@target_alias@-gcc@exe_ext@
+/opt/gnatrtems/bin/@target_alias@-gnatbind
+/opt/gnatrtems/bin/@target_alias@-gnatbl
+/opt/gnatrtems/bin/@target_alias@-gnatchop
+/opt/gnatrtems/bin/@target_alias@-gnatfind
+/opt/gnatrtems/bin/@target_alias@-gnatkr
+/opt/gnatrtems/bin/@target_alias@-gnatlink
+/opt/gnatrtems/bin/@target_alias@-gnatls
+/opt/gnatrtems/bin/@target_alias@-gnatmake
+/opt/gnatrtems/bin/@target_alias@-gnatmem
+/opt/gnatrtems/bin/@target_alias@-gnatprep
+/opt/gnatrtems/bin/@target_alias@-gnatpsta
+/opt/gnatrtems/bin/@target_alias@-gnatpsys
+/opt/gnatrtems/bin/@target_alias@-gnatxref
+
 
 %dir /opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
 
