@@ -95,13 +95,14 @@ int fcntl(
        *  XXX man page, only these flags can be added.
        */
 
-      flags &= ~(O_APPEND | O_NONBLOCK);
+      flags = (iop->flags & ~(O_APPEND|O_NONBLOCK)) |
+                   (flags & (O_APPEND|O_NONBLOCK));
 
       /*
        *  XXX If we are turning on append, should we seek to the end?
        */
 
-      iop->flags |= flags;
+      iop->flags = flags;
       return 0;
 
     case F_GETLK:
