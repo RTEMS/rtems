@@ -22,6 +22,14 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 MP_C_PIECES_yes_V = mpci objectmp threadmp
 MP_C_PIECES = $(MP_C_PIECES_$(HAS_MP)_V)
 
+CORE_MESSAGE_QUEUE_C_PIECES= coremsg coremsgbroadcast coremsgclose \
+    coremsgflush coremsgflushsupp coremsgseize coremsgsubmit
+
+CORE_MUTEX_C_PIECES= coremutex coremutexflush coremutexseize \
+    coremutexsurrender
+
+CORE_SEMAPHORE_C_PIECES= coresem coresemflush coresemseize coresemsurrender
+
 HEAP_C_PIECES = heap heapallocate heapextend heapfree \
     heapsizeofuserarea heapwalk
 
@@ -48,11 +56,15 @@ THREADQ_C_PIECES= threadq threadqdequeue threadqdequeuefifo \
 TOD_C_PIECES= coretod coretodset coretodtickle coretodtoseconds \
     coretodvalidate
 
+WATCHDOG_C_PIECES= watchdog watchdogadjust watchdoginsert watchdogremove \
+    watchdogtickle
+
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES = apiext chain coremsg coremutex coresem $(HEAP_C_PIECES) interr isr \
+C_PIECES = apiext chain $(CORE_MESSAGE_QUEUE_C_PIECES) $(CORE_MUTEX_C_PIECES) \
+    $(CORE_SEMAPHORE_C_PIECES) $(HEAP_C_PIECES) interr isr \
     $(OBJECT_C_PIECES) $(THREAD_C_PIECES) $(THREADQ_C_PIECES) \
     $(TOD_C_PIECES) userext \
-    watchdog wkspace $(MP_C_PIECES)
+    $(WATCHDOG_C_PIECES) wkspace $(MP_C_PIECES)
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
