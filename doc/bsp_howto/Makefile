@@ -18,10 +18,12 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
-GENERATED_FILES= clock.texi console.texi init.texi intro.texi \
-    linkcmds.texi makefiles.texi target.texi timer.texi
+GENERATED_FILES= \
+    intro.texi target.texi makefiles.texi linkcmds.texi support.texi \
+    init.texi console.texi clock.texi timer.texi rtc.texi nvmem.texi \
+    network.texi shmsupp.texi analog.texi discrete.texi
 
-FILES= $(PROJECT).texi $(GENERATED_FILES)
+FILES=$(PROJECT).texi $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
@@ -44,6 +46,22 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) -v $(PROJECT).texi
 	texi2dvi -v $(PROJECT).texi
 
+html: dirs $(FILES)
+	@echo NOT BUILDING HTML
+	#-mkdir -p $(WWW_INSTALL)/$(PROJECT)
+	#$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
+ 	#    $(PROJECT).texi
+
+clean:
+	rm -f *.o $(PROG) *.txt core 
+	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
+	rm -f $(PROJECT) $(PROJECT)-* $(GENERATED_FILES)
+	rm -f *.fixed _*
+
+#
+#  Process Automatically Generated Files
+#
+
 intro.texi: intro.t Makefile
 	$(BMENU) -p "" \
 	    -u "Top" \
@@ -64,12 +82,12 @@ linkcmds.texi: linkcmds.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
-init.texi: init.t Makefile
+support.texi: support.t Makefile
 	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
-clock.texi: clock.t Makefile
+init.texi: init.t Makefile
 	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
@@ -79,20 +97,42 @@ console.texi: console.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
+clock.texi: clock.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
 timer.texi: timer.t Makefile
 	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
-html: dirs $(FILES)
-	@echo NOT BUILDING HTML
-	#-mkdir -p $(WWW_INSTALL)/$(PROJECT)
-	#$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
- 	#    $(PROJECT).texi
+rtc.texi: rtc.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
 
-clean:
-	rm -f *.o $(PROG) *.txt core 
-	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f $(PROJECT) $(PROJECT)-* $(GENERATED_FILES)
-	rm -f *.fixed _*
+nvmem.texi: nvmem.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
 
+network.texi: network.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+shmsupp.texi: shmsupp.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+analog.texi: analog.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+discrete.texi: discrete.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
