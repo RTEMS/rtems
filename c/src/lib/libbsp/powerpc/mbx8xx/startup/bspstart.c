@@ -26,6 +26,11 @@
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
+#include <libcpu/spr.h>
+
+
+SPR_RW(SPRG0)
+SPR_RW(SPRG1)
 
 /*
  *  The original table from the application (in ROM) and our copy of it with
@@ -134,7 +139,6 @@ void bsp_start(void)
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
-  register unsigned int intrNestingLevel = 0;
   
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
@@ -166,8 +170,9 @@ void bsp_start(void)
    */
   
   intrStack = (((unsigned char*)&intrStackPtr) - CPU_MINIMUM_STACK_FRAME_SIZE);
-  asm volatile ("mtspr	273, %0" : "=r" (intrStack) : "0" (intrStack));
-  asm volatile ("mtspr	272, %0" : "=r" (intrNestingLevel) : "0" (intrNestingLevel));
+  _write_SPRG1((unsigned int)intrStack);
+  /* signal them that we have fixed PR288 - eventually, this should go away */
+  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
   /*
    * Install our own set of exception vectors
