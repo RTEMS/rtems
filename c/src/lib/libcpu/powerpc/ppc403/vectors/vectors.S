@@ -29,10 +29,6 @@
  *  section called ".vectors", which will be loaded to an address
  *  between 0x????0000 and 0x????0100 (inclusive) via a link script.
  *
- *  The basic mechanism for XCOFF assemblers is to place it in the
- *  normal text section, and arrange for this file to be located
- *  at an appropriate position on the linker command line.
- *
  *  The variable 'PPC_VECTOR_FILE_BASE' must be defined to be the
  *  offset from 0x????0000 to the first location in the file.  This
  *  will usually be 0x0000 or 0x0100.
@@ -107,8 +103,6 @@
 /* Go to the right section */
 #if PPC_ASM == PPC_ASM_ELF
 	.section .vectors,"awx",@progbits
-#elif PPC_ASM == PPC_ASM_XCOFF
-	.csect	.text[PR]
 #endif
 
 	PUBLIC_VAR (__vectors)

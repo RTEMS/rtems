@@ -1,5 +1,9 @@
 2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* ppc403/vectors/vectors.S: Remove XCOFF support.
+
+2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/powerpc/cache.h, rtems/powerpc/debugmod.h:
 	New header guards.
 
