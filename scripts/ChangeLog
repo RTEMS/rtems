@@ -1,3 +1,14 @@
+2003-02-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/gccnewlib.add: Add %gcc_version, %newlib_version.
+	Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-c++.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-g77.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-gcc.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-gcj.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-gnat.add: Apply %gcc_version, %newlib_version.
+	* gcc3newlib/target-objc.add: Apply %gcc_version, %newlib_version.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).

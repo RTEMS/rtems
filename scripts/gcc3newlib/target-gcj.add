@@ -22,7 +22,7 @@ This is the gcc/java compiler for @target_alias@
 %{_prefix}/bin/@target_alias@-gcjh%{_exeext}
 %{_prefix}/man/man1/@target_alias@-gcj.1
 
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/jc1%{_exeext}
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain%{_exeext}
+%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/jc1%{_exeext}
+%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/jvgenmain%{_exeext}
 
 %endif

@@ -15,6 +15,6 @@ This is the gcc/objc compiler for @target_alias@
 
 %files -n @target_alias@-objc -f build/files.objc
 %defattr(-,root,root)
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj%{_exeext}
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc
+%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/cc1obj%{_exeext}
+%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include/objc
 %endif

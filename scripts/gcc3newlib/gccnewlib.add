@@ -1,3 +1,7 @@
+
+%define gcc_version	@gcc_version@
+%define newlib_version	@newlib_version@
+
 Name:         @target_alias@-gcc-newlib
 Summary:      gcc and newlib C Library for @target_alias@.
 Group:	      rtems
@@ -7,13 +11,13 @@ License:      gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      	gcc@gcc_version@newlib@newlib_version@
+Version:      	gcc%{gcc_version}newlib%{newlib_version}
 # gcc 3.x and gcc 2.9
-Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
-# Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.bz2
+Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}.tar.gz
+# Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}.tar.bz2
 # gcc 2.95.x
-# Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.bz2
-Source1:	ftp://sources.redhat.com/pub/newlib/newlib-@newlib_version@.tar.gz
+# Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}.tar.bz2
+Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 @PATCH1@
 @PATCH3@
 BuildPreReq:	texinfo >= 4.2
@@ -35,7 +39,7 @@ NoSource:	1
 # Use rpm -ba --define 'gnat [0|1]' xxx.spec to override building gnat for 
 # those targets wanting to support ada.
 
-%if "@gcc_version@" >= "3.2"
+%if "%{gcc_version}" >= "3.2"
 # default to building gnat
 %define _gnat	%{?gnat:%gnat}%{!?gnat:1}
 %else
@@ -46,7 +50,7 @@ NoSource:	1
 # Use rpm -ba --define 'gcj [0|1]' xxx.spec to override building gcj for 
 # those targets wanting to support gcj.
 
-%if "@gcc_version@" >= "3.2"
+%if "%{gcc_version}" >= "3.2"
 # default to building gcj
 %define _gcj	%{?gcj:%gcj}%{!?gcj:1}
 %else
@@ -134,8 +138,8 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 @PATCH2@
 @PATCH4@
 
-  cd gcc-@gcc_version@
-    sed -e 's/\(version_string = \"[^\"]*\)/\1 (OAR Corporation gcc-@gcc_version@-@gcc_patch_version@\/newlib-@newlib_version@-@newlib_patch_version@ @Release@)/' \
+  cd gcc-%{gcc_version}
+    sed -e 's/\(version_string = \"[^\"]*\)/\1 (OAR Corporation gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
     gcc/version.c > gcc/version.c~
     mv gcc/version.c~  gcc/version.c 
 
@@ -144,7 +148,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   cd ..
 
   # Copy the C library into gcc's source tree
-  ln -s ../newlib-@newlib_version@/newlib gcc-@gcc_version@
+  ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_version}
   test -d build || mkdir build
 
 %build
@@ -170,7 +174,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %if %build_gnat
   languages="$languages,ada"
 %endif
-  ../gcc-@gcc_version@/configure \
+  ../gcc-%{gcc_version}/configure \
     --build=%_build --host=%_host \
     --target=@target_alias@ \
     --with-gnu-as --with-gnu-ld --with-newlib --verbose \
@@ -183,11 +187,11 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # Bug in gcc-3.2.1:
   # Somehow, gcc doesn't get syslimits.h right for Cdn-Xs
   test -d gcc/include || mkdir -p gcc/include
-  cp ../gcc-@gcc_version@/gcc/gsyslimits.h gcc/include/syslimits.h
+  cp ../gcc-%{gcc_version}/gcc/gsyslimits.h gcc/include/syslimits.h
 %endif
 
 %if %build_gnat
-  cd ../gcc-@gcc_version@/gcc/ada
+  cd ../gcc-%{gcc_version}/gcc/ada
   touch treeprs.ads [es]info.h nmake.ad[bs]
   cd ../../../build
 %endif
@@ -208,7 +212,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   GNATLIBCFLAGS="-g -O2"
 # Let gnatlib building find newlib's headers
   GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/@target_alias@/newlib/targ-include"
-  GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/../newlib-@newlib_version@/newlib/libc/include"
+  GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/../newlib-%{newlib_version}/newlib/libc/include"
 # Without this xgcc doesn't find the target's binutils.
   GNATLIBCFLAGS="$GNATLIBCFLAGS -B%{_prefix}/@target_alias@/bin/"
 %if "@target_alias@" == "mips-rtems"
@@ -222,8 +226,8 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   cd build
 # Bug in gcc-2.95.1: It doesn't build this installation directory
 # If it doesn't find it, gcc doesn't install @target_alias@/bin/gcc
-%if "@gcc_version@" < "3.0"
-  ../gcc-@gcc_version@/mkinstalldirs \
+%if "%{gcc_version}" < "3.0"
+  ../gcc-%{gcc_version}/mkinstalldirs \
     $RPM_BUILD_ROOT%{_prefix}/@target_alias@/bin
 %endif
 
@@ -248,7 +252,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # host library
   rm -f  ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty.a
 
-%if "@gcc_version@" < "3.0"
+%if "%{gcc_version}" < "3.0"
   # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
   # Rename it to target_alias-cpp
   if test -f $RPM_BUILD_ROOT%{_prefix}/bin/cpp%{_exeext};
@@ -272,7 +276,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # Collect multilib subdirectories
   f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
-  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@"
+  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -299,7 +303,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   cp dirs files.gcj
   cp dirs files.g++
 
-  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@"
+  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
