@@ -97,7 +97,7 @@ xdr_xdr_regs (XDR *xdrs, xdr_regs *objp)
 		 return FALSE;
 	return TRUE;
 }
-  /*
+ /*
    * Memory data for read/write text or data. The size is in data. The target
    * addr is in the addr field.
    * Be careful before modifying because this value goes into internal
@@ -105,16 +105,16 @@ xdr_xdr_regs (XDR *xdrs, xdr_regs *objp)
    * become too small if this value gets incremented.
    */
 bool_t xdr_xdr_mem(xdrs, objp)
-	XDR *xdrs;
-	struct xdr_mem *objp;
+ XDR *xdrs;
+ struct xdr_mem *objp;
 {
-	if (!xdr_u_long(xdrs, &objp->addr)) {
-		return (FALSE);
-	}
-	if (!xdr_u_int(xdrs, &objp->dataNb)) {
-		return(FALSE);
-	}
-	return (xdr_opaque(xdrs, objp->data, objp->dataNb));
+ if (!xdr_u_long(xdrs, &objp->addr)) {
+ return (FALSE);
+ }
+ if (!xdr_u_int(xdrs, &objp->dataNb)) {
+ return(FALSE);
+ }
+ return (xdr_opaque(xdrs, objp->data, objp->dataNb));
 }
 
 bool_t
@@ -262,11 +262,11 @@ xdr_KernThread (XDR *xdrs, KernThread *objp)
 	return TRUE;
 }
 bool_t xdr_thread_list(xdrs, objp)
-	XDR *xdrs;
-	struct thread_list *objp;
+ XDR *xdrs;
+ struct thread_list *objp;
 {
-	return (xdr_array(xdrs, (char**)&objp->threads, &objp->nbThread,
-			UTHREAD_MAX, sizeof(KernThread), xdr_KernThread));
+ return (xdr_array(xdrs, (char**)&objp->threads, &objp->nbThread,
+ UTHREAD_MAX, sizeof(KernThread), xdr_KernThread));
 }
 
 bool_t
@@ -396,7 +396,7 @@ xdr_one_arg (XDR *xdrs, one_arg *objp)
 		 return FALSE;
 	return TRUE;
 }
-  /* now open_connex() routine which establishes a connection to server */
+ /* now open_connex() routine which establishes a connection to server */
 
 bool_t
 xdr_debug_type (XDR *xdrs, debug_type *objp)
@@ -407,7 +407,7 @@ xdr_debug_type (XDR *xdrs, debug_type *objp)
 		 return FALSE;
 	return TRUE;
 }
-#define DEBUGGER_IS_GDB 0x2    /* */
+#define DEBUGGER_IS_GDB 0x2 /* */
 
 bool_t
 xdr_open_in (XDR *xdrs, open_in *objp)
@@ -514,7 +514,7 @@ xdr_open_out (XDR *xdrs, open_out *objp)
 		 return FALSE;
 	return TRUE;
 }
-  /* now close_connex() routine which detaches from server */
+ /* now close_connex() routine which detaches from server */
 
 bool_t
 xdr_close_control (XDR *xdrs, close_control *objp)
@@ -535,7 +535,7 @@ xdr_close_in (XDR *xdrs, close_in *objp)
 		 return FALSE;
 	return TRUE;
 }
-  /* now send_signal() routine which sends signals to processes like kill(2) */
+ /* now send_signal() routine which sends signals to processes like kill(2) */
 
 bool_t
 xdr_signal_in (XDR *xdrs, signal_in *objp)
@@ -560,7 +560,7 @@ xdr_signal_out (XDR *xdrs, signal_out *objp)
 		 return FALSE;
 	return TRUE;
 }
-  /* now wait_info() routine which returns results of polling the wait status
+ /* now wait_info() routine which returns results of polling the wait status
 	of a process/actor. It may return 0 if running, else pid or -1 */
 
 bool_t
@@ -685,8 +685,8 @@ xdr_wait_out (XDR *xdrs, wait_out *objp)
 		 return FALSE;
 	return TRUE;
 }
-  /* now ptrace() routine. This matches the Sun UNIX ptrace as well as
-	some additions */ 
+ /* now ptrace() routine. This matches the Sun UNIX ptrace as well as
+	some additions */
 
 bool_t
 xdr_ptrace_in (XDR *xdrs, ptrace_in *objp)
@@ -866,4 +866,4 @@ xdr_get_signal_names_out (XDR *xdrs, get_signal_names_out *objp)
 		 return FALSE;
 	return TRUE;
 }
-  /* now define the actual calls we support */
+ /* now define the actual calls we support */

@@ -16,7 +16,7 @@ extern "C" {
 #define RTEMS_PORT 2071
 #define RTEMS_BACK_PORT 2073
 #ifndef REMDEB_H
-#define RPCGENSRVNAME(a)     a
+#define RPCGENSRVNAME(a) a
 
 enum rpc_type {
 	SUNRPC = 0,
@@ -99,62 +99,62 @@ struct xdr_regs {
 typedef struct xdr_regs xdr_regs;
 /* now define register macros to apply to xdr_regs struct */
 
-#define R_PC    	0
-#define R_MSR   	1
-#define R_EXCEPNB    	2
-#define R_R0    	3
-#define R_R1    (R_R0 + 1) 
-#define R_R2    (R_R0 + 2)
-#define R_R3    (R_R0 + 3)
-#define R_R4    (R_R0 + 4)
-#define R_R5    (R_R0 + 5)
-#define R_R6    (R_R0 + 6)
-#define R_R7    (R_R0 + 7)
-#define R_R8    (R_R0 + 8)
-#define R_R9    (R_R0 + 9)
-#define R_R10   (R_R0 + 10)
-#define R_R11   (R_R0 + 11)
-#define R_R12   (R_R0 + 12)
-#define R_R13   (R_R0 + 13)
-#define R_R14   (R_R0 + 14)
-#define R_R15   (R_R0 + 15)
-#define R_R16   (R_R0 + 16)
-#define R_R17   (R_R0 + 17)
-#define R_R18   (R_R0 + 18)
-#define R_R19   (R_R0 + 19)
-#define R_R20   (R_R0 + 20)
-#define R_R21   (R_R0 + 21)
-#define R_R22   (R_R0 + 22)
-#define R_R23   (R_R0 + 23)
-#define R_R24   (R_R0 + 24)
-#define R_R25   (R_R0 + 25)
-#define R_R26   (R_R0 + 26)
-#define R_R27   (R_R0 + 27)
-#define R_R28   (R_R0 + 28)
-#define R_R29   (R_R0 + 29)
-#define R_R30   (R_R0 + 30)
-#define R_R31   (R_R0 + 31)
-#define R_CR    35
-#define R_CTR   36
-#define R_XER   37
-#define R_LR    38
-#define R_MQ    39
+#define R_PC 0
+#define R_MSR 1
+#define R_EXCEPNB 2
+#define R_R0 3
+#define R_R1 (R_R0 + 1)
+#define R_R2 (R_R0 + 2)
+#define R_R3 (R_R0 + 3)
+#define R_R4 (R_R0 + 4)
+#define R_R5 (R_R0 + 5)
+#define R_R6 (R_R0 + 6)
+#define R_R7 (R_R0 + 7)
+#define R_R8 (R_R0 + 8)
+#define R_R9 (R_R0 + 9)
+#define R_R10 (R_R0 + 10)
+#define R_R11 (R_R0 + 11)
+#define R_R12 (R_R0 + 12)
+#define R_R13 (R_R0 + 13)
+#define R_R14 (R_R0 + 14)
+#define R_R15 (R_R0 + 15)
+#define R_R16 (R_R0 + 16)
+#define R_R17 (R_R0 + 17)
+#define R_R18 (R_R0 + 18)
+#define R_R19 (R_R0 + 19)
+#define R_R20 (R_R0 + 20)
+#define R_R21 (R_R0 + 21)
+#define R_R22 (R_R0 + 22)
+#define R_R23 (R_R0 + 23)
+#define R_R24 (R_R0 + 24)
+#define R_R25 (R_R0 + 25)
+#define R_R26 (R_R0 + 26)
+#define R_R27 (R_R0 + 27)
+#define R_R28 (R_R0 + 28)
+#define R_R29 (R_R0 + 29)
+#define R_R30 (R_R0 + 30)
+#define R_R31 (R_R0 + 31)
+#define R_CR 35
+#define R_CTR 36
+#define R_XER 37
+#define R_LR 38
+#define R_MQ 39
 
 #include <libcpu/raw_exception.h>
 
-#define REG_PC tabreg[R_PC]     /* PC register offset */
-#define REG_SP tabreg[R_R1]    /* SP register offset */
-#define REG_FP tabreg[R_R1]    /* SP register offset (no FP on PPC) */
-#define BREAK_SIZE     4       /* Breakpoint occupies 4 bytes */
-#define BREAK_ADJ      0       /* Nothing to subtract from address after bp */
-#define IS_BREAK(l)    ((l) == 0x7d8d6808)
-#define SET_BREAK(l)   (0x7d8d6808)
+#define REG_PC tabreg[R_PC] /* PC register offset */
+#define REG_SP tabreg[R_R1] /* SP register offset */
+#define REG_FP tabreg[R_R1] /* SP register offset (no FP on PPC) */
+#define BREAK_SIZE 4 /* Breakpoint occupies 4 bytes */
+#define BREAK_ADJ 0 /* Nothing to subtract from address after bp */
+#define IS_BREAK(l) ((l) == 0x7d8d6808)
+#define SET_BREAK(l) (0x7d8d6808)
 #define ORG_BREAK(c,p) (p)
-#define IS_STEP(regs)  (regs.tabreg[R_EXCEPNB] == ASM_TRACE_VECTOR) /* Was step and not break */
-#define TARGET_PROC_TYPE  3
+#define IS_STEP(regs) (regs.tabreg[R_EXCEPNB] == ASM_TRACE_VECTOR) /* Was step and not break */
+#define TARGET_PROC_TYPE 3
 #define MAXDEBUGGEE 150
 #define NAMEMAX 17
-  /*
+ /*
    * Memory data for read/write text or data. The size is in data. The target
    * addr is in the addr field.
    * Be careful before modifying because this value goes into internal
@@ -252,7 +252,7 @@ typedef struct {
 } CHAR_DATA;
 
 typedef char *one_arg;
-  /* now open_connex() routine which establishes a connection to server */
+ /* now open_connex() routine which establishes a connection to server */
 
 enum debug_type {
 	DEBTYP_PROCESS = 0,
@@ -261,7 +261,7 @@ enum debug_type {
 	DEBTYP_OTHER = 3,
 };
 typedef enum debug_type debug_type;
-#define DEBUGGER_IS_GDB 0x2    /* */
+#define DEBUGGER_IS_GDB 0x2 /* */
 
 struct open_in {
 	u_char back_port[16];
@@ -281,7 +281,7 @@ struct open_out {
 	u_short server_vers;
 };
 typedef struct open_out open_out;
-  /* now close_connex() routine which detaches from server */
+ /* now close_connex() routine which detaches from server */
 
 enum close_control {
 	CLOSE_IGNORE = 0,
@@ -294,7 +294,7 @@ struct close_in {
 	close_control control;
 };
 typedef struct close_in close_in;
-  /* now send_signal() routine which sends signals to processes like kill(2) */
+ /* now send_signal() routine which sends signals to processes like kill(2) */
 
 struct signal_in {
 	int pid;
@@ -307,7 +307,7 @@ struct signal_out {
 	int errNo;
 };
 typedef struct signal_out signal_out;
-  /* now wait_info() routine which returns results of polling the wait status
+ /* now wait_info() routine which returns results of polling the wait status
 	of a process/actor. It may return 0 if running, else pid or -1 */
 
 enum stop_code {
@@ -342,8 +342,8 @@ struct wait_out {
 	u_long thread;
 };
 typedef struct wait_out wait_out;
-  /* now ptrace() routine. This matches the Sun UNIX ptrace as well as
-	some additions */ 
+ /* now ptrace() routine. This matches the Sun UNIX ptrace as well as
+	some additions */
 #define PTRFLG_FORCE 1
 #define PTRFLG_NON_OWNER 2
 #define PTRFLG_FREE 4
@@ -411,7 +411,7 @@ struct get_signal_names_out {
 	all_signals signals;
 };
 typedef struct get_signal_names_out get_signal_names_out;
-  /* now define the actual calls we support */
+ /* now define the actual calls we support */
 #define REMDEB_H
 #endif
 
