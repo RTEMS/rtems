@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_netdir = $(includedir)/net
+
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
@@ -34,14 +36,12 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 EXTRA_DIST = if.c if_ethersubr.c if_loop.c radix.c raw_cb.c raw_usrreq.c \
     route.c rtsock.c
 
-H_FILES = bpf.h ethernet.h if.h if_arp.h if_dl.h if_llc.h if_ppp.h \
+include_net_HEADERS = bpf.h ethernet.h if.h if_arp.h if_dl.h if_llc.h if_ppp.h \
     if_types.h netisr.h ppp-comp.h ppp_defs.h radix.h raw_cb.h route.h \
     if_pppvar.h pppcompress.h
 
-noinst_HEADERS = $(H_FILES)
-
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/net/%)
+    $(include_net_HEADERS:%=$(PROJECT_INCLUDE)/net/%)
 
 $(PROJECT_INCLUDE)/net:
 	@$(mkinstalldirs) $@

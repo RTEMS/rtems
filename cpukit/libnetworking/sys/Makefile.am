@@ -4,16 +4,18 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = buf.h callout.h conf.h domain.h filio.h ioctl.h kernel.h libkern.h \
+
+
+include_sysdir = $(includedir)/sys
+
+include_sys_HEADERS = buf.h callout.h conf.h domain.h filio.h ioctl.h kernel.h libkern.h \
     malloc.h mbuf.h mount.h param.h proc.h protosw.h queue.h reboot.h \
     resourcevar.h rtprio.h select.h signalvar.h socket.h socketvar.h \
     sockio.h sysctl.h syslimits.h syslog.h systm.h ttydefaults.h ucred.h \
     uio.h un.h
 
-noinst_HEADERS = $(H_FILES)
-
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/sys/%)
+    $(include_sys_HEADERS:%=$(PROJECT_INCLUDE)/sys/%)
 
 $(PROJECT_INCLUDE)/sys:
 	@$(mkinstalldirs) $@

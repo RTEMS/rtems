@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_goaheaddir = $(includedir)/goahead
+
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
@@ -46,6 +48,9 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems_webserver.h \
     $(PROJECT_INCLUDE)/goahead $(H_FILES:%.h=$(PROJECT_INCLUDE)/goahead/%.h)
 
 if HAS_POSIX
+include_HEADERS = rtems_webserver.h
+include_goahead_HEADERS = $(H_FILES)
+
 all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 endif
 

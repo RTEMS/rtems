@@ -35,7 +35,6 @@ AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
-include/Makefile
 arpa/Makefile
 machine/Makefile
 kern/Makefile

@@ -4,13 +4,13 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = conf.h cpu.h cpufunc.h endian.h in_cksum.h limits.h param.h \
+include_machinedir = $(includedir)/machine
+
+include_machine_HEADERS = conf.h cpu.h cpufunc.h endian.h in_cksum.h limits.h param.h \
     types.h vmparam.h
 
-noinst_HEADERS = $(H_FILES)
-
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/machine/%)
+    $(include_machine_HEADERS:%=$(PROJECT_INCLUDE)/machine/%)
 
 $(PROJECT_INCLUDE)/machine:
 	@$(mkinstalldirs) $@

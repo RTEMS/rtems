@@ -4,12 +4,14 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = ftp.h inet.h nameser.h nameser_compat.h telnet.h
 
-noinst_HEADERS = $(H_FILES)
+
+include_arpadir = $(includedir)/arpa
+
+include_arpa_HEADERS = ftp.h inet.h nameser.h nameser_compat.h telnet.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/arpa/%)
+    $(include_arpa_HEADERS:%=$(PROJECT_INCLUDE)/arpa/%)
 
 $(PROJECT_INCLUDE)/arpa:
 	@$(mkinstalldirs) $@

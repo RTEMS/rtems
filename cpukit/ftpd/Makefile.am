@@ -4,6 +4,9 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+
+
+
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
@@ -29,11 +32,9 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 
 EXTRA_DIST = ftpd.c ftpd.h
 
-H_FILES = ftpd.h
+include_HEADERS = ftpd.h
 
-noinst_HEADERS = $(H_FILES)
-
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%=$(PROJECT_INCLUDE)/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@

@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_netinetdir = $(includedir)/netinet
+
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
@@ -39,14 +41,12 @@ EXTRA_DIST = if_ether.c igmp.c igmp_var.h in.c in_cksum.c in_cksum_i386.c \
     raw_ip.c tcp_debug.c tcp_input.c tcp_output.c tcp_subr.c tcp_timer.c \
     tcp_usrreq.c udp_usrreq.c
 
-H_FILES = icmp_var.h if_ether.h igmp.h igmp_var.h in.h in_pcb.h in_systm.h \
+include_netinet_HEADERS = icmp_var.h if_ether.h igmp.h igmp_var.h in.h in_pcb.h in_systm.h \
     in_var.h ip.h ip_fw.h ip_icmp.h ip_mroute.h ip_var.h tcp.h tcp_debug.h \
     tcp_fsm.h tcp_seq.h tcp_timer.h tcp_var.h tcpip.h udp.h udp_var.h
 
-noinst_HEADERS = $(H_FILES)
-
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/netinet/%)
+    $(include_netinet_HEADERS:%=$(PROJECT_INCLUDE)/netinet/%)
 
 $(PROJECT_INCLUDE)/netinet:
 	@$(mkinstalldirs) $@

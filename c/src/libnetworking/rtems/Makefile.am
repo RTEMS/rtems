@@ -4,6 +4,10 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+
+
+include_rtemsdir = $(includedir)/rtems
+
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
@@ -15,12 +19,10 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
-H_FILES = rtems_bsdnet.h rtems_bsdnet_internal.h tftp.h
-
-noinst_HEADERS = $(H_FILES)
+include_rtems_HEADERS = rtems_bsdnet.h rtems_bsdnet_internal.h tftp.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@

@@ -1,3 +1,14 @@
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, arpa/Makefile.am, machine/Makefile.am, net/Makefile.am, 
+	netinet/Makefile.am, nfs/Makefile.am, rtems/Makefile.am, 
+	rtems_servers/Makefile.am, rtems_webserver/Makefile.am, 
+	sys/Makefile.am, vm/Makefile.am:
+	Apply include_*HEADERS instead of H_FILES.
+	* include/Makefile.am: Remove.
+	* Makefile.am: Add handling of *.h files.
+	* configure.in: Remove include/Makefile.
+
 2001-01-25	Eric Norum <eric.norum@usask.ca>
 
 	* lib/tftpDriver.c: Reduce first timeout interval.  This

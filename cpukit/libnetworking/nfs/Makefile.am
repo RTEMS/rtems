@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_nfsdir = $(includedir)/nfs
+
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
@@ -32,12 +34,10 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 
 EXTRA_DIST = bootp_subr.c
 
-H_FILES = krpc.h nfs.h nfsdiskless.h nfsproto.h rpcv2.h xdr_subs.h
-
-noinst_HEADERS = $(H_FILES)
+include_nfs_HEADERS = krpc.h nfs.h nfsdiskless.h nfsproto.h rpcv2.h xdr_subs.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/nfs/%)
+    $(include_nfs_HEADERS:%=$(PROJECT_INCLUDE)/nfs/%)
 
 $(PROJECT_INCLUDE)/nfs:
 	@$(mkinstalldirs) $@
