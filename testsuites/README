@@ -17,19 +17,24 @@ NOTE: Other than the 'samples' directory these tests are intended
        which can be used either to test a board support package
        or as the starting point for a custom application.
 
-    mptest
+    mptests
 
        This directory contains the RTEMS Multiprocessor Test Suite.
        The tests in this directory provide near complete (98%+) test
        coverage of the multiprocessor specific code in RTEMS.
 
-    sptest
+    psxtests
+
+       This directory contains the RTEMS POSIX API Test Suite.
+       The tests in this directory test the POSIX API support in RTEMS.
+
+    sptests
 
        This directory contains the RTEMS Single Processor Test Suite.
        The tests in this directory provide near complete (98%+) test
        coverage of the non-multiprocessor code in RTEMS.
 
-    tmtest
+    tmtests
 
        This directory contains the RTEMS Timing Test Suite.
        The tests in this directory are used to measure the execution
