@@ -50,7 +50,7 @@ void Screen5()
   status = rtems_semaphore_create(
     Semaphore_name[ 2 ],
     1,
-    RTEMS_BINARY_SEMAPHORE,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
     RTEMS_NO_PRIORITY,
     &Semaphore_id[ 2 ]
   );
