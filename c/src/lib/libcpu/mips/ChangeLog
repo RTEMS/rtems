@@ -1,3 +1,19 @@
+2000-10-24	Alan Cudmore <alanc@linuxstart.com> and
+	Joel Sherrill <joel@OARcorp.com>
+
+	* This is a major reworking of the mips64orion port to use 
+	gcc predefines as much as possible and a big push to multilib
+	the mips port.  The mips64orion port was copied/renamed to mips
+	to be more like other GNU tools.  Alan did most of the technical
+	work of determining how to map old macro names used by the mips64orion
+	port to standard compiler macro definitions.  Joel did the merge
+	with CVS magic to keep individual file history and did the BSP
+	modifications. Details follow:
+	* Makefile.am: Made clock and timer subdirectories conditional.
+	* configure.in: Ditto.
+	* clock/clock.S: Switch from using <idtmon.h> to <asm.h>.
+	* clock/gettime.S: Switch from using <idtmon.h> to <asm.h>.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am, timer/Makefile.am: Include compile.am
