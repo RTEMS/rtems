@@ -124,6 +124,9 @@ c/src/lib/libbsp/m68k/mvme162/startup/Makefile \
 c/src/lib/libbsp/m68k/mvme162/timer/Makefile \
 c/src/lib/libbsp/m68k/mvme162/tools/Makefile \
 c/src/lib/libbsp/m68k/mvme162/wrapup/Makefile \
+c/src/lib/libcpu/m68k/Makefile \
+c/src/lib/libcpu/m68k/m68040/Makefile \
+c/src/lib/libcpu/m68k/m68040/fpsp/Makefile \
 c/src/lib/start/m68k/Makefile"
 
 no_cpu_mk="c/src/exec/score/cpu/no_cpu/Makefile \
@@ -493,7 +496,7 @@ case "${target}" in
 	;;
   m68k-rtems*)
 	rtems_bsp="dmv152 efi332 efi68k gen68302 gen68360 gen68360_040 idp \
-                   mvme136 mvme147 mvme147s mvme162"
+                   mvme136 mvme147 mvme147s mvme162 mvme162lx"
        	makefiles=$m68k_mk
 	;;
   mips64orion-rtems*)
