@@ -251,7 +251,7 @@ sem_t *sem_open(
 {
   va_list                    arg;
   mode_t                     mode;
-  unsigned int               value;
+  unsigned int               value = 0;
   int                        status;
   Objects_Id                 the_semaphore_id;
   POSIX_Semaphore_Control   *the_semaphore;
@@ -618,7 +618,7 @@ int _POSIX_Semaphore_Name_to_id(
 {
   Objects_Name_to_id_errors  status;
 
-  status = _Objects_Name_to_id( &_POSIX_Semaphore_Information, name, 0, id );
+  status = _Objects_Name_to_id( &_POSIX_Semaphore_Information, (char *)name, 0, id );
 
   if ( status == OBJECTS_SUCCESSFUL ) {
 	  return 0;
