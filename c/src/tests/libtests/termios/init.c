@@ -46,7 +46,9 @@ rtems_task Init (rtems_task_argument argument);
 #include <errno.h>
 #include <string.h>
 
+#if !defined(fileno)
 int fileno( FILE *stream); /* beyond ANSI */
+#endif
 
 /* Some of the termios dumping code depends on bit positions! */
 
@@ -372,10 +374,12 @@ void print_c_cflag( struct termios * tp )
   else
     printf( "\tCLOCAL clear: don't ignore modem lines\n" );
   
+#if defined(CBAUDEX)
   if( tp->c_cflag & CBAUDEX )
     printf( "\tCBAUDEX set: What does this do?\n" );
   else
     printf( "\tCBAUDEX clear: What does this do?\n" );
+#endif
   
   if( tp->c_cflag & CRTSCTS )
     printf( "\tCRTSCTS: harware flow control enabled?\n" );
