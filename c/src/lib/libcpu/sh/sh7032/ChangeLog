@@ -1,3 +1,7 @@
+2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Remove EXTRA_DIST.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, delay/delay.c, include/iosh7032.h,

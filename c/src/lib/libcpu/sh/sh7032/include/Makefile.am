@@ -27,6 +27,4 @@ TMPINSTALL_FILES = $(PROJECT_INCLUDE)/sh \
 
 all-local: $(TMPINSTALL_FILES)
 
-EXTRA_DIST = sci.h sh7_pfc.h sh7_sci.h
-
 include $(top_srcdir)/../../../../../../automake/local.am
