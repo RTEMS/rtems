@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 SAMPLE = ticker
 PGM = ${ARCH}/$(SAMPLE).exe
