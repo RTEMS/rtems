@@ -393,7 +393,6 @@ int pthread_getschedparam(
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
-      _Thread_Enable_dispatch();
       return ESRCH;
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
@@ -434,7 +433,6 @@ int pthread_setschedparam(
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
-      _Thread_Enable_dispatch();
       return ESRCH;
     case OBJECTS_LOCAL:
       switch ( policy ) {
@@ -857,7 +855,6 @@ int pthread_detach(
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
-      _Thread_Enable_dispatch();
       return ESRCH;
     case OBJECTS_LOCAL:
 
@@ -968,7 +965,6 @@ int pthread_equal(
 
   _Thread_Enable_dispatch();
   return status;
-
 }
 
 /*PAGE
@@ -1003,7 +999,6 @@ int pthread_once(
   }
   
   _Thread_Enable_dispatch();
-
   return 0;
 }
 
