@@ -188,8 +188,10 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
 
   make CC=gcc CFLAGS="-O2" LANGUAGES="c" all
   make CC=gcc CFLAGS="-O2" LANGUAGES="c" info
-  # must be installed in the real place to allow gnat to continue to build
-  make CC=gcc CFLAGS="-O2" LANGUAGES="c" install
+  # must be installed to allow gnat to continue to build
+  make CC=gcc CFLAGS="-O2" LANGUAGES="c" install install-info
+  make prefix=$RPM_BUILD_ROOT/opt/gnatrtems \
+    CC=gcc CFLAGS="-O2" LANGUAGES="c" install install-info
 
 #  When GNAT uses a gcc that finds the RTEMS limits.h, this will not
 #  be needed.  This should not be needed if the limits.h trick above works.
@@ -253,14 +255,15 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
   echo "%dir /opt/gnatrtems/lib/gcc-lib" >> dirs ;
   echo "%dir /opt/gnatrtems/lib/gcc-lib/@target_alias@" >> dirs ;
 
-  if test -f $RPM_BUILD_ROOT/opt/gnatrtems/info/configure.info.gz;
-  then
+  touch ../files
+  # if test -f $RPM_BUILD_ROOT/opt/gnatrtems/info/configure.info.gz;
+  # then
 # These common files are only present in binutils >= 2.9.5
-    find $RPM_BUILD_ROOT/opt/gnatrtems/info -name 'configure.*' | \
-      sed -e "s,^$RPM_BUILD_ROOT,,g" > ../files
-  else
-    touch ../files
-  fi
+  #   find $RPM_BUILD_ROOT/opt/gnatrtems/info -name 'configure.*' | \
+  #     sed -e "s,^$RPM_BUILD_ROOT,,g" > ../files
+  # else
+  #   touch ../files
+  # fi
 # These target specific files are only present in binutils >= 2.9.5
   if test -f /opt/gnatrtems/bin/@target_alias@-readelf@exe_ext@;
   then
@@ -288,17 +291,17 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
 
 %files -n rtems-base-gnat-binutils -f files
 %dir /opt/gnatrtems/info
-%doc /opt/gnatrtems/info/dir
-%doc /opt/gnatrtems/info/as.info.gz
-%doc /opt/gnatrtems/info/as.info-?.gz
-%doc /opt/gnatrtems/info/bfd.info.gz
-%doc /opt/gnatrtems/info/bfd.info-?.gz
-%doc /opt/gnatrtems/info/binutils.info.gz
-%doc /opt/gnatrtems/info/binutils.info-?.gz
-%doc /opt/gnatrtems/info/ld.info.gz
-%doc /opt/gnatrtems/info/ld.info-?.gz
-%doc /opt/gnatrtems/info/gasp.info.gz
-%doc /opt/gnatrtems/info/standards.info.gz
+# %doc /opt/gnatrtems/info/dir
+# %doc /opt/gnatrtems/info/as.info.gz
+# %doc /opt/gnatrtems/info/as.info-?.gz
+# %doc /opt/gnatrtems/info/bfd.info.gz
+# %doc /opt/gnatrtems/info/bfd.info-?.gz
+# %doc /opt/gnatrtems/info/binutils.info.gz
+# %doc /opt/gnatrtems/info/binutils.info-?.gz
+# %doc /opt/gnatrtems/info/ld.info.gz
+# %doc /opt/gnatrtems/info/ld.info-?.gz
+# %doc /opt/gnatrtems/info/gasp.info.gz
+# %doc /opt/gnatrtems/info/standards.info.gz
 
 %dir /opt/gnatrtems/man
 %dir /opt/gnatrtems/man/man1
@@ -362,7 +365,7 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
 
 %dir /opt/gnatrtems/bin
 # /opt/gnatrtems/bin/cpp@exe_ext@
-/opt/gnatrtems/bin/gcov@exe_ext@
+# /opt/gnatrtems/bin/gcov@exe_ext@
 %dir /opt/gnatrtems/include
 # /opt/gnatrtems/include/g++-3
 
