@@ -48,8 +48,8 @@ rtems_task Init(
 
 void test_init()
 {
-  rtems_unsigned32    index;
-  rtems_unsigned32    size;
+  uint32_t      index;
+  uint32_t      size;
   rtems_task_entry    task_entry;
   rtems_status_code   status;
   rtems_task_priority priority;
@@ -117,7 +117,7 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32 size;
+  uint32_t   size;
   
   Timer_initialize();
      (void) rtems_message_queue_receive(
@@ -133,7 +133,7 @@ rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32 size;
+  uint32_t   size;
   
   (void) rtems_message_queue_receive(
            Queue_id,

@@ -63,7 +63,7 @@ rtems_task test_init(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32     index;
+  uint32_t       index;
   rtems_task_entry     task_entry;
   rtems_task_priority  priority;
   rtems_id             task_id;
@@ -106,7 +106,7 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  index;
+  uint32_t    index;
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
@@ -134,7 +134,7 @@ rtems_task Low_tasks(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32 size;
+  uint32_t   size;
 
   (void) rtems_message_queue_receive(
            Queue_id,

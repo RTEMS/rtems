@@ -13,9 +13,9 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_unsigned8 Memory_area[ 2048 ];
-rtems_unsigned8 Internal_port_area[ 256 ];
-rtems_unsigned8 External_port_area[ 256 ];
+uint8_t   Memory_area[ 2048 ];
+uint8_t   Internal_port_area[ 256 ];
+uint8_t   External_port_area[ 256 ];
 
 rtems_task Task_1(
   rtems_task_argument argument
@@ -58,7 +58,7 @@ rtems_task Task_1(
 )
 {
   rtems_name                 name;
-  rtems_unsigned32           index;
+  uint32_t             index;
   rtems_cpu_table            cpu_table;
   rtems_id                   id;
   rtems_task_priority        in_priority;
@@ -66,18 +66,18 @@ rtems_task Task_1(
   rtems_mode                 in_mode;
   rtems_mode                 mask;
   rtems_mode                 out_mode;
-  rtems_unsigned32           note;
+  uint32_t             note;
   rtems_time_of_day          time;
   rtems_interval             timeout;
   rtems_signal_set           signals;
   void                      *address_1;
   rtems_event_set            events;
   long                       buffer[ 4 ];
-  rtems_unsigned32           count;
+  uint32_t             count;
   rtems_device_major_number  major;
   rtems_device_minor_number  minor;
-  rtems_unsigned32           io_result;
-  rtems_unsigned32           error;
+  uint32_t             io_result;
+  uint32_t             error;
   rtems_clock_get_options    options;
 
   name        = rtems_build_name( 'N', 'A', 'M', 'E' );

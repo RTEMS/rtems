@@ -13,8 +13,8 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_unsigned8 Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
-rtems_unsigned8 Partition_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t   Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t   Partition_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
 
 rtems_task Task_1(
   rtems_task_argument argument
@@ -54,7 +54,7 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_id          id;
   rtems_status_code status;
 

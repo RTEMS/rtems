@@ -41,7 +41,7 @@ rtems_task Init(
 {
 
   rtems_task_priority priority;
-  rtems_unsigned32    index;
+  uint32_t      index;
   rtems_id            id;
   rtems_task_entry    task_entry;
   rtems_status_code   status;
@@ -93,7 +93,7 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_status_code status;
   int i;
 

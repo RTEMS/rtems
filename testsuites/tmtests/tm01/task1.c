@@ -53,13 +53,13 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  semaphore_obtain_time;
-  rtems_unsigned32  semaphore_release_time;
-  rtems_unsigned32  semaphore_obtain_no_wait_time;
-  rtems_unsigned32  semaphore_obtain_loop_time;
-  rtems_unsigned32  semaphore_release_loop_time;
-  rtems_unsigned32  index;
-  rtems_unsigned32  iterations;
+  uint32_t    semaphore_obtain_time;
+  uint32_t    semaphore_release_time;
+  uint32_t    semaphore_obtain_no_wait_time;
+  uint32_t    semaphore_obtain_loop_time;
+  uint32_t    semaphore_release_loop_time;
+  uint32_t    index;
+  uint32_t    iterations;
   rtems_name        name;
   rtems_id          smid;
   rtems_status_code status;

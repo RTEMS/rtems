@@ -14,7 +14,7 @@
 #include "system.h"
 
 rtems_id         Task_id[OPERATION_COUNT+1];
-rtems_unsigned32 Task_index;
+uint32_t   Task_index;
 
 rtems_task High_task(
   rtems_task_argument argument
@@ -51,7 +51,7 @@ void test_init()
   rtems_status_code   status;
   rtems_task_entry    task_entry;
   rtems_task_priority priority;
-  rtems_unsigned32    index;
+  uint32_t      index;
 
   priority = 250;
 

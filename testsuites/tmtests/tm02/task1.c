@@ -51,7 +51,7 @@ rtems_task Init(
 void test_init()
 {
   rtems_status_code   status;
-  rtems_unsigned32    index;
+  uint32_t      index;
   rtems_task_priority priority;
 
   priority = 5;

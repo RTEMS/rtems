@@ -13,7 +13,7 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_unsigned32 time_set, eventout;
+uint32_t   time_set, eventout;
 
 rtems_task High_tasks(
   rtems_task_argument argument
@@ -44,7 +44,7 @@ rtems_task Init(
 void test_init()
 {
   rtems_id          id;
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_event_set   event_out;
   rtems_status_code status;
 
@@ -130,7 +130,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_event_set   event_out;
 
   end_time = Read_timer();

@@ -28,7 +28,7 @@ rtems_task Init(
 )
 {
   rtems_id          task_id;
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_status_code status;
 
   Print_Warning();

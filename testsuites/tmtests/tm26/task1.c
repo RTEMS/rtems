@@ -34,26 +34,26 @@ Thread_Control *Low_tcb;      /* uses internal RTEMS type */
  *  at the end of the test.
  */
 
-rtems_unsigned32 isr_disable_time;
-rtems_unsigned32 isr_flash_time;
-rtems_unsigned32 isr_enable_time;
-rtems_unsigned32 thread_disable_dispatch_time;
-rtems_unsigned32 thread_enable_dispatch_time;
-rtems_unsigned32 thread_set_state_time;
-rtems_unsigned32 thread_dispatch_no_fp_time;
-rtems_unsigned32 context_switch_no_fp_time;
-rtems_unsigned32 context_switch_self_time;
-rtems_unsigned32 context_switch_another_task_time;
-rtems_unsigned32 context_switch_restore_1st_fp_time;
-rtems_unsigned32 context_switch_save_idle_restore_initted_time;
-rtems_unsigned32 context_switch_save_restore_idle_time;
-rtems_unsigned32 context_switch_save_restore_initted_time;
-rtems_unsigned32 thread_resume_time;
-rtems_unsigned32 thread_unblock_time;
-rtems_unsigned32 thread_ready_time;
-rtems_unsigned32 thread_get_time;
-rtems_unsigned32 semaphore_get_time;
-rtems_unsigned32 thread_get_invalid_time;
+uint32_t   isr_disable_time;
+uint32_t   isr_flash_time;
+uint32_t   isr_enable_time;
+uint32_t   thread_disable_dispatch_time;
+uint32_t   thread_enable_dispatch_time;
+uint32_t   thread_set_state_time;
+uint32_t   thread_dispatch_no_fp_time;
+uint32_t   context_switch_no_fp_time;
+uint32_t   context_switch_self_time;
+uint32_t   context_switch_another_task_time;
+uint32_t   context_switch_restore_1st_fp_time;
+uint32_t   context_switch_save_idle_restore_initted_time;
+uint32_t   context_switch_save_restore_idle_time;
+uint32_t   context_switch_save_restore_initted_time;
+uint32_t   thread_resume_time;
+uint32_t   thread_unblock_time;
+uint32_t   thread_ready_time;
+uint32_t   thread_get_time;
+uint32_t   semaphore_get_time;
+uint32_t   thread_get_invalid_time;
 
 rtems_task High_task(
   rtems_task_argument argument
@@ -87,7 +87,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_id          task_id;
   rtems_status_code status;
 
@@ -376,7 +376,7 @@ rtems_task Floating_point_task_2(
 
 void complete_test( void )
 {
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_id          task_id;
 
   Timer_initialize();

@@ -15,7 +15,7 @@
 
 rtems_id Task_id[ OPERATION_COUNT + 1 ];
 
-rtems_unsigned32 Task_restarted;
+uint32_t   Task_restarted;
 
 rtems_task null_task(
   rtems_task_argument argument
@@ -69,7 +69,7 @@ rtems_task Task_1(
 )
 {
   rtems_status_code status;
-  rtems_unsigned32  index;
+  uint32_t    index;
 
   if ( Task_restarted == OPERATION_COUNT )
      Timer_initialize();

@@ -13,7 +13,7 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_unsigned32 Task_count;
+uint32_t   Task_count;
 rtems_task_priority Task_priority;
 
 rtems_task First_task(
@@ -33,7 +33,7 @@ rtems_task Init(
 )
 {
   rtems_task_entry  task_entry;
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_status_code status;
 
   Print_Warning();
@@ -104,7 +104,7 @@ rtems_task Last_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32 index;
+  uint32_t   index;
 
   end_time = Read_timer();
 

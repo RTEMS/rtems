@@ -13,7 +13,7 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_unsigned32 taskcount;
+uint32_t   taskcount;
 rtems_task_priority taskpri;
 
 rtems_task First_task(
@@ -51,7 +51,7 @@ void test_init()
 {
   rtems_id          id;
   rtems_task_entry  task_entry;
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_status_code status;
 
   for ( index = 0 ; index <= OPERATION_COUNT ; index++ ) {

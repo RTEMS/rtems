@@ -13,7 +13,7 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_unsigned32 Task_count;
+uint32_t   Task_count;
 
 rtems_task Tasks(
   rtems_task_argument argument
@@ -28,7 +28,7 @@ rtems_task Init(
 )
 {
   rtems_id          id;
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_status_code status;
 
   Print_Warning();
@@ -71,7 +71,7 @@ rtems_task High_task(
 )
 {
   rtems_status_code status;
-  rtems_unsigned32  index;
+  uint32_t    index;
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )

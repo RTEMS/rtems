@@ -13,7 +13,7 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_unsigned32 Task_count;
+uint32_t   Task_count;
 
 rtems_task test_init(
   rtems_task_argument argument
@@ -61,7 +61,7 @@ rtems_task test_init(
 {
   rtems_task_priority priority;
   rtems_status_code   status;
-  rtems_unsigned32    index;
+  uint32_t      index;
   rtems_task_entry    task_entry;
 
 /*  As each task is started, it preempts this task and

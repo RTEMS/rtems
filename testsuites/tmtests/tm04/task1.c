@@ -15,7 +15,7 @@
 
 rtems_id         Semaphore_id;
 rtems_id         Task_id[OPERATION_COUNT+1];
-rtems_unsigned32 task_count;
+uint32_t   task_count;
 rtems_id         Highest_id;
 
 rtems_task Low_tasks(
@@ -51,7 +51,7 @@ rtems_task Init(
 void test_init()
 {
   rtems_status_code status;
-  rtems_unsigned32  index;
+  uint32_t    index;
 
   task_count = OPERATION_COUNT;
 
@@ -136,7 +136,7 @@ rtems_task High_task(
 )
 {
   rtems_status_code   status;
-  rtems_unsigned32    index;
+  uint32_t      index;
   rtems_name          name;
   rtems_task_priority old_priority;
 

@@ -67,7 +67,7 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32 index;
+  uint32_t   index;
 
   check_read_timer();
 rtems_test_pause();
@@ -141,8 +141,8 @@ rtems_test_pause();
 
 void check_read_timer()
 {
-  rtems_unsigned32 index;
-  rtems_unsigned32 time;
+  uint32_t   index;
+  uint32_t   time;
 
   for ( index = 1 ; index <= MAXIMUM_DISTRIBUTION ; index++ )
     Distribution[ index ] = 0;

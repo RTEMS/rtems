@@ -15,8 +15,8 @@
 
 rtems_id Port_id;
 
-rtems_unsigned8 Internal_area[ 256 ] CPU_STRUCTURE_ALIGNMENT;
-rtems_unsigned8 External_area[ 256 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t   Internal_area[ 256 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t   External_area[ 256 ] CPU_STRUCTURE_ALIGNMENT;
 
 rtems_task Test_task(
   rtems_task_argument argument
@@ -54,7 +54,7 @@ rtems_task Test_task (
 )
 {
   rtems_name         name;
-  rtems_unsigned32   index;
+  uint32_t     index;
   void              *converted;
 
   Timer_initialize();

@@ -18,7 +18,7 @@ rtems_device_major_number _STUB_major = 1;
 
 rtems_id         Region_id;
 rtems_name       Region_name;
-rtems_unsigned8  Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t    Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
 
 #define PARTITION_SIZE         2048
 #define PARTITION_ELEMENT_SIZE  128
@@ -27,14 +27,14 @@ rtems_unsigned8  Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
 
 rtems_id         Partition_id;
 rtems_name       Partition_name;
-rtems_unsigned8  Partition_area[ PARTITION_SIZE ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t    Partition_area[ PARTITION_SIZE ] CPU_STRUCTURE_ALIGNMENT;
 
 void  *Buffer_address_1;
 void  *Buffer_address_2;
 void  *Buffer_address_3;
 void  *Buffer_address_4;
 
-rtems_unsigned32 buffer_count;
+uint32_t   buffer_count;
 
 void  *Buffer_addresses[ PARTITION_BUFFER_POINTERS ];
 
@@ -90,7 +90,7 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32    index;
+  uint32_t      index;
   rtems_mode          previous_mode;
   rtems_task_priority previous_priority;
   rtems_status_code   status;

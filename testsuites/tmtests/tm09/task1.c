@@ -91,21 +91,21 @@ rtems_task Test_task (
 
 void queue_test()
 {
-  rtems_unsigned32  send_loop_time;
-  rtems_unsigned32  urgent_loop_time;
-  rtems_unsigned32  receive_loop_time;
-  rtems_unsigned32  send_time;
-  rtems_unsigned32  urgent_time;
-  rtems_unsigned32  receive_time;
-  rtems_unsigned32  empty_flush_time;
-  rtems_unsigned32  flush_time;
-  rtems_unsigned32  empty_flush_count;
-  rtems_unsigned32  flush_count;
-  rtems_unsigned32  index;
-  rtems_unsigned32  iterations;
+  uint32_t    send_loop_time;
+  uint32_t    urgent_loop_time;
+  uint32_t    receive_loop_time;
+  uint32_t    send_time;
+  uint32_t    urgent_time;
+  uint32_t    receive_time;
+  uint32_t    empty_flush_time;
+  uint32_t    flush_time;
+  uint32_t    empty_flush_count;
+  uint32_t    flush_count;
+  uint32_t    index;
+  uint32_t    iterations;
   long              buffer[4];
   rtems_status_code status;
-  rtems_unsigned32  size;
+  uint32_t    size;
 
   send_loop_time    = 0;
   urgent_loop_time  = 0;

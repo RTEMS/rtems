@@ -23,14 +23,14 @@ rtems_task Low_task(
   rtems_task_argument argument
 );
 
-rtems_unsigned32 Task_count;
+uint32_t   Task_count;
 
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   rtems_id          id;
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_status_code status;
 
   Print_Warning();
@@ -184,7 +184,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32 index;
+  uint32_t   index;
 
   end_time = Read_timer();
 

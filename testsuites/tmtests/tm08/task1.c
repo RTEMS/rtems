@@ -75,11 +75,11 @@ rtems_task test_task(
 )
 {
   rtems_status_code   status;
-  rtems_unsigned32    index;
+  uint32_t      index;
   rtems_task_priority old_priority;
   rtems_time_of_day   time;
-  rtems_unsigned32    old_note;
-  rtems_unsigned32    old_mode;
+  uint32_t      old_note;
+  uint32_t      old_mode;
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )

@@ -30,11 +30,11 @@ rtems_task Task_2(
   rtems_task_argument argument
 );
 
-volatile rtems_unsigned32 Interrupt_occurred;
-volatile rtems_unsigned32 Interrupt_enter_time, Interrupt_enter_nested_time;
-volatile rtems_unsigned32 Interrupt_return_time, Interrupt_return_nested_time;
-rtems_unsigned32 Interrupt_nest;
-rtems_unsigned32 timer_overhead;
+volatile uint32_t   Interrupt_occurred;
+volatile uint32_t   Interrupt_enter_time, Interrupt_enter_nested_time;
+volatile uint32_t   Interrupt_return_time, Interrupt_return_nested_time;
+uint32_t   Interrupt_nest;
+uint32_t   timer_overhead;
 
 rtems_isr Isr_handler(
   rtems_vector_number vector

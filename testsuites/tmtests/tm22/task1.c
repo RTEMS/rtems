@@ -85,7 +85,7 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  count;
+  uint32_t    count;
   rtems_status_code status;
 
   Timer_initialize();
@@ -114,9 +114,9 @@ rtems_task Low_task(
 )
 {
   rtems_id          id;
-  rtems_unsigned32  index;
-  rtems_unsigned32  count;
-  rtems_unsigned32  size;
+  uint32_t    index;
+  uint32_t    count;
+  uint32_t    size;
   rtems_status_code status;
 
   status = rtems_task_create(
@@ -187,7 +187,7 @@ rtems_task Preempt_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  count;
+  uint32_t    count;
 
   Timer_initialize();
     (void) rtems_message_queue_broadcast(

@@ -59,7 +59,7 @@ rtems_task test_init(
 )
 {
   rtems_status_code   status;
-  rtems_unsigned32    index;
+  uint32_t      index;
   rtems_id            task_id;
   rtems_task_priority priority;
 
