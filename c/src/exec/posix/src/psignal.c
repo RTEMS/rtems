@@ -11,6 +11,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tqdata.h>
+#include <rtems/score/wkspace.h>
 #include <rtems/posix/seterr.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/pthread.h>
@@ -116,7 +117,7 @@ Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
  */
 
 /* XXX this routine could probably be cleaned up */
-void _POSIX_signals_Unblock_thread( 
+boolean _POSIX_signals_Unblock_thread( 
   Thread_Control  *the_thread,
   int              signo,
   siginfo_t       *info
@@ -150,8 +151,14 @@ void _POSIX_signals_Unblock_thread(
       }
       
       _Thread_queue_Extract_with_proxy( the_thread );
+      return TRUE;
     }
-    return;
+
+    /*
+     *  This should only be reached via pthread_kill().
+     */
+
+    return FALSE;
   }
 
   if ( ~api->signals_blocked & mask ) {
@@ -168,6 +175,7 @@ void _POSIX_signals_Unblock_thread(
       }
     }
   }
+  return FALSE;
 
 }
 
@@ -218,12 +226,12 @@ boolean _POSIX_signals_Check_signal(
   boolean             is_global
 )
 {
-  sigset_t            mask;
-  ISR_Level           level;
-  boolean             do_callout;
-  siginfo_t          *siginfo = NULL;  /* really needs to be set below */
-  siginfo_t           siginfo_struct;
-  sigset_t            saved_signals_blocked;
+  sigset_t                    mask;
+  ISR_Level                   level;
+  boolean                     do_callout;
+  POSIX_signals_Siginfo_node *psiginfo;
+  siginfo_t                   siginfo_struct;
+  sigset_t                    saved_signals_blocked;
 
   mask = signo_to_mask( signo );
 
@@ -235,7 +243,21 @@ boolean _POSIX_signals_Check_signal(
   _ISR_Disable( level );
     if ( is_global ) {
        if ( mask & (_POSIX_signals_Pending & ~api->signals_blocked ) ) {
-         _POSIX_signals_Clear_process_signals( mask );
+         if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
+           psiginfo = (POSIX_signals_Siginfo_node *)
+             _Chain_Get_unprotected( &_POSIX_signals_Siginfo[ signo ] );
+           if ( _Chain_Is_empty( &_POSIX_signals_Siginfo[ signo ] ) )
+             _POSIX_signals_Clear_process_signals( mask );
+           if ( psiginfo ) {
+             siginfo_struct = psiginfo->Info;
+             _Chain_Append_unprotected(
+               &_POSIX_signals_Inactive_siginfo,
+               &psiginfo->Node
+             );
+           } else
+             do_callout = FALSE;
+         } else
+           _POSIX_signals_Clear_process_signals( mask );
          do_callout = TRUE;
        }
     } else {
@@ -273,16 +295,11 @@ boolean _POSIX_signals_Check_signal(
 
   switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
     case SA_SIGINFO:
-      assert( 0 );   /* XXX we haven't completely implemented this yet */
-      if ( !is_global ) {
-        siginfo = &siginfo_struct;
-        siginfo->si_signo = signo;
-        siginfo->si_code = SI_USER;
-        siginfo->si_value.sival_int = 0;
-      }
+      assert( is_global );
+
       (*_POSIX_signals_Vectors[ signo ].sa_sigaction)(
         signo,
-        siginfo,
+        &siginfo_struct,
         NULL        /* context is undefined per 1003.1b-1993, p. 66 */
       );
       break;
@@ -371,7 +388,9 @@ void _POSIX_signals_Alarm_TSR(
  *  _POSIX_signals_Manager_Initialization
  */
 
-void _POSIX_signals_Manager_Initialization( void )
+void _POSIX_signals_Manager_Initialization(
+  int  maximum_queued_signals
+)
 {
   unsigned32 signo;
 
@@ -420,14 +439,22 @@ void _POSIX_signals_Manager_Initialization( void )
   );
 
   /* XXX status codes */
+
   /* 
-   *  XXX Allocate the siginfo pools.
+   *  Allocate the siginfo pools.
    */
 
   for ( signo=1 ; signo<= SIGRTMAX ; signo++ )
     _Chain_Initialize_empty( &_POSIX_signals_Siginfo[ signo ] );
 
-  /* XXX especially the inactive pool */
+  _Chain_Initialize(
+    &_POSIX_signals_Inactive_siginfo,
+    _Workspace_Allocate_or_fatal_error(
+      maximum_queued_signals * sizeof( POSIX_signals_Siginfo_node )
+    ),
+    maximum_queued_signals,
+    sizeof( POSIX_signals_Siginfo_node )
+  );
 }
 
 /*
@@ -810,20 +837,8 @@ int sigwait(
   return errno;
 }
 
-/*
- *  3.3.9 Queue a Signal to a Process, P1003.1b-1993, p. 78
- */
-
-int sigqueue(
-  pid_t               pid,
-  int                 signo,
-  const union sigval  value
-)
-{
-  return POSIX_NOT_IMPLEMENTED();
-}
-
-/*
+/*PAGE
+ *
  *  3.3.2 Send a Signal to a Process, P1003.1b-1993, p. 68
  *
  *  NOTE: Behavior of kill() depends on _POSIX_SAVED_IDS.
@@ -832,23 +847,27 @@ int sigqueue(
 #define _POSIX_signals_Is_interested( _api, _mask ) \
   ( ~(_api)->signals_blocked & (_mask) )
           
-int kill(
-  pid_t pid,
-  int   sig
+int killinfo(
+  pid_t               pid,
+  int                 sig,
+  const union sigval *value
 )
 {
-  sigset_t              mask;
-  POSIX_API_Control    *api;
-  unsigned32            the_class;
-  unsigned32            index;
-  unsigned32            maximum;
-  Objects_Information  *the_info;
-  Objects_Control     **object_table;
-  Thread_Control       *the_thread;
-  Thread_Control       *interested_thread;
-  Priority_Control      interested_priority;
-  Chain_Control        *the_chain;
-  Chain_Node           *the_node;
+  sigset_t                     mask;
+  POSIX_API_Control           *api;
+  unsigned32                   the_class;
+  unsigned32                   index;
+  unsigned32                   maximum;
+  Objects_Information         *the_info;
+  Objects_Control            **object_table;
+  Thread_Control              *the_thread;
+  Thread_Control              *interested_thread;
+  Priority_Control             interested_priority;
+  Chain_Control               *the_chain;
+  Chain_Node                  *the_node;
+  siginfo_t                    siginfo_struct;
+  siginfo_t                   *siginfo;
+  POSIX_signals_Siginfo_node  *psiginfo;
  
   /*
    *  Only supported for the "calling process" (i.e. this node).
@@ -881,6 +900,19 @@ int kill(
 
   mask = signo_to_mask( sig );
 
+  /*
+   *  Build up a siginfo structure
+   */
+
+  siginfo = &siginfo_struct;
+  siginfo->si_signo = sig;
+  siginfo->si_code = SI_USER;
+  if ( !value ) {
+    siginfo->si_value.sival_int = 0;
+  } else {
+    siginfo->si_value = *value;
+  }
+
   _Thread_Disable_dispatch();
 
   /*
@@ -892,7 +924,6 @@ int kill(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
   if ( _POSIX_signals_Is_interested( api, mask ) ) {
-    _POSIX_signals_Set_process_signals( mask );
     goto process_it;
   }
 
@@ -921,13 +952,6 @@ int kill(
 
     }
   }
-
-  /*
-   *  Since we did not deliver the signal to the current thread or to a
-   *  specific thread via sigwait() we will mark it as pending.
-   */
-
-  _POSIX_signals_Set_process_signals( mask );
 
   /*
    *  Is any other thread interested?  The highest priority interested
@@ -1061,8 +1085,8 @@ int kill(
    *    + sigaction() which changes the handler to SIG_IGN. 
    */
 
-  _Thread_Enable_dispatch();
-  return 0;
+  the_thread = NULL;
+  goto post_process_signal;
 
   /*
    *  We found a thread which was interested, so now we mark that this 
@@ -1072,20 +1096,69 @@ int kill(
 
 process_it:
   
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-
   the_thread->do_post_task_switch_extension = TRUE;
 
-  _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
+  /*
+   *  Returns TRUE if the signal was synchronously given to a thread
+   *  blocked waiting for the signal.
+   */
+
+  if ( _POSIX_signals_Unblock_thread( the_thread, sig, siginfo ) ) {
+    _Thread_Enable_dispatch();
+    return 0;
+  }
+
+post_process_signal:
+
+  /*
+   *  We may have woken up a thread but we definitely need to post the
+   *  signal to the process wide information set.
+   */
+
+  _POSIX_signals_Set_process_signals( mask );
+
+  if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO ) {
+
+    psiginfo = (POSIX_signals_Siginfo_node *)
+               _Chain_Get( &_POSIX_signals_Inactive_siginfo );
+    if ( !psiginfo )
+      set_errno_and_return_minus_one( EAGAIN );
+
+    psiginfo->Info = *siginfo;
+
+    _Chain_Append( &_POSIX_signals_Siginfo[ sig ], &psiginfo->Node );
+  }
 
   _Thread_Enable_dispatch();
-
-   /* XXX take this out when a little more confident */
-  /* SIGABRT comes from abort via assert and must work no matter what */
-  if ( sig == SIGABRT ) {
-    exit( 1 );
-  }
   return 0;
+}
+
+/*PAGE
+ *
+ *  3.3.2 Send a Signal to a Process, P1003.1b-1993, p. 68
+ *
+ *  NOTE: Behavior of kill() depends on _POSIX_SAVED_IDS.
+ */
+
+int kill(
+  pid_t pid,
+  int   sig
+)
+{
+  return killinfo( pid, sig, NULL );
+}
+
+/*
+ *  3.3.9 Queue a Signal to a Process, P1003.1b-1993, p. 78
+ */
+
+int sigqueue(
+  pid_t               pid,
+  int                 signo,
+  const union sigval  value
+)
+{
+  return killinfo( pid, signo, &value );
 }
 
 /*
@@ -1107,6 +1180,13 @@ int pthread_kill(
   if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN )
     return 0;
 
+  /*
+   *  RTEMS does not support sending  a siginfo signal to a specific thread.
+   */
+
+  if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO )
+    return ENOSYS;
+
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
@@ -1125,7 +1205,7 @@ int pthread_kill(
 
         api->signals_pending |= signo_to_mask( sig );
 
-        _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
+        (void) _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
     }
     _Thread_Enable_dispatch();
     return 0;
