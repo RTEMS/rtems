@@ -10,6 +10,9 @@ AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_BEFORE([$0], [AC_PROG_CC])dnl
 AC_BEFORE([$0], [RTEMS_CANONICALIZE_TOOLS])dnl
 
+_RTEMS_FLAGS([CFLAGS],
+  ["\$(CPU_CFLAGS) \$(RTEMS_CFLAGS_\$(VARIANT_V)_V) \$(CFLAGS_\$(VARIANT_V)_V) -g"])
+
 RTEMS_CHECK_TOOL(CC,gcc)
 test -z "$CC" && \
   AC_MSG_ERROR([no acceptable cc found in \$PATH])
@@ -30,16 +33,7 @@ RTEMS_GCC_PIPE
 test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 
 if test "$GCC" = yes; then
-]
-m4_if([$1],,[],[CPPFLAGS="$CPPFLAGS $1"])
-[
-CFLAGS=${CFLAGS--g -Wall}
+RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
+m4_if([$1],,[],[RTEMS_CFLAGS="$RTEMS_CFLAGS $1"])
 fi
-
-dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*
-#case $build_os in
-#*cygwin*)     GCCSED="| sed 's%\\\\%/%g'" ;;
-#*) ;;
-#esac
-AC_SUBST(GCCSED)
 ])

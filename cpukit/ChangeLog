@@ -1,5 +1,17 @@
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/multilib.am: Don't include @RTEMS_BSP@.cfg.
+	* automake/compile.am: Remove hard-coded CFLAGS_PROFILE_V.
+	Add autoconf-supplied CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, 
+	CFLAGS_PROFILE_V.
+	Hard-code RTEMS_CFLAGS_PROFILE = -pg
+	* aclocal/prog-cc.m4: Sync with toplevel/aclocal/prog-cc.m4.
+	Remove GCCSED.
+	* aclocal/env-rtemsbsp.m4: Add AC_ARG_VAR for CPU_CFLAGS,
+	CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, CFLAGS_PROFILE_V.
+
+2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/rtems-flags.m4: New.
 
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

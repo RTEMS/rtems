@@ -57,9 +57,6 @@ CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) \
 CFLAGS   = @CFLAGS@ $(CPU_CFLAGS) $(XCFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
-# profile flag; use gprof(1)
-CFLAGS_PROFILE_V=-pg
-
 #
 # How to compile stuff into ${ARCH} subdirectory
 #
@@ -144,9 +141,10 @@ LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
 LIBSUFFIX_VA = $(LIB_VARIANT).a
 
 ## These are supposed to be set in make/custom/<bsp>.cfg
-## CFLAGS_OPTIMIZE_V = 
-## CFLAGS_DEBUG_V =
-## CFLAGS_PROFILE_V =
+CPU_CFLAGS = @CPU_CFLAGS@
+CFLAGS_OPTIMIZE_V = @CFLAGS_OPTIMIZE_V@
+CFLAGS_DEBUG_V = @CFLAGS_DEBUG_V@
+CFLAGS_PROFILE_V = @CFLAGS_PROFILE_V@
 CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
 
 ## ------------------------------------------------------------------------
@@ -155,7 +153,7 @@ if RTEMS_USE_GCC
 ## gcc >= gcc-2.8
 RTEMS_CFLAGS_OPTIMIZE_V =
 RTEMS_CFLAGS_DEBUG_V = -Wno-unused
-RTEMS_CFLAGS_PROFILE_V =
+RTEMS_CFLAGS_PROFILE_V = -pg
 
 ## non-gcc
 ## We can't guess what flags might be required here.
