@@ -1,3 +1,8 @@
+2001-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* asm.h: include cpuopts.h instead of targopts.h
+	* rtems/score/arm.h: Use __arm__.
+
 2001-11-28	Joel Sherrill <joel@OARcorp.com>,
 
 	This was tracked as PR91.

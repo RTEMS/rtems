@@ -29,7 +29,7 @@ extern "C" {
  *  of the family.
  */
  
-#if defined(arm)
+#if defined(__arm__)
  
 #define CPU_MODEL_NAME  "arm"
 #define ARM_HAS_FPU     0
