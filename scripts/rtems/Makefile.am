@@ -40,7 +40,6 @@ TEMPLATES = rtems.spec.in
 RPM_SPECS_DATA = hppa1.1-rtems-simhppa-$(BSPVERS).spec \
     i386-rtems-pc386-$(BSPVERS).spec i960-rtems-cvme961-$(BSPVERS).spec \
     m68k-rtems-gen68360-$(BSPVERS).spec \
-    m68k-rtemself-gen68360-$(BSPVERS).spec \
     mips64orion-rtems-p4600-$(BSPVERS).spec \
     powerpc-rtems-mcp750-$(BSPVERS).spec sh-rtems-gensh1-$(BSPVERS).spec \
     sh-rtemself-gensh1-$(BSPVERS).spec sparc-rtems-erc32-$(BSPVERS).spec
