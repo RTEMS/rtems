@@ -288,7 +288,7 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
    if (out) fprintf(out,"%s",line);
   };
   tcdrain(fileno(in ));
-  tcdrain(fileno(out));
+  if (out) tcdrain(fileno(out));
   for (;;) {
    line[col]=0;	  
    c=fgetc(in);
