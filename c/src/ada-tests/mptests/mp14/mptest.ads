@@ -21,7 +21,6 @@
 --  $Id$
 --
 
-with BSP_MPCI;
 with RTEMS;
 
 package MPTEST is
