@@ -73,7 +73,7 @@ int sigdelset(
  *  3.3.3 Manipulate Signal Sets, P1003.1b-1993, p. 69
  */
 
-int sigismembet(
+int sigismember(
   const sigset_t   *set,
   int               signo
 )
