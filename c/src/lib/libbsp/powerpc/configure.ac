@@ -34,5 +34,6 @@ shared/pci/Makefile
 shared/residual/Makefile
 shared/start/Makefile
 shared/startup/Makefile
-shared/vectors/Makefile])
+shared/vectors/Makefile
+shared/vme/Makefile])
 AC_OUTPUT

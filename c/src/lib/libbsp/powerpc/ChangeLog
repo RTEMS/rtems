@@ -1,3 +1,9 @@
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
+	* configure.ac: Add glue to the powerpc/shared BSP
+	to use the vmeUniverse VME-PCI bridge driver.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
