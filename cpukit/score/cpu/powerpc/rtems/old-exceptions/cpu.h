@@ -326,6 +326,7 @@ typedef void ( *ppc_isr_entry )( int, struct CPU_Interrupt_frame * );
  *  a debugger such as gdb.  But that is another problem.
  */
 
+#ifndef ASM
 typedef struct {
     uint32_t   gpr1;	/* Stack pointer for all */
     uint32_t   gpr2;	/* TOC in PowerOpen, reserved SVR4, section ptr EABI + */
@@ -441,6 +442,7 @@ typedef struct {
   uint32_t     clock_speed;            /* Speed of CPU in Hz */
 #endif
 }   rtems_cpu_table;
+#endif
 
 /*
  *  Macros to access required entires in the CPU Table are in 
@@ -451,6 +453,7 @@ typedef struct {
  *  Macros to access PowerPC specific additions to the CPU Table
  */
 
+#ifndef ASM
 #define rtems_cpu_configuration_get_clicks_per_usec() \
    (_CPU_Table.clicks_per_usec)
 
@@ -493,6 +496,7 @@ typedef struct {
    (_CPU_Table.clock_speed)
 #endif
 
+#endif
 
 /*
  *  The following type defines an entry in the PPC's trap table.
@@ -503,12 +507,14 @@ typedef struct {
  *        trap type (a.k.a. vector) and another with the psr.
  */
  
+#ifndef ASM
 typedef struct {
   uint32_t     stwu_r1;                       /* stwu  %r1, -(??+IP_END)(%1)*/
   uint32_t     stw_r0;                        /* stw   %r0, IP_0(%r1)       */
   uint32_t     li_r0_IRQ;                     /* li    %r0, _IRQ            */
   uint32_t     b_Handler;                     /* b     PROC (_ISR_Handler)  */
 } CPU_Trap_table_entry;
+#endif
 
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
@@ -517,7 +523,9 @@ typedef struct {
  *  _CPU_Context_Initialize.
  */
 
+#ifndef ASM
 /* EXTERN Context_Control_fp  _CPU_Null_fp_context; */
+#endif
 
 /*
  *  On some CPUs, RTEMS supports a software managed interrupt stack.
@@ -532,8 +540,10 @@ typedef struct {
  *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
  */
 
+#ifndef ASM
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
+#endif
 
 /*
  *  With some compilation systems, it is difficult if not impossible to
@@ -545,13 +555,16 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  sequence (if a dispatch is necessary).
  */
 
+#ifndef ASM
 /* EXTERN void           (*_CPU_Thread_dispatch_pointer)(); */
+#endif
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  */
 
 
+#ifndef ASM
 SCORE_EXTERN struct {
   uint32_t   volatile* Nest_level;
   uint32_t   volatile* Disable_level;
@@ -570,6 +583,7 @@ SCORE_EXTERN struct {
 
   uint32_t   msr_initial;
 } _CPU_IRQ_info CPU_STRUCTURE_ALIGNMENT;
+#endif
 
 /*
  *  The size of the floating point context area.  On some CPUs this
@@ -668,13 +682,16 @@ SCORE_EXTERN struct {
  *  ISR handler macros
  */
 
+#ifndef ASM
 void _CPU_Initialize_vectors(void);
+#endif
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _isr_cookie.
  */
 
+#ifndef ASM
 #define _CPU_MSR_Value( _msr_value ) \
   do { \
     _msr_value = 0; \
@@ -715,6 +732,7 @@ void _CPU_Initialize_vectors(void);
 	"0" ((_isr_cookie)), "1" ((_disable_mask)) \
 	); \
   }
+#endif
 
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -722,12 +740,14 @@ void _CPU_Initialize_vectors(void);
  *  _isr_cookie is not modified.
  */
 
+#ifndef ASM
 #define _CPU_ISR_Enable( _isr_cookie )  \
   { \
      asm volatile ( "mtmsr %0" : \
 		   "=r" ((_isr_cookie)) : \
                    "0" ((_isr_cookie))); \
   }
+#endif
 
 /*
  *  This temporarily restores the interrupt to _isr_cookie before immediately
@@ -740,6 +760,7 @@ void _CPU_Initialize_vectors(void);
  *         get loaded.  Check this for future (post 10/97 gcc versions.
  */
 
+#ifndef ASM
 #define _CPU_ISR_Flash( _isr_cookie ) \
   { register unsigned int _disable_mask = PPC_MSR_DISABLE_MASK; \
     asm volatile ( \
@@ -748,6 +769,7 @@ void _CPU_Initialize_vectors(void);
       "0" ((_isr_cookie)), "1" ((_disable_mask)) \
     ); \
   }
+#endif
 
 /*
  *  Map interrupt level in task mode onto the hardware that the CPU
@@ -760,6 +782,7 @@ void _CPU_Initialize_vectors(void);
  *  via the rtems_task_mode directive.
  */
 
+#ifndef ASM
 uint32_t   _CPU_ISR_Calculate_level(
   uint32_t   new_level
 );
@@ -775,6 +798,7 @@ void _CPU_ISR_install_raw_handler(
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
+#endif
 
 /* end of ISR handler macros */
 
@@ -782,6 +806,8 @@ void _CPU_ISR_install_raw_handler(
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */
+
+#ifndef ASM
 
 #define CPU_Get_timebase_low( _value ) \
     asm volatile( "mftb  %0" : "=r" (_value) )
@@ -805,6 +831,7 @@ void _CPU_ISR_install_raw_handler(
     while (now - start < (_cycles)); \
   } while (0)
 
+#endif
 
 
 /* Context handler macros */
@@ -827,6 +854,7 @@ void _CPU_ISR_install_raw_handler(
  *  NOTE:  Implemented as a subroutine for the SPARC port.
  */
 
+#ifndef ASM
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   uint32_t         *stack_base,
@@ -835,6 +863,7 @@ void _CPU_Context_Initialize(
   void             *entry_point,
   boolean           is_fp
 );
+#endif
 
 /*
  *  This routine is responsible for somehow restarting the currently
@@ -986,9 +1015,13 @@ void _CPU_Context_Initialize(
 
 /* variables */
 
+#ifndef ASM
 extern const uint32_t   _CPU_msrs[4];
+#endif
 
 /* functions */
+
+#ifndef ASM
 
 /*
  *  _CPU_Initialize
@@ -1141,6 +1174,9 @@ static inline uint64_t   PPC_Get_timebase_register( void )
   tbr |= tbr_low;
   return tbr;
 }
+
+/* ASM */
+#endif
 
 #ifdef __cplusplus
 }
