@@ -38,7 +38,7 @@ $(PROJECT_INCLUDE)/rtems/score/%: %
 $(PROJECT_INCLUDE)/%: %
 	$(INSTALL_DATA) $< $@
 
-REL = ../$(ARCH)/rtems-cpu.rel
+REL = $(ARCH)/rtems-cpu.rel
 
 $(REL): $(C_O_FILES) $(S_O_FILES)
 	test -d ../$(ARCH) || mkdir ../$(ARCH)
