@@ -10,22 +10,9 @@ ACLOCAL_AMFLAGS = -I aclocal
 SUBDIRS = make $(build_SUBDIRS) $(host_SUBDIRS) $(target_SUBDIRS)
 DIST_SUBDIRS = $(SUBDIRS)
 
-ACLOCAL_FILES =
-ACLOCAL_FILES += aclocal/bsp-alias.m4
-ACLOCAL_FILES += aclocal/canonical-target-name.m4
-ACLOCAL_FILES += aclocal/check-bsps.m4
-ACLOCAL_FILES += aclocal/check-custom-bsp.m4
-ACLOCAL_FILES += aclocal/enable-bare.m4
-ACLOCAL_FILES += aclocal/path-ksh.m4
-ACLOCAL_FILES += aclocal/project-root.m4
-ACLOCAL_FILES += aclocal/quoting.m4
-ACLOCAL_FILES += aclocal/rtems-cpu-subdirs.m4
-ACLOCAL_FILES += aclocal/tool-paths.m4
-
 noinst_SCRIPTS = bootstrap
 
 EXTRA_DIST = README.configure SUPPORT VERSION LICENSE $(noinst_SCRIPTS)
-EXTRA_DIST += $(ACLOCAL_FILES)
 EXTRA_DIST += config-ml.in
 
 dist-hook:

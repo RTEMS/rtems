@@ -1,3 +1,7 @@
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove ACLOCAL_FILES.
+
 2004-11-16	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* aclocal/check-bsps.m4: Use ls instead of globs to pickup
