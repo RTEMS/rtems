@@ -32,9 +32,6 @@ rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
 
-/* Amount of RAM on this board. Dynamically set in start.S */
-unsigned long _M68k_Ramsize;
-
 /*
  *  Use the shared implementations of the following routines
  */
@@ -52,6 +49,13 @@ void bsp_pretasking_hook(void);               /* m68k version */
 void bsp_start( void )
 {
   extern void *_WorkspaceBase;
+  
+  /*
+   *  _M68k_Ramsize is the amount of RAM on this board and
+   *  is set by many m68k BSPs at this point.  With this
+   *  BSP, it is dynamically set in start.S.
+   */
+
 
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from

@@ -34,10 +34,12 @@
 extern void bsp_libc_init( void *, unsigned long, int );
 extern rtems_configuration_table  BSP_Configuration;
 
-extern unsigned long  _M68k_Ramsize;
 extern void          *_RamBase;
 extern void          *_WorkspaceBase;
 extern void          *_HeapSize;
+
+
+unsigned long  _M68k_Ramsize;
 
 void bsp_pretasking_hook(void)
 {
