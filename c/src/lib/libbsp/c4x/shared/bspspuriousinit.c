@@ -16,7 +16,6 @@
 
 #include <bsp.h>
 #include <bspIo.h>
-#include <simio.h>
 
 /*
  *  bsp_spurious_initialize

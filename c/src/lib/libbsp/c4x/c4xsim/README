@@ -5,7 +5,7 @@
 BSP NAME:           c4xsim
 BOARD:              Simulator in GDB
 BUS:                N/A
-CPU FAMILY:         ppc
+CPU FAMILY:         C3X/C4X
 CPU:                C32 and others
 COPROCESSORS:       N/A
 MODE:               32 bit mode
@@ -14,7 +14,7 @@ DEBUG MONITOR:      gdb simulator
 
 PERIPHERALS
 ===========
-TIMERS:             PPC internal Timebase register
+TIMERS:             Internal Timer
   RESOLUTION:         ???
 SERIAL PORTS:       simulated via 
 REAL-TIME CLOCK:    ???

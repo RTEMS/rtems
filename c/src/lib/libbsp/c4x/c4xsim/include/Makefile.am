@@ -26,7 +26,3 @@ all-local: $(PREINSTALL_FILES)
 EXTRA_DIST = bsp.h
 
 include $(top_srcdir)/../../../../../../automake/local.am
-
-H_FILES = $(srcdir)/../../../shared/include/coverhd.h \
-    $(srcdir)/bsp.h $(srcdir)/simio.h $(srcdir)/../../../shared/include/bspIo.h
-

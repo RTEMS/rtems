@@ -329,7 +329,7 @@ static inline void * c4x_get_ittp(void)
   register unsigned int _if_value;
   
   __asm__( "ldi if, %0" : "=r" (_if_value) );
-  return (void *)((_if_value & 0xffff) >> 8); 
+  return (void *)((_if_value & 0xffff0000) >> 8); 
 }  
 
 static inline void c4x_set_ittp(void *_ittp_value)
@@ -343,8 +343,8 @@ static inline void c4x_set_ittp(void *_ittp_value)
   _if_value = c3x_get_if();
 #endif
   _if_value &= 0xffff;
-  _ittp_field = (((unsigned int) _ittp_value) << 8);
-  _if_value |= _ittp_field;
+  _ittp_field = (((unsigned int) _ittp_value) >> 8);
+  _if_value |= _ittp_field << 16 ;
 #ifdef _TMS320C40
   c4x_set_iif( _if_value );
 #else
