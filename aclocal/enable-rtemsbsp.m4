@@ -42,6 +42,7 @@ AC_DEFUN(RTEMS_ENV_RTEMSCPU,
 [AC_REQUIRE([RTEMS_ENABLE_MULTILIB])
 if test x"$multilib" = x"no"; then
   RTEMS_ENV_RTEMSBSP
+  RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 else
   rtems_cv_RTEMS_BSP="multilib"
   RTEMS_BSP="$rtems_cv_RTEMS_BSP"
