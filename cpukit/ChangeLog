@@ -1,3 +1,8 @@
+2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-top.m4: Use with_project_root and MULTIBUILDTOP to 
+	compose PROJECT_TOPdir (Fixes hppa1.1/genoffset problem).
+
 2002-07-31	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/rtems-cpu-subdirs.m4:  Removed the or16 port
