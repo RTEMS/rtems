@@ -682,8 +682,8 @@ fat_file_ioctl(
     switch (cmd)
     {
         case F_CLU_NUM:
-            pos = va_arg(ap, int);
-            ret = va_arg(ap, int *);
+            pos = va_arg(ap, unsigned32);
+            ret = va_arg(ap, unsigned32 *);
 
             /* sanity check */
             if ( pos >= fat_fd->fat_file_size )
