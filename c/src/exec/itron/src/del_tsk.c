@@ -29,16 +29,21 @@ ER del_tsk(
   Objects_Locations        location;
   ER                       result;
 
-  /* XXX - Fix Documentation and error checking for this error on self */
-
   the_thread = _ITRON_Task_Get( tskid, &location );
-  _Thread_Disable_dispatch();
+
+  if (!the_thread)
+    _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
+
+  if ( the_thread == _Thread_Executing )
+    _ITRON_return_errorno( E_OBJ );
+
+  if ( !_States_Is_dormant( the_thread->current_state ) )
+    _ITRON_return_errorno( E_OBJ );
 
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      _Thread_Enable_dispatch();  
-      return _ITRON_Task_Clarify_get_id_error( tskid );
+      _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
 
     case OBJECTS_LOCAL:
       result = _ITRON_Delete_task( the_thread );

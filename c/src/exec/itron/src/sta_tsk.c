@@ -21,24 +21,6 @@
  *  sta_tsk - Start Task
  */
 
-/*
- * XXX - How Do I know when these happen ???
-  E_NOEXS   Object does not exist (the task specified by tskid does not exist)
-  E_OACV    Object access violation (A tskid less than -4 was specified from
-            a user task.  This is implementation dependent.)
-  E_OBJ     Invalid object state (the target task is not in DORMANT state)
-  EN_OBJNO  An object number which could not be accessed on the target node
-            is specified. XXX Should never get on a single processor??
-  EN_CTXID  Specified an object on another node when the system call was
-            issued from a task in dispatch disabled state or from a task-
-            independent portionXXX Should never get on a single processor??
-  EN_PAR    A value outside the range supported by the target node and/or
-            transmission packet format was specified as a parameter (a value
-            outside supported range was specified for stacd)
-XXX- What does _ITRON_Task_Get return on an invalid id and how do you know
-     if it is E_ID, E_NOEXS, E_OACV 
-*/
-
 ER sta_tsk(
   ID   tskid,
   INT  stacd
@@ -49,10 +31,16 @@ ER sta_tsk(
   boolean                  status;
 
   the_thread = _ITRON_Task_Get( tskid, &location );
+  if (!the_thread)
+    _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
+
+  if ( !_States_Is_dormant( the_thread->current_state ) )
+    _ITRON_return_errorno( E_OBJ );
+
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      return E_ID;  /* XXX */
+      _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
 
     case OBJECTS_LOCAL:
       status = _Thread_Start(
@@ -63,14 +51,8 @@ ER sta_tsk(
         0                     /* unused */
       );
 
-      /*
-       *  Wrong state  XXX
-       */
-
-      if ( !status ) {
-        _Thread_Enable_dispatch();
-        return E_OBJ;
-      }
+      if ( !status )
+        _ITRON_return_errorno(  E_OBJ );
 
       _Thread_Enable_dispatch();
       return E_OK;

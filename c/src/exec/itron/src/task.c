@@ -117,10 +117,8 @@ ER _ITRON_Delete_task(
   Objects_Information     *the_information;
 
   the_information = _Objects_Get_information( the_thread->Object.id );
-
   if ( !the_information ) {
-    return -1;                  /* XXX */
-        /* This should never happen if _Thread_Get() works right */
+    return E_OBJ;             /* XXX - should never happen */
   }
 
   _Thread_Close( the_information, the_thread );

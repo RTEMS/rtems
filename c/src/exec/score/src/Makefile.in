@@ -42,10 +42,10 @@ OBJECT_C_PIECES = object objectallocate objectallocatebyindex \
 THREAD_C_PIECES = thread threadchangepriority threadclearstate threadclose \
     threadcreateidle threaddelayended threaddispatch threadevaluatemode \
     threadget threadhandler threadidlebody threadinitialize threadloadenv \
-    threadready threadresettimeslice threadrestart threadsetpriority \
-    threadsetstate threadsettransient threadstackallocate threadstackfree \
-    threadstart threadstartmultitasking threadtickletimeslice \
-    threadyieldprocessor
+    threadready threadresettimeslice threadrestart threadresume \
+    threadrotatequeue threadsetpriority threadsetstate threadsettransient \
+    threadstackallocate threadstackfree threadstart threadstartmultitasking \
+    threadsuspend threadtickletimeslice threadyieldprocessor
 
 THREADQ_C_PIECES= threadq threadqdequeue threadqdequeuefifo \
     threadqdequeuepriority threadqenqueue threadqenqueuefifo \

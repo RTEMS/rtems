@@ -21,28 +21,6 @@
  *  cre_tsk - Create Task
  */
 
-/*
- * XXX - How do I return these errors ???  Do I have to validate the ID
-         prior to calling the ID routine ??
-  E_NOMEM   Insufficient memory (Memory for control block and/or user stack
-            cannot be allocated)
-  E_ID      Invalid ID Number (tskid was invalid or could not be used)
-  E_RSATR   Reserved attribute (tskatr was invalid or could not be used)
-  E_OBJ     Invalid object state (a task of the same ID already exists)
-  E_OACV    Object access violation (A tskid less than -4 was specified from
-            a user task.  This is implementation dependent.)
-  E_PAR     Parameter error (pk_ctsk, task, itskpri and/or stksz is invalid)
-  EN_OBJNO  An object number which could not be accessed on the target node
-            is specified.
-  EN_CTXID  Specified an object on another node when the system call was
-            issued from a task in dispatch disabled state or from a task-
-            independent portion
-  EN_PAR    A value outside the range supported by the target node and/or
-            transmission packet format was specified as a parameter (a value
-            outside supported range was specified for exinf, tskatr, task,
-            itskpri and/or stksz)
- */
-
 ER cre_tsk(
   ID      tskid,
   T_CTSK *pk_ctsk
@@ -60,18 +38,39 @@ ER cre_tsk(
   _Thread_Disable_dispatch();
 
   /*
+   * Validate Parameters.
+   */
+  
+ if ( pk_ctsk == NULL )
+    _ITRON_return_errorno( E_PAR );
+
+  if ((pk_ctsk->tskatr != TA_ASM ) &&
+      (pk_ctsk->tskatr != TA_HLNG) &&
+      (pk_ctsk->tskatr != TA_COP0) &&
+      (pk_ctsk->tskatr != TA_COP1) &&
+      (pk_ctsk->tskatr != TA_COP2) &&
+      (pk_ctsk->tskatr != TA_COP3) &&
+      (pk_ctsk->tskatr != TA_COP4) &&
+      (pk_ctsk->tskatr != TA_COP5) &&
+      (pk_ctsk->tskatr != TA_COP6) &&
+      (pk_ctsk->tskatr != TA_COP7))
+    _ITRON_return_errorno( E_RSATR );
+
+  if (( pk_ctsk->itskpri <= 0 ) || ( pk_ctsk->itskpri >= 256 ))
+  if ( pk_ctsk->itskpri <= 0 )
+    _ITRON_return_errorno( E_PAR );
+  if ( pk_ctsk->task == NULL )
+    _ITRON_return_errorno( E_PAR );
+  if ( pk_ctsk->stksz < 0 )
+    _ITRON_return_errorno( E_PAR );
+  
+  /*
    * allocate the thread.
    */
 
   the_thread = _ITRON_Task_Allocate( tskid );
-  if ( !the_thread ) {
-    ena_dsp();
-    return _ITRON_Task_Clarify_allocation_id_error( tskid ); 
-  }
-
-  /*
-   * XXX - FIX THE VARIABLES TO THE CORRECT VALUES!!!
-   */
+  if ( !the_thread )
+    _ITRON_return_errorno( _ITRON_Task_Clarify_allocation_id_error( tskid ) );
 
   /*
    *  Initialize the core thread for this task.
@@ -83,7 +82,7 @@ ER cre_tsk(
     the_thread, 
     NULL,
     pk_ctsk->stksz,
-    TRUE,          /* XXX - All tasks FP ??? */
+    TRUE,          /* XXX - All tasks FP for now */
     core_priority,
     TRUE,
     THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE,
@@ -94,21 +93,8 @@ ER cre_tsk(
 
   if ( !status ) {
     _ITRON_Task_Free( the_thread );
-    _Thread_Enable_dispatch();
-    return -1;
-#if (0)
-/* XXX */
-#endif
+    _ITRON_return_errorno( E_NOMEM );
   }
-
-#if (0)  /* XXX We have any thing else to set per API structure? */
-  api = the_thread->API_Extensions[ THREAD_API_ITRON ];
-  asr = &api->Signal;
- 
-  asr->is_enabled = FALSE;
-
-  *id = the_thread->Object.id;
-#endif
 
   /*
    *  This insures we evaluate the process-wide signals pending when we
@@ -124,4 +110,7 @@ ER cre_tsk(
   _Thread_Enable_dispatch();
   return E_OK;
 }
+
+
+
 

@@ -19,7 +19,7 @@
 
 
 /*
- *  slp_tsk - Sleep Task Sleep Task with Timeout
+ *  slp_tsk - Sleep Task
  */
 
 ER slp_tsk( void )

@@ -44,7 +44,8 @@ boolean _Thread_Restart(
   if ( !_States_Is_dormant( the_thread->current_state ) ) {
  
     _Thread_Set_transient( the_thread );
-    the_thread->resource_count = 0;
+    the_thread->resource_count   = 0;
+    the_thread->suspend_count    = 0;
     the_thread->is_preemptible   = the_thread->Start.is_preemptible;
     the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
     the_thread->budget_callout   = the_thread->Start.budget_callout;

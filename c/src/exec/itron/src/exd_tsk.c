@@ -25,12 +25,12 @@ void exd_tsk( void )
 {
   Objects_Information     *the_information;
 
+  _Thread_Disable_dispatch();
+
   the_information = _Objects_Get_information( _Thread_Executing->Object.id );
 
   /* This should never happen if _Thread_Get() works right */
   assert( the_information );
-
-  _Thread_Disable_dispatch();
 
   _Thread_Set_state( _Thread_Executing, STATES_DORMANT );
   _ITRON_Delete_task( _Thread_Executing );

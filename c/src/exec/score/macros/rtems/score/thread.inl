@@ -55,15 +55,6 @@
 
 /*PAGE
  *
- *  _Thread_Resume
- *
- */
-
-#define _Thread_Resume( _the_thread ) \
-        _Thread_Clear_state( (_the_thread), STATES_SUSPENDED )
-
-/*PAGE
- *
  *  _Thread_Unblock
  *
  */

@@ -109,7 +109,13 @@ RTEMS_INLINE_ROUTINE Thread_Control *_ITRON_Task_Get (
   ID                 id,
   Objects_Locations *location
 )
-{
+{ 
+  if ( id == 0 ) {
+    _Thread_Disable_dispatch();
+    *location = OBJECTS_LOCAL;
+    return _Thread_Executing;
+  }
+
   return (Thread_Control *)
     _ITRON_Objects_Get( &_ITRON_Task_Information, id, location );
 }
@@ -144,12 +150,25 @@ RTEMS_INLINE_ROUTINE boolean _ITRON_Task_Is_null (
  *  _ITRON_tasks_Priority_to_Core
  */
  
-RTEMS_INLINE_ROUTINE Priority_Control _ITRON_Task_Priority_to_Core( 
-  PRI   _priority 
+RTEMS_INLINE_ROUTINE _ITRON_Task_Priority_to_Core( 
+  PRI   ITRON_priority 
 ) 
 {  
-  return ((Priority_Control) (_priority));
+  return (Priority_Control) ITRON_priority;
 }
+
+/*PAGE
+ *
+ *  _ITRON_tasks_Core_to_Priority
+ */
+ 
+RTEMS_INLINE_ROUTINE _ITRON_Task_Core_to_Priority( 
+  Priority_Control  core_priority 
+) 
+{  
+  return (PRI) core_priority;
+}
+
 
 #ifdef __cplusplus
 }
@@ -157,4 +176,3 @@ RTEMS_INLINE_ROUTINE Priority_Control _ITRON_Task_Priority_to_Core(
 
 #endif
 /* end of include file */
-

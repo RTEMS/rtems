@@ -185,6 +185,7 @@ struct Thread_Control_struct {
   MP_packet_Prefix                     *receive_packet;
 #endif
      /****************** end of common block ********************/
+  unsigned32                            suspend_count;
   boolean                               is_global;
   boolean                               do_post_task_switch_extension;
 
@@ -552,6 +553,20 @@ void _Thread_Tickle_timeslice( void );
 
 void _Thread_Yield_processor( void );
 
+/*  
+ *  _Thread_Rotate_Ready_Queue
+ *  
+ *  DESCRIPTION:
+ *  
+ *  This routine is invoked to rotate the ready queue for the
+ *  given priority.  It can be used to yeild the processor
+ *  by rotating the executing threads ready queue.
+ */
+
+void _Thread_Rotate_Ready_Queue(
+  Priority_Control  priority
+);
+
 /*
  *  _Thread_Load_environment
  *
@@ -624,11 +639,42 @@ void _Thread_Set_priority(
 );
 
 /*
+ *  _Thread_Suspend
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine updates the related suspend fields in the_thread
+ *  control block to indicate the current nested level.
+ */
+
+void _Thread_Suspend(
+  Thread_Control   *the_thread
+);
+
+/*
+ *  _Thread_Resume
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine updates the related suspend fields in the_thread
+ *  control block to indicate the current nested level.  A force
+ *  parameter of TRUE will force a resume and clear the suspend count.
+ */
+
+void _Thread_Resume(
+  Thread_Control   *the_thread,
+  boolean           force
+);
+
+/*
  *  _Thread_Evaluate_mode
  *
  *  DESCRIPTION:
  *
- *  This routine XXX
+ *  This routine evaluates the current scheduling information for the
+ *  system and determines if a context switch is required.  This 
+ *  is usually called after changing an execution mode such as preemptability
+ *  for a thread.
  */
 
 boolean _Thread_Evaluate_mode( void );

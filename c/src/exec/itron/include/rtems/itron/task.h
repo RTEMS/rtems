@@ -77,7 +77,18 @@ ER _ITRON_Delete_task(
   Thread_Control *the_thread
 );
 
+/* XXX remove the need for this.  Enable dispatch should not be hidden */
+
+#define _ITRON_return_errorno( _errno )                \
+do {                                                   \
+  _Thread_Enable_dispatch();                           \
+  return _errno;                                       \
+} while (0);
+
+
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/itron/task.inl>
+#endif
 
 #ifdef __cplusplus
 }

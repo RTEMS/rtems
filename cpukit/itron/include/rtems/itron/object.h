@@ -80,7 +80,7 @@ typedef Objects_Control ITRON_Objects_Control;
 #define _ITRON_Objects_Clarify_get_id_error( _the_information, _id ) \
   (((_id) < -4) ? E_OACV : /* attempt to access a "system object" */ \
   ((_id) <= 0) ? E_ID :    /* bogus index of 0 - -3 */ \
-  ((_id) <= (_the_information)->maximum) ? E_OBJ : /* object is in use */ \
+  ((_id) <= (_the_information)->maximum) ? E_NOEXS : /* does not exist */ \
    E_ID)  /* simply a bad id */
 
 

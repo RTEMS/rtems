@@ -84,24 +84,6 @@ RTEMS_INLINE_ROUTINE boolean _Thread_Is_executing_also_the_heir( void )
 
 /*PAGE
  *
- *  _Thread_Resume
- *
- *  DESCRIPTION:
- *
- *  This routine clears the SUSPENDED state for the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- */
-
-RTEMS_INLINE_ROUTINE void _Thread_Resume (
-  Thread_Control *the_thread
-)
-{
-  _Thread_Clear_state( the_thread, STATES_SUSPENDED );
-}
-
-/*PAGE
- *
  *  _Thread_Unblock
  *
  *  DESCRIPTION:
