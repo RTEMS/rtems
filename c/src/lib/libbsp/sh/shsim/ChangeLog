@@ -1,3 +1,11 @@
+2001-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add scitab, gdbsci to SUBDIRS.
+	* include/gdbsci.h: New file.
+	* include/.cvsignore: Add stamp-h? and bspopts.h*.
+	* console/Makefile.am: Use shared/console.c.
+	* console/console-io.c, console/console-support.S: Remove.
+
 2001-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gdbsci/, scitab/, trap34/: Add directories.

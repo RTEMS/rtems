@@ -1,2 +1,4 @@
 Makefile
 Makefile.in
+stamp-h*
+bspopts.h*
