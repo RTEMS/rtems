@@ -24,6 +24,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <rtems/error.h>
 
@@ -47,6 +48,10 @@ extern "C" {
     } \
   } while ( 0 ) 
 
+/*
+ *  These macros properly report errors within the Classic API
+ */
+
 #define directive_failed( _dirstat, _failmsg )  \
  fatal_directive_status( _dirstat, RTEMS_SUCCESSFUL, _failmsg )
 
@@ -67,6 +72,61 @@ extern "C" {
       exit( _stat ); \
     } \
   } while ( 0 ) 
+
+/*
+ *  These macros properly report errors from the POSIX API
+ */
+
+#define posix_service_failed( _dirstat, _failmsg )  \
+ fatal_posix_service_status( _dirstat, RTEMS_SUCCESSFUL, _failmsg )
+
+#define posix_service_failed_with_level( _dirstat, _failmsg, _level )  \
+ fatal_posix_service_status_with_level( \
+      _dirstat, RTEMS_SUCCESSFUL, _failmsg, _level )
+
+#define fatal_posix_service_status( _stat, _desired, _msg ) \
+  fatal_posix_service_status_with_level( _stat, _desired, _msg, 0 )
+
+#define fatal_posix_service_status_with_level( _stat, _desired, _msg, _level ) \
+  do { \
+    check_dispatch_disable_level( _level ); \
+    if ( (_stat) != (_desired) ) { \
+      printf( "\n%s FAILED -- expected (%s) got (%s)\n", \
+              (_msg), strerror(_desired), strerror(_stat) ); \
+      fflush(stdout); \
+      exit( _stat ); \
+    } \
+  } while ( 0 )
+
+/*
+ *  Generic integer version of the error reporting
+ */
+
+#define int_service_failed( _dirstat, _failmsg )  \
+ fatal_int_service_status( _dirstat, RTEMS_SUCCESSFUL, _failmsg )
+
+#define int_service_failed_with_level( _dirstat, _failmsg, _level )  \
+ fatal_int_service_status_with_level( \
+      _dirstat, RTEMS_SUCCESSFUL, _failmsg, _level )
+
+#define fatal_int_service_status( _stat, _desired, _msg ) \
+  fatal_int_service_status_with_level( _stat, _desired, _msg, 0 )
+
+#define fatal_int_service_status_with_level( _stat, _desired, _msg, _level ) \
+  do { \
+    check_dispatch_disable_level( _level ); \
+    if ( (_stat) != (_desired) ) { \
+      printf( "\n%s FAILED -- expected (%d) got (%d)\n", \
+              (_msg), (_desired), (_stat) ); \
+      fflush(stdout); \
+      exit( _stat ); \
+    } \
+  } while ( 0 )
+
+
+/*
+ *  Print the time
+ */
 
 #define sprint_time(_str, _s1, _tb, _s2) \
   do { \
