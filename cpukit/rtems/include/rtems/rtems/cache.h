@@ -46,47 +46,47 @@ extern "C" {
  * copybacks. It must determine how many cache lines need to be copied
  * back and then perform the copybacks.
  */
-void rtems_flush_multiple_data_cache_lines( const void *, size_t );
+void rtems_cache_flush_multiple_data_lines( const void *, size_t );
 
 /*
  * This function is responsible for performing a data cache invalidate.
  * It must determine how many cache lines need to be invalidated and then
  * perform the invalidations.
  */
-void rtems_invalidate_multiple_data_cache_lines( const void *, size_t );
+void rtems_cache_invalidate_multiple_data_lines( const void *, size_t );
 
 /*
  * This function is responsible for performing a data cache flush.
  * It flushes the entire cache.
  */
-void rtems_flush_entire_data_cache( void );
+void rtems_cache_flush_entire_data( void );
 
 /*
  * This function is responsible for performing a data cache
  * invalidate. It invalidates the entire cache.
  */
-void rtems_invalidate_entire_data_cache( void );
+void rtems_cache_invalidate_entire_data( void );
 
 /*
  * This function returns the data cache granularity.
  */
-int rtems_get_data_cache_line_size( void );
+int rtems_cache_get_data_line_size( void );
 
 /*
  * This function freezes the data cache.
  */
-void rtems_freeze_data_cache( void );
+void rtems_cache_freeze_data( void );
 
 /*
  * This function unfreezes the data cache.
  */
-void rtems_unfreeze_data_cache( void );
+void rtems_cache_unfreeze_data( void );
 
 /*
  * These functions enable/disable the data cache.
  */
-void rtems_enable_data_cache( void );
-void rtems_disable_data_cache( void );
+void rtems_cache_enable_data( void );
+void rtems_cache_disable_data( void );
 
 /*
  *  These functions will ONLY do something if the
@@ -99,34 +99,34 @@ void rtems_disable_data_cache( void );
  * invalidate. It must determine how many cache lines need to be invalidated
  * and then perform the invalidations.
  */
-void rtems_invalidate_multiple_inst_cache_lines( const void *, size_t );
+void rtems_cache_invalidate_multiple_instruction_lines( const void *, size_t );
 
 /*
  * This function is responsible for performing an instruction cache
  * invalidate. It invalidates the entire cache.
  */
-void rtems_invalidate_entire_inst_cache( void );
+void rtems_cache_invalidate_entire_instruction( void );
 
 /*
  * This function returns the instruction cache granularity.
  */
-int rtems_get_inst_cache_line_size( void );
+int rtems_cache_get_instruction_line_size( void );
 
 /*
  * This function freezes the instruction cache.
  */
-void rtems_freeze_inst_cache( void );
+void rtems_cache_freeze_instruction( void );
 
 /*
  * This function unfreezes the instruction cache.
  */
-void rtems_unfreeze_inst_cache( void );
+void rtems_cache_unfreeze_instruction( void );
 
 /*
  * These functions enable/disable the instruction cache.
  */
-void rtems_enable_inst_cache( void );
-void rtems_disable_inst_cache( void );
+void rtems_cache_enable_instruction( void );
+void rtems_cache_disable_instruction( void );
 
 
 #ifdef __cplusplus
