@@ -4,8 +4,6 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@:
-
 C_FILES = vectors_init.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
