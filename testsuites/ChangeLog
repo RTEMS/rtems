@@ -1,3 +1,8 @@
+2001-05-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Remove RTEMS_PROG_CC_FOR_TARGET,
+	RTEMS_PROG_CXX_FOR_TARGET, RTEMS_CANONICALIZE_TOOLS.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
