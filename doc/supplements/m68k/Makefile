@@ -9,17 +9,17 @@
 PROJECT=m68k
 DISTRIBUTION_LEVEL=support
 
-include ../Make.config
+include ../../Make.config
 
-REPLACE=../tools/word-replace
+REPLACE=../../tools/word-replace
 
 all: html info ps
 
 dirs:
 	$(make-dirs)
 
-COMMON_FILES=../common/cpright.texi ../common/setup.texi \
-  ../common/timing.texi
+COMMON_FILES=../../common/cpright.texi ../../common/setup.texi \
+  ../../common/timing.texi
 
 FILES= $(PROJECT).texi \
   bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
@@ -47,9 +47,9 @@ intr.texi: intr.t MVME136_TIMES
 	${REPLACE} -p MVME136_TIMES intr.t
 	mv intr.t.fixed intr.texi
 
-timetbl.t: ../common/timetbl.t
+timetbl.t: ../../common/timetbl.t
 	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-            <../common/timetbl.t >timetbl.t
+            <../../common/timetbl.t >timetbl.t
 
 timetbl.texi: timetbl.t MVME136_TIMES
 	${REPLACE} -p MVME136_TIMES timetbl.t
@@ -59,10 +59,10 @@ timedata.texi: timedata.t MVME136_TIMES
 	${REPLACE} -p MVME136_TIMES timedata.t
 	mv timedata.t.fixed timedata.texi
 
-wksheets.t: ../common/wksheets.t
+wksheets.t: ../../common/wksheets.t
 	sed -e 's/WORKSHEETS_PREVIOUS_LINK/Processor Dependent Information Table CPU Dependent Information Table/' \
             -e 's/WORKSHEETS_NEXT_LINK/MC68020 Timing Data/' \
-            <../common/wksheets.t >wksheets.t
+            <../../common/wksheets.t >wksheets.t
 
 wksheets.texi: wksheets.t MVME136_TIMES
 	${REPLACE} -p MVME136_TIMES wksheets.t
