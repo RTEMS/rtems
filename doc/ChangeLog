@@ -1,3 +1,9 @@
+2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove AUTOMAKE_FILES.
+	Add ../scripts/setup.def ../COPYING to EXTRA_DIST.
+	Add rtems.html.in to EXTRA_DIST.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac, index.html.in: mips64orion port removed as mips port

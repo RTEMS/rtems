@@ -15,13 +15,11 @@ if USE_HTML
 html_DATA = index.html HELP.html
 endif
 
-AUTOMAKE_FILES = project.am main.am
-
-EXTRA_DIST = $(AUTOMAKE_FILES) HELP.html rtems_header.html.in \
-    rtems_footer.html.in
+EXTRA_DIST = HELP.html rtems_header.html.in rtems_footer.html.in
 
 EXTRA_DIST += common/cpright.texi common/setup.texi common/timemac.texi \
-    common/timetbl.t common/treedef.tex common/wksheets.t common/timing.t
+    common/timetbl.t common/treedef.tex common/wksheets.t common/timing.t \
+    common/rtems.texi.in
 
 html_imagesdir = $(htmldir)/images
 
@@ -38,3 +36,6 @@ EXTRA_DIST += $(HTML_IMAGES)
 
 CLEANFILES = common/rtems.texi
 DISTCLEANFILES = common/rtems.sed
+
+# HACK: This should not be here, but it makes "make distcheck" work.
+EXTRA_DIST += ../scripts/setup.def ../COPYING
