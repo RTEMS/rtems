@@ -1,3 +1,8 @@
+2004-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/Makefile.am, sh7045/Makefile.am, sh7750/Makefile.am: Don't 
+	include .../lib.am.
+
 2004-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ChangeLog: Merge-in sh7032/ChangeLog, sh7045/ChangeLog,
