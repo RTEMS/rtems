@@ -1,3 +1,7 @@
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/stdint.h: Use __PTRDIFF_TYPE for intptr_t.
+
 2005-01-23	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* sapi/src/fatal.c, score/src/interr.c: 

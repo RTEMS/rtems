@@ -159,8 +159,18 @@ typedef signed long intmax_t;
 typedef unsigned long uintmax_t;
 #endif
 
+/*
+ * GCC doesn't provide an propriate macro for [u]intptr_t
+ * For now, use __PTRDIFF_TYPE__
+ */
+#if defined(__PTRDIFF_TYPE__)
+typedef signed __PTRDIFF_TYPE__ intptr_t;
+typedef unsigned __PTRDIFF_TYPE__ uintptr_t;
+#else
+/* Fallback to hardcoded values, valid on cpu's with 32bit int/32bit void* */
 typedef signed long intptr_t;
 typedef unsigned long uintptr_t;
+#endif
 
 /* Limits of Specified-Width Integer Types */
 
