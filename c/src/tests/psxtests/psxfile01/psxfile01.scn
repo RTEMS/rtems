@@ -8,7 +8,7 @@
 ***************       End of Dump        ***************
 stat of /dev/console
 ....st_dev     (0x0:0x0)
-....st_ino     3
+....st_ino     3  may vary by small amount
 ....mode  = 00020771
 ....nlink = 1
 ....uid = 0
@@ -52,8 +52,9 @@ mknod /tmp/joel
 
 (10)the first write!!!
 
-stat( /tmp/joel ) returned     st_dev     (0x0:0x0)
-....st_ino     10
+stat( /tmp/joel ) returned
+....st_dev     (0x0:0x0)
+....st_ino     10  may vary by small amount
 ....mode  = 00100700
 ....nlink = 1
 ....uid = 0
@@ -81,8 +82,9 @@ mknod /tmp/joel
 (513)the first write!!!
 
 (139743)
-stat( /tmp/joel ) returned     st_dev     (0x0:0x0)
-....st_ino     11
+stat( /tmp/joel ) returned
+....st_dev     (0x0:0x0)
+....st_ino     11  may vary by small amount
 ....mode  = 00100700
 ....nlink = 1
 ....uid = 0
@@ -93,7 +95,7 @@ stat( /tmp/joel ) returned     st_dev     (0x0:0x0)
 stat of /tmp/j
 stat(/tmp/j) returned -1 (errno=2)
 ....st_dev     (0x0:0x0)
-....st_ino     3
+....st_ino     3  may vary by small amount
 ....mode  = 00020771
 ....nlink = 1
 ....uid = 0
@@ -109,7 +111,7 @@ fprintf to /tmp/j
 (4) 26 characters written to the file
 (5) 26 characters written to the file
 ....st_dev     (0x0:0x0)
-....st_ino     12
+....st_ino     12  may vary by small amount
 ....mode  = 00100660
 ....nlink = 1
 ....uid = 0
@@ -123,7 +125,7 @@ This is call 3 to fprintf
 This is call 4 to fprintf
 This is call 5 to fprintf
 ....st_dev     (0x0:0x0)
-....st_ino     12
+....st_ino     12  may vary by small amount
 ....mode  = 00100660
 ....nlink = 1
 ....uid = 0
@@ -149,7 +151,7 @@ This is call 5 to fprintf
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 40
 ....st_dev     (0x0:0x0)
-....st_ino     12
+....st_ino     12  may vary by small amount
 ....mode  = 00100660
 ....nlink = 1
 ....uid = 0

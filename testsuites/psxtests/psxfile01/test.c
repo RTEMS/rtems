@@ -77,7 +77,8 @@ void dump_statbuf( struct stat *buf )
   rtems_filesystem_split_dev_t( buf->st_rdev, major2, minor2 );
 
   printf( "....st_dev     (0x%x:0x%x)\n", major1, minor1 );
-  printf( "....st_ino     %x\n", buf->st_ino );
+  printf( "....st_ino     %x  may vary by small amount\n",
+      (unsigned int) buf->st_ino );
   printf( "....mode  = %08o\n", buf->st_mode );
   printf( "....nlink = %d\n", buf->st_nlink );
 
@@ -112,6 +113,7 @@ void stat_a_file(
   if ( status == -1 ) {
     printf( ": %s\n", strerror( errno ) );
   } else {
+    puts("");
     dump_statbuf( &statbuf );
   }
 
@@ -133,7 +135,7 @@ int main(
 {
   int               status;
   int               max_size;
-  int               fd, fd1;
+  int               fd;
   int               i;
   struct stat       buf;
   char              buffer[128];
