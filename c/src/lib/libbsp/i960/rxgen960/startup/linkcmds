@@ -25,7 +25,7 @@ SECTIONS
 {
   prcb :
     {
-      rom_ibr.o
+      INPUT(rom_ibr.o)
     } > config
     
     /* Only monitor start point and fault handler
