@@ -93,8 +93,20 @@ void _CPU_Context_Initialize(
    *  time (7 July 1997), this restructuring is not being done.
    */
 
-  /*if ( is_fp ) */
+  /* Till Straumann: For deferred FPContext save/restore, make sure integer
+   *                 tasks have no FPU access in order to catch violations.
+   *                 Otherwise, the FP registers may be corrupted.
+   *				 Since we set the_contex->msr using our current MSR,
+   *				 we must make sure MSR_FP is off if (!is_fp)...
+   */
+#if defined(CPU_USE_DEFERRED_FP_SWITCH) && (CPU_USE_DEFERRED_FP_SWITCH==TRUE)
+  if ( is_fp )
+#endif
     the_context->msr |= PPC_MSR_FP;
+#if defined(CPU_USE_DEFERRED_FP_SWITCH) && (CPU_USE_DEFERRED_FP_SWITCH==TRUE)
+  else
+	the_context->msr &= ~PPC_MSR_FP;
+#endif
 
   the_context->pc = (unsigned32)entry_point;
 }
