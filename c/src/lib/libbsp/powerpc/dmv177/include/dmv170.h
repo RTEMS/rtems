@@ -253,6 +253,7 @@ extern "C" {
 
 void SCV64_Generate_DUART_Interrupts();
 rtems_unsigned32 SCV64_Get_Interrupt();
+rtems_unsigned32 SCV64_Get_Interrupt_Enable();
 
 /*
  *  css_iface.c
