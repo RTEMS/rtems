@@ -1,5 +1,11 @@
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/env-rtemsbsp.m4: Remove RTEMS_CHECK_CUSTOM_BSP.
+	* aclocal/env-rtemscpu.m4: Remove RTEMS_CHECK_CUSTOM_BSP.
+	* aclocal/check-bsps.m4: Remove.
+
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Remove *_OBJS, use LIBS+= instead.
 	* configure.ac: Require autoconf >= 2.54, automake-1.7.2.
 

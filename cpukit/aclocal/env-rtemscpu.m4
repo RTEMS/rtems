@@ -29,6 +29,5 @@ if test x"$multilib" = x"yes"; then
   libdir="${libdir}\$(MULTISUBDIR)"
 else
   RTEMS_ENV_RTEMSBSP
-  RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 fi
 ])
