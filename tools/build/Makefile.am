@@ -18,8 +18,7 @@ binpatch_SOURCES = binpatch.c
 bin_SCRIPTS=\
 install-if-change \
 lock-directory \
-unlock-directory \
-rcs-clean 
+unlock-directory
 
 noinst_SCRIPTS = search-id.sh
 

@@ -24,6 +24,5 @@ AC_OUTPUT(
 Makefile
 install-if-change
 lock-directory
-rcs-clean
 unlock-directory
 )

@@ -86,15 +86,14 @@ packhex_SOURCES = packhex.c
 unhex_SOURCES = unhex.c
 binpatch_SOURCES = binpatch.c
 
-bin_SCRIPTS =  install-if-change lock-directory unlock-directory rcs-clean 
+bin_SCRIPTS =  install-if-change lock-directory unlock-directory
 
 
 noinst_SCRIPTS = search-id.sh
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../mkinstalldirs
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES =  install-if-change lock-directory rcs-clean \
-unlock-directory
+CONFIG_CLEAN_FILES =  install-if-change lock-directory unlock-directory
 bin_PROGRAMS =  cklength$(EXEEXT) eolstrip$(EXEEXT) packhex$(EXEEXT) \
 unhex$(EXEEXT)
 noinst_PROGRAMS =  binpatch$(EXEEXT)
@@ -133,7 +132,7 @@ CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  README ./stamp-h.in Makefile.am Makefile.in aclocal.m4 \
 config.h.in configure configure.in install-if-change.in \
-lock-directory.in rcs-clean.in unlock-directory.in
+lock-directory.in unlock-directory.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -193,8 +192,6 @@ maintainer-clean-hdr:
 install-if-change: $(top_builddir)/config.status install-if-change.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 lock-directory: $(top_builddir)/config.status lock-directory.in
-	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
-rcs-clean: $(top_builddir)/config.status rcs-clean.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 unlock-directory: $(top_builddir)/config.status unlock-directory.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
