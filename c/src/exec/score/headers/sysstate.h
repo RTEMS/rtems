@@ -33,6 +33,7 @@ typedef enum {
   SYSTEM_STATE_BEFORE_MULTITASKING,     /* end of 1st -> beginning of 2nd */
   SYSTEM_STATE_BEGIN_MULTITASKING,      /* just before multitasking starts */
   SYSTEM_STATE_UP,                      /* normal operation */
+  SYSTEM_STATE_SHUTDOWN,                /* shutdown */
   SYSTEM_STATE_FAILED                   /* fatal error occurred */
 } System_state_Codes;
 
