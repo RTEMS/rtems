@@ -1,3 +1,8 @@
+2002-03-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpuModel.h: PR 146. 
+	Adding guards. Remove unnecessary headers.
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* i386/displayCpu.c: Include rtems/bspIo.h instead of bspIo.h.

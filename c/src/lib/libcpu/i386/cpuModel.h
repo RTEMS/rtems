@@ -13,14 +13,14 @@
  *  $Id$
  */
 
+#ifndef libcpu_cpuModel_h
+#define libcpu_cpuModel_h
+
 /*
  * Tell us the machine setup..
  */
-#include <stdio.h>
-#include <libcpu/cpu.h>
-#include <string.h>
 
-extern char hard_math;	/* flotting point coprocessor present indicator */
+extern char hard_math;	/* floating point coprocessor present indicator */
 extern char x86;	/* type of cpu (3 = 386, 4 =486, ...) */
 extern char x86_model;
 extern char x86_mask;
@@ -30,3 +30,5 @@ extern int have_cpuid;
 extern unsigned char Cx86_step; /* cyrix processor identification */
 
 extern void printCpuInfo(); /* Display this information on console in ascii form */
+
+#endif
