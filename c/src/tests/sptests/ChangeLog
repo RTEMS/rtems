@@ -1,3 +1,7 @@
+2003-05-29	Joel Sherrill <joel@OARcorp.com>
+
+	* sp27/init.c, sp29/init.c, spsize/size.c: Removed warnings.
+
 2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove CC_CFLAGS_DEBUG_V.
