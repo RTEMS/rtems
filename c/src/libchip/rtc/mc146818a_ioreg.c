@@ -19,6 +19,11 @@
 #include <rtems.h>
 #include <bsp.h>
 
+/*
+ *  At this point, not all CPUs or BSPs have defined in/out port routines.
+ */
+#if defined(__i386__) || defined(__PPC__)
+#if defined(inport_byte)
 unsigned32 mc146818a_get_register(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum
@@ -43,3 +48,5 @@ void  mc146818a_set_register(
   outport_byte( ulCtrlPort, ucRegNum );
   outport_byte( ulCtrlPort+1, (unsigned8)ucData );
 }
+#endif
+#endif

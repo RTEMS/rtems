@@ -1,3 +1,9 @@
+2004-11-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 693/misc
+	* rtc/mc146818a_ioreg.c: Disable unless on a target with in/outport
+	routines.
+
 2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
 
 	* network/dec21140.c: Cleanup a bit and remove message about not
