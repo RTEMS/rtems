@@ -1,3 +1,10 @@
+2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+  
+	* aclocal/*: Replace with contents of macros/*.m4
+	* macros/: Remove.
+	* aclocal/ar-s.m4 aclocal/tool-prefix.m4: Remove.
+	* Makefile.am: Reflect changes to aclocal/ and macros/.
+
 2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: New, Cygnus/GNU style configuration.

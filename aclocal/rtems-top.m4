@@ -15,16 +15,36 @@ AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 ENDIF=endif
 AC_SUBST(ENDIF)
 
-## HACK to destinguish between using GNU and RTEMS canonicalization
-AM_CONDITIONAL(RTEMS_CANONICALIZATION,test x=x)
-
+# with_target_subdir
 AC_ARG_WITH(target-subdir,
 [  --with-target-subdir=DIR],
-TARGET_SUBDIR="$withval",
-TARGET_SUBDIR=".")
+with_target_subdir="$withval",
+with_target_subdir=".")
 
 RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
+
+if test "$with_target_subdir" = "." ; then
+# Native
+PROJECT_TOPdir=${RTEMS_TOPdir}/'$(top_builddir)'
+else
+# Cross
+changequote(, )dnl
+dots=`echo $with_target_subdir|\
+sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
+changequote([, ])dnl
+PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
+fi
+AC_SUBST(PROJECT_TOPdir)
+
+if test "$with_target_subdir" = "." ; then
+# Native
+PROJECT_ROOT=${RTEMS_TOPdir}/'$(top_builddir)';
+else
+# Cross
+PROJECT_ROOT=${RTEMS_TOPdir}/'$(top_builddir)'
+fi
+AC_SUBST(PROJECT_ROOT)
 
 dnl Determine RTEMS Version string from the VERSION file
 dnl Hopefully, Joel never changes its format ;-

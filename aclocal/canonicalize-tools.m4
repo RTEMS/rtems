@@ -3,17 +3,16 @@ dnl $Id$
 dnl
 dnl Set target tools
 dnl
-dnl 98/06/23 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
-dnl		fixing cache/environment variable handling
-dnl		adding checks for cygwin/egcs '\\'-bug
-dnl		adding checks for ranlib/ar -s problem 
-dnl
-dnl 98/02/12 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
-dnl
+
+AC_DEFUN(RTEMS_HOST_AR,
+[AC_CHECK_TOOL(AR,ar,no)])
+
+AC_DEFUN(RTEMS_HOST_RANLIB,
+[AC_CHECK_TOOL(RANLIB,ranlib,:)])
 
 AC_DEFUN(RTEMS_GCC_PRINT,
 [
-    $1=`$CC_FOR_TARGET --print-prog-name=$2`
+    $1=`$CC --print-prog-name=$2`
 ])
 
 AC_DEFUN(RTEMS_PATH_TOOL,
@@ -28,7 +27,7 @@ if test -n "$ac_cv_path_$1"; then
 else
   dnl the cache was not set
   if test -z "[$]$1" ; then
-    if test "$rtems_cv_prog_gcc" = "yes"; then
+    if test "$ac_cv_prog_gcc" = "yes"; then
       # We are using gcc, ask it about its tool
       # NOTE: Necessary if gcc was configured to use the target's 
       # native tools or uses prefixes for gnutools (e.g. gas instead of as)
@@ -61,29 +60,16 @@ AC_DEFUN(RTEMS_CANONICALIZE_TOOLS,
 [AC_REQUIRE([RTEMS_PROG_CC])dnl
 
 dnl FIXME: What shall be done if these tools are not available?
-  RTEMS_PATH_TOOL(AR_FOR_TARGET,ar,no)
-  RTEMS_PATH_TOOL(AS_FOR_TARGET,as,no)
-  RTEMS_PATH_TOOL(LD_FOR_TARGET,ld,no)
-  RTEMS_PATH_TOOL(NM_FOR_TARGET,nm,no)
+  RTEMS_HOST_AR(AR,ar,no)
+  RTEMS_PATH_TOOL(AS,as,no)
+  RTEMS_PATH_TOOL(LD,ld,no)
+  RTEMS_PATH_TOOL(NM,nm,no)
 
 dnl special treatment of ranlib
-  RTEMS_PATH_TOOL(RANLIB_FOR_TARGET,ranlib,no)
-  if test "$RANLIB_FOR_TARGET" = "no"; then
-    # ranlib wasn't found; check if ar -s is available
-    RTEMS_AR_FOR_TARGET_S
-    if test $rtems_cv_AR_FOR_TARGET_S = "yes" ; then
-      dnl override RANLIB_FOR_TARGET's cache
-      ac_cv_path_RANLIB_FOR_TARGET="$AR_FOR_TARGET -s"
-      RANLIB_FOR_TARGET=$ac_cv_path_RANLIB_FOR_TARGET
-    else
-      AC_MSG_ERROR([***]
-        [Can't figure out how to build a library index]
-	[Neither ranlib nor ar -s seem to be available] )
-    fi
-  fi
+  RTEMS_HOST_RANLIB
 
 dnl NOTE: These may not be available if not using gnutools
-  RTEMS_PATH_TOOL(OBJCOPY_FOR_TARGET,objcopy,no)
-  RTEMS_PATH_TOOL(SIZE_FOR_TARGET,size,no)
-  RTEMS_PATH_TOOL(STRIP_FOR_TARGET,strip,no)
+  AC_CHECK_TOOL(OBJCOPY,objcopy,no)
+  AC_CHECK_TOOL(SIZE,size,no)
+  AC_CHECK_TOOL(STRIP,strip,:)
 ])

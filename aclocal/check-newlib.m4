@@ -8,7 +8,6 @@ AC_CACHE_CHECK([for newlib],
   rtems_cv_use_newlib,
   [
     rtems_save_CC=$CC
-    CC=$CC_FOR_TARGET
 
 dnl some versions of newlib provide not_required_by_rtems
     AC_TRY_LINK(
