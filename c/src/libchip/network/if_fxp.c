@@ -442,7 +442,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		return 0;
 	}
 
-	bzero(sc, sizeof(*sc));
+	memset(sc, 0, sizeof(*sc));
 #ifdef NOTUSED
 	sc->dev = dev;
 	callout_handle_init(&sc->stat_ch);
@@ -617,7 +617,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	if (sc->cbl_base == NULL)
 		goto failmem;
 	else 
-	        bzero(sc->cbl_base,sizeof(struct fxp_cb_tx) * FXP_NTXCB);
+	        memset(sc->cbl_base, 0, sizeof(struct fxp_cb_tx) * FXP_NTXCB);
 
 	sc->fxp_stats = malloc(sizeof(struct fxp_stats), M_DEVBUF,
 	    M_NOWAIT);
@@ -625,7 +625,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	if (sc->fxp_stats == NULL)
 		goto failmem;
 	else
-	        bzero(sc->fxp_stats,sizeof(struct fxp_stats));
+	        memset(sc->fxp_stats, 0, sizeof(struct fxp_stats));
 
 	sc->mcsp = malloc(sizeof(struct fxp_cb_mcs), M_DEVBUF, M_NOWAIT);
 	DBGLVL_PRINTK(3,"fxp_attach: sc->mcsp = 0x%x\n",sc->mcsp);
@@ -1720,12 +1720,12 @@ rtems_task_wake_after(100);
 	DBGLVL_PRINTK(5,"fxp_init: cbp = 0x%x\n",cbp);
 
 	/*
-	 * This bcopy is kind of disgusting, but there are a bunch of must be
+	 * This memcpy is kind of disgusting, but there are a bunch of must be
 	 * zero and must be one bits in this structure and this is the easiest
 	 * way to initialize them all to proper values.
 	 */
-	bcopy(fxp_cb_config_template,
-		(void *)(u_int32_t *)(volatile void *)&cbp->cb_status,
+	memcpy(	(void *)(u_int32_t *)(volatile void *)&cbp->cb_status,
+		fxp_cb_config_template,
 		sizeof(fxp_cb_config_template));
 
 	cbp->cb_status =	0;
@@ -1830,8 +1830,8 @@ rtems_task_wake_after(100);
 	cb_ias->cb_status = 0;
 	cb_ias->cb_command = FXP_CB_COMMAND_IAS | FXP_CB_COMMAND_EL;
 	cb_ias->link_addr = -1;
-	bcopy(sc->arpcom.ac_enaddr,
-	    (void *)(u_int32_t *)(volatile void *)cb_ias->macaddr,
+	memcpy((void *)(u_int32_t *)(volatile void *)cb_ias->macaddr,
+	    sc->arpcom.ac_enaddr,
 	    sizeof(sc->arpcom.ac_enaddr));
 
 	/*
@@ -1849,7 +1849,7 @@ rtems_task_wake_after(100);
 
 	DBGLVL_PRINTK(5,"fxp_init: initialize TxCB list\n");
 	txp = sc->cbl_base;
-	bzero(txp, sizeof(struct fxp_cb_tx) * FXP_NTXCB);
+	memset(txp, 0, sizeof(struct fxp_cb_tx) * FXP_NTXCB);
 	for (i = 0; i < FXP_NTXCB; i++) {
 		txp[i].cb_status = FXP_CB_STATUS_C | FXP_CB_STATUS_OK;
 		txp[i].cb_command = FXP_CB_COMMAND_NOP;
@@ -2272,9 +2272,9 @@ fxp_mc_setup(struct fxp_softc *sc)
 				nmcasts = 0;
 				break;
 			}
-			bcopy(LLADDR((struct sockaddr_dl *)ifma->ifma_addr),
-			    (void *)(uintptr_t)(volatile void *)
-				&sc->mcsp->mc_addr[nmcasts][0], 6);
+			memcpy((void *)(uintptr_t)(volatile void *)
+				&sc->mcsp->mc_addr[nmcasts][0],
+				LLADDR((struct sockaddr_dl *)ifma->ifma_addr), 6);
 			nmcasts++;
 		}
 	}
