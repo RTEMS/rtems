@@ -1,5 +1,9 @@
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Remove CFLAGS_DEBUG_OPTIMIZE_V (Unused).
+
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/sysv-ipc.m4: Adaptation to autoconf-2.5x.
 	* aclocal/check-newlib.m4: Sync with ../aclocal/check-newlib.m4.
 

@@ -57,11 +57,6 @@ CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) \
 CFLAGS   = @CFLAGS@ $(CPU_CFLAGS) $(XCFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
-## FIXME: This doesn't seem to be correct
-# when debugging, optimize flag: typically empty
-# some compilers do allow optimization with their "-g"
-CFLAGS_DEBUG_OPTIMIZE_V=-g
-
 # profile flag; use gprof(1)
 CFLAGS_PROFILE_V=-pg
 
