@@ -1,3 +1,5 @@
+#include <rtems.h>
+
 #if !defined(RTEMS_UNIX)
 /*
  *  RTEMS gettimeofday Implementation
@@ -13,8 +15,6 @@
  *
  *  $Id$
  */
-
-#include <rtems.h>
 
 #ifdef RTEMS_NEWLIB
 #include <sys/reent.h>
