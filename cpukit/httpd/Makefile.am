@@ -13,8 +13,8 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 H_FILES = ej.h ejIntrn.h emfdb.h md5.h uemf.h um.h webs.h wsIntrn.h
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 #
 # Add local stuff here using +=
@@ -58,4 +58,4 @@ EXTRA_DIST = asp.c balloc.c default.c ej.h ejlex.c ejparse.c form.c h.c \
     sock.c socket.c sym.c uemf.c uemf.h um.h url.c value.c wbase64.c webcomp.c \
     webmain.c webpage.c webrom.c webs.c webs.h websuemf.c wsIntrn.h
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am

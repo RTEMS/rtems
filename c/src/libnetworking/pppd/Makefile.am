@@ -10,8 +10,8 @@ C_FILES = auth.c ccp.c chap.c chap_ms.c chat.c demand.c fsm.c ipcp.c lcp.c \
     rtemspppd.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 #
 # Add local stuff here using +=
@@ -39,4 +39,4 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am

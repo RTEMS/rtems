@@ -10,8 +10,8 @@ C_FILES = pty.c telnetd.c icmds.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -39,4 +39,4 @@ endif
 
 EXTRA_DIST = README pty.c telnetd.c pty.h icmds.c telnetd.h
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am

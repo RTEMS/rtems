@@ -8,8 +8,8 @@ LIB = $(ARCH)/$(LIBNAME)
 C_FILES = ftpd.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 #
 # Add local stuff here using +=
@@ -43,4 +43,4 @@ $(PROJECT_INCLUDE)/rtems:
 $(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am
