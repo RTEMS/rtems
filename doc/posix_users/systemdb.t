@@ -22,7 +22,7 @@ The directives provided by the system databases manager are:
 @item @code{getgrnam_r} - Reentrant Get Group File Entry for Name
 @item @code{getpwuid} - Get Password File Entry for UID
 @item @code{getpwuid_r} - Reentrant Get Password File Entry for UID
-@item @code{getpwnam} Get Password File Entry for Name
+@item @code{getpwnam} - Get Password File Entry for Name
 @item @code{getpwnam_r} - Reentrant Get Password File Entry for Name
 @end itemize
 
