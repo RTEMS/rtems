@@ -26,9 +26,48 @@ remained with the "M" meaning Military.
 @section What is RTEMS?
 
 RTEMS is a real-time executive which provides a high performance
-environment for embedded military applications including the
-following features:
+environment for embedded military applications including many
+features. The following is just a short list of the features
+avilable in RTEMS.  If you are interested in something that
+is not on this list, please contact the RTEMS Team.  Features
+are being added continuously.
 
+@itemize @bullet
+
+@item Standards Compliant
+@itemize @bullet
+@item POSIX 1003.1b API including threads
+@item RTEID/ORKID based Classic API
+@end itemize
+
+@item TCP/IP Stack
+@itemize @bullet
+@item high performance port of FreeBSD TCP/IP stack
+@item UDP, TCP
+@item ICMP, DHCP, RARP
+@item TFTP
+@item RPC
+@item FTPD
+@item HTTPD
+@item CORBA
+@end itemize
+
+@item Debugging
+@itemize @bullet
+@item GNU debugger (gdb)
+@item DDD GUI interface to GDB
+@item thread aware
+@item debug over Ethernet 
+@item debug over Serial Port
+@end itemize
+
+@item Filesystem Support
+@itemize @bullet
+@item In-Memory Filesystem (IMFS)
+@item TFTP Client Filesystem
+@end itemize
+
+@item Basic Kernel Features
 @itemize @bullet
 @item multitasking capabilities
 @item homogeneous and heterogeneous multiprocessor systems
@@ -41,7 +80,8 @@ following features:
 @item high level of user configurability
 @end itemize
 
-XXX This feature list is weak these days. :)
+@end itemize
+
 
 @section What standards does RTEMS support?
 
@@ -87,7 +127,9 @@ or an operating system.
 @section Where/why was it developed?
 
 RTEMS was developed by On-Line Applications Research Corporation (OAR)
-for the U.S. Army Missile Command.  The original goal of RTEMS was
+for the U.S. Army Missile Command prior to that organizations merger
+with the Aviation Command that resulted in the new command, U. S. Army
+Aviation and Missile command (AMCOM).  The original goal of RTEMS was
 to provide a portable, standards-based real-time executive for which
 source code was available and royalties were paid.
 
@@ -115,8 +157,8 @@ training, and custom development.
 @section Are there any mailing lists?
 
 The primary RTEMS mailing list is @code{rtems-list@@oarcorp.com}.  You 
-can subscribe by sending a message with the word @b{subscribe} as the 
-body to @code{rtems-list-request@@oarcorp.com}.
+can subscribe by sending a message with the word @b{subscribe rtems-list}
+as the body to @code{majordomo@@oarcorp.com}.
 
 @section Are there any license restrictions?
 
