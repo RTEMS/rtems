@@ -10,7 +10,7 @@ CPU_PIECES = clock timer console tty_drv vectors ictrl
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(wildcard ../../../../libcpu/powerpc/old_exception_processing/$(ARCH)/*.rel) \
+    ../@exceptions@/$(ARCH)/rtems-cpu.rel \
     $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/ppc403/$(piece)/$(ARCH)/$(piece).rel)
 
 LIB = $(ARCH)/libbsp.a

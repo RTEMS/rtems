@@ -1,3 +1,14 @@
+2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove . from SUBDIRS, remove duplicate bsp_specs
+	rules, add @exceptions@ to SUBDIRS.
+	* configure.ac: Add RTEMS_BSPOPTS_*(PPC_USE_SPRG),
+	RTEMS_BSPOPTS_*(PPC_VECTOR_FILE_BASE),
+	RTEMS_PPC_EXCEPTIONS([old]), autoupdate to autoconf 2.52.
+	* include/Makefile.am: Convert PREINSTALL_FILES to
+	TMPINSTALL_FILES, include force-preinstall.am.
+	* wrapup/Makefile.am: Apply @exceptions@.
+
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bspopts.h.in: Automatically generated file that should not
