@@ -4,11 +4,10 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@:@srcdir@/../../shared/io
-
 PGM = $(ARCH)/console.rel
 
-RTEMS_H_FILES = keyboard.h kd.h serial_mouse.h ps2_drv.h fb_vga.h
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = keyboard.h kd.h serial_mouse.h ps2_drv.h fb_vga.h
 
 C_FILES = console.c inch.c outch.c defkeymap.c fb_vga.c keyboard.c \
     mouse_parser.c pc_keyb.c ps2_mouse.c serial_mouse.c vgainit.c vt.c
@@ -21,7 +20,7 @@ include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) \
-    $(RTEMS_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/%.h)
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 #
 # (OPTIONAL) Add local stuff here using +=

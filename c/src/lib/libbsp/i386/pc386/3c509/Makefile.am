@@ -9,7 +9,7 @@ PGM = $(ARCH)/3c509.rel
 C_FILES = 3c509.c elink.c
 X3c509_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = 3c509.h elink.h
+noinst_HEADERS = 3c509.h elink.h
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am

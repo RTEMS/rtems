@@ -30,6 +30,7 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 AC_SUBST(RTEMS_BSP)
 
+AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
