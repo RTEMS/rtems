@@ -1,3 +1,11 @@
+2002-03-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 149
+	* src/i386/any/Makefile.am: s/$(SED)/sed/.
+	* src/m68k/any/Makefile.am: s/$(SED)/sed/.
+	* src/powerpc/new_exception_processing/Makefile.am: s/$(SED)/sed/.
+	(Reported by Till Straumann <strauman@SLAC.Stanford.EDU>)
+
 2002-02-01	Eric Valette <valette@crf.canon.fr>
 
 

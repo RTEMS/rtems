@@ -71,7 +71,7 @@ if RPCTOOLS
 	  -o m68k/any/tmpSvc.c remdeb.x; \
 	$(AWK) -f ./awk.svc THEPROG="remdeb.h" m68k/any/tmpSvc.c \
 	  > m68k/any/remdeb_svc.c; \
-	$(SED) -e 's/fprintf.*,/printf(/'  m68k/any/remdeb_svc.c > m68k/any/remdeb_svc.tmp; \
+	sed -e 's/fprintf.*,/printf(/'  m68k/any/remdeb_svc.c > m68k/any/remdeb_svc.tmp; \
 	mv m68k/any/remdeb_svc.tmp m68k/any/remdeb_svc.c; \
 	rm -f m68k/any/tmpSvc.c )
 endif
