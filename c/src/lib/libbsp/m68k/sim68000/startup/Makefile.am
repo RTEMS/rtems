@@ -29,7 +29,7 @@ project_lib_DATA = linkcmds
 
 all-local: $(PGM) $(TMPINSTALL_FILES)
 
-EXTRA_DIST = bspclean.c bspstart.c exit.c linkcmds setvec.c
+EXTRA_DIST = bspstart.c linkcmds
 
 TMPINSTALL_FILES =
 

@@ -13,8 +13,6 @@ SUBDIRS = . startup clock console timer wrapup
 
 nodist_include_HEADERS += $(top_srcdir)/../../shared/include/coverhd.h
 
-EXTRA_DIST = times
-
 S_FILES = start/start.S
 $(ARCH)/%$(LIB_VARIANT).$(OBJEXT): start/start.S $(ARCH)/$(dirstamp)
 	$(CCASCOMPILE) -DASM -o $@ -c $<
