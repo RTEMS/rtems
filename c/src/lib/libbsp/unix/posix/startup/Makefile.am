@@ -42,6 +42,9 @@ project_lib_DATA = ${ARCH}/libno-ctor$(LIB_VARIANT).a
 ${ARCH}/libno-ctor$(LIB_VARIANT).a: $(ARCH)/no-ctor.$(OBJEXT)
 	$(AR) -cvr $@ $<
 
+${ARCH}/rtems-ctor$(LIB_VARIANT).$(OBJEXT): rtems-ctor.cc $(ARCH)/$(dirstamp)
+	${CXXCOMPILE} -o $@ -c $<
+
 project_lib_DATA += ${ARCH}/rtems-ctor$(LIB_VARIANT).$(OBJEXT)
 endif
 

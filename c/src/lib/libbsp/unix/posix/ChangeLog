@@ -1,5 +1,10 @@
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* startup/Makefile.am: Add custom compilation rule for
+	rtems-ctor$(LIB_VARIANT).$(OBJEXT).
+
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* startup/Makefile.am: Misc cleanups and fixes.
 	* wrapup/Makefile.am: Misc cleanups and fixes.
 
