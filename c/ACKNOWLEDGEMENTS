@@ -75,6 +75,10 @@ The following persons/organizations have made contributions:
   Laboratory submitted the support for the Motorola MC68360 CPU
   including the `gen68360' BSP.
 
++ Dominique le Campion (Dominique.LECAMPION@enst-bretagne.fr), for
+  Telecom Bretagne and T.N.I. (Brest, France) submitted the BSP for
+  the Motorola MVME147 board (68030 CPU + 68881 FPU).
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
