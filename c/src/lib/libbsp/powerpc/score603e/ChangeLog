@@ -1,3 +1,8 @@
+2001-10-11	Joel Sherrill <joel@OARcorp.com>
+
+	* console/85c30.c, startup/bspstart.c: Fix references to delay() and
+	delay_in_bus_cycles() to add rtems_bsp_ prefix.
+
 2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Use 'TMPINSTALL_FILES ='.

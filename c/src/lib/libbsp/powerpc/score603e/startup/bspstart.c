@@ -193,7 +193,7 @@ void bsp_start( void )
   unsigned int  msr_value = 0x0000;
   volatile rtems_unsigned32 *ptr;
 
-  delay( 1000 );
+  rtems_bsp_delay( 1000 );
 
   /*
    *  Zero out lots of memory

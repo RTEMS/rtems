@@ -74,11 +74,11 @@ static unsigned char Read_85c30_register(
  
   *csr = register_number; 
 
-  delay_in_bus_cycles( 40 );
+  rtems_bsp_delay_in_bus_cycles( 40 );
 
   Data = *csr;
   
-  delay_in_bus_cycles( 40 );
+  rtems_bsp_delay_in_bus_cycles( 40 );
 
   return Data;
 }
@@ -96,11 +96,11 @@ static void  Write_85c30_register(
 {
   *csr = register_number;
 
-  delay_in_bus_cycles( 40 );
+  rtems_bsp_delay_in_bus_cycles( 40 );
 
   *csr = data;
 
-  delay_in_bus_cycles( 40 );
+  rtems_bsp_delay_in_bus_cycles( 40 );
 }
 
 
