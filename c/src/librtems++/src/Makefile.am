@@ -15,6 +15,7 @@ SRCS = $(CC_FILES)
 OBJS = $(CC_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 AM_CFLAGS += $(LIBC_DEFINES)
