@@ -79,7 +79,7 @@ TMPINSTALL_FILES += $(project_libdir)/librtemscpu$(LIB_VARIANT).a
 all-am: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
 
 install-data-hook: $(LIB)
-	@$(mkinstalldirs) $(DESTDIR)/$(libdir)
-	$(INSTALL_DATA) $(LIB) $(DESTDIR)/$(libdir)
+	@$(mkinstalldirs) $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(libdir)
 
 include $(top_srcdir)/automake/local.am

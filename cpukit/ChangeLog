@@ -1,3 +1,8 @@
+2003-03-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Remove '/' after $(DESTDIR) to work around
+	Cygwin mistreating paths.
+
 2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Reflect changes to project_libdir.
