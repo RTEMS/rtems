@@ -31,9 +31,9 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 ** idt_csu.S -- IDT stand alone startup code
 **
 **************************************************************************/
-#include <rtems/score/iregdef.h>
-#include <rtems/score/idtcpu.h>
-#include <rtems/score/idtmon.h>
+#include <iregdef.h>
+#include <idtcpu.h>
+#include <idtmon.h>
 
 
 .extern _fbss,4		  /* this is defined by the linker */
