@@ -205,8 +205,19 @@ AM_CONDITIONAL([LIBCHIP],[test "$RTEMS_BSP_FAMILY" != "posix"])
 # The bare bsp doesn't have libbsp.a
 # FIXME: We should use a feature based check, here
 AM_CONDITIONAL([HAS_LIBBSP],[test "$RTEMS_BSP_FAMILY" != "bare"])
-AM_CONDITIONAL([HAS_WRAPUP_LIBBSP],
-  [test -f $srcdir/lib/libbsp/$RTEMS_CPU/$RTEMS_BSP_FAMILY/wrapup/Makefile.am])
+
+# FIXME: HACK
+# Temporarily, we need to consider 3 cases:
+# 1. 4.7-style: lib/libbsp/<cpu>/<bsp>/libbsp.a w/o wrapup/Makefile.am
+# 2. powerpc: lib/libbsp/<cpu>/<bsp>/libbsp.a w/ wrapup/Makefile.am
+# 3. 4.6-style: lib/libbsp/<cpu>/<bsp>/wrapup/$(ARCH)/libbsp.a w/ wrapup/Makefile.am
+
+AS_IF([test -f $srcdir/lib/libbsp/$RTEMS_CPU/$RTEMS_BSP_FAMILY/wrapup/Makefile.am],
+  [AS_IF([grep ___libbsp_a $srcdir/lib/libbsp/$RTEMS_CPU/$RTEMS_BSP_FAMILY/wrapup/Makefile.am >/dev/null],
+    [HAS_WRAPUP_LIBBSP=no],
+    [HAS_WRAPUP_LIBBSP=yes])],
+  [HAS_WRAPUP_LIBBSP=no])
+AM_CONDITIONAL([HAS_WRAPUP_LIBBSP],[test $HAS_WRAPUP_LIBBSP = yes])
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
 
 AM_CONDITIONAL(RPCTOOLS, test "$rpctools" != "no")

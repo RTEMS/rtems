@@ -1,3 +1,8 @@
+2004-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add powerpc's <bsp>/wrapup/Makefile.am detection
+	hack.
+
 2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libnetworking/rtems_webserver/Makefile.am: Add PREINSTALL_DIRS.
