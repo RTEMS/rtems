@@ -100,7 +100,6 @@ package body TMTEST is
          16,
          RTEMS.DEFAULT_OPTIONS,
          TMTEST.QUEUE_ID,
-         MESSAGE_SIZE,
          STATUS
       );
 
