@@ -1,3 +1,7 @@
+2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
+
 2001-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* serial/Makefile.am, serial/mc68681.c, serial/ns16550.c,
