@@ -1,3 +1,10 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/no-dpmem.c, rtems/no-event.c, rtems/no-mp.c, rtems/no-msg.c,
+	rtems/no-part.c, rtems/no-region.c, rtems/no-rtmon.c, rtems/no-sem.c,
+	rtems/no-signal.c, rtems/no-timer.c, sapi/no-ext.c, sapi/no-io.c: URL
+	for license changed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
