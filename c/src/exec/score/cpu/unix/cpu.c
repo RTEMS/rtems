@@ -277,6 +277,15 @@ void _CPU_Initialize(
 )
 {
   /*
+   *  If something happened where the public Context_Control is not
+   *  at least as large as the private Context_Control_overlay, then
+   *  we are in trouble.
+   */
+
+  if ( sizeof(Context_Control_overlay) < sizeof(Context_Control) )
+    _CPU_Fatal_error(0x100 + 1);
+
+  /*
    *  The thread_dispatch argument is the address of the entry point
    *  for the routine called at the end of an ISR once it has been
    *  decided a context switch is necessary.  On some compilation
@@ -484,11 +493,11 @@ void _CPU_Context_Initialize(
    */
 
   if ( _new_level == 0 )
-      *_the_context = *(Context_Control *)
-                         &_CPU_Context_Default_with_ISRs_enabled;
+      *(Context_Control_overlay *)_the_context =
+                         _CPU_Context_Default_with_ISRs_enabled;
   else
-      *_the_context = *(Context_Control *)
-                         &_CPU_Context_Default_with_ISRs_disabled;
+      *(Context_Control_overlay *)_the_context = 
+                         _CPU_Context_Default_with_ISRs_disabled;
 
   addr = (unsigned32 *)_the_context;
 
