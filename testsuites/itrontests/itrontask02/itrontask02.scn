@@ -4,7 +4,7 @@ Init - cre_tsk - Non-Dormant Task
 NON-DORMANT - Sleep for 2 minutes
 
 *** Create Task Errors ***
-nit - cre_tsk - access violation ( id less than -4) - E_OACV
+Init - cre_tsk - access violation ( id less than -4) - E_OACV
 Init - cre_tsk - bad id (between 0 and -4) - E_ID
 Init - cre_tsk - cannot create TSK_SELF  - E_ID
 Init - cre_tsk - invalid id; id already exists  - E_OBJ
@@ -65,6 +65,7 @@ Init - rsm_tsk - access violation ( id less than -4) - E_OACV
 Init - rsm_tsk - bad id (between 0 and -4) - E_ID
 Init - rsm_tsk - cannot resume SELF - E_OBJ
 Init - rsm_tsk - task is DORMANT - E_OBJ
+Init - rsm_tsk - task is NON_DORMANT not suspended - E_OK
 Init - rsm_tsk - task does not exist - E_NOEXS
 
 *** Forcibly Resume Task Errors ***
@@ -73,5 +74,7 @@ Init - frsm_tsk - bad id (between 0 and -4) - E_ID
 Init - frsm_tsk - cannot forcibly resume SELF - E_OBJ
 Init - frsm_tsk - task is DORMANT - E_OBJ
 Init - frsm_tsk - task does not exist - E_NOEXS
+Init - frsm_tsk - task is NON_DORMANT not suspended - E_OK
 
 *** END OF ITRON TASK TEST 2 ***
+

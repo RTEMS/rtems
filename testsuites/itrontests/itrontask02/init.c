@@ -484,6 +484,10 @@ void ITRON_Init( void )
   status = rsm_tsk( DORMANT_TASK_ID );
   fatal_directive_status( status, E_OBJ, "rsm_tsk DORMANT");
 
+  puts( "Init - rsm_tsk - task is NON_DORMANT not suspended - E_OK" );
+  status = rsm_tsk( NON_DORMANT_TASK_ID );
+  fatal_directive_status( status, E_OK, "rsm_tsk NON_DORMANT");
+
   puts( "Init - rsm_tsk - task does not exist - E_NOEXS" );
   status = rsm_tsk( 5 );
   fatal_directive_status( status, E_NOEXS, "rms_tsk 5");
@@ -516,6 +520,10 @@ void ITRON_Init( void )
   puts( "Init - frsm_tsk - task does not exist - E_NOEXS" );
   status = frsm_tsk( 5 );
   fatal_directive_status( status, E_NOEXS, "frsm_tsk 5");
+
+  puts( "Init - frsm_tsk - task is NON_DORMANT not suspended - E_OK" );
+  status = frsm_tsk( NON_DORMANT_TASK_ID );
+  fatal_directive_status( status, E_OK, "frsm_tsk NON_DORMANT");
 
 #if (0)
   /* these errors can not be generated for frsm_tsk at this time */
@@ -564,6 +572,6 @@ XXXXX - FIX ME
   fatal_directive_status( status, EN_RPAR, "");
 #endif
 
-  puts( "*** ITRON TASK TEST 2 ***" );
+  puts( "*** END OF ITRON TASK TEST 2 ***" );
   exit( 0 );
 }
