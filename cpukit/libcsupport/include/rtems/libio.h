@@ -105,7 +105,7 @@ int __rtems_isatty(int _fd);
 typedef struct {
     int (*open)(const char  *pathname, unsigned32 flag, unsigned32 mode);
     int (*close)(int  fd);
-    int (*read)(int fd, void *buffer);
+    int (*read)(int fd, void *buffer, unsigned32 count);
     int (*write)(int fd, const void *buffer, unsigned32 count);
     int (*ioctl)(int fd, unsigned32  command, void *buffer);
     int (*lseek)(int fd, rtems_libio_offset_t offset, int whence);
