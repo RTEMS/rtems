@@ -41,7 +41,7 @@ SYM (start):
 	! copy the vector table from rom to ram
 	mov.l   vects_k,r0   	! vectab
 	mov	#0,r1		! address of boot vector table
-	mov     #0,r2		| number of bytes copied
+	mov     #0,r2		! number of bytes copied
 	mov.w   vects_size,r3   ! size of entries in vectab
 1:
 	mov.l   @r1+,r4
