@@ -70,7 +70,7 @@
 #include <netinet/tcp_debug.h>
 
 #ifdef TCPDEBUG
-static int	tcpconsdebug = 0;
+static int	tcpconsdebug = 0; /* set to 1 to enable prints */
 #endif
 
 static struct tcp_debug tcp_debug[TCP_NDEBUG];
