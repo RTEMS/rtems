@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <ctype.h>
 
 #include <rtems/rtmonuse.h>
 
@@ -130,7 +131,10 @@ void Period_usage_Dump( void )
   Period_usage_t         *the_usage;
   Rate_monotonic_Control *the_period;
   unsigned32              u32_name;
+  char                   *cname;
   char                    name[5];
+  unsigned32              api_index;
+  Objects_Information    *information;
  
   if ( !Period_usage_Information ) {
     printf( "Period statistics library is not initialized\n" );
@@ -154,16 +158,38 @@ void Period_usage_Dump( void )
     the_period =
       (Rate_monotonic_Control *)_Rate_monotonic_Information.local_table[ i ];
 
-    if ( the_period->owner )
-      u32_name = *(unsigned32 *)the_period->owner->Object.name;
-    else
-      u32_name = rtems_build_name(' ', ' ', ' ', ' ');
-
-    name[ 0 ] = (u32_name >> 24) & 0xff;
-    name[ 1 ] = (u32_name >> 16) & 0xff;
-    name[ 2 ] = (u32_name >>  8) & 0xff;
-    name[ 3 ] = (u32_name >>  0) & 0xff;
+    name[ 0 ] = ' ';
+    name[ 1 ] = ' ';
+    name[ 2 ] = ' ';
+    name[ 3 ] = ' ';
     name[ 4 ] = '\0';
+
+    if ( the_period->owner ) {
+      api_index = _Objects_Get_API(the_period->owner->Object.id);
+      information = _Objects_Information_table[ api_index ][ 1 ];
+
+      if ( information->is_string ) {
+        cname = the_period->owner->Object.name;
+        name[ 0 ] = cname[0];
+        name[ 1 ] = cname[1];
+        name[ 2 ] = cname[2];
+        name[ 3 ] = cname[3];
+        name[ 4 ] = '\0';
+      } else {
+        u32_name = (unsigned32)the_period->owner->Object.name;
+        name[ 0 ] = (u32_name >> 24) & 0xff;
+        name[ 1 ] = (u32_name >> 16) & 0xff;
+        name[ 2 ] = (u32_name >>  8) & 0xff;
+        name[ 3 ] = (u32_name >>  0) & 0xff;
+        name[ 4 ] = '\0';
+      }
+    }
+
+    if ( !isprint(name[0]) ) name[0] = '*';
+    if ( !isprint(name[1]) ) name[1] = '*';
+    if ( !isprint(name[2]) ) name[2] = '*';
+    if ( !isprint(name[3]) ) name[3] = '*';
+
 
     printf(
       "0x%08x  %4s   %6d   %3d       %d/%d/%5.2f    %d/%d/%3.2f\n",
