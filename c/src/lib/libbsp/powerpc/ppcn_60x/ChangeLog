@@ -1,3 +1,8 @@
+2005-03-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h, pci/pci.c, startup/bspstart.c: Make PCI initialize
+	function part of the unified PCI API as pci_initialize().
+
 2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove argument from RTEMS_PPC_EXCEPTIONS.

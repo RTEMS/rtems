@@ -314,7 +314,7 @@ extern unsigned long ulCpuBusClock;
 /*
  * PCI initialisation
  */
-void InitializePCI(void);
+void pci_initialize(void);
 
 /*
  * VME initiaisation

@@ -248,7 +248,7 @@ rtems_status_code PCIConfigRead32(
 /*
  * This routine determines the maximum bus number in the system
  */
-void InitializePCI()
+void pci_initialize()
 {
 	uint8_t   ucSlotNumber, ucFnNumber, ucNumFuncs;
 	uint8_t   ucHeader;

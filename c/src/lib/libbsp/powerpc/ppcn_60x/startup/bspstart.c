@@ -116,7 +116,7 @@ void bsp_pretasking_hook(void)
 	/*
 	 * Initialise the PCI bus(ses)
 	 */
-	InitializePCI();
+	pci_initialize();
 
 	/*
 	 * Initialize the Universe PCI-VME bridge
