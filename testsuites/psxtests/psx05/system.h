@@ -22,7 +22,15 @@ void *POSIX_Init(
   void *argument
 );
 
-void *Task_1_through_3(
+void *Task_1(
+  void *argument
+);
+
+void *Task_2(
+  void *argument
+);
+
+void *Task_3(
   void *argument
 );
 
@@ -49,6 +57,9 @@ void *Task_1_through_3(
 
 TEST_EXTERN pthread_t        Init_id;
 TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t        Task2_id;
+TEST_EXTERN pthread_t        Task3_id;
 TEST_EXTERN pthread_mutex_t  Mutex_id;
+TEST_EXTERN pthread_mutex_t  Mutex2_id;
 
 /* end of include file */
