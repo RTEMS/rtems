@@ -1,3 +1,8 @@
+2002-03-22      Chris Johns <ccj@acm.org>
+
+	* io.t, conf.t: PR 160. Added the IO Manager's register and 
+	unregister interface documentation.
+
 2002-03-15	Eric Norum <eric.norum@usask.ca>
 
 	* rtmon.t: Correct example and correctly used ensure not insure.

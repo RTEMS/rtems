@@ -255,6 +255,11 @@ entries named @code{Device_drivers}.  By default, this is not
 defined indicating the @code{confdefs.h} is providing the
 device driver table.
 
+@findex CONFIGURE_MAXIMUM_DRIVERS
+@item @code{CONFIGURE_MAXIMUM_DRIVERS} is defined
+as the number of device drivers per node.  By default, this is 
+set to 10.
+
 @findex CONFIGURE_MAXIMUM_DEVICES
 @item @code{CONFIGURE_MAXIMUM_DEVICES} is defined
 to the number of individual devices that may be registered
@@ -716,6 +721,7 @@ typedef struct @{
   rtems_unsigned32                  microseconds_per_tick;
   rtems_unsigned32                  ticks_per_timeslice;
   rtems_unsigned32                  maximum_devices;
+  rtems_unsigned32                  maximum_drivers;
   rtems_unsigned32                  number_of_device_drivers;
   rtems_driver_address_table       *Device_driver_table;
   rtems_unsigned32                  number_of_initial_extensions;
@@ -799,6 +805,14 @@ is the maximum number of devices that can be registered.
 When using the @code{confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_DEVICES}.
+
+@item maximum_drivers
+is the maximum number of device drivers that can be registered.
+When using the @code{confdefs.h} mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_MAXIMUM_DRIVERS}.
+This value is set to @code{maximum_devices} if it is greater 
+than @code{maximum_drivers}.
 
 @item number_of_device_drivers
 is the number of device drivers for the system.  There should be
@@ -1397,14 +1411,15 @@ Initialization_Tasks : aliased
 
 @cindex Device Driver Table
 
-The Device Driver Table is used to inform the I/O
-Manager of the set of entry points for each device driver
-configured in the system.  The table contains one entry for each
-device driver required by the application.  The number of
-entries is defined in the number_of_device_drivers entry in the
-Configuration Table.  The format of each entry in the Device
-Driver Table is defined in 
-the following @value{LANGUAGE} @value{STRUCTURE}:
+The Device Driver Table is used to inform the I/O Manager of the set of
+entry points for each device driver configured in the system.  The table
+contains one entry for each device driver required by the application.
+The number of entries is defined in the number_of_device_drivers entry
+in the Configuration Table.  This table is copied to the Device Drive
+Table during the IO Manager's initialization giving the entries in this
+table the lower major numbers.  The format of each entry in the Device
+Driver Table is defined in the following @value{LANGUAGE}
+@value{STRUCTURE}:
 
 @ifset is-C
 @findex rtems_driver_address_table

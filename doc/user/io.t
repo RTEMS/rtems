@@ -35,11 +35,11 @@ directives provided by the I/O manager are:
 
 @cindex Device Driver Table
 
-Each application utilizing the RTEMS I/O manager must
-specify the address of a Device Driver Table in its
-Configuration Table.  This table contains each device driver's
-entry points.  Each device driver may contain the following
-entry points:
+Each application utilizing the RTEMS I/O manager must specify the
+address of a Device Driver Table in its Configuration Table. This table
+contains each device driver's entry points that is to be initialised by
+RTEMS during initialization.  Each device driver may contain the
+following entry points:
 
 @itemize @bullet
 @item Initialization
@@ -56,6 +56,13 @@ be NULL.  RTEMS will return
 @code{@value{RPREFIX}SUCCESSFUL} as the executive's and
 zero (0) as the device driver's return code for these device
 driver entry points.
+
+Applications can register and unregister drivers with the RTEMS I/O
+manager avoiding the need to have all drivers statically defined and
+linked into this table.
+
+The @file{confdefs.h} entry @code{CONFIGURE_MAXIMUM_DRIVERS} configures
+the number of driver slots available to the application.
 
 @subsection Major and Minor Device Numbers
 
@@ -115,6 +122,27 @@ objects.
 Although the RTEMS I/O manager provides a framework
 for device drivers, it makes no assumptions regarding the
 construction or operation of a device driver.
+
+@sybsection Runtime Driver Registration
+
+@cindex runtime driver registration
+
+Board support package and application developers can select wether a
+device driver is statically entered into the default device table or
+registered at runtime.
+
+Dynamic registration helps applications where:
+
+@enumerate
+@item The BSP and kernel libraries are common to a range of applications
+for a specific target platform. An application may be built upon a
+common library with all drivers. The application selects and registers
+the drivers. Uniform driver name lookup protects the application.
+@item The type and range of drivers may vary as the application probes a
+bus during initialization.
+@item Support for hot swap bus system such as Compact PCI.
+@item Support for runtime loadable driver modules.
+@end enumerate
 
 @subsection Device Driver Interface
 
@@ -216,6 +244,101 @@ This section details the I/O manager's directives.  A
 subsection is dedicated to each of this manager's directives and
 describes the calling sequence, related constants, usage, and
 status codes.
+
+@c
+@c
+@c
+@page
+@subsection IO_REGISTER_DRIVER - Register a device driver
+
+@cindex register a device driver
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_io_register_driver
+@example
+rtems_status_code rtems_io_register_driver(
+  rtems_device_major_number   major,
+  rtems_driver_address_table *driver_table,
+  rtems_device_major_number  *registered_major
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+No Ada implementation.
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - successfully registered@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number@*
+@code{@value{RPREFIX}TOO_MANY} - no available major device table slot@*
+@code{@value{RPREFIX}RESOURCE_IN_USE} - major device number entry in use
+
+@subheading DESCRIPTION:
+
+This directive attempts to add a new device driver to the Device Driver
+Table. The user can specify a specific major device number via the
+directive's @code{major} parameter, or let the registration routine find
+the next available major device number by specifing a major number of
+@code{0}. The selected major device number is returned via the
+@code{registered_major} directive parameter. The directive automatically
+allocation major device numbers from the highest value down.
+
+This directive automatically invokes the IO_INITIALIZE directive if
+the driver address table has an initialization and open entry.
+
+The directive returns @value{RPREFIX}TOO_MANY if Device Driver Table is
+full, and @value{RPREFIX}RESOURCE_IN_USE if a specific major device
+number is requested and it is already in use.
+
+@subheading NOTES:
+
+The Device Driver Table size is specified in the Configuration Table
+condiguration. This needs to be set to maximum size the application
+requires.
+
+
+@c
+@c
+@c
+@page
+@subsection IO_UNREGISTER_DRIVER - Unregister a device driver
+
+@cindex unregister a device driver
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_io_unregister_driver
+@example
+rtems_status_code rtems_io_register_driver(
+  rtems_device_major_number   major
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+No Ada implementation.
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - successfully registered@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number
+
+@subheading DESCRIPTION:
+
+This directive removes a device driver from the Device Driver Table.
+
+@subheading NOTES:
+
+Currently no specific checks are made and the driver is not closed.
+
 
 @c
 @c
