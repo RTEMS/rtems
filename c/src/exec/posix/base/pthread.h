@@ -183,11 +183,6 @@ int pthread_attr_getscope(
   int                   *contentionscope
 );
 
-#define PTHREAD_INHERIT_SCHED  1      /* scheduling policy and associated */
-                                      /*   attributes are inherited from */
-                                      /*   the calling thread. */
-#define PTHREAD_EXPLICIT_SCHED 2      /* set from provided attribute object */
-
 int pthread_attr_setinheritsched(
   pthread_attr_t  *attr,
   int              inheritsched
@@ -247,14 +242,6 @@ int pthread_setschedparam(
  *  13.6.1 Mutex Initialization Scheduling Attributes, P1003.1c/Draft 10, p. 128
  */
  
-/*
- *  Values for protocol.
- */
-
-#define PTHREAD_PRIO_NONE    0
-#define PTHREAD_PRIO_INHERIT 1
-#define PTHREAD_PRIO_PROTECT 2
-
 int pthread_mutexattr_setprotocol(
   pthread_mutexattr_t   *attr,
   int                    protocol
