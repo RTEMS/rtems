@@ -12,34 +12,34 @@
 @end tex
 
 @ifinfo
-@node MC68020 Timing Data, MC68020 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node MVME136 Timing Data, MVME136 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
 @end ifinfo
-@chapter MC68020 Timing Data
+@chapter MVME136 Timing Data
 @ifinfo
 @menu
-* MC68020 Timing Data Introduction::
-* MC68020 Timing Data Hardware Platform::
-* MC68020 Timing Data Interrupt Latency::
-* MC68020 Timing Data Context Switch::
-* MC68020 Timing Data Directive Times::
-* MC68020 Timing Data Task Manager::
-* MC68020 Timing Data Interrupt Manager::
-* MC68020 Timing Data Clock Manager::
-* MC68020 Timing Data Timer Manager::
-* MC68020 Timing Data Semaphore Manager::
-* MC68020 Timing Data Message Manager::
-* MC68020 Timing Data Event Manager::
-* MC68020 Timing Data Signal Manager::
-* MC68020 Timing Data Partition Manager::
-* MC68020 Timing Data Region Manager::
-* MC68020 Timing Data Dual-Ported Memory Manager::
-* MC68020 Timing Data I/O Manager::
-* MC68020 Timing Data Rate Monotonic Manager::
+* MVME136 Timing Data Introduction::
+* MVME136 Timing Data Hardware Platform::
+* MVME136 Timing Data Interrupt Latency::
+* MVME136 Timing Data Context Switch::
+* MVME136 Timing Data Directive Times::
+* MVME136 Timing Data Task Manager::
+* MVME136 Timing Data Interrupt Manager::
+* MVME136 Timing Data Clock Manager::
+* MVME136 Timing Data Timer Manager::
+* MVME136 Timing Data Semaphore Manager::
+* MVME136 Timing Data Message Manager::
+* MVME136 Timing Data Event Manager::
+* MVME136 Timing Data Signal Manager::
+* MVME136 Timing Data Partition Manager::
+* MVME136 Timing Data Region Manager::
+* MVME136 Timing Data Dual-Ported Memory Manager::
+* MVME136 Timing Data I/O Manager::
+* MVME136 Timing Data Rate Monotonic Manager::
 @end menu
 @end ifinfo
 
 @ifinfo
-@node MC68020 Timing Data Introduction, MC68020 Timing Data Hardware Platform, MC68020 Timing Data, MC68020 Timing Data
+@node MVME136 Timing Data Introduction, MVME136 Timing Data Hardware Platform, MVME136 Timing Data, MVME136 Timing Data
 @end ifinfo
 @section Introduction
 
@@ -52,7 +52,7 @@ is a description of the interrupt latency and the context switch
 times as they pertain to the MC68020 version of RTEMS.
 
 @ifinfo
-@node MC68020 Timing Data Hardware Platform, MC68020 Timing Data Interrupt Latency, MC68020 Timing Data Introduction, MC68020 Timing Data
+@node MVME136 Timing Data Hardware Platform, MVME136 Timing Data Interrupt Latency, MVME136 Timing Data Introduction, MVME136 Timing Data
 @end ifinfo
 @section Hardware Platform
 
@@ -78,7 +78,7 @@ MC68020 assume that the internal cache is disabled and that no
 instructions overlap.
 
 @ifinfo
-@node MC68020 Timing Data Interrupt Latency, MC68020 Timing Data Context Switch, MC68020 Timing Data Hardware Platform, MC68020 Timing Data
+@node MVME136 Timing Data Interrupt Latency, MVME136 Timing Data Context Switch, MVME136 Timing Data Hardware Platform, MVME136 Timing Data
 @end ifinfo
 @section Interrupt Latency
 
@@ -105,7 +105,7 @@ using the Multiprocessing Communications registers to generate
 as the interrupt source.
 
 @ifinfo
-@node MC68020 Timing Data Context Switch, MC68020 Timing Data Directive Times, MC68020 Timing Data Interrupt Latency, MC68020 Timing Data
+@node MVME136 Timing Data Context Switch, MVME136 Timing Data Directive Times, MVME136 Timing Data Interrupt Latency, MVME136 Timing Data
 @end ifinfo
 @section Context Switch
 

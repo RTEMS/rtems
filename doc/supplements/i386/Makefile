@@ -61,7 +61,7 @@ timedata.texi: timedata.t FORCE386_TIMES
 
 wksheets.t: ../../common/wksheets.t
 	sed -e 's/WORKSHEETS_PREVIOUS_LINK/Processor Dependent Information Table CPU Dependent Information Table/' \
-            -e 's/WORKSHEETS_NEXT_LINK/i386 Timing Data/' \
+            -e 's/WORKSHEETS_NEXT_LINK/CPU386 Timing Data/' \
             <../../common/wksheets.t >wksheets.t
 
 wksheets.texi: wksheets.t FORCE386_TIMES

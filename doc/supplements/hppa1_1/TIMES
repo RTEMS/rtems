@@ -7,6 +7,7 @@
 #
 #  CPU Model Information
 #
+RTEMS_BSP simhppa
 RTEMS_CPU_MODEL HP-7100
 #
 #  Interrupt Latency

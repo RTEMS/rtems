@@ -7,6 +7,7 @@
 #
 #  CPU Model Information
 #
+RTEMS_BSP       CVME961
 RTEMS_CPU_MODEL i960CA
 #
 #  Interrupt Latency

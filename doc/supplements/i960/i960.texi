@@ -91,7 +91,7 @@ Applications Supplement.
 * Processor Dependent Information Table::
 * Memory Requirements::
 * Timing Specification::
-* i960CA Timing Data::
+* CVME961 Timing Data::
 * Command and Variable Index::
 * Concept Index::
 @end menu
@@ -102,7 +102,7 @@ Applications Supplement.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, i960CA Timing Data Rate Monotonic Manager, Top
+@node Command and Variable Index, Concept Index, CVME961 Timing Data Rate Monotonic Manager, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.

@@ -12,34 +12,34 @@
 @end tex
  
 @ifinfo
-@node i386 Timing Data, i386 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node CPU386 Timing Data, CPU386 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
 @end ifinfo
-@chapter i386 Timing Data
+@chapter CPU386 Timing Data
 @ifinfo
 @menu
-* i386 Timing Data Introduction::
-* i386 Timing Data Hardware Platform::
-* i386 Timing Data Interrupt Latency::
-* i386 Timing Data Context Switch::
-* i386 Timing Data Directive Times::
-* i386 Timing Data Task Manager::
-* i386 Timing Data Interrupt Manager::
-* i386 Timing Data Clock Manager::
-* i386 Timing Data Timer Manager::
-* i386 Timing Data Semaphore Manager::
-* i386 Timing Data Message Manager::
-* i386 Timing Data Event Manager::
-* i386 Timing Data Signal Manager::
-* i386 Timing Data Partition Manager::
-* i386 Timing Data Region Manager::
-* i386 Timing Data Dual-Ported Memory Manager::
-* i386 Timing Data I/O Manager::
-* i386 Timing Data Rate Monotonic Manager::
+* CPU386 Timing Data Introduction::
+* CPU386 Timing Data Hardware Platform::
+* CPU386 Timing Data Interrupt Latency::
+* CPU386 Timing Data Context Switch::
+* CPU386 Timing Data Directive Times::
+* CPU386 Timing Data Task Manager::
+* CPU386 Timing Data Interrupt Manager::
+* CPU386 Timing Data Clock Manager::
+* CPU386 Timing Data Timer Manager::
+* CPU386 Timing Data Semaphore Manager::
+* CPU386 Timing Data Message Manager::
+* CPU386 Timing Data Event Manager::
+* CPU386 Timing Data Signal Manager::
+* CPU386 Timing Data Partition Manager::
+* CPU386 Timing Data Region Manager::
+* CPU386 Timing Data Dual-Ported Memory Manager::
+* CPU386 Timing Data I/O Manager::
+* CPU386 Timing Data Rate Monotonic Manager::
 @end menu
 @end ifinfo
 
 @ifinfo
-@node i386 Timing Data Introduction, i386 Timing Data Hardware Platform, i386 Timing Data, i386 Timing Data
+@node CPU386 Timing Data Introduction, CPU386 Timing Data Hardware Platform, CPU386 Timing Data, CPU386 Timing Data
 @end ifinfo
 @section Introduction
 
@@ -52,7 +52,7 @@ is a description of the  interrupt latency and the context
 switch times as they pertain to the i386 version of RTEMS.
 
 @ifinfo
-@node i386 Timing Data Hardware Platform, i386 Timing Data Interrupt Latency, i386 Timing Data Introduction, i386 Timing Data
+@node CPU386 Timing Data Hardware Platform, CPU386 Timing Data Interrupt Latency, CPU386 Timing Data Introduction, CPU386 Timing Data
 @end ifinfo
 @section Hardware Platform
 
@@ -74,7 +74,7 @@ instructions to disable and enable interrupts, was divided by 16
 to simulate a i386 executing at 16 Mhz.
 
 @ifinfo
-@node i386 Timing Data Interrupt Latency, i386 Timing Data Context Switch, i386 Timing Data Hardware Platform, i386 Timing Data
+@node CPU386 Timing Data Interrupt Latency, CPU386 Timing Data Context Switch, CPU386 Timing Data Hardware Platform, CPU386 Timing Data
 @end ifinfo
 @section Interrupt Latency
 
@@ -99,7 +99,7 @@ Computers CPU386 benchmark platform using the int instruction as
 the interrupt source.
 
 @ifinfo
-@node i386 Timing Data Context Switch, i386 Timing Data Directive Times, i386 Timing Data Interrupt Latency, i386 Timing Data
+@node CPU386 Timing Data Context Switch, CPU386 Timing Data Directive Times, CPU386 Timing Data Interrupt Latency, CPU386 Timing Data
 @end ifinfo
 @section Context Switch
 

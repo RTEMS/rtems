@@ -12,38 +12,38 @@
 @end tex
 
 @ifinfo
-@node i960CA Timing Data, i960CA Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node CVME961 Timing Data, CVME961 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
 @end ifinfo
 @chapter Timing Data
 @ifinfo
 @menu
-* i960CA Timing Data Introduction::
-* i960CA Timing Data Hardware Platform::
-* i960CA Timing Data Interrupt Latency::
-* i960CA Timing Data Context Switch::
-* i960CA Timing Data Directive Times::
-* i960CA Timing Data Task Manager::
-* i960CA Timing Data Interrupt Manager::
-* i960CA Timing Data Clock Manager::
-* i960CA Timing Data Timer Manager::
-* i960CA Timing Data Semaphore Manager::
-* i960CA Timing Data Message Manager::
-* i960CA Timing Data Event Manager::
-* i960CA Timing Data Signal Manager::
-* i960CA Timing Data Partition Manager::
-* i960CA Timing Data Region Manager::
-* i960CA Timing Data Dual-Ported Memory Manager::
-* i960CA Timing Data I/O Manager::
-* i960CA Timing Data Rate Monotonic Manager::
+* CVME961 Timing Data Introduction::
+* CVME961 Timing Data Hardware Platform::
+* CVME961 Timing Data Interrupt Latency::
+* CVME961 Timing Data Context Switch::
+* CVME961 Timing Data Directive Times::
+* CVME961 Timing Data Task Manager::
+* CVME961 Timing Data Interrupt Manager::
+* CVME961 Timing Data Clock Manager::
+* CVME961 Timing Data Timer Manager::
+* CVME961 Timing Data Semaphore Manager::
+* CVME961 Timing Data Message Manager::
+* CVME961 Timing Data Event Manager::
+* CVME961 Timing Data Signal Manager::
+* CVME961 Timing Data Partition Manager::
+* CVME961 Timing Data Region Manager::
+* CVME961 Timing Data Dual-Ported Memory Manager::
+* CVME961 Timing Data I/O Manager::
+* CVME961 Timing Data Rate Monotonic Manager::
 @end menu
 @end ifinfo
 
-NOTE: The i960CA board used by the RTEMS Project to
+NOTE: The CVME961 board used by the RTEMS Project to
 obtain i960CA times is currently broken.  The information in
 this chapter was obtained using Release 3.2.1.
 
 @ifinfo
-@node i960CA Timing Data Introduction, i960CA Timing Data Hardware Platform, i960CA Timing Data, i960CA Timing Data
+@node CVME961 Timing Data Introduction, CVME961 Timing Data Hardware Platform, CVME961 Timing Data, CVME961 Timing Data
 @end ifinfo
 @section Introduction
 
@@ -56,7 +56,7 @@ is a description of the  interrupt latency and the context
 switch times as they pertain to the i960CA version of RTEMS.
 
 @ifinfo
-@node i960CA Timing Data Hardware Platform, i960CA Timing Data Interrupt Latency, i960CA Timing Data Introduction, i960CA Timing Data
+@node CVME961 Timing Data Hardware Platform, CVME961 Timing Data Interrupt Latency, CVME961 Timing Data Introduction, CVME961 Timing Data
 @end ifinfo
 @section Hardware Platform
 
@@ -79,7 +79,7 @@ disable and enable interrupts, was divided by 33 to simulate a
 i960CA executing at 33 Mhz with zero wait states.
 
 @ifinfo
-@node i960CA Timing Data Interrupt Latency, i960CA Timing Data Context Switch, i960CA Timing Data Hardware Platform, i960CA Timing Data
+@node CVME961 Timing Data Interrupt Latency, CVME961 Timing Data Context Switch, CVME961 Timing Data Hardware Platform, CVME961 Timing Data
 @end ifinfo
 @section Interrupt Latency
 
@@ -105,7 +105,7 @@ CVME961 benchmark platform using the sysctl instruction as the
 interrupt source.
 
 @ifinfo
-@node i960CA Timing Data Context Switch, i960CA Timing Data Directive Times, i960CA Timing Data Interrupt Latency, i960CA Timing Data
+@node CVME961 Timing Data Context Switch, CVME961 Timing Data Directive Times, CVME961 Timing Data Interrupt Latency, CVME961 Timing Data
 @end ifinfo
 @section Context Switch
 
@@ -117,7 +117,7 @@ when a TSWITCH user extension is configured.  The use of the
 TSWITCH extension is application dependent.  Thus, its execution
 time is not considered part of the base context switch time.
 
-The i960CA has no hardware floating point capability
+The CVME961 has no hardware floating point capability
 and floating point tasks are not supported.
 
 The following table summarizes the context switch

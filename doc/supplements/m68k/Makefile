@@ -61,7 +61,7 @@ timedata.texi: timedata.t MVME136_TIMES
 
 wksheets.t: ../../common/wksheets.t
 	sed -e 's/WORKSHEETS_PREVIOUS_LINK/Processor Dependent Information Table CPU Dependent Information Table/' \
-            -e 's/WORKSHEETS_NEXT_LINK/MC68020 Timing Data/' \
+            -e 's/WORKSHEETS_NEXT_LINK/MVME136 Timing Data/' \
             <../../common/wksheets.t >wksheets.t
 
 wksheets.texi: wksheets.t MVME136_TIMES
