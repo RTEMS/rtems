@@ -333,4 +333,27 @@ void _exit(int status)
 }
 #endif
 
+
+/*
+ *  These are only supported in the posix api.
+ */
+
+#ifndef RTEMS_POSIX_API
+
+#include <assert.h>
+
+pid_t __getpid(void)
+{
+  assert( 0 );
+  return 0;
+}
+
+int __kill( pid_t pid, int sig )
+{
+  assert( 0 );
+  return 0;
+}
+
+#endif
+
 #endif
