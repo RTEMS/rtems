@@ -10,10 +10,10 @@
 @c  Set Variables
 @c
 
-@set RTEMS-RELEASE 4.0.0-beta4
-@set RTEMS-EDITION 4.0.0-beta4
-@set RTEMS-VERSION 4.0.0-beta4
-@set RTEMS-UPDATE-DATE October 15 1998
+@set RTEMS-RELEASE 4.0.0-beta4b
+@set RTEMS-EDITION 4.0.0-beta4b
+@set RTEMS-VERSION 4.0.0-beta4b
+@set RTEMS-UPDATE-DATE October 27 1998
 @set RTEMS-UPDATE-MONTH October 1998
 
 @c
