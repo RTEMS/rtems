@@ -33,20 +33,6 @@
 
 /*PAGE
  *
- *  _MESSAGE_QUEUE_CORE_MESSAGE_QUEUE_MP_SUPPORT
- *
- *  Condition support for the MP. Helps the macro build.
- *
- */
-
-#if defined(RTEMS_MULTIPROCESSING)
-#define _MESSAGE_QUEUE_CORE_MESSAGE_QUEUE_MP_SUPPORT _Message_queue_Core_message_queue_mp_support
-#else
-#define _MESSAGE_QUEUE_CORE_MESSAGE_QUEUE_MP_SUPPORT NULL
-#endif
-
-/*PAGE
- *
  *  _Message_queue_Manager_initialization
  *
  *  This routine initializes all message queue manager related
@@ -464,7 +450,11 @@ rtems_status_code rtems_message_queue_broadcast(
                       buffer,
                       size,
                       id,
-                      _MESSAGE_QUEUE_CORE_MESSAGE_QUEUE_MP_SUPPORT,
+#if defined(RTEMS_MULTIPROCESSING)
+                      _Message_queue_Core_message_queue_mp_support,
+#else
+                      NULL,
+#endif
                       count
                     );
                       
@@ -728,7 +718,11 @@ rtems_status_code _Message_queue_Submit(
                           buffer,
                           size,
                           id,
-                          _MESSAGE_QUEUE_CORE_MESSAGE_QUEUE_MP_SUPPORT
+#if defined(RTEMS_MULTIPROCESSING)
+                          _Message_queue_Core_message_queue_mp_support,
+#else
+                          NULL,
+#endif
                         );
           break;
         case MESSAGE_QUEUE_URGENT_REQUEST:
@@ -737,7 +731,11 @@ rtems_status_code _Message_queue_Submit(
                           buffer,
                           size,
                           id,
-                          _MESSAGE_QUEUE_CORE_MESSAGE_QUEUE_MP_SUPPORT
+#if defined(RTEMS_MULTIPROCESSING)
+                          _Message_queue_Core_message_queue_mp_support,
+#else
+                          NULL,
+#endif
                         );
           break;
         default:
