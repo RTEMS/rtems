@@ -16,6 +16,11 @@
  *
  */
 
+/*
+ * This file is only used if using gcc
+ */
+#if defined(__GNUC__)
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -39,7 +44,7 @@
 typedef void *__gthread_key_t;
 typedef int   __gthread_once_t;
 typedef void *__gthread_mutex_t;
-
+typedef void *__gthread_recursive_mutex_t;
 
 /* uncomment this if you need to debug this interface */
 
@@ -215,3 +220,25 @@ int rtems_gxx_mutex_unlock (__gthread_mutex_t *mutex)
 #endif
   return (rtems_semaphore_release( (rtems_id)*mutex ) ==  RTEMS_SUCCESSFUL) ? 0 :-1;
 }
+
+void rtems_gxx_recursive_mutex_init_function(__gthread_recursive_mutex_t *mutex)
+{
+  rtems_gxx_mutex_init(mutex);
+}
+
+int rtems_gxx_recursive_mutex_lock(__gthread_recursive_mutex_t *mutex)
+{
+  return rtems_gxx_mutex_lock(mutex);
+}
+
+int rtems_gxx_recursive_mutex_trylock(__gthread_recursive_mutex_t *mutex)
+{
+  return rtems_gxx_mutex_trylock(mutex);
+}
+
+int rtems_gxx_recursive_mutex_unlock(__gthread_recursive_mutex_t *mutex)
+{
+  return rtems_gxx_mutex_unlock(mutex);
+}
+
+#endif /* __GNUC__ */

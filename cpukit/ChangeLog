@@ -1,3 +1,8 @@
+2005-01-13	Joel Sherrill <joel@oarcorp.com>
+		Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/gxx_wrapper.c: Reflect GCC-4.0's gthr-rtems.h.
+
 2005-01-09	Joel Sherrill <joel@oarcorp.com>
 
 	* librpc/include/rpc/clnt.h, librpc/src/rpc/authunix_prot.c,
