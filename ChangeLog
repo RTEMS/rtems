@@ -1,3 +1,8 @@
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* VERSION: 4.6.99.0.
+	* aclocal/version.m4: 4.6.99.0.
+
 2004-02-06	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/bsp-alias.m4: Readd aliases for p4600 and p4650
