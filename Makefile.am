@@ -29,7 +29,7 @@ ACLOCAL_FILES += aclocal/ar-s.m4 aclocal/bsp-alias.m4 \
     aclocal/i386-gas-code16.m4 aclocal/path-ksh.m4 aclocal/path-perl.m4 \
     aclocal/prog-cc.m4 aclocal/prog-cxx.m4 aclocal/project-root.m4 \
     aclocal/rtems-top.m4 aclocal/sysv-ipc.m4 aclocal/target.m4 \
-    aclocal/tool-paths.m4 aclocal/tool-prefix.m4
+    aclocal/tool-paths.m4 aclocal/tool-prefix.m4 aclocal/multilib.m4
 
 noinst_SCRIPTS = bootstrap
 
