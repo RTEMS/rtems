@@ -22,7 +22,7 @@ extern rtems_configuration_table BSP_Configuration;
 #include <string.h>
 #include <stdlib.h>
 
-#include "cpuuse.h"
+#include <rtems/cpuuse.h>
 
 unsigned32 CPU_usage_Ticks_at_last_reset;
 
