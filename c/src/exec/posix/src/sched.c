@@ -4,11 +4,13 @@
 
 #include <assert.h>
 #include <sched.h>
+#include <errno.h>
 
 #include <rtems/system.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/thread.h>
 #include <rtems/posix/priority.h>
+#include <rtems/posix/time.h>
 
 /*PAGE
  *
@@ -134,8 +136,6 @@ int sched_rr_get_interval(
   struct timespec  *interval
 )
 {
-  time_t us_per_quantum; 
-
   /* XXX do we need to support different time quantums per thread */
 
   /*
@@ -143,7 +143,6 @@ int sched_rr_get_interval(
    */
 
   assert( pid == getpid() );
-
 
   _POSIX_Interval_to_timespec( _Thread_Ticks_per_timeslice, interval );
   return 0;
