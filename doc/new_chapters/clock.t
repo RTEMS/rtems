@@ -294,14 +294,7 @@ This routine returns the process times
 
 @code{times} stores the current process times in @code{buf}.
 
-@code{struct tms} is as defined in @code{/usr/include/sys/times.h}:
-
-struct  tms  {
-             clock_t tms_utime;  /* user time */
-             clock_t tms_stime;  /* system time */
-             clock_t tms_cutime; /* user time of children */
-             clock_t tms_cstime; /* system time of children */
-             };
+@code{struct tms} is as defined in @code{/usr/include/sys/times.h}
 
 @code{times} returns the number of clock ticks that have elapsed
 since the systm has been up.
