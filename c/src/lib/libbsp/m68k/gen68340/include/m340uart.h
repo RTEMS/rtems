@@ -44,20 +44,20 @@
 void Init_UART_Table(void);
 
 typedef struct {
-		rtems_unsigned8		enable;
-		rtems_unsigned16	rx_buffer_size;	/* NOT IMPLEMENTED */
-		rtems_unsigned16	tx_buffer_size;	/* NOT IMPLEMENTED */
+		uint8_t        		enable;
+		uint16_t        	rx_buffer_size;	/* NOT IMPLEMENTED */
+		uint16_t        	tx_buffer_size;	/* NOT IMPLEMENTED */
 	       } uart_termios_config;
 
 typedef struct { /* for one channel */
-		rtems_unsigned8		enable;		/* use this channel */
+		uint8_t        		enable;		/* use this channel */
 		char			name[64];	/* use UART_CONSOLE_NAME for console purpose */
-		rtems_unsigned8		parity_mode;	/* parity mode, see MR1 section for defines */
-		rtems_unsigned8		bits_per_char;	/* bits per character, see MR1 section for defines  */
+		uint8_t        		parity_mode;	/* parity mode, see MR1 section for defines */
+		uint8_t        		bits_per_char;	/* bits per character, see MR1 section for defines  */
 		float			rx_baudrate;	/* Rx baudrate */
 		float			tx_baudrate;	/* Tx baudrate */
-		rtems_unsigned8		rx_mode;	/* FIFO Full (UART_FIFO_FULL) or ChannelReceiverReady (UART_CRR) */
-		rtems_unsigned8		mode;		/* use interrupts (UART_INTERRUPTS) or polling (UART_POLLING) */
+		uint8_t        		rx_mode;	/* FIFO Full (UART_FIFO_FULL) or ChannelReceiverReady (UART_CRR) */
+		uint8_t        		mode;		/* use interrupts (UART_INTERRUPTS) or polling (UART_POLLING) */
 		uart_termios_config	termios;
 	       } uart_channel_config;
 
@@ -75,8 +75,8 @@ typedef	 struct {
 		} t_baud_speed_table;
 
 extern t_baud_speed_table
-Find_Right_m340_UART_Config(float ChannelA_ReceiverBaudRate, float ChannelA_TransmitterBaudRate, rtems_unsigned8 enableA,
-			    float ChannelB_ReceiverBaudRate, float ChannelB_TransmitterBaudRate, rtems_unsigned8 enableB);
+Find_Right_m340_UART_Config(float ChannelA_ReceiverBaudRate, float ChannelA_TransmitterBaudRate, uint8_t         enableA,
+			    float ChannelB_ReceiverBaudRate, float ChannelB_TransmitterBaudRate, uint8_t         enableB);
 
 extern rtems_isr InterruptHandler (rtems_vector_number v);
 

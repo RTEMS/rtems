@@ -40,7 +40,7 @@
  * Clock_driver_ticks is a monotonically increasing counter of the
  * number of clock ticks since the driver was initialized.
  */
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t         Clock_driver_ticks;
 
 /*
  * These are set by clock driver during its init
@@ -93,8 +93,8 @@ Clock_exit (void)
 static void
 Install_clock (rtems_isr_entry clock_isr)
 {
-	unsigned32 pitr_tmp;
-	unsigned32 usecs_per_tick;
+	uint32_t   pitr_tmp;
+	uint32_t   usecs_per_tick;
 
 	Clock_driver_ticks = 0;
 
@@ -160,7 +160,7 @@ rtems_device_driver Clock_control(
 	void *pargp
 )
 {
-	rtems_unsigned32 isrlevel;
+	uint32_t         isrlevel;
 	rtems_libio_ioctl_args_t *args = pargp;
 
 	if (args) {

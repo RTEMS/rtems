@@ -192,8 +192,8 @@ Find_Right_m340_UART_Channel_Config(float ReceiverBaudRate, float TransmitterBau
 	       needs set 2)
  *****************************************************/
 t_baud_speed_table
-Find_Right_m340_UART_Config(float ChannelA_ReceiverBaudRate, float ChannelA_TransmitterBaudRate, rtems_unsigned8 enableA,
-			    float ChannelB_ReceiverBaudRate, float ChannelB_TransmitterBaudRate, rtems_unsigned8 enableB)
+Find_Right_m340_UART_Config(float ChannelA_ReceiverBaudRate, float ChannelA_TransmitterBaudRate, uint8_t         enableA,
+			    float ChannelB_ReceiverBaudRate, float ChannelB_TransmitterBaudRate, uint8_t         enableB)
 {
  t_baud_speed_table tableA, tableB;
  t_baud_speed_table return_value, tmp;
