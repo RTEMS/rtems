@@ -1,3 +1,9 @@
+2001-01-05	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h: Changed <sh/null.h> to <rtems/devnull.h> to reflect
+	the movement of this component to libmisc.
+	* wrapup/Makefile.am: /dev/null driver is no longer in libcpu/sh.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

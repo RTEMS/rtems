@@ -55,7 +55,7 @@ extern "C" {
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
 #if 0
-#include <sh/null.h>
+#include <rtems/devnull.h>
 #define BSP_CONSOLE_DEVNAME "/dev/null"
 #define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVNULL_DRIVER_TABLE_ENTRY
 #else

@@ -45,7 +45,7 @@ extern "C" {
 
 /* EDIT: To activate the sci driver, change the define below */
 #if 1
-#include <sh/null.h>
+#include <rtems/devnull.h>
 #define BSP_CONSOLE_DEVNAME "/dev/null"
 #define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVNULL_DRIVER_TABLE_ENTRY
 #else
