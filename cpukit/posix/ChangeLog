@@ -1,3 +1,7 @@
+2001-01-23	Joel Sherrill <joel@OARcorp.com>
+
+	* src/alarm.c: Eliminated use of C++ style comments.
+
 2001-01-12	Joel Sherrill <joel@OARcorp.com>
 
 	* src/clockgetres.c: Fixed match problem.  We are not converting

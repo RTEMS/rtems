@@ -13,7 +13,7 @@
 
 
 #include <pthread.h>
-//#include <errno.h>
+/* #include <errno.h> */
 
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
