@@ -18,6 +18,7 @@ The directives provided by the clock manager are:
 @item @code{clock_gettime} - 
 @item @code{clock_settime} -
 @item @code{clock_getres} -
+@item @code{sleep} - Delay Process Execution
 @item @code{nanosleep} -
 @item @code{gettimeofday} -
 @item @code{time} -
@@ -25,7 +26,11 @@ The directives provided by the clock manager are:
 
 @section Background
 
+There is currently no text in this section.
+
 @section Operations
+
+There is currently no text in this section.
 
 @section Directives
 
@@ -34,7 +39,7 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
-@subsection clock_gettime
+@subsection clock_gettime -
 
 @subheading CALLING SEQUENCE:
 
@@ -63,8 +68,10 @@ The clock_id specified is invalid.
 
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection clock_settime
+@subsection clock_settime -
  
 @subheading CALLING SEQUENCE:
  
@@ -96,9 +103,11 @@ The contents of the tp structure are invalid.
 @subheading DESCRIPTION:
  
 @subheading NOTES:
+
+NONE
  
 @page
-@subsection clock_getres
+@subsection clock_getres -
  
 @subheading CALLING SEQUENCE:
  
@@ -131,7 +140,7 @@ The clock_id specified is invalid.
 If res is NULL, then the resolution is not returned.
 
 @page
-@subsection sleep
+@subsection sleep - Delay Process Execution
  
 @subheading CALLING SEQUENCE:
  
@@ -149,12 +158,15 @@ This routine returns the number of unslept seconds.
 
 @subheading DESCRIPTION:
  
+The @code{sleep()} function delays the calling thread by the specified
+number of @code{seconds}.
+
 @subheading NOTES:
 
 This call is interruptible by a signal.
  
 @page
-@subsection nanosleep
+@subsection nanosleep -
  
 @subheading CALLING SEQUENCE:
  
@@ -191,7 +203,7 @@ field.
 This call is interruptible by a signal.
 
 @page
-@subsection gettimeofday
+@subsection gettimeofday -
 
 @subheading CALLING SEQUENCE:
 
@@ -216,7 +228,7 @@ On error, this routine returns -1 and sets errno as appropriate.
 Currently, the timezone information is not supported.
 
 @page
-@subsection time
+@subsection time -
  
 @subheading CALLING SEQUENCE:
  
@@ -235,4 +247,6 @@ This routine returns the number of seconds since the Epoch.
 @subheading DESCRIPTION:
  
 @subheading NOTES:
+
+NONE
  
