@@ -1,3 +1,8 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Misc. fixes.
+	* bsp.am: Add project_libdir.
+
 2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bspstart.am: New.

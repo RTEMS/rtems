@@ -41,21 +41,15 @@ shmdr/$(ARCH)/$(dirstamp):
 	@: > shmdr/$(ARCH)/$(dirstamp)
 shmdr/$(ARCH)/%.$(OBJEXT): shmdr/%.c shmdr/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
-shmdr/$(ARCH)/shmdr.rel: $(shmdr_OBJS)
+shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel: $(shmdr_OBJS)
 	$(make-rel)
 
-$(PROJECT_RELEASE)/lib/shmdr$(LIB_VARIANT).rel: shmdr/$(ARCH)/shmdr.rel
-	$(INSTALL_DATA) $< $@
-
 if HAS_MP
-include_HEADERS = shmdir/shm_driver.h shmdir/mpci.h
+include_HEADERS = shmdr/shm_driver.h shmdr/mpci.h
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/shmdr$(LIB_VARIANT).rel
-
-all-local: $(PREINSTALL_FILES) shmdr/$(ARCH)/shmdr.rel $(TMPINSTALL_FILES)
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
+project_lib_DATA = shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel
 endif
-
-.PRECIOUS: shmdr/$(ARCH)/shmdr.rel
 
 EXTRA_DIST += shmdr/README shmdr/addlq.c shmdr/cnvpkt.c shmdr/dump.c \
     shmdr/fatal.c shmdr/getlq.c shmdr/getpkt.c shmdr/init.c shmdr/initlq.c \
@@ -70,13 +64,17 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_MP
-$(PROJECT_INCLUDE)/shm_driver.h: shmdir/shm_driver.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/shm_driver.h: shmdr/shm_driver.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/shm_driver.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/shm_driver.h
 
-$(PROJECT_INCLUDE)/mpci.h: shmdir/mpci.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/mpci.h: shmdr/mpci.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpci.h
+
+${PROJECT_RELEASE}/lib/shmdr$(LIB_VARIANT).rel: shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/shmdr$(LIB_VARIANT).rel
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/shmdr$(LIB_VARIANT).rel
 endif
 
 include $(top_srcdir)/automake/subdirs.am
