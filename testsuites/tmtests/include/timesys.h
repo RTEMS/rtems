@@ -31,19 +31,6 @@
 #define OPERATION_COUNT 100
 #endif
 
-/*
- *  Some tests are repeated (iterated) multiple times over 
- *  "operation count" operations.  For example, a semaphore
- *  test may acquire and release the semaphore "operation count"
- *  times per loop and the body of the loop is repeated "iteration
- *  count" times.  This value is a repitition factor which does
- *  not increase memory usage -- only execution time.
- */
-
-#ifndef IT_COUNT
-#define IT_COUNT        100
-#endif
-
 /* functions */
 
 #define put_time( _message, _total_time, \
