@@ -9,9 +9,8 @@ include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_FILES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(foreach piece, $(CPU_FILES), \
-    $(wildcard \
+OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    $(foreach piece, $(CPU_FILES), $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/*.$(OBJEXT))) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/r46xx/*/$(ARCH)/*.$(OBJEXT)) \
