@@ -15,9 +15,15 @@
  *  "Numericallly higher values represent higher priorities."
  *
  *  Thus, RTEMS Core has priorities run in the opposite sense of the POSIX API.
+ *
+ *  There are only 254 posix priority levels since a task at priority level
+ *  255 would never run because of the RTEMS idle task.  This is necessary
+ *  because GNAT maps the lowest Ada task priority to the lowest thread
+ *  priority.  The lowest priority Ada task should get to run, so there is
+ *  a fundamental conflict with having 255 priorities.
  */
 
-#define POSIX_SCHEDULER_MAXIMUM_PRIORITY (255)
+#define POSIX_SCHEDULER_MAXIMUM_PRIORITY (254)
   
 #define POSIX_SCHEDULER_MINIMUM_PRIORITY (1)
 

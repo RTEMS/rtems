@@ -17,21 +17,21 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Priority_Is_valid(
   int priority
 )
 {
-  return (boolean) (priority >= 1 && priority <= 255);
+  return (boolean) (priority >= 1 && priority <= 254);
 }
 
 RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Priority_To_core(
   int priority
 )
 {
-  return (Priority_Control) (256 - priority);
+  return (Priority_Control) (255 - priority);
 }
 
 RTEMS_INLINE_ROUTINE int _POSIX_Priority_From_core(
   Priority_Control priority
 )
 {
-  return 256 - priority;
+  return 255 - priority;
 }
 
 #endif
