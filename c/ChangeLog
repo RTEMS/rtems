@@ -1,3 +1,8 @@
+2000-10-26      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Make sure $SHELL inside of Makefiles does not get
+	propagated to the BSP-subdirectories if a user specified CONFIG_SHELL.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.

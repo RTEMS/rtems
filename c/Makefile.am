@@ -22,7 +22,7 @@ SUBDIRS = make . $(RTEMS_BSP)
 	  echo "Configuring RTEMS_BSP=$$i"; \
 	  test -d $$i || mkdir $$i; \
 	  ( cd $$i && \
-	    RTEMS_BSP=$$i $(rtems_bsp_configure) \
+	    CONFIG_SHELL=$(SHELL) RTEMS_BSP=$$i $(rtems_bsp_configure) \
 	    && $(MAKE) $(AM_MAKEFLAGS) preinstall ) \
 	  || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
 	done
