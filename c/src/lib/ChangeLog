@@ -1,3 +1,11 @@
+2002-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/sys/ioctl.h: Relocated from libnetworking/sys.
+	* include/sys/filio.h: Relocated from libnetworking/sys.
+	* include/sys/sockio.h: Relocated from libnetworking/sys.
+	* include/Makefile.am: Reflect changes above.
+	* configure.ac: Take out *NETWORKING*.
+
 2001-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/gxx_wrappers.c: Fix to keep prototype same as in gcc and
