@@ -168,7 +168,7 @@ void Install_clock(
   mips_timer_rate =
      rtems_configuration_get_microseconds_per_tick() * CLOCKS_PER_MICROSECOND;
   mips_set_timer( mips_timer_rate );
-  enable_int(CLOCK_VECTOR_MASK);
+  mips_enable_in_interrupt_mask(CLOCK_VECTOR_MASK);
 
   /*
    *  Schedule the clock cleanup routine to execute if the application exits.
@@ -184,7 +184,7 @@ void Install_clock(
 void Clock_exit( void )
 {
   /* mips: turn off the timer interrupts */
-  disable_int(~CLOCK_VECTOR_MASK);
+  mips_disable_in_interrupt_mask(CLOCK_VECTOR_MASK);
 }
 
 /*

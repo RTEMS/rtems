@@ -1,3 +1,21 @@
+2000-12-13	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/.cvsignore, shared/Makefile.am,
+	shared/cache/.cvsignore, shared/cache/Makefile.am,
+	shared/cache/cache.c, shared/cache/cache_.h,
+	shared/interrupts/.cvsignore, shared/interrupts/Makefile.am,
+	shared/interrupts/installisrentries.c,
+	shared/interrupts/isr_entries.S,
+	shared/interrupts/maxvectors.c, tx39/.cvsignore,
+	tx39/Makefile.am, tx39/include/.cvsignore,
+	tx39/include/Makefile.am, tx39/include/tx3904.h: New file.
+	Moved some pieces of interrupt processing from score/cpu to
+	libcpu/mips since many interrupt servicing characteristics are
+	CPU model dependent.  This patch addresses the number of interrupt
+	sources and where the ISR prologues are located.  The only way to
+	currently install the ISR prologues requires that the prologues
+	be installed into RAM.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

@@ -29,8 +29,15 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 AM_CONDITIONAL(r46xx, test "$RTEMS_CPU_MODEL" = "R4600" \
 || test "$RTEMS_CPU_MODEL" = "R4650" )
 
+AM_CONDITIONAL(tx39, test "$RTEMS_CPU_MODEL" = "tx3904")
+
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 clock/Makefile
+shared/Makefile
+shared/cache/Makefile
+shared/interrupts/Makefile
+tx39/Makefile
+tx39/include/Makefile
 timer/Makefile)
