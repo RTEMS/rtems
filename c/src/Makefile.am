@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS= make exec lib tests
+SUBDIRS= make exec lib librtems++ tests
 
 rtems_bspdir=$(prefix)/@RTEMS_BSP@
 

@@ -34,10 +34,6 @@ LIBRPC = $(LIBRPC_$(HAS_NETWORKING)_V)
 LIBRDBG_yes_yes_V = librdbg
 LIBRDBG = $(LIBRDBG_$(HAS_NETWORKING)_$(HAS_RDBG)_V)
 
-# We only build the rtems++ library if HAS_CPLUSPLUS was defined
-LIBRTEMSCPLUSPLUS_yes_V = librtems++
-LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
-
 # General Hardware API library 
 LIBHWAPI = $(wildcard libhwapi)
 

@@ -41,11 +41,6 @@ MOTOROLA_H_FILES = $(MOTOROLA_H_PIECES:%=$(srcdir)/motorola/%.h)
 ZILOG_H_PIECES = z8036 z8530 z8536
 ZILOG_H_FILES = $(ZILOG_H_PIECES:%=$(srcdir)/zilog/%.h)
 
-RTEMSCPLUSPLUS_H_PIECES_yes_V = rtemsEvent rtemsInterrupt rtemsMessageQueue \
-    rtemsSemaphore rtemsStatusCode rtemsTask rtemsTaskMode rtemsTimer
-RTEMSCPLUSPLUS_H_PIECES = $(RTEMSCPLUSPLUS_H_PIECES_$(HAS_CPLUSPLUS)_V)
-RTEMSCPLUSPLUS_H_FILES = $(RTEMSCPLUSPLUS_H_PIECES:%=$(srcdir)/rtems++/%.h)
-
 RPC_H_PIECES = auth clnt rpc rpc_msg svc svc_auth types xdr
 RPC_H_FILES = $(RPC_H_PIECES:%=$(srcdir)/rpc/%.h)
 
@@ -68,10 +63,6 @@ LIBRPCdir = $(LIBRPC_$(HAS_NETWORKING)_V)
 LIBRDBG_yes_yes_V = $(PROJECT_INCLUDE)/rdbg
 LIBRDBGdir = $(LIBRDBG_$(HAS_NETWORKING)_$(HAS_RDBG)_V)
 
-# We only make the rtems++ install point if it is enabled.
-LIBRTEMSCPLUSPLUS_yes_V = $(PROJECT_INCLUDE)/rtems++
-LIBRTEMSCPLUSPLUSdir = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
-
 all: preinstall
 
 preinstall: $(INSTALLDIRS) $(SRCS)
@@ -79,9 +70,6 @@ preinstall: $(INSTALLDIRS) $(SRCS)
 	@$(INSTALL_CHANGE) -m 644 $(SYS_H_FILES) $(PROJECT_INCLUDE)/sys
 	@$(INSTALL_CHANGE) -m 644 $(MOTOROLA_H_FILES) $(PROJECT_INCLUDE)/motorola
 	@$(INSTALL_CHANGE) -m 644 $(ZILOG_H_FILES) $(PROJECT_INCLUDE)/zilog
-	@if test "$(HAS_CPLUSPLUS)" = "yes"; then \
-	$(INSTALL_CHANGE) -m 644 $(RTEMSCPLUSPLUS_H_FILES) $(LIBRTEMSCPLUSPLUSdir); \
-	fi
 	@if test "$(HAS_NETWORKING)" = "yes"; then \
 	$(INSTALL_CHANGE) -m 644 $(RPC_H_FILES) $(LIBRPCdir); \
 	fi
