@@ -207,7 +207,7 @@ void _CPU_ISR_install_vector(
 void
 hppa_external_interrupt_initialize(void)
 {
-    hppa_rtems_isr_entry ignore = 0;
+    proc_ptr ignore;
 
     /* mark them all unused */
 
@@ -218,7 +218,7 @@ hppa_external_interrupt_initialize(void)
   _CPU_ISR_install_vector(
     HPPA_INTERRUPT_EXTERNAL_INTERRUPT,
     (proc_ptr)hppa_external_interrupt,
-    (proc_ptr *)ignore
+    &ignore
   );
 }
 
