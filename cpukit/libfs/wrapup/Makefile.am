@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 LIBNAME = libfs
 LIB = $(ARCH)/$(LIBNAME).a
 
@@ -18,9 +17,6 @@ endif
 
 TMP_LIBS = $(IMFSLIB) $(DOSFSLIB)
 
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
 #
 # (OPTIONAL) Add local stuff here using +=
 #
@@ -33,9 +29,7 @@ $(LIB): $(TMP_LIBS)
 	$(AR) ruv $@ $(ARCH)/*
 	$(RANLIB) $@
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
-
-all-local: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(LIB)
 
 .PRECIOUS: $(LIB)
 
