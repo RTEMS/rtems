@@ -15,4 +15,3 @@ noinst_SCRIPTS = setup
 noinst_DATA = setup.def
 
 EXTRA_DIST = $(noinst_SCRIPTS) $(noinst_DATA) .cvsignore
-
