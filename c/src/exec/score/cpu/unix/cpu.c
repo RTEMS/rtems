@@ -391,6 +391,28 @@ void _CPU_Context_Initialize(
   *(addr + RP_OFF) = jmp_addr + ADDR_ADJ_OFFSET;
   *(addr + SP_OFF) = (unsigned32)(_stack_high - CPU_FRAME_SIZE);
   *(addr + FP_OFF) = (unsigned32)(_stack_high);
+
+#elif defined(i386)
+ 
+    /*
+     *  This information was gathered by disassembling setjmp().
+     */
+ 
+    stack_ptr = _stack_high - CPU_FRAME_SIZE;
+    *(addr + EBX_OFF) = 0xFEEDFEED;
+    *(addr + ESI_OFF) = 0xDEADDEAD;
+    *(addr + EDI_OFF) = 0xDEAFDEAF;
+    *(addr + EBP_OFF) = stack_ptr;
+    *(addr + ESP_OFF) = stack_ptr;
+    *(addr + RET_OFF) = jmp_addr;
+ 
+ 
+    addr = (unsigned32 *) stack_ptr;
+ 
+    addr[ 0 ] = jmp_addr;
+    addr[ 1 ] = (unsigned32) stack_ptr;
+    addr[ 2 ] = (unsigned32) stack_ptr;
+
 #else
 #error "UNKNOWN CPU!!!"
 #endif

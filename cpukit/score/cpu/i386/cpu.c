@@ -73,7 +73,6 @@ void _CPU_Initialize(
  */
  
 #if __GO32__
-#include <cpu.h>
 #include <go32.h>
 #include <dpmi.h>
 #endif /* __GO32__ */
@@ -89,7 +88,7 @@ void _CPU_ISR_install_raw_handler(
  
     *old_handler =  0;    /* XXX not supported */
 
-    handler_info.pm_offset = new_handler;
+    handler_info.pm_offset = (u_long) new_handler;
     handler_info.pm_selector = _go32_my_cs();
 
     /* install the IDT entry */
