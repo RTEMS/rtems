@@ -1,5 +1,10 @@
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* bootstrap: Add ACLOCAL, AUTOHEADER.
+	Don't check for auto*tool-versions.
+
+2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* config-ml.in: Don't build sh-rtems ml and ml/m2 multilib variants.
 
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
