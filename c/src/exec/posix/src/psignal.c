@@ -11,6 +11,7 @@
 #include <pthread.h>
 #include <signal.h>
 #include <string.h>	/* memcpy */
+#include <stdlib.h>	/* exit */
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
