@@ -1,5 +1,10 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* ppc403/console/console405.c: Rename round to spiBaudRound
+	(Conflict with C99). Make spiBaudRound static.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* mpc8260/mmu/mmu.c: Use _CPU_MSR_GET instead of _CPU_MSR_Value.
 	(Unify old/new-exception processing API).
 

@@ -185,7 +185,7 @@ static void *spittyp;         /* handle for termios */
 int ppc403_spi_interrupt = 0; /* do not use interrupts... */
 
 
-int round(double x)
+static int spiBaudRound(double x)
 {
   return (int)((int)((x-(int)x)*1000)>500 ? x+1 : x);
 }
@@ -195,7 +195,7 @@ spiBaudSet(uint32_t   baudrate)
 {
   uint32_t   tmp;
 
-  tmp = round( (double)rtems_cpu_configuration_get_serial_per_sec() / (baudrate * 16) );
+  tmp = spiBaudRound( (double)rtems_cpu_configuration_get_serial_per_sec() / (baudrate * 16) );
 
   port->LCR = port->LCR | LCR_DL;
 
