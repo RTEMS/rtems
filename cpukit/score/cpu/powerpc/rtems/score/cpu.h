@@ -61,4 +61,46 @@
 #include <rtems/new-exceptions/cpu.h>
 #endif
 
-#endif
+#ifndef ASM
+/*  The following routine swaps the endian format of an unsigned int.
+ *  It must be static because it is referenced indirectly.
+ *
+ *  This version will work on any processor, but if there is a better
+ *  way for your CPU PLEASE use it.  The most common way to do this is to:
+ *
+ *     swap least significant two bytes with 16-bit rotate
+ *     swap upper and lower 16-bits
+ *     swap most significant two bytes with 16-bit rotate
+ *
+ *  Some CPUs have special instructions which swap a 32-bit quantity in
+ *  a single instruction (e.g. i486).  It is probably best to avoid
+ *  an "endian swapping control bit" in the CPU.  One good reason is
+ *  that interrupts would probably have to be disabled to insure that
+ *  an interrupt does not try to access the same "chunk" with the wrong
+ *  endian.  Another good reason is that on some CPUs, the endian bit
+ *  endianness for ALL fetches -- both code and data -- so the code
+ *  will be fetched incorrectly.
+ */
+ 
+static inline uint32_t CPU_swap_u32(
+  uint32_t value
+)
+{
+  uint32_t   swapped;
+ 
+  asm volatile("rlwimi %0,%1,8,24,31;"
+	       "rlwimi %0,%1,24,16,23;"
+	       "rlwimi %0,%1,8,8,15;"
+	       "rlwimi %0,%1,24,0,7;" :
+	       "=&r" ((swapped)) : "r" ((value)));
+
+  return( swapped );
+}
+
+#define CPU_swap_u16( value ) \
+  (((value&0xff) << 8) | ((value >> 8)&0xff))
+
+#endif /* ASM */
+
+#endif /* _RTEMS_SCORE_CPU_H */
+
