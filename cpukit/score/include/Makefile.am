@@ -46,20 +46,6 @@ endif
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
-# make the cpu dependent options file
-# FIXME: We are exporting a config-header here, which is a bad idea in
-# general
-rtems/score/cpuopts.h: rtems/score/cpuopts-tmp.h
-	@echo "/* target cpu dependent options file */"        >$@
-	@echo "/* automatically generated -- DO NOT EDIT!! */" >>$@
-	@echo                                                  >>$@
-	@echo "#ifndef __CPU_OPTIONS_h"                        >>$@
-	@echo "#define __CPU_OPTIONS_h"                        >>$@
-	@echo                                                  >>$@
-	@cat rtems/score/cpuopts-tmp.h | sed -e '/.*PACKAGE.*/d' >>$@
-	@echo                                                  >>$@
-	@echo "#endif"                                         >>$@
-
 all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

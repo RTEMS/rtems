@@ -1,5 +1,12 @@
 2002-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* score/include/Makefile.am: Remove cpuopt.h generation.
+	* configure.ac: Correct package name.
+	Don't build ada if POSIX is disabled.
+	Generate cpuopt.h on the fly, filter out autoconf-2.53 PACKAGE crap.
+
+2002-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/prog-gnat.m4: New.
 	* configure.ac: Add ada subdir handling.
 

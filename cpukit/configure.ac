@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT([rtems-c-src-exec],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([score])
 RTEMS_TOP(..)
 AC_CONFIG_AUX_DIR(..)
@@ -85,7 +85,7 @@ AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
 
 AC_ARG_ENABLE([ada],[enable ada support])
 AS_IF([test x"$enable_ada" = x"yes"],[
-  AS_IF([test -d ${srcdir}/ada],[
+  AS_IF([test x"$HAS_POSIX_API" = x"yes"],[
     AC_CONFIG_SUBDIRS([ada])
   ])
 ])
@@ -108,7 +108,24 @@ AS_IF([test x"${enable_unixlib}" = x"yes"],
     [to indicate RTEMS using RTEMS's unixlib])]
 )
 
-AM_CONFIG_HEADER(score/include/rtems/score/cpuopts-tmp.h)
+
+AM_CONFIG_HEADER([score/include/rtems/score/cpuopts-tmp.h],[
+echo "/* target cpu dependent options file */"         >$tmp/config.h
+echo "/* automatically generated -- DO NOT EDIT!! */" >>$tmp/config.h
+echo                                                  >>$tmp/config.h
+echo "#ifndef __CPU_OPTIONS_h"                        >>$tmp/config.h
+echo "#define __CPU_OPTIONS_h"                        >>$tmp/config.h
+echo                                                  >>$tmp/config.h
+sed -e '/.*PACKAGE.*/d' score/include/rtems/score/cpuopts-tmp.h >> $tmp/config.h
+echo                                                  >>$tmp/config.h
+echo "#endif"                                         >>$tmp/config.h
+AS_IF([cmp -s score/include/rtems/score/cpuopts.h $tmp/config.h 2>/dev/null],
+  [AC_MSG_NOTICE([score/include/rtems/score/cpuopts.h is unchanged])
+   rm -f $tmp/config.h],
+  [AC_MSG_NOTICE([creating score/include/rtems/score/cpuopts.h])
+   rm -f score/include/rtems/score/cpuopts.h
+   mv $tmp/config.h score/include/rtems/score/cpuopts.h])
+])
 
 AC_ENABLE_MULTILIB([Makefile],[..])
 
