@@ -6,6 +6,7 @@
 #include <bsp.h>
 
 #include <string.h>
+#include <unistd.h>
 
 #define	MAX_COL	80
 #define MAX_ROW	50
