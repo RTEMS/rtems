@@ -6,7 +6,6 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-lib-libbsp-i386-ts_386ex-tools],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([coff2bin])
 RTEMS_TOP(../../../../../../..)
-AC_CONFIG_AUX_DIR(../../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 

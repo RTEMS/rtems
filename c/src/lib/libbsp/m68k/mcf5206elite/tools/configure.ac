@@ -6,7 +6,6 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-lib-libbsp-m68k-mcf5206elite-tools],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([runtest])
 RTEMS_TOP(../../../../../../..)
-AC_CONFIG_AUX_DIR(../../../../../../..)
 
 # FIXME: This should not be here
 AC_ARG_VAR([RTEMS_BSP],[])
