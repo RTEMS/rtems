@@ -145,7 +145,6 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 | need to be converted to ticks for the application.
 +--------------------------------------------------------------------------*/
 #define MAX_LONG_TEST_DURATION       300  /* 5 minutes = 300 seconds */
-#define MAX_SHORT_TEST_DURATION      3    /* 3 seconds */
 
 /*-------------------------------------------------------------------------+
 | Macros

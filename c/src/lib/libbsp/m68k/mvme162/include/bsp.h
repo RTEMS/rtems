@@ -173,7 +173,6 @@ typedef volatile struct {
  */
 
 #define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
  *  Define the interrupt mechanism for Time Test 27

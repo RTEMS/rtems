@@ -62,7 +62,6 @@ extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *conf
  */
 
 #define MAX_LONG_TEST_DURATION       3   /* 3 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
  *  Define the interrupt mechanism for Time Test 27

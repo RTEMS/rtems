@@ -63,7 +63,6 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
  */
 
 #define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
  *  Stuff for Time Test 27

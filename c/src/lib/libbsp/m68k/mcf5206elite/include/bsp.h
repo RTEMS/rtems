@@ -169,7 +169,6 @@ extern char _SYS_CLOCK_FREQUENCY; /* Don't use this variable directly!!! */
  */
 
 #define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
  *  Stuff for Time Test 27
