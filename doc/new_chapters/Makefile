@@ -18,9 +18,12 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi
 
-GENERATED_FILES= process.texi procenv.texi files.texi clock.texi \
-  cond.texi key.texi mutex.texi \
-  sched.texi signal.texi thread.texi
+GENERATED_FILES= \
+   adminiface.texi base.texi cancel.texi clock.texi cond.texi confspace.texi \
+   cspecific.texi device.texi dumpcontrol.texi eventlog.texi files.texi \
+   io.texi key.texi memorymgmt.texi message.texi mutex.texi procenv.texi \
+   process.texi sched.texi semaphores.texi signal.texi systemdb.texi \
+   thread.texi
 
 FILES= posix_users.texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
@@ -103,6 +106,66 @@ clock.texi: clock.t Makefile
 	    -n "" ${*}.t
 
 sched.texi: sched.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+io.texi: io.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+device.texi: device.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+cspecific.texi: cspecific.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+semaphores.texi: semaphores.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+memorymgmt.texi: memorymgmt.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+message.texi: message.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+cancel.texi: cancel.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+eventlog.texi: eventlog.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+dumpcontrol.texi: dumpcontrol.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+confspace.texi: confspace.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+adminiface.texi: adminiface.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+systemdb.texi: systemdb.t Makefile
 	 $(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t

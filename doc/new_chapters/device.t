@@ -6,27 +6,28 @@
 @c  $Id$
 @c
 
-@chapter Process Creation and Execution Manager
+@chapter Device- and Class- Specific Functions Manager
 
 @section Introduction
 
 The 
-process creation and execution manager is ...
+device- and class- specific functions manager is ...
 
-The directives provided by the process creation and execution manager are:
+The directives provided by the device- and class- specific functions manager are:
 
 @itemize @bullet
-@item @code{fork} - 
-@item @code{execl} - 
-@item @code{execv} - 
-@item @code{execle} - 
-@item @code{execve} - 
-@item @code{execlp} - 
-@item @code{execvp} - 
-@item @code{pthread_atfork} - 
-@item @code{wait} - 
-@item @code{waitpid} - 
-@item @code{_exit} - 
+@item @code{cfgetispeed} - 
+@item @code{cfgetospeed} - 
+@item @code{cfsetispeed} - 
+@item @code{cfsetospeed} - 
+@item @code{tcgetattr} - 
+@item @code{tcsetattr} - 
+@item @code{tcsendbreak} - 
+@item @code{tcdrain} - 
+@item @code{tcflush} - 
+@item @code{tcflow} - 
+@item @code{tcgetpgrp} - 
+@item @code{tcsetpgrp} - 
 @end itemize
 
 @section Background
@@ -35,19 +36,19 @@ The directives provided by the process creation and execution manager are:
 
 @section Directives
 
-This section details the process creation and execution manager's directives.
+This section details the device- and class- specific functions manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - XXX
+@subsection cfgetispeed - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fork(
+int cfgetispeed(
 );
 @end example
 @end ifset
@@ -62,13 +63,13 @@ int fork(
 @subheading NOTES:
 
 @page
-@subsection execl - XXX
+@subsection cfgetospeed - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execl(
+int cfgetospeed(
 );
 @end example
 @end ifset
@@ -83,13 +84,13 @@ int execl(
 @subheading NOTES:
 
 @page
-@subsection execv - XXX
+@subsection cfsetispeed - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execv(
+int cfsetispeed(
 );
 @end example
 @end ifset
@@ -104,13 +105,13 @@ int execv(
 @subheading NOTES:
 
 @page
-@subsection execle - XXX
+@subsection cfsetospeed - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execle(
+int cfsetospeed(
 );
 @end example
 @end ifset
@@ -125,13 +126,13 @@ int execle(
 @subheading NOTES:
 
 @page
-@subsection execve - XXX
+@subsection tcgetattr - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execve(
+int tcgetattr(
 );
 @end example
 @end ifset
@@ -146,13 +147,13 @@ int execve(
 @subheading NOTES:
 
 @page
-@subsection execlp - XXX
+@subsection tcsetattr - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execlp(
+int tcsetattr(
 );
 @end example
 @end ifset
@@ -167,13 +168,13 @@ int execlp(
 @subheading NOTES:
 
 @page
-@subsection execvp - XXX
+@subsection tcsendbreak - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execvp(
+int tcsendbreak(
 );
 @end example
 @end ifset
@@ -188,13 +189,13 @@ int execvp(
 @subheading NOTES:
 
 @page
-@subsection pthread_atfork - XXX
+@subsection tcdrain - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int pthread_atfork(
+int tcdrain(
 );
 @end example
 @end ifset
@@ -209,13 +210,13 @@ int pthread_atfork(
 @subheading NOTES:
 
 @page
-@subsection wait - XXX
+@subsection tcflush - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int wait(
+int tcflush(
 );
 @end example
 @end ifset
@@ -230,13 +231,13 @@ int wait(
 @subheading NOTES:
 
 @page
-@subsection waitpid - XXX
+@subsection tcflow - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int waitpid(
+int tcflow(
 );
 @end example
 @end ifset
@@ -251,13 +252,34 @@ int waitpid(
 @subheading NOTES:
 
 @page
-@subsection _exit - XXX
+@subsection tcgetpgrp - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int _exit(
+int tcgetpgrp(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection tcsetpgrp - XXX
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int tcsetpgrp(
 );
 @end example
 @end ifset

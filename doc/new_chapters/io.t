@@ -6,38 +6,34 @@
 @c  $Id$
 @c
 
-@chapter Process Environment Manager
+@chapter Input and Output Primitives Manager
 
 @section Introduction
 
 The 
-process environment manager is ...
+input and output primitives manager is ...
 
-The directives provided by the process environment manager are:
+The directives provided by the input and output primitives manager are:
 
 @itemize @bullet
-@item @code{getpid} - 
-@item @code{getppid} - 
-@item @code{getuid} - 
-@item @code{geteuid} - 
-@item @code{getgid} - 
-@item @code{getegid} - 
-@item @code{setuid} - 
-@item @code{setgid} - 
-@item @code{getgroups} - 
-@item @code{getlogin} - 
-@item @code{getlogin_r} - 
-@item @code{getpgrp} - 
-@item @code{setsid} - 
-@item @code{setpgid} - 
-@item @code{uname} - 
-@item @code{times} - 
-@item @code{getenv} - 
-@item @code{ctermid} - 
-@item @code{ttyname} - 
-@item @code{ttyname_r} - 
-@item @code{isatty} - 
-@item @code{sysconf} - 
+@item @code{pipe} - 
+@item @code{dup} - 
+@item @code{dup2} - 
+@item @code{close} - 
+@item @code{read} - 
+@item @code{write} - 
+@item @code{fcntl} - 
+@item @code{lseek} - 
+@item @code{fsynch} - 
+@item @code{fdatasynch} - 
+@item @code{aio_read} - 
+@item @code{aio_write} - 
+@item @code{lio_listio} - 
+@item @code{aio_error} - 
+@item @code{aio_return} - 
+@item @code{aio_cancel} - 
+@item @code{aio_suspend} - 
+@item @code{aio_fsync} - 
 @end itemize
 
 @section Background
@@ -46,19 +42,19 @@ The directives provided by the process environment manager are:
 
 @section Directives
 
-This section details the process environment manager's directives.
+This section details the input and output primitives manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection getpid - XXX
+@subsection pipe - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getpid(
+int pipe(
 );
 @end example
 @end ifset
@@ -73,13 +69,13 @@ int getpid(
 @subheading NOTES:
 
 @page
-@subsection getppid - XXX
+@subsection dup - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getppid(
+int dup(
 );
 @end example
 @end ifset
@@ -94,13 +90,13 @@ int getppid(
 @subheading NOTES:
 
 @page
-@subsection getuid - XXX
+@subsection dup2 - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getuid(
+int dup2(
 );
 @end example
 @end ifset
@@ -115,13 +111,13 @@ int getuid(
 @subheading NOTES:
 
 @page
-@subsection geteuid - XXX
+@subsection close - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int geteuid(
+int close(
 );
 @end example
 @end ifset
@@ -136,13 +132,13 @@ int geteuid(
 @subheading NOTES:
 
 @page
-@subsection getgid - XXX
+@subsection read - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getgid(
+int read(
 );
 @end example
 @end ifset
@@ -157,13 +153,13 @@ int getgid(
 @subheading NOTES:
 
 @page
-@subsection getegid - XXX
+@subsection write - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getegid(
+int write(
 );
 @end example
 @end ifset
@@ -178,13 +174,13 @@ int getegid(
 @subheading NOTES:
 
 @page
-@subsection setuid - XXX
+@subsection fcntl - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setuid(
+int fcntl(
 );
 @end example
 @end ifset
@@ -199,13 +195,13 @@ int setuid(
 @subheading NOTES:
 
 @page
-@subsection setgid - XXX
+@subsection lseek - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setgid(
+int lseek(
 );
 @end example
 @end ifset
@@ -220,13 +216,13 @@ int setgid(
 @subheading NOTES:
 
 @page
-@subsection getgroups - XXX
+@subsection fsynch - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getgroups(
+int fsynch(
 );
 @end example
 @end ifset
@@ -241,13 +237,13 @@ int getgroups(
 @subheading NOTES:
 
 @page
-@subsection getlogin - XXX
+@subsection fdatasynch - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getlogin(
+int fdatasynch(
 );
 @end example
 @end ifset
@@ -262,13 +258,13 @@ int getlogin(
 @subheading NOTES:
 
 @page
-@subsection getlogin_r - XXX
+@subsection aio_read - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getlogin_r(
+int aio_read(
 );
 @end example
 @end ifset
@@ -283,13 +279,13 @@ int getlogin_r(
 @subheading NOTES:
 
 @page
-@subsection getpgrp - XXX
+@subsection aio_write - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getpgrp(
+int aio_write(
 );
 @end example
 @end ifset
@@ -304,13 +300,13 @@ int getpgrp(
 @subheading NOTES:
 
 @page
-@subsection setsid - XXX
+@subsection lio_listio - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setsid(
+int lio_listio(
 );
 @end example
 @end ifset
@@ -325,13 +321,13 @@ int setsid(
 @subheading NOTES:
 
 @page
-@subsection setpgid - XXX
+@subsection aio_error - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setpgid(
+int aio_error(
 );
 @end example
 @end ifset
@@ -346,13 +342,13 @@ int setpgid(
 @subheading NOTES:
 
 @page
-@subsection uname - XXX
+@subsection aio_return - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int uname(
+int aio_return(
 );
 @end example
 @end ifset
@@ -367,13 +363,13 @@ int uname(
 @subheading NOTES:
 
 @page
-@subsection times - XXX
+@subsection aio_cancel - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int times(
+int aio_cancel(
 );
 @end example
 @end ifset
@@ -388,13 +384,13 @@ int times(
 @subheading NOTES:
 
 @page
-@subsection getenv - XXX
+@subsection aio_suspend - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getenv(
+int aio_suspend(
 );
 @end example
 @end ifset
@@ -409,97 +405,13 @@ int getenv(
 @subheading NOTES:
 
 @page
-@subsection ctermid - XXX
+@subsection aio_fsync - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int ctermid(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection ttyname - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int ttyname(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection ttyname_r - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int ttyname_r(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection isatty - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int isatty(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection sysconf - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int sysconf(
+int aio_fsync(
 );
 @end example
 @end ifset

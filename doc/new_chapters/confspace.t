@@ -6,27 +6,28 @@
 @c  $Id$
 @c
 
-@chapter Process Creation and Execution Manager
+@chapter Configuration Space Manager
 
 @section Introduction
 
 The 
-process creation and execution manager is ...
+configuration space manager is ...
 
-The directives provided by the process creation and execution manager are:
+The directives provided by the configuration space manager are:
 
 @itemize @bullet
-@item @code{fork} - 
-@item @code{execl} - 
-@item @code{execv} - 
-@item @code{execle} - 
-@item @code{execve} - 
-@item @code{execlp} - 
-@item @code{execvp} - 
-@item @code{pthread_atfork} - 
-@item @code{wait} - 
-@item @code{waitpid} - 
-@item @code{_exit} - 
+@item @code{cfg_mount} - 
+@item @code{cfg_unmount} - 
+@item @code{cfg_mknod} - 
+@item @code{cfg_get} - 
+@item @code{cfg_set} - 
+@item @code{cfg_link} - 
+@item @code{cfg_unlink} - 
+@item @code{cfg_open} - 
+@item @code{cfg_read} - 
+@item @code{cfg_children} - 
+@item @code{cfg_mark} - 
+@item @code{cfg_close} - 
 @end itemize
 
 @section Background
@@ -35,19 +36,19 @@ The directives provided by the process creation and execution manager are:
 
 @section Directives
 
-This section details the process creation and execution manager's directives.
+This section details the configuration space manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - XXX
+@subsection cfg_mount - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fork(
+int cfg_mount(
 );
 @end example
 @end ifset
@@ -62,13 +63,13 @@ int fork(
 @subheading NOTES:
 
 @page
-@subsection execl - XXX
+@subsection cfg_unmount - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execl(
+int cfg_unmount(
 );
 @end example
 @end ifset
@@ -83,13 +84,13 @@ int execl(
 @subheading NOTES:
 
 @page
-@subsection execv - XXX
+@subsection cfg_mknod - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execv(
+int cfg_mknod(
 );
 @end example
 @end ifset
@@ -104,13 +105,13 @@ int execv(
 @subheading NOTES:
 
 @page
-@subsection execle - XXX
+@subsection cfg_get - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execle(
+int cfg_get(
 );
 @end example
 @end ifset
@@ -125,13 +126,13 @@ int execle(
 @subheading NOTES:
 
 @page
-@subsection execve - XXX
+@subsection cfg_set - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execve(
+int cfg_set(
 );
 @end example
 @end ifset
@@ -146,13 +147,13 @@ int execve(
 @subheading NOTES:
 
 @page
-@subsection execlp - XXX
+@subsection cfg_link - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execlp(
+int cfg_link(
 );
 @end example
 @end ifset
@@ -167,13 +168,13 @@ int execlp(
 @subheading NOTES:
 
 @page
-@subsection execvp - XXX
+@subsection cfg_unlink - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execvp(
+int cfg_unlink(
 );
 @end example
 @end ifset
@@ -188,13 +189,13 @@ int execvp(
 @subheading NOTES:
 
 @page
-@subsection pthread_atfork - XXX
+@subsection cfg_open - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int pthread_atfork(
+int cfg_open(
 );
 @end example
 @end ifset
@@ -209,13 +210,13 @@ int pthread_atfork(
 @subheading NOTES:
 
 @page
-@subsection wait - XXX
+@subsection cfg_read - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int wait(
+int cfg_read(
 );
 @end example
 @end ifset
@@ -230,13 +231,13 @@ int wait(
 @subheading NOTES:
 
 @page
-@subsection waitpid - XXX
+@subsection cfg_children - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int waitpid(
+int cfg_children(
 );
 @end example
 @end ifset
@@ -251,13 +252,34 @@ int waitpid(
 @subheading NOTES:
 
 @page
-@subsection _exit - XXX
+@subsection cfg_mark - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int _exit(
+int cfg_mark(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection cfg_close - XXX
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int cfg_close(
 );
 @end example
 @end ifset

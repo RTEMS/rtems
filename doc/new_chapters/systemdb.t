@@ -6,27 +6,24 @@
 @c  $Id$
 @c
 
-@chapter Process Creation and Execution Manager
+@chapter System Databases Manager
 
 @section Introduction
 
 The 
-process creation and execution manager is ...
+system databases manager is ...
 
-The directives provided by the process creation and execution manager are:
+The directives provided by the system databases manager are:
 
 @itemize @bullet
-@item @code{fork} - 
-@item @code{execl} - 
-@item @code{execv} - 
-@item @code{execle} - 
-@item @code{execve} - 
-@item @code{execlp} - 
-@item @code{execvp} - 
-@item @code{pthread_atfork} - 
-@item @code{wait} - 
-@item @code{waitpid} - 
-@item @code{_exit} - 
+@item @code{getgrgid} - 
+@item @code{getgrgid_r} - 
+@item @code{getgrnam} - 
+@item @code{getgrnam_r} - 
+@item @code{getpwuid} - 
+@item @code{getpwuid_r} - 
+@item @code{getpwnam} - 
+@item @code{getpwnam_r} - 
 @end itemize
 
 @section Background
@@ -35,19 +32,19 @@ The directives provided by the process creation and execution manager are:
 
 @section Directives
 
-This section details the process creation and execution manager's directives.
+This section details the system databases manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - XXX
+@subsection getgrgid - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fork(
+int getgrgid(
 );
 @end example
 @end ifset
@@ -62,13 +59,13 @@ int fork(
 @subheading NOTES:
 
 @page
-@subsection execl - XXX
+@subsection getgrgid_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execl(
+int getgrgid_r(
 );
 @end example
 @end ifset
@@ -83,13 +80,13 @@ int execl(
 @subheading NOTES:
 
 @page
-@subsection execv - XXX
+@subsection getgrnam - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execv(
+int getgrnam(
 );
 @end example
 @end ifset
@@ -104,13 +101,13 @@ int execv(
 @subheading NOTES:
 
 @page
-@subsection execle - XXX
+@subsection getgrnam_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execle(
+int getgrnam_r(
 );
 @end example
 @end ifset
@@ -125,13 +122,13 @@ int execle(
 @subheading NOTES:
 
 @page
-@subsection execve - XXX
+@subsection getpwuid - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execve(
+int getpwuid(
 );
 @end example
 @end ifset
@@ -146,13 +143,13 @@ int execve(
 @subheading NOTES:
 
 @page
-@subsection execlp - XXX
+@subsection getpwuid_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execlp(
+int getpwuid_r(
 );
 @end example
 @end ifset
@@ -167,13 +164,13 @@ int execlp(
 @subheading NOTES:
 
 @page
-@subsection execvp - XXX
+@subsection getpwnam - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execvp(
+int getpwnam(
 );
 @end example
 @end ifset
@@ -188,76 +185,13 @@ int execvp(
 @subheading NOTES:
 
 @page
-@subsection pthread_atfork - XXX
+@subsection getpwnam_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int pthread_atfork(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection wait - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int wait(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection waitpid - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int waitpid(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection _exit - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int _exit(
+int getpwnam_r(
 );
 @end example
 @end ifset

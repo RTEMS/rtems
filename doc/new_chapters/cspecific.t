@@ -6,38 +6,37 @@
 @c  $Id$
 @c
 
-@chapter Process Environment Manager
+@chapter Language-Specific Services for the C Programming Language Manager
 
 @section Introduction
 
 The 
-process environment manager is ...
+language-specific services for the C programming language manager is ...
 
-The directives provided by the process environment manager are:
+The directives provided by the language-specific services for the C programming language manager are:
 
 @itemize @bullet
-@item @code{getpid} - 
-@item @code{getppid} - 
-@item @code{getuid} - 
-@item @code{geteuid} - 
-@item @code{getgid} - 
-@item @code{getegid} - 
-@item @code{setuid} - 
-@item @code{setgid} - 
-@item @code{getgroups} - 
-@item @code{getlogin} - 
-@item @code{getlogin_r} - 
-@item @code{getpgrp} - 
-@item @code{setsid} - 
-@item @code{setpgid} - 
-@item @code{uname} - 
-@item @code{times} - 
-@item @code{getenv} - 
-@item @code{ctermid} - 
-@item @code{ttyname} - 
-@item @code{ttyname_r} - 
-@item @code{isatty} - 
-@item @code{sysconf} - 
+@item @code{setlocale} - 
+@item @code{fileno} - 
+@item @code{fdopen} - 
+@item @code{flcokfile} - 
+@item @code{ftrylockfile} - 
+@item @code{funlockfile} - 
+@item @code{getc_unlocked} - 
+@item @code{getchar_unlocked} - 
+@item @code{putc_unlocked} - 
+@item @code{putchar_unlocked} - 
+@item @code{setjmp} - 
+@item @code{longjmp} - 
+@item @code{sigsetjmp} - 
+@item @code{siglongjmp} - 
+@item @code{tzset} - 
+@item @code{strtok_r} - 
+@item @code{asctime_r} - 
+@item @code{ctime_r} - 
+@item @code{gmtime_r} - 
+@item @code{localtime_r} - 
+@item @code{rand_r} - 
 @end itemize
 
 @section Background
@@ -46,19 +45,19 @@ The directives provided by the process environment manager are:
 
 @section Directives
 
-This section details the process environment manager's directives.
+This section details the language-specific services for the C programming language manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection getpid - XXX
+@subsection setlocale - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getpid(
+int setlocale(
 );
 @end example
 @end ifset
@@ -73,13 +72,13 @@ int getpid(
 @subheading NOTES:
 
 @page
-@subsection getppid - XXX
+@subsection fileno - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getppid(
+int fileno(
 );
 @end example
 @end ifset
@@ -94,13 +93,13 @@ int getppid(
 @subheading NOTES:
 
 @page
-@subsection getuid - XXX
+@subsection fdopen - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getuid(
+int fdopen(
 );
 @end example
 @end ifset
@@ -115,13 +114,13 @@ int getuid(
 @subheading NOTES:
 
 @page
-@subsection geteuid - XXX
+@subsection flcokfile - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int geteuid(
+int flcokfile(
 );
 @end example
 @end ifset
@@ -136,13 +135,13 @@ int geteuid(
 @subheading NOTES:
 
 @page
-@subsection getgid - XXX
+@subsection ftrylockfile - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getgid(
+int ftrylockfile(
 );
 @end example
 @end ifset
@@ -157,13 +156,13 @@ int getgid(
 @subheading NOTES:
 
 @page
-@subsection getegid - XXX
+@subsection funlockfile - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getegid(
+int funlockfile(
 );
 @end example
 @end ifset
@@ -178,13 +177,13 @@ int getegid(
 @subheading NOTES:
 
 @page
-@subsection setuid - XXX
+@subsection getc_unlocked - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setuid(
+int getc_unlocked(
 );
 @end example
 @end ifset
@@ -199,13 +198,13 @@ int setuid(
 @subheading NOTES:
 
 @page
-@subsection setgid - XXX
+@subsection getchar_unlocked - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setgid(
+int getchar_unlocked(
 );
 @end example
 @end ifset
@@ -220,13 +219,13 @@ int setgid(
 @subheading NOTES:
 
 @page
-@subsection getgroups - XXX
+@subsection putc_unlocked - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getgroups(
+int putc_unlocked(
 );
 @end example
 @end ifset
@@ -241,13 +240,13 @@ int getgroups(
 @subheading NOTES:
 
 @page
-@subsection getlogin - XXX
+@subsection putchar_unlocked - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getlogin(
+int putchar_unlocked(
 );
 @end example
 @end ifset
@@ -262,13 +261,13 @@ int getlogin(
 @subheading NOTES:
 
 @page
-@subsection getlogin_r - XXX
+@subsection setjmp - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getlogin_r(
+int setjmp(
 );
 @end example
 @end ifset
@@ -283,13 +282,13 @@ int getlogin_r(
 @subheading NOTES:
 
 @page
-@subsection getpgrp - XXX
+@subsection longjmp - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getpgrp(
+int longjmp(
 );
 @end example
 @end ifset
@@ -304,13 +303,13 @@ int getpgrp(
 @subheading NOTES:
 
 @page
-@subsection setsid - XXX
+@subsection sigsetjmp - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setsid(
+int sigsetjmp(
 );
 @end example
 @end ifset
@@ -325,13 +324,13 @@ int setsid(
 @subheading NOTES:
 
 @page
-@subsection setpgid - XXX
+@subsection siglongjmp - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setpgid(
+int siglongjmp(
 );
 @end example
 @end ifset
@@ -346,13 +345,13 @@ int setpgid(
 @subheading NOTES:
 
 @page
-@subsection uname - XXX
+@subsection tzset - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int uname(
+int tzset(
 );
 @end example
 @end ifset
@@ -367,13 +366,13 @@ int uname(
 @subheading NOTES:
 
 @page
-@subsection times - XXX
+@subsection strtok_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int times(
+int strtok_r(
 );
 @end example
 @end ifset
@@ -388,13 +387,13 @@ int times(
 @subheading NOTES:
 
 @page
-@subsection getenv - XXX
+@subsection asctime_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getenv(
+int asctime_r(
 );
 @end example
 @end ifset
@@ -409,13 +408,13 @@ int getenv(
 @subheading NOTES:
 
 @page
-@subsection ctermid - XXX
+@subsection ctime_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int ctermid(
+int ctime_r(
 );
 @end example
 @end ifset
@@ -430,13 +429,13 @@ int ctermid(
 @subheading NOTES:
 
 @page
-@subsection ttyname - XXX
+@subsection gmtime_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int ttyname(
+int gmtime_r(
 );
 @end example
 @end ifset
@@ -451,13 +450,13 @@ int ttyname(
 @subheading NOTES:
 
 @page
-@subsection ttyname_r - XXX
+@subsection localtime_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int ttyname_r(
+int localtime_r(
 );
 @end example
 @end ifset
@@ -472,34 +471,13 @@ int ttyname_r(
 @subheading NOTES:
 
 @page
-@subsection isatty - XXX
+@subsection rand_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int isatty(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection sysconf - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int sysconf(
+int rand_r(
 );
 @end example
 @end ifset

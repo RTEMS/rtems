@@ -6,27 +6,25 @@
 @c  $Id$
 @c
 
-@chapter Process Creation and Execution Manager
+@chapter Semaphores Manager
 
 @section Introduction
 
 The 
-process creation and execution manager is ...
+semaphore manager is ...
 
-The directives provided by the process creation and execution manager are:
+The directives provided by the semaphore manager are:
 
 @itemize @bullet
-@item @code{fork} - 
-@item @code{execl} - 
-@item @code{execv} - 
-@item @code{execle} - 
-@item @code{execve} - 
-@item @code{execlp} - 
-@item @code{execvp} - 
-@item @code{pthread_atfork} - 
-@item @code{wait} - 
-@item @code{waitpid} - 
-@item @code{_exit} - 
+@item @code{sem_init} - 
+@item @code{sem_destroy} - 
+@item @code{sem_open} - 
+@item @code{sem_close} - 
+@item @code{sem_unlink} - 
+@item @code{sem_wait} - 
+@item @code{sem_trywait} - 
+@item @code{sem_post} - 
+@item @code{sem_getvalue} - 
 @end itemize
 
 @section Background
@@ -35,19 +33,19 @@ The directives provided by the process creation and execution manager are:
 
 @section Directives
 
-This section details the process creation and execution manager's directives.
+This section details the semaphore manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - XXX
+@subsection sem_init - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fork(
+int sem_init(
 );
 @end example
 @end ifset
@@ -62,13 +60,13 @@ int fork(
 @subheading NOTES:
 
 @page
-@subsection execl - XXX
+@subsection sem_destroy - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execl(
+int sem_destroy(
 );
 @end example
 @end ifset
@@ -83,13 +81,13 @@ int execl(
 @subheading NOTES:
 
 @page
-@subsection execv - XXX
+@subsection sem_open - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execv(
+int sem_open(
 );
 @end example
 @end ifset
@@ -104,13 +102,13 @@ int execv(
 @subheading NOTES:
 
 @page
-@subsection execle - XXX
+@subsection sem_close - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execle(
+int sem_close(
 );
 @end example
 @end ifset
@@ -125,13 +123,13 @@ int execle(
 @subheading NOTES:
 
 @page
-@subsection execve - XXX
+@subsection sem_unlink - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execve(
+int sem_unlink(
 );
 @end example
 @end ifset
@@ -146,13 +144,13 @@ int execve(
 @subheading NOTES:
 
 @page
-@subsection execlp - XXX
+@subsection sem_wait - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execlp(
+int sem_wait(
 );
 @end example
 @end ifset
@@ -167,13 +165,13 @@ int execlp(
 @subheading NOTES:
 
 @page
-@subsection execvp - XXX
+@subsection sem_trywait - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execvp(
+int sem_trywait(
 );
 @end example
 @end ifset
@@ -188,13 +186,13 @@ int execvp(
 @subheading NOTES:
 
 @page
-@subsection pthread_atfork - XXX
+@subsection sem_post - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int pthread_atfork(
+int sem_post(
 );
 @end example
 @end ifset
@@ -209,55 +207,13 @@ int pthread_atfork(
 @subheading NOTES:
 
 @page
-@subsection wait - XXX
+@subsection sem_getvalue - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int wait(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection waitpid - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int waitpid(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection _exit - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int _exit(
+int sem_getvalue(
 );
 @end example
 @end ifset

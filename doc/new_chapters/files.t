@@ -6,38 +6,42 @@
 @c  $Id$
 @c
 
-@chapter Process Environment Manager
+@chapter Files and Directories Manager
 
 @section Introduction
 
 The 
-process environment manager is ...
+files and directories manager is ...
 
-The directives provided by the process environment manager are:
+The directives provided by the files and directories manager are:
 
 @itemize @bullet
-@item @code{getpid} - 
-@item @code{getppid} - 
-@item @code{getuid} - 
-@item @code{geteuid} - 
-@item @code{getgid} - 
-@item @code{getegid} - 
-@item @code{setuid} - 
-@item @code{setgid} - 
-@item @code{getgroups} - 
-@item @code{getlogin} - 
-@item @code{getlogin_r} - 
-@item @code{getpgrp} - 
-@item @code{setsid} - 
-@item @code{setpgid} - 
-@item @code{uname} - 
-@item @code{times} - 
-@item @code{getenv} - 
-@item @code{ctermid} - 
-@item @code{ttyname} - 
-@item @code{ttyname_r} - 
-@item @code{isatty} - 
-@item @code{sysconf} - 
+@item @code{opendir} - 
+@item @code{readdir} - 
+@item @code{readdir_r} - 
+@item @code{rewinddir} - 
+@item @code{closedir} - 
+@item @code{chdir} - 
+@item @code{getcwd} - 
+@item @code{open} - 
+@item @code{creat} - 
+@item @code{umask} - 
+@item @code{link} - 
+@item @code{mkdir} - 
+@item @code{mkfifo} - 
+@item @code{unlink} - 
+@item @code{rmdir} - 
+@item @code{rename} - 
+@item @code{stat} - 
+@item @code{fstat} - 
+@item @code{access} - 
+@item @code{chmod} - 
+@item @code{fchmod} - 
+@item @code{chown} - 
+@item @code{utime} - 
+@item @code{ftrunctate} - 
+@item @code{pathconf} - 
+@item @code{fpathconf} - 
 @end itemize
 
 @section Background
@@ -46,19 +50,19 @@ The directives provided by the process environment manager are:
 
 @section Directives
 
-This section details the process environment manager's directives.
+This section details the files and directories manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection getpid - XXX
+@subsection opendir - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getpid(
+int opendir(
 );
 @end example
 @end ifset
@@ -73,13 +77,13 @@ int getpid(
 @subheading NOTES:
 
 @page
-@subsection getppid - XXX
+@subsection readdir - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getppid(
+int readdir(
 );
 @end example
 @end ifset
@@ -94,13 +98,13 @@ int getppid(
 @subheading NOTES:
 
 @page
-@subsection getuid - XXX
+@subsection readdir_r - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getuid(
+int readdir_r(
 );
 @end example
 @end ifset
@@ -115,13 +119,13 @@ int getuid(
 @subheading NOTES:
 
 @page
-@subsection geteuid - XXX
+@subsection rewinddir - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int geteuid(
+int rewinddir(
 );
 @end example
 @end ifset
@@ -136,13 +140,13 @@ int geteuid(
 @subheading NOTES:
 
 @page
-@subsection getgid - XXX
+@subsection closedir - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getgid(
+int closedir(
 );
 @end example
 @end ifset
@@ -157,13 +161,13 @@ int getgid(
 @subheading NOTES:
 
 @page
-@subsection getegid - XXX
+@subsection chdir - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getegid(
+int chdir(
 );
 @end example
 @end ifset
@@ -178,13 +182,13 @@ int getegid(
 @subheading NOTES:
 
 @page
-@subsection setuid - XXX
+@subsection getcwd - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setuid(
+int getcwd(
 );
 @end example
 @end ifset
@@ -199,13 +203,13 @@ int setuid(
 @subheading NOTES:
 
 @page
-@subsection setgid - XXX
+@subsection open - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setgid(
+int open(
 );
 @end example
 @end ifset
@@ -220,13 +224,13 @@ int setgid(
 @subheading NOTES:
 
 @page
-@subsection getgroups - XXX
+@subsection creat - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getgroups(
+int creat(
 );
 @end example
 @end ifset
@@ -241,13 +245,13 @@ int getgroups(
 @subheading NOTES:
 
 @page
-@subsection getlogin - XXX
+@subsection umask - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getlogin(
+int umask(
 );
 @end example
 @end ifset
@@ -262,13 +266,13 @@ int getlogin(
 @subheading NOTES:
 
 @page
-@subsection getlogin_r - XXX
+@subsection link - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getlogin_r(
+int link(
 );
 @end example
 @end ifset
@@ -283,13 +287,13 @@ int getlogin_r(
 @subheading NOTES:
 
 @page
-@subsection getpgrp - XXX
+@subsection mkdir - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getpgrp(
+int mkdir(
 );
 @end example
 @end ifset
@@ -304,13 +308,13 @@ int getpgrp(
 @subheading NOTES:
 
 @page
-@subsection setsid - XXX
+@subsection mkfifo - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setsid(
+int mkfifo(
 );
 @end example
 @end ifset
@@ -325,13 +329,13 @@ int setsid(
 @subheading NOTES:
 
 @page
-@subsection setpgid - XXX
+@subsection unlink - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int setpgid(
+int unlink(
 );
 @end example
 @end ifset
@@ -346,13 +350,13 @@ int setpgid(
 @subheading NOTES:
 
 @page
-@subsection uname - XXX
+@subsection rmdir - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int uname(
+int rmdir(
 );
 @end example
 @end ifset
@@ -367,13 +371,13 @@ int uname(
 @subheading NOTES:
 
 @page
-@subsection times - XXX
+@subsection rename - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int times(
+int rename(
 );
 @end example
 @end ifset
@@ -388,13 +392,13 @@ int times(
 @subheading NOTES:
 
 @page
-@subsection getenv - XXX
+@subsection stat - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int getenv(
+int stat(
 );
 @end example
 @end ifset
@@ -409,13 +413,13 @@ int getenv(
 @subheading NOTES:
 
 @page
-@subsection ctermid - XXX
+@subsection fstat - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int ctermid(
+int fstat(
 );
 @end example
 @end ifset
@@ -430,13 +434,13 @@ int ctermid(
 @subheading NOTES:
 
 @page
-@subsection ttyname - XXX
+@subsection access - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int ttyname(
+int access(
 );
 @end example
 @end ifset
@@ -451,13 +455,13 @@ int ttyname(
 @subheading NOTES:
 
 @page
-@subsection ttyname_r - XXX
+@subsection chmod - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int ttyname_r(
+int chmod(
 );
 @end example
 @end ifset
@@ -472,13 +476,13 @@ int ttyname_r(
 @subheading NOTES:
 
 @page
-@subsection isatty - XXX
+@subsection fchmod - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int isatty(
+int fchmod(
 );
 @end example
 @end ifset
@@ -493,13 +497,97 @@ int isatty(
 @subheading NOTES:
 
 @page
-@subsection sysconf - XXX
+@subsection chown - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int sysconf(
+int chown(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection utime - XXX
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int utime(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection ftrunctate - XXX
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int ftrunctate(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection pathconf - XXX
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int pathconf(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection fpathconf - XXX
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int fpathconf(
 );
 @end example
 @end ifset

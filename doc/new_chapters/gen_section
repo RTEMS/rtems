@@ -4,20 +4,20 @@
 
 
 # Set this based on which chapter you want to generate a template for.
-chapter="files"
+chapter=$1
 
 case ${chapter} in 
   process)
     CHAPTER_CAPS="Process Creation and Execution"
     CHAPTER_LOWER="process creation and execution"
-    ROUTINES="execl execv execle execve execlp execvp pthread_atfork \
+    ROUTINES="fork execl execv execle execve execlp execvp pthread_atfork \
       wait waitpid _exit"
     ;;
   procenv)
     CHAPTER_CAPS="Process Environment"
     CHAPTER_LOWER="process environment"
-    ROUTINES="getpid getppid getgid getegid setuid setgid getgroups \
-      getlogin getlogin_r getpgrp setsid setpgid uname times \
+    ROUTINES="getpid getppid getuid geteuid getgid getegid setuid setgid \
+      getgroups getlogin getlogin_r getpgrp setsid setpgid uname times \
       getenv ctermid ttyname ttyname_r isatty sysconf "
     ;;
   files)
@@ -27,6 +27,80 @@ case ${chapter} in
        chdir getcwd open creat umask link mkdir mkfifo unlink \
        rmdir rename stat fstat access chmod fchmod chown \
        utime ftrunctate pathconf fpathconf"
+    ;;
+  io)
+    CHAPTER_CAPS="Input and Output Primitives"
+    CHAPTER_LOWER="input and output primitives"
+    ROUTINES="pipe dup dup2 close read write fcntl lseek fsynch fdatasynch \
+       aio_read aio_write lio_listio aio_error aio_return aio_cancel \
+       aio_suspend aio_fsync"
+    ;;
+  device)
+    CHAPTER_CAPS="Device- and Class- Specific Functions"
+    CHAPTER_LOWER="device- and class- specific functions"
+    ROUTINES="cfgetispeed cfgetospeed cfsetispeed cfsetospeed tcgetattr \
+       tcsetattr tcsendbreak tcdrain tcflush tcflow tcgetpgrp tcsetpgrp"
+    ;;
+  cspecific)
+    CHAPTER_CAPS="Language-Specific Services for the C Programming Language"
+    CHAPTER_LOWER="language-specific services for the C programming language"
+    ROUTINES="setlocale fileno fdopen flcokfile ftrylockfile funlockfile \
+       getc_unlocked getchar_unlocked putc_unlocked putchar_unlocked \
+       setjmp longjmp sigsetjmp siglongjmp tzset strtok_r asctime_r \
+       ctime_r gmtime_r localtime_r rand_r"
+    ;;
+  systemdb)
+    CHAPTER_CAPS="System Databases"
+    CHAPTER_LOWER="system databases"
+    ROUTINES="getgrgid getgrgid_r getgrnam getgrnam_r getpwuid getpwuid_r \
+       getpwnam getpwnam_r"
+    ;;
+  semaphores)
+    CHAPTER_CAPS="Semaphores"
+    CHAPTER_LOWER="semaphore"
+    ROUTINES="sem_init sem_destroy sem_open sem_close sem_unlink sem_wait \
+       sem_trywait sem_post sem_getvalue"
+    ;;
+  memorymgmt)
+    CHAPTER_CAPS="Memory Management"
+    CHAPTER_LOWER="memory management"
+    ROUTINES="mlockall munlockall mlock munlock mmap munmap mprotect \
+       msync shm_open shm_unlink"
+    ;;
+  message)
+    CHAPTER_CAPS="Message Passing"
+    CHAPTER_LOWER="message passing"
+    ROUTINES="mq_open mq_close mq_unlink mq_send mq_receive mq_notify \
+       mq_setattr mq_getattr"
+    ;;
+  cancel)
+    CHAPTER_CAPS="Thread Cancellation"
+    CHAPTER_LOWER="thread cancellation"
+    ROUTINES="pthread_cancel pthread_setcancelstate pthread_setcanceltype \
+       pthread_testcancel pthread_cleanup_push"
+    ;;
+  eventlog)
+    CHAPTER_CAPS="Event Logging"
+    CHAPTER_LOWER="event logging"
+    ROUTINES="log_write log_open log_read log_notify log_close log_seek \
+       log_severity_before log_facilityemptyset log_facilityfillset \
+       log_facilityaddset log_facilitydelset log_facilityismember"
+    ;;
+  dumpcontrol)
+    CHAPTER_CAPS="Process Dump Control"
+    CHAPTER_LOWER="process dump control"
+    ROUTINES="dump_setpath"
+    ;;
+  confspace)
+    CHAPTER_CAPS="Configuration Space"
+    CHAPTER_LOWER="configuration space"
+    ROUTINES="cfg_mount cfg_unmount cfg_mknod cfg_get cfg_set cfg_link \
+       cfg_unlink cfg_open cfg_read cfg_children cfg_mark cfg_close"
+    ;;
+  adminiface)
+    CHAPTER_CAPS="Administration Interface"
+    CHAPTER_LOWER="administration interface"
+    ROUTINES="admin_shutdown"
     ;;
   *)
     echo "Unknown chapter name"

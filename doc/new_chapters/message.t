@@ -6,27 +6,24 @@
 @c  $Id$
 @c
 
-@chapter Process Creation and Execution Manager
+@chapter Message Passing Manager
 
 @section Introduction
 
 The 
-process creation and execution manager is ...
+message passing manager is ...
 
-The directives provided by the process creation and execution manager are:
+The directives provided by the message passing manager are:
 
 @itemize @bullet
-@item @code{fork} - 
-@item @code{execl} - 
-@item @code{execv} - 
-@item @code{execle} - 
-@item @code{execve} - 
-@item @code{execlp} - 
-@item @code{execvp} - 
-@item @code{pthread_atfork} - 
-@item @code{wait} - 
-@item @code{waitpid} - 
-@item @code{_exit} - 
+@item @code{mq_open} - 
+@item @code{mq_close} - 
+@item @code{mq_unlink} - 
+@item @code{mq_send} - 
+@item @code{mq_receive} - 
+@item @code{mq_notify} - 
+@item @code{mq_setattr} - 
+@item @code{mq_getattr} - 
 @end itemize
 
 @section Background
@@ -35,19 +32,19 @@ The directives provided by the process creation and execution manager are:
 
 @section Directives
 
-This section details the process creation and execution manager's directives.
+This section details the message passing manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - XXX
+@subsection mq_open - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fork(
+int mq_open(
 );
 @end example
 @end ifset
@@ -62,13 +59,13 @@ int fork(
 @subheading NOTES:
 
 @page
-@subsection execl - XXX
+@subsection mq_close - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execl(
+int mq_close(
 );
 @end example
 @end ifset
@@ -83,13 +80,13 @@ int execl(
 @subheading NOTES:
 
 @page
-@subsection execv - XXX
+@subsection mq_unlink - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execv(
+int mq_unlink(
 );
 @end example
 @end ifset
@@ -104,13 +101,13 @@ int execv(
 @subheading NOTES:
 
 @page
-@subsection execle - XXX
+@subsection mq_send - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execle(
+int mq_send(
 );
 @end example
 @end ifset
@@ -125,13 +122,13 @@ int execle(
 @subheading NOTES:
 
 @page
-@subsection execve - XXX
+@subsection mq_receive - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execve(
+int mq_receive(
 );
 @end example
 @end ifset
@@ -146,13 +143,13 @@ int execve(
 @subheading NOTES:
 
 @page
-@subsection execlp - XXX
+@subsection mq_notify - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execlp(
+int mq_notify(
 );
 @end example
 @end ifset
@@ -167,13 +164,13 @@ int execlp(
 @subheading NOTES:
 
 @page
-@subsection execvp - XXX
+@subsection mq_setattr - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execvp(
+int mq_setattr(
 );
 @end example
 @end ifset
@@ -188,76 +185,13 @@ int execvp(
 @subheading NOTES:
 
 @page
-@subsection pthread_atfork - XXX
+@subsection mq_getattr - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int pthread_atfork(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection wait - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int wait(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection waitpid - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int waitpid(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection _exit - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int _exit(
+int mq_getattr(
 );
 @end example
 @end ifset

@@ -6,27 +6,28 @@
 @c  $Id$
 @c
 
-@chapter Process Creation and Execution Manager
+@chapter Event Logging Manager
 
 @section Introduction
 
 The 
-process creation and execution manager is ...
+event logging manager is ...
 
-The directives provided by the process creation and execution manager are:
+The directives provided by the event logging manager are:
 
 @itemize @bullet
-@item @code{fork} - 
-@item @code{execl} - 
-@item @code{execv} - 
-@item @code{execle} - 
-@item @code{execve} - 
-@item @code{execlp} - 
-@item @code{execvp} - 
-@item @code{pthread_atfork} - 
-@item @code{wait} - 
-@item @code{waitpid} - 
-@item @code{_exit} - 
+@item @code{log_write} - 
+@item @code{log_open} - 
+@item @code{log_read} - 
+@item @code{log_notify} - 
+@item @code{log_close} - 
+@item @code{log_seek} - 
+@item @code{log_severity_before} - 
+@item @code{log_facilityemptyset} - 
+@item @code{log_facilityfillset} - 
+@item @code{log_facilityaddset} - 
+@item @code{log_facilitydelset} - 
+@item @code{log_facilityismember} - 
 @end itemize
 
 @section Background
@@ -35,19 +36,19 @@ The directives provided by the process creation and execution manager are:
 
 @section Directives
 
-This section details the process creation and execution manager's directives.
+This section details the event logging manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - XXX
+@subsection log_write - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fork(
+int log_write(
 );
 @end example
 @end ifset
@@ -62,13 +63,13 @@ int fork(
 @subheading NOTES:
 
 @page
-@subsection execl - XXX
+@subsection log_open - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execl(
+int log_open(
 );
 @end example
 @end ifset
@@ -83,13 +84,13 @@ int execl(
 @subheading NOTES:
 
 @page
-@subsection execv - XXX
+@subsection log_read - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execv(
+int log_read(
 );
 @end example
 @end ifset
@@ -104,13 +105,13 @@ int execv(
 @subheading NOTES:
 
 @page
-@subsection execle - XXX
+@subsection log_notify - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execle(
+int log_notify(
 );
 @end example
 @end ifset
@@ -125,13 +126,13 @@ int execle(
 @subheading NOTES:
 
 @page
-@subsection execve - XXX
+@subsection log_close - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execve(
+int log_close(
 );
 @end example
 @end ifset
@@ -146,13 +147,13 @@ int execve(
 @subheading NOTES:
 
 @page
-@subsection execlp - XXX
+@subsection log_seek - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execlp(
+int log_seek(
 );
 @end example
 @end ifset
@@ -167,13 +168,13 @@ int execlp(
 @subheading NOTES:
 
 @page
-@subsection execvp - XXX
+@subsection log_severity_before - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execvp(
+int log_severity_before(
 );
 @end example
 @end ifset
@@ -188,13 +189,13 @@ int execvp(
 @subheading NOTES:
 
 @page
-@subsection pthread_atfork - XXX
+@subsection log_facilityemptyset - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int pthread_atfork(
+int log_facilityemptyset(
 );
 @end example
 @end ifset
@@ -209,13 +210,13 @@ int pthread_atfork(
 @subheading NOTES:
 
 @page
-@subsection wait - XXX
+@subsection log_facilityfillset - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int wait(
+int log_facilityfillset(
 );
 @end example
 @end ifset
@@ -230,13 +231,13 @@ int wait(
 @subheading NOTES:
 
 @page
-@subsection waitpid - XXX
+@subsection log_facilityaddset - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int waitpid(
+int log_facilityaddset(
 );
 @end example
 @end ifset
@@ -251,13 +252,34 @@ int waitpid(
 @subheading NOTES:
 
 @page
-@subsection _exit - XXX
+@subsection log_facilitydelset - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int _exit(
+int log_facilitydelset(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection log_facilityismember - XXX
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int log_facilityismember(
 );
 @end example
 @end ifset

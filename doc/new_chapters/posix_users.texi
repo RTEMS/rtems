@@ -86,15 +86,27 @@ END-INFO-DIR-ENTRY
 
 @include preface.texi
 @include process.texi
+@include signal.texi
 @include procenv.texi
 @include files.texi
-@include thread.texi
-@include signal.texi
+@include io.texi
+@include device.texi
+@include cspecific.texi
+@include systemdb.texi
+@include semaphores.texi
 @include mutex.texi
 @include cond.texi
-@include key.texi
-@include clock.texi
+@include memorymgmt.texi
 @include sched.texi
+@include clock.texi
+@include message.texi
+@include thread.texi
+@include key.texi
+@include cancel.texi
+@include eventlog.texi
+@include dumpcontrol.texi
+@include confspace.texi
+@include adminiface.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top posix_users_new
@@ -104,15 +116,27 @@ This is the online version of the RTEMS POSIX API User's Guide
 @menu
 * Preface::
 * Process Creation and Execution Manager::
+* Signal Manager::
 * Process Environment Manager::
 * Files and Directories Manager::
-* Thread Manager::
-* Signal Manager::
+* Input and Output Primitives Manager::
+* Device- and Class- Specific Functions Manager::
+* Language-Specific Services for the C Programming Language Manager::
+* System Databases Manager::
+* Semaphores Manager::
 * Mutex Manager::
 * Condition Variable Manager::
-* Key Manager::
-* Clock Manager::
+* Memory Management Manager::
 * Scheduler Manager::
+* Clock Manager::
+* Message Passing Manager::
+* Thread Manager::
+* Key Manager::
+* Thread Cancellation Manager::
+* Event Logging Manager::
+* Process Dump Control Manager::
+* Configuration Space Manager::
+* Administration Interface Manager::
 * Command and Variable Index::
 * Concept Index::
 @end menu

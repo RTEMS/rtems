@@ -6,27 +6,26 @@
 @c  $Id$
 @c
 
-@chapter Process Creation and Execution Manager
+@chapter Memory Management Manager
 
 @section Introduction
 
 The 
-process creation and execution manager is ...
+memory management manager is ...
 
-The directives provided by the process creation and execution manager are:
+The directives provided by the memory management manager are:
 
 @itemize @bullet
-@item @code{fork} - 
-@item @code{execl} - 
-@item @code{execv} - 
-@item @code{execle} - 
-@item @code{execve} - 
-@item @code{execlp} - 
-@item @code{execvp} - 
-@item @code{pthread_atfork} - 
-@item @code{wait} - 
-@item @code{waitpid} - 
-@item @code{_exit} - 
+@item @code{mlockall} - 
+@item @code{munlockall} - 
+@item @code{mlock} - 
+@item @code{munlock} - 
+@item @code{mmap} - 
+@item @code{munmap} - 
+@item @code{mprotect} - 
+@item @code{msync} - 
+@item @code{shm_open} - 
+@item @code{shm_unlink} - 
 @end itemize
 
 @section Background
@@ -35,19 +34,19 @@ The directives provided by the process creation and execution manager are:
 
 @section Directives
 
-This section details the process creation and execution manager's directives.
+This section details the memory management manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - XXX
+@subsection mlockall - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fork(
+int mlockall(
 );
 @end example
 @end ifset
@@ -62,13 +61,13 @@ int fork(
 @subheading NOTES:
 
 @page
-@subsection execl - XXX
+@subsection munlockall - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execl(
+int munlockall(
 );
 @end example
 @end ifset
@@ -83,13 +82,13 @@ int execl(
 @subheading NOTES:
 
 @page
-@subsection execv - XXX
+@subsection mlock - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execv(
+int mlock(
 );
 @end example
 @end ifset
@@ -104,13 +103,13 @@ int execv(
 @subheading NOTES:
 
 @page
-@subsection execle - XXX
+@subsection munlock - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execle(
+int munlock(
 );
 @end example
 @end ifset
@@ -125,13 +124,13 @@ int execle(
 @subheading NOTES:
 
 @page
-@subsection execve - XXX
+@subsection mmap - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execve(
+int mmap(
 );
 @end example
 @end ifset
@@ -146,13 +145,13 @@ int execve(
 @subheading NOTES:
 
 @page
-@subsection execlp - XXX
+@subsection munmap - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execlp(
+int munmap(
 );
 @end example
 @end ifset
@@ -167,13 +166,13 @@ int execlp(
 @subheading NOTES:
 
 @page
-@subsection execvp - XXX
+@subsection mprotect - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int execvp(
+int mprotect(
 );
 @end example
 @end ifset
@@ -188,13 +187,13 @@ int execvp(
 @subheading NOTES:
 
 @page
-@subsection pthread_atfork - XXX
+@subsection msync - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int pthread_atfork(
+int msync(
 );
 @end example
 @end ifset
@@ -209,13 +208,13 @@ int pthread_atfork(
 @subheading NOTES:
 
 @page
-@subsection wait - XXX
+@subsection shm_open - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int wait(
+int shm_open(
 );
 @end example
 @end ifset
@@ -230,34 +229,13 @@ int wait(
 @subheading NOTES:
 
 @page
-@subsection waitpid - XXX
+@subsection shm_unlink - XXX
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int waitpid(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-@page
-@subsection _exit - XXX
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int _exit(
+int shm_unlink(
 );
 @end example
 @end ifset
