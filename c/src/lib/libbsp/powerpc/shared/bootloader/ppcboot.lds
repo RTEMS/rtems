@@ -40,6 +40,7 @@ SECTIONS
     *(.text)
     *(.sdata2)
     *(.rodata)
+    *(.rodata*)
   }
 /*  . = ALIGN(16); */
   .image :
@@ -70,6 +71,7 @@ SECTIONS
   .data    :
   {
     *(.data)
+    *(.data*)
     *(.sdata)
     . = ALIGN(4);
     _edata = .;
