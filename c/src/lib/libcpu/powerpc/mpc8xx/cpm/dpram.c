@@ -17,6 +17,8 @@
 #include <mpc8xx.h>
 #include <mpc8xx/cpm.h>
 
+extern void rtems_panic(char *, int);
+
 /*
  * Allocation order:
  *      - Dual-Port RAM section 0

@@ -24,6 +24,7 @@
 #include <libcpu/raw_exception.h>
 #include <libcpu/cpuIdent.h>
 #include <rtems/bspIo.h>	/* for printk */
+#include <string.h>
 
 static rtems_raw_except_connect_data* 		raw_except_table;
 static rtems_raw_except_connect_data  		default_raw_except_entry;
