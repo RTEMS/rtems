@@ -157,7 +157,8 @@ bsd_init ()
 	 * Set up mbuf data structures
 	 */
 
-	p = malloc(nmbuf * MSIZE);
+	p = malloc(nmbuf * MSIZE + MSIZE - 1);
+	p = (char *)(((unsigned long)p + MSIZE - 1) & ~(MSIZE - 1));
 	if (p == NULL)
 		rtems_panic ("Can't get network memory.");
 	for (i = 0; i < nmbuf; i++) {
