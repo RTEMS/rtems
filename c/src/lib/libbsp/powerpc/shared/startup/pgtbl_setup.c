@@ -50,14 +50,14 @@ unsigned		ldPtSize,tmp;
 	/* get those from the linker script.
 	 * NOTE THAT THE CORRECTNESS OF THE LINKER SCRIPT IS CRUCIAL
 	 */
-	extern unsigned long __DATA_START__, _etext;
+	extern unsigned long __DATA_START__[], _etext[];
 
 	/* map text and RO data read-only */
 	tmp = triv121PgTblMap(
 						pt,
 						TRIV121_121_VSID,
 						0,
-						(PAGE_ALIGN((unsigned long)&_etext) - 0) >> PG_SHIFT,
+						(PAGE_ALIGN((unsigned long)_etext) - 0) >> PG_SHIFT,
 						0, /* WIMG */
 						TRIV121_PP_RO_PAGE);
 	if (TRIV121_MAP_SUCCESS != tmp) {
@@ -69,8 +69,8 @@ unsigned		ldPtSize,tmp;
 		tmp = triv121PgTblMap(
 						pt,
 						TRIV121_121_VSID,
-						(unsigned long)&__DATA_START__,
-						(*pmemsize - (1<<ldPtSize) -  (unsigned long)&__DATA_START__ )>> PG_SHIFT,
+						(unsigned long)__DATA_START__,
+						(*pmemsize - (1<<ldPtSize) -  (unsigned long)__DATA_START__ )>> PG_SHIFT,
 						0, /* WIMG */
 						TRIV121_PP_RW_PAGE);
 		if (TRIV121_MAP_SUCCESS != tmp) {

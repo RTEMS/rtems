@@ -27,7 +27,8 @@
 	mtmsr	r10		;	\
 	li	r10,0x63	;	\
 	sc
-			
+
+		
 	.text
 	.globl	__rtems_entry_point
 	.type	__rtems_entry_point,@function
@@ -86,6 +87,7 @@ __rtems_entry_point:
 	
 enter_C_code:
 	bl	MMUon
+	bl  __eabi	/* setup EABI and SYSV environment */
 	bl	zero_bss
 	/*
 	 * restore prep boot params

@@ -43,9 +43,9 @@ typedef struct {
 pci_isa_bridge_device* via_82c586 = 0;
 static pci_isa_bridge_device bridge;
 
-extern unsigned int external_exception_vector_prolog_code_size;
+extern unsigned int external_exception_vector_prolog_code_size[];
 extern void external_exception_vector_prolog_code();
-extern unsigned int decrementer_exception_vector_prolog_code_size;
+extern unsigned int decrementer_exception_vector_prolog_code_size[];
 extern void decrementer_exception_vector_prolog_code();
 
 /*
@@ -296,7 +296,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     vectorDesc.exceptIndex 	=	ASM_DEC_VECTOR;
     vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
     vectorDesc.hdl.raw_hdl	=	decrementer_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	(unsigned) &decrementer_exception_vector_prolog_code_size;
+    vectorDesc.hdl.raw_hdl_size	=	(unsigned) decrementer_exception_vector_prolog_code_size;
     vectorDesc.on		=	nop_func;
     vectorDesc.off		=	nop_func;
     vectorDesc.isOn		=	connected;
@@ -306,7 +306,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     vectorDesc.exceptIndex	=	ASM_EXT_VECTOR;
     vectorDesc.hdl.vector	=	ASM_EXT_VECTOR;
     vectorDesc.hdl.raw_hdl	=	external_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	(unsigned) &external_exception_vector_prolog_code_size;
+    vectorDesc.hdl.raw_hdl_size	=	(unsigned) external_exception_vector_prolog_code_size;
     if (!mpc60x_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }
