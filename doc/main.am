@@ -1,4 +1,6 @@
-AM_MAKEINFOFLAGS = -I .. -I $(top_srcdir)
+AM_MAKEINFOFLAGS = -I $(top_builddir) -I $(top_srcdir)
+TEXI2DVI = @TEXI2DVI@ -I $(top_builddir) -I $(top_srcdir)
+TEXI2PDF = @TEXI2PDF@ -I $(top_builddir) -I $(top_srcdir)
 
 html_projectdir = $(htmldir)/$(PROJECT)
 

@@ -1,5 +1,10 @@
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* project.am, main.am: Use automake rules to build ps, pdf, info.
+	Various minor changes.
+
+2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* project.am: Append $($(PROJECT)_TEXINFOS) to
 	html-dependencies.
 
