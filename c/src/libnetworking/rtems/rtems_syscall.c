@@ -136,12 +136,8 @@ connect (int s, struct sockaddr *name, int namelen)
 		return -1;
 	}
 	error = soconnect (so, nam);
-	if (error) {
-		m_freem(nam);
-		errno = error;
-		rtems_bsdnet_semaphore_release ();
-		return -1;
-	}
+	if (error)
+		goto bad;
 	if ((so->so_state & SS_NBIO) && (so->so_state & SS_ISCONNECTING)) {
 		m_freem(nam);
 		errno = EINPROGRESS;
@@ -149,15 +145,20 @@ connect (int s, struct sockaddr *name, int namelen)
 		return -1;
 	}
 	while ((so->so_state & SS_ISCONNECTING) && so->so_error == 0) {
-		so->so_error = soconnsleep (so);
+		error = soconnsleep (so);
+		if (error)
+			break;
 	}
 	if (error == 0) {
 		error = so->so_error;
 		so->so_error = 0;
 	}
+    bad:
 	so->so_state &= ~SS_ISCONNECTING;
 	m_freem (nam);
-	if (error == 0)
+	if (error)
+		errno = error;
+	else
 		ret = 0;
 	rtems_bsdnet_semaphore_release ();
 	return ret;
