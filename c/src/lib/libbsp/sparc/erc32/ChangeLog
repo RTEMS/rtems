@@ -1,3 +1,7 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* tools/runtest.in: Recognize debug variant of monitor test.

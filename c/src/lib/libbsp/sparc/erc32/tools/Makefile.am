@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
 
 noinst_SCRIPTS = runtest
 
-TMPINSTALL_FILES += $(PROJECT_ROOT)/erc32/tests \
+TMPINSTALL_FILES = $(PROJECT_ROOT)/erc32/tests \
     $(PROJECT_ROOT)/erc32/tests/runtest
 
 $(PROJECT_ROOT)/erc32/tests:
