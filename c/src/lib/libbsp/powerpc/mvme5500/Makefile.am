@@ -174,11 +174,11 @@ noinst_DATA += GT64260$(LIB_VARIANT).rel
 if HAS_NETWORKING
 include_bsp_HEADERS += network/GT64260eth.h network/GT64260ethreg.h
 
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+network_CPPFLAGS = -D_KERNEL # -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 EXTRA_PROGRAMS += network.rel
 CLEANFILES += network.rel
 network_rel_SOURCES = network/GT64260eth.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -D_KERNEL
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_PROGRAMS += network_g.rel

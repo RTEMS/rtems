@@ -42,10 +42,6 @@
  */
 #define BYTE_ORDER BIG_ENDIAN
 
-#ifndef KERNEL
-#define KERNEL
-#endif
-
 #define INET
 
 #include <rtems.h>
