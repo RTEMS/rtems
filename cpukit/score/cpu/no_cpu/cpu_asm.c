@@ -136,17 +136,29 @@ void _ISR_Handler()
    *
    *  (*_ISR_Vector_table[ vector ])( vector );
    *
-   *  if ( --__ISR_Nest_level == 0 ) {
-   *    if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing )
-   *      call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+   *  --_ISR_Nest_level;
+   *
+   *  if ( _ISR_Nest_level )
+   *    goto the label "exit interrupt (simple case)"
+   *
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
    *    restore stack
    *  #endif
-   *  }
+   *  
+   *  if ( !_Context_Switch_necessary )
+   *    goto the label "exit interrupt (simple case)"
+   *  
+   *  if ( !_ISR_Signals_to_thread_executing )
+   *    goto the label "exit interrupt (simple case)"
+   *
+   *  call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
    *
    *  prepare to get out of interrupt
-   *  return from interrupt
+   *  return from interrupt  (maybe to _ISR_Dispatch)
    *
+   *  LABEL "exit interrupt (simple case):
+   *  prepare to get out of interrupt
+   *  return from interrupt
    */
 }
 
