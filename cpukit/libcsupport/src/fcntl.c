@@ -126,6 +126,8 @@ int fcntl(
       break;
 
     default:
+      errno = EINVAL;
+      ret = -1;
       break;
   }
   if ((ret >= 0) && iop->handlers->fcntl) {
