@@ -437,7 +437,7 @@ static boolean config_PMX1553_probe(int minor)
 	 * 1382400 baud (RS422 only).
 	 */
 
-        ulTemp = (uint32_t)Console_Port_Tbl[minor].pDeviceParams
+        ulTemp = (uint32_t)Console_Port_Tbl[minor].pDeviceParams;
 #if 1
 	/*
 	 * Scale requested baud rate for 16 MHz clock
@@ -455,7 +455,7 @@ static boolean config_PMX1553_probe(int minor)
 	 * In order to maintain maximum data rate accuracy, we will
 	 * apply a div 4 here rather than in hardware (using MCR bit 7).
 	 */
-	ultemp /= 4;
+	ulTemp /= 4;
 
 	Console_Port_Tbl[minor].pDeviceParams = (void *)ulTemp;
 

@@ -22,7 +22,7 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 nodist_include_HEADERS += $(top_srcdir)/../../shared/include/coverhd.h
-include_HEADERS += include/tod.h
+include_HEADERS += ../../shared/tod.h
 include_HEADERS += include/nvram.h include/pci.h
 
 EXTRA_DIST = start/start.S
@@ -91,8 +91,7 @@ if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/amd79c970.c network/amd79c970.h
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(network_CPPFLAGS)
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
@@ -134,7 +133,7 @@ $(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h $(PRO
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/tod.h: include/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
