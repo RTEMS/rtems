@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS = . binutils gnatnewlib gdb
+SUBDIRS = . gnatnewlib gdb
 
 noinst_SCRIPTS = setup buildall mkbinutilspec mkbspspec mkgnatnewlibspec \
     mkgdbspec mkrpms mkspec
