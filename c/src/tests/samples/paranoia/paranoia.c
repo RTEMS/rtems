@@ -273,7 +273,7 @@ FLOAT   E0, E1, Exp2, E3, MinSqEr;
 FLOAT   SqEr, MaxSqEr, E9;
 FLOAT   Third;
 FLOAT   F6, F9;
-FLOAT   H, HInvrse;
+FLOAT   HVar, HInvrse;
 int     I;
 FLOAT   StickyBit, J;
 FLOAT   MyZero;
@@ -283,7 +283,7 @@ FLOAT   R, Random9;
 FLOAT   T, Underflow, S;
 FLOAT   OneUlp, UfThold, U1, U2;
 FLOAT   V, V0, V9;
-FLOAT   W;
+FLOAT   WVar;
 FLOAT   X, X1, X2, X8, Random1;
 FLOAT   Y, Y1, Y2, Random2;
 FLOAT   Z, PseudoZero, Z1, Z2, Z9;
@@ -445,38 +445,38 @@ char **argv;
         printf ("\n");
     }
     printf ("Searching for Radix and Precision.\n");
-    W = One;
+    WVar = One;
     do {
-        W = W + W;
-        Y = W + One;
-        Z = Y - W;
+        WVar = WVar + WVar;
+        Y = WVar + One;
+        Z = Y - WVar;
         Y = Z - One;
     }
     while (MinusOne + FABS (Y) < Zero);
-    /*.. now W is just big enough that |((W+1)-W)-1| >= 1 ...*/
+    /*.. now WVar is just big enough that |((WVar+1)-WVar)-1| >= 1 ...*/
     Precision = Zero;
     Y = One;
     do {
-        Radix = W + Y;
+        Radix = WVar + Y;
         Y = Y + Y;
-        Radix = Radix - W;
+        Radix = Radix - WVar;
     }
     while (Radix == Zero);
     if (Radix < Two)
         Radix = One;
     printf ("Radix = %f .\n", Radix);
     if (Radix != 1) {
-        W = One;
+        WVar = One;
         do {
             Precision = Precision + One;
-            W = W * Radix;
-            Y = W + One;
+            WVar = WVar * Radix;
+            Y = WVar + One;
         }
-        while ((Y - W) == One);
+        while ((Y - WVar) == One);
     }
-    /*... now W == Radix^Precision is barely too big to satisfy (W+1)-W == 1
+    /*... now WVar == Radix^Precision is barely too big to satisfy (WVar+1)-WVar == 1
                                                       ...*/
-    U1 = One / W;
+    U1 = One / WVar;
     U2 = Radix * U1;
     printf ("Closest relative separation found is U1 = %.7e .\n\n", U1);
     printf ("Recalculating radix and precision\n ");
@@ -528,7 +528,7 @@ char **argv;
         printf ("confirms closest relative separation U1 .\n");
     else
         printf ("gets better closest relative separation U1 = %.7e .\n", U1);
-    W = One / U1;
+    WVar = One / U1;
     F9 = (Half - U1) + Half;
     Radix = FLOOR (0.01 + U2 / U1);
     if (Radix == E0)
@@ -652,7 +652,7 @@ char **argv;
     Milestone = 35;
     /*=============================================*/
     if (Radix >= Two) {
-        X = W / (Radix * Radix);
+        X = WVar / (Radix * Radix);
         Y = X + One;
         Z = Y - X;
         T = Z + U2;
@@ -1194,7 +1194,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
                         NewD ();
                     }
                     while (!(U2 * D >= F9));
-                    if (D * Radix - D != W - D)
+                    if (D * Radix - D != WVar - D)
                         Anomaly = True;
                     else {
                         Z2 = D;
@@ -1207,7 +1207,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
                         X = X + Q + X;
                         SR3750 ();
                         NewD ();
-                        if (D - Z2 != W - Z2)
+                        if (D - Z2 != WVar - Z2)
                             Anomaly = True;
                         else {
                             Y = (D - Z2) + (Z2 + (One - Z) * Half);
@@ -1225,7 +1225,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
         }
         if ((I == 0) || Anomaly) {
             BadCond (Failure, "Anomalous arithmetic with Integer < ");
-            printf ("Radix^Precision = %.7e\n", W);
+            printf ("Radix^Precision = %.7e\n", WVar);
             printf (" fails test whether sqrt rounds or chops.\n");
             SqRWrng = True;
         }
@@ -1282,7 +1282,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
     N1 = N;
     N = 0;
     Z = A1;
-    M = (int) FLOOR (Two * LOG (W) / LOG (A1));
+    M = (int) FLOOR (Two * LOG (WVar) / LOG (A1));
     Break = False;
     do {
         X = Z;
@@ -1358,16 +1358,16 @@ or  1/3  and  3/9  and  9/27 may disagree");
         HInvrse = Two;
     else
         HInvrse = Radix;
-    H = One / HInvrse;
-    /* ... 1/HInvrse == H == Min(1/Radix, 1/2) */
+    HVar = One / HInvrse;
+    /* ... 1/HInvrse == HVar == Min(1/Radix, 1/2) */
     CInvrse = One / C;
     E0 = C;
-    Z = E0 * H;
+    Z = E0 * HVar;
     /* ...1/Radix^(BIG Integer) << 1 << CInvrse == 1/C */
     do {
         Y = E0;
         E0 = Z;
-        Z = E0 * H;
+        Z = E0 * HVar;
     }
     while ((E0 > Z) && (Z + Z > Z));
     UfThold = E0;
@@ -1389,7 +1389,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
         }
     } else {
         Underflow = D;
-        PseudoZero = Underflow * H;
+        PseudoZero = Underflow * HVar;
         UfThold = Zero;
         do {
             Y1 = Underflow;
@@ -1401,7 +1401,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
                 if ((UfThold == Zero) && (Y1 != Y2))
                     UfThold = Y1;
             }
-            PseudoZero = PseudoZero * H;
+            PseudoZero = PseudoZero * HVar;
         }
         while ((Underflow > PseudoZero)
             && (PseudoZero + PseudoZero > PseudoZero));
@@ -1432,7 +1432,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
     Milestone = 120;
     /*=============================================*/
     if (CInvrse * Y > CInvrse * Y1) {
-        S = H * S;
+        S = HVar * S;
         E0 = Underflow;
     }
     if (!((E1 == Zero) || (E1 == E0))) {
@@ -1502,16 +1502,16 @@ or  1/3  and  3/9  and  9/27 may disagree");
         sigsave = _sigfpe;
         if (setjmp (ovfl_buf)) {
             printf ("Underflow / UfThold failed!\n");
-            R = H + H;
+            R = HVar + HVar;
         } else
             R = SQRT (Underflow / UfThold);
         sigsave = 0;
-        if (R <= H) {
+        if (R <= HVar) {
             Z = R * UfThold;
-            X = Z * (One + R * H * (One + H));
+            X = Z * (One + R * HVar * (One + HVar));
         } else {
             Z = UfThold;
-            X = Z * (One + H * H * (One + H));
+            X = Z * (One + HVar * HVar * (One + HVar));
         }
         if (!((X == Z) || (X - Z != Zero))) {
             BadCond (Flaw, "");
@@ -1779,7 +1779,7 @@ the system traps on overflow.\n");
         V9 = V9 * X;
         if (((V9 < (One - Two * Radix * E9) * Z) || (V9 > Z))) {
             Y = V9;
-            if (X < W)
+            if (X < WVar)
                 BadCond (Serious, "");
             else
                 BadCond (Defect, "");
@@ -2066,7 +2066,7 @@ NewD ()
 void
 SR3750 ()
 {
-    if (!((X - Radix < Z2 - Radix) || (X - Z2 > W - Z2))) {
+    if (!((X - Radix < Z2 - Radix) || (X - Z2 > WVar - Z2))) {
         I = I + 1;
         X2 = SQRT (X * D);
         Y2 = (X2 - Z2) - (Y - Z2);
@@ -2111,7 +2111,7 @@ SR3980 ()
             break;
         X = Z * X;
     }
-    while (X < W);
+    while (X < WVar);
 }
 
 void
