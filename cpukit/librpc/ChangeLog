@@ -1,5 +1,13 @@
 2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/rpc/Makefile.am, src/xdr/Makefile.am, src/Makefile.am:
+	Removed.
+	* Makefile.am: Merge-in src/rpc/Makefile.am, src/xdr/Makefile.am,
+	src/Makefile.am.
+	Various fixes. Reformat.
+
+2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* include/rpc/rpc.hinclude/rpc/rpc.h: Rename struct
 	rtems_rpc_task_variables into struct _rtems_rpc_task_variables
 	(Avoid symbol conflict between struct and variable).
