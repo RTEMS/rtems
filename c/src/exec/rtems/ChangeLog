@@ -1,3 +1,8 @@
+2002-04-08	Chris Johns <ccj@acm.org>
+
+	* Per PR142, make task switch extension its own list.
+	* src/tasks.c (_RTEMS_tasks_User_extensions): Reflect above.
+
 2001-03-29	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR126, configuration structures now match docs.

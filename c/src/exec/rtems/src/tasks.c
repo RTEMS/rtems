@@ -205,6 +205,7 @@ API_extensions_Control _RTEMS_tasks_API_extensions = {
 
 User_extensions_Control _RTEMS_tasks_User_extensions = {
   { NULL, NULL },
+  { { NULL, NULL }, NULL },
   { _RTEMS_tasks_Create_extension,            /* create */
     _RTEMS_tasks_Start_extension,             /* start */
     _RTEMS_tasks_Start_extension,             /* restart */
