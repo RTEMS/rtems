@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 SUBDIRS = cache interrupts
 
 include $(top_srcdir)/../../../automake/subdirs.am

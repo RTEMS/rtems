@@ -29,12 +29,13 @@ EXTRA_DIST = mg5uart.c README.mguart mg5uart.c mg5uart_reg.c
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/libchip:
+$(PROJECT_INCLUDE)/libchip/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip
+	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 
-$(PROJECT_INCLUDE)/libchip/mg5uart.h: mg5uart.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/libchip/mg5uart.h: mg5uart.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mg5uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mg5uart.h
 
 include $(top_srcdir)/../../../automake/local.am

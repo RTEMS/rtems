@@ -1,3 +1,18 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Reformat.
+	* clock/Makefile.am: Reformat.
+	* mongoosev/Makefile.am: Reformat. Use dirstamps for preinstallation.
+	* tx39/Makefile.am: Ditto.
+	* shared/cache/Makefile.am: Ditto.
+	* mongoosev/duart/Makefile.am: Ditto.
+	* mongoosev/vectorisrs/Makefile.am: Reformat.
+	* r46xx/vectorisrs/Makefile.am: Reformat.
+	* shared/Makefile.am: Reformat.
+	* shared/interrupts/Makefile.am: Reformat.
+	* timer/Makefile.am: Reformat.
+	* tx39/vectorisrs/Makefile.am: Reformat.
+
 2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mongoosev/Makefile.am: Rework preinstall rules.

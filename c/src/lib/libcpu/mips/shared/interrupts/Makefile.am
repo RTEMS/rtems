@@ -2,14 +2,14 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/interrupts.rel
 
 C_FILES = installisrentries.c vectorexceptions.c
 
 S_FILES = isr_entries.S
 
-interrupts_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
+interrupts_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) \
+    $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am

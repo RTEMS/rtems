@@ -13,12 +13,13 @@ all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/libcpu:
+$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libcpu
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu
+	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
-$(PROJECT_INCLUDE)/libcpu/mongoose-v.h: include/mongoose-v.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/libcpu/mongoose-v.h: include/mongoose-v.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mongoose-v.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mongoose-v.h
 
 include $(top_srcdir)/../../../automake/subdirs.am

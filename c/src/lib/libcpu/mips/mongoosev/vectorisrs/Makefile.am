@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/vectorisrs.rel
 
 C_FILES = maxvectors.c vectorisrs.c
