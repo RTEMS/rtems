@@ -37,10 +37,11 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
     *EP7312_TC1EOI = 0xffffffff;                      \
   } while(0)
 
-#define Clock_driver_support_install_isr( _new, _old )                      \
-  do {                                                                      \
-      BSP_install_rtems_irq_handler(&clock_isr_data);                       \
-     } while(0)
+#define Clock_driver_support_install_isr( _new, _old ) \
+  do {                                                 \
+      (_old) = NULL; /* avoid warning */;              \
+      BSP_install_rtems_irq_handler(&clock_isr_data);  \
+  } while(0)
 
 /*
  * Set up the clock hardware
