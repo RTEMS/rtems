@@ -316,7 +316,8 @@ i82586_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
   if ((unit = rtems_bsdnet_parse_driver_name (config, &name)) < 0)
     return 0;
   
-  sc  = config->drv_ctrl;
+  sc  = 0; /* config->drv_ctrl; */
+#warning "undo this hack"
   ifp = &sc->arpcom.ac_if;
   
 #if I82586_DEBUG
@@ -1048,7 +1049,7 @@ i82586_tint(struct ie_softc *sc, int scbstatus)
     printf("i82586_tint: (%d) command still busy; status=0x%x; tail=%d\n",
            sc->trace_flow_in / 2, status, sc->xctail);
     printf("iestatus = 0x%x\n", scbstatus);
-//    sc->sc_debug = IED_ALL;
+/*    sc->sc_debug = IED_ALL; */
   }
 
   if (status & IE_STAT_OK) {
@@ -1964,7 +1965,7 @@ int
 i82586_ioctl(struct ifnet *ifp, int cmd, caddr_t data)
 {
   struct ie_softc *sc  = ifp->if_softc;
-//  struct ifreq    *ifr = (struct ifreq *)data;
+/*  struct ifreq    *ifr = (struct ifreq *)data; */
   int             s;
   int             error = 0;
 

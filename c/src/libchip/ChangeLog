@@ -1,3 +1,11 @@
+2001-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* network/Makefile.am: Fixed typo on file name.
+	* network/i82586.c: Commented out line 318 which is referencing 
+	a member of a structure that is not currently there.  This
+	needs to be worked out with Chris Johns <ccj@acm.org>.
+	Switched C++ style comments to C style.
+
 2001-09-19	Chris Johns <ccj@acm.org>
 
 	* network/README.i82586, network/i82586.c, network/i82586reg.h,

@@ -10,7 +10,7 @@ LIBNAME = libnetchip
 LIB = $(ARCH)/$(LIBNAME).a
 
 # add cs8900.c to work with it and make it compile
-C_FILES = dec21140.c i82586.h sonic.c
+C_FILES = dec21140.c i82586.c sonic.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include_libchip_HEADERS = cs8900.h i82586var.h sonic.h
