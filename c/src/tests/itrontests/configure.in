@@ -44,5 +44,8 @@ itronhello/Makefile
 itronmbf01/Makefile
 itronsem01/Makefile
 itrontask01/Makefile
+itrontask02/Makefile
+itrontask03/Makefile
+itrontask04/Makefile
 itrontime01/Makefile
 )

@@ -13,7 +13,8 @@ $(PREINSTALLDIRS):
 
 all-local: $(PREINSTALLDIRS)
 
-ITRON_DIRS = itronhello itrontask01 itronmbf01 itronsem01 itrontime01
+ITRON_DIRS = itronhello itrontask01 itrontask02 itrontask03 itrontask04 \
+    itronmbf01 itronsem01 itrontime01
 
 SUBDIRS = $(ITRON_DIRS)
 
