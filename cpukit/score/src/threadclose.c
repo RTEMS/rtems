@@ -41,6 +41,8 @@ void _Thread_Close(
   Thread_Control       *the_thread
 )
 {
+  _User_extensions_Thread_delete( the_thread );
+ 
   _Objects_Close( information, &the_thread->Object );
  
   _Thread_Set_state( the_thread, STATES_TRANSIENT );
@@ -50,8 +52,6 @@ void _Thread_Close(
       (void) _Watchdog_Remove( &the_thread->Timer );
   }
 
-  _User_extensions_Thread_delete( the_thread );
- 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
   if ( _Thread_Is_allocated_fp( the_thread ) )
