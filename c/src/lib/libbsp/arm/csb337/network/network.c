@@ -12,6 +12,8 @@
 #include <rtems/rtems_bsdnet.h>
 #include <at91rm9200.h>
 #include <at91rm9200_emac.h>
+#include <at91rm9200_gpio.h>
+#include <at91rm9200_pmc.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -308,7 +310,41 @@ void at91rm9200_emac_init(void *arg)
 void  at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc)
 {
     int i;
-    
+
+    /* Configure shared pins for Ethernet, not GPIO */
+    PIOA_REG(PIO_PDR) = ( BIT7  |   /* tx clock      */
+                          BIT8  |   /* tx enable     */
+                          BIT9  |   /* tx data 0     */
+                          BIT10 |   /* tx data 1     */
+                          BIT11 |   /* carrier sense */
+                          BIT12 |   /* rx data 0     */
+                          BIT13 |   /* rx data 1     */
+                          BIT14 |   /* rx error      */
+                          BIT15 |   /* MII clock     */
+                          BIT16 );  /* MII data      */
+
+    PIOB_REG(PIO_PDR) = ( BIT12 |   /* tx data 2     */
+                          BIT13 |   /* tx data 3     */
+                          BIT14 |   /* tx error      */
+                          BIT15 |   /* rx data 2     */
+                          BIT16 |   /* rx data 3     */
+                          BIT17 |   /* rx data valid */
+                          BIT18 |   /* rx collistion */
+                          BIT19 );  /* rx clock   */
+
+    PIOB_REG(PIO_BSR) = ( BIT12 |   /* tx data 2     */
+                          BIT13 |   /* tx data 3     */
+                          BIT14 |   /* tx error      */
+                          BIT15 |   /* rx data 2     */
+                          BIT16 |   /* rx data 3     */
+                          BIT17 |   /* rx data valid */
+                          BIT18 |   /* rx collistion */
+                          BIT19 );  /* rx clock   */
+                          
+
+    /* Enable the clock to the EMAC */
+    PMC_REG(PMC_PCER) |= PMC_PCR_PID_EMAC;
+
     /* initialize our receive buffer descriptors */
     for (i = 0; i < NUM_RXBDS-1; i++) {
         rxbuf_hdrs[i].address = (unsigned long)(&rxbuf[i * RX_BUFFER_SIZE]);
@@ -327,6 +363,7 @@ void  at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc)
     EMAC_REG(EMAC_RSR)  &= ~(EMAC_RSR_OVR | EMAC_RSR_REC | EMAC_RSR_BNA);
     
     /* set the MII clock divder to MCK/64 */
+    EMAC_REG(EMAC_CFG) &= EMAC_CFG_CLK_MASK;
     EMAC_REG(EMAC_CFG) = (EMAC_CFG_CLK_64 | EMAC_CFG_BIG | EMAC_CFG_FD);
     
     /* enable the MII interface */

@@ -62,7 +62,7 @@ SECTIONS
 	at91rm9200_emac_txbuf = .;
 	. += (0x600);
 
-	/* 4 receive buffers, 0x600 each */
+	/* 8 receive buffers, 0x600 each */
 	at91rm9200_emac_rxbufs = .;
 	. += (0x600 * 8);
 
