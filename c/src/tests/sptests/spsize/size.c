@@ -17,6 +17,7 @@
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/directives.h>
+#include <rtems/core/apiext.h>
 #include <rtems/core/copyrt.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/tasks.h>
@@ -25,7 +26,7 @@
 #include <rtems/extension.h>
 #include <rtems/fatal.h>
 #include <rtems/init.h>
-#include <rtems/core/intthrd.h>
+#include <rtems/intthrd.h>
 #include <rtems/core/isr.h>
 #include <rtems/rtems/intr.h>
 #include <rtems/io.h>
@@ -38,7 +39,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/rtems/sem.h>
 #include <rtems/rtems/signal.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 #include <rtems/core/thread.h>
 #include <rtems/rtems/timer.h>
 #include <rtems/core/tod.h>
@@ -189,6 +190,8 @@ sys_req = SYSTEM_TASKS     +     /* SYSI and IDLE */
 uninitialized =
 /*address.h*/   0                                         +
 
+/*apiext.h*/    (sizeof _API_extensions_List)             +
+
 /*asr.h*/       0                                         +
 
 /*attr.h*/      0                                         +
@@ -233,7 +236,6 @@ uninitialized =
 /*intthrd.h*/   (sizeof _Internal_threads_Information)    +
                 (sizeof _Internal_threads_System_initialization_thread) +
                 (sizeof _Internal_threads_Idle_thread)    +
-                (sizeof _Internal_threads_Extensions)     +
 
 /*io.h*/        (sizeof _IO_Number_of_drivers)            +
                 (sizeof _IO_Driver_address_table)         +

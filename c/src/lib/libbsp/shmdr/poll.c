@@ -20,7 +20,7 @@
  */
 
 #include <rtems.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 #include <rtems/libio.h>
 
 #include "shm.h"

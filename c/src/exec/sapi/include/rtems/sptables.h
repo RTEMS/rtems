@@ -27,7 +27,7 @@ extern "C" {
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/io.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 #include <rtems/rtems/intr.h>
 #include <rtems/rtems/clock.h>

@@ -26,13 +26,13 @@
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/io.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 #include <rtems/core/apiext.h>
 #include <rtems/core/copyrt.h>
 #include <rtems/core/heap.h>
 #include <rtems/core/interr.h>
-#include <rtems/core/intthrd.h>
+#include <rtems/intthrd.h>
 #include <rtems/core/isr.h>
 #include <rtems/core/mpci.h>
 #include <rtems/core/priority.h>
@@ -179,7 +179,8 @@ rtems_interrupt_level rtems_initialize_executive_early(
   );
 
   _MPCI_Handler_initialization(
-    multiprocessing_table->User_mpci_table
+    multiprocessing_table->User_mpci_table,
+    RTEMS_TIMEOUT
   );
 
   _Internal_threads_Initialization();
