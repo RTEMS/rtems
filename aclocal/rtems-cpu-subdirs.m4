@@ -26,6 +26,6 @@ _RTEMS_CPU_SUBDIR([powerpc],[$1]);;
 _RTEMS_CPU_SUBDIR([sh],[$1]);;
 _RTEMS_CPU_SUBDIR([sparc],[$1]);;
 _RTEMS_CPU_SUBDIR([unix],[$1]);;
-*) AC_MSG_ERROR([Invalid RTEMS_CPU])
+*) AC_MSG_ERROR([Invalid RTEMS_CPU <[$]{RTEMS_CPU}>])
 esac
 ])

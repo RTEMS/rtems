@@ -1,3 +1,8 @@
+2001-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-cpu-subdirs.m4: Print out RTEMS_CPU in error message.
+	* aclocal/enable-cxx.m4: Use $enable_cxx instead of $enableval.
+
 2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/prog-cxx.m4: Remove RTEMS_PROG_CXX.
