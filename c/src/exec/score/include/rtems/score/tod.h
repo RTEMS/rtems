@@ -236,6 +236,21 @@ void _TOD_Tickle(
 #define TOD_MILLISECONDS_TO_MICROSECONDS(_ms) ((_ms) * 1000)
 
 /*
+ *  TOD_MICROSECONDS_TO_TICKS
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine converts an interval expressed in microseconds to ticks.
+ *
+ *  NOTE:
+ *
+ *  This must be a macro so it can be used in "static" tables.
+ */
+
+#define TOD_MICROSECONDS_TO_TICKS(_us) \
+    ((_us) / _TOD_Microseconds_per_tick)
+
+/*
  *  TOD_MILLISECONDS_TO_TICKS
  *
  *  DESCRIPTION:

@@ -995,6 +995,32 @@ static inline unsigned int CPU_swap_u32(
  *  Special Purpose Routines to hide the use of UNIX system calls.
  */
 
+
+/*
+ *  Pointer to a sync io  Handler
+ */
+
+typedef void ( *rtems_sync_io_handler )(
+  int fd,
+  boolean read,
+  boolean wrtie,
+  boolean except
+);
+
+/* returns -1 if fd to large, 0 is successful */
+int _CPU_Set_sync_io_handler(
+  int fd,
+  boolean read,
+  boolean write,
+  boolean except,
+  rtems_sync_io_handler handler
+);
+
+/* returns -1 if fd to large, o if successful */
+int _CPU_Clear_sync_io_handler(
+  int fd
+);
+
 int _CPU_Get_clock_vector( void );
 
 void _CPU_Start_clock( 

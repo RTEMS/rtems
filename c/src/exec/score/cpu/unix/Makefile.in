@@ -33,7 +33,7 @@ include $(PROJECT_ROOT)/make/leaf.cfg
 
 DEFINES  +=
 CPPFLAGS += 
-CFLAGS   += $(CFLAGS_OS_V)
+CFLAGS   += $(CFLAGS_OS_V) -DCPU_SYNC_IO
 
 LD_PATHS  +=
 LD_LIBS   +=

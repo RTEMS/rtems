@@ -63,6 +63,18 @@ static Context_Control_overlay
           _CPU_Context_Default_with_ISRs_disabled CPU_STRUCTURE_ALIGNMENT;
 
 /*
+ * Sync IO support, an entry for each fd that can be set
+ */
+
+void  _CPU_Sync_io_Init();
+
+static rtems_sync_io_handler _CPU_Sync_io_handlers[FD_SETSIZE];
+static int sync_io_nfds;
+static fd_set sync_io_readfds;
+static fd_set sync_io_writefds;
+static fd_set sync_io_exceptfds;
+
+/*
  * Which cpu are we? Used by libcpu and libbsp.
  */
 
@@ -216,6 +228,24 @@ void _CPU_Context_From_CPU_Init()
 
 /*PAGE
  *
+ *  _CPU_Sync_io_Init
+ */
+
+void _CPU_Sync_io_Init()
+{
+  int fd;
+
+  for (fd = 0; fd < FD_SETSIZE; fd++)
+    _CPU_Sync_io_handlers[fd] = NULL;
+
+  sync_io_nfds = 0;
+  FD_ZERO(&sync_io_readfds);
+  FD_ZERO(&sync_io_writefds);
+  FD_ZERO(&sync_io_exceptfds);
+}
+
+/*PAGE
+ *
  *  _CPU_ISR_Get_level
  */
 
@@ -271,6 +301,8 @@ void _CPU_Initialize(
   _CPU_Table = *cpu_table;
 
   _CPU_ISR_From_CPU_Init();
+
+  _CPU_Sync_io_Init();
 
   _CPU_Context_From_CPU_Init();
 
@@ -350,13 +382,52 @@ void _CPU_Install_interrupt_stack( void )
 
 void _CPU_Thread_Idle_body( void )
 {
+#if CPU_SYNC_IO
+  extern void _Thread_Dispatch(void);
+  int fd;
+#endif
+
   while (1) {
 #ifdef RTEMS_DEBUG
     /* interrupts had better be enabled at this point! */
     if (_CPU_ISR_Get_level() != 0)
        abort();
 #endif
+
+    /*
+     *  Block on a select statement, the CPU interface added allow the
+     *  user to add new descriptors which are to be blocked on
+     */
+
+#if CPU_SYNC_IO
+    if (sync_io_nfds) {
+      int result;
+
+      result = select(sync_io_nfds,
+                 &sync_io_readfds,
+                 &sync_io_writefds,
+                 &sync_io_exceptfds,
+                 NULL);
+
+      if ((result < 0) && (errno != EINTR))
+        _CPU_Fatal_error(0x200);       /* FIXME : what number should go here !! */
+
+      for (fd = 0; fd < sync_io_nfds; fd++) {
+        boolean read = FD_ISSET(fd, &sync_io_readfds);
+        boolean write = FD_ISSET(fd, &sync_io_writefds);
+        boolean except = FD_ISSET(fd, &sync_io_exceptfds);
+
+        if (_CPU_Sync_io_handlers[fd] && (read || write || except))
+          _CPU_Sync_io_handlers[fd](fd, read, write, except);
+
+        _Thread_Dispatch();
+      }
+    } else
+      pause();
+#else
     pause();
+#endif
+
   }
 
 }
@@ -756,6 +827,55 @@ void _CPU_Fatal_error(unsigned32 error)
  *  Special Purpose Routines to hide the use of UNIX system calls.
  */
 
+int _CPU_Set_sync_io_handler(
+  int fd,
+  boolean read,
+  boolean write,
+  boolean except,
+  rtems_sync_io_handler handler
+)
+{
+  if ((fd < FD_SETSIZE) && (_CPU_Sync_io_handlers[fd] == NULL)) {
+    if (read)
+      FD_SET(fd, &sync_io_readfds);
+    else
+      FD_CLR(fd, &sync_io_readfds);
+    if (write)
+      FD_SET(fd, &sync_io_writefds);
+    else
+      FD_CLR(fd, &sync_io_writefds);
+    if (except)
+      FD_SET(fd, &sync_io_exceptfds);
+    else
+      FD_CLR(fd, &sync_io_exceptfds);
+    _CPU_Sync_io_handlers[fd] = handler;
+    if ((fd + 1) > sync_io_nfds)
+      sync_io_nfds = fd + 1;
+    return 0;
+  }
+  return -1;
+}
+
+int _CPU_Clear_sync_io_handler(
+  int fd
+)
+{
+  if ((fd < FD_SETSIZE) && _CPU_Sync_io_handlers[fd]) {
+    FD_CLR(fd, &sync_io_readfds);
+    FD_CLR(fd, &sync_io_writefds);
+    FD_CLR(fd, &sync_io_exceptfds);
+    _CPU_Sync_io_handlers[fd] = NULL;
+    sync_io_nfds = 0;
+    for (fd = 0; fd < FD_SETSIZE; fd++)
+      if (FD_ISSET(fd, &sync_io_readfds) ||
+          FD_ISSET(fd, &sync_io_writefds) ||
+          FD_ISSET(fd, &sync_io_exceptfds))
+        sync_io_nfds = fd;
+    return 0;
+  }
+  return -1;
+}
+
 int _CPU_Get_clock_vector( void )
 {
   return SIGALRM;
@@ -934,14 +1054,15 @@ void _CPU_SHM_Lock(
   int semaphore
 )
 {
-  struct sembuf      sb;
-  int                status;
+  struct sembuf sb;
 
   sb.sem_num = semaphore;
   sb.sem_op  = -1;
   sb.sem_flg = 0;
 
   while (1) {
+    int status = -1;
+
     status = semop(_CPU_SHM_Semid, &sb, 1);
     if ( status >= 0 )
       break;
