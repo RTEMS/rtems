@@ -1,3 +1,8 @@
+2002-11-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add Templates/*.
+	* Templates/Makefile.am: Remove.
+
 2002-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/Cygwin-posix.cfg: Remove obsolete comment on RTEMS_LIBC_DIR.
