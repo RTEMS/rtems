@@ -1,3 +1,10 @@
+2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-top.m4: Set PROJECT_ROOT unconditionally.
+	* automake/local.am: Remove $(ARCH), clean-local.
+	* automake/compile.am: Add $(ARCH), clean-local.
+	Set CXXFLAGS = @RTEMS_CFLAGS@ $(XCXXFLAGS).
+
 2003-02-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove references to obsoleted files

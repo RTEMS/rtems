@@ -55,7 +55,10 @@ DEFS = @DEFS@
 
 CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES) $(XCPPFLAGS)
 CFLAGS   = @RTEMS_CFLAGS@ $(XCFLAGS)
-CXXFLAGS = @RTEMS_CXXFLAGS@ $(XCXXFLAGS)
+## FIXME: This should be correct, but is not supported, yet
+# CXXFLAGS = @RTEMS_CXXFLAGS@ $(XCXXFLAGS)
+## Fall back to using RTEMS_CFLAGS for C++
+CXXFLAGS = @RTEMS_CFLAGS@ $(XCXXFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
 LINK_LIBS = $(LD_LIBS)
@@ -219,3 +222,10 @@ AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
 AM_CFLAGS =
 AM_CXXFLAGS =
 AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
+
+${ARCH}:
+	mkdir ${ARCH}
+
+clean-local:
+	$(RM) -r o-optimize o-debug o-profile $(CLEANDIRS)
+	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp Depends-o-profile.tmp

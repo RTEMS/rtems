@@ -24,12 +24,5 @@ depend-am:
 depend: depend-am
 .PHONY: depend depend-am
 
-${ARCH}:
-	mkdir ${ARCH}
-
-clean-local:
-	$(RM) -r o-optimize o-debug o-profile $(CLEANDIRS)
-	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp Depends-o-profile.tmp
-
 PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
 
