@@ -13,7 +13,7 @@ STD_H_FILES = asr.h attr.h clock.h config.h dpmem.h event.h eventset.h intr.h \
     signal.h status.h support.h tasks.h timer.h types.h
 
 if HAS_MP
-H_FILES = $(STD_HFILES) $(MP_H_FILES)
+H_FILES = $(STD_H_FILES) $(MP_H_FILES)
 else
 H_FILES = $(STD_H_FILES)
 endif

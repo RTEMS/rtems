@@ -32,7 +32,7 @@ $(PROJECT_RELEASE)/lib:
 $(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%.rel
 	$(INSTALL_DATA) $< $@
 
-all: ${ARCH} $(TMPINSTALL_FILES)
+all: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES)
 

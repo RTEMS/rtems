@@ -30,9 +30,13 @@ SED=sed
 # M4=@M4@
 
 # Global tools
+ifndef PACKHEX
 PACKHEX=$(PROJECT_BIN)/packhex
+endif
 
+ifndef INSTALL_CHANGE
 INSTALL_CHANGE=$(PROJECT_BIN)/install-if-change
+endif
 INSTALL_VARIANT=$(INSTALL_CHANGE) -V "$(LIB_VARIANT)"
 
 # FIXME: HACK for a bug in cygwin-hosted egcs which returns a mixture
@@ -71,4 +75,6 @@ INSTLIBFLAGS  = -m 0644
 INSTDIRFLAGS  = -m 0755 -d
 INSTINCFLAGS  = -m 0644
 
+ifndef INSTALL_DATA
 INSTALL_DATA = $(INSTALL) $(INSTDATAFLAGS)
+endif
