@@ -1,3 +1,8 @@
+2001-05-17	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/posix/mqueue.inl: Implemented missing routines
+	to support message queue FDs.
+
 2002-05-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>	
 
 	* include/sys/utsname.h: Remove.
