@@ -64,7 +64,6 @@ END-INFO-DIR-ENTRY
 
 @include intro.texi
 @include target.texi
-@include bspstruct.texi
 @include makefiles.texi
 @include linkcmds.texi
 @include init.texi
@@ -80,10 +79,9 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 
 @menu
 * Introduction::
-* Target Dependent and Board Dependent Files::
-* Board Support Package Structure::
+* CPU and Board Dependent Files::
 * Makefiles::
-* Linkcmds::
+* Linker Script::
 * Initialization Code::
 * Clock Driver::
 * Console Driver::
