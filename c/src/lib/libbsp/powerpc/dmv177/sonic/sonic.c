@@ -1,4 +1,3 @@
-void break_when_you_get_here();
 /*
  *******************************************************************
  *******************************************************************
@@ -56,12 +55,7 @@ void break_when_you_get_here();
 #define SONIC_DEBUG_DESCRIPTORS      0x0010
 #define SONIC_DEBUG_ERRORS           0x0020
 
-#define SONIC_DEBUG (SONIC_DEBUG_ERRORS)
-
-/* (SONIC_DEBUG_MEMORY|SONIC_DEBUG_DESCRIPTORS) */
-
-/* SONIC_DEBUG_ALL */
-
+#define SONIC_DEBUG (SONIC_DEBUG_NONE)
 
 /*
  * XXX
@@ -131,7 +125,7 @@ void break_when_you_get_here();
  * Default sizes of transmit and receive descriptor areas
  */
 #define RDA_COUNT     20
-#define TDA_COUNT     100
+#define TDA_COUNT     10
 
 /*
  * 
@@ -371,6 +365,7 @@ SONIC_STATIC void sonic_show (struct iface *iface)
 SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
 {
   struct sonic *dp = sonic;
+  unsigned32    isr, imr;
   void *rp;
 
 #if (NSONIC > 1)
@@ -392,16 +387,15 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
 
   dp->Interrupts++;
 
+  isr = sonic_read_register( rp, SONIC_REG_ISR );
+  imr = sonic_read_register( rp, SONIC_REG_IMR );
+
   /*
    * Packet received or receive buffer area exceeded?
    */
-  if ((sonic_read_register( rp, SONIC_REG_IMR ) & (IMR_PRXEN | IMR_RBAEEN)) &&
-      (sonic_read_register( rp, SONIC_REG_ISR ) & (ISR_PKTRX | ISR_RBAE))) {
-    sonic_write_register(
-       rp,
-       SONIC_REG_IMR,
-       sonic_read_register( rp, SONIC_REG_IMR) & ~(IMR_PRXEN | IMR_RBAEEN)
-    );
+  if ((imr & (IMR_PRXEN | IMR_RBAEEN)) &&
+      (isr & (ISR_PKTRX | ISR_RBAE))) {
+    imr &= ~(IMR_PRXEN | IMR_RBAEEN);
     dp->rxInterrupts++;
     rtems_event_send (dp->iface->rxproc, INTERRUPT_EVENT);
   }
@@ -409,17 +403,14 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
   /*
    * Packet started, transmitter done or transmitter error?
    */
-  if ((sonic_read_register( rp, SONIC_REG_IMR ) & (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN))
-   && (sonic_read_register( rp, SONIC_REG_ISR ) & (ISR_PINT | ISR_TXDN | ISR_TXER))) {
-    sonic_write_register(
-       rp,
-       SONIC_REG_IMR,
-       sonic_read_register( rp, SONIC_REG_IMR) &
-                  ~(IMR_PINTEN | IMR_PTXEN | IMR_TXEREN)
-    );
+  if ((imr & (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN))
+   && (isr & (ISR_PINT | ISR_TXDN | ISR_TXER))) {
+    imr &= ~(IMR_PINTEN | IMR_PTXEN | IMR_TXEREN);
     dp->txInterrupts++;
     rtems_event_send (dp->txWaitTid, INTERRUPT_EVENT);
   }
+
+  sonic_write_register( rp, SONIC_REG_IMR, imr );
 }
 
 /*
@@ -1523,6 +1514,7 @@ char SONIC_Reg_name[64][6]= {
     "DCR2"        /* 0x3F */
 };
 #endif
+
 void sonic_write_register(
   void       *base,
   unsigned32  regno,
