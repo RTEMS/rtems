@@ -99,7 +99,9 @@ The following persons/organizations have made contributions:
 
 + Eric Norum (eric@skatter.usask.ca) of the Saskatchewan Accelerator
   Laboratory submitted a port of the KA9Q TCP/IP stack to RTEMS as
-  well as a network device driver for the gen68360 BSP.
+  well as a network device driver for the gen68360 BSP.  To address
+  performance issues and licensing concerns, Eric followed this up
+  by replacing the KA9Q TCP/IP stack with a port of the FreeBSD stack.
 
 + Chris Johns (cjohns@plessey.com.au) submitted the ods68302 BSP which
   offers easier configuration than its counterpart gen68302.  Chris
