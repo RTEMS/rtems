@@ -124,6 +124,7 @@ SECTIONS
     *(.fini)
     *(.lit)
     *(.shdata)
+    . = ALIGN (16);
     _endtext = .;
   } > ram
   .dynamic	  : { *(.dynamic) 	} >ram
