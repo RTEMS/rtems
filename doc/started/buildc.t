@@ -107,17 +107,26 @@ specific patches.
     FTP Site:    @value{RTEMS-FTPSITE}
     Directory:   @value{RTEMS-FTPDIR}
     File:        @value{RTEMS-TAR}
-    File:        hello_world_c.tgz
-    File:        bit
 @ifset use-html
     URL:         @href{Download RTEMS components,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}}
 @end ifset
 @end example
 
-@subheading RTEMS Specific Tool Patches
+@subheading RTEMS Hello World
+@example
+    FTP Site:    @value{RTEMS-FTPSITE}
+    Directory:   @value{RTEMS-FTPDIR}
+    File:        hello_world_c.tgz
+@ifset use-html
+    URL:         @href{Download RTEMS Hello World,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/hello_world_c.tgz}
+@end ifset
+@end example
+
+@subheading RTEMS Specific Tool Patches and Scripts
 @example
     FTP Site:    @value{RTEMS-FTPSITE}
     Directory:   @value{RTEMS-FTPDIR}/c_tools
+    File:        bit
 @ifset BINUTILS-RTEMSPATCH
     File:        @value{BINUTILS-RTEMSPATCH}
 @end ifset
@@ -127,15 +136,9 @@ specific patches.
 @ifset GCC-RTEMSPATCH
     File:        @value{GCC-RTEMSPATCH}
 @end ifset
-    URL:         @href{Download RTEMS patches,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools}
-@c Just in case there are ever no patches
-@ifclear BINUTILS-RTEMSPATCH
-@ifclear GCC-RTEMSPATCH
-@ifclear NEWLIB-RTEMSPATCH
-    No RTEMS specific patches are required.
-@end ifclear
-@end ifclear
-@end ifclear
+@ifset use-html
+    URL:         @href{Download RTEMS Patches and Scripts,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools}
+@end ifset
 @end example
 
 @section Unarchiving the Tools

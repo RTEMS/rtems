@@ -66,7 +66,7 @@ one shown in the following figure:
 @end html
 @end ifset
 
-@section Get all the Pieces 
+@section Get All the Pieces 
 
 This section lists the components of an RTEMS cross development system.
 Included are the locations of each component as well as any required RTEMS
@@ -77,6 +77,9 @@ specific patches.
     FTP Site:    @value{GCC-FTPSITE}
     Directory:   @value{GCC-FTPDIR}
     File:        @value{GCC-TAR}
+@ifset use-html
+    URL:         @href{Download @value{GCC-VERSION},,,ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR}}
+@end ifset
 @end example
 
 @subheading @value{GNAT-VERSION}
@@ -84,6 +87,9 @@ specific patches.
     FTP Site:    @value{GNAT-FTPSITE}
     Directory:   @value{GNAT-FTPDIR}
     File:        @value{GNAT-TAR}
+@ifset use-html
+    URL:         @href{Download @value{GNAT-VERSION},,,ftp://@value{GNAT-FTPSITE}@value{GNAT-FTPDIR}/@value{GNAT-TAR}}
+@end ifset
 @end example
 
 @subheading @value{BINUTILS-VERSION}
@@ -91,6 +97,9 @@ specific patches.
     FTP Site:    @value{BINUTILS-FTPSITE}
     Directory:   @value{BINUTILS-FTPDIR}
     File:        @value{BINUTILS-TAR}
+@ifset use-html
+    URL:         @href{Download @value{BINUTILS-VERSION},,,ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}}
+@end ifset
 @end example
 
 @subheading @value{NEWLIB-VERSION}
@@ -98,6 +107,9 @@ specific patches.
     FTP Site:    @value{NEWLIB-FTPSITE}
     Directory:   @value{NEWLIB-FTPDIR}
     File:        @value{NEWLIB-TAR}
+@ifset use-html
+    URL:         @href{Download @value{NEWLIB-VERSION},,,ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}}
+@end ifset
 @end example
 
 @subheading @value{RTEMS-VERSION}
@@ -105,14 +117,26 @@ specific patches.
     FTP Site:    @value{RTEMS-FTPSITE}
     Directory:   @value{RTEMS-FTPDIR}
     File:        @value{RTEMS-TAR}
-    File:        bit_ada
-    File:        hello_world_ada.tgz
+@ifset use-html
+    URL:         @href{Download RTEMS components,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}}
+@end ifset
 @end example
 
-@subheading RTEMS Specific Tool Patches
+@subheading RTEMS Hello World
+@example
+    FTP Site:    @value{RTEMS-FTPSITE}
+    Directory:   @value{RTEMS-FTPDIR}
+    File:        hello_world_ada.tgz
+@ifset use-html
+    URL:         @href{Download RTEMS Hello World,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/hello_world_ada.tgz}
+@end ifset       
+@end example
+
+@subheading RTEMS Specific Tool Patches and Scripts
 @example
     FTP Site:    @value{RTEMS-FTPSITE}
     Directory:   @value{RTEMS-FTPDIR}/ada_tools
+    File:        bit_ada
 @ifset BINUTILS-RTEMSPATCH
     File:        @value{BINUTILS-RTEMSPATCH}
 @end ifset
@@ -125,15 +149,8 @@ specific patches.
 @ifset GNAT-RTEMSPATCH
     File:        @value{GNAT-RTEMSPATCH}
 @end ifset
-@c Just in case there are ever no patches
-@ifset BINUTILS-RTEMSPATCH
-@ifset GCC-RTEMSPATCH
-@ifset NEWLIB-RTEMSPATCH
-@ifset GNAT-RTEMSPATCH
-    No RTEMS specific patches are required.
-@end ifset
-@end ifset
-@end ifset
+@ifset use-html
+    URL:         @href{Download RTEMS patches,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools}
 @end ifset
 @end example
 

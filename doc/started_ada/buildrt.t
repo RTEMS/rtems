@@ -43,9 +43,9 @@ function in a file named @code{f.c}:
 
 @example
 int f( int x )
-{
+@{
   return x + 1; 
-}
+@}
 @end example
 
 Then assemble the file using a command similar to the following:

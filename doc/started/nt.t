@@ -65,7 +65,14 @@ save files with Unix format (so don't use Notepad
 nor Wordpad). If you do not have an appropriate
 text editor, try @b{Programmers File Editor}, it is
 free and very convenient.  This editor may be downloaded
-from @href{@value{PFE-FTP},,@value{PFE-FTP}}.
+from:
+
+@ifset use-html
+@href{@value{PFE-FTP},,@value{PFE-FTP}}
+@end ifset
+@ifclear use-html
+@value{PFE-FTP}
+@end ifclear
 
 @subsection Bug in Patch Utility
 
@@ -76,12 +83,19 @@ Unix format, so a @code{dos2unix}-like command must
 be used to put them back into Unix format as shown below:
 
 @example
-dos2unix XXX
+$ dos2unix XYZ
+Dos2Unix: Cleaning file XYZ ...
 @end example
 
 The dos2unix utility may be downloaded from:
 
-@href{@value{DOS2UNIX-FTP},,,@value{DOS2UNIX-FTP}}.
+@ifset use-html
+@href{@value{DOS2UNIX-FTP},,,@value{DOS2UNIX-FTP}}
+@end ifset
+@ifclear use-html
+@value{DOS2UNIX-FTP}
+@end ifclear
+
 
 @subsection Files Needed
 
@@ -96,10 +110,20 @@ Web browser or ftp client.
 @table @b
 
 @item cdk.exe
-@ref{@value{CYGWIN-FTP},,@value{CYGWIN-FTP}}
+@ifset use-html
+@href{@value{CYGWIN-FTP},,@value{CYGWIN-FTP}}
+@end ifset
+@ifclear use-html
+@value{CYGWIN-FTP}
+@end ifclear
 
 @item usertools.exe
-@ref{@value{CYGWIN-FTP},,@value{CYGWIN-FTP}}
+@ifset use-html
+@href{@value{CYGWIN-FTP},,@value{CYGWIN-FTP}}
+@end ifset
+@ifclear use-html
+@value{CYGWIN-FTP}
+@end ifclear
 
 @end table
 
