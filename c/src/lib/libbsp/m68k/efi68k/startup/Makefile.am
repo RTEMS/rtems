@@ -10,7 +10,7 @@ PGM = $(ARCH)/startup.rel
 C_FILES = bsplibc.c bsppost.c bspstart.c bspclean.c efi68k_tcp.c efi68k_wd.c \
     bootcard.c m68kpretaskinghook.c main.c sbrk.c setvec.c \
     gnatinstallhandler.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

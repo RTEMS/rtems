@@ -5,8 +5,8 @@
 BSP_PIECES = startup clock console spurious timer
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/memcpy.o)
+OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
+    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/memcpy.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
