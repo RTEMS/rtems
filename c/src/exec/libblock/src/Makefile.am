@@ -19,14 +19,9 @@ include $(top_srcdir)/../automake/lib.am
 
 AM_CFLAGS += $(LIBC_DEFINES)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
-
 $(LIB): ${OBJS}
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-all-local: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(LIB)
 
 include $(top_srcdir)/../automake/local.am

@@ -1,3 +1,7 @@
+2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/Makefile.am: Don't preinstall libblock.a.
+
 2002-06-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in include/Makefile.am.
