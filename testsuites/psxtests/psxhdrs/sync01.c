@@ -19,6 +19,6 @@ void test( void )
   int    fd;
   int    result;
 
-  int fd = 4;
+  fd = 4;
   result = fsync( fd );
 }

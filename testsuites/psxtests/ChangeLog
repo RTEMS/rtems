@@ -1,3 +1,7 @@
+2003-09-15	Jennifer Averett <jennifer@OARcorp.com>
+
+	* psxhdrs/sync01.c, psxhdrs/sync02.c: Correct fd creation
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* psx01/init.c, psx01/system.h, psx01/task.c, psx02/init.c,
