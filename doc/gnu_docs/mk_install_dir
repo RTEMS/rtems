@@ -1,0 +1,29 @@
+#! /bin/sh
+#
+#  This script creates the install infrastructure for the GNU tools
+#  documentation.
+#
+
+install=/usr3/rtems_cds/test_cd/doc/tools
+
+#if [ $? -ne 1 ] ; then
+#  echo "Usage: $0 install_directory"
+#  exit 1
+#fi
+
+rm -rf ${install}
+mkdir ${install}
+mkdir ${install}/info
+mkdir ${install}/html
+
+cp rtems_tools_index.html  ${install}/../index.html
+cp index.html              ${install}/html
+cp ../BAD.html             ${install}/html
+cp ../tools/texi2www/*.gif ${install}/html
+cp ../common/*arrow.gif    ${install}/html
+cp ../common/up-arrow.gif  ${install}/html
+cp ../common/oaronly.jpg   ${install}/html
+cp ../common/dvi.gif       ${install}/html
+cp ../common/pdf.gif       ${install}/html
+cp ../common/pdf1.gif      ${install}/html
+cp ../common/ps.gif        ${install}/html

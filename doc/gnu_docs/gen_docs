@@ -1,0 +1,125 @@
+#! /bin/sh
+#
+#  This script is intended to be run in the build directory of a software
+#  package including documentation in texinfo format.  The basic operation
+#  of this script is to:
+#      + find all ".dvi" files from the current directory down,
+#      + for each dvi file
+#        + install the dvi file 
+#        + generate PostScript files for the dvi file
+#        + install the PostScript file 
+#        + if there is texinfo source for this dvi file
+#             install the info files 
+#             generate PDF from the texinfo source 
+#             install the PDF file
+#             generate HTML from the texinfo source 
+#             install the HTML file
+# 
+#
+
+texi2www=/usr1/rtems/rtemsdoc-work/tools/texi2www/texi2www
+install=/usr3/rtems_cds/test_cd/doc/tools/html
+
+#if [ $? -ne 1 ] ; then
+#  echo "Usage: $0 install_directory"
+#  exit 1
+#fi
+
+if [ ! -d ${install} ] ; then
+  echo "${install} is not a directory"
+  exit 1
+fi
+
+#ECHO=echo
+
+STARTDIR=`pwd`
+find . -name "*.dvi" | while read file
+do
+  cd $STARTDIR
+  cd `dirname $file`
+  echo $file
+  i=`basename $file`
+####
+  b=`echo $i | cut -d'.' -f1`
+  echo $b
+  
+  if [ -d ${install}/${b} ] ; then
+    echo "Cleaning install point for ${b}"
+    ${ECHO} rm -rf ${install}/${b}
+  fi
+  ${ECHO} mkdir ${install}/${b}
+
+  echo "Copying DVI for ${b}"
+  ${ECHO} cp ${b}.dvi ${install}/${b}
+
+  echo "Generating PS for ${b}"
+  ${ECHO} dvips -o ${install}/${b}/${b}.ps ${b}.dvi
+
+  # unfortunately the .dvi names are not always the same. :(
+  case ${b} in
+    history)  tsrc=hist ;;
+    readline) tsrc=rlman ;;
+    *)        tsrc=${b} ;;
+  esac 
+
+  case ${b} in
+    refcard)
+      cp $d/gnu_docs/refcard.html ${install}/${b}
+      ;;
+    *)
+      if [ -r ${tsrc}.texi ] ; then
+        ext=texi
+      elif [ -r ${tsrc}.texinfo ] ; then
+        ext=texinfo
+      else
+        echo "*** 
+        echo "*** Cannot find a texi or texinfo file for ${b}"
+        echo "*** 
+exit 1
+      fi
+
+      echo "Copying INFO for ${b}"
+      ${ECHO} cp ${b}.info* ${install}/../info
+
+      case ${b} in 
+        g77)  bad_for_pdf="yes" ;;
+        *)    bad_for_pdf="no" ;;
+      esac
+
+      case ${b} in 
+        gdb)  extraargs_for_pdf="-I ../../readline/doc" ;;
+        *)    extraargs_for_pdf="" ;;
+      esac
+      if [ ${bad_for_pdf} = "yes" ] ; then
+        echo "*** "
+        echo "*** Skipping PDF for ${b}"
+        echo "*** "
+      else
+        echo "Generating PDF for ${b}"
+        ${ECHO} texi2pdf ${extraargs_for_pdf} ${tsrc}.${ext} && \
+            ${ECHO} cp ${tsrc}.pdf ${install}/${b}/${b}.pdf
+      fi
+
+      # until texi2www is modified to take a search path
+      case ${b} in 
+        gdb)
+          sed -e 's/^ @/@/' <../../readline/doc/rluser.texinfo >rluser.texinfo
+          cp ../../readline/doc/inc-hist.texi .
+          ;;
+        readline)
+          cp rluser.texinfo rluser.texinfo.tmp
+          sed -e 's/^ @/@/' <../../readline/doc/rluser.texinfo >rluser.texinfo
+          rm -f rluser.texinfo.tmp
+          ;;
+        *)    ;;
+      esac
+      echo "Generating HTML for ${b}"
+      ${ECHO} ${texi2www} \
+        -dirfile ../index.html \
+        -header $d/gnu_docs/gnu_header.html \
+        -footer $d/gnu_docs/gnu_footer.html \
+        -icons  .. -dir ${install}/${b} \
+          ${tsrc}.${ext}
+      ;;
+   esac
+done
