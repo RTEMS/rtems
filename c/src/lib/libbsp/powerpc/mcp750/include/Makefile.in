@@ -1,0 +1,35 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+H_FILES = $(srcdir)/nvram.h $(srcdir)/bsp.h
+
+#
+#  Equate files are for including from assembly preprocessed by
+#  gm4 or gasp.  No examples are provided except for those for
+#  other CPUs.  The best way to generate them would be to
+#  provide a program which generates the constants used based
+#  on the C equivalents.
+#
+
+EQ_FILES =
+
+SRCS=$(H_FILES) $(EQ_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+preinstall:
+	$(MKDIR) $(PROJECT_INCLUDE)/bsp
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+
+all:	$(SRCS) preinstall

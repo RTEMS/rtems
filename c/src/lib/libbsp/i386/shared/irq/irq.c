@@ -346,7 +346,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
       }
     }
     /*
-     * must disable slave pic anyway
+     * must enable slave pic anyway
      */
     BSP_irq_enable_at_i8259s (2);
     _CPU_ISR_Enable(level);
@@ -374,6 +374,6 @@ void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
   }
   /*
    * I plan to process other thread related events here.
-   * This will include DEBUG session requsted from keyboard...
+   * This will include DEBUG session requested from keyboard...
    */
 }

@@ -1,0 +1,84 @@
+#
+#  $Id: 
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../console
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=misc pci zlib mm em86 polled_io
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES=bootldr.h zlib.h pci.h
+
+# Assembly source names, if any, go here -- minus the .s
+S_PIECES=head exception em86real consoleLib
+S_FILES=$(S_PIECES:%=%.S)
+S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
+
+SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES) 
+OBJS=$(S_O_FILES) $(C_O_FILES) 
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+CC_PIECES=
+CC_FILES=$(CC_PIECES:%=%.cc)
+CC_O_FILES=$(CC_PIECES:%=${ARCH}/%.o)
+
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS += -D__BOOT__ -DDEBUG
+CFLAGS   += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -mstring \
+		-O2 -fomit-frame-pointer -mrelocatable -ffixed-r13 \
+		-mno-sdata -D__BOOT__ -DDEBUG 
+
+ASFLAGS	 += -mrelocatable 
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+IMAGES := rtems.gz
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS += bootloader
+CLOBBER_ADDITIONS += $(IMAGES)
+
+bootloader : ${OBJS} $(IMAGES) $(BINARY_LOADED) ppcboot.lds
+	$(LD) -o bootloader $(OBJS) --just-symbols=$(BINARY_LOADED) \
+	-b binary $(IMAGES) -T @srcdir@/ppcboot.lds \
+	 -Map bootloader.map
+
+rtems.gz: $(BINARY_LOADED)
+	$(OBJCOPY)  $(BINARY_LOADED) rtems -O binary -R .comment -S 
+	gzip -vf9 rtems
+	rm -f rtems
+
+
+all:	${ARCH} $(SRCS) ${OBJ}
+
+
+
+
+
+
+
+
+
+

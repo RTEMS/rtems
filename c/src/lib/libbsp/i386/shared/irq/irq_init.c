@@ -93,7 +93,7 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={
    *	255 means all other interrupts are masked
    * The second entry has a priority of 255 because
    * it is the slave pic entry and is should always remain
-   * unamsked.
+   * unmasked.
    */
   0,0,
   255,

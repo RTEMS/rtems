@@ -1,4 +1,7 @@
 #
+# $Id$
+#
+#	
 #  $Id$
 #
 
@@ -18,8 +21,13 @@ VPATH = @srcdir@
 include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-SUB_DIRS = rtems wrap
+SHARED_LIB=shared
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
-	cd $(top_builddir) \
-	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+ifeq ($(RTEMS_CPU_MODEL),mpc750)
+CPUDIR=mpc750
+else
+CPUDIR=other_cpu
+endif
+
+SUB_DIRS=$(CPUDIR) $(SHARED_LIB)
+

@@ -29,10 +29,19 @@
  *  directives available to an interrupt service routine are restricted.
  */
 
+#if defined(powerpc)
+#define CPU_PROVIDES_ISR_IS_IN_PROGRESS
+#endif
+
+#ifndef CPU_PROVIDES_ISR_IS_IN_PROGRESS
+
 RTEMS_INLINE_ROUTINE boolean _ISR_Is_in_progress( void )
 {
   return (_ISR_Nest_level != 0);
 }
+#else
+#include <rtems/score/c_isr.inl>
+#endif
 
 /*PAGE
  *

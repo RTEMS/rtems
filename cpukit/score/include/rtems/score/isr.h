@@ -82,7 +82,7 @@ SCORE_EXTERN boolean    _ISR_Signals_to_thread_executing;
  *  When this variable is zero, a thread is executing.
  */
 
-SCORE_EXTERN unsigned32 _ISR_Nest_level;
+SCORE_EXTERN volatile unsigned32 _ISR_Nest_level;
 
 /*
  *  The following declares the Vector Table.  Application

@@ -234,7 +234,7 @@ SCORE_EXTERN Context_Control _Thread_BSP_context;
  *  moments.
  */
 
-SCORE_EXTERN unsigned32 _Thread_Dispatch_disable_level;
+SCORE_EXTERN volatile unsigned32 _Thread_Dispatch_disable_level;
 
 /*
  *  If this is non-zero, then the post-task switch extension

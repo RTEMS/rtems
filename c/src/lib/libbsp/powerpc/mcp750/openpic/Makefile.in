@@ -1,0 +1,62 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+INSTALL = @INSTALL@
+
+PGM=${ARCH}/openpic.rel
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=$(OPENPIC_PIECES)
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES=$(srcdir)/openpic.h
+
+SRCS=$(C_FILES) $(H_FILES)
+OBJS=$(C_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+OPENPIC_PIECES=openpic
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+${PGM}: ${SRCS} ${OBJS}
+	$(make-rel)
+
+preinstall:
+	$(MKDIR) $(PROJECT_INCLUDE)/bsp
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/bsp
+
+all:	${ARCH} $(SRCS) preinstall $(PGM)
+
+# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+install:  all
