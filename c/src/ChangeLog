@@ -1,3 +1,8 @@
+2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Merge-in libnetworking/configure.ac.
+	Merge-in parts of librdbg/configure.ac.
+
 2003-07-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Merge-in libchip/configure.ac.

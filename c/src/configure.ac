@@ -24,6 +24,15 @@ RTEMS_CHECK_CPU
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
+RTEMS_CHECK_POSIX_API(RTEMS_BSP)
+AS_IF([test "$HAS_NETWORKING" = "yes"],[
+  AS_IF([test "$RTEMS_HAS_RDBG" = "yes"],[
+    RTEMS_CHECK_RDBG(RTEMS_BSP)
+  ])
+])
+
+AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen,no)
+AC_PROG_AWK
 
 AC_MSG_NOTICE([setting up make/custom])
 
@@ -115,23 +124,13 @@ BSP_SUBDIRS="$BSP_SUBDIRS lib/libcpu"
 AC_CONFIG_SUBDIRS([lib/libbsp])
 BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
 
-AS_IF([test "$RTEMS_CPU" != "unix"],[
-## HACK: Suppress libchip for unix
-  BSP_SUBDIRS="$BSP_SUBDIRS libchip"
-])
-
-AS_IF([test "$HAS_NETWORKING" = "yes"],[
-  AC_CONFIG_SUBDIRS(libnetworking)
-  BSP_SUBDIRS="$BSP_SUBDIRS libnetworking"
-  AS_IF([test "$RTEMS_HAS_RDBG" = "yes"],[
-    RTEMS_CHECK_RDBG(RTEMS_BSP)
-  ])
-])
-
 AS_IF([test "$HAS_RDBG" = "yes"],[
   AC_CONFIG_SUBDIRS([librdbg])
   BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
 ])
+
+BSP_SUBDIRS="$BSP_SUBDIRS libchip"
+BSP_SUBDIRS="$BSP_SUBDIRS libnetworking"
 
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
   AC_CONFIG_SUBDIRS([librtems++])
@@ -168,6 +167,7 @@ AS_IF([test "$host_cpu" = "sparc"],[
 
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 AM_CONDITIONAL([HAS_RDBG],[test "$HAS_RDBG" = "yes"])
+AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 
 # The posix bsp doesn't support libchip
 # FIXME: We should use a feature based check, here
@@ -177,6 +177,9 @@ AM_CONDITIONAL([LIBCHIP],[test "$RTEMS_BSP_FAMILY" != "posix"])
 # FIXME: We should use a feature based check, here
 AM_CONDITIONAL([HAS_LIBBSP],[test "$RTEMS_BSP_FAMILY" != "bare"])
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
+
+AM_CONDITIONAL(HAS_RDBG,test "$HAS_RDBG" = "yes")
+AM_CONDITIONAL(RPCTOOLS, test "$rpctools" != "no")
 
 RTEMS_PROJECT_ROOT
 
@@ -188,6 +191,14 @@ AC_CONFIG_FILES([Makefile],
 
 AC_CONFIG_FILES([
 support/Makefile 
+
+libnetworking/Makefile
+libnetworking/pppd/Makefile
+libnetworking/rtems_servers/Makefile
+libnetworking/rtems_telnetd/Makefile
+libnetworking/rtems_webserver/Makefile
+libnetworking/wrapup/Makefile
+
 libchip/Makefile
 libchip/network/Makefile
 libchip/rtc/Makefile
