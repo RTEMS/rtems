@@ -1,3 +1,7 @@
+2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CANONICAL_HOST.
+
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-multiprocessing.m4: Don't require RTEMS_BSP_ALIAS.
