@@ -182,7 +182,7 @@ extern char               _VBR[];
  *  Minimum size of a thread's stack.
  */
 
-#define CPU_STACK_MINIMUM_SIZE           1024
+#define CPU_STACK_MINIMUM_SIZE           2048
 
 /*
  *  m68k is pretty tolerant of alignment.  Just put things on 4 byte boundaries.

@@ -58,9 +58,10 @@ extern "C" {
  *     m68040        (implies FP)
  *     m68lc040      (no FP)
  *     m68ec040      (no FP)
+ *     m68360        (no FP)
  *
  *  Primary difference (for RTEMS) between m68040, m680lc040, and 
- *  m68ec040 is the presence or abscense of the FPU.
+ *  m68ec040 is the presence or absence of the FPU.
  *
  *  Here is some information on the 040 variants (courtesy of Doug McBride,
  *  mcbride@rodin.colorado.edu):
@@ -147,6 +148,15 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
+
+#elif defined(m68360)
+ 
+#define CPU_MODEL_NAME         "m68360"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_FPU             0
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_PREINDEXING     1
 
 #else
 
