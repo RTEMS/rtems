@@ -19,13 +19,13 @@
 #include <rtems.h>
 #include <bsp.h>
 
-unsigned32 mc146818a_get_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint32_t mc146818a_get_register(
+  uint32_t  ulCtrlPort,
+  uint8_t   ucRegNum
 )
 {
-  unsigned8   val;
-  unsigned8   tmp;
+  uint8_t   val;
+  uint8_t   tmp;
 
   outport_byte( ulCtrlPort, ucRegNum );
   inport_byte( 0x84, tmp );   /* Hack a delay to give chip time to settle */
@@ -35,11 +35,11 @@ unsigned32 mc146818a_get_register(
 }
 
 void  mc146818a_set_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned32  ucData
+  uint32_t  ulCtrlPort,
+  uint8_t   ucRegNum,
+  uint32_t  ucData
 )
 {
   outport_byte( ulCtrlPort, ucRegNum );
-  outport_byte( ulCtrlPort+1, (unsigned8)ucData );
+  outport_byte( ulCtrlPort+1, (uint8_t)ucData );
 }

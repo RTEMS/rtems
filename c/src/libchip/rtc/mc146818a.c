@@ -37,9 +37,9 @@ boolean mc146818a_probe(
   int minor
 )
 {
-  unsigned32     mc146818a;
+  uint32_t     mc146818a;
   getRegister_f  getReg;
-  unsigned32     value;
+  uint32_t     value;
 
   /*
    * Verify that chip is present and that time is valid
@@ -59,7 +59,7 @@ void mc146818a_initialize(
   int minor
 )
 {
-  unsigned32     mc146818a;
+  uint32_t     mc146818a;
   getRegister_f  getReg;
   setRegister_f  setReg;
 
@@ -79,9 +79,9 @@ int mc146818a_get_time(
   rtems_time_of_day *time
 )
 {
-  unsigned32     mc146818a;
+  uint32_t     mc146818a;
   getRegister_f  getReg;
-  unsigned32     value;
+  uint32_t     value;
   rtems_interrupt_level level;
 
   mc146818a = RTC_Table[ minor ].ulCtrlPort1;
@@ -139,7 +139,7 @@ int mc146818a_set_time(
   rtems_time_of_day *time
 )
 {
-  unsigned32     mc146818a;
+  uint32_t     mc146818a;
   getRegister_f  getReg;
   setRegister_f  setReg;
 

@@ -52,15 +52,15 @@ extern rtc_fns mc146818a_fns;
 /*
  * Default register access routines
  */
-unsigned32 mc146818a_get_register(
-  unsigned32  ulCtrlPort,
+uint32_t mc146818a_get_register(
+  uint32_t  ulCtrlPort,
   unsigned8   ucRegNum
 );
 
 void  mc146818a_set_register(
-  unsigned32  ulCtrlPort,
+  uint32_t  ulCtrlPort,
   unsigned8   ucRegNum,
-  unsigned32  ucData
+  uint32_t  ucData
 );
 
 #endif
