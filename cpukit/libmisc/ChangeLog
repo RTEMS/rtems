@@ -1,5 +1,9 @@
 2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
 
+	* shell/pty.c: Moved to libnetworking/rtems_telnetd.
+
+2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
+
 	* shell/Makefile.am, shell/README, shell/cmds.c, shell/shell.c,
 	shell/shell.h: Updates.
 
