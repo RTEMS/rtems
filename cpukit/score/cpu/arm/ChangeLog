@@ -1,3 +1,10 @@
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 754/rtems
+	* rtems/asm.h: New (relocated from .).
+	* asm.h: Remove (moved to rtems/asm.h).
+	* Makefile.am: Reflect changes above.
+
 2004-01-28	Ralf Corsepius <ralf.corsepiu@rtems.org>
 
 	* asm.h, rtems/score/arm.h, rtems/score/cpu.h,

@@ -8,7 +8,7 @@ noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS = asm.h
+include_rtems_HEADERS = rtems/asm.h
 
 include_rtems_m68kdir = $(includedir)/rtems/m68k
 include_rtems_m68k_HEADERS = rtems/m68k/m68302.h rtems/m68k/m68360.h \
@@ -30,7 +30,7 @@ $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/asm.h: rtems/asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 

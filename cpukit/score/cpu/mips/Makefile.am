@@ -5,7 +5,7 @@
 include $(top_srcdir)/automake/compile.am
 
 include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS = asm.h
+include_rtems_HEADERS = rtems/asm.h
 
 include_rtems_mipsdir = $(includedir)/rtems/mips
 include_rtems_mips_HEADERS = rtems/mips/idtcpu.h rtems/mips/iregdef.h
@@ -28,7 +28,7 @@ $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/asm.h: rtems/asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
