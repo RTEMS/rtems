@@ -18,6 +18,7 @@
 #include <asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/io.h>
+#include <bspopts.h>
 
 /* Unfortunately, the CPU types defined in cpu.h are
  * an 'enum' type and hence not available :-(
@@ -137,7 +138,18 @@ L1_caches_enables:
 	beq	4f			/* not needed for 601 */
 	mfspr	r11,HID0
 	andi.	r0,r11,HID0_DCE
-	ori	r11,r11,HID0_ICE|HID0_DCE
+#if defined(mpc8240) || defined(mpc8245)
+        /*
+         * Data cache is broken for mpc8240 and mpc8245,
+         * enable instruction cache only.
+         */
+	ori	r11,r11,HID0_ICE
+#else
+        /*
+         * Enable both instruction and data caches 
+         */
+ 	ori	r11,r11,HID0_ICE|HID0_DCE
+#endif
 	ori	r8,r11,HID0_ICFI
 	bne	3f			/* don't invalidate the D-cache */
 	ori	r8,r8,HID0_DCI		/* unless it wasn't enabled */
