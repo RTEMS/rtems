@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,8 +27,16 @@
  * SUCH DAMAGE.
  *
  *	@(#)raw_ip.c	8.7 (Berkeley) 5/15/95
+ * $FreeBSD: src/sys/netinet/raw_ip.c,v 1.147 2005/01/07 01:45:45 imp Exp $
+ */
+
+/*
  *	$Id$
  */
+ 
+#include "opt_inet6.h"
+#include "opt_ipsec.h"
+#include "opt_mac.h"
 
 #include <sys/param.h>
 #include <sys/queue.h>
@@ -101,11 +105,9 @@ static struct	sockaddr_in ripsrc = { sizeof(ripsrc), AF_INET };
  * mbuf chain.
  */
 void
-rip_input(m, iphlen)
-	struct mbuf *m;
-	int iphlen;
+rip_input(struct mbuf *m, int iphlen)
 {
-	register struct ip *ip = mtod(m, struct ip *);
+	struct ip *ip = mtod(m, struct ip *);
 	register struct inpcb *inp;
 	struct inpcb *last = 0;
 	struct mbuf *opts = 0;
@@ -163,14 +165,12 @@ rip_input(m, iphlen)
  * Tack on options user may have setup with control call.
  */
 int
-rip_output(m, so, dst)
-	register struct mbuf *m;
-	struct socket *so;
-	u_long dst;
+rip_output(struct mbuf *m, struct socket *so, u_long dst)
 {
-	register struct ip *ip;
-	register struct inpcb *inp = sotoinpcb(so);
-	int flags = (so->so_options & SO_DONTROUTE) | IP_ALLOWBROADCAST;
+	struct ip *ip;
+	struct inpcb *inp = sotoinpcb(so);
+	int flags = ((so->so_options & SO_DONTROUTE) ? IP_ROUTETOIF : 0) |
+	    IP_ALLOWBROADCAST;
 
 	/*
 	 * If the user handed us a complete IP packet, use it.
@@ -225,8 +225,8 @@ rip_ctloutput(op, so, level, optname, m)
 	int level, optname;
 	struct mbuf **m;
 {
-	register struct inpcb *inp = sotoinpcb(so);
-	register int error;
+	struct inpcb *inp = sotoinpcb(so);
+	int error;
 
 	if (level != IPPROTO_IP) {
 		if (op == PRCO_SETOPT && *m)

@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,13 +27,23 @@
  * SUCH DAMAGE.
  *
  *	@(#)in.h	8.3 (Berkeley) 1/3/94
+ * $FreeBSD: src/sys/netinet/in.h,v 1.89 2005/01/07 01:45:44 imp Exp $
+ */
+ 
+/*
  * $Id$
  */
 
 #ifndef _NETINET_IN_H_
 #define _NETINET_IN_H_
 
-#include <machine/endian.h>  /* for ntohx routines */
+#include <machine/endian.h>
+
+/* Protocols common to RFC 1700, POSIX, and X/Open. */
+#define	IPPROTO_IP		0		/* dummy for IP */
+#define	IPPROTO_ICMP		1		/* control message protocol */
+#define	IPPROTO_TCP		6		/* tcp */
+#define	IPPROTO_UDP		17		/* user datagram protocol */
 
 /*
  * Constants and structures defined by the internet system,
@@ -47,12 +53,11 @@
 /*
  * Protocols (RFC 1700)
  */
-#define	IPPROTO_IP		0		/* dummy for IP */
-#define	IPPROTO_ICMP		1		/* control message protocol */
+#define	IPPROTO_HOPOPTS		0		/* IP6 hop-by-hop options */
 #define	IPPROTO_IGMP		2		/* group mgmt protocol */
 #define	IPPROTO_GGP		3		/* gateway^2 (deprecated) */
-#define IPPROTO_IPIP		4 		/* IP encapsulation in IP */
-#define	IPPROTO_TCP		6		/* tcp */
+#define	IPPROTO_IPV4		4		/* IPv4 encapsulation */
+#define	IPPROTO_IPIP		IPPROTO_IPV4	/* for compatibility */
 #define	IPPROTO_ST		7		/* Stream protocol II */
 #define	IPPROTO_EGP		8		/* exterior gateway protocol */
 #define	IPPROTO_PIGP		9		/* private interior gateway */
@@ -63,7 +68,6 @@
 #define	IPPROTO_EMCON		14		/* EMCON */
 #define	IPPROTO_XNET		15		/* Cross Net Debugger */
 #define	IPPROTO_CHAOS		16		/* Chaos*/
-#define	IPPROTO_UDP		17		/* user datagram protocol */
 #define	IPPROTO_MUX		18		/* Multiplexing */
 #define	IPPROTO_MEAS		19		/* DCN Measurement Subsystems */
 #define	IPPROTO_HMP		20		/* Host Monitoring */
@@ -87,21 +91,26 @@
 #define	IPPROTO_CMTP		38		/* Control Message Transport */
 #define	IPPROTO_TPXX		39		/* TP++ Transport */
 #define	IPPROTO_IL		40		/* IL transport protocol */
-#define	IPPROTO_SIP		41		/* Simple Internet Protocol */
+#define	IPPROTO_IPV6		41		/* IP6 header */
 #define	IPPROTO_SDRP		42		/* Source Demand Routing */
-#define	IPPROTO_SIPSR		43		/* SIP Source Route */
-#define	IPPROTO_SIPFRAG		44		/* SIP Fragment */
+#define	IPPROTO_ROUTING		43		/* IP6 routing header */
+#define	IPPROTO_FRAGMENT	44		/* IP6 fragmentation header */
 #define	IPPROTO_IDRP		45		/* InterDomain Routing*/
 #define IPPROTO_RSVP		46 		/* resource reservation */
 #define	IPPROTO_GRE		47		/* General Routing Encap. */
 #define	IPPROTO_MHRP		48		/* Mobile Host Routing */
 #define	IPPROTO_BHA		49		/* BHA */
-#define	IPPROTO_ESP		50		/* SIPP Encap Sec. Payload */
-#define	IPPROTO_AH		51		/* SIPP Auth Header */
+#define	IPPROTO_ESP		50		/* IP6 Encap Sec. Payload */
+#define	IPPROTO_AH		51		/* IP6 Auth Header */
 #define	IPPROTO_INLSP		52		/* Integ. Net Layer Security */
 #define	IPPROTO_SWIPE		53		/* IP with encryption */
 #define	IPPROTO_NHRP		54		/* Next Hop Resolution */
-/* 55-60: Unassigned */
+#define	IPPROTO_MOBILE		55		/* IP Mobility */
+#define	IPPROTO_TLSP		56		/* Transport Layer Security */
+#define	IPPROTO_SKIP		57		/* SKIP */
+#define	IPPROTO_ICMPV6		58		/* ICMP6 */
+#define	IPPROTO_NONE		59		/* IP6 no next header */
+#define	IPPROTO_DSTOPTS		60		/* IP6 destination option */
 #define	IPPROTO_AHIP		61		/* any host internal protocol */
 #define	IPPROTO_CFTP		62		/* CFTP */
 #define	IPPROTO_HELLO		63		/* "hello" routing protocol */
@@ -170,7 +179,8 @@
  *
  * The value IP_PORTRANGE_HIGH changes the range of candidate port numbers
  * into the "high" range.  These are reserved for client outbound connections
- * which do not want to be filtered by any firewalls.
+ * which do not want to be filtered by any firewalls.  Note that by default
+ * this is the same as IP_PORTRANGE_DEFAULT.
  *
  * The value IP_PORTRANGE_LOW changes the range to the "low" are
  * that is (by convention) restricted to privileged processes.  This
@@ -300,6 +310,7 @@ struct ip_opts {
 #define	IP_RECVOPTS		5    /* bool; receive all IP opts w/dgram */
 #define	IP_RECVRETOPTS		6    /* bool; receive IP opts for response */
 #define	IP_RECVDSTADDR		7    /* bool; receive IP dst addr w/dgram */
+#define	IP_SENDSRCADDR		IP_RECVDSTADDR /* cmsg_type to set src addr */
 #define	IP_RETOPTS		8    /* ip_opts; set/get IP options */
 #define	IP_MULTICAST_IF		9    /* u_char; set/get IP multicast i/f  */
 #define	IP_MULTICAST_TTL	10   /* u_char; set/get IP multicast ttl */
@@ -440,4 +451,4 @@ extern	ip_nat_ctl_t *ip_nat_ctl_ptr;
 
 #endif /* _KERNEL */
 
-#endif
+#endif /* !_NETINET_IN_H_*/

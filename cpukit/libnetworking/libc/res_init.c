@@ -96,12 +96,12 @@ static char rcsid[] = "$Id$";
 #include <rtems/rtems_bsdnet_internal.h>
 #include <rtems/bsdnet/servers.h>
 
-static void res_setoptions __P((char *, char *));
+static void res_setoptions(char *, char *);
 
 #ifdef RESOLVSORT
 static const char sort_mask[] = "/&";
 #define ISSORTMASK(ch) (strchr(sort_mask, ch) != NULL)
-static u_int32_t net_mask __P((struct in_addr));
+static u_int32_t net_mask(struct in_addr);
 #endif
 
 #if !defined(isascii) /* XXX - could be a function */
@@ -143,9 +143,9 @@ struct __res_state _res
 int
 res_init()
 {
-	register FILE *fp;
-	register char *cp, **pp;
-	register int n;
+	FILE *fp;
+	char *cp, **pp;
+	int n;
 	char buf[MAXDNAME];
 	int nserv = 0;    /* number of nameserver records read from file */
 	int haveenv = 0;
@@ -482,7 +482,7 @@ static u_int32_t
 net_mask(in)		/* XXX - should really use system's version of this */
 	struct in_addr in;
 {
-	register u_int32_t i = ntohl(in.s_addr);
+	u_int32_t i = ntohl(in.s_addr);
 
 	if (IN_CLASSA(i))
 		return (htonl(IN_CLASSA_NET));
