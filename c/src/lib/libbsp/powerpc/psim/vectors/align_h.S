@@ -121,17 +121,23 @@ align_h:
         stw     r8,Open_lr(r1)
         stw     r9,Open_cr(r1)
         stw     r10,Open_ctr(r1)
+#if defined(ppc403)
         mfspr	r7, srr2		/* SRR 2 */
         mfspr	r8, srr3		/* SRR 3 */
+#endif
         mfspr	r9, srr0		/* SRR 0 */
         mfspr	r10, srr1		/* SRR 1 */
+#if defined(ppc403)
         stw     r7,Open_srr2(r1)
         stw     r8,Open_srr3(r1)
+#endif
         stw     r9,Open_srr0(r1)
         stw     r10,Open_srr1(r1)
 
 /*      Set up common registers */
+#if defined(ppc403)
         mfspr	r5, dear		/* DEAR: R5 is data exception address */
+#endif
         lwz     r9,Open_srr0(r1)        /* get faulting instruction */
         addi    r7,r9,4                 /* bump instruction */
         stw     r7,Open_srr0(r1)        /* restore to image */
@@ -425,8 +431,10 @@ align_complete:
         mtlr    r25
         mtctr   r26
         mtcrf   0xFF, r27
+#if defined(ppc403)
         mtspr	srr2, r28		/* SRR 2 */
         mtspr	srr3, r29		/* SRR 3 */
+#endif
         mtspr	srr0, r30		/* SRR 0 */
         mtspr	srr1, r31		/* SRR 1 */
         lmw     r1,Open_gpr1+ALIGN_REGS(r0)
