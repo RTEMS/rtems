@@ -1,3 +1,13 @@
+2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add @exceptions@ to SUBDIRS.
+	* configure.ac: Add RTEMS_BSPOPTS_*(), merge-in settings
+	from make/custom/mbx*.cfg, add RTEMS_PPC_EXCEPTIONS([new]).
+	* include/Makefile.am: Convert PREINSTALL_FILES to
+	TMPINSTALL_FILES, include force-preinstall.am.
+	* vectors/Makefile.am: remove bogus VPATH.
+	* wrapup/Makefile.am: Apply @exceptions@.
+
 2001-10-29	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h: Modify Install_tm27_vector() so this BSP will link tm27.
