@@ -350,7 +350,7 @@ foreach( @vars )
 exit 0;
 
 # find a relative up-path to a file $file, starting at directory $pre
-sub find_file
+sub find_file($$)
 {
   my $pre = $_[0] ;
   my $file= $_[1] ;
