@@ -23,7 +23,6 @@
  */
 
 #include <asm.h>
-#include <rtems/score/cpu.h>
 
 #if (SPARC_HAS_FPU == 1)
 
