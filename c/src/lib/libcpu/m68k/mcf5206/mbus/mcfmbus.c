@@ -225,11 +225,6 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                     else
                     {
                         b = (bus->cmsg->addr & ~0x01);
-                        if (!(bus->cmsg->flags & I2C_MSG_WR))
-                        {
-                            b |= 1;
-                        }
-                        mcfmbus_send(bus, b);
 
                         if (bus->cmsg->flags & I2C_MSG_WR)
                         {
@@ -238,7 +233,10 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                         else
                         {
                             next_state(bus, STATE_ADDR_7);
+                            b |= 1;
                         }
+
+                        mcfmbus_send(bus, b);
                     }
                     break;
                 
