@@ -25,8 +25,6 @@ include $(top_srcdir)/../../../automake/lib.am
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
     $(include_libchip_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
-
 $(PROJECT_INCLUDE)/libchip:
 	@$(mkinstalldirs) $@
 $(PROJECT_INCLUDE)/libchip/%.h: %.h
@@ -41,10 +39,7 @@ AM_CFLAGS += $(LIBC_DEFINES)
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-all-local: $(ARCH) $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 
 DOC_FILES = README.ds1643 README.icm7170 README.m48t08 README.m48t18 STATUS
 

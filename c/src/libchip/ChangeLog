@@ -1,3 +1,8 @@
+2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* serial/Makefile.am: Don't tmp-install lib.
+	* rtc/Makefile.am: Don't tmp-install lib.
+
 2002-07-16	Eric Norum <eric.norum@usask.ca>
 
 	* New driver for the Intel EtherExpressPro (82559ER) chip.
