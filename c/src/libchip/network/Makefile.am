@@ -3,15 +3,11 @@
 ##
 
 
-include_libchipdir = $(includedir)/libchip
-
 LIBNAME = libnetchip
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = cs8900.c dec21140.c i82586.c sonic.c if_fxp.c elnk.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-include_libchip_HEADERS = cs8900.h i82586var.h if_fxpvar.h sonic.h if_media.h mii.h
 
 include $(top_srcdir)/../../automake/compile.am
 include $(top_srcdir)/../../automake/lib.am
@@ -26,6 +22,10 @@ $(PROJECT_INCLUDE)/libchip/%.h: %.h
 #
 
 AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+
+if LIBCHIP
+include_libchipdir = $(includedir)/libchip
+include_libchip_HEADERS = cs8900.h i82586var.h if_fxpvar.h sonic.h if_media.h mii.h
 
 $(LIB): $(OBJS)
 	$(make-library)
@@ -42,6 +42,7 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
 if HAS_NETWORKING
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
+endif
 endif
 
 .PRECIOUS: $(LIB)

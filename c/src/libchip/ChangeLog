@@ -1,5 +1,11 @@
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ide/Makefile.am, network/Makefile.am, rtc/Makefile.am, 
+	serial/Makefile.am: Add conditional LIBCHIP.
+	Conditionally build include-dirs.
+
+2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* network/if_fxp.c: Replace deprecated b* funcs by mem* funcs.
 
 2003-07-18      Greg Menke <gregory.menke@gsfc.nasa.gov>

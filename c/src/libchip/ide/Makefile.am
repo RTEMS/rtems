@@ -2,9 +2,6 @@
 ## $Id$
 ##
 
-
-include_idedir = $(includedir)/libchip
-
 LIBNAME = libide
 LIB = $(ARCH)/$(LIBNAME).a
 
@@ -12,8 +9,6 @@ C_FILES = ata.c ide_controller.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 noinst_HEADERS = ata_internal.h
-
-include_ide_HEADERS = ata.h ide_ctrl_cfg.h ide_ctrl.h ide_ctrl_io.h
 
 OBJS = $(C_O_FILES)
 
@@ -29,10 +24,15 @@ $(PROJECT_INCLUDE)/libchip:
 $(PROJECT_INCLUDE)/libchip/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
+if LIBCHIP
+include_idedir = $(includedir)/libchip
+include_ide_HEADERS = ata.h ide_ctrl_cfg.h ide_ctrl.h ide_ctrl_io.h
+
 $(LIB): $(OBJS)
 	$(make-library)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
+endif
 
 EXTRA_DIST = $(C_FILES)
 
