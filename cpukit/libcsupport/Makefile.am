@@ -147,152 +147,161 @@ BUILT_SOURCES = $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/chain.h: include/chain.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/chain.h: include/chain.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/chain.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/chain.h
 
-$(PROJECT_INCLUDE)/console.h: include/console.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/console.h: include/console.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/console.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/console.h
 
-$(PROJECT_INCLUDE)/clockdrv.h: include/clockdrv.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/clockdrv.h: include/clockdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/clockdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/clockdrv.h
 
-$(PROJECT_INCLUDE)/iosupp.h: include/iosupp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/iosupp.h: include/iosupp.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/iosupp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/iosupp.h
 
-$(PROJECT_INCLUDE)/ringbuf.h: include/ringbuf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/ringbuf.h: include/ringbuf.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ringbuf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ringbuf.h
 
-$(PROJECT_INCLUDE)/rtc.h: include/rtc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtc.h: include/rtc.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtc.h
 
-$(PROJECT_INCLUDE)/spurious.h: include/spurious.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/spurious.h: include/spurious.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/spurious.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/spurious.h
 
-$(PROJECT_INCLUDE)/timerdrv.h: include/timerdrv.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/timerdrv.h: include/timerdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/timerdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/timerdrv.h
 
-$(PROJECT_INCLUDE)/vmeintr.h: include/vmeintr.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vmeintr.h
 
 if NEED_STDINT_H
-$(PROJECT_INCLUDE)/stdint.h: include/stdint.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/stdint.h: include/stdint.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/stdint.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
 endif
 
 if NEED_INTTYPES_H
-$(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/inttypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
 endif
 
-$(PROJECT_INCLUDE)/motorola:
+$(PROJECT_INCLUDE)/motorola/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/motorola
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola
+	@: > $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/$(dirstamp)
 
-$(PROJECT_INCLUDE)/motorola/mc68230.h: include/motorola/mc68230.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/motorola/mc68230.h: include/motorola/mc68230.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68230.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68230.h
 
-$(PROJECT_INCLUDE)/motorola/mc68681.h: include/motorola/mc68681.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/motorola/mc68681.h: include/motorola/mc68681.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68681.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68681.h
 
-$(PROJECT_INCLUDE)/rtems:
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/assoc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/assoc.h
 
-$(PROJECT_INCLUDE)/rtems/error.h: include/rtems/error.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/error.h: include/rtems/error.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/error.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/error.h
 
-$(PROJECT_INCLUDE)/rtems/libcsupport.h: include/rtems/libcsupport.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/libcsupport.h: include/rtems/libcsupport.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libcsupport.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libcsupport.h
 
-$(PROJECT_INCLUDE)/rtems/libio.h: include/rtems/libio.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/libio.h: include/rtems/libio.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libio.h
 
-$(PROJECT_INCLUDE)/rtems/libio_.h: include/rtems/libio_.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/libio_.h: include/rtems/libio_.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libio_.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libio_.h
 
-$(PROJECT_INCLUDE)/rtems/termiostypes.h: include/rtems/termiostypes.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/termiostypes.h: include/rtems/termiostypes.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/termiostypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/termiostypes.h
 
-$(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
 
-$(PROJECT_INCLUDE)/sys:
+$(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sys
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys
+	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
-$(PROJECT_INCLUDE)/sys/filio.h: include/sys/filio.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/filio.h: include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
 
-$(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
 
-$(PROJECT_INCLUDE)/sys/ioctl.h: include/sys/ioctl.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/ioctl.h: include/sys/ioctl.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioctl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioctl.h
 
-$(PROJECT_INCLUDE)/sys/sockio.h: include/sys/sockio.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/sockio.h: include/sys/sockio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/sockio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sockio.h
 
-$(PROJECT_INCLUDE)/sys/ttycom.h: include/sys/ttycom.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/ttycom.h: include/sys/ttycom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttycom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
 
 if NEWLIB
-$(PROJECT_INCLUDE)/sys/termios.h: include/sys/termios.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/termios.h: include/sys/termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/termios.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h
 
-$(PROJECT_INCLUDE)/sys/utsname.h: include/sys/utsname.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/utsname.h: include/sys/utsname.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
 endif
 
 if NEED_SYS_CDEFS_H
-$(PROJECT_INCLUDE)/sys/cdefs.h: include/sys/cdefs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/cdefs.h: include/sys/cdefs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/cdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
 endif
 
-$(PROJECT_INCLUDE)/zilog:
+$(PROJECT_INCLUDE)/zilog/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/zilog
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog
+	@: > $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/$(dirstamp)
 
-$(PROJECT_INCLUDE)/zilog/z8036.h: include/zilog/z8036.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/zilog/z8036.h: include/zilog/z8036.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8036.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8036.h
 
-$(PROJECT_INCLUDE)/zilog/z8530.h: include/zilog/z8530.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/zilog/z8530.h: include/zilog/z8530.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8530.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8530.h
 
-$(PROJECT_INCLUDE)/zilog/z8536.h: include/zilog/z8536.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/zilog/z8536.h: include/zilog/z8536.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8536.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8536.h
 
 include $(top_srcdir)/automake/local.am

@@ -89,19 +89,24 @@ all-local: $(IMFSLIB) $(DOSFSLIB)
 
 EXTRA_DIST += $(libdosfs_DOSFS_C_FILES) $(libdosfs_FATFS_C_FILES)
 
-CLEANDIRS += src
+CLEANDIRS = src
 
 # ---
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/imfs.h: src/imfs/imfs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/imfs.h: src/imfs/imfs.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/imfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/imfs.h
 
 if !UNIX
-$(PROJECT_INCLUDE)/dosfs.h: src/dosfs/dosfs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/dosfs.h: src/dosfs/dosfs.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dosfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dosfs.h
 endif
 

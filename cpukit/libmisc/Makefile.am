@@ -293,80 +293,86 @@ CLEANDIRS = */$(ARCH)
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/rtems:
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/capture.h: capture/capture.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/capture.h: capture/capture.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/capture.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/capture.h
 
-$(PROJECT_INCLUDE)/rtems/capture-cli.h: capture/capture-cli.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/capture-cli.h: capture/capture-cli.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/capture-cli.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/capture-cli.h
 
-$(PROJECT_INCLUDE)/rtems/cpuuse.h: cpuuse/cpuuse.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/cpuuse.h: cpuuse/cpuuse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cpuuse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cpuuse.h
 
-$(PROJECT_INCLUDE)/rtems/devnull.h: devnull/devnull.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/devnull.h: devnull/devnull.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/devnull.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/devnull.h
 
-$(PROJECT_INCLUDE)/rtems/dumpbuf.h: dumpbuf/dumpbuf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/dumpbuf.h: dumpbuf/dumpbuf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dumpbuf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dumpbuf.h
 
-$(PROJECT_INCLUDE)/rtems/monitor.h: monitor/monitor.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/monitor.h: monitor/monitor.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/monitor.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/monitor.h
 
-$(PROJECT_INCLUDE)/rtems/mw_fb.h: mw-fb/mw_fb.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/mw_fb.h: mw-fb/mw_fb.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mw_fb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mw_fb.h
 
-$(PROJECT_INCLUDE)/rtems/mw_uid.h: mw-fb/mw_uid.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/mw_uid.h: mw-fb/mw_uid.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mw_uid.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mw_uid.h
 
 if LIBSHELL
-$(PROJECT_INCLUDE)/rtems/shell.h: shell/shell.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/shell.h: shell/shell.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/shell.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/shell.h
 endif
 
-$(PROJECT_INCLUDE)/rtems/rtmonuse.h: rtmonuse/rtmonuse.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/rtmonuse.h: rtmonuse/rtmonuse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtmonuse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtmonuse.h
 
 if LIBSERDBG
-$(PROJECT_INCLUDE)/serdbgcnf.h: serdbg/serdbgcnf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/serdbgcnf.h: serdbg/serdbgcnf.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/serdbgcnf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/serdbgcnf.h
 
-$(PROJECT_INCLUDE)/serdbg.h: serdbg/serdbg.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/serdbg.h: serdbg/serdbg.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/serdbg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/serdbg.h
 
-$(PROJECT_INCLUDE)/termios_printk_cnf.h: serdbg/termios_printk_cnf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/termios_printk_cnf.h: serdbg/termios_printk_cnf.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/termios_printk_cnf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/termios_printk_cnf.h
 
-$(PROJECT_INCLUDE)/termios_printk.h: serdbg/termios_printk.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/termios_printk.h: serdbg/termios_printk.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/termios_printk.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/termios_printk.h
 endif
 
-$(PROJECT_INCLUDE)/rtems/stackchk.h: stackchk/stackchk.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/stackchk.h: stackchk/stackchk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stackchk.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stackchk.h
 
-$(PROJECT_INCLUDE)/rtems/untar.h: untar/untar.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/untar.h: untar/untar.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/untar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/untar.h
 
-$(PROJECT_INCLUDE)/rtems/fsmount.h: fsmount/fsmount.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/fsmount.h: fsmount/fsmount.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fsmount.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fsmount.h
 
 include $(top_srcdir)/automake/local.am
