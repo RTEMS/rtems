@@ -249,9 +249,15 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     /* nothing to do for W83C553 bridge */
     known_cpi_isa_bridge = 1;
   }
+  if ( currentBoard == MTX_WO_PP || currentBoard == MTX_W_PP ) {
+     /* W83C554, don't to anything at the moment.  gregm 11/6/2002 */
+     known_cpi_isa_bridge = 1;
+  }
+
   if (!known_cpi_isa_bridge) {
-    printk("Please add code for PCI/ISA bridge init to libbsp/shared/irq/irq_init.c\n");
+    printk("Please add code for PCI/ISA bridge init to libbsp/powerpc/shared/irq/irq_init.c\n");
     printk("If your card works correctly please add a test and set known_cpi_isa_bridge to true\n");
+    printk("currentBoard = %i\n", currentBoard);
   }
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize the ISA PC legacy IRQ management hardware\n");

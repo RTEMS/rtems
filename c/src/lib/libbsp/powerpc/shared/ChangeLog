@@ -1,3 +1,7 @@
+2002-11-17	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* irq/irq_init.c, motorola/motorola.c: Support for MTX603e.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* bootloader/em86.c, console/inch.c, console/polled_io.c, irq/irq.c,

@@ -42,7 +42,7 @@ static const mot_info_t mot_boards[] = {
   {0x1E0, 0xE1, "Sitka cPCI (MCPN750)"},
   {0x1E0, 0xE2, "Mesquite cPCI (MCP750) w/ HAC"},
   {0x1E0, 0xF6, "MTX Plus"},
-  {0x1E0, 0xF7, "MTX wo/ Parallel Port"},
+  {0x1E0, 0xF7, "MTX w/o Parallel Port"},
   {0x1E0, 0xF8, "MTX w/ Parallel Port"},
   {0x1E0, 0xF9, "MVME 2300"},
   {0x1E0, 0xFA, "MVME 2300SC/2600"},
