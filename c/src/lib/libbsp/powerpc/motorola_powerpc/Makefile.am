@@ -17,10 +17,8 @@ noinst_DATA =
 
 include_bspdir = $(includedir)/bsp
 
-nodist_include_HEADERS += ../../powerpc/shared/include/nvram.h
-nodist_include_HEADERS += ../../shared/include/coverhd.h
-nodist_include_bsp_HEADERS = ../../powerpc/shared/console/consoleIo.h
-nodist_include_bsp_HEADERS += ../../powerpc/shared/console/uart.h
+include_HEADERS += ../../powerpc/shared/include/nvram.h
+include_HEADERS += ../../shared/include/coverhd.h
 
 EXTRA_DIST = ../../powerpc/shared/start/start.S
 start$(LIB_VARIANT).$(OBJEXT): ../../powerpc/shared/start/start.S
@@ -67,6 +65,9 @@ pclock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += pclock$(LIB_VARIANT).rel
 
+include_bsp_HEADERS = ../../powerpc/shared/console/consoleIo.h
+include_bsp_HEADERS += ../../powerpc/shared/console/uart.h
+
 console_CPPFLAGS = -DSTATIC_LOG_ALLOC
 EXTRA_PROGRAMS += console.rel
 CLEANFILES += console.rel
@@ -91,7 +92,7 @@ console_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += console$(LIB_VARIANT).rel
 
-nodist_include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h
+include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h
 
 EXTRA_PROGRAMS += irq.rel
 CLEANFILES += irq.rel
@@ -109,7 +110,7 @@ irq_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += irq$(LIB_VARIANT).rel
 
-nodist_include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
+include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
 
 EXTRA_PROGRAMS += motorola.rel
 CLEANFILES += motorola.rel
@@ -126,12 +127,14 @@ motorola_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += motorola$(LIB_VARIANT).rel
 
-nodist_include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
+include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
 
 EXTRA_PROGRAMS += openpic.rel
 CLEANFILES += openpic.rel
 openpic_rel_SOURCES = ../../powerpc/shared/openpic/openpic.h \
-    ../../powerpc/shared/openpic/openpic.c
+    ../../powerpc/shared/openpic/openpic.c \
+    ../../powerpc/shared/openpic/openpic.h
+
 openpic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 openpic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -143,7 +146,7 @@ openpic_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += openpic$(LIB_VARIANT).rel
 
-nodist_include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
+include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
 
 EXTRA_PROGRAMS += pci.rel
 CLEANFILES += pci.rel
@@ -161,6 +164,9 @@ pci_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += pci$(LIB_VARIANT).rel
 
+include_bsp_HEADERS += ../../powerpc/shared/residual/residual.h \
+    ../../powerpc/shared/residual/pnp.h
+
 EXTRA_PROGRAMS += residual.rel
 CLEANFILES += residual.rel
 residual_rel_SOURCES = ../../powerpc/shared/residual/pnp.h \
@@ -177,7 +183,7 @@ residual_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += residual$(LIB_VARIANT).rel
 
-nodist_include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
+include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
 
 EXTRA_PROGRAMS += vectors.rel
 CLEANFILES += vectors.rel
@@ -195,7 +201,7 @@ vectors_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += vectors$(LIB_VARIANT).rel
 
-nodist_include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
+include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../powerpc/shared/vme/VMEConfig.h ../../powerpc/shared/vme/VME.h
 
 EXTRA_PROGRAMS += vme.rel
@@ -236,14 +242,6 @@ $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/bsp/consoleIo.h: ../../powerpc/shared/console/consoleIo.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
-
-$(PROJECT_INCLUDE)/bsp/uart.h: ../../powerpc/shared/console/uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
-
 $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT): start$(LIB_VARIANT).$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
@@ -255,6 +253,14 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/rtems_crti$(LIB_VARIANT).$(OBJEXT)
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
+$(PROJECT_INCLUDE)/bsp/consoleIo.h: ../../powerpc/shared/console/consoleIo.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
+
+$(PROJECT_INCLUDE)/bsp/uart.h: ../../powerpc/shared/console/uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
 
 $(PROJECT_INCLUDE)/bsp/irq.h: ../../powerpc/shared/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
@@ -271,6 +277,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/openpic.h
 $(PROJECT_INCLUDE)/bsp/pci.h: ../../powerpc/shared/pci/pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pci.h
+
+$(PROJECT_INCLUDE)/bsp/residual.h: ../../powerpc/shared/residual/residual.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/residual.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/residual.h
+
+$(PROJECT_INCLUDE)/bsp/pnp.h: ../../powerpc/shared/residual/pnp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pnp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pnp.h
 
 $(PROJECT_INCLUDE)/bsp/vectors.h: ../../powerpc/shared/vectors/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
