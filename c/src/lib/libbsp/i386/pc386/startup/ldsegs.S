@@ -78,8 +78,8 @@ _delay:
 delay1:
 	dec	eax
 	jnz	delay1
-	ret
 #endif
+	ret
 
 /*-------------------------------------------------------------------------+
 |         Function: _load_segments

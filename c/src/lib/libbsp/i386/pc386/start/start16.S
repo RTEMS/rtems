@@ -141,15 +141,15 @@ _start16:
 delay:
 _delay:
 /*
-	outb	%al, $0xED	# about 1uS delay on most machines
+	outb	%al, $0x80	# about 1uS delay on most machines
 */
-/*
- 
+/* 
 	movl	$0x200, %eax
 delay1:
 	dec	%eax
 	jnz	delay1
-	ret
+*/
+ 	ret
 
 /*----------------------------------------------------------------------------+
 | empty_8042
