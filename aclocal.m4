@@ -1,6 +1,8 @@
 dnl some macros for rtems host configuration checks
 dnl
 dnl Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de), 97/11/29
+dnl 
+dnl Last Modified: 98/01/10
 dnl
 
 dnl macro to detect mkdir
@@ -46,11 +48,11 @@ dnl file .. name of the files to search for
 dnl var  .. shell variable to append found files
 AC_DEFUN(RTEMS_CHECK_FILES_IN,
 [
-AC_MSG_CHECKING(for $2 in $1)
+AC_MSG_CHECKING(for $2.in in $1)
 if test -d $srcdir/$1; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find $1 -name $2 -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find $1 -name "$2.in" -print | sed "s/$2\.in/%/" | sort | sed "s/%/$2/"`
   $3="$$3 $rtems_av_tmp";
   cd $rtems_av_save_dir;
   AC_MSG_RESULT(done)
@@ -65,7 +67,7 @@ dnl at path and append an entry for Makefile to global variable
 dnl "makefiles" (from configure.in) for each Makefile.in found
 dnl 
 AC_DEFUN(RTEMS_CHECK_MAKEFILE,
-[RTEMS_CHECK_FILES_IN($1,Makefile.in,makefiles)
+[RTEMS_CHECK_FILES_IN($1,Makefile,makefiles)
 ])
 
 dnl canonicalize target name
