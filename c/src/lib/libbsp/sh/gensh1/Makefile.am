@@ -77,7 +77,8 @@ EXTRA_LIBRARIES = libbsp.a
 CLEANFILES += libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup$(LIB_VARIANT).rel scitab$(LIB_VARIANT).rel \
-    console$(LIB_VARIANT).rel \
+    console$(LIB_VARIANT).rel
+libbsp_a_LIBADD += \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock$(LIB_VARIANT).rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer$(LIB_VARIANT).rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/sci$(LIB_VARIANT).rel \
@@ -91,7 +92,7 @@ libbsp_g_a_LIBADD = $(libbsp_a_LIBADD)
 
 noinst_DATA += libbsp$(LIB_VARIANT).a
 
-all-local: $(TMPINSTALL_FILES)
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST += times
 
@@ -114,5 +115,4 @@ CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
