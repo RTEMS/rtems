@@ -62,7 +62,6 @@ void bsp_pretasking_hook(void)
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
-
 }
 
 /*  PAGE
