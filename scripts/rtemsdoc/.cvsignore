@@ -29,3 +29,4 @@ sparc-supplement.add
 *.spec
 started_ada-docs.add
 started-docs.add
+*.spec.in

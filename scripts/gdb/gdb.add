@@ -49,6 +49,7 @@ cd gdb-@gdb_version@
 test -d build || mkdir build
   cd build
   ../gdb-@gdb_version@/configure \
+    --build=%_build --host=%_host \
     --target=@target_alias@ \
     --verbose --prefix=%{_prefix} @extra_configure_arguments@ \
     --disable-nls
