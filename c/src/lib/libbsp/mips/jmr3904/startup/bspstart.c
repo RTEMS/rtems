@@ -90,6 +90,10 @@ void bsp_start( void )
    _sys_exit( 1 );
 
   BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
+
+  mips_set_sr( 0xff00 );  /* all interrupts unmasked but globally off */
+                          /* depend on the IRC to take care of things */
+  mips_install_isr_entries();
 }
 
 /* XXX */

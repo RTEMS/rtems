@@ -1,3 +1,15 @@
+2000-12-13	Joel Sherrill <joel@OARcorp.com>
+
+	* README: Updated.  We are now vectoring a clock tick ISR handler.
+	But RTEMS is not returning from the ISR properly.
+	* clock/clockdrv.c: Now causes interrupts but has not been calibrated.
+	* include/bsp.h: Use <libcpu/tx3904.h>
+	* startup/Makefile.am: Add setvec.c from shared.
+	* startup/bspstart.c: Initialize the status register (SR) so
+	no interrupts are masked but global interrupts (SR_IEC) are off.
+	Added call to install the ISR prologue code.
+	* wrapup/Makefile.am: Pick up more pieces from libcpu.
+
 2000-12-11	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/bspclean.c: New file to explicitly invoke _sys_exit().
