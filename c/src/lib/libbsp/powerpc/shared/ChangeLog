@@ -1,3 +1,13 @@
+	* include/bsp.h: Include <bspopts.h>.
+
+2001-10-25	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Added _init and _fini.
+
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/p_clock.c, startup/bspstart.c: Fixed typo.
+
 2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/Makefile.am: Use 'PREINSTALL_FILES ='.
