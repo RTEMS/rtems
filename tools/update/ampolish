@@ -134,6 +134,10 @@ else { $rtems_top .= "/" ; }
     {
       push @ibuf, "include \$(top_srcdir)/${rtems_top}automake/lib.am\n" ;
     }
+    elsif ( /^[\s]*include[\s\t]*.*compile.am[\s]*$/o )
+    {
+      # remove the line
+    }
     elsif ( /^(.*[^\s])[\s]*$/o )
     { # remove trailing spaces
       push @ibuf, "$1\n" ;
@@ -220,6 +224,7 @@ else { $rtems_top .= "/" ; }
     {
       if ( "$1" eq "lib" )
       {
+        push @ibuf, "include \$(top_srcdir)/${rtems_top}automake/compile.am\n" ;
         push @ibuf, "include \$(top_srcdir)/${rtems_top}automake/$1.am\n" ;
       }
       elsif ( "$1" eq "local" )
@@ -229,6 +234,18 @@ else { $rtems_top .= "/" ; }
       elsif ( "$1" eq "host" )
       {
         $main::seen_host = 1 ;
+      }
+    }
+    elsif ( /^[\s]*include[\s\t]*\$\(RTEMS_ROOT\)\/make\/(.*)\.cfg$/o )
+    {
+      if ( "$1" eq "leaf" )
+      {
+        push @ibuf, "include \$(top_srcdir)/${rtems_top}automake/compile.am\n" ;
+        push @ibuf, "include \$(RTEMS_ROOT)/make/$1.cfg\n" ;
+      }
+      else
+      {
+        push @ibuf, "include \$(RTEMS_ROOT)/make/$1.cfg\n" ;
       }
     }
     elsif ( /^[\s]*include[\s\t]*(.*)$/o )
