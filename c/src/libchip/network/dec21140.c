@@ -174,7 +174,7 @@ struct MD {
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PPC_CACHE_ALIGNMENT
 #else
 #define phys_to_bus(address) (unsigned int) address
-#define bus_to_phys(address) address
+#define bus_to_phys(address) (unsigned int) address
 #define delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE
 
@@ -343,7 +343,6 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 {
   rtems_status_code st;
   volatile unsigned int *tbase;
-  union {char c[64]; unsigned short s[32];} rombuf;
   int i;
   volatile unsigned char *cp, *setup_frm, *eaddrs; 
   volatile unsigned char *buffer;
@@ -836,7 +835,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
         
 	pcib_conf_read32(signature, 20, &value);
 	if (_CPU_is_paging_enabled())
-	  _CPU_map_phys_address(&(sc->base),
+	  _CPU_map_phys_address((void **) &(sc->base),
 				(void *)(value & ~MEM_MASK),
 				DEC_REGISTER_SIZE ,
 				PTE_CACHE_DISABLE | PTE_WRITABLE);
