@@ -1,3 +1,8 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* unlimited/test1.c: Corrected use of _Objects_Information_table
+	now that it is a two dimensional array based upon API and class.
+
 2002-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* base_sp/apptask.c: Include <stdlib.h>.

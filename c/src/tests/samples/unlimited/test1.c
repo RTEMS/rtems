@@ -27,6 +27,7 @@ void test1()
   boolean           auto_extend;
   rtems_status_code result;
   rtems_unsigned32  task_count = 0;
+  Objects_Information *the_information;
   
   char              c1 = 'a';
   char              c2 = 'a';
@@ -40,8 +41,10 @@ void test1()
    * saves having another test.
    */
 
-  auto_extend = _Objects_Information_table[OBJECTS_RTEMS_TASKS]->auto_extend;
-  _Objects_Information_table[OBJECTS_RTEMS_TASKS]->auto_extend = FALSE;
+  the_information = 
+    _Objects_Information_table[OBJECTS_CLASSIC_API][OBJECTS_RTEMS_TASKS];
+  auto_extend = the_information->auto_extend;
+  the_information->auto_extend = FALSE;
   
   while (task_count < MAX_TASKS)
   {
@@ -92,7 +95,7 @@ void test1()
 
   destory_all_tasks("TEST1");
   
-  _Objects_Information_table[OBJECTS_RTEMS_TASKS]->auto_extend = auto_extend;
+  the_information->auto_extend = auto_extend;
   
   printf( " TEST1 : completed\n" );
 }
