@@ -1,3 +1,14 @@
+2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: AM_CPPFLAGS += -I$(top_builddir).
+	Use AM_CPPFLAGS instead of AM_CFLAGS.
+	* src/ata.c: Include config.h.
+	* src/bdbuf.c: Ditto.
+	* src/blkdev.c: Ditto.
+	* src/diskdevs.c: Ditto.
+	* src/ide_part_table.c: Ditto.
+	* src/ramdisk.c: Ditto.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/ide_part_table.h, src/ata.c, src/ide_part_table.c: URL

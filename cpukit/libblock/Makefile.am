@@ -29,7 +29,8 @@ C_FILES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c\
 
 OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 
-AM_CFLAGS += $(LIBC_DEFINES)
+AM_CPPFLAGS += -I$(top_builddir)
+AM_CPPFLAGS += $(LIBC_DEFINES)
 
 ${ARCH}/%.$(OBJEXT): src/%.c
 	${COMPILE} -o $@ -c $<
