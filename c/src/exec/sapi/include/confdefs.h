@@ -1,9 +1,27 @@
 /*  confdefs.h
  *
  *  This include file contains the configuration table template that will
- *  be used by the single processor tests to define its default configuration
- *  parameters.
+ *  be instantiated by an application based on the setting of a number
+ *  of macros.  The macros are documented in the Configuring a System
+ *  chapter of the Classic API User's Guide
  *
+ *  The model is to estimate the memory required for each configured item
+ *  and sum those estimates.  The estimate can be too high or too low for
+ *  a variety of reasons:
+ *
+ *  Reasons estimate is too high:
+ *    + FP contexts (not all tasks are FP)
+ *
+ *  Reasons estimate is too low:
+ *    + stacks greater than minimum size
+ *    + messages
+ *    + application must account for device driver resources
+ *    + application must account for add-on library resource requirements
+ *
+ *  NOTE:  Eventually this may be able to take into account some of
+ *         the above.  This procedure has evolved from just enough to
+ *         support the RTEMS Test Suites into something that can be
+ *         used remarkably reliably by most applications.
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -41,8 +59,12 @@ extern itron_api_configuration_table    Configuration_ITRON_API;
 #define CONFIGURE_NEWLIB_EXTENSION 1
 #define CONFIGURE_MALLOC_REGION 1
 
+/*
+ *  File descriptors managed by libio
+ */
+
 #ifndef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 20
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 3
 #endif
 
 #define CONFIGURE_LIBIO_SEMAPHORES \
@@ -50,6 +72,22 @@ extern itron_api_configuration_table    Configuration_ITRON_API;
 
 #ifdef CONFIGURE_INIT
 unsigned32 rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
+#endif
+
+/*
+ *  Termios resources
+ */
+
+#ifdef CONFIGURE_TERMIOS_DISABLED
+#define CONFIGURE_TERMIOS_SEMAPHORES 0
+#else
+
+#ifndef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
+#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
+#endif
+
+#define CONFIGURE_TERMIOS_SEMAPHORES \
+  ((CONFIGURE_NUMBER_OF_TERMIOS_PORTS * 4) + 1)
 #endif
 
 /*
@@ -62,10 +100,10 @@ unsigned32 rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
 
 #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
 rtems_filesystem_mount_table_t configuration_mount_table = {
-#ifdef CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
-  &miniIMFS_ops,
-#else  /* using IMFS as base filesystem */
+#ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
   &IMFS_ops,
+#else  /* using miniIMFS as base filesystem */
+  &miniIMFS_ops,
 #endif
   RTEMS_FILESYSTEM_READ_WRITE,
   NULL,
@@ -94,15 +132,17 @@ int rtems_filesystem_mount_table_size = 1;
 
 /*
  *  Interrupt Stack Space
+ *
+ *  NOTE: There is currently no way for the application to override
+ *        the interrupt stack size set by the BSP.
  */
 
 #if (CPU_ALLOCATE_INTERRUPT_STACK == 0)
+#undef CONFIGURE_INTERRUPT_STACK_MEMORY
 #define CONFIGURE_INTERRUPT_STACK_MEMORY 0
 #else
   #ifndef CONFIGURE_INTERRUPT_STACK_MEMORY
   #define CONFIGURE_INTERRUPT_STACK_MEMORY RTEMS_MINIMUM_STACK_SIZE
-  #else
-  #define CONFIGURE_INTERRUPT_STACK_MEMORY 0
   #endif
 #endif
 
@@ -245,9 +285,9 @@ rtems_driver_address_table Device_drivers[] = {
 #endif
 
 /*
- *  Default Configuration Table.  This table contains the most values set in
- *  the RTEMS Test Suite.  Each value may be overridden within each test to
- *  customize the environment. 
+ *  Default Multiprocessing Configuration Table.  The defaults are
+ *  appropriate for most of the RTEMS Multiprocessor Test Suite.  Each
+ *  value may be overridden within each test to customize the environment. 
  */
 
 #ifdef CONFIGURE_MP_APPLICATION
@@ -295,9 +335,7 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #endif /* CONFIGURE_MP_APPLICATION */
  
 /*
- *  Default Configuration Table.  This table contains the most values set in
- *  the RTEMS Test Suite.  Each value may be overridden within each test to
- *  customize the environment. 
+ *  Default Configuration Table.  
  */
 
 #ifndef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
@@ -307,7 +345,7 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #endif
 
 #ifndef CONFIGURE_MAXIMUM_TASKS
-#define CONFIGURE_MAXIMUM_TASKS               10
+#define CONFIGURE_MAXIMUM_TASKS               0
 #endif
 
 #ifndef CONFIGURE_MAXIMUM_TIMERS
@@ -393,7 +431,7 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #include <rtems/posix/threadsup.h>
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
-#define CONFIGURE_MAXIMUM_POSIX_THREADS      10
+#define CONFIGURE_MAXIMUM_POSIX_THREADS      0
 #endif
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
@@ -430,7 +468,7 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 
 /*
  *  The user is defining their own table information and setting the
- *  appropriate variables.
+ *  appropriate variables for the POSIX Initialization Thread Table.
  */
  
 #else
@@ -547,7 +585,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #include <rtems/itron/vmempool.h>
 
 #ifndef CONFIGURE_MAXIMUM_ITRON_TASKS
-#define CONFIGURE_MAXIMUM_ITRON_TASKS      10
+#define CONFIGURE_MAXIMUM_ITRON_TASKS      0
 #endif
 
 #ifndef CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
@@ -584,7 +622,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 /*
  *  The user is defining their own table information and setting the
- *  appropriate variables.
+ *  appropriate variables for the ITRON Initialization Task Table.
  */
 
 #else
@@ -709,22 +747,6 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 
 /* 
  *  Calculate the RAM size based on the maximum number of objects configured.
- *  The model is to estimate the memory required for each configured item,
- *  sum the memory requirements and insure that there is at least 32K greater 
- *  than that for things not directly addressed such as:
- *
- *    + stacks greater than minimum size
- *    + FP contexts
- *    + API areas (should be optional)
- *    + messages
- *    + object name and local pointer table overhead
- *    + per node memory requirements
- *    + executive fixed requirements (including at least internal threads
- *       and the Ready chains)
- *
- *  NOTE:  Eventually this should take into account some of the above.
- *         Basically, this is a "back of the envelope" estimate for
- *         memory requirements.  It could be more accurate.
  */
 
 #ifndef CONFIGURE_EXECUTIVE_RAM_SIZE
@@ -822,7 +844,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
       CONFIGURE_MAXIMUM_ITRON_TASKS ) + \
    CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS) + \
    CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES + \
-     CONFIGURE_LIBIO_SEMAPHORES) + \
+     CONFIGURE_LIBIO_SEMAPHORES + CONFIGURE_TERMIOS_SEMAPHORES) + \
    CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(CONFIGURE_MAXIMUM_MESSAGE_QUEUES) + \
    CONFIGURE_MEMORY_FOR_PARTITIONS(CONFIGURE_MAXIMUM_PARTITIONS) + \
    CONFIGURE_MEMORY_FOR_REGIONS( \
@@ -872,7 +894,8 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 rtems_api_configuration_table Configuration_RTEMS_API = {
   CONFIGURE_MAXIMUM_TASKS,
   CONFIGURE_MAXIMUM_TIMERS,
-  CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES,
+  CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES +
+    CONFIGURE_TERMIOS_SEMAPHORES,
   CONFIGURE_MAXIMUM_MESSAGE_QUEUES,
   CONFIGURE_MAXIMUM_PARTITIONS,
   CONFIGURE_MAXIMUM_REGIONS + CONFIGURE_MALLOC_REGION,
@@ -948,5 +971,31 @@ rtems_configuration_table Configuration = {
 }
 #endif
  
+/*
+ *  Some warnings and error checking
+ */
+
+/*
+ *  Make sure a task/thread of some sort is configured
+ */
+
+#if (CONFIGURE_MAXIMUM_TASKS == 0) && \
+    (CONFIGURE_MAXIMUM_POSIX_THREADS == 0) && \
+    (CONFIGURE_MAXIMUM_ADA_TASKS == 0) &&  \
+    (CONFIGURE_MAXIMUM_ITRON_TASKS == 0)
+#error "CONFIGURATION ERROR: No tasks or threads configured!!
+#endif
+
+/*
+ *  Make sure at least one of the initialization task/thread
+ *  tables was defined.
+ */
+
+#if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) && \
+    !defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) && \
+    !defined(CONFIGURE_ITRON_INIT_TASK_TABLE)
+#error "CONFIGURATION ERROR: No initialization tasks or threads configured!!
+#endif
+
 #endif
 /* end of include file */

@@ -26,6 +26,15 @@ extern "C" {
 #include <clockdrv.h>
 
 /*
+ *  confdefs.h overrides for this BSP:
+ *   - number of termios serial ports (defaults to 1)
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
+
+/*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
  *  values are in seconds and need to be converted to ticks for the
