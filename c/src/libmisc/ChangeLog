@@ -1,6 +1,10 @@
+2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Don't preinstall libmisc.a.
+
 2002-05-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* coinfigure.ac, Makefile.am: Remove references to rootfs.
+	* configure.ac, Makefile.am: Remove references to rootfs.
 
 2002-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

@@ -17,9 +17,6 @@ TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a \
     ../devnull/$(ARCH)/libdevnull-tmp.a ../dummy/$(ARCH)/libdummy-tmp.a \
     ../mw-fb/$(ARCH)/libmw-fb-tmp.a ../capture/$(ARCH)/libcapture-tmp.a
 
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
 #
 # (OPTIONAL) Add local stuff here using +=
 #
@@ -32,10 +29,6 @@ $(LIB): $(TMP_LIBS)
 	$(AR) ruv $@ $(ARCH)/*
 	$(RANLIB) $@
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
-
-all-local: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(LIB)
+all-local: $(ARCH) $(LIB)
 
 include $(top_srcdir)/../../../automake/local.am
