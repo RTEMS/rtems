@@ -21,7 +21,6 @@ RTEMS_CHECK_CPU
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 AC_PROG_RANLIB
-AC_PROG_RANLIB
 
 RTEMS_CHECK_NETWORKING
 
@@ -31,11 +30,8 @@ AM_CONDITIONAL(rpc_not_supported, test "$RTEMS_CPU" = "c4x")
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 include/Makefile
-include/rpc/Makefile
-include/rpcsvc/Makefile
 src/Makefile
 src/xdr/Makefile
 src/rpc/Makefile
-src/rpc/PSD.doc/Makefile
 ])
 AC_OUTPUT

@@ -6,8 +6,6 @@ include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am
 
-SUBDIRS = PSD.doc
-
 LIB = $(ARCH)/librpc.a
 
 C_FILES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c \
@@ -44,5 +42,7 @@ endif
 
 EXTRA_DIST = $(C_FILES) DISCLAIMER $(UNUSED_C_FILES) $(noinst_MANS)
 
-include $(top_srcdir)/../automake/subdirs.am
+EXTRA_DIST += PSD.doc/nfs.rfc.ms PSD.doc/rpc.prog.ms PSD.doc/rpc.rfc.ms \
+    PSD.doc/rpcgen.ms PSD.doc/xdr.nts.ms PSD.doc/xdr.rfc.ms
+
 include $(top_srcdir)/../automake/local.am
