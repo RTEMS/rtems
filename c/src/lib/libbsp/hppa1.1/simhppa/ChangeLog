@@ -1,3 +1,10 @@
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shmsupp/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* start/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* startup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* tty/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+
 2002-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* start/start.S: Per PR329 now compiles with GNU tools.
