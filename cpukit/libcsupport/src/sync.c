@@ -21,6 +21,13 @@
 #include "config.h"
 #endif
 
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
+int fdatasync(int);        /* still not always prototyped */
+
+
 #include <unistd.h>
 #include <stdio.h>
 
@@ -34,6 +41,7 @@
 
 /* XXX check standards -- Linux version appears to be void */
 void _fwalk(struct _reent *, void *);
+
 
 static void sync_wrapper(FILE *f)
 {
@@ -60,6 +68,22 @@ static void sync_per_thread(Thread_Control *t)
 
 int sync(void)
 {
+  extern struct _reent libc_global_reent;
+
+  /*
+   *  Walk the one used initially by RTEMS.
+   */
+  _fwalk(&libc_global_reent, sync_wrapper);
+
+  /*
+   *  XXX Do we walk the one used globally by newlib?
+   *  XXX Do we need the RTEMS global one?
+   */
+
+  /*
+   *  Now walk all the per-thread reentrancy structures.
+   */
   rtems_iterate_over_all_threads(sync_per_thread);
+
   return 0;
 }
