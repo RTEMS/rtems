@@ -26,6 +26,8 @@ void *Task_1(
 {
   int  status;
 
+/* wait for a condition variable signal from Init */
+
   Task_id = pthread_self();
   printf( "Task_1: ID is 0x%08x\n", Task_id );
 
@@ -43,6 +45,8 @@ void *Task_1(
   status = pthread_mutex_unlock( &Mutex_id );
   assert( !status );
 
+/* wait for a condition variable broadcast from Init */
+
   status = pthread_mutex_lock( &Mutex_id );
   assert( !status );
 
@@ -54,6 +58,7 @@ void *Task_1(
   status = pthread_mutex_unlock( &Mutex_id );
   assert( !status );
 
+  puts( "Task_1: task exit" );
   pthread_exit( NULL );
 
   return NULL; /* just so the compiler thinks we returned something */
