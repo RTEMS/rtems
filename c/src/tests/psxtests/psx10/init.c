@@ -299,7 +299,7 @@ void *POSIX_Init(
   puts( "Init: sleep - switch to Task_3" );
   sleep( 1 );
 
-  puts( "*** END OF POSIX TEST 5 ***" );
+  puts( "*** END OF POSIX TEST 10 ***" );
   exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
