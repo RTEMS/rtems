@@ -1,3 +1,8 @@
+2003-12-11	Joel Sherrill <joel@OARcorp.com>
+
+	PR 531/rtems_misc
+	* rtmonuse/rtmonuse.c: Correct indexing.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* cpuuse/cpuuse.c, cpuuse/cpuuse.h, devnull/devnull.c,
