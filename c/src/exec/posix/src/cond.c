@@ -447,6 +447,17 @@ int pthread_cond_timedwait(
   const struct timespec *abstime
 )
 {
+  if ( !abstime )
+    return EINVAL;
+
+/* XXX need to fully address an error occuring in the total timespec */
+
+  if ( abstime->tv_sec < 0 || abstime->tv_nsec < 0 )
+    return EINVAL;
+
+  if ( abstime->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
+    return EINVAL;
+ 
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,
