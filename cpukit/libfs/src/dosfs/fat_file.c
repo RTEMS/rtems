@@ -228,6 +228,11 @@ fat_file_close(
             free(fat_fd);
         }  
     }  
+    /*
+     * flush any modified "cached" buffer back to disk
+     */
+    rc = fat_buf_release(fs_info);
+
     return rc;
 }
 
