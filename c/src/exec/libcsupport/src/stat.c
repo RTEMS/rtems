@@ -1,6 +1,8 @@
 /*
  *  stat() - POSIX 1003.1b 5.6.2 - Get File Status
  *
+ *  Reused from lstat().
+ *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
@@ -11,6 +13,18 @@
  *
  *  $Id$
  */
+
+/*
+ *  lstat() and stat() share the same implementation with a minor
+ *  difference on how links are evaluated.
+ */
+
+#ifndef _STAT_NAME
+#define _STAT_NAME         stat
+#define _STAT_R_NAME       _stat_r
+#define _STAT_FOLLOW_LINKS TRUE
+#endif
+
 
 #include <rtems.h>
 
@@ -25,7 +39,7 @@
 
 #include "libio_.h"
 
-int stat(
+int _STAT_NAME(
   const char  *path,
   struct stat *buf
 )
@@ -40,7 +54,7 @@ int stat(
   if ( !buf )
     set_errno_and_return_minus_one( EFAULT );
 
-  status = rtems_filesystem_evaluate_path( path, 0, &loc, TRUE );
+  status = rtems_filesystem_evaluate_path( path, 0, &loc, _STAT_FOLLOW_LINKS );
   if ( status != 0 )
     return -1;
   
@@ -59,21 +73,21 @@ int stat(
 #endif
 
 /*
- *  _stat_r
+ *  _stat_r, _lstat_r
  *
- *  This is the Newlib dependent reentrant version of stat().
+ *  This is the Newlib dependent reentrant version of stat() and lstat().
  */
 
 #if defined(RTEMS_NEWLIB)
 
 #include <reent.h>
 
-int _stat_r(
+int _STAT_R_NAME(
   struct _reent *ptr,
   const char    *path,
   struct stat   *buf
 )
 {
-  return stat( path, buf );
+  return _STAT_NAME( path, buf );
 }
 #endif

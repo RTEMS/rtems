@@ -47,7 +47,7 @@ MALLOC_PIECES=\
 
 LIBC_GLUE_PIECES=\
   __gettod __times \
-  truncate access stat pathconf \
+  truncate access stat lstat pathconf \
   newlibc no_libc
 
 UNIX_LIBC_PIECES=unixlibc hosterr 
