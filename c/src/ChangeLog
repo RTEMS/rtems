@@ -1,5 +1,9 @@
 2004-11-22	Joel Sherrill <joel@OARcorp.com>
 
+	* libchip/network/if_fxp.c: Add entry for another module ID code.
+
+2004-11-22	Joel Sherrill <joel@OARcorp.com>
+
 	PR 693/misc
 	* libchip/rtc/mc146818a_ioreg.c: Disable unless on a target with
 	in/outport routines.
