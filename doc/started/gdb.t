@@ -20,7 +20,7 @@ successfully used with RTEMS applications:
 Other configurations of gdb have successfully been used by RTEMS users
 but are not documented here.
 
-@section Unarchive the gdb distribution
+@section Unarchive the gdb Distribution
 
 Use the following commands to unarchive the gdb distribution:
 
@@ -76,7 +76,7 @@ The files that are found, have been modified by the patch file.
 
 @section GDB with Sparc Instruction Simulation (SIS)
 
-@subheading Make the build directory
+@subheading Make the Build Directory
 
 Create a build directory for the SIS Debugger
 
@@ -85,7 +85,7 @@ cd tools
 mkdir build-sis
 @end example
 
-@subheading Configure for the build
+@subheading Configure for the Build
 
 Configure the GNU Debugger for the
 Sparc Instruction Simulator (SIS):
@@ -102,7 +102,7 @@ cd tools/build-sis
 Where <INSTALL_POINT_FOR_SIS> is a unique location where the gdb
 with SIS will be created. 
 
-@subheading Make the debugger
+@subheading Make the Debugger
 
 From tools/build-sis execute the following command sequence:
 
@@ -113,7 +113,7 @@ gmake all install
 
 @section GDB with PowerPC Instruction Simulator
 
-@subheading Make the build directory
+@subheading Make the Build Directory
 
 Create a build directory for the SIS Debugger
 
@@ -122,7 +122,7 @@ cd tools
 mkdir build-ppc
 @end example
 
-@subheading Configure for the build
+@subheading Configure for the Build
 
 Configure the GNU Debugger for the PowerPC
 Instruction Simulator (PSIM):
@@ -144,7 +144,7 @@ Where <INSTALL_POINT_FOR_PPC> is a unique location where the gdb
 with PSIM will be created. 
 
 
-@subheading Make the debugger
+@subheading Make the Debugger
 
 From tools/build-ppc execute the following command sequence:
 
@@ -155,11 +155,7 @@ gmake all install
 
 @section GDB for DINK32
 
-@subheading Unarchive the gdb distribution
-
-Use the following commands to unarchive the gdb distribution:
-
-@subheading Make the build directory
+@subheading Make the Build Directory
 
 Create a build directory for the DINK32 Debugger
 
@@ -168,7 +164,7 @@ cd tools
 mkdir build-dink32
 @end example
 
-@subheading Configure for the build
+@subheading Configure for the Build
 
 Configure the GNU Debugger to communicate with
 the DINK32 ROM monitor:
@@ -184,7 +180,7 @@ cd tools/build-dink32
 Where <INSTALL_POINT_FOR_DINK32> is a unique location where the
 gdb Dink32 will be created. 
 
-@subheading Make the debugger
+@subheading Make the Debugger
 
 From tools/build-dink32 execute the following command sequence:
 

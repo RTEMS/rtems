@@ -9,7 +9,7 @@
 
 @chapter Building RTEMS
 
-@section Unpack the RTEMS source
+@section Unpack the RTEMS Source
 
 Use the following command sequence to unpack the RTEMS source into the
 tools directory: 
@@ -19,7 +19,7 @@ cd tools
 tar xzf ../arc/@value{RTEMS-TAR}
 @end example
 
-@section Add the bin directory under the install point to the default PATH
+@section Add <INSTALL_POINT>/bin to Executable PATH
 
 In order to compile RTEMS, you must have the cross compilation toolset
 in your search patch.  The following command appends the directory
@@ -33,7 +33,7 @@ NOTE:  The above command is in Bourne shell (@code{sh}) syntax and should work w
 the Korn (@code{ksh}) and GNU Bourne Again Shell (@code{bash}).  It will not
 work with the C Shell (@code{csh})or derivatives of the C Shell.
 
-@section Generate RTEMS for a specific target and board support package
+@section Generate RTEMS for a Specific Target and BSP
 
 Make a build directory under tools and build the RTEMS product in this
 directory. The ../@value{RTEMS-UNTAR}/configure
@@ -58,9 +58,7 @@ cd build-rtems
 gmake all install
 @end example
 
-Where:
-
-The list of currently supported of <TARGET_CONFIGURATION>'s and
+Where the list of currently supported of <TARGET_CONFIGURATION>'s and
 <BOARD_SUPPORT_PACKAGE>'s can be found in
 tools/@value{RTEMS-UNTAR}/README.configure.
 

@@ -8,7 +8,7 @@
 
 @chapter Building the Sample Application
 
-@section Unpack the sample application 
+@section Unpack the Sample Application 
 
 Use the following command to unarchive the sample application:
 
@@ -17,7 +17,7 @@ cd tools
 tar xzf ../arc/hello_world_c.tgz
 @end example
 
-@section Set the environment variable RTEMS_MAKEFILE_PATH 
+@section Set the Environment Variable RTEMS_MAKEFILE_PATH 
 
 It must point to the appropriate directory containing RTEMS build for our
 target and board support package combination. 
@@ -27,9 +27,7 @@ export RTEMS_MAKEFILE_PATH = \
 <INSTALLATION_POINT>/rtems/<BOARD_SUPPORT_PACKAGE>
 @end example
 
-Where:
-
-<INSTALLATION_POINT> and <BOARD_SUPPORT_PACKAGE> are those used when
+Where <INSTALLATION_POINT> and <BOARD_SUPPORT_PACKAGE> are those used when
 configuring and installing RTEMS.
 
 @section Build the Sample Application
@@ -46,13 +44,13 @@ reasonable to assume that the build of the GNU C/C++ Cross Compiler Tools
 for RTEMS and RTEMS itself for the selected host and target
 combination was done properly. 
 
-@section Application executable 
+@section Application Executable 
 
 If the sample application has successfully been build, then the application
 executable is placed in the following directory: 
 
 @example
-tools/simple_app/o-<BOARD_SUPPORT_PACKAGE>/<filename>.exe
+tools/hello_world_c/o-<BOARD_SUPPORT_PACKAGE>/<filename>.exe
 @end example
 
 How this executable is downloaded to the target board is very dependent

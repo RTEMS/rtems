@@ -50,7 +50,7 @@ intro.texi: intro.t versions.texi
 	    -n "Requirements" ${*}.t
 
 require.texi: require.t versions.texi
-	$(BMENU) -c -p "Introduction" \
+	$(BMENU) -c -p "Cross Development" \
 	    -u "Top" \
 	    -n "Building the GNU C/C++ Cross Compiler Toolset" ${*}.t
 
@@ -65,12 +65,12 @@ buildrt.texi: buildrt.t versions.texi
 	    -n "Building the Sample Application" ${*}.t
 
 sample.texi: sample.t versions.texi
-	$(BMENU) -c -p "Generate RTEMS for a specific target and board support package" \
+	$(BMENU) -c -p "Generate RTEMS for a Specific Target and Board Support Package" \
 	    -u "Top" \
 	    -n "Building the GNU Debugger" ${*}.t
 
 gdb.texi: gdb.t versions.texi
-	$(BMENU) -c -p "Application executable" \
+	$(BMENU) -c -p "Application Executable" \
 	    -u "Top" \
 	    -n "" ${*}.t
 

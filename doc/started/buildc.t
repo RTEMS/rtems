@@ -13,12 +13,14 @@ source code for a GNU cross compiler toolset, apply
 any required RTEMS specific patches, compile that 
 toolset and install it.
 
-@section Get all the pieces 
+@section Directory Organization
 
 The tree structure in the figure below is assumed to be present in the
 following discussions: 
 
 @center @b{XXX directory tree figure goes here}
+
+@section Get All the Pieces 
 
 Gather the components that will be required for the installation and place
 them in an archive directory. Call this directory arc. Be sure that there
@@ -52,14 +54,20 @@ approximately 20 megabytes.
     Directory:   @value{RTEMS-FTPDIR}
     File:        @value{RTEMS-TAR}
     File:        bit
+@ifset BINUTILS-RTEMSPATCH
     File:        @value{BINUTILS-RTEMSPATCH}
+@end ifset
+@ifset NEWLIB-RTEMSPATCH
     File:        @value{NEWLIB-RTEMSPATCH}
+@end ifset
+@ifset GCC-RTEMSPATCH
     File:        @value{GCC-RTEMSPATCH}
+@end ifset
     File:        hello_world_c.tgz
 @end example
 
 
-@section Create the tools directory
+@section Create the tools Directory
 
 Create a directory called tools that will serve as a working directory to
 perform the build of the cross compiler tools.
