@@ -1,3 +1,8 @@
+2001-03-29	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR126, configuration structures now match docs.
+	* include/rtems/config.h: Use public data types.
+
 2001-03-28	Joel Sherrill <joel@OARcorp.com>
 
 	* PR132 requested some tinkering ot lower memory.

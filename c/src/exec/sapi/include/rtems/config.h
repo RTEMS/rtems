@@ -74,12 +74,12 @@ typedef void *itron_api_configuration_table;
  */
 
 typedef struct {
-  unsigned32    node;                   /* local node number */
-  unsigned32    maximum_nodes;          /* maximum # nodes in system */
-  unsigned32    maximum_global_objects; /* maximum # global objects */
-  unsigned32    maximum_proxies;        /* maximum # proxies */
+  rtems_unsigned32    node;             /* local node number */
+  rtems_unsigned32    maximum_nodes;    /* maximum # nodes in system */
+  rtems_unsigned32    maximum_global_objects; /* maximum # global objects */
+  rtems_unsigned32    maximum_proxies;  /* maximum # proxies */
 #if defined(RTEMS_MULTIPROCESSING)
-  MPCI_Control *User_mpci_table;        /* pointer to MPCI table */
+  rtems_mpci_table   *User_mpci_table;  /* pointer to MPCI table */
 #else
   void         *User_mpci_table;        /* pointer to MPCI table */
 #endif
@@ -99,15 +99,15 @@ typedef struct {
 
 typedef struct {
   void                             *work_space_start;
-  unsigned32                        work_space_size;
-  unsigned32                        maximum_extensions;
-  unsigned32                        microseconds_per_tick;
-  unsigned32                        ticks_per_timeslice;
-  unsigned32                        maximum_devices;
-  unsigned32                        maximum_drivers;
-  unsigned32                        number_of_device_drivers;
+  rtems_unsigned32                  work_space_size;
+  rtems_unsigned32                  maximum_extensions;
+  rtems_unsigned32                  microseconds_per_tick;
+  rtems_unsigned32                  ticks_per_timeslice;
+  rtems_unsigned32                  maximum_devices;
+  rtems_unsigned32                  maximum_drivers;
+  rtems_unsigned32                  number_of_device_drivers;
   rtems_driver_address_table       *Device_driver_table;
-  unsigned32                        number_of_initial_extensions;
+  rtems_unsigned32                  number_of_initial_extensions;
   rtems_extensions_table           *User_extension_table;
   rtems_multiprocessing_table      *User_multiprocessing_table;
   rtems_api_configuration_table    *RTEMS_api_configuration;
