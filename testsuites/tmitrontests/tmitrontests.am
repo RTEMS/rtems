@@ -3,7 +3,7 @@
 project_bspdir=$(PROJECT_ROOT)/@RTEMS_BSP@
 
 $(project_bspdir)/tests:
-	@$(mkinstalldirs) $@
+	@$(mkdir_p) $@
 
 $(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe: $(PGM)
 	$(INSTALL_PROGRAM) $< $@
