@@ -58,25 +58,31 @@ esac
 if test "$RTEMS_BSP" = "bare" ; then
   RTEMS_LIBBSP_CPU_SUBDIR="bare"
 else
-  RTEMS_LIBBSP_CPU_SUBDIR='$(RTEMS_CPU)'
+  RTEMS_LIBBSP_CPU_SUBDIR=$RTEMS_CPU
 fi
 AC_SUBST(RTEMS_LIBBSP_CPU_SUBDIR)
 
-# find all the Makefiles for the BSPs
-makefiles="$makefiles $RTEMS_CPU/Makefile"
-     
-if test -d "$srcdir/$bspcpudir$bspdir"; then
-  RTEMS_CHECK_MAKEFILE(${bspcpudir}$bspdir)
-  RTEMS_CHECK_MAKEFILE(${bspcpudir}shared)
+if test ! -f ${srcdir}/${RTEMS_LIBBSP_CPU_SUBDIR}/configure.in
+then
 
-  # HACK: sed out bsp-tools from makefiles
-  t="$bspcpudir$bspdir/tools"
-  if test -d "$srcdir/$t"; then
-    bsptools_cfgdirs="$bsptools_cfgdirs $t"
-    makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
+# find all the Makefiles for the BSPs
+  makefiles="$makefiles $RTEMS_CPU/Makefile"
+     
+  if test -d "$srcdir/$bspcpudir$bspdir"; then
+    RTEMS_CHECK_MAKEFILE(${bspcpudir}$bspdir)
+    RTEMS_CHECK_MAKEFILE(${bspcpudir}shared)
+
+    # HACK: sed out bsp-tools from makefiles
+    t="$bspcpudir$bspdir/tools"
+    if test -d "$srcdir/$t"; then
+      bsptools_cfgdirs="$bsptools_cfgdirs $t"
+      makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
+    fi
+  else
+    AC_MSG_ERROR([unable to find libbsp subdirectory ($bspdir) for  ${RTEMS_BSP}])
   fi
 else
-  AC_MSG_ERROR([unable to find libbsp subdirectory ($bspdir) for  ${RTEMS_BSP}])
+  cfg_subdirs="$RTEMS_LIBBSP_CPU_SUBDIR"
 fi
 
 if test "$HAS_MP" = "yes"; then
@@ -86,13 +92,11 @@ else
   t="$bspcpudir$bspdir/shmsupp"
   makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
 fi
+
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
 
-if test "$RTEMS_BSP" = "bare"; then
-cfg_subdirs="bare"
-fi
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 
 # try to explicitly list a Makefile here 

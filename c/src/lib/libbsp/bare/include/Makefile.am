@@ -3,15 +3,18 @@
 ## 
 
 AUTOMAKE_OPTIONS = foreign 1.4
-H_FILES = bsp.h $(srcdir)/../../../shared/coverhd.h
-
+H_FILES = bsp.h
 noinst_HEADERS = $(H_FILES)
 
 TMPINSTALL_FILES += \
 $(PROJECT_INCLUDE) \
-$(H_FILES:%=$(PROJECT_INCLUDE)/%)
+$(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
+$(PROJECT_INCLUDE)/coverhd.h
 
 $(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
+$(PROJECT_INCLUDE)/coverhd.h: $(srcdir)/../../shared/include/coverhd.h
 	$(INSTALL_DATA) $< $@
 
 all-local: $(TMPINSTALL_FILES)

@@ -1,0 +1,39 @@
+## 
+## $Id$
+## 
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+PGM = ${ARCH}/startup.rel
+
+VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
+   
+## C source names
+C_FILES = bsplibc.c bsppost.c bspstart.c bspclean.c sbrk.c bootcard.c main.c \
+    gnatinstallhandler.c
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+
+OBJS = $(C_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/lib.am
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+AM_CPPFLAGS += -DHZ=$(HZ)
+
+$(PGM): ${OBJS}
+	$(make-rel)
+
+$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
+	$(INSTALL_DATA) $< $@
+
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
+
+all-local: ${ARCH} $(PREINSTALL_FILES) $(PGM) $(TMPINSTALL_FILES)
+
+EXTRA_DIST = bspclean.c bspstart.c linkcmds
+
+include $(top_srcdir)/../../../../../../automake/local.am
