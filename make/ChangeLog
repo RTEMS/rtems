@@ -1,3 +1,8 @@
+2001-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Add simsh7032 and
+	simsh7045.
+	* ChangeLog: Remove bogus 2001-01-22 entry.
 
 2001-01-09	Joel Sherrill <joel@OARcorp.com>
 

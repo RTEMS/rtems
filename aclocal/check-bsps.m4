@@ -31,6 +31,7 @@ AC_MSG_CHECKING([for bsps])
 	erc32)             rtems_bsp="$rtems_bsp erc32 erc32nfp";;
 	leon)              rtems_bsp="$rtems_bsp leon1 leon2";;
 	sim68000)          rtems_bsp="$rtems_bsp sim68000 simcpu32";;
+	shsim)             rtems_bsp="$rtems_bsp simsh7032 simsh7045";;
         *) $1="[$]$1 $file";;
       esac;
     done

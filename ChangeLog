@@ -1,3 +1,8 @@
+2001-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Add simsh7032 and
+	simsh7045.
+
 2001-01-03	Emmanuel Raguet <raguet@crf.canon.fr>
 
 	* automake/compile.am: Add LD.
