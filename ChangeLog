@@ -1,3 +1,24 @@
+2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/bsp-arg-enable.m4, aclocal/bsp-configure.m4,
+	aclocal/bspopts.m4, aclocal/canonicalize-tools.m4,
+	aclocal/check-bsp-cache.m4, aclocal/check-cxx.m4,
+	aclocal/check-itron.m4, aclocal/check-multiprocessing.m4,
+	aclocal/check-networking.m4, aclocal/check-newlib.m4,
+	aclocal/check-posix.m4, aclocal/check-rdbg.m4,
+	aclocal/check-tool.m4, aclocal/env-rtemsbsp.m4,
+	aclocal/gcc-isystem.m4, aclocal/gcc-pipe.m4,
+	aclocal/gcc-specs.m4, aclocal/i386-gas-code16.m4,
+	aclocal/path-perl.m4, aclocal/ppc.m4,
+	aclocal/prog-cc.m4, aclocal/prog-ccas.m4,
+	aclocal/prog-cxx.m4, aclocal/prog-gnat.m4,
+	aclocal/rtems-debug.m4, aclocal/rtems-flags.m4,
+	aclocal/rtems-test-no-pause.m4, aclocal/target.m4:
+	Remove (Unused).
+	* automake/leaf.am, automake/force-preinstall.am:
+	Remove (Unused).
+	* Makefile.am: Reflect changes above.
+
 2003-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/local.am, automake/host.am: Remove "debug".

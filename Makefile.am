@@ -10,32 +10,46 @@ ACLOCAL_AMFLAGS = -I aclocal
 
 SUBDIRS = make $(build_SUBDIRS) $(host_SUBDIRS) $(target_SUBDIRS)
 
-AUTOMAKE_FILES = automake/compile.am automake/host.am automake/lib.am \
-    automake/local.am automake/subdirs.am \
-    automake/leaf.am automake/force-preinstall.am
+AUTOMAKE_FILES =
+AUTOMAKE_FILES += automake/compile.am 
+AUTOMAKE_FILES += automake/host.am
+AUTOMAKE_FILES += automake/local.am
+AUTOMAKE_FILES += automake/subdirs.am
 
-ACLOCAL_FILES = aclocal/bsp-alias.m4 aclocal/canonical-host.m4 \
-    aclocal/canonical-target-name.m4 aclocal/canonicalize-tools.m4 \
-    aclocal/check-bsp-cache.m4 aclocal/check-bsps.m4 aclocal/check-cpu.m4 \
-    aclocal/check-cxx.m4 aclocal/check-itron.m4 \
-    aclocal/check-multiprocessing.m4 aclocal/check-networking.m4 \
-    aclocal/check-newlib.m4 aclocal/check-posix.m4 aclocal/check-rdbg.m4 \
-    aclocal/enable-bare.m4 aclocal/enable-cxx.m4 \
-    aclocal/enable-inlines.m4 aclocal/enable-itron.m4 \
-    aclocal/enable-multiprocessing.m4 aclocal/enable-networking.m4 \
-    aclocal/enable-posix.m4 aclocal/enable-rdbg.m4 aclocal/enable-rtemsbsp.m4 \
-    aclocal/enable-tests.m4 aclocal/gcc-pipe.m4 aclocal/gcc-specs.m4 \
-    aclocal/i386-gas-code16.m4 aclocal/multilib.m4 aclocal/path-ksh.m4 \
-    aclocal/path-perl.m4 aclocal/prog-cc.m4 aclocal/prog-cxx.m4 \
-    aclocal/project-root.m4 aclocal/rtems-debug.m4 \
-    aclocal/rtems-test-no-pause.m4 aclocal/rtems-top.m4 \
-    aclocal/target.m4 aclocal/tool-paths.m4 aclocal/bspopts.m4 \
-    aclocal/ppc.m4 aclocal/bsp-configure.m4 aclocal/gcc-isystem.m4
+ACLOCAL_FILES =
+ACLOCAL_FILES += bsp-alias.m4
+ACLOCAL_FILES += canonical-host.m4
+ACLOCAL_FILES += canonical-target-name.m4
+ACLOCAL_FILES += check-bsps.m4
+ACLOCAL_FILES += check-cpu.m4
+ACLOCAL_FILES += check-custom-bsp.m4
+ACLOCAL_FILES += config-subdirs.m4
+ACLOCAL_FILES += enable-bare.m4
+ACLOCAL_FILES += enable-cxx.m4
+ACLOCAL_FILES += enable-inlines.m4
+ACLOCAL_FILES += enable-itron.m4
+ACLOCAL_FILES += enable-multiprocessing.m4
+ACLOCAL_FILES += enable-networking.m4
+ACLOCAL_FILES += enable-posix.m4
+ACLOCAL_FILES += enable-rdbg.m4
+ACLOCAL_FILES += enable-rtemsbsp.m4
+ACLOCAL_FILES += enable-rtems-debug.m4
+ACLOCAL_FILES += enable-tests.m4
+ACLOCAL_FILES += multilib.m4
+ACLOCAL_FILES += path-ksh.m4
+ACLOCAL_FILES += project-root.m4
+ACLOCAL_FILES += quoting.m4
+ACLOCAL_FILES += rtems-cpu-subdirs.m4
+ACLOCAL_FILES += rtems-top.m4
+ACLOCAL_FILES += tool-paths.m4
+ACLOCAL_FILES += version.m4
 
 noinst_SCRIPTS = bootstrap
 
-EXTRA_DIST = $(AUTOMAKE_FILES) $(ACLOCAL_FILES) README.configure SUPPORT \
+EXTRA_DIST = README.configure SUPPORT \
     VERSION LICENSE $(noinst_SCRIPTS)
+EXTRA_DIST += $(AUTOMAKE_FILES)
+EXTRA_DIST += $(ACLOCAL_FILES)
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/host.am
