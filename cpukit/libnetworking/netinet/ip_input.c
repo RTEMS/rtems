@@ -251,7 +251,7 @@ ip_input(struct mbuf *m)
 	if (m->m_pkthdr.len < sizeof(struct ip))
 		goto tooshort;
 
-#ifdef	DIAGNOSTIC
+#if defined(DIAGNOSTIC) && defined(ORIGINAL_FREEBSD_CODE)
 	if (m->m_len < sizeof(struct ip))
 		panic("ipintr mbuf too short");
 #endif
