@@ -246,12 +246,14 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  ISR handler macros
  *
  *  These macros perform the following functions:
+ *     + initialize the RTEMS vector table
  *     + disable all maskable CPU interrupts
  *     + restore previous interrupt level (enable)
  *     + temporarily restore interrupts (flash)
  *     + set a particular level
  */
 
+#define _CPU_Initialize_vectors()
 #define _CPU_ISR_Disable( _level ) i960_disable_interrupts( _level )
 #define _CPU_ISR_Enable( _level )  i960_enable_interrupts( _level )
 #define _CPU_ISR_Flash( _level )   i960_flash_interrupts( _level )

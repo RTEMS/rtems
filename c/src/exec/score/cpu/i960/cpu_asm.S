@@ -128,10 +128,12 @@ __ISR_Handler:
           lda       1(r4),r4                 # increment dispatch disable level
           movl      g6,r14                   # save g6-g7
 
-		  stq		g8, _ISR_reg_save		 # save g8-g11
-		  stl		g12, _ISR_reg_save+16    # save g12-g13
+          ld        __ISR_Vector_table,g1    # g1 = base of vector table
 
-          ld        __ISR_Vector_table[g0*4],g1    # g1 = Users handler
+	  stq       g8, _ISR_reg_save        # save g8-g11
+	  stl       g12, _ISR_reg_save+16    # save g12-g13
+
+          ld        (g1)[g0*4],g1            # g1 = Users handler
           addo      1,r5,r5                  # increment ISR level
 
           st        r4,__Thread_Dispatch_disable_level
