@@ -1,5 +1,10 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/xdr/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* src/rpc/Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* src/xdr/Makefile.am: Eliminate LIBNAME.
 	* src/rpc/Makefile.am: Eliminate LIBNAME.
 

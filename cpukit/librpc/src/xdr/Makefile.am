@@ -10,7 +10,7 @@ include $(top_srcdir)/../automake/lib.am
 
 C_FILES = xdr.c xdr_array.c xdr_float.c xdr_mem.c xdr_rec.c xdr_reference.c \
     xdr_sizeof.c xdr_stdio.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

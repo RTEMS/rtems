@@ -21,7 +21,7 @@ UNUSED_C_FILES = auth_des.c auth_time.c authdes_prot.c clnt_unix.c \
     crypt_client.c des_crypt.c des_soft.c getpublickey.c key_call.c \
     key_prot_xdr.c svc_auth_des.c svc_unix.c
 
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
