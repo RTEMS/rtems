@@ -14,6 +14,8 @@
 #ifndef	TERMIOS_H
 #define	TERMIOS_H
 
+#include <sys/types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
