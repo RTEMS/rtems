@@ -28,7 +28,8 @@ IMFS_PIECES= imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
     imfs_readlink imfs_fdatasync
 
 TERMIOS_PIECES= cfgetispeed cfgetospeed cfsetispeed cfsetospeed \
-  tcgetattr tcsetattr tcdrain termios 
+  tcgetattr tcsetattr tcdrain termios termiosinitialize \
+  termiosreserveresources
 
 SYSTEM_CALL_PIECES=\
   open close read write lseek ioctl \

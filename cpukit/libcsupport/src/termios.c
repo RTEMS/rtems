@@ -141,54 +141,10 @@ struct rtems_termios_tty {
 #define FL_MDXON   0x200    /* input controlled with XON/XOFF protocol    */
 #define FL_MDXOF   0x400    /* output controlled with XON/XOFF protocol   */
 
-static struct rtems_termios_tty *ttyHead, *ttyTail;
-static rtems_id ttyMutex;
+extern struct rtems_termios_tty *rtems_termios_ttyHead;
+extern struct rtems_termios_tty *rtems_termios_ttyTail;
+extern rtems_id rtems_termios_ttyMutex;
 
-/*
- *  Reserve enough resources to open every physical device once.
- */
-
-static int first_time;   /* assumed to be zeroed by BSS initialization */
-
-void
-rtems_termios_reserve_resources (
-  rtems_configuration_table *configuration,
-  rtems_unsigned32           number_of_devices
-  )
-{
-	rtems_api_configuration_table *rtems_config;
-
-	if (!configuration)
-		rtems_fatal_error_occurred (0xFFF0F001);
-	rtems_config = configuration->RTEMS_api_configuration;
-	if (!rtems_config)
-		rtems_fatal_error_occurred (0xFFF0F002);
-	if (!first_time)
-		rtems_config->maximum_semaphores += 1;
-	first_time = 1;
-	rtems_config->maximum_semaphores += (4 * number_of_devices);
-}
-
-void
-rtems_termios_initialize (void)
-{
-	rtems_status_code sc;
-
-	/*
-	 * Create the mutex semaphore for the tty list
-	 */
-	if (!ttyMutex) {
-		sc = rtems_semaphore_create (
-			rtems_build_name ('T', 'R', 'm', 'i'),
-			1,
-			RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-			RTEMS_NO_PRIORITY,
-			&ttyMutex);
-		if (sc != RTEMS_SUCCESSFUL)
-			rtems_fatal_error_occurred (sc);
-	}
-}
-	
 /*
  * Open a termios device
  */
@@ -207,10 +163,10 @@ rtems_termios_open (
 	/*
 	 * See if the device has already been opened
 	 */
-	sc = rtems_semaphore_obtain (ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+	sc = rtems_semaphore_obtain (rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		return sc;
-	for (tty = ttyHead ; tty != NULL ; tty = tty->forw) {
+	for (tty = rtems_termios_ttyHead ; tty != NULL ; tty = tty->forw) {
 		if ((tty->major == major) && (tty->minor == minor))
 			break;
 	}
@@ -222,13 +178,13 @@ rtems_termios_open (
 		 */
 		tty = calloc (1, sizeof (struct rtems_termios_tty));
 		if (tty == NULL) {
-			rtems_semaphore_release (ttyMutex);
+			rtems_semaphore_release (rtems_termios_ttyMutex);
 			return RTEMS_NO_MEMORY;
 		}
-		tty->forw = ttyHead;
-		ttyHead = tty;
-		if (ttyTail == NULL)
-			ttyTail = tty;
+		tty->forw = rtems_termios_ttyHead;
+		rtems_termios_ttyHead = tty;
+		if (rtems_termios_ttyTail == NULL)
+			rtems_termios_ttyTail = tty;
 
 		tty->minor = minor;
 		tty->major = major;
@@ -317,7 +273,7 @@ rtems_termios_open (
 	args->iop->data1 = tty;
 	if (!tty->refcount++ && tty->device.firstOpen)
 		(*tty->device.firstOpen)(major, minor, arg);
-	rtems_semaphore_release (ttyMutex);
+	rtems_semaphore_release (rtems_termios_ttyMutex);
 	return RTEMS_SUCCESSFUL;
 }
 
@@ -353,7 +309,7 @@ rtems_termios_close (void *arg)
 	struct rtems_termios_tty *tty = args->iop->data1;
 	rtems_status_code sc;
 
-	sc = rtems_semaphore_obtain (ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+	sc = rtems_semaphore_obtain (rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_fatal_error_occurred (sc);
 	if (--tty->refcount == 0) {
@@ -361,11 +317,11 @@ rtems_termios_close (void *arg)
 		if (tty->device.lastClose)
 			 (*tty->device.lastClose)(tty->major, tty->minor, arg);
 		if (tty->forw == NULL)
-			ttyTail = tty->back;
+			rtems_termios_ttyTail = tty->back;
 		else
 			tty->forw->back = tty->back;
 		if (tty->back == NULL)
-			ttyHead = tty->forw;
+			rtems_termios_ttyHead = tty->forw;
 		else
 			tty->back->forw = tty->forw;
 		rtems_semaphore_delete (tty->isem);
@@ -375,7 +331,7 @@ rtems_termios_close (void *arg)
 			rtems_semaphore_delete (tty->rawInBufSemaphore);
 		free (tty);
 	}
-	rtems_semaphore_release (ttyMutex);
+	rtems_semaphore_release (rtems_termios_ttyMutex);
 	return RTEMS_SUCCESSFUL;
 }
 
