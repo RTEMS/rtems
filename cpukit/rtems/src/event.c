@@ -186,11 +186,7 @@ void _Event_Seize(
       executing->Object.id,
       NULL
     );
-    _Watchdog_Insert_ticks(
-      &executing->Timer,
-      ticks,
-      WATCHDOG_ACTIVATE_NOW
-    );
+    _Watchdog_Insert_ticks( &executing->Timer, ticks );
   }
 
   _Thread_Set_state( executing, STATES_WAITING_FOR_EVENT );

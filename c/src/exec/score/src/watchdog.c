@@ -140,8 +140,7 @@ void _Watchdog_Adjust(
 
 void _Watchdog_Insert(
   Chain_Control         *header,
-  Watchdog_Control      *the_watchdog,
-  Watchdog_Insert_modes  insert_mode
+  Watchdog_Control      *the_watchdog
 )
 {
   ISR_Level          level;
@@ -174,10 +173,10 @@ restart:
      delta_interval -= after->delta_interval;
 
      /*
-      *  If you experience problems comment out the _ISR_Flash line.  This
-      *  (3.2.0) is the first release with this critical section redesigned.
+      *  If you experience problems comment out the _ISR_Flash line.  
+      *  3.2.0 was the first release with this critical section redesigned.
       *  Under certain circumstances, the PREVIOUS critical section algorithm
-      *  used around this flash point allows interrupts to execute
+      *  used around this flash point allowed interrupts to execute
       *  which violated the design assumptions.  The critical section 
       *  mechanism used here WAS redesigned to address this.
       */
@@ -195,8 +194,7 @@ restart:
      }
   }
 
-  if ( insert_mode == WATCHDOG_ACTIVATE_NOW )
-    _Watchdog_Activate( the_watchdog );
+  _Watchdog_Activate( the_watchdog );
 
   the_watchdog->delta_interval = delta_interval;
 

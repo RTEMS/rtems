@@ -61,11 +61,7 @@ STATIC INLINE void _TOD_Activate(
   Watchdog_Interval ticks
 )
 {
-  _Watchdog_Insert_ticks(
-    &_TOD_Seconds_watchdog,
-    ticks,
-    WATCHDOG_ACTIVATE_NOW
-  );
+  _Watchdog_Insert_ticks( &_TOD_Seconds_watchdog, ticks );
 }
 
 #endif

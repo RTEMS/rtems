@@ -242,8 +242,7 @@ rtems_status_code rtems_timer_fire_after(
       (void) _Watchdog_Remove( &the_timer->Ticker );
       the_timer->the_class = TIMER_INTERVAL;
       _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
-      _Watchdog_Insert_ticks( &the_timer->Ticker,
-                                 ticks, WATCHDOG_ACTIVATE_NOW );
+      _Watchdog_Insert_ticks( &the_timer->Ticker, ticks );
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
   }
@@ -298,8 +297,10 @@ rtems_status_code rtems_timer_fire_when(
       (void) _Watchdog_Remove( &the_timer->Ticker );
       the_timer->the_class = TIMER_TIME_OF_DAY;
       _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
-      _Watchdog_Insert_seconds( &the_timer->Ticker,
-                seconds - _TOD_Seconds_since_epoch, WATCHDOG_ACTIVATE_NOW );
+      _Watchdog_Insert_seconds(
+         &the_timer->Ticker,
+         seconds - _TOD_Seconds_since_epoch
+       );
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
   }

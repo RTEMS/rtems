@@ -252,11 +252,7 @@ unsigned int sleep(
       _Thread_Executing->Object.id,
       NULL
     );
-    _Watchdog_Insert_seconds(
-      &_Thread_Executing->Timer,
-      seconds,
-      WATCHDOG_ACTIVATE_NOW
-    );
+    _Watchdog_Insert_seconds( &_Thread_Executing->Timer, seconds );
   _Thread_Enable_dispatch();
   return 0;                       /* XXX should account for signal */
 }

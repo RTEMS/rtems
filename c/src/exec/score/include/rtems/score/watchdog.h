@@ -49,18 +49,6 @@ typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
 #define WATCHDOG_NO_TIMEOUT  0
 
 /*
- *  The following enumerated type details the modes in which the
- *  Watchdog_Insert routine may operate.  The watchdog may be
- *  activated automatically at insert time or later, explicitly
- *  by the caller.
- */
-
-typedef enum {
-  WATCHDOG_ACTIVATE_NOW, /* activate watchdog as part of insertion */
-  WATCHDOG_NO_ACTIVATE   /* watchdog will be explicitly activated */
-} Watchdog_Insert_modes;
-
-/*
  *  The following enumerated type lists the states in which a
  *  watchdog timer may be at any given time.
  */
@@ -238,8 +226,7 @@ STATIC INLINE void _Watchdog_Tickle_seconds( void );
 
 STATIC INLINE void _Watchdog_Insert_ticks(
   Watchdog_Control      *the_watchdog,
-  Watchdog_Interval      units,
-  Watchdog_Insert_modes  insert_mode
+  Watchdog_Interval      units
 );
 
 /*
@@ -256,8 +243,7 @@ STATIC INLINE void _Watchdog_Insert_ticks(
 
 STATIC INLINE void _Watchdog_Insert_seconds(
   Watchdog_Control      *the_watchdog,
-  Watchdog_Interval      units,
-  Watchdog_Insert_modes  insert_mode
+  Watchdog_Interval      units
 );
 
 /*
@@ -391,8 +377,7 @@ void _Watchdog_Adjust (
 
 void _Watchdog_Insert (
   Chain_Control         *header,
-  Watchdog_Control      *the_watchdog,
-  Watchdog_Insert_modes  insert_mode
+  Watchdog_Control      *the_watchdog
 );
 
 /*

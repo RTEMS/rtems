@@ -987,8 +987,7 @@ rtems_status_code rtems_task_wake_after(
         _Thread_Executing->Object.id,
         NULL
       );
-      _Watchdog_Insert_ticks( &_Thread_Executing->Timer,
-                              ticks, WATCHDOG_ACTIVATE_NOW );
+      _Watchdog_Insert_ticks( &_Thread_Executing->Timer, ticks );
     _Thread_Enable_dispatch();
   }
   return RTEMS_SUCCESSFUL;
@@ -1036,8 +1035,10 @@ rtems_time_of_day *time_buffer
       _Thread_Executing->Object.id,
       NULL
     );
-    _Watchdog_Insert_seconds( &_Thread_Executing->Timer,
-            seconds - _TOD_Seconds_since_epoch, WATCHDOG_ACTIVATE_NOW );
+    _Watchdog_Insert_seconds(
+      &_Thread_Executing->Timer,
+      seconds - _TOD_Seconds_since_epoch
+    );
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
 }

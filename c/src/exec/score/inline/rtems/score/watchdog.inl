@@ -115,14 +115,13 @@ STATIC INLINE void _Watchdog_Tickle_seconds( void )
 
 STATIC INLINE void _Watchdog_Insert_ticks(
   Watchdog_Control      *the_watchdog,
-  Watchdog_Interval      units,
-  Watchdog_Insert_modes  insert_mode
+  Watchdog_Interval      units
 )
 {
 
   the_watchdog->initial = units;
 
-  _Watchdog_Insert( &_Watchdog_Ticks_chain, the_watchdog, insert_mode );
+  _Watchdog_Insert( &_Watchdog_Ticks_chain, the_watchdog );
 
 }
 
@@ -134,14 +133,13 @@ STATIC INLINE void _Watchdog_Insert_ticks(
 
 STATIC INLINE void _Watchdog_Insert_seconds(
   Watchdog_Control      *the_watchdog,
-  Watchdog_Interval      units,
-  Watchdog_Insert_modes  insert_mode
+  Watchdog_Interval      units
 )
 {
 
   the_watchdog->initial = units;
 
-  _Watchdog_Insert( &_Watchdog_Seconds_chain, the_watchdog, insert_mode );
+  _Watchdog_Insert( &_Watchdog_Seconds_chain, the_watchdog );
 
 }
 
@@ -190,11 +188,7 @@ STATIC INLINE void _Watchdog_Reset(
 
   (void) _Watchdog_Remove( the_watchdog );
 
-  _Watchdog_Insert(
-    &_Watchdog_Ticks_chain,
-    the_watchdog,
-    WATCHDOG_ACTIVATE_NOW
-  );
+  _Watchdog_Insert( &_Watchdog_Ticks_chain, the_watchdog );
 
 }
 

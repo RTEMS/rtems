@@ -109,11 +109,7 @@ void _Thread_queue_Enqueue(
        NULL
     );
 
-    _Watchdog_Insert_ticks(
-       &the_thread->Timer,
-      timeout,
-      WATCHDOG_ACTIVATE_NOW
-    );
+    _Watchdog_Insert_ticks( &the_thread->Timer, timeout );
   }
 
   switch( the_thread_queue->discipline ) {

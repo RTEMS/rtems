@@ -277,8 +277,7 @@ rtems_status_code rtems_rate_monotonic_period(
             id,
             NULL
           );
-          _Watchdog_Insert_ticks(
-                     &the_period->Timer, length, WATCHDOG_ACTIVATE_NOW );
+          _Watchdog_Insert_ticks( &the_period->Timer, length );
           _Thread_Enable_dispatch();
           return RTEMS_SUCCESSFUL;
 
@@ -292,8 +291,7 @@ rtems_status_code rtems_rate_monotonic_period(
          /* has expired -- fall into next case */
         case RATE_MONOTONIC_EXPIRED:
           the_period->state = RATE_MONOTONIC_ACTIVE;
-          _Watchdog_Insert_ticks(
-                     &the_period->Timer, length, WATCHDOG_ACTIVATE_NOW );
+          _Watchdog_Insert_ticks( &the_period->Timer, length );
           _Thread_Enable_dispatch();
           return RTEMS_TIMEOUT;
       }

@@ -231,6 +231,5 @@ void _TOD_Tickle(
   }
 
   _Watchdog_Tickle_seconds();
-  _Watchdog_Insert_ticks( &_TOD_Seconds_watchdog, _TOD_Ticks_per_second,
-                          WATCHDOG_ACTIVATE_NOW );
+  _Watchdog_Insert_ticks( &_TOD_Seconds_watchdog, _TOD_Ticks_per_second );
 }
