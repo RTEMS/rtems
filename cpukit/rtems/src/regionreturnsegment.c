@@ -94,6 +94,19 @@ rtems_status_code rtems_region_return_segment(
       }
 
       the_region->number_of_used_blocks -= 1;
+
+      /*
+       *  Switch from using the memory allocation mutex to using a
+       *  dispatching disabled critical section.  We have to do this
+       *  because this thread may unblock one or more threads that were
+       *  waiting on memory.
+       *
+       *  NOTE: The following loop is O(n) where n is the number of
+       *        threads whose memory request is satisfied.
+       */
+      _RTEMS_Unlock_allocator();
+      _Thread_Disable_dispatch();
+
       for ( ; ; ) {
         the_thread = _Thread_queue_First( &the_region->Wait_queue );
 
@@ -113,8 +126,8 @@ rtems_status_code rtems_region_return_segment(
         _Thread_queue_Extract( &the_region->Wait_queue, the_thread );
         the_thread->Wait.return_code = RTEMS_SUCCESSFUL;
       }
+      _Thread_Enable_dispatch();
 
-      _RTEMS_Unlock_allocator();
       return RTEMS_SUCCESSFUL;
   }
 
