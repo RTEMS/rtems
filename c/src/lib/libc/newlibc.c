@@ -93,7 +93,7 @@ libc_create_hook(rtems_tcb *current_task,
 }
 
 /*
- * Called for all user TASKS (system tasks are SYSI and IDLE)
+ * Called for all user TASKS (system tasks are MPCI Receive Server and IDLE)
  */
 
 rtems_extension
@@ -115,7 +115,7 @@ libc_start_hook(rtems_tcb *current_task,
 }
 
 /*
- * Called for all user TASKS (system tasks are SYSI and IDLE)
+ * Called for all user TASKS (system tasks are MPCI Receive Server and IDLE)
  *
  *  NOTE: When using RTEMS fake stat, fstat, and isatty, all output 
  *        is line buffered so this setvbuf is not necessary.  This

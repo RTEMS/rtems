@@ -244,7 +244,7 @@ int bsp_start(
 
   Cpu_table.interrupt_stack_size = 4 * 1024;
 
-  Cpu_table.extra_system_initialization_stack = 0;
+  Cpu_table.extra_mpci_receive_server_stack = 0;
 
   /*
    *  Don't forget the other CPU Table entries.

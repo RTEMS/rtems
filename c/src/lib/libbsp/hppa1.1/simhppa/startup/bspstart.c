@@ -29,7 +29,6 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/libio.h>
-#include <rtems/intthrd.h>
 
 #include <libcsupport.h>
 
@@ -88,9 +87,9 @@ fast_idle_switch_hook(rtems_tcb *current_task,
      * but its the best we could think of at the moment.
      */
 
-    if (heir_task == _Internal_threads_Idle_thread)
+    if (heir_task == _Thread_Idle)
         CPU_HPPA_CLICKS_PER_TICK = fast_clock;
-    else if (current_task == _Internal_threads_Idle_thread)
+    else if (current_task == _Thread_Idle)
         CPU_HPPA_CLICKS_PER_TICK = normal_clock;
 }
 
@@ -345,7 +344,7 @@ bsp_start(void)
 
     Cpu_table.interrupt_stack_size = (12 * 1024);
 
-    Cpu_table.extra_system_initialization_stack = 0;
+    Cpu_table.extra_mpci_receive_server_stack = 0;
 
     /*
      * Set this artificially low for the simulator

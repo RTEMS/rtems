@@ -321,7 +321,7 @@ bsp_start(void)
 
     Cpu_table.interrupt_stack_size = (12 * 1024);
 
-    Cpu_table.extra_system_initialization_stack = 0;
+    Cpu_table.extra_mpci_receive_server_stack = 0;
 
     /*
      * Add 1 region for RTEMS Malloc

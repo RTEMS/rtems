@@ -201,7 +201,7 @@ int main(
 
   Cpu_table.interrupt_stack_size = 4096;
 
-  Cpu_table.extra_system_initialization_stack = 0;
+  Cpu_table.extra_mpci_receive_server_stack = 0;
 
   /*
    *  Copy the table
