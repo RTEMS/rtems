@@ -100,6 +100,7 @@ struct mcf5282_enet_struct {
     unsigned long   txInterrupts;
     unsigned long   txRawWait;
     unsigned long   txRealign;
+    unsigned long   txRealignBytes;
 };
 static struct mcf5282_enet_struct enet_driver[NIFACES];
 
@@ -528,6 +529,7 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
                 }
                 p = dest;
                 sc->txRealign++;
+                sc->txRealignBytes += m->m_len;
             }
             txBd->buffer = p;
             txBd->length = m->m_len;
@@ -694,35 +696,36 @@ enet_stats(struct mcf5282_enet_struct *sc)
     printf("  Tx Interrupts:%-10lu",   sc->txInterrupts);
     printf("Tx Output Waits:%-10lu",   sc->txRawWait);
     printf("Tx Realignments:%-10lu\n",   sc->txRealign);
+    printf(" Tx RealignByte:%-10lu", sc->txRealignBytes);
     printf(" Tx Unaccounted:%-10lu", MCF5282_FEC_RMON_T_DROP);
-    printf("Tx Packet Count:%-10lu",   MCF5282_FEC_RMON_T_PACKETS);
-    printf("   Tx Broadcast:%-10lu\n",   MCF5282_FEC_RMON_T_BC_PKT);
+    printf("Tx Packet Count:%-10lu\n",   MCF5282_FEC_RMON_T_PACKETS);
+    printf("   Tx Broadcast:%-10lu",   MCF5282_FEC_RMON_T_BC_PKT);
     printf("   Tx Multicast:%-10lu", MCF5282_FEC_RMON_T_MC_PKT);
-    printf("CRC/Align error:%-10lu",   MCF5282_FEC_RMON_T_CRC_ALIGN);
-    printf("   Tx Undersize:%-10lu\n",   MCF5282_FEC_RMON_T_UNDERSIZE);
+    printf("CRC/Align error:%-10lu\n",   MCF5282_FEC_RMON_T_CRC_ALIGN);
+    printf("   Tx Undersize:%-10lu",   MCF5282_FEC_RMON_T_UNDERSIZE);
     printf("    Tx Oversize:%-10lu", MCF5282_FEC_RMON_T_OVERSIZE);
-    printf("    Tx Fragment:%-10lu",   MCF5282_FEC_RMON_T_FRAG);
-    printf("      Tx Jabber:%-10lu\n",   MCF5282_FEC_RMON_T_JAB);
+    printf("    Tx Fragment:%-10lu\n",   MCF5282_FEC_RMON_T_FRAG);
+    printf("      Tx Jabber:%-10lu",   MCF5282_FEC_RMON_T_JAB);
     printf("  Tx Collisions:%-10lu", MCF5282_FEC_RMON_T_COL);
-    printf("          Tx 64:%-10lu",   MCF5282_FEC_RMON_T_P64);
-    printf("      Tx 65-127:%-10lu\n",   MCF5282_FEC_RMON_T_P65TO127);
+    printf("          Tx 64:%-10lu\n",   MCF5282_FEC_RMON_T_P64);
+    printf("      Tx 65-127:%-10lu",   MCF5282_FEC_RMON_T_P65TO127);
     printf("     Tx 128-255:%-10lu", MCF5282_FEC_RMON_T_P128TO255);
-    printf("     Tx 256-511:%-10lu",   MCF5282_FEC_RMON_T_P256TO511);
-    printf("    Tx 511-1023:%-10lu\n",   MCF5282_FEC_RMON_T_P512TO1023);
+    printf("     Tx 256-511:%-10lu\n",   MCF5282_FEC_RMON_T_P256TO511);
+    printf("    Tx 511-1023:%-10lu",   MCF5282_FEC_RMON_T_P512TO1023);
     printf("   Tx 1024-2047:%-10lu", MCF5282_FEC_RMON_T_P1024TO2047);
-    printf("      Tx >=2048:%-10lu",   MCF5282_FEC_RMON_T_P_GTE2048);
-    printf("      Tx Octets:%-10lu\n",   MCF5282_FEC_RMON_T_OCTETS);
+    printf("      Tx >=2048:%-10lu\n",   MCF5282_FEC_RMON_T_P_GTE2048);
+    printf("      Tx Octets:%-10lu",   MCF5282_FEC_RMON_T_OCTETS);
     printf("     Tx Dropped:%-10lu", MCF5282_FEC_IEEE_T_DROP);
-    printf("    Tx Frame OK:%-10lu",   MCF5282_FEC_IEEE_T_FRAME_OK);
-    printf(" Tx 1 Collision:%-10lu\n",   MCF5282_FEC_IEEE_T_1COL);
+    printf("    Tx Frame OK:%-10lu\n",   MCF5282_FEC_IEEE_T_FRAME_OK);
+    printf(" Tx 1 Collision:%-10lu",   MCF5282_FEC_IEEE_T_1COL);
     printf("Tx >1 Collision:%-10lu", MCF5282_FEC_IEEE_T_MCOL);
-    printf("    Tx Deferred:%-10lu",   MCF5282_FEC_IEEE_T_DEF);
-    printf(" Late Collision:%-10lu\n",   MCF5282_FEC_IEEE_T_LCOL);
+    printf("    Tx Deferred:%-10lu\n",   MCF5282_FEC_IEEE_T_DEF);
+    printf(" Late Collision:%-10lu",   MCF5282_FEC_IEEE_T_LCOL);
     printf(" Excessive Coll:%-10lu", MCF5282_FEC_IEEE_T_EXCOL);
-    printf("  FIFO Underrun:%-10lu",   MCF5282_FEC_IEEE_T_MACERR);
-    printf("  Carrier Error:%-10lu\n",   MCF5282_FEC_IEEE_T_CSERR);
+    printf("  FIFO Underrun:%-10lu\n",   MCF5282_FEC_IEEE_T_MACERR);
+    printf("  Carrier Error:%-10lu",   MCF5282_FEC_IEEE_T_CSERR);
     printf("   Tx SQE Error:%-10lu", MCF5282_FEC_IEEE_T_SQE);
-    printf("Tx Pause Frames:%-10lu",   MCF5282_FEC_IEEE_T_FDXFC);
+    printf("Tx Pause Frames:%-10lu\n",   MCF5282_FEC_IEEE_T_FDXFC);
     printf("   Tx Octets OK:%-10lu\n", MCF5282_FEC_IEEE_T_OCTETS_OK);
 }
 
