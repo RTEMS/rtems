@@ -123,6 +123,8 @@ The following persons/organizations have made contributions:
 + Dario Alcocer <alcocer@connectnet.com> submitted a port of the
   RTEMS port to FreeBSD.
 
++ David Fiddes <D.J.Fiddes@hw.ac.uk> submitted Motorola ColdFire support.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
