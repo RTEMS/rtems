@@ -7,16 +7,16 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-C_FILES = sapi/no-ext.c sapi/no-io.c
-C_O_FILES = $(C_FILES:sapi/%.c=$(ARCH)/%.$(OBJEXT))
+sapi_C_FILES = sapi/no-ext.c sapi/no-io.c
+C_O_FILES = $(sapi_C_FILES:sapi/%.c=$(ARCH)/%.$(OBJEXT))
 
-C_FILES += rtems/no-dpmem.c rtems/no-event.c rtems/no-msg.c rtems/no-mp.c \
+rtems_C_FILES = rtems/no-dpmem.c rtems/no-event.c rtems/no-msg.c rtems/no-mp.c \
     rtems/no-part.c rtems/no-region.c \
     rtems/no-rtmon.c rtems/no-sem.c rtems/no-signal.c rtems/no-timer.c
-C_O_FILES += $(C_FILES:rtems/%.c=${ARCH}/%.$(OBJEXT))
+C_O_FILES += $(rtems_C_FILES:rtems/%.c=${ARCH}/%.$(OBJEXT))
 
-PGMS = $(C_FILES:rtems/%.c=$(ARCH)/%$(LIB_VARIANT).rel)
-PGMS += $(C_FILES:sapi/%.c=$(ARCH)/%$(LIB_VARIANT).rel)
+PGMS = $(rtems_C_FILES:rtems/%.c=$(ARCH)/%$(LIB_VARIANT).rel)
+PGMS += $(sapi_C_FILES:sapi/%.c=$(ARCH)/%$(LIB_VARIANT).rel)
 
 ${ARCH}/%.o: sapi/%.c
 	test -d $(ARCH) || mkdir $(ARCH)
@@ -43,6 +43,6 @@ all-local: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGMS) $(C_O_FILES)
 
-EXTRA_DIST = $(C_FILES)
+EXTRA_DIST = $(rtems_C_FILES) $(sapi_C_FILES)
 
 include $(top_srcdir)/../../../automake/local.am
