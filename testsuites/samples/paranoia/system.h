@@ -31,6 +31,8 @@ rtems_task Init(
 #define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT
 #define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
 
+#define CONFIGURE_EXTRA_TASK_STACKS       (1 * RTEMS_MINIMUM_STACK_SIZE)
+
 #include <confdefs.h>
 
 /* global variables */

@@ -77,6 +77,8 @@ rtems_timer_service_routine TA2_send_10_to_self(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_EXTRA_TASK_STACKS         (2 * RTEMS_MINIMUM_STACK_SIZE)
+
 #include <confdefs.h>
 
 /* global variables */

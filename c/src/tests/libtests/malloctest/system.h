@@ -18,8 +18,6 @@
 
 /* macros */
 
-#define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
-
 /* functions */
 
 rtems_task Init(
@@ -38,6 +36,10 @@ void blow_stack( void );
 
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
+
+#define CONFIGURE_EXTRA_TASK_STACKS (10 * RTEMS_MINIMUM_STACK_SIZE)
 
 #include <confdefs.h>
 

@@ -46,6 +46,7 @@ void Get_all_counters( void );
 #define CONFIGURE_MAXIMUM_PERIODS             10
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_EXTRA_TASK_STACKS           (3 * RTEMS_MINIMUM_STACK_SIZE)
 
 #include <confdefs.h>
 

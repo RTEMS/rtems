@@ -74,6 +74,8 @@ rtems_extension Task_exit_extension(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_EXTRA_TASK_STACKS         (4 * RTEMS_MINIMUM_STACK_SIZE)
+
 #include <confdefs.h>
 
 /* global variables */

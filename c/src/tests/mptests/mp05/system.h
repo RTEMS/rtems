@@ -39,6 +39,8 @@ rtems_asr Process_asr( rtems_signal_set );
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_EXTRA_TASK_STACKS         (1 * RTEMS_MINIMUM_STACK_SIZE)
+
 #include <confdefs.h>
 
 /* variables */
