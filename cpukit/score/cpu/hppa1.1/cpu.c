@@ -122,7 +122,7 @@ void _CPU_Initialize(
 )
 {
     register unsigned8  *fp_context;
-    int i;
+    unsigned32 i;
     proc_ptr   old_handler;
 
     /*
