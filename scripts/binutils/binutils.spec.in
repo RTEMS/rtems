@@ -11,12 +11,11 @@ Distribution: Linux
 Name:         @target_alias@-binutils
 Release:      @Release@
 Copyright:    1999 OARCorp
-Group:        unsorted
+Group:        rtems
 Provides:     @target_alias@-binutils
 
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
-Buildroot:    	@rpm_build_root@
 Prefix:		/opt
 
 Version:      	@binutils_version@

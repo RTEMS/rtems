@@ -1,5 +1,5 @@
 #
-# spec file for package rtems
+# spec file for building gcc for rtems
 # 
 # Copyright  (c)  1999  OARCorp, Huntsville, AL
 #
@@ -8,19 +8,19 @@
 
 Vendor:       OAR Corporation
 Distribution: Linux
-Name:         @target_alias@-gcc
+Name:         @target_alias@-gcc-newlib
 Summary:      gcc and newlib C Library for @target_alias@.
-Group:	      unsorted
+Group:	      rtems
 Release:      @Release@
 Copyright:    1999 OARCorp
 
-Provides:     @target_alias@-gcc-newlib
+Provides:     @target_alias@-gcc @target_alias@-chill @target_alias@-gcj
 Requires:     @target_alias@-binutils
 
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      @gcc_version@newlib@newlib_version@
+Version:      gcc@gcc_version@newlib@newlib_version@
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
 Source1:	ftp://sourceware.cygnus/com/pub/newlib/newlib-@newlib_version@.tar.gz
 Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
@@ -39,31 +39,50 @@ Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
 #
 NoSource:      0, 1
 
-Buildroot:    	@rpm_build_root@
-
 %description
 RTEMS is an open source operating system for embedded systems.
 
-This is gcc and newlib C Library for @target_alias@.
+This is gcc's and newlib C Library's sources with patch for RTEMS.
 
-Authors:
---------
-    Joel Sherrill (joel@oarcorp.com)
-    ...
+ The original sources are not included in the source RPM.
+ If we included them, then the source RPMs for each target
+ would duplicate MBs of source unnecessarily.  This is 
+ a duplication of over 30 MBs of source for each of
+ the more than 10 targets it is possible to build.
 
-%package -n @target_alias@-gcc-newlib
-Summary:      rtems gcc and newlib C Library for target @target_alias@
-Group: unsorted
+ You can get them yourself from the Internet and copy them to
+ your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+ Or you can try the ftp options of rpm :-)
 
-%description -n @target_alias@-gcc-newlib
+%package -n @target_alias@-gcc
+Summary:      rtems gcc and newlib C Library for @target_alias@
+Group: rtems
+Requires: @target_alias@-binutils
+
+%description -n @target_alias@-gcc
 RTEMS is an open source operating system for embedded systems.
 
 This is gcc and newlib C Library for @target_alias@.
 
-Authors:
---------
-    Joel Sherrill (joel@oarcorp.com)
-    ...
+%package -n @target_alias@-chill
+Summary:      gcc/chill compiler for @target_alias@
+Group: rtems
+Requires: @target_alias@-gcc
+
+%description -n @target_alias@-chill
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/chill compiler and support files for @target_alias@
+
+%package -n @target_alias@-gcj
+Summary:      gcc/java compiler (gcj) for @target_alias@
+Group: rtems
+Requires: @target_alias@-gcc
+
+%description -n @target_alias@-gcj
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/java compiler and support files for @target_alias@
 
 %prep
 # untar the sources inside @target_alias@-gcc-newlib
@@ -83,7 +102,7 @@ Authors:
     --prefix=/opt/rtems
 
   # for now we are building all the languages
-  #  '--enable-languages=c c++'
+  #  '--enable-languages=c,c++'
 
   make all
   make info
@@ -115,7 +134,27 @@ Authors:
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
 
-%post
+  rm -f dirs ;
+  # Collect multilib subdirectories
+  TGTDIR="$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@"
+  find $TGTDIR \
+    \( -type d -a ! -path "$TGTDIR/include*" \) -print | \
+    sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> dirs
+
+  # Collect files to go into different packages
+  cp dirs files.chill
+  cp dirs files.gcc
+  f=`find $TGTDIR ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
+  for i in $f; do
+    case $i in
+    *chill*) echo "$i" >> files.chill ;;
+    *jc1) ;;
+    *jvgenmain) ;;
+    *) echo "$i" >> files.gcc ;;
+    esac
+  done
+
+%post -n @target_alias@-gcc
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
@@ -125,7 +164,7 @@ Authors:
     done
   fi
 
-%postun
+%postun -n @target_alias@-gcc
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
@@ -135,10 +174,9 @@ Authors:
     done
   fi
 
-%files -n @target_alias@-gcc-newlib
+%files -n @target_alias@-gcc -f build/files.gcc
 %dir /opt/rtems/info
 %doc /opt/rtems/info/dir
-%doc /opt/rtems/info/chill.info*
 %doc /opt/rtems/info/cpp.info*
 %doc /opt/rtems/info/gcc.info*
 %doc /opt/rtems/info/g77.info*
@@ -154,26 +192,67 @@ Authors:
 
 %dir /opt/rtems/bin
 /opt/rtems/bin/cpp
-/opt/rtems/bin/jv-scan
 /opt/rtems/bin/gcov
-/opt/rtems/bin/jcf-dump
-/opt/rtems/bin/gcjh
 /opt/rtems/bin/@target_alias@-c++
 /opt/rtems/bin/@target_alias@-g++
 /opt/rtems/bin/@target_alias@-gcc
-/opt/rtems/bin/@target_alias@-gcj
-/opt/rtems/bin/@target_alias@-chill
 /opt/rtems/bin/@target_alias@-g77
 /opt/rtems/bin/@target_alias@-protoize
 /opt/rtems/bin/@target_alias@-unprotoize
 
 %dir /opt/rtems/lib
-# We use libiberty from binutils
-# /opt/rtems/lib/libiberty*
-%dir /opt/rtems/include
-/opt/rtems/include/g++-3
 
 %dir /opt/rtems/lib/gcc-lib
-/opt/rtems/lib/gcc-lib/@target_alias@
+%dir /opt/rtems/lib/gcc-lib/@target_alias@
+%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
+%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc
 
+%dir /opt/rtems/include
+/opt/rtems/include/g++-3
 /opt/rtems/@target_alias@
+
+%post -n @target_alias@-chill
+  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+    done
+  fi
+
+%postun -n @target_alias@-chill
+  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+    done
+  fi
+
+%files -n @target_alias@-chill -f build/files.chill
+%dir /opt/rtems/bin
+/opt/rtems/bin/@target_alias@-chill
+
+%dir /opt/rtems/info
+%doc /opt/rtems/info/dir
+%doc /opt/rtems/info/chill.info*
+
+%dir /opt/rtems/lib
+%dir /opt/rtems/lib/gcc-lib
+%dir /opt/rtems/lib/gcc-lib/@target_alias@
+
+%files -n @target_alias@-gcj
+%dir /opt/rtems/bin
+/opt/rtems/bin/jcf-dump
+/opt/rtems/bin/jv-scan
+/opt/rtems/bin/gcjh
+/opt/rtems/bin/@target_alias@-gcj
+
+%dir /opt/rtems/lib
+%dir /opt/rtems/lib/gcc-lib
+%dir /opt/rtems/lib/gcc-lib/@target_alias@
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jc1
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain
+
