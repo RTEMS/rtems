@@ -1,6 +1,10 @@
+2004-12-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* acinclude.m4: Reflect eth_comm having been removed.
+
 2004-11-30	Eric Norum <norume@aps.anl.gov>
 
-    * mvme5500/include/bsp.h: Add definition for PCI_MEM_BASE_ADJUSTMENT
+	* mvme5500/include/bsp.h: Add definition for PCI_MEM_BASE_ADJUSTMENT
 
 2004-11-23	Joel Sherrill <joel@OARcorp.com>
 

@@ -4,8 +4,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
   case "$1" in
   dmv177 )
     AC_CONFIG_SUBDIRS([dmv177]);;
-  eth_comm )
-    AC_CONFIG_SUBDIRS([eth_comm]);;
   gen405 )
     AC_CONFIG_SUBDIRS([gen405]);;
   helas403 )
