@@ -1,0 +1,34 @@
+## @target@
+
+%package @target@
+Summary: Documentation for RTEMS @target@ support
+Group: rtems/documentation
+PreReq: /sbin/install-info
+Requires: rtemsdoc-base
+
+%description @target@
+RTEMS is a free operating system for embedded systems.
+
+This package contains the @target@ documentation.
+
+%files @target@
+%dir %{_infodir}
+%{_infodir}/@target@.info*
+%dir %{_datadir}
+%dir %{_datadir}/rtems
+%dir %{_datadir}/rtems/dvi
+%{_datadir}/rtems/dvi/@target@*
+%dir %{_datadir}/rtems/pdf
+%{_datadir}/rtems/pdf/@target@*
+%dir %{_datadir}/rtems/ps
+%{_datadir}/rtems/ps/@target@*
+%dir %{_datadir}/rtems/html
+%{_datadir}/rtems/html/@target@*
+
+%post @target@
+/sbin/install-info %{_infodir}/@target@.info.gz %{_infodir}/dir
+
+%preun @target@
+if [ $1 = 0 ]; then
+    /sbin/install-info --delete %{_infodir}/@target@.info.gz %{_infodir}/dir
+fi
