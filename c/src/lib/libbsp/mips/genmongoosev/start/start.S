@@ -48,15 +48,6 @@
 #endif
 
 
-#ifdef HACKED_PMON
-   #define PMON_UTIL_ROUTINES      0xbfc00200
-   #define UTIL_WARMSTART_VECTOR   21*4
-   #define UTIL_CPUINIT_VECTOR     22*4
-   #define UTIL_CONFIGUART_VECTOR  23*4
-   #define UTIL_PUTCHROM_VECTOR    24*4
-#endif
-
-
 /*
 ** defined by linkcmds, pointing to the start of the relocation target
 ** memory, referenced in this way so we can avoid defining it
@@ -84,7 +75,6 @@
    .globl putch_rom
 _start:
    .set    noreorder
-   move    k1,ra       /* save ra so we can optionally return to caller */
    $LF1 = . + 8
 
    /*
@@ -131,6 +121,42 @@ _branch:
    jal    t0
    nop
 
+
+
+   /*
+   ** Print 'b'.  Show that we started.
+   */
+   move   t2,a1
+   and    t2,0xffff0000
+   li     a0,'b'
+   la     t0,putch_rom
+   and    t0,0x0000ffff
+   or     t0,t2
+   jal    t0
+   nop
+	
+
+			
+		
+
+   li	k0,0
+   li   k1,0
+	
+   move t1,a1
+   nop
+   li	t2,0xa0000000	/* lower limit of kseg1 */
+   li   t3,0xbfffffff	/* upper limit of kseg1 */
+
+   subu	t0,t1,t2
+   srl  t0,31		/* shift high bit down to bit 0 */
+   bnez t0,1f		/* booting from below kseg1 */
+	
+   subu t0,t3,t1
+   srl  t0,31		/* shift high bit down to bit 0 */
+   bnez t0,1f		/* booting from above kseg1 */
+
+		
+	
    /*
    ** Call IcacheFlush. Masking used to call EEPROM address of IcacheFlush.  Label is RAM label.
    */
@@ -139,6 +165,7 @@ _branch:
    la     t0,IcacheFlush
    and    t0,0x0000ffff
    or     t0,t2
+   move	  k0,t0		/* save cache flush in-prom address */
    jal    t0
    nop
 
@@ -177,10 +204,12 @@ _branch:
    la     t0,putch_rom
    and    t0,0x0000ffff
    or     t0,t2
+   move	  k1,t0		/* save cache flush in-prom address */
    jal    t0
    nop
 
 
+1:	
    /*
    ** Print ' RTEMS  b'.  Show that we are booting.
    */
@@ -277,16 +306,16 @@ _branch:
    la     t0,putch_rom
    and    t0,0x0000ffff
    or     t0,t2
-   jal    t0
+   jal	  t0
    nop
 
-   la  a3, _edata
+   la		a3, _edata
 relocate:
-   lw  t0, (a1)            /* load from EEPROM */
-   addu    a1, 4
-   sw      t0, (a2)        /* store to RAM */
-   addu    a2, 4
-   bne a2, a3, relocate    /* copied all the way to edata? */
+   lw		t0, (a1)            /* load from EEPROM */
+   addu		a1, 4
+   sw		t0, (a2)            /* store to RAM */
+   addu		a2, 4
+   bne		a2, a3, relocate    /* copied all the way to edata? */
    nop
 
    /*
@@ -317,11 +346,11 @@ _start_in_ram:
    /*
    ** Print 'S'.  Already in RAM no need to reference EEPROM address.
    */
-   li a0,'S'
-   jal putch_rom
+   li	a0,'S'
+   jal	putch_rom
    nop
 
-   la  gp, _gp         /* set the global data pointer */
+   la	gp, _gp			/* set the global data pointer */
    .end _start_in_ram
 
 
@@ -341,12 +370,12 @@ zerobss:
    jal putch_rom
    nop
 
-   la v0, _fbss
-   la v1, _end
+   la		v0, _fbss
+   la		v1, _end
 3:
-   sw zero,0(v0)
-   bltu v0,v1,3b
-   addiu v0,v0,4               /* executed in delay slot */
+   sw		zero,0(v0)
+   bltu		v0,v1,3b
+   addiu	v0,v0,4               /* executed in delay slot */
 
    la  t0, _stack_init         /* initialize stack so we */
 
@@ -368,8 +397,8 @@ zerobss:
    /*
    ** Print 'Z'.  Finished zeroing bss.
    */
-   li a0,'Z'
-   jal putch_rom
+   li	a0,'Z'
+   jal	putch_rom
    nop
 
    .end    zerobss
@@ -387,12 +416,26 @@ _init:
    /*
    ** Print 'i'.  Starting to initialize RTEMS.
    */
-   li a0, 'i'
-   jal putch_rom
+   li		a0, 'i'
+   jal		putch_rom
    nop
 
-   move    a0,zero         /* set argc to 0 */
-   jal boot_card           /* call the program start function */
+
+   /*
+   ** Save the boot-time addresses of the I & D cache flush routines.
+   ** Note, if we're running from RAM, we cannot manipulate the cache
+   ** so we just disable the cache flush functions.
+   */
+   la		a0,_promIcache
+   sw		k0,0(a0)
+   nop
+	
+   la		a0,_promDcache
+   sw		k1,0(a0)
+   nop
+
+   move		a0,zero         /* set argc to 0 */
+   jal		boot_card           /* call the program start function */
    nop
 
    /*
@@ -748,13 +791,77 @@ _cpuinit:
    .end _cpuinit
 
 
+
+
+
+	
+
+
+	
+/**********************************************************************
+**
+** Keep the boot-time address of the I & D cache reset code for
+** later on.  If we need to clear the I/D caches, we <must> run from 
+** non-cached memory.  This means the relocated versions are useless, 
+** thankfully they are quite small.
+*/
+	
+_promIcache:	.word 0
+_promDcache:	.word 0
+
+		
+
+	.globl promCopyIcacheFlush
+	.ent promCopyIcacheFlush
+	.set noreorder
+promCopyIcacheFlush:	
+	move	a0,ra
+	
+	la	t1,_promIcache
+	lw	t0,0(t1)
+	nop
+	beqz	t0,1f
+	
+	jal	t0
+	nop
+
+1:	j	a0
+	nop
+	.set reorder
+	.end promCopyIcacheFlush
+	
+
+	
+	.globl promCopyDcacheFlush
+	.ent promCopyDcacheFlush
+	.set noreorder
+promCopyDcacheFlush:	
+	move	a0,ra
+	
+	la	t1,_promDcache
+	lw	t0,0(t1)
+	nop
+	beqz	t0,1f
+	
+	jal	t0
+	nop
+
+1:	j	a0
+	nop
+	.set reorder
+	.end promCopyDcacheFlush
+			
+	
+		
+
+	
 /*******************************************************************************
 ** Function Name:   IcacheFlush
 ** Description:     This functions flushes the on chip icache.
 */
 
-     .globl IcacheFlush
      .ent IcacheFlush
+     .set noreorder
 IcacheFlush:
 
 1:
@@ -762,8 +869,6 @@ IcacheFlush:
      # Get contents of M_BIU register and save in t1
      li        t0, M_BIU
      lw        t1, 0(t0)
-
-     .set noreorder
 
      # Isolate I cache
      mfc0      t3, C0_SR        /* Read Status Register */
@@ -778,7 +883,7 @@ IcacheFlush:
 
 icache_write:
      sw        zero, 0(t8)          /* Store zero to memory addres in t8 */
-     addu      t8, 4                /* Increment t8 addres by 4 */
+     addu      t8, 4                /* Increment t8 address by 4 */
      bltu      t8, t9, icache_write /* check to see if we are done */
      nop
 
@@ -798,12 +903,12 @@ icache_write:
 ** Description:     This functions flushes the on chip dcache.
 */
 
-     .globl DcacheFlush
+
      .ent DcacheFlush
+     .set noreorder
 DcacheFlush:
 
      # isolate icache
-     .set noreorder
      mfc0      t3,C0_SR
      nop
      or        t0, t3, SR_ISC

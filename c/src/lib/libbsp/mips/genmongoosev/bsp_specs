@@ -15,8 +15,8 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{qrtems: \
-%{!qrtems_debug: start.o%s} \
-%{qrtems_debug: start_g.o%s}}
+%{!qnostartfile: %{!qrtems_debug: start.o%s} \
+		 %{qrtems_debug: start_g.o%s}}}
 
 *link:
 %(old_link) %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}

@@ -21,7 +21,6 @@ ClockRate = DEFINED(ClockRate) ? ClockRate : 12000000;
 
 MEMORY
 {
-   romstore : ORIGIN = 0xbfc40000, LENGTH = 4M
    ram      : ORIGIN = 0x80020000, LENGTH = 4M
 }
 
@@ -42,7 +41,8 @@ SECTIONS
       *(.rel.dyn)
       PROVIDE (__runtime_reloc_stop = .);
       *(.fini)
-    } >ram  AT>romstore
+      *(.gcc_except_table)
+    } >ram  
 
   .ctors    : 
   {
@@ -66,7 +66,7 @@ SECTIONS
     KEEP (*(EXCLUDE_FILE (*crtend.o) .ctors))
     KEEP (*(SORT(.ctors.*)))
     KEEP (*(.ctors))
-  } >ram  AT>romstore
+  } >ram  
 
   .dtors    : 
   {
@@ -77,9 +77,9 @@ SECTIONS
 
     etext  =  .;
     _etext  =  .;
-  } >ram  AT>romstore
+  } >ram  
 
-/*    . = .; */
+
 
   .rdata : 
   {
@@ -87,7 +87,7 @@ SECTIONS
     *(.rodata)
     *(.rodata.*)
     *(.gnu.linkonce.r*)
-  } >ram  AT>romstore
+  } >ram  
 
   .data : 
   {
@@ -96,7 +96,7 @@ SECTIONS
     *(.data)
     *(.data.*)
     *(.gnu.linkonce.d*)
-  } >ram  AT>romstore
+  } >ram  
 
 
   .lit8 : 
@@ -106,29 +106,28 @@ SECTIONS
     _gp = . + 0x8000;
     __global = _gp;
     *(.lit8)
-  } >ram  AT>romstore
+  } >ram  
 
   .lit4 : 
   {
     *(.lit4)
-  } >ram  AT>romstore 
+  } >ram   
 
   .sdata :   
   {
     *(.sdata)
     *(.sdata.*)
     *(.gnu.linkonce.s*)
-  } >ram  AT>romstore
+  } >ram  
 
   .sbss : 
   {
-  . = ALIGN(4);
    edata  =  .;
    _edata  =  .;
    _fbss = .;
     *(.sbss)
     *(.scommon)
-  } >ram  AT>romstore 
+  } >ram   
 
 
   .bss : 
@@ -148,7 +147,7 @@ SECTIONS
     WorkspaceBase = .;
     end = .;
     _end = .;
-  } >ram  AT>romstore 
+  } >ram   
 
 
 /* 
@@ -158,29 +157,29 @@ SECTIONS
 */
 
   /* DWARF 1 */
-  .debug          0 : { *(.debug) } AT>romstore
-  .line           0 : { *(.line) } AT>romstore
+  .debug          0 : { *(.debug) } 
+  .line           0 : { *(.line) } 
 
   /* GNU DWARF 1 extensions */
-  .debug_srcinfo  0 : { *(.debug_srcinfo) } AT>romstore
-  .debug_sfnames  0 : { *(.debug_sfnames) } AT>romstore
+  .debug_srcinfo  0 : { *(.debug_srcinfo) } 
+  .debug_sfnames  0 : { *(.debug_sfnames) } 
 
   /* DWARF 1.1 and DWARF 2 */
-  .debug_aranges  0 : { *(.debug_aranges) } AT>romstore
-  .debug_pubnames 0 : { *(.debug_pubnames) } AT>romstore
+  .debug_aranges  0 : { *(.debug_aranges) } 
+  .debug_pubnames 0 : { *(.debug_pubnames) } 
 
   /* DWARF 2 */
-  .debug_info     0 : { *(.debug_info) }    AT>romstore
-  .debug_abbrev   0 : { *(.debug_abbrev) }  AT>romstore
-  .debug_line     0 : { *(.debug_line) }    AT>romstore
-  .debug_frame    0 : { *(.debug_frame)}    AT>romstore
-  .debug_str      0 : { *(.debug_str) }     AT>romstore
-  .debug_loc      0 : { *(.debug_loc) }     AT>romstore
-  .debug_macinfo  0 : { *(.debug_macinfo) } AT>romstore
+  .debug_info     0 : { *(.debug_info) }    
+  .debug_abbrev   0 : { *(.debug_abbrev) }  
+  .debug_line     0 : { *(.debug_line) }    
+  .debug_frame    0 : { *(.debug_frame)}    
+  .debug_str      0 : { *(.debug_str) }     
+  .debug_loc      0 : { *(.debug_loc) }     
+  .debug_macinfo  0 : { *(.debug_macinfo) } 
 
   /* SGI/MIPS DWARF 2 extensions */
-  .debug_weaknames 0 : { *(.debug_weaknames) } AT>romstore
-  .debug_funcnames 0 : { *(.debug_funcnames) } AT>romstore
-  .debug_typenames 0 : { *(.debug_typenames) } AT>romstore
-  .debug_varnames  0 : { *(.debug_varnames) }  AT>romstore
+  .debug_weaknames 0 : { *(.debug_weaknames) } 
+  .debug_funcnames 0 : { *(.debug_funcnames) } 
+  .debug_typenames 0 : { *(.debug_typenames) } 
+  .debug_varnames  0 : { *(.debug_varnames) }  
 }

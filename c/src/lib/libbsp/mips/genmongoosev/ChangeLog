@@ -1,6 +1,11 @@
-2001-02-27	Joel Sherrill <joel@OARcorp.com>
+2002-02-27	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
-	* startup/Makefile.am: Added rtems-stub-glue.c to C_FILES.
+	* start/start.S: Added kseg1 test to enable cache flush code
+	* bsp_specs: Added -qnostartfile to disable including bsp's start.o
+	* startup/bspstart.c: Made clear_cache actually work, tweaked cpu
+	init to only turn on whats needed.
+	* startup/gdb-support.c: Added calls to uart 2 for gdb stub I/O and
+	a handy init function.
 
 2002-02-08	Joel Sherrill <joel@OARcorp.com>
 

@@ -44,9 +44,10 @@ entered, else PMON jumps to the EEPROM address above, presuming a user
 program is located there.
 
 The default output of an RTEMS link is an image linked to run from
-80020000, but has had its LMA shifted up to BFC40000.  It is suitable
-for copying to S3 records or can be burned to ROMs in whatever manner
-the user desires.
+0x80020000.  It is suitable for copying to S3 records or can be burned
+to ROMs in whatever manner the user desires.  If you want to locate the
+image into ROM at some other address, use mips-rtems-objcopy to shift
+the LMA.
 
 Operation
 =========
@@ -67,7 +68,51 @@ linkcmds.
 
 Before relocating the RTEMS image, the bsp startup routine attempts to
 configure the processor into a rational state.  During this process,
-status characters are emitted at 19200N81 baud on UART port 0.
+status characters are emitted at 19200N81 on UART port 0.
+
+The default link script simply places the image at 0x8002000 with
+LMA=VMA, which is conviently located in RAM on our board.  You should
+probably consider creating your own linkcmds, putting things where you
+want and supply it as above.  
+
+The Mongoose V has a somewhat restricted cache configuration model; you
+can only flush it if the code which does so executes within noncached
+memory, in our case, code in kseg1.  If you do so from elsewhere the
+code will appear to lock up, this is caused by the cache clearing
+routine making the instruction fetch always return 0, or nop- leaving
+the processor in an endless loop.  The default start.S code detects if
+its booting from outside kseg1, it which case it disables the cache
+flush code.  This means you cannot flush the cache with the bsp's
+functions if you boot your program from outside kseg1.  A more subtle
+issue is the bsp keeps a pointer to the location in kseg1 where the
+bsp's cache flush code resides.  This is advantageous because you can
+relocate the system anywhere and still control the cache, but might
+cause trouble if the boot image becomes inaccessible.  If this is
+possible, you should probably consider rolling your own cache control &
+disabling the bsp's.
+
+As stated above, if you boot from outside kseg1, the bsp disables the
+cache flush routines.  This is not desirable in the long run because the
+Mongoose V remote debugger stub assumes it can flush caches when exiting
+an exception so it might not be able to update code/data properly,
+though it should still nominally function.  However, if you're not using
+the remote debugger & don't care about flushing caches, then everything
+should run just fine.
+
+Our approach has to been locate ROM in kseg1, link the code for VMA in
+RAM and relocate the LMA up into kseg1 ROM.  Since the start.S code is
+position-independent, it will relocate the entire app down to the VMA
+region before starting things up with everything in its proper place.
+The cache clear code runs before relocation, so executes from ROM &
+things work.
+
+You can prevent including the default start.S by adding;
+
+-qnostartfile
+
+to the link command line in addition to the "nolinkcmds" options above.
+Be sure to supply your replacement start.o.
+
 
 
 Questions
@@ -84,6 +129,51 @@ when sending them fast?
   somewhat faulty UART design.
 
 
-Status
-======
+Debugging
+=========
+
+After getting Joel's initial port of the gdb stub to the Mongoose bsp, I
+worked up & tested this stub on our R3000 board.  It seems to work OK.
+Our MIPS has 2 serial ports, the first being dedicated to the console, I
+chose to arrange the 2nd one for the remote gdb protocol.  While this
+solution is somewhat specific to our board & bsp, I think the technique
+is quite generalizable.
+
+The following is a code snippet to be included in the user program;
+
+/***********************************************/
+
+extern int mg5rdbgOpenGDBuart(int);
+extern void mg5rdbgCloseGDBuart(void);
+
+
+void setupgdb(void)
+{
+   printf("Configuring remote GDB stub...\n");
+
+   /* initialize remote gdb support */
+   if( mg5rdbgOpenGDBuart(-1) != RTEMS_SUCCESSFUL )
+   {
+      printf("Remote GDB stub is disabled.\n\n");
+   }
+}
+
+/***********************************************/
+
+It allows the program to decide if it wants gdb to be ready to pick up
+exceptions or not.  The 2 extern functions are located in the MongooseV
+bsp inside gdb-support.c.  They configure & initialize the 2nd serial
+port & invoke the vector initialization routine located in cpu_asm.
+Note, we call directly down into the MongooseV UART driver- its quite
+unfriendly to TERMIO.  I chose this approach because I wanted to
+minimize dependence on the I/O subsystems because they might be in a
+state just short of collapsing if the program had done something bad to
+cause the exception.
+
+If user code leaves the 2nd port alone, then things will work out OK.
+
+Greg Menke
+2/27/2002
+
+============================================================================
 
