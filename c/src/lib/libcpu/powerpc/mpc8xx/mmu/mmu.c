@@ -12,6 +12,8 @@
  */
 
 #include <rtems.h>
+#include <rtems/powerpc/powerpc.h>
+
 #include <mpc8xx.h>
 #include <mpc8xx/mmu.h>
 

@@ -1,3 +1,8 @@
+2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* mpc8xx/mmu/mmu.c, rtems/powerpc/cache.h, rtems/powerpc/powerpc.h:
+	#include <rtems/powerpc/powerpc.h>.
+
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/powerpc/powerpc.h: New header guard.
