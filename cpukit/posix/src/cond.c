@@ -261,7 +261,7 @@ int pthread_cond_destroy(
         &the_cond->Object
       );
  
-      if ( _Thread_queue_Get_number_waiting( &the_cond->Wait_queue ) ) 
+      if ( _Thread_queue_First( &the_cond->Wait_queue ) ) 
         return EBUSY;
  
       _POSIX_Condition_variables_Free( the_cond );
