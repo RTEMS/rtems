@@ -22,7 +22,7 @@ $(PROJECT_ROOT)/@RTEMS_BSP@/tests/psim: psim $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$
 	$(INSTALL_SCRIPT) $< $(PROJECT_ROOT)/@RTEMS_BSP@/tests/psim
 TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/psim
 
-$(PROJECT_ROOT)/@RTEMS_BSP@/tests/psim-gdb: psim $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/psim-gdb: psim-gdb $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
 	$(INSTALL_SCRIPT) $< $(PROJECT_ROOT)/@RTEMS_BSP@/tests/psim-gdb
 TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/psim-gdb
 

@@ -13,8 +13,7 @@
 #
 
 TREE_FILE=psim_tree.${LOGNAME}
-
-# RUN_DEBUG="-t sem_device"
+GDB_FILE=gdb_tree.${LOGNAME}
 
 #  Build this user's device tree file
 echo "/#address-cells 2"                              >  ${TREE_FILE}
@@ -26,9 +25,17 @@ echo "/openprom/options/oea-memory-size 8388608"      >> ${TREE_FILE}
 # echo "/sem@0xc0010000/reg 0xc0010000 12"              >> ${TREE_FILE}
 # echo "/sem@0xc0010000/key ${RTEMS_SHM_SEMAPHORE_KEY}" >> ${TREE_FILE}
 # echo "/sem@0xc0010000/value -1"                       >> ${TREE_FILE}
+#
+#  Build this user's gdb script
+echo "tar sim -f ${TREE_FILE} ${GDB_DEBUG}"           >  ${GDB_FILE}
+echo "load"                                           >> ${GDB_FILE}
+echo "b _Internal_error_Occurred"                     >> ${GDB_FILE}
+echo "b rtems_fatal_error_occurred"                   >> ${GDB_FILE}
+echo "b __assert"                                     >> ${GDB_FILE}
 
-RUN=powerpc-rtems4.7-run
-${RUN} -f ${TREE_FILE} ${RUN_DEBUG} $*
+GDB=powerpc-rtems4.7-gdb
+
+${GDB} -x ${GDB_FILE} $*
 
 exit $?
 
