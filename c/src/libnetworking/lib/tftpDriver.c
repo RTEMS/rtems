@@ -139,6 +139,8 @@ static struct tftpStream ** volatile tftpStreams;
 /*
  * Initialize the TFTP driver
  */
+/* XXX change name to rtems_bsdnet_initialize_tftp_filesystem ("mountpt") */
+/* XXX this won't be a driver when we are finished */
 rtems_device_driver rtems_tftp_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -158,6 +160,7 @@ rtems_device_driver rtems_tftp_initialize(
 					&tftp_mutex);
 	if (sc != RTEMS_SUCCESSFUL)
 		return sc;
+/* XXX change to a mount */
 	rtems_io_register_name (TFTP_PATHNAME_PREFIX, major, minor);
 	return RTEMS_SUCCESSFUL;
 }
@@ -310,6 +313,7 @@ rtems_device_driver rtems_tftp_open(
 	rtems_interval now;
 	rtems_status_code sc;
 
+/* XXX change to eval_path/open */
 	/*
 	 * Read-only for now
 	 */
