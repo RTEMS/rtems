@@ -122,25 +122,25 @@ static inline unsigned int sh_swap_u32(
   unsigned int value
 )
 {
-  register unsigned int swapped ;
+  register unsigned int swapped;
   
   asm volatile ( 
-    "swap.b %1,%0
-     swap.w %0,%0
-     swap.b %0,%0" 
+    "swap.b %1,%0; "
+    "swap.w %0,%0; "
+    "swap.b %0,%0" 
     : "=r" (swapped) 
     : "r"  (value) );
 
   return( swapped );
 }
 
-static inline unsigned int sh_swap_u32(
+static inline unsigned int sh_swap_u16(
   unsigned int value
 )
 {
   register unsigned int swapped ;
 
-  asm volatile ( "swap.b %1,%0 : "=r" (swapped) : "r"  (value) );
+  asm volatile ( "swap.b %1,%0" : "=r" (swapped) : "r"  (value) );
 
   return( swapped );
 }
