@@ -9,11 +9,13 @@
 #include <rtems/score/coresem.h>
 
 typedef struct {
+#if 0
   /*
    *  POSIX Interrupts 
    */
   unsigned32              interrupts_installed;
   CORE_semaphore_Control  Interrupt_Semaphore;
+#endif
 
   /*
    *  POSIX Cancelability 
