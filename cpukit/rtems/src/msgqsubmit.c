@@ -105,9 +105,9 @@ rtems_status_code _Message_queue_Submit(
                           size,
                           id,
 #if defined(RTEMS_MULTIPROCESSING)
-                          _Message_queue_Core_message_queue_mp_support,
+                          _Message_queue_Core_message_queue_mp_support
 #else
-                          NULL,
+                          NULL
 #endif
                         );
           break;
@@ -118,9 +118,9 @@ rtems_status_code _Message_queue_Submit(
                           size,
                           id,
 #if defined(RTEMS_MULTIPROCESSING)
-                          _Message_queue_Core_message_queue_mp_support,
+                          _Message_queue_Core_message_queue_mp_support
 #else
-                          NULL,
+                          NULL
 #endif
                         );
           break;
