@@ -15,14 +15,6 @@
 #
 
 
-# $Id$
-
-# NOTE: This is a temporary work-around to keep 
-# "make debug" and "make debug_install" working.
-# Once automake is fully integrated these make targets 
-# and this file will probably be removed
-
-
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -88,7 +80,6 @@ tooldir = @tooldir@
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL = @ACLOCAL@ -I $(RTEMS_TOPdir)/aclocal
 
-# FIXME: This script doesn't make sense to be installed
 noinst_SCRIPTS = size_rtems
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../../../../../mkinstalldirs
@@ -105,7 +96,7 @@ TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../../../../../automake/local.am
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
@@ -186,7 +177,7 @@ check-am: all-am
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
-install-exec-am: install-exec-local
+install-exec-am:
 install-exec: install-exec-am
 
 install-data-am:
@@ -234,37 +225,12 @@ maintainer-clean: maintainer-clean-am
 	-rm -f config.status
 
 .PHONY: tags distdir info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-local install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs \
-mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
-
-# HACK: install into build-tree
-preinstall: install-exec-local
-
-install-exec-local: size_rtems
-	$(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/bin
-	$(INSTALL_SCRIPT) size_rtems $(PROJECT_ROOT)/${RTEMS_BSP}/bin
-
-debug-am:
-
-debug: debug-am
-
-debug_install-am:
-
-debug_install: debug_install-am
-
-profile-am:
-
-profile: profile-am
-
-profile_install-am:
-
-profile_install: profile_install-am
-
-.PHONY: debug debug_install profile profile_install
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
