@@ -30,7 +30,7 @@ AM_CFLAGS = \
     -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
     -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata \
     $(CPU_CFLAGS)
-AM_CCASFLAGS = $(INCLUDES) $(AM_CPPFLAGS) \
+AM_CCASFLAGS = $(AM_CPPFLAGS) \
     $(GCC_SPECS) -specs bsp_specs -qrtems -mrelocatable \
     -DASM $(CPU_CFLAGS)
 

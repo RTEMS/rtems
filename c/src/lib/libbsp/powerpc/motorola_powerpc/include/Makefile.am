@@ -2,13 +2,13 @@
 ## $Id$
 ##
 
-
 include_HEADERS = bspopts.h
 
-H_FILES = ../../shared/include/nvram.h ../../shared/include/bsp.h \
+include_HEADERS += ../../shared/include/nvram.h ../../shared/include/bsp.h \
     ../../../shared/include/coverhd.h
 
-BSP_H_FILES = ../../shared/console/consoleIo.h ../../shared/console/uart.h \
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS = ../../shared/console/consoleIo.h ../../shared/console/uart.h \
     ../../shared/irq/irq.h ../../shared/motorola/motorola.h
 
 $(PROJECT_INCLUDE):
@@ -41,12 +41,17 @@ $(PROJECT_INCLUDE)/bsp/irq.h: ../../shared/irq/irq.h
 $(PROJECT_INCLUDE)/bsp/motorola.h: ../../shared/motorola/motorola.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp \
-    $(PROJECT_INCLUDE)/nvram.h $(PROJECT_INCLUDE)/bsp.h \
-    $(PROJECT_INCLUDE)/coverhd.h $(PROJECT_INCLUDE)/bsp/consoleIo.h \
-    $(PROJECT_INCLUDE)/bsp/uart.h $(PROJECT_INCLUDE)/bsp/irq.h \
-    $(PROJECT_INCLUDE)/bsp/motorola.h \
-    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
+TMPINSTALL_FILES = $(PROJECT_INCLUDE)
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/nvram.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h 
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
 all-local: $(TMPINSTALL_FILES)
 
