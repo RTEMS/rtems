@@ -24,11 +24,14 @@ TASK_PIECES=\
   taskmode taskrestart taskresume tasksetnote tasksetpriority \
   taskstart tasksuspend taskwakeafter taskwakewhen
 
+CLOCK_PIECES=
+  clock clockget clockset clocktick
+
 REGION_PIECES=\
   region regioncreate regiondelete regionextend regiongetsegment \
   regiongetsegmentsize regionident regionreturnsegemnt regionreturnsegemnt
 
-C_PIECES=attr clock dpmem event intr intrbody msg \
+C_PIECES=attr $(CLOCK_PIECES) dpmem event intr intrbody msg \
    part ratemon $(REGION_PIECES) sem signal \
    $(TASK_PIECES) timer $(MP_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
