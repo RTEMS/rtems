@@ -1,3 +1,11 @@
+2005-01-31	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR rtems/752
+	* rtems/m68k/m68302.h, rtems/m68k/m68360.h, rtems/m68k/qsm.h,
+	rtems/m68k/sim.h: New (relocated from .).
+	* m68302.h, m68360.h, qsm.h, sim.h: Remove.
+	* Makefile.am: Reflect changes above.
+
 2005-01-28	Eric Norum <norume@aps.anl.gov>
 
 	* rtems/score/cpu.h, rtems/score/m68k.h: ColdFire ISA A+ instructions

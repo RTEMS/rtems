@@ -11,7 +11,8 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = asm.h
 
 include_rtems_m68kdir = $(includedir)/rtems/m68k
-include_rtems_m68k_HEADERS = m68302.h m68360.h qsm.h sim.h
+include_rtems_m68k_HEADERS = rtems/m68k/m68302.h rtems/m68k/m68360.h \
+    rtems/m68k/qsm.h rtems/m68k/sim.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/m68k.h \
@@ -38,19 +39,19 @@ $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/m68k/m68302.h: m68302.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/m68k/m68302.h: rtems/m68k/m68302.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/m68k/m68302.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/m68k/m68302.h
 
-$(PROJECT_INCLUDE)/rtems/m68k/m68360.h: m68360.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/m68k/m68360.h: rtems/m68k/m68360.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/m68k/m68360.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/m68k/m68360.h
 
-$(PROJECT_INCLUDE)/rtems/m68k/qsm.h: qsm.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/m68k/qsm.h: rtems/m68k/qsm.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/m68k/qsm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/m68k/qsm.h
 
-$(PROJECT_INCLUDE)/rtems/m68k/sim.h: sim.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/m68k/sim.h: rtems/m68k/sim.h $(PROJECT_INCLUDE)/rtems/m68k/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/m68k/sim.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/m68k/sim.h
 
