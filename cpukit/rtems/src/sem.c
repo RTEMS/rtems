@@ -71,8 +71,8 @@ void _Semaphore_Manager_initialization(
     RTEMS_MAXIMUM_NAME_LENGTH    /* maximum length of an object name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                       /* TRUE if this is a global object class */
-    NULL                         /* Proxy extraction support callout */
+    TRUE,                        /* TRUE if this is a global object class */
+    _Semaphore_MP_Send_extract_proxy /* Proxy extraction support callout */
 #endif
   );
  

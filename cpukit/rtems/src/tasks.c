@@ -258,7 +258,7 @@ void _RTEMS_tasks_Manager_initialization(
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                     /* TRUE if this is a global object class */
+    TRUE,                      /* TRUE if this is a global object class */
     NULL                       /* Proxy extraction support callout */
 #endif
   );

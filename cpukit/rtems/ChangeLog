@@ -1,3 +1,9 @@
+2003-01-10	Joel Sherrill <joel@OARcorp.com>
+
+	* src/msg.c, src/part.c, src/sem.c, src/tasks.c: Correct object
+	class control structure initialization for multiprocessing
+	configurations.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Don't create $ARCH as side-effect of compilation.

@@ -58,8 +58,8 @@ void _Message_queue_Manager_initialization(
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                     /* TRUE if this is a global object class */
-    NULL                       /* Proxy extraction support callout */
+    TRUE,                      /* TRUE if this is a global object class */
+    _Message_queue_MP_Send_extract_proxy  /* Proxy extraction support callout */
 #endif
   );
 
