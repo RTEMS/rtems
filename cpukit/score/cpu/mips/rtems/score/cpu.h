@@ -1181,8 +1181,8 @@ void _CPU_Context_restore_fp(
  *  will be fetched incorrectly.
  */
 
-static inline unsigned int CPU_swap_u32(
-  unsigned int value
+static inline uint32_t CPU_swap_u32(
+  uint32_t value
 )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;

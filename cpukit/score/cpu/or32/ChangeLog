@@ -1,5 +1,9 @@
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/cpu.h: *_swap_u32( uint32_t ).
+
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/types.h: #include <rtems/stdint.h>.
 
 2005-01-07	Ralf Corsepius <ralf.corsepius@freenet.de>
