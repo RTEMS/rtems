@@ -90,7 +90,7 @@ void ITRON_Init( void )
 
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;
-  pk_ctsk.itskpri  = 1; 
+  pk_ctsk.itskpri  = 1;
   pk_ctsk.task     = Preempt_task;
   pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
 
@@ -110,8 +110,8 @@ void ITRON_Init( void )
   status = cre_tsk( -2, &pk_ctsk );
   assert( status == E_ID );
 
-  puts( "Init - cre_tsk - cannot create self (0) - E_ID" );
-  status = cre_tsk( 0, &pk_ctsk );
+  puts( "Init - cre_tsk - cannot create TSK_SELF  - E_ID" );
+  status = cre_tsk( TSK_SELF, &pk_ctsk );
   assert( status == E_ID );
 
   puts( "Init - cre_tsk - invalid id; id already exists  - E_OBJ" );
@@ -174,12 +174,12 @@ void ITRON_Init( void )
   pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
 
 
-  puts( "Init - del_tsk - cannot delete self - E_OBJ" );
-  status = del_tsk( 1 );
+  puts( "Init - del_tsk - cannot delete TSK_SELF - E_OBJ" );
+  status = del_tsk( TSK_SELF );
   assert( status == E_OBJ );
 
   puts( "Init - del_tsk - task is not DORMANT - E_OBJ" );
-  status = del_tsk( 1 );
+  status = del_tsk( PREEMPT_TASK_ID );
   assert( status == E_OBJ );
 
   puts( "Init - del_tsk - task does not exist - E_NOEXS" );
@@ -190,8 +190,8 @@ void ITRON_Init( void )
   status =  del_tsk( -5 );
   assert( status == E_OACV );
 
-  puts( "Init - del_tsk - cannot delete SELF - E_OBJ" );
-  status = del_tsk( 0 );
+  puts( "Init - del_tsk - cannot delete TSK_SELF - E_OBJ" );
+  status = del_tsk( TSK_SELF );
   assert( status == E_OBJ );
 
   puts( "Init - del_tsk - bad id (between 0 and -4) - E_ID" );
@@ -215,12 +215,12 @@ void ITRON_Init( void )
   status = sta_tsk( -2, 1 );
   assert( status == E_ID );
 
-  puts( "Init - sta_tsk - cannot start SELF - E_OBJ" );
-  status = sta_tsk( 0, 1 );
+  puts( "Init - sta_tsk - cannot start TSK_SELF - E_OBJ" );
+  status = sta_tsk( TSK_SELF, 1 );
   assert( status == E_OBJ );
 
   puts( "Init - sta_tsk - task is not DORMANT  - E_OBJ" );
-  status = sta_tsk( 1, 1 );
+  status = sta_tsk( PREEMPT_TASK_ID, 1 );
   assert( status == E_OBJ );
 
   puts( "Init - sta_tsk - task does not exist  - E_NOEXS" );
@@ -255,12 +255,12 @@ void ITRON_Init( void )
   status = ter_tsk( -2 );
   assert( status == E_ID );
 
-  puts( "Init - ter_tsk - cannot terminate SELF (0) - E_OBJ" );
-  status = ter_tsk( 0 );
+  puts( "Init - ter_tsk - cannot terminate TSK_SELF (0) - E_OBJ" );
+  status = ter_tsk( TSK_SELF );
   assert( status == E_OBJ );
 
   puts( "Init - ter_tsk - task is not DORMANT - E_OBJ" );
-  status = ter_tsk( 1 );
+  status = ter_tsk( PREEMPT_TASK_ID );
   assert( status == E_OBJ );
 
   puts( "Init - ter_tsk - task does not exist - E_NOEXS" );
@@ -294,16 +294,15 @@ void ITRON_Init( void )
   assert( status == E_ID );
 
   /*  Call from task independent portion to cause E_OBJ
-  puts( "Init - chg_pri - change priority of SELF - E_OBJ" );
-  status = chg_pri( 0, 1 );
+  puts( "Init - chg_pri - change priority of TSK_SELF - E_OBJ" );
+  status = chg_pri( TSK_SELF, 1 );
   assert( status == E_OBJ );
   */
 
-  /*  Need a dormant task to call
+  /*  Need a dormant task to call */
   puts( "Init - chg_pri - task is not DORMANT - E_OBJ" );
-  status = chg_pri( 1, 1 );
+  status = chg_pri( PREEMPT_TASK_ID, 1 );
   assert( status == E_OBJ );
-  */
 
   puts( "Init - chg_pri - task does not exist - E_NOEXS" );
   status = chg_pri( 5, 1 );
@@ -363,7 +362,7 @@ void ITRON_Init( void )
 
   /*  Call from task independent portion to cause E_ID 
   puts( "Init - ref_tsk - reference SELF - E_ID" );
-  status = ref_tsk( &pk_rtsk, 0 );
+  status = ref_tsk( &pk_rtsk, TSK_SELF );
   assert( status == E_ID );
   */
 
@@ -399,7 +398,7 @@ void ITRON_Init( void )
   assert( status == E_ID );
 
   puts( "Init - sus_tsk - cannot suspend SELF - E_OBJ" );
-  status = sus_tsk( 0 );
+  status = sus_tsk( TSK_SELF );
   assert( status == E_OBJ );
 
   puts( "Init - sus_tsk - task does not exist - E_NOEXS" );
@@ -433,11 +432,11 @@ void ITRON_Init( void )
   assert( status == E_ID );
 
   puts( "Init - rsm_tsk - cannot resume SELF - E_OBJ" );
-  status = rsm_tsk( 0 );
+  status = rsm_tsk( TSK_SELF );
   assert( status == E_OBJ );
 
   puts( "Init - rsm_tsk - task is DORMANT - E_OBJ" );
-  status = rsm_tsk( 1 );
+  status = rsm_tsk( PREEMPT_TASK_ID );
   assert( status == E_OBJ );
 
   puts( "Init - rsm_tsk - task does not exist - E_NOEXS" );
@@ -462,11 +461,11 @@ void ITRON_Init( void )
   assert( status == E_ID );
 
   puts( "Init - frsm_tsk - cannot forcibly resume SELF - E_OBJ" );
-  status = frsm_tsk( 0 );
+  status = frsm_tsk( TSK_SELF );
   assert( status == E_OBJ );
 
   puts( "Init - frsm_tsk - task is DORMANT - E_OBJ" );
-  status = frsm_tsk( 1 );
+  status = frsm_tsk( PREEMPT_TASK_ID );
   assert( status == E_OBJ );
 
   puts( "Init - frsm_tsk - task does not exist - E_NOEXS" );
