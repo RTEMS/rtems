@@ -553,24 +553,25 @@ typedef struct
   __MIPS_REGISTER_TYPE  exctype;  /* 77 -- NOT FILLED IN (not enough info) */
   __MIPS_REGISTER_TYPE  mode;     /* 78 -- NOT FILLED IN (not enough info) */
   __MIPS_REGISTER_TYPE  prid;     /* 79 -- NOT FILLED IN (not need to do so) */
-  /* end of __mips == 1 so NREGS == 80 */
+  __MIPS_REGISTER_TYPE  tar ;     /* 80 -- target address register, filled on exceptions */
+  /* end of __mips == 1 so NREGS == 81 */
 #if  __mips == 3
-  __MIPS_REGISTER_TYPE  tlblo1;   /* 80 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  pagemask; /* 81 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  wired;    /* 82 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  count;    /* 83 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  compare;  /* 84 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  config;   /* 85 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  lladdr;   /* 86 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  watchlo;  /* 87 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  watchhi;  /* 88 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  ecc;      /* 89 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  cacheerr; /* 90 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  taglo;    /* 91 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  taghi;    /* 92 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  errpc;    /* 93 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  xctxt;    /* 94 -- NOT FILLED IN */
- /* end of __mips == 3 so NREGS == 95 */
+  __MIPS_REGISTER_TYPE  tlblo1;   /* 81 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  pagemask; /* 82 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  wired;    /* 83 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  count;    /* 84 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  compare;  /* 85 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  config;   /* 86 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  lladdr;   /* 87 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  watchlo;  /* 88 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  watchhi;  /* 89 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  ecc;      /* 90 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  cacheerr; /* 91 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  taglo;    /* 92 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  taghi;    /* 93 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  errpc;    /* 94 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  xctxt;    /* 95 -- NOT FILLED IN */
+ /* end of __mips == 3 so NREGS == 96 */
 #endif
 
 } CPU_Interrupt_frame;
@@ -755,9 +756,10 @@ extern unsigned int mips_interrupt_number_of_vectors;
 
 #define _CPU_ISR_Disable( _level ) \
   do { \
-    mips_get_sr( _level ); \
-    mips_set_sr( _level & ~SR_INTERRUPT_ENABLE_BITS ); \
-    _level &= SR_INTERRUPT_ENABLE_BITS; \
+    unsigned int _scratch; \
+    mips_get_sr( _scratch ); \
+    mips_set_sr( _scratch & ~SR_INTERRUPT_ENABLE_BITS ); \
+    _level = _scratch & SR_INTERRUPT_ENABLE_BITS; \
   } while(0)
 
 /*
@@ -782,8 +784,10 @@ extern unsigned int mips_interrupt_number_of_vectors;
 
 #define _CPU_ISR_Flash( _xlevel ) \
   do { \
-    _CPU_ISR_Enable( _xlevel ); \
-    _CPU_ISR_Disable( _xlevel ); \
+    unsigned int _scratch2 = _xlevel; \
+    _CPU_ISR_Enable( _scratch2 ); \
+    _CPU_ISR_Disable( _scratch2 ); \
+    _xlevel = _scratch2; \
   } while(0)
 
 /*

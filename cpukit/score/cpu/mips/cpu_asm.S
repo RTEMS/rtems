@@ -945,10 +945,19 @@ _ISR_Handler_1:
 #if __mips == 3
 	li	t1,SR_EXL | SR_IE
 #elif __mips == 1
-	li	t1,SR_IEC | SR_KUC	/* ints off, kernel mode on (kernel mode enabled is bit clear..argh!) */
+	/* ints off, current & prev kernel mode on (kernel mode enabled is bit clear..argh!) */
+	li	t1,SR_IEC | SR_KUP | SR_KUC	
 #endif
 	not	t1
 	and	t0, t1
+
+#if __mips == 1
+	/* make sure previous int enable is on  because we're returning from an interrupt
+	** which means interrupts have to be enabled
+	*/
+	li	t1,SR_IEP
+	or	t0,t1
+#endif
         MTC0    t0, C0_SR
 	NOP
 	

@@ -1,5 +1,10 @@
-2002-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
+2002-03-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
+	* cpu_asm.S: Fixed a sneaky return from int w/ ints disabled bug.
+	* rtems/score/cpu.h: Fixed register numbering in comments and made
+	interrupt enable/disable more robust.
+	
+2002-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
 	* cpu_asm.S: Added support for the debug exception vector, cleaned
 	up the exception processing & exception return stuff.  Re-added
 	EPC in the task context structure so the gdb stub will know where
