@@ -101,6 +101,8 @@ n:
 #define LR	8
 #define CTR	9
 #define HID0	1008	/* Hardware Implementation */
+#define HID1	1009	/* Hardware Implementation */
+#define DABR	1013	/* Data Access Breakpoint  */
 #define PVR	287	/* Processor Version */
 #define IBAT0U	528	/* Instruction BAT #0 Upper/Lower */
 #define IBAT0L	529
