@@ -1,3 +1,8 @@
+2001-05-24	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* Assisted in design and debug by Joel Sherrill <joel@OARcorp.com>.
+	* cpu_asm.S: Now works on Mongoose-V.  Missed in previous patch.
+
 2001-05-22	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* rtems/score/cpu.h: Add the interrupt stack structure and enhance

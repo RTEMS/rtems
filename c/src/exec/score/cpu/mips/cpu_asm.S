@@ -38,6 +38,15 @@
 #include "iregdef.h"
 #include "idtcpu.h"
 
+/* enable debugging shadow writes to misc ram, this is a vestigal
+* Mongoose-ism debug tool- but may be handy in the future so we
+* left it in...
+*/
+/* #define INSTRUMENT */
+	
+
+
+	
 /*  Ifdefs prevent the duplication of code for MIPS ISA Level 3 ( R4xxx )
  *  and MIPS ISA Level 1 (R3xxx).
  */
@@ -101,7 +110,7 @@
 #define FP_OFFSET 9
 #define RA_OFFSET 10
 #define C0_SR_OFFSET 11
-#define C0_EPC_OFFSET 12
+/* #define C0_EPC_OFFSET 12 */
 
 /* NOTE: these constants must match the Context_Control_fp structure in cpu.h */
 #define FP0_OFFSET  0 
@@ -159,7 +168,7 @@
 #if ( CPU_HARDWARE_FP == FALSE )
 FRAME(_CPU_Context_save_fp,sp,0,ra)
         .set noat
-        ld a1,(a0)
+        ld   a1,(a0)
 	NOP
         swc1 $f0,FP0_OFFSET*F_SZ(a1)
         swc1 $f1,FP1_OFFSET*F_SZ(a1)
@@ -275,15 +284,15 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 
         MFC0  t0,C0_SR
         li    t1,~(SR_INTERRUPT_ENABLE_BITS)
-        STREG t0,C0_SR_OFFSET*4(a0)   /* save status register */
+        STREG t0,C0_SR_OFFSET*4(a0)	/* save status register */
         and   t0,t1
-        MTC0  t0,C0_SR                /* first disable ie bit (recommended) */
+        MTC0  t0,C0_SR			/* first disable ie bit (recommended) */
 #if __mips == 3
-        ori   t0,SR_EXL|SR_IE   /* enable exception level to disable interrupts */
+        ori   t0,SR_EXL|SR_IE		/* enable exception level to disable interrupts */
         MTC0  t0,C0_SR
 #endif
 
-        STREG ra,RA_OFFSET*R_SZ(a0)         /* save current context */
+        STREG ra,RA_OFFSET*R_SZ(a0)	/* save current context */
         STREG sp,SP_OFFSET*R_SZ(a0)
         STREG fp,FP_OFFSET*R_SZ(a0)
         STREG s0,S0_OFFSET*R_SZ(a0)
@@ -295,15 +304,17 @@ FRAME(_CPU_Context_switch,sp,0,ra)
         STREG s6,S6_OFFSET*R_SZ(a0)
         STREG s7,S7_OFFSET*R_SZ(a0)
 
+	/*
         MFC0  t0,C0_EPC
 	NOP
         STREG t0,C0_EPC_OFFSET*R_SZ(a0)
+	*/
 
 _CPU_Context_switch_restore:
-        LDREG ra,RA_OFFSET*R_SZ(a1)
+        LDREG ra,RA_OFFSET*R_SZ(a1)	    /* restore context */
         LDREG sp,SP_OFFSET*R_SZ(a1)
         LDREG fp,FP_OFFSET*R_SZ(a1)
-        LDREG s0,S0_OFFSET*R_SZ(a1)           /* restore context */
+        LDREG s0,S0_OFFSET*R_SZ(a1)
         LDREG s1,S1_OFFSET*R_SZ(a1)
         LDREG s2,S2_OFFSET*R_SZ(a1)
         LDREG s3,S3_OFFSET*R_SZ(a1)
@@ -312,9 +323,12 @@ _CPU_Context_switch_restore:
         LDREG s6,S6_OFFSET*R_SZ(a1)
         LDREG s7,S7_OFFSET*R_SZ(a1)
 
+	/*
         LDREG t0,C0_EPC_OFFSET*R_SZ(a1)
 	NOP
         MTC0  t0,C0_EPC
+	*/
+	
         LDREG t0, C0_SR_OFFSET*R_SZ(a1)
 	NOP
 	
@@ -336,6 +350,7 @@ _CPU_Context_switch_restore:
         MTC0  t0,C0_SR                      /* set with enabled */
 #endif
 
+	
 _CPU_Context_1:
         j ra
         NOP
@@ -364,6 +379,7 @@ ASM_EXTERN(_ISR_Nest_level, SZ_INT)
 ASM_EXTERN(_Thread_Dispatch_disable_level,SZ_INT)
 ASM_EXTERN(_Context_Switch_necessary,SZ_INT)
 ASM_EXTERN(_ISR_Signals_to_thread_executing,SZ_INT)
+ASM_EXTERN(_Thread_Executing,SZ_INT)
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 
@@ -418,46 +434,90 @@ FRAME(_ISR_Handler,sp,0,ra)
         STREG t5, R_T5*R_SZ(sp)
         STREG t6, R_T6*R_SZ(sp)
         STREG t7, R_T7*R_SZ(sp)
-        mflo  k0
+        mflo  t0
         STREG t8, R_T8*R_SZ(sp)
-        STREG k0, R_MDLO*R_SZ(sp) 
+        STREG t0, R_MDLO*R_SZ(sp) 
         STREG t9, R_T9*R_SZ(sp)
-        mfhi  k0
+        mfhi  t0
         STREG gp, R_GP*R_SZ(sp)
-        STREG k0, R_MDHI*R_SZ(sp) 
+        STREG t0, R_MDHI*R_SZ(sp) 
         STREG fp, R_FP*R_SZ(sp)
         .set noat
         STREG AT, R_AT*R_SZ(sp)
         .set at
 
-	MFC0     t0,C0_EPC		  /* XXX */
-        MFC0     t1,C0_SR
-        STREG    t0,R_EPC*R_SZ(sp)        /* XXX store EPC on the stack */
-        STREG    t1,R_SR*R_SZ(sp)         /* XXX store SR on the stack */
+        MFC0     t0,C0_SR
+	MFC0     t1,C0_EPC
+        STREG    t0,R_SR*R_SZ(sp)
+        STREG    t1,R_EPC*R_SZ(sp)
 
+
+#ifdef INSTRUMENT
+	lw t2, _Thread_Executing
+	nop
+	sw t2, 0x8001FFF0
+
+	sw t0, 0x8001F050
+	sw t1, 0x8001F054
+
+	li t0, 0xdeadbeef
+	li t1, 0xdeadbeef
+	li t2, 0xdeadbeef
+			
+        sw ra, 0x8001F000
+        sw v0, 0x8001F004
+        sw v1, 0x8001F008
+        sw a0, 0x8001F00c
+        sw a1, 0x8001F010
+        sw a2, 0x8001F014
+        sw a3, 0x8001F018
+        sw t0, 0x8001F01c
+        sw t1, 0x8001F020
+        sw t2, 0x8001F024
+        sw t3, 0x8001F028
+        sw t4, 0x8001F02c
+        sw t5, 0x8001F030
+        sw t6, 0x8001F034
+        sw t7, 0x8001F038
+        sw t8, 0x8001F03c
+        sw t9, 0x8001F040
+        sw gp, 0x8001F044
+        sw fp, 0x8001F048
+#endif
+	
 /* determine if an interrupt generated this exception */
 
         MFC0     k0,C0_CAUSE
 	NOP
-        and      k1,k0,CAUSE_EXCMASK
+
+	and      k1,k0,CAUSE_EXCMASK
         beq      k1, 0, _ISR_Handler_1
 
 _ISR_Handler_Exception:
-        nop
-        jal    mips_vector_exceptions
-        nop
+
+	/* if we return from the exception, it is assumed nothing */
+	/* bad is going on and we can continue to run normally */
+	
+	move	 a0,sp
+        jal	 mips_vector_exceptions
+	nop
+	j	 _ISR_Handler_exit
+	nop
 
 _ISR_Handler_1:
 
         MFC0     k1,C0_SR
         and      k0,CAUSE_IPMASK
         and      k0,k1
-        beq      k0,zero,_ISR_Handler_exit
-                /* external interrupt not enabled, ignore */
-                /* but if it's not an exception or an interrupt, */
-                /* Then where did it come from??? */
-        nop
 
+        /* external interrupt not enabled, ignore */
+        /* but if it's not an exception or an interrupt, */
+        /* Then where did it come from??? */
+	
+	beq      k0,zero,_ISR_Handler_exit
+	
+	li	 t2,1		/* set a flag so we process interrupts */
+	
   /*
    *  save some or all context on stack
    *  may need to save some special interrupt information for exit
@@ -487,8 +547,8 @@ _ISR_Handler_1:
    *  Call the CPU model or BSP specific routine to decode the
    *  interrupt source and actually vector to device ISR handlers.
    */
-
-        jal    mips_vector_isr_handlers
+	move	 a0,sp
+        jal      mips_vector_isr_handlers
         nop
 
   /*
@@ -527,25 +587,34 @@ _ISR_Handler_1:
         beq   t0,zero,_ISR_Handler_exit
         nop
 
-  /*
-   *  call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
-   */
-        LDREG    t0,R_SR*R_SZ(sp)         /* XXX restore SR on the stack */
+	
+	
+#ifdef INSTRUMENT
+	li	t0,0x11111111
+	sw	t0,0x8001F104
+#endif
+	
+  /* restore interrupt state from the saved status register,
+   * if the isr vectoring didn't so we allow nested interrupts to
+   * occur */
+		
+        LDREG    t0,R_SR*R_SZ(sp)
 	NOP
         MTC0     t0,C0_SR
-        la       t0,_ISR_Dispatch
-        MTC0     t0, C0_EPC		  /* XXX */
-	NOP
-        j        t0
-        rfe                               /* go to _ISR_Dispatch in task mode */
+        rfe
+	
 
-_ISR_Dispatch:
         jal _Thread_Dispatch
         nop
+
+#ifdef INSTRUMENT
+	li	t0,0x22222222
+	sw	t0,0x8001F100
+#endif
+
 	
-	li	t0,0x10011001
-	sw	t0,0x8001ff00
-	nop
+			
+
   /*
    *  prepare to get out of interrupt
    *  return from interrupt  (maybe to _ISR_Dispatch)
@@ -556,21 +625,24 @@ _ISR_Dispatch:
    */
 
 _ISR_Handler_exit:
-        LDREG    t0, R_EPC*R_SZ(sp)        /* XXX restore EPC on the stack */
-        LDREG    t1, R_SR*R_SZ(sp)         /* XXX restore SR on the stack */
-        MTC0     t0, C0_EPC		  /* XXX */
-        MTC0     t1, C0_SR
+        LDREG    t0, R_SR*R_SZ(sp)
+	NOP
+        MTC0     t0, C0_SR
 
-/* restore interrupt context from stack */
-      
+/* restore context from stack */
+
+#ifdef INSTRUMENT
+	lw	t0,_Thread_Executing
+	nop
+	sw	t0, 0x8001FFF4
+#endif
+
         LDREG k0, R_MDLO*R_SZ(sp)
-        LDREG a2, R_A2*R_SZ(sp)
+        LDREG t0, R_T0*R_SZ(sp)
         mtlo  k0
         LDREG k0, R_MDHI*R_SZ(sp)           
-        LDREG a3, R_A3*R_SZ(sp)
-        mthi  k0
-        LDREG t0, R_T0*R_SZ(sp)
         LDREG t1, R_T1*R_SZ(sp)
+        mthi  k0
         LDREG t2, R_T2*R_SZ(sp)
         LDREG t3, R_T3*R_SZ(sp)
         LDREG t4, R_T4*R_SZ(sp)
@@ -584,18 +656,42 @@ _ISR_Handler_exit:
         LDREG ra, R_RA*R_SZ(sp)
         LDREG a0, R_A0*R_SZ(sp)
         LDREG a1, R_A1*R_SZ(sp)
+        LDREG a2, R_A2*R_SZ(sp)
+        LDREG a3, R_A3*R_SZ(sp)
         LDREG v1, R_V1*R_SZ(sp)
         LDREG v0, R_V0*R_SZ(sp)
-        .set noat
+
+#ifdef INSTRUMENT
+        sw ra, 0x8001F000
+        sw v0, 0x8001F004
+        sw v1, 0x8001F008
+        sw a0, 0x8001F00c
+        sw a1, 0x8001F010
+        sw a2, 0x8001F014
+        sw a3, 0x8001F018
+        sw t0, 0x8001F01c
+        sw t1, 0x8001F020
+        sw t2, 0x8001F024
+        sw t3, 0x8001F028
+        sw t4, 0x8001F02c
+        sw t5, 0x8001F030
+        sw t6, 0x8001F034
+        sw t7, 0x8001F038
+        sw t8, 0x8001F03c
+        sw t9, 0x8001F040
+        sw gp, 0x8001F044
+        sw fp, 0x8001F048
+#endif
+	
+        LDREG     k0, R_EPC*R_SZ(sp)
+	
+	.set noat
         LDREG AT, R_AT*R_SZ(sp)
         .set at
 
         ADDIU     sp,sp,EXCP_STACK_SIZE
-
-        MFC0      k0, C0_EPC
-	NOP
-        j         k0
-        rfe			/* Might not need to do RFE here... */
+	j         k0
+	rfe
         nop
 
        .set    reorder
@@ -610,5 +706,4 @@ FRAME(mips_break,sp,0,ra)
 #endif
         nop
 ENDFRAME(mips_break)
-
 
