@@ -231,6 +231,7 @@ extern "C" {
 
 #ifndef ASM
 #include <rtems/score/types.h>
+#include <stdint.h>
 #endif
 
 /*
