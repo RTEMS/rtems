@@ -74,7 +74,7 @@ rtems_isr Clock_isr( rtems_vector_number vector );
  *  number of clock ticks since the driver was initialized.
  */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t   Clock_driver_ticks;
 
 /*
  *  Clock_isrs is the number of clock ISRs until the next invocation of
@@ -84,7 +84,7 @@ volatile rtems_unsigned32 Clock_driver_ticks;
  *  has passed.
  */
 
-rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
+uint32_t   Clock_isrs;              /* ISRs until next tick */
 
 /*
  * These are set by clock driver during its init
@@ -101,7 +101,7 @@ rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
 
-static unsigned32 mips_timer_rate = 0;
+static uint32_t   mips_timer_rate = 0;
 
 /*
  *  Isr Handler
@@ -217,7 +217,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t   isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)

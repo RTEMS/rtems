@@ -1,3 +1,11 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* clock/ckinit.c, clock/clock.h, mongoosev/duart/mg5uart.c,
+	mongoosev/duart/mg5uart.h, mongoosev/duart/mg5uart_reg.c,
+	mongoosev/include/mongoose-v.h, mongoosev/vectorisrs/vectorisrs.c,
+	shared/interrupts/vectorexceptions.c, timer/timer.c,
+	tx39/include/tx3904.h: Convert to using c99 fixed size types.
+
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Add 2nd argument (rtems_updir) to RTEMS_TOP.

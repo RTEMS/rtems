@@ -20,16 +20,16 @@
 
 
 #define MONGOOSEV_READ( _base ) \
-  ( *((volatile unsigned32 *)(_base)) )
+  ( *((volatile uint32_t   *)(_base)) )
 
 #define MONGOOSEV_WRITE( _base, _value ) \
-  ( *((volatile unsigned32 *)(_base)) = (_value) )
+  ( *((volatile uint32_t   *)(_base)) = (_value) )
 
 #define MONGOOSEV_READ_REGISTER( _base, _register ) \
-  ( *((volatile unsigned32 *)((_base) + (_register))) )
+  ( *((volatile uint32_t   *)((_base) + (_register))) )
 
 #define MONGOOSEV_WRITE_REGISTER( _base, _register, _value ) \
-  ( *((volatile unsigned32 *)((_base) + (_register))) = (_value) )
+  ( *((volatile uint32_t   *)((_base) + (_register))) = (_value) )
 
 
 

@@ -71,7 +71,7 @@ void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
   unsigned int *frame_u32;
   int   i, j;
 
-  frame_u32 = (unsigned32 *)frame;
+  frame_u32 = (uint32_t   *)frame;
   for(i=0; dumpregs[i].offset > -1; i++)
   {
      printk("   %s", dumpregs[i].name);
@@ -112,8 +112,8 @@ void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
 
 void mips_vector_exceptions( CPU_Interrupt_frame *frame )
 {
-  unsigned32 cause;
-  unsigned32 exc;
+  uint32_t   cause;
+  uint32_t   exc;
 
   mips_get_cause( cause );
   exc = (cause >> 2) & 0x1f;

@@ -82,15 +82,15 @@ extern console_fns mg5uart_fns_polled;
  * Default register access routines
  */
 
-unsigned32 mg5uart_get_register(    /* registers are on 32-bit boundaries */
-  unsigned32  ulCtrlPort,           /*   and accessed as word             */
-  unsigned32  ucRegNum
+uint32_t   mg5uart_get_register(    /* registers are on 32-bit boundaries */
+  uint32_t    ulCtrlPort,           /*   and accessed as word             */
+  uint32_t    ucRegNum
 );
 
 void  mg5uart_set_register(
-  unsigned32  ulCtrlPort,
-  unsigned32  ucRegNum,
-  unsigned32  ucData
+  uint32_t    ulCtrlPort,
+  uint32_t    ucRegNum,
+  uint32_t    ucData
 );
 
 #ifdef __cplusplus

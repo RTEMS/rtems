@@ -41,11 +41,11 @@ int mips_default_isr( int vector )
 
 /* userspace routine to assert either software interrupt */
 
-int assertSoftwareInterrupt( unsigned32 n )
+int assertSoftwareInterrupt( uint32_t   n )
 {
    if( n<2 )
    {
-      unsigned32 c;
+      uint32_t   c;
 
       mips_get_cause(c);
       c = ((n+1) << CAUSE_IPSHIFT);
@@ -76,8 +76,8 @@ int assertSoftwareInterrupt( unsigned32 n )
 //
 
 #if 0
-#define SET_ISR_FLAG( offset )	*((unsigned32 *)(0x8001e000+offset)) = 1;
-#define CLR_ISR_FLAG( offset )	*((unsigned32 *)(0x8001e000+offset)) = 0;
+#define SET_ISR_FLAG( offset )	*((uint32_t   *)(0x8001e000+offset)) = 1;
+#define CLR_ISR_FLAG( offset )	*((uint32_t   *)(0x8001e000+offset)) = 0;
 #else
 #define SET_ISR_FLAG( offset )
 #define CLR_ISR_FLAG( offset )
@@ -88,10 +88,10 @@ int assertSoftwareInterrupt( unsigned32 n )
 
 
 
-static volatile unsigned32 _ivcause, _ivsr;
+static volatile uint32_t   _ivcause, _ivsr;
 
 
-static unsigned32 READ_CAUSE(void) 
+static uint32_t   READ_CAUSE(void) 
 {
    mips_get_cause( _ivcause );
    _ivcause &= SR_IMASK;	// mask off everything other than the interrupt bits
@@ -116,7 +116,7 @@ static unsigned32 READ_CAUSE(void)
 //
 void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 {
-   unsigned32	cshifted;
+   uint32_t  	cshifted;
 
    /* mips_get_sr( sr ); */
    _ivsr = frame->c0_sr;
@@ -190,9 +190,9 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 
    if ( cshifted & 0x80 )       /* IP[5] ==> INT5, peripheral interrupt */
    {
-      unsigned32  bit;
-      unsigned32  pf_icr, pf_mask, pf_reset = 0;
-      unsigned32  i, m;
+      uint32_t    bit;
+      uint32_t    pf_icr, pf_mask, pf_reset = 0;
+      uint32_t    i, m;
 
       pf_icr = MONGOOSEV_READ( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER );
 

@@ -50,10 +50,10 @@
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ )
 #define TIMER_MAX_VALUE 0xffffffff
 
-extern unsigned32 mips_read_timer( void );
+extern uint32_t   mips_read_timer( void );
 
 static rtems_boolean Timer_driver_Find_average_overhead;
-static unsigned32 Timer_initial_value = 0;
+static uint32_t   Timer_initial_value = 0;
 
 void Timer_initialize( void )
 {
@@ -82,8 +82,8 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  unsigned64 clicks;
-  unsigned32 total;
+  uint64_t   clicks;
+  uint32_t   total;
 
   /*
    *  Read the timer and see how many clicks it has been since we started.

@@ -81,11 +81,11 @@ MG5UART_STATIC int mg5uart_set_attributes(
   const struct termios *t
 )
 {
-  unsigned32             pMG5UART_port;
-  unsigned32             pMG5UART;
-  unsigned32             cmd, cmdSave;
-  unsigned32             baudcmd;
-  unsigned32             shift;
+  uint32_t               pMG5UART_port;
+  uint32_t               pMG5UART;
+  uint32_t               cmd, cmdSave;
+  uint32_t               baudcmd;
+  uint32_t               shift;
   rtems_interrupt_level  Irql;
 
   pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -220,10 +220,10 @@ MG5UART_STATIC void mg5uart_initialize_context(
 
 MG5UART_STATIC void mg5uart_init(int minor)
 {
-  unsigned32            pMG5UART_port;
-  unsigned32            pMG5UART;
-  unsigned32		cmdSave;
-  unsigned32		shift;
+  uint32_t              pMG5UART_port;
+  uint32_t              pMG5UART;
+  uint32_t  		cmdSave;
+  uint32_t  		shift;
 
   mg5uart_context        *pmg5uartContext;
 
@@ -269,12 +269,12 @@ MG5UART_STATIC int mg5uart_open(
   void    *arg
 )
 {
-  unsigned32    pMG5UART;
-  unsigned32    pMG5UART_port;
-  unsigned32	vector;
-  unsigned32    cmd, cmdSave;
-  unsigned32    baudcmd;
-  unsigned32    shift;
+  uint32_t      pMG5UART;
+  uint32_t      pMG5UART_port;
+  uint32_t  	vector;
+  uint32_t      cmd, cmdSave;
+  uint32_t      baudcmd;
+  uint32_t      shift;
 
   rtems_interrupt_level  Irql;
 
@@ -326,10 +326,10 @@ MG5UART_STATIC int mg5uart_close(
   void    *arg
 )
 {
-  unsigned32    pMG5UART;
-  unsigned32    pMG5UART_port;
-  unsigned32	cmd, cmdSave;
-  unsigned32    shift;
+  uint32_t      pMG5UART;
+  uint32_t      pMG5UART_port;
+  uint32_t  	cmd, cmdSave;
+  uint32_t      shift;
   rtems_interrupt_level  Irql;
 
   pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -374,9 +374,9 @@ MG5UART_STATIC void mg5uart_write_polled(
   char  c
 )
 {
-  unsigned32              pMG5UART;
-  unsigned32              pMG5UART_port;
-  unsigned32              status;
+  uint32_t                pMG5UART;
+  uint32_t                pMG5UART_port;
+  uint32_t                status;
   int                     shift;
   int                     timeout;
 
@@ -474,10 +474,10 @@ __ISR(rx_ready, MG5UART_IRQ_RX_READY)
 
 MG5UART_STATIC void mg5uart_process_isr_rx_error(
    int  minor, 
-   unsigned32 mask 
+   uint32_t   mask 
 )
 {
-  unsigned32              pMG5UART;
+  uint32_t                pMG5UART;
   int                     shift;
 
   pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -519,10 +519,10 @@ MG5UART_STATIC void mg5uart_process_isr_rx_overrun_error(
 
 MG5UART_STATIC void mg5uart_process_tx_isr(
    int        minor,
-   unsigned32 source
+   uint32_t   source
 )
 {
-   unsigned32      pMG5UART;
+   uint32_t        pMG5UART;
    int             shift;
    
    pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
@@ -579,7 +579,7 @@ MG5UART_STATIC void mg5uart_process_isr_rx_ready(
   int  minor
 )
 {
-  unsigned32              pMG5UART_port;
+  uint32_t                pMG5UART_port;
   unsigned char           c;
 
   pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
@@ -638,8 +638,8 @@ MG5UART_STATIC int mg5uart_write_support_int(
   int         len
 )
 {
-  unsigned32      Irql;
-  unsigned32      pMG5UART_port;
+  uint32_t        Irql;
+  uint32_t        pMG5UART_port;
 
   pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
 
@@ -712,10 +712,10 @@ MG5UART_STATIC int mg5uart_inbyte_nonblocking_polled(
   int minor
 )
 {
-  unsigned32              pMG5UART;
-  unsigned32              pMG5UART_port;
-  unsigned32              status;
-  unsigned32              tmp,shift;
+  uint32_t                pMG5UART;
+  uint32_t                pMG5UART_port;
+  uint32_t                status;
+  uint32_t                tmp,shift;
 
   pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
   pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
@@ -754,9 +754,9 @@ MG5UART_STATIC int mg5uart_baud_rate(
   unsigned int *code
 )
 {
-  rtems_unsigned32 clock;
-  rtems_unsigned32 tmp_code;
-  rtems_unsigned32 baud_requested;
+  uint32_t   clock;
+  uint32_t   tmp_code;
+  uint32_t   baud_requested;
 
   baud_requested = baud & CBAUD;
   if (!baud_requested)
@@ -764,7 +764,7 @@ MG5UART_STATIC int mg5uart_baud_rate(
 
   baud_requested = termios_baud_to_number( baud_requested );
 
-  clock = (rtems_unsigned32) Console_Port_Tbl[minor].ulClock;
+  clock = (uint32_t  ) Console_Port_Tbl[minor].ulClock;
   if (!clock)
     rtems_fatal_error_occurred(RTEMS_INVALID_NUMBER);
 
@@ -810,9 +810,9 @@ MG5UART_STATIC void mg5uart_enable_interrupts(
   int mask
 )
 {
-  unsigned32            pMG5UART;
-  unsigned32		maskSave;
-  unsigned32            shift;
+  uint32_t              pMG5UART;
+  uint32_t  		maskSave;
+  uint32_t              shift;
   rtems_interrupt_level  Irql;
 
   pMG5UART = Console_Port_Tbl[minor].ulCtrlPort1;

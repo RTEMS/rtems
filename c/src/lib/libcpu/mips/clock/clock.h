@@ -22,4 +22,4 @@
 
 /* @(#)clock.h       08/20/96     1.2 */
 
-extern void mips_set_timer( unsigned32 timer_clock_interval );
+extern void mips_set_timer( uint32_t   timer_clock_interval );

@@ -2,7 +2,7 @@
  *  This file contains a typical set of register access routines which may be
  *  used with the mg5uart chip if accesses to the chip are as follows:
  *
- *    + registers are accessed as unsigned32's
+ *    + registers are accessed as uint32_t  's
  *    + registers are only u32-aligned (no address gaps)
  *
  *  COPYRIGHT (c) 1989-2001.
@@ -20,7 +20,7 @@
 #ifndef _MG5UART_MULTIPLIER
 #define _MG5UART_MULTIPLIER 1
 #define _MG5UART_NAME(_X) _X
-#define _MG5UART_TYPE unsigned32
+#define _MG5UART_TYPE uint32_t  
 #endif
 
 #define CALCULATE_REGISTER_ADDRESS( _base, _reg ) \
@@ -30,9 +30,9 @@
  *  MG5UART Get Register Routine
  */
 
-unsigned8 _MG5UART_NAME(mg5uart_get_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t   _MG5UART_NAME(mg5uart_get_register)(
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 )
 {
   _MG5UART_TYPE *port;
@@ -47,9 +47,9 @@ unsigned8 _MG5UART_NAME(mg5uart_get_register)(
  */
 
 void  _MG5UART_NAME(mg5uart_set_register)(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 )
 {
   _MG5UART_TYPE *port;
