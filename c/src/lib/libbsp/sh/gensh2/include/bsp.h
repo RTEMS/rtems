@@ -45,6 +45,8 @@ extern "C" {
 #include <clockdrv.h>
 #include <console.h>
 
+#include <bspopts.h>
+
 /*
  *  confdefs.h overrides for this BSP:
  *   - number of termios serial ports (defaults to 1)
