@@ -1,3 +1,7 @@
+2001-10-29	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Add more entries.
+
 2001-10-26	Victor V. Vengerov <vvv@oktet.ru>
 
 	* New libcpu support for mcf5206e.

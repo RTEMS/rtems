@@ -1,3 +1,7 @@
+2001-10-29	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Add more entries.
+
 2001-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal.m4: Removed.  Should not have been in CVS.
