@@ -19,8 +19,9 @@
  */
 
 #include <assert.h>
+#include <rtems.h>
 #include <libcpu/cpu.h>
-#include <bsp.h>
+/* #include <bsp.h> */
 
 rtems_unsigned64 Timer_driver_Start_time;
 
@@ -60,6 +61,9 @@ void Timer_initialize()
 /*
  *  Read_timer
  */
+
+extern int BSP_Convert_decrementer( unsigned32 );
+
 int Read_timer()
 {
   rtems_unsigned64  total64;

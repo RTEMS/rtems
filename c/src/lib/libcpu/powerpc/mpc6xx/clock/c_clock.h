@@ -24,15 +24,36 @@
 #define _LIB_LIBCPU_C_CLOCK_H
 
 #include <rtems.h>
-#include <bsp.h>
+/* #include <bsp.h> */
 
 /*
- * Theses functions and variables represent the API exported by the CPU to the BSP
+ * These functions and variables represent the API exported by the
+ * CPU to the BSP.
  */
+
 extern void clockOff	(void* unused);
 extern void clockOn	(void* unused);
 extern void clockIsr	(void);
 extern int  clockIsOn	(void* unused);
+
+/*
+ *  These functions and variables represent the assumptions of this
+ *  driver on the BSP.
+ */
+
+extern int BSP_disconnect_clock_handler (void);
+/*
+ * PCI Bus Frequency
+ */
+extern unsigned int BSP_bus_frequency;
+/*
+ * processor clock frequency
+ */
+extern unsigned int BSP_processor_frequency;
+/*
+ * Time base divisior (how many tick for 1 second).
+ */
+extern unsigned int BSP_time_base_divisor;
 
 #endif
 

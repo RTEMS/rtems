@@ -1,3 +1,10 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc6xx/clock/c_clock.c, mpc6xx/clock/c_clock.h: Removed use of
+	bsp.h and replaced it with use of proper interfaces or explicit
+	externs of required functions and data.
+	* mpc6xx/timer/timer.c: Ditto.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc505/timer/Makefile.am, mpc505/vectors/Makefile.am,

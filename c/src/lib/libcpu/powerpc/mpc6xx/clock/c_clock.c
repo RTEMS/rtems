@@ -26,6 +26,7 @@
 #include <assert.h>
 #include <libcpu/cpu.h>
 #include <libcpu/c_clock.h>
+#include <bspIo.h>                     /* for printk() */
 
 /*
  *  Clock ticks since initialization
@@ -140,7 +141,7 @@ rtems_device_driver Clock_initialize(
 )
 {
   Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
-                            (BSP_Configuration.microseconds_per_tick/1000);
+            (rtems_configuration_get_microseconds_per_tick()/1000);
 
   if (!BSP_connect_clock_handler ()) {
     printk("Unable to initialize system clock\n");
@@ -182,7 +183,7 @@ rtems_device_driver Clock_control(
         goto done;
  
     Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
-      (BSP_Configuration.microseconds_per_tick/1000);
+      (rtems_configuration_get_microseconds_per_tick()/1000);
 
     if      (args->command == rtems_build_name('I', 'S', 'R', ' '))
       clockIsr();
