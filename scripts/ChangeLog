@@ -1,5 +1,10 @@
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* gcc3newlib/gcc3newlib.add: Remove info/dir.
+	Cosmetics.
+
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* setup.def: Adapt to what Joel already ships -
 	gcc3_version=3.3.2, gcc3_patch_version=20031216,
 	gcc3newlib_rpm_release=3
