@@ -14,7 +14,7 @@ C_PIECES=consolex
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=consolex
+H_FILES=consolex.h
 
 SRCS=$(C_FILES) $(H_FILES)
 OBJS=$(C_O_FILES)
