@@ -50,6 +50,12 @@
 
 #include <irq.h>
 
+/* Define this to force byte-wide data transfers with the NIC. This
+   is needed for boards like the TS-1325 386EX PC, which support only
+   an 8-bit PC/104 bus.  Undefine this on a normal PC.*/
+
+/* #define NE2000_BYTE_TRANSFERS */
+
 /* Define this to print debugging messages with printk.  */
 
 /* #define DEBUG_NE2000 */
@@ -132,6 +138,9 @@ struct ne_softc {
   /* The thread ID of the receive task.  */
   rtems_id rx_daemon_tid;
 
+  /* Whether we use byte-transfers with the device. */
+  rtems_boolean byte_transfers;
+
   /* The number of memory buffers which the transmit daemon has loaded
      with data to be sent, but which have not yet been completely
      sent.  */
@@ -211,14 +220,23 @@ ne_read_data (struct ne_softc *sc, int addr, int len, unsigned char *p)
   outport_byte (port + RSAR1, addr >> 8);
   outport_byte (port + CMDR, MSK_PG0 | MSK_RRE | MSK_STA);
 
-  while (len > 0) {
-    unsigned short d;
-
-    inport_word (dport, d);
-    *p++ = d;
-    *p++ = d >> 8;
-    len -= 2;
-  }
+  if (sc->byte_transfers)
+    while (len > 0) {
+      unsigned char d;
+      
+      inport_byte (dport, d);
+      *p++ = d;
+      len--;
+    }
+  else  /* word transfers */
+    while (len > 0) {
+      unsigned short d;
+      
+      inport_word (dport, d);
+      *p++ = d;
+      *p++ = d >> 8;
+      len -= 2;
+    }
 
   outport_byte (port + ISR, MSK_RDC);
 }
@@ -375,7 +393,14 @@ ne_init_hardware (struct ne_softc *sc)
   /* Initialize registers.  */
 
   outport_byte (port + CMDR, MSK_PG0 | MSK_RD2 | MSK_STP);
-  outport_byte (port + DCR, MSK_FT10 | MSK_BMS | MSK_WTS);
+
+  if (sc->byte_transfers) {
+    outport_byte (port + DCR, MSK_FT10 | MSK_BMS);
+  }
+  else {
+    outport_byte (port + DCR, MSK_FT10 | MSK_BMS | MSK_WTS);
+  }
+
   outport_byte (port + RBCR0, 0);
   outport_byte (port + RBCR1, 0);
   outport_byte (port + RCR, MSK_MON);
@@ -391,6 +416,13 @@ ne_init_hardware (struct ne_softc *sc)
   outport_byte (port + CMDR, MSK_PG1 | MSK_RD2);
   for (i = 0; i < ETHER_ADDR_LEN; ++i)
     outport_byte (port + PAR + i, sc->arpcom.ac_enaddr[i]);
+
+#ifdef DEBUG_NE2000
+  printk ("Using ethernet address: ");
+  for (i = 0; i < ETHER_ADDR_LEN; ++i)
+    printk("%x ",sc->arpcom.ac_enaddr[i]);
+  printk ("\n");
+#endif
 
   /* Clear the multicast address.  */
   for (i = 0; i < MARsize; ++i)
@@ -482,12 +514,27 @@ ne_rx_daemon (void *arg)
       outport_byte (port + RSAR1, startpage);
       outport_byte (port + CMDR, MSK_PG0 | MSK_RRE | MSK_STA);
 
-      inport_word (dport, statnext);
-      inport_word (dport, len);
+      if (sc->byte_transfers) {
+	unsigned char data;
+
+	inport_byte (dport, data);  /* Throw away status  */
+	inport_byte (dport, data);
+	next = data;
+
+	inport_byte (dport, data);
+	len = data;
+	inport_byte (dport, data);
+	len |= data << 8;
+      }
+      else {                        /* Word transfers  */
+	inport_word (dport, statnext);
+	inport_word (dport, len);
+
+	next = statnext >> 8;
+      }
 
       outport_byte (port + ISR, MSK_RDC);
 
-      next = statnext >> 8;
       if (next >= NE_STOP_PAGE)
 	next = NE_FIRST_RX_PAGE;
 
@@ -571,7 +618,7 @@ ne_loadpacket (struct ne_softc *sc, struct mbuf *m)
 
   /* Transfer the mbuf chain to device memory.  NE2000 devices require
      that the data be transferred as words, so we need to handle odd
-     length mbufs.  */
+     length mbufs.  Never occurs if we force byte transfers. */
 
   leftover = 0;
   leftover_data = '\0';
@@ -596,11 +643,20 @@ ne_loadpacket (struct ne_softc *sc, struct mbuf *m)
       leftover = 0;
     }
 
-    while (len > 1) {
-      outport_word (dport, data[0] | (data[1] << 8));
-      data += 2;
-      len -= 2;
-    }
+    /* If using byte transfers, len always ends up as zero so 
+       there are no leftovers. */
+
+    if (sc->byte_transfers)
+      while (len > 0) {
+	outport_byte (dport, *data++);
+	len--;
+      }
+    else
+      while (len > 1) {
+	outport_word (dport, data[0] | (data[1] << 8));
+	data += 2;
+	len -= 2;
+      }
 
     if (len > 0)
       {
@@ -897,6 +953,14 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config)
 
   memset (sc, 0, sizeof *sc);
 
+  /* Check whether we do byte-wide or word-wide transfers.  */
+  
+#ifdef NE2000_BYTE_TRANSFERS
+  sc->byte_transfers = TRUE;
+#else
+  sc->byte_transfers = FALSE;
+#endif
+
   /* Handle the options passed in by the caller.  */
 
   if (config->mtu != 0)
@@ -931,7 +995,14 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config)
       /* Read the PROM to get the Ethernet hardware address.  */
 
       outport_byte (sc->port + CMDR, MSK_PG0 | MSK_RD2 | MSK_STP);
-      outport_byte (sc->port + DCR, MSK_FT10 | MSK_BMS | MSK_WTS);
+
+      if (sc->byte_transfers) {
+	outport_byte (sc->port + DCR, MSK_FT10 | MSK_BMS);
+      }
+      else {
+	outport_byte (sc->port + DCR, MSK_FT10 | MSK_BMS | MSK_WTS);
+      }
+
       outport_byte (sc->port + RBCR0, 0);
       outport_byte (sc->port + RBCR1, 0);
       outport_byte (sc->port + RCR, MSK_MON);
