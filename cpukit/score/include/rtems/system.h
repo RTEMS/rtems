@@ -22,6 +22,13 @@ extern "C" {
 #endif
 
 /*
+ * Major and minor version number of RTEMS.
+ * Use these macros to test for features in specific releases.
+ */
+#define __RTEMS_MAJOR__	4
+#define __RTEMS_MINOR__	6
+
+/*
  *  The cpu options include file defines all cpu dependent 
  *  parameters for this build of RTEMS.  It must be included
  *  first so the basic macro definitions are in place.

@@ -1,3 +1,8 @@
+2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/sptables.h.in: Remove RTEMS_VERSION (Moved to
+	cpuopts.h).
+
 2003-02-03	Joel Sherrill <joel@OARcorp.com>
 
 	PR 338/filesystem

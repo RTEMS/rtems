@@ -63,12 +63,6 @@ extern const rtems_multiprocessing_table
        _Initialization_Default_multiprocessing_table;
 #endif
 
-/*
- *  This is the version string.
- */
-
-#define RTEMS_VERSION "rtems-@RTEMS_VERSION@"
-
 #if defined(SAPI_INIT) 
 const char _RTEMS_version[] =
   "RTEMS RELEASE " RTEMS_VERSION

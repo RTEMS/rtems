@@ -1,3 +1,7 @@
+2002-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/system.h: Add __RTEMS_MAJOR__, __RTEMS_MINOR__.
+
 2003-02-14	Joel Sherrill <joel@OARcorp.com>
 
 	AMD a29k declared obsolete.
