@@ -9,7 +9,7 @@ include $(top_srcdir)/../../automake/lib.am
 
 LIB = $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
 
-SRCS =
+SRCS = ../support/${ARCH}/libsupport.a
 
 if HAS_LIBBSP
 SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/wrapup/$(ARCH)/libbsp.a

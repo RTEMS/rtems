@@ -148,6 +148,7 @@ AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
   BSP_SUBDIRS="$BSP_SUBDIRS librtems++"
 ])
 
+BSP_SUBDIRS="$BSP_SUBDIRS support"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
 AC_ARG_ENABLE([ada],
@@ -190,6 +191,6 @@ AC_CONFIG_FILES([Makefile],
 [RTEMS_BSP=${RTEMS_BSP}
  MAKE=${MAKE}])
 
-AC_CONFIG_FILES([wrapup/Makefile])
+AC_CONFIG_FILES([support/Makefile wrapup/Makefile])
 
 AC_OUTPUT

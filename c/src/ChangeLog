@@ -1,5 +1,12 @@
 2003-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add support/.
+	* support/Makefile.am: New.
+	* support/version.c: New.
+	* wrapup/Makefile.am: Add support/libsupport.a.
+
+2003-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Use SRC += instead of make-vars.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
