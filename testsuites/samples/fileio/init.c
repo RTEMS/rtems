@@ -30,7 +30,7 @@
 #include <rtems.h>
 #include <fcntl.h>
 #include <rtems/error.h>
-#include <dosfs.h>
+#include <rtems/dosfs.h>
 #include <ctype.h>
 #include <rtems/ide_part_table.h>
 #include <rtems/libcsupport.h>

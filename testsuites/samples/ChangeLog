@@ -1,3 +1,7 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* fileio/init.c: Include <rtems/dosfs.h> instead of <dosfs.h>.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* fileio/init.c, fileio/system.h, ticker/system.h, ticker/tasks.c,
