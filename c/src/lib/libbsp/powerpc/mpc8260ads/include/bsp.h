@@ -72,30 +72,6 @@ extern rtems_configuration_table BSP_Configuration;
 #define NOCACHE_MEM_SIZE 512*1024
 */
 
-/*
- *  Stuff for Time Test 27
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) \
-   do { \
-	static rtems_irq_connect_data scIrqData = { \
-	  PPC_IRQ_SCALL, \
-	  (rtems_irq_hdl) handler, \
-	  NULL, \
-	  NULL, \
-	  NULL  \
-	}; \
-	BSP_install_rtems_irq_handler (&scIrqData); \
-   } while(0)
-
-#define Cause_tm27_intr() asm volatile ("sc")
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
 /* Constants */
 /*
 #define RAM_START 0
