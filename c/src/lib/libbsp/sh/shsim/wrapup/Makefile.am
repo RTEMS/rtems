@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-BSP_FILES = startup clock console timer gdbsci scitab
+BSP_FILES = startup clock console gdbsci scitab
 
 CPU_PIECES = score
 
@@ -10,8 +10,8 @@ include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_FILES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(foreach piece, $(CPU_PIECES), \
+OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    $(foreach piece, $(CPU_PIECES), \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/$(piece).rel)
 
 LIB = $(ARCH)/libbsp.a
