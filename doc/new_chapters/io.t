@@ -563,8 +563,8 @@ of the existing end-of-file of the file. If data is later written at this
 point, subsequent reads of the data in the gap return bytes of zeros
 (until data is actually written into the gap).
 
-Some devices are incapable of seeking.  The value of the pointer asso-
-ciated with such a device is undefined.
+Some devices are incapable of seeking.  The value of the pointer associated
+with such a device is undefined.
 
 @subheading NOTES: 
 
@@ -632,7 +632,7 @@ int fdatasync(
 
 @subheading STATUS CODES:
 
-On success, zeor is returned.  On error, -1 is returned, and @code{errno} is
+On success, zero is returned.  On error, -1 is returned, and @code{errno} is
 set appropriately.
 
 @table @b
@@ -640,7 +640,7 @@ set appropriately.
 @code{fd} is not a valid file descriptor open for writing.
 
 @item EINVAL
-@code{fd} is bound to a special file which dows not support synchronization.
+@code{fd} is bound to a special file which does not support synchronization.
 
 @item EIO
 An error occurred during synchronization.
