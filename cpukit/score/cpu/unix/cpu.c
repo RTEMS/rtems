@@ -817,7 +817,7 @@ void _CPU_SHM_Init(
   char        *shm_addr;
   key_t        shm_key;
   key_t        sem_key;
-  int          status;
+  int          status = 0;
   int          shm_size;
 
   if (getenv("RTEMS_SHM_KEY"))
