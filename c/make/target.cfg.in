@@ -4,11 +4,8 @@
 # Target specific settings. 
 #
 
-prefix = @prefix@
-
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
-# DEFS = @DEFS@
 LDFLAGS =
 LIBS = @LIBS@
 

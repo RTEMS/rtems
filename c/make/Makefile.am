@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-rtems_makedir = $(prefix)/make
+rtems_makedir = $(exec_prefix)/make
 
 GENERIC_FILES = target.cfg
 

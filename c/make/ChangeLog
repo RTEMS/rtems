@@ -1,3 +1,8 @@
+2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Switch from prefix to exec_prefix.
+	* target.cfg.in: Remove prefix and commented out lines.
+
 2001-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Remove rtems_cv_prog_cc_cross reference.
