@@ -77,12 +77,12 @@ extern "C" {
 
 #define mips_get_sr( _x ) \
   do { \
-    asm volatile( "mfc0 %0, $12; nop" : "=g" (_x) :  ); \
+    asm volatile( "mfc0 %0, $12; nop" : "=r" (_x) : ); \
   } while (0)
 
 #define mips_set_sr( _x ) \
   do { \
-    unsigned int __x = (_x); \
+    register unsigned int __x = (_x); \
     asm volatile( "mtc0 %0, $12; nop" : : "r" (__x) ); \
   } while (0)
 

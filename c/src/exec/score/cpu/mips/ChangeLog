@@ -1,3 +1,8 @@
+2001-01-12	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/mips.h (mips_get_sr, mips_set_sr): Corrected
+	register constraints from "general" to "register".
+
 2001-01-09	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu_asm.S: Use SR_INTERRUPT_ENABLE_BITS instead of SR_XXX constants
