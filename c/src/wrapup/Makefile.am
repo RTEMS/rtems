@@ -12,8 +12,13 @@ project_lib_DATA = $(ARCH)/librtemsbsp$(LIB_VARIANT).a
 SRCS = ../support/libsupport$(LIB_VARIANT).a
 
 if HAS_LIBBSP
+if HAS_WRAPUP_LIBBSP
 SRCS += \
     ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/wrapup/$(ARCH)/libbsp.a
+else
+SRCS += \
+    ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp$(LIB_VARIANT).a
+endif
 endif
 
 if HAS_NETWORKING

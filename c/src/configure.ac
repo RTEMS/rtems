@@ -206,6 +206,8 @@ AM_CONDITIONAL([LIBCHIP],[test "$RTEMS_BSP_FAMILY" != "posix"])
 # The bare bsp doesn't have libbsp.a
 # FIXME: We should use a feature based check, here
 AM_CONDITIONAL([HAS_LIBBSP],[test "$RTEMS_BSP_FAMILY" != "bare"])
+AM_CONDITIONAL([HAS_WRAPUP_LIBBSP],
+  [test -f $srcdir/lib/libbsp/$RTEMS_CPU/$RTEMS_BSP_FAMILY/wrapup/Makefile.am])
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
 
 AM_CONDITIONAL(RPCTOOLS, test "$rpctools" != "no")
