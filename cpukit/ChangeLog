@@ -1,3 +1,18 @@
+2005-01-20  Sergei Organov  <osv@topconrd.ru>
+
+	PR 536/rtems
+	Heap manager re-implementation to consume less memory and still satisfy
+	alignment requirements.
+	
+	* score/src/heap.c, score/src/heapallocate.c, score/src/heapextend.c,
+	score/src/heapfree.c, score/src/heapgetinfo.c,
+	score/src/heapgetfreeinfo.c, core/src/heapsizeofuserarea.c,
+	score/src/heapwalk.c, core/macros/rtems/score/heap.inl,
+	score/inline/rtems/score/heap.inl,
+	score/include/rtems/score/heap.h: Reimplemented.
+	* score/src/heapallocatealigned.c: new file
+	* score/Makefile.am: HEAP_C_FILES: add score/src/heapallocatealigned.c
+
 2005-01-20	Joel Sherrill <joel@OARcorp.com>
 
 	PR 745/rtems
