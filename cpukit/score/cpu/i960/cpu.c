@@ -67,10 +67,10 @@ unsigned32 _CPU_ISR_Get_level( void )
  */
 
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
-#define _Is_vector_caching_enabled( _prcb ) \
+#define i960_vector_caching_enabled( _prcb ) \
    ((_prcb)->control_tbl->icon & 0x2000)
 #elif defined(__i960RP__)
-#define _Is_vector_caching_enabled( _prcb ) \
+#define i960_vector_caching_enabled( _prcb ) \
    ((*((unsigned int *) ICON_ADDR)) & 0x2000)
 #endif
 
@@ -93,7 +93,7 @@ void _CPU_ISR_install_raw_handler(
 
   prcb->intr_tbl[ vector + 1 ] = new_handler;
 
-  if ( _Is_vector_caching_enabled( prcb ) )
+  if ( i960_vector_caching_enabled( prcb ) )
     if ( (vector & 0xf) == 0x2 )       /* cacheable? */
       cached_intr_tbl[ vector >> 4 ] = new_handler;
 }

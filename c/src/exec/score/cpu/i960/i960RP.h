@@ -270,13 +270,13 @@
 
 /* Byte order bit for region configuration */
 /* Set to Little Endian for the 80960RP*/
-#define BYTE_ORDER BIG_ENDIAN(0)
-#define BUS_WIDTH(bw)  ((bw==16)?(1<<22):(0)) | ((bw==32)?(2<<22):(0))
-#define BIG_ENDIAN(on) ((on)?(0x1<<31):0)
-#define BYTE_N(n,data)  (((unsigned)(data) >> (n*8)) & 0xFF)
-#define BUS_WIDTH_8 0
-#define BUS_WIDTH_16 (1<<22)
-#define BUS_WIDTH_32 (1<<23)
+#define I960RP_BYTE_ORDER I960RP_BIG_ENDIAN(0)
+#define I960RP_BUS_WIDTH(bw)  ((bw==16)?(1<<22):(0)) | ((bw==32)?(2<<22):(0))
+#define I960RP_BIG_ENDIAN(on) ((on)?(0x1<<31):0)
+#define I960RP_BYTE_N(n,data)  (((unsigned)(data) >> (n*8)) & 0xFF)
+#define I960RP_BUS_WIDTH_8 0
+#define I960RP_BUS_WIDTH_16 (1<<22)
+#define I960RP_BUS_WIDTH_32 (1<<23)
 
 
 /* ATU Register Definitions */

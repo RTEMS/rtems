@@ -50,8 +50,8 @@ SYM (_timerisr):
         addo    1,r6,r6
         st      r6,_Ttimer_val           # increment test timer
 loop_til_cleared:
-        clrbit 4,sf0,sf0
-        bbs    4,sf0,loop_til_cleared
+        /* clrbit 4,sf0,sf0 XXX JRS */
+        /* bbs    4,sf0,loop_til_cleared XXX JRS */
 leaf:   ret
 
         .leafproc _flush_reg, flush_reg.lf

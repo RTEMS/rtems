@@ -70,7 +70,7 @@ int faultOk(int fault)
     userFaultTable[fault].cnt ++;
       /* Check sum has changed.
        */
-#ifdef 0
+#if 0
     faultCheckSum = faultNewCheckSum();
 #endif
     faultCheckSum ++; 
@@ -95,7 +95,7 @@ void faultBad(int invokedFromRom,
      /* At this point RAM is repaired. Do
       * whatever you want.
       */
-# ifdef 0
+#if 0
   if (OsfIsUp)  {    
     asm_exit(romFaultStart, & ram_prcb);
   }
@@ -117,7 +117,7 @@ void faultGood(unsigned int inst, unsigned int * faultBuffer,
     userFaultTable[type].cnt --;
       /* Check sum has changed.
        */
-#ifdef 0
+#if 0
     faultCheckSum = faultNewCheckSum();
 #endif
     faultCheckSum --;

@@ -80,7 +80,7 @@ SYM(_romFaultStart) :
 
 	mov	0, g14
 
-	ldconst	0, sf0
+	/* ldconst	0, sf0 XXX JRS */
 /*
 	  # To get ready to invoke procedures.
 	  # I'll use supervisor stack.

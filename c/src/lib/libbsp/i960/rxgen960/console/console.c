@@ -21,7 +21,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include "concntl.h"
-#include "pcimsgreg.h"
+/* #include "pcimsgreg.h" XXX JRS */
 
 #ifndef lint
 static char _sccsid[] = "@(#)console.c 09/12/96     1.13\n";

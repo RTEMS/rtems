@@ -64,7 +64,7 @@ _asm_sysctl:
 	.text
 _asm_ipend:
 	chkbit	 0, g1
-	alterbit g0, sf0, sf0
+	/* alterbit g0, sf0, sf0 XXX JRS */
 	ret
 ########################################################################
 #
@@ -82,7 +82,7 @@ _asm_ipend:
 	.text
 _asm_imask:
 	chkbit	 0, g1
-	alterbit g0, sf1, sf1
+	/* alterbit g0, sf1, sf1 XXX JRS */
 	ret
 
 
@@ -100,7 +100,7 @@ _asm_imask:
 
 	.text
 _asm_get_imask:
-	mov		sf1, g0
+	/* mov		sf1, g0 XXX JRS */
 	ret
 
 ########################################################################

@@ -20,11 +20,11 @@
 
 
 /* Bus configuration */
-#define RP_CONFIG_REGS     BUS_WIDTH_32
-#define FLASH              BUS_WIDTH_8
-#define DRAM               BUS_WIDTH_32
-#define UART_LED           BUS_WIDTH_8
-#define DEFAULT            BUS_WIDTH_32
+#define RP_CONFIG_REGS     I960RP_BUS_WIDTH_32
+#define FLASH              I960RP_BUS_WIDTH_8
+#define DRAM               I960RP_BUS_WIDTH_32
+#define UART_LED           I960RP_BUS_WIDTH_8
+#define DEFAULT            I960RP_BUS_WIDTH_32
 
 /* Region Configuration */
 #define  REGION_0_CONFIG      RP_CONFIG_REGS

@@ -90,9 +90,9 @@ extern "C" {
  *  Returns the PRCB pointer.
  */
 
-static inline PRCB *get_prcb( void )
+static inline i960_PRCB *get_prcb( void )
 {
-  register PRCB *_prcb = 0;
+  register i960_PRCB *_prcb = 0;
 
   asm volatile( "calls 5; \
                  mov   g0,%0" \
@@ -118,18 +118,8 @@ static inline PRCB *get_prcb( void )
 
 extern rtems_configuration_table BSP_Configuration;
 
-BSP_EXTERN PRCB          *Prcb;
-BSP_EXTERN CNTL_TBL      *Ctl_tbl;
-
-/*
-#if defined(i960ca)
-BSP_EXTERN i960ca_control_table *Ctl_tbl;
-#elif defined(i960rp)
-BSP_EXTERN i960rp_control_table *Ctl_tbl;
-#else
-#error "invalid processor selection!"
-#endif
-*/
+BSP_EXTERN i960_PRCB          *Prcb;
+BSP_EXTERN i960_control_table *Ctl_tbl;
 
 /*
  *  Device Driver Table Entries

@@ -16,7 +16,7 @@ VPATH = @srcdir@
 PGM = ${ARCH}/console.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = console pcimsgreg
+C_PIECES = console
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
