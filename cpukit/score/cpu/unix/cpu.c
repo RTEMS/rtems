@@ -47,7 +47,7 @@ void  _CPU_Signal_initialize(void);
 void  _CPU_Stray_signal(int);
 void  _CPU_ISR_Handler(int);
 
-static sigset_t         _CPU_Signal_mask;
+static sigset_t _CPU_Signal_mask;
 static Context_Control_overlay
           _CPU_Context_Default_with_ISRs_enabled CPU_STRUCTURE_ALIGNMENT;
 static Context_Control_overlay
@@ -248,9 +248,7 @@ unsigned32 _CPU_ISR_Get_level( void )
 {
   sigset_t old_mask;
 
-#if defined(__linux__)
   sigemptyset( &old_mask );
-#endif
   sigprocmask(SIG_BLOCK, 0, &old_mask);
 
   if (memcmp((void *)&posix_empty_mask, (void *)&old_mask, sizeof(sigset_t)))
@@ -657,6 +655,7 @@ unsigned32 _CPU_ISR_Disable_support(void)
   int status;
   sigset_t  old_mask;
 
+  sigemptyset( &old_mask );
   status = sigprocmask(SIG_BLOCK, &_CPU_Signal_mask, &old_mask);
   if ( status )
     _Internal_error_Occurred(
