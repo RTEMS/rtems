@@ -1,3 +1,7 @@
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* autotools/automake-rtems.spec.in: automake-1.9.4.
+
 2004-11-02	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Include PowerPC patch to make C++ global constructors work
