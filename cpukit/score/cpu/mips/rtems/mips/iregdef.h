@@ -328,5 +328,5 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 /* Ketan till here */
 #endif
 
-#endif /* __IREGDEF_H__ */
+#endif /* _RTEMS_MIPS_IREGDEF_H */
 

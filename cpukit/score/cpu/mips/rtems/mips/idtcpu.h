@@ -691,5 +691,5 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define CALG	$17
 #endif
 
-#endif /* _IDTCPU_H__ */
+#endif /* _RTEMS_MIPS_IDTCPU_H */
 

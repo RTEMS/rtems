@@ -279,5 +279,5 @@ extern "C" {
 }
 #endif
 
-#endif /* ! _INCLUDE_MIPS_h */
+#endif /* _RTEMS_SCORE_MIPS_H */
 /* end of include file */
