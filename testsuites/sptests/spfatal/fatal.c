@@ -57,6 +57,7 @@ rtems_unsigned32  First_Time_Through;
 void Process_case();
 
 rtems_extension Fatal_extension(
+  rtems_unsigned32 source,
   rtems_unsigned32 error,
   boolean          is_internal
 )
