@@ -2,21 +2,22 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.5
-%define srcvers	1.5
+%define rpmvers 1.6
+%define srcvers	1.6
+%define amvers  1.6
 
-%define _defaultbuildroot	/var/tmp/%{name}-%{srcvers}-root
-%define _prefix			/opt/rtems
+%define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
+%define _prefix			@prefix@
 %define _name			automake
 
 %if "%{_prefix}" != "/usr"
 %define name			%{_name}-rtems
-%define requirements		autoconf-rtems
+%define requirements		autoconf-rtems >= 2.52
 %define _infodir		%{_prefix}/info
 %define _mandir			%{_prefix}/man
 %else
 %define name			%{_name}
-%define requirements		autoconf
+%define requirements		autoconf >= 2.52
 %endif
 
 Vendor:       http://www.rtems.com
@@ -32,11 +33,11 @@ Release:      0
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
-BuildPreReq:  autoconf perl help2man
+BuildPreReq:  %{requirements} perl help2man
 Requires:     %{requirements}
 PreReq:	      /sbin/install-info
 
-Source: automake-%{srcvers}.tar.bz2
+Source: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.gz
 
 %description
 Automake is a tool for automatically generating "Makefile.in"s from
@@ -56,8 +57,10 @@ make
 %makeinstall
 
 install -m 755 -d $RPM_BUILD_ROOT/%{_mandir}/man1
-for i in $RPM_BUILD_ROOT%{_bindir}/*; do
-  perllibdir=$RPM_BUILD_ROOT/%{_datadir}/automake \
+for i in $RPM_BUILD_ROOT%{_bindir}/aclocal \
+  $RPM_BUILD_ROOT%{_bindir}/automake ; 
+do
+  perllibdir=$RPM_BUILD_ROOT/%{_datadir}/automake-%{amvers} \
   help2man $i > `basename $i`.1
   install -m 644 `basename $i`.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 done
@@ -79,9 +82,10 @@ fi
 
 %files
 %doc AUTHORS COPYING ChangeLog NEWS README THANKS
-%{_bindir}/aclocal
-%{_bindir}/automake
+%{_bindir}/aclocal*
+%{_bindir}/automake*
 %doc %{_infodir}/automake.info*.gz
 %doc %{_mandir}/man?/*
-%{_datadir}/aclocal
-%{_datadir}/automake
+%{_datadir}/aclocal-%{amvers}
+%{_datadir}/automake-%{amvers}
+
