@@ -440,6 +440,20 @@ typedef struct {
   unsigned32   clicks_per_usec;	       /* Timer clicks per microsecond */
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
 
+#if (defined(ppc403) || defined(mpc860) || defined(mpc821))
+  unsigned32   serial_per_sec;	       /* Serial clocks per second */
+  boolean      serial_external_clock;
+  boolean      serial_xon_xoff;
+  boolean      serial_cts_rts;
+  unsigned32   serial_rate;
+  unsigned32   timer_average_overhead; /* Average overhead of timer in ticks */
+  unsigned32   timer_least_valid;      /* Least valid number from timer      */
+  boolean      timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
+#endif
+
+#if (defined(mpc860) || defined(mpc821))
+  unsigned32   clock_speed;            /* Speed of CPU in Hz */
+#endif
 }   rtems_cpu_table;
 
 /*

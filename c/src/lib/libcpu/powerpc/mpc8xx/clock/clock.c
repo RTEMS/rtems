@@ -45,9 +45,12 @@
 
 volatile rtems_unsigned32 Clock_driver_ticks;
 extern volatile m8xx_t m8xx;
+extern int BSP_get_clock_irq_level();
+extern int BSP_connect_clock_handler(rtems_isr_entry);
+extern int BSP_disconnect_clock_handler();
 
 void Clock_exit( void );
- 
+
 /*
  * These are set by clock driver during its init
  */
@@ -65,62 +68,42 @@ rtems_isr Clock_isr(rtems_vector_number vector)
   rtems_clock_tick();
 }
 
-void Install_clock(rtems_isr_entry clock_isr)
+void clockOn(void* unused)
 {
-#ifdef EPPCBUG_SMC1
-  extern unsigned32 simask_copy;
-#endif /* EPPCBUG_SMC1 */
-  
-  rtems_isr_entry previous_isr;
+  unsigned desiredLevel;
   rtems_unsigned32 pit_value;
-  
-  Clock_driver_ticks = 0;
   
   pit_value = (rtems_configuration_get_microseconds_per_tick() *
                rtems_cpu_configuration_get_clicks_per_usec()) - 1 ;
   
   if (pit_value > 0xffff) {           /* pit is only 16 bits long */
     rtems_fatal_error_occurred(-1);
-  }  
-
-  /*
-   * initialize the interval here
-   * First tick is set to right amount of time in the future
-   * Future ticks will be incremented over last value set
-   * in order to provide consistent clicks in the face of
-   * interrupt overhead
-   */
-  
-  rtems_interrupt_catch(clock_isr, PPC_IRQ_LVL0, &previous_isr);
-  
+  }
   m8xx.sccr &= ~(1<<24);
   m8xx.pitc = pit_value;
-  
+
+  desiredLevel = BSP_get_clock_irq_level();
   /* set PIT irq level, enable PIT, PIT interrupts */
   /*  and clear int. status */
-  m8xx.piscr = M8xx_PISCR_PIRQ(0) |
-    M8xx_PISCR_PTE | M8xx_PISCR_PS | M8xx_PISCR_PIE; 
-    
-#ifdef EPPCBUG_SMC1
-  simask_copy = m8xx.simask | M8xx_SIMASK_LVM0;
-#endif /* EPPCBUG_SMC1 */
-  m8xx.simask |= M8xx_SIMASK_LVM0;
-  atexit(Clock_exit);
+  m8xx.piscr = M8xx_PISCR_PIRQ(desiredLevel) |
+    M8xx_PISCR_PTE | M8xx_PISCR_PS | M8xx_PISCR_PIE;
 }
-
+/*
+ * Called via atexit()
+ * Remove the clock interrupt handler by setting handler to NULL
+ */
 void
-ReInstall_clock(rtems_isr_entry new_clock_isr)
+clockOff(void* unused)
 {
-  rtems_isr_entry previous_isr;
-  rtems_unsigned32 isrlevel = 0;
-  
-  rtems_interrupt_disable(isrlevel);
-  
-  rtems_interrupt_catch(new_clock_isr, PPC_IRQ_LVL0, &previous_isr);
-  
-  rtems_interrupt_enable(isrlevel);
+  /* disable PIT and PIT interrupts */
+  m8xx.piscr &= ~(M8xx_PISCR_PTE | M8xx_PISCR_PIE); 
 }
 
+int clockIsOn(void* unused)
+{
+  if (m8xx.piscr & M8xx_PISCR_PIE) return 1;
+  return 0;
+}
 
 /*
  * Called via atexit()
@@ -129,11 +112,23 @@ ReInstall_clock(rtems_isr_entry new_clock_isr)
 void
 Clock_exit(void)
 {
-  /* disable PIT and PIT interrupts */
-  m8xx.piscr &= ~(M8xx_PISCR_PTE | M8xx_PISCR_PIE); 
-  
-  (void) set_vector(0, PPC_IRQ_LVL0, 1);
+  (void) BSP_disconnect_clock_handler ();
 }
+
+void Install_clock(rtems_isr_entry clock_isr)
+{
+  Clock_driver_ticks = 0;
+
+  BSP_connect_clock_handler (clock_isr);
+  atexit(Clock_exit);
+}
+
+void
+ReInstall_clock(rtems_isr_entry new_clock_isr)
+{
+  BSP_connect_clock_handler (new_clock_isr);
+}
+
 
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
@@ -142,7 +137,7 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+  
   /*
    * make major/minor avail to others such as shared memory driver
    */

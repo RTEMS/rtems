@@ -1,3 +1,16 @@
+2001-03-30	Eric Valette <valette@crf.canon.fr>
+
+	* mpc8xx/exceptions/.cvsignore, mpc8xx/exceptions/Makefile.am,
+	mpc8xx/exceptions/asm_utils.S, mpc8xx/exceptions/raw_exception.c,
+	mpc8xx/exceptions/raw_exception.h: New files.
+	* configure.in, mpc6xx/mmu/bat.h, mpc8xx/Makefile.am,
+	mpc8xx/clock/clock.c,
+	mpc8xx/console-generic/console-generic.c,
+	mpc8xx/include/mpc8xx.h, mpc8xx/mmu/mmu.c,
+	new_exception_processing/cpu.h, shared/include/byteorder.h,
+	wrapup/Makefile.am:  This is conversion of the
+	mpc8xx CPU to the "new exception processing model."
+
 2001-02-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc505/ictrl/Makefile.am, mpc6xx/clock/Makefile.am,

@@ -25,7 +25,7 @@
 
 #include <libcpu/mmu.h>
 #include <libcpu/pgtable.h>
-#include <bsp/consoleIo.h>
+#include <bspIo.h>
 
 #define IO_PAGE	(_PAGE_NO_CACHE | _PAGE_GUARDED | _PAGE_RW)
 

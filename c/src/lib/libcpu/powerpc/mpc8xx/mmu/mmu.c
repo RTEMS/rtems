@@ -115,7 +115,7 @@ void mmu_init( void )
   /* 
    * Turn on address translation by setting MSR[IR] and MSR[DR].
    */ 
-  _CPU_MSR_Value( reg1 );
+  _CPU_MSR_GET( reg1 );
   reg1 |= PPC_MSR_IR | PPC_MSR_DR;
   _CPU_MSR_SET( reg1 );
 }

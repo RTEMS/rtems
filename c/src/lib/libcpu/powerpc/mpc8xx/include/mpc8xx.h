@@ -649,9 +649,9 @@ typedef struct m8xxSPIparms_ {
 *************************************************************************
 */
 typedef struct m8xxBufferDescriptor_ {
-  rtems_unsigned16        status;
-  rtems_unsigned16        length;
-  volatile void           *buffer;
+  volatile rtems_unsigned16        status;
+  rtems_unsigned16        	   length;
+  volatile void           	   *buffer;
 } m8xxBufferDescriptor_t;
 
 /*

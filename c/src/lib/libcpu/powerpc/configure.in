@@ -37,7 +37,9 @@ AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "mpc750" \
 ## there are no 601 or 602 BSPs currently.  The 505 BSPs are in user land.
 AM_CONDITIONAL(new_exception_processing, \
 test "$RTEMS_CPU_MODEL" = "mpc750" || \
-test "$RTEMS_CPU_MODEL" = "mpc604")
+test "$RTEMS_CPU_MODEL" = "mpc604" || \
+test "$RTEMS_CPU_MODEL" = "mpc8xx" || \
+test "$RTEMS_CPU_MODEL" = "mpc860")
 
 ## The goal is to get rid of the old exception processing code but
 ## but all BSPs in the distribution must be migrated to the new model
@@ -45,8 +47,7 @@ test "$RTEMS_CPU_MODEL" = "mpc604")
 AM_CONDITIONAL(old_exception_processing, \
 test "$RTEMS_CPU_MODEL" = "ppc403" || \
 test "$RTEMS_CPU_MODEL" = "mpc505" || \
-test "$RTEMS_CPU_MODEL" = "ppc603e" || \
-test "$RTEMS_CPU_MODEL" = "mpc8xx" \
+test "$RTEMS_CPU_MODEL" = "ppc603e" \
 )
 
 ## test on CPU type
@@ -70,10 +71,10 @@ mpc8xx/Makefile
 mpc8xx/clock/Makefile
 mpc8xx/console-generic/Makefile
 mpc8xx/cpm/Makefile
+mpc8xx/exceptions/Makefile
 mpc8xx/include/Makefile
 mpc8xx/mmu/Makefile
 mpc8xx/timer/Makefile
-mpc8xx/vectors/Makefile
 ppc403/Makefile
 ppc403/clock/Makefile
 ppc403/console/Makefile

@@ -53,15 +53,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
+#include <bsp/irq.h>
+#include <bspIo.h>   /* for printk */
 
 extern rtems_cpu_table Cpu_table;
 
 /* BSP supplied routine */
 extern int mbx8xx_console_get_configuration();
-
-#ifdef EPPCBUG_SMC1
-extern unsigned32 simask_copy;
-#endif
 
 /*
  * Interrupt-driven input buffer
@@ -88,9 +86,6 @@ static char  brg_used[4];
 /* Used to track termios private data for callbacks */
 struct rtems_termios_tty *ttyp[NUM_PORTS];
 
-/* Used to record previous ISR */
-static rtems_isr_entry old_handler[NUM_PORTS];
-
 /*
  * Device-specific routines
  */
@@ -99,12 +94,12 @@ static unsigned char m8xx_get_brg_clk(int);
 void m8xx_console_reserve_resources(rtems_configuration_table *);
 static int m8xx_smc_set_attributes(int, const struct termios*);
 static int m8xx_scc_set_attributes(int, const struct termios*);
-static rtems_isr m8xx_smc1_interrupt_handler(rtems_vector_number);
-static rtems_isr m8xx_smc2_interrupt_handler(rtems_vector_number);
-static rtems_isr m8xx_scc2_interrupt_handler(rtems_vector_number);
+static void m8xx_smc1_interrupt_handler(void);
+static void m8xx_smc2_interrupt_handler(void);
+static void m8xx_scc2_interrupt_handler(void);
 #if defined(mpc860)
-static rtems_isr m8xx_scc3_interrupt_handler(rtems_vector_number);
-static rtems_isr m8xx_scc4_interrupt_handler(rtems_vector_number);
+static void m8xx_scc3_interrupt_handler(void);
+static void m8xx_scc4_interrupt_handler(void);
 #endif
 
 /*
@@ -387,8 +382,7 @@ m8xx_uart_setAttributes(
 /*
  * Interrupt handlers
  */
-static rtems_isr
-m8xx_scc2_interrupt_handler (rtems_vector_number v)
+static void m8xx_scc2_interrupt_handler ()
 {
   int nb_overflow;
 
@@ -425,13 +419,12 @@ m8xx_scc2_interrupt_handler (rtems_vector_number v)
         (void *)ttyp[SCC2_MINOR],
         (int)TxBd[SCC2_MINOR]->length);
   }
-  m8xx.cisr = 1UL << 29;  /* Clear SCC2 interrupt-in-service bit */
 }
 
 
 #ifdef mpc860
-static rtems_isr
-m8xx_scc3_interrupt_handler (rtems_vector_number v)
+static void
+m8xx_scc3_interrupt_handler (void)
 {
   int nb_overflow;
 
@@ -468,12 +461,11 @@ m8xx_scc3_interrupt_handler (rtems_vector_number v)
         (void *)ttyp[SCC3_MINOR],
         (int)TxBd[SCC3_MINOR]->length);
   }
-  m8xx.cisr = 1UL << 28;  /* Clear SCC3 interrupt-in-service bit */
 }
 
 
-static rtems_isr
-m8xx_scc4_interrupt_handler (rtems_vector_number v)
+static void
+m8xx_scc4_interrupt_handler (void)
 {
   int nb_overflow;
 
@@ -510,12 +502,11 @@ m8xx_scc4_interrupt_handler (rtems_vector_number v)
         (void *)ttyp[SCC4_MINOR],
         (int)TxBd[SCC4_MINOR]->length);
   }
-  m8xx.cisr = 1UL << 27;  /* Clear SCC4 interrupt-in-service bit */
 }
 #endif
 
-static rtems_isr
-m8xx_smc1_interrupt_handler (rtems_vector_number v)
+static void
+m8xx_smc1_interrupt_handler (void)
 {
   int nb_overflow;
 
@@ -552,12 +543,11 @@ m8xx_smc1_interrupt_handler (rtems_vector_number v)
         (void *)ttyp[SMC1_MINOR],
         (int)TxBd[SMC1_MINOR]->length);
   }
-  m8xx.cisr = 1UL << 4;  /* Clear SMC1 interrupt-in-service bit */
 }
 
 
-static rtems_isr
-m8xx_smc2_interrupt_handler (rtems_vector_number v)
+static void
+m8xx_smc2_interrupt_handler (void)
 {
   int nb_overflow;
 
@@ -594,16 +584,77 @@ m8xx_smc2_interrupt_handler (rtems_vector_number v)
         (void *)ttyp[SMC2_MINOR],
         (int)TxBd[SMC2_MINOR]->length);
   }
-  m8xx.cisr = 1UL << 3;  /* Clear SMC2 interrupt-in-service bit */
 }
 
+void m8xx_scc_enable(const rtems_irq_connect_data* ptr)
+{
+  volatile m8xxSCCRegisters_t *sccregs = 0;
+  switch (ptr->name) {
+#if defined(mpc860)
+  case BSP_CPM_IRQ_SCC4 :
+    sccregs = &m8xx.scc4;
+    break;
+  case BSP_CPM_IRQ_SCC3 :
+    sccregs = &m8xx.scc3;
+    break;
+#endif
+  case BSP_CPM_IRQ_SCC2 :
+    sccregs = &m8xx.scc2;
+    break;
+  case BSP_CPM_IRQ_SCC1 :
+    sccregs = &m8xx.scc1;
+    break;
+  default:
+    break;
+  }
+  sccregs->sccm = 3;
+}
 
+void m8xx_scc_disable(const rtems_irq_connect_data* ptr)
+{
+  volatile m8xxSCCRegisters_t *sccregs = 0;
+  switch (ptr->name) {
+#if defined(mpc860)
+  case BSP_CPM_IRQ_SCC4 :
+    sccregs = &m8xx.scc4;
+    break;
+  case BSP_CPM_IRQ_SCC3 :
+    sccregs = &m8xx.scc3;
+    break;
+#endif
+  case BSP_CPM_IRQ_SCC2 :
+    sccregs = &m8xx.scc2;
+    break;
+  case BSP_CPM_IRQ_SCC1 :
+    sccregs = &m8xx.scc1;
+    break;
+  default:
+    break;
+  }
+  sccregs->sccm &= (~3);
+}
+
+int m8xx_scc_isOn(const rtems_irq_connect_data* ptr)
+{
+ return BSP_irq_enabled_at_cpm (ptr->name);
+}
+
+static rtems_irq_connect_data consoleIrqData =
+{
+  BSP_CPM_IRQ_SCC2,
+  (rtems_irq_hdl)m8xx_scc2_interrupt_handler,
+  (rtems_irq_enable) m8xx_scc_enable,
+  (rtems_irq_disable) m8xx_scc_disable,
+  (rtems_irq_is_enabled) m8xx_scc_isOn
+};
+	
 void
 m8xx_uart_scc_initialize (int minor)
 {
   unsigned char brg;
   volatile m8xxSCCparms_t *sccparms = 0;
   volatile m8xxSCCRegisters_t *sccregs = 0;
+  int res;
 
   /*
    * Check that minor number is valid
@@ -777,37 +828,63 @@ m8xx_uart_scc_initialize (int minor)
   if ( (mbx8xx_console_get_configuration() & 0x06) == 0x02 ) {
     switch (minor) {
       case SCC2_MINOR:
-        rtems_interrupt_catch (m8xx_scc2_interrupt_handler,
-                               PPC_IRQ_CPM_SCC2,
-                               &old_handler[minor]);
-
-        sccregs->sccm = 3;            /* Enable SCC2 Rx & Tx interrupts */
-        m8xx.cimr |= 1UL <<  29;      /* Enable SCC2 interrupts */
         break;
 
 #ifdef mpc860
-      case SCC3_MINOR:
-        rtems_interrupt_catch (m8xx_scc3_interrupt_handler,
-                               PPC_IRQ_CPM_SCC3,
-                               &old_handler[minor]);
-
-        sccregs->sccm = 3;            /* Enable SCC2 Rx & Tx interrupts */
-        m8xx.cimr |= 1UL <<  28;      /* Enable SCC2 interrupts */
-        break;
+    case SCC3_MINOR:
+      consoleIrqData.name = BSP_CPM_IRQ_SCC3;
+      consoleIrqData.hdl = m8xx_scc3_interrupt_handler;
+      break;
       
-      case SCC4_MINOR:
-        rtems_interrupt_catch (m8xx_scc4_interrupt_handler,
-                               PPC_IRQ_CPM_SCC4,
-                               &old_handler[minor]);
-
-        sccregs->sccm = 3;            /* Enable SCC2 Rx & Tx interrupts */
-        m8xx.cimr |= 1UL <<  27;      /* Enable SCC2 interrupts */
-        break;
+    case SCC4_MINOR:
+      consoleIrqData.name = BSP_CPM_IRQ_SCC4;
+      consoleIrqData.hdl = m8xx_scc4_interrupt_handler;
+      break;
 #endif /* mpc860 */
+    }
+    if (!BSP_install_rtems_irq_handler (&consoleIrqData)) {
+        printk("Unable to connect SCC Irq handler\n");
+	rtems_fatal_error_occurred(1);
     }
   }
 }
 
+void m8xx_smc_enable(const rtems_irq_connect_data* ptr)
+{
+  volatile m8xxSMCRegisters_t *smcregs = 0;
+  switch (ptr->name) {
+  case BSP_CPM_IRQ_SMC1 :
+    smcregs = &m8xx.smc1;
+    break;
+  case BSP_CPM_IRQ_SMC2_OR_PIP :
+    smcregs = &m8xx.smc2;
+    break;
+  default:
+    break;
+  }
+  smcregs->smcm = 3;
+}
+
+void m8xx_smc_disable(const rtems_irq_connect_data* ptr)
+{
+  volatile m8xxSMCRegisters_t *smcregs = 0;
+  switch (ptr->name) {
+  case BSP_CPM_IRQ_SMC1 :
+    smcregs = &m8xx.smc1;
+    break;
+  case BSP_CPM_IRQ_SMC2_OR_PIP :
+    smcregs = &m8xx.smc2;
+    break;
+  default:
+    break;
+  }
+  smcregs->smcm &= (~3);
+}
+
+int m8xx_smc_isOn(const rtems_irq_connect_data* ptr)
+{
+ return BSP_irq_enabled_at_cpm (ptr->name);
+}
 
 void
 m8xx_uart_smc_initialize (int minor)
@@ -923,24 +1000,23 @@ m8xx_uart_smc_initialize (int minor)
    */
   smcregs->smcmr |= M8xx_SMCMR_TEN | M8xx_SMCMR_REN;
   if ( (mbx8xx_console_get_configuration() & 0x06) == 0x02 ) {
+    consoleIrqData.on = m8xx_smc_enable;
+    consoleIrqData.off = m8xx_smc_disable;
+    consoleIrqData.isOn = m8xx_smc_isOn;
     switch (minor) {
-      case SMC1_MINOR:
-        rtems_interrupt_catch (m8xx_smc1_interrupt_handler,
-                                    PPC_IRQ_CPM_SMC1,
-                                    &old_handler[minor]);
-
-        smcregs->smcm = 3;            /* Enable SMC1 Rx & Tx interrupts */
-        m8xx.cimr |= 1UL <<  4;       /* Enable SMC1 interrupts */
-        break;
+    	case SMC1_MINOR:
+	  consoleIrqData.name = BSP_CPM_IRQ_SMC1;
+	  consoleIrqData.hdl  = m8xx_smc1_interrupt_handler;
+	  break;
       
-      case SMC2_MINOR:
-        rtems_interrupt_catch (m8xx_smc2_interrupt_handler,
-                                    PPC_IRQ_CPM_SMC2,
-                                    &old_handler[minor]);
-
-        smcregs->smcm = 3;            /* Enable SMC2 Rx & Tx interrupts */
-        m8xx.cimr |= 1UL <<  3;       /* Enable SMC2 interrupts */
-        break;
+    	case SMC2_MINOR:
+	  consoleIrqData.name = BSP_CPM_IRQ_SMC2_OR_PIP;
+	  consoleIrqData.hdl  = m8xx_smc2_interrupt_handler;
+	  break;
+    }
+    if (!BSP_install_rtems_irq_handler (&consoleIrqData)) {
+        printk("Unable to connect SMC Irq handler\n");
+	rtems_fatal_error_occurred(1);
     }
   }
 }
@@ -956,21 +1032,6 @@ m8xx_uart_initialize(void)
   }
 }
 
-
-void 
-m8xx_uart_interrupts_initialize(void)
-{
-#ifdef mpc860
-  m8xx.cicr = 0x00E43F80;           /* SCaP=SCC1, SCbP=SCC2, SCcP=SCC3,
-                                       SCdP=SCC4, IRL=1, HP=PC15, IEN=1 */
-#else
-  m8xx.cicr = 0x00043F80;           /* SCaP=SCC1, SCbP=SCC2, IRL=1, HP=PC15, IEN=1 */
-#endif
-  m8xx.simask |= M8xx_SIMASK_LVM1;  /* Enable level interrupts */
-#ifdef EPPCBUG_SMC1
-  simask_copy = m8xx.simask;
-#endif
-}
 
 
 int

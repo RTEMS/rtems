@@ -19,10 +19,6 @@
 #ifndef _PPC_BYTEORDER_H
 #define _PPC_BYTEORDER_H
 
-/*
- *  $Id$
- */
-
 #ifdef __GNUC__
 
 extern __inline__ unsigned ld_le16(volatile unsigned short *addr)
