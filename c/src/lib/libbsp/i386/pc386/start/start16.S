@@ -54,6 +54,11 @@ _start16:
 
 #if defined(RTEMS_VIDEO_80x50)
 	
+	movl	$0x0040,%eax	# use 32 bit constant to ensure 16 MSB=0
+	mov     %ax,%es
+	movw	%es:0x4a, %ax	# get 16 bit number of columns 
+	cmpw	$0, %ax         # or 0 if no video adapter
+	je	1f              # if no video, skip touching it
 	/*---------------------------------------------------------------------+
 	| Switch VGA video to 80 lines x 50 columns mode. Has to be done before
 	| turning protected mode on since it uses BIOS int 10h (video) services.
@@ -71,6 +76,7 @@ _start16:
 	movw	$0x0007, %cx
 	int	$0x10
 
++1:
 #endif /* RTEMS_VIDEO_80x50 */
 
 	/*---------------------------------------------------------------------+
