@@ -2,9 +2,7 @@
 ## $Id$
 ##
 
-
-LIBNAME = libxdr
-LIB = $(ARCH)/$(LIBNAME).a
+LIB = $(ARCH)/libxdr.a
 
 include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
