@@ -58,7 +58,7 @@ $(ARCH)/rtems-cpu.rel: $(OBJS)
 
 all:	${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
 
-preinstall: $(PROJECT_INCLUDE)/rtems/score/targopts.h \
+preinstall: $(ARCH) $(PROJECT_INCLUDE)/rtems/score/targopts.h \
             ${PROJECT_RELEASE}/lib/bsp_specs
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 # we will share the basic cpu file

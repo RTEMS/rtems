@@ -16,11 +16,11 @@ C_PIECES=cpu rtems
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=$(srcdir)/cpu.h $(srcdir)/a29ktypes.h
+H_FILES=$(srcdir)/cpu.h $(srcdir)/a29k.h $(srcdir)/a29ktypes.h
 
 # H_FILES that get installed externally
-# a29k.h is handled separately
-EXTERNAL_H_FILES = $(srcdir)/asm.h $(srcdir)/amd.ah $(srcdir)/pswmacro.ah $(srcdir)/register.ah
+EXTERNAL_H_FILES = $(srcdir)/asm.h $(srcdir)/amd.ah \
+      $(srcdir)/pswmacro.ah $(srcdir)/register.ah
 
 # Assembly source names, if any, go here -- minus the .s
 #  Normally cpu_asm and rtems are assembly files
@@ -65,18 +65,12 @@ $(ARCH)/rtems-cpu.rel: $(OBJS)
 # Install the program(s), appending _g or _p as appropriate.
 # for include files, just use $(INSTALL)
 
-preinstall: $(PROJECT_INCLUDE)/rtems/score/a29k.h \
+preinstall: $(ARCH) \
             $(PROJECT_INCLUDE)/rtems/score/targopts.h \
             ${PROJECT_RELEASE}/lib/bsp_specs
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 # we will share the basic cpu file
 	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
-
-$(PROJECT_INCLUDE)/rtems/score/a29k.h: a29k.h
-	 $(SED) -e 's?REPLACE_THIS_WITH_THE_CPU_MODEL?$(RTEMS_CPU_MODEL)?' \
-	        -e 's?REPLACE_THIS_WITH_THE_BSP?$(RTEMS_BSP)?' \
-      < $< >$(ARCH)/a29k.h.tmp
-	$(INSTALL) -m 444 $(ARCH)/a29k.h.tmp $@
 
 $(PROJECT_INCLUDE)/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
 	$(INSTALL) -m 444 $(ARCH)/targopts.h-tmp $@

@@ -15,7 +15,7 @@ C_PIECES=cpu
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=$(srcdir)/cpu.h $(srcdir)/i386types.h
+H_FILES=$(srcdir)/cpu.h $(srcdir)/i386.h $(srcdir)/i386types.h
 
 # H_FILES that get installed externally
 # i386.h is handled specially
@@ -63,18 +63,12 @@ all:	${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
 # for include files, just use $(INSTALL)
 install:  all
 
-preinstall: $(ARCH) $(PROJECT_INCLUDE)/rtems/score/i386.h \
+preinstall: $(ARCH) \
             $(PROJECT_INCLUDE)/rtems/score/targopts.h \
             ${PROJECT_RELEASE}/lib/bsp_specs
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 # we will share the basic cpu file
 	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
-
-$(PROJECT_INCLUDE)/rtems/score/i386.h: i386.h
-	$(SED) -e 's?REPLACE_THIS_WITH_THE_CPU_MODEL?$(RTEMS_CPU_MODEL)?' \
-	        -e 's?REPLACE_THIS_WITH_THE_BSP?$(RTEMS_BSP)?' \
-      < $< >$(ARCH)/i386.h-tmp
-	$(INSTALL) -m 444 $(ARCH)/i386.h-tmp $@
 
 $(PROJECT_INCLUDE)/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
 	$(INSTALL) -m 444 $(ARCH)/targopts.h-tmp $@

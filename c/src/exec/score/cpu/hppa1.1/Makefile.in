@@ -62,9 +62,9 @@ $(ARCH)/offsets.h: $(ARCH) cpu.h $(PROJECT_RELEASE)/bin/genoffsets
 $(ARCH)/rtems-cpu.rel: $(OBJS)
 	$(make-rel)
 
-all:  ${ARCH} install-headers $(SRCS) $(ARCH)/offsets.h preinstall $(RELS)
+all:  ${ARCH} install-headers preinstall $(RELS)
 
-preinstall:
+preinstall: $(ARCH) $(SRCS) $(ARCH)/offsets.h
 	$(INSTALL) -m 444 $(ARCH)/offsets.h $(PROJECT_INCLUDE)/rtems/score
 
 install-headers: $(ARCH) $(PROJECT_INCLUDE)/rtems/score/targopts.h \

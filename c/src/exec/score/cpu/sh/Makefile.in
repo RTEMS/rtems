@@ -24,7 +24,6 @@ H_FILES= \
 	$(srcdir)/iosh7030.h
 
 # H_FILES that get installed externally
-# sh.h is handled separately
 EXTERNAL_H_FILES = \
 	$(srcdir)/asm.h
 
@@ -71,7 +70,7 @@ $(ARCH)/rtems-cpu.rel: $(OBJS)
 # for include files, just use $(INSTALL)
 install:  all
 
-preinstall: $(PROJECT_INCLUDE)/rtems/score/targopts.h \
+preinstall: $(ARCH) $(PROJECT_INCLUDE)/rtems/score/targopts.h \
             ${PROJECT_RELEASE}/lib/bsp_specs
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 # we will share the basic cpu file

@@ -16,10 +16,9 @@ C_PIECES=cpu
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=$(srcdir)/cpu.h $(srcdir)/ppctypes.h
+H_FILES=$(srcdir)/cpu.h $(srcdir)/ppc.h $(srcdir)/ppctypes.h
 
 # H_FILES that get installed externally
-# ppc.h is handled separately
 EXTERNAL_H_FILES = $(srcdir)/asm.h
 
 # Assembly source names, if any, go here -- minus the .s
@@ -67,7 +66,7 @@ $(ARCH)/cpu_asm.o: irq_stub.s
 # for include files, just use $(INSTALL)
 install:  all
 
-preinstall: $(PROJECT_INCLUDE)/rtems/score/ppc.h \
+preinstall: $(ARCH) \
             $(PROJECT_INCLUDE)/rtems/score/targopts.h \
             ${PROJECT_RELEASE}/lib/bsp_specs
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
@@ -75,12 +74,6 @@ preinstall: $(PROJECT_INCLUDE)/rtems/score/ppc.h \
 	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
 # make a link in case we are not compiling in the source directory
 	test -f irq_stub.s || $(LN) -s $(srcdir)/irq_stub.s irq_stub.s
-
-$(PROJECT_INCLUDE)/rtems/score/ppc.h: ppc.h
-	 $(SED) -e 's?REPLACE_THIS_WITH_THE_CPU_MODEL?$(RTEMS_CPU_MODEL)?' \
-	        -e 's?REPLACE_THIS_WITH_THE_BSP?$(RTEMS_BSP)?' \
-      < $< >$(ARCH)/ppc.h.tmp
-	$(INSTALL) -m 444 $(ARCH)/ppc.h.tmp $@
 
 $(PROJECT_INCLUDE)/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
 	$(INSTALL) -m 444 $(ARCH)/targopts.h-tmp $@
