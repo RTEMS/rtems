@@ -1,3 +1,8 @@
+2002-07-16	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/object.inl: Corrected typos in 
+	_Objects_Open, _Objects_Close, and _Objects_Namespace_remove.
+
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/score/object.inl: Corrected implementation of
