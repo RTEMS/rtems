@@ -261,6 +261,10 @@ cs8900_hardware_init (cs8900_device *cs)
   rtems_task_wake_after (TOD_MILLISECONDS_TO_TICKS (20));
   
   status = io_pp_get_reg_16 (dev, CS8900_PP_SelfST);
+  if (status == 0) {
+      printf("Reading status register again\n");
+      status = io_pp_get_reg_16 (dev, CS8900_PP_SelfST);
+  }
     
   if (((status & CS8900_SELF_STATUS_INITD) == 0) ||
       ((status & CS8900_SELF_STATUS_INITD) &&
