@@ -20,7 +20,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-all-local: $(ARCH) $(OBJS) $(PGM)
+all-local: $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
