@@ -721,6 +721,10 @@ void BuildTexinfoNodes( void )
     
       strcpy( ChapterName, NodeName );
 
+    } else if ( NodeNameIncludesChapter ) {
+
+      sprintf( Buffer, "%s %s", ChapterName, NodeName );
+      strcpy( NodeName, Buffer );
     }
 
     /*
@@ -828,9 +832,12 @@ continue_menu_loop:
           
         if ( up_node->level == (line->level - 1) ) { 
           LineCopySectionName( up_node, Buffer );
-          if (NodeNameIncludesChapter)
-            sprintf( UpNodeName, "%s %s", ChapterName, Buffer );
-          else
+          if (NodeNameIncludesChapter) {
+            if (!strcmp(ChapterName, Buffer))
+              sprintf( UpNodeName, "%s", Buffer );
+            else
+              sprintf( UpNodeName, "%s %s", ChapterName, Buffer );
+          } else
             sprintf( UpNodeName, "%s", Buffer );
           break;
         }
@@ -853,14 +860,25 @@ continue_menu_loop:
 #endif
 
     /* node_line was previously inserted */
-    sprintf(
-      node_line->Contents,
-      "@node %s, %s, %s, %s",
-      NodeName,
-      NextNodeName,
-      PreviousNodeName,
-      UpNodeName
-    );
+    if (!NodeNameIncludesChapter) {
+      sprintf(
+        node_line->Contents,
+        "@node %s, %s, %s, %s",
+        NodeName,
+        NextNodeName,
+        PreviousNodeName,
+        UpNodeName
+      );
+    } else {
+      sprintf(
+        node_line->Contents,
+        "@node %s, %s, %s, %s",
+        NodeName,
+        NextNodeName,
+        PreviousNodeName,
+        UpNodeName
+      );
+    }
 
     strcpy( PreviousNodeName, NodeName );
 
