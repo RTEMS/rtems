@@ -1,3 +1,31 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/timesys.h, tm01/system.h, tm01/task1.c, tm01/tm01.doc,
+	tm02/system.h, tm02/task1.c, tm02/tm02.doc, tm03/system.h,
+	tm03/task1.c, tm03/tm03.doc, tm04/system.h, tm04/task1.c,
+	tm04/tm04.doc, tm05/system.h, tm05/task1.c, tm05/tm05.doc,
+	tm06/system.h, tm06/task1.c, tm06/tm06.doc, tm07/system.h,
+	tm07/task1.c, tm07/tm07.doc, tm08/system.h, tm08/task1.c,
+	tm08/tm08.doc, tm09/system.h, tm09/task1.c, tm09/tm09.doc,
+	tm10/system.h, tm10/task1.c, tm10/tm10.doc, tm11/system.h,
+	tm11/task1.c, tm11/tm11.doc, tm12/system.h, tm12/task1.c,
+	tm12/tm12.doc, tm13/system.h, tm13/task1.c, tm13/tm13.doc,
+	tm14/system.h, tm14/task1.c, tm14/tm14.doc, tm15/system.h,
+	tm15/task1.c, tm15/tm15.doc, tm16/system.h, tm16/task1.c,
+	tm16/tm16.doc, tm17/system.h, tm17/task1.c, tm17/tm17.doc,
+	tm18/system.h, tm18/task1.c, tm18/tm18.doc, tm19/system.h,
+	tm19/task1.c, tm19/tm19.doc, tm20/system.h, tm20/task1.c,
+	tm20/tm20.doc, tm21/system.h, tm21/task1.c, tm21/tm21.doc,
+	tm22/system.h, tm22/task1.c, tm22/tm22.doc, tm23/system.h,
+	tm23/task1.c, tm23/tm23.doc, tm24/system.h, tm24/task1.c,
+	tm24/tm24.doc, tm25/system.h, tm25/task1.c, tm25/tm25.doc,
+	tm26/fptest.h, tm26/system.h, tm26/task1.c, tm26/tm26.doc,
+	tm27/system.h, tm27/task1.c, tm27/tm27.doc, tm28/system.h,
+	tm28/task1.c, tm28/tm28.doc, tm29/system.h, tm29/task1.c,
+	tm29/tm29.doc, tmck/system.h, tmck/task1.c, tmck/tmck.doc,
+	tmoverhd/dumrtems.h, tmoverhd/empty.c, tmoverhd/system.h,
+	tmoverhd/testtask.c, tmoverhd/tmoverhd.doc: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
