@@ -136,7 +136,6 @@ TA3 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
 TA1 - rtems_interrupt_catch - RTEMS_INVALID_NUMBER
 TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS
 TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS
-TA1 - rtems_interrupt_catch - RTEMS_INVALID_ADDRESS
 TA1 - rtems_signal_send - RTEMS_INVALID_ID
 TA1 - rtems_signal_send - RTEMS_NOT_DEFINED
 TA1 - rtems_port_create - RTEMS_INVALID_NAME
