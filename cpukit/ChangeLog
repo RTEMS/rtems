@@ -1,3 +1,10 @@
+2004-11-10	Joel Sherrill <joel@oarcorp.com>
+
+	* include/rtems/pci.h: BSPs use the name BSP_pci_configuration not pci.
+	Also need to address that this largely duplicates
+	libbsp/powerpc/pci/pci.h but that file is not used when both are
+	included due to the same double inclusion protection.
+
 2004-11-09	Joel Sherrill <joel@OARcorp.com>
 
 	* libcsupport/include/stdint.h: Fixed name in @file.

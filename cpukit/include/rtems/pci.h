@@ -1106,42 +1106,42 @@ typedef struct {
   pci_config_access_functions*	pci_functions;
 } pci_config;
 
-extern pci_config pci;
+extern pci_config BSP_pci_configuration;
 
 extern inline int
 pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned char * val) {
-	return pci.pci_functions->read_config_byte(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->read_config_byte(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned short * val) {
-	return pci.pci_functions->read_config_word(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->read_config_word(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_read_config_dword(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned int * val) {
-	return pci.pci_functions->read_config_dword(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->read_config_dword(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_write_config_byte(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned char val) {
-	return pci.pci_functions->write_config_byte(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->write_config_byte(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned short val) {
-	return pci.pci_functions->write_config_word(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->write_config_word(bus, slot, function, where, val);
 }
 
 extern inline int
 pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char function, 
 			 unsigned char where, unsigned int val) {
-	return pci.pci_functions->write_config_dword(bus, slot, function, where, val);
+	return BSP_pci_configuration.pci_functions->write_config_dword(bus, slot, function, where, val);
 }
 
 /*
