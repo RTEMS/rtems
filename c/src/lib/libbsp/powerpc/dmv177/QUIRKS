@@ -4,6 +4,19 @@
 #  $Id$
 #
 
+JTAG and Caching
+================
+If data or code caching is enabled on certain revisions of the PPC603e,
+then the JTAG emulator interface become disfunctional.  You can not
+debug using the emulator on these chip revisions.  On certain revisions,
+it is so bad that when code caching is enabled, you can not even 
+download code reliably to the board.
+
+Caching and Peripherals
+=======================
+When caching is enabled, care must be exercised to insure that all
+peripheral addresses are still uncached.
+
 Exar 88681 Clock
 ================
 This board uses a different clock for the Exar 88681 DUART than is
