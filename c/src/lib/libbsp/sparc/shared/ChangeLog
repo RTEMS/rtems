@@ -1,3 +1,9 @@
+2000-04-23	Jiri Gaisler <jiri@gaisler.com>
+
+	* start.S: Modificatins to preserve the current CWP and adjust the
+	WIM accordingly. This improves compatibility with the remote
+	debugger and the mkprom prom-builder.
+
 2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* ChangeLog, .cvsignore, Makefile.am, bspclean.c, bspstart.c,

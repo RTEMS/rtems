@@ -199,14 +199,18 @@ SYM(hard_reset):
 
 /* Common initialisation */
 
-        set     SYM(trap_table), %g1           ! Initialize TBR
+        set     SYM(trap_table), %g1    ! Initialize TBR
         mov     %g1, %tbr
 
-        set     WIM_INIT, %g1           ! Initialize WIM
-        mov     %g1, %wim               
+        mov	%psr, %g1         	! Initialize WIM
+	add	%g1, 1, %g2
+	and	%g2, 0x7, %g2
+	set	1, %g3
+	sll	%g3, %g2, %g3
+        mov     %g3, %wim               
 
-        set     PSR_INIT, %g1
-        wr      %g1, 0x20, %psr         ! enable traps
+	or	%g1, 0x20, %g1
+        wr      %g1, %psr         ! enable traps
 
         nop
         nop
