@@ -9,6 +9,7 @@ mkbinutils_subpackage_version \
 mkbinutilspec \
 mkbspspec \
 mkgccnewlibspec \
+mkgnatnewlibspec \
 mkgdbspec \
 mkrpms \
 mkspec

@@ -44,10 +44,12 @@ Makefile
 buildall
 mkbinutilspec
 mkgccnewlibspec
+mkgnatnewlibspec
 mkgdbspec
 mkbspspec
 binutils/Makefile
 gccnewlib/Makefile
+gnatnewlib/Makefile
 gdb/Makefile
 rtems/Makefile
 )
