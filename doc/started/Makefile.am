@@ -55,7 +55,7 @@ sample.texi: sample.t tversions.texi
 	    -n "Building the GNU Debugger" $<
 
 gdb.texi: gdb.t tversions.texi
-	$(BMENU) -c -p "Application Executable" \
+	$(BMENU) -c -p "More Information on RTEMS Application Makefiles" \
 	    -u "Top" \
 	    -n "Where To Go From Here" $<
 
