@@ -27,6 +27,7 @@ CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.o}
 # so it can be easily place correctly by the compiler config file.
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 #
