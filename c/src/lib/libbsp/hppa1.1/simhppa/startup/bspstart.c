@@ -70,7 +70,7 @@ fast_idle_switch_hook(rtems_tcb *current_task,
     static rtems_unsigned32 fast_clock;
 
     /* init our params on first call */
-    if (normal_clock == ~0)
+    if (normal_clock == (rtems_unsigned32) ~0)
     {
         normal_clock = CPU_HPPA_CLICKS_PER_TICK;
         fast_clock = CPU_HPPA_CLICKS_PER_TICK / 0x100;
