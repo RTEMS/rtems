@@ -1,5 +1,10 @@
 2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am: Remove CLEANDIRS (Unused).
+	Remove DEFS (Implicitly handled by automake).
+
+2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* automake/compile.am: Remove CONFIG.CC (Unused).
 	Remove CPPFLAGS, CFLAGS, CXXFLAGS, ASFLAGS (Implicitly handled by
 	automake). Add CCAS. Use AM_*FLAGS = RTEMS_*FLAGS.

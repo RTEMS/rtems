@@ -14,8 +14,6 @@ if RTEMS_USE_GCC
 GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
 endif # RTEMS_USE_GCC
 
-DEFS = @DEFS@
-
 LINK_LIBS = $(LD_LIBS)
 
 #
@@ -115,5 +113,5 @@ AM_CXXFLAGS = $(RTEMS_CXXFLAGS)
 AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
 
 clean-local:
-	$(RM) -r o-optimize $(CLEANDIRS)
+	$(RM) -r o-optimize
 	$(RM) Depends-o-optimize.tmp
