@@ -7,7 +7,7 @@
 #include <pthread.h>
 
 #include <rtems/system.h>
-#include <rtems/score/stack.h>
+#include <rtems/posix/pthread.h>
 
 /*PAGE
  *
@@ -24,5 +24,5 @@ size_t _ada_pthread_minimum_stack_size( void )
    *  but for now, this will do.
    */ 
 
-  return STACK_MINIMUM_SIZE;
+  return PTHREAD_MINIMUM_STACK_SIZE * 2;
 }
