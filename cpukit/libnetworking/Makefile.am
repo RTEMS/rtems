@@ -173,10 +173,10 @@ libc/$(ARCH):
 	@$(mkinstalldirs) $@
 libc/$(ARCH)/%.$(OBJEXT): libc/%.c
 	${COMPILE} $(libc_CPPFLAGS) -o $@ -c $<
-libc/$(ARCH)/libc.a: $(libc_OBJS)
+libc/$(ARCH)/lib.a: $(libc_OBJS)
 	$(make-library)
 
-TMP_LIBS += libc/$(ARCH) libc/$(ARCH)/libc.a
+TMP_LIBS += libc/$(ARCH) libc/$(ARCH)/lib.a
 
 CLEANDIRS = libc/o-optimize libc/o-debug
 
@@ -231,437 +231,450 @@ endif
 
 PREINSTALL_FILES =
 
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
 if HAS_NETWORKING
-$(PROJECT_INCLUDE)/bpfilter.h: bpfilter.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/bpfilter.h: bpfilter.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bpfilter.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bpfilter.h
 
-$(PROJECT_INCLUDE)/loop.h: loop.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/loop.h: loop.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/loop.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/loop.h
 
-$(PROJECT_INCLUDE)/netdb.h: netdb.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netdb.h: netdb.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netdb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netdb.h
 
-$(PROJECT_INCLUDE)/opt_ipfw.h: opt_ipfw.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/opt_ipfw.h: opt_ipfw.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/opt_ipfw.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/opt_ipfw.h
 
-$(PROJECT_INCLUDE)/opt_mrouting.h: opt_mrouting.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/opt_mrouting.h: opt_mrouting.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/opt_mrouting.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/opt_mrouting.h
 
-$(PROJECT_INCLUDE)/opt_tcpdebug.h: opt_tcpdebug.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/opt_tcpdebug.h: opt_tcpdebug.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/opt_tcpdebug.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/opt_tcpdebug.h
 
-$(PROJECT_INCLUDE)/resolv.h: resolv.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/resolv.h: resolv.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/resolv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/resolv.h
 
-$(PROJECT_INCLUDE)/syslog.h: syslog.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/syslog.h: syslog.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/syslog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/syslog.h
 
-$(PROJECT_INCLUDE)/memory.h: memory.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/memory.h: memory.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/memory.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/memory.h
 
-$(PROJECT_INCLUDE)/arpa:
+$(PROJECT_INCLUDE)/arpa/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/arpa
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa
+	@: > $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 
-$(PROJECT_INCLUDE)/arpa/ftp.h: arpa/ftp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/arpa/ftp.h: arpa/ftp.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/ftp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/ftp.h
 
-$(PROJECT_INCLUDE)/arpa/inet.h: arpa/inet.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/arpa/inet.h: arpa/inet.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/inet.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/inet.h
 
-$(PROJECT_INCLUDE)/arpa/nameser.h: arpa/nameser.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/arpa/nameser.h: arpa/nameser.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/nameser.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/nameser.h
 
-$(PROJECT_INCLUDE)/arpa/nameser_compat.h: arpa/nameser_compat.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/arpa/nameser_compat.h: arpa/nameser_compat.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/nameser_compat.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/nameser_compat.h
 
-$(PROJECT_INCLUDE)/arpa/telnet.h: arpa/telnet.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/arpa/telnet.h: arpa/telnet.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/telnet.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/telnet.h
 
-$(PROJECT_INCLUDE)/machine:
+$(PROJECT_INCLUDE)/machine/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/machine
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine
+	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/$(dirstamp)
 
-$(PROJECT_INCLUDE)/machine/conf.h: machine/conf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/machine/conf.h: machine/conf.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/conf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/conf.h
 
-$(PROJECT_INCLUDE)/machine/cpu.h: machine/cpu.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/machine/cpu.h: machine/cpu.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/cpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/cpu.h
 
-$(PROJECT_INCLUDE)/machine/cpufunc.h: machine/cpufunc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/machine/cpufunc.h: machine/cpufunc.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/cpufunc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/cpufunc.h
 
-$(PROJECT_INCLUDE)/machine/endian.h: machine/endian.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/machine/endian.h: machine/endian.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/endian.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/endian.h
 
-$(PROJECT_INCLUDE)/machine/in_cksum.h: machine/in_cksum.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/machine/in_cksum.h: machine/in_cksum.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/in_cksum.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/in_cksum.h
 
-$(PROJECT_INCLUDE)/machine/vmparam.h: machine/vmparam.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/machine/vmparam.h: machine/vmparam.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/vmparam.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/vmparam.h
 
-$(PROJECT_INCLUDE)/net:
+$(PROJECT_INCLUDE)/net/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/net
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/net
+	@: > $(PROJECT_INCLUDE)/net/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/$(dirstamp)
 
-$(PROJECT_INCLUDE)/net/bpf.h: net/bpf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/bpf.h: net/bpf.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/bpf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/bpf.h
 
-$(PROJECT_INCLUDE)/net/ethernet.h: net/ethernet.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/ethernet.h: net/ethernet.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/ethernet.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/ethernet.h
 
-$(PROJECT_INCLUDE)/net/if.h: net/if.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/if.h: net/if.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if.h
 
-$(PROJECT_INCLUDE)/net/if_arp.h: net/if_arp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/if_arp.h: net/if_arp.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_arp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_arp.h
 
-$(PROJECT_INCLUDE)/net/if_dl.h: net/if_dl.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/if_dl.h: net/if_dl.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_dl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_dl.h
 
-$(PROJECT_INCLUDE)/net/if_llc.h: net/if_llc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/if_llc.h: net/if_llc.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_llc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_llc.h
 
-$(PROJECT_INCLUDE)/net/if_ppp.h: net/if_ppp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/if_ppp.h: net/if_ppp.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_ppp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_ppp.h
 
-$(PROJECT_INCLUDE)/net/if_types.h: net/if_types.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/if_types.h: net/if_types.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_types.h
 
-$(PROJECT_INCLUDE)/net/netisr.h: net/netisr.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/netisr.h: net/netisr.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/netisr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/netisr.h
 
-$(PROJECT_INCLUDE)/net/ppp-comp.h: net/ppp-comp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/ppp-comp.h: net/ppp-comp.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/ppp-comp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/ppp-comp.h
 
-$(PROJECT_INCLUDE)/net/ppp_defs.h: net/ppp_defs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/ppp_defs.h: net/ppp_defs.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/ppp_defs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/ppp_defs.h
 
-$(PROJECT_INCLUDE)/net/radix.h: net/radix.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/radix.h: net/radix.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/radix.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/radix.h
 
-$(PROJECT_INCLUDE)/net/raw_cb.h: net/raw_cb.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/raw_cb.h: net/raw_cb.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/raw_cb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/raw_cb.h
 
-$(PROJECT_INCLUDE)/net/route.h: net/route.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/route.h: net/route.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/route.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/route.h
 
-$(PROJECT_INCLUDE)/net/if_pppvar.h: net/if_pppvar.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/if_pppvar.h: net/if_pppvar.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_pppvar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if_pppvar.h
 
-$(PROJECT_INCLUDE)/net/pppcompress.h: net/pppcompress.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/net/pppcompress.h: net/pppcompress.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/pppcompress.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/pppcompress.h
 
-$(PROJECT_INCLUDE)/netinet:
+$(PROJECT_INCLUDE)/netinet/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/netinet
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet
+	@: > $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 
-$(PROJECT_INCLUDE)/netinet/icmp_var.h: netinet/icmp_var.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/icmp_var.h: netinet/icmp_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/icmp_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/icmp_var.h
 
-$(PROJECT_INCLUDE)/netinet/if_ether.h: netinet/if_ether.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/if_ether.h: netinet/if_ether.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/if_ether.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/if_ether.h
 
-$(PROJECT_INCLUDE)/netinet/igmp.h: netinet/igmp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/igmp.h: netinet/igmp.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/igmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/igmp.h
 
-$(PROJECT_INCLUDE)/netinet/igmp_var.h: netinet/igmp_var.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/igmp_var.h: netinet/igmp_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/igmp_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/igmp_var.h
 
-$(PROJECT_INCLUDE)/netinet/in.h: netinet/in.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/in.h: netinet/in.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/in.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/in.h
 
-$(PROJECT_INCLUDE)/netinet/in_pcb.h: netinet/in_pcb.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/in_pcb.h: netinet/in_pcb.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/in_pcb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/in_pcb.h
 
-$(PROJECT_INCLUDE)/netinet/in_systm.h: netinet/in_systm.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/in_systm.h: netinet/in_systm.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/in_systm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/in_systm.h
 
-$(PROJECT_INCLUDE)/netinet/in_var.h: netinet/in_var.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/in_var.h: netinet/in_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/in_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/in_var.h
 
-$(PROJECT_INCLUDE)/netinet/ip.h: netinet/ip.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/ip.h: netinet/ip.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/ip.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/ip.h
 
-$(PROJECT_INCLUDE)/netinet/ip_fw.h: netinet/ip_fw.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/ip_fw.h: netinet/ip_fw.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/ip_fw.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/ip_fw.h
 
-$(PROJECT_INCLUDE)/netinet/ip_icmp.h: netinet/ip_icmp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/ip_icmp.h: netinet/ip_icmp.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/ip_icmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/ip_icmp.h
 
-$(PROJECT_INCLUDE)/netinet/ip_mroute.h: netinet/ip_mroute.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/ip_mroute.h: netinet/ip_mroute.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/ip_mroute.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/ip_mroute.h
 
-$(PROJECT_INCLUDE)/netinet/ip_var.h: netinet/ip_var.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/ip_var.h: netinet/ip_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/ip_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/ip_var.h
 
-$(PROJECT_INCLUDE)/netinet/tcp.h: netinet/tcp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/tcp.h: netinet/tcp.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp.h
 
-$(PROJECT_INCLUDE)/netinet/tcp_debug.h: netinet/tcp_debug.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/tcp_debug.h: netinet/tcp_debug.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp_debug.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp_debug.h
 
-$(PROJECT_INCLUDE)/netinet/tcp_fsm.h: netinet/tcp_fsm.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/tcp_fsm.h: netinet/tcp_fsm.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp_fsm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp_fsm.h
 
-$(PROJECT_INCLUDE)/netinet/tcp_seq.h: netinet/tcp_seq.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/tcp_seq.h: netinet/tcp_seq.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp_seq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp_seq.h
 
-$(PROJECT_INCLUDE)/netinet/tcp_timer.h: netinet/tcp_timer.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/tcp_timer.h: netinet/tcp_timer.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp_timer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp_timer.h
 
-$(PROJECT_INCLUDE)/netinet/tcp_var.h: netinet/tcp_var.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/tcp_var.h: netinet/tcp_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp_var.h
 
-$(PROJECT_INCLUDE)/netinet/tcpip.h: netinet/tcpip.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/tcpip.h: netinet/tcpip.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcpip.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcpip.h
 
-$(PROJECT_INCLUDE)/netinet/udp.h: netinet/udp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/udp.h: netinet/udp.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/udp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/udp.h
 
-$(PROJECT_INCLUDE)/netinet/udp_var.h: netinet/udp_var.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/netinet/udp_var.h: netinet/udp_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/udp_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/udp_var.h
 
-$(PROJECT_INCLUDE)/nfs:
+$(PROJECT_INCLUDE)/nfs/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/nfs
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs
+	@: > $(PROJECT_INCLUDE)/nfs/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/$(dirstamp)
 
-$(PROJECT_INCLUDE)/nfs/krpc.h: nfs/krpc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nfs/krpc.h: nfs/krpc.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/krpc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/krpc.h
 
-$(PROJECT_INCLUDE)/nfs/nfs.h: nfs/nfs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nfs/nfs.h: nfs/nfs.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/nfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/nfs.h
 
-$(PROJECT_INCLUDE)/nfs/nfsdiskless.h: nfs/nfsdiskless.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nfs/nfsdiskless.h: nfs/nfsdiskless.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/nfsdiskless.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/nfsdiskless.h
 
-$(PROJECT_INCLUDE)/nfs/nfsproto.h: nfs/nfsproto.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nfs/nfsproto.h: nfs/nfsproto.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/nfsproto.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/nfsproto.h
 
-$(PROJECT_INCLUDE)/nfs/rpcv2.h: nfs/rpcv2.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nfs/rpcv2.h: nfs/rpcv2.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/rpcv2.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/rpcv2.h
 
-$(PROJECT_INCLUDE)/nfs/xdr_subs.h: nfs/xdr_subs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nfs/xdr_subs.h: nfs/xdr_subs.h $(PROJECT_INCLUDE)/nfs/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nfs/xdr_subs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs/xdr_subs.h
 
-$(PROJECT_INCLUDE)/rtems:
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h: rtems/rtems_bsdnet.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h: rtems/rtems_bsdnet.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h
 
-$(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h: rtems/rtems_bsdnet_internal.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h: rtems/rtems_bsdnet_internal.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h
 
-$(PROJECT_INCLUDE)/rtems/tftp.h: rtems/tftp.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/tftp.h: rtems/tftp.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tftp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tftp.h
 
-$(PROJECT_INCLUDE)/rtems/ftpfs.h: rtems/ftpfs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/ftpfs.h: rtems/ftpfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ftpfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ftpfs.h
 
-$(PROJECT_INCLUDE)/rtems/mkrootfs.h: rtems/mkrootfs.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/mkrootfs.h: rtems/mkrootfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mkrootfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mkrootfs.h
 
-$(PROJECT_INCLUDE)/sys:
+$(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sys
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys
+	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
-$(PROJECT_INCLUDE)/sys/buf.h: sys/buf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/buf.h: sys/buf.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/buf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/buf.h
 
-$(PROJECT_INCLUDE)/sys/callout.h: sys/callout.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/callout.h: sys/callout.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/callout.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/callout.h
 
-$(PROJECT_INCLUDE)/sys/conf.h: sys/conf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/conf.h: sys/conf.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/conf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/conf.h
 
-$(PROJECT_INCLUDE)/sys/domain.h: sys/domain.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/domain.h: sys/domain.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/domain.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/domain.h
 
-$(PROJECT_INCLUDE)/sys/kernel.h: sys/kernel.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/kernel.h: sys/kernel.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/kernel.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/kernel.h
 
-$(PROJECT_INCLUDE)/sys/libkern.h: sys/libkern.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/libkern.h: sys/libkern.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/libkern.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/libkern.h
 
-$(PROJECT_INCLUDE)/sys/linker_set.h: sys/linker_set.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/linker_set.h: sys/linker_set.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/linker_set.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/linker_set.h
 
-$(PROJECT_INCLUDE)/sys/malloc.h: sys/malloc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/malloc.h: sys/malloc.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/malloc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/malloc.h
 
-$(PROJECT_INCLUDE)/sys/mbuf.h: sys/mbuf.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/mbuf.h: sys/mbuf.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/mbuf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/mbuf.h
 
-$(PROJECT_INCLUDE)/sys/mount.h: sys/mount.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/mount.h: sys/mount.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/mount.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/mount.h
 
-$(PROJECT_INCLUDE)/sys/proc.h: sys/proc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/proc.h: sys/proc.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/proc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/proc.h
 
-$(PROJECT_INCLUDE)/sys/protosw.h: sys/protosw.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/protosw.h: sys/protosw.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/protosw.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/protosw.h
 
-$(PROJECT_INCLUDE)/sys/queue.h: sys/queue.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/queue.h: sys/queue.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/queue.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/queue.h
 
-$(PROJECT_INCLUDE)/sys/reboot.h: sys/reboot.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/reboot.h: sys/reboot.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/reboot.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/reboot.h
 
-$(PROJECT_INCLUDE)/sys/resourcevar.h: sys/resourcevar.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/resourcevar.h: sys/resourcevar.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/resourcevar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/resourcevar.h
 
-$(PROJECT_INCLUDE)/sys/rtprio.h: sys/rtprio.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/rtprio.h: sys/rtprio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/rtprio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/rtprio.h
 
-$(PROJECT_INCLUDE)/sys/select.h: sys/select.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/select.h: sys/select.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/select.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/select.h
 
-$(PROJECT_INCLUDE)/sys/signalvar.h: sys/signalvar.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/signalvar.h: sys/signalvar.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/signalvar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/signalvar.h
 
-$(PROJECT_INCLUDE)/sys/socket.h: sys/socket.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/socket.h: sys/socket.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/socket.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/socket.h
 
-$(PROJECT_INCLUDE)/sys/socketvar.h: sys/socketvar.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/socketvar.h: sys/socketvar.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/socketvar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/socketvar.h
 
-$(PROJECT_INCLUDE)/sys/sysctl.h: sys/sysctl.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/sysctl.h: sys/sysctl.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/sysctl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sysctl.h
 
-$(PROJECT_INCLUDE)/sys/syslog.h: sys/syslog.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/syslog.h: sys/syslog.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/syslog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/syslog.h
 
-$(PROJECT_INCLUDE)/sys/systm.h: sys/systm.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/systm.h: sys/systm.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/systm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/systm.h
 
-$(PROJECT_INCLUDE)/sys/ttydefaults.h: sys/ttydefaults.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/ttydefaults.h: sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
 
-$(PROJECT_INCLUDE)/sys/ucred.h: sys/ucred.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/ucred.h: sys/ucred.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ucred.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ucred.h
 
-$(PROJECT_INCLUDE)/sys/uio.h: sys/uio.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/uio.h: sys/uio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/uio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/uio.h
 
-$(PROJECT_INCLUDE)/sys/un.h: sys/un.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sys/un.h: sys/un.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/un.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/un.h
 
-$(PROJECT_INCLUDE)/vm:
+$(PROJECT_INCLUDE)/vm/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/vm
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm
+	@: > $(PROJECT_INCLUDE)/vm/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/$(dirstamp)
 
-$(PROJECT_INCLUDE)/vm/vm.h: vm/vm.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/vm/vm.h: vm/vm.h $(PROJECT_INCLUDE)/vm/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vm/vm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/vm.h
 
-$(PROJECT_INCLUDE)/vm/vm_extern.h: vm/vm_extern.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/vm/vm_extern.h: vm/vm_extern.h $(PROJECT_INCLUDE)/vm/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vm/vm_extern.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/vm_extern.h
 
-$(PROJECT_INCLUDE)/vm/vm_kern.h: vm/vm_kern.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/vm/vm_kern.h: vm/vm_kern.h $(PROJECT_INCLUDE)/vm/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vm/vm_kern.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/vm_kern.h
 
-$(PROJECT_INCLUDE)/vm/vm_param.h: vm/vm_param.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/vm/vm_param.h: vm/vm_param.h $(PROJECT_INCLUDE)/vm/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vm/vm_param.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/vm/vm_param.h
 endif
 
