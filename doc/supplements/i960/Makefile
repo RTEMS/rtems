@@ -20,6 +20,10 @@ dirs:
 
 COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
+#GENERATED_FILES=\
+#  cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
+#  bsp.texi cputable.texi timing.texi wksheets.texi timeFORCE386.texi
+
 GENERATED_FILES= \
   timing.texi wksheets.texi 
 
@@ -50,21 +54,48 @@ replace: timedata.texi
 #  Chapters which get automatic processing
 #
 
-# CPU Model
-# Calling Conventions
-# Memory Model
+cpumodel.texi: cpumodel.t Makefile
+	$(BMENU) -p "Preface" \
+	    -u "Top" \
+	    -n "Calling Conventions" ${*}.t
+
+callconv.texi: callconv.t Makefile
+	$(BMENU) -p "CPU Model Dependent Features Floating Point Unit" \
+	    -u "Top" \
+	    -n "Memory Model" ${*}.t
+
+memmodel.texi: memmodel.t Makefile
+	$(BMENU) -p "Calling Conventions User-Provided Routines" \
+	    -u "Top" \
+	    -n "Interrupt Processing" ${*}.t
 
 # Interrupt Chapter:
 #  1.  Replace Times and Sizes
 #  2.  Build Node Structure
+intr.t: intr_NOTIMES.t CVME961_TIMES
+	${REPLACE} -p CVME961_TIMES intr_NOTIMES.t
+	mv intr_NOTIMES.t.fixed intr.t
 
-intr.texi: intr.t CVME961_TIMES
-	${REPLACE} -p CVME961_TIMES intr.t
-	mv intr.t.fixed intr.texi
+intr.texi: intr.t Makefile
+	$(BMENU) -p "Memory Model Flat Memory Model" \
+	    -u "Top" \
+	    -n "Default Fatal Error Processing" ${*}.t
 
-# Fatal Error
-# BSP
-# CPU Table
+fatalerr.texi: fatalerr.t Makefile
+	$(BMENU) -p "Interrupt Processing Interrupt Stack" \
+	    -u "Top" \
+	    -n "Board Support Packages" ${*}.t
+
+bsp.texi: bsp.t Makefile
+	$(BMENU) -p "Default Fatal Error Processing Default Fatal Error Handler Operations" \
+	    -u "Top" \
+	    -n "Processor Dependent Information Table" ${*}.t
+
+cputable.texi: cputable.t Makefile
+	$(BMENU) -p "Board Support Packages Processor Initialization" \
+	    -u "Top" \
+	    -n "Memory Requirements" ${*}.t
+
 
 # Worksheets Chapter:
 #  1.  Obtain the Shared File
@@ -119,7 +150,7 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_i960 c_i960-*
-	rm -f timedata.texi timetbl.texi timetbl.t intr.texi $(GENERATED_FILES)
+	rm -f timedata.texi timetbl.texi timetbl.t intr.t $(GENERATED_FILES)
 	rm -f wksheets.t wksheets_NOTIMES.t 
 	rm -f *.fixed _* timing.t timing.texi
 
