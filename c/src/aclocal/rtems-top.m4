@@ -10,6 +10,7 @@ dnl
 AC_DEFUN([RTEMS_TOP],
 [dnl
 AC_REQUIRE([RTEMS_VERSIONING])
+AC_REQUIRE([AM_SET_LEADING_DOT])
 AC_CONFIG_AUX_DIR([$1])
 AC_CHECK_PROGS(MAKE, gmake make)
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
@@ -45,4 +46,6 @@ AS_IF([test -r "${srcdir}/${RTEMS_TOPdir}/aclocal/version.m4"],
 [],
 [AC_MSG_ERROR([Unable to find ${RTEMS_TOPdir}/aclocal/version.m4])])
 AC_MSG_RESULT([_RTEMS_VERSION])
+
+AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
 ])dnl

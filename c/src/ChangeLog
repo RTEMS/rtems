@@ -1,3 +1,9 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/lead-dot.m4: New (from automake-1.7f).
+	* aclocal/rtems-top.m4: Require AM_SET_LEADING_DOT.
+	Add AC_SUBST(dirstamp).
+
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/bsp-arg-enable.m4, aclocal/canonical-target-name.m4,
