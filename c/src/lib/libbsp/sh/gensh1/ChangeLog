@@ -1,3 +1,7 @@
+2001-10-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/Makefile.am: Remove AC_CFLAGS, HZ.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h, include/coverhd.h, start/start.S, startup/bspclean.c,

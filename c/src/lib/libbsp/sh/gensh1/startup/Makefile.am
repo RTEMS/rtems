@@ -22,8 +22,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -DHZ=$(HZ)
-
 $(PGM): $(OBJS)
 	$(make-rel)
 
