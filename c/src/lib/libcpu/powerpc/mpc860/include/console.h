@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #ifndef _M860_CONSOLE_H_
 #define _M860_CONSOLE_H_
 
