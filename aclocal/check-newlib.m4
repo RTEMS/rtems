@@ -27,5 +27,11 @@ dnl some versions of newlib provide rtems_provides_crt0()
   CC=$rtems_save_CC])
 RTEMS_USE_NEWLIB="$rtems_cv_use_newlib"
 AC_SUBST(RTEMS_USE_NEWLIB)
+
+if test x"${RTEMS_USE_NEWLIB}" = x"yes";
+then
+  AC_DEFINE_UNQUOTED(RTEMS_NEWLIB,1,[if using newlib])
+  AC_DEFINE_UNQUOTED(MALLOC_PROVIDED,1,[if malloc is provided])
+fi
 ])
 
