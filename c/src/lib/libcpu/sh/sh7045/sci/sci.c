@@ -61,7 +61,7 @@ struct scidev_t {
 } sci_device[2] =
 {
   { "/dev/sci0", 0, 0, B9600 | CS8 },
-  { "/dev/sci1", 0, 0, B9600 | CS8 }
+  { "/dev/sci1", 1, 0, B9600 | CS8 }
 } ;
 
 /*  local data structures maintain hardware configuration */
