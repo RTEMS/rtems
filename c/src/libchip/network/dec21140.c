@@ -35,7 +35,7 @@
  *  from being compiled on systems which can't support this driver.
  */
 
-#if defined(__i386)
+#if defined(__i386__)
   #define DEC21140_SUPPORTED
 #endif
 
@@ -45,7 +45,7 @@
 
 #if defined(DEC21140_SUPPORTED)
 #include <bsp.h>
-#if defined(i386)
+#if defined(__i386__)
 #include <pcibios.h>
 #endif
 #if defined(__PPC)
@@ -71,7 +71,7 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
  
-#if defined(i386)
+#if defined(__i386__)
 #include <irq.h>
 #endif
 #if defined(__PPC)
@@ -399,7 +399,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
   sc->bufferBase = cp;
   cp += (CPU_CACHE_ALIGNMENT_FOR_BUFFER - (int)cp)
          & (CPU_CACHE_ALIGNMENT_FOR_BUFFER - 1);
-#if defined(__i386)
+#if defined(__i386__)
 #ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA 
   if (_CPU_is_paging_enabled())
     _CPU_change_memory_mapping_attribute
@@ -781,7 +781,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	/*
 	 * First, find a DEC board
 	 */
-#if defined(__i386)
+#if defined(__i386__)
 	int signature;
 	int value;
 	char interrupt;
@@ -857,7 +857,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	/*
 	 * Process options
 	 */
-#if defined(__i386)
+#if defined(__i386__)
 
     /* the 21143 chip must be enabled before it can be accessed */
     if ( deviceId == PCI_DEVICE_ID_DEC_21143 )
@@ -916,7 +916,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	  for (i=0; i<32; i++){
 	    rombuf.s[i] = eeget16(sc->base+memCSR9, i);
 	  }
-#if defined(__i386)
+#if defined(__i386__)
 	  for (i=0 ; i<(ETHER_ADDR_LEN/2); i++){
 	    sc->arpcom.ac_enaddr[2*i]   = rombuf.c[20+2*i+1];
 	    sc->arpcom.ac_enaddr[2*i+1] = rombuf.c[20+2*i];
