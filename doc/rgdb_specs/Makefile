@@ -7,7 +7,6 @@
 #
 
 PROJECT=rgdb_specs
-DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 

@@ -7,7 +7,6 @@
 #
 
 PROJECT=posix1003_1
-DISTRIBUTION_LEVEL=partners
 
 include ../Make.config
 

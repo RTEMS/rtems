@@ -7,7 +7,6 @@
 #
 
 PROJECT=mips64orion
-DISTRIBUTION_LEVEL=public
 
 include ../../Make.config
 

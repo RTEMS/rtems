@@ -7,7 +7,6 @@
 #
 
 PROJECT=started_ada
-DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 

@@ -7,7 +7,6 @@
 #
 
 PROJECT=sparc
-DISTRIBUTION_LEVEL=support
 
 include ../../Make.config
 

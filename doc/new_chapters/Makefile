@@ -7,7 +7,6 @@
 #
 
 PROJECT=new_chapters
-DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 

@@ -7,7 +7,6 @@
 #
 
 PROJECT=i960
-DISTRIBUTION_LEVEL=support
 
 include ../../Make.config
 

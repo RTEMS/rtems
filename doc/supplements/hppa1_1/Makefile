@@ -7,7 +7,6 @@
 #
 
 PROJECT=hppa1_1
-DISTRIBUTION_LEVEL=support
 
 include ../../Make.config
 

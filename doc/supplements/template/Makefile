@@ -7,7 +7,6 @@
 #
 
 PROJECT=template
-DISTRIBUTION_LEVEL=support
 
 include ../../Make.config
 

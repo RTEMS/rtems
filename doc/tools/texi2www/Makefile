@@ -7,7 +7,6 @@
 #
 
 PROJECT=texi2www
-DISTRIBUTION_LEVEL=internal
 
 include ../../Make.config
 

@@ -7,7 +7,6 @@
 #
 
 PROJECT=bsp_howto
-DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 

@@ -7,7 +7,6 @@
 #
 
 PROJECT=networking
-DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 

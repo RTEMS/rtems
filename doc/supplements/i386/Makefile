@@ -7,7 +7,6 @@
 #
 
 PROJECT=i386
-DISTRIBUTION_LEVEL=support
 
 include ../../Make.config
 

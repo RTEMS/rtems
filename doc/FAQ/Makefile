@@ -7,7 +7,6 @@
 #
 
 PROJECT=FAQ
-DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 

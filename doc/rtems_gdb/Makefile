@@ -7,7 +7,6 @@
 #
 
 PROJECT=rtems_gdb
-DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 

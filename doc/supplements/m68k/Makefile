@@ -7,7 +7,6 @@
 #
 
 PROJECT=m68k
-DISTRIBUTION_LEVEL=support
 
 include ../../Make.config
 

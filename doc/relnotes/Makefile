@@ -7,7 +7,6 @@
 #
 
 PROJECT=relnotes
-DISTRIBUTION_LEVEL=internal
 
 include ../Make.config
 

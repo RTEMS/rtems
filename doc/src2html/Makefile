@@ -7,7 +7,6 @@
 #
 
 PROJECT=browseable_rtems
-DISTRIBUTION_LEVEL=internal
 
 include ../Make.config
 
