@@ -1,3 +1,10 @@
+2002-11-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/gccnewlib.add: 
+	Remove *.la's to make rpm-4.1/RH-8.0 happy.
+	Remove libiberty.a to make rpm-4.1/RH-8.0 happy.
+	Change gcc/version.c to reflect us having patched gcc.
+
 2002-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* binutils/binutils.add: Add BuildPreReq: /sbin/install-info.
