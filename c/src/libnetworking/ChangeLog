@@ -1,3 +1,7 @@
+2000-12-14	Eric Norum <eric.norum@usask.ca>
+
+	* lib/tftpDriver.c: Added write capability.
+
 2000-12-08	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/linkaddr.c: Initialized variable to remove warning.

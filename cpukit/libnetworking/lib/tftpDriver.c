@@ -1,4 +1,6 @@
 /*
+ * vim: set expandtab tabstop=4 shiftwidth=4 ai :
+ * 
  * Trivial File Transfer Protocol (RFC 1350)
  *
  * Transfer file to/from remote host
@@ -10,6 +12,7 @@
  * eric@skatter.usask.ca
  *
  *  $Id$
+ *
  */
 
 #include <stdio.h>
@@ -36,105 +39,106 @@
 /*
  * Range of UDP ports to try
  */
-#define UDP_PORT_BASE	3180
+#define UDP_PORT_BASE        3180
 
 /*
  * Pathname prefix
  */
-#define TFTP_PATHNAME_PREFIX	"/TFTP/"
+#define TFTP_PATHNAME_PREFIX "/TFTP/"
 
 /*
  * Default limits
  */
-#define PACKET_REPLY_MILLISECONDS	6000
-#define OPEN_RETRY_LIMIT	10
-#define IO_RETRY_LIMIT		10
+#define PACKET_REPLY_MILLISECONDS     6000
+#define OPEN_RETRY_LIMIT              10
+#define IO_RETRY_LIMIT                10
 
 /*
  * TFTP opcodes
  */
-#define TFTP_OPCODE_RRQ		1
-#define TFTP_OPCODE_WRQ		2
-#define TFTP_OPCODE_DATA	3
-#define TFTP_OPCODE_ACK		4
-#define TFTP_OPCODE_ERROR	5
+#define TFTP_OPCODE_RRQ     1
+#define TFTP_OPCODE_WRQ     2
+#define TFTP_OPCODE_DATA    3
+#define TFTP_OPCODE_ACK     4
+#define TFTP_OPCODE_ERROR   5
 
 /*
  * Largest data transfer
  */
-#define TFTP_BUFSIZE	512
+#define TFTP_BUFSIZE        512
 
 /*
  * Packets transferred between machines
  */
 union tftpPacket {
-	/*
-	 * RRQ/WRQ packet
-	 */
-	struct tftpRWRQ {
-		rtems_unsigned16	opcode;
-		char			filename_mode[TFTP_BUFSIZE];
-	} tftpRWRQ;
+    /*
+     * RRQ/WRQ packet
+     */
+    struct tftpRWRQ {
+        rtems_unsigned16    opcode;
+        char                filename_mode[TFTP_BUFSIZE];
+    } tftpRWRQ;
 
-	/*
-	 * DATA packet
-	 */
-	struct tftpDATA {
-		rtems_unsigned16	opcode;
-		rtems_unsigned16	blocknum;
-		rtems_unsigned8		data[TFTP_BUFSIZE];
-	} tftpDATA;
+    /*
+     * DATA packet
+     */
+    struct tftpDATA {
+        rtems_unsigned16    opcode;
+        rtems_unsigned16    blocknum;
+        rtems_unsigned8     data[TFTP_BUFSIZE];
+    } tftpDATA;
 
-	/*
-	 * ACK packet
-	 */
-	struct tftpACK {
-		rtems_unsigned16	opcode;
-		rtems_unsigned16	blocknum;
-	} tftpACK;
+    /*
+     * ACK packet
+     */
+    struct tftpACK {
+        rtems_unsigned16    opcode;
+        rtems_unsigned16    blocknum;
+    } tftpACK;
 
-	/*
-	 * ERROR packet
-	 */
-	struct tftpERROR {
-		rtems_unsigned16	opcode;
-		rtems_unsigned16	errorCode;
-		char			errorMessage[TFTP_BUFSIZE];
-	} tftpERROR;
+    /*
+     * ERROR packet
+     */
+    struct tftpERROR {
+        rtems_unsigned16    opcode;
+        rtems_unsigned16    errorCode;
+        char                errorMessage[TFTP_BUFSIZE];
+    } tftpERROR;
 };
 
 /*
  * State of each TFTP stream
  */
 struct tftpStream {
-	/*
-	 * Buffer for storing most recently-received packet
-	 */
-	union tftpPacket	pkbuf;
+    /*
+     * Buffer for storing most recently-received packet
+     */
+    union tftpPacket    pkbuf;
 
-	/*
-	 * Last block number received
-	 */
-	rtems_unsigned16	blocknum;
+    /*
+     * Last block number transferred
+     */
+    rtems_unsigned16    blocknum;
 
-	/*
-	 * Data transfer socket
-	 */
-	int			socket;
-	struct sockaddr_in	myAddress;
-	struct sockaddr_in	farAddress;
+    /*
+     * Data transfer socket
+     */
+    int                 socket;
+    struct sockaddr_in  myAddress;
+    struct sockaddr_in  farAddress;
 
-	/*
-	 * Indices into buffer
-	 */
-	int	nleft;
-	int	nused;
+    /*
+     * Indices into buffer
+     */
+    int     nleft;
+    int     nused;
 
-	/*
-	 * Flags
-	 */
-	int	firstReply;
-	int	eof;
+    /*
+     * Flags
+     */
+    int     firstReply;
+    int     eof;
+    int     writing;
 };
 
 /*
@@ -168,7 +172,7 @@ rtems_filesystem_limits_and_options_t rtems_tftp_limits_and_options = {
    6    /* posix_vdisable */
 };
 
-int rtems_tftp_mount_me(
+static int rtems_tftp_mount_me(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry
 )
 {
@@ -224,52 +228,50 @@ int rtems_tftp_mount_me(
 
 int rtems_bsdnet_initialize_tftp_filesystem () 
 {
- int                                   status;
- rtems_filesystem_mount_table_entry_t *entry;
+    int                                   status;
+    rtems_filesystem_mount_table_entry_t *entry;
 
- status = mkdir( TFTP_PATHNAME_PREFIX, S_IRWXU | S_IRWXG | S_IRWXO );
- if ( status == -1 )
-   return status; 
+    status = mkdir( TFTP_PATHNAME_PREFIX, S_IRWXU | S_IRWXG | S_IRWXO );
+    if ( status == -1 )
+        return status; 
 
-  status = mount( 
-     &entry,
-     &rtems_tftp_ops,
-     RTEMS_FILESYSTEM_READ_ONLY,
-     NULL,
-     TFTP_PATHNAME_PREFIX
-  );
+    status = mount( 
+            &entry,
+            &rtems_tftp_ops,
+            RTEMS_FILESYSTEM_READ_WRITE,
+            NULL,
+            TFTP_PATHNAME_PREFIX
+    );
 
-  if ( status )
-    perror( "TFTP mount failed" );
+    if ( status )
+        perror( "TFTP mount failed" );
 
-  return status;
+    return status;
 }
 
 /*
- * Set error message
- * This RTEMS/UNIX error mapping needs to be fixed!
+ * Map error message
  */
-static void
-tftpSetErrno (struct tftpStream *tp)
+static int
+tftpErrno (struct tftpStream *tp)
 {
-	unsigned int tftpError;
-	static const int errorMap[] = {
-		0,
-		ENOENT,
-		EPERM,
-		ENOSPC,
-		EINVAL,
-		ENXIO,
-		EEXIST,
-		ESRCH,
-		0,
-	};
+    unsigned int tftpError;
+    static const int errorMap[] = {
+        EINVAL,
+        ENOENT,
+        EPERM,
+        ENOSPC,
+        EINVAL,
+        ENXIO,
+        EEXIST,
+        ESRCH,
+    };
 
-	tftpError = ntohs (tp->pkbuf.tftpERROR.errorCode);
-	if (tftpError < (sizeof errorMap / sizeof errorMap[0]))
-		errno = errorMap[tftpError];
-	else
-		errno = 1000 + tftpError;
+    tftpError = ntohs (tp->pkbuf.tftpERROR.errorCode);
+    if (tftpError < (sizeof errorMap / sizeof errorMap[0]))
+        return errorMap[tftpError];
+    else
+        return 1000 + tftpError;
 }
 
 /*
@@ -278,22 +280,25 @@ tftpSetErrno (struct tftpStream *tp)
 static void
 sendStifle (struct tftpStream *tp, struct sockaddr_in *to)
 {
-	int len;
+    int len;
+    struct {
+        rtems_unsigned16    opcode;
+        rtems_unsigned16    errorCode;
+        char                errorMessage[12];
+    } msg;
 
-	/*
-	 * Create the error packet (Unknown transfer ID).
-	 */
-	tp->pkbuf.tftpERROR.opcode = htons (TFTP_OPCODE_ERROR);
-	tp->pkbuf.tftpERROR.errorCode = htons (5);
-	len = sizeof tp->pkbuf.tftpERROR.opcode +
-				sizeof tp->pkbuf.tftpERROR.errorCode + 1;
-	len += sprintf (tp->pkbuf.tftpERROR.errorMessage, "GO AWAY"); 
+    /*
+     * Create the error packet (Unknown transfer ID).
+     */
+    msg.opcode = htons (TFTP_OPCODE_ERROR);
+    msg.errorCode = htons (5);
+    len = sizeof msg.opcode + sizeof msg.errorCode + 1;
+    len += sprintf (msg.errorMessage, "GO AWAY"); 
 
-	/*
-	 * Send it
-	 */
-	sendto (tp->socket, (char *)&tp->pkbuf, len, 0,
-					(struct sockaddr *)to, sizeof *to);
+    /*
+     * Send it
+     */
+    sendto (tp->socket, (char *)&msg, len, 0, (struct sockaddr *)to, sizeof *to);
 }
 
 /*
@@ -302,42 +307,42 @@ sendStifle (struct tftpStream *tp, struct sockaddr_in *to)
 static int
 getPacket (struct tftpStream *tp)
 {
-	int len;
-	struct timeval tv;
+    int len;
+    struct timeval tv;
 
-	tv.tv_sec = PACKET_REPLY_MILLISECONDS / 1000;
-	tv.tv_usec = (PACKET_REPLY_MILLISECONDS % 1000) * 1000;
-	setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
-	for (;;) {
-		union {
-			struct sockaddr s;
-			struct sockaddr_in i;
-		} from;
-		int fromlen = sizeof from;
-		len = recvfrom (tp->socket, (char *)&tp->pkbuf,
-							sizeof tp->pkbuf, 0,
-							&from.s, &fromlen);
-		if (len < 0)
-			break;
-		if (from.i.sin_addr.s_addr == tp->farAddress.sin_addr.s_addr) {
-			if (tp->firstReply) {
-				tp->firstReply = 0;
-				tp->farAddress.sin_port = from.i.sin_port;
-			}
-			if (tp->farAddress.sin_port == from.i.sin_port) 
-				break;
-		}
+    tv.tv_sec = PACKET_REPLY_MILLISECONDS / 1000;
+    tv.tv_usec = (PACKET_REPLY_MILLISECONDS % 1000) * 1000;
+    setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+    for (;;) {
+        union {
+            struct sockaddr s;
+            struct sockaddr_in i;
+        } from;
+        int fromlen = sizeof from;
+        len = recvfrom (tp->socket, (char *)&tp->pkbuf,
+                                                    sizeof tp->pkbuf, 0,
+                                                    &from.s, &fromlen);
+        if (len < 0)
+            break;
+        if (from.i.sin_addr.s_addr == tp->farAddress.sin_addr.s_addr) {
+            if (tp->firstReply) {
+                tp->firstReply = 0;
+                tp->farAddress.sin_port = from.i.sin_port;
+            }
+            if (tp->farAddress.sin_port == from.i.sin_port) 
+                break;
+        }
 
-		/*
-		 * Packet is from someone with whom we are
-		 * not interested.  Tell them to go away.
-		 */
-		sendStifle (tp, &from.i);
-	}
-	tv.tv_sec = 0;
-	tv.tv_usec = 0;
-	setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
-	return len;
+        /*
+         * Packet is from someone with whom we are
+         * not interested.  Tell them to go away.
+         */
+        sendStifle (tp, &from.i);
+    }
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+    return len;
 }
 
 /*
@@ -346,20 +351,20 @@ getPacket (struct tftpStream *tp)
 static int
 sendAck (struct tftpStream *tp)
 {
-	/*
-	 * Create the acknowledgement
-	 */
-	tp->pkbuf.tftpACK.opcode = htons (TFTP_OPCODE_ACK);
-	tp->pkbuf.tftpACK.blocknum = htons (tp->blocknum);
+    /*
+     * Create the acknowledgement
+     */
+    tp->pkbuf.tftpACK.opcode = htons (TFTP_OPCODE_ACK);
+    tp->pkbuf.tftpACK.blocknum = htons (tp->blocknum);
 
-	/*
-	 * Send it
-	 */
-	if (sendto (tp->socket, (char *)&tp->pkbuf, sizeof tp->pkbuf.tftpACK, 0,
-					(struct sockaddr *)&tp->farAddress,
-					sizeof tp->farAddress) < 0)
-		return errno;
-	return 0;
+    /*
+     * Send it
+     */
+    if (sendto (tp->socket, (char *)&tp->pkbuf, sizeof tp->pkbuf.tftpACK, 0,
+                                    (struct sockaddr *)&tp->farAddress,
+                                    sizeof tp->farAddress) < 0)
+        return errno;
+    return 0;
 }
 
 /*
@@ -368,13 +373,13 @@ sendAck (struct tftpStream *tp)
 static void
 releaseStream (int s)
 {
-	rtems_semaphore_obtain (tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-	free (tftpStreams[s]);
-	tftpStreams[s] = NULL;
-	rtems_semaphore_release (tftp_mutex);
+    rtems_semaphore_obtain (tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    free (tftpStreams[s]);
+    tftpStreams[s] = NULL;
+    rtems_semaphore_release (tftp_mutex);
 }
 
-int rtems_tftp_evaluate_for_make(
+static int rtems_tftp_evaluate_for_make(
    const char                         *path,       /* IN     */
    rtems_filesystem_location_info_t   *pathloc,    /* IN/OUT */
    const char                        **name        /* OUT    */
@@ -383,395 +388,477 @@ int rtems_tftp_evaluate_for_make(
   set_errno_and_return_minus_one( EIO );    
 }
 
-/*
- * XXX - Fix return values.
- */
 
-int rtems_tftp_eval_path(  
+static int rtems_tftp_eval_path(  
   const char                        *pathname,     /* IN     */
   int                                flags,        /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 )
 {
 
-  /*
-   * Read-only for now
-   */
-   
-  if ( (flags & O_WRONLY) == O_WRONLY )
-    set_errno_and_return_minus_one( ENOENT );
+    /*
+     * Read-only or write-only for now
+     */
+    flags &= RTEMS_LIBIO_PERMS_READ | RTEMS_LIBIO_PERMS_WRITE;
+    if ((flags != RTEMS_LIBIO_PERMS_READ) && (flags != RTEMS_LIBIO_PERMS_WRITE) )
+        set_errno_and_return_minus_one( EINVAL );
 
-  /*
-   * The File system is mounted at TFTP_PATHNAME_PREFIX
-   * the caller of this routine has striped off this part of the
-   * name. Save the remainder of the name for use by the open routine.
-   */
-
-  pathloc->node_access = (void * ) pathname;
-  pathloc->handlers    = &rtems_tftp_handlers;
-
-  return 0;
+    /*
+     * The File system is mounted at TFTP_PATHNAME_PREFIX
+     * the caller of this routine has striped off this part of the
+     * name. Save the remainder of the name for use by the open routine.
+     */
+    pathloc->node_access = (void * ) pathname;
+    pathloc->handlers    = &rtems_tftp_handlers;
+    return 0;
 }
 
-
-int rtems_tftp_open(
-  rtems_libio_t *iop,
-  const char    *new_name,
-  unsigned32     flag,
-  unsigned32     mode
+static int rtems_tftp_open(
+    rtems_libio_t *iop,
+    const char    *new_name,
+    unsigned32     flags,
+    unsigned32     mode
 )
 {
-  struct tftpStream  *tp;
-  int                 retryCount;
-  rtems_unsigned32    farAddress;
-  int                 s;
-  int                 len;
-  char               *cp1;
-  char               *cp2;
-  char               *remoteFilename;
-  rtems_interval      now;
-  rtems_status_code   sc;
-  char               *hostname;
+    struct tftpStream    *tp;
+    int                  retryCount;
+    struct in_addr       farAddress;
+    int                  s;
+    int                  len;
+    char                 *cp1;
+    char                 *cp2;
+    char                 *remoteFilename;
+    rtems_interval       now;
+    rtems_status_code    sc;
+    char                 *hostname;
 
-  /*
-   * This came from the evaluate path. 
-   */
+    /*
+     * This came from the evaluate path. 
+     * Extract host name component
+     */
+    cp1 = cp2 = iop->file_info;    
+    while (*cp2 != '/') {
+        if (*cp2 == '\0')
+            return ENOENT;
+        cp2++;
+    }
+    len = cp2 - cp1;
+    hostname = malloc (len + 1);
+    if (hostname == NULL)
+        return ENOMEM; 
+    strncpy (hostname, cp1, len);
+    hostname[len] = '\0';
 
-  cp2 = iop->file_info;  
+    /*
+     * Convert hostname to Internet address
+     */
+    if (strcmp (hostname, "BOOTP_HOST") == 0)
+        farAddress = rtems_bsdnet_bootp_server_address;
+    else
+        farAddress.s_addr = inet_addr (hostname);
+    free (hostname);
+    if ((farAddress.s_addr == 0) || (farAddress.s_addr == ~0))
+        return ENOENT;
 
-  cp1 = cp2;
-  while (*cp2 != '/') {
+    /*
+     * Extract file pathname component
+     */
+    while (*cp2 == '/') 
+        cp2++;
+    if (strcmp (cp2, "BOOTP_FILE") == 0) {
+        cp2 = rtems_bsdnet_bootp_boot_file_name;
+        while (*cp2 == '/') 
+            cp2++;
+    }
     if (*cp2 == '\0')
-      return ENOENT;
-    cp2++;
-  }
-
-  len = cp2 - cp1;
-  hostname = malloc (len + 1);
-  if (hostname == NULL)
-    return ENOMEM; 
-
-  strncpy (hostname, cp1, len);
-  hostname[len] = '\0';
-  farAddress = inet_addr (hostname);
-  free (hostname);
-
-  if ((farAddress == 0) || (farAddress == ~0))
-    return ENOENT;
-
-  if (*++cp2 == '\0')
-    return ENOENT;
-
-  remoteFilename = cp2;
-  if (strlen (remoteFilename) > (TFTP_BUFSIZE - 10))
-    return ENOENT;    
-
-  /*
-   * Find a free stream
-   */
-
-  sc = rtems_semaphore_obtain (tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  if (sc != RTEMS_SUCCESSFUL)
-    return EBUSY;
-
-  for (s = 0 ; s < nStreams ; s++) {
-    if (tftpStreams[s] == NULL)
-    break;
-  }
-
-  if (s == nStreams) {
-    /*
-     * Reallocate stream pointers
-     * Guard against the case where realloc() returns NULL.
-     */
-    struct tftpStream **np;
-
-    np = realloc (tftpStreams, ++nStreams * sizeof *tftpStreams);
-    if (np == NULL) {
-      rtems_semaphore_release (tftp_mutex);
-      return ENOMEM;
-    }
-    tftpStreams = np;
-  }
-
-  tp = tftpStreams[s] = malloc (sizeof (struct tftpStream));
-  rtems_semaphore_release (tftp_mutex);
-  if (tp == NULL)
-    return ENOMEM;
-  iop->data0 = s;
-  iop->data1 = tp;
-
-  /*
-   * Create the socket
-   */
-
-  if ((tp->socket = socket (AF_INET, SOCK_DGRAM, 0)) < 0) {
-    releaseStream (s);
-    return ENOMEM;
-  }
-
-  /*
-   * Bind the socket to a local address
-   */
-
-  retryCount = 0;
-  rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
-  for (;;) {
-    int try = (now + retryCount) % 10;
-
-    tp->myAddress.sin_family = AF_INET;
-    tp->myAddress.sin_port = htons (UDP_PORT_BASE + nStreams * try + s);
-    tp->myAddress.sin_addr.s_addr = htonl (INADDR_ANY);
-    if (bind (tp->socket, (struct sockaddr *)&tp->myAddress, sizeof tp->myAddress) >= 0)
-      break;
-    if (++retryCount == 10) {
-      close (tp->socket);
-      releaseStream (s);
-      return EBUSY;
-    }
-  }
-
-  /*
-   * Set the UDP destination to the TFTP server
-   * port on the remote machine.
-   */
-  tp->farAddress.sin_family = AF_INET;
-  tp->farAddress.sin_addr.s_addr = farAddress;
-  tp->farAddress.sin_port = htons (69);
-
-  /*
-   * Start the transfer
-   */
-  tp->firstReply = 1;
-  for (;;) {
-    /*
-     * Create the request
-     */
-    tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_RRQ);
-    cp1 = (char *) tp->pkbuf.tftpRWRQ.filename_mode;
-    cp2 = (char *) remoteFilename;
-    while ((*cp1++ = *cp2++) != '\0')
-      continue;
-    cp2 = "octet";
-    while ((*cp1++ = *cp2++) != '\0')
-      continue;
-    len = cp1 - (char *)&tp->pkbuf.tftpRWRQ;
+        return ENOENT;
+    remoteFilename = cp2;
+    if (strlen (remoteFilename) > (TFTP_BUFSIZE - 10))
+        return ENOENT;        
 
     /*
-     * Send the request
+     * Find a free stream
      */
-    if (sendto (tp->socket, (char *)&tp->pkbuf, len, 0, 
-          (struct sockaddr *)&tp->farAddress,
-          sizeof tp->farAddress) < 0) {
-      close (tp->socket);
-      releaseStream (s);
-      return EIO;
-    }
-
-    /*
-     * Get reply
-     */
-    len = getPacket (tp);
-    if (len >= (int) sizeof tp->pkbuf.tftpACK) {
-      int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
-      if ((opcode == TFTP_OPCODE_DATA)
-       && (ntohs (tp->pkbuf.tftpDATA.blocknum) == 1)) {
-        tp->nused = 0;
-        tp->blocknum = 1;
-        tp->nleft = len - 2 * sizeof (rtems_unsigned16);
-        tp->eof = (tp->nleft < TFTP_BUFSIZE);
-        if (sendAck (tp) != 0) {
-          close (tp->socket);
-          releaseStream (s);
-          return EIO;
-        }
+    sc = rtems_semaphore_obtain (tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    if (sc != RTEMS_SUCCESSFUL)
+        return EBUSY;
+    for (s = 0 ; s < nStreams ; s++) {
+        if (tftpStreams[s] == NULL)
         break;
-      }
-      if (opcode == TFTP_OPCODE_ERROR) {
-        tftpSetErrno (tp);
-        close (tp->socket);
+    }
+    if (s == nStreams) {
+        /*
+         * Reallocate stream pointers
+         * Guard against the case where realloc() returns NULL.
+         */
+        struct tftpStream **np;
+
+        np = realloc (tftpStreams, ++nStreams * sizeof *tftpStreams);
+        if (np == NULL) {
+            rtems_semaphore_release (tftp_mutex);
+            return ENOMEM;
+        }
+        tftpStreams = np;
+    }
+    tp = tftpStreams[s] = malloc (sizeof (struct tftpStream));
+    rtems_semaphore_release (tftp_mutex);
+    if (tp == NULL)
+        return ENOMEM;
+    iop->data0 = s;
+    iop->data1 = tp;
+
+    /*
+     * Create the socket
+     */
+    if ((tp->socket = socket (AF_INET, SOCK_DGRAM, 0)) < 0) {
         releaseStream (s);
-        return EIO;
-      }
+        return ENOMEM;
     }
 
     /*
-     * Keep trying
+     * Bind the socket to a local address
      */
-    if (++retryCount >= OPEN_RETRY_LIMIT) {
-      close (tp->socket);
-      releaseStream (s);
-      return EIO;
-    }
-  }
+    retryCount = 0;
+    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+    for (;;) {
+        int try = (now + retryCount) % 10;
 
-  return 0;
+        tp->myAddress.sin_family = AF_INET;
+        tp->myAddress.sin_port = htons (UDP_PORT_BASE + nStreams * try + s);
+        tp->myAddress.sin_addr.s_addr = htonl (INADDR_ANY);
+        if (bind (tp->socket, (struct sockaddr *)&tp->myAddress, sizeof tp->myAddress) >= 0)
+            break;
+        if (++retryCount == 10) {
+            close (tp->socket);
+            releaseStream (s);
+            return EBUSY;
+        }
+    }
+
+    /*
+     * Set the UDP destination to the TFTP server
+     * port on the remote machine.
+     */
+    tp->farAddress.sin_family = AF_INET;
+    tp->farAddress.sin_addr = farAddress;
+    tp->farAddress.sin_port = htons (69);
+
+    /*
+     * Start the transfer
+     */
+    tp->firstReply = 1;
+    for (;;) {
+        /*
+         * Create the request
+         */
+        if ((flags & O_ACCMODE) == O_RDONLY) {
+            tp->writing = 0;
+            tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_RRQ);
+        }
+        else {
+            tp->writing = 1;
+            tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_WRQ);
+        }
+        cp1 = (char *) tp->pkbuf.tftpRWRQ.filename_mode;
+        cp2 = (char *) remoteFilename;
+        while ((*cp1++ = *cp2++) != '\0')
+            continue;
+        cp2 = "octet";
+        while ((*cp1++ = *cp2++) != '\0')
+            continue;
+        len = cp1 - (char *)&tp->pkbuf.tftpRWRQ;
+
+        /*
+         * Send the request
+         */
+        if (sendto (tp->socket, (char *)&tp->pkbuf, len, 0, 
+                    (struct sockaddr *)&tp->farAddress,
+                    sizeof tp->farAddress) < 0) {
+            close (tp->socket);
+            releaseStream (s);
+            return EIO;
+        }
+
+        /*
+         * Get reply
+         */
+        len = getPacket (tp);
+        if (len >= (int) sizeof tp->pkbuf.tftpACK) {
+            int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
+            if (!tp->writing
+             && (opcode == TFTP_OPCODE_DATA)
+             && (ntohs (tp->pkbuf.tftpDATA.blocknum) == 1)) {
+                tp->nused = 0;
+                tp->blocknum = 1;
+                tp->nleft = len - 2 * sizeof (rtems_unsigned16);
+                tp->eof = (tp->nleft < TFTP_BUFSIZE);
+                if (sendAck (tp) != 0) {
+                    close (tp->socket);
+                    releaseStream (s);
+                    return EIO;
+                }
+                break;
+            }
+            if (tp->writing
+             && (opcode == TFTP_OPCODE_ACK)
+             && (ntohs (tp->pkbuf.tftpACK.blocknum) == 0)) {
+                tp->nused = 0;
+                tp->blocknum = 1;
+                break;
+            }
+            if (opcode == TFTP_OPCODE_ERROR) {
+                int e = tftpErrno (tp);
+                close (tp->socket);
+                releaseStream (s);
+                return e;
+            }
+        }
+
+        /*
+         * Keep trying
+         */
+        if (++retryCount >= OPEN_RETRY_LIMIT) {
+            close (tp->socket);
+            releaseStream (s);
+            return EIO;
+        }
+    }
+    return 0;
 }
 
 /*
  * Read from a TFTP stream
  */
-
-int rtems_tftp_read(
-  rtems_libio_t *iop,
-  void          *buffer,
-  unsigned32     count
+static int rtems_tftp_read(
+    rtems_libio_t *iop,
+    void          *buffer,
+    unsigned32    count
 )
 {
-  char              *bp;
-  struct tftpStream *tp;
-  int                retryCount;
-  int                nwant;
+    char              *bp;
+    struct tftpStream *tp = iop->data1;
+    int               retryCount;
+    int               nwant;
 
-  tp = iop->data1;
-
-  /*
-   * Read till user request is satisfied or EOF is reached
-   */
-
-  bp = buffer;
-  nwant = count;
-  while (nwant) {
-    if (tp->nleft) {
-      int count;
-      if (nwant < tp->nleft)
-        count = nwant;
-      else
-        count = tp->nleft;
-      memcpy (bp, &tp->pkbuf.tftpDATA.data[tp->nused], count);
-      tp->nused += count;
-      tp->nleft -= count;
-      bp += count;
-      nwant -= count;
-      if (nwant == 0)
-        break;
-    }
-    if (tp->eof)
-      break;
 
     /*
-     * Wait for the next packet
+     * Read till user request is satisfied or EOF is reached
      */
-    retryCount = 0;
-    for (;;) {
-      int len = getPacket (tp);
-      if (len >= (int)sizeof tp->pkbuf.tftpACK) {
-        int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
-        rtems_unsigned16 nextBlock = tp->blocknum + 1;
-        if ((opcode == TFTP_OPCODE_DATA)
-         && (ntohs (tp->pkbuf.tftpDATA.blocknum) == nextBlock)) {
-          tp->nused = 0;
-          tp->nleft = len - 2 * sizeof (rtems_unsigned16);
-          tp->eof = (tp->nleft < TFTP_BUFSIZE);
-          tp->blocknum++;
-          if (sendAck (tp) != 0)
-            set_errno_and_return_minus_one( EIO );
-          break;
+    bp = buffer;
+    nwant = count;
+    while (nwant) {
+        if (tp->nleft) {
+            int ncopy;
+            if (nwant < tp->nleft)
+                ncopy = nwant;
+            else
+                ncopy = tp->nleft;
+            memcpy (bp, &tp->pkbuf.tftpDATA.data[tp->nused], ncopy);
+            tp->nused += ncopy;
+            tp->nleft -= ncopy;
+            bp += ncopy;
+            nwant -= ncopy;
+            if (nwant == 0)
+                break;
         }
-        if (opcode == TFTP_OPCODE_ERROR) {
-          tftpSetErrno (tp);
-          return RTEMS_INTERNAL_ERROR;
-        }
-      }
+        if (tp->eof)
+            break;
 
-      /*
-       * Keep trying?
-       */
-      if (++retryCount == IO_RETRY_LIMIT)
-        set_errno_and_return_minus_one( EIO );
-      if (sendAck (tp) != 0)
-        set_errno_and_return_minus_one( EIO );
+        /*
+         * Wait for the next packet
+         */
+        retryCount = 0;
+        for (;;) {
+            int len = getPacket (tp);
+            if (len >= (int)sizeof tp->pkbuf.tftpACK) {
+                int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
+                rtems_unsigned16 nextBlock = tp->blocknum + 1;
+                if ((opcode == TFTP_OPCODE_DATA)
+                 && (ntohs (tp->pkbuf.tftpDATA.blocknum) == nextBlock)) {
+                    tp->nused = 0;
+                    tp->nleft = len - 2 * sizeof (rtems_unsigned16);
+                    tp->eof = (tp->nleft < TFTP_BUFSIZE);
+                    tp->blocknum++;
+                    if (sendAck (tp) != 0)
+                        set_errno_and_return_minus_one( EIO );
+                    break;
+                }
+                if (opcode == TFTP_OPCODE_ERROR)
+                        set_errno_and_return_minus_one( tftpErrno (tp) );
+            }
+
+            /*
+             * Keep trying?
+             */
+            if (++retryCount == IO_RETRY_LIMIT)
+                set_errno_and_return_minus_one( EIO );
+            if (sendAck (tp) != 0)
+                set_errno_and_return_minus_one( EIO );
+        }
     }
-  }
+    return count - nwant;
+}
 
- /*
-  * XXX - Eric is this right?
-  *
-  */
-  return count - nwant;
+/*
+ * Flush a write buffer and wait for acknowledgement
+ */
+static int rtems_tftp_flush ( struct tftpStream *tp )
+{
+    int wlen, rlen;
+    int retryCount = 0;
+
+    wlen = tp->nused + 2 * sizeof (rtems_unsigned16);
+    for (;;) {
+        tp->pkbuf.tftpDATA.opcode = htons (TFTP_OPCODE_DATA);
+        tp->pkbuf.tftpDATA.blocknum = htons (tp->blocknum);
+        if (sendto (tp->socket, (char *)&tp->pkbuf, wlen, 0, 
+                                        (struct sockaddr *)&tp->farAddress,
+                                        sizeof tp->farAddress) < 0)
+            return EIO;
+        rlen = getPacket (tp);
+        if (rlen >= (int)sizeof tp->pkbuf.tftpACK) {
+            int opcode = ntohs (tp->pkbuf.tftpACK.opcode);
+            if ((opcode == TFTP_OPCODE_ACK)
+             && (ntohs (tp->pkbuf.tftpACK.blocknum) == tp->blocknum)) {
+                tp->nused = 0;
+                tp->blocknum++;
+                return 0;
+            }
+            if (opcode == TFTP_OPCODE_ERROR)
+                return tftpErrno (tp);
+        }
+
+        /*
+         * Keep trying?
+         */
+        if (++retryCount == IO_RETRY_LIMIT)
+            return EIO;
+    }
 }
 
 /*
  * Close a TFTP stream
  */
-int rtems_tftp_close(
-  rtems_libio_t *iop
+static int rtems_tftp_close(
+    rtems_libio_t *iop
 )
 {
-  struct tftpStream *tp = iop->data1;;
+    struct tftpStream *tp = iop->data1;;
 
-  if (!tp->eof && !tp->firstReply) {
+    if (tp->writing)
+        rtems_tftp_flush (tp);
+    if (!tp->eof && !tp->firstReply) {
+        /*
+         * Tell the other end to stop
+         */
+        rtems_interval ticksPerSecond;
+        sendStifle (tp, &tp->farAddress);
+        rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
+        rtems_task_wake_after (1 + ticksPerSecond / 10);
+    }
+    close (tp->socket);
+    releaseStream (iop->data0);
+    return RTEMS_SUCCESSFUL;
+}
+
+static int rtems_tftp_write(
+    rtems_libio_t   *iop,
+    const void      *buffer,
+    unsigned32      count
+)
+{
+    const char        *bp;
+    struct tftpStream *tp = iop->data1;
+    int               nleft, nfree, ncopy;
+
     /*
-     * Tell the other end to stop
+     * Bail out if an error has occurred
      */
-    rtems_interval ticksPerSecond;
-    sendStifle (tp, &tp->farAddress);
-    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
-    rtems_task_wake_after (1 + ticksPerSecond / 10);
-  }
-  close (tp->socket);
-  releaseStream (iop->data0);
-  return RTEMS_SUCCESSFUL;
+    if (!tp->writing)
+        return EIO;
+
+
+    /*
+     * Write till user request is satisfied
+     * Notice that the buffer is flushed as soon as it is filled rather
+     * than waiting for the next write or a close.  This ensures that
+     * the flush in close writes a less than full buffer so the far
+     * end can detect the end-of-file condition.
+     */
+    bp = buffer;
+    nleft = count;
+    while (nleft) {
+        nfree = sizeof tp->pkbuf.tftpDATA.data - tp->nused;
+        if (nleft < nfree)
+            ncopy = nleft;
+        else
+            ncopy = nfree;
+        memcpy (&tp->pkbuf.tftpDATA.data[tp->nused], bp, ncopy);
+        tp->nused += ncopy;
+        nleft -= ncopy;
+        bp += ncopy;
+        if (tp->nused == sizeof tp->pkbuf.tftpDATA.data) {
+            int e = rtems_tftp_flush (tp);
+            if (e) {
+                tp->writing = 0;
+                set_errno_and_return_minus_one (e);
+            }
+        }
+    }
+    return count;
 }
 
-int rtems_tftp_write(
-  rtems_libio_t *iop,
-  const void    *buffer,
-  unsigned32     count
+/*
+ * Dummy version to let fopen(xxxx,"w") work properly.
+ */
+static int rtems_tftp_ftruncate(
+    rtems_libio_t   *iop,
+    off_t           count
 )
 {
-  return RTEMS_NOT_CONFIGURED;
-}
-
-rtems_device_driver rtems_tftp_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
-{
-  return RTEMS_NOT_CONFIGURED;
+    return 0;
 }
 
 rtems_filesystem_node_types_t rtems_tftp_node_type(
-   rtems_filesystem_location_info_t    *pathloc         /* IN */
+     rtems_filesystem_location_info_t        *pathloc                 /* IN */
 )
 {
-  return RTEMS_FILESYSTEM_MEMORY_FILE;
+    return RTEMS_FILESYSTEM_MEMORY_FILE;
 }
 
 
 rtems_filesystem_operations_table  rtems_tftp_ops = {
-  rtems_tftp_eval_path,            /* eval_path */
-  rtems_tftp_evaluate_for_make,    /* evaluate_for_make */
-  NULL,                            /* link */
-  NULL,                            /* unlink */
-  rtems_tftp_node_type,            /* node_type */
-  NULL,                            /* mknod */
-  NULL,                            /* chown */
-  NULL,                            /* freenodinfo */
-  NULL,                            /* mount */
-  rtems_tftp_mount_me,             /* initialize */
-  NULL,                            /* unmount */
-  NULL,                            /* fsunmount */
-  NULL,                            /* utime, */
-  NULL,                            /* evaluate_link */
-  NULL,                            /* symlink */
-  NULL,                            /* readlin */
+    rtems_tftp_eval_path,            /* eval_path */
+    rtems_tftp_evaluate_for_make,    /* evaluate_for_make */
+    NULL,                            /* link */
+    NULL,                            /* unlink */
+    rtems_tftp_node_type,            /* node_type */
+    NULL,                            /* mknod */
+    NULL,                            /* chown */
+    NULL,                            /* freenodinfo */
+    NULL,                            /* mount */
+    rtems_tftp_mount_me,             /* initialize */
+    NULL,                            /* unmount */
+    NULL,                            /* fsunmount */
+    NULL,                            /* utime, */
+    NULL,                            /* evaluate_link */
+    NULL,                            /* symlink */
+    NULL,                            /* readlin */
 };
-
+  
 rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
-  rtems_tftp_open,   /* open */     
-  rtems_tftp_close,  /* close */    
-  rtems_tftp_read,   /* read */     
-  rtems_tftp_write,  /* write */    
-  NULL,		     /* ioctl */    
-  NULL,		     /* lseek */    
-  NULL,		     /* fstat */    
-  NULL,		     /* fchmod */   
-  NULL,		     /* ftruncate */
-  NULL,		     /* fpathconf */
-  NULL,		     /* fsync */    
-  NULL,		     /* fdatasync */
-  NULL,		     /* fcntl */
-  NULL		     /* rmnod */
+    rtems_tftp_open,   /* open */     
+    rtems_tftp_close,  /* close */    
+    rtems_tftp_read,   /* read */     
+    rtems_tftp_write,  /* write */    
+    NULL,              /* ioctl */    
+    NULL,              /* lseek */    
+    NULL,              /* fstat */    
+    NULL,              /* fchmod */   
+    rtems_tftp_ftruncate, /* ftruncate */
+    NULL,              /* fpathconf */
+    NULL,              /* fsync */    
+    NULL,              /* fdatasync */
+    NULL,              /* fcntl */
+    NULL               /* rmnod */
 };
