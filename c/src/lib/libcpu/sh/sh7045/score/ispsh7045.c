@@ -107,58 +107,58 @@ _oei_isp, /* I/O Port: irq 156*/
  * We try to work around this problem by using the macro below.
  */
 #define isp( name, number, func)\
-asm (".global _"Str(name)"\n\t" \
-     "_"Str(name)":       \n\t" \
-     "    mov.l r0,@-r15   \n\t" \
-     "    mov.l r1,@-r15   \n\t" \
-     "    mov.l r2,@-r15   \n\t" \
-     "    mov.l r3,@-r15   \n\t" \
-     "    mov.l r4,@-r15   \n\t" \
-     "    mov.l r5,@-r15   \n\t" \
-     "    mov.l r6,@-r15   \n\t" \
-     "    mov.l r7,@-r15   \n\t" \
-     "    mov.l r14,@-r15  \n\t" \
-     "    sts.l pr,@-r15   \n\t" \
-     "    sts.l mach,@-r15 \n\t" \
-     "    sts.l macl,@-r15 \n\t" \
-     "    mov r15,r14      \n\t" \
-     "    mov.l "Str(name)"_v, r2 \n\t" \
-     "    mov.l "Str(name)"_k, r1\n\t" \
-     "    jsr @r1           \n\t" \
-     "    mov   r2,r4      \n\t" \
-     "    mov   r14,r15    \n\t" \
-     "    lds.l @r15+,macl \n\t" \
-     "    lds.l @r15+,mach \n\t" \
-     "    lds.l @r15+,pr   \n\t" \
-     "    mov.l @r15+,r14  \n\t" \
-     "    mov.l @r15+,r7   \n\t" \
-     "    mov.l @r15+,r6   \n\t" \
-     "    mov.l @r15+,r5   \n\t" \
-     "    mov.l @r15+,r4   \n\t" \
-     "    mov.l @r15+,r3   \n\t" \
-     "    mov.l @r15+,r2   \n\t" \
-     "    mov.l @r15+,r1   \n\t" \
-     "    mov.l @r15+,r0   \n\t" \
-     "    rte              \n\t" \
-     "    nop              \n\t" \
-     "    .align 2         \n\t" \
-     #name"_k: \n\t" \
-     ".long "Str(func)"\n\t" \
-     #name"_v: \n\t" \
+asm (".global _"Str(name)"\n\t"
+     "_"Str(name)":       \n\t"
+     "    mov.l r0,@-r15   \n\t"
+     "    mov.l r1,@-r15   \n\t"
+     "    mov.l r2,@-r15   \n\t"
+     "    mov.l r3,@-r15   \n\t"
+     "    mov.l r4,@-r15   \n\t"
+     "    mov.l r5,@-r15   \n\t"
+     "    mov.l r6,@-r15   \n\t"
+     "    mov.l r7,@-r15   \n\t"
+     "    mov.l r14,@-r15  \n\t"
+     "    sts.l pr,@-r15   \n\t"
+     "    sts.l mach,@-r15 \n\t"
+     "    sts.l macl,@-r15 \n\t"
+     "    mov r15,r14      \n\t"
+     "    mov.l "Str(name)"_v, r2 \n\t"
+     "    mov.l "Str(name)"_k, r1\n\t"
+     "    jsr @r1           \n\t"
+     "    mov   r2,r4      \n\t"
+     "    mov   r14,r15    \n\t"
+     "    lds.l @r15+,macl \n\t"
+     "    lds.l @r15+,mach \n\t"
+     "    lds.l @r15+,pr   \n\t"
+     "    mov.l @r15+,r14  \n\t"
+     "    mov.l @r15+,r7   \n\t"
+     "    mov.l @r15+,r6   \n\t"
+     "    mov.l @r15+,r5   \n\t"
+     "    mov.l @r15+,r4   \n\t"
+     "    mov.l @r15+,r3   \n\t"
+     "    mov.l @r15+,r2   \n\t"
+     "    mov.l @r15+,r1   \n\t"
+     "    mov.l @r15+,r0   \n\t"
+     "    rte              \n\t"
+     "    nop              \n\t"
+     "    .align 2         \n\t"
+     #name"_k: \n\t"
+     ".long "Str(func)"\n\t"
+     #name"_v: \n\t"
      ".long "Str(number));
 
 /************************************************
  * Dummy interrupt service procedure for 
  * interrupts being not allowed --> Trap 34 
  ************************************************/
-asm(" .section .text
-.global __dummy_isp
-__dummy_isp:
-      mov.l r14,@-r15
-      mov   r15, r14
-      trapa #34
-      mov.l @r15+,r14
-      rte
+asm(" .section .text\n\
+.global __dummy_isp\n\
+__dummy_isp:\n\
+      mov.l r14,@-r15\n\
+      mov   r15, r14\n\
+      trapa #34\n\
+      mov.l @r15+,r14\n\
+      rte\n\
       nop");
 
 /*******************************************************************

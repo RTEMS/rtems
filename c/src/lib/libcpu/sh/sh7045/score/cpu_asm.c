@@ -199,62 +199,62 @@ void __CPU_Context_switch(
 )
 {
 
-asm volatile("
-	.global __CPU_Context_switch
-__CPU_Context_switch:
-
-	add	%0,r4
-  
-	stc.l   sr,@-r4
-	stc.l	gbr,@-r4
-	mov.l   r0,@-r4
-	mov.l   r1,@-r4
-	mov.l   r2,@-r4
-	mov.l   r3,@-r4
-
-	mov.l   r6,@-r4
-	mov.l   r7,@-r4
-	mov.l	r8,@-r4
-	mov.l	r9,@-r4
-	mov.l	r10,@-r4
-	mov.l	r11,@-r4
-	mov.l	r12,@-r4
-	mov.l	r13,@-r4
-	mov.l   r14,@-r4
-	sts.l   pr,@-r4
-	sts.l   mach,@-r4
-	sts.l   macl,@-r4
-	mov.l   r15,@-r4
-
-	mov     r5, r4"
+asm volatile("\n\
+	.global __CPU_Context_switch\n\
+__CPU_Context_switch:\n\
+\n\
+	add	%0,r4\n\
+  \n\
+	stc.l   sr,@-r4\n\
+	stc.l	gbr,@-r4\n\
+	mov.l   r0,@-r4\n\
+	mov.l   r1,@-r4\n\
+	mov.l   r2,@-r4\n\
+	mov.l   r3,@-r4\n\
+\n\
+	mov.l   r6,@-r4\n\
+	mov.l   r7,@-r4\n\
+	mov.l	r8,@-r4\n\
+	mov.l	r9,@-r4\n\
+	mov.l	r10,@-r4\n\
+	mov.l	r11,@-r4\n\
+	mov.l	r12,@-r4\n\
+	mov.l	r13,@-r4\n\
+	mov.l   r14,@-r4\n\
+	sts.l   pr,@-r4\n\
+	sts.l   mach,@-r4\n\
+	sts.l   macl,@-r4\n\
+	mov.l   r15,@-r4\n\
+\n\
+	mov     r5, r4"\n\
   :: "I" (sizeof(Context_Control))
   );
 
-  asm volatile("
-	.global __CPU_Context_restore
-__CPU_Context_restore:
-	mov.l   @r4+,r15
-	lds.l   @r4+,macl
-	lds.l   @r4+,mach
-	lds.l   @r4+,pr
-	mov.l   @r4+,r14
-	mov.l   @r4+,r13
-	mov.l   @r4+,r12
-	mov.l   @r4+,r11
-	mov.l   @r4+,r10
-	mov.l   @r4+,r9
-	mov.l   @r4+,r8
-	mov.l   @r4+,r7
-	mov.l   @r4+,r6
-
-	mov.l   @r4+,r3
-	mov.l   @r4+,r2
-	mov.l   @r4+,r1
-	mov.l   @r4+,r0
-	ldc.l   @r4+,gbr
-	ldc.l   @r4+,sr
-
-	rts
+  asm volatile("\n\
+	.global __CPU_Context_restore\n\
+__CPU_Context_restore:\n\
+	mov.l   @r4+,r15\n\
+	lds.l   @r4+,macl\n\
+	lds.l   @r4+,mach\n\
+	lds.l   @r4+,pr\n\
+	mov.l   @r4+,r14\n\
+	mov.l   @r4+,r13\n\
+	mov.l   @r4+,r12\n\
+	mov.l   @r4+,r11\n\
+	mov.l   @r4+,r10\n\
+	mov.l   @r4+,r9\n\
+	mov.l   @r4+,r8\n\
+	mov.l   @r4+,r7\n\
+	mov.l   @r4+,r6\n\
+\n\
+	mov.l   @r4+,r3\n\
+	mov.l   @r4+,r2\n\
+	mov.l   @r4+,r1\n\
+	mov.l   @r4+,r0\n\
+	ldc.l   @r4+,gbr\n\
+	ldc.l   @r4+,sr\n\
+\n\
+	rts\n\
 	nop" );
 }
 
