@@ -1,3 +1,12 @@
+2001-03-20	Till Straumann <strauman@SLAC.Stanford.EDU>
+
+	* PR158
+	* libc/rcmd.c, libc/rcmd.c: Enable the rcmd() library call by
+	commenting out the parts that deal with signals.  This enables
+	RTEMS to 'rsh' command to a server connecting fd to remote stdio.
+	The 'server-side' parts of this file which deal with authentication
+	are disabled since they are not needed.
+
 2002-02-27	Ilya Alexeev <ilya@continuum.ru>
 
 	* net/if_ppp.c, pppd/auth.c, pppd/chat.c, pppd/pppd.h,

@@ -59,12 +59,22 @@ static char sccsid[] = "@(#)rcmd.c	8.3 (Berkeley) 3/26/94";
 #include <rpcsvc/ypclnt.h>
 #endif
 
-extern int innetgr __P(( const char *, const char *, const char *, const char * ));
 
 #define max(a, b)	((a > b) ? a : b)
 
+#ifdef __rtems
+int rresvport();
+#define bzero(a,s)		memset((a),0,(s))
+#define bcmp			memcmp
+#define bcopy(s,d,i)	memcpy(d,s,i)
+#else /* __rtems */
+
+extern int innetgr __P(( const char *, const char *, const char *, const char * ));
+
 int	__ivaliduser __P((FILE *, u_long, const char *, const char *));
 static int __icheckhost __P((u_long, char *));
+
+#endif
 
 int
 rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
@@ -76,7 +86,9 @@ rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
 	struct hostent *hp;
 	struct sockaddr_in sin, from;
 	fd_set reads;
+#ifndef __rtems
 	long oldmask;
+#endif
 	pid_t pid;
 	int s, lport, timo;
 	char c;
@@ -88,7 +100,9 @@ rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
 		return (-1);
 	}
 	*ahost = hp->h_name;
+#ifndef __rtems
 	oldmask = sigblock(sigmask(SIGURG));
+#endif
 	for (timo = 1, lport = IPPORT_RESERVED - 1;;) {
 		s = rresvport(&lport);
 		if (s < 0) {
@@ -98,7 +112,9 @@ rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
 			else
 				(void)fprintf(stderr, "rcmd: socket: %s\n",
 				    strerror(errno));
+#ifndef __rtems
 			sigsetmask(oldmask);
+#endif
 			return (-1);
 		}
 		fcntl(s, F_SETOWN, pid);
@@ -133,7 +149,9 @@ rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
 			continue;
 		}
 		(void)fprintf(stderr, "%s: %s\n", hp->h_name, strerror(errno));
+#ifndef __rtems
 		sigsetmask(oldmask);
+#endif
 		return (-1);
 	}
 	lport--;
@@ -221,14 +239,18 @@ again:
 		}
 		goto bad2;
 	}
+#ifndef __rtems
 	sigsetmask(oldmask);
+#endif
 	return (s);
 bad2:
 	if (lport)
 		(void)close(*fd2p);
 bad:
 	(void)close(s);
+#ifndef __rtems
 	sigsetmask(oldmask);
+#endif
 	return (-1);
 }
 
@@ -264,6 +286,7 @@ rresvport(alport)
 	return (s);
 }
 
+#ifndef __rtems
 int	__check_rhosts_file = 1;
 char	*__rcmd_errstr;
 
@@ -518,3 +541,4 @@ __icheckhost(raddr, lhost)
 	/* No match. */
 	return (0);
 }
+#endif

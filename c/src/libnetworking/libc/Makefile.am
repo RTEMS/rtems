@@ -15,7 +15,7 @@ C_FILES = addr2ascii.c ascii2addr.c base64.c gethostbydns.c gethostbyht.c \
     inet_pton.c linkaddr.c map_v4v6.c nsap_addr.c ns_name.c ns_netint.c \
     ns_parse.c ns_print.c ns_ttl.c res_comp.c res_data.c res_debug.c \
     res_init.c res_mkquery.c res_mkupdate.c res_query.c res_send.c \
-    res_stubs.c res_update.c strsep.c
+    res_stubs.c res_update.c strsep.c rcmd.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
