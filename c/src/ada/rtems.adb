@@ -9,11 +9,18 @@
 --
 --
 --
---  COPYRIGHT (c) 1989 - 1997.
+--  COPYRIGHT (c) 1997.
 --  On-Line Applications Research Corporation (OAR).
+--
+--  The license and distribution terms for this file may in
+--  the file LICENSE in this distribution or at
+--  http://www.OARcorp.com/rtems/license.html.
+--
+--  $Id$
 --
 
 with Ada;
+with Ada.Unchecked_Conversion;
 with System;
 with Interfaces; use Interfaces;
 with Interfaces.C;
@@ -170,6 +177,17 @@ package body RTEMS is
       return False;
 
    end Is_Status_Successful;
+
+   function Subtract (
+      Left   : in     RTEMS.Address;
+      Right  : in     RTEMS.Address
+   ) return RTEMS.Unsigned32 is
+      function To_Unsigned32 is
+         new Ada.Unchecked_Conversion (System.Address, RTEMS.Unsigned32);
+
+   begin
+      return To_Unsigned32(Left) - To_Unsigned32(Right);
+   end Subtract;
 
    --
    --
@@ -822,17 +840,19 @@ package body RTEMS is
    --
  
    procedure Semaphore_Create (
-      Name          : in     RTEMS.Name;
-      Count         : in     RTEMS.Unsigned32;
-      Attribute_Set : in     RTEMS.Attribute;
-      ID            :    out RTEMS.ID;
-      Result        :    out RTEMS.Status_Codes
+      Name             : in     RTEMS.Name;
+      Count            : in     RTEMS.Unsigned32;
+      Attribute_Set    : in     RTEMS.Attribute;
+      Priority_Ceiling : in     RTEMS.Task_Priority;
+      ID               :    out RTEMS.ID;
+      Result           :    out RTEMS.Status_Codes
    ) is
       function Semaphore_Create_Base (
-         Name          : RTEMS.Name;
-         Count         : RTEMS.Unsigned32;
-         Attribute_Set : RTEMS.Attribute;
-         ID            : access RTEMS.ID
+         Name             : RTEMS.Name;
+         Count            : RTEMS.Unsigned32;
+         Attribute_Set    : RTEMS.Attribute;
+         Priority_Ceiling : RTEMS.Task_Priority;
+         ID               : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C, Semaphore_Create_Base, "rtems_semaphore_create");
       ID_Base : aliased RTEMS.ID := ID;
@@ -842,6 +862,7 @@ package body RTEMS is
          Name,
          Count,
          Attribute_Set,
+         Priority_Ceiling,
          ID_Base'Unchecked_Access
       );
  
@@ -934,10 +955,11 @@ package body RTEMS is
    ) is
       --  XXX broken
       function Message_Queue_Create_Base (
-         Name          : RTEMS.Name;
-         Count         : RTEMS.Unsigned32;
-         Attribute_Set : RTEMS.Attribute;
-         ID            : access RTEMS.ID
+         Name             : RTEMS.Name;
+         Count            : RTEMS.Unsigned32;
+         Max_Message_Size : RTEMS.Unsigned32;
+         Attribute_Set    : RTEMS.Attribute;
+         ID               : access RTEMS.ID
       )  return RTEMS.Status_Codes;
       pragma Import (C,
         Message_Queue_Create_Base, "rtems_message_queue_create");
@@ -947,6 +969,7 @@ package body RTEMS is
       Result := Message_Queue_Create_Base (
          Name,
          Count,
+         Max_Message_Size,
          Attribute_Set,
          ID_Base'Unchecked_Access
       );
@@ -1931,13 +1954,14 @@ package body RTEMS is
       Result  :    out RTEMS.Status_Codes
    ) is
       function Rate_Monotonic_Period_Base (
-         ID : RTEMS.ID
+         ID     : RTEMS.ID;
+         Length : RTEMS.Interval
       )  return RTEMS.Status_Codes;
       pragma Import (C, Rate_Monotonic_Period_Base,
          "rtems_rate_monotonic_period");
    begin
  
-      Result := Rate_Monotonic_Period_base ( ID );
+      Result := Rate_Monotonic_Period_base ( ID, Length );
 
    end Rate_Monotonic_Period;
  

@@ -9,8 +9,14 @@
 --
 --
 --
---  COPYRIGHT (c) 1989 - 1997.
+--  COPYRIGHT (c) 1997.
 --  On-Line Applications Research Corporation (OAR).
+--
+--  The license and distribution terms for this file may in
+--  the file LICENSE in this distribution or at
+--  http://www.OARcorp.com/rtems/license.html.
+--
+--  $Id$
 --
 
 with System;
@@ -20,7 +26,7 @@ with Interfaces.C;
 
 package RTEMS is
 
-   Structure_Alignment : constant := 16;
+   Structure_Alignment : constant := 8;
 
    --
    --  RTEMS Base Types
@@ -73,7 +79,7 @@ package RTEMS is
    subtype Mode                is RTEMS.Unsigned32;
    subtype Option              is RTEMS.Unsigned32;
    subtype Task_Priority       is RTEMS.Unsigned32;
-   subtype Notepad_Index       is RTEMS.Unsigned32;
+   subtype Notepad_Index       is RTEMS.Unsigned32 range 0 .. 15;
 
    subtype Event_Set           is RTEMS.Unsigned32;
    subtype Signal_Set          is RTEMS.Unsigned32;
@@ -262,6 +268,7 @@ package RTEMS is
    Period_Status    : constant RTEMS.Interval := 0;
    Yield_Processor  : constant RTEMS.Interval := 0;
    Current_Priority : constant RTEMS.Task_Priority := 0;
+   No_Priority      : constant RTEMS.Task_Priority := 0;
 
 
    --
@@ -765,6 +772,11 @@ package RTEMS is
       Status  : in     RTEMS.Status_Codes
    ) return Standard.Boolean;
 
+   function Subtract (
+      Left   : in     RTEMS.Address;
+      Right  : in     RTEMS.Address
+   ) return RTEMS.Unsigned32;
+
    --
    --  RTEMS API
    --
@@ -998,11 +1010,12 @@ package RTEMS is
    --
 
    procedure Semaphore_Create (
-      Name          : in     RTEMS.Name;
-      Count         : in     RTEMS.Unsigned32;
-      Attribute_Set : in     RTEMS.Attribute;
-      ID            :    out RTEMS.ID;
-      Result        :    out RTEMS.Status_Codes
+      Name             : in     RTEMS.Name;
+      Count            : in     RTEMS.Unsigned32;
+      Attribute_Set    : in     RTEMS.Attribute;
+      Priority_Ceiling : in     RTEMS.Task_Priority;
+      ID               :    out RTEMS.ID;
+      Result           :    out RTEMS.Status_Codes
    );
 
    procedure Semaphore_Delete (
@@ -1383,6 +1396,9 @@ package RTEMS is
    --
    --  Debug Manager
    --
+
+   Debug_All_Mask : constant RTEMS.Debug_Set := 16#ffffffff#;
+   Debug_Region   : constant RTEMS.Debug_Set := 16#00000001#;
 
    procedure Debug_Enable (
       To_Be_Enabled : in     RTEMS.Debug_Set
