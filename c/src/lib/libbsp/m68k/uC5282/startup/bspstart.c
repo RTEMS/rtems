@@ -347,7 +347,7 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
         return -1;
     handlerTab[vector].func = handler;
     handlerTab[vector].arg = usrArg;
-    rtems_interrupt_catch(trampoline, vector, old_handler);
+    rtems_interrupt_catch(trampoline, vector, &old_handler);
 
     /*
      * Find an unused level/priority

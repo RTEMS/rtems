@@ -1,3 +1,8 @@
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* startup/bspstart.c:
+	rtems_interrupt_catch(trampoline, vector, &old_handler).
+
 2005-02-03  Eric Norum <norume@aps.anl.gov>
 
 	* include/bsp.h, startup/bspstart.c: Add 'extended' BSP
