@@ -571,11 +571,8 @@ Where <target configuration> is one of the following:
 @itemize @bullet
 @item hppa1.1
 @item i386
-@item i386-elf
-@item i386-go32
 @item i960
 @item m68k
-@item mips64orion
 @item powerpc
 @item sh
 @item sparc
