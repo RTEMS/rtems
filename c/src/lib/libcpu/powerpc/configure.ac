@@ -55,5 +55,5 @@ ppc403/Makefile
 mpc6xx/Makefile
 mpc8260/Makefile
 shared/Makefile
-wrapup/Makefile])
+])
 AC_OUTPUT

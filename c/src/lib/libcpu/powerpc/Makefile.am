@@ -8,7 +8,7 @@ include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
     rtems/powerpc/debugmod.h
 
-SUBDIRS = shared mpc505 mpc6xx mpc8260 mpc8xx ppc403 wrapup
+SUBDIRS = shared mpc505 mpc6xx mpc8260 mpc8xx ppc403
 
 all-local: $(TMPINSTALL_FILES)
 
