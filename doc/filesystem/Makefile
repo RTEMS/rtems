@@ -22,18 +22,18 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES=basefs.texi applayering.texi patheval.texi \
-    init.texi mounting.texi 
+    init.texi mounting.texi lifecycle.texi
 
 FILES= $(PROJECT).texi \
   preface.texi $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: dirs networking
+info: dirs $(PROJECT)
 	#cp $(wildcard $(PROJECT) $(PROJECT)-*) $(INFO_INSTALL)
 	cp $(PROJECT) $(INFO_INSTALL)
 
-networking: $(FILES)
+$(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
 dvi: dirs $(PROJECT).dvi
@@ -73,6 +73,11 @@ init.texi: init.t Makefile
 	   -n "" ${*}.t
 
 mounting.texi: mounting.t Makefile
+	$(BMENU) -p "" \
+	   -u "Top" \
+	   -n "" ${*}.t
+
+lifecycle.texi: lifecycle.t Makefile
 	$(BMENU) -p "" \
 	   -u "Top" \
 	   -n "" ${*}.t
