@@ -30,6 +30,7 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 {
   switch (cpu) {
     case PPC_601:		return "MPC601";
+    case PPC_5XX:		return "MPC5XX";
     case PPC_603:		return "MPC603";
     case PPC_603ev:		return "MPC603ev";
     case PPC_604:		return "MPC604";
@@ -52,6 +53,7 @@ ppc_cpu_id_t get_ppc_cpu_type()
   current_ppc_cpu = (ppc_cpu_id_t) pvr;
   switch (pvr) {
     case PPC_601:
+    case PPC_5XX:
     case PPC_603:
     case PPC_603ev:
     case PPC_604:
