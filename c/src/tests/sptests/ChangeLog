@@ -1,3 +1,39 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+	sp01/Makefile.am: Reflect having moved automake.
+	sp02/Makefile.am: Reflect having moved automake.
+	sp03/Makefile.am: Reflect having moved automake.
+	sp04/Makefile.am: Reflect having moved automake.
+	sp05/Makefile.am: Reflect having moved automake.
+	sp06/Makefile.am: Reflect having moved automake.
+	sp07/Makefile.am: Reflect having moved automake.
+	sp08/Makefile.am: Reflect having moved automake.
+	sp09/Makefile.am: Reflect having moved automake.
+	sp11/Makefile.am: Reflect having moved automake.
+	sp12/Makefile.am: Reflect having moved automake.
+	sp13/Makefile.am: Reflect having moved automake.
+	sp14/Makefile.am: Reflect having moved automake.
+	sp15/Makefile.am: Reflect having moved automake.
+	sp16/Makefile.am: Reflect having moved automake.
+	sp17/Makefile.am: Reflect having moved automake.
+	sp19/Makefile.am: Reflect having moved automake.
+	sp20/Makefile.am: Reflect having moved automake.
+	sp21/Makefile.am: Reflect having moved automake.
+	sp22/Makefile.am: Reflect having moved automake.
+	sp23/Makefile.am: Reflect having moved automake.
+	sp24/Makefile.am: Reflect having moved automake.
+	sp25/Makefile.am: Reflect having moved automake.
+	sp26/Makefile.am: Reflect having moved automake.
+	sp27/Makefile.am: Reflect having moved automake.
+	sp28/Makefile.am: Reflect having moved automake.
+	sp29/Makefile.am: Reflect having moved automake.
+	sp30/Makefile.am: Reflect having moved automake.
+	sp31/Makefile.am: Reflect having moved automake.
+	sp32/Makefile.am: Reflect having moved automake.
+	spfatal/Makefile.am: Reflect having moved automake.
+	spsize/Makefile.am: Reflect having moved automake.
+
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
 	* sp02/task1.c: Added ID to name lookup service and changed name of

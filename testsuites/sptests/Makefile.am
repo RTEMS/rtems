@@ -11,5 +11,5 @@ SUBDIRS = sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 sp09 sp11 sp12 sp13 sp14 \
 
 EXTRA_DIST = sptests.am spfatal
 
-include $(top_srcdir)/../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
