@@ -32,32 +32,26 @@ extern "C" {
 #if defined(__ARM_ARCH_4__)
 #  define CPU_MODEL_NAME  "ARMv4"
 #  define ARM_HAS_CLZ     0
-#  define ARM_HAS_THUMB   0
 
 #elif defined(__ARM_ARCH_4T__)
 #  define CPU_MODEL_NAME  "ARMv4T"
 #  define ARM_HAS_CLZ     0
-#  define ARM_HAS_THUMB   1
 
 #elif defined(__ARM_ARCH_5__)
 #  define CPU_MODEL_NAME  "ARMv5"
 #  define ARM_HAS_CLZ     1
-#  define ARM_HAS_THUMB   0
 
 #elif defined(__ARM_ARCH_5T__)
 #  define CPU_MODEL_NAME  "ARMv5T"
 #  define ARM_HAS_CLZ     1
-#  define ARM_HAS_THUMB   1
 
 #elif defined(__ARM_ARCH_5E__)
 #  define CPU_MODEL_NAME  "ARMv5E"
 #  define ARM_HAS_CLZ     1
-#  define ARM_HAS_THUMB   0
 
 #elif defined(__ARM_ARCH_5TE__)
 #  define CPU_MODEL_NAME  "ARMv5TE"
 #  define ARM_HAS_CLZ     1
-#  define ARM_HAS_THUMB   1
 
 #else
 #  error "Unsupported CPU Model"

@@ -278,9 +278,17 @@ extern "C" {
  */
 
 #define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
-#define CPU_BIG_ENDIAN                           FALSE
-#define CPU_LITTLE_ENDIAN                        TRUE
 
+#if defined(__ARMEL__)
+#define CPU_BIG_ENDIAN          FALSE
+#define CPU_LITTLE_ENDIAN       TRUE
+#elif define(__ARMEB__)
+#define CPU_BIG_ENDIAN          TRUE
+#define CPU_LITTLE_ENDIAN       FALSE
+#else
+#error "Unknown endianness"
+#endif
+			
 /*
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
@@ -774,7 +782,7 @@ void _CPU_Context_Initialize(
 #  define _CPU_Priority_bits_index( _priority ) \
    (_priority)
 
-#  error "Implement CLZ verson of priority bit functions for ARMv5"
+#  error "Implement CLZ version of priority bit functions for ARMv5"
 #endif
 
 /* end of Priority handler macros */
