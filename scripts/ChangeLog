@@ -1,3 +1,7 @@
+2004-01-23	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Make it match gcc 3.2.3 RPMs.
+
 2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 554/tools
