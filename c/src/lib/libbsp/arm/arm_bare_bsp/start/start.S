@@ -37,6 +37,7 @@ _start:
 /*
  * Here is the code to initialize the low-level BSP environment
  * (Chip Select, PLL, ....?)
+ */
 
 /* Copy data from FLASH to RAM */
         LDR     r0, =_initdata        /* load address of region */
