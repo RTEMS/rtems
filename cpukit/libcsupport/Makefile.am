@@ -32,7 +32,7 @@ endif
 
 include_rtems_motoroladir = $(includedir)/rtems/motorola
 
-include_rtems_motorola_HEADERS = include/rtems/motorola/mc68230.h \
+include_rtems_motorola_HEADERS = include/motorola/mc68230.h \
     include/motorola/mc68681.h
 
 ## rtems
