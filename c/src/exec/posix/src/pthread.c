@@ -580,7 +580,7 @@ int pthread_create(
   void                   *arg
 )
 {
-  const pthread_attr_t  *attrp;
+  const pthread_attr_t  *the_attr;
   Priority_Control       core_priority;
   boolean                is_timesliced;
   boolean                is_fp;
@@ -591,9 +591,9 @@ int pthread_create(
   int                    schedpolicy = SCHED_RR;
   struct sched_param     schedparams;
 
-  attrp = (attr) ? attr : &_POSIX_Threads_Default_attributes;
+  the_attr = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
-  if ( !attrp->is_initialized )
+  if ( !the_attr->is_initialized )
     return EINVAL;
 
   /*
@@ -620,15 +620,15 @@ int pthread_create(
    *  attributes structure.
    */
 
-  switch ( attrp->inheritsched ) {
+  switch ( the_attr->inheritsched ) {
     case PTHREAD_INHERIT_SCHED:
       api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
       schedpolicy = api->schedpolicy;
       schedparams = api->Schedule;
       break; 
     case PTHREAD_EXPLICIT_SCHED:
-      schedpolicy = attrp->schedpolicy;
-      schedparams = attrp->schedparam;
+      schedpolicy = the_attr->schedpolicy;
+      schedparams = the_attr->schedparam;
       break; 
   }
 
@@ -638,10 +638,10 @@ int pthread_create(
 
   is_timesliced = FALSE;
 
-  if ( !_POSIX_Priority_Is_valid( attrp->schedparam.sched_priority ) )
+  if ( !_POSIX_Priority_Is_valid( the_attr->schedparam.sched_priority ) )
     return EINVAL;
  
-  core_priority = _POSIX_Priority_To_core( attrp->schedparam.sched_priority );
+  core_priority = _POSIX_Priority_To_core(the_attr->schedparam.sched_priority);
  
   switch ( schedpolicy ) {
     case SCHED_OTHER:
@@ -693,8 +693,8 @@ int pthread_create(
   status = _Thread_Initialize(
     &_POSIX_Threads_Information,
     the_thread,
-    attrp->stackaddr,
-    attrp->stacksize,
+    the_attr->stackaddr,
+    the_attr->stacksize,
     is_fp,
     core_priority,
     TRUE,                 /* preemptible */
@@ -716,7 +716,7 @@ int pthread_create(
   
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  api->Attributes = *attrp;
+  api->Attributes = *the_attr;
   api->detachstate = attr->detachstate;
 
   _Thread_queue_Initialize(
