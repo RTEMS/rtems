@@ -64,9 +64,9 @@ void  _CPU_ISR_Handler(int);
 
 static sigset_t         _CPU_Signal_mask;
 static Context_Control_overlay
-          CPU_STRUCTURE_ALIGNMENT _CPU_Context_Default_with_ISRs_enabled;
+          _CPU_Context_Default_with_ISRs_enabled CPU_STRUCTURE_ALIGNMENT;
 static Context_Control_overlay
-          CPU_STRUCTURE_ALIGNMENT _CPU_Context_Default_with_ISRs_disabled;
+          _CPU_Context_Default_with_ISRs_disabled CPU_STRUCTURE_ALIGNMENT;
 
 /*
  * Which cpu are we? Used by libcpu and libbsp.
