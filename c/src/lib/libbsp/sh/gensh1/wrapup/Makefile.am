@@ -12,7 +12,7 @@ CPU_PIECES = clock timer sci delay score
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     $(foreach piece, $(CPU_PIECES), \
-    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/$(piece).rel)
+    ../../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/$(piece)$(LIB_VARIANT).rel)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
