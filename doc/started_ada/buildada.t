@@ -13,13 +13,64 @@ source code for a GNU cross compiler toolset, apply
 any required RTEMS specific patches, compile that 
 toolset and install it.
 
+@section Create the Archive and Build Directories
+
+Start by making the @code{archive} directory to contain the downloaded 
+source code and the @code{tools} directory to be used as a build
+directory.  The command sequence to do this is shown
+below:
+
+@example
+mkdir arc
+mkdir tools
+@end example
+
+This will result in an initial directory structure similar to the
+one shown in the following figure:
+
+@ifset use-ascii
+@example
+@group
+                parent directory common to the 
+               tools and archive subdirectories
+                             |
+      +----------------------+----------------------+
+      |                                             |  
+   tools                                           arc
+@end group
+@end example
+@end ifset
+
+
+@ifset use-tex
+@c for now use the ascii version
+@example 
+@group
+                parent directory common to the 
+               tools and archive subdirectories
+                             |
+      +----------------------+----------------------+
+      |                                             |
+   tools                                           arc
+@end group
+@end example
+@tex
+@end tex
+@end ifset
+
+
+@ifset use-html
+@html
+<IMG SRC="sfile12c.jpg" WIDTH=417 HEIGHT=178 
+    ALT="Starting Directory Organization">
+@end html
+@end ifset
+
 @section Get all the Pieces 
 
-Gather the components that will be required for the installation and place
-them in an archive directory. Call this directory @code{arc}. Be sure that there
-is sufficient space to hold all necessary information. This will amount to
-approximately 20 megabytes.  In addition, make a directory named @code{tools}
-to build the cross-compiler in.
+This section lists the components of an RTEMS cross development system.
+Included are the locations of each component as well as any required RTEMS
+specific patches.
 
 @subheading @value{GCC-VERSION}
 @example
@@ -55,6 +106,13 @@ to build the cross-compiler in.
     Directory:   @value{RTEMS-FTPDIR}
     File:        @value{RTEMS-TAR}
     File:        bit_ada
+    File:        hello_world_ada.tgz
+@end example
+
+@subheading RTEMS Specific Tool Patches
+@example
+    FTP Site:    @value{RTEMS-FTPSITE}
+    Directory:   @value{RTEMS-FTPDIR}/ada_tools
 @ifset BINUTILS-RTEMSPATCH
     File:        @value{BINUTILS-RTEMSPATCH}
 @end ifset
@@ -67,53 +125,17 @@ to build the cross-compiler in.
 @ifset GNAT-RTEMSPATCH
     File:        @value{GNAT-RTEMSPATCH}
 @end ifset
-    File:        hello_world_ada.tgz
-@end example
-
-@section Create the tools Directory
-
-Create a directory called tools that will serve as a working directory to
-perform the build of the cross compiler tools.  Since we previously
-created a directory named @code{arc} to place the files we downloaded
-into, this will result in a starting directory structure similar the
-one shown in the following figure:
-                
-@ifset use-ascii
-@example
-@group
-                parent directory common to the
-               tools and archive subdirectories
-                             |
-      +----------------------+----------------------+
-      |                                             |
-   tools                                           arc
-@end group
-@end example
+@c Just in case there are ever no patches
+@ifset BINUTILS-RTEMSPATCH
+@ifset GCC-RTEMSPATCH
+@ifset NEWLIB-RTEMSPATCH
+@ifset GNAT-RTEMSPATCH
+    No RTEMS specific patches are required.
 @end ifset
-    
-
-@ifset use-tex
-@c for now use the ascii version
-@example
-@group
-                parent directory common to the
-               tools and archive subdirectories
-                             |
-      +----------------------+----------------------+
-      |                                             |
-   tools                                           arc
-@end group
+@end ifset
+@end ifset
+@end ifset
 @end example
-@tex
-@end tex
-@end ifset
-
-
-@ifset use-html  
-@html
-<IMG SRC="sfile12c.jpg" WIDTH=417 HEIGHT=178 ALT="Base Directory Organization">
-@end html
-@end ifset
 
 @section Unarchiving the Tools
 
@@ -216,15 +238,6 @@ find . -name "*.rej" -print
 If any files are found with the .rej extension, a patch has been rejected.
 This should not happen with a good patch file.
 
-To see the files that have been modified use the sequence:
-
-@example
-cd tools/@value{GCC-UNTAR}
-find . -name "*.orig" -print
-@end example
-
-The files that are found, have been modified by the patch file.
-
 @end ifset
 
 @c
@@ -256,15 +269,6 @@ find . -name "*.rej" -print
 
 If any files are found with the .rej extension, a patch has been rejected.
 This should not happen with a good patch file. 
-
-To see the files that have been modified use the sequence:
-
-@example
-cd tools/@value{BINUTILS-UNTAR}
-find . -name "*.orig" -print
-@end example
-
-The files that are found, have been modified by the patch file. 
 
 @end ifset
 
@@ -299,15 +303,6 @@ find . -name "*.rej" -print
 If any files are found with the .rej extension, a patch has been rejected.
 This should not happen with a good patch file. 
 
-To see the files that have been modified use the sequence:
-
-@example
-cd tools/@value{NEWLIB-UNTAR}
-find . -name "*.orig" -print
-@end example
-
-The files that are found, have been modified by the patch file. 
-
 @end ifset
 
 @c  
@@ -340,15 +335,6 @@ find . -name "*.rej" -print
 
 If any files are found with the .rej extension, a patch has been rejected.
 This should not happen with a good patch file.
-
-To see the files that have been modified use the sequence:
-
-@example
-cd tools/@value{GNAT-UNTAR}
-find . -name "*.orig" -print
-@end example
-
-The files that are found, have been modified by the patch file.
 
 @end ifset
 

@@ -56,7 +56,7 @@
 @c @set BINUTILS-TAR         gas-980314.tgz
 @c @set BINUTILS-UNTAR       gas-980314
 @c @set BINUTILS-FTPSITE     ftp.OARcorp.com
-@c @set BINUTILS-FTPDIR      /OARcorp/private/beta2/c_tools
+@c @set BINUTILS-FTPDIR      /oarcorp/private/beta2/ada_tools
 @c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
 
 @c
