@@ -19,6 +19,10 @@
 /*PAGE
  *
  *  _POSIX_Semaphore_Create_support
+ *
+ *  This routine does the actual creation and initialization of
+ *  a poxix semaphore.  It is a support routine for sem_init and
+ *  sem_open.
  */
 
 int _POSIX_Semaphore_Create_support(
@@ -68,9 +72,12 @@ int _POSIX_Semaphore_Create_support(
 
   the_sem_attr = &the_semaphore->Semaphore.Attributes;
  
-  /* XXX
-   *
-   *  Note should this be based on the current scheduling policy?
+  /*
+   *  POSIX does not appear to specify what the discipline for 
+   *  blocking tasks on this semaphore should be.  It could somehow 
+   *  be derived from the current scheduling policy.  One
+   *  thing is certain, no matter what we decide, it won't be 
+   *  the same as  all other POSIX implementations. :)
    */
 
   the_sem_attr->discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
@@ -86,10 +93,13 @@ int _POSIX_Semaphore_Create_support(
     OBJECTS_POSIX_SEMAPHORES,
     the_sem_attr,
     value,
-    0      /* XXX - proxy_extract_callout is unused */
+    NULL                 /* multiprocessing is not supported */
   );
+
+  /*
+   *  Make the semaphore available for use.
+   */
  
-  /* XXX - need Names to be a string!!! */
   _Objects_Open(
     &_POSIX_Semaphore_Information,
     &the_semaphore->Object,
@@ -104,7 +114,7 @@ int _POSIX_Semaphore_Create_support(
       POSIX_SEMAPHORE_MP_ANNOUNCE_CREATE,
       the_semaphore->Object.id,
       (char *) name,
-      0                /* proxy id - Not used */
+      0                           /* proxy id - Not used */
     );
 #endif
  
