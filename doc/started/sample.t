@@ -61,3 +61,16 @@ tools/hello_world_c/o-optimize/<filename>.exe
 
 How this executable is downloaded to the target board is very dependent
 on the BOARD_SUPPORT_PACKAGE selected.
+
+@section More Information on RTEMS Application Makefiles
+
+The hello world sample application is a simple example of an
+RTEMS application the uses the RTEMS Application Makefile 
+system.  This Makefile system gives simplifies building
+RTEMS applications by providing Makefile templates and
+capturing the configuration information used to build
+RTEMS specific to your BSP.  Building an RTEMS application
+for different BSPs is as simple as switching the
+setting of @code{RTEMS_MAKEFILE_PATH}.  This Makefile
+system is described in the file
+@code{@value{RTEMS-UNTAR}/make/README}.
