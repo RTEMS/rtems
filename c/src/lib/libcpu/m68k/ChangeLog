@@ -1,3 +1,14 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* m68040/fpsp/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* m68040/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* shared/cache/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* shared/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-10-26	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, configure.ac: New libcpu support for mcf5206e.
