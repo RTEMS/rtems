@@ -1,3 +1,10 @@
+2004-11-01	Joel Sherrill <joel@oarcorp.com>
+
+	* score/include/rtems/score/object.h, 
+	score/inline/rtems/score/object.inl,
+	score/macros/rtems/score/object.inl: Add first cut of optional
+	16 bit object Id as space reduction for small systems (TinyRTEMS).
+
 2004-11-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* monitor/monitor.h: Let rtems_monitor_config_dump return int.

@@ -131,12 +131,14 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
  *  FALSE otherwise.
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
   uint32_t   node
 )
 {
   return ( node == _Objects_Local_node );
 }
+#endif
 
 /*PAGE
  *
@@ -148,12 +150,14 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
  *  FALSE otherwise.
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_id(
   Objects_Id id
 )
 {
   return _Objects_Is_local_node( _Objects_Get_node(id) );
 }
+#endif
 
 /*PAGE
  *
@@ -185,7 +189,7 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Are_ids_equal(
 
 RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
   Objects_Information *information,
-  uint32_t             index
+  uint16_t             index
 )
 {
   if ( index > information->maximum )
@@ -205,7 +209,7 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
 
 RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
   Objects_Information *information,
-  uint32_t             index,
+  uint16_t             index,
   Objects_Control     *the_object
 )
 {
@@ -229,7 +233,7 @@ RTEMS_INLINE_ROUTINE Objects_Information *_Objects_Get_information(
 )
 {
   Objects_APIs  the_api;
-  uint32_t      the_class;
+  uint16_t      the_class;
 
 
   the_class = _Objects_Get_class( id );

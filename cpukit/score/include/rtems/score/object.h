@@ -5,7 +5,7 @@
  *  can be used to initialize and manipulate all objects which have
  *  ids.
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,6 +57,28 @@ typedef boolean (*Objects_Name_comparators)(
   uint32_t     /* length */
 );
 
+#if defined(RTEMS_USE_16_BIT_OBJECT)
+/*
+ *  The following type defines the control block used to manage
+ *  object IDs.  The format is as follows (0=LSB):
+ *
+ *     Bits  0 ..  7    = index  (up to 254 objects of a type)
+ *     Bits  8 .. 10    = API    (up to 7 API classes)
+ *     Bits 11 .. 15    = class  (up to 31 object types per API)
+ */
+
+typedef uint16_t   Objects_Id;
+typedef uint8_t    Objects_Maximum;
+
+#define OBJECTS_INDEX_START_BIT  0
+#define OBJECTS_API_START_BIT    8
+#define OBJECTS_CLASS_START_BIT 11
+
+#define OBJECTS_INDEX_MASK      (Objects_Id)0x000000ff
+#define OBJECTS_API_MASK        (Objects_Id)0x00000700
+#define OBJECTS_CLASS_MASK      (Objects_Id)0x0000F800
+
+#else
 /*
  *  The following type defines the control block used to manage
  *  object IDs.  The format is as follows (0=LSB):
@@ -68,6 +90,7 @@ typedef boolean (*Objects_Name_comparators)(
  */
 
 typedef uint32_t   Objects_Id;
+typedef uint16_t   Objects_Maximum;
 
 #define OBJECTS_INDEX_START_BIT  0
 #define OBJECTS_NODE_START_BIT  16
@@ -83,6 +106,7 @@ typedef uint32_t   Objects_Id;
 #define OBJECTS_NODE_VALID_BITS   (Objects_Id)0x000000ff
 #define OBJECTS_API_VALID_BITS    (Objects_Id)0x00000007
 #define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x0000001f
+#endif
 
 /*
  *  This enumerated type is used in the class field of the object ID.
@@ -161,7 +185,7 @@ typedef enum {
   OBJECTS_LOCAL  = 0,         /* object is local */
   OBJECTS_REMOTE = 1,         /* object is remote */
   OBJECTS_ERROR  = 2          /* id was invalid */
-}  Objects_Locations;
+} Objects_Locations;
 
 /*
  *  The following type defines the callout used when a local task
@@ -170,7 +194,6 @@ typedef enum {
  */
 
 typedef void ( *Objects_Thread_queue_Extract_callout )( void * );
-
 
 /*
  *  The following defines the Object Control Block used to manage
@@ -181,7 +204,7 @@ typedef struct {
   Chain_Node     Node;
   Objects_Id     id;
   Objects_Name   name;
-}   Objects_Control;
+} Objects_Control;
 
 /*
  *  The following defines the structure for the information used to
@@ -190,21 +213,21 @@ typedef struct {
 
 typedef struct {
   Objects_APIs      the_api;            /* API of this object */
-  uint32_t          the_class;          /* class of this object */
+  uint16_t          the_class;          /* class of this object */
   Objects_Id        minimum_id;         /* minimum valid id of this type */
   Objects_Id        maximum_id;         /* maximum valid id of this type */
-  uint32_t          maximum;            /* maximum number of objects */
+  Objects_Maximum   maximum;            /* maximum number of objects */
   boolean           auto_extend;        /* TRUE if unlimited objects */
   uint32_t          allocation_size;    /* number of objects in a block */
   uint32_t          size;               /* size of the objects */
   Objects_Control **local_table;
   Objects_Name     *name_table;
   Chain_Control     Inactive;           /* chain of inactive ctl blocks */
-  uint32_t          inactive;           /* number of objects on the InActive list */
+  Objects_Maximum   inactive;           /* number of objects on the InActive list */
   uint32_t         *inactive_per_block; /* used to release a block */
   void            **object_blocks;      /* the object memory to remove */
   boolean           is_string;          /* TRUE if names are strings */
-  uint32_t          name_length;        /* maximum length of names */
+  uint16_t          name_length;        /* maximum length of names */
   Objects_Thread_queue_Extract_callout *extract;
 #if defined(RTEMS_MULTIPROCESSING)
   Chain_Control    *global_table;       /* pointer to global table */
@@ -216,8 +239,13 @@ typedef struct {
  *  node number of the local node.
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 SCORE_EXTERN uint32_t    _Objects_Local_node;
 SCORE_EXTERN uint32_t    _Objects_Maximum_nodes;
+#else
+#define _Objects_Local_node    1
+#define _Objects_Maximum_nodes 1
+#endif
 
 /*
  *  The following is the list of information blocks per API for each object
@@ -254,7 +282,6 @@ SCORE_EXTERN Objects_Information
 
 #define OBJECTS_ID_INITIAL(_api, _class, _node) \
   _Objects_Build_id( (_api), (_class), (_node), OBJECTS_ID_INITIAL_INDEX )
-
 #define OBJECTS_ID_FINAL           ((Objects_Id)~0)
 
 /*
@@ -314,8 +341,8 @@ void _Objects_Initialize_information (
   Objects_Information *information,
   Objects_APIs         the_api,
   uint32_t             the_class,
-  uint32_t             maximum,
-  uint32_t             size,
+  Objects_Maximum      maximum,
+  uint16_t             size,
   boolean              is_string,
   uint32_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
@@ -351,8 +378,8 @@ Objects_Control *_Objects_Allocate(
 
 Objects_Control *_Objects_Allocate_by_index(
   Objects_Information *information,
-  uint32_t             index,
-  uint32_t             sizeof_control
+  uint16_t             index,
+  uint16_t             sizeof_control
 );
 
 /*PAGE
@@ -407,7 +434,7 @@ void _Objects_Copy_name_string(
 void _Objects_Copy_name_raw(
   void       *source,
   void       *destination,
-  uint32_t    length
+  uint16_t    length
 );
 
 /*
@@ -421,7 +448,7 @@ void _Objects_Copy_name_raw(
 boolean _Objects_Compare_name_string(
   void       *name_1,
   void       *name_2,
-  uint32_t    length
+  uint16_t    length
 );
 
 /*
@@ -435,7 +462,7 @@ boolean _Objects_Compare_name_string(
 boolean _Objects_Compare_name_raw(
   void       *name_1,
   void       *name_2,
-  uint32_t    length
+  uint16_t    length
 );
 
 /*
