@@ -40,6 +40,8 @@ void Send_messages( void );
 #define CONFIGURE_MAXIMUM_TIMERS              1
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* variables */

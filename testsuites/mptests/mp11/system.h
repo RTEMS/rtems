@@ -38,6 +38,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_PARTITIONS          1
 #endif
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* variables */

@@ -25,7 +25,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-void *Init(
+void *POSIX_Init(
   void *argument
 )
 {

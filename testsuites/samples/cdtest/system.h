@@ -29,6 +29,7 @@ rtems_task main_task(
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_INIT_TASK_ENTRY_POINT   main_task
 #define CONFIGURE_INIT_TASK_NAME          rtems_build_name( 'C', 'T', 'O', 'R' )
 

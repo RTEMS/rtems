@@ -61,6 +61,8 @@ rtems_task Task5(
 #define CONFIGURE_MAXIMUM_SEMAPHORES         10
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

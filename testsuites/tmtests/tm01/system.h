@@ -36,6 +36,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_SEMAPHORES         1
 #define CONFIGURE_TICKS_PER_TIMESLICE        0
  
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* end of include file */

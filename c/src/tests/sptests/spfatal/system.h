@@ -64,6 +64,8 @@ rtems_extensions_table initial_extensions = {
 
 #define CONFIGURE_INITIAL_EXTENSIONS    &initial_extensions
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

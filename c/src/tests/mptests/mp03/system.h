@@ -40,6 +40,8 @@ rtems_timer_service_routine Delayed_send_event(
  
 #define CONFIGURE_MAXIMUM_TIMERS              1
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* variables */

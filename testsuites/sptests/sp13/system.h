@@ -53,6 +53,8 @@ rtems_task Task_3(
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     10
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

@@ -95,6 +95,8 @@ void Screen14( void );
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

@@ -75,6 +75,8 @@ rtems_timer_service_routine TA2_send_10_to_self(
 #define CONFIGURE_MAXIMUM_TIMERS              6
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

@@ -40,6 +40,8 @@ rtems_task Task_1_through_3(
 
 #define CONFIGURE_MAXIMUM_TIMERS              3
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

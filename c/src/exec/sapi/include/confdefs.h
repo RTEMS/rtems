@@ -27,7 +27,7 @@ extern rtems_driver_address_table       Device_drivers[];
 extern rtems_configuration_table        Configuration;
 extern rtems_multiprocessing_table      Multiprocessing_configuration;
 #ifdef RTEMS_POSIX_API
-extern posix_api_configuration_table Configuration_POSIX_API;
+extern posix_api_configuration_table    Configuration_POSIX_API;
 #endif
 
 /*
@@ -35,7 +35,16 @@ extern posix_api_configuration_table Configuration_POSIX_API;
  *  one user initialization table is defined.
  */
 
-#ifndef CONFIGURE_HAS_OWN_INIT_TASK_TABLE
+#ifdef CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#ifdef CONFIGURE_HAS_OWN_INIT_TASK_TABLE
+
+/*
+ *  The user is defining their own table information and setting the 
+ *  appropriate variables.
+ */
+
+#else
 
 #ifndef CONFIGURE_INIT_TASK_NAME
 #define CONFIGURE_INIT_TASK_NAME          rtems_build_name( 'U', 'I', '1', ' ' )
@@ -82,6 +91,13 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 
 #define CONFIGURE_INIT_TASK_TABLE_SIZE \
   sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
+
+#endif    /* CONFIGURE_HAS_OWN_INIT_TASK_TABLE */
+
+#else     /* CONFIGURE_RTEMS_INIT_TASKS_TABLE */
+
+#define CONFIGURE_INIT_TASK_TABLE      NULL
+#define CONFIGURE_INIT_TASK_TABLE_SIZE 0
 
 #endif
 
@@ -265,25 +281,41 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_MAXIMUM_POSIX_KEYS         0
 #endif
 
-#ifndef CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE
+#ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
 
-#ifndef CONFIGURE_POSIX_INIT_TASK_ENTRY_POINT
-#define CONFIGURE_POSIX_INIT_TASK_ENTRY_POINT   Init 
+#ifdef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
+
+/*
+ *  The user is defining their own table information and setting the
+ *  appropriate variables.
+ */
+ 
+#else
+
+#ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
+#define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init 
 #endif
 
 #ifdef CONFIGURE_INIT
-posix_initialization_tasks_table POSIX_Initialization_tasks[] = {
-  { CONFIGURE_POSIX_INIT_TASK_ENTRY_POINT }
+posix_initialization_threads_table POSIX_Initialization_threads[] = {
+  { CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT }
 };
 #endif
 
-#define CONFIGURE_POSIX_INIT_TASK_TABLE POSIX_Initialization_tasks
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME POSIX_Initialization_threads
  
-#define CONFIGURE_POSIX_INIT_TASK_TABLE_SIZE \
-  sizeof(CONFIGURE_POSIX_INIT_TASK_TABLE) / \
-      sizeof(posix_initialization_tasks_table)
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE \
+  sizeof(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME) / \
+      sizeof(posix_initialization_threads_table)
 
 #endif    /* CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE */
+
+#else     /* CONFIGURE_POSIX_INIT_THREAD_TABLE */
+
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME NULL
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE 0
+
+#endif
 
 #endif    /* RTEMS_POSIX_API */
 
@@ -412,8 +444,8 @@ posix_api_configuration_table Configuration_POSIX_API = {
   CONFIGURE_MAXIMUM_POSIX_MUTEXES,
   CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES,
   CONFIGURE_MAXIMUM_POSIX_KEYS,
-  CONFIGURE_POSIX_INIT_TASK_TABLE_SIZE,
-  CONFIGURE_POSIX_INIT_TASK_TABLE
+  CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
+  CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
 };
 #endif
 

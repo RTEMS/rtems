@@ -46,6 +46,8 @@ rtems_task Test_task3(
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
 #endif
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* variables */

@@ -52,6 +52,8 @@ rtems_task Task5(
 #define CONFIGURE_MAXIMUM_REGIONS             4
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

@@ -33,6 +33,8 @@ rtems_task Task_1_through_3(
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

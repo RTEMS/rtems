@@ -45,6 +45,8 @@ void Get_all_counters( void );
 #define CONFIGURE_INIT_TASK_INITIAL_MODES     RTEMS_DEFAULT_MODES
 #define CONFIGURE_MAXIMUM_PERIODS             10
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

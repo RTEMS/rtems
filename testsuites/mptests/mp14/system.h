@@ -68,6 +68,8 @@ void Exit_test( void );
 #define CONFIGURE_MAXIMUM_TIMERS              2
 #endif
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* variables */

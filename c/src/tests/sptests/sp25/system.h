@@ -35,6 +35,8 @@ rtems_task Task_1(
 
 #define CONFIGURE_MAXIMUM_REGIONS             1
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */

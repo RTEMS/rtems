@@ -35,6 +35,8 @@ rtems_task Test_task(
  
 #define CONFIGURE_MAXIMUM_TIMERS              1
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* variables */

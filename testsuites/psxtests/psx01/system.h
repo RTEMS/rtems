@@ -21,7 +21,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-void *Init(
+void *POSIX_Init(
   void *argument
 );
 
@@ -36,9 +36,7 @@ void *Task_1_through_3(
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_HAS_OWN_INIT_TASK_TABLE
-#define CONFIGURE_INIT_TASK_TABLE_SIZE 0
-#define CONFIGURE_INIT_TASK_TABLE      NULL
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #include <confdefs.h>
 

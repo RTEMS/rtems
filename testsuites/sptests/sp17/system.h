@@ -44,6 +44,8 @@ rtems_task Task_2(
 #define CONFIGURE_MICROSECONDS_PER_TICK   RTEMS_MILLISECONDS_TO_MICROSECONDS(25)
 #define CONFIGURE_TICKS_PER_TIMESLICE     1000
 
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 #include <confdefs.h>
 
 /* global variables */
