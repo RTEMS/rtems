@@ -1,3 +1,11 @@
+2003-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: New.
+	* common/rtems.texi.in: New.
+	* configure.ac: Reflect changes above.
+	* project.am: Add COMMON_FILES.
+	Add rules to build common/rtems.texi.
+
 2003-08-29	Joel Sherrill <joel@OARcorp.com>
 
 	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,

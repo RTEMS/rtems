@@ -10,7 +10,7 @@ AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 AM_MAINTAINER_MODE
 
 AC_ARG_ENABLE(html,
-[  --disable-html           disable html support ],
+[  --disable-html          disable html support ],
 [case $enableval in
 yes) ;;
 no) ;;
@@ -161,7 +161,17 @@ AS_IF([test -z "$gdb_patch_version"],
 
 AC_CONFIG_SUBDIRS(tools)
 
-AC_CONFIG_FILES([Makefile
+AC_CONFIG_FILES([Makefile],[],[
+test -d common || mkdir common
+cat << EOF > common/rtems.sed~
+:t
+s/@RTEMSAPI@/RTEMS_API/;t t
+s,@RTEMSPREFIX@,$prefix,;t t
+EOF
+_RTEMS_UPDATE_CONDITIONAL([common/rtems.sed],[common/rtems.sed~])
+])
+
+AC_CONFIG_FILES([
 rtems_support.html
 index.html
 FAQ/Makefile
@@ -185,16 +195,7 @@ s/@GCCRPMRELEASE@/$gcc3newlib_rpm_release/;t t
 s/@BINUTILSRPMRELEASE@/$binutils_rpm_release/;t t
 s/@GDBRPMRELEASE@/$gdb_rpm_release/;t t
 EOF
- AS_IF([test -f started/tversions.sed],[
-   AS_IF([cmp -s started/tversions.sed started/tversions.sed~ 2>/dev/null],
-     [AC_MSG_NOTICE([started/tversions.sed is unchanged])
-      rm -f $started/tversions.sed~],
-     [AC_MSG_NOTICE([creating started/tversions.sed])
-      rm -f started/tversions.sed
-      mv started/tversions.sed~ started/tversions.sed])],[
-   AC_MSG_NOTICE([creating started/tversions.sed])
-   rm -f started/tversions.sed
-   mv started/tversions.sed~ started/tversions.sed])
+_RTEMS_UPDATE_CONDITIONAL([started/tversions.sed],[started/tversions.sed~])
 ])
 
 AC_CONFIG_FILES([
