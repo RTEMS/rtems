@@ -30,38 +30,35 @@ AC_CONFIG_SUBDIRS(make)
 
 ## Exclude exec from building if multilibs are enabled
 if test x"$multilib" = x"no"; then
-hst_subdirs="$hst_subdirs exec"
+AC_CONFIG_SUBDIRS(exec)
 fi
-hst_subdirs="$hst_subdirs lib"
-hst_subdirs="$hst_subdirs lib/libcpu"
-hst_subdirs="$hst_subdirs lib/libbsp"
-hst_subdirs="$hst_subdirs libfs"
-hst_subdirs="$hst_subdirs libmisc"
+AC_CONFIG_SUBDIRS(lib)
+AC_CONFIG_SUBDIRS(lib/libcpu)
+AC_CONFIG_SUBDIRS(lib/libbsp)
+AC_CONFIG_SUBDIRS(libfs)
+AC_CONFIG_SUBDIRS(libmisc)
 
 if test "$RTEMS_CPU" != "unix"; then
 ## HACK: Suppress libchip for unix
-hst_subdirs="$hst_subdirs libchip"
+  AC_CONFIG_SUBDIRS(libchip)
 fi
 
 if test "$HAS_NETWORKING" = "yes"; then
-  hst_subdirs="$hst_subdirs libnetworking librpc"
+  AC_CONFIG_SUBDIRS(libnetworking librpc)
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
   fi
 fi
 
 if test "$HAS_RDBG" = "yes"; then
-  hst_subdirs="$hst_subdirs librdbg"
+  AC_CONFIG_SUBDIRS(librdbg)
 fi
 AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes" )
 AM_CONDITIONAL(HAS_RDBG, test "$HAS_RDBG" = "yes" )
 
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-  hst_subdirs="$hst_subdirs librtems++";
+  AC_CONFIG_SUBDIRS(librtems++)
 fi 
-
-AC_CONFIG_SUBDIRS($hst_subdirs)
-AC_SUBST(hst_subdirs)
 
 AC_CONFIG_SUBDIRS(wrapup tests)
 

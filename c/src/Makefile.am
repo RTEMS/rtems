@@ -2,10 +2,10 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-SUBDIRS = make @hst_subdirs@ wrapup tests
+SUBDIRS = @subdirs@
 
 # NOTE: The wildcard on the install should pick up everything except
 #       the tests directory.  This significantly minimizes the install size.

@@ -1,3 +1,9 @@
+2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use SUBDIRS = @subdirs@, require automake-1.5.
+	* configure.ac: Replace hst_subdirs with AC_CONFIG_SUBDIRS to make
+	autoconf-2.52 happy.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
