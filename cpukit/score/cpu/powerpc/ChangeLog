@@ -1,5 +1,9 @@
 2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/powerpc.h (mpc8260): PPC_ALIGNMENT 8.
+
+2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/powerpc.h: Remove PPC_HAS_RFCI (Unused).
 
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>

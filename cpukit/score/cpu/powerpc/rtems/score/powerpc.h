@@ -214,7 +214,7 @@ extern "C" {
  */
 #define CPU_MODEL_NAME  "PowerPC MPC8260"
 
-#define PPC_ALIGNMENT		4
+#define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT	32
 #define PPC_INTERRUPT_MAX       125
 #else
