@@ -4,13 +4,24 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-scripts],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils])
 RTEMS_TOP([..])
-AC_PREFIX_DEFAULT([/opt/rtems])
+
 AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 
 AC_CANONICAL_HOST
 
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
+
+AC_ARG_ENABLE([rpmprefix],
+[  --enable-rpmprefix=<rpmprefix>      prefix rpms],
+[case $enable_rpmprefix in
+yes ) rpmprefix="rtems-"]RTEMS_API["-";;
+no ) rpmprefix="%{nil}";;
+* ) AS_IF([test -z "$enable_rpmprefix"],
+      [rpmprefix="%{nil}"],
+      [rpmprefix="$enable_rpmprefix"]);;
+esac],
+[rpmprefix="rtems-"]RTEMS_API["-"])
 
 AC_MSG_CHECKING(for rpm SPECS directory)
 # Allow users to override RPM_SPECSdir from the environment.
@@ -66,6 +77,8 @@ BSPVERS="${rtems_version}"
 AC_SUBST(RTEMS_VERSION)
 AC_SUBST(BSPVERS)
 AC_SUBST(RPM_CPU)
+AC_SUBST(rpmprefix,$rpmprefix)
+AC_SUBST(rpmgroup,[Rtems/][RTEMS_API])
 
 AC_CONFIG_FILES([Makefile
 binutils/Makefile

@@ -2,18 +2,17 @@
 # ==============================================================
 # rtems-base-g77
 # ==============================================================
-%package -n rtems-base-g77
-Provides:	rtems-base-g77
+%package -n %{rpmprefix}rtems-base-g77
 Summary:      rtems base package for gcc/g77 compiler
-Group: rtems
+Group: %{rpmgroup}
 Requires: rtems-base-gcc
 
-%description -n rtems-base-g77
+%description -n %{rpmprefix}rtems-base-g77
 RTEMS is an open source operating system for embedded systems.
 
 This is the files for gcc/g77 that are shared by all targets.
 
-%files -n rtems-base-g77
+%files -n %{rpmprefix}rtems-base-g77
 %defattr(-,root,root)
 %dir %{_prefix}/info
 %doc %{_prefix}/info/g77.info*.gz
@@ -22,7 +21,7 @@ This is the files for gcc/g77 that are shared by all targets.
 %dir %{_prefix}/man/man1
 %doc %{_prefix}/man/man1/%{gcc_target}-g77.1*
 
-%post -n rtems-base-g77
+%post -n %{rpmprefix}rtems-base-g77
   if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
     rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
@@ -32,7 +31,7 @@ This is the files for gcc/g77 that are shared by all targets.
     done
   fi
 
-%postun -n rtems-base-g77
+%postun -n %{rpmprefix}rtems-base-g77
   if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
     rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir

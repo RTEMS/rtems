@@ -2,6 +2,7 @@
 ## $Id$
 ##
 
+include $(top_srcdir)/common/common.am
 
 MKSPEC = $(SHELL) ./mkspec
 

@@ -2,27 +2,24 @@
 # ==============================================================
 # %{gcc_target}-c++
 # ==============================================================
-%package -n %{gcc_target}-c++
-Provides:	%{gcc_target}-c++
+%package -n %{rpmprefix}%{gcc_target}-c++
 Summary:      gcc/g++ compiler (c++) for %{gcc_target}
-Group: rtems
-Requires: rtems-base-gcc %{gcc_target}-gcc
+Group: %{rpmgroup}
+Requires: %{rpmprefix}rtems-base-gcc %{rpmprefix}%{gcc_target}-gcc
 
-%description -n %{gcc_target}-c++
+%description -n %{rpmprefix}%{gcc_target}-c++
 RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/g++ compiler for %{gcc_target}
 
-%files -n %{gcc_target}-c++ -f build/files.g++
+%files -n %{rpmprefix}%{gcc_target}-c++ -f build/files.g++
 %defattr(-,root,root)
 %doc %{_prefix}/man/man1/%{gcc_target}-g++.1*
 
 %dir %{_prefix}/bin
 %{_prefix}/bin/%{gcc_target}-c++%{_exeext}
 %{_prefix}/bin/%{gcc_target}-g++%{_exeext}
-%if "{gcc_version}" < "3.3"
 %{_prefix}/bin/%{gcc_target}-c++filt%{_exeext}
-%endif
 
 %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
 %dir %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include

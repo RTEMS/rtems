@@ -4,9 +4,9 @@
 
 %define gcc_target	@target_alias@
 
-Name:         %{gcc_target}-gcc-newlib
+Name:         %{rpmprefix}%{gcc_target}-gcc-newlib
 Summary:      gcc and newlib C Library for %{gcc_target}.
-Group:	      rtems
+Group: %{rpmgroup}
 Release:      @Release@
 License:      gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
@@ -14,16 +14,20 @@ Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      	gcc%{gcc_version}newlib%{newlib_version}
-# gcc 3.x and gcc 2.9
-# Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}.tar.gz
-Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}.tar.bz2
-# gcc 2.95.x
-# Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}.tar.bz2
+%if "%{gcc_version}" >= "3.2.2"
+Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.bz2
+%else
+%if "%{gcc_version}" >= "3.0"
+Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.gz
+%else
+Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}-everything.tar.gz
+%endif
+%endif
 Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 @PATCH1@
 @PATCH3@
 BuildPreReq:	texinfo >= 4.2
-BuildPreReq:	%{gcc_target}-binutils
+BuildPreReq:	%{rpmprefix}%{gcc_target}-binutils
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
@@ -57,7 +61,7 @@ NoSource:	1
 %define _gcj	%{?gcj:%gcj}%{!?gcj:1}
 %else
 # default to not building gcj
-%define _gcj	%{?gnat:%gcj}%{!?gcj:0}
+%define _gcj	%{?gcj:%gcj}%{!?gcj:0}
 %endif
 
 
@@ -177,6 +181,8 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %if %build_gnat
   languages="$languages,ada"
 %endif
+
+  export PATH="%{_bindir}:${PATH}"
   ../gcc-%{gcc_version}/configure \
     --build=%_build --host=%_host \
     --target=%{gcc_target} \
@@ -191,6 +197,12 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # Somehow, gcc doesn't get syslimits.h right for Cdn-Xs
   test -d gcc/include || mkdir -p gcc/include
   cp ../gcc-%{gcc_version}/gcc/gsyslimits.h gcc/include/syslimits.h
+%endif
+
+%if %build_cxx
+%if "%{gcc_version}" >= "3.3"
+  make -C %{gcc_target}/libiberty CFLAGS="$RPM_OPT_FLAGS" c++filt
+%endif
 %endif
 
 %if %build_gnat
@@ -226,6 +238,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   make info
 
 %install
+  export PATH="%{_bindir}:${PATH}"
   cd build
 # Bug in gcc-2.95.1: It doesn't build this installation directory
 # If it doesn't find it, gcc doesn't install %{gcc_target}/bin/gcc
@@ -263,6 +276,14 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     mv $RPM_BUILD_ROOT%{_prefix}/bin/cpp%{_exeext} \
       $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-cpp%{_exeext}
   fi
+%endif
+
+%if %build_cxx
+%if "%{gcc_version}" >= "3.3"
+  install -d $RPM_BUILD_ROOT%{_prefix}/bin
+  install -c -m 755 %{gcc_target}/libiberty/c++filt%{_exeext} \
+     $RPM_BUILD_ROOT%{_prefix}/bin/%{target_alias}-c++filt%{_exeext}
+%endif
 %endif
 
   # gzip info files

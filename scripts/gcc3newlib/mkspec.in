@@ -69,6 +69,8 @@ sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s%@Release\@%${gcc3newlib_rpm_release}%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
     -e "s%@prefix\@%@prefix@%g" \
+    -e "s,@rpmprefix\@,@rpmprefix@,g" \
+    -e "s%@rpmgroup\@%@rpmgroup@%g" \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@gcc_version\@%${gcc3_version}%g" \
     -e "s%@gcc_patch_version\@%${gcc3_patch_version}%g" \

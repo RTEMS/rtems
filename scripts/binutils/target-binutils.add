@@ -1,49 +1,48 @@
 # ==============================================================
-# @target_alias@-binutils
+# %{binutils_target}-binutils
 # ==============================================================
-%package -n @target_alias@-binutils
-Provides:	@target_alias@-binutils
-Summary:      rtems binutils for @target_alias@
-Group: rtems
-Requires: rtems-base-binutils
+%package -n %{rpmprefix}%{binutils_target}-binutils
+Summary:      rtems binutils for %{binutils_target}
+Group: %{rpmgroup}
+Requires: %{rpmprefix}rtems-base-binutils
 Autoreqprov:  	off
 
-%description -n @target_alias@-binutils
+%description -n %{rpmprefix}%{binutils_target}-binutils
 
 RTEMS is an open source operating system for embedded systems.
 
-This is the GNU binutils for RTEMS targetting @target_alias@.
+This is the GNU binutils for RTEMS targetting %{binutils_target}.
 
-%files -n @target_alias@-binutils
+%files -n %{rpmprefix}%{binutils_target}-binutils
 %defattr(-,root,root)
-%doc %{_prefix}/man/man1/@target_alias@-*.1*
+%doc %{_prefix}/man/man1/%{binutils_target}-*.1*
 
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-addr2line%{_exeext}
-%{_prefix}/bin/@target_alias@-ar%{_exeext}
-%{_prefix}/bin/@target_alias@-as%{_exeext}
+%{_prefix}/bin/%{binutils_target}-addr2line%{_exeext}
+%{_prefix}/bin/%{binutils_target}-ar%{_exeext}
+%{_prefix}/bin/%{binutils_target}-as%{_exeext}
 # c++filt now comes from gcc
-# %{_prefix}/bin/@target_alias@-c++filt%{_exeext}
+# %{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
 # deleted as of 2.13
-# %{_prefix}/bin/@target_alias@-gasp%{_exeext}
-%{_prefix}/bin/@target_alias@-ld%{_exeext}
-%{_prefix}/bin/@target_alias@-nm%{_exeext}
-%{_prefix}/bin/@target_alias@-objcopy%{_exeext}
-%{_prefix}/bin/@target_alias@-objdump%{_exeext}
-%{_prefix}/bin/@target_alias@-ranlib%{_exeext}
-%{_prefix}/bin/@target_alias@-readelf%{_exeext}
-%{_prefix}/bin/@target_alias@-size%{_exeext}
-%{_prefix}/bin/@target_alias@-strings%{_exeext}
-%{_prefix}/bin/@target_alias@-strip%{_exeext}
+# %{_prefix}/bin/%{binutils_target}-gasp%{_exeext}
+%{_prefix}/bin/%{binutils_target}-ld%{_exeext}
+%{_prefix}/bin/%{binutils_target}-nm%{_exeext}
+%{_prefix}/bin/%{binutils_target}-objcopy%{_exeext}
+%{_prefix}/bin/%{binutils_target}-objdump%{_exeext}
+%{_prefix}/bin/%{binutils_target}-ranlib%{_exeext}
+%{_prefix}/bin/%{binutils_target}-readelf%{_exeext}
+%{_prefix}/bin/%{binutils_target}-size%{_exeext}
+%{_prefix}/bin/%{binutils_target}-strings%{_exeext}
+%{_prefix}/bin/%{binutils_target}-strip%{_exeext}
 
-%dir %{_prefix}/@target_alias@
-%dir %{_prefix}/@target_alias@/bin
-%{_prefix}/@target_alias@/bin/ar%{_exeext}
-%{_prefix}/@target_alias@/bin/as%{_exeext}
-%{_prefix}/@target_alias@/bin/ld%{_exeext}
-%{_prefix}/@target_alias@/bin/nm%{_exeext}
-%{_prefix}/@target_alias@/bin/ranlib%{_exeext}
-%{_prefix}/@target_alias@/bin/strip%{_exeext}
+%dir %{_prefix}/%{binutils_target}
+%dir %{_prefix}/%{binutils_target}/bin
+%{_prefix}/%{binutils_target}/bin/ar%{_exeext}
+%{_prefix}/%{binutils_target}/bin/as%{_exeext}
+%{_prefix}/%{binutils_target}/bin/ld%{_exeext}
+%{_prefix}/%{binutils_target}/bin/nm%{_exeext}
+%{_prefix}/%{binutils_target}/bin/ranlib%{_exeext}
+%{_prefix}/%{binutils_target}/bin/strip%{_exeext}
 
-%dir %{_prefix}/@target_alias@/lib
-%{_prefix}/@target_alias@/lib/ldscripts
+%dir %{_prefix}/%{binutils_target}/lib
+%{_prefix}/%{binutils_target}/lib/ldscripts

@@ -2,18 +2,17 @@
 # ==============================================================
 # %{gcc_target}-objc
 # ==============================================================
-%package -n %{gcc_target}-objc
-Provides:	%{gcc_target}-objc
+%package -n %{rpmprefix}%{gcc_target}-objc
 Summary:      gcc/objc compiler for %{gcc_target}
-Group: rtems
-Requires: %{gcc_target}-gcc
+Group: %{rpmgroup}
+Requires: %{rpmprefix}%{gcc_target}-gcc
 
-%description -n %{gcc_target}-objc
+%description -n %{rpmprefix}%{gcc_target}-objc
 RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/objc compiler for %{gcc_target}
 
-%files -n %{gcc_target}-objc -f build/files.objc
+%files -n %{rpmprefix}%{gcc_target}-objc -f build/files.objc
 %defattr(-,root,root)
 %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/cc1obj%{_exeext}
 %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include/objc

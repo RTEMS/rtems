@@ -2,6 +2,8 @@
 ## $Id$
 ##
 
+include ${top_srcdir}/common/common.am
+
 CLEANFILES =
 
 MKSPEC = $(SHELL) ./mkspec

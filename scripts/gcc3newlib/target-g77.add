@@ -2,18 +2,17 @@
 # ==============================================================
 # %{gcc_target}-g77
 # ==============================================================
-%package -n %{gcc_target}-g77
-Provides:	%{gcc_target}-g77
+%package -n %{rpmprefix}%{gcc_target}-g77
 Summary:	gcc/g77 compiler for %{gcc_target}
-Group: rtems
-Requires: rtems-base-g77 %{gcc_target}-gcc
+Group: %{rpmgroup}
+Requires: %{rpmprefix}rtems-base-g77 %{rpmprefix}%{gcc_target}-gcc
 
-%description -n %{gcc_target}-g77
+%description -n %{rpmprefix}%{gcc_target}-g77
 RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/g77 compiler for %{gcc_target}
 
-%files -n %{gcc_target}-g77 -f build/files.g77
+%files -n %{rpmprefix}%{gcc_target}-g77 -f build/files.g77
 %defattr(-,root,root)
 %dir %{_prefix}/bin
 %{_prefix}/bin/%{gcc_target}-g77%{_exeext}

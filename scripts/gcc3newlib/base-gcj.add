@@ -2,18 +2,17 @@
 # ==============================================================
 # rtems-base-gcj
 # ==============================================================
-%package -n rtems-base-gcj
-Provides:	rtems-base-gcj
+%package -n %{rpmprefix}rtems-base-gcj
 Summary:      base package for rtems gcc/java compiler (gcj).
-Group: rtems
-Requires: rtems-base-gcc
+Group: %{rpmgroup}
+Requires: %{rpmprefix}rtems-base-gcc
 
-%description -n rtems-base-gcj
+%description -n %{rpmprefix}rtems-base-gcj
 RTEMS is an open source operating system for embedded systems.
 
 This is the files for gcc/java (gcj) that are shared by all targets.
 
-%files -n rtems-base-gcj
+%files -n %{rpmprefix}rtems-base-gcj
 %defattr(-,root,root)
 %dir %{_prefix}/bin
 %{_prefix}/bin/jar%{_exeext}

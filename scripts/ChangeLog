@@ -1,3 +1,26 @@
+2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, configure.ac,
+	autotools/autoconf-rtems.spec.in, autotools/automake-rtems.spec.in,
+	binutils/Makefile.am, binutils/base-binutils.add, 
+	binutils/binutils.add, binutils/mkspec.in, 
+	binutils/target-binutils.add,
+	common/common.add.in,
+	cpukit/Makefile.am,
+	gcc3newlib/Makefile.am, gcc3newlib/base-g77.add,
+	gcc3newlib/base-gcc.add, gcc3newlib/base-gcj.add,
+	gcc3newlib/base-gnat.add, gcc3newlib/gccnewlib.add,
+	gcc3newlib/mkspec.in, gcc3newlib/target-c++.add,
+	gcc3newlib/target-g77.add, gcc3newlib/target-gcc.add,
+	gcc3newlib/target-gcj.add, gcc3newlib/target-gnat.add,
+	gcc3newlib/target-objc.add, 
+	gccnewlib/Makefile.am,
+	gdb/Makefile.am,
+	rtems/Makefile.am,
+	rtemsdoc/Makefile.am:
+	Merger from rtems-4-6-branch.
+	* common/common.am: New.
+
 2003-08-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* common/common.add.in: s/www.oarcorp.com/www.rtems.com/.

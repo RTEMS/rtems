@@ -11,8 +11,8 @@
 %define _name			automake
 
 %if "%{_prefix}" != "/usr"
-%define name			%{_name}-rtems
-%define requirements		autoconf-rtems >= 2.54
+%define name			@rpmprefix@%{_name}-rtems
+%define requirements		@rpmprefix@autoconf-rtems >= 2.54
 %define _infodir		%{_prefix}/info
 %define _mandir			%{_prefix}/man
 %else
@@ -25,7 +25,7 @@ Name:         %{name}
 Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 Copyright:    GPL
-Group:        rtems
+Group:        @rpmgroup@
 Autoreqprov:  on
 Version:      %{rpmvers}
 Release:      1
