@@ -22,7 +22,7 @@ include_HEADERS += include/coverhd.h
 include_HEADERS += include/page_table.h
 include_HEADERS += include/tod.h
 
-nodist_include_HEADERS += $(top_srcdir)/../shared/mvme/include/mvme16x_hw.h
+nodist_include_HEADERS += $(top_srcdir)/../shared/mvme/mvme16x_hw.h
 
 all-local: $(PREINSTALL_FILES)
 
@@ -41,7 +41,7 @@ $(PROJECT_INCLUDE)/tod.h: include/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
 $(PROJECT_INCLUDE)/mvme16x_hw.h: \
-    $(top_srcdir)/../shared/mvme/include/mvme16x_hw.h
+    $(top_srcdir)/../shared/mvme/mvme16x_hw.h
 	$(INSTALL_DATA) $< $@
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mvme16x_hw.h
 
