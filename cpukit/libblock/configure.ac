@@ -5,7 +5,7 @@
 AC_PREREQ(2.52)
 AC_INIT([rtems-c-src-libblock],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([src/bdbuf.c])
-RTEMS_TOP(../../../..)
+RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)
 
 RTEMS_CANONICAL_TARGET_CPU
