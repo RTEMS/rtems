@@ -12,12 +12,15 @@ LIBNAME=librtcio.a
 LIB=${ARCH}/${LIBNAME}
 
 C_PIECES=\
-  rtcprobe m48t08
+  rtcprobe \
+  icm7170 icm7170_reg icm7170_reg2 icm7170_reg4 icm7170_reg8 \
+  m48t08 m48t08_reg m48t08_reg2 m48t08_reg4 m48t08_reg8
 
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-INSTALLED_H_FILES=$(srcdir)/rtc.h $(srcdir)/m48t08.h
+INSTALLED_H_FILES=$(srcdir)/rtc.h \
+    $(srcdir)/icm7170.h $(srcdir)/m48t08.h
 
 SRCS=$(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES) $(PRIVATE_H_FILES)
 OBJS=$(C_O_FILES)
