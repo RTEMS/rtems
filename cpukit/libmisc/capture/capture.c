@@ -142,7 +142,7 @@ rtems_capture_match_names (rtems_name lhs, rtems_name rhs)
  *  DESCRIPTION:
  *
  * This function duplicates an rtems_names. It protects the
- * cpature engine from a change to the way names are supported
+ * capture engine from a change to the way names are supported
  * in RTEMS.
  *
  */

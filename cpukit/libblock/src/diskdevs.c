@@ -61,7 +61,7 @@ static volatile rtems_boolean diskdevs_protected;
  *     dev - device id (major, minor)
  *
  * RETURNS:
- *     pointer to the disk device descirptor entry, or NULL if no memory
+ *     pointer to the disk device descriptor entry, or NULL if no memory
  *     available for its creation.
  */
 static disk_device *
