@@ -27,9 +27,8 @@ all-local: $(PREINSTALL_FILES) $(OBJS)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
+	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
 $(PROJECT_INCLUDE)/bsp/irq.h: $(top_srcdir)/../shared/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h

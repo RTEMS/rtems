@@ -26,9 +26,8 @@ EXTRA_DIST = BOOTING README.MVME2300 README.OTHERBOARDS README.dec21140
 EXTRA_DIST += times.mcp750 times.mvme2307
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
+	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
 $(PROJECT_INCLUDE)/nvram.h: ../shared/include/nvram.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nvram.h

@@ -59,6 +59,10 @@ all-local: $(TMPINSTALL_FILES)
 
 TMPINSTALL_FILES =
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 ${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT): bootloader.$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT)
 TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT)
