@@ -1,0 +1,49 @@
+@c
+@c  COPYRIGHT (c) 1988-2002.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@ifinfo
+@node Preface, CPU Model Dependent Features, Top, Top
+@end ifinfo
+@unnumbered Preface
+
+The Real Time Executive for Multiprocessor Systems (RTEMS)
+is designed to be portable across multiple processor
+architectures.  However, the nature of real-time systems makes
+it essential that the application designer understand certain
+processor dependent implementation details.  These processor
+dependencies include calling convention, board support package
+issues, interrupt processing, exact RTEMS memory requirements,
+performance data, header files, and the assembly language
+interface to the executive.
+
+This document discusses the ARM architecture dependencies
+in this port of RTEMS.  The ARM family has a wide variety
+of implementations by a wide range of vendors.  Consequently,
+there are 100's of CPU models within it.
+
+It is highly recommended that the ARM
+RTEMS application developer obtain and become familiar with the
+documentation for the processor being used as well as the
+documentation for the ARM architecture as a whole.
+
+@subheading Architecture Documents
+
+For information on the ARM architecture,
+refer to the following documents available from Arm, Limited
+(@file{http//www.arm.com/}).  There does not appear to
+be an electronic version of a manual on the architecture
+in general on that site.  The following book is a good 
+resource:
+
+@itemize @bullet
+@item @cite{David Seal. "ARM Architecture Reference Manual."
+Addison-Wesley. @b{ISBN 0-201-73719-1}. 2001.}
+
+@end itemize
+
+

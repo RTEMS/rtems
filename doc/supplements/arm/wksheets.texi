@@ -1,0 +1,437 @@
+@c ******   This comment is here to remind you not to edit the wksheets.t
+@c ******   in any directory but common.
+@c
+@c Figures ...
+@c   RTEMS RAM Workspace Worksheet
+@c   RTEMS Code Space Worksheet
+@c
+@c  COPYRIGHT (c) 1988-2002.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+
+@node Memory Requirements, Memory Requirements Introduction, Processor Dependent Information Table CPU Dependent Information Table, Top
+
+@chapter Memory Requirements
+@ifinfo
+@menu
+* Memory Requirements Introduction::
+* Memory Requirements Data Space Requirements::
+* Memory Requirements Minimum and Maximum Code Space Requirements::
+* Memory Requirements RTEMS Code Space Worksheet::
+* Memory Requirements RTEMS RAM Workspace Worksheet::
+@end menu
+@end ifinfo
+
+
+@node Memory Requirements Introduction, Memory Requirements Data Space Requirements, Memory Requirements, Memory Requirements
+
+@section Introduction
+
+Memory is typically a limited resource in real-time
+embedded systems, therefore, RTEMS can be configured  to utilize
+the minimum amount of memory while meeting all of the
+applications requirements.  Worksheets are provided which allow
+the RTEMS application developer to determine the amount of RTEMS
+code and RAM workspace which is required by the particular
+configuration.  Also provided are the minimum code space,
+maximum code space,  and the constant data space required by
+RTEMS.
+
+
+@node Memory Requirements Data Space Requirements, Memory Requirements Minimum and Maximum Code Space Requirements, Memory Requirements Introduction, Memory Requirements
+
+@section Data Space Requirements
+
+RTEMS requires a small amount of memory for its
+private variables.  This data area must be in RAM and is
+separate from the RTEMS RAM Workspace.  The following
+illustrates the data space required for all configurations of
+RTEMS:
+
+@itemize @bullet
+@item Data Space: 723
+@end itemize
+
+
+@node Memory Requirements Minimum and Maximum Code Space Requirements, Memory Requirements RTEMS Code Space Worksheet, Memory Requirements Data Space Requirements, Memory Requirements
+
+@section Minimum and Maximum Code Space Requirements
+
+A maximum configuration of RTEMS includes the core
+and all managers, including the multiprocessing manager.
+Conversely, a minimum configuration of RTEMS includes only the
+core and the following managers: initialization, task, interrupt
+and fatal error.  The following illustrates the code space
+required by these configurations of RTEMS:
+
+@itemize @bullet
+@item Minimum Configuration: 18,980
+@item Maximum Configuration: 36,438
+@end itemize
+
+
+@node Memory Requirements RTEMS Code Space Worksheet, Memory Requirements RTEMS RAM Workspace Worksheet, Memory Requirements Minimum and Maximum Code Space Requirements, Memory Requirements
+
+@section RTEMS Code Space Worksheet
+
+The RTEMS Code Space Worksheet is a tool provided to
+aid the RTEMS application designer to accurately calculate the
+memory required by the RTEMS run-time environment.  RTEMS allows
+the custom configuration of the executive by optionally
+excluding managers which are not required by a particular
+application.  This worksheet provides the included and excluded
+size of each manager in tabular form allowing for the quick
+calculation of any custom configuration of RTEMS.  The RTEMS
+Code Space Worksheet is below:
+
+@ifset use-ascii
+@page
+@end ifset
+@ifset use-tex
+@page
+@end ifset
+
+@page
+@center @b{RTEMS Code Space Worksheet}
+@sp 1
+
+@ifset use-ascii
+
+The following is a list of the components of the RTEMS code space.  The first
+number in parentheses is the size when the component is included,
+while the second number indicates its size when not included.  If the second
+number is "NA", then the component must always be included.
+
+@itemize @bullet
+@item Core (12,674, NA)
+@item Initialization (970, NA)
+@item Task (3,562, NA)
+@item Interrupt (54, NA)
+@item Clock (334, NA)
+@item Timer (1,110, 184)
+@item Semaphore (1,632, 172)
+@item Message (1,754, 288)
+@item Event (1,000, 56)
+@item Signal (418, 56)
+@item Partition (1,164, 132)
+@item Region (1,494, 160)
+@item Dual Ported Memory (724, 132)
+@item I/O (686, 00)
+@item Fatal Error (24, NA)
+@item Rate Monotonic (1,212, 184)
+@item Multiprocessing (6.952, 332)
+@end itemize
+@end ifset
+
+@ifset use-tex
+
+@tex
+\line{\hskip 0.50in\vbox{\offinterlineskip\halign{
+\vrule\strut#&
+\hbox to 2.25in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 1.00in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 1.00in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 1.25in{\enskip\hfil#\hfil}&
+\vrule#\cr
+\noalign{\hrule}
+&\bf Component && \bf Included && \bf Not Included && \bf Size &\cr\noalign{\hrule}
+&Core && 12,674 && NA && &\cr\noalign{\hrule}
+&Initialization && 970 && NA && &\cr\noalign{\hrule}
+&Task && 3,562 && NA && &\cr\noalign{\hrule}
+&Interrupt && 54 && NA && &\cr\noalign{\hrule}
+&Clock && 334 && NA && &\cr\noalign{\hrule}
+&Timer && 1,110 && 184 && &\cr\noalign{\hrule}
+&Semaphore && 1,632 && 172 && &\cr\noalign{\hrule}
+&Message && 1,754 && 288 && &\cr\noalign{\hrule}
+&Event && 1,000 && 56 && &\cr\noalign{\hrule}
+&Signal && 418 && 56 && &\cr\noalign{\hrule}
+&Partition && 1,164 && 132 && &\cr\noalign{\hrule}
+&Region && 1,494 && 160 && &\cr\noalign{\hrule}
+&Dual Ported Memory && 724 && 132 && &\cr\noalign{\hrule}
+&I/O && 686 && 00 && &\cr\noalign{\hrule}
+&Fatal Error && 24 && NA && &\cr\noalign{\hrule}
+&Rate Monotonic && 1,212 && 184 && &\cr\noalign{\hrule}
+&Multiprocessing && 6.952 && 332 && &\cr\noalign{\hrule}
+&\multispan 5 \bf\hfil Total Code Space Requirements\qquad\hfil&&&\cr\noalign{\hrule}
+}}\hfil}
+@end tex
+@end ifset
+
+@ifset use-html
+@html
+<CENTER>
+  <TABLE COLS=4 WIDTH="80%" BORDER=2>
+<TR><TD ALIGN=center><STRONG>Component</STRONG></TD>
+    <TD ALIGN=center><STRONG>Included</STRONG></TD>
+    <TD ALIGN=center><STRONG>Not Included</STRONG></TD>
+    <TD ALIGN=center><STRONG>Size</STRONG></TD></TR>
+<TR><TD ALIGN=center>Core</TD>
+    <TD ALIGN=center>12,674</TD>
+    <TD ALIGN=center>NA</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Initialization</TD>
+    <TD ALIGN=center>970</TD>
+    <TD ALIGN=center>NA</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Task</TD>
+    <TD ALIGN=center>3,562</TD>
+    <TD ALIGN=center>NA</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Interrupt</TD>
+    <TD ALIGN=center>54</TD>
+    <TD ALIGN=center>NA</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Clock</TD>
+    <TD ALIGN=center>334</TD>
+    <TD ALIGN=center>NA</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Timer</TD>
+    <TD ALIGN=center>1,110</TD>
+    <TD ALIGN=center>184</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Semaphore</TD>
+    <TD ALIGN=center>1,632</TD>
+    <TD ALIGN=center>172</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Message</TD>
+    <TD ALIGN=center>1,754</TD>
+    <TD ALIGN=center>288</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Event</TD>
+    <TD ALIGN=center>1,000</TD>
+    <TD ALIGN=center>56</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Signal</TD>
+    <TD ALIGN=center>418</TD>
+    <TD ALIGN=center>56</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Partition</TD>
+    <TD ALIGN=center>1,164</TD>
+    <TD ALIGN=center>132</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Region</TD>
+    <TD ALIGN=center>1,494</TD>
+    <TD ALIGN=center>160</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Dual Ported Memory</TD>
+    <TD ALIGN=center>724</TD>
+    <TD ALIGN=center>132</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>I/O</TD>
+    <TD ALIGN=center>686</TD>
+    <TD ALIGN=center>00</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Fatal Error</TD>
+    <TD ALIGN=center>24</TD>
+    <TD ALIGN=center>NA</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Rate Monotonic</TD>
+    <TD ALIGN=center>1,212</TD>
+    <TD ALIGN=center>184</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center>Multiprocessing</TD>
+    <TD ALIGN=center>6.952</TD>
+    <TD ALIGN=center>332</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=center COLSPAN=3>
+      <STRONG>Total Code Space Requirements</STRONG></TD>
+     <TD><BR></TD></TR>
+  </TABLE>
+</CENTER>
+@end html
+@end ifset
+
+@page
+
+@c ******   Next node is set by a sed script in the document Makefile.
+@c ******   This comment is here to remind you not to edit the wksheets.t
+@c ******   in any directory but common.
+
+
+@node Memory Requirements RTEMS RAM Workspace Worksheet, Timing Specification, Memory Requirements RTEMS Code Space Worksheet, Memory Requirements
+
+@section RTEMS RAM Workspace Worksheet
+
+The RTEMS RAM Workspace Worksheet is a tool provided
+to aid the RTEMS application designer to accurately calculate
+the minimum memory block to be reserved for RTEMS use.  This
+worksheet provides equations for calculating the amount of
+memory required based upon the number of objects configured,
+whether for single or multiple processor versions of the
+executive.  This information is presented in tabular form, along
+with the fixed system requirements, allowing for quick
+calculation of any application defined configuration of RTEMS.
+The RTEMS RAM Workspace Worksheet is provided below:
+
+@ifset use-ascii
+@page
+@end ifset
+@ifset use-tex
+@sp 2
+@end ifset
+
+@center @b{RTEMS RAM Workspace Worksheet}
+@sp 2
+
+@ifset use-ascii
+The total RTEMS RAM Workspace required is the sum of the following:
+
+@itemize @bullet
+@item maximum_tasks * 400
+@item maximum_timers * 68
+@item maximum_semaphores * 124
+@item maximum_message_queues * 148
+@item maximum_regions * 144
+@item maximum_partitions * 56
+@item maximum_ports * 36
+@item maximum_periods * 36
+@item maximum_extensions * 64
+@item Floating Point Tasks * 332
+@item Task Stacks
+@item maximum_nodes * 48
+@item maximum_global_objects * 20
+@item maximum_proxies * 124
+@item Fixed System Requirements of 8,872
+@end itemize
+@end ifset
+
+@ifset use-tex
+@tex
+\line{\hskip 0.75in\vbox{\offinterlineskip\halign{
+\vrule\strut#&
+\hbox to 3.0in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 0.75in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 1.25in{\enskip\hfil#\hfil}&
+\vrule#\cr
+\noalign{\hrule}
+& \bf Description && \bf Equation && \bf Bytes Required &\cr\noalign{\hrule}
+& maximum\_tasks &&  * 400 = &&&\cr\noalign{\hrule}
+& maximum\_timers &&  * 68 = &&&\cr\noalign{\hrule}
+& maximum\_semaphores &&  * 124 = &&&\cr\noalign{\hrule}
+& maximum\_message\_queues &&  * 148 = &&&\cr\noalign{\hrule}
+& maximum\_regions &&  * 144 = &&&\cr\noalign{\hrule}
+& maximum\_partitions &&  * 56 = &&&\cr\noalign{\hrule}
+& maximum\_ports &&  * 36 = &&&\cr\noalign{\hrule}
+& maximum\_periods &&  * 36 = &&&\cr\noalign{\hrule}
+& maximum\_extensions &&  * 64 = &&&\cr\noalign{\hrule}
+& Floating Point Tasks &&  * 332 = &&&\cr\noalign{\hrule}
+& Task Stacks &&\hskip 2.3em=&&&\cr\noalign{\hrule}
+& Total Single Processor Requirements &&&&&\cr\noalign{\hrule}
+}}\hfil}
+
+\line{\hskip 0.75in\vbox{\offinterlineskip\halign{
+\vrule\strut#&
+\hbox to 3.0in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 0.75in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 1.25in{\enskip\hfil#\hfil}&
+\vrule#\cr
+\noalign{\hrule}
+& \bf Description && \bf Equation && \bf Bytes Required &\cr\noalign{\hrule}
+& maximum\_nodes &&  * 48 = &&&\cr\noalign{\hrule}
+& maximum\_global\_objects &&  * 20 = &&&\cr\noalign{\hrule}
+& maximum\_proxies &&  * 124 = &&&\cr\noalign{\hrule}
+}}\hfil}
+
+\line{\hskip 0.75in\vbox{\offinterlineskip\halign{
+\vrule\strut#&
+\hbox to 3.0in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 0.75in{\enskip\hfil#\hfil}&
+\vrule#&
+\hbox to 1.25in{\enskip\hfil#\hfil}&
+\vrule#\cr
+\noalign{\hrule}
+& Total Multiprocessing Requirements &&&&&\cr\noalign{\hrule}
+& Fixed System Requirements && 8,872 &&&\cr\noalign{\hrule}
+& Total Single Processor Requirements &&&&&\cr\noalign{\hrule}
+& Total Multiprocessing Requirements &&&&&\cr\noalign{\hrule}
+& Minimum Bytes for RTEMS Workspace &&&&&\cr\noalign{\hrule}
+}}\hfil}
+@end tex
+@end ifset
+
+@ifset use-html
+@html
+<CENTER>
+  <TABLE COLS=3 WIDTH="80%" BORDER=2>
+<TR><TD ALIGN=center><STRONG>Description</STRONG></TD>
+    <TD ALIGN=center><STRONG>Equation</STRONG></TD>
+    <TD ALIGN=center><STRONG>Bytes Required</STRONG></TD></TR>
+<TR><TD ALIGN=left>maximum_tasks</TD>
+    <TD ALIGN=right>* 400 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_timers</TD>
+    <TD ALIGN=right>* 68 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_semaphores</TD>
+    <TD ALIGN=right>* 124 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_message_queues</TD>
+    <TD ALIGN=right>* 148 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_regions</TD>
+    <TD ALIGN=right>* 144 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_partitions</TD>
+    <TD ALIGN=right>* 56 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_ports</TD>
+    <TD ALIGN=right>* 36 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_periods</TD>
+    <TD ALIGN=right>* 36 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_extensions</TD>
+    <TD ALIGN=right>* 64 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>Floating Point Tasks</TD>
+    <TD ALIGN=right>* 332 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left COLSPAN=2>Task Stacks</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left COLSPAN=2>
+      <STRONG>Total Single Processor Requirements</STRONG></TD>
+     <TD><BR></TD></TR>
+<TR></TR>
+<TR><TD ALIGN=center><STRONG>Description</STRONG></TD>
+    <TD ALIGN=center><STRONG>Equation</STRONG></TD>
+    <TD ALIGN=center><STRONG>Bytes Required</STRONG></TD></TR>
+<TR><TD ALIGN=left>maximum_nodes</TD>
+    <TD ALIGN=right>* 48 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_global_objects</TD>
+    <TD ALIGN=right>* 20 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left>maximum_proxies</TD>
+    <TD ALIGN=right>* 124 =</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left COLSPAN=2>
+      <STRONG>Total Multiprocessing Requirements</STRONG></TD>
+     <TD><BR></TD></TR>
+<TR></TR>
+<TR><TD ALIGN=left COLSPAN=2>Fixed System Requirements</TD>
+    <TD ALIGN=center>8,872</TD></TR>
+<TR><TD ALIGN=left COLSPAN=2>Total Single Processor Requirements</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left COLSPAN=2>Total Multiprocessing Requirements</TD>
+     <TD><BR></TD></TR>
+<TR><TD ALIGN=left COLSPAN=2>
+      <STRONG>Minimum Bytes for RTEMS Workspace</STRONG></TD>
+     <TD><BR></TD></TR>
+  </TABLE>
+</CENTER>
+@end html
+@end ifset
+
+
