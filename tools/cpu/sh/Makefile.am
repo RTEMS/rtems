@@ -12,7 +12,7 @@ if HELP2MAN
 man_MANS = shgen.1
 
 shgen.1: $(srcdir)/shgen.c
-	$(HELP2MAN) -N shgen >$@
+	$(HELP2MAN) -N ./shgen >$@
 endif
 
 include $(top_srcdir)/../../../automake/host.am

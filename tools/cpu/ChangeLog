@@ -1,5 +1,10 @@
 2001-04-02	Joel Sherrill <joel@OARcorp.com>
 
+	* sh/Makefile.am: Use "./shgen" not "shgen" so current directory 
+	does not have to be in the PATH.
+
+2001-04-02	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am: Remove unix from DIST_SUBDIRS.
 
 2001-03-29	Joel Sherrill <joel@OARcorp.com>
