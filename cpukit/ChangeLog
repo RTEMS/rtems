@@ -1,3 +1,8 @@
+2004-12-02	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/kern/kern_sysctl.c, libnetworking/netinet/ip_mroute.c,
+	libnetworking/sys/socketvar.h: Remove warnings.
+
 2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/radix.c, libnetworking/net/radix.h,
