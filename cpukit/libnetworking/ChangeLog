@@ -1,3 +1,7 @@
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems_telnetd/.cvsignore: New file.
+
 2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
 
 	* Makefile.am, configure.in, rtems_servers/Makefile.am,
