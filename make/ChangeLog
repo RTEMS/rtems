@@ -1,3 +1,9 @@
+2004-11-05	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/csb336.cfg, custom/csb337.cfg: RTEMS_CPU must match an
+	architecture name for RTEMS. Since this was used as the -mcpu
+	argument to GCC, that also had to be changed.
+
 2004-10-26	Eric Norum <norume@aps.anl.gov
 
 	* custom/mvme5500.cfg: -Wa,-m7450 until gcc/gas get their acts together
