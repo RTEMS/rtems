@@ -1,3 +1,16 @@
+2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* unlimited/Makefile.am: include leaf.am instead of leaf.cfg.
+	* base_mp/node2/Makefile.am: include leaf.am instead of leaf.cfg.
+	* base_mp/node1/Makefile.am: include leaf.am instead of leaf.cfg.
+	* hello/Makefile.am: include leaf.am instead of leaf.cfg.
+	* base_sp/Makefile.am: include leaf.am instead of leaf.cfg.
+	* paranoia/Makefile.am: include leaf.am instead of leaf.cfg.
+	* cdtest/Makefile.am: include leaf.am instead of leaf.cfg, use
+	make-cxx-exe.
+	* ticker/Makefile.am: include leaf.am instead of leaf.cfg.
+	* minimum/Makefile.am: include leaf.am instead of leaf.cfg.
+
 2001-06-14	Joel Sherrill <joel@OARcorp.com>
 
  	* cdtest/system.h: Removed configure of POSIX mutexes since
