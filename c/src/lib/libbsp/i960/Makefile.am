@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
 
 # Descend into the $(RTEMS_BSP_FAMILY) directory
 SUBDIRS = $(RTEMS_BSP_FAMILY)

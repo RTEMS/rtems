@@ -1,3 +1,8 @@
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+        Switch to GNU canonicalization.
+
 2000-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, bsp_specs, configure.in, console/Makefile.am,

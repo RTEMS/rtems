@@ -1,3 +1,8 @@
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+        Switch to GNU canonicalization.
+
 2000-10-20	Joel Sherrill <joel@OARcorp.com>
 
 	* console/console.c: Invoke BSP_uart_init() with enough arguments
