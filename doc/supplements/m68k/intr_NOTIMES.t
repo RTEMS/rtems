@@ -145,7 +145,7 @@ MC68xxx CPU models with separate interrupt stacks:
 
 @section CPU Models Without VBR and RAM at 0
 
-This is from a post by Zoltan Kocsi <zoltan@bendor.com.au> and is
+This is from a post by Zoltan Kocsi <zoltan@@bendor.com.au> and is
 a nice trick in certain situations.  In his words:
 
 I think somebody on this list asked about the interupt vector 

@@ -1,3 +1,8 @@
+2002-07-26	Joel Sherrill <joel@OARcorp.com>
+
+	* intr_NOTIMES.t: Per PR258, changed single @ to double @ in email
+	address to make texinfo happy.
+
 2002-06-28	Joel Sherrill <joel@OARcorp.com>
 
 	* intr_NOTIMES.t: Per PR70 incorporate the posting by 
