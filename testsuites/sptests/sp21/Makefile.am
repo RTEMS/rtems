@@ -3,7 +3,6 @@
 ## 
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 TEST = sp21
 
@@ -29,6 +28,8 @@ PGM = ${ARCH}/$(TEST).exe
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 include $(top_srcdir)/sptests.am
+
+LD_LIBS += $(PROJECT_RELEASE)/lib/libtest$(LIBSUFFIX_VA)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

@@ -3,7 +3,6 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 SAMPLE = hello
 PGM = ${ARCH}/$(SAMPLE).exe
