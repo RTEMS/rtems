@@ -35,7 +35,7 @@
  *  Id: dlentry.S,v 1.2 2000/08/02 16:30:57 joel Exp 
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 
 /*
  *  The gen405 ELF link scripts support three special sections:
