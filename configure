@@ -1085,14 +1085,15 @@ else
 fi
 
 
-# Check whether --enable-gcc272 or --disable-gcc272 was given.
-if test "${enable_gcc272+set}" = set; then
-  enableval="$enable_gcc272"
+# Check whether --enable-gcc28 or --disable-gcc28 was given.
+if test "${enable_gcc28+set}" = set; then
+  enableval="$enable_gcc28"
   \
 RTEMS_USE_GCC272=no
 else
   RTEMS_USE_GCC272=yes
 fi
+
 
 # Check whether --enable-libcdir or --disable-libcdir was given.
 if test "${enable_libcdir+set}" = set; then
