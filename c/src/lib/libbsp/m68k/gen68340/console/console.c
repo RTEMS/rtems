@@ -418,9 +418,12 @@ dbugInitialise ()
 	if (uart_config.nb<2) rtems_fatal_error_occurred (-1);
 	
 	/* don't set DUACR twice! */
-	if (!CHANNEL_ENABLED_A)
-	   if (uart_config.baud_speed_table[UART_CHANNEL_B].set==1) DUACR = m340_BRG_Set1;
-	   else DUACR = m340_BRG_Set2;
+	if (!CHANNEL_ENABLED_A) {
+	   if (uart_config.baud_speed_table[UART_CHANNEL_B].set==1)
+              DUACR = m340_BRG_Set1;
+	   else
+              DUACR = m340_BRG_Set2;
+        }
 
 	/*
 	 * make OPCR an auxiliary function serving the communication channels

@@ -27,6 +27,7 @@
 #include <m68340.h>
 #include <m340uart.h>
 #include <stdarg.h>
+#include <string.h>
 
 /* this table shows compatible speed configurations for the MC68340:
    the first row shows baud rates for baud speed set 1
