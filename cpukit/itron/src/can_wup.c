@@ -29,9 +29,6 @@ ER can_wup(
   Objects_Locations        location;
 
   the_thread = _ITRON_Task_Get( tskid, &location );
-  if (!the_thread)
-    _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
-
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
@@ -41,9 +38,9 @@ ER can_wup(
       /*
        * XXX - FILL ME IN.
        */
-      return E_OK;
+      _ITRON_return_errorno( E_OK );
   }
 
-  return E_OBJ;           /* XXX - Should never get here */
+  _ITRON_return_errorno( E_OBJ );  /* XXX - Should never get here */
 }
 
