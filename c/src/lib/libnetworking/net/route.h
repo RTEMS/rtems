@@ -253,10 +253,12 @@ struct route_cb {
 
 #ifdef KERNEL
 #define	RTFREE(rt) \
-	if ((rt)->rt_refcnt <= 1) \
+	do { \
+	  if ((rt)->rt_refcnt <= 1) \
 		rtfree(rt); \
-	else \
-		(rt)->rt_refcnt--;
+	  else \
+		(rt)->rt_refcnt--; \
+	} while (0)
 
 extern struct route_cb route_cb;
 extern struct rtstat rtstat;
