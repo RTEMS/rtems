@@ -23,8 +23,6 @@ VPATH=@srcdir@
 
 ifeq ($(RTEMS_BSP),)
   RTEMS_BSP = @RTEMS_BSP_LIST@
-else
-  RTEMS_BSP = $(RTEMS_BSP)
 endif
 
 MAKE_CONFIG_EXTRA_DIR_PART=c/
