@@ -17,6 +17,6 @@ binpatch_SOURCES = binpatch.c
 
 bin_SCRIPTS = install-if-change lock-directory unlock-directory
 
-noinst_SCRIPTS = search-id.sh
+noinst_SCRIPTS = search-id.sh multigen
 
 include $(top_srcdir)/../../automake/host.am
