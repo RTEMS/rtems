@@ -76,8 +76,8 @@ _wdt_isp,
 #define Str(a)#a
 
 /*
- * Some versions of gcc and all version of egcs at least until egcs-1.0.2
- * are not able to handle #praga interrupt correctly if more than 1 isr is 
+ * Some versions of gcc and all version of egcs at least until egcs-1.1b
+ * are not able to handle #pragma interrupt correctly if more than 1 isr is 
  * contained in a file and when optimizing.
  * We try to work around this problem by using the macro below.
  */
