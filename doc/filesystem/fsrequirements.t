@@ -266,7 +266,7 @@ information to process nodes under a mounted filesystem.
 
 @example
 struct rtems_filesystem_location_info_tt @{
-    void                                         *node_access;
+    void                                     *node_access;
     rtems_filesystem_file_handlers_r         *handlers;
     rtems_filesystem_operations_table        *ops;
     rtems_filesystem_mount_table_entry_t     *mt_entry;
