@@ -68,7 +68,6 @@ include/sys/ioctl.h \
 include/sys/sockio.h \
 include/sys/termios.h \
 include/sys/ttycom.h \
-include/sys/utime.h \
 $(NEWLIB_H_FILES)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
