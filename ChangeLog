@@ -1,5 +1,10 @@
 2001-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-bsps.m4: Reworked.
+	* aclocal/bsp-alias.m4: Add score603e_g1, apply m4sugar.
+
+2001-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/bspopts.m4: New file.
 
 2001-11-13	Joel Sherrill <joel@OARcorp.com>
