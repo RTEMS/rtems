@@ -38,38 +38,22 @@
 
 if RTEMS_USE_GCC
 ## All the stuff below is specific to gcc
-
-## gcc >= 2.8.x
 GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
-else
-## fall back to the old style compilers/*.cfg
-## CONFIG.CC is supposed to be provided by <BSP>.cfg
-include $(CONFIG.CC)
 endif # RTEMS_USE_GCC
-
-DEFS = @DEFS@
 
 CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES)
 CFLAGS   = @RTEMS_CFLAGS@
 ## FIXME: This should be correct, but is not supported, yet
-# CXXFLAGS = @RTEMS_CXXFLAGS@ $(XCXXFLAGS)
+# CXXFLAGS = @RTEMS_CXXFLAGS@
 ## Fall back to using RTEMS_CFLAGS for C++
-CXXFLAGS = @RTEMS_CFLAGS@ $(XCXXFLAGS)
-ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
+CXXFLAGS = @RTEMS_CFLAGS@ 
+ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS)
 
 depend:
 
 if RTEMS_USE_GCC
 ## gcc >= 2.8
 RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
-define make-rel
-	$(LINK) $(RTEMS_RELLDFLAGS) $^
-endef
-else
-## non-gcc
-define make-rel
-	$(LINK) $(RTEMS_RELLDFLAGS) $^
-endef
 endif
 
 ## -------------------------------------------------------------------------
@@ -103,10 +87,6 @@ if RTEMS_USE_GCC
 ## gcc >= gcc-2.8
 RTEMS_CFLAGS_OPTIMIZE_V =
 RTEMS_CFLAGS_DEBUG_V = -qrtems_debug -Wno-unused
-
-## non-gcc
-## We can't guess what flags might be required here.
-## Pass the values from the environment if you want to apply them.
 endif
 RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
 
@@ -115,12 +95,6 @@ RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
 CC = @CC@ $(GCCSPECS)
 CXX = @CXX@ $(GCCSPECS)
 CPP = @CPP@ $(GCCSPECS)
-
-LD = @LD@
-OBJCOPY = @OBJCOPY@
-NM = @NM@
-SIZE = @SIZE@
-STRIP = @STRIP@
 
 ##
 AM_CPPFLAGS = $(RTEMS_CPPFLAGS)

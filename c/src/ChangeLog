@@ -1,5 +1,10 @@
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Don't include host.am.
+	* automake/compile.am: Further cleanups.
+
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/lib.am: Remove (Unused).
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
