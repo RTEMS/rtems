@@ -65,6 +65,8 @@ rtems_bsp_configure="$rtems_bsp_configure/configure"
     [-enable-rtemsbsp=* | --enable-rtemsbsp=* ) ;;])
 
 rtems_bsp_configure="$rtems_bsp_configure $rtems_bsp_configure_args"
+rtems_bsp_configure="$rtems_bsp_configure '--with-project-root=../../'"
+rtems_bsp_configure="$rtems_bsp_configure '--with-project-top=../../'"
 AC_SUBST(rtems_bsp_configure)
 
 AC_SUBST(RTEMS_BSP_LIST)

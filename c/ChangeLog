@@ -1,3 +1,8 @@
+2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Add --with-project-root, --with-project-top to
+	rtems_bsp_configure.
+
 2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.
