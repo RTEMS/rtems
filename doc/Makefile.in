@@ -19,7 +19,7 @@ program_prefix = @program_prefix@
 VPATH=@srcdir@
 
 include $(RTEMS_CUSTOM)
-include $(PROJECT_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
 
 CLEAN_ADDITIONS += xxx-your-debris-goes-here
 CLOBBER_ADDITIONS +=
