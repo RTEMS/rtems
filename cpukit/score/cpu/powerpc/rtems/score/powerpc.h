@@ -187,12 +187,11 @@ extern "C" {
 #define PPC_INTERRUPT_MAX       71
 
 #elif defined(mpc750)
-
 #define CPU_MODEL_NAME  "PowerPC 750"
-
 #define PPC_ALIGNMENT		8
 
-#elif defined(__ALTIVEC__)
+#elif defined(__ALTIVEC__) \
+  || defined(mpc7400) || defined(mpc7450) || defined(mpc7455)
 
 /* ppc altivec family */
 #if defined(mpc7400)

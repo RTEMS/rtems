@@ -1,3 +1,8 @@
+2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/powerpc.h: Add  "defined(mpc7400) || defined(mpc7450)
+	|| defined(mpc7455)" to altivec (gcc-3.2.x compatibility).
+
 2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/new-exceptions/cpu.h (CPU_HARDWARE_FP, CPU_ALL_TASKS_ARE_FP,
