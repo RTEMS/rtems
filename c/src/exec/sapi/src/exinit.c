@@ -52,6 +52,10 @@
 #ifdef RTEMS_POSIX_API
 #include <rtems/posix/posixapi.h>
 #endif
+#ifdef RTEMS_ITRON_API
+#include <rtems/itron/itronapi.h>
+#endif
+
 
 /*PAGE
  *
@@ -209,6 +213,10 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
 #ifdef RTEMS_POSIX_API
   _POSIX_API_Initialize( configuration_table );
+#endif
+
+#ifdef RTEMS_ITRON_API
+  _ITRON_API_Initialize( configuration_table );
 #endif
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );

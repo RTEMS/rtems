@@ -29,6 +29,9 @@ extern rtems_multiprocessing_table      Multiprocessing_configuration;
 #ifdef RTEMS_POSIX_API
 extern posix_api_configuration_table    Configuration_POSIX_API;
 #endif
+#ifdef RTEMS_ITRON_API
+extern itron_api_configuration_table    Configuration_ITRON_API;
+#endif
 
 /*
  *  RTEMS C Library and Newlib support
@@ -508,6 +511,184 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE    0
 #endif
 
+/*
+ *  ITRON API Configuration Parameters
+ */
+
+#ifdef RTEMS_ITRON_API
+
+#include <itron.h>
+#include <rtems/itron/config.h>
+#include <rtems/itron/eventflags.h>
+#include <rtems/itron/fmempool.h>
+#include <rtems/itron/mbox.h>
+#include <rtems/itron/msgbuffer.h>
+#include <rtems/itron/port.h>
+#include <rtems/itron/semaphore.h>
+#include <rtems/itron/task.h>
+#include <rtems/itron/vmempool.h>
+
+#ifndef CONFIGURE_MAXIMUM_ITRON_TASKS
+#define CONFIGURE_MAXIMUM_ITRON_TASKS      10
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
+#define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES   0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS
+#define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS   0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_ITRON_MAILBOXES
+#define CONFIGURE_MAXIMUM_ITRON_MAILBOXES   0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS
+#define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS   0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_ITRON_PORTS
+#define CONFIGURE_MAXIMUM_ITRON_PORTS   0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS
+#define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS   0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS
+#define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS   0
+#endif
+
+#ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
+
+#ifdef CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE
+
+/*
+ *  The user is defining their own table information and setting the
+ *  appropriate variables.
+ */
+
+#else
+
+#ifndef CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT
+#define CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT   ITRON_Init
+#endif
+
+#ifndef CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES
+#define CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES    TA_HLNG
+#endif
+
+#ifndef CONFIGURE_ITRON_INIT_TASK_PRIORITY
+#define CONFIGURE_ITRON_INIT_TASK_PRIORITY      1
+#endif
+
+#ifndef CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
+#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE
+#endif
+
+#ifdef CONFIGURE_INIT
+itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
+  { 1,                                    /* ID */
+    { (VP) 0,                                /* exinfo */
+      CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES,  /* task attributes */
+      CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT, /* task start address */
+      CONFIGURE_ITRON_INIT_TASK_PRIORITY,    /* initial task priority */
+      CONFIGURE_ITRON_INIT_TASK_STACK_SIZE   /* stack size */
+    }
+  }
+};
+#endif
+
+#define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME ITRON_Initialization_tasks
+
+#define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE \
+  sizeof(CONFIGURE_ITRON_INIT_TASK_TABLE_NAME) / \
+      sizeof(itron_initialization_tasks_table)
+
+#endif    /* CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE */
+
+#else     /* CONFIGURE_ITRON_INIT_TASK_TABLE */
+
+#define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME NULL
+#define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE 0
+
+#endif
+
+#define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API \
+  ( \
+    sizeof (ITRON_API_Control) \
+  )
+
+#define CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES(_semaphores) \
+  ((_semaphores) * \
+   ( sizeof(ITRON_Semaphore_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS(_eventflags) \
+  ((_eventflags) * \
+   ( sizeof(ITRON_Eventflags_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES(_mailboxes) \
+  ((_mailboxes) * \
+   ( sizeof(ITRON_Mailbox_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(_message_buffers) \
+  ((_message_buffers) * \
+   ( sizeof(ITRON_Message_buffer_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_ITRON_PORTS(_ports) \
+  ((_ports) * \
+   ( sizeof(ITRON_Port_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(_memory_pools) \
+  ((_memory_pools) * \
+   (sizeof(ITRON_Variable_memory_pool_Control) + CONFIGURE_OBJECT_TABLE_STUFF))
+
+#define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_fixed_memory_pools) \
+  ((_fixed_memory_pools) * \
+   ( sizeof(ITRON_Fixed_memory_pool_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#ifndef CONFIGURE_ITRON_INIT_TASK_STACK_SIZES
+#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZES (RTEMS_MINIMUM_STACK_SIZE * 2)
+#endif
+
+
+#define CONFIGURE_MEMORY_FOR_ITRON \
+  ( \
+    CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES( \
+        CONFIGURE_MAXIMUM_ITRON_SEMAPHORES ) + \
+    CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS( \
+        CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS ) + \
+    CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES( \
+        CONFIGURE_MAXIMUM_ITRON_MAILBOXES ) + \
+    CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS( \
+        CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS ) + \
+    CONFIGURE_MEMORY_FOR_ITRON_PORTS( \
+        CONFIGURE_MAXIMUM_ITRON_PORTS ) + \
+    CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS( \
+        CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS ) + \
+    CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS( \
+        CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS ) + \
+    CONFIGURE_ITRON_INIT_TASK_STACK_SIZES \
+   )
+
+
+#else
+
+#define CONFIGURE_MAXIMUM_ITRON_TASKS               0
+#define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES          0
+#define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS          0
+#define CONFIGURE_MAXIMUM_ITRON_MAILBOXES           0
+#define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS     0
+#define CONFIGURE_MAXIMUM_ITRON_PORTS               0
+#define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS        0
+#define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS  0
+#define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API     0
+#define CONFIGURE_MEMORY_FOR_ITRON                  0
+
+#endif    /* RTEMS_ITRON_API */
+
+
 /* 
  *  Calculate the RAM size based on the maximum number of objects configured.
  *  The model is to estimate the memory required for each configured item,
@@ -538,6 +719,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
    ((sizeof(Thread_Control) + CONTEXT_FP_SIZE + \
       STACK_MINIMUM_SIZE + sizeof( RTEMS_API_Control ) + \
       CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
+      CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API + \
       CONFIGURE_OBJECT_TABLE_STUFF)) \
   )
 
@@ -616,8 +798,10 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
 (( CONFIGURE_MEMORY_FOR_POSIX + \
+   CONFIGURE_MEMORY_FOR_ITRON + \
    CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS + \
-      CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS ) + \
+      CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS + \
+      CONFIGURE_MAXIMUM_ITRON_TASKS ) + \
    CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS) + \
    CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES + \
      CONFIGURE_LIBIO_SEMAPHORES) + \
@@ -697,6 +881,21 @@ posix_api_configuration_table Configuration_POSIX_API = {
 };
 #endif
 
+#ifdef RTEMS_ITRON_API
+itron_api_configuration_table Configuration_ITRON_API = {
+  CONFIGURE_MAXIMUM_ITRON_TASKS,
+  CONFIGURE_MAXIMUM_ITRON_SEMAPHORES,
+  CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS,
+  CONFIGURE_MAXIMUM_ITRON_MAILBOXES,
+  CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS,
+  CONFIGURE_MAXIMUM_ITRON_PORTS,
+  CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS,
+  CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS,
+  CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE,
+  CONFIGURE_ITRON_INIT_TASK_TABLE_NAME
+};
+#endif
+
 rtems_configuration_table Configuration = {
   CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
   CONFIGURE_EXECUTIVE_RAM_SIZE,
@@ -713,9 +912,14 @@ rtems_configuration_table Configuration = {
   CONFIGURE_MULTIPROCESSING_TABLE,           /* pointer to MP config table */
   &Configuration_RTEMS_API,                  /* pointer to RTEMS API config */
 #ifdef RTEMS_POSIX_API
-  &Configuration_POSIX_API                   /* pointer to POSIX API config */
+  &Configuration_POSIX_API,                  /* pointer to POSIX API config */
 #else
-  NULL                                       /* pointer to POSIX API config */
+  NULL,                                      /* pointer to POSIX API config */
+#endif
+#ifdef RTEMS_ITRON_API
+  &Configuration_ITRON_API                   /* pointer to ITRON API config */
+#else
+  NULL                                       /* pointer to ITRON API config */
 #endif
 };
 #endif

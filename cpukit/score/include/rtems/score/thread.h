@@ -166,11 +166,12 @@ typedef struct {
 
 typedef enum {
   THREAD_API_RTEMS,
-  THREAD_API_POSIX
+  THREAD_API_POSIX,
+  THREAD_API_ITRON
 }  Thread_APIs;
 
 #define THREAD_API_FIRST THREAD_API_RTEMS
-#define THREAD_API_LAST  THREAD_API_POSIX
+#define THREAD_API_LAST  THREAD_API_ITRON
 
 struct Thread_Control_struct {
   Objects_Control                       Object;

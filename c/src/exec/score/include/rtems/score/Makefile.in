@@ -93,6 +93,10 @@ $(TARGOPTS):
 	@if test "$(HAS_POSIX_API)" = "yes"; then \
 	echo "#define RTEMS_POSIX_API 1"	>>$@; \
 	fi
+	echo "SHOULD BE HAS_ITRON_API not RTEMS_HAS_ITRON_API XXX "
+	@if test "$(RTEMS_HAS_ITRON_API)" = "yes"; then \
+	echo "#define RTEMS_ITRON_API 1"	>>$@; \
+	fi
 	@if test "$(RTEMS_USE_NEWLIB)" = "yes"; then 	\
 	echo "#define RTEMS_NEWLIB 1"		>>$@;	\
 	echo "#define MALLOC_PROVIDED 1"        >>$@;	\

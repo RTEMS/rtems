@@ -14,6 +14,7 @@ AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
+RTEMS_ENABLE_ITRON
 RTEMS_ENABLE_NETWORKING
 RTEMS_ENABLE_INLINES
 RTEMS_ENABLE_CXX
@@ -41,8 +42,10 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 RTEMS_CHECK_POSIX_API(RTEMS_BSP)
+RTEMS_CHECK_ITRON_API(RTEMS_BSP)
 
 if test "$tests_enabled" = "yes"; then
+  # do functionality tests first, then performance tests
   cfg_subdirs="libtests sptests"
   if test "$HAS_MP" = "yes"; then
     cfg_subdirs="$cfg_subdirs mptests"
@@ -50,7 +53,14 @@ if test "$tests_enabled" = "yes"; then
   if test "$HAS_POSIX_API" = "yes"; then
     cfg_subdirs="$cfg_subdirs psxtests"
   fi
+  if test "$HAS_ITRON_API" = "yes"; then
+    cfg_subdirs="$cfg_subdirs itrontests tmitrontests"
+  fi
+  # Now do performance tests
   cfg_subdirs="$cfg_subdirs tmtests"
+  if test "$HAS_ITRON_API" = "yes"; then
+    cfg_subdirs="$cfg_subdirs tmitrontests"
+  fi
 fi
 
 AC_SUBST(BARE_CPU_CFLAGS)

@@ -9,7 +9,11 @@ if HAS_POSIX
 POSIX_SUBDIRS = posix
 endif
 
-SUBDIRS = score rtems $(POSIX_SUBDIRS) sapi wrapup
+if HAS_ITRON
+ITRON_SUBDIRS = itron
+endif
+
+SUBDIRS = score rtems $(POSIX_SUBDIRS) $(ITRON_SUBDIRS) sapi wrapup
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

@@ -13,7 +13,8 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-C_PIECES = debug entrytable extension fatal exinit io posixapi rtemsapi
+C_PIECES = debug entrytable extension fatal exinit io \
+    itronapi posixapi rtemsapi
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

@@ -86,30 +86,38 @@ typedef unsigned32 Objects_Id;
  */
 
 typedef enum {
-  OBJECTS_NO_CLASS                  =  0,
-  OBJECTS_INTERNAL_THREADS          =  1,
-  OBJECTS_RTEMS_TASKS               =  2,
-  OBJECTS_POSIX_THREADS             =  3,
-  OBJECTS_RTEMS_TIMERS              =  4,
-  OBJECTS_RTEMS_SEMAPHORES          =  5,
-  OBJECTS_RTEMS_MESSAGE_QUEUES      =  6,
-  OBJECTS_RTEMS_PARTITIONS          =  7,
-  OBJECTS_RTEMS_REGIONS             =  8,
-  OBJECTS_RTEMS_PORTS               =  9,
-  OBJECTS_RTEMS_PERIODS             = 10,
-  OBJECTS_RTEMS_EXTENSIONS          = 11,
-  OBJECTS_POSIX_KEYS                = 12,
-  OBJECTS_POSIX_INTERRUPTS          = 13,
-  OBJECTS_POSIX_MESSAGE_QUEUES      = 14,
-  OBJECTS_POSIX_MUTEXES             = 15,
-  OBJECTS_POSIX_SEMAPHORES          = 16,
-  OBJECTS_POSIX_CONDITION_VARIABLES = 17
+  OBJECTS_NO_CLASS                    =  0,
+  OBJECTS_INTERNAL_THREADS            =  1,
+  OBJECTS_RTEMS_TASKS                 =  2,
+  OBJECTS_POSIX_THREADS               =  3,
+  OBJECTS_ITRON_TASKS                 =  4,
+  OBJECTS_RTEMS_TIMERS                =  5,
+  OBJECTS_RTEMS_SEMAPHORES            =  6,
+  OBJECTS_RTEMS_MESSAGE_QUEUES        =  7,
+  OBJECTS_RTEMS_PARTITIONS            =  8,
+  OBJECTS_RTEMS_REGIONS               =  9,
+  OBJECTS_RTEMS_PORTS                 = 10,
+  OBJECTS_RTEMS_PERIODS               = 11,
+  OBJECTS_RTEMS_EXTENSIONS            = 12,
+  OBJECTS_POSIX_KEYS                  = 13,
+  OBJECTS_POSIX_INTERRUPTS            = 14,
+  OBJECTS_POSIX_MESSAGE_QUEUES        = 15,
+  OBJECTS_POSIX_MUTEXES               = 16,
+  OBJECTS_POSIX_SEMAPHORES            = 17,
+  OBJECTS_POSIX_CONDITION_VARIABLES   = 18,
+  OBJECTS_ITRON_EVENTFLAGS            = 19,
+  OBJECTS_ITRON_MAILBOXES             = 20,
+  OBJECTS_ITRON_MESSAGE_BUFFERS       = 21,
+  OBJECTS_ITRON_PORTS                 = 22,
+  OBJECTS_ITRON_SEMAPHORES            = 23,
+  OBJECTS_ITRON_VARIABLE_MEMORY_POOLS = 24,
+  OBJECTS_ITRON_FIXED_MEMORY_POOLS    = 25
 } Objects_Classes;
  
 #define OBJECTS_CLASSES_FIRST               OBJECTS_NO_CLASS
-#define OBJECTS_CLASSES_LAST                OBJECTS_POSIX_CONDITION_VARIABLES
+#define OBJECTS_CLASSES_LAST                OBJECTS_ITRON_FIXED_MEMORY_POOLS
 #define OBJECTS_CLASSES_FIRST_THREAD_CLASS  OBJECTS_INTERNAL_THREADS
-#define OBJECTS_CLASSES_LAST_THREAD_CLASS   OBJECTS_POSIX_THREADS
+#define OBJECTS_CLASSES_LAST_THREAD_CLASS   OBJECTS_ITRON_TASKS
 
 /*
  *  This enumerated type lists the locations which may be returned
@@ -282,6 +290,22 @@ void _Objects_Initialize_information (
 
 Objects_Control *_Objects_Allocate(
   Objects_Information *information
+);
+
+/*
+ *  _Objects_Allocate_by_index
+ *
+ *  DESCRIPTION:
+ *
+ *  This function allocates the object control block
+ *  specified by the index from the inactive chain of
+ *  free object control blocks.
+ */
+
+Objects_Control *_Objects_Allocate_by_index(
+  Objects_Information *information,
+  unsigned32           index,
+  unsigned32           sizeof_control
 );
 
 /*PAGE

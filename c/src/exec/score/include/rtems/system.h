@@ -69,6 +69,14 @@ extern "C" {
 #define POSIX_EXTERN  extern
 #endif
 
+#ifdef ITRON_API_INIT
+#undef  ITRON_EXTERN
+#define ITRON_EXTERN
+#else
+#undef  ITRON_EXTERN
+#define ITRON_EXTERN  extern
+#endif
+
 /*
  *  The following (in conjunction with compiler arguments) are used
  *  to choose between the use of static inline functions and macro

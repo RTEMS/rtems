@@ -25,8 +25,8 @@ extern "C" {
  *  Unlimited object support. Changes the configuration table entry for POSIX
  *  or RTEMS APIs to bounded only by the memory of the work-space.
  *
- *  Use the macro to define the resource unlimited before placing in the configuration
- *  table.
+ *  Use the macro to define the resource unlimited before placing in
+ *  the configuration table.
  */
 
 #include <rtems/score/object.h>
@@ -37,14 +37,20 @@ extern "C" {
     
 /*
  *  This is kind of kludgy but it allows targets to totally ignore the
- *  POSIX API safely.
+ *  optional APIs like POSIX and ITRON safely.
  */
 
 #ifdef RTEMS_POSIX_API
 #include <rtems/posix/config.h>
 #else
-
 typedef void *posix_api_configuration_table;
+#endif
+
+#ifdef RTEMS_ITRON_API
+#include <itron.h>
+#include <rtems/itron/config.h>
+#else
+typedef void *itron_api_configuration_table;
 #endif
 
 #include <rtems/rtems/config.h>
@@ -106,6 +112,7 @@ typedef struct {
   rtems_multiprocessing_table      *User_multiprocessing_table;
   rtems_api_configuration_table    *RTEMS_api_configuration;
   posix_api_configuration_table    *POSIX_api_configuration;
+  itron_api_configuration_table    *ITRON_api_configuration;
 } rtems_configuration_table;
 
 /*
@@ -164,6 +171,9 @@ SAPI_EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
 
 #define rtems_configuration_get_posix_api_configuration() \
         (_Configuration_Table->POSIX_api_configuration)
+
+#define rtems_configuration_get_itron_api_configuration() \
+        (_Configuration_Table->ITRON_api_configuration)
 
 #ifdef __cplusplus
 }
