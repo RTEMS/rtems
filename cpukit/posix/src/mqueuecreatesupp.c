@@ -47,9 +47,16 @@ int _POSIX_Message_queue_Create_support(
 
   _Thread_Disable_dispatch();
  
+  /*
+   *  There is no real basis for the default values.  They will work
+   *  but were not compared against any existing implementation for
+   *  compatibility.  See README.mqueue for an example program we
+   *  think will print out the defaults.  Report anything you find with it.
+   */
+
   if ( attr_ptr == NULL ) {
-    attr.mq_maxmsg  = 0;  /* XXX */
-    attr.mq_msgsize = 0;  /* XXX */
+    attr.mq_maxmsg  = 10;
+    attr.mq_msgsize = 16;
   } else {
     if ( attr_ptr->mq_maxmsg < 0 ){
       _Thread_Enable_dispatch();
@@ -76,7 +83,7 @@ int _POSIX_Message_queue_Create_support(
  
   if ( name ) {
 
-    if( strlen(name) > PATH_MAX ) {  /* XXX - Is strlen ok to use here ? */
+    if( strlen(name) > PATH_MAX ) {  /* XXX - on non-null terminated name? */
       _Thread_Enable_dispatch();
       set_errno_and_return_minus_one( ENAMETOOLONG );
     }
@@ -95,6 +102,7 @@ int _POSIX_Message_queue_Create_support(
   }
  
   the_mq->process_shared  = pshared;
+  the_mq->oflag = oflag;
  
   if ( name ) {
     the_mq->named = TRUE;
