@@ -1,9 +1,10 @@
-dnl Process this file with autoconf to produce a configure script.
-dnl
-dnl $Id$
+## Process this file with autoconf to produce a configure script.
+## 
+## $Id$
 
-AC_PREREQ(2.13)
-AC_INIT(optman)
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([optman])
 RTEMS_TOP(../../../..)
 AC_CONFIG_AUX_DIR(../../../..)
 
@@ -49,8 +50,7 @@ fi
 AM_CONFIG_HEADER(src/config.h)
 
 # Explicitly list all Makefiles here
-AC_OUTPUT( 
-Makefile
+AC_CONFIG_FILES([Makefile
 src/Makefile
 include/Makefile
 include/sys/Makefile
@@ -63,4 +63,5 @@ inline/rtems/posix/Makefile
 macros/Makefile
 macros/rtems/Makefile
 macros/rtems/posix/Makefile
-)
+])
+AC_OUTPUT

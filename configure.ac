@@ -1,6 +1,6 @@
-dnl Process this file with autoconf to produce a configure script.
-dnl
-dnl  $Id$
+## Process this file with autoconf to produce a configure script.
+## 
+## $Id$
 
 AC_PREREQ(2.52)
 AC_INIT
@@ -19,8 +19,8 @@ AC_CANONICAL_TARGET([])
 AM_INIT_AUTOMAKE(rtems,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
-dnl These option are only in here to let --help report all supported
-dnl options.
+## These option are only in here to let --help report all supported
+## options.
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_ITRON

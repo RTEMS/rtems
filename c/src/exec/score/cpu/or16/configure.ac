@@ -1,15 +1,16 @@
-dnl Process this file with autoconf to produce a configure script.
-dnl
-dnl $Id$
+## Process this file with autoconf to produce a configure script.
+## 
+## $Id$
 
-AC_PREREQ(2.13)
-AC_INIT(cpu_asm.S)
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([cpu_asm.c])
 RTEMS_TOP(../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-c-src-exec-score-cpu-mips64orion,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-exec-score-cpu-or16,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSCPU
@@ -25,7 +26,7 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_NEWLIB
 
 # Explicitly list all Makefiles here
-AC_OUTPUT( 
-Makefile
+AC_CONFIG_FILES([Makefile
 rtems/Makefile
-rtems/score/Makefile)
+rtems/score/Makefile])
+AC_OUTPUT

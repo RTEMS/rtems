@@ -1,9 +1,10 @@
-dnl Process this file with autoconf to produce a configure script.
-dnl
-dnl  $Id$
+## Process this file with autoconf to produce a configure script.
+## 
+## $Id$
 
-AC_PREREQ(2.13)
-AC_INIT(src)
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([src])
 RTEMS_TOP(..)
 AC_CONFIG_AUX_DIR(..)
 
@@ -12,7 +13,7 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE(rtems-c,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
-dnl These options are used within this file.
+## These options are used within this file.
 RTEMS_ENABLE_BARE
 RTEMS_ENABLE_RTEMSBSP(rtems_bsp)
 
@@ -93,9 +94,9 @@ AC_SUBST(RTEMS_BSP_LIST)
 AC_CONFIG_SUBDIRS(make)
 
 # Explicitly list all Makefiles here
-AC_OUTPUT( 
-Makefile
-)
+AC_CONFIG_FILES([Makefile
+])
+AC_OUTPUT
 
 echo
 echo target architecture: $target_cpu.

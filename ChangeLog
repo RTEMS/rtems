@@ -1,3 +1,9 @@
+2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* configure.in: Remove.
+	* configure.ac: New file, generated from configure.in by autoupdate.
+
 2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-cpu-subdirs.m4: New file.

@@ -1,13 +1,14 @@
-dnl Process this file with autoconf to produce a configure script.
-dnl
-dnl  $Id$
+## Process this file with autoconf to produce a configure script.
+## 
+## $Id$
 
-dnl
-dnl This script configures the configuration files below c/make/
-dnl
+## 
+## This script configures the configuration files below c/make/
+## 
 
-AC_PREREQ(2.13)
-AC_INIT(target.cfg.in)
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([target.cfg.in])
 RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)
 
@@ -32,7 +33,7 @@ RTEMS_PROJECT_ROOT
 
 RTEMS_PROG_CC_FOR_TARGET
 
-dnl check for g++
+## check for g++
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
   RTEMS_PROG_CXX_FOR_TARGET
 fi
@@ -46,7 +47,7 @@ AC_SUBST(RTEMS_USE_GCC272)
 AC_SUBST(RTEMS_CPU)
 
 # Explicitly list all Makefiles here
-AC_OUTPUT( 
-Makefile
+AC_CONFIG_FILES([Makefile
 target.cfg
-)
+])
+AC_OUTPUT

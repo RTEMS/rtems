@@ -1,9 +1,10 @@
-dnl Process this file with autoconf to produce a configure script.
-dnl
-dnl  $Id$
+## Process this file with autoconf to produce a configure script.
+## 
+## $Id$
 
-AC_PREREQ(2.13)
-AC_INIT(score)
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([score])
 RTEMS_TOP(../../..)
 AC_CONFIG_AUX_DIR(../../..)
 
@@ -73,8 +74,7 @@ fi
 AM_CONFIG_HEADER(score/include/rtems/score/cpuopts-tmp.h)
 
 # Explicitly list all Makefiles here
-AC_OUTPUT( 
-Makefile
+AC_CONFIG_FILES([Makefile
 rtems/Makefile
 rtems/src/Makefile
 rtems/include/Makefile
@@ -113,4 +113,5 @@ wrapup/Makefile
 wrapup/rtems/Makefile
 wrapup/itron/Makefile
 wrapup/posix/Makefile
-)
+])
+AC_OUTPUT
