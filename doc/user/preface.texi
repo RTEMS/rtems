@@ -159,6 +159,7 @@ It has been ported to the following processor families:
 @item PowerPC
 @item SPARC
 @item Hewlett Packard PA-RISC
+@item Hitach SH
 @item AMD A29K
 @item UNIX
 @end itemize

@@ -545,7 +545,7 @@ is the address of the entry point called by io_control.
 @end table
 
 Driver entry points configured as NULL will always
-return a status code of @code{SUCCESSFUL}.  No user code will be
+return a status code of @code{@value{RPREFIX}SUCCESSFUL}.  No user code will be
 executed in this situation.
 
 A typical declaration for a Device Driver Table might appear as follows:
@@ -972,7 +972,7 @@ the RTEMS RAM Workspace.
 The starting address of the RTEMS RAM Workspace must
 be aligned on a four-byte boundary.  Failure to properly align
 the workspace area will result in the fatal_error_occurred
-directive being invoked with the @code{INVALID_ADDRESS} error code.
+directive being invoked with the @code{@value{RPREFIX}INVALID_ADDRESS} error code.
 
 A worksheet is provided in the Memory Requirements
 chapter of the Applications Supplement document for a specific

@@ -46,6 +46,7 @@ END-INFO-DIR-ENTRY
 @set ROUTINE function
 @set OR |
 @set RPREFIX RTEMS_
+@set DIRPREFIX rtems_
 @c the language is @value{LANGUAGE}
 @c NOTE:  don't use underscore in the name
 @c

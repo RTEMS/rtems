@@ -11,32 +11,32 @@
 @end ifinfo
 @chapter Directive Status Codes
 @table @b
-@item @code{SUCCESSFUL} - successful completion
-@item @code{TASK_EXITTED} - returned from a task
-@item @code{MP_NOT_CONFIGURED} - multiprocessing not configured
-@item @code{INVALID_NAME} - invalid object name
-@item @code{INVALID_ID} - invalid object id
-@item @code{TOO_MANY} - too many
-@item @code{TIMEOUT} - timed out waiting
-@item @code{OBJECT_WAS_DELETED} - object was deleted while waiting
-@item @code{INVALID_SIZE} - invalid specified size
-@item @code{INVALID_ADDRESS} - invalid address specified
-@item @code{INVALID_NUMBER} - number was invalid
-@item @code{NOT_DEFINED} - item not initialized
-@item @code{RESOURCE_IN_USE} - resources outstanding
-@item @code{UNSATISFIED} - request not satisfied
-@item @code{INCORRECT_STATE} - task is in wrong state
-@item @code{ALREADY_SUSPENDED} - task already in state
-@item @code{ILLEGAL_ON_SELF} - illegal for calling task
-@item @code{ILLEGAL_ON_REMOTE_OBJECT} - illegal for remote object
-@item @code{CALLED_FROM_ISR} - invalid environment
-@item @code{INVALID_PRIORITY} - invalid task priority
-@item @code{INVALID_CLOCK} - invalid time buffer
-@item @code{INVALID_NODE} - invalid node id
-@item @code{NOT_CONFIGURED} - directive not configured
-@item @code{NOT_OWNER_OF_RESOURCE} - not owner of resource
-@item @code{NOT_IMPLEMENTED} - directive not implemented
-@item @code{INTERNAL_ERROR} - RTEMS inconsistency detected
-@item @code{NO_MEMORY} - could not get enough memory
+@item @code{@value{RPREFIX}SUCCESSFUL} - successful completion
+@item @code{@value{RPREFIX}TASK_EXITTED} - returned from a task
+@item @code{@value{RPREFIX}MP_NOT_CONFIGURED} - multiprocessing not configured
+@item @code{@value{RPREFIX}INVALID_NAME} - invalid object name
+@item @code{@value{RPREFIX}INVALID_ID} - invalid object id
+@item @code{@value{RPREFIX}TOO_MANY} - too many
+@item @code{@value{RPREFIX}TIMEOUT} - timed out waiting
+@item @code{@value{RPREFIX}OBJECT_WAS_DELETED} - object was deleted while waiting
+@item @code{@value{RPREFIX}INVALID_SIZE} - invalid specified size
+@item @code{@value{RPREFIX}INVALID_ADDRESS} - invalid address specified
+@item @code{@value{RPREFIX}INVALID_NUMBER} - number was invalid
+@item @code{@value{RPREFIX}NOT_DEFINED} - item not initialized
+@item @code{@value{RPREFIX}RESOURCE_IN_USE} - resources outstanding
+@item @code{@value{RPREFIX}UNSATISFIED} - request not satisfied
+@item @code{@value{RPREFIX}INCORRECT_STATE} - task is in wrong state
+@item @code{@value{RPREFIX}ALREADY_SUSPENDED} - task already in state
+@item @code{@value{RPREFIX}ILLEGAL_ON_SELF} - illegal for calling task
+@item @code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - illegal for remote object
+@item @code{@value{RPREFIX}CALLED_FROM_ISR} - invalid environment
+@item @code{@value{RPREFIX}INVALID_PRIORITY} - invalid task priority
+@item @code{@value{RPREFIX}INVALID_CLOCK} - invalid time buffer
+@item @code{@value{RPREFIX}INVALID_NODE} - invalid node id
+@item @code{@value{RPREFIX}NOT_CONFIGURED} - directive not configured
+@item @code{@value{RPREFIX}NOT_OWNER_OF_RESOURCE} - not owner of resource
+@item @code{@value{RPREFIX}NOT_IMPLEMENTED} - directive not implemented
+@item @code{@value{RPREFIX}INTERNAL_ERROR} - RTEMS inconsistency detected
+@item @code{@value{RPREFIX}NO_MEMORY} - could not get enough memory
 @end table
 

@@ -29,9 +29,9 @@ and other time related capabilities.  The directives provided by
 the clock manager are:
 
 @itemize @bullet
-@item @code{clock_set} - Set system date and time
-@item @code{clock_get} - Get system date and time information
-@item @code{clock_tick} - Announce a clock tick
+@item @code{@value{DIRPREFIX}clock_set} - Set system date and time
+@item @code{@value{DIRPREFIX}clock_get} - Get system date and time information
+@item @code{@value{DIRPREFIX}clock_tick} - Announce a clock tick
 @end itemize
 
 @ifinfo
@@ -241,17 +241,17 @@ dependent on the option selected by the caller.  The following
 options are available:
 
 @itemize @bullet
-@item @code{CLOCK_GET_TOD} - obtain native style date and time
+@item @code{@value{RPREFIX}CLOCK_GET_TOD} - obtain native style date and time
 
-@item @code{CLOCK_GET_TIME_VALUE} - obtain UNIX-style date and time
+@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - obtain UNIX-style date and time
 
-@item @code{CLOCK_GET_TICKS_SINCE_BOOT} - obtain number of ticks
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT} - obtain number of ticks
 since RTEMS was initialized
 
-@item @code{CLOCK_GET_SECONDS_SINCE_EPOCH} - obtain number of seconds
+@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - obtain number of seconds
 since RTEMS epoch
 
-@item @code{CLOCK_GET_TICKS_PER_SECOND} - obtain number of clock ticks
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - obtain number of clock ticks
 per second
 
 @end itemize
@@ -302,7 +302,7 @@ procedure Clock_Set (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - date and time set successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - date and time set successfully@*
 @code{INVALID_TIME_OF_DAY} - invalid time of day
 
 @subheading DESCRIPTION:
@@ -357,52 +357,52 @@ procedure Clock_Get (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - current time obtained successfully@*
-@code{NOT_DEFINED} - system date and time is not set
+@code{@value{RPREFIX}SUCCESSFUL} - current time obtained successfully@*
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
 
 @subheading DESCRIPTION:
 
 This directive obtains the system date and time.  If
 the caller is attempting to obtain the date and time (i.e.
-option is set to either @code{CLOCK_GET_SECONDS_SINCE_EPOCH},
-@code{CLOCK_GET_TOD}, or @code{CLOCK_GET_TIME_VALUE}) and the date and time
+option is set to either @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH},
+@code{@value{RPREFIX}CLOCK_GET_TOD}, or @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE}) and the date and time
 has not been set with a previous call to clock_set, then the
-@code{NOT_DEFINED} status code is returned.  The caller can always
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned.  The caller can always
 obtain the number of ticks per second (option is
-@code{CLOCK_GET_TICKS_PER_SECOND}) and the number of ticks since the
-executive was initialized option is @code{CLOCK_GET_TICKS_SINCE_BOOT}).
+@code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND}) and the number of ticks since the
+executive was initialized option is @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT}).
 
 The data type expected for time_buffer is indicated below:
 
 @ifset is-C
 @itemize @bullet
-@item @code{CLOCK_GET_TOD} - (rtems_time_of_day *)
+@item @code{@value{RPREFIX}CLOCK_GET_TOD} - (rtems_time_of_day *)
 
-@item @code{CLOCK_GET_TIME_VALUE} - (rtems_clock_time_value *)
+@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - (rtems_clock_time_value *)
 
-@item @code{CLOCK_GET_TICKS_SINCE_BOOT} - (rtems_interval *)
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT} - (rtems_interval *)
 
-@item @code{CLOCK_GET_SECONDS_SINCE_EPOCH} - (rtems_interval *)
+@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - (rtems_interval *)
 
-@item @code{CLOCK_GET_TICKS_PER_SECOND} - (rtems_interval *)
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - (rtems_interval *)
 
 @end itemize
 @end ifset
 
 @ifset is-Ada
 @itemize @bullet
-@item @code{CLOCK_GET_TOD} - Address of an variable of type RTEMS.Time_Of_Day
+@item @code{@value{RPREFIX}CLOCK_GET_TOD} - Address of an variable of type RTEMS.Time_Of_Day
 
-@item @code{CLOCK_GET_TIME_VALUE} - Address of an variable of
+@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - Address of an variable of
 type RTEMS.Clock_Time_Value
 
-@item @code{CLOCK_GET_TICKS_SINCE_BOOT} - Address of an variable of
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT} - Address of an variable of
 type RTEMS.Interval
 
-@item @code{CLOCK_GET_SECONDS_SINCE_EPOCH} - Address of an variable of
+@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - Address of an variable of
 type RTEMS.Interval
 
-@item @code{CLOCK_GET_TICKS_PER_SECOND} - Address of an variable of
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - Address of an variable of
 type RTEMS.Interval
 
 @end itemize
@@ -441,7 +441,7 @@ procedure Clock_Tick (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - current time obtained successfully
+@code{@value{RPREFIX}SUCCESSFUL} - current time obtained successfully
 
 @subheading DESCRIPTION:
 

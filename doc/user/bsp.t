@@ -96,7 +96,7 @@ following requirements:
 must leave the processor in the most privileged, or supervisory,
 state.
 
-@item Must allocate a stack of at least @code{MINIMUM_STACK_SIZE}
+@item Must allocate a stack of at least @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
 bytes and initialize the stack pointer for the
 initialize_executive directive.
 
@@ -141,7 +141,7 @@ stack usage must account for the following requirements:
 @end itemize
 
 The size of the interrupt stack must be greater than
-or equal to the constant @code{MINIMUM_STACK_SIZE}.
+or equal to the constant @code{@value{RPREFIX}MINIMUM_STACK_SIZE}.
 
 @ifinfo
 @node Processors with a Separate Interrupt Stack, Processors without a Separate Interrupt Stack, Interrupt Stack Requirements, Board Support Packages Reset and Initialization
