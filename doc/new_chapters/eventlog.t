@@ -42,18 +42,23 @@ The directives provided by the event logging manager are:
 
 @subsection Log Files and Events
 
-The operating system uses a special log file named @code{XXX}.  
+The operating system uses a special log file named @code{syslog}.  
 This log file is called the system log and is automatically created and
-tracked by the operating system.  The system log is written to with 
-the @code{log_write} function.  An alternative log file may be written 
-using the @code{log_write_any} function.  It is possible to use @code{log_read}
-to query the system and @code{log_write_entry} to a non-system log file
-to produce a filtered version of the system log.  For example you could
-produce a log of all disk controller faults that have occurred.  
+tracked by the operating system.  The system log is written with 
+the @code{log_write()} function.  An alternative log file may be written 
+using the @code{log_write_any()} function.  It is possible to use @code{log_read()}
+to query the system log and and write the records to a non-system log file 
+using @code{log_write_entry()} to produce a filtered version of the
+system log.  For example you could produce a log of all disk controller
+faults that have occurred.  
 
 A non-system log may be a special log file created by an application to 
 describe application faults, or a subset of the system log created 
 by the application.  
+
+
+
+@subsection Facilities, Severity, & Queries
 
 A facility is an identification code for a subsystem, device, or
 other object about which information is being written to 
@@ -61,20 +66,16 @@ a log file.  Severity is a rating of the error that is being logged.
 The facility identifier and the event severity are the basis for
 subsequent log query.  A log query is used as a filter to
 obtain a subset of a given log file.  The log file may be configured 
-to send out an event ... ??? 
-
-XXX Events
-
-@subsection Queries
+to send out an event.
 
 @section Operations
 
 @subsection Creating and Writing a non-System Log
 
-The following snips of code create a non-System log file at /temp/.
-A previously read entry and buffer (log_buf) of size readsize are written
-into the log.  See the dicussion on opening and reading a log for
-how the entry is created.
+The following code fragment create a non-System log file at /temp/.
+A real filename previously read entry and buffer @code{log_buf} of size 
+@code{readsize} are written into the log.  See the discussion on opening 
+and reading a log for how the entry is created.
 
 @example
 #include <evlog.h>
@@ -144,7 +145,7 @@ The @code{severity} argument exceeds @code{LOG_SEVERITY_MAX}.
 The @code{len} argument exceeds @code{LOG_MAXIUM_BUFFER_SIZE}.
 
 @item EINVAL
-The @code{len} argument was non-zero and @code{buf} is NULL.
+The @code{len} argument was non-zero and @code{buf} is @code{NULL}.
 
 @item ENOSPC
 The device which contains the log file has run out of space.
@@ -156,7 +157,7 @@ An I/O error occurred in writing to the log file.
 
 @subheading DESCRIPTION:
 
-The @code{log_write_any} function writes an event record to the 
+The @code{log_write} function writes an event record to the 
 system log file.  The event record written consists of the
 event attributes specified by the @code{facility}, @code{event_id},
 and @code{severity} arguments as well as the data identified by the
@@ -181,20 +182,20 @@ This is set to the value of the @code{facility} argument.
 This is set to the value of the @code{severity} argument.
 
 @item log_uid
-This is set to the value returned by @code{geteuid}.
+This is set to the value returned by @code{geteuid()}.
 
 @item log_gid
-This is set to the value returned by @code{getegid}.
+This is set to the value returned by @code{getegid()}.
 
 @item log_pid
-This is set to the value returned by @code{getpid}.
+This is set to the value returned by @code{getpid()}.
 
 @item log_pgrp
-This is set to the value returned by @code{getpgrp}.
+This is set to the value returned by @code{getpgrp()}.
 
 @item log_time
-This is set to the value returned by @code{clock_gettime} for the 
-CLOCK_REALTIME clock source.
+This is set to the value returned by @code{clock_gettime()} for the 
+@code{CLOCK_REALTIME clock} source.
 
 @end table
 
@@ -248,7 +249,7 @@ The @code{severity} argument exceeds @code{LOG_SEVERITY_MAX}.
 The @code{len} argument exceeds @code{LOG_MAXIMUM_BUFFER_SIZE}.
 
 @item EINVAL
-The @code{len} argument was non-zero and @code{buf} is NULL.
+The @code{len} argument was non-zero and @code{buf} is @code{NULL}.
 
 @item ENOSPC
 The device which contains the log file has run out of space.
@@ -260,7 +261,7 @@ An I/O error occurred in writing to the log file.
 
 @subheading DESCRIPTION:
 
-The @code{log_write_any} function writes an event record to the log file
+The @code{log_write_any()} function writes an event record to the log file
 specified by @code{logdes}.  The event record written consists of the
 event attributes specified by the @code{facility}, @code{event_id},
 and @code{severity} arguments as well as the data identified by the
@@ -285,20 +286,20 @@ This is set to the value of the @code{facility} argument.
 This is set to the value of the @code{severity} argument.
 
 @item log_uid
-This is set to the value returned by @code{geteuid}.
+This is set to the value returned by @code{geteuid()}.
 
 @item log_gid
-This is set to the value returned by @code{getegid}.
+This is set to the value returned by @code{getegid()}.
 
 @item log_pid
-This is set to the value returned by @code{getpid}.
+This is set to the value returned by @code{getpid()}.
 
 @item log_pgrp
-This is set to the value returned by @code{getpgrp}.
+This is set to the value returned by @code{getpgrp()}.
 
 @item log_time
-This is set to the value returned by @code{clock_gettime} for the 
-CLOCK_REALTIME clock source.
+This is set to the value returned by @code{clock_gettime()} for the 
+@code{CLOCK_REALTIME} clock source.
 
 @end table
 
@@ -368,7 +369,7 @@ An I/O error occurred in writing to the log file.
 
 @subheading DESCRIPTION:
 
-The @code{log_write_entry} function writes an event record 
+The @code{log_write_entry()} function writes an event record 
 specified by the @code{entry}, @code{buf}, and @code{len} arguments.
 Most of the fields of the event record pointed to by @code{entry}
 are left intact.  The following fields are filled in as follows:
@@ -424,7 +425,7 @@ Search permission is denied on a component of the path prefix,
 or the log file exists and read permission is denied.
 
 @item  EINTR
-A signal interrupted the call to log_open().
+A signal interrupted the call to @code{log_open()}.
 
 @item EINVAL
 The log_severity field of the query argument exceeds 
@@ -455,24 +456,24 @@ A component of the path prefix is not a directory.
 
 @subheading DESCRIPTION:
 
-The @code{log_open} function establishes the connection between a 
+The @code{log_open()} function establishes the connection between a 
 log file and a log file descriptor.  It creates an open log file 
 descriptor that refers to this query stream on the specified log file
 The log file descriptor is used by the other log functions to refer
 to that log query stream.  The @code{path} argument points to a
-pathname for a log file.  A @code{path} argument of NULL specifies
+pathname for a log file.  A @code{path} argument of @code{NULL} specifies
 the current system log file.  
 
-The @code{query} argument is not NULL, then it points to a log query
+The @code{query} argument is not @code{NULL}, then it points to a log query
 specification that is used to filter the records in the log file on
-subsequent @code{log_read} operations.  This restricts the set of
+subsequent @code{log_read()} operations.  This restricts the set of
 event records read using the returned log file descriptor to those
 which match the query.  A query match occurs for a given record when
 that record's facility is a member of the query's facility set and
 the record's severity is greater than or equal to the severity specified
 in the query.
 
-If the value of the @code{query} argument is NULL, no query filter
+If the value of the @code{query} argument is @code{NULL}, no query filter
 shall be applied.
 
 @subheading NOTES:
@@ -485,9 +486,9 @@ POSIX specifies that @code{EINVAL} will be returned if the
 a valid facility set.  In this implementation, this condition
 can never occur.
 
-Many error codes that POSIX specifies to be returned by @code{log_open}
-should actually be detected by @code{open} and passed back by the
-@code{log_open} implementation.  In this implementation, @code{EACCESS},
+Many error codes that POSIX specifies to be returned by @code{log_open()}
+should actually be detected by @code{open()} and passed back by the
+@code{log_open()} implementation.  In this implementation, @code{EACCESS},
 @code{EMFILE}, @code{ENAMETOOLONG}, @code{ENFILE}, @code{ENOENT},
 and @code{ENOTDIR} are detected in this manner.
 
@@ -551,7 +552,7 @@ longer than @code{log_len}.
 
 @subheading DESCRIPTION:
 
-The @code{log_read} function reads the @code{log_entry}
+The @code{log_read()} function reads the @code{log_entry}
 structure and up to @code{log_len} bytes of data from the next
 event record of the log file associated with the open log file
 descriptor @code{logdes}.  The event record read is placed
@@ -564,7 +565,7 @@ record.
 If the query attribute of the open log file description associated with
 the @code{logdes} is set, the event record read will match that query.
 
-If the @code{log_read} is successful the call stores the actual length
+If the @code{log_read()} is successful the call stores the actual length
 of the data associated with the event record into the location specified by
 @code{log_sizeread}.  This number will be less than or equal to
 @code{log_len}.
@@ -577,7 +578,7 @@ this service is available.
 When @code{EINVAL} is returned, then no data is returned although the
 event record is returned.  This is an extension to the POSIX specification.
 
-The POSIX specification specifically allows @code{log_read} to write
+The POSIX specification specifically allows @code{log_read()} to write
 greater than @code{log_len} bytes into @code{log_buf}.  This is highly
 undesirable and this implementation will NOT do this.
 
@@ -620,7 +621,7 @@ The function log_notify() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-If the argument @code{notification} is not NULL this function registers 
+If the argument @code{notification} is not @code{NULL} this function registers 
 the calling process to be notified of event records received by the system 
 log, which match the query parameters associated with the open log descriptor
 specified by @code{logdes}.  The notification specified by the 
@@ -631,7 +632,7 @@ descriptor.  If the calling process has already registered a notification
 for the @code{logdes} log file descriptor, the new notification shall 
 replace the existing notification registration.
 
-If the @code{notification} argument is NULL and the calling process is 
+If the @code{notification} argument is @code{NULL} and the calling process is 
 currently registered to be notified for the @code{logdes} log file
 descriptor, the existing registration shall be removed.
 
@@ -668,7 +669,7 @@ The logdes argument is not a valid log file descriptor.
 
 @subheading DESCRIPTION:
 
-The @code{log_close} function deallocates the open log file descriptor 
+The @code{log_close()} function deallocates the open log file descriptor 
 indicated by @code{log_des}.
 
 When all log file descriptors associated with an open log file description
@@ -717,11 +718,12 @@ The @code{log_recid} argument is not a valid record id.
 
 @subheading DESCRIPTION:
 
-The @code{log_seek} function sets the log file offset of the open 
+The @code{log_seek()} function sets the log file offset of the open 
 log description associated with the @code{logdes} log file descriptor 
 to the event record in the log file identified by @code{log_recid}.  
 The @code{log_recid} argument is either the record id of a valid event
-record or one of the following values, as defined in the header <evlog.h>:
+record or one of the following values, as defined in the header file
+@code{<evlog.h>:}
 
 @table @b
 @item LOG_SEEK_START
@@ -739,9 +741,9 @@ record in the log file.
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
 
-This implementation can not return @code{EINTR}.
+This implementation can not return EINTR.
 
-This implementation can not return @code{EINVAL} to indicate that
+This implementation can not return EINVAL to indicate that
 the @code{log_recid} argument is not a valid record id.
 
 @page
@@ -779,13 +781,13 @@ The value of either s1 or s2 exceeds @code{LOG_SEVERITY_MAX}.
 
 @subheading DESCRIPTION:
 
-The @code{log_severity_before} function compares the severity order
+The @code{log_severity_before()} function compares the severity order
 of the @code{s1} and @code{s2} arguments.  If @code{s1} is of 
 severity greater than or equal to that of @code{s2}, then this
 function returns 1.  Otherwise, it returns 0.
 
 If either @code{s1} or @code{s2} specify invalid severity values, the
-return value of @code{log_severity_before} is unspecified.
+return value of @code{log_severity_before()} is unspecified.
 
 @subheading NOTES:
 
@@ -793,7 +795,7 @@ The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
 
 The POSIX specification of the return value for this function is ambiguous.
-If @code{EINVAL} is equal to 1 in an implementation, then the application
+If EINVAL is equal to 1 in an implementation, then the application
 can not distinguish between greater than and an error condition.
 
 @page
@@ -824,7 +826,7 @@ The @code{set} argument is an invalid pointer.
 
 @subheading DESCRIPTION:
 
-The @code{log_facilityemptyset} function initializes the facility
+The @code{log_facilityemptyset()} function initializes the facility
 set pointed to by the argument @code{set}, such that all facilities
 are excluded.
 
@@ -833,13 +835,13 @@ are excluded.
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
 
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
+Applications shall call either @code{log_facilityemptyset()} or 
+@code{log_facilityfillset()} at least once for each object of type
 @code{log_facilityset_t} prior to any other use of that object.  If
 such an object is not initialized in this way, but is nonetheless 
-supplied as an argument to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
+supplied as an argument to any of the @code{log_facilityaddset()}, 
+@code{logfacilitydelset()}, @code{log_facilityismember()} or 
+@code{log_open()} functions, the results are undefined.
 
 @page
 @subsection log_facilityfillset - Manipulate log facility sets
@@ -869,7 +871,7 @@ The @code{set} argument is an invalid pointer.
 
 @subheading DESCRIPTION:
 
-The @code{log_facilityfillset} function initializes the facility
+The @code{log_facilityfillset()} function initializes the facility
 set pointed to by the argument @code{set}, such that all facilities
 are included.
 
@@ -878,13 +880,13 @@ are included.
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
 
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
+Applications shall call either @code{log_facilityemptyset()} or 
+@code{log_facilityfillset()} at least once for each object of type
 @code{log_facilityset_t} prior to any other use of that object.  If
 such an object is not initialized in this way, but is nonetheless 
-supplied as an argument to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
+supplied as an argument to any of the @code{log_facilityaddset()}, 
+@code{logfacilitydelset()}, @code{log_facilityismember()} or 
+@code{log_open()} functions, the results are undefined.
 
 @page
 @subsection log_facilityaddset - Manipulate log facility sets
@@ -918,7 +920,7 @@ The @code{facilityno} argument is not a valid facility.
 
 @subheading DESCRIPTION:
 
-The @code{log_facilityaddset} function adds the individual
+The @code{log_facilityaddset()} function adds the individual
 facility specified by the value of the argument @code{facilityno}
 to the facility set pointed to by the argument @code{set}.
 
@@ -927,13 +929,13 @@ to the facility set pointed to by the argument @code{set}.
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
 
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
+Applications shall call either @code{log_facilityemptyset()} or 
+@code{log_facilityfillset()} at least once for each object of type
 @code{log_facilityset_t} prior to any other use of that object.  If
 such an object is not initialized in this way, but is nonetheless 
-supplied as an argument to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
+supplied as an argument to any of the @code{log_facilityaddset()}, 
+@code{logfacilitydelset()}, @code{log_facilityismember()} or 
+@code{log_open()} functions, the results are undefined.
 
 @page
 @subsection log_facilitydelset - Manipulate log facility sets
@@ -967,7 +969,7 @@ The @code{facilityno} argument is not a valid facility.
 
 @subheading DESCRIPTION:
 
-The @code{log_facilitydelset} function deletes the individual
+The @code{log_facilitydelset()} function deletes the individual
 facility specified by the value of the argument @code{facilityno}
 from the facility set pointed to by the argument @code{set}.
 
@@ -976,13 +978,13 @@ from the facility set pointed to by the argument @code{set}.
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
 
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
+Applications shall call either @code{log_facilityemptyset()} or 
+@code{log_facilityfillset()} at least once for each object of type
 @code{log_facilityset_t} prior to any other use of that object.  If
 such an object is not initialized in this way, but is nonetheless 
-supplied as an argument to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
+supplied as an argument to any of the @code{log_facilityaddset()}, 
+@code{logfacilitydelset()}, @code{log_facilityismember()} or 
+@code{log_open()} functions, the results are undefined.
 
 @page
 @subsection log_facilityismember - Manipulate log facility sets
@@ -1017,10 +1019,10 @@ The @code{facilityno} argument is not a valid facility.
 
 @subheading DESCRIPTION:
 
-The @code{log_facilityismember} function tests whether the facility
+The @code{log_facilityismember()} function tests whether the facility
 specified by the value of the argument @code{facilityno} is a member
 of the set pointed to by the argument @code{set}.  Upon successful
-completion, the @code{log_facilityismember} function either returns
+completion, the @code{log_facilityismember()} function either returns
 a value of one to the location specified by @code{member} if the 
 specified facility is a member of the specified set or value of
 zero to the location specified by @code{member} if the specified
@@ -1031,16 +1033,16 @@ facility is not a member of the specified set.
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
 
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
+Applications shall call either @code{log_facilityemptyset()} or 
+@code{log_facilityfillset()} at least once for each object of type
 @code{log_facilityset_t} prior to any other use of that object.  If
 such an object is not initialized in this way, but is nonetheless 
-supplied as an argument to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
+supplied as an argument to any of the @code{log_facilityaddset()}, 
+@code{logfacilitydelset()}, @code{log_facilityismember()} or 
+@code{log_open()} functions, the results are undefined.
 
 @page
-@subsection log_facilityismember - Manipulate log facility sets
+@subsection log_facilityisvalid - Manipulate log facility sets
 
 @subheading CALLING SEQUENCE:
 
@@ -1070,10 +1072,10 @@ The @code{facilityno} argument is not a valid facility.
 
 @subheading DESCRIPTION:
 
-The @code{log_facilityisvalid} function tests whether the facility
+The @code{log_facilityisvalid()} function tests whether the facility
 specified by the value of the argument @code{facilityno} is a valid
-facility number which is less than 32.  Upon successful completion, 
-the @code{log_facilityisvalid} function either returns a value of
+facility number.  Upon successful completion, the 
+the @code{log_facilityisvalid()} function either returns a value of
 0 if the specified facility is a valid facility or value of EINVAL 
 if the specified facility is not a valid facility.
 
@@ -1082,13 +1084,13 @@ if the specified facility is not a valid facility.
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
 
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
+Applications shall call either @code{log_facilityemptyset()} or 
+@code{log_facilityfillset()} at least once for each object of type
 @code{log_facilityset_t} prior to any other use of that object.  If
 such an object is not initialized in this way, but is nonetheless 
-supplied as an argument to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
+supplied as an argument to any of the @code{log_facilityaddset()}, 
+@code{logfacilitydelset()}, @code{log_facilityismember()} or 
+@code{log_open()} functions, the results are undefined.
 
 @page
 @subsection log_create - Creates a log file
@@ -1113,61 +1115,48 @@ int log_create(
 
 @table @b
 
-@item 
-EEXIST 
+@item EEXIST 
 The @code{path} already exists and O_CREAT and O_EXCL were used.
 
-@item
-EISDIR 
+@item EISDIR 
 The @code{path} refers to a directory and the access requested involved 
 writing.
 
-@item
-ETXTBSY
+@item ETXTBSY
 The @code{path} refers to an executable image which is currently being  
 executed and write access was requested.
 
-@item
-EFAULT 
+@item EFAULT 
 The @code{path} points outside your accessible address space.
 
-@item
-EACCES 
+@item EACCES 
 The requested access to the file is not allowed, or one of the 
 directories in @code{path} did not allow search (execute) permission.
 
-@item
-ENAMETOOLONG
+@item ENAMETOOLONG
 The @code{path} was too long.
 
-@item
-ENOENT 
+@item ENOENT 
 A directory component in @code{path} does not exist or is a dangling symbolic 
 link.
 
-@item       
-ENOTDIR
+@item ENOTDIR
 A component used as a directory in @code{path} is not, in fact, a directory.
 
-@item
-EMFILE
+@item EMFILE
 The process already has the maximum number of files open.
 
-@item
-ENFILE
+@item ENFILE
 The limit on the total number of files open on the system has been reached.
 
-@item
-ENOMEM
+@item ENOMEM
 Insufficient kernel memory was available.
 
-@item
-EROFS
+@item EROFS
 The @code{path} refers to a file on a read-only filesystem and write access
 was requested.
 
-@item
-ELOOP
+@item ELOOP
 The @code{path} contains a reference to a circular symbolic link, ie a 
 symbolic link whose expansion contains a reference to itself.
 
