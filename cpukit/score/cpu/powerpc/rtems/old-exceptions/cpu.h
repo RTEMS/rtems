@@ -312,7 +312,8 @@ typedef struct {
   void       (*spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
 
-#if (defined(ppc403) || defined(ppc405) || defined(mpc860) || defined(mpc821))
+#if (defined(ppc403) || defined(ppc405) \
+  || defined(mpc860) || defined(mpc821) || defined(mpc8260))
   uint32_t     serial_per_sec;	       /* Serial clocks per second */
   boolean      serial_external_clock;
   boolean      serial_xon_xoff;
@@ -323,7 +324,8 @@ typedef struct {
   boolean      timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 #endif
 
-#if (defined(mpc860) || defined(mpc821))
+#if (defined(mpc555) \
+  || defined(mpc860) || defined(mpc821) || defined(mpc8260))
   uint32_t     clock_speed;            /* Speed of CPU in Hz */
 #endif
 }   rtems_cpu_table;

@@ -1,5 +1,10 @@
 2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h
+	(rtems_cpu_table): Sync defines between {old|new}-exceptions.
+
+2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/new-exceptions/cpu.h (Context_Control,
 	Context_Control_fp, CPU_Interrupt_frame): Remove.
 	* rtems/old-exceptions/cpu.h (Context_Control,
