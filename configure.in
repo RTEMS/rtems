@@ -240,6 +240,12 @@ case $host_os in
 esac
 AC_SUBST(GCCSED)
 
+dnl FIXME: This is a kludge
+dnl Add -Wall if using gcc as host compiler
+test "$ac_cv_prog_gcc" = "yes" && CC_CFLAGS_DEFAULT=-Wall
+dnl Add -g if the host compiler accepts -g, assume -g means debugging
+test "$ac_cv_prog_cc_g" = "yes" && CC_CFLAGS_DEBUG_V=-g
+
 dnl check for host library functions
 dnl NOTE: must be called after AC_PROG_CC
 AC_CHECK_FUNCS(strerror)
@@ -448,6 +454,8 @@ AC_SUBST(BARE_CPU_CFLAGS)
 AC_SUBST(BARE_CPU_MODEL)
 AC_SUBST(PROJECT_ROOT)
 AC_SUBST(program_prefix)
+AC_SUBST(CC_CFLAGS_DEFAULT)
+AC_SUBST(CC_CFLAGS_DEBUG_V)
 
 # pick up all the Makefiles in required parts of the tree
 RTEMS_CHECK_MAKEFILE(c/build-tools)
@@ -463,6 +471,7 @@ Makefile
 make/host.cfg
 make/target.cfg
 make/Templates/Makefile.inc
+make/compilers/gcc.cfg
 c/Makefile
 c/src/Makefile
 c/src/exec/Makefile

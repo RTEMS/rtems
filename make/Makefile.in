@@ -58,35 +58,34 @@ get: retrieve
 all: 
 
 $(prefix)/rtems:
-	-$(MKDIR) $(prefix)
-	-$(MKDIR) $(prefix)/rtems
+	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install: install_files $(prefix)/rtems
+install: $(prefix)/rtems install_files
 
-install_files::	$(GENERIC_FILES) $(MAKEFILES)
-	@test -d $(prefix)/rtems/make || \
-		$(MKDIR) $(prefix)/rtems/make
-	for f in $^; do \
-	$(INSTALL) -m 644 "$$f" $(prefix)/rtems/make ;\
-	done
+$(prefix)/rtems/make:
+	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install_files:: $(COMPILER_FILES)
-	@test -d $(prefix)/rtems/make/compilers || \
-		$(MKDIR) $(prefix)/rtems/make/compilers
-	for f in $^; do \
-	$(INSTALL) -m 644 "$$f" $(prefix)/rtems/make/compilers; \
-	done
+install_files::	$(GENERIC_FILES) $(MAKEFILES) $(prefix)/rtems/make
+	@INSTALL@ $(INSTDATAFLAGS) $(GENERIC_FILES) $(MAKEFILES) \
+	$(prefix)/rtems/make
 
-install_files:: $(CUSTOM_FILES)
-	@test -d $(prefix)/rtems/make/custom || \
-		$(MKDIR) $(prefix)/rtems/make/custom
-	for f in $^; do \
-	$(INSTALL) -m 644 "$$f" $(prefix)/rtems/make/custom; \
-	done
+$(prefix)/rtems/make/compilers:
+	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install_files:: $(TEMPLATE_FILES)
-	@test -d $(prefix)/rtems/make/Templates || \
-		$(MKDIR) $(prefix)/rtems/make/Templates
-	for f in $^; do \
-	$(INSTALL) -m 644 "$$f" $(prefix)/rtems/make/Templates; \
-	done
+install_files:: $(COMPILER_FILES) $(prefix)/rtems/make/compilers
+	@INSTALL@ $(INSTDATAFLAGS) $(COMPILER_FILES) \
+	$(prefix)/rtems/make/compilers
+
+$(prefix)/rtems/make/custom:
+	@INSTALL@ $(INSTDIRFLAGS) $@
+
+install_files:: $(CUSTOM_FILES) $(prefix)/rtems/make/custom
+	@INSTALL@ $(INSTDATAFLAGS) $(CUSTOM_FILES) \
+	$(prefix)/rtems/make/custom
+
+$(prefix)/rtems/make/Templates:
+	@INSTALL@ $(INSTDIRFLAGS) $@
+
+install_files:: $(TEMPLATE_FILES) $(prefix)/rtems/make/Templates
+	@INSTALL@ $(INSTDATAFLAGS) $(TEMPLATE_FILES) \
+	$(prefix)/rtems/make/Templates
