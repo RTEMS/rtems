@@ -179,7 +179,7 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
     const unsigned char *hwaddr;
     rtems_status_code status;
     rtems_isr_entry old_handler;
-	unsigned32 clock_speed = get_CPU_clock_speed();
+	unsigned32 clock_speed = bsp_get_CPU_clock_speed();
 
     /*
      * Issue reset to FEC
@@ -297,9 +297,11 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
     if (status != RTEMS_SUCCESSFUL)
         rtems_panic ("Can't attach MCF5282 FEC RX interrupt handler: %s\n",
                      rtems_status_text(status));
+    bsp_allocate_interrupt(FEC_IRQ_LEVEL, FEC_IRQ_TX_PRIORITY);
     MCF5282_INTC0_ICR23 = MCF5282_INTC_ICR_IL(FEC_IRQ_LEVEL) |
                           MCF5282_INTC_ICR_IP(FEC_IRQ_TX_PRIORITY);
     MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT23 | MCF5282_INTC_IMRL_MASKALL);
+    bsp_allocate_interrupt(FEC_IRQ_LEVEL, FEC_IRQ_RX_PRIORITY);
     MCF5282_INTC0_ICR27 = MCF5282_INTC_ICR_IL(FEC_IRQ_LEVEL) |
                           MCF5282_INTC_ICR_IP(FEC_IRQ_RX_PRIORITY);
     MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT27 | MCF5282_INTC_IMRL_MASKALL);

@@ -67,7 +67,8 @@ extern rtems_configuration_table BSP_Configuration;
 
 /* functions */
 
-unsigned32 get_CPU_clock_speed(void);
+unsigned32 bsp_get_CPU_clock_speed(void);
+int bsp_allocate_interrupt(int level, int priority);
 unsigned const char *uC5282_gethwaddr(int a);
 const char *uC5282_getbenv(const char *a);
 

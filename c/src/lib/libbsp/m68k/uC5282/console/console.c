@@ -136,7 +136,7 @@ IntUartSet(int minor, int baud, int databits, int parity, int stopbits, int hwfl
 	info->stopbits = stopbits;
 	info->hwflow   = hwflow;
 
-    clock_speed = get_CPU_clock_speed();
+    clock_speed = bsp_get_CPU_clock_speed();
     /* determine the baud divisor value */
     divisor = (clock_speed / ( 32 * baud ));
     if ( divisor < 2 )
@@ -396,6 +396,7 @@ IntUartInitialize(void)
 		rtems_interrupt_disable(level);
         switch(chan) {
         case 0:
+            bsp_allocate_interrupt(UART0_IRQ_LEVEL, UART0_IRQ_PRIORITY);
             MCF5282_INTC0_ICR13 = MCF5282_INTC_ICR_IL(UART0_IRQ_LEVEL) |
                                   MCF5282_INTC_ICR_IP(UART0_IRQ_PRIORITY);
             MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT13 |
@@ -403,6 +404,7 @@ IntUartInitialize(void)
             break;
 
         case 1:
+            bsp_allocate_interrupt(UART1_IRQ_LEVEL, UART1_IRQ_PRIORITY);
             MCF5282_INTC0_ICR14 = MCF5282_INTC_ICR_IL(UART1_IRQ_LEVEL) |
                                   MCF5282_INTC_ICR_IP(UART1_IRQ_PRIORITY);
             MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT14 |
@@ -410,6 +412,7 @@ IntUartInitialize(void)
             break;
 
         case 2:
+            bsp_allocate_interrupt(UART2_IRQ_LEVEL, UART2_IRQ_PRIORITY);
             MCF5282_INTC0_ICR15 = MCF5282_INTC_ICR_IL(UART2_IRQ_LEVEL) |
                                   MCF5282_INTC_ICR_IP(UART2_IRQ_PRIORITY);
             MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT15 |

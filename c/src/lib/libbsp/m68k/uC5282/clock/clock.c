@@ -47,11 +47,12 @@
     do {                                                                 \
         int level;                                                       \
         int preScaleCode = -2;                                           \
-        int preScaleDivisor = get_CPU_clock_speed() / 1000000;   \
+        int preScaleDivisor = bsp_get_CPU_clock_speed() / 1000000;       \
         while (preScaleDivisor) {                                        \
             preScaleDivisor >>= 1;                                       \
             preScaleCode++;                                              \
         }                                                                \
+        bsp_allocate_interrupt(PIT3_IRQ_LEVEL, PIT3_IRQ_PRIORITY);       \
         MCF5282_INTC0_ICR58 = MCF5282_INTC_ICR_IL(PIT3_IRQ_LEVEL) |      \
                               MCF5282_INTC_ICR_IP(PIT3_IRQ_PRIORITY);    \
         rtems_interrupt_disable( level );                                \

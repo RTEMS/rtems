@@ -246,10 +246,30 @@ void bsp_start( void )
     MCF5282_CS2_CSCR = MCF5282_CS_CSCR_PS_16;
 }
 
-unsigned32 get_CPU_clock_speed(void)
+unsigned32 bsp_get_CPU_clock_speed(void)
 {
     extern char _CPUClockSpeed[];
     return( (unsigned32)_CPUClockSpeed);
+}
+
+/*
+ * Interrupt controller allocation
+ */
+int bsp_allocate_interrupt(int level, int priority)
+{
+    static char used[7];
+    rtems_interrupt_level l;
+    int ret = -1;
+
+    if ((level < 1) || (level > 7) || (priority < 0) || (priority > 7))
+        return ret;
+    rtems_interrupt_disable(l);
+    if ((used[level-1] & (1 << priority)) == 0) {
+        used[level-1] |= (1 << priority);
+        ret = 0;
+    }
+    rtems_interrupt_enable(l);
+    return ret;
 }
 
 /*

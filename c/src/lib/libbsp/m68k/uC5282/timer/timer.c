@@ -10,7 +10,7 @@
 void
 Timer_initialize(void)
 {
-    int preScaleDivisor = get_CPU_clock_speed() / 1000000;
+    int preScaleDivisor = bsp_get_CPU_clock_speed() / 1000000;
     int div = MCF5282_TIMER_DTMR_CLK_DIV1;
 
     if (preScaleDivisor > 256) {
