@@ -1,3 +1,9 @@
+2001-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c, rtems/score/cpu.h, rtems/score/mipstypes.h:
+	Removed unused variable _CPU_Thread_dispatch_pointer
+	and cleaned numerous comments.
+	
 2001-03-13	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c, cpu_asm.S, iregdef.h, rtems/score/cpu.h, rtems/score/mips.h:

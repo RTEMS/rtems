@@ -1,14 +1,22 @@
-/*  cpu.h
+/*  
+ *  Mips CPU Dependent Header File
+ *  
+ *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
+ *           Joel Sherrill <joel@OARcorp.com>.
+ *  
+ *    These changes made the code conditional on standard cpp predefines,
+ *    merged the mips1 and mips3 code sequences as much as possible,
+ *    and moved some of the assembly code to C.  Alan did much of the
+ *    initial analysis and rework.  Joel took over from there and
+ *    wrote the JMR3904 BSP so this could be tested.  Joel also
+ *    added the new interrupt vectoring support in libcpu and
+ *    tried to better support the various interrupt controllers.
+ *      
+ *  Original MIP64ORION port by Craig Lebakken <craigl@transition.com>
+ *           COPYRIGHT (c) 1996 by Transition Networks Inc. 
  *
- *  This include file contains information pertaining to the IDT 4650
- *  processor.
- *
- *  Author:     Craig Lebakken <craigl@transition.com>
- *
- *  COPYRIGHT (c) 1996 by Transition Networks Inc.
- *
- *  To anyone who acknowledges that this file is provided "AS IS"
- *  without any express or implied warranty:
+ *    To anyone who acknowledges that this file is provided "AS IS"
+ *    without any express or implied warranty:
  *      permission to use, copy, modify, and distribute this file
  *      for any purpose is hereby granted without fee, provided that
  *      the above copyright notice and this notice appears in all
@@ -18,9 +26,7 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from c/src/exec/score/cpu/no_cpu/cpu.h:
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,7 +35,6 @@
  *
  *  $Id$
  */
-/* @(#)cpu.h       08/29/96     1.7 */
 
 #ifndef __CPU_h
 #define __CPU_h
@@ -490,9 +495,12 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  and contains the address of the routine _Thread_Dispatch.  This
  *  can make it easier to invoke that routine at the end of the interrupt
  *  sequence (if a dispatch is necessary).
- */
+ *
 
 SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
+ *
+ *  NOTE: Not needed on this port.
+ */
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
@@ -740,16 +748,15 @@ void _CPU_ISR_Set_level( unsigned32 );  /* in cpu.c */
  *  halts/stops the CPU.
  */
 
-void mips_fatal_error ( int error );
-
 #define _CPU_Fatal_halt( _error ) \
   do { \
     unsigned int _level; \
     _CPU_ISR_Disable(_level); \
-    mips_fatal_error(_error); \
+    loop: goto loop; \
   } while (0)
 
-/* end of Fatal Error manager macros */
+
+extern void mips_break( int error );
 
 /* Bitfield handler macros */
 

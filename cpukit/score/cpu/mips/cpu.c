@@ -2,7 +2,15 @@
  *  Mips CPU Dependent Source
  *
  *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
- *           Joel Sherrill <joel@OARcorp.com>.
+ *           Joel Sherrill <joel@OARcorp.com>. 
+ *
+ *    These changes made the code conditional on standard cpp predefines,
+ *    merged the mips1 and mips3 code sequences as much as possible,
+ *    and moved some of the assembly code to C.  Alan did much of the
+ *    initial analysis and rework.  Joel took over from there and
+ *    wrote the JMR3904 BSP so this could be tested.  Joel also
+ *    added the new interrupt vectoring support in libcpu and
+ *    tried to better support the various interrupt controllers.
  *
  *  Original MIP64ORION port by Craig Lebakken <craigl@transition.com>
  *           COPYRIGHT (c) 1996 by Transition Networks Inc.
@@ -18,9 +26,7 @@
  *             Transition Networks makes no representations about the 
  *             suitability of this software for any purpose.
  *
- *  Derived from c/src/exec/score/cpu/no_cpu/cpu.c:
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,13 +34,6 @@
  *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
- */
-
-/*
- *  Rather than deleting this, it is commented out to (hopefully) help
- *  the submitter send updates.
- *
- * static char _sccsid[] = "@(#)cpu.c 08/20/96     1.5\n";
  */
 
 #include <rtems/system.h>
@@ -58,19 +57,6 @@ void _CPU_Initialize(
 )
 {
   /*
-   *  The thread_dispatch argument is the address of the entry point
-   *  for the routine called at the end of an ISR once it has been
-   *  decided a context switch is necessary.  On some compilation
-   *  systems it is difficult to call a high-level language routine
-   *  from assembly.  This allows us to trick these systems.
-   *
-   *  If you encounter this problem save the entry point in a CPU
-   *  dependent variable.
-   */
-
-  _CPU_Thread_dispatch_pointer = thread_dispatch;
-
-  /*
    *  If there is not an easy way to initialize the FP context
    *  during Context_Initialize, then it is usually easier to
    *  save an "uninitialized" FP context here and copy it to
@@ -80,7 +66,6 @@ void _CPU_Initialize(
   /* FP context initialization support goes here */
 
   _CPU_Table = *cpu_table;
-
 }
 
 /*PAGE
@@ -129,7 +114,6 @@ void _CPU_ISR_Set_level( unsigned32 new_level )
   }
  
 #elif __mips == 1
-
   if ( (new_level & SR_IEC) == (sr & SR_IEC) )
     return;
 
@@ -148,6 +132,14 @@ void _CPU_ISR_Set_level( unsigned32 new_level )
 /*PAGE
  *
  *  _CPU_ISR_install_raw_handler
+ *
+ *  Input parameters:
+ *    vector      - interrupt vector number
+ *    old_handler - former ISR for this vector number
+ *    new_handler - replacement ISR for this vector number
+ *
+ *  Output parameters:  NONE
+ *
  */
  
 void _CPU_ISR_install_raw_handler(
@@ -159,12 +151,10 @@ void _CPU_ISR_install_raw_handler(
   /*
    *  This is where we install the interrupt handler into the "raw" interrupt
    *  table used by the CPU to dispatch interrupt handlers.
+   *
+   *  Because all interrupts are vectored through the same exception handler
+   *  this is not necessary on thi sport.
    */
-/* Q: This will become necessary for Non IDT/Sim use...*/
-#if 0 /* not necessary */
-/* use IDT/Sim to set interrupt vector.  Needed to co-exist with debugger. */
-   add_ext_int_func( vector, new_handler );
-#endif
 }
 
 /*PAGE
@@ -245,14 +235,4 @@ void _CPU_Thread_Idle_body( void )
 #else
 #error "IDLE: __mips not set to 1 or 3"
 #endif
-}
-
-extern void mips_break( int error );
-
-#include <stdio.h>
-
-void mips_fatal_error( int error )
-{
-   printf("fatal error 0x%x %d\n",error,error);
-   mips_break( error );
 }

@@ -1,6 +1,6 @@
 /*  mips.h
  *
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

@@ -1,24 +1,9 @@
 /*  mipstypes.h
  *
- *  This include file contains type definitions pertaining to the IDT 4650
+ *  This include file contains type definitions pertaining to the MIPS
  *  processor family.
  *
- *  Author:     Craig Lebakken <craigl@transition.com>
- *
- *  COPYRIGHT (c) 1996 by Transition Networks Inc.
- *
- *  To anyone who acknowledges that this file is provided "AS IS"
- *  without any express or implied warranty:
- *      permission to use, copy, modify, and distribute this file
- *      for any purpose is hereby granted without fee, provided that
- *      the above copyright notice and this notice appears in all
- *      copies, and that the name of Transition Networks not be used in
- *      advertising or publicity pertaining to distribution of the
- *      software without specific, written prior permission.
- *      Transition Networks makes no representations about the suitability
- *      of this software for any purpose.
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
