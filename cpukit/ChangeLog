@@ -1,5 +1,9 @@
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Rework *FLAGS, AM_*FLAGS handling.
+
+2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/multilib.am: Don't include @RTEMS_BSP@.cfg.
 	* automake/compile.am: Remove hard-coded CFLAGS_PROFILE_V.
 	Add autoconf-supplied CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, 

@@ -1,5 +1,9 @@
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Rework *FLAGS, AM_*FLAGS handling.
+
+2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/compile.am: Remove hard-coded *_PROFILE_V.
 	Add autoconf-supplied CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, 
 	CFLAGS_PROFILE_V.
