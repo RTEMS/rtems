@@ -19,5 +19,5 @@
 %{qrtems_debug: }}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -u download_entry -N -e start}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -u download_entry -N }
 
