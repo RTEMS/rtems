@@ -17,11 +17,15 @@ This is the GNU gdb for RTEMS targetting @target_alias@.
 %files -n @target_alias@-gdb
 %defattr(-,attr,attr)
 %doc %{_prefix}/man/man1/@target_alias@-gdb.1*
+%if "%_sim" == "1"
 %doc %{_prefix}/man/man1/@target_alias@-run.1*
+%endif
 
 %dir %{_prefix}/bin
 %{_prefix}/bin/@target_alias@-gdb%{_exeext}
+%if "%_sim" == "1"
 %{_prefix}/bin/@target_alias@-run%{_exeext}
+%endif
 %if "@target_alias@" == "sparc-rtems"
 %{_prefix}/bin/@target_alias@-sis%{_exeext}
 %endif

@@ -48,22 +48,6 @@ target_alias=$1
 
 . ./$CFG
 
-case ${target_alias} in
-  arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | hppa1.1* | \
-  i960* | m32r* | mcore* | mips* | mn10200* | mn10300* | sh* | sparc*| \
-  v850* | w65* | z8k*)
-    extra_configure_arguments="--enable-sim"
-    ;;
-  powerpc*)
-    extra_configure_arguments="--enable-sim --enable-sim-powerpc --enable-sim-timebase --enable-sim-hardware"
-    #  Enabling this causes the program image to be huge and causes
-    #  some gcc/hosts combinations to run out of memory.
-    #          --enable-sim-inline
-    ;;
-  *)
-    ;;
-esac
-
 sed -e "s%@Release\@%${gdb_rpm_release}%g" \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@prefix\@%@prefix@%g" \

@@ -1,3 +1,9 @@
+2003-02-10	Joel Sherrill <joel@OARcorp.com>
+
+	* gdb/gdb.add, gdb/mkspec.in, gdb/target-gdb.add: Use RPM logic to
+	determine which targets have simulators, configure with appropriate
+	arguments, and package the correct files.
+
 2003-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/target-gcc.add: Remove %{_exeext} from gccbug.

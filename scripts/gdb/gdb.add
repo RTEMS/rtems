@@ -30,6 +30,17 @@ BuildPreReq:	ncurses-devel
 #
 NoSource:      0
 
+#  Account as best possible for targets without simulators
+#  and targets which require extra arguments.
+%define _sim	1
+
+%if "@target_alias@" == "m68k-rtems"
+%define _sim	0
+%endif
+%if "@target_alias@" == "i386-rtems"
+%define _sim	0
+%endif
+
 
 %description
 RTEMS is an open source operating system for embedded systems.
@@ -46,12 +57,23 @@ cd gdb-@gdb_version@
 %patch2 -p1
 
 %build
+%if "%_sim" == "1"
+ simargs="--enable-sim"
+%endif
+
+%if "@target_alias@" == "powerpc-rtems"
+ simargs="$simargs --enable-sim-timebase --enable-sim-hardware"
+ #  Enabling this causes the program image to be huge and causes
+ #  some gcc/hosts combinations to run out of memory.
+ # simargs="$simargs --enable-sim-inline"
+%endif
+
 test -d build || mkdir build
   cd build
   ../gdb-@gdb_version@/configure \
     --build=%_build --host=%_host \
     --target=@target_alias@ \
-    --verbose --prefix=%{_prefix} @extra_configure_arguments@ \
+    --verbose --prefix=%{_prefix} $simargs \
     --disable-nls
 
   make all
