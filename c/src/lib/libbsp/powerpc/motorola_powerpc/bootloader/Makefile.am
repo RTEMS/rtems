@@ -5,6 +5,7 @@
 ## NOTE: This Makefile.am applies automake compilation rules and does not 
 ## apply RTEMS's compilation rules.
 
+AUTOMAKE_OPTIONS = no-exeext
 
 VPATH = @srcdir@:@srcdir@/../../shared/bootloader:@srcdir@/../../shared/console
 
@@ -18,14 +19,6 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 
 NM = @NM@
 LD = @LD@
-
-# ----
-## Custom compilation vars, stripped versions of what is used in
-## automake/compile.am and by automake-1.5's standard rules.
-COMPILE = $(CC) $(INCLUDES) $(AM_CPPFLAGS) $(AM_CFLAGS)
-ASCOMPILE = $(CC) $(AM_ASFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
 # ----
 DEFAULT_INCLUDES =
