@@ -1,3 +1,8 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* README: Updated to reflect status.
+	* startup/linkcmds: Added .ctor and .dtor sections to no avail.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* README: Updated to reflect current status.  Misaligned reference

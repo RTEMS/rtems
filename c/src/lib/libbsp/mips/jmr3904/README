@@ -6,26 +6,20 @@ Simple BSP for the TX3904 simulator built into gdb.
 
 Simulator Invocation
 ====================
-The following is not 100% correct since it does not work.   :)
+The following is how the simulator is invoked.
 
-target sim --board=jmr3904pal --memory-region 0x8800000,0x100000
+target sim --board=jmr3904
+
+GDB must be configured with a target like "tx39-rtems".  Otherwise,
+the simulator will not be built for the correct instruction
+and peripheral set.
 
 Status
 ======
 
-+ printk() works and is being called from bsp_start as prove.
++ hello.exe locks up while running the global destructors.  This almost
+  has to be a linkcmds issue.
 
-+ There appears to be a compilation problem in _Thread_Handler_initialization
-where _Thread_Ready_chain[1] is only 1 byte -- not 12 from
-_Thread_Ready_chain[0].   I am throwing this to the RTEMS list
-first before reporting it.
++ There is no clock tick device driver.
 
-Made it to bsp_start
-mips-core: 4 byte write to unaligned address 0x8803bb01 at 0x8800d83c
-
-Program received signal SIGBUS, Bus error.
-0x8800d83c in _Chain_Initialize_empty (the_chain=0x8803bb01)
-    at ../../../../../jmr3904/lib/include/rtems/score/chain.inl:222
-222	  the_chain->first          = _Chain_Tail( the_chain );
-(gdb) q
-
++ There is no timer device driver.

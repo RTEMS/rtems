@@ -32,6 +32,38 @@ SECTIONS
        etext  =  .;
        _etext  =  .;
     }  
+  .ctors    :
+  {
+    /* gcc uses crtbegin.o to find the start of
+       the constructors, so we make sure it is
+       first.  Because this is a wildcard, it
+       doesn't matter if the user does not
+       actually link against crtbegin.o; the
+       linker won't look for a file to match a
+       wildcard.  The wildcard also means that it
+       doesn't matter which directory crtbegin.o
+       is in.  */
+
+    KEEP (*crtbegin.o(.ctors))
+
+    /* We don't want to include the .ctor section from
+       from the crtend.o file until after the sorted ctors.
+       The .ctor section from the crtend file contains the
+       end of ctors marker and it must be last */
+
+    KEEP (*(EXCLUDE_FILE (*crtend.o) .ctors))
+    KEEP (*(SORT(.ctors.*)))
+    KEEP (*(.ctors))
+  }
+
+  .dtors    :
+  {
+    KEEP (*crtbegin.o(.dtors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
+    KEEP (*(SORT(.dtors.*)))
+    KEEP (*(.dtors))
+  }
+
     . = .;
   .rdata : {
     *(.rdata)
@@ -44,7 +76,6 @@ SECTIONS
     *(.data)
     *(.data.*)
     *(.gnu.linkonce.d*)
-    CONSTRUCTORS
   }
   . = ALIGN(8);
   _gp = . + 0x8000;
@@ -73,8 +104,10 @@ SECTIONS
     *(.bss)
     *(COMMON)
     . = ALIGN (64);
-    _stack_init = .;
+    _stack_limit = .;
     . += _StackSize;
+    __stack = .;
+    _stack_init = .;
     _clear_end = .;
     WorkspaceBase = .;
     . += 512K;    /* reserve some memory for workspace */
@@ -87,7 +120,7 @@ SECTIONS
 
 /* Put starting stack in SRAM (8 Kb); this size is the same as the stack from
       the original script (when everything was in SRAM). */
-   __stack = 0x8000A000;
+   /* __stack = 0x8000A000; */
   /* DWARF debug sections.
      Symbols in the DWARF debugging sections are relative to
      the beginning of the section so we begin them at 0.  */
