@@ -24,6 +24,12 @@ ac_help="$ac_help
   --disable-rtems-inlines 	    disable RTEMS inline functions (use macros)"
 ac_help="$ac_help
 \
+  --enable-gcc28		    enable use of gcc 2.8.x features"
+ac_help="$ac_help
+\
+  --enable-libcdir=directory	    set the directory for the C library"
+ac_help="$ac_help
+\
   --disable-tests 	     	    disable tests"
 ac_help="$ac_help
 \
@@ -907,7 +913,7 @@ c/src/tests/tools/unix/Makefile \
 c/src/tests/tools/unix/posix/Makefile"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:911: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:917: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -980,7 +986,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:984: checking host system type" >&5
+echo "configure:990: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -1001,7 +1007,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:1005: checking target system type" >&5
+echo "configure:1011: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -1019,7 +1025,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:1023: checking build system type" >&5
+echo "configure:1029: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -1077,6 +1083,25 @@ RTEMS_USE_MACROS=yes
 else
   RTEMS_USE_MACROS=no
 fi
+
+
+# Check whether --enable-gcc272 or --disable-gcc272 was given.
+if test "${enable_gcc272+set}" = set; then
+  enableval="$enable_gcc272"
+  \
+RTEMS_USE_GCC272=no
+else
+  RTEMS_USE_GCC272=yes
+fi
+
+# Check whether --enable-libcdir or --disable-libcdir was given.
+if test "${enable_libcdir+set}" = set; then
+  enableval="$enable_libcdir"
+  \
+ RTEMS_LIBC_DIR="${enableval}" ; \
+test -d ${enableval} || { echo "configure: error: "$enableval is not a directory" " 1>&2; exit 1; }  
+fi
+
 
 
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
@@ -1178,7 +1203,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1182: checking for $ac_word" >&5
+echo "configure:1208: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AWK'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1207,7 +1232,7 @@ test -n "$AWK" && break
 done
 
 echo $ac_n "checking whether ln -s works""... $ac_c" 1>&6
-echo "configure:1211: checking whether ln -s works" >&5
+echo "configure:1237: checking whether ln -s works" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_LN_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1249,6 +1274,8 @@ if test "${enable_rtemsbsp+set}" = set; then
   \
 RTEMS_BSP=$enableval
 fi
+
+
 
 
 
@@ -1487,6 +1514,7 @@ s%@RTEMS_ROOT@%$RTEMS_ROOT%g
 s%@RTEMS_HAS_POSIX_API@%$RTEMS_HAS_POSIX_API%g
 s%@RTEMS_HAS_KA9Q@%$RTEMS_HAS_KA9Q%g
 s%@RTEMS_USE_MACROS@%$RTEMS_USE_MACROS%g
+s%@RTEMS_USE_GCC272@%$RTEMS_USE_GCC272%g
 s%@PROJECT_ROOT@%$PROJECT_ROOT%g
 s%@program_prefix@%$program_prefix%g
 
