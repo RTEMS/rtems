@@ -1,6 +1,10 @@
 
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Eliminate LIBNAME. Use AM_CPPFLAGS instead of
 	INCLUDES (Upcoming automake standard).
 
