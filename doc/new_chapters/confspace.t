@@ -98,7 +98,7 @@ The notification argument specifies an invalid log facility.
 The @code{cfg_mount} function maps a configuration space defined
 by the file identified by the the @code{file} argument.  The 
 distinguished node of the mapped configuration space shall be
-mounted in the active space at the point identified bt the
+mounted in the active space at the point identified by the
 @code{cfgpath} configuration pathname.
 
 The @code{notification} argument specifies how changes to the
@@ -172,7 +172,7 @@ resolution of the cfgpath argument
 
 The @code{cfg_umount} function unmaps the configuration space whose 
 distinguished node is mapped in the active space at the location defined
-by @code{cfgpatah} configuration pathname.  All system resources 
+by @code{cfgpath} configuration pathname.  All system resources 
 allocated for this configuration space should be deallocated.
 
 @subheading NOTES:
@@ -181,7 +181,7 @@ The @code{_POSIX_CFG} feature flag is defined to indicate
 this service is available.
 
 @page
-@subsection cfg_mknod - Create a Configuratioin Node
+@subsection cfg_mknod - Create a Configuration Node
 
 @subheading CALLING SEQUENCE:
 
@@ -207,7 +207,7 @@ or an entire path name exceed @code{PATH_MAX} characters while
 @code{_POSIX_NO_TRUNC} is in effect.
 
 @item ENOENT
-A compent of the path prefix does not exist.
+A component of the path prefix does not exist.
 
 @item EACCES
 Search permission is denied for a component of the path prefix.
@@ -287,7 +287,7 @@ A component of cfgpath does not exist.
 Search permission is denied for a component of the path prefix.
 
 @item EPERM
-The calling process does not have the appropriate priviledges.
+The calling process does not have the appropriate privileges.
 
 @item ELOOP
 A node appears more than once in the path specified by the 
@@ -415,7 +415,7 @@ The link named by dest and the node named by src are from different
 configuration spaces.
 
 @item ENOSPC
-The node in which the entry for the new link is boeing placed
+The node in which the entry for the new link is being placed
 cannot be extended because there is no space left on the 
 configuration space containing the node.
 
@@ -439,7 +439,7 @@ resolution of the cfgpath argument.
 
 @subheading DESCRIPTION:
 
-The @code{src} and @code{dest}arguments point to pathnnames which 
+The @code{src} and @code{dest}arguments point to pathnames which 
 name existing nodes.  The @code{cfg_link} function shall atomically 
 create a link between specified nodes, and increment by one the link 
 count of the node specified by the @code{src} argument. 
@@ -494,7 +494,7 @@ be removed.
 A component of cfgpath does not exist.
 
 @item EPERM
-The calling process does not have the appropriate priviledge to 
+The calling process does not have the appropriate privilege to 
 modify the node indicated by the path prefix of the cfgpath
 argument.
 
@@ -507,7 +507,7 @@ An I/O error occurred while deleting the link entry or deallocating
 the node.
 
 @item EROFS
-The named node resides in a read-opnly configuration space.
+The named node resides in a read-only configuration space.
 
 @item ELOOP
 A node appears more than once in the path specified by the
@@ -523,7 +523,7 @@ resolution of the cfgpath argument.
 
 The @code{cfg_unlink} function removes the link between the node
 specified by the @code{cfgpath} path prefix and the parent node 
-specified by @code{cfgpaht}, and shall decrement the link count 
+specified by @code{cfgpath}, and shall decrement the link count 
 of the @code{cfgpath} node.
 
 When the link count of the node becomes zero, the space occupied
@@ -545,7 +545,7 @@ int cfg_open(
   const char     *pathnames[],
   int             options,
   int           (*compar)(const CFGENT **f1, const CFGENT **f2),
-  CFG           **cfgsrteam
+  CFG           **cfgstream
 );
 @end example
 @end ifset
@@ -584,7 +584,7 @@ resolution of the pathnames argument.
 
 @item ENAMETOOLONG
 As a result of encountering a symbolic link in resolution of the
-pathname specified by the pathnames argument, the lenght of
+pathname specified by the pathnames argument, the length of
 the substituted pathname string exceeded @code{PATH_MAX}.
 
 @end table
@@ -611,7 +611,7 @@ field of the returned CFGENT structure shall describe
 the target node pointed to by the link instead of the 
 link itself, unless the target node does not exist. 
 If the target node has children, the pre-order return,
-followed by the return of structures referenceing all of
+followed by the return of structures referencing all of
 its descendants, followed by a post-order return, shall
 be done.
                     
@@ -642,7 +642,7 @@ return, shall be done.
 @item CFG_XDEV
 The configuration space functions shall not return a
 CFGENT structure for any node in a different configuration
-space than the configuration spacce of the nodes identified 
+space than the configuration space of the nodes identified 
 by the CFGENT structures for the @code{pathnames} argument.
 
 @end table
@@ -711,7 +711,7 @@ More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument.
 
 @item ENAMETOOLONG
-As aresult of encountering a symbolic link in resolution of the
+As a result of encountering a symbolic link in resolution of the
 pathname specified by the pathnames argument, the length of the
 substituted pathname string exceeded @code{PATH_MATH}.
 
@@ -719,7 +719,7 @@ substituted pathname string exceeded @code{PATH_MATH}.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_read} function returns a pointer to a CFGENT sturcture
+The @code{cfg_read} function returns a pointer to a CFGENT structure
 representing a node in the configuration space to which @code{cfgp}
 refers.  The returned pointer shall be stored at the location 
 indicated by the @code{node} argument.
@@ -736,13 +736,13 @@ specifies otherwise with @code{cfg_mark}]-once immediately before
 the structures representing their descendants, are returned 
 (pre-order), and once immediately after structures representing all
 of their descendants, if any, are returned (post-order).  The 
-CFGENT structure returned in post-porder (with the exception of the 
+CFGENT structure returned in post-order (with the exception of the 
 @code{cfg_info} field) shall be identical to that returned in pre-order.
 Structures referencing nodes of other types shall be returned at least
 once.
 
 The fields of the CFGENT structure shall contain the following 
-informatation:
+information:
 
 @table @b
 
@@ -789,8 +789,8 @@ space routines.
 @item cfg_path
 A pathname for the node including and relative to the 
 argument supplied to the @code{cfg_open} routine for this
-configuration space.  This pathname may be logner than
-@code{PATH_MAX} bytes.  This patname shall be NULL-terminated.
+configuration space.  This pathname may be longer than
+@code{PATH_MAX} bytes.  This pathname shall be NULL-terminated.
 
 @item cfg_name
 The nodename of the node.
@@ -805,7 +805,7 @@ field.
 
 @item cfg_level
 The depth of the current entry in the configuration space.
-The @code{cfg_level} field of the @code{cfg_partent} 
+The @code{cfg_level} field of the @code{cfg_parent} 
 structure for each of the node(s) specified in the 
 @code{pathnames} argument to the @code{cfg_open} function
 shall be set to 0, and this number shall be incremented for
@@ -867,7 +867,7 @@ Structures returned by @code{cfg_read} with a @code{cfg_info} field equal
 to CFG_D shall be accessible until a subsequent call, on the same
 configuration traversal stream, to @code{cfg_close}, or to @code{cfg_read}
 after they have been returned by the @code{cfg_read} function in
-post-order.  Structures returded by @code{cfg_read} with an
+post-order.  Structures returned by @code{cfg_read} with an
 @code{cfg_info} field not equal to CFG_D shall be accessible until a
 subsequent call, on the same configuration traversal stream, to
 @code{cfg_close} or @code{cfg_read}. 
@@ -923,7 +923,7 @@ component is longer than @code{NAME_MAX} while @code{_POSIX_NO_TRUNC} is
 in effect.
 
 @item EINVAL
-The specified value of the optiions argument is invalid.
+The specified value of the options argument is invalid.
 
 @item ENOENT
 The named node does not exist.
@@ -1005,12 +1005,12 @@ flags specified in the following list:
 If the @code{cfgp} argument is non-NULL, or the @code{f}
 argument is NULL, or the structure referenced by @code{f}
 is not the one most recently returned by @code{cfg_read},
-@code{cfg_mark} ahall return an error.  Otherwise, the next 
-call to teh @code{cfg_read} function shall return the 
+@code{cfg_mark} shall return an error.  Otherwise, the next 
+call to the @code{cfg_read} function shall return the 
 structure referenced by @code{f} with the @code{cfg_info}
 field reinitialized.  Subsequent behavior of the @code{cfg}
 functions shall be based on the reinitialized value of 
-@code{cfg_ingo}.
+@code{cfg_info}.
 
 @item CFG_SKIP
 If the @code{cfgp} argument is non-NULL, or the @code{f}
@@ -1076,7 +1076,7 @@ traversal stream.
 The @code{cfg_close} function closes a configuration space transversal
 stream represented by the CFG structure pointed at by the @code{cfgp}
 argument.  All system resources allocated for this configuration space
-travsversal stream should be deallocated.  Upon return, the value of 
+traversal stream should be deallocated.  Upon return, the value of 
 @code{cfgp} need not point to an accessible object of type CFG.
 
 @subheading NOTES:

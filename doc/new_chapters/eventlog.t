@@ -11,7 +11,7 @@
 @section Introduction
 
 The event logging manager provides a portable method for logging
-system and appplication events and subsequent processing of those
+system and application events and subsequent processing of those
 events.  The capabilities in this manager were defined in the POSIX
 1003.1h/D3 proposed standard titled @b{Services for Reliable,
 Available, and Serviceable Systems}.
@@ -132,7 +132,7 @@ being written.  The @code{event_id} argument shall specify the value
 of the event ID attribute of the event record.
 
 The argument @code{facility} indicates the facility from which the
-event type is drawn.  The @code{facility} aargument shall specify the
+event type is drawn.  The @code{facility} argument shall specify the
 value of the event record facility attribute.  The value of the
 @code{facility} argument shall be a valid log facility or the 
 @code{log_write} function shall fail.
@@ -144,7 +144,7 @@ of the event record severity attribute.  The value of the
 @code{LOG_SEVERITY_MAX} or the @code{log_write} function shall fail.  
 
 The effective_UID of the calling process shall specify the event
-record UID attribute.  The efective-GID of the calling process 
+record UID attribute.  The effective-GID of the calling process 
 shall specify the event record GID attribute.  The process ID
 of the calling process shall specify the event record process ID
 attribute.  The process group ID of the calling process shall
@@ -294,13 +294,13 @@ of the log file associated with the open log file descriptor @code{logdes},
 placing the @code{log_entry} structure into the buffer pointed to by
 @code{entry}, and the data into the buffer pointed to by @code{log_buf}.
 The log record ID of the returned event record shall be stored in the 
-@code{log_recied} member of the @code{log_entry} structure for the event
+@code{log_recid} member of the @code{log_entry} structure for the event
 record.
 
 If the query attribute of the open log file description associated with
 the @code{logdes} is set, the event record read shall match that query.
 If the @code{entry} argument is not NULL it will point to a @code{log_entry}
-structure which sall be filled with the creation information for this log
+structure which shall be filled with the creation information for this log
 entry.  If the argument @code{log_buf} is not NULL the data written with the
 log entry will be placed in the buffer.  The size of the buffer is specified
 by the argument @code{log_len}.
@@ -336,7 +336,7 @@ int log_notify(
 
 @table @b
 @item EBADF
-The logdes arfument is not a valid log file descriptor.
+The logdes argument is not a valid log file descriptor.
 
 @item EINVAL
 The notification argument specifies an invalid signal.
@@ -450,7 +450,7 @@ The log_recid argument is not a valid record id.
 @subheading DESCRIPTION:
 
 The @code{log_seek} function shall set the log file offset of the open 
-log descriptioin associated with the @code{logdes} log file descriptor 
+log description associated with the @code{logdes} log file descriptor 
 to the event record in the log file identified by @code{log_recid}.  
 The @code{log_recid} argument is either the record id of a valid event
 record or one of the following values, as defined in the header <evlog.h>:
@@ -507,7 +507,7 @@ according to this function shall be according to decreasing severity.
 
 If @code{s1} is ordered before or is equal to @code{s2} then the ordering
 predicate shall return 1, otherwise the predicate shall return 0.  If 
-either @code{s1} or @code{s2} specify invlid severity values, the return
+either @code{s1} or @code{s2} specify invalid severity values, the return
 value of @code{log_severity_before} is unspecified.
 
 @subheading NOTES:
@@ -545,7 +545,7 @@ The facilitysetops primitives manipulate sets of facilities.  They
 operate on data objects addressable by the application.
 
 The @code{log_facilityemptyset} function initializes the facility
-set pointed to by the argument @code{set}, such that all facilties
+set pointed to by the argument @code{set}, such that all facilities
 are included.
 
 Applications shall call either @code{log_facilityemptyset} or 
@@ -605,7 +605,7 @@ The facilitysetops primitives manipulate sets of facilities.  They
 operate on data objects addressable by the application.
 
 The @code{log_facilityemptyset} function initializes the facility
-set pointed to by the argument @code{set}, such that all facilties
+set pointed to by the argument @code{set}, such that all facilities
 are included.
 
 Applications shall call either @code{log_facilityemptyset} or 
@@ -666,7 +666,7 @@ The facilitysetops primitives manipulate sets of facilities.  They
 operate on data objects addressable by the application.
 
 The @code{log_facilityemptyset} function initializes the facility
-set pointed to by the argument @code{set}, such that all facilties
+set pointed to by the argument @code{set}, such that all facilities
 are included.
 
 Applications shall call either @code{log_facilityemptyset} or 
@@ -727,7 +727,7 @@ The facilitysetops primitives manipulate sets of facilities.  They
 operate on data objects addressable by the application.
 
 The @code{log_facilityemptyset} function initializes the facility
-set pointed to by the argument @code{set}, such that all facilties
+set pointed to by the argument @code{set}, such that all facilities
 are included.
 
 Applications shall call either @code{log_facilityemptyset} or 
@@ -789,7 +789,7 @@ The facilitysetops primitives manipulate sets of facilities.  They
 operate on data objects addressable by the application.
 
 The @code{log_facilityemptyset} function initializes the facility
-set pointed to by the argument @code{set}, such that all facilties
+set pointed to by the argument @code{set}, such that all facilities
 are included.
 
 Applications shall call either @code{log_facilityemptyset} or 
@@ -847,7 +847,7 @@ The is ????????????
 @subheading DESCRIPTION:
 
 This function dynamically allocates memory for the @code{ld}, associates 
-a directory path to the @code{Ld}, andprovides access permissions to the
+a directory path to the @code{Ld}, and provides access permissions to the
 @code{ld}.
 
 @subheading NOTES:
