@@ -21,7 +21,7 @@ extern "C" {
 
 #include <rtems/score/arm.h>            /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/armtypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
