@@ -1,3 +1,9 @@
+2005-03-17      Joel Sherrill <joel@OARcorp.com>
+
+	PR 745/rtems
+	* src/ratemoncreate.c, src/timercreate.c: Make sure internal timer
+	structures are initialized so object control reuse is safe.
+
 2004-10-15	Joel Sherrill <joel@OARcorp.com>
 
 	PR 692/rtems
