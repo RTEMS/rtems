@@ -1,7 +1,7 @@
 dnl $Id$
 
 AC_DEFUN([_RTEMS_CHECK_CUSTOM_BSP],[
-  for i in ${rtems_rootdir}/make/custom/$1;
+  for i in ${rtems_rootdir}make/custom/$1;
   do
     AC_MSG_CHECKING([for $i])
     AS_IF([test -r $i],[

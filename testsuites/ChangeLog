@@ -1,5 +1,9 @@
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-custom-bsp.m4: Fix minor typo.
+
+2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/rtems-top.m4: Add rtems_rootdir.
 	* aclocal/check-custom-bsp.m4: Check for $RTEMS_BSP.cfg in $rtems_rootdir.
 
