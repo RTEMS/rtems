@@ -1,3 +1,7 @@
+2001-04-11	Eric Valette <valette@crf.canon.fr>
+
+	* network/network.c: Fix unnecessary double assignment.
+
 2001-03-30	Eric Valette <valette@crf.canon.fr>
 
 	* clock/.cvsignore, clock/Makefile.am, clock/p_clock.c,

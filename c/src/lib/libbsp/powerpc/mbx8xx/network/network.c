@@ -586,7 +586,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   /*
    * Set up interrupts
    */
-  status = status = BSP_install_rtems_irq_handler (&ethernetFECIrqData);
+  status = BSP_install_rtems_irq_handler (&ethernetFECIrqData);
   if (status != RTEMS_SUCCESSFUL)
     rtems_panic ("Can't attach M860 FEC interrupt handler: %s\n",
                  rtems_status_text (status));
