@@ -47,6 +47,13 @@ The following persons/organizations have made contributions:
 + Bryce Cogswell (cogswell@cs.uoregon.edu) submitted the support for MS-DOS 
   as a development environment as well as djgpp/go32 as a target environment.
 
++ Andy Bray (andy@i-cubed.demon.co.uk) of I-CUBED Ltd. in Cambridge U.K.
+  for porting RTEMS to the PowerPC.  This effort included support for the
+  IBM 403 as well as the Motorola 601, 603, and 604 variants.  A special
+  thanks to Dom Latter (dom@i-cubed.demon.co.uk) for being an RTEMS
+  evangelist and promoting the use of RTEMS both at I-CUBED Ltd. as well  
+  as within the Internet community as a whole.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
