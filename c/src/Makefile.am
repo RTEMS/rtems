@@ -4,7 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-SUBDIRS = @BSP_SUBDIRS@
+SUBDIRS = . @BSP_SUBDIRS@
 
 clean-local:
 	$(RM) -r $(PROJECT_RELEASE)
@@ -30,6 +30,13 @@ make/custom/%.cfg: $(srcdir)/$(cfg_dir)/custom/%.cfg
 
 noinst_DATA += make/custom/default.cfg
 DISTCLEANFILES += make/custom/default.cfg
+
+noinst_DATA += preinstall-stamp
+
+preinstall-stamp:
+	$(MAKE) $(AM_MAKEFLAGS) preinstall
+	touch preinstall-stamp
+CLEANFILES = preinstall-stamp 
 
 include $(top_srcdir)/../../automake/subdirs.am
 include $(top_srcdir)/../../automake/host.am
