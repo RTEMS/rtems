@@ -41,7 +41,7 @@
  * place in BSP specific place to do things it knows nothing about
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 
 /*----------------------------------------------------------------------------+
 | Size of heap and stack:	

@@ -36,7 +36,7 @@ changes:
  */
 
 
-#include "asm.h"
+#include <rtems/asm.h>
 #include "macros.inc"
 #include "80386ex.inc"
 

@@ -15,7 +15,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 
   .set	BAR,		0xF2		| Base Address Register location
   .set	SCR,		0xF4		| System Control Register location
