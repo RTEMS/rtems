@@ -21,8 +21,8 @@
 
 #include "system.h"
 
-#include <cpuuse.h>
-#include "rtmonuse.h"
+#include <rtems/cpuuse.h>
+#include <rtems/rtmonuse.h>
 
 rtems_unsigned32    Periods[6]    = { 0,   2,   2,   2,   2, 100 };
 rtems_unsigned32    Iterations[6] = { 0,  50,  50,  50,  50,   1 };

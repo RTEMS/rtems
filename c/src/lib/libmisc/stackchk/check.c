@@ -40,7 +40,7 @@ extern rtems_configuration_table BSP_Configuration;
 #include <string.h>
 #include <stdlib.h>
 
-#include "stackchk.h"
+#include <rtems/stackchk.h>
 #include "internal.h"
 
 /*

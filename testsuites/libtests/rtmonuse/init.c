@@ -25,7 +25,7 @@
 #define TEST_INIT
 #include "system.h"
 
-#include "rtmonuse.h"
+#include <rtems/rtmonuse.h>
 
 rtems_task Init(
   rtems_task_argument argument

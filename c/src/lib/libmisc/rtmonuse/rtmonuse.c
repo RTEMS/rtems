@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "rtmonuse.h"
+#include <rtems/rtmonuse.h>
 
 typedef struct {
   rtems_id     id;
