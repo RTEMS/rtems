@@ -102,6 +102,33 @@ case ${chapter} in
     CHAPTER_LOWER="administration interface"
     ROUTINES="admin_shutdown"
     ;;
+  # XXX this is not all of the C Library Stuff
+  libc_ctype)
+    CHAPTER_CAPS="C Library Character Handling"
+    CHAPTER_LOWER="character handling"
+    ROUTINES="isalnum isalpha iscntrl isdigit isgraph islower isprint \
+        ispunct isspace isupper isxdigit tolower toupper"
+    ;;
+  libc_math)
+    CHAPTER_CAPS="C Math Library"
+    CHAPTER_LOWER="math library"
+    ROUTINES="acos asis atan atan2 cos sin tan cosh sinh tanh exp frexp ldexp
+      log log10 modf pow sqrt ceil fabs floor fmod"
+    ;;
+  libc_io)
+    CHAPTER_CAPS="C Library IO"
+    CHAPTER_LOWER="C Library IO"
+    ROUTINES="clearerr fclose feof ferror fflush fgetc fgets fopen fputc \
+        fputs fread freopen fseek ftell fwrite getc getchar gets perror \
+        printf fprintf sprintf putc putchar puts remove rename rewind \
+        scanf fscanf sscanf setbuf tempfile tmpnam ungetc"
+    ;;
+  libc_string)
+    CHAPTER_CAPS="C Library String Handling"
+    CHAPTER_LOWER="string handling"
+    ROUTINES="strcpy strncpy strcat strncat strcmp strncmp strchr strcspn \
+       strpbrk strrchr strspn strstr strtok stlen"
+    ;;
   *)
     echo "Unknown chapter name"
     exit 1
