@@ -60,7 +60,7 @@ extern "C" {
 
 # if defined(__pentium__)
 # define CPU_MODEL_NAME  "Pentium"
-# elsif defined(__k6__)
+# elif defined(__k6__)
 # define CPU_MODEL_NAME "K6"
 # else
 # define CPU_MODEL_NAME "i586"

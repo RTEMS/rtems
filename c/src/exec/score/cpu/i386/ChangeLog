@@ -1,3 +1,7 @@
+2000-09-12	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/i386.h: Corrected "#elsif" to be "#elif".
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am.
