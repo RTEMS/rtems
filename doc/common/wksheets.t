@@ -12,23 +12,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Memory Requirements, Memory Requirements Introduction, WORKSHEETS_PREVIOUS_LINK, Top
-@end ifinfo
 @chapter Memory Requirements
-@ifinfo
-@menu
-* Memory Requirements Introduction::
-* Memory Requirements Data Space Requirements::
-* Memory Requirements Minimum and Maximum Code Space Requirements::
-* Memory Requirements RTEMS Code Space Worksheet::
-* Memory Requirements RTEMS RAM Workspace Worksheet::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Memory Requirements Introduction, Memory Requirements Data Space Requirements, Memory Requirements, Memory Requirements
-@end ifinfo
 @section Introduction
 
 Memory is typically a limited resource in real-time
@@ -41,9 +26,6 @@ configuration.  Also provided are the minimum code space,
 maximum code space,  and the constant data space required by
 RTEMS.
 
-@ifinfo
-@node Memory Requirements Data Space Requirements, Memory Requirements Minimum and Maximum Code Space Requirements, Memory Requirements Introduction, Memory Requirements
-@end ifinfo
 @section Data Space Requirements
 
 RTEMS requires a small amount of memory for its
@@ -56,9 +38,6 @@ RTEMS:
 @item Data Space: RTEMS_DATA_SPACE
 @end itemize
 
-@ifinfo
-@node Memory Requirements Minimum and Maximum Code Space Requirements, Memory Requirements RTEMS Code Space Worksheet, Memory Requirements Data Space Requirements, Memory Requirements
-@end ifinfo
 @section Minimum and Maximum Code Space Requirements
 
 A maximum configuration of RTEMS includes the core
@@ -73,9 +52,6 @@ required by these configurations of RTEMS:
 @item Maximum Configuration: RTEMS_MAXIMUM_CONFIGURATION
 @end itemize
 
-@ifinfo
-@node Memory Requirements RTEMS Code Space Worksheet, Memory Requirements RTEMS RAM Workspace Worksheet, Memory Requirements Minimum and Maximum Code Space Requirements, Memory Requirements
-@end ifinfo
 @section RTEMS Code Space Worksheet
 
 The RTEMS Code Space Worksheet is a tool provided to
@@ -254,9 +230,6 @@ number is "NA", then the component must always be included.
 @c ******   This comment is here to remind you not to edit the wksheets.t
 @c ******   in any directory but common.
 
-@ifinfo
-@node Memory Requirements RTEMS RAM Workspace Worksheet, WORKSHEETS_NEXT_LINK, Memory Requirements RTEMS Code Space Worksheet, Memory Requirements
-@end ifinfo
 @section RTEMS RAM Workspace Worksheet
 
 The RTEMS RAM Workspace Worksheet is a tool provided
