@@ -30,8 +30,10 @@ $(ARCH)/start16.$(OBJEXT): start16.S
 	$(COMPILE.S) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ $<
 
 $(ARCH)/start16.bin: $(ARCH)/start16.$(OBJEXT)
-	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib 	  --oformat=elf32-i386 -o $(basename $@).$(OBJEXT)bj $(basename $@).$(OBJEXT)
-	$(OBJCOPY) -O binary $(basename $@).$(OBJEXT)bj $@
+	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
+	  --oformat=elf32-i386 \
+	-o $(basename $@)-elf32.$(OBJEXT) $(basename $@).$(OBJEXT)
+	$(OBJCOPY) -O binary $(basename $@)-elf32.$(OBJEXT) $@
 
 $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin: $(ARCH)/start16.bin
 	$(INSTALL_DATA) $< $@

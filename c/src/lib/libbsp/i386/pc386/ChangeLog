@@ -1,3 +1,8 @@
+2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 461/bsps
+	* start/Makefile.am: Correct generation of startup16.bin.
+
 2003-08-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ide/Makefile.am: Don't include @RTEMS_BPS@.cfg.
