@@ -2,6 +2,10 @@
 
 	* rtems/score/cpu.h: Added _CPU_Initialize_vectors().
 
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Added _CPU_Initialize_vectors().
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
