@@ -6,7 +6,6 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-tests-mptests],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([mp01])
 RTEMS_TOP(../../../..)
-AC_CONFIG_AUX_DIR(../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 

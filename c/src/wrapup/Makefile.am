@@ -9,29 +9,29 @@ include $(top_srcdir)/../../automake/lib.am
 
 LIB = $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
 
+SRCS = ../support/${ARCH}/libsupport.a
+
+if HAS_LIBBSP
+SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/wrapup/$(ARCH)/libbsp.a
+endif
+
 if HAS_NETWORKING
-LIBNETWORKING = ../libnetworking/wrapup/$(ARCH)/libnetapps.a
+SRCS += ../libnetworking/wrapup/$(ARCH)/libnetapps.a
 endif
 
 if HAS_RDBG
-LIBRDBG = $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a
+SRCS += $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a
 endif
 
-if HAS_LIBBSP
-LIBBSP = ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/wrapup/$(ARCH)/libbsp.a
-endif
+SRCS += $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a)
 
 if LIBCHIP
-LIBCHIP = \
-    ../libchip/rtc/$(ARCH)/librtcio.a \
-    ../libchip/serial/$(ARCH)/libserialio.a \
-    $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a)
+SRCS += ../libchip/rtc/$(ARCH)/librtcio.a
+SRCS += ../libchip/serial/$(ARCH)/libserialio.a
+SRCS += $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a)
 endif
 
-SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
-    $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
-    $(LIBCHIP) \
-    $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
+SRCS += $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
 TMPINSTALL_FILES += $(LIB)
 
