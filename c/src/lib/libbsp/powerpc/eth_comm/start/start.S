@@ -151,5 +151,3 @@ clear_bss:
 
         bdnz    clear_bss                       /* dec counter and loop */
         blr                                     /* return */
-
-	.comm	environ,4,4

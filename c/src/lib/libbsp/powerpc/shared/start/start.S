@@ -195,5 +195,3 @@ flush_tlbs:
 	bgt	1b
 	sync
 	blr
-
-	.comm	environ,4,4

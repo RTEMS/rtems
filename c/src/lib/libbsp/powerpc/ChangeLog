@@ -1,3 +1,16 @@
+2004-10-26	Eric Norum <norume@aps.anl.gov>
+
+    Remove environ common area -- it breaks newlib
+	* powerpc/dmv177/start/start.S
+	* powerpc/eth_comm/start/start.S
+	* powerpc/mbx8xx/startup/start.S
+	* powerpc/mvme5500/start/start.S
+	* powerpc/ppcn_60x/start/start.S
+	* powerpc/psim/start/start.S
+	* powerpc/score603e/start/start.S
+	* powerpc/shared/start/start.S
+	* powerpc/ss555/startup/start.S
+
 2004-10-20	Eric Norum <norume@aps.anl.gov>
 
 	* acinclude.m4:        Add mvme5500 BSP

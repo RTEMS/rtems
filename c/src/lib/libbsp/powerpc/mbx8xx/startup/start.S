@@ -393,5 +393,3 @@ initregs:
 	blr			/* return */
 
 .L_text_e:
-
-	.comm	environ,4,4

@@ -122,5 +122,3 @@ past_constants:
 	trap
 .Lstart:
 	.size	_start,.Lstart-_start
-
-	.comm	environ,4,4

@@ -151,5 +151,3 @@ _start:
 	blr
 .Lstart:
 	.size	_start,.Lstart-_start
-
-	.comm	environ,4,4

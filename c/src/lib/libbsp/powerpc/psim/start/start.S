@@ -108,5 +108,3 @@ _start:
 	trap
 .Lstart:
 	.size	_start,.Lstart-_start
-
-	.comm	environ,4,4
