@@ -38,21 +38,23 @@ compiler (GNAT) is available and has excellent support for RTEMS.
 @subsection DDD
 
 By far the easiest way to use DDD if you are on a Redhat Linux system is
-to retrieve the latest RPM package. I got mine from
-ftp://ftp.crc.ca/systems/linux/redhat/contrib.redhat.com/libc6/i386/ddd-dynamic-
-3.1.5-1.i386.rpm.
-This particular one is for Redhat 6.0 on i386. For 5.2, I guess you
-should use libc5 instead of libc6.
+to retrieve the RPM package for your OS version.  In general, it is 
+easier to install a static binary since doing so avoids all problems
+with dynamic library versions.
 
-You also need Lesstif 0.88. I got mine from
-ftp://ftp.hungry.com/pub/hungry/lesstif/bindist/lesstif-0.88.1-1.i386.rpm
+Some versions of DDD have had trouble with Lesstif.  If you
+are using Lesstiff, you will need version 0.88 or newer.  It
+is also available as an RPM at the popular sites.  Another Motif
+clone is Motive and versions 1.2 and newer known to work with DDD
+on popular distributions of Linux including RedHat and Slackware.
 
-Installed as RPMs, DDD and Lesstif work out-of-the-box.
+Installed as RPMs, DDD in conjunction with either Lesstif or Motive
+should work out-of-the-box.
 
-Both Lesstif and DDD can be built from scratch without any problems.
-
-The isntruction on how to install Lesstif are at
-http://www.cs.tu-bs.de/softech/ddd/.  They indicate that
+User comments indicate that both Lesstif and DDD can be built
+from scratch without any problems.  Instructions on installing
+Lesstif are at http://www.cs.tu-bs.de/softech/ddd/.  They
+indicate that
 
 @itemize @bullet
 LessTif should be used in (default) Motif 1.2 compatibility mode.
@@ -70,25 +72,25 @@ Watch out: Lesstif installs its libraries in /usr/local/Lesstif. You
 will need to update /etc/ld.so.conf and regenerate the cache of shared
 library paths to point to the Motif 1.2 library.
 
-The student configure DDD --with-motif-libraries=/usr/local/lib
---with-motif-includes=/usr/local/include
-
-You will need gnuplot 3.7. I got mine from
+The following notes are from an RTEMS user who uses DDD in conjunction
+with Lesstif.  Configure DDD "--with-motif-libraries=/usr/local/lib
+--with-motif-includes=/usr/local/include" DDD needs gnuplot 3.7.  
 ftp://ftp.dartmouth.edu/pub/gnuplot/gnuplot-3.7.tar.gz. Build and
-install from scratch.
+install from scratch.  
 
-I start DDD from a script in $HOME/bin:
+DDD can be started from a script that specifies the cross debugger.
+This simplifies the invocation.  The following example shows what
+a script doing this looks like.
 
 @example
 #!/bin/bash
 ddd --debugger m68k-elf-gdb $1
 @end example
 
+Under many flavors of UNIX, you will likely have to relax permissions.
 
-Now for the hard part:
-
-under RH Linux, to get gdb to use the serial ports while running as a
-mere mortal, edit /etc/security/console.perms, and create a <serial>
+On Linux, to get gdb to use the serial ports while running as a
+normal user, edit /etc/security/console.perms, and create a <serial>
 class (call it whatever you want).
 
 @example
@@ -102,22 +104,22 @@ from the console:
 <console> 0600 <serial> 0600 root
 @end example
 
-And voila!
-
-I use minicom to communicate with the target to initiate a TFTP
-download. I then suspend minicom,  lauch DDD, and begin debugging.
+Users report using minicom to communicate with the target to initiate a TFTP
+download. They then suspend minicom, launch DDD, and begin debugging.
 
 The procedure should be the same on other platforms, modulo the choice
 of terminal emulator program and the scheme used to access the serial
-ports. From the cygwin mailing list, I have the impression that GDB has
-some problems communicating over serial lines on that platform.
+ports. From problem reports on the cygwin mailing list, it appears that
+GDB has some problems communicating over serial lines on that platform.
 
-P.S. GDB doesn't like getting lots of input from the program under test
-over the serial line. Actually, it doesn't care, but it looses
+NOTE: GDB does not like getting lots of input from the program under test
+over the serial line. Actually, it does not care, but it looses
 characters. It would appear that flow control is not re-enabled when it
 resumes program execution. At times, it looked like the test were
 failing, but everything was OK. We modified the MVME167 serial driver to
-send test output to another serial port.
+send test output to another serial port.  Using two serial ports is
+usually the easiest way to get test output while retaining a reliable debug
+connection regardless of the debugger/target combination.
 
 Information provided by Charles-Antoine Gauthier (charles.gauthier@@iit.nrc.ca)
 and Jiri Gaisler (jgais@@ws.estec.esa.nl).
