@@ -1,6 +1,13 @@
 
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
+	* libc/Makefile.am: Added mallocfreespace.c.
+	* libc/mallocfreespace.c: New file based on work by Nick Simon
+	<Nick.SIMON@syntegra.bt.co.uk> which he included in malloc.c.
+	* libc/libcsupport.h: Added prototype for malloc_free_space().
+
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
 	* libc/fcntl.c: Do not require every filesystem to have an fcntl()
 	handler.  Most fcntl() operations can be performed with no
 	filesystem support.

@@ -37,7 +37,7 @@ SYSTEM_CALL_C_FILES = open.c close.c read.c write.c lseek.c ioctl.c mkdir.c \
 DIRECTORY_SCAN_C_FILES = opendir.c closedir.c readdir.c rewinddir.c \
     scandir.c seekdir.c telldir.c getcwd.c
 
-MALLOC_C_FILES = malloc.c __brk.c __sbrk.c
+MALLOC_C_FILES = malloc.c mallocfreespace.c __brk.c __sbrk.c
 
 PASSWORD_GROUP_C_FILES = getpwent.c getgrent.c
 
