@@ -1,3 +1,7 @@
+#### THIS IS NOT gcc's config-ml.in ####
+
+# 2002-07-06 	Imported from from gcc-3.1
+
 # Configure fragment invoked in the post-target section for subdirs
 # wanting multilib support.
 #
@@ -204,170 +208,38 @@ done
 # Target libraries are configured for the host they run on, so we check
 # $host here, not $target.
 
+# BEGIN - RTEMS specific
+#
+# Prune multilib variants RTEMS does not support
 case "${host}" in
-arc-*-elf*)
-	if [ x$enable_biendian != xyes ]
-	then
+arm-*-rtems*)
 	  old_multidirs=${multidirs}
 	  multidirs=""
 	  for x in ${old_multidirs}; do
 	    case "${x}" in
-	      *be*) : ;;
+	      *thumb*) : ;;
 	      *) multidirs="${multidirs} ${x}" ;;
 	    esac
 	  done
-	fi
 	;;
-arm-*-*)
-	if [ x"$enable_fpu" = xno ]
-	then
+
+sh-*-rtems*)
 	  old_multidirs=${multidirs}
 	  multidirs=""
 	  for x in ${old_multidirs}; do
 	    case "${x}" in
-	      *fpu*) : ;;
+	      *m3e*) : ;;
+	      *m4-single*) : ;;
+	      m4*) : ;;
 	      *) multidirs="${multidirs} ${x}" ;;
 	    esac
 	  done
-	fi
-	if [ x"$enable_26bit" = xno ]
-	then
-	  old_multidirs=${multidirs}
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "${x}" in
-	      *26bit*) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x"$enable_underscore" = xno ]
-	then
-	  old_multidirs=${multidirs}
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "${x}" in
-	      *under*) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x"$enable_interwork" = xno ]
-	then
-	  old_multidirs=${multidirs}
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "${x}" in
-	      *interwork*) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_biendian = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *le* ) : ;;
-	      *be* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x"$enable_nofmult" = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *nofmult* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
 	;;
-m68*-*-*)
-	if [ x$enable_softfloat = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *soft-float* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_m68881 = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *m68881* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_m68000 = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *m68000* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_m68020 = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *m68020* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	;;
+esac
+# END - RTEMS specific
+
+case "${host}" in
 mips*-*-*)
-	if [ x$enable_single_float = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *single* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_biendian = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *el* ) : ;;
-	      *eb* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_softfloat = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *soft-float* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
 	case " $multidirs " in
 	*" mabi=64 "*)
 	  # We will not be able to create libraries with -mabi=64 if
@@ -390,107 +262,6 @@ mips*-*-*)
 	  rm -f conftest.c conftest
 	  ;;
 	esac
-	;;
-powerpc*-*-* | rs6000*-*-*)
-	if [ x$enable_aix64 = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *ppc64* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_pthread = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *pthread* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_softfloat = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *soft-float* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_powercpu = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      power | */power | */power/* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_powerpccpu = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *powerpc* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_powerpcos = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *mcall-linux* | *mcall-solaris* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_biendian = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *mlittle* | *mbig* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_sysv = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *mcall-sysv* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
-	if [ x$enable_aix = xno ]
-	then
-	  old_multidirs="${multidirs}"
-	  multidirs=""
-	  for x in ${old_multidirs}; do
-	    case "$x" in
-	      *mcall-aix* ) : ;;
-	      *) multidirs="${multidirs} ${x}" ;;
-	    esac
-	  done
-	fi
 	;;
 sparc*-*-*)
 	case " $multidirs " in
@@ -548,6 +319,7 @@ multi-do:
 				CFLAGS="$(CFLAGS) $${flags}" \
 				prefix="$(prefix)" \
 				exec_prefix="$(exec_prefix)" \
+				ASFLAGS="$(ASFLAGS) $${flags}" \
 				GCJFLAGS="$(GCJFLAGS) $${flags}" \
 				CXXFLAGS="$(CXXFLAGS) $${flags}" \
 				LIBCFLAGS="$(LIBCFLAGS) $${flags}" \
@@ -760,7 +532,7 @@ if [ -n "${multidirs}" ] && [ -z "${ml_norecursion}" ]; then
     cd ${ml_dir}/${ml_libdir}
 
     if [ -f ${ml_newsrcdir}/configure ]; then
-      ml_recprog="${ml_newsrcdir}/configure --cache-file=../config.cache"
+      ml_recprog="${ml_newsrcdir}/configure"
     fi
 
     # find compiler flag corresponding to ${ml_dir}
@@ -854,6 +626,7 @@ if [ -n "${multidirs}" ] && [ -z "${ml_norecursion}" ]; then
 
     if eval ${ml_config_env} ${ml_config_shell} ${ml_recprog} \
 	--with-multisubdir=${ml_dir} --with-multisrctop=${multisrctop} \
+	--with-multibuildtop=${ml_builddotdot} \
 	${ml_arguments} ${ml_srcdiroption} ; then
       true
     else
