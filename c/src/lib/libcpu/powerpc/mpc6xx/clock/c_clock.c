@@ -73,21 +73,23 @@ void clockOn(void* unused)
  *  Return values:      NONE
  *
  */
+
 void clockIsr()
 {
+int decr;
   /*
    *  The driver has seen another tick.
    */
+  do {
+	asm volatile ("mfdec %0; add %0, %0, %1; mtdec %0":"=r"(decr):"r"(Clock_Decrementer_value));
 
-  PPC_Set_decrementer( Clock_Decrementer_value );
+	Clock_driver_ticks += 1;
 
-  Clock_driver_ticks += 1;
-
-  /*
-   *  Real Time Clock counter/timer is set to automatically reload.
-   */
-
-  rtems_clock_tick();
+	/*
+	 *  Real Time Clock counter/timer is set to automatically reload.
+	 */
+	rtems_clock_tick();
+  } while ( decr < 0 );
 }
 
 int clockIsOn(void* unused)
@@ -144,6 +146,18 @@ rtems_device_driver Clock_initialize(
   Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
             (rtems_configuration_get_microseconds_per_tick()/1000);
 
+  /* set the decrementer now, prior to installing the handler 
+   * so no interrupts will happen in a while.
+   */
+  PPC_Set_decrementer( (unsigned)-1 );
+
+  /* if a decrementer exception was pending, it is cleared by
+   * executing the default (nop) handler at this point;
+   * The next exception will then be taken by our clock handler.
+   * Clock handler installation initializes the decrementer to
+   * the correct value.
+   */
+
   if (!BSP_connect_clock_handler ()) {
     printk("Unable to initialize system clock\n");
     rtems_fatal_error_occurred(1);
@@ -190,10 +204,7 @@ rtems_device_driver Clock_control(
       clockIsr();
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-      if (!BSP_connect_clock_handler ()) {
-	printk("Error installing clock interrupt handler!\n");
-	rtems_fatal_error_occurred(1);
-      }
+		Clock_initialize(major, minor, 0);
     }
 done:
     return RTEMS_SUCCESSFUL;

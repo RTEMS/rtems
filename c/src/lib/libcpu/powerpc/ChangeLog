@@ -1,3 +1,13 @@
+2004-05-22	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 619/bsps
+	* mpc6xx/clock/c_clock.c: The PPC decrementer must be reloaded on each
+	clock tick. Currently, this is done by just reloading a fixed value.
+	The attached patch takes into account the time that elapsed since the
+	decrementer crossed zero in order to adjust the value to be
+	re-loaded. Without the patch, the effective system clock cycle is
+	increased by the exception handler latency.
+
 2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* mpc5xx/clock/clock.c, mpc5xx/irq/irq_asm.S, mpc5xx/vectors/vectors.S:
