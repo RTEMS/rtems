@@ -1,6 +1,6 @@
 2004-05-21  Till Strauman <strauman@slac.stanford.edu>
 
-	* PR/625/networking
+	PR 625/networking
 	* libchip/network/dec21140.c, ... : Prevent name clashes by making
 	'ld_le32()' etc.  static inlines.  Let dec21140 attach routine return
 	an error rather than panic if no chip is detected (thus allowing
