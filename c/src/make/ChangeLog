@@ -1,3 +1,9 @@
+2003-04-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp.mak: Use var="$val" instead of var=${var=$val}. to satisfy
+	Solaris /bin/sh.
+	(Reported by Till Straumann <strauman@SLAC.Stanford.EDU>).
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
