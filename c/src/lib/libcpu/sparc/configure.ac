@@ -35,6 +35,7 @@ AC_CONFIG_FILES([Makefile
 cache/Makefile
 include/Makefile
 reg_win/Makefile
-syscall/Makefile])
+syscall/Makefile
+tbr/Makefile])
 AC_OUTPUT
 
