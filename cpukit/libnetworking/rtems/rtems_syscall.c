@@ -448,7 +448,10 @@ recvfrom (int s, void *buf, size_t buflen, int flags, const struct sockaddr *fro
 	iov.iov_base = buf;
 	iov.iov_len = buflen;
 	msg.msg_name = (caddr_t)from;
-	msg.msg_namelen = *fromlen;
+	if (fromlen)
+		msg.msg_namelen = *fromlen;
+	else
+	msg.msg_namelen = 0;
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
 	msg.msg_control = NULL;
