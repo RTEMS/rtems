@@ -12,7 +12,7 @@ AC_REQUIRE([RTEMS_ENABLE_LIBCDIR])dnl
 
 dnl Only accept g++
 dnl NOTE: This might be too restrictive
-AC_CHECK_TOOL(CXX,g++)
+RTEMS_CHECK_TOOL(CXX,g++)
 AC_PROG_CXX
 test -z "$CXX" \
   && AC_MSG_ERROR([no acceptable c++ found in \$PATH])

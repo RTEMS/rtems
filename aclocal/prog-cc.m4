@@ -12,7 +12,9 @@ AC_BEFORE([$0], [RTEMS_CANONICALIZE_TOOLS])dnl
 AC_REQUIRE([RTEMS_ENABLE_LIBCDIR])dnl
 AC_REQUIRE([RTEMS_ENABLE_GCC28])dnl
 
-AC_CHECK_TOOL(CC,gcc)
+RTEMS_CHECK_TOOL(CC,gcc)
+test -z "$CC" && \
+  AC_MSG_ERROR([no acceptable cc found in \$PATH])
 AC_PROG_CC
 
 AM_CONDITIONAL(RTEMS_USE_GCC,test x"$ac_cv_prog_gcc" = x"yes")
