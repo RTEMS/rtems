@@ -3,8 +3,7 @@
 ## 
 
 AUTOMAKE_OPTIONS = foreign 1.4
-SAMPLE = termios
-PGM = ${ARCH}/$(SAMPLE).exe
+TEST = termios
 
 MANAGERS = io
 
@@ -16,14 +15,14 @@ H_FILES =
 noinst_HEADERS =$(H_FILES)
 
 DOCTYPES =
-DOCS = $(DOCTYPES:%=$(SAMPLE).%)
+DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS = $(DOCS) $(C_FILES) $(H_FILES)
-OBJS = $(C_O_FILES)
+SRCS = $(DOCS) $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
+OBJS = $(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
 
 PRINT_SRCS = $(DOCS)
 
-PGM = ${ARCH}/$(SAMPLE).exe
+PGM = ${ARCH}/$(TEST).exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
