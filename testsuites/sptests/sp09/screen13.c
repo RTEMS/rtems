@@ -1,0 +1,115 @@
+/*  Screen13
+ *
+ *  This routine generates error screen 13 for test 9.
+ *
+ *  Input parameters:  NONE
+ *
+ *  Output parameters:  NONE
+ *
+ *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+ *  On-Line Applications Research Corporation (OAR).
+ *  All rights assigned to U.S. Government, 1994.
+ *
+ *  This material may be reproduced by or for the U.S. Government pursuant
+ *  to the copyright license under the clause at DFARS 252.227-7013.  This
+ *  notice must appear in all copies of this file and its derivatives.
+ *
+ *  $Id$
+ */
+
+#include "system.h"
+
+void Screen13()
+{
+  rtems_unsigned32  result;
+  rtems_time_of_day time;
+  rtems_status_code status;
+
+  status = rtems_io_close( 0xffff, 0x0000, NULL, &result );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_io_close with bad major number"
+  );
+  puts( "TA1 - rtems_io_close - RTEMS_INVALID_NUMBER" );
+  status = rtems_io_control( 0xffff, 0x00000, NULL, &result );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_io_close with bad major number"
+  );
+  puts( "TA1 - rtems_io_control - RTEMS_INVALID_NUMBER" );
+  status = rtems_io_initialize( 0xffff, 0x00000, NULL, &result );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_io_initialize with bad major number"
+  );
+  puts( "TA1 - rtems_io_initialize - RTEMS_INVALID_NUMBER" );
+  status = rtems_io_open( 0xffff, 0x00000, NULL, &result );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_io_open with bad major number"
+  );
+  puts( "TA1 - rtems_io_open - RTEMS_INVALID_NUMBER" );
+  status = rtems_io_read( 0xffff, 0x00000, NULL, &result );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_io_read with bad major number"
+  );
+  puts( "TA1 - rtems_io_read - RTEMS_INVALID_NUMBER" );
+  status = rtems_io_write( 0xffff, 0x0ffff, NULL, &result );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_io_write with bad major number"
+  );
+  puts( "TA1 - rtems_io_write - RTEMS_INVALID_NUMBER" );
+
+  build_time( &time, 12, 31, 2000, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+
+  build_time( &time, 12, 31, 1999, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+
+  build_time( &time, 12, 31, 2100, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+
+  build_time( &time, 12, 31, 2099, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+
+  build_time( &time, 12, 31, 1991, 23, 59, 59, 0 );
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_get - ", &time, " - RTEMS_SUCCESSFUL\n" );
+}

@@ -1,0 +1,837 @@
+/*
+ *  Thread Queue Handler
+ *
+ *
+ *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+ *  On-Line Applications Research Corporation (OAR).
+ *  All rights assigned to U.S. Government, 1994.
+ *
+ *  This material may be reproduced by or for the U.S. Government pursuant
+ *  to the copyright license under the clause at DFARS 252.227-7013.  This
+ *  notice must appear in all copies of this file and its derivatives.
+ *
+ *  $Id$
+ */
+
+#include <rtems/system.h>
+#include <rtems/chain.h>
+#include <rtems/isr.h>
+#include <rtems/object.h>
+#include <rtems/states.h>
+#include <rtems/thread.h>
+#include <rtems/threadq.h>
+#include <rtems/tqdata.h>
+
+/*PAGE
+ *
+ *  _Thread_queue_Initialize
+ *
+ *  This routine initializes the specified threadq.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to a threadq header
+ *    attribute_set    - used to determine queueing discipline
+ *    state            - state of waiting threads
+ *
+ *  Output parameters: NONE
+ */
+
+void _Thread_queue_Initialize(
+  Thread_queue_Control *the_thread_queue,
+  rtems_attribute           attribute_set,
+  States_Control               state
+)
+{
+  unsigned32 index;
+
+  if ( _Attributes_Is_priority( attribute_set ) ) {
+    the_thread_queue->discipline = THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE;
+    for( index=0 ;
+         index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
+         index++)
+      _Chain_Initialize_empty( &the_thread_queue->Queues.Priority[index] );
+  }
+  else {
+    the_thread_queue->discipline = THREAD_QUEUE_DATA_FIFO_DISCIPLINE;
+    _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
+  }
+
+  the_thread_queue->state = state;
+
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Enqueue
+ *
+ *  This routine blocks a thread, places it on a thread, and optionally
+ *  starts a timeout timer.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to threadq
+ *    timeout          - interval to wait
+ *
+ *  Output parameters: NONE
+ *
+ *  INTERRUPT LATENCY:
+ *    only case
+ */
+
+void _Thread_queue_Enqueue(
+  Thread_queue_Control *the_thread_queue,
+  rtems_interval     timeout
+)
+{
+  Thread_Control *the_thread;
+
+  the_thread = _Thread_Executing;
+
+  if ( _Thread_MP_Is_receive( the_thread ) )
+    the_thread = _Thread_MP_Allocate_proxy( the_thread_queue->state );
+  else
+    _Thread_Set_state( the_thread, the_thread_queue->state );
+
+  if ( timeout ) {
+    _Watchdog_Initialize(
+       &the_thread->Timer,
+       _Thread_queue_Timeout,
+       the_thread->Object.id,
+       NULL
+    );
+
+    _Watchdog_Insert_ticks(
+       &the_thread->Timer,
+      timeout,
+      WATCHDOG_NO_ACTIVATE
+    );
+  }
+
+  switch( the_thread_queue->discipline ) {
+    case THREAD_QUEUE_DATA_FIFO_DISCIPLINE:
+      _Thread_queue_Enqueue_fifo( the_thread_queue, the_thread, timeout );
+      break;
+    case THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE:
+      _Thread_queue_Enqueue_priority(
+         the_thread_queue, the_thread, timeout );
+      break;
+  }
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Dequeue
+ *
+ *  This routine removes a thread from the specified threadq.  If the
+ *  threadq discipline is RTEMS_FIFO, it unblocks a thread, and cancels its
+ *  timeout timer.  Priority discipline is processed elsewhere.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to threadq
+ *
+ *  Output parameters:
+ *    returns - thread dequeued or NULL
+ *
+ *  INTERRUPT LATENCY:
+ *    check sync
+ *    RTEMS_FIFO
+ */
+
+Thread_Control *_Thread_queue_Dequeue(
+  Thread_queue_Control *the_thread_queue
+)
+{
+  Thread_Control *the_thread;
+  ISR_Level       level;
+
+  switch ( the_thread_queue->discipline ) {
+    case THREAD_QUEUE_DATA_FIFO_DISCIPLINE:
+      the_thread = _Thread_queue_Dequeue_fifo( the_thread_queue );
+      break;
+    case THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE:
+      the_thread = _Thread_queue_Dequeue_priority( the_thread_queue );
+      break;
+    default:              /* this is only to prevent warnings */
+      the_thread = NULL;
+      break;
+  }
+
+  if ( !_Thread_Is_null( the_thread ) )
+    return( the_thread );
+
+  _ISR_Disable( level );
+  if ( the_thread_queue->sync == FALSE ) {
+    _ISR_Enable( level );
+    return( NULL );
+  }
+
+  the_thread_queue->sync = FALSE;
+  _ISR_Enable( level );
+  return( _Thread_Executing );
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Extract
+ *
+ *  This routine removes a specific thread from the specified threadq,
+ *  deletes any timeout, and unblocks the thread.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to a threadq header
+ *    the_thread       - pointer to a thread control block
+ *
+ *  Output parameters: NONE
+ *
+ *  INTERRUPT LATENCY: NONE
+ */
+
+void _Thread_queue_Extract(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+)
+{
+  switch ( the_thread_queue->discipline ) {
+    case THREAD_QUEUE_DATA_FIFO_DISCIPLINE:
+      _Thread_queue_Extract_fifo( the_thread_queue, the_thread );
+      break;
+    case THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE:
+      _Thread_queue_Extract_priority( the_thread_queue, the_thread );
+      break;
+   }
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Flush
+ *
+ *  This kernel routine flushes the given thread queue.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to threadq to be flushed
+ *
+ *  Output parameters:  NONE
+ */
+
+void _Thread_queue_Flush(
+  Thread_queue_Control       *the_thread_queue,
+  Thread_queue_Flush_callout  remote_extract_callout
+)
+{
+  Thread_Control *the_thread;
+
+  while ( (the_thread = _Thread_queue_Dequeue( the_thread_queue )) ) {
+    if ( _Objects_Is_local_id( the_thread->Object.id ) )
+      the_thread->Wait.return_code = RTEMS_OBJECT_WAS_DELETED;
+    else
+      ( *remote_extract_callout )( the_thread );
+  }
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_First
+ *
+ *  This routines returns a pointer to the first thread on the
+ *  specified threadq.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to thread queue
+ *
+ *  Output parameters:
+ *    returns - first thread or NULL
+ */
+
+Thread_Control *_Thread_queue_First(
+  Thread_queue_Control *the_thread_queue
+)
+{
+  Thread_Control *the_thread;
+
+  switch ( the_thread_queue->discipline ) {
+    case THREAD_QUEUE_DATA_FIFO_DISCIPLINE:
+      the_thread = _Thread_queue_First_fifo( the_thread_queue );
+      break;
+    case THREAD_QUEUE_DATA_PRIORITY_DISCIPLINE:
+      the_thread = _Thread_queue_First_priority( the_thread_queue );
+      break;
+    default:              /* this is only to prevent warnings */
+      the_thread = NULL;
+      break;
+  }
+
+  return the_thread;
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Timeout
+ *
+ *  This routine processes a thread which timeouts while waiting on
+ *  a thread queue. It is called by the watchdog handler.
+ *
+ *  Input parameters:
+ *    id - thread id
+ *
+ *  Output parameters: NONE
+ */
+
+void _Thread_queue_Timeout(
+  Objects_Id  id,
+  void       *ignored
+)
+{
+  Thread_Control  *the_thread;
+  Objects_Locations       location;
+
+  the_thread = _Thread_Get( id, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:  /* impossible */
+      break;
+    case OBJECTS_LOCAL:
+      the_thread->Wait.return_code = RTEMS_TIMEOUT;
+      _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
+      _Thread_Unnest_dispatch();
+      break;
+  }
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Enqueue_fifo
+ *
+ *  This routine blocks a thread, places it on a thread, and optionally
+ *  starts a timeout timer.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to threadq
+ *    the_thread       - pointer to the thread to block
+ *    timeout          - interval to wait
+ *
+ *  Output parameters: NONE
+ *
+ *  INTERRUPT LATENCY:
+ *    only case
+ */
+
+void _Thread_queue_Enqueue_fifo (
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  rtems_interval            timeout
+)
+{
+  ISR_Level level;
+
+  _ISR_Disable( level );
+  if ( the_thread_queue->sync == TRUE ) {
+    the_thread_queue->sync = FALSE;
+
+    _Chain_Append_unprotected(
+      &the_thread_queue->Queues.Fifo,
+      &the_thread->Object.Node
+    );
+
+    if ( timeout != RTEMS_NO_TIMEOUT )
+      _Watchdog_Activate( &the_thread->Timer );
+
+    _ISR_Enable( level );
+    return;
+  }
+
+  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+    _ISR_Enable( level );
+    _Thread_Unblock( the_thread );
+  } else {
+    _Watchdog_Deactivate( &the_thread->Timer );
+    _ISR_Enable( level );
+    (void) _Watchdog_Remove( &the_thread->Timer );
+    _Thread_Unblock( the_thread );
+  }
+
+  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+    _Thread_MP_Free_proxy( the_thread );
+
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Dequeue_fifo
+ *
+ *  This routine removes a thread from the specified threadq.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to threadq
+ *
+ *  Output parameters:
+ *    returns - thread dequeued or NULL
+ *
+ *  INTERRUPT LATENCY:
+ *    check sync
+ *    RTEMS_FIFO
+ */
+
+Thread_Control *_Thread_queue_Dequeue_fifo(
+  Thread_queue_Control *the_thread_queue
+)
+{
+  ISR_Level              level;
+  Thread_Control *the_thread;
+
+  _ISR_Disable( level );
+  if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) ) {
+
+    the_thread = (Thread_Control *)
+       _Chain_Get_first_unprotected( &the_thread_queue->Queues.Fifo );
+
+    if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+      _ISR_Enable( level );
+      _Thread_Unblock( the_thread );
+    } else {
+      _Watchdog_Deactivate( &the_thread->Timer );
+      _ISR_Enable( level );
+      (void) _Watchdog_Remove( &the_thread->Timer );
+      _Thread_Unblock( the_thread );
+    }
+
+    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+      _Thread_MP_Free_proxy( the_thread );
+
+    return( the_thread );
+  }
+  _ISR_Enable( level );
+  return( NULL );
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Extract_fifo
+ *
+ *  This routine removes a specific thread from the specified threadq,
+ *  deletes any timeout, and unblocks the thread.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to a threadq header
+ *    the_thread       - pointer to the thread to block
+ *
+ *  Output parameters: NONE
+ *
+ *  INTERRUPT LATENCY:
+ *    EXTRACT_FIFO
+ */
+
+void _Thread_queue_Extract_fifo(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+)
+{
+  ISR_Level level;
+
+  _ISR_Disable( level );
+
+  if ( !_States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+    _ISR_Enable( level );
+    return;
+  }
+
+  _Chain_Extract_unprotected( &the_thread->Object.Node );
+
+  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+    _ISR_Enable( level );
+    _Thread_Unblock( the_thread );
+  } else {
+    _Watchdog_Deactivate( &the_thread->Timer );
+    _ISR_Enable( level );
+    (void) _Watchdog_Remove( &the_thread->Timer );
+    _Thread_Unblock( the_thread );
+  }
+
+  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+    _Thread_MP_Free_proxy( the_thread );
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_First_fifo
+ *
+ *  This routines returns a pointer to the first thread on the
+ *  specified threadq.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to threadq
+ *
+ *  Output parameters:
+ *    returns - first thread or NULL
+ */
+
+Thread_Control *_Thread_queue_First_fifo(
+  Thread_queue_Control *the_thread_queue
+)
+{
+  if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) )
+    return (Thread_Control *) the_thread_queue->Queues.Fifo.first;
+
+  return NULL;
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Enqueue_priority
+ *
+ *  This routine blocks a thread, places it on a thread, and optionally
+ *  starts a timeout timer.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to threadq
+ *    thread           - thread to insert
+ *    timeout          - timeout interval in ticks
+ *
+ *  Output parameters: NONE
+ *
+ *  INTERRUPT LATENCY:
+ *    forward less than
+ *    forward equal
+ */
+
+void _Thread_queue_Enqueue_priority(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  rtems_interval     timeout
+)
+{
+  rtems_task_priority       search_priority;
+  Thread_Control *search_thread;
+  ISR_Level              level;
+  Chain_Control  *header;
+  unsigned32             header_index;
+  Chain_Node     *the_node;
+  Chain_Node     *next_node;
+  Chain_Node     *previous_node;
+  Chain_Node     *search_node;
+  rtems_task_priority       priority;
+  States_Control         block_state;
+
+  _Chain_Initialize_empty( &the_thread->Wait.Block2n );
+
+  priority     = the_thread->current_priority;
+  header_index = _Thread_queue_Header_number( priority );
+  header       = &the_thread_queue->Queues.Priority[ header_index ];
+  block_state  = the_thread_queue->state;
+
+  if ( _Thread_queue_Is_reverse_search( priority ) )
+    goto restart_reverse_search;
+
+restart_forward_search:
+  search_priority = RTEMS_MINIMUM_PRIORITY - 1;
+  _ISR_Disable( level );
+  search_thread = (Thread_Control *) header->first;
+  while ( !_Chain_Is_tail( header, (Chain_Node *)search_thread ) ) {
+    search_priority = search_thread->current_priority;
+    if ( priority <= search_priority )
+      break;
+
+#if ( CPU_UNROLL_ENQUEUE_PRIORITY == TRUE )
+    search_thread = (Thread_Control *) search_thread->Object.Node.next;
+    if ( _Chain_Is_tail( header, (Chain_Node *)search_thread ) )
+      break;
+    search_priority = search_thread->current_priority;
+    if ( priority <= search_priority )
+      break;
+#endif
+    _ISR_Flash( level );
+    if ( !_States_Are_set( search_thread->current_state, block_state) ) {
+      _ISR_Enable( level );
+      goto restart_forward_search;
+    }
+    search_thread =
+       (Thread_Control *)search_thread->Object.Node.next;
+  }
+  if ( the_thread_queue->sync == FALSE )
+    goto syncronize;
+
+  the_thread_queue->sync = FALSE;
+  if ( timeout != RTEMS_NO_TIMEOUT )
+    _Watchdog_Activate( &the_thread->Timer );
+
+  if ( priority == search_priority )
+    goto equal_priority;
+
+  search_node   = (Chain_Node *) search_thread;
+  previous_node = search_node->previous;
+  the_node      = (Chain_Node *) the_thread;
+
+  the_node->next        = search_node;
+  the_node->previous    = previous_node;
+  previous_node->next   = the_node;
+  search_node->previous = the_node;
+  _ISR_Enable( level );
+  return;
+
+restart_reverse_search:
+  search_priority     = RTEMS_MAXIMUM_PRIORITY + 1;
+
+  _ISR_Disable( level );
+  search_thread = (Thread_Control *) header->last;
+  while ( !_Chain_Is_head( header, (Chain_Node *)search_thread ) ) {
+    search_priority = search_thread->current_priority;
+    if ( priority >= search_priority )
+      break;
+#if ( CPU_UNROLL_ENQUEUE_PRIORITY == TRUE )
+    search_thread = (Thread_Control *) search_thread->Object.Node.previous;
+    if ( _Chain_Is_head( header, (Chain_Node *)search_thread ) )
+      break;
+    search_priority = search_thread->current_priority;
+    if ( priority >= search_priority )
+      break;
+#endif
+    _ISR_Flash( level );
+    if ( !_States_Are_set( search_thread->current_state, block_state) ) {
+      _ISR_Enable( level );
+      goto restart_reverse_search;
+    }
+    search_thread = (Thread_Control *)
+                         search_thread->Object.Node.previous;
+  }
+  if ( !the_thread_queue->sync )
+    goto syncronize;
+
+  the_thread_queue->sync = FALSE;
+  if ( timeout != RTEMS_NO_TIMEOUT )
+    _Watchdog_Activate( &the_thread->Timer );
+
+  if ( priority == search_priority )
+    goto equal_priority;
+
+  search_node = (Chain_Node *) search_thread;
+  next_node   = search_node->next;
+  the_node    = (Chain_Node *) the_thread;
+
+  the_node->next      = next_node;
+  the_node->previous  = search_node;
+  search_node->next   = the_node;
+  next_node->previous = the_node;
+  _ISR_Enable( level );
+  return;
+
+equal_priority:               /* add at end of priority group */
+  search_node   = _Chain_Tail( &search_thread->Wait.Block2n );
+  previous_node = search_node->previous;
+  the_node      = (Chain_Node *) the_thread;
+
+  the_node->next        = search_node;
+  the_node->previous    = previous_node;
+  previous_node->next   = the_node;
+  search_node->previous = the_node;
+  _ISR_Enable( level );
+  return;
+
+syncronize:
+  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+    _ISR_Enable( level );
+    _Thread_Unblock( the_thread );
+  } else {
+    _Watchdog_Deactivate( &the_thread->Timer );
+    _ISR_Enable( level );
+    (void) _Watchdog_Remove( &the_thread->Timer );
+    _Thread_Unblock( the_thread );
+  }
+  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+    _Thread_MP_Free_proxy( the_thread );
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Dequeue_priority
+ *
+ *  This routine removes a thread from the specified RTEMS_PRIORITY based
+ *  threadq, unblocks it, and cancels its timeout timer.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to thread queue
+ *
+ *  Output parameters:
+ *    returns - thread dequeued or NULL
+ *
+ *  INTERRUPT LATENCY:
+ *    only case
+ */
+
+Thread_Control *_Thread_queue_Dequeue_priority(
+  Thread_queue_Control *the_thread_queue
+)
+{
+  unsigned32             index;
+  ISR_Level              level;
+  Thread_Control *the_thread;
+  Thread_Control *new_first_thread;
+  Chain_Node     *new_first_node;
+  Chain_Node     *new_second_node;
+  Chain_Node     *last_node;
+  Chain_Node     *next_node;
+  Chain_Node     *previous_node;
+
+  for( index=0 ;
+       index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
+       index++ ) {
+    _ISR_Disable( level );
+    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) ) {
+      the_thread = (Thread_Control *)
+                    the_thread_queue->Queues.Priority[ index ].first;
+      goto dequeue;
+    }
+    _ISR_Enable( level );
+  }
+  return NULL;
+
+dequeue:
+  new_first_node   = the_thread->Wait.Block2n.first;
+  new_first_thread = (Thread_Control *) new_first_node;
+  next_node        = the_thread->Object.Node.next;
+  previous_node    = the_thread->Object.Node.previous;
+
+  if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
+    last_node       = the_thread->Wait.Block2n.last;
+    new_second_node = new_first_node->next;
+
+    previous_node->next      = new_first_node;
+    next_node->previous      = new_first_node;
+    new_first_node->next     = next_node;
+    new_first_node->previous = previous_node;
+
+    if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
+                                                /* > two threads on 2-n */
+      new_second_node->previous =
+                _Chain_Head( &new_first_thread->Wait.Block2n );
+
+      new_first_thread->Wait.Block2n.first = new_second_node;
+      new_first_thread->Wait.Block2n.last  = last_node;
+
+      last_node->next = _Chain_Tail( &new_first_thread->Wait.Block2n );
+    }
+  } else {
+    previous_node->next = next_node;
+    next_node->previous = previous_node;
+  }
+
+  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+    _ISR_Enable( level );
+    _Thread_Unblock( the_thread );
+  } else {
+    _Watchdog_Deactivate( &the_thread->Timer );
+    _ISR_Enable( level );
+    (void) _Watchdog_Remove( &the_thread->Timer );
+    _Thread_Unblock( the_thread );
+  }
+
+  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+    _Thread_MP_Free_proxy( the_thread );
+  return( the_thread );
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_Extract_priority
+ *
+ *  This routine removes a specific thread from the specified threadq,
+ *  deletes any timeout, and unblocks the thread.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to a threadq header
+ *    the_thread       - pointer to a thread control block
+ *
+ *  Output parameters: NONE
+ *
+ *  INTERRUPT LATENCY:
+ *    EXTRACT_PRIORITY
+ */
+
+void _Thread_queue_Extract_priority(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+)
+{
+  ISR_Level              level;
+  Chain_Node     *the_node;
+  Chain_Node     *next_node;
+  Chain_Node     *previous_node;
+  Thread_Control *new_first_thread;
+  Chain_Node     *new_first_node;
+  Chain_Node     *new_second_node;
+  Chain_Node     *last_node;
+
+  the_node = (Chain_Node *) the_thread;
+  _ISR_Disable( level );
+  if ( _States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+    next_node     = the_node->next;
+    previous_node = the_node->previous;
+
+    if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
+      new_first_node   = the_thread->Wait.Block2n.first;
+      new_first_thread = (Thread_Control *) new_first_node;
+      last_node        = the_thread->Wait.Block2n.last;
+      new_second_node  = new_first_node->next;
+
+      previous_node->next      = new_first_node;
+      next_node->previous      = new_first_node;
+      new_first_node->next     = next_node;
+      new_first_node->previous = previous_node;
+
+      if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
+                                          /* > two threads on 2-n */
+        new_second_node->previous =
+                  _Chain_Head( &new_first_thread->Wait.Block2n );
+        new_first_thread->Wait.Block2n.first = new_second_node;
+
+        new_first_thread->Wait.Block2n.last = last_node;
+        last_node->next = _Chain_Tail( &new_first_thread->Wait.Block2n );
+      }
+    } else {
+      previous_node->next = next_node;
+      next_node->previous = previous_node;
+    }
+
+    if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+      _ISR_Enable( level );
+      _Thread_Unblock( the_thread );
+    } else {
+      _Watchdog_Deactivate( &the_thread->Timer );
+      _ISR_Enable( level );
+      (void) _Watchdog_Remove( &the_thread->Timer );
+      _Thread_Unblock( the_thread );
+    }
+
+    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+      _Thread_MP_Free_proxy( the_thread );
+  }
+  else
+    _ISR_Enable( level );
+}
+
+/*PAGE
+ *
+ *  _Thread_queue_First_priority
+ *
+ *  This routines returns a pointer to the first thread on the
+ *  specified threadq.
+ *
+ *  Input parameters:
+ *    the_thread_queue - pointer to thread queue
+ *
+ *  Output parameters:
+ *    returns - first thread or NULL
+ */
+
+Thread_Control *_Thread_queue_First_priority (
+  Thread_queue_Control *the_thread_queue
+)
+{
+  unsigned32 index;
+
+  for( index=0 ;
+       index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
+       index++ ) {
+    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) )
+      return (Thread_Control *)
+        the_thread_queue->Queues.Priority[ index ].first;
+  }
+  return NULL;
+}

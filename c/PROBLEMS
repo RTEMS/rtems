@@ -1,0 +1,39 @@
+#
+#  $Id$
+#
+
+This is the list of outstanding problems in this release.
+
+1.  The m68000 support is not complete.  Someone with target hardware
+    needs to complete the missing gaps.  Look for ifdef's based on the
+    M68K_* macros defined in c/make/cpu/m68k.cfg.  Most of the code
+    is present but none of it is tested.  An attempt was made to insert
+    "#warnings" preprocessor directives in the appropriate places.
+    So these are a good starting spot.
+
+2.  The only i960 family member tested is the CA.  No support for the
+    floating point support found in other family members is present.
+    This also implies that RTEMS may "think" of something as generic
+    across the i960 family when in fact it is specific to the CA.
+
+3.  The __read() system call in all of the BSPs using single
+    character input/output needs to be smarter.  The following
+    issues need to be addressed:
+
+       + echoing of characters on input
+       + CR/NL echoing
+       + backspaces
+       + tabs
+
+4.  Solaris 2.3 port notes:
+
+       + Some of the tests run correctly when run interactively but
+         the screen and output do not match when the output is 
+         redirected to a file.
+
+       + sometimes a stray SIGALRM is reported as spfatal completes.
+
+5.  Some of the tests may execute correctly and not produce the exact
+    ordering of lines in the screen file.  This appears to be a combination
+    of a number of factors including buffering, processor speed, IO
+    device overhead, and clock interrupt rate.

@@ -1,0 +1,14 @@
+#
+#  $Id$
+#
+
+This is the README file for libcpu.
+
+This directory contains reusable libraries which are CPU dependent but not
+target board dependent.  For example, the HPPA has an on chip interval timer
+which may be used by all HPPA bsp's.
+
+Another example might be the Intel i960CA has on-chip DMA which could be
+supported in a library and placed in lib/libcpu/i960.  This level of support
+will make it easier for others developing embedded applications on a given
+CPU.

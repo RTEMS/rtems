@@ -1,0 +1,27 @@
+#
+#  $Id$
+#
+
+This is the top level directory of the C RTEMS environment.  The
+following is a description of the contents of each file and
+subdirectory directly in this directory:
+
+    tests
+
+       This directory contains the RTEMS Test Suites. Currently
+       this includes the following suites:
+
+         + Single Processor Test Suite
+         + Multiprocessor Test Suite
+         + Timing Test Suite
+         + Sample Application Suite
+
+    lib
+
+       This directory contains src for RTEMS libraries:
+          libc, board support (including drivers) and libcpu.
+
+    exec
+
+       This directory contains the source code for the RTEMS executive.
+

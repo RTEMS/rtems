@@ -1,0 +1,29 @@
+*** TEST 25 ***
+TA1 - rtems_region_ident - 00010002
+TA1 - rtems_region_get_segment - wait on 64 byte segment from region 1
+TA1 - got segment from region 1 - 0x0000f9b8
+TA1 - rtems_region_get_segment - wait on 128 byte segment from region 1
+TA1 - got segment from region 1 - 0x0000f930
+TA1 - rtems_region_get_segment - wait on 256 byte segment from region 1
+TA1 - got segment from region 1 - 0x0000f828
+TA1 - rtems_region_get_segment - wait on 512 byte segment from region 1
+TA1 - got segment from region 1 - 0x0000f620
+TA1 - rtems_region_get_segment - wait on 1024 byte segment from region 1
+TA1 - got segment from region 1 - 0x0000f218
+TA1 - rtems_region_get_segment - wait on 2048 byte segment from region 1
+TA1 - got segment from region 1 - 0x0000ea10
+TA1 - rtems_region_get_segment - wait on 4096 byte segment from region 1
+TA1 - got segment from region 1 - 0x0000da08
+TA1 - rtems_region_get_segment - wait on 8192 byte segment from region 1
+TA1 - got segment from region 1 - 0x0000ba00
+<pause>
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x0000f828
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x0000f620
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x0000f9b8
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x0000f930
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x0000da08
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x0000ea10
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x0000ba00
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x0000f218
+TA1 - rtems_region_delete - walks heap if debug enabled
+*** END OF TEST 25 ***

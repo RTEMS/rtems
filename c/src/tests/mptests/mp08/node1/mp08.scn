@@ -1,0 +1,11 @@
+*** TEST 8 -- NODE 1 ***
+Creating Test_task (Global)
+Starting Test_task (Global)
+Deleting initialization task
+Getting SMID of semaphore
+pvpvpvpvpvp.......
+(continued) pvp
+
+Deleting global semaphore
+*** END OF TEST 8 ***
+

@@ -1,0 +1,47 @@
+*** TEST 5 ***
+TA1 - rtems_task_wake_after - sleep 5 seconds
+TA2 - rtems_task_suspend - suspend self
+TA3 - rtems_task_suspend - suspend self
+TA1 - rtems_task_suspend - suspend TA3
+TA1 - rtems_task_resume  - resume TA2
+TA1 - rtems_task_wake_after - sleep 5 seconds
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA1 - rtems_task_suspend - suspend TA2
+TA1 - rtems_task_resume - resume TA3
+TA1 - rtems_task_wake_after - sleep 5 seconds
+TA3 - rtems_task_wake_after - sleep 1 second
+TA3 - rtems_task_wake_after - sleep 1 second
+TA3 - rtems_task_wake_after - sleep 1 second
+TA3 - rtems_task_wake_after - sleep 1 second
+TA3 - rtems_task_wake_after - sleep 1 second
+TA1 - rtems_task_suspend - suspend TA3
+TA1 - rtems_task_resume  - resume TA2
+TA1 - rtems_task_wake_after - sleep 5 seconds
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA1 - rtems_task_suspend - suspend TA2
+TA1 - rtems_task_resume - resume TA3
+TA1 - rtems_task_wake_after - sleep 5 seconds
+TA3 - rtems_task_wake_after - sleep 1 second
+TA3 - rtems_task_wake_after - sleep 1 second
+TA3 - rtems_task_wake_after - sleep 1 second
+TA3 - rtems_task_wake_after - sleep 1 second
+TA3 - rtems_task_wake_after - sleep 1 second
+TA1 - rtems_task_suspend - suspend TA3
+TA1 - rtems_task_resume - resume TA2
+TA1 - rtems_task_wake_after - sleep 5 seconds
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA2 - rtems_task_wake_after - sleep 1 second
+TA1 - rtems_task_suspend - suspend TA2
+TA1 - rtems_task_resume - resume TA3
+*** END OF TEST 5 ***

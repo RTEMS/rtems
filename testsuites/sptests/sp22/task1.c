@@ -1,0 +1,164 @@
+/*  Task_1
+ *
+ *  This routine serves as a test task.  It verifies the basic task
+ *  switching capabilities of the executive.
+ *
+ *  Input parameters:
+ *    argument - task argument
+ *
+ *  Output parameters:  NONE
+ *
+ *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+ *  On-Line Applications Research Corporation (OAR).
+ *  All rights assigned to U.S. Government, 1994.
+ *
+ *  This material may be reproduced by or for the U.S. Government pursuant
+ *  to the copyright license under the clause at DFARS 252.227-7013.  This
+ *  notice must appear in all copies of this file and its derivatives.
+ *
+ *  $Id$
+ */
+
+#include "system.h"
+
+rtems_task Task_1(
+  rtems_task_argument argument
+)
+{
+  rtems_id          tmid;
+  rtems_time_of_day time;
+  rtems_status_code status;
+
+/* Get id */
+
+  puts( "TA1 - rtems_timer_ident - identing timer 1" );
+  status = rtems_timer_ident( Timer_name[ 1 ], &tmid );
+  directive_failed( status, "rtems_timer_ident" );
+  printf( "TA1 - timer 1 has id (0x%x)\n", tmid );
+
+/* after which is allowed to fire */
+
+  Print_time();
+
+  puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
+  status = rtems_timer_fire_after(
+    tmid,
+    3 * TICKS_PER_SECOND,
+    Delayed_resume,
+    NULL
+  );
+  directive_failed( status, "rtems_timer_fire_after" );
+
+  puts( "TA1 - rtems_task_suspend( RTEMS_SELF )" );
+  status = rtems_task_suspend( RTEMS_SELF );
+  directive_failed( status, "rtems_task_suspend" );
+
+  Print_time();
+
+/* after which is reset and allowed to fire */
+
+  puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
+  status = rtems_timer_fire_after(
+    tmid,
+    3 * TICKS_PER_SECOND,
+    Delayed_resume,
+    NULL
+  );
+  directive_failed( status, "rtems_timer_fire_after" );
+
+  puts( "TA1 - rtems_task_wake_after - 1 second" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  directive_failed( status, "rtems_task_wake_after" );
+
+  Print_time();
+
+  puts( "TA1 - rtems_timer_reset - timer 1" );
+  status = rtems_timer_reset( tmid );
+  directive_failed( status, "rtems_timer_reset" );
+
+  puts( "TA1 - rtems_task_suspend( RTEMS_SELF )" );
+  status = rtems_task_suspend( RTEMS_SELF );
+  directive_failed( status, "rtems_task_suspend" );
+
+  Print_time();
+
+  pause();
+
+  /*
+   *  Reset the time since we do not know how long the user waited
+   *  before pressing <cr> at the pause.  This insures that the 
+   *  actual output matches the screen.
+   */
+
+  build_time( &time, 12, 31, 1988, 9, 0, 7, 0 );
+
+  status = rtems_clock_set( &time );
+  directive_failed( status, "rtems_clock_set" );
+
+/* after which is canceled */
+
+  puts( "TA1 - rtems_timer_fire_after - timer 1 in 3 seconds" );
+  status = rtems_timer_fire_after(
+    tmid,
+    3 * TICKS_PER_SECOND,
+    Delayed_resume,
+    NULL
+  );
+  directive_failed( status, "rtems_timer_fire_after" );
+
+  puts( "TA1 - rtems_timer_cancel - timer 1" );
+  status = rtems_timer_cancel( tmid );
+  directive_failed( status, "rtems_timer_cancel" );
+
+/* when which is allowed to fire */
+
+  Print_time();
+
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  directive_failed( status, "rtems_clock_get" );
+
+  time.second += 3;
+
+  puts( "TA1 - rtems_timer_fire_when - timer 1 in 3 seconds" );
+  status = rtems_timer_fire_when( tmid, &time, Delayed_resume, NULL );
+  directive_failed( status, "rtems_timer_fire_when" );
+
+  puts( "TA1 - rtems_task_suspend( RTEMS_SELF )" );
+  status = rtems_task_suspend( RTEMS_SELF );
+  directive_failed( status, "rtems_task_suspend" );
+
+  Print_time();
+
+/* when which is canceled */
+
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  directive_failed( status, "rtems_clock_get" );
+
+  time.second += 3;
+
+  puts( "TA1 - rtems_timer_fire_when - timer 1 in 3 seconds" );
+  status = rtems_timer_fire_when( tmid, &time, Delayed_resume, NULL );
+  directive_failed( status, "rtems_timer_fire_when" );
+
+  puts( "TA1 - rtems_task_wake_after - 1 second" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  directive_failed( status, "rtems_task_wake_after" );
+
+  Print_time();
+
+  puts( "TA1 - rtems_timer_cancel - timer 1" );
+  status = rtems_timer_cancel( tmid );
+  directive_failed( status, "rtems_timer_cancel" );
+
+/* delete */
+  puts( "TA1 - rtems_task_wake_after - YIELD (only task at priority)" );
+  status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+  directive_failed( status, "rtems_task_wake_after" );
+
+  puts( "TA1 - timer_deleting - timer 1" );
+  status = rtems_timer_delete( tmid );
+  directive_failed( status, "rtems_timer_delete" );
+
+  puts( "*** END OF TEST 22 *** " );
+  exit( 0 );
+}

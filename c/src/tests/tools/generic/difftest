@@ -1,0 +1,110 @@
+#!/bin/ksh -p
+#
+# Check test results against official output in the src tree
+# $Id$
+#
+
+# XXX: do not run size.exe with this; it asks questions we don't answer
+
+# how to do arith in bash
+#    i=$((i * 2))
+#    b=$((b + 1))
+
+# progname=`basename $0`
+progname=${0##*/}        # fast basename hack for ksh, bash
+
+USAGE=\
+"usage: $progname [ -opts ] test [ test ... ]
+	-v	    -- verbose
+        -l logdir   -- specify log directory (default is 'logdir')
+"
+
+#   log an error to stderr
+prerr()
+{
+    echo "$*" >&2
+}
+
+fatal() {
+    [ "$1" ] && prerr $*
+    prerr "$USAGE"
+    exit 1
+}
+
+warn() {
+    [ "$1" ] && prerr $*
+}
+
+#
+# process the options
+#
+# defaults for getopt vars
+#
+
+verbose=""
+logdir=log
+
+while getopts v12o:l: OPT
+do
+    case "$OPT" in
+	v)
+	    verbose="yes";;
+        l)
+            logdir="$OPTARG";;
+        *)
+            fatal;;
+    esac
+done
+((shiftcount = $OPTIND - 1))
+shift $shiftcount
+
+args=$*
+
+#
+# Run the tests
+#
+
+cd $RTEMS_ROOT/c/$RTEMS_BSP/tests/$logdir ||
+  fatal "No log directory: $RTEMS_ROOT/c/$RTEMS_BSP/tests/$logdir"
+
+tests="$args"
+if [ ! "$tests" ]
+then
+     set -- `echo sp?? mp??_?`
+     tests="$*"
+fi
+
+for t in $tests
+do
+   logfile=$t
+
+   if [ ! -f $logfile ]
+   then
+        continue
+   fi
+
+   echo $logfile
+   echo
+
+   case $t in
+       mp*)
+           mptest=`echo $t | sed 's/_.//'`
+           node=`echo $t | sed 's/...._//'`
+           scn_file=$RTEMS_ROOT/c/src/tests/mptests/$mptest/node$node/$mptest.scn;;
+       sp*)
+           scn_file=$RTEMS_ROOT/c/src/tests/sptests/$t/$t.scn;;
+       *)
+           fatal "unknown test $t";;
+   esac
+
+   sed -e '/^$/d' < $logfile | diff -b $scn_file -
+   echo
+   echo
+done
+
+exit 0
+
+# Local Variables: ***
+# mode:ksh ***
+# End: ***
+

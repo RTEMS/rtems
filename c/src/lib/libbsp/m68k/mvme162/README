@@ -1,0 +1,124 @@
+--
+--  EISCAT Scientific Association. M.Savitski
+--
+--  This material is a part of the MVME162 Board Support Package
+--  for the RTEMS executive. Its licensing policies are those of the
+--  RTEMS distribution.
+--
+--  Updated by Joel Sherrill (jsherril@redstone.army.mil) after
+--  inclusion in the standard release.
+--
+--  $Id$
+--
+
+This is a README file for the MVME162 port of RTEMS.
+
+Disclaimer
+----------
+This is my first attempt at porting RTEMS. The resulting code obviously
+contains bugs (know and unknown) and limitations. I assume no
+responsibility for quality and support of the software in question.
+
+Now on more optimistic note:
+
+I have run most of the standard RTEMS sptests, and neither of them
+failed. My present (short) experience of developing RTEMS applications
+is essentially positive and suggestive of a long-term commitment. In
+any case I am ready to answer questions regarding the port and intend
+to follow the future RTEMS versions. I will do my best to provide
+whatever support I can afford time-wise.
+
+Installation
+------------
+Nothing unique to the MVME162.  It has been incorporated into the
+standard release.
+
+Port Description
+----------------
+The port was done using already existing ports to the M68020 boards,
+DMV152 and MVME136.
+
+The host system was SUN/Solaris 2.3, and the cross-development
+environment consisted of Free Software Foundation (FSF)'s GNU C
+compiler (version 2.6), GNU Assembler (version 2.3) and GNU binary
+utilities binutils version 2.5.2, built with m68k as a target. The
+recent/latest versions of other GNU programs (flex, make, etc) were
+also used at the build stage.
+
+In all subdirectories of the RTEMS distribution tree, the directories
+mvme136 were duplicated as mvme162.
+
+Essential modifications are detailed below:
+
+- the MVME162-specific hardware registers were described in bsp.h
+
+- timer and clock routines were made to use the MVME162's Tick Timers 1
+and 2, respectively
+
+- shared memory support was replaced by stubs for the time being
+
+- console IO was lifted entirely from the DMV152 support code, thanks
+to the fact that Z8530 SCC used in DMV152 is upwards compatible with
+the Z85230 SCC of the MVME162. (Only the memory mapping of the SCC
+registers had to be changed.)
+
+- symbols in several *.s files were prepended with underscores to
+comply with the xgcc configuration used (it prepends underscores to all
+symbols defined in c code)
+
+- linkcmds file was modified to place the linked code into the memory
+configured for the board in use
+
+- bspstart.c was modified as follows:
+
+         monitors_vector_table = (m68k_isr *)0xFFE00000;
+
+was made to point to the power-up location of MVME162 interrupt vector
+table.
+
+- The shutdown is a temporary solution. To exit cleanly, it has to disable
+all enabled interrupts and restore the board to its power-up status.
+Presently this is not done satisfactorily, as a result, the board needs
+a hardware reset from the external VMEbus master or from the front
+panel to ensure correct operation for subsequent downloads.
+
+Host System
+-----------
+The VMEbus master used to externally control and download the MVME162
+is a FORCE CPU-2CE board running Solaris 2.3. A simple program to load
+s-records and start/reset the MVME162 was written. The code is in the
+file tools/sload.c
+
+This code depends on the external VMEbus master's vme driver and is
+provided as an example, without the Makefile. The bulk of the program
+which parses the s-records is courtesy of Kym Newbery,
+(8918927y@lux.levels.unisa.edu.au).
+
+In general, apart from x-gcc, the tools most often used while building
+RTEMS for MVME162 were: find, grep, diff, and, of course
+
+MVME162 Embedded Controller Programmer's Reference Guide,
+Motorola, MVME162PG/D1.
+
+Thanks
+------
+- to On-Line Applications Research Corporation (OAR) for developing
+RTEMS and making it available on a Technology Transfer basis;
+- to Joel Sherril, the leader of the RTEMS development group for
+stimulating and helpful discussions;
+- to Kym Newbery (8918927y@lux.levels.unisa.edu.au) for his s-record
+parser;
+- to Gerd Truschinski (gt@first.gmd.de) for creating and running the
+crossgcc mailing list
+- to FSF and Cygnus Support for great free software;
+
+
++----------------------------------+-------------------------------+
+|  Dr. Mikhail (Misha) Savitski    |  Voice : +46-980-79162        |
+|  Software Systems Engineer       |  Fax   : +46-980-79161        |
+|  EISCAT Svalbard Radar Project   |  E-mail: mms@eiscathq.irf.se  |
+|  EISCAT Scientific Association   |-----------  /\_/\  -----------|
+|  Box 812 S-98128 Kiruna, Sweden  |  EIS       { o o }       CAT  |
++----------------------------------+-------oQQQ--(>I<)--QQQo-------+
+
+

@@ -1,0 +1,19 @@
+*** TEST 10 -- NODE 2 ***
+Creating Test_task 1 (local)
+Starting Test_task 1 (local)
+Creating Test_task 2 (local)
+Starting Test_task 2 (local)
+Creating Test_task 3 (local)
+Starting Test_task 3 (local)
+Sleeping for 1 seconds ...
+Getting QID of message queue
+Attempting to receive message ...
+Getting SMID of semaphore
+Attempting to acquire semaphore ...
+Getting SMID of semaphore
+Attempting to acquire semaphore ...
+Deleting Test_task2
+Deleting Test_task1
+Restarting Test_task3
+*** END OF TEST 10 ***
+

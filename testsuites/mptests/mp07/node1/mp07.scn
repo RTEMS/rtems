@@ -1,0 +1,10 @@
+*** TEST 7 -- NODE 1 ***
+Creating Test_task (Global)
+Starting Test_task (Global)
+Deleting initialization task
+Remote task's name is : 222
+Getting TID of remote task
+Sending first event to remote task
+....................................................
+....................................................
+*** END OF TEST 7 ***

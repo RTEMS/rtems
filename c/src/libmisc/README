@@ -1,0 +1,16 @@
+#
+#  $Id$
+#
+
+This directory contains for the "miscellaneous" library.  Currently
+the only item in this library is a user extension set which checks
+for a task "blowing" it's stack.
+
+The following ideas have been mentioned for items which could go
+in this library, but this list is not all inclusive:
+
+   + Workspace Consistency Checker
+   + Task Execution Time Monitor
+
+The intent of this library is to provide a home for useful utility routines
+which are dependent upon RTEMS.

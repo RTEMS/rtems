@@ -1,0 +1,8 @@
+*** TEST 17 ***
+TA2 - Suspending self
+TA1 - rtems_signal_catch: initializing signal catcher
+TA1 - Sending signal to self
+TA2 - signal_return preempted correctly
+TA1 - TA2 correctly preempted me
+TA1 - Got Back!!!
+*** END OF TEST 17 ***

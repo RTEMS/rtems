@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+#  On-Line Applications Research Corporation (OAR).
+#  All rights assigned to U.S. Government, 1994.
+#
+#  This material may be reproduced by or for the U.S. Government pursuant
+#  to the copyright license under the clause at DFARS 252.227-7013.  This
+#  notice must appear in all copies of this file and its derivatives.
+#
+
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  test5
+
+directives:
+  ex_init, ex_start, t_create, t_start, tm_tick, i_return, t_ident
+  tm_wkafter, t_suspend, t_resume
+
+concepts:
+
+  a.  Verifies that a task can be suspended and resumed.
+
+  b.  Verifies that a task can suspend itself.

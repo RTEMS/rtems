@@ -1,0 +1,40 @@
+*** TEST 6 ***
+TA1 - is beginning to run
+TA1 - restarting TA3
+TA2 - is beginning to run
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA1 - rtems_task_restart - restarting TA2
+TA2 - is beginning to run
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA1 - rtems_task_restart - restarting self
+TA1 - is beginning to run
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA1 - rtems_task_restart - restarting TA2
+TA2 - is beginning to run
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA1 - rtems_task_restart - restarting self
+TA1 - is beginning to run
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA1 - rtems_task_restart - restarting TA2
+TA2 - is beginning to run
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA1 - rtems_task_restart - restarting self
+TA1 - is beginning to run
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA1 - rtems_task_restart - restarting TA2
+TA2 - is beginning to run
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA2 - rtems_task_wake_after - sleep 1/2 second
+TA1 - rtems_task_restart - restarting self
+TA1 - is beginning to run
+*** END OF TEST 6 ***
+
+NOTE:  The prints from TA2 may not be as regular as indicated in the screen.
+       The important point is that TA2 is running and gets restarted.

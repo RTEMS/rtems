@@ -1,0 +1,31 @@
+Hey I'm in base class constructor number 1 for 0x400010cc.
+Hey I'm in base class constructor number 2 for 0x400010d4.
+Hey I'm in derived class constructor number 3 for 0x400010d4.
+
+
+*** CONSTRUCTOR/DESTRUCTOR TEST ***
+Hey I'm in base class constructor number 4 for 0x4009ee08.
+Hey I'm in base class constructor number 5 for 0x4009ee10.
+Hey I'm in base class constructor number 6 for 0x4009ee18.
+Hey I'm in base class constructor number 7 for 0x4009ee20.
+Hey I'm in derived class constructor number 8 for 0x4009ee20.
+Testing a C++ I/O stream
+Hey I'm in derived class destructor number 8 for 0x4009ee20.
+Derived class - Instantiation order 8
+Hey I'm in base class destructor number 7 for 0x4009ee20.
+Instantiation order 8
+Hey I'm in base class destructor number 6 for 0x4009ee18.
+Instantiation order 6
+Hey I'm in base class destructor number 5 for 0x4009ee10.
+Instantiation order 5
+Hey I'm in base class destructor number 4 for 0x4009ee08.
+Instantiation order 5
+*** END OF CONSTRUCTOR/DESTRUCTOR TEST ***
+
+
+Hey I'm in derived class destructor number 3 for 0x400010d4.
+Derived class - Instantiation order 3
+Hey I'm in base class destructor number 2 for 0x400010d4.
+Instantiation order 3
+Hey I'm in base class destructor number 1 for 0x400010cc.
+Instantiation order 1
