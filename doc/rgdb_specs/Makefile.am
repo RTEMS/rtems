@@ -78,4 +78,3 @@ noinst_DATA = layers.eps process.eps seqdetach.eps seqbreak.eps seqinit.eps
 EXTRA_DIST = comm.t conclusion.t daemon.t gdbinternals.t interfacing.t \
     intro.t objectives.t revision.t $(noinst_DATA) $(JPEG_FILES)
 CLEANFILES += rgdb_specs.info
-

@@ -1,3 +1,7 @@
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* system.h: Remove USE_INLINES.

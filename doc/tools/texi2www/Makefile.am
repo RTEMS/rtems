@@ -6,7 +6,6 @@
 #  $Id$
 #
 
-
 noinst_SCRIPTS = texi2www texi2dvi
 
 EXTRA_DIST = $(noinst_SCRIPTS) dir-arrow.gif prev-arrow.gif \

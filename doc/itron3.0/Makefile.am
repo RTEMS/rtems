@@ -101,4 +101,3 @@ EXTRA_DIST = config.t eventflags.t fixedblock.t interrupt.t mailbox.t \
     task.t tasksync.t time.t $(noinst_SCRIPTS)
 
 CLEANFILES += itron.info itron.info-?
-

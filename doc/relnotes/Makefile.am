@@ -20,4 +20,3 @@ info_TEXINFOS = relnotes.texi
 relnotes_TEXINFOS = $(FILES) $(COMMON_FILES)
 
 CLEANFILES += relnotes.info
-

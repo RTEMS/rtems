@@ -75,4 +75,3 @@ EXTRA_DIST = adminiface.t base.t confspace.t cpuuse.t dumpcontrol.t error.t \
     $(noinst_SCRIPTS)
 
 CLEANFILES += new_chapters.info new_chapters.info-?
-

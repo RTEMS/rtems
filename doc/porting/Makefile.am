@@ -80,4 +80,3 @@ EXTRA_DIST = codetuning.t cpuinit.t cpumodels.t developtools.t idlethread.t \
     taskcontext.t
 
 CLEANFILES += porting.info porting.info-?
-

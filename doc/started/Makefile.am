@@ -90,4 +90,3 @@ CLEANFILES += tversions.texi
 DISTCLEANFILES = tversions.sed
 
 CLEANFILES += started.info started.info-?
-

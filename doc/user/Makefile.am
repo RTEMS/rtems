@@ -164,4 +164,3 @@ EXTRA_DIST = bsp.t concepts.t clock.t datatypes.t conf.t dpmem.t event.t \
     $(EPS_IMAGES) $(noinst_DATA)
 
 CLEANFILES += c_user.info c_user.info-? c_user.info-??
-

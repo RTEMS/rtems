@@ -13,4 +13,3 @@ SUBDIRS += sparc
 SUBDIRS += template
 
 EXTRA_DIST = supplement.am
-

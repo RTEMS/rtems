@@ -37,4 +37,3 @@ $(srcdir)/utils.texi: utils.t
 	    -n "Command and Variable Index" < $< > $@
 
 CLEANFILES += develenv.info
-
