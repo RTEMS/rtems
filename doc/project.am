@@ -1,6 +1,8 @@
 ## $Id$
 
+# HACK: makeinfo is locale sensitive 
 LANG=C
+
 SUFFIXES = .t
 
 MAINTAINERCLEANFILES =
@@ -8,6 +10,16 @@ CLEANFILES =
 MOSTLYCLEANFILES =
 CLEANFILES += $(PROJECT) $(PROJECT)-[0-9] $(PROJECT)-[0-9][0-9]
 CLEANFILES += $(GENERATED_FILES)
+
+AM_MAKEINFOFLAGS = -I $(top_builddir) -I $(top_srcdir)
+TEXI2DVI = @TEXI2DVI@ -I $(top_builddir) -I $(top_srcdir)
+TEXI2PDF = @TEXI2PDF@ -I $(top_builddir) -I $(top_srcdir)
+
+# Without $(srcdir) in TEXINPUTS, dvips doesn't find the *.eps
+# we distribute in $(srcdir)
+.dvi.ps:
+	TEXINPUTS="$(srcdir)${PATH_SEPARATOR}$$TEXINPUTS" \
+	$(DVIPS) -o $@ $<
 
 ## DVI support
 dvidir = $(pkgdocdir)/dvi
@@ -59,7 +71,6 @@ endif # USE_DVI
 if USE_PS
 ps_DATA = $(PROJECT).ps
 endif # USE_PS
-
 
 if USE_PDF
 pdf_DATA = $(PROJECT).pdf

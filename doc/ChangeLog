@@ -1,3 +1,10 @@
+2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* main.am: Remove AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF.
+	Append -I $(top_builddir) to TEXI2WWW_ARGS.
+	* project.am: Add AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF.
+	Override automake's .dvi.ps:-rule.
+
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* project.am, main.am: Use automake rules to build ps, pdf, info.

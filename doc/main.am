@@ -1,11 +1,8 @@
-AM_MAKEINFOFLAGS = -I $(top_builddir) -I $(top_srcdir)
-TEXI2DVI = @TEXI2DVI@ -I $(top_builddir) -I $(top_srcdir)
-TEXI2PDF = @TEXI2PDF@ -I $(top_builddir) -I $(top_srcdir)
 
 html_projectdir = $(htmldir)/$(PROJECT)
 
 TEXI2WWW_ARGS=\
--I $(srcdir) -I $(top_srcdir) \
+-I $(srcdir) -I $(top_srcdir) -I $(top_builddir) \
 -dirfile ../index.html \
 -header rtems_header.html \
 -footer rtems_footer.html \
