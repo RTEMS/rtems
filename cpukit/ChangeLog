@@ -1,5 +1,11 @@
 2004-10-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libcsupport/include/rtems/_inttypes.h: Undefine __PRIN defines.
+	* libcsupport/include/rtems/_stdint.h: Apply GNUC-limits to GCC >= 3.3, only.
+	Add _rtems_*_t_defined defines. Add extern "C".
+
+2004-10-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libcsupport/include/rtems/_stdint.h: New.
 	* libcsupport/include/rtems/_inttypes.h: New.
 	* libcsupport/Makefile.am: Reflect changes above.

@@ -26,6 +26,7 @@
 #define PRIx8	__PRI8(x)
 #define PRIX8	__PRI8(X)
 
+#undef __PRI8
 
 /* 16-bit types */
 #define __PRI16(x) __STRINGIFY(x)
@@ -36,6 +37,8 @@
 #define PRIu16	__PRI16(u)
 #define PRIx16	__PRI16(x)
 #define PRIX16	__PRI16(X)
+
+#undef __PRI16
 
 /* 32-bit types */
 #if defined(__rtems_long32)
@@ -51,6 +54,7 @@
 #define PRIx32	__PRI32(x)
 #define PRIX32	__PRI32(X)
 
+#undef __PRI32
 
 /* 64-bit types */
 #if defined(__rtems_longlong64)
@@ -67,5 +71,8 @@
 #define PRIu64	__PRI64(u)
 #define PRIx64	__PRI64(x)
 #define PRIX64	__PRI64(X)
+
+#undef __STRINGIFY
+#undef __PRI64
 
 #endif /* __rtems__inttypes_h */
