@@ -37,8 +37,7 @@ preinstall:
 	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)
 	@$(INSTALL_CHANGE) -m 644 $(MPC860_H_FILES) $(PROJECT_INCLUDE)/mpc860
 
-all: FORCEIT
-	cd ../../../../libbsp/$(RTEMS_CPU)/@RTEMS_BSP@/include; $(MAKE) all
+all: 
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
