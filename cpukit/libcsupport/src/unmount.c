@@ -42,96 +42,11 @@ int search_mt_for_mount_point(
   rtems_filesystem_location_info_t *location_of_mount_point
 );
 
-
-int file_systems_below_this_mountpoint( 
-  const char                            *path,
-  rtems_filesystem_location_info_t      *temp_loc,
-  rtems_filesystem_mount_table_entry_t  *temp_mt_entry
-);
-
-/*
- *  unmount
- * 
- *  This routine will attempt to unmount the file system that has been
- *  is mounted a path.  If the operation is successful, 0 will
- *  be returned to the calling routine.  Otherwise, 1 will be returned.
- */
-
-int unmount(
-  const char *path
-)
-{
-  int                                   status;
-  rtems_filesystem_location_info_t      fs_root_loc;
-  rtems_filesystem_mount_table_entry_t  temp_mt_entry;
-
-  /*
-   *  Are there any file systems below the path specified
-   */
-
-  status = file_systems_below_this_mountpoint( 
-    path, 
-    &fs_root_loc,
-    &temp_mt_entry
-  );
-
-  if ( status != 0 )
-    return -1;
-
-  /*
-   *  Is the current node reference pointing to a node in the file system
-   *  we are attempting to unmount ?
-   */
-
-  if ( rtems_filesystem_current.mt_entry == fs_root_loc.mt_entry ) {
-    rtems_filesystem_freenode( &fs_root_loc );
-    set_errno_and_return_minus_one( EBUSY );
-  }
-
-  /*
-   *  Run the file descriptor table to determine if there are any file
-   *  descriptors that are currently active and reference nodes in the
-   *  file system that we are trying to unmount 
-   */
-
-  if ( rtems_libio_is_open_files_in_fs( fs_root_loc.mt_entry ) == 1 ) {
-    rtems_filesystem_freenode( &fs_root_loc );
-    set_errno_and_return_minus_one( EBUSY );
-  }
-  
-  /*
-   * Allow the file system being unmounted on to do its cleanup.
-   */
-
-  if ((temp_mt_entry.mt_point_node.ops->unmount_h )( fs_root_loc.mt_entry ) != 0 ) {
-    rtems_filesystem_freenode( &fs_root_loc );
-    return -1;
-  }
-
-  /*
-   * Run the unmount function for the subordinate file system.
-   */
-
-  if ((temp_mt_entry.mt_fs_root.ops->fsunmount_me_h )( fs_root_loc.mt_entry ) != 0){
-    rtems_filesystem_freenode( &fs_root_loc );
-    return -1;
-  }
-
-  /*
-   *  Extract the mount table entry from the chain
-   */
-
-  Chain_Extract( ( Chain_Node * ) fs_root_loc.mt_entry );
-
-  /*
-   *  Free the memory associated with the extracted mount table entry.
-   */
-
-  rtems_filesystem_freenode( &fs_root_loc.mt_entry->mt_point_node );
-  free( fs_root_loc.mt_entry );
-  rtems_filesystem_freenode( &fs_root_loc );
-
-  return 0;
+rtems_boolean rtems_filesystem_nodes_equal( 
+  const rtems_filesystem_location_info_t   *loc1,
+  const rtems_filesystem_location_info_t   *loc2
+){
+  return ( loc1->node_access == loc2->node_access );
 }
 
 
@@ -147,7 +62,7 @@ int unmount(
  *  the root node of the file system being unmounted.
  */
 
-int file_systems_below_this_mountpoint( 
+rtems_boolean file_systems_below_this_mountpoint( 
   const char                            *path,
   rtems_filesystem_location_info_t      *fs_root_loc,
   rtems_filesystem_mount_table_entry_t  *fs_to_unmount
@@ -155,23 +70,6 @@ int file_systems_below_this_mountpoint(
 {
   Chain_Node                           *the_node;
   rtems_filesystem_mount_table_entry_t *the_mount_entry;
-
-  /*
-   *  Is the path even a valid node name in the existing tree?
-   */
-
-  if ( rtems_filesystem_evaluate_path( path, 0x0, fs_root_loc, TRUE ) )
-    return -1;
-  
-  /*
-   * Verify this is the root node for the file system to be unmounted.
-   */
-
-  *fs_to_unmount = *fs_root_loc->mt_entry;
-  if ( fs_to_unmount->mt_fs_root.node_access != fs_root_loc->node_access ){
-    rtems_filesystem_freenode(fs_root_loc);
-    set_errno_and_return_minus_one( EACCES );
-  }
 
   /*
    * Search the mount table for any mount entries referencing this
@@ -183,10 +81,140 @@ int file_systems_below_this_mountpoint(
         the_node = the_node->next ) {
      the_mount_entry = ( rtems_filesystem_mount_table_entry_t * )the_node;
      if (the_mount_entry->mt_point_node.mt_entry  == fs_root_loc->mt_entry ) {
-        rtems_filesystem_freenode(fs_root_loc);  
-        set_errno_and_return_minus_one( EBUSY );
+        return TRUE;
      }
   }
 
+  return FALSE;
+}
+
+/*
+ *  unmount
+ * 
+ *  This routine will attempt to unmount the file system that has been
+ *  is mounted a path.  If the operation is successful, 0 will
+ *  be returned to the calling routine.  Otherwise, 1 will be returned.
+ */
+
+int unmount(
+  const char *path
+)
+{
+  rtems_filesystem_location_info_t      loc;
+  rtems_filesystem_location_info_t     *fs_root_loc;
+  rtems_filesystem_location_info_t     *fs_mount_loc;
+  rtems_filesystem_mount_table_entry_t *mt_entry;
+
+  /*
+   *  Get
+   *    The root node of the mounted filesytem.
+   *    The node for the directory that the fileystem is mounted on.
+   *    The mount entry that is being refered to.
+   */
+
+  if ( rtems_filesystem_evaluate_path( path, 0x0, &loc, TRUE ) )
+    return -1;
+
+  mt_entry     = loc.mt_entry;
+  fs_mount_loc = &mt_entry->mt_point_node;
+  fs_root_loc  = &mt_entry->mt_fs_root;
+	
+  /*
+   * Verify this is the root node for the file system to be unmounted.
+   */
+
+  if ( !rtems_filesystem_nodes_equal( fs_root_loc, &loc) ){
+    rtems_filesystem_freenode( &loc );
+    set_errno_and_return_minus_one( EACCES );
+  }
+
+  /*
+   * Free the loc node and just use the nodes from the mt_entry .
+   */
+
+  rtems_filesystem_freenode( &loc );
+
+  /*
+   * Verify Unmount is supported by both filesystems.
+   */
+
+  if ( !fs_mount_loc->ops->unmount_h )
+    set_errno_and_return_minus_one( ENOTSUP );
+
+  if ( !fs_root_loc->ops->fsunmount_me_h )
+    set_errno_and_return_minus_one( ENOTSUP );
+
+
+  /*
+   *  Verify the current node is not in this filesystem.
+   *  XXX - Joel I have a question here wasn't code added
+   *        that made the current node thread based instead
+   *        of system based?  I thought it was but it doesn't
+   *        look like it in this version.
+   */
+
+  if ( rtems_filesystem_current.mt_entry == mt_entry )
+    set_errno_and_return_minus_one( EBUSY );
+
+  /*
+   *  Verify there are no file systems below the path specified
+   */
+
+  if ( file_systems_below_this_mountpoint( path, fs_root_loc, mt_entry ) != 0 )
+    set_errno_and_return_minus_one( EBUSY );
+
+  /*
+   *  Run the file descriptor table to determine if there are any file
+   *  descriptors that are currently active and reference nodes in the
+   *  file system that we are trying to unmount 
+   */
+
+  if ( rtems_libio_is_open_files_in_fs( mt_entry ) == 1 ) 
+    set_errno_and_return_minus_one( EBUSY );
+  
+  /*
+   * Allow the file system being unmounted on to do its cleanup.
+   * If it fails it will set the errno to the approprate value
+   * and the fileystem will not be modified.
+   */
+
+  if (( fs_mount_loc->ops->unmount_h )( mt_entry ) != 0 )
+    return -1;
+
+  /*
+   *  Allow the mounted filesystem to unmark the use of the root node.
+   *
+   *  Run the unmount function for the subordinate file system.
+   *
+   *  If we fail to unmount the filesystem remount it on the base filesystems
+   *  directory node.
+   *
+   *  NOTE:  Fatal error is called in a case which should never happen
+   *         This was response was questionable but the best we could 
+   *         come up with.
+   */
+
+  if ((fs_root_loc->ops->fsunmount_me_h )( mt_entry ) != 0){
+    if (( fs_mount_loc->ops->mount_h )( mt_entry ) != 0 )
+      rtems_fatal_error_occurred( 0 );
+    return -1;
+  }
+
+  /*
+   *  Extract the mount table entry from the chain
+   */
+
+  Chain_Extract( ( Chain_Node * ) mt_entry );
+
+  /*
+   *  Free the memory node that was allocated in mount
+   *  Free the memory associated with the extracted mount table entry.
+   */
+
+  rtems_filesystem_freenode( fs_mount_loc );
+  free( mt_entry );
+
   return 0;
 }
+
+

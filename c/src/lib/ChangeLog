@@ -1,5 +1,12 @@
 2001-10-25	Jennifer Averett <jennifer@OARcorp.com>
 
+	* libc/unmount.c: Primarily restructuring and clean up to address
+	procedures which did not do what their name implied.  Also addressed
+	problem situation where unmount fails and the filesystem was 
+	inconsistent.  The mounted filesystem could have been left hanging.
+
+2001-10-25	Jennifer Averett <jennifer@OARcorp.com>
+
 	* libc/libio.c: Initialize more fields to NULL/0 during initialiation.
 	* include/rtems/libio_.h: Fix freenode macro so it works for sockets
 	which do not have the full set of filesystem operations and are 
