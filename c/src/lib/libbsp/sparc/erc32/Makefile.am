@@ -12,6 +12,7 @@ SUBDIRS = . start startup gnatsupp console clock timer erc32sonic wrapup \
 include $(top_srcdir)/../../bsp.am
 
 include_HEADERS += include/erc32.h
+include_HEADERS += include/coverhd.h
 
 all-local: $(PREINSTALL_FILES)
 
@@ -20,6 +21,10 @@ EXTRA_DIST = times
 $(PROJECT_INCLUDE)/erc32.h: include/erc32.h
 	$(INSTALL_DATA) $< $@
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/erc32.h
+
+$(PROJECT_INCLUDE)/coverhd.h.h: include/coverhd.h.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
