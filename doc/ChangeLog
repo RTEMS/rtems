@@ -1,3 +1,8 @@
+2004-11-05	Joel Sherrill <joel@OARcorp.com>
+
+	PR 706/doc
+	* user/task.t: Remove not that changes explanation.
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac, index.html.in, FAQ/basic.t, FAQ/basic.texi, FAQ/entry,
