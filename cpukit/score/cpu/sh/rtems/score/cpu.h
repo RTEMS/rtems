@@ -130,7 +130,7 @@ extern "C" {
  *
  *  We currently support sh1 only, which has no FPU, other SHes have an FPU
  *
- *  The macro name "NO_CPU_HAS_FPU" should be made CPU specific.
+ *  The macro name "SH_HAS_FPU" should be made CPU specific.
  *  It indicates whether or not this CPU model has FP support.  For
  *  example, it would be possible to have an i386_nofp CPU model
  *  which set this to false to indicate that you have an i386 without

@@ -46,7 +46,7 @@ extern "C" {
  *  _Thread_Dispatch.  If the enable dispatch is inlined, then
  *  one subroutine call is avoided entirely.]
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -70,7 +70,7 @@ extern "C" {
  *  code is the longest interrupt disable period in RTEMS.  So it is
  *  necessary to strike a balance when setting this parameter.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -100,7 +100,7 @@ extern "C" {
  *  is unclear what that would imply about the interrupt processing
  *  procedure on that CPU.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -121,7 +121,7 @@ extern "C" {
  *  is unclear what that would imply about the interrupt processing
  *  procedure on that CPU.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -137,7 +137,7 @@ extern "C" {
  *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE
  *  or CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -149,7 +149,7 @@ extern "C" {
  *  a pointer to the saved interrupt frame (1) or just the vector 
  *  number (0)?
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -165,7 +165,7 @@ extern "C" {
  *  If there is a FP coprocessor such as the i387 or mc68881, then
  *  the answer is TRUE.
  *
- *  The macro name "NO_CPU_HAS_FPU" should be made CPU specific.
+ *  The macro name "AVR_HAS_FPU" should be made CPU specific.
  *  It indicates whether or not this CPU model has FP support.  For
  *  example, it would be possible to have an i386_nofp CPU model
  *  which set this to false to indicate that you have an i386 without
@@ -177,12 +177,12 @@ extern "C" {
  *  is very tool specific and the state saved/restored is also
  *  compiler specific.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
 
-#if ( NO_CPU_HAS_FPU == 1 )
+#if ( AVR_HAS_FPU == 1 )
 #define CPU_HARDWARE_FP     TRUE
 #else
 #define CPU_HARDWARE_FP     FALSE
@@ -209,7 +209,7 @@ extern "C" {
  *
  *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -227,7 +227,7 @@ extern "C" {
  *  the IDLE task from an interrupt because the floating point context
  *  must be saved as part of the preemption.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -259,7 +259,7 @@ extern "C" {
  *  Thus in a system with only one FP task, the FP context will never
  *  be saved or restored.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -286,7 +286,7 @@ extern "C" {
  *    2.  CPU dependent (if provided)
  *    3.  generic (if no BSP and no CPU dependent)
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -300,7 +300,7 @@ extern "C" {
  *  If TRUE, then the grows upward.
  *  If FALSE, then the grows toward smaller addresses.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -326,7 +326,7 @@ extern "C" {
  *         used so it will stay in the cache and used frequently enough
  *         in the executive to justify turning this on.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -337,7 +337,7 @@ extern "C" {
  *  Define what is required to specify how the network to host conversion
  *  routines are handled.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -351,7 +351,7 @@ extern "C" {
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -361,7 +361,7 @@ extern "C" {
 /*
  *  Processor defined structures required for cpukit/score.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -402,7 +402,7 @@ extern "C" {
  *  this is enough information for RTEMS, it is probably not enough for
  *  a debugger such as gdb.  But that is another problem.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -425,7 +425,7 @@ typedef struct {
  *  The following table contains the information required to configure
  *  the XXX processor specific parameters.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -449,15 +449,15 @@ typedef struct {
  *  Macros to access required entires in the CPU Table are in 
  *  the file rtems/system.h.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
 
 /*
- *  Macros to access NO_CPU specific additions to the CPU Table
+ *  Macros to access AVR specific additions to the CPU Table
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -470,7 +470,7 @@ typedef struct {
  *  _CPU_Initialize and copied into the task's FP context area during
  *  _CPU_Context_Initialize.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -489,7 +489,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *  NOTE: These two variables are required if the macro
  *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -506,7 +506,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  can make it easier to invoke that routine at the end of the interrupt
  *  sequence (if a dispatch is necessary).
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -516,7 +516,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -529,7 +529,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  area is not defined -- only the size is.  This is usually on
  *  CPUs with a "floating point save context" instruction.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -541,7 +541,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  MPCI receive server thread.  Remember that in a multiprocessor
  *  system this thread must exist and be able to process all directives.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -552,7 +552,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  This defines the number of entries in the ISR_Vector_table managed
  *  by RTEMS.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -571,7 +571,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  Should be large enough to run all RTEMS tests.  This insures
  *  that a "reasonable" small application should not have any problems.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -582,7 +582,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -608,7 +608,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *         have to be greater or equal to than CPU_ALIGNMENT to ensure that
  *         elements allocated from the heap meet all restrictions.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -626,7 +626,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  NOTE:  This does not have to be a power of 2.  It does have to
  *         be greater or equal to than CPU_ALIGNMENT.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -641,7 +641,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -655,7 +655,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  Support routine to initialize the RTEMS vector table after it is allocated.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -666,7 +666,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -681,7 +681,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  This indicates the end of an RTEMS critical section.  The parameter
  *  _level is not modified.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -696,7 +696,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  sections into two or more parts.  The parameter _level is not
  * modified.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -717,7 +717,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  The get routine usually must be implemented as a subroutine.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -752,7 +752,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *        FPU may be easily disabled by software such as on the SPARC
  *        where the PSR contains an enable FPU bit.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -771,7 +771,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  not work if restarting self conflicts with the stack frame
  *  assumptions of restoring a context.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -792,7 +792,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  a "dump context" instruction which could fill in from high to low
  *  or low to high based on the whim of the CPU designers.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -811,7 +811,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  Other models include (1) not doing anything, and (2) putting
  *  a "null FP status word" in the correct place in the FP context.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -830,7 +830,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  location or a register, optionally disables interrupts, and
  *  halts/stops the CPU.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -897,7 +897,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *    where bit_set_table[ 16 ] has values which indicate the first
  *      bit set
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -921,7 +921,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  as searched by _CPU_Bitfield_Find_first_bit().  See the discussion
  *  for that routine.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -939,7 +939,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  a major or minor component of a priority.  See the discussion
  *  for that routine.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -960,7 +960,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  This routine performs CPU dependent initialization.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -976,7 +976,7 @@ void _CPU_Initialize(
  *  This routine installs a "raw" interrupt handler directly into the 
  *  processor's vector table.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -992,7 +992,7 @@ void _CPU_ISR_install_raw_handler(
  *
  *  This routine installs an interrupt vector.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -1011,7 +1011,7 @@ void _CPU_ISR_install_vector(
  *  NOTE:  It need only be provided if CPU_HAS_HARDWARE_INTERRUPT_STACK
  *         is TRUE.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -1026,7 +1026,7 @@ void _CPU_Install_interrupt_stack( void );
  *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
  *         is TRUE.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -1038,7 +1038,7 @@ void _CPU_Thread_Idle_body( void );
  *
  *  This routine switches from the run context to the heir context.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -1056,7 +1056,7 @@ void _CPU_Context_switch(
  *
  *  NOTE: May be unnecessary to reload some registers.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -1070,7 +1070,7 @@ void _CPU_Context_restore(
  *
  *  This routine saves the floating point context passed to it.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -1084,7 +1084,7 @@ void _CPU_Context_save_fp(
  *
  *  This routine restores the floating point context passed to it.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
@@ -1112,7 +1112,7 @@ void _CPU_Context_restore_fp(
  *  endianness for ALL fetches -- both code and data -- so the code
  *  will be fetched incorrectly.
  *
- *  NO_CPU Specific Information:
+ *  AVR Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */

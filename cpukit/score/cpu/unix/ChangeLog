@@ -1,3 +1,7 @@
+2005-02-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/cpu.h: Remove traces from NO_CPU.
+
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Split out preinstallation rules.

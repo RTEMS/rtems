@@ -155,7 +155,7 @@ extern "C" {
  *  If there is a FP coprocessor such as the i387 or mc68881, then
  *  the answer is TRUE.
  *
- *  The macro name "NO_CPU_HAS_FPU" should be made CPU specific.
+ *  The macro name "H8300_HAS_FPU" should be made CPU specific.
  *  It indicates whether or not this CPU model has FP support.  For
  *  example, it would be possible to have an i386_nofp CPU model
  *  which set this to false to indicate that you have an i386 without
