@@ -1,3 +1,12 @@
+2004-02-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove AUTOMAKE_FILES.
+	Cleanup duplicate ACLOCAL_FILES.
+	EXTRA_DIST += config-ml.in.
+	DIST_SUBDIRS += make.
+	Add dist-hook.
+	* configure.ac: Add dist-bzip2 no-dist-gzip to AUTOMAKE_OPTIONS.
+
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootstrap: RTEMS_CHECK_BSPDIR(RTEMS_BSP_FAMILY).
