@@ -2,8 +2,8 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.8.2
-%define srcvers	1.8.2
+%define rpmvers 1.8.3
+%define srcvers	1.8.3
 %define amvers  1.8
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
@@ -29,7 +29,7 @@ Copyright:    GPL
 Group:        @rpmgroup@
 Autoreqprov:  on
 Version:      %{rpmvers}
-Release:      2
+Release:      1
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
