@@ -59,7 +59,7 @@ include/rdbg/i386/Makefile
 include/rdbg/powerpc/Makefile
 src/Makefile
 src/i386/Makefile
-src/i386/pc386/Makefile
+src/i386/any/Makefile
 src/powerpc/Makefile
 src/powerpc/mcp750/Makefile
 )

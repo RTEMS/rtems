@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS = pc386
+SUBDIRS = any
 
 EXTRA_DIST = \
 excep_f.c rdbg_cpu_asm.S rdbg_f.c
