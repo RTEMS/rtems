@@ -66,7 +66,7 @@ ssize_t write(
 
 #include <reent.h>
 
-long _write_r(
+_ssize_t _write_r(
   struct _reent *ptr,
   int            fd,
   const void    *buf,
