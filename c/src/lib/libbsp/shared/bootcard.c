@@ -73,11 +73,11 @@ int boot_card(int argc, char **argv)
 
   BSP_Configuration       = Configuration;
 
-  BSP_RTEMS_Configuration = *Configuration->rtems_api_configuration;
+  BSP_RTEMS_Configuration = *Configuration.RTEMS_api_configuration;
   BSP_Configuration.RTEMS_api_configuration = &BSP_RTEMS_Configuration;
 
 #ifdef RTEMS_POSIX_API
-  BSP_POSIX_Configuration = *Configuration->posix_api_configuration;
+  BSP_POSIX_Configuration = *Configuration.POSIX_api_configuration;
   BSP_Configuration.POSIX_api_configuration = &BSP_POSIX_Configuration;
 #endif
 
