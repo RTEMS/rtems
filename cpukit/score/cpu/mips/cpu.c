@@ -99,7 +99,7 @@ unsigned32 _CPU_ISR_Get_level( void )
 
   mips_get_sr(sr);
 
-  //printf("current sr=%08X, ",sr);
+  /* printf("current sr=%08X, ",sr); */
 
 #if __mips == 3
 /* EXL bit and shift down hardware ints into bits 1 thru 6 */
@@ -112,7 +112,7 @@ unsigned32 _CPU_ISR_Get_level( void )
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
-  //printf("intlevel=%02X\n",sr);
+  /* printf("intlevel=%02X\n",sr); */
   return sr;
 }
 

@@ -1,3 +1,8 @@
+2004-04-09	Joel Sherrill <joel@OARcorp.com>
+
+	PR 605/bsps
+	* cpu.c: Do not use C++ style comments.
+
 2004-04-03	Art Ferrer <arturo.b.ferrer@nasa.gov>
 
 	PR 598/bsps
