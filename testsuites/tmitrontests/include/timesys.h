@@ -18,9 +18,10 @@
 /*
  *   How many times a particular operation is performed while timed.
  */
- 
+
+#ifndef OPERATION_COUNT 
 #define OPERATION_COUNT 100
-#define IT_COUNT        100
+#endif
 
 /* functions */
 

@@ -247,6 +247,20 @@ void  _Semaphore_Core_semaphore_mp_support (
   rtems_id        id
 );
 
+/*PAGE
+ *
+ *  _POSIX_Semaphore_MP_support
+ *
+ *  DESCRIPTION:
+ *
+ *  XXX
+ */
+
+void _POSIX_Semaphore_MP_support(
+  Thread_Control *the_thread,
+  Objects_Id      id
+);
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/sem.inl>
 #endif

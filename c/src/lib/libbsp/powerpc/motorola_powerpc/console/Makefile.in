@@ -14,7 +14,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = polled_io uart console inch
+C_PIECES = polled_io uart console inch console_reserve_resources
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

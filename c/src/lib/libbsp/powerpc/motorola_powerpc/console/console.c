@@ -45,10 +45,10 @@ extern int close(int fd);
  *	BSP_UART_COM2
  */
 
-int BSPConsolePort = BSP_UART_COM1;
+extern int BSPConsolePort;
 
 /* int BSPConsolePort = BSP_UART_COM2;  */
-int BSPBaseBaud    = 115200;
+extern int BSPBaseBaud;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
@@ -84,6 +84,7 @@ isr_is_on(const rtems_irq_connect_data *irq)
   return BSP_irq_enabled_at_i8259s(irq->name);
 }
 
+/*
 void console_reserve_resources(rtems_configuration_table *conf)
 {
     if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
@@ -93,6 +94,7 @@ void console_reserve_resources(rtems_configuration_table *conf)
    
   return;
 }
+*/
 
 void __assert (const char *file, int line, const char *msg)
 {

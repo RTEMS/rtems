@@ -62,7 +62,7 @@ typedef struct {
  *  process operation can be performed on another node.
  */
 
-void _POSIX_Semaphore_MP_Send_process_packet (
+void _POSIX_Semaphore_MP_Send_process_packet(
   POSIX_Semaphore_MP_Remote_operations  operation,
   Objects_Id                            semaphore_id,
   Objects_Name                          name,
@@ -78,7 +78,7 @@ void _POSIX_Semaphore_MP_Send_process_packet (
  *  directive operation can be initiated on another node.
  */
 
-int _POSIX_Semaphore_MP_Send_request_packet (
+int _POSIX_Semaphore_MP_Send_request_packet(
   POSIX_Semaphore_MP_Remote_operations  operation,
   Objects_Id                            semaphore_id,
   boolean                               wait,  /* XXX options */
@@ -94,7 +94,7 @@ int _POSIX_Semaphore_MP_Send_request_packet (
  *  directive can be performed on another node.
  */
 
-void _POSIX_Semaphore_MP_Send_response_packet (
+void _POSIX_Semaphore_MP_Send_response_packet(
   POSIX_Semaphore_MP_Remote_operations  operation,
   Objects_Id                        semaphore_id,
   Thread_Control                   *the_thread
@@ -110,7 +110,7 @@ void _POSIX_Semaphore_MP_Send_response_packet (
  *  the request from another node.
  */
 
-void _POSIX_Semaphore_MP_Process_packet (
+void _POSIX_Semaphore_MP_Process_packet(
   MP_packet_Prefix *the_packet_prefix
 );
 
@@ -124,7 +124,7 @@ void _POSIX_Semaphore_MP_Process_packet (
  *  the remote node must be informed of this.
  */
 
-void _POSIX_Semaphore_MP_Send_object_was_deleted (
+void _POSIX_Semaphore_MP_Send_object_was_deleted(
   Thread_Control *the_proxy
 );
 
@@ -138,7 +138,7 @@ void _POSIX_Semaphore_MP_Send_object_was_deleted (
  *  the remote node must be informed of this.
  */
 
-void _POSIX_Semaphore_MP_Send_extract_proxy (
+void _POSIX_Semaphore_MP_Send_extract_proxy(
   Thread_Control *the_thread
 );
 
@@ -150,7 +150,7 @@ void _POSIX_Semaphore_MP_Send_extract_proxy (
  *  This function is used to obtain a semaphore mp packet.
  */
 
-POSIX_Semaphore_MP_Packet *_POSIX_Semaphore_MP_Get_packet ( void );
+POSIX_Semaphore_MP_Packet *_POSIX_Semaphore_MP_Get_packet( void );
 
 #ifdef __cplusplus
 }

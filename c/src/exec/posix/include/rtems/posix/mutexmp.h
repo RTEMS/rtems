@@ -143,6 +143,19 @@ void _POSIX_Mutex_MP_Send_extract_proxy (
 );
 
 /*
+ *  _POSIX_Threads_mutex_MP_support
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine XXX
+ */
+
+void _POSIX_Threads_mutex_MP_support(
+  Thread_Control *the_thread,
+  Objects_Id      id
+);
+
+/*
  *  _POSIX_Mutex_MP_Get_packet
  *
  *  DESCRIPTION:
