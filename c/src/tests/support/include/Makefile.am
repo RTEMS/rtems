@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 project_bspdir = $(PROJECT_ROOT)/@RTEMS_BSP@
 
