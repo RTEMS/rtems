@@ -456,6 +456,7 @@ boolean _Objects_Compare_name_raw(
 typedef enum {
   OBJECTS_SUCCESSFUL,
   OBJECTS_INVALID_NAME,
+  OBJECTS_INVALID_ADDRESS,
   OBJECTS_INVALID_NODE
 } Objects_Name_to_id_errors;
 

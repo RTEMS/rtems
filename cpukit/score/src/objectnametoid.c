@@ -56,6 +56,9 @@ Objects_Name_to_id_errors _Objects_Name_to_id(
   unsigned32                 name_length;
   Objects_Name_comparators   compare_them;
 
+  if ( !id )
+    return OBJECTS_INVALID_ADDRESS;
+
   if ( name == 0 )
     return OBJECTS_INVALID_NAME;
 
