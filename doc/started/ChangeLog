@@ -1,3 +1,8 @@
+2003-10-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 513/doc
+	* started.texi: Rename to be non-language specific.
+
 2003-10-02	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, binaries.t, buildc.t, intro.t, nextstep.t, require.t,

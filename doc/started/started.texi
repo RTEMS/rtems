@@ -31,7 +31,7 @@
 @ifset use-ascii
 @dircategory RTEMS On-Line Manual
 @direntry
-* Getting Started with RTEMS for C/C++ Users: (started).
+* Getting Started with RTEMS: (started).
 @end direntry
 @end ifset
 
@@ -45,11 +45,11 @@
 @c @shorttitlepage Getting Started with RTEMS
 
 @setchapternewpage odd
-@settitle Getting Started with RTEMS for C/C++ Users
+@settitle Getting Started with RTEMS
 @titlepage
 @finalout
 
-@title Getting Started with RTEMS for C/C++ Users
+@title Getting Started with RTEMS
 @subtitle Edition @value{EDITION}, for @value{VERSION}
 @sp 1
 @subtitle @value{UPDATED}
@@ -74,7 +74,7 @@
 @node Top, Introduction, (dir), (dir)
 @top started
 
-This is the online version of the Getting Started with RTEMS for C/C++ Users.
+This is the online version of the Getting Started with RTEMS.
 
 @menu
 * Introduction::
