@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
 # C source names
 C_FILES = cpu.c

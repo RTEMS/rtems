@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 nobase_include_HEADERS = rtems/powerpc/cache.h \
     rtems/powerpc/debugmod.h

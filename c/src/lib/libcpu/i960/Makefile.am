@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 SUBDIRS = . i960ca i960ka i960rp
 

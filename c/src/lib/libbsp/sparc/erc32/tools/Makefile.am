@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
 transform =
 bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests

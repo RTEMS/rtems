@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
 noinst_SCRIPTS = coff2bin elf2exe
 

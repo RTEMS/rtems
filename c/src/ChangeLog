@@ -1,5 +1,9 @@
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Reflect having moved aclocal/.
+
+2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/bsp-alias.m4: New (Copied from ../../aclocal).
 	* aclocal/bsp-arg-enable.m4: New (Copied from ../../aclocal).
 	* aclocal/bsp-configure.m4: New (Copied from ../../aclocal).

@@ -3,7 +3,7 @@
 ##
 
 
-ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))

@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 # consolex is a predecessor of the termios and libchip concepts.
 # It is no longer being compiled into the source.

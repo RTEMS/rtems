@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 ## Descend into the $(RTEMS_BSP_FAMILY) directory
 ## Currently, the shared directory is not explicitly
