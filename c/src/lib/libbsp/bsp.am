@@ -9,17 +9,17 @@ nodist_include_HEADERS = include/bspopts.h
 
 PREINSTALL_FILES =
 
-$(PROJECT_RELEASE)/lib/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_RELEASE)/lib
-	@: > $(PROJECT_RELEASE)/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 
-$(PROJECT_RELEASE)/lib/bsp_specs: bsp_specs $(PROJECT_RELEASE)/lib/$(dirstamp)
+$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_RELEASE)/lib/bsp_specs
+PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 
 $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $@
