@@ -1,24 +1,4 @@
 /*
- *  File:       $RCSfile$
- *  Project:    PixelFlow
- *  Created:    94/11/29
- *  RespEngr:   tony bennett
- *  Revision:   $Revision$
- *  Last Mod:   $Date$
- *
- *  COPYRIGHT (c) 1994 by Division Incorporated
- *
- *  To anyone who acknowledges that this file is provided "AS IS"
- *  without any express or implied warranty:
- *      permission to use, copy, modify, and distribute this file
- *      for any purpose is hereby granted without fee, provided that
- *      the above copyright notice and this notice appears in all
- *      copies, and that the name of Division Incorporated not be
- *      used in advertising or publicity pertaining to distribution
- *      of the software without specific, written prior permission.
- *      Division Incorporated makes no representations about the
- *      suitability of this software for any purpose.
- *
  *  Description:
  *      HPPA fast spinlock semaphores based on LDCWX instruction.
  *      These semaphores are not known to RTEMS.
@@ -26,6 +6,12 @@
  *  TODO:
  *      Put node number in high 16 bits of flag??
  *      XXX: Need h_s_deallocate
+ *
+ *  COPYRIGHT (c) 1994 by Division Incorporated
+ *
+ *  The license and distribution terms for this file may in
+ *  the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
  */

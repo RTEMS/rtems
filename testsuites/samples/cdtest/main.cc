@@ -1,5 +1,4 @@
-/*  main
- *
+/*
  *  This routine is the initialization task for this test program.
  *  It is called from init_exec and has the responsibility for creating
  *  and starting the tasks that make up the test.  If the time of day
@@ -11,18 +10,11 @@
  *  Output parameters:  NONE
  *
  *  COPYRIGHT (c) 1994 by Division Incorporated
- *
  *  Based in part on OAR works.
- *  To anyone who acknowledges that this file is provided "AS IS"
- *  without any express or implied warranty:
- *      permission to use, copy, modify, and distribute this file
- *      for any purpose is hereby granted without fee, provided that
- *      the above copyright notice and this notice appears in all
- *      copies, and that the name of Division Incorporated not be
- *      used in advertising or publicity pertaining to distribution
- *      of the software without specific, written prior permission.
- *      Division Incorporated makes no representations about the
- *      suitability of this software for any purpose.
+ *
+ *  The license and distribution terms for this file may in
+ *  the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
  */
