@@ -1,5 +1,13 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* console/console-io.c, include/bsp.h, include/coverhd.h,
+	shmsupp/addrconv.c, shmsupp/getcfg.c, shmsupp/lock.c,
+	shmsupp/mpisr.c, startup/bspclean.c, startup/bspstart.c,
+	startup/linkcmds, startup/setvec.c, tools/psim, tools/runtest,
+	vectors/vectors.S: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* startup/bspstart.c: Removed incorrect statement about copyright
 	assignment.
 
