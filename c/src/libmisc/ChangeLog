@@ -1,3 +1,22 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* cpuuse/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* devnull/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* dummy/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* dumpbuf/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* monitor/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mw-fb/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rootfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtmonuse/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* shell/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* stackchk/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* untar/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-03-20	Chris Johns <ccj@acm.org>
 
 	* PR148.
