@@ -34,9 +34,9 @@ dist_project_lib_DATA += startup/linkcmds startup/gdbinit \
 EXTRA_PROGRAMS += startup.rel
 CLEANFILES += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c ../shared/m68kpretaskinghook.c startup/bspstart.c \
-    startup/init5206e.c ../../shared/bootcard.c ../../shared/main.c \
-    ../../shared/sbrk.c ../shared/setvec.c \
+    ../../shared/bsppost.c ../../m68k/shared/m68kpretaskinghook.c \
+    startup/bspstart.c startup/init5206e.c ../../shared/bootcard.c \
+    ../../shared/main.c ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

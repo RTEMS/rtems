@@ -25,10 +25,10 @@ EXTRA_PROGRAMS += startup.rel
 CLEANFILES += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../shared/m68kpretaskinghook.c ../../shared/main.c ../../shared/sbrk.c \
-    ../shared/setvec.c ../../shared/gnatinstallhandler.c \
-    ../shared/bspspuriousinit.c ../shared/m68000spurious.c \
-    startup/spurious_assistant.c
+    ../../m68k/shared/m68kpretaskinghook.c ../../shared/main.c \
+    ../../shared/sbrk.c ../../m68k/shared/setvec.c \
+    ../../shared/gnatinstallhandler.c ../../m68k/shared/bspspuriousinit.c \
+    ../../m68k/shared/m68000spurious.c startup/spurious_assistant.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

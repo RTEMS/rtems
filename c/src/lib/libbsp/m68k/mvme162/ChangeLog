@@ -1,5 +1,10 @@
 2004-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Pickup files from ../../m68k/shared instead of
+	../shared. Reformat.
+
+2004-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Pick up ../mvme167/network/network.c.
 
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
