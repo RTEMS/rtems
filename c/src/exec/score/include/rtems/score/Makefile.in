@@ -11,8 +11,6 @@ subdir = score/include/rtems/score
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-HAS_ITRON_API = @HAS_ITRON_API@
-
 VPATH = @srcdir@
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -40,6 +38,7 @@ TARGOPTS = targopts.h
 SRCS = $(H_FILES) $(TARGOPTS)
 
 RTEMS_USE_NEWLIB = @RTEMS_USE_NEWLIB@
+HAS_ITRON_API = @HAS_ITRON_API@
 
 #
 # Add your list of files to delete here.  The config files
