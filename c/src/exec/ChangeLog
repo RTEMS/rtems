@@ -1,3 +1,7 @@
+2000-09-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/rtems/Makefile.am: Use PROJECT_TOPdir in path to size_rtems.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/itron/Makefile.am, wrapup/posix/Makefile.am, 

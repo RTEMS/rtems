@@ -18,7 +18,7 @@ RTEMS_OBJS = $(wildcard ../../rtems/src/$(ARCH)/*.o)
 
 OBJS = $(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS)
 
-SIZE_RTEMS = $(SHELL) $(PROJECT_ROOT)/tools/cpu/generic/size_rtems
+SIZE_RTEMS = $(SHELL) $(PROJECT_TOPdir)/tools/cpu/generic/size_rtems
 
 $(LIB): ${OBJS}
 	$(make-library)
