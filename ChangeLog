@@ -1,3 +1,7 @@
+2004-07-14      Jay Monkman
+
+        * MAINTAINERS: Added Jay Monkman as ARM architecture maintainer
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Remove ENDIF. 

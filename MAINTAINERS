@@ -33,7 +33,7 @@ Networking		NAME-TBD		EMAIL-TBD
 
 			CPU Port Maintainers	(CPU alphabetical order)
 
-arm			NAME-TBD		EMAIL-TBD
+arm			Jay Monkman		jtm@lopingdog.com
 c4x			Joel Sherrill		joel.sherrill@OARcorp.com
 h8300			NAME-TBD		EMAIL-TBD
 i386			NAME-TBD		EMAIL-TBD
@@ -50,3 +50,4 @@ unix			NAME-TBD		EMAIL-TBD
 		    BSP Maintainers		(CPU/BSP alphabetical order)
 
 CPU/BSP			NAME-TBD		EMAIL-TBD
+edb7312  		Jay Monkman		jtm@lopingdog.com
