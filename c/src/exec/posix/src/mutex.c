@@ -223,6 +223,9 @@ int pthread_mutex_init(
   if ( attr ) the_attr = attr;
   else        the_attr = &_POSIX_Mutex_Default_attributes;
 
+  /* XXX need to check for NULL mutex */
+  /* XXX EBUSY if *mutex is a valid id */
+
   if ( !the_attr->is_initialized ) 
     return EINVAL;
 
@@ -262,7 +265,7 @@ int pthread_mutex_init(
  
   if ( !the_mutex ) {
     _Thread_Enable_dispatch();
-    return ENOMEM;
+    return EAGAIN;
   }
 
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED && 
