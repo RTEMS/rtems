@@ -1,7 +1,7 @@
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libtests.am: Use TMPINSTALL_FILES = to make automake-1.5 happy.
-	* rtems++/Makefile: Remove LD_LIBS.
+	* rtems++/Makefile.am: LD_FLAGS = -lrtems++.
 
 2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

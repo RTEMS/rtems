@@ -34,6 +34,8 @@ include $(top_srcdir)/libtests.am
 #
 
 if HAS_CXX
+LD_LIBS = -lrtems++
+
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-cxx-exe)
 
