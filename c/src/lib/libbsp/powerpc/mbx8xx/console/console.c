@@ -881,3 +881,24 @@ rtems_device_driver console_control(
 #endif
 }
 
+/*
+ *  Support routine for console-generic
+ */
+
+int mbx8xx_console_use_maximum_buffer_size(void)
+{
+#if NVRAM_CONFIGURE == 1
+  if ( (nvram->console_mode & 0x06) == 0x02 )
+    return 1;
+  else
+    return 0;
+#else
+#if UARTS_IO_MODE == 1
+  return 1;
+#else
+  return 0;
+#endif
+#endif
+
+}
+

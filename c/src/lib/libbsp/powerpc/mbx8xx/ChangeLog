@@ -1,3 +1,9 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c: Added BSP dependent routine
+	mbx8xx_console_use_maximum_buffer_size() required by mbx8xx
+	console-generic code.  This avoids libcpu use of bsp.h.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/Makefile.am, network/Makefile.am, startup/Makefile.am,
