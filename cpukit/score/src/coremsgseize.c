@@ -61,13 +61,13 @@ void _CORE_message_queue_Seize(
   void                            *buffer,
   unsigned32                      *size,
   boolean                          wait,
-  CORE_message_queue_Submit_types *priority,
   Watchdog_Interval                timeout
 )
 {
   ISR_Level                          level;
   CORE_message_queue_Buffer_control *the_message;
   Thread_Control                    *executing;
+  Thread_Control                    *the_thread;
 
   executing = _Thread_Executing;
   executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
@@ -77,10 +77,44 @@ void _CORE_message_queue_Seize(
 
     the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
     _ISR_Enable( level );
+
     *size = the_message->Contents.size;
-    *priority = the_message->priority;
-    _CORE_message_queue_Copy_buffer(the_message->Contents.buffer,buffer,*size );
-    _CORE_message_queue_Free_message_buffer(the_message_queue, the_message );
+    _Thread_Executing->Wait.count = the_message->priority;
+    _CORE_message_queue_Copy_buffer(the_message->Contents.buffer,buffer,*size);
+
+    /*
+     *  There could be a thread waiting to send a message.  If there
+     *  is not, then we can go ahead and free the buffer.
+     *
+     *  NOTE: If we note that the queue was not full before this receive,
+     *  then we can avoid this dequeue.
+     */
+
+    the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
+    if ( !the_thread ) {
+      _CORE_message_queue_Free_message_buffer( the_message_queue, the_message );
+      return;
+    }
+
+    /*
+     *  There was a thread waiting to send a message.  This code 
+     *  puts the messages in the message queue on behalf of the 
+     *  waiting task.
+     */
+
+    the_message->priority  = the_thread->Wait.count;
+    the_message->Contents.size = (unsigned32)the_thread->Wait.return_argument_1;
+    _CORE_message_queue_Copy_buffer(
+      the_thread->Wait.return_argument,
+      the_message->Contents.buffer,
+      the_message->Contents.size
+    );
+
+    _CORE_message_queue_Insert_message(
+       the_message_queue,
+       the_message,
+       the_message->priority
+    );
     return;
   }
 
@@ -95,6 +129,7 @@ void _CORE_message_queue_Seize(
   executing->Wait.id                 = id;
   executing->Wait.return_argument    = (void *)buffer;
   executing->Wait.return_argument_1  = (void *)size;
+  /* Wait.count will be filled in with the message priority */
   _ISR_Enable( level );
 
   _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
