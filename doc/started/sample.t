@@ -132,4 +132,4 @@ RTEMS specific to your BSP.  Building an RTEMS application
 for different BSPs is as simple as switching the
 setting of @code{RTEMS_MAKEFILE_PATH}.  This Makefile
 system is described in the file
-@code{@value{RTEMS-UNTAR}/make/README}.
+@code{make/README}.

@@ -93,7 +93,9 @@ of each component as well as any required RTEMS specific patches.
 @example
     FTP Site:    @value{RTEMS-FTPSITE}
     Directory:   @value{RTEMS-FTPDIR}/c_tools/source
+@ifset BUILDTOOLS-TAR
     File:        @value{BUILDTOOLS-TAR}
+@end ifset
 @ifset BINUTILS-RTEMSPATCH
     File:        @value{BINUTILS-RTEMSPATCH}
 @end ifset
@@ -602,7 +604,9 @@ of each component as well as any required RTEMS specific patches.
 @example
     FTP Site:    @value{RTEMS-FTPSITE}
     Directory:   @value{RTEMS-FTPDIR}/c_tools/source
+@ifset BUILDTOOLS-TAR
     File:        @value{BUILDTOOLS-TAR}
+@end ifset
 @ifset GDB-RTEMSPATCH
     File:        @value{GDB-RTEMSPATCH}
 @end ifset
