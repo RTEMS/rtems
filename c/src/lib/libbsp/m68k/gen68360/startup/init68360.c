@@ -69,14 +69,15 @@ void _Init68360 (void)
 
 	/*
 	 * Step 8: Initialize system protection
-	 *	Disable watchdog FIXME: Should use watchdog!!!!
-	 *	Watchdog causes system reset
-	 *	Slowest watchdog timeout
-	 *	Disable double bus fault monitor
-	 *	Enable bus monitor external
-	 *	1024 clocks for external timeout
+	 *      Enable watchdog
+	 *      Watchdog causes system reset
+	 *      Next-to-slowest watchdog timeout
+	 *          (21 seconds with 25 MHz oscillator)
+	 *      Enable double bus fault monitor
+	 *      Enable bus monitor for external cycles
+	 *      1024 clocks for external timeout
 	 */
-	m360.sypcr = 0x74;
+	 m360.sypcr = 0xEC;
 
 	/*
 	 * Step 9: Clear parameter RAM and reset communication processor module
@@ -368,14 +369,15 @@ void _Init68360 (void)
 
 	/*
 	 * Step 8: Initialize system protection
-	 *	Disable watchdog FIXME: Should use watchdog!!!!
-	 *	Watchdog causes system reset
-	 *	Slowest watchdog timeout
-	 *	Enable double bus fault monitor
-	 *	Enable bus monitor external
-	 *	128 clocks for external timeout
+	 *      Enable watchdog
+	 *      Watchdog causes system reset
+	 *      Next-to-slowest watchdog timeout
+	 *          (21 seconds with 25 MHz oscillator)
+	 *      Enable double bus fault monitor
+	 *      Enable bus monitor for external cycles
+	 *      1024 clocks for external timeout
 	 */
-	m360.sypcr = 0x7F;
+	 m360.sypcr = 0xEC;
 
 	/*
 	 * Step 9: Clear parameter RAM and reset communication processor module
@@ -497,7 +499,7 @@ void _Init68360 (void)
 	/*
 	 * Step 14: More system initialization
 	 * SDCR (Serial DMA configuration register)
-	 *	Disable SDMA during FREEZE
+	 *	Enable SDMA during FREEZE
 	 *	Give SDMA priority over all interrupt handlers
 	 *	Set DMA arbiration level to 4
 	 * CICR (CPM interrupt configuration register):
@@ -510,7 +512,7 @@ void _Init68360 (void)
 	 *	Vector base 128
 	 *	SCCs priority grouped at top of table
 	 */
-	m360.sdcr = M360_SDMA_FREEZE | M360_SDMA_SISM_7 | M360_SDMA_SAID_4;
+	m360.sdcr = M360_SDMA_SISM_7 | M360_SDMA_SAID_4;
 	m360.cicr = (3 << 22) | (2 << 20) | (1 << 18) | (0 << 16) |
 						(4 << 13) | (0x1F << 8) | (128);
 

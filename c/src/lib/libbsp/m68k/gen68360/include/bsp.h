@@ -121,6 +121,7 @@ void bsp_cleanup( void );
 void M360ExecuteRISC( rtems_unsigned16 command );
 void *M360AllocateBufferDescriptors( int count );
 void *M360AllocateRiscTimers( int count );
+extern char M360DefaultWatchdogFeeder;
 
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,

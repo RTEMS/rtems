@@ -51,9 +51,12 @@ volatile rtems_unsigned32 Clock_driver_ticks;
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
+char M360DefaultWatchdogFeeder = 1;
+
 /*
  * Periodic interval timer interrupt handler
  */
+
 rtems_isr
 Clock_isr (rtems_vector_number vector)
 {
@@ -62,6 +65,16 @@ Clock_isr (rtems_vector_number vector)
 	 * This works around a bug in Rev. B of the 68360
 	 */
 	m360.dpram0[0];
+
+	/*
+	 * Feed the watchdog
+	 * Application code can override this by
+	 * setting M360DefaultWatchdogFeeder to zero.
+	 */
+	if (M360DefaultWatchdogFeeder) {
+		m360.swsr = 0x55;
+		m360.swsr = 0xAA;
+	}
 
 	/*
 	 * Announce the clock tick
