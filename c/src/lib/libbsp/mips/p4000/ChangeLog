@@ -1,3 +1,8 @@
+2001-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* start/start.S: init_exc_vecs is now called mips_install_isr_entries.
+	* wrapup/Makefile.am: Corrected to reflect new libcpu structure.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

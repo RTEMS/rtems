@@ -173,7 +173,7 @@ FRAME(start,sp,0,ra)
 	bltu	v0, v1, 4b		/* clear out temp stack */
 	add	v0, 4 
 	
-	jal	init_exc_vecs		/* install exception handlers */ 
+	jal	mips_install_isr_entries/* install exception handlers */ 
 	nop				/* MUST do before memory probes */
 
 	la	v0, 5f
