@@ -1,3 +1,8 @@
+2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove optman/Makefile from CONFIG_FILES.
+	* Makefile.am: Remove optman from SUBDIRS.
+
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* optman/Makefile.am: Add multilib support. Remove ASM4FLAGS.

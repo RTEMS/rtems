@@ -53,7 +53,6 @@ AM_CONFIG_HEADER(src/config.h)
 AC_CONFIG_FILES([Makefile
 src/Makefile
 include/Makefile
-optman/Makefile
 inline/Makefile
 macros/Makefile
 ])
