@@ -94,7 +94,7 @@ limit on the value taken by the semaphore.
 
 @end table
 
-@subsection Building a Semaphore's Attribute Set
+@subsection Building a Semaphore Attribute Set
 
 In general, an attribute set is built by a bitwise OR
 of the desired attribute components.  The following table lists
