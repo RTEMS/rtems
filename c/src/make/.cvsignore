@@ -1,0 +1,17 @@
+Makefile
+Makefile.in
+Makefile.inc
+aclocal.m4
+bsp.cfg
+config.cache
+config.guess
+config.log
+config.status
+config.sub
+configure
+depcomp
+host.cfg
+install-sh
+main.cfg
+missing
+mkinstalldirs
