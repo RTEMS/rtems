@@ -898,6 +898,7 @@ m8xx_uart_smc_initialize (int minor)
   if ( (minor < SMC1_MINOR) || (minor > SMC2_MINOR) ) 
     return;
 
+  m8xx.sdcr = 0x01;                 /* as per section 16.10.2.1 MPC821UM/AD */
   /* Get the simode clock source bit values for 9600 bps */
   brg = m8xx_get_brg_clk(9600);
 
