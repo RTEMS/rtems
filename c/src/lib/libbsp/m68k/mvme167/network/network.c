@@ -1701,6 +1701,7 @@ int uti596_attach(
   /* Read the J1 header */
   j1 = (unsigned char)(lcsr->vector_base & 0xFF);
 
+#if defined(mvme167)
   if ( !(j1 & 0x10) ) {
   	/* Jumper J1-4 is on, configure from NVRAM */
   
@@ -1749,7 +1750,9 @@ int uti596_attach(
      */
     memcpy ((void *)sc->arpcom.ac_enaddr, pConfig->hardware_address, ETHER_ADDR_LEN);
   }
-  else {
+  else
+#endif
+  {
     /* We are not configuring from NVRAM (J1-4 is off), and there is no ethernet
      * address provided in the ifconfig struct, so it will be read from BBRAM at
      * $FFFC1F2C by default. [mvme167 manual p. 1-47]

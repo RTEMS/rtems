@@ -1,3 +1,8 @@
+2000-09-12	Joel Sherrill <joel@OARcorp.com>
+
+	* network/network.c (uti596_attach): Adjust cpp directives
+	and conditional braces so all cases compile.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am, console/Makefile.am, fatal/Makefile.am,
