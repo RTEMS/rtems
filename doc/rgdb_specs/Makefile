@@ -22,7 +22,6 @@ GENERATED_FILES= \
     intro.texi revision.texi objectives.texi gdbinternals.texi \
     interfacing.texi comm.texi daemon.texi conclusion.texi
 
-
 FILES=$(PROJECT).texi $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
@@ -60,15 +59,6 @@ clean:
 #
 #  Process Automatically Generated Files
 #
-
-@include intro.texi
-@include revision.texi
-@include objectives.texi
-@include gdbinternals.texi
-@include interfacing.texi
-@include comm.texi
-@include daemon.texi
-@include conclusion.texi
 
 intro.texi: intro.t Makefile
 	$(BMENU) -p "Top" \
