@@ -1,3 +1,8 @@
+2001-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/multilib.am: include @RTEMS_BSP@.cfg, cleanup.
+	* automake/lib.am: Add MULTISUBDIR.
+
 2001-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootstrap: Run autoheader when configure.ac contains
