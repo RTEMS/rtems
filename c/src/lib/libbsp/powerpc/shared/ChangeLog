@@ -1,0 +1,13 @@
+2000-09-29	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
+	* startup/linkcmds: Added lines so DWARF debug information
+	would be available.  Otherwise gdb complains that the offsets
+	for the debug info are incorrect and doesn't load the files.
+
+2000-09-05	Joel Sherrill <joel@OARcorp.com>
+
+	* start/start.S: Include proper files to compile.
+
+2000-08-10	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: New file.

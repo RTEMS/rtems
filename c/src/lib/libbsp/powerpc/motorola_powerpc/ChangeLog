@@ -1,0 +1,13 @@
+	for the debug info are incorrect and doesn't load the files.
+
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootloader/Makefile.am, clock/Makefile.am, console/Makefile.am,
+	irq/Makefile.am, motorola/Makefile.am, openpic/Makefile.am,
+	pci/Makefile.am, residual/Makefile.am, start/Makefile.am,
+	startup/Makefile.am, vectors/Makefile.am, wrapup/Makefile.am:
+	Include compile.am
+
+2000-08-10	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: New file.
