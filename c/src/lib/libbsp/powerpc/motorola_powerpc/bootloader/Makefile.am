@@ -28,8 +28,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 CFLAGS_DEBUG_V = $(CFLAGS_OPTIMIZE_V)
 
 AM_CPPFLAGS += -D__BOOT__ -DDEBUG -mrelocatable
-AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
-    -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata
+AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata
 
 IMAGES = rtems.gz
 
