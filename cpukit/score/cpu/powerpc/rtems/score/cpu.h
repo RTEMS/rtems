@@ -197,5 +197,82 @@ static inline  void PPC_Set_timebase_register (uint64_t tbr)
 }
 #endif /* ASM */
 
-#endif /* _RTEMS_SCORE_CPU_H */
+#ifndef ASM
+/* Context handler macros */
 
+/*
+ *  Initialize the context to a state suitable for starting a
+ *  task after a context restore operation.  Generally, this
+ *  involves:
+ *
+ *     - setting a starting address
+ *     - preparing the stack
+ *     - preparing the stack and frame pointers
+ *     - setting the proper interrupt level in the context
+ *     - initializing the floating point context
+ *
+ *  This routine generally does not set any unnecessary register
+ *  in the context.  The state of the "general data" registers is
+ *  undefined at task start time.
+ */
+
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
+  void             *entry_point,
+  boolean           is_fp
+);
+
+/*
+ *  This routine is responsible for somehow restarting the currently
+ *  executing task.  If you are lucky, then all that is necessary
+ *  is restoring the context.  Otherwise, there will need to be
+ *  a special assembly routine which does something special in this
+ *  case.  Context_Restore should work most of the time.  It will
+ *  not work if restarting self conflicts with the stack frame
+ *  assumptions of restoring a context.
+ */
+
+#define _CPU_Context_Restart_self( _the_context ) \
+   _CPU_Context_restore( (_the_context) );
+
+/*
+ *  The purpose of this macro is to allow the initial pointer into
+ *  a floating point context area (used to save the floating point
+ *  context) to be at an arbitrary place in the floating point
+ *  context area.
+ *
+ *  This is necessary because some FP units are designed to have
+ *  their context saved as a stack which grows into lower addresses.
+ *  Other FP units can be saved by simply moving registers into offsets
+ *  from the base of the context area.  Finally some FP units provide
+ *  a "dump context" instruction which could fill in from high to low
+ *  or low to high based on the whim of the CPU designers.
+ */
+
+#define _CPU_Context_Fp_start( _base, _offset ) \
+   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
+
+/*
+ *  This routine initializes the FP context area passed to it to.
+ *  There are a few standard ways in which to initialize the
+ *  floating point context.  The code included for this macro assumes
+ *  that this is a CPU in which a "initial" FP context was saved into
+ *  _CPU_Null_fp_context and it simply copies it to the destination
+ *  context passed to it.
+ *
+ *  Other models include (1) not doing anything, and (2) putting
+ *  a "null FP status word" in the correct place in the FP context.
+ */
+
+#define _CPU_Context_Initialize_fp( _destination ) \
+  { \
+   ((Context_Control_fp *) *((void **) _destination))->fpscr = PPC_INIT_FPSCR; \
+  }
+
+/* end of Context handler macros */
+#endif /* ASM */
+
+#endif /* _RTEMS_SCORE_CPU_H */
