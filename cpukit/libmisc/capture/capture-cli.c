@@ -1319,7 +1319,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: copen [-i] size\n",
     0,
     rtems_capture_cli_open,
-    0,
+    { 0 },
     0
   },
   {
@@ -1327,7 +1327,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cclose\n",
     0,
     rtems_capture_cli_close,
-    0,
+    { 0 },
     0
   },
   {
@@ -1335,7 +1335,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cenable\n",
     0,
     rtems_capture_cli_enable,
-    0,
+    { 0 },
     0
   },
   {
@@ -1343,7 +1343,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cdisable\n",
     0,
     rtems_capture_cli_disable,
-    0,
+    { 0 },
     0
   },
   {
@@ -1351,7 +1351,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: ctlist \n",
     0,
      rtems_capture_cli_task_list,
-    0,
+    { 0 },
     0
   },
   {
@@ -1359,7 +1359,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: ctload \n",
     0,
     rtems_capture_cli_task_load,
-    0,
+    { 0 },
     0
   },
   {
@@ -1367,7 +1367,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cwlist\n",
     0,
     rtems_capture_cli_watch_list,
-    0,
+    { 0 },
     0
   },
   {
@@ -1375,7 +1375,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cwadd [task name] [id]\n",
     0,
     rtems_capture_cli_watch_add,
-    0,
+    { 0 },
     0
   },
   {
@@ -1383,7 +1383,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cwdel [task name] [id]\n",
     0,
     rtems_capture_cli_watch_del,
-    0,
+    { 0 },
     0
   },
   {
@@ -1391,7 +1391,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cwctl [task name] [id] on/off\n",
     0,
     rtems_capture_cli_watch_control,
-    0,
+    { 0 },
     0
   },
   {
@@ -1399,7 +1399,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cwglob on/off\n",
     0,
     rtems_capture_cli_watch_global,
-    0,
+    { 0 },
     0
   },
   {
@@ -1407,7 +1407,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cwceil priority\n",
     0,
     rtems_capture_cli_watch_ceiling,
-    0,
+    { 0 },
     0
   },
   {
@@ -1415,7 +1415,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cwfloor priority\n",
     0,
     rtems_capture_cli_watch_floor,
-    0,
+    { 0 },
     0
   },
   {
@@ -1423,7 +1423,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: ctrace [-c] [-r records]\n",
     0,
     rtems_capture_cli_trace_records,
-    0,
+    { 0 },
     0
   },
   {
@@ -1431,7 +1431,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: ctrig type [from name] [from id] [to name] [to id]\n",
     0,
     rtems_capture_cli_trigger_set,
-    0,
+    { 0 },
     0
   },
   {
@@ -1439,7 +1439,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
     "usage: cflush [-n]\n",
     0,
     rtems_capture_cli_flush,
-    0,
+    { 0 },
     0
   }
 };

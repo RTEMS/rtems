@@ -1,3 +1,7 @@
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* capture/capture-cli.c: Reflect new rtems_monitor_command_arg_t.
+
 2003-09-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 495/rtems_misc
