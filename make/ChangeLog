@@ -1,4 +1,8 @@
 
+2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
+
+	* custom/mbx8xx.cfg: Add support for configuration parameters in NVRAM
+
 2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* ChangeLog: File paths corrected.
