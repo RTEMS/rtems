@@ -30,6 +30,7 @@ extern "C" {
 #include <clockdrv.h>
 #include <console.h>
 #include <iosupp.h>
+#include <bspIo.h>
 
 
 /*
@@ -305,11 +306,6 @@ typedef volatile struct cd2401_regs_ {
 
 /* CD2401 is clocked at 20 MHz */
 #define CD2401_CLK_RATE 20000000
-
-/* 
- *  Debug print functions: implemented in console.c
- */
-void BSP_output_string( char * buf );
 
 /* BSP-wide functions */
 
