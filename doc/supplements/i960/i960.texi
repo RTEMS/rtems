@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename c_i960
+@setfilename i960
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -75,7 +75,7 @@ END-INFO-DIR-ENTRY
 @include timeCVME961.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top c_i960
+@top i960
 
 This is the online version of the RTEMS Intel i960
 Applications Supplement.

@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename c_template
+@setfilename template
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -76,7 +76,7 @@ END-INFO-DIR-ENTRY
 @include timeBSP.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top c_template
+@top template
 
 This is the online version of the RTEMS Template
 Applications Supplement.
@@ -92,7 +92,7 @@ Applications Supplement.
 * Processor Dependent Information Table::
 * Memory Requirements::
 * Timing Specification::
-* BSP_FOR_TIMES Timing Data::
+* MYBSP Timing Data::
 * Command and Variable Index::
 * Concept Index::
 @end menu
@@ -103,7 +103,7 @@ Applications Supplement.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, BSP_FOR_TIMES Timing Data Context Switch, Top
+@node Command and Variable Index, Concept Index, MYBSP Timing Data Rate Monotonic Manager, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.

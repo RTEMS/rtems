@@ -80,7 +80,7 @@ There is no ASCII version of the PCI Device's Configuration Header Space Format
 @end ifset
 
 @ifset use-tex
-@image{PCIreg,,}
+@image{PCIreg}
 @end ifset
 
 @c @image{PCIreg}

@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename c_mips64orion
+@setfilename mips64orion
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -76,7 +76,7 @@ END-INFO-DIR-ENTRY
 @include timeBSP.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top c_mips64orion
+@top mips64orion
 
 This is the online version of the RTEMS MIPS64 Orion Applications Supplement.
 

@@ -1,0 +1,72 @@
+## $Id$
+
+SUFFIXES += .t
+
+## Texinfo support
+TEXINFO_TEX = $(top_srcdir)/texinfo/texinfo.tex
+
+MAINTAINERCLEANFILES += $(PROJECT) $(PROJECT)-[0-9] $(PROJECT)-[0-9][0-9]
+MAINTAINERCLEANFILES += $(GENERATED_FILES)
+
+## DVI support
+dvidir = $(pkgdatadir)/dvi
+## dvi_projectdir = $(dvidir)/$(PROJECT)
+
+## PS support
+psdir = $(pkgdatadir)/ps
+## ps_projectdir = $(psdir)/$(PROJECT)
+
+## PDF support
+SUFFIXES += .pdf
+
+pdfdir = $(pkgdatadir)/pdf
+## pdf_projectdir = $(pdfdir)/$(PROJECT)
+
+SUFFIXES += .eps
+
+if EPSTOPDF
+.eps.pdf:
+	$(EPSTOPDF) $< > $@
+endif
+
+if TEXI2PDF
+.texi.pdf:
+	TEXINPUTS=$(srcdir)/$(top_srcdir)/texinfo:$$TEXINPUTS \
+          MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2PDF) $<
+endif
+
+CLEANFILES += $(PROJECT).pdf
+
+## HTML 
+SUFFIXES += .html
+
+html_projectdir = $(htmldir)/$(PROJECT)
+
+TEXI2WWW_ARGS=\
+-dirfile ../index.html \
+-header $(top_builddir)/rtems_header.html \
+-footer $(top_builddir)/rtems_footer.html \
+-icons ../images
+
+index.html $(PROJECT)*.html: $(PROJECT).texi \
+	$(top_builddir)/rtems_header.html $(top_builddir)/rtems_footer.html
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -base $(PROJECT) $<
+
+MOSTLYCLEANFILES += index.html $(PROJECT)*.html
+
+## Common installation points
+if USE_HTML
+html_project_DATA += index.html $(PROJECT)*.html
+endif
+
+if USE_DVI
+dvi_DATA += $(PROJECT).dvi
+endif
+
+if USE_PS
+ps_DATA += $(PROJECT).ps
+endif
+
+if USE_PDF
+pdf_DATA += $(PROJECT).pdf
+endif

@@ -11,7 +11,7 @@
 \global\advance \smallskipamount by -4pt
 @end tex
 
-@chapter BSP_FOR_TIMES Timing Data
+@chapter MYBSP Timing Data
 
 @section Introduction
 
@@ -27,7 +27,7 @@ times as they pertain to the XXX version of RTEMS.
 
 All times reported except for the maximum period
 interrupts are disabled by RTEMS were measured using a Motorola
-BSP_FOR_TIMES CPU board.  The BSP_FOR_TIMES is a 20Mhz board with one wait
+MYBSP CPU board.  The MYBSP is a 20Mhz board with one wait
 state dynamic memory and a XXX numeric coprocessor.  The
 Zilog 8036 countdown timer on this board was used to measure
 elapsed time with a one-half microsecond resolution.  All
@@ -66,14 +66,14 @@ It should be noted again that the maximum period with
 interrupts disabled within RTEMS is hand-timed and based upon
 worst case (i.e. CPU cache disabled and no instruction overlap)
 times for a 20Mhz XXX.  The interrupt vector and entry
-overhead time was generated on an BSP_FOR_TIMES benchmark platform
+overhead time was generated on an MYBSP benchmark platform
 using the Multiprocessing Communications registers to generate
 as the interrupt source.
 
 @section Context Switch
 
 The RTEMS processor context switch time is RTEMS_NO_FP_CONTEXTS
-microseconds on the BSP_FOR_TIMES benchmark platform when no floating
+microseconds on the MYBSP benchmark platform when no floating
 point context is saved or restored.  Additional execution time
 is required when a TASK_SWITCH user extension is configured.
 The use of the TASK_SWITCH extension is application dependent.
@@ -104,5 +104,5 @@ executing and the busy state when floating point instructions
 are executing.  The state of the coprocessor is task specific.
 
 The following table summarizes the context switch
-times for the BSP_FOR_TIMES benchmark platform:
+times for the MYBSP benchmark platform:
 

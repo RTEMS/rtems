@@ -7,8 +7,8 @@
 #
 #  CPU Model Information
 #
-RTEMS_BSP       BSP_FOR_TIMES
-RTEMS_CPU_MODEL BSP_CPU_MODEL
+RTEMS_BSP       MYBSP
+RTEMS_CPU_MODEL MYCPU
 #
 #  Interrupt Latency
 #

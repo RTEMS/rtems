@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename c_hppa1_1
+@setfilename hppa1_1
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -75,7 +75,7 @@ END-INFO-DIR-ENTRY
 @include timeSIMHPPA.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top c_hppa1_1
+@top hppa1_1
 
 This is the online version of the RTEMS Hewlett Packard PA-RISC
 Applications Supplement.

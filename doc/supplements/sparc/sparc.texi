@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename c_sparc
+@setfilename sparc
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -75,7 +75,7 @@ END-INFO-DIR-ENTRY
 @include timeERC32.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top c_sparc
+@top sparc
 
 This is the online version of the RTEMS SPARC Applications Supplement.
 

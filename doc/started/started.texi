@@ -24,7 +24,7 @@
 @c
 @c  Now set all the tool version dependent information
 @c
-@include versions.texi
+@include tversions.texi
 
 @ignore
 @ifinfo
