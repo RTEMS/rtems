@@ -216,5 +216,42 @@ Run the @code{ttcp} network benchmark program.
 Transfer large amounts of data (100's of megabytes) to and from the target
 system.
 
+The procedure for testing throughput from a host to an RTEMS target
+is as follows:
+
+@enumerate
+@item Download and start the ttcp program on the Target.
+
+@item In response to the @code{ttcp} prompt, enter @code{-s -r}.  The
+meaning of these flags is described in the @code{ttcp.1} manual page
+found in the @code{ttcp_orig} subdirectory.
+
+@item On the host run @code{ttcp -s -t <<insert the hostname or IP address of
+the Target here>>}
+
+@end enumerate
+
+
+The procedure for testing throughput from an RTEMS target
+to a Host is as follows:
+
+@enumerate
+@item On the host run @code{ttcp -s -r}.
+
+@item Download and start the ttcp program on the Target.
+
+@item In response to the @code{ttcp} prompt, enter @code{-s -t <<insert
+the hostname or IP address of the Target here>>}.  You need to type the
+IP address of the host unless your Target is talking to your Domain Name
+Server.
+
+@end enumerate
+
+To change the number of buffers, the buffer size, etc. you just add the
+extra flags to the @code{-t} machine as specified in the @code{ttcp.1}
+manual page found in the @code{ttcp_orig} subdirectory.
+
+
+
 
 
