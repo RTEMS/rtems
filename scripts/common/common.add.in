@@ -12,3 +12,7 @@
 %define _exeext %{nil}
 %endif
 
+Vendor: 	OARCorp
+Distribution: 	Linux
+
+BuildRoot:	%{_defaultbuildroot}

@@ -5,8 +5,17 @@
 
 MKSPEC = $(SHELL) ./mkspec
 
+SUBPACKAGES = header.add
+SUBPACKAGES += $(top_builddir)/common/common.add
+SUBPACKAGES += rtems-cpukit.add
+SUBPACKAGES += $(top_builddir)/common/clean.add
+
 MKSPEC_DEPS = mkspec rtems-cpukit.spec.in \
     $(top_builddir)/setup.cache
+
+rtems-cpukit.spec.in: $(SUBPACKAGES)
+	cat $^ > $@
+CLEANFILES = rtems-cpukit.spec.in
 
 c4x-rtems-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . c4x-rtems > $@
@@ -56,11 +65,8 @@ sparc-rtems-cpukit.spec: $(MKSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems > $@
 RPM_SPECS_DATA += sparc-rtems-cpukit.spec
 
-TEMPLATES = rtems-cpukit.spec.in
+EXTRA_DIST = $(SUBPACKAGES)
 
-noinst_DATA = $(TEMPLATES)
+CLEANFILES += $(RPM_SPECS_DATA)
 
-EXTRA_DIST = $(TEMPLATES)
-
-CLEANFILES = $(RPM_SPECS_DATA)
 include $(top_srcdir)/../automake/local.am

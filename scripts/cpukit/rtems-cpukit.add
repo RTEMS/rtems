@@ -1,15 +1,3 @@
-#
-# spec file for package rtems-cpukit
-# 
-# Copyright  (c)  2002 Ralf Corsepius, Ulm, Germany
-#
-# please send bugfixes or comments to joel@OARcorp.com
-#
-
-%define _prefix	/opt/rtems
-
-Vendor:       OAR Corporation
-Distribution: Linux
 Name:         @target_alias@-cpukit
 Release:      @Release@
 License:      Various, Open Source.
@@ -40,7 +28,6 @@ Source:       rtems-@rtems_version@.tar.gz
 NoSource:      0
 # We claim to be relocatible, but in fact we are not
 Prefix:		%{_prefix}
-Buildroot:    %{_tmppath}/%{name}-%{version}-root
 
 %description
 RTEMS is a free operating system for embedded systems.

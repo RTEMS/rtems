@@ -35,7 +35,6 @@ NoSource:      0
 Prefix:		%{_prefix}
 Prefix:		%{_infodir}
 Prefix:		%{_datadir}
-BuildRoot:    	%{_tmppath}/%{name}-%{version}-root
 BuildArch:	noarch
 
 %description

@@ -1,5 +1,20 @@
 2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* common/common.add.in: Add Vendor, Distribution, BuildRoot.
+	* binutils/Makefile.am: Fix path to clean.add.
+	* binutils/binutils.add: Remove BuildRoot.
+	* cpukit/Makefile.am:  Use $(top_builddir)/common/common.add,
+	$(top_builddir)/common/clean.add, header.add.
+	Generate rtems-cpukit.spec.in.
+	* cpukit/header.add: New.
+	* cpukit/rtems-cpukit.spec.in: Remove.
+	* cpukit/rtems-cpukit.add: New.
+	* gccnewlib/gccnewlib.add: Remove Buildroot.
+	* gdb/gdb.add: Remove Buildroot.
+	* rtemsdoc/rtemsdoc.add: Remove BuildRoot.
+
+2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* rtemsdoc/Makefile.am: Use $(top_builddir)/common/common.add,
 	$(top_builddir)/common/clean.add, header.add.
 	Generate rtemsdoc.spec.in.

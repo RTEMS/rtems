@@ -7,7 +7,6 @@ License:      GPL/LGPL
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Prefix:		%{_prefix}
-BuildRoot:	%{_defaultbuildroot}
 BuildPreReq:	/sbin/install-info
 BuildPreReq:	texinfo >= 4.2
 

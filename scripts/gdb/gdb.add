@@ -12,7 +12,6 @@ Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
 Patch0:	      gdb-@gdb_version@-rtems-base-@gdb_patch_version@.diff
 Patch1:	      gdb-@gdb_version@-rtems-cg-@gdb_patch_version@.diff
 Patch2:	      gdb-@gdb_version@-rtems-rdbg-@gdb_patch_version@.diff
-Buildroot:    %{_defaultbuildroot}
 
 %if "%{_vendor}" == "redhat"
 BuildPreReq:	ncurses-devel
