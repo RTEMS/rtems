@@ -20,7 +20,6 @@
  *  $Id$
  */
 
-#include <stdlib.h>
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <libcsupport.h>
@@ -46,8 +45,8 @@ char *rtems_progname;
  
 rtems_unsigned32 Timer_interrupts;
 
-/* extern void set_debug_traps(void); */
-/* extern void breakpoint(void); */
+extern void set_debug_traps(void);
+extern void breakpoint(void);
 
 /*      Initialize whatever libc we are using
  *      called from postdriver hook
@@ -55,14 +54,22 @@ rtems_unsigned32 Timer_interrupts;
 
 void bsp_libc_init()
 {
-  extern int end;
+/*   extern int end; */
   rtems_unsigned32        heap_start;
   
-  heap_start = (rtems_unsigned32) &end;
+  heap_start = (rtems_unsigned32) BSP_Configuration.work_space_start +
+               (rtems_unsigned32) BSP_Configuration.work_space_size;
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
   
-  RTEMS_Malloc_Initialize((void *) heap_start, 64 * 1024, 0);
+  if (heap_start > RAM_END) {
+    /* rtems_fatal_error_occurred can not be used before initalization */
+    RAW_PUTS("\n\rRTEMS: Out of memory.\n\r");
+    RAW_PUTS("RTEMS:    Check RAM_END and the size of the work space.\n\r");
+  }
+
+  RTEMS_Malloc_Initialize((void *) heap_start, 
+			  (RAM_END - heap_start), 0);
     
   /*
    *  Init the RTEMS libio facility to provide UNIX-like system
@@ -80,7 +87,6 @@ void bsp_libc_init()
     libc_init(1);                /* reentrant if possible */
   else
     libc_init(0);                /* non-reentrant */
-  
 }
  
 /*
@@ -161,7 +167,7 @@ int main(
    *  we only use a hook to get the C library initialized.
    */
 
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
+  Cpu_table.pretasking_hook = bsp_pretasking_hook;
  
   Cpu_table.predriver_hook = NULL;
  
@@ -174,7 +180,7 @@ int main(
   m68k_get_vbr( vbr );
   Cpu_table.interrupt_vector_table = vbr;
 
-  Cpu_table.interrupt_stack_size = 4096;
+  Cpu_table.interrupt_stack_size = 0;
 
   Cpu_table.extra_mpci_receive_server_stack = 0;
 
@@ -185,15 +191,7 @@ int main(
   BSP_Configuration = Configuration;
 
   BSP_Configuration.work_space_start = (void *)
-     (RAM_END - BSP_Configuration.work_space_size);
-
-  if ((unsigned int)BSP_Configuration.work_space_start < 
-      (unsigned int)((stack_start + stack_size) & 0xffffffc0) ) {
-    /* rtems_fatal_error_occurred can not be used before initalization */
-    RAW_PUTS("\n\rRTEMS: Out of memory.\n\r");
-    RAW_PUTS("RTEMS:    Check RAM_END and the size of the work space.\n\r");
-    goto exit;
-  }
+    (((unsigned int)_end + STACK_SIZE + 0x100) & 0xffffff00);
 
   /*
    * Add 1 region for Malloc in libc_low
@@ -217,12 +215,18 @@ int main(
     BSP_Configuration.maximum_extensions++;
 #endif
 
+  /*
+   * Tell libio how many fd's we want and allow it to tweak config
+   */
+
+  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
+
   rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
   /* does not return */
 
   /* Clock_exit is done as an atexit() function */
 
-exit:
+/* exit: */
   /* configure peripherals for safe exit */
   bsp_cleanup();
 

@@ -43,6 +43,7 @@ MEMORY
 }
 
 _VBR = 0x200000;		/* location of the VBR table (in RAM) */
+__end_of_ram = 0x240000;
 _copy_data_from_rom = 0;
 
 /*

@@ -1,0 +1,15 @@
+#! /bin/bash
+#
+#  $Id$
+#
+
+/bin/rm sp* &>/dev/null
+(cd ..; for f in sp*; do cp ${f}/o-efi332/${f}.nxe hold; done)
+
+stty 5:0:800008bf:0:0:0:0:0:0:1:1:0:0:0:0:0:0:0:0:0:0:0:0 </dev/cua0
+/bin/cp /dev/cua0 screen &
+
+for f in sp*; do m68k-bdm-coff-gdb ${f} </dev/null; done
+
+kill -9 `ps -efax | grep "/bin/cp /dev/cua0" | sed "/grep/D; s/ .*$//"`
+/bin/rm sp* &>/dev/null

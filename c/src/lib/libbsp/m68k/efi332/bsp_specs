@@ -4,12 +4,12 @@ predefines:
 
 startfile: replace
 mrtems:
-pg: start.o%s
+pg: start332.o%s
 {!pg:
-g: start.o%s
+g: start332.o%s
 {!g:
-p: start.o%s
-!p: start.o%s
+p: start332.o%s
+!p: start332.o%s
 }}
 {!mrtems:
 pg: pgcrt0%O

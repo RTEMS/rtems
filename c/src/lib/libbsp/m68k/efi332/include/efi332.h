@@ -36,15 +36,10 @@
 #define EFI_X 1
 #define EFI_Y 0x38
 #define SYS_CLOCK (XTAL*4.0*(EFI_Y+1)*(1 << (2*EFI_W+EFI_X)))
-#define SCI_BAUD 19200		/* RS232 Baud Rate */
+#define SCI_BAUD 115200		/* RS232 Baud Rate */
 
 
 /* macros/functions */
-#if 0
-static void reboot(void) __attribute__ ((noreturn));
-__inline__ static void reboot() {asm("trap #15");}
-#else
-#define reboot() do {asm("trap #15");} while(0)
-#endif
+void reboot(void) __attribute__ ((noreturn));
 
 #endif /* _EFI332_H_ */

@@ -194,14 +194,8 @@ void _UART_flush(void) {
  *  Return values:
  */
  
-rtems_device_driver console_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
-)
+void console_init()
 {
-  rtems_status_code status;
-
   /* set clock divisor */
   *LCR = (char)(DLAB);
   *DLL = (char)((int)(CLK_FREQ/BAUD/16.0+0.5) & 0xFF);
@@ -223,6 +217,15 @@ rtems_device_driver console_initialize(
   _tx_stop = ( (*MDSR & CTS) ? 0 : 1);
 
   set_vector(_catchUARTint, UART_ISR_LEVEL+24, 0);
+}
+
+rtems_device_driver console_initialize(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
+  rtems_status_code status;
 
   status = rtems_io_register_name(
     "/dev/console",

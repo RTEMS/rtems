@@ -71,10 +71,27 @@ extern "C" {
                   : "0"  (_tmp), "1"  (_delay) ); \
   }
 
-/* macros */
+/* externals */
 
-#define RAM_START 0x200000
-#define RAM_END   0x240000
+extern char _endtext[];
+extern char _sdata[];
+extern char _edata[];
+extern char __bss_start[];
+extern char _end[];
+extern char _copy_data_from_rom[];
+extern char __end_of_ram[];
+
+/* constants */
+
+#define RAM_END ((int)__end_of_ram)
+
+#ifdef __START_C__
+#define STACK_SIZE "#0x800"
+#else
+#define STACK_SIZE 0x800
+#endif
+
+/* macros */
 
 #define RAW_PUTS(str) \
   { register char *ptr = str; \

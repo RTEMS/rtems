@@ -1,20 +1,27 @@
 /*  linkcmds
  *
- *  $Id$
+ *  linkcmds,v 1.1 1995/09/20 15:04:47 joel Exp
  */
 
 OUTPUT_ARCH(m68k)
+STARTUP(except_vect_332_ROM.o)
 __DYNAMIC  =  0;
 
 /*
- * The memory map looks like this:
+ * ROM:
  * +--------------------+ <- low memory
  * | .text              |
  * |        etext       |
  * |        ctor list   | the ctor and dtor lists are for
  * |        dtor list   | C++ support
  * |        _endtext    |
- * +--------------------+
+ * | temporary .data    | .data is moved to RAM by crt0
+ * |                    |
+ * +--------------------+ <- high memory
+ *
+ *
+ * RAM:
+ * +--------------------+ <- low memory
  * | .data              | initialized data goes here
  * |        _sdata      |
  * |        _edata      |
@@ -32,14 +39,15 @@ __DYNAMIC  =  0;
 
 MEMORY
 {
+  rom     : ORIGIN = 0x00000, LENGTH = 256K
   ram     : ORIGIN = 0x80000, LENGTH = 256K
 }
 
 __end_of_ram = 0xc0000;
-_copy_data_from_rom = 0;
+_copy_data_from_rom = 1;
 
 /*
- * stick everything in ram (of course)
+ * 
  */
 SECTIONS
 {
@@ -64,8 +72,9 @@ SECTIONS
     *(.lit)
     *(.shdata)
     _endtext = .;
-  } > ram
+  } > rom
   .data :
+  AT ( ADDR(.text) + SIZEOF( .text ) )
   {
     data_start = .;
     _data_start = .;

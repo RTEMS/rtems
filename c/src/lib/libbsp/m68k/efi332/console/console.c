@@ -36,7 +36,7 @@ static volatile struct UART_buf  xmt = { xmt_buf, (char *)0, (char *)1};
 static volatile struct UART_buf  rcv = { rcv_buf, (char *)0, (char *)1};
 static volatile char _debug_flag = 0;
 
-#define SET_RTS(a) {*PORTF0 = (*PORTF0 & 0x4) | ( (a)? 0 : 0x4); }
+#define SET_RTS(a) {*PORTF0 = (*PORTF0 & ~0x4) | ( (a)? 0 : 0x4); }
 #define GET_CTS (!(*PORTF0 & 0x2))
 
 /* _catchSCIint, _catchCTSint, and _catchSPURIOUSint are the 
@@ -234,14 +234,8 @@ void _UART_flush(void) {
  *  Return values:
  */
  
-rtems_device_driver console_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
-)
+void console_init()
 {
-  rtems_status_code status;
- 
   *QSMCR = ( SAM(QSM_IARB,0,IARB) );
   *QILR = ( SAM(ISRL_QSPI,4,ILQSPI) | SAM(ISRL_SCI,0,ILSCI) );
   *QIVR = ( SAM(EFI_QIVR,0,INTV) );
@@ -252,6 +246,16 @@ rtems_device_driver console_initialize(
   set_vector(_catchSPURIOUSint, EFI_SPINT, 0);
   set_vector(_catchSCIint, EFI_QIVR, 0);
   set_vector(_catchCTSint, EFI_INT1, 0);
+}
+
+rtems_device_driver console_initialize(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
+  rtems_status_code status;
+
   status = rtems_io_register_name(
     "/dev/console",
     major,
