@@ -286,19 +286,14 @@ rtems_termios_open (
 		tty->termios.c_cc[VLNEXT] = '\026';
 
 		/*
-		 * Device-specific open
-		 */
-		if (tty->device.firstOpen)
-			(*tty->device.firstOpen)(major, minor, arg);
-
-		/*
 		 * Bump name characer
 		 */
 		if (c++ == 'z')
 			c = 'a';
 	}
-	tty->refcount++;
 	args->iop->data1 = tty;
+	if (!tty->refcount++ && tty->device.firstOpen)
+		(*tty->device.firstOpen)(major, minor, arg);
 	rtems_semaphore_release (ttyMutex);
 	return RTEMS_SUCCESSFUL;
 }

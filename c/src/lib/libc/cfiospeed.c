@@ -47,7 +47,7 @@ cfsetispeed(struct termios *tp, speed_t speed)
 		errno = EINVAL;
 		return -1;
 	}
-	tp->c_cflag = (tp->c_cflag & ~CBAUD) | (speed * (CIBAUD / CBAUD));
+	tp->c_cflag = (tp->c_cflag & ~CIBAUD) | (speed * (CIBAUD / CBAUD));
 	return 0;
 }
 
