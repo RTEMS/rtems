@@ -7,79 +7,45 @@ include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
 include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
-    include/iosupp.h include/ringbuf.h include/rtc.h \
-    include/spurious.h include/timerdrv.h include/vmeintr.h
+    include/iosupp.h include/ringbuf.h include/rtc.h include/spurious.h \
+    include/timerdrv.h include/vmeintr.h
 
 if NEED_STDINT_H
-LIBC_HFILES = include/stdint.h
+include_HEADERS += include/stdint.h
 endif
 if NEED_INTTYPES_H
-LIBC_HFILES += include/inttypes.h
+include_HEADERS += include/inttypes.h
 endif
-include_HEADERS += $(LIBC_HFILES)
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE) \
-    $(include_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
-
-$(PROJECT_INCLUDE):
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/motorola:
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/rtems:
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/sys:
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/zilog:
-	@$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/%.h: include/%.h
-	$(INSTALL_DATA) $< $@
 
 ## motorola
 
 include_motoroladir = $(includedir)/motorola
 
-include_motorola_HEADERS = include/motorola/mc68230.h include/motorola/mc68681.h
-
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola \
-    $(include_motorola_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
+include_motorola_HEADERS = include/motorola/mc68230.h \
+    include/motorola/mc68681.h
 
 ## rtems
 include_rtemsdir = $(includedir)/rtems
 
-include_rtems_HEADERS = \
-    include/rtems/assoc.h include/rtems/error.h include/rtems/libcsupport.h \
-    include/rtems/libio.h include/rtems/libio_.h \
-    include/rtems/termiostypes.h
-
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(include_rtems_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
+include_rtems_HEADERS = include/rtems/assoc.h include/rtems/error.h \
+    include/rtems/libcsupport.h include/rtems/libio.h include/rtems/libio_.h \
+    include/rtems/termiostypes.h include/rtems/cdefs.h
 
 ## sys
 
 include_sysdir = $(includedir)/sys
 
+# FIXME: We should not install to include/sys unless using newlib.
+include_sys_HEADERS = include/sys/filio.h include/sys/ioccom.h \
+    include/sys/ioctl.h include/sys/sockio.h include/sys/ttycom.h
+
 if NEWLIB
-NEWLIB_H_FILES = include/sys/termios.h include/sys/utsname.h
+include_sys_HEADERS += include/sys/termios.h include/sys/utsname.h
 endif
 
 if NEED_SYS_CDEFS_H
-SYS_H_FILES = include/sys/cdefs.h
+include_sys_HEADERS += include/sys/cdefs.h
 endif
-
-# FIXME: We should not install to include/sys unless using newlib.
-include_sys_HEADERS = \
-include/sys/filio.h \
-include/sys/ioccom.h \
-include/sys/ioctl.h \
-include/sys/sockio.h \
-include/sys/termios.h \
-include/sys/ttycom.h \
-$(SYS_H_FILES) \
-$(NEWLIB_H_FILES)
-
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
-    $(include_sys_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
 
 ## zilog
 
@@ -87,9 +53,6 @@ include_zilogdir = $(includedir)/zilog
 
 include_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
     include/zilog/z8536.h
-
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog \
-    $(include_zilog_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
 
 ##  General stuff
 all-local: $(PREINSTALL_FILES)
@@ -124,10 +87,11 @@ DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
     src/telldir.c src/getcwd.c
 
 ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
-    src/getlogin.c src/getpgrp.c \
-    src/getpid.c src/getppid.c src/getuid.c src/setpgid.c src/setsid.c
+    src/getlogin.c src/getpgrp.c src/getpid.c src/getppid.c src/getuid.c \
+    src/setpgid.c src/setsid.c
 
-MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c src/__sbrk.c
+MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c \
+    src/__sbrk.c
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 
@@ -142,10 +106,8 @@ UNIX_LIBC_C_FILES = src/unixlibc.c src/hosterr.c
 
 BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c
 
-COMMON_C_FILES = src/gxx_wrappers.c src/printk.c \
-    $(BSD_LIBC_C_FILES) \
-    $(BASE_FS_C_FILES) \
-    $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
+COMMON_C_FILES = src/gxx_wrappers.c src/printk.c $(BSD_LIBC_C_FILES) \
+    $(BASE_FS_C_FILES) $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
     $(ASSOCIATION_C_FILES)
 
 UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
@@ -180,5 +142,157 @@ DOC_FILES = src/TODO src/CASES
 
 EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
     $(UNIX_C_FILES)
+
+BUILT_SOURCES = $(PREINSTALL_FILES)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/chain.h: include/chain.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/chain.h
+
+$(PROJECT_INCLUDE)/console.h: include/console.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/console.h
+
+$(PROJECT_INCLUDE)/clockdrv.h: include/clockdrv.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/clockdrv.h
+
+$(PROJECT_INCLUDE)/iosupp.h: include/iosupp.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/iosupp.h
+
+$(PROJECT_INCLUDE)/ringbuf.h: include/ringbuf.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ringbuf.h
+
+$(PROJECT_INCLUDE)/rtc.h: include/rtc.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtc.h
+
+$(PROJECT_INCLUDE)/spurious.h: include/spurious.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/spurious.h
+
+$(PROJECT_INCLUDE)/timerdrv.h: include/timerdrv.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/timerdrv.h
+
+$(PROJECT_INCLUDE)/vmeintr.h: include/vmeintr.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/vmeintr.h
+
+if NEED_STDINT_H
+$(PROJECT_INCLUDE)/stdint.h: include/stdint.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
+endif
+
+if NEED_INTTYPES_H
+$(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
+endif
+
+$(PROJECT_INCLUDE)/motorola:
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/motorola
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola
+
+$(PROJECT_INCLUDE)/motorola/mc68230.h: include/motorola/mc68230.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68230.h
+
+$(PROJECT_INCLUDE)/motorola/mc68681.h: include/motorola/mc68681.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68681.h
+
+$(PROJECT_INCLUDE)/rtems:
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems
+
+$(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/assoc.h
+
+$(PROJECT_INCLUDE)/rtems/error.h: include/rtems/error.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/error.h
+
+$(PROJECT_INCLUDE)/rtems/libcsupport.h: include/rtems/libcsupport.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libcsupport.h
+
+$(PROJECT_INCLUDE)/rtems/libio.h: include/rtems/libio.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libio.h
+
+$(PROJECT_INCLUDE)/rtems/libio_.h: include/rtems/libio_.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libio_.h
+
+$(PROJECT_INCLUDE)/rtems/termiostypes.h: include/rtems/termiostypes.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/termiostypes.h
+
+$(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
+
+$(PROJECT_INCLUDE)/sys:
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sys
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys
+
+$(PROJECT_INCLUDE)/sys/filio.h: include/sys/filio.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
+
+$(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
+
+$(PROJECT_INCLUDE)/sys/ioctl.h: include/sys/ioctl.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioctl.h
+
+$(PROJECT_INCLUDE)/sys/sockio.h: include/sys/sockio.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sockio.h
+
+$(PROJECT_INCLUDE)/sys/ttycom.h: include/sys/ttycom.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
+
+if NEWLIB
+$(PROJECT_INCLUDE)/sys/termios.h: include/sys/termios.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h
+
+$(PROJECT_INCLUDE)/sys/utsname.h: include/sys/utsname.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
+endif
+
+if NEED_SYS_CDEFS_H
+$(PROJECT_INCLUDE)/sys/cdefs.h: include/sys/cdefs.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
+endif
+
+$(PROJECT_INCLUDE)/zilog:
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/zilog
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog
+
+$(PROJECT_INCLUDE)/zilog/z8036.h: include/zilog/z8036.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8036.h
+
+$(PROJECT_INCLUDE)/zilog/z8530.h: include/zilog/z8530.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8530.h
+
+$(PROJECT_INCLUDE)/zilog/z8536.h: include/zilog/z8536.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8536.h
 
 include $(top_srcdir)/automake/local.am
