@@ -1,3 +1,7 @@
+2004-11-05	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Add .gnu.linkonce.b section.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
