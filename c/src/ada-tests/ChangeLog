@@ -1,5 +1,47 @@
 2003-08-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am,
+	mptests/Makefile.am,
+	mptests/mp01/Makefile.am, mptests/mp01/node1/Makefile.am,
+	mptests/mp01/node2/Makefile.am,
+	samples/Makefile.am, samples/base_mp/Makefile.am,
+	samples/base_mp/node1/Makefile.am, samples/base_mp/node2/Makefile.am,
+	samples/base_sp/Makefile.am, samples/hello/Makefile.am,
+	samples/ticker/Makefile.am,
+	sptests/Makefile.am,
+	sptests/sp01/Makefile.am, sptests/sp02/Makefile.am,
+	sptests/sp03/Makefile.am, sptests/sp04/Makefile.am,
+	sptests/sp05/Makefile.am, sptests/sp06/Makefile.am,
+	sptests/sp07/Makefile.am, sptests/sp08/Makefile.am,
+	sptests/sp09/Makefile.am, sptests/sp11/Makefile.am,
+	sptests/sp12/Makefile.am, sptests/sp13/Makefile.am,
+	sptests/sp14/Makefile.am, sptests/sp15/Makefile.am,
+	sptests/sp16/Makefile.am, sptests/sp17/Makefile.am,
+	sptests/sp19/Makefile.am, sptests/sp20/Makefile.am,
+	sptests/sp21/Makefile.am, sptests/sp22/Makefile.am,
+	sptests/sp23/Makefile.am, sptests/sp24/Makefile.am,
+	sptests/sp25/Makefile.am, sptests/spsize/Makefile.am,
+	support/Makefile.am,
+	tmtests/Makefile.am,
+	tmtests/tm01/Makefile.am, tmtests/tm02/Makefile.am,
+	tmtests/tm03/Makefile.am, tmtests/tm04/Makefile.am,
+	tmtests/tm05/Makefile.am, tmtests/tm06/Makefile.am,
+	tmtests/tm07/Makefile.am, tmtests/tm08/Makefile.am,
+	tmtests/tm09/Makefile.am, tmtests/tm10/Makefile.am,
+	tmtests/tm11/Makefile.am, tmtests/tm12/Makefile.am,
+	tmtests/tm13/Makefile.am, tmtests/tm14/Makefile.am,
+	tmtests/tm15/Makefile.am, tmtests/tm16/Makefile.am,
+	tmtests/tm17/Makefile.am, tmtests/tm18/Makefile.am,
+	tmtests/tm19/Makefile.am, tmtests/tm20/Makefile.am,
+	tmtests/tm21/Makefile.am, tmtests/tm22/Makefile.am,
+	tmtests/tm23/Makefile.am, tmtests/tm24/Makefile.am,
+	tmtests/tm25/Makefile.am, tmtests/tm28/Makefile.am,
+	tmtests/tm29/Makefile.am, tmtests/tmck/Makefile.am,
+	tmtests/tmoverhd/Makefile.am:
+	Pick up am-fragments from ../tests/automake.
+
+2003-08-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/prog-gnat.m4: New (copied from ../../../aclocal).
 	* Makefile.am: ACLOCAL_AMFLAGS = -I aclocal -I ../tests/aclocal.
 	Don't include */automake/lib.am (Unused).
@@ -11,7 +53,7 @@
 2003-07-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ada.am: Add .adp to SUFFIXES.
-	Remove c-compilation rule. 
+	Remove c-compilation rule.
 	* samples/base_sp/Makefile.am: Add init.$(OBJEXT).
 	* samples/hello/Makefile.am: Add init.$(OBJEXT).
 	* samples/ticker/Makefile.am: Add init.$(OBJEXT).
@@ -177,7 +219,7 @@
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
 	* support/init.c: Included <unistd.h> for exit(2).
-	* support/test_support.adb: Eliminated warnings by commenting out 
+	* support/test_support.adb: Eliminated warnings by commenting out
 	unused variables.
 
 2002-09-13	Joel Sherrill <joel@OARcorp.com>
@@ -357,7 +399,7 @@
 	mptests/mp09/mptest.ads, mptests/mp10/mptest.ads,
 	mptests/mp11/mptest.ads, mptests/mp12/mptest.ads,
 	mptests/mp13/mptest.ads, mptests/mp14/mptest.adb,
-	mptests/mp14/mptest.ads: Per PR274, identify the need for the 
+	mptests/mp14/mptest.ads: Per PR274, identify the need for the
 	BSP_MPCI package.  It was a trivial dependency and eliminated.
 
 2002-08-26	Joel Sherrill <joel@OARcorp.com>

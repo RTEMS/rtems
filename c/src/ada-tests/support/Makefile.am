@@ -17,5 +17,5 @@ EXTRA_DIST += timer_driver.adb
 EXTRA_DIST += timer_driver.ads
 EXTRA_DIST += unsigned32_io.ads
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../tests/automake/local.am
 

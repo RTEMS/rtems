@@ -26,5 +26,5 @@ SUBDIRS += sp24
 SUBDIRS += sp25
 SUBDIRS += spsize
 
-include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../tests/automake/subdirs.am
+include $(top_srcdir)/../tests/automake/local.am

@@ -1,7 +1,7 @@
 ## $Id$
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../tests/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
@@ -14,4 +14,4 @@ sp11$(EXEEXT): sp11.adb init.$(OBJEXT)
 
 EXTRA_DIST = sp11.scn
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../tests/automake/local.am
