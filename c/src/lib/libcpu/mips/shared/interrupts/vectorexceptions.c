@@ -9,6 +9,7 @@
 
 #include <rtems.h>
 #include <stdlib.h>
+#include <string.h>
 #include "iregdef.h"
 #include "idtcpu.h"
 #include <rtems/bspIo.h>

@@ -5,6 +5,7 @@
 #include <rtems.h>
 #include <idtcpu.h>
 #include <stdlib.h>
+#include <string.h>
 
 void mips_install_isr_entries( void )
 {
