@@ -1,3 +1,10 @@
+2001-03-26	Zoltan Kocsi <zoltan@bendor.com.au>
+
+
+	* src/eventsurrender.c: Clear event condition when task is unblocked.
+	This makes sure that subsequent event send thinks the task is still
+	blocked and overwrites the initial events received.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am, include/rtems/rtems/Makefile.am,
