@@ -1,3 +1,10 @@
+2001-09-19	Chris Johns <ccj@acm.org>
+
+	* nfs/bootp_subr.c, rtems/rtems_bootp.c, rtems/rtems_bsdnet.h,
+	rtems/rtems_bsdnet_internal.h Added support for populating the
+	initial "root" filesystem with information obtained via the DHCP
+	response.
+
 2001-08-16	Mike Siers <mikes@poliac.com>
 
 	* pppd/STATUS: Updated by Joel based upon email from Mike.

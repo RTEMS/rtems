@@ -170,6 +170,8 @@ void rtems_bsdnet_detach (struct rtems_bsdnet_ifconfig *ifconfig);
 int rtems_bsdnet_ifconfig (const char *ifname, unsigned32 cmd, void *param);
 
 void rtems_bsdnet_do_bootp (void);
+void rtems_bsdnet_do_bootp_and_rootfs (void);
+
 int rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority);
 
 #endif /* _RTEMS_BSDNET_ */

@@ -69,6 +69,11 @@
 #include <nfs/krpc.h>
 #include <nfs/xdr_subs.h>
 
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <rtems/mkrootfs.h>
+
 #define BOOTP_MIN_LEN		300	/* Minimum size of bootp udp packet */
 
 /*
@@ -147,7 +152,7 @@ bootpc_adjust_interface(struct ifreq *ireq,struct socket *so,
 			struct sockaddr_in *gw,
 			struct proc *procp);
 
-void bootpc_init(void);
+void bootpc_init(int update_files);
 
 #ifdef BOOTP_DEBUG
 void bootpboot_p_sa(sa,ma)
@@ -689,6 +694,7 @@ static char dhcp_gotserver = 0;
 static char dhcp_gotlogserver = 0;
 static struct sockaddr_in dhcp_netmask;
 static struct sockaddr_in dhcp_gw;
+static char *dhcp_hostname;
 
 static void
 processOptions (unsigned char *optbuf, int optbufSize)
@@ -795,6 +801,7 @@ processOptions (unsigned char *optbuf, int optbufSize)
       if (sethostname (p, len) < 0)
         panic("Can't set host name");
       printf("Hostname is %s\n", p);
+      dhcp_hostname = strdup(p);
       break;
 
     case 7:
@@ -864,7 +871,7 @@ processOptions (unsigned char *optbuf, int optbufSize)
 #define EALEN 6
 
 void
-bootpc_init(void)
+bootpc_init(int update_files)
 {
   struct bootp_packet call;
   struct bootp_packet reply;
@@ -887,6 +894,18 @@ bootpc_init(void)
   if (nfs_diskless_valid)
     return;
 
+  /*
+   * If we are to update the files create the root
+   * file structure.
+   */
+  if (update_files)
+    if (rtems_create_root_fs () < 0) {
+      printf("Error creating the root filesystem.\nFile not created.\n");
+      update_files = 0;
+    }
+
+  memset(dhcp_hostname, 0, sizeof(dhcp_hostname));
+  
   /*
    * Find a network interface.
    */
@@ -1026,7 +1045,66 @@ bootpc_init(void)
   if (!dhcp_gotlogserver)
     rtems_bsdnet_log_host_address = rtems_bsdnet_bootp_server_address;
   printip ("Log server ip address", rtems_bsdnet_log_host_address);
-  
+
+  /*
+   * Update the files if we are asked too.
+   */
+  if (update_files) {
+    char *dn = rtems_bsdnet_domain_name;
+    char *hn = dhcp_hostname;
+    if (!dn)
+      dn = "mydomain";
+    if (!hn)
+      hn = "me";
+    rtems_rootfs_append_host_rec(*((unsigned long*) &myaddr.sin_addr), hn, dn);
+
+    /*
+     * Should the given domainname be used here ?
+     */
+    if (dhcp_gotserver) {
+      if (rtems_bsdnet_bootp_server_name)
+        hn = rtems_bsdnet_bootp_server_name;
+      else
+        hn = "bootps";
+      rtems_rootfs_append_host_rec(*((unsigned long *) &rtems_bsdnet_bootp_server_address),
+                                   hn, dn);
+    }
+
+    if (dhcp_gotlogserver) {
+      rtems_rootfs_append_host_rec(*((unsigned long *) &rtems_bsdnet_log_host_address),
+                                   "logs", dn);
+    }
+
+    /*
+     * Setup the DNS configuration file /etc/resolv.conf.
+     */
+    if (rtems_bsdnet_nameserver_count) {
+      int        i;
+      char       buf[64];
+      const char *bufl[1];
+
+      bufl[0] = buf;
+      
+#define MKFILE_MODE (S_IRUSR | S_IWUSR | S_IWGRP | S_IRGRP | S_IROTH)
+      
+      if (rtems_bsdnet_domain_name &&
+          (strlen(rtems_bsdnet_domain_name) < (sizeof(buf) - 1))) {
+        strcpy(buf, "search ");
+        strcat(buf, rtems_bsdnet_domain_name);
+        strcat(buf, "\n");
+        rtems_rootfs_file_append ("/etc/resolv.conf", MKFILE_MODE, 1, bufl);
+      }
+
+      for (i = 0; i < rtems_bsdnet_nameserver_count; i++) {
+        strcpy(buf, "nameserver ");
+        strcat(buf, inet_ntoa(rtems_bsdnet_ntpserver[i]));
+        strcat(buf, "\n");
+        if (rtems_rootfs_file_append ("/etc/resolv.conf", MKFILE_MODE, 1, bufl))
+          break;
+      }
+    }
+  }
+
   /*
    * Configure the interface with the new settings
    */
