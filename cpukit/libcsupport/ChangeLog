@@ -1,3 +1,12 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Corrected.
+
+2002-10-30	Eric Norum <eric.norum@usask.ca>
+
+	* src/printk.c: Add vprintk function for kernel printing
+	from routines which have already obtained the va_list pointer.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* src/mallocfreespace.c: Corrected sense of status check to 

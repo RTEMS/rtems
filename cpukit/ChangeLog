@@ -1,3 +1,12 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Corrected.
+
+2002-10-30	Eric Norum <eric.norum@usask.ca>
+
+	* include/rtems/bspIo.h: Add vprintk function for kernel printing
+	from routines which have already obtained the va_list pointer.
+
 2002-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-bsp-cache.m4: Remove.

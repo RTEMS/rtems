@@ -1,3 +1,14 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Corrected.
+
+2002-11-01	Eric Norum <eric.norum@usask.ca>
+
+	* nfs/bootp_subr.c, rtems/rtems_bsdnet.h, rtems/rtems_glue.c:
+	Till Straumann's patch (PR295) to use bootp option 129 to get
+	command line string.  Till Straumann's patch to change
+	inet_ntoa->inet_ntop.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/rcmd.c, netinet/in_cksum_arm.c: Removed warnings.
