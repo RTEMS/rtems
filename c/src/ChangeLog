@@ -1,3 +1,7 @@
+2003-10-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/force-preinstall.am: Remove.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* lib/libcpu/shared/include/cache.h,

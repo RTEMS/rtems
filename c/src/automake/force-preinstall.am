@@ -1,4 +1,0 @@
-## This file is a temporary band-aid for the ppc-BSPs.
-## DO NOT use it, it will eventually be removed in future.
-
-PREINSTALL_FILES = $(TMPINSTALL_FILES)
