@@ -192,7 +192,7 @@ mkdir /tmp
 mkdir /source
 mkdir /build
 mkdir /build/binutils
-mkdir /build/egcs
+mkdir /build/gcc
 @end example
 
 @item The light Bourne shell provided with Cygwin B19 is buggy.
@@ -321,7 +321,7 @@ or Objective-C as Cygwin32 cross-compilers):
 @item ln -s ../@value{NEWLIB-UNTAR}/libgloss libgloss
 @end itemize
 
-@item Change to the /build/egcs directory to configure the compiler:
+@item Change to the /build/gcc directory to configure the compiler:
 
 @example
 /source/@value{GCC-UNTAR}/configure --verbose --target=m68k-rtems \

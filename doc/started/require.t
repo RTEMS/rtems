@@ -63,9 +63,10 @@ the GNU tools.
 
 @section GNU makeinfo Version Requirements
 
-In order to build egcs 1.1b or newer, the GNU @code{makeinfo} program
+In order to build egcs 1.1b, gcc 2.9.x, or newer versions, the GNU
+@code{makeinfo} program
 installed on your system must be at least version 1.68.  The appropriate
-version of @code{makeinfo} is distributed with egcs 1.1b.
+version of @code{makeinfo} is distributed with @code{gcc}.
 
 The following demonstrates how to determine the version of @code{makeinfo}
 on your machine:

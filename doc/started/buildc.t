@@ -381,7 +381,7 @@ as described below:
 @item INSTALL_POINT
 is the location where you wish the GNU C/C++ cross compilation tools for
 RTEMS to be built. It is recommended that the directory chosen to receive
-these tools be named so that it is clear from which egcs distribution it
+these tools be named so that it is clear from which gcc distribution it
 was generated and for which target system the tools are to produce code for.
 
 @b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory 
@@ -581,7 +581,7 @@ This can occur for one of the following reasons:
 @end itemize
 
 If you are using binutils 2.9.1 or newer with certain versions of
-egcs and gcc, they do not agree on what the name of the newly 
+gcc, they do not agree on what the name of the newly 
 generated cross assembler is.  Older binutils called it @code{as.new}
 which became @code{as.new.exe} under Windows.  This is not a valid
 file name, so @code{as.new} is now called @code{as-new}.  By using the latest

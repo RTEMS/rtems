@@ -18,7 +18,7 @@
 
 
 @c
-@c  GCC/EGCS Version
+@c  GCC Version
 @c
 
 @set GCC-VERSION     gcc 2.95.2

@@ -20,7 +20,7 @@ components:
 
 @itemize @bullet
 
-@item gcc/egcs
+@item gcc
 @item binutils
 @item gdb
 

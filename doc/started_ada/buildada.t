@@ -420,7 +420,7 @@ as described below:
 @item INSTALL_POINT
 is the location where you wish the GNU C/C++ cross compilation tools for
 RTEMS to be built. It is recommended that the directory chosen to receive
-these tools be named so that it is clear from which egcs distribution it
+these tools be named so that it is clear from which gcc distribution it
 was generated and for which target system the tools are to produce code for.
 
 @b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory 

@@ -205,9 +205,9 @@ ifeq ($(RTEMS_USE_GCC272),yes)
 # BSPs which already had this support.
 [...]
 else
-# This has rules to link an application using gcc 2.8 or newer or any
-# egcs version.  All BSPs should support this.  This version is required
-# to support GNAT/RTEMS.
+# This has rules to link an application using gcc 2.8 or newer.
+# All BSPs should support this.  This version is required to support
+# GNAT/RTEMS.
 define make-exe
 	$(CC) $(CFLAGS) $(CFLAGS_LD) -o $(basename $@@).exe $(LINK_OBJS)
 	$(NM) -g -n $(basename $@@).exe > $(basename $@@).num

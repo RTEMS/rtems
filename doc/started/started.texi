@@ -96,7 +96,7 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@c @node Command and Variable Index, Concept Index, Installing EGCS AND NEWLIB, Top
+@c @node Command and Variable Index, Concept Index, Installing GCC AND NEWLIB, Top
 @c @unnumbered Command and Variable Index
 
 @c There are currently no Command and Variable Index entries.
