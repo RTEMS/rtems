@@ -56,6 +56,25 @@ typedef enum {
 typedef Thread ( *Thread_Entry )( );
 
 /*
+ *  The following lists the algorithms used to manage the thread cpu budget.
+ *
+ *  Reset Timeslice:   At each context switch, reset the time quantum.
+ *  Exhaust Timeslice: Only reset the quantum once it is consumed.
+ *  Callout:           Execute routine when budget is consumed.
+ */
+
+typedef enum {
+  THREAD_CPU_BUDGET_ALGORITHM_NONE,
+  THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE,
+  THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE,
+  THREAD_CPU_BUDGET_ALGORITHM_CALLOUT
+}  Thread_CPU_budget_algorithms;
+
+typedef struct Thread_Control_struct Thread_Control;
+
+typedef void (*Thread_CPU_budget_algorithm_callout )( Thread_Control * );
+
+/*
  *  The following structure contains the information which defines
  *  the starting state of a thread.
  */
@@ -67,7 +86,8 @@ typedef struct {
   unsigned32           numeric_argument; /* numeric argument                */
                                          /* initial execution modes         */
   boolean              is_preemptible;
-  boolean              is_timeslice;
+  Thread_CPU_budget_algorithms          budget_algorithm;
+  Thread_CPU_budget_algorithm_callout   budget_callout;
   unsigned32           isr_level;
   Priority_Control     initial_priority; /* initial priority                */
   boolean              core_allocated_stack;
@@ -138,29 +158,32 @@ typedef enum {
 #define THREAD_API_FIRST THREAD_API_RTEMS
 #define THREAD_API_LAST  THREAD_API_POSIX
 
-typedef struct {
-  Objects_Control           Object;
-  States_Control            current_state;
-  Priority_Control          current_priority;
-  Priority_Control          real_priority;
-  unsigned32                resource_count;
-  Thread_Wait_information   Wait;
-  Watchdog_Control          Timer;
-  MP_packet_Prefix         *receive_packet;
+struct Thread_Control_struct {
+  Objects_Control                       Object;
+  States_Control                        current_state;
+  Priority_Control                      current_priority;
+  Priority_Control                      real_priority;
+  unsigned32                            resource_count;
+  Thread_Wait_information               Wait;
+  Watchdog_Control                      Timer;
+  MP_packet_Prefix                     *receive_packet;
      /****************** end of common block ********************/
-  boolean                   is_global;
-  boolean                   do_post_task_switch_extension;
-  unsigned32                cpu_time_budget;
-  Chain_Control            *ready;
-  Priority_Information      Priority_map;
-  Thread_Start_information  Start;
-  boolean                   is_preemptible;
-  boolean                   is_timeslice;
-  Context_Control           Registers;
-  void                     *fp_context;
-  void                     *API_Extensions[ THREAD_API_LAST + 1 ];
-  void                    **extensions;
-}   Thread_Control;
+  boolean                               is_global;
+  boolean                               do_post_task_switch_extension;
+
+  boolean                               is_preemptible;
+  unsigned32                            cpu_time_budget;
+  Thread_CPU_budget_algorithms          budget_algorithm;
+  Thread_CPU_budget_algorithm_callout   budget_callout;
+
+  Chain_Control                        *ready;
+  Priority_Information                  Priority_map;
+  Thread_Start_information              Start;
+  Context_Control                       Registers;
+  void                                 *fp_context;
+  void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
+  void                                **extensions;
+};
 
 /*
  *  The following constants define the stack size requirements for
@@ -306,20 +329,27 @@ void _Thread_Dispatch( void );
  *  DESCRIPTION:
  *
  *  XXX
+ *
+ *  NOTES:
+ *
+ *  If stack_area is NULL, it is allocated from the workspace.
+ *
+ *  If the stack is allocated from the workspace, then it is guaranteed to be
+ *  of at least minimum size.
  */
 
 boolean _Thread_Initialize(
-  Objects_Information *information,
-  Thread_Control      *the_thread,
-  void                *stack_area,    /* NULL if to be allocated */
-  unsigned32           stack_size,    /* insure it is >= min */
-  boolean              is_fp,         /* TRUE if thread uses FP */
-  Priority_Control     priority,
-  boolean              is_preemptible,
-  boolean              is_timeslice,
-  unsigned32           isr_level,
-  Objects_Name         name
- 
+  Objects_Information                  *information,
+  Thread_Control                       *the_thread,
+  void                                 *stack_area,
+  unsigned32                            stack_size,
+  boolean                               is_fp,
+  Priority_Control                      priority,
+  boolean                               is_preemptible,
+  Thread_CPU_budget_algorithms          budget_algorithm,
+  Thread_CPU_budget_algorithm_callout   budget_callout,
+  unsigned32                            isr_level,
+  Objects_Name                          name
 );
 
 /*
