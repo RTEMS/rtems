@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef __ARM_TYPES_h
-#define __ARM_TYPES_h
+#ifndef __rtems_score_types_h
+#define __rtems_score_types_h
 
 #ifndef ASM
 

@@ -18,8 +18,8 @@
  *  Chris Ziomkowski. <chris@asics.ws>
  */
 
-#ifndef __OR1K_TYPES_h
-#define __OR1K_TYPES_h
+#ifndef __rtems_score_types_h
+#define __rtems_score_types_h
 
 #ifndef ASM
 

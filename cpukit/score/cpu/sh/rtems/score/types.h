@@ -26,8 +26,8 @@
  *  $Id$
  */
 
-#ifndef __CPU_SH_TYPES_h
-#define __CPU_SH_TYPES_h
+#ifndef __rtems_score_types_h
+#define __rtems_score_types_h
 
 #ifndef ASM
 

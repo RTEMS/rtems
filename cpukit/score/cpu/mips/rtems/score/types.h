@@ -17,8 +17,8 @@
  */
 /* @(#)mipstypes.h       08/20/96     1.4 */
 
-#ifndef __MIPS_TYPES_h
-#define __MIPS_TYPES_h
+#ifndef __rtems_score_types_h
+#define __rtems_score_types_h
 
 #ifndef ASM
 
