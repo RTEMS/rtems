@@ -1,0 +1,2 @@
+Figure: Detach a process and close a connection.
+       (Not available in ASCII version of this document.)
