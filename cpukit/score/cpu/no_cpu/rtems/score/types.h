@@ -1,5 +1,8 @@
-/*  no_cputypes.h
- *
+/**
+ * @file rtems/score/types.h
+ */
+
+/*
  *  This include file contains type definitions pertaining to the Intel
  *  no_cpu processor family.
  *
