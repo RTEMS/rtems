@@ -1,3 +1,7 @@
+2000-12-14	Joel Sherrill <joel@OARcorp.com>
+
+	* TESTED: Added comment on 68en302 now that there is a network driver.
+
 2000-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	* TESTED: Added jmr3904 entry.

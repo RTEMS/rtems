@@ -44,6 +44,7 @@ RedHat Linux 5.1 as the host environment:
    m68k    m68040    Motorola MVME167             (note 1, 6)
    m68k    m68020    DY-4 DMV152                  (note 1)
    m68k    m68302    generic 68302                (note 1)
+   m68k    m68en302  generic 68en302              (note 1)
    m68k    m68302    ods 68302                    (note 1)
    m68k    m68332    efi332                       (note 1)
    m68k    m68360    generic 68360                (note 1, 6)
