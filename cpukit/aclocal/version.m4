@@ -1,2 +1,2 @@
 AC_DEFUN([RTEMS_VERSIONING],
-m4_define([_RTEMS_VERSION],[JUNK]))
+m4_define([_RTEMS_VERSION],[20021021-test]))
