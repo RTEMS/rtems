@@ -16,7 +16,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 #include "imfs.h"
 

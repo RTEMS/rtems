@@ -19,7 +19,7 @@
 #include <assert.h>
 
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 #if defined(IMFS_DEBUG)
 #include <stdio.h>

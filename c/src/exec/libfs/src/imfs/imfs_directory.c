@@ -23,7 +23,7 @@
 #include <dirent.h>
 
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 /*
  *  imfs_dir_open

@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int IMFS_unlink(
   rtems_filesystem_location_info_t  *loc       /* IN */

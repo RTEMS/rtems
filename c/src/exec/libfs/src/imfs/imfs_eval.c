@@ -20,7 +20,7 @@
 #include <assert.h>
 
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 #define RTEMS_LIBIO_PERMS_RX (RTEMS_LIBIO_PERMS_SEARCH | RTEMS_LIBIO_PERMS_READ)
 #define RTEMS_LIBIO_PERMS_WX (RTEMS_LIBIO_PERMS_SEARCH | RTEMS_LIBIO_PERMS_WRITE)

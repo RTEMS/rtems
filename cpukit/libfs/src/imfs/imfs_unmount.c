@@ -22,7 +22,7 @@
 #include <errno.h>
 
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int IMFS_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry

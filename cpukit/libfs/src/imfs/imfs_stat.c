@@ -15,7 +15,7 @@
 
 #include <errno.h>
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int IMFS_stat(
   rtems_filesystem_location_info_t *loc,

@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 IMFS_jnode_t *IMFS_create_node(
   rtems_filesystem_location_info_t  *parent_loc,

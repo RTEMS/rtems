@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int IMFS_mknod(
   const char                        *token,      /* IN */

@@ -24,7 +24,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 #define MEMFILE_STATIC 
 

@@ -16,7 +16,7 @@
 
 #include <stdlib.h>
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 IMFS_token_types IMFS_get_token(
   const char       *path,

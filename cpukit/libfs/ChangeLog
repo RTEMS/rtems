@@ -1,3 +1,20 @@
+2000-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* src/imfs/Makefile.am, src/imfs/deviceio.c, src/imfs/imfs_chown.c,
+	src/imfs/imfs_config.c, src/imfs/imfs_creat.c, src/imfs/imfs_debug.c,
+	src/imfs/imfs_directory.c, src/imfs/imfs_eval.c, src/imfs/imfs_fchmod.c,
+	src/imfs/imfs_free.c, src/imfs/imfs_fsunmount.c, src/imfs/imfs_gtkn.c,
+	src/imfs/imfs_init.c, src/imfs/imfs_initsupp.c, src/imfs/imfs_link.c,
+	src/imfs/imfs_mknod.c, src/imfs/imfs_mount.c, src/imfs/imfs_readlink.c,
+	src/imfs/imfs_rmnod.c, src/imfs/imfs_stat.c, src/imfs/imfs_symlink.c,
+	src/imfs/imfs_unixstub.c, src/imfs/imfs_unlink.c,
+	src/imfs/imfs_unmount.c, src/imfs/imfs_utime.c, src/imfs/ioman.c,
+	src/imfs/memfile.c, src/imfs/miniimfs_init.c:
+	assoc.h, error.h, libio_.h, libio.h, and libcsupport.h moved 
+	from libc to lib/include/rtems and now must be referenced as
+	<rtems/XXX.h>.  Now we do not have to reach up and over to
+	libc to pick them up.
+
 2000-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* src/imfs/imfs_config.c: New file containing IMFS configuration

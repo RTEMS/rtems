@@ -22,7 +22,7 @@
 #include <sys/stat.h>
 
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 /*
  *  IMFS_types

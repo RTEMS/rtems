@@ -15,7 +15,7 @@
  */
 
 #include <errno.h>
-#include "libio_.h"
+#include <rtems/libio_.h>
 #include "imfs.h"
 
 int IMFS_chown(

@@ -22,7 +22,7 @@
 #include <assert.h>
 
 #include <rtems.h>
-#include "libio_.h"
+#include <rtems/libio_.h>
 #include "imfs.h"
 
 #if defined(__linux__)

@@ -17,7 +17,7 @@
 #include <errno.h>
 #include <sys/time.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 #include "imfs.h"
 
 int IMFS_utime(

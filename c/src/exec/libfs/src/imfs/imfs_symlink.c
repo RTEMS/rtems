@@ -17,7 +17,7 @@
 
 #include <errno.h>
 #include "imfs.h"
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int IMFS_symlink(
   rtems_filesystem_location_info_t  *parent_loc,

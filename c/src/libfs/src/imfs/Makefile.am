@@ -63,7 +63,7 @@ OBJS = $(C_O_FILES)
 # Add local stuff here using +=
 #
 
-AM_CFLAGS += $(LIBC_DEFINES) -I $(top_srcdir)/../lib/libc
+AM_CFLAGS += $(LIBC_DEFINES) 
 
 all-local: ${ARCH} $(LIB)
 
