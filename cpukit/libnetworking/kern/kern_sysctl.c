@@ -392,9 +392,8 @@ sysctl_add_oid(struct sysctl_ctx_list *clist, struct sysctl_oid_list *parent,
 	oidp->oid_kind = CTLFLAG_DYN | kind;
 	if ((kind & CTLTYPE) == CTLTYPE_NODE) {
 		/* Allocate space for children */
-                /* Later accessed by macro SYSCTL_CHILDREN(oidp) */
-		oidp->oid_arg1 = malloc(sizeof(struct sysctl_oid_list),
-		    M_SYSCTLOID, M_WAITOK);
+		SYSCTL_CHILDREN_SET(oidp, malloc(sizeof(struct sysctl_oid_list),
+		    M_SYSCTLOID, M_WAITOK));
 		SLIST_INIT(SYSCTL_CHILDREN(oidp));
 	} else {
 		oidp->oid_arg1 = arg1;

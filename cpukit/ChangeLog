@@ -1,3 +1,9 @@
+2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/kern/kern_sysctl.c,
+	libnetworking/sys/sysctl.h: Add SYSCTL_CHILDREN_SET
+	(Update from FreeBSD for GCC-4.0.0).
+
 2004-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/kern/kern_sysctl.c, libnetworking/netinet/ip_mroute.c,
