@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename bsp_howto
+@setfilename bsp_howto.info
 @setcontentsaftertitlepage
 @syncodeindex vr fn
 @synindex ky cp
