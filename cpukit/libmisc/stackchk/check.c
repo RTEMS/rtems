@@ -104,6 +104,12 @@ Stack_check_Control Stack_check_Pattern;
 Stack_Control stack_check_interrupt_stack;
 
 /*
+ * Prototypes necessary for forward references
+ */
+
+void Stack_check_Dump_usage( void );
+
+/*
  * Fill an entire stack area with BYTE_PATTERN.
  * This will be used by a Fatal extension to check for
  * amount of actual stack used
@@ -161,6 +167,10 @@ void Stack_check_Initialize( void )
   assert ( status == RTEMS_SUCCESSFUL );
 
   Stack_check_Blown_task = 0;
+
+#ifdef STACK_CHECKER_REPORT_USAGE
+  atexit( Stack_check_Dump_usage );
+#endif
 
   /*
    * If installed by a task, that task will not get setup properly
