@@ -1,3 +1,7 @@
+2002-08-07	Ivan Guzvinec <ivang@opencores.org>
+
+	* orp.cfg: Bender BSP renamed to OpenRisc Reference Platform or ORP.
+
 2002-08-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/vegaplus.cfg: Fix bogus and corrupted make-exe.
