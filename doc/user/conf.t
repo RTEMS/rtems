@@ -333,7 +333,7 @@ initialization threads must be configured.
 is the address of the Initialization Threads Table. This table contains the
 information needed to create and start each of the initialization threads.  
 The format of each entry in this table is defined in the 
-posix_initialization_threads_table structure.
+posix_initialization_threads_table @value{STRUCTURE}.
 
 @end table
 
@@ -363,8 +363,8 @@ data structure directly correspond to arguments to the
 task_create and task_start directives.  The number of entries is
 found in the number_of_initialization_tasks entry in the
 Configuration Table.  The format of each entry in the
-Initialization Task Table is defined in the following C
-structure:
+Initialization Task Table is defined in the following @value{LANGUAGE}
+@value{STRUCTURE}:
 
 @ifset is-C
 @example
@@ -581,8 +581,8 @@ contains one entry for each possible extension.  The entries are
 called at critical times in the life of the system and
 individual tasks.  The application may create dynamic extensions
 in addition to this single static set.  The format of each entry
-in the User Extensions Table is defined in the following C
-structure:
+in the User Extensions Table is defined in the following @value{LANGUAGE}
+@value{STRUCTURE}:
 
 typedef User_extensions_routine                   rtems_extension;
 typedef User_extensions_thread_create_extension   rtems_task_create_extension;

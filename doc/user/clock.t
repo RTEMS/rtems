@@ -67,7 +67,7 @@ specified by the user in the Configuration Table.
 
 The clock facilities of the clock manager operate
 upon calendar time.  These directives utilize the following date
-and time structure for the native time and date format:
+and time @value{STRUCTURE} for the native time and date format:
 
 @ifset is-C
 @example
@@ -106,7 +106,7 @@ supported when setting the system date and time using the
 clock_get directive.  Some applications expect to operate on a
 "UNIX-style" date and time data structure.  The clock_get
 directive can optionally return the current date and time in the
-following structure:
+following @value{STRUCTURE}:
 
 @ifset is-C
 @example
@@ -129,7 +129,7 @@ type Clock_Time_Value is
 @end example
 @end ifset
 
-The seconds field in this structure is the number of
+The seconds field in this @value{STRUCTURE} is the number of
 seconds since the RTEMS epoch of January 1, 1988.
 
 @ifinfo
@@ -306,7 +306,7 @@ procedure Clock_Set (
 @subheading DESCRIPTION:
 
 This directive sets the system date and time.  The
-date, time, and ticks in the time_buffer structure are all
+date, time, and ticks in the time_buffer @value{STRUCTURE} are all
 range-checked, and an error is returned if any one is out of its
 valid range.
 

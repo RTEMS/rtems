@@ -90,7 +90,7 @@ The fatal_error_occurred directive is invoked when a
 fatal error is detected.  Before invoking any user-supplied
 fatal error handlers or the RTEMS fatal error handler, the
 fatal_error_occurred directive stores useful information in the
-variable @code{_Internal_errors_What_happened}.  This structure
+variable @code{_Internal_errors_What_happened}.  This @value{STRUCTURE}
 contains three pieces of information:
 
 @itemize @bullet

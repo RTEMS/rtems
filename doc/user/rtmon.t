@@ -1194,7 +1194,7 @@ procedure Rate_Monotonic_Get_Status (
 @subheading DESCRIPTION:
 
 This directive returns status information associated with 
-the rate monotonic period id in the following data structure:
+the rate monotonic period id in the following data @value{STRUCTURE}:
 
 @ifset is-C
 @example

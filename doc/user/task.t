@@ -1483,5 +1483,5 @@ in time_buffer.  At the requested date and time, the calling
 task will be unblocked and made ready to execute.
 
 @subheading NOTES:
-The ticks portion of time_buffer structure is ignored.  The
+The ticks portion of time_buffer @value{STRUCTURE} is ignored.  The
 timing granularity of this directive is a second.

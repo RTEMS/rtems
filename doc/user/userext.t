@@ -85,7 +85,7 @@ user extension routines are invoked.  Together a set of these
 routines typically perform a specific functionality such as
 performance monitoring or debugger support.  RTEMS is informed of
 the entry points which constitute an extension set via the
-following structure:
+following @value{STRUCTURE}:
 
 @ifset is-C
 @example

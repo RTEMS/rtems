@@ -211,8 +211,7 @@ the memory.
 An acronym for First In First Out.
 
 @item First In First Out
-A discipline for manipulating
-entries in a data structure.
+A discipline for manipulating entries in a data structure.
 
 @item floating point coprocessor
 A component used in
@@ -247,12 +246,10 @@ A data structure used to dynamically allocate
 and deallocate variable sized blocks of memory.
 
 @item heterogeneous
-A multiprocessor computer system
-composed of dissimilar processors.
+A multiprocessor computer system composed of dissimilar processors.
 
 @item homogeneous
-A multiprocessor computer system
-composed of a single type of processor.
+A multiprocessor computer system composed of a single type of processor.
 
 @item ID
 An RTEMS assigned identification tag used to
@@ -350,9 +347,8 @@ and communicate between tasks by transporting messages between
 sending and receiving tasks.
 
 @item Message Queue Control Block
-A data structure
-associated with each message queue used by RTEMS to manage that
-message queue.
+A data structure associated with each message queue used by RTEMS
+to manage that message queue.
 
 @item minor number
 A numeric value passed to a device
@@ -382,8 +378,7 @@ of user-provided routines which enable the nodes in a
 multiprocessor system to communicate with one another.
 
 @item Multiprocessor Configuration Table
-The data
-structure defining the characteristics of the multiprocessor
+The data structure defining the characteristics of the multiprocessor
 target system with which RTEMS will communicate.
 
 @item multitasking

@@ -437,7 +437,7 @@ names are printed in bold type.
 @item Items in bold capital letters are constants defined by
 RTEMS.  Each language interface provided by RTEMS includes a
 file containing the standard set of constants, data types, and
-structure definitions which can be incorporated into the user
+@value{STRUCTURE} definitions which can be incorporated into the user
 application.
 
 @item A number of type definitions are provided by RTEMS and

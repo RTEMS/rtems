@@ -33,6 +33,10 @@ directive:
 
 @itemize @bullet
 @item @code{interrupt_catch} - Establish an ISR
+@item @code{interrupt_disable} - Disable Interrupts
+@item @code{interrupt_enable} - Enable Interrupts
+@item @code{interrupt_flash} - Flash Interrupt
+@item @code{interrupt_is_in_progress} - Is an ISR in Progress
 @end itemize
 
 @ifinfo
@@ -315,9 +319,9 @@ procedure Interrupt_Catch (
 
 This directive establishes an interrupt service
 routine (ISR) for the specified interrupt vector number.  The
-new_isr_handler parameter specifies the entry point of the ISR.
+@code{new_isr_handler} parameter specifies the entry point of the ISR.
 The entry point of the previous ISR for the specified vector is
-returned in old_isr_handler.
+returned in @code{old_isr_handler}.
 
 @subheading NOTES:
 
