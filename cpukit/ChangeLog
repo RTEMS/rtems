@@ -1,5 +1,13 @@
 2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* sapi/include/confdefs.h, sapi/include/rtems/config.h,
+	sapi/include/rtems/extension.h, sapi/include/rtems/fatal.h,
+	sapi/include/rtems/init.h, sapi/include/rtems/io.h,
+	sapi/include/rtems/sptables.h, sapi/inline/rtems/extension.inl,
+	sapi/macros/rtems/extension.inl: Add doxygen preamble.
+
+2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* score/include/rtems/debug.h, score/include/rtems/seterr.h,
 	score/include/rtems/system.h, score/include/rtems/score/address.h,
 	score/include/rtems/score/apiext.h,
