@@ -35,7 +35,7 @@ RTEMS development environment.
 For those interested in using the Ada95 programming language, the GNU Ada
 compiler (GNAT) is available and has excellent support for RTEMS.
 
-@subsection DDD
+@subsection DDD - Data Display Debugger
 
 By far the easiest way to use DDD if you are on a Redhat Linux system is
 to retrieve the RPM package for your OS version.  In general, it is 
@@ -53,7 +53,7 @@ should work out-of-the-box.
 
 User comments indicate that both Lesstif and DDD can be built
 from scratch without any problems.  Instructions on installing
-Lesstif are at http://www.cs.tu-bs.de/softech/ddd/.  They
+Lesstif are at @uref{http://www.cs.tu-bs.de/softech/ddd/}.  They
 indicate that
 
 @itemize @bullet
@@ -75,7 +75,7 @@ library paths to point to the Motif 1.2 library.
 The following notes are from an RTEMS user who uses DDD in conjunction
 with Lesstif.  Configure DDD "--with-motif-libraries=/usr/local/lib
 --with-motif-includes=/usr/local/include" DDD needs gnuplot 3.7.  
-ftp://ftp.dartmouth.edu/pub/gnuplot/gnuplot-3.7.tar.gz. Build and
+@uref{ftp://ftp.dartmouth.edu/pub/gnuplot/gnuplot-3.7.tar.gz}. Build and
 install from scratch.  
 
 DDD can be started from a script that specifies the cross debugger.
