@@ -57,6 +57,10 @@ SECTIONS
     text_start = .;
     _text_start = .;
     *(.text)
+    . = ALIGN (16);
+    *(.eh_fram)
+    . = ALIGN (16);
+
     etext = ALIGN(0x10);
     _etext = .;
     __CTOR_LIST__ = .;

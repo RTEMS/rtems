@@ -72,6 +72,9 @@ SECTIONS {
                 *(.text)
                 . = ALIGN (16);
 
+		*(.eh_fram)
+		. = ALIGN (16);
+
 		/*
 		 * C++ constructors
 		 */

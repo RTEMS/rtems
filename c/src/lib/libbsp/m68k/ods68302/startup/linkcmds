@@ -11,6 +11,11 @@ SECTIONS
   {
     text_start = .;
     *(.text)
+    . = ALIGN (16);
+
+    *(.eh_fram)
+    . = ALIGN (16);
+
     etext = .;
     . = ALIGN(4);
     __CTOR_LIST__ = .;
