@@ -171,5 +171,5 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
   }
 
-  return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
+  return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT;
 }
