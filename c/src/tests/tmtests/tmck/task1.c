@@ -157,7 +157,7 @@ void check_read_timer()
        *  consider valid for our testing purposes.
        */
       printf( "TOO LONG (%d) at index %d!!!\n", end_time, index );
-#if defined(unix) || defined(go32)
+#if defined(unix)
       index--; 
       continue;
 #else
