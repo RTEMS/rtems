@@ -290,6 +290,8 @@ void __ISR_Handler( unsigned32 vector)
 
   _CPU_ISR_Disable( level );
 
+  _Thread_Dispatch_disable_level--;
+
   _ISR_Nest_level--;
 
 #if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
@@ -299,16 +301,18 @@ void __ISR_Handler( unsigned32 vector)
     stack_ptr = _old_stack_ptr;  
 #endif
 
-  _Thread_Dispatch_disable_level--;
-
   _CPU_ISR_Enable( level );
 
-  if ( _Thread_Dispatch_disable_level == 0 )
-    {
-      if(( _Context_Switch_necessary) || (! _ISR_Signals_to_thread_executing))
-	{
-	  _ISR_Signals_to_thread_executing = FALSE;
-	  _Thread_Dispatch();
-	}
+  if ( _ISR_Nest_level )
+    return;
+
+  if ( _Thread_Dispatch_disable_level ) {
+    _ISR_Signals_to_thread_executing = FALSE;
+    return;
+  }
+
+  if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing ) {
+    _ISR_Signals_to_thread_executing = FALSE;
+    _Thread_Dispatch();
   }
 }

@@ -1,3 +1,10 @@
+2003-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* score/cpu_asm.c: Rework logic that decides when to call
+	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru>
+	determined that _ISR_Signals_to_thread_executing was not being
+	honored and/or cleared properly.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
