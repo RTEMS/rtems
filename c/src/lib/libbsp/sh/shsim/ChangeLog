@@ -1,3 +1,7 @@
+2001-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gdbsci/, scitab/, trap34/: Add directories.
+
 2001-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, README, console/console-io.c, start/start.S,
