@@ -83,10 +83,13 @@ decdriver.texi: decdriver.t Makefile
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
+	rm -f $(WWW_INSTALL)/$(PROJECT)/networkflow.jpg
 	rm -f $(WWW_INSTALL)/$(PROJECT)/networkflow.png
+	rm -f $(WWW_INSTALL)/$(PROJECT)/PCIreg.jpg
+	cp recvbd.jpg $(WWW_INSTALL)/$(PROJECT)/recvbd.jpg
+	cp networkflow.jpg $(WWW_INSTALL)/$(PROJECT)/networkflow.jpg
 	cp networkflow.png $(WWW_INSTALL)/$(PROJECT)/networkflow.png
-	rm -f $(WWW_INSTALL)/$(PROJECT)/PCIreg.png
-	cp PCIreg.png $(WWW_INSTALL)/$(PROJECT)/PCIreg.png
+	cp PCIreg.jpg $(WWW_INSTALL)/$(PROJECT)/PCIreg.jpg
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
@@ -102,3 +105,4 @@ clean:
 convert:
 	/usr/bin/gs -dMaxBitmap=300000000 -g5500x7500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER  -sOutputFile=networkflow.pdf -- networkflow.eps -c -quit
 	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=PCIreg.pdf -- PCIreg.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=recvbd.pdf -- recvbd.eps -c -quit
