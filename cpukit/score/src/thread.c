@@ -70,7 +70,6 @@ void _Thread_Handler_initialization(
 
   _Thread_Maximum_extensions = maximum_extensions;
 
-  _Thread_Ticks_remaining_in_timeslice = ticks_per_timeslice;
   _Thread_Ticks_per_timeslice          = ticks_per_timeslice;
 
   _Thread_Ready_chain = _Workspace_Allocate_or_fatal_error(
@@ -244,7 +243,7 @@ void _Thread_Dispatch( void )
 
     _User_extensions_Thread_switch( executing, heir );
 
-    _Thread_Ticks_remaining_in_timeslice = _Thread_Ticks_per_timeslice;
+    heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
 
     /*
      *  If the CPU has hardware floating point, then we must address saving
@@ -874,8 +873,8 @@ void _Thread_Reset_timeslice( void )
   ready     = executing->ready;
   _ISR_Disable( level );
     if ( _Chain_Has_only_one_node( ready ) ) {
-      _Thread_Ticks_remaining_in_timeslice = _Thread_Ticks_per_timeslice;
       _ISR_Enable( level );
+      executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       return;
     }
     _Chain_Extract_unprotected( &executing->Object.Node );
@@ -911,7 +910,7 @@ void _Thread_Tickle_timeslice( void )
        !_States_Is_ready( _Thread_Executing->current_state ) ) 
     return;
 
-  if ( --_Thread_Ticks_remaining_in_timeslice == 0 ) {
+  if ( --_Thread_Executing->cpu_time_budget == 0 ) {
       _Thread_Reset_timeslice();
   }
 }

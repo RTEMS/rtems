@@ -150,6 +150,7 @@ typedef struct {
      /****************** end of common block ********************/
   boolean                   is_global;
   boolean                   do_post_task_switch_extension;
+  unsigned32                cpu_time_budget;
   Chain_Control            *ready;
   Priority_Information      Priority_map;
   Thread_Start_information  Start;
@@ -210,10 +211,9 @@ SCORE_EXTERN unsigned32 _Thread_Dispatch_disable_level;
 SCORE_EXTERN unsigned32 _Thread_Maximum_extensions;
 
 /*
- *  The following data items are used to manage timeslicing.
+ *  The following is used to manage the length of a timeslice quantum.
  */
 
-SCORE_EXTERN unsigned32 _Thread_Ticks_remaining_in_timeslice;
 SCORE_EXTERN unsigned32 _Thread_Ticks_per_timeslice;
 
 /*
