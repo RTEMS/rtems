@@ -19,7 +19,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
  
-#include <libcsupport.h>
+#include <rtems/libcsupport.h>
  
 #include <string.h>
 extern int _mem_end;
@@ -34,8 +34,6 @@ extern rtems_configuration_table Configuration;
 rtems_configuration_table  BSP_Configuration;
 
 rtems_cpu_table Cpu_table;
-
-char *rtems_progname;
 
 /*
  *  Use the shared implementations of the following routines
@@ -117,6 +115,4 @@ void bsp_start( void )
   rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
 
   bsp_cleanup();
-
-  return 0;
 }

@@ -1,5 +1,11 @@
 2002-08-06	Joel Sherrill <joel@OARcorp.com>
 
+	* bsp_specs, configure.ac, startup/bspstart.c: Update and fix
+	minor things so this BSP compiles and almost completely links.
+	* startup/Makefile.am: New file.
+
+2002-08-06	Joel Sherrill <joel@OARcorp.com>
+
 	* include/.cvsignore: Updated to account for more files.
 
 2002-08-06	Chris Ziomkowski <chris@asics.ws>
