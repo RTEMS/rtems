@@ -17,15 +17,6 @@ The following persons/organizations have made contributions:
   Scientific Association submitted the BSP and other miscellaneous support
   for the Motorola MVME162 (M68040LC CPU) VMEbus single board computer.
 
-+ Division Inc. of Chapel Hill, NC for sponsoring On-Line Applications
-  Research to port RTEMS to the Hewlett-Packard PA-RISC architecture (V1.1)
-  and the addition of HP-UX as a development host. Tony Bennett
-  (tbennett@chapelhill.hp.com) was assisted in this effort by Joel Sherrill
-  (joel@OARcorp.com).  Tony also deserves a big pat on the back for 
-  contributing significantly to the overall organization of the development 
-  environment and directory structure.  RTEMS is much easier to build 
-  because of Tony.
-
 + Greg Allen of Division Inc. of Chapel Hill, NC for 
   porting RTEMS to HP-UX.  This port treats a UNIX computer as simply
   another RTEMS target processor.  This port can be used to develop 
