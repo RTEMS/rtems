@@ -31,6 +31,9 @@ concepts:
   e.  Verifies a task called with rtems suspend can be resumed 
       with an itron resume call. ( XXX - May not be necessary. )
 
+  f.  verifies rot_rdq can be used by non-equal priority tasks to correctly rotate ready queue.
+
+  g.  Verifies enable dispatch and disable dispatch work.
 
 notes: 
 
