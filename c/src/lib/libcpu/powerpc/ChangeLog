@@ -1,5 +1,9 @@
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove mpc6xx/*/Makefile,  mpc8260/*/Makefile.
+
+2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mpc6xx/clock/Makefile.am: Remove.
 	* mpc6xx/exceptions/Makefile.am: Remove.
 	* mpc6xx/mmu/Makefile.am: Remove.
