@@ -1,3 +1,7 @@
+2004-03-25	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Reflect changes to testsuites's configuration.
+
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	PR/589 rtems
