@@ -108,7 +108,8 @@ BuildPreReq:	zlib-devel
 %if %build_gnat
 # Building gnat requires gnat
 %if "%_vendor" == "redhat"
-BuildPreReq:	gcc-gnat
+# This really isn't available until RedHat 8.0.  How to conditionalize this?
+# BuildPreReq:	gcc-gnat
 %endif
 %endif
 

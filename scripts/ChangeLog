@@ -1,3 +1,11 @@
+2003-02-26	RTEMS
+
+	* setup.def: Updated gdb revision to -2 so arm will build and
+	to fix psim build problem on NetBSD.   
+	* gcc3newlib/gccnewlib.add: Ignore dependency on GNAT RPM since
+	RedHat 7.3 doesn't have it available.  Maybe later.
+	* gdb/Makefile.am: Cleanup way the RPM_SPECS_DATA variable is built.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
