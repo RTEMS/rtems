@@ -10,11 +10,11 @@
 @c  Set Variables
 @c
 
-@set RTEMS-RELEASE 4.0.0-beta3a
-@set RTEMS-EDITION 980603
-@set RTEMS-VERSION 980603
-@set RTEMS-UPDATE-DATE June 3 1998
-@set RTEMS-UPDATE-MONTH June 1998
+@set RTEMS-RELEASE 980821
+@set RTEMS-EDITION 980812
+@set RTEMS-VERSION 980812
+@set RTEMS-UPDATE-DATE August 12 1998
+@set RTEMS-UPDATE-MONTH August 1998
 
 @c
 @c  The following determines which set of the tables and figures we will use.
