@@ -81,6 +81,7 @@ subtask (rtems_task_argument arg)
 	while (nRunning)
 		rtems_task_wake_after (0);
 	printf ("Task variables test complete.\n");
+	puts ("*** END OF TEST SP28 ***" );
 	exit (0);
 }
 
@@ -92,7 +93,7 @@ starttask (int arg)
 
 	sc = rtems_task_create (rtems_build_name ('S', 'R', 'V', arg + 'A'),
 		100,
-		10000,
+		RTEMS_MINIMUM_STACK_SIZE,
 		RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
 		RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
 		&tid);
@@ -110,8 +111,10 @@ starttask (int arg)
 rtems_task
 Init (rtems_task_argument ignored)
 {
-	printf ("Task variables test begins.  Any output between\n");
-	printf ("this line and the `Task variables test complete' line indicates an error.\n");
+
+	puts ("*** START OF TEST SP28 ***" );
+	puts ("Task variables test begins.  Any output between\n");
+	puts ("this line and the `Task variables test complete' line indicates an error.\n");
 	starttask (1);
 	starttask (2);
 	starttask (3);
