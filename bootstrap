@@ -82,6 +82,8 @@ generate)
     aclocal $aclocal_args;
     test -n "`grep CONFIG_HEADER ${configure}`" && autoheader \
       && test "$verbose" = "-v" && echo "autoheader";
+    test -n "`grep RTEMS_BSP_CONFIGURE ${configure}`" && autoheader \
+      && test "$verbose" = "-v" && echo "autoheader";
     test -f Makefile.am && automake -a -c $verbose ;
     autoconf;
     test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
@@ -115,6 +117,7 @@ clean)
   fi; done
 
   find . -name '*~' -print | xargs rm -f
+  find . -name 'bspopts.h*' -print | xargs rm -f
   find . -name '*.orig' -print | xargs rm -f
   find . -name '*.rej' -print | xargs rm -f
   find . -name 'config.status' -print | xargs rm -f
