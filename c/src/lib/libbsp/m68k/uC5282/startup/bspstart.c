@@ -66,7 +66,7 @@ char *rtems_progname;
  *   No burst transfers on non-cacheable accesses
  *   Default cache mode is *disabled* (cache only ACRx areas)
  */
-static unsigned32 cacr_mode = MCF5XXX_CACR_CENB |
+static uint32_t cacr_mode = MCF5XXX_CACR_CENB |
                               MCF5XXX_CACR_DBWE |
                               MCF5XXX_CACR_DCM;
 /*
@@ -156,7 +156,7 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
  *  Use the shared implementations of the following routines
  */
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);         /* m68k version */
 
 /*
@@ -246,10 +246,10 @@ void bsp_start( void )
     MCF5282_CS2_CSCR = MCF5282_CS_CSCR_PS_16;
 }
 
-unsigned32 bsp_get_CPU_clock_speed(void)
+uint32_t bsp_get_CPU_clock_speed(void)
 {
     extern char _CPUClockSpeed[];
-    return( (unsigned32)_CPUClockSpeed);
+    return( (uint32_t)_CPUClockSpeed);
 }
 
 /*

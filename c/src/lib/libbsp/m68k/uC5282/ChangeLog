@@ -1,5 +1,10 @@
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* console/console.c, include/bsp.h, network/network.c,
+	startup/bspstart.c: Remove obsolete fixed size types.
+
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* startup/bspstart.c:
 	rtems_interrupt_catch(trampoline, vector, &old_handler).
 

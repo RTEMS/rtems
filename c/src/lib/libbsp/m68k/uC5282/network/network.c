@@ -70,8 +70,8 @@
 #endif
 
 typedef struct mcf5282BufferDescriptor_ {
-    volatile rtems_unsigned16   status;
-    rtems_unsigned16            length;
+    volatile uint16_t           status;
+    uint16_t			length;
     volatile void               *buffer;
 } mcf5282BufferDescriptor_t;
 
@@ -138,6 +138,7 @@ mcf5282_bd_allocate(unsigned int count)
     return p;
 }
 
+#if UNUSED
 /*
  * Read MII register
  * Busy-waits, but transfer time should be short!
@@ -154,6 +155,7 @@ getMII(int phyNumber, int regNumber)
     MCF5282_FEC_EIR = MCF5282_FEC_EIR_MII;
     return MCF5282_FEC_MMFR & 0xFFFF;
 }
+#endif
 
 /*
  * Write MII register
@@ -179,7 +181,7 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
     const unsigned char *hwaddr;
     rtems_status_code status;
     rtems_isr_entry old_handler;
-	unsigned32 clock_speed = bsp_get_CPU_clock_speed();
+	uint32_t clock_speed = bsp_get_CPU_clock_speed();
 
     /*
      * Issue reset to FEC
@@ -331,7 +333,7 @@ fec_rxDaemon (void *arg)
     volatile struct mcf5282_enet_struct *sc = (volatile struct mcf5282_enet_struct *)arg;
     struct ifnet *ifp = (struct ifnet* )&sc->arpcom.ac_if;
     struct mbuf *m;
-    volatile rtems_unsigned16 status;
+    volatile uint16_t status;
     volatile mcf5282BufferDescriptor_t *rxBd;
     int rxBdIndex;
 
@@ -400,7 +402,7 @@ fec_rxDaemon (void *arg)
              * FIXME: Packet filtering hook could be done here.
              */
             struct ether_header *eh;
-            int len = rxBd->length - sizeof(rtems_unsigned32);;
+            int len = rxBd->length - sizeof(uint32_t);;
 
             /*
              * Invalidate the cache and push the packet up.
@@ -446,7 +448,7 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
 {
     struct mcf5282_enet_struct *sc = ifp->if_softc;
     volatile mcf5282BufferDescriptor_t *firstTxBd, *txBd;
-    rtems_unsigned16 status;
+    uint16_t status;
     int nAdded;
 
    /*
@@ -519,10 +521,10 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
             if ((int)p & 0x3) {
                 int l = m->m_len;
                 char *dest = p - ((int)p & 0x3);
-                unsigned16 *o = (unsigned16 *)dest, *i = (unsigned16 *)p;
+                uint16_t *o = (uint16_t *)dest, *i = (uint16_t *)p;
                 while (l > 0) {
                     *o++ = *i++;
-                    l -= sizeof(unsigned16);
+                    l -= sizeof(uint16_t);
                 }
                 p = dest;
                 sc->txRealign++;
