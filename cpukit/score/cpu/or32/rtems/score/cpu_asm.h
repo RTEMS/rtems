@@ -1,6 +1,8 @@
+/**
+ * @file rtems/score/cpu_asm.h
+ */
+
 /*
- *  cpu_asm.h
- *
  *  Very loose template for an include file for the cpu_asm.? file
  *  if it is implemented as a ".S" file (preprocessed by cpp) instead
  *  of a ".s" file (preprocessed by gm4 or gasp).

@@ -1,5 +1,8 @@
-/*  or1k.h
- *
+/**
+ * @file rtems/score/or32.h
+ */
+
+/*
  *  This include file contains Or1k definitions pertaining to the Opencores
  *  or1k processor family.
  *

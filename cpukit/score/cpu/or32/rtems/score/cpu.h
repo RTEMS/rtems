@@ -1,5 +1,8 @@
-/*  cpu.h
- *
+/**
+ * @file rtems/score/cpu.h
+ */
+
+/*
  *  This include file contains macros pertaining to the Opencores
  *  or1k processor family.
  *
