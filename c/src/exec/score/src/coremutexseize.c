@@ -53,17 +53,11 @@ void _CORE_mutex_Seize(
   ISR_Level       level;
 
   executing = _Thread_Executing;
-  switch ( the_mutex->Attributes.discipline ) {
-    case CORE_MUTEX_DISCIPLINES_FIFO:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-      break;
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-      if ( executing->current_priority <
-                              the_mutex->Attributes.priority_ceiling) {
-        executing->Wait.return_code = CORE_MUTEX_STATUS_CEILING_VIOLATED;
-        return;
-      }
+  if ( _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+    if ( executing->current_priority < the_mutex->Attributes.priority_ceiling) {
+      executing->Wait.return_code = CORE_MUTEX_STATUS_CEILING_VIOLATED;
+      return;
+    }
   }
   executing->Wait.return_code = CORE_MUTEX_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
@@ -72,17 +66,17 @@ void _CORE_mutex_Seize(
     the_mutex->holder     = executing;
     the_mutex->holder_id  = executing->Object.id;
     the_mutex->nest_count = 1;
-    executing->resource_count++;
+    if ( _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ||
+         _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) )
+      executing->resource_count++;
     _ISR_Enable( level );
-    switch ( the_mutex->Attributes.discipline ) {
-      case CORE_MUTEX_DISCIPLINES_FIFO:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-        /* already the highest priority */
-        break;
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-      if ( the_mutex->Attributes.priority_ceiling <
-                                           executing->current_priority ) {
+    /*
+     *  if CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT then nothing to do
+     *  because this task is already the highest priority.
+     */
+
+    if ( _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+      if (the_mutex->Attributes.priority_ceiling < executing->current_priority){
         _Thread_Change_priority(
           the_mutex->holder,
           the_mutex->Attributes.priority_ceiling,
@@ -120,40 +114,27 @@ void _CORE_mutex_Seize(
   executing->Wait.id    = id;
   _ISR_Enable( level );
 
-  switch ( the_mutex->Attributes.discipline ) {
-    case CORE_MUTEX_DISCIPLINES_FIFO:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-      break;
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-      if ( the_mutex->holder->current_priority > executing->current_priority ) {
-        _Thread_Change_priority(
-          the_mutex->holder,
-          executing->current_priority,
-          FALSE
-        );
-      }
-      break;
+  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
+    if ( the_mutex->holder->current_priority > executing->current_priority ) {
+      _Thread_Change_priority(
+        the_mutex->holder,
+        executing->current_priority,
+        FALSE
+      );
+    }
   }
 
   _Thread_queue_Enqueue( &the_mutex->Wait_queue, timeout );
 
   if ( _Thread_Executing->Wait.return_code == CORE_MUTEX_STATUS_SUCCESSFUL ) {
-    switch ( the_mutex->Attributes.discipline ) {
-      case CORE_MUTEX_DISCIPLINES_FIFO:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-        break;
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-        if ( the_mutex->Attributes.priority_ceiling <
-                                           executing->current_priority ) {
-          _Thread_Change_priority(
-            executing,
-            the_mutex->Attributes.priority_ceiling,
-            FALSE
-          );
-        };
-        break;
+    if ( _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+      if (the_mutex->Attributes.priority_ceiling < executing->current_priority){
+        _Thread_Change_priority(
+          executing,
+          the_mutex->Attributes.priority_ceiling,
+          FALSE
+        );
+      }
     }
   }
 }

@@ -86,7 +86,9 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     }
   }
 
-  holder->resource_count--;
+  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
+       _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
+    holder->resource_count--;
   the_mutex->holder    = NULL;
   the_mutex->holder_id = 0;
 
@@ -96,19 +98,13 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  mutex (i.e. resource) this task has.
    */
 
-  switch ( the_mutex->Attributes.discipline ) {
-    case CORE_MUTEX_DISCIPLINES_FIFO:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY:
-      break;
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-      if ( holder->resource_count == 0 && 
-           holder->real_priority != holder->current_priority ) {
-         _Thread_Change_priority( holder, holder->real_priority, TRUE );
-      }
-      break;
+  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
+       _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+    if ( holder->resource_count == 0 && 
+         holder->real_priority != holder->current_priority ) {
+       _Thread_Change_priority( holder, holder->real_priority, TRUE );
+    }
   }
-
 
   if ( ( the_thread = _Thread_queue_Dequeue( &the_mutex->Wait_queue ) ) ) {
 
