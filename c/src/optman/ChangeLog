@@ -1,3 +1,8 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* sapi/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-07-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* sapi/Makefile.am: Add bsplib_DATA = $(PGMS).

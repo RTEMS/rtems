@@ -4,7 +4,7 @@
 
 
 C_FILES = no-ext.c no-io.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 PGMS = $(C_FILES:%.c=$(ARCH)/%.rel)
 

@@ -5,7 +5,7 @@
 
 C_FILES = no-dpmem.c no-event.c no-msg.c no-mp.c no-part.c no-region.c \
     no-rtmon.c no-sem.c no-signal.c no-timer.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 PGMS = $(C_FILES:%.c=$(ARCH)/%.rel)
 
