@@ -1,5 +1,9 @@
 2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/rtems-flags.m4: Remove (Unused).
+
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/prog-ccas.m4: Remove $(GCCSPECS).
 
 2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
