@@ -25,16 +25,17 @@ Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 Copyright:    GPL
 URL:          http://www.gnu.org/software/autoconf
 Group:        @rpmgroup@
-Autoreqprov:  on
 Version:      %{rpmvers}
-Release:      2
+Release:      3
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
-BuildPreReq:  autoconf perl m4 gawk
+BuildRequires: autoconf perl m4 gawk emacs
+Requires:     m4 gawk
 PreReq:       /sbin/install-info
 
 Source: autoconf-%{srcvers}.tar.bz2
+Patch0: autoconf-2.59-quoting-20040817-1.diff
 
 %description
 GNU's Autoconf is a tool for configuring source code and Makefiles.
@@ -51,13 +52,21 @@ their use.
 
 %prep
 %setup -q -n %{_name}-%{srcvers}
+%patch -p0 -P 0
 
 %build
-./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir}
+./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
+  --bindir=%{_bindir} --datadir=%{_datadir}
 make
 
 %install
-%makeinstall
+rm -rf "${RPM_BUILD_ROOT}"
+make DESTDIR=${RPM_BUILD_ROOT} install
+
+# Create this directory to prevent the corresponding line
+# in %%files below to fail
+mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/emacs/site-lisp
+
 gzip -9qf $RPM_BUILD_ROOT%{_infodir}/autoconf.info* 2>/dev/null
 # RTEMS's standards.info comes from binutils
 rm -f $RPM_BUILD_ROOT%{_infodir}/standards.info*
@@ -65,7 +74,6 @@ rm -f $RPM_BUILD_ROOT%{_infodir}/standards.info*
 gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/* 2>/dev/null
 
 %clean
-[ x"$RPM_BUILD_ROOT" = x"%{_defaultbuildroot}" ] ; \
    rm -rf "$RPM_BUILD_ROOT"
 
 %post
@@ -82,8 +90,8 @@ fi
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog NEWS README THANKS
 %{_bindir}/*
-%doc %{_infodir}/autoconf.info*.gz
-#%doc %{_infodir}/standards.info*.gz
-%doc %{_mandir}/man?/*.gz
+%{_infodir}/autoconf.info*
+#%{_infodir}/standards.info*
+%{_mandir}/man?/*
 %{_datadir}/autoconf
-%{_datadir}/emacs/site-lisp/*
+%exclude %{_datadir}/emacs/site-lisp

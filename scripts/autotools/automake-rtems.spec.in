@@ -2,8 +2,8 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.9
-%define srcvers	1.9
+%define rpmvers 1.9.2
+%define srcvers	1.9.2
 %define amvers  1.9
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
@@ -25,9 +25,9 @@ Name:         %{name}
 Packager:     Ralf Corsepius <ralf_corsepius@rtems.org>
 URL: 	      http://sources.redhat.com/automake
 
-Copyright:    GPL
+License:      GPL
 Group:        @rpmgroup@
-Autoreqprov:  on
+
 Version:      %{rpmvers}
 Release:      1
 Summary:      Tool for automatically generating GNU style Makefile.in's
@@ -35,7 +35,8 @@ BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
 BuildPreReq:  %{requirements} perl help2man
 Requires:     %{requirements}
-PreReq:	      /sbin/install-info
+Requires(post):	      	/sbin/install-info
+Requires(preun):	/sbin/install-info
 
 Source: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
 Patch0: automake-1.8.1-rtems-20040112-1.diff
@@ -58,6 +59,7 @@ PATH=%{_prefix}/bin:$PATH
 make
 
 %install
+rm -rf "$RPM_BUILD_ROOT"
 make DESTDIR=${RPM_BUILD_ROOT} install
 
 install -m 755 -d $RPM_BUILD_ROOT/%{_mandir}/man1
@@ -73,7 +75,6 @@ gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info* 2>/dev/null
 gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/* 2>/dev/null
 
 %clean
-[ x"$RPM_BUILD_ROOT" = x"%{_defaultbuildroot}" ] ; \
    rm -rf "$RPM_BUILD_ROOT"
 
 %post 
