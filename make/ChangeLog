@@ -1,3 +1,7 @@
+2003-09-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	custom/ppcn_60x.cfg: Remove -fvolatile-global -fvolatile from CFLAGS.
+
 2003-08-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 470/bsps
