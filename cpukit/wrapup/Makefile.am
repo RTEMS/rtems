@@ -100,12 +100,19 @@ $(ARCH)/librtemscpu$(LIB_VARIANT).a: ${LIBS}
 
 all-local: $(TMPINSTALL_FILES)
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+${PROJECT_LIB}/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_LIB}
+	@: > ${PROJECT_LIB}/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/librtemscpu$(LIB_VARIANT).a: $(ARCH)/librtemscpu$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/librtemscpu$(LIB_VARIANT).a
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/librtemscpu$(LIB_VARIANT).a
+${PROJECT_LIB}/librtemscpu$(LIB_VARIANT).a: $(ARCH)/librtemscpu$(LIB_VARIANT).a ${PROJECT_LIB}/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_LIB}/librtemscpu$(LIB_VARIANT).a
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+
+$(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a: $(ARCH)/librtemscpu$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a
 
 include $(top_srcdir)/automake/local.am

@@ -15,6 +15,7 @@ AC_DEFUN([RTEMS_ENV_RTEMSCPU],
     AC_SUBST(MULTISUBDIR)
  
     AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/lib/include"])
+    AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/lib/\$(MULTISUBDIR)"])
     AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)"])
 
     includedir="\${exec_prefix}/include"
@@ -43,6 +44,7 @@ AC_DEFUN([RTEMS_ENV_RTEMSCPU],
     libdir="\${exec_prefix}/${RTEMS_BSP}/lib"
 
     AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"])
+    AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/$RTEMS_BSP/lib"])
     AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)/$RTEMS_BSP"])
 
     RTEMS_ENABLE_BARE

@@ -1,3 +1,8 @@
+2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/env-rtemscpu.m4: Add PROJECT_LIB.
+	* wrapup/Makefile.am: Use $(PROJECT_LIB) instead of ${PROJECT_RELEASE}/lib.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
