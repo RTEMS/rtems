@@ -19,7 +19,7 @@ SUBDIRS = . $(RTEMS_BSP)
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	test -n "${RTEMS_BSP}" && for i in ${RTEMS_BSP}; do \
 	  echo "Configuring RTEMS_BSP=$$i"; \
-	  $(mkinstalldirs) $$i; \
+	  $(mkdir_p) $$i; \
 	  ( cd $$i && \
 	    CONFIG_SHELL=$(SHELL) RTEMS_BSP=$$i $(rtems_bsp_configure) ) \
 	  || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
