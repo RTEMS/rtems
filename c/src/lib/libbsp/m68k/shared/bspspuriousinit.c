@@ -30,7 +30,7 @@ rtems_isr bsp_spurious_handler(
 
 void bsp_spurious_initialize()
 {
-  rtems_unsigned32 vector;
+  uint32_t         vector;
 
   for ( vector=0 ; vector<255 ; vector++ ) {
 
