@@ -1,3 +1,7 @@
+2004-02-08	Joel Sherrill <joel@OARcorp.com>
+
+	* vectors/vectors.h: Force globalExceptHdl into bss section.
+
 2004-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Don't install, just distribute the files.
