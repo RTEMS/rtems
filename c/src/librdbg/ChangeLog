@@ -1,3 +1,10 @@
+2001-01-18	Joel Sherrill <joel@OARcorp.com>
+
+	* src/powerpc/new_exception_processing/remdeb.h,
+	src/powerpc/new_exception_processing/remdeb_xdr.c: Regenerated since
+	I updated the main RTEMS development machine to RedHat 7.2 and
+	apparently got a new version of rpcgen.
+
 2001-10-30	Victor V. Vengerov <vvv@oktet.ru>
 
 	* src/m68k/rdbg_cpu_asm.S: Now compiles on ColdFire.
