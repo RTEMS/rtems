@@ -1,3 +1,7 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Update gcc3 RPMs for new patches.
+
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* autotools/automake-rtems.spec.in: Update to automake-1.6.2.
