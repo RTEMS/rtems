@@ -16,6 +16,7 @@ use strict ;
 
 my @vars = () ;
 my @buffer = () ;
+my %var_ ;
 
 # find relative up-path to VERSION
 my $rtems_cfg = &find_file(".","VERSION");
@@ -129,8 +130,8 @@ while ( <> )
   {
     if ( /^[\s]*(RTEMS_ENABLE_LIBCDIR).*$/o )
     {
-      if (  ( not defined $main::var_RTEMS_PROG_CC_FOR_TARGET )
-        and ( not defined $main::var_RTEMS_PROG_CXX_FOR_TARGET )
+      if (  ( not variable_seen( "RTEMS_PROG_CC_FOR_TARGET" ) )
+        and ( not variable_seen( "RTEMS_PROG_CXX_FOR_TARGET" ) )
       ) 
       {
         push @tbuf, "$_" ;
@@ -220,20 +221,27 @@ sub find_root()
   die "Can't find VERSION\n" ;
 }
 
-sub define_variable
+sub variable_seen($)
 {
-  my ($name,$value) = @_ ;
+  my $label = "$_[0]" ;
+  my $res = defined $var_{"$label"};
+#print STDERR "SEEN: $label ->$res<\n" ;
+  return $res ;
+}
 
-  if ( not defined ${"var_$name"} )
+sub define_variable($$)
+{
+  my ($label,@value) = @_ ;
+
+  if ( not variable_seen("$label") )
   {
-# print STDERR "DEFINING $name = $value\n" ;
-    push @vars, "$name" ;
-    ${"var_$name"} = "$value" ;
+# print STDERR "DEFINING $label\n" ;
+    push @vars, "$label" ;
   }
-  else
+
+  foreach my $i ( @{value} )
   {
-# print STDERR "APPENDING <$name> <- <$value>\n" ; 
-    ${"var_$name"} .= " $value" ;
+    push @{$var_{"$label"}}, $i ;
   }
 }
 
