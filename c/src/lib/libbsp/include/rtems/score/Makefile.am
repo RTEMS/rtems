@@ -19,7 +19,7 @@ $(PROJECT_INCLUDE)/rtems/score:
 $(PROJECT_INCLUDE)/rtems/score/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-CLEANFILES += $(TARGOPTS)
+CLEANFILES = $(TARGOPTS)
 
 # Until RTEMS_CPU is removed from all the make configuration files,
 # this will need to be here to transform hppa1.1 into hppa1_1 to

@@ -1,3 +1,11 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use SUBDIRS = instead of SUBDIRS += to make
+	automake-1.5 happy.
+	* include/rtems/score/Makefile.am: Use CLEANFILES = to make
+	automake-1.5 happy.
+	* bsp.am: Use PREINSTALL_FILES = to make automake-1.5 happy.
+
 2001-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp.am: Fix automake version number in comment.

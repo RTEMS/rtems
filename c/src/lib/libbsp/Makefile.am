@@ -11,7 +11,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 # level as the CPUs.  If we are building the bare BSP, then descend
 # into that directory.
 
-SUBDIRS += include shared shmdr @RTEMS_LIBBSP_CPU_SUBDIR@
+SUBDIRS = include shared shmdr @RTEMS_LIBBSP_CPU_SUBDIR@
 
 EXTRA_DIST = MERGE.PROCEDURE bsp.am
 
