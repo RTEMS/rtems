@@ -1,3 +1,17 @@
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/canonical-target-name.m4: Add m4-quotes.
+	* aclocal/check-cxx.m4: Add m4-quotes.
+	Don't require RTEMS_CHECK_CPU.
+	* aclocal/check-multiprocessing.m4: Add m4-quotes.
+	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/check-networking.m4: Add m4-quotes.
+	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/check-posix.m4: Add m4-quotes.
+	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/check-rdbg.m4: Add m4-quotes.
+	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-multiprocessing.m4: Remove RTEMS_BSP_ALIAS.
