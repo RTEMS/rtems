@@ -565,7 +565,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 #define _CPU_ISR_Set_level( new_level )         \
   {                                             \
-    int reg;                                    \
+    int reg = 0; /* to avoid warning */         \
     asm volatile ("MRS	%0, cpsr \n"            \
                   "BIC  %0, %0, #0xc0 \n"       \
                   "ORR  %0, %0, %2 \n"          \
