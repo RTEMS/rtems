@@ -1,5 +1,9 @@
 2002-10-04	Joel Sherrill <joel@OARcorp.com>
 
+	* VERSION: Updated to rtems-JUNK.
+
+2002-10-04	Joel Sherrill <joel@OARcorp.com>
+
 	* aclocal/version.m4: Updated to rtems-JUNK.
 
 2002-10-04	Joel Sherrill <joel@OARcorp.com>
