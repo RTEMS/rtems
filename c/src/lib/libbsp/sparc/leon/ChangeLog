@@ -1,3 +1,7 @@
+2000-04-23	Jiri Gaisler <jiri@gaisler.com>
+
+	* console/debugputs.c: Switched to unsigned characters.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* console/console.c: Removed console_reserve_resources().

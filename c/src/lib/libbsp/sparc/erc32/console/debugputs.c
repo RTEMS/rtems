@@ -26,17 +26,17 @@
 
 void console_outbyte_polled(
   int  port,
-  char ch
+  unsigned char ch
 )
 {
   if ( port == 0 ) {
     while ( (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEA) == 0 );
-    ERC32_MEC.UART_Channel_A = (int) ch;
+    ERC32_MEC.UART_Channel_A = (unsigned int) ch;
     return;
   }
 
   while ( (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEB) == 0 );
-  ERC32_MEC.UART_Channel_B = (int) ch;
+  ERC32_MEC.UART_Channel_B = (unsigned int) ch;
 }
 
 /*
