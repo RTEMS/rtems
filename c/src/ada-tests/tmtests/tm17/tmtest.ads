@@ -92,4 +92,18 @@ package TMTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
 
+--
+--  LAST_TASK
+--
+--  DESCRIPTION:
+--
+--  This RTEMS task is the last task to execute in the system.  It
+--  stops the timer and reports the execution time of a preemptive
+--  TASK_SET_PRIORITY.
+--
+
+   procedure LAST_TASK (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   );
+
 end TMTEST;
