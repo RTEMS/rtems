@@ -14,5 +14,4 @@ Makefile
 Makefile.in
 mdate-sh
 missing
-mkinstalldirs
 texinfo.tex

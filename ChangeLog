@@ -1,3 +1,8 @@
+2004-01-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Remove mkinstalldirs.
+	* bootstrap: Remove compile during "clean".
+
 2004-01-08	Joel Sherrill <joel@OARcorp.com>
 
 	* .cvsignore: Add compile.

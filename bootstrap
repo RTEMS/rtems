@@ -160,7 +160,7 @@ clean)
   test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
   for i in $files; do if test -f $i; then
     rm -f $i config.sub config.guess depcomp install-sh mdate-sh missing \
-	mkinstalldirs texinfo.tex
+	mkinstalldirs texinfo.tex compile
     test "$verbose" = "-v" && echo "$i"    
   fi; done
   
