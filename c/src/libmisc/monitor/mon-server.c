@@ -299,4 +299,5 @@ rtems_monitor_server_init(
     }
 
 done:
+    return;
 }

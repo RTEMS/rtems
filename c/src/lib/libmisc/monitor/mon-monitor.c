@@ -415,6 +415,7 @@ rtems_monitor_symbols_loadup(void)
     }
 
 done:
+    return;
 }
 
 

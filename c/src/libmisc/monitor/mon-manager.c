@@ -26,7 +26,7 @@ rtems_monitor_manager_next(
     Objects_Information     *table = table_void;
     rtems_monitor_generic_t *copy;
     Objects_Control         *object = 0;
-    unsigned32               location;
+    Objects_Locations        location;
 
     /*
      * When we are called, it must be local

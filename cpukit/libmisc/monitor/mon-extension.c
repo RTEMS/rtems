@@ -19,22 +19,22 @@ rtems_monitor_extension_canonical(
     rtems_extensions_table *e = &rtems_extension->Extension.Callouts;
 
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_create,
-                                            e->thread_create);
+                                            (void *) e->thread_create);
 
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_start,
-                                            e->thread_start);
+                                            (void *) e->thread_start);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_restart,
-                                            e->thread_restart);
+                                            (void *) e->thread_restart);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_delete,
-                                            e->thread_delete);
+                                            (void *) e->thread_delete);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_tswitch,
-                                            e->thread_switch);
+                                            (void *) e->thread_switch);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_begin,
-                                            e->thread_begin);
+                                            (void *) e->thread_begin);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_exitted,
-                                            e->thread_exitted);
+                                            (void *) e->thread_exitted);
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_fatal,
-                                            e->fatal);
+                                            (void *) e->fatal);
 }
 
 void

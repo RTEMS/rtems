@@ -8,6 +8,7 @@
 #include "monitor.h"
 
 #include <stdio.h>
+#include <string.h>    /* memcpy() */
 
 void
 rtems_monitor_task_canonical(

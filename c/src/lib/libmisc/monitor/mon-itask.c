@@ -22,7 +22,7 @@ rtems_monitor_init_task_canonical(
     rtems_initialization_tasks_table *rtems_itask = itask_void;
     
     rtems_monitor_symbol_canonical_by_value(&canonical_itask->entry,
-                                            rtems_itask->entry_point);
+                                            (void *) rtems_itask->entry_point);
 
     canonical_itask->argument = rtems_itask->argument;
     canonical_itask->stack_size = rtems_itask->stack_size;

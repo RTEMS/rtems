@@ -40,18 +40,18 @@ rtems_monitor_driver_canonical(
     rtems_driver_address_table *d = (rtems_driver_address_table *) driver_void;
 
     rtems_monitor_symbol_canonical_by_value(&canonical_driver->initialization,
-                                            d->initialization);
+                                            (void *) d->initialization);
 
     rtems_monitor_symbol_canonical_by_value(&canonical_driver->open,
-                                            d->open);
+                                            (void *) d->open);
     rtems_monitor_symbol_canonical_by_value(&canonical_driver->close,
-                                            d->close);
+                                            (void *) d->close);
     rtems_monitor_symbol_canonical_by_value(&canonical_driver->read,
-                                            d->read);
+                                            (void *) d->read);
     rtems_monitor_symbol_canonical_by_value(&canonical_driver->write,
-                                            d->write);
+                                            (void *) d->write);
     rtems_monitor_symbol_canonical_by_value(&canonical_driver->control,
-                                            d->control);
+                                            (void *) d->control);
 }
 
 

@@ -45,16 +45,16 @@ rtems_monitor_mpci_canonical(
     canonical_mpci->maximum_packet_size = mt->maximum_packet_size;
 
     rtems_monitor_symbol_canonical_by_value(&canonical_mpci->initialization,
-                                            mt->initialization);
+                                            (void *) mt->initialization);
 
     rtems_monitor_symbol_canonical_by_value(&canonical_mpci->get_packet,
-                                            mt->get_packet);
+                                            (void *) mt->get_packet);
     rtems_monitor_symbol_canonical_by_value(&canonical_mpci->return_packet,
-                                            mt->return_packet);
+                                            (void *) mt->return_packet);
     rtems_monitor_symbol_canonical_by_value(&canonical_mpci->send_packet,
-                                            mt->send_packet);
+                                            (void *) mt->send_packet);
     rtems_monitor_symbol_canonical_by_value(&canonical_mpci->receive_packet,
-                                            mt->receive_packet);
+                                            (void *) mt->receive_packet);
 }    
 
 /*

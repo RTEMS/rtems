@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>             /* strtoul() */
+#include <string.h>             /* memcpy() */
 
 #include <monitor.h>
 
@@ -371,4 +372,5 @@ not_found:      printf("Invalid or unsupported type %d\n", type);
         }
     }
 done:
+    return;
 }
