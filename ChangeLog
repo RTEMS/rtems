@@ -1,3 +1,11 @@
+2003-03-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tools/Makefile.am: Remove.
+	* configure.ac: Remove tools.
+	* acinclude.m4: Fix build_subdir handling.
+	* Makefile.am: Remove tools from SUBDIRS.
+	Rename HOST|BUILD|TARGET_SUBDIRS into host|build|target_SUBDIRS.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
