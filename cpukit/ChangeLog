@@ -1,3 +1,7 @@
+2003-07-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Remove bogus $(MULTISUBDIR).
+
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Merge-in librpc/configure.ac.

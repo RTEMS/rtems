@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-LIB = $(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a
+LIB = $(project_libdir)/librtemscpu$(LIB_VARIANT).a
 
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
@@ -69,12 +69,12 @@ $(LIB): ${LIBS}
 	    ;; \
 	  esac; \
 	done
-	test -d $(project_libdir)$(MULTISUBDIR) || $(mkinstalldirs) $(project_libdir)$(MULTISUBDIR)
+	test -d $(project_libdir) || $(mkinstalldirs) $(project_libdir)
 	$(AR) rc $@ $(ARCH)/*
 	rm -f $(ARCH)/*.$(OBJEXT)
 	$(RANLIB) $@
 
-TMPINSTALL_FILES += $(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(project_libdir)/librtemscpu$(LIB_VARIANT).a
 
 all-am: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
 
