@@ -17,11 +17,16 @@ assessing the amount of disk space required for your installation:
 |                Component               |     Disk Space Required      |
 +----------------------------------------+------------------------------+
 |          archive directory             |          30 Mbytes           |
-|          tools src unzipped            |          77 Mbytes           |
-|    each individual build directory     |    120 Mbytes worst case     |
-|       each installation directory      |         20-60 Mbytes         |
+|          tools src unzipped            |         100 Mbytes           |
+|    each individual build directory     |    300 Mbytes worst case     |
+|       each installation directory      |        20-130 Mbytes         |
 +----------------------------------------+------------------------------+
 @end example
+
+The disk space required for each installation directory depends 
+primarily on the number of RTEMS BSPs which are to be installed.
+If a single BSP is installed, then the size of each install directory 
+will tend to be in the 40-60 Mbyte range.
 
 The instructions in this manual should work on any computer running
 a UNIX variant.  Some native GNU tools are used by this procedure
