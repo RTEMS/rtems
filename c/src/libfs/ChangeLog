@@ -1,3 +1,11 @@
+2001-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* src/imfs/imfs_debug.c (IMFS_print_jnode): Modified to print
+	only information that does not vary based on target or memory
+	configuration.  The old prints are still there in case they
+	are needed in the future to debug.  Printing target dependent
+	addresses makes the test output vary by target unnecessarily.
+
 2001-03-23	Joel Sherrill <joel@OARcorp.com>
 
 	* src/imfs/memfile.c: Reapply fix from bug report from

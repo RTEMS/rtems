@@ -73,12 +73,17 @@ void IMFS_print_jnode(
       break;
 
     case IMFS_MEMORY_FILE:
+      /* Useful when debugging .. varies between targets  */
+#if 0
       printf( " (file %d %p %p %p)",
         (int)the_jnode->info.file.size,
         the_jnode->info.file.indirect,
         the_jnode->info.file.doubly_indirect,
         the_jnode->info.file.triply_indirect
       );
+#else
+      printf( " (file %d)", (int)the_jnode->info.file.size );
+#endif
       break;
 
     case IMFS_HARD_LINK:
