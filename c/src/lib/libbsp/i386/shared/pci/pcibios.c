@@ -9,7 +9,6 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <assert.h>
 #include <pcibios.h>
 
 /*
@@ -75,7 +74,6 @@ pcib_init(void)
   if(ucp >= (unsigned char *)0xFFFFF)
     {
       /* BIOS-32 not found */
-      assert(0);
       return PCIB_ERR_NOTPRESENT;
     }
 
@@ -99,7 +97,6 @@ pcib_init(void)
   if((pcibExchg[0] & 0xff) != 0)
     {
       /* Not found */
-      assert(0);
       return PCIB_ERR_NOTPRESENT;
     }
 
@@ -124,14 +121,12 @@ pcib_init(void)
   if((pcibExchg[0] & 0xff00) != 0)
     {
       /* Not found */
-      assert(0);
       return PCIB_ERR_NOTPRESENT;
     }
 
   if(pcibExchg[3] != 0x20494350)
     {
       /* Signature does not match */
-      assert(0);
       return PCIB_ERR_NOTPRESENT;
     }
 
@@ -150,7 +145,6 @@ pcib_find_by_devid(int vendorId, int devId, int idx, int *sig)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -186,7 +180,6 @@ pcib_find_by_class(int classCode, int idx, int *sig)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -226,7 +219,6 @@ pcib_special_cycle(int busNo, int data)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -258,7 +250,6 @@ pcib_conf_read8(int sig, int off, unsigned char *data)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -297,7 +288,6 @@ pcib_conf_read16(int sig, int off, unsigned short *data)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -336,7 +326,6 @@ pcib_conf_read32(int sig, int off, unsigned int *data)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -375,7 +364,6 @@ pcib_conf_write8(int sig, int off, unsigned int data)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -407,7 +395,6 @@ pcib_conf_write16(int sig, int off, unsigned int data)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -441,7 +428,6 @@ pcib_conf_write32(int sig, int off, unsigned int data)
 {
   if(!pcibInitialized)
     {
-      assert(0);
       return PCIB_ERR_UNINITIALIZED;
     }
 
@@ -482,7 +468,6 @@ pcib_convert_err(int err)
     case 0x87:
       return PCIB_ERR_BADREG;
     default:
-      assert(0);
       break;
     }
   return PCIB_ERR_NOFUNC;

@@ -1,3 +1,10 @@
+2002-08-05	Eric Norum <eric.norum@usask.ca>
+
+	* pci/pcibios.c: Per PR262, removed all asserts so probes for 
+	devices that are not present will work.  This lets you have
+	multiple PCI Ethernet drivers in an application and dynamically
+	use the one for the card othat is present.
+
 2002-07-16	Eric Norum <eric.norum@usask.ca>
 
 	* comm/uart.c: I am using a PC-104 card with no video output.  I
