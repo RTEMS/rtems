@@ -19,7 +19,7 @@ endif
 
 AM_CPPFLAGS += $(M68K_CPPFLAGS)
 
-all-local: $(ARCH) $(OBJS)
+all-local: $(OBJS)
 
 EXTRA_DIST = memcpy.c m68kidle.c
 

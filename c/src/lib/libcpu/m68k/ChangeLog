@@ -1,3 +1,9 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* m68040/fpsp/Makefile.am: Remove all-local: $(ARCH).
+	* shared/cache/Makefile.am: Remove all-local: $(ARCH).
+	* shared/misc/Makefile.am: Remove all-local: $(ARCH).
+
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* m68040/Makefile.am: Reformat.

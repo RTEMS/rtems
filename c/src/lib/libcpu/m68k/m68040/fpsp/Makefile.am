@@ -28,7 +28,7 @@ $(PGM): $(OBJS)
 	$(make-rel)
 
 if m68040
-all-local: $(ARCH) $(OBJS) $(PGM)
+all-local: $(OBJS) $(PGM)
 endif
 
 .PRECIOUS: $(PGM)

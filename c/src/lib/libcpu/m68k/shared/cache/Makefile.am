@@ -20,7 +20,7 @@ AM_CPPFLAGS += -I$(srcdir)
 cache.h: $(top_srcdir)/../shared/include/cache.h
 	cp $< $@
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(PREINSTALL_FILES) $(OBJS)
 
 CLEANFILES = cache.h
 
