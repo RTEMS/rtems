@@ -78,7 +78,7 @@ SECTIONS
   .rela.data     :
     { *(.rela.data) *(.rela.gnu.linkonce.d*) }
   .rel.rodata    :
-    { *(.rel.rodata) *(.rel.gnu.linkonce.r*) }
+    { *(.rel.rodata*) *(.rel.gnu.linkonce.r*) }
   .rela.rodata   :
     { *(.rela.rodata) *(.rela.gnu.linkonce.r*) }
   .rel.got       : { *(.rel.got)		}

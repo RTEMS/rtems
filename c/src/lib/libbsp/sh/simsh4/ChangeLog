@@ -1,3 +1,7 @@
+2002-11-07	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Include all .rodata* sections.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, console/console.c: Removed warnings.
