@@ -591,6 +591,9 @@ int pthread_mutex_setprioceiling(
   Priority_Control              the_priority;
   int                           status;
 
+  if ( !old_ceiling )
+    return EINVAL;
+
   if ( !_POSIX_Priority_Is_valid( prioceiling ) )
     return EINVAL;
 
@@ -607,10 +610,9 @@ int pthread_mutex_setprioceiling(
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return EINVAL;
+      return EINVAL;        /* impossible to get here */
     case OBJECTS_REMOTE:
       /*  XXX It feels questionable to set the ceiling on a remote mutex. */
-      return POSIX_MP_NOT_IMPLEMENTED();
       return EINVAL;
     case OBJECTS_LOCAL:
       *old_ceiling = the_mutex->Mutex.Attributes.priority_ceiling;
