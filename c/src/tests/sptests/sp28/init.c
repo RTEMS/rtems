@@ -37,7 +37,7 @@ subtask (rtems_task_argument arg)
 	nRunning++;
 	while (nRunning != 3)
 		rtems_task_wake_after (0);
-	sc = rtems_task_variable_add (RTEMS_SELF, &taskvar, NULL);
+	sc = rtems_task_variable_add (RTEMS_SELF, (void **)&taskvar, NULL);
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't add task variable: %s\n", rtems_status_text (sc));
 		rtems_task_suspend (RTEMS_SELF);
@@ -53,7 +53,7 @@ subtask (rtems_task_argument arg)
 			rtems_task_suspend (RTEMS_SELF);
 		}
 	}
-	sc = rtems_task_variable_delete (RTEMS_SELF, &taskvar);
+	sc = rtems_task_variable_delete (RTEMS_SELF, (void **)&taskvar);
 	nDeleted++;
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't delete task variable: %s\n", rtems_status_text (sc));
