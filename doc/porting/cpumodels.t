@@ -41,7 +41,6 @@ has been ported to a variety of microprocessor families including:
 @item Motorola MC68xxx
 @item Motorola MC683xx
 @item Intel ix86 (i386, i486, Pentium and above)
-@item Intel i960
 @item ARM
 @item MIPS
 @item PowerPC 4xx, 5xx, 6xx, 7xx, 8xx, and 84xx

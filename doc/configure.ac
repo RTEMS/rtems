@@ -218,7 +218,6 @@ supplements/Makefile
 supplements/arm/Makefile
 supplements/c4x/Makefile
 supplements/i386/Makefile
-supplements/i960/Makefile
 supplements/m68k/Makefile
 supplements/mips/Makefile
 supplements/powerpc/Makefile

@@ -571,7 +571,6 @@ Where <target configuration> is one of the following:
 @itemize @bullet
 @item hppa1.1
 @item i386
-@item i960
 @item m68k
 @item powerpc
 @item sh

@@ -178,16 +178,6 @@
                RTEMS Intel i386 Applications Supplement</A>
             </LI>
 
-        <LI><A HREF="../pdf/i960.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/i960.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/i960.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/i960/index.html">
-               RTEMS Intel i960 Applications Supplement</A>
-            </LI>
-
         <LI><A HREF="../pdf/m68k.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/m68k.ps">

@@ -1,5 +1,11 @@
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
+	* configure.ac, index.html.in, FAQ/basic.t, FAQ/basic.texi, FAQ/entry,
+	porting/cpumodels.t, started/buildc.t, started_ada/buildada.t,
+	user/preface.texi: i960 obsoleted.
+
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
 	* supplements/Makefile.am: i960 obsoleted.
 	* supplements/i960/.cvsignore, supplements/i960/CVME961_TIMES,
 	supplements/i960/ChangeLog, supplements/i960/Makefile.am,

@@ -843,9 +843,6 @@ such as a processor simulator.  The following is a list of
 configurations for which there are extra options:
 
 @table @b
-@item i960-rtems
-@code{--enable-sim}
-
 @item powerpc-rtems
 @code{--enable-sim --enable-sim-powerpc --enable-sim-timebase --enable-sim-hardware}
 

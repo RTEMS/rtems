@@ -152,7 +152,6 @@ It has been ported to the following processor families:
 
 @itemize @bullet
 @item Intel i386 and above 
-@item Intel i960
 @item Motorola MC68xxx 
 @item Motorola MC683xx
 @item Motorola ColdFire

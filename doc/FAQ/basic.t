@@ -107,7 +107,6 @@ RTEMS is available for the following processor families:
 @item Hitachi H8/300
 @item Hitachi SH
 @item Intel i386
-@item Intel i960
 @item MIPS
 @item PowerPC
 @item SPARC
