@@ -96,7 +96,7 @@ void *POSIX_Init(
   
   /* basic checkout of mutex attributes */
 
-  puts( "Init: Initializing mutex attributes" );
+  puts( "Init: pthread_mutexattr_init - SUCCESSFUL" );
   status = pthread_mutexattr_init( &attr );
   assert( !status );
 
@@ -127,25 +127,25 @@ void *POSIX_Init(
 
   empty_line();
 
-  puts( "Init: Creating a mutex" );
+  puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex_id, &attr );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
 
-  puts( "Init: pthread_mutex_trylock successfully" );
+  puts( "Init: pthread_mutex_trylock - SUCCESSFUL" );
   status = pthread_mutex_trylock( &Mutex_id );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
 
-  puts( "Init: pthread_mutex_trylock already locked" );
+  puts( "Init: pthread_mutex_trylock - EDEADLK (already locked)" );
   status = pthread_mutex_trylock( &Mutex_id );
   if ( status != EDEADLK )
     printf( "status = %d\n", status );
   assert( status == EDEADLK );
 
-  puts( "Init: pthread_mutex_lock already locked" );
+  puts( "Init: pthread_mutex_lock - EDEADLK (already locked)" );
   status = pthread_mutex_lock( &Mutex_id );
   if ( status != EDEADLK )
     printf( "status = %d\n", status );
@@ -157,13 +157,13 @@ void *POSIX_Init(
   
      /* switch to task 1 */
 
-  puts( "Init: pthread_mutex_unlock successfully" );
+  puts( "Init: pthread_mutex_unlock - SUCCESSFUL" );
   status = pthread_mutex_unlock( &Mutex_id );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
 
-  puts( "Init: pthread_mutex_unlock not owner" );
+  puts( "Init: pthread_mutex_unlock - EPERM (not owner)" );
   status = pthread_mutex_unlock( &Mutex_id );
   if ( status != EPERM )
     printf( "status = %d\n", status );
@@ -171,7 +171,7 @@ void *POSIX_Init(
 
   times.tv_sec = 0;
   times.tv_nsec = 500000000;
-  puts( "Init: pthread_mutex_timedlock time out in 1/2 second" );
+  puts( "Init: pthread_mutex_timedlock - time out in 1/2 second" );
   status = pthread_mutex_timedlock( &Mutex_id, &times );
   if ( status != EAGAIN )
     printf( "status = %d\n", status );
@@ -179,23 +179,23 @@ void *POSIX_Init(
 
      /* switch to idle */
 
-  puts( "Init: correctly timed out waiting for mutex" );
+  puts( "Init: pthread_mutex_timedlock - EAGAIN (timeout)" );
 
   /* destroy a mutex */
 
   empty_line();
 
-  puts( "Init: Creating a mutex" );
+  puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex2_id, &attr );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
 
-  puts( "Init: pthread_mutexattr_destroy" );
+  puts( "Init: pthread_mutexattr_destroy - SUCCESSFUL" );
   status = pthread_mutexattr_destroy( &attr );
   assert( !status );
 
-  puts( "Init: pthread_mutex_destroy" );
+  puts( "Init: pthread_mutex_destroy - SUCCESSFUL" );
   status = pthread_mutex_destroy( &Mutex2_id );
   assert( !status );
  
@@ -203,31 +203,31 @@ void *POSIX_Init(
  
   empty_line();
  
-  puts( "Init: Initializing mutex attributes" );
+  puts( "Init: pthread_mutexattr_init - SUCCESSFUL" );
   status = pthread_mutexattr_init( &attr );
   assert( !status );
 
-  puts( "Init: Creating a mutex" );
+  puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex2_id, &attr );
   assert( !status );
  
-  puts( "Init: pthread_mutex_trylock successfully" );
+  puts( "Init: pthread_mutex_trylock - SUCCESSFUL" );
   status = pthread_mutex_trylock( &Mutex2_id );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
 
+  puts( "Init: pthread_mutex_destroy - EBUSY (already locked)" );
   status = pthread_mutex_destroy( &Mutex2_id );
   if ( status != EBUSY )
     printf( "status = %d\n", status );
   assert( status == EBUSY );
-  puts( "Init: pthread_mutex_destroy - EBUSY" );
 
-  puts( "Init: pthread_mutex_unlock successfully" );
+  puts( "Init: pthread_mutex_unlock - SUCCESSFUL" );
   status = pthread_mutex_unlock( &Mutex2_id );
   assert( !status );
 
-  puts( "Init: pthread_mutex_destroy" );
+  puts( "Init: pthread_mutex_destroy - SUCCESSFUL" );
   status = pthread_mutex_destroy( &Mutex2_id );
   assert( !status );
 
@@ -235,19 +235,21 @@ void *POSIX_Init(
 
   empty_line();
  
-  puts( "Init: Initializing mutex attributes" );
+  puts( "Init: pthread_mutexattr_init - SUCCESSFUL" );
   status = pthread_mutexattr_init( &attr );
   assert( !status );
 
-  puts( "Init: Setting PTHREAD_PRIO_INHERIT attribute" );
+  puts(
+    "Init: pthread_mutexattr_setprotocol - SUCCESSFUL (PTHREAD_PRIO_INHERIT)"
+  );
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_INHERIT );
   assert( !status );
 
-  puts( "Init: Creating a mutex" );
+  puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex2_id, &attr );
   assert( !status );
 
-  puts( "Init: pthread_mutex_trylock successfully" );
+  puts( "Init: pthread_mutex_trylock - SUCCESSFUL" );
   status = pthread_mutex_trylock( &Mutex2_id );
   assert( !status );
 
@@ -260,7 +262,7 @@ void *POSIX_Init(
  
   param.sched_priority = 255;
  
-  puts( "Init: Setting Task2 priority to highest" );
+  puts( "Init: pthread_setschedparam - Setting Task2 priority to highest" );
   status = pthread_setschedparam( Task2_id, SCHED_FIFO, &param );
   assert( !status );
 
@@ -268,17 +270,17 @@ void *POSIX_Init(
 
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   assert( !status );
-  printf( "Init: pthread_getschedparam priority = %d\n", param.sched_priority );
+  printf( "Init: pthread_getschedparam - priority = %d\n", param.sched_priority);
 
-  puts( "Init: pthread_mutex_unlock successfully" );
+  puts( "Init: pthread_mutex_unlock - SUCCESSFUL" );
   status = pthread_mutex_unlock( &Mutex2_id );
   assert( !status );
   
-  puts( "Init: pthread_mutexattr_destroy" );
+  puts( "Init: pthread_mutexattr_destroy - SUCCESSFUL" );
   status = pthread_mutexattr_destroy( &attr );
   assert( !status );
 
-  puts( "Init: pthread_mutex_destroy" );
+  puts( "Init: pthread_mutex_destroy - SUCCESSFUL" );
   status = pthread_mutex_destroy( &Mutex2_id );
   assert( !status );
  
@@ -286,37 +288,46 @@ void *POSIX_Init(
  
   empty_line();
  
-  puts( "Init: Initializing mutex attributes" );
+  puts( "Init: pthread_mutexattr_init - SUCCESSFUL" );
   status = pthread_mutexattr_init( &attr );
   assert( !status );
  
-  puts( "Init: Setting PTHREAD_PRIO_PROTECT attribute" );
+  puts(
+    "Init: pthread_mutexattr_setprotocol - SUCCESSFUL (PTHREAD_PRIO_PROTECT)"
+  );
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_PROTECT );
   assert( !status );
  
-  puts( "Init: Creating a mutex" );
+  puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex2_id, &attr );
   assert( !status );
  
   status = pthread_mutex_getprioceiling( &Mutex2_id, &ceiling );
   assert( !status );
-  printf( "Init: priority ceiling = %d\n", ceiling );
+  printf( "Init: pthread_mutex_getprioceiling - %d\n", ceiling );
  
+  puts( "Init: pthread_mutex_setprioceiling - new ceiling = 200" );
   status = pthread_mutex_setprioceiling( &Mutex2_id, 200, &old_ceiling );
   assert( !status );
-  printf( "Init: Set ceiling = 200  old priority ceiling = %d\n",old_ceiling );
+  printf(
+    "Init: pthread_mutex_setprioceiling - old ceiling = %d\n",old_ceiling
+  );
  
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   assert( !status );
-  printf( "Init: pthread_getschedparam priority = %d\n", param.sched_priority );
+  printf(
+    "Init: pthread_getschedparam - priority = %d\n", param.sched_priority
+  );
 
-  puts( "Init: pthread_mutex_trylock successfully" );
+  puts( "Init: pthread_mutex_trylock - SUCCESSFUL" );
   status = pthread_mutex_trylock( &Mutex2_id );
   assert( !status );
  
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   assert( !status );
-  printf( "Init: pthread_getschedparam priority = %d\n", param.sched_priority );
+  printf(
+    "Init: pthread_getschedparam - priority = %d\n", param.sched_priority
+  );
 
   /* create a thread at a higher priority */
  
@@ -329,7 +340,7 @@ void *POSIX_Init(
  
   status = pthread_setschedparam( Task3_id, SCHED_FIFO, &param );
   assert( !status );
-  puts( "Init: Set Task3 priority to highest" );
+  puts( "Init: pthread_setschedparam - set Task3 priority to highest" );
  
   /* DOES NOT SWITCH to Task3 */
 
@@ -339,13 +350,13 @@ void *POSIX_Init(
   
   /* switch to task 3 */
  
-  puts( "Init: pthread_mutex_unlock successfully" );
+  puts( "Init: pthread_mutex_unlock - SUCCESSFUL" );
   status = pthread_mutex_unlock( &Mutex2_id );
   assert( !status );
  
   status = pthread_mutex_getprioceiling( &Mutex2_id, &ceiling );
   assert( !status );
-  printf( "Init: priority ceiling = %d\n", ceiling );
+  printf( "Init: pthread_mutex_getprioceiling- ceiling = %d\n", ceiling );
  
   /* set priority of Init to highest priority */
  
@@ -353,13 +364,13 @@ void *POSIX_Init(
  
   status = pthread_setschedparam( Init_id, SCHED_FIFO, &param );
   assert( !status );
-  puts( "Init: Set Init priority to highest" );
+  puts( "Init: pthread_setschedparam - set Init priority to highest" );
  
+  puts( "Init: pthread_mutex_lock - EINVAL (priority ceiling violation)" );
   status = pthread_mutex_lock( &Mutex2_id );
   if ( status != EDEADLK )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
-  puts( "Init: pthread_mutex_lock EINVAL (priority ceiling violation)" );
 
   puts( "*** END OF POSIX TEST 5 ***" );
   exit( 0 );
