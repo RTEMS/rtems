@@ -27,7 +27,7 @@
    object
 */
 
-static rtemsInterrupt *interrupt_table[CPU_INTERRUPT_NUMBER_OF_VECTORS];
+static rtemsInterrupt **interrupt_table;
 
 // has the table been initialised
 static bool initialised = false;
@@ -35,6 +35,8 @@ static bool initialised = false;
 /* ----
    rtemsInterrupt
 */
+
+#include <stdlib.h> /* for malloc */
 
 rtemsInterrupt::rtemsInterrupt()
   : vector(0),
@@ -44,6 +46,8 @@ rtemsInterrupt::rtemsInterrupt()
 {
   if (!initialised)
   {
+    interrupt_table = (rtemsInterrupt **)
+        malloc(sizeof(rtemsInterrupt *) * CPU_INTERRUPT_NUMBER_OF_VECTORS);
     for (rtems_vector_number vec = 0;
          vec < CPU_INTERRUPT_NUMBER_OF_VECTORS;
          vec++)
