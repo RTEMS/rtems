@@ -400,26 +400,34 @@ void _CPU_Thread_Idle_body( void )
 #if CPU_SYNC_IO
     if (sync_io_nfds) {
       int result;
+      fd_set readfds, writefds, exceptfds;
 
+      readfds = sync_io_readfds;
+      writefds = sync_io_writefds;
+      exceptfds = sync_io_exceptfds;
       result = select(sync_io_nfds,
-                 &sync_io_readfds,
-                 &sync_io_writefds,
-                 &sync_io_exceptfds,
+                 &readfds,
+                 &writefds,
+                 &exceptfds,
                  NULL);
 
-      if ((result < 0) && (errno != EINTR))
-        _CPU_Fatal_error(0x200);       /* FIXME : what number should go here !! */
+      if (result < 0) {
+	if (errno != EINTR)
+	  _CPU_Fatal_error(0x200);       /* FIXME : what number should go here !! */
+	_Thread_Dispatch();
+	continue;
+      }
 
       for (fd = 0; fd < sync_io_nfds; fd++) {
-        boolean read = FD_ISSET(fd, &sync_io_readfds);
-        boolean write = FD_ISSET(fd, &sync_io_writefds);
-        boolean except = FD_ISSET(fd, &sync_io_exceptfds);
+        boolean read = FD_ISSET(fd, &readfds);
+        boolean write = FD_ISSET(fd, &writefds);
+        boolean except = FD_ISSET(fd, &exceptfds);
 
         if (_CPU_Sync_io_handlers[fd] && (read || write || except))
           _CPU_Sync_io_handlers[fd](fd, read, write, except);
-
-        _Thread_Dispatch();
       }
+
+      _Thread_Dispatch();
     } else
       pause();
 #else
@@ -869,7 +877,7 @@ int _CPU_Clear_sync_io_handler(
       if (FD_ISSET(fd, &sync_io_readfds) ||
           FD_ISSET(fd, &sync_io_writefds) ||
           FD_ISSET(fd, &sync_io_exceptfds))
-        sync_io_nfds = fd;
+        sync_io_nfds = fd + 1;
     return 0;
   }
   return -1;
