@@ -746,7 +746,6 @@ rtems_filesystem_operations_table  rtems_tftp_ops = {
   NULL,                            /* unlink */
   rtems_tftp_node_type,            /* node_type */
   NULL,                            /* mknod */
-  NULL,                            /* rmnod */
   NULL,                            /* chown */
   NULL,                            /* freenodinfo */
   NULL,                            /* mount */
