@@ -40,7 +40,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
  
 /*PAGE
  *
- *  _POSIX_Mutex_Get
+ *  _POSIX_Mutex_Get_support
  *
  *  NOTE: The support macro makes it possible for both to use exactly
  *        the same code to check for NULL id pointer and
