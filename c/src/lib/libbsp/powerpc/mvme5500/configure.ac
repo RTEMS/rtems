@@ -34,18 +34,6 @@ RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-include/Makefile
-pci/Makefile
-GT64260/Makefile
-network/Makefile
-irq/Makefile
-tod/Makefile
-start/Makefile
-startup/Makefile
-vectors/Makefile
-vme/Makefile
 wrapup/Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])
