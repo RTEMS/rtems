@@ -134,6 +134,7 @@ extern "C" {
     putchar( '\n' ); \
 }
 
+#ifndef build_time
 #define build_time( TB, MON, DAY, YR, HR, MIN, SEC, TK ) \
   { (TB)->year   = YR;  \
     (TB)->month  = MON; \
@@ -142,6 +143,7 @@ extern "C" {
     (TB)->minute = MIN; \
     (TB)->second = SEC; \
     (TB)->ticks  = TK; }
+#endif
 
 #define task_number( tid ) \
   ( rtems_get_index( tid ) - \
