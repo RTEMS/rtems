@@ -1,5 +1,33 @@
 2003-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* binutils/base-binutils.add: Add osversion support.
+	* binutils/binutils.add: Add osversion support.
+	%setup -n %{name}-%{version}.
+	Don't remove c++filt.
+	* binutils/target-binutils.add: Add osversion support.
+	Pickup c++filt.
+	* gcc3newlib/base-g77.add: Add osversion support.
+	* gcc3newlib/base-gcc.add: Add osversion support.
+	* gcc3newlib/base-gcj.add: Add osversion support.
+	* gcc3newlib/base-gnat.add: Add osversion support.
+	* gcc3newlib/gccnewlib.add: Add osversion support.
+	Remove c++filt,
+	%setup -n -n %{name}-%{version}.
+	* gcc3newlib/target-c++.add: Add osversion support.
+	Don't pickup c++filt.
+	* gcc3newlib/target-g77.add: Add osversion support.
+	* gcc3newlib/target-gcc.add: Add osversion support.
+	* gcc3newlib/target-gcj.add: Add osversion support.
+	* gcc3newlib/target-gnat.add: Add osversion support.
+	* gccnewlib/gccnewlib.add: %setup -n %{name}-%{version}.
+	* gdb/base-gdb.add: Add osversion support, rpmgroup, rpmprefix,
+	gdb_version, gdb_target.
+	* gdb/target-gdb.add: Ditto.
+	* gdb/gdb.add: Ditto.
+	%setup -n -n %{name}-%{version}.
+
+2003-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* binutils/Makefile.am: Fix osversion support for sh-rtemself.
 	* gcc3newlib/Makefile.am: Fix osversion support for sh-rtemself.
 

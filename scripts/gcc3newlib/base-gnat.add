@@ -2,16 +2,16 @@
 # ==============================================================
 # rtems-base-gnat
 # ==============================================================
-%package -n %{rpmprefix}rtems-base-gnat
+%package -n %{rpmprefix}rtems@osversion@-base-gnat
 Summary:	gcc/gnat tools
 Group: %{rpmgroup}
 
-%description -n %{rpmprefix}rtems-base-gnat
+%description -n %{rpmprefix}rtems@osversion@-base-gnat
 RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/gnat tools for the gcc/gnat compiler
 
-%files -n %{rpmprefix}rtems-base-gnat
+%files -n %{rpmprefix}rtems@osversion@-base-gnat
 %defattr(-,root,root)
 %dir %{_prefix}/bin
 # %{_prefix}/bin/gnat*

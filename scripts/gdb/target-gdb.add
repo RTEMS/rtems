@@ -1,31 +1,30 @@
 # =====================================================================
-# @target_alias@-gdb
+# %{gdb_target}-gdb
 # =====================================================================
 
-%package -n @target_alias@-gdb
-Provides:	@target_alias@-gdb
-Summary:      rtems gdb for @target_alias@
-Group: rtems
-Requires: rtems-base-gdb
+%package -n %{rpmprefix}%{gdb_target}-gdb
+Summary:      rtems gdb for %{gdb_target}
+Group: %{rpmgroup}
+Requires: %{rpmprefix}rtems@osversion@-base-gdb
 
-%description -n @target_alias@-gdb
+%description -n %{rpmprefix}%{gdb_target}-gdb
 
 RTEMS is an open source operating system for embedded systems.
 
-This is the GNU gdb for RTEMS targetting @target_alias@.
+This is the GNU gdb for RTEMS targetting %{gdb_target}.
 
-%files -n @target_alias@-gdb
-%defattr(-,attr,attr)
-%doc %{_prefix}/man/man1/@target_alias@-gdb.1*
+%files -n %{rpmprefix}%{gdb_target}-gdb
+%defattr(-,root,root)
+%doc %{_prefix}/man/man1/%{gdb_target}-gdb.1*
 %if "%_sim" == "1"
-%doc %{_prefix}/man/man1/@target_alias@-run.1*
+%doc %{_prefix}/man/man1/%{gdb_target}-run.1*
 %endif
 
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-gdb%{_exeext}
+%{_prefix}/bin/%{gdb_target}-gdb%{_exeext}
 %if "%_sim" == "1"
-%{_prefix}/bin/@target_alias@-run%{_exeext}
+%{_prefix}/bin/%{gdb_target}-run%{_exeext}
 %endif
-%if "@target_alias@" == "sparc-rtems"
-%{_prefix}/bin/@target_alias@-sis%{_exeext}
+%if "%{gdb_target}" == "sparc-rtems@osversion@"
+%{_prefix}/bin/%{gdb_target}-sis%{_exeext}
 %endif

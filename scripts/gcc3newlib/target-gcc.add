@@ -4,7 +4,7 @@
 %package -n %{rpmprefix}%{gcc_target}-gcc
 Summary:      	rtems gcc and newlib C Library for %{gcc_target}
 Group: %{rpmgroup}
-Requires: %{rpmprefix}%{gcc_target}-binutils %{rpmprefix}rtems-base-gcc
+Requires: %{rpmprefix}%{gcc_target}-binutils %{rpmprefix}rtems@osversion@-base-gcc
 
 %description -n %{rpmprefix}%{gcc_target}-gcc
 RTEMS is an open source operating system for embedded systems.

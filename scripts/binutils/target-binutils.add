@@ -4,7 +4,7 @@
 %package -n %{rpmprefix}%{binutils_target}-binutils
 Summary:      rtems binutils for %{binutils_target}
 Group: %{rpmgroup}
-Requires: %{rpmprefix}rtems-base-binutils
+Requires: %{rpmprefix}rtems@osversion@-base-binutils
 Autoreqprov:  	off
 
 %description -n %{rpmprefix}%{binutils_target}-binutils
@@ -21,10 +21,11 @@ This is the GNU binutils for RTEMS targetting %{binutils_target}.
 %{_prefix}/bin/%{binutils_target}-addr2line%{_exeext}
 %{_prefix}/bin/%{binutils_target}-ar%{_exeext}
 %{_prefix}/bin/%{binutils_target}-as%{_exeext}
-# c++filt now comes from gcc
-# %{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
+%{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
+%if "%{binutils_version}" < "2.13"
 # deleted as of 2.13
-# %{_prefix}/bin/%{binutils_target}-gasp%{_exeext}
+%{_prefix}/bin/%{binutils_target}-gasp%{_exeext}
+%endif
 %{_prefix}/bin/%{binutils_target}-ld%{_exeext}
 %{_prefix}/bin/%{binutils_target}-nm%{_exeext}
 %{_prefix}/bin/%{binutils_target}-objcopy%{_exeext}

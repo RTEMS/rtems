@@ -1,17 +1,21 @@
-Name:         @target_alias@-gdb-collection
+
+%define gdb_version	@gdb_version@
+%define gdb_target	@target_alias@
+
+Name:         %{rpmprefix}%{gdb_target}-gdb-collection
 Release:      @Release@
 License:      GPL/LGPL
-Group:        rtems
+Group:        %{rpmgroup}
 
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      @gdb_version@
-Summary:      gdb for target @target_alias@
-Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
-Patch0:	      gdb-@gdb_version@-rtems-base-@gdb_patch_version@.diff
-Patch1:	      gdb-@gdb_version@-rtems-cg-@gdb_patch_version@.diff
-Patch2:	      gdb-@gdb_version@-rtems-rdbg-@gdb_patch_version@.diff
+Version:      %{gdb_version}
+Summary:      gdb for target %{gdb_version}
+Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}.tar.gz
+Patch0:	      gdb-%{gdb_version}-rtems-base-@gdb_patch_version@.diff
+Patch1:	      gdb-%{gdb_version}-rtems-cg-@gdb_patch_version@.diff
+Patch2:	      gdb-%{gdb_version}-rtems-rdbg-@gdb_patch_version@.diff
 
 %if "%{_vendor}" == "redhat"
 BuildPreReq:	ncurses-devel
@@ -34,10 +38,10 @@ NoSource:      0
 #  and targets which require extra arguments.
 %define _sim	1
 
-%if "@target_alias@" == "m68k-rtems"
+%if "%{gdb_target}" == "m68k-rtems@osversion@"
 %define _sim	0
 %endif
-%if "@target_alias@" == "i386-rtems"
+%if "%{gdb_target}" == "i386-rtems@osversion@"
 %define _sim	0
 %endif
 
@@ -45,13 +49,12 @@ NoSource:      0
 %description
 RTEMS is an open source operating system for embedded systems.
 
-This is the GNU gdb for RTEMS targetting @target_alias@.
+This is the GNU gdb for RTEMS targetting %{gdb_version}.
 
 %prep
-# untar the sources inside @target_alias@-gdb
-%setup -c -n @target_alias@-gdb -a 0
+%setup -c -n %{name}-%{version} -a 0
 
-cd gdb-@gdb_version@
+cd gdb-%{gdb_version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -61,7 +64,7 @@ cd gdb-@gdb_version@
  simargs="--enable-sim"
 %endif
 
-%if "@target_alias@" == "powerpc-rtems"
+%if "%{gdb_target}" == "powerpc-rtems@osversion@"
  simargs="$simargs --enable-sim-timebase --enable-sim-hardware"
  #  Enabling this causes the program image to be huge and causes
  #  some gcc/hosts combinations to run out of memory.
@@ -70,9 +73,10 @@ cd gdb-@gdb_version@
 
 test -d build || mkdir build
   cd build
-  ../gdb-@gdb_version@/configure \
+  export PATH="%{_bindir}:${PATH}"
+  ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \
-    --target=@target_alias@ \
+    --target=%{gdb_target} \
     --verbose --prefix=%{_prefix} $simargs \
     --disable-nls
 

@@ -71,38 +71,38 @@ NoSource:	1
 %define build_gcj	0
 %define build_gnat	0
 
-%if "%{gcc_target}" == "arm-rtems"
+%if "%{gcc_target}" == "arm-rtems@osversion@"
 %define build_gcj	%_gcj
 %endif
 
-%if "%{gcc_target}" == "c4x-rtems"
+%if "%{gcc_target}" == "c4x-rtems@osversion@"
 %define build_cxx	0
 %endif
 
-%if "%{gcc_target}" == "i386-rtems"
+%if "%{gcc_target}" == "i386-rtems@osversion@"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
 %endif
 
-%if "%{gcc_target}" == "i960-rtems"
+%if "%{gcc_target}" == "i960-rtems@osversion@"
 %define build_cxx	0
 %endif
 
-%if "%{gcc_target}" == "m68k-rtems"
+%if "%{gcc_target}" == "m68k-rtems@osversion@"
 %define build_gcj	%_gcj
 %endif
 
-%if "%{gcc_target}" == "mips-rtems"
+%if "%{gcc_target}" == "mips-rtems@osversion@"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
 %endif
 
-%if "%{gcc_target}" == "powerpc-rtems"
+%if "%{gcc_target}" == "powerpc-rtems@osversion@"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
 %endif
 
-%if "%{gcc_target}" == "sparc-rtems"
+%if "%{gcc_target}" == "sparc-rtems@osversion@"
 %define build_gnat      %_gnat
 %define build_gcj	%_gcj
 %endif
@@ -140,7 +140,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 
 %prep
 # untar the sources inside %{gcc_target}-gcc-newlib
-%setup -c -T -n %{name} -a0 -a1
+%setup -c -T -n %{name}-%{version} -a0 -a1
 
 @PATCH2@
 @PATCH4@
@@ -199,11 +199,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   cp ../gcc-%{gcc_version}/gcc/gsyslimits.h gcc/include/syslimits.h
 %endif
 
-%if %build_cxx
-%if "%{gcc_version}" >= "3.3"
-  make -C %{gcc_target}/libiberty CFLAGS="$RPM_OPT_FLAGS" c++filt
-%endif
-%endif
+  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-c++filt%{_exeext}
 
 %if %build_gnat
   cd ../gcc-%{gcc_version}/gcc/ada
@@ -230,11 +226,12 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/../newlib-%{newlib_version}/newlib/libc/include"
 # Without this xgcc doesn't find the target's binutils.
   GNATLIBCFLAGS="$GNATLIBCFLAGS -B%{_prefix}/%{gcc_target}/bin/"
-%if "%{gcc_target}" == "mips-rtems"
+%if "%{gcc_target}" == "mips-rtems@osversion@"
   GNATLIBCFLAGS="$GNATLIBCFLAGS -G0"
 %endif
   make -C gcc GNATLIBCFLAGS="${GNATLIBCFLAGS}" gnatlib
 %endif
+
   make info
 
 %install
@@ -268,6 +265,11 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # host library
   rm -f  ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty.a
 
+%if "%{gcc_version}" < "3.3"
+  # We use the version from binutils
+  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-c++filt%{_exeext}
+%endif
+
 %if "%{gcc_version}" < "3.0"
   # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
   # Rename it to target_alias-cpp
@@ -276,14 +278,6 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     mv $RPM_BUILD_ROOT%{_prefix}/bin/cpp%{_exeext} \
       $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-cpp%{_exeext}
   fi
-%endif
-
-%if %build_cxx
-%if "%{gcc_version}" >= "3.3"
-  install -d $RPM_BUILD_ROOT%{_prefix}/bin
-  install -c -m 755 %{gcc_target}/libiberty/c++filt%{_exeext} \
-     $RPM_BUILD_ROOT%{_prefix}/bin/%{target_alias}-c++filt%{_exeext}
-%endif
 %endif
 
   # gzip info files

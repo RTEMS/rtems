@@ -5,7 +5,7 @@
 %package -n %{rpmprefix}%{gcc_target}-c++
 Summary:      gcc/g++ compiler (c++) for %{gcc_target}
 Group: %{rpmgroup}
-Requires: %{rpmprefix}rtems-base-gcc %{rpmprefix}%{gcc_target}-gcc
+Requires: %{rpmprefix}rtems@osversion@-base-gcc %{rpmprefix}%{gcc_target}-gcc
 
 %description -n %{rpmprefix}%{gcc_target}-c++
 RTEMS is an open source operating system for embedded systems.
@@ -19,7 +19,6 @@ This is the gcc/g++ compiler for %{gcc_target}
 %dir %{_prefix}/bin
 %{_prefix}/bin/%{gcc_target}-c++%{_exeext}
 %{_prefix}/bin/%{gcc_target}-g++%{_exeext}
-%{_prefix}/bin/%{gcc_target}-c++filt%{_exeext}
 
 %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
 %dir %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include
