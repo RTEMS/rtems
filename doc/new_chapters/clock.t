@@ -19,6 +19,7 @@ The directives provided by the clock manager are:
 @item @code{clock_settime} -
 @item @code{clock_getres} -
 @item @code{nanosleep} -
+@item @code{gettimeofday} -
 @item @code{time} -
 @end itemize
 
@@ -188,6 +189,31 @@ field.
 @subheading NOTES:
  
 This call is interruptible by a signal.
+
+@page
+@subsection gettimeofday
+
+@subheading CALLING SEQUENCE:
+
+@example
+#include <sys/time.h>
+#include <unistd.h>
+
+int gettimeofday(
+  struct timeval  *tp,
+  struct timezone *tzp
+);
+@end example
+
+@subheading STATUS CODES:
+
+On error, this routine returns -1 and sets errno as appropriate.
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+Currently, the timezone information is not supported.
 
 @page
 @subsection time
