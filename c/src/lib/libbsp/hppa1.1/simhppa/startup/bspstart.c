@@ -88,7 +88,7 @@ fast_idle_switch_hook(rtems_tcb *current_task,
 
     if (heir_task == _Internal_threads_Idle_thread)
         CPU_HPPA_CLICKS_PER_TICK = fast_clock;
-    else if (heir_task == _Internal_threads_Idle_thread)
+    else if (current_task == _Internal_threads_Idle_thread)
         CPU_HPPA_CLICKS_PER_TICK = normal_clock;
 }
 
