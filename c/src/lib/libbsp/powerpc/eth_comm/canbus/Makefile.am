@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/canbus.rel
 
 C_FILES = canbus.c

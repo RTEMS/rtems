@@ -13,39 +13,37 @@ include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
-include_HEADERS += include/coverhd.h
-include_HEADERS += include/canbus.h
-include_HEADERS += include/info.h
-include_bsp_HEADERS  = include/commproc.h
-include_bsp_HEADERS += include/8xx_immap.h
+include_HEADERS += include/coverhd.h include/canbus.h include/info.h
+include_bsp_HEADERS = include/commproc.h include/8xx_immap.h
 
 all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/bsp:
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
-$(PROJECT_INCLUDE)/bsp/commproc.h: include/commproc.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/commproc.h
-
-$(PROJECT_INCLUDE)/bsp/8xx_immap.h: include/8xx_immap.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/8xx_immap.h
-
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/canbus.h: include/canbus.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/canbus.h: include/canbus.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/canbus.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/canbus.h
 
-$(PROJECT_INCLUDE)/info.h: include/info.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/info.h: include/info.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/info.h
+
+$(PROJECT_INCLUDE)/bsp/commproc.h: include/commproc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/commproc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/commproc.h
+
+$(PROJECT_INCLUDE)/bsp/8xx_immap.h: include/8xx_immap.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/8xx_immap.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/8xx_immap.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
