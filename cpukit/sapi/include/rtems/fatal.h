@@ -1,5 +1,8 @@
-/*  fatal.h
- *
+/**
+ * @file rtems/fatal.h
+ */
+ 
+/*
  *  This include file contains constants and prototypes related
  *  to the Fatal Error Manager.  This manager processes all fatal or
  *  irrecoverable errors.

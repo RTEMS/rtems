@@ -1,4 +1,5 @@
-/*  io.h
+/**
+ * @file rtems/io.h
  *
  *  This include file contains all the constants and structures associated
  *  with the Input/Output Manager.  This manager provides a well defined
@@ -13,7 +14,9 @@
  *     + read from a device driver
  *     + write to a device driver
  *     + special device services
- *
+ */
+ 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

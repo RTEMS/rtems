@@ -1,5 +1,8 @@
-/*  extension.h
- *
+/**
+ * @file rtems/extension.h
+ */
+ 
+/*
  *  This include file contains all the constants, structures, and
  *  prototypes associated with the User Extension Manager.  This manager
  *  provides a mechanism for manipulating sets of user-defined extensions.

@@ -1,8 +1,11 @@
-/*  extension.inl
+/**
+ *  @file rtems/extension.inl
  *
  *  This file contains the static inline implementation of the inlined routines
  *  from the Extension Manager.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

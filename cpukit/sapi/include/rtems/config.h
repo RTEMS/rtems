@@ -1,5 +1,8 @@
-/*  config.h
- *
+/**
+ * @file rtems/config.h
+ */
+ 
+/*
  *  This include file contains the table of user defined configuration
  *  parameters.
  *

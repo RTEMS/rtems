@@ -1,4 +1,6 @@
-/*  init.h
+/**
+ * @file rtems/init.h
+ *
  *
  *  This include file contains all the constants and structures associated
  *  with the Initialization Manager.  This manager is responsible for
@@ -10,8 +12,9 @@
  *
  *     + initialize the RTEMS executive
  *     + shutdown the RTEMS executive
- *
- *
+ */
+ 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
