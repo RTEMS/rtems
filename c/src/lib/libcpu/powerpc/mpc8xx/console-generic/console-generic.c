@@ -32,7 +32,6 @@
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  Modifications by Darlene Stewart <Darlene.Stewart@iit.nrc.ca>
  *  and Charles-Antoine Gauthier <charles.gauthier@iit.nrc.ca>
@@ -54,7 +53,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
-#include <bsp.h>
+#include <bsp.h>            /* for nvram interface to board */
 
 extern rtems_cpu_table Cpu_table;
 
@@ -183,8 +182,8 @@ char m8xx_get_brg_clk(int baud)
 static int
 m8xx_smc_set_attributes (int minor, const struct termios *t)
 {
-  int baud, brg, csize, ssize, psize;
-  rtems_unsigned16 clen, cstopb, parenb, parodd, cread; 
+  int baud, brg=0, csize=0, ssize, psize;
+  rtems_unsigned16 clen=0, cstopb, parenb, parodd, cread; 
 
   /* Baud rate */
   switch (t->c_cflag & CBAUD) {
@@ -279,8 +278,8 @@ m8xx_smc_set_attributes (int minor, const struct termios *t)
 static int
 m8xx_scc_set_attributes (int minor, const struct termios *t)
 {
-  int baud, brg;
-  rtems_unsigned16 csize, cstopb, parenb, parodd;
+  int baud, brg=0;
+  rtems_unsigned16 csize=0, cstopb, parenb, parodd;
 
   /* Baud rate */
   switch (t->c_cflag & CBAUD) {
@@ -601,8 +600,8 @@ void
 m8xx_uart_scc_initialize (int minor)
 {
   unsigned char brg;
-  volatile m8xxSCCparms_t *sccparms;
-  volatile m8xxSCCRegisters_t *sccregs;
+  volatile m8xxSCCparms_t *sccparms = 0;
+  volatile m8xxSCCRegisters_t *sccregs = 0;
 
   /*
    * Check that minor number is valid
@@ -858,8 +857,8 @@ void
 m8xx_uart_smc_initialize (int minor)
 {
   unsigned char brg;
-  volatile m8xxSMCparms_t *smcparms;
-  volatile m8xxSMCRegisters_t *smcregs;
+  volatile m8xxSMCparms_t *smcparms = 0;
+  volatile m8xxSMCRegisters_t *smcregs = 0;
 
   /*
    * Check that minor number is valid
@@ -1100,7 +1099,7 @@ m8xx_uart_pollWrite(
     while (TxBd[minor]->status & M8xx_BD_READY)
       continue;
     txBuf[minor] = *buf++;
-    rtems_cache_flush_multiple_data_lines( &txBuf[minor], 1 );
+    rtems_cache_flush_multiple_data_lines( (void *)&txBuf[minor], 1 );
     TxBd[minor]->buffer = &txBuf[minor];
     TxBd[minor]->length = 1;
     TxBd[minor]->status = M8xx_BD_READY | M8xx_BD_WRAP;

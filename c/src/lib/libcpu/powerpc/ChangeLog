@@ -1,5 +1,9 @@
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
+	* mpc8xx/console-generic/console-generic.c: Removed warnings.
+
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
 	* mpc6xx/clock/c_clock.h: Removed commented out reference to <bsp.h>.
 	* mpc6xx/timer/timer.c: Ditto.
 
