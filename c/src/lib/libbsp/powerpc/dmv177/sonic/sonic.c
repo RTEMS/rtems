@@ -1,4 +1,3 @@
-void break_when_you_get_here();
 /*
  *******************************************************************
  *******************************************************************
@@ -33,6 +32,31 @@ void break_when_you_get_here();
 #include <bsp.h>   /* XXX JRS changed order */
 #include "sonic.h"
 #include <rtems/rtems_bsdnet.h>
+
+/***** CONFIGURATION ****/
+typedef void (*sonic_write_register_t)(
+  void       *base,
+  unsigned32  regno,
+  unsigned32  value
+);
+
+typedef unsigned32 (*sonic_read_register_t)(
+  void       *base,
+  unsigned32  regno
+);
+
+typedef struct {
+  unsigned32              base_address;
+  unsigned32              vector;
+  unsigned32              dcr_value;
+  unsigned32              dc2_value;
+  unsigned32              tda_count;
+  unsigned32              rda_count;
+  sonic_write_register_t  write_register;
+  sonic_read_register_t   read_register;
+} sonic_configuration_t;
+
+/***** CONFIGURATION ****/
 
 #include <stdio.h>
 
@@ -104,56 +128,6 @@ void break_when_you_get_here();
 #endif
 
 /*
- * Default location of device registers
- */
-#ifndef SONIC_BASE_ADDRESS
-# define SONIC_BASE_ADDRESS 0xF3000000
-# warning "Using default SONIC_BASE_ADDRESS."
-#endif
-
-/*
- * Default interrupt vector
- */
-#ifndef SONIC_VECTOR
-# define SONIC_VECTOR 1
-# warning "Using default SONIC_VECTOR."
-#endif
-
-/*
- * Default device configuration register values
- * Conservative, generic values.
- * DCR:
- *      No extended bus mode
- *      Unlatched bus retry
- *      Programmable outputs unused
- *      Asynchronous bus mode
- *      User definable pins unused
- *      No wait states (access time controlled by DTACK*)
- *      32-bit DMA
- *      Empty/Fill DMA mode
- *      Maximum Transmit/Receive FIFO
- * DC2:
- *      Extended programmable outputs unused
- *      Normal HOLD request
- *      Packet compress output unused
- *      No reject on CAM match
- */
-#define SONIC_DCR \
-   (DCR_DW32 | DCR_WAIT0 | DCR_PO0 | DCR_PO1  | DCR_RFT24 | DCR_TFT28)
-#ifndef SONIC_DCR
-# define SONIC_DCR (DCR_DW32 | DCR_TFT28)
-#endif
-#ifndef SONIC_DC2
-# define SONIC_DC2 (0)
-#endif
-
-/*
- * Default sizes of transmit and receive descriptor areas
- */
-#define RDA_COUNT     20 /* 20 */
-#define TDA_COUNT     20 /* 10 */
-
-/*
  * 
  * As suggested by National Application Note 746, make the
  * receive resource area bigger than the receive descriptor area.
@@ -213,9 +187,21 @@ struct sonic_softc {
   void                             *sonic;
 
   /*
+   *  Register access routines 
+   */
+  sonic_write_register_t           write_register;
+  sonic_read_register_t            read_register;
+  
+  /*
    * Interrupt vector
    */
   rtems_vector_number             vector;
+
+  /*
+   * Data Configuration Register values
+   */
+  rtems_unsigned32                dcr_value;
+  rtems_unsigned32                dc2_value;
 
   /*
    *  Indicates configuration
@@ -325,29 +311,19 @@ void sonic_print_rx_descriptor(
  ******************************************************************
  */
 
-void sonic_write_register(
-  void       *base,
-  unsigned32  regno,
-  unsigned32  value
-);
-
-unsigned32 sonic_read_register(
-  void       *base,
-  unsigned32  regno
-);
-
 void sonic_enable_interrupts(
-  void       *rp,
+  struct sonic_softc *sc,
   unsigned32  mask
 )
 {
+  void *rp = sc->sonic;
   rtems_interrupt_level level;
 
   rtems_interrupt_disable( level );
-      sonic_write_register(
+      (*sc->write_register)(
          rp,
          SONIC_REG_IMR,
-         sonic_read_register(rp, SONIC_REG_IMR) | mask
+         (*sc->read_register)(rp, SONIC_REG_IMR) | mask
       );
   rtems_interrupt_enable( level );
 }
@@ -395,7 +371,7 @@ SONIC_STATIC void sonic_stop (struct sonic_softc *sc)
   /*
    * Stop the transmitter and receiver.
    */
-  sonic_write_register( rp, SONIC_REG_CR, CR_HTX | CR_RXDIS );
+  (*sc->write_register)( rp, SONIC_REG_CR, CR_HTX | CR_RXDIS );
 }
 
 /*
@@ -456,8 +432,8 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
 
   sc->Interrupts++;
 
-  isr = sonic_read_register( rp, SONIC_REG_ISR );
-  imr = sonic_read_register( rp, SONIC_REG_IMR );
+  isr = (*sc->read_register)( rp, SONIC_REG_ISR );
+  imr = (*sc->read_register)( rp, SONIC_REG_IMR );
 
   /*
    * Packet received or receive buffer area exceeded?
@@ -479,7 +455,7 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
     rtems_event_send (sc->txDaemonTid, INTERRUPT_EVENT);
   }
 
-  sonic_write_register( rp, SONIC_REG_IMR, imr );
+  (*sc->write_register)( rp, SONIC_REG_IMR, imr );
 }
 
 /*
@@ -542,8 +518,8 @@ SONIC_STATIC void sonic_retire_tda (struct sonic_softc *sc)
       if ((link & TDA_LINK_EOL) == 0) {
         void *rp = sc->sonic;
 
-        sonic_write_register( rp, SONIC_REG_CTDA, link );
-        sonic_write_register( rp, SONIC_REG_CR, CR_TXP );
+        (*sc->write_register)( rp, SONIC_REG_CTDA, link );
+        (*sc->write_register)( rp, SONIC_REG_CR, CR_TXP );
       }
     }
 
@@ -625,7 +601,7 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
     /*
      * Clear old events.
      */
-    sonic_write_register( rp, SONIC_REG_ISR, ISR_PINT | ISR_TXDN | ISR_TXER );
+    (*sc->write_register)( rp, SONIC_REG_ISR, ISR_PINT | ISR_TXDN | ISR_TXER );
 
     /*
      * Wait for transmit descriptor to become available.
@@ -645,7 +621,7 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
       /*
        * Enable transmitter interrupts.
        */
-      sonic_enable_interrupts( rp, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) );
+      sonic_enable_interrupts( sc, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) );
 
       /*
        * Wait for interrupt
@@ -654,7 +630,7 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
             RTEMS_WAIT|RTEMS_EVENT_ANY,
             RTEMS_NO_TIMEOUT,
             &events);
-      sonic_write_register( rp, SONIC_REG_ISR, ISR_PINT | ISR_TXDN | ISR_TXER );
+      (*sc->write_register)( rp, SONIC_REG_ISR, ISR_PINT | ISR_TXDN | ISR_TXER );
       sonic_retire_tda (sc);
     }
   }
@@ -742,8 +718,8 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
   sc->tdaHead = tdp;
 
 /* XXX not in KA9Q */
-  sonic_enable_interrupts( rp, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) );
-  sonic_write_register( rp, SONIC_REG_CR, CR_TXP );
+  sonic_enable_interrupts( sc, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) );
+  (*sc->write_register)( rp, SONIC_REG_CR, CR_TXP );
 }
 
 /*
@@ -832,7 +808,7 @@ SONIC_STATIC void sonic_rda_wait(
      * that only reception of the current packet is aborted.
      * This would be more difficult to recover from....
      */
-    if (sonic_read_register( rp, SONIC_REG_ISR ) & ISR_RBAE) {
+    if ((*sc->read_register)( rp, SONIC_REG_ISR ) & ISR_RBAE) {
 
 #if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
       printf( "ERROR: looks like a giant packet -- RBAE\n" );
@@ -852,7 +828,7 @@ SONIC_STATIC void sonic_rda_wait(
       /*
        * Check my interpretation of the SONIC manual.
        */
-      if (sonic_read_register( rp, SONIC_REG_CR ) & CR_RXEN)
+      if ((*sc->read_register)( rp, SONIC_REG_CR ) & CR_RXEN)
         rtems_panic ("SONIC RBAE/RXEN");
 
       /*
@@ -872,31 +848,31 @@ SONIC_STATIC void sonic_rda_wait(
        * reuse the receive buffer holding the giant packet.
        */
       for (i = 0 ; i < 2 ; i++) {
-        if (sonic_read_register( rp, SONIC_REG_RRP ) ==
-            sonic_read_register( rp, SONIC_REG_RSA ))
-          sonic_write_register(
+        if ((*sc->read_register)( rp, SONIC_REG_RRP ) ==
+            (*sc->read_register)( rp, SONIC_REG_RSA ))
+          (*sc->write_register)(
             rp,
             SONIC_REG_RRP,
-            sonic_read_register( rp, SONIC_REG_REA )
+            (*sc->read_register)( rp, SONIC_REG_REA )
           );
-          sonic_write_register(
+          (*sc->write_register)(
              rp,
              SONIC_REG_RRP,
-             sonic_read_register(rp, SONIC_REG_RRP) - sizeof(ReceiveResource_t)
+             (*sc->read_register)(rp, SONIC_REG_RRP) - sizeof(ReceiveResource_t)
           );
       }
 
       /*
        * Restart reception
        */
-      sonic_write_register( rp, SONIC_REG_ISR, ISR_RBAE );
-      sonic_write_register( rp, SONIC_REG_CR, CR_RXEN );
+      (*sc->write_register)( rp, SONIC_REG_ISR, ISR_RBAE );
+      (*sc->write_register)( rp, SONIC_REG_CR, CR_RXEN );
     }
 
     /*
      * Clear old packet-received events.
      */
-    sonic_write_register( rp, SONIC_REG_ISR, ISR_PKTRX );
+    (*sc->write_register)( rp, SONIC_REG_ISR, ISR_PKTRX );
 
     /*
      * Has Receive Descriptor become available?
@@ -907,7 +883,7 @@ SONIC_STATIC void sonic_rda_wait(
     /*
      * Enable interrupts.
      */
-    sonic_enable_interrupts( rp, (IMR_PRXEN | IMR_RBAEEN) );
+    sonic_enable_interrupts( sc, (IMR_PRXEN | IMR_RBAEEN) );
 
     /*
      * Wait for interrupt.
@@ -951,7 +927,7 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
   /*
    * Start the receiver
    */
-  oldMissedTally = sonic_read_register( rp, SONIC_REG_MPT );
+  oldMissedTally = (*sc->read_register)( rp, SONIC_REG_MPT );
 
   /*
    * Input packet handling loop
@@ -1042,13 +1018,13 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
 #endif
         rwp = sc->rsa;
       }
-      sonic_write_register( rp, SONIC_REG_RWP , LSW(rwp) );
+      (*sc->write_register)( rp, SONIC_REG_RWP , LSW(rwp) );
 
       /*
        * Tell the SONIC to reread the RRA.
        */
-      if (sonic_read_register( rp, SONIC_REG_ISR ) & ISR_RBE)
-        sonic_write_register( rp, SONIC_REG_ISR, ISR_RBE );
+      if ((*sc->read_register)( rp, SONIC_REG_ISR ) & ISR_RBE)
+        (*sc->write_register)( rp, SONIC_REG_ISR, ISR_RBE );
     }
     else {
       if (status & RDA_STATUS_COL)
@@ -1062,7 +1038,7 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
     /*
      * Count missed packets
      */
-    newMissedTally = sonic_read_register( rp, SONIC_REG_MPT );
+    newMissedTally = (*sc->read_register)( rp, SONIC_REG_MPT );
     if (newMissedTally != oldMissedTally) {
       sc->rxMissed += (newMissedTally - oldMissedTally) & 0xFFFF;
       newMissedTally = oldMissedTally;
@@ -1111,7 +1087,7 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
    *  you need to add some code to the RX path to handle this weirdness.
    */
 
-  if ( sonic_read_register( rp, SONIC_REG_SR ) < SONIC_REVISION_C ) {
+  if ( (*sc->read_register)( rp, SONIC_REG_SR ) < SONIC_REVISION_C ) {
     rtems_fatal_error_occurred( 0x0BADF00D );  /* don't eat this part :) */
   }
   
@@ -1252,34 +1228,34 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
   /*
    * Issue a software reset.
    */
-  sonic_write_register( rp, SONIC_REG_CR, CR_RST | CR_STP | CR_RXDIS | CR_HTX );
+  (*sc->write_register)( rp, SONIC_REG_CR, CR_RST | CR_STP | CR_RXDIS | CR_HTX );
 
   /*
    * Set up data configuration registers.
    */
-  sonic_write_register( rp, SONIC_REG_DCR, SONIC_DCR );
-  sonic_write_register( rp, SONIC_REG_DCR2, SONIC_DC2 );
+  (*sc->write_register)( rp, SONIC_REG_DCR, sc->dcr_value );
+  (*sc->write_register)( rp, SONIC_REG_DCR2, sc->dc2_value );
 
-  sonic_write_register( rp, SONIC_REG_CR, CR_STP | CR_RXDIS | CR_HTX );
+  (*sc->write_register)( rp, SONIC_REG_CR, CR_STP | CR_RXDIS | CR_HTX );
 
   /*
    * Mask all interrupts
    */
-  sonic_write_register( rp, SONIC_REG_IMR, 0x0 ); /* XXX was backwards */
+  (*sc->write_register)( rp, SONIC_REG_IMR, 0x0 ); /* XXX was backwards */
 
   /*
    * Clear outstanding interrupts.
    */
-  sonic_write_register( rp, SONIC_REG_ISR, 0x7FFF );
+  (*sc->write_register)( rp, SONIC_REG_ISR, 0x7FFF );
 
   /*
    *  Clear the tally counters
    */
 
-  sonic_write_register( rp, SONIC_REG_CRCT, 0xFFFF );
-  sonic_write_register( rp, SONIC_REG_FAET, 0xFFFF );
-  sonic_write_register( rp, SONIC_REG_MPT, 0xFFFF );
-  sonic_write_register( rp, SONIC_REG_RSC, 0 );
+  (*sc->write_register)( rp, SONIC_REG_CRCT, 0xFFFF );
+  (*sc->write_register)( rp, SONIC_REG_FAET, 0xFFFF );
+  (*sc->write_register)( rp, SONIC_REG_MPT, 0xFFFF );
+  (*sc->write_register)( rp, SONIC_REG_RSC, 0 );
 
   /*
    *  Set the Receiver mode
@@ -1288,48 +1264,48 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
    */
 
   if (sc->acceptBroadcast)
-    sonic_write_register( rp, SONIC_REG_RCR, RCR_BRD );
+    (*sc->write_register)( rp, SONIC_REG_RCR, RCR_BRD );
   else
-    sonic_write_register( rp, SONIC_REG_RCR, 0 );
+    (*sc->write_register)( rp, SONIC_REG_RCR, 0 );
 
   /*
    * Set up Resource Area pointers
    */
 
-  sonic_write_register( rp, SONIC_REG_URRA, MSW(sc->rsa) );
-  sonic_write_register( rp, SONIC_REG_RSA, LSW(sc->rsa) );
+  (*sc->write_register)( rp, SONIC_REG_URRA, MSW(sc->rsa) );
+  (*sc->write_register)( rp, SONIC_REG_RSA, LSW(sc->rsa) );
 
-  sonic_write_register( rp, SONIC_REG_REA, LSW(sc->rea) );
+  (*sc->write_register)( rp, SONIC_REG_REA, LSW(sc->rea) );
 
-  sonic_write_register( rp, SONIC_REG_RRP, LSW(sc->rsa) );
-  sonic_write_register( rp, SONIC_REG_RWP, LSW(sc->rsa) ); /* XXX was rea */
+  (*sc->write_register)( rp, SONIC_REG_RRP, LSW(sc->rsa) );
+  (*sc->write_register)( rp, SONIC_REG_RWP, LSW(sc->rsa) ); /* XXX was rea */
 
-  sonic_write_register( rp, SONIC_REG_URDA, MSW(sc->rda) );
-  sonic_write_register( rp, SONIC_REG_CRDA, LSW(sc->rda) );
+  (*sc->write_register)( rp, SONIC_REG_URDA, MSW(sc->rda) );
+  (*sc->write_register)( rp, SONIC_REG_CRDA, LSW(sc->rda) );
 
-  sonic_write_register( rp, SONIC_REG_UTDA, MSW(sc->tdaTail) );
-  sonic_write_register( rp, SONIC_REG_CTDA, LSW(sc->tdaTail) );
+  (*sc->write_register)( rp, SONIC_REG_UTDA, MSW(sc->tdaTail) );
+  (*sc->write_register)( rp, SONIC_REG_CTDA, LSW(sc->tdaTail) );
 
   /*
    * Set End Of Buffer Count register to the value recommended
    * in Note 1 of Section 3.4.4.4 of the SONIC data sheet.
    */
 
-  sonic_write_register( rp, SONIC_REG_EOBC, RBUF_WC - 2 );
+  (*sc->write_register)( rp, SONIC_REG_EOBC, RBUF_WC - 2 );
 
   /*
    *  Issue the load RRA command
    */
 
-  sonic_write_register( rp, SONIC_REG_CR, CR_RRRA );
-  while (sonic_read_register( rp, SONIC_REG_CR ) & CR_RRRA)
+  (*sc->write_register)( rp, SONIC_REG_CR, CR_RRRA );
+  while ((*sc->read_register)( rp, SONIC_REG_CR ) & CR_RRRA)
     continue;
 
   /*
    * Remove device reset
    */
 
-  sonic_write_register( rp, SONIC_REG_CR, 0 );
+  (*sc->write_register)( rp, SONIC_REG_CR, 0 );
 
   /*
    *  Set up the SONIC CAM with our hardware address.
@@ -1349,54 +1325,54 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
   cdp->cap2 = hwaddr[5] << 8 | hwaddr[4];
   cdp->ce   = 0x0001;                /* Enable first entry in CAM */
 
-  sonic_write_register( rp, SONIC_REG_CDC, 1 );      /* 1 entry in CDA */
-  sonic_write_register( rp, SONIC_REG_CDP, LSW(cdp) );
-  sonic_write_register( rp, SONIC_REG_CR,  CR_LCAM );  /* Load the CAM */
+  (*sc->write_register)( rp, SONIC_REG_CDC, 1 );      /* 1 entry in CDA */
+  (*sc->write_register)( rp, SONIC_REG_CDP, LSW(cdp) );
+  (*sc->write_register)( rp, SONIC_REG_CR,  CR_LCAM );  /* Load the CAM */
 
-  while (sonic_read_register( rp, SONIC_REG_CR ) & CR_LCAM)
+  while ((*sc->read_register)( rp, SONIC_REG_CR ) & CR_LCAM)
     continue;
 
   /*
    * Verify that CAM was properly loaded.
    */
 
-  sonic_write_register( rp, SONIC_REG_CR, CR_RST | CR_STP | CR_RXDIS | CR_HTX );
+  (*sc->write_register)( rp, SONIC_REG_CR, CR_RST | CR_STP | CR_RXDIS | CR_HTX );
 
 #if (SONIC_DEBUG & SONIC_DEBUG_CAM)
-  sonic_write_register( rp, SONIC_REG_CEP, 0 );  /* Select first entry in CAM */
+  (*sc->write_register)( rp, SONIC_REG_CEP, 0 );  /* Select first entry in CAM */
     printf ("Loaded Ethernet address into SONIC CAM.\n"
       "  Wrote %04x%04x%04x - %#x\n"
       "   Read %04x%04x%04x - %#x\n", 
         cdp->cap2, cdp->cap1, cdp->cap0, cdp->ce,
-        sonic_read_register( rp, SONIC_REG_CAP2 ),
-        sonic_read_register( rp, SONIC_REG_CAP1 ),
-        sonic_read_register( rp, SONIC_REG_CAP0 ),
-        sonic_read_register( rp, SONIC_REG_CE ));
+        (*sc->read_register)( rp, SONIC_REG_CAP2 ),
+        (*sc->read_register)( rp, SONIC_REG_CAP1 ),
+        (*sc->read_register)( rp, SONIC_REG_CAP0 ),
+        (*sc->read_register)( rp, SONIC_REG_CE ));
 #endif
 
-  sonic_write_register( rp, SONIC_REG_CEP, 0 );  /* Select first entry in CAM */
-  if ((sonic_read_register( rp, SONIC_REG_CAP2 ) != cdp->cap2)
-   || (sonic_read_register( rp, SONIC_REG_CAP1 ) != cdp->cap1)
-   || (sonic_read_register( rp, SONIC_REG_CAP0 ) != cdp->cap0)
-   || (sonic_read_register( rp, SONIC_REG_CE ) != cdp->ce)) {
+  (*sc->write_register)( rp, SONIC_REG_CEP, 0 );  /* Select first entry in CAM */
+  if (((*sc->read_register)( rp, SONIC_REG_CAP2 ) != cdp->cap2)
+   || ((*sc->read_register)( rp, SONIC_REG_CAP1 ) != cdp->cap1)
+   || ((*sc->read_register)( rp, SONIC_REG_CAP0 ) != cdp->cap0)
+   || ((*sc->read_register)( rp, SONIC_REG_CE ) != cdp->ce)) {
     printf ("Failed to load Ethernet address into SONIC CAM.\n"
       "  Wrote %04x%04x%04x - %#x\n"
       "   Read %04x%04x%04x - %#x\n", 
         cdp->cap2, cdp->cap1, cdp->cap0, cdp->ce,
-        sonic_read_register( rp, SONIC_REG_CAP2 ),
-        sonic_read_register( rp, SONIC_REG_CAP1 ),
-        sonic_read_register( rp, SONIC_REG_CAP0 ),
-        sonic_read_register( rp, SONIC_REG_CE ));
+        (*sc->read_register)( rp, SONIC_REG_CAP2 ),
+        (*sc->read_register)( rp, SONIC_REG_CAP1 ),
+        (*sc->read_register)( rp, SONIC_REG_CAP0 ),
+        (*sc->read_register)( rp, SONIC_REG_CE ));
     rtems_panic ("SONIC LCAM");
   }
 
-  sonic_write_register(rp, SONIC_REG_CR, /* CR_TXP | */CR_RXEN | CR_STP);
+  (*sc->write_register)(rp, SONIC_REG_CR, /* CR_TXP | */CR_RXEN | CR_STP);
 
   /*
    * Attach SONIC interrupt handler
    */
 /* XXX
-  sonic_write_register( rp, SONIC_REG_IMR, 0 );
+  (*sc->write_register)( rp, SONIC_REG_IMR, 0 );
 */
   old_handler = set_vector(sonic_interrupt_handler, sc->vector, 0);
 
@@ -1446,12 +1422,12 @@ SONIC_STATIC void sonic_init (void *arg)
   /*
    * Set flags appropriately
    */
-  rcr = sonic_read_register( rp, SONIC_REG_RCR );
+  rcr = (*sc->read_register)( rp, SONIC_REG_RCR );
   if (ifp->if_flags & IFF_PROMISC)
     rcr |= RCR_PRO;
   else
     rcr &= ~RCR_PRO;
-  sonic_write_register( rp, SONIC_REG_RCR, rcr);
+  (*sc->write_register)( rp, SONIC_REG_RCR, rcr);
 
   /*
    * Tell the world that we're running.
@@ -1461,11 +1437,11 @@ SONIC_STATIC void sonic_init (void *arg)
   /*
    * Enable receiver and transmitter
    */
-  /* sonic_write_register( rp, SONIC_REG_IMR, 0 ); */
-  sonic_enable_interrupts( rp,
+  /* (*sc->write_register)( rp, SONIC_REG_IMR, 0 ); */
+  sonic_enable_interrupts( sc,
         (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) | (IMR_PRXEN | IMR_RBAEEN) );
 
-  sonic_write_register(rp, SONIC_REG_CR, /* CR_TXP | */ CR_RXEN);
+  (*sc->write_register)(rp, SONIC_REG_CR, /* CR_TXP | */ CR_RXEN);
 }
 
 /*
@@ -1521,8 +1497,12 @@ sonic_ioctl (struct ifnet *ifp, int command, caddr_t data)
  * Attach an SONIC driver to the system
  * This is the only `extern' function in the driver.
  */
+
 int
-rtems_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config)
+rtems_sonic_driver_attach_chip (
+  struct rtems_bsdnet_ifconfig *config,
+  sonic_configuration_t *chip
+)
 {
   struct sonic_softc *sc;
   struct ifnet *ifp;
@@ -1569,15 +1549,19 @@ rtems_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config)
   if (config->rbuf_count)
     sc->rdaCount = config->rbuf_count;
   else
-    sc->rdaCount = RDA_COUNT;
+    sc->rdaCount = chip->rda_count;
   if (config->xbuf_count)
     sc->tdaCount = config->xbuf_count;
   else
-    sc->tdaCount = TDA_COUNT;
+    sc->tdaCount = chip->tda_count;
   sc->acceptBroadcast = !config->ignore_broadcast;
 
-  sc->sonic = (void *) SONIC_BASE_ADDRESS;
-  sc->vector = SONIC_VECTOR;
+  sc->sonic = (void *) chip->base_address;
+  sc->vector = chip->vector;
+  sc->dcr_value = chip->dcr_value;
+  sc->dc2_value  = chip->dc2_value;
+  sc->write_register = chip->write_register;
+  sc->read_register  = chip->read_register;
 
   /*
    * Set up network interface values
@@ -1673,7 +1657,7 @@ char SONIC_Reg_name[64][6]= {
 };
 #endif
 
-void sonic_write_register(
+void dmv177_sonic_write_register(
   void       *base,
   unsigned32  regno,
   unsigned32  value
@@ -1689,7 +1673,7 @@ void sonic_write_register(
   p[regno] = value;
 }
 
-unsigned32 sonic_read_register(
+unsigned32 dmv177_sonic_read_register(
   void       *base,
   unsigned32  regno
 )
@@ -1705,3 +1689,73 @@ unsigned32 sonic_read_register(
 #endif
   return value;
 }
+/********  DMV177 SPECIFIC INFORMATION ***********/
+/*
+ * Default sizes of transmit and receive descriptor areas
+ */
+#define RDA_COUNT     20 /* 20 */
+#define TDA_COUNT     20 /* 10 */
+
+/*
+ * Default device configuration register values
+ * Conservative, generic values.
+ * DCR:
+ *      No extended bus mode
+ *      Unlatched bus retry
+ *      Programmable outputs unused
+ *      Asynchronous bus mode
+ *      User definable pins unused
+ *      No wait states (access time controlled by DTACK*)
+ *      32-bit DMA
+ *      Empty/Fill DMA mode
+ *      Maximum Transmit/Receive FIFO
+ * DC2:
+ *      Extended programmable outputs unused
+ *      Normal HOLD request
+ *      Packet compress output unused
+ *      No reject on CAM match
+ */
+#define SONIC_DCR \
+   (DCR_DW32 | DCR_WAIT0 | DCR_PO0 | DCR_PO1  | DCR_RFT24 | DCR_TFT28)
+#ifndef SONIC_DCR
+# define SONIC_DCR (DCR_DW32 | DCR_TFT28)
+#endif
+#ifndef SONIC_DC2
+# define SONIC_DC2 (0)
+#endif
+
+/*
+ * Default location of device registers
+ */
+#ifndef SONIC_BASE_ADDRESS
+# define SONIC_BASE_ADDRESS 0xF3000000
+# warning "Using default SONIC_BASE_ADDRESS."
+#endif
+
+/*
+ * Default interrupt vector
+ */
+#ifndef SONIC_VECTOR
+# define SONIC_VECTOR 1
+# warning "Using default SONIC_VECTOR."
+#endif
+
+sonic_configuration_t dmv177_sonic_configuration = {
+  SONIC_BASE_ADDRESS,        /* base address */ 
+  SONIC_VECTOR,              /* vector number */ 
+  SONIC_DCR,                 /* DCR register value */
+  SONIC_DC2,                 /* DC2 register value */
+  TDA_COUNT,                 /* number of transmit descriptors */
+  RDA_COUNT,                 /* number of receive descriptors */
+  dmv177_sonic_write_register,
+  dmv177_sonic_read_register
+};
+
+int rtems_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config)
+{
+  return rtems_sonic_driver_attach_chip ( config, &dmv177_sonic_configuration );
+  
+}
+
+/********  DMV177 SPECIFIC INFORMATION ***********/
+
