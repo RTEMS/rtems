@@ -1,5 +1,5 @@
 #
-#  COPYRIGHT (c) 1988-1999.
+#  COPYRIGHT (c) 1988-2002.
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 #
@@ -40,12 +40,12 @@ $(srcdir)/buildada.texi: buildada.t tversions.texi
 	    -n "Building RTEMS" < $< > $@
 
 $(srcdir)/buildrt.texi: ../started/buildrt.t tversions.texi
-	$(BMENU2) -c -p "Running the bit_ada Script" \
+	$(BMENU2) -c -p "Error Messages Indicating Configuration Problems" \
 	    -u "Top" \
 	    -n "Building the Sample Application" < $< > $@
 
 $(srcdir)/sample.texi: sample.t tversions.texi
-	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \
+	$(BMENU2) -c -p "Using the bit_rtems Script" \
 	    -u "Top" \
 	    -n "Building the GNU Debugger" < $< > $@
 

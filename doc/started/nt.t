@@ -1,53 +1,78 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@set CYGWIN-VERSION B19
-@set CYGWIN-FTP http://www.cygnus.com/misc/gnu-win32/
-@set CYGWIN-COOLVIEW http://www.lexa.ru/sos/
-@set DOS2UNIX-FTP ftp://ftp.micros.hensa.ac.uk/platforms/ibm-pc/ms-dos/simtelnet/txtutl/dos2unix.zip
-
-@c @set PFE-FTP http://www.lancs.ac.uk/people/cpaap/pfe
-@set PFE-FTP http://www.simtel.net/pub/simtelnet/win95/editor/pfe101i.zip
-
-@chapter Using MS-Windows as a Development Host
+@appendix Using MS-Windows as a Development Host
 
 This chapter discusses the installation of the GNU tool chain
 on a computer running the Microsoft Windows NT operating system.
 
-This chapter is based on a draft provided by 
-Geoffroy Montel <g_montel@@yahoo.com>.  Geoffroy's 
-procedure was based on information from 
-David Fiddes <D.J@@fiddes.surfaid.org>.
+@section Cygwin 1.0 or Newer
+
+Recent versions of Cygwin are vastly improved over the beta
+versions.  Most of the oddities, instabilities, and performance
+problems have been resolved.  The installation procedure
+is much simpler.  However, there are a handful of issues
+that remain to successfully use Cygwin as an RTEMS development
+environment.
+
+@itemize @bullet
+
+@item There is no @code{cc} program by default.  The GNU configure
+scripts used by RTEMS require this to be present to work properly.
+The solution is to link @code{gcc.exe} to @code{cc.exe}.
+
+@item Make sure you unarchive and build in a binary mounted
+filesystem (e.g. mounted with the @code{-b} option).  Otherwise,
+many confusing errors will result.
+
+@item If you want to use RPM, you will have to obtain that
+separately by following the links from the main Cygwin site.
+
+@item When using the RPMs, there may be warnings about
+@code{/etc/mtab} while installing the info files.  This can be
+ignored.
+
+@item A user has reported that they needed 
+to set CYGWIN=ntsec for chmod to work correctly, but had to set 
+CYGWIN=nontsec for compile to work properly (otherwise there were
+complaints about permissions on a temporary file).
+
+@item If you want to build the tools from source, you have the 
+same options as UNIX users -- @code{bit} or @code{RPM}.
+
+@end itemize
+
+@section Cygwin B19
+
+This section is based on a draft provided by 
+@uref{mailto:g_montel@@yahoo.com, Geoffroy Montel <g_montel@@yahoo.com>}.
+Geoffroy's procedure was based on information from 
+@uref{mailto:<D.J@@fiddes.surfaid.org>, David Fiddes <D.J@@fiddes.surfaid.org>}.
 Their input and feedback is greatly appreciated.
 
 @b{STATUS:}  This chapter should be considered preliminary.
 Please be careful when following these instructions.
-
-@section Version Information
 
 This installation process works well under Windows NT. 
 Using Windows 95 or 98 is not recommended although it 
 should be possible with version 3.77 of GNU make and an updated
 cygwinb19.dll.
 
-This procedure should also work with newer version of 
+This procedure should also work with newer versions of 
 the tool versions listed in this chapter, but this has
-not been verified.  If you have success with a particular
-version of the toolset or notice problems in this chapter,
-please let the RTEMS maintainers know so they can be
-addressed in future revisions of this document.
+not been verified.  
 
-@section MS-Windows Host Specific Requirements
+@subsection MS-Windows Host Specific Requirements
 
 This section details the components required to install
 and build a Windows hosted GNU cross development toolset.
 
-@subsection Unzipping Archives
+@subsubsection Unzipping Archives
 
 You will have to uncompress many archives during this
 process.  You must @b{NOT} use @code{WinZip} or
@@ -60,13 +85,12 @@ tar -xzvf archive.tgz
 
 @code{tar} is provided with Cygwin32.
 
-@subsection Text Editor
+@subsubsection Text Editor
 
 You absolutely have to use a text editor which can 
 save files with Unix format (so don't use Notepad 
 nor Wordpad).  There are a number of editors
 freely available that can be used.  
-
 
 @itemize @bullet
 @item @b{VIM} (@b{Vi IMproved}) is available from
@@ -81,14 +105,14 @@ The GNU Emacs on Windows NT and Windows 95/98 FAQ is
 at @b{http://www.gnu.org/software/emacs/windows/ntemacs.html}.
 
 @item @b{PFE} (@b{Programmers File Editor}) may be downloaded
-from @b{@value{PFE-FTP},@value{PFE-FTP}}.  Note this
+from @b{http://www.simtel.net/pub/simtelnet/win95/editor/pfe101i.zip}.  Note this
 editor is no longer actively supported.
 
-@c @uref{@value{PFE-FTP},@value{PFE-FTP}}
+@c @uref{http://www.simtel.net/pub/simtelnet/win95/editor/pfe101i.zip}
 
 @end itemize
 
-@subsection Bug in Patch Utility
+@subsubsection Bug in Patch Utility
 
 There is a bug in the @code{patch} utility
 provided in Cygwin32 B19. The files modified end up 
@@ -103,35 +127,36 @@ Dos2Unix: Cleaning file XYZ ...
 
 The dos2unix utility may be downloaded from:
 
-@c @uref{@value{DOS2UNIX-FTP},@value{DOS2UNIX-FTP}}
-@b{@value{DOS2UNIX-FTP},@value{DOS2UNIX-FTP}}
+@c @uref{ftp://ftp.micros.hensa.ac.uk/platforms/ibm-pc/ms-dos/simtelnet/txtutl/dos2unix.zip,ftp://ftp.micros.hensa.ac.uk/platforms/ibm-pc/ms-dos/simtelnet/txtutl/dos2unix.zip}
+@b{ftp://ftp.micros.hensa.ac.uk/platforms/ibm-pc/ms-dos/simtelnet/txtutl/dos2unix.zip}
 
 You @b{must} change the format of every patched file 
 for the toolset build to work correctly.
 
-@subsection Files Needed
+@subsubsection Files Needed
 
 This section lists the files required to build and install
 a Windows hosted GNU cross development toolset and their
 home WWW site.  In addition to the sources required 
-for the cross environment listed earlier in @ref{Get All the Pieces}, 
-you will need to  download the following
+for the RTEMS cross environment listed earlier in this manual,
+you may need to  download the following
 files from their respective sites using your favorite
-Web browser or ftp client.
+Web browser or ftp client. [NOTE: This information was current when B19
+was released and URLs may no longer be correct.]
 
 @table @b
 
 @item cdk.exe
-@c @uref{@value{CYGWIN-FTP},@value{CYGWIN-FTP}}
-@b{@value{CYGWIN-FTP},@value{CYGWIN-FTP}}
+@c @uref{http://www.cygnus.com/misc/gnu-win32/,http://www.cygnus.com/misc/gnu-win32/}
+@b{http://www.cygnus.com/misc/gnu-win32/}
 
 @item coolview.tar.gz
-@c @uref{@value{CYGWIN-COOLVIEW},@value{CYGWIN-COOLVIEW}}
-@b{@value{CYGWIN-COOLVIEW},@value{CYGWIN-COOLVIEW}}
+@c @uref{http://www.lexa.ru/sos/,http://www.lexa.ru/sos/}
+@b{http://www.lexa.ru/sos/}
 
 @end table
 
-@subsection System Requirements
+@subsubsection System Requirements
 
 Although the finished cross-compiler is fairly easy on resources,
 building it can take a significant amount of processing power and 
@@ -152,10 +177,10 @@ Even with this spec of machine expect the full suite to take over 2 hours to
 build with a further half an hour for RTEMS itself.
 
 
-@section Installing Cygwin32 B19
+@subsection Installing Cygwin32 B19
 
 This section describes the process of installing the 
-version @value{CYGWIN-VERSION} of the Cygwin32 environment.  It assumes
+version B19 of the Cygwin32 environment.  It assumes
 that this toolset is installed in a directory 
 referred to as @code{<RTOS>}.
 
@@ -214,16 +239,16 @@ cp <RTOS>/cygnus/b19/H-i386-cygwin32/bin/bash.exe /bin
 
 @item Open the file 
 @code{/cygnus/b19/H-i386-cygwin32/lib/gcc-lib/i386-cygwin32/2.7-b19/specs},
-and change the following line:
+and append
+
+@example
+-ladvapi32
+@end example
+
+to the following line:
 
 @example
 -lcygwin %@{mwindows:-luser32 -lgdi32 -lcomdlg32@} -lkernel32
-@end example
-
-to:
-
-@example
--lcygwin %@{mwindows:-luser32 -lgdi32 -lcomdlg32@} -lkernel32 -ladvapi32
 @end example
 
 @end enumerate
@@ -235,25 +260,26 @@ are ready to proceed to building a cross-compiler.
 @c  BINUTILS
 @c
 
-@section Installing binutils
+@subsection Installing binutils
 
 @enumerate
 
 @item Unarchive @value{BINUTILS-TAR} following the 
 instructions in @ref{Unarchiving the Tools} into the /source directory.
 Apply the appropriate RTEMS specific patch as detailed in
-@ref{Apply RTEMS Patch to binutils}.
+@ref{Applying RTEMS Patches}.
 
 @item In the @code{/build/binutils} directory, execute the following
 command to configure @value{BINUTILS-VERSION}:
 
 @example
-/source/@value{BINUTILS-UNTAR}/configure --verbose --target=m68k-rtems \
+/source/@value{BINUTILS-UNTAR}/configure \
+    --verbose --target=m68k-rtems \
     --prefix=/gcc-m68k-rtems --with-gnu-as --with-gnu-ld 
 @end example
 
 Replace @code{m68k-rtems} with the target configuration
-of your choice.  See @ref{Running the bit Script} for a
+of your choice.  See @ref{Using the bit Script} for a
 list of the targets available.
 
 @item Execute the following command to compile the toolset:
@@ -269,7 +295,7 @@ make -k install
 @end example
 
 There is a problem with the gnu info package which will cause an 
-error during installation. Telling make to keep going with -k allows 
+error during installation. Telling make to keep going with @code{-k} allows 
 the install to complete.
 
 @item In the @code{cygnus.bat} file, add the directory
@@ -292,13 +318,13 @@ the Cygwin32 environment with the new path.
 @c  GCC
 @c
 
-@section Installing GCC AND NEWLIB
+@subsection Installing GCC AND NEWLIB
 
 @enumerate
 @item Unarchive and patch @value{GCC-TAR} and @value{NEWLIB-TAR}
 following the instructions in @ref{Unarchiving the Tools}. 
 Apply the appropriate RTEMS specific patches as detailed in
-@ref{Apply RTEMS Patch to GCC} and @ref{Apply RTEMS Patch to newlib}.
+@ref{Applying RTEMS Patches}.
 
 @b{NOTE}: See @ref{Bug in Patch Utility}.
 
@@ -324,13 +350,14 @@ or Objective-C as Cygwin32 cross-compilers):
 @item Change to the /build/gcc directory to configure the compiler:
 
 @example
-/source/@value{GCC-UNTAR}/configure --verbose --target=m68k-rtems \
+/source/@value{GCC-UNTAR}/configure \
+    --verbose --target=m68k-rtems \
     --prefix=/gcc-m68k --with-gnu-as --with-gnu-ld \
     --with-newlib
 @end example
 
 Replace @code{m68k-rtems} with the target configuration
-of your choice.  See @ref{Running the bit Script} for a
+of your choice.  See @ref{Using the bit Script} for a
 list of the targets available.
 
 @item Compile the toolset as follows:
@@ -353,10 +380,6 @@ make -k install
 @item Just as with binutils package, a problem with the gnu
 info package not building correctly requires that you use -k to 
 keep going.
-
-@example
-make -k install
-@end example
 
 @end enumerate
 

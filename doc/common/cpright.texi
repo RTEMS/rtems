@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -17,7 +17,7 @@
 @end tex
 
 @vskip 0pt plus 1filll
-COPYRIGHT @copyright{} 1988 - 2000.@*
+COPYRIGHT @copyright{} 1988 - 2002.@*
 On-Line Applications Research Corporation (OAR).@*
 
 The authors have used their best efforts in preparing
@@ -32,7 +32,8 @@ and to make changes from time to time in the content hereof
 without obligation to notify anyone of such revision or changes.
 
 Any inquiries concerning RTEMS, its related support
-components, or its documentation should be directed to either:
+components, its documentation, or any custom services
+for RTEMS should be directed to:
 
 @example
 On-Line Applications Research Corporation
@@ -41,5 +42,6 @@ Huntsville, AL 35805
 VOICE: (256) 722-9985
 FAX:   (256) 722-0985
 EMAIL: rtems@@OARcorp.com
+URL:   http://www.oarcorp.com
 @end example
 

@@ -90,7 +90,7 @@ if USE_DVI
 dvi_DATA += $(PROJECT).dvi
 
 .texi.dvi:
-	$(TEXI2DVI) -I $(srcdir) -I $(top_srcdir) $<
+	$(TEXI2DVI) -q -I $(srcdir) -I $(top_srcdir) $<
 
 if USE_PS
 ps_DATA += $(PROJECT).ps
@@ -106,7 +106,8 @@ pdf_DATA += $(PROJECT).pdf
 
 if TEXI2PDF
 .texi.pdf:
-	$(TEXI2PDF) -I $(srcdir) -I $(top_srcdir) $<
+	rm -f *.aux *.cp *.fn *.ky *.pg *.tp *.toc *.vr
+	$(TEXI2PDF) -q -I $(srcdir) -I $(top_srcdir) $<
 endif
 
 endif

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -25,31 +25,31 @@
 @set GCC-TAR         gcc-2.8.1.tar.gz
 @set GCC-UNTAR       gcc-2.8.1
 @set GCC-FTPSITE     ftp.gnu.org
-@set GCC-FTPDIR      /pub/gnu
-@set GCC-RTEMSPATCH  gcc-2.8.1-rtems-gnat-3.12p-20000429.diff.gz
+@set GCC-FTPDIR      /pub/gnu/gcc
+@set GCC-RTEMSPATCH  gcc-2.8.1-rtems-gnat-3.13p-20000429.diff.gz
 
 @c
 @c  GNAT Version
 @c
 
-@set GNAT-VERSION     gnat 3.12p
-@set GNAT-TAR         gnat-3.12p-src.tar.gz
-@set GNAT-UNTAR       gnat-3.12p-src
+@set GNAT-VERSION     gnat 3.13p
+@set GNAT-TAR         gnat-3.13p-src.tar.gz
+@set GNAT-UNTAR       gnat-3.13p-src
 @set GNAT-FTPSITE     NONE
 @set GNAT-FTPDIR      NO_DIRECTORY
-@set GNAT-RTEMSPATCH  gnat-3.12p-rtems-20000429.diff.gz
+@set GNAT-RTEMSPATCH  gnat-3.13p-rtems-20000829.diff
 
 @c
 @c  BINUTILS Version
 @c
 
 @c The "official" binutils
-@set BINUTILS-VERSION     binutils 2.9.1
-@set BINUTILS-TAR         binutils-2.9.1.tar.gz
-@set BINUTILS-UNTAR       binutils-2.9.1
+@set BINUTILS-VERSION     binutils 2.10
+@set BINUTILS-TAR         binutils-2.10.tar.gz
+@set BINUTILS-UNTAR       binutils-2.10
 @set BINUTILS-FTPSITE     ftp.gnu.org
-@set BINUTILS-FTPDIR      /pub/gnu
-@set BINUTILS-RTEMSPATCH  binutils-2.9.1-rtems-gnat-3.12p-20000429.diff.gz
+@set BINUTILS-FTPDIR      /pub/gnu/binutils
+@set BINUTILS-RTEMSPATCH  binutils-2.10-rtems-gnat-3.13p-20001107.diff
 
 @c When forced to use a snapshot
 @c @set BINUTILS-VERSION     gas 980314
@@ -66,9 +66,9 @@
 @set NEWLIB-VERSION     newlib 1.8.2
 @set NEWLIB-TAR         newlib-1.8.2.tar.gz
 @set NEWLIB-UNTAR       newlib-1.8.2
-@set NEWLIB-FTPSITE     ftp.cygnus.com
+@set NEWLIB-FTPSITE     sources.redhat.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.8.2-rtems-20000501.diff.gz
+@set NEWLIB-RTEMSPATCH  newlib-1.8.2-rtems-20000606.diff.gz
 
 @c
 @c  GDB Version
@@ -78,19 +78,19 @@
 @set GDB-TAR         gdb-4.17.tar.gz
 @set GDB-UNTAR       gdb-4.17
 @set GDB-FTPSITE     ftp.gnu.org
-@set GDB-FTPDIR      /pub/gnu
-@set GDB-RTEMSPATCH  gdb-4.17-rtems-gnat-3.12p-20000429.diff
+@set GDB-FTPDIR      /pub/gnu/gdb/
+@set GDB-RTEMSPATCH  gdb-4.17-rtems-gnat-3.13p-20000918.diff
 @c @set GDB-GNATPATCH   gdb-ada-patch-1.17.8.gz
 
 @c
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS 4.5.0-beta3
-@set RTEMS-TAR       rtems-4.5.0-beta3.tgz
-@set RTEMS-UNTAR     rtems-4.5.0-beta3
+@set RTEMS-VERSION   RTEMS 4.5.1
+@set RTEMS-TAR       rtems-4.5.1.tgz
+@set RTEMS-UNTAR     rtems-4.5.1
 @set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/betas/4.5.0-beta
-@set BUILDTOOLS-TAR  c_build_scripts-4.5.0-beta3.tgz 
+@set RTEMS-FTPDIR    /pub/rtems/releases/4.5.1
+@set BUILDTOOLS-TAR  c_build_scripts-4.5.1.tgz 
 
 

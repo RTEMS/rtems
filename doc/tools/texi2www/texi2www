@@ -1179,6 +1179,7 @@ sub initialize_tables
         'page', 1,
 	'paragraphindent', 1,
 	'setchapternewpage', 1,
+	'setcontentsaftertitlepage', 1,
 	'setfilename', 1,
 	'shortcontents', 1,
 	'shorttitlepage', 1,

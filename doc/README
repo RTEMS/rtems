@@ -28,8 +28,9 @@ Making the Documentation
 
 cvs co rtems-doc
 ./bootstrap
-./configure ...
+./configure --enable-maintainer-mode
 cd tools ; make
+cd ..
 make info
 make all
 make install

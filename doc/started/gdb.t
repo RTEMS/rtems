@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -8,26 +8,51 @@
 
 @chapter Building the GNU Debugger
 
-GDB is currently RTEMS aware only if you are using the remote debugging
-support via Ethernet.   The following configurations have been
+The GNU Debugger GDB supports many configurations but requires some
+means of communicating between the host computer and target board.
+This communication can be via a serial port, Ethernet, BDM, or ROM emulator.
+The communication protocol can be the GDB remote protocol or GDB
+can talk directly to a ROM monitor.  This setup is target board 
+specific.  The following configurations have been
 successfully used with RTEMS applications:
 
 @itemize @bullet
 @item Sparc Instruction Simulator (SIS)
 @item PowerPC Instruction Simulator (PSIM)
 @item DINK32
+@item BDM with 68360 and MPC860 CPUs
+@item Motorola Mxxxbug found on M68xxx MVME boards
+@item Motorola PPCbug found on PowerPC MVME boards
 @end itemize
 
-Other configurations of gdb have successfully been used by RTEMS users
-but are not documented here.
+GDB is currently RTEMS thread/task aware only if you are using the
+remote debugging support via Ethernet.  These are configured
+using gdb targets of the form CPU-RTEMS.  Note the capital RTEMS.
 
 It is recommended that when toolset binaries are available for
 your particular host, that they be used.  Prebuilt binaries
-are much easier to install.
+are much easier to install but in the case of gdb may or may
+not include support for your particular target board.
 
-@section Unarchive the gdb Distribution
+@c
+@c  Getting Ready to Build GDB
+@c
+@section Getting Ready to Build GDB
 
-Use the following commands to unarchive the gdb distribution:
+This section describes the process of unarchiving GDB
+as well as applying RTEMS specific patches.  This is required when building
+the tools via the instructions in the
+@ref{Using the GDB configure Script Directly} or
+@ref{Using the bit_gdb Script} sections.  It is @b{NOT} required when
+using RPM to build tool binaries.
+
+
+@c
+@c  Unarchive the GDB Distribution
+@c
+@subsection Unarchive the GDB Distribution
+
+Use the following commands to unarchive the GDB distribution:
 
 @example
 cd tools
@@ -37,10 +62,10 @@ tar xzf ../archive/@value{GDB-TAR}
 The directory @value{GDB-UNTAR} is created under the tools directory.
 
 @c
-@c  GDB Patch
+@c  Apply RTEMS Patch to GDB
 @c
 
-@section Apply RTEMS Patch to GDB
+@subsection Apply RTEMS Patch to GDB
 
 @ifclear GDB-RTEMSPATCH
 No RTEMS specific patches are required for @value{GDB-VERSION} to
@@ -69,11 +94,151 @@ This should not happen with a good patch file.
 
 @end ifset
 
-@section Using the bit_gdb script
+@c
+@c  Building the GNU Debugger GDB
+@c
+
+@section Building the GNU Debugger GDB
+
+There are three methods of build the GNU Debugger:
+
+@itemize @bullet
+@item RPM
+@item direct invocation of configure and make
+@item using the @code{bit_gdb} script
+@end itemize
+
+Direct invocation of configure and make provides more control
+and easier recovery from problems when building.
+
+@c
+@c  Using RPM to Build GDB
+@c
+
+@subsection Using RPM to Build GDB
+
+This section describes the process of building binutils, gcc, and
+newlib using RPM.  RPM is a packaging format which can be used to
+distribute binary files as well as to capture the procedure and
+source code used to produce those binary files.  Before
+attempting to build any RPM from source, it is necessary to
+ensure that all required source and patches are in the @code{SOURCES}
+directory under the RPM root (probably @code{/usr/src/redhat} or
+@code{/usr/local/src/redhat} on your machine.  This procedure
+starts by installing the source RPMs as shown in the following
+example:
+
+@example
+rpm -i i386-rtems-gdb-collection-4.18-4.nosrc.rpm
+@end example
+
+Because RTEMS tool RPMS are called "nosrc" to indicate that one or
+more source files required to produce the RPMs are not present.
+The RTEMS source GDB RPM does not include the large @code{.tar.gz} or
+@code{.tgz} files for GDB.  This is shared by all RTEMS RPMs
+regardless of target CPU and there was no reason
+to duplicate them.  You will have to get the required source
+archive files by hand and place them in the @code{SOURCES} directory
+before attempting to build.  If you forget to do this, RPM is
+smart -- it will tell you what is missing.  To determine what is
+included or referenced by a particular RPM, use a command like the
+following:
+
+@example
+$ rpm -q -l -p i386-rtems-gdb-collection-4.18-4.nosrc.rpm
+gdb-4.18-rtems-20000524.diff
+gdb-4.18.tar.gz
+i386-rtems-gdb-4.18.spec
+@end example
+
+Notice that there is a patch file (the @code{.diff} file), a source archive
+file (the @code{.tar.gz}), and a file describing the build procedure and
+files produced (the @code{.spec} file).  The @code{.spec} file is placed
+in the @code{SPECS} directory under the RPM root directory.
+
+c
+@c  Configuring and Building GDB using RPM
+@c
+
+@subsubsection Configuring and Building GDB using RPM
+
+The following example illustrates the invocation of RPM to build a new,
+locally compiled, binutils binary RPM that matches the installed source
+RPM.  This example assumes that all of the required source is installed.
+
+@example
+cd <RPM_ROOT_DIRECTORY>/SPECS
+rpm -bb i386-rtems-gdb-4.18.spec
+@end example
+
+If the build completes successfully, RPMS like the following will
+be generated in a build-host architecture specific subdirectory
+of the RPMS directory under the RPM root directory.
+
+@example
+rtems-base-gdb-4.18-4.i386.rpm
+i386-rtems-gdb-4.18-4.i386.rpm
+@end example
+
+NOTE: It may be necessary to remove the build tree in the
+@code{BUILD} directory under the RPM root directory.
+
+@c
+@c Using the GDB configure Script Directly
+@c 
+
+@subsection Using the GDB configure Script Directly
+
+This section describes how to configure the GNU debugger for
+standard RTEMS configurations as well as some alternative
+configurations that have been used in the past.
+
+@subsubsection Standard RTEMS GDB Configuration
+
+The following example illustrates the invocation of configure
+and make to build and install @value{GDB-UNTAR} for the
+m68k-rtems target:
+
+@example
+mkdir b-gdb
+cd b-gdb
+../@value{GDB-UNTAR}/configure --target=m68k-rtems \
+  --prefix=/opt/rtems
+make all
+make info
+make install
+@end example
+
+For some configurations, it is necessary to specify extra options
+to @code{configure} to enable and configure option components
+such as a processor simulator.  The following is a list of
+configurations for which there are extra options:
+
+@table @b
+@item i960-rtems
+@code{--enable-sim}
+
+@item powerpc-rtems
+@code{--enable-sim --enable-sim-powerpc --enable-sim-timebase --enable-sim-hardware}
+
+@item sparc-rtems
+@code{--enable-sim}
+
+@end table
+
+After @value{GDB-UNTAR} is built and installed the
+build directory @code{b-gdb} may be removed.
+
+For more information on the invocation of @code{configure}, please
+refer to the documentation for @value{GDB-UNTAR} or
+invoke the @value{GDB-UNTAR} configure command with the
+@code{--help} option.
+
+@subsection Using the bit_gdb Script
 
 The simplest way to build gdb for RTEMS is to use the @code{bit_gdb} script.
 This script interprets the settings in the @code{user.cfg} file to
-produce the gdb configuration most appropriate for the target CPU.
+produce the GDB configuration most appropriate for the target CPU.
 
 This script is invoked as follows:
 
@@ -87,135 +252,18 @@ list:
 @itemize @bullet
 @item hppa1.1
 @item i386
+@item i386-coff
 @item i386-elf
-@item i386-go32
 @item i960
 @item m68k
+@item m68k-coff
 @item mips64orion
 @item powerpc
 @item sh
+@item sh-elf
 @item sparc
 @end itemize
 
 If gdb supports a CPU instruction simulator for this configuration, then
 it is included in the build.
 
-@section Using the gdb configure Script Directly
-
-@subsection GDB with Sparc Instruction Simulation (SIS)
-
-@subheading Make the Build Directory
-
-Create a build directory for the SIS Debugger
-
-@example
-cd tools
-mkdir build-sis
-@end example
-
-@subheading Configure for the Build
-
-Configure the GNU Debugger for the
-Sparc Instruction Simulator (SIS):
-
-@example
-cd tools/build-sis
-../@value{GDB-UNTAR}/configure --target-sparc-erc32-aout \
-    --program-prefix=sparc-rtems- \
-    --disable-gdbtk \
-    --enable-targets=all \
-    --prefix=<INSTALL_POINT_FOR_SIS>
-@end example
-
-Where <INSTALL_POINT_FOR_SIS> is a unique location where the gdb
-with SIS will be created. 
-
-@subheading Make the Debugger
-
-From tools/build-sis execute the following command sequence:
-
-@example
-make all install
-@end example
-
-NOTE: The @code{make} utility used should be GNU make.
-
-@subsection GDB with PowerPC Instruction Simulator
-
-@subheading Make the Build Directory
-
-Create a build directory for the SIS Debugger
-
-@example
-cd tools
-mkdir build-ppc
-@end example
-
-@subheading Configure for the Build
-
-Configure the GNU Debugger for the PowerPC
-Instruction Simulator (PSIM):
-
-@example
-cd tools/build-ppc
-../@value{GDB-UNTAR}/configure \
-      --target=powerpc-unknown-eabi \
-      --program-prefix=powerpc-rtems- \
-      --enable-sim-powerpc \
-      --enable-sim-timebase \
-      --enable-sim-inline \
-      --enable-sim-hardware \
-      --enable-targets=all \
-      --prefix=<INSTALL_POINT_FOR_PPC>
-@end example
-
-Where <INSTALL_POINT_FOR_PPC> is a unique location where the gdb
-with PSIM will be created. 
-
-
-@subheading Make the Debugger
-
-From tools/build-ppc execute the following command sequence:
-
-@example
-make all install
-@end example
-
-NOTE: The @code{make} utility used should be GNU make.
-
-@subsection GDB for DINK32
-
-@subheading Make the Build Directory
-
-Create a build directory for the DINK32 Debugger
-
-@example
-cd tools
-mkdir build-dink32
-@end example
-
-@subheading Configure for the Build
-
-Configure the GNU Debugger to communicate with
-the DINK32 ROM monitor:
-
-@example
-cd tools/build-dink32
-../@value{GDB-UNTAR}/configure --target-powerpc-elf \
-    --program-prefix=powerpc-rtems- \
-    --enable-targets=all \
-    --prefix=<INSTALL_POINT_FOR_DINK32>
-@end example
-
-Where <INSTALL_POINT_FOR_DINK32> is a unique location where the
-gdb Dink32 will be created. 
-
-@subheading Make the Debugger
-
-From tools/build-dink32 execute the following command sequence:
-
-@example
-make all install
-@end example
-
-NOTE: The @code{make} utility used should be GNU make.

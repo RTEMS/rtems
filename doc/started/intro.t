@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -16,8 +16,8 @@ have a background in Unix, these instructions should provide the bare
 essentials for performing a setup of the following items: 
 
 @itemize @bullet
-@item GNU C/C++ Cross Compilation Tools for RTEMS on your host system
-@item RTEMS OS for the target host
+@item GNU C/C++ Cross Compilation Tools for RTEMS on your build-host system
+@item RTEMS OS for the target
 @item GDB Debugger
 @end itemize
 
@@ -34,7 +34,7 @@ process used when developing RTEMS applications.
 Real-time embedded systems are found in practically every facet of our
 everyday lives.  Today's systems range from the common telephone, automobile
 control systems, and kitchen appliances to complex air traffic control
-systems, military weapon systems, an d production line control including
+systems, military weapon systems, and production line control including
 robotics and automation. However, in the current climate of rapidly changing
 technology, it is difficult to reach a consensus on the definition of a
 real-time embedded system. Hardware costs are continuing to rapidly decline 
@@ -72,7 +72,7 @@ nuclear reactor control system that must not only detect failures, but must
 also respond quickly enough to prevent a meltdown. This application also has
 soft real-time requirements because it may involve a man-machine interface.
 Providing an interactive input to the control system is not as critical as
-setting off an alarm to indicate a failure condition. However, th e
+setting off an alarm to indicate a failure condition. However, the
 interactive system component must respond within an acceptable time limit to
 allow the operator to interact efficiently with the control system. 
 
@@ -81,26 +81,27 @@ allow the operator to interact efficiently with the control system.
 Today almost all real-time embedded software systems are developed in a 
 @b{cross development} environment using cross development tools. In the cross
 development environment, software development activities are typically
-performed on one computer system, the @b{host} system, while the result of the
+performed on one computer system, the @b{build-host} system, while the result of the
 development effort (produced by the cross tools) is a software system that
 executes on the @b{target} platform. The requirements for the target platform are
 usually incompatible and quite often in direct conflict with the requirements
-for the host.  Moreover, the target hardware is often custom designed for a
+for the build-host.  Moreover, the target hardware is often custom designed for a
 particular project.  This means that the cross development toolset must allow
 the developer to customize the tools to address target specific run-time
 issues.  The toolset must have provisions for board dependent initialization
 code, device drivers, and error handling code. 
 
-The host computer is optimized to support the code development cycle with
+The build-host computer is optimized to support the code development cycle with
 support for code editors, compilers, and linkers requiring large disk drives,
-user development windows, and multiple developer connections.  Thus the host
-computer is typically a traditional UNIX workstation such as are available
+user development windows, and multiple developer connections.  Thus the build-host
+computer is typically a traditional UNIX workstation such as those available
 from SUN or Silicon Graphics, or a PC running either a version of MS-Windows
-or UNIX.  The host system may also be required to execute office productivity
-applications to allow the software developer to write  documentation, make
-presentations, or track the project's progress using a project management
-tool.  This necessitates that the host computer be general purpose with
-resources such as a thirty-two or sixty-four bit processor, large amounts of
+or UNIX.  The build-host system may also be required to execute
+office productivity applications to allow the software developer
+to write  documentation, make presentations, or track the project's
+progress using a project management tool.  This necessitates that the
+build-host computer be general purpose with resources such as a
+thirty-two or sixty-four bit processor, large amounts of
 RAM, a  monitor, mouse, keyboard, hard and floppy disk drives, CD-ROM drive,
 and a graphics card.  It is likely that the system will be multimedia capable
 and have some networking capability. 
@@ -108,14 +109,14 @@ and have some networking capability.
 Conversely, the target platform generally has limited traditional computer
 resources.  The hardware is designed for the particular functionality and
 requirements of the embedded system and optimized to perform those tasks
-effectively.  Instead of hard  driverss and keyboards, it is composed of
+effectively.  Instead of hard drives and keyboards, it is composed of
 sensors, relays, and stepper motors. The per-unit cost of the target platform
 is typically a critical concern.  No hardware component is included without
 being cost justified.  As a result, the processor of the target system is
-often from a different processor family than that of the host system and
+often from a different processor family than that of the build-host system and
 usually has lower performance.  In addition to the processor families
-targeted only for use in embedded systems, there are versions of nearly every
-general-purpose process or specifically tailored for real-time embedded
+designed only for use in embedded systems, there are versions of nearly every
+general-purpose processor specifically tailored for real-time embedded
 systems.  For example, many of the processors targeting the embedded market
 do not include hardware floating point units, but do include peripherals such
 as timers, serial controllers, or network interfaces. 
@@ -125,35 +126,65 @@ as timers, serial controllers, or network interfaces.
 This section describes various resources on the Internet which are of
 use to RTEMS users.
 
+@c
+@c  Online Tool Documentation
+@c
+
+@subsection Online Tool Documentation
+
+Each of the tools in the GNU development suite comes with documentation.
+It is in the reader's and tool maintainers' interest that one read the
+documentation before posting a problem to a mailing list or news group.
+The RTEMS Project provides formatted documentation for the primary
+tools in the cross development toolset including BINUTILS, GCC,
+NEWLIB, and GDB at
+@uref{http://www.oarcorp.com/rtemsdoc-4.5.0, http://www.oarcorp.com/rtemsdoc-4.5.0}.
+
+Much of the documentation is available at other sites on the Internet.
+The following is a list of URLs where one can find HTML versions of
+the GNU manuals:
+
+@table @b
+
+@item Free Software Foundation
+@uref{http://www.gnu.org/manual/manual.html, http://www.gnu.org/manual/manual.html}
+
+@item Delorie Software
+@uref{http://www.delorie.com/gnu/docs, http://www.delorie.com/gnu/docs}
+
+@end table
+
+
 @subsection RTEMS Mailing List
 
-rtems-users@@OARcorp.com
+@uref{mailto:rtems-users@@OARcorp.com,rtems-users@@OARcorp.com}
 
 This mailing list is dedicated to the discussion of issues related
 to RTEMS, including GNAT/RTEMS.  If you have questions about RTEMS,
 wish to make suggestions, or just want to pick up hints, this is a 
-good list to subscribe to.  Subscribe by sending an empty mail 
-message to rtems-users-subscribe@@OARcorp.com.  Messages sent 
-to rtems-users@@OARcorp.com are posted to the list.
+good list to monitor.  Subscribe by sending an empty mail message to 
+@uref{mailto:rtems-users-subscribe@@OARcorp.com,rtems-users-subscribe@@OARcorp.com}.  Messages sent 
+to @uref{mailto:rtems-users@@OARcorp.com,rtems-users@@OARcorp.com}
+are posted to the list.
 
 @subsection CrossGCC Mailing List
 
-crossgcc@@cygnus.com
+@uref{mailto:crossgcc@@sources.redhat.com,crossgcc@@sources.redhat.com}
 
 This mailing list is dedicated to the use of the GNU tools in
 cross development environments.  Most of the discussions
-focus on embedded issues.  Subscribe by sending a message with
-the one line "subscribe" to crossgcc-request@@cygnus.com.
+focus on embedded issues.  Information on subscribing
+to this mailing list is included in the 
+@uref{http://www.objsw.com/CrossGCC/,CrossGCC FAQ}.
 
-The crossgcc FAQ as well as a number of patches and utiliities
+The CrossGCC FAQ as well as a number of patches and utilities
 of interest to cross development system users are available
-at ftp://ftp.cygnus.com/pub/embedded/crossgcc.
+at @uref{ftp://ftp.cygnus.com/pub/embedded/crossgcc}.
 
 @subsection GCC Mailing Lists
 
-See http://gcc.gnu.org for details.
 
-The GCC Project maintains multiple mailing lists.  They
-are described at the above web site along with subscription
-information.
+The GCC Project is hosted at @uref{http://gcc.gnu.org,http://gcc.gnu.org}.
+They maintain multiple mailing lists that are described at the web site
+along with subscription information.
 

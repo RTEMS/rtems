@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -21,33 +21,33 @@
 @c  GCC Version
 @c
 
-@set GCC-VERSION     gcc 2.95.2
-@set GCC-TAR         gcc-2.95.2.tar.gz
-@set GCC-UNTAR       gcc-2.95.2
+@set GCC-VERSION     gcc 2.95.3
+@set GCC-TAR         gcc-everything-2.95.3.tar.gz
+@set GCC-UNTAR       gcc-2.95.3
 @set GCC-FTPSITE     gcc.gnu.org
-@set GCC-FTPDIR      /pub/gcc/gcc-2.95.2
+@set GCC-FTPDIR      /pub/gnu/gcc/
 @set GCC-HTTPDIR     /pub/gcc/releases/index.html
-@set GCC-RTEMSPATCH  gcc-2.95.2-rtems-20000427.diff.gz
+@set GCC-RTEMSPATCH  gcc-2.95.3-rtems-20010622a.diff.gz
 
 @c
 @c  BINUTILS Version
 @c
 
 @c The "official" binutils
-@c @set BINUTILS-VERSION     binutils 2.9.1
-@c @set BINUTILS-TAR         binutils-2.9.1.tar.gz
-@c @set BINUTILS-UNTAR       binutils-2.9.1
-@c @set BINUTILS-FTPSITE     ftp.gnu.org
-@c @set BINUTILS-FTPDIR      /pub/gnu
-@c @set BINUTILS-RTEMSPATCH  binutils-2.9.1-rtems-diff-19981012.gz
+@set BINUTILS-VERSION     binutils 2.10
+@set BINUTILS-TAR         binutils-2.10.tar.gz
+@set BINUTILS-UNTAR       binutils-2.10
+@set BINUTILS-FTPSITE     ftp.gnu.org
+@set BINUTILS-FTPDIR      /pub/gnu/binutils
+@set BINUTILS-RTEMSPATCH  binutils-2.10-rtems-diff-20001107.gz
 
 @c The "official" Linux binutils
-@set BINUTILS-VERSION     binutils 2.9.5.0.24
-@set BINUTILS-TAR         binutils-2.9.5.0.24.tar.gz
-@set BINUTILS-UNTAR       binutils-2.9.5.0.24
-@set BINUTILS-FTPSITE     ftp.varesearch.com
-@set BINUTILS-FTPDIR      /pub/support/hjl/binutils
-@set BINUTILS-RTEMSPATCH  binutils-2.9.5.0.24-rtems-20000207.diff.gz
+@c @set BINUTILS-VERSION     binutils 2.9.5.0.24
+@c @set BINUTILS-TAR         binutils-2.9.5.0.24.tar.gz
+@c @set BINUTILS-UNTAR       binutils-2.9.5.0.24
+@c @set BINUTILS-FTPSITE     ftp.varesearch.com
+@c @set BINUTILS-FTPDIR      /pub/support/hjl/binutils
+@c @set BINUTILS-RTEMSPATCH  binutils-2.9.5.0.24-rtems-20000207.diff.gz
 
 @c When forced to use a snapshot
 @c @set BINUTILS-VERSION     gas 980314
@@ -65,30 +65,30 @@
 @set NEWLIB-VERSION     newlib 1.8.2
 @set NEWLIB-TAR         newlib-1.8.2.tar.gz
 @set NEWLIB-UNTAR       newlib-1.8.2
-@set NEWLIB-FTPSITE     sourceware.cygnus.com
+@set NEWLIB-FTPSITE     sources.redhat.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.8.2-rtems-20000501.diff.gz
+@set NEWLIB-RTEMSPATCH  newlib-1.8.2-rtems-20000606.diff.gz
 
 @c
 @c  GDB Version
 @c
 
-@set GDB-VERSION     gdb 4.18
-@set GDB-TAR         gdb-4.18.tar.gz
-@set GDB-UNTAR       gdb-4.18
+@set GDB-VERSION     gdb 5.0
+@set GDB-TAR         gdb-5.0.tar.gz
+@set GDB-UNTAR       gdb-5.0
 @set GDB-FTPSITE     ftp.gnu.org
 @set GDB-FTPDIR      /pub/gnu/gdb
-@set GDB-RTEMSPATCH  gdb-4.18-rtems-20000502.diff.gz
+@set GDB-RTEMSPATCH  gdb-5.0-rtems-20010314.diff.gz
 
 @c
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS 4.5.0-beta3
-@set RTEMS-TAR       rtems-4.5.0-beta3.tgz
-@set RTEMS-UNTAR     rtems-4.5.0-beta3
+@set RTEMS-VERSION   RTEMS 4.5.1
+@set RTEMS-TAR       rtems-4.5.1.tgz
+@set RTEMS-UNTAR     rtems-4.5.1
 @set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/betas/rtems-4.5.0-beta
-@set BUILDTOOLS-TAR  c_build_scripts-4.5.0-beta3.tgz 
+@set RTEMS-FTPDIR    /pub/rtems/releases/4.5.1
+@set BUILDTOOLS-TAR  c_build_scripts-4.5.1.tgz 
 
 

@@ -1,5 +1,5 @@
 #
-#  COPYRIGHT (c) 1996-1997.
+#  COPYRIGHT (c) 1996-2000.
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 #

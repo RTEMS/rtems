@@ -12,7 +12,7 @@
  *    + previous of the first node
  *    + next of the last node
  *
- *  COPYRIGHT (c) 1988-1999.
+ *  COPYRIGHT (c) 1988-2002.
  *  On-Line Applications Research Corporation (OAR).
  *  All rights reserved.
  *

@@ -23,9 +23,9 @@ texi2www=${srcdir}/tools/texi2www/texi2www
 gnu_docs=${srcdir}/gnu_docs
 images=${srcdir}/images
 
-install_base=/home/httpd/html/rtems/rtemsdoc-4.5-beta3
-install_share=/home/httpd/html/rtems/rtemsdoc-4.5-beta3/share/toolsdoc
-install_info=/home/httpd/html/rtems/rtemsdoc-4.5-beta3/info
+install_base=/home/httpd/html/rtems/rtemsdoc-4.5.1-pre3
+install_share=/home/httpd/html/rtems/rtemsdoc-4.5.1-pre3/share/toolsdoc
+install_info=/home/httpd/html/rtems/rtemsdoc-4.5.1-pre3/info
 
 
 #if [ $? -ne 1 ] ; then

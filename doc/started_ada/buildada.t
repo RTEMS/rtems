@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -610,4 +610,93 @@ GNU C/C++ cross compilation tools are installed.
 
 If the @code{bit_ada} script does not successfully complete, then investigation
 will be required to determine the source of the error.
+
+@c
+@c Common Problems
+@c
+
+@section Common Problems
+
+@subsection Error Message Indicates Invalid Option to Assembler
+
+If a message like this is printed then the new cross compiler
+is most likely using the native assembler instead of the cross
+assembler or vice-versa (native compiler using new cross assembler).
+This can occur for one of the following reasons:
+
+@itemize @bullet
+
+@item Binutils Patch Improperly Applied
+@item Binutils Not Built
+@item Current Directory is in Your PATH
+
+@end itemize
+
+If you are using binutils 2.9.1 or newer with certain older versions of
+gcc, they do not agree on what the name of the newly 
+generated cross assembler is.  Older binutils called it @code{as.new}
+which became @code{as.new.exe} under Windows.  This is not a valid
+file name, so @code{as.new} is now called @code{as-new}.  By using the latest
+released tool versions and RTEMS patches, this problem will be avoided.
+
+If binutils did not successfully build the cross assembler, then 
+the new cross gcc (@code{xgcc}) used to build the libraries can not
+find it.  Make sure the build of the binutils succeeded.
+
+If you include the current directory in your PATH, then there
+is a chance that the native compiler will accidentally use
+the new cross assembler instead of the native one.  This usually
+indicates that "." is before the standard system directories
+in your PATH.  As a general rule, including "." in your PATH
+is a security risk and should be avoided.  Remove "." from
+your PATH.
+
+NOTE:  In some environments, it may be difficult to remove "."
+completely from your PATH.  In this case, make sure that "."
+is after the system directories containing "as" and "ld".
+
+@subsection Error Messages Indicating Configuration Problems
+
+If you see error messages like the following,
+
+@itemize @bullet
+
+@item cannot configure libiberty
+@item coff-emulation not found
+@item etc.
+
+@end itemize
+
+Then it is likely that one or more of your gnu tools is 
+already configured locally in its source tree.  You can check
+for this by searching for the @code{config.status} file
+in the various tool source trees.  The following command
+does this for the binutils source:
+
+@example
+find @value{BINUTILS-UNTAR} -name config.status -print
+@end example
+
+The solution for this is to execute the command 
+@code{make distclean} in each of the GNU tools
+root source directory.  This should remove all
+generated files including Makefiles.
+
+This situation usually occurs when you have previously
+built the tool source for some non-RTEMS target.  The
+generated configuration specific files are still in
+the source tree and the include path specified during
+the RTEMS build accidentally picks up the previous
+configuration.  The include path used is something like
+this:
+
+@example
+-I../../@value{BINUTILS-UNTAR}/gcc -I/@value{BINUTILS-UNTAR}/gcc/include -I.
+@end example
+
+Note that the tool source directory is searched before the 
+build directory.
+
+This situation can be avoided entirely by never using 
+the source tree as the build directory -- even for
 

@@ -18,7 +18,7 @@
         </LI>
     <LI>C/C++ Manuals</LI>
     <MENU>
-        <LI><A HREF="BAD.html">
+        <LI><A HREF="../pdf/started.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/started.ps">
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
@@ -70,7 +70,7 @@
     </MENU>
     <LI>Ada Manuals</LI>
     <MENU>
-        <LI><A HREF="BAD.html">
+        <LI><A HREF="../pdf/started.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/started_ada.ps">
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
@@ -271,5 +271,5 @@
 
 </MENU>
 <HR>
-Copyright &copy; 1988-2000 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+Copyright &copy; 1988-2002 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
 </BODY></HTML>

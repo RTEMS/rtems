@@ -3,6 +3,7 @@
 @comment %**start of header
 @setfilename texi2www
 @settitle texi2www user's guide
+@setcontentsaftertitlepage
 @comment %**end of header
 
 @finalout

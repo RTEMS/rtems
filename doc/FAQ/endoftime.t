@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -42,7 +42,7 @@ to either the existence of the board or RTEMS are past 2000.  The
 starting year (epoch) for RTEMS is 1988.  Thus,
 
 @itemize @bullet
-@item Chip year values 88-99 are interpreted as years 1988-1999.
+@item Chip year values 88-99 are interpreted as years 1988-2002.
 @item Chip year values 00-87 are interpreted as years 2000-2087.
 @end itemize
 
@@ -84,7 +84,7 @@ to correctly report dates after 2099, then it is possible for the
 
 Each embedded system could be impacted by a variety of date/time
 representation issues.  Even whether a particular date/time
-repsentation issue impacts a system is questionable.  A system
+representation issue impacts a system is questionable.  A system
 using only the RTEMS Classic API is not impacted by the
 date/time representation issues in POSIX.  A system not using
 date/time at all is not impacted by any of these issues.  Also

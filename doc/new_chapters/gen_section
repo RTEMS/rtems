@@ -168,7 +168,7 @@ if [ "x${CHAPTER_CAPS}" = "x" -o "x${CHAPTER_LOWER}" = "x" \
 fi
 
 echo "@c"
-echo "@c  COPYRIGHT (c) 1988-1999."
+echo "@c  COPYRIGHT (c) 1988-2002."
 echo "@c  On-Line Applications Research Corporation (OAR)."
 echo "@c  All rights reserved. "
 echo "@c"

@@ -1,5 +1,5 @@
 #
-#  COPYRIGHT (c) 1988-1999.
+#  COPYRIGHT (c) 1988-2002.
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 #
@@ -15,7 +15,7 @@ SUBDIRS = pictures
 
 include $(top_srcdir)/project.am
 
-GENERATED_FILES = binaries.texi buildc.texi buildrt.texi gdb.texi intro.texi \
+GENERATED_FILES = binaries.texi buildc.texi buildrt.texi intro.texi \
     nt.texi require.texi nextstep.texi sample.texi
 
 COMMON_FILES = $(top_srcdir)/common/setup.texi \
@@ -37,12 +37,12 @@ $(srcdir)/require.texi: require.t tversions.texi
 	    -n "Prebuilt Toolset Executables" < $< > $@
 
 $(srcdir)/binaries.texi: binaries.t tversions.texi
-	$(BMENU2) -c -p "GNU makeinfo Version Requirements" \
+	$(BMENU2) -c -p "Archive and Build Directory Format" \
 	    -u "Top" \
 	    -n "Building the GNU C/C++ Cross Compiler Toolset" < $< > $@
 
 $(srcdir)/buildc.texi: buildc.t tversions.texi
-	$(BMENU2) -c -p "Removing RPMs" \
+	$(BMENU2) -c -p "Removing Zipped Tar Files" \
 	    -u "Top" \
 	    -n "Building RTEMS" < $< > $@
 
@@ -52,17 +52,12 @@ $(srcdir)/buildrt.texi: buildrt.t tversions.texi
 	    -n "Building the Sample Application" < $< > $@
 
 $(srcdir)/sample.texi: sample.t tversions.texi
-	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \
-	    -u "Top" \
-	    -n "Building the GNU Debugger" < $< > $@
-
-$(srcdir)/gdb.texi: gdb.t tversions.texi
-	$(BMENU2) -c -p "More Information on RTEMS Application Makefiles" \
+	$(BMENU2) -c -p "Using the bit_rtems Script" \
 	    -u "Top" \
 	    -n "Where To Go From Here" < $< > $@
 
 $(srcdir)/nextstep.texi: nextstep.t tversions.texi
-	$(BMENU2) -c -p "GDB for DINK32" \
+	$(BMENU2) -c -p "More Information on RTEMS Application Makefiles" \
 	    -u "Top" \
 	    -n "Using MS-Windows as a Development Host" < $< > $@
 

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -8,33 +8,51 @@
 
 @chapter Prebuilt Toolset Executables
 
-Precompiled toolsets are available for Linux and Cygwin.  These are
-packaged using the RedHat Package Manager (RPM).  RPM is the
-native package installer for many Linux distributions including
-RedHat and SUSE.  RPM supports other operating systems including
-Cygwin.  David Fiddes <D.J@@fiddes.surfaid.org> has graciously
-build Cygwin RPMs for a number of popular target CPU families.
+Precompiled toolsets are available for Linux, Cygwin, FreeBSD,
+and Solaris.  These are packaged in the following formats:
 
-RPMs are very easy to install and the instructions are the same
-regardless of the host environment.  There are a few structural
-issues with the packaging of the RTEMS Cross Toolset RPMs
-that you need to be aware of.
+@itemize @bullet
+@item Linux - RPM and Debian
+@item Cygwin - RPM and zipped tar
+@item FreeBSD - native package
+@item Solaris - RPM and zipped tar
+@end itemize
+
+RPM is an acronym for the RedHat Package Manager.  RPM is the
+native package installer for many Linux distributions including
+RedHat and SuSE.  RPM supports other operating systems including
+Cygwin.  @uref{mailto:D.J@@fiddes.surfaid.org,David Fiddes <D.J@@fiddes.surfaid.org>}
+did the initial groundwork that lead to Cygwin RPMs being available.
+
+The prebuilt binaries are intended to be easy to install and
+the instructions are similar regardless of the host environment.  
+There are a few structural issues with the packaging of the RTEMS
+Cross Toolset binaries that you need to be aware of.
 
 @enumerate
 @item There are dependencies between the various packages.
 This requires that certain packages be installed before others may be.
+Some packaging formats enforce this dependency.
 
-@item Some packages are target CPU family indepedent and shared
+@item Some packages are target CPU family independent and shared
 across all target architectures.   These are referred to as 
 "base" packages.
 
 @item If buildable for a particular CPU, RPMs are provided for 
 Chill, Java (gcj), Fortran (g77), and Objective-C (objc).  These
-RPMs are strictly optional.
+binaries are strictly optional.
 
 @end enumerate
 
-@section Installing RPMs
+NOTE: Installing toolset binaries does not install RTEMS itself, only the tools
+required to build RTEMS.  See @ref{Building RTEMS} for the next
+step in the process.
+
+@section RPMs
+
+This section provides information on installing and removing RPMs.
+
+@subsection Installing RPMs
 
 The following is a sample session illustrating the installation
 of a C/C++ toolset targeting the SPARC architecture.  
@@ -42,23 +60,31 @@ of a C/C++ toolset targeting the SPARC architecture.
 @example
 rpm -i rtems-base-binutils-2.9.5.0.24-1.i386.rpm
 rpm -i sparc-rtems-binutils-2.9.5.0.24-1.i386.rpm
-rpm -i rtems-base-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
-rpm -i sparc-rtems-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
-rpm -i rtems-base-gdb-4.18-2.i386.rpm
-rpm -i sparc-rtems-gdb-4.18-2.i386.rpm
+rpm -i rtems-base-gcc-gcc2.95.2newlib1.8.2-7.i386.rpm
+rpm -i sparc-rtems-gcc-gcc2.95.2newlib1.8.2-7.i386.rpm
+rpm -i rtems-base-gdb-4.18-4.i386.rpm
+rpm -i sparc-rtems-gdb-4.18-4.i386.rpm
 @end example
 
 Upon successful completion of the above command sequence, a 
-C/C++ cross development toolset targetting the SPARC is
+C/C++ cross development toolset targeting the SPARC is
 installed in @code{/opt/rtems}.  In order to use this toolset,
 the directory @code{/opt/rtems/bin} must be included in your
 PATH.
 
-NOTE: This process does not install RTEMS itself, only the tools
-required to build RTEMS.  See @ref{Building RTEMS} for the next
-step in the process.
+Once you have successfully installed the RPMs for BINUTILS, GCC,
+NEWLIB, and GDB, then you may proceed directly to @ref{Building RTEMS}.  
 
-@section Removing RPMs
+@subsection Determining Which RTEMS RPMs are Installed
+
+The following command will report which RTEMS RPMs are currently
+installed:
+
+@example
+rpm -q -g rtems
+@end example
+
+@subsection Removing RPMs
 
 The following is a sample session illustrating the removal
 of a C/C++ toolset targeting the SPARC architecture.
@@ -71,4 +97,42 @@ rpm -e rtems-base-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
 rpm -e sparc-rtems-binutils-2.9.5.0.24-1.i386.rpm
 rpm -e rtems-base-binutils-2.9.5.0.24-1.i386.rpm
 @end example
+
+NOTE:  If you have installed any RTEMS BSPs, then it is likely that
+RPM will complain about not being able to remove everything.
+
+@section Zipped Tar Files
+
+This section provides information on installing and removing
+Zipped Tar Files (.tgz).
+
+@subsection Installing Zipped Tar Files
+
+The following is a sample session illustrating the installation
+of a C/C++ toolset targeting the SPARC architecture assuming
+that GNU tar is installed as @code{tar}:
+
+@example
+cd /
+tar xzf rtems-base-binutils-2.9.5.0.24-1.tgz
+tar xzf sparc-rtems-binutils-2.9.5.0.24-1.tgz
+tar xzf rtems-base-gcc-gcc2.95.2newlib1.8.2-4.tgz
+tar xzf sparc-rtems-gcc-gcc2.95.2newlib1.8.2-4.tgz
+tar xzf rtems-base-gdb-4.18-2.tgz
+tar xzf sparc-rtems-gdb-4.18-2.tgz
+@end example
+
+Upon successful completion of the above command sequence, a
+C/C++ cross development toolset targeting the SPARC is
+installed in @code{/opt/rtems}.  In order to use this toolset,
+the directory @code{/opt/rtems/bin} must be included in your
+PATH.
+
+@subsection Removing Zipped Tar Files
+
+There is no automatic way to remove the contents of a @code{tgz} once
+it is installed.  The contents of the directory @code{/opt/rtems}
+can be removed but this will likely result in other packages
+being removed as well.
+
 

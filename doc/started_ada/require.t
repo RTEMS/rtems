@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -18,7 +18,7 @@ assessing the amount of disk space required for your installation:
 +------------------------------------+--------------------------+
 |        archive directory           |        40 Mbytes         |
 |        tools src unarchived        |       200 Mbytes         |
-|  each individual build directory   |  300 Mbytes worst case   |
+|  each individual build directory   |     up to 500 Mbytes     |
 |     each installation directory    |      20-200 Mbytes       |
 +------------------------------------+--------------------------+
 @end example

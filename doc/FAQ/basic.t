@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -13,7 +13,7 @@ did it come from, why is it, what is it, when should you use it, etc.?
 
 @section What does RTEMS stand for?
 
-RTEMS is an anacronym for the Real-Time Executive for Multiprocessor
+RTEMS is an an acronym for the Real-Time Executive for Multiprocessor
 Systems.
 
 Initially RTEMS stood for the Real-Time Executive for Missile Systems
@@ -28,7 +28,7 @@ remained with the "M" meaning Military.
 RTEMS is a real-time executive which provides a high performance
 environment for embedded military applications including many
 features. The following is just a short list of the features
-avilable in RTEMS.  If you are interested in something that
+available in RTEMS.  If you are interested in something that
 is not on this list, please contact the RTEMS Team.  Features
 are being added continuously.
 

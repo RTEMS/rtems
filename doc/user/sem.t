@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -774,7 +774,7 @@ inherited a higher priority.
 @subsection SEMAPHORE_FLUSH - Unblock all tasks waiting on a semaphore
 
 @cindex flush a semaphore
-@cindex unlock all tasks a semaphore
+@cindex unblock all tasks waiting on a semaphore
 
 @subheading CALLING SEQUENCE:
 

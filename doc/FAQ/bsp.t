@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -29,7 +29,7 @@ EXCEPT hello world and the timing tests.  The timer driver is a benchmark
 timer and is needed for the tmtests (timing tests).  Sometimes you will
 see a shmsupp directory which is for shared memory multiprocessing
 systems.  The network driver and real-time clock drivers are optional
-and not reqired by any RTEMS tests.
+and not required by any RTEMS tests.
 
 
 

@@ -125,7 +125,7 @@ prefix, eg.  i386-rtems-gcc, m68k-rtems-ld are target tools.
 Host tools are supposed not to be prefixed.
 e.g.: cc, ld, gcc etc.
 
-If using OARCorp's rpms for the toolchain, simply prepend:
+If using OAR Corporation's rpms for the toolchain, simply prepend
 @code{/opt/rtems/bin} to @code{$PATH}.
 
 @subsection Can I build RTEMS Canadian Cross?
@@ -247,7 +247,7 @@ templates when implementing BSPs or porting RTEMS to new CPUs.
 @subsection What is the bare-BSP?
 
 At the time being RTEMS is build per BSP, with all support files being build
-separately for each BSP.  This can become unhandy when using several similiar
+separately for each BSP.  This can become unhandy when using several similar
 but not identical boards (e.g.  a PC with different peripherial cards plugged
 in), because this in general requires to implement a BSP for each setup.
 The bare BSP is a general, setup independent BSP which can be used when
@@ -301,7 +301,7 @@ To remove them before importing, run
 ./bootstrap -c
 @end example
 
-from the toplevel directory of the source tree (XXX ref sec-bootstrap).
+from the toplevel directory of the source tree (cf. @ref{./bootstrap}).
  
 @subsection ./bootstrap
 
@@ -309,7 +309,7 @@ from the toplevel directory of the source tree (XXX ref sec-bootstrap).
 @code{bootstrap} is a simple shell script which automatically generates all
 auto* generated files within RTEMS's source tree (Other packages use the name 
 @code{autogen.sh} for similar scripts).  You will need to have autoconf,
-automake and further underlaying packages installed to apply it.
+automake and further underlying packages installed to apply it.
 
 It typically should be applied when having:
 
@@ -343,4 +343,4 @@ will let automake take care about dependencies between auto* generated
 files.  I.e.  auto* generated files will get automatically updated.
 
 Configuring RTEMS in maintainer-mode will require to have autoconf, automake
-and underlaying tools installed (Cf. @ref{Required Tools}).
+and underlying tools installed (Cf. @ref{Required Tools}).

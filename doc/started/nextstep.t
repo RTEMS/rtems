@@ -1,6 +1,6 @@
 @c
 @c
-@c  COPYRIGHT (c) 1988-1999.
+@c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -66,7 +66,7 @@ C Math Library functionality provided by Newlib's libm.
 @end itemize
 
 Finally, the RTEMS FAQ and mailing list archives are available 
-at http://www.oarcorp.com.
+at @uref{http://www.oarcorp.com}.
 
 There is a wealth of documentation available for RTEMS and
 the GNU tools supporting it.  If you run into something
@@ -74,7 +74,11 @@ that is not clear or missing, bring it to our attention.
 
 Also, some of the RTEMS documentation is still under
 construction.  If you would like to contribute to this
-effort, please contact the RTEMS Team.
+effort, please contact the RTEMS Team at
+@uref{mailto:rtems-users@@OARcorp.com, rtems-users@@OARcorp.com}.
+If you are interested in sponsoring the development of a new
+feature, BSP, device driver, port of an existing library, etc.,
+please contact @uref{mailto:sales@@OARcorp.com, sales@@OARcorp.com}.
 
 @section Writing an Application
 
@@ -114,7 +118,7 @@ most of the examples, the initialization task completes by
 deleting itself.
 
 As you begin to write RTEMS application code, you may be confused
-by the plethora of alternatives.  Supporting multiple tasking
+by the range of alternatives.  Supporting multiple tasking
 APIs can make the choices confusing.  Many application groups
 writing new code choose one of the APIs as their primary API
 and only use services from the others if nothing comparable
