@@ -19,47 +19,6 @@
 
 /*PAGE
  *
- *  _Workspace_Handler_initialization
- *
- */
-
-#define _Workspace_Handler_initialization( _starting_address, _size ) \
-{ \
-  unsigned32 *zero_out_array; \
-  unsigned32  index; \
-  unsigned32  memory_available; \
-  \
-  if ( !(_starting_address) || !_Addresses_Is_aligned( (_starting_address) ) ) \
-    _Internal_error_Occurred( \
-      INTERNAL_ERROR_CORE, \
-      TRUE, \
-      INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS \
-    ); \
-  \
-  if ( _CPU_Table.do_zero_of_workspace ) { \
-    for( zero_out_array  = (unsigned32 *) (_starting_address), index = 0 ; \
-         index < (_size) / 4 ; \
-         index++ ) \
-      zero_out_array[ index ] = 0; \
-  } \
-  \
-  memory_available =  _Heap_Initialize( \
-    &_Workspace_Area, \
-    (_starting_address), \
-    (_size), \
-    CPU_HEAP_ALIGNMENT \
-  ); \
-  \
-  if ( memory_available == 0 ) \
-    _Internal_error_Occurred( \
-      INTERNAL_ERROR_CORE, \
-      TRUE, \
-      INTERNAL_ERROR_TOO_LITTLE_WORKSPACE \
-    ); \
-}
-
-/*PAGE
- *
  *  _Workspace_Allocate
  *
  */

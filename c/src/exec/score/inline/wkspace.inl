@@ -19,53 +19,6 @@
 
 /*PAGE
  *
- *  _Workspace_Handler_initialization
- *
- *  DESCRIPTION:
- *
- *  This routine performs the initialization necessary for this handler.
- */
-
-STATIC INLINE void _Workspace_Handler_initialization(
-  void       *starting_address,
-  unsigned32  size
-)
-{
-  unsigned32 *zero_out_array;
-  unsigned32  index;
-  unsigned32  memory_available;
-
-  if ( !starting_address || !_Addresses_Is_aligned( starting_address ) )
-    _Internal_error_Occurred(
-      INTERNAL_ERROR_CORE,
-      TRUE,
-      INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS
-    );
-
-  if ( _CPU_Table.do_zero_of_workspace ) {
-    for( zero_out_array  = (unsigned32 *) starting_address, index = 0 ;
-         index < size / 4 ;
-         index++ )
-      zero_out_array[ index ] = 0;
-  }
-
-  memory_available = _Heap_Initialize(
-    &_Workspace_Area,
-    starting_address,
-    size,
-    CPU_HEAP_ALIGNMENT
-  );
-
-  if ( memory_available == 0 )
-    _Internal_error_Occurred(
-      INTERNAL_ERROR_CORE,
-      TRUE,
-      INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
-    );
-}
-
-/*PAGE
- *
  *  _Workspace_Allocate
  *
  *  DESCRIPTION:
