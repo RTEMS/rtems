@@ -3,9 +3,9 @@ dnl
 dnl  $Id$
 
 AC_INIT(generic)
+RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)
 
-RTEMS_TOP(../..)
 RTEMS_CANONICAL_TARGET_CPU
 
 AM_INIT_AUTOMAKE(rtems-tools-cpu,$RTEMS_VERSION,no)

@@ -3,9 +3,9 @@ dnl
 dnl  $Id$
 
 AC_INIT(psim)
+RTEMS_TOP(../../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../../..)
 
-RTEMS_TOP(../../../../../../..)
 RTEMS_CANONICAL_TARGET_CPU
 
 AM_INIT_AUTOMAKE(rtems-lib-libbsp-powerpc-psim-tools,$RTEMS_VERSION,no)

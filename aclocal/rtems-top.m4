@@ -7,6 +7,9 @@ dnl $1 .. relative path from this configure.in to the toplevel configure.in
 dnl
 AC_DEFUN(RTEMS_TOP,
 [dnl
+AC_BEFORE([$0], [AC_CONFIG_AUX_DIR])dnl
+AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
+
 AC_ARG_WITH(target-subdir,
 [  --with-target-subdir=DIR],
 TARGET_SUBDIR="$withval",

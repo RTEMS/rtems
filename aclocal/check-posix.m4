@@ -3,6 +3,8 @@ dnl
 AC_DEFUN(RTEMS_CHECK_POSIX_API,
 [dnl
 AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_REQUIRE([RTEMS_ENABLE_POSIX])dnl
+
 AC_CACHE_CHECK([whether BSP supports libposix],
   rtems_cv_HAS_POSIX_API,
   [dnl

@@ -32,7 +32,7 @@ for i in $rtems_bsp; do
 
     # Is there code where there should be for this BSP?
     # The bare bsp is a special case as it is not under the RTEMS_CPU path
-    case $i in
+    case $bspdir in
       bare)
         bspcpudir=
         if test "X${BARE_CPU_CFLAGS}" = "X" ; then

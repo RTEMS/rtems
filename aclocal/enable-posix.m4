@@ -2,6 +2,8 @@ dnl $Id$
 
 AC_DEFUN(RTEMS_ENABLE_POSIX,
 [
+AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
+
 AC_ARG_ENABLE(posix,
 [  --enable-posix                       enable posix interface],
 [case "${enableval}" in 

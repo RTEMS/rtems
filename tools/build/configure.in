@@ -4,8 +4,8 @@
 
 AC_PREREQ(2.13)
 AC_INIT(install-if-change.in)
-AC_CONFIG_AUX_DIR(../..)
 RTEMS_TOP(../..)
+AC_CONFIG_AUX_DIR(../..)
 
 AC_CANONICAL_HOST
 

@@ -2,6 +2,8 @@ dnl $Id$
 
 AC_DEFUN(RTEMS_ENABLE_RDBG,
 [
+AC_BEFORE([$0], [RTEMS_CHECK_RDBG])dnl
+
 AC_ARG_ENABLE(rdbg,
 [  --enable-rdbg                        enable remote debugger],
 [case "${enableval}" in

@@ -5,6 +5,7 @@ dnl used by the toplevel configure script
 dnl RTEMS_ENABLE_RTEMSBSP(rtems_bsp_list)
 AC_DEFUN(RTEMS_ENABLE_RTEMSBSP,
 [
+AC_BEFORE([$0], [RTEMS_ENV_RTEMSBSP])dnl
 AC_ARG_ENABLE(rtemsbsp,
 [  --enable-rtemsbsp=bsp1 bsp2 ..      BSPs to include in build],
 [case "${enableval}" in
@@ -17,6 +18,12 @@ dnl Pass a single BSP via an environment variable
 dnl used by per BSP configure scripts
 AC_DEFUN(RTEMS_ENV_RTEMSBSP,
 [dnl
+AC_BEFORE([$0], [RTEMS_ENABLE_RTEMSBSP])dnl
+AC_BEFORE([$0], [RTEMS_PROJECT_ROOT])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_CUSTOM_BSP])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_MULTIPROCESSING])dnl
+AC_BEFORE([$0], [RTEMS_CHECK_POSIX_API])dnl
+
 AC_MSG_CHECKING([for RTEMS_BSP])
 AC_CACHE_VAL(rtems_cv_RTEMS_BSP,
 [dnl

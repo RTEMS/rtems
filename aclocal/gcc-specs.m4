@@ -3,8 +3,6 @@ dnl $Id$
 dnl
 dnl Check whether the target compiler accepts -specs
 dnl
-dnl 98/02/11 Ralf Corsepius 	corsepiu@faw.uni-ulm.de
-dnl
 
 AC_DEFUN(RTEMS_GCC_SPECS,
 [AC_REQUIRE([RTEMS_PROG_CC])

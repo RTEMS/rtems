@@ -47,7 +47,7 @@ RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
 
 # Is there code where there should be for this BSP?
 # The bare bsp is a special case as it is not under the RTEMS_CPU path
-case ${RTEMS_BSP} in
+case $bspdir in
   bare)
     bspcpudir=
     if test "X${BARE_CPU_CFLAGS}" = "X" ; then

@@ -8,29 +8,34 @@ RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)
 
 RTEMS_ENABLE_CXX
+RTEMS_ENABLE_NETWORKING
 
 RTEMS_CANONICAL_TARGET_CPU
+RTEMS_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE(rtems-c-src,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_CPU
-RTEMS_CANONICAL_HOST
-
-RTEMS_PROJECT_ROOT
-
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+
+RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
 ## Note: the order of the directories below is essential
 AC_CONFIG_SUBDIRS(make)
 AC_CONFIG_SUBDIRS(exec)
 AC_CONFIG_SUBDIRS(lib)
+if test "$HAS_NETWORKING" = "yes"; then
+cfg_subdirs="librpc"
+fi
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-cfg_subdirs="librtems++";
+cfg_subdirs="$cfg_subdirs librtems++";
 fi 
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 AC_CONFIG_SUBDIRS(tests)
+
+RTEMS_PROJECT_ROOT
 
 AC_OUTPUT( 
 Makefile

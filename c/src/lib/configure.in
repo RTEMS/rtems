@@ -37,8 +37,6 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
-RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
-
 AM_CONDITIONAL(UNIX,test "$RTEMS_CPU" = "unix")
 
 # find all the CPU dependent library Makefiles
@@ -48,7 +46,6 @@ AC_CONFIG_SUBDIRS(libbsp)
 # If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
 if test "$HAS_NETWORKING" = "yes"; then
   cfg_subdirs="$cfg_subdirs libnetworking"
-  cfg_subdirs="$cfg_subdirs librpc"
 
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
@@ -99,7 +96,6 @@ include/Makefile
 include/sys/Makefile
 include/motorola/Makefile
 include/zilog/Makefile
-include/rpc/Makefile
 include/rdbg/Makefile
 include/rdbg/i386/Makefile
 include/rdbg/powerpc/Makefile

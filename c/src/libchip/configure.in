@@ -29,8 +29,6 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
-RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
-
 # pick up all the Makefiles in required parts of the tree
 if test "$RTEMS_CPU" = "unix"; then
 ## HACK: Suppress libchip for unix

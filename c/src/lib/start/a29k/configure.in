@@ -29,8 +29,6 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
-RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
-
 # try to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile

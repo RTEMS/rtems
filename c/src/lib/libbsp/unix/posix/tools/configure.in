@@ -3,9 +3,9 @@ dnl
 dnl  $Id$
 
 AC_INIT(runtest.in)
+RTEMS_TOP(../../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../../..)
 
-RTEMS_TOP(../../../../../../..)
 RTEMS_CANONICAL_TARGET_CPU
 
 AM_INIT_AUTOMAKE(rtems-lib-libbsp-unix-posix-tools,$RTEMS_VERSION,no)
