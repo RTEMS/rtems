@@ -54,6 +54,16 @@ extern "C" {
 #include <libcpu/cpu.h>
 #include <bspIo.h>
   
+/*
+ * Network driver configuration
+ */
+
+struct rtems_bsdnet_ifconfig;
+extern int rtems_wd_driver_attach (struct rtems_bsdnet_ifconfig *config);
+
+#define RTEMS_BSP_NETWORK_DRIVER_NAME "wd1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH       rtems_wd_driver_attach
+
 /*-------------------------------------------------------------------------+
 | Constants
 +--------------------------------------------------------------------------*/
