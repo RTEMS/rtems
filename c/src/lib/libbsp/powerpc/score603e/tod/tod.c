@@ -141,7 +141,6 @@ void ICM7170_SetTOD(
   rtems_time_of_day      *rtc_tod
 )
 {
-  int ticks;
   int year;
 
   year = rtc_tod->year;

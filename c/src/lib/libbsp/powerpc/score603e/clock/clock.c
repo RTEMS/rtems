@@ -170,7 +170,7 @@ rtems_device_driver Clock_initialize(
   Clock_Decrementer_value = (int) &CPU_PPC_CLICKS_PER_MS *
                        (BSP_Configuration.microseconds_per_tick / 1000);
 
-  Install_clock( Clock_isr );
+  Install_clock( (rtems_isr_entry) Clock_isr );
  
   /*
    * make major/minor avail to others such as shared memory driver

@@ -162,7 +162,9 @@ void initialize_universe()
 {
   rtems_unsigned32 jumper_selection;
   rtems_unsigned32 pci_id;
+#if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
   volatile rtems_unsigned32 universe_temp_value;
+#endif
  
   /*
    * Read the VME jumper location to determine the VME base address

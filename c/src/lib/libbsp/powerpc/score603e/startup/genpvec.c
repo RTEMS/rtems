@@ -18,6 +18,8 @@
 #include "chain.h"
 #include <assert.h>
 
+#include <stdio.h> /* for sprintf */
+
 
 /* 
  * Proto types for this file                                          
@@ -141,14 +143,16 @@ rtems_isr external_exception_ISR (
  EE_ISR_Type         *node;
  rtems_unsigned16    value;
  char                err_msg[100];
+#if (HAS_PMC_PSC8)
  rtems_unsigned16    PMC_irq;
  rtems_unsigned16    check_irq;
  rtems_unsigned16    status_word;
+#endif
 
  index = read_and_clear_irq();
  if ( index >= NUM_LIRQ ) {
-   sprintf(err_msg,"ERROR:: Invalid interrupt number (%02x)\n", index);
-   DEBUG_puts( err_msg);
+   sprintf( err_msg, "ERROR:: Invalid interrupt number (%02x)\n", index );
+   DEBUG_puts( err_msg );
    return;
  }
 

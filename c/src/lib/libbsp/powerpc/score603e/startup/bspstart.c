@@ -130,7 +130,8 @@ void initialize_PMC() {
   /*
    * Bit 0 and 1 HI cause Medium Loopback to occur.
    */
-  PMC_addr =  SCORE603E_PMC_SERIAL_ADDRESS( 0x100000 );
+  PMC_addr = (volatile rtems_unsigned32 *)
+        SCORE603E_PMC_SERIAL_ADDRESS( 0x100000 );
   data = *PMC_addr;
   /*   *PMC_addr = data | 0x3;  */
   *PMC_addr = data & 0xfc;
@@ -152,7 +153,8 @@ void initialize_PMC() {
   PMC_addr  = SCORE603E_PCI_DEVICE_ADDRESS( 0x14 );
   *PMC_addr = (SCORE603E_PCI_REGISTER_BASE >> 24) & 0x3f;
 
-  PMC_addr =  SCORE603E_PMC_SERIAL_ADDRESS( 0x100000 );
+  PMC_addr = (volatile rtems_unsigned32 *)
+      SCORE603E_PMC_SERIAL_ADDRESS( 0x100000 );
   data = *PMC_addr;
   *PMC_addr = data & 0xfc;
 
@@ -170,6 +172,7 @@ void initialize_PMC() {
  
 void SCORE603e_bsp_postdriver_hook(void)
 {
+  extern void Init_EE_mask_init(void);
 
   bsp_postdriver_hook();
 

@@ -136,7 +136,7 @@ const Port_85C30_info Ports_85C30 [ NUM_Z85C30_PORTS ] = {
     &Chips_85C30[1], 
  },
 
-#if defined(HAS_PMC_PSC8)
+#if (HAS_PMC_PSC8)
   {  
     (volatile unsigned char *) SCORE603E_85C30_CTRL_4, 
     (volatile unsigned char *) SCORE603E_85C30_DATA_4,

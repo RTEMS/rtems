@@ -83,9 +83,9 @@ void init_RTC()
 
 void init_PCI()
 {  
+#if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
   rtems_unsigned32 value;
 
-#if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
  /*
   * NOTE:  Accessing any memory location not mapped by the BAT 
   * registers will cause a TLB miss exception.   
