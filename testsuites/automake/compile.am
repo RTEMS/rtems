@@ -221,9 +221,6 @@ AM_CFLAGS =
 AM_CXXFLAGS =
 AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
 
-${ARCH}:
-	mkdir ${ARCH}
-
 clean-local:
 	$(RM) -r o-optimize o-debug $(CLEANDIRS)
 	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp
