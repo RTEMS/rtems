@@ -1,3 +1,7 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/directives.h: Fixed typo.
+
 2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
