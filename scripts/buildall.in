@@ -95,7 +95,7 @@ if [ ${testing} = yes ] ; then
   ECHO=echo
 fi
 
-installed_count=`rpm -q -g rtems | wc -l`
+installed_count=`rpm -q -g rtems | grep -v "does not contain" | wc -l`
 if [ ${installed_count} -ne 0 ] ; then
   echo This script should be run with NO rtems RPMs installed.
   echo It appears that the following rtems RPMs are installed:
