@@ -14,7 +14,8 @@ MP_C_FILES = eventmp.c mp.c msgmp.c partmp.c regionmp.c semmp.c signalmp.c \
 TASK_C_FILES = tasks.c taskcreate.c taskdelete.c taskgetnote.c taskident.c \
     taskinitusers.c taskissuspended.c taskmode.c taskrestart.c taskresume.c \
     tasksetnote.c tasksetpriority.c taskstart.c tasksuspend.c \
-    taskwakeafter.c taskwakewhen.c taskvariableadd.c taskvariabledelete.c
+    taskwakeafter.c taskwakewhen.c taskvariableadd.c taskvariabledelete.c \
+    taskvariableget.c
 
 RATEMON_C_FILES = ratemon.c ratemoncancel.c ratemoncreate.c ratemondelete.c \
     ratemongetstatus.c ratemonident.c ratemonperiod.c ratemontimeout.c

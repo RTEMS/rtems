@@ -417,6 +417,18 @@ rtems_status_code rtems_task_variable_add(
 );
 
 /*
+ *  rtems_task_variable_get
+ *
+ *  This directive gets the value of a task variable.
+ */
+
+rtems_status_code rtems_task_variable_get(
+  rtems_id tid,
+  void **ptr,
+  void **result
+);
+
+/*
  *  rtems_task_variable_delete
  *
  *  This directive removes a per task variable.
