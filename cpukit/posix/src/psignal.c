@@ -813,7 +813,7 @@ int kill(
    *  Only supported for the "calling process" (i.e. this node).
    */
  
-  if( pid != getpid() );
+  if( pid != getpid() )
     set_errno_and_return_minus_one( ESRCH );
 
   /*
@@ -842,17 +842,18 @@ int kill(
 
   _Thread_Disable_dispatch();
 
-  _POSIX_signals_Pending |= mask;
-
   /*
-   *  Is the currently executing thread interested?
+   *  Is the currently executing thread interested?  If so then it will
+   *  get it an execute it as soon as the dispatcher executes.
    */
 
   the_thread = _Thread_Executing;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-  if ( _POSIX_signals_Is_interested( api, mask ) )
+  if ( _POSIX_signals_Is_interested( api, mask ) ) {
+    _POSIX_signals_Pending |= mask;
     goto process_it;
+  }
 
   /*
    *  Is an interested thread waiting for this signal (sigwait())?
@@ -879,6 +880,13 @@ int kill(
 
     }
   }
+
+  /*
+   *  Since we did not deliver the signal to the current thread or to a
+   *  specific thread via sigwait() we will mark it as pending.
+   */
+
+  _POSIX_signals_Pending |= mask;
 
   /*
    *  Is any other thread interested?  The highest priority interested
@@ -919,7 +927,10 @@ int kill(
     object_table++;                         /* skip entry 0 */
 
     for ( index = 1 ; index <= maximum ; index++ ) {
-      the_thread = (Thread_Control *) object_table++;
+      the_thread = (Thread_Control *) object_table[ index ];
+
+      if ( !the_thread )
+        continue;
 
       /*
        *  If this thread is of lower priority than the interested thread,
@@ -935,7 +946,7 @@ int kill(
 
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-      if ( !_POSIX_signals_Is_interested( api, mask ) )
+      if ( !api || !_POSIX_signals_Is_interested( api, mask ) )
         continue;
 
       /*
