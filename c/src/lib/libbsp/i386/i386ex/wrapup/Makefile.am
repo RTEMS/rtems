@@ -12,8 +12,7 @@ BSP_FILES = startup clock console timer $(NETWORK)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard \
-    ../../../../libcpu/i386/$(ARCH)/*.$(OBJEXT))
+    $(wildcard ../../../../libcpu/i386/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/compile.am

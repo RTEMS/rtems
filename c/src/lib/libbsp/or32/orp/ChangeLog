@@ -1,3 +1,7 @@
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Cosmetics.
+
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Misc cleanups and fixes.
