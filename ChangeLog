@@ -1,5 +1,11 @@
 2001-05-25	Joel Sherrill <joel@OARcorp.com>
 
+ 	* README.configure: Corrected the name of the MRM332 BSP.
+	Strengthened the distinction between what the target 
+	and the BSP each select.  Added more targets to list.
+
+2001-05-25	Joel Sherrill <joel@OARcorp.com>
+
  	* README.configure: Updated the list of BSPs.
 
 2001-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -88,19 +88,25 @@ unless directly specified. There are  two ways of changing this:
   + set the RTEMS_BSP variable during make (see below).
 
 The --enable-rtemsbsp= option configures RTEMS for a specific target
-architecture.  The following targets are supported:
+architecture.  Remember that the target specifies the CPU family while
+the BSP specifies the precise board you will be using. The following
+targets are supported:
 
 	(none)			will build the host-based version on Linux,
 				Solaris and HPUX.
 
 	a29k-rtems		only standalone, uses non-gnu compiler
+        arm-rtems
+        h8300-rtems
 	i386-rtems
 	i960-rtems
 	hppa1.1-rtems
 	m68k-rtems
+	mips-rtems
 	mips64orion-rtems
         no_cpu-rtems
 	powerpc-rtems
+	sh-rtems
 	sparc-rtems
         bare                    see notes
 	
@@ -181,7 +187,7 @@ i960		: cvme961 i960sim rxgen960
 hppa1.1		: simhppa
 m68k		: dmv152 efi332 efi68k gen68302 gen68340 gen68360 
                   gen68360_040 idp mvme136 mvme147 mvme147s mvme162 ods68302
-                  mrm
+                  mrm332
 no_cpu          : no_bsp
 mips            : p4600 p4650 (p4000 port with either R4600 or R4650)
                   jmr3904 genmongoosev
