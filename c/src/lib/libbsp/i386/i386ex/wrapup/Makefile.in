@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../..
-subdir = i386/i386ex/wrapup
+top_builddir = ..
+subdir = wrapup
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -59,11 +59,6 @@ $(LIB): ${OBJS}
 
 all: ${ARCH} $(SRCS) $(LIB)
 	$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
-
-install: all
-
-$(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs: ../bsp_specs
-	$(INSTALL_DATA) $< $@
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

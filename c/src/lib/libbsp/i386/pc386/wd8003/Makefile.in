@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../..
-subdir = i386/pc386/wd8003
+top_builddir = ..
+subdir = wd8003
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
