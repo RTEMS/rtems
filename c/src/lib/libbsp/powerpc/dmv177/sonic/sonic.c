@@ -1132,9 +1132,9 @@ SONIC_STATIC void sonic_initialize_hardware(
    */
 
   if (broadcastFlag)
-    sonic_write_register( rp, SONIC_REG_RCR, RCR_BRD | RDA_STATUS_PRO );
+    sonic_write_register( rp, SONIC_REG_RCR, RCR_BRD );
   else
-    sonic_write_register( rp, SONIC_REG_RCR, 0  | RDA_STATUS_PRO);
+    sonic_write_register( rp, SONIC_REG_RCR, 0 );
 
   /*
    * Set up Resource Area pointers
@@ -1176,32 +1176,27 @@ SONIC_STATIC void sonic_initialize_hardware(
   sonic_write_register( rp, SONIC_REG_CR, 0 );
 
   /*
-   * Set up the SONIC CAM with our hardware address.
-   * Use the Receive Resource Area to hold the CAM Descriptor Area.
+   *  Set up the SONIC CAM with our hardware address.
    */
+
   hwaddr = dp->iface->hwaddr;
   cdp = dp->cdp;
-
-  for (i=0 ; i<16 ; i++ ) {
-    /*
-     *  cap0, cap1, and cap2 are zeroed by sonic_allocate.
-     */
-    cdp->desc[i].cep = i;
-  }
 
 #if (SONIC_DEBUG & SONIC_DEBUG_CAM)
   printf( "hwaddr: %2x:%2x:%2x:%2x:%2x:%2x\n",
      hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5] );
 #endif
-  cdp->desc[0].cep = 0;      /* Fill first entry in CAM */
-  cdp->desc[0].cap2 = hwaddr[0] << 8 | hwaddr[1];
-  cdp->desc[0].cap1 = hwaddr[2] << 8 | hwaddr[3];
-  cdp->desc[0].cap0 = hwaddr[4] << 8 | hwaddr[5];
-  cdp->ce = 0x0001;    /* Enable first entry in CAM */
 
-  sonic_write_register( rp, SONIC_REG_CDC, 16 );      /* 16 entries in CDA */
+  cdp->cep  = 0;                     /* Fill first and only entry in CAM */
+  cdp->cap0 = hwaddr[1] << 8 | hwaddr[0];
+  cdp->cap1 = hwaddr[3] << 8 | hwaddr[2];
+  cdp->cap2 = hwaddr[5] << 8 | hwaddr[4];
+  cdp->ce   = 0x0001;                /* Enable first entry in CAM */
+
+  sonic_write_register( rp, SONIC_REG_CDC, 1 );      /* 1 entry in CDA */
   sonic_write_register( rp, SONIC_REG_CDP, LSW(cdp) );
-  sonic_write_register( rp, SONIC_REG_CR, CR_LCAM );  /* Load the CAM */
+  sonic_write_register( rp, SONIC_REG_CR,  CR_LCAM );  /* Load the CAM */
+
   while (sonic_read_register( rp, SONIC_REG_CR ) & CR_LCAM)
     continue;
 
@@ -1216,7 +1211,7 @@ SONIC_STATIC void sonic_initialize_hardware(
     printf ("Loaded Ethernet address into SONIC CAM.\n"
       "  Wrote %04x%04x%04x - %#x\n"
       "   Read %04x%04x%04x - %#x\n", 
-        cdp->desc[0].cap2, cdp->desc[0].cap1, cdp->desc[0].cap0, cdp->ce,
+        cdp->cap2, cdp->cap1, cdp->cap0, cdp->ce,
         sonic_read_register( rp, SONIC_REG_CAP2 ),
         sonic_read_register( rp, SONIC_REG_CAP1 ),
         sonic_read_register( rp, SONIC_REG_CAP0 ),
@@ -1224,14 +1219,14 @@ SONIC_STATIC void sonic_initialize_hardware(
 #endif
 
   sonic_write_register( rp, SONIC_REG_CEP, 0 );  /* Select first entry in CAM */
-  if ((sonic_read_register( rp, SONIC_REG_CAP2 ) != cdp->desc[0].cap2)
-   || (sonic_read_register( rp, SONIC_REG_CAP1 ) != cdp->desc[0].cap1)
-   || (sonic_read_register( rp, SONIC_REG_CAP0 ) != cdp->desc[0].cap0)
+  if ((sonic_read_register( rp, SONIC_REG_CAP2 ) != cdp->cap2)
+   || (sonic_read_register( rp, SONIC_REG_CAP1 ) != cdp->cap1)
+   || (sonic_read_register( rp, SONIC_REG_CAP0 ) != cdp->cap0)
    || (sonic_read_register( rp, SONIC_REG_CE ) != cdp->ce)) {
     printf ("Failed to load Ethernet address into SONIC CAM.\n"
       "  Wrote %04x%04x%04x - %#x\n"
       "   Read %04x%04x%04x - %#x\n", 
-        cdp->desc[0].cap2, cdp->desc[0].cap1, cdp->desc[0].cap0, cdp->ce,
+        cdp->cap2, cdp->cap1, cdp->cap0, cdp->ce,
         sonic_read_register( rp, SONIC_REG_CAP2 ),
         sonic_read_register( rp, SONIC_REG_CAP1 ),
         sonic_read_register( rp, SONIC_REG_CAP0 ),

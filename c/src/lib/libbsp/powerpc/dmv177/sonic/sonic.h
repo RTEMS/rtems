@@ -333,12 +333,10 @@ typedef struct ReceiveDescriptor ReceiveDescriptor_t;
 typedef volatile ReceiveDescriptor_t *ReceiveDescriptorPointer_t;
 
 typedef struct {
-  struct {
-    rtems_unsigned32  cep;  /* CAM Entry Pointer */
-    rtems_unsigned32  cap0; /* CAM Address Port 0 xx-xx-xx-xx-YY-YY */
-    rtems_unsigned32  cap1; /* CAM Address Port 1 xx-xx-YY-YY-xxxx */
-    rtems_unsigned32  cap2; /* CAM Address Port 2 YY-YY-xx-xx-xx-xx */
-  } desc[16];
+  rtems_unsigned32  cep;  /* CAM Entry Pointer */
+  rtems_unsigned32  cap0; /* CAM Address Port 0 xx-xx-xx-xx-YY-YY */
+  rtems_unsigned32  cap1; /* CAM Address Port 1 xx-xx-YY-YY-xxxx */
+  rtems_unsigned32  cap2; /* CAM Address Port 2 YY-YY-xx-xx-xx-xx */
   rtems_unsigned32  ce;
 } CamDescriptor_t;
 
