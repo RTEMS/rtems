@@ -135,9 +135,9 @@ rtems_boolean rdSCI0(unsigned char *ch)
   rtems_boolean result=FALSE;
 
   if ((read8(SCI_SSR0) & SCI_RDRF) != 0x00) {
-    /* Write the character to the TDR */
-    write8(*ch, SCI_RDR0);
-    /* Clear the TDRE bit */
+    /* read input */
+    *ch = read8(SCI_RDR0);
+    /* Clear RDRF flag */
     temp = read8(SCI_SSR0) & ~SCI_RDRF;
     write8(temp, SCI_SSR0);
     result = TRUE;
@@ -151,9 +151,9 @@ rtems_boolean rdSCI1(unsigned char *ch)
   rtems_boolean result=FALSE;
 
   if ((read8(SCI_SSR1) & SCI_RDRF) != 0x00) {
-    /* Write the character to the TDR */
-    write8(*ch, SCI_RDR1);
-    /* Clear the TDRE bit */
+    /* read input */
+    *ch = read8(SCI_RDR1);
+    /* Clear RDRF flag */
     temp= read8(SCI_SSR1) & ~SCI_RDRF;
     write8(temp, SCI_SSR1);
     result = TRUE;
