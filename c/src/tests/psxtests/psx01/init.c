@@ -51,6 +51,7 @@ void *POSIX_Init(
   int             status;
   pthread_t       thread_id;
   time_t          seconds;
+  time_t          remaining;
   struct tm       tm;
   struct timespec tv;
   struct timespec tr;
@@ -74,8 +75,8 @@ void *POSIX_Init(
 
   /* use sleep to delay */
 
-  seconds = sleep( 3 );
-  assert( !seconds );
+  remaining = sleep( 3 );
+  assert( !remaining );
 
   /* print new times to make sure it has changed and we can get the realtime */
 
@@ -86,6 +87,11 @@ void *POSIX_Init(
 
   seconds = time( NULL );
   printf( ctime( &seconds ) );
+
+  /* check the time remaining */
+
+  printf( "seconds remaining (%d)\n", (int)remaining );
+  assert( !remaining );
 
   /* use nanosleep to delay */
 
