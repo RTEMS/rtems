@@ -1,3 +1,7 @@
+2001-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Added stamp-h.in.
+
 2002-01-23	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge in rtems/Makefile.am and
