@@ -22,11 +22,8 @@
 #
 ##########################################################*/
 
-#include "mc68230.h"
-#include "mc68681.h"
-#include "ringbuf.h"
-#include "rtems.h"
-#include "bsp.h"
+#include <bsp.h>
+#include <ringbuf.h>
 
 rtems_isr C_Receive_ISR(rtems_vector_number vector);
 extern Ring_buffer_t  Buffer[];
@@ -42,67 +39,143 @@ unsigned char Pit_initialized = 0;
 ######################################################################*/
 volatile void init_pit()
 {
-	/* Disable ports A & B while configuring PIT */
-	MC68681_WRITE(DUART_IMR, 0x00);		/* disable imr */
-	MC68681_WRITE(DUART_CRA, 0x08);		/* disable port a transmitter */
-	MC68681_WRITE(DUART_CRA, 0x02);		/* disable port a receiver */
-	MC68681_WRITE(DUART_CRB, 0x08);		/* disable port b transmitter */
-	MC68681_WRITE(DUART_CRB, 0x02);		/* disable port b receiver */
+  /*
+   *  ports A & B while configuring PIT by:
+   *
+   *    + disable Interrupt Mask Register
+   *    + disable port A transmitter
+   *    + disable port A receiver
+   *    + disable port B transmitter
+   *    + disable port B receiver
+   */
 
-	/* install ISR for ports A and B */
-	set_vector(C_Receive_ISR, (VECT+H3VECT), 1);
+  MC68681_WRITE(MC68681_INTERRUPT_MASK_REG, 0x00);
+  MC68681_WRITE(MC68681_COMMAND_REG_A ,MC68681_MODE_REG_DISABLE_TX);
+  MC68681_WRITE(MC68681_COMMAND_REG_A, MC68681_MODE_REG_DISABLE_RX);
+  MC68681_WRITE(MC68681_COMMAND_REG_B, MC68681_MODE_REG_DISABLE_TX);
+  MC68681_WRITE(MC68681_COMMAND_REG_B, MC68681_MODE_REG_DISABLE_RX);
 
-	/* initialize pit */
-	MC68230_WRITE(PGCR, 0x00);  /* set mode to 0 -- disable all ports */
-	MC68230_WRITE(PSRR, 0x18);	/* set up pirq and piack */
-	MC68230_WRITE(PBDDR, 0x00);	/* all pins on port b are input */
-	MC68230_WRITE(PBCR, 0x82);	/* submode 1x, h3 interrupt enabled */
-	MC68230_WRITE(PIVR, VECT);	/* setup pivr */
-	MC68230_WRITE(PGCR, 0x20);	/* turn on all ports */
+  /* 
+   *  install ISR for ports A and B
+   */
+  set_vector(C_Receive_ISR, (VECT+H3VECT), 1);
 
-	/* For some reason, the reset of receiver/transmitter only works for
-       the first time around -- it garbles the output otherwise (e.g., sp21) */
-	if (!Pit_initialized)
-	{
-	   /* now initialize the duart registers on port b */
-	   /* WARNING:OPTIMIZER MAY ONLY EXECUTE THIRD STATEMENT IF NOT VOLATILE */
-	   MC68681_WRITE(DUART_CRB, 0x30);		/* reset tx, channel b */
-	   MC68681_WRITE(DUART_CRB, 0x20);		/* reset rx, channel b */
-	   MC68681_WRITE(DUART_CRB, 0x10);		/* reset mr pointer, channel b */
+  /* 
+   *  initialize pit 
+   *
+   *  set mode to 0 -- disable all ports
+   *  set up pirq and piack
+   *  all pins on port b are input
+   *  submode 1x, h3 interrupt enabled
+   *  setup pivr
+   *  turn on all ports
+   */
+  MC68230_WRITE(PGCR, 0x00); 
+  MC68230_WRITE(PSRR, 0x18); 
+  MC68230_WRITE(PBDDR, 0x00);
+  MC68230_WRITE(PBCR, 0x82); 
+  MC68230_WRITE(PIVR, VECT); 
+  MC68230_WRITE(PGCR, 0x20); 
 
-	   /* now initialize the duart registers on port a */
-	   /* WARNING:OPTIMIZER MAY ONLY EXECUTE THIRD STATEMENT IF NOT VOLATILE */
-	   MC68681_WRITE(DUART_CRA, 0x30);		/* reset tx, channel a */
-	   MC68681_WRITE(DUART_CRA, 0x20);		/* reset rx, channel a */
-	   MC68681_WRITE(DUART_CRA, 0x10);		/* reset mr pointer, channel a */
-	   Pit_initialized = 1;
-	}
+  /*
+   *  For some reason, the reset of receiver/transmitter only works for
+   *  the first time around -- it garbles the output otherwise 
+   *  (e.g., sp21) 
+   */
+  if (!Pit_initialized)
+  {
+    /* 
+     * initialize the duart registers on port b
+     * WARNING:OPTIMIZER MAY ONLY EXECUTE THIRD STATEMENT IF NOT VOLATILE
+     * 
+     *  reset tx, channel b
+     *  reset rx, channel b
+     *  reset mr pointer, ch
+     */
+     MC68681_WRITE(MC68681_COMMAND_REG_B, MC68681_MODE_REG_RESET_TX);
+     MC68681_WRITE(MC68681_COMMAND_REG_B, MC68681_MODE_REG_RESET_RX);
+     MC68681_WRITE(MC68681_COMMAND_REG_B, MC68681_MODE_REG_RESET_MR_PTR);
 
-	/* init the general registers of the duart */
-	MC68681_WRITE(DUART_IVR, 0x0f);		/* init ivr */
-	MC68681_WRITE(DUART_IMR, 0x22);		/* init imr */
-	MC68681_WRITE(DUART_ACR, 0x00);		/* init acr */
-	MC68681_WRITE(DUART_CTUR, 0x00);	/* init ctur */
-	MC68681_WRITE(DUART_CTLR, 0x02);	/* init ctlr */
-	MC68681_WRITE(DUART_OPCR, 0x00);	/* init opcr */
-	MC68681_WRITE(DUART_OPRSET, 0x01);	/* init cts */
+    /* 
+     * initialize the duart registers on port a
+     * WARNING:OPTIMIZER MAY ONLY EXECUTE THIRD STATEMENT IF NOT VOLATILE
+     * 
+     *  reset tx, channel a
+     *  reset rx, channel a
+     *  reset mr pointer, ch
+     */
+     MC68681_WRITE(MC68681_COMMAND_REG_A, MC68681_MODE_REG_RESET_TX);
+     MC68681_WRITE(MC68681_COMMAND_REG_A, MC68681_MODE_REG_RESET_RX);
+     MC68681_WRITE(MC68681_COMMAND_REG_A, MC68681_MODE_REG_RESET_MR_PTR);
 
-	/* init the actual serial port for port a */
-	MC68681_WRITE(DUART_CSRA, 0xbb);	/* init csra -- 9600 baud */
-	MC68681_WRITE(DUART_MR1A, 0x13);	/* init mr1a */
-	MC68681_WRITE(DUART_MR2A, 0x07);	/* init mr2a */
-	MC68681_WRITE(DUART_CRA, 0x05);		/* init cra */
+     Pit_initialized = 1;
+  }
 
-	/* init the actual serial port for port b */
-	MC68681_WRITE(DUART_CSRB, 0xbb);	/* init csrb -- 9600 baud */
+  /*
+   * Init the general registers of the duart 
+   * 
+   * init ivr
+   * init imr
+   * init acr
+   * init ctur
+   * init ctlr
+   * init opcr
+   * init cts
+   */
+  MC68681_WRITE(MC68681_INTERRUPT_VECTOR_REG,  
+                MC68681_INTERRUPT_VECTOR_INIT);
+  MC68681_WRITE(MC68681_INTERRUPT_MASK_REG, 
+                MC68681_IR_RX_READY_A | MC68681_IR_RX_READY_B);  
+  MC68681_WRITE(MC68681_AUX_CTRL_REG, MC68681_CLEAR);
+  MC68681_WRITE(MC68681_COUNTER_TIMER_UPPER_REG, 0x00);
+  MC68681_WRITE(MC68681_COUNTER_TIMER_LOWER_REG, 0x02);
+  MC68681_WRITE(MC68681_OUTPUT_PORT_CONFIG_REG, MC68681_CLEAR); 
+  MC68681_WRITE(MC68681_OUTPUT_PORT_SET_REG, 0x01); 
+
+  /* 
+   * init the actual serial port for port a
+   * 
+   * Set Baud Rate to 9600 
+   * Set Stop bit length of 1
+   * enable Transmit and receive
+   */
+  MC68681_WRITE(MC68681_CLOCK_SELECT_REG_A, MC68681_BAUD_RATE_MASK_9600);
+  MC68681_WRITE(MC68681_MODE_REG_1A, 
+                (MC68681_8BIT_CHARS | MC68681_NO_PARITY));
+  MC68681_WRITE(MC68681_MODE_REG_2A,MC68681_STOP_BIT_LENGTH_1);
+  MC68681_WRITE(MC68681_COMMAND_REG_A, 
+                (MC68681_MODE_REG_ENABLE_TX | MC68681_MODE_REG_ENABLE_RX));
+
+  /* 
+   * init the actual serial port for port b 
+   * init csrb -- 9600 baud
+   */
+  MC68681_WRITE(MC68681_CLOCK_SELECT_REG_B, MC68681_BAUD_RATE_MASK_9600);
+
+
 #define EIGHT_BITS_NO_PARITY
 #ifdef EIGHT_BITS_NO_PARITY
-	MC68681_WRITE(DUART_MR1B, 0x13);	/* init mr1b */
-#else /* 7 bits, even parity */
-	MC68681_WRITE(DUART_MR1B, 0x02);	/* init mr1b */
+  /*
+   * Set 8 Bit characters with no parity
+   */ 
+  MC68681_WRITE(MC68681_MODE_REG_1B, 
+                (MC68681_NO_PARITY | MC68681_8BIT_CHARS) );
+#else 
+  /*
+   * Set 7 Bit Characters with parity 
+   */
+  MC68681_WRITE(MC68681_MODE_REG_1B, 
+                (MC68681_WITH_PARITY |  MC68681_7BIT_CHARS) );
 #endif
-	MC68681_WRITE(DUART_MR2B, 0x07);	/* init mr2b -- one stop bit */
-	MC68681_WRITE(DUART_CRB, 0x05);		/* init crb */
+
+
+  /*
+   * Set Stop Bit length to 1 
+   * Disable Recieve and transmit on B
+   */
+  MC68681_WRITE(MC68681_MODE_REG_2B,MC68681_STOP_BIT_LENGTH_1);
+  MC68681_WRITE(MC68681_COMMAND_REG_B,
+                (MC68681_MODE_REG_ENABLE_TX | MC68681_MODE_REG_ENABLE_RX) );
 }
 
 /*#####################################################################
@@ -110,31 +183,45 @@ volatile void init_pit()
 #####################################################################*/
 rtems_isr C_Receive_ISR(rtems_vector_number vector)
 {
-	volatile unsigned char *_addr;
+  volatile unsigned char *_addr;
 
-	_addr = (unsigned char *) (PIT_ADDR + PITSR);
-	*_addr = 0x04;		/* clear pit interrupt */
+  /*
+   *  Clear pit interrupt.
+   */
+  _addr = (unsigned char *) (PIT_ADDR + PITSR);
+  *_addr = 0x04;
 
-	/* Let's check port A first for input */
-	_addr = (unsigned char *) (DUART_ADDR + DUART_SRA);
-	if (*_addr & 0x01)	/* extract rcvrdy on port A */
-	{
-		/* Read input on port A */
-		_addr = (unsigned char *) (DUART_ADDR + DUART_RBA);
-		Ring_buffer_Add_character( &Buffer[ 0 ], *_addr );
-	}
-	else	/* If not on port A, let's check port B */
-	{
-		_addr = (unsigned char *) (DUART_ADDR + DUART_SRB);
-		if (*_addr & 0x01)	/* extract rcvrdy on port B */
-		{
-			/* Read input on port B */
-			_addr = (unsigned char *) (DUART_ADDR + DUART_RBB);
-			Ring_buffer_Add_character( &Buffer[ 1 ], *_addr );
-		}
-		/* if not ready on port A or port B, must be an error */
-		/* if error, get out so that fifo is undisturbed */
-	}
+  /* 
+   *  check port A first for input 
+   *     extract rcvrdy on port B
+   *     set ptr to recieve buffer and read character into ring buffer
+   */
+  _addr = (unsigned char *) (DUART_ADDR + MC68681_STATUS_REG_A);
+  if (*_addr & MC68681_RX_READY)  /* extract rcvrdy on port A */
+  {
+    _addr = (unsigned char *) (DUART_ADDR + MC68681_RECEIVE_BUFFER_A);
+    Ring_buffer_Add_character( &Buffer[ 0 ], *_addr );
+  }
+
+  /* 
+   *  If not on port A, let's check port B
+   *     extract rcvrdy on port B
+   *     set ptr to recieve buffer and read character into ring buffer
+   */ 
+  else
+  {
+    _addr = (unsigned char *) (DUART_ADDR + MC68681_STATUS_REG_B);
+    if (*_addr & MC68681_RX_READY)  /* extract rcvrdy on port B */
+    {
+      _addr = (unsigned char *) (DUART_ADDR + MC68681_RECEIVE_BUFFER_B);
+      Ring_buffer_Add_character( &Buffer[ 1 ], *_addr );
+    }
+
+    /* 
+     * if not ready on port A or port B, must be an error 
+     * if error, get out so that fifo is undisturbed 
+     */
+  }
 }
 
 /*#####################################################################
@@ -143,17 +230,22 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector)
 #####################################################################*/
 void transmit_char(char ch)
 {
-	volatile unsigned char *_addr;
+  volatile unsigned char *_addr;
 
-	/* Get SRA (extract txrdy) */
-	_addr = (unsigned char *) (DUART_ADDR + DUART_SRA);
-	while (!(*_addr & 0x04))
-	{
-	}
+  /* 
+   * Get SRA (extract txrdy) 
+   */
+  _addr = (unsigned char *) (DUART_ADDR + MC68681_STATUS_REG_A);
+  while (!(*_addr & MC68681_TX_READY))
+  {
+  }
 
-	/* transmit character over port A */
-	MC68681_WRITE(DUART_TBA, ch);
+  /* 
+   * transmit character over port A 
+   */
+  MC68681_WRITE(MC68681_TRANSMIT_BUFFER_A, ch);
 }
+
 
 /*#####################################################################
 # This is the routine that actually transmits a character one at a time
@@ -161,14 +253,18 @@ void transmit_char(char ch)
 #####################################################################*/
 void transmit_char_portb(char ch)
 {
-	volatile unsigned char *_addr;
+  volatile unsigned char *_addr;
 
-	/* Get SRB (extract txrdy) */
-	_addr = (unsigned char *) (DUART_ADDR + DUART_SRB);
-	while (!(*_addr & 0x04))
-	{
-	}
+  /* 
+   * Get SRB (extract txrdy) 
+   */
+  _addr = (unsigned char *) (DUART_ADDR + MC68681_STATUS_REG_B);
+  while (!(*_addr &  MC68681_TX_READY))
+  {
+  }
 
-	/* transmit character over port B */
-	MC68681_WRITE(DUART_TBB, ch);
+  /* 
+   * transmit character over port B 
+   */
+  MC68681_WRITE(MC68681_TRANSMIT_BUFFER_B, ch);
 }
