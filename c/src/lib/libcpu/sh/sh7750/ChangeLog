@@ -1,5 +1,13 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/ckinit.c, include/rtems/score/iosh7750.h,
+	include/rtems/score/ipl.h, include/rtems/score/ispsh7750.h,
+	include/rtems/score/sh4_regs.h, include/rtems/score/sh7750_regs.h,
+	include/sh/sh4uart.h, sci/console.c, sci/sh4uart.c, score/cpu_asm.c,
+	score/ispsh7750.c, timer/timer.c: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* score/cpu_asm.c: Removed incorrect statement about copyright
 	assignment.
 
