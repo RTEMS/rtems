@@ -26,7 +26,9 @@ EVENTFLAGS_C_PIECES = eventflags
 
 MAILBOX_C_PIECES = mbox
 
-MSGBUFFER_C_PIECES = msgbuffer
+MSGBUFFER_C_PIECES = msgbuffer msgbuffertranslatereturncode \
+    cre_mbf del_mbf prcv_mbf psnd_mbf rcv_mbf ref_mbf snd_mbf trcv_mbf \
+    tsnd_mbf
 
 RENDEZVOUS_C_PIECES = port
 
