@@ -54,6 +54,19 @@ In this case, it is not uncommon to see executable files
 that are between two and three times larger than the actual
 space required in target memory.
 
+Remember, the debugging information is required to do symbolic
+debugging with gdb.  Normally gdb obtains its symbolic information
+from the same file that it gets the executable image from.  However,
+gdb does not require that the executable image and symbolic
+information be obtained from the same file.  So you might
+want to create a @code{hello_with_symbols.exe}, copy that
+file to @code{hello_without_symbols.exe}, and strip
+@code{hello_without_symbols.exe}.  Then gdb would have to
+be told to read symbol information from @code{hello_with_symbols.exe}.
+The gdb command line option @code{-symbols} or command
+@code{symbol-file} may be used to specify the file read
+for symbolic information.
+
 
 @section Malloc
 
