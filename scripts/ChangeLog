@@ -1,3 +1,8 @@
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/gccnewlib.spec.in: Removed from CVS.
+
+
 2002-04-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mkbinutilspec.in: Add support for empty patch-version (no patch).
