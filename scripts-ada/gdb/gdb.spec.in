@@ -19,7 +19,7 @@ Provides:     rtems-base-gnat-gdb @target_alias@-gnat-gdb
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      @gdb_version@
+Version:      gnat@gnat_version@
 Summary:      gdb for target @target_alias@
 Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
 Source1:	ftp://cs.nyu.edu/pub/gnat/gnat-@gnat_version@-src.tar.gz
@@ -38,6 +38,7 @@ Buildroot:	/tmp
 # Or you can try the ftp options of rpm :-)
 #
 NoSource:      0
+NoSource:      1
 
 %description
 RTEMS is an open source operating system for embedded systems.

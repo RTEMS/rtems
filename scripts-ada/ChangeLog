@@ -1,3 +1,8 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, gdb/gdb.spec.in,gnatnewlib/gnatnewlib.spec.in:
+	Updated to reflect gnat 3.13p successfully building.
+
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Updated to gnat-3.13p and adjusted all versions
