@@ -120,6 +120,8 @@ SECTIONS
 
     etext = ALIGN(0x10);
     _etext = .;
+    *(.init)
+    *(.fini)
     *(.lit)
     *(.shdata)
     _endtext = .;

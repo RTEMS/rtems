@@ -7,6 +7,9 @@
 *cpp:
 %(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
+*endfile:
+crtend.o%s crtn.o%s
+
 *lib:
 %{!qrtems: %(old_lib)} %{qrtems: --start-group \
 %{!qrtems_debug: -lrtemsall} %{qrtems_debug: -lrtemsall_g} \
@@ -15,8 +18,8 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{qrtems: \
-%{!qrtems_debug: startsis.o%s} \
-%{qrtems_debug: startsis_g.o%s}}
+%{!qrtems_debug: startsis.o%s crti.o%s crtbegin.o%s} \
+%{qrtems_debug: startsis_g.o%s crti.o%s crtbegin.o%s}}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e start}
