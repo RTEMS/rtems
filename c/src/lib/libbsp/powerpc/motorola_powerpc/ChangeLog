@@ -1,3 +1,8 @@
+2004-11-16	Richard Campbell <richard.campbell@OARcorp.com>
+
+	* README.MVME2100: Update to include DBAT0.
+	* startup/linkcmds: Add sections from new gcc versions.
+
 2004-11-12	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	PR 717/bsps

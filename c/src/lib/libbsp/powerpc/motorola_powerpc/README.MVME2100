@@ -66,8 +66,17 @@ Memory Map
     fd00 0000   |------------------------------------|   | 
                 |                                    |   | 
                 |                      xxxxxxxxxxxxxx| ----- f000 0000
-                |                      x not mapped  |
-                |                      xxxxxxxxxxxxxx| ----- 9000 0000
+                |                      x not mapped  |   |
+                |                      xxxxxxxxxxxxxx| ----- a000 0000 
+                |                                    |   | 
+                |                                    |   |
+                |                                    | DBAT0
+                |                                    |  - Supervisor R/W
+                |                                    |  - Cache Inhibited
+                |                                    |  - Guarded
+                |                                    |   |
+                |                                    |   | 
+                |                                    | ----- 9000 0000
                 |                                    |   |
                 |                                    |   |
                 | PCI Memory Space                   | DBAT2
