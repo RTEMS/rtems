@@ -58,11 +58,21 @@ by the application.
 
 
 
-@subsection Facilities, Severity, & Queries
+@subsection Facilities
 
 A facility is an identification code for a subsystem, device, or
 other object about which information is being written to 
-a log file.  Severity is a rating of the error that is being logged.   
+a log file.  
+
+A facility set is a collection of facilities.
+
+@subsection Severity
+
+Severity is a rating of the error that is being logged.   
+
+@subsection Queries
+
+
 The facility identifier and the event severity are the basis for
 subsequent log query.  A log query is used as a filter to
 obtain a subset of a given log file.  The log file may be configured 
@@ -421,7 +431,7 @@ int log_open(
 
 @table @b
 @item EACCES
-Search permission is denied on a component of the path prefix,
+Search permission is denied on a component of the @cdoe{path} prefix,
 or the log file exists and read permission is denied.
 
 @item  EINTR
@@ -432,7 +442,7 @@ The log_severity field of the query argument exceeds
 @code{LOG_SEVERITY_MAX}.
 
 @item EINVAL
-The path argument referred to a file that was not a log file.
+The @code{path} argument referred to a file that was not a log file.
 
 @item EMFILE
 Too many log file descriptors are currently in use by this
@@ -447,10 +457,10 @@ in effect.
 Too many files are currently open in the system.
 
 @item ENOENT
-The file specified by the path argument does not exist.
+The file specified by the @code{path} argument does not exist.
 
 @item ENOTDIR
-A component of the path prefix is not a directory.
+A component of the @code{path} prefix is not a directory.
 
 @end table
 
@@ -535,7 +545,7 @@ No data available.  There are no unread event records remaining
 in this log file.
 
 @item EINTR
-A signal interrupted the call to log_read().
+A signal interrupted the call to @code{log_read()}.
 
 @item EIO
 An I/O error occurred in reading from the event log.
@@ -615,7 +625,7 @@ The process has requested a notify on a log that will not be
 written to.
 
 @item ENOSYS
-The function log_notify() is not supported by this implementation.
+The function @code{log_notify()} is not supported by this implementation.
 
 @end table
 
