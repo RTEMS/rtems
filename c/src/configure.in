@@ -34,11 +34,11 @@ fi
 cfg_subdirs="$cfg_subdirs lib"
 cfg_subdirs="$cfg_subdirs lib/libcpu lib/libbsp"
 hst_subdirs="libfs"
-cfg_subdirs2="libmisc"
+hst_subdirs="$hst_subdirs libmisc"
 
 if test "$RTEMS_CPU" != "unix"; then
 ## HACK: Suppress libchip for unix
-cfg_subdirs2="$cfg_subdirs2 libchip"
+hst_subdirs="$hst_subdirs libchip"
 fi
 
 if test "$HAS_NETWORKING" = "yes"; then
