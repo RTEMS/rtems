@@ -1,3 +1,9 @@
+2004-04-21	Joel Sherrill <joel@OARcorp.com>
+
+	PR 611/bsps
+	* tm27/task1.c: Follow conventions for tm27 and do not add another
+	macro definition.
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* tm01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.

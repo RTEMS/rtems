@@ -22,10 +22,6 @@
 
 #include <bsp.h>
 
-#if defined(Declarations_for_tm27)
-Declarations_for_tm27
-#endif
-
 rtems_task Task_1(
   rtems_task_argument argument
 );
