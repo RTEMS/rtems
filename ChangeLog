@@ -1,5 +1,9 @@
 2003-04-11	Joel Sherrill <joel@OARcorp.com>
 
+	* VERSION: Updated to rtems-ss-20020411.
+
+2003-04-11	Joel Sherrill <joel@OARcorp.com>
+
 	* aclocal/version.m4: Updated to rtems-ss-20020411.
 
 2003-03-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
