@@ -39,7 +39,6 @@ AC_CONFIG_FILES([Makefile
 clock/Makefile
 mongoosev/Makefile
 mongoosev/duart/Makefile
-mongoosev/include/Makefile
 mongoosev/vectorisrs/Makefile
 shared/Makefile
 shared/cache/Makefile

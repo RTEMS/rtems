@@ -1,3 +1,10 @@
+2002-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mongoosev/Makefile.am: Merge-in mongoosev/include/Makefile.am.
+	Install include/mongoose-v.h.
+	* mongoosev/include/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/interrupts/installisrentries.c,
