@@ -10,7 +10,7 @@ AC_ARG_ENABLE(multilib,
   yes) multilib=yes ;;
   no)  multilib=no ;;
   *)   AC_MSG_ERROR(bad value ${enableval} for multilib option) ;;
- esac], [multilib=yes])dnl
+ esac], [multilib=no])dnl
 
 AM_CONDITIONAL(MULTILIB,test x"${multilib}" = x"yes")
 ])
