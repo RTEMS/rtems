@@ -13,8 +13,12 @@
  *  $Id$
  */
 
-#ifdef RTEMS_REGION_FREE_SHRED_PATTERN
+#ifdef RTEMS_REGION_SHRED_ON_FREE
 #include <string.h>
+
+#ifndef RTEMS_REGION_FREE_SHRED_PATTERN
+#define RTEMS_REGION_FREE_SHRED_PATTERN 0x00
+#endif
 #endif
 
 #include <rtems/system.h>
@@ -70,7 +74,7 @@ rtems_status_code rtems_region_return_segment(
 
 #ifdef RTEMS_REGION_FREE_SHRED_PATTERN
       if ( _Heap_Size_of_user_area( &the_region->Memory, segment, size ) ) {
-        memset(segment, (RTEMS_REGION_FREE_SHRED_BYTE & 0xFF), size);
+        memset(segment, (RTEMS_REGION_FREE_SHRED_PATTERN & 0xFF), size);
       } else {
         _Thread_Enable_dispatch();
         return RTEMS_INVALID_ADDRESS;
