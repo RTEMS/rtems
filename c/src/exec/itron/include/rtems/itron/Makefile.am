@@ -4,14 +4,14 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = config.h eventflags.h fmempool.h intr.h itronapi.h mbox.h \
+include_rtems_itrondir = $(includedir)/rtems/itron
+
+include_rtems_itron_HEADERS = config.h eventflags.h fmempool.h intr.h itronapi.h mbox.h \
     msgbuffer.h network.h object.h port.h semaphore.h sysmgmt.h task.h \
     time.h vmempool.h
 
-noinst_HEADERS = $(H_FILES)
-
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/itron/%)
+    $(include_rtems_itron_HEADERS:%=$(PROJECT_INCLUDE)/rtems/itron/%)
 
 $(PROJECT_INCLUDE)/rtems/itron:
 	@$(mkinstalldirs) $@
