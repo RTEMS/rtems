@@ -1,0 +1,56 @@
+#
+#  $Id$
+#
+
+The following are targets for the GNU tools (egcs, binutils, newlib, and gdb)
+that are for RTEMS, their object format, and status notes
+
+hppa:
+	hppa1.1-rtems		ELF
+	
+
+i386:
+	i386-rtems		ELF
+	i386-rtemself		ELF
+	i386-rtemscoff		COFF		Obsoleted
+	i386-go32-rtems		COFF		Obsoleted
+
+i960:
+	i960-rtems		COFF		Switch to ELF when possible
+	i960-rtemscoff		COFF
+	i960-rtemself		ELF		Not currently in any tools
+
+	NOTE: i960-elf is in post binutils 2.9.1 snapshots.
+
+m68k:
+	m68k-rtems		COFF		Switch to ELF when possible
+	m68k-rtemscoff		COFF
+	m68k-rtemself		ELF		Not in all tools
+
+	NOTE: m68k-elf is in post egcs 1.1.2 snapshots.
+
+mips:
+	mips*-rtems		ELF		Big endian
+	mips*el-rtems		ELF		Little endian
+
+	NOTE: Little endian configuration is not in all tools and 
+	      is untested for RTEMS itself.
+
+powerpc:
+	powerpc-rtems		ELF
+	powerpcle-rtems		ELF		Little endian
+
+	NOTE: Little endian configuration is not in all tools and 
+	      is untested for RTEMS itself.
+
+sh:
+	sh-rtems		COFF
+	sh-rtemscoff		COFF
+	sh-rtemself		ELF
+
+	NOTE:  ELF is not completely stable for SH yet.
+
+sparc:
+	sparc-rtems		ELF
+	sparc-rtemself		ELF
+	sparc-rtemsaout		A.OUT
