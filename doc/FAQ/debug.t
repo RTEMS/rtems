@@ -27,7 +27,7 @@ one free block of memory in the workspace (very likely if no task
 deletions).  Then do this:
 
 (gdb) p *(Heap_Block *)_Workspace_Area->first
-$3 = {back_flag = 1, front_flag = 68552, next = 0x1e260, previous = 0x1e25c}
+$3 = @{back_flag = 1, front_flag = 68552, next = 0x1e260, previous = 0x1e25c@}
 
 In this case, I had 68552 bytes left in the workspace.
 
@@ -36,8 +36,8 @@ In this case, I had 68552 bytes left in the workspace.
 The C heap is a region so this should work:
 
 (gdb) p *((Region_Control *)_Region_Information->local_table[1])->Memory->first
-$9 = {back_flag = 1, front_flag = 8058280, next = 0x7ea5b4,
-  previous = 0x7ea5b0}
+$9 = @{back_flag = 1, front_flag = 8058280, next = 0x7ea5b4,
+  previous = 0x7ea5b0@}
 
 In this case, the first block on the C Heap has 8,058,280 bytes left.
 
