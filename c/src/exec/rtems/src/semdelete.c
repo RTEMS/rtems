@@ -62,7 +62,7 @@
  */
 
 #if defined(RTEMS_MULTIPROCESSING)
-#define SEMAPHORE_MP_WAS_DELETED       _Semaphore_MP_Send_object_was_deleted
+#define SEMAPHORE_MP_OBJECT_WAS_DELETED _Semaphore_MP_Send_object_was_deleted
 #else
 #define SEMAPHORE_MP_OBJECT_WAS_DELETED NULL
 #endif
