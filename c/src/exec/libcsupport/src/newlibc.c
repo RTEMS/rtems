@@ -35,6 +35,7 @@
 #include <string.h>             /* for memset() */
 
 #include <sys/reent.h>          /* for extern of _REENT (aka _impure_ptr) */
+#include <errno.h>
 
 /*
  *  NOTE: When using RTEMS fake stat, fstat, and isatty, all output
@@ -289,6 +290,14 @@ libc_init(int reentrant)
     }
 }
 
+/*
+ *  Routines required by the gnat runtime.
+ */
+
+int get_errno()
+{
+  return errno;
+}
 
 /*
  *  Function:   _exit
@@ -338,19 +347,30 @@ void exit(int status)
  *  These are directly supported (and completely correct) in the posix api.
  */
 
-#ifndef RTEMS_POSIX_API
-
-#include <assert.h>
+#if !defined(__RTEMS_POSIX_API__)
 
 pid_t __getpid(void)
 {
-  assert( 0 );
   return 0;
 }
+#endif
+
+#if !defined(__RTEMS_POSIX_API__) && !defined(__GO32__)
+pid_t getpid(void)
+{
+  return __getpid();
+}
+#endif
+
+#if !defined(__RTEMS_POSIX_API__) && !defined(__GO32__)
+int kill( pid_t pid, int sig )
+{
+  return 0;
+}
+#endif
 
 int __kill( pid_t pid, int sig )
 {
-  assert( 0 );
   return 0;
 }
 
@@ -379,6 +399,5 @@ unsigned int sleep(
   return 0;
 }
 
-#endif
 
 #endif
