@@ -1,3 +1,11 @@
+2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add $(dirstamp) to preinstallation rules.
+
+2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add $(dirstamp) to preinstallation rules.
+
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Don't use gmake rules for preinstallation.

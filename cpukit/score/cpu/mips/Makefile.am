@@ -32,32 +32,38 @@ EXTRA_DIST = cpu.c cpu_asm.S
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/asm.h: asm.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/asm.h: asm.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm.h
 
-$(PROJECT_INCLUDE)/idtcpu.h: idtcpu.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/idtcpu.h: idtcpu.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/idtcpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/idtcpu.h
 
-$(PROJECT_INCLUDE)/iregdef.h: iregdef.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/iregdef.h: iregdef.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/iregdef.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/iregdef.h
 
-$(PROJECT_INCLUDE)/rtems/score:
+$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score
+	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu.h
 
-$(PROJECT_INCLUDE)/rtems/score/mips.h: rtems/score/mips.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/mips.h: rtems/score/mips.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mips.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/mips.h
 
-$(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
 include $(top_srcdir)/../../../automake/local.am
