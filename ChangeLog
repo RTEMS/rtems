@@ -1,3 +1,7 @@
+2003-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/local.am, automake/host.am: Remove "debug".
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
