@@ -35,8 +35,14 @@ unsigned int alarm(
 
     case WATCHDOG_ACTIVE:
     case WATCHDOG_REMOVE_IT:
+      /*
+       *  The stop_time and start_time fields are snapshots of ticks since
+       *  boot.  Since alarm() is dealing in seconds, we must account for
+       *  this.
+       */
+
       remaining = the_timer->initial -
-                  (the_timer->stop_time - the_timer->start_time);
+       ((the_timer->stop_time - the_timer->start_time) / _TOD_Ticks_per_second);
       break;
   }
 
