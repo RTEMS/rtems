@@ -23,7 +23,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 
         .seg    "text"
         /*
