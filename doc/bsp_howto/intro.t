@@ -26,9 +26,9 @@ are provided for the following topics:
 
 @itemize @bullet
 
-@item Clock Driver
-
 @item Console Driver
+
+@item Clock Driver
 
 @item Timer Driver
 
@@ -54,5 +54,4 @@ BSP, this manual did not exist.  He wrote the initial version of
 this manual as the result of his experiences.  At that time, this
 document was viewed internally as the most important "missing manual"
 in the RTEMS documentation set.
-
 
