@@ -564,12 +564,18 @@ struct {								\
  * They bogusly assumes that all queue heads look alike.
  */
 
-struct quehead {
-	struct quehead *qh_link;
-	struct quehead *qh_rlink;
-};
 
 #ifdef	__GNUC__
+
+struct quehead {
+#if defined(__arm__)
+    struct quehead *qh_link  __attribute__((packed));
+    struct quehead *qh_rlink __attribute__((packed));
+#else /* !defined(__arm__)) */
+    struct quehead *qh_link;
+    struct quehead *qh_rlink;
+#endif 
+};
 
 static __inline void
 insque(void *a, void *b)

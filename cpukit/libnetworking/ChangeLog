@@ -1,3 +1,7 @@
+2003-01-03	Jitendra Vegiraju <jvegiraju@netscape.net>
+
+	* sys/queue.h: Fix alignment problem on ARM.
+
 2002-11-26	Chris Johns <cjohns@cybertec.com.au>
 
 	* Makefile.am: Added sys/linker_set.h
