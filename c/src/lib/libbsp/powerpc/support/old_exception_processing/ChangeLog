@@ -1,3 +1,7 @@
+2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* cpu.c: Add _PPC_MSR_DISABLE_MASK.
+
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am, configure.ac: Remove (Unused).

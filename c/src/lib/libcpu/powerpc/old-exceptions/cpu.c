@@ -859,3 +859,5 @@ boolean _ISR_Is_in_progress( void )
 {
   return (_ISR_Nest_level != 0);
 }
+
+const unsigned int _PPC_MSR_DISABLE_MASK = PPC_MSR_DISABLE_MASK;
