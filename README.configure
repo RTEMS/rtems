@@ -23,7 +23,7 @@ RTEMS-specific option are supported:
         --enable-cpp
         --enable-gcc28
         --enable-gmake-print-directory
-        --enable-libcdir=<DIRECTORY>
+        --enable-libcdir=<DIRECTORY>      (do not use gcc 2.8 is enabled)
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 
 By default, the RTEMS posix interface is built for targets that support
@@ -45,6 +45,8 @@ compatible with gcc 2.7.2.2.  This requires that the user specify
 the location of the Standard C Library with the --enable-libcdir
 option.  If using a gcc which supports the -specs option, then
 the --enable-gcc28 option may be used to enable this feature.
+You should use the --enable-gcc28 option when using either the
+egcs source tree or testgcc snapshots.
 
 By default, all bsps for a target are built. There are  two ways of
 changing this:
