@@ -1,3 +1,8 @@
+2004-04-16	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* rtems/score/i386.h: Rename i386_swap_U* to i386_swap_u* (API
+	consistency with other ports).
+
 2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* cpu_asm.S: Convert asm comments to C-comments to prevent gcc-3.4.0pre

@@ -115,7 +115,7 @@ extern "C" {
  *  It must be static so it can be referenced indirectly.
  */
 
-static inline unsigned int i386_swap_U32(
+static inline unsigned int i386_swap_u32(
   unsigned int value
 )
 {
@@ -131,7 +131,7 @@ static inline unsigned int i386_swap_U32(
   return( lout );
 }
 
-static inline unsigned int i386_swap_U16(
+static inline unsigned int i386_swap_u16(
   unsigned int value
 )
 {
@@ -221,8 +221,8 @@ void *i386_Physical_to_logical(
 #define get_fs()   i386_get_fs()
 #define get_gs()   i386_get_gs()
  
-#define CPU_swap_u32( _value )  i386_swap_U32( _value )
-#define CPU_swap_u16( _value )  i386_swap_U16( _value )
+#define CPU_swap_u32( _value )  i386_swap_u32( _value )
+#define CPU_swap_u16( _value )  i386_swap_u16( _value )
  
 /* i80x86 I/O instructions */
  
