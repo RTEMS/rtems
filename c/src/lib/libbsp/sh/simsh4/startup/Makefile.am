@@ -21,7 +21,9 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
+bsplib_DATA = linkcmds
+
+$(PROJECT_RELEASE)/lib/linkcmds: linkcmds linkcmds-le
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_RELEASE)/lib/linkcmds-le: linkcmds-le
