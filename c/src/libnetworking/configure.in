@@ -49,6 +49,7 @@ pppd/Makefile
 modem/Makefile
 rtems/Makefile
 rtems_servers/Makefile
+rtems_telnetd/Makefile
 rtems_webserver/Makefile
 wrapup/Makefile
 )

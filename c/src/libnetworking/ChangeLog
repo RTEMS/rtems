@@ -1,3 +1,20 @@
+2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
+
+	* Makefile.am, configure.in, rtems_servers/Makefile.am,
+	rtems_servers/telnetd.c, rtems_servers/telnetd.h,
+	rtems_telnetd/Makefile.am, rtems_telnetd/README, rtems_telnetd/icmds.c,
+	rtems_telnetd/pty.c, rtems_telnetd/pty.h, rtems_telnetd/telnetd.c,
+	rtems_telnetd/telnetd.h, wrapup/Makefile.am:
+	  - pty and telnetd have a new subdir rtems_telnetd to avoid
+	    the side effect when ftpd change.
+	  - the tcp/ip stats have been implemented into icmds.c and
+	    started when telnetd daemon is started.
+	* rtems_servers/telnetd.c, rtems_servers/telnetd.h: Removed.
+	* rtems_telnetd: New directory.
+	* rtems_telnetd/Makefile.am, rtems_telnetd/README,
+	rtems_telnetd/icmds.c, rtems_telnetd/pty.c, rtems_telnetd/pty.h,
+	rtems_telnetd/telnetd.c, rtems_telnetd/telnetd.h: New files.
+
 2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems_servers/Makefile.am: Deleted blank lines.
