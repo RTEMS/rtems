@@ -383,6 +383,11 @@ RTEMS_USE_MACROS=yes,RTEMS_USE_MACROS=no)
 
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
 
+#
+#  Target configurations are listed in alphabetical order.  
+#  The BSPs for a target configuration are also listed in alphabetical order.
+#
+
 case "${target}" in
   a29k-rtems*)
 	rtems_bsp=portsw
@@ -412,8 +417,8 @@ case "${target}" in
        	makefiles=$i960_mk
 	;;
   m68k-rtems*)
-	rtems_bsp="efi332 gen68302 idp mvme147 mvme162 \
-           dmv152 efi68k gen68360 mvme136 mvme147s"
+	rtems_bsp="dmv152 efi332 efi68k gen68302 gen68360 idp \
+                   mvme136 mvme147 mvme147s mvme162"
        	makefiles=$m68k_mk
 	;;
   mips64orion-rtems*)

@@ -1063,6 +1063,11 @@ fi
 
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
 
+#
+#  Target configurations are listed in alphabetical order.  
+#  The BSPs for a target configuration are also listed in alphabetical order.
+#
+
 case "${target}" in
   a29k-rtems*)
 	rtems_bsp=portsw
@@ -1092,8 +1097,8 @@ case "${target}" in
        	makefiles=$i960_mk
 	;;
   m68k-rtems*)
-	rtems_bsp="efi332 gen68302 idp mvme147 mvme162 \
-           dmv152 efi68k gen68360 mvme136 mvme147s"
+	rtems_bsp="dmv152 efi332 efi68k gen68302 gen68360 idp \
+                   mvme136 mvme147 mvme147s mvme162"
        	makefiles=$m68k_mk
 	;;
   mips64orion-rtems*)
@@ -1152,7 +1157,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1156: checking for $ac_word" >&5
+echo "configure:1161: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AWK'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1181,7 +1186,7 @@ test -n "$AWK" && break
 done
 
 echo $ac_n "checking whether ln -s works""... $ac_c" 1>&6
-echo "configure:1185: checking whether ln -s works" >&5
+echo "configure:1190: checking whether ln -s works" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_LN_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
