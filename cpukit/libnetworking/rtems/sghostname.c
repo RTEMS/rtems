@@ -15,7 +15,7 @@
 static char *rtems_hostname;
 
 int
-gethostname (char *name, int namelen)
+gethostname (char *name, size_t namelen)
 {
 	char *cp = rtems_hostname;
 
@@ -26,7 +26,7 @@ gethostname (char *name, int namelen)
 }
 
 int
-sethostname (char *name, int namelen)
+sethostname (char *name, size_t namelen)
 {
 	char *old, *new;
 

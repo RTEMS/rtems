@@ -14,7 +14,7 @@
 #if defined(__rtems__)
 u_int16_t _getshort(const u_char *src);
 u_int32_t _getlong(const u_char *src);
-int gethostname (char *name, int namelen);
-int sethostname (char *name, int namelen);
+int gethostname (char *name, size_t namelen);
+int sethostname (char *name, size_t namelen);
 int issetugid (void);
 #endif

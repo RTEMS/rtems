@@ -166,7 +166,7 @@ extern int rtems_bsdnet_nameserver_count;
 /*
  * Some extra prototypes
  */
-int sethostname (char *name, int namelen);
+int sethostname (char *name, size_t namelen);
 void domaininit (void *);
 void ifinit (void *);
 void ipintr (void);
@@ -174,5 +174,19 @@ void arpintr (void);
 void bootpc_init(void);
 int socket (int, int, int);
 int ioctl (int, unsigned long, ...);
+struct socket *rtems_bsdnet_fdToSocket (int fd);
+int rtems_bsdnet_makeFdForSocket (struct socket *);
+
+/*
+ * Events used by networking routines.
+ * Everything will break if the application
+ * tries to use these events or if the `sleep'
+ * events are equal to any of the NETISR * events.
+ */
+#define SBWAIT_EVENT   RTEMS_EVENT_24
+#define SOSLEEP_EVENT  RTEMS_EVENT_25
+#define NETISR_IP_EVENT                (1 << NETISR_IP)
+#define NETISR_ARP_EVENT       (1 << NETISR_ARP)
+#define NETISR_EVENTS  (NETISR_IP_EVENT|NETISR_ARP_EVENT)
 
 #endif /* _RTEMS_BSDNET_INTERNAL_H_ */

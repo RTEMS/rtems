@@ -13,6 +13,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <malloc.h>
 #include <string.h>
@@ -24,6 +25,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
+#ifndef set_errno_and_return_minus_one
+#define set_errno_and_return_minus_one( _error ) \
+  do { errno = (_error); return -1; } while(0)
+#endif
+
 
 /*
  * Range of UDP ports to try
@@ -136,6 +143,50 @@ static rtems_id tftp_mutex;
 static int nStreams;
 static struct tftpStream ** volatile tftpStreams;
 
+typedef struct {
+   rtems_id                             tftp_mutex;
+   int                                  nStreams;
+   struct tftpStream ** volatile        tftpStreams;
+  rtems_filesystem_mount_table_entry_t *mt_entry;  
+}  tftp_fs_info;
+
+int rtems_tftp_mount_me(
+  rtems_filesystem_mount_table_entry_t *temp_mt_entry
+)
+{
+  tftp_fs_info      *fs_info;
+  rtems_status_code  sc;
+
+  /*
+   * Allocate stuff for this file system.
+   */
+
+  fs_info = calloc( 1, sizeof( tftp_fs_info ));
+  if ( !fs_info )
+    set_errno_and_return_minus_one( ENOMEM );
+
+  temp_mt_entry->fs_info                = fs_info;
+  temp_mt_entry->mt_fs_root.node_access = fs_info;
+
+  
+  sc = rtems_semaphore_create (
+    rtems_build_name('T', 'F', 'T', 'P'),
+    1,
+    RTEMS_FIFO |
+    RTEMS_BINARY_SEMAPHORE |
+    RTEMS_NO_INHERIT_PRIORITY |
+    RTEMS_NO_PRIORITY_CEILING |
+    RTEMS_LOCAL,
+    0,
+    &fs_info->tftp_mutex
+  );
+
+  if (sc != RTEMS_SUCCESSFUL)
+    set_errno_and_return_minus_one( ENOMEM ); /* ??? */
+
+  return 0;
+}
+
 /*
  * Initialize the TFTP driver
  */
@@ -147,19 +198,7 @@ rtems_device_driver rtems_tftp_initialize(
   void *pargp
 )
 {
-	rtems_status_code sc;
 
-	sc = rtems_semaphore_create (rtems_build_name('T', 'F', 'T', 'P'),
-					1,
-					RTEMS_FIFO |
-						RTEMS_BINARY_SEMAPHORE |
-						RTEMS_NO_INHERIT_PRIORITY |
-						RTEMS_NO_PRIORITY_CEILING |
-						RTEMS_LOCAL,
-					0,
-					&tftp_mutex);
-	if (sc != RTEMS_SUCCESSFUL)
-		return sc;
 /* XXX change to a mount */
 	rtems_io_register_name (TFTP_PATHNAME_PREFIX, major, minor);
 	return RTEMS_SUCCESSFUL;
@@ -293,39 +332,44 @@ releaseStream (int s)
 	rtems_semaphore_release (tftp_mutex);
 }
 
+int rtems_tftp_evaluate_for_make(
+   const char                         *path,       /* IN     */
+   rtems_filesystem_location_info_t   *pathloc,    /* IN/OUT */
+   const char                        **name        /* OUT    */
+)
+{  
+    set_errno_and_return_minus_one( EIO );    
+}
 /*
- * Open a TFTP stream
+ * XXX - Fix return values.
  */
-rtems_device_driver rtems_tftp_open(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
+
+int TFTP_eval_path(  
+  const char                        *pathname,     /* IN     */
+  int                                flags,        /* IN     */
+  rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 )
 {
-	rtems_libio_open_close_args_t *ap = pargp;
-	struct tftpStream *tp;
-	int retryCount;
 	rtems_unsigned32 farAddress;
-	int s;
 	int len;
-	char *cp1, *cp2;
-	char *remoteFilename;
-	rtems_interval now;
-	rtems_status_code sc;
+	const char *remoteFilename;
 
-/* XXX change to eval_path/open */
-	/*
-	 * Read-only for now
-	 */
-	if (ap->flags & LIBIO_FLAGS_WRITE)
-		return RTEMS_NOT_IMPLEMENTED;
+  tftp_fs_info      *fs_info;
+  const char *cp1, *cp2;
+
+  fs_info = pathloc->node_access;
 
 	/*
 	 * Pick apart the name into a host:pathname pair
 	 */
-	if (strlen (ap->iop->pathname) <= strlen (TFTP_PATHNAME_PREFIX))
-		return RTEMS_INVALID_NAME;
-	cp2 = ap->iop->pathname + strlen (TFTP_PATHNAME_PREFIX);
+	/*
+	 * XXX - I think this is handled by the caller of 
+	 *       the evaluate routine. ? Am I starting at the right
+	 *       place?
+	 */
+
+        cp2 = pathname+1;
+
 	if (*cp2 == '/') {
 		farAddress = rtems_bsdnet_bootp_server_address.s_addr;
 	}
@@ -354,6 +398,37 @@ rtems_device_driver rtems_tftp_open(
 	remoteFilename = cp2;
 	if (strlen (remoteFilename) > (TFTP_BUFSIZE - 10))
 		return RTEMS_INVALID_NAME;
+
+  return 0;
+}
+
+/*
+ * Open a TFTP stream
+ */
+rtems_device_driver rtems_tftp_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
+	rtems_libio_open_close_args_t *ap = pargp;
+	struct tftpStream *tp;
+	int retryCount;
+	rtems_unsigned32 farAddress = 0; /* XXX - node parameter */
+	int s;
+	int len;
+	char *cp1, *cp2;
+	char *remoteFilename = NULL; /* XXX - node parameter */
+	rtems_interval now;
+	rtems_status_code sc;
+
+	/*
+	 * Read-only for now
+	 */
+	/* XXX - Move to the open routine */
+	if (ap->flags & LIBIO_FLAGS_WRITE)
+		return RTEMS_NOT_IMPLEMENTED;
+
 
 	/*
 	 * Find a free stream
