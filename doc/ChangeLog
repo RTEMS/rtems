@@ -1,5 +1,9 @@
 2001-01-17	Joel Sherrill <joel@OARcorp.com>
 
+	* configure.in: Changed the version to eng-20010816b.
+
+2001-01-17	Joel Sherrill <joel@OARcorp.com>
+
 	* SUPPORT, LICENSE: New files.
 	* Numerous files touched as part of merging the 4.5 branch
 	onto the mainline development trunk and ensuring that the
