@@ -20,4 +20,4 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = motorola.c motorola.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

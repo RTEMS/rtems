@@ -23,4 +23,4 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = i8259.c irq.c irq_asm.S irq_init.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

@@ -5,4 +5,4 @@
 
 noinst_HEADERS = nvram.h bsp.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

@@ -20,4 +20,4 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = pci.c pci.h detect_raven_bridge.c pcifinddevice.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

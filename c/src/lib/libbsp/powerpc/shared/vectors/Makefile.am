@@ -22,4 +22,4 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = vectors.S vectors.h vectors_init.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

@@ -10,4 +10,4 @@ C_FILES = vmeconfig.c
 
 EXTRA_DIST = vmeconfig.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

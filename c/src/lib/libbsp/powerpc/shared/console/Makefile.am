@@ -21,4 +21,4 @@ all-local: $(PREINSTALL_FILES)
 EXTRA_DIST = console.c inch.c polled_io.c uart.c \
     reboot.c console.inl
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am
