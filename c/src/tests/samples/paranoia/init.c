@@ -23,6 +23,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <stdio.h>
+#include <stdlib.h> /* exit */
 
 extern int paranoia(int, char **);
 

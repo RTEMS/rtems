@@ -24,6 +24,7 @@
 
 #include "system.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 rtems_id task_id[MAX_TASKS];
 

@@ -1,3 +1,14 @@
+2002-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* base_sp/apptask.c: Include <stdlib.h>.
+	* hello/init.c: Ditto.
+	* paranoia/init.c: Ditto.
+	* ticker/tasks.c: Ditto.
+	* unlimited/init.c: Ditto.
+	* unlimited/test1.c: Ditto.
+	* unlimited/test2.c: Ditto.
+	* unlimited/test3.c: Ditto.
+
 2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove ENABLE_GCC28.

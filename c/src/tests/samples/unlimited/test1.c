@@ -20,6 +20,7 @@
 #include "system.h"
 #include <rtems/score/object.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 void test1()
 {

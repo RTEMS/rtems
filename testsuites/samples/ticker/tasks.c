@@ -19,6 +19,7 @@
 
 #include "system.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 rtems_task Test_task(
   rtems_task_argument unused

@@ -23,6 +23,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 rtems_task Init(
   rtems_task_argument ignored
