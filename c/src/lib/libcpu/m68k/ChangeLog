@@ -1,19 +1,17 @@
 2004-01-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* m68040/Makefile.am: Merge-in m68040/fpsp/Makefile.am.
-	Use automake-compilation rules.
+	* m68040/Makefile.am: Merge-in m68040/fpsp/Makefile.am. Use
+	automake-compilation rules.
 	* m68040/fpsp/Makefile.am: Remove.
 	* shared/Makefile.am: Use automake compilation rules.
 	* Makefile.am: Reflect changes above. Remove CPU_SUBDIR.
-	* configure.ac: Require automake >= 1.8.2.
-	Add subdir-objects to AUTOMAKE_OPTIONS.
-	Remove CHECK_CUSTOM_BSP.
-	Reflect changes above.
+	* configure.ac: Require automake >= 1.8.2. Add subdir-objects to
+	AUTOMAKE_OPTIONS. Remove CHECK_CUSTOM_BSP. Reflect changes above.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* shared/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
-	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* shared/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -23,16 +21,10 @@
 
 	* shared/cache/Makefile.am: Remove.
 	* shared/misc/Makefile.am: Remove.
-	* shared/Makefile.am: Merge-in the Makefile.ams above.
-	Eliminate VPATH.
+	* shared/Makefile.am: Merge-in the Makefile.ams above. Eliminate VPATH.
 	* configure.ac: Reflect changes above.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* shared/cache/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* shared/cache/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -90,17 +82,7 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
-
-2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* m68040/fpsp/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	Eliminate *_O_FILES.
-	* shared/cache/Makefile.am: Ditto.
-	* shared/misc/Makefile.am: Ditto.
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -112,58 +94,60 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-08-21	Joel Sherrill <joel@OARcorp.com>
 
-	* configure.ac, shared/misc/Makefile.am: PR217 required that the
-	idle task be moved to libcpu so it could be more acutely aware of
-	the CPU model.  This file was modified to pick up the idle task
-	from there.
+	* configure.ac, shared/misc/Makefile.am: PR217 required that the idle
+	task be moved to libcpu so it could be more acutely aware of the CPU
+	model.  This file was modified to pick up the idle task from there.
 	* shared/misc/m68kidle.c: New file.
 
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* m68040/fpsp/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* mcf5206/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* mcf5206/console/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* mcf5206/mbus/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* mcf5206/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* shared/cache/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* shared/misc/Makefile.am: Use .$(OBJEXT) instead of .o.
-
-2002-08-06	Joel Sherrill <joel@OARcorp.com>
-
-	* configure.ac: Be more specific about looking at CPU32 and CPU32+
-	CPU model names so we can turn on the best compile of memcpy.c.
+	* mcf5206/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* mcf5206/console/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* mcf5206/mbus/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* mcf5206/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* shared/cache/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* shared/misc/Makefile.am: Use .$(OBJEXT) instead of .o.
 
 2002-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Replace mcpu32 by mcpu32p conditional.
 	* share/misc/Makefile.am: Fix AM_CPPFLAGS bug.
 
+2002-08-06	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac: Be more specific about looking at CPU32 and CPU32+ CPU
+	model names so we can turn on the best compile of memcpy.c.
+
 2002-08-05	Joel Sherrill <joel@OARcorp.com>
 
-	* Per PR260 eliminate use of make-target-options.  This impacted
-	RTEMS allowing a distinction between the CPU32 and CPU32+ in the
-	SuperCore and required that the m68k optimized memcpy be moved
-	to libcpu.
+	* Per PR260 eliminate use of make-target-options.  This impacted RTEMS
+	allowing a distinction between the CPU32 and CPU32+ in the SuperCore and
+	required that the m68k optimized memcpy be moved to libcpu.
 	* shared/misc/memcpy.c: Moved from score/cpu/m68k.
 	* configure.ac, shared/Makefile.am: Modified to reflect new directory.
 	* shared/misc/.cvsignore, shared/misc/Makefile.am: New file.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* m68040/fpsp/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* m68040/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* shared/cache/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* shared/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* m68040/fpsp/Makefile.am: Don't include @RTEMS_BSP@.cfg. Eliminate
+	*_O_FILES.
+	* shared/cache/Makefile.am: Ditto.
+	* shared/misc/Makefile.am: Ditto.
 
 2001-10-26	Joel Sherrill <joel@OARcorp.com>
 
@@ -182,8 +166,8 @@
 
 2001-03-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* m68040/fpsp/Makefile.am, shared/cache/Makefile.am:
-	Apply include_*HEADERS instead of H_FILES.
+	* m68040/fpsp/Makefile.am, shared/cache/Makefile.am: Apply
+	include_*HEADERS instead of H_FILES.
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -195,14 +179,14 @@
 
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
+	canonicalization.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* m68040/fpsp/Makefile.am, shared/cache/Makefile.am: Include
-	compile.am
+	* m68040/fpsp/Makefile.am, shared/cache/Makefile.am: Include compile.am.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+

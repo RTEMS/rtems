@@ -6,15 +6,12 @@
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
-	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -90,23 +87,19 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* clock/Makefile.am: Eliminate *_O_FILES.
-	Don't include @RTEMS_BSP@.cfg. 
+	* clock/Makefile.am: Eliminate *_O_FILES. Don't include @RTEMS_BSP@.cfg.
 	* console/Makefile.am: Likewise.
 	* mbus/Makefile.am: Likewise.
 	* timer/Makefile.am: Likewise.
 
 2003-01-03	Victor V. Vengerov <vvv@oktet.ru>
 
-	* mbus/mcfmbus.c: Per PR323, move the mbus_send command on line 232
-	to after the state has been set. 
+	* mbus/mcfmbus.c: Per PR323, move the mbus_send command on line 232 to
+	after the state has been set.
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -118,14 +111,11 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
@@ -136,8 +126,7 @@
 
 2001-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* include/Makefile.am: Fix TMPINSTALL_FILES to make automake-1.5
-	happy.
+	* include/Makefile.am: Fix TMPINSTALL_FILES to make automake-1.5 happy.
 
 2001-10-29	Joel Sherrill <joel@OARcorp.com>
 
