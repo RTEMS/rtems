@@ -310,7 +310,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 #if ( M68K_HAS_BFFFO == 1 )
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  asm volatile( "bfffo (%1),#0,#16,%0" : "=d" (_output), "=a" (&_value));
+  asm volatile( "bfffo (%1),#0,#16,%0" : "=d" (_output), "a" (&_value));
 
 #else
 
