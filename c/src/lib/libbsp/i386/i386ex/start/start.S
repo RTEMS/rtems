@@ -98,6 +98,8 @@ SYM(reset):
 	
 	
 	.section .initial
+	nop     /* nops required to correct 32 bit jmp relative */
+	nop     /*    offset from .reset section */
 	
 /*
  * Enable access to peripheral register at expanded I/O addresses
