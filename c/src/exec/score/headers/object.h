@@ -38,7 +38,7 @@ typedef void * Objects_Name;
  *  NOTE:  Must be a power of 2.  Matches the name manipulation routines.
  */
 
-#define OBJECTS_NAME_ALIGNMENT     4
+#define OBJECTS_NAME_ALIGNMENT     sizeof( unsigned32 )
 
 /*
  *  Functions which compare names are prototyped like this.
@@ -365,7 +365,7 @@ Objects_Control *_Objects_Get (
 Objects_Control *_Objects_Get_next(
     Objects_Information *information,
     Objects_Id           id,
-    unsigned32          *location_p,
+    Objects_Locations   *location_p,
     Objects_Id          *next_id_p
 );
 
