@@ -49,9 +49,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
 
 include_sysdir = $(includedir)/sys
 
-if !HAS_NETWORKING
-NETWORKING_H_FILES = sys/ioctl.h
-endif
+NETWORKING_H_FILES = sys/ioctl.h sys/sockio.h sys/filio.h
 
 if NEWLIB
 NEWLIB_H_FILES = sys/termios.h sys/cdefs.h
