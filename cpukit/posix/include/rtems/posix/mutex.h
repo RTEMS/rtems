@@ -108,6 +108,18 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
   POSIX_Mutex_Control *the_mutex
 );
 
+/*
+ *  _POSIX_Mutex_From_core_mutex_status
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns a POSIX error code for each RTEMS CORE error message.
+ */
+ 
+int _POSIX_Mutex_From_core_mutex_status(
+  CORE_mutex_Status  status
+);
+
 #include <rtems/posix/mutex.inl>
 #include <rtems/posix/mutexmp.h>
 
