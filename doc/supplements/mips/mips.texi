@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename mips
+@setfilename mips.info
 @setcontentsaftertitlepage
 @syncodeindex vr fn
 @synindex ky cp
