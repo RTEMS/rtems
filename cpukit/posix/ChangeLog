@@ -1,3 +1,7 @@
+2003-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Corrected entry for sysconf.c which did not include PR.
+
 2003-01-03	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* src/mqueueopen.c: Actually open the message queue descriptor
@@ -36,7 +40,8 @@
 2002-11-29	Eric Norum <eric.norum@usask.ca>
 
 	* src/sysconf.c: Add support for _SC_GETPW_R_SIZE_MAX.
-                     Return error rather than panic if argument is unsupported.
+        Return error rather than panic if argument is unsupported.
+	This was tracked as PR316.
 
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
