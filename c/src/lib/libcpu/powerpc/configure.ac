@@ -36,19 +36,6 @@ AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "mpc750" \
 || test "$RTEMS_CPU_MODEL" = "mpc8260" \
 || test "$RTEMS_CPU_MODEL" = "mpc8xx" )
 
-## there are no 601 or 602 BSPs currently.  The 505 BSPs are in user land.
-AM_CONDITIONAL(new_exception_processing, \
-test "$RTEMS_CPU_MODEL" = "mpc860" )
-
-## The goal is to get rid of the old exception processing code but
-## but all BSPs in the distribution must be migrated to the new model
-## first.
-AM_CONDITIONAL(old_exception_processing, \
-test "$RTEMS_CPU_MODEL" = "ppc403" || \
-test "$RTEMS_CPU_MODEL" = "ppc405" || \
-test "$RTEMS_CPU_MODEL" = "mpc505" \
-)
-
 ## test on CPU type
 AM_CONDITIONAL(mpc505, test "$RTEMS_CPU_MODEL" = "mpc505")
 AM_CONDITIONAL(mpc6xx, test "$RTEMS_CPU_MODEL" = "mpc6xx" \
@@ -97,8 +84,6 @@ mpc8260/timer/Makefile
 mpc8260/exceptions/Makefile
 mpc8260/mmu/Makefile
 mpc8260/cpm/Makefile
-new_exception_processing/Makefile
-old_exception_processing/Makefile
 shared/Makefile
 shared/include/Makefile
 shared/src/Makefile
