@@ -1,3 +1,7 @@
+2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_PROJECT_ROOT.
+
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use AC_CONFIG_AUX_DIR(../../../..).

@@ -28,8 +28,6 @@ RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AM_CONDITIONAL(rpc_not_supported, test "$RTEMS_CPU" = "c4x")
 
-RTEMS_PROJECT_ROOT
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 include/Makefile

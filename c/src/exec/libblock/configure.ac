@@ -21,8 +21,6 @@ RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 AC_PROG_RANLIB
 
-RTEMS_PROJECT_ROOT
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 src/Makefile
