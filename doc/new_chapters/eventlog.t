@@ -443,7 +443,7 @@ and an unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EACCES
-Search permission is denied on a component of the @cdoe{path} prefix,
+Search permission is denied on a component of the @code{path} prefix,
 or the log file exists and read permission is denied.
 
 @item  EINTR
