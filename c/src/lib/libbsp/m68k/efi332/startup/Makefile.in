@@ -19,8 +19,13 @@ C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES=
 
-SRCS=$(C_FILES) $(H_FILES)
-OBJS=$(C_O_FILES)
+# Assembly source names, if any, go here -- minus the .S
+S_PIECES= except_vect_332_ROM
+S_FILES=$(S_PIECES:%=%.S)
+S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
+
+SRCS=$(C_FILES) $(H_FILES) $(S_FILES)
+OBJS=$(C_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
@@ -52,6 +57,8 @@ ${PGM}: ${SRCS} ${OBJS}
 
 all:	${ARCH} $(SRCS) $(PGM)
 	$(INSTALL_CHANGE) $(srcdir)/linkcmds ${PROJECT_RELEASE}/lib
+	$(INSTALL_CHANGE) $(srcdir)/linkcmds_ROM ${PROJECT_RELEASE}/lib
+	$(INSTALL_CHANGE) ${ARCH}/except_vect_332_ROM.o ${PROJECT_RELEASE}/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 

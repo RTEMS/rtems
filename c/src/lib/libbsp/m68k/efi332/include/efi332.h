@@ -43,12 +43,10 @@
 
 /*
  *  This prototype really should have the noreturn attribute but
- *  that causes a warning since it appears that the routine does
- *  return.
- *
- *   void reboot(void) __attribute__ ((noreturn));
+ *  that causes a warning. Not sure how to fix that. 
  */
-
-void reboot(void);
+/*   static void reboot(void) __attribute__ ((noreturn)); */
+static void reboot(void);
+__inline__ static void reboot() {asm("trap #15");}
 
 #endif /* _EFI332_H_ */

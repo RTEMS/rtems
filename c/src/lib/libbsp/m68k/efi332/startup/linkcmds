@@ -32,10 +32,10 @@ __DYNAMIC  =  0;
 
 MEMORY
 {
-  ram     : ORIGIN = 0x80000, LENGTH = 256K
+  ram     : ORIGIN = 0x80000, LENGTH = 512K
 }
 
-__end_of_ram = 0xc0000;
+__end_of_ram = 0x100000;
 _copy_data_from_rom = 0;
 
 /*
@@ -48,8 +48,10 @@ SECTIONS
     CREATE_OBJECT_SYMBOLS
     text_start = .;
     _text_start = .;
+
     *(.text)
     . = ALIGN (16);
+
     *(.eh_fram)
     . = ALIGN (16);
 
@@ -68,6 +70,10 @@ SECTIONS
     *(.lit)
     *(.shdata)
     _endtext = .;
+  } > ram
+  .gcc_exc :
+  {
+    *(.gcc_exc)
   } > ram
   .data :
   {

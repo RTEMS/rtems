@@ -40,10 +40,10 @@ __DYNAMIC  =  0;
 MEMORY
 {
   rom     : ORIGIN = 0x00000, LENGTH = 256K
-  ram     : ORIGIN = 0x80000, LENGTH = 256K
+  ram     : ORIGIN = 0x80000, LENGTH = 512K
 }
 
-__end_of_ram = 0xc0000;
+__end_of_ram = 0x100000;
 _copy_data_from_rom = 1;
 
 /*
@@ -57,6 +57,11 @@ SECTIONS
     text_start = .;
     _text_start = .;
     *(.text)
+    . = ALIGN (16);
+
+    *(.eh_fram)
+    . = ALIGN (16);
+
     etext = ALIGN(0x10);
     _etext = .;
     __CTOR_LIST__ = .;
@@ -73,8 +78,12 @@ SECTIONS
     *(.shdata)
     _endtext = .;
   } > rom
-  .data :
+  .gcc_exc :
   AT ( ADDR(.text) + SIZEOF( .text ) )
+  {
+    *(.gcc_exc)
+  } > ram
+  .data :
   {
     data_start = .;
     _data_start = .;

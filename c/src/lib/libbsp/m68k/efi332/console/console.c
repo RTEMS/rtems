@@ -328,7 +328,7 @@ rtems_device_driver console_read(
   rtems_libio_rw_args_t *rw_args;
   char *buffer;
   int maximum;
-  int count = 0;
+  int count;
  
   rw_args = (rtems_libio_rw_args_t *) arg;
  
