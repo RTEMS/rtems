@@ -42,7 +42,8 @@ void _Init68360 (void)
 {
 	int i;
 	m68k_isr_entry *vbr;
-	extern void _CopyDataClearBSSAndStart (void);
+	unsigned long ramSize;
+	extern void _CopyDataClearBSSAndStart (unsigned long ramSize);
 
 #if (defined (__mc68040__))
 	/*
@@ -138,6 +139,7 @@ void _Init68360 (void)
 	 *	Wait for chips to power up
 	 *	Perform 8 read cycles
 	 */
+	ramSize = 1 * 1024 * 1024;
 	m360.memc[1].or = M360_MEMC_OR_TCYC(0) |
 					M360_MEMC_OR_1MB |
 					M360_MEMC_OR_DRAM;
@@ -275,6 +277,7 @@ void _Init68360 (void)
 	/*
 	 * Step 12: Initialize the system RAM
 	 */
+	ramSize = 2 * 1024 * 1024;
 	/* first bank 1MByte DRAM */
 	m360.memc[1].or = M360_MEMC_OR_TCYC(2) | M360_MEMC_OR_1MB |
 					M360_MEMC_OR_PGME | M360_MEMC_OR_DRAM;
@@ -334,7 +337,7 @@ void _Init68360 (void)
 	 *	Disable timers during FREEZE
 	 *	Enable bus monitor during FREEZE
 	 *	BCLRO* arbitration level 3
-         */
+	 */
 
 #elif (defined (GEN68360_WITH_SRAM))
    /*
@@ -417,6 +420,7 @@ void _Init68360 (void)
     * 512Kx32 SRAM on CS1*
     * 0 wait states
     */
+   ramSize = 1 * 1024 * 1024;
    m360.memc[1].br = (unsigned long)&_RamBase | M360_MEMC_BR_V;
    m360.memc[1].or = M360_MEMC_OR_WAITS(0) | M360_MEMC_OR_2MB |
                                                    M360_MEMC_OR_32BIT; 
@@ -606,6 +610,12 @@ void _Init68360 (void)
 		 */
 		m360.memc[1].br |= M360_MEMC_BR_PAREN;
 	}
+	switch (m360.gmr & 0x001C0000) {
+	default:		ramSize =  4 * 1024 * 1024;	break;
+	case M360_GMR_PGS(1):	ramSize =  1 * 1024 * 1024;	break;
+	case M360_GMR_PGS(3):	ramSize =  4 * 1024 * 1024;	break;
+	case M360_GMR_PGS(5):	ramSize = 16 * 1024 * 1024;	break;
+	}
 
 	/*
 	 * Step 13: Copy  the exception vector table to system RAM
@@ -650,6 +660,8 @@ void _Init68360 (void)
 
 	/*
 	 * Copy data, clear BSS, switch stacks and call main()
+	 * Must pass ramSize as argument since the data/bss segment
+	 * may be overwritten.
 	 */
-	_CopyDataClearBSSAndStart ();
+	_CopyDataClearBSSAndStart (ramSize);
 }

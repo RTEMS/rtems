@@ -117,7 +117,7 @@ SECTIONS {
                 *(.bss)
                 *(COMMON)
                 . = ALIGN (16);
-                PROVIDE (end = .);
+                _end = .;
 
                 _HeapStart = .;
                 . += HeapSize;
