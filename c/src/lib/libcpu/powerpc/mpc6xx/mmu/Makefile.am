@@ -5,13 +5,13 @@
 
 PGM = $(ARCH)/mmu.rel
 
-C_FILES = bat.c
+C_FILES = bat.c pte121.c
 
 S_FILES = mmuAsm.S
 
 include_libcpudir = $(includedir)/libcpu
 
-include_libcpu_HEADERS = bat.h
+include_libcpu_HEADERS = bat.h pte121.h
 
 mmu_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
 
@@ -38,6 +38,6 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(mmu_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = bat.c bat.h mmuAsm.S
+EXTRA_DIST = bat.c bat.h mmuAsm.S pte121.c pte121.h
 
 include $(top_srcdir)/../../../../../automake/local.am

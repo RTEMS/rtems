@@ -28,6 +28,7 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
 AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "mpc750" \
+|| test "$RTEMS_CPU_MODEL" = "mpc7400" \
 || test "$RTEMS_CPU_MODEL" = "ppc603e" \
 || test "$RTEMS_CPU_MODEL" = "mpc604" \
 || test "$RTEMS_CPU_MODEL" = "mpc6xx" \
@@ -40,6 +41,7 @@ AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "mpc750" \
 AM_CONDITIONAL(mpc505, test "$RTEMS_CPU_MODEL" = "mpc505")
 AM_CONDITIONAL(mpc6xx, test "$RTEMS_CPU_MODEL" = "mpc6xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc604" \
+|| test "$RTEMS_CPU_MODEL" = "mpc7400" \
 || test "$RTEMS_CPU_MODEL" = "mpc750" )
 AM_CONDITIONAL(mpc8xx, test "$RTEMS_CPU_MODEL" = "mpc8xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc821" \

@@ -113,6 +113,7 @@ int mpc604_vector_is_valid(rtems_vector vector)
 int mpc60x_vector_is_valid(rtems_vector vector)
 {
      switch (current_ppc_cpu) {
+	case PPC_7400:
         case PPC_750:
             if (!mpc750_vector_is_valid(vector)) {
                 return 0;

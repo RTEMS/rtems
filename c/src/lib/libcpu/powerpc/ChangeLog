@@ -1,3 +1,30 @@
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/powerpc/registers.h, rtems/score/ppc.h: Per PR213, add 
+	the following:
+	    - support for the MPC74000 (AKA G4); there is no
+	      AltiVec support yet, however.
+	    - the cache flushing assembly code uses hardware-flush on the G4.
+	      Also, a couple of hardcoded numerical values were replaced
+	      by more readable symbolic constants.
+	    - extended interrupt-disabled code section so enclose the entire
+	      cache flush/invalidate procedure (as recommended by the book).
+	      This is not (latency) critical as it is only used by
+	      init code but prevents possible corruption.
+	    - Trivial page table support as been added.
+	      (1:1 effective-virtual-physical address mapping which is only
+	      useful only on CPUs which feature hardware TLB replacement,
+	      e.g. >604.  This allows for write-protecting memory regions,
+	      e.g. text/ro-data which makes catching corruptors a lot easier.
+	      It also frees one DBAT/IBAT and gives more flexibility
+	      for setting up address maps :-)
+	    - setdbat() allows changing BAT0 also (since the BSP may use
+	      a page table, BAT0 could be available...).
+	    - asm_setdbatX() violated the SVR ABI by using
+	      r20 as a scratch register; changed for r0
+	    - according to the book, a context synchronizing instruction is
+	      necessary prior to and after changing a DBAT -> isync added
+
 2002-04-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/powerpc/cache.h: New file (extracted from

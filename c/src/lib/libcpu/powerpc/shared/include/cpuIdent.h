@@ -27,6 +27,7 @@ typedef enum
   PPC_750 = 0x8,
   PPC_604e = 0x9,
   PPC_604r = 0xA,
+  PPC_7400 = 0xA,
   PPC_620 = 0x16,
   PPC_860 = 0x50,
   PPC_821 = PPC_860,
@@ -38,6 +39,7 @@ typedef unsigned short ppc_cpu_revision_t;
 
 extern ppc_cpu_id_t get_ppc_cpu_type ();
 extern ppc_cpu_id_t current_ppc_cpu;
+extern char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu);
 extern ppc_cpu_revision_t get_ppc_cpu_revision ();
 extern ppc_cpu_revision_t current_ppc_revision;
 #endif /* ASM */
