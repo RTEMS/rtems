@@ -54,68 +54,6 @@ extern int rtems_erc32_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_erc32_sonic_driver_attach
 
 /*
- *  Define the interrupt mechanism for Time Test 27
- *
- *  NOTE: Since the interrupt code for the SPARC supports both synchronous
- *        and asynchronous trap handlers, support for testing with both
- *        is included.
- */
-
-#define ERC32_BSP_USE_SYNCHRONOUS_TRAP  0
-
-/*
- *  The synchronous trap is an arbitrarily chosen software trap.
- */
-
-#if (ERC32_BSP_USE_SYNCHRONOUS_TRAP == 1)
-
-#define TEST_VECTOR SPARC_SYNCHRONOUS_TRAP( 0x90 )
-
-#define MUST_WAIT_FOR_INTERRUPT 1
-
-#define Install_tm27_vector( handler ) \
-  set_vector( (handler), TEST_VECTOR, 1 );
-
-#define Cause_tm27_intr() \
-  asm volatile( "ta 0x10; nop " );
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
-/*
- *  The asynchronous trap is an arbitrarily chosen ERC32 interrupt source.
- */
-
-#else   /* use a regular asynchronous trap */
-
-#define TEST_INTERRUPT_SOURCE ERC32_INTERRUPT_EXTERNAL_1
-#define TEST_INTERRUPT_SOURCE2 (ERC32_INTERRUPT_EXTERNAL_1+1)
-#define TEST_VECTOR ERC32_TRAP_TYPE( TEST_INTERRUPT_SOURCE )
-#define TEST_VECTOR2 ERC32_TRAP_TYPE( TEST_INTERRUPT_SOURCE2 )
-
-#define MUST_WAIT_FOR_INTERRUPT 1
-
-#define Install_tm27_vector( handler ) \
-  set_vector( (handler), TEST_VECTOR, 1 ); \
-  set_vector( (handler), TEST_VECTOR2, 1 );
-
-#define Cause_tm27_intr() \
-  do { \
-    ERC32_Force_interrupt( TEST_INTERRUPT_SOURCE+(Interrupt_nest>>1) ); \
-    nop(); \
-    nop(); \
-    nop(); \
-  } while (0)
-
-#define Clear_tm27_intr() \
-  ERC32_Clear_interrupt( TEST_INTERRUPT_SOURCE )
-
-#define Lower_tm27_intr()
-
-#endif
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */
