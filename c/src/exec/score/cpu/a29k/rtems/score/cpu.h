@@ -529,13 +529,11 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 /*
- *  Amount of extra stack (above minimum stack size) required by
- *  system initialization thread.  Remember that in a multiprocessor
- *  system the system intialization thread becomes the MP server thread.
+ *  extra stack required by the MPCI receive server thread
  */
 
-#define CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK 0
-
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 1024
+ 
 /*
  *  This defines the number of entries in the ISR_Vector_table managed
  *  by RTEMS.

@@ -1,3 +1,8 @@
+2000-09-25	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/a29k.h, rtems/score/cpu.h: Switched to using
+	cpuopts.h not targopts.h to reduce dependency on BSP.
+
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
 	* amd.ah, cpu.c, cpu_asm.S, register.ah, sig.S, rtems/score/cpu.h:

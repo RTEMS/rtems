@@ -28,6 +28,15 @@ extern "C" {
  *  of the family.
  */
  
+#define A29K_HAS_FPU     0
+#define CPU_MODEL_NAME "a29xxx"
+
+/*
+ *  Moving toward multilib with no attempt to distinguish 
+ *  multilib features in gcc.
+ */
+
+#if 0
 #if defined(rtems_multilib)
 /*
  *  Figure out all CPU Model Feature Flags based upon compiler 
@@ -46,6 +55,7 @@ extern "C" {
  
 #error "Unsupported CPU Model"
  
+#endif
 #endif
 
 /*
