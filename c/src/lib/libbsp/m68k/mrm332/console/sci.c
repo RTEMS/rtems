@@ -36,6 +36,11 @@
 * $Id$
 *
 * $Log$
+* Revision 1.2  2002/11/04 14:26:47  joel
+* 2002-11-04	Joel Sherrill <joel@OARcorp.com>
+*
+* 	* console/sci.c, spurious/spinit.c: Removed warnings.
+*
 * Revision 1.1  2002/02/28 23:10:39  joel
 * 2002-02-28	Mike Panetta <ahuitzot@mindspring.com>
 *
@@ -117,6 +122,7 @@
   Section A - Include Files
 *****************************************************************************/
 
+#include <rtems.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
 #include <stdio.h>
@@ -560,6 +566,7 @@ static void SciRcvBufFlush( void )
 * Func:     SciInterruptOpen
 * Desc:     open routine for the interrupt based device driver
 *           Default state is 9600 baud, 8 bits, No parity, and 1 stop bit. ??
+**CHANGED** Default baud rate is now 19200, 8N1
 *           called from rtems_termios_open which is called from console_open
 * Inputs:   major - device number
 *           minor - device number
@@ -598,8 +605,8 @@ signed32 SciInterruptOpen(
 //  SciSetBaud(115200);                         // set the baud rate
 //  SciSetBaud( 57600);                         // set the baud rate
 //  SciSetBaud( 38400);                         // set the baud rate
-//  SciSetBaud( 19200);                         // set the baud rate
-    SciSetBaud(  9600);                         // set the baud rate
+SciSetBaud( 19200);                         // set the baud rate
+//    SciSetBaud(  9600);                         // set the baud rate
 
     SciSetParity(SCI_PARITY_NONE);              // set parity to none
 
@@ -724,7 +731,8 @@ signed32 SciSetAttributes(
 
     if (!baud_requested)
     {
-        baud_requested = B9600;                 // default to 9600 baud
+//        baud_requested = B9600;                 // default to 9600 baud
+        baud_requested = B19200;                 // default to 19200 baud
     }
     
     sci_rate = termios_baud_to_number( baud_requested );
@@ -832,8 +840,8 @@ signed32 SciPolledOpen(
 //  SciSetBaud(115200);                         // set the baud rate
 //  SciSetBaud( 57600);                         // set the baud rate
 //  SciSetBaud( 38400);                         // set the baud rate
-//  SciSetBaud( 19200);                         // set the baud rate
-  SciSetBaud(  9600);                         // set the baud rate
+  SciSetBaud( 19200);                         // set the baud rate
+//  SciSetBaud(  9600);                         // set the baud rate
 
     SciSetParity(SCI_PARITY_NONE);              // set no parity
 
@@ -1457,6 +1465,8 @@ void SciWriteCharWait(unsigned8 c)
          * are ignoring flow control from the other end).
          * In the first case, higher baud rates will help.
          */
+      /* relinquish processor while waiting */
+      rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
     }
 
     *SCDR = c;                                  // send the charcter
@@ -1506,7 +1516,8 @@ unsigned8 inline SciReadCharWait( void )
 
     while ( SciCharAvailable() == 0 )           // anything there?
     {
-        // do nothing
+      /* relinquish processor while waiting */
+      rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
     }
 
     // if you have rcv ints enabled, then the isr will probably

@@ -50,7 +50,7 @@ _RamEnd = _RamBase + _RamSize;
 __end_of_ram = 0x080000;
 _copy_data_from_rom = 1;
 _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x2000;
 
 /*
  * 
@@ -91,7 +91,37 @@ SECTIONS
     *(.fini)
     *crtn.o(.fini)
 
-    *(.eh_fram)
+    /*
+     * Special FreeBSD sysctl sections.
+     */
+    . = ALIGN (16);
+    __start_set_sysctl_set = .;
+    *(set_sysctl_*);
+    __stop_set_sysctl_set = ABSOLUTE(.);
+    *(set_domain_*);
+    *(set_pseudo_*);
+
+    /*
+     * C++ constructors/destructors
+     *
+     * gcc uses crtbegin.o to find the start of the constructors
+     * and destructors so we make sure it is first.  Because this
+     * is a wildcard, it doesn't matter if the user does not
+     * actually link against crtbegin.o; the linker won't look for
+     * a file to match a wildcard.  The wildcard also means that
+     * it doesn't matter which directory crtbegin.o is in. The
+     * constructor and destructor list are terminated in
+     * crtend.o.  The same comments apply to it.
+     */
+    . = ALIGN (16);
+    *crtbegin.o(.ctors)
+    *(.ctors)
+    *crtend.o(.ctors)
+    *crtbegin.o(.dtors)
+    *(.dtors)
+    *crtend.o(.dtors)
+
+    *(.eh_frame)
     . = ALIGN (16);
 
     /*
@@ -99,7 +129,7 @@ SECTIONS
      */
     . = ALIGN (16);
     _rodata_start = . ;
-    *(.rodata)
+    *(.rodata*)
     *(.gnu.linkonce.r*)
 
     etext = ALIGN(0x10);
@@ -130,6 +160,10 @@ SECTIONS
     _copy_start = .;
     _sdata = . ;
     *(.data)
+    *(.gnu.linkonce.d*)
+    *(.gcc_except_table)
+    *(.jcr)
+
     CONSTRUCTORS
     edata = ALIGN(0x10);
     _edata = .;
@@ -146,6 +180,7 @@ SECTIONS
     _clear_start = .;
     *(.bss)
     *(COMMON)
+    . = ALIGN (16);
     end = .;
     _end = ALIGN(0x8);
     __end = ALIGN(0x8);

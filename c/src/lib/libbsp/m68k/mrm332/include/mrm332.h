@@ -33,14 +33,14 @@
 /* System Clock definitions */
 #define XTAL 32768.0		/* crystal frequency in Hz */
 
-#if 1
+#if 0
 /* Default MRM clock rate (8.388688 MHz) set by CPU32: */
 #define MRM_W 0			/* system clock parameters */
 #define MRM_X 0
 #define MRM_Y 0x3f
 #endif
 
-#if 0
+#if 1
 /* 16.77722 MHz: */
 #define MRM_W 1			/* system clock parameters */
 #define MRM_X 1
@@ -55,7 +55,7 @@
 #endif
 
 #define SYS_CLOCK (XTAL*4.0*(MRM_Y+1)*(1 << (2*MRM_W+MRM_X)))
-#define SCI_BAUD 9600		/* RS232 Baud Rate */
+#define SCI_BAUD 19200		/* RS232 Baud Rate */
 
 
 /* macros/functions */

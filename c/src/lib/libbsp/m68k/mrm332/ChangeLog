@@ -1,3 +1,9 @@
+2003-01-20	Duane Gustavus <duane@unt.edu>
+
+	* console/sci.c, include/mrm332.h, startup/linkcmds,
+	startup/linkcmds_ROM: Various updates to make this run properly
+	from ROM.
+
 2002-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
