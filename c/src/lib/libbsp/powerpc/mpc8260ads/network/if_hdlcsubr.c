@@ -48,6 +48,8 @@
  * $Id$
  */
 
+#include <rtems/rtems_bsdnet.h>
+
 #include <sys/param.h>
 /*#include <sys/systm.h>
 #include <sys/kernel.h> */
