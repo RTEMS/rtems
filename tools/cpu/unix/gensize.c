@@ -8,8 +8,8 @@
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may in
- *  the file LICENSE in this distribution or at
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
@@ -63,8 +63,8 @@ printf(
   " *  On-Line Applications Research Corporation (OAR).\n"
   " *  Copyright assigned to U.S. Government, 1994.\n"
   " *\n"
-  " *  The license and distribution terms for this file may in\n"
-  " *  the file LICENSE in this distribution or at\n"
+  " *  The license and distribution terms for this file may be\n"
+  " *  found in the file LICENSE in this distribution or at\n"
   " *  http://www.OARcorp.com/rtems/license.html.\n"
   " */\n"
   "\n"
