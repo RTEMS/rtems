@@ -7,7 +7,7 @@ srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH=@srcdir@
 
-C_PIECES=clock dpmem event eventmp intr mp msg msgmp \
+C_PIECES=attr clock dpmem event eventmp intr intrbody mp msg msgmp \
    part partmp ratemon region regionmp sem semmp signal signalmp \
    taskmp tasks timer
 C_FILES=$(C_PIECES:%=%.c)
