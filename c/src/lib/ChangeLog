@@ -1,3 +1,12 @@
+2001-10-11	Mike Siers <mikes@poliac.com>
+
+	* libc/termios.c: Fixed a memory leak in the termios
+	software.  Basically the tty open function was allocating an input
+	raw buffer, an output raw buffer, and a cooked buffer that were
+	not getting released.  I have attached a patch for the latest
+	snapshot.  The patch also has a fix to ensure the tty link list
+	is updated correctly when a tty is closed.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

@@ -198,15 +198,18 @@ rtems_termios_open (
 		tty->tty_rcv.sw_pfn = NULL;
 		tty->tty_rcv.sw_arg = NULL;
 		tty->tty_rcvwakeup  = 0;
+
 		/*
 		 * link tty
 		 */
-		if (rtems_termios_ttyHead)
-			rtems_termios_ttyHead->back = tty;
 		tty->forw = rtems_termios_ttyHead;
+		tty->back = NULL;
+		if (rtems_termios_ttyHead != NULL)
+			rtems_termios_ttyHead->back = tty;
 		rtems_termios_ttyHead = tty;
 		if (rtems_termios_ttyTail == NULL)
 			rtems_termios_ttyTail = tty;
+
 		tty->minor = minor;
 		tty->major = major;
 
@@ -411,20 +414,33 @@ rtems_termios_close (void *arg)
 		}
 		if (tty->device.lastClose)
 			 (*tty->device.lastClose)(tty->major, tty->minor, arg);
-		if (tty->forw == NULL)
+		if (tty->forw == NULL) {
 			rtems_termios_ttyTail = tty->back;
-		else
+			if ( rtems_termios_ttyTail != NULL ) {
+				rtems_termios_ttyTail->forw = NULL;
+			}
+		}
+		else {
 			tty->forw->back = tty->back;
-		if (tty->back == NULL)
+		}
+		if (tty->back == NULL) {
 			rtems_termios_ttyHead = tty->forw;
-		else
+			if ( rtems_termios_ttyHead != NULL ) {
+				rtems_termios_ttyHead->back = NULL;
+			}
+		}
+		else {
 			tty->back->forw = tty->forw;
+		}
 		rtems_semaphore_delete (tty->isem);
 		rtems_semaphore_delete (tty->osem);
 		rtems_semaphore_delete (tty->rawOutBuf.Semaphore);
 		if ((tty->device.pollRead == NULL) ||
 		    (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN))
 			rtems_semaphore_delete (tty->rawInBuf.Semaphore);
+		free (tty->rawInBuf.theBuf);
+		free (tty->rawOutBuf.theBuf);
+		free (tty->cbuf);
 		free (tty);
 	}
 	rtems_semaphore_release (rtems_termios_ttyMutex);
