@@ -27,8 +27,8 @@ $(PROJECT_INCLUDE)/libchip/%.h: %.h
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-AM_CFLAGS = $(LIBC_DEFINES)
+AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+AM_CFLAGS += $(LIBC_DEFINES)
 
 $(LIB): $(OBJS)
 	$(make-library)
