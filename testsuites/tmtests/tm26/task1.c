@@ -373,7 +373,7 @@ void complete_test( void )
   rtems_id          task_id;
 
   Timer_initialize();
-    _Thread_Resume( Middle_tcb );
+    _Thread_Resume( Middle_tcb, TRUE );
   thread_resume_time = Read_timer();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
