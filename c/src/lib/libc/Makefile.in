@@ -11,10 +11,12 @@ PROJECT_ROOT = @PROJECT_ROOT@
 LIBNAME=libcsupport.a
 LIB=${ARCH}/${LIBNAME}
 
+# define TARGET_PIECES later based on RTEMS_CPU definition
+
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES=__gettod __brk __times _execve getdents malloc syscalls \
-    no_libc newlibc newlibif newlibifr support unixlibc \
-    libio hosterr tcattr tcdrain cfiospeed termios readdir opendir
+C_PIECES=__times _execve getdents malloc syscalls \
+    no_libc support libio hosterr tcattr tcdrain \
+    cfiospeed termios $(TARGET_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
@@ -29,6 +31,12 @@ OBJS=$(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/lib.cfg
+
+ifeq ($(RTEMS_CPU),unix)
+TARGET_PIECES=unixlibc
+else
+TARGET_PIECES=__brk __gettod newlibc newlibif newlibifr readdir opendir
+endif
 
 #
 # Add local stuff here using +=
