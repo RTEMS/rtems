@@ -567,9 +567,10 @@ char remcomOutBuffer[BUFMAX];
 static short error;
 
 void 
-debug_error (format, parm)
-     char *format;
-     char *parm;
+debug_error (
+     char *format,
+     char *parm
+)
 {
   if (remote_debug)
     fprintf (stderr, format, parm);
