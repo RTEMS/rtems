@@ -5,8 +5,7 @@
 
 RTEMS_DIR=`dirname $0`/@top_srcdir@
 
-CFG=setup.cache
-dst=@RPM_SPECSdir@
+CFG=../setup.cache
 exe_ext=@EXEEXT@
 
 usage()
@@ -25,11 +24,6 @@ case $1 in
 -cfg) 
   shift
   CFG=$1
-  shift
-  ;;
--o)
-  shift
-  dst=$1
   shift
   ;;
 -a)        # alternate specs file
@@ -54,8 +48,6 @@ fi
 target_alias=$1
 
 . ./$CFG
-
-specfile=${dst}/${target_alias}-gcc-${gcc3_version}-newlib-${gcc3newlib_version}.spec
 
 patchn=-1
 if test -n "${gcc3_patch_version}"; then
@@ -84,7 +76,4 @@ sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s%@newlib_version\@%${gcc3newlib_version}%g" \
     -e "s%@newlib_patch_version\@%${gcc3newlib_patch_version}%g" \
     -e "s%@exe_ext\@%${exe_ext}%g" \
-< ${specsrc} \
-> ${specfile}
-
-echo Generated ${specfile}.
+< ${specsrc} 

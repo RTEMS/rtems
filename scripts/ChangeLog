@@ -1,3 +1,20 @@
+2002-08-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mkgcc3newlibspec.in: Remove
+	* gcc3newlib/mkspec.in: New.
+	* configure.ac: Reflect changes above.
+	* gcc3newlib/gccnewlib.add: Add build_XXX defines.
+	Add preliminary gnat support.
+	* gcc3newlib/base-g77.add: Add build_g77.
+	* gcc3newlib/base-gcj.add: Add build_gcj.
+	* gcc3newlib/base-gnat.add: New.
+	* gcc3newlib/target-c++.add: Add build_cxx.
+	* gcc3newlib/target-g77.add: Add build_g77.
+	* gcc3newlib/target-gcj.add: Add build_gcj.
+	* gcc3newlib/target-objc.add: Add build_objc.
+	* gcc3newlib/target-gnat.add: New.
+	* gcc3newlib/Makefile.am: Use ./mkspec. Use unified spec.
+
 2002-08-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* setup.def: Increment release for gcc3newlib.

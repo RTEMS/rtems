@@ -1,0 +1,22 @@
+%if %build_gnat
+# ==============================================================
+# @target_alias@-gnat
+# ==============================================================
+%package -n @target_alias@-gnat
+Provides:	@target_alias@-gnat
+Summary:	gcc/gnat compiler for @target_alias@
+Group: rtems
+Requires: rtems-base-gnat @target_alias@-gcc
+
+%description -n @target_alias@-gnat
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/gnat compiler for @target_alias@
+
+%files -n @target_alias@-gnat
+# %files -n @target_alias@-gnat -f build/files.gnat
+%dir %{_prefix}/bin
+%{_prefix}/bin/@target_alias@-gnat*
+
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/gnat1@exe_ext@
+%endif

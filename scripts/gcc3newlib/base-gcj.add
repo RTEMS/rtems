@@ -1,3 +1,4 @@
+%if %build_gcj
 # ==============================================================
 # rtems-base-gcj
 # ==============================================================
@@ -18,3 +19,4 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %{_prefix}/bin/jv-scan@exe_ext@
 %{_prefix}/bin/gcjh@exe_ext@
 
+%endif
