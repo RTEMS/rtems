@@ -2,25 +2,29 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../../shared
-
 PGM = $(ARCH)/startup.rel
 
-C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c imbx8xx.c \
-    main.c mmutlbtab.c sbrk.c gnatinstallhandler.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+C_FILES = bspstart.c imbx8xx.c mmutlbtab.c
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-S_FILES = start.s
-S_O_FILES = $(S_FILES:%.s=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES) $(S_O_FILES)
+S_FILES = start.S
+OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+shared_C_FILES = $(top_srcdir)/../../shared/bootcard.c
+shared_C_FILES += $(top_srcdir)/../../shared/bspclean.c
+shared_C_FILES += $(top_srcdir)/../../shared/bsplibc.c
+shared_C_FILES += $(top_srcdir)/../../shared/bsppost.c
+shared_C_FILES += $(top_srcdir)/../../shared/main.c
+shared_C_FILES += $(top_srcdir)/../../shared/sbrk.c
+shared_C_FILES += $(top_srcdir)/../../shared/gnatinstallhandler.c
+OBJS += \
+    $(shared_C_FILES:$(top_srcdir)/../../shared/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../shared/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
 
 $(PGM): $(OBJS)
 	$(make-rel)
@@ -31,7 +35,7 @@ project_lib_DATA = linkcmds
 
 all-local: $(PGM) $(TMPINSTALL_FILES)
 
-EXTRA_DIST = bspstart.c imbx8xx.c linkcmds mmutlbtab.c setvec.c
+EXTRA_DIST = linkcmds $(C_FILES)
 
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)

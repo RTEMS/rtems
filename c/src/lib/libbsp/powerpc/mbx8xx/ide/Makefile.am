@@ -2,29 +2,14 @@
 ## Makefile.am,v 1.5 2002/08/11 06:59:03 ralf Exp
 ##
 
-PGM = # $(ARCH)/console.rel
-
 C_FILES = idecfg.c pcmcia_ide.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
-
-$(PGM): $(OBJS)
-	$(make-rel)
-
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all-local: $(OBJS) $(PGM)
-
-.PRECIOUS: $(PGM)
-
-EXTRA_DIST = idecfg.c
+noinst_DATA = $(OBJS)
 
 include $(top_srcdir)/../../../../automake/local.am
