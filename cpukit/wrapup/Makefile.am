@@ -2,11 +2,11 @@
 ## $Id$
 ##
 
-LIB = $(project_libdir)/librtemscpu$(LIB_VARIANT).a
-
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
+
+project_lib_DATA = $(ARCH)/librtemscpu$(LIB_VARIANT).a
 
 LIBS =
 if LIBSCORECPU
@@ -68,7 +68,7 @@ endif
 
 $(LIBS): $(ARCH)/$(dirstamp)
 
-$(LIB): ${LIBS}
+$(ARCH)/librtemscpu$(LIB_VARIANT).a: ${LIBS}
 	rm -f $@
 	rm -rf $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	for f in $(LIBS); do \
@@ -94,17 +94,19 @@ $(LIB): ${LIBS}
 	    ;; \
 	  esac; \
 	done
-	test -d $(project_libdir) || $(mkinstalldirs) $(project_libdir)
 	$(AR) rc $@ $(ARCH)/*
 	rm -f $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	$(RANLIB) $@
 
-TMPINSTALL_FILES += $(project_libdir)/librtemscpu$(LIB_VARIANT).a
+all-local: $(TMPINSTALL_FILES)
 
-all-am: $(LIB) $(TMPINSTALL_FILES)
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkinstalldirs) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/$(dirstamp)
 
-install-data-hook: $(LIB)
-	@$(mkinstalldirs) $(DESTDIR)$(libdir)
-	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(libdir)
+${PROJECT_RELEASE}/lib/librtemscpu$(LIB_VARIANT).a: $(ARCH)/librtemscpu$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/librtemscpu$(LIB_VARIANT).a
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/librtemscpu$(LIB_VARIANT).a
 
 include $(top_srcdir)/automake/local.am

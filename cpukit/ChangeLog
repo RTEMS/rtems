@@ -1,5 +1,9 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Reworked.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/lead-dot.m4: Remove (Use the version in automake-1.8).
 	* automake/lib.am: Remove $(project_libdir)$(MULTISUBDIR).
 	* aclocal/env-rtemscpu.m4: Reflect new definition of project_lib.
