@@ -1,3 +1,7 @@
+2003-06-12	Joel Sherrill <joel@OARcorp.com>
+
+	* psxchroot01/test.c, psxreaddir/test.c: Removed warnings.
+
 2003-05-29	Joel Sherrill <joel@OARcorp.com>
 
 	* psx02/init.c, psx04/init.c, psx13/test.c, psxchroot01/test.c,
