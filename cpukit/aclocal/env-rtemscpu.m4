@@ -13,9 +13,6 @@ if test x"$multilib" = x"yes"; then
     [MULTISUBDIR="/$with_multisubdir"])
   AC_SUBST(MULTISUBDIR)
 
-  GCC_SPECS="-isystem \$(PROJECT_INCLUDE)"
-  AC_SUBST(GCC_SPECS)
-
   PROJECT_INCLUDE="\$(PROJECT_ROOT)/lib/include"
   AC_SUBST(PROJECT_INCLUDE)
 

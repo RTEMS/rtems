@@ -40,16 +40,6 @@
 ## are used to add flags from the shell
 ## cf. make.info ("Implicit rules/variables" for details)
 
-if RTEMS_USE_GCC
-## All the stuff below is specific to gcc
-## gcc >= 2.8.x
-GCCSPECS = $(GCC_SPECS)
-else
-## fall back to the old style compilers/*.cfg
-## CONFIG.CC is supposed to be provided by <BSP>.cfg
-include $(CONFIG.CC)
-endif # RTEMS_USE_GCC
-
 DEFS = @DEFS@
 
 CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES) $(XCPPFLAGS)
@@ -87,9 +77,10 @@ DEPEND=Depends-${ARCH}
 # on 'make clean'
 #
 
+if RTEMS_USE_GCC
 ## HACK: Specific to gcc
 ## FIXME: The approach below is known to be conceptionally broken.
-depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
+depend-gcc: $(C_FILES) $(CC_FILES) $(S_FILES)
 ##       Use gcc -M to generate dependencies
 ##       Replace foo.$(OBJEXT) with $(ARCH)/foo.$(OBJEXT)
 ##       Replace $(ARCH) value with string $(ARCH)
@@ -98,12 +89,13 @@ depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
 	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
 	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
 	mv $(DEPEND).tmp $(DEPEND)
-depend: depend-am
 
 # pull in dependencies if they exist  
 ifeq (${DEPEND},$(wildcard ${DEPEND}))
 include ${DEPEND}
 @ENDIF@
+endif
+depend: depend-gcc
 
 ## -------------------------------------------------------------------------
 
@@ -126,6 +118,9 @@ ARCH_PROFILE_V = o-profile
 
 ARCH__V = $(ARCH_OPTIMIZE_V)
 ARCH = $(ARCH_$(VARIANT_V)_V)
+
+${ARCH}:
+	mkdir ${ARCH}
 
 ## Setup the library suffix
 LIBSUFFIX_OPTIMIZE_V =
@@ -158,11 +153,6 @@ endif
 RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
 
 ## -------------------------------------------------------------------------
-
-CC = @CC@ $(GCCSPECS)
-CPP = @CPP@ $(GCCSPECS)
-
-##
 AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
 AM_CFLAGS =
 AM_CCASFLAGS = $(RTEMS_CPPFLAGS) $(RTEMS_ASFLAGS)

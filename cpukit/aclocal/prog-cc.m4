@@ -35,5 +35,9 @@ test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 if test "$GCC" = yes; then
 RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
 m4_if([$1],,[],[RTEMS_CFLAGS="$RTEMS_CFLAGS $1"])
+RTEMS_CPPFLAGS="-isystem \$(PROJECT_INCLUDE)"
+else
+RTEMS_CPPFLAGS="-I\$(PROJECT_INCLUDE)"
 fi
+AC_SUBST(RTEMS_CPPFLAGS)
 ])

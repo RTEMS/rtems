@@ -1,3 +1,13 @@
+2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/local.am: Introduce depend-gcc.
+	Remove ${ARCH}.
+	* automake/compile.am: Remove GCCSPECS, GCC_SPECS, CONFIG.CC, CC,
+	CPP. Add ${ARCH}. depend-gcc.
+	* aclocal/prog-cc.m4: Set up RTEMS_CPPFLAGS.
+	* aclocal/env-rtemscpu.m4: Remove GCC_SPECS.
+	* aclocal/env-rtemsbsp.m4: Remove GCC_SPECS.
+
 2003-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/canonical-target-name.m4: Transform tic4x -> RTEMS_CPU=c4x.
