@@ -30,13 +30,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 include $(top_srcdir)/mptests.am
 
+AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I$(srcdir)/..
+
 if HAS_MP
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I$(srcdir)/..
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

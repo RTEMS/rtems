@@ -35,10 +35,12 @@ else
 HAS_MP="no"
 fi
 AC_SUBST(HAS_MP)
+])
 
+AC_DEFUN(RTEMS_DEFINE_MULTIPROCESSING,
+[AC_REQUIRE([RTEMS_CHECK_MULTIPROCESSING])dnl
 if test x"${HAS_MP}" = x"yes";
 then
   AC_DEFINE_UNQUOTED(RTEMS_MULTIPROCESSING,1,[if multiprocessing is supported])
 fi
-
 ])

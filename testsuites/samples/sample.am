@@ -1,3 +1,5 @@
+AM_CPPFLAGS += @DEFS@
+
 project_bspdir=$(PROJECT_ROOT)/@RTEMS_BSP@
 
 $(project_bspdir)/samples:
