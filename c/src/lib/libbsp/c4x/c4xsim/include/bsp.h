@@ -19,6 +19,8 @@
 extern "C" {
 #endif
 
+#include <bspopts.h>
+
 #ifdef ASM
 
 #else
