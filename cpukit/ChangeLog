@@ -1,3 +1,8 @@
+2005-01-23	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* sapi/src/fatal.c, score/src/interr.c: 
+	Remove volatile on return type.
+
 2005-01-20  Sergei Organov  <osv@topconrd.ru>
 
 	PR 536/rtems

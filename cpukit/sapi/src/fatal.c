@@ -27,7 +27,7 @@
  *  Output parameters: NONE
  */
 
-void volatile rtems_fatal_error_occurred(
+void rtems_fatal_error_occurred(
   uint32_t   the_error
 )
 {

@@ -39,7 +39,7 @@
  *  NOTE: The the_error is not necessarily a directive status code.
  */
 
-void volatile _Internal_error_Occurred(
+void _Internal_error_Occurred(
   Internal_errors_Source  the_source,
   boolean                 is_internal,
   uint32_t                the_error
