@@ -1,5 +1,0 @@
-The <tt>i386/include</tt> directory holds C-language include files that
-define things that are specific about the PC architecture.<p>
-
-The 4.3BSD Internals book by Leffler, McKusick, Karels and Quarterman
-doesn't describe this anywhere at all. <p>

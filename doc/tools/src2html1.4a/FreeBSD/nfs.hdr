@@ -1,7 +1,0 @@
-The <tt>nfs</tt> directory holds the code for the Network File System.
-The code was developed from a specification of NFS from Sun Microsystems.<p>
-
-The 4.3BSD Internals book by Leffler, McKusick, Karels and Quarterman
-doesn't cover <tt>nfs</tt>. You probably don't really want to delve into
-it too much, but there is an RFC around describing the protocol, but not
-the code here. <p>

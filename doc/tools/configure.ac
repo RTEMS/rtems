@@ -4,6 +4,8 @@ AC_PREREQ(2.57)
 
 AC_INIT([rtems-doc-tools],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([word-replace2])
+AC_CONFIG_AUX_DIR([../..])
+RTEMS_VERSIONING
 
 AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 dnl Checks for programs.
@@ -22,11 +24,6 @@ AC_CHECK_FUNCS(strdup strstr)
 
 AC_CONFIG_FILES([Makefile
 bmenu/Makefile
-src2html/Makefile
-src2html1.4a/Makefile
-src2html1.4a/Ctags/Makefile
-src2html1.4a/FreeBSD/Makefile
-src2html1.4a/ctags-emacs/Makefile
 texi2www/Makefile
 ])
 AC_OUTPUT
