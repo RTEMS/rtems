@@ -14,8 +14,10 @@ include $(top_srcdir)/../../../../../automake/lib.am
 
 # gcc doesn't recognize difference between the cpu32 and cpu32+ so we have to
 if mcpu32p
-AM_CPPFLAGS += -D__mcpu32p__
+MCPU32P_CPPFLAGS = -D__mcpu32p__
 endif
+
+AM_CPPFLAGS += $(MCPU32P_CPPFLAGS)
 
 all-local: $(ARCH) $(OBJS)
 

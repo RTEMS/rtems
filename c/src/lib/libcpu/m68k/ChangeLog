@@ -1,3 +1,8 @@
+2002-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Replace mcpu32 by mcpu32p conditional.
+	* share/misc/Makefile.am: Fix AM_CPPFLAGS bug.
+
 2002-08-05	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR260 eliminate use of make-target-options.  This impacted
