@@ -1,3 +1,8 @@
+2001-01-16	Joel Sherrill <joel@OARcorp.com>
+
+	* src/taskmode.c: Ensure the this service does not dispatch before
+	tasking is enabled at initialization time.
+
 2002-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* optman/, optman/.cvsignore, optman/Makefile.am, optman/no-dpmem.c,
