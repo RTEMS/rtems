@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 PGM = $(ARCH)/timer.rel
 
 C_FILES = timerstub.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

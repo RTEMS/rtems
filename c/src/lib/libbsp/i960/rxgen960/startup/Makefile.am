@@ -20,7 +20,7 @@ noinst_HEADERS = asmfault.h asmstub.h cntrltbl.h fault.h faultret.h flttbl.h \
 
 S_FILES = asmfault.S asmstub.S ihandler.S
 
-OBJS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
