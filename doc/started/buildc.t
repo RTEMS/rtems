@@ -477,6 +477,21 @@ refer to the documentation for @value{BINUTILS-UNTAR} or
 invoke the @value{BINUTILS-UNTAR} @code{configure} command with the
 @code{--help} option.
 
+NOTE: The shell PATH variable needs to be updated to include the path
+the binutils has been installed in. This the prefix used above with
+@file{bin} post-fixed.
+
+@example
+export PATH=$PATH:/opt/rtems/bin
+@end example
+
+Failure to have the binutils in the path will cause the GCC and NEWLIB
+build to fail with an error message similar to:
+
+@example
+sparc-rtems-ar: command not found
+@end example
+
 @c
 @c  Configuring and Building GCC and NEWLIB
 @c

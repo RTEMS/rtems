@@ -1,3 +1,9 @@
+2002-03-20	Chris Johns <ccj@acm.org>
+
+	* PR137
+	* buildc.t: Now provides more explicit requirements on $PATH
+	after building binutils.
+
 2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include main.am, require automake-1.5.
