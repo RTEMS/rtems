@@ -58,7 +58,7 @@ void _Thread_Handler( void )
 {
   ISR_Level  level;
   Thread_Control *executing;
-#ifdef USE_INIT_FINI
+#if defined(__USE_INIT_FINI__)
   static char doneConstructors;
   char doneCons;
 #endif
@@ -73,7 +73,7 @@ void _Thread_Handler( void )
   level = executing->Start.isr_level;
   _ISR_Set_level(level);
 
-#ifdef USE_INIT_FINI
+#if defined(__USE_INIT_FINI__)
   doneCons = doneConstructors;
   doneConstructors = 1;
 #endif
@@ -91,7 +91,7 @@ void _Thread_Handler( void )
    */
 
   _Thread_Enable_dispatch();
-#ifdef USE_INIT_FINI
+#if defined(__USE_INIT_FINI__)
   if (!doneCons)
     _init ();
 #endif

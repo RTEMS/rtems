@@ -1,4 +1,9 @@
 
+2001-10-22	Joel Sherrill <joel@OARcorp.com>
+
+	* src/threadhandler.c: Use __USE_INIT_FINI__ since USE_INIT_FINI
+	pollutes the application namespace.
+
 2001-10-16	Joel Sherrill <joel@OARcorp.com>
 
 	* .cvsignore: Add stamp-h.in.
