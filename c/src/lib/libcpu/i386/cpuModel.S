@@ -39,8 +39,8 @@ SYM (checkCPUtypeSetCr0):
 	 */
 	movl $3, SYM (x86) 
 	/*
-	 * Start using the EFAGS AC bit determination method described in
-	 * the book mentionned above page 5.1. If this bit can be set we
+	 * Start using the EFLAGS AC bit determination method described in
+	 * the book mentioned above page 5.1. If this bit can be set we
 	 * have a 486 or above.
 	 */
 	pushfl				/* save EFLAGS			*/

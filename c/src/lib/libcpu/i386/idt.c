@@ -1,9 +1,9 @@
 /*
  * cpu.c  - This file contains implementation of C function to
- *          Instanciate IDT entries. More detailled information can be found
+ *          instantiate IDT entries. More detailled information can be found
  *	    on Intel site and more precisely in the following book :
  *
- *		Pentium Processor familly
+ *		Pentium Processor family
  *		Developper's Manual
  *
  *		Volume 3 : Architecture and Programming Manual
