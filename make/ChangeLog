@@ -1,4 +1,8 @@
 
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* compilers/gcc-portsw.cfg: Use gcc style flags.
+
 2000-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/arm_bare_bsp.cfg, custom/armulator.cfg, custom/dmv177.cfg,
