@@ -32,6 +32,7 @@
 #include <netinet/if_ether.h>
 #include <bsp/irq.h>
 
+int BSP_irq_enabled_at_cpm    (const rtems_irq_symbolic_name);
 
 /*
  * Number of interfaces supported by this driver
@@ -1046,7 +1047,7 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
   /*
    * Free up buffer descriptors
    */
-  m8xxEnet_retire_tx_bd (sc);
+  m860Enet_retire_tx_bd (sc);
   
   /*
    * Set up the transmit buffer descriptors.

@@ -1925,6 +1925,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 
  /* static */ rtems_isr uti596DynamicInterruptHandler(rtems_vector_number irq)
  {
+   rtems_status_code sc;
 #ifdef DEBUG_ISR
  printk("I");
 #endif

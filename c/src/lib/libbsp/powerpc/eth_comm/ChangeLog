@@ -2,6 +2,10 @@
 
 	* network/network.c: Removed warnings.
 
+2002-11-04	Joel Sherrill <joel@OARcorp.com>
+
+	* network/network.c: Removed warnings.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* canbus/canbus.c, clock/p_clock.c, console/console.c,
