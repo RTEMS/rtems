@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../aclocal
 
 project_bspdir = $(PROJECT_ROOT)/@RTEMS_BSP@
 
