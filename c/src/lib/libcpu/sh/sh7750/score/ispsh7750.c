@@ -335,13 +335,13 @@ asm ("        .text\n"
  * Dummy interrupt service procedure for 
  * interrupts being not allowed --> Trap 2
  ************************************************/
-asm(" .section .text
-.global __dummy_isp
-__dummy_isp:
-      mov.l r14,@-r15
-      mov   r15, r14
-      trapa #2
-      mov.l @r15+,r14
-      rte
+asm(" .section .text\n\
+.global __dummy_isp\n\
+__dummy_isp:\n\
+      mov.l r14,@-r15\n\
+      mov   r15, r14\n\
+      trapa #2\n\
+      mov.l @r15+,r14\n\
+      rte\n\
       nop");
 
