@@ -1,5 +1,14 @@
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* shmdr/addlq.c, shmdr/cnvpkt.c, shmdr/dump.c, shmdr/fatal.c,
+	shmdr/getlq.c, shmdr/getpkt.c, shmdr/init.c, shmdr/initlq.c,
+	shmdr/intr.c, shmdr/mpci.h, shmdr/mpisr.c, shmdr/poll.c,
+	shmdr/README, shmdr/receive.c, shmdr/retpkt.c, shmdr/send.c,
+	shmdr/setckvec.c, shmdr/shm_driver.h: Remove (Moved to
+	c/src/libchip/shmdr).
+
+2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* bspstart.am: Use .$(OBJEXT) instead of .o.
 	* Makefile.am: Remove shmdr.
 
