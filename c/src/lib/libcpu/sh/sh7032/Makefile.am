@@ -21,11 +21,15 @@ $(PROJECT_INCLUDE)/sh:
 $(PROJECT_INCLUDE)/sh/%.h: include/%.h
 	$(INSTALL_DATA) $< $@
 
+$(PROJECT_INCLUDE)/rtems/score:
+	$(mkinstalldirs) $@
+
 $(PROJECT_INCLUDE)/rtems/score/%.h: include/%.h
 	$(INSTALL_DATA) $< $@
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/sh \
     $(include_sh_HEADERS:include/%.h=$(PROJECT_INCLUDE)/sh/%.h) \
+    $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:include/%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
 # clock
