@@ -1,3 +1,15 @@
+2005-02-25	Joel Sherrill <joel@OARcorp.com>
+
+	* arm_bare_bsp/.cvsignore, arm_bare_bsp/ChangeLog,
+	arm_bare_bsp/Makefile.am, arm_bare_bsp/bsp_specs,
+	arm_bare_bsp/configure.ac, arm_bare_bsp/clock/clockdrv.c,
+	arm_bare_bsp/include/.cvsignore, arm_bare_bsp/include/bsp.h,
+	arm_bare_bsp/include/registers.h, arm_bare_bsp/include/tm27.h,
+	arm_bare_bsp/irq/bsp_irq_asm.S, arm_bare_bsp/irq/bsp_irq_init.c,
+	arm_bare_bsp/irq/irq.c, arm_bare_bsp/irq/irq.h,
+	arm_bare_bsp/start/start.S, arm_bare_bsp/startup/bspstart.c,
+	arm_bare_bsp/startup/exit.c, arm_bare_bsp/startup/linkcmds: Removed.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
