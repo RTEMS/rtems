@@ -99,6 +99,11 @@ int main(
 
   printf( "\n\n*** MOUNT/UNMOUNT TEST ***\n" );
 
+  /*
+   * Change directory to the root and create files under
+   * the base file system.
+   */
+
   printf( "\nchdir to the root directory\n" );
   status = chdir( "/" );
   printf( "chdir() status : %d\n\n", status );
@@ -108,7 +113,7 @@ int main(
   while ( strcmp(dnames[i], "END") != 0 )
   {
      status = mkdir( dnames[i], 0777 );
-     printf("Creating directory: %s      %d %d   ", dnames[i], status, errno );
+     printf("Creating : %25s  %d %d   ", dnames[i], status, errno );
      if ( status == 0 )
         printf(" Success\n");
      else
@@ -117,15 +122,35 @@ int main(
      i++;
   }
 
+  /*
+   * Create a Files with all rwx for others group and user.  Verify
+   * the created file.
+   */
+
+  printf("create /b/my_file\n");
   fd = open ("/b/my_file", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
+  assert( fd != 0 );
   close (fd);
+
+  printf("Verify /b/my_file\n");
   fd = open("/b/my_file", S_IRWXU|S_IRWXG|S_IRWXO);
+  assert( fd != 0 );
   close( fd );
 
+
+  printf("create c/y/my_mount_point/my_dir/d\n");
   fd = open ("c/y/my_mount_point/my_dir/d", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
+  assert( fd != 0 );
   close (fd);
+ 
+  printf("Verify c/y/my_mount_point/my_dir/d\n");
   fd = open("c/y/my_mount_point/my_dir/d", S_IRWXU|S_IRWXG|S_IRWXO);
+  assert( fd != 0 );
   close( fd );
+
+  /*
+   *  Mount an the IMFS file system on the base file system.
+   */
 
   printf("Attempting to mount IMFS file system at /c/z/my_mount_point \n");
   status = mount(
@@ -142,8 +167,12 @@ int main(
      printf("2nd file system successfully mounted at /c/z/my_mount_point \n");
   }
 
-  printf( "\nchdir to /c/z/my_mount_point the mount point of the \n" );
-  printf( "second file system \n" );
+  /*
+   * Change directory to the mount point and create a group of files under
+   * the mounted file system.
+   */
+
+  printf( "\nchdir to /c/z/my_mount_point.\n" );
   status = chdir( "/c/z/my_mount_point" );
   printf( "chdir() status : %d\n\n", status );
 
@@ -152,7 +181,7 @@ int main(
   while ( strcmp(fnames[i], "END") != 0 )
   {
      status = mkdir( fnames[i], 0777 );
-     printf("Creating directory: %s      %d %d   ", fnames[i], status, errno );
+     printf("Creating: %46s   %d %d   ", fnames[i], status, errno );
      if ( status == 0 )
         printf(" Success\n");
      else {
@@ -167,7 +196,7 @@ int main(
      i++;
   }
 
-  printf( "\nchdir to / the mount point of the first file system \n" );
+  printf( "\nchdir to /\n" );
   status = chdir( "/" );
   printf( "chdir() status : %d\n\n", status );
 
@@ -179,28 +208,12 @@ int main(
   status = unmount( "/c/z/my_mount_point" );
   printf( " %d\n", status );
 
-/*
-  status = chmod( "c/y/j123", S_IRUSR );
-  assert( status == 0 );
 
-  printf("Attempting to mount IMFS file system at c/y/j123\n");
-  status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     "RO",
-     NULL,
-     "c/y/j123" );
-  assert( status == 0 );
+  /*
+   * Mount a NULL filesystem and verify it fails.
+   */
 
-  status = mkdir( "c/y/j123/new_dir", S_IRUSR );
-  assert( status == -1 );
-
-  printf("Unmount c/y/j123\n");
-  status = unmount( "c/y/j123" );
-  assert( status == 0 );
-*/
-
-  printf(" File system type should be invalid.\n");
+  printf("Mount a NULL file system and verify EINVAL\n");
   status = mount(
    &mt_entry,
    NULL,
@@ -210,7 +223,25 @@ int main(
   assert( status == -1 );
   assert( errno == EINVAL );
 
-  printf("Attempting to mount IMFS file system at /c/y/my_mount_point \n");
+  /*
+   * Verify mount with option RA fails with EINVAL
+   */
+
+  printf("mount with option RA should fail with EINVAL\n");
+  status = mount(
+     &mt_entry,
+     &IMFS_ops,
+     "RA",
+     NULL,
+     "/c/y/my_mount_point" );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+
+  /*
+   * Mount a Read Only File system.
+   */
+
+  printf("Mount a Read Only filesystem at /c/y/my_mount_point \n");
   status = mount(
      &mt_entry,
      &IMFS_ops,
@@ -222,18 +253,26 @@ int main(
      printf(" NULL mount table entry was returned\n");
   }
   else {
-     printf("3rd file system successfully mounted at /c/y/my_mount_point \n");
+     printf("Read only file system successfully mounted at /c/y/my_mount_point \n");
   }
 
+  /*
+   * Create a directory that passes through the read only file system.
+   */
+
+  printf("create c/y/my_mount_point/../../y/my_mount_point/new_dir\n");
   status = mkdir("c/y/my_mount_point/../../y/my_mount_point/new_dir",S_IRWXU );
   assert( status == 0 );
-
   status = stat("c/y/my_mount_point/../../y/my_mount_point/new_dir",&statbuf );
   assert( status == 0 );
   status = stat("c/y/my_mount_point/new_dir/..", &statbuf );
   assert( status == 0 );
 
-  printf("Mount another file system at /c/y/my_mount_point should fail with EBUSY\n");
+  /*
+   * Attempt to mount a second file system at a used mount point.
+   */
+
+  printf("Verify a mount point retruns EBUSY for another mount\n");
   status = mount(
      &mt_entry,
      &IMFS_ops,
@@ -243,7 +282,11 @@ int main(
   assert( status == -1 );
   assert( errno == EBUSY);
 
-  printf("Mount /b/my_file should fail in rtems_filesystem_evaluate_path\n");
+  /*
+   * Attempt to mount at a file.
+   */
+
+  printf("Mount on a file should fail with ENOTDIR\n");
   status = mount(
      &mt_entry,
      &IMFS_ops,
@@ -251,24 +294,14 @@ int main(
      NULL,
      "/b/my_file" );
   assert( status == -1 );
+  assert( errno == ENOTDIR );
+
  
-  printf("Unmount /c/y/my_mount_point\n");
-  status = unmount( "/c/y/my_mount_point" );
-  assert( status == 0 );
+  /*
+   * Verify we cannot unmount a file system while we are in it.
+   */
 
-/* What's wrong with this? It should be causing failure at unmount.c:87,
- * instead, it's returning a status of 0.
- */
-
-  printf("Mount /c/y/my_mount_point to cause error\n");
-  status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     "RO",
-     NULL,
-     "/c/y/my_mount_point" );
-
-  assert( status == 0 );
+  printf("Create and chdir to /c/y/my_mount_point/mydir\n");
   status = mkdir( "/c/y/my_mount_point/mydir", 0777);
   assert( status == 0 );
 
@@ -280,6 +313,11 @@ int main(
   assert( status == -1 );
   assert( errno == EBUSY );
 
+  /*
+   * Chdir to root and verify we can unmount the file system now.
+   */
+
+  printf("chdir to / and verify we can unmount /c/y/my_mount_point\n");
   status = chdir( "/" );
   assert( status == 0 );
 
@@ -287,9 +325,18 @@ int main(
   status = unmount( "/c/y/my_mount_point" );
   assert( status == 0 );
 
-  printf(" unmount /b/mount_point should fail\n");
+  /*
+   * Attempt to unmount a directory that does not exist.
+   */
+
+  printf(" unmount /b/mount_point should fail with EINVAL\n");
   status = unmount( "/b/mount_point" );
   assert( status == -1 );
+  assert( errno == ENOENT );
+  
+  /*
+   * Remount the filesystem.
+   */
 
   printf("Mount /c/y/my_mount_point\n");
   status = mount(
@@ -300,9 +347,13 @@ int main(
      "/c/y/my_mount_point" );
   assert( status == 0 );
 
-  /* XXX - There is an error in open that calculates incorrect mode. */
+  /*
+   * Create a file and directory then open the directory.
+   * Verify unmount will return EBUSY while directory is open.
+   */
+
   printf("Create and open /c/y/my_mount_point/my_file\n");
-  fd = open( "/c/y/my_mount_point/my_file", O_CREAT ); 
+  fd = open( "/c/y/my_mount_point/my_file", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
   assert( fd != -1 );
   status = close( fd );
   assert( status == 0 );
@@ -316,27 +367,25 @@ int main(
   printf("Unmount /c/y/my_mount_point should fail with EBUSY\n");
   status = unmount( "/c/y/my_mount_point" );
   assert( status == -1 );
+  assert( errno == EBUSY );
 
   printf("Close /c/y/my_mount_point/my_dir\n");
   status = closedir( directory ); 
   assert( status == 0 );
 
-  printf("Unmount /c/y/my_mount_point/d should fail at 107\n");
-  status = unmount( "/c/y/my_mount_point/d" );
-  assert( status == -1 );
+  /*
+   * Attempt to unmount a directory that is not a mount point.
+   */
 
-  printf("unmount /c/y/my_mount_point\n");
-  status = unmount( "/c/y/my_mount_point" );
-  assert( status == 0 );
-
-  printf("mount with option RA should fail with EINVAL\n");
-  status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     "RA",
-     NULL,
-     "/c/y/my_mount_point" );
+  printf("Unmount /c/y/my_mount_point/my_dir\n");
+  status = unmount( "/c/y/my_mount_point/my_dir" );
   assert( status == -1 );
+  assert( errno == EACCES );
+
+  /*
+   * Verify a file system can not be unmounted with a mounted file system
+   * in it.
+   */
 
   printf("Mount a file system at /c/y/my_mount_point/my_dir\n");
   status = mount(
@@ -347,60 +396,48 @@ int main(
      "/c/y/my_mount_point/my_dir");
   assert( status == 0 );
 
-  printf("unmount /c/y/my_mount_point/my_dir should fail in ");
-  printf("file_systems_below_this_mountpoint \n");
-  status = unmount( "/c/y/my_mount_point/my_dir" );
-  assert( status == 0 );
+  printf("unmount /c/y/my_mount_point should fail with EBUSY\n");
+  status = unmount( "/c/y/my_mount_point" );
+  assert( status == -1 );
+  assert( errno == EBUSY );
 
-  printf("mount first filesystem /c/y/my_mount_point/\n");
-  status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     "RW",
-     NULL,
-     "/c/y/my_mount_point" );
-  assert( status == 0 );
+  /*
+   * Verify you cannot create a hard link across mounted file systems.
+   */
 
-  printf("\nmkdir /c/y/my_mount_point/my_dir\n");
-  status = mkdir( "/c/y/my_mount_point/my_dir", S_IRWXU );
-  assert( status == 0 );
-
-  printf("Mount another filesystem at /c/y/my_mount_point/my_dir\n");
-  status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     "RW",
-     NULL,
-     "/c/y/my_mount_point/my_dir");
-  assert( status == 0 );
-
+  printf("Verify a hard link across filesystems fails with EXDEV\n");
   status = mkdir( "/c/y/my_mount_point/my_dir2", S_IRWXU  );
-  assert( status != -1 ); 
+  assert( status == 0 ); 
 
   status = link( "/c/y/my_mount_point/my_dir2", "/c/y/my_mount_point/my_dir/my_link" );
   assert( status == -1 );
+  assert( errno == EXDEV );
 
-  printf("unmount /c/y/my_mount_point\n");
-  status = unmount( "/c/y/my_mount_point" );
-  assert( status == -1 );
+  /*
+   * Create a symbolic link across mountpoints.
+   */
+
+  printf("Verify a symbolic link across file systems works\n");
+  status = symlink( "/c/y/my_mount_point/my_dir2", "/c/y/my_mount_point/my_dir/my_link" );
+  assert( status == 0 );
+  status = stat( "/c/y/my_mount_point/my_dir/my_link", &statbuf );
+  assert( status == 0 );
 
   printf("unmount /c/y/my_mount_point/my_dir\n");
   status = unmount( "/c/y/my_mount_point/my_dir" );
   assert( status == 0 );
 
+  /*
+   * Verify symblic link no longer works.
+   */
+
+  printf("Verify the symbolic link now fails\n");
+  status = stat( "/c/y/my_mount_point/my_dir/my_link", &statbuf );
+  assert( status != 0 );
+
   printf("unmount /c/y/my_mount_point\n");
   status = unmount( "/c/y/my_mount_point" );
   assert( status == 0 );
-
-/*  printf("Mount /c/y/my_mount_point\n");
-  status = mount(
-     &mt_entry,
-     &IMFS_ops,
-     "RO",
-     NULL,
-     "/c/y/my_mount_point" );
-  assert( status == 0 );
-*/
 
   printf( "\n\n*** END OF MOUNT/UNMOUNT TEST ***\n" );
   exit(0);

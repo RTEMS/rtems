@@ -1,0 +1,15 @@
+
+Files initialized successfully.
+Testing device_lseek()... Success.
+Testing dup()............ Success.
+Testing dup2()........... Success.
+Testing fdatasync()...... Success.
+Testing umask().......... Success.
+Testing utime().......... Success.
+Testing pipe()........... Success.
+Testing fsync().......... Success.
+Testing pathconf()....... Success.
+Testing fpathconf()...... Success.
+
+
+*** END OF TEST PSX13 ***

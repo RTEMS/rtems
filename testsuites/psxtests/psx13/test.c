@@ -161,8 +161,8 @@ int DupTest(void) {
 
   if (fd2 != -1) {
 
-    fcntl(F_SETFL, fd1, O_APPEND);
-    flags = fcntl(F_GETFL, fd2);
+    fcntl(fd1, F_SETFL, O_APPEND);
+    flags = fcntl(fd2, F_GETFL);
 
     close (fd1);
 
@@ -214,8 +214,8 @@ int Dup2Test(void) {
 
   if (error != -1) {
 
-    fcntl(F_SETFL, fd1, O_APPEND);
-    flags = fcntl(F_GETFL, fd1);
+    fcntl(fd1, F_SETFL, O_APPEND);
+    flags = fcntl(fd1, F_GETFL);
 
     flags = (flags & O_APPEND);
     retval = (flags == O_APPEND);
@@ -600,76 +600,74 @@ int main(
 #endif
 {
   if (InitFiles() == TRUE) {
-    puts ("\nFiles initialized successfully.\n");
+    printf ("\nFiles initialized successfully.\n");
 
-    puts ("Testing device_lseek()...");
+    printf ("Testing device_lseek()... ");
     if (DeviceLSeekTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
 
-    puts ("Testing dup()...");
+    printf ("Testing dup()............ ");
     if (DupTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
     
-    puts ("Testing dup2()...");
+    printf ("Testing dup2()........... ");
     if (Dup2Test() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
 
-    puts ("Testing fdatasync()...");
+    printf ("Testing fdatasync()...... ");
     if (FDataSyncTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
 
-    puts ("Testing umask()...");
+    printf ("Testing umask().......... ");
     if (UMaskTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
 
-   puts ("Testing utime()...");
+   printf ("Testing utime().......... ");
     if (UTimeTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
 
-   puts ("Testing pipe()...");
+   printf ("Testing pipe()........... ");
     if (PipeTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
 
-   puts ("Testing fsync()...");
+   printf ("Testing fsync().......... ");
     if (FSyncTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
 
-   puts ("Testing pathconf()...");
+   printf ("Testing pathconf()....... ");
     if (PathConfTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
  
-   puts ("Testing fpathconf()...");
+   printf ("Testing fpathconf()...... ");
     if (FPathConfTest() == TRUE)
-      puts ("Success.\n");
+      printf ("Success.\n");
     else
-      puts ("Failed!!!\n");
+      printf ("Failed!!!\n");
   }
 
 
   else
-    puts ("\n\nError opening files for write!!!!\n");
+    printf ("\n\nError opening files for write!!!!\n");
 
-  puts( "\n\n*** XXX ***" );
-
-  puts( "\n\n*** END OF TEST PSX13 ***" );
+  printf( "\n\n*** END OF TEST PSX13 ***" );
   exit(0);
 }
 

@@ -205,68 +205,95 @@ int main(
      i++;
   }
 
+  /*
+   * Create files under many and open the directory.
+   */
+
+  printf("Create a lot of files\n");
   status = mkdir( "/many", 0x1c0 );
   status = chdir( "/many" ); 
-  for (i = 0; i<=44; i++) {
-    fd = open (many_files[i], O_CREAT);
+  for (i = 0; i<44; i++) {
+    printf("  Create %s\n", many_files[i]);
+    fd = open (many_files[i], O_CREAT, S_IRWXU);
     close (fd);
   }
+  printf("Open /many and print the directory\n");
   directory_not = opendir( "/many" );
   printdir ( directory_not );
   d_not = readdir( directory_not );
 
-  fd = open ("/b/my_file", O_CREAT);
+  printf("open /b/myfile\n");
+  fd = open ("/b/my_file", O_CREAT, S_IRWXU);
   assert( fd != -1 );
   close (fd);
 
+  printf("scandir a file status: ");
   status = scandir(
      "/b/my_file",
      &namelist,
      select1,
      NULL
   );
+  printf("%d\n", status);
 
-  fd  = open( "/b/new_file", O_CREAT );
+  printf("Open /b/new_file\n");
+  fd  = open( "/b/new_file", O_CREAT, S_IRWXU );
   assert( fd != -1 );
 
+  printf("fcntl F_SETFD should return 0\n");
   status = fcntl( fd, F_SETFD, 1 );
   assert( status == 0 );
+
+  printf("fcntl F_SETFD should return 1\n");
   status = fcntl( fd, F_GETFD, 1 );
   assert( status == 1 );
 
-  status = fcntl( fd, F_DUPFD, 1 );
-  assert ( status == -1 );
+  printf("fcntl F_DUPFD should return 0\n");
+  status = fcntl( fd, F_DUPFD, 0 );
+  assert ( status == 0 );
 
+  printf("fcntl F_GETFL should return -1\n");
   status = fcntl( fd, F_GETFL, 1 );
   assert ( status == -1 );
 
+  printf("fcntl F_SETFL should return -1\n");
   status = fcntl( fd, F_SETFL, 1 );
   assert ( status == -1 );
 
+  printf("fcntl F_GETLK should return -1\n");
   status = fcntl( fd, F_GETLK, 1 );
   assert ( status == -1 );
 
+  printf("fcntl F_SETLK should return -1\n");
   status = fcntl( fd, F_SETLK, 1 );
   assert ( status == -1 );
 
+  printf("fcntl F_SETLKW should return -1\n");
   status = fcntl( fd, F_SETLKW, 1 );
   assert ( status == -1 );
 
+  printf("fcntl F_SETOWN should return -1\n");
   status = fcntl( fd, F_SETOWN, 1 );
   assert ( status == -1 );
 
+  printf("fcntl F_GETOWN should return -1\n");
   status = fcntl( fd, F_GETOWN, 1 );
   assert ( status == -1 );
 
+  printf("fcntl invalid argument should return -1\n");
   status = fcntl( fd, 0xb, 1 );
+  printf("Status %d\n",status);
   assert( status == -1 );
 
+  printf("opendir and readdir /b/myfile\n");
   directory_not = opendir ("/b/my_file");
   d_not = readdir(directory_not);
 
+  printf("opendir and readdir\n");
   directory_not = opendir ("/a");
   d_not = readdir (directory_not);
 
+  printf("chdir to /b/myfile\n");
   status = chdir ("/b/my_file");
   assert (status == -1);
 
@@ -275,11 +302,9 @@ int main(
   printf("status for stat : %d, size of directory: %d\n\n",
          status,(int)s.st_size);
 
-  puts( "\nOpening directory /" );
+  puts( "\nOpen and print directory /" );
   directory = opendir("/");
-
   assert( directory );
-
   printdir(directory);
 
   printf("\nmkdir /d/my_dir\n");
@@ -305,9 +330,7 @@ int main(
 
   printf( "\nOpening directory /c/y\n" );
   directory3 = opendir("/c/y");
-
   assert( directory3 );
-
   printdir(directory3);
   status = closedir( directory3 );
 

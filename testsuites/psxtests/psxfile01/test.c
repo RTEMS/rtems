@@ -238,6 +238,7 @@ int main(
 
   status = rmdir ("/fred");
   assert (status == -1);
+  assert( errno == ENOENT );
 
   status = mknod( "/dev/test_console", S_IFCHR, 0LL );
   assert( !status );
