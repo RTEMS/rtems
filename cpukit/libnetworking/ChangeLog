@@ -1,3 +1,10 @@
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* machine/param.h, sys/syslimits.h: In the continued effort to
+	eliminate .h conflicts between newlib and RTEMS, these were moved to
+	newlib.
+	* machine/Makefile.am, sys/Makefile.am: Reflect above.
+
 2002-08-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Don't install.
