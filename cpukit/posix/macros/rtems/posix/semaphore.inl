@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/semaphore.inl
+ */
+
 /*  rtems/posix/semaphore.inl
  *
  *  This include file contains the macro implementation of the private 

@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/cond.h
+ */
+
 /*  rtems/posix/cond.h
  *
  *  This include file contains all the private support information for

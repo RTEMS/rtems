@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/config.h
+ */
+
 /*  config.h
  *
  *  This include file contains the table of user defined configuration

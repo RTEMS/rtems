@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/pthread.inl
+ */
+
 /*  rtems/posix/pthread.inl
  *
  *  This include file contains the static inline implementation of the private 

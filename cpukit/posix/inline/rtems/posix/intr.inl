@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/intr.inl
+ */
+
 /*  rtems/posix/intr.inl
  *
  *  This include file contains the static inline implementation of the private 

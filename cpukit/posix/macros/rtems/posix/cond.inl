@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/cond.inl
+ */
+
 /*  rtems/posix/cond.inl
  *
  *  This include file contains the macro implementation of the private 

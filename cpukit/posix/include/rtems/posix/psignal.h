@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/psignal.h
+ */
+
 /*
  *  $Id$
  */

@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/timer.h
+ */
+
 /*
  *  $Id$
  */

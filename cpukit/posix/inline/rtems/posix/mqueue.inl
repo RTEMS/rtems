@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/mqueue.inl
+ */
+
 /*  rtems/posix/mqueue.inl
  *
  *  This include file contains the static inline implementation of the private 

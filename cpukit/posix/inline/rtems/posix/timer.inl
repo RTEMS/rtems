@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/timer.inl
+ */
+
 /*  timer.inl
  *
  *  This file contains the static inline implementation of the inlined routines

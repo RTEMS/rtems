@@ -1,8 +1,11 @@
-/*  rtems/posix/mqueue.h
+/**
+ * @file rtems/posix/mqueue.h
  *
  *  This include file contains all the private support information for
  *  POSIX Message Queues.
- *
+ */
+ 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

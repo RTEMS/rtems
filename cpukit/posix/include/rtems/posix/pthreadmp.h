@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/pthreadmp.h
+ */
+
 /*  pthreadmp.h
  *
  *  This include file contains all the constants and structures associated

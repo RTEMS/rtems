@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/ptimer.h
+ */
+
 /*  rtems/posix/ptimer.h
  *
  *  This include file contains all the private support information for

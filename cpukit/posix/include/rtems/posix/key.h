@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/key.h
+ */
+
 /*  rtems/posix/key.h
  *
  *  This include file contains all the private support information for

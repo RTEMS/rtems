@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/intr.inl
+ */
+
 /*  rtems/posix/intr.inl
  *
  *  This include file contains the macro implementation of the private 

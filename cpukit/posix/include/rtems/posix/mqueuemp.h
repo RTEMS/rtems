@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/mqueuemp.h
+ */
+
 /*  mqueuemp.h
  *
  *  This include file contains all the constants and structures associated

@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/semaphoremp.h
+ */
+
 /*  semaphoremp.h
  *
  *  This include file contains all the constants and structures associated

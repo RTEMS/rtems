@@ -1,5 +1,8 @@
-/* mqueue.h
- *
+/**
+ * @file mqueue.h
+ */
+
+/*
  *  $Id$
  */
 

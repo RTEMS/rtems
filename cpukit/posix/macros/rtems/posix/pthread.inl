@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/pthread.inl
+ */
+
 /*  rtems/posix/pthread.inl
  *
  *  This include file contains the macro implementation of the private 

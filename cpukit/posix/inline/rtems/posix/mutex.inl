@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/mutex.inl
+ */
+
 /*  rtems/posix/mutex.inl
  *
  *  This include file contains the static inline implementation of the private 

@@ -1,5 +1,8 @@
-/*  semaphore.h
- *
+/**
+ * @file semaphore.h
+ */
+
+/*
  *  $Id$
  */
 

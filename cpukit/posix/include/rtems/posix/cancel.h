@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/cancel.h
+ */
+
 /* rtems/posix/cancel.h
  *
  *  $Id$

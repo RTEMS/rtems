@@ -1,8 +1,12 @@
-/* intr.h
+/**
+ * @file intr.h
+ *
  *
  *  XXX: It is unclear if the type "intr_t" should be defined when
  *       _POSIX_INTERRUPT_CONTROL is not.
- *
+ */
+ 
+/*
  *  $Id$
  */
 

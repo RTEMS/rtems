@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/intr.h
+ */
+
 /*  rtems/posix/intr.h
  *
  *  This include file contains all the private support information for

@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/posixapi.h
+ */
+
 /*
  *  POSIX API Support
  *

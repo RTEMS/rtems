@@ -1,5 +1,8 @@
-/* devctl.h
- *
+/**
+ * @file devctl.h
+ */
+
+/*
  *  $Id$
  */
 

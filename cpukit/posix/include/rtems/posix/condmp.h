@@ -1,3 +1,7 @@
+/**
+ * @file rtems/posix/condmp.h
+ */
+
 /*  condmp.h
  *
  *  This include file contains all the constants and structures associated

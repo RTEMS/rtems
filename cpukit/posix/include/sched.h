@@ -1,5 +1,8 @@
-/*  sched.h
- *
+/**
+ * @file sched.h
+ */
+
+/*
  *  $Id$
  */
 
