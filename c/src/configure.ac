@@ -197,7 +197,6 @@ AS_IF([test "$host_cpu" = "sparc"],[
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 AM_CONDITIONAL([HAS_RDBG],[test "$HAS_RDBG" = "yes"])
 AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
-AM_CONDITIONAL([HAS_MP],[test "$HAS_MP" = "yes"])
 
 # The posix bsp doesn't support libchip
 # FIXME: We should use a feature based check, here

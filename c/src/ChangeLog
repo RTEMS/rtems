@@ -1,3 +1,15 @@
+2004-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-multiprocessing.m4: Remove AC_SUBST(HAS_MP).
+	Add AM_CONDITIONAL(HAS_MP).
+	* wrapup/Makefile.am: Fix path to ../libchip/shmdr.rel.
+	* configure.ac: Remove AM_CONDITIONAL(HAS_MP).
+	* aclocal/enable-cxx.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4, aclocal/enable-rdbg.m4,
+	aclocal/multilib.m4: Use AS_HELP_STRING instead of AC_HELP_STRING
+	(Deprecated by autoconf 2.59).
+
 2004-01-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add AM_CONDITIONAL HAS_WRAPUP_LIBBSP.

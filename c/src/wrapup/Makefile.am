@@ -48,7 +48,7 @@ endif
 SRCS += $(wildcard $(PROJECT_LIB)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
 if HAS_MP
-SRCS += ../libchip/shmdr/shmdr$(LIB_VARIANT).rel
+SRCS += ../libchip/shmdr$(LIB_VARIANT).rel
 endif
 
 all-local: $(TMPINSTALL_FILES)
