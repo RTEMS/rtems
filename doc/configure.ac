@@ -5,7 +5,6 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-doc],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([project.am])
 RTEMS_TOP([..])
-AC_CONFIG_AUX_DIR([..])
 
 AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 AM_MAINTAINER_MODE
