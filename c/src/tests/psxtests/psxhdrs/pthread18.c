@@ -23,7 +23,7 @@ void test( void )
 {
   pthread_attr_t  attr;
   int             policy;
-  int             status;
+  int             result;
 
-  status = pthread_attr_getschedpolicy( &attr, &policy );
+  result = pthread_attr_getschedpolicy( &attr, &policy );
 }

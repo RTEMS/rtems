@@ -21,8 +21,8 @@
 
 void test( void )
 {
-  int result;
   pthread_mutexattr_t attribute;
+  int result;
 
   result = pthread_mutexattr_destroy( &attribute );
 }

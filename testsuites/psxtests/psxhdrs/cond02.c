@@ -21,8 +21,8 @@
 
 void test( void )
 {
-  int result;
   pthread_condattr_t attribute;
+  int result;
 
   result = pthread_condattr_destroy( &attribute );
 }

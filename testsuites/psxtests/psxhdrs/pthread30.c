@@ -27,10 +27,10 @@ void test( void )
 {
   int         type;
   int         oldtype;
-  int         status;
+  int         result;
 
   type = PTHREAD_CANCEL_DEFERRED;
   type = PTHREAD_CANCEL_ASYNCHRONOUS;
 
-  status = pthread_setcanceltype( type, &oldtype );
+  result = pthread_setcanceltype( type, &oldtype );
 }

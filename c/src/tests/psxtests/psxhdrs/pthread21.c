@@ -22,8 +22,8 @@
 void test( void )
 {
   pthread_t   thread;
-  int         status;
+  int         result;
 
   thread = 0;
-  status = pthread_detach( thread );
+  result = pthread_detach( thread );
 }

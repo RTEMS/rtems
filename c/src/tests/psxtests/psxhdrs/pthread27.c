@@ -26,7 +26,7 @@ void init_routine( void )
 void test( void )
 {
   pthread_once_t   once_control = PTHREAD_ONCE_INIT;
-  int              status;
+  int              result;
 
-  status = pthread_once( &once_control, init_routine );
+  result = pthread_once( &once_control, init_routine );
 }

@@ -27,10 +27,10 @@ void test( void )
 {
   int         state;
   int         oldstate;
-  int         status;
+  int         result;
 
   state = PTHREAD_CANCEL_ENABLE;
   state = PTHREAD_CANCEL_DISABLE;
 
-  status = pthread_setcancelstate( state, &oldstate );
+  result = pthread_setcancelstate( state, &oldstate );
 }

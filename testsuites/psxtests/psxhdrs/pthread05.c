@@ -26,9 +26,9 @@
 
 void test( void )
 {
-  int             result;
   pthread_attr_t  attribute;
   size_t          size;
+  int             result;
 
   size = PTHREAD_STACK_MIN;
 

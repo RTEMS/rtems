@@ -25,9 +25,9 @@
 
 void test( void )
 {
-  int             result;
   pthread_attr_t  attribute;
   size_t          size;
+  int             result;
 
   result = pthread_attr_getstacksize( &attribute, &size );
 }

@@ -23,7 +23,7 @@ void test( void )
 {
   pthread_attr_t  attr;
   int             contentionscope;
-  int             status;
+  int             result;
 
-  status = pthread_attr_getscope( &attr, &contentionscope );
+  result = pthread_attr_getscope( &attr, &contentionscope );
 }

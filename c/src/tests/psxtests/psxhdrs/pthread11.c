@@ -24,7 +24,7 @@ void test( void )
   pthread_t           thread;
   int                 policy;
   struct sched_param  param;
-  int                 status;
+  int                 result;
 
   thread = 0;
 
@@ -38,5 +38,5 @@ void test( void )
 
   param.sched_priority = 0; 
 
-  status = pthread_setschedparam( thread, policy, &param );
+  result = pthread_setschedparam( thread, policy, &param );
 }

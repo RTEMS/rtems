@@ -23,9 +23,9 @@ void test( void )
 {
   pthread_t   thread;
   void       *value_ptr;
-  int         status;
+  int         result;
 
   thread = 0;
 
-  status = pthread_join( thread, &value_ptr );
+  result = pthread_join( thread, &value_ptr );
 }

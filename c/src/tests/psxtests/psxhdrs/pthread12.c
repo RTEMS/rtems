@@ -24,9 +24,9 @@ void test( void )
   pthread_t           thread;
   int                 policy;
   struct sched_param  param;
-  int                 status;
+  int                 result;
 
   thread = 0;
 
-  status = pthread_getschedparam( thread, &policy, &param );
+  result = pthread_getschedparam( thread, &policy, &param );
 }

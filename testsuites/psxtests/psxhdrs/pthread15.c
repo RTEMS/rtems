@@ -23,10 +23,10 @@ void test( void )
 {
   pthread_attr_t  attr;
   int             inheritsched;
-  int             status;
+  int             result;
 
   inheritsched = PTHREAD_INHERIT_SCHED;
   inheritsched = PTHREAD_EXPLICIT_SCHED;
   
-  status = pthread_attr_setinheritsched( &attr, inheritsched );
+  result = pthread_attr_setinheritsched( &attr, inheritsched );
 }

@@ -23,7 +23,7 @@ void test( void )
 {
   pthread_attr_t      attr;
   struct sched_param  param;
-  int                 status;
+  int                 result;
 
-  status = pthread_attr_setschedparam( &attr, &param );
+  result = pthread_attr_setschedparam( &attr, &param );
 }

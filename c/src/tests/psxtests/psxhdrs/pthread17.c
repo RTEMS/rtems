@@ -23,11 +23,11 @@ void test( void )
 {
   pthread_attr_t  attr;
   int             policy;
-  int             status;
+  int             result;
 
   policy = SCHED_FIFO;
   policy = SCHED_RR;
   policy = SCHED_OTHER;
   
-  status = pthread_attr_setschedpolicy( &attr, policy );
+  result = pthread_attr_setschedpolicy( &attr, policy );
 }

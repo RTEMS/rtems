@@ -23,7 +23,7 @@ void test( void )
 {
   pthread_attr_t  attr;
   int             inheritsched;
-  int             status;
+  int             result;
 
-  status = pthread_attr_getinheritsched( &attr, &inheritsched );
+  result = pthread_attr_getinheritsched( &attr, &inheritsched );
 }

@@ -23,10 +23,10 @@ void test( void )
 {
   pthread_attr_t  attr;
   int             contentionscope;
-  int             status;
+  int             result;
 
   contentionscope = PTHREAD_SCOPE_SYSTEM;
   contentionscope = PTHREAD_SCOPE_PROCESS;
 
-  status = pthread_attr_setscope( &attr, contentionscope );
+  result = pthread_attr_setscope( &attr, contentionscope );
 }

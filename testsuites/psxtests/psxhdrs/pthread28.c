@@ -26,8 +26,8 @@ void init_routine( void )
 void test( void )
 {
   pthread_t   thread;
-  int         status;
+  int         result;
 
   thread = 0;
-  status = pthread_cancel( thread );
+  result = pthread_cancel( thread );
 }

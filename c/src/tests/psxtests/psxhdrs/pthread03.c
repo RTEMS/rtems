@@ -21,9 +21,9 @@
 
 void test( void )
 {
-  int             result;
   pthread_attr_t  attribute;
   int             state;
+  int             result;
 
   state = PTHREAD_CREATE_DETACHED;
   state = PTHREAD_CREATE_JOINABLE;

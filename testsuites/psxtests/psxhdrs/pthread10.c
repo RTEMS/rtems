@@ -23,7 +23,7 @@ void test( void )
 {
   pthread_t  id_1 = 0;
   pthread_t  id_2 = 0;
-  int        status;
+  int        result;
 
-  status = pthread_equal( id_1, id_2 );
+  result = pthread_equal( id_1, id_2 );
 }
