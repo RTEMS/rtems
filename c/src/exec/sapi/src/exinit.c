@@ -65,10 +65,6 @@
  *  Output parameters:  NONE
  */
 
-struct months {
-  unsigned32 months[2][13];
-};
-
 void rtems_initialize_executive(
   rtems_configuration_table *configuration_table,
   rtems_cpu_table           *cpu_table
