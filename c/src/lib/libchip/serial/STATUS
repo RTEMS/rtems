@@ -1,0 +1,49 @@
+#
+#  $Id$
+#
+
+General
+=======
+
++ Hardware flow control is not currently supported.  Some of the chip
+  drivers (in particular the z8530) have support for hardware flow control
+  but this has not been tested in the libchip context.  There will need
+  to be a way to totally disabled hardware flow control which is not
+  currently in this.
+
++ "ulClockSpeed" configuration item field to become a pointer to a table
+  of chip specific information.  For example, the z8530 should specify
+  clock speed and clock divisor setting.
+
++ A termios structure should be included to specify  the initial settings.
+  Right now all drivers default to 9600, 8N1.
+ 
+
+MC68681
+=======
+
++ Works interrupt and polled.
+
++ Hardware flow control not included.
+
+NS16650
+=======
+
++ Not tested in libchip context.  Based on Radstone PPC2 driver which worked 
+  well.
+
++ Interrupt code needs to be reworked to eliminate Ring_buffer usage.  This
+  will probably require managing the interrupt mask register as is 
+  done in the mc68681 and z85c30 drivers.
+
++ Missing set attributes function.
+
+Z85C30
+======
+
++ Works polled and interrupt.
+
++ Hardware flow control included but is currently disabled.
+
++ Needs to support mode where more specific vectors are generated.
+
