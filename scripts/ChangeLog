@@ -1,5 +1,10 @@
 2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Use rtems_source_spec_DEPS instead of
+	rtems_source_spec_DEPENDENCIES (Conflicts with automake internals).
+
+2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove rtemsdoc/mkspec.
 
 2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
