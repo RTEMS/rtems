@@ -1,3 +1,10 @@
+2000-11-14	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* Makefile.am, configure.in: Added support for instruction
+	cache enabling based on CPU model.
+	* cache/.cvsignore, cache/Makefile.am, cache/cache.c,
+	cache/cache_.h: New files.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
