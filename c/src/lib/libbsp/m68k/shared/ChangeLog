@@ -1,3 +1,8 @@
+2005-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* m68kpretaskinghook.c: Correct type of symbols from linkcmds to
+	compile with gcc 4.x.
+
 2005-01-28	Eric Norum <norume@aps.anl.gov>
 
 	* m68kpretaskinghook.c: Work around agressive optimizing compilers.

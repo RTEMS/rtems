@@ -34,9 +34,9 @@
 extern void bsp_libc_init( void *, unsigned long, int );
 extern rtems_configuration_table  BSP_Configuration;
 
-extern char          _RamBase[];
-extern char          _WorkspaceBase[];
-extern char          _HeapSize[];
+extern char         _RamBase[];
+extern char         _WorkspaceBase[];
+extern char         _HeapSize[];
 
 unsigned long  _M68k_Ramsize;
 
