@@ -635,7 +635,9 @@ int pthread_mutex_setprioceiling(
       /*  XXX It feels questionable to set the ceiling on a remote mutex. */
       return EINVAL;
     case OBJECTS_LOCAL:
-      *old_ceiling = the_mutex->Mutex.Attributes.priority_ceiling;
+      *old_ceiling = _POSIX_Priority_From_core(
+        the_mutex->Mutex.Attributes.priority_ceiling
+      );
       the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
       _CORE_mutex_Surrender(
         &the_mutex->Mutex,
