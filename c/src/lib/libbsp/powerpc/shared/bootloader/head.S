@@ -76,7 +76,7 @@
  * code area, so that simple C routines can be called. 
  */
 start:	
-#if defined(USE_PPCBUG) && defined(DEBUG)
+#if defined(USE_PPCBUG) && defined(DEBUG) && defined(REENTER_MONITOR)
 	MONITOR_ENTER
 #endif
 	bl	1f
@@ -308,7 +308,7 @@ moved:	lwz	r1,stack(bd)
 	mtspr	HID0,r0
 	
 /* Provisional return to FW, works for PPCBug */
-#if 0
+#if 0 && defined(REENTER_MONITOR)
 	MONITOR_ENTER
 #else
 1:	bctr

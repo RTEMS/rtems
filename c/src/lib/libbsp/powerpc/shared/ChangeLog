@@ -1,3 +1,31 @@
+2003-09-29	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 497/bsps
+	* ChangeLog, bootloader/head.S, startup/bspstart.c: Disable code that
+	returned to the firmware when the loader starts.
+	* startup/sbrk.c: New file.
+
+2003-09-26	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 496/bsps
+	* startup/sbrk.c: New file.
+	* startup/bspstart.c: This patch implements 'sbrk'
+	for the powerpc-shared BSP to work around what's known as the
+	'32Mb problem' in combination with run-time loaded code.
+	GCC normally generates (PowerPC) code doing 'short jumps' which
+	requires all text segments being in the same 32Mb area of memory.
+	However, some run-time loaders use (e.g. heap-) memory violating the
+	stated limitation on hardware with more than 32Mb of memory.
+	(NOTE: portable loaders are probably not even aware of this
+	GCC/CPU specific problem.)
+
+	This patch implements a simple workaround: At boot time, the system is
+	only provided with 32Mb of memory. The user is supposed to load all
+	necessary modules prior to that limit being exhausted. Once that
+	happens, newlib/malloc end up trying to 'sbrk()' for more memory and
+	the implementation provided by this patch will then make the rest of
+	the physical memory available.
+
 2003-09-26  Till Straumann <strauman@slac.stanford.edu>
 
 	PR 497/bsps
