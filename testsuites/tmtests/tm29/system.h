@@ -36,6 +36,7 @@ rtems_task Init(
 #define CONFIGURE_TICKS_PER_TIMESLICE        0
  
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
 
 #include <confdefs.h>
 
