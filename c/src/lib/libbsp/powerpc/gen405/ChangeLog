@@ -1,3 +1,8 @@
+2003-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* dlentry/Makefile.am: Eliminate VPATH.
+	* startup/Makefile.am: Eliminate VPATH.
+
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 333/bsps
