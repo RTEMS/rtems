@@ -63,6 +63,7 @@ END-INFO-DIR-ENTRY
 @c  The alternative is to rework a sentence to avoid this problem.
 
 @include preface.texi
+@include basefs.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top filesystem
@@ -71,6 +72,7 @@ This is the online version of the RTEMS Filesystem Design Guide.
 
 @menu
 * Preface::
+* Base File System::
 * Command and Variable Index::
 * Concept Index::
 @end menu

@@ -7,7 +7,7 @@
 @c
 
 @ifinfo
-@node Preface, , Top, Top
+@node Preface, Base File System, Top, Top
 @end ifinfo
 @unnumbered Preface
 
