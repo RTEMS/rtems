@@ -21,13 +21,13 @@
 @c  GCC Version
 @c
 
-@set GCC-VERSION     gcc 3.2.2
-@set GCC-TAR         gcc-3.2.2.tar.bz2
-@set GCC-UNTAR       gcc-3.2.2
+@set GCC-VERSION     gcc 3.2.3
+@set GCC-TAR         gcc-3.2.3.tar.bz2
+@set GCC-UNTAR       gcc-3.2.3
 @set GCC-FTPSITE     gcc.gnu.org
 @set GCC-FTPDIR      /pub/gnu/gcc/
 @set GCC-HTTPDIR     /pub/gcc/releases/index.html
-@set GCC-RTEMSPATCH  gcc-3.2.2-rtems-20030326.diff
+@set GCC-RTEMSPATCH  gcc-3.2.3-rtems-20030507a.diff
 
 @c
 @c  BINUTILS Version
@@ -51,7 +51,7 @@
 @set NEWLIB-UNTAR       newlib-1.11.0
 @set NEWLIB-FTPSITE     sources.redhat.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.11.0-rtems-20030326.diff.gz
+@set NEWLIB-RTEMSPATCH  newlib-1.11.0-rtems-20030605.diff.gz
 
 @c
 @c  GDB Version
@@ -62,15 +62,15 @@
 @set GDB-UNTAR       gdb-5.2
 @set GDB-FTPSITE     ftp.gnu.org
 @set GDB-FTPDIR      /pub/gnu/gdb
-@set GDB-RTEMSPATCH  gdb-5.2-rtems-20020612.diff.gz
+@set GDB-RTEMSPATCH  gdb-5.2-rtems-20030211.diff.gz
 
 @c
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS SS-20030417
-@set RTEMS-TAR       rtems-ss-20030417.tar.bz2
-@set RTEMS-UNTAR     rtems-ss-20030417
-@set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/snapshots/rtems
+@set RTEMS-VERSION   RTEMS 4.6.0
+@set RTEMS-TAR       rtems-4.6.0.tar.bz2
+@set RTEMS-UNTAR     rtems-4.6.0
+@set RTEMS-FTPSITE   ftp.rtems.com
+@set RTEMS-FTPDIR    /pub/rtems/releases/4.6.0
 
