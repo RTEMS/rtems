@@ -4,11 +4,13 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /********************************* Includes ***********************************/
 
-#if UEMF
+#ifdef UEMF
 	#include	"uemf.h"
 #else
 	#include	"basic/basicInternal.h"
@@ -49,6 +51,9 @@ enum flag {
 
 static int 	dsnprintf(char_t **s, int size, char_t *fmt, va_list arg,
 				int msize);
+#if !defined(__rtems__)
+static int	strnlen(char_t *s, unsigned int n);
+#endif
 static void	put_char(strbuf_t *buf, char_t c);
 static void	put_string(strbuf_t *buf, char_t *s, int len,
 				int width, int prec, enum flag f);
@@ -58,15 +63,15 @@ static void	put_ulong(strbuf_t *buf, unsigned long int value, int base,
 /************************************ Code ************************************/
 /*
  *	"basename" returns a pointer to the last component of a pathname
- *  LINUX and LynxOS have their own basename function
+ *  LINUX, LynxOS and Mac OS X have their own basename function
  */
 
-#if ! LINUX && ! LYNX && ! __rtems__
+#if (!defined (LINUX) && !defined (LYNX) && !defined (MACOSX))
 char_t *basename(char_t *name)
 {
 	char_t	*cp;
 
-#if NW || WIN
+#if (defined (NW) || defined (WIN))
 	if (((cp = gstrrchr(name, '\\')) == NULL) &&
 			((cp = gstrrchr(name, '/')) == NULL)) {
 		return name;
@@ -82,7 +87,7 @@ char_t *basename(char_t *name)
 		return ++cp;
 	}
 }
-#endif /* ! LINUX & ! LYNX */
+#endif /* ! LINUX & ! LYNX & ! MACOSX */
 
 /******************************************************************************/
 /*
@@ -99,7 +104,7 @@ char_t *dirname(char_t *buf, char_t *name, int bufsize)
 	a_assert(buf);
 	a_assert(bufsize > 0);
 
-#if WIN || NW
+#if (defined (WIN) || defined (NW))
 	if ((cp = gstrrchr(name, '/')) == NULL && 
 		(cp = gstrrchr(name, '\\')) == NULL)
 #else
@@ -343,7 +348,11 @@ static int dsnprintf(char_t **s, int size, char_t *fmt, va_list arg, int msize)
 								prec, f);
 						}
 					} else {
+                  /* 04 Apr 02 BgP -- changed so that %X correctly outputs
+                   * uppercase hex digits when requested.
 						put_ulong(&buf, value, 16, 0, NULL, width, prec, f);
+                   */
+						put_ulong(&buf, value, 16, ('X' == c) , NULL, width, prec, f);
 					}
 				}
 
@@ -405,6 +414,21 @@ static int dsnprintf(char_t **s, int size, char_t *fmt, va_list arg, int msize)
 	}
 	return buf.count;
 }
+
+/******************************************************************************/
+/*
+ *	Return the length of a string limited by a given length
+ */
+
+#if !defined(__rtems__)
+static int strnlen(char_t *s, unsigned int n)
+{
+	unsigned int 	len;
+
+	len = gstrlen(s);
+	return min(len, n);
+}
+#endif
 
 /******************************************************************************/
 /*
@@ -527,13 +551,13 @@ static void put_ulong(strbuf_t *buf, unsigned long int value, int base,
 
 char_t *ascToUni(char_t *ubuf, char *str, int nBytes)
 {
-#if UNICODE
+#ifdef UNICODE
 	if (MultiByteToWideChar(CP_ACP, 0, str, nBytes / sizeof(char_t), ubuf,
 			nBytes / sizeof(char_t)) < 0) {
 		return (char_t*) str;
 	}
 #else
-	memcpy(ubuf, str, nBytes);
+	strncpy(ubuf, str, nBytes);
 #endif
 	return ubuf;
 }
@@ -547,13 +571,13 @@ char_t *ascToUni(char_t *ubuf, char *str, int nBytes)
 
 char *uniToAsc(char *buf, char_t *ustr, int nBytes)
 {
-#if UNICODE
+#ifdef UNICODE
 	if (WideCharToMultiByte(CP_ACP, 0, ustr, nBytes, buf, nBytes, NULL,
 			NULL) < 0) {
 		return (char*) ustr;
 	}
 #else
-	memcpy(buf, ustr, nBytes);
+	strncpy(buf, ustr, nBytes);
 #endif
 	return (char*) buf;
 }

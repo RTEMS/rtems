@@ -662,7 +662,7 @@ static int dbWriteKeyValue(int fd, char_t *key, char_t *value)
 
 	if (pLineOut) {
 		len = gstrlen(pLineOut);
-#if CE
+#ifdef CE
 		rc = writeUniToAsc(fd, pLineOut, len);
 #else
 		rc = gwrite(fd, pLineOut, len);
@@ -853,7 +853,7 @@ int dbLoad(int did, char_t *filename, int flags)
  *	Read entire file into temporary buffer
  */
 	buf = balloc(B_L, sbuf.st_size + 1);
-#if CE
+#ifdef CE
 	if (readAscToUni(fd, &buf, sbuf.st_size) != (int)sbuf.st_size) {
 #else
 	if (gread(fd, buf, sbuf.st_size) != (int)sbuf.st_size) {
@@ -1019,8 +1019,8 @@ void basicSetProductDir(char_t *proddir)
 {
 	int len;
 
-	if (basicProdDir != NULL) {
-		bfree(B_L, basicProdDir);
+	if (basicProdDir != NULL) {	
+      bfree(B_L, basicProdDir);
 	}
     
 	basicProdDir = bstrdup(B_L, proddir);

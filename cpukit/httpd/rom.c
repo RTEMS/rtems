@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -24,7 +26,7 @@
 
 /******************************** Local Data **********************************/
 
-#if WEBS_PAGE_ROM
+#ifdef WEBS_PAGE_ROM
 
 sym_fd_t	romTab;						/* Symbol table for web pages */
 

@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -25,10 +27,10 @@ static int					urlHandlerOpenCount = 0;	/* count of apps */
 
 /**************************** Forward Declarations ****************************/
 
-static int 	websUrlHandlerSort(const void *p1, const void *p2);
-static int 	websPublishHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, 
+static int 		websUrlHandlerSort(const void *p1, const void *p2);
+static int 		websPublishHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, 
 				int sid, char_t *url, char_t *path, char_t *query);
-static int	websTidyUrl(webs_t wp);
+static char_t	*websCondenseMultipleChars(char_t *strToCondense, char_t cCondense);
 
 /*********************************** Code *************************************/
 /*
@@ -256,7 +258,11 @@ int websUrlHandlerRequest(webs_t wp)
 	
 	websSetRequestPath(wp, websGetDefaultDir(), NULL);
 
-	websTidyUrl(wp);
+/*
+ *	Eliminate security hole
+ */
+ 	websCondenseMultipleChars(wp->path, '/');
+	websCondenseMultipleChars(wp->url, '/');
 
 /*
  *	We loop over each handler in order till one accepts the request. 
@@ -292,6 +298,7 @@ int websUrlHandlerRequest(webs_t wp)
 	return 0;
 }
 
+#ifdef OBSOLETE_CODE
 
 /******************************************************************************/
 /*
@@ -356,6 +363,49 @@ static int websTidyUrl(webs_t wp)
 		bfree(B_L, url);
 		return -1;
 	}
+}
+
+#endif
+
+/******************************************************************************/
+/*
+ *	Convert multiple adjacent occurrences of a given character to a single
+ *	instance.
+ */
+
+static char_t *websCondenseMultipleChars(char_t *strToCondense, char_t cCondense)
+{
+	if (strToCondense != NULL) {
+		char_t *pStr, *pScan;
+
+		pStr = pScan = strToCondense;
+
+		while (*pScan && *pStr) {
+/*
+ *			Advance scan pointer over multiple occurences of condense character
+ */
+			while ((*pScan == cCondense) && (*(pScan + 1) == cCondense)) {
+				pScan++;
+			}
+/*
+ *			Copy character if an advance of the scan pointer has occurred
+ */
+			if (pStr != pScan) {
+				*pStr = *pScan;
+			}
+			
+			pScan++;
+			pStr++;
+		}
+/*
+ *		Zero terminate string if multiple adjacent characters were found and condensed
+ */
+		if (pStr != pScan) {
+			*pStr = 0;
+		}
+	}
+
+	return strToCondense;
 }
 
 /******************************************************************************/

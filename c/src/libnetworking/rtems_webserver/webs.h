@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1992-2000. All Rights Reserved.
  *
  *	See the file "license.txt" for information on usage and redistribution
+ *
+ * $Id$
  */
 
 #ifndef _h_WEBS
@@ -21,7 +23,7 @@
 
 #include	"ej.h"
 #ifdef WEBS_SSL_SUPPORT
-#include	"websSSL.h"
+	#include	"websSSL.h"
 #endif
 
 /********************************** Defines ***********************************/
@@ -30,7 +32,7 @@
  *	code must not be modified.
  */
 #define WEBS_NAME				T("GoAhead-Webs")
-#define WEBS_VERSION			T("2.1")
+#define WEBS_VERSION			T("2.1.3")
 
 #define WEBS_HEADER_BUFINC 		512			/* Header buffer size */
 #define WEBS_ASP_BUFINC			512			/* Asp expansion increment */
@@ -140,6 +142,8 @@ extern void		 websDecodeUrl(char_t *token, char_t *decoded, int len);
 extern void  	 websDone(webs_t wp, int code);
 extern void 	 websEncode64(char_t *outbuf, char_t *string, int buflen);
 extern void  	 websError(webs_t wp, int code, char_t *msg, ...);
+/* function websErrorMsg() made extern 03 Jun 02 BgP */
+extern char_t 	*websErrorMsg(int code);
 extern void  	 websFooter(webs_t wp);
 extern int 		 websFormDefine(char_t *name, void (*fn)(webs_t wp, 
 					char_t *path, char_t *query));
@@ -206,7 +210,7 @@ extern int 		 websWriteBlock(webs_t wp, char_t *buf, int nChars);
 extern int 		 websWriteDataNonBlock(webs_t wp, char *buf, int nChars);
 extern int 		 websValid(webs_t wp);
 extern int 		 websValidateUrl(webs_t wp, char_t *path);
-extern void		websMarkTime(webs_t wp);
+extern void		websSetTimeMark(webs_t wp);
 
 /*
  *	The following prototypes are used by the SSL patch found in websSSL.c
@@ -220,7 +224,7 @@ extern void 	websReadEvent(webs_t wp);
  *	Prototypes for functions available when running as part of the 
  *	GoAhead Embedded Management Framework (EMF)
  */
-#if EMF
+#ifdef EMF
 extern void 	 websFormExplain(webs_t wp, char_t *path, char_t *query);
 #endif
 

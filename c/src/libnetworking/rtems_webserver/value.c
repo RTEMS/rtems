@@ -2,6 +2,8 @@
  * value.c -- Generic type (holds all types)
  *
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -13,14 +15,14 @@
 
 /********************************* Includes ***********************************/
 
-#if UEMF
+#ifdef UEMF
 	#include	"uemf.h"
 #else
 	#include	"basic/basicInternal.h"
 #endif
 
 /*********************************** Locals ***********************************/
-#if !UEMF
+#ifndef UEMF
 static value_t value_null;					/* All zeros */
 
 /***************************** Forward Declarations ***************************/
@@ -77,7 +79,7 @@ void valueFree(value_t* v)
 			v->value.string != NULL) {
 		bfree(B_L, v->value.string);
 	}
-#if !UEMF
+#ifndef UEMF
 	if (v->valid && v->type == symbol && v->value.symbol.data != NULL &&
 			v->value.symbol.freeCb !=NULL) {
 		v->value.symbol.freeCb(v->value.symbol.data);
@@ -88,7 +90,7 @@ void valueFree(value_t* v)
 	v->allocated = 0;
 }
 
-#if !UEMF
+#ifndef UEMF
 
 /******************************************************************************/
 /*
@@ -151,7 +153,7 @@ value_t valueShortint(short value)
 	return v;
 }
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 /******************************************************************************/
 /*
  *	Initialize a floating value.
@@ -336,7 +338,7 @@ value_t valueAdd(value_t v1, value_t v2)
 		a_assert(0);
 		break;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		v1.value.floating += v2.value.floating;
 		return v1;
@@ -393,7 +395,7 @@ value_t valueSub(value_t v1, value_t v2)
 		a_assert(0);
 		break;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		v1.value.floating -= v2.value.floating;
 		return v1;
@@ -454,7 +456,7 @@ value_t valueMul(value_t v1, value_t v2)
 		a_assert(v1.type != flag);
 		break;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		v1.value.floating *= v2.value.floating;
 		return v1;
@@ -511,7 +513,7 @@ value_t valueDiv(value_t v1, value_t v2)
 		a_assert(v1.type != flag);
 		break;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		v1.value.floating /= v2.value.floating;
 		return v1;
@@ -582,7 +584,7 @@ int valueCmp(value_t v1, value_t v2)
 			return 0;
 		else return 1;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		if (v1.value.floating < v2.value.floating)
 			return -1;
@@ -633,7 +635,7 @@ int valueCmp(value_t v1, value_t v2)
 
 static void coerce_types(register value_t* v1, register value_t* v2)
 {
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	if (v1->type == floating) {
 		v2->type = floating;
 		v2->value.floating = (double) v2->value.integer;
@@ -700,7 +702,7 @@ int valueNegative(value_t* vp)
 	case bytes:
 		return 0;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		if (vp->value.floating < 0)
 			return 1;
@@ -750,7 +752,7 @@ int valueZero(value_t* vp)
 	case bytes:
 		return 0;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		if (vp->value.floating == 0)
 			return 1;
@@ -801,7 +803,7 @@ static int value_to_integer(value_t* vp)
 	case string:
 	case bytes:
 	case big:
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		a_assert(0);
 		return -1;
@@ -852,7 +854,7 @@ void valueSprintf(char_t** out, int size, char_t* fmt, value_t vp)
 		}
 		break;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		if (fmt == NULL || *fmt == '\0') {
 			fmtAlloc(out, size, T("%f"), vp.value.floating);
@@ -961,7 +963,7 @@ void valueSprintf(char_t** out, int size, char_t* fmt, value_t vp)
 		}
 		break;
 
-#if UNUSED
+#ifdef UNUSED
 	case bytes:
 		asrc = vp.value.bytes;
 
@@ -1168,7 +1170,7 @@ value_t valueAtov(char_t* s, int pref_type)
 		}
 		break;
 
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 	case floating:
 		gsscanf(s, T("%f"), &v.value.floating);
 		break;
@@ -1191,7 +1193,7 @@ value_t valueAtov(char_t* s, int pref_type)
 		v = valueBytes((char*) s, VALUE_ALLOCATE);
 		break;
 
-#if UNUSED
+#ifdef UNUSED
 	case literal:
 		v = value_literal(bstrdup(B_L, s));
 		v.value.literal[len] = '\0';

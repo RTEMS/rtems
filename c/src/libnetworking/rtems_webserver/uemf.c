@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /********************************** Description *******************************/
@@ -46,14 +48,24 @@ void error(E_ARGS_DEC, int etype, char_t *fmt, ...)
 
 	if (etype == E_LOG) {
 		fmtAlloc(&buf, E_MAX_ERROR, T("%s\n"), fmtBuf);
-#if DEV
+/*#ifdef DEV*/
 	} else if (etype == E_ASSERT) {
 		fmtAlloc(&buf, E_MAX_ERROR, 
 			T("Assertion %s, failed at %s %d\n"), fmtBuf, E_ARGS); 
-#endif
+/*#endif*/
 	} else if (etype == E_USER) {
 		fmtAlloc(&buf, E_MAX_ERROR, T("%s\n"), fmtBuf);
 	}
+   /*
+    * bugfix -- if etype is not E_LOG, E_ASSERT, or E_USER, the call to
+    * bfreeSafe(B_L, buf) below will fail, because 'buf' is randomly
+    * initialized. To be nice, we format a message saying that this is an
+    * unknown message type, and in doing so give buf a valid value. Thanks 
+    * to Simon Byholm.
+    */
+   else {
+      fmtAlloc(&buf, E_MAX_ERROR, T("Unknown error"));
+   }
 	va_end(args);
 
 	bfree(B_L, fmtBuf);

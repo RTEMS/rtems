@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -17,7 +19,7 @@
 
 #include	"ejIntrn.h"
 
-#if CE
+#ifdef CE
 	#include	"CE/wincompat.h"
 #endif
 
@@ -98,7 +100,7 @@ int ejOpenEngine(sym_fd_t variables, sym_fd_t functions)
  */
 	ejSetGlobalVar(ep->eid, T("null"), NULL);
 
-#if EMF
+#ifdef EMF
 	ejEmfOpen(ep->eid);
 #endif
 	return ep->eid;
@@ -118,7 +120,7 @@ void ejCloseEngine(int eid)
 		return;
 	}
 
-#if EMF
+#ifdef EMF
 	ejEmfClose(eid);
 #endif
 

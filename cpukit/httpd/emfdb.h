@@ -18,7 +18,7 @@
 #ifndef _h_EMFDB
 #define _h_EMFDB 1
 
-#if ! UEMF
+#ifndef UEMF
 	#include	"basic/basic.h"
 	#include	"emf/emf.h"
 #else

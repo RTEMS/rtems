@@ -2,13 +2,20 @@
 #  $Id$
 #
 
-Notes on merging GoAhead Webs 2.1.  Eventually RTEMS should be supported
+Notes on merging GoAhead Webs 2.1.4.  Eventually RTEMS should be supported
 in their distributions and this directory removed.
 
 Applied patch from Antti P Miettinen <antti.p.miettinen@nokia.com>.
 
 Obtain the original distribution from http://www.goahead.com for
 documentation.
+
+Porting
+=======
+ - added rtems complier flags to uemf.h and misc.c
+ - following source files are distributed with the web server
+    but not currently used by RTEMS
+    [cgi.c, sockGen.c, umui.c, websSSL.c, websda.c]
 
 Tailoring
 =========

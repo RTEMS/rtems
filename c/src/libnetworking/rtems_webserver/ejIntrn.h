@@ -4,6 +4,8 @@
  *	Copyright (c) GoAhead Software, Inc., 1992-2000
  *
  *	See the file "license.txt" for information on usage and redistribution
+ *
+ * $Id$
  */
 
 #ifndef _h_EJINTERNAL
@@ -22,13 +24,13 @@
 #include	<stdarg.h>
 #include	<stdlib.h>
 
-#if CE
-#if ! UEMF
+#ifdef CE
+#ifndef UEMF
 	#include	<io.h>
 #endif
 #endif
 
-#if LYNX
+#ifdef LYNX
 	#include	<unistd.h>
 #endif
 
@@ -36,7 +38,7 @@
 	#include	<dirent.h>
 #endif
 
-#if UEMF
+#ifdef UEMF
 	#include	"uemf.h"
 #else
 	#include	<param.h>

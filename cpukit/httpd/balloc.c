@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -26,7 +28,7 @@
 
 #define IN_BALLOC
 
-#if UEMF
+#ifdef UEMF
 	#include	"uemf.h"
 #else
 	#include	"basic/basicInternal.h"
@@ -35,13 +37,13 @@
 #include	<stdarg.h>
 #include	<stdlib.h>
 
-#if !NO_BALLOC
+#ifndef NO_BALLOC
 /********************************* Defines ************************************/
 
 /*
  *	Define B_STATS if you wish to track memory block and stack usage
  */
-#if B_STATS
+#ifdef B_STATS
 /*
  *	Optional statistics
  */
@@ -107,18 +109,18 @@ static int				bopenCount = 0;			/* Num tasks using balloc */
 
 /*************************** Forward Declarations *****************************/
 
-#if B_STATS
+#ifdef B_STATS
 static void bStatsAlloc(B_ARGS_DEC, void *ptr, int q, int size);
 static void bStatsFree(B_ARGS_DEC, void *ptr, int q, int size);
 static void bstatsWrite(int handle, char_t *fmt, ...);
 static int 	bStatsFileSort(const void *cp1, const void *cp2);
 #endif /* B_STATS */
 
-#if B_FILL || B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#if (defined (B_FILL) || defined (B_VERIFY_CAUSES_SEVERE_OVERHEAD))
 static void bFillBlock(void *buf, int bufsize);
 #endif
 
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 static void verifyUsedBlock(bType *bp, int q);
 static void verifyFreeBlock(bType *bp, int q);
 void verifyBallocSpace();
@@ -141,7 +143,7 @@ int bopen(void *buf, int bufsize, int flags)
 {
 	bFlags = flags;
 
-#if BASTARD_TESTING
+#ifdef BASTARD_TESTING
 	srand(time(0L));
 #endif /* BASTARD_TESTING */
 
@@ -163,7 +165,7 @@ int bopen(void *buf, int bufsize, int flags)
 		if ((buf = malloc(bufsize)) == NULL) {
 			return -1;
 		}
-#if B_STATS
+#ifdef B_STATS
 		bStatsMemMalloc += bufsize;
 #endif
 	} else {
@@ -173,13 +175,13 @@ int bopen(void *buf, int bufsize, int flags)
 	bFreeSize = bFreeLeft = bufsize;
 	bFreeBuf = bFreeNext = buf;
 	memset(bQhead, 0, sizeof(bQhead));
-#if B_FILL || B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#if (defined (B_FILL) || defined (B_VERIFY_CAUSES_SEVERE_OVERHEAD))
 	bFillBlock(buf, bufsize);
 #endif
-#if B_STATS
+#ifdef B_STATS
 	bStackStart = &buf;
 #endif
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 	verifyFreeBlock(buf, bufsize);
 #endif
 	return 0;
@@ -192,7 +194,7 @@ int bopen(void *buf, int bufsize, int flags)
 
 void bclose()
 {
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 	verifyBallocSpace();
 #endif
 	if (--bopenCount <= 0 && !(bFlags & B_USER_BUF)) {
@@ -220,14 +222,14 @@ void *balloc(B_ARGS_DEC, int size)
 			return NULL;
 		}
 	}
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 	verifyBallocSpace();
 #endif
 	if (size < 0) {
 		return NULL;
 	}
 
-#if BASTARD_TESTING
+#ifdef BASTARD_TESTING
 	if (rand() == 0x7fff) {
 		return NULL;
 	}
@@ -241,7 +243,7 @@ void *balloc(B_ARGS_DEC, int size)
  *		Size if bigger than the maximum class. Malloc if use has been okayed
  */
 		if (bFlags & B_USE_MALLOC) {
-#if B_STATS
+#ifdef B_STATS
 			bstats(0, NULL);
 #endif
 #ifdef IRIX
@@ -252,10 +254,10 @@ void *balloc(B_ARGS_DEC, int size)
 				traceRaw(T("B: malloc failed\n"));
 				return NULL;
 			}
-#if B_STATS
+#ifdef B_STATS
 			bStatsMemMalloc += memSize;
 #endif
-#if B_FILL || B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#if (defined (B_FILL) || defined (B_VERIFY_CAUSES_SEVERE_OVERHEAD))
 			bFillBlock(bp, memSize);
 #endif
 
@@ -275,10 +277,10 @@ void *balloc(B_ARGS_DEC, int size)
  *		Take first block off the relevant q if non-empty
  */
 		bQhead[q] = bp->u.next;
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 		verifyFreeBlock(bp, q);
 #endif
-#if B_FILL || B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#if (defined (B_FILL) || defined (B_VERIFY_CAUSES_SEVERE_OVERHEAD))
 		bFillBlock(bp, memSize);
 #endif
 		bp->u.size = memSize - sizeof(bType);
@@ -291,19 +293,19 @@ void *balloc(B_ARGS_DEC, int size)
  *			create a new block out of the primary free block
  */
 			bp = (bType*) bFreeNext;
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 			verifyFreeBlock(bp, q);
 #endif
 			bFreeNext += memSize;
 			bFreeLeft -= memSize;
-#if B_FILL || B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#if (defined (B_FILL) || defined (B_VERIFY_CAUSES_SEVERE_OVERHEAD))
 			bFillBlock(bp, memSize);
 #endif
 			bp->u.size = memSize - sizeof(bType);
 			bp->flags = 0;
 
 		} else if (bFlags & B_USE_MALLOC) {
-#if B_STATS
+#ifdef B_STATS
 			static int once = 0;
 			if (once++ == 0) {
 				bstats(0, NULL);
@@ -319,10 +321,10 @@ void *balloc(B_ARGS_DEC, int size)
 				traceRaw(T("B: malloc failed\n"));
 				return NULL;
 			}
-#if B_STATS
+#ifdef B_STATS
 			bStatsMemMalloc += memSize;
 #endif
-#if B_FILL || B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#if (defined (B_FILL) || defined (B_VERIFY_CAUSES_SEVERE_OVERHEAD))
 			bFillBlock(bp, memSize);
 #endif
 			bp->u.size = memSize - sizeof(bType);
@@ -334,7 +336,7 @@ void *balloc(B_ARGS_DEC, int size)
 		}
 	}
 
-#if B_STATS
+#ifdef B_STATS
 	bStatsAlloc(B_ARGS, bp, q, memSize);
 #endif
 	bp->flags |= B_INTEGRITY;
@@ -344,7 +346,7 @@ void *balloc(B_ARGS_DEC, int size)
  *	determine and reduce maximum memory use.
  */
 #if 0
-#if B_STATS
+#ifdef B_STATS
 	if (bStatsBallocInUse == bStatsBallocMax) {
 		bstats(0, NULL);
 	}
@@ -365,7 +367,7 @@ void bfree(B_ARGS_DEC, void *mp)
 	bType	*bp;
 	int		q, memSize;
 
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 	verifyBallocSpace();
 #endif
 	bp = (bType*) ((char*) mp - sizeof(bType));
@@ -378,10 +380,10 @@ void bfree(B_ARGS_DEC, void *mp)
 
 	memSize = ballocGetSize(bp->u.size, &q);
 
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 	verifyUsedBlock(bp,q);
 #endif
-#if B_STATS
+#ifdef B_STATS
 	bStatsFree(B_ARGS, bp, q, bp->u.size+sizeof(bType));
 #endif
 	if (bp->flags & B_MALLOCED) {
@@ -389,7 +391,7 @@ void bfree(B_ARGS_DEC, void *mp)
 		return;
 	}
 		
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 	bFillBlock(bp, memSize);
 #endif
 
@@ -415,7 +417,7 @@ void bfreeSafe(B_ARGS_DEC, void *mp)
 }
 
 /******************************************************************************/
-#if UNICODE
+#ifdef UNICODE
 /*
  *	Duplicate a string, allow NULL pointers and then dup an empty string.
  */
@@ -510,7 +512,7 @@ static int ballocGetSize(int size, int *q)
 }
 
 /******************************************************************************/
-#if B_FILL || B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#if (defined (B_FILL) || defined (B_VERIFY_CAUSES_SEVERE_OVERHEAD))
 /*
  *	Fill the block (useful during development to catch zero fill assumptions)
  */
@@ -522,7 +524,7 @@ static void bFillBlock(void *buf, int bufsize)
 #endif
 
 /******************************************************************************/
-#if B_STATS
+#ifdef B_STATS
 /*
  *	Statistics. Do output via calling the writefn callback function with 
  *	"handle" as the output file handle. 
@@ -816,7 +818,7 @@ void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
 #endif /* B_STATS */
 
 /******************************************************************************/
-#if B_VERIFY_CAUSES_SEVERE_OVERHEAD
+#ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 /*
  *	The following routines verify the integrity of the balloc memory space.
  *	These functions use the B_FILL feature.  Corruption is defined
@@ -936,7 +938,7 @@ void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...))
 
 char_t *bstrdupNoBalloc(char_t *s)
 {
-#if UNICODE
+#ifdef UNICODE
 	if (s) {
 		return wcsdup(s);
 	} else {

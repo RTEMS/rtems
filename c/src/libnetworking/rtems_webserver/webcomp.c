@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -112,7 +114,7 @@ static int compile(char_t *fileList, char_t *prefix)
 			fprintf(stderr, "Can't open file %s\n", file);
 			return -1;
 		}
-		fprintf(stdout, "static const unsigned char page_%d[] = {\n", nFile);
+		fprintf(stdout, "static unsigned char page_%d[] = {\n", nFile);
 
 		while ((len = read(fd, buf, sizeof(buf))) > 0) {
 			p = buf;

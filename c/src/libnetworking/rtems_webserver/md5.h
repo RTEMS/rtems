@@ -1,4 +1,6 @@
 /* MD5.H - header file for MD5C.C
+ *
+ * $Id$
  */
 
 /* Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
@@ -46,3 +48,4 @@ extern void MD5Update (MD5_CONTEXT *, unsigned char *, unsigned int);
 extern void MD5Final (unsigned char [16], MD5_CONTEXT *);
 
 #endif /* _h_MD5 */
+

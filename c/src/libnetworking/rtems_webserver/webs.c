@@ -19,7 +19,7 @@
 
 #include	"wsIntrn.h"
 #ifdef DIGEST_ACCESS_SUPPORT
-#include	"websda.h"
+	#include	"websda.h"
 #endif
 
 /******************************** Global Data *********************************/
@@ -44,7 +44,7 @@ websErrorType websErrors[] = {
 	{ 204, T("No Content") },
 	{ 301, T("Redirect") },
 	{ 302, T("Redirect") },
-	{ 304, T("User local copy") },
+	{ 304, T("Use local copy") },
 	{ 400, T("Page not found") },
 	{ 401, T("Unauthorized") },
 	{ 403, T("Forbidden") },
@@ -56,7 +56,7 @@ websErrorType websErrors[] = {
 	{ 0, NULL }
 };
 
-#if WEBS_LOG_SUPPORT
+#ifdef WEBS_LOG_SUPPORT
 static char_t	websLogname[64] = T("log.txt");	/* Log filename */
 static int 		websLogFd;						/* Log file handle */
 #endif
@@ -69,17 +69,17 @@ static int		websOpenCount = 0;		/* count of apps using this module */
 /**************************** Forward Declarations ****************************/
 
 
-static char_t 	*websErrorMsg(int code);
+/*static char_t 	*websErrorMsg(int code);*/
 static int 		websGetInput(webs_t wp, char_t **ptext, int *nbytes);
 static int 		websParseFirst(webs_t wp, char_t *text);
 static void 	websParseRequest(webs_t wp);
 static void		websSocketEvent(int sid, int mask, int data);
 static int		websGetTimeSinceMark(webs_t wp);
 
-#if WEBS_LOG_SUPPORT
+#ifdef WEBS_LOG_SUPPORT
 static void 	websLog(webs_t wp, int code);
 #endif
-#if WEBS_IF_MODIFIED_SUPPORT
+#ifdef WEBS_IF_MODIFIED_SUPPORT
 static time_t	dateParse(time_t tip, char_t *cmd);
 #endif
 
@@ -99,7 +99,7 @@ int websOpenServer(int port, int retries)
 	a_assert(port > 0);
 	a_assert(retries >= 0);
 
-#if WEBS_PAGE_ROM
+#ifdef WEBS_PAGE_ROM
 	websRomOpen();
 #endif
 
@@ -123,7 +123,7 @@ int websOpenServer(int port, int retries)
 	}
 	websFormOpen();
 
-#if WEBS_LOG_SUPPORT
+#ifdef WEBS_LOG_SUPPORT
 /*
  *	Optional request log support
  */
@@ -165,14 +165,14 @@ void websCloseServer()
 		websFree(wp);
 	}
 
-#if WEBS_LOG_SUPPORT
+#ifdef WEBS_LOG_SUPPORT
 	if (websLogFd >= 0) {
 		close(websLogFd);
 		websLogFd = -1;
 	}
 #endif
 
-#if WEBS_PAGE_ROM
+#ifdef WEBS_PAGE_ROM
 	websRomClose();
 #endif
 	symClose(websMime);
@@ -272,7 +272,7 @@ int websAccept(int sid, char *ipaddr, int port, int listenSid)
 	a_assert(wp);
 	wp->listenSid = listenSid;
 
-	ascToUni(wp->ipaddr, ipaddr, sizeof(wp->ipaddr));
+	ascToUni(wp->ipaddr, ipaddr, min(sizeof(wp->ipaddr), strlen(ipaddr) + 1));
 
 /*
  *	Check if this is a request from a browser on this system. This is useful
@@ -319,7 +319,7 @@ static void websSocketEvent(int sid, int mask, int iwp)
 		websReadEvent(wp);
 	} 
 	if (mask & SOCKET_WRITABLE) {
-		if (wp->writeSocket) {
+		if (websValid(wp) && wp->writeSocket) {
 			(*wp->writeSocket)(wp);
 		}
 	} 
@@ -340,7 +340,7 @@ void websReadEvent(webs_t wp)
 	a_assert(wp);
 	a_assert(websValid(wp));
 
-	websMarkTime(wp);
+	websSetTimeMark(wp);
 
 /*
  *	Read as many lines as possible. socketGets is called to read the header
@@ -410,8 +410,18 @@ void websReadEvent(webs_t wp)
 						0666);
 				}
 				gwrite(fd, text, gstrlen(text));
-				gwrite(fd, T("\n"), sizeof(char_t));
+            /*
+             * NOTE that the above comment is wrong -- if the content length
+             * is set, websGetInput() does NOT use socketGets(), it uses
+             * socketRead(), so the line below that adds an additional newline
+             * is destructive.
+             */
+				/*gwrite(fd, T("\n"), sizeof(char_t));*/
+/*
+ *				Line removed as per BUG02488
+ *
 				nbytes += 1;
+ */
 			} else 
 #endif
 			if (wp->query) {
@@ -433,12 +443,15 @@ void websReadEvent(webs_t wp)
  *					The existing query data came from the POST request so just
  *					append it.
  */
-					len = gstrlen(wp->query);
-					wp->query = brealloc(B_L, wp->query, (len +	gstrlen(text) +
-						1) * sizeof(char_t));
-					if (wp->query) {
-						gstrcpy(&wp->query[len], text);
-					}
+               if (text != NULL)
+               {
+                  len = gstrlen(wp->query);
+                  wp->query = brealloc(B_L, wp->query, (len +	gstrlen(text) +
+                     1) * sizeof(char_t));
+                  if (wp->query) {
+                     gstrcpy(&wp->query[len], text);
+                  }
+               }
 				}
 
 			} else {
@@ -457,8 +470,13 @@ void websReadEvent(webs_t wp)
 				break;
 			}
 /*
- *			No more data so process the request
+ *			No more data so process the request, (but be sure to close
+ *			the input file first!).
  */
+			if (fd != -1) {
+				gclose (fd);
+				fd = -1;
+			}
 			websUrlHandlerRequest(wp);
 			done++;
 			break;
@@ -624,16 +642,33 @@ static int websGetInput(webs_t wp, char_t **ptext, int *pnbytes)
 				} else {
 					websDone(wp, 0);
 				}
+			} else {
+/*
+ *				If an error occurred and it wasn't an eof, close the connection
+ */
+#ifdef HP_FIX
+				websDone(wp, 0);
+#endif /*HP_FIX*/
+
 			}
 /*
  *			If state is WEBS_HEADER and the ringq is empty, then this is a
  *			simple request with no additional header fields to process and
  *			no empty line terminator.
  */
+/*
+ *			NOTE: this fix for earlier versions of browsers is troublesome
+ *			because if we don't receive the entire header in the first pass
+ *			this code assumes we were only expecting a one line header, which
+ *			is not necessarily the case. So we weren't processing the whole
+ *			header and weren't fufilling requests properly. 
+ */
+#ifdef UNUSED
 			if (wp->state == WEBS_HEADER && ringqLen(&wp->header) <= 0) {
 				websParseRequest(wp);
 				websUrlHandlerRequest(wp);
 			}
+#endif
 			return -1;
 
 		} else if (nbytes == 0) {
@@ -761,7 +796,7 @@ static int websParseFirst(webs_t wp, char_t *text)
 
 	websUrlType(url, wp->type, TSZ(wp->type));
 
-#if WEBS_PROXY_SUPPORT
+#ifdef WEBS_PROXY_SUPPORT
 /*
  *	Determine if this is a request for local webs data. If it is not a proxied 
  *	request from the browser, we won't see the "http://" or the system name, so
@@ -872,6 +907,12 @@ static void websParseRequest(webs_t wp)
  */
 				if ((cp = gstrchr(value, ' ')) != NULL) {
 					*cp = '\0';
+               /*
+                * bugfix 5/24/02 -- we were leaking the memory pointed to by
+                * wp->authType that was allocated just before the if()
+                * statement that we are currently in. Thanks to Simon Byholm.
+                */
+               bfree(B_L, wp->authType);
 					wp->authType = bstrdup(B_L, value);
 					websDecode64(userAuth, ++cp, sizeof(userAuth));
 				} else {
@@ -1000,9 +1041,22 @@ static void websParseRequest(webs_t wp)
  *		Parse the content length
  */
 		} else if (gstrcmp(key, T("content-length")) == 0) {
-			wp->flags |= WEBS_CLEN;
-			wp->clen = gatoi(value);
-			websSetVar(wp, T("CONTENT_LENGTH"), value);
+         /*
+          * 11 Oct 02 BgP -- The server would crash if an attacker sent a POST
+          * message with a content-length value <= 0. We assume that anyone
+          * sending this is malicious, and the POST is read from the socket,
+          * but it is ignored, and the socket is closed.
+          */
+         wp->clen = gatoi(value);
+         if (wp->clen > 0)
+         {
+			   wp->flags |= WEBS_CLEN;			
+			   websSetVar(wp, T("CONTENT_LENGTH"), value);
+         }
+         else
+         {
+            wp->clen = 0;
+         }
 
 /*
  *		Parse the content type
@@ -1010,7 +1064,7 @@ static void websParseRequest(webs_t wp)
 		} else if (gstrcmp(key, T("content-type")) == 0) {
 			websSetVar(wp, T("CONTENT_TYPE"), value);
 
-#if WEBS_KEEP_ALIVE_SUPPORT
+#ifdef WEBS_KEEP_ALIVE_SUPPORT
 		} else if (gstrcmp(key, T("connection")) == 0) {
 			strlower(value);
 			if (gstrcmp(value, T("keep-alive")) == 0) {
@@ -1018,7 +1072,7 @@ static void websParseRequest(webs_t wp)
 			}
 #endif
 
-#if WEBS_PROXY_SUPPORT
+#ifdef WEBS_PROXY_SUPPORT
 /*
  *		This may be useful if you wish to keep a local cache of web pages
  *		for proxied requests.
@@ -1039,7 +1093,7 @@ static void websParseRequest(webs_t wp)
 			wp->flags |= WEBS_COOKIE;
 			wp->cookie = bstrdup(B_L, value);
 
-#if WEBS_IF_MODIFIED_SUPPORT
+#ifdef WEBS_IF_MODIFIED_SUPPORT
 /*
  *		See if the local page has been modified since the browser last
  *		requested this document. If not, just return a 302
@@ -1127,7 +1181,7 @@ void websSetEnv(webs_t wp)
 		keyword = gstrtok(NULL, T("&"));
 	}
 
-#if EMF
+#ifdef EMF
 /*
  *	Add GoAhead Embedded Management Framework defines
  */
@@ -1256,7 +1310,15 @@ void websResponse(webs_t wp, int code, char_t *message, char_t *redirect)
  */
 	if ( !(wp->flags & WEBS_HEADER_DONE)) {
 		wp->flags |= WEBS_HEADER_DONE;
-		websWrite(wp, T("HTTP/1.1 %d %s\r\n"), code, websErrorMsg(code));
+/*
+ *		Redirect behaves much better when sent with HTTP/1.0
+ */
+		if (redirect != NULL) {
+			websWrite(wp, T("HTTP/1.0 %d %s\r\n"), code, websErrorMsg(code));
+		} else {
+			websWrite(wp, T("HTTP/1.1 %d %s\r\n"), code, websErrorMsg(code));
+		}
+
 /*		
  *		By license terms the following line of code must not be modified.
  */
@@ -1280,8 +1342,13 @@ void websResponse(webs_t wp, int code, char_t *message, char_t *redirect)
 			} else {
 				char_t *nonce, *opaque;
 
+            /* $$$ before... (note commas instead of semicolons...)
 				nonce = websCalcNonce(wp), 
 				opaque = websCalcOpaque(wp), 
+            $$$ after */
+				nonce = websCalcNonce(wp);
+				opaque = websCalcOpaque(wp); 
+            /* ...$$$ end */
 				websWrite(wp, 
 					T("WWW-Authenticate: Digest realm=\"%s\", domain=\"%s\",")
 					T("qop=\"%s\", nonce=\"%s\", opaque=\"%s\",")
@@ -1381,10 +1448,17 @@ void websRedirect(webs_t wp, char_t *url)
  *	Output an error message and cleanup
  */
 
+#ifdef qRichErrorPage
+extern int dmfRichError(webs_t wp, int code, char_t* userMsg);
+#endif
 void websError(webs_t wp, int code, char_t *fmt, ...)
 {
 	va_list		args;
 	char_t		*msg, *userMsg, *buf;
+#ifdef qRichErrorPage
+   static int reEntry = 0;
+   int errorOk;
+#endif
 
 	a_assert(websValid(wp));
 	a_assert(fmt);
@@ -1395,6 +1469,30 @@ void websError(webs_t wp, int code, char_t *fmt, ...)
 	userMsg = NULL;
 	fmtValloc(&userMsg, WEBS_BUFSIZE, fmt, args);
 	va_end(args);
+
+#ifdef qRichErrorPage
+   if (!reEntry)
+   {
+      /* 
+       * The dmfRichError function that we're about to call may very well call
+       * websError() as part of its work. If that happens, we do NOT want to
+       * get into a never-ending recursive call chain. When we get back here
+       * in a call from inside dmfRichError(), we check to see if we're
+       * already trying to call dmfRichError. If we are, we just revert to the
+       * old non-rich behavior and display a black on white error page.
+       */
+
+      reEntry = 1;
+      errorOk = dmfRichError(wp, code, userMsg);
+      reEntry = 0;
+      if (errorOk)
+      {
+         return;
+      }
+      /* ...else we need to fall through and execute the simple error page. */
+   }
+   /* implicit else... */
+#endif
 
 	msg = T("<html><head><title>Document Error: %s</title></head>\r\n\
 		<body><h2>Access Error: %s</h2>\r\n\
@@ -1416,7 +1514,8 @@ void websError(webs_t wp, int code, char_t *fmt, ...)
  *	Return the error message for a given code
  */
 
-static char_t *websErrorMsg(int code)
+/*static char_t *websErrorMsg(int code)*/
+char_t *websErrorMsg(int code)
 {
 	websErrorType	*ep;
 
@@ -1447,9 +1546,11 @@ int websWrite(webs_t wp, char_t *fmt, ...)
 
 	buf = NULL;
 	rc = 0;
+
 	if (fmtValloc(&buf, WEBS_BUFSIZE, fmt, vargs) >= WEBS_BUFSIZE) {
 		trace(0, T("webs: websWrite lost data, buffer overflow\n"));
 	}
+   
 	va_end(vargs);
 	a_assert(buf);
 	if (buf) {
@@ -1597,7 +1698,7 @@ void websDecodeUrl(char_t *decoded, char_t *token, int len)
 }
 
 /******************************************************************************/
-#if WEBS_LOG_SUPPORT
+#ifdef WEBS_LOG_SUPPORT
 /*
  *	Output a log message
  */
@@ -1607,12 +1708,30 @@ static void websLog(webs_t wp, int code)
 	char_t	*buf;
 	char	*abuf;
 	int		len;
-
+#define qAnlLog 1
+#ifdef qAnlLog
+   time_t timer;
+   char_t* newLine = NULL;
+   char_t* timeStr = NULL;
+#endif
 	a_assert(websValid(wp));
 
 	buf = NULL;
+
+#ifdef qAnlLog
+   time(&timer);
+   timeStr = ctime(&timer);
+   newLine = gstrchr(timeStr, '\n');
+   if (newLine)
+   {
+      *newLine = '\0';
+   }
+   fmtAlloc(&buf, WEBS_MAX_URL + 80, T("%s\t%s\t%s\tcode = %d\n"), 
+      timeStr, wp->ipaddr, wp->url, code);
+#else
 	fmtAlloc(&buf, WEBS_MAX_URL + 80, T("%d %s %d %d\n"), time(0), 
 		wp->url, code, wp->written);
+#endif
 	len = gstrlen(buf);
 	abuf = ballocUniToAsc(buf, len+1);
 	write(websLogFd, abuf, len);
@@ -1647,7 +1766,6 @@ void websTimeout(void *arg, int id)
  */
 		wp->timeout = -1;
 		websDone(wp, 404);
-
 	} else {
 		delay = WEBS_TIMEOUT - tm;
 		a_assert(delay > 0);
@@ -1673,13 +1791,13 @@ void websDone(webs_t wp, int code)
 		wp->flags &= ~WEBS_KEEP_ALIVE;
 	}
 
-#if WEBS_PROXY_SUPPORT
+#ifdef WEBS_PROXY_SUPPORT
 	if (! (wp->flags & WEBS_LOCAL_PAGE)) {
 		websStats.activeNetRequests--;
 	}
 #endif
 
-#if WEBS_LOG_SUPPORT
+#ifdef WEBS_LOG_SUPPORT
 	if (! (wp->flags & WEBS_REQUEST_DONE)) {
 		websLog(wp, code);
 	}
@@ -1960,7 +2078,7 @@ char_t *websGetRequestLpath(webs_t wp)
 {
 	a_assert(websValid(wp));
 
-#if WEBS_PAGE_ROM
+#ifdef WEBS_PAGE_ROM
 	return wp->path;
 #else
 	return wp->lpath;
@@ -2209,7 +2327,7 @@ char_t *websGetDateString(websStatType *sbuf)
  *	"real" time, but rather a relative marker.
  */
 
-void websMarkTime(webs_t wp)
+void websSetTimeMark(webs_t wp)
 {
 	wp->timestamp = time(0);
 }
@@ -2247,7 +2365,7 @@ char_t *websGetRealm()
 }
 
 
-#if WEBS_IF_MODIFIED_SUPPORT
+#ifdef WEBS_IF_MODIFIED_SUPPORT
 /******************************************************************************/
 /*	
  *	These functions are intended to closely mirror the syntax for HTTP-date 
@@ -2582,7 +2700,13 @@ static time_t dateToTimet(int year, int month, int day)
 {
 	long dayDifference;
 
-	dayDifference = FixedFromGregorian(month, day, year) - 
+     /* 
+      * Bug fix by Jeff Reeder (Jun 14, 2002): The 'month' parameter is 
+      * numbered from  0 (Jan == 0), but FixedFromGregorian() takes 
+      * months numbered from 1 (January == 1). We need to add 1 
+      * to the month 
+      */
+	dayDifference = FixedFromGregorian(month + 1, day, year) - 
 		FixedFromGregorian(1, 1, 1970);
 
 	return dayDifference * SECONDS_PER_DAY;
@@ -2833,6 +2957,5 @@ static time_t dateParse(time_t tip, char_t *cmd)
 }
 
 #endif /* WEBS_IF_MODIFIED_SUPPORT */
-
 
 /******************************************************************************/

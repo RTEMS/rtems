@@ -2,6 +2,8 @@
  * sock.c -- Posix Socket upper layer support module for general posix use
  *
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -16,7 +18,7 @@
 #include	<string.h>
 #include	<stdlib.h>
 
-#if UEMF
+#ifdef UEMF
 	#include	"uemf.h"
 #else
 	#include	<socket.h>
@@ -70,7 +72,7 @@ int	socketWrite(int sid, char *buf, int bufsize)
 			}
 			if ((room = ringqPutBlkMax(rq)) == 0) {
 				if (sp->flags & SOCKET_BLOCK) {
-#if WIN || CE
+#if (defined (WIN) || defined (CE))
 					int		errCode;
 					if (! socketWaitForEvent(sp,  FD_WRITE | SOCKET_WRITABLE,
 						&errCode)) {
@@ -99,7 +101,7 @@ int	socketWrite(int sid, char *buf, int bufsize)
 
 int	socketWriteString(int sid, char_t *buf)
 {
- #if UNICODE
+ #ifdef UNICODE
  	char	*byteBuf;
  	int		r, len;
  
@@ -247,7 +249,7 @@ int	socketGets(int sid, char_t **buf)
 		if (c == '\n') {
 			len = ringqLen(lq);
 			if (len > 0) {
-				*buf = ballocAscToUni(lq->servp, len);
+				*buf = ballocAscToUni((char *)lq->servp, len);
 			} else {
 				*buf = NULL;
 			}
@@ -298,7 +300,7 @@ int socketFlush(int sid)
 			if (errCode == EINTR) {
 				continue;
 			} else if (errCode == EWOULDBLOCK || errCode == EAGAIN) {
-#if WIN || CE
+#if (defined (WIN) || defined (CE))
 				if (sp->flags & SOCKET_BLOCK) {
 					int		errCode;
 					if (! socketWaitForEvent(sp,  FD_WRITE | SOCKET_WRITABLE,
@@ -478,7 +480,7 @@ static int socketDoOutput(socket_t *sp, char *buf, int toWrite, int *errCode)
 
 	*errCode = 0;
 
-#if WIN || CE
+#if (defined (WIN) || defined (CE))
 	if ((sp->flags & SOCKET_ASYNC)
 			&& ! socketWaitForEvent(sp,  FD_CONNECT, errCode)) {
 		return -1;
@@ -490,7 +492,7 @@ static int socketDoOutput(socket_t *sp, char *buf, int toWrite, int *errCode)
  */
 	if (sp->flags & SOCKET_BROADCAST) {
 		server.sin_family = AF_INET;
-#if UEMF || LITTLEFOOT
+#if (defined (UEMF) || defined (LITTLEFOOT))
 		server.sin_addr.s_addr = INADDR_BROADCAST;
 #else
 		server.sin_addr.s_addr = inet_addr(basicGetBroadcastAddress());
@@ -514,7 +516,7 @@ static int socketDoOutput(socket_t *sp, char *buf, int toWrite, int *errCode)
 
 	if (bytes < 0) {
 		*errCode = socketGetError();
-#if WIN || CE 
+#if (defined (WIN) || defined (CE))
 		sp->currentEvents &= ~FD_WRITE;
 #endif
 
@@ -522,7 +524,7 @@ static int socketDoOutput(socket_t *sp, char *buf, int toWrite, int *errCode)
 
 	} else if (bytes == 0 && bytes != toWrite) {
 		*errCode = EWOULDBLOCK;
-#if WIN || CE
+#if (defined (WIN) || defined (CE))
 		sp->currentEvents &= ~FD_WRITE;
 #endif
 		return -1;
@@ -532,8 +534,8 @@ static int socketDoOutput(socket_t *sp, char *buf, int toWrite, int *errCode)
  *	Ensure we get to write some more data real soon if the socket can absorb
  *	more data
  */
-#if !UEMF
-#if WIN 
+#ifndef UEMF
+#ifdef WIN 
 	if (sp->interestEvents & FD_WRITE) {
 		emfTime_t blockTime = { 0, 0 };
 		emfSetMaxBlockTime(&blockTime);
@@ -553,7 +555,7 @@ static int socketDoOutput(socket_t *sp, char *buf, int toWrite, int *errCode)
 static int tryAlternateSendTo(int sock, char *buf, int toWrite, int i,
 			struct sockaddr *server)
 {
-#if VXWORKS
+#ifdef VXWORKS
 	char *ptr;
 
 	ptr = (char *)server;
@@ -638,7 +640,7 @@ void socketFree(int sid)
 		if (shutdown(sp->sock, 1) >= 0) {
 			recv(sp->sock, buf, sizeof(buf), 0);
 		}
-#if WIN || CE
+#if (defined (WIN) || defined (CE))
 		closesocket(sp->sock);
 #else
 		close(sp->sock);
@@ -688,7 +690,7 @@ socket_t *socketPtr(int sid)
 
 int socketGetError()
 {
-#if WIN || CE
+#if (defined (WIN) || defined (CE))
 	switch (WSAGetLastError()) {
 	case WSAEWOULDBLOCK:
 		return EWOULDBLOCK;

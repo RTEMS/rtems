@@ -53,6 +53,13 @@
 
 /******************************** Local Data **********************************/
 
+#ifdef qHierarchicalAccess
+/*
+ * user-provided function to allow hierarchical access protection. See below.
+ * for details.
+ */
+extern bool_t dmfCanAccess(const char_t* usergroup, const char_t* group);
+#endif
 #ifdef UEMF
 /*
  *	User table definition
@@ -1377,15 +1384,28 @@ bool_t umUserCanAccessURL(char_t *user, char_t *url)
  *	member of that group
  */
 	if (group && *group) {
+#ifdef qHierarchicalAccess
+      /*
+       * If we are compiling with the hierarchical access extensions, we
+       * instead call the user-provided function that checks to see whether
+       * the current user's access level is greater than or equal to the
+       * access level required for this URL.
+       */
+      return dmfCanAccess(usergroup, group);
+
+#else
 		if (usergroup && (gstrcmp(group, usergroup) != 0)) {
 			return FALSE;
+
 		}
+#endif
 	} 
 
 /*
  *	Otherwise, user can access the URL 
  */
 	return TRUE;
+
 }
 
 /******************************************************************************/

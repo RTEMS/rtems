@@ -21,7 +21,7 @@
 
 /********************************* Includes ***********************************/
 
-#if ! UEMF
+#ifndef UEMF
 	#include	"basic/basic.h"
 	#include	"emf/emf.h"
 #else

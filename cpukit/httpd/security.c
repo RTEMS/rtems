@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -81,10 +83,14 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
  */
 #ifdef WEBS_SSL_SUPPORT
 	nRet = umGetAccessLimitSecure(accessLimit);
-	if (nRet && ((flags | WEBS_SECURE) == 0)) {
+	if (nRet && ((flags & WEBS_SECURE) == 0)) {
 		websStats.access++;
-		websError(wp, 200, T("Access Denied\nSecure access is required."));
+		websError(wp, 405, T("Access Denied\nSecure access is required."));
 		trace(3, T("SEC: Non-secure access attempted on <%s>\n"), path);
+      /* bugfix 5/24/02 -- we were leaking the memory pointed to by
+       * 'accessLimit'. Thanks to Simon Byholm.
+       */
+      bfree(B_L, accessLimit);
 		return 1;
 	}
 #endif
@@ -109,7 +115,7 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	} else 	if (userid && *userid) {
 		if (!umUserExists(userid)) {
 			websStats.access++;
-			websError(wp, 200, T("Access Denied\nUnknown User"));
+			websError(wp, 401, T("Access Denied\nUnknown User"));
 			trace(3, T("SEC: Unknown user <%s> attempted to access <%s>\n"), 
 				userid, path);
 			nRet = 1;
@@ -122,7 +128,7 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 			if (userpass) {
 				if (gstrcmp(password, userpass) != 0) {
 					websStats.access++;
-					websError(wp, 200, T("Access Denied\nWrong Password"));
+					websError(wp, 401, T("Access Denied\nWrong Password"));
 					trace(3, T("SEC: Password fail for user <%s>")
 								T("attempt to access <%s>\n"), userid, path);
 					nRet = 1;
@@ -153,7 +159,7 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 
 			if (gstrcmp(wp->digest, digestCalc) != 0) {
 				websStats.access++;
-				websError(wp, 200, T("Access Denied\nWrong Password"));
+				websError(wp, 405, T("Access Denied\nWrong Password"));
 				nRet = 1;
 			}
 

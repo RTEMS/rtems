@@ -84,17 +84,16 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 /*
  *	Open the document. Stat for later use.
  */
-	if (websPageOpen(wp, lpath, path, SOCKET_RDONLY | SOCKET_BINARY,
-				0666) < 0) {
-			websError(wp, 400, 
-				T("Cannot open URL <b>%s</b>"), url);
-			return 1;
-		} 
-		if (websPageStat(wp, lpath, path, &sbuf) < 0) {
-			websError(wp, 400, T("Cannot stat page for URL <b>%s</b>"),
-				url);
-			return 1;
-		}
+	if (websPageOpen(wp, lpath, path, SOCKET_RDONLY | SOCKET_BINARY, 
+		0666) < 0) {
+		websError(wp, 400, T("Cannot open URL <b>%s</b>"), url);
+		return 1;
+	} 
+
+	if (websPageStat(wp, lpath, path, &sbuf) < 0) {
+		websError(wp, 400, T("Cannot stat page for URL <b>%s</b>"), url);
+		return 1;
+	}
 
 /*
  *	If the page has not been modified since the user last received it and it
@@ -102,7 +101,7 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
  *	sending a 304 Use local copy response
  */
 	websStats.localHits++;
-#if WEBS_IF_MODIFIED_SUPPORT
+#ifdef WEBS_IF_MODIFIED_SUPPORT
 	if (flags & WEBS_IF_MODIFIED && !(flags & WEBS_ASP)) {
 		if (sbuf.mtime <= wp->since) {
 			websWrite(wp, T("HTTP/1.0 304 Use local copy\r\n"));
@@ -227,6 +226,38 @@ int websValidateUrl(webs_t wp, char_t *path)
 
 	len = npart = 0;
 	parts[0] = NULL;
+
+   /*
+    * 22 Jul 02 -- there were reports that a directory traversal exploit was
+    * possible in the WebServer running under Windows if directory paths
+    * outside the server's specified root web were given by URL-encoding the
+    * backslash character, like:
+    *
+    *  GoAhead is vulnerable to a directory traversal bug. A request such as
+    *  
+    *  GoAhead-server/../../../../../../../ results in an error message
+    *  'Cannot open URL'.
+
+    *  However, by encoding the '/' character, it is possible to break out of
+    *  the
+    *  web root and read arbitrary files from the server.
+    *  Hence a request like:
+    * 
+    *  GoAhead-server/..%5C..%5C..%5C..%5C..%5C..%5C/winnt/win.ini returns the
+    *  contents of the win.ini file.
+    * (Note that the description uses forward slashes (0x2F), but the example
+    * uses backslashes (0x5C). In my tests, forward slashes are correctly
+    * trapped, but backslashes are not. The code below substitutes forward
+    * slashes for backslashes before attempting to validate that there are no
+    * unauthorized paths being accessed.
+    */
+   token = gstrchr(path, '\\');
+   while (token != NULL)
+   {
+      *token = '/';
+      token = gstrchr(token, '\\');
+   }
+   
 	token = gstrtok(path, T("/"));
 
 /*
@@ -284,7 +315,7 @@ static void websDefaultWriteEvent(webs_t wp)
 
 	flags = websGetRequestFlags(wp);
 
-	websMarkTime(wp);
+	websSetTimeMark(wp);
 
 	wrote = bytes = 0;
 	written = websGetRequestWritten(wp);
@@ -300,8 +331,7 @@ static void websDefaultWriteEvent(webs_t wp)
  */
 		if ((buf = balloc(B_L, PAGE_READ_BUFSIZE)) == NULL) {
 			websError(wp, 200, T("Can't get memory"));
-		}
-		else {
+		} else {
 			while ((len = websPageReadData(wp, buf, PAGE_READ_BUFSIZE)) > 0) {
 				if ((wrote = websWriteDataNonBlock(wp, buf, len)) < 0) {
 					break;

@@ -3,6 +3,8 @@
  *
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -15,7 +17,7 @@
 
 /********************************* Includes ***********************************/
 
-#if UEMF
+#ifdef UEMF
 	#include	"uemf.h"
 #else
 	#include	"basic/basicInternal.h"
@@ -41,7 +43,7 @@
  *	element in the handle array.
  */
 
-#if B_STATS
+#ifdef B_STATS
 int HALLOC(B_ARGS_DEC, void ***map)
 #else
 int hAlloc(void ***map)
@@ -55,7 +57,7 @@ int hAlloc(void ***map)
 	if (*map == NULL) {
 		incr = H_INCR;
 		memsize = (incr + H_OFFSET) * sizeof(void**);
-#if B_STATS
+#ifdef B_STATS
 		if ((mp = (int*) balloc(B_ARGS, memsize)) == NULL) {
 #else
 		if ((mp = (int*) balloc(B_L, memsize)) == NULL) {
@@ -148,7 +150,7 @@ int hFree(void ***map, int handle)
  *	Allocate an entry in the halloc array.
  */
 
-#if B_STATS
+#ifdef B_STATS
 int HALLOCENTRY(B_ARGS_DEC, void ***list, int *max, int size)
 #else
 int hAllocEntry(void ***list, int *max, int size)
@@ -160,7 +162,7 @@ int hAllocEntry(void ***list, int *max, int size)
 	a_assert(list);
 	a_assert(max);
 
-#if B_STATS
+#ifdef B_STATS
 	if ((id = HALLOC(B_ARGS, (void***) list)) < 0) {
 #else
 	if ((id = hAlloc((void***) list)) < 0) {
@@ -169,7 +171,7 @@ int hAllocEntry(void ***list, int *max, int size)
 	}
 
 	if (size > 0) {
-#if B_STATS
+#ifdef B_STATS
 		if ((cp = balloc(B_ARGS, size)) == NULL) {
 #else
 		if ((cp = balloc(B_L, size)) == NULL) {

@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -22,6 +24,7 @@
  *	Addd entries to the MimeList as required for your content
  */
 
+
 websMimeType websMimeList[] = {
 	{ T("application/java"), T(".class") },
 	{ T("application/java"), T(".jar") },
@@ -32,8 +35,9 @@ websMimeType websMimeList[] = {
 	{ T("image/jpeg"), T(".jpg") },
 	{ T("text/css"), T(".css") },
 	{ T("text/plain"), T(".txt") },
+   { T("application/x-javascript"), T(".js") },
 
-#if MORE_MIME_TYPES
+#ifdef MORE_MIME_TYPES
 	{ T("application/binary"), T(".exe") },
 	{ T("application/compress"), T(".z") },
 	{ T("application/gzip"), T(".gz") },

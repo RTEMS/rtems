@@ -1,3 +1,33 @@
+2002-04-10	Mike Siers <mikes@poliac.com>
+
+	* rtems_webserver/NOTES, rtems_webserver/asp.c,
+	rtems_webserver/balloc.c, rtems_webserver/default.c,
+	rtems_webserver/ej.h, rtems_webserver/ejIntrn.h,
+	rtems_webserver/ejlex.c, rtems_webserver/ejparse.c,
+	rtems_webserver/emfdb.c, rtems_webserver/emfdb.h,
+	rtems_webserver/form.c, rtems_webserver/h.c,
+	rtems_webserver/handler.c, rtems_webserver/license.txt,
+	rtems_webserver/md5.h, rtems_webserver/md5c.c,
+	rtems_webserver/mime.c, rtems_webserver/misc.c,
+	rtems_webserver/ringq.c, rtems_webserver/rom.c,
+	rtems_webserver/security.c, rtems_webserver/sock.c,
+	rtems_webserver/sym.c, rtems_webserver/uemf.c,
+	rtems_webserver/uemf.h, rtems_webserver/um.c, rtems_webserver/um.h,
+	rtems_webserver/url.c, rtems_webserver/value.c,
+	rtems_webserver/wbase64.c, rtems_webserver/webcomp.c,
+	rtems_webserver/webpage.c, rtems_webserver/webrom.c,
+	rtems_webserver/webs.c, rtems_webserver/webs.h,
+	rtems_webserver/websuemf.c, rtems_webserver/wsIntrn.h:
+	Update to GoAhead Webserver 2.1.4. The following URL is
+	the release notes from GoAhead.
+
+	    http://data.goahead.com/Software/Webserver/2.1.4/release.htm
+
+	I have only done a minimal amount of testing (i.e. the network 
+	demo program works fine).  Please try this out and let me know
+	if it works.  The patch needs to be applied on the 
+	c/src/libnetworking/rtems_webserver directory.
+
 2003-04-10	Joel Sherrill <joel@OARcorp.com>
 
 	PR 371/pppd

@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1992-2000. All Rights Reserved.
  *
  *	See the file "license.txt" for information on usage and redistribution
+ *
+ * $Id$
  */
 
 #ifndef _h_EJ
@@ -18,7 +20,7 @@
 
 /********************************* Includes ***********************************/
 
-#if ! UEMF
+#ifndef UEMF
 	#include	"basic/basic.h"
 	#include	"emf/emf.h"
 #else

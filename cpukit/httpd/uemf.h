@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 #ifndef _h_UEMF
@@ -17,7 +19,7 @@
 
 /******************************* Per O/S Includes *****************************/
 
-#if WIN
+#ifdef WIN
 	#include	<direct.h>
 	#include	<io.h>
 	#include	<sys/stat.h>
@@ -33,20 +35,43 @@
 	#include	<errno.h>
 #endif /* WIN */
 
-#if CE
+#ifdef CE
+	#include	<errno.h>
 	#include	<limits.h>
 	#include	<tchar.h>
 	#include	<windows.h>
+	#include	<winsock.h>
 	#include	<winnls.h>
 	#include	"CE/wincompat.h"
 	#include	<winsock.h>
 #endif /* CE */
 
-#if NW
+#ifdef NW
+	#include	<direct.h>
+	#include	<io.h>
+	#include	<sys/stat.h>
+	#include	<time.h>
+	#include	<sys/types.h>
 	#include	<stdio.h>
+	#include	<stdlib.h>
+	#include	<fcntl.h>
+	#include	<errno.h>
+	#include	<niterror.h>
+	#define		EINTR EINUSE
+	#define		 WEBS	1
+	#include	<limits.h>
+	#include	<netdb.h>
+	#include	<process.h>
+	#include	<tiuser.h>
+	#include	<sys/time.h>
+	#include	<arpa/inet.h>
+	#include	<sys/types.h>
+	#include	<sys/socket.h>
+	#include	<sys/filio.h>
+	#include	<netinet/in.h>
 #endif /* NW */
 
-#if SCOV5 
+#ifdef SCOV5 
 	#include	<sys/types.h>
 	#include	<stdio.h>
 	#include	"sys/socket.h"
@@ -56,7 +81,7 @@
 	#include 	"netdb.h"
 #endif /* SCOV5 */
 
-#if UNIX
+#ifdef UNIX
 	#include	<stdio.h>
 #endif /* UNIX */
 
@@ -78,7 +103,7 @@
 	#include	<errno.h>
 #endif /* LINUX */
 
-#if LYNX
+#ifdef LYNX
 	#include	<limits.h>
 	#include	<stdarg.h>
 	#include	<stdio.h>
@@ -93,11 +118,24 @@
 	#include	<errno.h>
 #endif /* LYNX */
 
-#if UW
+#ifdef MACOSX
+	#include	<sys/stat.h>
+	#include	<stdio.h>
+	#include	<stdlib.h>
+	#include	<unistd.h>
+	#include	<sys/socket.h>
+	#include	<netinet/in.h>
+	#include 	<arpa/inet.h>
+	#include 	<netdb.h>
+	#include	<fcntl.h>
+	#include	<errno.h>
+#endif /* MACOSX */
+
+#ifdef UW
 	#include	<stdio.h>
 #endif /* UW */
 
-#if VXWORKS
+#ifdef VXWORKS
 	#include	<vxWorks.h>
 	#include	<sockLib.h>
 	#include	<selectLib.h>
@@ -111,7 +149,7 @@
 	#include	<errno.h>
 #endif /* VXWORKS */
 
-#if SOLARIS
+#ifdef SOLARIS
 	#include	<sys/types.h>
 	#include	<limits.h>
 	#include	<stdio.h>
@@ -127,7 +165,7 @@
 	#include	<errno.h>
 #endif /* SOLARIS */
 
-#if QNX4
+#ifdef QNX4
 	#include	<sys/types.h>
 	#include	<stdio.h>
 	#include	<sys/socket.h>
@@ -141,7 +179,7 @@
     #include    <sys/wait.h>
 #endif /* QNX4 */
 
-#if ECOS
+#ifdef ECOS
 	#include	<limits.h>
 	#include	<cyg/infra/cyg_type.h>
 	#include	<cyg/kernel/kapi.h>
@@ -156,7 +194,7 @@
 #include	<stdarg.h>
 #include	<string.h>
 
-#if ! WEBS
+#ifndef WEBS
 #include	"messages.h"
 #endif /* ! WEBS */
 
@@ -166,18 +204,18 @@
 #define		__NO_PACK		1
 #endif
 
-#if UW
+#ifdef UW
 	#define		__NO_PACK		1
 #endif /* UW */
 
-#if SCOV5 || VXWORKS || LINUX || LYNX || __rtems__
+#if (defined (SCOV5) || defined (VXWORKS) || defined (LINUX) || defined (LYNX) || defined (MACOSX) || defined (__rtems__))
 #ifndef O_BINARY
 #define O_BINARY 		0
 #endif /* O_BINARY */
 #define	SOCKET_ERROR	-1
-#endif /* SCOV5 || VXWORKS || LINUX || LYNX */
+#endif /* SCOV5 || VXWORKS || LINUX || LYNX || MACOSX */
 
-#if WIN || CE
+#if (defined (WIN) || defined (CE))
 /*
  *	__NO_FCNTL means can't access fcntl function.  Fcntl.h is still available.
  */
@@ -193,7 +231,7 @@
 #define F_OK	0
 #endif /* WIN || CE */
 
-#if LINUX && !__rtems__ && ! _STRUCT_TIMEVAL
+#if (defined (LINUX) && !defined(__rtems__) && !defined (_STRUCT_TIMEVAL))
 struct timeval
 {
 	time_t	tv_sec;		/* Seconds.  */
@@ -202,7 +240,7 @@ struct timeval
 #define _STRUCT_TIMEVAL 1
 #endif /* LINUX && ! _STRUCT_TIMEVAL */
 
-#if ECOS
+#ifdef ECOS
 	#define		O_RDONLY		1
 	#define		O_BINARY		2
 
@@ -218,10 +256,27 @@ struct timeval
 
 #endif /* ECOS */
 
-#if QNX4
+#ifdef QNX4
     typedef long        fd_mask;
     #define NFDBITS (sizeof (fd_mask) * NBBY)   /* bits per mask */
 #endif /* QNX4 */
+
+#ifdef NW
+	#define fd_mask			fd_set
+	#define INADDR_NONE		-1l
+	#define Sleep			delay
+
+	#define __NO_FCNTL		1
+
+	#undef R_OK
+	#define R_OK    4
+	#undef W_OK
+	#define W_OK    2
+	#undef X_OK
+	#define X_OK    1
+	#undef F_OK
+	#define F_OK    0
+#endif /* NW */
 
 /********************************** Unicode ***********************************/
 /* 
@@ -233,8 +288,9 @@ struct timeval
 #define SYM_MAX				(512)
 #define XML_MAX				4096			/* Maximum size for tags/tokens */
 #define BUF_MAX				4096			/* General sanity check for bufs */
+#define FMT_STATIC_MAX		256				/* Maximum for fmtStatic calls */
 
-#if LITTLEFOOT || WEBS
+#if (defined (LITTLEFOOT) || defined (WEBS))
 #define LF_BUF_MAX		(510)
 #define LF_PATHSIZE		LF_BUF_MAX
 #else
@@ -245,7 +301,7 @@ struct timeval
 
 #ifndef CHAR_T_DEFINED
 #define CHAR_T_DEFINED 1
-#if UNICODE
+#ifdef UNICODE
 /*
  *	To convert strings to UNICODE. We have a level of indirection so things
  *	like T(__FILE__) will expand properly.
@@ -271,7 +327,7 @@ typedef unsigned short		uchar_t;
 typedef char				char_t;
 #define	TSZ(x)				(sizeof(x))
 #define	TASTRL(x)			(strlen(x) + 1)
-#if WIN
+#ifdef WIN
 typedef unsigned char		uchar_t;
 #endif /* WIN */
 
@@ -301,14 +357,14 @@ typedef unsigned char		uchar_t;
  *	The following include has to be after the unicode defines.  By putting it
  *	here, many modules in various parts of the tree are cleaner.
  */
-#if LITTLEFOOT && INMEM
+#if (defined (LITTLEFOOT) && defined (INMEM))
 	#include	"lf/inmem.h"
 #endif /* LITTLEFOOT && INMEM */
 
 /*
  *	Type for unicode systems
  */
-#if UNICODE
+#ifdef UNICODE
 
 #define gmain		wmain
 
@@ -367,7 +423,7 @@ typedef struct _stat gstat_t;
 
 #define gtolower	towlower
 #define gtoupper	towupper
-#if CE
+#ifdef CE
 #define gisspace	isspace
 #define gisdigit	isdigit
 #define gisxdigit	isxdigit
@@ -394,39 +450,39 @@ typedef struct _stat gstat_t;
 
 #ifndef gopen
 #if INMEM
+#define gchdir		imChdir
+#define gmkdir		imMkdir
+#define grmdir		imRmdir
 #define gclose		imClose
 #define gclosedir	imClosedir
-#define gchdir		imChdir
 #define gchmod		imChmod
 #define ggetcwd		imGetcwd
 #define glseek		imLseek
 #define gloadModule	imLoadModule
-#define gmkdir		imMkdir
 #define gopen		imOpen
 #define gopendir	imOpendir
 #define gread		imRead
 #define greaddir	imReaddir
 #define grename		imRename
-#define grmdir		imRmdir
 #define gstat		imStat
 #define gunlink		imUnlink
 #define gwrite		imWrite
 #else
-#define gclose		close
-#define gclosedir	closedir
 #if VXWORKS
 #define gchdir		vxchdir
 #define gmkdir		vxmkdir
 #define grmdir		vxrmdir
-#else
-#if LYNX || LINUX || SOLARIS
-#define gmkdir(s)	mkdir(s,0755)
-#else
-#define gmkdir		mkdir
-#endif /* LYNX || LINUX || SOLARIS */
-#define grmdir		rmdir
+#elif (defined (LYNX) || defined (LINUX) || defined (MACOSX) || defined (SOLARIS))
 #define gchdir		chdir
-#endif /* VXWORKS */
+#define gmkdir(s)	mkdir(s,0755)
+#define grmdir		rmdir
+#else
+#define gchdir		chdir
+#define gmkdir		mkdir
+#define grmdir		rmdir
+#endif /* VXWORKS #elif LYNX || LINUX || MACOSX || SOLARIS*/
+#define gclose		close
+#define gclosedir	closedir
 #define gchmod		chmod
 #define ggetcwd		getcwd
 #define glseek		lseek
@@ -500,10 +556,18 @@ typedef struct stat gstat_t;
 #ifndef VXWORKS
 #define gmain		main
 #endif /* ! VXWORKS */
-#if VXWORKS
+#ifdef VXWORKS
 #define	fcntl(a, b, c)
 #endif /* VXWORKS */
 #endif /* ! UNICODE */
+
+/*
+ *	Include inmem.h here because it redefines many of the file access fucntions.
+ *	Otherwise there would be lots more #if-#elif-#else-#endif ugliness.
+ */
+#ifdef INMEM
+	#include	"lf/inmem.h"
+#endif
 
 /********************************** Defines ***********************************/
 
@@ -525,7 +589,7 @@ typedef struct stat gstat_t;
 #define E_ARGS_DEC			char_t *file, int line
 #define E_ARGS				file, line
 
-#if ASSERT || ASSERT_CE
+#if (defined (ASSERT) || defined (ASSERT_CE))
 	#define a_assert(C)		if (C) ; else error(E_L, E_ASSERT, T("%s"), T(#C))
 #else
 	#define a_assert(C)		if (1) ; else
@@ -570,7 +634,7 @@ typedef struct {
 		long	hex;
 		long	octal;
 		long	big[2];
-#if FLOATING_POINT_SUPPORT
+#ifdef FLOATING_POINT_SUPPORT
 		double	floating;
 #endif /* FLOATING_POINT_SUPPORT */
 		char_t	*string;
@@ -579,7 +643,7 @@ typedef struct {
 		void	*symbol;
 	} value;
 
-	vtype_t			type		: 16;
+	vtype_t			type;
 	unsigned int	valid		: 8;
 	unsigned int	allocated	: 8;		/* String was balloced */
 } value_t;
@@ -749,47 +813,48 @@ extern int		cronFree(cron_t *cp);
  *	Socket flags 
  */
 
-#if (WIN || CE) && WEBS
+#if ((defined (WIN) || defined (CE)) && defined (WEBS))
 #define EWOULDBLOCK             WSAEWOULDBLOCK
 #define ENETDOWN                WSAENETDOWN
 #define ECONNRESET              WSAECONNRESET
 #endif /* (WIN || CE) && WEBS) */
 
-#define SOCKET_EOF				0x1			/* Seen end of file */
-#define SOCKET_CONNECTING		0x2			/* Connect in progress */
-#define SOCKET_BROADCAST		0x4			/* Broadcast mode */
-#define SOCKET_PENDING			0x8			/* Message pending on this socket */
-#define SOCKET_FLUSHING			0x10		/* Background flushing */
-#define SOCKET_DATAGRAM			0x20		/* Use datagrams */
-#define SOCKET_ASYNC			0x40		/* Use async connect */
-#define SOCKET_BLOCK			0x80		/* Use blocking I/O */
-#define SOCKET_LISTENING		0x100		/* Socket is server listener */
-#define SOCKET_CLOSING			0x200		/* Socket is closing */
+#define SOCKET_EOF				0x1		/* Seen end of file */
+#define SOCKET_CONNECTING		0x2		/* Connect in progress */
+#define SOCKET_BROADCAST		0x4		/* Broadcast mode */
+#define SOCKET_PENDING			0x8		/* Message pending on this socket */
+#define SOCKET_FLUSHING			0x10	/* Background flushing */
+#define SOCKET_DATAGRAM			0x20	/* Use datagrams */
+#define SOCKET_ASYNC			0x40	/* Use async connect */
+#define SOCKET_BLOCK			0x80	/* Use blocking I/O */
+#define SOCKET_LISTENING		0x100	/* Socket is server listener */
+#define SOCKET_CLOSING			0x200	/* Socket is closing */
+#define SOCKET_CONNRESET		0x400	/* Socket connection was reset */
 
-#define SOCKET_PORT_MAX			0xffff		/* Max Port size */
+#define SOCKET_PORT_MAX			0xffff	/* Max Port size */
 
 /*
  *	Socket error values
  */
-#define SOCKET_WOULDBLOCK		1			/* Socket would block on I/O */
-#define SOCKET_RESET			2			/* Socket has been reset */
-#define SOCKET_NETDOWN			3			/* Network is down */
-#define SOCKET_AGAIN			4			/* Issue the request again */
-#define SOCKET_INTR				5			/* Call was interrupted */
-#define SOCKET_INVAL			6			/* Invalid */
+#define SOCKET_WOULDBLOCK		1		/* Socket would block on I/O */
+#define SOCKET_RESET			2		/* Socket has been reset */
+#define SOCKET_NETDOWN			3		/* Network is down */
+#define SOCKET_AGAIN			4		/* Issue the request again */
+#define SOCKET_INTR				5		/* Call was interrupted */
+#define SOCKET_INVAL			6		/* Invalid */
 
 /*
  *	Handler event masks
  */
-#define SOCKET_READABLE			0x2			/* Make socket readable */ 
-#define SOCKET_WRITABLE			0x4			/* Make socket writable */
-#define SOCKET_EXCEPTION		0x8			/* Interested in exceptions */
+#define SOCKET_READABLE			0x2		/* Make socket readable */ 
+#define SOCKET_WRITABLE			0x4		/* Make socket writable */
+#define SOCKET_EXCEPTION		0x8		/* Interested in exceptions */
 #define EMF_SOCKET_MESSAGE		(WM_USER+13)
 
-#if LITTLEFOOT
-#define SOCKET_BUFSIZ			510			/* Underlying buffer size */
+#ifdef LITTLEFOOT
+#define SOCKET_BUFSIZ			510		/* Underlying buffer size */
 #else
-#define SOCKET_BUFSIZ			1024		/* Underlying buffer size */
+#define SOCKET_BUFSIZ			1024	/* Underlying buffer size */
 #endif /* LITTLEFOOT */
 
 typedef void 	(*socketHandler_t)(int sid, int mask, int data);
@@ -830,7 +895,7 @@ extern int 		 bopen(void *buf, int bufsize, int flags);
  *		#define NO_BALLOC 1
  */
 
-#if NO_BALLOC
+#ifdef NO_BALLOC
 #define balloc(B_ARGS, num) malloc(num)
 #define bfree(B_ARGS, p) free(p)
 #define bfreeSafe(B_ARGS, p) \
@@ -851,7 +916,7 @@ extern char *bstrdupANoBalloc(char *s);
 #define brealloc(B_ARGS, p, size) brealloc(p, size)
 #define bstrdup(B_ARGS, p) bstrdup(p)
 
-#if UNICODE
+#ifdef UNICODE
 #define bstrdupA(B_ARGS, p) bstrdupA(p)
 #else /* UNICODE */
 #define bstrdupA bstrdup
@@ -866,7 +931,7 @@ extern void		bfreeSafe(B_ARGS_DEC, void *mp);
 extern void		*brealloc(B_ARGS_DEC, void *buf, int newsize);
 extern char_t	*bstrdup(B_ARGS_DEC, char_t *s);
 
-#if UNICODE
+#ifdef UNICODE
 extern char *bstrdupA(B_ARGS_DEC, char *s);
 #else /* UNICODE */
 #define bstrdupA bstrdup
@@ -881,11 +946,12 @@ extern void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...));
 #define B_USE_MALLOC		0x1				/* Okay to use malloc if required */
 #define B_USER_BUF			0x2				/* User supplied buffer for mem */
 
+
 #if !LINUX && !__rtems__
 extern char_t	*basename(char_t *name);
 #endif /* !LINUX */
 
-#if UEMF && WEBS
+#if (defined (UEMF) && defined (WEBS))
 /*
  *	The open source webserver uses a different callback/timer mechanism
  *	than other emf derivative products such as FieldUpgrader agents
@@ -908,7 +974,7 @@ extern void		error(E_ARGS_DEC, int flags, char_t *fmt, ...);
 extern void		(*errorSetHandler(void (*function)(int etype, char_t *msg))) \
 					(int etype, char_t *msg);
 
-#if B_STATS
+#ifdef B_STATS
 #define 		hAlloc(x) 				HALLOC(B_L, x)
 #define			hAllocEntry(x, y, z)	HALLOCENTRY(B_L, x, y, z)
 extern int		HALLOC(B_ARGS_DEC, void ***map);
@@ -933,7 +999,7 @@ extern int		fmtValloc(char_t **s, int n, char_t *fmt, va_list arg);
 extern int		fmtAlloc(char_t **s, int n, char_t *fmt, ...);
 extern int		fmtStatic(char_t *s, int n, char_t *fmt, ...);
 
-#if UNICODE
+#ifdef UNICODE
 extern int 		ringqPutcA(ringq_t *rq, char c);
 extern int	 	ringqInsertcA(ringq_t *rq, char c);
 extern int	 	ringqPutStrA(ringq_t *rq, char *str);

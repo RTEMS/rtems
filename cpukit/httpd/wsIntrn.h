@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1992-2000. All Rights Reserved.
  *
  *	See the file "license.txt" for information on usage and redistribution
+ *
+ * $Id$
  */
  
 #ifndef _h_WEBS_INTERNAL
@@ -19,7 +21,7 @@
 /*********************************** Defines **********************************/
 
 /*
- *	Define this to enable login of web accesses to a file
+ *	Define this to enable logging of web accesses to a file 
  *		#define WEBS_LOG_SUPPORT 1
  *
  *	Define this to enable HTTP/1.1 keep alive support
@@ -46,45 +48,52 @@
 #include	<string.h>
 #include	<stdarg.h>
 
-#if WIN
+#ifdef NETWARE
+	#include	<fcntl.h>
+	#include	<sys/stat.h>
+	#include	<signal.h>
+	#include	<io.h>
+#endif
+
+#ifdef WIN
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 	#include	<io.h>
 #endif
 
-#if CE
-#if ! UEMF
+#ifdef CE
+#ifndef UEMF
 	#include	<io.h>
 #endif
 #endif
 
-#if NW
+#ifdef NW
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 #endif
 
-#if SCOV5
-	#include	<fcntl.h>
-	#include	<sys/stat.h>
-	#include	<signal.h>
-	#include	<unistd.h>
-#endif
-
-#if LYNX
+#ifdef SCOV5
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 	#include	<signal.h>
 	#include	<unistd.h>
 #endif
 
-#if UNIX
+#ifdef LYNX
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 	#include	<signal.h>
 	#include	<unistd.h>
 #endif
 
-#if QNX4
+#ifdef UNIX
+	#include	<fcntl.h>
+	#include	<sys/stat.h>
+	#include	<signal.h>
+	#include	<unistd.h>
+#endif
+
+#ifdef QNX4
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 	#include	<signal.h>
@@ -92,24 +101,24 @@
 	#include	<unix.h>
 #endif
 
-#if UW
+#ifdef UW
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 #endif
 
-#if VXWORKS
+#ifdef VXWORKS
 	#include	<vxWorks.h>
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 #endif
 
-#if SOLARIS
+#ifdef SOLARIS
 	#include	<macros.h>
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 #endif
 
-#if UEMF
+#ifdef UEMF
 	#include	"uemf.h"
 	#include	"ejIntrn.h"
 #else
@@ -134,7 +143,6 @@
 #define PAGE_READ_BUFSIZE	512			/* bytes read from page files */
 #define MAX_PORT_LEN		10			/* max digits in port number */
 #define WEBS_SYM_INIT		64			/* initial # of sym table entries */
-#define	WEBS_VERSION_STR	T("2.1.3")	/* version of web server s/w */	
 
 /*
  *	URL handler structure. Stores the leading URL path and the handler
@@ -201,7 +209,7 @@ typedef struct {
  */
 typedef struct {
 	char_t			*path;					/* Web page URL path */
-	const unsigned char	*page;					/* Web page data */
+	unsigned char	*page;					/* Web page data */
 	int				size;					/* Size of web page in bytes */
 	int				pos;					/* Current read position */
 } websRomPageIndexType;
@@ -285,13 +293,13 @@ extern int		strcmpci(char_t* s1, char_t* s2);
  *	Prototypes for functions available when running as part of the 
  *	GoAhead Embedded Management Framework (EMF)
  */
-#if EMF
+#ifdef EMF
 extern int 		 websEmfOpen();
 extern void 	 websEmfClose();
 extern void 	 websSetEmfEnvironment(webs_t wp);
 #endif
 
-#if CE
+#ifdef CE
 extern int writeUniToAsc(int fid, void *buf, unsigned int len);
 extern int readAscToUni(int fid, void **buf, unsigned int len);
 #endif

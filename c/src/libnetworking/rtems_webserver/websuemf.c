@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /********************************** Description *******************************/
@@ -45,7 +47,12 @@ int scriptEval(int engine, char_t *cmd, char_t **result, int chan)
 
 	if (engine == EMF_SCRIPT_EJSCRIPT) {
 		ejid = (int) chan;
-		if (ejEval(ejid, cmd, NULL) ) {
+      /*
+       * NOTE -- to disable better reporting of ASP errors, change the
+       * following line of code to
+       *	if (ejEval(ejid, cmd, NULL) ) {
+       */
+		if (ejEval(ejid, cmd, result) ) {
 			return 0;
 		} else {
 			return -1;

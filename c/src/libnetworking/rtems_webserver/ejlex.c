@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -17,7 +19,7 @@
 
 #include	"ejIntrn.h"
 
-#if UEMF
+#ifdef UEMF
 	#include "uemf.h"
 #else
 	#include "basic/basicInternal.h"
@@ -194,7 +196,13 @@ void ejLexFreeInputState(ej_t* ep, ejinput_t* state)
 int ejLexGetToken(ej_t* ep, int state)
 {
 	ep->tid = getLexicalToken(ep, state);
+   /*
+    * commented out 04 Apr 02 Bg Porter -- we found a case where very long
+    * arguments to write() were being corrupted downstream in the trace call
+    * (the ep->token pointer was being overwritten with the trace message.
+    * restore this if it's useful for your debugging.
 	trace(9, T("ejGetToken: %d, \"%s\"\n"), ep->tid, ep->token);
+    */
 	return ep->tid;
 }
 

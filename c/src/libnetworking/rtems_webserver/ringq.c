@@ -4,6 +4,8 @@
  * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -47,7 +49,7 @@
 
 /********************************* Includes ***********************************/
 
-#if UEMF
+#ifdef UEMF
 	#include	"uemf.h"
 #else
 	#include	"basic/basicInternal.h"
@@ -245,7 +247,7 @@ void ringqAddNull(ringq_t *rq)
 }
 
 /******************************************************************************/
-#if UNICODE
+#ifdef UNICODE
 /*
  *	Get a byte from the queue
  */
@@ -538,7 +540,7 @@ static int ringqGrow(ringq_t *rq)
 	ringqGetBlk(rq, newbuf, ringqLen(rq));
 	bfree(B_L, (char*) rq->buf);
 
-#if OLD
+#ifdef OLD
 	rq->endp = &newbuf[endp];
 	rq->servp = &newbuf[servp];
 	rq->endbuf = &newbuf[rq->buflen];
