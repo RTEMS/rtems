@@ -29,13 +29,17 @@ AC_ARG_ENABLE([rtems-root],[
 AS_HELP_STRING(--enable-rtems-root,directory containing make/custom)],
 [case ${enable_rtems_root} in
   [[\\/$]]* | ?:[[\\/]]* ) # absolute directory
-   RTEMS_ROOT=${enable_rtems_root}
+   rtems_rootdir=${enable_rtems_root}
+   RTEMS_RTEMS=${enable_rtems_root}
    ;;
   *) # relative directory
+   rtems_rootdir=${enable_rtems_root}${rtems_updir}
    RTEMS_ROOT=${enable_rtems_root}${rtems_updir}'$(top_builddir)'
    ;;
-esac],
-[RTEMS_ROOT=${rtems_updir}'$(top_builddir)'])
+esac],[
+rtems_rootdir=${rtems_updir}
+RTEMS_ROOT=${rtems_updir}'$(top_builddir)'
+])
 AC_SUBST([RTEMS_ROOT])
 
 AC_SUBST([PROJECT_TOPdir],[${with_project_top}${rtems_updir}'$(top_builddir)'])

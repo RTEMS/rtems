@@ -1,5 +1,10 @@
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/rtems-top.m4: Add rtems_rootdir.
+	* aclocal/check-custom-bsp.m4: Check for $RTEMS_BSP.cfg in $rtems_rootdir.
+
+2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/rtems-top.m4: Add 2nd arg to RTEMS_TOP.
 	Rework with_project_root/PROJECT_ROOT and with_project_top/PROJECT_TOPdir.
 	Add --enable-rtems-root. Rework RTEMS_ROOT.
