@@ -42,6 +42,7 @@ AC_OUTPUT(
 Makefile
 itronhello/Makefile
 itronmbf01/Makefile
+itronmbox01/Makefile
 itronsem01/Makefile
 itrontask01/Makefile
 itrontask02/Makefile
