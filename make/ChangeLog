@@ -1,4 +1,12 @@
 
+2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/eth_comm.cfg: Reflect changes to eth_comm/configure.ac.
+	* custom/mbx8xx.cfg: Reflect changes to mbx8xx/configure.ac.
+	* custom/mbx860_005b.cfg: Ditto.
+	* custom/mpc8620ads.cfg: Reflect changes to mpc8620/configure.ac.
+
+
 2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/gensh1.cfg: remove make-target-options.
