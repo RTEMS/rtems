@@ -18,7 +18,7 @@ DOCTYPES = doc
 DOCS = $(DOCTYPES:%=$(TEST).%)
 
 SRCS = $(DOCS) $(C_FILES) $(H_FILES)
-OBJS = $(C_O_FILES) ../../support/stubdr/$(ARCH)/stubdr.rel
+OBJS = $(C_O_FILES)
 
 PRINT_SRCS = $(DOCS)
 
