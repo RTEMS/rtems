@@ -1,5 +1,7 @@
 2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in supplements/ChangeLog.
+	* supplements/ChangeLog: Remove.
 	* ChangeLog: Merge-in ada_user/ChangeLog.
 	* ChangeLog: Merge-in started_ada/ChangeLog.
 	* ada_user/ChangeLog, started_ada/ChangeLog: Remove.
@@ -67,6 +69,18 @@
 	* rtems_support.html.in: Removed.
 	* started_ada/buildada.t: mips64orion port removed as mips port more
 	completely covers the MIPS family.
+	* supplements/Makefile.am: mips64orion port removed as mips port more
+	completely covers the MIPS family.
+	* supplements/mips64orion/.cvsignore, supplements/mips64orion/BSP_TIMES,
+	supplements/mips64orion/ChangeLog, supplements/mips64orion/Makefile.am,
+	supplements/mips64orion/bsp.t, supplements/mips64orion/callconv.t,
+	supplements/mips64orion/cpumodel.t, supplements/mips64orion/cputable.t,
+	supplements/mips64orion/fatalerr.t,
+	supplements/mips64orion/intr_NOTIMES.t,
+	supplements/mips64orion/memmodel.t,
+	supplements/mips64orion/mips64orion.texi,
+	supplements/mips64orion/preface.texi, supplements/mips64orion/timeBSP.t:
+	Removed.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -85,6 +99,7 @@
 	* rtems_gdb/Makefile.am: Cosmetics.
 	* ada_user/Makefile.am: Cosmetics.
 	* started_ada/Makefile.am: Cosmetics.
+	* supplements/Makefile.am: Cosmetics.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -102,6 +117,7 @@
 	* rtems_gdb/Makefile.am: Cosmetics.
 	* ada_user/Makefile.am: Cosmetics.
 	* started_ada/Makefile.am: Cosmetics.
+	* supplements/Makefile.am: Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -173,6 +189,14 @@
 	references.
 	* porting/cpumodels.t: Obsoleting HP PA-RISC port and removing all
 	references.
+	* supplements/hppa1_1/.cvsignore, supplements/hppa1_1/ChangeLog,
+	supplements/hppa1_1/Makefile.am, supplements/hppa1_1/SIMHPPA_TIMES,
+	supplements/hppa1_1/bsp.t, supplements/hppa1_1/callconv.t,
+	supplements/hppa1_1/cpumodel.t, supplements/hppa1_1/cputable.t,
+	supplements/hppa1_1/fatalerr.t, supplements/hppa1_1/hppa1_1.texi,
+	supplements/hppa1_1/intr_NOTIMES.t, supplements/hppa1_1/memmodel.t,
+	supplements/hppa1_1/preface.texi, supplements/hppa1_1/timeSIMHPPA.t:
+	Removed.
 
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -200,6 +224,11 @@
 	* rtems_gdb/Makefile.am: Merger from rtems-4-6-branch.
 	* ada_user/Makefile.am: Merger from rtems-4-6-branch.
 	* started_ada/Makefile.am: Merger from rtems-4-6-branch.
+
+2003-09-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* supplements/supplement.am: Add -I $(top_builddir) TEXI2WWW_ARGS.
+	* supplements/Makefile.am: Purge hppa1.1.
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -360,6 +389,7 @@
 	* rtems_gdb/rtems_gdb.texi: Set @setfilename rtems_gdb.info.
 	* ada_user/ada_user.texi: Set @setfilename ada_user.info.
 	* started_ada/started_ada.texi: Set @setfilename started_ada.info.
+	* supplements/Makefile.am: Add c4x, cosmetical changes.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -380,6 +410,8 @@
 	* rtems_gdb/Makefile.am: Put GENERATED_FILES into $builddir.
 	* ada_user/Makefile.am: Put GENERATED_FILES into $builddir.
 	* started_ada/Makefile.am: Put GENERATED_FILES into $builddir.
+	* supplements/supplements.am: Remove AM_MAKEINFOFLAGS, TEXI2DVI,
+	TEXI2PDF.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -436,6 +468,8 @@
 	* started_ada/version.texi: Remove from CVS.
 	* started_ada/stamp-vti: Remove from CVS.
 	* started_ada/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* supplements/supplements.am: Use automake rules to build ps, pdf, info.
+	Various minor changes.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -461,6 +495,7 @@
 	* common/Makefile.am: Remove.
 	* configure.ac: Reflect changes above.
 	* main.am: Append -I $(topsrc_dir) to AM_MAKEINFOFLAGS.
+	* supplements/supplement.am: Append -I $(topsrc_dir) to AM_MAKEINFOFLAGS.
 
 2002-11-13	Joel Sherrill <joel@OARcorp.com>
 
@@ -527,6 +562,7 @@
 	* user/stamp-vti, user/version.texi: Regenerated.
 	* porting/miscellaneous.t: Added some markups for fonts and clarified
 	some places.
+	* supplements/Makefile.am: Added arm subdirectory.
 
 2002-06-28	Joel Sherrill <joel@OARcorp.com>
 
@@ -580,6 +616,7 @@
 	* rtems_gdb/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* ada_user/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* started_ada/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* supplements/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-03-27	Eric Norum <eric.norum@usask.ca>
 
@@ -615,6 +652,7 @@
 	* configure.ac: Add AC_CONFIG_AUX_DIR([.]).
 	* project.am: Remove custom .texi and stamp-vti rules.
 	* main.am: Replace TEXI_COMMON with AM_MAKEINFOFLAGS.
+	* supplements/supplement.am: Replace TEXI_COMMON with AM_MAKEINFOFLAGS.
 
 2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -640,6 +678,7 @@
 	* rtems_gdb/Makefile.am: include main.am, require automake-1.5.
 	* ada_user/Makefile.am: include main.am, require automake-1.5.
 	* started_ada/Makefile.am: include main.am, require automake-1.5.
+	* supplements/Makefile.am: Require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -660,6 +699,7 @@
 2001-02-14	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: New mips supplement.
+	* supplements/mips: New supplement.
 
 2001-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -708,4 +748,5 @@
 	* rtems_gdb/ChangeLog: New file.
 	* ada_user/ChangeLog: New file.
 	* started_ada/ChangeLog: New file.
+	* supplements/ChangeLog: New file.
 
