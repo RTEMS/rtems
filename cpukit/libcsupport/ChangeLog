@@ -1,4 +1,8 @@
 
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* src/__times.c: Corrected from previous attempt to cleanup.
+
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_PROJECT_ROOT.

@@ -27,13 +27,18 @@ clock_t _times(
    struct tms  *ptms
 )
 {
-  rtems_status_code  status;
-  rtems_interval     ticks;
+  rtems_interval ticks;
 
   if ( !ptms ) {
     errno = EFAULT;
     return -1;
   }
+
+  /*
+   *  This call does not depend on TOD being initialized and can't fail.
+   */
+
+  (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &ticks );
 
   /*
    *  RTEMS technically has no notion of system versus user time 
