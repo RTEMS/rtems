@@ -1,3 +1,8 @@
+2002-08-14	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/coremsg.inl: Add <string.h> to remove warning.
+	* src/threadidlebody.c: Add return 0 to avoid warning.
+
 2002-08-07	Chris Johns <ccj@acm.org>
 
 	* src/coretodset.c: Correct calculation of ticks until next section

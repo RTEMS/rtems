@@ -46,5 +46,6 @@ Thread _Thread_Idle_body(
 )
 {
   for( ; ; ) ;
+  return 0;   /* to avoid warning */
 }
 #endif

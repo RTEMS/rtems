@@ -16,6 +16,8 @@
 #ifndef __CORE_MESSAGE_QUEUE_inl
 #define __CORE_MESSAGE_QUEUE_inl
 
+#include <string.h>  /* for memcpy */
+
 /*PAGE
  *
  *  _CORE_message_queue_Send
