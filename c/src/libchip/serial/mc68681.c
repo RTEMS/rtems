@@ -273,7 +273,10 @@ MC68681_STATIC int mc68681_set_attributes(
   rtems_interrupt_disable(Irql);
     (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr_bit );
     (*setReg)( pMC68681_port, MC68681_CLOCK_SELECT, baud_mask );
-    (*setReg)( pMC68681_port, MC68681_COMMAND, cmd );
+    if ( cmd ) {
+      (*setReg)( pMC68681_port, MC68681_COMMAND, cmd );         /* RX */
+      (*setReg)( pMC68681_port, MC68681_COMMAND, cmd | 0x20 );  /* TX */
+    }
     (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_MR_PTR );
     (*setReg)( pMC68681_port, MC68681_MODE, mode1 );
     (*setReg)( pMC68681_port, MC68681_MODE, mode2 );
@@ -365,7 +368,11 @@ MC68681_STATIC unsigned int mc68681_build_imr(
     }
   }
 
+#if 0
   return mask | mate_mask;
+#endif
+
+  return 0;
 }
 
 /*
@@ -451,10 +458,10 @@ MC68681_STATIC int mc68681_open(
    */
 
   rtems_interrupt_disable(Irql);
+    (*setReg)( pMC68681, MC68681_COMMAND, command );
     (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr );
     (*setReg)( pMC68681_port, MC68681_CLOCK_SELECT, baud );
     (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_MR_PTR );
-    (*setReg)( pMC68681, MC68681_COMMAND, command );
     (*setReg)( pMC68681_port, MC68681_MODE, 0x13 );
     (*setReg)( pMC68681_port, MC68681_MODE, 0x07 );
   rtems_interrupt_enable(Irql);
@@ -523,7 +530,10 @@ MC68681_STATIC void mc68681_write_polled(
    */
   iTimeout = 1000;
   ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
-  while ((ucLineStatus & MC68681_TX_READY) == 0) {
+  while ((ucLineStatus & (MC68681_TX_READY|MC68681_TX_EMPTY)) == 0) {
+
+    if ((ucLineStatus & 0xF0))
+      (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_ERROR );
 
     /*
      * Yield while we wait
@@ -816,7 +826,7 @@ MC68681_STATIC int mc68681_inbyte_nonblocking_polled(
 {
   unsigned32           pMC68681_port;
   unsigned char        ucLineStatus;
-  char                 cChar;
+  unsigned char        cChar;
   getRegister_f        getReg;
 
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
@@ -842,7 +852,6 @@ MC68681_STATIC int mc68681_baud_rate(
   unsigned int     baud_mask;
   unsigned int     acr_bit;
   int              status;
-  int              is_a;
   int              is_extended;
   int              baud_requested;
   mc68681_baud_table_t  *baud_tbl;
@@ -851,12 +860,6 @@ MC68681_STATIC int mc68681_baud_rate(
   acr_bit = 0;
   status = 0;
 
-  if (Console_Port_Tbl[minor].ulCtrlPort1 ==
-      Console_Port_Tbl[minor].ulCtrlPort2)
-    is_a = 1;
-  else
-    is_a = 0;
-    
   if ( !(Console_Port_Tbl[minor].ulDataPort & MC68681_DATA_BAUD_RATE_SET_1) )
     acr_bit = 1;
 
@@ -867,17 +870,17 @@ MC68681_STATIC int mc68681_baud_rate(
       *command = 0x00;
       break;
     case MC68681_XBRG_ENABLED:
-      *command = (is_a) ? 0x08 : 0x09;
+      *command = 0x80;
       is_extended = 1;
       break;
     case MC68681_XBRG_DISABLED:
-      *command = (is_a) ? 0x0A : 0x0B;
+      *command = 0x90;
       break;
   }
 
   baud_requested = baud & CBAUD;
   if (!baud_requested)
-    baud_requested = B9600;
+    baud_requested = B9600;              /* default to 9600 baud */
   
   baud_requested = termios_baud_to_index( baud_requested );
 
@@ -893,7 +896,11 @@ MC68681_STATIC int mc68681_baud_rate(
   if ( baud_mask == MC68681_BAUD_NOT_VALID )
     status = -1;
 
-  *baud_mask_p = baud_mask;     /* default to 9600 baud */
+  /*
+   *  upper nibble is receiver and lower nibble is transmitter
+   */
+
+  *baud_mask_p = (baud_mask << 4) | baud_mask;
   *acr_bit_p   = acr_bit;
   return status;
 }
