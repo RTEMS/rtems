@@ -55,23 +55,27 @@
  *  P1003.1c/D10, p. 52 adds the following.
  */
 
-#define _SC_GETGR_R_SIZE_MAX       35
-#define _SC_GETPW_R_SIZE_MAX
-#define _SC_LOGIN_NAME_MAX
-#define _SC_THREAD_DESTRUCTOR_ITERATIONS
-#define _SC_THREAD_KEYS_MAX
-#define _SC_THREAD_STACK_MIN
-#define _SC_THREAD_THREADS_MAX
-#define _SC_TTY_NAME_MAX
+#define _SC_GETGR_R_SIZE_MAX             35
+#define _SC_GETPW_R_SIZE_MAX             36
+#define _SC_LOGIN_NAME_MAX               37
+#define _SC_THREAD_DESTRUCTOR_ITERATIONS 38
+#define _SC_THREAD_KEYS_MAX              39
+#define _SC_THREAD_STACK_MIN             40
+#define _SC_THREAD_THREADS_MAX           41
+#define _SC_TTY_NAME_MAX                 42
 
-#define _SC_THREADS
-#define _SC_THREAD_ATTR_STACKADDR
-#define _SC_THREAD_ATTR_STACKSIZE
-#define _SC_THREAD_PRIORITY_SCHEDULING
-#define _SC_THREAD_PRIO_INHERIT
-#define _SC_THREAD_PRIO_CEILING
-#define _SC_THREAD_PROCESS_SHARED
-#define _SC_THREAD_SAGE_FUNCTIONS
+#define _SC_THREADS                      43
+#define _SC_THREAD_ATTR_STACKADDR        44
+#define _SC_THREAD_ATTR_STACKSIZE        45
+#define _SC_THREAD_PRIORITY_SCHEDULING   46
+#define _SC_THREAD_PRIO_INHERIT          47
+#define _SC_THREAD_PRIO_CEILING          48
+#define _SC_THREAD_PROCESS_SHARED        49
+#define _SC_THREAD_SAFE_FUNCTIONS        50
+
+/* JRS: 04/02/98: _SC_THREAD_PRIO_CEILING seems to have changed names
+ *                in the final standard to _SC_THREAD_PRIO_PROTECT.
+ */
 
 /*
  *  4.8.1 Get Configurable System Variables, P1003.1b-1993, p. 95

@@ -25,21 +25,21 @@
  */
 
 #define AIO_CANCELED    0 /* all requested operations have been canceled */
-#define AIO_NOTCANCELED 0 /* some of the operations could not be canceled */
+#define AIO_NOTCANCELED 1 /* some of the operations could not be canceled */
                           /*   since they are in progress */
-#define AIO_ALLDONE     0 /* none of the requested operations could be */
+#define AIO_ALLDONE     2 /* none of the requested operations could be */
                           /*   canceled since they are already complete */
 
 /* lio_listio() options */
 
 #define LIO_WAIT        0 /* calling process is to suspend until the */
                           /*   operation is complete */
-#define LIO_NOWAIT      0 /* calling process is to continue execution while */
+#define LIO_NOWAIT      1 /* calling process is to continue execution while */
                           /*   the operation is performed and no notification */
                           /*   shall be given when the operation is completed */
-#define LIO_READ        0 /* request a read() */
-#define LIO_WRITE       0 /* request a write() */
-#define LIO_NOP         0 /* no transfer is requested */
+#define LIO_READ        2 /* request a read() */
+#define LIO_WRITE       3 /* request a write() */
+#define LIO_NOP         4 /* no transfer is requested */
 
 /*
  *  6.7.1.1 Asynchronous I/O Control Block, P1003.1b-1993, p. 151
