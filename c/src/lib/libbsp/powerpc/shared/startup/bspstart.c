@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <bsp/consoleIo.h>
@@ -28,7 +29,6 @@
 #include <bsp/openpic.h>
 #include <bsp/irq.h>
 #include <bsp/VME.h>
-#include <bsp.h>
 #include <libcpu/bat.h>
 #include <libcpu/pte121.h>
 #include <libcpu/cpuIdent.h>
@@ -47,6 +47,41 @@ extern void			BSP_vme_config();
 
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
+
+#if defined(DEBUG_BATS)
+void printBAT( int bat, unsigned32 upper, unsigned32 lower )
+{
+  unsigned32 lowest_addr;
+  unsigned32 size;
+
+  printk("BAT%d raw(upper=0x%08x, lower=0x%08x) ", bat, upper, lower );
+
+  lowest_addr = (upper & 0xFFFE0000);
+  size = (((upper & 0x00001FFC) >> 2) + 1) * (128 * 1024);
+  printk(" range(0x%08x, 0x%08x) %s%s %s%s%s%s %s\n",
+    lowest_addr,
+    lowest_addr + (size - 1),
+    (upper & 0x01) ? "P" : "p",
+    (upper & 0x02) ? "S" : "s",
+    (lower & 0x08) ? "G" : "g",
+    (lower & 0x10) ? "M" : "m",
+    (lower & 0x20) ? "I" : "i",
+    (lower & 0x40) ? "W" : "w",
+    (lower & 0x01) ? "Read Only" :
+      ((lower & 0x02) ? "Read/Write" : "No Access")
+  );
+}
+
+void ShowBATS(){
+  unsigned32 lower;
+  unsigned32 upper;
+
+  __MFSPR(536, upper); __MFSPR(537, lower); printBAT( 0, upper, lower );
+  __MFSPR(538, upper); __MFSPR(539, lower); printBAT( 1, upper, lower );
+  __MFSPR(540, upper); __MFSPR(541, lower); printBAT( 2, upper, lower );
+  __MFSPR(542, upper); __MFSPR(543, lower); printBAT( 3, upper, lower );
+}
+#endif
 
 /*
  * Copy of residuals passed by firmware
@@ -130,27 +165,28 @@ void bsp_libc_init( void *, uint32_t, int );
 
 void bsp_pretasking_hook(void)
 {
-    uint32_t                heap_start;
-    uint32_t                heap_size;
-    uint32_t                heap_sbrk_spared;
-	extern uint32_t         _bsp_sbrk_init(uint32_t, uint32_t*);
+  rtems_unsigned32        heap_start;    
+  rtems_unsigned32        heap_size;
+  rtems_unsigned32        heap_sbrk_spared;
+  extern rtems_unsigned32 _bsp_sbrk_init(rtems_unsigned32, rtems_unsigned32*);
 
-    heap_start = ((uint32_t) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
-    if (heap_start & (CPU_ALIGNMENT-1))
-        heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+  heap_start = ((rtems_unsigned32) __rtems_end) +
+                INIT_STACK_SIZE + INTR_STACK_SIZE;
+  if (heap_start & (CPU_ALIGNMENT-1))
+      heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-    heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
-
-	heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
+  heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
+  heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-   	printk(" HEAP start %x  size %x (%x bytes spared for sbrk)\n", heap_start, heap_size, heap_sbrk_spared);
-#endif
+  printk( "HEAP start %x  size %x (%x bytes spared for sbrk)\n",
+             heap_start, heap_size, heap_sbrk_spared);
+#endif    
 
-    bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
+  bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
 
 #ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
+  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 }
 
@@ -172,6 +208,33 @@ void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_op
   loaderParam[MAX_LOADER_ADD_PARM - 1] ='\0';
 }
 
+#if defined(mpc8240) || defined(mpc8245)
+unsigned int EUMBBAR;
+
+/* 
+ * Return the current value of the Embedded Utilities Memory Block Base Address
+ * Register (EUMBBAR) as read from the processor configuration register using
+ * Processor Address Map B (CHRP).
+ */ 
+unsigned int get_eumbbar() {
+  register int a, e;
+
+  asm volatile( "lis %0,0xfec0; ori  %0,%0,0x0000": "=r" (a) );
+  asm volatile("sync");
+                                                                
+  asm volatile("lis %0,0x8000; ori %0,%0,0x0078": "=r"(e) ); 
+  asm volatile("stwbrx  %0,0x0,%1": "=r"(e): "r"(a));  
+  asm volatile("sync");
+
+  asm volatile("lis %0,0xfee0; ori %0,%0,0x0000": "=r" (a) ); 
+  asm volatile("sync");
+                                                         
+  asm volatile("lwbrx %0,0x0,%1": "=r" (e): "r" (a));
+  asm volatile("isync");
+  return e;
+}
+#endif
+
 /*
  *  bsp_start
  *
@@ -180,9 +243,10 @@ void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_op
 
 void bsp_start( void )
 {
-  int err;
   unsigned char *stack;
+#if !defined(mpc8240) && !defined(mpc8245)
   unsigned l2cr;
+#endif
   register unsigned char* intrStack;
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
@@ -190,17 +254,29 @@ void bsp_start( void )
   prep_t boardManufacturer;
   motorolaBoard myBoard;
   Triv121PgTbl	pt=0;
+
   /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
-   * store the result in global variables so that it can be used latter...
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
+   * function store the result in global variables so that it can be used 
+   * later...
    */
   myCpu 	= get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
+
+#if defined(mvme2100)
+  EUMBBAR = get_eumbbar(); 
+
+  Cpu_table.exceptions_in_RAM 	 = TRUE;
+  { unsigned v = 0x3000 ; _CPU_MSR_SET(v); }
+#endif
+
+#if !defined(mpc8240) && !defined(mpc8245)
   /*
    * enables L1 Cache. Note that the L1_caches_enables() codes checks for
    * relevant CPU type so that the reason why there is no use of myCpu...
    */
   L1_caches_enables();
+
   /*
    * Enable L2 Cache. Note that the set_L2CR(L2CR) codes checks for
    * relevant CPU type (mpc750)...
@@ -211,24 +287,28 @@ void bsp_start( void )
 #endif
   if ( (! (l2cr & 0x80000000)) && ((int) l2cr == -1))
     set_L2CR(0xb9A14000);
+#endif
+
   /*
    * the initial stack  has aready been set to this value in start.S
    * so there is no need to set it in r1 again... It is just for info
    * so that It can be printed without accessing R1.
    */
-  stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+  stack = ((unsigned char*) __rtems_end) +
+               INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
- /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
+  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((uint32_t*)stack) = 0;
 
   /*
    * Initialize the interrupt related settings
    * SPRG1 = software managed IRQ stack
    *
-   * This could be done latter (e.g in IRQ_INIT) but it helps to understand
+   * This could be done later (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  intrStack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+  intrStack = ((unsigned char*) __rtems_end) +
+    INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
   (uint32_t)intrStack &= ~(CPU_STACK_ALIGNMENT-1);
@@ -242,38 +322,48 @@ void bsp_start( void )
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
   /*
-   * Initialize default raw exception hanlders. See vectors/vectors_init.c
+   * Initialize default raw exception handlers. See vectors/vectors_init.c
    */
   initialize_exceptions();
+
   /*
-   * Init MMU block address translation to enable hardware
-   * access
+   * Init MMU block address translation to enable hardware access
    */
+
+#if !defined(mvme2100)
   /*
-   * PC legacy IO space used for inb/outb and all PC
-   * compatible hardware
+   * PC legacy IO space used for inb/outb and all PC compatible hardware
    */
   setdbat(1, _IO_BASE, _IO_BASE, 0x10000000, IO_PAGE);
+#endif
+
   /*
-   * PCI devices memory area. Needed to access OPENPIC features
-   * provided by the RAVEN
-   */
-  /* T. Straumann: give more PCI address space */
-  setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
-  /*
-   * Must have acces to open pic PCI ACK registers
-   * provided by the RAVEN
+   * PCI devices memory area. Needed to access OpenPIC features
+   * provided by the Raven
    *
+   * T. Straumann: give more PCI address space
+   */
+  setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
+
+  /*
+   * Must have acces to open pic PCI ACK registers provided by the RAVEN
    */
   setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
 
   select_console(CONSOLE_LOG);
 
-  /* We check that the keyboard is present and immediately
+  /*
+   * We check that the keyboard is present and immediately
    * select the serial console if not.
    */
-  err = kbdreset();
-  if (err) select_console(CONSOLE_SERIAL);
+#if defined(BSP_KBD_IOBASE)
+  { int err;
+    err = kbdreset();
+    if (err) select_console(CONSOLE_SERIAL);
+  }
+#else
+  select_console(CONSOLE_SERIAL);
+#endif
 
   boardManufacturer   =  checkPrepBoardType(&residualCopy);
   if (boardManufacturer != PREP_Motorola) {
@@ -283,7 +373,8 @@ void bsp_start( void )
   myBoard = getMotorolaBoard();
 
   printk("-----------------------------------------\n");
-  printk("Welcome to %s on %s\n", _RTEMS_version, motorolaBoardToString(myBoard));
+  printk("Welcome to %s on %s\n", _RTEMS_version,
+                                    motorolaBoardToString(myBoard));
   printk("-----------------------------------------\n");
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Residuals are located at %x\n", (unsigned) &residualCopy);
@@ -307,12 +398,12 @@ void bsp_start( void )
 #endif
   InitializePCI();
 
- {
-    const struct _int_map     *bspmap   = motorolaIntMap(currentBoard);
-    if( bspmap )
-    {
-       printk("pci : Configuring interrupt routing for '%s'\n", motorolaBoardToString(currentBoard));
-       FixupPCI(bspmap, motorolaIntSwizzle(currentBoard) );
+  {
+    const struct _int_map *bspmap  = motorolaIntMap(currentBoard);
+    if( bspmap ) {
+       printk("pci : Configuring interrupt routing for '%s'\n",
+          motorolaBoardToString(currentBoard));
+       FixupPCI(bspmap, motorolaIntSwizzle(currentBoard));
     }
     else
        printk("pci : Interrupt routing not available for this bsp\n");
@@ -328,17 +419,25 @@ void bsp_start( void )
    */
   __asm__ __volatile ("sc");
   /*
-   * Check we can still catch exceptions and returned coorectly.
+   * Check we can still catch exceptions and return coorectly.
    */
   printk("Testing exception handling Part 2\n");
   __asm__ __volatile ("sc");
+
+  /*
+   *  Somehow doing the above seems to clobber SPRG0 on the mvme2100.  It
+   *  is probably a not so subtle hint that you do not want to use PPCBug
+   *  once RTEMS is up and running.  Anyway, we still needs to indicate
+   *  that we have fixed PR288.  Eventually, this should go away.
+   */
+  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 #endif
 
-  BSP_mem_size 				= residualCopy.TotalMemory;
-  BSP_bus_frequency			= residualCopy.VitalProductData.ProcessorBusHz;
-  BSP_processor_frequency		= residualCopy.VitalProductData.ProcessorHz;
-  BSP_time_base_divisor			= (residualCopy.VitalProductData.TimeBaseDivisor?
-					   residualCopy.VitalProductData.TimeBaseDivisor : 4000);
+  BSP_mem_size            = residualCopy.TotalMemory;
+  BSP_bus_frequency       = residualCopy.VitalProductData.ProcessorBusHz;
+  BSP_processor_frequency = residualCopy.VitalProductData.ProcessorHz;
+  BSP_time_base_divisor   = (residualCopy.VitalProductData.TimeBaseDivisor?
+                    residualCopy.VitalProductData.TimeBaseDivisor : 4000);
 
   /* clear hostbridge errors but leave MCP disabled -
    * PCI config space scanning code will trip otherwise :-(
@@ -354,16 +453,11 @@ void bsp_start( void )
    */
   pt = BSP_pgtbl_setup(&BSP_mem_size);
 
-  if (!pt ||
-	  TRIV121_MAP_SUCCESS != triv121PgTblMap(
-			  							pt,
-										TRIV121_121_VSID,
-										0xfeff0000,
-										1,
-										TRIV121_ATTR_IO_PAGE,
-										TRIV121_PP_RW_PAGE
-										)) {
-	printk("WARNING: unable to setup page tables VME bridge must share PCI space\n");
+  if (!pt || TRIV121_MAP_SUCCESS != triv121PgTblMap(
+            pt, TRIV121_121_VSID, 0xfeff0000, 1,
+            TRIV121_ATTR_IO_PAGE, TRIV121_PP_RW_PAGE)) {
+	printk("WARNING: unable to setup page tables VME "
+               "bridge must share PCI space\n");
   }
 
   /*
@@ -380,12 +474,15 @@ void bsp_start( void )
   Cpu_table.exceptions_in_RAM 	 = TRUE;
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("BSP_Configuration.work_space_size = %x\n", BSP_Configuration.work_space_size);
+  printk("BSP_Configuration.work_space_size = %x\n",
+          BSP_Configuration.work_space_size);
 #endif
+
   work_space_start =
     (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
 
-  if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
+  if ( work_space_start <=
+       ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
     printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }
@@ -406,22 +503,27 @@ void bsp_start( void )
     printk("Page table setup finished; will activate it NOW...\n");
 #endif
     BSP_pgtbl_activate(pt);
-  	/* finally, switch off DBAT3 */
-	setdbat(3, 0, 0, 0, 0);
+#if !defined(mvme2100)
+    /* finally, switch off DBAT3 */
+    setdbat(3, 0, 0, 0, 0); 
+#endif
   }
 
   /*
-   * Initialize VME bridge - needs working PCI
-   * and IRQ subsystems...
+   * Initialize VME bridge - needs working PCI and IRQ subsystems...
    */
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to initialize VME bridge\n");
 #endif
-  /* VME initialization is in a separate file so apps which don't use
-   * VME or want a different configuration may link against a customized
-   * routine.
+  /*
+   * VME initialization is in a separate file so apps which don't use VME or
+   * want a different configuration may link against a customized routine.
    */
   BSP_vme_config();
+
+#if defined(DEBUG_BATS)
+  ShowBATS();
+#endif
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");

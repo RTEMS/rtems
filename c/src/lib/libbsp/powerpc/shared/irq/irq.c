@@ -21,6 +21,7 @@
 #include <libcpu/raw_exception.h>
 #include <libcpu/io.h>
 #include <bsp/vectors.h>
+#include <stdlib.h>
 
 #include <rtems/bspIo.h> /* for printk */
 #define RAVEN_INTR_ACK_REG 0xfeff0030
@@ -28,7 +29,7 @@
 /*
  * pointer to the mask representing the additionnal irq vectors
  * that must be disabled when a particular entry is activated.
- * They will be dynamically computed from teh prioruty table given
+ * They will be dynamically computed from the priority table given
  * in BSP_rtems_irq_mngt_set();
  * CAUTION : this table is accessed directly by interrupt routine
  * 	     prologue.
@@ -67,7 +68,7 @@ static inline int is_pci_irq(const rtems_irq_symbolic_name irqLine)
 }
 
 /*
- * Check if IRQ is a Porcessor IRQ
+ * Check if IRQ is a Processor IRQ
  */
 static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
 {
@@ -358,7 +359,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 }
 
 /*
- * ------------------------ RTEMS Global Irq Handler Mngt Routines ----------------
+ * RTEMS Global Interrupt Handler Management Routines
  */
 
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)

@@ -20,6 +20,7 @@
  */
 
 #include <bsp.h>
+#ifdef BSP_KBD_IOBASE
 #include <bsp/irq.h>
 
 #include "console.inl"
@@ -296,3 +297,4 @@ _IBMPC_inch_sleep(void)
 
     return c;
 } /* _IBMPC_inch */
+#endif

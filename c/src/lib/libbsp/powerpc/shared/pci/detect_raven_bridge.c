@@ -12,20 +12,22 @@
 #include <bsp/openpic.h>
 
 #include <rtems/bspIo.h>
+#include <libcpu/cpuIdent.h>
 
-#define RAVEN_MPIC_IOSPACE_ENABLE	0x1
-#define RAVEN_MPIC_MEMSPACE_ENABLE	0x2
-#define RAVEN_MASTER_ENABLE		0x4
-#define RAVEN_PARITY_CHECK_ENABLE	0x40
-#define RAVEN_SYSTEM_ERROR_ENABLE	0x100
-#define RAVEN_CLEAR_EVENTS_MASK		0xf9000000
+#define RAVEN_MPIC_IOSPACE_ENABLE  0x0001
+#define RAVEN_MPIC_MEMSPACE_ENABLE 0x0002
+#define RAVEN_MASTER_ENABLE        0x0004
+#define RAVEN_PARITY_CHECK_ENABLE  0x0040
+#define RAVEN_SYSTEM_ERROR_ENABLE  0x0100
+#define RAVEN_CLEAR_EVENTS_MASK    0xf9000000
 
-#define RAVEN_MPIC_MEREN		((volatile unsigned *)0xfeff0020)
-#define RAVEN_MPIC_MERST		((volatile unsigned *)0xfeff0024)
+#define RAVEN_MPIC_MEREN    ((volatile unsigned *)0xfeff0020)
+#define RAVEN_MPIC_MERST    ((volatile unsigned *)0xfeff0024)
 /* enable machine check on all conditions */
-#define MEREN_VAL				0x2f00
+#define MEREN_VAL           0x2f00
 
 #define pci BSP_pci_configuration
+extern unsigned int EUMBBAR;
 
 extern const pci_config_access_functions pci_direct_functions;
 extern const pci_config_access_functions pci_indirect_functions;
@@ -35,25 +37,39 @@ _BSP_clear_hostbridge_errors(int enableMCP, int quiet)
 {
 unsigned merst;
 
-		merst = in_be32(RAVEN_MPIC_MERST);
-		/* write back value to clear status */
-		out_be32(RAVEN_MPIC_MERST, merst);
+    merst = in_be32(RAVEN_MPIC_MERST);
+    /* write back value to clear status */
+    out_be32(RAVEN_MPIC_MERST, merst);
 
-		if (enableMCP) {
-			if (!quiet)
-				printk("Enabling MCP generation on hostbridge errors\n");
-			out_be32(RAVEN_MPIC_MEREN, MEREN_VAL);
-		} else {
-			out_be32(RAVEN_MPIC_MEREN, 0);
-			if ( !quiet && enableMCP ) {
-				printk("leaving MCP interrupt disabled\n");
-			}
-		}
-		return (merst & 0xffff);
+    if (enableMCP) {
+      if (!quiet)
+        printk("Enabling MCP generation on hostbridge errors\n");
+      out_be32(RAVEN_MPIC_MEREN, MEREN_VAL);
+    } else {
+      out_be32(RAVEN_MPIC_MEREN, 0);
+      if ( !quiet && enableMCP ) {
+        printk("leaving MCP interrupt disabled\n");
+      }
+    }
+    return (merst & 0xffff);
 }
 
 void detect_host_bridge()
 {
+#if (defined(mpc8240) || defined(mpc8245))
+  /*
+   * If the processor is an 8240 or an 8245 then the PIC is built
+   * in instead of being on the PCI bus. The MVME2100 is using Processor
+   * Address Map B (CHRP) although the Programmer's Reference Guide says
+   * it defaults to Map A.
+   */
+  /* We have an EPIC Interrupt Controller  */
+  OpenPIC = (volatile struct OpenPIC *) (EUMBBAR + BSP_OPEN_PIC_BASE_OFFSET);
+  pci.pci_functions = &pci_indirect_functions;
+  pci.pci_config_addr = (volatile unsigned char *) 0xfec00000;
+  pci.pci_config_data = (volatile unsigned char *) 0xfee00000;
+
+#else
   PPC_DEVICE *hostbridge;
   unsigned int id0;
   unsigned int tmp;
@@ -130,10 +146,10 @@ void detect_host_bridge()
       printk("Raven MPIC is accessed via memory Space Access at address : %x\n", tmp);
 #endif
       OpenPIC=(volatile struct OpenPIC *) (tmp + PREP_ISA_MEM_BASE);
-      printk("OpenPIC found at %x.\n",
-	     OpenPIC);
+      printk("OpenPIC found at %x.\n", OpenPIC);
     }
   }
+#endif
   if (OpenPIC == (volatile struct OpenPIC *)0) {
     BSP_panic("OpenPic Not found\n");
   }

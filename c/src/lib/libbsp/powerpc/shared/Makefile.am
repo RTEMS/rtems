@@ -44,6 +44,9 @@ EXTRA_DIST += start/start.S start/rtems_crti.S
 EXTRA_DIST += startup/bspstart.c startup/pgtbl_setup.c \
     startup/pgtbl_activate.c
 
+## tod
+EXTRA_DIST += tod/todcfg.c
+
 ## vectors
 EXTRA_DIST += vectors/vectors_init.c vectors/vectors.S
 

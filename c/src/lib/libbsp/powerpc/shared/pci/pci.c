@@ -1,9 +1,9 @@
 /*
  * pci.c :  this file contains basic PCI Io functions.
  *
- *  CopyRight (C) 1999 valette@crf.canon.fr
+ *  Copyright (C) 1999 valette@crf.canon.fr
  *
- *  This code is heavilly inspired by the public specification of STREAM V2
+ *  This code is heavily inspired by the public specification of STREAM V2
  *  that can be found at :
  *
  *      <http://www.chorus.com/Documentation/index.html> by following
@@ -21,6 +21,7 @@
 
 #include <libcpu/io.h>
 #include <bsp/pci.h>
+#include <rtems/bspIo.h>
 
 /* allow for overriding these definitions */
 #ifndef PCI_CONFIG_ADDR
@@ -35,8 +36,6 @@
 
 /* define a shortcut */
 #define pci	BSP_pci_configuration
-
-
 
 /*
  * Bit encode for PCI_CONFIG_HEADER_TYPE register
@@ -225,9 +224,14 @@ const pci_config_access_functions pci_direct_functions = {
 ** the names defined in the routing record.
 */
 static int test_intname(
-  const struct _int_map *row, int pbus, int pslot, int int_pin, int int_name )
+  const struct _int_map *row,
+  int pbus,
+  int pslot,
+  int int_pin,
+  int int_name
+)
 {
-   int j,k;
+   int j, k;
    int _nopin= -1, _noname= -1;
 
    for(j=0; row->pin_route[j].pin > -1; j++)

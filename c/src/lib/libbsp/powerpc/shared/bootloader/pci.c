@@ -23,6 +23,7 @@
 #include <libcpu/io.h>
 #include <libcpu/page.h>
 #include <bsp/consoleIo.h>
+#include <string.h>
 
 #include <string.h>
 

@@ -176,7 +176,9 @@ void initialize_exceptions()
   if (!mpc60x_init_exceptions(&exception_config)) {
     BSP_panic("Exception handling initialization failed\n");
   }
+#ifdef RTEMS_DEBUG
   else {
     printk("Exception handling initialization done\n");
   }
+#endif
 }

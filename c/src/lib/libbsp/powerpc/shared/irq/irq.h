@@ -1,9 +1,9 @@
 /* irq.h
  *
  *  This include file describe the data structure and the functions implemented
- *  by rtems to write interrupt handlers.
+ *  by RTEMS to write interrupt handlers.
  *
- *  CopyRight (C) 1999 valette@crf.canon.fr
+ *  Copyright (C) 1999 valette@crf.canon.fr
  *
  *  This code is heavilly inspired by the public specification of STREAM V2
  *  that can be found at :
@@ -63,68 +63,79 @@ extern "C" {
 #endif
 
 /*
- * Symblolic IRQ names and related definitions.
+ * Symbolic IRQ names and related definitions
  */
 
 typedef enum {
   /* Base vector for our ISA IRQ handlers. */
-  BSP_ISA_IRQ_VECTOR_BASE	=	BSP_ASM_IRQ_VECTOR_BASE,
+  BSP_ISA_IRQ_VECTOR_BASE	= BSP_ASM_IRQ_VECTOR_BASE,
   /*
    * ISA IRQ handler related definitions
    */
-  BSP_ISA_IRQ_NUMBER    	= 	16,
-  BSP_ISA_IRQ_LOWEST_OFFSET	= 	0,
-  BSP_ISA_IRQ_MAX_OFFSET	= 	BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER - 1,
+  BSP_ISA_IRQ_NUMBER    	= 16,
+  BSP_ISA_IRQ_LOWEST_OFFSET	= 0,
+  BSP_ISA_IRQ_MAX_OFFSET	= BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER - 1,
   /*
    * PCI IRQ handlers related definitions
    * CAUTION : BSP_PCI_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
    */
-  BSP_PCI_IRQ_NUMBER		=	16,
-  BSP_PCI_IRQ_LOWEST_OFFSET	=	BSP_ISA_IRQ_NUMBER,
-  BSP_PCI_IRQ_MAX_OFFSET	= 	BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER - 1,
+  BSP_PCI_IRQ_NUMBER		= 16,
+  BSP_PCI_IRQ_LOWEST_OFFSET	= BSP_ISA_IRQ_NUMBER,
+  BSP_PCI_IRQ_MAX_OFFSET	= BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER - 1,
   /*
-   * PowerPc exceptions handled as interrupt where a rtems managed interrupt
+   * PowerPC exceptions handled as interrupt where an RTEMS managed interrupt
    * handler might be connected
    */
-  BSP_PROCESSOR_IRQ_NUMBER	=	1,
-  BSP_PROCESSOR_IRQ_LOWEST_OFFSET = 	BSP_PCI_IRQ_MAX_OFFSET + 1,
-  BSP_PROCESSOR_IRQ_MAX_OFFSET	=	BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER - 1,
+  BSP_PROCESSOR_IRQ_NUMBER	= 1,
+  BSP_PROCESSOR_IRQ_LOWEST_OFFSET = BSP_PCI_IRQ_MAX_OFFSET + 1,
+  BSP_PROCESSOR_IRQ_MAX_OFFSET	= BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER - 1,
   /* Misc vectors for OPENPIC irqs (IPI, timers)
    */
-  BSP_MISC_IRQ_NUMBER		=	8,
-  BSP_MISC_IRQ_LOWEST_OFFSET	=	BSP_PROCESSOR_IRQ_MAX_OFFSET + 1,
-  BSP_MISC_IRQ_MAX_OFFSET	=	BSP_MISC_IRQ_LOWEST_OFFSET + BSP_MISC_IRQ_NUMBER - 1,
+  BSP_MISC_IRQ_NUMBER		= 8,
+  BSP_MISC_IRQ_LOWEST_OFFSET	= BSP_PROCESSOR_IRQ_MAX_OFFSET + 1,
+  BSP_MISC_IRQ_MAX_OFFSET	= BSP_MISC_IRQ_LOWEST_OFFSET + BSP_MISC_IRQ_NUMBER - 1,
   /*
    * Summary
    */
-  BSP_IRQ_NUMBER		= 	BSP_MISC_IRQ_MAX_OFFSET + 1,
-  BSP_LOWEST_OFFSET		=	BSP_ISA_IRQ_LOWEST_OFFSET,
-  BSP_MAX_OFFSET		=	BSP_MISC_IRQ_MAX_OFFSET,
+  BSP_IRQ_NUMBER		= BSP_MISC_IRQ_MAX_OFFSET + 1,
+  BSP_LOWEST_OFFSET		= BSP_ISA_IRQ_LOWEST_OFFSET,
+  BSP_MAX_OFFSET		= BSP_MISC_IRQ_MAX_OFFSET,
     /*
      * Some ISA IRQ symbolic name definition
      */
-  BSP_ISA_PERIODIC_TIMER      	= 	0,
-
-  BSP_ISA_KEYBOARD          	= 	1,
-
-  BSP_ISA_UART_COM2_IRQ		=	3,
-
-  BSP_ISA_UART_COM1_IRQ		=	4,
-
-  BSP_ISA_RT_TIMER1	      	= 	8,
-
-  BSP_ISA_RT_TIMER3		= 	10,
+  BSP_ISA_PERIODIC_TIMER      	= 0,
+  BSP_ISA_KEYBOARD          	= 1,
+  BSP_ISA_UART_COM2_IRQ		= 3,
+  BSP_ISA_UART_COM1_IRQ		= 4,
+  BSP_ISA_RT_TIMER1	      	= 8,
+  BSP_ISA_RT_TIMER3		= 10,
     /*
      * Some PCI IRQ symbolic name definition
      */
-  BSP_PCI_IRQ0			=	BSP_PCI_IRQ_LOWEST_OFFSET,
-  BSP_PCI_ISA_BRIDGE_IRQ	=	BSP_PCI_IRQ0,
-    /*
-     * Some Processor execption handled as rtems IRQ symbolic name definition
-     */
-  BSP_DECREMENTER		=	BSP_PROCESSOR_IRQ_LOWEST_OFFSET
+  BSP_PCI_IRQ0			= BSP_PCI_IRQ_LOWEST_OFFSET,
+  BSP_PCI_ISA_BRIDGE_IRQ	= BSP_PCI_IRQ0,
 
-}rtems_irq_symbolic_name;
+#if defined(mvme2100)
+  BSP_DEC21143_IRQ                = BSP_PCI_IRQ_LOWEST_OFFSET + 1,
+  BSP_PMC_PCMIP_TYPE1_SLOT0_IRQ   = BSP_PCI_IRQ_LOWEST_OFFSET + 2,
+  BSP_PCMIP_TYPE1_SLOT1_IRQ       = BSP_PCI_IRQ_LOWEST_OFFSET + 3,
+  BSP_PCMIP_TYPE2_SLOT0_IRQ       = BSP_PCI_IRQ_LOWEST_OFFSET + 4,
+  BSP_PCMIP_TYPE2_SLOT1_IRQ       = BSP_PCI_IRQ_LOWEST_OFFSET + 5,
+  BSP_PCI_INTA_UNIVERSE_LINT0_IRQ = BSP_PCI_IRQ_LOWEST_OFFSET + 7,
+  BSP_PCI_INTB_UNIVERSE_LINT1_IRQ = BSP_PCI_IRQ_LOWEST_OFFSET + 8,
+  BSP_PCI_INTC_UNIVERSE_LINT2_IRQ = BSP_PCI_IRQ_LOWEST_OFFSET + 9,
+  BSP_PCI_INTD_UNIVERSE_LINT3_IRQ = BSP_PCI_IRQ_LOWEST_OFFSET + 10,
+  BSP_UART_COM1_IRQ               = BSP_PCI_IRQ_LOWEST_OFFSET + 13,
+  BSP_FRONT_PANEL_ABORT_IRQ       = BSP_PCI_IRQ_LOWEST_OFFSET + 14,
+  BSP_RTC_IRQ                     = BSP_PCI_IRQ_LOWEST_OFFSET + 15,
+#endif
+
+    /*
+     * Some Processor execption handled as RTEMS IRQ symbolic name definition
+     */
+  BSP_DECREMENTER		= BSP_PROCESSOR_IRQ_LOWEST_OFFSET
+
+} rtems_irq_symbolic_name;
 
 /*
  * Type definition for RTEMS managed interrupts
@@ -200,7 +211,7 @@ typedef struct {
   rtems_irq_symbolic_name	irqBase;
   /*
    * software priorities associated with interrupts.
-   * if irqPrio  [i]  >  intrPrio  [j]  it  means  that
+   * if (*irqPrio  [i]  >  intrPrio  [j]  it  means  that
    * interrupt handler hdl connected for interrupt name i
    * will  not be interrupted by the handler connected for interrupt j
    * The interrupt source  will be physically masked at i8259 level.
@@ -228,10 +239,10 @@ int BSP_irq_disable_at_i8259s        (const rtems_irq_symbolic_name irqLine);
  */
 int BSP_irq_enable_at_i8259s		(const rtems_irq_symbolic_name irqLine);
 /*
- * function to acknoledge a particular irq at 8259 level. After calling
+ * function to acknowledge a particular irq at 8259 level. After calling
  * this function, if a device asserts an enabled interrupt line it will
  * be propagated further to the processor. Mainly usefull for people
- * writting raw handlers as this is automagically done for rtems managed
+ * writing raw handlers as this is automagically done for RTEMS managed
  * handlers.
  */
 int BSP_irq_ack_at_i8259s           	(const rtems_irq_symbolic_name irqLine);
@@ -252,21 +263,21 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine);
  *	3) store the current i8259s' interrupt masks
  *	4) modify them to disable the current interrupt at 8259 level (and may
  *	be others depending on software priorities)
- *	5) aknowledge the i8259s',
+ *	5) acknowledge the i8259s',
  *	6) demask the processor,
  *	7) call the application handler
  *
  * As a result the hdl function provided
  *
  *	a) can perfectly be written is C,
- * 	b) may also well directly call the part of the RTEMS API that can be used
- *	from interrupt level,
+ * 	b) may also well directly call the part of the RTEMS API that can be
+ *      used from interrupt level,
  *	c) It only responsible for handling the jobs that need to be done at
- *	the device level including (aknowledging/re-enabling the interrupt at device,
- *	level, getting the data,...)
+ *	the device level including (aknowledging/re-enabling the interrupt
+ *      at device, level, getting the data,...)
  *
  *	When returning from the function, the following will be performed by
- *	the RTEMS irq epilogue :
+ *	the RTEMS irq epilogue:
  *
  *	1) masks the interrupts again,
  *	2) restore the original i8259s' interrupt masks
@@ -274,7 +285,6 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine);
  *	4) perform rescheduling when necessary,
  *	5) restore the C scratch registers...
  *	6) restore initial execution flow
- *
  */
 int BSP_install_rtems_irq_handler   	(const rtems_irq_connect_data*);
 int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data*);
@@ -288,7 +298,8 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data*);
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* ptr);
 /*
  * function to get disconnect the RTEMS irq handler for ptr->name.
- * This function checks that the value given is the current one for safety reason.
+ * This function checks that the value given is the current one for safety
+ * reasons.
  * The user can use the previous function to get it.
  */
 int BSP_remove_rtems_irq_handler    	(const rtems_irq_connect_data*);

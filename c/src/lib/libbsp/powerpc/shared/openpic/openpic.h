@@ -41,7 +41,11 @@
      *  OpenPIC supports up to 2048 interrupt sources and up to 32 processors
      */
 
+#if defined(mpc8240) || defined(mpc8245)
+#define OPENPIC_MAX_SOURCES    (2048 - 16)
+#else
 #define OPENPIC_MAX_SOURCES	2048
+#endif
 #define OPENPIC_MAX_PROCESSORS	32
 
 #define OPENPIC_NUM_TIMERS	4
@@ -151,6 +155,9 @@ typedef struct _OpenPIC_Global {
     OpenPIC_Reg _Timer_Frequency;		/* Read/Write */
     OpenPIC_Timer Timer[OPENPIC_NUM_TIMERS];
     char Pad1[0xee00];
+#if defined(mpc8240) || defined(mpc8245)
+    char Pad2[0x0200];
+#endif  
 } OpenPIC_Global;
 
     /*

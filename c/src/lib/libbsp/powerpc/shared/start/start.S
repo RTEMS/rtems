@@ -14,6 +14,7 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/io.h>
+#include <bspopts.h>
 
 #define SYNC \
 	sync; \
@@ -66,13 +67,24 @@ __rtems_entry_point:
  * of RAM to KERNELBASE.
  */
 	lis	r11,KERNELBASE@h
-	ori	r11,r11,0x1ffe		/* set up BAT registers for 604 */
+/* set up BAT registers for 604 */
+	ori	r11,r11,0x1ffe		
 	li	r8,2			/* R/W access */
 	isync
+#if defined(mvme2100)
+        /* BSP_vme_config() wants to use BAT0, this board will use the
+         * available BAT1 to map RAM.
+         */
+	mtspr	DBAT1L,r8		/* N.B. 6xx (not 601) have valid */
+	mtspr	DBAT1U,r11		/* bit in upper BAT register */
+	mtspr	IBAT1L,r8
+	mtspr	IBAT1U,r11
+#else
 	mtspr	DBAT0L,r8		/* N.B. 6xx (not 601) have valid */
 	mtspr	DBAT0U,r11		/* bit in upper BAT register */
 	mtspr	IBAT0L,r8
 	mtspr	IBAT0U,r11
+#endif
 	isync
 
 /*
@@ -86,7 +98,7 @@ __rtems_entry_point:
 
 enter_C_code:
 	bl	MMUon
-	bl  __eabi	/* setup EABI and SYSV environment */
+	bl      __eabi	/* setup EABI and SYSV environment */
 	bl	zero_bss
 	/*
 	 * restore prep boot params
@@ -104,7 +116,8 @@ enter_C_code:
         addi	r9,r9, __rtems_end+(4096-CPU_MINIMUM_STACK_FRAME_SIZE)@l
 	mr	r1, r9
 	/*
-	 * We are know in a environment that is totally independent from bootloader setup.
+	 * We are now in a environment that is totally independent from 
+         * bootloader setup.
 	 */
         lis	r5,environ@ha
         la	r5,environ@l(r5)	/* environp */
@@ -117,11 +130,14 @@ enter_C_code:
 	.type	MMUon,@function
 MMUon:
 	mfmsr	r0
-#if (PPC_HAS_FPU == 0)
 	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
+#if defined(mvme2100)
+        /* Data addr translation is broken for the mvme2100, disable it here */
+	xori	r0,r0, MSR_DR
+#endif
+#if (PPC_HAS_FPU == 0)
 	xori	r0, r0, MSR_EE | MSR_IP | MSR_FP
 #else
-	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
 	xori	r0, r0, MSR_EE | MSR_IP | MSR_FE0 | MSR_FE1
 #endif
 	mflr	r11
