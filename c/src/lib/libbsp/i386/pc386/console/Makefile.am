@@ -42,6 +42,6 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(console_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = $(C_FILES) $(RTEMS_H_FILES) $(S_FILES)
+EXTRA_DIST = $(C_FILES) $(S_FILES)
 
 include $(top_srcdir)/../../../../../../automake/local.am

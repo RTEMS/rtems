@@ -1,5 +1,10 @@
 2001-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* console/Makefile.am: Remove RTEMS_H_FILES.
+	* start/start16.S: include <bspopts.h> to get NEW_GAS.
+
+2001-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.in: Add bspopts.h.
 	* include/.cvsignore: Add bspopts.h*, stamp-h*.
 	* include/Makefile.am: Use *_HEADERS instead of *H_FILES.
