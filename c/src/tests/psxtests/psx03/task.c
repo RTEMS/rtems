@@ -30,7 +30,9 @@ void *Task_1(
 
   /* send SIGUSR2 to Init which is waiting on SIGUSR1 */
 
-  print_current_time( "Task1: ", "" );
+  print_current_time( "Task_1: ", "" );
+
+  puts( "Task_1: pthread_kill - SIGUSR2 to Init" );
   status = pthread_kill( Init_id, SIGUSR2 );
   assert( !status );
 
@@ -49,7 +51,9 @@ void *Task_2(
 
   /* send SIGUSR1 to Init which is waiting on SIGUSR1 */
  
-  print_current_time( "Task2: ", "" );
+  print_current_time( "Task_2: ", "" );
+
+  puts( "Task_1: pthread_kill - SIGUSR1 to Init" );
   status = pthread_kill( Init_id, SIGUSR1 );
   assert( !status );
  
