@@ -1,3 +1,7 @@
+2005-03-17	Joel Sherrill <joel@OARcorp.com>
+
+	* VERSION: Updated to rtems-4.6.3.
+
 2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
 
 	* aclocal/bsp-alias.m4: Add MVME2100 BSP.
