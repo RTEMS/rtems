@@ -14,8 +14,8 @@
  *  $Id$
  */
 
-#ifndef __NO_BSP_h
-#define __NO_BSP_h
+#ifndef __PORTSW_h
+#define __PORTSW_h
 
 #ifdef __cplusplus
 extern "C" {
