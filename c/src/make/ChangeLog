@@ -1,3 +1,7 @@
+2002-11-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* compilers/gcc-target-default.cfg: Add -qrtems-debug handling.
+
 2002-11-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Only symlink leaf.cfg.
