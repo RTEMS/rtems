@@ -241,7 +241,7 @@ BOOTP server and a TFTP server (this can very well be you're Linux
 RTEMS host system), you can use Gero Kuhlmann's NetBoot loader, to
 load RTEMS to a diskless PC across a network. You can get it from:
 
-      ftp://sunsite.unc.edu/pub/Linux/system/boot/netboot-0.7.3.tar.gz
+   ftp://sunsite.unc.edu/pub/Linux/system/boot/ethernet/netboot-0.7.3.tar.gz
 
 or in any of Sunsite's mirrors. It is also available from NetBoot's
 homepage:
