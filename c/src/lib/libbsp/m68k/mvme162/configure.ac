@@ -13,23 +13,17 @@ RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
+RTEMS_PROG_CCAS
 
 RTEMS_CHECK_NETWORKING 
 
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
-AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
-AM_CONDITIONAL(HAS_FPSP,[test "$RTEMS_CPU_MODEL" = "m68040"])
+AM_CONDITIONAL([HAS_NETWORKING],test "$HAS_NETWORKING" = "yes")
+AM_CONDITIONAL([HAS_FPSP],[test "$RTEMS_CPU_MODEL" = "m68040"])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-network/Makefile
-startup/Makefile
-timer/Makefile
-tod/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
 ## consolex/Makefile

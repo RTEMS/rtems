@@ -1,5 +1,16 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* README: Remove references to consolex.
+	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
+	network/Makefile.am, startup/Makefile.am, timer/Makefile.am, 
+	tod/Makefile.am.
+	Use automake compilation rules.
+	* clock/Makefile.am, console/Makefile.am, network/Makefile.am
+	startup/Makefile.am, timer/Makefile.am, tod/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.	
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	PR 563/bsps
 	* consolex/consolex.c, consolex/consolex.h, consolex/cTest.c,
 	consolex/Makefile.am, consolex/README:
