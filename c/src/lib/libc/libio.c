@@ -46,7 +46,6 @@
 extern unsigned32  rtems_libio_number_iops;
 rtems_id           rtems_libio_semaphore;
 rtems_libio_t     *rtems_libio_iops;
-rtems_libio_t     *rtems_libio_last_iop;
 rtems_libio_t     *rtems_libio_iop_freelist;
 
 /*
@@ -236,6 +235,7 @@ void rtems_libio_free(
     if (iop->sem)
       rtems_semaphore_delete(iop->sem);
 
+    iop->flags &= ~LIBIO_FLAGS_OPEN;
     iop->data1 = rtems_libio_iop_freelist;
     rtems_libio_iop_freelist = iop;
 
@@ -259,6 +259,7 @@ int rtems_libio_is_open_files_in_fs(
 {
   rtems_libio_t     *iop;
   int                result = 0;
+  int                i;
 
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
               
@@ -266,7 +267,7 @@ int rtems_libio_is_open_files_in_fs(
    *  Look for any active file descriptor entry.
    */         
      
-  for ( iop=rtems_libio_iops ; iop <= rtems_libio_last_iop ; iop++ ) {
+  for (iop=rtems_libio_iops,i=0; i <= rtems_libio_number_iops; iop++, i++){
         
     if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
         
@@ -302,6 +303,7 @@ int rtems_libio_is_file_open(
 {
   rtems_libio_t     *iop;
   int                result=0;
+  int                i;
 
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
@@ -309,8 +311,7 @@ int rtems_libio_is_file_open(
    *  Look for any active file descriptor entry.
    */
   
-  for ( iop=rtems_libio_iops ; iop <= rtems_libio_last_iop ; iop++ ) {
-  
+ for (iop=rtems_libio_iops,i=0; i <= rtems_libio_number_iops; iop++, i++){ 
     if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
   
        /*
