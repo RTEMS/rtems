@@ -24,6 +24,10 @@ if tx39
 EXTRA_FLAGS = -DTX39
 endif
 
+if mongoosev
+EXTRA_FLAGS = -DMONGOOSEV
+endif
+
 AM_CPPFLAGS += $(EXTRA_FLAGS)
 
 $(PGM): $(interrupts_rel_OBJECTS)

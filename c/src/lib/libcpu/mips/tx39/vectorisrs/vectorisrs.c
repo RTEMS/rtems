@@ -19,6 +19,8 @@
       mips_default_exception(_vector); \
   } while (0)
 
+#include <bspIo.h>  /* for printk */
+
 void mips_default_exception( int vector )
 {
   printk( "Unhandled exception %d\n", vector );

@@ -31,10 +31,16 @@ AM_CONDITIONAL(r46xx, test "$RTEMS_CPU_MODEL" = "R4600" \
 
 AM_CONDITIONAL(tx39, test "$RTEMS_CPU_MODEL" = "tx3904")
 
+AM_CONDITIONAL(mongoosev, test "$RTEMS_CPU_MODEL" = "mongoosev")
+
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 clock/Makefile
+mongoosev/Makefile
+mongoosev/duart/Makefile
+mongoosev/include/Makefile
+mongoosev/vectorisrs/Makefile
 shared/Makefile
 shared/cache/Makefile
 shared/interrupts/Makefile

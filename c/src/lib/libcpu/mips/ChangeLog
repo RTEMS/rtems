@@ -1,3 +1,19 @@
+2001-03-13	Joel Sherrill <joel@OARcorp.com>
+
+	* Added mongoose-v, mongoose-v/include, and mongoose-v/vectorisrs
+	directories.
+	* mongoosev/.cvsignore, mongoosev/Makefile.am, mongoosev/README,
+	mongoosev/duart/.cvsignore, mongoosev/duart/Makefile.am,
+	mongoosev/duart/README.mguart, mongoosev/duart/mg5uart.c,
+	mongoosev/duart/mg5uart.h, mongoosev/duart/mg5uart_reg.c,
+	mongoosev/include/.cvsignore, mongoosev/include/Makefile.am,
+	mongoosev/include/mongoose-v.h, mongoosev/vectorisrs/.cvsignore,
+	mongoosev/vectorisrs/Makefile.am, mongoosev/vectorisrs/vectorisrs.c:
+	New files.
+	* Makefile.am, configure.in, shared/interrupts/Makefile.am,
+	shared/interrupts/maxvectors.c: Added support for mongoosev.
+	* tx39/vectorisrs/vectorisrs.c: Corrected warning.
+
 2001-03-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shared/cache/Makefile.am, tx39/include/Makefile.am:

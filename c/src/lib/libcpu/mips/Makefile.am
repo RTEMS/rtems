@@ -7,6 +7,10 @@ ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
 SHARED_LIB = shared
 
+if mongoosev
+CPU_SUBDIR = mongoosev
+endif
+
 if tx39
 CPU_SUBDIR = tx39
 endif
