@@ -24,7 +24,7 @@ rtems_isr cs8900_isr(rtems_vector_number v)
 }
 
 /* cs8900_io_set_reg - set one of the I/O addressed registers */
-void cs8900_io_set_reg (int dev, unsigned short reg, unsigned short data)
+void cs8900_io_set_reg (cs8900_device *cs, unsigned short reg, unsigned short data)
 {
     /* works the same for all values of dev */
 /*
@@ -36,7 +36,7 @@ void cs8900_io_set_reg (int dev, unsigned short reg, unsigned short data)
 }
 
 /* cs8900_io_get_reg - reads one of the I/O addressed registers */
-unsigned short cs8900_io_get_reg (int dev, unsigned short reg)
+unsigned short cs8900_io_get_reg (cs8900_device *cs, unsigned short reg)
 {
     unsigned short val;
     /* works the same for all values of dev */
@@ -50,24 +50,24 @@ unsigned short cs8900_io_get_reg (int dev, unsigned short reg)
 /* cs8900_mem_set_reg - sets one of the registers mapped through
  *                      PacketPage
  */
-void cs8900_mem_set_reg (int dev, unsigned long reg, unsigned short data)
+void cs8900_mem_set_reg (cs8900_device *cs, unsigned long reg, unsigned short data)
 {
     /* works the same for all values of dev */
-    cs8900_io_set_reg(dev, CS8900_IO_PACKET_PAGE_PTR, reg);
-    cs8900_io_set_reg(dev, CS8900_IO_PP_DATA_PORT0, data);
+    cs8900_io_set_reg(cs, CS8900_IO_PACKET_PAGE_PTR, reg);
+    cs8900_io_set_reg(cs, CS8900_IO_PP_DATA_PORT0, data);
 }
 
 /* cs8900_mem_get_reg - reads one of the registers mapped through
  *                      PacketPage
  */
-unsigned short cs8900_mem_get_reg (int dev, unsigned long reg)
+unsigned short cs8900_mem_get_reg (cs8900_device *cs, unsigned long reg)
 {
     /* works the same for all values of dev */
-    cs8900_io_set_reg(dev, CS8900_IO_PACKET_PAGE_PTR, reg);
-    return cs8900_io_get_reg(dev, CS8900_IO_PP_DATA_PORT0);
+    cs8900_io_set_reg(cs, CS8900_IO_PACKET_PAGE_PTR, reg);
+    return cs8900_io_get_reg(cs, CS8900_IO_PP_DATA_PORT0);
 }
 
-void cs8900_get_mac_addr (int dev, unsigned char *mac_address)
+void cs8900_get_mac_addr (cs8900_device *cs, unsigned char *mac_address)
 {
     mac_address[0] = 0x08;
     mac_address[1] = 0x00;
@@ -77,32 +77,32 @@ void cs8900_get_mac_addr (int dev, unsigned char *mac_address)
     mac_address[5] = 0xf7;
 }
 
-void cs8900_attach_interrupt (int dev, cs8900_device *cs)
+void cs8900_attach_interrupt (cs8900_device *cs)
 {
     g_cs = cs;
     BSP_install_rtems_irq_handler(&cs8900_isr_data);
 }
 
-void cs8900_detach_interrupt (int dev)
+void cs8900_detach_interrupt (cs8900_device *cs)
 {
     BSP_remove_rtems_irq_handler(&cs8900_isr_data);
 }
 
-unsigned short cs8900_get_data_block (int dev, unsigned char *data)
+unsigned short cs8900_get_data_block (cs8900_device *cs, unsigned char *data)
 {
     int len;
     int i;
 
-    len = cs8900_mem_get_reg(dev, CS8900_PP_RxLength);
+    len = cs8900_mem_get_reg(cs, CS8900_PP_RxLength);
 
     for (i = 0; i < ((len + 1) / 2); i++) {
-        ((short *)data)[i] = cs8900_io_get_reg(dev,
+        ((short *)data)[i] = cs8900_io_get_reg(cs,
                                                CS8900_IO_RX_TX_DATA_PORT0);
     }
     return len;
 }
 
-void cs8900_tx_load (int dev, struct mbuf *m)
+void cs8900_tx_load (cs8900_device *cs, struct mbuf *m)
 {
     int len;
     short *data;
@@ -118,7 +118,7 @@ void cs8900_tx_load (int dev, struct mbuf *m)
 
     data = (unsigned short *) &g_enetbuf[0];
     for (i = 0; i < ((len + 1) / 2); i++) {
-        cs8900_io_set_reg(dev,
+        cs8900_io_set_reg(cs,
                           CS8900_IO_RX_TX_DATA_PORT0,
                           data[i]);
     }
