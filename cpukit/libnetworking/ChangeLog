@@ -1,8 +1,15 @@
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* netinet/tcp_subr.c: Add args to INP_INFO_RLOCK, INP_INFO_RUNLOCK, 
+	INP_LOCK, INP_UNLOCK macros.
+	* netinet/udp_usrreq.c: Add args to INP_INFO_RLOCK, INP_INFO_RUNLOCK, 
+	INP_LOCK, INP_UNLOCK macros.
+
 2003-01-03	Jitendra Vegiraju <jvegiraju@netscape.net>
 
 	* sys/queue.h: Fix alignment problem on ARM.
 
-2002-11-26	Chris Johns <cjohns@cybertec.com.au>
+2003-01-03	Chris Johns <cjohns@cybertec.com.au>
 
 	* Makefile.am: Added sys/linker_set.h
 	* kern/Makefile.am: Added kern_mib.c and kern_sysctl.c.

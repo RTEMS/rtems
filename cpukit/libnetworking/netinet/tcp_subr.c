@@ -458,10 +458,10 @@ tcp_notify(inp, error)
 }
 
 #ifdef __rtems__
-#define INP_INFO_RLOCK
-#define INP_INFO_RUNLOCK
-#define INP_LOCK
-#define INP_UNLOCK
+#define INP_INFO_RLOCK(a)
+#define INP_INFO_RUNLOCK(a)
+#define INP_LOCK(a)
+#define INP_UNLOCK(a)
 #endif
 
 static int
