@@ -818,19 +818,19 @@ in this function management structure.
 
 @example
 typedef struct @{
-    rtems_filesystem_open_t           open;
-    rtems_filesystem_close_t          close;
-    rtems_filesystem_read_t           read;
-    rtems_filesystem_write_t          write;
-    rtems_filesystem_ioctl_t          ioctl;
-    rtems_filesystem_lseek_t          lseek;
-    rtems_filesystem_fstat_t          fstat;
-    rtems_filesystem_fchmod_t         fchmod;
-    rtems_filesystem_ftruncate_t      ftruncate;
-    rtems_filesystem_fpathconf_t      fpathconf;
-    rtems_filesystem_fsync_t          fsync;
-    rtems_filesystem_fdatasync_t      fdatasync;
-    rtems_filesystem_fcntl_t          fcntl;
+  rtems_filesystem_open_t           open;
+  rtems_filesystem_close_t          close;
+  rtems_filesystem_read_t           read;
+  rtems_filesystem_write_t          write;
+  rtems_filesystem_ioctl_t          ioctl;
+  rtems_filesystem_lseek_t          lseek;
+  rtems_filesystem_fstat_t          fstat;
+  rtems_filesystem_fchmod_t         fchmod;
+  rtems_filesystem_ftruncate_t      ftruncate;
+  rtems_filesystem_fpathconf_t      fpathconf;
+  rtems_filesystem_fsync_t          fsync;
+  rtems_filesystem_fdatasync_t      fdatasync;
+  rtems_filesystem_fcntl_t          fcntl;
 @} rtems_filesystem_file_handlers_r;
 @end example
 
@@ -1038,7 +1038,14 @@ specific node and placed in the @code{stat} structure:
 
 @subheading NOTES:
 
-XXX
+Both the @code{stat()} and @code{lstat()} services are 
+implemented directly using the @code{fstat()} handler.  The
+difference in behavior is determined by how the path is evaluated
+prior to this handler being called on a particular
+file entity.
+
+The @code{fstat()} system call is implemented directly
+on top of this filesystem handler.
 
 @c
 @c
