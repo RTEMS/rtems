@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../shared/comm:@srcdir@/../../shared/io
 
 PGM = $(ARCH)/console.rel
