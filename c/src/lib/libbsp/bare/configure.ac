@@ -19,6 +19,5 @@ AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-include/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
