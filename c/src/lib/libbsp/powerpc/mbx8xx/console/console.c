@@ -173,9 +173,9 @@ static int _EPPCBug_pollRead(
   simask = m8xx.simask;
 
   /* Check for a char in the input FIFO using .CIO_STAT */
-  asm volatile( "li 10,0x202
-                 mr 3, %0
-                 mr 4, %1
+  asm volatile( "li 10,0x202\n\
+                 mr 3, %0\n\
+                 mr 4, %1\n\
                  sc"
     :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 
@@ -185,9 +185,9 @@ static int _EPPCBug_pollRead(
     input_params.inbuf = &c;
     input_params.nbytes_requested = 1;
   
-    asm volatile( "li     10,0x200     /* Code for .CIO_READ */
-                   mr    3, %0         /* Address of input_params */
-                   mr    4, %1         /* Address of output_params */
+    asm volatile( "li     10,0x200     /* Code for .CIO_READ */\n\
+                   mr    3, %0         /* Address of input_params */\n\
+                   mr    4, %1         /* Address of output_params */\n\
                    sc"             /* Call EPPCBUG */ 
       :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 
@@ -288,9 +288,9 @@ static int _EPPCBug_pollWrite(
     /* Wait for space in the output buffer */
     do {
       /* Check for space in the output FIFO */
-      asm volatile( "li 10,0x202        /* Code for .CIO_STAT */
-                     mr 3, %0           /* Address of input_params */
-                     mr 4, %1           /* Address of output_params */
+      asm volatile( "li 10,0x202        /* Code for .CIO_STAT */\n\
+                     mr 3, %0           /* Address of input_params */\n\
+                     mr 4, %1           /* Address of output_params */\n\
                      sc"            /* Call EPPCBUG */ 
         :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 
@@ -302,9 +302,9 @@ static int _EPPCBug_pollWrite(
     input_params.outbuf = &buf[i];
     input_params.nbytes_to_output = len - i;
   
-    asm volatile( "li 10,0x201          /* Code for .CIO_WRITE */
-                   mr 3, %0             /* Address of input_params */
-                   mr 4, %1             /* Address of output_params */
+    asm volatile( "li 10,0x201          /* Code for .CIO_WRITE */\n\
+                   mr 3, %0             /* Address of input_params */\n\
+                   mr 4, %1             /* Address of output_params */\n\
                    sc"                  /* Call EPPCBUG */ 
       :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 

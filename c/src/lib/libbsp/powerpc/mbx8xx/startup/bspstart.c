@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include <bsp.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
