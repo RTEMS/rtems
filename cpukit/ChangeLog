@@ -8,6 +8,8 @@
 2004-10-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libcsupport/include/sys/ioccom.h: Cosmetical update from FreeBSD.
+	* libcsupport/include/sys/ioctl.h: Cosmetical update from FreeBSD.
+	Remove sys/compat_ioctl.h section (Meaningless with RTEMS).
 
 2004-10-25	Eric Norum <norume@aps.anl.gov>
 

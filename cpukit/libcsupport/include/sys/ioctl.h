@@ -15,10 +15,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -36,6 +32,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)ioctl.h	8.6 (Berkeley) 3/28/94
+ * $FreeBSD: src/sys/sys/ioctl.h,v 1.13 2004/06/11 11:16:26 phk Exp $
+ */
+ 
+/*
  * $Id$
  */
 
@@ -64,14 +64,3 @@ struct ttysize {
 #include <sys/sockio.h>
 
 #endif /* !_SYS_IOCTL_H_ */
-
-/*
- * Keep outside _SYS_IOCTL_H_
- * Compatibility with old terminal driver
- *
- * Source level -> #define USE_OLD_TTY
- * Kernel level -> options COMPAT_43 or COMPAT_SUNOS
- */
-#if defined(USE_OLD_TTY) || defined(COMPAT_43) || defined(COMPAT_SUNOS)
-#include <sys/ioctl_compat.h>
-#endif
