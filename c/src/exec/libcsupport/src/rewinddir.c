@@ -30,6 +30,4 @@ void rewinddir(
     return;
 
   dirp->dd_loc = 0;
-
-
 }
