@@ -74,8 +74,8 @@ is the extended information XXX
 
 @item sematr
 is the attributes for this semaphore.  The only attributed
-which can be specified is whether tasks wait in FIFO (default)
-or priority order.
+which can be specified is whether tasks wait in FIFO (@code{TA_TFIFO})
+or priority (@code{TA_TPRI}) order.
 
 @item isemcnt
 is the initial count of the semaphore.
@@ -161,33 +161,42 @@ ER cre_sem(
 
 @code{E_OK} - Normal Completion
 
-@code{E_NOMEM} - Insufficient memory (Memory for control block cannot be allocated)
+@code{E_NOMEM} - Insufficient memory (Memory for control block cannot be
+allocated)
 
 @code{E_ID} - Invalid ID number (semid was invalid or could not be used)
 
-@code{E_RSATR} - Reserved attribute (sematr was invalid or could not be used)
+@code{E_RSATR} - Reserved attribute (sematr was invalid or could not be
+used)
 
-@code{E_OBJ} - Invalid object state (a semaphore of the same ID already exists)
+@code{E_OBJ} - Invalid object state (a semaphore of the same ID already
+exists)
 
-@code{E_OACV} - Object access violation (A semid less than -4 was specified from a user task.  This is implementation dependent.)
+@code{E_OACV} - Object access violation (A semid less than -4 was
+specified from a user task.  This is implementation dependent.)
 
-@code{E_PAR} - Parameter error (pk_csem is invalid and/or isemcnt or maxsem is negative or invalid)
+@code{E_PAR} - Parameter error (pk_csem is invalid and/or isemcnt or
+maxsem is negative or invalid)
 
-@code{EN_OBJNO} - An object number which could not be accessed on the target node is specified.
+@code{EN_OBJNO} - An object number which could not be accessed on the
+target node is specified.
 
-@code{EN_CTXID} - Specified an object on another node when the system call was
-issued from a task in dispatch disabled state or from a task-
+@code{EN_CTXID} - Specified an object on another node when the system call
+was issued from a task in dispatch disabled state or from a task-
 independent portion
 
-@code{EN_PAR} - A value outside the range supported by the target node and/or
-transmission packet format was specified as a parameter (a value
-outside supported range was specified for exinf, sematr, isemcnt
-and/or maxsem)
+@code{EN_PAR} - A value outside the range supported by the target node
+and/or transmission packet format was specified as a parameter (a value
+outside supported range was specified for exinf, sematr, isemcnt and/or
+maxsem)
 
 @subheading DESCRIPTION:
 
+
+
 @subheading NOTES:
 
+NONE
 
 
 @c
@@ -214,7 +223,27 @@ ER del_sem(
 
 @subheading DESCRIPTION:
 
+@code{E_OK} - Normal Completion
+
+@code{E_ID} - Invalid ID number (semid was invalid or could not be used)
+
+@code{E_NOEXS} - Object does not exist (the semaphore specified by semid
+does not exist)
+
+@code{E_OACV} - Object access violation (A semid less than -4 was
+specified from a user task.  This is implementation dependent.)
+
+@code{EN_OBJNO} - An object number which could not be accessed on the
+target node is specified.
+
+@code{EN_CTXID} - Specified an object on another node when the system call
+was issued from a task in dispatch disabled state or from a
+task-independent portion
+
+
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -239,9 +268,31 @@ ER sig_sem(
 
 @subheading STATUS CODES:
 
+@code{E_OK} - Normal Completion
+
+@code{E_ID} - Invalid ID number (semid was invalid or could not be used)
+
+@code{E_NOEXS} - Object does not exist (the semaphore specified by semid
+does not exist)
+
+@code{E_OACV} - Object access violation (A semid less than -4 was
+specified from a user task.  This is implementation dependent.)
+
+@code{E_QOVR} - Queuing or nesting overflow (the queuing count given by
+semcnt went over the maximum allowed)
+
+@code{EN_OBJNO} - An object number which could not be accessed on the
+target node is specified.
+
+@code{EN_CTXID} - Specified an object on another node when the system call
+was issued from a task in dispatch disabled state or from a
+task-independent portion
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -266,9 +317,42 @@ ER wai_sem(
 
 @subheading STATUS CODES:
 
+@code{E_OK} - Normal Completion
+
+@code{E_ID} - Invalid ID number (semid was invalid or could not be used)
+
+@code{E_NOEXS} - Object does not exist (the semaphore specified by semid
+does not exist)
+
+@code{E_OACV} - Object access violation (A semid less than -4 was
+specified from a user task.  This is implementation dependent.)
+
+@code{E_PAR} - Parameter error (tmout is -2 or less)
+
+@code{E_DLT} - The object being waited for was deleted (the specified
+semaphore was deleted while waiting)
+
+@code{E_RLWAI} - Wait state was forcibly released (rel_wai was received
+while waiting)
+
+@code{E_TMOUT} - Polling failure or timeout exceeded
+
+@code{E_CTX} - Context error (issued from task-independent portions or a
+task in dispatch disabled state)
+
+@code{EN_OBJNO} - An object number which could not be accessed on the
+target node is specified.
+
+@code{EN_PAR} - A value outside the range supported by the target node
+and/or transmission packet format was specified as a parameter (a value
+outside supported range was specified for tmout)
+
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -293,9 +377,42 @@ ER preq_sem(
 
 @subheading STATUS CODES:
 
+@code{E_OK} - Normal Completion
+
+@code{E_ID} - Invalid ID number (semid was invalid or could not be used)
+
+@code{E_NOEXS} - Object does not exist (the semaphore specified by semid
+does not exist)
+
+@code{E_OACV} - Object access violation (A semid less than -4 was
+specified from a user task.  This is implementation dependent.)
+
+@code{E_PAR} - Parameter error (tmout is -2 or less)
+
+@code{E_DLT} - The object being waited for was deleted (the specified
+semaphore was deleted while waiting)
+
+@code{E_RLWAI} - Wait state was forcibly released (rel_wai was received
+while waiting)
+
+@code{E_TMOUT} - Polling failure or timeout exceeded
+
+@code{E_CTX} - Context error (issued from task-independent portions or a
+task in dispatch disabled state)
+
+@code{EN_OBJNO} - An object number which could not be accessed on the
+target node is specified.
+
+@code{EN_PAR} - A value outside the range supported by the target node
+and/or transmission packet format was specified as a parameter (a value
+outside supported range was specified for tmout)
+
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -321,9 +438,42 @@ ER twai_sem(
 
 @subheading STATUS CODES:
 
+@code{E_OK} - Normal Completion
+
+@code{E_ID} - Invalid ID number (semid was invalid or could not be used)
+
+@code{E_NOEXS} - Object does not exist (the semaphore specified by semid
+does not exist)
+
+@code{E_OACV} - Object access violation (A semid less than -4 was
+specified from a user task.  This is implementation dependent.)
+
+@code{E_PAR} - Parameter error (tmout is -2 or less)
+
+@code{E_DLT} - The object being waited for was deleted (the specified
+semaphore was deleted while waiting)
+
+@code{E_RLWAI} - Wait state was forcibly released (rel_wai was received
+while waiting)
+
+@code{E_TMOUT} - Polling failure or timeout exceeded
+
+@code{E_CTX} - Context error (issued from task-independent portions or a
+task in dispatch disabled state)
+
+@code{EN_OBJNO} - An object number which could not be accessed on the
+target node is specified.
+
+@code{EN_PAR} - A value outside the range supported by the target node
+and/or transmission packet format was specified as a parameter (a value
+outside supported range was specified for tmout)
+
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+NONE
 
 
 @c
@@ -349,7 +499,33 @@ ER ref_sem(
 
 @subheading STATUS CODES:
 
+@code{E_OK} - Normal Completion
+
+@code{E_ID} - Invalid ID number (semid was invalid or could not be used)
+
+@code{E_NOEXS} - Object does not exist (the semaphore specified by semid
+does not exist)
+
+@code{E_OACV} - Object access violation (A semid less than -4 was
+specified from a user task.  This is implementation dependent.)
+
+@code{E_PAR} - Parameter error (the packet address for the return
+parameters could not be used)
+
+@code{EN_OBJNO} - An object number which could not be accessed on the
+target node is specified.
+
+@code{EN_CTXID} - Specified an object on another node when the system call
+was issued from a task in dispatch disabled state or from a
+task-independent portion
+
+@code{EN_RPAR} - A value outside the range supported by the requesting
+node and/or transmission packet format was returned as a parameter (a
+value outside supported range was specified for exinf, wtsk or semcnt)
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+NONE
 
