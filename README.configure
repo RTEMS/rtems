@@ -181,15 +181,16 @@ The following bsps are supported:
 host-based	: posix (on linux, solaris and hpux)
 
 a29k		: portsw
-i386		: force386 i386ex
+i386		: force386 i386ex pc386
 i386-go32	: go32 go32_p5
 i960		: cvme961
 hppa1.1		: simhppa
-m68k		: dmv152 efi332 efi68k gen68302 gen68360 gen68360_040 idp
-		  mvme136 mvme147 mvme147s mvme162 ods68302
+m68k		: dmv152 efi332 efi68k gen68302 gen68340 gen68360 
+                  gen68360_040 idp mvme136 mvme147 mvme147s mvme162 ods68302
 no_cpu          : no_bsp
 mips64orion 	: p4600 p4650 (p4000 port with either R4600 or R4650)
-powerpc		: papyrus
+powerpc		: papyrus psim helas403
+sh              : gensh1
 sparc 		: erc32
 any             : bare
 
