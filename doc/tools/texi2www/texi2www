@@ -211,6 +211,8 @@ sub expand_xref
 	$topic = $manual = '';
     } elsif ($cmd eq 'href') {
 	($xrefname,$node,$infofile,$url) = split(/,/,$arg);
+    } elsif ($cmd eq 'uref') {
+	($url,$xrefname,$node,$infofile) = split(/,/,$arg);
     } else {
 	($node,$xrefname,$topic,$infofile,$manual) = split(/,/,$arg);
     }
@@ -1146,6 +1148,7 @@ sub initialize_tables
 	'ref',      'X',
 	'pxref',    'Xsee ',
 	'href',     'X',
+	'uref',     'X',
 	'inforef',  'XSee ',
     );
 

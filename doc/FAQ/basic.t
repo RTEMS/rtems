@@ -102,13 +102,10 @@ Yes, but not all are based on standards and the open source philosophy.
 RTEMS is distributed by OAR Corporation via the Internet.  Point your
 favorite browser at the following URL and following the link:
 
-@set OAR-URL http://www.OARcorp.com
-@ifset use-html
-@href{@value{OAR-URL},,@value{OAR-URL}}
-@end ifset
-@ifclear use-html
-@value{OAR-URL}
-@end ifclear
+@c this version should work
+@c @set OAR-URL http://www.OARcorp.com
+@c @uref{@value{OAR-URL},@value{OAR-URL}}
+@uref{http://www.OARcorp.com,http://www.OARcorp.com}
 
 @section What about support?
 

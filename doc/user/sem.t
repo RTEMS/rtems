@@ -168,7 +168,7 @@ any of the semaphores the task holds.  Only when the task
 releases ALL of the binary semaphores it holds will its priority
 be restored to the normal value.
 
-@subsection Building a Semaphore's Attribute Set
+@subsection Building a Semaphore Attribute Set
 
 In general, an attribute set is built by a bitwise OR
 of the desired attribute components.  The following table lists

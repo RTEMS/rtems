@@ -67,12 +67,7 @@ text editor, try @b{Programmers File Editor}, it is
 free and very convenient.  This editor may be downloaded
 from:
 
-@ifset use-html
-@href{@value{PFE-FTP},,@value{PFE-FTP}}
-@end ifset
-@ifclear use-html
-@value{PFE-FTP}
-@end ifclear
+@uref{@value{PFE-FTP},@value{PFE-FTP}}
 
 @subsection Bug in Patch Utility
 
@@ -89,12 +84,7 @@ Dos2Unix: Cleaning file XYZ ...
 
 The dos2unix utility may be downloaded from:
 
-@ifset use-html
-@href{@value{DOS2UNIX-FTP},,,@value{DOS2UNIX-FTP}}
-@end ifset
-@ifclear use-html
-@value{DOS2UNIX-FTP}
-@end ifclear
+@uref{@value{DOS2UNIX-FTP},@value{DOS2UNIX-FTP}}
 
 You @b{must} change the format of every patched file 
 for the toolset build to work correctly.
@@ -112,20 +102,10 @@ Web browser or ftp client.
 @table @b
 
 @item cdk.exe
-@ifset use-html
-@href{@value{CYGWIN-FTP},,@value{CYGWIN-FTP}}
-@end ifset
-@ifclear use-html
-@value{CYGWIN-FTP}
-@end ifclear
+@uref{@value{CYGWIN-FTP},@value{CYGWIN-FTP}}
 
 @item coolview.tar.gz
-@ifset use-html
-@href{@value{CYGWIN-COOLVIEW},,@value{CYGWIN-COOLVIEW}}
-@end ifset
-@ifclear use-html
-@value{CYGWIN-COOLVIEW}
-@end ifclear
+@uref{@value{CYGWIN-COOLVIEW},@value{CYGWIN-COOLVIEW}}
 
 @end table
 

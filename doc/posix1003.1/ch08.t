@@ -37,7 +37,7 @@ toupper(), Function, Implemented
 ANSI C Section 4.4 --- Localization
 
 @example
-setlocale(), Function, Partial Implementation
+setlocale(), Function, Implemented
 @end example
 
 ANSI C Section 4.5 --- Mathematics

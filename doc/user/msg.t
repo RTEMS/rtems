@@ -52,7 +52,7 @@ a queue for the arrival of a message.
 The maximum length message which can be sent is set
 on a per message queue basis.
 
-@subsection Building a Message Queue's Attribute Set
+@subsection Building a Message Queue Attribute Set
 
 In general, an attribute set is built by a bitwise OR
 of the desired attribute components.  The set of valid message

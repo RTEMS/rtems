@@ -10,7 +10,7 @@ PROJECT=browseable_rtems
 
 include ../Make.config
 
-all: html info ps
+all: html info ps pdf
 
 dirs:
 	$(make-dirs)
@@ -25,6 +25,8 @@ INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 info: 
 
 ps:
+
+pdf:
 
 html: dirs
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)

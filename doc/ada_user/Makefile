@@ -10,7 +10,7 @@ PROJECT=ada_user
 
 include ../Make.config
 
-all: html info ps
+all: html info ps pdf
 
 COMMON_FILES=../common/cpright.texi ../user/bsp.texi ../user/clock.texi \
   ../user/concepts.texi ../user/conf.texi ../user/dirstat.texi \
@@ -36,7 +36,12 @@ ada_user: $(FILES)
 
 dvi: $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
+pdf: dirs $(PROJECT).pdf
 	
+$(PROJECT).pdf: $(FILES)
+	$(TEXI2PDF) $(PROJECT).texi
+	cp $(PROJECT).pdf $(PDF_INSTALL)
+
 $(PROJECT).ps: dirs $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
@@ -52,7 +57,7 @@ html: dirs $(FILES)
  	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core *.html 
+	rm -f *.o $(PROG) *.txt core *.html *.pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f ada_user ada_user-* _*
 

@@ -12,7 +12,7 @@ include ../../Make.config
 
 REPLACE=../../tools/word-replace
 
-all: html info ps
+all: html info ps pdf
 
 dirs:
 	$(make-dirs)
@@ -35,6 +35,11 @@ c_m68k: $(FILES)
 
 dvi: $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
+pdf: dirs $(PROJECT).pdf
+	
+$(PROJECT).pdf: $(FILES)
+	$(TEXI2PDF) $(PROJECT).texi
+	cp $(PROJECT).pdf $(PDF_INSTALL)
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
@@ -49,7 +54,7 @@ html: dirs $(FILES)
  	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core 
+	rm -f *.o $(PROG) *.txt core *.pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_m68k c_m68k-*

@@ -34,7 +34,7 @@ chdir(), Function, Implemented
 @subsection Get Working Directory Pathname
 
 @example
-getcwd(), Function, Untested Implementation, assumes directory services
+getcwd(), Function, Implemented
 @end example
 
 @section General File Creation

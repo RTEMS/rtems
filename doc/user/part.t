@@ -40,7 +40,7 @@ Therefore, modifying memory that is outside of an allocated
 buffer could destroy the free buffer chain or the contents of an
 adjacent allocated buffer.
 
-@subsection Building a Partition's Attribute Set
+@subsection Building a Partition Attribute Set
 
 In general, an attribute set is built by a bitwise OR
 of the desired attribute components.  The set of valid partition

@@ -10,7 +10,7 @@ PROJECT=develenv
 
 include ../Make.config
 
-all: html info ps
+all: html info ps pdf
 
 dirs:
 	$(make-dirs)
@@ -27,6 +27,11 @@ $(PROJECT): $(FILES)
 
 dvi: $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
+pdf: dirs $(PROJECT).pdf
+	
+$(PROJECT).pdf: $(FILES)
+	$(TEXI2PDF) $(PROJECT).texi
+	cp $(PROJECT).pdf $(PDF_INSTALL)
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
@@ -42,7 +47,7 @@ html: dirs
  	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core *.html 
+	rm -f *.o $(PROG) *.txt core *.html *.pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* _*
 

@@ -264,7 +264,7 @@ attribute.  The consequence of a @code{@value{RPREFIX}NO_FLOATING_POINT}
 task attempting to access the floating point unit is CPU dependent but will
 generally result in an exception condition. 
 
-@subsection Building a Task's Attribute Set
+@subsection Building a Task Attribute Set
 
 In general, an attribute set is built by a bitwise OR of the
 desired components.  The set of valid task attribute components
@@ -1092,7 +1092,7 @@ binary semaphores.
 
 @page
 
-@subsection TASK_MODE - Change current task's mode
+@subsection TASK_MODE - Change the current task mode
 
 @subheading CALLING SEQUENCE:
 

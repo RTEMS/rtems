@@ -82,7 +82,7 @@ to the @code{@value{DIRPREFIX}signal_send} directive should be
 @code{@value{RPREFIX}SIGNAL_6 @value{OR} 
 @value{RPREFIX}SIGNAL_15 @value{OR} @value{RPREFIX}SIGNAL_31}.
 
-@subsection Building an ASR's Mode
+@subsection Building an ASR Mode
 
 In general, an ASR's mode is built by a bitwise OR of
 the desired mode components.  The set of valid mode components

@@ -31,6 +31,10 @@ chain.o: chain.c
 
 dvi: $(PROJECT).dvi
 ps: $(PROJECT).ps
+pdf: dirs $(PROJECT).pdf
+	
+$(PROJECT).pdf: $(FILES)
+	$(TEXI2PDF) $(PROJECT).texi
 info: Drive
 html: $(PROJECT).texi $(BASE).txt
 	 ../textools/texi2html $(PROJECT).texi
@@ -74,7 +78,7 @@ avdas:
 	    -u "Magic Subsystem" test_cases/avdas.d
 	
 clean:
-	rm -f *.o $(PROG) *.txt core *.html $(PROJECT) Drive.texi
+	rm -f *.o $(PROG) *.txt core *.html $(PROJECT) Drive.texi *.pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f test_cases/*.txt test_cases/*.texi
 

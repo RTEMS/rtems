@@ -67,7 +67,7 @@ CR, Constant, Unimplemented
 @example
 tcflag_t, Type, Implemented
 cc_t, Type, Implemented
-struct termios, Type, Partial Implementation
+struct termios, Type, Implemented
 @end example
 
 @subsubsection Input Modes

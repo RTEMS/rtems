@@ -13,7 +13,7 @@
 @subsection Process Creation
 
 @example
-fork(), Function, Unimplementable
+fork(), Function, Unimplementable, Requires Processes
 @end example
 
 
@@ -54,7 +54,7 @@ WSTOPSIG(), Function, Unimplementable, Requires Processes
 @subsection Terminate a Process
 
 @example
-_exit(), Function, Unimplemented
+_exit(), Function, Implemented
 @end example
 
 @section Signals

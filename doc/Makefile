@@ -6,7 +6,7 @@ include Make.config
 
 BASEDIR=$(shell pwd)
 
-all: env info html ps
+all: env info html ps pdf
 #	find $(WWW_INSTALL) -type f | xargs -e chmod 444
 #	find $(WWW_INSTALL) -type d | xargs -e chmod 555
 
@@ -31,8 +31,14 @@ info: env
 html: env
 	./do_docs $(BASEDIR) html
 
+dvi: dirs env
+	./do_docs $(BASEDIR) dvi
+
 ps: dirs env
 	./do_docs $(BASEDIR) ps
+
+pdf: dirs env
+	./do_docs $(BASEDIR) pdf
 
 clean:
 	./do_docs $(BASEDIR) clean

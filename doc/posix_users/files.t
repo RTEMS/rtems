@@ -37,7 +37,7 @@ The directives provided by the files and directories manager are:
 @item @code{rename} - Renames a file 
 @item @code{stat} - Gets information about a file.
 @item @code{fstat} - Gets file status
-@item @code{access} - Check user's permissions for a file.
+@item @code{access} - Check permissions for a file.
 @item @code{chmod} - Changes file mode
 @item @code{fchmod} - Changes permissions of a file
 @item @code{chown} - Changes the owner and/ or group of a file
@@ -1321,7 +1321,7 @@ to by the @code{buf} argument.
 NONE
 
 @page
-@subsection access - Check user's permissions for a file
+@subsection access - Check permissions for a file
 
 @subheading CALLING SEQUENCE:
 

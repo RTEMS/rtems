@@ -129,23 +129,12 @@ and Jiri Gaisler (jgais@@ws.estec.esa.nl).
 
 omniORB is a GPL'ed CORBA which has been ported to RTEMS.  It is
 available from 
-@ifset use-html
-(@href{http://www.uk.research.att.com/omniORB/omniORB.html,,,http://www.uk.research.att.com/omniORB/omniORB.html})
-@end ifset
-@ifclear use-html
-http://www.uk.research.att.com/omniORB/omniORB.html
-@end ifclear
+(@uref{http://www.uk.research.att.com/omniORB/omniORB.html,http://www.uk.research.att.com/omniORB/omniORB.html})
 .
 
 For information on the RTEMS port of omniORB to RTEMS, see the following
 URL 
-@ifset use-html
-(@href{http://www.connecttel.com/corba/rtems_omni.html,,,http://www.connecttel.com/corba/rtems_omni.html})
-@end ifset
-@ifclear use-html
-http://www.connecttel.com/corba/rtems_omni.html
-@end ifclear
-.
+(@uref{http://www.connecttel.com/corba/rtems_omni.html,http://www.connecttel.com/corba/rtems_omni.html}).
 
 C++ exceptions must work properly on your target for omniORB to work.
 

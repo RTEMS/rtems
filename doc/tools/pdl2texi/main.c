@@ -87,7 +87,7 @@ extern char *optarg;     /* Why is this not in <stdlib.h>? */
 
 #include "base.h"
 
-FILE           *OutFile = stdout;
+FILE           *OutFile;
 
 /*************************************************************************
  *************************************************************************
@@ -1028,6 +1028,7 @@ int main(
   int      index;
   boolean  single_file_mode;
 
+  OutFile = stdout;
   Verbose = FALSE;
   Statistics = FALSE;
   OutputWord = FALSE;

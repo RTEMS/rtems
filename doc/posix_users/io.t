@@ -23,8 +23,8 @@ The directives provided by the input and output primitives manager are:
 @item @code{write} - Writes to a file
 @item @code{fcntl} - Manipulates an open file descriptor
 @item @code{lseek} - Reposition read/write file offset
-@item @code{fsync} - Synchronize a file's complete in-core state with that on disk
-@item @code{fdatasync} - synchronize a file's in-core data with that on disk
+@item @code{fsync} - Synchronize file complete in-core state with that on disk
+@item @code{fdatasync} - Synchronize file in-core data with that on disk
 @item @code{mount} - Mount a file system
 @item @code{umount} - Unmount file systems
 @item @code{aio_read} - YYY
@@ -571,7 +571,7 @@ with such a device is undefined.
 NONE
 
 @page
-@subsection fsync - Synchronize a file's complete in-core state with that on disk
+@subsection fsync - Synchronize file complete in-core state with that on disk
 
 @subheading CALLING SEQUENCE:
 
@@ -615,7 +615,7 @@ An error occurred during synchronization
 NONE
 
 @page
-@subsection fdatasync - synchronize a file's in-core data with that on disk. 
+@subsection fdatasync - Synchronize file in-core data with that on disk. 
 
 @subheading CALLING SEQUENCE:
 

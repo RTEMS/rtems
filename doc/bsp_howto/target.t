@@ -106,12 +106,7 @@ Regardless of the amount of development required, OAR Corporation
 offers custom development services to assist RTEMS users.
 For more information on custom development, training courses, and
 support, contact OAR Corporation at
-@ifset use-html
-@href{http://www.oarcorp.com,,,http://www.oarcorp.com}.
-@end ifset
-@ifclear use-html
-http://www.oarcorp.com.
-@end ifclear
+@uref{http://www.oarcorp.com}.
 
 
 @section CPU Dependent Executive Files

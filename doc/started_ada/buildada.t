@@ -56,7 +56,7 @@ specific patches.
     Directory:   @value{GCC-FTPDIR}
     File:        @value{GCC-TAR}
 @ifset use-html
-    URL:         @href{Download @value{GCC-VERSION},,,ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR}}
+    URL:         @uref{ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR},Download @value{GCC-VERSION}}
 @end ifset
 @end example
 
@@ -66,7 +66,7 @@ specific patches.
     Directory:   @value{GNAT-FTPDIR}
     File:        @value{GNAT-TAR}
 @ifset use-html
-    URL:         @href{Download @value{GNAT-VERSION},,,ftp://@value{GNAT-FTPSITE}@value{GNAT-FTPDIR}/@value{GNAT-TAR}}
+    URL:         @uref{ ftp://@value{GNAT-FTPSITE}@value{GNAT-FTPDIR}/@value{GNAT-TAR}, Download @value{GNAT-VERSION}}
 @end ifset
 @end example
 
@@ -76,7 +76,7 @@ specific patches.
     Directory:   @value{BINUTILS-FTPDIR}
     File:        @value{BINUTILS-TAR}
 @ifset use-html
-    URL:         @href{Download @value{BINUTILS-VERSION},,,ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}}
+    URL:         @uref{ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}, Download @value{BINUTILS-VERSION}}
 @end ifset
 @end example
 
@@ -86,7 +86,7 @@ specific patches.
     Directory:   @value{NEWLIB-FTPDIR}
     File:        @value{NEWLIB-TAR}
 @ifset use-html
-    URL:         @href{Download @value{NEWLIB-VERSION},,,ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}}
+    URL:         @uref{ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}, Download @value{NEWLIB-VERSION}}
 @end ifset
 @end example
 
@@ -96,7 +96,7 @@ specific patches.
     Directory:   @value{RTEMS-FTPDIR}
     File:        @value{RTEMS-TAR}
 @ifset use-html
-    URL:         @href{Download RTEMS components,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}}
+    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}, Download RTEMS components}
 @end ifset
 @end example
 
@@ -106,7 +106,7 @@ specific patches.
     Directory:   @value{RTEMS-FTPDIR}
     File:        hello_world_ada.tgz
 @ifset use-html
-    URL:         @href{Download RTEMS Hello World,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/hello_world_ada.tgz}
+    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/hello_world_ada.tgz, Download RTEMS Hello World}
 @end ifset       
 @end example
 
@@ -128,7 +128,7 @@ specific patches.
     File:        @value{GNAT-RTEMSPATCH}
 @end ifset
 @ifset use-html
-    URL:         @href{Download RTEMS patches,,,ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools}
+    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools, Download RTEMS patches}
 @end ifset
 @end example
 

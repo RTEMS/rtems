@@ -10,7 +10,7 @@ PROJECT=c_user
 
 include ../Make.config
 
-all: html info ps
+all: html info ps pdf
 
 dirs:
 	$(make-dirs)
@@ -38,13 +38,19 @@ c_user: $(FILES)
 
 dvi: $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
+pdf: dirs $(PROJECT).pdf
+	
+$(PROJECT).pdf: $(FILES)
+	$(TEXI2PDF) $(PROJECT).texi
+	cp $(PROJECT).pdf $(PDF_INSTALL)
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
 
 $(PROJECT).dvi: $(FILES)
-	$(TEXI2DVI) $(PROJECT).texi
+	# $(TEXI2DVI) $(PROJECT).texi
+	texi2dvi -V $(PROJECT).texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_user
@@ -53,7 +59,7 @@ html: dirs $(FILES)
  	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core *.html 
+	rm -f *.o $(PROG) *.txt core *.html *.pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f c_user c_user-* _* $(GENERATED_FILES)
 

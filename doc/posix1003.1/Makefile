@@ -10,7 +10,7 @@ PROJECT=posix1003_1
 
 include ../Make.config
 
-all: html info ps
+all: html info ps pdf
 
 dirs:
 	$(make-dirs)
@@ -36,6 +36,11 @@ $(PROJECT): $(FILES)
 
 dvi: $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
+pdf: dirs $(PROJECT).pdf
+	
+$(PROJECT).pdf: $(FILES)
+	$(TEXI2PDF) $(PROJECT).texi
+	cp $(PROJECT).pdf $(PDF_INSTALL)
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
@@ -43,8 +48,8 @@ $(PROJECT).ps: $(PROJECT).dvi
 
 # run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
-	$(TEXI2DVI) -v $(PROJECT).texi
-	texi2dvi -v $(PROJECT).texi
+	$(TEXI2DVI) $(PROJECT).texi
+	texi2dvi $(PROJECT).texi
 
 ch01.texi: ch01.t
 	$(BMENU) -c -p "Preface" \
@@ -152,7 +157,7 @@ html: dirs $(FILES)
  	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core 
+	rm -f *.o $(PROG) *.txt core *.pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* $(GENERATED_FILES)
 	rm -f *.fixed _*

@@ -13,12 +13,7 @@
 
 This document describes the RTEMS specific parts of the FreeBSD TCP/IP
 stack.  Much of this documentation was written by Eric Norum
-@ifset use-html
-(@href{eric@@skatter.usask.ca,,,mailto:eric@@skatter.usask.ca})
-@end ifset
-@ifclear use-html
-(eric@@skatter.usask.ca)
-@end ifclear
+(@email{eric@@skatter.usask.ca})
 of the Saskatchewan Accelerator Laboratory
 who also ported the FreeBSD TCP/IP stack to RTEMS.
 
@@ -35,7 +30,7 @@ the original 10 Megabit per second (Mbps) system, the 100 Mbps
 Fast Ethernet system (802.3u), and the Gigabit Ethernet system (802.3z)."
 The URL is:
 @ifset use-html
-(@href{http://wwwhost.ots.utexas.edu/ethernet/index.html,,,http://wwwhost.ots.utexas.edu/ethernet/index.html})
+(@uref{http://wwwhost.ots.utexas.edu/ethernet/index.html,http://wwwhost.ots.utexas.edu/ethernet/index.html})
 @end ifset
 @ifclear use-html
 (http://wwwhost.ots.utexas.edu/ethernet/index.html)

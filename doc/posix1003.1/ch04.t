@@ -116,7 +116,7 @@ ctermid(), Function, Unimplemented
 @example
 ttyname(), Function, Untested Implementation, assumes directory services
 ttyname_r(), Function, Unimplemented
-isatty(), Function, Partial Implementation
+isatty(), Function, Implemented
 @end example
 
 @section Configurable System Variables

@@ -22,7 +22,7 @@ pipe(), Function, Dummy Implementation
 
 @example
 dup(), Function, Implemented
-dup2(), Function, Untested Iimplementation
+dup2(), Function, Implemented
 @end example
 
 @section File Descriptor Deassignment
@@ -80,7 +80,7 @@ are also included in another section.  @xref{Open a File}.
 @subsection Reposition Read/Write File Offset
 
 @example
-lseek(), Function, Partial Implementation
+lseek(), Function, Implemented
 SEEK_SET, Constant, Implemented
 SEEK_CUR, Constant, Implemented
 SEEK_END, Constant, Implemented

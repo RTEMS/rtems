@@ -648,7 +648,7 @@ returns immediately with a timeout error status.
 
 @end itemize
 
-@subsection Obtaining a Period's Status
+@subsection Obtaining the Status of a Period
 
 If the @code{@value{DIRPREFIX}rate_monotonic_period} directive is invoked
 with a period of @code{@value{RPREFIX}PERIOD_STATUS} ticks, the current
