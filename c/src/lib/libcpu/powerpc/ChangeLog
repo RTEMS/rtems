@@ -1,5 +1,13 @@
 2001-03-30	Eric Valette <valette@crf.canon.fr>
 
+	* mpc8xx/vectors/.cvsignore, mpc8xx/vectors/Makefile.am,
+	mpc8xx/vectors/README, mpc8xx/vectors/align_h.S
+	mpc8xx/vectors/vectors.S:  These files were removed in
+	support of switching the mpc8xx to the use the "new exception
+	processing model."
+
+2001-03-30	Eric Valette <valette@crf.canon.fr>
+
 	* mpc8xx/exceptions/.cvsignore, mpc8xx/exceptions/Makefile.am,
 	mpc8xx/exceptions/asm_utils.S, mpc8xx/exceptions/raw_exception.c,
 	mpc8xx/exceptions/raw_exception.h: New files.
