@@ -54,19 +54,19 @@ void IMFS_print_jnode(
 {
   assert( the_jnode );
 
-  printf( "%s", the_jnode->name );
+  fprintf(stdout, "%s", the_jnode->name );
   switch( the_jnode->type ) {
     case IMFS_DIRECTORY:
-      printf( "/" );
+      fprintf(stdout, "/" );
       break;
 
     case IMFS_DEVICE:
-      printf( " (device %d, %d)",
+      fprintf(stdout, " (device %d, %d)",
         the_jnode->info.device.major, the_jnode->info.device.minor );
       break;
 
     case IMFS_LINEAR_FILE:
-      printf( " (file %d %p)",
+      fprintf(stdout, " (file %d %p)",
         (int)the_jnode->info.linearfile.size,
         the_jnode->info.linearfile.direct
       );
@@ -75,29 +75,29 @@ void IMFS_print_jnode(
     case IMFS_MEMORY_FILE:
       /* Useful when debugging .. varies between targets  */
 #if 0
-      printf( " (file %d %p %p %p)",
+      fprintf(stdout, " (file %d %p %p %p)",
         (int)the_jnode->info.file.size,
         the_jnode->info.file.indirect,
         the_jnode->info.file.doubly_indirect,
         the_jnode->info.file.triply_indirect
       );
 #else
-      printf( " (file %d)", (int)the_jnode->info.file.size );
+      fprintf(stdout, " (file %d)", (int)the_jnode->info.file.size );
 #endif
       break;
 
     case IMFS_HARD_LINK:
-      printf( " links not printed\n" );
+      fprintf(stdout, " links not printed\n" );
       assert(0);
       break;
 
     case IMFS_SYM_LINK:
-      printf( " links not printed\n" );
+      fprintf(stdout, " links not printed\n" );
       assert(0);
       break;
 
     default:
-      printf( " bad type %d\n", the_jnode->type );
+      fprintf(stdout, " bad type %d\n", the_jnode->type );
       assert(0);
       break;
   }
@@ -137,7 +137,7 @@ void IMFS_dump_directory(
     the_jnode = (IMFS_jnode_t *) the_node;
 
     for ( i=0 ; i<=level ; i++ )
-      printf( "...." );
+      fprintf(stdout, "...." );
     IMFS_print_jnode( the_jnode );
     if ( the_jnode->type == IMFS_DIRECTORY )
       IMFS_dump_directory( the_jnode, level + 1 );
@@ -156,10 +156,10 @@ void IMFS_dump_directory(
 
 void IMFS_dump( void )
 {
-  printf( "*************** Dump of Entire IMFS ***************\n" );
-  printf( "/\n" );
+  fprintf(stdout, "*************** Dump of Entire IMFS ***************\n" );
+  fprintf(stdout, "/\n" );
   IMFS_dump_directory( rtems_filesystem_root.node_access, 0 );
-  printf( "***************       End of Dump        ***************\n" );
+  fprintf(stdout, "***************       End of Dump        ***************\n" );
 }
 
 /*

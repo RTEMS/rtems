@@ -354,7 +354,7 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
     return 0;
 
 #if 0
-  printf( "%d %p", block, block_entry_ptr );
+  fprintf(stdout, "%d %p", block, block_entry_ptr );
     fflush(stdout);
 #endif
 
@@ -778,7 +778,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
     if ( !block_ptr )
       return copied;
 #if 0
-printf( "write %d at %d in %d: %*s\n", to_copy, start_offset, block, to_copy, src );
+fprintf(stdout, "write %d at %d in %d: %*s\n", to_copy, start_offset, block, to_copy, src );
 #endif
     memcpy( &(*block_ptr)[ start_offset ], src, to_copy );
     src += to_copy;
@@ -798,7 +798,7 @@ printf( "write %d at %d in %d: %*s\n", to_copy, start_offset, block, to_copy, sr
     if ( !block_ptr )
       return copied;
 #if 0
-printf( "write %d in %d: %*s\n", to_copy, block, to_copy, src );
+fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
 #endif
     memcpy( &(*block_ptr)[ 0 ], src, to_copy );
     src += to_copy;
@@ -820,7 +820,7 @@ printf( "write %d in %d: %*s\n", to_copy, block, to_copy, src );
     if ( !block_ptr )
       return copied;
 #if 0
-printf( "write %d in %d: %*s\n", to_copy, block, to_copy, src );
+fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
 #endif
     memcpy( &(*block_ptr)[ 0 ], src, my_length );
     my_length = 0;
@@ -856,7 +856,7 @@ block_p *IMFS_memfile_get_block_pointer(
   block_p *p;
 
   p = IMFS_memfile_get_block_pointer_DEBUG( the_jnode, block, malloc_it );
-  printf( "(%d -> %p) ", block, p );
+  fprintf(stdout, "(%d -> %p) ", block, p );
   return p;
 }
 
@@ -900,7 +900,7 @@ block_p *IMFS_memfile_get_block_pointer(
 
   if ( my_block <= LAST_INDIRECT ) {
 #if 0
-printf( "(s %d) ", block );
+fprintf(stdout, "(s %d) ", block );
 fflush(stdout);
 #endif
     p = info->indirect;
@@ -928,7 +928,7 @@ fflush(stdout);
 
   if ( my_block <= LAST_DOUBLY_INDIRECT ) {
 #if 0
-printf( "(d %d) ", block );
+fprintf(stdout, "(d %d) ", block );
 fflush(stdout);
 #endif
 
@@ -966,7 +966,7 @@ fflush(stdout);
       return 0;
 
 #if 0
-printf( "(d %d %d %d %d %p %p) ", block, my_block, doubly,
+fprintf(stdout, "(d %d %d %d %d %p %p) ", block, my_block, doubly,
                                        singly, p, &p[singly] );
 fflush(stdout);
 #endif
@@ -974,7 +974,7 @@ fflush(stdout);
   }
 
 #if 0
-printf( "(t %d) ", block );
+fprintf(stdout, "(t %d) ", block );
 fflush(stdout);
 #endif
   /*
@@ -1021,7 +1021,7 @@ fflush(stdout);
       return 0;
 
 #if 0
-printf( "(t %d %d %d %d %d) ", block, my_block, triply, doubly, singly );
+fprintf(stdout, "(t %d %d %d %d %d) ", block, my_block, triply, doubly, singly );
 fflush(stdout);
 #endif
     p1 = (block_p *) p[ triply ];
@@ -1072,7 +1072,7 @@ void memfile_free_block(
 )
 {
 #if 0
-printf( "(d %p) ", memory );
+fprintf(stdout, "(d %p) ", memory );
 fflush(stdout);
 #endif
   free(memory);
