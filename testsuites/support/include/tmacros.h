@@ -46,7 +46,7 @@ extern "C" {
 
 #define check_dispatch_disable_level( _expect ) \
   do { \
-    extern volatile rtems_unsigned32 _Thread_Dispatch_disable_level; \
+    extern volatile uint32_t   _Thread_Dispatch_disable_level; \
     if ( (_expect) != -1 && _Thread_Dispatch_disable_level != (_expect) ) { \
       printf( "\n_Thread_Dispatch_disable_level is (%d) not %d\n", \
               _Thread_Dispatch_disable_level, (_expect) ); \
@@ -199,7 +199,7 @@ extern "C" {
 #endif
 
 #define put_name( name, crlf ) \
-{ rtems_unsigned32 c0, c1, c2, c3; \
+{ uint32_t   c0, c1, c2, c3; \
   c0 = (name >> 24) & 0xff; \
   c1 = (name >> 16) & 0xff; \
   c2 = (name >> 8) & 0xff; \
@@ -227,7 +227,7 @@ extern "C" {
   ( rtems_get_index( tid ) - \
      rtems_configuration_get_rtems_api_configuration()->number_of_initialization_tasks )
 
-static inline rtems_unsigned32 get_ticks_per_second( void )
+static inline uint32_t   get_ticks_per_second( void )
 {
   rtems_interval ticks_per_second;
   (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );

@@ -1,5 +1,9 @@
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* include/tmacros.h: Convert to using c99 fixed size types.
+
+2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add 2nd arg to RTEMS_TOP.
 
 2004-03-03	Joel Sherrill <joel@OARcorp.com>
