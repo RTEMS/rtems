@@ -108,6 +108,7 @@ SECTIONS
    PROVIDE (_GOT2_START_ = .);
   .got2		  :  { *(.got2) 	} >RAM
   PROVIDE (__GOT2_END__ = .);
+  PROVIDE (_GOT2_END_ = .);
 
   PROVIDE (__CTOR_LIST__ = .);
   .ctors	  : { *(.ctors) 	} >RAM
@@ -122,7 +123,6 @@ SECTIONS
   .fixup	  : { *(.fixup) 	} >RAM
   PROVIDE (_FIXUP_END_ = .);
   PROVIDE (__FIXUP_END__ = .);
-  PROVIDE (_GOT2_END_ = .);
 
   PROVIDE (__GOT_START__ = .);
   PROVIDE (_GOT_START_ = .);
