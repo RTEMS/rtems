@@ -1,0 +1,42 @@
+#
+#  $Id$
+#
+
+Description: efi68k
+============
+CPU: MC68332 @16MHz
+RAM: 256k max. (supports several configurations)
+ROM: 512k (supports several configurations)
+
+   This general purpose controller has been designed by a group of
+Internet subscribes to the mailing list "efi332" (an offshoot of the
+"diy_efi" mailing list). Although efi332 was initially designed for
+automotive research, it is a fairly generalized embedded controller
+when used without the companion EFI board. It is patterned much after
+the the Motorola BCC but cost on the order of $250US. A 4x3 inch
+(approx.) printed circuit board is available.  For complete
+information see
+
+	http://www.cim.swin.edu.au/wwwhome/aden/efi332/332_index.html
+
+TODO:
+=====
+- add separate interrupt stack (low priority).
+
+- add a timer driver for the tmtest set.
+
+- generate include/coverhd.c to preform the tmtest.
+
+- the interrupt drive I/O should be integrated into the RTEMS.
+
+- finish the ROM memory model.
+
+
+                                       John S Gwynne
+                                          Gwynne.1@osu.edu
+_______________________________________________________________________________
+               T h e   O h i o - S t a t e   U n i v e r s i t y
+    ElectroScience Laboratory, 1320 Kinnear Road, Columbus, Ohio 43212, USA
+                Telephone: (614) 292-7981 * Fax: (614) 292-7297
+-------------------------------------------------------------------------------
+
