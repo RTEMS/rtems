@@ -34,14 +34,15 @@ DIRECTORY_SCAN_C_FILES = opendir.c closedir.c readdir.c rewinddir.c \
 
 MALLOC_C_FILES = malloc.c mallocfreespace.c __brk.c __sbrk.c
 
-ENVIRON_C_FILES = envlock.c
+ENVIRON_C_FILES =
 
 PASSWORD_GROUP_C_FILES = getpwent.c getgrent.c
 
 TERMINAL_IDENTIFICATION_C_FILES = ctermid.c isatty.c ttyname.c ttyname_r.c
 
 LIBC_GLUE_C_FILES = __getpid.c __gettod.c __times.c truncate.c access.c \
-    stat.c lstat.c pathconf.c newlibc.c no_posix.c no_libc.c utsname.c
+    stat.c lstat.c pathconf.c envlock.c newlibc.c no_posix.c no_libc.c \
+    utsname.c
 
 UNIX_LIBC_C_FILES = unixlibc.c hosterr.c
 
