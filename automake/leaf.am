@@ -1,0 +1,9 @@
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+ifndef make-cxx-exe
+define make-cxx-exe
+	$(LINK.cc) $(AM_CFLAGS) $(AM_LDFLAGS) \
+	$(LDLIBS) -o $@ \
+	$(LINK_OBJS) $(LINK_LIBS)
+endef
+@ENDIF@
