@@ -1,3 +1,9 @@
+2003-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	PR 338/filesystem
+	* io.t: Fix Ada binding as side-effect of fixing reentrancy
+	problem with rtems_io_lookup_name() (API change).
+
 2003-02-03	Steven Johnson <sjohnson@neurizon.net>
 
 	PR 338/filesystem

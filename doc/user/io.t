@@ -465,7 +465,7 @@ rtems_status_code rtems_io_lookup_name(
 @example
 procedure IO_Lookup_Name (
    Name         : in     String;
-   Device_Info  :    out RTEMS.Driver_Name_t;
+   Device_Info  :    out RTEMS.Driver_Name_t_Pointer;
    Result       :    out RTEMS.Status_Codes
 );
 @end example
@@ -478,7 +478,7 @@ procedure IO_Lookup_Name (
 @subheading DESCRIPTION:
 
 This directive returns the major/minor number pair
-associated with the given device name in device_info.
+associated with the given device name in @code{device_info}.
 
 @subheading NOTES:
 
