@@ -152,7 +152,6 @@ __ISR_Handler:
 
           callx     (g1)                     # invoke user ISR
 
-          st        r4,__Thread_Dispatch_disable_level
                                              # unnest multitasking
           st        r5,__ISR_Nest_level      # one less ISR nest level
           cmpobne.f 0,r4,exit                # If dispatch disabled, exit
@@ -186,8 +185,10 @@ bframe:   mov       0,g2
           stt       r4,(g3)                  # set _Isr_dispatch ret info
           st        g1,16(g3)                # set r4 = AC for ISR disp
           or        7,g3,pfp                 # pfp to _Isr_dispatch
-
-exit:     mov       r7,g14                   # restore g14
+          flushreg
+          b         exit1
+exit:     st        r4,__Thread_Dispatch_disable_level
+exit1:    mov       r7,g14                   # restore g14
           movq      r8,g0                    # restore g0-g3
           movq      r12,g4                   # restore g4-g7
 		  ldq		_ISR_reg_save, g8		 # restore g8-g11
