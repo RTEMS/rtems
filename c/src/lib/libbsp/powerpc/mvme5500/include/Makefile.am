@@ -23,4 +23,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 
 all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

@@ -2,17 +2,19 @@
 ## 
 ## configure.ac,v 1.9.2.2 2003/03/06 10:42:42 ralf Exp
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-mvme5500],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
+AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.9])
 RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
+RTEMS_CHECK_TOOL(NM,nm,no)
+RTEMS_PROG_CCAS
 
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")

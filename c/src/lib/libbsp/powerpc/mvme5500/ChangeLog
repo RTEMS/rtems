@@ -1,3 +1,15 @@
+2004-10-20	Joel Sherrill <joel@OARcorp.com>
+
+	* README, configure.ac, GT64260/Makefile.am, include/bsp.h,
+	irq/Makefile.am, irq/irq.c, irq/irq.h, irq/irq_init.c,
+	network/GT64260ethreg.h, pci/pci.c, startup/bspstart.c: CVS Id string
+	and license corrected.
+	* GT64260/Makefile.in, clock/Makefile.in, console/Makefile.in,
+	include/Makefile.am, include/Makefile.in, irq/Makefile.in,
+	network/Makefile.in, pci/Makefile.in, start/Makefile.in,
+	startup/Makefile.in, vectors/Makefile.in, vme/Makefile.in,
+	wrapup/Makefile.in: Removed.
+
 2004-10-20  Kate Feng <feng1@bnl.gov>
 
 	* New BSP.

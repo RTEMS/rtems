@@ -13,7 +13,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  http://www.rtems.com/license/LICENSE.
  *
  * Copyright 2004, Brookhaven National Laboratory and
  *                 Shuchen Kate Feng <feng1@bnl.gov> 
@@ -21,6 +21,8 @@
  *    - modified shared/irq/irq.h for Mvme5500 (no ISA devices/PIC)
  *    - Discovery GT64260 interrupt controller instead of 8259.
  *    - Added support for software IRQ priority levels. 
+ *
+ *  $Id$
  */
 
 #ifndef LIBBSP_POWERPC_MVME5500_IRQ_IRQ_H

@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am  S. Kate Feng, 12/03
+## $Id$
 ##
 
 VPATH = @srcdir@:@srcdir@/../../shared/irq

@@ -14,9 +14,11 @@
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
- * http://www.OARcorp.com/rtems/license.html.
- * 
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
  */
+
 #include <libcpu/io.h>
 #include <libcpu/spr.h>
 #include <bsp/irq.h>

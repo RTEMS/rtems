@@ -11,9 +11,9 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  http://www.rtems.com/license/LICENSE.
  *
- *  pci.c,v 1.2 2002/05/14 17:10:16 joel Exp
+ *  $Id$
  *
  *  Copyright 2004, Brookhaven National Laboratory and
  *                  Shuchen K. Feng, <feng1@bnl.gov>, 2004
