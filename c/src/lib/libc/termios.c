@@ -238,7 +238,7 @@ rtems_termios_open (
 		 */
 		tty->termios.c_iflag = BRKINT | ICRNL | IMAXBEL;
 		tty->termios.c_oflag = OPOST | ONLCR | XTABS;
-		tty->termios.c_cflag = B9600 | CS8 | CREAD;
+		tty->termios.c_cflag = B9600 | CS8 | CREAD | CLOCAL;
 		tty->termios.c_lflag = ISIG | ICANON | IEXTEN | ECHO | ECHOK | ECHOE | ECHOCTL;
 
 		tty->termios.c_cc[VINTR] = '\003';
@@ -256,8 +256,8 @@ rtems_termios_open (
 		tty->termios.c_cc[VWERASE] = '\027';
 		tty->termios.c_cc[VLNEXT] = '\026';
 
-		/* setup flow control mode, clear flow control flags */
-		tty->flow_ctrl = FL_MDXON;
+		/* start with no flow control, clear flow control flags */
+		tty->flow_ctrl = 0;
 		/*
 		 * set low/highwater mark for XON/XOFF support
 		 */
