@@ -1,3 +1,8 @@
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* qsm.h, sim.h: Remove efi68k and efi332 references as they are no
+	longer in the tree.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkdir_p. Remove dirs from PREINSTALL_FILES.

@@ -24,8 +24,7 @@
  * Family System Integration Module Reference Manual" (Motorola document
  * SIMRM/AD). 
  *
- * This file has been created by John S. Gwynne for support of 
- * Motorola's 68332 MCU in the efi332 project.
+ * This file was created by John S. Gwynne to support Motorola's 68332 MCU.
  * 
  * Redistribution and use in source and binary forms are permitted
  * provided that the following conditions are met:
