@@ -897,27 +897,27 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-    unsigned32 tmp;
-    asm volatile ("EOR   %1, %0, %0, ROR #16\n"  \
-                  "BIC   %1, %1, #0xff0000\n"    \
-                  "MOV   %0, %0, ROR #8\n"       \
-                  "EOR   %0, %0, %1, LSR #8\n"   \
-                  : "=&r" (value), "=&r" (tmp)     \
-                  : "0" (value));
+    unsigned32 tmp = value; /* make compiler warnings go away */
+    asm volatile ("EOR   %1, %0, %0, ROR #16\n" 
+                  "BIC   %1, %1, #0xff0000\n"   
+                  "MOV   %0, %0, ROR #8\n"      
+                  "EOR   %0, %0, %1, LSR #8\n"  
+                  : "=r" (value), "=r" (tmp)  
+                  : "0" (value), "1" (tmp));
 
     return value;
 }
 
 static inline unsigned16 CPU_swap_u16(unsigned16 value)
 {
-    unsigned32 tmp = value;   /* make compiler warnings go away */
-    asm volatile ("MOV   %1, %0, LSR #8\n"       \
-                  "BIC   %0, %0, #0xff00\n"      \
-                  "MOV   %0, %0, LSL #8\n"       \
-                  "ORR   %0, %0, %1\n"           \
-                  : "=&r" (value), "=&r" (tmp)     \
-                  : "0" (value));
-    return value;
+    unsigned16 lower;
+    unsigned16 upper;
+
+    value = value & (unsigned16) 0xffff;
+    lower = (value >> 8) ;
+    upper = (value << 8) ;
+
+    return (lower | upper);
 }
 
 #ifdef __cplusplus

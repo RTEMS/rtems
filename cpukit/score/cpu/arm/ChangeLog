@@ -1,3 +1,7 @@
+2002-10-04	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* rtems/score/cpu.h: Fix u16 and u32 swap routines.
+
 2002-08-05	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h, rtems/score/types.h: Updated to fix some typos.
