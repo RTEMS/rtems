@@ -1,3 +1,16 @@
+2004-10-13      Eric Norum <norume@aps.anl.gov>
+
+        PR 688/bsps
+        * libchip/rtc/rtc.h, libchip/rtc/mc146818a.c, libchip/rtc/mc146818a.h,
+	libchip/rtc/mc146818a_ioreg.c: New files.  Add libchip driver for
+	MC146818A (and several Dallas Semiconductor) TOD chips.
+
+2004-10-13      Eric Norum <norume@aps.anl.gov>
+
+        PR 686/networking
+        * libchip/network/if_fxp.c: Fix lockup in if_fxp.c, add additional
+	device code.
+
 2004-10-11	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libchip/network/dec21140.c: include <rtems/pci.h>.
