@@ -43,41 +43,33 @@ void _CORE_mutex_Seize_interrupt_blocking(
   Thread_Control   *executing;
 
   executing = _Thread_Executing;
-  switch ( the_mutex->Attributes.discipline ) {
-    case CORE_MUTEX_DISCIPLINES_FIFO:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-      break;
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-      if ( the_mutex->holder->current_priority > executing->current_priority ) {
-        _Thread_Change_priority(
-          the_mutex->holder,
-          executing->current_priority,
-          FALSE
-        );
-      }
-      break;
+  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
+    if ( the_mutex->holder->current_priority > executing->current_priority ) {
+      _Thread_Change_priority(
+        the_mutex->holder,
+        executing->current_priority,
+        FALSE
+      );
+    }
   }
 
   the_mutex->blocked_count++;
   _Thread_queue_Enqueue( &the_mutex->Wait_queue, timeout );
 
   if ( _Thread_Executing->Wait.return_code == CORE_MUTEX_STATUS_SUCCESSFUL ) {
-    switch ( the_mutex->Attributes.discipline ) {
-      case CORE_MUTEX_DISCIPLINES_FIFO:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-        break;
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-        if ( the_mutex->Attributes.priority_ceiling <
-                                           executing->current_priority ) {
-          _Thread_Change_priority(
-            executing,
-            the_mutex->Attributes.priority_ceiling,
-            FALSE
-          );
-        };
-        break;
+    /*
+     *  if CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT then nothing to do
+     *  because this task is already the highest priority.
+     */
+
+    if ( _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+      if (the_mutex->Attributes.priority_ceiling < executing->current_priority){
+        _Thread_Change_priority(
+          executing,
+          the_mutex->Attributes.priority_ceiling,
+          FALSE
+        );
+      }
     }
   }
   _Thread_Enable_dispatch();
@@ -101,11 +93,13 @@ int _CORE_mutex_Seize_interrupt_trylock(
     the_mutex->holder     = executing;
     the_mutex->holder_id  = executing->Object.id;
     the_mutex->nest_count = 1;
-    executing->resource_count++;
-    if ( the_mutex->Attributes.discipline !=
-           CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING ) {
-        _ISR_Enable( level );
-        return 0;
+    if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
+         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
+      executing->resource_count++;
+
+    if ( !_CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+      _ISR_Enable( level );
+      return 0;
     }
     /* else must be CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING */
     {
@@ -139,6 +133,22 @@ int _CORE_mutex_Seize_interrupt_trylock(
     }
     return 0;
   }
+
+  if ( _Thread_Is_executing( the_mutex->holder ) ) {
+    switch ( the_mutex->Attributes.lock_nesting_behavior ) {
+      case CORE_MUTEX_NESTING_ACQUIRES:
+        the_mutex->nest_count++;
+        _ISR_Enable( level );
+        return 0;
+      case CORE_MUTEX_NESTING_IS_ERROR:
+        executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
+        _ISR_Enable( level );
+        return 0;
+      case CORE_MUTEX_NESTING_BLOCKS:
+        break;
+    }
+  }
+
   return 1;
 }
 #endif

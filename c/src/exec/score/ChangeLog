@@ -1,6 +1,19 @@
 
 2001-08-30	Joel Sherrill <joel@OARcorp.com>
 
+	*  src/coremutex.c, src/coremutexseize.c, src/coremutexsurrender.c,
+	inline/rtems/score/coremutex.inl: The per thread field resource_count
+	should only be manipulated when a mutex is priority ceiling or
+	priority inherit.  This was reported by Chris Johns <ccj@acm.org>
+	who also noticed that the use of switches for all disciplines
+	generated less efficient code than using explicit tests for the one
+	or two cases we were really interested in.  Further review of his
+	modifications made it apparent that the "isa" methods to test mutex
+	discipline were not being used so this modification was swept into
+	the code as well.
+
+2001-08-30	Joel Sherrill <joel@OARcorp.com>
+
 	* src/coremutexseize.c: Add missing code for proper handling
 	of nesting acquisitions.  This only impacts building with
 	inlines disabled on the source with the "fast mutex" optimizations.

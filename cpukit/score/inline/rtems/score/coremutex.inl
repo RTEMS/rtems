@@ -134,9 +134,10 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
     the_mutex->holder     = executing;
     the_mutex->holder_id  = executing->Object.id;
     the_mutex->nest_count = 1;
-    executing->resource_count++;
-    if ( the_mutex->Attributes.discipline !=
-           CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING ) {
+    if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
+         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
+      executing->resource_count++;
+    if ( !_CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
         _ISR_Enable( level );
         return 0;
     }
