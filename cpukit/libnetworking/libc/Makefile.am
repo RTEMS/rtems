@@ -15,10 +15,11 @@ C_FILES = addr2ascii.c ascii2addr.c base64.c gethostbydns.c gethostbyht.c \
     res_stubs.c res_update.c strsep.c rcmd.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../automake/multilib.am
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
+if HAS_NETWORKING
 man_MANS = addr2ascii.3 byteorder.3 ethers.3 gethostbyname.3 getnetent.3 \
     getprotoent.3 getservent.3 inet.3 iso_addr.3 linkaddr.3 ns.3 rcmd.3 \
     resolver.3
@@ -33,6 +34,7 @@ $(LIB): $(OBJS)
 	$(make-library)
 
 all-local: $(ARCH) $(LIB)
+endif
 
 .PRECIOUS: $(LIB)
 
@@ -50,4 +52,4 @@ EXTRA_DIST = addr2ascii.3 addr2ascii.c ascii2addr.c base64.c byteorder.3 \
     res_mkupdate.c res_query.c res_send.c res_stubs.c res_update.c \
     resolver.3 send.c strsep.c
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am

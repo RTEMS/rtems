@@ -59,7 +59,7 @@
 
 #ifdef __rtems__
 char machine[] = "SET ME";
-char osrelease[] = PACKAGE_VERSION;
+char osrelease[] = RTEMS_VERSION;
 char ostype[] = "RTEMS";
 #endif
 

@@ -4,9 +4,9 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-include $(top_srcdir)/../automake/multilib.am
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 # Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
 AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
@@ -17,6 +17,7 @@ LIB = $(ARCH)/libnetworking.a
 SUBDIRS = . lib libc
 SUBDIRS += wrapup
 
+if HAS_NETWORKING
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
 include_HEADERS = \
@@ -207,5 +208,7 @@ $(LIB): $(OBJS)
 
 all-local: $(PREINSTALL_FILES) $(ARCH) $(LIB)
 
-include $(top_srcdir)/../automake/subdirs.am
-include $(top_srcdir)/../automake/local.am
+endif
+
+include $(top_srcdir)/automake/subdirs.am
+include $(top_srcdir)/automake/local.am

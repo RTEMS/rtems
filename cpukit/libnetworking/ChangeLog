@@ -1,3 +1,10 @@
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove (Merged into ../configure.ac).
+	* Makefile.am, libc/Makefile.am, lib/Makefile.am, wrapup/Makefile.am: 
+	Reflect having merged configure.ac into ../configure.ac.
+	* kern/kern_mib.c: Use RTEMS_VERSION to setup osrelease.
+
 2003-05-29	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/rtems_syscall.c: Removed warnings.
