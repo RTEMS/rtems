@@ -89,7 +89,7 @@
 #define MC68681_PORT_B                                     1
 
 /* 
- *  DUART Command Register Definations: 
+ *  DUART Command Register Definitions: 
  *
  *  MC68681_COMMAND_REG_A,MC68681_COMMAND_REG_B       
  */
@@ -112,7 +112,7 @@
 #define MC68681_MODE_REG_SET_ACTIVE                         0xd0
 
 /*
- * Mode Register Definations
+ * Mode Register Definitions
  *
  *  MC68681_MODE_REG_1A 
  *  MC68681_MODE_REG_1B 
@@ -141,7 +141,7 @@
 
 
 /*
- * Mode Register Definations
+ * Mode Register Definitions
  *
  *  MC68681_MODE_REG_2A
  *  MC68681_MODE_REG_2B
@@ -172,7 +172,7 @@
 #define MC68681_CHANNEL_MODE_REMOTE_LOOP                    0xc0
 
 /*
- * Status Register Definations
+ * Status Register Definitions
  *
  *    MC68681_STATUS_REG_A,  MC68681_STATUS_REG_B
  */
@@ -187,14 +187,14 @@
 
 
 /* 
- * Interupt Status Register Definations.  
+ * Interupt Status Register Definitions.  
  *
  * MC68681_INTERRUPT_STATUS_REG          
  */
 
 
 /* 
- *  Interupt Mask Register Definations     
+ *  Interupt Mask Register Definitions     
  *
  *  MC68681_INTERRUPT_MASK_REG 
  */
@@ -208,7 +208,7 @@
 #define MC68681_IR_INPUT_PORT_CHANGE                        0x80
 
 /* 
- * Status Register Definations.  
+ * Status Register Definitions.  
  * 
  * MC68681_STATUS_REG_A,MC68681_STATUS_REG_B          
  */
@@ -222,14 +222,14 @@
 #define MC68681_STATUS_RECEIVED_BREAK                       0x80
 
 /* 
- * Definations for the Interrupt Vector Register: 
+ * Definitions for the Interrupt Vector Register: 
  *
  * MC68681_INTERRUPT_VECTOR_REG  
  */
 #define  MC68681_INTERRUPT_VECTOR_INIT                      0x0f
 
 /* 
- * Definations for the Auxiliary Control Register  
+ * Definitions for the Auxiliary Control Register  
  *
  * MC68681_AUX_CTRL_REG 
  */
@@ -245,7 +245,7 @@
  */
 
 /* 
- * Definations for the Clock Select Register: 
+ * Definitions for the Clock Select Register: 
  *
  * MC68681_CLOCK_SELECT_REG_A,MC68681_CLOCK_SELECT_REG_A 
  * 
