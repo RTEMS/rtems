@@ -1,0 +1,10 @@
+2004-07-15	Jay Monkman
+
+	* ChangeLog, Makefile.am, clock/.cvsignore, clock/clock.c,
+	dbgu/.cvsignore, dbgu/dbgu.c, include/at91rm9200.h,
+	include/at91rm9200_dbgu.h, include/at91rm9200_emac.h,
+	include/at91rm9200_gpio.h, include/at91rm9200_mem.h,
+	include/at91rm9200_pmc.h, include/bits.h, irq/.cvsignore,
+	irq/bsp_irq_asm.S, irq/bsp_irq_init.c, irq/irq.c, irq/irq.h,
+	pmc/pmc.c, timer/.cvsignore, timer/timer.c: New files.
+
