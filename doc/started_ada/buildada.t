@@ -56,7 +56,8 @@ specific patches.
     Directory:   @value{GCC-FTPDIR}
     File:        @value{GCC-TAR}
 @ifset use-html
-    URL:         @uref{ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR},Download @value{GCC-VERSION}}
+@c    URL:         @uref{ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR},Download @value{GCC-VERSION}}
+    URL:         ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR}
 @end ifset
 @end example
 
@@ -66,7 +67,8 @@ specific patches.
     Directory:   @value{GNAT-FTPDIR}
     File:        @value{GNAT-TAR}
 @ifset use-html
-    URL:         @uref{ ftp://@value{GNAT-FTPSITE}@value{GNAT-FTPDIR}/@value{GNAT-TAR}, Download @value{GNAT-VERSION}}
+@c    URL:         @uref{ ftp://@value{GNAT-FTPSITE}@value{GNAT-FTPDIR}/@value{GNAT-TAR}, Download @value{GNAT-VERSION}}
+    URL:         ftp://@value{GNAT-FTPSITE}@value{GNAT-FTPDIR}/@value{GNAT-TAR}
 @end ifset
 @end example
 
@@ -76,7 +78,8 @@ specific patches.
     Directory:   @value{BINUTILS-FTPDIR}
     File:        @value{BINUTILS-TAR}
 @ifset use-html
-    URL:         @uref{ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}, Download @value{BINUTILS-VERSION}}
+@c    URL:         @uref{ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}, Download @value{BINUTILS-VERSION}}
+    URL:         ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}
 @end ifset
 @end example
 
@@ -86,7 +89,8 @@ specific patches.
     Directory:   @value{NEWLIB-FTPDIR}
     File:        @value{NEWLIB-TAR}
 @ifset use-html
-    URL:         @uref{ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}, Download @value{NEWLIB-VERSION}}
+@c    URL:         @uref{ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}, Download @value{NEWLIB-VERSION}}
+    URL:         ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}
 @end ifset
 @end example
 
@@ -96,7 +100,8 @@ specific patches.
     Directory:   @value{RTEMS-FTPDIR}
     File:        @value{RTEMS-TAR}
 @ifset use-html
-    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}, Download RTEMS components}
+@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}, Download RTEMS components}
+    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}
 @end ifset
 @end example
 
@@ -106,7 +111,8 @@ specific patches.
     Directory:   @value{RTEMS-FTPDIR}
     File:        hello_world_ada.tgz
 @ifset use-html
-    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/hello_world_ada.tgz, Download RTEMS Hello World}
+@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/hello_world_ada.tgz, Download RTEMS Hello World}
+    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/hello_world_ada.tgz
 @end ifset       
 @end example
 
@@ -128,7 +134,8 @@ specific patches.
     File:        @value{GNAT-RTEMSPATCH}
 @end ifset
 @ifset use-html
-    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools, Download RTEMS patches}
+@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools, Download RTEMS patches}
+    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools
 @end ifset
 @end example
 
@@ -397,8 +404,6 @@ cd tools/@value{GNAT-UNTAR}/src
 cp -r ada ../../@value{GCC-UNTAR}
 @end example
 
-
-===================================================================
 
 @c
 @c  Localizing the Configuration
