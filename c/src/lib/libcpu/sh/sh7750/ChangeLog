@@ -1,21 +1,17 @@
 2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Require automake 1.8.2.
-	Add subdir-objects to AUTOMAKE_OPTIONS.
-	Add AM_PROG_CC_C_0.
+	* configure.ac: Require automake 1.8.2. Add subdir-objects to
+	AUTOMAKE_OPTIONS. Add AM_PROG_CC_C_0.
 	* Makefile.am: Use automake compilation rules.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
-	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -45,9 +41,6 @@
 	include/rtems/score/sh4_regs.h, include/rtems/score/sh7750_regs.h,
 	include/sh/sh4uart.h, sci/console.c, sci/sh4uart.c, score/cpu_asm.c,
 	score/ispsh7750.c, timer/timer.c: URL for license changed.
-
-2003-09-04	Joel Sherrill <joel@OARcorp.com>
-
 	* score/cpu_asm.c: Removed incorrect statement about copyright
 	assignment.
 
@@ -67,36 +60,26 @@
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
 
-2003-02-11	Joel Sherrill <joel@OARcorp.com>
-
-	* score/cpu_asm.c: Rework logic that decides when to call
-	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru>
-	determined that _ISR_Signals_to_thread_executing was not being
-	honored and/or cleared properly.
-
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
+
+2003-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* score/cpu_asm.c: Rework logic that decides when to call
+	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru> determined
+	that _ISR_Signals_to_thread_executing was not being honored and/or
+	cleared properly.
 
 2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Merge-in subdir Makefile.ams
+	* Makefile.am: Merge-in subdir Makefile.ams.
 	* configure.ac: Reflect changes above.
 	* score/Makefile.am: Removed.
 	* sci/Makefile.am: Removed.
 	* timer/Makefile.am: Removed.
 	* clock/Makefile.am: Removed.
-
-2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* clock/Makefile.am: Eliminate @RTEMS_BSP@.cfg, $(C_O_FILES).
-	* sci/Makefile.am: Likewise.
-	* score/Makefile.am: Likewise.
-	* timer/Makefile.am: Likewise.
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -114,27 +97,18 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* sci/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* score/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* timer/Makefile.am: Use .$(OBJEXT) instead of .o.
-
-2001-04-03	Joel Sherrill <joel@OARcorp.com>
-
-	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
-	* include/rtems/score/ispsh7750.h, score/ispsh7750.c: Account for
-	name change.
+	* sci/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* score/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* timer/Makefile.am: Use .$(OBJEXT) instead of .o.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
@@ -143,10 +117,17 @@
 	* score/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* timer/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
+2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am: Eliminate @RTEMS_BSP@.cfg, $(C_O_FILES).
+	* sci/Makefile.am: Likewise.
+	* score/Makefile.am: Likewise.
+	* timer/Makefile.am: Likewise.
+
 2001-10-28	Alexandra Kossovsky <sasha@oktet.ru>
 
-	* include/rtems/score/sh7750_regs.h: Fix definitions of 
-	SH7750_SCBRR1 and SH7750_SCBRR2 so things compile.
+	* include/rtems/score/sh7750_regs.h: Fix definitions of  SH7750_SCBRR1
+	and SH7750_SCBRR2 so things compile.
 
 2001-10-26	Alexandra Kossovsky <sasha@oktet.ru>
 
@@ -159,19 +140,19 @@
 	* include/iosh7750.h: move include/rtems/score/iosh7750.h.
 	* include/sh7750_regs.h: move to include/rtems/score/sh7750_regs.h.
 	* include/rtems/score/ipl.h: move to include/rtems/score/ipl.h.
-	* include/rtems/score/sh4_regs.h: Reintroduce from Alexandra
-	Kossovsky's original sources.
-	* include/Makefile.am: reflect changes above, remove EXTRA_DIST,
-	require automake 1.5.
+	* include/rtems/score/sh4_regs.h: Reintroduce from Alexandra Kossovsky's
+	original sources.
+	* include/Makefile.am: reflect changes above, remove EXTRA_DIST, require
+	automake 1.5.
 	* sci/Makefile.am: Disable compilation of console.c.
-	* sci/sh4uart.c: include <sh/sh4uart.h>, add SH7750_SCSMR_CHK_S,
-	remove SH4_CPU_HZ_Frequency;
+	* sci/sh4uart.c: include <sh/sh4uart.h>, add SH7750_SCSMR_CHK_S, remove
+	SH4_CPU_HZ_Frequency.
 	* score/isph7750.c: Remove #if !defined(sh7750), include sh4_regs.h.
 
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
-	* include/sh4_regs.h: Deleted and contents merged in score/cpu
-	to avoid dependencies.
+	* include/sh4_regs.h: Deleted and contents merged in score/cpu to avoid
+	dependencies.
 	* include/Makefile.am: Reflects above.
 
 2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
@@ -181,9 +162,14 @@
 	include/ispsh7750.h, include/sh4_regs.h, include/sh4uart.h,
 	include/sh7750_regs.h, include/.cvsignore, sci/Makefile.am,
 	sci/console.c, sci/sh4uart.c, sci/.cvsignore, score/Makefile.am,
-	score/cpu_asm.c, score/ispsh7750.c, score/.cvsignore,
-	timer/Makefile.am, timer/timer.c, timer/.cvsignore, configure.ac,
-	.cvsignore, ChangeLog:  New files.  
-	Reviewed and updated to latest automake and autoconf standards
-	by Ralf Corsepius <corsepiu@faw.uni-ulm.de>.
+	score/cpu_asm.c, score/ispsh7750.c, score/.cvsignore, timer/Makefile.am,
+	timer/timer.c, timer/.cvsignore, configure.ac, .cvsignore, ChangeLog: 
+	New files.   Reviewed and updated to latest automake and autoconf
+	standards by Ralf Corsepius <corsepiu@faw.uni-ulm.de>.
+
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* include/rtems/score/ispsh7750.h, score/ispsh7750.c: Account for name
+	change.
 

@@ -2,14 +2,12 @@
 
 	* Makefile.am: Unconditionally build subdirs sh7032, sh7045, sh7750.
 	* configure.ac: Merge-in sh7032/configure.ac, sh7045/configure.ac,
-	sh7750/configure.ac.
-	Add AM_CONDITIONALS sh7032, sh7045, sh7750.
-	* sh7032/Makefile.am, sh7045/Makefile.am, sh7750/Makefile.am: 
-	Reflect changes above. Add PREINSTALL_DIRS.
-	* sh7032/configure.ac, sh7045/configure.ac, sh7750/configure.ac:
-	Remove.
-	* sh7032/.cvsignore, sh7045/.cvsignore, sh7750/.cvsignore: 
-	Reflect changes above.
+	sh7750/configure.ac. Add AM_CONDITIONALS sh7032, sh7045, sh7750.
+	* sh7032/Makefile.am, sh7045/Makefile.am, sh7750/Makefile.am:  Reflect
+	changes above. Add PREINSTALL_DIRS.
+	* sh7032/configure.ac, sh7045/configure.ac, sh7750/configure.ac: Remove.
+	* sh7032/.cvsignore, sh7045/.cvsignore, sh7750/.cvsignore:  Reflect
+	changes above.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -42,9 +40,6 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -54,21 +49,15 @@
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* sh7045/score/ispsh7045.c: Fixed typos.
-
-2002-11-01	Joel Sherrill <joel@OARcorp.com>
-
 	* sh7045/score/cpu_asm.c: Fixed typo.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 
@@ -84,8 +73,7 @@
 
 2001-10-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: AC_PREREQ(2.52), Adapt CONFIG_SUBDIRS to
-	autoconf-2.52.
+	* configure.in: AC_PREREQ(2.52), Adapt CONFIG_SUBDIRS to autoconf-2.52.
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -97,9 +85,10 @@
 
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
+	canonicalization.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+

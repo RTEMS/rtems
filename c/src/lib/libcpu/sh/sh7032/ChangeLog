@@ -1,21 +1,17 @@
 2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Require automake 1.8.2.
-	Add subdir-objects to AUTOMAKE_OPTIONS.
-	Add AM_PROG_CC_C_0.
+	* configure.ac: Require automake 1.8.2. Add subdir-objects to
+	AUTOMAKE_OPTIONS. Add AM_PROG_CC_C_0.
 	* Makefile.am: Use automake compilation rules.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
-	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -44,9 +40,6 @@
 	include/ispsh7032.h, include/sci.h, include/sh7_pfc.h,
 	include/sh7_sci.h, sci/sci.c, score/cpu_asm.c, score/ispsh7032.c,
 	timer/timer.c: URL for license changed.
-
-2003-09-04	Joel Sherrill <joel@OARcorp.com>
-
 	* score/cpu_asm.c: Removed incorrect statement about copyright
 	assignment.
 
@@ -70,24 +63,21 @@
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
 
-2003-02-11	Joel Sherrill <joel@OARcorp.com>
-
-	* score/cpu_asm.c: Rework logic that decides when to call
-	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru>
-	determined that _ISR_Signals_to_thread_executing was not being
-	honored and/or cleared properly.
-
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
+
+2003-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* score/cpu_asm.c: Rework logic that decides when to call
+	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru> determined
+	that _ISR_Signals_to_thread_executing was not being honored and/or
+	cleared properly.
 
 2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Merge-in subdir Makefile.ams
+	* Makefile.am: Merge-in subdir Makefile.ams.
 	* configure.ac: Reflect changes above.
 	* score/Makefile.am: Removed.
 	* sci/Makefile.am: Removed.
@@ -97,8 +87,7 @@
 
 2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* clock/Makefile.am: Eliminate *_O_FILES.
-	Don't include @RTEMS_BSP@.cfg.
+	* clock/Makefile.am: Eliminate *_O_FILES. Don't include @RTEMS_BSP@.cfg.
 	* delay/Makefile.am: Ditto.
 	* sci/Makefile.am: Ditto.
 	* score/Makefile.am: Ditto.
@@ -120,31 +109,23 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* delay/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* sci/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* score/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* delay/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sci/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* score/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* timer/Makefile.am: Use .$(OBJEXT) instead of .o.
 
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* score/cpu_asm.c: Adapt inline asm to gcc-3.0.4.
 
-2001-04-03	Joel Sherrill <joel@OARcorp.com>
-
-	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
-	* include/ispsh7032.h, score/ispsh7032.c: Account for name change.
-
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
@@ -164,6 +145,7 @@
 	include/ispsh7032.h, include/sci.h, include/sh7_pfc.h,
 	include/sh7_sci.h, sci/sci.c, score/cpu_asm.c, score/ispsh7032.c,
 	timer/timer.c: Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
@@ -173,6 +155,11 @@
 2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Use 'TMPINSTALL_FILES ='.
+
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* include/ispsh7032.h, score/ispsh7032.c: Account for name change.
 
 2001-02-18	Ralf Corsepiu <corsepius@faw.uni-ulm.de>
 
@@ -197,15 +184,16 @@
 
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
+	canonicalization.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am, delay/Makefile.am, null/Makefile.am,
 	sci/Makefile.am, timer/Makefile.am, score/Makefile.am: Include
-	compile.am
+	compile.am.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+
