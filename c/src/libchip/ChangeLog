@@ -5,15 +5,12 @@
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Fix typo in previous patch.
-
-2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* Makefile.am: Use automake compilation rules.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
-	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -23,9 +20,9 @@
 
 	* shmdr/addlq.c, shmdr/cnvpkt.c, shmdr/dump.c, shmdr/fatal.c,
 	shmdr/getlq.c, shmdr/getpkt.c, shmdr/init.c, shmdr/initlq.c,
-	shmdr/intr.c, shmdr/mpci.h, shmdr/mpisr.c, shmdr/poll.c,
-	shmdr/README, shmdr/receive.c, shmdr/retpkt.c, shmdr/send.c,
-	shmdr/setckvec.c, shmdr/shm_driver.h: Copied from libbsp/shmdr.
+	shmdr/intr.c, shmdr/mpci.h, shmdr/mpisr.c, shmdr/poll.c, shmdr/README,
+	shmdr/receive.c, shmdr/retpkt.c, shmdr/send.c, shmdr/setckvec.c,
+	shmdr/shm_driver.h: Copied from libbsp/shmdr.
 
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -43,11 +40,8 @@
 
 	* ide/Makefile.am, network/Makefile.am, rtc/Makefile.am, 
 	serial/Makefile.am: Remove.
-	* Makefile.am: Merge-in Makefile.am above.
-	Add preinstallation + compilation dirstamp support.
-
-2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* Makefile.am: Merge-in Makefile.am above. Add preinstallation +
+	compilation dirstamp support.
 	* ide/Makefile.am: Remove all-local: $(ARCH).
 	* network/Makefile.am: Remove all-local: $(ARCH).
 	* rtc/Makefile.am: Remove all-local: $(ARCH).
@@ -56,9 +50,7 @@
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ide/Makefile.am: Use dirstamps for preinstallation. Reformat.
-	* network/Makefile.am: Ditto.
-	* rtc/Makefile.am: Ditto.
-	* serial/Makefile.am: Ditto.
+	* network/Makefile.am, rtc/Makefile.am, serial/Makefile.am: Ditto.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -67,36 +59,34 @@
 2003-09-26	Cedric Aubert <cedric_aubert@yahoo.fr>
 
 	PR 499/rtems_misc
-	* serial/mc68681.c:  Miscellaneous corrections:
-	    - Correction of ACR_BIT[7] (Baudrate table) Configuration
-	    - Correction of Parity Bit Configuration (Odd was forced)
-	    - Correction of Stop Bit configuration (inversed)
-	    - Correction of ISR Handler to call 
-  	      rtems_termios_dequeue_character() only if is a Tx Empty IRQ.
-	    - Add RTS CTS Hardware flow control Configuration
+	* serial/mc68681.c:  Miscellaneous corrections: - Correction of
+	ACR_BIT[7] (Baudrate table) Configuration - Correction of Parity Bit
+	Configuration (Odd was forced) - Correction of Stop Bit configuration
+	(inversed) - Correction of ISR Handler to call 
+	rtems_termios_dequeue_character() only if is a Tx Empty IRQ. - Add RTS
+	CTS Hardware flow control Configuration.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* ide/ata.c, ide/ata.h, ide/ata_internal.h, ide/ide_controller.c,
-	ide/ide_ctrl.h, ide/ide_ctrl_cfg.h, ide/ide_ctrl_io.h,
-	network/cs8900.c, network/cs8900.c.bsp, network/cs8900.h,
-	network/dec21140.c, network/elnk.c, network/open_eth.c,
-	network/sonic.c, network/sonic.h, rtc/icm7170.c, rtc/icm7170.h,
-	rtc/icm7170_reg.c, rtc/icm7170_reg2.c, rtc/icm7170_reg4.c,
-	rtc/icm7170_reg8.c, rtc/m48t08.c, rtc/m48t08.h, rtc/m48t08_reg.c,
-	rtc/m48t08_reg2.c, rtc/m48t08_reg4.c, rtc/m48t08_reg8.c, rtc/rtc.h,
-	rtc/rtcprobe.c, serial/mc68681.c, serial/mc68681.h,
-	serial/mc68681_p.h, serial/mc68681_reg.c, serial/mc68681_reg2.c,
-	serial/mc68681_reg4.c, serial/mc68681_reg8.c, serial/serial.h,
-	serial/z85c30.c, serial/z85c30.h, serial/z85c30_p.h,
+	ide/ide_ctrl.h, ide/ide_ctrl_cfg.h, ide/ide_ctrl_io.h, network/cs8900.c,
+	network/cs8900.c.bsp, network/cs8900.h, network/dec21140.c,
+	network/elnk.c, network/open_eth.c, network/sonic.c, network/sonic.h,
+	rtc/icm7170.c, rtc/icm7170.h, rtc/icm7170_reg.c, rtc/icm7170_reg2.c,
+	rtc/icm7170_reg4.c, rtc/icm7170_reg8.c, rtc/m48t08.c, rtc/m48t08.h,
+	rtc/m48t08_reg.c, rtc/m48t08_reg2.c, rtc/m48t08_reg4.c,
+	rtc/m48t08_reg8.c, rtc/rtc.h, rtc/rtcprobe.c, serial/mc68681.c,
+	serial/mc68681.h, serial/mc68681_p.h, serial/mc68681_reg.c,
+	serial/mc68681_reg2.c, serial/mc68681_reg4.c, serial/mc68681_reg8.c,
+	serial/serial.h, serial/z85c30.c, serial/z85c30.h, serial/z85c30_p.h,
 	serial/z85c30_reg.c: URL for license changed.
 
 2003-09-03	Jiri Gaisler <jiri@gaisler.com>
 
 	PR 477/networking
 	* network/Makefile.am: Add driver for OpenCores NIC.
-	* network/README.open_eth, network/open_eth.c, network/open_eth.h:
-	New files.
+	* network/README.open_eth, network/open_eth.c, network/open_eth.h: New
+	files.
 
 2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -117,40 +107,33 @@
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ide/Makefile.am, network/Makefile.am, rtc/Makefile.am, 
-	serial/Makefile.am: Add conditional LIBCHIP.
-	Conditionally build include-dirs.
-
-2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	serial/Makefile.am: Add conditional LIBCHIP. Conditionally build
+	include-dirs.
 	* network/if_fxp.c: Replace deprecated b* funcs by mem* funcs.
 
-2003-07-18      Greg Menke <gregory.menke@gsfc.nasa.gov>
+2003-07-18	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	PR 429/bsps
 	PR 432/bsps
-	* network/elnk.c: Due to a bug in the driver, if multiple packets
-	are queued onto an elnk board, the ISR will deadlock the device with
-	a tx complete interrupt.  Lighter tx loads are not affected as they
-	end up submitting single packets to the device.
+	* network/elnk.c: Due to a bug in the driver, if multiple packets are
+	queued onto an elnk board, the ISR will deadlock the device with a tx
+	complete interrupt.  Lighter tx loads are not affected as they end up
+	submitting single packets to the device.
 
 2003-07-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove (Merged into ../configure.ac).
-	* Makefile.am, ide/Makefile.am, network/Makefile.am,
-	rtc/Makefile.am, serial/Makefile.am:
-	Reflect having merged configure.ac into ../configure.ac
+	* Makefile.am, ide/Makefile.am, network/Makefile.am, rtc/Makefile.am,
+	serial/Makefile.am: Reflect having merged configure.ac into
+	../configure.ac.
 
 2003-06-30	Greg Menke <gregory.menke@gsfc.nasa.gov>
-
 
 	* network/dec21140.c, network/elnk.c: Update to compile on i386.
 
 2003-06-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* network/README.3com: New file missed in previous commit.
-
-2003-06-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
-
 	PR 405/bsps
 	PR 393/networking
 	* network/dec21140.c: Fix leak also known as PR393.
@@ -166,15 +149,15 @@
 2003-03-27	Joel Sherrill <joel@OARcorp.com>
 
 	* ide/Makefile.am: ATA code depends upon libchip/ide which is not
-	allowed in the cpukit source code since it must be buildable
-	independent of any BSP. These files were moved to libchip/ide.
+	allowed in the cpukit source code since it must be buildable independent
+	of any BSP. These files were moved to libchip/ide.
 	* ide/ata.c, ide/ata.h, ide/ata_internal.h: New files.
 
 2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 368/filesystems
-	* ide/Makefile.am, ide/ide_ctrl_cfg.h: General improvements which
-	now work on pc386 and mbx8xx.
+	* ide/Makefile.am, ide/ide_ctrl_cfg.h: General improvements which now
+	work on pc386 and mbx8xx.
 	* ide/ide_controller.c: New file.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -185,36 +168,32 @@
 
 	PR 354/networking
 	* network/if_fxp.c (Intel eepro network driver): re-enabled the chip
-	against a table of supported chips. The untested
-	ones are still commented out, however.
+	against a table of supported chips. The untested ones are still
+	commented out, however.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* network/Makefile.am: Eliminate C_O_FILES.
 	* rtc/Makefile.am: Ditto.
-	* serial/Makefile.am: Ditto,
+	* serial/Makefile.am: Ditto.
 
 2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* serial/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	Don't use LIBC_DEFINES.
-	* rtc/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	Don't use LIBC_DEFINES.
-	* network/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	Don't use LIBC_DEFINES.
+	* serial/Makefile.am: Don't include @RTEMS_BSP@.cfg. Don't use
+	LIBC_DEFINES.
+	* rtc/Makefile.am: Don't include @RTEMS_BSP@.cfg. Don't use LIBC_DEFINES.
+	* network/Makefile.am: Don't include @RTEMS_BSP@.cfg. Don't use
+	LIBC_DEFINES.
 
 2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
 
-	* network/cs8900.c: I don't know why we have to SelfST register
-	twice on the EDB7312, but it doesn't work on the EDB7312 if we don't. 
+	* network/cs8900.c: I don't know why we have to SelfST register twice on
+	the EDB7312, but it doesn't work on the EDB7312 if we don't.
 
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
@@ -222,15 +201,13 @@
 
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
-	* New files: New directory ide/, ide/Makefile.am, ide/ide_ctrl_cfg.h,
-	ide/ide_ctrl_io.h, ide/ide_ctrl.h:
+	* ide/Makefile.am, ide/ide_ctrl_cfg.h, ide/ide_ctrl_io.h,
+	ide/ide_ctrl.h: New files.
 	* configure.ac, Makefile.am: Modified to reflect changes above.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -239,17 +216,17 @@
 2002-09-07	Chris Johns <ccj@acm.org>
 
 	* network/Makefile.am, network/README.cs8900, network/cs8900.c,
-	network/cs8900.h: Significant update which corrects the problem 
-	where the cs8900.c file was actually the BSP glue.  Joel did
-	some hacking so this file will compile.  Previously it required
-	providing a target.h file to compile.
+	network/cs8900.h: Significant update which corrects the problem  where
+	the cs8900.c file was actually the BSP glue.  Joel did some hacking so
+	this file will compile.  Previously it required providing a target.h
+	file to compile.
 	* network/cs8900.c.bsp: New file.
 
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* network/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* rtc/Makefile.am: Use .$(OBJEXT) instead of .o.
- 	* serial/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* rtc/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* serial/Makefile.am: Use .$(OBJEXT) instead of .o.
 
 2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -263,40 +240,23 @@
 	network/pci.h: New file.
 	* network/Makefile.am: Modified to reflect above.
 
-2001-05-14	Till Straumann <strauman@slac.stanford.edu>
-
-	* bootloader/Makefile.am, console/Makefile.am, pci/Makefile.am:
-	Per PR215 address the following issues:
-	    - _IO_BASE, _ISA_MEM_BASE and PCI_DRAM_OFFSET
-	      are no longer defined by libcpu (powerpc/shared/include/io.h)
-	      but by the BSP (who is the only one to know the values)
-	    - the affected BSP (shared/motorola) headers have been fixed
-	      in a separate "libbsp/powerpc/shared" patch.
-	    - the DEC 21140 driver (libchip/network/dec21140.c) has been
-	      fixed to use PCI_DRAM_OFFSET instead of PREP_PCI_DRAM_OFFSET.
-	      and PCI_MEM_BASE instead of PREP_ISA_MEM_BASE. PCI_MEM_BASE
-	      is to be defined by the BSP who is using this driver.
-	    - the DEC driver also has been fixed to use the newer
-	      rtems_bsp_delay_in_bus_cycles() instead of the obsolete
-	      delay_in_bus_cycles().
-
 2002-05-07	Chris Johns <ccj@acm.org>
 
-	* c/src/libchip/network/i82586.c: Per PR210, adjust the mbuf
-	lengths to remove the ethernet header as the FreeBSD (RTEMS)
-	stack requires it to be stripped.
+	* c/src/libchip/network/i82586.c: Per PR210, adjust the mbuf lengths to
+	remove the ethernet header as the FreeBSD (RTEMS) stack requires it to
+	be stripped.
 
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* network/dec21140.c: Reflect changes to powerpc's
-	rtems/score/cpu.h. Use __PPC__ for gcc-3.x compliance.
+	* network/dec21140.c: Reflect changes to powerpc's rtems/score/cpu.h.
+	Use __PPC__ for gcc-3.x compliance.
 
 2002-04-11	Chris Johns <ccj@acm.org>
 
 	* network/rtems_bsdnet.h: To address PR59, added the drv_ctrl driver
-	control block field to the ifconfig network driver structure. This
-	field is needed by the i82586 driver which was ported from NetBSD
-	as it had better hardware abstraction.
+	control block field to the ifconfig network driver structure. This field
+	is needed by the i82586 driver which was ported from NetBSD as it had
+	better hardware abstraction.
 
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -309,8 +269,7 @@
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* network/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
@@ -348,16 +307,30 @@
 2001-09-21	Joel Sherrill <joel@OARcorp.com>
 
 	* network/Makefile.am: Fixed typo on file name.
-	* network/i82586.c: Commented out line 318 which is referencing 
-	a member of a structure that is not currently there.  This
-	needs to be worked out with Chris Johns <ccj@acm.org>.
-	Switched C++ style comments to C style.
+	* network/i82586.c: Commented out line 318 which is referencing  a
+	member of a structure that is not currently there.  This needs to be
+	worked out with Chris Johns <ccj@acm.org>. Switched C++ style comments
+	to C style.
 
 2001-09-19	Chris Johns <ccj@acm.org>
 
 	* network/README.i82586, network/i82586.c, network/i82586reg.h,
-	network/i82586var.h: New files.  Network driver for Intel
-	i82586.
+	network/i82586var.h: New files.  Network driver for Intel i82586.
+
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* bootloader/Makefile.am, console/Makefile.am, pci/Makefile.am: Per
+	PR215 address the following issues: - _IO_BASE, _ISA_MEM_BASE and
+	PCI_DRAM_OFFSET are no longer defined by libcpu
+	(powerpc/shared/include/io.h) but by the BSP (who is the only one to
+	know the values) - the affected BSP (shared/motorola) headers have been
+	fixed in a separate "libbsp/powerpc/shared" patch. - the DEC 21140
+	driver (libchip/network/dec21140.c) has been fixed to use
+	PCI_DRAM_OFFSET instead of PREP_PCI_DRAM_OFFSET. and PCI_MEM_BASE
+	instead of PREP_ISA_MEM_BASE. PCI_MEM_BASE is to be defined by the BSP
+	who is using this driver. - the DEC driver also has been fixed to use
+	the newer rtems_bsp_delay_in_bus_cycles() instead of the obsolete
+	delay_in_bus_cycles().
 
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -366,9 +339,9 @@
 2001-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* serial/Makefile.am, serial/mc68681.c, serial/ns16550.c,
-	serial/serprobe.c, serial/z85c30.c: Now install sersupp.h
-	to <libchip/sersupp.h> so libchip style serial drivers can
-	be written in libcpu or libbsp.
+	serial/serprobe.c, serial/z85c30.c: Now install sersupp.h to
+	<libchip/sersupp.h> so libchip style serial drivers can be written in
+	libcpu or libbsp.
 
 2001-03-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -382,15 +355,15 @@
 
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* network/Makefile.am, rtc/Makefile.am, serial/Makefile.am: 
-	Apply include_*HEADERS instead of H_FILES, replace ${..} with $(..). 
+	* network/Makefile.am, rtc/Makefile.am, serial/Makefile.am:  Apply
+	include_*HEADERS instead of H_FILES, replace ${..} with $(..).
 
 2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
-	* network/sonic.c: Added ipalign() routine to align the
-	received packet so that the ip header is on a 32-bit boundary.
-	Necessary for cpu's that do not allow unaligned loads and stores
-	and when the 32-bit DMA mode is used.
+	* network/sonic.c: Added ipalign() routine to align the received packet
+	so that the ip header is on a 32-bit boundary. Necessary for cpu's that
+	do not allow unaligned loads and stores and when the 32-bit DMA mode is
+	used.
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -406,24 +379,24 @@
 
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-	Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
+	canonicalization.
 
 2000-10-20	Joel Sherrill <joel@OARcorp.com>
 
-	* network/dec21140.c: Corrected attach to include "int attach"
-	parameter.
+	* network/dec21140.c: Corrected attach to include "int attach" parameter.
 
 2000-09-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* network/Makefile.am: Use AM_*FLAGS += .. .
+	* network/Makefile.am: Use AM_*FLAGS += ...
 	* ChangeLog: Fix formating.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* network/Makefile.am, rtc/Makefile.am, serial/Makefile.am:
-	Include compile.am.
+	* network/Makefile.am, rtc/Makefile.am, serial/Makefile.am: Include
+	compile.am.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+
