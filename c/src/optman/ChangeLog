@@ -1,0 +1,7 @@
+2002-01-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: New.
+	* configure.ac: New.
+	* Makefile.am: New.
+	* rtems/*: Copied from c/src/exec/rtems/optman.
+	* sapi/*: Copied from c/src/exec/sapi/optman.
