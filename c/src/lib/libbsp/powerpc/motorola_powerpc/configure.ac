@@ -48,8 +48,7 @@ AC_DEFINE_UNQUOTED([USE_ENHANCED_INTR_API],[1],
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-bootloader/Makefile
-wrapup/Makefile])
+bootloader/Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])
 

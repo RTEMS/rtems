@@ -4,10 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -75,6 +71,12 @@ noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = vectors/vectors.S
 vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel tod.rel \
+    vectors.rel PCI_bus.rel
+libbsp_a_LIBADD += ../../../@RTEMS_CPU@/@exceptions@/rtems-cpu.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

@@ -4,10 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -72,6 +68,25 @@ network_rel_SOURCES = network/network.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+
+libbsp_a_LIBADD = pclock.rel irq.rel ide.rel startup.rel console.rel \
+    vectors.rel
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+endif
+
+libbsp_a_LIBADD += ../../../libcpu/powerpc/shared/cpuIdent.rel \
+    ../../../libcpu/powerpc/shared/cache.rel \
+    ../../../libcpu/powerpc/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/powerpc/mpc8xx/clock.rel \
+    ../../../libcpu/powerpc/mpc8xx/console-generic.rel \
+    ../../../libcpu/powerpc/mpc8xx/cpm.rel \
+    ../../../libcpu/powerpc/mpc8xx/mmu.rel \
+    ../../../libcpu/powerpc/mpc8xx/timer.rel \
+    ../../../libcpu/powerpc/mpc8xx/exceptions.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

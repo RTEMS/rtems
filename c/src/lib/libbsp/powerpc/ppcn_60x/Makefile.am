@@ -4,10 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -94,6 +90,15 @@ network_rel_SOURCES = network/amd79c970.c network/amd79c970.h
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel tod.rel \
+    nvram.rel universe.rel pci.rel vectors.rel
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+endif
+libbsp_a_LIBADD += ../../../@RTEMS_CPU@/@exceptions@/rtems-cpu.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

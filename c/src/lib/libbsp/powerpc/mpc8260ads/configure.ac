@@ -68,8 +68,7 @@ RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 # Explicitly list a Makefile here 
-AC_CONFIG_FILES([Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])
 

@@ -115,8 +115,7 @@ RTEMS_BSPOPTS_HELP([DISPATCH_HANDLER_STAT],
 [used by irq/irq.c])
 
 # Explicitly list a Makefile here 
-AC_CONFIG_FILES([Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])
 

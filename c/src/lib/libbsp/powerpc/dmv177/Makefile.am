@@ -4,10 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -74,6 +70,18 @@ sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(sonic_CPPFLAGS)
 sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+noinst_LIBRARIES = libbsp.a
+CLEANFILES = libbsp.a
+libbsp_a_SOURCES =
+
+libbsp_a_LIBADD = startup.rel clock.rel console.rel scv64.rel timer.rel \
+    tod.rel
+if HAS_NETWORKING
+libbsp_a_LIBADD += sonic.rel
+endif
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
+
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST += QUIRKS README.net STATUS cable.doc times
@@ -128,7 +136,7 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 

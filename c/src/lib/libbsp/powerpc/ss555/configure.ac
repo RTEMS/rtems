@@ -45,8 +45,7 @@ RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
  for the SCI ports.])
 
 # Explicitly list a Makefile here 
-AC_CONFIG_FILES([Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])
 

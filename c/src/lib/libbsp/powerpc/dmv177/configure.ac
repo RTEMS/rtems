@@ -47,9 +47,7 @@ RTEMS_BSPOPTS_HELP([DMV177_USE_INSTRUCTION_CACHE],
  The BSP actually contains the call that enables this.])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-wrapup/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 
 RTEMS_PPC_EXCEPTIONS([old])
 

@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 # wrapup is the one that actually builds and installs the library
 # from the individual .rel files built in other directories
-SUBDIRS = . bootloader @exceptions@ wrapup
+SUBDIRS = . bootloader
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -140,6 +140,18 @@ vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../powerpc/shared/vme/VMEConfig.h ../../powerpc/shared/vme/VME.h
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+libbsp_a_LIBADD = startup.rel pclock.rel console.rel irq.rel openpic.rel \
+    pci.rel residual.rel vectors.rel motorola.rel tod.rel vme.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/exceptions.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

@@ -4,10 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-#  from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -130,6 +126,23 @@ mvme5500start___OBJEXT__CPPFLAGS = $(AM_CPPFLAGS)
 mvme5500start___OBJEXT__LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 project_lib_DATA += mvme5500start.$(OBJEXT)
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+libbsp_a_LIBADD = pclock.rel console.rel irq.rel pci.rel startup.rel tod.rel \
+    vectors.rel GT64260.rel
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+endif
+libbsp_a_LIBADD += vme.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/exceptions.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

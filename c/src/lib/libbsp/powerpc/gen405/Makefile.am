@@ -4,10 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -37,6 +33,19 @@ noinst_PROGRAMS += dlentry.rel
 dlentry_rel_SOURCES = dlentry/dlentry.S
 dlentry_rel_CPPFLAGS = $(AM_CPPFLAGS)
 dlentry_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+
+libbsp_a_LIBADD = startup.rel dlentry.rel
+
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel \
+    ../../../libcpu/@RTEMS_CPU@/ppc403/console.rel \
+    ../../../libcpu/@RTEMS_CPU@/ppc403/tty_drv.rel \
+    ../../../libcpu/@RTEMS_CPU@/ppc403/vectors.rel \
+    ../../../libcpu/@RTEMS_CPU@/ppc403/ictrl.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

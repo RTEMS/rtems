@@ -4,10 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -52,6 +48,18 @@ noinst_PROGRAMS += tm27supp.rel
 tm27supp_rel_SOURCES = startup/tm27supp.c
 tm27supp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tm27supp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+libbsp_a_LIBADD = pclock.rel console.rel startup.rel tm27supp.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc5xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc5xx/console-generic.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc5xx/exceptions.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc5xx/irq.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc5xx/timer.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc5xx/vectors.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

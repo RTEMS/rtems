@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 # wrapup is the one that actually builds and installs the library
 # from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup tools
+SUBDIRS = . tools
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -81,6 +81,21 @@ shmsupp_rel_SOURCES = shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
 shmsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shmsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+libbsp_a_LIBADD = startup.rel pclock.rel console.rel irq.rel vectors.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/exceptions.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
+
+if HAS_MP
+libbsp_a_LIBADD += shmsupp.rel
 endif
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)

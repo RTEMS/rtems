@@ -4,10 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
-SUBDIRS = . @exceptions@ wrapup
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -72,6 +68,22 @@ network_rel_SOURCES = network/network.c network/if_hdlcsubr.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
+
+noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
+libbsp_a_LIBADD = pclock.rel irq.rel startup.rel console.rel vectors.rel
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+endif
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8260/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8260/console-generic.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8260/cpm.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8260/timer.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8260/exceptions.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

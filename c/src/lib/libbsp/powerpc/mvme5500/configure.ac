@@ -33,8 +33,7 @@ RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
 
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])
 
