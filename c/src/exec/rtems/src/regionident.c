@@ -48,7 +48,7 @@ rtems_status_code rtems_region_ident(
 
   status = _Objects_Name_to_id(
     &_Region_Information,
-    &name,
+    name,
     OBJECTS_SEARCH_LOCAL_NODE,
     id
   );

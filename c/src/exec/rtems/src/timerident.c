@@ -47,7 +47,7 @@ rtems_status_code rtems_timer_ident(
 
   status = _Objects_Name_to_id(
     &_Timer_Information,
-    &name,
+    name,
     OBJECTS_SEARCH_LOCAL_NODE,
     id
   );

@@ -46,7 +46,7 @@ rtems_status_code rtems_rate_monotonic_ident(
 
   status = _Objects_Name_to_id(
     &_Rate_monotonic_Information,
-    &name,
+    name,
     OBJECTS_SEARCH_LOCAL_NODE,
     id
   );

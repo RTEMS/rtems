@@ -1,3 +1,11 @@
+2002-07-05	Joel Sherrill <joel@OARcorp.com>
+
+	* src/dpmemident.c, src/msgqident.c, src/partident.c,
+	src/ratemonident.c, src/regionident.c, src/semident.c,
+	src/timerident.c: Corrected use of name parameter to 
+	be consistent with fixes implemented to string name processing
+	which were committed with the POSIX Message Queue update.
+
 2002-07-01    Joel Sherrill <joel@OARcorp.com>
 
 	* Mega patch merge to change the format of the object IDs to

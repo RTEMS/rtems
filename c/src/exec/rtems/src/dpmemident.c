@@ -46,7 +46,7 @@ rtems_status_code rtems_port_ident(
 
   status = _Objects_Name_to_id(
     &_Dual_ported_memory_Information,
-    &name,
+    name,
     OBJECTS_SEARCH_ALL_NODES,
     id
   );
