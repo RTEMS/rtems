@@ -1,3 +1,12 @@
+2004-09-17	Joel Sherrill <joel@OARcorp.com>
+
+	PR 677/misc
+	* libmisc/dumpbuf/dumpbuf.h, libmisc/fsmount/fsmount.h,
+	libmisc/rtmonuse/rtmonuse.h, libmisc/serdbg/serdbg.h,
+	libmisc/serdbg/serdbgcnf.h, libmisc/serdbg/termios_printk.h,
+	libmisc/serdbg/termios_printk_cnf.h, libmisc/untar/untar.h: Add
+	extern C wrappers.
+
 2004-09-17	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 676/networking

@@ -24,6 +24,10 @@
 
 #include <rtems/termios_printk.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef CONFIGURE_INIT
 
 /*
@@ -66,5 +70,9 @@ int termios_printk_init(void) {
 }
 
 #endif /* CONFIGURE_INIT */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _TERMIOS_PRINTK_CNF_H */

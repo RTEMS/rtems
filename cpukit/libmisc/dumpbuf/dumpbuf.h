@@ -12,10 +12,18 @@
 #ifndef __DUMP_BUFFER_h
 #define __DUMP_BUFFER_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void Dump_Buffer(
   unsigned char *buffer,
   int            length
 );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

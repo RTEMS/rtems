@@ -24,6 +24,10 @@
 
 #include <rtems/serdbg.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef CONFIGURE_INIT
 
 /*
@@ -77,5 +81,9 @@ int serdbg_init(void) {
 }
 
 #endif /* CONFIGURE_INIT */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _SERDBGCNF_H */
