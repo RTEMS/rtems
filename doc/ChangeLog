@@ -1,3 +1,8 @@
+2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Extract toolversions from ../scripts/setup.def.
+	Propagate them to started/tversions.sed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
