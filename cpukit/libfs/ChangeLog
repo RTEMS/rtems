@@ -1,5 +1,11 @@
 2003-10-22	Joel Sherrill <joel@OARcorp.com>
 
+	PR 440/filesystem
+	* src/dosfs/fat_fat_operations.c: Improve write speed with FAT12 and
+	FAT16 filesystems. Previously merged on 4.6 branch.
+
+2003-10-22	Joel Sherrill <joel@OARcorp.com>
+
 	* ChangeLog: Correct line length.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -63,9 +63,8 @@ fat_scan_fat_for_free_clusters(
     if (count == 0)
         return rc;
         
-    /*if ((fs_info->vol.type & FAT_FAT32) &&
-        (fs_info->vol.next_cl != FAT_UNDEFINED_VALUE))*/
-    if (fs_info->vol.next_cl != FAT_UNDEFINED_VALUE)
+    if ((fs_info->vol.type & FAT_FAT32) && 
+        (fs_info->vol.next_cl != FAT_UNDEFINED_VALUE))  
         cl4find = fs_info->vol.next_cl;  
 
     /* 
@@ -133,12 +132,12 @@ fat_scan_fat_for_free_clusters(
             /* have we satisfied request ? */
             if (*cls_added == count)
             {
-                /*if (fs_info->vol.type & FAT_FAT32)
-                {*/
+                if (fs_info->vol.type & FAT_FAT32) 
+                {
                     fs_info->vol.next_cl = save_cln;
                     if (fs_info->vol.free_cls != 0xFFFFFFFF)
                         fs_info->vol.free_cls -= (*cls_added);
-                /*}*/
+                }        
                 *last_cl = save_cln;    
                 fat_buf_release(fs_info);
                 return rc;  
@@ -150,13 +149,12 @@ fat_scan_fat_for_free_clusters(
             cl4find = 2;
     }
 
-    /*if (fs_info->vol.type & FAT_FAT32)
-    {*/
+    if (fs_info->vol.type & FAT_FAT32)
+    { 
         fs_info->vol.next_cl = save_cln;
         if (fs_info->vol.free_cls != 0xFFFFFFFF)
             fs_info->vol.free_cls -= (*cls_added);    
-    /*}*/
-
+    }        
     *last_cl = save_cln;
     fat_buf_release(fs_info);
     return RC_OK;    
@@ -189,11 +187,9 @@ fat_free_fat_clusters_chain(
         rc = fat_get_fat_cluster(mt_entry, cur_cln, &next_cln);
         if ( rc != RC_OK )
         {
-            /*if ((fs_info->vol.type & FAT_FAT32) &&
-                (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE))*/
-              if(fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
+            if ((fs_info->vol.type & FAT_FAT32) && 
+                (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE))
                 fs_info->vol.free_cls += freed_cls_cnt;
-
             fat_buf_release(fs_info);    
             return rc;
         }    
@@ -206,12 +202,12 @@ fat_free_fat_clusters_chain(
         cur_cln = next_cln;
     }
 
-    /*if (fs_info->vol.type & FAT_FAT32)
-    {*/
+    if (fs_info->vol.type & FAT_FAT32)
+    {
         fs_info->vol.next_cl = chain;
         if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
             fs_info->vol.free_cls += freed_cls_cnt;
-    /*}*/
+    }    
 
     fat_buf_release(fs_info);
     if (rc1 != RC_OK)
