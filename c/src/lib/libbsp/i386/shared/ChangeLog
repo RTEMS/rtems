@@ -1,4 +1,8 @@
 
+	* io/Makefile.am: Formatting.
+
+2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
+
 	* shared/comm: Added "/dev/ttyS1" & "/dev/ttyS2" support for
 	the i386 BSPs.
 	* shared/comm/gdb_glue.c: New file.
