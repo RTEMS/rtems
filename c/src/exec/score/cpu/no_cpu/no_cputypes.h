@@ -44,7 +44,8 @@ typedef unsigned32 boolean;     /* Boolean value   */
 typedef float          single_precision;     /* single precision float */
 typedef double         double_precision;     /* double precision float */
 
-typedef void ( *no_cpu_isr )( void );
+typedef void no_cpu_isr;
+typedef void ( *no_cpu_isr_entry )( void );
 
 #ifdef __cplusplus
 }

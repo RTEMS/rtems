@@ -82,8 +82,8 @@ int bsp_start(
   char **environp
 )
 {
-  m68k_isr *monitors_vector_table;
-  int          index;
+  m68k_isr_entry *monitors_vector_table;
+  int             index;
 
   duart_base = (unsigned char *)DUART_ADDR;
 
@@ -91,9 +91,8 @@ int bsp_start(
    *  Set the VBR here to the monitor's default.
    */
 
-  monitors_vector_table = (m68k_isr *)0;   /* This is where
-											  you set vector base
-											  register = 0 */
+  monitors_vector_table = (m68k_isr_entry *)0;
+   /* This is where you set vector base register = 0 */
   m68k_set_vbr( monitors_vector_table );
 
   /* The vector interrupt table for the 680x0 is in appendix B-2 
@@ -128,7 +127,7 @@ int bsp_start(
 
   Cpu_table.do_zero_of_workspace = TRUE;
  
-  Cpu_table.interrupt_vector_table = (m68k_isr *) &M68Kvec;
+  Cpu_table.interrupt_vector_table = (m68k_isr_entry *) &M68Kvec;
  
   Cpu_table.interrupt_stack_size = 4096;
 

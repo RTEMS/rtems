@@ -25,13 +25,13 @@
 #include <rtems.h>
 #include <bsp.h>
 
-i386_isr set_vector(                            /* returns old vector */
+i386_isr_entry set_vector(                      /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
 )
 {
-  i386_isr       previous_isr;
+  i386_isr_entry previous_isr;
   i386_IDT_slot  idt;
 
   if ( type )
@@ -41,7 +41,7 @@ i386_isr set_vector(                            /* returns old vector */
 
     idt = Interrupt_descriptor_table[ vector ];
 
-    previous_isr = (i386_isr)
+    previous_isr = (i386_isr_entry)
                       ((idt.offset_16_31 << 16) | idt.offset_0_15);
 
     /* build the IDT entry */

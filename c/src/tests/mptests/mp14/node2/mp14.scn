@@ -32,4 +32,7 @@ p - indicates 100 iterations of
 s - indicates 100 iterations of
     rtems_semaphore_obtain and rtems_semaphore_release.
 
-NOTE: The messages could be interspersed.
+NOTES: 1.  The messages could be interspersed.
+       2.  If one of the nodes exits first, the other may report
+           timeout errors on blocking directives.
+    

@@ -56,13 +56,13 @@
 
 extern rtems_configuration_table BSP_Configuration;
 
-extern m68k_isr     M68Kvec[];   /* vector table address */
+extern m68k_isr_entry M68Kvec[];   /* vector table address */
 
 /* functions */
 
 void bsp_cleanup( void );
 
-m68k_isr set_vector(
+m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
   int                 type

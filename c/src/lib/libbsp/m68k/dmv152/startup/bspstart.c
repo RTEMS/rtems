@@ -75,11 +75,11 @@ int bsp_start(
   char **environp
 )
 {
-  m68k_isr *monitors_vector_table;
-  int       index;
-  void     *vbr;
+  m68k_isr_entry *monitors_vector_table;
+  int             index;
+  void           *vbr;
 
-  monitors_vector_table = (m68k_isr *)0;   /* Monitor Vectors are at 0 */
+  monitors_vector_table = (m68k_isr_entry *)0;   /* Monitor Vectors are at 0 */
   m68k_set_vbr( monitors_vector_table );
 
   for ( index=2 ; index<=255 ; index++ )

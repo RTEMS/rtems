@@ -81,14 +81,14 @@ int bsp_start(
   char **environp
 )
 {
-  m68k_isr *monitors_vector_table;
-  int       index;
+  m68k_isr_entry *monitors_vector_table;
+  int             index;
 
   /*
    *  162Bug Vectors are at 0xFFE00000
    */
 
-  monitors_vector_table = (m68k_isr *)0xFFE00000;
+  monitors_vector_table = (m68k_isr_entry *)0xFFE00000;
 
   m68k_set_vbr( monitors_vector_table );
 
@@ -125,7 +125,7 @@ int bsp_start(
 
   Cpu_table.do_zero_of_workspace = TRUE;
 
-  Cpu_table.interrupt_vector_table = (m68k_isr *) &M68Kvec;
+  Cpu_table.interrupt_vector_table = (m68k_isr_entry *) &M68Kvec;
 
   Cpu_table.interrupt_stack_size = 4096;
 
