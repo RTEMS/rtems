@@ -212,9 +212,10 @@ typedef enum {
  *  Shared Data
  */
 
-extern rtems_filesystem_file_handlers_r       IMFS_device_handlers;
-extern rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_directory_handlers;
+extern rtems_filesystem_file_handlers_r       IMFS_device_handlers;
+extern rtems_filesystem_file_handlers_r       IMFS_link_handlers;
+extern rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern rtems_filesystem_operations_table      IMFS_ops;
 extern rtems_filesystem_operations_table      miniIMFS_ops;
 extern rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS; 
@@ -456,10 +457,6 @@ int device_lseek(
   int            whence             /* IN  */
 );
 
-int device_rmnod(
-  rtems_filesystem_location_info_t      *pathloc       /* IN */
-);
-
 int IMFS_utime(
   rtems_filesystem_location_info_t  *pathloc,       /* IN */
   time_t                             actime,        /* IN */
@@ -490,6 +487,10 @@ int IMFS_fdatasync(
 int IMFS_fcntl(
   int            cmd,
   rtems_libio_t *iop
+);
+
+int IMFS_rmnod(
+  rtems_filesystem_location_info_t      *pathloc       /* IN */
 );
 
 #ifdef __cplusplus

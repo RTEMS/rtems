@@ -42,6 +42,11 @@
 #define jnode_get_first_child( jnode ) \
     ((IMFS_jnode_t *)( Chain_Head( jnode_get_control( jnode ) )->next))
 
+/* XXX should be in a more public place */
+
+extern int IMFS_Set_handlers(  
+  rtems_filesystem_location_info_t   *loc 
+);
 
 int IMFS_fsunmount(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry
@@ -59,7 +64,6 @@ int IMFS_fsunmount(
     
    jnode = (IMFS_jnode_t *)temp_mt_entry->mt_fs_root.node_access;
    loc = temp_mt_entry->mt_fs_root;
-
    
    /*
     *  Set this to null to indicate that it is being unmounted.
@@ -70,6 +74,7 @@ int IMFS_fsunmount(
    do {
      next = jnode->Parent;
      loc.node_access = (void *)jnode;
+     IMFS_Set_handlers( &loc );
 
      if ( jnode->type != IMFS_DIRECTORY ) {
         result = IMFS_unlink( &loc );

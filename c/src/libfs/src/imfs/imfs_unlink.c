@@ -49,9 +49,10 @@ int IMFS_unlink(
     the_link.node_access = node->info.hard_link.link_node;
 
     /*
-     * If this is the last referance to the node 
-     * Free the node that the link points to.
+     *  If removing the last hard link to a node, then we need
+     *  to remove the node that is a link and the node itself.
      */
+
     node->info.hard_link.link_node->st_nlink --;
     IMFS_update_ctime( node->info.hard_link.link_node );
     if ( node->info.hard_link.link_node->st_nlink < 1) {
@@ -61,7 +62,11 @@ int IMFS_unlink(
     }
   }
 
-  result = (*loc->handlers->rmnod)( &the_link );
+  /*
+   *  Now actually free the node we were asked to free.
+   */
+
+  result = (*loc->handlers->rmnod)( loc );
 
   return result;
 }

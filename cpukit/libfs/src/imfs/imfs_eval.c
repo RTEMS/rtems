@@ -45,7 +45,7 @@ int IMFS_Set_handlers(
       break;
     case IMFS_SYM_LINK:
     case IMFS_HARD_LINK:
-      loc->handlers = &rtems_filesystem_null_handlers;
+      loc->handlers = &IMFS_link_handlers;
       break;
     case IMFS_MEMORY_FILE:
       loc->handlers = fs_info->memfile_handlers;
