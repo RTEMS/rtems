@@ -13,8 +13,8 @@ include_bsp_HEADERS = irq.h
 S_FILES = irq_asm.S
 OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 $(PROJECT_INCLUDE)/bsp:
 	$(mkinstalldirs) $@
@@ -38,4 +38,4 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(PGM)
 
 EXTRA_DIST = irq.c irq_asm.S irq_init.c
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
