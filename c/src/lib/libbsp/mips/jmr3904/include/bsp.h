@@ -44,16 +44,42 @@ extern "C" {
  *
  */
 
-#define MUST_WAIT_FOR_INTERRUPT 0
+#define MUST_WAIT_FOR_INTERRUPT 1
 
+#if 0
 #define Install_tm27_vector( handler ) \
     (void) set_vector( handler, TX3904_IRQ_SOFTWARE_1, 1 ); \
 
 #define Cause_tm27_intr() \
+    asm volatile ( "syscall 0x01" : : );
+
+#define CLOCK_VECTOR TX3904_IRQ_TMR0
 
 #define Clear_tm27_intr()  
 
 #define Lower_tm27_intr()
+#else
+#define Install_tm27_vector( handler ) \
+    (void) set_vector( handler, TX3904_IRQ_TMR0, 1 ); \
+
+#define Cause_tm27_intr() \
+  do { \
+    unsigned32 _clicks = 20; \
+    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_CCDR, 0x3 ); \
+    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_CPRA, _clicks ); \
+    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TISR, 0x00 ); \
+    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_ITMR, 0x8001 ); \
+    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TCR,   0xC0 ); \
+    *((volatile unsigned32 *) 0xFFFFC01C) = 0x00000700; \
+  } while(0)
+
+#define Clear_tm27_intr() \
+  TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TCR,   0x03 );
+
+#define Lower_tm27_intr() \
+  mips_enable_in_interrupt_mask( 0xff01 );
+
+#endif
 
 /* Constants */
 
@@ -77,7 +103,8 @@ extern rtems_configuration_table BSP_Configuration;
 
 void bsp_cleanup( void );
 
-rtems_isr_entry set_vector( rtems_isr_entry, unsigned int, unsigned int );
+rtems_isr_entry set_vector(
+  rtems_isr_entry, rtems_vector_number, int );
 
 #ifdef __cplusplus
 }

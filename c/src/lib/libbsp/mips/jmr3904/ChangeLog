@@ -1,3 +1,9 @@
+2001-01-12	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h, timer/timer.c: Updated so timer appears to
+	work and support tm27.  I would prefer to time a software
+	interrupt rather than an use an extra timer though.
+
 2001-01-09	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/clockdrv.c: Clean up.
