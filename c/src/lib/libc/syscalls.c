@@ -24,16 +24,6 @@
 #include <sys/stat.h>
 
 /*
- *  check this newlib bug?:
- *
- *  newlib/libc/stdio/makebuf.c:
- *
- *  2nd ifdef uses 1024 instead of BUFSIZ
- *  2nd check lets fp blksize be 0
- *  finally look at the malloc
- */
-
-/*
  *  fstat, stat, and isatty must lie consistently and report that everything
  *  is a tty or stdout will not be line buffered.
  */
