@@ -1,3 +1,17 @@
+2001-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/armulator.cfg: Remove make-target-options.
+	* custom/erc32.cfg: Remove CONSOLE_USE_INTERRUPTS, SIMSPARC_FAST_IDLE
+	(now in erc32/configure.ac).
+	* custom/leon2.cfg: Remove CONSOLE_USE_INTERRUPTS,
+	SIMSPARC_FAST_IDLE (now in leon2/configure.ac). 
+	Remove CONSOLE_USE_POLLED (Unused).
+	* custom/mvme167.cfg: Remove CD2401_INT_LEVEL, CD2401_IO_MODE,
+	CD2401_USE_TERMIOS (now in mvme167/configure.ac).
+	* custom/mvme162.cfg: Remove references to mvme162lx.
+	Abandon gcc272. Remove make-target-options.
+	* custom/mvme162lx.cfg: Add portions formerly in mvme162.cfg.
+
 2001-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/bare.cfg: Remove make-target-options.
