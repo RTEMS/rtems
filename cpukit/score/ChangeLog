@@ -1,3 +1,7 @@
+2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/Makefile.am: Add multilib support.
+
 2001-11-28	Joel Sherrill <joel@OARcorp.com>,
 
 	This was tracked as PR91.
