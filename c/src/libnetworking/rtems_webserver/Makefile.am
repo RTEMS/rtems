@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -9,8 +9,7 @@ LIB = $(ARCH)/$(LIBNAME)
 
 C_FILES = asp.c balloc.c wbase64.c default.c ejlex.c ejparse.c form.c h.c \
     handler.c mime.c misc.c webpage.c ringq.c rom.c security.c socket.c \
-    sym.c uemf.c url.c value.c webrom.c webs.c websuemf.c \
-    webmain.c
+    sym.c uemf.c url.c value.c webrom.c webs.c websuemf.c webmain.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -39,7 +38,7 @@ $(PROJECT_INCLUDE)/goahead/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/goahead \
-   $(H_FILES:%.h=$(PROJECT_INCLUDE)/goahead/%.h)
+    $(H_FILES:%.h=$(PROJECT_INCLUDE)/goahead/%.h)
 
 if HAS_POSIX
 all: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)

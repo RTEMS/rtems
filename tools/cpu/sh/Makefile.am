@@ -5,12 +5,9 @@
 AUTOMAKE_OPTIONS = foreign 1.4 no-installman
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-noinst_PROGRAMS=shgen
+noinst_PROGRAMS = shgen
 
-shgen_SOURCES = \
-sci.h \
-sci.c \
-shgen.c
+shgen_SOURCES = sci.h sci.c shgen.c
 
 if HELP2MAN
 man_MANS = shgen.1

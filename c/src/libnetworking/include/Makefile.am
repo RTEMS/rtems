@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 ##
 ## FIXME: This Makefile.am is pretty ugly and deserves to be reworked :(
 ##
@@ -192,7 +192,8 @@ $(PROJECT_INCLUDE)/sys/uio.h: ../sys/uio.h
 $(PROJECT_INCLUDE)/rtems/rtems_bsdnet.h: ../rtems/rtems_bsdnet.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h: ../rtems/rtems_bsdnet_internal.h
+$(PROJECT_INCLUDE)/rtems/rtems_bsdnet_internal.h: \
+    ../rtems/rtems_bsdnet_internal.h
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE)/rtems/tftp.h: ../rtems/tftp.h

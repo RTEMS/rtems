@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -9,8 +9,8 @@ GENERIC_FILES = shared
 # Use two variables so that I can make two ar command.
 # So far FAMILY_OBJS is empty and ar dislike it...
 CPU_SPECIFIC_OBJS = $(wildcard ../$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.o)
-FAMILY_OBJS = $(wildcard ../shared/$(ARCH)/*.o ../shared/*/$(ARCH)/*.o \
-    ../mpc6xx/*/$(ARCH)/*.o)
+FAMILY_OBJS = \
+    $(wildcard ../shared/$(ARCH)/*.o ../shared/*/$(ARCH)/*.o ../mpc6xx/*/$(ARCH)/*.o)
 
 LIB = $(ARCH)/libcpu.a
 

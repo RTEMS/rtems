@@ -1,12 +1,12 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
 H_FILES = io_types.h null.h sci.h sh7_pfc.h sh7_sci.h
 
-# NOTE: Unlike other CPUS, we install into a subdirectory to avoid 
+# NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts
 
 $(PROJECT_INCLUDE)/sh:

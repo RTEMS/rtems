@@ -1,8 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+
 TEST = psx02
 
 MANAGERS = all
@@ -11,7 +12,7 @@ C_FILES = init.c task.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 H_FILES = system.h
-noinst_HEADERS =$(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

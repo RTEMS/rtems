@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -9,10 +9,9 @@ MPC860_H_FILES = console.h
 
 noinst_HEADERS = $(H_FILES) $(MPC860_H_FILES)
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/mpc860 \
-$(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
-$(MPC860_H_FILES:%.h=$(PROJECT_INCLUDE)/mpc860/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc860 \
+    $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
+    $(MPC860_H_FILES:%.h=$(PROJECT_INCLUDE)/mpc860/%.h)
 
 $(PROJECT_INCLUDE)/mpc860:
 	$(mkinstalldirs) $@
@@ -23,6 +22,6 @@ $(PROJECT_INCLUDE)/%.h: %.h
 $(PROJECT_INCLUDE)/mpc860/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all: $(PREINSTALL_FILES) 
+all: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../automake/local.am

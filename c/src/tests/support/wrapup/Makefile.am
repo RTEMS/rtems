@@ -1,10 +1,10 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-LIBNAME=libtest
+LIBNAME = libtest
 LIB = $(ARCH)/$(LIBNAME).a
 
 GENERIC_FILES = stubdr

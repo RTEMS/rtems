@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -13,7 +13,7 @@ C_FILES = init.c task1.c task2.c task3.c task4.c taskexit.c tcreate.c \
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 H_FILES = system.h
-noinst_HEADERS =$(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)

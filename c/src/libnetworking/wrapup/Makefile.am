@@ -1,12 +1,12 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
 if HAS_POSIX
 POSIX_PIECES = rtems_webserver
-endif 
+endif
 
 NET_O_PIECES = kern lib libc net netinet nfs rtems rtems_servers pppd \
     $(POSIX_PIECES)

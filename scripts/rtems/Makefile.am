@@ -2,11 +2,12 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
 MKBSPSPEC = $(SHELL) $(top_builddir)/mkbspspec
 
-MKBSPSPEC_DEPS = $(top_builddir)/mkbspspec rtems.spec.in $(top_builddir)/setup.cache
+MKBSPSPEC_DEPS = $(top_builddir)/mkbspspec rtems.spec.in \
+    $(top_builddir)/setup.cache
 
 hppa1.1-rtems-simhppa-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems simhppa
@@ -38,25 +39,19 @@ sh-rtemself-gensh1-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 sparc-rtems-erc32-$(BSPVERS).spec: $(MKBSPSPEC_DEPS)
 	$(MKBSPSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems erc32
 
-TEMPLATES = \
-rtems.spec.in
+TEMPLATES = rtems.spec.in
 
-RPM_SPECS_DATA = \
-hppa1.1-rtems-simhppa-$(BSPVERS).spec \
-i386-rtems-pc386-$(BSPVERS).spec \
-i960-rtems-cvme961-$(BSPVERS).spec \
-m68k-rtems-gen68360-$(BSPVERS).spec \
-m68k-rtemself-gen68360-$(BSPVERS).spec \
-mips64orion-rtems-p4600-$(BSPVERS).spec \
-powerpc-rtems-mcp750-$(BSPVERS).spec \
-sh-rtems-gensh1-$(BSPVERS).spec \
-sh-rtemself-gensh1-$(BSPVERS).spec \
-sparc-rtems-erc32-$(BSPVERS).spec
+RPM_SPECS_DATA = hppa1.1-rtems-simhppa-$(BSPVERS).spec \
+    i386-rtems-pc386-$(BSPVERS).spec i960-rtems-cvme961-$(BSPVERS).spec \
+    m68k-rtems-gen68360-$(BSPVERS).spec \
+    m68k-rtemself-gen68360-$(BSPVERS).spec \
+    mips64orion-rtems-p4600-$(BSPVERS).spec \
+    powerpc-rtems-mcp750-$(BSPVERS).spec sh-rtems-gensh1-$(BSPVERS).spec \
+    sh-rtemself-gensh1-$(BSPVERS).spec sparc-rtems-erc32-$(BSPVERS).spec
 
-noinst_DATA = \
-$(TEMPLATES)
+noinst_DATA = $(TEMPLATES)
 
-EXTRA_DIST = \
-$(TEMPLATES)
+EXTRA_DIST = $(TEMPLATES)
 
 CLEANFILES = $(RPM_SPECS_DATA)
+include $(top_srcdir)/../automake/local.am

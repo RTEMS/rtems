@@ -19,8 +19,7 @@ include $(top_srcdir)/../../../automake/lib.am
 
 AM_CFLAGS += $(LIBC_DEFINES)
 
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
 $(LIB): ${OBJS}
 	$(make-library)

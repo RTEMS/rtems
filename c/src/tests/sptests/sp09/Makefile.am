@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -16,7 +16,7 @@ C_FILES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen04.c \
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 H_FILES = system.h
-noinst_HEADERS =$(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)

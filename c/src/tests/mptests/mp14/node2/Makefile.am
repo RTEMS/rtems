@@ -1,9 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
- 
+
 VPATH = @srcdir@:@srcdir@/..
 
 NODE = 2

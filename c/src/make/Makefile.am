@@ -5,30 +5,22 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-rtems_makedir=$(prefix)/make
+rtems_makedir = $(prefix)/make
 
-GENERIC_FILES = \
-host.cfg
+GENERIC_FILES = host.cfg
 
-MAKE_FILES = README \
-directory.cfg leaf.cfg \
-lib.cfg
+MAKE_FILES = README directory.cfg leaf.cfg lib.cfg
 
-rtems_make_DATA = \
-$(MAKE_FILES) \
-$(GENERIC_FILES)
+rtems_make_DATA = $(MAKE_FILES) $(GENERIC_FILES)
 
-noinst_DATA = \
-main.cfg
+noinst_DATA = main.cfg
 
 rtemsdir = $(prefix)
 rtems_bspdir = $(rtemsdir)/@RTEMS_BSP@
-rtems_bsp_DATA = \
-Makefile.inc
+rtems_bsp_DATA = Makefile.inc
 
 rtems_bsp_makedir = $(rtems_bspdir)/make
-rtems_bsp_make_DATA = \
-bsp.cfg
+rtems_bsp_make_DATA = bsp.cfg
 
 if MAINTAINER_MODE
 $(srcdir)/host.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/host.cfg.in

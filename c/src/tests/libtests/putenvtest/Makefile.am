@@ -1,8 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+
 TEST = putenvtest
 
 MANAGERS = io
@@ -11,7 +12,7 @@ C_FILES = init.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 H_FILES =
-noinst_HEADERS =$(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
 DOCTYPES =
 DOCS = $(DOCTYPES:%=$(TEST).%)

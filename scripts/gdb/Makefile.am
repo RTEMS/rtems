@@ -2,12 +2,12 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
 MKGDBSPEC = $(SHELL) $(top_builddir)/mkgdbspec
 
-MKGDBSPEC_DEPS = \
-$(top_builddir)/mkgdbspec gdb.spec.in $(top_builddir)/setup.cache
+MKGDBSPEC_DEPS = $(top_builddir)/mkgdbspec gdb.spec.in \
+    $(top_builddir)/setup.cache
 
 hppa1.1-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
@@ -39,25 +39,17 @@ sh-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 sparc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
-TEMPLATES = \
-gdb.spec.in
+TEMPLATES = gdb.spec.in
 
-RPM_SPECS_DATA = \
-hppa1.1-rtems-$(GDBVERS).spec \
-i386-rtems-$(GDBVERS).spec \
-i960-rtems-$(GDBVERS).spec \
-m68k-rtems-$(GDBVERS).spec \
-m68k-rtemself-$(GDBVERS).spec \
-mips64orion-rtems-$(GDBVERS).spec \
-powerpc-rtems-$(GDBVERS).spec \
-sh-rtems-$(GDBVERS).spec \
-sh-rtemself-$(GDBVERS).spec \
-sparc-rtems-$(GDBVERS).spec
+RPM_SPECS_DATA = hppa1.1-rtems-$(GDBVERS).spec i386-rtems-$(GDBVERS).spec \
+    i960-rtems-$(GDBVERS).spec m68k-rtems-$(GDBVERS).spec \
+    m68k-rtemself-$(GDBVERS).spec mips64orion-rtems-$(GDBVERS).spec \
+    powerpc-rtems-$(GDBVERS).spec sh-rtems-$(GDBVERS).spec \
+    sh-rtemself-$(GDBVERS).spec sparc-rtems-$(GDBVERS).spec
 
-noinst_DATA = \
-$(TEMPLATES)
+noinst_DATA = $(TEMPLATES)
 
-EXTRA_DIST = \
-$(TEMPLATES)
+EXTRA_DIST = $(TEMPLATES)
 
 CLEANFILES = $(RPM_SPECS_DATA)
+include $(top_srcdir)/../automake/local.am

@@ -13,9 +13,8 @@ LIBNAME = librtemsall
 LIB = $(PROJECT_RELEASE)/lib/$(LIBNAME)${LIB_VARIANT}.a
 
 if HAS_NETWORKING
-LIBNETWORKING = \
-   $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a \
-   $(PROJECT_RELEASE)/lib/librpc$(LIB_VARIANT).a
+LIBNETWORKING = $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a \
+    $(PROJECT_RELEASE)/lib/librpc$(LIB_VARIANT).a
 endif
 
 if HAS_RDBG
@@ -26,8 +25,7 @@ SRCS = $(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
     $(PROJECT_RELEASE)/lib/librtems$(LIB_VARIANT).a \
     $(wildcard $(PROJECT_RELEASE)/lib/libposix$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libitron$(LIB_VARIANT).a) \
-    $(LIBNETWORKING) \
-    $(LIBRDBG) \
+    $(LIBNETWORKING) $(LIBRDBG) \
     $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/librtcio$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libserialio$(LIB_VARIANT).a) \
@@ -36,8 +34,7 @@ SRCS = $(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
     $(PROJECT_RELEASE)/lib/libmisc$(LIB_VARIANT).a \
     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
 
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)${LIB_VARIANT}.a
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)${LIB_VARIANT}.a
 
 all: $(ARCH) $(TMPINSTALL_FILES)
 
