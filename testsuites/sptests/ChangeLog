@@ -1,3 +1,7 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* sp07/buffered_io.c: Include <rtems/ringbuf.h> instead of <ringbuf.h>.
+
 2004-03-30	David Querbach <querbach@realtime.bc.ca>
 
 	PR 595/tests

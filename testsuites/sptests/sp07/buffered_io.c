@@ -8,7 +8,7 @@
 
 #define RINGBUF_QUEUE_LENGTH 512
 
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
 
 Ring_buffer_t Buffer;
 
