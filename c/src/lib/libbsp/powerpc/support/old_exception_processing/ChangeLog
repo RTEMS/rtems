@@ -1,3 +1,8 @@
+2002-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

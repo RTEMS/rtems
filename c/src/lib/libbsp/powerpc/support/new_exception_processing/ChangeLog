@@ -1,3 +1,8 @@
+2002-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c: Currently only the mpc8260 BSP supports interrupt nesting.
