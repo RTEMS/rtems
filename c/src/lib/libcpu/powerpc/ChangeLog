@@ -1,3 +1,33 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc505/ictrl/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc505/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc505/vectors/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc6xx/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc6xx/exceptions/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc6xx/mmu/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc6xx/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8260/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8260/console-generic/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8260/cpm/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8260/exceptions/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8260/mmu/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8260/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8xx/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8xx/console-generic/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8xx/cpm/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8xx/exceptions/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8xx/mmu/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* mpc8xx/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* ppc403/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* ppc403/console/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* ppc403/ictrl/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* ppc403/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* ppc403/tty_drv/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* ppc403/vectors/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* shared/include/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* shared/src/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-07-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc6xx/mmu/pte121.c: Include <string.h> for gcc-3.1.

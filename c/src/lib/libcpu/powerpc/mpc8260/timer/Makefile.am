@@ -8,7 +8,7 @@ PGM = ${ARCH}/timer.rel
 ## C sources
 C_FILES = timer.c
 
-timer_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.o)
+timer_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am

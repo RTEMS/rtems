@@ -9,7 +9,7 @@ C_FILES = ictrl.c
 
 include_HEADERS = ictrl.h
 
-ictrl_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
+ictrl_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am

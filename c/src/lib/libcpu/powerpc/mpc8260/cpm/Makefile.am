@@ -8,7 +8,7 @@ PGM = ${ARCH}/cp.rel
 ## C sources
 C_FILES = cp.c dpram.c brg.c
 
-cpm_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.o)
+cpm_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am

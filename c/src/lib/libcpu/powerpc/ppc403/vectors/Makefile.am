@@ -8,7 +8,7 @@ PGM = ${ARCH}/vectors.rel
 ## Assembly sources
 S_FILES = vectors.S align_h.S
 
-vectors_rel_OBJECTS = $(S_FILES:%.S=${ARCH}/%.o)
+vectors_rel_OBJECTS = $(S_FILES:%.S=${ARCH}/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am

@@ -9,7 +9,7 @@ include_HEADERS = tty_drv.h
 
 C_FILES = tty_drv.c
 
-tty_drv_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
+tty_drv_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am

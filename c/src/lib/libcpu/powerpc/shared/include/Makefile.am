@@ -4,7 +4,7 @@
 
 
 C_FILES = cpuIdent.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_libcpudir = $(includedir)/libcpu
 
