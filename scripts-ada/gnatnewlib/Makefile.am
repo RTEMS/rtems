@@ -1,6 +1,5 @@
 ## $Id$
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 MKGNATNEWLIBSPEC = $(SHELL) $(top_builddir)/mkgnatnewlibspec
 

@@ -1,9 +1,9 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT
+AC_INIT([rtems-scripts-ada],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([binutils])
-AM_INIT_AUTOMAKE(rtems-scripts_ada,20000125-0,no)
+AM_INIT_AUTOMAKE([no-define foreign 1.6])
 
 # Check for .exe suffix.
 # With autoconf > 2.13 AC_EXEEXT is not what we want to use.
