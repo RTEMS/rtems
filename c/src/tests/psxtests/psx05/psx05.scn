@@ -3,7 +3,7 @@ Init's ID is 0x0c010001
 Init: pthread_mutexattr_init - EINVAL (NULL attr)
 Init: pthread_mutexattr_init - SUCCESSFUL
 Init: mutex protocol is (0) -- PTHREAD_PRIO_NONE
-Init: mutex priority ceiling is 255
+Init: mutex priority ceiling is 254
 Init: mutex process shared is (0) -- PTHREAD_PROCESS_PRIVATE
 Init: pthread_mutexattr_destroy - SUCCESSFUL
 Init: pthread_mutexattr_destroy - EINVAL (NULL attr)
@@ -75,7 +75,7 @@ Init: pthread_mutex_init - SUCCESSFUL
 Init: pthread_mutex_trylock - SUCCESSFUL
 Init: pthread_setschedparam - Setting Task2 priority to highest
 Task 2: pthread_mutex_lock unavailable (inherit case)
-Init: pthread_getschedparam - priority = 255
+Init: pthread_getschedparam - priority = 254
 Init: pthread_mutex_unlock - SUCCESSFUL
 Task 2: mutex acquired
 Task 2: unlock Mutex 2
@@ -88,7 +88,7 @@ Init: pthread_mutexattr_setprotocol - SUCCESSFUL (PTHREAD_PRIO_PROTECT)
 Init: pthread_mutex_init - SUCCESSFUL
 Init: pthread_mutex_getprioceiling - EINVAL (invalid id)
 Init: pthread_mutex_getprioceiling - EINVAL (NULL ceiling)
-Init: pthread_mutex_getprioceiling - 255
+Init: pthread_mutex_getprioceiling - 254
 Init: pthread_mutex_setprioceiling - EINVAL (invalid id)
 Init: pthread_mutex_setprioceiling - EINVAL (illegal priority)
 Init: pthread_mutex_setprioceiling - EINVAL (NULL ceiling)

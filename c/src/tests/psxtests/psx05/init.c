@@ -428,7 +428,7 @@ void *POSIX_Init(
  
   /* set priority of Task2 to highest priority */
  
-  param.sched_priority = 255;
+  param.sched_priority = 254;
  
   puts( "Init: pthread_setschedparam - Setting Task2 priority to highest" );
   status = pthread_setschedparam( Task2_id, SCHED_FIFO, &param );
@@ -550,7 +550,7 @@ void *POSIX_Init(
  
   /* set priority of Init to highest priority */
  
-  param.sched_priority = 255;
+  param.sched_priority = 254;
  
   status = pthread_setschedparam( Init_id, SCHED_FIFO, &param );
   assert( !status );
