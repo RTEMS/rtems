@@ -174,7 +174,7 @@ void _CPU_Signal_initialize( void )
 void _CPU_Context_From_CPU_Init()
 {
 
-#if defined(hppa1_1) && defined(RTEMS_UNIXLIB_SETJMP)
+#if defined(__hppa__) && defined(RTEMS_UNIXLIB_SETJMP)
     /*
      * HACK - set the _SYSTEM_ID to 0x20c so that setjmp/longjmp
      * will handle the full 32 floating point registers.
@@ -474,7 +474,7 @@ void _CPU_Context_Initialize(
 
   addr = (unsigned32 *)_the_context;
 
-#if defined(hppa1_1)
+#if defined(__hppa__)
   *(addr + RP_OFF) = jmp_addr;
   *(addr + SP_OFF) = (unsigned32)(_stack_low + CPU_FRAME_SIZE);
 
@@ -489,7 +489,7 @@ void _CPU_Context_Initialize(
     jmp_addr &= 0xfffffffc;
      *(addr + RP_OFF) = *(unsigned32 *)jmp_addr;
   }
-#elif defined(sparc)
+#elif defined(__sparc__)
 
   /*
    *  See /usr/include/sys/stack.h in Solaris 2.3 for a nice
@@ -502,7 +502,7 @@ void _CPU_Context_Initialize(
   *(addr + SP_OFF) = (unsigned32)(_stack_high - CPU_FRAME_SIZE);
   *(addr + FP_OFF) = (unsigned32)(_stack_high);
 
-#elif defined(i386) || defined(__i386__)
+#elif defined(__i386__)
 
     /*
      *  This information was gathered by disassembling setjmp().

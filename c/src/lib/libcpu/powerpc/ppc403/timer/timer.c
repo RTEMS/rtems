@@ -21,7 +21,7 @@
  *      i-cubed limited makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from c/src/lib/libcpu/hppa1_1/timer/timer.c:
+ *  Derived from c/src/lib/libcpu/hppa1.1/timer/timer.c:
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).

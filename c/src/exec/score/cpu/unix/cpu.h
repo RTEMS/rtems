@@ -242,9 +242,9 @@ extern "C" {
  *  If FALSE, then the grows toward smaller addresses.
  */
 
-#if defined(hppa1_1)
+#if defined(__hppa__)
 #define CPU_STACK_GROWS_UP               TRUE
-#elif defined(sparc) || defined(i386) || defined(__i386__)
+#elif defined(__sparc__) || defined(__i386__)
 #define CPU_STACK_GROWS_UP               FALSE
 #else
 #error "unknown CPU!!"
@@ -282,11 +282,11 @@ extern "C" {
  *  routines are handled.
  */
 
-#if defined(hppa1_1) || defined(sparc)
+#if defined(__hppa__) || defined(__sparc__)
 #define CPU_CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
-#elif defined(i386) || defined(__i386__)
+#elif defined(__i386__)
 #define CPU_CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
 #define CPU_BIG_ENDIAN                           FALSE
 #define CPU_LITTLE_ENDIAN                        TRUE
@@ -313,7 +313,7 @@ extern "C" {
 
 /* may need to put some structures here.  */
 
-#if defined(hppa1_1)
+#if defined(__hppa__)
 /*
  * Word indices within a jmp_buf structure
  */
@@ -363,7 +363,7 @@ extern "C" {
 #endif
 #endif
 
-#if defined(i386) || defined(__i386__)
+#if defined(__i386__)
  
 #ifdef RTEMS_NEWLIB
 #error "Newlib not installed"
@@ -384,7 +384,7 @@ extern "C" {
  
 #endif
  
-#if defined(sparc)
+#if defined(__sparc__)
 
 /*
  *  Word indices within a jmp_buf structure
@@ -550,11 +550,11 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  * The size of a frame on the stack
  */
 
-#if defined(hppa1_1)
+#if defined(__hppa__)
 #define CPU_FRAME_SIZE  (32 * 4)
-#elif defined(sparc)
+#elif defined(__sparc__)
 #define CPU_FRAME_SIZE  (112)   /* based on disassembled test code */
-#elif defined(i386) || defined(__i386__)
+#elif defined(__i386__)
 #define CPU_FRAME_SIZE  (24)  /* return address, sp, and bp pushed plus fudge */
 #else
 #error "Unknown CPU!!!"

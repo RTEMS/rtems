@@ -352,7 +352,7 @@ uninitialized = 0;
 
 #ifndef unix  /* make sure this is not a native compile */
 
-#ifdef i386
+#ifdef __i386__
 
 /* cpu.h */
 uninitialized += (sizeof _CPU_Null_fp_context) +
@@ -361,7 +361,7 @@ uninitialized += (sizeof _CPU_Null_fp_context) +
 
 #endif
 
-#ifdef i960
+#ifdef __i960__
 
 /* cpu.h */
 uninitialized += (sizeof _CPU_Interrupt_stack_low) +
@@ -369,7 +369,7 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 
 #endif
 
-#ifdef hppa1_1
+#ifdef __hppa__
 
 /* cpu.h */
 uninitialized += (sizeof _CPU_Null_fp_context) +
@@ -380,7 +380,7 @@ uninitialized += (sizeof _CPU_Null_fp_context) +
                  (sizeof _CPU_Interrupt_stack_high);
 #endif
 
-#ifdef m68k
+#ifdef __mc68000__
 
 /* cpu.h */
 uninitialized += (sizeof _CPU_Interrupt_stack_low) +
@@ -388,7 +388,7 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 
 #endif
 
-#ifdef sparc
+#ifdef __sparc__
  
 /* cpu.h */
 uninitialized += (sizeof _CPU_Interrupt_stack_low) +
@@ -417,7 +417,7 @@ uninitialized += (sizeof _CPU_Null_fp_context) +
 
 #endif
 
-#ifdef ppc
+#ifdef __PPC__
 
 /* cpu.h */
 uninitialized += (sizeof _CPU_Interrupt_stack_low) +
@@ -440,7 +440,7 @@ initialized +=
                 (sizeof _TOD_Days_since_last_leap_year);
 
 #ifndef unix /* make sure this is not native */
-#ifdef sparc
+#ifdef __sparc__
 
 initialized +=  (sizeof _CPU_Trap_slot_template);
 

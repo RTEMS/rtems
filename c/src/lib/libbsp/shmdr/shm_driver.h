@@ -119,27 +119,27 @@ extern "C" {
  *         view of the VMEbus address space) are not addressed yet.
  */
 
-#if defined(i960)
+#if defined(__i960__)
 #define SHM_LOCK_VALUE    0x00000080
 #define SHM_UNLOCK_VALUE  0
-#elif defined(m68k)
+#elif defined(__mc68000__)
 #define SHM_LOCK_VALUE    0x80000000
 #define SHM_UNLOCK_VALUE  0
 #define SHM_LOCK_VALUE    0x80000000
 #define SHM_UNLOCK_VALUE  0
-#elif defined(i386)
+#elif defined(__i386__)
 #define SHM_LOCK_VALUE    0x80000000
 #define SHM_UNLOCK_VALUE  0
-#elif defined(mips64orion)
+#elif defined(__mips__)
 #define SHM_LOCK_VALUE    0x80000000
 #define SHM_UNLOCK_VALUE  0
-#elif defined(hppa1_1)
+#elif defined(__hppa__)
 #define SHM_LOCK_VALUE    0
 #define SHM_UNLOCK_VALUE  1
-#elif defined(ppc)
+#elif defined(__PPC__)
 #define SHM_LOCK_VALUE    1
 #define SHM_UNLOCK_VALUE  0
-#elif defined(unix)
+#elif defined(__unix__)
 #define SHM_LOCK_VALUE    0
 #define SHM_UNLOCK_VALUE  1
 #elif defined(no_cpu)               /* for this values are irrelevant */

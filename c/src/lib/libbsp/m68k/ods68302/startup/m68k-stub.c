@@ -331,7 +331,7 @@ asm("
 _already7:
 	      movew   %sp@+,%d0
 ");
-#if defined (__m68000__) && !defined(__mc68020__)
+#if defined (__mc68000__) && !defined(__mc68020__)
 asm("
         lea     %sp@(4),%sp");       /* pull off 68000 return address */
 #endif
@@ -551,7 +551,7 @@ void _returnFromException(Frame *frame)
     frame->fsaveHeader = -1; /* restore regs, but we dont have fsave info*/
   }
 
-#if defined(__m68000__) && !defined(__mc68020__)
+#if defined(__mc68000__) && !defined(__mc68020__)
   /* a 68000 cannot use the internal info pushed onto a bus error
    * or address error frame when doing an RTE so don't put this info
    * onto the stack or the stack will creep every time this happens.

@@ -126,8 +126,6 @@ cdtest(void)
 //      in many implementations in order to get global constructors
 //      run.
 //
-//      Ref: c/src/lib/libbsp/hppa1_1/pxfl/startup/bspstart.c
-//
 
 
 rtems_task main_task(

@@ -74,7 +74,7 @@ architecture.  The following targets are supported:
 	i386-rtems
 	i386-go32-rtems         see notes
 	i960-rtems
-	hppa1_1-rtems
+	hppa1.1-rtems
 	m68k-rtems
 	mips64orion-rtems
         no_cpu-rtems
@@ -170,7 +170,7 @@ a29k		: portsw
 i386		: force386 i386ex
 i386-go32	: go32 go32_p5
 i960		: cvme961
-hppa1_1		: simhppa
+hppa1.1		: simhppa
 m68k		: dmv152 efi332 efi68k gen68302 gen68360 gen68360_040 idp
 		  mvme136 mvme147 mvme147s mvme162 ods68302
 no_cpu          : no_bsp
