@@ -27,7 +27,7 @@
 #include <termios.h>
 #include <bsp.h>
 #include <rtems/libio.h>
-#include "m68360.h"
+#include <rtems/m68k/m68360.h>
 
 /*
  * Declare clock speed -- may be overwritten by downloader or debugger

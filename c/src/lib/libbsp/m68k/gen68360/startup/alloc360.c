@@ -12,7 +12,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <m68360.h>
+#include <rtems/m68k/m68360.h>
 #include <rtems/error.h>
 
 /*

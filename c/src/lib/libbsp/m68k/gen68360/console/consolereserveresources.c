@@ -25,6 +25,6 @@
 #include <termios.h>
 #include <bsp.h>
 #include <rtems/libio.h>
-#include "m68360.h"
+#include <rtems/m68k/m68360.h>
 
 int _console_reserve_resources_removed;

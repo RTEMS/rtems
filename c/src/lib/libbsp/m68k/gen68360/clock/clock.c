@@ -15,7 +15,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include "m68360.h"
+#include <rtems/m68k/m68360.h>
 
 #define CLOCK_VECTOR     120
 #define CLOCK_IRQ_LEVEL    4

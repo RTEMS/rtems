@@ -10,7 +10,7 @@
  *  $Id$
  */
 #include <bsp.h>
-#include <m68360.h>
+#include <rtems/m68k/m68360.h>
 #include <stdio.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
