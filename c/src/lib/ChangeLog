@@ -1,3 +1,18 @@
+2001-08-16	Mike Siers <mikes@poliac.com>
+
+	* libc/termios.c: Fix a bug in the termios implementation in
+	the following scenario:
+	  The General Terminal Interface document that me states that
+	  if VMIN = 0 and VTIME = 0, then read() should return the minimum
+	  of two values:
+  		a) number of bytes available
+  		b) number of bytes requested (I assume from the read call)
+
+	  The current implementation of the fillBufferQueue() in termios.c is
+	  always return 1 character with these setting values.  I know the
+	  termios buffer has more than one character available and my read()
+	  call is requesting 1024 bytes.
+
 2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
 
 	* libc/getgrent.c, libc/getpwent.c: the 'ls' and more related command

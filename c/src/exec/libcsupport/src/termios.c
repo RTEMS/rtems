@@ -982,8 +982,9 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 {
 	rtems_interval timeout = tty->rawInBufSemaphoreFirstTimeout;
 	rtems_status_code sc;
+        int               wait = (int)1;
 
-	for (;;) {
+	while ( wait ) {
 		/*
 		 * Process characters read from raw queue
 		 */
@@ -1020,12 +1021,12 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 			/* continue processing new character */
 			if (tty->termios.c_lflag & ICANON) {
 				if  (siproc (c, tty))
-					return RTEMS_SUCCESSFUL;
+					wait = 0;
 			}
 			else {
 				siproc (c, tty);
 				if (tty->ccount >= tty->termios.c_cc[VMIN])
-					return RTEMS_SUCCESSFUL;
+					wait = 0;
 			}
 			timeout = tty->rawInBufSemaphoreTimeout;
 		}
@@ -1033,11 +1034,13 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 		/*
 		 * Wait for characters
 		 */
-		sc = rtems_semaphore_obtain (tty->rawInBuf.Semaphore,
-						tty->rawInBufSemaphoreOptions,
-						timeout);
-		if (sc != RTEMS_SUCCESSFUL)
-			break;
+		if ( wait ) {
+			sc = rtems_semaphore_obtain (tty->rawInBuf.Semaphore,
+				tty->rawInBufSemaphoreOptions,
+				timeout);
+			if (sc != RTEMS_SUCCESSFUL)
+				break;
+		}
 	}
 	return RTEMS_SUCCESSFUL;
 }
