@@ -1,5 +1,9 @@
 2004-04-20	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/Makefile.am: Add -D_KERNEL to CPPFLAGS.
+
+2004-04-20	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libnetworking/net/bpf.h: Partial update from FreeBSD.
 
 2004-04-19	Ralf Corsepius <ralf_corsepius@rtems.org>

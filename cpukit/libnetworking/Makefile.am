@@ -21,7 +21,7 @@ UNUSED_FILES += net/ppp.h net/ppp-deflate.c net/bsd-comp.c
 if HAS_NETWORKING
 # Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
 libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
-    -DDIAGNOSTIC -DBOOTP_COMPAT
+    -DDIAGNOSTIC -DBOOTP_COMPAT -D_KERNEL
 
 EXTRA_LIBRARIES = libnetworking.a
 CLEANFILES += libnetworking.a
