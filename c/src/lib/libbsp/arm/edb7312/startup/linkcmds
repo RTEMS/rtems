@@ -92,6 +92,9 @@ SECTIONS
 	 CREATE_OBJECT_SYMBOLS
 	*(.text) 
 	*(.text.*)
+	/* .gnu.warning sections are handled specially by elf32.em.  */
+	*(.gnu.warning)
+	*(.gnu.linkonce.t*)
 	*(.glue_7)
 	*(.glue_7t)
 
