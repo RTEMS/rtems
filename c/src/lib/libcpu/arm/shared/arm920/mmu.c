@@ -77,8 +77,8 @@ void mmu_init(mmu_sect_map_t *map)
     /* create a 1:1 mapping of the entire address space */
     i = 0;
     while(map[i].size != 0) {
-        int c;
-        int b;
+        int c = 0;  /* to avoid uninitialized warnings */
+        int b = 0;  /* to avoid uninitialized warnings */
         int pbase;
         int vbase;
         int sects;

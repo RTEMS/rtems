@@ -19,6 +19,7 @@
 #include <bsp.h>
 #include <irq.h>
 #include <mc9328mxl.h>
+#include <rtems/bspIo.h>  /* for printk */
 
 /* this is defined in ../../../shared/clockdrv_shell.c */
 rtems_isr Clock_isr(rtems_vector_number vector);
@@ -57,10 +58,11 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER1,
 /**
  * Installs the clock ISR. You shouldn't need to change this.
  */
-#define Clock_driver_support_install_isr( _new, _old )                      \
-  do {                                                                      \
-      BSP_install_rtems_irq_handler(&clock_isr_data);                       \
-     } while(0)
+#define Clock_driver_support_install_isr( _new, _old ) \
+  do {                                                 \
+      (_old) = NULL;                                   \
+      BSP_install_rtems_irq_handler(&clock_isr_data);  \
+  } while(0)
 
 
 /**

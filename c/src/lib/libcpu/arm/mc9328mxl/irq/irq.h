@@ -104,9 +104,6 @@ typedef enum {
     BSP_MAX_INT
 } rtems_irq_symbolic_name;
 
-extern void *bsp_vector_table;
-#define VECTOR_TABLE &bsp_vector_table;
-  											   
 typedef unsigned char  rtems_irq_level;
 typedef unsigned char  rtems_irq_trigger;
 
@@ -117,6 +114,9 @@ typedef void (*rtems_irq_enable)    (const struct __rtems_irq_connect_data__*);
 typedef void (*rtems_irq_disable)   (const struct __rtems_irq_connect_data__*);
 typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);
 
+extern rtems_irq_hdl bsp_vector_table;
+#define VECTOR_TABLE bsp_vector_table
+  											   
 typedef struct __rtems_irq_connect_data__ {
     /* IRQ line */
     rtems_irq_symbolic_name       name;

@@ -29,9 +29,9 @@ int at91rm9200_get_slck(void)
 int at91rm9200_get_mck(void)
 {
     uint32_t mck_reg;
-    uint32_t mck_freq;
+    uint32_t mck_freq = 0;  /* to avoid warnings */
     uint32_t pll_reg;
-    int prescaler;
+    int prescaler = 0;  /* to avoid warnings */
 
     mck_reg = PMC_REG(PMC_MCKR);
 

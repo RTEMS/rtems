@@ -21,6 +21,7 @@
 #include <bsp.h>
 #include <irq.h>
 #include <at91rm9200.h>
+#include <at91rm9200_pmc.h>
 
 
 rtems_device_major_number rtems_clock_major = ~0;

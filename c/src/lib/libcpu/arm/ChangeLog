@@ -1,3 +1,9 @@
+2005-01-04	Joel Sherrill <joel@OARcorp.com>
+
+	* at91rm9200/clock/clock.c, at91rm9200/irq/irq.c, at91rm9200/pmc/pmc.c,
+	mc9328mxl/clock/clockdrv.c, mc9328mxl/irq/irq.c, mc9328mxl/irq/irq.h,
+	shared/arm920/mmu.c: Remove warnings.
+
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* at91rm9200/Makefile.am, mc9328mxl/Makefile.am,

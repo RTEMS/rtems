@@ -45,7 +45,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * sources PID (see the at91rm9200_pid for this mapping).  We 
      * convert it to a long word offset to get source's vector register 
      */
-    if (AIC_SVR_REG(irq->name * 4) != default_int_handler) {
+    if (AIC_SVR_REG(irq->name * 4) != (uint32_t) default_int_handler) {
         return 0;
     }
     
@@ -54,7 +54,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * store the new handler
      */
-    AIC_SVR_REG(irq->name * 4) = irq->hdl;
+    AIC_SVR_REG(irq->name * 4) = (uint32_t) irq->hdl;
     
     /*
      * unmask interrupt
@@ -87,7 +87,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Check if the handler is actually connected. If not, issue an error.
      */
-    if (AIC_SVR_REG(irq->name * 4) != irq->hdl) {
+    if (AIC_SVR_REG(irq->name * 4) != (uint32_t) irq->hdl) {
       return 0;
     }
     _CPU_ISR_Disable(level);
@@ -107,7 +107,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * restore the default irq value
      */
-    AIC_SVR_REG(irq->name * 4) = default_int_handler;
+    AIC_SVR_REG(irq->name * 4) = (uint32_t) default_int_handler;
     
     _CPU_ISR_Enable(level);
 

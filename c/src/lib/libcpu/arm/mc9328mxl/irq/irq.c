@@ -36,9 +36,9 @@ static int isValidInterrupt(int irq)
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level level;
-    uint32_t *bsp_tbl;
+    rtems_irq_hdl *bsp_tbl;
 
-    bsp_tbl = (uint32_t*)&bsp_vector_table;
+    bsp_tbl = &bsp_vector_table;
     
     if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -80,9 +80,9 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level level;
-    uint32_t *bsp_tbl;
+    rtems_irq_hdl *bsp_tbl;
 
-    bsp_tbl = (uint32_t*)&bsp_vector_table;
+    bsp_tbl = &bsp_vector_table;
   
     if (!isValidInterrupt(irq->name)) {
       return 0;
