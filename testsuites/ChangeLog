@@ -1,3 +1,7 @@
+2003-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Use $(mkdir_p) instead of $(mkinstalldirs).
+
 2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/env-rtemsbsp.m4: Add PROJECT_LIB.
