@@ -4,6 +4,8 @@
 
 include $(top_srcdir)/automake/compile.am
 
+EXEEXT =
+
 EXTRA_PROGRAMS =
 CLEANFILES =
 project_lib_DATA =
