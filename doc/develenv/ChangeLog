@@ -1,3 +1,7 @@
+2003-02-28	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Add newly generated .texi files.
+
 2003-02-18	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, develenv.texi: Relect generating .texi from .t's.
