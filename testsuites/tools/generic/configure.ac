@@ -11,12 +11,11 @@ RTEMS_CANONICAL_TARGET_CPU
 
 AM_INIT_AUTOMAKE([no-define foreign 1.8])
 AM_MAINTAINER_MODE
-# Override the set of BSPs to be built.
-
-RTEMS_ENV_RTEMSBSP
-RTEMS_PROJECT_ROOT
 
 RTEMS_PATH_KSH
+
+RTEMS_TOOLPATHS
+AC_SUBST(program_prefix)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
