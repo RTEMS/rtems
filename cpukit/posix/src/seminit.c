@@ -30,10 +30,9 @@ int sem_init(
   int                        status;
   POSIX_Semaphore_Control   *the_semaphore;
 
-  if ( !*sem )
+  if ( !sem )
     set_errno_and_return_minus_one( EINVAL );
     
-
   status = _POSIX_Semaphore_Create_support(
     NULL,
     pshared,
