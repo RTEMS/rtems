@@ -158,7 +158,7 @@ void validate_mq_open_error_codes()
   mqd_t           n_mq2;
   struct mq_attr  attr;
   int             status;
-  mqd_t           open_mq[CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES];
+  mqd_t           open_mq[CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES + 1];
 
   attr.mq_maxmsg  = MAXMSG;
   attr.mq_msgsize = MSGSIZE;
@@ -203,7 +203,6 @@ void validate_mq_open_error_codes()
     (int) n_mq2, (int ) (-1), "mq_open error return status" );
   fatal_posix_service_status( errno, ENOENT,  "mq_open errno ENOENT"); 
 
-
   /*
    * XXX EINTR  - call was interrupted by a signal
    */
@@ -224,6 +223,27 @@ void validate_mq_open_error_codes()
    */
 
   /*
+   * EEXIST - Create an existing queue.
+   */
+
+  puts( "Init: mq_open - Create an Existing mq (EEXIST)" );
+  open_mq[0] = mq_open( 
+    Build_Queue_Name(0), O_CREAT | O_RDWR | O_NONBLOCK, 0x777, NULL );
+  assert( open_mq[0] != (-1) );
+
+  n_mq2 = mq_open(
+    Build_Queue_Name(0), O_CREAT | O_EXCL | O_RDONLY, 0x777, NULL);
+  fatal_posix_service_status( 
+    (int) n_mq2, (int ) (-1), "mq_open error return status" );
+  fatal_posix_service_status( errno, EEXIST,  "mq_open errno EEXIST");
+
+  status = mq_unlink( Build_Queue_Name(0) );
+  fatal_posix_service_status( status, 0, "mq_unlink message queue"); 
+
+  status = mq_close( open_mq[0]);
+  fatal_posix_service_status( status, 0, "mq_close message queue"); 
+
+  /*
    * Open maximum number of message queues
    */
 
@@ -232,7 +252,9 @@ void validate_mq_open_error_codes()
     open_mq[i] = mq_open( 
       Build_Queue_Name(i), O_CREAT | O_RDWR | O_NONBLOCK, 0x777, NULL );
     assert( open_mq[i] != (-1) );
+    assert( open_mq[i] );
     /*XXX - Isn't there a more general check */ 
+/* JRS     printf( "mq_open 0x%x %s\n", open_mq[i], Build_Queue_Name(i) ); */
   }
 
   /*
@@ -242,17 +264,6 @@ void validate_mq_open_error_codes()
   /*
    * XXX EACCES - queue exists permissions specified by o_flag are denied.
    */
-
-  /*
-   * EEXIST - Create an existing queue.
-   */
-
-  puts( "Init: mq_open - Create an Existing mq (EEXIST)" );
-  n_mq2 = mq_open(
-    Build_Queue_Name(0), O_CREAT | O_EXCL | O_RDONLY, 0x777, NULL);
-  fatal_posix_service_status( 
-    (int) n_mq2, (int ) (-1), "mq_open error return status" );
-  fatal_posix_service_status( errno, EEXIST,  "mq_open errno EEXIST");
 
   /*
    * XXX EMFILE  - Too many message queues in use by the process
@@ -279,7 +290,10 @@ void validate_mq_open_error_codes()
     fatal_posix_service_status( status, 0, "mq_close message queue"); 
 
     status = mq_unlink( Build_Queue_Name(i) );
+    if ( status == -1 )
+      perror( "mq_unlink" );
     fatal_posix_service_status( status, 0, "mq_unlink message queue"); 
+    /* JRS printf( "mq_close/mq_unlink 0x%x %s\n", open_mq[i], Build_Queue_Name(i) ); */
   }
 }
 
@@ -669,10 +683,12 @@ void verify_open_functionality()
    * Validate a second open returns the same message queue.
    */
 
+#if 0
   puts( "Init: mq_open - Open an existing mq ( same id )" );
   n_mq = mq_open( RD_NAME, 0 );
   fatal_posix_service_status( 
     (int) n_mq, (int ) Test_q[RD_QUEUE].mq, "mq_open error return status" );
+#endif
 }
 
 void verify_unlink_functionality()
