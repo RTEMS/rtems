@@ -17,7 +17,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all-local: $(ARCH) $(OBJS)
+all-local: $(OBJS)
 
 .PRECIOUS:
 
