@@ -1,3 +1,9 @@
+2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Switch to GNU-canonicalization.
+	* Makefile.am: Reflect changes to configure.in.
+	* acinclude.m4: Remove.
+
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: add lib/libbsp to the GNU canonicalized
