@@ -19,7 +19,7 @@ of the following:
 @item Initialization of mount table chain control structure
 
 @item Allocation of a @code{jnode} structure that will server as the root node
-of the `In Memory File System'
+of the `In Memory Filesystem'
 
 @item Initialization of the allocated @code{jnode} with the appropriate OPS,
 directory handlers and pathconf limits and options.

@@ -1,9 +1,9 @@
 
-@chapter In-Memory File System 
+@chapter In-Memory Filesystem 
 
-This chapter describes the In-Memory File System.
+This chapter describes the In-Memory Filesystem.
 
-@section OPS Table Functions
+@section Filesystem Handler Table Functions
 
 OPS table functions are defined in a rtems_filesystem_operations_table
 structure.  It defines functions that are specific to a given file system.
@@ -619,7 +619,7 @@ XXX
 @c
 @c
 @page
-@section Handler Table Functions for Regular Files
+@section Regular File Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
 structure. It defines functions that are specific to a node type in a given
@@ -652,7 +652,7 @@ typedef struct @{
 
 @page
 
-@subsection open() for Regular File
+@subsection open() for Regular Files
 
 @subheading Slot Function:
 
@@ -682,7 +682,7 @@ a success code is always returned.
 
 @page
 
-@subsection close() for Regular File
+@subsection close() for Regular Files
 
 @subheading Slot Function:
 
@@ -711,7 +711,7 @@ and then immediately returns a success status.
 
 @page
 
-@subsection read() for Regular File
+@subsection read() for Regular Files
 
 @subheading Slot Function:
 
@@ -758,7 +758,7 @@ IMFS_memfile_read() will do the following:
 
 @page
 
-@subsection write() for Regular File
+@subsection write() for Regular Files
 
 @subheading Slot Function:
 
@@ -781,7 +781,7 @@ XXX
 
 @page
 
-@subsection ioctl() for Regular File
+@subsection ioctl() for Regular Files
 
 @subheading Slot Function:
 
@@ -810,7 +810,7 @@ a successful completion status.
 
 @page
 
-@subsection lseek() for Regular File
+@subsection lseek() for Regular Files
 
 @subheading Slot Function:
 
@@ -843,7 +843,7 @@ file position index. A success code is always returned from this routine.
 
 @page
 
-@subsection fstat() for Regular File
+@subsection fstat() for Regular Files
 
 @subheading Slot Function:
 
@@ -905,7 +905,7 @@ structure:
 
 @page
 
-@subsection fchmod() for Regular File
+@subsection fchmod() for Regular Files
 
 @subheading Slot Function:
 
@@ -946,7 +946,7 @@ based on the mode calling parameter.
 
 @page
 
-@subsection ftruncate() for Regular File
+@subsection ftruncate() for Regular Files
 
 @subheading Slot Function:
 
@@ -969,7 +969,7 @@ XXX
 
 @page
 
-@subsection fpathconf() for Regular File
+@subsection fpathconf() for Regular Files
 
 @subheading Slot Function:
 
@@ -994,7 +994,7 @@ Not Implemented
 
 @page
 
-@subsection fsync() for Regular File
+@subsection fsync() for Regular Files
 
 @subheading Slot Function:
 
@@ -1018,7 +1018,7 @@ XXX
 
 @page
 
-@subsection fdatasync() for Regular File
+@subsection fdatasync() for Regular Files
 
 @subheading Slot Function:
 
@@ -1039,7 +1039,7 @@ XXX
 @c
 @c
 @page
-@section Handler Table Functions for Directories
+@section Directory Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
 structure. It defines functions that are specific to a node type in a given
@@ -1072,7 +1072,7 @@ typedef struct @{
 
 @page
 
-@section open() for Directories
+@subsection open() for Directories
 
 @subheading Slot Function:
 
@@ -1108,7 +1108,7 @@ This allows us to start reading at the beginning of the directory.
 
 @page
 
-@section close() for Directories
+@subsection close() for Directories
 
 @subheading Slot Function:
 
@@ -1135,7 +1135,7 @@ immediately returns a success status.
 
 @page
 
-@section read() for Directories
+@subsection read() for Directories
 
 @subheading Slot Function:
 
@@ -1166,7 +1166,7 @@ this routine.
 
 @page
 
-@section write() for Directories
+@subsection write() for Directories
 
 @subheading Slot Function:
 
@@ -1190,7 +1190,7 @@ XXX
 
 @page
 
-@section ioctl() for Directories
+@subsection ioctl() for Directories
 
 @subheading Slot Function:
 
@@ -1213,7 +1213,7 @@ XXX
 
 @page
 
-@section lseek() for Directories
+@subsection lseek() for Directories
 
 @subheading Slot Function:
 
@@ -1247,7 +1247,7 @@ the open directory.
 
 @page
 
-@section fstat() for Directories
+@subsection fstat() for Directories
 
 @subheading Slot Function:
 
@@ -1293,7 +1293,7 @@ of the children of the directory.
 
 @page
 
-@section fchmod() for Directories
+@subsection fchmod() for Directories
 
 @subheading Slot Function:
 
@@ -1334,7 +1334,7 @@ based on the mode calling parameter.
 
 @page
 
-@section ftruncate() for Directories
+@subsection ftruncate() for Directories
 
 @subheading Slot Function:
 
@@ -1358,7 +1358,7 @@ XXX
 
 @page
 
-@section fpathconf() for Directories
+@subsection fpathconf() for Directories
 
 @subheading Slot Function:
 
@@ -1383,7 +1383,7 @@ Not Implemented
 
 @page
 
-@section fsync() for Directories
+@subsection fsync() for Directories
 
 @subheading Slot Function:
 
@@ -1407,7 +1407,7 @@ XXX
 
 @page
 
-@section fdatasync() for Directories
+@subsection fdatasync() for Directories
 
 @subheading Slot Function:
 
@@ -1426,7 +1426,7 @@ XXX
 XXX
 
 
-@section Handler Table Functions for Devices
+@section Device Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
 structure. It defines functions that are specific to a node type in a given
@@ -1458,7 +1458,7 @@ typedef struct @{
 
 @page
 
-@section open() for Devices
+@subsection open() for Devices
 
 @subheading Slot Function:
 
@@ -1494,7 +1494,7 @@ driver that contains the file control block, flags and mode information.
 
 @page
 
-@section close() for Devices
+@subsection close() for Devices
 
 @subheading Slot Function:
 
@@ -1527,7 +1527,7 @@ major and minor device numbers.
 
 @page
 
-@section read() for Devices
+@subsection read() for Devices
 
 @subheading Slot Function:
 
@@ -1578,7 +1578,7 @@ read will be returned to the calling program.
 
 @page
 
-@section write() for Devices
+@subsection write() for Devices
 
 @subheading Slot Function:
 
@@ -1601,7 +1601,7 @@ XXX
 
 @page
 
-@section ioctl() for Devices
+@subsection ioctl() for Devices
 
 @subheading Slot Function:
 
@@ -1647,7 +1647,7 @@ the calling program, otherwise the ioctl_return value is returned.
 
 @page
 
-@section lseek() for Devices
+@subsection lseek() for Devices
 
 @subheading Slot Function:
 
@@ -1676,7 +1676,7 @@ successful status.
 
 @page
 
-@section fstat() for Devices
+@subsection fstat() for Devices
 
 @subheading Slot Function:
 
@@ -1738,7 +1738,7 @@ structure:
 
 @page
 
-@section fchmod() for Devices
+@subsection fchmod() for Devices
 
 @subheading Slot Function:
 
@@ -1780,7 +1780,7 @@ based on the mode calling parameter.
 
 @page
 
-@section ftruncate() for Devices
+@subsection ftruncate() for Devices
 
 @subheading Slot Function:
 
@@ -1803,7 +1803,7 @@ XXX
 
 @page
 
-@section fpathconf() for Devices
+@subsection fpathconf() for Devices
 
 @subheading Slot Function:
 
@@ -1828,7 +1828,7 @@ Not Implemented
 
 @page
 
-@section fsync() for Devices
+@subsection fsync() for Devices
 
 @subheading Slot Function:
 

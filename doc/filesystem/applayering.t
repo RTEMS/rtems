@@ -18,7 +18,7 @@ and 7).
 
 
 @example
-Figure of the File System Functional Layering goes here.
+Figure of the Filesystem Functional Layering goes here.
 This figure includes networking and disk caching layering.
 @end example
 
@@ -81,8 +81,8 @@ interface routines.
 
 
 @example
-Figure of the File System Functional Layering goes here.
-This figure focuses on the Base File System and IMFS.
+Figure of the Filesystem Functional Layering goes here.
+This figure focuses on the Base Filesystem and IMFS.
 @end example
 
 
@@ -97,7 +97,7 @@ Figure of the IMFS Memfile control blocks
 
 
 
-@section Mapping of Generic System Calls to File System Specific Functions
+@section Mapping of Generic System Calls to Filesystem Specific Functions
 
 
 The list of generic system calls includes the routines open(), read(),
@@ -263,13 +263,13 @@ pointers to the OPS table for the file system that contains the node, the
 node type specific handlers for the node and a reference pointer to the
 mount table entry associated with the file system containing the node
 
-@subsection File System Functional Interface to Files and Directories
+@subsection Filesystem Functional Interface to Files and Directories
 
 @itemize @bullet
 
 @item Access using relative or absolute path names to file
 
-@item OP Table for File System - rtems_filesystem_operations_table
+@item OP Table for Filesystem - rtems_filesystem_operations_table
 
 @enumerate
 @item evalpath()

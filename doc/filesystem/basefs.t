@@ -7,7 +7,7 @@
 @c
 
 
-@chapter Base File System
+@chapter Base Filesystem
 
 RTEMS initially mounts a RAM based file system known as the base file system.  
 The root directory of this file system tree serves as the logical root of the
@@ -34,7 +34,7 @@ base file system. The framework set up under the base file system will allow
 for these new file system types and the unique data and functionality that is
 required to manage the future file systems.
 
-@section Base File System Mounting
+@section Base Filesystem Mounting
 
 At present, the first file system to be mounted is the `In Memory File
 System'. It is mounted using a standard MOUNT() command in which the mount
@@ -71,7 +71,7 @@ Note: Other file systems can be mounted but they are mounted onto points
 (directory mount points) in the base file system.
 
 
-@subsection Base File System Node Structure and Function
+@subsection Base Filesystem Node Structure and Function
 
 Each regular file, device, hard link, and directory is represented by a data
 structure called a @code{jnode}. The @code{jnode} is formally represented by the
@@ -235,7 +235,7 @@ function.
 
 @section IMFS
 
-@subsection OPS Table Functions for the In Memory File System (IMFS)
+@subsection OPS Table Functions for the In Memory Filesystem (IMFS)
 
 @example
 
@@ -262,7 +262,7 @@ Readlink Imfs_readlink.c IMFS_readlink()
 
 
 
-@subsection Handler Functions for Regular Files of In Memory File System
+@subsection Handler Functions for Regular Files of In Memory Filesystem
 
 @example
 Handler Function            File            Routine Name
@@ -282,7 +282,7 @@ Fdatasync NA NULL
 @end example
 
 
-@subsection Handler Functions for Directories of In Memory File System
+@subsection Handler Functions for Directories of In Memory Filesystem
 
 @example
 Handler Function             File                Routine Name
@@ -303,7 +303,7 @@ Fdatasync NA NULL
 
 
 
-@subsection Handler Functions for Devices of In Memory File System
+@subsection Handler Functions for Devices of In Memory Filesystem
 
 @example
 Handler Function          File                  Routine Name

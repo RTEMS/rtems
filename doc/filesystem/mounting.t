@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@chapter Mounting and Unmounting File Systems 
+@chapter Mounting and Unmounting Filesystems
 
 @section Mount Points
 
@@ -32,6 +32,7 @@ of the mount point after the mount is complete.
 
 Each entry in the mount table chain is of the following type:
 
+@example
 struct rtems_filesystem_mount_table_entry_tt
 @{
    Chain_Node                             Node;
@@ -51,6 +52,7 @@ struct rtems_filesystem_mount_table_entry_tt
    */
    char                                  *dev;
 @};
+@end example
 
 @section Adding entries to the chain during mount
 

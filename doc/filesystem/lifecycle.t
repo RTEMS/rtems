@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@chapter File System Lifecycle
+@chapter Filesystem Lifecycle
 
 This chapter describes some of the dynamic behavior of file system control
 structures
@@ -19,7 +19,7 @@ initialized to an empty state during the base file system initialization.
 The mount operation will add entries to the mount table chain. The
 un-mount operation will remove entries from the mount table chain.
 
-@section Memory associated with the In Memory File System
+@section Memory associated with the In Memory Filesystem
 
 A memory based file system draws its resources for files and directories
 from the memory resources of the system. When it is time to un-mount the

@@ -79,13 +79,13 @@ This is the online version of the RTEMS Filesystem Design Guide.
 
 @menu
 * Preface::
-* Base File System::
+* Base Filesystem::
 * Applications and Functional Layering::
 * Pathname Evaluation::
 * System Initialization::
-* Mounting and Unmounting File Systems::
-* File System Lifecycle::
-* In-Memory File System::
+* Mounting and Unmounting Filesystems::
+* Filesystem Lifecycle::
+* In-Memory Filesystem::
 * System Call Development Notes::
 * Command and Variable Index::
 * Concept Index::
