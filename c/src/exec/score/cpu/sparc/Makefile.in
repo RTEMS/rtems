@@ -20,10 +20,10 @@ H_FILES=$(srcdir)/cpu.h $(srcdir)/sparc.h $(srcdir)/sparctypes.h
 # H_FILES that get installed externally
 EXTERNAL_H_FILES = $(srcdir)/asm.h $(srcdir)/erc32.h
 
-# Assembly source names, if any, go here -- minus the .s
+# Assembly source names, if any, go here -- minus the .S
 S_PIECES=cpu_asm rtems
-S_FILES=$(S_PIECES:%=%.s)
-S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+S_FILES=$(S_PIECES:%=%.S)
+S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 
 SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES) $(EXTERNAL_H_FILES) 
 OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)

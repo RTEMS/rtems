@@ -8,8 +8,8 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-BSP_PIECES=startup clock console timer # shmsupp
-GENERIC_PIECES=# shmdr
+BSP_PIECES=startup clock console timer
+GENERIC_PIECES=
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \

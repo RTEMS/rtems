@@ -8,21 +8,18 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-# MP_XXX_PARTS are the pieces of the BSP required in a MP environment
-# We only build them if HAS_MP was defined
- 
-MP_BSP_PARTS_yes_V = shmsupp
-MP_BSP_PARTS = $(MP_BSP_PARTS_$(HAS_MP)_V)
-
-MP_GENERIC_PARTS_yes_V = shmdr
-MP_GENERIC_PARTS = $(MP_GENERIC_PARTS_$(HAS_MP)_V)
-
-
-
-BSP_PIECES=startup clock console $(MP_BSP_PARTS) timer
+BSP_PIECES=startup clock console timer
 # pieces to pick up out of libcpu/unix
 CPU_PIECES=
-GENERIC_PIECES=$(MP_GENERIC_PARTS)
+GENERIC_PIECES=
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/lib.cfg
+
+ifeq ($(HAS_MP),yes)
+GENERIC_PIECES += shmdr
+BSP_PIECES += shmsupp
+endif
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
@@ -31,9 +28,6 @@ OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
      $(foreach piece, $(GENERIC_PIECES), \
        ../../../$(piece)/$(ARCH)/$(piece).rel)
 LIB=$(ARCH)/libbsp.a
-
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
-include $(RTEMS_ROOT)/make/lib.cfg
 
 #
 # (OPTIONAL) Add local stuff here using +=

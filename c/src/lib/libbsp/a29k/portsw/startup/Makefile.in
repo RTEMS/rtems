@@ -17,10 +17,10 @@ C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES=
 
-# Assembly source names, if any, go here -- minus the .s
+# Assembly source names, if any, go here -- minus the .S
 S_PIECES=
-S_FILES=$(S_PIECES:%=%.s)
-S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+S_FILES=$(S_PIECES:%=%.S)
+S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 
 SRCS=ramlink romlink $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
 OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)

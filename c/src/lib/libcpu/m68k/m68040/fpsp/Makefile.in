@@ -17,14 +17,14 @@ C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES=
 
-# Assembly source names, if any, go here -- minus the .s
+# Assembly source names, if any, go here -- minus the .S
 S_PIECES= bindec binstr bugfix decbin do_func gen_except get_op kernel_ex \
     res_func round rtems_skel sacos sasin satan satanh scale scosh setox \
     sgetem sint slog2 slogn smovecr srem_mod ssin ssinh stan stanh sto_res \
     stwotox tbldo util x_bsun x_fline x_operr x_ovfl x_snan x_store x_unfl \
     x_unimp x_unsupp
-S_FILES=$(S_PIECES:%=%.s)
-S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+S_FILES=$(S_PIECES:%=%.S)
+S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 
 SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
 OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)

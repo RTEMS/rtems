@@ -13,6 +13,9 @@ BSP_PIECES=startup clock console timer vectors
 CPU_PIECES=
 GENERIC_PIECES=
 
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/lib.cfg
+
 ifeq ($(HAS_MP),yes)
 GENERIC_PIECES += shmdr
 BSP_PIECES += shmsupp
@@ -25,9 +28,6 @@ OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
      $(foreach piece, $(GENERIC_PIECES), \
          ../../../$(piece)/$(ARCH)/$(piece).rel)
 LIB=$(ARCH)/libbsp.a
-
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
-include $(RTEMS_ROOT)/make/lib.cfg
 
 #
 # (OPTIONAL) Add local stuff here using +=
