@@ -1,3 +1,14 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* mpc505/Makefile.am: Ditto.
+	* mpc6xx/Makefile.am: Ditto.
+	* mpc8260/Makefile.am: Ditto.
+	* mpc8xx/Makefile.am: Ditto.
+	* ppc403/Makefile.am: Ditto.
+	* shared/Makefile.am: Ditto.
+
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc6xx/Makefile.am: Remove libcpuspec.a (Unused).

@@ -125,10 +125,12 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc8260/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc8260
 	@: > $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc8260.h: include/mpc8260.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260.h
@@ -149,9 +151,12 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/cpm.h
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/raw_exception.h: exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

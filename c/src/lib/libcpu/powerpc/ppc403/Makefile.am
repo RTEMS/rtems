@@ -123,6 +123,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/ictrl.h: ictrl/ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h
@@ -133,5 +134,7 @@ $(PROJECT_INCLUDE)/tty_drv.h: tty_drv/tty_drv.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tty_drv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tty_drv.h
 endif
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am
