@@ -1,3 +1,7 @@
+2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add tmpinstall dirstamp support.
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add dependencies to $(ARCH)/$(dirstamp).
