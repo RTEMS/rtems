@@ -173,6 +173,27 @@ pcib_find_by_devid(int vendorId, int devId, int idx, int *sig)
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
 
+int
+pci_find_device(
+  unsigned short vendorid,
+  unsigned short deviceid,
+  int instance,
+  int *pbus,
+  int *pdev,
+  int *pfun
+)
+{
+  int status;
+  int sig;
+
+  status = pcib_find_by_devid( vendorid, deviceid, instance, &sig );
+
+  *pbus = PCIB_DEVSIG_BUS(sig);
+  *pdev = PCIB_DEVSIG_DEV(sig);
+  *pfun = PCIB_DEVSIG_FUNC(sig);
+  return status;
+}
+
 /* 
  * Find specified class code return device signature: combination 
  * of bus number, device number and function number

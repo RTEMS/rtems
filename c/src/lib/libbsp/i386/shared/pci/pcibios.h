@@ -27,7 +27,6 @@
 extern "C" {
 #endif
 
-int pcib_find_by_devid(int vendorId, int devId, int idx, int *sig);
 int pcib_find_by_class(int classCode, int idx, int *sig);
 int pcib_special_cycle(int busNo, int data);
 int pcib_conf_read8(int sig, int off, unsigned char *data);
