@@ -1,3 +1,10 @@
+2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 321:
+	* aclocal/env-rtemscpu.m4: Remove support for profile-variant.
+	* automake/compile.am: Ditto.
+	* automake/local.am: Ditto.
+
 2003-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Remove LIBSUFFIX_VA (unused).

@@ -8,14 +8,6 @@ debug:
 
 .PHONY: debug
 
-profile:
-	@echo
-	@echo "\"make profile\" is obsolete, instead use:"
-	@echo "	make VARIANT=PROFILE"
-	@echo
-
-.PHONY: profile
-
 preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
@@ -25,6 +17,6 @@ depend: depend-am
 .PHONY: depend depend-am depend-gcc
 
 clean-local:
-	$(RM) -r o-optimize o-debug o-profile $(CLEANDIRS)
-	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp Depends-o-profile.tmp
+	$(RM) -r o-optimize o-debug $(CLEANDIRS)
+	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp
 

@@ -26,8 +26,6 @@ AC_DEFUN(RTEMS_ENV_RTEMSCPU,
       [CFLAGS for building the optimized variant])
     AC_ARG_VAR([CFLAGS_DEBUG_V],
       [CFLAGS for building the debugging variant])
-    AC_ARG_VAR([CFLAGS_PROFILE_V],
-      [CFLAGS for building the profiled variant])
  
     AC_ARG_VAR([RTEMS_BSP],[RTEMS_BSP to build])
     AC_MSG_CHECKING([for RTEMS_BSP])
