@@ -33,9 +33,9 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 # (OPTIONAL) Add local stuff here using +=
 #
 
-#ifeq ($(RTEMS_GAS_CODE16),yes)
+ifeq ($(RTEMS_GAS_CODE16),yes)
 DEFINES  += -DNEW_GAS
-#endif
+endif
 CPPFLAGS +=
 CFLAGS   +=
 
