@@ -9,8 +9,8 @@ C_FILES = console.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 AM_CPPFLAGS += $(BSP_CPPFLAGS)
 #
@@ -28,4 +28,4 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 EXTRA_DIST = console.c
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

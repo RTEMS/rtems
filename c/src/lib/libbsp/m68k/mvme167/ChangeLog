@@ -1,3 +1,16 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+	clock/Makefile.am: Reflect having moved automake.
+	console/Makefile.am: Reflect having moved automake.
+	fatal/Makefile.am: Reflect having moved automake.
+	include/Makefile.am: Reflect having moved automake.
+	network/Makefile.am: Reflect having moved automake.
+	start/Makefile.am: Reflect having moved automake.
+	startup/Makefile.am: Reflect having moved automake.
+	timer/Makefile.am: Reflect having moved automake.
+	wrapup/Makefile.am: Reflect having moved automake.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 452/bsps
