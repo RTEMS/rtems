@@ -12,10 +12,7 @@ PGM=$(ARCH)/timer.rel
 C_FILES = timer.c timerisr.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-S_FILES = gettime.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
-
-OBJS = $(C_O_FILES) $(S_O_FILES)
+OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/lib.am

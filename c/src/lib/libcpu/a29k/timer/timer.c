@@ -29,16 +29,18 @@ static char _sccsid[] = "@(#)timer.c 05/07/96     1.4\n";
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ )
 #define TIMER_MAX_VALUE 0xffffffff
 
-extern unsigned32 mips_read_timer( void );
+static unsigned32 read_timer( void )
+{
+  return 0; /* do something with real hardware here */
+}
 
 static rtems_boolean Timer_driver_Find_average_overhead;
 static unsigned32 Timer_initial_value = 0;
 
 void Timer_initialize( void )
 {
-/*
-   Timer_initial_value = mips_read_timer();
- */
+   Timer_initial_value = read_timer();
+
   /*
    *  Somehow start the timer
    */
@@ -70,7 +72,7 @@ int Read_timer( void )
    *  Read the timer and see how many clicks it has been since we started.
    */
 
-  clicks = mips_read_timer();   /* XXX: read some HW here */
+  clicks = read_timer();   /* XXX: read some HW here */
   if (clicks < Timer_initial_value)
   {
       clicks += TIMER_MAX_VALUE;
