@@ -269,6 +269,10 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #include <timerdrv.h>
 #endif
 
+#ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
+#include <rtc.h>
+#endif
+
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 #include <rtems/devnull.h>
 #endif
@@ -282,6 +286,9 @@ rtems_driver_address_table Device_drivers[] = {
 #endif
 #ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
   CLOCK_DRIVER_TABLE_ENTRY,
+#endif
+#ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
+  RTC_DRIVER_TABLE_ENTRY,
 #endif
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
   DEVNULL_DRIVER_TABLE_ENTRY,
