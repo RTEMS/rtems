@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  system.h,v 1.6 1995/12/19 20:21:12 joel Exp
+ *  $Id$
  */
 
 #include <tmacros.h>
@@ -44,6 +44,8 @@ void Get_all_counters( void );
 #define CONFIGURE_INIT_TASK_PRIORITY          10
 #define CONFIGURE_INIT_TASK_INITIAL_MODES     RTEMS_DEFAULT_MODES
 #define CONFIGURE_MAXIMUM_PERIODS             10
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <confdefs.h>
 

@@ -67,7 +67,7 @@ rtems_task Init(
      1,
      RTEMS_MINIMUM_STACK_SIZE * 2,
      RTEMS_TIMESLICE,
-     RTEMS_DEFAULT_ATTRIBUTES,
+     RTEMS_FLOATING_POINT,
      &Task_id[ 1 ]
   );
   directive_failed( status, "rtems_task_create of TA1" );
@@ -77,7 +77,7 @@ rtems_task Init(
      1,
      RTEMS_MINIMUM_STACK_SIZE * 2,
      RTEMS_TIMESLICE,
-     RTEMS_DEFAULT_ATTRIBUTES,
+     RTEMS_FLOATING_POINT,
      &Task_id[ 2 ]
   );
   directive_failed( status, "rtems_task_create of TA2" );
@@ -87,7 +87,7 @@ rtems_task Init(
      1,
      RTEMS_MINIMUM_STACK_SIZE * 2,
      RTEMS_TIMESLICE,
-     RTEMS_DEFAULT_ATTRIBUTES,
+     RTEMS_FLOATING_POINT,
      &Task_id[ 3 ]
   );
   directive_failed( status, "rtems_task_create of TA3" );

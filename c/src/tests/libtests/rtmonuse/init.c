@@ -49,7 +49,7 @@ rtems_task Init(
       Priorities[ index ],
       RTEMS_MINIMUM_STACK_SIZE * 4,
       RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
+      (index == 5) ? RTEMS_FLOATING_POINT : RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ index ]
     );
     directive_failed( status, "rtems_task_create loop" );
