@@ -68,7 +68,6 @@ AC_MSG_NOTICE([creating make/${RTEMS_BSP}.cache])
 ${MAKE-make} -f ${srcdir}/make/bsp.mak \
 RTEMS_BSP=${RTEMS_BSP} \
 RTEMS_HOST=${RTEMS_HOST} \
-BARE_CPU_MODEL=${BARE_CPU_MODEL} \
 RTEMS_ROOT=. make/${RTEMS_BSP}.cache
 
 # Read back the cache

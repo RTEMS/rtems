@@ -1,3 +1,9 @@
+2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* aclocal/env-rtemsbsp.m4: Remove refs to bare BSP.
+	* aclocal/enable-bare.m4: Remove.
+	* configure.ac: Remove BARE_CPU_MODEL.
+
 2004-10-13      Eric Norum <norume@aps.anl.gov>
 
         PR 688/bsps
