@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/libio.h>
+#include <rtems/userenv.h>
 #include <pmacros.h>
 
 void touch( char *file )

@@ -40,11 +40,13 @@ DIR *directory_not;
 #define __P(args)()
 #endif
 
+/*
 int scandir ( const char *dirname,
    struct dirent *** namelist,
    int (*select) __P((struct dirent *)),
-   int (*dcomp) __P((const void *, const void *))
+   int (*dcomp) __P((const struct dirent **, const struct dirent **))
 );
+*/
 
 #if defined(__rtems__)
 #define d_type d_reclen
@@ -168,13 +170,13 @@ int compare_ascending(const struct dirent **a, const struct dirent **b )
 }
 
 
-int compare_descending( struct dirent **a, struct dirent **b )
+int compare_descending( const struct dirent **a, const struct dirent **b )
 {
    int i;
 
    i = strcmp (
-      (char *)((struct dirent *)(*b)->d_name),
-      (char *)((struct dirent *)(*a)->d_name)
+      (char *)((const struct dirent *)(*b)->d_name),
+      (char *)((const struct dirent *)(*a)->d_name)
    );
 
    return i;
