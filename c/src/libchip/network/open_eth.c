@@ -12,7 +12,6 @@
 
 #include <rtems.h>
 
-#define OPEN_ETH_SUPPORTED
 #include <bsp.h>
 
 #include <stdlib.h>
