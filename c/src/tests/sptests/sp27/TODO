@@ -1,0 +1,19 @@
+#
+#  $Id$
+#
+
+This test should be for rtems_semaphore_flush.  It will be something like:
+
+TaskA:
+        create semaphore with initial count 0
+        start taskB and TaskC (Higher priority than taskA, no round-robin)
+        print message
+        semaphore_flush
+
+TaskB/C:
+        obtain semaphore
+        print message
+        suspend/delete self
+
+Successful test would show message from both tasks B and C after the
+message from task A.
