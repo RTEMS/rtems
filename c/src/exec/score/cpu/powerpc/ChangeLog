@@ -1,3 +1,7 @@
+2000-10-20	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/ppc.h: For multilibs, derive PPC_HAS_FPU from _SOFT_FLOAT.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am.

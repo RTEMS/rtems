@@ -106,7 +106,12 @@ extern "C" {
 #define PPC_ALIGNMENT		 4  
 #define PPC_CACHE_ALIGNMENT	 16
 #define PPC_HAS_RFCI    	 1
+#if defined(_SOFT_FLOAT)
 #define PPC_HAS_FPU     	 0
+#else
+#define PPC_HAS_FPU     	 1
+#endif
+
 #define PPC_USE_MULTIPLE	 1
 #define PPC_I_CACHE		 2048
 #define PPC_D_CACHE		 1024
