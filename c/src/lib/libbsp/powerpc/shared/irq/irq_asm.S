@@ -85,8 +85,15 @@ SYM (shared_raw_irq_code_entry):
 	stw	r2, SRR1_FRAME_OFFSET(r1)
 	/*
 	 * Enable data and instruction address translation, exception recovery
+     *
+     * also, on CPUs with FP, enable FP so that FP context can be
+     * saved and restored (using FP instructions)
 	 */
+#if (PPC_HAS_FPU == 0)
 	ori     r3, r3, MSR_RI | MSR_IR | MSR_DR
+#else
+	ori     r3, r3, MSR_RI | MSR_IR | MSR_DR | MSR_FP
+#endif
 	mtmsr   r3
 	SYNC
 	/*

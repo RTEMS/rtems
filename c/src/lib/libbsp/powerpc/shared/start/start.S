@@ -106,8 +106,13 @@ enter_C_code:
 	.type	MMUon,@function
 MMUon:	
 	mfmsr	r0
-	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1
+#if (PPC_HAS_FPU == 0)
+	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
 	xori	r0, r0, MSR_EE | MSR_IP | MSR_FP
+#else
+	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
+	xori	r0, r0, MSR_EE | MSR_IP | MSR_FE0 | MSR_FE1
+#endif
 	mflr	r11
 	mtsrr0	r11
 	mtsrr1	r0
