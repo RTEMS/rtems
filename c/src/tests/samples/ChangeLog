@@ -1,3 +1,11 @@
+2003-08-06	Thomas Doerfler<Thomas.Doerfler@imd-systems.de>
+
+	PR 369/filesystem
+	* Makefile.am, configure.ac: sample application to show the use of the
+	DOSFS functions
+	* fileio/Makefile.am, fileio/fileio.doc, fileio/init.c,
+	fileio/system.h: New files.
+
 2003-06-04	Joel Sherrill <joel@OARcorp.com>
 
 	* pppd/system.h: Hack from Ralf to compile on all targets.
