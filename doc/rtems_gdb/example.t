@@ -15,7 +15,7 @@ GDB is free software, covered by the GNU General Public License, and you are
 welcome to change it and/or distribute copies of it under certain conditions.
 Type "show copying" to see the conditions.
 There is absolutely no warranty for GDB.  Type "show warranty" for details.
-This GDB was configured as --host=i686-pc-linux-gnu --target=i386RTEMS". 
+This GDB was configured as --host=i686-pc-linux-gnu --target=i386-rtems". 
 (gdb) setrpcmode sun 
 (gdb) setdaemontype rdbg 
 (gdb) target rtems usnet-test 
