@@ -91,12 +91,25 @@ typedef struct {
 }   User_extensions_Table;
 
 /*
- *  The following is used to manage each user extension set.
+ *  The following is used to manage the list of switch handlers.
  */
 
 typedef struct {
-  Chain_Node              Node;
-  User_extensions_Table   Callouts;
+  Chain_Node                              Node;
+  User_extensions_thread_switch_extension thread_switch;
+}   User_extensions_Switch_control;
+
+/*
+ *  The following is used to manage each user extension set.
+ *  The switch control is part of the extensions control even
+ *  if not used due to the extension not having a switch
+ *  handler.
+ */
+
+typedef struct {
+  Chain_Node                     Node;
+  User_extensions_Switch_control Switch;
+  User_extensions_Table          Callouts;
 }   User_extensions_Control;
 
 /*
@@ -104,6 +117,13 @@ typedef struct {
  */
 
 SCORE_EXTERN Chain_Control _User_extensions_List;
+
+/*
+ *  The following is used to manage a chain of user extension task
+ *  switch nodes.
+ */
+
+SCORE_EXTERN Chain_Control _User_extensions_Switches_list;
 
 /*
  *  _User_extensions_Thread_create
