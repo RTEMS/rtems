@@ -119,7 +119,15 @@ of these extension sets could be written and installed
 independently of the others.
 
 All user extensions are optional and RTEMS places no
-naming  restrictions on the user.
+naming  restrictions on the user. The user extension entry points
+are copied into an internal RTEMS structure. This means the user
+does not need to keep the table after creating it, and changing the
+handler entry points dynamically in a table once created has no 
+effect. Creating a table local to a function can save space in
+space limited applications.
+
+Extension switches do not effect the context switch overhead if
+no switch handler is installed.
 
 @subsection TCB Extension Area
 
@@ -134,7 +142,25 @@ to utilize the notepad locations associated with each task
 although this may conflict with application usage of those
 particular notepads.
 
-The TCB extension is an array of pointers in the TCB.
+The TCB extension is an array of pointers in the TCB. The
+index into the table can be obtained from the extension id
+returned when the extension is created:
+
+@findex rtems extensions table index
+@ifset is-C
+@example
+@group
+index = rtems_get_index(extension_id);
+@end group
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+There is currently no example for Ada.
+@end example
+@end ifset
+
 The number of pointers in the area is the same as the number of
 user extension sets configured.  This allows an application to
 augment the TCB with user-defined information.  For example, an

@@ -1,3 +1,9 @@
+2002-04-12	Chris Johns <ccj@acm.org>
+
+	* doc/user/userext.t: Per PR138, updated the documentation to show
+	how to obtain an extension table index. Also provided some extra
+	background on the user extension API.
+
 2002-04-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* io.t: Fix typo @sybsection.
