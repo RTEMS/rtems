@@ -34,18 +34,25 @@ typedef struct {
    int                         process_shared;
    boolean                     named;
    boolean                     linked;
-   int                         oflag;
    unsigned32                  open_count;
    CORE_message_queue_Control  Message_queue;
    struct sigevent             notification;
 }  POSIX_Message_queue_Control;
 
+typedef struct {
+   Objects_Control              Object;
+   POSIX_Message_queue_Control *Queue;
+   int                          oflag;
+} POSIX_Message_queue_Control_fd;
+
 /*
  *  The following defines the information control block used to manage
- *  this class of objects.
+ *  this class of objects.  The second item is used to manage the set
+ *  of "file descriptors" associated with the message queues.
  */
  
 POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information;
+POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information_fds;
  
 /*
  *  _POSIX_Message_queue_Manager_initialization
@@ -72,7 +79,6 @@ void _POSIX_Message_queue_Manager_initialization(
 int _POSIX_Message_queue_Create_support(
   const char                    *name,
   int                            pshared,
-  unsigned int                   oflag,
   struct mq_attr                *attr,
   POSIX_Message_queue_Control  **message_queue
 );
@@ -182,7 +188,8 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Message_queue_Is_null (
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This routine looks up the specified name for a message queue and returns the
+ *  id of the message queue associated with it.
  */
 
 int _POSIX_Message_queue_Name_to_id(

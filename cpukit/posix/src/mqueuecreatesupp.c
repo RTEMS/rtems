@@ -41,9 +41,8 @@
  */
  
 int _POSIX_Message_queue_Create_support(
-  const char                    *name,
+  const char                    *_name,
   int                            pshared,
-  unsigned int                   oflag,
   struct mq_attr                *attr_ptr,
   POSIX_Message_queue_Control  **message_queue
 )
@@ -51,6 +50,7 @@ int _POSIX_Message_queue_Create_support(
   POSIX_Message_queue_Control   *the_mq;
   CORE_message_queue_Attributes *the_mq_attr;
   struct mq_attr                 attr;
+  char *name;
 
   _Thread_Disable_dispatch();
  
@@ -95,7 +95,6 @@ int _POSIX_Message_queue_Create_support(
   }
  
   the_mq->process_shared  = pshared;
-  the_mq->oflag = oflag;
   the_mq->named = TRUE;
   the_mq->open_count = 1;
   the_mq->linked = TRUE;
@@ -133,6 +132,8 @@ int _POSIX_Message_queue_Create_support(
     rtems_set_errno_and_return_minus_one( ENOSPC );
   }
 
+  name = malloc(256);
+  strcpy( name, _name );
   _Objects_Open(
     &_POSIX_Message_queue_Information,
     &the_mq->Object,

@@ -46,9 +46,10 @@ int _POSIX_Message_queue_Send_support(
   Watchdog_Interval   timeout
 )
 {
-  register POSIX_Message_queue_Control *the_mq;
-  Objects_Locations                     location;
-  CORE_message_queue_Status             msg_status;
+  POSIX_Message_queue_Control    *the_mq;
+  POSIX_Message_queue_Control_fd *the_mq_fd;
+  Objects_Locations               location;
+  CORE_message_queue_Status       msg_status;
 
   /*
    * Validate the priority.
@@ -58,8 +59,7 @@ int _POSIX_Message_queue_Send_support(
   if ( msg_prio > MQ_PRIO_MAX )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  the_mq = _POSIX_Message_queue_Get( mqdes, &location );
-
+  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( EBADF );
@@ -70,10 +70,12 @@ int _POSIX_Message_queue_Send_support(
       rtems_set_errno_and_return_minus_one( EINVAL );
 
     case OBJECTS_LOCAL:
-      if ( (the_mq->oflag & O_ACCMODE) == O_RDONLY ) {
+      if ( (the_mq_fd->oflag & O_ACCMODE) == O_RDONLY ) {
         _Thread_Enable_dispatch();
         rtems_set_errno_and_return_minus_one( EBADF );
       }
+
+      the_mq = the_mq_fd->Queue;
 
       msg_status = _CORE_message_queue_Submit(
         &the_mq->Message_queue,
@@ -86,7 +88,7 @@ int _POSIX_Message_queue_Send_support(
         NULL,
 #endif
         _POSIX_Message_queue_Priority_to_core( msg_prio ),
-         (the_mq->oflag & O_NONBLOCK) ? FALSE : TRUE, 
+         (the_mq_fd->oflag & O_NONBLOCK) ? FALSE : TRUE, 
         timeout    /* no timeout */
       );
 

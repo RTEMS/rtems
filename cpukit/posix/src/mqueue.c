@@ -58,4 +58,14 @@ void _POSIX_Message_queue_Manager_initialization(
     _POSIX_PATH_MAX,
     FALSE
   );
+  _Objects_Initialize_information(
+    &_POSIX_Message_queue_Information_fds,
+    OBJECTS_POSIX_MESSAGE_QUEUE_FDS,
+    FALSE,
+    maximum_message_queues,
+    sizeof( POSIX_Message_queue_Control_fd ),
+    FALSE,
+    0,
+    FALSE
+  );
 }

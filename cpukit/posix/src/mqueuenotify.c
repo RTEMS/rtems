@@ -64,10 +64,11 @@ int mq_notify(
   const struct sigevent *notification
 )
 {
-  register POSIX_Message_queue_Control *the_mq;
-  Objects_Locations                     location;
+  POSIX_Message_queue_Control    *the_mq;
+  POSIX_Message_queue_Control_fd *the_mq_fd;
+  Objects_Locations               location;
  
-  the_mq = _POSIX_Message_queue_Get( mqdes, &location );
+  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( EBADF );
@@ -76,6 +77,8 @@ int mq_notify(
       return POSIX_MP_NOT_IMPLEMENTED();
       rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
+      the_mq = the_mq_fd->Queue;
+
       if ( notification ) {
         if ( _CORE_message_queue_Is_notify_enabled( &the_mq->Message_queue ) ) {
           _Thread_Enable_dispatch();

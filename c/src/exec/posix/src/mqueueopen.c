@@ -45,13 +45,14 @@ mqd_t mq_open(
   /* struct mq_attr  attr */
 )
 {
-  va_list                        arg;
-  mode_t                         mode;
-  struct mq_attr                *attr = NULL;
-  int                            status;
-  Objects_Id                     the_mq_id;
-  POSIX_Message_queue_Control   *the_mq;
-  Objects_Locations              location;
+  va_list                         arg;
+  mode_t                          mode;
+  struct mq_attr                 *attr = NULL;
+  int                             status;
+  Objects_Id                      the_mq_id;
+  POSIX_Message_queue_Control    *the_mq;
+  POSIX_Message_queue_Control_fd *the_mq_fd;
+  Objects_Locations               location;
  
   _Thread_Disable_dispatch();
 
@@ -62,8 +63,15 @@ mqd_t mq_open(
     va_end(arg);
   }
  
+  the_mq_fd = _POSIX_Message_queue_Allocate_fd();
+  if ( !the_mq_fd ) {
+    _Thread_Enable_dispatch();
+    rtems_set_errno_and_return_minus_one( ENFILE );
+  }
+  the_mq_fd->oflag = oflag;
+
   status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id );
- 
+
   /*
    *  If the name to id translation worked, then the message queue exists
    *  and we can just return a pointer to the id.  Otherwise we may
@@ -79,6 +87,7 @@ mqd_t mq_open(
      */
 
     if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
+      _POSIX_Message_queue_Free_fd( the_mq_fd );
       _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one_cast( status, mqd_t );
     }
@@ -90,20 +99,22 @@ mqd_t mq_open(
      */
 
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
+      _POSIX_Message_queue_Free_fd( the_mq_fd );
       _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one_cast( EEXIST, mqd_t );
     }
 
     /*
-     * XXX In this case we need to do an ID->pointer conversion to
-     *     check the mode.   This is probably a good place for a subroutine.
+     * In this case we need to do an ID->pointer conversion to
+     * check the mode.
      */
 
     the_mq = _POSIX_Message_queue_Get( the_mq_id, &location );
     the_mq->open_count += 1;
+    the_mq_fd->Queue = the_mq;
     _Thread_Enable_dispatch();
     _Thread_Enable_dispatch();
-    return (mqd_t)the_mq->Object.id;
+    return (mqd_t)the_mq_fd->Object.id;
  
   }
  
@@ -115,7 +126,6 @@ mqd_t mq_open(
   status = _POSIX_Message_queue_Create_support(
     name,
     TRUE,         /* shared across processes */
-    oflag,
     attr,
     &the_mq
   );
@@ -124,12 +134,22 @@ mqd_t mq_open(
    * errno was set by Create_support, so don't set it again.
    */
 
+  if ( status == -1 ) {
+    _Thread_Enable_dispatch();
+    _POSIX_Message_queue_Free_fd( the_mq_fd );
+    return (mqd_t) -1;
+  }
+ 
+  the_mq_fd->Queue = the_mq;
+  _Objects_Open(
+    &_POSIX_Message_queue_Information_fds,
+    &the_mq_fd->Object,
+    NULL
+  );
+ 
   _Thread_Enable_dispatch();
 
-  if ( status == -1 )
-    return (mqd_t) -1;
- 
-  return (mqd_t) the_mq->Object.id;
+  return (mqd_t) the_mq_fd->Object.id;
 }
 
 

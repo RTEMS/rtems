@@ -42,14 +42,15 @@ int mq_getattr(
   struct mq_attr *mqstat
 )
 {
-  register POSIX_Message_queue_Control *the_mq;
+  POSIX_Message_queue_Control          *the_mq;
+  POSIX_Message_queue_Control_fd       *the_mq_fd;
   Objects_Locations                     location;
   CORE_message_queue_Attributes        *the_mq_attr;
  
   if ( !mqstat )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  the_mq = _POSIX_Message_queue_Get( mqdes, &location );
+  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( EBADF );
@@ -58,16 +59,15 @@ int mq_getattr(
       return POSIX_MP_NOT_IMPLEMENTED();
       rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
+      the_mq = the_mq_fd->Queue;
+
       /*
        *  Return the old values.
        */
  
-      /* XXX this is the same stuff as is in mq_setattr... and probably */
-      /* XXX should be in an inlined private routine */
- 
       the_mq_attr = &the_mq->Message_queue.Attributes;
  
-      mqstat->mq_flags   = the_mq->oflag;
+      mqstat->mq_flags   = the_mq_fd->oflag;
       mqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
       mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
       mqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;

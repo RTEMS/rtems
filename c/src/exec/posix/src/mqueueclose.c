@@ -41,10 +41,11 @@ int mq_close(
   mqd_t  mqdes
 )
 {
-  register POSIX_Message_queue_Control *the_mq;
-  Objects_Locations                     location;
+  POSIX_Message_queue_Control    *the_mq;
+  POSIX_Message_queue_Control_fd *the_mq_fd;
+  Objects_Locations               location;
  
-  the_mq = _POSIX_Message_queue_Get( mqdes, &location );
+  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( EBADF );
@@ -53,8 +54,24 @@ int mq_close(
       return POSIX_MP_NOT_IMPLEMENTED();
       rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
+      /*
+       *  First update the actual message queue to reflect this descriptor
+       *  being disassociated.  This may result in the queue being really
+       *  deleted.
+       */
+
+      the_mq = the_mq_fd->Queue;
       the_mq->open_count -= 1;
       _POSIX_Message_queue_Delete( the_mq );
+
+      /*
+       *  Now close this file descriptor.
+       */
+
+      _Objects_Close(
+        &_POSIX_Message_queue_Information_fds, &the_mq_fd->Object );
+      _POSIX_Message_queue_Free_fd( the_mq_fd );
+
       _Thread_Enable_dispatch();
       return 0;
   }

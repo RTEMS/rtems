@@ -48,11 +48,12 @@ ssize_t _POSIX_Message_queue_Receive_support(
   Watchdog_Interval   timeout
 )
 {
-  register POSIX_Message_queue_Control *the_mq;
-  Objects_Locations                     location;
-  unsigned32                            length_out;
+  POSIX_Message_queue_Control     *the_mq;
+  POSIX_Message_queue_Control_fd  *the_mq_fd;
+  Objects_Locations                location;
+  unsigned32                       length_out;
  
-  the_mq = _POSIX_Message_queue_Get( mqdes, &location );
+  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( EBADF );
@@ -61,10 +62,12 @@ ssize_t _POSIX_Message_queue_Receive_support(
       return POSIX_MP_NOT_IMPLEMENTED();
       rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
-      if ( (the_mq->oflag & O_ACCMODE) == O_WRONLY ) {
+      if ( (the_mq_fd->oflag & O_ACCMODE) == O_WRONLY ) {
         _Thread_Enable_dispatch();
         rtems_set_errno_and_return_minus_one( EBADF );
       }
+
+      the_mq = the_mq_fd->Queue;
 
       if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
         _Thread_Enable_dispatch();
@@ -83,7 +86,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
         mqdes,
         msg_ptr,
         &length_out,
-        (the_mq->oflag & O_NONBLOCK) ? FALSE : TRUE,
+        (the_mq_fd->oflag & O_NONBLOCK) ? FALSE : TRUE,
         timeout
       );
       

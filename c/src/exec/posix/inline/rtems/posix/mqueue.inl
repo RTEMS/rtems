@@ -21,10 +21,23 @@
  *  _POSIX_Message_queue_Allocate
  */
  
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void )
+RTEMS_INLINE_ROUTINE
+  POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void )
 {
   return (POSIX_Message_queue_Control *)
     _Objects_Allocate( &_POSIX_Message_queue_Information );
+}
+ 
+/*PAGE
+ *
+ *  _POSIX_Message_queue_Allocate_fd
+ */
+ 
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *
+  _POSIX_Message_queue_Allocate_fd( void )
+{
+  return (POSIX_Message_queue_Control_fd *)
+    _Objects_Allocate( &_POSIX_Message_queue_Information_fds );
 }
  
 /*PAGE
@@ -37,6 +50,18 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
 )
 {
   _Objects_Free( &_POSIX_Message_queue_Information, &the_mq->Object );
+}
+
+/*PAGE
+ *
+ *  _POSIX_Message_queue_Free_fd
+ */
+ 
+RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free_fd (
+  POSIX_Message_queue_Control_fd *the_mq_fd
+)
+{
+  _Objects_Free( &_POSIX_Message_queue_Information_fds, &the_mq_fd->Object );
 }
 
 /*PAGE
@@ -64,6 +89,20 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
 {
   return (POSIX_Message_queue_Control *)
     _Objects_Get( &_POSIX_Message_queue_Information, id, location );
+}
+ 
+/*PAGE
+ *
+ *  _POSIX_Message_queue_Get_fd
+ */
+ 
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *_POSIX_Message_queue_Get_fd (
+  Objects_Id         id,
+  Objects_Locations *location
+)
+{
+  return (POSIX_Message_queue_Control_fd *)
+    _Objects_Get( &_POSIX_Message_queue_Information_fds, id, location );
 }
  
 /*PAGE

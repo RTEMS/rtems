@@ -1,3 +1,13 @@
+2001-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/posix/mqueue.h, inline/rtems/posix/mqueue.inl,
+	src/mqueue.c, src/mqueueclose.c, src/mqueuecreatesupp.c,
+	src/mqueuegetattr.c, src/mqueuenotify.c, src/mqueueopen.c,
+	src/mqueuerecvsupp.c, src/mqueuesendsupp.c, src/mqueuesetattr.c:
+	Per PR81 reworked to add a message queue descriptor separate from
+	the underlying message queue.  This allows non-blocking to follow
+	the "open" not the underlying queue.
+ 
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/psignal.c: Include <stdlib.h>.
