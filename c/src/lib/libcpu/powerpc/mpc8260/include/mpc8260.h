@@ -67,7 +67,7 @@
  */
 typedef struct m8260MEMCRegisters_ {
   rtems_unsigned32        br;
-  rtems_unsigned32        or;
+  rtems_unsigned32        _or;  /* or is a C++ keyword :( */
 } m8260MEMCRegisters_t;
 
 

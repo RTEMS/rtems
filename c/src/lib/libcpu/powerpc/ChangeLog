@@ -1,3 +1,7 @@
+2001-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc8260/include/mpc8260.h: "or" is a keyword in C++.  
+
 2001-10-22	Andy Dachs <a.dachs@sstl.co.uk>
 
 	* Makefile.am, README, configure.ac, new_exception_processing/cpu.h,
