@@ -3,13 +3,13 @@
  *  This include file contains information necessary to utilize
  *  and install the cpu usage reporting mechanism.
  *
- *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994, 1996.
+ *  COPYRIGHT (c) 1989-1997. 1996.
  *  On-Line Applications Research Corporation (OAR).
- *  All rights assigned to U.S. Government, 1994.
+ *  Copyright assigned to U.S. Government, 1994.
  *
- *  This material may be reproduced by or for the U.S. Government pursuant
- *  to the copyright license under the clause at DFARS 252.227-7013.  This
- *  notice must appear in all copies of this file and its derivatives.
+ *  The license and distribution terms for this file may in
+ *  the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  *
  *  stackchk.h,v 1.3 1995/12/19 20:13:52 joel Exp
  */

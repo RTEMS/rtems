@@ -19,7 +19,7 @@
  *  notice.  This file is freely distributable as long as the source
  *  of the file is noted.  This file is:
  *
- *  COPYRIGHT (c) 1994.
+ *  COPYRIGHT (c) 1989-1997
  *  On-Line Applications Research Corporation (OAR).
  *
  *  $Id$
