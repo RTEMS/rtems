@@ -443,11 +443,6 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 uninitialized += (sizeof _CPU_Trap_Table_area);
 #endif
 
-#ifdef erc32
-uninitialized += (sizeof _ERC32_MEC_Timer_Control_Mirror);
-#endif
-
- 
 #endif
 
 

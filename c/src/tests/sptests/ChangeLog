@@ -1,3 +1,8 @@
+2001-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	* Side-effect of PR132.
+	* sp21/system.h: Now must explicitly request NULL driver.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
