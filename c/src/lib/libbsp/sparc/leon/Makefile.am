@@ -68,8 +68,6 @@ leon_open_eth_rel_SOURCES = leon_open_eth/leon_open_eth.c
 leon_open_eth_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     $(leon_open_eth_CPPFLAGS)
 leon_open_eth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-    $(leon_open_eth_CPPFLAGS)
 endif
 
 noinst_LIBRARIES = libbsp.a
