@@ -47,13 +47,10 @@ The following persons/organizations have made contributions:
 
 + John S. Gwynne (jsg@coulomb.eng.ohio-state.edu) of Ohio State University 
   submitted the support for the Motorola MC68332 CPU as well as completing 
-  the support for CPUs based on the MC68000 core.  This included the "efi68k" 
-  and "efi332" BSPs as well as completing the modifications to the m68k 
-  dependent executive code to support m68k family members based on the 
-  MC68000 core.  "efi68k" and "efi332" are single board computers designed 
-  primarily for automotive electronic fuel injection (EFI) control, but can 
-  be considered general purpose controllers when used without the EFI 
-  companion board(s). See the README in each BSP for more information.
+  the support for CPUs based on the MC68000 core.  Although the BSPs for
+  automotive electronic fuel injection (EFI) control he submitted have now
+  been removed, they formed the foundation for the mrm332 BSP which is still
+  in the tree. 
 
 + The European Space Agency for sponsoring On-Line Applications Research 
   to port RTEMS to the SPARC V7 architecture for use with their ERC32
