@@ -34,7 +34,7 @@
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_partition_delete(
@@ -42,7 +42,7 @@ rtems_status_code rtems_partition_delete(
 )
 {
   register Partition_Control *the_partition;
-  Objects_Locations                  location;
+  Objects_Locations           location;
 
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {

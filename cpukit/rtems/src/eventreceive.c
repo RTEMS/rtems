@@ -48,6 +48,9 @@ rtems_status_code rtems_event_receive(
 {
   RTEMS_API_Control       *api;
 
+  if ( !event_out )
+    return RTEMS_INVALID_ADDRESS;
+
   api = _Thread_Executing->API_Extensions[ THREAD_API_RTEMS ];
 
   if ( _Event_sets_Is_empty( event_in ) ) {

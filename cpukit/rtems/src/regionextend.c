@@ -51,6 +51,9 @@ rtems_status_code rtems_region_extend(
   Heap_Extend_status  heap_status;
   rtems_status_code   status;
 
+  if ( !starting_address )
+    return RTEMS_INVALID_ADDRESS;
+
   status = RTEMS_SUCCESSFUL;
 
   _RTEMS_Lock_allocator();                      /* to prevent deletion */

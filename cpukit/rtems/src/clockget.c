@@ -45,6 +45,9 @@ rtems_status_code rtems_clock_get(
   ISR_Level      level;
   rtems_interval tmp;
 
+   if ( !time_buffer )
+     return RTEMS_INVALID_ADDRESS;
+
   switch ( option ) {
     case RTEMS_CLOCK_GET_TOD:
       if ( !_TOD_Is_set )

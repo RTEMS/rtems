@@ -47,6 +47,9 @@ rtems_status_code rtems_timer_create(
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
+
   _Thread_Disable_dispatch();         /* to prevent deletion */
 
   the_timer = _Timer_Allocate();

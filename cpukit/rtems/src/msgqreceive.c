@@ -61,6 +61,12 @@ rtems_status_code rtems_message_queue_receive(
   Objects_Locations               location;
   boolean                         wait;
 
+  if ( !buffer )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !size )
+    return RTEMS_INVALID_ADDRESS;
+
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
 

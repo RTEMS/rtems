@@ -49,6 +49,12 @@ rtems_status_code rtems_region_get_segment_size(
   Objects_Locations        location;
   Thread_Control          *executing;
 
+  if ( !segment )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !size )
+    return RTEMS_INVALID_ADDRESS;
+
   _RTEMS_Lock_allocator();
   executing  = _Thread_Executing;
   the_region = _Region_Get( id, &location );

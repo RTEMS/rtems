@@ -32,6 +32,9 @@ rtems_status_code rtems_task_variable_add(
   Objects_Locations      location;
   rtems_task_variable_t *tvp, *new;
 
+  if ( !ptr )
+    return RTEMS_INVALID_ADDRESS;
+
   the_thread = _Thread_Get (tid, &location);
   switch (location) {
   case OBJECTS_REMOTE:

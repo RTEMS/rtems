@@ -49,7 +49,7 @@ rtems_status_code rtems_task_suspend(
 )
 {
   register Thread_Control *the_thread;
-  Objects_Locations               location;
+  Objects_Locations        location;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {

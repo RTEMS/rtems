@@ -53,6 +53,9 @@ rtems_status_code rtems_timer_server_fire_after(
   if ( !_Timer_Server )
     return RTEMS_INCORRECT_STATE;
 
+  if ( !routine )
+    return RTEMS_INVALID_ADDRESS;
+
   if ( ticks == 0 )
     return RTEMS_INVALID_NUMBER;
 

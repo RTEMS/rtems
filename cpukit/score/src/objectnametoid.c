@@ -56,6 +56,9 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   uint32_t                   name_length;
   Objects_Name_comparators   compare_them;
 
+  if ( !id )
+    return OBJECTS_INVALID_ADDRESS;
+
   if ( name == 0 )
     return OBJECTS_INVALID_NAME;
 

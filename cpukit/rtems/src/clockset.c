@@ -39,6 +39,9 @@ rtems_status_code rtems_clock_set(
 {
   rtems_interval     seconds;
 
+  if ( !time_buffer )
+    return RTEMS_INVALID_ADDRESS;
+
   if ( _TOD_Validate( time_buffer ) ) {
     seconds = _TOD_To_seconds( time_buffer );
     _Thread_Disable_dispatch();

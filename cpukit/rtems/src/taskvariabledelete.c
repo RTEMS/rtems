@@ -31,6 +31,9 @@ rtems_status_code rtems_task_variable_delete(
   Objects_Locations      location;
   rtems_task_variable_t *tvp, *prev;
 
+  if ( !ptr )
+    return RTEMS_INVALID_ADDRESS;
+
   prev = NULL;
 
   the_thread = _Thread_Get (tid, &location);

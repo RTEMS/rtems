@@ -46,6 +46,9 @@ rtems_status_code rtems_partition_get_buffer(
   Objects_Locations           location;
   void                       *the_buffer;
 
+  if ( !buffer )
+    return RTEMS_INVALID_ADDRESS;
+
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:

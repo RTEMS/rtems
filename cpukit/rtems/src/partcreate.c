@@ -37,9 +37,9 @@
  *    id               - pointer to partition id
  *
  *  Output parameters:
- *    id                - partition id
+ *    id               - partition id
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_partition_create(
@@ -47,7 +47,7 @@ rtems_status_code rtems_partition_create(
   void               *starting_address,
   uint32_t            length,
   uint32_t            buffer_size,
-  rtems_attribute  attribute_set,
+  rtems_attribute     attribute_set,
   Objects_Id         *id
 )
 {
@@ -55,6 +55,12 @@ rtems_status_code rtems_partition_create(
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
+
+  if ( !starting_address )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
 
   if ( length == 0 || buffer_size == 0 || length < buffer_size ||
          !_Partition_Is_buffer_size_aligned( buffer_size ) )

@@ -58,6 +58,9 @@ rtems_status_code rtems_task_mode(
   boolean             needs_asr_dispatching = FALSE;
   rtems_mode          old_mode;
 
+  if ( !previous_mode_set )
+    return RTEMS_INVALID_ADDRESS;
+
   executing     = _Thread_Executing;
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;

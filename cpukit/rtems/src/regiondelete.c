@@ -35,7 +35,7 @@
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_region_delete(
@@ -43,7 +43,7 @@ rtems_status_code rtems_region_delete(
 )
 {
   register Region_Control *the_region;
-  Objects_Locations               location;
+  Objects_Locations        location;
 
   _RTEMS_Lock_allocator();
   the_region = _Region_Get( id, &location );

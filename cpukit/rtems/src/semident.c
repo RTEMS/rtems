@@ -58,9 +58,9 @@
  *    id   - pointer to semaphore id
  *
  *  Output parameters:
- *    *id      - semaphore id
+ *    *id              - semaphore id
  *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_semaphore_ident(

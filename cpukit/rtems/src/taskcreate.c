@@ -72,6 +72,9 @@ rtems_status_code rtems_task_create(
   ASR_Information         *asr;
 
 
+  if ( !id )
+   return RTEMS_INVALID_ADDRESS;
+
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 

@@ -38,9 +38,9 @@
  *    id               - address of region id to set
  *
  *  Output parameters:
- *    id       - region id
+ *    id               - region id
  *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_region_create(
@@ -48,7 +48,7 @@ rtems_status_code rtems_region_create(
   void               *starting_address,
   uint32_t            length,
   uint32_t            page_size,
-  rtems_attribute  attribute_set,
+  rtems_attribute     attribute_set,
   Objects_Id         *id
 )
 {
@@ -56,6 +56,12 @@ rtems_status_code rtems_region_create(
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
+
+  if ( !starting_address )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
 
   if ( !_Addresses_Is_aligned( starting_address ) )
     return RTEMS_INVALID_ADDRESS;

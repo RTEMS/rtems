@@ -32,9 +32,9 @@
  *    id   - pointer to period id
  *
  *  Output parameters:
- *    *id               - region id
+ *    *id              - region id
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_rate_monotonic_ident(

@@ -69,6 +69,9 @@ rtems_status_code _Message_queue_Submit(
   Objects_Locations                location;
   CORE_message_queue_Status        msg_status;
 
+  if ( !buffer )
+    return RTEMS_INVALID_ADDRESS;
+
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location )
   {

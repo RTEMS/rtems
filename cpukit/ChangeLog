@@ -1,3 +1,35 @@
+2004-05-06	Joel Sherrill <joel@OARcorp.com>
+
+	PR 618/rtems
+	* rtems/include/rtems/rtems/status.h, rtems/src/clockget.c,
+	rtems/src/clockset.c, rtems/src/dpmemcreate.c,
+	rtems/src/dpmemexternal2internal.c,
+	rtems/src/dpmeminternal2external.c, rtems/src/eventmp.c,
+	rtems/src/eventreceive.c, rtems/src/eventsend.c,
+	rtems/src/msgqbroadcast.c, rtems/src/msgqcreate.c,
+	rtems/src/msgqflush.c, rtems/src/msgqgetnumberpending.c,
+	rtems/src/msgqreceive.c, rtems/src/msgqsubmit.c,
+	rtems/src/partcreate.c, rtems/src/partdelete.c,
+	rtems/src/partgetbuffer.c, rtems/src/ratemoncancel.c,
+	rtems/src/ratemoncreate.c, rtems/src/ratemondelete.c,
+	rtems/src/ratemongetstatus.c, rtems/src/ratemonident.c,
+	rtems/src/ratemonperiod.c, rtems/src/regioncreate.c,
+	rtems/src/regiondelete.c, rtems/src/regionextend.c,
+	rtems/src/regiongetsegment.c, rtems/src/regiongetsegmentsize.c,
+	rtems/src/regionreturnsegment.c, rtems/src/semcreate.c,
+	rtems/src/semdelete.c, rtems/src/semflush.c, rtems/src/semident.c,
+	rtems/src/taskcreate.c, rtems/src/taskgetnote.c,
+	rtems/src/taskmode.c, rtems/src/taskrestart.c,
+	rtems/src/taskresume.c, rtems/src/tasksetnote.c,
+	rtems/src/tasksuspend.c, rtems/src/taskvariableadd.c,
+	rtems/src/taskvariabledelete.c, rtems/src/taskvariableget.c,
+	rtems/src/taskwakewhen.c, rtems/src/timercreate.c,
+	rtems/src/timerdelete.c, rtems/src/timerfireafter.c,
+	rtems/src/timerfirewhen.c, rtems/src/timerserverfireafter.c,
+	rtems/src/timerserverfirewhen.c, score/include/rtems/score/object.h,
+	score/src/coretodvalidate.c, score/src/objectnametoid.c: Add NULL
+	checks.
+
 2004-04-30	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/kern/kern_sysctl.c: sysctl_register_all cannot be

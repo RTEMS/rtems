@@ -54,6 +54,9 @@ rtems_status_code rtems_region_get_segment(
   Thread_Control          *executing;
   void                    *the_segment;
 
+  if ( !segment )
+    return RTEMS_INVALID_ADDRESS;
+
   *segment = NULL;
 
   if ( size == 0 )
