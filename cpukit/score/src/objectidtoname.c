@@ -40,6 +40,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   unsigned32           the_class;
   Objects_Information *information;
   Objects_Control     *the_object = (Objects_Control *) 0;
+  Objects_Locations    ignored_location;
  
   if ( !name )
     return OBJECTS_INVALID_NAME;
@@ -57,7 +58,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   if ( information->is_string )
     return OBJECTS_INVALID_ID;
 
-  the_object = _Objects_Get( information, id, OBJECTS_SEARCH_LOCAL_NODE );
+  the_object = _Objects_Get( information, id, &ignored_location  );
   if (!the_object)
     return OBJECTS_INVALID_ID;
 

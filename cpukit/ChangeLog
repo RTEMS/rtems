@@ -1,23 +1,10 @@
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
-	* libblock/src/bdbuf.c, libblock/src/ramdisk.c,
-	libcsupport/src/newlibc.c, libcsupport/src/sync.c,
-	libmisc/cpuuse/cpuuse.c, libmisc/monitor/mon-symbols.c,
-	libmisc/shell/cmds.c, libmisc/shell/shell.c,
-	libnetworking/kern/kern_sysctl.c, libnetworking/lib/ftpfs.c,
-	libnetworking/lib/tftpDriver.c, libnetworking/libc/gethostbydns.c,
-	libnetworking/libc/gethostbyht.c, libnetworking/libc/gethostnamadr.c,
-	libnetworking/libc/getnetbyht.c, libnetworking/libc/getnetnamadr.c,
-	libnetworking/libc/inet_addr.c, libnetworking/libc/linkaddr.c,
-	libnetworking/libc/map_v4v6.c, libnetworking/libc/ns_print.c,
-	libnetworking/libc/ns_ttl.c, libnetworking/libc/nsap_addr.c,
-	libnetworking/libc/rcmd.c, libnetworking/libc/res_debug.c,
-	libnetworking/libc/res_mkupdate.c, libnetworking/libc/res_query.c,
-	libnetworking/libc/res_send.c, libnetworking/libc/res_update.c,
-	libnetworking/net/radix.c, libnetworking/rtems/mkrootfs.c,
-	librpc/src/rpc/clnt_perror.c, librpc/src/rpc/svc.c,
-	score/macros/rtems/score/chain.inl, score/src/objectidtoname.c: Too
-	much was accidentally committed -- revert.
+	* score/macros/rtems/score/chain.inl, score/src/objectidtoname.c:
+	Add cast to avoid type punning warning in gcc 3.3.
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	* 
 
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
