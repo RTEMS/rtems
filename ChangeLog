@@ -1,5 +1,9 @@
 2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Correct bogus ACLOCAL_FILES.
+
+2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/bsp-arg-enable.m4, aclocal/bsp-configure.m4,
 	aclocal/bspopts.m4, aclocal/canonicalize-tools.m4,
 	aclocal/check-bsp-cache.m4, aclocal/check-cxx.m4,
