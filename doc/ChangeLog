@@ -1,5 +1,8 @@
 2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in ada_user/ChangeLog.
+	* ChangeLog: Merge-in started_ada/ChangeLog.
+	* ada_user/ChangeLog, started_ada/ChangeLog: Remove.
 	* ChangeLog: Merge-in bsp_howto/ChangeLog.
 	* ChangeLog: Merge-in porting/ChangeLog.
 	* ChangeLog: Merge-in rgdb_specs/ChangeLog.
@@ -62,6 +65,8 @@
 	* configure.ac, index.html.in: mips64orion port removed as mips port
 	more completely covers the MIPS family.
 	* rtems_support.html.in: Removed.
+	* started_ada/buildada.t: mips64orion port removed as mips port more
+	completely covers the MIPS family.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -78,6 +83,8 @@
 	* porting/Makefile.am: Cosmetics.
 	* rgdb_specs/Makefile.am: Cosmetics.
 	* rtems_gdb/Makefile.am: Cosmetics.
+	* ada_user/Makefile.am: Cosmetics.
+	* started_ada/Makefile.am: Cosmetics.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -93,6 +100,8 @@
 	* porting/Makefile.am: Cosmetics.
 	* rgdb_specs/Makefile.am: Cosmetics.
 	* rtems_gdb/Makefile.am: Cosmetics.
+	* ada_user/Makefile.am: Cosmetics.
+	* started_ada/Makefile.am: Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -121,6 +130,10 @@
 	* rgdb_specs/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 	* rtems_gdb/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* ada_user/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* started_ada/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 
 2003-11-25	Joel Sherrill <joel@OARcorp.com>
@@ -185,6 +198,8 @@
 	* porting/Makefile.am: Merger from rtems-4-6-branch.
 	* rgdb_specs/Makefile.am: Merger from rtems-4-6-branch.
 	* rtems_gdb/Makefile.am: Merger from rtems-4-6-branch.
+	* ada_user/Makefile.am: Merger from rtems-4-6-branch.
+	* started_ada/Makefile.am: Merger from rtems-4-6-branch.
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -211,11 +226,19 @@
 	* porting/porting.texi: Merge from branch.
 	* rgdb_specs/rgdb_specs.texi: Merge from branch.
 	* rtems_gdb/rtems_gdb.texi: Merge from branch.
+	* started_ada/intro.t, started_ada/started_ada.texi,
+	started_ada/tversions.texi: Merge from branch.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	PR 466/doc
 	* posix_users/io.t: Added sync().
+
+2003-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* started_ada/buildada.t, started_ada/gdb.t, started_ada/tversions.texi:
+	Don't use VARIABLEs containing '-' in @set and @value (violates
+	texi-syntax).
 
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -335,6 +358,8 @@
 	* porting/porting.texi: Set @setfilename porting.info.
 	* rgdb_specs/rgdb_specs.texi: Set @setfilename rgdb_specs.info.
 	* rtems_gdb/rtems_gdb.texi: Set @setfilename rtems_gdb.info.
+	* ada_user/ada_user.texi: Set @setfilename ada_user.info.
+	* started_ada/started_ada.texi: Set @setfilename started_ada.info.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -353,6 +378,8 @@
 	* porting/Makefile.am: Put GENERATED_FILES into $builddir.
 	* rgdb_specs/Makefile.am: Put GENERATED_FILES into $builddir.
 	* rtems_gdb/Makefile.am: Put GENERATED_FILES into $builddir.
+	* ada_user/Makefile.am: Put GENERATED_FILES into $builddir.
+	* started_ada/Makefile.am: Put GENERATED_FILES into $builddir.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -403,6 +430,12 @@
 	* rtems_gdb/version.texi: Remove from CVS.
 	* rtems_gdb/stamp-vti: Remove from CVS.
 	* rtems_gdb/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* ada_user/version.texi: Remove from CVS.
+	* ada_user/stamp-vti: Remove from CVS.
+	* ada_user/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* started_ada/version.texi: Remove from CVS.
+	* started_ada/stamp-vti: Remove from CVS.
+	* started_ada/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -418,6 +451,8 @@
 	* porting/stamp-vti, porting/version.texi: Regenerated.
 	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
 	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
+	* ada_user/stamp-vti, ada_user/version.texi: Regenerated.
+	* started_ada/stamp-vti, started_ada/version.texi: Regenerated.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -443,6 +478,9 @@
 	* porting/stamp-vti, porting/version.texi: Regenerated.
 	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
 	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
+	* ada_user/stamp-vti, ada_user/version.texi: Regenerated.
+	* started_ada/Makefile.am: Corrected link.
+	* started_ada/stamp-vti, started_ada/version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
@@ -459,6 +497,8 @@
 	* porting/stamp-vti, porting/version.texi: Regenerated.
 	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
 	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
+	* ada_user/stamp-vti, ada_user/version.texi: Regenerated.
+	* started_ada/stamp-vti, started_ada/version.texi: Regenerated.
 
 2002-10-24	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
@@ -538,6 +578,8 @@
 	* porting/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* rgdb_specs/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* rtems_gdb/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* ada_user/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* started_ada/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-03-27	Eric Norum <eric.norum@usask.ca>
 
@@ -596,6 +638,8 @@
 	* porting/Makefile.am: include main.am, require automake-1.5.
 	* rgdb_specs/Makefile.am: include main.am, require automake-1.5.
 	* rtems_gdb/Makefile.am: include main.am, require automake-1.5.
+	* ada_user/Makefile.am: include main.am, require automake-1.5.
+	* started_ada/Makefile.am: include main.am, require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -639,6 +683,8 @@
 	* porting/.cvsignore: Added rtems_header.html and rtems_footer.html.
 	* rgdb_specs/.cvsignore: Added rtems_header.html and rtems_footer.html.
 	* rtems_gdb/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* ada_user/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* started_ada/.cvsignore: Added rtems_header.html and rtems_footer.html.
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -660,4 +706,6 @@
 	* porting/ChangeLog: New file.
 	* rgdb_specs/ChangeLog: New file.
 	* rtems_gdb/ChangeLog: New file.
+	* ada_user/ChangeLog: New file.
+	* started_ada/ChangeLog: New file.
 
