@@ -169,7 +169,7 @@ this service is available.
 #include <evlog.h>
 
 int log_open(
-  const logd_t         *logdes,
+  logd_t               *logdes,
   const char           *path,
   const log_query_t    *query
 );
@@ -188,10 +188,6 @@ or the log file exists and read permission is denied.
 
 @item  EINTR
 A signal interrupted the call to log_open().
-
-@item EINVAL
-The log_facility field of the query argument is not a valid 
-facility set.
 
 @item EINVAL
 The log_severity field of the query argument exceeds 
@@ -224,32 +220,39 @@ A component of the path prefix is not a directory.
 
 The @code{log_open} function establishes the connection between a 
 log file and a log file descriptor.  It creates an open log file 
-description that refers to a log file and a log file descriptor that
-refers to that open log file description.  The log file descriptor is
-used by other log functions to refer to that log file.  The @code{path}
-argument points to a pathname naming a log file.  A @code{path}
-argument of NULL specifies the current system log file.  
+descriptor that refers to this query stream on the specified log file
+The log file descriptor is used by the other log functions to refer
+to that log query stream.  The @code{path} argument points to a
+pathname for a log file.  A @code{path} argument of NULL specifies
+the current system log file.  
 
-The @code{query} argument points to a log query specification that
-restricts log operations using the returned log file descriptor to 
-to event records from the log file which match the query.  The 
-predicate which determines the success of the match operation is the
-logical AND of the individual comparison predicates for each member
-of the log query specification.  The query attribute of the open file
-description is set to filter as specified by the @code{query} argument.
-If the value of the query argument is not NULL, the value of the 
-@code{log_facility} member of the @code{query} specification shall be
-a set of valid log facilities or the @code{log_open} shall fail.  If
-the value of the @code{query} argument is not NULL, the value of the
-@code{log_severity} member of the @code{query} specification shall be
-less than or equal to @code{LOG_SEVERITY_MAX} or the @code{log_open}
-shall fail.  If the value of the @code{query} argument is NULL, no
-query filter shall be applied. 
+The @code{query} argument is not NULL, then it points to a log query
+specification that is used to filter the records in the log file on
+subsequent @code{log_read} operations.  This restricts the set of
+event records read using the returned log file descriptor to those
+which match the query.  A query match occurs for a given record when
+that record's facility is a member of the query's facility set and
+the record's severity is greater than or equal to the severity specified
+in the query.
+
+If the value of the @code{query} argument is NULL, no query filter
+shall be applied.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+POSIX specifies that @code{EINVAL} will be returned if the 
+@code{log_facilities} field of the @code{query} argument is not
+a valid facility set.  In this implementation, this condition
+can never occur.
+
+Many error codes that POSIX specifies to be returned by @code{log_open}
+should actually be detected by @code{open} and passed back by the
+@code{log_open} implementation.  In this implementation, @code{EACCESS},
+@code{EMFILE}, @code{ENAMETOOLONG}, @code{ENFILE}, @code{ENOENT},
+and @code{ENOTDIR} are detected in this manner.
 
 @page
 @subsection log_read - Read from the system Log
