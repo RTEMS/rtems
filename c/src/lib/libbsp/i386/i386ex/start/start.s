@@ -44,6 +44,8 @@ changes:
  * #define NEXT_GAS
  */			
 
+#define NEXT_GAS
+	
         EXTERN (boot_card)         /* exits to bspstart   */ 
 	EXTERN (stack_start)       /* defined in startup/linkcmds */
 	EXTERN (Clock_exit)
@@ -149,14 +151,13 @@ SYM(InitRCU):
 /*
  * Initialize clock and power mgmt unit for:	
  *	Clock Frequency = 50 Mhz
- *	Prescaled clock output = 1.19318 Mhz
- *      ( matches standard PC )
+ *	Prescaled clock output = 1 Mhz
  *      Normal halt instructions
  */
 	
 SYM(InitClk):	 
 	SetExRegByte( PWRCON, 0x0 )
-	SetExRegWord( CLKPRS, 0x13)
+	SetExRegWord( CLKPRS, 0x17)   # 0x13 for 1.19318 MHz.  0x17 for 1MHz.
 
 /**************************************************************
  * Initialize the Pin Configurations
@@ -274,21 +275,19 @@ SYM(InitTimer):
 	                             # and 2 are set to Vcc
 
 	SetExRegByte(TMRCON , 0x34 ) # prepare to write counter 0 LSB,MSB
-	SetExRegByte(TMR0   , 0xA8 ) # LSB = 0B count, followed by MSB 
-	SetExRegByte(TMR0   , 0x04 ) # for INT every 50 msec. MSB = 0xE900
-	                             # for INT every 5  msec. 0x174c
-				     # for INT every 1 msec. 0x04A8
-				     #  was 0xe900
-	
+	SetExRegByte(TMR0   , 0x00 ) # sfa
+	SetExRegByte(TMR0   , 0x00 ) # sfa 
+
+			
 	SetExRegByte(TMRCON , 0x70 ) # mode 0 disables on Gate= Vcc
 	SetExRegByte(TMR1   , 0x00 ) # sfa 
 	SetExRegByte(TMR1   , 0x00 ) # sfa
 	
 	SetExRegByte(TMRCON , 0xB0 ) # mode 0 disables on gate =Vcc
 	SetExRegByte(TMR2   , 0x00 ) #  
-	SetExRegByte(TMR2   , 0x00 ) #
-	SetExRegByte(TMRCFG , 0x80 ) # Enable timers = 0x00 
-  
+	SetExRegByte(TMR2   , 0x00 ) #  
+
+	SetExRegByte(TMRCFG , 0x80 ) # Enable = 0x00
 
 /*
  *	Initialize the DMACFG register for:	

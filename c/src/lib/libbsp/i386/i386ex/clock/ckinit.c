@@ -33,6 +33,7 @@
 #include <stdlib.h>
 
 rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
+static rtems_unsigned32 Clock_initial_isr_value;
 
 volatile rtems_unsigned32 Clock_driver_ticks;
 
@@ -55,7 +56,7 @@ void Clock_isr()
   Clock_driver_ticks += 1;
   if ( Clock_isrs == 1 ) {
     rtems_clock_tick();
-    Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+    Clock_isrs = Clock_initial_isr_value; /* BSP_Configuration.microseconds_per_tick / 1000;*/
   }
   else
     Clock_isrs -= 1;
@@ -63,19 +64,12 @@ void Clock_isr()
 
 void ClockOff(const rtems_irq_connect_data* unused)
 {
-  /* should do something here */;
-  outport_byte	( TMRCFG , 0x80 );
+  outport_byte	( TMRCFG , 0x80 ); /* disable the counter timer */
 }
 
 void ClockOn(const rtems_irq_connect_data* unused)
 {
-  outport_byte	( TMRCFG , 0x80 );
-
-  outport_byte    ( TMRCON , 0x34 ); 
-  outport_byte	( TMR0   , 0xA8 ); 
-  outport_byte    ( TMR0   , 0x04 ); 
-
-  outport_byte    ( TMRCFG , 0x00 ); 
+  outport_byte    ( TMRCFG , 0x00 ); /* enable the counter timer */
 }
 
 int ClockIsOn(const rtems_irq_connect_data* unused)
@@ -95,12 +89,36 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
+  unsigned timer_counter_init_value;
+  unsigned char clock_lsb, clock_msb;
+  
   Clock_driver_ticks = 0;
-  Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+
+  Clock_isrs = Clock_initial_isr_value = BSP_Configuration.microseconds_per_tick / 1000; /* ticks per clock_isr */
+  
+  /*
+   * configure the counter timer ( should be based on microsecs/tick )
+   * NB. The divisor(Clock_isrs) resolves the  is the same number that appears in confdefs.h
+   * when setting the microseconds_per_tick value.
+   */
+  ClockOff      ( &clockIrqData );
+  
+  timer_counter_init_value  =  BSP_Configuration.microseconds_per_tick / Clock_isrs;
+  clock_lsb = (unsigned char)timer_counter_init_value;
+  clock_msb = timer_counter_init_value >> 8;
+
+  printk("timer_counter_init_value = 0x%x, lsb = 0x%x, msb = 0x%x, Clock_isrs = %d\n",timer_counter_init_value,
+	 clock_lsb, clock_msb, Clock_isrs);
+  
+  outport_byte  ( TMRCON , 0x34 ); 
+  outport_byte	( TMR0   , clock_lsb );       /* load LSB first */
+  outport_byte  ( TMR0   , clock_msb );  /* then MSB       */
+ 
   if (!pc386_install_rtems_irq_handler (&clockIrqData)) {
     printk("Unable to initialize system clock\n");
     rtems_fatal_error_occurred(1);
   }
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
