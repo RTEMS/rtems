@@ -19,6 +19,7 @@ AC_DEFUN(_RTEMS_BSP_ALIAS,
     pc486)        $2=pc386            ;; # i386 - PC with i486DX
     pc586)        $2=pc386            ;; # i386 - PC with Pentium
     pc686)        $2=pc386            ;; # i386 - PC with PentiumPro
+    pck6)         $2=pc386            ;; # i386 - PC with K6
     bare*)        $2=bare             ;; # EXP: bare-aliases
     *)            $2=$1;;
   esac]

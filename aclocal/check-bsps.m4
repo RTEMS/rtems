@@ -12,6 +12,7 @@ AC_MSG_CHECKING([for bsps])
     files=`ls $srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU`
     for file in $files; do
       case $file in
+        ChangeLog*);;
         shared*);;
         Makefile*);;
         READ*);;
@@ -26,7 +27,7 @@ AC_MSG_CHECKING([for bsps])
         mvme162)           rtems_bsp="$rtems_bsp mvme162 mvme162lx";;
         mbx8xx)            rtems_bsp="$rtems_bsp mbx821_001 mbx860_002";;
 	motorola_powerpc)  rtems_bsp="$rtems_bsp mvme2307 mcp750";;
-	pc386)             rtems_bsp="$rtems_bsp pc386 pc486 pc586 pc686";;
+	pc386)             rtems_bsp="$rtems_bsp pc386 pc486 pc586 pc686 pck6";;
 	sim68000)          rtems_bsp="$rtems_bsp simcpu32";;
         *) $1="[$]$1 $file";;
       esac;
