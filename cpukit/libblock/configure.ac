@@ -22,7 +22,5 @@ RTEMS_CANONICALIZE_TOOLS
 AC_PROG_RANLIB
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-src/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

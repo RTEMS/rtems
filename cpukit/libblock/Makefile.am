@@ -4,7 +4,9 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = src
+include $(top_srcdir)/../automake/multilib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 include_rtemsdir = $(includedir)/rtems
 
@@ -21,9 +23,23 @@ include_rtems_HEADERS = \
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
 
-all-local: $(PREINSTALL_FILES)
+LIB = ${ARCH}/libblock.a
 
-EXTRA_DIST = README
+C_FILES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c
 
-include $(top_srcdir)/../automake/subdirs.am
+C_O_FILES = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
+
+SRCS = $(C_FILES)
+OBJS = $(C_O_FILES)
+
+AM_CFLAGS += $(LIBC_DEFINES)
+
+${ARCH}/%.$(OBJEXT): src/%.c
+	${COMPILE} -o $@ -c $<
+
+$(LIB): ${OBJS}
+	$(make-library)
+
+all-local: $(PREINSTALL_FILES) ${ARCH} $(LIB)
+
 include $(top_srcdir)/../automake/local.am

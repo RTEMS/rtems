@@ -1,3 +1,9 @@
+2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge src/Makefile.am.
+	* src/Makefile.am: Remove.
+	* configure.ac: Remove src/Makefile.am
+
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/Makefile.am: Use .$(OBJEXT) instead of .o.
