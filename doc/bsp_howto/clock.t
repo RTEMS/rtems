@@ -18,7 +18,7 @@ The clock driver is located in the clock directory of the BSP.
 
 @section Primitives
 
-@section Initialization
+@subsection Initialization
 
 The major and minor numbers of the clock driver can be made available to
 the others, such as the Shared Memory Driver. 
@@ -36,7 +36,7 @@ the VBR:
 rtems_interrupt_catch (InterruptHandler, CONSOLE_VECTOR, &old_handler); 
 @end example
 
-@section The clock interrupt subroutine
+@subsection The Clock Interrupt Subroutine
 
 It only has to inform the kernel that a ticker has elapsed, so call : 
 

@@ -99,7 +99,7 @@ $RTEMS_ROOT/c/src/lib/libc directory,
 
 @end itemize
 
-@section Termios and Polled I/O
+@subsection Termios and Polled I/O
 
 You have to point Termios out which functions are used for simple
 character input/output: 
@@ -122,16 +122,11 @@ int pollread(int minor)
 
 wait for a character to be available in the UART channel minor, then return it.
 
-@section Termios and Interrupt Driven I/O
+@subsection Termios and Interrupt Driven I/O
 
 The UART generally generates interrupts when it is ready to accept or to
 emit a number of characters. In this mode, the interrupt subroutine is the
 core of the driver: 
-
-
-Function
-
-Description
 
 @example
 rtems_isr InterruptHandler (rtems_vector_number v)
@@ -162,7 +157,7 @@ UART.
 
 Figure 5: general TERMIOS driven serial driver functioning
 
-@section Initialization
+@subsection Initialization
 
 The driver initialization is called once during RTEMS initialization
 process. 
@@ -200,7 +195,7 @@ rtems_io_register_name ("dev/console", major, i);
 
 @end itemize
 
-@section Opening a serial device
+@subsection Opening a serial device
 
 The console device is opened during RTEMS initialization but the
 console_open function is called when a new device is opened. For instance,
@@ -221,13 +216,13 @@ The gen68340 BSP defines two kinds of callbacks:
 
 @end itemize
 
-@ection Polled I/O
+@subsubsection Polled I/O
 
 You have to point Termios out which functions are used for simple
 character input/output, i.e. pointers to pollWrite and pollRead functions
 defined in 8.4.1. 
 
-@ection Interrupt Driven I/O
+@subsubsection Interrupt Driven I/O
 
 Driver functioning is quite different in this mode. You can see there's no
 read function passed to Termios. Indeed a console_read call returns the
@@ -236,14 +231,14 @@ interrupt subroutine (cf. 8.4.2).
 
 But you actually have to provide a pointer to the InterruptWrite function. 
 
-@section Closing a serial device
+@subsection Closing a serial device
 
 The driver entry point is: console_close. 
 
 You just have to notify Termios that the serial device was closed, with a
 call to rtems_termios_close. 
 
-@section Reading characters from the serial device
+@subsection Reading characters from the serial device
 
 The driver entry point is: console_read. 
 
@@ -251,7 +246,7 @@ You just have to return the content of the Termios input buffer.
 
 Call rtems_termios_read. 
 
-@section Writing characters to the serial device
+@subsection Writing characters to the serial device
 
 The driver entry point is: console_write. 
 
@@ -260,7 +255,7 @@ buffer.
 
 Call rtems_termios_write. 
 
-@section Changing serial line parameters
+@subsection Changing serial line parameters
 
 The driver entry point is: console_control. 
 
