@@ -1,5 +1,8 @@
-/*  cpu.h
- *
+/**
+ * @file rtems/score/cpu.h
+ */
+
+/*
  *  This include file contains information pertaining to the XXX
  *  processor.
  *

@@ -1,5 +1,8 @@
-/*  avr.h
- *
+/**
+ * @file rtems/score/avr.h
+ */
+
+/*
  *  This file sets up basic CPU dependency settings based on 
  *  compiler settings.  For example, it can determine if
  *  floating point is available.  This particular implementation
