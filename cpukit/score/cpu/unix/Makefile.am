@@ -15,7 +15,7 @@ include_rtems_score_HEADERS = rtems/score/types.h rtems/score/cpu.h \
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c
-libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 all-local: $(PREINSTALL_FILES)
 

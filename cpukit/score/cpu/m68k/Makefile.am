@@ -5,7 +5,7 @@
 include $(top_srcdir)/automake/compile.am
 
 noinst_LIBRARIES = libscorecpu.a
-libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = asm.h

@@ -1,3 +1,7 @@
+2005-01-07	Ralf Corsepius <ralf.corsepius@freenet.de>
+
+	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
+
 2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove build-variant support.
