@@ -2,5 +2,39 @@
 #  $Id$
 #
 
-This file needs to be redone to reflect tasks left after the 2.3.11 
-update.
+
+Notes from Mike Siers <mikes@poliac.com>
+========================================
+
+I know that several users have tried out this version of
+pppd under RTEMS.  It has been successfully used as both
+a client and server.  Below are the only issues that I
+know of.
+
+1) Large packet ping causes RTEMS box to lock up
+   If you ping the RTEMS box over the ppp link with a packet
+   size greater than 1500, the RTEMS box locks up.  I think
+   the problem is in the pppd ethernet driver.
+
+2) Upgrade the libnetworking/modem files
+   This upgrade did not modify the ppp ethernet driver files
+   in the libnetworking/modem directory.  Would like to
+   upgrade these files.  Hopefully, it will fix the large
+   packet ping problem.
+
+3) The files cbcp.c and cbcp.h provide a callback feature
+   that I have not tried to compile or use.  The files in 
+   this directory are identical to the 2.3.11 versions.  
+   for completeness.
+
+
+JOEL: Are the modifications to the original pppd such that the 
+      real maintainers will accept them?
+
+No.  The pppd 2.3.11 branch is an old branch.  The current
+version is 2.4.x and it contains alot of extra items that
+just did not make sense to have in an embedded environment.
+I could make the RTEMS changes compatible with the standard
+2.3.11 release by using compilation flags.  I have not
+contacted the maintainers to see if they are interested.
+
