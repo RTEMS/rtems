@@ -235,10 +235,11 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * RATIONALE : to always have the same transition by forcing the user
      * to get the previous handler before accepting to disconnect.
      */
+    _CPU_ISR_Disable(level);
     if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
+	  _CPU_ISR_Enable(level);
       return 0;
     }
-    _CPU_ISR_Disable(level);
 
     /*
      * store the data provided by user
@@ -265,10 +266,14 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
+     unsigned int level;
+
      if (!isValidInterrupt(irq->name)) {
       return 0;
      }
+    _CPU_ISR_Disable(level);
      *irq = rtems_hdl_tbl[irq->name];
+    _CPU_ISR_Enable(level);
      return 1;
 }
 
@@ -286,10 +291,11 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * RATIONALE : to always have the same transition by forcing the user
      * to get the previous handler before accepting to disconnect.
      */
+    _CPU_ISR_Disable(level);
     if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
+      _CPU_ISR_Enable(level);
       return 0;
     }
-    _CPU_ISR_Disable(level);
 
     /*
      * disable interrupt at PIC level

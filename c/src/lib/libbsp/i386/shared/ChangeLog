@@ -1,3 +1,8 @@
+2003-08-21	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 456/bsps
+	* irq/irq.c: Fix race condition when installing an ISR.
+
 2003-07-16      Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	PR 428/bsps
