@@ -8,11 +8,13 @@ MULTICLEAN = true
 endif
 
 # Multilib support rules
-.PHONY: all-multi mostlyclean-multi clean-multi distclean-multi \
+.PHONY: all-multi install-multi mostlyclean-multi clean-multi distclean-multi \
 	maintainer-clean-multi
 
 if MULTILIB
 all-recursive: all-multi
+install-recursive: install-multi
+
 mostlyclean-recursive: mostlyclean-multi
 clean-recursive: clean-multi
 distclean-recursive: distclean-multi
@@ -20,6 +22,9 @@ maintainer-clean-recursive: maintainer-clean-multi
 
 all-multi:
 	$(MULTIDO) $(AM_MAKEFLAGS) DO=all multi-do
+install-multi:
+	$(MULTIDO) $(AM_MAKEFLAGS) DO=install multi-do
+
 mostlyclean-multi:
 	$(MULTICLEAN) $(AM_MAKEFLAGS) DO=mostlyclean multi-clean
 clean-multi:

@@ -35,18 +35,14 @@ PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
 fi
 AC_SUBST(PROJECT_TOPdir)
 
-if test "$with_target_subdir" = "." ; then
-# Native
-PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
-else
-# Cross
-PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
-fi
+AS_IF([test "${with_project_root+set}" = set],
+  [PROJECT_ROOT="${with_project_root}${RTEMS_TOPdir}/\$(top_builddir)"],
+  [PROJECT_ROOT="../../${RTEMS_TOPdir}/\$(top_builddir)"])
 AC_SUBST(PROJECT_ROOT)
 
 AC_MSG_CHECKING([for RTEMS Version])
-AS_IF([test -r "${srcdir}/${RTEMS_TOPdir}/aclocal/version.m4"],
+AS_IF([test -r "${srcdir}/${RTEMS_TOPdir}/exec/aclocal/version.m4"],
 [],
-[AC_MSG_ERROR([Unable to find ${RTEMS_TOPdir}/aclocal/version.m4])])
+[AC_MSG_ERROR([Unable to find ${RTEMS_TOPdir}/exec/aclocal/version.m4])])
 AC_MSG_RESULT([_RTEMS_VERSION])
 ])dnl

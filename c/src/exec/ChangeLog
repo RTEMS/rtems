@@ -1,5 +1,16 @@
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/multilib.am: Add install-multi.
+	* aclocal/rtems-top.m4: Reflect new RTEMS_TOPdir to detecting
+	version.m4.
+	Add --with-project-root.
+	Reflect --with-project-root to setting up PROJECT_ROOT.
+	* aclocal/env-rtemscpu.m4: Reflect new RTEMS_TOPdir (HACK).
+	* aclocal/check-cpu.m4:  Reflect new RTEMS_TOPdir.
+	* aclocal/check-bsps.m4: Reflect new RTEMS_TOPdir.
+
+2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: RTEMS_TOP(..).
 
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -8,7 +8,7 @@ AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])
 
 # Is this a supported CPU?
 AC_MSG_CHECKING([if cpu $RTEMS_CPU is supported])
-if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
+if test -d "$srcdir/$RTEMS_TOPdir/exec/score/cpu/$RTEMS_CPU"; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_ERROR(no)

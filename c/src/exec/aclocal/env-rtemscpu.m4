@@ -18,7 +18,7 @@ if test x"$multilib" = x"yes"; then
   fi
   AC_SUBST(MULTISUBDIR)
 
-  PROJECT_ROOT="${RTEMS_TOPdir}/\$(MULTIBUILDTOP)\$(top_builddir)"
+  PROJECT_ROOT="../../${RTEMS_TOPdir}/\$(MULTIBUILDTOP)\$(top_builddir)"
   GCC_SPECS="-isystem \$(PROJECT_ROOT)/lib/include"
   AC_SUBST(GCC_SPECS)
 
