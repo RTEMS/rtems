@@ -282,7 +282,7 @@ void _CPU_Initialize(
    *  we are in trouble.
    */
 
-  if ( sizeof(Context_Control_overlay) < sizeof(Context_Control) )
+  if ( sizeof(Context_Control_overlay) > sizeof(Context_Control) )
     _CPU_Fatal_error(0x100 + 1);
 
   /*
