@@ -3,8 +3,9 @@
 %rename link old_link
 
 *startfile:
-%{!qrtems: %(old_startfile)} \
-%{qrtems: %{qrtems_debug: rxgen_romld_g.o%s} %{!qrtems_debug: rxgen_romld.o%s}}}
+%{!qrtems: %(old_startfile)}  %{!nostdlib: %{qrtems: \
+%{!qrtems_debug: rxgen_romld.o%s} \
+%{qrtems_debug: rxgen_romld_g.o%s}}}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}
