@@ -366,9 +366,10 @@ void _Thread_queue_Enqueue_fifo (
 
   _ISR_Disable( level );
 
+  the_thread_queue->sync = FALSE;
+
   switch ( the_thread_queue->sync_state ) {
     case THREAD_QUEUE_NOTHING_HAPPENED: 
-      the_thread_queue->sync = FALSE;
       _Chain_Append_unprotected(
         &the_thread_queue->Queues.Fifo,
         &the_thread->Object.Node
@@ -448,7 +449,8 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
       _Thread_MP_Free_proxy( the_thread );
 
     return the_thread;
-  } else if ( the_thread_queue->sync ) {
+  } else if ( the_thread_queue->sync && 
+              the_thread_queue->sync_state != THREAD_QUEUE_SATISFIED ) {
     the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
     _ISR_Enable( level );
     return _Thread_Executing;
@@ -602,10 +604,11 @@ restart_forward_search:
     search_thread =
        (Thread_Control *)search_thread->Object.Node.next;
   }
-  if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
-    goto syncronize;
 
   the_thread_queue->sync = FALSE;
+
+  if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
+    goto syncronize;
 
   if ( priority == search_priority )
     goto equal_priority;
@@ -646,10 +649,11 @@ restart_reverse_search:
     search_thread = (Thread_Control *)
                          search_thread->Object.Node.previous;
   }
-  if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
-    goto syncronize;
 
   the_thread_queue->sync = FALSE;
+
+  if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
+    goto syncronize;
 
   if ( priority == search_priority )
     goto equal_priority;
@@ -755,7 +759,8 @@ Thread_Control *_Thread_queue_Dequeue_priority(
     }
   }
 
-  if ( the_thread_queue->sync ) {
+  if ( the_thread_queue->sync && 
+       the_thread_queue->sync_state != THREAD_QUEUE_SATISFIED ) {
     the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
     _ISR_Enable( level );
     return _Thread_Executing;
