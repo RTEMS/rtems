@@ -502,8 +502,6 @@ defined by RTEMS:
 @item GLOBAL - global task
 @end itemize
 
-
-
 Semaphores should not be made global unless remote
 tasks must interact with the created semaphore.  This is to
 avoid the system overhead incurred by the creation of a global
@@ -724,6 +722,9 @@ access the semaphore.  If the semaphore is not available and
 @code{NO_WAIT} was not specified, then the task must be blocked until
 the semaphore is released.  A proxy is allocated on the remote
 node to represent the task until the semaphore is released.
+
+A clock tick is required to support the timeout functionality of
+this directive.
 
 @page
 @ifinfo

@@ -380,3 +380,4 @@ RTEMS:
 @item @code{EVENT_ANY} 	return after any events
 @end itemize
 
+A clock tick is required to support the functionality of this directive.

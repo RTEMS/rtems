@@ -44,11 +44,12 @@ directives provided by the rate monotonic manager are:
 @end itemize
 
 @ifinfo
-@node Rate Monotonic Manager Background, Rate Monotonic Manager Definitions, Rate Monotonic Manager Introduction, Rate Monotonic Manager
+@node Rate Monotonic Manager Background, Rate Monotonic Manager Required Support, Rate Monotonic Manager Introduction, Rate Monotonic Manager
 @end ifinfo
 @section Background
 @ifinfo
 @menu
+* Rate Monotonic Manager Required Support::
 * Rate Monotonic Manager Definitions::
 * Rate Monotonic Scheduling Algorithm::
 * Schedulability Analysis::
@@ -72,7 +73,14 @@ systems, the services provided by the rate monotonic manager may
 be used by any application which requires periodic tasks.
 
 @ifinfo
-@node Rate Monotonic Manager Definitions, Rate Monotonic Scheduling Algorithm, Rate Monotonic Manager Background, Rate Monotonic Manager Background
+@node Rate Monotonic Manager Required Support, Rate Monotonic Manager Definitions, Rate Monotonic Manager Background, Rate Monotonic Manager Background
+@end ifinfo
+@subsection Rate Monotonic Manager Required Support
+
+A clock tick is required to support the functionality provided by this manager.
+
+@ifinfo
+@node Rate Monotonic Manager Definitions, Rate Monotonic Scheduling Algorithm, Rate Monotonic Manager Required Support, Rate Monotonic Manager Background
 @end ifinfo
 @subsection Rate Monotonic Manager Definitions
 
@@ -180,7 +188,7 @@ set and priority assignments:
 & 1 && 100 && Low &\cr\noalign{\hrule}
 & 2 && 50 && Medium &\cr\noalign{\hrule}
 & 3 && 50 && Medium &\cr\noalign{\hrule}
-& 4 && 25 && Low &\cr\noalign{\hrule}
+& 4 && 25 && High &\cr\noalign{\hrule}
 }}\hfil}
 @end tex
 @end ifset

@@ -592,6 +592,9 @@ are defined by RTEMS:
 @item @code{NO_WAIT} - task should not wait
 @end itemize
 
+A clock tick is required to support the timeout functionality of
+this directive.
+
 @page
 @ifinfo
 @node REGION_RETURN_SEGMENT - Return segment to a region, REGION_GET_SEGMENT_SIZE - Obtain size of a segment, REGION_GET_SEGMENT - Get segment from a region, Region Manager Directives

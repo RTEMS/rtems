@@ -768,7 +768,6 @@ defined by RTEMS:
 @item @code{NO_WAIT} - task should not wait
 @end itemize
 
-
 Receiving a message from a global message queue which
 does not reside on the local node will generate a request to the
 remote node to obtain a message from the specified message
@@ -776,6 +775,9 @@ queue.  If no message is available and @code{WAIT} was specified, then
 the task must be blocked until a message is posted.  A proxy is
 allocated on the remote node to represent the task until the
 message is posted.
+
+A clock tick is required to support the timeout functionality of
+this directive.
 
 @page
 @ifinfo

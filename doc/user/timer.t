@@ -39,18 +39,26 @@ facilities.  The directives provided by the timer manager are:
 
 
 @ifinfo
-@node Timer Manager Background, Timers, Timer Manager Introduction, Timer Manager
+@node Timer Manager Background, Timer Manager Required Support, Timer Manager Introduction, Timer Manager
 @end ifinfo
 @section Background
 @ifinfo
 @menu
+* Timer Manager Required Support::
 * Timers::
 * Timer Service Routines::
 @end menu
 @end ifinfo
 
 @ifinfo
-@node Timers, Timer Service Routines, Timer Manager Background, Timer Manager Background
+@node Timer Manager Required Support, Timers, Timer Manager Background, Timer Manager Background
+@end ifinfo
+@subsection Required Support
+
+A clock tick is required to support the functionality provided by this manager.
+
+@ifinfo
+@node Timers, Timer Service Routines, Timer Manager Required Support, Timer Manager Background
 @end ifinfo
 @subsection Timers
 
@@ -183,8 +191,11 @@ timer_fire_when directives.
 
 The timer_reset directive is used to restore an
 interval timer initiated by a previous invocation of
-timer_fire_after to its original interval length.  The timer
-service routine is not changed or fired by this directive.
+timer_fire_after to its original interval length.  If the
+timer has not been used or the last usage of this timer
+was by a timer_fire_when directive, then an error is
+returned.  The timer service routine is not changed or
+fired by this directive.
 
 @ifinfo
 @node Deleting a Timer, Timer Manager Directives, Resetting a Timer, Timer Manager Operations
@@ -520,7 +531,7 @@ procedure Timer_Reset (
 @subheading DIRECTIVE STATUS CODES:
 @code{SUCCESSFUL} - timer reset successfully@*
 @code{INVALID_ID} - invalid timer id@*
-@code{NOT_DEFINED} - attempted to reset a when timer
+@code{NOT_DEFINED} - attempted to reset a when or newly created timer
 
 @subheading DESCRIPTION:
 
@@ -532,6 +543,13 @@ timer service routine which the original timer_fire_after
 directive used.
 
 @subheading NOTES:
+
+If the timer has not been used or the last usage of this timer
+was by a timer_fire_when directive, then the NOT_DEFINED error is
+returned. 
+
+Restarting a cancelled after timer results in the timer being 
+reinitiated with its previous timer service routine and interval.
 
 This directive will not cause the running task to be preempted.
 

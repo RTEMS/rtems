@@ -560,6 +560,9 @@ compete for the processor and resources.  If the task was
 blocked as well as suspended, this directive clears the
 suspension and leaves the task in the blocked state.
 
+Suspending a task which is already suspended or resuming a 
+task which is not suspended is considered an error.
+
 @ifinfo
 @node Delaying the Currently Executing Task, Changing Task Priority, Suspending and Resuming Tasks, Task Manager Operations 
 @end ifinfo
@@ -1062,6 +1065,9 @@ Suspending a global task which does not reside on the local node
 will generate a request to the remote node to suspend the
 specified task.
 
+If the task specified by id is already suspended, then the
+ALREADY_SUSPENDED status code is returned.
+
 @page
 
 @ifinfo
@@ -1106,6 +1112,9 @@ enabled and the local task being resumed has a higher priority.
 Resuming a global task which does not reside on the local node
 will generate a request to the remote node to resume the
 specified task.
+
+If the task specified by id is not suspended, then the
+INCORRECT_STATE status code is returned.
 
 @page
 
@@ -1448,6 +1457,8 @@ by specifying a value of @code{YIELD_PROCESSOR} in ticks.
 The maximum timer interval that can be specified is the maximum
 value which can be represented by the rtems_unsigned32 type.
 
+A clock tick is required to support the functionality of this directive.
+
 @page
 
 @ifinfo
@@ -1487,3 +1498,5 @@ task will be unblocked and made ready to execute.
 @subheading NOTES:
 The ticks portion of time_buffer @value{STRUCTURE} is ignored.  The
 timing granularity of this directive is a second.
+
+A clock tick is required to support the functionality of this directive.
