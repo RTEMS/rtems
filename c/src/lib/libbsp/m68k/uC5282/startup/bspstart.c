@@ -277,7 +277,7 @@ do {                                                   \
    return (type)(ret);                                 \
 } while (0)
 #define syscall_1(type,name,d1type,d1)                      \
-type bsp_##name(d1type d1)                               \
+type bsp_##name(d1type d1)                                  \
 {                                                           \
    long ret;                                                \
    register long __d1 __asm__ ("%d1") = (long)d1;           \
@@ -285,12 +285,12 @@ type bsp_##name(d1type d1)                               \
                          "trap #2\n\t"                      \
                          "move.l %%d0,%0"                   \
                          : "=g" (ret)                       \
-                         : "d" (SysCode_##name), "d" (__d1) \
+                         : "i" (SysCode_##name), "d" (__d1) \
                          : "d0" );                          \
    syscall_return(type,ret);                                \
 }
 #define syscall_2(type,name,d1type,d1,d2type,d2)            \
-type bsp_##name(d1type d1, d2type d2)                    \
+type bsp_##name(d1type d1, d2type d2)                       \
 {                                                           \
    long ret;                                                \
    register long __d1 __asm__ ("%d1") = (long)d1;           \
@@ -299,19 +299,40 @@ type bsp_##name(d1type d1, d2type d2)                    \
                          "trap #2\n\t"                      \
                          "move.l %%d0,%0"                   \
                          : "=g" (ret)                       \
-                         : "d" (SysCode_##name), "d" (__d1),\
+                         : "i" (SysCode_##name), "d" (__d1),\
                                                  "d" (__d2) \
                          : "d0" );                          \
    syscall_return(type,ret);                                \
 }
-#define SysCode_reset         0 /* reset */
-#define SysCode_program       5 /* program flash memory */
-#define SysCode_gethwaddr    12 /* get hardware address */
-#define SysCode_getbenv      14 /* get bootloader environment variable */
-#define SysCode_setbenv      15 /* get bootloader environment variable */
+#define syscall_3(type,name,d1type,d1,d2type,d2,d3type,d3)  \
+type bsp_##name(d1type d1, d2type d2, d3type d3)            \
+{                                                           \
+   long ret;                                                \
+   register long __d1 __asm__ ("%d1") = (long)d1;           \
+   register long __d2 __asm__ ("%d2") = (long)d2;           \
+   register long __d3 __asm__ ("%d3") = (long)d3;           \
+   __asm__ __volatile__ ("move.l %1,%%d0\n\t"               \
+                         "trap #2\n\t"                      \
+                         "move.l %%d0,%0"                   \
+                         : "=g" (ret)                       \
+                         : "i" (SysCode_##name), "d" (__d1),\
+                                                 "d" (__d2),\
+                                                 "d" (__d3) \
+                         : "d0" );                          \
+   syscall_return(type,ret);                                \
+}
+#define SysCode_reset              0 /* reset */
+#define SysCode_program            5 /* program flash memory */
+#define SysCode_gethwaddr         12 /* get hardware address */
+#define SysCode_getbenv           14 /* get bootloader environment variable */
+#define SysCode_setbenv           15 /* get bootloader environment variable */
+#define SysCode_flash_erase_range 19 /* erase a section of flash */
+#define SysCode_flash_write_range 20 /* write a section of flash */
 syscall_1(unsigned const char *, gethwaddr, int, a)
 syscall_1(const char *, getbenv, const char *, a)
 syscall_2(int, program, bsp_mnode_t *, chain, int, flags)
+syscall_3(int, flash_erase_range, volatile unsigned short *, flashptr, int, start, int, end);
+syscall_3(int, flash_write_range, volatile unsigned short *, flashptr, bsp_mnode_t *, chain, int, offset);
 
 /*
  * 'Extended BSP' routines

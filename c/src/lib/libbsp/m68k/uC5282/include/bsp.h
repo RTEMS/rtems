@@ -83,6 +83,8 @@ int bsp_reset(int flags);
 int bsp_program(bsp_mnode_t *chain, int flags);
 unsigned const char *bsp_gethwaddr(int a);
 const char *bsp_getbenv(const char *a);
+int bsp_flash_erase_range(volatile unsigned short *flashptr, int start, int end);
+int bsp_flash_write_range(volatile unsigned short *flashptr, bsp_mnode_t *chain, int offset);
 
 void bsp_cleanup(void);
 
