@@ -46,7 +46,7 @@ rtems_interrupt_level bsp_isr_level;
  *  Since there is a forward reference
  */
 
-int main(int argc, char **argv, char **envp);
+int c_rtems_main(int argc, char **argv, char **envp);
 
 int boot_card(int argc, char **argv, char **envp)
 {
@@ -57,8 +57,10 @@ int boot_card(int argc, char **argv, char **envp)
   char **envp_p = &envp_pointer;
 
   /*
-   *  Set things up so main is called with real pointers for argv and envp.
-   *  If the BSP has passed us something useful, then pass it on.
+   *  Set things up so c_rtems_main() is called with real pointers for
+   *  argv and envp.  If the BSP has passed us something useful, then
+   *  pass it on.  Somehow we need to eventually make this available to
+   *  a real main() in user land. :)
    */
 
   if ( argv )
@@ -114,14 +116,15 @@ int boot_card(int argc, char **argv, char **envp)
     rtems_initialize_executive_early( &BSP_Configuration, &Cpu_table );
 
   /*
-   *  Call main() and get the global constructors invoked if there
-   *  are any.
+   *  Call c_rtems_main() and eventually let the first task or the real
+   *  main() invoke the global constructors if there are any.
    */
+
 #ifdef USE_INIT_FINI 
    atexit( _fini );
 #endif
 
-  status = main( argc, argv_p, envp_p );
+  status = c_rtems_main( argc, argv_p, envp_p );
 
   /*
    *  Perform any BSP specific shutdown actions.

@@ -22,7 +22,7 @@ char *rtems_progname;
 
 extern rtems_interrupt_level bsp_isr_level;
 
-int main(int argc, char **argv)
+int c_rtems_main(int argc, char **argv)
 {
   if ((argc > 0) && argv && argv[0])
     rtems_progname = argv[0];
