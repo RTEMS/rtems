@@ -21,6 +21,7 @@
 #include <rtems/options.h>
 #include <rtems/thread.h>
 #include <rtems/watchdog.h>
+#include <rtems/config.h>
 
 /*PAGE
  *
@@ -85,16 +86,16 @@ void _Message_queue_MP_Send_process_packet (
 rtems_status_code _Message_queue_MP_Send_request_packet (
   Message_queue_MP_Remote_operations  operation,
   Objects_Id                          message_queue_id,
-  Message_queue_Buffer               *buffer,
-  rtems_option                     option_set,
-  rtems_interval                   timeout
+  void                               *buffer,
+  unsigned32                         *size_p,
+  rtems_option                        option_set,
+  rtems_interval                      timeout
 )
 {
   Message_queue_MP_Packet *the_packet;
 
   switch ( operation ) {
 
-    case MESSAGE_QUEUE_MP_RECEIVE_REQUEST:
     case MESSAGE_QUEUE_MP_SEND_REQUEST:
     case MESSAGE_QUEUE_MP_URGENT_REQUEST:
     case MESSAGE_QUEUE_MP_BROADCAST_REQUEST:
@@ -102,25 +103,69 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
 
       the_packet                    = _Message_queue_MP_Get_packet();
       the_packet->Prefix.the_class  = RTEMS_MP_PACKET_MESSAGE_QUEUE;
-      the_packet->Prefix.length     = sizeof ( Message_queue_MP_Packet );
-      the_packet->Prefix.to_convert = sizeof ( Message_queue_MP_Packet ) -
-                         sizeof ( Message_queue_Buffer );
+      the_packet->Prefix.length     = sizeof(Message_queue_MP_Packet);
+      if ( size_p )
+      the_packet->Prefix.length     += *size_p;
+      the_packet->Prefix.to_convert = sizeof(Message_queue_MP_Packet);
+
+      /*
+       * make sure message is not too big for our MPCI driver
+       * We have to check it here instead of waiting for MPCI because
+       * we are about to slam in the payload
+       */
+
+      if (the_packet->Prefix.length >
+          _Configuration_MPCI_table->maximum_packet_size)
+      {
+          _Thread_Enable_dispatch();
+          return RTEMS_INVALID_SIZE;
+      }
+
       if ( ! _Options_Is_no_wait(option_set))
           the_packet->Prefix.timeout = timeout;
 
-      the_packet->operation         = operation;
-      the_packet->Prefix.id         = message_queue_id;
-      the_packet->option_set        = option_set;
+      the_packet->operation  = operation;
+      the_packet->Prefix.id  = message_queue_id;
+      the_packet->option_set = option_set;
 
-      if ( buffer )
-        _Message_queue_Copy_buffer( buffer, &the_packet->Buffer );
+      /*
+       * Copy the data into place if needed
+       */
+      
+      if (buffer)
+      {
+          the_packet->Buffer.size = *size_p;
+          _Message_queue_Copy_buffer(buffer,
+                                     the_packet->Buffer.buffer,
+                                     *size_p);
+      }
 
-      return
-        _MPCI_Send_request_packet(
-          rtems_get_node( message_queue_id ),
-          &the_packet->Prefix,
-          STATES_WAITING_FOR_MESSAGE
-        );
+      return _MPCI_Send_request_packet(rtems_get_node(message_queue_id),
+                                       &the_packet->Prefix,
+                                       STATES_WAITING_FOR_MESSAGE);
+      break;
+
+    case MESSAGE_QUEUE_MP_RECEIVE_REQUEST:
+
+      the_packet                    = _Message_queue_MP_Get_packet();
+      the_packet->Prefix.the_class  = RTEMS_MP_PACKET_MESSAGE_QUEUE;
+      the_packet->Prefix.length     = sizeof(Message_queue_MP_Packet);
+      the_packet->Prefix.to_convert = sizeof(Message_queue_MP_Packet);
+
+      if ( ! _Options_Is_no_wait(option_set))
+          the_packet->Prefix.timeout = timeout;
+
+      the_packet->operation  = MESSAGE_QUEUE_MP_RECEIVE_REQUEST;
+      the_packet->Prefix.id  = message_queue_id;
+      the_packet->option_set = option_set;
+      the_packet->size       = 0;        /* just in case of an error */
+
+      _Thread_Executing->Wait.return_argument      = (unsigned32 *)buffer;
+      _Thread_Executing->Wait.Extra.message_size_p = size_p;
+      
+      return _MPCI_Send_request_packet(rtems_get_node(message_queue_id),
+                                       &the_packet->Prefix,
+                                       STATES_WAITING_FOR_MESSAGE);
       break;
 
     case MESSAGE_QUEUE_MP_ANNOUNCE_CREATE:
@@ -132,12 +177,8 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
     case MESSAGE_QUEUE_MP_BROADCAST_RESPONSE:
     case MESSAGE_QUEUE_MP_FLUSH_RESPONSE:
       break;
-
   }
-  /*
-   *  The following line is included to satisfy compilers which
-   *  produce warnings when a function does not end with a return.
-   */
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -168,10 +209,16 @@ void _Message_queue_MP_Send_response_packet (
 /*
  *  The packet being returned already contains the class, length, and
  *  to_convert fields, therefore they are not set in this routine.
+ *
+ *  Exception: MESSAGE_QUEUE_MP_RECEIVE_RESPONSE needs payload length
+ *             added to 'length'
  */
       the_packet->operation = operation;
       the_packet->Prefix.id = the_packet->Prefix.source_tid;
 
+      if (operation == MESSAGE_QUEUE_MP_RECEIVE_RESPONSE)
+          the_packet->Prefix.length += the_packet->size;
+      
       _MPCI_Send_response_packet(
         rtems_get_node( the_packet->Prefix.source_tid ),
         &the_packet->Prefix
@@ -243,7 +290,8 @@ void _Message_queue_MP_Process_packet (
 
       the_packet->Prefix.return_code = rtems_message_queue_receive(
         the_packet->Prefix.id,
-        &the_packet->Buffer,
+        the_packet->Buffer.buffer,
+        &the_packet->size,
         the_packet->option_set,
         the_packet->Prefix.timeout
       );
@@ -260,10 +308,15 @@ void _Message_queue_MP_Process_packet (
 
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
-      _Message_queue_Copy_buffer(
-        &the_packet->Buffer,
-        (Message_queue_Buffer *) the_thread->Wait.return_argument
-      );
+      if (the_packet->Prefix.return_code == RTEMS_SUCCESSFUL) {
+        *the_thread->Wait.Extra.message_size_p = the_packet->size;
+
+        _Message_queue_Copy_buffer(
+          the_packet->Buffer.buffer,
+          the_thread->Wait.return_argument,
+          the_packet->size
+        );
+      }
 
       _MPCI_Return_packet( the_packet_prefix );
       break;
@@ -272,7 +325,8 @@ void _Message_queue_MP_Process_packet (
 
       the_packet->Prefix.return_code = rtems_message_queue_send(
         the_packet->Prefix.id,
-        &the_packet->Buffer
+        the_packet->Buffer.buffer,
+        the_packet->Buffer.size
       );
 
       _Message_queue_MP_Send_response_packet(
@@ -294,7 +348,8 @@ void _Message_queue_MP_Process_packet (
 
       the_packet->Prefix.return_code = rtems_message_queue_urgent(
         the_packet->Prefix.id,
-        &the_packet->Buffer
+        the_packet->Buffer.buffer,
+        the_packet->Buffer.size
       );
 
       _Message_queue_MP_Send_response_packet(
@@ -308,7 +363,8 @@ void _Message_queue_MP_Process_packet (
 
       the_packet->Prefix.return_code = rtems_message_queue_broadcast(
         the_packet->Prefix.id,
-        &the_packet->Buffer,
+        the_packet->Buffer.buffer,
+        the_packet->Buffer.size,
         &the_packet->count
       );
 
