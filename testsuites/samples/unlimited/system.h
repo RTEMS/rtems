@@ -51,7 +51,7 @@ void test3();
 #define CONFIGURE_EXTRA_TASK_STACKS (62 * RTEMS_MINIMUM_STACK_SIZE)
 
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /*
  * Keep track of the task id's created, use a large array.

@@ -35,6 +35,6 @@ rtems_task main_task(
 #define CONFIGURE_INIT_TASK_ENTRY_POINT   main_task
 #define CONFIGURE_INIT_TASK_NAME          rtems_build_name( 'C', 'T', 'O', 'R' )
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* end of include file */

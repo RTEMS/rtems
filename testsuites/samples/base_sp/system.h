@@ -35,6 +35,6 @@ rtems_task Application_task(
 #define CONFIGURE_MAXIMUM_TASKS            2
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* end of include file */

@@ -1,5 +1,19 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* base_mp/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* base_sp/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* cdtest/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* fileio/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* hello/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* loopback/init.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* minimum/init.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* paranoia/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* pppd/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* ticker/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* unlimited/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* fileio/init.c: Include <rtems/dosfs.h> instead of <dosfs.h>.
 
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>

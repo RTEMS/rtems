@@ -48,7 +48,7 @@ extern rtems_name Task_name[ 4 ];       /* array of task names */
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /*
  *  Handy macros and static inline functions

@@ -33,6 +33,6 @@ rtems_task Init(
 
 #define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* end of include file */

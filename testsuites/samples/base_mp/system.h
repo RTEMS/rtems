@@ -42,6 +42,6 @@ rtems_task Application_task(
  *  Put the overrides of default configuration parameters here.
  */
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* end of include file */
