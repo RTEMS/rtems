@@ -68,7 +68,7 @@ END-INFO-DIR-ENTRY
 @include callconv.texi
 @include memmodel.texi
 @include intr.texi
-@c @include fatalerr.texi
+@include fatalerr.texi
 @c @include bsp.texi
 @c @include cputable.texi
 @c @include wksheets.texi
@@ -87,7 +87,7 @@ Applications Supplement.
 * Calling Conventions::
 * Memory Model::
 * Interrupt Processing::
-** Default Fatal Error Processing::
+* Default Fatal Error Processing::
 ** Board Support Packages::
 ** Processor Dependent Information Table::
 ** Memory Requirements::
