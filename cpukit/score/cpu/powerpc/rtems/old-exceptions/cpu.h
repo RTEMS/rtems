@@ -894,12 +894,6 @@ void _CPU_ISR_install_raw_handler(
 
 /* end of Priority handler macros */
 
-/* variables */
-
-#ifndef ASM
-extern const uint32_t   _CPU_msrs[4];
-#endif
-
 #ifdef __cplusplus
 }
 #endif

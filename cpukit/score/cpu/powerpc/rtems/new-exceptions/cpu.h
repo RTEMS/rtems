@@ -722,10 +722,6 @@ void _BSP_Fatal_error(unsigned int);
 
 /* end of Priority handler macros */
 
-/* variables */
-
-extern const uint32_t   _CPU_msrs[4];
-
 /*
  *  Until all new-exception processing BSPs have fixed
  *  PR288, we let the good BSPs pass

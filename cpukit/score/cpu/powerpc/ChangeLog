@@ -1,5 +1,10 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/new-exceptions/cpu.h (_CPU_msrs): Remove (Unused).
+	* rtems/old-exceptions/cpu.h (_CPU_msrs): Remove (Unused).
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/new-exceptions/cpu.h (_CPU_ISR_install_vector,
 	_CPU_Initialize, _CPU_Install_interrupt_stack, _CPU_Context_switch,
 	_CPU_Context_restore, _CPU_Context_save_fp, _CPU_Context_restore_fp,
