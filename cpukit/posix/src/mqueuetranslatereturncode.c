@@ -23,6 +23,7 @@
 #include <rtems/posix/seterr.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/interr.h>
 
 
 /*PAGE
@@ -92,5 +93,5 @@ int _POSIX_Message_queue_Translate_core_message_queue_return_code(
     TRUE,
     the_message_queue_status
   );
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return POSIX_BOTTOM_REACHED();
 }
