@@ -30,8 +30,8 @@
             Makefiles) one developer can develop and test under SVR4,
             another under 4.x, another under HPUX.
 
-        .  Builtin support for compiling "variants" such as debug,
-            profile, and tcov versions.  These variants can be built
+        .  Builtin support for compiling "variants" such as debug
+            versions.  These variants can be built
             recursively.
 
         .  Control of system dependencies.  "hidden" dependencies on
@@ -110,7 +110,6 @@
 
             o-optimize/       -- optimized binaries
             o-debug/          -- debug binaries
-            o-profile/        -- profiling binaries
 
         Using the template Makefiles, this will all happen automatically. 
         The contents of these directories are specific to a BSP.
@@ -123,13 +122,12 @@
            
         Typing 'make' will place objects in o-optimize.
         'make debug' will place objects in o-debug.
-        'make profile' will place objects in o-profile.
 
-        The debug and profile targets are equivalent to 'all' except that
+        The debug targets are equivalent to 'all' except that
         CFLAGS and/or LDFLAGS are modified as per the compiler config file for
         debug and profile support.
 
-        The targets debug, profile, etc., can be invoked recursively at
+        The targets debug etc., can be invoked recursively at
         the directory make level.  So from the top of a tree, one could
         install a debug version of everything under that point by:
 
@@ -141,7 +139,7 @@
         appropriate version of the library will be linked in.
 
         For example, the following fragments link the normal, debug, or
-        profile version of "libmine.a" as appropriate:
+        version of "libmine.a" as appropriate:
 
             LD_LIBS   += $(LIBMINE)
             LIBMINE = ../libmine/${ARCH}/libmine.a
@@ -250,7 +248,7 @@
             Names in here should be fully qualified, and NOT depend on $PATH.
 
             Also specifies compiler flags to be used to generate optimized,
-            debugging and profile versions, as well as rules to compile
+            debugging versions, as well as rules to compile
             assembly language and make makefile dependencies.
 
 
@@ -314,11 +312,10 @@
 
             VARIANTS    -- full list of all possible values for $(ARCH);
                            used mainly for 'make clean'
-                           [ eg: "o-optimize o-debug o-profile" ]
+                           [ eg: "o-optimize o-debug" ]
 
             VARIANT_VA  -- Variant name.
-                           Normally "", but for 'make debug' it is "debug",
-                           for 'make profile', "profile, etc.
+                           Normally "", but for 'make debug' it is "debug".
 
                            see make/leaf.cfg for more info.
 
@@ -335,15 +332,11 @@
             CFLAGS_DEBUG_V      -- value of debug flag for compiler
                                    [ eg: -g ]
 
-            CFLAGS_PROFILE_V    -- compiler profile flags
-                                   [ eg: -pg ]
-
             CFLAGS_DEBUG_OPTIMIZE_V
                                 -- optimize flag if compiling for debug
                                      [ eg: "" ]
 
             CFLAGS_DEBUG
-            CFLAGS_PROFILE
             CFLAGS_OPTIMIZE     -- current values for each depending
                                     on make variant.
 
