@@ -190,6 +190,9 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/../newlib-@newlib_version@/newlib/libc/include"
 # Without this xgcc doesn't find the target's binutils.
   GNATLIBCFLAGS="$GNATLIBCFLAGS -B%{_prefix}/@target_alias@/bin/"
+%if "@target_alias@" == "mips-rtems"
+  GNATLIBCFLAGS="$GNATLIBCFLAGS -G0"
+%endif
   make -C gcc GNATLIBCFLAGS="${GNATLIBCFLAGS}" gnatlib
 %endif
   make info
