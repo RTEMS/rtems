@@ -52,6 +52,8 @@ void _POSIX_Threads_Sporadic_budget_TSR(
   void           *argument
 )
 {
+  unsigned32          ticks;
+  unsigned32          new_priority;
   Thread_Control     *the_thread;
   POSIX_API_Control  *api;
 
@@ -59,18 +61,26 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  the_thread->cpu_time_budget =
-    _POSIX_Timespec_to_interval( &api->schedparam.ss_initial_budget );
+  ticks = _POSIX_Timespec_to_interval( &api->schedparam.ss_initial_budget );
 
-  _Thread_Change_priority(
-    the_thread,
-    _POSIX_Priority_To_core( api->schedparam.sched_priority )
-  );
+  if ( !ticks )
+    ticks = 1;
+
+  the_thread->cpu_time_budget = ticks;
   
-  _Watchdog_Insert_ticks(
-    &api->Sporadic_timer,
-    _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period )
-  );
+  new_priority = _POSIX_Priority_To_core( api->ss_high_priority );
+  the_thread->real_priority = new_priority;
+
+  if ( the_thread->resource_count == 0 ||
+       the_thread->current_priority > new_priority )
+    _Thread_Change_priority( the_thread, new_priority );
+
+  ticks = _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period );
+
+  if ( !ticks )
+    ticks = 1;
+
+  _Watchdog_Insert_ticks( &api->Sporadic_timer, ticks );
 }
 
 /*PAGE
@@ -82,18 +92,25 @@ void _POSIX_Threads_Sporadic_budget_callout(
   Thread_Control *the_thread
 )
 {
-  POSIX_API_Control                  *api;
+  POSIX_API_Control *api;
+  unsigned32         new_priority;
 
-  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  /* XXX really should be based on MAX_U32 */
+  /*
+   *  This will prevent the thread from consuming its entire "budget"
+   *  while at low priority.
+   */
 
-  the_thread->cpu_time_budget = 0xFFFFFFFF;
 
-  _Thread_Change_priority(
-    the_thread, 
-    _POSIX_Priority_To_core( api->schedparam.ss_low_priority )
-  );
+  the_thread->cpu_time_budget = 0xFFFFFFFF; /* XXX should be based on MAX_U32 */
+
+  new_priority = _POSIX_Priority_To_core( api->schedparam.ss_low_priority );
+  the_thread->real_priority = new_priority;
+
+ if ( the_thread->resource_count == 0 ||
+      the_thread->current_priority > new_priority )
+    _Thread_Change_priority( the_thread, new_priority );
 }
 
 /*PAGE
@@ -464,7 +481,7 @@ int pthread_attr_setschedparam(
   const struct sched_param *param
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !param )
     return EINVAL;
 
   attr->schedparam = *param;
@@ -481,7 +498,7 @@ int pthread_attr_getschedparam(
   struct sched_param     *param
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !param )
     return EINVAL;
 
   *param = attr->schedparam;
@@ -516,6 +533,8 @@ int pthread_getschedparam(
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
       *policy = api->schedpolicy;
       *param  = api->schedparam;
+      param->sched_priority =
+        _POSIX_Priority_From_core( the_thread->current_priority );
       _Thread_Enable_dispatch();
       return 0;
   }
@@ -618,6 +637,7 @@ int pthread_setschedparam(
           break;
  
         case SCHED_SPORADIC:
+          api->ss_high_priority = api->schedparam.sched_priority;
           _POSIX_Threads_Sporadic_budget_TSR( 0, the_thread );
           break;
       }
