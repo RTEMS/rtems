@@ -1,9 +1,0 @@
-#
-#  $Id$
-#
-
-This directory contains the SHM driver support files for the
-HP PA-RISC simulator for the 72000 processor.
-
-WARNING: The interrupt support in this directory currently will
-         only work in a homogeneous system.
