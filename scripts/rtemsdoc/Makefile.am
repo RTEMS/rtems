@@ -8,26 +8,15 @@ CLEANFILES =
 
 MKSPEC = $(SHELL) ./mkspec
 
-MKSPEC_DEPS = mkspec rtemsdoc.spec.in \
-    $(top_builddir)/setup.cache
+MKSPEC_DEPS = mkspec rtemsdoc.spec.in $(top_builddir)/setup.cache
 
-SUPPLEMENTS = \
-  arm \
-  c4x \
-  i386 \
-  i960 \
-  m68k \
-  mips \
-  mips64orion \
-  powerpc \
-  sh \
-  sparc
+SUPPLEMENTS = arm c4x i386 i960 m68k mips mips64orion powerpc sh sparc
 
-DOCS =  ada_user posix1003_1 bsp_howto
+DOCS = ada_user posix1003_1 bsp_howto
 DOCS += c_user
-DOCS += develenv 
+DOCS += develenv
 DOCS += FAQ filesystem itron
-DOCS += networking porting new_chapters 
+DOCS += networking porting new_chapters
 DOCS += relnotes rgdb_specs rtems_gdb
 DOCS += started started_ada
 
@@ -36,19 +25,19 @@ SUBPACKAGES += ../common/common.add
 SUBPACKAGES += rtemsdoc.add
 SUBPACKAGES += ../common/clean.add
 SUBPACKAGES += $(DOCS:%=%-docs.add)
-CLEANFILES  += $(DOCS:%=%-docs.add)
+CLEANFILES += $(DOCS:%=%-docs.add)
 SUBPACKAGES += $(SUPPLEMENTS:%=%-supplement.add)
-CLEANFILES  += $(SUPPLEMENTS:%=%-supplement.add)
+CLEANFILES += $(SUPPLEMENTS:%=%-supplement.add)
 
 SUFFIXES = -supplement.add -docs.add
 
 %-supplement.add: supplement.add.in
 	t=`echo $@ | sed -e 's,-supplement.add,,'`; \
-	sed -e s/@target\@/$$t/g < $< >$@ 
+	sed -e s/@target\@/$$t/g < $< >$@
 
 %-docs.add: templ.add.in
 	t=`echo $@ | sed -e 's,-docs.add,,'`; \
-	sed -e s/@target\@/$$t/g < $< >$@ 
+	sed -e s/@target\@/$$t/g < $< >$@
 
 rtemsdoc.spec.in: $(SUBPACKAGES)
 	cat $^ > $@

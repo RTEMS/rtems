@@ -2,8 +2,8 @@
 # spec file for autoconf 
 #
 
-%define rpmvers 2.57
-%define srcvers	2.57
+%define rpmvers 2.59
+%define srcvers	2.59
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
 %define _prefix			@prefix@

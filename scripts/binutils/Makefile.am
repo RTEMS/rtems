@@ -16,8 +16,7 @@ binutils.spec.in: $(SUBPACKAGES)
 CLEANFILES = binutils.spec.in
 RPM_SPECS_DATA =
 
-MKBINUTILSSPEC_DEPS = mkspec binutils.spec.in \
-    $(top_builddir)/setup.cache
+MKBINUTILSSPEC_DEPS = mkspec binutils.spec.in $(top_builddir)/setup.cache
 
 arm-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@

@@ -1,3 +1,17 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+	* autotools/Makefile.am: Cosmetics.
+	* autotools/autoconf-rtems.spec.in: 2.59.
+	* autotools/automake-rtems.spec.in: 1.8, Require autoconf-2.59.
+	* binutils/Makefile.am: Cosmetics.
+	* cpukit/Makefile.am: Cosmetics.
+	* gcc3newlib/Makefile.am: Cosmetics.
+	* gccnewlib/Makefile.am: Cosmetics.
+	* gdb/Makefile.am: Cosmetics.
+	* rtems/Makefile.am: Cosmetics.
+	* rtemsdoc/Makefile.am: Cosmetics.
+
 2003-11-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/gccnewlib.add: Add hacks to make gnatlib

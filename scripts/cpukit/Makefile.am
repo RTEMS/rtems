@@ -12,8 +12,7 @@ SUBPACKAGES += rtems-cpukit.add
 SUBPACKAGES += $(top_builddir)/common/clean.add
 SUBPACKAGES += target-cpukit.add
 
-MKSPEC_DEPS = mkspec rtems-cpukit.spec.in \
-    $(top_builddir)/setup.cache
+MKSPEC_DEPS = mkspec rtems-cpukit.spec.in $(top_builddir)/setup.cache
 
 rtems-cpukit.spec.in: $(SUBPACKAGES)
 	cat $^ > $@

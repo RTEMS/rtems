@@ -10,12 +10,9 @@ SUBPACKAGES = header.add
 SUBPACKAGES += $(top_builddir)/common/common.add
 SUBPACKAGES += gccnewlib.add
 SUBPACKAGES += $(top_builddir)/common/clean.add
-SUBPACKAGES += base-gcc.add target-gcc.add \
-    base-g77.add target-g77.add \
-    base-gcj.add target-gcj.add \
-    target-objc.add \
-    target-c++.add \
-    base-gnat.add target-gnat.add
+SUBPACKAGES += base-gcc.add target-gcc.add base-g77.add target-g77.add \
+    base-gcj.add target-gcj.add target-objc.add target-c++.add base-gnat.add \
+    target-gnat.add
 
 noinst_DATA = gccnewlib.spec.in
 
@@ -23,8 +20,7 @@ gccnewlib.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
 CLEANFILES = gccnewlib.spec.in
 
-MKGCCNEWLIBSPEC_DEPS = mkspec gccnewlib.spec.in \
-    $(top_builddir)/setup.cache
+MKGCCNEWLIBSPEC_DEPS = mkspec gccnewlib.spec.in $(top_builddir)/setup.cache
 
 RPM_SPECS_DATA =
 
