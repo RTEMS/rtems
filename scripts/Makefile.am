@@ -13,7 +13,7 @@ TEMPLATES =
 
 noinst_DATA = setup.def $(TEMPLATES)
 
-EXTRA_DIST = config.sub config.guess $(noinst_DATA) $(noinst_SCRIPTS)
+EXTRA_DIST = $(noinst_DATA) $(noinst_SCRIPTS)
 
 CONFIGURE_DEPENDENCIES = setup.cache
 setup.cache: setup.def
