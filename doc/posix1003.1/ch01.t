@@ -7,7 +7,10 @@
 @c
 
 @chapter General
+
 @section Scope
+
 @section Normative References
+
 @section Conformance
 
