@@ -13,7 +13,7 @@ SUBDIRS = doc make tools $(BUILD_SUBDIRS) $(TARGET_SUBDIRS)
 
 AUTOMAKE_FILES = automake/compile.am automake/host.am automake/lib.am \
     automake/local.am automake/multilib.am automake/subdirs.am \
-    automake/leaf.am
+    automake/leaf.am automake/force-preinstall.am
 
 ACLOCAL_FILES = aclocal/bsp-alias.m4 aclocal/canonical-host.m4 \
     aclocal/canonical-target-name.m4 aclocal/canonicalize-tools.m4 \
@@ -30,14 +30,13 @@ ACLOCAL_FILES = aclocal/bsp-alias.m4 aclocal/canonical-host.m4 \
     aclocal/path-perl.m4 aclocal/prog-cc.m4 aclocal/prog-cxx.m4 \
     aclocal/project-root.m4 aclocal/rtems-debug.m4 \
     aclocal/rtems-test-no-pause.m4 aclocal/rtems-top.m4 aclocal/sysv-ipc.m4 \
-    aclocal/target.m4 aclocal/tool-paths.m4
+    aclocal/target.m4 aclocal/tool-paths.m4 aclocal/bspopts.m4 \
+    aclocal/ppc.m4
 
 noinst_SCRIPTS = bootstrap
 
 EXTRA_DIST = $(AUTOMAKE_FILES) $(ACLOCAL_FILES) README.configure SUPPORT \
     VERSION LICENSE $(noinst_SCRIPTS)
-
-$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(ACLOCAL_FILES)
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/host.am

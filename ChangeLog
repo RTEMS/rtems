@@ -1,3 +1,8 @@
+2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add automake/force-preinstall.am,
+	aclocal/ppc.am, remove ACLOCAL_M4.
+
 2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/bsp-alias.m4: Remove score603e_g1.
