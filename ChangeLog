@@ -1,3 +1,8 @@
+2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/prog-cc.m4: Add CPPFLAGS and CFLAGS handling to
+	RTEMS_PROG_CC_FOR_TARGET.
+
 2001-04-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* README.cdn-X: Update.
