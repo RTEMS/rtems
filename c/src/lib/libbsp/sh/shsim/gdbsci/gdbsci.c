@@ -83,13 +83,14 @@ extern int _sci_get_brparms(
   unsigned char *smr,
   unsigned char *brr );
 
+#if 0
 /* Translate termios' tcflag_t into sci settings */
 static int _sci_set_cflags(
   struct scidev_t      *sci_dev,
   tcflag_t      c_cflag )
 {
-  unsigned8	smr ;
-  unsigned8	brr ;
+  unsigned8	smr;
+  unsigned8	brr;
   
   if ( c_cflag & CBAUD )
   {
@@ -127,6 +128,7 @@ static int _sci_set_cflags(
   
   return 0 ;
 }
+#endif
 
 static void _sci_init( 
   rtems_device_minor_number minor )
