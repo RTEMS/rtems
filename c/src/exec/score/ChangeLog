@@ -1,3 +1,8 @@
+2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/system.h: Fix typo in yesterday's change:
+	RTEMS_MULTILIBS.
+
 2001-01-18	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/system.h: Only include cpuopts.h when building a

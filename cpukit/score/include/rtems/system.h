@@ -37,7 +37,7 @@ extern "C" {
  *  are not ready to be built multilib yet. 
  */
 
-#if !defined(RTEMS_MULTILIB)
+#if !defined(RTEMS_MULTILIBS)
 #if defined(__PPC__) || defined(__sparc__) || defined(__i386__)
 #include <rtems/score/targopts.h>
 #endif
