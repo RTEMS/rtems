@@ -18,6 +18,7 @@
 #include <errno.h>
 
 #include <i386_io.h>
+#include <rtems.h>
 #include <rtems/kd.h>
 #include <rtems/keyboard.h>
 
