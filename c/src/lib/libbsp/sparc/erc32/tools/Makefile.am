@@ -8,13 +8,13 @@ transform =
 bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests
 bsptools_bin_SCRIPTS = runtest
 
-TMPINSTALL_FILES = $(PROJECT_ROOT)/erc32/tests \
-    $(PROJECT_ROOT)/erc32/tests/runtest
+TMPINSTALL_FILES = $(PROJECT_ROOT)/@RTEMS_BSP@/tests \
+    $(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest
 
-$(PROJECT_ROOT)/erc32/tests:
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests:
 	$(mkinstalldirs) $@
 
-$(PROJECT_ROOT)/erc32/tests/runtest: runtest
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest: runtest
 	$(INSTALL_SCRIPT) $< $@
 
 all-local: $(TMPINSTALL_FILES)
