@@ -104,12 +104,23 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
   printk("Error code pushed by processor itself (if not 0) = %x\n",
 	 ctx->faultCode);
   printk("----------------------------------------------------------\n\n");
-  printk(" ************ FAULTY THREAD WILL BE DELETED **************\n");
-  /*
-   * OK I could probably use a simplified version but at least this
-   * should work.
-   */
-  rtems_task_delete(_Thread_Executing->Object.id);
+  if (_ISR_Nest_level > 0) {
+    /*
+     * In this case we shall not delete the task interrupted as
+     * it has nothing to do with the fault. We cannot return either
+     * because the eip points to the faulty instruction so...
+     */
+    printk("Exception while executing ISR!!!. System locked\n");
+    while(1);
+  }
+  else {
+    /*
+     * OK I could probably use a simplified version but at least this
+     * should work.
+     */
+    printk(" ************ FAULTY THREAD WILL BE DELETED **************\n");
+    rtems_task_delete(_Thread_Executing->Object.id);
+  }
 }
 
 cpuExcHandlerType _currentExcHandler = _defaultExcHandler;

@@ -4,17 +4,14 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@:@srcdir@/../../../shared
+VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/irq
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 PGM=${ARCH}/startup.rel
 
-IMPORT_SRC=$(srcdir)/../../shared/irq/irq.c \
-   $(srcdir)/../../shared/irq/irq_init.c $(srcdir)/../../shared/irq/irq_asm.s
-
 # C source names, if any, go here -- minus the .c
-C_PIECES=bspclean bsplibc bsppost bspstart exit irq irq_init main sbrk 
+C_PIECES=bsplibc bsppost bspstart exit irq irq_init main sbrk 
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
@@ -53,12 +50,9 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-preinstall:
-	${CP} ${IMPORT_SRC} .
-
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
-all:	${ARCH} preinstall $(SRCS) $(PGM)
+all:	${ARCH} $(SRCS) $(PGM)
 	$(INSTALL) $(srcdir)/linkcmds ${PROJECT_RELEASE}/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile

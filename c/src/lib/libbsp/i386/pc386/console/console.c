@@ -49,7 +49,7 @@
  *	PC386_UART_COM2
  */
 
-int PC386ConsolePort = PC386_UART_COM2;
+int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
 
 static int conSetAttr(int minor, const struct termios *);
 extern BSP_polling_getchar_function_type BSP_poll_char;
@@ -91,6 +91,13 @@ void __assert(const char *file, int line, const char *msg)
    * Note we cannot call exit or printf from here, 
    * assert can fail inside ISR too
    */
+  /*
+   * Close console
+   */
+  __rtems_close(2);
+  __rtems_close(1);
+  __rtems_close(0);
+
   printk("\nassert failed: %s: ", file);
   printk("%d: ", line);
   printk("%s\n\n", msg);
@@ -205,6 +212,13 @@ console_initialize(rtems_device_major_number major,
 } /* console_initialize */
 
 
+static int console_open_count = 0;
+
+static void console_last_close()
+{
+  pc386_remove_rtems_irq_handler (&console_isr_data);
+}
+
 /*-------------------------------------------------------------------------+
 | Console device driver OPEN entry point
 +--------------------------------------------------------------------------*/
@@ -217,7 +231,7 @@ console_open(rtems_device_major_number major,
   static rtems_termios_callbacks cb = 
   {
     NULL,	              /* firstOpen */
-    NULL,	              /* lastClose */
+    console_last_close,       /* lastClose */
     NULL,	              /* pollRead */
     PC386_uart_termios_write_com1, /* write */
     conSetAttr,	              /* setAttributes */
@@ -228,6 +242,7 @@ console_open(rtems_device_major_number major,
 
   if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
     {
+      ++console_open_count;
       return RTEMS_SUCCESSFUL;
     }
 
@@ -265,12 +280,16 @@ console_close(rtems_device_major_number major,
               void                      *arg)
 {
   rtems_device_driver res = RTEMS_SUCCESSFUL;
-  
+
   if(PC386ConsolePort != PC386_CONSOLE_PORT_CONSOLE)
     {
       res =  rtems_termios_close (arg);
     }
-  pc386_remove_rtems_irq_handler (&console_isr_data);
+  else {
+    if (--console_open_count == 0) { 
+      console_last_close();
+    }
+  }
   
   return res;
 } /* console_close */

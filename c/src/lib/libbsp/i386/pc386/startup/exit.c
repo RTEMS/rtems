@@ -37,67 +37,20 @@
 #include <rtems/libio.h>
 #include <pc386uart.h>
 
-/*-------------------------------------------------------------------------+
- | Which console is in use: either (-1) which means normal console or 
- | uart id if uart was used
- +-------------------------------------------------------------------------*/
-extern int PC386ConsolePort;
-
-/*-------------------------------------------------------------------------+
-| External Prototypes
-+--------------------------------------------------------------------------*/
-extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
-
-/*-------------------------------------------------------------------------+
-|         Function: _exit
-|      Description: Shutdown the PC. Called from libc's 'exit'. 
-| Global Variables: None.
-|        Arguments: status - exit status (ignored).
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-void _exit(int status)
+void bsp_cleanup()
 {
-  unsigned char ch, *cp;
+  unsigned char ch;
   static   char line[]="EXECUTIVE SHUTDOWN! Any key to reboot...";
-
-  if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
-    {
-
-      printk("\n");
-      printk(line);
-      while(!_IBMPC_scankey(&ch))
-	;
-      printk("\n\n");
-    }
-  else
-    {
-      /* Close console */
-      __rtems_close(2);
-      __rtems_close(1);
-      __rtems_close(0);
-
-      PC386_uart_intr_ctrl(PC386ConsolePort, PC386_UART_INTR_CTRL_DISABLE);
-      
-      PC386_uart_polled_write(PC386ConsolePort, '\r');
-      PC386_uart_polled_write(PC386ConsolePort, '\n');
-      
-      for(cp=line; *cp != 0; cp++)
-	{
-	  PC386_uart_polled_write(PC386ConsolePort, *cp);
-	}
-
-      PC386_uart_polled_read(PC386ConsolePort);
-
-      PC386_uart_polled_write(PC386ConsolePort, '\r');
-      PC386_uart_polled_write(PC386ConsolePort, '\n');
-      PC386_uart_polled_write(PC386ConsolePort, '\r');
-      PC386_uart_polled_write(PC386ConsolePort, '\n');
-    }
-
+  /*
+   * AT this point, the console driver is disconnected => we must
+   * use polled output/input. This is exactly what printk
+   * does.
+   */
+  printk("\n");
+  printk(line);
+  ch = BSP_poll_char();
   rtemsReboot();
-} /* _exit */
-
-
+}
 
 
 
