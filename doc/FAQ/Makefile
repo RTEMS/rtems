@@ -61,7 +61,7 @@ clean:
 #
 
 basic.texi: basic.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "Top" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
