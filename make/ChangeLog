@@ -1,4 +1,10 @@
 
+2000-09-12	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/mbx860_005b.cfg (make-target-options): Add lines to 
+	define PRINTK_MINOR SMC1_MINOR and PRINTK_IO_MODE.  The settings
+	may be incorrect but the BSP now compiles.
+
 2000-09-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/arm_bare_bsp.cfg: Fix comments.
