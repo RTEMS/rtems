@@ -1032,7 +1032,7 @@ void _Thread_Handler( void )
    */
  
   level = executing->Start.isr_level;
-  _ISR_Enable(level);
+  _ISR_Set_level(level);
 
   /*
    * Take care that 'begin' extensions get to complete before
