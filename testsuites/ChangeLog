@@ -1,3 +1,8 @@
+2001-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: autoupdate to autoconf-2.52, new CONFIG_SUBDIRS
+	handling.
+
 2001-05-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Remove RTEMS_PROG_CC_FOR_TARGET,

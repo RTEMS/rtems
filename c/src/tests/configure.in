@@ -2,8 +2,9 @@ dnl Process this file with autoconf to produce a configure script.
 dnl
 dnl  $Id$
 
-AC_PREREQ(2.13)
-AC_INIT(samples)
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([samples])
 RTEMS_TOP(../../..)
 AC_CONFIG_AUX_DIR(../../..)
 
@@ -31,34 +32,33 @@ RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 RTEMS_CHECK_POSIX_API(RTEMS_BSP)
 RTEMS_CHECK_ITRON_API(RTEMS_BSP)
 
+AC_CONFIG_SUBDIRS(tools)
+AC_CONFIG_SUBDIRS(support)
+AC_CONFIG_SUBDIRS(samples)
+
 if test "$tests_enabled" = "yes"; then
   # do functionality tests first, then performance tests
-  cfg_subdirs="libtests sptests"
+  AC_CONFIG_SUBDIRS(libtests sptests)
   if test "$HAS_MP" = "yes"; then
-    cfg_subdirs="$cfg_subdirs mptests"
+    AC_CONFIG_SUBDIRS(mptests)
   fi
   if test "$HAS_POSIX_API" = "yes"; then
-    cfg_subdirs="$cfg_subdirs psxtests"
+    AC_CONFIG_SUBDIRS(psxtests)
   fi
   if test "$HAS_ITRON_API" = "yes"; then
-    cfg_subdirs="$cfg_subdirs itrontests"
+    AC_CONFIG_SUBDIRS(itrontests)
   fi
   # Now do performance tests
-  cfg_subdirs="$cfg_subdirs tmtests"
+  AC_CONFIG_SUBDIRS(tmtests)
   if test "$HAS_ITRON_API" = "yes"; then
-    cfg_subdirs="$cfg_subdirs tmitrontests"
+    AC_CONFIG_SUBDIRS(tmitrontests)
   fi
 fi
 
 AC_SUBST(BARE_CPU_CFLAGS)
 AC_SUBST(BARE_CPU_MODEL)
 
-AC_CONFIG_SUBDIRS(tools)
-AC_CONFIG_SUBDIRS(support)
-AC_CONFIG_SUBDIRS(samples)
-AC_CONFIG_SUBDIRS($cfg_subdirs)
-
 # Explicitly list all Makefiles here
-AC_OUTPUT( 
-Makefile
-)
+AC_CONFIG_FILES([Makefile
+])
+AC_OUTPUT
