@@ -1,3 +1,8 @@
+2003-01-27	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* src/blkdev.c: Per PR331 fix bug which is tripped by writing 512 byte
+	blocks to 512 byte aligned positions.
+
 2003-01-03	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
 	* src/ata.c, src/bdbuf.c: Correct invocation of rtems_task_mode()
