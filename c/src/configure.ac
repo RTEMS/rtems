@@ -29,6 +29,14 @@ else
   AC_MSG_ERROR(no)
 fi
 
+AC_ARG_ENABLE(rpcgen,
+[AS_HELP_STRING([--enable-rpcgen],[rebuild rpcgen-generated sources])],
+[case "${enable_rpcgen}" in 
+  yes) enable_rpcgen=yes ;;
+  no) enable_rpcgen=no ;;
+  *)  enable_rpcgen=no ;;
+esac],[enable_rpcgen=yes]) 
+
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
@@ -39,7 +47,7 @@ AS_IF([test "$HAS_NETWORKING" = "yes"],[
   ])
 ])
 
-AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen,no)
+AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen)
 AC_PROG_AWK
 
 AC_MSG_NOTICE([setting up make/custom])
@@ -233,7 +241,9 @@ AS_IF([test -f $srcdir/lib/libbsp/$RTEMS_CPU/$RTEMS_BSP_FAMILY/wrapup/Makefile.a
 AM_CONDITIONAL([HAS_WRAPUP_LIBBSP],[test $HAS_WRAPUP_LIBBSP = yes])
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
 
-AM_CONDITIONAL(RPCTOOLS, test "$rpctools" != "no")
+AM_CONDITIONAL([RPCTOOLS],[test "$RPCGEN" = rpcgen \
+&& test -n "$AWK" \
+&& test "$enable_rpcgen" = yes])
 
 RTEMS_PROJECT_ROOT
 
