@@ -18,11 +18,11 @@ The directives provided by the files and directories manager are:
 @item @code{opendir} - Open a Directory
 @item @code{readdir} - Reads a directory
 @item @code{readdir_r} - 
-@item @code{rewinddir} - 
+@item @code{rewinddir} - Resets the @code{readdir()} pointer 
 @item @code{scandir} - Scan a directory for matching entries
-@item @code{telldir} - 
-@item @code{closedir} - 
-@item @code{getdents}
+@item @code{telldir} - Return current location in directory stream
+@item @code{closedir} - Ends directory read operation
+@item @code{getdents} - Get directory entries
 @item @code{chdir} - Changes the current working directory
 @item @code{getcwd} - Gets current working directory
 @item @code{open} - Opens a file
@@ -30,20 +30,20 @@ The directives provided by the files and directories manager are:
 @item @code{umask} - Sets a file creation mask
 @item @code{link} - Creates a link to a file
 @item @code{mkdir} - Makes a directory
-@item @code{mkfifo} - 
+@item @code{mkfifo} - Makes a FIFO special file
 @item @code{unlink} - Removes a directory entry 
 @item @code{rmdir} - Delete a directory
 @item @code{rename} - Renames a file 
 @item @code{stat} - Gets information about a file.
-@item @code{fstat} - 
+@item @code{fstat} - Gets file status
 @item @code{access} - Check user's permissions for a file.
 @item @code{chmod} - Changes file mode
-@item @code{fchmod} - 
+@item @code{fchmod} - Changes permissions of a file
 @item @code{chown} - Changes the owner and/ or group of a file
 @item @code{utime} - Change access and/or modification times of an inode
 @item @code{ftrunctate} - 
-@item @code{pathconf} - 
-@item @code{fpathconf} - 
+@item @code{pathconf} - Gets configuration values for files
+@item @code{fpathconf} - Get configuration values for files
 @end itemize
 
 @section Background
@@ -177,13 +177,16 @@ The
 XXX must be implemented in RTEMS.
 
 @page
-@subsection rewinddir - 
+@subsection rewinddir - Resets the @code{readdir()} pointer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int rewinddir(
+#include <sys/types.h>
+#include <dirent.h>
+
+void rewinddir(DIR *dirp
 );
 @end example
 @end ifset
@@ -191,17 +194,18 @@ int rewinddir(
 @ifset is-Ada
 @end ifset
 
-@subheading STATUS CODES:
-
-@table @b
-@item E
-The
-
-@end table
+@subheading STATUS CODES: No value is returned.
 
 @subheading DESCRIPTION:
 
+The @code{rewinddir()} function resets the position associated with
+the directory stream pointed to by @code{dirp}.  It also causes the
+directory stream to refer to the current state of the directory.
+
 @subheading NOTES:
+
+If @code{dirp} is not a pointer by @code{opendir()}, the results are
+undefined.
 
 The routine is implemented in Cygnus newlib.
 
@@ -247,13 +251,15 @@ If @code{select} is NULL, all entries are selected.
 The routine is implemented in Cygnus newlib.
 
 @page
-@subsection telldir -
+@subsection telldir - Return current location in directory stream
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int telldir(
+#include <dirent.h>
+
+off_t telldir( DIR *dir
 );
 @end example
 @end ifset
@@ -264,12 +270,15 @@ int telldir(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EBADF
+Invalid directory stream descriptor @code{dir}.
 
 @end table
 
 @subheading DESCRIPTION:
+
+The @code{telldir()} function returns the current location associated with the
+directory stream @code{dir}.
 
 @subheading NOTES:
 
@@ -277,13 +286,16 @@ The routine is implemented in Cygnus newlib.
 
 
 @page
-@subsection closedir - 
+@subsection closedir - Ends directory read operation 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int closedir(
+#include <sys/types.h>
+#include <dirent.h>
+
+int closedir(DIR *dirp
 );
 @end example
 @end ifset
@@ -294,14 +306,22 @@ int closedir(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EBADF
+Invalid file descriptor
 
 @end table
 
 @subheading DESCRIPTION:
 
+The directory stream associated with @code{dirp} is closed.
+The value in @code{dirp} may not be usable after a call to
+@code{closedir()}.
+
 @subheading NOTES:
+
+The argument to @code{closedir()} must be a pointer returned by 
+@code{opendir()}.  If it is not, the results are not portable and
+most likely unpleasant.
 
 The routine is implemented in Cygnus newlib.
 
@@ -739,13 +759,18 @@ empty.
 @subheading NOTES: None
 
 @page
-@subsection mkfifo - 
+@subsection mkfifo - Makes a FIFO special file
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int mkfifo(
+#include <sys/types.h>
+#include <sys/stat.h>
+
+
+int mkfifo(const char *path,
+           mode_t      mode
 );
 @end example
 @end ifset
@@ -756,14 +781,30 @@ int mkfifo(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+@item EEXIST
+The named file already exists.
+@item ENOENT
+A file or directory does not exist.
+@item ENOSPC
+No space left on disk.
+@item ENOTDIR
+A component of the specified @code{path} was not a directory when a directory
+was expected.
+@item EROFS
+Read-only file system.
 
 @end table
 
 @subheading DESCRIPTION:
 
-@subheading NOTES:
+The @code{mkfifo()} function creates a new FIFO special file named @code{path}.
+The permission bits (modified by the file creation mask) are set from 
+@code{mode}.  The owner and group IDs for the FIFO are set from the efective
+user ID and group ID.
+
+@subheading NOTES: None
 
 @page
 @subsection unlink - Removes a directory entry
@@ -796,7 +837,7 @@ effect.
 @item ENOENT
 A file or directory does not exist.
 @item ENOTDIR
-A component of the specified pathname was not a directory when a directory
+A component of the specified @code{path} was not a directory when a directory
 was expected.
 @item EPERM
 Operation is not permitted.  Process does not have the appropriate priviledges
@@ -1002,13 +1043,17 @@ information about the named file and writes it to the area pointed to by
 @subheading NOTES: None
 
 @page
-@subsection fstat - 
+@subsection fstat - Gets file status 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fstat(
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int fstat(int fildes,
+          struct stat *buf
 );
 @end example
 @end ifset
@@ -1019,12 +1064,16 @@ int fstat(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EBADF
+Invalid file descriptor
 
 @end table
 
 @subheading DESCRIPTION:
+
+The @code{fstat()} function obtains information about the file
+associated with @code{fildes} and writes it to the area pointed
+to by the @code{buf} argument.
 
 @subheading NOTES:
 
@@ -1132,13 +1181,75 @@ the appropriate privileges, @code{chmod()} returns -1 and sets @code{errno} to
 @subheading NOTES:
 
 @page
-@subsection fchmod - 
+@subsection fchmod - Changes permissions of a file 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fchmod(
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int fchmod(int    fildes, 
+           mote_t mode
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EACCES
+Search permission is denied for a directory in a file's path prefix.
+@item EBADF
+The descriptor is not valid.
+@item EFAULT
+@code{Path} points outside your accessible address space.
+@item EIO
+A low-level I/o error occurred while modifying the inode.
+@item ELOOP
+@code{Path} contains a circular reference
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is
+in effect.
+@item ENOENT
+A file or directory does no exist.
+@item ENOMEM
+Insufficient kernel memory was avaliable.
+@item ENOTDIR
+A component of the specified pathname was not a directory when a 
+directory was expected.
+@item EPERM
+The effective UID does not match the owner of the file, and is not 
+zero
+@item EROFS
+Read-only file system
+@end table
+
+@subheading DESCRIPTION:
+
+The mode of the file given by @code{path} or referenced by 
+@code{filedes} is changed. 
+
+@subheading NOTES: None
+
+@page
+@subsection getdents - Get directory entries
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <unistd.h>
+#include <linux/dirent.h>
+#include <linux/unistd.h>
+
+long getdents(int   dd_fd,
+              char *dd_buf,
+              int   dd_len
 );
 @end example
 @end ifset
@@ -1288,13 +1399,16 @@ The
 @subheading NOTES:
 
 @page
-@subsection pathconf - 
+@subsection pathconf - Gets configuration values for files
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int pathconf(
+#include <unistd.h>
+
+int pathconf(const char *path,
+             int         name
 );
 @end example
 @end ifset
@@ -1305,23 +1419,82 @@ int pathconf(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EINVAL
+Invalid argument
+@item EACCES
+Permission to write the file is denied
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC
+is in effect.
+@item ENOENT
+A file or directory does not exist
+@item ENOTDIR
+A component of the specified @code{path} was not a directory whan a 
+directory was expected.
 
 @end table
 
 @subheading DESCRIPTION:
+
+@code{pathconf()} gets a value for the configuration option @code{name}
+for the open file descriptor @code{filedes}.
+
+The possible values for name are:
+
+@table @b
+@item_PC_LINK_MAX
+returns the maximum number of links to the file.  If @code{filedes} or 
+@code{path} refer to a directory, then the value applies to the whole
+directory.  The corresponding macro is _POSIX_LINK_MAX.
+
+@item_PC_MAX_CANON
+returns  the maximum length of a formatted input line, where @code{filedes}
+or @code{path} must refer to a terminal.  The corresponding macro is 
+_POSIX_MAX_CANON.
+
+@item_PC_MAX_INPUT
+returns the maximum length of an input line, where @code{filedes} or 
+@code{path} must refer to a terminal.  The corresponding macro is 
+_POSIX_MAX_INPUT.
+
+@item_PC_NAME_MAX
+returns the maximum length of a filename in the directory @code{path} or 
+@code{filedes}.  The process is allowed to create. The corresponding macro 
+is _POSIX_NAME_MAX.
+
+@item_PC_PATH_MAX
+returns the maximum length of a relative pathname when @code{path} or 
+@code{filedes} is the current working directory.  The corresponding macro 
+is _POSIX_PATH_MAX.
+
+@item_PC_PIPE_BUF
+returns the size of the pipe buffer, where @code{filedes} must refer to a 
+pipe or FIFO and @code{path} must refer to a FIFO.  The corresponding macro 
+is _POSIX_PIPE_BUF.
+
+@item_PC_CHOWN_RESTRICTED
+returns nonzero if the chown(2) call may not be used on this file.  If 
+@code{filedes} or @code{path} refer to a directory, then this applies to all 
+files in that directory.  The corresponding macro is _POSIX_CHOWN_RESTRICTED.
+
+@end table
 
 @subheading NOTES:
 
+Files with name lengths longer than the value returned for @code{name} equal 
+_PC_NAME_MAX may exist in the given directory.
+
 @page
-@subsection fpathconf - 
+@subsection fpathconf - Gets configuration values for files
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fpathconf(
+#include <unistd.h>
+
+int fpathconf(int filedes, 
+              int name
 );
 @end example
 @end ifset
@@ -1332,12 +1505,66 @@ int fpathconf(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EINVAL
+Invalid argument
+@item EACCES
+Permission to write the file is denied
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC
+is in effect.
+@item ENOENT
+A file or directory does not exist
+@item ENOTDIR
+A component of the specified @code{path} was not a directory whan a 
+directory was expected.
+@end table
+
+
+@subheading DESCRIPTION:
+
+@code{pathconf()} gets a value for the configuration option @code{name}
+for the open file descriptor @code{filedes}.
+
+The possible values for name are:
+
+@table @b
+@item_PC_LINK_MAX
+returns the maximum number of links to the file.  If @code{filedes} or 
+@code{path} refer to a directory, then the value applies to the whole
+directory.  The corresponding macro is _POSIX_LINK_MAX.
+
+@item_PC_MAX_CANON
+returns  the maximum length of a formatted input line, where @code{filedes}
+or @code{path} must refer to a terminal.  The corresponding macro is 
+_POSIX_MAX_CANON.
+
+@item_PC_MAX_INPUT
+returns the maximum length of an input line, where @code{filedes} or 
+@code{path} must refer to a terminal.  The corresponding macro is 
+_POSIX_MAX_INPUT.
+
+@item_PC_NAME_MAX
+returns the maximum length of a filename in the directory @code{path} or 
+@code{filedes}.  The process is allowed to create. The corresponding macro 
+is _POSIX_NAME_MAX.
+
+@item_PC_PATH_MAX
+returns the maximum length of a relative pathname when @code{path} or 
+@code{filedes} is the current working directory.  The corresponding macro 
+is _POSIX_PATH_MAX.
+
+@item_PC_PIPE_BUF
+returns the size of the pipe buffer, where @code{filedes} must refer to a 
+pipe or FIFO and @code{path} must refer to a FIFO.  The corresponding macro 
+is _POSIX_PIPE_BUF.
+
+@item_PC_CHOWN_RESTRICTED
+returns nonzero if the chown(2) call may not be used on this file.  If 
+@code{filedes} or @code{path} refer to a directory, then this applies to all 
+files in that directory.  The corresponding macro is _POSIX_CHOWN_RESTRICTED.
 
 @end table
 
-@subheading DESCRIPTION:
 
 @subheading NOTES:
 
