@@ -116,7 +116,7 @@ typedef int (*rtems_filesystem_fdatasync_t)(
 );
 
 typedef int (*rtems_filesystem_fcntl_t)(
-  int cmd,
+  int            cmd,
   rtems_libio_t *iop
 );
 
