@@ -1,3 +1,21 @@
+2005-02-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/rtems/issetugid.c,
+	libnetworking/rtems/mkrootfs.c,
+	libnetworking/rtems/rtems_bootp.c,
+	libnetworking/rtems/rtems_bsdnet_malloc_starvation.c,
+	libnetworking/rtems/rtems_glue.c,
+	libnetworking/rtems/rtems_select.c,
+	libnetworking/rtems/rtems_showicmpstat.c,
+	libnetworking/rtems/rtems_showifstat.c,
+	libnetworking/rtems/rtems_showipstat.c,
+	libnetworking/rtems/rtems_showmbuf.c,
+	libnetworking/rtems/rtems_showroute.c,
+	libnetworking/rtems/rtems_showtcpstat.c,
+	libnetworking/rtems/rtems_showudpstat.c,
+	libnetworking/rtems/rtems_syscall.c,
+	libnetworking/rtems/sghostname.c: Include config.h.
+
 2005-02-01	Joel Sherrill <joel@OARcorp.com>
 
 	* libblock/include/rtems/bdbuf.h,
