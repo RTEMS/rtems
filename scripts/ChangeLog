@@ -1,5 +1,9 @@
 2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove rtemsdoc/mkspec.
+
+2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* rtemsdoc/.cvsignore: Reformat.
 	* configure.ac: Add RTEMS_RPM_RELEASE.
 	* Makefile.am: Reformat. Add RTEMS_RPM_RELEASE support to
