@@ -28,55 +28,18 @@
  *
  */
 
-#ifndef _TFTP_DRIVER_h
-#define _TFTP_DRIVER_h
+#ifndef _TFTP_FILESYSTEM_h
+#define _TFTP_FILESYSTEM_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /*
- * Driver entry points
+ * Filesystem initialization routine
  */
-#define TFTP_DRIVER_TABLE_ENTRY \
-  { rtems_tftp_initialize, rtems_tftp_open, rtems_tftp_close, \
-    rtems_tftp_read, rtems_tftp_write, rtems_tftp_control }
 
-rtems_device_driver rtems_tftp_initialize(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
-);
-
-rtems_device_driver rtems_tftp_open(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
-);
-
-rtems_device_driver rtems_tftp_close(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
-);
-
-rtems_device_driver rtems_tftp_read(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
-);
-
-rtems_device_driver rtems_tftp_write(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
-);
-
-rtems_device_driver rtems_tftp_control(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
-);
+int rtems_bsdnet_initialize_tftp_filesystem( void );
 
 #ifdef __cplusplus
 }
