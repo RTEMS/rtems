@@ -1,3 +1,14 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* supplements/Makefile.am: i960 obsoleted.
+	* supplements/i960/.cvsignore, supplements/i960/CVME961_TIMES,
+	supplements/i960/ChangeLog, supplements/i960/Makefile.am,
+	supplements/i960/bsp.t, supplements/i960/callconv.t,
+	supplements/i960/cpumodel.t, supplements/i960/cputable.t,
+	supplements/i960/fatalerr.t, supplements/i960/i960.texi,
+	supplements/i960/intr_NOTIMES.t, supplements/i960/memmodel.t,
+	supplements/i960/preface.texi, supplements/i960/timeCVME961.t: Removed.
+
 2004-09-27	Joel Sherrill <joel@OARcorp.com>
 
 	PR 682/doc
