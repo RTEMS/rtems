@@ -27,7 +27,7 @@ $(PGM): $(OBJS)
 
 all-local: $(TMPINSTALL_FILES) $(PGM)
 
-EXTRA_DIST = bspclean.c bspstart.c linkcmds linkcmds.rom linkcmds.rom2ram
+EXTRA_DIST = bspstart.c linkcmds linkcmds.rom linkcmds.rom2ram
 
 TMPINSTALL_FILES =
 
