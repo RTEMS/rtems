@@ -1,5 +1,9 @@
 2002-08-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* gcc3newlib/base-gnat.add: Use -n rtems-base-gnat.
+
+2002-08-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* gcc3newlib/.cvsignore: Add mkspec.
 
 2002-08-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
