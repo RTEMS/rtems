@@ -33,13 +33,16 @@ __DYNAMIC  =  0;
 /*
  * Declare some sizes.
  */
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
-StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 MEMORY
 {
   ram     : ORIGIN = 0x80000, LENGTH = 512K
 }
+
+_RamBase = 0x80000;
+_RamSize = 0x80000;
 
 __end_of_ram = 0x100000;
 _copy_data_from_rom = 0;
@@ -135,22 +138,17 @@ SECTIONS
                 PROVIDE (_copy_end = .);
         } >ram
         .bss : {
-                PROVIDE (_clear_start = .);
+                _clear_start = .;
                 *(.bss)
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);
 
-                . += StackSize;
-                PROVIDE (_stack_init = .);
-
+                . += _StackSize;
                 . = ALIGN (16);
-                PROVIDE (_HeapStart = .);
-                . += HeapSize;
-                PROVIDE (_HeapEnd = .);
+                _stack_init = .;
+                _clear_end = .;
 
-                PROVIDE (_clear_end = .);
-
-                PROVIDE (_WorkspaceBase = .);
+                _WorkspaceBase = .;
         } >ram
 }

@@ -18,8 +18,8 @@
 /*
  * Declare some sizes.
  */
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
-StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 /*
  * Declare on-board memory.
@@ -120,8 +120,8 @@ SECTIONS {
                 _end = .;
 
                 _HeapStart = .;
-                . += HeapSize;
-                . += StackSize;
+                . += _HeapSize;
+                . += _StackSize;
                 . = ALIGN (16);
                 stack_init = .;
                 clear_end = .;

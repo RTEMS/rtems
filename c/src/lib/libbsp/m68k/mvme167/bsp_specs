@@ -15,7 +15,7 @@
 %{!qrtems_debug: -lrtemsall} %{qrtems_debug: -lrtemsall_g} \
 -lc -lgcc --end-group \
 %{!qelf: %{!qnolinkcmds: -T linkcmds%s}} %{qelf: %{!qnolinkcmd: -T
-elflinkcmds%s}}}
+linkcmds%s}}}
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{qrtems: \

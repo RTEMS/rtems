@@ -16,8 +16,8 @@ VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 PGM = ${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = bspclean bsplibc bsppost bspstart bootcard main page_table sbrk \
-    setvec gnatinstallhandler
+C_PIECES = bspclean bsplibc bsppost bspstart bootcard m68kpretaskinghook \
+    main page_table sbrk setvec gnatinstallhandler
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

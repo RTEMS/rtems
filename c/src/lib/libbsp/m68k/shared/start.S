@@ -77,7 +77,6 @@ loop:   movel   #0,a1@+                 | to zero out uninitialized
         jlt     loop                    | loop until _end reached
 
         movel   # SYM (_stack_init),d0  | d0 = stop of stack
-        andl    #0xffffffc0,d0          | align it on 16 byte boundary
         movw    #0x3700,sr              | SUPV MODE,INTERRUPTS OFF!!!
         movel   d0,a7                   | set master stack pointer
         movel   d0,a6                   | set base pointer

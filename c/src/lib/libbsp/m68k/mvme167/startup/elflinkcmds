@@ -21,20 +21,11 @@ OUTPUT_FORMAT("elf32-m68k")
 OUTPUT_ARCH(m68k)
 ENTRY(_start)
 
-/* Base address and size of RAM on the MVME167 */
-
-RAM_SIZE = 4M;
-RAM_START = 0x00800000;
-RAM_END = RAM_START + RAM_SIZE;
-
 /*
  * Declare some sizes.
- * XXX: The assignment of ". += XyzSize;" fails in older gld's if the
- *      number used there is not constant.  If this happens to you, edit
- *      the lines marked XXX below to use a constant value.
  */
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
-StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 MEMORY
 {
@@ -170,9 +161,9 @@ SECTIONS
   . += HeapSize;	/* XXX -- Old gld can't	handle this	*/
   _HeapEnd = .;
   _StackStart = .;
-  . += StackSize;	/* XXX -- Old gld can't	handle this	*/
+  . += _StackSize;	/* XXX -- Old gld can't	handle this	*/
   /* . +=	0x10000; */	/* HeapSize	for	old	gld	*/
-  /* . +=	0x1000;	 */	/* StackSize for old gld */
+  /* . +=	0x1000;	 */	/* _StackSize for old gld */
   . =	ALIGN (16);
   _StackEnd = .;
   stack_init = .;

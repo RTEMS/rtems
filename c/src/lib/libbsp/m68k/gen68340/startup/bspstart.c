@@ -44,32 +44,7 @@ char *rtems_progname;
  */
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, unsigned32, int );
-
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- */
- 
-void bsp_pretasking_hook(void)
-{
-    extern void *_HeapStart;
-    extern rtems_unsigned32 _HeapSize;
-
-    bsp_libc_init(&_HeapStart, _HeapSize, 0);
- 
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
-}
+void bsp_pretasking_hook(void);               /* m68k version */
 
 /*
  *  bsp_start

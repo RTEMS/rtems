@@ -120,9 +120,6 @@ extern "C" {
 
 /* constants */
 
-#define RAM_START 0
-#define RAM_END   0x100000
-
 #define TIMER 0x0c000000
 #define TIMER_VECTOR 0x4D
 

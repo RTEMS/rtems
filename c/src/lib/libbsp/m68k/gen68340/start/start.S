@@ -851,14 +851,6 @@ SYM(_mainDone):
 	bra.l	SYM(_mainDone)					| Stuck forever
 
         .align 2
-	PUBLIC (_HeapSize)
-SYM (_HeapSize):
-        .long  HeapSize
-	PUBLIC (_StackSize)
-SYM (_StackSize):
-        .long  StackSize
-END_CODE
-
 BEGIN_DATA_DCL
         .align 2
 	PUBLIC (environ)

@@ -39,32 +39,7 @@ char *rtems_progname;
  
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, unsigned32, int );
-
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- */
- 
-void bsp_pretasking_hook(void)
-{
-    extern void             *_HeapStart;
-    extern rtems_unsigned32  HeapSize;
-
-    bsp_libc_init( &_HeapStart, HeapSize, 0 );
- 
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
-}
+void bsp_pretasking_hook(void);               /* m68k version */
  
 /*
  *  bsp_start
@@ -77,6 +52,7 @@ void bsp_start( void )
   m68k_isr_entry *monitors_vector_table;
   int             index;
   void           *vbr;
+  extern void    *_WorkspaceBase;
 
   monitors_vector_table = (m68k_isr_entry *)0;   /* Monitor Vectors are at 0 */
   m68k_set_vbr( monitors_vector_table );
@@ -118,8 +94,7 @@ void bsp_start( void )
   m68k_get_vbr( vbr );
   Cpu_table.interrupt_vector_table = vbr;
 
-  BSP_Configuration.work_space_start = (void *)
-     (RAM_END - BSP_Configuration.work_space_size);
+  BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
 
   /*
    *  Account for the console's resources

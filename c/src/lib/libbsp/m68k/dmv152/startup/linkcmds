@@ -15,13 +15,16 @@
 /*
  * Declare some sizes.
  */
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
-StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 MEMORY
 {
 	ram : org = 0x0, l = 1M
 }
+
+_RamBase = 0;
+_RamSize = 1M;
 
 SECTIONS
 {
@@ -117,15 +120,10 @@ SECTIONS
                 . = ALIGN (16);
                 PROVIDE (end = .);
 
-                . += StackSize;
-                PROVIDE (_stack_init = .);
-
+                . += _StackSize;
                 . = ALIGN (16);
-                PROVIDE (_HeapStart = .);
-                . += HeapSize;
-                PROVIDE (_HeapEnd = .);
-
-                PROVIDE (_clear_end = .);
+                _stack_init = .;
+                _clear_end = .;
 
                 _WorkspaceBase = .;
         } >ram

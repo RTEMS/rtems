@@ -48,48 +48,7 @@ rtems_cpu_table Cpu_table;
  */
 void bsp_postdriver_hook( void );
 void bsp_libc_init( void *, unsigned32, int );
-
-
-/*
- *  bsp_pretasking_hook
- *
- *  Called when RTEMS initialization is complete but before interrupts and
- *  tasking are enabled. Used to setup libc and install any BSP extensions.
- *
- *  Must not use libc (to do io) from here, since drivers are not yet
- *  initialized.
- *
- *  Installed in the rtems_cpu_table defined in 
- *  rtems/c/src/exec/score/cpu/m68k/cpu.h in main() below. Called from
- *  rtems_initialize_executive() defined in rtems/c/src/exec/sapi/src/init.c
- *
- *  Input parameters: NONE
- *
- *  Output parameters: NONE
- *
- *  Return values: NONE
- */
-void bsp_pretasking_hook( void )
-{    
-  /* 
-   *  These are assigned addresses in the linkcmds file for the BSP. This
-   *  approach is better than having these defined as manifest constants and
-   *  compiled into the kernel, but it is still not ideal when dealing with
-   *  multiprocessor configuration in which each board as a different memory
-   *  map. A better place for defining these symbols might be the makefiles.
-   *  Consideration should also be given to developing an approach in which
-   *  the kernel and the application can be linked and burned into ROM
-   *  independently of each other.
-   */
-  extern unsigned char _HeapStart, _HeapEnd;
-
-  bsp_libc_init(&_HeapStart, &_HeapEnd - &_HeapStart, 0);
-
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
-}
-
+void bsp_pretasking_hook(void);               /* m68k version */
 
 /*
  *  bsp_start()
@@ -122,6 +81,7 @@ void bsp_start( void )
 {
   extern void *_WorkspaceBase;
   extern m68k_isr_entry M68Kvec[];
+  extern void    *_WorkspaceBase;
   
   void M68KFPSPInstallExceptionHandlers (void);
   

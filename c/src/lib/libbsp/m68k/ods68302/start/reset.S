@@ -453,8 +453,8 @@ copy_data_loop:
         |
 
 zerobss:
-        moveal  #end,%a0                        | find end of .bss
-        moveal  #_bss_start,%a1                 | find beginning of .bss
+        moveal  #_clear_end,%a0                 | find end of .bss
+        moveal  #_clear_start,%a1               | find beginning of .bss
         moveq   #0,%d0
         
 zerobss_loop:
@@ -463,12 +463,7 @@ zerobss_loop:
         cmpal   %a0,%a1
         jlt     zerobss_loop                    | loop until _end reached
 
-        movel   #end,%d0                        | d0 = end of bss/start of heap
-        addl    #heap_size,%d0                  | d0 = end of heap
-
-        movel   %d0,stack_start                 | Save for brk() routine
-        addl    #stack_size,%d0                 | make room for stack
-        andl    #0xffffffc0,%d0                 | align it on 16 byte boundary
+        movel   %d0,_stack_init                 | load stack top
 
         movw    #0x3700,%sr                     | SUPV MODE,INTERRUPTS OFF!!!
         movel   %d0,%a7                         | set master stack pointer
