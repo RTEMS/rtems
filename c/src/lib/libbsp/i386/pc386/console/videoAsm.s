@@ -26,11 +26,11 @@
 
 	.text
 	.align 4
-    	.globl  wr_cursor	/ Move cursor position
+    	.globl  wr_cursor	/* Move cursor position */
 
-/**/
-/**/ 	void wr_cursor(newPosition, ioBaseAddr)
-/**/
+/*
+ *   	void wr_cursor(newPosition, ioBaseAddr)
+ */
 
 wr_cursor:	pushl	%ecx
 		movl	8(%esp), %ecx		/* Get new cursor position */
