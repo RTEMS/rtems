@@ -58,9 +58,6 @@ AC_MSG_CHECKING([whether CPU supports librpc])
   * )    LIBRPC=yes;;
   esac
 AC_MSG_RESULT([$LIBRPC])
-  AS_IF([test "$LIBRPC" = "yes"],
-    [AC_CONFIG_SUBDIRS([librpc])
-  ])
 ])
 
 AC_ARG_ENABLE([ada],
@@ -248,6 +245,11 @@ libnetworking/Makefile
 libnetworking/lib/Makefile
 libnetworking/libc/Makefile
 libnetworking/wrapup/Makefile
+librpc/Makefile
+librpc/include/Makefile
+librpc/src/Makefile
+librpc/src/xdr/Makefile
+librpc/src/rpc/Makefile
 libmisc/Makefile
 libmisc/cpuuse/Makefile
 libmisc/shell/Makefile

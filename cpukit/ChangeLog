@@ -1,5 +1,11 @@
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Merge-in librpc/configure.ac.
+	* Makefile.am: Add librpc to SUBDIRS.
+	Remove @subdirs@.
+
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Merge-in libcsupport/configure.ac.
 	* Makefile.am: Add libcsupport to SUBDIRS.
 
