@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4 no-installman
 
 SUBDIRS = PSD.doc
 
