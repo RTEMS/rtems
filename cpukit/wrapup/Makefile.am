@@ -23,13 +23,13 @@ if HAS_ITRON
 ITRON_OBJS = $(wildcard ../itron/src/$(ARCH)/*.o)
 endif
 
-LIBCSUPPORT_OBJS = $(wildcard ../libcsupport/src/$(ARCH)/*.o)
+LIBCSUPPORT_OBJS = ../libcsupport/$(ARCH)/libcsupport.a
 
-LIBBLOCK_OBJS = $(wildcard ../libblock/$(ARCH)/*.o)
+LIBBLOCK_OBJS = ../libblock/src/$(ARCH)/libblock.a
 if !UNIX
-LIBDOSFS_OBJS = $(wildcard ../libfs/src/dosfs/$(ARCH)/*.o)
+LIBDOSFS_OBJS = ../libfs/src/dosfs/$(ARCH)/libdosfs.a
 endif
-LIBIMFS_OBJS = $(wildcard ../libfs/src/imfs/$(ARCH)/*.o)
+LIBIMFS_OBJS = ../libfs/src/imfs/$(ARCH)/libimfs.a
 
 if HAS_NETWORKING
 NETWORKING_OBJS = \

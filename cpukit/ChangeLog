@@ -1,3 +1,8 @@
+2002-06-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Use relative path to lib*.a for
+	LIBCSUPPORT_OBJS, LIBBLOCK_OBJS, LIBDOSFS_OBJS, LIBIMFS_OBJS.
+
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include $(top_srcdir)/automake/*.am.
