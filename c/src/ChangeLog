@@ -1,5 +1,10 @@
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* librdbg/src/i386/rdbg_f.c, librdbg/src/m68k/rdbg_cpu_asm.S
+	librdbg/src/m68k/rdbg_f.c: Use POSIX fixed size types.
+
+2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libnetworking/rtems_servers/ftpd.c: Use POSIX fixed size types.
 
 2004-10-20	Ralf Corsepius <ralf_corsepius@rtems.org>

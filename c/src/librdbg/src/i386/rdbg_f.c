@@ -63,8 +63,8 @@ get_ctx_thread (Thread_Control * thread, CPU_Exception_frame * ctx)
 {
   ctx->edi = thread->Registers.edi;
   ctx->esi = thread->Registers.esi;
-  ctx->ebp = (unsigned32) (thread->Registers.ebp);
-  ctx->esp0 = (unsigned32) (thread->Registers.esp);
+  ctx->ebp = (uint32_t) (thread->Registers.ebp);
+  ctx->esp0 = (uint32_t) (thread->Registers.esp);
   ctx->ebx = thread->Registers.ebx;
   ctx->edx = 0;
   ctx->ecx = 0;

@@ -87,18 +87,18 @@ get_ctx_thread (Thread_Control * thread, CPU_Exception_frame * ctx)
    */
   ctx->vecnum = 0xdeadbeef;
   ctx->sr = thread->Registers.sr;
-  ctx->pc = *(unsigned32 *) thread->Registers.a7_msp;
+  ctx->pc = *(uint32_t *) thread->Registers.a7_msp;
   ctx->d0 = 0xdeadbeef;
   ctx->d1 = 0xdeadbeef;
   ctx->a0 = 0xdeadbeef;
   ctx->a1 = 0xdeadbeef;
 
-  ctx->a2 = (unsigned32) thread->Registers.a2;
-  ctx->a3 = (unsigned32) thread->Registers.a3;
-  ctx->a4 = (unsigned32) thread->Registers.a4;
-  ctx->a5 = (unsigned32) thread->Registers.a5;
-  ctx->a6 = (unsigned32) thread->Registers.a6;
-  ctx->a7 = (unsigned32) thread->Registers.a7_msp;
+  ctx->a2 = (uint32_t) thread->Registers.a2;
+  ctx->a3 = (uint32_t) thread->Registers.a3;
+  ctx->a4 = (uint32_t) thread->Registers.a4;
+  ctx->a5 = (uint32_t) thread->Registers.a5;
+  ctx->a6 = (uint32_t) thread->Registers.a6;
+  ctx->a7 = (uint32_t) thread->Registers.a7_msp;
   ctx->d2 = thread->Registers.d2;
   ctx->d3 = thread->Registers.d3;
   ctx->d4 = thread->Registers.d4;

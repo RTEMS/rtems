@@ -62,14 +62,14 @@ SYM (enterRdbg):
  *
  * The two types of exception frames on m68000 are
  *
- * unsigned16 sr <- sp
- * unsigned32 pc
+ * uint16_t sr <- sp
+ * uint32_t pc
  *
- * unsigned16 fc <- sp
- * unsigned32 addr
- * unsigned16 instr
- * unsigned16 sr
- * unsigned32 pc
+ * uint16_t fc <- sp
+ * uint32_t addr
+ * uint16_t instr
+ * uint16_t sr
+ * uint32_t pc
  *
  * after real frame we push d0-d1/a0-a1
  *
