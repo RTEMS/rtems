@@ -54,7 +54,7 @@ include_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
     include/zilog/z8536.h
 
 ##  General stuff
-all-local: $(PREINSTALL_FILES) $(ARCH)/libcsupport.a
+all-local: $(PREINSTALL_FILES) libcsupport$(LIB_VARIANT).a
 
 AM_CPPFLAGS += -I$(top_builddir)
 
@@ -121,13 +121,13 @@ endif
 
 AM_CFLAGS += $(LIBC_DEFINES)
 
-EXTRA_LIBRARIES = o-optimize/libcsupport.a
-o_optimize_libcsupport_a_SOURCES = $(C_FILES)
-o_optimize_libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+EXTRA_LIBRARIES = libcsupport.a
+libcsupport_a_SOURCES = $(C_FILES)
+libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += o-debug/libcsupport.a
-o_debug_libcsupport_a_SOURCES = $(C_FILES)
-o_debug_libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+EXTRA_LIBRARIES += libcsupport_g.a
+libcsupport_g_a_SOURCES = $(C_FILES)
+libcsupport_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 DOC_FILES = src/TODO src/CASES
 
