@@ -363,8 +363,7 @@ int pthread_attr_setscope(
       return 0;
 
     case PTHREAD_SCOPE_SYSTEM:
-/* XXX needs to be ENOTSUP */
-      return ENOSYS;
+      return ENOTSUP;
 
     default:
       return EINVAL;
@@ -381,7 +380,7 @@ int pthread_attr_getscope(
   int                   *contentionscope
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !contentionscope )
     return EINVAL;
 
   *contentionscope = attr->contentionscope;
@@ -408,7 +407,7 @@ int pthread_attr_setinheritsched(
       return 0;
 
     default:
-      return EINVAL;
+      return ENOTSUP;
   }
 }
 
@@ -422,7 +421,7 @@ int pthread_attr_getinheritsched(
   int                   *inheritsched
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !inheritsched )
     return EINVAL;
 
   *inheritsched = attr->inheritsched;
@@ -451,7 +450,7 @@ int pthread_attr_setschedpolicy(
       return 0;
  
     default:
-      return EINVAL;
+      return ENOTSUP;
   }
 }
 
@@ -465,7 +464,7 @@ int pthread_attr_getschedpolicy(
   int                   *policy
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !policy )
     return EINVAL;
 
   *policy = attr->schedpolicy;
@@ -691,7 +690,7 @@ int pthread_attr_getstacksize(
   size_t                *stacksize
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !stacksize )
     return EINVAL;
 
   *stacksize = attr->stacksize;
@@ -728,7 +727,7 @@ int pthread_attr_getstackaddr(
   void                  **stackaddr
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !stackaddr )
     return EINVAL;
 
   *stackaddr = attr->stackaddr;
@@ -762,7 +761,7 @@ int pthread_attr_getdetachstate(
   int                   *detachstate
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !detachstate )
     return EINVAL;
 
   *detachstate = attr->detachstate;
@@ -866,7 +865,7 @@ int pthread_create(
    */
 
   if ( the_attr->contentionscope != PTHREAD_SCOPE_PROCESS )
-    return ENOSYS;
+    return ENOTSUP;
 
   /*
    *  Interpret the scheduling parameters.
@@ -961,7 +960,7 @@ int pthread_create(
   if ( !status ) {
     _POSIX_Threads_Free( the_thread );
     _Thread_Enable_dispatch();
-    return EINVAL;
+    return EAGAIN;
   }
 
   /*
@@ -1275,7 +1274,7 @@ int pthread_attr_getcputime(
   int             *clock_allowed
 )
 {
-  if ( !attr || !attr->is_initialized )
+  if ( !attr || !attr->is_initialized || !clock_allowed )
     return EINVAL;
 
   *clock_allowed = attr->cputime_clock_allowed;
