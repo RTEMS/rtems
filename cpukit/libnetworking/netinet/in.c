@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)in.c	8.4 (Berkeley) 1/9/95
- *	$Id$
+ * $FreeBSD: src/sys/netinet/in.c,v 1.75 2004/04/07 20:46:13 imp Exp $
  */
 
 #include <sys/param.h>
@@ -161,7 +157,6 @@ in_control(so, cmd, data, ifp)
 	struct in_aliasreq *ifra = (struct in_aliasreq *)data;
 	struct sockaddr_in oldaddr;
 	int error, hostIsNew, maskIsNew, s;
-	u_long i;
 	struct multi_kludge *mk;
 
 	/*
@@ -322,8 +317,8 @@ in_control(so, cmd, data, ifp)
 		    (struct sockaddr_in *) &ifr->ifr_addr, 1));
 
 	case SIOCSIFNETMASK:
-		i = ifra->ifra_addr.sin_addr.s_addr;
-		ia->ia_subnetmask = ntohl(ia->ia_sockmask.sin_addr.s_addr = i);
+		ia->ia_sockmask.sin_addr = ifra->ifra_addr.sin_addr;
+		ia->ia_subnetmask = ntohl(ia->ia_sockmask.sin_addr.s_addr);
 		break;
 
 	case SIOCAIFADDR:
