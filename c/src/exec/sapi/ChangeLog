@@ -1,3 +1,10 @@
+2001-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	* PR132 requested some tinkering ot lower memory.
+	* include/confdefs.h: Lowered footprint of device driver table
+	and statically configure user extensions.  Now if no static
+	extensions are configured, then the table is not instantiated.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.

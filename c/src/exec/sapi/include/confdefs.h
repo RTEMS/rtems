@@ -293,7 +293,14 @@ rtems_driver_address_table Device_drivers[] = {
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
   DEVNULL_DRIVER_TABLE_ENTRY,
 #endif
+#ifdef CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
   NULL_DRIVER_TABLE_ENTRY
+#elif !defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
+    !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
+    !defined(CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER) && \
+    !defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER)
+  NULL_DRIVER_TABLE_ENTRY
+#endif
 };
 #endif
 
@@ -304,8 +311,11 @@ rtems_driver_address_table Device_drivers[] = {
  *  overridden by the user.
  */
 
+#define CONFIGURE_NUMBER_OF_DRIVERS \
+  ((sizeof(Device_drivers) / sizeof(rtems_driver_address_table)))
+
 #ifndef CONFIGURE_MAXIMUM_DRIVERS
-#define CONFIGURE_MAXIMUM_DRIVERS   10
+#define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS
 #endif
 
 /*
@@ -430,6 +440,8 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #include <rtems/stackchk.h>
 #endif
 
+#if defined(CONFIGURE_INITIAL_EXTENSIONS) || \
+    defined(STACK_CHECKER_ON)
 rtems_extensions_table Configuration_Initial_Extensions[] = {
 #ifdef CONFIGURE_INITIAL_EXTENSIONS
     CONFIGURE_INITIAL_EXTENSIONS,
@@ -437,12 +449,17 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #ifdef STACK_CHECKER_ON
     STACK_CHECKER_EXTENSION,
 #endif
-    { NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
+#define CONFIGURE_INITIAL_EXTENSION_TABLE Configuration_Initial_Extensions
 #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
   ((sizeof(Configuration_Initial_Extensions) / \
-    sizeof(rtems_extensions_table)) - 1)
+    sizeof(rtems_extensions_table)))
+#else
+#define CONFIGURE_INITIAL_EXTENSION_TABLE NULL
+#define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
+#endif
+
 
 #endif
 
@@ -1003,11 +1020,10 @@ rtems_configuration_table Configuration = {
   CONFIGURE_TICKS_PER_TIMESLICE,
   CONFIGURE_MAXIMUM_DEVICES,
   CONFIGURE_MAXIMUM_DRIVERS,
-  sizeof (Device_drivers)/
-    sizeof(rtems_driver_address_table),      /* number of device drivers */
+  CONFIGURE_NUMBER_OF_DRIVERS,               /* number of device drivers */
   Device_drivers,                            /* pointer to driver table */
   CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,    /* number of initial extensions */
-  Configuration_Initial_Extensions,          /* pointer to initial extensions */
+  CONFIGURE_INITIAL_EXTENSION_TABLE,         /* pointer to initial extensions */
   CONFIGURE_MULTIPROCESSING_TABLE,           /* pointer to MP config table */
   &Configuration_RTEMS_API,                  /* pointer to RTEMS API config */
 #ifdef RTEMS_POSIX_API
