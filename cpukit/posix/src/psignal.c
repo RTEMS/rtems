@@ -1247,8 +1247,8 @@ int pthread_kill(
   if ( sig && !is_valid_signo(sig) )
     set_errno_and_return_minus_one( EINVAL );
 
-  if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN )
-    return 0;
+  if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO )
+    set_errno_and_return_minus_one( ENOSYS );
 
   /*
    *  RTEMS does not support sending  a siginfo signal to a specific thread.
@@ -1268,8 +1268,10 @@ int pthread_kill(
 
       if ( sig ) {
 
-        if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO )
-          set_errno_and_return_minus_one( ENOSYS );
+        if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
+          _Thread_Enable_dispatch();
+          return 0;
+        }
 
         /* XXX critical section */
 
