@@ -7,9 +7,9 @@ AUTOMAKE_OPTIONS = foreign 1.4
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-ROOT_H_FILES =
-RTEMS_SCORE_H_FILES = cpu.h c_isr.inl
-noinst_HEADERS = $(ROOT_H_FILES) $(RTEMS_SCORE_H_FILES)
+include_rtems_scoredir = $(includedir)/rtems/score
+
+include_rtems_score_HEADERS = cpu.h c_isr.inl
 
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
@@ -23,8 +23,7 @@ include $(top_srcdir)/../../../../../automake/lib.am
 #
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
-    $(ROOT_H_FILES:%=$(PROJECT_INCLUDE)/%) \
-    $(RTEMS_SCORE_H_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
+    $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@

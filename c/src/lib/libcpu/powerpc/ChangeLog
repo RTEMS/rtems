@@ -1,3 +1,13 @@
+2001-02-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc505/ictrl/Makefile.am, mpc6xx/clock/Makefile.am,
+	mpc6xx/exceptions/Makefile.am, mpc6xx/mmu/Makefile.am,
+	mpc8xx/include/Makefile.am, new_exception_processing/Makefile.am,
+	old_exception_processing/Makefile.am, pc403/ictrl/Makefile.am,
+	shared/include/Makefile.am, shared/src/Makefile.am:
+	Apply *_HEADERS instead of *H_FILES.
+	* shared/src/.cvsignore: Add cache.h.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* new_exception_processing/cpu.h, old_exception_processing/cpu.c: 

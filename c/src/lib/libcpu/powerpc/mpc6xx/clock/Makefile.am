@@ -6,7 +6,9 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = c_clock.c
 
-H_FILES = c_clock.h
+include_libcpudir = $(includedir)/libcpu
+
+include_libcpu_HEADERS = c_clock.h
 
 c_clock_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
@@ -24,7 +26,7 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 #
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
-    $(PROJECT_INCLUDE)/libcpu/c_clock.h
+    $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(c_clock_rel_OBJECTS)
 

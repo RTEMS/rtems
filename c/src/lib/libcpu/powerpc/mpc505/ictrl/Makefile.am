@@ -8,7 +8,7 @@ PGM = $(ARCH)/ictrl.rel
 
 C_FILES = ictrl.c
 
-H_FILES = ictrl.h
+include_HEADERS = ictrl.h
 
 ictrl_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
@@ -28,7 +28,8 @@ $(PROJECT_INCLUDE)/%.h: %.h
 $(PGM): $(ictrl_rel_OBJECTS)
 	$(make-rel)
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/ictrl.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
+   $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(ARCH) $(ictrl_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 

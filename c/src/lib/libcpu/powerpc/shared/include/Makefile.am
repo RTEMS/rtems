@@ -7,7 +7,9 @@ AUTOMAKE_OPTIONS = foreign 1.4
 C_FILES = cpuIdent.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = cpu.h spr.h io.h mmu.h page.h byteorder.h pgtable.h
+include_libcpudir = $(includedir)/libcpu
+
+include_libcpu_HEADERS = cpu.h spr.h io.h mmu.h page.h byteorder.h pgtable.h
 
 OBJS = $(C_O_FILES)
 
@@ -31,7 +33,7 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/libcpu/%)
+    $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 

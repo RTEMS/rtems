@@ -10,7 +10,9 @@ C_FILES = bat.c
 
 S_FILES = mmuAsm.S
 
-H_FILES = bat.h
+include_libcpudir = $(includedir)/libcpu
+
+include_libcpu_HEADERS = bat.h
 
 mmu_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
 
@@ -31,7 +33,7 @@ $(PGM): $(mmu_rel_OBJECTS)
 	$(make-rel)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
-    $(PROJECT_INCLUDE)/libcpu/bat.h
+    $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(mmu_rel_OBJECTS) $(PGM)
 
