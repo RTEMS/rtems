@@ -11,8 +11,12 @@ PROJECT_ROOT = @PROJECT_ROOT@
 # following are semi-implemented and untested
 # C_PIECES=aio cancel devctl intr mqueue ptimer semaphore time utsname
 
+ENOSYS_C_PIECES=\
+    execl execle execlp execv execve execvp fork \
+    pthreadatfork
+
 C_PIECES= adasupp cond getpid key mutex pthread psignal sched time \
-  types unistd
+  types unistd $(ENOSYS_C_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

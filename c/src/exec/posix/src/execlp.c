@@ -10,6 +10,7 @@ int execlp(
   const char *file,
   const char *arg,
   ...
+)
 {
   errno = ENOSYS;
   return -1;
