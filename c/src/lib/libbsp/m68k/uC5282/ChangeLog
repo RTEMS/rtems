@@ -1,3 +1,7 @@
+2005-02-14  Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Don't cache flash -- it messes up programming.
+
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* console/console.c, include/bsp.h, network/network.c,

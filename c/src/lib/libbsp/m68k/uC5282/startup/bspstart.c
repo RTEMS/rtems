@@ -199,16 +199,12 @@ void bsp_start( void )
     m68k_set_cacr(MCF5XXX_CACR_CINV);
 
     /*
-     * Cache SDRAM and FLASH
+     * Cache SDRAM
      */
     m68k_set_acr0(MCF5XXX_ACR_AB((uint32_t)_RamBase)     |
                   MCF5XXX_ACR_AM((uint32_t)_RamSize-1)   |
                   MCF5XXX_ACR_EN                         |
                   MCF5XXX_ACR_BWE                        |
-                  MCF5XXX_ACR_SM_IGNORE);
-    m68k_set_acr1(MCF5XXX_ACR_AB((uint32_t)_FlashBase)   |
-                  MCF5XXX_ACR_AM((uint32_t)_FlashSize-1) |
-                  MCF5XXX_ACR_EN                         |
                   MCF5XXX_ACR_SM_IGNORE);
 
     /*
