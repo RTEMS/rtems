@@ -15,6 +15,6 @@ include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/leaf.cfg
 
 all: FORCEIT
-	cd ../../../libbsp/$(RTEMS_CPU)/$(RTEMS_BSP)/include; $(MAKE) all
+	cd ../../../libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/include; $(MAKE) all
 
 
