@@ -8,7 +8,7 @@ shift
 public_docs="user develenv ka9q posix_users"
 support_docs="hppa1_1 i386 i960 m68k sparc newlib gcc"
 partners_docs="posix1003.1 posix1003.1h"
-oar_manuals="ada_user hwapi powerpc"
+oar_manuals="ada_user hwapi powerpc tools/texi2www"
 
 # relnotes  is obsolete
 # posix_users manual left out until finished
