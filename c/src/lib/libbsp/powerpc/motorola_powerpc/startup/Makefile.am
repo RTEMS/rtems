@@ -1,11 +1,10 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = \
-    @srcdir@:@srcdir@/../console:@srcdir@/../../../shared:@srcdir@/../../shared/startup
+VPATH = @srcdir@:@srcdir@/../console:@srcdir@/../../../shared:@srcdir@/../../shared/startup
 
 C_FILES = bootcard.c main.c bspstart.c bsppost.c bsplibc.c sbrk.c bspclean.c \
     gnatinstallhandler.c
@@ -24,7 +23,7 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
 # FIXME: This should not be here
-# $(PROJECT_RELEASE)/lib/libbsp.a: 
+# $(PROJECT_RELEASE)/lib/libbsp.a:
 #	cd ../wrapup; $(MAKE) $(AM_MAKEFLAGS)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds

@@ -1,11 +1,10 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = \
-    @srcdir@:@srcdir@/../../mvme147/startup:@srcdir@/../../shared:@srcdir@/../../../shared
+VPATH = @srcdir@:@srcdir@/../../mvme147/startup:@srcdir@/../../shared:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
 

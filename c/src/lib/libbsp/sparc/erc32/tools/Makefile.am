@@ -5,9 +5,9 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-noinst_SCRIPTS=runtest
+noinst_SCRIPTS = runtest
 
-TMPINSTALL_FILES = $(PROJECT_ROOT)/erc32/tests \
+TMPINSTALL_FILES += $(PROJECT_ROOT)/erc32/tests \
     $(PROJECT_ROOT)/erc32/tests/runtest
 
 $(PROJECT_ROOT)/erc32/tests:

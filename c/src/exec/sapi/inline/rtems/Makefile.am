@@ -9,9 +9,8 @@ I_FILES = extension.inl
 
 noinst_HEADERS = $(I_FILES)
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rtems \
-$(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -20,7 +19,5 @@ $(PROJECT_INCLUDE)/rtems/%.inl: %.inl
 endif
 
 all-am: $(PREINSTALL_FILES)
-debug-am: $(PREINSTALL_FILES)
-profile-am: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

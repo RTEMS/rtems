@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -33,7 +33,8 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 $(PROJECT_RELEASE)/lib/linkcmds_ROM: linkcmds_ROM
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).o: $(ARCH)/except_vect_332_ROM.o
+$(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).o: \
+    $(ARCH)/except_vect_332_ROM.o
 	$(INSTALL_DATA) $< $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile

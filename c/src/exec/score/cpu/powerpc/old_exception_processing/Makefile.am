@@ -19,14 +19,11 @@ S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE) \
-$(PROJECT_INCLUDE)/rtems/score \
-$(ROOT_H_FILES:%=$(PROJECT_INCLUDE)/%) \
-$(RTEMS_SCORE_H_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
+    $(ROOT_H_FILES:%=$(PROJECT_INCLUDE)/%) \
+    $(RTEMS_SCORE_H_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 
 $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
 	$(INSTALL_DATA) $< $@
@@ -58,9 +55,6 @@ clean-local:
 
 UNUSED_FILES = irq_stub.S
 
-EXTRA_DIST = \
-TODO \
-rtems.S \
-$(C_FILES) $(S_FILES) $(UNUSED_FILES)
+EXTRA_DIST = TODO rtems.S $(C_FILES) $(S_FILES) $(UNUSED_FILES)
 
 include $(top_srcdir)/../../../../../../automake/local.am

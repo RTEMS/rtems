@@ -42,7 +42,7 @@ SIGNAL_C_FILES = signal.c signalcatch.c signalsend.c
 
 REGION_C_FILES = region.c regioncreate.c regiondelete.c regionextend.c \
     regiongetsegment.c regiongetsegmentsize.c regionident.c \
-    regionreturnsegment.c regionreturnsegment.c
+    regionreturnsegment.c
 
 PARTITION_C_FILES = part.c partcreate.c partdelete.c partgetbuffer.c \
     partident.c partreturnbuffer.c

@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -16,7 +16,6 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 OBJS = $(S_O_FILES) $(C_O_FILES)
 
-
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am
 
@@ -24,7 +23,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-## FIXME: 
+## FIXME:
 ## ASFLAGS = -mrelocatable
 CFLAGS_DEBUG_V = $(CFLAGS_OPTIMIZE_V)
 
@@ -57,7 +56,7 @@ check_unresolved : $(OBJS)
 	echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
 
 rtems: $(BINARY_LOADED)
-	$(OBJCOPY)  $(BINARY_LOADED) rtems -O binary -R .comment -S 
+	$(OBJCOPY)  $(BINARY_LOADED) rtems -O binary -R .comment -S
 
 rtems.gz: rtems
 	gzip -vf9 rtems

@@ -4,17 +4,15 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+
 ## NOTE: This Makefile.am is rather fragile to the value of RTEMS_BSP
-## Esp. make clean and make distclean have unwanted side-effects 
+## Esp. make clean and make distclean have unwanted side-effects
 ## if RTEMS_BSP is not properly set up.
 
 RTEMS_BSP = $(RTEMS_BSP_LIST)
-## The '.' in SUBDIRS ensures that local make-targets (xxx-am) will be 
+## The '.' in SUBDIRS ensures that local make-targets (xxx-am) will be
 ## triggered before $(RTEMS_BSP_LIST) subdirectories are made.
-SUBDIRS= \
-make \
-. \
-$(RTEMS_BSP)
+SUBDIRS = make . $(RTEMS_BSP)
 
 ## Use @RTEMS_BSP_LIST@ here, using $(RTEMS_BSP_LIST) would trigger
 ## this rule for invalid BSPs
@@ -31,20 +29,12 @@ $(RTEMS_BSP)
 
 ## Let all RTEMS' make targets depend on ${RTEMS_BSP}
 all-am: ${RTEMS_BSP}
-debug-am: ${RTEMS_BSP}
-profile-am: ${RTEMS_BSP}
 preinstall-am: ${RTEMS_BSP}
 depend-am: ${RTEMS_BSP}
 
 ## Pull in extra files intro the distribution
-EXTRA_DIST = \
-ACKNOWLEDGEMENTS \
-README.DOS \
-REQUIRES \
-PROBLEMS \
-TESTED \
-README \
-UPDATE_HELP
+EXTRA_DIST = ACKNOWLEDGEMENTS README.DOS REQUIRES PROBLEMS TESTED README \
+    UPDATE_HELP
 
 DIST_SUBDIRS = ${RTEMS_BSP}
 ## -------------------------------------------------------

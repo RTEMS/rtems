@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -8,7 +8,7 @@ PGM = $(ARCH)/network.rel
 
 C_FILES = network.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
-  
+
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

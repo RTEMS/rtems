@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -11,9 +11,8 @@ noinst_HEADERS = $(H_FILES)
 # (OPTIONAL) Add local stuff here using +=
 #
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rtems/score \
-$(H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+    $(H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
 $(PROJECT_INCLUDE)/rtems/score:
 	$(mkinstalldirs) $@

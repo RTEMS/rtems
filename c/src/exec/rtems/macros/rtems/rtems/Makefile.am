@@ -5,16 +5,15 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 I_FILES = asr.inl attr.inl dpmem.inl event.inl eventset.inl message.inl \
-    modes.inl options.inl part.inl ratemon.inl \
-    region.inl sem.inl status.inl support.inl tasks.inl timer.inl
+    modes.inl options.inl part.inl ratemon.inl region.inl sem.inl status.inl \
+    support.inl tasks.inl timer.inl
 
 noinst_HEADERS = $(I_FILES)
 
 if MACROS
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rtems/rtems \
-$(I_FILES:%=$(PROJECT_INCLUDE)/rtems/rtems/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems \
+    $(I_FILES:%=$(PROJECT_INCLUDE)/rtems/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems/rtems:
 	@$(mkinstalldirs) $@
@@ -23,7 +22,5 @@ $(PROJECT_INCLUDE)/rtems/rtems/%.inl: %.inl
 endif
 
 all-am: $(PREINSTALL_FILES)
-debug-am: $(PREINSTALL_FILES)
-profile-am: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

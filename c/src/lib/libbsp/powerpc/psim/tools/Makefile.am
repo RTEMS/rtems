@@ -5,12 +5,11 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-noinst_SCRIPTS=psim runtest
+noinst_SCRIPTS = psim runtest
 
-TMPINSTALL_FILES = $(PROJECT_ROOT)/psim/tests \
-   $(PROJECT_ROOT)/psim/tests/runtest \
-   $(PROJECT_ROOT)/psim/tests/psim \
-   $(PROJECT_ROOT)/psim/tests/psim-gdb
+TMPINSTALL_FILES += $(PROJECT_ROOT)/psim/tests \
+    $(PROJECT_ROOT)/psim/tests/runtest $(PROJECT_ROOT)/psim/tests/psim \
+    $(PROJECT_ROOT)/psim/tests/psim-gdb
 
 $(PROJECT_ROOT)/psim/tests:
 	$(mkinstalldirs) $@

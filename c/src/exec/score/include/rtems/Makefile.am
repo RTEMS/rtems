@@ -8,9 +8,8 @@ H_FILES = debug.h system.h
 
 noinst_HEADERS = $(H_FILES)
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rtems \
-$(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -18,8 +17,6 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 all-am: $(PREINSTALL_FILES)
-debug-am: $(PREINSTALL_FILES)
-profile-am: $(PREINSTALL_FILES)
 
 SUBDIRS = score
 

@@ -1,11 +1,12 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-## FIXME
 VPATH = @srcdir@:@srcdir@/../../ppc403/vectors
+
+## FIXME
 
 PGM = ${ARCH}/vectors.rel
 

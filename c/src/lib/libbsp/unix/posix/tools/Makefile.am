@@ -7,12 +7,11 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 if PERL
 perl_scripts = shmdump semdump
-PERL_TMPINSTALL_FILES = \
-  $(PROJECT_ROOT)/posix/tests/shmdump \
-  $(PROJECT_ROOT)/posix/tests/semdump
+PERL_TMPINSTALL_FILES = $(PROJECT_ROOT)/posix/tests/shmdump \
+    $(PROJECT_ROOT)/posix/tests/semdump
 endif
 
-noinst_SCRIPTS=runtest looptest $(perl_scripts)
+noinst_SCRIPTS = runtest looptest $(perl_scripts)
 
 $(PROJECT_ROOT)/posix/tests:
 	$(mkinstalldirs) $@
@@ -29,9 +28,8 @@ $(PROJECT_ROOT)/posix/tests/shmdump: shmdump
 $(PROJECT_ROOT)/posix/tests/semdump: semdump
 	$(INSTALL_SCRIPT) $< $@
 
-TMPINSTALL_FILES = $(PROJECT_ROOT)/posix/tests \
-   $(PROJECT_ROOT)/posix/tests/runtest \
-   $(PROJECT_ROOT)/posix/tests/looptest
+TMPINSTALL_FILES += $(PROJECT_ROOT)/posix/tests \
+    $(PROJECT_ROOT)/posix/tests/runtest $(PROJECT_ROOT)/posix/tests/looptest
 
 ## HACK: install to build-tree
 all-local: $(TMPINSTALL_FILES) $(PERL_TMPINSTALL_FILES)

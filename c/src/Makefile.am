@@ -5,9 +5,9 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS= @cfg_subdirs@ wrapup tests
+SUBDIRS = @cfg_subdirs@ wrapup tests
 
-rtems_bspdir=$(prefix)/@RTEMS_BSP@
+rtems_bspdir = $(prefix)/@RTEMS_BSP@
 
 # NOTE: The wildcard on the install should pick up everything except
 #       the tests directory.  This significantly minimizes the install size.

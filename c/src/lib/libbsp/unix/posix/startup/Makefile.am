@@ -4,9 +4,9 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/startup.rel
-
 VPATH = @srcdir@:@srcdir@/../../../shared
+
+PGM = ${ARCH}/startup.rel
 
 if HAS_CXX
 C_MAIN_C_FILES =
@@ -48,14 +48,13 @@ $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o: $(ARCH)/rtems-ctor.o
 	$(INSTALL_DATA) $< $@
 
 if HAS_CXX
-all: $(ARCH) $(PGM) \
-	$(PROJECT_RELEASE)/lib/libno-ctor$(LIB_VARIANT).a \
-	$(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o
+all: $(ARCH) $(PGM) $(PROJECT_RELEASE)/lib/libno-ctor$(LIB_VARIANT).a \
+    $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o
 else
-all: $(ARCH) $(PGM) 
+all: $(ARCH) $(PGM)
 endif
 
 EXTRA_DIST = bspclean.c bspstart.c exit.c main.c no-ctor.c rtems-ctor.cc \
-   setvec.c
+    setvec.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

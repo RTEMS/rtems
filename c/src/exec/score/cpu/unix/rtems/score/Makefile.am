@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -20,10 +20,9 @@ unixsize.h: $(GENSIZE) cpu.h
 
 CLEANFILES = unixsize.h
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rtems/score \
-$(STATIC_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h) \
-$(GENERIC_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+    $(STATIC_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h) \
+    $(GENERIC_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
 $(PROJECT_INCLUDE)/rtems/score:
 	$(mkinstalldirs) $@

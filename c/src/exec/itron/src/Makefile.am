@@ -18,9 +18,9 @@ EVENTFLAGS_C_FILES = eventflags.c
 
 MAILBOX_C_FILES = mbox.c
 
-MSGBUFFER_C_FILES = msgbuffer.c msgbuffertranslatereturncode.c \
-    cre_mbf.c del_mbf.c prcv_mbf.c psnd_mbf.c rcv_mbf.c ref_mbf.c snd_mbf.c \
-    trcv_mbf.c tsnd_mbf.c
+MSGBUFFER_C_FILES = msgbuffer.c msgbuffertranslatereturncode.c cre_mbf.c \
+    del_mbf.c prcv_mbf.c psnd_mbf.c rcv_mbf.c ref_mbf.c snd_mbf.c trcv_mbf.c \
+    tsnd_mbf.c
 
 RENDEZVOUS_C_FILES = port.c
 
@@ -53,16 +53,8 @@ AM_CFLAGS += $(CFLAGS_OS_V)
 
 all: ${ARCH} ${OBJS}
 
-UNUSED_C_FILES = \
-cre_mbx.c del_mbx.c \
-mboxtranslatereturncode.c \
-network.c \
-prcv_mbx.c \
-rcv_mbx.c \
-ref_mbx.c \
-snd_mbx.c \
-sysmgmt.c \
-trcv_mbx.c
+UNUSED_C_FILES = cre_mbx.c del_mbx.c mboxtranslatereturncode.c network.c \
+    prcv_mbx.c rcv_mbx.c ref_mbx.c snd_mbx.c sysmgmt.c trcv_mbx.c
 
 EXTRA_DIST = $(C_FILES) $(UNUSED_C_FILES)
 

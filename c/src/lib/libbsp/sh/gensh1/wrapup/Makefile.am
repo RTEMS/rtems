@@ -1,8 +1,8 @@
-## 
+##
 ## $Id$
-## 
+##
 ## build and install libbsp
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 

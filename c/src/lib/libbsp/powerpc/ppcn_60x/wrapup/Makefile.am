@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -9,8 +9,8 @@ if HAS_NETWORKING
 NETWORK = network
 endif
 
-BSP_PIECES = startup clock console timer tod $(NETWORK) nvram \
-    universe pci vectors
+BSP_PIECES = startup clock console timer tod $(NETWORK) nvram universe pci \
+    vectors
 # pieces to pick up out of libcpu/$(RTEMS_CPU)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
