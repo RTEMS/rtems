@@ -37,5 +37,4 @@ AC_CACHE_CHECK([whether BSP supports librdbg],
     fi
   ])
 HAS_RDBG="$rtems_cv_HAS_RDBG"
-AC_SUBST(HAS_RDBG)
 ])

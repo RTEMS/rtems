@@ -1,5 +1,9 @@
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-rdbg.m4: Don't AC_SUBST(HAS_RDBG).
+
+2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: DISTCLEANFILES += @CUSTOM_CFG_FILES.
 
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
