@@ -2,6 +2,11 @@
 #  $Id$
 #
 
-ifc.exe is an MS-DOS executable which is equivalent to the program
+ifc is an MS-DOS executable which is equivalent to the program
 install-if-change.  It was compiled using Borland C 2.00.
 
+cklength is a precompiled version of the program cklength.c from
+the main source tree.
+
+fixtimer is a program to restore the clock if the program does not
+exit cleanly.
