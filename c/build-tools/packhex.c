@@ -478,7 +478,7 @@ int main(
     } while ( gets( inbuff ) != NULL );
 
 
-    exit( EXIT_SUCCESS );
+    return ( EXIT_SUCCESS );
 
 }
 

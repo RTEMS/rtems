@@ -11,16 +11,16 @@
  *  $Id$
  */
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-#include <rtems.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-/* for strcasecmp in linux */
+/* for strcasecmp in linux and solaris */
 #if defined(linux)
 #define __USE_BSD
 #endif
 #include <string.h>
+
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+#include <rtems.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <rtems/monitor.h>
 #include <rtems/symbols.h>

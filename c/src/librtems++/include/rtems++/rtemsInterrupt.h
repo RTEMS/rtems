@@ -71,7 +71,7 @@ protected:
   
 private:   
   const rtemsInterrupt& operator=(const rtemsInterrupt& );
-  Interrupt(const rtemsInterrupt& );
+  rtemsInterrupt(const rtemsInterrupt& );
   
   // the vector caught
   rtems_vector_number vector;

@@ -18,6 +18,7 @@
   ------------------------------------------------------------------------
 */
 
+#include <string.h>
 #include <rtems++/rtemsTask.h>
 // include to allow it to be compiled
 #include <rtems++/rtemsTaskMode.h>

@@ -14,16 +14,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/interr.h>
 
-#if defined(solaris2)
-/*
-#undef  _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE 3
-#undef  __STRICT_ANSI__
-#define __STRICT_ANSI__
-*/
-#define __EXTENSIONS__
-#endif
-
 #if defined(__linux__)
 #define MALLOC_0_RETURNS_NULL
 #endif

@@ -142,11 +142,13 @@ static int rtems_verror(
         chars_written += fprintf(stderr, " (status: %s)", rtems_status_text(status));
 
     if (local_errno)
-	if ((local_errno > 0) && *strerror(local_errno))
-	    chars_written += fprintf(stderr, " (errno: %s)", strerror(local_errno));
-	else
-	    chars_written += fprintf(stderr, " (unknown errno=%d)", local_errno);
-
+    {
+      if ((local_errno > 0) && *strerror(local_errno))
+        chars_written += fprintf(stderr, " (errno: %s)", strerror(local_errno));
+      else
+        chars_written += fprintf(stderr, " (unknown errno=%d)", local_errno);
+    }
+    
     chars_written += fprintf(stderr, "\n");
 
     (void) fflush(stderr);

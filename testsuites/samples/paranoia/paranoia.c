@@ -154,6 +154,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(solaris2)
+#include <math.h>
+#endif
+
 /*
  * To compile this on host using only libm from newlib (and using host libc)
  * do:

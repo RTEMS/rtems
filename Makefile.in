@@ -18,6 +18,8 @@ manext = 1
 mandir = @mandir@/man$(manext)
 program_prefix = @program_prefix@
 
+export bindir
+
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
