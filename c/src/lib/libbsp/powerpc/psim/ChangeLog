@@ -1,3 +1,8 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Use GENERIC_PIECES = to make automake-1.5
+	happy.
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/clock.c: Ensure that clock ticks are long enough to

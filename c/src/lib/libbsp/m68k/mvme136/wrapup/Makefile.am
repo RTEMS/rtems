@@ -11,7 +11,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 if HAS_MP
 GENERIC_MP_REL_PIECES = shmdr
 endif
-GENERIC_PIECES += $(GENERIC_MP_REL_PIECES)
+GENERIC_PIECES = $(GENERIC_MP_REL_PIECES)
 
 if HAS_MP
 BSP_MP_O_PIECES = shmsupp

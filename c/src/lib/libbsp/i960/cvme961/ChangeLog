@@ -1,4 +1,8 @@
 
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile: Use GENERIC_FILES = to make automake-1.5 happy.
+
 2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add bspopts.h.
