@@ -16,6 +16,11 @@ HAS_RDBG = @HAS_RDBG@
 HAS_POSIX_API = @HAS_POSIX_API@
 
 ##
+## Does this BSP support RTEMS's ITRON API ?
+##
+HAS_ITRON_API = @HAS_ITRON_API@
+
+##
 ## Does this BSP support RTEMS's CXX API ?
 ##
 HAS_CPLUSPLUS = @HAS_CPLUSPLUS@

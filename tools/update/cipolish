@@ -65,6 +65,10 @@ while( <> )
   {
     #remove the line
   }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_ITRON_API\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
   elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_HWAPI\)[ 	]*$/o ) 
   {
     #remove the line
