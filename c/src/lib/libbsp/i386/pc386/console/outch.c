@@ -270,8 +270,11 @@ _IBMPC_outch(char c)
 {
 static int escaped = 0;
 
-  if ( ! (escaped = handleEscape(escaped, c)) )
+  if ( ! (escaped = handleEscape(escaped, c)) ) {
+    if ( '\n' == c )
+      videoPutChar('\r');
   	videoPutChar(c);
+  }
 } /* _IBMPC_outch */
 
 

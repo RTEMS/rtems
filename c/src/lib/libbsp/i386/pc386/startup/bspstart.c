@@ -82,11 +82,17 @@ void bsp_postdriver_hook(void);
 void bsp_pretasking_hook(void)
 {
   rtems_unsigned32 topAddr, val;
-  int i;
+  int i, lowest;
   
   
   if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
     rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+
+  /* find the lowest 1M boundary to probe */
+  lowest = ((rtemsFreeMemStart + (1<<20)) >> 20) + 1;
+  if ( lowest  < 2 )
+	lowest = 2;
+
 
   if(_heap_size == 0)
     {
@@ -95,13 +101,13 @@ void bsp_pretasking_hook(void)
        * between 2M and 2048M.
        * let us first write
        */
-      for(i=2048; i>=2; i--)
+      for(i=2048; i>=lowest; i--)
 	{
 	  topAddr = i*1024*1024 - 4;
 	  *(volatile rtems_unsigned32 *)topAddr = topAddr;
 	}
 
-      for(i=2; i<=2048; i++)
+      for(i=lowest; i<=2048; i++)
 	{
 	  topAddr = i*1024*1024 - 4;
 	  val =  *(rtems_unsigned32 *)topAddr;
