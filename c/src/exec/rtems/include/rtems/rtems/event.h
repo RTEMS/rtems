@@ -48,6 +48,7 @@ extern "C" {
  */
 
 typedef enum {
+  EVENT_SYNC_SYNCHRONIZED,
   EVENT_SYNC_NOTHING_HAPPENED,
   EVENT_SYNC_TIMEOUT,
   EVENT_SYNC_SATISFIED
@@ -153,12 +154,11 @@ void _Event_Timeout (
 );
 
 /*
- *  The following defines the synchronization flags used by the
+ *  The following defines the synchronization flag used by the
  *  Event Manager to insure that signals sent to the currently
  *  executing thread are received properly.
  */
 
-EXTERN volatile boolean _Event_Sync;
 EXTERN volatile Event_Sync_states _Event_Sync_state;
 
 #include <rtems/rtems/eventmp.h>
