@@ -35,7 +35,7 @@
 #include "m68360.h"
 
 #define CLOCK_VECTOR	120
-#define CLOCK_IRQ_LEVEL	6
+#define CLOCK_IRQ_LEVEL	4
 
 /*
  * Clock_driver_ticks is a monotonically increasing counter of the

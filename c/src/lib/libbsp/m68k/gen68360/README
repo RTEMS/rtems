@@ -299,3 +299,17 @@ The board support package has been tested with:
 		Arnewsh Inc.
 		P.O. Box 270352
 		Fort Collins, CO 80527-0352
+
+Interrupt Notes
+===============
+ckinit.c:
+        Occasional network lockups have been noted when the PIT has a higher
+interrupt request level than the CPM.  The SCC1 bit in the CISR is set
+even though the SCC1 interrupt handler is not active.  This blocks
+interrupts from SCC1 (and all other CPM sources) and locks up the
+system.  It has not been determined whether the error is within the
+68360 or in the RTEMS interrupt support assembler code.  The solution,
+for now, is to set both PIT and CPM interrupt request levels to the same
+value (4).
+
+

@@ -364,6 +364,8 @@ m360Enet_retire_tx_bd (struct scc_softc *sc)
 			if (status & (M360_BD_LATE_COLLISION |
 					M360_BD_RETRY_LIMIT |
 					M360_BD_UNDERRUN)) {
+				int j;
+
 				if (status & M360_BD_LATE_COLLISION)
 					scc_softc[0].txLateCollision++;
 				if (status & M360_BD_RETRY_LIMIT)
@@ -372,9 +374,37 @@ m360Enet_retire_tx_bd (struct scc_softc *sc)
 					scc_softc[0].txUnderrun++;
 
 				/*
+				 * Reenable buffer descriptors
+				 */
+				j = sc->txBdTail;
+				for (;;) {
+					status = (sc->txBdBase + j)->status;
+					if (status & M360_BD_READY)
+						break;
+					(sc->txBdBase + j)->status = M360_BD_READY | 
+						(status & (M360_BD_PAD | 
+							   M360_BD_WRAP | 
+							   M360_BD_INTERRUPT | 
+							   M360_BD_LAST |
+							   M360_BD_TX_CRC));
+					if (status & M360_BD_LAST)
+						break;
+					if (++j == sc->txBdCount)
+						j = 0;
+				}
+
+				/*
+				 * Move transmitter back to the first
+				 * buffer descriptor in the frame.
+				 */
+				m360.scc1p._tbptr = m360.scc1p.tbase + 
+					sc->txBdTail * sizeof (m360BufferDescriptor_t);
+
+				/*
 				 * Restart the transmitter
 				 */
 				M360ExecuteRISC (M360_CR_OP_RESTART_TX | M360_CR_CHAN_SCC1);
+				continue;
 			}
 			if (status & M360_BD_DEFER)
 				scc_softc[0].txDeferred++;
