@@ -83,7 +83,8 @@ The following persons/organizations have made contributions:
 + Craig Lebakken (lebakken@minn.net) and Derrick Ostertag
   (ostertag@transition.com) of Transition Networks of Eden Prairie, MN
   for porting RTEMS to the MIPS and AMD 29K architectures.  This submission
-  includes complete for the R4650 as well as partial support for the R4600.
+  includes complete support for the R4650 as well as partial support
+  for the R4600.
 
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
