@@ -1,3 +1,9 @@
+2002-06-25	Joel Sherrill <joel@OARcorp.com>
+
+	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k
+	support to the shared gdb stub glue thus adding a directory.
+	* configure.ac: Modified to reflect above.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
