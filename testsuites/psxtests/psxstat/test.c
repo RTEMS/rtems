@@ -27,6 +27,7 @@
 
 #define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
 
+
 /*
  *  List of files which should exist.
  */
@@ -133,7 +134,7 @@ char *Good_absolute_paths[] = {
 
 
 char *Bad_paths[] = {
-  "/links/ENAMETOOLONG___",
+  "/links/ENAMETOOLONG__________________________",
   "/dir1/file4/NOTADIR",
   "/dir1/dir1/EACCES__",
   0
@@ -244,6 +245,7 @@ void chown_multiple_files(
   st_gid = getegid();
 #else
   st_uid = 100;
+e
   st_gid = 0;
 #endif
 
