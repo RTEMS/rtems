@@ -8,8 +8,6 @@ include $(top_srcdir)/automake/compile.am
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CFLAGS += $(LIBC_DEFINES)
 
-UNUSED_FILES = src/envlock.c
-
 EXTRA_LIBRARIES = libcsupport.a
 CLEANFILES = libcsupport.a
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
@@ -121,7 +119,8 @@ libcsupport_a_SOURCES += src/unixlibc.c src/hosterr.c
 else
 libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
-    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES)
+    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) \
+    src/envlock.c
 endif
 
 libcsupport_g_a_SOURCES = $(libcsupport_a_SOURCES)
