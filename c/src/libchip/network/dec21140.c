@@ -1,11 +1,24 @@
 /*
- * RTEMS driver for TULIP based Ethernet Controller
+ *  RTEMS driver for TULIP based Ethernet Controller
  *
- *  $Header$
+ *  Copyright (C) 1999 Emmanuel Raguet. raguet@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ * $Id$
  */
 
 #include <bsp.h>
+#if defined(i386)
 #include <pcibios.h>
+#endif
+#if defined(__PPC)
+#include <bsp/pci.h>
+#include <libcpu/byteorder.h>
+#include <libcpu/io.h>
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,7 +37,12 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
  
+#if defined(i386)
 #include <irq.h>
+#endif
+#if defined(__PPC)
+#include <bsp/irq.h>
+#endif
 
 #ifdef malloc
 #undef malloc
@@ -33,11 +51,15 @@
 #undef free 
 #endif
 
+#define DEC_DEBUG
+
+#define PCI_INVALID_VENDORDEVICEID	0xffffffff
 #define PCI_VENDOR_ID_DEC 0x1011
 #define PCI_DEVICE_ID_DEC_TULIP_FAST 0x0009
 
 #define IO_MASK  0x3
 #define MEM_MASK  0xF
+#define MASK_OFFSET 0xF
 
 /* command and status registers, 32-bit access, only if IO-ACCESS */
 #define ioCSR0  0x00	/* bus mode register */
@@ -78,27 +100,35 @@
 #define DEC_REGISTER_SIZE    0x100   /* to reserve virtual memory */
 
 #define RESET_CHIP   0x00000001
-#define CSR0_MODE    0x01a08000   /* 01a08000 */
+#if defined(__PPC)
+#define CSR0_MODE    0x0030e002   /* 01b08000 */
+#else
+#define CSR0_MODE    0x0020e002   /* 01b08000 */
+#endif
 #define ROM_ADDRESS  0x00004800
-#define CSR6_INIT    0x020c0000   /* 020c0000 */  
+#define CSR6_INIT    0x022cc000   /* 022c0000 020c0000 */  
 #define CSR6_TX      0x00002000   
 #define CSR6_TXRX    0x00002002   
-#define IT_SETUP     0x00010040   /* 0001ebef */
+#define IT_SETUP     0x000100c0   /* 000100e0 */
 #define CLEAR_IT     0xFFFFFFFF   
 #define NO_IT        0x00000000   
 
-#define NRXBUFS 7	/* number of receive buffers */
-#define NTXBUFS 1	/* number of transmit buffers */
+#define NRXBUFS 32	/* number of receive buffers */
+#define NTXBUFS 16	/* number of transmit buffers */
 
 /* message descriptor entry */
 struct MD {
-    volatile unsigned long status;
-    volatile unsigned long counts;
-    unsigned long buf1, buf2;	
+    /* used by hardware */
+    volatile unsigned32 status;
+    volatile unsigned32 counts;
+    unsigned32 buf1, buf2;  
+    /* used by software */
+    volatile struct mbuf *m;
+    volatile struct MD *next;
 };
 
 /*
- * Number of WDs supported by this driver
+ * Number of DECs supported by this driver
  */
 #define NDECDRIVER	1
 
@@ -121,6 +151,28 @@ struct MD {
  */
 #define START_TRANSMIT_EVENT	RTEMS_EVENT_2
 
+#if defined(__PPC)
+#define phys_to_bus(address) ((unsigned int)(address) + PREP_PCI_DRAM_OFFSET)
+#define bus_to_phys(address) ((unsigned int)(address) - PREP_PCI_DRAM_OFFSET)
+#define CPU_CACHE_ALIGNMENT_FOR_BUFFER PPC_CACHE_ALIGNMENT
+#else
+#define phys_to_bus(address) address
+#define bus_to_phys(address) address
+#define delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
+#define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE
+
+inline void st_le32(volatile unsigned32 *addr, unsigned32 value)
+{
+  *(addr)=value ;
+}
+
+inline unsigned32 ld_le32(volatile unsigned32 *addr)
+{
+  return(*addr);
+}
+
+#endif
+
 #if (MCLBYTES < RBUF_SIZE)
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
@@ -129,19 +181,24 @@ struct MD {
  * Per-device data
  */
  struct dec21140_softc {
-  struct arpcom			arpcom;
-  rtems_irq_connect_data	irqInfo;
-  struct MD			*MDbase;
-  char				*bufferBase;
-  int				acceptBroadcast;
-  int				rxBdCount;
-  int				txBdCount;
-  rtems_id			rxDaemonTid;
-  rtems_id			txDaemonTid;
+
+   struct arpcom			arpcom;
+
+   rtems_irq_connect_data	irqInfo;
+
+   volatile struct MD		*MDbase;
+   volatile unsigned char	*bufferBase;
+   int				acceptBroadcast;
+   rtems_id			rxDaemonTid;
+   rtems_id			txDaemonTid;
+   
+   volatile struct MD   *TxMD;
+   volatile struct MD   *SentTxMD;
+   int         PendingTxCount;
+   int         TxSuspended;
 
   unsigned int 			port;
-  unsigned int			*base;
-  unsigned long			bpar;
+  volatile unsigned int		*base;
    
   /*
    * Statistics
@@ -174,27 +231,26 @@ static struct dec21140_softc dec21140_softc[NDECDRIVER];
 static rtems_isr
 dec21140Enet_interrupt_handler (rtems_vector_number v)
 {
-  unsigned int *tbase;
-  unsigned long status;
+    volatile unsigned32 *tbase;
+    unsigned32 status;
+    struct dec21140_softc *sc;
 
-  unsigned int sc;
-  
-  tbase = dec21140_softc[0].base ;
+    sc = &dec21140_softc[0];
+    tbase = (unsigned32 *)(sc->base) ;
 
-  /*
-   * Read status
-   */
-  *(tbase+memCSR7) = NO_IT;
-  status = *(tbase+memCSR5);
-  *(tbase+memCSR5) = CLEAR_IT;
+    /*
+     * Read status
+     */
+    status = ld_le32(tbase+memCSR5);
+    st_le32((tbase+memCSR5), status); /* clear the bits we've read */
 
-  /*
-   * Frame received?
-   */
-  if (status & 0x00000040){
-    dec21140_softc[0].rxInterrupts++;
-    sc = rtems_event_send (dec21140_softc[0].rxDaemonTid, INTERRUPT_EVENT);
-  }
+    /*
+     * Frame received?
+     */
+    if (status & 0x000000c0){
+      sc->rxInterrupts++;
+      rtems_event_send (sc->rxDaemonTid, INTERRUPT_EVENT);
+    }
 }
 
 static void nopOn(const rtems_irq_connect_data* notUsed)
@@ -210,93 +266,6 @@ static int dec21140IsOn(const rtems_irq_connect_data* irq)
   return BSP_irq_enabled_at_i8259s (irq->name);
 }
 
-/*
- * Read and write the MII registers using software-generated serial
- * MDIO protocol.
- */
-#define MDIO_SHIFT_CLK		0x10000
-#define MDIO_DATA_WRITE0 	0x00000
-#define MDIO_DATA_WRITE1 	0x20000
-#define MDIO_ENB		0x00000	 
-#define MDIO_ENB_IN		0x40000
-#define MDIO_DATA_READ		0x80000
-
-static int mdio_read(unsigned int *ioaddr, int phy_id, int location)
-{
-	int i, i3;
-	int read_cmd = (0xf6 << 10) | (phy_id << 5) | location;
-	unsigned short retval = 0;
-
-	/* Establish sync by sending at least 32 logic ones. */ 
-	for (i = 32; i >= 0; i--) {
-		*ioaddr = MDIO_ENB | MDIO_DATA_WRITE1;
-		for(i3=0; i3<1000; i3++);
-		*ioaddr =  MDIO_ENB | MDIO_DATA_WRITE1 | MDIO_SHIFT_CLK;
-		for(i3=0; i3<1000; i3++);
-	}
-	/* Shift the read command bits out. */
-	for (i = 17; i >= 0; i--) {
-		int dataval = (read_cmd & (1 << i)) ? MDIO_DATA_WRITE1 : 0;
-		*ioaddr =  dataval;
-		for(i3=0; i3<1000; i3++);
-		*ioaddr =  dataval | MDIO_SHIFT_CLK;
-		for(i3=0; i3<1000; i3++);
-		*ioaddr =  dataval;
-		for(i3=0; i3<1000; i3++);
-	}
-	*ioaddr =  MDIO_ENB_IN | MDIO_SHIFT_CLK;
-	for(i3=0; i3<1000; i3++);
-	*ioaddr =  MDIO_ENB_IN;
-
-	for (i = 16; i > 0; i--) {
-		*ioaddr =  MDIO_ENB_IN | MDIO_SHIFT_CLK;
-		for(i3=0; i3<1000; i3++);
-		retval = (retval << 1) | ((*ioaddr & MDIO_DATA_READ) ? 1 : 0);
-		*ioaddr =  MDIO_ENB_IN;
-		for(i3=0; i3<1000; i3++);
-	}
-	/* Clear out extra bits. */
-	for (i = 16; i > 0; i--) {
-		*ioaddr =  MDIO_ENB_IN | MDIO_SHIFT_CLK;
-		for(i3=0; i3<1000; i3++);
-		*ioaddr =  MDIO_ENB_IN;
-		for(i3=0; i3<1000; i3++);
-	}
-	return retval;
-}
-
-static int mdio_write(unsigned int *ioaddr, int phy_id, int location, int value)
-{
-	int i, i3;
-	int cmd = (0x5002 << 16) | (phy_id << 23) | (location << 18) | value;
-
-	/* Establish sync by sending at least 32 logic ones. */ 
-	for (i = 32; i >= 0; i--) {
-		*ioaddr =  MDIO_ENB | MDIO_DATA_WRITE1;
-		for(i3=0; i3<1000; i3++);
-		*ioaddr = MDIO_ENB | MDIO_DATA_WRITE1 | MDIO_SHIFT_CLK;
-		for(i3=0; i3<1000; i3++);
-	}
-	/* Shift the read command bits out. */
-	for (i = 31; i >= 0; i--) {
-		int dataval = (cmd & (1 << i)) ? MDIO_DATA_WRITE1 : 0;
-		*ioaddr =  dataval;
-		for(i3=0; i3<1000; i3++);
-		*ioaddr =  dataval | MDIO_SHIFT_CLK;
-		for(i3=0; i3<1000; i3++);
-	}
-
-	/* Clear out extra bits. */
-	for (i = 2; i > 0; i--) {
-		*ioaddr =  MDIO_ENB_IN;
-		for(i3=0; i3<1000; i3++);
-		*ioaddr = MDIO_ENB_IN | MDIO_SHIFT_CLK;
-		for(i3=0; i3<1000; i3++);
-	}
-	return 0;
-
-
-}
 
 /*
  * This routine reads a word (16 bits) from the serial EEPROM.
@@ -315,38 +284,38 @@ static int mdio_write(unsigned int *ioaddr, int phy_id, int location, int value)
 #define EE_READ_CMD	(6 << 6)
 #define EE_ERASE_CMD	(7 << 6)
 
-static int eeget16(unsigned int *ioaddr, int location)
+static int eeget16(volatile unsigned int *ioaddr, int location)
 {
-	int i, i3;
+	int i;
 	unsigned short retval = 0;
 	int read_cmd = location | EE_READ_CMD;
 	
-	*ioaddr = EE_ENB & ~EE_CS;
-	*ioaddr = EE_ENB;
+	st_le32(ioaddr, EE_ENB & ~EE_CS);
+	st_le32(ioaddr, EE_ENB);
 	
 	/* Shift the read command bits out. */
 	for (i = 10; i >= 0; i--) {
 		short dataval = (read_cmd & (1 << i)) ? EE_DATA_WRITE : 0;
-		*ioaddr = EE_ENB | dataval;
-		for (i3=0; i3<1000; i3++) ;
-		*ioaddr = EE_ENB | dataval | EE_SHIFT_CLK;
-		for (i3=0; i3<1000; i3++) ;
-		*ioaddr = EE_ENB | dataval; /* Finish EEPROM a clock tick. */
-		for (i3=0; i3<1000; i3++) ;
+		st_le32(ioaddr, EE_ENB | dataval);
+		delay_in_bus_cycles(200);
+		st_le32(ioaddr, EE_ENB | dataval | EE_SHIFT_CLK);
+		delay_in_bus_cycles(200);
+		st_le32(ioaddr, EE_ENB | dataval); /* Finish EEPROM a clock tick. */
+		delay_in_bus_cycles(200);
 	}
-	*ioaddr = EE_ENB;
+	st_le32(ioaddr, EE_ENB);
 	
 	for (i = 16; i > 0; i--) {
-		*ioaddr = EE_ENB | EE_SHIFT_CLK;
-		for (i3=0; i3<1000; i3++) ;
-		retval = (retval << 1) | ((*ioaddr & EE_DATA_READ) ? 1 : 0);
-		*ioaddr = EE_ENB;
-		for (i3=0; i3<1000; i3++) ;
+		st_le32(ioaddr, EE_ENB | EE_SHIFT_CLK);
+		delay_in_bus_cycles(200);
+		retval = (retval << 1) | ((ld_le32(ioaddr) & EE_DATA_READ) ? 1 : 0);
+		st_le32(ioaddr, EE_ENB);
+		delay_in_bus_cycles(200);
 	}
 
 	/* Terminate the EEPROM access. */
-	*ioaddr = EE_ENB & ~EE_CS;
-	return retval;
+	st_le32(ioaddr, EE_ENB & ~EE_CS);
+	return ( ((retval<<8)&0xff00) | ((retval>>8)&0xff) );
 }
 
 /*
@@ -356,96 +325,110 @@ static void
 dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 {
   rtems_status_code st;
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
   union {char c[64]; unsigned short s[32];} rombuf;
-  int i, i2, i3;
-  char *cp, direction, *setup_frm, *eaddrs; 
-  unsigned long csr12_val, mii_reg0;
-  unsigned char *buffer;
-  struct MD *rmd;
+  int i;
+  volatile unsigned char *cp, *setup_frm, *eaddrs; 
+  volatile unsigned char *buffer;
+  volatile struct MD *rmd;
 
-  
   tbase = sc->base;
 
   /*
    * WARNING : First write in CSR6
    *           Then Reset the chip ( 1 in CSR0)
    */
-
-  *(tbase+memCSR6) = CSR6_INIT;  
-  *(tbase+memCSR0) = RESET_CHIP;  
-  for(i3=0; i3<1000; i3++);
+  st_le32( (tbase+memCSR6), CSR6_INIT);  
+  st_le32( (tbase+memCSR0), RESET_CHIP);  
+  delay_in_bus_cycles(200);
 
   /*
    * Init CSR0
    */
-  *(tbase+memCSR0) = CSR0_MODE;  
+  st_le32( (tbase+memCSR0), CSR0_MODE);  
 
-  csr12_val = *(tbase+memCSR8);
-  
-  for (i=0; i<32; i++)
+  /*  csr12_val = ld_le32( (tbase+memCSR8) );*/
+
+  for (i=0; i<32; i++){
     rombuf.s[i] = eeget16(tbase+memCSR9, i);
+  }
   memcpy (sc->arpcom.ac_enaddr, rombuf.c+20, ETHER_ADDR_LEN);
 
-
-  mii_reg0 = mdio_read(tbase+memCSR9, 0, 0); 
-  mdio_write(tbase+memCSR9, 0, 0, mii_reg0 | 0x1000);
- 
 #ifdef DEC_DEBUG
   printk("DC21140 %x:%x:%x:%x:%x:%x IRQ %d IO %x M %x .........\n",
 	 sc->arpcom.ac_enaddr[0], sc->arpcom.ac_enaddr[1],
 	 sc->arpcom.ac_enaddr[2], sc->arpcom.ac_enaddr[3],
 	 sc->arpcom.ac_enaddr[4], sc->arpcom.ac_enaddr[5],
-	 sc->irqInfo.name, sc->port, sc->base);
+	 sc->irqInfo.name, sc->port, (unsigned) sc->base);
 #endif
   
   /*
    * Init RX ring
    */
-  sc->rxBdCount = 0;
-  
-  cp = (char *)malloc((NRXBUFS+NTXBUFS)*(sizeof(struct MD)+ RBUF_SIZE) + PG_SIZE);
+  cp = (volatile unsigned char *)malloc(((NRXBUFS+NTXBUFS)*sizeof(struct MD))
+					+ (NTXBUFS*RBUF_SIZE)
+					+ CPU_CACHE_ALIGNMENT_FOR_BUFFER);
   sc->bufferBase = cp;
-  cp += (PG_SIZE - (int)cp) & MASK_OFFSET;
+  cp += (CPU_CACHE_ALIGNMENT_FOR_BUFFER - (int)cp)
+         & (CPU_CACHE_ALIGNMENT_FOR_BUFFER - 1);
+#if defined(__i386)
 #ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA 
   if (_CPU_is_paging_enabled())
     _CPU_change_memory_mapping_attribute
                    (NULL, cp,
-		    (NRXBUFS+NTXBUFS)*(sizeof(struct MD)+ RBUF_SIZE),
+		    ((NRXBUFS+NTXBUFS)*sizeof(struct MD))
+		    + (NTXBUFS*RBUF_SIZE),
 		    PTE_CACHE_DISABLE | PTE_WRITABLE);
 #endif
-  rmd = (struct MD*)cp;
+#endif
+  rmd = (volatile struct MD*)cp;
   sc->MDbase = rmd;
   buffer = cp + ((NRXBUFS+NTXBUFS)*sizeof(struct MD));
-  
-  *(tbase+memCSR3) = (long)(sc->MDbase);
+  st_le32( (tbase+memCSR3), (long)(phys_to_bus((long)(sc->MDbase))));
   for (i=0 ; i<NRXBUFS; i++){
-    rmd->buf2 = 0;
-    rmd->buf1 = (unsigned long)(buffer + (i*RBUF_SIZE));  
-    if (i == NRXBUFS-1)
-      rmd->counts = 0xfec00000 | (RBUF_SIZE);
-    else
-      rmd->counts = 0xfcc00000 | (RBUF_SIZE);
+    struct mbuf *m;
+    
+    /* allocate an mbuf for each receive descriptor */
+    MGETHDR (m, M_WAIT, MT_DATA);
+    MCLGET (m, M_WAIT);
+    m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
+    rmd->m = m;
+
+    rmd->buf2   = phys_to_bus(rmd+1);
+    rmd->buf1   = phys_to_bus(mtod(m, void *));  
+    rmd->counts = 0xfdc00000 | (RBUF_SIZE);
     rmd->status = 0x80000000;
+    rmd->next   = rmd + 1;
     rmd++;
   }
+  /*
+   * mark last RX buffer.
+   */
+  sc->MDbase [NRXBUFS-1].counts = 0xfec00000 | (RBUF_SIZE);
+  sc->MDbase [NRXBUFS-1].next   = sc->MDbase;
 
   /*
    * Init TX ring
    */
-  sc->txBdCount = 0;
-  *(tbase+memCSR4) = (long)(rmd);
-  rmd->buf2 = 0;
-  rmd->buf1 = (unsigned long)(buffer + (NRXBUFS*RBUF_SIZE));
-  rmd->counts = 0x62000000;
-  rmd->status = 0x0;
+  st_le32( (tbase+memCSR4), (long)(phys_to_bus((long)(rmd))) );
+  for (i=0 ; i<NTXBUFS; i++){
+    (rmd+i)->buf2   = phys_to_bus(rmd+i+1);
+    (rmd+i)->buf1   = phys_to_bus(buffer + (i*RBUF_SIZE));
+    (rmd+i)->counts = 0x01000000;
+    (rmd+i)->status = 0x0;
+    (rmd+i)->next   = rmd+i+1;
+    (rmd+i)->m      = 0;
+  } 
+
+  /*
+   * mark last TX buffer.
+   */
+  (rmd+NTXBUFS-1)->buf2   = phys_to_bus(rmd);
+  (rmd+NTXBUFS-1)->next   = rmd;
   
   /*
    * Set up interrupts
    */
-  *(tbase+memCSR5) = IT_SETUP;
-  *(tbase+memCSR7) = IT_SETUP; 
-
   sc->irqInfo.hdl = (rtems_irq_hdl)dec21140Enet_interrupt_handler;
   sc->irqInfo.on  = nopOn;
   sc->irqInfo.off = nopOn;
@@ -455,72 +438,61 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
     rtems_panic ("Can't attach DEC21140 interrupt handler for irq %d\n",
 		  sc->irqInfo.name);
 
-  /*
-   * Start TX for setup frame
-   */
-  *(tbase+memCSR6) = CSR6_INIT | CSR6_TX;
+  st_le32( (tbase+memCSR7), NO_IT); 
 
   /*
    * Build setup frame
    */
-  setup_frm = (char *)(rmd->buf1);
+  setup_frm = (volatile unsigned char *)(bus_to_phys(rmd->buf1));
   eaddrs = (char *)(sc->arpcom.ac_enaddr);
   /* Fill the buffer with our physical address. */
   for (i = 1; i < 16; i++) {
 	*setup_frm++ = eaddrs[0];
 	*setup_frm++ = eaddrs[1];
-	setup_frm += 2;
+	*setup_frm++ = eaddrs[0];
+	*setup_frm++ = eaddrs[1];
 	*setup_frm++ = eaddrs[2];
 	*setup_frm++ = eaddrs[3];
-	setup_frm += 2;
+	*setup_frm++ = eaddrs[2];
+	*setup_frm++ = eaddrs[3];
 	*setup_frm++ = eaddrs[4];
 	*setup_frm++ = eaddrs[5];
-	setup_frm += 2;
+	*setup_frm++ = eaddrs[4];
+	*setup_frm++ = eaddrs[5];
   }
   /* Add the broadcast address when doing perfect filtering */
-  memset(setup_frm, 0xff, 12);
-  rmd->counts = 0x0a000000 | 192 ;
+  memset((void*) setup_frm, 0xff, 12);
+  rmd->counts = 0x09000000 | 192 ;
   rmd->status = 0x80000000;
-  *(tbase+memCSR1) = 1;
+  st_le32( (tbase+memCSR6), CSR6_INIT | CSR6_TX);
+  st_le32( (tbase+memCSR1), 1);
   while (rmd->status != 0x7fffffff);
-
+  rmd->counts = 0x01000000;    
+  sc->TxMD = rmd+1;
+  
   /*
    * Enable RX and TX
    */
-  *(tbase+memCSR6) = CSR6_INIT | CSR6_TXRX;
+  st_le32( (tbase+memCSR5), IT_SETUP);
+  st_le32( (tbase+memCSR7), IT_SETUP); 
+  st_le32( (unsigned int*)(tbase+memCSR6), CSR6_INIT | CSR6_TXRX);
   
-  /*
-   * Set up PHY
-   */
-  
-  i = rombuf.c[27];
-  i+=2;
-  direction = rombuf.c[i];
-  i +=4;
-  *(tbase+memCSR12) = direction | 0x100;
-  for (i2 = 0; i2 < rombuf.c[(i+2) + rombuf.c[i+1]]; i2++){
-    *(tbase + memCSR12) = rombuf.c[(i+3) + rombuf.c[i+1] + i2];
-  }
-  for (i2 = 0; i2 < rombuf.c[i+1]; i2++){
-    *(tbase + memCSR12) = rombuf.c[(i+2) + i2];
-  }
 }
 
 static void
 dec21140_rxDaemon (void *arg)
 {
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
   struct ether_header *eh;
   struct dec21140_softc *dp = (struct dec21140_softc *)&dec21140_softc[0];
   struct ifnet *ifp = &dp->arpcom.ac_if;
   struct mbuf *m;
-  struct MD *rmd;
+  volatile struct MD *rmd;
   unsigned int len;
-  char *temp;
   rtems_event_set events;
-  int nbMD;
   
   tbase = dec21140_softc[0].base ;
+  rmd = dec21140_softc[0].MDbase;
 
   for (;;){
 
@@ -528,27 +500,27 @@ dec21140_rxDaemon (void *arg)
 				RTEMS_WAIT|RTEMS_EVENT_ANY,
 				RTEMS_NO_TIMEOUT,
 				&events);
-    rmd = dec21140_softc[0].MDbase;
-    nbMD = 0;
     
-    while (nbMD < NRXBUFS){
-      if ( (rmd->status & 0x80000000) == 0){
-	len = (rmd->status >> 16) & 0x7ff;
-	MGETHDR (m, M_WAIT, MT_DATA);
-	MCLGET (m, M_WAIT);
-	m->m_pkthdr.rcvif = ifp;
-	temp = m->m_data;
-	m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
-	memcpy(temp, (char *)rmd->buf1, len);
-	rmd->status = 0x80000000;
-	eh = mtod (m, struct ether_header *);
-	m->m_data += sizeof(struct ether_header);
-	ether_input (ifp, eh, m);
-      }
-      rmd++;
-      nbMD++;
+    while((rmd->status & 0x80000000) == 0){
+      /* pass on the packet in the mbuf */
+      len = (rmd->status >> 16) & 0x7ff;
+      m = (struct mbuf *)(rmd->m);
+      m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
+      eh = mtod (m, struct ether_header *);
+      m->m_data += sizeof(struct ether_header);
+      ether_input (ifp, eh, m);
+       
+      /* get a new mbuf for the 21140 */
+      MGETHDR (m, M_WAIT, MT_DATA);
+      MCLGET (m, M_WAIT);
+      m->m_pkthdr.rcvif = ifp;
+      rmd->m = m;
+      rmd->buf1 = phys_to_bus(mtod(m, void *));  
+
+      rmd->status = 0x80000000;
+      
+      rmd=rmd->next;
     }
-    *(tbase+memCSR7) = IT_SETUP; 
   }	
 }
 
@@ -557,37 +529,41 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
   struct dec21140_softc *dp = ifp->if_softc;
   volatile struct MD *tmd;
-  unsigned char *temp;
+  volatile unsigned char *temp;
   struct mbuf *n;
   unsigned int len;
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
 
   tbase = dp->base;
-
   /*
    * Waiting for Transmitter ready
    */	
-  tmd = dec21140_softc[0].MDbase + NRXBUFS;
-  while ( (tmd->status & 0x80000000) != 0 );
-  len = 0;
+  tmd = dec21140_softc[0].TxMD;
   n = m;
-  temp = (char *)(tmd->buf1);
+
+  while ((tmd->status & 0x80000000) != 0){
+    tmd=tmd->next;
+    }
+
+  len = 0;
+  temp = (volatile unsigned char *)(bus_to_phys(tmd->buf1));
   
   for (;;){
     len += m->m_len;
-    memcpy(temp, (char *)m->m_data, m->m_len);
+    memcpy((void*) temp, (char *)m->m_data, m->m_len);
     temp += m->m_len ;
     if ((m = m->m_next) == NULL)
       break;
   }
 
   if (len < ET_MINLEN) len = ET_MINLEN;
-  tmd->counts = 0xe2000000 | len;
+  tmd->counts =  0xe1000000 | (len & 0x7ff);  
   tmd->status = 0x80000000;
 
-  *(tbase+memCSR1) = 0x1;
+  st_le32( (tbase+memCSR1), 0x1);
 
   m_freem(n);
+  dec21140_softc[0].TxMD = tmd->next;
 }
 
 /*
@@ -672,7 +648,7 @@ dec21140_init (void *arg)
 static void
 dec21140_stop (struct dec21140_softc *sc)
 {
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
   struct ifnet *ifp = &sc->arpcom.ac_if;
 
   ifp->if_flags &= ~IFF_RUNNING;
@@ -681,9 +657,9 @@ dec21140_stop (struct dec21140_softc *sc)
    * Stop the transmitter
    */
   tbase=dec21140_softc[0].base ;
-  *(tbase+memCSR7) = NO_IT;
-  *(tbase+memCSR6) = CSR6_INIT;
-  free(sc->bufferBase);
+  st_le32( (tbase+memCSR7), NO_IT);
+  st_le32( (tbase+memCSR6), CSR6_INIT);
+  free((void*)sc->bufferBase);
 }
 
 
@@ -759,6 +735,7 @@ dec21140_ioctl (struct ifnet *ifp, int command, caddr_t data)
 		error = EINVAL;
 		break;
 	}
+
 	return error;
 }
 
@@ -772,14 +749,16 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	struct ifnet *ifp;
 	int mtu;
 	int i;
+	
+	/*
+	 * First, find a DEC board
+	 */
+#if defined(__i386)
 	int signature;
 	int value;
 	char interrupt;
 	int diag;
-	
-	/*
-	 * Initialise PCI module
-	 */
+
 	if (pcib_init() == PCIB_ERR_NOTPRESENT)
 	  rtems_panic("PCI BIOS not found !!");
 	
@@ -794,7 +773,37 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	else {
 	  printk("DEC PCI Device found\n");
 	}
+#endif	
+#if defined(__PPC)
+	unsigned char ucSlotNumber, ucFnNumber;
+	unsigned int  ulDeviceID, lvalue, tmp;	
+	unsigned char cvalue;
+
+	for(ucSlotNumber=0;ucSlotNumber<PCI_MAX_DEVICES;ucSlotNumber++) {
+	  for(ucFnNumber=0;ucFnNumber<PCI_MAX_FUNCTIONS;ucFnNumber++) {
+	    (void)pci_read_config_dword(0,
+					ucSlotNumber,
+					ucFnNumber,
+					PCI_VENDOR_ID,
+					&ulDeviceID);
+	    if(ulDeviceID==PCI_INVALID_VENDORDEVICEID) {
+	      /*
+	       * This slot is empty
+	       */
+	      continue;
+	    }
+	    if (ulDeviceID == ((PCI_DEVICE_ID_DEC_TULIP_FAST<<16) + PCI_VENDOR_ID_DEC))
+	      break;
+	  }
+	  if (ulDeviceID == ((PCI_DEVICE_ID_DEC_TULIP_FAST<<16) + PCI_VENDOR_ID_DEC)){
+	    printk("DEC Adapter found !!\n");
+	    break;
+	  }
+	}
 	
+	if(ulDeviceID==PCI_INVALID_VENDORDEVICEID)
+	  rtems_panic("DEC PCI board not found !!\n");
+#endif  
 	/*
 	 * Find a free driver
 	 */
@@ -812,7 +821,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	/*
 	 * Process options
 	 */
-
+#if defined(__i386)
 	pcib_conf_read32(signature, 16, &value);
 	sc->port = value & ~IO_MASK;
         
@@ -827,7 +836,34 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	
 	pcib_conf_read8(signature, 60, &interrupt);
 	  sc->irqInfo.name = (rtems_irq_symbolic_name)interrupt;
-	
+#endif
+#if defined(__PPC)
+	(void)pci_read_config_dword(0,
+				    ucSlotNumber,
+				    ucFnNumber,
+				    PCI_BASE_ADDRESS_0,
+				    &lvalue);
+
+	sc->port = lvalue & (unsigned int)(~IO_MASK);
+        
+	(void)pci_read_config_dword(0,
+				    ucSlotNumber,
+				    ucFnNumber,
+				    PCI_BASE_ADDRESS_1  ,
+				    &lvalue);
+
+
+	tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK)) 
+	  + (unsigned int)PREP_ISA_MEM_BASE;
+	sc->base = (unsigned int *)(tmp);
+
+	(void)pci_read_config_byte(0,
+				   ucSlotNumber,
+				   ucFnNumber,
+				   PCI_INTERRUPT_LINE,
+				   &cvalue);
+	sc->irqInfo.name = (rtems_irq_symbolic_name)cvalue;
+#endif
  	if (config->hardware_address) {
 	  memcpy (sc->arpcom.ac_enaddr, config->hardware_address,
 		  ETHER_ADDR_LEN);
@@ -865,14 +901,4 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 
 	return 1;
 };
-
-
-
-
-
-
-
-
-
-
 

@@ -1,0 +1,117 @@
+#
+#  $Id$
+#
+
+This TULIP driver can be used on BSPs that support PCI bus.
+
+It can handle any DEC21140 based Ethernet controller. 
+  
+It works on big or little endian target.
+
+It has been tested with powerpc/mcp750 BSP (OnBoard Ethernet
+controller) and i386/pc386 BSP (D-Link DFE-500TX Ethernet board).
+
+
+*****************************************************************
+********                                          ***************
+******** tests with ttcp benchmark for DEC driver ***************
+********               optimization               ***************
+********                                          ***************
+*****************************************************************
+
+
+LINUX  -> LINUX-ix86 
+
+Transmitter :
+
+ttcp-t: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp -> genesis
+ttcp-t: 16777216 bytes in 1.87 real seconds = 8775.25 KB/sec +++
+ttcp-t: 2048 I/O calls, msec/call = 0.93, calls/sec = 1096.91
+ttcp-t: 0.0user 0.9sys 0:01real 51% 0i+0d 0maxrss 0+2pf 0+0csw
+
+Receiver :
+
+ttcp-r: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp
+ttcp-r: 16777216 bytes in 1.88 real seconds = 8706.53 KB/sec +++
+ttcp-r: 10802 I/O calls, msec/call = 0.18, calls/sec = 5740.23
+ttcp-r: 0.0user 0.2sys 0:01real 13% 0i+0d 0maxrss 0+2pf 0+0csw
+
+==============================================================
+==============================================================
+==============================================================
+
+LINUX  -> RTEMS-ix86 with tulip driver from pc386 bsp
+
+Transmitter :
+
+ttcp-t: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp -> neil-young-100
+ttcp-t: 16777216 bytes in 1.98 real seconds = 8294.76 KB/sec +++
+ttcp-t: 2048 I/O calls, msec/call = 0.99, calls/sec = 1036.85
+ttcp-t: 0.0user 0.1sys 0:01real 9% 0i+0d 0maxrss 0+2pf 0+0csw
+
+Receiver :
+
+ttcp-r: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp
+ttcp-r: 16777216 bytes in 2.03 real seconds = 8065.14 KB/sec +++
+ttcp-r: 3088 I/O calls, msec/call = 0.67, calls/sec = 1520.09
+ttcp-r: 0.0user 2.0sys 0:02real 100% 0i+0d 0maxrss 0+0pf 0+0csw
+
+==============================================================
+==============================================================
+==============================================================
+
+RTEMS-ix86 with tulip driver from pc386 bsp -> LINUX 
+
+Transmitter :
+
+ttcp-t: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp  -> 194.2.81.126
+ttcp-t: 16777216 bytes in 2.76 real seconds = 5938.77 KB/sec +++
+ttcp-t: 2048 I/O calls, msec/call = 1.38, calls/sec = 742.35
+ttcp-t: 0.0user 2.5sys 0:02real 100% 0i+0d 0maxrss 0+0pf 0+0csw
+
+Receiver :
+
+ttcp-r: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp
+ttcp-r: 16777216 bytes in 2.75 real seconds = 5948.53 KB/sec +++
+ttcp-r: 11349 I/O calls, msec/call = 0.25, calls/sec = 4120.48
+ttcp-r: 0.0user 0.1sys 0:02real 6% 0i+0d 0maxrss 0+2pf 0+0csw
+
+==============================================================
+==============================================================
+==============================================================
+
+LINUX  -> RTEMS-ix86 with optimized tulip driver
+
+Transmitter :
+
+ttcp-t: buflen=8192, nbuf=2048, align=16384/0, port=5001 tcp -> neil-young-100
+ttcp-t: 16777216 bytes in 1.73 real seconds = 9470.13 KB/sec +++
+ttcp-t: 2048 I/O calls, msec/call = 0.87, calls/sec = 1183.77
+ttcp-t: 0.0user 0.1sys 0:01real 6% 0i+0d 0maxrss 0+2pf 0+0csw
+
+Receiver :
+
+ttcp-r: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp
+ttcp-r: 16777216 bytes in 1.76 real seconds = 9315.33 KB/sec +++
+ttcp-r: 4558 I/O calls, msec/call = 0.40, calls/sec = 2591.51
+ttcp-r: 0.0user 1.7sys 0:01real 100% 0i+0d 0maxrss 0+0pf 0+0csw
+
+==============================================================
+==============================================================
+==============================================================
+
+RTEMS-ix86 with optimized tulip driver -> LINUX   
+
+Transmitter :
+
+ttcp-t: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp  -> 194.2.81.126
+ttcp-t: 16777216 bytes in 2.09 real seconds = 7847.80 KB/sec +++
+ttcp-t: 2048 I/O calls, msec/call = 1.04, calls/sec = 980.98
+ttcp-t: 0.0user 2.0sys 0:02real 100% 0i+0d 0maxrss 0+0pf 0+0csw
+
+Receiver :
+
+ttcp-r: buflen=8192, nbuf=2048, align=16384/0, port=5001  tcp
+ttcp-r: 16777216 bytes in 2.08 real seconds = 7874.23 KB/sec +++
+ttcp-r: 11404 I/O calls, msec/call = 0.19, calls/sec = 5480.82
+ttcp-r: 0.0user 0.1sys 0:02real 8% 0i+0d 0maxrss 0+2pf 0+0csw

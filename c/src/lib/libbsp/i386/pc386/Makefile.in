@@ -19,7 +19,8 @@ include $(RTEMS_ROOT)/make/directory.cfg
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
 # We only build the Network library if HAS_NETWORKING was defined
-NETWORK_yes_V = dec21140 ne2000 wd8003 3c509
+# dec21140 is supported via libchip
+NETWORK_yes_V = ne2000 wd8003 3c509
 NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 # wrapup is the one that actually builds and installs the library
