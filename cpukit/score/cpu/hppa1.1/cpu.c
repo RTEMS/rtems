@@ -33,8 +33,8 @@ void hppa_external_interrupt(unsigned32, CPU_Interrupt_frame *);
  * So we use our own prototype instead of rtems_isr_entry
  */
 
-typedef rtems_isr ( *hppa_rtems_isr_entry )(
-    rtems_vector_number,
+typedef void ( *hppa_rtems_isr_entry )(
+    ISR_Vector_number,
     CPU_Interrupt_frame *
  );
 
@@ -193,7 +193,7 @@ void _CPU_ISR_install_vector(
 void
 hppa_external_interrupt_initialize(void)
 {
-    rtems_isr_entry ignore;
+    hppa_rtems_isr_entry ignore;
 
     /* mark them all unused */
 

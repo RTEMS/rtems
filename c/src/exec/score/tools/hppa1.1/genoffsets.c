@@ -24,12 +24,14 @@
 
 #include <rtems/system.h>
 
+void print_information( void );
+
 int main(
   int argc,
   char **argv
 )
 {
-  unsigned int size;
+  unsigned int size = 0;
 
   /*
    * Print the file header
@@ -59,10 +61,6 @@ printf(
   "\n"
 );
 
-/*
- *  Offsets of elements in the Context_control structure.
- */
-
 #define PRINT_IT( STRING, TYPE, FIELD ) \
   printf( "#define\t%s\t0x%p\t\t/* %d */\n", \
           STRING, \
@@ -83,6 +81,12 @@ printf(
     " */\n"     \
     "\n"        \
   );
+
+#if defined(hpux) && defined(__hppa__)
+
+/*
+ *  Offsets of elements in the Context_control structure.
+ */
 
   PRINT_COMMENT("Context_Control information");
 
@@ -172,6 +176,12 @@ printf(
 
   printf( "#define\tCPU_INTERRUPT_FRAME_SIZE\t%d\t\t/* 0x%x */\n", size, size );
 
+#else
+
+  print_information();
+
+#endif
+
 #undef PRINT_IT
 #undef PRINT_SIZE
 #undef PRINT_COMMENT
@@ -188,4 +198,118 @@ printf(
   );
 
   return 0;
+}
+
+void print_information( void )
+{
+
+#define PRINT_IT( STRING, NUMBER ) \
+  printf( "#define\t%s\t0x%x\t\t/* %d */\n", \
+          STRING, \
+          NUMBER, \
+          NUMBER );
+
+#define PRINT_SIZE( STRING, NUMBER ) \
+  printf( "#define\t%s\t0x%x\t\t/* %d */\n", \
+          STRING, \
+          NUMBER, \
+          NUMBER );
+
+#define PRINT_COMMENT( STRING ) \
+  printf(       \
+    "\n"        \
+    "/*\n"      \
+    " * " STRING "\n" \
+    " */\n"     \
+    "\n"        \
+  );
+
+/*
+ *  Offsets of elements in the Context_control structure.
+ */
+
+  PRINT_COMMENT("Context_Control information");
+
+  PRINT_IT( "FLAGS_OFFSET",  0x00 );
+  PRINT_IT( "R1_OFFSET",     0x04 );
+  PRINT_IT( "R2_OFFSET",     0x08 );
+  PRINT_IT( "R3_OFFSET",     0x0c );
+  PRINT_IT( "R4_OFFSET",     0x00 );
+  PRINT_IT( "R5_OFFSET",     0x14 );
+  PRINT_IT( "R6_OFFSET",     0x18 );
+  PRINT_IT( "R7_OFFSET",     0x1c );
+  PRINT_IT( "R8_OFFSET",     0x20 );
+  PRINT_IT( "R9_OFFSET",     0x24 );
+  PRINT_IT( "R10_OFFSET",    0x28 );
+  PRINT_IT( "R11_OFFSET",    0x2c );
+  PRINT_IT( "R12_OFFSET",    0x30 );
+  PRINT_IT( "R13_OFFSET",    0x34 );
+  PRINT_IT( "R14_OFFSET",    0x38 );
+  PRINT_IT( "R15_OFFSET",    0x3c );
+  PRINT_IT( "R16_OFFSET",    0x40 );
+  PRINT_IT( "R17_OFFSET",    0x44 );
+  PRINT_IT( "R18_OFFSET",    0x48 );
+  PRINT_IT( "R19_OFFSET",    0x4c );
+  PRINT_IT( "R20_OFFSET",    0x50 );
+  PRINT_IT( "R21_OFFSET",    0x54 );
+  PRINT_IT( "R22_OFFSET",    0x58 );
+  PRINT_IT( "R23_OFFSET",    0x5c );
+  PRINT_IT( "R24_OFFSET",    0x60 );
+  PRINT_IT( "R25_OFFSET",    0x64 );
+  PRINT_IT( "R26_OFFSET",    0x68 );
+  PRINT_IT( "R27_OFFSET",    0x6c );
+  PRINT_IT( "R28_OFFSET",    0x70 );
+  PRINT_IT( "R29_OFFSET",    0x74 );
+  PRINT_IT( "R30_OFFSET",    0x78 );
+  PRINT_IT( "R31_OFFSET",    0x7c );
+
+  /*
+   * And common aliases for the above
+   */
+
+  PRINT_COMMENT("Common aliases for above");
+
+  PRINT_IT( "RP_OFFSET",   0x08 );
+  PRINT_IT( "ARG3_OFFSET", 0x5c );
+  PRINT_IT( "ARG2_OFFSET", 0x60 );
+  PRINT_IT( "ARG1_OFFSET", 0x64 );
+  PRINT_IT( "ARG0_OFFSET", 0x68 );
+  PRINT_IT( "SP_OFFSET",   0x78 );
+  PRINT_IT( "DP_OFFSET",   0x6c );
+  PRINT_IT( "RET0_OFFSET", 0x74 );
+  PRINT_IT( "RET1_OFFSET", 0x74 );
+
+  PRINT_SIZE("CPU_CONTEXT_SIZE", 168 );
+
+  PRINT_COMMENT("Context_Control_fp information");
+
+  PRINT_SIZE("CPU_CONTEXT_FP_SIZE", 256);
+
+  /*
+   *  And the control registers
+   */
+
+  PRINT_COMMENT("Control register portion of context");
+
+  PRINT_IT( "SAR_OFFSET",        0x80 );
+  PRINT_IT( "IPSW_OFFSET",       0x84 );
+  PRINT_IT( "IIR_OFFSET",        0x88 );
+  PRINT_IT( "IOR_OFFSET",        0x8c );
+  PRINT_IT( "ISR_OFFSET",        0x90 );
+  PRINT_IT( "PCOQFRONT_OFFSET",  0x94 );
+  PRINT_IT( "PCOQBACK_OFFSET",   0x98 );
+  PRINT_IT( "PCSQFRONT_OFFSET",  0x9c );
+  PRINT_IT( "PCSQBACK_OFFSET",   0xa0 );
+  PRINT_IT( "ITIMER_OFFSET",     0xa4 );
+
+  /*
+   *  Full interrupt frame (integer + float)
+   */
+
+  PRINT_COMMENT("Interrupt frame information");
+
+  PRINT_IT( "INTEGER_CONTEXT_OFFSET",   0x00 );
+  PRINT_IT( "FP_CONTEXT_OFFSET",        0xa8 );
+  PRINT_SIZE( "CPU_INTERRUPT_FRAME_SIZE", 448 );
+
 }

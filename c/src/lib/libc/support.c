@@ -25,7 +25,8 @@ void MY_task_set_note(
  
   api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
 
-  api->Notepads[ notepad ] = note;
+  if ( api )
+    api->Notepads[ notepad ] = note;
 }
 
 

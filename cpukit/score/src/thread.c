@@ -471,6 +471,9 @@ void _Thread_Close(
 
   if ( the_thread->extensions )
     (void) _Workspace_Free( the_thread->extensions );
+
+  the_thread->Start.stack = NULL;
+  the_thread->extensions = NULL;
 }
 
 /*PAGE

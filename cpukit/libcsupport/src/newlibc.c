@@ -119,10 +119,19 @@ libc_switch_hook(rtems_tcb *current_task,
     /* XXX We can't use rtems_task_set_note() here since SYSI task has a
      * tid of 0, which is treated specially (optimized, actually)
      * by rtems_task_set_note
+     *
+     * NOTE:  The above comment is no longer true and we need to use
+     *        the extension data areas added about the same time.
      */
 
-    impure_value = (rtems_unsigned32) _REENT;
-    MY_task_set_note(current_task, LIBC_NOTEPAD, impure_value);
+    /*
+     *  Don't touch the outgoing task if it has been deleted.
+     */
+
+    if ( !_States_Is_transient( current_task->current_state ) ) {
+      impure_value = (rtems_unsigned32) _REENT;
+      MY_task_set_note(current_task, LIBC_NOTEPAD, impure_value);
+    }
 
     _REENT = (struct _reent *) MY_task_get_note(heir_task, LIBC_NOTEPAD);
 
@@ -171,7 +180,8 @@ libc_delete_hook(rtems_tcb *current_task,
         ptr = (struct _reent *) MY_task_get_note(deleted_task, LIBC_NOTEPAD);
     }
 
-    if (ptr)
+    /* if (ptr) */
+    if (ptr && ptr != &libc_global_reent)
     {
         _wrapup_reent(ptr);
         _reclaim_reent(ptr);

@@ -67,7 +67,7 @@ void _MPCI_Handler_initialization(
     THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_RPC_REPLY,
     NULL,
-    RTEMS_TIMEOUT
+    RTEMS_TIMEOUT   /* XXX */
   );
 }
 
