@@ -211,7 +211,7 @@ static int* stackPtr = &remcomStack[STACKSIZE/sizeof(int) - 1];
 
 static ExceptionHook oldExceptionHook;
 
-#if defined(__mc68020__)
+#if (defined(__mc68020__) && !defined(__mcpu32__))
 /* the size of the exception stack on the 68020 varies with the type of
  * exception.  The following table is the number of WORDS used
  * for each exception format.
@@ -313,7 +313,7 @@ _debug_level7:\n\
         movew   %d0,%sp@-\n\
 ");
 
-#if defined(__mc68020__) || defined(__mc68332__)
+#if (defined(__mc68020__) && !defined(__mcpu32__)) || defined(__mc68332__)
 asm("\n\
         movew   %sp@(2),%d0\n\
 ");
@@ -331,7 +331,7 @@ asm("\n\
 _already7:\n\
 	      movew   %sp@+,%d0\n\
 ");
-#if defined (__mc68000__) && !defined(__mc68020__)
+#if defined (__mc68000__) && !(defined(__mc68020__) && !defined(__mcpu32__))
 asm("\n\
         lea     %sp@(4),%sp");       /* pull off 68000 return address */
 #endif
@@ -341,7 +341,7 @@ asm("\n\
 
 extern void _catchException(void);
 
-#if defined(__mc68020__) || defined(__mc68332__)
+#if (defined(__mc68020__) && !defined(__mcpu32__)) || defined(__mc68332__)
 /* This function is called when a 68020 exception occurs.  It saves
  * all the cpu and fpcp regs in the _registers array, creates a frame on a
  * linked list of frames which has the cpu and fpcp stack frames needed
@@ -550,7 +550,7 @@ void _returnFromException(Frame *frame)
     frame->fsaveHeader = -1; /* restore regs, but we dont have fsave info*/
   }
 
-#if defined(__mc68000__) && !defined(__mc68020__)
+#if defined(__mc68000__) && !(defined(__mc68020__) && !defined(__mcpu32__))
   /* a 68000 cannot use the internal info pushed onto a bus error
    * or address error frame when doing an RTE so don't put this info
    * onto the stack or the stack will creep every time this happens.
