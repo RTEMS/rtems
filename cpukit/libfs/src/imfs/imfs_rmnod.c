@@ -55,6 +55,7 @@ int IMFS_rmnod(
   /* 
    * Take the node out of the parent's chain that contains this node 
    */
+
   if ( the_jnode->Parent != NULL ) {
     Chain_Extract( (Chain_Node *) the_jnode );
     the_jnode->Parent = NULL;
