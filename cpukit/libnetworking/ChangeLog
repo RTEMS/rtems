@@ -1,3 +1,8 @@
+2000-09-01	Rosimildo daSilva <rdasilva@connecttel.com>
+
+	* emfdb.c: Removed stray semi-colon.  Reported on GoAhead
+	mailing lists by Jim Rudnicki <jdrudnicki@yahoo.com>
+
 2000-08-31	Joel Sherrill <joel@OARcorp.com>
 
 	* Merged version 2.1 of GoAhead webserver.  This update

@@ -1019,7 +1019,7 @@ void basicSetProductDir(char_t *proddir)
 {
 	int len;
 
-	if (basicProdDir != NULL); {
+	if (basicProdDir != NULL) {
 		bfree(B_L, basicProdDir);
 	}
     
