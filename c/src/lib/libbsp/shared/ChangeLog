@@ -2,16 +2,16 @@
 
 	PR 501/rtems_misc
 	* console.c: console_open disables ICANON on non-console port, which
-	should be ok for the first open but not for subsequent ones. If you
-	open one serial port, you will configure it, when you reopen it you
-	will lost the ICANON parameters if you had put it. Should be done by
-	console only at first open.
+	should be ok for the first open but not for subsequent ones. If you open
+	one serial port, you will configure it, when you reopen it you will lost
+	the ICANON parameters if you had put it. Should be done by console only
+	at first open.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
-	* bootcard.c, bspclean.c, clockdrv_shell.c, console-polled.c,
-	console.c, ide_ctrl.c, main.c, sbrk.c, setvec.c, tod.c, tod.h,
-	include/coverhd.h: URL for license changed.
+	* bootcard.c, bspclean.c, clockdrv_shell.c, console-polled.c, console.c,
+	ide_ctrl.c, main.c, sbrk.c, setvec.c, tod.c, tod.h, include/coverhd.h:
+	URL for license changed.
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -21,8 +21,8 @@
 
 	* include/Makefile.am: Remove (merged into Makefile.am).
 	* gdbstub/Makefile.am: Remove (merged into Makefile.am).
-	* Makefile.am: Reflect changes above.
-	Reflect having merged ../configure.ac into ../../../configure.ac.
+	* Makefile.am: Reflect changes above. Reflect having merged
+	../configure.ac into ../../../configure.ac.
 
 2003-06-30	Joel Sherrill <joel@OARcorp.com>
 
@@ -31,14 +31,13 @@
 2003-04-10	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 380/bsps
-	* vmeUniverse/vmeUniverse.c, vmeUniverse/vmeUniverse.h:
-	make printk format strings compliant with libcpu/printk.
-	minor fixes and lazy init bugfix.
+	* vmeUniverse/vmeUniverse.c, vmeUniverse/vmeUniverse.h: make printk
+	format strings compliant with libcpu/printk. minor fixes and lazy init
+	bugfix.
 
 2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* vmeUniverse/vmeUniverse.c: Remove CVS-Log (skrews up on
-	CVS-mergers).
+	* vmeUniverse/vmeUniverse.c: Remove CVS-Log (skrews up on CVS-mergers).
 
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
@@ -54,19 +53,9 @@
 
 2002-06-25	Joel Sherrill <joel@OARcorp.com>
 
-	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k
-	support to the shared gdb stub glue necessitating a move up.
+	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k support to
+	the shared gdb stub glue necessitating a move up.
 	* Makefile.am: Reflect new gdbstub directory.
-
-2001-05-14	Till Straumann <strauman@slac.stanford.edu>
-
-	* vmeUniverse/README.universe, vmeUniverse/vmeUniverse.c,
-	vmeUniverse/vmeUniverse.h: New files.
-	* Makefile.am: Modified to reflect addition of files.
-	* Per PR214, contributes a driver for the TUNDRA UNIVERSE
-	VME-PCI bridge to libbsp/shared.  
-	NOTE: This driver is maintained _outside_ RTEMS by Till.  Please
-	forward future modifications to him.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -75,8 +64,8 @@
 
 2001-10-22	Joel Sherrill <joel@OARcorp.com>
 
-	* bootcard.c: Use __USE_INIT_FINI__ since USE_INIT_FINI
-	pollutes the application namespace.
+	* bootcard.c: Use __USE_INIT_FINI__ since USE_INIT_FINI pollutes the
+	application namespace.
 
 2001-10-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -86,6 +75,15 @@
 
 	* console-polled.c, console.c: Fixed typo.
 
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/README.universe, vmeUniverse/vmeUniverse.c,
+	vmeUniverse/vmeUniverse.h: New files.
+	* Makefile.am: Modified to reflect addition of files.
+	* Per PR214, contributes a driver for the TUNDRA UNIVERSE VME-PCI bridge
+	to libbsp/shared.   NOTE: This driver is maintained _outside_ RTEMS by
+	Till.  Please forward future modifications to him.
+
 2001-01-12	Joel Sherrill <joel@OARcorp.com>
 
 	* setvec.c: Removed unused variables.
@@ -93,15 +91,12 @@
 2001-01-09	Joel Sherrill <joel@OARcorp.com>
 
 	* clockdrv_shell.c (CLOCK_DRIVER_ISRS_PER_TICK): Add support for
-	multiple ISRs per clock tick.  Testing per hacking on mips/jmr3904
-	clock driver.
+	multiple ISRs per clock tick.  Testing per hacking on mips/jmr3904 clock
+	driver.
 
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* clockdrv_shell.c: Fixed syntax error in fast idle support.
-
-2001-01-03	Joel Sherrill <joel@OARcorp.com>
-
 	* clockdrv_shell.c: Added fast idle mode which is enabled by defining
 	CLOCK_DRIVER_USE_FAST_IDLE.
 	* console-polled.c: Added console_initialize_hardware() hook.
@@ -112,25 +107,25 @@
 
 2000-11-13	Joel Sherrill <joel@OARcorp.com>
 
-	* clock_driver_stub.c: This is a stub of a clock driver that
-	is sufficient for linking the ticker application.  Some
-	simulators do not have a soruce for a clock tick.  Also
-	this can be used while constructing a BSP so everything links.
+	* clock_driver_stub.c: This is a stub of a clock driver that is
+	sufficient for linking the ticker application.  Some simulators do not
+	have a soruce for a clock tick.  Also this can be used while
+	constructing a BSP so everything links.
 
 2000-11-01	Joel Sherrill <joel@OARcorp.com>
 
-	* bsplibc.c: assoc.h, error.h, libio_.h, libio.h, and
-	libcsupport.h moved from libc to lib/include/rtems and
-	now must be referenced as <rtems/XXX.h>.   Header file order
-	was cleaned up while doing this.
+	* bsplibc.c: assoc.h, error.h, libio_.h, libio.h, and libcsupport.h
+	moved from libc to lib/include/rtems and now must be referenced as
+	<rtems/XXX.h>.   Header file order was cleaned up while doing this.
 
 2000-10-30	Joel Sherrill <joel@OARcorp.com>
 
-	* POSIX include files merged into newlib.  This resulted in
-	some definitions moving to other files and thus some secondary
-	effects in RTEMS source code.
+	* POSIX include files merged into newlib.  This resulted in some
+	definitions moving to other files and thus some secondary effects in
+	RTEMS source code.
 	* sbrk.c: Corrected prototype to match newlib.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+
