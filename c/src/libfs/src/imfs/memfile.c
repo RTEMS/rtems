@@ -145,10 +145,14 @@ int memfile_write(
 )
 {
   IMFS_jnode_t   *the_jnode;
+  int             status;
 
   the_jnode = iop->file_info;
 
-  return IMFS_memfile_write( the_jnode, iop->offset, buffer, count );
+  status = IMFS_memfile_write( the_jnode, iop->offset, buffer, count );
+  iop->size = the_jnode->info.file.size;
+
+  return status;
 }
 
 /*
@@ -191,7 +195,8 @@ int memfile_lseek(
   if (IMFS_memfile_extend( the_jnode, iop->offset ))
     set_errno_and_return_minus_one( ENOSPC );
 
-  return 0;
+  iop->size = the_jnode->info.file.size;
+  return iop->offset;
 }
 
 /*
@@ -231,6 +236,7 @@ int memfile_ftruncate(
    */
 
   the_jnode->info.file.size = length;
+  iop->size = the_jnode->info.file.size;
 
   IMFS_update_atime( the_jnode );
 
