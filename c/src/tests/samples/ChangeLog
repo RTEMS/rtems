@@ -1,3 +1,22 @@
+2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add pppd.
+	* Makefile.am: Add pppd.
+
+2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Adding pppd:
+	* pppd/Makefile-user: New, copied over from libnetworking/pppd/example.
+	* pppd/README: New, copied over from libnetworking/pppd/example.
+	* pppd/init.c: New, copied over from libnetworking/pppd/example.
+	* pppd/netconfig.h: New, copied over from libnetworking/pppd/example.
+	* pppd/ppp.conf: New, copied over from libnetworking/pppd/example.
+	* pppd/pppdapp.c: New, copied over from libnetworking/pppd/example.
+	* pppd/system.h: New, copied over from libnetworking/pppd/example.
+	* pppd/pppd.options: New, copied over from libnetworking/pppd/example.
+	* pppd/Makefile.am: New, converted to automake from Makefile-user.
+	* pppd/.cvsignore: New.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
