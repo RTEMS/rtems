@@ -219,6 +219,7 @@ rtems_termios_open (
 
 		tty->minor = minor;
 		tty->major = major;
+		tty->refcount = 0;
 
 		/*
 		 * Set up mutex semaphores
@@ -922,6 +923,8 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 
 	if (tty->rawOutBufState == rob_wait)
 		rtems_semaphore_release (tty->rawOutBufSemaphore);
+	if ( tty->rawOutBufHead == tty->rawOutBufTail )
+		return;
 	newTail = (tty->rawOutBufTail + len) % RAW_OUTPUT_BUFFER_SIZE;
 	if (newTail == tty->rawOutBufHead) {
 		/*
