@@ -155,7 +155,8 @@ ch19.texi: ch19.t
 	    -n "Command and Variable Index" ${*}.t
 	
 html: $(FILES)
-	-mkdir $(WWW_INSTALL)/$(PROJECT)
+	-mkdir $(WWW_INSTALL)/partners
+	-mkdir $(WWW_INSTALL)/partners/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
