@@ -9,5 +9,14 @@ int termios_baud_to_index(
   int termios_baud
 );
 
+int termios_baud_to_number(
+  int termios_baud
+);
+
+boolean libchip_serial_default_probe(
+  int minor
+);
+
+
 #endif
 /* end of include file */
