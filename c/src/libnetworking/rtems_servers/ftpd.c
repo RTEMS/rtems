@@ -899,6 +899,11 @@ rtems_ftpd_session(rtems_task_argument arg)
  * Change History:                                                        *
  *  12/01/97 - Creation (JWJ)                                             *
  *************************************************************************/
+
+/* this is not prototyped in strict ansi mode */
+
+FILE *fdopen (int fildes, const char *mode);
+
 static void
 rtems_ftpd_daemon()
 {
