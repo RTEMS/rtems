@@ -473,10 +473,16 @@ typedef int (*rtems_libio_lseek_t)(
 #define rtems_filesystem_make_dev_t( _major, _minor ) \
   ((((dev_t)(_major)) << 32) | (dev_t)(_minor))
 
+#define rtems_filesystem_dev_major_t( _dev ) \
+  (rtems_device_major_number) ((_dev) >> 32)
+
+#define rtems_filesystem_dev_minor_t( _dev ) \
+  (rtems_device_minor_number) ((_dev) & 0xFFFFFFFF)
+
 #define rtems_filesystem_split_dev_t( _dev, _major, _minor ) \
   do { \
-    (_major) = (rtems_device_major_number) ((_dev) >> 32); \
-    (_minor) = (rtems_device_minor_number) ((_dev) & 0xFFFFFFFF); \
+    (_major) = rtems_filesystem_dev_major_t ( _dev ); \
+    (_minor) = rtems_filesystem_dev_minor_t( _dev ); \
   } while(0)
 
 /*

@@ -30,6 +30,9 @@ int fsync(
    *  Now process the fsync().
    */
 
+  if ( !iop->handlers )
+    set_errno_and_return_minus_one( EBADF );
+
   if ( !iop->handlers->fsync )
     set_errno_and_return_minus_one( ENOTSUP );
 

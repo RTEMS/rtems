@@ -33,6 +33,9 @@ int ioctl(
    *  Now process the ioctl().
    */
 
+  if ( !iop->handlers )
+    set_errno_and_return_minus_one( EBADF );
+
   if ( !iop->handlers->ioctl )
     set_errno_and_return_minus_one( ENOTSUP );
 
