@@ -1,4 +1,8 @@
-2001-09-14	Joel Sherrill <joel@OARcorp.com>
+2001-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Fixed typo in date.
+
+2001-09-21	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.in, rootfs/Makefile.am: Added conditional to make sure
 	rootfs does not get built with networking is disabled.  Also

@@ -1,4 +1,8 @@
-2001-09-14	Joel Sherrill <joel@OARcorp.com>
+2001-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Fixed typo in date.
+
+2001-09-21	Joel Sherrill <joel@OARcorp.com>
 
 	* network/Makefile.am: Fixed typo on file name.
 	* network/i82586.c: Commented out line 318 which is referencing 
