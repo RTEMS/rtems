@@ -85,8 +85,6 @@ EXTRA_DIST =  $(noinst_DATA) $(noinst_SCRIPTS)
 CONFIGURE_DEPENDENCIES = setup.cache
 
 DISTCLEANFILES = setup.cache
-
-CLEANFILES = buildall
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  buildall mkbinutilspec mkgccnewlibspec mkgdbspec \
@@ -313,7 +311,6 @@ installdirs-am:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES)

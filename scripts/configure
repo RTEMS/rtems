@@ -692,7 +692,7 @@ fi
 
 PACKAGE=scripts
 
-VERSION=19991020-1
+VERSION=19991021-0
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -768,14 +768,16 @@ fi
 
 
 
-test -f ./setup.cache || cp ./setup.def ./setup.cache
+# RTEMS_CHECK_VERSION(..)
+
+test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
 
 # Some linux distributions use /usr/src/packages
 # redhat uses /usr/src/redhat
 # others might use /usr/src
 echo $ac_n "checking for rpm SPECS directory""... $ac_c" 1>&6
-echo "configure:779: checking for rpm SPECS directory" >&5
+echo "configure:781: checking for rpm SPECS directory" >&5
 if test -d /usr/src/packages/SPECS;
 then
   RPM_SPECSdir=/usr/src/packages/SPECS;
@@ -786,7 +788,7 @@ elif test -d /usr/src/SPECS/;
 then
   RPM_SPECSdir=/usr/src/SPECS;
 fi
-if test x"$RPM_SPECSdir" = x; then
+if test x"$RPM_SPECSdir" = x"" ; then
 { echo "configure: error: not found" 1>&2; exit 1; }
 fi
 echo "$ac_t""$RPM_SPECSdir" 1>&6
@@ -798,7 +800,7 @@ BINUTILSVERS="binutils-${binutils_version}"
 
 GDBVERS="gdb-${gdb_version}"
 
-BSPVERS="RTEMS-no_version_yet"
+BSPVERS="${RTEMS_VERSION}"
 
 
 trap '' 1 2 15

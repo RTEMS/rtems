@@ -69,14 +69,15 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = foreign
 
-MKGDBSPEC = $(SHELL) $(top_srcdir)/mkgdbspec
+MKGDBSPEC = $(SHELL) $(top_builddir)/mkgdbspec
 
-MKGDBSPEC_DEPS = ../mkgdbspec gdb.spec.in ../setup.cache
+MKGDBSPEC_DEPS =  $(top_builddir)/mkgdbspec gdb.spec.in $(top_builddir)/setup.cache
+
 
 TEMPLATES =  gdb.spec.in
 
 
-RPM_SPECS_DATA =  i386-rtems-$(GDBVERS).spec sh-rtems-$(GDBVERS).spec sh-rtemself-$(GDBVERS).spec powerpc-rtems-$(GDBVERS).spec sparc-rtems-$(GDBVERS).spec m68k-rtems-$(GDBVERS).spec m68k-rtemself-$(GDBVERS).spec mips64orion-rtems-$(GDBVERS).spec i960-rtems-$(GDBVERS).spec hppa1.1-rtems-$(GDBVERS).spec
+RPM_SPECS_DATA =  hppa1.1-rtems-$(GDBVERS).spec i386-rtems-$(GDBVERS).spec i960-rtems-$(GDBVERS).spec m68k-rtems-$(GDBVERS).spec m68k-rtemself-$(GDBVERS).spec mips64orion-rtems-$(GDBVERS).spec powerpc-rtems-$(GDBVERS).spec sh-rtems-$(GDBVERS).spec sh-rtemself-$(GDBVERS).spec sparc-rtems-$(GDBVERS).spec
 
 
 noinst_DATA =  $(TEMPLATES)
@@ -212,35 +213,35 @@ mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
+hppa1.1-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
+
 i386-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . i386-rtems
-
-sh-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . sh-rtems
-
-sh-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . sh-rtemself
-
-powerpc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . powerpc-rtems
-
-sparc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . sparc-rtems
-
-m68k-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . m68k-rtems
-
-m68k-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . m68k-rtemself
-
-mips64orion-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . mips64orion-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems
 
 i960-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . i960-rtems
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i960-rtems
 
-hppa1.1-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg ../setup.cache -o . hppa1.1-rtems
+m68k-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems
+
+m68k-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtemself
+
+mips64orion-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems
+
+powerpc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-rtems
+
+sh-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtems
+
+sh-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtemself
+
+sparc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

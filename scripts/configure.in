@@ -3,7 +3,7 @@
 AC_INIT(binutils)
 AM_INIT_AUTOMAKE(scripts,19991021-0,no)
 
-RTEMS_CHECK_VERSION(..)
+# RTEMS_CHECK_VERSION(..)
 
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
