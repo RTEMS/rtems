@@ -62,11 +62,11 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 INSTALL_CHANGE = @INSTALL_CHANGE@
 mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-INSTALLDIRS = $(PROJECT_INCLUDE)/networking \
-    $(PROJECT_INCLUDE)/networking/sys $(PROJECT_INCLUDE)/networking/machine \
-    $(PROJECT_INCLUDE)/networking/rtems $(PROJECT_INCLUDE)/networking/vm \
-    $(PROJECT_INCLUDE)/networking/net $(PROJECT_INCLUDE)/networking/netinet \
-    $(PROJECT_INCLUDE)/networking/arpa $(PROJECT_INCLUDE)/networking/nfs
+INSTALLDIRS = $(PROJECT_INCLUDE) \
+    $(PROJECT_INCLUDE)/sys $(PROJECT_INCLUDE)/machine \
+    $(PROJECT_INCLUDE)/rtems $(PROJECT_INCLUDE)/vm \
+    $(PROJECT_INCLUDE)/net $(PROJECT_INCLUDE)/netinet \
+    $(PROJECT_INCLUDE)/arpa $(PROJECT_INCLUDE)/nfs
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)
@@ -77,16 +77,16 @@ CLOBBER_ADDITIONS +=
 # We only make the install point for the networking header files if needed.
 
 preinstall: $(INSTALLDIRS) $(SRCS)
-	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/networking
-	@$(INSTALL_CHANGE) -m 644 $(SYS_H_FILES) $(PROJECT_INCLUDE)/networking/sys
-	@$(INSTALL_CHANGE) -m 644 $(RTEMS_H_FILES) $(PROJECT_INCLUDE)/networking/rtems
-	@$(INSTALL_CHANGE) -m 644 $(MACHINE_H_FILES) $(PROJECT_INCLUDE)/networking/machine
-	@$(INSTALL_CHANGE) -m 644 $(VM_H_FILES) $(PROJECT_INCLUDE)/networking/vm
-	@$(INSTALL_CHANGE) -m 644 $(NET_H_FILES) $(PROJECT_INCLUDE)/networking/net
-	@$(INSTALL_CHANGE) -m 644 $(NETINET_H_FILES) $(PROJECT_INCLUDE)/networking/netinet
-	@$(INSTALL_CHANGE) -m 644 $(ARPA_H_FILES) $(PROJECT_INCLUDE)/networking/arpa
-	@$(INSTALL_CHANGE) -m 644 $(NFS_H_FILES) $(PROJECT_INCLUDE)/networking/nfs
-	@$(INSTALL_CHANGE) -m 644 $(RTEMS_SERVERS_H_FILES) $(PROJECT_INCLUDE)/networking
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)
+	@$(INSTALL_CHANGE) -m 644 $(SYS_H_FILES) $(PROJECT_INCLUDE)/sys
+	@$(INSTALL_CHANGE) -m 644 $(RTEMS_H_FILES) $(PROJECT_INCLUDE)/rtems
+	@$(INSTALL_CHANGE) -m 644 $(MACHINE_H_FILES) $(PROJECT_INCLUDE)/machine
+	@$(INSTALL_CHANGE) -m 644 $(VM_H_FILES) $(PROJECT_INCLUDE)/vm
+	@$(INSTALL_CHANGE) -m 644 $(NET_H_FILES) $(PROJECT_INCLUDE)/net
+	@$(INSTALL_CHANGE) -m 644 $(NETINET_H_FILES) $(PROJECT_INCLUDE)/netinet
+	@$(INSTALL_CHANGE) -m 644 $(ARPA_H_FILES) $(PROJECT_INCLUDE)/arpa
+	@$(INSTALL_CHANGE) -m 644 $(NFS_H_FILES) $(PROJECT_INCLUDE)/nfs
+	@$(INSTALL_CHANGE) -m 644 $(RTEMS_SERVERS_H_FILES) $(PROJECT_INCLUDE)
 
 all: preinstall
 
