@@ -115,7 +115,6 @@ rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority)
 	myAddr.sin_family = AF_INET;
 	myAddr.sin_port = htons (123);
 	myAddr.sin_addr.s_addr = htonl (INADDR_ANY);
-	printf ("Bind socket.\n");
 	if (bind (s, (struct sockaddr *)&myAddr, sizeof myAddr) < 0) {
 		printf ("Can't bind socket: %s\n", strerror (errno));
 		return -1;
@@ -147,7 +146,6 @@ rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority)
 		if (i == 0)
 			rtems_panic ("EOF");
 		if (i < 0) {
-			printf ("%d\n", errno);
 			if (errno == EWOULDBLOCK)
 				continue;
 			rtems_panic ("Can't receive: %s", strerror (errno));
