@@ -102,7 +102,7 @@ Install_clock(rtems_isr_entry clock_isr)
     Clock_driver_ticks = 0;
     if (BSP_Configuration.ticks_per_timeslice)
     {
-        void *old_isr;
+        rtems_isr_entry  old_isr;
         period = Cpu_table.clicks_per_second / 
                  BSP_Configuration.ticks_per_timeslice;
         
@@ -169,7 +169,7 @@ Clock_control(rtems_device_major_number major,
 
     if (args)
     {
-        void *old_isr;
+        rtems_isr_entry  old_isr;
         /*
          * This is hokey, but until we get a defined interface
          * to do this, it will just be this simple...

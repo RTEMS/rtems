@@ -159,9 +159,6 @@ console_start_remote_tx(int minor)
 static int
 console_first_open(int major, int minor, void *arg)
 {
-    rtems_libio_open_close_args_t *args = arg;
-    rtems_status_code sc;
-    
     if (minor != 0)
     {
         return RTEMS_INVALID_NUMBER; /* Single console supported */
@@ -426,4 +423,6 @@ console_control(rtems_device_major_number major,
     {
         return RTEMS_SUCCESSFUL;
     }
+
+    return RTEMS_SUCCESSFUL;
 }
