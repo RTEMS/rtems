@@ -36,6 +36,7 @@ void Get_all_counters()
   Count.count[ 3 ] = 0;
   Count.count[ 4 ] = 0;
   Count.count[ 5 ] = 0;
+  Count.count[ 6 ] = 0;
 
   status = rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &previous_mode );
   directive_failed( status, "rtems_task_mode to RTEMS_PREEMPT" );

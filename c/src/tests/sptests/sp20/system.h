@@ -13,12 +13,16 @@
  *  $Id$
  */
 
+/* StM: 
+  One test added for verifying rtems_rate_monotonic_period() with changing period lengths.
+ */
+
 #include <tmacros.h>
 
 /* types */
 
 struct counters {
-  rtems_unsigned32 count[6];
+  rtems_unsigned32 count[7];
 };
 
 /* functions */
@@ -27,7 +31,7 @@ rtems_task Init(
   rtems_task_argument argument
 );
  
-rtems_task Task_1_through_5(
+rtems_task Task_1_through_6(
   rtems_task_argument argument
 );
  
@@ -38,7 +42,7 @@ void Get_all_counters( void );
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               6
+#define CONFIGURE_MAXIMUM_TASKS               7
 #define CONFIGURE_MAXIMUM_PERIODS             10
 
 #define CONFIGURE_INIT_TASK_PRIORITY          10
@@ -51,11 +55,11 @@ void Get_all_counters( void );
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 6 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 6 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 7 ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 7 ];   /* array of task names */
 
 TEST_EXTERN struct counters Count;       /* iteration counters */
 TEST_EXTERN struct counters Temporary_count;
-extern rtems_task_priority Priorities[ 6 ];
+extern rtems_task_priority Priorities[ 7 ];
 
 /* end of include file */

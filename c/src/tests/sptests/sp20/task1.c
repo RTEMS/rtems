@@ -20,11 +20,17 @@
 
 #include "system.h"
 
-rtems_unsigned32    Periods[6]    = { 0,   2,   2,   2,   2, 100 };
-rtems_unsigned32    Iterations[6] = { 0,  50,  50,  50,  50,   1 };
-rtems_task_priority Priorities[6] = { 0,   1,   1,   3,   4,   5 };
+/*
+ runtime of TA6 should be shorter than TA5
+ */
+#define TA6_ITERATIONS 10
+#define TA6_PERIOD_FACTOR 10
 
-rtems_task Task_1_through_5(
+rtems_unsigned32    Periods[7]    = { 0,   2,   2,   2,   2, 100, 0 };
+rtems_unsigned32    Iterations[7] = { 0,  50,  50,  50,  50,   1, TA6_ITERATIONS };
+rtems_task_priority Priorities[7] = { 0,   1,   1,   3,   4,   5, 1 };
+
+rtems_task Task_1_through_6(
   rtems_unsigned32 argument
 )
 {
@@ -110,6 +116,38 @@ rtems_task Task_1_through_5(
         }
 
       }
+      break;
+    case 6:
+      /* test changing periods */
+      {
+        unsigned32 time[TA6_ITERATIONS+1];
+        rtems_interval period;
+
+        period = 1*TA6_PERIOD_FACTOR;
+        status = rtems_rate_monotonic_period( rmid, period);
+        directive_failed( status, "rtems_rate_monotonic_period of TA6" );
+        time[0] = _Watchdog_Ticks_since_boot; /* timestamp */
+        /*printf("%d - %d\n", period, time[0]);*/
+
+        for (index = 1; index <= TA6_ITERATIONS; index++)
+        {
+          period = (index+1)*TA6_PERIOD_FACTOR;
+          status = rtems_rate_monotonic_period( rmid,  period);
+          directive_failed( status, "rtems_rate_monotonic_period of TA6" );
+          time[index] = _Watchdog_Ticks_since_boot; /* timestamp */
+          /*printf("%d - %d\n", period, time[index]);*/
+        }
+
+        for (index = 1; index <= TA6_ITERATIONS; index++)
+        {
+          rtems_interval meas = time[index] - time[index-1];
+          period = index*TA6_PERIOD_FACTOR;
+          printf("TA6 - Actual: %d  Expected: %d", meas, period);
+          if (period == meas) printf(" - OK\n");
+          else printf(" - FAILED\n");
+        }
+      }
+      rtems_task_suspend(RTEMS_SELF);
       break;
   }
 }

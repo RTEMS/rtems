@@ -1,3 +1,9 @@
+2000-09-29	Stephan Merker <merker@decrc.abb.de>
+
+	* sp20/getall.c, sp20/init.c, sp20/system.h, sp20/task1.c:
+	Added new task to test sequence of altering a period's length
+	while it is still active.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* sp01/Makefile.am, sp02/Makefile.am, sp03/Makefile.am,

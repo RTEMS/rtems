@@ -38,8 +38,9 @@ rtems_task Init(
   Task_name[ 3 ] =  rtems_build_name( 'T', 'A', '3', ' ' );
   Task_name[ 4 ] =  rtems_build_name( 'T', 'A', '4', ' ' );
   Task_name[ 5 ] =  rtems_build_name( 'T', 'A', '5', ' ' );
+  Task_name[ 6 ] =  rtems_build_name( 'T', 'A', '6', ' ' );
 
-  for ( index = 1 ; index <= 5 ; index++ ) {
+  for ( index = 1 ; index <= 6 ; index++ ) {
     status = rtems_task_create(
       Task_name[ index ],
       Priorities[ index ],
@@ -51,8 +52,8 @@ rtems_task Init(
     directive_failed( status, "rtems_task_create loop" );
   }
 
-  for ( index = 1 ; index <= 5 ; index++ ) {
-    status = rtems_task_start( Task_id[ index ], Task_1_through_5, index );
+  for ( index = 1 ; index <= 6 ; index++ ) {
+    status = rtems_task_start( Task_id[ index ], Task_1_through_6, index );
     directive_failed( status, "rtems_task_start loop" );
   }
 
@@ -61,6 +62,7 @@ rtems_task Init(
   Count.count[ 3 ] = 0;
   Count.count[ 4 ] = 0;
   Count.count[ 5 ] = 0;
+  Count.count[ 6 ] = 0;
 
   status = rtems_task_delete( RTEMS_SELF );
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
