@@ -57,12 +57,29 @@ STATIC INLINE void rtems_name_to_characters(
  */
 
 STATIC INLINE Objects_Id _Objects_Build_id(
-  unsigned32 node,
-  unsigned32 index
+  Objects_Classes  the_class,
+  unsigned32       node,
+  unsigned32       index
 )
 {
-  return ( (node << 16) | index );
+  return ( (the_class << OBJECTS_CLASS_START_BIT) |
+           (node << OBJECTS_NODE_START_BIT)       |
+           (index << OBJECTS_INDEX_START_BIT) );
 }
+
+/*PAGE
+ *
+ *  rtems_get_class
+ */
+ 
+STATIC INLINE Objects_Classes rtems_get_class(
+  Objects_Id id
+)
+{
+  return (Objects_Classes) 
+    ((id >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS);
+}
+ 
 
 /*PAGE
  *
@@ -74,7 +91,7 @@ STATIC INLINE unsigned32 rtems_get_node(
   Objects_Id id
 )
 {
-  return (id >> 16);
+  return (id >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS;
 }
 
 /*PAGE
@@ -87,7 +104,7 @@ STATIC INLINE unsigned32 rtems_get_index(
   Objects_Id id
 )
 {
-  return (id &0xFFFF);
+  return (id >> OBJECTS_INDEX_START_BIT) & OBJECTS_INDEX_VALID_BITS;
 }
 
 /*PAGE
@@ -174,6 +191,7 @@ STATIC INLINE void _Objects_Open(
   index = rtems_get_index( the_object->id );
   information->local_table[ index ] = the_object;
   information->name_table[ index ]  = name;
+  the_object->name = &information->name_table[ index ];
 }
 
 /*PAGE
@@ -192,6 +210,7 @@ STATIC INLINE void _Objects_Close(
   index = rtems_get_index( the_object->id );
   information->local_table[ index ] = NULL;
   information->name_table[ index ]  = 0;
+  the_object->name = 0;
 }
 
 #endif

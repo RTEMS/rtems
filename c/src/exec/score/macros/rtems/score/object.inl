@@ -45,8 +45,19 @@
  *
  */
 
-#define _Objects_Build_id( _node, _index ) \
-  ( ((_node) << 16) | (_index) )
+#define _Objects_Build_id( _the_class, _node, _index ) \
+  ( ((_the_class) << OBJECTS_CLASS_START_BIT) | \
+    ((_node) << OBJECTS_NODE_START_BIT)       | \
+    ((_index) << OBJECTS_INDEX_START_BIT) )
+
+/*PAGE
+ *
+ *  rtems_get_class
+ */
+ 
+#define rtems_get_class( _id ) \
+  (Objects_Classes) \
+    (((_id) >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS)
 
 /*PAGE
  *
@@ -55,7 +66,7 @@
  */
 
 #define rtems_get_node( _id ) \
-  ((_id) >> 16)
+  (((_id) >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS)
 
 /*PAGE
  *
@@ -64,7 +75,7 @@
  */
 
 #define rtems_get_index( _id ) \
-  ((_id) & 0xFFFF)
+  (((_id) >> OBJECTS_INDEX_START_BIT) & OBJECTS_INDEX_VALID_BITS)
 
 /*PAGE
  *
@@ -124,6 +135,7 @@
     _index = rtems_get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = (_the_object); \
     (_information)->name_table[ _index ]  = (_name); \
+    (_the_object)->name = &(_information)->name_table[ _index ]; \
   }
 
 /*PAGE
@@ -139,6 +151,7 @@
     _index = rtems_get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = NULL; \
     (_information)->name_table[ _index ]  = 0; \
+    (_the_object)->name = 0; \
   }
 
 #endif

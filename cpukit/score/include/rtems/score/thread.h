@@ -133,14 +133,13 @@ typedef struct {
 
 typedef struct {
   Objects_Control          Object;
-  Objects_Name             name;
   States_Control           current_state;
-  rtems_task_priority         current_priority;
-  rtems_task_priority         real_priority;
+  rtems_task_priority      current_priority;
+  rtems_task_priority      real_priority;
   unsigned32               resource_count;
   Thread_Wait_information  Wait;
   Watchdog_Control         Timer;
-  rtems_packet_prefix        *receive_packet;
+  rtems_packet_prefix     *receive_packet;
      /****************** end of common block ********************/
   Chain_Node               Active;
 }   Thread_Proxy_control;
@@ -156,7 +155,6 @@ typedef struct {
 
 typedef struct {
   Objects_Control           Object;
-  Objects_Name              name;
   States_Control            current_state;
   rtems_task_priority       current_priority;
   rtems_task_priority       real_priority;

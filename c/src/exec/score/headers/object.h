@@ -33,10 +33,43 @@ typedef unsigned32 Objects_Name;
 
 /*
  *  The following type defines the control block used to manage
- *  object IDs.
+ *  object IDs.  The format is as follows (0=LSB):
+ *
+ *     Bits  0 .. 15    = index
+ *     Bits 16 .. 25    = node
+ *     Bits 26 .. 31    = class
  */
 
 typedef unsigned32 Objects_Id;
+
+#define OBJECTS_INDEX_START_BIT  0
+#define OBJECTS_NODE_START_BIT  16
+#define OBJECTS_CLASS_START_BIT 26
+
+#define OBJECTS_INDEX_MASK      0x0000ffff
+#define OBJECTS_NODE_MASK       0x03ff0000
+#define OBJECTS_CLASS_MASK      0xfc000000
+
+#define OBJECTS_INDEX_VALID_BITS  0x0000ffff
+#define OBJECTS_NODE_VALID_BITS   0x000003ff
+#define OBJECTS_CLASS_VALID_BITS  0x000000cf
+
+/*
+ *  This enumerated type is used in the class field of the object ID.
+ */
+
+typedef enum {
+  OBJECTS_NO_CLASS             =  0,
+  OBJECTS_RTEMS_TASKS          =  1,
+  OBJECTS_RTEMS_TIMERS         =  2,
+  OBJECTS_RTEMS_SEMAPHORES     =  3,
+  OBJECTS_RTEMS_MESSAGE_QUEUES =  4,
+  OBJECTS_RTEMS_PARTITIONS     =  5,
+  OBJECTS_RTEMS_REGIONS        =  6,
+  OBJECTS_RTEMS_PORTS          =  7,
+  OBJECTS_RTEMS_PERIODS        =  8,
+  OBJECTS_RTEMS_EXTENSIONS     =  9
+} Objects_Classes;
 
 /*
  *  This enumerated type lists the locations which may be returned
@@ -56,8 +89,9 @@ typedef enum {
  */
 
 typedef struct {
-  Chain_Node Node;
-  Objects_Id id;
+  Chain_Node    Node;
+  Objects_Id    id;
+  Objects_Name *name;
 }   Objects_Control;
 
 /*
@@ -66,6 +100,7 @@ typedef struct {
  */
 
 typedef struct {
+  Objects_Classes   the_class;       /* Class of this object */
   Objects_Id        minimum_id;      /* minimum valid id of this type */
   Objects_Id        maximum_id;      /* maximum valid id of this type */
   unsigned32        maximum;         /* maximum number of objects */
@@ -88,7 +123,7 @@ EXTERN unsigned32  _Objects_Local_node;
  *
  */
 
-#define OBJECTS_ID_OF_SELF 0
+#define OBJECTS_ID_OF_SELF ((Objects_Id) 0)
 
 /*
  *  The following define the constants which may be used in name searches.
@@ -107,9 +142,10 @@ EXTERN unsigned32  _Objects_Local_node;
 #define RTEMS_OBJECT_ID_FINAL_INDEX     (0xffff)
 
 #define RTEMS_OBJECT_ID_INITIAL(node)   (_Objects_Build_id(      \
+                                            OBJECTS_NO_CLASS, \
                                             node, \
                                             RTEMS_OBJECT_ID_INITIAL_INDEX))
-#define RTEMS_OBJECT_ID_FINAL           ((Objects_Id) ~0)
+#define RTEMS_OBJECT_ID_FINAL           ((Objects_Id)~0)
 
 /*
  *  _Objects_Handler_initialization
@@ -140,6 +176,7 @@ void _Objects_Handler_initialization(
 
 void _Objects_Initialize_information (
   Objects_Information *information,
+  Objects_Classes      the_class,
   boolean              supports_global,
   unsigned32           maximum,
   unsigned32           size
@@ -264,8 +301,22 @@ STATIC INLINE void rtems_name_to_characters(
  */
 
 STATIC INLINE Objects_Id _Objects_Build_id(
-  unsigned32 node,
-  unsigned32 index
+  Objects_Classes  the_class,
+  unsigned32       node,
+  unsigned32       index
+);
+
+/*
+ *  rtems_get_class
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the class portion of the ID.
+ *
+ */
+ 
+STATIC INLINE Objects_Classes rtems_get_class(
+  Objects_Id id
 );
 
 /*
