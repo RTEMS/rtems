@@ -1,5 +1,9 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libmisc/dummy/dummy.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* backward/confdefs.h: New.
 	* Makefile.am: Add  backward/confdefs.h.
 	Add conditional DEPRECATED.

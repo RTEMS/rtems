@@ -40,7 +40,7 @@ int main( int, char **, char **);
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_INIT
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 
