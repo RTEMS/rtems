@@ -545,7 +545,7 @@ STATIC INLINE void _Objects_Close(
 );
 
 #include <rtems/core/object.inl>
-#include <rtems/objectmp.h>
+#include <rtems/core/objectmp.h>
 
 #ifdef __cplusplus
 }

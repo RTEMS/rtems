@@ -14,7 +14,7 @@
 
 #include <rtems/system.h>
 #include <rtems/core/interr.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 #include <rtems/core/userext.h>
 
 /*PAGE

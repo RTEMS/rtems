@@ -19,19 +19,14 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/attr.h>
 #include <rtems/core/chain.h>
 #include <rtems/core/isr.h>
-#include <rtems/rtems/message.h>
 #include <rtems/core/object.h>
-#include <rtems/rtems/options.h>
+#include <rtems/core/coremsg.h>
 #include <rtems/core/states.h>
-#include <rtems/rtems/support.h>
 #include <rtems/core/thread.h>
 #include <rtems/core/wkspace.h>
 #include <rtems/core/mpci.h>
-#include <rtems/sysstate.h>
 
 /*PAGE
  *
@@ -219,7 +214,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
       constrained_size
     );
 
-    *(rtems_unsigned32 *)the_thread->Wait.return_argument_1 = size;
+    *(unsigned32 *)the_thread->Wait.return_argument_1 = size;
 
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       (*api_message_queue_mp_support) ( the_thread, id );
@@ -396,7 +391,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       the_thread->Wait.return_argument,
       size
     );
-    *(rtems_unsigned32 *)the_thread->Wait.return_argument_1 = size;
+    *(unsigned32 *)the_thread->Wait.return_argument_1 = size;
     
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       (*api_message_queue_mp_support) ( the_thread, id );

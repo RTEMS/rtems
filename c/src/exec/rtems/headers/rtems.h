@@ -48,7 +48,7 @@ extern "C" {
 #include <rtems/rtems/mp.h>
 
 #include <rtems/rtems/support.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 #define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
 

@@ -14,7 +14,7 @@
 
 
 #include <rtems/system.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 #include <rtems/core/heap.h>
 
 /*PAGE

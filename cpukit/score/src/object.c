@@ -16,10 +16,10 @@
 #include <rtems/system.h>
 #include <rtems/core/chain.h>
 #include <rtems/core/object.h>
-#include <rtems/objectmp.h>
+#include <rtems/core/objectmp.h>
 #include <rtems/core/thread.h>
 #include <rtems/core/wkspace.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 /*PAGE
  *

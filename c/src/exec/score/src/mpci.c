@@ -23,7 +23,7 @@
 #include <rtems/core/threadq.h>
 #include <rtems/core/tqdata.h>
 #include <rtems/core/watchdog.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 #include <rtems/core/coresem.h>
 
