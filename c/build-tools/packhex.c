@@ -8,7 +8,13 @@
  *                is not robust enough to detect hex-record formatting
  *                errors.
  *
- *   Published:   5/93 Embedded Systems magazine
+ *   Published:   May 1993 Embedded Systems Programming magazine
+ *                "Creating Faster Hex Files"
+ *
+ *   URL:         ESP magazine: http://www.embedded.com
+ *                Source Code:  ftp://ftp.mfi.com/pub/espmag/1993/pakhex.zip
+ *
+ *   Author:      Mark Gringrich
  *
  *   Compiler:    Microsoft C 6.0
  *                cl /F 1000 packhex.c
