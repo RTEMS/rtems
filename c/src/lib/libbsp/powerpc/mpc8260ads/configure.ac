@@ -1,0 +1,39 @@
+## Process this file with autoconf to produce a configure script.
+## 
+## $Id$
+
+AC_PREREQ(2.13)
+AC_INIT(bsp_specs)
+RTEMS_TOP(../../../../../..)
+AC_CONFIG_AUX_DIR(../../../../../..)
+
+RTEMS_CANONICAL_TARGET_CPU
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-powerpc-mpc8260,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
+RTEMS_ENABLE_LIBCDIR
+RTEMS_ENABLE_NETWORKING
+
+RTEMS_ENV_RTEMSBSP
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
+RTEMS_CHECK_NETWORKING
+RTEMS_CANONICAL_HOST
+
+RTEMS_PROJECT_ROOT
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+
+# Explicitly list a Makefile here 
+AC_OUTPUT( 
+Makefile
+clock/Makefile
+console/Makefile
+include/Makefile
+network/Makefile
+irq/Makefile
+vectors/Makefile
+start/Makefile
+startup/Makefile
+wrapup/Makefile)
