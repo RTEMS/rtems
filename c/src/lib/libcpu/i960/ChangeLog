@@ -1,3 +1,7 @@
+2002-12-02	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/soft_reset_asm.S: Removed.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
