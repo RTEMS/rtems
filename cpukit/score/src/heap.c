@@ -11,6 +11,9 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <rtems/system.h>
 #include <rtems/score/sysstate.h>
@@ -169,7 +172,6 @@ uint32_t   _Heap_Initialize(
   _HAssert(_Heap_Is_aligned(the_heap->min_block_size, page_size));
   _HAssert(_Heap_Is_aligned_ptr(_Heap_User_area(the_block), page_size));
 
-
   the_block = _Heap_Block_at( the_block, the_size );
   the_heap->final = the_block;       /* Permanent final block of the heap */
   the_block->prev_size = the_size;   /* Previous block is free */
@@ -199,7 +201,6 @@ uint32_t   _Heap_Initialize(
  *
  */
 
-
 /*
  * Convert user requested 'size' of memory block to the block size.
  * Return block size on success, 0 if overflow occured
@@ -214,7 +215,6 @@ uint32_t _Heap_Calc_block_size(
   if(block_size < min_size) block_size = min_size;
   return (block_size > size) ? block_size : 0;
 }
-
 
 /*
  * Allocate block of size 'alloc_size' from 'the_block' belonging to

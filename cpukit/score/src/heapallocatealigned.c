@@ -11,6 +11,9 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <rtems/system.h>
 #include <rtems/score/sysstate.h>
@@ -52,7 +55,6 @@ check_result(
 #define check_result(a, b, c, d, e) ((void)0)
 
 #endif /* !defined(RTEMS_HEAP_DEBUG) */
-
 
 /*PAGE
  *

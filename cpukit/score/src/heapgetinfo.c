@@ -11,6 +11,9 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <rtems/system.h>
 #include <rtems/score/sysstate.h>
@@ -31,7 +34,6 @@
  *    *the_info  - contains information about heap
  *    return 0=success, otherwise heap is corrupt.
  */
-
 
 Heap_Get_information_status _Heap_Get_information(
   Heap_Control            *the_heap,
