@@ -20,7 +20,6 @@
 #include <rtems/posix/key.h>
 #include <rtems/posix/time.h>
 
-#define PTHREAD_MINIMUM_STACK_SIZE (STACK_MINIMUM_SIZE * 2)
 /*PAGE
  *
  *  The default pthreads attributes structure.
