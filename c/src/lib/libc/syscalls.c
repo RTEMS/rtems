@@ -58,8 +58,10 @@ int __rtems_fstat(int _fd, struct stat* _sbuf)
       break;
 
     case RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET:
+#if !defined(__GO32__)
       _sbuf->st_mode = S_IFSOCK;
       break;
+#endif
 
     default:
       puts( "__rtems_fstat -- unknown file descriptor type" );
