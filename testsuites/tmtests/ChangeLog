@@ -1,3 +1,37 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* tm01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm02/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm03/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm04/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm05/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm06/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm07/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm08/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm09/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm10/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm11/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm12/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm13/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm14/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm15/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm16/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm17/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm18/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm19/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm20/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm21/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm22/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm23/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm24/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm25/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm26/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm27/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm28/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tm29/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tmck/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* tmoverhd/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+
 2004-03-30	David Querbach <querbach@realtime.bc.ca>
 
 	PR 597/tests

@@ -52,6 +52,6 @@ rtems_status_code Empty_directive();
  
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* end of include file */
