@@ -5,24 +5,27 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
-
 SUBDIRS = rtems
 
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = amd.ah asm.h cpu_asm.h pswmacro.ah register.ah
+H_FILES = amd.ah asm.h pswmacro.ah register.ah
 
 S_FILES = cpu_asm.S sig.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
+include $(top_srcdir)/../../../../../../automake/lib.am
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
 
 $(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
+$(PROJECT_INCLUDE)/%.ah: %.ah
 	$(INSTALL_DATA) $< $@
 
 $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o

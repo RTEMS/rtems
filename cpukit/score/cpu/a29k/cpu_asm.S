@@ -39,9 +39,9 @@
 ; */
 
 ;#include <cpu_asm.h>
-        .include "register.ah"
-        .include "amd.ah"
-        .include "pswmacro.ah"
+#include <register.ah>
+#include <amd.ah>
+#include <pswmacro.ah>
 ;	.extern _bsp_exit 
 ;
 ; push a register onto the struct

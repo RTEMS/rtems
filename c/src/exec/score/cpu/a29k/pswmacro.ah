@@ -281,8 +281,8 @@ $1:
 		nop					;
 		add	v2, rfb, 0			;
 $2:
-		cpeq	v0, v3, rfb			; fill rfb->'rfb
-		jmpt	v0, $3				; if rfb==rfb'
+		cpeq	v0, v3, rfb			; fill rfb->rfb
+		jmpt	v0, $3				; if rfb==rfb
 		const	tav, (0x80<<2)			; prepare for fill
 		or	tav, tav, v2			; 
 
@@ -294,12 +294,12 @@ $2:
 		mtsr	cr, tav				;
 		loadm	0, 0, gr0, v2			; fill from LA->rfb
 $3:
-		add	rfb, v3, 0			; move rfb upto 'rfb
+		add	rfb, v3, 0			; move rfb upto rfb
 		sub	rab, v1, 0			; assign rab to rfb-512
 
 		add	v0, msp, SIGCTX_GR1		;
 		load	0, 0, v2, v0			; v0 = interrupted gr1
-		add	gr1, v2, 0			; move gr1 upto 'gr1
+		add	gr1, v2, 0			; move gr1 upto gr1
 		nop					;
 	.endm	
 		
