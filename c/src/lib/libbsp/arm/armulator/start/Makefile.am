@@ -23,7 +23,9 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # to create the program's environment.
 AM_CPPFLAGS += -DARM_RDI_MONITOR
 
-bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+install-data-local: $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
+	$(INSTALL_DATA) $< $(DESTDIR)$(bsplibdir)
 
 $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
 	$(INSTALL_DATA) $< $@

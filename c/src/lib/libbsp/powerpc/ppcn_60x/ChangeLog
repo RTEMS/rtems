@@ -1,3 +1,7 @@
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am: Use install-data-local to install startfile.
+
 2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.

@@ -15,13 +15,16 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-bsplib_DATA += $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
-bsplib_DATA += $(PROJECT_RELEASE)/lib/ram_init$(LIB_VARIANT)
-bsplib_DATA += $(PROJECT_RELEASE)/lib/ram_init_FW$(LIB_VARIANT)
+START_O_FILES = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT) \
+START_O_FILES += $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
+START_O_FILES += $(PROJECT_RELEASE)/lib/ram_init$(LIB_VARIANT)
+START_O_FILES += $(PROJECT_RELEASE)/lib/ram_init_FW$(LIB_VARIANT)
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
+install-data-local: $(START_O_FILES)
+	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
+	list='$(START_O_FILES)'; for i in $$list; do \
+	$(INSTALL_DATA) $$i $(DESTDIR)$(bsplibdir); \
+	done
 
 $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT): \
     $(ARCH)/except_vect_332_ROM.$(OBJEXT)

@@ -15,7 +15,9 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+install-data-local: $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
+	$(INSTALL_DATA) $< $(DESTDIR)$(bsplibdir)
 
 $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
 	$(INSTALL_DATA) $< $@

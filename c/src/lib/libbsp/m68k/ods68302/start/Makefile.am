@@ -24,7 +24,9 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 AM_CFLAGS += $(CFLAGS_V)
 
-bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+install-data-local: $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
+	$(INSTALL_DATA) $< $(DESTDIR)$(bsplibdir)
 
 $(ARCH)/start.$(OBJEXT): $(OBJS)
 	cp $(S_O_FILES) $(ARCH)/start.$(OBJEXT)

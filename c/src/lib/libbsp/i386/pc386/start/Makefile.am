@@ -17,8 +17,14 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 LINKCMDS = $(top_srcdir)/startup/linkcmds
 
-bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-bsplib_DATA += $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin
+START_O_FILES = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
+START_O_FILES += $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin
+
+install-data-local: $(START_O_FILES)
+	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
+	list='$(START_O_FILES)'; for i in $$list; do \
+	$(INSTALL_DATA) $$i $(DESTDIR)$(bsplibdir); \
+	done
 
 $(ARCH)/start16.$(OBJEXT): start16.S
 	$(COMPILE.S) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ $<
