@@ -262,12 +262,12 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                  _isr, _entry_point, _is_fp ) \
    do { \
-     void   *_stack; \
+     unsigned32 _stack; \
      \
      (_the_context)->sr      = 0x3000 | ((_isr) << 8); \
-     _stack                  = (void *)(_stack_base) + (_size) - 4; \
-     (_the_context)->a7_msp  = _stack; \
-     *(void **)_stack = (_entry_point); \
+     _stack                  = (unsigned32)(_stack_base) + (_size) - 4; \
+     (_the_context)->a7_msp  = (void *)_stack; \
+     *(void **)_stack        = (void *)(_entry_point); \
    } while ( 0 )
 
 #define _CPU_Context_Restart_self( _the_context ) \
