@@ -30,7 +30,6 @@ rtems_status_code rtems_task_variable_add(
 {
   Thread_Control        *the_thread;
   Objects_Locations      location;
-  RTEMS_API_Control     *api;
   rtems_task_variable_t *tvp, *new;
 
   the_thread = _Thread_Get (tid, &location);
@@ -48,13 +47,12 @@ rtems_status_code rtems_task_variable_add(
     return RTEMS_INTERNAL_ERROR;
 
   case OBJECTS_LOCAL:
-    api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
 
     /*
      *  Figure out if the variable is already in this task's list.
      */
 
-    tvp = api->task_variables;
+    tvp = the_thread->task_variables;
     while (tvp) {
       if (tvp->ptr == ptr) {
         _Thread_Enable_dispatch();
@@ -76,8 +74,8 @@ rtems_status_code rtems_task_variable_add(
     new->var = 0;
     new->ptr = ptr;
 
-    new->next = api->task_variables;
-    api->task_variables = new;
+    new->next = the_thread->task_variables;
+    the_thread->task_variables = new;
     _Thread_Enable_dispatch();
     return RTEMS_SUCCESSFUL;
   }

@@ -87,6 +87,20 @@ typedef struct Thread_Control_struct Thread_Control;
 typedef void (*Thread_CPU_budget_algorithm_callout )( Thread_Control * );
 
 /*
+ *  Per task variable structure
+ */
+
+struct rtems_task_variable_tt;
+
+struct rtems_task_variable_tt {
+  struct rtems_task_variable_tt  *next;
+  int                            *ptr;
+  int                             var;
+};
+
+typedef struct rtems_task_variable_tt   rtems_task_variable_t;
+
+/*
  *  The following structure contains the information which defines
  *  the starting state of a thread.
  */
@@ -203,6 +217,7 @@ struct Thread_Control_struct {
   void                                 *fp_context;
   void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
   void                                **extensions;
+  rtems_task_variable_t                *task_variables;
 };
 
 /*

@@ -56,7 +56,7 @@ boolean _RTEMS_tasks_Create_extension(
  
   api->pending_events = EVENT_SETS_NONE_PENDING;
   _ASR_Initialize( &api->Signal );
-  api->task_variables = NULL;
+  created->task_variables = NULL;
   return TRUE;
 }
 
@@ -94,17 +94,14 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
   Thread_Control *deleted
 )
 {
-  RTEMS_API_Control     *api;
   rtems_task_variable_t *tvp, *next;
-
-  api = executing->API_Extensions[ THREAD_API_RTEMS ];
 
   /*
    *  Free per task variable memory
    */
 
-  tvp = api->task_variables;
-  api->task_variables = NULL;
+  tvp = deleted->task_variables;
+  deleted->task_variables = NULL;
   while (tvp) {
     next = tvp->next;
     _Workspace_Free( tvp );
@@ -115,8 +112,7 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
    *  Free API specific memory
    */
 
-  (void) _Workspace_Free( api );
- 
+  (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_RTEMS ] );
   deleted->API_Extensions[ THREAD_API_RTEMS ] = NULL;
 }
 
@@ -132,23 +128,19 @@ void _RTEMS_tasks_Switch_extension(
   Thread_Control *heir
 )
 {
-  RTEMS_API_Control     *api;
   rtems_task_variable_t *tvp;
 
   /*
    *  Per Task Variables
    */
 
-
-  api = executing->API_Extensions[ THREAD_API_RTEMS ];
-  tvp = api->task_variables;
+  tvp = executing->task_variables;
   while (tvp) {
     tvp->var = *tvp->ptr;
     tvp = tvp->next;
   }
 
-  api = heir->API_Extensions[ THREAD_API_RTEMS ];
-  tvp = api->task_variables;
+  tvp = heir->task_variables;
   while (tvp) {
     *tvp->ptr = tvp->var;
     tvp = tvp->next;

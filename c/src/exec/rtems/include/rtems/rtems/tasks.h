@@ -147,20 +147,6 @@ typedef struct {
 } rtems_initialization_tasks_table;
 
 /*
- *  Per task variable structure
- */
-
-struct rtems_task_variable_tt;
-
-struct rtems_task_variable_tt {
-  struct rtems_task_variable_tt  *next;
-  int                            *ptr;
-  int                             var;
-};
-
-typedef struct rtems_task_variable_tt   rtems_task_variable_t;
-
-/*
  *  This is the API specific information required by each thread for
  *  the RTEMS API to function correctly.
  */
@@ -171,7 +157,6 @@ typedef struct {
   rtems_event_set          pending_events;
   rtems_event_set          event_condition;
   ASR_Information          Signal;
-  rtems_task_variable_t   *task_variables;
 }  RTEMS_API_Control;
 
 /*

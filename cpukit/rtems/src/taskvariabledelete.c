@@ -30,7 +30,6 @@ rtems_status_code rtems_task_variable_delete(
 {
   Thread_Control        *the_thread;
   Objects_Locations      location;
-  RTEMS_API_Control     *api;
   rtems_task_variable_t *tvp, *prev;
 
   prev = NULL;
@@ -50,12 +49,11 @@ rtems_status_code rtems_task_variable_delete(
     return RTEMS_INTERNAL_ERROR;
 
   case OBJECTS_LOCAL:
-    api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
-    tvp = api->task_variables;
+    tvp = the_thread->task_variables;
     while (tvp) {
       if (tvp->ptr == ptr) {
         if (prev) prev->next = tvp->next;
-        else      api->task_variables = tvp->next;
+        else      the_thread->task_variables = tvp->next;
         _Thread_Enable_dispatch();
         _Workspace_Free(tvp);
         return RTEMS_SUCCESSFUL;
