@@ -1,3 +1,7 @@
+2001-04-16      Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtc.h: New file.
+	* include/Makefile.am: Updated to reflect above.
 
 2001-02-06	Joel Sherrill <joel@OARcorp.com>
 
