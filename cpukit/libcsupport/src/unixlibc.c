@@ -28,7 +28,7 @@ rtems_status_code rtems_io_register_name(
 
 rtems_status_code rtems_io_lookup_name(
   const char           *name,
-  rtems_driver_name_t **device_info
+  rtems_driver_name_t  *device_info
 )
 {
   return 0; /* not supported */
