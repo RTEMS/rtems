@@ -114,6 +114,14 @@ SECTIONS
     *(.shdata)
     _endtext = .;
   } > ram
+  .dynamic	  : { *(.dynamic) 	} >ram
+  .got		  : { *(.got) 		} >ram
+  .plt   	  : { *(.plt) 		} >ram
+  .hash		  : { *(.hash)		} >ram
+  .dynrel	  : { *(.dynrel)	} >ram
+  .dynsym	  : { *(.dynsym)	} >ram
+  .dynstr	  : { *(.dynstr)	} >ram
+  .hash		  : { *(.hash)		} >ram
   .data :
   {
     data_start = .;
