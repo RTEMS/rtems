@@ -1,3 +1,11 @@
+2003-06-22	Chris Johns <cjohns@cybertec.com.au>
+
+	* start/reset.S, startup/cpuboot.c, startup/linkcmds:
+	PR264 - Stopped the core dump by removing the bad instruction.
+	PR414 - Fixed the global interupt vector register.
+        Linker command file to have the boot code in the first 8K.
+        The chip select remap needed to be volatile.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
