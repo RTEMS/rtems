@@ -35,6 +35,12 @@ int unlink(
   if ( result != 0 )
      return -1;
   
+  result = rtems_filesystem_evaluate_parent(RTEMS_LIBIO_PERMS_WRITE, &loc );
+  if (result != 0){
+    rtems_filesystem_freenode( &loc );
+    return -1;
+  }
+
   if ( !loc.ops->node_type_h ) {
     rtems_filesystem_freenode( &loc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );

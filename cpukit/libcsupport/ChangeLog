@@ -1,3 +1,9 @@
+2003-11-25	Jennifer Averett <jennifer@OARcorp.com>
+
+	PR 519/filesystem
+	* include/rtems/libio_.h, src/eval.c, src/rmdir.c, src/unlink.c: Check
+	write permissions in parent directory for file or directory delete
+
 2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/cdefs.h: Use _RTEMS_CDEFS_H guards.

@@ -97,3 +97,28 @@ int rtems_filesystem_evaluate_path(
   return result;
 }
 
+
+int rtems_filesystem_evaluate_parent(
+  int                                flags,
+  rtems_filesystem_location_info_t  *pathloc
+)
+{
+  rtems_filesystem_location_info_t  parent;
+  int                               result;
+
+  if ( !pathloc )
+    rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
+  
+  if ( !pathloc->ops->evalpath_h )
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
+
+  parent = *pathloc;
+  result = (*pathloc->ops->evalpath_h)( "..", flags, &parent );
+  if (result != 0){
+    return -1;
+  }
+  rtems_filesystem_freenode( &parent );
+
+  return result;
+}
+

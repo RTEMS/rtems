@@ -227,6 +227,11 @@ int rtems_filesystem_evaluate_path(
   int                                follow_link
 );
 
+int rtems_filesystem_evaluate_parent(
+  int                                flags,
+  rtems_filesystem_location_info_t  *pathloc
+);
+
 void rtems_filesystem_initialize();
 
 int init_fs_mount_table();
