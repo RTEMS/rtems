@@ -75,7 +75,6 @@ all:    ${ARCH} $(SRCS) preinstall $(OBJS) $(ARCH)/rtems.o $(RELS)
 # Install the program(s), appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)
 install:  all
-	$(INSTALL_VARIANT) -m 644 ../$(ARCH)/rtems.o ${PROJECT_RELEASE}/lib
 
 preinstall: ${ARCH}
 	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)
