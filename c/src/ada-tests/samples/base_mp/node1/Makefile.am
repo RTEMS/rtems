@@ -3,7 +3,7 @@
 NODE=1
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../tests/automake/compile.am
+include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
@@ -21,4 +21,4 @@ endif
 
 EXTRA_DIST = base_mp.scn
 
-include $(top_srcdir)/../tests/automake/local.am
+include $(top_srcdir)/../../../testsuites/automake/local.am

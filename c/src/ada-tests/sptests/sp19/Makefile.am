@@ -1,7 +1,7 @@
 ## $Id$
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../tests/automake/compile.am
+include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
@@ -19,4 +19,4 @@ sp19$(EXEEXT): sp19.adb sptest.adb sptest.ads init.$(OBJEXT)
 
 EXTRA_DIST = sp19.scn
 
-include $(top_srcdir)/../tests/automake/local.am
+include $(top_srcdir)/../../../testsuites/automake/local.am

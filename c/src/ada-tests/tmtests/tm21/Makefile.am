@@ -1,7 +1,7 @@
 ## $Id$
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../tests/automake/compile.am
+include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
@@ -12,4 +12,4 @@ tm21_SOURCES += ../../support/init.c
 tm21$(EXEEXT): tm21.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../tests/automake/local.am
+include $(top_srcdir)/../../../testsuites/automake/local.am

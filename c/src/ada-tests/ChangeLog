@@ -1,3 +1,74 @@
+2003-11-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Reflect having moved tests/.
+	* mptests/Makefile.am: Reflect having moved tests/.
+	* mptests/mp01/Makefile.am: Reflect having moved tests/.
+	* mptests/mp01/node1/Makefile.am: Reflect having moved tests/.
+	* mptests/mp01/node2/Makefile.am: Reflect having moved tests/.
+	* samples/Makefile.am: Reflect having moved tests/.
+	* samples/base_mp/Makefile.am: Reflect having moved tests/.
+	* samples/base_mp/node1/Makefile.am: Reflect having moved tests/.
+	* samples/base_mp/node2/Makefile.am: Reflect having moved tests/.
+	* samples/base_sp/Makefile.am: Reflect having moved tests/.
+	* samples/hello/Makefile.am: Reflect having moved tests/.
+	* samples/ticker/Makefile.am: Reflect having moved tests/.
+	* sptests/Makefile.am: Reflect having moved tests/.
+	* sptests/sp01/Makefile.am: Reflect having moved tests/.
+	* sptests/sp02/Makefile.am: Reflect having moved tests/.
+	* sptests/sp03/Makefile.am: Reflect having moved tests/.
+	* sptests/sp04/Makefile.am: Reflect having moved tests/.
+	* sptests/sp05/Makefile.am: Reflect having moved tests/.
+	* sptests/sp06/Makefile.am: Reflect having moved tests/.
+	* sptests/sp07/Makefile.am: Reflect having moved tests/.
+	* sptests/sp08/Makefile.am: Reflect having moved tests/.
+	* sptests/sp09/Makefile.am: Reflect having moved tests/.
+	* sptests/sp11/Makefile.am: Reflect having moved tests/.
+	* sptests/sp12/Makefile.am: Reflect having moved tests/.
+	* sptests/sp13/Makefile.am: Reflect having moved tests/.
+	* sptests/sp14/Makefile.am: Reflect having moved tests/.
+	* sptests/sp15/Makefile.am: Reflect having moved tests/.
+	* sptests/sp16/Makefile.am: Reflect having moved tests/.
+	* sptests/sp17/Makefile.am: Reflect having moved tests/.
+	* sptests/sp19/Makefile.am: Reflect having moved tests/.
+	* sptests/sp20/Makefile.am: Reflect having moved tests/.
+	* sptests/sp21/Makefile.am: Reflect having moved tests/.
+	* sptests/sp22/Makefile.am: Reflect having moved tests/.
+	* sptests/sp23/Makefile.am: Reflect having moved tests/.
+	* sptests/sp24/Makefile.am: Reflect having moved tests/.
+	* sptests/sp25/Makefile.am: Reflect having moved tests/.
+	* sptests/spsize/Makefile.am: Reflect having moved tests/.
+	* support/Makefile.am: Reflect having moved tests/.
+	* tmtests/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm01/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm02/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm03/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm04/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm05/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm06/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm07/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm08/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm09/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm10/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm11/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm12/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm13/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm14/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm15/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm16/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm17/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm18/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm19/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm20/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm21/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm22/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm23/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm24/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm25/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm28/Makefile.am: Reflect having moved tests/.
+	* tmtests/tm29/Makefile.am: Reflect having moved tests/.
+	* tmtests/tmck/Makefile.am: Reflect having moved tests/.
+	* tmtests/tmoverhd/Makefile.am: Reflect having moved tests/.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.

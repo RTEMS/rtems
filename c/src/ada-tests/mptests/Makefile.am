@@ -16,5 +16,5 @@ SUBDIRS += mp01
 #SUBDIRS += mp13
 #SUBDIRS += mp14
 
-include $(top_srcdir)/../tests/automake/subdirs.am
-include $(top_srcdir)/../tests/automake/local.am
+include $(top_srcdir)/../../../testsuites/automake/subdirs.am
+include $(top_srcdir)/../../../testsuites/automake/local.am
