@@ -170,6 +170,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     *include/g++*);;
     *jc1) ;;
     *jvgenmain) ;;
+    *cc1plus) ;; # ignore: explicitly put into rpm elsewhere
     *libstdc++.a) echo "$i" >> files.g++ ;;
     *libsupc++.a) echo "$i" >> files.g++ ;;
     *) echo "$i" >> files.gcc ;;
