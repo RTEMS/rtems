@@ -15,6 +15,10 @@ AC_ARG_WITH(target-subdir,
 TARGET_SUBDIR="$withval",
 TARGET_SUBDIR=".")
 
+## HACK to allow gnu-make conditionals in automake-Makefiles.
+ENDIF=endif
+AC_SUBST(ENDIF)
+
 RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
 

@@ -26,7 +26,7 @@ PRINT_SRCS = $(DOCS)
 PGM = ${ARCH}/$(TEST).exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../automake/leaf.am
 include $(top_srcdir)/sptests.am
 
 ${PGM}: $(OBJS) $(LINK_FILES)
