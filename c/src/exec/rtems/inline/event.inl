@@ -17,24 +17,5 @@
 #ifndef __MACROS_EVENT_inl
 #define __MACROS_EVENT_inl
 
-/*
- *  Event_Manager_initialization
- *
- *  DESCRIPTION:
- *
- *  This routine performs the initialization necessary for this manager.
- */
-
-STATIC INLINE void _Event_Manager_initialization( void )
-{
-  _Event_Sync_state = EVENT_SYNC_SYNCHRONIZED;
-
-  /*
-   *  Register the MP Process Packet routine.
-   */
- 
-  _MPCI_Register_packet_processor( MP_PACKET_EVENT, _Event_MP_Process_packet );
-}
-
 #endif
 /* end of include file */
