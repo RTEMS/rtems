@@ -123,11 +123,13 @@ AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 EXTRA_LIBRARIES = librtems.a
+CLEANFILES = librtems.a
 librtems_a_SOURCES = $(C_FILES)
 librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += librtems_g.a
-librtems_g_a_SOURCES = $(C_FILES)
+CLEANFILES += librtems_g.a
+librtems_g_a_SOURCES = $(librtems_a_SOURCES)
 librtems_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 all-local: $(PREINSTALL_FILES) librtems$(LIB_VARIANT).a

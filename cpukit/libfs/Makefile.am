@@ -38,11 +38,13 @@ libimfs_C_FILES = $(libimfs_EMBEDDED_C_FILES)
 endif
 
 EXTRA_LIBRARIES = libimfs.a
+CLEANFILES = libimfs.a
 libimfs_a_SOURCES = $(libimfs_C_FILES)
 libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libimfs_g.a
-libimfs_g_a_SOURCES = $(libimfs_C_FILES)
+CLEANFILES += libimfs_g.a
+libimfs_g_a_SOURCES = $(libimfs_a_SOURCES)
 libimfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 include_HEADERS += src/imfs/imfs.h
@@ -51,10 +53,8 @@ IMFSLIB = libimfs$(LIB_VARIANT).a
 
 # dosfs
 
-noinst_HEADERS = src/dosfs/fat.h
-
 libdosfs_FATFS_C_FILES = src/dosfs/fat.c src/dosfs/fat_fat_operations.c \
-    src/dosfs/fat_file.c
+    src/dosfs/fat_file.c src/dosfs/fat.h
 
 libdosfs_DOSFS_C_FILES = src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/msdos_eval.c src/dosfs/msdos_file.c src/dosfs/msdos_free.c \
@@ -72,11 +72,13 @@ include_HEADERS += src/dosfs/dosfs.h
 DOSFSLIB = libdosfs$(LIB_VARIANT).a
 
 EXTRA_LIBRARIES += libdosfs.a
+CLEANFILES += libdosfs.a
 libdosfs_a_SOURCES = $(libdosfs_C_FILES)
 libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libdosfs_g.a
-libdosfs_g_a_SOURCES = $(libdosfs_C_FILES)
+CLEANFILES += libdosfs_g.a
+libdosfs_g_a_SOURCES = $(libdosfs_a_SOURCES)
 libdosfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 endif
 

@@ -15,11 +15,13 @@ C_FILES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c \
     src/ide_part_table.c
 
 EXTRA_LIBRARIES = libblock.a
+CLEANFILES = libblock.a
 libblock_a_SOURCES = $(C_FILES)
 libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libblock_g.a
-libblock_g_a_SOURCES = $(C_FILES)
+CLEANFILES += libblock_g.a
+libblock_g_a_SOURCES = $(libblock_a_SOURCES)
 libblock_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 AM_CPPFLAGS += -I$(top_builddir)

@@ -23,11 +23,13 @@ libxdr_C_FILES = src/xdr/xdr.c src/xdr/xdr_array.c src/xdr/xdr_float.c \
 
 if LIBRPC
 EXTRA_LIBRARIES = libxdr.a
+CLEANFILES = libxdr.a
 libxdr_a_SOURCES = $(libxdr_C_FILES)
 libxdr_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libxdr_g.a
-libxdr_g_a_SOURCES = $(libxdr_C_FILES)
+CLEANFILES += libxdr_g.a
+libxdr_g_a_SOURCES = $(libxdr_a_SOURCES)
 libxdr_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 man_MANS += src/xdr/xdr.3
@@ -58,11 +60,13 @@ librpc_CPPFLAGS = -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close \
     -D_RTEMS_RPC_INTERNAL_
 
 EXTRA_LIBRARIES += librpc.a
+CLEANFILES += librpc.a
 librpc_a_SOURCES = $(librpc_C_FILES)
 librpc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(librpc_CPPFLAGS)
 
 EXTRA_LIBRARIES += librpc_g.a
-librpc_g_a_SOURCES = $(librpc_C_FILES)
+CLEANFILES += librpc_g.a
+librpc_g_a_SOURCES = $(librpc_a_SOURCES)
 librpc_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(librpc_CPPFLAGS)
 
 man_MANS += src/rpc/bindresvport.3 src/rpc/getrpcent.3 src/rpc/publickey.3 \

@@ -105,21 +105,23 @@ AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 EXTRA_LIBRARIES = libitron.a
+CLEANFILES = libitron.a
 libitron_a_SOURCES = $(C_FILES)
 libitron_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libitron_g.a
-libitron_g_a_SOURCES = $(C_FILES)
+CLEANFILES += libitron_g.a
+libitron_g_a_SOURCES = $(libitron_a_SOURCES)
 libitron_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 all-local: $(PREINSTALL_FILES) libitron$(LIB_VARIANT).a
 endif
 
 UNUSED_C_FILES = src/cre_mbx.c src/del_mbx.c src/mboxtranslatereturncode.c \
-    src/network.c src/prcv_mbx.c src/rcv_mbx.c src/ref_mbx.c src/snd_mbx.c \
-    src/sysmgmt.c src/trcv_mbx.c
+    $(NETWORK_C_FILES) src/prcv_mbx.c src/rcv_mbx.c src/ref_mbx.c \
+    src/snd_mbx.c $(CONFIGURATION_C_FILES) src/trcv_mbx.c
 
-EXTRA_DIST += $(C_FILES) $(UNUSED_C_FILES) src/TODO
+EXTRA_DIST += $(UNUSED_C_FILES) src/TODO
 
 PREINSTALL_FILES =
 

@@ -147,11 +147,13 @@ endif
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 EXTRA_LIBRARIES = libscore.a
+CLEANFILES = libscore.a
 libscore_a_SOURCES = $(C_FILES)
 libscore_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libscore_g.a
-libscore_g_a_SOURCES = $(C_FILES)
+CLEANFILES += libscore_g.a
+libscore_g_a_SOURCES = $(libscore_a_SOURCES)
 libscore_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt

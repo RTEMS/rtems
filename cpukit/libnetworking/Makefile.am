@@ -16,11 +16,13 @@ libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
     -DDIAGNOSTIC -DBOOTP_COMPAT
 
 EXTRA_LIBRARIES = libnetworking.a
+CLEANFILES = libnetworking.a
 libnetworking_a_SOURCES =
 libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
     $(libnetworking_CPPFLAGS)
 
 EXTRA_LIBRARIES += libnetworking_g.a
+CLEANFILES += libnetworking_g.a
 libnetworking_g_a_SOURCES =
 libnetworking_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
     $(libnetworking_CPPFLAGS)
@@ -140,10 +142,12 @@ include_vm_HEADERS = vm/vm.h vm/vm_extern.h vm/vm_kern.h vm/vm_param.h
 libc_CPPFLAGS = -DNOPOLL -DNOSELECT
 
 EXTRA_LIBRARIES += libc.a
+CLEANFILES += libc.a
 libc_a_SOURCES =
 libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(libc_CPPFLAGS)
 
 EXTRA_LIBRARIES += libc_g.a
+CLEANFILES += libc_g.a
 libc_g_a_SOURCES =
 libc_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(libc_CPPFLAGS)
 
@@ -194,10 +198,12 @@ EXTRA_DIST = libc/addr2ascii.3 libc/addr2ascii.c libc/ascii2addr.c \
 lib_CPPFLAGS = -DNOPOLL -DNOSELECT
 
 EXTRA_LIBRARIES += lib.a
+CLEANFILES += lib.a
 lib_a_SOURCES =
 lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(lib_CPPFLAGS)
 
 EXTRA_LIBRARIES += lib_g.a
+CLEANFILES += lib_g.a
 lib_g_a_SOURCES =
 lib_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(lib_CPPFLAGS)
 

@@ -32,11 +32,13 @@ AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 EXTRA_LIBRARIES = libsapi.a
+CLEANFILES = libsapi.a
 libsapi_a_SOURCES = $(C_FILES)
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libsapi_g.a
-libsapi_g_a_SOURCES = $(C_FILES)
+CLEANFILES += libsapi_g.a
+libsapi_g_a_SOURCES = $(libsapi_a_SOURCES)
 libsapi_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 all-local: $(PREINSTALL_FILES) libsapi$(LIB_VARIANT).a

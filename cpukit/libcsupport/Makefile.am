@@ -122,11 +122,13 @@ endif
 AM_CFLAGS += $(LIBC_DEFINES)
 
 EXTRA_LIBRARIES = libcsupport.a
+CLEANFILES = libcsupport.a
 libcsupport_a_SOURCES = $(C_FILES)
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libcsupport_g.a
-libcsupport_g_a_SOURCES = $(C_FILES)
+CLEANFILES += libcsupport_g.a
+libcsupport_g_a_SOURCES = $(libcsupport_a_SOURCES)
 libcsupport_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 DOC_FILES = src/TODO src/CASES

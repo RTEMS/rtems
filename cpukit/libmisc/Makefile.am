@@ -13,6 +13,7 @@ include_HEADERS =
 include_rtems_HEADERS =
 EXTRA_LIBRARIES =
 TMP_LIBS =
+CLEANFILES =
 
 ## capture
 
@@ -20,71 +21,77 @@ libcapture_C_FILES = capture/capture.c capture/capture-cli.c
 include_rtems_HEADERS += capture/capture.h capture/capture-cli.h
 
 EXTRA_LIBRARIES += libcapture.a
+CLEANFILES += libcapture.a
 libcapture_a_SOURCES = $(libcapture_C_FILES)
 libcapture_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libcapture_g.a
-libcapture_g_a_SOURCES = $(libcapture_C_FILES)
+CLEANFILES += libcapture_g.a
+libcapture_g_a_SOURCES = $(libcapture_a_SOURCES)
 libcapture_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libcapture$(LIB_VARIANT).a
 
 ## cpuuse
-
 libcpuuse_C_FILES = cpuuse/cpuuse.c
 include_rtems_HEADERS += cpuuse/cpuuse.h
 
 EXTRA_LIBRARIES += libcpuuse.a
+CLEANFILES += libcpuuse.a
 libcpuuse_a_SOURCES = $(libcpuuse_C_FILES)
 libcpuuse_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libcpuuse_g.a
-libcpuuse_g_a_SOURCES = $(libcpuuse_C_FILES)
+CLEANFILES += libcpuuse_g.a
+libcpuuse_g_a_SOURCES = $(libcpuuse_a_SOURCES)
 libcpuuse_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libcpuuse$(LIB_VARIANT).a
 
 ## devnull
-
 libdevnull_C_FILES = devnull/devnull.c
 include_rtems_HEADERS += devnull/devnull.h
 
 EXTRA_LIBRARIES += libdevnull.a
+CLEANFILES += libdevnull.a
 libdevnull_a_SOURCES = $(libdevnull_C_FILES)
 libdevnull_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libdevnull_g.a
-libdevnull_g_a_SOURCES = $(libdevnull_C_FILES)
+CLEANFILES += libdevnull_g.a
+libdevnull_g_a_SOURCES = $(libdevnull_a_SOURCES)
 libdevnull_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libdevnull$(LIB_VARIANT).a
 
 ## dummy
-
 libdummy_C_FILES = dummy/dummy.c
 EXTRA_DIST += dummy/README
 
 EXTRA_LIBRARIES += libdummy.a
+CLEANFILES += libdummy.a
 libdummy_a_SOURCES = $(libdummy_C_FILES)
 libdummy_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libdummy_g.a
-libdummy_g_a_SOURCES = $(libdummy_C_FILES)
+CLEANFILES += libdummy_g.a
+libdummy_g_a_SOURCES = $(libdummy_a_SOURCES)
 libdummy_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libdummy$(LIB_VARIANT).a
 
 ## dumpbuf
-
 libdumpbuf_C_FILES = dumpbuf/dumpbuf.c
 include_rtems_HEADERS += dumpbuf/dumpbuf.h
 
 EXTRA_LIBRARIES += libdumpbuf.a
+CLEANFILES += libdumpbuf.a
 libdumpbuf_a_SOURCES = $(libdumpbuf_C_FILES)
 libdumpbuf_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libdumpbuf_g.a
-libdumpbuf_g_a_SOURCES = $(libdumpbuf_C_FILES)
+CLEANFILES += libdumpbuf_g.a
+libdumpbuf_g_a_SOURCES = $(libdumpbuf_a_SOURCES)
 libdumpbuf_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libdumpbuf$(LIB_VARIANT).a
@@ -92,7 +99,6 @@ TMP_LIBS += libdumpbuf$(LIB_VARIANT).a
 ## monitor
 
 include_rtems_HEADERS += monitor/monitor.h
-
 libmonitor_C_FILES = monitor/mon-command.c monitor/mon-symbols.c \
     monitor/mon-prmisc.c monitor/mon-monitor.c monitor/mon-object.c \
     monitor/mon-server.c monitor/mon-task.c monitor/mon-queue.c \
@@ -104,11 +110,13 @@ libmonitor_C_FILES += monitor/mon-mpci.c
 endif
 
 EXTRA_LIBRARIES += libmonitor.a
+CLEANFILES += libmonitor.a
 libmonitor_a_SOURCES = $(libmonitor_C_FILES)
 libmonitor_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libmonitor_g.a
-libmonitor_g_a_SOURCES = $(libmonitor_C_FILES)
+CLEANFILES += libmonitor_g.a
+libmonitor_g_a_SOURCES = $(libmonitor_a_SOURCES)
 libmonitor_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 EXTRA_DIST += monitor/README
@@ -116,16 +124,17 @@ EXTRA_DIST += monitor/README
 TMP_LIBS += libmonitor$(LIB_VARIANT).a
 
 ## mw-fb
-
 libmw_fb_C_FILES = mw-fb/mw_fb.c mw-fb/mw_uid.c
 include_rtems_HEADERS += mw-fb/mw_fb.h mw-fb/mw_uid.h
 
 EXTRA_LIBRARIES += libmw-fb.a
+CLEANFILES += libmw-fb.a
 libmw_fb_a_SOURCES = $(libmw_fb_C_FILES)
 libmw_fb_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libmw-fb_g.a
-libmw_fb_g_a_SOURCES = $(libmw_fb_C_FILES)
+CLEANFILES += libmw-fb_g.a
+libmw_fb_g_a_SOURCES = $(libmw_fb_a_SOURCES)
 libmw_fb_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libmw-fb$(LIB_VARIANT).a
@@ -137,11 +146,13 @@ include_rtems_HEADERS += shell/shell.h
 libshell_C_FILES = shell/cmds.c shell/shell.c
 
 EXTRA_LIBRARIES += libshell.a
+CLEANFILES += libshell.a
 libshell_a_SOURCES = $(libshell_C_FILES)
 libshell_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libshell_g.a
-libshell_g_a_SOURCES = $(libshell_C_FILES)
+CLEANFILES += libshell_g.a
+libshell_g_a_SOURCES = $(libshell_a_SOURCES)
 libshell_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libshell$(LIB_VARIANT).a
@@ -150,16 +161,17 @@ endif
 EXTRA_DIST += shell/README
 
 ## rtmonuse
-
 librtmonuse_C_FILES = rtmonuse/rtmonuse.c
 include_rtems_HEADERS += rtmonuse/rtmonuse.h
 
 EXTRA_LIBRARIES += librtmonuse.a
+CLEANFILES += librtmonuse.a
 librtmonuse_a_SOURCES = $(librtmonuse_C_FILES)
 librtmonuse_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += librtmonuse_g.a
-librtmonuse_g_a_SOURCES = $(librtmonuse_C_FILES)
+CLEANFILES += librtmonuse_g.a
+librtmonuse_g_a_SOURCES = $(librtmonuse_a_SOURCES)
 librtmonuse_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += librtmonuse$(LIB_VARIANT).a
@@ -169,16 +181,17 @@ TMP_LIBS += librtmonuse$(LIB_VARIANT).a
 if LIBSERDBG
 include_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h \
     serdbg/termios_printk_cnf.h serdbg/termios_printk.h
-
 libserdbg_C_FILES = serdbg/serdbg.c serdbg/serdbgio.c \
     serdbg/termios_printk.c
 
 EXTRA_LIBRARIES += libserdbg.a
+CLEANFILES += libserdbg.a
 libserdbg_a_SOURCES = $(libserdbg_C_FILES)
 libserdbg_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libserdbg_g.a
-libserdbg_g_a_SOURCES = $(libserdbg_C_FILES)
+CLEANFILES += libserdbg_g.a
+libserdbg_g_a_SOURCES = $(libserdbg_a_SOURCES)
 libserdbg_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libserdbg$(LIB_VARIANT).a
@@ -192,11 +205,13 @@ include_rtems_HEADERS += stackchk/stackchk.h
 libstackchk_C_FILES = stackchk/check.c stackchk/internal.h
 
 EXTRA_LIBRARIES += libstackchk.a
+CLEANFILES += libstackchk.a
 libstackchk_a_SOURCES = $(libstackchk_C_FILES)
 libstackchk_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libstackchk_g.a
-libstackchk_g_a_SOURCES = $(libstackchk_C_FILES)
+CLEANFILES += libstackchk_g.a
+libstackchk_g_a_SOURCES = $(libstackchk_a_SOURCES)
 libstackchk_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libstackchk$(LIB_VARIANT).a
@@ -208,11 +223,13 @@ include_rtems_HEADERS += untar/untar.h
 libuntar_C_FILES = untar/untar.c
 
 EXTRA_LIBRARIES += libuntar.a
+CLEANFILES += libuntar.a
 libuntar_a_SOURCES = $(libuntar_C_FILES)
 libuntar_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libuntar_g.a
-libuntar_g_a_SOURCES = $(libuntar_C_FILES)
+CLEANFILES += libuntar_g.a
+libuntar_g_a_SOURCES = $(libuntar_a_SOURCES)
 libuntar_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libuntar$(LIB_VARIANT).a
@@ -220,16 +237,17 @@ TMP_LIBS += libuntar$(LIB_VARIANT).a
 EXTRA_DIST += untar/README
 
 ## fsmount
-
 libfsmount_C_FILES = fsmount/fsmount.c
 include_rtems_HEADERS += fsmount/fsmount.h
 
 EXTRA_LIBRARIES += libfsmount.a
+CLEANFILES += libfsmount.a
 libfsmount_a_SOURCES = $(libfsmount_C_FILES)
 libfsmount_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libfsmount_g.a
-libfsmount_g_a_SOURCES = $(libfsmount_C_FILES)
+CLEANFILES += libfsmount_g.a
+libfsmount_g_a_SOURCES = $(libfsmount_a_SOURCES)
 libfsmount_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 TMP_LIBS += libfsmount$(LIB_VARIANT).a

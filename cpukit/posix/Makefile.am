@@ -150,11 +150,13 @@ AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 EXTRA_LIBRARIES = libposix.a
+CLEANFILES = libposix.a
 libposix_a_SOURCES = $(C_FILES)
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libposix_g.a
-libposix_g_a_SOURCES = $(C_FILES)
+CLEANFILES += libposix_g.a
+libposix_g_a_SOURCES = $(libposix_a_SOURCES)
 libposix_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 all-local: $(PREINSTALL_FILES) libposix$(LIB_VARIANT).a
