@@ -1,3 +1,7 @@
+2003-02-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/arm.h: Set up ARM_HAS_FPU based on -D__SOFTFP__.
+
 2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require autoconf-2.57 + automake-1.7.2.

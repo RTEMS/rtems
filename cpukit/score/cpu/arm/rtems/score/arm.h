@@ -65,7 +65,13 @@ extern "C" {
 #endif
 
 /* All ARM CPUs are assumed to not have floating point units */
+#if defined(__SOFTFP__)
 #define ARM_HAS_FPU     0
+#else
+#define ARM_HAS_FPU	1
+# error "FPU-support not yet implemented for the arm"
+#endif
+
 
 /*
  *  Define the name of the CPU family.
