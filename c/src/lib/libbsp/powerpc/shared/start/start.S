@@ -78,17 +78,16 @@ __rtems_entry_point:
 	isync
 
 /*
- * we now have the 1st 64M of ram mapped with the bats.
+ * we now have the 1st 64M of ram mapped with the bats. We are still 
+ * running on the bootloader stack and cannot switch to an RTEMS allocated 
+ * init stack before copying the residual data that may have been set just after
+ * rtems_end address. This bug has been experienced on MVME2304. Thank to
+ * Till Straumann <strauman@SLAC.Stanford.EDU> for hunting it and suggesting 
+ * the appropriate code.
  */
 	
 enter_C_code:
 	bl	MMUon
-	/*
-	 * stack = &__rtems_end + 4096
-	 */
-	addis	r9,r0, __rtems_end+(4096-CPU_MINIMUM_STACK_FRAME_SIZE)@ha
-        addi	r9,r9, __rtems_end+(4096-CPU_MINIMUM_STACK_FRAME_SIZE)@l
-	mr	r1, r9
 	bl	zero_bss
 	/*
 	 * restore prep boot params
@@ -99,6 +98,15 @@ enter_C_code:
 	mr	r6,r28
 	mr	r7,r27 
 	bl	save_boot_params
+	/*
+	 * stack = &__rtems_end + 4096
+	 */
+	addis	r9,r0, __rtems_end+(4096-CPU_MINIMUM_STACK_FRAME_SIZE)@ha
+        addi	r9,r9, __rtems_end+(4096-CPU_MINIMUM_STACK_FRAME_SIZE)@l
+	mr	r1, r9
+	/*
+	 * We are know in a environment that is totally independent from bootloader setup.
+	 */
 	bl	boot_card
 	bl	_return_to_ppcbug
 	
