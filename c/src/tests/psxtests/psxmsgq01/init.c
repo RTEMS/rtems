@@ -447,7 +447,6 @@ int fill_message_queues(
 )
 {
   int             msg;
-  int             status;
   int             que;
 
 
@@ -604,7 +603,6 @@ void validate_mq_receive_error_codes( )
   int            status;
   char           message[100];
   unsigned int   priority;
-  int            i;
 
   Start_Test( "mq_receive errors"  );
 
@@ -727,7 +725,6 @@ void verify_timed_send_queue(
   int  is_blocking
 )
 {
-  int             i;
   struct timespec timeout;
   struct timeval  tv1, tv2, tv3;
   struct timezone tz1, tz2;
@@ -904,7 +901,6 @@ void verify_notify()
   int             status;
   timer_t         timer_id;
   sigset_t        set;
-  Test_Message_t *ptr;
 
   Start_Test( "mq_notify"  );
 
@@ -1127,9 +1123,6 @@ void *POSIX_Init(
   void *argument
 )
 {
-  int             status;
-  mqd_t           n_mq2;
-
   puts( "\n\n*** POSIX MESSAGE QUEUE TEST ***" );
 
   validate_mq_open_error_codes( );
@@ -1158,10 +1151,6 @@ void *Task_1 (
   void *argument
 )
 {
-  int      status;
-  int      count = 0;
-  sigset_t set;
-
   /* Block Waiting for a message */
 
   print_current_time( "Task_1: ", "" );
@@ -1181,9 +1170,6 @@ void *Task_2(
   void *argument
 )
 {
-  int status;
-
- 
   print_current_time( "Task_2: ", "" );
 
  
