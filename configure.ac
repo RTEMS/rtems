@@ -65,11 +65,9 @@ AS_IF([test x"${enable_docs}" = x"yes"],
   [RTEMS_HOST_CONFIG_SUBDIRS([doc])])
 
 RTEMS_TARGET_CONFIG_SUBDIRS([c/make])
-if test x"$enable_multilib" = x"yes"; then
-RTEMS_TARGET_CONFIG_SUBDIRS([c/src/exec])
-# FIXME: Not yet
-# RTEMS_TARGET_CONFIG_SUBDIRS([c/src/lib])
-fi
+AS_IF([test x"$enable_multilib" = x"yes"],[
+  RTEMS_TARGET_CONFIG_SUBDIRS([cpukit])
+])  
 RTEMS_TARGET_CONFIG_SUBDIRS([c])
 
 AC_CONFIG_FILES([Makefile
