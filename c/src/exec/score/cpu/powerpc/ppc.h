@@ -7,6 +7,8 @@
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
+ *  MPC860 support code was added by Jay Monkman <jmonkman@frasca.com>
+ *
  *  To anyone who acknowledges that this file is provided "AS IS"
  *  without any express or implied warranty:
  *      permission to use, copy, modify, and distribute this file
@@ -177,6 +179,27 @@ extern "C" {
 #define PPC_I_CACHE		16384
 #define PPC_D_CACHE		16384
  
+#elif defined(mpc860)
+/* 
+ *  Added by Jay Monkman (jmonkman@frasca.com) 6/28/98 
+ */ 
+#define CPU_MODEL_NAME  "PowerPC MPC860"
+
+#define PPC_ALIGNMENT		4
+#define PPC_I_CACHE             4096
+#define PPC_D_CACHE             4096
+#define PPC_CACHE_ALIGNMENT	16
+#define PPC_INTERRUPT_MAX       64
+#define PPC_HAS_FPU     	0
+#define PPC_HAS_DOUBLE		0
+#define PPC_USE_MULTIPLE	1
+#define PPC_USE_SPRG            1
+
+#define PPC_MSR_0		0x00009000
+#define PPC_MSR_1		0x00001000
+#define PPC_MSR_2		0x00001000
+#define PPC_MSR_3		0x00000000
+
 #else
  
 #error "Unsupported CPU Model"
@@ -412,6 +435,58 @@ extern "C" {
 #define PPC_IRQ_ADDR_BRK (PPC_STD_IRQ_LAST+1) /*0x1300- Inst. addr break  */
 #define PPC_IRQ_SYS_MGT  (PPC_STD_IRQ_LAST+2) /*0x1400- System Management */
 #define PPC_IRQ_LAST     PPC604_IRQ_SYS_MGT  
+
+#elif defined(mpc860)
+#define PPC_IRQ_IRQ0            (PPC_STD_IRQ_LAST + 1)
+#define PPC_IRQ_LVL0            (PPC_STD_IRQ_LAST + 2)
+#define PPC_IRQ_IRQ1            (PPC_STD_IRQ_LAST + 3)
+#define PPC_IRQ_LVL1            (PPC_STD_IRQ_LAST + 4)
+#define PPC_IRQ_IRQ2		(PPC_STD_IRQ_LAST + 5)
+#define PPC_IRQ_LVL2		(PPC_STD_IRQ_LAST + 6)
+#define PPC_IRQ_IRQ3		(PPC_STD_IRQ_LAST + 7)
+#define PPC_IRQ_LVL3		(PPC_STD_IRQ_LAST + 8)
+#define PPC_IRQ_IRQ4		(PPC_STD_IRQ_LAST + 9)
+#define PPC_IRQ_LVL4		(PPC_STD_IRQ_LAST + 10)
+#define PPC_IRQ_IRQ5		(PPC_STD_IRQ_LAST + 11)
+#define PPC_IRQ_LVL5		(PPC_STD_IRQ_LAST + 12)
+#define PPC_IRQ_IRQ6		(PPC_STD_IRQ_LAST + 13)
+#define PPC_IRQ_LVL6		(PPC_STD_IRQ_LAST + 14)
+#define PPC_IRQ_IRQ7		(PPC_STD_IRQ_LAST + 15)
+#define PPC_IRQ_LVL7		(PPC_STD_IRQ_LAST + 16)
+#define PPC_IRQ_CPM_RESERVED_0	(PPC_STD_IRQ_LAST + 17)
+#define PPC_IRQ_CPM_PC4		(PPC_STD_IRQ_LAST + 18)
+#define PPC_IRQ_CPM_PC5		(PPC_STD_IRQ_LAST + 19)
+#define PPC_IRQ_CPM_SMC2	(PPC_STD_IRQ_LAST + 20)
+#define PPC_IRQ_CPM_SMC1	(PPC_STD_IRQ_LAST + 21)
+#define PPC_IRQ_CPM_SPI		(PPC_STD_IRQ_LAST + 22)
+#define PPC_IRQ_CPM_PC6		(PPC_STD_IRQ_LAST + 23)
+#define PPC_IRQ_CPM_TIMER4	(PPC_STD_IRQ_LAST + 24)
+#define PPC_IRQ_CPM_RESERVED_8	(PPC_STD_IRQ_LAST + 25)
+#define PPC_IRQ_CPM_PC7		(PPC_STD_IRQ_LAST + 26)
+#define PPC_IRQ_CPM_PC8		(PPC_STD_IRQ_LAST + 27)
+#define PPC_IRQ_CPM_PC9		(PPC_STD_IRQ_LAST + 28)
+#define PPC_IRQ_CPM_TIMER3	(PPC_STD_IRQ_LAST + 29)
+#define PPC_IRQ_CPM_RESERVED_D	(PPC_STD_IRQ_LAST + 30)
+#define PPC_IRQ_CPM_PC10	(PPC_STD_IRQ_LAST + 31)
+#define PPC_IRQ_CPM_PC11	(PPC_STD_IRQ_LAST + 32)
+#define PPC_IRQ_CPM_I2C		(PPC_STD_IRQ_LAST + 33)
+#define PPC_IRQ_CPM_RISC_TIMER	(PPC_STD_IRQ_LAST + 34)
+#define PPC_IRQ_CPM_TIMER2	(PPC_STD_IRQ_LAST + 35)
+#define PPC_IRQ_CPM_RESERVED_13	(PPC_STD_IRQ_LAST + 36)
+#define PPC_IRQ_CPM_IDMA2	(PPC_STD_IRQ_LAST + 37)
+#define PPC_IRQ_CPM_IDMA1	(PPC_STD_IRQ_LAST + 38)
+#define PPC_IRQ_CPM_SDMA_ERROR	(PPC_STD_IRQ_LAST + 39)
+#define PPC_IRQ_CPM_PC12	(PPC_STD_IRQ_LAST + 40)
+#define PPC_IRQ_CPM_PC13	(PPC_STD_IRQ_LAST + 41)
+#define PPC_IRQ_CPM_TIMER1	(PPC_STD_IRQ_LAST + 42)
+#define PPC_IRQ_CPM_PC14	(PPC_STD_IRQ_LAST + 43)
+#define PPC_IRQ_CPM_SCC4	(PPC_STD_IRQ_LAST + 44)
+#define PPC_IRQ_CPM_SCC3	(PPC_STD_IRQ_LAST + 45)
+#define PPC_IRQ_CPM_SCC2	(PPC_STD_IRQ_LAST + 46)
+#define PPC_IRQ_CPM_SCC1	(PPC_STD_IRQ_LAST + 47)
+#define PPC_IRQ_CPM_PC15	(PPC_STD_IRQ_LAST + 48)
+
+#define PPC_IRQ_LAST             PPC_IRQ_CPM_PC15
 
 #endif
 

@@ -19,7 +19,7 @@ C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 H_FILES=$(srcdir)/cpu.h $(srcdir)/ppc.h $(srcdir)/ppctypes.h
 
 # H_FILES that get installed externally
-EXTERNAL_H_FILES = $(srcdir)/asm.h
+EXTERNAL_H_FILES = $(srcdir)/asm.h $(srcdir)/mpc860.h
 
 # Assembly source names, if any, go here -- minus the .S
 #  Normally cpu_asm and rtems are assembly files

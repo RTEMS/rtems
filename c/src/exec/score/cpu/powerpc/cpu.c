@@ -405,6 +405,15 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
   0x48000002            /* ba    PROC (_ISR_Handler)            */
 };
 
+#ifdef mpc860
+const CPU_Trap_table_entry _CPU_Trap_slot_template_m860 = {
+  0x7c0803ac,           /* mtlr  %r0                            */
+  0x81210028,           /* lwz   %r9, IP_9(%r1)                 */
+  0x38000000,           /* li    %r0, PPC_IRQ                   */
+  0x48000002            /* b     PROC (_ISR_Handler)            */
+};
+#endif /* mpc860 */
+
 unsigned32  ppc_exception_vector_addr( 
   unsigned32 vector
 );
@@ -483,11 +492,31 @@ void _CPU_ISR_install_raw_handler(
 
     *old_handler =  (proc_ptr) u32_handler;
   } else
+/* There are two kinds of handlers for the MPC860. One is the 'standard' 
+ *  one like above. The other is for the cascaded interrupts from the SIU
+ *  and CPM. Therefore we must check for the alternate one if the standard
+ *  one is not present
+ */
+#ifdef mpc860
+  if (slot->stwu_r1 == _CPU_Trap_slot_template_m860.stwu_r1) {
+    /* 
+     * Set u32_handler = to target address  
+     */
+    u32_handler = slot->b_Handler & 0x03fffffc;
+    *old_handler =  (proc_ptr) u32_handler;
+  } else
+#endif /* mpc860 */
+
     *old_handler = 0;
 
   /*
    *  Copy the template to the slot and then fix it.
    */
+#ifdef mpc860
+  if (vector > PPC_STD_IRQ_LAST)
+    *slot = _CPU_Trap_slot_template_m860;
+  else
+#endif /* mpc860 */
   *slot = _CPU_Trap_slot_template;
 
   u32_handler = (unsigned32) new_handler;
@@ -641,6 +670,152 @@ unsigned32  ppc_exception_vector_addr(
       break;
     case PPC_IRQ_SYS_MGT:
       Offset = 0x1400;
+      break;
+
+#elif defined(mpc860)
+    case PPC_IRQ_IRQ0:
+      Offset = 0x1000;
+      break;
+    case PPC_IRQ_LVL0:
+      Offset = 0x1040;
+      break;
+    case PPC_IRQ_IRQ1:
+      Offset = 0x1080;
+      break;
+    case PPC_IRQ_LVL1:
+      Offset = 0x10c0;
+      break;
+    case PPC_IRQ_IRQ2:
+      Offset = 0x1100;
+      break;
+    case PPC_IRQ_LVL2:
+      Offset = 0x1140;
+      break;
+    case PPC_IRQ_IRQ3:
+      Offset = 0x1180;
+      break;
+    case PPC_IRQ_LVL3:
+      Offset = 0x11c0;
+      break;
+    case PPC_IRQ_IRQ4:
+      Offset = 0x1200;
+      break;
+    case PPC_IRQ_LVL4:
+      Offset = 0x1240;
+      break;
+    case PPC_IRQ_IRQ5:
+      Offset = 0x1280;
+      break;
+    case PPC_IRQ_LVL5:
+      Offset = 0x12c0;
+      break;
+    case PPC_IRQ_IRQ6:
+      Offset = 0x1300;
+      break;
+    case PPC_IRQ_LVL6:
+      Offset = 0x1340;
+      break;
+    case PPC_IRQ_IRQ7:
+      Offset = 0x1380;
+      break;
+    case PPC_IRQ_LVL7:
+      Offset = 0x13c0;
+      break;
+    case PPC_IRQ_CPM_RESERVED_0:
+      Offset = 0x1400;
+      break;
+    case PPC_IRQ_CPM_PC4:
+      Offset = 0x1410;
+      break;
+    case PPC_IRQ_CPM_PC5:
+      Offset = 0x1420;
+      break;
+    case PPC_IRQ_CPM_SMC2:
+      Offset = 0x1430;
+      break;
+    case PPC_IRQ_CPM_SMC1:
+      Offset = 0x1440;
+      break;
+    case PPC_IRQ_CPM_SPI:
+      Offset = 0x1450;
+      break;
+    case PPC_IRQ_CPM_PC6:
+      Offset = 0x1460;
+      break;
+    case PPC_IRQ_CPM_TIMER4:
+      Offset = 0x1470;
+      break;
+    case PPC_IRQ_CPM_RESERVED_8:
+      Offset = 0x1480;
+      break;
+    case PPC_IRQ_CPM_PC7:
+      Offset = 0x1490;
+      break;
+    case PPC_IRQ_CPM_PC8:
+      Offset = 0x14a0;
+      break;
+    case PPC_IRQ_CPM_PC9:
+      Offset = 0x14b0;
+      break;
+    case PPC_IRQ_CPM_TIMER3:
+      Offset = 0x14c0;
+      break;
+    case PPC_IRQ_CPM_RESERVED_D:
+      Offset = 0x14d0;
+      break;
+    case PPC_IRQ_CPM_PC10:
+      Offset = 0x14e0;
+      break;
+    case PPC_IRQ_CPM_PC11:
+      Offset = 0x14f0;
+      break;
+    case PPC_IRQ_CPM_I2C:
+      Offset = 0x1500;
+      break;
+    case PPC_IRQ_CPM_RISC_TIMER:
+      Offset = 0x1510;
+      break;
+    case PPC_IRQ_CPM_TIMER2:
+      Offset = 0x1520;
+      break;
+    case PPC_IRQ_CPM_RESERVED_13:
+      Offset = 0x1530;
+      break;
+    case PPC_IRQ_CPM_IDMA2:
+      Offset = 0x1540;
+      break;
+    case PPC_IRQ_CPM_IDMA1:
+      Offset = 0x1550;
+      break;
+    case PPC_IRQ_CPM_SDMA_ERROR:
+      Offset = 0x1560;
+      break;
+    case PPC_IRQ_CPM_PC12:
+      Offset = 0x1570;
+      break;
+    case PPC_IRQ_CPM_PC13:
+      Offset = 0x1580;
+      break;
+    case PPC_IRQ_CPM_TIMER1:
+      Offset = 0x1590;
+      break;
+    case PPC_IRQ_CPM_PC14:
+      Offset = 0x15a0;
+      break;
+    case PPC_IRQ_CPM_SCC4:
+      Offset = 0x15b0;
+      break;
+    case PPC_IRQ_CPM_SCC3:
+      Offset = 0x15c0;
+      break;
+    case PPC_IRQ_CPM_SCC2:
+      Offset = 0x15d0;
+      break;
+    case PPC_IRQ_CPM_SCC1:
+      Offset = 0x15e0;
+      break;
+    case PPC_IRQ_CPM_PC15:
+      Offset = 0x15f0;
       break;
 #endif
 

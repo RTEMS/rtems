@@ -474,7 +474,7 @@ typedef struct {
   void       (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
 
-#if defined(ppc403)
+#if (defined(ppc403) || defined(mpc860))
   unsigned32   serial_per_sec;	       /* Serial clocks per second */
   boolean      serial_external_clock;
   boolean      serial_xon_xoff;
@@ -483,6 +483,10 @@ typedef struct {
   unsigned32   timer_average_overhead; /* Average overhead of timer in ticks */
   unsigned32   timer_least_valid;      /* Least valid number from timer      */
   boolean      timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
+#endif
+
+#if (defined(mpc860))
+  unsigned32   clock_speed;            /* Speed of CPU in Hz */
 #endif
 }   rtems_cpu_table;
 
