@@ -65,7 +65,7 @@ buildrt.texi: buildrt.t versions.texi
 	    -n "Building the Sample Application" ${*}.t
 
 sample.texi: sample.t versions.texi
-	$(BMENU) -c -p "Generate RTEMS for a Specific Target and BSP" \
+	$(BMENU) -c -p "Using the RTEMS configure Script Directly" \
 	    -u "Top" \
 	    -n "Building the GNU Debugger" ${*}.t
 
