@@ -9,6 +9,11 @@ RTEMS_TOP(../../../../..)
 RTEMS_CANONICAL_TARGET_CPU
 
 AM_INIT_AUTOMAKE(rtems-tests-tools-generic,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+# Override the set of BSPs to be built.
+
+RTEMS_ENV_RTEMSBSP
+RTEMS_PROJECT_ROOT
 
 RTEMS_PATH_KSH
 

@@ -10,11 +10,13 @@ AC_DEFUN(RTEMS_TOOL_PREFIX,
 [AC_REQUIRE([AC_CANONICAL_TARGET])dnl
 AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 
-if [[ "${program_prefix}" = "NONE" ]] ; then
-  if [[ "${target}" = "${host}" ]] ; then
+changequote(,)dnl
+if [ "${program_prefix}" = "NONE" ] ; then
+  if [ "${target}" = "${host}" ] ; then
     program_prefix=
   else
     program_prefix=${target}-
   fi
 fi
+changequote([,])dnl
 ])

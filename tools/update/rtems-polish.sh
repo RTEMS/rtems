@@ -12,7 +12,7 @@
 
 progname=`basename $0`
 
-perltools=c/update-tools
+perltools=tools/update
 ac_do=""
 am_do=""
 ci_do=""

@@ -27,10 +27,6 @@ TARGET_SUBDIR=".")
 RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
 
-PROJECT_ROOT=`pwd`/$RTEMS_TOPdir;
-test "$TARGET_SUBDIR" = "." || PROJECT_ROOT="$PROJECT_ROOT/.."
-AC_SUBST(PROJECT_ROOT)
-
 dnl Determine RTEMS Version string from the VERSION file
 dnl Hopefully, Joel never changes its format ;-
 AC_MSG_CHECKING([for RTEMS Version])
@@ -46,9 +42,6 @@ if test -z "$RTEMS_VERSION"; then
 AC_MSG_ERROR(Unable to determine version)
 fi
 AC_MSG_RESULT($RTEMS_VERSION)
-
-RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
-AC_SUBST(RTEMS_ROOT)
 ])dnl
 
 dnl
@@ -184,6 +177,39 @@ else
 fi
 AC_SUBST($1)])
 
+# Add --enable-maintainer-mode option to configure.
+# From Jim Meyering
+
+# serial 1
+
+AC_DEFUN(AM_MAINTAINER_MODE,
+[AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
+  dnl maintainer-mode is disabled by default
+  AC_ARG_ENABLE(maintainer-mode,
+[  --enable-maintainer-mode enable make rules and dependencies not useful
+                          (and sometimes confusing) to the casual installer],
+      USE_MAINTAINER_MODE=$enableval,
+      USE_MAINTAINER_MODE=no)
+  AC_MSG_RESULT($USE_MAINTAINER_MODE)
+  AM_CONDITIONAL(MAINTAINER_MODE, test $USE_MAINTAINER_MODE = yes)
+  MAINT=$MAINTAINER_MODE_TRUE
+  AC_SUBST(MAINT)dnl
+]
+)
+
+# Define a conditional.
+
+AC_DEFUN(AM_CONDITIONAL,
+[AC_SUBST($1_TRUE)
+AC_SUBST($1_FALSE)
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi])
+
 dnl $Id$
 
 AC_DEFUN(RTEMS_PATH_KSH,
@@ -203,6 +229,8 @@ AC_DEFUN(RTEMS_TOOLPATHS,
 [
 # tooldir='$(exec_prefix)/'$target_alias
 # Temporary work-around until building in source tree is supported
+AC_REQUIRE([RTEMS_PROJECT_ROOT])
+
 tooldir='$(PROJECT_ROOT)'
 AC_SUBST(tooldir)
 
@@ -214,5 +242,35 @@ AC_SUBST(project_libdir)
 
 project_bindir='$(tooldir)/bin'
 AC_SUBST(project_bindir)
+
+rtems_bspdir='$(prefix)/${RTEMS_BSP}'
+AC_SUBST(rtems_bspdir)
+rtems_makedir='$(prefix)/make'
+AC_SUBST(rtems_makedir)
 ])
+
+dnl
+dnl $Id$
+dnl 
+
+AC_DEFUN(RTEMS_PROJECT_ROOT,
+[dnl
+AC_REQUIRE([RTEMS_TOP])
+if test "$TARGET_SUBDIR" = "." ; then
+PROJECT_ROOT=$RTEMS_TOPdir/'$(top_builddir)';
+else
+PROJECT_ROOT=../$RTEMS_TOPdir/'$(top_builddir)'
+fi
+AC_SUBST(PROJECT_ROOT)
+
+RTEMS_ROOT=$RTEMS_TOPdir/'$(top_builddir)'/c/$RTEMS_BSP
+AC_SUBST(RTEMS_ROOT)
+
+INSTALL_CHANGE="\$(KSH) \$(PROJECT_ROOT)/tools/build/install-if-change"
+AC_SUBST(INSTALL_CHANGE)
+
+PACKHEX="\$(PROJECT_ROOT)/tools/build/packhex"
+AC_SUBST(PACKHEX)
+])
+
 

@@ -63,3 +63,15 @@ unset ac_cv_prog_cc_g
 unset ac_cv_prog_cxx_works
 unset ac_cv_prog_cxx_cross
 ])
+
+AC_DEFUN(RTEMS_PROG_CXX_FOR_TARGET,
+[
+  RTEMS_PROG_CXX
+  if test "$rtems_cv_prog_cc_cross" != "$rtems_cv_prog_cxx_cross"; then
+    AC_MSG_ERROR([***]
+     [Inconsistency in compiler configuration:]
+     [Target C compiler and Target C++ compiler]
+     [must both either be cross compilers or native compilers]
+     [Hint: If building a posix bsp: LD_LIBRARY_PATH?] )
+  fi
+])

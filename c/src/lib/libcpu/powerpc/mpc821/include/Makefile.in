@@ -9,31 +9,38 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../../../..
-subdir = c/src/lib/libcpu/powerpc/mpc821/include
+top_builddir = ../../../..
+subdir = libcpu/powerpc/mpc821/include
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(wildcard $(srcdir)/*.h)
-SRCS=$(H_FILES)
+H_PIECES = console mpc821
+H_FILES = $(H_PIECES:%=$(srcdir)/%.h)
+SRCS = $(H_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
-all:	install
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-install:
-	$(RTEMS_ROOT)/mkinstalldirs $(PROJECT_INCLUDE)/mpc821
-	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/mpc821
+INSTALLDIRS = $(PROJECT_INCLUDE)/mpc821
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
+
+all: install
+
+install: 
+	$(mkinstalldirs) $(PROJECT_INCLUDE)/mpc821
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/mpc821
 
 all: FORCEIT
-	cd ../../../../libbsp/$(RTEMS_CPU)/${RTEMS_BSP}/include; $(MAKE) all
+	cd ../../../../libbsp/$(RTEMS_CPU)/@RTEMS_BSP@/include; $(MAKE) all
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

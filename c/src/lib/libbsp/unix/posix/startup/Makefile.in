@@ -5,60 +5,65 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../../../..
-subdir = c/src/lib/libbsp/unix/posix/startup
+top_builddir = ../../../..
+subdir = libbsp/unix/posix/startup
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@:@srcdir@/../../../shared
 
-PGM=${ARCH}/startup.rel
-NO_CTOR_LIB=${ARCH}/libno-ctor.a
+PGM = ${ARCH}/startup.rel
+NO_CTOR_LIB = $(NO_CTOR_LIB_CPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bspclean bsplibc bspstart setvec $(C_MAIN)
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_PIECES = bspclean bsplibc bspstart setvec $(C_MAIN_C_PIECES)
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-CC_PIECES=$(CXX_MAIN)
-CC_FILES=$(CC_PIECES:%=%.cc)
-CC_O_FILES=$(CC_PIECES:%=${ARCH}/%.o)
+CC_PIECES = $(CXX_MAIN)
+CC_FILES = $(CC_PIECES:%=%.cc)
+CC_O_FILES = $(CC_PIECES:%=${ARCH}/%.o)
 
-H_FILES=
+H_FILES =
 
-SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) no-ctor.c
-OBJS=$(C_O_FILES)
+SRCS = $(C_FILES) $(CC_FILES) $(H_FILES) no-ctor.c
+OBJS = $(C_O_FILES)
 
 # We install the RTEMS constructor as a separate .o
 # so it can be easily place correctly by the compiler config file.
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
-ifeq ($(HAS_CPLUSPLUS),yes)
-NO_CTOR_LIB=${ARCH}/libno-ctor.a
-INSTALLED_O_FILES=$(ARCH)/rtems-ctor.o
-CXX_MAIN=rtems-ctor
-C_MAIN=
-else
-CXX_MAIN=
-C_MAIN=main bootcard
-endif
+INSTALL_CHANGE = @INSTALL_CHANGE@
+
+NO_CTOR_LIB_CPLUSPLUS_yes_V = ${ARCH}/libno-ctor.a
+INSTALLED_O_FILES_CPLUSPLUS_yes_V = $(ARCH)/rtems-ctor.o
+CXX_MAIN_C_PIECES_CPLUSPLUS_yes_V = rtems-ctor
+C_MAIN_C_PIECES_CPLUSPLUS_yes_V =
+
+NO_CTOR_LIB_CPLUSPLUS_no_V =
+INSTALLED_O_FILES_CPLUSPLUS_no_V =
+CXX_MAIN_C_PIECES_CPLUSPLUS_no_V =
+C_MAIN_C_PIECES_CPLUSPLUS_no_V = main bootcard
+
+NO_CTOR_LIB = $(NO_CTOR_LIB_CPLUSPLUS_$(HAS_CPLUSPLUS)_V)
+INSTALLED_O_FILES = $(INSTALLED_O_FILES_CPLUSPLUS_$(HAS_CPLUSPLUS)_V)
+CXX_MAIN_C_PIECES = $(CXX_MAIN_C_PIECES_CPLUSPLUS_$(HAS_CPLUSPLUS)_V)
+C_MAIN_C_PIECES = $(C_MAIN_C_PIECES_CPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS +=
-CFLAGS   +=  $(LIBC_DEFINES)
+CFLAGS += $(LIBC_DEFINES)
 
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
+LD_PATHS +=
+LD_LIBS +=
+LDFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -77,10 +82,10 @@ ${NO_CTOR_LIB}: $(ARCH)/no-ctor.o
 	$(RM) $@
 	$(AR) -cvr $@ $(ARCH)/no-ctor.o
 
-all:	${ARCH} $(SRCS) $(INSTALLED_O_FILES) $(PGM) ${NO_CTOR_LIB}
-	$(INSTALL_VARIANT) $(INSTALLED_O_FILES) ${PROJECT_RELEASE}/lib
-	$(INSTALL_VARIANT) $(NO_CTOR_LIB) ${PROJECT_RELEASE}/lib
+all: ${ARCH} $(SRCS) $(INSTALLED_O_FILES) $(PGM) ${NO_CTOR_LIB}
+	@$(INSTALL_VARIANT) $(INSTALLED_O_FILES) $(PROJECT_RELEASE)/lib
+	@$(INSTALL_VARIANT) $(NO_CTOR_LIB) $(PROJECT_RELEASE)/lib
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

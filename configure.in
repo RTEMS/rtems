@@ -7,13 +7,15 @@ AC_PREREQ(2.13)
 AC_INIT(README)
 RTEMS_TOP(.)
 
-dnl Checks for programs.
-AC_PROG_MAKE_SET
-
-AC_ARG_WITH(cross-host,[  --with-cross-host=HOST      host (cygnus)], \
-host=$withval)
-
 RTEMS_CANONICAL_TARGET_CPU
+AM_INIT_AUTOMAKE(rtems,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+dnl RTEMS_ENABLE_BARE
+dnl RTEMS_ENABLE_RTEMSBSP(rtems_bsp)
+
+dnl These option are only in here to let --help report all supported
+dnl options.
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_NETWORKING
@@ -22,409 +24,36 @@ RTEMS_ENABLE_INLINES
 RTEMS_ENABLE_CXX
 RTEMS_ENABLE_GCC28
 RTEMS_ENABLE_LIBCDIR
-RTEMS_ENABLE_BARE
+RTEMS_ENABLE_TESTS
+RTEMS_ENABLE_HWAPI
 
-RTEMS_PREFIX=${target_cpu}-${target_vendor}
-
-dnl BEGIN configure.host.in
-
-AC_PATH_PROG(CAT,cat)
-AC_PATH_PROG(RM,rm)
-AC_PATH_PROG(CP,cp)
-AC_PATH_PROG(MV,mv)
-AC_PATH_PROG(LN,ln)
-AC_PROG_LN_S
-AC_PATH_PROG(CHMOD,chmod)
-AC_PATH_PROG(SORT,sort)
-AC_PROG_INSTALL
-RTEMS_PATH_PERL
-
-AC_PATH_PROG(TOUCH,touch)
-AC_PATH_PROG(CMP,cmp)
-
-AC_PATH_PROG(SED,sed)
-AC_PATH_PROGS(M4,gm4 m4)
-
-RTEMS_PATH_KSH
-
-dnl BEGIN configure.target.in
-
-dnl echo "TARGET"
-dnl echo "    cpu    --> $target_cpu"
-dnl echo "    os     --> $target_os"
-dnl echo "    vendor --> $target_vendor"
-
-dnl canonicalize target name
-dnl NOTE: Most rtems targets do not fullfil autoconf 
-dnl targets naming conventions "processor-vendor-os"
-dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
-dnl and we have to fix it for rtems ourselves 
-dnl 
-dnl The original plan was to do CPU-BSP-rtems or CPU-rtems to
-dnl imply all BSPs.  Eventually we would like to build a collection
-dnl of CPU model specific RTEMS libraries which in conjunction with
-dnl a BSP library would be used to link an application.
-
-# RTEMS_CANONICAL_TARGET_CPU
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
 
+AC_CONFIG_SUBDIRS(tools/build)
+AC_CONFIG_SUBDIRS(tools/update)
+AC_CONFIG_SUBDIRS(tools/cpu)
+
+# List all subdirectories to be compiled for the target here
+RTEMS_CONFIG_SUBDIRS(c)
+
+if test "$target_alias" != "$host_alias"; then
 changequote(,)dnl
-case "${target}" in
-  i[3456]86-go32-rtems*)
-    rtems_bsp="go32 go32_p5"
-    skip_startfiles="yes"
-    ;;
-  *)
-    ;;
-esac
+TARGET_SUBDIRS=`echo "$target_subdirs" | \
+ sed -e "s%\([^ ]\+\)%$target_alias/\1%g"`
 changequote([,])dnl
-
-# Override the set of BSPs to be built.
-AC_ARG_ENABLE(rtemsbsp, \
-  [  --enable-rtemsbsp=bsp1 bsp2 ..   BSPs to include in build], \
-      rtems_bsp=$enableval \
-)
-
-RTEMS_TOOL_PREFIX
-
-dnl check target cc
-RTEMS_PROG_CC
-dnl check if the compiler supports --specs
-RTEMS_GCC_SPECS
-dnl check if the target compiler may use --pipe
-RTEMS_GCC_PIPE
-
-dnl check if the compiler supports --specs if gcc28 is requested
-if test "$RTEMS_USE_GCC272" != "yes" ; then
-  if test "$rtems_cv_gcc_specs" = "no"; then
-    AC_MSG_WARN([*** disabling --enable-gcc28])
-     RTEMS_USE_GCC272=yes
-  fi
-fi
-test "$rtems_cv_gcc_pipe" = "yes" && CC_FOR_TARGET="$CC_FOR_TARGET --pipe"
-
-dnl check for g++
-if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-  RTEMS_PROG_CXX
-  if test "$rtems_cv_prog_cc_cross" != "$rtems_cv_prog_cxx_cross"; then
-    AC_MSG_ERROR([***]
-     [Inconsistency in compiler configuration:]
-     [Target C compiler and Target C++ compiler]
-     [must both either be cross compilers or native compilers]
-     [Hint: If building a posix bsp: LD_LIBRARY_PATH?] )
-  fi
 else
-  CXX_FOR_TARGET="no"
+TARGET_SUBDIRS="$target_subdirs"
 fi
+AC_SUBST(TARGET_SUBDIRS)
 
-RTEMS_CANONICALIZE_TOOLS
-
-dnl if this is an i386, does gas have good code16 support?
-RTEMS_I386_GAS_CODE16
-
-dnl check host cc
-AC_PROG_CC
-dnl check for .exe (Cygwin)
-AC_EXEEXT
-
-dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*
-case $host_os in
-*cygwin32*)	GCCSED="| sed 's%\\\\%/%g'" ;;
-*) ;;
-esac
-AC_SUBST(GCCSED)
-
-dnl FIXME: This is a kludge
-dnl Set flags to settings all gcc variants are assumed to accept.
-if test "$ac_cv_prog_gcc" = "yes"; then
-dnl Add -Wall if using gcc as host compiler
-  CC_CFLAGS_DEFAULT=-Wall
-dnl Add -pg to profile flags, unless specified in the environment
-  CC_CFLAGS_PROFILE_V=${CC_CFLAGS_PROFILE_V-"-pg"}
-dnl propagate cflags to ldflags, unless specified in the environment
-  CC_LDFLAGS_PROFILE_V=${CC_LDFLAGS_PROFILE_V-$CC_CFLAGS_PROFILE_V}
-fi
-
-dnl Add -g if the host compiler accepts -g, assume -g means debugging
-test "$ac_cv_prog_cc_g" = "yes" && CC_CFLAGS_DEBUG_V=${CC_CFLAGS_DEBUG_V-"-g"}
-
-dnl check for SysV IPC used by simulators
-if test "$RTEMS_CPU" = "unix" ; then
-  RTEMS_SYSV_SEM
-  if test "$rtems_cv_sysv_sem" != "yes" ; then
-    AC_MSG_ERROR([System V semaphores don't work, required by simulator])
-  fi
-  RTEMS_SYSV_SHM
-  if test "$rtems_cv_sysv_shm" != "yes" ; then
-    AC_MSG_ERROR([System V shared memory doesn't work, required by simulator])
-  fi
-  RTEMS_SYSV_MSG
-  if test "$rtems_cv_sysv_msg" != "yes" ; then
-    AC_MSG_ERROR([System V messages don't work, required by simulator])
-  fi
-fi
-
-# Collect config subdirs for exec/score/tools
-t="c/src/exec/score/tools"
-scoretools_cfgdirs="$t/generic"
-if test -d $srcdir/$t/$RTEMS_CPU; then
-  scoretools_cfgdirs="$scoretools_cfgdirs $t/$RTEMS_CPU"
-fi
-
-# find all the Executive Makefiles
-RTEMS_CHECK_MAKEFILE(c/src/exec/rtems)
-RTEMS_CHECK_MAKEFILE(c/src/exec/sapi)
-RTEMS_CHECK_MAKEFILE(c/src/exec/score/cpu/$RTEMS_CPU)
-
-if test "$RTEMS_HAS_POSIX_API" = "yes"; then
-  RTEMS_CHECK_MAKEFILE(c/src/exec/posix)
-  makefiles="$makefiles c/src/exec/wrapup/posix/Makefile"
-fi
-
-# find all the Makefiles for the BSPs
-if test -d "$srcdir/c/src/lib/libbsp/$RTEMS_CPU"; then
-  makefiles="$makefiles c/src/lib/libbsp/$RTEMS_CPU/Makefile"
-
-  if test -z "$rtems_bsp"; then
-    AC_MSG_CHECKING([for bsps])
-    files=`ls $srcdir/c/src/lib/libbsp/$RTEMS_CPU`
-    for file in $files; do
-      case $file in
-        shared*);;
-        Makefile*);;
-        READ*);;
-        CVS*);;
-        pxfl*);;
-        go32*);;       # so the i386 port can pick up the other Makefiles
-        # Now account for BSPs with build variants
-        gen68360)      rtems_bsp="$rtems_bsp gen68360 gen68360_040";;
-        p4000)         rtems_bsp="$rtems_bsp p4600 p4650";;
-        mvme162)       rtems_bsp="$rtems_bsp mvme162 mvme162lx";;
-        *) rtems_bsp="$rtems_bsp $file";;
-      esac;
-    done
-
-    makefiles="$makefiles c/src/lib/libbsp/bare/Makefile"
-
-    AC_MSG_RESULT([$rtems_bsp done])
-  fi
-
-  # collect makefiles for each bsp
-  for i in $rtems_bsp; do
-    # make sure there is a make/custom file for the bsp
-    if test ! -r "$srcdir/make/custom/${i}.cfg"; then
-      AC_MSG_ERROR([no make/custom/${i}.cfg file for BSP $i])
-    fi
- 
-    # account for "aliased" bsps which share source code
-    case $i in 
-      mvme162lx)    bspdir=mvme162  ;;  # mvme162 board variant
-      gen68360_040) bspdir=gen68360 ;;  # 68360 in companion mode
-      go32_p5)      bspdir=go32     ;;  # go32 on Pentium class CPU
-      p4600)        bspdir=p4000    ;;  # p4000 board with IDT 4600
-      p4650)        bspdir=p4000    ;;  # p4000 board with IDT 4650
-      *)            bspdir=$i;;
-    esac
-
-    # Is there code where there should be for this BSP?
-    # The bare bsp is a special case as it is not under the RTEMS_CPU path
-    case $i in
-      bare)
-        bspcpudir=
-        if test "X${BARE_CPU_CFLAGS}" = "X" ; then
-          AC_MSG_ERROR([--enable-bare-cpu-cflags not specified for bare bsp])
-        fi
-        if test "X${BARE_CPU_MODEL}" = "X" ; then
-          AC_MSG_ERROR([--enable-bare-cpu-model not specified for bare bsp])
-        fi
-        ;;
-      *)
-        bspcpudir=$RTEMS_CPU/
-        ;;
-    esac
-     
-    if test -d "$srcdir/c/src/lib/libbsp/$bspcpudir$bspdir"; then
-      RTEMS_BSP_LIST="$RTEMS_BSP_LIST $i"
-      # make sure the Makefiles in a bsp directory are only done once
-      echo $bspdirs | grep $bspdir >/dev/null 2>&1
-      if test $? -ne 0 ; then
-        bspdirs="$bspdirs $bspdir"
-        RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/$bspcpudir$bspdir)
-        RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/${bspcpudir}shared)
-
-        # HACK: sed out bsp-tools from makefiles
-        t="c/src/lib/libbsp/$bspcpudir$bspdir/tools"
-        if test -d "$srcdir/$t"; then
-          bsptools_cfgdirs="$bsptools_cfgdirs $t"
-          makefiles=`echo "$makefiles" | sed -e "s%$t/Makefile%%g"`
-        fi
-      fi
-    else
-      AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  $i])
-    fi
-  done
-fi
-
-# find all the CPU dependent library Makefiles
-RTEMS_CHECK_MAKEFILE(c/src/lib/libcpu/$RTEMS_CPU)
-
-dnl Workaround for go32
-if test "$skip_startfiles" != "yes"; then
-  RTEMS_CHECK_MAKEFILE(c/src/lib/start/$RTEMS_CPU)
-fi
-
-dnl END configure.target.in
-
-# If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
-if test "$RTEMS_USE_MACROS" = "yes"; then
-  inline_dir=macros
-  if test "$RTEMS_HAS_POSIX_API" = "yes"; then
-    # The problem is that there is currently no code in posix/macros :)
-    AC_MSG_ERROR(Macros are not implemented for the POSIX API)
-  fi
-else
-  inline_dir=inline
-fi
-
-# If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
-AC_MSG_CHECKING([if networking is enabled? ])
-AC_MSG_RESULT($RTEMS_HAS_NETWORKING)
-if test "$RTEMS_HAS_NETWORKING" = "yes"; then
-  RTEMS_CHECK_MAKEFILE(c/src/lib/libnetworking)
-  RTEMS_CHECK_MAKEFILE(c/src/lib/librpc)
-  if test "$RTEMS_HAS_RDBG" = "yes"; then
-    AC_MSG_CHECKING([whether cpu supports rdbg? ])
-    test ! -d "$srcdir/c/src/lib/librdbg/$RTEMS_CPU" && RTEMS_HAS_RDBG="no" ;
-    AC_MSG_RESULT($RTEMS_HAS_RDBG)
-    if test "$RTEMS_HAS_RDBG" = "yes"; then
-      AC_PATH_PROG(RPCGEN,rpcgen)
-      test -z "$RPCGEN" && RTEMS_HAS_RDBG="no"
-    fi
-    if test "$RTEMS_HAS_RDBG" = "yes"; then
-      AC_PROG_AWK
-      test -z "$AWK" && RTEMS_HAS_RDBG="no"
-    fi
-    if test "$RTEMS_HAS_RDBG" = "yes"; then
-      RTEMS_CHECK_MAKEFILE(c/src/lib/librdbg)
-    else
-      AC_MSG_WARN([*** warning disabling --enable-rdbg])
-    fi
-  fi
-fi
-
-# If the C++ support is enabled, then include the Makefiles
-if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-  makefiles="$makefiles c/src/lib/librtems++/Makefile"
-fi
-
-RTEMS_ENABLE_TESTS
-
-# always build the test tools
-testtools_cfgdirs="c/src/tests/tools/generic"
-if test "$tests_enabled" = "yes"; then
-   RTEMS_CHECK_MAKEFILE(c/src/tests/libtests)
-   RTEMS_CHECK_MAKEFILE(c/src/tests/sptests)
-   RTEMS_CHECK_MAKEFILE(c/src/tests/tmtests)
-   if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
-       RTEMS_CHECK_MAKEFILE(c/src/tests/mptests)
-   fi
-   if test "$RTEMS_HAS_POSIX_API" = "yes"; then
-     RTEMS_CHECK_MAKEFILE(c/src/tests/psxtests)
-   fi
-   if test -d "$srcdir/c/src/tests/tools/$RTEMS_CPU"; then
-     testtools_cfgdirs="$testtools_cfgdirs c/src/tests/tools/$RTEMS_CPU"
-   fi
-fi 
-
-# If the HWAPI is enabled, the find the HWAPI Makefiles
-RTEMS_ENABLE_HWAPI
-if test "$RTEMS_HAS_HWAPI" = "yes"; then
-  AC_MSG_CHECKING(whether libwapi is present)
-  if test -f ${srcdir}/c/src/lib/libhwapi/Makefile.in ; then
-    AC_MSG_RESULT(yes)
-    makefiles="$makefiles c/src/lib/libhwapi/Makefile"
-    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/analog)
-    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/discrete)
-    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/drivers)
-    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/non_volatile_memory)
-    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/serial)
-    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/support)
-    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/wrapup)
-  else
-    AC_MSG_ERROR(No source code found for the HWAPI)
-  fi
-fi
-
-AC_SUBST(rtems_cv_prog_cc_cross)
-AC_SUBST(RTEMS_BSP_LIST)
-AC_SUBST(RTEMS_HAS_CPLUSPLUS)
-AC_SUBST(RTEMS_USE_GCC272)
-AC_SUBST(BARE_CPU_CFLAGS)
-AC_SUBST(BARE_CPU_MODEL)
-AC_SUBST(program_prefix)
-AC_SUBST(CC_CFLAGS_DEFAULT)
-AC_SUBST(CC_CFLAGS_DEBUG_V)
-AC_SUBST(CC_CFLAGS_PROFILE_V)
-AC_SUBST(CC_LDFLAGS_PROFILE_V)
-
-# pick up all the Makefiles in required parts of the tree
-RTEMS_CHECK_MAKEFILE(make)
-RTEMS_CHECK_MAKEFILE(c/src/lib/libchip)
-RTEMS_CHECK_MAKEFILE(c/src/lib/libmisc)
-RTEMS_CHECK_MAKEFILE(c/src/tests/samples)
-
-AC_CONFIG_SUBDIRS(c/build-tools)
-AC_CONFIG_SUBDIRS(c/update-tools)
-AC_CONFIG_SUBDIRS($scoretools_cfgdirs)
-AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
-AC_CONFIG_SUBDIRS($testtools_cfgdirs)
-
-# FIXME: libhwapi needs a separate configure.in in future ;-
-# AC_CONFIG_SUBDIRS(c/src/lib/libhwapi)
-
-# try not to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile
-make/host.cfg
-make/target.cfg
-make/Templates/Makefile.inc
-make/compilers/gcc.cfg
-c/Makefile
-c/src/Makefile
-c/src/exec/Makefile
-c/src/exec/score/Makefile
-c/src/exec/score/cpu/Makefile
-c/src/exec/score/include/Makefile
-c/src/exec/score/include/rtems/Makefile
-c/src/exec/score/include/rtems/wrap/Makefile
-c/src/exec/score/include/rtems/score/Makefile
-c/src/exec/score/${inline_dir}/Makefile
-c/src/exec/score/${inline_dir}/rtems/Makefile
-c/src/exec/score/${inline_dir}/rtems/score/Makefile
-c/src/exec/score/src/Makefile
-c/src/exec/score/tools/Makefile
-c/src/exec/wrapup/Makefile
-c/src/exec/wrapup/rtems/Makefile
-c/src/lib/Makefile
-c/src/lib/include/Makefile
-c/src/lib/libbsp/Makefile
-c/src/lib/libbsp/shmdr/Makefile
-c/src/lib/libc/Makefile
-c/src/lib/libcpu/Makefile
-c/src/lib/start/Makefile
-c/src/lib/wrapup/Makefile
-c/src/tests/Makefile
-c/src/tests/support/Makefile
-c/src/tests/support/include/Makefile
-c/src/tests/support/stubdr/Makefile
-c/src/tests/support/wrapup/Makefile
-c/src/tests/tools/Makefile
-$makefiles)
+tools/Makefile
+make/Makefile
+make/custom/Makefile
+make/Templates/Makefile
+make/compilers/Makefile
+doc/Makefile)
 
-echo
-echo target architecture: $RTEMS_CPU.
-echo available BSPs: $rtems_bsp.
-echo \'make all\' will build the following BSPs: $RTEMS_BSP_LIST.
-echo other BSPs can be built with \'make RTEMS_BSP=\"bsp1 bsp2 ...\"\' 
-echo
+RTEMS_OUTPUT_SUBDIRS(RTEMS_TGT_SUBDIRS)

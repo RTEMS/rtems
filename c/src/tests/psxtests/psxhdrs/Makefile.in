@@ -5,61 +5,54 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../..
-subdir = c/src/tests/psxtests/psxhdrs
+top_builddir = ../..
+subdir = psxtests/psxhdrs
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
 # C source names, if any, go here -- minus the
-C_PIECES=\
-  clock01 clock02 clock03 clock04 clock05 \
-  cond01 cond02 cond03 cond04 cond05 cond06 cond07 \
-  cond08 cond09 cond10 \
-  key01 key02 key03 key04 \
-  mutex01 mutex02 mutex03 mutex04 mutex05 mutex06 mutex07 \
-  mutex08 mutex09 mutex10 mutex11 mutex12 mutex13 mutex14 \
-  mutex15 mutex16 \
-  pthread01 pthread02 pthread03 pthread04 pthread05 pthread06 \
-  pthread07 pthread08 pthread09 pthread10 pthread11 pthread12 \
-  pthread13 pthread14 pthread15 pthread16 pthread17 pthread18 \
-  pthread19 pthread20 pthread21 pthread22 pthread23 pthread24 \
-  pthread25 pthread26 pthread27 pthread28 pthread29 pthread30 \
-  pthread31 pthread32 pthread33 pthread34 pthread35 pthread36 \
-  proc01 proc02 proc03 proc04 proc05 proc06 proc07 proc08 \
-  proc09 proc10 proc11 proc12 proc13 proc14 \
-  sched01 sched02 sched03 sched04 sched05 sched06 sched07 sched08 \
-  signal01 signal02 signal03 signal04 signal05 signal06 signal07 \
-  signal08 signal09 signal10 signal11 signal12 signal13 signal14 \
-  signal15 signal16 signal17 signal18 signal19 signal20 signal21 \
-  signal22 \
-  time01 time02 time03 time04 time05 time06 time07 time08 time09 \
-  time10 time11 time12 time13 \
-  timer01 timer02 timer03 timer04 timer05 timer06 
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_PIECES = clock01 clock02 clock03 clock04 clock05 cond01 cond02 cond03 \
+    cond04 cond05 cond06 cond07 cond08 cond09 cond10 key01 key02 key03 key04 \
+    mutex01 mutex02 mutex03 mutex04 mutex05 mutex06 mutex07 mutex08 mutex09 \
+    mutex10 mutex11 mutex12 mutex13 mutex14 mutex15 mutex16 pthread01 \
+    pthread02 pthread03 pthread04 pthread05 pthread06 pthread07 pthread08 \
+    pthread09 pthread10 pthread11 pthread12 pthread13 pthread14 pthread15 \
+    pthread16 pthread17 pthread18 pthread19 pthread20 pthread21 pthread22 \
+    pthread23 pthread24 pthread25 pthread26 pthread27 pthread28 pthread29 \
+    pthread30 pthread31 pthread32 pthread33 pthread34 pthread35 pthread36 \
+    proc01 proc02 proc03 proc04 proc05 proc06 proc07 proc08 proc09 proc10 \
+    proc11 proc12 proc13 proc14 sched01 sched02 sched03 sched04 sched05 \
+    sched06 sched07 sched08 signal01 signal02 signal03 signal04 signal05 \
+    signal06 signal07 signal08 signal09 signal10 signal11 signal12 signal13 \
+    signal14 signal15 signal16 signal17 signal18 signal19 signal20 signal21 \
+    signal22 time01 time02 time03 time04 time05 time06 time07 time08 time09 \
+    time10 time11 time12 time13 timer01 timer02 timer03 timer04 timer05 \
+    timer06
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=
+H_FILES =
 
-SRCS=$(C_FILES) $(H_FILES) 
+SRCS = $(C_FILES) $(H_FILES)
 
-SRCS=$(C_FILES) $(H_FILES)
-OBJS=$(C_O_FILES)
+SRCS = $(C_FILES) $(H_FILES)
+OBJS = $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
 
 #
 # Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS +=
-CFLAGS   +=
+CFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -71,8 +64,8 @@ CFLAGS   +=
 CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
-all:	${ARCH} $(SRCS) ${OBJS}
+all: ${ARCH} $(SRCS) ${OBJS}
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

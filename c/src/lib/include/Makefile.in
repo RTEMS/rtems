@@ -5,68 +5,90 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../..
-subdir = c/src/lib/include
+top_builddir = ..
+subdir = include
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_INCLUDE)/sys $(PROJECT_INCLUDE)/motorola \
+    $(PROJECT_INCLUDE)/zilog $(LIBRPCdir) $(LIBRDBGdir) \
+    $(LIBRTEMSCPLUSPLUSdir) $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems++ \
+    $(PROJECT_INCLUDE)/rpc $(PROJECT_INCLUDE)/rdbg
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
 
 VPATH = @srcdir@
 
-H_PIECES=chain console clockdrv iosupp ringbuf \
-   spurious timerdrv vmeintr
-H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
+H_PIECES = chain console clockdrv iosupp ringbuf spurious timerdrv vmeintr
+H_FILES = $(H_PIECES:%=$(srcdir)/%.h)
 
-SYS_H_PIECES=termios utime
-ifeq ($(HAS_NETWORKING),no)
-SYS_H_PIECES+=ioctl
-endif
-SYS_H_FILES=$(SYS_H_PIECES:%=$(srcdir)/sys/%.h)
+SYS_H_PIECES_no_V = ioctl
+SYS_H_PIECES_yes_V =
+SYS_H_PIECES = termios utime $(SYS_H_PIECES_$(HAS_NETWORKING)_V)
+SYS_H_FILES = $(SYS_H_PIECES:%=$(srcdir)/sys/%.h)
 
-MOTOROLA_H_PIECES=mc68230 mc68681
-MOTOROLA_H_FILES=$(MOTOROLA_H_PIECES:%=$(srcdir)/motorola/%.h)
+MOTOROLA_H_PIECES = mc68230 mc68681
+MOTOROLA_H_FILES = $(MOTOROLA_H_PIECES:%=$(srcdir)/motorola/%.h)
 
-ZILOG_H_PIECES=z8036 z8530 z8536
-ZILOG_H_FILES=$(ZILOG_H_PIECES:%=$(srcdir)/zilog/%.h)
+ZILOG_H_PIECES = z8036 z8530 z8536
+ZILOG_H_FILES = $(ZILOG_H_PIECES:%=$(srcdir)/zilog/%.h)
 
-RTEMSCPLUSPLUS_H_PIECES= rtemsEvent rtemsInterrupt rtemsMessageQueue \
-  rtemsSemaphore rtemsStatusCode rtemsTask rtemsTaskMode rtemsTimer
-RTEMSCPLUSPLUS_H_FILES=$(RTEMSCPLUSPLUS_H_PIECES:%=$(srcdir)/rtems++/%.h)
+RTEMSCPLUSPLUS_H_PIECES_yes_V = rtemsEvent rtemsInterrupt rtemsMessageQueue \
+    rtemsSemaphore rtemsStatusCode rtemsTask rtemsTaskMode rtemsTimer
+RTEMSCPLUSPLUS_H_PIECES = $(RTEMSCPLUSPLUS_H_PIECES_$(HAS_CPLUSPLUS)_V)
+RTEMSCPLUSPLUS_H_FILES = $(RTEMSCPLUSPLUS_H_PIECES:%=$(srcdir)/rtems++/%.h)
 
-RPC_H_PIECES=  auth clnt rpc rpc_msg svc svc_auth types xdr
-RPC_H_FILES=$(RPC_H_PIECES:%=$(srcdir)/rpc/%.h)
+RPC_H_PIECES = auth clnt rpc rpc_msg svc svc_auth types xdr
+RPC_H_FILES = $(RPC_H_PIECES:%=$(srcdir)/rpc/%.h)
 
 # We only build the rdbg library if HAS_NETWORKING and HAS_RDBG was defined
 RDBG_H_PIECES_yes_yes_V = servrpc rdbg $(RTEMS_CPU)/rdbg_f $(RTEMS_CPU)/reg
-RDBG_H_FILES=$(RDBG_H_PIECES_$(HAS_NETWORKING)_$(HAS_RDBG)_V:%=$(srcdir)/rdbg/%.h)
+RDBG_H_PIECES = $(RDBG_H_PIECES_$(HAS_NETWORKING)_$(HAS_RDBG)_V)
+RDBG_H_FILES = $(RDBG_H_PIECES:%=$(srcdir)/rdbg/%.h)
 
-SRCS=$(H_FILES) $(SYS_H_FILES) \
-     $(MOTOROLA_H_FILES) $(RTEMSCPLUSPLUS_H_FILES) \
-     $(RPC_H_FILES) $(RDBG_H_FILES)
+SRCS = $(H_FILES) $(SYS_H_FILES) $(MOTOROLA_H_FILES) \
+    $(RTEMSCPLUSPLUS_H_FILES) $(RPC_H_FILES) $(RDBG_H_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all:	$(SRCS)
-	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
-	$(INSTALL_CHANGE) -m 444 $(SYS_H_FILES) $(PROJECT_INCLUDE)/sys
-	$(INSTALL_CHANGE) -m 444 $(MOTOROLA_H_FILES) \
-            $(PROJECT_INCLUDE)/motorola
-	$(INSTALL_CHANGE) -m 444 $(ZILOG_H_FILES) $(PROJECT_INCLUDE)/zilog
-ifeq ($(HAS_CPLUSPLUS),yes)
-	$(INSTALL_CHANGE) -m 444 $(RTEMSCPLUSPLUS_H_FILES) $(PROJECT_INCLUDE)/rtems++
-endif
-ifeq ($(HAS_NETWORKING),yes)
-	$(INSTALL_CHANGE) -m 444 $(RPC_H_FILES) $(PROJECT_INCLUDE)/rpc
-ifeq ($(HAS_RDBG),yes)
-	$(INSTALL_CHANGE) -m 444 $(RDBG_H_FILES) $(PROJECT_INCLUDE)/rdbg
-endif
-endif
+# We only make the rpc install point if networking is enabled.
+LIBRPC_yes_V = $(PROJECT_INCLUDE)/rpc
+LIBRPCdir = $(LIBRPC_$(HAS_NETWORKING)_V)
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+# We only make the rdbg install point if networking and rdbg is enabled.
+LIBRDBG_yes_yes_V = $(PROJECT_INCLUDE)/rdbg
+LIBRDBGdir = $(LIBRDBG_$(HAS_NETWORKING)_$(HAS_RDBG)_V)
+
+# We only make the rtems++ install point if it is enabled.
+LIBRTEMSCPLUSPLUS_yes_V = $(PROJECT_INCLUDE)/rtems++
+LIBRTEMSCPLUSPLUSdir = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
+
+all: preinstall
+
+preinstall: $(INSTALLDIRS) $(SRCS)
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)
+	@$(INSTALL_CHANGE) -m 644 $(SYS_H_FILES) $(PROJECT_INCLUDE)/sys
+	@$(INSTALL_CHANGE) -m 644 $(MOTOROLA_H_FILES) $(PROJECT_INCLUDE)/motorola
+	@$(INSTALL_CHANGE) -m 644 $(ZILOG_H_FILES) $(PROJECT_INCLUDE)/zilog
+	@if test "$(HAS_CPLUSPLUS)" = "yes"; then \
+	$(INSTALL_CHANGE) -m 644 $(RTEMSCPLUSPLUS_H_FILES) $(PROJECT_INCLUDE)/rtems++; \
+	fi
+	@if test "$(HAS_NETWORKING)" = "yes"; then \
+	$(INSTALL_CHANGE) -m 644 $(RPC_H_FILES) $(PROJECT_INCLUDE)/rpc; \
+	fi
+	@if test "$(HAS_RDBG)" = "yes"; then \
+	$(INSTALL_CHANGE) -m 644 $(RDBG_H_FILES) $(PROJECT_INCLUDE)/rdbg; \
+	fi
+
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

@@ -5,45 +5,40 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../..
-subdir = c/src/lib/libnetworking/libc
+top_builddir = ../..
+subdir = libnetworking/libc
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-LIBNAME=lib.a
-LIB=${ARCH}/${LIBNAME}
+LIBNAME = lib.a
+LIB = ${ARCH}/${LIBNAME}
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES= base64 \
-        gethostbydns gethostbyht gethostbynis gethostnamadr \
-        herror \
-        inet_addr inet_ntoa inet_ntop inet_pton \
-        map_v4v6 \
-        nsap_addr ns_name ns_netint ns_parse ns_print ns_ttl \
-        res_comp res_data res_debug res_init res_mkquery res_mkupdate \
-        res_query res_send res_stubs res_update \
-        strsep
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_PIECES = base64 gethostbydns gethostbyht gethostbynis gethostnamadr herror \
+    inet_addr inet_ntoa inet_ntop inet_pton map_v4v6 nsap_addr ns_name \
+    ns_netint ns_parse ns_print ns_ttl res_comp res_data res_debug res_init \
+    res_mkquery res_mkupdate res_query res_send res_stubs res_update strsep
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-SRCS=$(C_FILES)
-OBJS=$(C_O_FILES)
+SRCS = $(C_FILES)
+OBJS = $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
 
 #
 # Add local stuff here using +=
 #
 
-DEFINES  += -DNOPOLL -DNOSELECT
+DEFINES += -DNOPOLL -DNOSELECT
 CPPFLAGS +=
-CFLAGS   +=
+CFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -55,11 +50,11 @@ CFLAGS   +=
 CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
-all:	${ARCH} $(LIB)
+all: ${ARCH} $(LIB)
 
 $(LIB): $(SRCS) ${OBJS}
 	$(make-library)
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

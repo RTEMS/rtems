@@ -9,6 +9,10 @@ RTEMS_TOP(../../../../../../..)
 RTEMS_CANONICAL_TARGET_CPU
 
 AM_INIT_AUTOMAKE(rtems-lib-libbsp-powerpc-psim-tools,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_PROJECT_ROOT
+RTEMS_TOOLPATHS
 
 AC_OUTPUT( 
 Makefile)

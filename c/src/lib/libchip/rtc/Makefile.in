@@ -5,43 +5,47 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../..
-subdir = c/src/lib/libchip/rtc
+top_builddir = ../..
+subdir = libchip/rtc
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-LIBNAME=librtcio.a
-LIB=${ARCH}/${LIBNAME}
+LIBNAME = librtcio.a
+LIB = ${ARCH}/${LIBNAME}
 
-C_PIECES=\
-  rtcprobe \
-  icm7170 icm7170_reg icm7170_reg2 icm7170_reg4 icm7170_reg8 \
-  m48t08 m48t08_reg m48t08_reg2 m48t08_reg4 m48t08_reg8
+C_PIECES = rtcprobe icm7170 icm7170_reg icm7170_reg2 icm7170_reg4 \
+    icm7170_reg8 m48t08 m48t08_reg m48t08_reg2 m48t08_reg4 m48t08_reg8
 
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-INSTALLED_H_FILES=$(srcdir)/rtc.h \
-    $(srcdir)/icm7170.h $(srcdir)/m48t08.h
+INSTALLED_H_FILES = $(srcdir)/rtc.h $(srcdir)/icm7170.h $(srcdir)/m48t08.h
 
-SRCS=$(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES) $(PRIVATE_H_FILES)
-OBJS=$(C_O_FILES)
+SRCS = $(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES) \
+    $(PRIVATE_H_FILES)
+OBJS = $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_INCLUDE)/libchip
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
 
 #
 # Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS +=
-CFLAGS   += $(LIBC_DEFINES)
+CFLAGS += $(LIBC_DEFINES)
 
 #
 # Add your list of files to delete here.  The config files
@@ -53,17 +57,18 @@ CFLAGS   += $(LIBC_DEFINES)
 CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
-all:	${ARCH} preinstall $(LIB)
-	$(INSTALL_VARIANT) -m 644 ${LIB} ${PROJECT_RELEASE}/lib
+all: ${ARCH} preinstall $(LIB)
+	$(INSTALL_VARIANT) -m 644 ${LIB} $(PROJECT_RELEASE)/lib
 
 $(LIB): $(SRCS) ${OBJS}
 	$(make-library)
 
 # Install the library, appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)
-preinstall:
-	$(INSTALL_CHANGE) -m 444 $(INSTALLED_H_FILES) $(PROJECT_INCLUDE)/libchip
+preinstall: 
+	$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
+	@$(INSTALL_CHANGE) -m 644 $(INSTALLED_H_FILES) $(PROJECT_INCLUDE)/libchip
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

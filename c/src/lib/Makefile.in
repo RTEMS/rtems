@@ -5,24 +5,21 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../..
-subdir = c/src/lib
+top_builddir = .
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/directory.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
 
 # We only build the networking library if HAS_NETWORKING was defined
 LIBNETWORKING_yes_V = libnetworking
 LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
-NETWORKING_INCLUDE_yes_V = libnetworking/include
-NETWORKING_INCLUDE = $(NETWORKING_INCLUDE_$(HAS_NETWORKING)_V)
 
 # We only build the rpc library if HAS_NETWORKING was defined
 LIBRPC_yes_V = librpc
@@ -37,17 +34,13 @@ LIBRTEMSCPLUSPLUS_yes_V = librtems++
 LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 
 # General Hardware API library 
-LIBHWAPI=$(wildcard libhwapi)
+LIBHWAPI = $(wildcard libhwapi)
 
-ifneq ($(RTEMS_CPU),unix)
-LIBCHIP=libchip
-endif
+@UNIX_FALSE@LIBCHIP = libchip
 
-SUB_DIRS=start include $(NETWORKING_INCLUDE) libmisc \
-         libc $(LIBCHIP) libcpu libbsp \
-         $(LIBNETWORKING) $(LIBRPC) $(LIBRDBG) \
-         $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup
+SUB_DIRS = start include libmisc libc $(LIBNETWORKING) libcpu libbsp \
+    $(LIBRPC) $(LIBRDBG) $(LIBCHIP) $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
-	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+	 && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status

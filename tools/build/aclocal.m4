@@ -27,10 +27,6 @@ TARGET_SUBDIR=".")
 RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
 
-PROJECT_ROOT=`pwd`/$RTEMS_TOPdir;
-test "$TARGET_SUBDIR" = "." || PROJECT_ROOT="$PROJECT_ROOT/.."
-AC_SUBST(PROJECT_ROOT)
-
 dnl Determine RTEMS Version string from the VERSION file
 dnl Hopefully, Joel never changes its format ;-
 AC_MSG_CHECKING([for RTEMS Version])
@@ -46,9 +42,6 @@ if test -z "$RTEMS_VERSION"; then
 AC_MSG_ERROR(Unable to determine version)
 fi
 AC_MSG_RESULT($RTEMS_VERSION)
-
-RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
-AC_SUBST(RTEMS_ROOT)
 ])dnl
 
 # Do all the work for Automake.  This macro actually does too much --
@@ -142,6 +135,39 @@ else
    AC_MSG_RESULT(missing)
 fi
 AC_SUBST($1)])
+
+# Add --enable-maintainer-mode option to configure.
+# From Jim Meyering
+
+# serial 1
+
+AC_DEFUN(AM_MAINTAINER_MODE,
+[AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
+  dnl maintainer-mode is disabled by default
+  AC_ARG_ENABLE(maintainer-mode,
+[  --enable-maintainer-mode enable make rules and dependencies not useful
+                          (and sometimes confusing) to the casual installer],
+      USE_MAINTAINER_MODE=$enableval,
+      USE_MAINTAINER_MODE=no)
+  AC_MSG_RESULT($USE_MAINTAINER_MODE)
+  AM_CONDITIONAL(MAINTAINER_MODE, test $USE_MAINTAINER_MODE = yes)
+  MAINT=$MAINTAINER_MODE_TRUE
+  AC_SUBST(MAINT)dnl
+]
+)
+
+# Define a conditional.
+
+AC_DEFUN(AM_CONDITIONAL,
+[AC_SUBST($1_TRUE)
+AC_SUBST($1_FALSE)
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi])
 
 dnl $Id$
 

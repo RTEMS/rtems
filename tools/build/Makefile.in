@@ -1,15 +1,22 @@
-# Makefile.in generated automatically by automake 1.2 from Makefile.am
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
-# Copyright (C) 1994, 1995, 1996, 1997 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
-# gives unlimited permission to copy, distribute and modify it.
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
 
 #
 # $Id$
 #
 
 
-SHELL = /bin/sh
+
+SHELL = @SHELL@
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -30,53 +37,54 @@ mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
 
+DESTDIR =
+
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 top_builddir = .
+
+ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
 AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 transform = @program_transform_name@
 
-NORMAL_INSTALL = true
-PRE_INSTALL = true
-POST_INSTALL = true
-NORMAL_UNINSTALL = true
-PRE_UNINSTALL = true
-POST_UNINSTALL = true
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 CC = @CC@
+EXEEXT = @EXEEXT@
 KSH = @KSH@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
-PROJECT_ROOT = @PROJECT_ROOT@
-RTEMS_ROOT = @RTEMS_ROOT@
 RTEMS_TOPdir = @RTEMS_TOPdir@
 VERSION = @VERSION@
 
-AUTOMAKE_OPTIONS = foreign
-ACLOCAL = @ACLOCAL@ -I $(RTEMS_TOPdir)/aclocal
+AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-bin_PROGRAMS=cklength eolstrip packhex unhex
+bin_PROGRAMS = cklength eolstrip packhex unhex
 
 cklength_SOURCES = cklength.c
 eolstrip_SOURCES = eolstrip.c
-packhex_SOURCES  = packhex.c
-unhex_SOURCES    = unhex.c
+packhex_SOURCES = packhex.c
+unhex_SOURCES = unhex.c
 
-bin_SCRIPTS=\
-install-if-change \
-lock-directory \
-unlock-directory \
-rcs-clean 
+bin_SCRIPTS =  install-if-change lock-directory unlock-directory rcs-clean 
+
 
 noinst_SCRIPTS = search-id.sh
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -84,6 +92,8 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/../../mkinstalldirs
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES =  install-if-change lock-directory rcs-clean \
 unlock-directory
+bin_PROGRAMS =  cklength$(EXEEXT) eolstrip$(EXEEXT) packhex$(EXEEXT) \
+unhex$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
 
@@ -93,86 +103,98 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 cklength_OBJECTS =  cklength.o
 cklength_LDADD = $(LDADD)
+cklength_DEPENDENCIES = 
 cklength_LDFLAGS = 
 eolstrip_OBJECTS =  eolstrip.o
 eolstrip_LDADD = $(LDADD)
+eolstrip_DEPENDENCIES = 
 eolstrip_LDFLAGS = 
 packhex_OBJECTS =  packhex.o
 packhex_LDADD = $(LDADD)
+packhex_DEPENDENCIES = 
 packhex_LDFLAGS = 
 unhex_OBJECTS =  unhex.o
 unhex_LDADD = $(LDADD)
+unhex_DEPENDENCIES = 
 unhex_LDFLAGS = 
 SCRIPTS =  $(bin_SCRIPTS) $(noinst_SCRIPTS)
 
 CFLAGS = @CFLAGS@
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
-DIST_COMMON =  README Makefile.am Makefile.in aclocal.m4 config.h.in \
-configure configure.in install-if-change.in lock-directory.in \
-rcs-clean.in stamp-h.in unlock-directory.in
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+DIST_COMMON =  README ./stamp-h.in Makefile.am Makefile.in aclocal.m4 \
+config.h.in configure configure.in install-if-change.in \
+lock-directory.in rcs-clean.in unlock-directory.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
-GZIP = --best
+GZIP_ENV = --best
 DEP_FILES =  .deps/cklength.P .deps/eolstrip.P .deps/packhex.P \
 .deps/unhex.P
 SOURCES = $(cklength_SOURCES) $(eolstrip_SOURCES) $(packhex_SOURCES) $(unhex_SOURCES)
 OBJECTS = $(cklength_OBJECTS) $(eolstrip_OBJECTS) $(packhex_OBJECTS) $(unhex_OBJECTS)
 
-default: all
-
+all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .c .o
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+.SUFFIXES: .S .c .o .s
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../automake/local.am
 	cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4):  configure.in 
-	cd $(srcdir) && $(ACLOCAL)
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ configure.in 
+	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
-config.status: $(srcdir)/configure
+config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure: @MAINTAINER_MODE_TRUE@$(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
 config.h: stamp-h
+	@if test ! -f $@; then \
+		rm -f stamp-h; \
+		$(MAKE) stamp-h; \
+	else :; fi
 stamp-h: $(srcdir)/config.h.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES= CONFIG_HEADERS=config.h \
 	     $(SHELL) ./config.status
-	@echo timestamp > stamp-h
-$(srcdir)/config.h.in: $(srcdir)/stamp-h.in
+	@echo timestamp > stamp-h 2> /dev/null
+$(srcdir)/config.h.in: @MAINTAINER_MODE_TRUE@$(srcdir)/stamp-h.in
+	@if test ! -f $@; then \
+		rm -f $(srcdir)/stamp-h.in; \
+		$(MAKE) $(srcdir)/stamp-h.in; \
+	else :; fi
 $(srcdir)/stamp-h.in: $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOHEADER)
-	@echo timestamp > $(srcdir)/stamp-h.in
+	@echo timestamp > $(srcdir)/stamp-h.in 2> /dev/null
 
 mostlyclean-hdr:
 
 clean-hdr:
 
 distclean-hdr:
-	rm -f config.h
+	-rm -f config.h
 
 maintainer-clean-hdr:
 install-if-change: $(top_builddir)/config.status install-if-change.in
-	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status
+	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 lock-directory: $(top_builddir)/config.status lock-directory.in
-	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status
+	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 rcs-clean: $(top_builddir)/config.status rcs-clean.in
-	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status
+	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 unlock-directory: $(top_builddir)/config.status unlock-directory.in
-	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status
+	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 mostlyclean-binPROGRAMS:
 
 clean-binPROGRAMS:
-	test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
 distclean-binPROGRAMS:
 
@@ -180,85 +202,97 @@ maintainer-clean-binPROGRAMS:
 
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(bindir)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "  $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`"; \
-	     $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	  else :; fi; \
 	done
 
 uninstall-binPROGRAMS:
-	$(NORMAL_UNINSTALL)
+	@$(NORMAL_UNINSTALL)
 	list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  rm -f $(bindir)/`echo $$p|sed '$(transform)'`; \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
 
-.c.o:
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
 	$(COMPILE) -c $<
 
 mostlyclean-compile:
-	rm -f *.o core
+	-rm -f *.o core *.core
 
 clean-compile:
 
 distclean-compile:
-	rm -f *.tab.c
+	-rm -f *.tab.c
 
 maintainer-clean-compile:
 
-cklength: $(cklength_OBJECTS) $(cklength_DEPENDENCIES)
-	@rm -f cklength
+cklength$(EXEEXT): $(cklength_OBJECTS) $(cklength_DEPENDENCIES)
+	@rm -f cklength$(EXEEXT)
 	$(LINK) $(cklength_LDFLAGS) $(cklength_OBJECTS) $(cklength_LDADD) $(LIBS)
 
-eolstrip: $(eolstrip_OBJECTS) $(eolstrip_DEPENDENCIES)
-	@rm -f eolstrip
+eolstrip$(EXEEXT): $(eolstrip_OBJECTS) $(eolstrip_DEPENDENCIES)
+	@rm -f eolstrip$(EXEEXT)
 	$(LINK) $(eolstrip_LDFLAGS) $(eolstrip_OBJECTS) $(eolstrip_LDADD) $(LIBS)
 
-packhex: $(packhex_OBJECTS) $(packhex_DEPENDENCIES)
-	@rm -f packhex
+packhex$(EXEEXT): $(packhex_OBJECTS) $(packhex_DEPENDENCIES)
+	@rm -f packhex$(EXEEXT)
 	$(LINK) $(packhex_LDFLAGS) $(packhex_OBJECTS) $(packhex_LDADD) $(LIBS)
 
-unhex: $(unhex_OBJECTS) $(unhex_DEPENDENCIES)
-	@rm -f unhex
+unhex$(EXEEXT): $(unhex_OBJECTS) $(unhex_DEPENDENCIES)
+	@rm -f unhex$(EXEEXT)
 	$(LINK) $(unhex_LDFLAGS) $(unhex_OBJECTS) $(unhex_LDADD) $(LIBS)
 
 install-binSCRIPTS: $(bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(bindir)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_SCRIPTS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo " $(INSTALL_SCRIPT) $$p $(bindir)/`echo $$p|sed '$(transform)'`"; \
-	    $(INSTALL_SCRIPT) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
 	  else if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(bindir)/`echo $$p|sed '$(transform)'`"; \
-	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
 	  else :; fi; fi; \
 	done
 
 uninstall-binSCRIPTS:
-	$(NORMAL_UNINSTALL)
+	@$(NORMAL_UNINSTALL)
 	list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  rm -f $(bindir)/`echo $$p|sed '$(transform)'`; \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
 	done
 
 tags: TAGS
 
-ID: $(HEADERS) $(SOURCES)
-	here=`pwd` && cd $(srcdir) && mkid -f$$here/ID $(SOURCES) $(HEADERS)
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
 
-TAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES)
+TAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	test -z "$(ETAGS_ARGS)config.h.in$(SOURCES)$(HEADERS)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags config.h.in $(SOURCES) $(HEADERS) -o $$here/TAGS)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)config.h.in$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags config.h.in $$unique $(LISP) -o $$here/TAGS)
 
 mostlyclean-tags:
 
 clean-tags:
 
 distclean-tags:
-	rm -f TAGS ID
+	-rm -f TAGS ID
 
 maintainer-clean-tags:
 
@@ -269,52 +303,54 @@ top_distdir = $(distdir)
 # it guarantees that the distribution is self-contained by making another
 # tarfile.
 distcheck: dist
-	rm -rf $(distdir)
-	GZIP=$(GZIP) $(TAR) zxf $(distdir).tar.gz
+	-rm -rf $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) zxf $(distdir).tar.gz
 	mkdir $(distdir)/=build
 	mkdir $(distdir)/=inst
 	dc_install_base=`cd $(distdir)/=inst && pwd`; \
 	cd $(distdir)/=build \
 	  && ../configure --srcdir=.. --prefix=$$dc_install_base \
-	  && $(MAKE) \
-	  && $(MAKE) dvi \
-	  && $(MAKE) check \
-	  && $(MAKE) install \
-	  && $(MAKE) installcheck \
-	  && $(MAKE) dist
-	rm -rf $(distdir)
-	@echo "========================"; \
-	echo "$(distdir).tar.gz is ready for distribution"; \
-	echo "========================"
+	  && $(MAKE) $(AM_MAKEFLAGS) \
+	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
+	  && $(MAKE) $(AM_MAKEFLAGS) check \
+	  && $(MAKE) $(AM_MAKEFLAGS) install \
+	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
+	  && $(MAKE) $(AM_MAKEFLAGS) dist
+	-rm -rf $(distdir)
+	@banner="$(distdir).tar.gz is ready for distribution"; \
+	dashes=`echo "$$banner" | sed s/./=/g`; \
+	echo "$$dashes"; \
+	echo "$$banner"; \
+	echo "$$dashes"
 dist: distdir
 	-chmod -R a+r $(distdir)
-	GZIP=$(GZIP) $(TAR) chozf $(distdir).tar.gz $(distdir)
-	rm -rf $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) chozf $(distdir).tar.gz $(distdir)
+	-rm -rf $(distdir)
 dist-all: distdir
 	-chmod -R a+r $(distdir)
-	GZIP=$(GZIP) $(TAR) chozf $(distdir).tar.gz $(distdir)
-	rm -rf $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) chozf $(distdir).tar.gz $(distdir)
+	-rm -rf $(distdir)
 distdir: $(DISTFILES)
-	rm -rf $(distdir)
+	-rm -rf $(distdir)
 	mkdir $(distdir)
 	-chmod 777 $(distdir)
 	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
+	top_distdir=`cd $(distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --foreign Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
-	  test -f $(distdir)/$$file \
-	  || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	  || cp -p $$d/$$file $(distdir)/$$file; \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
 	done
 
-MKDEP = gcc -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-
 DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
--include .deps/.P
-.deps/.P: $(BUILT_SOURCES)
-	echo > $@
 
 -include $(DEP_FILES)
 
@@ -323,104 +359,137 @@ mostlyclean-depend:
 clean-depend:
 
 distclean-depend:
+	-rm -rf .deps
 
 maintainer-clean-depend:
-	rm -rf .deps
 
-.deps/%.P: %.c
-	@echo "Computing dependencies for $<..."
-	@o='o'; \
-	test -n "$o" && o='$$o'; \
-	$(MKDEP) $< >$@.tmp \
-	  && sed "s,^\(.*\)\.o:,\1.$$o \1.l$$o $@:," < $@.tmp > $@ \
-	  && rm -f $@.tmp
-info:
-dvi:
-check: all
-	$(MAKE)
-installcheck:
-install-exec: install-binPROGRAMS install-binSCRIPTS install-exec-local
-	@$(NORMAL_INSTALL)
+%.o: %.c
+	@echo '$(COMPILE) -c $<'; \
+	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-cp .deps/$(*F).pp .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm .deps/$(*F).pp
 
-install-data: 
-	@$(NORMAL_INSTALL)
+%.lo: %.c
+	@echo '$(LTCOMPILE) -c $<'; \
+	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
+	  < .deps/$(*F).pp > .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm -f .deps/$(*F).pp
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+all-recursive-am: config.h
+	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
-install: install-exec install-data all
-	@:
+install-exec-am: install-binPROGRAMS install-binSCRIPTS
+install-exec: install-exec-am
 
-uninstall: uninstall-binPROGRAMS uninstall-binSCRIPTS
+install-data-am:
+install-data: install-data-am
 
-all: Makefile $(PROGRAMS) $(SCRIPTS) config.h
-
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS
+uninstall: uninstall-am
+all-am: Makefile $(PROGRAMS) $(SCRIPTS) config.h
+all-redirect: all-am
 install-strip:
-	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(bindir) $(bindir)
+	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(bindir)
 
 
 mostlyclean-generic:
-	test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
 
 clean-generic:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	rm -f Makefile $(DISTCLEANFILES)
-	rm -f config.cache config.log stamp-h stamp-h[0-9]*
-	test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-	test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
-	test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-mostlyclean:  mostlyclean-hdr mostlyclean-binPROGRAMS \
+mostlyclean-am:  mostlyclean-hdr mostlyclean-binPROGRAMS \
 		mostlyclean-compile mostlyclean-tags mostlyclean-depend \
 		mostlyclean-generic
 
-clean:  clean-hdr clean-binPROGRAMS clean-compile clean-tags \
-		clean-depend clean-generic mostlyclean
+mostlyclean: mostlyclean-am
 
-distclean:  distclean-hdr distclean-binPROGRAMS distclean-compile \
-		distclean-tags distclean-depend distclean-generic clean
-	rm -f config.status
+clean-am:  clean-hdr clean-binPROGRAMS clean-compile clean-tags \
+		clean-depend clean-generic mostlyclean-am
 
-maintainer-clean:  maintainer-clean-hdr maintainer-clean-binPROGRAMS \
+clean: clean-am
+
+distclean-am:  distclean-hdr distclean-binPROGRAMS distclean-compile \
+		distclean-tags distclean-depend distclean-generic \
+		clean-am
+
+distclean: distclean-am
+	-rm -f config.status
+
+maintainer-clean-am:  maintainer-clean-hdr maintainer-clean-binPROGRAMS \
 		maintainer-clean-compile maintainer-clean-tags \
 		maintainer-clean-depend maintainer-clean-generic \
-		distclean
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
-	rm -f config.status
 
-.PHONY: default mostlyclean-hdr distclean-hdr clean-hdr \
-maintainer-clean-hdr mostlyclean-binPROGRAMS distclean-binPROGRAMS \
-clean-binPROGRAMS maintainer-clean-binPROGRAMS uninstall-binPROGRAMS \
-install-binPROGRAMS mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean: maintainer-clean-am
+	-rm -f config.status
+
+.PHONY: mostlyclean-hdr distclean-hdr clean-hdr maintainer-clean-hdr \
+mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
+maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
+mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile uninstall-binSCRIPTS install-binSCRIPTS tags \
 mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
 distdir mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info dvi installcheck install-exec install-data \
-install uninstall all installdirs mostlyclean-generic distclean-generic \
-clean-generic maintainer-clean-generic clean mostlyclean distclean \
-maintainer-clean
+maintainer-clean-depend info-am info dvi-am dvi check check-am \
+installcheck-am installcheck all-recursive-am install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-#
-# HACK: Install to build directory
-#
-install-exec-local: $(bin_PROGRAMS) $(bin_SCRIPTS)
-	if test -n "${RTEMS_BSP}"; then \
-	  $(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
-	  for i in $(bin_SCRIPTS); do \
-	  $(INSTALL_SCRIPT) $$i $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
-	  done; \
-	  for i in $(bin_PROGRAMS); do \
-	  $(INSTALL_PROGRAM) $$i $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
-	  done; \
-	fi
+debug-am:
+debug: debug-am
+.PHONY: debug debug-am
 
-preinstall: install-exec-local
+debug_install-am:
+debug_install: debug_install-am
+.PHONY: debug_install debug_install-am
 
-include $(top_srcdir)/../../automake/local.am
+profile-am:
+profile: profile-am
+.PHONY: profile profile-am
+
+profile_install-am:
+profile_install: profile_install-am
+.PHONY: profile_install profile_install-am
+
+preinstall-am:
+preinstall: preinstall-am
+.PHONY: preinstall preinstall-am
+
+clobber-am:
+clobber: clobber-am
+.PHONY: clobber clobber-am
+
+depend-am:
+depend: depend-am
+.PHONY: depend depend-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -63,3 +63,28 @@ unset ac_cv_prog_cc_g
 unset ac_cv_prog_cc_works
 unset ac_cv_prog_cc_cross
 ])
+
+AC_DEFUN(RTEMS_PROG_CC_FOR_TARGET,
+[
+dnl check target cc
+RTEMS_PROG_CC
+dnl check if the compiler supports --specs
+RTEMS_GCC_SPECS
+dnl check if the target compiler may use --pipe
+RTEMS_GCC_PIPE
+dnl check if the compiler supports --specs if gcc28 is requested
+if test "$RTEMS_USE_GCC272" != "yes" ; then
+  if test "$rtems_cv_gcc_specs" = "no"; then
+    AC_MSG_WARN([*** disabling --enable-gcc28])
+      RTEMS_USE_GCC272=yes
+  fi
+fi
+test "$rtems_cv_gcc_pipe" = "yes" && CC_FOR_TARGET="$CC_FOR_TARGET --pipe"
+
+dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*
+case $host_os in
+*cygwin*)     GCCSED="| sed 's%\\\\%/%g'" ;;
+*) ;;
+esac
+AC_SUBST(GCCSED)
+])

@@ -5,51 +5,59 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../../..
-subdir = c/src/tests/mptests/mp14/node2
+top_builddir = ../../..
+subdir = mptests/mp14/node2
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@:@srcdir@/..
 
-NODE=2
-TEST=mp14
-PGM=${ARCH}/$(TEST)-node$(NODE).exe
+NODE = 2
+TEST = mp14
+PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 
-MANAGERS=io mp event partition semaphore timer message
+MANAGERS = io mp event partition semaphore timer message
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=exit init delay evtask1 evtmtask pttask1 smtask1 msgtask1
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_PIECES = exit init delay evtask1 evtmtask pttask1 smtask1 msgtask1
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=system.h
+H_FILES = system.h
 
-DOCTYPES=doc scn
-DOCS=$(DOCTYPES:%=$(TEST).%)
+DOCTYPES = doc scn
+DOCS = $(DOCTYPES:%=$(TEST).%)
 
-SRCS=$(DOCS) $(C_FILES) $(H_FILES)
-OBJS=$(C_O_FILES)
+SRCS = $(DOCS) $(C_FILES) $(H_FILES)
+OBJS = $(C_O_FILES)
 
-PRINT_SRCS=$(DOCS)
+PRINT_SRCS = $(DOCS)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+PACKHEX = @PACKHEX@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = \
+    $(PROJECT_RELEASE)/tests/screens/mptests/node$(NODE)/$(TEST).scn
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  += -DNODE_NUMBER=$(NODE)
+DEFINES += -DNODE_NUMBER=$(NODE)
 CPPFLAGS += -I.
-CFLAGS   +=
+CFLAGS +=
 
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
+LD_PATHS +=
+LD_LIBS +=
+LDFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -61,14 +69,14 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all:	${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_VARIANT) -m 555 ${PGM} ${PROJECT_RELEASE}/tests
+all: ${ARCH} $(SRCS) $(PGM)
+	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
 	$(INSTALL_CHANGE) $(srcdir)/$(TEST).scn \
-	    ${PROJECT_RELEASE}/tests/screens/mptests/node$(NODE)/$(TEST).scn
+	    $(PROJECT_RELEASE)/tests/screens/mptests/node$(NODE)/$(TEST).scn
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

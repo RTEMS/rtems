@@ -13,6 +13,9 @@ ac_default_prefix=/usr/local
 # Any additions from configure.in:
 ac_help="$ac_help
   --with-target-subdir=DIR"
+ac_help="$ac_help
+  --enable-maintainer-mode enable make rules and dependencies not useful
+                          (and sometimes confusing) to the casual installer"
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -555,12 +558,8 @@ fi
 RTEMS_TOPdir="../../../../../../..";
 
 
-PROJECT_ROOT=`pwd`/$RTEMS_TOPdir;
-test "$TARGET_SUBDIR" = "." || PROJECT_ROOT="$PROJECT_ROOT/.."
-
-
 echo $ac_n "checking for RTEMS Version""... $ac_c" 1>&6
-echo "configure:564: checking for RTEMS Version" >&5
+echo "configure:563: checking for RTEMS Version" >&5
 if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
 RTEMS_VERSION=`grep Version ${srcdir}/${RTEMS_TOPdir}/VERSION | \
 sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
@@ -571,9 +570,6 @@ if test -z "$RTEMS_VERSION"; then
 { echo "configure: error: Unable to determine version" 1>&2; exit 1; }
 fi
 echo "$ac_t""$RTEMS_VERSION" 1>&6
-
-RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
-
 
 
 
@@ -604,7 +600,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:608: checking host system type" >&5
+echo "configure:604: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -625,7 +621,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:629: checking target system type" >&5
+echo "configure:625: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -643,7 +639,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:647: checking build system type" >&5
+echo "configure:643: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -666,7 +662,7 @@ test "$host_alias" != "$target_alias" &&
   program_prefix=${target_alias}-
 
 echo $ac_n "checking rtems target cpu""... $ac_c" 1>&6
-echo "configure:670: checking rtems target cpu" >&5
+echo "configure:666: checking rtems target cpu" >&5
 case "${target}" in
   # hpux unix port should go here
   i[3456]86-go32-rtems*)
@@ -704,7 +700,7 @@ echo "$ac_t""$RTEMS_CPU" 1>&6
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install""... $ac_c" 1>&6
-echo "configure:708: checking for a BSD compatible install" >&5
+echo "configure:704: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if eval "test \"`echo '$''{'ac_cv_path_install'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -757,7 +753,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 echo $ac_n "checking whether build environment is sane""... $ac_c" 1>&6
-echo "configure:761: checking whether build environment is sane" >&5
+echo "configure:757: checking whether build environment is sane" >&5
 # Just in case
 sleep 1
 echo timestamp > conftestfile
@@ -814,7 +810,7 @@ test "$program_suffix" != NONE &&
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:818: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:814: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -853,7 +849,7 @@ fi
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
-echo "configure:857: checking for working aclocal" >&5
+echo "configure:853: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -866,7 +862,7 @@ else
 fi
 
 echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
-echo "configure:870: checking for working autoconf" >&5
+echo "configure:866: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -879,7 +875,7 @@ else
 fi
 
 echo $ac_n "checking for working automake""... $ac_c" 1>&6
-echo "configure:883: checking for working automake" >&5
+echo "configure:879: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -892,7 +888,7 @@ else
 fi
 
 echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
-echo "configure:896: checking for working autoheader" >&5
+echo "configure:892: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -905,7 +901,7 @@ else
 fi
 
 echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
-echo "configure:909: checking for working makeinfo" >&5
+echo "configure:905: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -918,11 +914,34 @@ else
 fi
 
 
+echo $ac_n "checking whether to enable maintainer-specific portions of Makefiles""... $ac_c" 1>&6
+echo "configure:919: checking whether to enable maintainer-specific portions of Makefiles" >&5
+    # Check whether --enable-maintainer-mode or --disable-maintainer-mode was given.
+if test "${enable_maintainer_mode+set}" = set; then
+  enableval="$enable_maintainer_mode"
+  USE_MAINTAINER_MODE=$enableval
+else
+  USE_MAINTAINER_MODE=no
+fi
+
+  echo "$ac_t""$USE_MAINTAINER_MODE" 1>&6
+  
+
+if test $USE_MAINTAINER_MODE = yes; then
+  MAINTAINER_MODE_TRUE=
+  MAINTAINER_MODE_FALSE='#'
+else
+  MAINTAINER_MODE_TRUE='#'
+  MAINTAINER_MODE_FALSE=
+fi
+  MAINT=$MAINTAINER_MODE_TRUE
+  
+
 
 # Extract the first word of "gcc", so it can be a program name with args.
 set dummy gcc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:926: checking for $ac_word" >&5
+echo "configure:945: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -952,7 +971,7 @@ if test -z "$CC"; then
   # Extract the first word of "cc", so it can be a program name with args.
 set dummy cc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:956: checking for $ac_word" >&5
+echo "configure:975: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1003,7 +1022,7 @@ fi
       # Extract the first word of "cl", so it can be a program name with args.
 set dummy cl; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1007: checking for $ac_word" >&5
+echo "configure:1026: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1035,7 +1054,7 @@ fi
 fi
 
 echo $ac_n "checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works""... $ac_c" 1>&6
-echo "configure:1039: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works" >&5
+echo "configure:1058: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works" >&5
 
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -1046,12 +1065,12 @@ cross_compiling=$ac_cv_prog_cc_cross
 
 cat > conftest.$ac_ext << EOF
 
-#line 1050 "configure"
+#line 1069 "configure"
 #include "confdefs.h"
 
 main(){return(0);}
 EOF
-if { (eval echo configure:1055: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:1074: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   ac_cv_prog_cc_works=yes
   # If we can't run a trivial program, we are probably using a cross compiler.
   if (./conftest; exit) 2>/dev/null; then
@@ -1077,12 +1096,12 @@ if test $ac_cv_prog_cc_works = no; then
   { echo "configure: error: installation or configuration problem: C compiler cannot create executables." 1>&2; exit 1; }
 fi
 echo $ac_n "checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler""... $ac_c" 1>&6
-echo "configure:1081: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler" >&5
+echo "configure:1100: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler" >&5
 echo "$ac_t""$ac_cv_prog_cc_cross" 1>&6
 cross_compiling=$ac_cv_prog_cc_cross
 
 echo $ac_n "checking whether we are using GNU C""... $ac_c" 1>&6
-echo "configure:1086: checking whether we are using GNU C" >&5
+echo "configure:1105: checking whether we are using GNU C" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_gcc'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1091,7 +1110,7 @@ else
   yes;
 #endif
 EOF
-if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:1095: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
+if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:1114: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
@@ -1110,7 +1129,7 @@ ac_test_CFLAGS="${CFLAGS+set}"
 ac_save_CFLAGS="$CFLAGS"
 CFLAGS=
 echo $ac_n "checking whether ${CC-cc} accepts -g""... $ac_c" 1>&6
-echo "configure:1114: checking whether ${CC-cc} accepts -g" >&5
+echo "configure:1133: checking whether ${CC-cc} accepts -g" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_cc_g'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1145,12 +1164,12 @@ fi
 for ac_func in strtol strtoul
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:1149: checking for $ac_func" >&5
+echo "configure:1168: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 1154 "configure"
+#line 1173 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -1173,7 +1192,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:1177: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:1196: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -1196,6 +1215,46 @@ else
   echo "$ac_t""no" 1>&6
 fi
 done
+
+
+
+if test "$TARGET_SUBDIR" = "." ; then
+PROJECT_ROOT=$RTEMS_TOPdir/'$(top_builddir)';
+else
+PROJECT_ROOT=../$RTEMS_TOPdir/'$(top_builddir)'
+fi
+
+
+RTEMS_ROOT=$RTEMS_TOPdir/'$(top_builddir)'/c/$RTEMS_BSP
+
+
+INSTALL_CHANGE="\$(KSH) \$(PROJECT_ROOT)/tools/build/install-if-change"
+
+
+PACKHEX="\$(PROJECT_ROOT)/tools/build/packhex"
+
+
+
+# tooldir='$(exec_prefix)/'$target_alias
+# Temporary work-around until building in source tree is supported
+
+
+tooldir='$(PROJECT_ROOT)'
+
+
+project_includedir='$(tooldir)'/include
+
+
+project_libdir='$(tooldir)/lib$(MULTISUBDIR)'
+
+
+project_bindir='$(tooldir)/bin'
+
+
+rtems_bspdir='$(prefix)/${RTEMS_BSP}'
+
+rtems_makedir='$(prefix)/make'
+
 
 
 trap '' 1 2 15
@@ -1344,8 +1403,6 @@ s%@oldincludedir@%$oldincludedir%g
 s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
 s%@RTEMS_TOPdir@%$RTEMS_TOPdir%g
-s%@PROJECT_ROOT@%$PROJECT_ROOT%g
-s%@RTEMS_ROOT@%$RTEMS_ROOT%g
 s%@host@%$host%g
 s%@host_alias@%$host_alias%g
 s%@host_cpu@%$host_cpu%g
@@ -1373,7 +1430,20 @@ s%@AUTOMAKE@%$AUTOMAKE%g
 s%@AUTOHEADER@%$AUTOHEADER%g
 s%@MAKEINFO@%$MAKEINFO%g
 s%@SET_MAKE@%$SET_MAKE%g
+s%@MAINTAINER_MODE_TRUE@%$MAINTAINER_MODE_TRUE%g
+s%@MAINTAINER_MODE_FALSE@%$MAINTAINER_MODE_FALSE%g
+s%@MAINT@%$MAINT%g
 s%@CC@%$CC%g
+s%@PROJECT_ROOT@%$PROJECT_ROOT%g
+s%@RTEMS_ROOT@%$RTEMS_ROOT%g
+s%@INSTALL_CHANGE@%$INSTALL_CHANGE%g
+s%@PACKHEX@%$PACKHEX%g
+s%@tooldir@%$tooldir%g
+s%@project_includedir@%$project_includedir%g
+s%@project_libdir@%$project_libdir%g
+s%@project_bindir@%$project_bindir%g
+s%@rtems_bspdir@%$rtems_bspdir%g
+s%@rtems_makedir@%$rtems_makedir%g
 
 CEOF
 EOF

@@ -2,8 +2,8 @@
 # $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
-ACLOCAL = @ACLOCAL@ -I $(RTEMS_TOPdir)/aclocal
+AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 bin_PROGRAMS=cklength eolstrip packhex unhex
 
@@ -19,21 +19,5 @@ unlock-directory \
 rcs-clean 
 
 noinst_SCRIPTS = search-id.sh
-
-#
-# HACK: Install to build directory
-#
-install-exec-local: $(bin_PROGRAMS) $(bin_SCRIPTS)
-	if test -n "${RTEMS_BSP}"; then \
-	  $(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
-	  for i in $(bin_SCRIPTS); do \
-	  $(INSTALL_SCRIPT) $$i $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
-	  done; \
-	  for i in $(bin_PROGRAMS); do \
-	  $(INSTALL_PROGRAM) $$i $(PROJECT_ROOT)/${RTEMS_BSP}/build-tools; \
-	  done; \
-	fi
-
-preinstall: install-exec-local
 
 include $(top_srcdir)/../../automake/local.am

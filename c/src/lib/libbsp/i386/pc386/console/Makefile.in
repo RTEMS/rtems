@@ -5,47 +5,47 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../../../..
-subdir = c/src/lib/libbsp/i386/pc386/console
+top_builddir = ../../../..
+subdir = libbsp/i386/pc386/console
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@:@srcdir@/../../shared/io
 
-PGM=${ARCH}/console.rel
+PGM = ${ARCH}/console.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=console inch outch printk
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_PIECES = console inch outch printk
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=
+H_FILES =
 
 # Assembly source names, if any, go here -- minus the .S
-S_PIECES=videoAsm
-S_FILES=$(S_PIECES:%=%.S)
-S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
+S_PIECES = videoAsm
+S_FILES = $(S_PIECES:%=%.S)
+S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
-SRCS=$(C_FILES) $(H_FILES)
-OBJS=$(C_O_FILES) $(S_O_FILES)
+SRCS = $(C_FILES) $(H_FILES)
+OBJS = $(C_O_FILES) $(S_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS +=
-CFLAGS   +=
+CFLAGS +=
 
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
+LD_PATHS +=
+LD_LIBS +=
+LDFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -60,11 +60,11 @@ CLOBBER_ADDITIONS +=
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
-all:	${ARCH} $(SRCS) $(PGM)
+all: ${ARCH} $(SRCS) $(PGM)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-install:  all
+install: all
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

@@ -13,7 +13,7 @@ dnl
 
 AC_DEFUN(RTEMS_GCC_PRINT,
 [ case $host_os in
-  *cygwin32*)
+  *cygwin*)
     dnl FIXME: Hack for cygwin/egcs reporting mixed '\\' and '/'
     dnl        Should be removed once cygwin/egcs reports '/' only
     $1=`$CC_FOR_TARGET --print-prog-name=$2 | sed -e 's%\\\\%/%g' `

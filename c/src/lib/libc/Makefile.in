@@ -5,96 +5,83 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../..
-subdir = c/src/lib/libc
+top_builddir = ..
+subdir = libc
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-LIBNAME=libcsupport.a
-LIB=${ARCH}/${LIBNAME}
+LIBNAME = libcsupport.a
+LIB = ${ARCH}/${LIBNAME}
 
-BASE_FS_PIECES=base_fs mount unmount ioman \
-  libio libio_sockets eval
+BASE_FS_C_PIECES = base_fs mount unmount ioman libio libio_sockets eval
 
-IMFS_PIECES= imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
+IMFS_C_PIECES = imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
     imfs_gtkn imfs_init imfs_link imfs_mknod imfs_mount imfs_fchmod \
     imfs_rmnod imfs_unlink imfs_unmount imfs_utime imfs_ntype imfs_stat \
     imfs_getchild memfile deviceio imfs_handlers imfs_debug imfs_symlink \
     imfs_readlink imfs_fdatasync
 
-TERMIOS_PIECES= cfgetispeed cfgetospeed cfsetispeed cfsetospeed \
-  tcgetattr tcsetattr tcdrain termios termiosinitialize \
-  termiosreserveresources
+TERMIOS_C_PIECES = cfgetispeed cfgetospeed cfsetispeed cfsetospeed tcgetattr \
+    tcsetattr tcdrain termios termiosinitialize termiosreserveresources
 
-SYSTEM_CALL_PIECES=\
-  open close read write lseek ioctl \
-  mkdir mknod mkfifo rmdir chdir \
-  chmod fchmod chown \
-  link unlink umask ftruncate utime \
-  fstat fcntl fpathconf getdents \
-  fsync fdatasync pipe dup dup2  \
-  symlink readlink
+SYSTEM_CALL_C_PIECES = open close read write lseek ioctl mkdir mknod mkfifo \
+    rmdir chdir chmod fchmod chown link unlink umask ftruncate utime fstat \
+    fcntl fpathconf getdents fsync fdatasync pipe dup dup2 symlink readlink
 
-DIRECTORY_SCAN_PIECES=\
-  opendir closedir readdir rewinddir scandir seekdir telldir getcwd
+DIRECTORY_SCAN_C_PIECES = opendir closedir readdir rewinddir scandir seekdir \
+    telldir getcwd
 
-MALLOC_PIECES=\
-  malloc __brk __sbrk
+MALLOC_C_PIECES = malloc __brk __sbrk
 
-PASSWORD_GROUP_PIECES=\
-  getpwent getgrent
+PASSWORD_GROUP_C_PIECES = getpwent getgrent
 
-LIBC_GLUE_PIECES=\
-  __gettod __times \
-  truncate access stat lstat pathconf \
-  newlibc no_libc
+LIBC_GLUE_C_PIECES = __gettod __times truncate access stat lstat pathconf \
+    newlibc no_libc
 
-UNIX_LIBC_PIECES=unixlibc hosterr 
+UNIX_LIBC_C_PIECES = unixlibc hosterr
 
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
-
-H_FILES=$(srcdir)/libcsupport.h
-SYS_H_FILES=
-RTEMS_H_FILES=$(srcdir)/libio.h
-
-SRCS=$(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES)
-OBJS=$(C_O_FILES)
-
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_INCLUDE)/rtems $(PROJECT_INCLUDE)/sys \
+    $(PROJECT_INCLUDE)
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
+
 # C and C++ source names, if any, go here -- minus the .c or .cc
-ifeq ($(RTEMS_CPU),unix)
-C_PIECES=\
-    $(UNIX_LIBC_PIECES) \
-    $(BASE_FS_PIECES) \
-    $(MALLOC_PIECES) \
-    $(TERMIOS_PIECES)
-else
-C_PIECES=\
-    $(LIBC_GLUE_PIECES) \
-    $(BASE_FS_PIECES) \
-    $(MALLOC_PIECES) \
-    $(PASSWORD_GROUP_PIECES) \
-    $(TERMIOS_PIECES) \
-    $(SYSTEM_CALL_PIECES) \
-    $(DIRECTORY_SCAN_PIECES) \
-    $(IMFS_PIECES)
-endif
+UNIX_C_PIECES = $(UNIX_LIBC_C_PIECES) $(BASE_FS_C_PIECES) $(MALLOC_C_PIECES) \
+    $(TERMIOS_C_PIECES)
+
+EMBEDDED_C_PIECES = $(LIBC_GLUE_C_PIECES) $(BASE_FS_C_PIECES) \
+    $(MALLOC_C_PIECES) $(PASSWORD_GROUP_C_PIECES) $(TERMIOS_C_PIECES) \
+    $(SYSTEM_CALL_C_PIECES) $(DIRECTORY_SCAN_C_PIECES) $(IMFS_C_PIECES)
+
+@UNIX_TRUE@C_PIECES = $(UNIX_C_PIECES)
+@UNIX_FALSE@C_PIECES = $(EMBEDDED_C_PIECES)
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES = $(srcdir)/libcsupport.h
+SYS_H_FILES =
+RTEMS_H_FILES = $(srcdir)/libio.h
+
+SRCS = $(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES)
+OBJS = $(C_O_FILES)
 
 #
 # Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS +=
-CFLAGS   += $(LIBC_DEFINES)
+CFLAGS += $(LIBC_DEFINES)
 
 #
 # Add your list of files to delete here.  The config files
@@ -106,19 +93,20 @@ CFLAGS   += $(LIBC_DEFINES)
 CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
-all:	${ARCH} preinstall $(LIB)
-	$(INSTALL_VARIANT) -m 644 ${LIB} ${PROJECT_RELEASE}/lib
+all: ${ARCH} preinstall $(LIB)
+	@$(INSTALL_VARIANT) -m 644 ${LIB} $(PROJECT_RELEASE)/lib
 
 $(LIB): $(SRCS) ${OBJS}
 	$(make-library)
 
 # Install the library, appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)
-preinstall:
-	$(INSTALL_CHANGE) -m 444 ${RTEMS_H_FILES} $(PROJECT_INCLUDE)/rtems
-	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
-	$(INSTALL_CHANGE) -m 444 $(SYS_H_FILES) $(PROJECT_INCLUDE)/sys
+preinstall: 
+	@$(mkinstalldirs) $(INSTALLDIRS)
+	@$(INSTALL_CHANGE) -m 644 $(RTEMS_H_FILES) $(PROJECT_INCLUDE)/rtems
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)
+	@$(INSTALL_CHANGE) -m 644 $(SYS_H_FILES) $(PROJECT_INCLUDE)/sys
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

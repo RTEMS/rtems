@@ -5,89 +5,77 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../..
-subdir = c/src/exec/rtems/src
+top_builddir = ../..
+subdir = rtems/src
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
 # We only build multiprocessing related files if HAS_MP was defined
-MP_PIECES_yes_V = eventmp mp msgmp partmp regionmp semmp signalmp taskmp
-MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+MP_C_PIECES_yes_V = eventmp mp msgmp partmp regionmp semmp signalmp taskmp
+MP_C_PIECES = $(MP_C_PIECES_$(HAS_MP)_V)
 
-TASK_PIECES=\
-  tasks taskcreate taskdelete taskgetnote taskident taskinitusers \
-  taskmode taskrestart taskresume tasksetnote tasksetpriority \
-  taskstart tasksuspend taskwakeafter taskwakewhen
+TASK_C_PIECES = tasks taskcreate taskdelete taskgetnote taskident \
+    taskinitusers taskmode taskrestart taskresume tasksetnote \
+    tasksetpriority taskstart tasksuspend taskwakeafter taskwakewhen
 
-RATEMON_PIECES=\
-  ratemon ratemoncancel ratemoncreate ratemondelete ratemongetstatus \
-  ratemonident ratemonperiod ratemontimeout
+RATEMON_C_PIECES = ratemon ratemoncancel ratemoncreate ratemondelete \
+    ratemongetstatus ratemonident ratemonperiod ratemontimeout
 
-INTR_PIECES=\
-  intr intrbody intrcatch
+INTR_C_PIECES = intr intrbody intrcatch
 
-CLOCK_PIECES=\
-  rtclock clockget clockset clocktick
+CLOCK_C_PIECES = rtclock clockget clockset clocktick
 
-TIMER_PIECES=\
-  rtemstimer timercancel timercreate timerdelete timerfireafter \
-  timerfirewhen timerident timerreset
+TIMER_C_PIECES = rtemstimer timercancel timercreate timerdelete \
+    timerfireafter timerfirewhen timerident timerreset
 
-MESSAGE_QUEUE_PIECES=\
-  msg msgqallocate msgqbroadcast msgqcreate msgqdelete \
-  msgqflush msgqgetnumberpending msgqident msgqreceive \
-  msgqsend msgqsubmit msgqtranslatereturncode msgqurgent
+MESSAGE_QUEUE_C_PIECES = msg msgqallocate msgqbroadcast msgqcreate \
+    msgqdelete msgqflush msgqgetnumberpending msgqident msgqreceive msgqsend \
+    msgqsubmit msgqtranslatereturncode msgqurgent
 
-SEMAPHORE_PIECES=\
-  sem semcreate semdelete semident semobtain semrelease \
-  semtranslatereturncode
+SEMAPHORE_C_PIECES = sem semcreate semdelete semident semobtain semrelease \
+    semtranslatereturncode
 
-EVENT_PIECES=\
-  event eventreceive eventseize eventsend eventsurrender eventtimeout
+EVENT_C_PIECES = event eventreceive eventseize eventsend eventsurrender \
+    eventtimeout
 
-SIGNAL_PIECES=\
-  signal signalcatch signalsend
+SIGNAL_C_PIECES = signal signalcatch signalsend
 
-REGION_PIECES=\
-  region regioncreate regiondelete regionextend regiongetsegment \
-  regiongetsegmentsize regionident regionreturnsegment regionreturnsegment
+REGION_C_PIECES = region regioncreate regiondelete regionextend \
+    regiongetsegment regiongetsegmentsize regionident regionreturnsegment \
+    regionreturnsegment
 
-PARTITION_PIECES=\
-  part partcreate partdelete partgetbuffer partident partreturnbuffer
+PARTITION_C_PIECES = part partcreate partdelete partgetbuffer partident \
+    partreturnbuffer
 
-DPMEM_PIECES=\
-  dpmem dpmemcreate dpmemdelete dpmemexternal2internal \
-  dpmemident dpmeminternal2external
+DPMEM_C_PIECES = dpmem dpmemcreate dpmemdelete dpmemexternal2internal \
+    dpmemident dpmeminternal2external
 
-C_PIECES=\
-  attr $(TASK_PIECES) $(RATEMON_PIECES) \
-  $(INTR_PIECES) \
-  $(CLOCK_PIECES) $(TIMER_PIECES) \
-  $(SEMAPHORE_PIECES) $(MESSAGE_QUEUE_PIECES) \
-  $(EVENT_PIECES) $(SIGNAL_PIECES) \
-  $(PARTITION_PIECES) $(REGION_PIECES) $(DPMEM_PIECES) \
-  $(MP_PIECES)
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_PIECES = attr $(TASK_C_PIECES) $(RATEMON_C_PIECES) $(INTR_C_PIECES) \
+    $(CLOCK_C_PIECES) $(TIMER_C_PIECES) $(SEMAPHORE_C_PIECES) \
+    $(MESSAGE_QUEUE_C_PIECES) $(EVENT_C_PIECES) $(SIGNAL_C_PIECES) \
+    $(PARTITION_C_PIECES) $(REGION_C_PIECES) $(DPMEM_C_PIECES) \
+    $(MP_C_PIECES)
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-SRCS=$(C_FILES)
-OBJS=$(C_O_FILES)
+SRCS = $(C_FILES)
+OBJS = $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
 
 #
 # Add local stuff here using +=
 #
 
-DEFINES  += -D__RTEMS_INSIDE__
+DEFINES += -D__RTEMS_INSIDE__
 CPPFLAGS +=
-CFLAGS   += $(CFLAGS_OS_V)
+CFLAGS += $(CFLAGS_OS_V)
 
 #
 # Add your list of files to delete here.  The config files
@@ -96,11 +84,11 @@ CFLAGS   += $(CFLAGS_OS_V)
 #  'make clobber' already includes 'make clean'
 #
 
-CLEAN_ADDITIONS += 
+CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all:	${ARCH} $(SRCS) ${OBJS}
+all: ${ARCH} $(SRCS) ${OBJS}
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

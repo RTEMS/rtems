@@ -5,25 +5,25 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../..
-subdir = c/src/lib/libchip
+top_builddir = ..
+subdir = libchip
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/directory.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
 
 # We only build the networking chip drivers if HAS_NETWORKING was defined
 LIBNETWORKING_yes_V = network
 LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
 
-SUB_DIRS=rtc serial $(LIBNETWORKING)
+SUB_DIRS = rtc serial $(LIBNETWORKING)
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

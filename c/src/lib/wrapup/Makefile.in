@@ -7,43 +7,43 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../..
-subdir = c/src/lib/wrapup
+top_builddir = ..
+subdir = wrapup
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
- 
-LIB=$(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
- 
-SRCS=$(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
-     $(PROJECT_RELEASE)/lib/librtems$(LIB_VARIANT).a \
-     $(wildcard $(PROJECT_RELEASE)/lib/libposix$(LIB_VARIANT).a) \
-     $(wildcard $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a) \
-     $(wildcard $(PROJECT_RELEASE)/lib/librpc$(LIB_VARIANT).a) \
-     $(wildcard $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a) \
-     $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
-     $(wildcard $(PROJECT_RELEASE)/lib/librtcio$(LIB_VARIANT).a) \
-     $(wildcard $(PROJECT_RELEASE)/lib/libserialio$(LIB_VARIANT).a) \
-     $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a) \
-     $(PROJECT_RELEASE)/lib/libcsupport$(LIB_VARIANT).a \
-     $(PROJECT_RELEASE)/lib/libmisc$(LIB_VARIANT).a \
-     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
- 
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+
+LIB = $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
+
+SRCS = $(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
+    $(PROJECT_RELEASE)/lib/librtems$(LIB_VARIANT).a $(wildcard \
+    $(PROJECT_RELEASE)/lib/libposix$(LIB_VARIANT).a) $(wildcard \
+    $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a) $(wildcard \
+    $(PROJECT_RELEASE)/lib/librpc$(LIB_VARIANT).a) $(wildcard \
+    $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a) $(wildcard \
+    $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) $(wildcard \
+    $(PROJECT_RELEASE)/lib/librtcio$(LIB_VARIANT).a) $(wildcard \
+    $(PROJECT_RELEASE)/lib/libserialio$(LIB_VARIANT).a) $(wildcard \
+    $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a) \
+    $(PROJECT_RELEASE)/lib/libcsupport$(LIB_VARIANT).a \
+    $(PROJECT_RELEASE)/lib/libmisc$(LIB_VARIANT).a $(wildcard \
+    $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
+
 CLEAN_ADDITIONS += $(ARCH)/check
 CLOBBER_ADDITIONS +=
- 
-all:    $(ARCH) $(LIB)
 
-install:  all
+all: $(ARCH) $(LIB)
 
-$(ARCH)/check:: $(SRCS)
+install: all
+
+$(ARCH)/check: $(SRCS)
 	@$(RM) $@; touch $@;
 	@for f in $(SRCS); do \
 	  case $$f in \
@@ -63,7 +63,7 @@ $(ARCH)/check:: $(SRCS)
 	  esac; \
 	done;
 
-$(LIB):: $(ARCH)/check
+$(LIB): $(ARCH)/check
 	@for f in $(SRCS); do \
 	  case $$f in \
 	  *.o) $(AR) ru $@ $$f \
@@ -72,8 +72,8 @@ $(LIB):: $(ARCH)/check
 	    ;;\
 	  *.a) \
 	    (cd $(ARCH); \
-	    list=`$(AR) t $$f`; \
-	    $(AR) x $$f $$list; $(AR) ru $@ $$list; \
+	    list=`$(AR) t ../$$f`; \
+	    $(AR) x ../$$f $$list; $(AR) ru ../$@ $$list; \
 	    $(RM) $$list ;)\
 	    ;; \
 	  esac; \
@@ -81,6 +81,6 @@ $(LIB):: $(ARCH)/check
 	@$(RANLIB) $@
 	@echo "*** Glommed $@"
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

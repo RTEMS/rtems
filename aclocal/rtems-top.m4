@@ -15,10 +15,6 @@ TARGET_SUBDIR=".")
 RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
 
-PROJECT_ROOT=`pwd`/$RTEMS_TOPdir;
-test "$TARGET_SUBDIR" = "." || PROJECT_ROOT="$PROJECT_ROOT/.."
-AC_SUBST(PROJECT_ROOT)
-
 dnl Determine RTEMS Version string from the VERSION file
 dnl Hopefully, Joel never changes its format ;-
 AC_MSG_CHECKING([for RTEMS Version])
@@ -34,7 +30,4 @@ if test -z "$RTEMS_VERSION"; then
 AC_MSG_ERROR(Unable to determine version)
 fi
 AC_MSG_RESULT($RTEMS_VERSION)
-
-RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
-AC_SUBST(RTEMS_ROOT)
 ])dnl

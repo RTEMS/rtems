@@ -106,6 +106,7 @@ clean)
   find . -name 'config.status' -print | xargs rm -f
   find . -name 'config.log' -print | xargs rm -f
   find . -name 'config.cache' -print | xargs rm -f
+  find . -name 'Makefile' -print | xargs rm -f
   find . -name '.deps' -print | xargs rm -rf
   find . -name '.libs' -print | xargs rm -rf
   find . -name 'stamp-h.in' | xargs rm -rf

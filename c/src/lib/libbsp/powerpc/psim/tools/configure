@@ -13,6 +13,9 @@ ac_default_prefix=/usr/local
 # Any additions from configure.in:
 ac_help="$ac_help
   --with-target-subdir=DIR"
+ac_help="$ac_help
+  --enable-maintainer-mode enable make rules and dependencies not useful
+                          (and sometimes confusing) to the casual installer"
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -555,12 +558,8 @@ fi
 RTEMS_TOPdir="../../../../../../..";
 
 
-PROJECT_ROOT=`pwd`/$RTEMS_TOPdir;
-test "$TARGET_SUBDIR" = "." || PROJECT_ROOT="$PROJECT_ROOT/.."
-
-
 echo $ac_n "checking for RTEMS Version""... $ac_c" 1>&6
-echo "configure:564: checking for RTEMS Version" >&5
+echo "configure:563: checking for RTEMS Version" >&5
 if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
 RTEMS_VERSION=`grep Version ${srcdir}/${RTEMS_TOPdir}/VERSION | \
 sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
@@ -571,9 +570,6 @@ if test -z "$RTEMS_VERSION"; then
 { echo "configure: error: Unable to determine version" 1>&2; exit 1; }
 fi
 echo "$ac_t""$RTEMS_VERSION" 1>&6
-
-RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
-
 
 
 
@@ -604,7 +600,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:608: checking host system type" >&5
+echo "configure:604: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -625,7 +621,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:629: checking target system type" >&5
+echo "configure:625: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -643,7 +639,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:647: checking build system type" >&5
+echo "configure:643: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -666,7 +662,7 @@ test "$host_alias" != "$target_alias" &&
   program_prefix=${target_alias}-
 
 echo $ac_n "checking rtems target cpu""... $ac_c" 1>&6
-echo "configure:670: checking rtems target cpu" >&5
+echo "configure:666: checking rtems target cpu" >&5
 case "${target}" in
   # hpux unix port should go here
   i[3456]86-go32-rtems*)
@@ -704,7 +700,7 @@ echo "$ac_t""$RTEMS_CPU" 1>&6
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install""... $ac_c" 1>&6
-echo "configure:708: checking for a BSD compatible install" >&5
+echo "configure:704: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if eval "test \"`echo '$''{'ac_cv_path_install'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -757,7 +753,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 echo $ac_n "checking whether build environment is sane""... $ac_c" 1>&6
-echo "configure:761: checking whether build environment is sane" >&5
+echo "configure:757: checking whether build environment is sane" >&5
 # Just in case
 sleep 1
 echo timestamp > conftestfile
@@ -814,7 +810,7 @@ test "$program_suffix" != NONE &&
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:818: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:814: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -853,7 +849,7 @@ fi
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
-echo "configure:857: checking for working aclocal" >&5
+echo "configure:853: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -866,7 +862,7 @@ else
 fi
 
 echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
-echo "configure:870: checking for working autoconf" >&5
+echo "configure:866: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -879,7 +875,7 @@ else
 fi
 
 echo $ac_n "checking for working automake""... $ac_c" 1>&6
-echo "configure:883: checking for working automake" >&5
+echo "configure:879: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -892,7 +888,7 @@ else
 fi
 
 echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
-echo "configure:896: checking for working autoheader" >&5
+echo "configure:892: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -905,7 +901,7 @@ else
 fi
 
 echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
-echo "configure:909: checking for working makeinfo" >&5
+echo "configure:905: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -916,6 +912,69 @@ else
    MAKEINFO="$missing_dir/missing makeinfo"
    echo "$ac_t""missing" 1>&6
 fi
+
+
+echo $ac_n "checking whether to enable maintainer-specific portions of Makefiles""... $ac_c" 1>&6
+echo "configure:919: checking whether to enable maintainer-specific portions of Makefiles" >&5
+    # Check whether --enable-maintainer-mode or --disable-maintainer-mode was given.
+if test "${enable_maintainer_mode+set}" = set; then
+  enableval="$enable_maintainer_mode"
+  USE_MAINTAINER_MODE=$enableval
+else
+  USE_MAINTAINER_MODE=no
+fi
+
+  echo "$ac_t""$USE_MAINTAINER_MODE" 1>&6
+  
+
+if test $USE_MAINTAINER_MODE = yes; then
+  MAINTAINER_MODE_TRUE=
+  MAINTAINER_MODE_FALSE='#'
+else
+  MAINTAINER_MODE_TRUE='#'
+  MAINTAINER_MODE_FALSE=
+fi
+  MAINT=$MAINTAINER_MODE_TRUE
+  
+
+
+
+if test "$TARGET_SUBDIR" = "." ; then
+PROJECT_ROOT=$RTEMS_TOPdir/'$(top_builddir)';
+else
+PROJECT_ROOT=../$RTEMS_TOPdir/'$(top_builddir)'
+fi
+
+
+RTEMS_ROOT=$RTEMS_TOPdir/'$(top_builddir)'/c/$RTEMS_BSP
+
+
+INSTALL_CHANGE="\$(KSH) \$(PROJECT_ROOT)/tools/build/install-if-change"
+
+
+PACKHEX="\$(PROJECT_ROOT)/tools/build/packhex"
+
+
+
+# tooldir='$(exec_prefix)/'$target_alias
+# Temporary work-around until building in source tree is supported
+
+
+tooldir='$(PROJECT_ROOT)'
+
+
+project_includedir='$(tooldir)'/include
+
+
+project_libdir='$(tooldir)/lib$(MULTISUBDIR)'
+
+
+project_bindir='$(tooldir)/bin'
+
+
+rtems_bspdir='$(prefix)/${RTEMS_BSP}'
+
+rtems_makedir='$(prefix)/make'
 
 
 
@@ -1065,8 +1124,6 @@ s%@oldincludedir@%$oldincludedir%g
 s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
 s%@RTEMS_TOPdir@%$RTEMS_TOPdir%g
-s%@PROJECT_ROOT@%$PROJECT_ROOT%g
-s%@RTEMS_ROOT@%$RTEMS_ROOT%g
 s%@host@%$host%g
 s%@host_alias@%$host_alias%g
 s%@host_cpu@%$host_cpu%g
@@ -1094,6 +1151,19 @@ s%@AUTOMAKE@%$AUTOMAKE%g
 s%@AUTOHEADER@%$AUTOHEADER%g
 s%@MAKEINFO@%$MAKEINFO%g
 s%@SET_MAKE@%$SET_MAKE%g
+s%@MAINTAINER_MODE_TRUE@%$MAINTAINER_MODE_TRUE%g
+s%@MAINTAINER_MODE_FALSE@%$MAINTAINER_MODE_FALSE%g
+s%@MAINT@%$MAINT%g
+s%@PROJECT_ROOT@%$PROJECT_ROOT%g
+s%@RTEMS_ROOT@%$RTEMS_ROOT%g
+s%@INSTALL_CHANGE@%$INSTALL_CHANGE%g
+s%@PACKHEX@%$PACKHEX%g
+s%@tooldir@%$tooldir%g
+s%@project_includedir@%$project_includedir%g
+s%@project_libdir@%$project_libdir%g
+s%@project_bindir@%$project_bindir%g
+s%@rtems_bspdir@%$rtems_bspdir%g
+s%@rtems_makedir@%$rtems_makedir%g
 
 CEOF
 EOF

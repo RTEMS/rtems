@@ -44,6 +44,8 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 top_builddir = .
+
+ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
 AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
@@ -66,17 +68,21 @@ host_alias = @host_alias@
 host_triplet = @host@
 target_alias = @target_alias@
 target_triplet = @target@
+INSTALL_CHANGE = @INSTALL_CHANGE@
 KSH = @KSH@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
+PACKHEX = @PACKHEX@
 PROJECT_ROOT = @PROJECT_ROOT@
+RTEMS_BSP = @RTEMS_BSP@
 RTEMS_CPU = @RTEMS_CPU@
 RTEMS_ROOT = @RTEMS_ROOT@
 RTEMS_TOPdir = @RTEMS_TOPdir@
 VERSION = @VERSION@
 
-AUTOMAKE_OPTIONS = foreign
-ACLOCAL = @ACLOCAL@ -I $(RTEMS_TOPdir)/aclocal
+AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 noinst_SCRIPTS = difftest sorttimes
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -94,19 +100,19 @@ TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../../../../automake/local.am
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../../../../automake/local.am
 	cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4):  configure.in 
-	cd $(srcdir) && $(ACLOCAL)
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ configure.in 
+	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure: @MAINTAINER_MODE_TRUE@$(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 difftest: $(top_builddir)/config.status difftest.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
@@ -234,9 +240,9 @@ mostlyclean distclean maintainer-clean
 
 # HACK: install to build-tree
 all-local: $(SCRIPTS)
-	$(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/tests
-	$(INSTALL_SCRIPT) difftest $(PROJECT_ROOT)/${RTEMS_BSP}/tests
-	$(INSTALL_SCRIPT) sorttimes $(PROJECT_ROOT)/${RTEMS_BSP}/tests
+	$(mkinstalldirs) $(PROJECT_ROOT)/@RTEMS_BSP@/tests
+	$(INSTALL_SCRIPT) difftest $(PROJECT_ROOT)/@RTEMS_BSP@/tests
+	$(INSTALL_SCRIPT) sorttimes $(PROJECT_ROOT)/@RTEMS_BSP@/tests
 
 debug-am:
 debug: debug-am

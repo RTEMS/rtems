@@ -5,12 +5,10 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../..
-subdir = c/src/exec/posix/src
+top_builddir = ../..
+subdir = posix/src
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
@@ -19,52 +17,49 @@ VPATH = @srcdir@
 # C_PIECES=aio cancel devctl intr mqueue semaphore utsname
 
 # These are really in the stand but not really functional
-BUILD_FOR_NOW_C_PIECES=aio cancel mqueue semaphore utsname
+BUILD_FOR_NOW_C_PIECES = aio cancel mqueue semaphore utsname
 
-ENOSYS_C_PIECES=\
-    execl execle execlp execv execve execvp fork \
-    pthreadatfork wait waitpid
+ENOSYS_C_PIECES = execl execle execlp execv execve execvp fork pthreadatfork \
+    wait waitpid
 
-PTHREAD_PIECES=\
-  pthread pthreadsetcputime pthreadgetcputime pthreadgetcpuclockid \
-  pthreadonce pthreadequal pthreadself pthreadexit pthreaddetach \
-  pthreadjoin pthreadcreate \
-  pthreadattrsetdetachstate pthreadattrgetdetachstate \
-  pthreadattrgetstackaddr pthreadattrsetstackaddr \
-  pthreadattrgetstacksize pthreadattrsetstacksize \
-  pthreadattrinit pthreadattrdestroy \
-  pthreadsetschedparam pthreadgetschedparam \
-  pthreadattrsetschedparam pthreadattrgetschedparam \
-  pthreadattrgetschedpolicy pthreadattrsetschedpolicy \
-  pthreadattrgetinheritsched pthreadattrsetinheritsched \
-  pthreadattrgetscope pthreadattrsetscope
+PTHREAD_C_PIECES = pthread pthreadsetcputime pthreadgetcputime \
+    pthreadgetcpuclockid pthreadonce pthreadequal pthreadself pthreadexit \
+    pthreaddetach pthreadjoin pthreadcreate pthreadattrsetdetachstate \
+    pthreadattrgetdetachstate pthreadattrgetstackaddr \
+    pthreadattrsetstackaddr pthreadattrgetstacksize pthreadattrsetstacksize \
+    pthreadattrinit pthreadattrdestroy pthreadsetschedparam \
+    pthreadgetschedparam pthreadattrsetschedparam pthreadattrgetschedparam \
+    pthreadattrgetschedpolicy pthreadattrsetschedpolicy \
+    pthreadattrgetinheritsched pthreadattrsetinheritsched \
+    pthreadattrgetscope pthreadattrsetscope
 
-PSIGNAL_PIECES=\
-  psignal alarm kill killinfo pause pthreadkill pthreadsigmask \
-  sigaction sigaddset sigdelset sigemptyset sigfillset sigismember \
-  sigpending sigprocmask sigqueue sigsuspend sigtimedwait sigwait \
-  sigwaitinfo signal_2
+PSIGNAL_C_PIECES = psignal alarm kill killinfo pause pthreadkill \
+    pthreadsigmask sigaction sigaddset sigdelset sigemptyset sigfillset \
+    sigismember sigpending sigprocmask sigqueue sigsuspend sigtimedwait \
+    sigwait sigwaitinfo signal_2
 
-C_PIECES= adasupp cond getpid key mutex $(PTHREAD_PIECES) \
-  $(PSIGNAL_PIECES) ptimer sched time \
-  types unistd $(ENOSYS_C_PIECES) $(BUILD_FOR_NOW_C_PIECES)
+C_PIECES = adasupp cond getpid key mutex $(PTHREAD_C_PIECES) \
+    $(PSIGNAL_C_PIECES) ptimer sched time types unistd $(ENOSYS_C_PIECES) \
+    $(BUILD_FOR_NOW_C_PIECES)
 
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-SRCS=$(C_FILES) $(CC_FILES)
-OBJS=$(C_O_FILES) $(CC_O_FILES)
+SRCS = $(C_FILES) $(CC_FILES)
+OBJS = $(C_O_FILES) $(CC_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
 
 #
 # Add local stuff here using +=
 #
 
-DEFINES  += -D__RTEMS_INSIDE__
+DEFINES += -D__RTEMS_INSIDE__
 CPPFLAGS +=
-CFLAGS   += $(CFLAGS_OS_V)
+CFLAGS += $(CFLAGS_OS_V)
 
 #
 # Add your list of files to delete here.  The config files
@@ -73,13 +68,13 @@ CFLAGS   += $(CFLAGS_OS_V)
 #  'make clobber' already includes 'make clean'
 #
 
-CLEAN_ADDITIONS += 
+CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all:	${ARCH} $(SRCS) ${OBJS}
+all: ${ARCH} $(SRCS) ${OBJS}
 
 # temporary so we can see how many things are left to implement
-not:
+not: 
 	grep -i NOT_IMPL $(C_FILES) | grep -v MP_NOT_IMPL
 	@echo
 	@echo
@@ -87,6 +82,6 @@ not:
 	@echo `grep -i NOT_IMPL $(C_FILES) | grep -v MP_NOT_IMPL | wc -l ` places marked not implemented
 	@echo `wc -l $(C_FILES) | grep total` lines of C code to test
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

@@ -98,21 +98,23 @@ else
   EOL="\\c"
 fi
 
-if [ ! -d ${board} ] ; then
+if [ ! -d ../${board} ] ; then
   echo "${board} does not exist ... is the current directory the build directory?"
   exit 1
 fi
 
 #DIRLIST -- so greps for DIRLIST will find this file
-CPUOBJ=c/src/exec/score/cpu/${rtems_cpu}/wrap/${ARCH}
-COREOBJ=c/src/exec/score/src/${ARCH}
-RTEMSOBJ=c/src/exec/rtems/src/${ARCH}
-SAPIOBJ=c/src/exec/sapi/src/${ARCH}
-OPTOBJ=c/src/exec/rtems/optman/${ARCH}
+CPUOBJ=exec/score/cpu/${rtems_cpu}/wrap/${ARCH}
+COREOBJ=exec/score/src/${ARCH}
+RTEMSOBJ=exec/rtems/src/${ARCH}
+SAPIOBJ=exec/sapi/src/${ARCH}
+OPTOBJ=exec/rtems/optman/${ARCH}
 
 # XXX These have been split up
 MANLIST=" \
-${RTEMSOBJ}/clock.o \
+${RTEMSOBJ}/clockget.o \
+${RTEMSOBJ}/clockset.o \
+${RTEMSOBJ}/clocktick.o \
 ${RTEMSOBJ}/dpmem.o \
 ${RTEMSOBJ}/event.o \
 ${RTEMSOBJ}/intr.o \

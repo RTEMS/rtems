@@ -1,0 +1,10 @@
+#
+#  $Id$
+#
+
+This is a test which can be built and run after the tools and BSP are
+installed.  It's placement in the BSP tree is questionable since this
+is the only target program like this in the RTEMS tree.  We need to
+work out some kind of proper placement for it.
+
+It is written in Ada.

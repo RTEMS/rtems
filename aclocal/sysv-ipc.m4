@@ -17,8 +17,8 @@ dnl modify any existing key sets.  See the man pages for semget, shmget,
 dnl msgget, semctl, shmctl and msgctl for details.
 
 AC_DEFUN(RTEMS_SYSV_SEM,
-[AC_REQUIRE([RTEMS_PROG_CC]) 
-AC_REQUIRE([AC_CANONICAL_HOST])
+[AC_REQUIRE([AC_PROG_CC]) 
+AC_REQUIRE([RTEMS_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $RTEMS_HOST supports System V semaphores,
 rtems_cv_sysv_sem,
 [
@@ -50,8 +50,8 @@ rtems_cv_sysv_sem="yes", rtems_cv_sysv_sem="no", :)
 ])
 
 AC_DEFUN(RTEMS_SYSV_SHM,
-[AC_REQUIRE([RTEMS_PROG_CC]) 
-AC_REQUIRE([AC_CANONICAL_HOST])
+[AC_REQUIRE([AC_PROG_CC]) 
+AC_REQUIRE([RTEMS_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $RTEMS_HOST supports System V shared memory,
 rtems_cv_sysv_shm,
 [
@@ -73,8 +73,8 @@ rtems_cv_sysv_shm="yes", rtems_cv_sysv_shm="no", :)
 ])
 
 AC_DEFUN(RTEMS_SYSV_MSG,
-[AC_REQUIRE([RTEMS_PROG_CC]) 
-AC_REQUIRE([AC_CANONICAL_HOST])
+[AC_REQUIRE([AC_PROG_CC]) 
+AC_REQUIRE([RTEMS_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $RTEMS_HOST supports System V messages,
 rtems_cv_sysv_msg,
 [
@@ -93,4 +93,22 @@ int main () {
 ],
 rtems_cv_sysv_msg="yes", rtems_cv_sysv_msg="no", :)
 ])
+])
+
+AC_DEFUN(RTEMS_CHECK_SYSV_UNIX,
+[AC_REQUIRE([RTEMS_CANONICAL_HOST])
+if test "$RTEMS_CPU" = "unix" ; then
+  RTEMS_SYSV_SEM
+  if test "$rtems_cv_sysv_sem" != "yes" ; then
+    AC_MSG_ERROR([System V semaphores don't work, required by simulator])
+  fi
+  RTEMS_SYSV_SHM
+  if test "$rtems_cv_sysv_shm" != "yes" ; then
+    AC_MSG_ERROR([System V shared memory doesn't work, required by simulator])
+  fi
+  RTEMS_SYSV_MSG
+  if test "$rtems_cv_sysv_msg" != "yes" ; then
+    AC_MSG_ERROR([System V messages don't work, required by simulator])
+  fi
+fi
 ])

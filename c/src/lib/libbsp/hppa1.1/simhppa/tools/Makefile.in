@@ -44,6 +44,8 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 top_builddir = .
+
+ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
 AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
@@ -67,16 +69,25 @@ host_triplet = @host@
 target_alias = @target_alias@
 target_triplet = @target@
 CC = @CC@
+INSTALL_CHANGE = @INSTALL_CHANGE@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
+PACKHEX = @PACKHEX@
 PROJECT_ROOT = @PROJECT_ROOT@
 RTEMS_CPU = @RTEMS_CPU@
 RTEMS_ROOT = @RTEMS_ROOT@
 RTEMS_TOPdir = @RTEMS_TOPdir@
 VERSION = @VERSION@
+project_bindir = @project_bindir@
+project_includedir = @project_includedir@
+project_libdir = @project_libdir@
+rtems_bspdir = @rtems_bspdir@
+rtems_makedir = @rtems_makedir@
+tooldir = @tooldir@
 
-AUTOMAKE_OPTIONS = foreign
-ACLOCAL = @ACLOCAL@ -I $(RTEMS_TOPdir)/aclocal
+AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 noinst_PROGRAMS =  print_dump
 
@@ -117,19 +128,19 @@ OBJECTS = $(print_dump_OBJECTS)
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .o .s
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../../../../../../automake/local.am
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../../../../../../automake/local.am
 	cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4):  configure.in 
-	cd $(srcdir) && $(ACLOCAL)
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ configure.in 
+	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure: @MAINTAINER_MODE_TRUE@$(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
 config.h: stamp-h
@@ -142,7 +153,7 @@ stamp-h: $(srcdir)/config.h.in $(top_builddir)/config.status
 	  && CONFIG_FILES= CONFIG_HEADERS=config.h \
 	     $(SHELL) ./config.status
 	@echo timestamp > stamp-h 2> /dev/null
-$(srcdir)/config.h.in: $(srcdir)/stamp-h.in
+$(srcdir)/config.h.in: @MAINTAINER_MODE_TRUE@$(srcdir)/stamp-h.in
 	@if test ! -f $@; then \
 		rm -f $(srcdir)/stamp-h.in; \
 		$(MAKE) $(srcdir)/stamp-h.in; \
@@ -386,9 +397,9 @@ maintainer-clean
 
 
 # HACK: install to build-tree
-install-exec-local: print_dump
-	$(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/bin
-	$(INSTALL_PROGRAM) print_dump $(PROJECT_ROOT)/${RTEMS_BSP}/bin
+install-exec-local: $(PROGRAMS)
+	$(mkinstalldirs) $(PROJECT_ROOT)/simhppa/bin
+	$(INSTALL_PROGRAM) print_dump $(PROJECT_ROOT)/simhppa/bin
 
 debug-am:
 debug: debug-am

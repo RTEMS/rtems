@@ -5,17 +5,15 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../../../..
-subdir = c/src/lib/libbsp/i386/shared/pci
+top_builddir = ../../../..
+subdir = libbsp/i386/shared/pci
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(srcdir)/pcibios.h 
+H_FILES = $(srcdir)/pcibios.h
 
 #
 #  Equate files are for including from assembly preprocessed by
@@ -27,17 +25,25 @@ H_FILES = $(srcdir)/pcibios.h
 
 EQ_FILES =
 
-SRCS=$(H_FILES) $(EQ_FILES)
+SRCS = $(H_FILES) $(EQ_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_INCLUDE)
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
 
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 preinstall all: $(SRCS)
-	$(INSTALL_CHANGE) -m 444 $(SRCS) $(PROJECT_INCLUDE)
+	@$(INSTALL_CHANGE) -m 644 $(SRCS) $(PROJECT_INCLUDE)
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

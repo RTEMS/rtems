@@ -27,10 +27,6 @@ TARGET_SUBDIR=".")
 RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
 
-PROJECT_ROOT=`pwd`/$RTEMS_TOPdir;
-test "$TARGET_SUBDIR" = "." || PROJECT_ROOT="$PROJECT_ROOT/.."
-AC_SUBST(PROJECT_ROOT)
-
 dnl Determine RTEMS Version string from the VERSION file
 dnl Hopefully, Joel never changes its format ;-
 AC_MSG_CHECKING([for RTEMS Version])
@@ -46,9 +42,6 @@ if test -z "$RTEMS_VERSION"; then
 AC_MSG_ERROR(Unable to determine version)
 fi
 AC_MSG_RESULT($RTEMS_VERSION)
-
-RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
-AC_SUBST(RTEMS_ROOT)
 ])dnl
 
 dnl
@@ -91,6 +84,131 @@ changequote([,])dnl
 AC_SUBST(RTEMS_CPU)
 AC_MSG_RESULT($RTEMS_CPU)
 ])
+
+# Do all the work for Automake.  This macro actually does too much --
+# some checks are only needed if your package does certain things.
+# But this isn't really a big deal.
+
+# serial 1
+
+dnl Usage:
+dnl AM_INIT_AUTOMAKE(package,version, [no-define])
+
+AC_DEFUN(AM_INIT_AUTOMAKE,
+[AC_REQUIRE([AC_PROG_INSTALL])
+PACKAGE=[$1]
+AC_SUBST(PACKAGE)
+VERSION=[$2]
+AC_SUBST(VERSION)
+dnl test to see if srcdir already configured
+if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
+  AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+fi
+ifelse([$3],,
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package]))
+AC_REQUIRE([AM_SANITY_CHECK])
+AC_REQUIRE([AC_ARG_PROGRAM])
+dnl FIXME This is truly gross.
+missing_dir=`cd $ac_aux_dir && pwd`
+AM_MISSING_PROG(ACLOCAL, aclocal, $missing_dir)
+AM_MISSING_PROG(AUTOCONF, autoconf, $missing_dir)
+AM_MISSING_PROG(AUTOMAKE, automake, $missing_dir)
+AM_MISSING_PROG(AUTOHEADER, autoheader, $missing_dir)
+AM_MISSING_PROG(MAKEINFO, makeinfo, $missing_dir)
+AC_REQUIRE([AC_PROG_MAKE_SET])])
+
+#
+# Check to make sure that the build environment is sane.
+#
+
+AC_DEFUN(AM_SANITY_CHECK,
+[AC_MSG_CHECKING([whether build environment is sane])
+# Just in case
+sleep 1
+echo timestamp > conftestfile
+# Do `set' in a subshell so we don't clobber the current shell's
+# arguments.  Must try -L first in case configure is actually a
+# symlink; some systems play weird games with the mod time of symlinks
+# (eg FreeBSD returns the mod time of the symlink's containing
+# directory).
+if (
+   set X `ls -Lt $srcdir/configure conftestfile 2> /dev/null`
+   if test "[$]*" = "X"; then
+      # -L didn't work.
+      set X `ls -t $srcdir/configure conftestfile`
+   fi
+   if test "[$]*" != "X $srcdir/configure conftestfile" \
+      && test "[$]*" != "X conftestfile $srcdir/configure"; then
+
+      # If neither matched, then we have a broken ls.  This can happen
+      # if, for instance, CONFIG_SHELL is bash and it inherits a
+      # broken ls alias from the environment.  This has actually
+      # happened.  Such a system could not be considered "sane".
+      AC_MSG_ERROR([ls -t appears to fail.  Make sure there is not a broken
+alias in your environment])
+   fi
+
+   test "[$]2" = conftestfile
+   )
+then
+   # Ok.
+   :
+else
+   AC_MSG_ERROR([newly created file is older than distributed files!
+Check your system clock])
+fi
+rm -f conftest*
+AC_MSG_RESULT(yes)])
+
+dnl AM_MISSING_PROG(NAME, PROGRAM, DIRECTORY)
+dnl The program must properly implement --version.
+AC_DEFUN(AM_MISSING_PROG,
+[AC_MSG_CHECKING(for working $2)
+# Run test in a subshell; some versions of sh will print an error if
+# an executable is not found, even if stderr is redirected.
+# Redirect stdin to placate older versions of autoconf.  Sigh.
+if ($2 --version) < /dev/null > /dev/null 2>&1; then
+   $1=$2
+   AC_MSG_RESULT(found)
+else
+   $1="$3/missing $2"
+   AC_MSG_RESULT(missing)
+fi
+AC_SUBST($1)])
+
+# Add --enable-maintainer-mode option to configure.
+# From Jim Meyering
+
+# serial 1
+
+AC_DEFUN(AM_MAINTAINER_MODE,
+[AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
+  dnl maintainer-mode is disabled by default
+  AC_ARG_ENABLE(maintainer-mode,
+[  --enable-maintainer-mode enable make rules and dependencies not useful
+                          (and sometimes confusing) to the casual installer],
+      USE_MAINTAINER_MODE=$enableval,
+      USE_MAINTAINER_MODE=no)
+  AC_MSG_RESULT($USE_MAINTAINER_MODE)
+  AM_CONDITIONAL(MAINTAINER_MODE, test $USE_MAINTAINER_MODE = yes)
+  MAINT=$MAINTAINER_MODE_TRUE
+  AC_SUBST(MAINT)dnl
+]
+)
+
+# Define a conditional.
+
+AC_DEFUN(AM_CONDITIONAL,
+[AC_SUBST($1_TRUE)
+AC_SUBST($1_FALSE)
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi])
 
 dnl $Id$
 
@@ -224,55 +342,37 @@ test -d ${enableval} || AC_MSG_ERROR("$enableval is not a directory" ) ] )
 AC_SUBST(RTEMS_LIBC_DIR)dnl
 ])
 
-AC_DEFUN(RTEMS_ENABLE_BARE,
-[
-AC_ARG_ENABLE(bare-cpu-cflags,
-[  --enable-bare-cpu-cflags             specify a particular cpu cflag]
-[                                       (bare bsp specific)],
-[case "${enableval}" in
-  no) BARE_CPU_CFLAGS="" ;;
-  *)    BARE_CPU_CFLAGS="${enableval}" ;;
-esac],
-[BARE_CPU_CFLAGS=""])
-
-AC_ARG_ENABLE(bare-cpu-model,
-[  --enable-bare-cpu-model              specify a particular cpu model]
-[                                       (bare bsp specific)],
-[case "${enableval}" in
-  no)   BARE_CPU_MODEL="" ;;
-  *)    BARE_CPU_MODEL="${enableval}" ;;
-esac],
-[BARE_CPU_MODEL=""])
-])
-
-
 dnl $Id$
 
-AC_DEFUN(RTEMS_PATH_PERL,
+AC_DEFUN(RTEMS_ENABLE_TESTS,
 [
-AC_PATH_PROG(PERL,perl)
-if test -z "$PERL" ; then
-AC_MSG_WARN(
-[***]
-[   perl was not found]
-[   Note: Some tools will not be built.])
-fi
+# If the tests are enabled, then find all the test suite Makefiles
+AC_MSG_CHECKING([if the test suites are enabled? ])
+AC_ARG_ENABLE(tests,
+[  --enable-tests                       enable tests (default:disabled)],
+  [case "${enableval}" in
+    yes) tests_enabled=yes ;;
+    no)  tests_enabled=no ;;
+    *)   AC_MSG_ERROR(bad value ${enableval} for tests option) ;;
+  esac], [tests_enabled=no])
+AC_MSG_RESULT([$tests_enabled])
 ])
 
 dnl $Id$
+dnl
+dnl FIXME: this needs to be reworked
 
-AC_DEFUN(RTEMS_PATH_KSH,
-[
-dnl NOTE: prefer bash over ksh over sh
-AC_PATH_PROGS(KSH,bash ksh sh)
-if test -z "$KSH"; then
-dnl NOTE: This cannot happen -- /bin/sh must always exist
-AC_MSG_ERROR(
-[***]
-[    Cannot determine a usable shell bash/ksh/sh]
-[    Please contact your system administrator] );
-fi
-])
+AC_DEFUN(RTEMS_ENABLE_HWAPI,
+[dnl
+AC_ARG_ENABLE(hwapi, \
+[  --enable-hwapi                       enable hardware API library],
+[case "${enableval}" in
+    yes) RTEMS_HAS_HWAPI=yes ;;
+    no)  RTEMS_HAS_HWAPI=no ;;
+    *)  AC_MSG_ERROR(bad value ${enableval} for hwapi option) ;;
+  esac],[RTEMS_HAS_HWAPI=no])
+AC_SUBST(RTEMS_HAS_HWAPI)dnl
+])dnl
 
 dnl $Id$
 
@@ -316,528 +416,134 @@ changequote([,])dnl
 AC_SUBST(RTEMS_HOST)
 ])dnl
 
-dnl
-dnl  $Id$
-dnl 
-dnl Set program_prefix
-dnl
-dnl 98/05/20 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
-dnl				Extracted from configure
+dnl $Id$
 
-AC_DEFUN(RTEMS_TOOL_PREFIX,
-[AC_REQUIRE([AC_CANONICAL_TARGET])dnl
-AC_REQUIRE([AC_CANONICAL_BUILD])dnl
-
-if [[ "${program_prefix}" = "NONE" ]] ; then
-  if [[ "${target}" = "${host}" ]] ; then
-    program_prefix=
-  else
-    program_prefix=${target}-
-  fi
-fi
+AC_DEFUN(RTEMS_CONFIG_SUBDIRS,
+[
+define([RTEMS_TGT_SUBDIRS], 
+ifdef([RTEMS_TGT_SUBDIRS], [RTEMS_TGT_SUBDIRS ],)[$1])dnl
+target_subdirs="RTEMS_TGT_SUBDIRS"
+AC_SUBST(target_subdirs)
 ])
 
-dnl
-dnl $Id$
-dnl 
-dnl Check for target gcc
-dnl
-dnl 98/05/20 Ralf Corsepius 	(corsepiu@faw.uni-ulm.de)
-dnl				Completely reworked
-
-AC_DEFUN(RTEMS_PROG_CC,
+dnl This is a subroutine of AC_OUTPUT.
+dnl It is called after running config.status.
+dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
+AC_DEFUN(RTEMS_OUTPUT_SUBDIRS,
 [
-AC_BEFORE([$0], [AC_PROG_CPP])dnl
-AC_BEFORE([$0], [AC_PROG_CC])dnl
-AC_REQUIRE([RTEMS_TOOL_PREFIX])dnl
-
-dnl Only accept gcc and cc
-dnl NOTE: This might be too restrictive for native compilation
-AC_PATH_PROGS(CC_FOR_TARGET, "$program_prefix"gcc "$program_prefix"cc )
-test -z "$CC_FOR_TARGET" \
-  && AC_MSG_ERROR([no acceptable cc found in \$PATH])
-
-dnl backup 
-rtems_save_CC=$CC
-rtems_save_CFLAGS=$CFLAGS
-
-dnl temporarily set CC
-CC=$CC_FOR_TARGET
-
-AC_PROG_CC_WORKS
-AC_PROG_CC_GNU
-
-if test $ac_cv_prog_gcc = yes; then
-  GCC=yes
-dnl Check whether -g works, even if CFLAGS is set, in case the package
-dnl plays around with CFLAGS (such as to build both debugging and
-dnl normal versions of a library), tasteless as that idea is.
-  ac_test_CFLAGS="${CFLAGS+set}"
-  ac_save_CFLAGS="$CFLAGS"
-  CFLAGS=
-  AC_PROG_CC_G
-  if test "$ac_test_CFLAGS" = set; then
-    CFLAGS="$ac_save_CFLAGS"
-  elif test $ac_cv_prog_cc_g = yes; then
-    CFLAGS="-g -O2"
+# bla
+if test "$no_recursion" != yes; then
+  if test $target_alias != $host_alias; then 
+    target_subdir="$target_alias"
   else
-    CFLAGS="-O2"
+    target_subdir="."
   fi
-else
-  GCC=
-  test "${CFLAGS+set}" = set || CFLAGS="-g"
-fi
-
-rtems_cv_prog_gcc=$ac_cv_prog_gcc
-rtems_cv_prog_cc_g=$ac_cv_prog_cc_g
-rtems_cv_prog_cc_works=$ac_cv_prog_cc_works
-rtems_cv_prog_cc_cross=$ac_cv_prog_cc_cross
-
-dnl restore initial values
-CC=$rtems_save_CC
-CFLAGS=$rtems_save_CFLAGS
-
-unset ac_cv_prog_gcc
-unset ac_cv_prog_cc_g
-unset ac_cv_prog_cc_works
-unset ac_cv_prog_cc_cross
-])
-
-dnl
-dnl $Id$
-dnl
-dnl Check whether the target compiler accepts -specs
-dnl
-dnl 98/02/11 Ralf Corsepius 	corsepiu@faw.uni-ulm.de
-dnl
-
-AC_DEFUN(RTEMS_GCC_SPECS,
-[AC_REQUIRE([RTEMS_PROG_CC])
-AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts -specs,rtems_cv_gcc_specs,
-[
-rtems_cv_gcc_specs=no
-if test "$rtems_cv_prog_gcc" = "yes"; then
-  touch confspec
-  echo 'void f(){}' >conftest.c
-  if test -z "`${CC_FOR_TARGET} -specs confspec -c conftest.c 2>&1`";then
-    rtems_cv_gcc_specs=yes
-  fi
-fi
-rm -f confspec conftest*
-])])
-
-dnl
-dnl $Id$
-dnl
-dnl Check whether the target compiler accepts -pipe
-dnl
-dnl 98/02/11 Ralf Corsepius     corsepiu@faw.uni-ulm.de
-dnl
-
-AC_DEFUN(RTEMS_GCC_PIPE,
-[AC_REQUIRE([RTEMS_PROG_CC]) 
-AC_REQUIRE([AC_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $CC_FOR_TARGET accepts --pipe,rtems_cv_gcc_pipe,
-[
-rtems_cv_gcc_pipe=no
-if test "$rtems_cv_prog_gcc" = "yes"; then
-case "$host_os" in
-  cygwin32*)
-    ;;
-  *)
-    echo 'void f(){}' >conftest.c
-    if test -z "`${CC_FOR_TARGET} --pipe -c conftest.c 2>&1`";then
-      rtems_cv_gcc_pipe=yes
+  # Remove --cache-file and --srcdir arguments so they do not pile up.
+  ac_sub_configure_args=
+  ac_prev=
+  for ac_arg in $ac_configure_args; do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      continue
     fi
-    rm -f conftest*
-    ;;
-esac
-fi
-])
-])
-
-dnl
-dnl $Id$
-dnl 
-dnl Check for target g++
-dnl 
-dnl 98/05/20 Ralf Corsepius 	(corsepiu@faw.uni-ulm.de)
-dnl				Completely reworked
-
-AC_DEFUN(RTEMS_PROG_CXX,
-[
-AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
-AC_BEFORE([$0], [AC_PROG_CXX])dnl
-AC_REQUIRE([RTEMS_TOOL_PREFIX])dnl
-
-dnl Only accept g++ and c++
-dnl NOTE: This might be too restrictive for native compilation
-AC_PATH_PROGS(CXX_FOR_TARGET, "$program_prefix"g++ "$program_prefix"c++)
-test -z "$CXX_FOR_TARGET" \
-  && AC_MSG_ERROR([no acceptable c++ found in \$PATH])
-
-dnl backup 
-rtems_save_CXX=$CXX
-rtems_save_CXXFLAGS=$CXXFLAGS
-
-dnl temporarily set CXX
-CXX=$CXX_FOR_TARGET
-
-AC_PROG_CXX_WORKS
-AC_PROG_CXX_GNU
-
-if test $ac_cv_prog_gxx = yes; then
-  GXX=yes
-dnl Check whether -g works, even if CXXFLAGS is set, in case the package
-dnl plays around with CXXFLAGS (such as to build both debugging and
-dnl normal versions of a library), tasteless as that idea is.
-  ac_test_CXXFLAGS="${CXXFLAGS+set}"
-  ac_save_CXXFLAGS="$CXXFLAGS"
-  CXXFLAGS=
-  AC_PROG_CXX_G
-  if test "$ac_test_CXXFLAGS" = set; then
-    CXXFLAGS="$ac_save_CXXFLAGS"
-  elif test $ac_cv_prog_cxx_g = yes; then
-    CXXFLAGS="-g -O2"
-  else
-    CXXFLAGS="-O2"
-  fi
-else
-  GXX=
-  test "${CXXFLAGS+set}" = set || CXXFLAGS="-g"
-fi
-
-rtems_cv_prog_gxx=$ac_cv_prog_gxx
-rtems_cv_prog_cxx_g=$ac_cv_prog_cxx_g
-rtems_cv_prog_cxx_works=$ac_cv_prog_cxx_works
-rtems_cv_prog_cxx_cross=$ac_cv_prog_cxx_cross
-
-CXX=$rtems_save_CXX
-CXXFLAGS=$rtems_save_CXXFLAGS
-
-dnl restore initial values
-unset ac_cv_prog_gxx
-unset ac_cv_prog_cc_g
-unset ac_cv_prog_cxx_works
-unset ac_cv_prog_cxx_cross
-])
-
-dnl
-dnl $Id$
-dnl
-dnl Set target tools
-dnl
-dnl 98/06/23 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
-dnl		fixing cache/environment variable handling
-dnl		adding checks for cygwin/egcs '\\'-bug
-dnl		adding checks for ranlib/ar -s problem 
-dnl
-dnl 98/02/12 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)
-dnl
-
-AC_DEFUN(RTEMS_GCC_PRINT,
-[ case $host_os in
-  *cygwin32*)
-    dnl FIXME: Hack for cygwin/egcs reporting mixed '\\' and '/'
-    dnl        Should be removed once cygwin/egcs reports '/' only
-    $1=`$CC_FOR_TARGET --print-prog-name=$2 | sed -e 's%\\\\%/%g' `
-    ;;
-  *)
-    $1=`$CC_FOR_TARGET --print-prog-name=$2`
-    ;;
-  esac
-])
-
-AC_DEFUN(RTEMS_PATH_TOOL,
-[
-AC_MSG_CHECKING([target's $2])
-AC_CACHE_VAL(ac_cv_path_$1,:)
-AC_MSG_RESULT([$ac_cv_path_$1])
-
-if test -n "$ac_cv_path_$1"; then
-  dnl retrieve the value from the cache
-  $1=$ac_cv_path_$1
-else
-  dnl the cache was not set
-  if test -z "[$]$1" ; then
-    if test "$rtems_cv_prog_gcc" = "yes"; then
-      # We are using gcc, ask it about its tool
-      # NOTE: Necessary if gcc was configured to use the target's 
-      # native tools or uses prefixes for gnutools (e.g. gas instead of as)
-      RTEMS_GCC_PRINT($1,$2)
-    fi
-  else
-    # The user set an environment variable.
-    # Check whether it is an absolute path, otherwise AC_PATH_PROG 
-    # will override the environment variable, which isn't what the user
-    # intends
-    AC_MSG_CHECKING([whether environment variable $1 is an absolute path])
-    case "[$]$1" in
-    /*) # valid
-      AC_MSG_RESULT("yes")
-    ;;
-    *)  # invalid for AC_PATH_PROG
-      AC_MSG_RESULT("no")
-      AC_MSG_ERROR([***]
-        [Environment variable $1 should either]
-	[be unset (preferred) or contain an absolute path])
-    ;;
+    case "$ac_arg" in
+    -cache-file | --cache-file | --cache-fil | --cache-fi \
+    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+      ac_prev=cache_file ;;
+    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+      ;;
+    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+      ac_prev=srcdir ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
     esac
-  fi
+  done
 
-  AC_PATH_PROG($1,"$program_prefix"$2,$3)
-fi
-])
+  test -d $target_subdir || mkdir $target_subdir
+  for ac_config_dir in $1; do
 
-AC_DEFUN(RTEMS_CANONICALIZE_TOOLS,
-[AC_REQUIRE([RTEMS_PROG_CC])dnl
-
-dnl FIXME: What shall be done if these tools are not available?
-  RTEMS_PATH_TOOL(AR_FOR_TARGET,ar,no)
-  RTEMS_PATH_TOOL(AS_FOR_TARGET,as,no)
-  RTEMS_PATH_TOOL(LD_FOR_TARGET,ld,no)
-  RTEMS_PATH_TOOL(NM_FOR_TARGET,nm,no)
-
-dnl special treatment of ranlib
-  RTEMS_PATH_TOOL(RANLIB_FOR_TARGET,ranlib,no)
-  if test "$RANLIB_FOR_TARGET" = "no"; then
-    # ranlib wasn't found; check if ar -s is available
-    RTEMS_AR_FOR_TARGET_S
-    if test $rtems_cv_AR_FOR_TARGET_S = "yes" ; then
-      dnl override RANLIB_FOR_TARGET's cache
-      ac_cv_path_RANLIB_FOR_TARGET="$AR_FOR_TARGET -s"
-      RANLIB_FOR_TARGET=$ac_cv_path_RANLIB_FOR_TARGET
-    else
-      AC_MSG_ERROR([***]
-        [Can't figure out how to build a library index]
-	[Neither ranlib nor ar -s seem to be available] )
+    # Do not complain, so a configure script can configure whichever
+    # parts of a large source tree are present.
+    if test ! -d $srcdir/$ac_config_dir; then
+      continue
     fi
-  fi
 
-dnl NOTE: These may not be available if not using gnutools
-  RTEMS_PATH_TOOL(OBJCOPY_FOR_TARGET,objcopy,no)
-  RTEMS_PATH_TOOL(SIZE_FOR_TARGET,size,no)
-  RTEMS_PATH_TOOL(STRIP_FOR_TARGET,strip,no)
-])
+    echo configuring in $target_subdir/$ac_config_dir
 
-dnl
-dnl $Id$
-dnl
-
-AC_DEFUN(RTEMS_AR_FOR_TARGET_S,
-[
-AC_CACHE_CHECK(whether $AR_FOR_TARGET -s works,
-rtems_cv_AR_FOR_TARGET_S,
-[
-cat > conftest.$ac_ext <<EOF
-int foo( int b ) 
-{ return b; }
-EOF
-if AC_TRY_COMMAND($CC_FOR_TARGET -o conftest.o -c conftest.$ac_ext) \
-  && AC_TRY_COMMAND($AR_FOR_TARGET -sr conftest.a conftest.o) \
-  && test -s conftest.a ; \
-then
-  rtems_cv_AR_FOR_TARGET_S="yes"
-else
-  rtems_cv_AR_FOR_TARGET_S="no"
-fi
-  rm -f conftest*
-])
-])
-
-
-dnl
-dnl  $Id$
-dnl 
-
-dnl check for i386 gas supporting 16 bit mode
-dnl     - binutils 2.9.1.0.7 and higher
-
-AC_DEFUN(RTEMS_I386_GAS_CODE16,
-[ if test "${target_cpu}" = "i386"; then
-    AC_CACHE_CHECK([for 16 bit mode assembler support],
-      rtems_cv_prog_gas_code16,
-      [cat > conftest.s << EOF
-         .code16
-         data32
-         addr32
-         lgdt 0
-EOF
-      if AC_TRY_COMMAND($AS_FOR_TARGET -o conftest.o conftest.s); then
-        rtems_cv_prog_gas_code16=yes
+    case "$srcdir" in
+    .) ;;
+    *)
+      if test -d $target_subdir/$ac_config_dir || mkdir $target_subdir/$ac_config_dir; then :;
       else
-        rtems_cv_prog_gas_code16=no
-      fi])
-    RTEMS_GAS_CODE16="$rtems_cv_prog_gas_code16"
-  fi
-  AC_SUBST(RTEMS_GAS_CODE16)
-])
+        AC_MSG_ERROR(can not create `pwd`/$target_subdir/$ac_config_dir)
+      fi
+      ;;
+    esac
 
+    ac_popdir=`pwd`
+    cd $target_subdir/$ac_config_dir
 
-dnl
-dnl $Id$
-dnl
-dnl Check for System V IPC calls used by Unix simulators
-dnl
-dnl 98/07/17 Dario Alcocer     alcocer@netcom.com
-dnl 	     Ralf Corsepius    corsepiu@faw.uni-ulm.de
-dnl
-dnl Note: $host_os should probably *not* ever be used here to
-dnl determine if host supports System V IPC calls, since some
-dnl (e.g. FreeBSD 2.x) are configured by default to include only
-dnl a subset of the System V IPC calls.  Therefore, to make sure
-dnl all of the required calls are found, test for each call explicitly.
-dnl
-dnl All of the calls use IPC_PRIVATE, so tests will not unintentionally
-dnl modify any existing key sets.  See the man pages for semget, shmget, 
-dnl msgget, semctl, shmctl and msgctl for details.
+changequote(, )dnl
+      # A "../" for each directory in /$ac_config_dir.
+      ac_dots=`echo $target_subdir/$ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
+changequote([, ])dnl
 
-AC_DEFUN(RTEMS_SYSV_SEM,
-[AC_REQUIRE([RTEMS_PROG_CC]) 
-AC_REQUIRE([AC_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V semaphores,
-rtems_cv_sysv_sem,
-[
-AC_TRY_RUN([
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/sem.h>
-int main () {
-#if !defined(sun) 
-  union semun arg ;
-#else
-  union semun {
-    int val;
-    struct semid_ds *buf;
-    ushort *array;
-  } arg;
-#endif
-  int id=semget(IPC_PRIVATE,1,IPC_CREAT|0400);
-  if (id == -1)
-    exit(1);
-  arg.val = 0; /* avoid implicit type cast to union */
-  if (semctl(id, 0, IPC_RMID, arg) == -1)
-    exit(1);
-  exit(0);
-}
-],
-rtems_cv_sysv_sem="yes", rtems_cv_sysv_sem="no", :)
-])
-])
+    case "$srcdir" in
+    .) # No --srcdir option.  We are building in place.
+      ac_sub_srcdir=$srcdir ;;
+    /*) # Absolute path.
+      ac_sub_srcdir=$srcdir/$ac_config_dir ;;
+    *) # Relative path.
+      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
+    esac
 
-AC_DEFUN(RTEMS_SYSV_SHM,
-[AC_REQUIRE([RTEMS_PROG_CC]) 
-AC_REQUIRE([AC_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V shared memory,
-rtems_cv_sysv_shm,
-[
-AC_TRY_RUN([
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-int main () {
-  int id=shmget(IPC_PRIVATE,1,IPC_CREAT|0400);
-  if (id == -1)
-    exit(1);
-  if (shmctl(id, IPC_RMID, 0) == -1)
-    exit(1);
-  exit(0);
-}
-],
-rtems_cv_sysv_shm="yes", rtems_cv_sysv_shm="no", :)
-])
-])
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f $ac_sub_srcdir/configure; then
+      ac_sub_configure=$ac_sub_srcdir/configure
+    elif test -f $ac_sub_srcdir/configure.in; then
+      ac_sub_configure=$ac_configure
+    else
+      AC_MSG_WARN(no configuration information is in $ac_config_dir)
+      ac_sub_configure=
+    fi
 
-AC_DEFUN(RTEMS_SYSV_MSG,
-[AC_REQUIRE([RTEMS_PROG_CC]) 
-AC_REQUIRE([AC_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V messages,
-rtems_cv_sysv_msg,
-[
-AC_TRY_RUN([
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
-int main () {
-  int id=msgget(IPC_PRIVATE,IPC_CREAT|0400);
-  if (id == -1)
-    exit(1);
-  if (msgctl(id, IPC_RMID, 0) == -1)
-    exit(1);
-  exit(0);
-}
-],
-rtems_cv_sysv_msg="yes", rtems_cv_sysv_msg="no", :)
-])
-])
+    # The recursion is here.
+    if test -n "$ac_sub_configure"; then
 
-dnl
-dnl $Id$
-dnl
+      # Make the cache file name correct relative to the subdirectory.
+      if test "$target_alias" != "$host_alias"; then
+      ac_sub_cache_file=$cache_file
+      else
+      case "$cache_file" in
+      /*) ac_sub_cache_file=$cache_file ;;
+      *) # Relative path.
+        ac_sub_cache_file="$ac_dots$cache_file" ;;
+      esac
+      fi
+ifdef([AC_PROVIDE_AC_PROG_INSTALL],
+      [  case "$ac_given_INSTALL" in
+changequote(, )dnl
+        [/$]*) INSTALL="$ac_given_INSTALL" ;;
+changequote([, ])dnl
+        *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
+        esac
+])dnl
 
-dnl RTEMS_CHECK_MAKEFILE(path)
-dnl Search for Makefile.in's within the directory starting
-dnl at path and append an entry for Makefile to global variable 
-dnl "makefiles" (from configure.in) for each Makefile.in found
-dnl 
-AC_DEFUN(RTEMS_CHECK_MAKEFILE,
-[RTEMS_CHECK_FILES_IN($1,Makefile,makefiles)
-])
+      echo "[running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
+      # The eval makes quoting arguments work.
+      if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure \
+	$ac_sub_configure_args --srcdir=$ac_sub_srcdir \
+	--with-target-subdir=$target_subdir --cache-file=$ac_sub_cache_file 
+      then :
+      else
+        AC_MSG_ERROR($ac_sub_configure failed for $ac_config_dir)
+      fi
+    fi
 
-dnl
-dnl $Id$
-dnl
-
-dnl RTEMS_CHECK_FILES_IN(path,file,var)
-dnl path .. path relative to srcdir, where to start searching for files
-dnl file .. name of the files to search for
-dnl var  .. shell variable to append files found
-
-AC_DEFUN(RTEMS_CHECK_FILES_IN,
-[
-AC_MSG_CHECKING(for $2.in in $1)
-if test -d $srcdir/$1; then
-  rtems_av_save_dir=`pwd`;
-  cd $srcdir;
-  rtems_av_tmp=`find $1 -name "$2.in" -print | sed "s/$2\.in/%/" | sort | sed "s/%/$2/"`
-  $3="$$3 $rtems_av_tmp";
-  cd $rtems_av_save_dir;
-  AC_MSG_RESULT(done)
-else
-  AC_MSG_RESULT(no)
+    cd $ac_popdir
+  done
 fi
 ])
-
-
-dnl $Id$
-
-AC_DEFUN(RTEMS_ENABLE_TESTS,
-[
-# If the tests are enabled, then find all the test suite Makefiles
-AC_MSG_CHECKING([if the test suites are enabled? ])
-AC_ARG_ENABLE(tests,
-[  --enable-tests                       enable tests (default:disabled)],
-  [case "${enableval}" in
-    yes) tests_enabled=yes ;;
-    no)  tests_enabled=no ;;
-    *)   AC_MSG_ERROR(bad value ${enableval} for tests option) ;;
-  esac], [tests_enabled=no])
-AC_MSG_RESULT([$tests_enabled])
-])
-
-dnl $Id$
-dnl
-dnl FIXME: this needs to be reworked
-
-AC_DEFUN(RTEMS_ENABLE_HWAPI,
-[dnl
-AC_ARG_ENABLE(hwapi, \
-[  --enable-hwapi                       enable hardware API library],
-[case "${enableval}" in
-    yes) RTEMS_HAS_HWAPI=yes ;;
-    no)  RTEMS_HAS_HWAPI=no ;;
-    *)  AC_MSG_ERROR(bad value ${enableval} for hwapi option) ;;
-  esac],[RTEMS_HAS_HWAPI=no])
-AC_SUBST(RTEMS_HAS_HWAPI)dnl
-])dnl
 

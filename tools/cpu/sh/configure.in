@@ -3,12 +3,13 @@ dnl
 dnl  $Id$
 
 AC_INIT(shgen.c)
-AC_CONFIG_AUX_DIR(../../../../../..)
+AC_CONFIG_AUX_DIR(../../..)
 
-RTEMS_TOP(../../../../../..)
+RTEMS_TOP(../../..)
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-exec-score-tools-sh,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-cpu-tools-sh,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
 
 AC_PROG_CC
 AC_CHECK_LIB(m,fabs)

@@ -5,37 +5,39 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../../../..
-subdir = c/src/exec/score/include/rtems/score
+top_builddir = ../../../..
+subdir = score/include/rtems/score
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
 # We only build multiprocessing related files if HAS_MP was defined
-MP_PIECES_yes_V = mpci mppkt objectmp threadmp 
-MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+MP_H_PIECES_yes_V = mpci mppkt objectmp threadmp
+MP_H_PIECES = $(MP_H_PIECES_$(HAS_MP)_V)
 
 # H_FILES that get installed in the rtems/score subdirectoy
-H_PIECES= address apiext bitfield chain context copyrt coremsg coremutex \
-    coresem heap interr isr object \
-    priority stack states sysstate thread threadq \
-    tod tqdata userext watchdog wkspace
+H_PIECES = address apiext bitfield chain context copyrt coremsg coremutex \
+    coresem heap interr isr object priority stack states sysstate thread \
+    threadq tod tqdata userext watchdog wkspace $(MP_H_PIECES)
+H_FILES = $(H_PIECES:%=$(srcdir)/%.h)
+TARGOPTS = targopts.h
 
-# Use this if compilation in location will be supported
-# H_FILES=$(H_PIECES:%=$(srcdir)/%.h) targopts.h
+SRCS = $(H_FILES) $(TARGOPTS)
 
-# FIXME: Work-around
-H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
-TARGOPTS=$(PROJECT_INCLUDE)/rtems/score/targopts.h
-
-SRCS=$(H_FILES) $(TARGOPTS)
-
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_INCLUDE)/rtems/score
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
+
+RTEMS_USE_NEWLIB = @RTEMS_USE_NEWLIB@
 
 #
 # Add your list of files to delete here.  The config files
@@ -54,10 +56,10 @@ CLOBBER_ADDITIONS +=
 # gcc cpp predefines eliminate the need for RTEMS_CPU_MODEL
 # on some families but not on others.  For example, the i386
 # family does not give us enough information from the predefines.
-RTEMS_CPU_DEFINED=$(subst .,_,$(RTEMS_CPU))
+RTEMS_CPU_DEFINED = $(subst .,_,$(RTEMS_CPU))
 
 # make the target dependent options file
-$(TARGOPTS):
+$(TARGOPTS): 
 	@echo "/* target board dependent options file */"       >$@
 	@echo "/* automatically generated -- DO NOT EDIT!! */" >>$@
 	@echo                                                  >>$@
@@ -74,34 +76,36 @@ $(TARGOPTS):
 	@echo "#endif"                                         >>$@
 	@echo "#define $(RTEMS_CPU_MODEL) 1"                   >>$@
 	@echo                                                  >>$@
-	@echo "#ifdef ${RTEMS_BSP}"                            >>$@
-	@echo "#undef ${RTEMS_BSP}"                            >>$@
+	@echo "#ifdef @RTEMS_BSP@"                            >>$@
+	@echo "#undef @RTEMS_BSP@"                            >>$@
 	@echo "#endif"                                         >>$@
-	@echo "#define ${RTEMS_BSP} 1"                         >>$@
+	@echo "#define @RTEMS_BSP@ 1"                         >>$@
 	@echo                                                  >>$@
 	@$(make-target-options)
-ifeq (${RTEMS_USE_MACROS},yes)
-	@echo "#define USE_MACROS 1"                           >>$@
-else
-	@echo "#define USE_INLINES 1"                          >>$@
-endif
-ifeq ($(HAS_MULTIPROCESSING),yes)
-	@echo "#define RTEMS_MULTIPROCESSING 1"                >>$@
-endif
-ifeq ($(HAS_POSIX_API),yes)
-	@echo "#define RTEMS_POSIX_API 1"                      >>$@
-endif
-ifeq ($(RTEMS_USE_NEWLIB),yes)
-	@echo "#define RTEMS_NEWLIB 1"                         >>$@
-	@echo "#define MALLOC_PROVIDED 1"                      >>$@
-endif
+	@if test "$(RTEMS_USE_MACROS)" = "yes"; then \
+	echo "#define USE_MACROS 1"           	>>$@; \
+	else \
+	echo "#define USE_INLINES 1"           	>>$@; \
+	fi
+	if test "$(HAS_MP)" = "yes"; then \
+	echo "#define RTEMS_MULTIPROCESSING 1"	>>$@; \
+	fi
+	@if test "$(HAS_POSIX_API)" = "yes"; then \
+	echo "#define RTEMS_POSIX_API 1"	>>$@; \
+	fi
+	@if test "$(RTEMS_USE_NEWLIB)" = "yes"; then 	\
+	echo "#define RTEMS_NEWLIB 1"		>>$@;	\
+	echo "#define MALLOC_PROVIDED 1"        >>$@;	\
+	fi
 	@echo                                                  >>$@
 	@echo "#endif"                                         >>$@
-	@chmod 755 $@
 
-all:	$(SRCS)
-	$(INSTALL_CHANGE) ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
+all: preinstall
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+preinstall: $(INSTALLDIRS) $(H_FILES) $(TARGOPTS)
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/rtems/score
+	@$(INSTALL_CHANGE) -m 644 $(TARGOPTS) $(PROJECT_INCLUDE)/rtems/score
+
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

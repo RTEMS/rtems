@@ -5,42 +5,50 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../../../../..
-subdir = c/src/lib/libbsp/m68k/ods68302/startup
+top_builddir = ../../../..
+subdir = libbsp/m68k/ods68302/startup
 
-INSTALL = @INSTALL@
-
-RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 
-PGM=${ARCH}/startup.rel
+PGM = ${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=crc debugport gdb-hooks bootcard main m68302scc m68k-stub memcheck trace gnatinstallhandler bsplibc bsppost bspstart bspclean sbrk setvec
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_PIECES = crc debugport gdb-hooks bootcard main m68302scc m68k-stub \
+    memcheck trace gnatinstallhandler bsplibc bsppost bspstart bspclean sbrk \
+    setvec
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=
+H_FILES =
 
-SRCS=$(C_FILES) $(H_FILES)  $(srcdir)/rom $(srcdir)/debugger
-OBJS=$(C_O_FILES)
+SRCS = $(C_FILES) $(H_FILES) $(srcdir)/rom $(srcdir)/debugger
+OBJS = $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_RELEASE)/lib
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS +=
-CFLAGS   +=
+CFLAGS +=
 
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
+LD_PATHS +=
+LD_LIBS +=
+LDFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -55,15 +63,15 @@ CLOBBER_ADDITIONS +=
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
-$(srcdir)/rom:
+$(srcdir)/rom: 
 
-$(srcdir)/debugger:
+$(srcdir)/debugger: 
 
-all:	${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(srcdir)/rom $(srcdir)/debugger ${PROJECT_RELEASE}/lib
+all: ${ARCH} $(SRCS) $(PGM)
+	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(srcdir)/rom $(srcdir)/debugger $(PROJECT_RELEASE)/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

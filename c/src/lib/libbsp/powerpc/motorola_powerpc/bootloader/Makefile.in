@@ -4,50 +4,56 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../console
-RTEMS_ROOT = @top_srcdir@
+top_srcdir = @top_srcdir@
+top_builddir = ../../../..
+subdir = libbsp/powerpc/mcp750/bootloader
+
+RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-# C source names, if any, go here -- minus the .c
-C_PIECES=misc pci zlib mm em86 polled_io lib
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../console
 
-H_FILES=bootldr.h zlib.h pci.h
+# C source names, if any, go here -- minus the .c
+C_PIECES = misc pci zlib mm em86 polled_io lib
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES = bootldr.h zlib.h pci.h
 
 # Assembly source names, if any, go here -- minus the .s
-S_PIECES=head exception em86real
-S_FILES=$(S_PIECES:%=%.S)
-S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
+S_PIECES = head exception em86real
+S_FILES = $(S_PIECES:%=%.S)
+S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
-SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES) 
-OBJS=$(S_O_FILES) $(C_O_FILES) 
+SRCS = $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
+OBJS = $(S_O_FILES) $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
-CC_PIECES=
-CC_FILES=$(CC_PIECES:%=%.cc)
-CC_O_FILES=$(CC_PIECES:%=${ARCH}/%.o)
+INSTALL_CHANGE = @INSTALL_CHANGE@
 
+CC_PIECES =
+CC_FILES = $(CC_PIECES:%=%.cc)
+CC_O_FILES = $(CC_PIECES:%=${ARCH}/%.o)
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS += -D__BOOT__ -DDEBUG
-CFLAGS   += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -mstring \
-		-O2 -fomit-frame-pointer -mrelocatable -ffixed-r13 \
-		-mno-sdata -D__BOOT__ -DDEBUG 
+CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -mstring \
+    -O2 -fomit-frame-pointer -mrelocatable -ffixed-r13 -mno-sdata -D__BOOT__ \
+    -DDEBUG
 
-ASFLAGS	 += -mrelocatable 
+ASFLAGS += -mrelocatable
 
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
+LD_PATHS +=
+LD_LIBS +=
+LDFLAGS +=
 
-IMAGES := rtems.gz
+IMAGES : = rtems.gz
 
 #
 # Add your list of files to delete here.  The config files
@@ -84,15 +90,8 @@ rtems.gz: $(BINARY_LOADED)
 	gzip -vf9 rtems
 	rm -f rtems
 
+all: ${ARCH} $(SRCS) ${OBJ}
 
-all:	${ARCH} $(SRCS) ${OBJ}
-
-
-
-
-
-
-
-
-
-
+Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

@@ -48,6 +48,10 @@ my $rtems_cfg = find_file(".","configure.in");
 # find relative up-path from configure.in to VERSION
 my $rtems_top = find_file("$rtems_cfg","VERSION");
 
+if ( "$rtems_top" eq "." ) 
+{ $rtems_top = "" ; } 
+else { $rtems_top .= "/" ; }  
+
 my $nl_seen = 0 ;
 
 while( <> )
@@ -56,30 +60,33 @@ while( <> )
   print "$_" ;
 }
 
-print "\nAUTOMAKE_OPTIONS = foreign\n";
+print "\nAUTOMAKE_OPTIONS = foreign 1.4\n";
 if ( "$rtems_cfg" eq "." )
 {
-  print "ACLOCAL = \@ACLOCAL\@ -I \$(RTEMS_TOPdir)/aclocal\n" 
+  print "ACLOCAL_AMFLAGS = -I \$(RTEMS_TOPdir)/aclocal\n" 
 }
 
 while( <> )
 { 
-  if ( /^[ 	]*$/o )
+  if ( /^[\s\t]*$/o )
   {
     $nl_seen = $nl_seen+1;
   }
 
-  if ( /^[ 	]*AUTOMAKE_OPTIONS.*$/o )
+  if ( /^[\s\t]*AUTOMAKE_OPTIONS.*$/o )
   { # remove the line
   }
-  elsif ( /^[ 	]*ACLOCAL[ 	]*=[ 	]*\@ACLOCAL\@.*$/o )
+  elsif ( /^[\s\t]*ACLOCAL[\s\t]*=[\s\t]*\@ACLOCAL\@.*$/o )
   { # remove the line
   }
-  elsif ( /^[ 	]*include[ 	]*\$\(top_srcdir\)[\.\/]*automake\/(.*)\.am$/o )
+  elsif ( /^[\s\t]*ACLOCAL_AMFLAGS[\s\t]*=[\s\t]*.*$/o )
+  { # remove the line
+  }
+  elsif ( /^[\s\t]*include[\s\t]*\$\(top_srcdir\)[\.\/]*automake\/(.*)\.am$/o )
   {
     # remove the line 
   }
-  elsif ( /^[ 	]*SUBDIRS.*$/o )
+  elsif ( /^[\s\t]*SUBDIRS.*$/o )
   {
     $subdirs_seen = "yes" ;
     print "$_" ;
@@ -98,8 +105,8 @@ while( <> )
 
 if ( "$subdirs_seen" )
 {
-  print "include \$(top_srcdir)/${rtems_top}/automake/subdirs.am\n" ;
+  print "include \$(top_srcdir)/${rtems_top}automake/subdirs.am\n" ;
 }
-print "include \$(top_srcdir)/${rtems_top}/automake/local.am\n" ;
+print "include \$(top_srcdir)/${rtems_top}automake/local.am\n" ;
 
 ;1
