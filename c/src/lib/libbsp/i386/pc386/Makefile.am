@@ -15,7 +15,7 @@ include $(top_srcdir)/../../bsp.am
 $(PROJECT_RELEASE)/BootImgs:
 	$(mkinstalldirs) $@
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/BootImgs
+TMPINSTALL_FILES = $(PROJECT_RELEASE)/BootImgs
 
 EXTRA_DIST = HOWTO README.dec21140 STATUS bsp_specs times_i486dx times_p5
 

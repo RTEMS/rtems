@@ -1,3 +1,10 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Use 'CLEANFILES ='.
+	* include/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* console/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* Makefile.am: Use 'TMPINSTALL_FILES ='.
+
 2001-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/Makefile.am: Remove RTEMS_H_FILES.
