@@ -11,7 +11,7 @@ dnl
 dnl
 dnl _AC_DOTS(PATH)
 dnl
-AC_DEFUN(_AC_DOTS,[
+AC_DEFUN([_AC_DOTS],[
 # A "../" for each directory in $1.
     ac_dots=`echo $1 | \
              sed -e 's%^\./%%' -e 's%[[^/]]$%&/%' -e 's%[[^/]]*/%../%g'`
@@ -20,7 +20,7 @@ AC_DEFUN(_AC_DOTS,[
 dnl
 dnl _RTEMS_ADJUST_SRCDIR(REVAR,CONFIG_DIR[,TARGET_SUBDIR])
 dnl
-AC_DEFUN(_RTEMS_ADJUST_SRCDIR,[
+AC_DEFUN([_RTEMS_ADJUST_SRCDIR],[
     _AC_DOTS(ifelse([$3], ,[$2],[$3/$2]))
 
     case "$srcdir" in

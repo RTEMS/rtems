@@ -5,7 +5,7 @@ dnl
 dnl check for i386 gas supporting 16 bit mode
 dnl     - binutils 2.9.1.0.7 and higher
 
-AC_DEFUN(RTEMS_I386_GAS_CODE16,
+AC_DEFUN([RTEMS_I386_GAS_CODE16],
 [ if test "${host_cpu}" = "i386"; then
     AC_CACHE_CHECK([for 16 bit mode assembler support],
       rtems_cv_prog_gas_code16,

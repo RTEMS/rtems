@@ -1,4 +1,4 @@
-AC_DEFUN(RTEMS_TOOLPATHS,
+AC_DEFUN([RTEMS_TOOLPATHS],
 [
 # tooldir='$(exec_prefix)/'$target_alias
 # Temporary work-around until building in source tree is supported

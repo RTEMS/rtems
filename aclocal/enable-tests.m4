@@ -1,6 +1,6 @@
 dnl $Id$
 
-AC_DEFUN(RTEMS_ENABLE_TESTS,
+AC_DEFUN([RTEMS_ENABLE_TESTS],
 [
 # If the tests are enabled, then find all the test suite Makefiles
 AC_MSG_CHECKING([if the test suites are enabled? ])

@@ -12,7 +12,7 @@ dnl RTEMS_ROOT         .. path to the top of a bsp's build directory
 dnl                       [Applied by custom/*.cfg, depredicated otherwise]
 dnl
 
-AC_DEFUN(RTEMS_PROJECT_ROOT,
+AC_DEFUN([RTEMS_PROJECT_ROOT],
 [dnl
 AC_REQUIRE([RTEMS_TOP])
 

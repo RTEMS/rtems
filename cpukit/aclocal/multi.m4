@@ -1,6 +1,6 @@
 #serial 103
 
-AC_DEFUN(AM_ENABLE_MULTILIB,
+AC_DEFUN([AM_ENABLE_MULTILIB],
 [
 AC_ARG_ENABLE(multilib,
 AC_HELP_STRING([--enable-multilib],

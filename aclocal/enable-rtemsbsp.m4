@@ -3,7 +3,7 @@ dnl $Id$
 dnl Override the set of BSPs to be built.
 dnl used by the toplevel configure script
 dnl RTEMS_ENABLE_RTEMSBSP(rtems_bsp_list)
-AC_DEFUN(RTEMS_ENABLE_RTEMSBSP,
+AC_DEFUN([RTEMS_ENABLE_RTEMSBSP],
 [
 AC_BEFORE([$0], [RTEMS_ENV_RTEMSBSP])
 AC_ARG_ENABLE(rtemsbsp,

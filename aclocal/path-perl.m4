@@ -1,6 +1,6 @@
 dnl $Id$
 
-AC_DEFUN(RTEMS_PATH_PERL,
+AC_DEFUN([RTEMS_PATH_PERL],
 [
 AC_PATH_PROG(PERL,perl)
 if test -z "$PERL" ; then

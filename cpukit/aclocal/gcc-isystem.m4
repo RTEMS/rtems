@@ -4,7 +4,7 @@ dnl
 dnl Check whether the gcc accepts -isystem
 dnl
 
-AC_DEFUN(RTEMS_GCC_ISYSTEM,
+AC_DEFUN([RTEMS_GCC_ISYSTEM],
 [AC_REQUIRE([RTEMS_PROG_CC])
 AC_CACHE_CHECK(whether $CC accepts -isystem,rtems_cv_gcc_isystem,
 [

@@ -7,7 +7,7 @@ dnl RTEMS_TOP($1)
 dnl 
 dnl $1 .. relative path from this configure.in to the toplevel configure.in
 dnl
-AC_DEFUN(RTEMS_TOP,
+AC_DEFUN([RTEMS_TOP],
 [dnl
 AC_REQUIRE([RTEMS_VERSIONING])
 AC_CONFIG_AUX_DIR([$1])

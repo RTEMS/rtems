@@ -1,6 +1,6 @@
 dnl $Id$
 
-AC_DEFUN(RTEMS_PATH_KSH,
+AC_DEFUN([RTEMS_PATH_KSH],
 [
 dnl NOTE: prefer bash over ksh over sh
 AC_PATH_PROGS(KSH,bash ksh sh)

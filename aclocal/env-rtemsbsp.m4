@@ -2,7 +2,7 @@ dnl $Id$
 
 dnl Pass a single BSP via an environment variable
 dnl used by per BSP configure scripts
-AC_DEFUN(RTEMS_ENV_RTEMSBSP,
+AC_DEFUN([RTEMS_ENV_RTEMSBSP],
 [dnl
 AC_BEFORE([$0], [RTEMS_ENABLE_RTEMSBSP])dnl
 AC_BEFORE([$0], [RTEMS_PROJECT_ROOT])dnl
