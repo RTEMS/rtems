@@ -1,3 +1,7 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: i960 obsoleted and all references removed.
+
 2004-07-25	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu_asm.S: Remove use of C++ style comments and make this compile

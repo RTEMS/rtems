@@ -297,10 +297,7 @@ extern "C" {
 #define CPU_NAME "UNIX"
 
 /*
- *  Processor defined structures
- *
- *  Examples structures include the descriptor tables from the i386
- *  and the processor control structure on the i960ca.
+ *  Processor defined structures required for cpukit/score.
  */
 
 /* may need to put some structures here.  */

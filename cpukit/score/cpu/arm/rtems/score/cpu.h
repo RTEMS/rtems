@@ -291,10 +291,7 @@ extern "C" {
 #define CPU_MODES_INTERRUPT_MASK   0x000000c0
 
 /*
- *  Processor defined structures
- *
- *  Examples structures include the descriptor tables from the i386
- *  and the processor control structure on the i960ca.
+ *  Processor defined structures required by cpukit/score.
  */
 
 /* may need to put some structures here.  */
