@@ -52,16 +52,14 @@ SECTIONS
 	    etext = ALIGN( 0x10 ) ;
 	    _etext = .;
         }
-        .data ADDR( .text ) + SIZEOF( .text ):
-	{
+        .data : {
 	    data_start = . ;
             _data_start = .;
             *(.data)
 	    edata = ALIGN( 0x10 ) ;
             _edata = .;
         }
-        .bss ADDR( .data ) + SIZEOF( .data ):
-        {
+        .bss : {
 	    bss_start = . ;
 	    _bss_start = . ;
 	    *(.bss)

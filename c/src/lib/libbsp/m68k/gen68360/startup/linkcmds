@@ -57,9 +57,15 @@ SECTIONS {
                 *(.text)
                 . = ALIGN (16);
 
+		*(.gnu.linkonce.t.*)
+		*(.descriptors)
+		/* .gnu.warning sections are handled specially by elf32.em.  */
+		*(.gnu.warning)
+
 		*(.eh_fram)
 		. = ALIGN (16);
 
+		*(.gcc_exc)
 		/*
 		 * C++ constructors
 		 */
@@ -74,12 +80,19 @@ SECTIONS {
 		LONG(0)
 		__DTOR_END__ = .;
 
+		_rodata_start = . ;
+		*(.rodata)
+		*(.gnu.linkonce.r*)
+		_erodata = ALIGN( 0x10 ) ;
+
                 etext = .;
                 _etext = .;
         } >ram 
         .data : {
                 copy_start = .;
                 *(.data)
+		*(.gnu.linkonce.d*)
+		*(.gcc_except_table)
                 . = ALIGN (16);
                 _edata = .;
                 copy_end = .;

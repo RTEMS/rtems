@@ -53,14 +53,12 @@ SECTIONS
 	__DTOR_END__ = .;
         etext = ALIGN( 0x10 ) ;
         }
-        .data ADDR( .text ) + SIZEOF( .text ):
-        {
+        .data : {
         data_start = . ;
         *(.data)
         edata = ALIGN( 0x10 ) ;
         }
-        .bss ADDR( .data ) + SIZEOF( .data ):
-        {
+        .bss : {
         bss_start = . ;
         *(.bss)
         *(COMMON)

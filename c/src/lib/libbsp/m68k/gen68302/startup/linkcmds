@@ -49,14 +49,20 @@ SECTIONS
 	*(.dtors)
 	LONG(0)
 	__DTOR_END__ = .;
+
+	_rodata_start = . ;
+	*(.rodata)
+	*(.gnu.linkonce.r*)
+	_erodata = ALIGN( 0x10 ) ;
+
 	etext = ALIGN( 0x10 ) ;
         } 
-	.rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) } >RAM
         .data 0x010000 : 
 	{
 	data_start = . ;
         *(.data)
     	*(.gnu.linkonce.d.*)
+    	*(.gcc_except_table)
 	edata = ALIGN( 0x10 ) ;
         }
         .bss ADDR( .data ) + SIZEOF( .data ): 

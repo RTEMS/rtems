@@ -33,6 +33,11 @@ SECTIONS
             *(.text)
 	    . = ALIGN (16);
 
+            *(.gnu.linkonce.t.*)
+            *(.descriptors)
+            /* .gnu.warning sections are handled specially by elf32.em.  */
+            *(.gnu.warning)
+
 	    *(.eh_fram)
 	    . = ALIGN (16);
 
@@ -49,6 +54,12 @@ SECTIONS
 	    *(.dtors)
 	    LONG(0)
 	    __DTOR_END__ = .;
+
+            _rodata_start = . ;
+            *(.rodata)
+            *(.gnu.linkonce.r*)
+            _erodata = ALIGN( 0x10 ) ;
+
 	    etext = ALIGN( 0x10 ) ;
 	    _etext = .;
         }
@@ -57,6 +68,8 @@ SECTIONS
 	    data_start = . ;
             _data_start = .;
             *(.data)
+            *(.gnu.linkonce.d*)
+            *(.gcc_except_table)
 	    edata = ALIGN( 0x10 ) ;
             _edata = .;
         }

@@ -7,6 +7,13 @@
 
 SECTIONS
 {
+  .vtable 0 :
+  {
+    vtable_start = .;
+    *(.vtable)
+    evtable = .;
+  }
+
   .text . :
   {
     text_start = .;
@@ -31,22 +38,13 @@ SECTIONS
     __DTOR_END__ = .;
   }
   
-  .vtable 0 :
-  {
-    vtable_start = .;
-    *(.vtable)
-    evtable = .;
-  }
-
-  .data (ADDR(.vtable) + SIZEOF(.vtable)) : 
-     AT (ADDR(.text) + SIZEOF(.text))
-  {
+  .data : {
     data_start = .;
     *(.data)
+    *(.rodata)
     edata = .;
   }
-  .bss (ADDR(.data) + SIZEOF(.data)) :
-  {
+  .bss : {
     bss_start = .;
     *(.bss)
     *(COMMON)
