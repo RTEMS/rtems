@@ -1,3 +1,7 @@
+2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Reflect having moved to testsuites/.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/tmacros.h: URL for license changed.

@@ -1,3 +1,7 @@
+2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Reflect having moved to testsuites/.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.

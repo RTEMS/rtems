@@ -5,7 +5,7 @@
 AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-tests],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([samples])
-RTEMS_TOP(../../..)
+RTEMS_TOP(..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
