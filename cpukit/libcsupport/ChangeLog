@@ -1,3 +1,9 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* src/mallocfreespace.c: Corrected sense of status check to 
+	match change inside RTEMS.
+	* src/newlibc.c: Removed warning.
+
 2002-10-28	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/libio.h: Change rtems_filesystem_node_types_t from

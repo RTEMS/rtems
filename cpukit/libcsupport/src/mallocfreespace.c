@@ -37,7 +37,7 @@ size_t malloc_free_space( void )
 {
   region_information_block   heap_info;
 
-  if ( rtems_region_get_information( RTEMS_Malloc_Heap, &heap_info ) ) {
+  if ( !rtems_region_get_information( RTEMS_Malloc_Heap, &heap_info ) ) {
     return (size_t) heap_info.free_size;
   }
   return (size_t) -1;

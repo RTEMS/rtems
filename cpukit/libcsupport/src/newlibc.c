@@ -320,6 +320,7 @@ void _exit(int status)
 
   libc_wrapup();
   rtems_shutdown_executive(status);
+  for (;;) ; /* to avoid warnings */
 }
 
 #else
@@ -328,6 +329,7 @@ void exit(int status)
 {
   libc_wrapup();
   rtems_shutdown_executive(status);
+  for (;;) ; /* to avoid warnings */
 }
 #endif
 
