@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 if ppc403
 SUBDIRS = console clock timer vectors ictrl

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 # PROC_SPECIFIC_O_FILES = exceptions mmu clock
 PROC_SPECIFIC_O_FILES = exceptions mmu
