@@ -1,3 +1,10 @@
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* pppd/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* rtems_servers/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* rtems_telnetd/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* rtems_webserver/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+
 2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.

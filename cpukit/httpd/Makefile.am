@@ -46,16 +46,14 @@ EXTRA_DIST = asp.c balloc.c default.c ej.h ejlex.c ejparse.c form.c h.c \
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_NETWORKING
 if HAS_POSIX
 $(PROJECT_INCLUDE)/goahead/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/goahead
+	@$(mkdir_p) $(PROJECT_INCLUDE)/goahead
 	@: > $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems_webserver.h: rtems_webserver.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems_webserver.h
