@@ -5,7 +5,8 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 ## RTEMS unistd.h needs to be checked against newlib's and removed
-#noinst_HEADERS= devctl.h intr.h
+UNUSED_H_FILES = devctl.h intr.h unistd.h
+
 H_FILES = pthread.h sched.h aio.h mqueue.h semaphore.h
 
 noinst_HEADERS = $(H_FILES)
@@ -25,7 +26,7 @@ profile-am: $(PREINSTALL_FILES)
 
 SUBDIRS = rtems sys
 
-EXTRA_DIST = intr.h devctl.h
+EXTRA_DIST = $(UNUSED_H_FILES)
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

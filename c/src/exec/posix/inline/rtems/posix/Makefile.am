@@ -3,13 +3,13 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-if INLINE
 #I_FILES= intr.inl
 I_FILES = cond.inl key.inl mqueue.inl mutex.inl pthread.inl priority.inl \
    semaphore.inl
 
 noinst_HEADERS = $(I_FILES)
 
+if INLINE
 PREINSTALL_FILES = \
 $(PROJECT_INCLUDE)/rtems/posix \
 $(I_FILES:%=$(PROJECT_INCLUDE)/rtems/posix/%)

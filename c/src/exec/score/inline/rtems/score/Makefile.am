@@ -4,22 +4,26 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-if INLINE
 ## We only build multiprocessing related files if HAS_MP was defined
-if HAS_MP
 MP_I_FILES = mppkt.inl objectmp.inl threadmp.inl
-endif
 
-I_FILES = address.inl chain.inl coremsg.inl coremutex.inl coresem.inl \
+STD_I_FILES = address.inl chain.inl coremsg.inl coremutex.inl coresem.inl \
     heap.inl isr.inl object.inl priority.inl stack.inl states.inl \
     sysstate.inl thread.inl tod.inl tqdata.inl userext.inl watchdog.inl \
-    wkspace.inl $(MP_I_FILES)
+    wkspace.inl
 
-noinst_HEADERS = $(I_FILES)
+if HAS_MP
+I_FILES = $(STD_I_FILES) $(MP_I_FILES)
+else
+I_FILES = $(STD_I_FILES)
+endif
 
+noinst_HEADERS = $(STD_I_FILES) $(MP_I_FILES)
+
+if INLINE
 PREINSTALL_FILES = \
 $(PROJECT_INCLUDE)/rtems/score \
-$(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rtems/score/%)
+$(I_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
 $(PROJECT_INCLUDE)/rtems/score:
 	@$(mkinstalldirs) $@

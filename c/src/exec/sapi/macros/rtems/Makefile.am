@@ -4,11 +4,11 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-if MACROS
 I_FILES = extension.inl
 
 noinst_HEADERS = $(I_FILES)
 
+if MACROS
 PREINSTALL_FILES = \
 $(PROJECT_INCLUDE)/rtems \
 $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
