@@ -6,7 +6,7 @@
 PGM = $(ARCH)/erc32sonic.rel
 
 C_FILES = erc32sonic.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
