@@ -15,7 +15,7 @@
  */
 
 #include <bsp.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <simio.h>
 
 /*
