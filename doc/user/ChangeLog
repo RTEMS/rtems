@@ -1,3 +1,8 @@
+2004-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	PR 683/doc
+	* overview.t: Chapter numbering in preface was wrong.
+
 2004-07-24	Joel Sherrill <joel@OARcorp.com>
 
 	PR 652/rtems
