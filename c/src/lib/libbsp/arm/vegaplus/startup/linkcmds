@@ -120,8 +120,8 @@ SECTIONS
   } > FLASH	
   .data : AT (_begdata)
   {
-    *(.data)
-    *(.data.*)
+    *(.data*)
+    *(.jcr)
     *(.gnu.linkonce.d*)
     SORT(CONSTRUCTORS)
   } > RAM 

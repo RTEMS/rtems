@@ -1,3 +1,11 @@
+2001-05-09	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: In support of gcc 3.1, added one of more
+	of the sections .jcr, .rodata*, .data.*, .gnu.linkonce.s2.*,
+	.gnu.linkonce.sb2.*, and .gnu.linkonce.s.*.  Spacing corrections
+	and direction of segments to memory regions may also have been
+	addressed.  This was a sweep across all BSPs.
+ 
 2001-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h: Change SIS to ERC32_BSP. 

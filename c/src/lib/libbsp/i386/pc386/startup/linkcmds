@@ -68,7 +68,7 @@ SECTIONS
     __DTOR_END__ = .;
 
     _rodata_start = . ;
-    *(.rodata)
+    *(.rodata*)
     *(.gnu.linkonce.r*)
     _erodata = ALIGN( 0x10 ) ;
 

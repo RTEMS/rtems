@@ -129,6 +129,8 @@ SECTIONS
   .data  .  :
   {
     *(.data)
+    *(.gcc_exc)
+    *(.gcc_except_table)
     *(.gnu.linkonce.d*)
     CONSTRUCTORS
   } > ram

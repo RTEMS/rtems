@@ -114,7 +114,7 @@ SECTIONS
     *(.gnu.linkonce.r*)
     *(.lit)
     *(.shdata)
-    *(.rodata)
+    *(.rodata*)
     *(.rodata1)
     *.(eh_frame)
     *(.descriptors)
@@ -143,6 +143,7 @@ SECTIONS
     PROVIDE (__SDATA_START__ = .);
     *(.sdata)
     *(.gnu.linkonce.d*)
+    *(.gnu.linkonce.s.*)
     PROVIDE (__SDATA_END__ = .);
     
     PROVIDE (__EXCEPT_START__ = .);
@@ -173,6 +174,8 @@ SECTIONS
    */
     PROVIDE (__SDATA2_START__ = .);
     *(.sdata2)
+    *(.gnu.linkonce.s2.*)
+    *(.sbss2)
     PROVIDE (__SDATA2_END__ = .);
   } > ram
 	

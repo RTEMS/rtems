@@ -1,3 +1,11 @@
+2001-05-09	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: In support of gcc 3.1, added one of more
+	of the sections .jcr, .rodata*, .data.*, .gnu.linkonce.s2.*,
+	.gnu.linkonce.sb2.*, and .gnu.linkonce.s.*.  Spacing corrections
+	and direction of segments to memory regions may also have been
+	addressed.  This was a sweep across all BSPs.
+ 
 2002-04-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove BSPOPTS_*(NO_TABLE_MOVE).

@@ -59,17 +59,17 @@ SECTIONS
     *(.descriptors)
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
-  } 
-  .init		  : { _init = .; __init = .; *(.init)		}
-  .fini		  : { _fini = .; __fini = .; *(.fini)		}
-  .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) }
-  .rodata1	  : { *(.rodata1)		}
-  .eh_frame	  : { *.(eh_frame)		}
+  }  >RAM
+  .init		  : { _init = .; __init = .; *(.init)		} >RAM
+  .fini		  : { _fini = .; __fini = .; *(.fini)		} >RAM
+  .rodata  	  : { *(.rodata*) *(.gnu.linkonce.r*) } >RAM
+  .rodata1	  : { *(.rodata1)		} >RAM
+  .eh_frame	  : { *.(eh_frame)		} >RAM
   _etext = .;
   PROVIDE (_etext = .);
   PROVIDE (__SDATA2_START__ = .);
-  .sdata2   	  : { *(.sdata2) 	}
-  .sbss2   	  : { *(.sbss2) 	}
+  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
+  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
   PROVIDE (__SBSS2_END__ = .);
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  It would
@@ -92,28 +92,28 @@ SECTIONS
     *(.data)
     *(.gnu.linkonce.d.*)
     CONSTRUCTORS
-  }
+  } >RAM
   PROVIDE (__EXCEPT_START__ = .);
-  .gcc_except_table   : { *(.gcc_except_table) }
+  .gcc_except_table   : { *(.gcc_except_table) } >RAM
   PROVIDE (__EXCEPT_END__ = .);
 
-  .data1   	  : { *(.data1) 	}
-  .got1		  : { *(.got1) 		}
-  .dynamic	  : { *(.dynamic) 	}
+  .data1   	  : { *(.data1) 	} >RAM
+  .got1		  : { *(.got1) 		} >RAM
+  .dynamic	  : { *(.dynamic) 	} >RAM
   /* Put .ctors and .dtors next to the .got2 section, so that the pointers
      get relocated with -mrelocatable. Also put in the .fixup pointers.
      The current compiler no longer needs this, but keep it around for 2.7.2  */
 		PROVIDE (_GOT2_START_ = .);
-  .got2		  :  { *(.got2)	}
+  .got2		  :  { *(.got2)	} >RAM
 		PROVIDE (__GOT2_END__ = .);
 		PROVIDE (__CTOR_LIST__ = .);
-  .ctors	  : { *(.ctors) }
+  .ctors	  : { *(.ctors) } >RAM
 		PROVIDE (__CTOR_END__ = .);
 		PROVIDE (__DTOR_LIST__ = .);
-  .dtors	  : { *(.dtors) }
+  .dtors	  : { *(.dtors) } >RAM
 		PROVIDE (__DTOR_END__ = .);
 		PROVIDE (_FIXUP_START_ = .);
-  .fixup	  : { *(.fixup) }
+  .fixup	  : { *(.fixup) } >RAM
 		PROVIDE (_FIXUP_END_ = .);
 		PROVIDE (__FIXUP_END__ = .);
 		PROVIDE (_GOT2_END_ = .);
@@ -121,8 +121,8 @@ SECTIONS
     PROVIDE (_GOT_START_ = .);
     s.got = .;
     *(.got)
-  }	
-  .got.plt	  : { *(.got.plt) }
+  }	 >RAM
+  .got.plt	  : { *(.got.plt) } >RAM
 		PROVIDE (_GOT_END_ = .);
 		PROVIDE (__GOT_END__ = .);
   /* We want the small data sections together, so single-instruction offsets
@@ -131,8 +131,9 @@ SECTIONS
   PROVIDE (__SDATA_START__ = .);
   .sdata	  : {
      *(.sdata)
+     *(.gnu.linkonce.s.*)
      _edata  =  .;
-  }
+  } >RAM
   PROVIDE (_edata = .);
   PROVIDE (RAM_END = ADDR(.text) + 10M);
   . =  ALIGN(8) + 0x1000;
@@ -143,7 +144,7 @@ SECTIONS
     *(.sbss)
     *(.scommon)
     PROVIDE (__sbss_end = .);
-  }
+  } >RAM
   PROVIDE (__SBSS_END__ = .);
   .bss       :
   {
@@ -155,11 +156,11 @@ SECTIONS
     PROVIDE (__stack = .);
     _end = . ;
     PROVIDE (end = .);
-  }
+  } >RAM
 
   /* These are needed for ELF backends which have not yet been
      converted to the new style linker.  */
-  .stab 0 : { *(.stab) }
+  .stab 0 : { *(.stab) } >RAM
   .stabstr 0 : { *(.stabstr) }
   /* DWARF debug sections.
      Symbols in the DWARF debugging sections are relative to the beginning

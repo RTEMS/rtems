@@ -17,6 +17,7 @@ SECTIONS
     { 
 	 CREATE_OBJECT_SYMBOLS
 	*(.text) 
+	*(.rodata*) 
 	 _etext = .;
 	
 	___CTOR_LIST__ = .;
@@ -34,6 +35,7 @@ SECTIONS
     .data :
     { 
  	*(.data) 
+	*(.jcr)
 	CONSTRUCTORS
 	 _edata = .;
     }  

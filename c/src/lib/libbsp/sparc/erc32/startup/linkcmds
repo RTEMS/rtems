@@ -114,7 +114,7 @@ SECTIONS
     __DTOR_END__ = .;
 
     _rodata_start = . ;
-    *(.rodata)
+    *(.rodata*)
     *(.gnu.linkonce.r*)
     _erodata = ALIGN( 0x10 ) ;
 
@@ -128,6 +128,7 @@ SECTIONS
     _endtext = .;
   } > ram
   .dynamic	  : { *(.dynamic) 	} >ram
+  .jcr		  : { *(.jcr) 		} >ram
   .got		  : { *(.got) 		} >ram
   .plt   	  : { *(.plt) 		} >ram
   .hash		  : { *(.hash)		} >ram

@@ -39,7 +39,7 @@ SECTIONS
 	     *(.entry)
 	     *(.entry2)
 	     *(.text)
-	     *(.rodata)
+	     *(.rodata*)
              *(.eh_frame)
              *(.gnu.linkonce.r*)
 	     *(.rodata1)
@@ -79,10 +79,11 @@ SECTIONS
           *(.gnu.linkonce.d.*)
 	  PROVIDE (__SDATA_START__ = .);
 	  *(.sdata)
+	  *(.gnu.linkonce.s.*)
 	} > ram
 	
 	PROVIDE (__EXCEPT_START__ = .);
-	.gcc_except_table   : { *(.gcc_except_table) } >RAM
+	.gcc_except_table   : { *(.gcc_except_table) } >ram
 	PROVIDE (__EXCEPT_END__ = .);
 	__GOT_START__ = .;
 	.got :
@@ -106,8 +107,8 @@ SECTIONS
 	PROVIDE (__FIXUP_END__ = .);
 	 
 	PROVIDE (__SDATA2_START__ = .);
-	.sdata2   	  : { *(.sdata2) 	} >ram
-	.sbss2   	  : { *(.sbss2) 	} >ram
+  	.sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >ram
+  	.sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >ram
 	PROVIDE (__SBSS2_END__ = .);
 	
 	.sbss2   	  : { *(.sbss2) 	} >ram

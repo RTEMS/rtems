@@ -51,13 +51,14 @@ SECTIONS
   } =0
   .init		  : { _init = .; *(.init)	}
   .fini		  : { _fini = .; *(.fini)	}
-  .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) }
+  .rodata  	  : { *(.rodata*) *(.gnu.linkonce.r*) }
   .rodata1	  : { *(.rodata1) }
   .eh_frame	  : { *.(eh_frame) }
   _etext = .;
   PROVIDE (etext = .);
   PROVIDE (__SDATA2_START__ = .);
-  .sdata2   : { *(.sdata2) }
+  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	}
+  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	}
   PROVIDE (__SBSS2_START__ = .);
   .sbss2   : { *(.sbss2) }
   PROVIDE (__SBSS2_END__ = .);
@@ -117,7 +118,7 @@ SECTIONS
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
   PROVIDE (__SDATA_START__ = .);
-  .sdata	  : { *(.sdata) }
+  .sdata     : { *(.sdata) *(.gnu.linkonce.s.*)	}
   _edata  =  .;
   PROVIDE (edata = .);
   . =  ALIGN(8) + 0x1000;

@@ -38,7 +38,7 @@ SECTIONS
   .rela.data     :
     { *(.rela.data) *(.rela.gnu.linkonce.d*) }	> CODE
   .rela.rodata   :
-    { *(.rela.rodata) *(.rela.gnu.linkonce.r*) }	> CODE
+    { *(.rela.rodata*) *(.rela.gnu.linkonce.r*) }	> CODE
   .rela.got       : { *(.rela.got)      }	> CODE
   .rela.got1      : { *(.rela.got1)     }	> CODE
   .rela.got2      : { *(.rela.got2)     }	> CODE
@@ -61,13 +61,13 @@ SECTIONS
   }  > CODE
   .init		  : { _init = .; *(.init)	} >CODE
   .fini		  : { _fini = .; *(.fini)	} >CODE
-  .rodata         : { *(.rodata) *(.gnu.linkonce.r*) }	> CODE
+  .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
   .rodata1        : { *(.rodata1) }	> CODE
   .eh_frame	  : { *.(eh_frame)		} >CODE
   _etext = .;
   PROVIDE (etext = .);
-  .sdata2   : { *(.sdata2) }	> CODE
-  .sbss2   : { *(.sbss2) }	> CODE
+  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >CODE
+  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >CODE
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  It would
      be more correct to do this:
@@ -117,7 +117,7 @@ SECTIONS
   /* We want the small data sections together, so single-instruction offsets
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
-  .sdata          : { *(.sdata) }	> CODE
+  .sdata	  : { *(.sdata) *(.gnu.linkonce.s.*)	} >CODE
   _edata  =  .;
   PROVIDE (edata = .);
   .sbss      :

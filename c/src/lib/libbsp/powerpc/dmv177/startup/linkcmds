@@ -57,13 +57,13 @@ SECTIONS
   .fini		  : { _fini = .; *(.fini)	} >RAM
   .eh_frame	  : { *.(eh_frame)		} >RAM
 
-  .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) } >RAM
+  .rodata  	  : { *(.rodata*) *(.gnu.linkonce.r*) } >RAM
   .rodata1	  : { *(.rodata1) 	} >RAM
   _etext = .;
   PROVIDE (etext = .);
   PROVIDE (__SDATA2_START__ = .);
-  .sdata2	  : { *(.sdata2) 	} >RAM
-  .sbss2	  : { *(.sbss2) 	} >RAM
+  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
+  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
   PROVIDE (__SBSS2_END__ = .);
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  It would
@@ -129,7 +129,7 @@ SECTIONS
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
   PROVIDE (__SDATA_START__ = .);
-  .sdata	  : { *(.sdata) 	} >RAM
+  .sdata	  : { *(.sdata) *(.gnu.linkonce.s.*)	} >RAM
   _edata  =  .;
   PROVIDE (edata = .);
 

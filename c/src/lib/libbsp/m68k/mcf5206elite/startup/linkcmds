@@ -116,8 +116,8 @@ SECTIONS
 	    * Read-only data
 	    */
 	   . = ALIGN (16);
-	   _rodata_start = . ;
-	   *(.rodata)
+	   _rodata_start = .;
+	   *(.rodata*)
 	   *(.gnu.linkonce.r*)
 
            . = ALIGN (16);
@@ -133,6 +133,7 @@ SECTIONS
            . = ALIGN (0x10);
            *(.gcc_exc)
            *(.gcc_except_table)
+	   *(.jcr)
            . = ALIGN (0x10);
            *(.gnu.linkonce.d*)
            . = ALIGN (0x10);

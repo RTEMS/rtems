@@ -34,7 +34,7 @@ SECTIONS
      *(.entry)
      *(.entry2)
      *(.text)
-     *(.rodata)
+     *(.rodata*)
      *(.rodata1)
      *.(eh_frame)
      *(.gnu.linkonce.r*)
@@ -75,6 +75,7 @@ SECTIONS
      *(.gnu.linkonce.d*)
     PROVIDE (__SDATA_START__ = .);
     *(.sdata)
+    *(.gnu.linkonce.s.*)
   } > RAM
  
   PROVIDE (__EXCEPT_START__ = .);
@@ -113,11 +114,8 @@ SECTIONS
   PROVIDE (__FIXUP_END__ = .);
  
   PROVIDE (__SDATA2_START__ = .);
-  .sdata2   	  : { *(.sdata2) 	} >RAM
-  .sbss2   	  : { *(.sbss2) 	} >RAM
-  PROVIDE (__SBSS2_END__ = .);
-
-  .sbss2   	  : { *(.sbss2) 	} >RAM
+  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
+  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
   PROVIDE (__SBSS2_END__ = .);
 
   __SBSS_START__ = .;

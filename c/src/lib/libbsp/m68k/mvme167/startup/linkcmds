@@ -109,8 +109,8 @@ SECTIONS
      * Read-only data
      */
     . = ALIGN (16);
-    PROVIDE(_rodata_start = . );
-    *(.rodata)
+    _rodata_start = .;
+    *(.rodata*)
     *(.gnu.linkonce.r*)
     PROVIDE(_erodata = . );
 
@@ -123,6 +123,7 @@ SECTIONS
     *(.data)
     *(.gnu.linkonce.d*)
     *(.gcc_except_table)
+    *(.jcr)
     . = ALIGN (16);
     PROVIDE (_edata = .);
     PROVIDE (_copy_end = .);

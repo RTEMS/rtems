@@ -34,7 +34,7 @@ SECTIONS
      text.start = . ;
      *(.entry2)
      *(.text)
-     *(.rodata)
+     *(.rodata*)
      *(.rodata1)
      *.(eh_frame)
      *(.descriptors)
@@ -90,6 +90,7 @@ SECTIONS
     *(.data1)
     PROVIDE (__SDATA_START__ = .);
     *(.sdata)
+    *(.gnu.linkonce.s.*)
     . = ALIGN(0x10);
     copy.tmptop.dat = .;
   } > RAM

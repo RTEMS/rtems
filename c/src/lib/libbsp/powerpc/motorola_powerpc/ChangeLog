@@ -1,3 +1,11 @@
+	      Eliminated the implicit assumption on the presence of an ISA PIC.
+	    - UART and console driver now supports more than 1 port. The current
+	      maximum of 2 can easily be extended by enlarging a table (it
+	      would even be easier if the ISR API was not broken by design).
+	    - fixed polled_io.c so it correctly supports console on COM2
+	    - fixed TLB invalidation code (start.S).
+	    - exception handler prints a stack backtrace.
+	    - added BSP_pciFindDevice() to scan the pci bus for a particular
 	      vendor/device/instance.
 
 2001-05-09	Joel Sherrill <joel@OARcorp.com>
