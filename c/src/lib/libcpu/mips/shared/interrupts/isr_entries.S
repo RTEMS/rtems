@@ -27,6 +27,12 @@ FRAME(exc_norm_code,sp,0,ra)
 	nop
 ENDFRAME(exc_norm_code)
 
+FRAME(exc_dbg_code,sp,0,ra)
+        la      k0, _DBG_Handler /* debug interrupt */
+        j       k0
+	nop
+ENDFRAME(exc_dbg_code)
+	
 /* XXX this is dependent on IDT/SIM and needs to be addressed */
 FRAME(exc_utlb_code,sp,0,ra)
         la      k0, (R_VEC+((48)*8))
