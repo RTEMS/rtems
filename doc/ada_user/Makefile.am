@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = ada_user
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 COMMON_FILES = $(top_srcdir)/user/bsp.texi $(top_srcdir)/user/clock.texi \
     $(top_srcdir)/user/concepts.texi $(top_srcdir)/user/datatypes.texi \

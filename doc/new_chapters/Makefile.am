@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = new_chapters
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 GENERATED_FILES = adminiface.texi confspace.texi dumpcontrol.texi \
     eventlog.texi stackchk.texi rtmonuse.texi cpuuse.texi error.texi \

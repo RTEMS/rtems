@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = develenv
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 FILES = compile.texi direct.texi intro.texi sample.texi utils.texi
 

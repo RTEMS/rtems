@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = started_ada
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 GENERATED_FILES = buildada.texi buildrt.texi gdb.texi intro.texi \
     require.texi sample.texi

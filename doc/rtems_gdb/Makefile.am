@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = rtems_gdb
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 GENERATED_FILES = intro.texi swarch.texi started.texi commands.texi \
     trouble.texi example.texi

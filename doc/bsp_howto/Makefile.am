@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = bsp_howto
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 GENERATED_FILES = intro.texi target.texi makefiles.texi linkcmds.texi \
     support.texi adaintr.texi init.texi console.texi clock.texi timer.texi \

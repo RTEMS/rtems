@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = FAQ
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 GENERATED_FILES = basic.texi tools.texi concepts.texi build45.texi bsp.texi \
     debug.texi freesw.texi embeddedinfo.texi hwdebugaids.texi projects.texi \

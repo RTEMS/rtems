@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = posix1003_1
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 GENERATED_FILES = ch01.texi ch02.texi ch03.texi ch04.texi ch05.texi \
     ch06.texi ch07.texi ch08.texi ch09.texi ch10.texi ch11.texi ch12.texi \

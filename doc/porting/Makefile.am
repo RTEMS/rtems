@@ -6,12 +6,13 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROJECT = porting
 EDITION = 1
 
 include $(top_srcdir)/project.am
+include $(top_srcdir)/main.am
 
 FILES = preface.texi developtools.texi sourcecode.texi cpumodels.texi \
     cpuinit.texi interrupts.texi taskcontext.texi idlethread.texi \
