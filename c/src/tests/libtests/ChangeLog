@@ -1,3 +1,9 @@
+2003-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Unconditionally check for CXX.
+	Require autoconf-2.57, automake-1.7.2.
+	* rtems++: Eliminate CC_O_FILES.
+
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* malloctest/init.c: Tasks should be floating point.

@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.52)
+AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([cpuuse])
 RTEMS_TOP(../../../..)
@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR(../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.6])
+AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_CXX
@@ -25,9 +25,7 @@ RTEMS_PROJECT_ROOT
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 
-if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-  RTEMS_PROG_CXX_FOR_TARGET
-fi
+RTEMS_PROG_CXX_FOR_TARGET
 
 RTEMS_CANONICALIZE_TOOLS
 
