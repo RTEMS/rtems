@@ -49,3 +49,25 @@ $(MTARGETS):
             $@" ; \
 	    eval $$cmd || $(EXIT_CMD); \
 	fi; done; 
+
+## Configuration stuff
+
+ACLOCAL = aclocal -I aclocal
+AUTOCONF = autoconf
+
+ACLOCAL_M4 = aclocal.m4
+
+$(ACLOCAL_M4): configure.in
+	-cd $(RTEMS_ROOT) && $(ACLOCAL)
+
+Makefile: Makefile.in config.status
+	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+config.status: $(RTEMS_ROOT)/configure
+	$(SHELL) ./config.status --recheck
+
+$(RTEMS_ROOT)/configure: $(RTEMS_ROOT)/configure.in $(ACLOCAL_M4)
+	-cd $(RTEMS_ROOT) && $(AUTOCONF)
+
+.PRECIOUS: $(ACLOCAL_M4) configure Makefile config.status
+
