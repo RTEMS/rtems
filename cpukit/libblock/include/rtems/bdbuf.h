@@ -1,5 +1,10 @@
-/* bdbuf.h -- block device buffer management
+/**
+ * @file rtems/bdbuf.h
  *
+ * block device buffer management
+ */
+ 
+/*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *

@@ -1,10 +1,10 @@
-/*****************************************************************************
+/**
+ * @file rtems/ide_part_table.h
  *
- * ide_part_table.h
- *
- * The header file for library supporting "MS-DOS-style" partition table
- *
- *
+ * Support for "MS-DOS-style" partition tables
+ */
+
+/*
  * Copyright (C) 2002 OKTET Ltd., St.-Petersburg, Russia
  *
  * Author: Konstantin Abramenko <Konstantin.Abramenko@oktet.ru>

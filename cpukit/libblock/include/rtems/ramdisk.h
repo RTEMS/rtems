@@ -1,5 +1,9 @@
-/* ramdisk.c -- RAM disk block device implementation
- *
+/**
+ * @file rtems/ramdisk.h
+ * RAM disk block device implementation
+ */
+
+/*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *

@@ -1,6 +1,9 @@
+/**
+ * @file rtems/blkdev.h
+ * block device driver interface definitions
+ */
+ 
 /*
- * blkdev.h - block device driver interface definitions
- *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *

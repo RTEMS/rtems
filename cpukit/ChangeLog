@@ -1,3 +1,12 @@
+2004-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libblock/include/rtems/bdbuf.h,
+	libblock/include/rtems/blkdev.h,
+	libblock/include/rtems/diskdevs.h,
+	libblock/include/rtems/ide_part_table.h,
+	libblock/include/rtems/ramdisk.h:
+	Add doxygen preamble.
+
 2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* sapi/include/confdefs.h, sapi/include/rtems/config.h,
