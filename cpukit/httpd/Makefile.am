@@ -2,26 +2,13 @@
 ## $Id$
 ##
 
-LIBNAME = lib.a
-LIB = $(ARCH)/$(LIBNAME)
-
-C_FILES = asp.c balloc.c default.c ejlex.c ejparse.c emfdb.c form.c h.c \
-    handler.c md5c.c mime.c misc.c webpage.c ringq.c rom.c security.c sock.c \
-    socket.c sym.c uemf.c um.c url.c value.c wbase64.c webrom.c webs.c \
-    websuemf.c webmain.c
-OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-#
-# Add local stuff here using +=
-#
+EXTRA_LIBRARIES =
+CLEANFILES =
 
 AM_CPPFLAGS += -DWEBS -DUEMF -DOS="RTEMS"
-
-$(LIB): $(OBJS)
-	$(make-library)
 
 if HAS_NETWORKING
 if HAS_POSIX
@@ -31,17 +18,26 @@ include_HEADERS = rtems_webserver.h
 include_goahead_HEADERS = ej.h ejIntrn.h emfdb.h md5.h uemf.h um.h webs.h \
     wsIntrn.h
 
-all-local: $(PREINSTALL_FILES) $(OBJS) $(LIB)
+EXTRA_LIBRARIES += libhttpd.a
+CLEANFILES += libhttpd.a
+libhttpd_a_SOURCES = asp.c balloc.c default.c ejlex.c ejparse.c emfdb.c \
+    form.c h.c handler.c md5c.c mime.c misc.c webpage.c ringq.c rom.c \
+    security.c sock.c socket.c sym.c uemf.c um.c url.c value.c wbase64.c \
+    webrom.c webs.c websuemf.c webmain.c
+libhttpd_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += libhttpd_g.a
+CLEANFILES += libhttpd_g.a
+libhttpd_g_a_SOURCES = $(libhttpd_a_SOURCES)
+libhttpd_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
+noinst_DATA = libhttpd$(LIB_VARIANT).a
 endif
 endif
 
-.PRECIOUS: $(LIB)
+all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = asp.c balloc.c default.c ej.h ejlex.c ejparse.c form.c h.c \
-    handler.c mime.c misc.c ringq.c rom.c rtems_webserver.h security.c \
-    sock.c socket.c sym.c uemf.c uemf.h um.h url.c value.c wbase64.c \
-    webcomp.c webmain.c webpage.c webrom.c webs.c webs.h websuemf.c \
-    wsIntrn.h
+EXTRA_DIST = webcomp.c webpage.c
 
 PREINSTALL_FILES =
 
@@ -95,6 +91,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/wsIntrn.h
 endif
 endif
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

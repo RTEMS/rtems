@@ -1,3 +1,16 @@
+2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove wrapup.
+	* pppd/Makefile.am: Build libpppd.
+	Use automake-compilation rules.
+	* rtems_servers/Makefile.am: Build libftpd.
+	Use automake-compilation rules.
+	* rtems_telnetd/Makefile.am: Build libtelnetd.
+	Use automake-compilation rules.
+	* rtems_webserver/Makefile.am: Build libhttpd.
+	Use automake-compilation rules.
+	* wrapup/Makefile.am: Remove (Unused).
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* pppd/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.

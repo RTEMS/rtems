@@ -2,35 +2,29 @@
 ## $Id$
 ##
 
-LIBNAME = lib.a
-LIB = $(ARCH)/$(LIBNAME)
-
-C_FILES = ftpd.c
-OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-#
-# Add local stuff here using +=
-#
-
-EXTRA_DIST = ftpd.c ftpd.h
+CLEANFILES =
+EXTRA_LIBRARIES =
 
 if HAS_NETWORKING
-include_rtemsdir = $(includedir)/rtems
-
 include_HEADERS = ftpd.h
 
-include_rtems_HEADERS =
+EXTRA_LIBRARIES += libftpd.a
+CLEANFILES += libftpd.a
+libftpd_a_SOURCES = ftpd.c ftpd.h
+libftpd_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-$(LIB): $(OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += libftpd_g.a
+CLEANFILES += libftpd_g.a
+libftpd_g_a_SOURCES = $(libftpd_a_SOURCES)
+libftpd_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-all-local: $(PREINSTALL_FILES) $(OBJS) $(LIB)
+noinst_DATA = libftpd$(LIB_VARIANT).a
 endif
 
-.PRECIOUS: $(LIB)
+all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 
@@ -40,16 +34,11 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_NETWORKING
-$(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
-	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-
 $(PROJECT_INCLUDE)/ftpd.h: ftpd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ftpd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ftpd.h
 endif
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

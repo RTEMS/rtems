@@ -2,32 +2,32 @@
 ## $Id$
 ##
 
-LIBNAME = libtelnetd-tmp
-LIB = $(ARCH)/$(LIBNAME).a
-
-C_FILES = pty.c telnetd.c icmds.c
-OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+EXTRA_LIBRARIES =
+CLEANFILES =
 
 if HAS_NETWORKING
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = pty.h telnetd.h
 
-$(LIB): $(OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += libtelnetd.a
+CLEANFILES += libtelnetd.a
+libtelnetd_a_SOURCES = pty.c pty.h telnetd.c telnetd.h icmds.c
+libtelnetd_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-all-local: $(PREINSTALL_FILES) $(OBJS) $(LIB)
+EXTRA_LIBRARIES += libtelnetd_g.a
+CLEANFILES += libtelnetd_g.a
+libtelnetd_g_a_SOURCES = $(libtelnetd_a_SOURCES)
+libtelnetd_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
+noinst_DATA = libtelnetd$(LIB_VARIANT).a
 endif
 
-.PRECIOUS: $(LIB)
+EXTRA_DIST = README
 
-EXTRA_DIST = README pty.c telnetd.c pty.h icmds.c telnetd.h
+all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 
@@ -46,6 +46,6 @@ $(PROJECT_INCLUDE)/rtems/telnetd.h: telnetd.h $(PROJECT_INCLUDE)/rtems/$(dirstam
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/telnetd.h
 endif
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
