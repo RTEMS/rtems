@@ -33,9 +33,6 @@ PREINSTALL_FILES += $(include_rtems_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
 
 EXTRA_DIST = include/rtems/README
 
-include/rtems/sptables.h: $(top_builddir)/config.status $(top_srcdir)/sapi/include/rtems/sptables.h.in
-	cd $(top_builddir) && CONFIG_FILES=sapi/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
-
 ## inline
 
 inline_H_FILES = inline/rtems/extension.inl

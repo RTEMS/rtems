@@ -1,5 +1,9 @@
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Remove stray reference to sptables.h.in.
+
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* include/rtems/sptables.h.in: Remove.
 	* include/rtems/sptables.h: New.
 	* include/.cvsignore: Remove.
