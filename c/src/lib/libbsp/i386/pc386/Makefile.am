@@ -36,6 +36,7 @@ start16$(LIB_VARIANT)-elf32.$(OBJEXT): start16.$(OBJEXT)
 
 start16$(LIB_VARIANT).bin: start16$(LIB_VARIANT)-elf32.$(OBJEXT)
 	$(OBJCOPY) -O binary $< $@
+CLEANFILES += start16.bin start16_g.bin
 
 project_lib_DATA += start16$(LIB_VARIANT).bin
 
