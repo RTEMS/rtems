@@ -49,6 +49,7 @@ const char* vhstr2int(const char *buf, int *ival);
 int   hstr2byte(const char *buf, int *bval);
 int   hstr2nibble(const char *buf, int *nibble);
 
+Thread_Control *rtems_gdb_index_to_stub_id(int);
 int rtems_gdb_stub_thread_support_ok(void);
 int rtems_gdb_stub_get_current_thread(void);
 int rtems_gdb_stub_get_next_thread(int);
@@ -158,5 +159,22 @@ void rtems_gdb_process_query(
 #define	FIRR		71
 
 #define	NUM_REGS	72
+
+
+
+
+
+
+void mips_gdb_stub_install(int enableThreads) ;
+
+
+#define MEMOPT_READABLE   1
+#define MEMOPT_WRITEABLE  2
+
+#define NUM_MEMSEGS     10
+
+int gdbstub_add_memsegment(unsigned,unsigned,int);
+
+
 
 #endif /* _GDB_IF_H */

@@ -2,6 +2,29 @@
 #  $Id$
 #
 
+/*****************************************************/
+
+Debugged this stub against the MongooseV bsp.  Relies on putting break
+instructions on breakpoints and step targets- normal stuff, and does not
+employ hardware breakpoint support at this time.  As written, a single
+breakpoint in a loop will not be reasserted unless the user steps or has
+a 2nd one, since breakpoints are only reset when the gdb stub is
+re-entered.  A useful enhancement would be to fix the break instruction
+management so the stub could invisibly put a 2nd break after the 1st
+"official" one so it can silently reset breakpoints.  Shouldn't be too
+hard, mostly a matter of working it out.
+
+This was tested only against an R3000 MIPS.  It should work OK on a
+R4000.  Needs to be tested at some point.
+
+This stub supports threads as implemented by gdb 5 and doesn't have any
+bugs I'm aware of.
+
+Greg Menke
+3/5/2002
+
+/*****************************************************/
+
 
 The contents of this directory are based upon the "r46kstub.tar.gz" package
 released to the net by

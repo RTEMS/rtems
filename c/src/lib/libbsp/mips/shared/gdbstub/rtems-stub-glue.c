@@ -29,7 +29,6 @@
  */
 
 #include <rtems.h>
-
 #include <string.h>
 
 #include "gdb_if.h"
@@ -39,6 +38,7 @@
 #define ASSERT(x) 
 
 extern const char gdb_hexchars[];
+
 
 /*
  *  Prototypes for CPU dependent routines that are conditional
@@ -50,6 +50,12 @@ void rtems_gdb_stub_get_registers_from_context(
   Thread_Control *th
 );
 
+
+
+
+
+
+
 /* Check whether it is OK to enable thread support */
 int rtems_gdb_stub_thread_support_ok(void)
 {
@@ -58,6 +64,10 @@ int rtems_gdb_stub_thread_support_ok(void)
   }
   return 0;
 }
+
+
+
+
 
 /*
  *  rtems_gdb_stub_id_to_index
@@ -101,11 +111,83 @@ int rtems_gdb_stub_id_to_index(
   return first_posix_id + (thread_obj_id - min_id);
 } 
 
+
+
+/* Return the RTEMS thread id from a gdb thread id */
+Thread_Control *rtems_gdb_index_to_stub_id(
+  int thread
+)
+{
+   Objects_Id thread_obj_id;
+   Objects_Id min_id, max_id;
+   int first_posix_id, first_rtems_id;
+   Objects_Information *obj_info;
+   Thread_Control *th;
+
+   ASSERT(registers != NULL);
+
+   if (_System_state_Get() != SYSTEM_STATE_UP || thread <= 0) {
+      /* Should not happen */
+      return NULL;
+   }
+
+   if (thread == 1) {
+      th = _Thread_Idle;
+      goto found;
+   }
+
+   /* Let us get object associtated with current thread */
+   first_rtems_id = 2;
+
+   thread_obj_id = _Thread_Executing->Object.id;
+
+   /* Let us figure out thread_id for gdb */
+   obj_info = _Objects_Information_table[OBJECTS_RTEMS_TASKS];
+
+   min_id = obj_info->minimum_id;
+   max_id = obj_info->maximum_id;
+
+   if (thread <= (first_rtems_id + (max_id - min_id))) {
+      th = (Thread_Control *)(obj_info->local_table[thread - first_rtems_id + 1]);
+
+      if (th != NULL) {
+         goto found;
+      }
+
+      /* Thread does not exist */
+      return NULL;
+   }
+
+   first_posix_id = first_rtems_id + (max_id - min_id) + 1;
+
+   obj_info = _Objects_Information_table[OBJECTS_POSIX_THREADS];
+
+   min_id = obj_info->minimum_id;
+   max_id = obj_info->maximum_id;
+
+   th = (Thread_Control *)(obj_info->local_table[thread - first_posix_id + 1]);
+   if (th == NULL) {
+      /* Thread does not exist */
+      return NULL;
+   }
+
+  found:
+   return th;
+}
+
+
+
+
+
+
 /* Get id of the thread stopped by exception */
 int rtems_gdb_stub_get_current_thread(void)
 {
   return rtems_gdb_stub_id_to_index( _Thread_Executing->Object.id );
 }
+
+
+
 
 /* Get id of the next thread after athread, if argument <= 0 find the
    first available thread, return thread if found or 0 if not */
@@ -176,6 +258,10 @@ int rtems_gdb_stub_get_next_thread(int athread)
 }
 
 
+
+
+
+
 /* Get thread registers, return 0 if thread does not 
    exist, and 1 otherwise */
 int rtems_gdb_stub_get_thread_regs(
@@ -183,70 +269,27 @@ int rtems_gdb_stub_get_thread_regs(
   unsigned int *registers
 )
 {
-  Objects_Id thread_obj_id;
-  Objects_Id min_id, max_id;
-  int first_posix_id, first_rtems_id;
-  Objects_Information *obj_info;
-  Thread_Control *th;
+   Thread_Control *th;
 
-  ASSERT(registers != NULL);
+   th= rtems_gdb_index_to_stub_id(thread);
 
-  if (_System_state_Get() != SYSTEM_STATE_UP || thread <= 0) {
-    /* Should not happen */
-    return 0;
-  }
-
-  if (thread == 1) {
-    th = _Thread_Idle;
-    goto found;
-  }
-
-  /* Let us get object associtated with current thread */
-  first_rtems_id = 2;
-
-  thread_obj_id = _Thread_Executing->Object.id;
-
-  /* Let us figure out thread_id for gdb */
-  obj_info = _Objects_Information_table[OBJECTS_RTEMS_TASKS];
-
-  min_id = obj_info->minimum_id;
-  max_id = obj_info->maximum_id;
-
-  if (thread <= (first_rtems_id + (max_id - min_id))) {
-    th = (Thread_Control *)(obj_info->local_table[thread - first_rtems_id + 1]);
-
-    if (th != NULL) {
-      goto found;
-    }
-
-    /* Thread does not exist */
-    return 0;
-  }
-
-  first_posix_id = first_rtems_id + (max_id - min_id) + 1;
-
-  obj_info = _Objects_Information_table[OBJECTS_POSIX_THREADS];
-
-  min_id = obj_info->minimum_id;
-  max_id = obj_info->maximum_id;
-
-  th = (Thread_Control *)(obj_info->local_table[thread - first_posix_id + 1]);
-  if (th == NULL) {
-    /* Thread does not exist */
-    return 0;
-  }
-
-found:
-
-  rtems_gdb_stub_get_registers_from_context( registers, th );
-
-  return 1;
+   if( th )
+   {
+      rtems_gdb_stub_get_registers_from_context( registers, th );
+      return 1;
+   }
+   return 0;
 }
+
+
+
+
 
 
 /* Set thread registers, return 0 if thread does not 
    exist or register values will screw up the threads, 
    and 1 otherwise */
+
 int rtems_gdb_stub_set_thread_regs(
   int thread,
   unsigned int *registers
@@ -260,6 +303,10 @@ int rtems_gdb_stub_set_thread_regs(
 }
 
 
+
+
+
+
 /* Get thread information, return 0 if thread does not 
    exist and 1 otherwise */
 int rtems_gdb_stub_get_thread_info(
@@ -267,120 +314,124 @@ int rtems_gdb_stub_get_thread_info(
   struct rtems_gdb_stub_thread_info *info
 )
 {
-  Objects_Id thread_obj_id;
-  Objects_Id min_id, max_id;
-  int first_posix_id, first_rtems_id;
-  Objects_Information *obj_info;
-  Thread_Control *th;
-  unsigned32 name;
-  char tmp_buf[20];
+   Objects_Id thread_obj_id;
+   Objects_Id min_id, max_id;
+   int first_posix_id, first_rtems_id;
+   Objects_Information *obj_info;
+   Thread_Control *th;
+   unsigned32 name;
+   char tmp_buf[20];
 
-  ASSERT(info != NULL);
+   ASSERT(info != NULL);
 
-  if (thread <= 0) {
-    return 0;
-  }
+   if (thread <= 0) {
+      return 0;
+   }
 
-  if (_System_state_Get() != SYSTEM_STATE_UP || thread == 1) {
-    /* We have one thread let us use value
+   if (_System_state_Get() != SYSTEM_STATE_UP || thread == 1) {
+      /* We have one thread let us use value
          which will never happen for real thread */
-    strcpy(info->display, "idle thread");
-    strcpy(info->name, "IDLE");
-    info->more_display[0] = 0; /* Nothing */
+      strcpy(info->display, "idle thread");
+      strcpy(info->name, "IDLE");
+      info->more_display[0] = 0; /* Nothing */
 
-    return 1;
-  }
+      return 1;
+   }
 
-  /* Let us get object associtated with current thread */
-  thread_obj_id = _Thread_Executing->Object.id;
+   /* Let us get object associtated with current thread */
+   thread_obj_id = _Thread_Executing->Object.id;
 
-  /* Let us figure out thread_id for gdb */
-  first_rtems_id = 2;
+   /* Let us figure out thread_id for gdb */
+   first_rtems_id = 2;
   
-  obj_info = _Objects_Information_table[OBJECTS_RTEMS_TASKS];
+   obj_info = _Objects_Information_table[OBJECTS_RTEMS_TASKS];
 
-  min_id = obj_info->minimum_id;
-  max_id = obj_info->maximum_id;
+   min_id = obj_info->minimum_id;
+   max_id = obj_info->maximum_id;
 
-  if (thread <= (first_rtems_id + (max_id - min_id))) {
+   if (thread <= (first_rtems_id + (max_id - min_id))) {
       th = (Thread_Control *)(obj_info->local_table[thread - 
                                                     first_rtems_id + 1]);
 
-  if (th == NULL) {
-    /* Thread does not exist */
-    return 0;
-  }
+      if (th == NULL) {
+         /* Thread does not exist */
+         return 0;
+      }
 
-  strcpy(info->display, "rtems task:   control at 0x");
+      strcpy(info->display, "rtems task:   control at 0x");
 
-  tmp_buf[0] = gdb_hexchars[(((int)th) >> 28) & 0xf];
-  tmp_buf[1] = gdb_hexchars[(((int)th) >> 24) & 0xf];
-  tmp_buf[2] = gdb_hexchars[(((int)th) >> 20) & 0xf];
-  tmp_buf[3] = gdb_hexchars[(((int)th) >> 16) & 0xf];
-  tmp_buf[4] = gdb_hexchars[(((int)th) >> 12) & 0xf];
-  tmp_buf[5] = gdb_hexchars[(((int)th) >> 8) & 0xf];
-  tmp_buf[6] = gdb_hexchars[(((int)th) >> 4) & 0xf];
-  tmp_buf[7] = gdb_hexchars[((int)th) & 0xf];
-  tmp_buf[8] = 0;
+      tmp_buf[0] = gdb_hexchars[(((int)th) >> 28) & 0xf];
+      tmp_buf[1] = gdb_hexchars[(((int)th) >> 24) & 0xf];
+      tmp_buf[2] = gdb_hexchars[(((int)th) >> 20) & 0xf];
+      tmp_buf[3] = gdb_hexchars[(((int)th) >> 16) & 0xf];
+      tmp_buf[4] = gdb_hexchars[(((int)th) >> 12) & 0xf];
+      tmp_buf[5] = gdb_hexchars[(((int)th) >> 8) & 0xf];
+      tmp_buf[6] = gdb_hexchars[(((int)th) >> 4) & 0xf];
+      tmp_buf[7] = gdb_hexchars[((int)th) & 0xf];
+      tmp_buf[8] = 0;
 
-  strcat(info->display, tmp_buf);
+      strcat(info->display, tmp_buf);
   
-  name = *(unsigned32 *)(obj_info->local_table[thread]->name);
+      name = *(unsigned32 *)(obj_info->local_table[thread]->name);
       
-  info->name[0] = (name >> 24) & 0xff;
-  info->name[1] = (name >> 16) & 0xff;
-  info->name[2] = (name >> 8) & 0xff;
-  info->name[3] = name & 0xff;
-  info->name[4] = 0;
+      info->name[0] = (name >> 24) & 0xff;
+      info->name[1] = (name >> 16) & 0xff;
+      info->name[2] = (name >> 8) & 0xff;
+      info->name[3] = name & 0xff;
+      info->name[4] = 0;
 
-  info->more_display[0] = 0; /* Nothing */
+      info->more_display[0] = 0; /* Nothing */
 
-  return 1;
-}
+      return 1;
+   }
 
-  first_posix_id = first_rtems_id + (max_id - min_id) + 1;
+   first_posix_id = first_rtems_id + (max_id - min_id) + 1;
 
-  obj_info = _Objects_Information_table[OBJECTS_POSIX_THREADS];
+   obj_info = _Objects_Information_table[OBJECTS_POSIX_THREADS];
 
-  min_id = obj_info->minimum_id;
-  max_id = obj_info->maximum_id;
+   min_id = obj_info->minimum_id;
+   max_id = obj_info->maximum_id;
 
-  th = (Thread_Control *)(obj_info->local_table[thread - first_posix_id + 1]);
-  if (th == NULL)
-    {
+   th = (Thread_Control *)(obj_info->local_table[thread - first_posix_id + 1]);
+   if (th == NULL)
+   {
       /* Thread does not exist */
       return 0;
-    }
+   }
 
-  strcpy(info->display, "posix thread: control at 0x");
+   strcpy(info->display, "posix thread: control at 0x");
 
-  tmp_buf[0] = gdb_hexchars[(((int)th) >> 28) & 0xf];
-  tmp_buf[1] = gdb_hexchars[(((int)th) >> 24) & 0xf];
-  tmp_buf[2] = gdb_hexchars[(((int)th) >> 20) & 0xf];
-  tmp_buf[3] = gdb_hexchars[(((int)th) >> 16) & 0xf];
-  tmp_buf[4] = gdb_hexchars[(((int)th) >> 12) & 0xf];
-  tmp_buf[5] = gdb_hexchars[(((int)th) >> 8) & 0xf];
-  tmp_buf[6] = gdb_hexchars[(((int)th) >> 4) & 0xf];
-  tmp_buf[7] = gdb_hexchars[((int)th) & 0xf];
-  tmp_buf[8] = 0;
+   tmp_buf[0] = gdb_hexchars[(((int)th) >> 28) & 0xf];
+   tmp_buf[1] = gdb_hexchars[(((int)th) >> 24) & 0xf];
+   tmp_buf[2] = gdb_hexchars[(((int)th) >> 20) & 0xf];
+   tmp_buf[3] = gdb_hexchars[(((int)th) >> 16) & 0xf];
+   tmp_buf[4] = gdb_hexchars[(((int)th) >> 12) & 0xf];
+   tmp_buf[5] = gdb_hexchars[(((int)th) >> 8) & 0xf];
+   tmp_buf[6] = gdb_hexchars[(((int)th) >> 4) & 0xf];
+   tmp_buf[7] = gdb_hexchars[((int)th) & 0xf];
+   tmp_buf[8] = 0;
 
-  strcat(info->display, tmp_buf);
+   strcat(info->display, tmp_buf);
 
-  name = *(unsigned32 *)(obj_info->local_table[thread - 
-                                               first_posix_id + 1]->name);
+   name = *(unsigned32 *)(obj_info->local_table[thread - 
+                                                first_posix_id + 1]->name);
 
-  info->name[0] = (name >> 24) & 0xff;
-  info->name[1] = (name >> 16) & 0xff;
-  info->name[2] = (name >> 8) & 0xff;
-  info->name[3] = name & 0xff;
-  info->name[4] = 0;
+   info->name[0] = (name >> 24) & 0xff;
+   info->name[1] = (name >> 16) & 0xff;
+   info->name[2] = (name >> 8) & 0xff;
+   info->name[3] = name & 0xff;
+   info->name[4] = 0;
 
-  info->more_display[0] = 0; /* Nothing */
+   info->more_display[0] = 0; /* Nothing */
   
-  return 1;
+   return 1;
 }
 
 /*******************************************************/
+
+
+
+
 
 
 /* Format: x<type-1x>,<address-x>,<length-x>, where x is 'z' or 'Z' */
@@ -597,25 +648,34 @@ pack_qm_thread(char *out, int thread)
 static void
 pack_qm_header(char *out, int count, int done, int athread)
 {
-  ASSERT(out != 0);
-  ASSERT(count >= 0 && count < 256);
+   ASSERT(out != 0);
+   ASSERT(count >= 0 && count < 256);
 
-  *out++ = 'q';
-  *out++ = 'M';
+   *out++ = 'q';
+   *out++ = 'M';
 
-  *out++ = gdb_hexchars[(count >> 4) & 0x0f];
-  *out++ = gdb_hexchars[count & 0x0f];
+   *out++ = gdb_hexchars[(count >> 4) & 0x0f];
+   *out++ = gdb_hexchars[count & 0x0f];
 
-  if (done) {
-    *out++ = '1';
-  } else {
-    *out++ = '0';
-  }
+   if (done) {
+      *out++ = '1';
+   } else {
+      *out++ = '0';
+   }
 
-  thread2fhstr(out, athread);
-
-  return;
+   thread2fhstr(out, athread);
+   return;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 void rtems_gdb_process_query( 
@@ -641,6 +701,9 @@ void rtems_gdb_process_query(
       optr    = thread2vhstr(optr, thread);
       *optr   = 0;
       break;
+
+
+
 
     case 'P':
       /* Thread info query */
@@ -669,10 +732,14 @@ void rtems_gdb_process_query(
         /* Build response */
         pack_qq(outbuffer, mask, rthread, &info);
       }
-
       break;
+
+
+
+
+
     case 'L':
-      /* Thread info query */
+      /* Thread list query */
       if (!do_threads) {
         break;
       }
@@ -724,9 +791,14 @@ void rtems_gdb_process_query(
 
         /* Fill header */
         pack_qm_header(outbuffer, i, done, athread);
-
       }
       break;
+
+
+
+
+
+
     default:
       if (memcmp(inbuffer, "qOffsets", 8) == 0) {
         unsigned char *t, *d, *b;
@@ -772,8 +844,12 @@ void rtems_gdb_process_query(
       /*  qCRC, qRcmd, qu and qz will be added here */
       break;
     }
-
 }
+
+
+
+
+
 
 /* Present thread in the variable length string format */
 char*
@@ -1196,6 +1272,7 @@ set_mem_err (void)
    that the compiler won't save any registers (if there is a fault
    to mem_fault, they won't get restored, so there better not be any
    saved).  */
+
 unsigned char 
 get_byte (const unsigned char *addr)
 {
@@ -1207,6 +1284,12 @@ set_byte (unsigned char *addr, int val)
 {
   *addr = val;
 }
+
+
+
+
+
+
 
 
 
@@ -1273,24 +1356,53 @@ int rtems_gdb_stub_get_offsets(
   return 1;
 }
 
+
+
+
+
 #elif defined(__mips__)
+
+
 void rtems_gdb_stub_get_registers_from_context( 
   int            *registers,
   Thread_Control *th
 )
 {
+   registers[S0] = (unsigned)th->Registers.s0;
+   registers[S1] = (unsigned)th->Registers.s1;
+   registers[S2] = (unsigned)th->Registers.s2;
+   registers[S3] = (unsigned)th->Registers.s3;
+   registers[S4] = (unsigned)th->Registers.s4;
+   registers[S5] = (unsigned)th->Registers.s5;
+   registers[S6] = (unsigned)th->Registers.s6;
+   registers[S7] = (unsigned)th->Registers.s7;
+
+   registers[SP] = (unsigned)th->Registers.sp;
+   registers[RA] = (unsigned)th->Registers.ra;
+
+   registers[SR] = (unsigned)th->Registers.c0_sr;
+   registers[PC] = (unsigned)th->Registers.c0_epc;
 }
+
 
 int rtems_gdb_stub_get_offsets(
   unsigned char **text_addr,
   unsigned char **data_addr, 
   unsigned char **bss_addr
 )
-{
+{ 
+/*
+  extern unsigned32 _ftext;
+  extern unsigned32 _fdata;
+  extern unsigned32 _bss_start;
+
+  *text_addr = &_ftext;
+  *data_addr = &_fdata;
+  *bss_addr  = &_bss_start;
+*/
   *text_addr = 0;
   *data_addr = 0;
   *bss_addr  = 0;
-
   return 1;
 }
 

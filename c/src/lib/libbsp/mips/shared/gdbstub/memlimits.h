@@ -12,8 +12,8 @@
  *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#ifndef _LIMITS_H_
-#define _LIMITS_H_
+#ifndef _MEMLIMITS_H_
+#define _MEMLIMITS_H_
 
 /*
  * The macros in this file are specific to a given implementation.
@@ -45,6 +45,7 @@
  * to have different readability and/or writeability attributes.
  */
 
+/*
 #define K0_LIMIT_FOR_READ  (K0BASE+0x18000000)
 #define K1_LIMIT_FOR_READ  (K1BASE+K1SIZE)
 
@@ -67,4 +68,21 @@
   && (((K0BASE <= (int)ptr) && ((int)ptr < K0_LIMIT_FOR_STEP)) \
       || ((K1BASE <= (int)ptr) && ((int)ptr < K1_LIMIT_FOR_STEP))))
 
-#endif  /* _LIMITS_H_ */
+struct memseg
+{
+      unsigned begin, end, opts;
+};
+
+#define MEMOPT_READABLE   1
+#define MEMOPT_WRITEABLE  2
+
+#define NUM_MEMSEGS     10
+
+
+int add_memsegment(unsigned,unsigned,int);
+int is_readable(unsigned,unsigned);
+int is_writeable(unsigned,unsigned);
+int is_steppable(unsigned);
+*/
+
+#endif  /* _MEMLIMITS_H_ */

@@ -123,7 +123,7 @@
 #include <string.h>
 #include <signal.h>
 #include "mips_opcode.h"
-#include "memlimits.h"
+/* #include "memlimits.h" */
 #include <rtems.h>
 #include "gdb_if.h"
 
@@ -208,8 +208,25 @@ static char do_threads;      /* != 0 means we are supporting threads */
  * The following external functions provide character input and output.
  */
 extern char getDebugChar (void);
-
 extern void putDebugChar (char);
+
+
+
+/*
+ * The following definitions are used for the gdb stub memory map
+ */
+struct memseg
+{
+      unsigned begin, end, opts;
+};
+
+static int is_readable(unsigned,unsigned);
+static int is_writeable(unsigned,unsigned);
+static int is_steppable(unsigned);
+
+
+
+
 
 
 /*
@@ -224,6 +241,7 @@ static char outBuffer[BUFMAX];
 
 /* Structure to keep info on a z-breaks */
 #define BREAKNUM 32
+
 struct z0break
 {
   /* List support */
@@ -231,8 +249,8 @@ struct z0break
   struct z0break *prev;
 
   /* Location, preserved data */
-  unsigned char *address;
-  char     buf[2];
+  unsigned *address;
+  unsigned instr;
 };
 
 static struct z0break z0break_arr[BREAKNUM];
@@ -623,6 +641,11 @@ putpacket (char *buffer)
   while  (getDebugChar () != '+');
 }
 
+
+
+
+
+
 
 /*
  * Saved instruction data for single step support
@@ -663,126 +686,132 @@ undoSStep (void)
 static void
 doSStep (void)
 {
-  InstFmt inst;
+   struct z0break *z0;
+   InstFmt inst;
 
-  instrBuffer.targetAddr = (unsigned *)(registers[PC]+4);    /* set default */
+   instrBuffer.targetAddr = (unsigned *)(registers[PC]+4);    /* set default */
 
-  inst.word = *(unsigned *)registers[PC];     /* read the next instruction  */
+   inst.word = *(unsigned *)registers[PC];     /* read the next instruction  */
 
-  switch (inst.RType.op) {                    /* override default if branch */
-    case OP_SPECIAL:
-      switch (inst.RType.func) {
-        case OP_JR:
-        case OP_JALR:
-          instrBuffer.targetAddr =
-            (unsigned *)registers[inst.RType.rs];
-          break;
-      };
-      break;
+   switch (inst.RType.op) {                    /* override default if branch */
+      case OP_SPECIAL:
+         switch (inst.RType.func) {
+            case OP_JR:
+            case OP_JALR:
+               instrBuffer.targetAddr =
+                  (unsigned *)registers[inst.RType.rs];
+               break;
+         };
+         break;
 
-    case OP_REGIMM:
-      switch (inst.IType.rt) {
-        case OP_BLTZ:
-        case OP_BLTZL:
-        case OP_BLTZAL:
-        case OP_BLTZALL:
-          if (registers[inst.IType.rs] < 0 )
+      case OP_REGIMM:
+         switch (inst.IType.rt) {
+            case OP_BLTZ:
+            case OP_BLTZL:
+            case OP_BLTZAL:
+            case OP_BLTZALL:
+               if (registers[inst.IType.rs] < 0 )
+                  instrBuffer.targetAddr =
+                     (unsigned *)(((signed short)inst.IType.imm<<2)
+                                  + (registers[PC]+4));
+               else
+                  instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
+               break;
+            case OP_BGEZ:
+            case OP_BGEZL:
+            case OP_BGEZAL:
+            case OP_BGEZALL:
+               if (registers[inst.IType.rs] >= 0 )
+                  instrBuffer.targetAddr =
+                     (unsigned *)(((signed short)inst.IType.imm<<2)
+                                  + (registers[PC]+4));
+               else
+                  instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
+               break;
+         };
+         break;
+
+      case OP_J:
+      case OP_JAL:
+         instrBuffer.targetAddr =
+            (unsigned *)((inst.JType.target<<2) + ((registers[PC]+4)&0xf0000000));
+         break;
+
+      case OP_BEQ:
+      case OP_BEQL:
+         if (registers[inst.IType.rs] == registers[inst.IType.rt])
             instrBuffer.targetAddr =
-              (unsigned *)(((signed short)inst.IType.imm<<2)
-                                        + (registers[PC]+4));
-          else
+               (unsigned *)(((signed short)inst.IType.imm<<2) + (registers[PC]+4));
+         else
             instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
-          break;
-        case OP_BGEZ:
-        case OP_BGEZL:
-        case OP_BGEZAL:
-        case OP_BGEZALL:
-          if (registers[inst.IType.rs] >= 0 )
+         break;
+      case OP_BNE:
+      case OP_BNEL:
+         if (registers[inst.IType.rs] != registers[inst.IType.rt])
             instrBuffer.targetAddr =
-              (unsigned *)(((signed short)inst.IType.imm<<2)
-                                        + (registers[PC]+4));
-          else
+               (unsigned *)(((signed short)inst.IType.imm<<2) + (registers[PC]+4));
+         else
             instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
-          break;
-      };
-      break;
+         break;
+      case OP_BLEZ:
+      case OP_BLEZL:
+         if (registers[inst.IType.rs] <= 0)
+            instrBuffer.targetAddr =
+               (unsigned *)(((signed short)inst.IType.imm<<2) + (registers[PC]+4));
+         else
+            instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
+         break;
+      case OP_BGTZ:
+      case OP_BGTZL:
+         if (registers[inst.IType.rs] > 0)
+            instrBuffer.targetAddr =
+               (unsigned *)(((signed short)inst.IType.imm<<2) + (registers[PC]+4));
+         else
+            instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
+         break;
 
-    case OP_J:
-    case OP_JAL:
-      instrBuffer.targetAddr =
-        (unsigned *)((inst.JType.target<<2) + ((registers[PC]+4)&0xf0000000));
-      break;
+      case OP_COP1:
+         if (inst.RType.rs == OP_BC)
+            switch (inst.RType.rt) {
+               case COPz_BCF:
+               case COPz_BCFL:
+                  if (registers[FCSR] & CSR_C)
+                     instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
+                  else
+                     instrBuffer.targetAddr =
+                        (unsigned *)(((signed short)inst.IType.imm<<2)
+                                     + (registers[PC]+4));
+                  break;
+               case COPz_BCT:
+               case COPz_BCTL:
+                  if (registers[FCSR] & CSR_C)
+                     instrBuffer.targetAddr =
+                        (unsigned *)(((signed short)inst.IType.imm<<2)
+                                     + (registers[PC]+4));
+                  else
+                     instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
+                  break;
+            };
+         break;
+   }
 
-    case OP_BEQ:
-    case OP_BEQL:
-      if (registers[inst.IType.rs] == registers[inst.IType.rt])
-        instrBuffer.targetAddr =
-          (unsigned *)(((signed short)inst.IType.imm<<2) + (registers[PC]+4));
-      else
-        instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
-      break;
-    case OP_BNE:
-    case OP_BNEL:
-      if (registers[inst.IType.rs] != registers[inst.IType.rt])
-        instrBuffer.targetAddr =
-          (unsigned *)(((signed short)inst.IType.imm<<2) + (registers[PC]+4));
-      else
-        instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
-      break;
-    case OP_BLEZ:
-    case OP_BLEZL:
-      if (registers[inst.IType.rs] <= 0)
-        instrBuffer.targetAddr =
-          (unsigned *)(((signed short)inst.IType.imm<<2) + (registers[PC]+4));
-      else
-        instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
-      break;
-    case OP_BGTZ:
-    case OP_BGTZL:
-      if (registers[inst.IType.rs] > 0)
-        instrBuffer.targetAddr =
-          (unsigned *)(((signed short)inst.IType.imm<<2) + (registers[PC]+4));
-      else
-        instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
-      break;
 
-    case OP_COP1:
-      if (inst.RType.rs == OP_BC)
-          switch (inst.RType.rt) {
-            case COPz_BCF:
-            case COPz_BCFL:
-              if (registers[FCSR] & CSR_C)
-                instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
-              else
-                instrBuffer.targetAddr =
-                  (unsigned *)(((signed short)inst.IType.imm<<2)
-                                            + (registers[PC]+4));
-              break;
-            case COPz_BCT:
-            case COPz_BCTL:
-              if (registers[FCSR] & CSR_C)
-                instrBuffer.targetAddr =
-                  (unsigned *)(((signed short)inst.IType.imm<<2)
-                                            + (registers[PC]+4));
-              else
-                instrBuffer.targetAddr = (unsigned*)(registers[PC]+8);
-              break;
-          };
-      break;
-  }
-
-  if is_steppable (instrBuffer.targetAddr)
-    {
+   if( is_steppable((unsigned)instrBuffer.targetAddr) && *(instrBuffer.targetAddr) != BREAK_INSTR )
+   {
       instrBuffer.savedInstr = *instrBuffer.targetAddr;
       *instrBuffer.targetAddr = BREAK_INSTR;
-    }
-  else
-    {
+   }
+   else
+   {
       instrBuffer.targetAddr = NULL;
       instrBuffer.savedInstr = NOP_INSTR;
-    }
-  return;
+   }
+   return;
 }
+
+
+
+
 
 
 /*
@@ -855,442 +884,587 @@ void gdb_stub_report_exception_info(
   int                  thread
 )
 {
-  char *optr;
-  int sigval;
+   char *optr;
+   int sigval;
 
-  optr = outBuffer;
-  *optr++ = 'T';
-  sigval = computeSignal ();
-  *optr++ = highhex (sigval);
-  *optr++ = lowhex (sigval);
+   optr = outBuffer;
+   *optr++ = 'T';
+   sigval = computeSignal ();
+   *optr++ = highhex (sigval);
+   *optr++ = lowhex (sigval);
 
-  *optr++ = gdb_hexchars[SP];
-  *optr++ = ':';
-  optr    = mem2hstr(optr, (unsigned char *)&frame->sp, R_SZ );
-  *optr++ = ';';
+   *optr++ = highhex(SP); /*gdb_hexchars[SP]; */
+   *optr++ = lowhex(SP);
+   *optr++ = ':';
+   optr    = mem2hstr(optr, (unsigned char *)&frame->sp, R_SZ );
+   *optr++ = ';';
   
-  *optr++ = gdb_hexchars[PC];
-  *optr++ = ':';
-  optr    = mem2hstr(optr, (unsigned char *)&frame->sp, R_SZ );
-  *optr++ = ';';
+   *optr++ = highhex(PC); /*gdb_hexchars[PC]; */
+   *optr++ = lowhex(PC);
+   *optr++ = ':';
+   optr    = mem2hstr(optr, (unsigned char *)&frame->epc, R_SZ );
+   *optr++ = ';';
 
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-  if (do_threads) {
-    *optr++ = 't';
-    *optr++ = 'h';
-    *optr++ = 'r';
-    *optr++ = 'e';
-    *optr++ = 'a';
-    *optr++ = 'd';
-    *optr++ = ':';
-    optr   = thread2vhstr(optr, thread);
-    *optr++ = ';';
-  }
+   if (do_threads) 
+   {
+      *optr++ = 't';
+      *optr++ = 'h';
+      *optr++ = 'r';
+      *optr++ = 'e';
+      *optr++ = 'a';
+      *optr++ = 'd';
+      *optr++ = ':';
+      optr   = thread2vhstr(optr, thread);
+      *optr++ = ';';
+   }
 #endif
-  putpacket (outBuffer);
-  
-  *optr++ = '\0';
+   *optr++ = '\0';
 }
 
 
 
+
+/*
+ * Scratch frame used to retrieve contexts for different threads, so as
+ * not to disrupt our current context on the stack
+ */
+CPU_Interrupt_frame current_thread_registers;
+
+
+
 /*
  * This function handles all exceptions.  It only does two things:
  * it figures out why it was activated and tells gdb, and then it
  * reacts to gdb's requests.
  */
 
-CPU_Interrupt_frame current_thread_registers;
 
 void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
 {
-  int host_has_detached = 0;
-  int regno, addr, length;
-  long long regval;
-  char *ptr;
-  int  current_thread;  /* current generic thread */
-  int  thread;          /* stopped thread: context exception happened in */
-  void *regptr;
-  int  binary;
+   int          host_has_detached = 0;
+   int          regno, addr, length;
+   char         *ptr;
+   int          current_thread;  /* current generic thread */
+   int          thread;          /* stopped thread: context exception happened in */
 
-  registers = (mips_register_t *)frame;
+   long long    regval;
+   void         *regptr;
+   int          binary;
+   
 
-  thread = 0;
+   registers = (mips_register_t *)frame;
+
+   thread = 0;
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-  if (do_threads) {
-    thread = rtems_gdb_stub_get_current_thread();
-  }
+   if (do_threads) {
+      thread = rtems_gdb_stub_get_current_thread();
+   }
 #endif
-  current_thread = thread;
-
-  /* reply to host that an exception has occurred with some basic info */
-  gdb_stub_report_exception_info(vector, frame, thread);
+   current_thread = thread;
 
 
-  /*
-   * Restore the saved instruction at
-   * the single-step target address.
-   */
-  undoSStep ();
+   {
+      /* reapply all breakpoints regardless of how we came in */
+      struct z0break *z0, *zother;
 
-  while (!(host_has_detached)) {
+      for (zother=z0break_list; zother!=NULL; zother=zother->next) 
+      {
+         if( zother->instr == 0xffffffff )
+         {
+            /* grab the instruction */
+            zother->instr = *(zother->address);
+            /* and insert the breakpoint */
+            *(zother->address) = BREAK_INSTR;
+         }
+      }
+
+
+
+      /* see if we're coming from a breakpoint */
+      if( *((unsigned *)frame->epc) == BREAK_INSTR )
+      {
+         /* see if its one of our zbreaks */
+         for (z0=z0break_list; z0!=NULL; z0=z0->next) 
+         {
+            if( (unsigned)z0->address == frame->epc) 
+               break;
+         }
+         if( z0 )
+         {
+            /* restore the original instruction */
+            *(z0->address) = z0->instr;
+            /* flag the breakpoint */
+            z0->instr = 0xffffffff;
+
+            /* 
+               now when we return, we'll execute the original code in
+               the original state.  This leaves our breakpoint inactive
+               since the break instruction isn't there, but we'll reapply
+               it the next time we come in via step or breakpoint
+            */
+         }
+         else
+         {
+            /* not a zbreak, see if its our trusty stepping code */
+
+            /*
+             * Restore the saved instruction at
+             * the single-step target address.
+             */
+            undoSStep();
+         }
+      }
+   }
+
+
+
+
+
+   /* reply to host that an exception has occurred with some basic info */
+   gdb_stub_report_exception_info(vector, frame, thread);
+   putpacket (outBuffer);
+
+
+
+   while (!(host_has_detached)) {
       outBuffer[0] = '\0';
       getpacket (inBuffer);
       binary = 0;
 
       switch (inBuffer[0]) {
-        case '?':
-          gdb_stub_report_exception_info(vector, frame, thread);
-          break;
+         case '?':
+            gdb_stub_report_exception_info(vector, frame, thread);
+            break;
 
-        case 'd': /* toggle debug flag */
-          /* can print ill-formed commands in valid packets & checksum errors */
-          break;
+         case 'd': /* toggle debug flag */
+            /* can print ill-formed commands in valid packets & checksum errors */
+            break;
 
-        case 'D':
-          /* remote system is detaching - return OK and exit from debugger */
-          strcpy (outBuffer, "OK");
-          host_has_detached = 1;
-          break;
+         case 'D':
+            /* remote system is detaching - return OK and exit from debugger */
+            strcpy (outBuffer, "OK");
+            host_has_detached = 1;
+            break;
 
-        case 'g':               /* return the values of the CPU registers */
-          regptr = registers;
+         case 'g':               /* return the values of the CPU registers */
+            regptr = registers;
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-          if (do_threads && current_thread != thread )
-             regptr = &current_thread_registers;
+            if (do_threads && current_thread != thread )
+               regptr = &current_thread_registers;
 #endif
-          mem2hex (regptr, NUM_REGS * (sizeof registers), outBuffer);
+            mem2hex (regptr, NUM_REGS * (sizeof registers), outBuffer);
+            break;
 
-          break;
 
-        case 'G':       /* set the values of the CPU registers - return OK */
-          regptr = registers;
+         case 'G':       /* set the values of the CPU registers - return OK */
+            regptr = registers;
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-          if (do_threads && current_thread != thread )
-             regptr = &current_thread_registers;
+            if (do_threads && current_thread != thread )
+               regptr = &current_thread_registers;
 #endif
-          if (hex2mem (&inBuffer[1], regptr, NUM_REGS * (sizeof registers)))
-              strcpy (outBuffer, "OK");
-          else
-              strcpy (outBuffer, "E00"); /* E00 = bad "set register" command */
-          break;
+            if (hex2mem (&inBuffer[1], regptr, NUM_REGS * (sizeof registers)))
+               strcpy (outBuffer, "OK");
+            else
+               strcpy (outBuffer, "E00"); /* E00 = bad "set register" command */
+            break;
 
-        case 'P':
-          /* Pn...=r...  Write register n... with value r... - return OK */
-          ptr = &inBuffer[1];
-          if (hexToInt(&ptr, &regno) &&
-              *ptr++ == '=' &&
-              hexToLongLong(&ptr, &regval))
+
+         case 'P':
+            /* Pn...=r...  Write register n... with value r... - return OK */
+            ptr = &inBuffer[1];
+            if (hexToInt(&ptr, &regno) &&
+                *ptr++ == '=' &&
+                hexToLongLong(&ptr, &regval))
             {
-              registers[regno] = regval;
-              strcpy (outBuffer, "OK");
+               registers[regno] = regval;
+               strcpy (outBuffer, "OK");
             }
-          else
-              strcpy (outBuffer, "E00"); /* E00 = bad "set register" command */
-          break;
+            else
+               strcpy (outBuffer, "E00"); /* E00 = bad "set register" command */
+            break;
 
-        case 'm':
-          /* mAA..AA,LLLL  Read LLLL bytes at address AA..AA */
-          ptr = &inBuffer[1];
-          if (hexToInt (&ptr, &addr)
-              && *ptr++ == ','
-              && hexToInt (&ptr, &length)
-              && is_readable (addr, length)
-              && (length < (BUFMAX - 4)/2))
-            mem2hex ((void *)addr, length, outBuffer);
-          else
-            strcpy (outBuffer, "E01"); /* E01 = bad 'm' command */
-          break;
 
-        case 'X':  /* XAA..AA,LLLL:<binary data>#cs */
-          binary = 1;
-        case 'M':
-          /* MAA..AA,LLLL:  Write LLLL bytes at address AA..AA - return OK */
-          ptr = &inBuffer[1];
-          if (hexToInt (&ptr, &addr)
-              && *ptr++ == ','
-              && hexToInt (&ptr, &length)
-              && *ptr++ == ':'
-              && is_writeable (addr, length) ) {
-              if ( binary )
-		hex2mem (ptr, (void *)addr, length);
-	      else
-		bin2mem (ptr, (void *)addr, length);
-              strcpy (outBuffer, "OK");
-          }
-          else
-            strcpy (outBuffer, "E02"); /* E02 = bad 'M' command */
-          break;
+         case 'm':
+            /* mAA..AA,LLLL  Read LLLL bytes at address AA..AA */
+            ptr = &inBuffer[1];
+            if (hexToInt (&ptr, &addr)
+                && *ptr++ == ','
+                && hexToInt (&ptr, &length)
+                && is_readable (addr, length)
+                && (length < (BUFMAX - 4)/2))
+               mem2hex ((void *)addr, length, outBuffer);
+            else
+               strcpy (outBuffer, "E01"); /* E01 = bad 'm' command */
+            break;
 
-        case 'c':
-          /* cAA..AA    Continue at address AA..AA(optional) */
-        case 's':
-          /* sAA..AA    Step one instruction from AA..AA(optional) */
-          {
+
+         case 'X':  /* XAA..AA,LLLL:<binary data>#cs */
+            binary = 1;
+         case 'M':
+            /* MAA..AA,LLLL:  Write LLLL bytes at address AA..AA - return OK */
+            ptr = &inBuffer[1];
+            if (hexToInt (&ptr, &addr)
+                && *ptr++ == ','
+                && hexToInt (&ptr, &length)
+                && *ptr++ == ':'
+                && is_writeable (addr, length) ) {
+               if ( binary )
+                  hex2mem (ptr, (void *)addr, length);
+               else
+                  bin2mem (ptr, (void *)addr, length);
+               strcpy (outBuffer, "OK");
+            }
+            else
+               strcpy (outBuffer, "E02"); /* E02 = bad 'M' command */
+            break;
+
+
+
+         case 'c':
+            /* cAA..AA    Continue at address AA..AA(optional) */
+         case 's':
+            /* sAA..AA    Step one instruction from AA..AA(optional) */
+         {
             /* try to read optional parameter, pc unchanged if no parm */
             ptr = &inBuffer[1];
             if (hexToInt (&ptr, &addr))
-              registers[PC] = addr;
+               registers[PC] = addr;
 
             if (inBuffer[0] == 's')
-              doSStep ();
-          }
-          return;
+               doSStep ();
+         }
+         goto stubexit;
 
-        case 'k':  /* remove all zbreaks if any */
-          {
-            int ret;
-            struct z0break *z0, *z0last;
 
-            ret = 1;
-            z0last = NULL;
 
-            for (z0=z0break_list; z0!=NULL; z0=z0->next) {
-                if (!hstr2mem(z0->address, z0->buf, 1)) {
-                   ret = 0;
-                }
 
-                z0last = z0;
+
+         case 'k':  /* remove all zbreaks if any */
+        dumpzbreaks:
+         {
+            {
+               /* Unlink the entire list */
+               struct z0break *z0, *znxt;
+
+               while( (z0= z0break_list) )
+               {
+
+                  /* put back the instruction */
+                  if( z0->instr != 0xffffffff )
+                     *(z0->address) = z0->instr;
+
+                  /* pop off the top entry */
+                  znxt = z0->next;
+                  if( znxt ) znxt->prev = NULL;
+                  z0break_list = znxt;
+
+                  /* and put it on the free list */
+                  z0->prev = NULL;
+                  z0->next = z0break_avail;
+                  z0break_avail = z0;
+               }
             }
 
-            /* Free entries if any */
-            if (z0last != NULL) {
-              z0last->next  = z0break_avail;
-              z0break_avail = z0break_list;
-              z0break_list  = NULL;
-            }
-          }
+            strcpy(outBuffer, "OK");
+         }
+         break;
 
-          break;
 
-        case 'q':   /* queries */
+
+
+
+         case 'q':   /* queries */
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-          rtems_gdb_process_query( inBuffer, outBuffer, do_threads, thread );
+            rtems_gdb_process_query( inBuffer, outBuffer, do_threads, thread );
 #endif
-          break;
+            break;
+
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+         case 'T':
+         {
+            int testThread;
+
+            if( vhstr2thread(&inBuffer[1], &testThread) == NULL ) 
+            {
+               strcpy(outBuffer, "E01");
+               break;
+            }
+
+            if( rtems_gdb_index_to_stub_id(testThread) == NULL )
+            {
+               strcpy(outBuffer, "E02");
+            }
+            else
+            {
+               strcpy(outBuffer, "OK");
+            }
+         }
+         break;
+#endif
         
-        case 'H':  /* set new thread */
+         case 'H':  /* set new thread */
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-	  if (inBuffer[1] != 'g') {
-	    break;
-	  }
+            if (inBuffer[1] != 'g') {
+               break;
+            }
 	  
-	  if (!do_threads) {
-	    break;
-	  }
+            if (!do_threads) {
+               break;
+            }
 	  
-	  {
-	    int tmp, ret;
+            {
+               int tmp, ret;
 	    
-	    /* Set new generic thread */
-	    if (vhstr2thread(&inBuffer[2], &tmp) == NULL) {
-	      strcpy(outBuffer, "E01");
-	      break;
-	    }
+               /* Set new generic thread */
+               if (vhstr2thread(&inBuffer[2], &tmp) == NULL) {
+                  strcpy(outBuffer, "E01");
+                  break;
+               }
 
-	    /* 0 means `thread' */
-	    if (tmp == 0) {
-	      tmp = thread;
-	    }
+               /* 0 means `thread' */
+               if (tmp == 0) {
+                  tmp = thread;
+               }
 
-            if (tmp == current_thread) {
-              /* No changes */
-	      strcpy(outBuffer, "OK");
-	      break;
-	    }
+               if (tmp == current_thread) {
+                  /* No changes */
+                  strcpy(outBuffer, "OK");
+                  break;
+               }
 
-            /* Save current thread registers if necessary */ 
-            if (current_thread != thread) {
-              ret = rtems_gdb_stub_set_thread_regs(
-                   current_thread, (unsigned int *) &current_thread_registers);
-	      ASSERT(ret);
-	    }
+               /* Save current thread registers if necessary */ 
+               if (current_thread != thread) {
+                  ret = rtems_gdb_stub_set_thread_regs(
+                     current_thread, (unsigned int *) &current_thread_registers);
+                  ASSERT(ret);
+               }
 
-	    /* Read new registers if necessary */
-	    if (tmp != thread) {
-		ret = rtems_gdb_stub_get_thread_regs(
-                    tmp, (unsigned int *) &current_thread_registers);
+               /* Read new registers if necessary */
+               if (tmp != thread) {
+                  ret = rtems_gdb_stub_get_thread_regs(
+                     tmp, (unsigned int *) &current_thread_registers);
 
-		if (!ret) {
-		  /* Thread does not exist */
-		  strcpy(outBuffer, "E02");
-		  break;
-		}
-	    }
+                  if (!ret) {
+                     /* Thread does not exist */
+                     strcpy(outBuffer, "E02");
+                     break;
+                  }
+               }
 	    
-	    current_thread = tmp;
-	    strcpy(outBuffer, "OK");
-	  }
-
+               current_thread = tmp;
+               strcpy(outBuffer, "OK");
+            }
 #endif
-          break;
+            break;
 
-        case 'Z':  /* Add breakpoint */
-          { 
+
+
+
+         case 'Z':  /* Add breakpoint */
+         { 
             int ret, type, len;
-            unsigned char *address;
+            unsigned *address;
             struct z0break *z0;
 
             ret = parse_zbreak(inBuffer, &type, &address, &len);
             if (!ret) {
-              strcpy(outBuffer, "E01");
-              break;
+               strcpy(outBuffer, "E01");
+               break;
             }
 
             if (type != 0) {
-              /* We support only software break points so far */
-              break;
+               /* We support only software break points so far */
+               strcpy(outBuffer, "E02");
+               break;
             }
 
-            if (len != 1) {
-               strcpy(outBuffer, "E02");
+            if (len != R_SZ) {     /* was 1 */
+               strcpy(outBuffer, "E03");
                break;
             }
 
             /* Let us check whether this break point already set */
             for (z0=z0break_list; z0!=NULL; z0=z0->next) {
-                if (z0->address == address) {
+               if (z0->address == address) {
                   break;
-                }
+               }
             }
 
             if (z0 != NULL) {
-              /* Repeated packet */
-              strcpy(outBuffer, "OK");
-              break;
+               /* we already have a breakpoint for this address */
+               strcpy(outBuffer, "E04");
+               break;
             }
 
             /* Let us allocate new break point */
             if (z0break_avail == NULL) {
-              strcpy(outBuffer, "E03");
-              break;
+               strcpy(outBuffer, "E05");
+               break;
             }
+
 
             /* Get entry */
             z0 = z0break_avail;
             z0break_avail = z0break_avail->next;
 
             /* Let us copy memory from address add stuff the break point in */
-            if (mem2hstr(z0->buf, address, 1) == NULL ||
-                !hstr2mem(address, "cc" , 1)) {
-              /* Memory error */
-              z0->next = z0break_avail;
-              z0break_avail = z0;
-              strcpy(outBuffer, "E03");
-              break;
-            }
+            /*
+            *if (mem2hstr(z0->buf, address, 1) == NULL ||
+              !hstr2mem(address, "cc" , 1)) { 
+
+               * Memory error *
+               z0->next = z0break_avail;
+               z0break_avail = z0;
+               strcpy(outBuffer, "E05");
+               break;
+            }*/
 
             /* Fill it */
             z0->address = address;
 
-            /* Add to the list */
-            z0->next = z0break_list;
-            z0->prev = NULL;
-
-            if (z0break_list != NULL) {
-              z0break_list->prev = z0;
+            if( z0->address == frame->epc )
+            {
+               /* re-asserting the breakpoint that put us in here, so
+               we'll add the breakpoint but leave the code in place
+               since we'll be returning to it when the user continues */
+               z0->instr = 0xffffffff;
+            }
+            else
+            {
+               /* grab the instruction */
+               z0->instr = *(z0->address);
+               /* and insert the break */
+               *(z0->address) = BREAK_INSTR;
             }
 
-            z0break_list = z0;
+            /* Add to the list */
+            {
+               struct z0break *znxt = z0break_list;
+
+               z0->prev = NULL;
+               z0->next = znxt;
+               
+               if( znxt ) znxt->prev = z0;
+               z0break_list = z0;
+            }
 
             strcpy(outBuffer, "OK");
-          }
+         }
+         break;
 
-        case 'z': /* remove breakpoint */
-	  {
-	    int ret, type, len;
-	    unsigned char  *address;
-	    struct z0break *z0, *z0last;
 
-            if (inBuffer[1] == 'z') {
-                /* zz packet - remove all breaks */
-                ret = 1;
+         case 'z': /* remove breakpoint */
+            if (inBuffer[1] == 'z') 
+            {
+               goto dumpzbreaks;
+               
+
+               /*
+                * zz packet - remove all breaks *
                 z0last = NULL;
-	        for (z0=z0break_list; z0!=NULL; z0=z0->next) {
-	            if(!hstr2mem(z0->address, z0->buf, 1)) {
-                        ret = 0;
-                      }
-                     
-                     z0last = z0;
-                   }
 
-                /* Free entries if any */
+                for (z0=z0break_list; z0!=NULL; z0=z0->next) 
+                {
+                if(!hstr2mem(z0->address, z0->buf, R_SZ)) 
+                {
+                ret = 0;
+                }
+                z0last = z0;
+                }
+
+                * Free entries if any *
                 if (z0last != NULL) {
-                    z0last->next  = z0break_avail;
-                    z0break_avail = z0break_list;
-                    z0break_list  = NULL;
-                  }
+                z0last->next  = z0break_avail;
+                z0break_avail = z0break_list;
+                z0break_list  = NULL;
+                }
 
                 if (ret) {
-	          strcpy(outBuffer, "OK");
+                strcpy(outBuffer, "OK");
                 } else {
-	          strcpy(outBuffer, "E04");
-	        }
-
+                strcpy(outBuffer, "E04");
+                }
                 break;
-              }
-              
-	    ret = parse_zbreak(inBuffer, &type, &address, &len);
-	    if (!ret) {
-		strcpy(outBuffer, "E01");
-		break;
-	      }
-	    
-	    if (type != 0) {
-	      /* We support only software break points so far */
-	      break;
-	    }
-
-            if (len != 1) {
-              strcpy(outBuffer, "E02");
-              break;
+               */
             }
-	   
-	    /* Let us check whether this break point set */
-	    for (z0=z0break_list; z0!=NULL; z0=z0->next) {
-	      if (z0->address == address) {
-		break;
-	      }
-	    }
+            else
+            {
+               int ret, type, len;
+               unsigned   *address;
+               struct z0break *z0;
               
-	    if (z0 == NULL) {
-	      /* Unknown breakpoint */
-	      strcpy(outBuffer, "E03");
-	      break;
-	    }
+               ret = parse_zbreak(inBuffer, &type, &address, &len);
+               if (!ret) {
+                  strcpy(outBuffer, "E01");
+                  break;
+               }
+
+               if (type != 0) {
+                  /* We support only software break points so far */
+                  break;
+               }
+
+               if (len != R_SZ) {
+                  strcpy(outBuffer, "E02");
+                  break;
+               }
+	   
+               /* Let us check whether this break point set */
+               for (z0=z0break_list; z0!=NULL; z0=z0->next) {
+                  if (z0->address == address) {
+                     break;
+                  }
+               }
+              
+               if (z0 == NULL) {
+                  /* Unknown breakpoint */
+                  strcpy(outBuffer, "E03");
+                  break;
+               }
 	    
-	    if (!hstr2mem(z0->address, z0->buf, 1)) {
-	      strcpy(outBuffer, "E04");
-	      break;
-	    }
+               /*
+               if (!hstr2mem(z0->address, z0->buf, R_SZ)) {
+                  strcpy(outBuffer, "E04");
+                  break;
+                  }*/
+
+               if( z0->instr != 0xffffffff )
+               {
+                  /* put the old instruction back  */
+                  *(z0->address) = z0->instr;
+               }
    
-	    /* Unlink entry */
-	    if (z0->prev == NULL) {
-	      z0break_list = z0->next;
-	      if (z0break_list != NULL) {
-	        z0break_list->prev = NULL;
-	      }
-	    } else if (z0->next == NULL) {
-	      z0->prev->next = NULL;
-            } else {
-	      z0->prev->next = z0->next;
-	      z0->next->prev = z0->prev;
-	   }
+               /* Unlink entry */
+               {
+                  struct z0break *zprv = z0->prev, *znxt = z0->next;
 
-	   z0->next = z0break_avail;
-	   z0break_avail = z0;
-	    
-	   strcpy(outBuffer, "OK");
-	 }
+                  if( zprv ) zprv->next = znxt;
+                  if( znxt ) znxt->prev = zprv;
 
-          break;
-        default: /* do nothing */
-          break;
+                  if( !zprv ) z0break_list = znxt;
+
+                  znxt = z0break_avail;
+
+                  z0break_avail = z0;
+                  z0->prev = NULL;
+                  z0->next = znxt;
+               }
+    
+               strcpy(outBuffer, "OK");
+            }
+            break;
+
+
+         default: /* do nothing */
+            break;
       }
 
       /* reply to the request */
       putpacket (outBuffer);
-    }
+   }
+
+  stubexit:
 
    /*
     *  The original code did this in the assembly wrapper.  We should consider
@@ -1299,15 +1473,115 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
     *  On exit from the exception handler invalidate each line in the I-cache
     *  and write back each dirty line in the D-cache.  This needs to be done
     *  before the target program is resumed in order to ensure that software
-    *  breakpoints and downloaded code will actually take effect.
+    *  breakpoints and downloaded code will actually take effect.  This
+    *  is because modifications to code in ram will affect the D-cache,
+    *  but not necessarily the I-cache.
     */
 
-  return;
+   {
+      extern void clear_cache();
+      clear_cache();
+   }
+
+   return;
 }
 
-static char initialized;   /* 0 means we are not initialized */
 
-void mips_gdb_stub_install(void) 
+
+
+
+
+
+
+
+
+static int numsegs;
+static struct memseg   memsegments[NUM_MEMSEGS];
+
+int gdbstub_add_memsegment( unsigned base, unsigned end, int opts )
+{
+   if( numsegs == NUM_MEMSEGS ) return -1;
+
+   memsegments[numsegs].begin = base;
+   memsegments[numsegs].end   = end;
+   memsegments[numsegs].opts   = opts;
+
+   ++numsegs;
+   return RTEMS_SUCCESSFUL;
+}
+
+
+
+
+static int is_readable(unsigned ptr, unsigned len)
+{
+   struct memseg *ms;
+   int i;
+
+   if( (ptr & 0x3) ) return -1;
+
+   for(i=0; i<numsegs; i++)
+   {
+      ms= &memsegments[i];
+
+      if( ms->begin <= ptr && ptr+len <= ms->end && (ms->opts & MEMOPT_READABLE) )
+         return -1;
+   }
+   return 0;
+}
+
+
+static int is_writeable(unsigned ptr, unsigned len)
+{
+   struct memseg *ms;
+   int i;
+
+   if( (ptr & 0x3) ) return -1;
+
+   for(i=0; i<numsegs; i++)
+   {
+      ms= &memsegments[i];
+
+      if( ms->begin <= ptr && ptr+len <= ms->end && (ms->opts & MEMOPT_WRITEABLE) )
+         return -1;
+   }
+   return 0;
+}
+
+
+static int is_steppable(unsigned ptr)
+{
+   struct memseg *ms;
+   int i;
+
+   if( (ptr & 0x3) ) return -1;
+
+   for(i=0; i<numsegs; i++)
+   {
+      ms= &memsegments[i];
+
+      if( ms->begin <= ptr && ptr <= ms->end && (ms->opts & MEMOPT_WRITEABLE) )
+         return -1;
+   }
+   return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static char initialized = 0;   /* 0 means we are not initialized */
+
+void mips_gdb_stub_install(int enableThreads) 
 {
    /*
      These are the RTEMS-defined vectors for all the MIPS exceptions
@@ -1334,20 +1608,37 @@ void mips_gdb_stub_install(void)
    int  i;
    rtems_isr_entry old;
 
-   if (initialized) {
+   if (initialized) 
+   {
       ASSERT(0);
       return;
    }
 
-   /* z0breaks */
-   for (i=0; i<(sizeof(z0break_arr)/sizeof(z0break_arr[0]))-1; i++) {
-      z0break_arr[i].next = &z0break_arr[i+1];
-   }
+   memset( memsegments,0,sizeof(struct memseg)*NUM_MEMSEGS );
+   numsegs = 0;
 
-   z0break_arr[i].next = NULL;
-   z0break_avail       = &z0break_arr[0];
-   z0break_list        = NULL;
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+   if( enableThreads )
+      do_threads = 1;
+   else
+      do_threads = 0;
+#endif
 
+   {
+      struct z0break *z0;
+
+      z0break_avail = NULL;
+      z0break_list  = NULL;
+   
+      /* z0breaks list init, now we'll do it so it makes sense... */
+      for (i=0; i<BREAKNUM; i++) 
+      {
+         memset( (z0= &z0break_arr[i]), 0, sizeof(struct z0break));
+
+         z0->next = z0break_avail;
+         z0break_avail = z0;
+      }
+   }     
 
    for(i=0; exceptionVector[i] > -1; i++)
    {
@@ -1355,8 +1646,9 @@ void mips_gdb_stub_install(void)
    }
 
    initialized = 1;
+
    /* get the attention of gdb */
-   mips_break(1);
+   /* mips_break(1);  disabled so user code can choose to invoke it or not */
 }
 
 

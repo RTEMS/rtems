@@ -1,3 +1,16 @@
+2001-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* mips-stub.c: Debugged & tweaked the gdb command processing,
+	zbreak stuff, breakpoint and step code.  Implemented 'T' command
+	support and debugged remote gdb support w/ the Mongoose bsp.
+	Added the memory segment support.
+	* memlimits.h: Disabled all contents in favor of memory sement
+	support.  This file could probably go away.
+	* rtems-stub-glue.c (rtems_gdb_index_to_stub_id()): New routine.
+	rtems_gdb_stub_get_register_from_context(): Implemented MIPS version.
+	rtems_gdb_stub_get_offsets(): Implemented MIPS version.
+	* README: Updated.
+
 2001-03-01	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Corrected previous entry. 
