@@ -30,5 +30,3 @@ CLOBBER_ADDITIONS +=
 all:	$(SRCS)
 	$(INSTALL) -m 444 $(H_FILES) ${PROJECT_RELEASE}/include
 	$(INSTALL) -m 444 $(EQ_FILES) ${PROJECT_RELEASE}/include
-
-install:  all
