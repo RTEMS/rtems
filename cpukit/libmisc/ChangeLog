@@ -1,3 +1,11 @@
+2001-01-05	Joel Sherrill <joel@OARcorp.com>
+
+	* devnull: New addition.  Moved from libcpu/sh.
+	* devnull/devnull.c, devnull/devnull.h, devnull/.cvsignore, 
+	devnull/Makefile.am: New files.
+	* Makefile.am, configure.in, wrapup/Makefile.am: Modified to reflect
+	addition of above.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* mw-fb/mw_uid.c: Removed unnecessary dependency on <bsp.h>.

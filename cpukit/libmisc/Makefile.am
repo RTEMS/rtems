@@ -5,7 +5,8 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
-SUBDIRS = dummy dumpbuf stackchk monitor cpuuse rtmonuse untar mw-fb wrapup
+SUBDIRS = devnull dummy dumpbuf stackchk monitor cpuuse rtmonuse untar \
+    mw-fb wrapup
 
 EXTRA_DIST = README
 

@@ -33,6 +33,7 @@ AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 AC_OUTPUT(
 Makefile
 cpuuse/Makefile
+devnull/Makefile
 dummy/Makefile
 dumpbuf/Makefile
 monitor/Makefile
