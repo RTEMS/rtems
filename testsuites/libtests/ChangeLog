@@ -1,3 +1,7 @@
+2001-10-25	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems++/Makefile.am: Pick up -lrtems++ even when debug.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
