@@ -42,7 +42,7 @@ void Send_messages( void );
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* variables */
 

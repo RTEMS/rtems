@@ -42,7 +42,7 @@ rtems_timer_service_routine Delayed_send_event(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* variables */
 

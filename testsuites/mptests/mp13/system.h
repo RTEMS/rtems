@@ -44,7 +44,7 @@ rtems_task Test_task2(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* variables */
 

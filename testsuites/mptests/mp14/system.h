@@ -72,7 +72,7 @@ void Exit_test( void );
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (1 * RTEMS_MINIMUM_STACK_SIZE)
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* variables */
 

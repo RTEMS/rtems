@@ -1,3 +1,20 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* mp01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp02/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp03/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp04/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp05/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp06/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp07/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp08/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp09/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp10/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp11/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp12/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp13/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* mp14/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* mp02/task1.c, mp03/system.h, mp03/task1.c, mp04/task1.c,
