@@ -405,7 +405,7 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
   0x48000002            /* ba    PROC (_ISR_Handler)            */
 };
 
-#ifdef mpc860
+#if defined(mpc860) || defined(mpc821)
 const CPU_Trap_table_entry _CPU_Trap_slot_template_m860 = {
   0x7c0803ac,           /* mtlr  %r0                            */
   0x81210028,           /* lwz   %r9, IP_9(%r1)                 */
@@ -497,7 +497,7 @@ void _CPU_ISR_install_raw_handler(
  *  and CPM. Therefore we must check for the alternate one if the standard
  *  one is not present
  */
-#ifdef mpc860
+#if defined(mpc860) || defined(mpc821)
   if (slot->stwu_r1 == _CPU_Trap_slot_template_m860.stwu_r1) {
     /* 
      * Set u32_handler = to target address  
@@ -512,8 +512,8 @@ void _CPU_ISR_install_raw_handler(
   /*
    *  Copy the template to the slot and then fix it.
    */
-#ifdef mpc860
-  if (vector > PPC_STD_IRQ_LAST)
+#if defined(mpc860) || defined(mpc821)
+  if (vector >= PPC_IRQ_IRQ0)
     *slot = _CPU_Trap_slot_template_m860;
   else
 #endif /* mpc860 */
@@ -672,150 +672,177 @@ unsigned32  ppc_exception_vector_addr(
       Offset = 0x1400;
       break;
 
-#elif defined(mpc860)
-    case PPC_IRQ_IRQ0:
+#elif defined(mpc860) || defined(mpc821)
+    case PPC_IRQ_EMULATE:
       Offset = 0x1000;
       break;
-    case PPC_IRQ_LVL0:
-      Offset = 0x1040;
-      break;
-    case PPC_IRQ_IRQ1:
-      Offset = 0x1080;
-      break;
-    case PPC_IRQ_LVL1:
-      Offset = 0x10c0;
-      break;
-    case PPC_IRQ_IRQ2:
+    case PPC_IRQ_INST_MISS:
       Offset = 0x1100;
       break;
-    case PPC_IRQ_LVL2:
-      Offset = 0x1140;
-      break;
-    case PPC_IRQ_IRQ3:
-      Offset = 0x1180;
-      break;
-    case PPC_IRQ_LVL3:
-      Offset = 0x11c0;
-      break;
-    case PPC_IRQ_IRQ4:
+    case PPC_IRQ_DATA_MISS:
       Offset = 0x1200;
       break;
-    case PPC_IRQ_LVL4:
-      Offset = 0x1240;
-      break;
-    case PPC_IRQ_IRQ5:
-      Offset = 0x1280;
-      break;
-    case PPC_IRQ_LVL5:
-      Offset = 0x12c0;
-      break;
-    case PPC_IRQ_IRQ6:
+    case PPC_IRQ_INST_ERR:
       Offset = 0x1300;
       break;
-    case PPC_IRQ_LVL6:
-      Offset = 0x1340;
-      break;
-    case PPC_IRQ_IRQ7:
-      Offset = 0x1380;
-      break;
-    case PPC_IRQ_LVL7:
-      Offset = 0x13c0;
-      break;
-    case PPC_IRQ_CPM_RESERVED_0:
+    case PPC_IRQ_DATA_ERR:
       Offset = 0x1400;
       break;
+    case PPC_IRQ_DATA_BPNT:
+      Offset = 0x1c00;
+      break;
+    case PPC_IRQ_INST_BPNT:
+      Offset = 0x1d00;
+      break;
+    case PPC_IRQ_IO_BPNT:
+      Offset = 0x1e00;
+      break;
+    case PPC_IRQ_DEV_PORT:
+      Offset = 0x1f00;
+      break;
+    case PPC_IRQ_IRQ0:
+      Offset = 0x2000;
+      break;
+    case PPC_IRQ_LVL0:
+      Offset = 0x2040;
+      break;
+    case PPC_IRQ_IRQ1:
+      Offset = 0x2080;
+      break;
+    case PPC_IRQ_LVL1:
+      Offset = 0x20c0;
+      break;
+    case PPC_IRQ_IRQ2:
+      Offset = 0x2100;
+      break;
+    case PPC_IRQ_LVL2:
+      Offset = 0x2140;
+      break;
+    case PPC_IRQ_IRQ3:
+      Offset = 0x2180;
+      break;
+    case PPC_IRQ_LVL3:
+      Offset = 0x21c0;
+      break;
+    case PPC_IRQ_IRQ4:
+      Offset = 0x2200;
+      break;
+    case PPC_IRQ_LVL4:
+      Offset = 0x2240;
+      break;
+    case PPC_IRQ_IRQ5:
+      Offset = 0x2280;
+      break;
+    case PPC_IRQ_LVL5:
+      Offset = 0x22c0;
+      break;
+    case PPC_IRQ_IRQ6:
+      Offset = 0x2300;
+      break;
+    case PPC_IRQ_LVL6:
+      Offset = 0x2340;
+      break;
+    case PPC_IRQ_IRQ7:
+      Offset = 0x2380;
+      break;
+    case PPC_IRQ_LVL7:
+      Offset = 0x23c0;
+      break;
+    case PPC_IRQ_CPM_RESERVED_0:
+      Offset = 0x2400;
+      break;
     case PPC_IRQ_CPM_PC4:
-      Offset = 0x1410;
+      Offset = 0x2410;
       break;
     case PPC_IRQ_CPM_PC5:
-      Offset = 0x1420;
+      Offset = 0x2420;
       break;
     case PPC_IRQ_CPM_SMC2:
-      Offset = 0x1430;
+      Offset = 0x2430;
       break;
     case PPC_IRQ_CPM_SMC1:
-      Offset = 0x1440;
+      Offset = 0x2440;
       break;
     case PPC_IRQ_CPM_SPI:
-      Offset = 0x1450;
+      Offset = 0x2450;
       break;
     case PPC_IRQ_CPM_PC6:
-      Offset = 0x1460;
+      Offset = 0x2460;
       break;
     case PPC_IRQ_CPM_TIMER4:
-      Offset = 0x1470;
+      Offset = 0x2470;
       break;
     case PPC_IRQ_CPM_RESERVED_8:
-      Offset = 0x1480;
+      Offset = 0x2480;
       break;
     case PPC_IRQ_CPM_PC7:
-      Offset = 0x1490;
+      Offset = 0x2490;
       break;
     case PPC_IRQ_CPM_PC8:
-      Offset = 0x14a0;
+      Offset = 0x24a0;
       break;
     case PPC_IRQ_CPM_PC9:
-      Offset = 0x14b0;
+      Offset = 0x24b0;
       break;
     case PPC_IRQ_CPM_TIMER3:
-      Offset = 0x14c0;
+      Offset = 0x24c0;
       break;
     case PPC_IRQ_CPM_RESERVED_D:
-      Offset = 0x14d0;
+      Offset = 0x24d0;
       break;
     case PPC_IRQ_CPM_PC10:
-      Offset = 0x14e0;
+      Offset = 0x24e0;
       break;
     case PPC_IRQ_CPM_PC11:
-      Offset = 0x14f0;
+      Offset = 0x24f0;
       break;
     case PPC_IRQ_CPM_I2C:
-      Offset = 0x1500;
+      Offset = 0x2500;
       break;
     case PPC_IRQ_CPM_RISC_TIMER:
-      Offset = 0x1510;
+      Offset = 0x2510;
       break;
     case PPC_IRQ_CPM_TIMER2:
-      Offset = 0x1520;
+      Offset = 0x2520;
       break;
     case PPC_IRQ_CPM_RESERVED_13:
-      Offset = 0x1530;
+      Offset = 0x2530;
       break;
     case PPC_IRQ_CPM_IDMA2:
-      Offset = 0x1540;
+      Offset = 0x2540;
       break;
     case PPC_IRQ_CPM_IDMA1:
-      Offset = 0x1550;
+      Offset = 0x2550;
       break;
     case PPC_IRQ_CPM_SDMA_ERROR:
-      Offset = 0x1560;
+      Offset = 0x2560;
       break;
     case PPC_IRQ_CPM_PC12:
-      Offset = 0x1570;
+      Offset = 0x2570;
       break;
     case PPC_IRQ_CPM_PC13:
-      Offset = 0x1580;
+      Offset = 0x2580;
       break;
     case PPC_IRQ_CPM_TIMER1:
-      Offset = 0x1590;
+      Offset = 0x2590;
       break;
     case PPC_IRQ_CPM_PC14:
-      Offset = 0x15a0;
+      Offset = 0x25a0;
       break;
     case PPC_IRQ_CPM_SCC4:
-      Offset = 0x15b0;
+      Offset = 0x25b0;
       break;
     case PPC_IRQ_CPM_SCC3:
-      Offset = 0x15c0;
+      Offset = 0x25c0;
       break;
     case PPC_IRQ_CPM_SCC2:
-      Offset = 0x15d0;
+      Offset = 0x25d0;
       break;
     case PPC_IRQ_CPM_SCC1:
-      Offset = 0x15e0;
+      Offset = 0x25e0;
       break;
     case PPC_IRQ_CPM_PC15:
-      Offset = 0x15f0;
+      Offset = 0x25f0;
       break;
 #endif
 

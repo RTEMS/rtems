@@ -29,7 +29,7 @@ C_PIECES = cpu ppccache
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_PIECES = asm.h mpc860.h
+H_PIECES = asm.h mpc860.h mpc821.h
 H_FILES=$(H_PIECES:%=$(srcdir)/../%)
 
 # Assembly source names, if any, go here -- minus the .S

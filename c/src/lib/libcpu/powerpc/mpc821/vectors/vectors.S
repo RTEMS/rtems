@@ -1,6 +1,6 @@
 /*  vectors.s	1.1 - 95/12/04
  *
- *  This file contains the assembly code for the PowerPC MPC860
+ *  This file contains the assembly code for the PowerPC MPC821
  *  interrupt veneers for RTEMS.
  * 
  *  Author: Jay Monkman (jmonkman@frasca.com)
@@ -47,7 +47,7 @@
  */
 
 #include "asm.h"
-#include <mpc860.h>
+#include <mpc821.h>
 
 #ifndef PPC_VECTOR_FILE_BASE
 #error "PPC_VECTOR_FILE_BASE is not defined."
@@ -214,8 +214,8 @@ SYM (__vectors):
         stw     r9, IP_9(r1)  	/* r9 will be restored in the next level */
         stw     r10, IP_10(r1)
 
-	lis  	r9, m860@ha
-        addi 	r9, r9, m860@l
+	lis  	r9, m821@ha
+        addi 	r9, r9, m821@l
 	lbz   	r10, 0x1c(r9)		/* SIVEC */
         rlwinm	r10, r10, 4, 0, 27	/* each psuedo vector will have */
         				/* room for 16 instructions */
@@ -483,7 +483,7 @@ siu_vectors:
 /* Now we need to get the CPM interrupt vector */
 	/* Registers:                                 */
 	/*   R0 - has stored value of LR 	      */
-	/*   R9 - pointer to m860 struct 	      */
+	/*   R9 - pointer to m821 struct 	      */
 	/*   R10 has already been saved and restored  */
 	li	r10, 1
 	sth	r10, 0x930(r9)	     /* CIVR */
