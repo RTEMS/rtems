@@ -20,13 +20,13 @@
 #ifndef _ICM7170_MULTIPLIER
 #define _ICM7170_MULTIPLIER 1
 #define _ICM7170_NAME(_X) _X
-#define _ICM7170_TYPE uint8_t  
+#define _ICM7170_TYPE uint8_t
 #endif
 
 #define CALCULATE_REGISTER_ADDRESS( _base, _reg ) \
   (_ICM7170_TYPE *)((_base) + ((_reg) * _ICM7170_MULTIPLIER ))
 
-/* 
+/*
  *  ICM7170 Get Register Routine
  */
 

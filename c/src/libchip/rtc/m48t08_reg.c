@@ -20,13 +20,13 @@
 #ifndef _M48T08_MULTIPLIER
 #define _M48T08_MULTIPLIER 1
 #define _M48T08_NAME(_X) _X
-#define _M48T08_TYPE uint8_t  
+#define _M48T08_TYPE uint8_t
 #endif
 
 #define CALCULATE_REGISTER_ADDRESS( _base, _reg ) \
   (_M48T08_TYPE *)((_base) + ((_reg) * _M48T08_MULTIPLIER ))
 
-/* 
+/*
  *  M48T08 Get Register Routine
  */
 

@@ -1,8 +1,8 @@
 /*
  * ide_ctrl_io.h
  *
- * LibChip library IDE controller header file - IO operations defined for 
- * IDE controllers. 
+ * LibChip library IDE controller header file - IO operations defined for
+ * IDE controllers.
  *
  * Copyright (C) 2002 OKTET Ltd., St.-Petersburg, Russia
  * Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
@@ -28,7 +28,7 @@ extern "C" {
 #define IDE_REGISTER_FEATURES           IDE_REGISTER_ERROR
 #define IDE_REGISTER_SECTOR_COUNT       2
 #define IDE_REGISTER_SECTOR_NUMBER      3
-#define IDE_REGISTER_LBA0               IDE_REGISTER_SECTOR_NUMBER 
+#define IDE_REGISTER_LBA0               IDE_REGISTER_SECTOR_NUMBER
 #define IDE_REGISTER_CYLINDER_LOW       4
 #define IDE_REGISTER_LBA1               IDE_REGISTER_CYLINDER_LOW
 #define IDE_REGISTER_CYLINDER_HIGH      5
@@ -42,7 +42,7 @@ extern "C" {
 #define IDE_REGISTER_ALTERNATE_STATUS   6
 #define IDE_REGISTER_DEVICE_CONTROL     IDE_REGISTER_ALTERNATE_STATUS
 
-/* offsets used to access  registers */ 
+/* offsets used to access  registers */
 #define IDE_REGISTER_DEVICE_CONTROL_OFFSET   8
 #define IDE_REGISTER_ALTERNATE_STATUS_OFFSET IDE_REGISTER_DEVICE_CONTROL_OFFSET
 #define IDE_REGISTER_DATA_BYTE               9
@@ -143,7 +143,7 @@ ide_controller_write_data_block(rtems_device_minor_number  minor,
  */
 void
 ide_controller_read_register(rtems_device_minor_number  minor,
-                             int                        reg, 
+                             int                        reg,
                              uint16_t                  *value);
 
 /*
@@ -174,7 +174,7 @@ ide_controller_write_register(rtems_device_minor_number minor,
  *     RTEMS_SUCCESSFUL on success, or error code if
  *     error occured
  */
-rtems_status_code 
+rtems_status_code
 ide_controller_config_io_speed(int minor, uint8_t   modes_avaible);
 
 #ifdef __cplusplus

@@ -55,7 +55,7 @@ typedef mc68681_baud_t mc68681_baud_table_t[RTEMS_TERMIOS_NUMBER_BAUD_RATES];
 
 #define MC68681_BAUD_NOT_VALID 0xFF
 
-extern mc68681_baud_t 
+extern mc68681_baud_t
     mc68681_baud_rate_table[4][RTEMS_TERMIOS_NUMBER_BAUD_RATES];
 
 

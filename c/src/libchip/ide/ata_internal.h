@@ -1,7 +1,7 @@
 /*
  * ata_internal.h
  *
- * ATA RTEMS driver internal header file 
+ * ATA RTEMS driver internal header file
  *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Authors: Eugeny S. Mints     <Eugeny.Mints@oktet.ru>
@@ -10,7 +10,7 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- * 
+ *
  * $Id$
  *
  */
@@ -82,9 +82,9 @@
 #define ATA_COMMAND_TYPE_DMA        3
 
 /* ATA commands opcodes */
-/* 
- * Commands present in both ATA-2 and ATA-4 specs. 
- * Some commands have two values in ATA-2, 
+/*
+ * Commands present in both ATA-2 and ATA-4 specs.
+ * Some commands have two values in ATA-2,
  * in such case value from ATA-4 used.
  * Some commands have slightly different names in these specifications,
  * so names from ATA-4 are used.
@@ -223,11 +223,11 @@ typedef struct ata_req_s {
     uint32_t    cnt;    /* Number of sectors to be exchanged */
     uint32_t    cbuf;   /* number of current buffer from breq in use */
     uint32_t    pos;    /* current position in 'cbuf' */
-    blkdev_request   *breq;   /* blkdev_request which corresponds to the 
+    blkdev_request   *breq;   /* blkdev_request which corresponds to the
                                * ata request
                                */
-    rtems_id          sema;   /* semaphore which is used if synchronous 
-                               * processing of the ata request is required 
+    rtems_id          sema;   /* semaphore which is used if synchronous
+                               * processing of the ata request is required
                                */
     rtems_status_code status; /* status of ata request processing */
     int               error;  /* device error code */
@@ -274,8 +274,8 @@ typedef struct ata_queue_msg_s {
     } while (0)
 
 /*
- * Array of such structures is indexed by interrupt vecotrs and used for 
- * mapping of IDE controllers and interrupt vectors 
+ * Array of such structures is indexed by interrupt vecotrs and used for
+ * mapping of IDE controllers and interrupt vectors
  */
 typedef struct ata_int_st_s {
     Chain_Node                link;
@@ -313,9 +313,9 @@ typedef struct ata_dev_s {
 } ata_dev_t;
 
 /*
- * This structure describes controller state, devices configuration on the 
- * controller and chain of ATA requests to the controller. Array of such 
- * structures is indexed by controller minor number 
+ * This structure describes controller state, devices configuration on the
+ * controller and chain of ATA requests to the controller. Array of such
+ * structures is indexed by controller minor number
  */
 typedef struct ata_ide_ctrl_s {
     rtems_boolean present;   /* controller state */

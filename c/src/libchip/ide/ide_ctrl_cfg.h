@@ -1,7 +1,7 @@
 /*
  * ide_ctrl_cfg.h
  *
- * LibChip library IDE controller header file - structuers used for 
+ * LibChip library IDE controller header file - structuers used for
  * configuration and plugin interface definition.
  *
  * Copyright (C) 2002 OKTET Ltd., St.-Petersburg, Russia
@@ -33,38 +33,38 @@ typedef enum {
 /*
  * Each driver for a particular controller have to provide following
  * functions in such a structure. The only field which should not be NULL
- * is contInit. 
+ * is contInit.
  */
 typedef struct ide_ctrl_fns_s {
     boolean           (*ctrl_probe)(int minor); /* probe routine */
     void              (*ctrl_initialize)(int minor);
-    int               (*ctrl_control)(int minor, uint32_t   command, 
+    int               (*ctrl_control)(int minor, uint32_t   command,
                                       void *arg);
     /*
      * Functions which allow read/write registers of a particular controller.
-     * (these functions may be used from ide_controller_read_register, 
+     * (these functions may be used from ide_controller_read_register,
      * ide_controller_write_register)
      */
     void    (*ctrl_reg_read)(int minor, int regist, uint16_t   *value);
     void    (*ctrl_reg_write)(int minor, int regist, uint16_t   value);
-    
-    /* 
-     * The function allows to escape overhead for read/write register 
+
+    /*
+     * The function allows to escape overhead for read/write register
      * functions calls
      */
-    void  (*ctrl_read_block)(int minor, uint16_t   block_size, 
+    void  (*ctrl_read_block)(int minor, uint16_t   block_size,
                              blkdev_sg_buffer *bufs, uint32_t   *cbuf,
                              uint32_t   *pos);
     void  (*ctrl_write_block)(int minor, uint16_t   block_size,
                               blkdev_sg_buffer *bufs, uint32_t   *cbuf,
                               uint32_t   *pos);
-    
-    rtems_status_code (*ctrl_config_io_speed)(int minor, 
+
+    rtems_status_code (*ctrl_config_io_speed)(int minor,
                                               uint8_t   modes_available);
 } ide_ctrl_fns_t;
 
-/* 
- * IDE Controller configuration. Table of such configurations is provided 
+/*
+ * IDE Controller configuration. Table of such configurations is provided
  * by BSP
  */
 typedef struct ide_controller_bsp_table_s {
@@ -72,14 +72,14 @@ typedef struct ide_controller_bsp_table_s {
     ide_ctrl_devs_t      type;  /* chip type */
     ide_ctrl_fns_t      *fns;   /* pointer to the set of driver routines */
     boolean              (*probe)(int minor); /* general probe routine */
-    uint8_t              status; /* initialized/non initialized. Should be set 
-                                  * to zero by static initialization  
+    uint8_t              status; /* initialized/non initialized. Should be set
+                                  * to zero by static initialization
                                   */
     uint32_t             port1; /* port number for the port of the device */
     rtems_boolean        int_driven; /* interrupt/poll driven */
     rtems_vector_number  int_vec; /* the interrupt vector of the device */
-    void                *params;  /* contains either device specific data or a 
-                                   * pointer to s device specific information 
+    void                *params;  /* contains either device specific data or a
+                                   * pointer to s device specific information
                                    * table
                                    */
 } ide_controller_bsp_table_t;

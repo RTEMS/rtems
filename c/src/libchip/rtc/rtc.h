@@ -37,8 +37,8 @@ typedef enum {
 
 /*
  * Each field is interpreted thus:
- * 
- * sDeviceName  This is the name of the device. 
+ *
+ * sDeviceName  This is the name of the device.
  *
  * deviceType   This indicates the chip type.
  *

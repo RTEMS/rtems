@@ -1,7 +1,7 @@
 /*
  *  This file contains the TTY driver for the National Semiconductor NS16550.
  *
- *  This part is widely cloned and second sourced.  It is found in a number 
+ *  This part is widely cloned and second sourced.  It is found in a number
  *  of "Super IO" controllers.
  *
  *  COPYRIGHT (c) 1998 by Radstone Technology
@@ -176,12 +176,12 @@ NS16550_STATIC int ns16550_close(
   return(RTEMS_SUCCESSFUL);
 }
 
-/* 
+/*
  *  ns16550_write_polled
  */
 
 NS16550_STATIC void ns16550_write_polled(
-  int   minor, 
+  int   minor,
   char  cChar
 )
 {
@@ -415,7 +415,7 @@ NS16550_STATIC int ns16550_set_attributes(
   rtems_interrupt_disable(Irql);
 
     /*
-     *  Set the baud rate 
+     *  Set the baud rate
      */
 
     (*setReg)(pNS16550, NS16550_LINE_CONTROL, SP_LINE_DLAB);
@@ -444,7 +444,7 @@ NS16550_STATIC void ns16550_process(
 )
 {
   uint32_t                pNS16550;
-  volatile uint8_t        ucLineStatus; 
+  volatile uint8_t        ucLineStatus;
   volatile uint8_t        ucInterruptId;
   unsigned char           cChar;
   getRegister_f           getReg;
@@ -464,10 +464,10 @@ NS16550_STATIC void ns16550_process(
         break;
       }
       cChar = (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER);
-      rtems_termios_enqueue_raw_characters( 
+      rtems_termios_enqueue_raw_characters(
         Console_Port_Data[minor].termios_data,
-        &cChar, 
-        1 
+        &cChar,
+        1
       );
     }
 
@@ -521,7 +521,7 @@ NS16550_STATIC rtems_isr ns16550_isr(
   int     minor;
 
   for(minor=0;minor<Console_Port_Count;minor++) {
-    if(Console_Port_Tbl[minor].ulIntVector == vector && 
+    if(Console_Port_Tbl[minor].ulIntVector == vector &&
        Console_Port_Tbl[minor].deviceType == SERIAL_NS16550 ) {
       ns16550_process(minor);
     }
@@ -552,7 +552,7 @@ NS16550_STATIC void ns16550_enable_interrupts(
  *  ns16550_initialize_interrupts
  *
  *  This routine initializes the port to operate in interrupt driver mode.
- */ 
+ */
 
 NS16550_STATIC void ns16550_initialize_interrupts(int minor)
 {
@@ -565,15 +565,15 @@ NS16550_STATIC void ns16550_initialize_interrupts(int minor)
   ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
 }
 
-/* 
+/*
  *  ns16550_write_support_int
  *
  *  Console Termios output entry point.
  */
 
 NS16550_STATIC int ns16550_write_support_int(
-  int   minor, 
-  const char *buf, 
+  int   minor,
+  const char *buf,
   int   len
 )
 {
@@ -607,7 +607,7 @@ NS16550_STATIC int ns16550_write_support_int(
   return 1;
 }
 
-/* 
+/*
  *  ns16550_write_support_polled
  *
  *  Console Termios output entry point.
@@ -615,8 +615,8 @@ NS16550_STATIC int ns16550_write_support_int(
  */
 
 NS16550_STATIC int ns16550_write_support_polled(
-  int         minor, 
-  const char *buf, 
+  int         minor,
+  const char *buf,
   int         len
 )
 {
@@ -639,14 +639,14 @@ NS16550_STATIC int ns16550_write_support_polled(
   return nwrite;
 }
 
-/* 
- *  ns16550_inbyte_nonblocking_polled 
+/*
+ *  ns16550_inbyte_nonblocking_polled
  *
  *  Console Termios polling input entry point.
  */
 
-NS16550_STATIC int ns16550_inbyte_nonblocking_polled( 
-  int minor 
+NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
+  int minor
 )
 {
   uint32_t             pNS16550;

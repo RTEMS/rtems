@@ -1,5 +1,5 @@
 /*
- *  This file interfaces with the real-time clock found in 
+ *  This file interfaces with the real-time clock found in
  *  a Harris ICM7170
  *
  *  Year 2K Notes:
@@ -42,7 +42,7 @@ void icm7170_initialize(
 )
 {
   uint32_t       icm7170;
-  setRegister_f  setReg;            
+  setRegister_f  setReg;
   uint32_t       clock;
 
   icm7170 = RTC_Table[ minor ].ulCtrlPort1;
@@ -97,7 +97,7 @@ int icm7170_get_time(
   time->hour   = (*getReg)( icm7170, ICM7170_HOUR );
   time->minute = (*getReg)( icm7170, ICM7170_MINUTE );
   time->second = (*getReg)( icm7170, ICM7170_SECOND );
-  
+
   time->ticks  = 0;
 
   /*
@@ -147,7 +147,7 @@ int icm7170_set_time(
   (*setReg)( icm7170, ICM7170_HOUR,    time->hour );
   (*setReg)( icm7170, ICM7170_MINUTE,  time->minute );
   (*setReg)( icm7170, ICM7170_SECOND,  time->second );
- 
+
   /*
    *  This is not really right.
    */

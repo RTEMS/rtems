@@ -253,7 +253,7 @@ typedef struct _mc68681_context
  */
 MC68681_STATIC boolean mc68681_probe(int minor);
 
-MC68681_STATIC int mc68681_set_attributes( 
+MC68681_STATIC int mc68681_set_attributes(
   int minor,
   const struct termios *t
 );
@@ -273,7 +273,7 @@ MC68681_STATIC int mc68681_close(
 );
 
 MC68681_STATIC void mc68681_write_polled(
-  int   minor, 
+  int   minor,
   char  cChar
 );
 

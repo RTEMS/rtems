@@ -20,13 +20,13 @@
 #ifndef _MC68681_MULTIPLIER
 #define _MC68681_MULTIPLIER 1
 #define _MC68681_NAME(_X) _X
-#define _MC68681_TYPE uint8_t  
+#define _MC68681_TYPE uint8_t
 #endif
 
 #define CALCULATE_REGISTER_ADDRESS( _base, _reg ) \
   (_MC68681_TYPE *)((_base) + ((_reg) * _MC68681_MULTIPLIER ))
 
-/* 
+/*
  *  MC68681 Get Register Routine
  */
 

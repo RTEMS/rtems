@@ -190,14 +190,14 @@ extern "C" {
  * size of stuff before preamble in envelope.
  * It must be a constant since we will use it to generate MAX_PACKET_SIZE
  */
- 
+
 #define SHM_ENVELOPE_PREFIX_OVERHEAD    (4 * sizeof(vol_u32))
 
 /*
  *  The following is adjusted so envelopes are MAX_ENVELOPE_SIZE bytes long.
  *  It must be >= RTEMS_MINIMUM_PACKET_SIZE in mppkt.h.
  */
- 
+
 #ifndef MAX_ENVELOPE_SIZE
 #define MAX_ENVELOPE_SIZE 0x180
 #endif

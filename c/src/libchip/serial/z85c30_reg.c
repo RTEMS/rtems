@@ -19,7 +19,7 @@
 #ifndef _Z85C30_MULTIPLIER
 #define _Z85C30_MULTIPLIER 1
 #define _Z85C30_NAME(_X) _X
-#define _Z85C30_TYPE uint8_t  
+#define _Z85C30_TYPE uint8_t
 #endif
 
 /*

@@ -17,6 +17,6 @@
 
 #define _M48T08_MULTIPLIER 8
 #define _M48T08_NAME(_X) _X##_8
-#define _M48T08_TYPE uint8_t  
+#define _M48T08_TYPE uint8_t
 
 #include "m48t08_reg.c"

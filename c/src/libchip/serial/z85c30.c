@@ -82,7 +82,7 @@ console_fns z85c30_fns_polled = {
 
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
 
-/* 
+/*
  *  z85c30_initialize_port
  *
  *  initialize a z85c30 Port
@@ -132,11 +132,11 @@ Z85C30_STATIC void z85c30_initialize_port(
   (*setReg)(
     ulCtrlPort,
     SCC_WR0_SEL_WR11,
-    SCC_WR11_OUT_BR_GEN | SCC_WR11_TRXC_OI | 
+    SCC_WR11_OUT_BR_GEN | SCC_WR11_TRXC_OI |
       SCC_WR11_TX_BR_GEN | SCC_WR11_RX_BR_GEN
   );
 
-  ulBaudDivisor = Z85C30_Baud( 
+  ulBaudDivisor = Z85C30_Baud(
     (uint32_t) Console_Port_Tbl[minor].ulClock,
     (uint32_t) Console_Port_Tbl[minor].pDeviceParams
   );
@@ -153,7 +153,7 @@ Z85C30_STATIC void z85c30_initialize_port(
    * Setup the upper 8 bits time constant
    */
   (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR13, (ulBaudDivisor>>8) & 0xff );
-           
+
   /*
    * Enable the baud rate generator enable with clock from the
    * SCC's PCLK input via register 14.
@@ -310,7 +310,7 @@ Z85C30_STATIC int z85c30_assert_RTS(int minor)
   setReg = Console_Port_Tbl[minor].setRegister;
 
   pz85c30Context = (z85c30_context *) Console_Port_Data[minor].pDeviceContext;
-  
+
   /*
    * Assert RTS
    */
@@ -339,7 +339,7 @@ Z85C30_STATIC int z85c30_negate_RTS(int minor)
   setReg = Console_Port_Tbl[minor].setRegister;
 
   pz85c30Context = (z85c30_context *) Console_Port_Data[minor].pDeviceContext;
-  
+
   /*
    * Negate RTS
    */
@@ -373,7 +373,7 @@ Z85C30_STATIC int z85c30_assert_DTR(int minor)
   setReg = Console_Port_Tbl[minor].setRegister;
 
   pz85c30Context = (z85c30_context *) Console_Port_Data[minor].pDeviceContext;
-  
+
   /*
    * Assert DTR
    */
@@ -402,7 +402,7 @@ Z85C30_STATIC int z85c30_negate_DTR(int minor)
   setReg = Console_Port_Tbl[minor].setRegister;
 
   pz85c30Context = (z85c30_context *) Console_Port_Data[minor].pDeviceContext;
-  
+
   /*
    * Negate DTR
    */
@@ -450,7 +450,7 @@ Z85C30_STATIC int z85c30_set_attributes(
   if (!baud_requested)
     baud_requested = B9600;              /* default to 9600 baud */
 
-  ulBaudDivisor = Z85C30_Baud( 
+  ulBaudDivisor = Z85C30_Baud(
     (uint32_t) Console_Port_Tbl[minor].ulClock,
     (uint32_t) termios_baud_to_number( baud_requested )
   );
@@ -467,7 +467,7 @@ Z85C30_STATIC int z85c30_set_attributes(
     wr4 |= SCC_WR4_PAR_EN;
     if (!(t->c_cflag & PARODD))
       wr4 |= SCC_WR4_PAR_EVEN;
-  } 
+  }
 
   /*
    *  Character Size
@@ -588,7 +588,7 @@ Z85C30_STATIC void z85c30_process(
        */
       break;
     }
-  
+
 #if 0
     if (!Z85C30_Status_Is_CTS_asserted(z85c30_status)) {
       /*
@@ -601,7 +601,7 @@ Z85C30_STATIC void z85c30_process(
       break;
     }
 #endif
-  
+
     rtems_termios_dequeue_characters(Console_Port_Data[minor].termios_data, 1);
     if (rtems_termios_dequeue_characters(
          Console_Port_Data[minor].termios_data, 1)) {
@@ -647,7 +647,7 @@ Z85C30_STATIC rtems_isr z85c30_isr(
   getRegister_f       getReg;
 
   for (minor=0;minor<Console_Port_Count;minor++) {
-    if(Console_Port_Tbl[minor].ulIntVector == vector && 
+    if(Console_Port_Tbl[minor].ulIntVector == vector &&
        Console_Port_Tbl[minor].deviceType == SERIAL_Z85C30 ) {
       ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort2;
       getReg     = Console_Port_Tbl[minor].getRegister;
@@ -736,7 +736,7 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
   (*setReg)(ulCtrlPort1, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT);
 }
 
-/* 
+/*
  *  z85c30_write_support_int
  *
  *  Console Termios output entry point.
@@ -744,8 +744,8 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
  */
 
 Z85C30_STATIC int z85c30_write_support_int(
-  int   minor, 
-  const char *buf, 
+  int   minor,
+  const char *buf,
   int   len)
 {
   uint32_t       Irql;
@@ -781,7 +781,7 @@ Z85C30_STATIC int z85c30_write_support_int(
   return 1;
 }
 
-/* 
+/*
  *  z85c30_inbyte_nonblocking_polled
  *
  *  This routine polls for a character.
@@ -813,7 +813,7 @@ Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
   return (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD8);
 }
 
-/* 
+/*
  *  z85c30_write_support_polled
  *
  *  Console Termios output entry point.
@@ -841,7 +841,7 @@ Z85C30_STATIC int z85c30_write_support_polled(
   return nwrite;
 }
 
-/* 
+/*
  *  z85c30_write_polled
  *
  *  This routine transmits a character using polling.

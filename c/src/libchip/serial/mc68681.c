@@ -84,7 +84,7 @@ MC68681_STATIC int mc68681_baud_rate(
  *  port settings.
  */
 
-MC68681_STATIC int mc68681_set_attributes( 
+MC68681_STATIC int mc68681_set_attributes(
   int minor,
   const struct termios *t
 )
@@ -147,7 +147,7 @@ MC68681_STATIC int mc68681_set_attributes(
   /*
    *  Stop Bits
    */
-  
+
   if (t->c_cflag & CSTOPB) {
     mode2 |= 0x0F;                      /* 2 stop bits */
   } else {
@@ -194,14 +194,14 @@ MC68681_STATIC void mc68681_initialize_context(
   int          port;
   unsigned int pMC68681;
   unsigned int pMC68681_port;
-  
+
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
 
   pmc68681Context->mate = -1;
 
   for (port=0 ; port<Console_Port_Count ; port++ ) {
-    if ( Console_Port_Tbl[port].ulCtrlPort1 == pMC68681 && 
+    if ( Console_Port_Tbl[port].ulCtrlPort1 == pMC68681 &&
          Console_Port_Tbl[port].ulCtrlPort2 != pMC68681_port ) {
       pmc68681Context->mate = port;
       pmc68681Context->imr  = 0;
@@ -282,13 +282,13 @@ MC68681_STATIC int mc68681_open(
   rtems_interrupt_level  Irql;
   setRegister_f          setReg;
   unsigned int			 status;
-  
-  
+
+
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
   vector        = Console_Port_Tbl[minor].ulIntVector;
-    
+
   /* XXX default baud rate should be from configuration table */
 
   status = mc68681_baud_rate( minor, B9600, &baud, &acr_bit, &command );
@@ -350,14 +350,14 @@ MC68681_STATIC int mc68681_close(
   return(RTEMS_SUCCESSFUL);
 }
 
-/* 
+/*
  *  mc68681_write_polled
  *
  *  This routine polls out the requested character.
  */
 
 MC68681_STATIC void mc68681_write_polled(
-  int   minor, 
+  int   minor,
   char  cChar
 )
 {
@@ -417,7 +417,7 @@ MC68681_STATIC rtems_isr mc68681_isr(
   int     minor;
 
   for(minor=0 ; minor<Console_Port_Count ; minor++) {
-    if(Console_Port_Tbl[minor].ulIntVector == vector && 
+    if(Console_Port_Tbl[minor].ulIntVector == vector &&
        Console_Port_Tbl[minor].deviceType == SERIAL_MC68681 ) {
       mc68681_process(minor);
     }
@@ -442,15 +442,15 @@ MC68681_STATIC void mc68681_initialize_interrupts(int minor)
   mc68681_enable_interrupts(minor,MC68681_IMR_ENABLE_ALL_EXCEPT_TX);
 }
 
-/* 
+/*
  *  mc68681_write_support_int
  *
  *  Console Termios output entry point when using interrupt driven output.
  */
 
 MC68681_STATIC int mc68681_write_support_int(
-  int         minor, 
-  const char *buf, 
+  int         minor,
+  const char *buf,
   int         len
 )
 {
@@ -484,7 +484,7 @@ MC68681_STATIC int mc68681_write_support_int(
   return 1;
 }
 
-/* 
+/*
  *  mc68681_write_support_polled
  *
  *  Console Termios output entry point when using polled output.
@@ -492,8 +492,8 @@ MC68681_STATIC int mc68681_write_support_int(
  */
 
 MC68681_STATIC int mc68681_write_support_polled(
-  int         minor, 
-  const char *buf, 
+  int         minor,
+  const char *buf,
   int         len
 )
 {
@@ -516,14 +516,14 @@ MC68681_STATIC int mc68681_write_support_polled(
   return nwrite;
 }
 
-/* 
- *  mc68681_inbyte_nonblocking_polled 
+/*
+ *  mc68681_inbyte_nonblocking_polled
  *
  *  Console Termios polling input entry point.
  */
 
-MC68681_STATIC int mc68681_inbyte_nonblocking_polled( 
-  int minor 
+MC68681_STATIC int mc68681_inbyte_nonblocking_polled(
+  int minor
 )
 {
   uint32_t             pMC68681_port;
@@ -589,7 +589,7 @@ MC68681_STATIC int mc68681_baud_rate(
   baud_requested = baud & CBAUD;
   if (!baud_requested)
     baud_requested = B9600;              /* default to 9600 baud */
-  
+
   baud_requested = termios_baud_to_index( baud_requested );
 
   baud_tbl = (mc68681_baud_table_t *) Console_Port_Tbl[minor].ulClock;
@@ -625,8 +625,8 @@ MC68681_STATIC void mc68681_process(
 {
   uint32_t                pMC68681;
   uint32_t                pMC68681_port;
-  volatile uint8_t        ucLineStatus; 
-  volatile uint8_t        ucISRStatus; 
+  volatile uint8_t        ucLineStatus;
+  volatile uint8_t        ucISRStatus;
   unsigned char           cChar;
   getRegister_f           getReg;
   setRegister_f           setReg;
@@ -636,14 +636,14 @@ MC68681_STATIC void mc68681_process(
   getReg        = Console_Port_Tbl[minor].getRegister;
   setReg        = Console_Port_Tbl[minor].setRegister;
 
-  /* Get ISR at the beginning of the IT routine */ 
+  /* Get ISR at the beginning of the IT routine */
   ucISRStatus = (*getReg)(pMC68681, MC68681_INTERRUPT_STATUS_REG);
-  
+
   /* Get good ISR a or b channel */
   if (pMC68681 != pMC68681_port){
     ucISRStatus >>= 4;
   }
-    
+
   /* See if is usefull to call rtems_termios_dequeue */
   if(Console_Port_Data[minor].bActive == FALSE) {
 		ucISRStatus = ucISRStatus & ~MC68681_IR_TX_READY;
@@ -668,10 +668,10 @@ MC68681_STATIC void mc68681_process(
       continue;
     }
     cChar = (*getReg)(pMC68681_port, MC68681_RX_BUFFER);
-    rtems_termios_enqueue_raw_characters( 
+    rtems_termios_enqueue_raw_characters(
       Console_Port_Data[minor].termios_data,
-      &cChar, 
-      1 
+      &cChar,
+      1
     );
   }
 
@@ -710,7 +710,7 @@ MC68681_STATIC unsigned int mc68681_build_imr(
   unsigned int     pMC68681_port;
   mc68681_context *pmc68681Context;
   mc68681_context *mateContext;
-  
+
   pMC68681        = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port   = Console_Port_Tbl[minor].ulCtrlPort2;
   pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
@@ -720,14 +720,14 @@ MC68681_STATIC unsigned int mc68681_build_imr(
   mate_mask = 0;
 
   is_a = (pMC68681 == pMC68681_port);
- 
+
   /*
    *  If there is a mate for this port, get its IMR mask.
    */
 
   if ( mate != -1 ) {
     mateContext = Console_Port_Data[mate].pDeviceContext;
-    
+
     if (mateContext)
       mate_mask = mateContext->imr;
   }

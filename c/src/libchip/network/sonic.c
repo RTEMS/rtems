@@ -27,9 +27,9 @@
  *  which had a 100 Mhz PPC603e.
  *
  *  This driver also works with DP83934CVUL-20/25 MHz, tested on
- *  Tharsys ERC32 VME board. 
+ *  Tharsys ERC32 VME board.
  *
- *  Rehaul to fix lost interrupts and buffers, and to use to use 
+ *  Rehaul to fix lost interrupts and buffers, and to use to use
  *  interrupt-free transmission by Jiri, 22/03/1999.
  */
 
@@ -55,7 +55,7 @@
 #include <netinet/if_ether.h>
 
 /*
- *  XXX fix this 
+ *  XXX fix this
  */
 
 void *set_vector(void *, uint32_t, uint32_t);
@@ -68,7 +68,7 @@ void *set_vector(void *, uint32_t, uint32_t);
  *  Use the top line if you want more symbols.
  */
 
-#define SONIC_STATIC 
+#define SONIC_STATIC
 /* #define SONIC_STATIC static */
 
 /*
@@ -79,7 +79,7 @@ void *set_vector(void *, uint32_t, uint32_t);
 #endif
 
 /*
- * 
+ *
  * As suggested by National Application Note 746, make the
  * receive resource area bigger than the receive descriptor area.
  *
@@ -138,11 +138,11 @@ struct sonic_softc {
   void                             *sonic;
 
   /*
-   *  Register access routines 
+   *  Register access routines
    */
   sonic_write_register_t           write_register;
   sonic_read_register_t            read_register;
-  
+
   /*
    * Interrupt vector
    */
@@ -480,7 +480,7 @@ SONIC_STATIC void sonic_retire_tda (struct sonic_softc *sc)
 
 #if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
     /*
-     *  If there is an error that was not a collision, 
+     *  If there is an error that was not a collision,
      *  then someone may want to see it.
      */
 
@@ -588,13 +588,13 @@ SONIC_STATIC void sonic_sendpacket (struct ifnet *ifp, struct mbuf *m)
    */
 
   while (sc->tdaHead->next->status != 0) {
-  
+
   /*
    * Free up transmit descriptors
    */
     sonic_retire_tda (sc);
 
-    if (sc->tdaHead->next->status == 0) 
+    if (sc->tdaHead->next->status == 0)
       break;
 
 #if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
@@ -893,12 +893,12 @@ SONIC_STATIC void sonic_rda_wait(
  * Routine to align the received packet so that the ip header
  * is on a 32-bit boundary. Necessary for cpu's that do not
  * allow unaligned loads and stores and when the 32-bit DMA
- * mode is used. 
- * 
- * Transfers are done on word basis to avoid possibly slow byte 
+ * mode is used.
+ *
+ * Transfers are done on word basis to avoid possibly slow byte
  * and half-word writes.
  */
- 
+
 void ipalign(struct mbuf *m)
 {
   unsigned int *first, *last, data;
@@ -979,7 +979,7 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
       sonic_print_rx_descriptor( rdp );
       if ((LSW(rdp->mbufp->m_data) != rdp->pkt_lsw)
        || (MSW(rdp->mbufp->m_data) != rdp->pkt_msw))
-        printf ("SONIC RDA/RRA %p, %08x\n",rdp->mbufp->m_data,(rdp->pkt_msw << 16) | 
+        printf ("SONIC RDA/RRA %p, %08x\n",rdp->mbufp->m_data,(rdp->pkt_msw << 16) |
 	(rdp->pkt_lsw & 0x0ffff));
 #endif
       rdp->byte_count &= 0x0ffff;    /* ERC32 pollutes msb of byte_count */
@@ -989,7 +989,7 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
                           sizeof(struct ether_header);
       eh = mtod (m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
-  
+
 #ifdef CPU_U32_FIX
       ipalign(m);	/* Align packet on 32-bit boundary */
 #endif
@@ -1122,7 +1122,7 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
   if ( (*sc->read_register)( rp, SONIC_REG_SR ) <= SONIC_REVISION_B ) {
     rtems_fatal_error_occurred( 0x0BADF00D );  /* don't eat this part :) */
   }
-  
+
   /*
    *  Set up circular linked list in Transmit Descriptor Area.
    *  Use the PINT bit in the transmit configuration field to
@@ -1138,11 +1138,11 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
   tdp = sc->tdaTail;
   for (i = 0 ; i < sc->tdaCount ; i++) {
     /*
-     *  Start off with the table of outstanding mbuf's 
+     *  Start off with the table of outstanding mbuf's
      */
 
     /*
-     *  status, pkt_config, pkt_size, and all fragment fields 
+     *  status, pkt_config, pkt_size, and all fragment fields
      *  are set to zero by sonic_allocate.
      */
 
@@ -1176,7 +1176,7 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
    */
 
   sc->rda = sonic_allocate(
-              (sc->rdaCount * sizeof(ReceiveDescriptor_t)) + 
+              (sc->rdaCount * sizeof(ReceiveDescriptor_t)) +
                 sizeof(CamDescriptor_t) );
   sc->cdp = (CamDescriptorPointer_t) ((unsigned char *)sc->rda +
         (sc->rdaCount * sizeof(ReceiveDescriptor_t)));
@@ -1204,7 +1204,7 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
   ordp->next   = sc->rda;
   ordp->link   = LSW(sc->rda) | RDA_LINK_EOL;
   sc->rdp_last = ordp;
- 
+
   /*
    * Allocate the receive resource area.
    * In accordance with National Application Note 746, make the
@@ -1232,7 +1232,7 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
      * so we can find the mbuf when the SONIC returns the buffer
      * to the driver.
      */
-    
+
     MGETHDR (m, M_WAIT, MT_DATA);
     MCLGET (m, M_WAIT);
     m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
@@ -1374,7 +1374,7 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
   (*sc->write_register)( rp, SONIC_REG_CEP, 0 );  /* Select first entry in CAM */
     printf ("Loaded Ethernet address into SONIC CAM.\n"
       "  Wrote %04x%04x%04x - %#x\n"
-      "   Read %04x%04x%04x - %#x\n", 
+      "   Read %04x%04x%04x - %#x\n",
         cdp->cap2, cdp->cap1, cdp->cap0, cdp->ce,
         (*sc->read_register)( rp, SONIC_REG_CAP2 ),
         (*sc->read_register)( rp, SONIC_REG_CAP1 ),
@@ -1388,7 +1388,7 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
    || ((*sc->read_register)( rp, SONIC_REG_CE ) != cdp->ce)) {
     printf ("Failed to load Ethernet address into SONIC CAM.\n"
       "  Wrote %04x%04x%04x - %#x\n"
-      "   Read %04x%04x%04x - %#x\n", 
+      "   Read %04x%04x%04x - %#x\n",
         cdp->cap2, cdp->cap1, cdp->cap0, cdp->ce,
         (*sc->read_register)( rp, SONIC_REG_CAP2 ),
         (*sc->read_register)( rp, SONIC_REG_CAP1 ),
@@ -1511,7 +1511,7 @@ sonic_ioctl (struct ifnet *ifp, int command, caddr_t data)
     case SIO_RTEMS_SHOW_STATS:
       sonic_stats (sc);
       break;
-    
+
     /*
      * FIXME: All sorts of multicast commands need to be added here!
      */

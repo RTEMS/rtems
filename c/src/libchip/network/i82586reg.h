@@ -260,7 +260,7 @@ struct __ie_recv_buf_desc {
  * All commands share this in common.
  *-
 struct __ie_cmd_common {
-	u_int16_t ie_cmd_status;	// status of this command 
+	u_int16_t ie_cmd_status;	// status of this command
 	u_int16_t ie_cmd_cmd;		// command word
 	u_int16_t ie_cmd_link;		// link to next command
 };

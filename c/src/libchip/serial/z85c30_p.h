@@ -359,7 +359,7 @@ Z85C30_STATIC int z85c30_close(
 );
 
 Z85C30_STATIC void z85c30_write_polled(
-  int   minor, 
+  int   minor,
   char  cChar
 );
 

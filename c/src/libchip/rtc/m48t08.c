@@ -1,5 +1,5 @@
 /*
- *  This file interfaces with the real-time clock found in 
+ *  This file interfaces with the real-time clock found in
  *  a Mostek M48T08 or M48T18 or compatibles.
  *
  *  Year 2K Notes:
@@ -74,7 +74,7 @@ int m48t08_get_time(
 
   controlReg = (*getReg)( m48t08, M48T08_CONTROL );
   (*setReg)( m48t08, M48T08_CONTROL, controlReg | M48T08_CONTROL_READ );
-  
+
   value1 = (*getReg)( m48t08, M48T08_YEAR );
   value2 = From_BCD( value1 );
   if ( value2 < 88 )
@@ -96,7 +96,7 @@ int m48t08_get_time(
 
   value1 = (*getReg)( m48t08, M48T08_SECOND );
   time->second = From_BCD( value1 );
-  
+
   time->ticks  = 0;
 
   /*
@@ -132,7 +132,7 @@ int m48t08_set_time(
 
   controlReg = (*getReg)( m48t08, M48T08_CONTROL );
   (*setReg)( m48t08, M48T08_CONTROL, controlReg | M48T08_CONTROL_WRITE );
-  
+
   if ( time->year >= 2088 )
     rtems_fatal_error_occurred( RTEMS_INVALID_NUMBER );
 
@@ -142,7 +142,7 @@ int m48t08_set_time(
   (*setReg)( m48t08, M48T08_HOUR,    To_BCD(time->hour) );
   (*setReg)( m48t08, M48T08_MINUTE,  To_BCD(time->minute) );
   (*setReg)( m48t08, M48T08_SECOND,  To_BCD(time->second) );
- 
+
   /*
    *  Put the RTC back into normal mode.
    */

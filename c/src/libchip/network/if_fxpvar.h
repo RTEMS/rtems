@@ -1,13 +1,13 @@
-/*                  
+/*
  * Copyright (c) 1995, David Greenman
  * All rights reserved.
- *              
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
- * are met:             
+ * are met:
  * 1. Redistributions of source code must retain the above copyright
  *    notice unmodified, this list of conditions, and the following
- *    disclaimer.  
+ *    disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
@@ -119,7 +119,7 @@ struct fxp_softc {
 	struct fxp_cb_tx *cbl_last;	/* last active TxCB in list */
 	struct fxp_stats *fxp_stats;	/* Pointer to interface stats */
 	int rx_idle_secs;		/* # of seconds RX has been idle */
-        enum {fxp_timeout_stopped,fxp_timeout_running,fxp_timeout_stop_rq} 
+        enum {fxp_timeout_stopped,fxp_timeout_running,fxp_timeout_stop_rq}
           stat_ch;                     /* status of status updater */
 	struct fxp_cb_tx *cbl_base;	/* base of TxCB list */
 	struct fxp_cb_mcs *mcsp;	/* Pointer to mcast setup descriptor */
@@ -194,7 +194,7 @@ struct fxp_softc {
        *((u_int32_t*)((u_int8_t*)((sc)->pci_regs_base)+(reg))) = val; \
   }while (0)
 
-#endif 
+#endif
 
 #define	sc_if			arpcom.ac_if
 

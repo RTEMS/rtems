@@ -1,6 +1,6 @@
 /*
  * ide_controller.c
- * 
+ *
  * This is generic rtems driver for IDE controllers.
  *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
@@ -10,7 +10,7 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  * $Id$
  *
  */
@@ -23,7 +23,7 @@
 
 /*
  * ide_controller_initialize --
- *     Initializes all configured IDE controllers. Controllers configuration 
+ *     Initializes all configured IDE controllers. Controllers configuration
  *     table is provided by BSP
  *
  * PARAMETERS:
@@ -35,7 +35,7 @@
  *     RTEMS_SUCCESSFUL on success, or error code if
  *     error occured
  */
-rtems_device_driver 
+rtems_device_driver
 ide_controller_initialize(rtems_device_major_number  major,
                           rtems_device_minor_number  minor_arg,
                           void                      *args)
@@ -46,22 +46,22 @@ ide_controller_initialize(rtems_device_major_number  major,
     /* FIXME: may be it should be done on compilation phase */
     if (IDE_Controller_Count > IDE_CTRL_MAX_MINOR_NUMBER)
         rtems_fatal_error_occurred(RTEMS_TOO_MANY);
-        
+
     for (minor=0; minor < IDE_Controller_Count; minor++)
     {
         IDE_Controller_Table[minor].status = IDE_CTRL_NON_INITIALIZED;
-        
-        if ((IDE_Controller_Table[minor].probe != NULL && 
+
+        if ((IDE_Controller_Table[minor].probe != NULL &&
              IDE_Controller_Table[minor].probe(minor)) ||
             IDE_Controller_Table[minor].fns->ctrl_probe(minor))
         {
-            status = rtems_io_register_name(IDE_Controller_Table[minor].name, 
+            status = rtems_io_register_name(IDE_Controller_Table[minor].name,
                                             major, minor);
-            if (status != RTEMS_SUCCESSFUL) 
+            if (status != RTEMS_SUCCESSFUL)
                 rtems_fatal_error_occurred(status);
 
             IDE_Controller_Table[minor].fns->ctrl_initialize(minor);
-            
+
             IDE_Controller_Table[minor].status = IDE_CTRL_INITIALIZED;
         }
     }
@@ -133,7 +133,7 @@ ide_controller_write_data_block(rtems_device_minor_number  minor,
  */
 void
 ide_controller_read_register(rtems_device_minor_number  minor,
-                             int                        reg, 
+                             int                        reg,
                              uint16_t                  *value)
 {
     IDE_Controller_Table[minor].fns->ctrl_reg_read(minor, reg, value);
@@ -152,7 +152,7 @@ ide_controller_read_register(rtems_device_minor_number  minor,
  *     NONE
  */
 void
-ide_controller_write_register(rtems_device_minor_number minor, int reg, 
+ide_controller_write_register(rtems_device_minor_number minor, int reg,
                               uint16_t   value)
 {
     IDE_Controller_Table[minor].fns->ctrl_reg_write(minor, reg, value);
@@ -170,10 +170,10 @@ ide_controller_write_register(rtems_device_minor_number minor, int reg,
  *     RTEMS_SUCCESSFUL on success, or error code if
  *     error occured
  */
-rtems_status_code 
+rtems_status_code
 ide_controller_config_io_speed(int minor, uint8_t   modes_avaible)
 {
     return IDE_Controller_Table[minor].fns->ctrl_config_io_speed(
-               minor, 
+               minor,
                modes_avaible);
 }

@@ -127,7 +127,7 @@
 #undef malloc
 #endif
 #ifdef free
-#undef free 
+#undef free
 #endif
 
 #define ELNK_DEBUG
@@ -181,13 +181,13 @@
 ** events so only requesting units are serviced.
 */
 
-static rtems_event_set unit_signals[NUM_UNITS]= { RTEMS_EVENT_1,  
+static rtems_event_set unit_signals[NUM_UNITS]= { RTEMS_EVENT_1,
                                                   RTEMS_EVENT_2,
-                                                  RTEMS_EVENT_3,  
+                                                  RTEMS_EVENT_3,
                                                   RTEMS_EVENT_4,
-                                                  RTEMS_EVENT_5,  
+                                                  RTEMS_EVENT_5,
                                                   RTEMS_EVENT_6,
-                                                  RTEMS_EVENT_7,  
+                                                  RTEMS_EVENT_7,
                                                   RTEMS_EVENT_8 };
 
 
@@ -757,7 +757,7 @@ struct xl_mii_frame {
 
 
 
-struct xl_stats 
+struct xl_stats
 {
       /* accumulated stats */
       u_int16_t		xl_carrier_lost;
@@ -797,7 +797,7 @@ struct xl_stats
 
 
 
-struct xl_type 
+struct xl_type
 {
       u_int16_t		xl_vid;
       u_int16_t		xl_did;
@@ -876,7 +876,7 @@ static struct xl_type xl_devs[] = {
 
 
 /* rx message descriptor entry, ensure the struct is aligned to 8 bytes */
-struct RXMD 
+struct RXMD
 {
       /* used by hardware */
       volatile uint32_t   next;
@@ -894,7 +894,7 @@ struct RXMD
 
 #define NUM_FRAGS       6
 
-/* 
+/*
  * tx message descriptor entry, ensure the struct is aligned to 8 bytes
  */
 
@@ -904,7 +904,7 @@ struct tfrag
       volatile uint32_t   length;
 } __attribute__ ((packed));
 
-struct TXMD 
+struct TXMD
 {
       /* used by hardware */
       volatile uint32_t   next;
@@ -926,7 +926,7 @@ struct TXMD
 /*
  * Per-device data
  */
-struct elnk_softc 
+struct elnk_softc
 {
       struct arpcom		arpcom;
 
@@ -1043,7 +1043,7 @@ xl_wait(sc)
 {
    register int		i;
 
-   for(i = 0; i < XL_TIMEOUT; i++) 
+   for(i = 0; i < XL_TIMEOUT; i++)
    {
       if (!(CSR_READ_2(sc, XL_STATUS) & XL_STAT_CMDBUSY))
          break;
@@ -1130,7 +1130,7 @@ static int
 xl_mii_readreg(sc, frame)
    struct elnk_softc		*sc;
    struct xl_mii_frame	*frame;
-	
+
 {
    int			i, ack;
 
@@ -1141,7 +1141,7 @@ xl_mii_readreg(sc, frame)
    frame->mii_opcode = XL_MII_READOP;
    frame->mii_turnaround = 0;
    frame->mii_data = 0;
-	
+
    /*
     * Select register window 4.
     */
@@ -1214,7 +1214,7 @@ static int
 xl_mii_writereg(sc, frame)
    struct elnk_softc		*sc;
    struct xl_mii_frame	*frame;
-	
+
 {
    /*
     * Set up frame for TX.
@@ -1223,7 +1223,7 @@ xl_mii_writereg(sc, frame)
    frame->mii_stdelim = XL_MII_STARTDELIM;
    frame->mii_opcode = XL_MII_WRITEOP;
    frame->mii_turnaround = XL_MII_TURNAROUND;
-	
+
    /*
     * Select the window 4.
     */
@@ -1371,7 +1371,7 @@ xl_read_eeprom(sc, dest, off, cnt, swap)
 
    for (i = 0; i < cnt; i++) {
       if (sc->xl_flags & XL_FLAG_8BITROM)
-         CSR_WRITE_2(sc, XL_W0_EE_CMD, 
+         CSR_WRITE_2(sc, XL_W0_EE_CMD,
                      XL_EE_8BIT_READ | EEPROM_8BIT_OFFSET(off + i));
       else
          CSR_WRITE_2(sc, XL_W0_EE_CMD,
@@ -1384,7 +1384,7 @@ xl_read_eeprom(sc, dest, off, cnt, swap)
       if (swap)
          *ptr = ntohs(word);
       else
-         *ptr = word;	
+         *ptr = word;
    }
 
    return(err ? 1 : 0);
@@ -1403,12 +1403,12 @@ xl_stats_update(timerid,xsc)
    u_int32_t            t1;
 
    sc->xl_stats.intstatus = CSR_READ_2(sc, XL_STATUS);
-   
+
    sc->xl_stats.miianr    = xl_miibus_readreg(sc, 0x18, MII_ANAR );
    sc->xl_stats.miipar    = xl_miibus_readreg(sc, 0x18, MII_ANLPAR );
    sc->xl_stats.miistatus = xl_miibus_readreg(sc, 0x18, MII_BMSR );
    sc->xl_stats.miicmd    = xl_miibus_readreg(sc, 0x18, MII_BMCR );
-   
+
    XL_SEL_WIN(1);
    sc->xl_stats.rxstatus  = CSR_READ_2(sc, XL_W1_RX_STATUS );
    sc->xl_stats.txstatus  = CSR_READ_1(sc, XL_W1_TX_STATUS );
@@ -1418,7 +1418,7 @@ xl_stats_update(timerid,xsc)
    sc->xl_stats.internalconfig = CSR_READ_4(sc, XL_W3_INTERNAL_CFG);
    sc->xl_stats.mac_control    = CSR_READ_2(sc, XL_W3_MAC_CTRL);
    sc->xl_stats.txfree         = CSR_READ_2(sc, XL_W3_FREE_TX );
-      
+
 
    /* Read all the stats registers. */
    XL_SEL_WIN(6);
@@ -1486,7 +1486,7 @@ xl_reset(sc)
    register int		i;
 
    XL_SEL_WIN(0);
-   CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RESET | 
+   CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_RESET |
                ((sc->xl_flags & XL_FLAG_WEIRDRESET) ?
                 XL_RESETOPT_DISADVFD:0));
 
@@ -1512,12 +1512,12 @@ xl_reset(sc)
    CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_TX_RESET);
    xl_wait(sc);
 
-   if (sc->xl_flags & XL_FLAG_INVERT_LED_PWR || 
-       sc->xl_flags & XL_FLAG_INVERT_MII_PWR) 
+   if (sc->xl_flags & XL_FLAG_INVERT_LED_PWR ||
+       sc->xl_flags & XL_FLAG_INVERT_MII_PWR)
    {
       XL_SEL_WIN(2);
       CSR_WRITE_2(sc, XL_W2_RESET_OPTIONS, CSR_READ_2(sc,
-                                                      XL_W2_RESET_OPTIONS) 
+                                                      XL_W2_RESET_OPTIONS)
                   | ((sc->xl_flags & XL_FLAG_INVERT_LED_PWR)?XL_RESETOPT_INVERT_LED:0)
                   | ((sc->xl_flags & XL_FLAG_INVERT_MII_PWR)?XL_RESETOPT_INVERT_MII:0)
          );
@@ -1896,7 +1896,7 @@ static int elnkIsOn(const rtems_irq_connect_data* irq)
 
 
 
-static void 
+static void
 elnk_start_txchain( struct elnk_softc *sc, struct TXMD *chainhead )
 {
    xl_wait(sc);
@@ -1935,7 +1935,7 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
       printk("etherlink : unit elnk%d intstatus %04x\n", sc->xl_unit, status  );
 #endif
 
-      if (status & XL_STAT_UP_COMPLETE) 
+      if (status & XL_STAT_UP_COMPLETE)
       {
 #if 0
          printk("etherlink : unit elnk%d rx\n", sc->xl_unit );
@@ -1990,7 +1990,7 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
              */
             if( (int)sc->last_txchain_head->chainptr == -1 )
             {
-               /* 
+               /*
                ** single packet was sent so no indirection to the last
                ** entry in the chain.  since chainptr is != 0, then
                ** another chain is ready starting from the packet AFTER
@@ -2032,18 +2032,18 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
       }
 
 
-      if (status & XL_STAT_ADFAIL) 
+      if (status & XL_STAT_ADFAIL)
       {
          printk("etherlink : unit elnk%d Catastrophic bus failure\n", sc->xl_unit );
       }
-      if (status & XL_STAT_STATSOFLOW) 
+      if (status & XL_STAT_STATSOFLOW)
       {
          sc->xl_stats_no_timeout = 1;
          xl_stats_update(sc->stat_timer_id,sc);
          sc->xl_stats_no_timeout = 0;
       }
    }
-   
+
 
 #if 0
    {
@@ -2102,13 +2102,13 @@ elnk_initialize_hardware (struct elnk_softc *sc)
    /*
     * Init RX ring
     */
-   cp = (unsigned char *)malloc( (ringsize = ((rxsize = (sc->numRxbuffers * sizeof(struct RXMD))) + 
+   cp = (unsigned char *)malloc( (ringsize = ((rxsize = (sc->numRxbuffers * sizeof(struct RXMD))) +
                                               (txsize = (sc->numTxbuffers * sizeof(struct TXMD)))) ) +
                                  + CPU_CACHE_ALIGNMENT_FOR_BUFFER);
    sc->bufferBase = cp;
    cp += (CPU_CACHE_ALIGNMENT_FOR_BUFFER - (int)cp) & (CPU_CACHE_ALIGNMENT_FOR_BUFFER - 1);
 #if defined(__i386__)
-#ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA 
+#ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA
    if (_CPU_is_paging_enabled())
       _CPU_change_memory_mapping_attribute
          (NULL, cp, ringsize, PTE_CACHE_DISABLE | PTE_WRITABLE);
@@ -2124,7 +2124,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
    {
       struct mbuf    *m;
       struct RXMD    *nxtmd;
-      /* 
+      /*
        * The rx ring is easy as its just an array of RXMD structs.  New
        * mbuf entries are allocated from the stack whenever the rx
        * daemon forwards an incoming packet into it.  Here, we
@@ -2136,7 +2136,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
          {
             rtems_panic ("etherlink : unit elnk%d rx ring entry %d not aligned to 8 bytes\n", sc->xl_unit, i );
          }
-      
+
          /* allocate an mbuf for each receive descriptor */
          MGETHDR (m, M_WAIT, MT_DATA);
          MCLGET (m, M_WAIT);
@@ -2161,7 +2161,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
 
    {
       struct TXMD *thismd, *nxtmd;
-      /* 
+      /*
        * The tx ring is more complex. Each MD has an array of fragment
        * descriptors that are loaded from each packet as they arrive
        * from the stack.  Each packet gets one ring entry, this allows
@@ -2217,7 +2217,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
           sc->arpcom.ac_enaddr[0], sc->arpcom.ac_enaddr[1],
           sc->arpcom.ac_enaddr[2], sc->arpcom.ac_enaddr[3],
           sc->arpcom.ac_enaddr[4], sc->arpcom.ac_enaddr[5],
-          sc->xl_unit, 
+          sc->xl_unit,
           (unsigned)sc->ioaddr, sc->irqInfo.name );
 #endif
 
@@ -2291,13 +2291,13 @@ elnk_rxDaemon (void *arg)
                   */
                   while( (rxstat = ld_le32(&rmd->status)) )
                   {
-                     if (rxstat & XL_RXSTAT_UP_ERROR) 
+                     if (rxstat & XL_RXSTAT_UP_ERROR)
                      {
                         printk("unit %i up error\n", sc->xl_unit );
                         ifp->if_ierrors++;
                      }
 
-                     if( (rxstat & XL_RXSTAT_UP_CMPLT) ) 
+                     if( (rxstat & XL_RXSTAT_UP_CMPLT) )
                      {
 
 #if 0
@@ -2337,7 +2337,7 @@ elnk_rxDaemon (void *arg)
                      }
                      /* clear descriptor status */
                      rmd->status = 0;
-      
+
                      rmd = rmd->next_md;
                   }
 
@@ -2377,13 +2377,13 @@ elnk_txDaemon (void *arg)
    int                   chainCount,i;
    rtems_event_set       events;
 
-   for (;;) 
+   for (;;)
    {
       /*
        * Wait for any unit's signal to wake us up
        */
       rtems_bsdnet_event_receive( RTEMS_ALL_EVENTS,
-                                  RTEMS_EVENT_ANY | RTEMS_WAIT, 
+                                  RTEMS_EVENT_ANY | RTEMS_WAIT,
                                   RTEMS_NO_TIMEOUT, &events);
 
       for(i=0; i< NUM_UNITS; i++ )
@@ -2401,10 +2401,10 @@ elnk_txDaemon (void *arg)
 
                chainCount = 0;
                firstmd = NULL;
-               
+
                lastmd = sc->last_tx_md;
 
-               for(;;) 
+               for(;;)
                {
                   /*
                   ** Check the chain recovery queue whenever the tx
@@ -2462,7 +2462,7 @@ elnk_txDaemon (void *arg)
                      break;
                   }
 
-                  
+
 
                   IF_DEQUEUE(&ifp->if_snd, m);
                   if( !m ) break;
@@ -2482,7 +2482,7 @@ elnk_txDaemon (void *arg)
                      if( m )
                      {
                         printk("etherlink : unit elnk%d tx fragments exhausted, truncating packet!\n", sc->xl_unit);
-                        st_le32( &nextmd->txfrags[NUM_FRAGS-1].length, XL_LAST_FRAG | 
+                        st_le32( &nextmd->txfrags[NUM_FRAGS-1].length, XL_LAST_FRAG |
                                  ld_le32( &nextmd->txfrags[NUM_FRAGS-1].length) );
                      }
                   }
@@ -2493,7 +2493,7 @@ elnk_txDaemon (void *arg)
                      int  i;
                      printk("unit %d queued  pkt (%08x) ", sc->xl_unit, (uint32_t)pkt );
                      for(delim="", i=0; i < sizeof(struct ether_header); i++, delim=":")
-                        printk("%s%02x", delim, (char) pkt[i] ); 
+                        printk("%s%02x", delim, (char) pkt[i] );
                      printk("\n");
                   }
 #endif
@@ -2504,7 +2504,7 @@ elnk_txDaemon (void *arg)
                   st_le32( &nextmd->status, 0);
 
                   if( !firstmd )
-                  {                     
+                  {
                      /* keep track of the first packet we add to the chain */
                      firstmd = nextmd;
 
@@ -2540,21 +2540,21 @@ elnk_txDaemon (void *arg)
                   /* save the last descriptor we set up in the chain */
                   sc->last_tx_md = lastmd;
 
-                  /* 
+                  /*
                    * We've added one or more packets to a chain, flag
                    * the last packet so we get an dnComplete interrupt
                    * when the card finishes accepting the chain
                    */
                   st_le32( &lastmd->status, XL_TXSTAT_DL_INTR );
 
-                  /* 
+                  /*
                    * point the chain head's chainptr to the tail so we
                    * can jump to the next chain to send inside the isr.
                    * If we're only sending one packet, then don't bother
                    * with the link, as the chainptr value will either be
                    * 0 if theres no next chain or -1 if there is.
                    */
-                  if( chainCount > 1 ) 
+                  if( chainCount > 1 )
                   {
                      firstmd->chainptr = lastmd;
 
@@ -2562,7 +2562,7 @@ elnk_txDaemon (void *arg)
                      if( ++sc->chlenIndex == NUM_CHAIN_LENGTHS ) sc->chlenIndex = 0;
                   }
 
-                  /* 
+                  /*
                   ** clear the last packet's chainptr flag.  If another
                   ** chain is added later but before this chain is
                   ** finished being sent, this flag on this packet will
@@ -2571,19 +2571,19 @@ elnk_txDaemon (void *arg)
                   lastmd->chainptr = NULL;
 
 #if 0
-                  printk("unit %d queued %d pkts, lastpkt status %08X\n", 
-                         sc->xl_unit, 
-                         chainCount, 
+                  printk("unit %d queued %d pkts, lastpkt status %08X\n",
+                         sc->xl_unit,
+                         chainCount,
                          (uint32_t)ld_le32( &lastmd->status) );
 #endif
 
-                  if( sc->tx_idle == 0 && CSR_READ_4(sc, XL_DOWNLIST_PTR) == 0 ) 
+                  if( sc->tx_idle == 0 && CSR_READ_4(sc, XL_DOWNLIST_PTR) == 0 )
                   {
                      printk("etherlink : unit elnk%d tx forced!\n", sc->xl_unit);
                      sc->tx_idle = -1;
                   }
 
-                  /* 
+                  /*
                   ** start sending this chain of packets if tx isn't
                   ** busy, else the dnComplete interrupt will see there
                   ** is another chain waiting and begin it immediately.
@@ -2660,7 +2660,7 @@ elnk_init (void *arg)
          uint32_t   cr,sr;
 
          xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_RESET );
-   
+
          while( (cr = xl_miibus_readreg(sc, 0x18, MII_BMCR )) & BMCR_RESET )
          {
             DELAY(100000);
@@ -2669,7 +2669,7 @@ elnk_init (void *arg)
          xl_miibus_writereg(sc, 0x18, MII_ANAR, ANAR_10 | ANAR_TX | ANAR_10_FD | ANAR_TX_FD );  /*  ANAR_T4 */
          xl_miibus_writereg(sc, 0x18, MII_BMCR, BMCR_STARTNEG | BMCR_AUTOEN );
 
-         while( ((sr = xl_miibus_readreg(sc, 0x18, MII_BMSR)) & BMSR_ACOMP) == 0 ); 
+         while( ((sr = xl_miibus_readreg(sc, 0x18, MII_BMSR)) & BMSR_ACOMP) == 0 );
       }
 
 
@@ -2689,7 +2689,7 @@ elnk_init (void *arg)
 
          /* Init our MAC address */
          XL_SEL_WIN(2);
-         for (i = 0; i < ETHER_ADDR_LEN; i++) 
+         for (i = 0; i < ETHER_ADDR_LEN; i++)
          {
             CSR_WRITE_1(sc, XL_W2_STATION_ADDR_LO + i, sc->arpcom.ac_enaddr[i]);
          }
@@ -2852,7 +2852,7 @@ elnk_init (void *arg)
             CSR_WRITE_2(sc, XL_COMMAND, XL_CMD_COAX_STOP);
 
          /* increase packet size to allow reception of 802.1q or ISL packets */
-         if (sc->xl_type == XL_TYPE_905B) 
+         if (sc->xl_type == XL_TYPE_905B)
             CSR_WRITE_2(sc, XL_W3_MAXPKTSIZE, XL_PACKET_SIZE);
          /* Clear out the stats counters. */
 
@@ -2960,13 +2960,13 @@ elnk_stop (struct elnk_softc *sc)
 static void
 elnk_stats (struct elnk_softc *sc)
 {
-   printf("    MII PHY data { anr:%04x  lpar:%04x  stat:%04x  ctl:%04x }\n", 
-          sc->xl_stats.miianr, 
-          sc->xl_stats.miipar, 
+   printf("    MII PHY data { anr:%04x  lpar:%04x  stat:%04x  ctl:%04x }\n",
+          sc->xl_stats.miianr,
+          sc->xl_stats.miipar,
           sc->xl_stats.miistatus,
           sc->xl_stats.miicmd);
 
-   printf("         internalcfg:%08x            macctl:%04x      dmactl:%08x\n", 
+   printf("         internalcfg:%08x            macctl:%04x      dmactl:%08x\n",
           sc->xl_stats.internalconfig,
           sc->xl_stats.mac_control,
           sc->xl_stats.dmactl);
@@ -3000,27 +3000,27 @@ elnk_stats (struct elnk_softc *sc)
              (totalLengths / numLengths) );
    }
 
-   printf("        carrier_lost:%-5d             sqe_errs:%-5d\n",   
-          sc->xl_stats.xl_carrier_lost, 
+   printf("        carrier_lost:%-5d             sqe_errs:%-5d\n",
+          sc->xl_stats.xl_carrier_lost,
           sc->xl_stats.xl_sqe_errs);
 
-   printf("  tx_multi_collision:%-5d  tx_single_collision:%-5d\n",   
-          sc->xl_stats.xl_tx_multi_collision, 
+   printf("  tx_multi_collision:%-5d  tx_single_collision:%-5d\n",
+          sc->xl_stats.xl_tx_multi_collision,
           sc->xl_stats.xl_tx_single_collision);
 
-   printf("   tx_late_collision:%-5d           rx_overrun:%-5d\n",   
-          sc->xl_stats.xl_tx_late_collision, 
+   printf("   tx_late_collision:%-5d           rx_overrun:%-5d\n",
+          sc->xl_stats.xl_tx_late_collision,
           sc->xl_stats.xl_rx_overrun);
 
-   printf("         tx_deferred:%-5d               badssd:%-5d\n",   
-          sc->xl_stats.xl_tx_deferred, 
+   printf("         tx_deferred:%-5d               badssd:%-5d\n",
+          sc->xl_stats.xl_tx_deferred,
           sc->xl_stats.xl_badssd);
 
-   printf("        rx_frames_ok:%-9d     tx_frames_ok:%-9d\n",   
+   printf("        rx_frames_ok:%-9d     tx_frames_ok:%-9d\n",
           sc->xl_stats.xl_rx_frames_ok,
           sc->xl_stats.xl_tx_frames_ok);
 
-   printf("         rx_bytes_ok:%-9d      tx_bytes_ok:%-9d\n",   
+   printf("         rx_bytes_ok:%-9d      tx_bytes_ok:%-9d\n",
           sc->xl_stats.xl_rx_bytes_ok,
           sc->xl_stats.xl_tx_bytes_ok );
 }
@@ -3069,7 +3069,7 @@ elnk_ioctl (struct ifnet *ifp, int command, caddr_t data)
       case SIO_RTEMS_SHOW_STATS:
          elnk_stats (sc);
          break;
-		
+
          /*
           * FIXME: All sorts of multicast commands need to be added here!
           */
@@ -3095,12 +3095,12 @@ static int iftap(struct ifnet *ifp, struct ether_header *eh, struct mbuf *m )
    char *delim, *pkt;
 
    printk("unit %i, src ", ifp->if_unit );
-   for(delim= "", i=0; i< ETHER_ADDR_LEN; i++, delim=":") 
+   for(delim= "", i=0; i< ETHER_ADDR_LEN; i++, delim=":")
       printk("%s%02x", delim, (char) eh->ether_shost[i] );
 
    printk(" dest ");
 
-   for(delim= "", i=0; i< ETHER_ADDR_LEN; i++, delim=":") 
+   for(delim= "", i=0; i< ETHER_ADDR_LEN; i++, delim=":")
       printk("%s%02x", delim, (char) eh->ether_dhost[i] );
    printk("  pkt ");
 
@@ -3108,7 +3108,7 @@ static int iftap(struct ifnet *ifp, struct ether_header *eh, struct mbuf *m )
    for(delim="", i=0; i < sizeof(struct ether_header); i++, delim=":")
       printk("%s%02x", delim, (char) pkt[i] );
 
-   printk("\n"); 
+   printk("\n");
    return 0;
 }
 #endif
@@ -3179,9 +3179,9 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
        */
       for( i=0; !done && xl_devs[i].xl_vid; i++)
       {
-         for(unum= 1; !done && BSP_pciFindDevice( xl_devs[i].xl_vid, xl_devs[i].xl_did, unum-1, 
-                                         &sysboards[numFound].pbus, 
-                                         &sysboards[numFound].pdev, 
+         for(unum= 1; !done && BSP_pciFindDevice( xl_devs[i].xl_vid, xl_devs[i].xl_did, unum-1,
+                                         &sysboards[numFound].pbus,
+                                         &sysboards[numFound].pdev,
                                                   &sysboards[numFound].pfun)==0; unum++)
          {
             if( numFound == NUM_UNITS )
@@ -3254,7 +3254,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
    sc = &elnk_softc[unitNumber - 1];
    ifp = &sc->arpcom.ac_if;
-   if (ifp->if_softc != NULL) 
+   if (ifp->if_softc != NULL)
    {
       printk("etherlink : unit %i already in use.\n", unitNumber );
       return 0;
@@ -3287,9 +3287,9 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
 
 #ifdef ELNK_DEBUG
-   printk("etherlink : device '%s', name 'elnk%d', pci %02x:%02x.%02x, %d rx/%d tx buffers\n", 
-          xl_devs[sc->xl_type].xl_name, sc->xl_unit, 
-          pbus, pdev, pfun, 
+   printk("etherlink : device '%s', name 'elnk%d', pci %02x:%02x.%02x, %d rx/%d tx buffers\n",
+          xl_devs[sc->xl_type].xl_name, sc->xl_unit,
+          pbus, pdev, pfun,
           sc->numRxbuffers, sc->numTxbuffers);
 #endif
 
@@ -3329,9 +3329,9 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    */
    pci_write_config_word(pbus, pdev, pfun,
                          PCI_COMMAND,
-                         (uint16_t)( PCI_COMMAND_IO | 
-                                       PCI_COMMAND_MASTER | 
-                                       PCI_COMMAND_INVALIDATE | 
+                         (uint16_t)( PCI_COMMAND_IO |
+                                       PCI_COMMAND_MASTER |
+                                       PCI_COMMAND_INVALIDATE |
                                        PCI_COMMAND_WAIT ) );
    /*
     * Get the device's base address
@@ -3348,7 +3348,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    pci_read_config_byte(pbus, pdev, pfun,
                         PCI_INTERRUPT_LINE,
                         &cvalue);
-#endif        
+#endif
 
    memset(&sc->irqInfo,0,sizeof(rtems_irq_connect_data));
    sc->irqInfo.name = cvalue;
@@ -3373,7 +3373,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 #if defined(__PPC__)
       pci_read_config_byte(pbus,pdev,pfun, PCI_LATENCY_TIMER, &pci_latency);
 #endif
-      if (pci_latency < new_latency) 
+      if (pci_latency < new_latency)
       {
          printk("etherlink : unit elnk%d Overriding PCI latency, timer (CFLT) setting of %d, new value is %d.\n", sc->xl_unit, pci_latency, new_latency );
 #if defined(__i386__)
@@ -3429,8 +3429,8 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       if (sc->deviceID == TC_DEVICEID_TORNADO_10_100BT_920B)
          sc->xl_flags |= XL_FLAG_PHYOK;
 
-      
-      if (config->hardware_address) 
+
+      if (config->hardware_address)
       {
          memcpy(sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
       }
@@ -3441,7 +3441,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
             printk("etherlink : unit elnk%d Failed to read station address\n", sc->xl_unit );
             return 0;
          }
-         memcpy((char *)&sc->arpcom.ac_enaddr, eaddr, ETHER_ADDR_LEN); 
+         memcpy((char *)&sc->arpcom.ac_enaddr, eaddr, ETHER_ADDR_LEN);
       }
 
       /*
@@ -3500,7 +3500,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
          printk("etherlink : unit elnk%d available media : %s\n", sc->xl_unit, &msg[1]);
       }
-                   
+
       XL_SEL_WIN(7);
    }
 
@@ -3538,7 +3538,7 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    /*
     * Start driver tasks if this is the first unit initialized
     */
-   if (txDaemonTid == 0) 
+   if (txDaemonTid == 0)
    {
       if( rtems_message_queue_create( rtems_build_name('X','L','c','r'),
                                       sc->numTxbuffers+1,
@@ -3548,11 +3548,11 @@ rtems_elnk_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       {
          rtems_panic( "etherlink : Unable to create TX buffer recovery queue\n" );
       }
-                                                       
+
 
       rxDaemonTid = rtems_bsdnet_newproc( "XLrx", 4096,
                                           elnk_rxDaemon, NULL);
-      
+
       txDaemonTid = rtems_bsdnet_newproc( "XLtx", 4096,
                                           elnk_txDaemon, NULL);
 #ifdef ELNK_DEBUG

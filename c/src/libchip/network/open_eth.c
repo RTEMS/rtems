@@ -240,13 +240,13 @@ open_eth_initialize_hardware (struct open_eth_softc *sc)
 #ifdef OETH_RATE_10MHZ
     mii_cr = 0;
 #endif
-    write_mii(0, mii_cr | 0x8000); 
+    write_mii(0, mii_cr | 0x8000);
     while (read_mii(0) & 0x8000) {}
     write_mii(20, 0x1422);
 #ifdef OETH_RATE_10MHZ
     mii_cr = 0;
 #endif
-    write_mii(0, mii_cr); 
+    write_mii(0, mii_cr);
     printf("open_eth: driver attached, PHY config : 0x%04x\n", read_mii(0));
 
 #ifdef OPEN_ETH_DEBUG

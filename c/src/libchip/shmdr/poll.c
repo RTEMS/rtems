@@ -39,7 +39,7 @@ void Shm_Poll()
    * This avoids a race condition where we may get a clock
    * interrupt before MPCI has completed its init
    */
-  
+
   if (_System_state_Is_up(_System_state_Get()))
   {
       tmpfront = Shm_Local_receive_queue->front;

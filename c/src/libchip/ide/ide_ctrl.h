@@ -23,11 +23,11 @@ rtems_device_driver ide_controller_initialize(
         rtems_device_major_number major,
         rtems_device_minor_number minor,
         void *args);
-        
+
 
 #define IDE_CONTROLLER_DRIVER_TABLE_ENTRY \
     {ide_controller_initialize, NULL, NULL, NULL, NULL, NULL}
-    
+
 
 #ifdef __cplusplus
 }

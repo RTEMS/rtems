@@ -54,8 +54,8 @@ typedef enum {
 
 /*
  * Each field is interpreted thus:
- * 
- * sDeviceName  This is the name of the device. 
+ *
+ * sDeviceName  This is the name of the device.
  *
  * deviceType   This indicates the chip type.  It is especially important when
  *              multiple devices share the same interrupt vector and must be
@@ -75,7 +75,7 @@ typedef enum {
  *              flow control routine used to stop the remote transmitter will
  *              be called. This figure should be greater than or equal to
  *              the number of stages of FIFO between the transmitter and
- *              receiver. 
+ *              receiver.
  *
  *              NOTE: At the current time, this parameter is hard coded
  *                    in termios and this number is ignored.
@@ -90,7 +90,7 @@ typedef enum {
  *
  * pDeviceParams This contains either device specific data or a pointer to a
  *              device specific structure containing additional information
- *              not provided in this table. 
+ *              not provided in this table.
  *
  * ulCtrlPort1  This is the primary control port number for the device. This
  *              may be used to specify different instances of the same device

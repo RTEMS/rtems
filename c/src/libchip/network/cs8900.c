@@ -23,7 +23,7 @@
   CS8900 RTEMS driver.
 
   See the header file for details.
-   
+
 */
 
 #include <errno.h>

@@ -184,7 +184,7 @@ NS16550_STATIC int ns16550_close(
 );
 
 NS16550_STATIC void ns16550_write_polled(
-  int   minor, 
+  int   minor,
   char  cChar
 );
 

@@ -427,7 +427,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	 */
 	if ((unitNumber = rtems_bsdnet_parse_driver_name (config, &unitName)) < 0)
 		return 0;
-	
+
 	/*
 	 * Is driver free?
 	 */
@@ -448,7 +448,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	callout_handle_init(&sc->stat_ch);
 	mtx_init(&sc->sc_mtx, device_get_nameunit(dev), MTX_DEF | MTX_RECURSE);
 #endif
-	s = splimp(); 
+	s = splimp();
 
 	/*
 	 * init PCI Bios interface...
@@ -459,10 +459,10 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	  device_printf(dev, "could not initialize pci bios interface\n");
 	  return 0;
 	}
-	
+
 	/*
 	 * find device on pci bus
-	 */	
+	 */
     { int j;
 
       for (j=0; fxp_ident_table[j].devid; j++ ) {
@@ -475,7 +475,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		      i,sc->pci_signature);
         if (PCIB_ERR_SUCCESS == i)
 			break;
-	  }			
+	  }
 	}
 
 	/*
@@ -485,7 +485,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	  device_printf(dev, "could not find 82559ER device\n");
 	  return 0;
 	}
-	  
+
 
 	/*
 	 * Enable bus mastering. Enable memory space too, in case
@@ -572,7 +572,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	  sc->pci_regs_are_io = TRUE;
 	  pcib_conf_read32(sc->pci_signature,
 			   PCI_BASE_ADDRESS_1,
-			   &val32);	  
+			   &val32);
 	  sc->pci_regs_base = val32 & PCI_BASE_ADDRESS_IO_MASK;
 	}
 	else {
@@ -599,7 +599,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	sc->irqInfo.hdl = (rtems_irq_hdl)fxp_intr;
 	sc->irqInfo.on  = nopOn;
 	sc->irqInfo.off = nopOn;
-	sc->irqInfo.isOn = fxpIsOn;  
+	sc->irqInfo.isOn = fxpIsOn;
 	s = BSP_install_rtems_irq_handler (&sc->irqInfo);
 	if (!s)
 	  rtems_panic ("Can't attach fxp interrupt handler for irq %d\n",
@@ -616,7 +616,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	DBGLVL_PRINTK(3,"fxp_attach: sc->cbl_base = 0x%x\n",sc->cbl_base);
 	if (sc->cbl_base == NULL)
 		goto failmem;
-	else 
+	else
 	        memset(sc->cbl_base, 0, sizeof(struct fxp_cb_tx) * FXP_NTXCB);
 
 	sc->fxp_stats = malloc(sizeof(struct fxp_stats), M_DEVBUF,
@@ -669,7 +669,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	 *
 	 * Systems based on the ICH2/ICH2-M chip from Intel have a defect
 	 * where the chip can cause a PCI protocol violation if it receives
-	 * a CU_RESUME command when it is entering the IDLE state.  The 
+	 * a CU_RESUME command when it is entering the IDLE state.  The
 	 * workaround is to disable Dynamic Standby Mode, so the chip never
 	 * deasserts CLKRUN#, and always remains in an active state.
 	 *
@@ -706,7 +706,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 			    "EEPROM checksum @ 0x%x: 0x%x -> 0x%x\n",
 			    i, data, cksum);
 			/*
-			 * We need to do a full PCI reset here.  A software 
+			 * We need to do a full PCI reset here.  A software
 			 * reset to the port doesn't cut it, but let's try
 			 * anyway.
 			 */
@@ -951,7 +951,7 @@ fxp_stats(struct fxp_softc *sc)
 	printf ("  Input errors:%-8lu\n", ifp->if_ierrors);
 }
 
-static void 
+static void
 fxp_eeprom_shiftin(struct fxp_softc *sc, int data, int length)
 {
 	u_int16_t reg;
@@ -1236,7 +1236,7 @@ tbdinit:
 			ifp->if_timer = 5;
 		}
 		txp->tx_threshold = tx_threshold;
-	
+
 		/*
 		 * Advance the end of list forward.
 		 */
@@ -1290,7 +1290,7 @@ tbdinit:
 static rtems_isr fxp_intr(rtems_vector_number v)
 {
   /*
-   * FIXME: currently only works with one interface... 
+   * FIXME: currently only works with one interface...
    */
   struct fxp_softc *sc = &(fxp_softc[0]);
 
@@ -1333,11 +1333,11 @@ static void fxp_daemon(void *xsc)
 #ifdef NOTUSED
 		/*
 		 * It should not be possible to have all bits set; the
-		 * FXP_SCB_INTR_SWI bit always returns 0 on a read.  If 
+		 * FXP_SCB_INTR_SWI bit always returns 0 on a read.  If
 		 * all bits are set, this may indicate that the card has
 		 * been physically ejected, so ignore it.
-		 */  
-		if (statack == 0xff) 
+		 */
+		if (statack == 0xff)
 			return;
 #endif
 
@@ -1516,7 +1516,7 @@ fxp_tick(void *xsc)
 	 * with external storage to be released in a timely manner rather
 	 * than being defered for a potentially long time. This limits
 	 * the delay to a maximum of one second.
-	 */ 
+	 */
 	for (txp = sc->cbl_first; sc->tx_queued &&
 	    (txp->cb_status & FXP_CB_STATUS_C) != 0;
 	    txp = txp->next) {
@@ -1579,7 +1579,7 @@ fxp_tick(void *xsc)
 	}
 	else if (sc->stat_ch == fxp_timeout_stop_rq) {
 	  sc->stat_ch = fxp_timeout_stopped;
-	}	  
+	}
 }
 
 /*

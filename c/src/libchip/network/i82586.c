@@ -237,12 +237,12 @@ char *bitmask_snprintf(unsigned long value, const char *format, char *buf, int b
 {
   char *b  = buf;
   int  bit = 31;
-  
+
   while (bit-- > *format)
     value <<= 1;
 
   format++;
-  
+
   while (*format)
   {
     if (value & 0x80000000)
@@ -252,13 +252,13 @@ char *bitmask_snprintf(unsigned long value, const char *format, char *buf, int b
       *b++ = '0';
 
     *b++ = ',';
-    
+
     while (bit-- > *format)
       value <<= 1;
-  
+
     format++;
   }
-  
+
   *b = '\0';
   return buf;
 }
@@ -268,7 +268,7 @@ char *ether_sprintf(unsigned char *addr)
   static char buf[32];
   char *b = buf;
   int i;
-  
+
   for (i = 0; i < ETHER_ADDR_LEN; i++)
   {
     sprintf(b, "%02x:", *addr++);
@@ -309,17 +309,17 @@ i82586_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
   char            *name;
   int             unit;
   int             mtu;
-  
+
   /*
     * Parse driver name
    */
-  
+
   if ((unit = rtems_bsdnet_parse_driver_name (config, &name)) < 0)
     return 0;
-  
-  sc  = config->drv_ctrl; 
+
+  sc  = config->drv_ctrl;
   ifp = &sc->arpcom.ac_if;
-  
+
 #if I82586_DEBUG
   sc->sc_debug = 0; //IED_TINT | IED_XMIT;
 #endif
@@ -331,18 +331,18 @@ i82586_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
       printf ("Driver `%s' already in use.\n", config->name);
       return 0;
     }
-    
+
     /*
      * Process options
      */
-    
+
     memcpy (sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
-  
+
     if (config->mtu)
       mtu = config->mtu;
     else
       mtu = ETHERMTU;
-    
+
     ifp->if_softc  = sc;
     ifp->if_unit   = unit;
     ifp->if_name   = name;
@@ -514,7 +514,7 @@ iexmit(struct ie_softc *sc)
 #if I82586_DEBUG
     I82586_TRACE(sc, I82586_TX_EMIT, cur);
 #endif
-    
+
 #if I82586_DEBUG
   if (sc->sc_debug & IED_XMIT)
     printf("%s: xmit buffer %d\n", sc->arpcom.ac_if.if_name, cur);
@@ -611,7 +611,7 @@ i82586_cmd_wait(struct ie_softc *sc)
 
   off = IE_SCB_STATUS(sc->scb);
   printf("i82586_cmd_wait: timo(%ssync): scb status: 0x%x, cmd: 0x%x\n",
-         sc->async_cmd_inprogress?"a":"", 
+         sc->async_cmd_inprogress?"a":"",
          sc->ie_bus_read16(sc, off), cmd);
 
   return (1);  /* Timeout */
@@ -726,7 +726,7 @@ i82586_intr(rtems_vector_number vec, void *arg)
   static unsigned long icnt = 0;
   I82586_TRACE(sc, I82586_INTS_REQ, icnt++);
 #endif
-    
+
   /*
    * Implementation dependent interrupt handling. It must at least
    * disabled interrupts from the i82586. It is hoped this can
@@ -756,7 +756,7 @@ i82586_intr_task(void *arg)
   u_int           status;
   int             off;
   int             reset;
-  
+
   /*
    * Not sure this is a good idea but as a out path exists and
    * roads lead to it, it seems ok.
@@ -775,14 +775,14 @@ i82586_intr_task(void *arg)
 #endif
 
     reset = 0;
-    
+
     while ((status & IE_ST_WHENCE) != 0) {
 #if I82586_DEBUG
       if (sc->sc_debug)
         printf ("%s: -------\n%s: scbstatus=0x%x\n",
                 sc->arpcom.ac_if.if_name, sc->arpcom.ac_if.if_name, status);
 #endif
-    
+
 #if 1
       /* Ack interrupts FIRST in case we receive more during the ISR. */
       ie_ack(sc, status & IE_ST_WHENCE);
@@ -816,7 +816,7 @@ i82586_intr_task(void *arg)
       /*
        * Interrupt ACK was posted asynchronously; wait for
        * completion here before reading SCB status again.
-       * 
+       *
        * If ACK fails, try to reset the chip, in hopes that
        * it helps.
        */
@@ -825,14 +825,14 @@ i82586_intr_task(void *arg)
           break;
         }
 #endif
-    
+
       IE_BUS_BARRIER(sc, off, 2, BUS_SPACE_BARRIER_READ);
       status = sc->ie_bus_read16(sc, off);
 #if I82586_DEBUG
       I82586_TRACE(sc, I82586_INTS_LOOPS, status);
 #endif
     }
-    
+
     if (reset) {
 #if I82586_DEBUG
       printf("%s: intr reset; status=0x%x\n", sc->arpcom.ac_if.if_name, status);
@@ -840,11 +840,11 @@ i82586_intr_task(void *arg)
       i82586_cmd_wait(sc);
       i82586_reset(sc, 1);
     }
-    
+
 #if I82586_DEBUG
     I82586_TRACE(sc, I82586_INTS_OUT, status);
 #endif
-    
+
     if (sc->intrhook)
       (sc->intrhook)(sc, INTR_EXIT);
   }
@@ -861,7 +861,7 @@ i82586_rint(struct ie_softc *sc, int scbstatus)
 
 #if I82586_DEBUG
   I82586_TRACE(sc, I82586_RX_INT, scbstatus);
-  
+
   if (sc->sc_debug & IED_RINT)
     printf("%s: rint: status 0x%x\n",
            sc->arpcom.ac_if.if_name, scbstatus);
@@ -904,7 +904,7 @@ i82586_rint(struct ie_softc *sc, int scbstatus)
        */
       i82586_rx_errors(sc, i, status);
       drop = 1;
-      
+
 #if I82586_DEBUG
       I82586_TRACE(sc, I82586_RX_DROP, status);
 #endif
@@ -1294,7 +1294,7 @@ ie_readframe(struct ie_softc *sc, int num) /* frame number to read */
    */
   ether_input (&sc->arpcom.ac_if, eh, m);
   sc->arpcom.ac_if.if_ipackets++;
-  
+
 #if I82586_DEBUG
   I82586_TRACE(sc, I82586_RX_OK, sc->arpcom.ac_if.if_ipackets);
 #endif
@@ -1309,14 +1309,14 @@ void
 i82586_start(struct ifnet *ifp)
 {
   struct ie_softc *sc = ifp->if_softc;
-  
+
   if ((ifp->if_flags & (IFF_RUNNING | IFF_OACTIVE)) != IFF_RUNNING)
     return;
-  
+
 #if I82586_DEBUG
   I82586_TRACE(sc, I82586_TX_REQ, sc->xmit_busy);
 #endif
-  
+
   rtems_event_send (sc->tx_task, i82586_TX_EVENT);
 }
 
@@ -1330,10 +1330,10 @@ i82586_tx_task(void *arg)
     rtems_bsdnet_event_receive (i82586_TX_EVENT,
                                 RTEMS_WAIT | RTEMS_EVENT_ANY,
                                 0, &events);
-    
+
 #if I82586_DEBUG
     I82586_TRACE(sc, I82586_TX_EVT, sc->xmit_busy);
-    
+
     if (sc->sc_debug)
       printf ("%s: =======\n", sc->arpcom.ac_if.if_name);
 #endif
@@ -1350,11 +1350,11 @@ i82586_start_tx(struct ie_softc *sc)
   int  buffer, head, xbase;
   u_short  len;
   int  s;
-  
+
 #if I82586_DEBUG
   I82586_TRACE(sc, I82586_START_TX, sc->xmit_busy);
 #endif
-  
+
   if ((ifp->if_flags & (IFF_RUNNING | IFF_OACTIVE)) != IFF_RUNNING)
   {
 #if I82586_DEBUG
@@ -1362,7 +1362,7 @@ i82586_start_tx(struct ie_softc *sc)
 #endif
     return;
   }
-  
+
   for (;;) {
     if (sc->xmit_busy == NTXBUF) {
       ifp->if_flags |= IFF_OACTIVE;
@@ -1421,14 +1421,14 @@ i82586_start_tx(struct ie_softc *sc)
 #if I82586_DEBUG
     I82586_TRACE(sc, I82586_TX_START, sc->xmit_busy);
 #endif
-      
+
     s = splnet();
     /* Start the first packet transmitting. */
     if (sc->xmit_busy == 0)
       iexmit(sc);
 
     sc->xmit_busy++;
-      
+
     splx(s);
   }
 }
@@ -1770,7 +1770,7 @@ ie_ia_setup(struct ie_softc *sc, int cmdbuf)
 
   (sc->memcopyout)(sc, sc->arpcom.ac_enaddr,
                    IE_CMD_IAS_EADDR(cmdbuf), ETHER_ADDR_LEN);
-  
+
   cmdresult = i82586_start_cmd(sc, IE_CUC_START, cmdbuf, IE_STAT_COMPL, 0);
   status = sc->ie_bus_read16(sc, IE_CMD_COMMON_STATUS(cmdbuf));
   if (cmdresult != 0) {
@@ -1852,13 +1852,13 @@ i82586_init(void *arg)
   sc->trace_flow_wrap = 0;
 #endif
   sc->trace_flow_in = 0;
-  
+
   cmd = sc->buf_area;
-  
+
 #if I82586_DEBUG
   printf ("%s: sc_debug at 0x%08x\n", sc->arpcom.ac_if.if_name, (unsigned int) &sc->sc_debug);
 #endif
-  
+
   /*
    * Send the configure command first.
    */
@@ -1923,7 +1923,7 @@ i82586_start_transceiver(struct ie_softc *sc)
 #if I82586_DEBUG
       I82586_TRACE(sc, I82586_RX_START, 0);
 #endif
-      
+
   /*
    * Start RU at current position in frame & RBD lists.
    */
@@ -2075,7 +2075,7 @@ void
 i82586_mediastatus(struct ifnet *ifp, struct ifmediareq *ifmr)
 {
   struct ie_softc *sc = ifp->if_softc;
-  
+
   if (sc->sc_mediastatus)
     (*sc->sc_mediastatus)(sc, ifmr);
 }
@@ -2104,13 +2104,13 @@ print_softie(struct ie_softc *sc)
     "TX_ACTIVE",
     "TRACE_CNT"
   };
-  
+
   int i;
-  
+
   printf("i82586 %s:\n", sc->arpcom.ac_if.if_name);
 
   printf(" iobase=%p\n", sc->sc_iobase);
-  
+
   printf(" scp=0x%08x\t\tiscp=0x%08x\t\tscb=0x%08x\n",
          sc->scp, sc->iscp, sc->scb);
   printf(" buf_area=0x%08x\tbuf_area_sz=0x%08x\n",
@@ -2139,7 +2139,7 @@ print_softie(struct ie_softc *sc)
     int in;
     int lfdone = 0;
     char *tabs;
-    
+
     if (!sc->trace_flow_wrap) {
       cnt = sc->trace_flow_in;
       in = 0;
@@ -2152,7 +2152,7 @@ print_softie(struct ie_softc *sc)
     sc->trace_flow_in = sc->trace_flow_wrap = 0;
 
     cnt /= 2;
-    
+
     for (i = 0; i < cnt; i++) {
       if (!lfdone) {
         switch (sc->trace_flow[in]) {
@@ -2168,7 +2168,7 @@ print_softie(struct ie_softc *sc)
         tabs = "\t\t";
       else
         tabs = "\t";
-      
+
       printf(" %d\t%s%s0x%08x (%d)\n",
              i, trace_labels[sc->trace_flow[in]], tabs,
              sc->trace_flow[in + 1], sc->trace_flow[in + 1]);
@@ -2179,9 +2179,9 @@ print_softie(struct ie_softc *sc)
           lfdone = 1;
           printf("\n");
       }
-      
+
       in += 2;
-      
+
       if (in >= I82586_TRACE_FLOW)
         in = 0;
     }

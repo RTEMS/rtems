@@ -30,7 +30,7 @@
  * User extension to install MPCI_Fatal as a fatal error
  * handler extension
  */
- 
+
 rtems_extensions_table MPCI_Shm_extensions;
 
 rtems_mpci_entry Shm_Initialization( void )
@@ -69,11 +69,11 @@ rtems_mpci_entry Shm_Initialization( void )
    *  Set the Node Status indicators
    */
 
-  Shm_Pending_initialization = 
+  Shm_Pending_initialization =
     Shm_Convert(rtems_build_name( 'P', 'E', 'N', 'D' ));
-  Shm_Initialization_complete = 
+  Shm_Initialization_complete =
     Shm_Convert(rtems_build_name( 'C', 'O', 'M', 'P' ));
-  Shm_Active_node = 
+  Shm_Active_node =
     Shm_Convert(rtems_build_name( 'A', 'C', 'T', 'V' ));
 
   /*

@@ -2,10 +2,10 @@
   ------------------------------------------------------------------------
   cs8900.h,v 1.3 2002/09/07 23:09:47 joel Exp
   ------------------------------------------------------------------------
-  
+
   Copyright Cybertec Pty Ltd, 2000
   All rights reserved Cybertec Pty Ltd, 2000
-  
+
   Port to the DIMM PC copyright (c) 2004 Angelo Fraietta
     This project has been assisted by the Commonwealth Government
     through the Australia Council, its arts funding and advisory body.
@@ -16,7 +16,7 @@
   The license and distribution terms for this file may be
   found in the file LICENSE in this distribution or at
   http://www.OARcorp.com/rtems/license.html.
-  
+
   ------------------------------------------------------------------------
 
   CS8900 RTEMS driver.
@@ -27,7 +27,7 @@
   completely different bus, byte order and interrupt structures.
 
   An example BSP backend is provided in the pci386 BSP.
-  
+
   The BSP provides the following functions:
 
     cs8900_io_set_reg
@@ -70,7 +70,7 @@
   attached to the networking stack. It also creates a
   'struct rtems_bsdnet_ifconfig' which is used to attach the interface
   to the networking stack. The following code declares the BSD config:
-  
+
     static cs8900_device cs8900;
 
     static struct rtems_bsdnet_ifconfig cs8900_ifconfig =
@@ -113,9 +113,9 @@
      #define ETHERNET_IRQ_LEVEL 0
 
      cs8900_device *cs = &cs8900;
-     
+
      memset (cs, 0, sizeof (cs8900_device));
-  
+
      cs->dev = 0;
      cs->io_base = ETHERNET_IO_BASE;
      cs->mem_base = ETHERNET_MEM_BASE;
@@ -123,11 +123,11 @@
      cs->rx_queue_size = 30;
 
      cs8900_ifconfig.drv_ctrl = &cs8900;
-     
+
      printf ("CS8900 initialisation\n");
-    
+
      rtems_bsdnet_attach (&cs8900_ifconfig);
-     
+
      flags = IFF_UP;
      if (rtems_bsdnet_ifconfig (cs8900_ifconfig.name,
                                 SIOCSIFFLAGS,
@@ -422,7 +422,7 @@
 #define CS8900_SELF_STATUS_3_3_V            (1 << 6)
 #define CS8900_SELF_STATUS_INITD            (1 << 7)
 #define CS8900_SELF_STATUS_SIBUST           (1 << 8)
-#define CS8900_SELF_STATUS_EEPROM_PRESENT   (1 << 9)  
+#define CS8900_SELF_STATUS_EEPROM_PRESENT   (1 << 9)
 #define CS8900_SELF_STATUS_EEPROM_OK        (1 << 10)
 #define CS8900_SELF_STATUS_EL_PRESENT       (1 << 11)
 #define CS8900_SELF_STATUS_EE_SIZE          (1 << 12)
@@ -453,7 +453,7 @@
 #define CS8900_TRACE_SIZE (400)
 
 /*
- * The default receive queue size. If the BSP sets this field to 
+ * The default receive queue size. If the BSP sets this field to
  * 0 this default is used.
  */
 #define CS8900_RX_QUEUE_SIZE (30)
@@ -489,12 +489,12 @@ typedef struct
   unsigned long tx_underrun_errors;
   unsigned long tx_dropped;
   unsigned long tx_resends;
-  
+
   /* interrupt watch dog */
   unsigned long int_swint_req;
   unsigned long int_swint_res;
   unsigned long int_lockup;
-  
+
   unsigned long interrupts;
 
 } eth_statistics;
@@ -538,7 +538,7 @@ typedef struct
   unsigned char mac_address[6];
 
   /*
-   * The bsdnet information structure.  
+   * The bsdnet information structure.
    */
 
   struct arpcom  arpcom;
@@ -549,29 +549,29 @@ typedef struct
 
   int            accept_bcast;
   int            tx_active;
-  
+
   rtems_id       rx_task;
   rtems_id       tx_task;
 
-  /* 
+  /*
    * The queues. FIXME : these should be changed to be mbuf lists.
    */
 
   struct mbuf    *rx_ready_head;
   struct mbuf    *rx_ready_tail;
   int            rx_ready_len;
-  
+
   struct mbuf    *rx_loaded_head;
   struct mbuf    *rx_loaded_tail;
   int            rx_loaded_len;
 
   /*
-   * Number of mbufs queued for the interrupt handler to 
+   * Number of mbufs queued for the interrupt handler to
    * loop reading.
    */
 
   int            rx_queue_size;
-  
+
 #if CS8900_TRACE
   unsigned short trace_key[CS8900_TRACE_SIZE];
   unsigned long  trace_var[CS8900_TRACE_SIZE];
@@ -580,11 +580,11 @@ typedef struct
 #endif
 
   /**
-   * Standard(!) ethernet statistics 
+   * Standard(!) ethernet statistics
    */
 
   eth_statistics eth_stats;
-  
+
 } cs8900_device;
 
 /*
@@ -611,7 +611,7 @@ int cs8900_link_active (cs8900_device *cs);
 
 int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
                           int                          attaching);
-          
+
 /**
  * The BSP specific interrupt wrapper calls this function when a device
  * interrupt occurs.
@@ -700,7 +700,7 @@ unsigned short cs8900_io_get_reg (cs8900_device *cs, unsigned short reg);
  * @param data The data to be written to the register.
  */
 
-void cs8900_mem_set_reg (cs8900_device *cs, 
+void cs8900_mem_set_reg (cs8900_device *cs,
                          unsigned long reg, unsigned short data);
 
 /**

@@ -323,7 +323,7 @@ struct TransmitDescriptor {
   uint32_t          link_pad;
 
   /*
-   * Extra RTEMS stuff 
+   * Extra RTEMS stuff
    */
   struct TransmitDescriptor       *next;  /* Circularly-linked list */
   struct mbuf                     *mbufp; /* First mbuf in packet */
@@ -400,7 +400,7 @@ struct ReceiveDescriptor {
   uint32_t          in_use;
 
   /*
-   * Extra RTEMS stuff 
+   * Extra RTEMS stuff
    */
   volatile struct ReceiveDescriptor  *next;  /* Circularly-linked list */
   struct mbuf                        *mbufp; /* First mbuf in packet */
@@ -443,7 +443,7 @@ typedef volatile CamDescriptor_t *CamDescriptorPointer_t;
 #define RDA_IN_USE          0x0000  /* SONIC has finished with the packet */
                                     /*   and the driver can process it */
 #define RDA_FREE            0xFFFF  /* SONIC can use it */
-  
+
 /*
  *  Attach routine
  */

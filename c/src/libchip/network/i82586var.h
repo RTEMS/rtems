@@ -199,7 +199,7 @@ struct ie_softc {
   struct arpcom arpcom;
 
   /*
-   * For RTEMS we run the tx and rx handlers under a task due to the 
+   * For RTEMS we run the tx and rx handlers under a task due to the
    * network semaphore stuff.
    */
 
@@ -225,7 +225,7 @@ struct ie_softc {
                            u_int16_t value);
   void  (*ie_bus_write24) (struct ie_softc *, int offset,
                            int addr);
-  void  (*ie_bus_barrier) (struct ie_softc *, int offset, 
+  void  (*ie_bus_barrier) (struct ie_softc *, int offset,
                            int length, int flags);
 
   /* Media management */
@@ -296,9 +296,9 @@ do { rtems_interrupt_level level; rtems_interrupt_disable (level); \
 
   int          sc_debug;
   unsigned int trace_flow[I82586_TRACE_FLOW * 2];
-  unsigned int trace_flow_wrap;  
+  unsigned int trace_flow_wrap;
 #endif
-  unsigned int trace_flow_in;  
+  unsigned int trace_flow_in;
 };
 
 /* Exported functions */

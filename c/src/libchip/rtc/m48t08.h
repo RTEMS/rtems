@@ -2,7 +2,7 @@
  *  This file contains the definitions for the following real-time clocks:
  *
  *    + Mostek M48T08
- *    + Mostek M48T18 
+ *    + Mostek M48T18
  *    + Dallas Semiconductor DS1643
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -30,7 +30,7 @@
 #define M48T08_DATE        5
 #define M48T08_MONTH       6
 #define M48T08_YEAR        7
- 
+
 /*
  *  Driver function table
  */

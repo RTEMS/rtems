@@ -226,7 +226,7 @@ struct fxp_cb_mcs {
  * chosen to make the total struct size an even power of two. It's
  * critical that no TxCB be split across a page boundry since
  * no attempt is made to allocate physically contiguous memory.
- * 
+ *
  */
 #ifdef __alpha__ /* XXX - should be conditional on pointer size */
 #define FXP_NTXSEG      28
@@ -251,7 +251,7 @@ struct fxp_cb_tx {
 	/*
 	 * The following structure isn't actually part of the TxCB,
 	 * unless the extended TxCB feature is being used.  In this
-	 * case, the first two elements of the structure below are 
+	 * case, the first two elements of the structure below are
 	 * fetched along with the TxCB.
 	 */
 	volatile struct fxp_tbd tbd[FXP_NTXSEG];
@@ -331,7 +331,7 @@ struct fxp_stats {
 };
 #define FXP_STATS_DUMP_COMPLETE	0xa005
 #define FXP_STATS_DR_COMPLETE	0xa007
-	
+
 /*
  * Serial EEPROM control register bits
  */
