@@ -42,6 +42,7 @@
 #if defined(__rtems__)
 /* RTEMS doesn't have FreeBSD's sys/_types.h machinery. */
 typedef int socklen_t;
+typedef unsigned char 	sa_family_t;
 #endif
 
 /*
@@ -157,7 +158,7 @@ struct	sockwakeup {
  */
 struct sockaddr {
 	unsigned char	sa_len;			/* total length */
-	u_char	sa_family;		/* address family */
+	sa_family_t	sa_family;		/* address family */
 	char	sa_data[14];		/* actually longer; address value */
 };
 
@@ -278,12 +279,12 @@ struct sockproto {
  * Used value-result for recvmsg, value only for sendmsg.
  */
 struct msghdr {
-	void	*msg_name;		/* optional address */
-	u_int	msg_namelen;		/* size of address */
+	void		*msg_name;		/* optional address */
+	socklen_t	msg_namelen;		/* size of address */
 	struct	iovec *msg_iov;		/* scatter/gather array */
 	int	msg_iovlen;		/* # elements in msg_iov */
-	void 	*msg_control;		/* ancillary data, see below */
-	u_int	msg_controllen;		/* ancillary data buffer len */
+	void		*msg_control;		/* ancillary data, see below */
+	socklen_t	msg_controllen;		/* ancillary data buffer len */
 	int	msg_flags;		/* flags on received message */
 };
 
@@ -305,7 +306,7 @@ struct msghdr {
  * of message elements headed by cmsghdr structures.
  */
 struct cmsghdr {
-	u_int	cmsg_len;		/* data byte count, including hdr */
+	socklen_t	cmsg_len;		/* data byte count, including hdr */
 	int	cmsg_level;		/* originating protocol */
 	int	cmsg_type;		/* protocol-specific type */
 /* followed by	u_char  cmsg_data[]; */
