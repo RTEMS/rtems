@@ -58,6 +58,7 @@ extern "C" {
 #else
 #define CPU_HARDWARE_FP     FALSE
 #endif
+#define CPU_SOFTWARE_FP     FALSE
 
 #define CPU_ALL_TASKS_ARE_FP             FALSE
 #define CPU_IDLE_TASK_IS_FP              FALSE

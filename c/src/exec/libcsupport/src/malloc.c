@@ -82,9 +82,9 @@ void RTEMS_Malloc_Initialize(
       /* DOES NOT RETURN!!! */
     }
 
-    if (u32_address & (CPU_ALIGNMENT-1)) {
+    if (u32_address & (CPU_HEAP_ALIGNMENT-1)) {
       old_address = u32_address;
-      u32_address = (u32_address + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+      u32_address = (u32_address + CPU_HEAP_ALIGNMENT) & ~(CPU_HEAP_ALIGNMENT-1);
 
        /*
 	* adjust the length by whatever we aligned by

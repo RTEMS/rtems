@@ -92,7 +92,7 @@ void _Thread_Dispatch( void )
      *  operations.
      */
 
-#if ( CPU_HARDWARE_FP == TRUE )
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
     if ( (heir->fp_context != NULL) && !_Thread_Is_allocated_fp( heir ) ) {
       if ( _Thread_Allocated_fp != NULL )

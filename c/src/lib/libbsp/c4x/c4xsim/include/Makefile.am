@@ -12,14 +12,11 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/bspIo.h: $(top_srcdir)/../../shared/include/bspIo.h
-	$(INSTALL_DATA) $< $@
-
 $(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 	$(INSTALL_DATA) $< $@
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
-    $(PROJECT_INCLUDE)/bspIo.h $(PROJECT_INCLUDE)/coverhd.h 
+    $(PROJECT_INCLUDE)/coverhd.h 
 
 all-local: $(PREINSTALL_FILES)
 

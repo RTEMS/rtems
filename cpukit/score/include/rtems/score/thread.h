@@ -119,7 +119,9 @@ typedef struct {
   Priority_Control     initial_priority; /* initial priority                */
   boolean              core_allocated_stack;
   Stack_Control        Initial_stack;    /* stack information               */
+#if ( CPU_HARDWARE_FP == TRUE )
   void                *fp_context;       /* initial FP context area address */
+#endif
   void                *stack;            /* initial stack area address      */
 }   Thread_Start_information;
 
@@ -215,7 +217,9 @@ struct Thread_Control_struct {
   Priority_Information                  Priority_map;
   Thread_Start_information              Start;
   Context_Control                       Registers;
+#if ( CPU_HARDWARE_FP == TRUE )
   void                                 *fp_context;
+#endif
   void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
   void                                **extensions;
   rtems_task_variable_t                *task_variables;
@@ -308,7 +312,9 @@ SCORE_EXTERN Thread_Control *_Thread_Heir;
  *  context is currently loaded.
  */
 
+#if ( CPU_HARDWARE_FP == TRUE )
 SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
+#endif
 
 /*
  *  _Thread_Handler_initialization

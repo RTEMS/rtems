@@ -105,6 +105,7 @@ extern "C" {
 #else
 #define CPU_HARDWARE_FP     FALSE
 #endif
+#define CPU_SOFTWARE_FP     FALSE
 
 /*
  *  Are all tasks FLOATING_POINT tasks implicitly?

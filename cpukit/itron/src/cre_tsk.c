@@ -83,9 +83,13 @@ ER cre_tsk(
     the_thread, 
     NULL,
     pk_ctsk->stksz,
-    TRUE,          /* XXX - All tasks FP for now */
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+    TRUE,          /* XXX - All tasks FP (if the HW supports it) for now */
+#else
+    FALSE,
+#endif
     core_priority,
-    TRUE,
+    TRUE,        /* preemptible */
     THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE,
     NULL,        /* no budget algorithm callout */
     0,

@@ -63,7 +63,9 @@ void _Thread_Handler_initialization(
   _Context_Switch_necessary = FALSE;
   _Thread_Executing         = NULL;
   _Thread_Heir              = NULL;
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   _Thread_Allocated_fp      = NULL;
+#endif
 
   _Thread_Do_post_task_switch_extension = 0;
 

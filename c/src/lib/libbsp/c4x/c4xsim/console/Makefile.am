@@ -8,7 +8,7 @@ PGM = $(ARCH)/console.rel
 
 VPATH = @srcdir@:@srcdir@/../../../shared
 
-C_FILES = console.c consolereserveresources.c debugio.c simio.c printk.c
+C_FILES = console.c consolereserveresources.c debugio.c simio.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)

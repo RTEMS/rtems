@@ -187,6 +187,7 @@ extern void a29k_sigdfl_sup(void);
 #else
 #define CPU_HARDWARE_FP     FALSE
 #endif
+#define CPU_SOFTWARE_FP     FALSE
 
 /*
  *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?

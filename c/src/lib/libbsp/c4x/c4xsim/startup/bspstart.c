@@ -104,21 +104,6 @@ void bsp_start( void )
   if ( BSP_Configuration.work_space_size > (int) &_WorkspaceMax )
     rtems_fatal_error_occurred( 0x43218765 );
   
-
-  /*
-   *  Account for the console's resources
-   */
-
-  console_reserve_resources( &BSP_Configuration );
-
-  /*
-   * Add 1 extension for MPCI_fatal
-   */
-
-  if (BSP_Configuration.User_multiprocessing_table)
-    BSP_Configuration.maximum_extensions++;
-
-  
   BSP_output_char = C4X_BSP_output_char;
   BSP_poll_char = (BSP_polling_getchar_function_type) NULL;
 }

@@ -158,6 +158,7 @@ extern "C" {
  */
 
 #define CPU_HARDWARE_FP     TRUE
+#define CPU_SOFTWARE_FP     FALSE
 
 /*
  *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?

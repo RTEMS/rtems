@@ -140,7 +140,12 @@ int pthread_create(
    *  supports it.
    */
 
-  is_fp = CPU_HARDWARE_FP;
+
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+  is_fp = TRUE;
+#else
+  is_fp = FALSE;
+#endif
 
   /*
    *  Disable dispatch for protection

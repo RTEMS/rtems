@@ -111,8 +111,10 @@ RTEMS_INLINE_ROUTINE void _Thread_Unblock (
 
 RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
 {
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( _Thread_Executing->fp_context != NULL )
     _Context_Restore_fp( &_Thread_Executing->fp_context );
+#endif
 
   _CPU_Context_Restart_self( &_Thread_Executing->Registers );
 }
@@ -144,12 +146,14 @@ RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
  *  FALSE otherwise.
  */
 
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 RTEMS_INLINE_ROUTINE boolean _Thread_Is_allocated_fp (
   Thread_Control *the_thread
 )
 {
   return ( the_thread == _Thread_Allocated_fp );
 }
+#endif
 
 /*PAGE
  *
@@ -161,10 +165,12 @@ RTEMS_INLINE_ROUTINE boolean _Thread_Is_allocated_fp (
  *  point context is now longer associated with an active thread.
  */
 
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
 {
   _Thread_Allocated_fp = NULL;
 }
+#endif
 
 /*PAGE
  *
