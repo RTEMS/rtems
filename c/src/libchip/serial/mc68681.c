@@ -410,34 +410,6 @@ MC68681_STATIC rtems_isr mc68681_isr(
 }
 
 /*
- *  mc68681_flush
- *
- *  This routine waits before all output is completed before closing
- *  the requested port.
- *
- *  NOTE:  This is the "interrupt mode" close entry point.
- */
-
-/* XXX remove me */
-MC68681_STATIC int mc68681_flush(int major, int minor, void *arg)
-{
-#if 0
-  while(!Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
-    /*
-     * Yield while we wait
-     */
-    if(_System_state_Is_up(_System_state_Get())) {
-      rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-    }
-  }
-
-  mc68681_close(major, minor, arg);
-
-#endif
-  return(RTEMS_SUCCESSFUL);
-}
-
-/*
  *  mc68681_initialize_interrupts
  *
  *  This routine initializes the console's receive and transmit
@@ -475,16 +447,17 @@ MC68681_STATIC int mc68681_write_support_int(
   setReg        = Console_Port_Tbl[minor].setRegister;
 
   /*
-   *  We are using interrupt driven output and termios only sends us one character
-   *  at a time.
+   *  We are using interrupt driven output and termios only sends us
+   *  one character at a time.
    */
 
   if ( !len )
     return 0;
 
   /*
-   * Wake up the device
+   *  Put the character out and enable interrupts if necessary.
    */
+
   rtems_interrupt_disable(Irql);
     if ( Console_Port_Data[minor].bActive == FALSE ) {
       Console_Port_Data[minor].bActive = TRUE;
@@ -492,6 +465,7 @@ MC68681_STATIC int mc68681_write_support_int(
     }
     (*setReg)(pMC68681_port, MC68681_TX_BUFFER, *buf);
   rtems_interrupt_enable(Irql);
+
   return 1;
 }
 

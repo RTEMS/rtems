@@ -280,8 +280,6 @@ MC68681_STATIC void mc68681_write_polled(
 
 MC68681_STATIC void mc68681_initialize_interrupts(int minor);
 
-MC68681_STATIC int mc68681_flush(int major, int minor, void *arg);
-
 MC68681_STATIC int mc68681_write_support_int(
   int   minor,
   const char *buf,
