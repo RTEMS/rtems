@@ -8,7 +8,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  task1.c,v 1.3 1995/06/05 23:55:00 joel Exp
  */
 
 #include <rtems.h>
@@ -31,6 +31,8 @@ rtems_id Semaphore_id;
 Objects_Locations location;   /* uses internal RTEMS type */
 
 Thread_Control *Middle_tcb;   /* uses internal RTEMS type */
+
+Thread_Control *Low_tcb;      /* uses internal RTEMS type */
 
 rtems_task High_task(
   rtems_task_argument argument
@@ -166,6 +168,44 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
+  rtems_interrupt_level level;
+
+  Timer_initialize();
+    rtems_interrupt_disable( level );
+  end_time = Read_timer();
+ 
+  put_time(
+    "INTERRUPT DISABLE",
+    end_time,
+    1,
+    0,
+    0
+  );
+
+  Timer_initialize();
+    rtems_interrupt_flash( level );
+  end_time = Read_timer();
+ 
+  put_time(
+    "INTERRUPT FLASH",
+    end_time,
+    1,
+    0,
+    0
+  );
+ 
+  Timer_initialize();
+    rtems_interrupt_enable( level );
+  end_time = Read_timer();
+ 
+  put_time(
+    "INTERRUPT ENABLE",
+    end_time,
+    1,
+    0,
+    0
+  );
+ 
   Timer_initialize();
     _Thread_Disable_dispatch();
   end_time = Read_timer();
@@ -177,7 +217,6 @@ rtems_task High_task(
     0,
     0
   );
-
 
   Timer_initialize();
     _Thread_Enable_dispatch();
@@ -238,6 +277,9 @@ rtems_task Middle_task(
 
   Timer_initialize();
     _Context_Switch( &Middle_tcb->Registers, &_Thread_Executing->Registers );
+
+  Timer_initialize();
+    _Context_Switch(&Middle_tcb->Registers, &Low_tcb->Registers);
 }
 
 rtems_task Low_task(
@@ -257,6 +299,33 @@ rtems_task Low_task(
   );
 
   executing    = _Thread_Executing;
+
+  Low_tcb = executing;
+
+  Timer_initialize();
+    _Context_Switch( &executing->Registers, &executing->Registers );
+
+  end_time = Read_timer();
+
+  put_time(
+    "CONTEXT_SWITCH (SELF)",
+    end_time,
+    1,
+    0,
+    0
+  );
+
+  _Context_Switch(&executing->Registers, &Middle_tcb->Registers);
+
+  end_time = Read_timer();
+
+  put_time(
+    "CONTEXT_SWITCH (Initialised)",
+    end_time,
+    1,
+    0,
+    0
+  );
 
   _Thread_Executing =
         (Thread_Control *) _Thread_Ready_chain[201].first;
