@@ -94,16 +94,16 @@ extern "C" {
 
 #define Cause_tm27_intr() \
 { \
-    *(volatile rtems_unsigned16 *)SH7750_IPRB |= 0xf000; \
-    *(volatile rtems_unsigned16 *)SH7750_WTCSR = SH7750_WTCSR_KEY; \
-    *(volatile rtems_unsigned16 *)SH7750_WTCNT = SH7750_WTCNT_KEY | 0xfe; \
-    *(volatile rtems_unsigned16 *)SH7750_WTCSR = \
+    *(volatile uint16_t*)SH7750_IPRB |= 0xf000; \
+    *(volatile uint16_t*)SH7750_WTCSR = SH7750_WTCSR_KEY; \
+    *(volatile uint16_t*)SH7750_WTCNT = SH7750_WTCNT_KEY | 0xfe; \
+    *(volatile uint16_t*)SH7750_WTCSR = \
                             SH7750_WTCSR_KEY | SH7750_WTCSR_TME; \
 }
 
 #define Clear_tm27_intr() \
 { \
-    *(volatile rtems_unsigned16 *)SH7750_WTCSR = SH7750_WTCSR_KEY; \
+    *(volatile uint16_t*)SH7750_WTCSR = SH7750_WTCSR_KEY; \
 }
 
 #define Lower_tm27_intr() \
@@ -126,10 +126,10 @@ extern "C" {
  * Defined in the linker script 'linkcmds'
  */
 
-extern unsigned32       HeapStart ;
-extern unsigned32       HeapEnd ;
-extern unsigned32       WorkSpaceStart ;
-extern unsigned32       WorkSpaceEnd ;
+extern uint32_t         HeapStart ;
+extern uint32_t         HeapEnd ;
+extern uint32_t         WorkSpaceStart ;
+extern uint32_t         WorkSpaceEnd ;
 
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
@@ -137,7 +137,7 @@ extern void *CPU_Interrupt_stack_high ;
 /*
  * Defined in start.S
  */
-extern unsigned32 boot_mode;
+extern uint32_t   boot_mode;
 #define SH4_BOOT_MODE_FLASH 0
 #define SH4_BOOT_MODE_IPL   1
   

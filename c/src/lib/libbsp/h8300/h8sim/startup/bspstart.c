@@ -38,7 +38,7 @@ char *rtems_progname;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -97,7 +97,7 @@ void bsp_start( void )
 }
 
 void H8BD_Install_IRQ(
-  unsigned32	vector,
+  uint32_t  	vector,
   proc_ptr	new_handler,
   proc_ptr	*old_handler )
 { /* empty */
