@@ -43,7 +43,6 @@ EXTRA_DIST += start/start.S start/rtems_crti.S
 ## startup
 EXTRA_DIST += startup/bspstart.c startup/pgtbl_setup.c \
     startup/pgtbl_activate.c
-EXTRA_DIST += startup/linkcmds
 
 ## vectors
 EXTRA_DIST += vectors/vectors_init.c vectors/vectors.S
