@@ -10,10 +10,7 @@ C_FILES = bsplibc.c bsppost.c bspstart.c bspclean.c bootcard.c \
     m68kpretaskinghook.c main.c sbrk.c setvec.c gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-S_FILES = 
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES) $(S_O_FILES)
+OBJS = $(C_O_FILES)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
