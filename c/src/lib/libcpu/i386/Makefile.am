@@ -7,8 +7,7 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 VPATH = @srcdir@:@srcdir@/../shared/src
 
-C_FILES = cache.c cache_aligned_malloc.c cache_manager.c displayCpu.c idt.c \
-    page.c
+C_FILES = cache.c cache_aligned_malloc.c cache_manager.c displayCpu.c page.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 H_FILES = cache_.h

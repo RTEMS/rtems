@@ -1,3 +1,8 @@
+2000-10-17	Joel Sherrill <joel@OARcorp.com>
+
+	* idt.c, Makefile.am: Moved idt.c to libbsp/i386/shared so 
+	i386 RTEMS can be multilib'ed.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am
