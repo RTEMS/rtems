@@ -1,3 +1,10 @@
+2002-04-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/erc32nfp.cfg: Remove CPU_U32_FIX.
+	* custom/erc32.cfg: Ditto.
+	* custom/leon2.cfg: Ditto.
+
+
 2002-03-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/erc32.cfg: Remove NO_TABLE_MOVE. Remove FPU_REVB.
