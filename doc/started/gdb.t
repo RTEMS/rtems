@@ -8,7 +8,8 @@
 
 @chapter Building the GNU Debugger
 
-GDB is not currently RTEMS aware. The following configurations have been
+GDB is currently RTEMS aware only if you are using the remote debugging
+support via Ethernet.   The following configurations have been
 successfully used with RTEMS applications:
 
 @itemize @bullet
@@ -19,6 +20,10 @@ successfully used with RTEMS applications:
 
 Other configurations of gdb have successfully been used by RTEMS users
 but are not documented here.
+
+It is recommended that when toolset binaries are available for
+your particular host, that they be used.  Prebuilt binaries
+are much easier to install.
 
 @section Unarchive the gdb Distribution
 

@@ -13,6 +13,10 @@ source code for a GNU cross compiler toolset, apply
 any required RTEMS specific patches, compile that 
 toolset and install it.
 
+It is recommended that when toolset binaries are available for
+your particular host, that they be used.  Prebuilt binaries
+are much easier to install.
+
 @section Create the Archive and Build Directories
 
 Start by making the @code{archive} directory to contain the downloaded 

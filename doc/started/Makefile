@@ -17,7 +17,7 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
-GENERATED_FILES= buildc.texi buildrt.texi gdb.texi intro.texi \
+GENERATED_FILES= binaries.texi buildc.texi buildrt.texi gdb.texi intro.texi \
     nt.texi require.texi sample.texi
 
 FILES= $(PROJECT).texi versions.texi $(GENERATED_FILES)
@@ -55,10 +55,15 @@ intro.texi: intro.t versions.texi
 require.texi: require.t versions.texi
 	$(BMENU) -c -p "EGCS Mailing List" \
 	    -u "Top" \
+	    -n "Prebuilt Toolset Executables" ${*}.t
+
+binaries.texi: binaries.t versions.texi
+	$(BMENU) -c -p "GNU makeinfo Version Requirements" \
+	    -u "Top" \
 	    -n "Building the GNU C/C++ Cross Compiler Toolset" ${*}.t
 
 buildc.texi: buildc.t versions.texi
-	$(BMENU) -c -p "GNU makeinfo Version Requirements" \
+	$(BMENU) -c -p "Removing RPMs" \
 	    -u "Top" \
 	    -n "Building RTEMS" ${*}.t
 

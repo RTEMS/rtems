@@ -69,6 +69,7 @@ END-INFO-DIR-ENTRY
 
 @include intro.texi
 @include require.texi
+@include binaries.texi
 @include buildc.texi
 @include buildrt.texi
 @include sample.texi
@@ -84,6 +85,7 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 @menu
 * Introduction::
 * Requirements::
+* Prebuilt Toolset Executables::
 * Building the GNU C/C++ Cross Compiler Toolset::
 * Building RTEMS::
 * Building the Sample Application::

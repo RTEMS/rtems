@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@chapter Tool Binaries
+@chapter Prebuilt Toolset Executables
 
 Precompiled toolsets are available for Linux and Cygwin.  These are
 packaged using the RedHat Package Manager (RPM).  RPM is the
@@ -34,6 +34,8 @@ RPMs are strictly optional.
 
 @end enumerate
 
+@section Installing RPMs
+
 The following is a sample session illustrating the installation
 of a C/C++ toolset targeting the SPARC architecture.  
 
@@ -44,5 +46,19 @@ rpm -i rtems-base-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
 rpm -i sparc-rtems-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
 rpm -i rtems-base-gdb-4.18-2.i386.rpm
 rpm -i sparc-rtems-gdb-4.18-2.i386.rpm
+@end example
+
+@section Removing RPMs
+
+The following is a sample session illustrating the removal
+of a C/C++ toolset targeting the SPARC architecture.
+
+@example
+rpm -i sparc-rtems-gdb-4.18-2.i386.rpm
+rpm -i rtems-base-gdb-4.18-2.i386.rpm
+rpm -i sparc-rtems-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
+rpm -i rtems-base-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
+rpm -i sparc-rtems-binutils-2.9.5.0.24-1.i386.rpm
+rpm -i rtems-base-binutils-2.9.5.0.24-1.i386.rpm
 @end example
 
