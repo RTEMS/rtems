@@ -1,3 +1,9 @@
+2002-04-08	Chris Johns <ccj@acm.org>
+
+	* Per PR141 and PR174, make task switch extension its own list and
+	fix all odd problems introduced by providing macro version.
+	* inline/rtems/score/userext.inl: Fix.
+
 2001-04-08	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/score/object.inl: Corrected arguments.

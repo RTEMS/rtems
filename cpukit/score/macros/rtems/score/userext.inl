@@ -81,6 +81,8 @@
     _Chain_Prepend( &_User_extensions_List, &(_the_extension)->Node ); \
     \
     if ( (_the_extension)->Callouts.thread_switch != NULL ) { \
+      (_the_extension)->Switch.thread_switch = \
+          (_the_extension)->Callouts.thread_switch; \
       _Chain_Append( \
         &_User_extensions_Switches_list, &(_the_extension)->Switch.Node ); \
     } \
