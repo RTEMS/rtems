@@ -279,7 +279,7 @@ move_data:
         xor     r6,r6,r6                /* r6 = 0 */
 clear_bss:
         stswi   r6,r2,0x4               /* store r6 */
-        addi    r3,r2,0x4               /* update r2 */
+        addi    r2,r2,0x4               /* update r2 */
         bdnz    clear_bss               /* decrement counter and loop */
         blr                             /* return */
 .L_text_e:
