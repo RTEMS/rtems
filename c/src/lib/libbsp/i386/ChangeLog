@@ -1,3 +1,7 @@
+2003-12-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove shared/io/Makefile.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.

@@ -21,7 +21,6 @@ RTEMS_CHECK_BSPDIR([$RTEMS_BSP])
 AC_CONFIG_FILES([Makefile
 shared/Makefile
 shared/comm/Makefile
-shared/io/Makefile
 shared/irq/Makefile
 shared/pci/Makefile])
 AC_OUTPUT
