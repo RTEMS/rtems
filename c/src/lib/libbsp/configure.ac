@@ -22,13 +22,12 @@ RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
-
-RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
 
 # Is there code where there should be for this BSP?
 # The bare bsp is a special case as it is not under the RTEMS_CPU path
-if test "$bspdir" = "bare" ; then
+if test "$RTEMS_BSP_FAMILY" = "bare" ; then
   AC_CONFIG_SUBDIRS([bare])
 else
   RTEMS_CPU_SUBDIRS
