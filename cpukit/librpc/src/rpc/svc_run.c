@@ -45,6 +45,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_run.c,v 1.10 1999/08/28 00:
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/select.h>
 
 void
 svc_run()

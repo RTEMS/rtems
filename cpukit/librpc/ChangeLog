@@ -1,3 +1,7 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* src/rpc/svc_run.c: Remove warning.
+
 2002-10-28	Joel Sherrill <joel@OARcorp.com>
 
 	* src/rpc/clnt_tcp.c, src/rpc/clnt_udp.c, src/rpc/pmap_rmt.c,
