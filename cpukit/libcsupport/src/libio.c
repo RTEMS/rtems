@@ -158,9 +158,26 @@ unsigned32 rtems_libio_to_fcntl_flags(
 {
   unsigned32 fcntl_flags = 0;
 
-  fcntl_flags = rtems_assoc_remote_by_local( access_modes_assoc, flags );
-  fcntl_flags |=
-     rtems_assoc_remote_by_local_bitfield(status_flags_assoc, flags);
+  if ( (flags & LIBIO_FLAGS_READ_WRITE) == LIBIO_FLAGS_READ_WRITE ) {
+    fcntl_flags |= O_RDWR;
+  } else if ( (flags & LIBIO_FLAGS_READ) == LIBIO_FLAGS_READ) {
+    fcntl_flags |= O_RDONLY;
+  } else if ( (flags & LIBIO_FLAGS_WRITE) == LIBIO_FLAGS_WRITE) {
+    fcntl_flags |= O_WRONLY;
+  }
+
+  if ( (flags & LIBIO_FLAGS_NO_DELAY) == LIBIO_FLAGS_NO_DELAY ) {
+    fcntl_flags |= O_NDELAY;
+  }
+
+  if ( (flags & LIBIO_FLAGS_APPEND) == LIBIO_FLAGS_APPEND ) {
+    fcntl_flags |= O_APPEND;
+  }
+
+  if ( (flags & LIBIO_FLAGS_CREATE) == LIBIO_FLAGS_CREATE ) {
+    fcntl_flags |= O_CREAT;
+  }
+
   return fcntl_flags;
 }
 
