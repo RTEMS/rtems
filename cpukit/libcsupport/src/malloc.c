@@ -33,6 +33,10 @@
 
 #include <unistd.h>    /* sbrk(2) */
 
+#include <chain.h>
+
+Chain_Control RTEMS_Malloc_GC_list;
+
 rtems_id RTEMS_Malloc_Heap;
 size_t RTEMS_Malloc_Sbrk_amount;
 
@@ -69,6 +73,11 @@ void RTEMS_Malloc_Initialize(
   void               *starting_address;
   rtems_unsigned32    old_address;
   rtems_unsigned32    u32_address;
+
+  /*
+   *  Initialize the garbage collection list to start with nothing on it.
+   */
+  Chain_Initialize_empty(&RTEMS_Malloc_GC_list);
 
   /*
    * If the starting address is 0 then we are to attempt to
@@ -150,11 +159,28 @@ void *malloc(
   rtems_unsigned32   the_size;
   rtems_unsigned32   sbrk_amount;
   rtems_status_code  status;
+  Chain_Node        *to_be_freed;
 
   MSBUMP(malloc_calls, 1);
 
   if ( !size )
     return (void *) 0;
+
+  /*
+   *  Do not attempt to allocate memory if in a critical section or ISR.
+   */
+
+  if (_Thread_Dispatch_disable_level > 0)
+    return (void *) 0;
+ 
+  if (_ISR_Nest_level > 0)
+    return (void *) 0;
+ 
+  /*
+   *  If some free's have been deferred, then do them now.
+   */
+  while ((to_be_freed = Chain_Get(&RTEMS_Malloc_GC_list)) != NULL)
+    free(to_be_freed);
 
   /*
    * Try to give a segment in the current region if there is not
@@ -267,6 +293,19 @@ void *realloc(
 
   MSBUMP(realloc_calls, 1);
 
+  /*
+   *  Do not attempt to allocate memory if in a critical section or ISR.
+   */
+
+  if (_Thread_Dispatch_disable_level > 0)
+    return (void *) 0;
+ 
+  if (_ISR_Nest_level > 0)
+    return (void *) 0;
+ 
+  /*
+   * Continue with calloc().
+   */
   if ( !ptr )
     return malloc( size );
 
@@ -313,6 +352,15 @@ void free(
   if ( !ptr )
     return;
 
+  /*
+   *  Do not attempt to free memory if in a critical section or ISR.
+   */
+
+  if ((_Thread_Dispatch_disable_level > 0) || (_ISR_Nest_level > 0)) {
+    Chain_Append(&RTEMS_Malloc_GC_list, (Chain_Node *)ptr);
+    return;
+  }
+ 
 #ifdef MALLOC_STATS
   {
       unsigned32        size;
