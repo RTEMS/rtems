@@ -1,3 +1,10 @@
+2004-01-28	RTEMS
+
+	* configure.ac: Enable OS versioning by default for 4.7 branch.
+	* setup.def: Update binutils RPM version and build new gcc 3.2.3 RPMs.
+	* autotools/autoconf-rtems.spec.in, autotools/automake-rtems.spec.in:
+	Update for new tool spin.
+
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* scripts/automake.spec.in: 1.8.2.

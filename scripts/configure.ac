@@ -29,7 +29,7 @@ AC_ARG_ENABLE([osversions],
 yes ) osversion=RTEMS_API;;
 * ) osversion=;;
 esac],
-[osversion=])
+[osversion=RTEMS_API])
 
 AC_MSG_CHECKING(for rpm SPECS directory)
 # Allow users to override RPM_SPECSdir from the environment.

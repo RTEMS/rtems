@@ -5,7 +5,7 @@
 #
 binutils_version=2.14
 binutils_patch_version=20030911
-binutils_rpm_release=2
+binutils_rpm_release=3
 newlib_version=1.10.0
 newlib_patch_version=20020322
 gcc_version=2.95.3
@@ -19,6 +19,6 @@ rtems_rpm_release=1
 rpm_build_root=%{_tmppath}
 gcc3newlib_version=1.11.0
 gcc3newlib_patch_version=20030507
-gcc3_version=3.3.2
-gcc3_patch_version=20031216
-gcc3newlib_rpm_release=2
+gcc3_version=3.2.3
+gcc3_patch_version=20040108
+gcc3newlib_rpm_release=1

@@ -29,7 +29,7 @@ Copyright:    GPL
 Group:        @rpmgroup@
 Autoreqprov:  on
 Version:      %{rpmvers}
-Release:      1
+Release:      2
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
