@@ -226,8 +226,8 @@ rtems_status_code rtems_timer_fire_after(
   void                              *user_data
 )
 {
-  Timer_Control   *the_timer;
-  Objects_Locations       location;
+  Timer_Control      *the_timer;
+  Objects_Locations   location;
 
   if ( ticks == 0 )
     return RTEMS_INVALID_NUMBER;
@@ -326,8 +326,8 @@ rtems_status_code rtems_timer_reset(
   Objects_Id id
 )
 {
-  Timer_Control *the_timer;
-  Objects_Locations     location;
+  Timer_Control     *the_timer;
+  Objects_Locations  location;
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
