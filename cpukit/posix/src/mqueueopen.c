@@ -112,6 +112,11 @@ mqd_t mq_open(
     the_mq = _POSIX_Message_queue_Get( the_mq_id, &location );
     the_mq->open_count += 1;
     the_mq_fd->Queue = the_mq;
+    _Objects_Open(
+      &_POSIX_Message_queue_Information_fds,
+      &the_mq_fd->Object,
+      NULL
+    );
     _Thread_Enable_dispatch();
     _Thread_Enable_dispatch();
     return (mqd_t)the_mq_fd->Object.id;

@@ -1,3 +1,8 @@
+2003-01-03	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* src/mqueueopen.c: Actually open the message queue descriptor
+	so it is available for others to use.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Don't create $ARCH as side-effect of compilation.
