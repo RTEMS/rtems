@@ -29,18 +29,16 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/sample.am
 
+# AM_CPPFLAGS += -DRTEMS_TEST_IO_STREAM
+
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-if HAS_CXX
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-cxx-exe)
 
 all-local: $(TMPINSTALL_FILES)
-else
-all-local:
-endif
 
 EXTRA_DIST = $(C_FILES) $(CC_FILES) $(DOCS)
 

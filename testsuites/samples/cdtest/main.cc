@@ -26,10 +26,12 @@
  */
 
 #include <rtems.h>
-#include <stdio.h>
-#include <stdlib.h>
+
+#include <cstdio>
+#include <cstdlib>
+
 #ifdef RTEMS_TEST_IO_STREAM
-#include <iostream.h>
+#include <iostream>
 #endif
 
 extern "C" 
@@ -144,7 +146,7 @@ cdtest(void)
     BClass bleak;
 
 #ifdef RTEMS_TEST_IO_STREAM
-    cout << "Testing a C++ I/O stream" << endl;
+    std::cout << "Testing a C++ I/O stream" << std::endl;
 #else
     printf("IO Stream not tested\n");
 #endif

@@ -4,23 +4,27 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-CPLUSPLUS_TESTS = cdtest
+SUBDIRS = hello ticker base_sp unlimited minimum fileio
 
+if MPTESTS
 ## base_mp is a sample multiprocessing test
-MP_TESTS = base_mp
+SUBDIRS += base_mp
+endif
 
-FP_TESTS = paranoia
+SUBDIRS += paranoia
 
+if CXXTESTS
+SUBDIRS += iostream cdtest
+endif
+
+if NETTESTS
 ## loopback tests a network loopback interface
-NET_TESTS = loopback
-NET_TESTS += pppd
+SUBDIRS += loopback
+SUBDIRS += pppd
+endif
 
-SUBDIRS = hello ticker base_sp unlimited minimum fileio $(MP_TESTS) \
-    $(CPLUSPLUS_TESTS) $(FP_TESTS) $(NET_TESTS)
-
-AUTOMAKE_FILES = sample.am
-
-EXTRA_DIST = $(AUTOMAKE_FILES)
+DIST_SUBDIRS = hello ticker base_sp unlimited minimum fileio base_mp cdtest \
+    paranoia loopback pppd
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

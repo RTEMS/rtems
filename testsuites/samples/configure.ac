@@ -23,7 +23,6 @@ RTEMS_PROJECT_ROOT
 RTEMS_PROG_CC_FOR_TARGET
 
 RTEMS_PROG_CXX_FOR_TARGET
-
 RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
@@ -31,9 +30,33 @@ RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 RTEMS_CHECK_CXX(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING
 
-AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
-AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
-AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
+
+CXXTESTS=$HAS_CPLUSPLUS
+AS_IF([test $HAS_CPLUSPLUS = yes],[
+  AC_LANG_PUSH([C++])
+  AC_CHECK_HEADERS([cstdio cstdlib iostream],[],[CXXTESTS=no])
+  AC_CACHE_CHECK(
+  [if iostream supports std:: namespace],
+  [rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE],
+  [AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM(
+      [[#include <iostream>]], 
+      [[std::cout << "hello" << std::endl;]])
+    ],
+    [rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE=yes],
+    [rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE=no])
+  ])
+  AS_IF([test $rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE = no],[CXXTESTS=no])
+  AS_IF([test $CXXTESTS = no],[
+    AC_MSG_WARN([disabling C++ tests])
+  ])
+  AC_LANG_POP
+])
+
+AM_CONDITIONAL([CXXTESTS],[test $CXXTESTS = "yes"])
+AM_CONDITIONAL(NETTESTS,test "$HAS_NETWORKING" = "yes")
+AM_CONDITIONAL(MPTESTS,test "$HAS_MP" = "yes")
+
 #FIXME: We should use a feature based check
 AM_CONDITIONAL(LIBCHIP,[test "$RTEMS_BSP_FAMILY" != "posix"])
 
@@ -50,6 +73,7 @@ unlimited/Makefile
 base_mp/Makefile
 base_mp/node1/Makefile
 base_mp/node2/Makefile
+iostream/Makefile
 cdtest/Makefile
 pppd/Makefile
 ])

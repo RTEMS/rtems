@@ -26,12 +26,10 @@ include $(top_srcdir)/sample.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-if HAS_NETWORKING
 all-local: $(TMPINSTALL_FILES)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
-endif
 
 EXTRA_DIST = $(C_FILES) $(H_FILES)
 

@@ -1,5 +1,14 @@
 2004-05-10	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* configure.ac: Add CXX-checks. New conditionals CXXTESTS, MPTESTS,
+	NETTESTS. Add iostream/.
+	* Makefile.am, base_mp/node1/Makefile.am, base_mp/node2/Makefile.am
+	cdtest/Makefile.am, loopback/Makefile.am, pppd/Makefile.am: 
+	Reflect changes above.
+	* cdtest/main.cc: Adaptation to new C++ standards.
+
+2004-05-10	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* iostream/Makefile.am, iostream/init.cc, iostream/iostream.doc,
 	iostream/iostream.scn, iostream/system.h: 
 	New (C++ variant of hello).

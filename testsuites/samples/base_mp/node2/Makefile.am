@@ -31,8 +31,6 @@ include $(top_srcdir)/sample.am
 
 AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I.
 
-if HAS_MP
-
 #
 # (OPTIONAL) Add local stuff here using +=
 #
@@ -41,9 +39,6 @@ ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
 all-local: $(TMPINSTALL_FILES)
-else
-all-local:
-endif
 
 EXTRA_DIST = $(DOCS)
 
