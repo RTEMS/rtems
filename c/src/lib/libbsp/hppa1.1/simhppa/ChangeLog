@@ -1,3 +1,8 @@
+2001-11-15	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_BSPOPTS_*(SIMHPPA_FAST_IDLE), 
+	remove RTEMS_OUTPUT_BUILD_SUBDIRS.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

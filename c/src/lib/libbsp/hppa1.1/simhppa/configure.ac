@@ -25,6 +25,12 @@ AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
+RTEMS_BSPOPTS_SET([SIMHPPA_FAST_IDLE],[*],[1])
+RTEMS_BSPOPTS_HELP([SIMHPPA_FAST_IDLE],
+[If defined, speed up the clock ticks while the idle task is running so
+ time spent in the idle task is minimized.  This significantly reduces 
+ the wall time required to execute the RTEMS test suites.])
+
 AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
@@ -37,5 +43,3 @@ startup/Makefile
 tty/Makefile
 wrapup/Makefile])
 AC_OUTPUT
-
-RTEMS_OUTPUT_BUILD_SUBDIRS(RTEMS_BUILD_SUBDIRS)
