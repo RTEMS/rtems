@@ -14,17 +14,19 @@ Group:	      rtems
 Release:      @Release@
 Copyright:    1999 OARCorp
 
-Provides:     @target_alias@-gcc @target_alias@-chill @target_alias@-gcj
-Requires:     @target_alias@-binutils
+Provides:     	@target_alias@-gcc @target_alias@-chill @target_alias@-gcj
+Provides:	@target_alias@-g77 @target_alias@-objc
+Requires:     	@target_alias@-binutils
 
-Autoreqprov:  on
-Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+Autoreqprov:  	on
+Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      gcc@gcc_version@newlib@newlib_version@
+Version:      	gcc@gcc_version@newlib@newlib_version@
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
 Source1:	ftp://sourceware.cygnus/com/pub/newlib/newlib-@newlib_version@.tar.gz
 Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
 Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
+Buildroot:	/tmp
 
 #
 # The original sources are not included in the source RPM.
@@ -42,7 +44,7 @@ NoSource:      0, 1
 %description
 RTEMS is an open source operating system for embedded systems.
 
-This is gcc's and newlib C Library's sources with patch for RTEMS.
+This is gcc's and newlib C Library's sources with patches for RTEMS.
 
  The original sources are not included in the source RPM.
  If we included them, then the source RPMs for each target
@@ -82,7 +84,27 @@ Requires: @target_alias@-gcc
 %description -n @target_alias@-gcj
 RTEMS is an open source operating system for embedded systems.
 
-This is the gcc/java compiler and support files for @target_alias@
+This is the gcc/java compiler for @target_alias@
+
+%package -n @target_alias@-g77
+Summary:      gcc/g77 compiler for @target_alias@
+Group: rtems
+Requires: @target_alias@-gcc
+
+%description -n @target_alias@-g77
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/g77 compiler for @target_alias@
+
+%package -n @target_alias@-objc
+Summary:      gcc/objc compiler for @target_alias@
+Group: rtems
+Requires: @target_alias@-objc
+
+%description -n @target_alias@-objc
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/objc compiler for @target_alias@
 
 %prep
 # untar the sources inside @target_alias@-gcc-newlib
@@ -135,6 +157,10 @@ This is the gcc/java compiler and support files for @target_alias@
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
 
   rm -f dirs ;
+  echo "%dir /opt/rtems/lib" >> dirs ;
+  echo "%dir /opt/rtems/lib/gcc-lib" >> dirs ;
+  echo "%dir /opt/rtems/lib/gcc-lib/@target_alias@" >> dirs ;
+
   # Collect multilib subdirectories
   TGTDIR="$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@"
   find $TGTDIR \
@@ -144,15 +170,52 @@ This is the gcc/java compiler and support files for @target_alias@
   # Collect files to go into different packages
   cp dirs files.chill
   cp dirs files.gcc
+  cp dirs files.g77
+  cp dirs files.objc
+  cp dirs files.gcj
+
   f=`find $TGTDIR ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
     *chill*) echo "$i" >> files.chill ;;
+    *f771) ;;
+    *cc1obj) ;;
+    *libobjc*) echo "$i" >> files.objc ;;
+    *include/objc*) ;;
     *jc1) ;;
     *jvgenmain) ;;
     *) echo "$i" >> files.gcc ;;
     esac
   done
+
+%files -n @target_alias@-gcc -f build/files.gcc
+%dir /opt/rtems/info
+%doc /opt/rtems/info/dir
+%doc /opt/rtems/info/cpp.info*
+%doc /opt/rtems/info/gcc.info*
+%doc /opt/rtems/info/libc.info*
+%doc /opt/rtems/info/libm.info*
+
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
+%doc /opt/rtems/man/man1/cccp.1
+%doc /opt/rtems/man/man1/@target_alias@-gcc.1
+%doc /opt/rtems/man/man1/@target_alias@-g++.1
+
+%dir /opt/rtems/bin
+/opt/rtems/bin/cpp
+/opt/rtems/bin/gcov
+/opt/rtems/bin/@target_alias@-c++
+/opt/rtems/bin/@target_alias@-g++
+/opt/rtems/bin/@target_alias@-gcc
+/opt/rtems/bin/@target_alias@-protoize
+/opt/rtems/bin/@target_alias@-unprotoize
+
+%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
+
+%dir /opt/rtems/include
+/opt/rtems/include/g++-3
+/opt/rtems/@target_alias@
 
 %post -n @target_alias@-gcc
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -174,42 +237,14 @@ This is the gcc/java compiler and support files for @target_alias@
     done
   fi
 
-%files -n @target_alias@-gcc -f build/files.gcc
+
+%files -n @target_alias@-chill -f build/files.chill
+%dir /opt/rtems/bin
+/opt/rtems/bin/@target_alias@-chill
+
 %dir /opt/rtems/info
 %doc /opt/rtems/info/dir
-%doc /opt/rtems/info/cpp.info*
-%doc /opt/rtems/info/gcc.info*
-%doc /opt/rtems/info/g77.info*
-%doc /opt/rtems/info/libc.info*
-%doc /opt/rtems/info/libm.info*
-
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
-%doc /opt/rtems/man/man1/cccp.1
-%doc /opt/rtems/man/man1/@target_alias@-gcc.1
-%doc /opt/rtems/man/man1/@target_alias@-g++.1
-%doc /opt/rtems/man/man1/@target_alias@-g77.1
-
-%dir /opt/rtems/bin
-/opt/rtems/bin/cpp
-/opt/rtems/bin/gcov
-/opt/rtems/bin/@target_alias@-c++
-/opt/rtems/bin/@target_alias@-g++
-/opt/rtems/bin/@target_alias@-gcc
-/opt/rtems/bin/@target_alias@-g77
-/opt/rtems/bin/@target_alias@-protoize
-/opt/rtems/bin/@target_alias@-unprotoize
-
-%dir /opt/rtems/lib
-
-%dir /opt/rtems/lib/gcc-lib
-%dir /opt/rtems/lib/gcc-lib/@target_alias@
-%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
-%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc
-
-%dir /opt/rtems/include
-/opt/rtems/include/g++-3
-/opt/rtems/@target_alias@
+%doc /opt/rtems/info/chill.info*
 
 %post -n @target_alias@-chill
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -231,28 +266,52 @@ This is the gcc/java compiler and support files for @target_alias@
     done
   fi
 
-%files -n @target_alias@-chill -f build/files.chill
-%dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-chill
 
-%dir /opt/rtems/info
-%doc /opt/rtems/info/dir
-%doc /opt/rtems/info/chill.info*
-
-%dir /opt/rtems/lib
-%dir /opt/rtems/lib/gcc-lib
-%dir /opt/rtems/lib/gcc-lib/@target_alias@
-
-%files -n @target_alias@-gcj
+%files -n @target_alias@-gcj -f build/files.gcj
 %dir /opt/rtems/bin
 /opt/rtems/bin/jcf-dump
 /opt/rtems/bin/jv-scan
 /opt/rtems/bin/gcjh
 /opt/rtems/bin/@target_alias@-gcj
 
-%dir /opt/rtems/lib
-%dir /opt/rtems/lib/gcc-lib
-%dir /opt/rtems/lib/gcc-lib/@target_alias@
 /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jc1
 /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain
 
+
+%files -n @target_alias@-g77 -f build/files.g77
+%dir /opt/rtems/bin
+/opt/rtems/bin/@target_alias@-g77
+
+%dir /opt/rtems/info
+%doc /opt/rtems/info/g77.info*
+
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
+%doc /opt/rtems/man/man1/@target_alias@-g77.1
+
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/f771
+
+%post -n @target_alias@-g77
+  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+    done
+  fi
+
+%postun -n @target_alias@-g77
+  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+    done
+  fi
+
+
+%files -n @target_alias@-objc -f build/files.objc
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc
