@@ -1,3 +1,7 @@
+/**
+ * @file rtems/itron/time.h
+ */
+
 /*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
