@@ -20,8 +20,9 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
+#include <ringbuf.h>
 
-#include "console.h"
+#include <libchip/serial.h>
 #include "ns16550_p.h"
 
 /*

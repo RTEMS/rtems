@@ -15,12 +15,8 @@ C_PIECES=ns16550 z85c30
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=$(srcdir)/libcsupport.h
-SYS_H_FILES=
-RTEMS_H_FILES=$(srcdir)/libio.h
-PRIVATE_H_FILES=$(srcdir)/internal.h
-
-INSTALLED_H_FILES=$(srcdir)/ns16550.h $(srcdir)/z8530.h
+INSTALLED_H_FILES=$(srcdir)/ns16550.h $(srcdir)/z85c30.h \
+                  $(srcdir)/serial.h
 SRCS=$(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES) $(PRIVATE_H_FILES)
 OBJS=$(C_O_FILES)
 
@@ -54,6 +50,6 @@ $(LIB): $(SRCS) ${OBJS}
 # Install the library, appending _g or _p as appropriate.
 # for include files, just use $(INSTALL)
 preinstall:
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/libchip
+	$(INSTALL) -m 444 $(INSTALLED_H_FILES) $(PROJECT_INCLUDE)/libchip
 
 

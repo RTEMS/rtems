@@ -30,7 +30,7 @@
 #include <rtems/libio.h>
 #include <stdlib.h>
 
-#include "console.h"
+#include <libchip/serial.h>
 #include "z85c30_p.h"
 
 /*
