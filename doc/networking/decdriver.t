@@ -7,9 +7,9 @@
 @c  $Id$
 @c
 
-@chatper DEC 21140 Driver
+@chapter DEC 21140 Driver
 
-@section Introduction
+@section DEC 21240 Driver Introduction
 
 @c XXX add back in cross reference to list of boards.
 
@@ -113,7 +113,7 @@ header space (see PCI Registers Fgure). Once this operation performed,
 the driver
 is able to extract the information it needs to configure the board internal
 registers, like the interrupt line, the base address,... The board internal
-registers will not be detailled here. You can find them in @title{DIGITAL
+registers will not be detailled here. You can find them in @b{DIGITAL
 Semiconductor 21140A PCI Fast Ethernet LAN Controller
 - Hardware Reference Manual}.
 
@@ -149,7 +149,7 @@ or outcoming frame to send on the physical link.
 This DEC chip uses the host memory to store the incoming Ethernet frames and
 the descriptor of these frames. We have chosen to use 7 receive buffers and
 1 transmit buffer to optimize memory allocation due to cache and paging problem
-that will be explained in the section @b{Encountered Problems.
+that will be explained in the section @b{Encountered Problems}.
 
 
 To reference these buffers to the DEC chip we use a buffer descriptors
@@ -303,3 +303,4 @@ Reference Manual}}.
 
 @item @cite{[99.TA.0021.M.ER]Emmanuel Raguet,
 @b{RTEMS Cache Management For Intel}}.
+@end itemize

@@ -23,7 +23,7 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES=networkapp.texi driver.texi networktasks.texi testing.texi \
-  servers.texi
+  servers.texi decdriver.texi
 
 FILES= $(PROJECT).texi \
   networktasks.texi preface.texi $(GENERATED_FILES)
@@ -69,6 +69,11 @@ testing.texi: testing.t Makefile
 
 servers.texi: servers.t Makefile
 	$(BMENU) -p "Throughput" \
+	   -u "Top" \
+	   -n "DEC 21140 Driver" ${*}.t
+
+decdriver.texi: decdriver.t Makefile
+	$(BMENU) -p "Using Hooks" \
 	   -u "Top" \
 	   -n "Command and Variable Index" ${*}.t
 

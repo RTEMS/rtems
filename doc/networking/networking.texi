@@ -68,6 +68,7 @@ END-INFO-DIR-ENTRY
 @include networkapp.texi
 @include testing.texi
 @include servers.texi
+@include decdriver.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top networking
@@ -81,6 +82,7 @@ This is the online version of the RTEMS Network Supplement.
 * Using Networking in an RTEMS Application::
 * Testing the Driver::
 * Network Servers::
+* DEC 21140 Driver::
 * Command and Variable Index::
 * Concept Index::
 @end menu
@@ -91,7 +93,7 @@ This is the online version of the RTEMS Network Supplement.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, Using Hooks, Top
+@node Command and Variable Index, Concept Index, List of Ethernet cards using the DEC chip, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.
