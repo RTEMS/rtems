@@ -32,8 +32,14 @@ extern "C" {
  *     + required number of each object type
  */
 
-/* XXX fix me */
-typedef int posix_initialization_tasks_table;
+/*
+ *  For now, we are only allowing the user to specify the entry point
+ *  for posix initialization threads.
+ */
+
+typedef struct {
+  void       *(*entry)(void *);
+} posix_initialization_tasks_table;
 
 typedef struct {
   int                               maximum_threads;
