@@ -19,11 +19,31 @@ cd tools
 tar xzf ../archive/@value{RTEMS-TAR}
 @end example
 
+If you did not build and instal the tools from source, then you
+will need to unarchive the build scripts at this point.  In this
+case, you will have to execute the following additional command
+since you did not do it as part of building the tools.
+
+@example
+tar xzf ../archive/@value{BUILDTOOLS-TAR}
+@end example
+
+At this point, the following files and directories should
+exist in the current directory in order to build RTEMS:
+
+@itemize @bullet
+@item bit
+@item bit_rtems
+@item common.sh
+@item @value{RTEMS-UNTAR}
+@item user.cfg
+@end itemize
+
 @section Add <INSTALL_POINT>/bin to Executable PATH
 
 In order to compile RTEMS, you must have the cross compilation toolset
 in your search patch.  The following command appends the directory
-where the tools were installed in the previous chapter:
+where the tools were installed prior to this point:
 
 @example
 export PATH=$PATH:<INSTALL_POINT>/bin
