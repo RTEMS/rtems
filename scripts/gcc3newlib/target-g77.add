@@ -17,5 +17,5 @@ This is the gcc/g77 compiler for %{gcc_target}
 %dir %{_prefix}/bin
 %{_prefix}/bin/%{gcc_target}-g77%{_exeext}
 
-%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/f771%{_exeext}
+%{gcclib}/%{gcc_target}/%{gcc_version}/f771%{_exeext}
 %endif

@@ -14,17 +14,22 @@ This is the files for gcc and newlib that are shared by all targets.
 %files -n %{rpmprefix}rtems@osversion@-base-gcc
 %defattr(-,root,root)
 %dir %{_prefix}/info
-%doc %{_prefix}/info/cpp.info*.gz
-%doc %{_prefix}/info/cppinternals.info*.gz
-%doc %{_prefix}/info/gcc.info*.gz
-%doc %{_prefix}/info/libc.info*.gz
-%doc %{_prefix}/info/libm.info*.gz
-%doc %{_prefix}/info/gccint.info*.gz
+%doc %{_prefix}/info/cpp.info*
+%doc %{_prefix}/info/cppinternals.info*
+%doc %{_prefix}/info/gcc.info*
+%doc %{_prefix}/info/libc.info*
+%doc %{_prefix}/info/libm.info*
+%doc %{_prefix}/info/gccint.info*
+%if "%{gcc_version}" >= "3.4"
+%doc %{_prefix}/info/gccinstall.info*
+%endif
 
 %dir %{_prefix}/man
+%if "%{gcc_version}" < "3.4"
 %dir %{_prefix}/man/man1
 %doc %{_prefix}/man/man1/cpp.1*
 %doc %{_prefix}/man/man1/gcov.1*
+%endif
 %dir %{_prefix}/man/man7
 %doc %{_prefix}/man/man7/fsf-funding.7*
 %doc %{_prefix}/man/man7/gfdl.7*

@@ -1,3 +1,9 @@
+2004-03-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/base-gcc.add, gcc3newlib/target-g77.add,
+	gcc3newlib/target-objc.add: Preps for gcc-3.4.0.
+	Reflect changes to gcc3newlib/gccnewlib.add.
+
 2004-03-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/target-gcc.add, gcc3newlib/target-c++.add:
