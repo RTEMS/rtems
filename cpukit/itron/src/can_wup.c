@@ -32,15 +32,15 @@ ER can_wup(
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-    _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
+      return _ITRON_Task_Clarify_get_id_error( tskid );
 
     case OBJECTS_LOCAL:
       /*
        * XXX - FILL ME IN.
        */
-      _ITRON_return_errorno( E_OK );
+      break;
   }
 
-  _ITRON_return_errorno( E_OBJ );  /* XXX - Should never get here */
+  _ITRON_return_errorno( E_OK );
 }
 

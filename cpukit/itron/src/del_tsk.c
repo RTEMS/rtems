@@ -27,14 +27,13 @@ ER del_tsk(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
-  ER                       result;
+  ER                       result = E_OK; /* to avoid warning */
 
   the_thread = _ITRON_Task_Get( tskid, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
-      break;
+      return _ITRON_Task_Clarify_get_id_error( tskid ); 
 
     case OBJECTS_LOCAL:
 
@@ -48,6 +47,6 @@ ER del_tsk(
       break;
   }
 
-  _ITRON_return_errorno( E_OK );
+  _ITRON_return_errorno( result );
 }
 

@@ -33,7 +33,7 @@ ER chg_pri(
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid )); 
+      return _ITRON_Task_Clarify_get_id_error( tskid ); 
 
     case OBJECTS_LOCAL:
       if (_States_Is_dormant( the_thread->current_state ))
@@ -54,10 +54,10 @@ ER chg_pri(
            the_thread->current_priority > new_priority )
         _Thread_Change_priority( the_thread, new_priority, FALSE );
 
-       _ITRON_return_errorno( E_OK );
+      break;
   }
 
-  _ITRON_return_errorno( E_OBJ );  /* XXX - Should never get here */
+  _ITRON_return_errorno( E_OK );
 }
 
 

@@ -32,7 +32,7 @@ ER rsm_tsk(
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-     _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) ); 
+      return _ITRON_Task_Clarify_get_id_error( tskid ); 
 
     case OBJECTS_LOCAL:
 
@@ -43,10 +43,9 @@ ER rsm_tsk(
         _ITRON_return_errorno( E_OBJ );
     
       _Thread_Resume( the_thread, FALSE );
-      _Thread_Enable_dispatch();
-      return E_OK;
+      break;
   }
 
-  return E_OBJ;           /* XXX - Should never get here */
+  _ITRON_return_errorno( E_OK ); 
 }
 

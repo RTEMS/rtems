@@ -34,7 +34,7 @@ ER sta_tsk(
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
+      return _ITRON_Task_Clarify_get_id_error( tskid ); 
 
     case OBJECTS_LOCAL:
 
@@ -55,10 +55,10 @@ ER sta_tsk(
            _ITRON_return_errorno(  E_OBJ );
        */
 
-      _ITRON_return_errorno( E_OK );
+      break;
   }
 
-  _ITRON_return_errorno( E_OBJ );   /* unreached - only to remove warnings */
+  _ITRON_return_errorno( E_OK ); 
 }
 
 

@@ -27,14 +27,14 @@ ER rot_rdq(
   PRI priority;
   
 
+  if (( tskpri <= 0 ) || ( tskpri >= 256 ))
+    return E_PAR;
+
   _Thread_Disable_dispatch();
 
   /*
    * Yield of processor will rotate the queue for this processor.
    */
-
-  if (( tskpri <= 0 ) || ( tskpri >= 256 ))
-    _ITRON_return_errorno( E_PAR );
 
   priority = _ITRON_Task_Core_to_Priority(_Thread_Executing->current_priority);
   if ( priority == tskpri )
