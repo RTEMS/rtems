@@ -1,3 +1,7 @@
+2003-02-11	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* networkapp.t: Add an example code snippet for adding a default route.
+
 2003-02-11	Mike Siers <mikes@poliac.com>
 
 	* networkapp.t: Add an example code snippet for adding an IP alias.
