@@ -67,9 +67,9 @@ void Timer_initialize()
 
 int Read_timer() 
 {
-  rtems_unsigned8 data;
-  rtems_unsigned8  msb, osb, lsb;
-  rtems_unsigned32 remaining, total;
+  uint8_t         data;
+  uint8_t          msb, osb, lsb;
+  uint32_t         remaining, total;
 
   /* Disable timer so that timer can be read
         data = TCR;

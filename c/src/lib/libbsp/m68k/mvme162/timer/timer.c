@@ -37,7 +37,7 @@
 #define TICK_INTERVAL         0x10000U
 #define TIMER_INT_LEVEL       6
 
-rtems_unsigned32    Ttimer_val;
+uint32_t            Ttimer_val;
 rtems_boolean       Timer_driver_Find_average_overhead;
 
 rtems_isr timerisr();
@@ -65,7 +65,7 @@ void Timer_initialize()
 
 int Read_timer() 
 {
-  rtems_unsigned32    total;
+  uint32_t            total;
 
   total = (Ttimer_val * TICK_INTERVAL) + lcsr->timer_cnt_1;
 
