@@ -114,7 +114,7 @@ typedef void (*rtems_irq_enable)    (const struct __rtems_irq_connect_data__*);
 typedef void (*rtems_irq_disable)   (const struct __rtems_irq_connect_data__*);
 typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);
 
-extern rtems_irq_hdl bsp_vector_table;
+extern rtems_irq_hdl bsp_vector_table[BSP_MAX_INT];
 #define VECTOR_TABLE bsp_vector_table
   											   
 typedef struct __rtems_irq_connect_data__ {

@@ -1,3 +1,7 @@
+2005-03-08	Jay Monkman <jtm@lopingdog.com>
+
+	* mc9328mxl/irq/irq.h: Fixed error in declaration of bsp_vector_table.
+
 2005-02-24	Jay Monkman <jtm@lopingdog.com>
 
 	* at91rm9200/include/at91rm9200_emac.h: Cleanup.
