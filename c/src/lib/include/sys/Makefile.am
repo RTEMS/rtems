@@ -14,9 +14,9 @@ else
 NEWLIB_H_FILES += termios.h
 endif
 
-H_FILES = ioccom.h utime.h $(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
+H_FILES = cdefs.h ioccom.h utime.h $(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
 
-noinst_HEADERS = utime.h termios.h ioctl.h rtems_ioccom.h
+noinst_HEADERS = utime.h termios.h ioctl.h ioccom.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
     $(H_FILES:%=$(PROJECT_INCLUDE)/sys/%)
