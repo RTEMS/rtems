@@ -1,7 +1,7 @@
 /*
- *  console.c
+ *  This file contains the TTY driver for the serial ports on the erc32.
  *
- *  This file contains the Sparc Instruction Simulator Console driver.
+ *  This driver uses the termios pseudo driver.
  *
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
@@ -11,36 +11,24 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
- *  Agency (ESA).
- *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
- *  European Space Agency.
- *
  *  $Id$
  */
 
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
+#include <assert.h>
 
-/*
- *  Define RDB_BREAK_IN if you need to be able to break in to the
- *  program with a ctrl-c during remote target debugging. If so,
- *  UART B will not be accessible from rtems during remote debugging
- *  if interrupt driven console is used. Does not affect UART A, polled 
- *  mode or when the program runs without remote debugging.
- */
 
-#define RDB_BREAK_IN
+#undef  CONSOLE_USE_POLLED
+#define CONSOLE_USE_INTERRUPTS
 
 /*
  *  Should we use a polled or interrupt drived console?
  *  
- *  NOTE: Define only one of these by default.
+ *  NOTE: This is defined in the custom/erc32.cfg file.
  *
- *  WARNING:  As of sis 1.6, it did not appear that the UART interrupts
+ *  WARNING:  In sis 1.6, it did not appear that the UART interrupts
  *            worked in a desirable fashion.  Immediately upon writing
  *            a character into the TX buffer, an interrupt was generated.
  *            This did not allow enough time for the program to put more
@@ -49,103 +37,13 @@
  *            in a polled console with a useless interrupt per character
  *            on output.  It is reasonable to assume that input does not
  *            share this problem although it was not investigated.
+ *
  */
 
-#ifdef CONSOLE_USE_POLLED
-#define OUTBYTE console_outbyte_polled
-#define INBYTE  console_inbyte_polled
-#else
-#define OUTBYTE console_outbyte_interrupts
-#define INBYTE  console_inbyte_interrupts
-#endif
-
-void console_initialize_interrupts( void );
-
-/*  console_initialize
+/*
+ *  console_outbyte_polled
  *
- *  This routine initializes the console IO driver.
- *
- *  Input parameters:
- *    major - console device major number
- *    minor - console device minor number
- *    arg   - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
- */
- 
-rtems_device_driver console_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
-)
-{
-  rtems_status_code status;
- 
-  status = rtems_io_register_name(
-    "/dev/console",
-    major,
-    (rtems_device_minor_number) 0
-  );
- 
-  if (status != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(status);
-
-#ifdef CONSOLE_USE_INTERRUPTS
-  console_initialize_interrupts();
-#endif
- 
-  return RTEMS_SUCCESSFUL;
-}
-
-/*  console_inbyte_polled
- *
- *  This routine reads a character from the UART.
- *
- *  Input parameters:
- *    port - port to read character from
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    character read from UART
- */
-
-char console_inbyte_polled( int port )
-{
-  int UStat;
-
-  if ( port == 0 ) {
-    while (((UStat = ERC32_MEC.UART_Status) & ERC32_MEC_UART_STATUS_DRA) == 0 )
-	if (UStat & ERC32_MEC_UART_STATUS_ERRA) {
-	    ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRA;
-	    ERC32_MEC.Control = ERC32_MEC.Control;
-	}
-    return (int) ERC32_MEC.UART_Channel_A;
-  } 
-
-  while (((UStat = ERC32_MEC.UART_Status) & ERC32_MEC_UART_STATUS_DRB) == 0 )
-	if (UStat & ERC32_MEC_UART_STATUS_ERRB) {
-	    ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRB;
-	    ERC32_MEC.Control = ERC32_MEC.Control;
-	}
-  return (int) ERC32_MEC.UART_Channel_B;
-}
-
-
-/*  console_outbyte_polled
- *
- *  This routine transmits a character out.
- *
- *  Input parameters:
- *    port - port to transmit character to
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
- *
- *  Return values: NONE
+ *  This routine transmits a character using polling.
  */
 
 void console_outbyte_polled(
@@ -164,6 +62,52 @@ void console_outbyte_polled(
 }
 
 /*
+ *  console_inbyte_nonblocking 
+ *
+ *  This routine polls for a character.
+ */
+
+int console_inbyte_nonblocking(
+  int port,
+  char *c
+)
+{
+  int UStat;
+
+  UStat = ERC32_MEC.UART_Status;
+
+  switch (port) {
+
+    case 0:
+      if (UStat & ERC32_MEC_UART_STATUS_ERRA) {
+        ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRA;
+        ERC32_MEC.Control = ERC32_MEC.Control;
+      }
+
+      if ((UStat & ERC32_MEC_UART_STATUS_DRA) == 0)
+         return 0;
+      *c = (char) ERC32_MEC.UART_Channel_A;
+      return 1;
+
+    case 1:
+      if (UStat & ERC32_MEC_UART_STATUS_ERRB) {
+        ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRB;
+        ERC32_MEC.Control = ERC32_MEC.Control;
+      }
+
+      if ((UStat & ERC32_MEC_UART_STATUS_DRB) == 0)
+        return 0;
+      *c = (char) ERC32_MEC.UART_Channel_B;
+      return 1;
+
+    default:
+      assert( 0 );
+  }
+
+  return 0;
+}
+
+/*
  *  Interrupt driven console IO
  */
 
@@ -176,9 +120,10 @@ void console_outbyte_polled(
 #include <ringbuf.h>
  
 Ring_buffer_t  TX_Buffer[ 2 ];
-Ring_buffer_t  RX_Buffer[ 2 ];
 boolean        Is_TX_active[ 2 ];
  
+void *console_termios_data[ 2 ];
+
 /*
  *  console_isr_a
  *
@@ -205,9 +150,8 @@ rtems_isr console_isr_a(
       ERC32_MEC.Control = ERC32_MEC.Control;
     }
     ch = ERC32_MEC.UART_Channel_A;
-    if ( !Ring_buffer_Is_full( &RX_Buffer[ 0 ] ) )
-      Ring_buffer_Add_character( &RX_Buffer[ 0 ], ch );
-    /* else toss it */
+
+    rtems_termios_enqueue_raw_characters( console_termios_data[ 0 ], &ch, 1 );
   }
  
   if ( ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEA ) {
@@ -247,9 +191,8 @@ rtems_isr console_isr_b(
       ERC32_MEC.Control = ERC32_MEC.Control;
     }
     ch = ERC32_MEC.UART_Channel_B;
-    if ( !Ring_buffer_Is_full( &RX_Buffer[ 1 ] ) )
-      Ring_buffer_Add_character( &RX_Buffer[ 1 ], ch );
-    /* else toss it */
+    rtems_termios_enqueue_raw_characters( console_termios_data[ 1 ], &ch, 1 );
+
   }
 
   if ( ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEB ) {
@@ -329,11 +272,8 @@ void console_exit()
   extern unsigned32 trap_table[];
 #endif
 
-void console_initialize_interrupts()
+void console_initialize_interrupts( void )
 {
-  Ring_buffer_Initialize( &RX_Buffer[ 0 ] );
-  Ring_buffer_Initialize( &RX_Buffer[ 1 ] );
-
   Ring_buffer_Initialize( &TX_Buffer[ 0 ] );
   Ring_buffer_Initialize( &TX_Buffer[ 1 ] );
 
@@ -349,29 +289,6 @@ void console_initialize_interrupts()
   set_vector( console_isr_b, CONSOLE_UART_B_TRAP, 1 );
 }
 
-/*
- *  console_inbyte_interrupts
- *
- *  This routine reads a character from the UART.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    character read from UART
- */
- 
-char console_inbyte_interrupts( int port )
-{
-  char ch;
-
-  while ( Ring_buffer_Is_empty( &RX_Buffer[ port ] ) );
- 
-  Ring_buffer_Remove_character( &RX_Buffer[ port ], ch );
-  return ch;
-}
- 
 /*
  *  console_outbyte_interrupts
  *
@@ -441,45 +358,96 @@ void DEBUG_puts(
 
 
 /*
- *  console_open
+ *  Console Termios Support Entry Points
  *
- *  This routine is the console device driver open entry point. 
+ */
+
+int console_write_support (int minor, char *buf, int len)
+{
+  int nwrite = 0;
+
+  while (nwrite < len) {
+#if defined(CONSOLE_USE_INTERRUPTS)
+    console_outbyte_polled( minor, *buf++ );
+#else
+    console_outbyte_interrupt( minor, *buf++ );
+#endif
+    nwrite++;
+  }
+  return nwrite;
+}
+
+/*
+ *  Console Device Driver Entry Points
  *
- *  Input parameters:
- *    major - console device major number
- *    minor - console device minor number
- *    arg   - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
  */
  
+rtems_device_driver console_initialize(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
+  rtems_status_code status;
+
+  rtems_termios_initialize();
+
+  /*
+   *  Register Device Names
+   */
+
+  status = rtems_io_register_name( "/dev/console", major, 0 );
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+
+  status = rtems_io_register_name( "/dev/console_b", major, 1 );
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+
+  /*
+   *  Initialize Hardware
+   */
+ 
+#ifdef CONSOLE_USE_INTERRUPTS
+  console_initialize_interrupts();
+#endif
+
+  return RTEMS_SUCCESSFUL;
+}
+
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
+        rtems_status_code sc;
+#if defined(CONSOLE_USE_INTERRUPTS)
+        rtems_libio_open_close_args_t *args = arg;
+#endif
+
+        assert( minor <= 1 );
+        if ( minor > 2 )
+          return RTEMS_INVALID_NUMBER;
+ 
+#if defined(CONSOLE_USE_INTERRUPTS)
+        sc = rtems_termios_open (major, minor, arg,
+                        NULL,
+                        NULL,
+                        NULL,
+                        console_write_support);
+
+        console_termios_data[ minor ] = args->iop->data1;
+#else
+        sc = rtems_termios_open (major, minor, arg,
+                        NULL,
+                        NULL,
+                        console_inbyte_nonblocking,
+                        console_write_support);
+#endif
+
   return RTEMS_SUCCESSFUL;
 }
- 
-/*
- *  console_close
- *
- *  This routine is the console device driver close entry point.
- *
- *  Input parameters:
- *    major - console device major number
- *    minor - console device minor number
- *    arg   - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
- */
  
 rtems_device_driver console_close(
   rtems_device_major_number major,
@@ -487,26 +455,8 @@ rtems_device_driver console_close(
   void                    * arg
 )
 {
-  return RTEMS_SUCCESSFUL;
+  return rtems_termios_close (arg);
 }
- 
-/*
- *  console_read
- *
- *  This routine is the console device driver read entry point.
- *
- *  Input parameters:
- *    major - console device major number
- *    minor - console device minor number
- *    arg   - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
- *
- *  NOTE:  Read bytes from the serial port. We only have stdin.
- */
  
 rtems_device_driver console_read(
   rtems_device_major_number major,
@@ -514,45 +464,8 @@ rtems_device_driver console_read(
   void                    * arg
 )
 {
-  rtems_libio_rw_args_t *rw_args;
-  char *buffer;
-  int maximum;
-  int count = 0;
- 
-  rw_args = (rtems_libio_rw_args_t *) arg;
- 
-  buffer = rw_args->buffer;
-  maximum = rw_args->count;
- 
-  for (count = 0; count < maximum; count++) {
-    buffer[ count ] = INBYTE( minor );
-    if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
-      buffer[ count++ ]  = '\n';
-      break;
-    }
-  }
- 
-  rw_args->bytes_moved = count;
-  return (count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
+  return rtems_termios_read (arg);
 }
- 
-/*
- *  console_write
- *
- *  This routine is the console device driver write entry point.
- *
- *  Input parameters:
- *    major - console device major number
- *    minor - console device minor number
- *    arg   - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
- *
- *  NOTE:  Write bytes to the serial port. Stdout and stderr are the same.
- */
  
 rtems_device_driver console_write(
   rtems_device_major_number major,
@@ -560,42 +473,8 @@ rtems_device_driver console_write(
   void                    * arg
 )
 {
-  int count;
-  int maximum;
-  rtems_libio_rw_args_t *rw_args;
-  char *buffer;
- 
-  rw_args = (rtems_libio_rw_args_t *) arg;
- 
-  buffer = rw_args->buffer;
-  maximum = rw_args->count;
- 
-  for (count = 0; count < maximum; count++) {
-    OUTBYTE( minor, buffer[ count ] );
-    if ( buffer[ count ] == '\n') {
-      OUTBYTE( minor, '\r');
-    }
-  }
- 
-  rw_args->bytes_moved = maximum;
-  return RTEMS_SUCCESSFUL;
+  return rtems_termios_write (arg);
 }
- 
-/*
- *  console_control
- *
- *  This routine is the console device driver control entry point.
- *
- *  Input parameters:
- *    major - console device major number
- *    minor - console device minor number
- *    arg   - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
- */
  
 rtems_device_driver console_control(
   rtems_device_major_number major,
@@ -603,6 +482,6 @@ rtems_device_driver console_control(
   void                    * arg
 )
 {
-  return RTEMS_SUCCESSFUL;
+  return rtems_termios_ioctl (arg);
 }
 
