@@ -1,7 +1,6 @@
 /*  
  *  $Id$
  *
- *
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.
  *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
  *
