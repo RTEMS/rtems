@@ -20,7 +20,8 @@
 /* functions */
 
 void ITRON_Init( void );
-void Preempt_task();
+void Dormant_task();
+void Non_Dormant_task();
 
 /* configuration information */
 
@@ -31,7 +32,8 @@ void Preempt_task();
 
 /* global variables */
 
-#define PREEMPT_TASK_ID         2
+#define DORMANT_TASK_ID         2
+#define NON_DORMANT_TASK_ID     3
 
 TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
 

@@ -19,7 +19,7 @@ PGM = ${ARCH}/$(TEST).exe
 MANAGERS = all
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = init preempt
+C_PIECES = init dormant
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

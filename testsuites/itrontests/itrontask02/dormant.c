@@ -1,6 +1,7 @@
-/*  Preempt_task
+/*  Dormant
  *
- *  This routine serves as a test task.  It verifies the task manager.
+ *  This routine serves as two test tasks.
+ *  It has one dormant and one sleeping tasks.
  *
  *  Input parameters:
  *    argument - task argument
@@ -17,14 +18,28 @@
  *
  *  $Id$
  */
+
 #include <assert.h>
 #include "system.h"
 
-void Preempt_task()
+void Dormant_task()
 {
-  puts( "PREEMPT - ext_tsk - going to DORMANT state" );
+  puts( "DORMANT - ext_tsk - going to DORMANT state" );
   ext_tsk( );
 
-  puts( "ext_tsk of RTEMS_PREEMPT" );
+  puts( "ERROR==>ext_tsk of DORMANT returned" );
   assert(0);
 }
+
+
+void Non_Dormant_task()
+{
+  ER       status;
+
+  while (TRUE) {
+    puts( "NON-DORMANT - Sleep for 2 minutes" );
+    status = rtems_task_wake_after( 120*TICKS_PER_SECOND );
+    directive_failed( status, "rtems_task_wake_after" );
+  }
+}  
+

@@ -82,25 +82,59 @@ void ITRON_Init( void )
 
 
   puts( "\n\n*** ITRON TASK TEST 2 ***\n" );
-  puts( "\n*** Create Task Errors ***" );
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
+
+  /*
+   * Set My priority to 8 so that dummy tasks will be
+   * forced to run when started.
+   */
+  
+  status = chg_pri( TSK_SELF, 8 );
+  assert( status == E_OK );
+  status = ref_tsk( &pk_rtsk, TSK_SELF );
+  assert( status == E_OK );
+  assert( pk_rtsk.tskpri == 8 );
+  
+  /*
+   * Create and verify a DORMANT task.
+   */
+
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;
   pk_ctsk.itskpri  = 1;
-  pk_ctsk.task     = Preempt_task;
+  pk_ctsk.task     = Dormant_task;
   pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
 
-  puts( "Init - cre_tsk - Preempt Task" );
-  status = cre_tsk( PREEMPT_TASK_ID, &pk_ctsk );
+  puts( "Init - cre_tsk - Dormant Task" );
+  status = cre_tsk( DORMANT_TASK_ID, &pk_ctsk );
   assert( status == E_OK );
+  status = ref_tsk( &pk_rtsk, DORMANT_TASK_ID );
+  assert( status == E_OK );
+  assert( pk_rtsk.tskstat == TTS_DMT );
 
+  /*
+   * Create, Start and verify a not DORMANT task.
+   */
+  
+  pk_ctsk.task     = Non_Dormant_task;
+  puts( "Init - cre_tsk - Non-Dormant Task" );
+  status = cre_tsk( NON_DORMANT_TASK_ID, &pk_ctsk );
+  assert( status == E_OK );
+  status = sta_tsk( NON_DORMANT_TASK_ID, 1 );
+  status = ref_tsk( &pk_rtsk, NON_DORMANT_TASK_ID );
+  assert( status == E_OK );
+  assert( pk_rtsk.tskstat == TTS_WAI);
+    
+  
   /*
    *  Bad ID errors
    */
+
+  puts( "\n*** Create Task Errors ***" );
 
   puts( "Init - cre_tsk - access violation ( id less than -4) - E_OACV" );
   status = cre_tsk( -5, &pk_ctsk );
@@ -160,7 +194,6 @@ void ITRON_Init( void )
   assert( status == EN_PAR );
 #endif
 
-
   puts( "\n\n*** Delete Task Errors ***" );
 
   /* 
@@ -170,7 +203,7 @@ void ITRON_Init( void )
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;
   pk_ctsk.itskpri  = 1; 
-  pk_ctsk.task     = Preempt_task;
+  pk_ctsk.task     = Dormant_task;
   pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
 
 
@@ -179,7 +212,7 @@ void ITRON_Init( void )
   assert( status == E_OBJ );
 
   puts( "Init - del_tsk - task is not DORMANT - E_OBJ" );
-  status = del_tsk( PREEMPT_TASK_ID );
+  status = del_tsk( NON_DORMANT_TASK_ID );
   assert( status == E_OBJ );
 
   puts( "Init - del_tsk - task does not exist - E_NOEXS" );
@@ -220,7 +253,7 @@ void ITRON_Init( void )
   assert( status == E_OBJ );
 
   puts( "Init - sta_tsk - task is not DORMANT  - E_OBJ" );
-  status = sta_tsk( PREEMPT_TASK_ID, 1 );
+  status = sta_tsk( NON_DORMANT_TASK_ID, 1 );
   assert( status == E_OBJ );
 
   puts( "Init - sta_tsk - task does not exist  - E_NOEXS" );
@@ -260,7 +293,7 @@ void ITRON_Init( void )
   assert( status == E_OBJ );
 
   puts( "Init - ter_tsk - task is not DORMANT - E_OBJ" );
-  status = ter_tsk( PREEMPT_TASK_ID );
+  status = ter_tsk( DORMANT_TASK_ID );
   assert( status == E_OBJ );
 
   puts( "Init - ter_tsk - task does not exist - E_NOEXS" );
@@ -301,7 +334,7 @@ void ITRON_Init( void )
 
   /*  Need a dormant task to call */
   puts( "Init - chg_pri - task is not DORMANT - E_OBJ" );
-  status = chg_pri( PREEMPT_TASK_ID, 1 );
+  status = chg_pri( DORMANT_TASK_ID, 1 );
   assert( status == E_OBJ );
 
   puts( "Init - chg_pri - task does not exist - E_NOEXS" );
@@ -436,7 +469,7 @@ void ITRON_Init( void )
   assert( status == E_OBJ );
 
   puts( "Init - rsm_tsk - task is DORMANT - E_OBJ" );
-  status = rsm_tsk( PREEMPT_TASK_ID );
+  status = rsm_tsk( DORMANT_TASK_ID );
   assert( status == E_OBJ );
 
   puts( "Init - rsm_tsk - task does not exist - E_NOEXS" );
@@ -465,7 +498,7 @@ void ITRON_Init( void )
   assert( status == E_OBJ );
 
   puts( "Init - frsm_tsk - task is DORMANT - E_OBJ" );
-  status = frsm_tsk( PREEMPT_TASK_ID );
+  status = frsm_tsk( DORMANT_TASK_ID );
   assert( status == E_OBJ );
 
   puts( "Init - frsm_tsk - task does not exist - E_NOEXS" );
