@@ -15,7 +15,8 @@ include $(top_srcdir)/main.am
 
 GENERATED_FILES = intro.texi target.texi makefiles.texi linkcmds.texi \
     support.texi adaintr.texi init.texi console.texi clock.texi timer.texi \
-    rtc.texi nvmem.texi network.texi shmsupp.texi analog.texi discrete.texi
+    rtc.texi ata.texi ide-ctrl.texi nvmem.texi network.texi shmsupp.texi \
+    analog.texi discrete.texi
 
 COMMON_FILES = $(top_srcdir)/common/setup.texi \
     $(top_srcdir)/common/cpright.texi
@@ -80,6 +81,16 @@ $(srcdir)/timer.texi: timer.t
 	    -n "" < $< > $@
 
 $(srcdir)/rtc.texi: rtc.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+$(srcdir)/ata.texi: ata.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+$(srcdir)/ide-ctrl.texi: ide-ctrl.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@

@@ -66,6 +66,8 @@
 @include clock.texi
 @include timer.texi
 @include rtc.texi
+@include ata.texi
+@include ide-ctrl.texi
 @include nvmem.texi
 @include network.texi
 @include shmsupp.texi
@@ -90,6 +92,8 @@ This is the online version of the RTEMS BSP and Device Driver Development Guide.
 * Clock Driver::
 * Timer Driver::
 * Real-Time Clock Driver::
+* ATA Driver::
+* IDE Controller Driver::
 * Networking Driver::
 * Non-Volatile Memory Driver::
 * Shared Memory Support Driver::

@@ -1,3 +1,11 @@
+2002-10-24	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* ata.t, ide-ctrl.t: New file.
+	* .cvsignore: Added new .texi files.
+	* Makefile.am:: Added new files to generate.
+	* bsp_howto.texi: Added new chapters.
+	* stamp-vti, version.texi: Regenerated.
+
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* stamp-vti, version.texi: Regenerated.

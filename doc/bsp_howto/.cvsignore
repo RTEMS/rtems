@@ -2,6 +2,7 @@ Makefile
 Makefile.in
 adaintr.texi
 analog.texi
+ata.texi
 bsp_howto
 bsp_howto*.html
 bsp_howto-?
@@ -21,6 +22,7 @@ bsp_howto.vr
 clock.texi
 console.texi
 discrete.texi
+ide-ctrl.texi
 index.html
 init.texi
 intro.texi
