@@ -1,5 +1,12 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mongoosev/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* mongoosev/duart/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* shared/cache/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* tx39/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
