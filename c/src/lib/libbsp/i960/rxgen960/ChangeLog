@@ -1,3 +1,8 @@
+2002-07-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am:
+	Fix bsplib_DATA = $(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).o.
+
 2002-07-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Eliminate PGM.

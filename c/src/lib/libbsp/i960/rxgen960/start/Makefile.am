@@ -15,7 +15,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-bsplib_DATA = $(ARCH)/rxgen_romld.o
+bsplib_DATA = $(PROJECT_RELEASE)/lib/rxgen_romld.o
 
 $(PROJECT_RELEASE)/lib/rxgen_romld$(LIB_VARIANT).o: $(ARCH)/rxgen_romld.o
 	$(INSTALL_DATA) $< $@
