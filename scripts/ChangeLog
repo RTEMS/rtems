@@ -1,3 +1,9 @@
+2004-09-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* autotools/autoconf-rtems.spec.in: Remove bogus BuildDep on
+	autoconf.
+	* autotools/automake-rtems.spec.in: Use my rtems.org address.
+
 2004-09-06	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* autotools/autoconf-rtems.spec.in: Backport from rtems-4.7.

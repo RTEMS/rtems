@@ -30,7 +30,7 @@ Release:      0
 Summary:      Tool for automatically generating GNU style Makefile.in's
 BuildArch:    noarch
 BuildRoot:    %{_defaultbuildroot}
-BuildRequires: autoconf perl m4 gawk emacs
+BuildRequires: perl m4 gawk emacs
 Requires:     m4 gawk
 PreReq:       /sbin/install-info
 
