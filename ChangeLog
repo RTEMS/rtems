@@ -1,3 +1,7 @@
+2002-07-17	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/version.m4: Updated to rtems-ss-20020717.
+
 2002-07-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* config-ml.in: Imported from gcc-3.1. 
