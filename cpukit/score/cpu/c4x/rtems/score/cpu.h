@@ -22,7 +22,7 @@ extern "C" {
 
 #include <rtems/score/c4x.h>            /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/c4xtypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
