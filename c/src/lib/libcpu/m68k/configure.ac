@@ -48,5 +48,6 @@ AC_CONFIG_FILES([Makefile
 shared/Makefile
 m68040/Makefile
 mcf5206/Makefile
+mcf5272/Makefile
 ])
 AC_OUTPUT

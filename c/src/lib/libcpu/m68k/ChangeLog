@@ -1,3 +1,12 @@
+2004-08-02	Jay Monkman <jtm@lopingdog.com>
+
+	* Makefile.am, configure.ac: Added CSB360 BSP
+	* mcf5272/.cvsignore, mcf5272/ChangeLog, mcf5272/Makefile.am,
+	mcf5272/clock/.cvsignore, mcf5272/clock/ckinit.c,
+	mcf5272/include/.cvsignore, mcf5272/include/mcf5272.h,
+	mcf5272/timer/.cvsignore, mcf5272/timer/timer.c,
+	mcf5272/timer/timerisr.S: New files.
+
 2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* mcf5206/timer/timerisr.S: Include <rtems/asm.h> instead of <asm.h>.

@@ -1,0 +1,6 @@
+2004-08-02	Jay Monkman <jtm@lopingdog.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, clock/.cvsignore, clock/ckinit.c,
+	include/.cvsignore, include/mcf5272.h, timer/.cvsignore,
+	timer/timer.c, timer/timerisr.S: New files.
+
