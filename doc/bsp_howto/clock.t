@@ -6,9 +6,9 @@
 @c  $Id$
 @c
 
-@chapter = Clock Driver
+@chapter Clock Driver
 
-@subsection = Introduction
+@section Introduction
 
 The clock driver aims at giving a steady time basis to the kernel, so that
 the RTEMS primitives that need a clock tick work properly. <insert a link
@@ -16,9 +16,9 @@ to the Clock Driver defs>
 
 The clock driver is located in the clock directory of the BSP. 
 
-@subsection = Primitives
+@section Primitives
 
-@subsection = Initialization
+@section Initialization
 
 The major and minor numbers of the clock driver can be made available to
 the others, such as the Shared Memory Driver. 
@@ -36,7 +36,7 @@ the VBR:
 rtems_interrupt_catch (InterruptHandler, CONSOLE_VECTOR, &old_handler); 
 @end example
 
-@subsection = The clock interrupt subroutine
+@section The clock interrupt subroutine
 
 It only has to inform the kernel that a ticker has elapsed, so call : 
 

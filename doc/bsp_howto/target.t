@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@chapter = Target Dependent and Board Dependent Files
+@chapter Target Dependent and Board Dependent Files
 
 RTEMS divides board dependencies into two parts :
 
@@ -21,12 +21,11 @@ descriptions of each needed CPU dependant function.
 
 @item the board dependant code : it includes support for a given board,
 such as the board initialization code and drivers for the various devices:
-clock, UARTs, ethernet board, etc.
 
 
 @end itemize
 
-Porting RTEMS on a new board should raise two questions :
+Porting RTEMS on a new board should raise two questions:
 
 @itemize @bullet
 

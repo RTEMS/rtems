@@ -6,14 +6,14 @@
 @c  $Id$
 @c
 
-@chapter = Linkcmds
+@chapter Linkcmds
 
-@subsection = What is a "linkcmds" file?
+@section What is a "linkcmds" file?
 
 The linkcmds file is a script which is passed to the linker at linking
 time. It holds somewhat the board memory configuration. 
 
-@subsection = Image of an Executable
+@section Image of an Executable
 
 A program destined to be embedded has some specificities. Embedded
 machines often mean average performances and small memory usage. 
@@ -43,8 +43,7 @@ initialized variables of the program. It can stay in RAM.
 @item the initialized data section (aka ".data" section): it holds the
 program data which are to be modified during the program's life, which
 means they have to be in RAM. On another hand, these variables must be set
-to predefined values, which have to be
- stored in ROM... 
+to predefined values, which have to be stored in ROM... 
 
 @end itemize
 
@@ -81,17 +80,17 @@ RamSize = DEFINED(RamSize) ? RamSize : 4M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
 
-MEMORY {
+MEMORY @{
           ram : ORIGIN = 0x10000000, LENGTH = 4M
           rom : ORIGIN = 0x01000000, LENGTH = 4M
-}
+@}
 
 ETHERNET_ADDRESS = DEFINED(ETHERNET_ADDRESS) ? ETHERNET_ADDRESS : 0xDEAD12;
 
 /*
  * Load objects
  */
-SECTIONS {
+SECTIONS @{
 	/*
 	 * Hardware variations
 	 */
@@ -101,23 +100,23 @@ SECTIONS {
         /*
          * Boot PROM
          */
-        rom : {
+        rom : @{
                 _RomBase = .;
                 __RomBase = .;
-        } >rom
+        @} >rom
 
         /*
          * Dynamic RAM
          */
-        ram : {
+        ram : @{
                 _RamBase = .;
                 __RamBase = .;
-        } >ram
+        @} >ram
 
         /*
          * Text, data and bss segments
          */
-        .text : {
+        .text : @{
                 CREATE_OBJECT_SYMBOLS
 
 
@@ -136,34 +135,34 @@ SECTIONS {
 
                 etext = .;
                 _etext = .;
-        } >rom 
+        @} >rom 
 
-	.eh_fram : {
+	.eh_fram : @{
 		. = ALIGN (16);
 		*(.eh_fram)
-	} >ram
+	@} >ram
 
-	.gcc_exc : {
+	.gcc_exc : @{
 		. = ALIGN (16);
 		*(.gcc_exc)
-	} >ram
+	@} >ram
 
-        dpram : {
+        dpram : @{
                 m340 = .;
                 _m340 = .;
                 . += (8 * 1024);
-        } >ram
+        @} >ram
 
-        .data : {
+        .data : @{
                 copy_start = .;
                 *(.data)
 
                 . = ALIGN (16);
                 _edata = .;
                 copy_end = .;
-        } >ram
+        @} >ram
 
-        .bss : {
+        .bss : @{
                 M68Kvec = .;
                 _M68Kvec = .;
                 . += (256 * 4);
@@ -192,8 +191,8 @@ SECTIONS {
 
 
 
-        } >ram
-}
+        @} >ram
+@}
 @end example
 
 executable format is COFF
@@ -328,9 +327,9 @@ m68k-rtems-objcopy \
 --adjust-section-vma .data= \
 
 `m68k-rtems-objdump --section-headers \
-$(basename $@).exe \
+$(basename $@@).exe \
 | awk '[...]` \
-$(basename $@).exe
+$(basename $@@).exe
 @end example
 
 use the target objcopy

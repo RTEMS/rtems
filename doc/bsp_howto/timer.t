@@ -6,12 +6,12 @@
 @c  $Id$
 @c
 
-@chapter = Timer Driver
+@chapter Timer Driver
 
 You can program the timer driver for your own needs, but here are two uses
 of it: 
 
-@subsection = UART'S FIFO Full Mode
+@section UART'S FIFO Full Mode
 
 The gen68340 BSP is an example of the use of the timer to support the UART
 input FIFO full mode (FIFO means First In First Out and roughly means
@@ -33,7 +33,7 @@ receipt.
 
 @end itemize
 
-@subsection = Measuring RTEMS Primitives Time
+@section Measuring RTEMS Primitives Time
 
 RTEMS Timing Test Suite needs a timer support. You have to provide two
 primitives: 

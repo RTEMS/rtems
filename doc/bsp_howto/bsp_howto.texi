@@ -21,11 +21,6 @@
 
 @include ../common/setup.texi
 
-@c
-@c  Now set all the tool version dependent information
-@c
-@include versions.texi
-
 @ignore
 @ifinfo
 @format
@@ -78,8 +73,8 @@ END-INFO-DIR-ENTRY
 @include timer.texi
 
 @ifinfo
-@node Top, Introduction, (dir), (dir)
-@top started
+@node Top, , (dir), (dir)
+@top bsp_howto
 
 This is the online version of the Getting Started with RTEMS for C/C++ Users.
 

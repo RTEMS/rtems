@@ -6,9 +6,9 @@
 @c  $Id$
 @c
 
-@chapter = Initialization Code
+@chapter Initialization Code
 
-@subsection = Introduction
+@section Introduction
 
 The initialization code is the first piece of code executed when there's a
 reset/reboot. It aims at initializing the main functions of the board. As
@@ -25,13 +25,13 @@ initialization related).
 
 @end itemize
 
-@subsection = Board Initialization
+@section Board Initialization
 
 You'll find two files under the $BSP340_ROOT/start340/ directory, open
 rtemsfor340only.s which holds initialization code for a MC68340 board only
 and is simpler. 
 
-@subsection = The Interrupts Vector Table
+@section The Interrupts Vector Table
 
 After the entry label starts a code section in which some room is
 allocated for the table of interrupts vectors. They are assigned to the
@@ -44,7 +44,7 @@ $BSP_ROOT/startup/dumpanic.c - that pri nts which address caused the
 interrupt and the contents of the registers, stack...), but this should
 not return. 
 
-@subsection = Chip Select Initialization
+@section Chip Select Initialization
 
 When the microprocessor accesses a memory area, address decoding is
 handled by an address decoder (!), so that the microprocessor knows which
@@ -57,13 +57,13 @@ the linkcmds settings. In this BSP ROM and RAM addresses can be found in
 both the linkcmds and initialization code, but this is not a great way to
 do, better use some shared variables . 
 
-@subsection = Integrated processor registers initialization
+@section Integrated processor registers initialization
 
 There are always some specific integrated processor registers
 initialization to do. Integrated processors' user manuals often detail
 them. 
 
-@subsection = Data section recopy
+@section Data section recopy
 
 The next initialization part can be found in
 $BSP340_ROOT/start340/init68340.c. First the Interrupt Vector Table is
@@ -83,9 +83,9 @@ This code :
 
 Then control is passed to the RTEMS-specific initialization code. 
 
-@subsection = RTEMS-Specific Initialization
+@section RTEMS-Specific Initialization
 
-@subsection = The RTEMS configuration table
+@section The RTEMS configuration table
 
 The RTEMS configuration table contains the maximum number of objects RTEMS
 can handle during the application (e.g. maximum number of tasks,
@@ -101,7 +101,7 @@ The BSP_Configuration label points on this table.
 For more information on the RTEMS configuration table, refer to C user's
 guide, chapter 23 <insert a link here>. 
 
-@subsection = RTEMS initialization procedure
+@section RTEMS initialization procedure
 
 The RTEMS initialization procedure is described in the 3rd chapter of the
 C user's manual <insert a link here>. Please read it carefully. 
@@ -149,7 +149,7 @@ bsp_cleanup
 
 Return control to the monitor. 
 
-@subsection = Drivers initialization
+@section Drivers initialization
 
 The Driver Address Table is part of the RTEMS configuration table. It
 defines RTEMS drivers entry points (initialization, open, close, read,

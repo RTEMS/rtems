@@ -6,9 +6,9 @@
 @c  $Id$
 @c
 
-@chapter = Makefiles
+@chapter Makefiles
 
-@subsection = Makefiles Used During The BSP Building Process
+@section Makefiles Used During The BSP Building Process
 
 There's a makefile template in each directory of a BSP. They are called
 "makefile.in" and are processed when building RTEMS for a given BSP. One
@@ -51,7 +51,7 @@ process, usually in your <the RTEMS build
 directory>/c/src/lib/libbsp/<your BSP family>/<your BSP>/<your driver>
 directory) by hand. 
 
-@subsection = Makefiles Used Both During The BSP Design and its Use
+@section Makefiles Used Both During The BSP Design and its Use
 
 A BSP must go with his configuration file. The configuration files can be
 found under $RTEMS_ROOT/c/make/custom. The configuration file is taken
@@ -92,9 +92,9 @@ ifeq ($(RTEMS_USE_GCC272),yes)
 else
 
 define make-exe
-	$(CC) $(CFLAGS) $(CFLAGS_LD) -o $(basename $@).exe $(LINK_OBJS)
-	$(NM) -g -n $(basename $@).exe > $(basename $@).num
-	$(SIZE) $(basename $@).exe
+	$(CC) $(CFLAGS) $(CFLAGS_LD) -o $(basename $@@).exe $(LINK_OBJS)
+	$(NM) -g -n $(basename $@@).exe > $(basename $@@).num
+	$(SIZE) $(basename $@@).exe
 endif
 @end example
 

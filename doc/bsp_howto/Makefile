@@ -21,7 +21,7 @@ COMMON_FILES=../common/cpright.texi ../common/setup.texi
 GENERATED_FILES= clock.texi console.texi init.texi intro.texi \
     linkcmds.texi bspstruct.texi makefiles.texi target.texi timer.texi
 
-FILES= $(PROJECT).texi versions.texi $(GENERATED_FILES)
+FILES= $(PROJECT).texi $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
@@ -45,47 +45,47 @@ $(PROJECT).dvi: $(FILES)
 	texi2dvi -v $(PROJECT).texi
 
 intro.texi: intro.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 target.texi: target.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 bspstruct.texi: bspstruct.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 makefiles.texi: makefiles.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 linkcmds.texi: linkcmds.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 init.texi: init.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 clock.texi: clock.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 console.texi: console.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 timer.texi: timer.t Makefile
-	$(BMENU) -c -p "" \
+	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 

@@ -6,9 +6,9 @@
 @c  $Id$
 @c
 
-@chapter = Console Driver
+@chapter Console Driver
 
-@subsection = Introduction
+@section Introduction
 
 This chapter describes how to do a console driver using RTEMS Termios
 support. 
@@ -28,7 +28,7 @@ line, tabulations, etc...) recognition and processing,
 We may think that one need two serial drivers to deal with those two types
 of data, but Termios permits having only one driver. 
 
-@subsection = Termios
+@section Termios
 
 Termios is a standard for terminal management, included in several Unix
 versions. Termios is good because: 
@@ -57,7 +57,7 @@ Timeout.
 For more information on Termios, type man termios in your Unix box or go
 to http://www.freebsd.org/cgi/man.cgi. 
 
-@subsection = Driver Functioning Modes
+@section Driver Functioning Modes
 
 There are generally two main functioning modes for an UART (Universal
 Asynchronous Receiver-Transmitter, i.e. the serial chip): 
@@ -82,7 +82,7 @@ remaining in the output buffer the same way.
 
 @end itemize
 
-@subsection = Serial Driver Functioning Overview
+@section Serial Driver Functioning Overview
 
 Figure 5 is an attempt of showing how a Termios driven serial driver works : 
 
@@ -99,7 +99,7 @@ $RTEMS_ROOT/c/src/lib/libc directory,
 
 @end itemize
 
-@subsection = Polled I/O
+@section Termios and Polled I/O
 
 You have to point Termios out which functions are used for simple
 character input/output: 
@@ -112,17 +112,17 @@ Description
 @example
 int pollWrite (int minor, const char *buf, int len) 
 
-for (i=0; i<len; i++) {
+for (i=0; i<len; i++) @{
      put buf[i] into the UART channel minor
      wait for the character to be transmitted
      on the serial line
-}
+@}
 int pollread(int minor)
 @end example
 
 wait for a character to be available in the UART channel minor, then return it.
 
-@subsection = Interrupted I/O
+@section Termios and Interrupt Driven I/O
 
 The UART generally generates interrupts when it is ready to accept or to
 emit a number of characters. In this mode, the interrupt subroutine is the
@@ -162,7 +162,7 @@ UART.
 
 Figure 5: general TERMIOS driven serial driver functioning
 
-@subsection = Initialization
+@section Initialization
 
 The driver initialization is called once during RTEMS initialization
 process. 
@@ -200,7 +200,7 @@ rtems_io_register_name ("dev/console", major, i);
 
 @end itemize
 
-@subsection = Opening a serial device
+@section Opening a serial device
 
 The console device is opened during RTEMS initialization but the
 console_open function is called when a new device is opened. For instance,
@@ -217,17 +217,17 @@ The gen68340 BSP defines two kinds of callbacks:
 
 @item functions to use with polled input/output,
 
-@item functions to use with interrupted input/output. 
+@item functions to use with interrupt input/output. 
 
 @end itemize
 
-@subsubsection = Polled I/O
+@ection Polled I/O
 
 You have to point Termios out which functions are used for simple
 character input/output, i.e. pointers to pollWrite and pollRead functions
 defined in 8.4.1. 
 
-@subsubsection = Interrupted I/O
+@ection Interrupt Driven I/O
 
 Driver functioning is quite different in this mode. You can see there's no
 read function passed to Termios. Indeed a console_read call returns the
@@ -236,14 +236,14 @@ interrupt subroutine (cf. 8.4.2).
 
 But you actually have to provide a pointer to the InterruptWrite function. 
 
-@subsection = Closing a serial device
+@section Closing a serial device
 
 The driver entry point is: console_close. 
 
 You just have to notify Termios that the serial device was closed, with a
 call to rtems_termios_close. 
 
-@subsection = Reading characters from the serial device
+@section Reading characters from the serial device
 
 The driver entry point is: console_read. 
 
@@ -251,7 +251,7 @@ You just have to return the content of the Termios input buffer.
 
 Call rtems_termios_read. 
 
-@subsection = Writing characters to the serial device
+@section Writing characters to the serial device
 
 The driver entry point is: console_write. 
 
@@ -260,7 +260,7 @@ buffer.
 
 Call rtems_termios_write. 
 
-@subsection = Changing serial line parameters
+@section Changing serial line parameters
 
 The driver entry point is: console_control. 
 
