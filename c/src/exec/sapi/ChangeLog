@@ -1,3 +1,11 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-03-15	Joel Sherrill <joel@OARcorp.com>
 
 	* src/extension.c: Split to reduce minimum code size per PR134.

@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 EXTENSION_FILES = extension.c extensioncreate.c extensiondelete.c \
     extensionident.c

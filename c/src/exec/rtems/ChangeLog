@@ -1,3 +1,11 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-01-31	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/rtems/timer.h: Missed merging these modifications
