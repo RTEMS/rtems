@@ -24,8 +24,8 @@ extern "C" {
 #include <bspopts.h>
 
 #include <rtems.h>
-#include <console.h>
-#include <clockdrv.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
 #include <mpc8260.h>
 #include <mpc8260/cpm.h>
 #include <mpc8260/mmu.h>
