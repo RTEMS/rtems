@@ -70,12 +70,6 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 # Explicitly list a Makefile here 
 AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-network/Makefile
-irq/Makefile
-vectors/Makefile
-startup/Makefile
 wrapup/Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])

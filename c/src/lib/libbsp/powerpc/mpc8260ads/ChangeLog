@@ -1,3 +1,13 @@
+2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in clock/.cvsignore, console/.cvsignore,
+	irq/.cvsignore, network/.cvsignore, startup/.cvsignore,
+	vectors/.cvsignore. Use automake compilation rules.
+	* clock/.cvsignore, console/.cvsignore, irq/.cvsignore,
+	network/.cvsignore, startup/.cvsignore, vectors/.cvsignore: Remove.
+	* configure.ac: Reflect changes above.
+	* wrapup/Makefile: Reflect changes above.
+
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in start/Makefile.am.

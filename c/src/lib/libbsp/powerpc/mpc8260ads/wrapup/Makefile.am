@@ -2,16 +2,17 @@
 ## $Id$
 ##
 
-# We only build the networking device driver if HAS_NETWORKING was defined
+OBJS = ../pclock$(LIB_VARIANT).rel ../irq$(LIB_VARIANT).rel \
+    ../startup$(LIB_VARIANT).rel \
+    ../console$(LIB_VARIANT).rel ../vectors$(LIB_VARIANT).rel
+
 if HAS_NETWORKING
-NETWORKING = network
+OBJS += ../network$(LIB_VARIANT).rel
 endif
 
-BSP_PIECES = clock irq start startup console vectors $(NETWORKING)
-
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard ../../../../libcpu/powerpc/shared/*/$(ARCH)/*.$(OBJEXT)) \
+OBJS += ../../../../libcpu/powerpc/shared/cpuIdent$(LIB_VARIANT).rel \
+    ../../../../libcpu/powerpc/shared/cache$(LIB_VARIANT).rel \
     ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel \
     ../../../../libcpu/powerpc/mpc8260/clock$(LIB_VARIANT).rel \
     ../../../../libcpu/powerpc/mpc8260/console-generic$(LIB_VARIANT).rel \
