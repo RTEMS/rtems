@@ -7,10 +7,12 @@
 #define __RTEMS_POSIX_THREAD_SUPPORT_h
 
 #include <rtems/score/coresem.h>
+#include <rtems/score/tqdata.h>
 
 typedef struct {
   pthread_attr_t          Attributes;
   int                     detachstate;
+  Thread_queue_Control    Join_List;
 #if 0
   /*
    *  POSIX Interrupts 
