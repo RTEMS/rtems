@@ -231,7 +231,7 @@ typedef struct {
   void            **object_blocks;      /* the object memory to remove */
   boolean           is_string;          /* TRUE if names are strings */
   uint16_t          name_length;        /* maximum length of names */
-  Objects_Thread_queue_Extract_callout *extract;
+  Objects_Thread_queue_Extract_callout extract;
 #if defined(RTEMS_MULTIPROCESSING)
   Chain_Control    *global_table;       /* pointer to global table */
 #endif
@@ -351,7 +351,7 @@ void _Objects_Initialize_information (
 #if defined(RTEMS_MULTIPROCESSING)
   ,
   boolean              supports_global,
-  Objects_Thread_queue_Extract_callout *extract
+  Objects_Thread_queue_Extract_callout extract
 #endif
 );
 

@@ -38,7 +38,7 @@
  *    maximum_name_length - maximum length of each object's name
  *    When multiprocessing is configured,
  *      supports_global     - TRUE if this is a global object class
- *      extract_callout     - pointer to threadq extract callout if MP
+ *      extract_callout     - pointer to threadq extract callout
  *
  *  Output parameters:  NONE
  */
@@ -54,7 +54,7 @@ void _Objects_Initialize_information(
 #if defined(RTEMS_MULTIPROCESSING)
   ,
   boolean              supports_global,
-  Objects_Thread_queue_Extract_callout *extract
+  Objects_Thread_queue_Extract_callout extract
 #endif
 )
 {

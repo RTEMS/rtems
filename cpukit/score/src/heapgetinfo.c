@@ -40,12 +40,15 @@ Heap_Get_information_status _Heap_Get_information(
   Heap_Block *the_block  = 0;  /* avoid warnings */
   Heap_Block *next_block = 0;  /* avoid warnings */
   int         notdone = 1;
+  uint32_t    size;
 
 
-  the_info->free_blocks = 0;
-  the_info->free_size   = 0;
-  the_info->used_blocks = 0;
-  the_info->used_size   = 0;
+  the_info->Free.number  = 0;
+  the_info->Free.total   = 0;
+  the_info->Free.largest = 0;
+  the_info->Used.number  = 0;
+  the_info->Used.total   = 0;
+  the_info->Used.largest = 0;
 
   /*
    * We don't want to allow walking the heap until we have
@@ -72,12 +75,17 @@ Heap_Get_information_status _Heap_Get_information(
        * Accumulate size
        */
 
+      size = _Heap_Block_size(the_block);
       if ( _Heap_Is_block_free(the_block) ) {
-        the_info->free_blocks++;
-        the_info->free_size += _Heap_Block_size(the_block);
+        the_info->Free.number++;
+        the_info->Free.total += size;
+	if ( size > the_info->Free.largest )
+	  the_info->Free.largest = size;
       } else {
-        the_info->used_blocks++;
-        the_info->used_size += _Heap_Block_size(the_block);
+        the_info->Used.number++;
+        the_info->Used.total += size;
+	if ( size > the_info->Used.largest )
+	  the_info->Used.largest = size;
       }
 
       /*

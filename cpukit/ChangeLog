@@ -1,3 +1,15 @@
+2004-11-29	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/src/mallocfreespace.c, rtems/Makefile.am,
+	rtems/include/rtems/rtems/region.h, score/Makefile.am,
+	score/include/rtems/score/heap.h, score/src/heapgetinfo.c: Add
+	capability to return information about just the free blocks in a
+	region or heap.  Also changed the semantics of free space available
+	to be the largest block of memory that can be allocated.
+	* rtems/src/regiongetfreeinfo.c, score/src/heapgetfreeinfo.c: New files.
+	: score/include/rtems/score/object.h,
+	score/src/objectinitializeinformation.c: Remove warning.
+
 2004-11-22	Joel Sherrill <joel@OARcorp.com>
 
 	* score/include/rtems/score/object.h, score/src/objectclearname.c,
