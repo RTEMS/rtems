@@ -3859,10 +3859,11 @@ fi
 
 
 
+
 # pick up all the Makefiles in required parts of the tree
 
 echo $ac_n "checking for Makefile.in in make""... $ac_c" 1>&6
-echo "configure:3866: checking for Makefile.in in make" >&5
+echo "configure:3867: checking for Makefile.in in make" >&5
 if test -d $srcdir/make; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3877,7 +3878,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libchip""... $ac_c" 1>&6
-echo "configure:3881: checking for Makefile.in in c/src/lib/libchip" >&5
+echo "configure:3882: checking for Makefile.in in c/src/lib/libchip" >&5
 if test -d $srcdir/c/src/lib/libchip; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3892,7 +3893,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libmisc""... $ac_c" 1>&6
-echo "configure:3896: checking for Makefile.in in c/src/lib/libmisc" >&5
+echo "configure:3897: checking for Makefile.in in c/src/lib/libmisc" >&5
 if test -d $srcdir/c/src/lib/libmisc; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3907,7 +3908,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/tests/samples""... $ac_c" 1>&6
-echo "configure:3911: checking for Makefile.in in c/src/tests/samples" >&5
+echo "configure:3912: checking for Makefile.in in c/src/tests/samples" >&5
 if test -d $srcdir/c/src/tests/samples; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -4170,6 +4171,7 @@ s%@rtems_cv_prog_cc_cross@%$rtems_cv_prog_cc_cross%g
 s%@RTEMS_BSP_LIST@%$RTEMS_BSP_LIST%g
 s%@RTEMS_LIBC_DIR@%$RTEMS_LIBC_DIR%g
 s%@RTEMS_USE_OWN_PDIR@%$RTEMS_USE_OWN_PDIR%g
+s%@RTEMS_HAS_MULTIPROCESSING@%$RTEMS_HAS_MULTIPROCESSING%g
 s%@RTEMS_HAS_NETWORKING@%$RTEMS_HAS_NETWORKING%g
 s%@RTEMS_HAS_RDBG@%$RTEMS_HAS_RDBG%g
 s%@RTEMS_USE_MACROS@%$RTEMS_USE_MACROS%g
