@@ -65,11 +65,18 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
   printk("\t XER = %x\n", excPtr->EXC_XER);
   printk("\t LR = %x\n", excPtr->EXC_LR);
   printk("\t MSR = %x\n", excPtr->EXC_MSR);
-  if ( (excPtr->_EXC_number == ASM_DEC_VECTOR) ||
-       (excPtr->_EXC_number == ASM_SYS_VECTOR)
-     )
+  if (excPtr->_EXC_number == ASM_DEC_VECTOR)
        recoverable = 1;
-  if (!recoverable) BSP_panic("unrecoverable exception!!! Push reset button\n");
+  if (excPtr->_EXC_number == ASM_SYS_VECTOR)
+#ifdef TEST_RAW_EXCEPTION_CODE      
+    recoverable = 1;
+#else
+    recoverable = 0;
+#endif
+    if (!recoverable) {
+      printk("unrecoverable exception!!! Push reset button\n");
+      while(1);
+    }
 }
 
 void nop_except_enable(const rtems_raw_except_connect_data* ptr)
