@@ -29,7 +29,7 @@ irrecoverable errors.  The directive provided by the fatal error
 manager is:
 
 @itemize @bullet
-@item @code{fatal_error_occurred} - Invoke the fatal error handler
+@item @code{@value{DIRPREFIX}fatal_error_occurred} - Invoke the fatal error handler
 @end itemize
 
 @ifinfo

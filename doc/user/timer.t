@@ -28,13 +28,13 @@ The timer manager provides support for timer
 facilities.  The directives provided by the timer manager are:
 
 @itemize @bullet
-@item @code{timer_create} - Create a timer
-@item @code{timer_ident} - Get ID of a timer
-@item @code{timer_cancel} - Cancel a timer
-@item @code{timer_delete} - Delete a timer
-@item @code{timer_fire_after} - Fire timer after interval
-@item @code{timer_fire_when} - Fire timer when specified
-@item @code{timer_reset} - Reset an interval timer
+@item @code{@value{DIRPREFIX}timer_create} - Create a timer
+@item @code{@value{DIRPREFIX}timer_ident} - Get ID of a timer
+@item @code{@value{DIRPREFIX}timer_cancel} - Cancel a timer
+@item @code{@value{DIRPREFIX}timer_delete} - Delete a timer
+@item @code{@value{DIRPREFIX}timer_fire_after} - Fire timer after interval
+@item @code{@value{DIRPREFIX}timer_fire_when} - Fire timer when specified
+@item @code{@value{DIRPREFIX}timer_reset} - Reset an interval timer
 @end itemize
 
 
@@ -258,9 +258,9 @@ procedure Timer_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - timer created successfully@*
-@code{INVALID_NAME} - invalid timer name@*
-@code{TOO_MANY} - too many timers created
+@code{@value{RPREFIX}SUCCESSFUL} - timer created successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid timer name@*
+@code{@value{RPREFIX}TOO_MANY} - too many timers created
 
 @subheading DESCRIPTION:
 
@@ -303,8 +303,8 @@ procedure Timer_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - timer identified successfully@*
-@code{INVALID_NAME} - timer name not found
+@code{@value{RPREFIX}SUCCESSFUL} - timer identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - timer name not found
 
 @subheading DESCRIPTION:
 
@@ -346,8 +346,8 @@ procedure Timer_Cancel (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - timer canceled successfully@*
-@code{INVALID_ID} - invalid timer id
+@code{@value{RPREFIX}SUCCESSFUL} - timer canceled successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid timer id
 
 @subheading DESCRIPTION:
 
@@ -385,8 +385,8 @@ procedure Timer_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - timer deleted successfully@*
-@code{INVALID_ID} - invalid timer id
+@code{@value{RPREFIX}SUCCESSFUL} - timer deleted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid timer id
 
 @subheading DESCRIPTION:
 
@@ -434,9 +434,9 @@ procedure Timer_Fire_After (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - timer initiated successfully@*
-@code{INVALID_ID} - invalid timer id@*
-@code{INVALID_NUMBER} - invalid interval
+@code{@value{RPREFIX}SUCCESSFUL} - timer initiated successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid timer id@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid interval
 
 @subheading DESCRIPTION:
 
@@ -484,10 +484,10 @@ procedure Timer_Fire_When (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - timer initiated successfully@*
-@code{INVALID_ID} - invalid timer id@*
-@code{NOT_DEFINED} - system date and time is not set@*
-@code{INVALID_CLOCK} - invalid time of day
+@code{@value{RPREFIX}SUCCESSFUL} - timer initiated successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid timer id@*
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set@*
+@code{@value{RPREFIX}INVALID_CLOCK} - invalid time of day
 
 @subheading DESCRIPTION:
 
@@ -529,9 +529,9 @@ procedure Timer_Reset (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - timer reset successfully@*
-@code{INVALID_ID} - invalid timer id@*
-@code{NOT_DEFINED} - attempted to reset a when or newly created timer
+@code{@value{RPREFIX}SUCCESSFUL} - timer reset successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid timer id@*
+@code{@value{RPREFIX}NOT_DEFINED} - attempted to reset a when or newly created timer
 
 @subheading DESCRIPTION:
 

@@ -29,13 +29,13 @@ allocate memory in variable sized units.  The directives
 provided by the region manager are:
 
 @itemize @bullet
-@item @code{region_create} - Create a region
-@item @code{region_ident} - Get ID of a region
-@item @code{region_delete} - Delete a region
-@item @code{region_extend} - Add memory to a region
-@item @code{region_get_segment} - Get segment from a region
-@item @code{region_return_segment} - Return segment to a region
-@item @code{region_get_segment_size} - Obtain size of a segment
+@item @code{@value{DIRPREFIX}region_create} - Create a region
+@item @code{@value{DIRPREFIX}region_ident} - Get ID of a region
+@item @code{@value{DIRPREFIX}region_delete} - Delete a region
+@item @code{@value{DIRPREFIX}region_extend} - Add memory to a region
+@item @code{@value{DIRPREFIX}region_get_segment} - Get segment from a region
+@item @code{@value{DIRPREFIX}region_return_segment} - Return segment to a region
+@item @code{@value{DIRPREFIX}region_get_segment_size} - Obtain size of a segment
 @end itemize
 
 @ifinfo
@@ -90,8 +90,8 @@ of the desired attribute components.  The set of valid region
 attributes is provided in the following table:
 
 @itemize @bullet
-@item @code{FIFO} - tasks wait by FIFO (default)
-@item @code{PRIORITY} - tasks wait by priority
+@item @code{@value{RPREFIX}FIFO} - tasks wait by FIFO (default)
+@item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
 @end itemize
 
 Attribute values are specifically designed to be
@@ -100,13 +100,13 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute @code{DEFAULT_ATTRIBUTES} should be
+defaults are desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
 specified on this call.
 
 This example demonstrates the attribute_set parameter
 needed to create a region with the task priority waiting queue
 discipline.  The attribute_set parameter to the region_create
-directive should be @code{PRIORITY}.
+directive should be @code{@value{RPREFIX}PRIORITY}.
 
 @ifinfo
 @node Building an Option Set, Region Manager Operations, Building an Attribute Set, Region Manager Background
@@ -118,8 +118,8 @@ desired option components.  The set of valid options for the
 region_get_segment directive are listed in the following table:
 
 @itemize @bullet
-@item @code{WAIT} - task will wait for semaphore (default)
-@item @code{NO_WAIT} - task should not wait
+@item @code{@value{RPREFIX}WAIT} - task will wait for semaphore (default)
+@item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
 Option values are specifically designed to be
@@ -128,12 +128,12 @@ are equivalent as long as each option appears exactly once in
 the component list.  An option listed as a default is not
 required to appear in the option list, although it is a good
 programming practice to specify default options.  If all
-defaults are desired, the option @code{DEFAULT_OPTIONS} should be
+defaults are desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should be
 specified on this call.
 
 This example demonstrates the option parameter needed
 to poll for a segment.  The option parameter passed to the
-region_get_segment directive should be @code{NO_WAIT}.
+region_get_segment directive should be @code{@value{RPREFIX}NO_WAIT}.
 
 @ifinfo
 @node Region Manager Operations, Creating a Region, Building an Option Set, Region Manager
@@ -218,7 +218,7 @@ following situations applies:
 @itemize @bullet
 @item By default, the calling task will wait forever to acquire the segment.
 
-@item Specifying the @code{NO_WAIT} option forces an immediate return
+@item Specifying the @code{@value{RPREFIX}NO_WAIT} option forces an immediate return
 with an error status code.
 
 @item Specifying a timeout limits the interval the task will
@@ -325,11 +325,11 @@ procedure Region_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 
-@code{SUCCESSFUL} - region created successfully@*
-@code{INVALID_NAME} - invalid task name@*
-@code{INVALID_ADDRESS} - address not on four byte boundary@*
-@code{TOO_MANY} - too many regions created@*
-@code{INVALID_SIZE} - invalid page size
+@code{@value{RPREFIX}SUCCESSFUL} - region created successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
+@code{@value{RPREFIX}TOO_MANY} - too many regions created@*
+@code{@value{RPREFIX}INVALID_SIZE} - invalid page size
 
 @subheading DESCRIPTION:
 
@@ -346,10 +346,10 @@ memory from the region is not used to store the RNCB.  However,
 some overhead within the region is required by RTEMS each time a
 segment is constructed in the region.
 
-Specifying @code{PRIORITY} in attribute_set causes tasks
+Specifying @code{@value{RPREFIX}PRIORITY} in attribute_set causes tasks
 waiting for a segment to be serviced according to task priority.
-Specifying @code{FIFO} in attribute_set or selecting
-@code{DEFAULT_ATTRIBUTES} will cause waiting tasks to be serviced in
+Specifying @code{@value{RPREFIX}FIFO} in attribute_set or selecting
+@code{@value{RPREFIX}DEFAULT_ATTRIBUTES} will cause waiting tasks to be serviced in
 First In-First Out order.
 
 The starting_address parameter must be aligned on a
@@ -398,8 +398,8 @@ procedure Region_Ident (
 
 @subheading DIRECTIVE STATUS CODES:
 
-@code{SUCCESSFUL} - region identified successfully@*
-@code{INVALID_NAME} - region name not found
+@code{@value{RPREFIX}SUCCESSFUL} - region identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - region name not found
 
 @subheading DESCRIPTION:
 
@@ -441,9 +441,9 @@ procedure Region_Delete (
 
 @subheading DIRECTIVE STATUS CODES:
 
-@code{SUCCESSFUL} - region deleted successfully@*
-@code{INVALID_ID} - invalid region id@*
-@code{RESOURCE_IN_USE} - segments still in use
+@code{@value{RPREFIX}SUCCESSFUL} - region deleted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid region id@*
+@code{@value{RPREFIX}RESOURCE_IN_USE} - segments still in use
 
 @subheading DESCRIPTION:
 
@@ -491,9 +491,9 @@ procedure Region_Extend (
 
 @subheading DIRECTIVE STATUS CODES:
 
-@code{SUCCESSFUL} - region extended successfully@*
-@code{INVALID_ID} - invalid region id@*
-@code{INVALID_ADDRESS} - invalid address of area to add
+@code{@value{RPREFIX}SUCCESSFUL} - region extended successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid region id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid address of area to add
 
 @subheading DESCRIPTION:
 
@@ -543,25 +543,25 @@ procedure Region_Get_Segment (
 
 @subheading DIRECTIVE STATUS CODES:
 
-@code{SUCCESSFUL} - segment obtained successfully@*
-@code{INVALID_ID} - invalid region id@*
-@code{INVALID_SIZE} - request is for zero bytes or exceeds
+@code{@value{RPREFIX}SUCCESSFUL} - segment obtained successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid region id@*
+@code{@value{RPREFIX}INVALID_SIZE} - request is for zero bytes or exceeds
 the size of maximum segment which is possible for this region@*
-@code{UNSATISFIED} - segment of requested size not available@*
-@code{TIMEOUT} - timed out waiting for segment@*
-@code{OBJECT_WAS_DELETED} - semaphore deleted while waiting
+@code{@value{RPREFIX}UNSATISFIED} - segment of requested size not available@*
+@code{@value{RPREFIX}TIMEOUT} - timed out waiting for segment@*
+@code{@value{RPREFIX}OBJECT_WAS_DELETED} - semaphore deleted while waiting
 
 @subheading DESCRIPTION:
 
 This directive obtains a variable size segment from
 the region specified by id.  The address of the allocated
-segment is returned in segment.  The @code{WAIT} and @code{NO_WAIT} components
+segment is returned in segment.  The @code{@value{RPREFIX}WAIT} and @code{@value{RPREFIX}NO_WAIT} components
 of the options parameter are used to specify whether the calling
 tasks wish to wait for a segment to become available or return
 immediately if no segment is available.  For either option, if a
 sufficiently sized segment is available, then the segment is
 successfully acquired by returning immediately with  the
-@code{SUCCESSFUL} status code.
+@code{@value{RPREFIX}SUCCESSFUL} status code.
 
 If the calling task chooses to return immediately and
 a segment large enough is not available, then an error code
@@ -569,14 +569,14 @@ indicating this fact is returned.  If the calling task chooses
 to wait for the segment and a segment large enough is not
 available, then the calling task is placed on the region's
 segment wait queue and blocked.  If the region was created with
-the @priority{PRIORITY} option, then the calling task is inserted into the
+the @code{@value{RPREFIX}PRIORITY} option, then the calling task is inserted into the
 wait queue according to its priority.  However, if the region
-was created with the @priority{FIFO} option, then the calling task is
+was created with the @code{@value{RPREFIX}FIFO} option, then the calling task is
 placed at the rear of the wait queue.
 
 The timeout parameter specifies the maximum interval
 that a task is willing to wait to obtain a segment.  If timeout
-is set to @code{NO_TIMEOUT}, then the calling task will wait forever.
+is set to @code{@value{RPREFIX}NO_TIMEOUT}, then the calling task will wait forever.
 
 @subheading NOTES:
 
@@ -588,8 +588,8 @@ The following segment acquisition option constants
 are defined by RTEMS:
 
 @itemize @bullet
-@item @code{WAIT} - task will wait for semaphore (default)
-@item @code{NO_WAIT} - task should not wait
+@item @code{@value{RPREFIX}WAIT} - task will wait for semaphore (default)
+@item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
 A clock tick is required to support the timeout functionality of
@@ -624,9 +624,9 @@ procedure Region_Return_Segment (
 
 @subheading DIRECTIVE STATUS CODES:
 
-@code{SUCCESSFUL} - segment returned successfully@*
-@code{INVALID_ID} - invalid region id@*
-@code{INVALID_ADDRESS} - segment address not in region
+@code{@value{RPREFIX}SUCCESSFUL} - segment returned successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid region id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - segment address not in region
 
 @subheading DESCRIPTION:
 
@@ -682,9 +682,9 @@ procedure Region_Get_Segment_Size (
 
 @subheading DIRECTIVE STATUS CODES:
 
-@code{SUCCESSFUL} - segment obtained successfully@*
-@code{INVALID_ID} - invalid region id@*
-@code{INVALID_ADDRESS} - segment address not in region
+@code{@value{RPREFIX}SUCCESSFUL} - segment obtained successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid region id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - segment address not in region
 
 @subheading DESCRIPTION:
 

@@ -128,8 +128,8 @@ to a task.}
 
 Another way the user can alter the basic scheduling
 algorithm is by manipulating the preemption mode flag
-(@code{PREEMPT_MASK}) of individual tasks.  If preemption is disabled
-for a task (@code{NO_PREEMPT}), then the task will not relinquish
+(@code{@value{RPREFIX}PREEMPT_MASK}) of individual tasks.  If preemption is disabled
+for a task (@code{@value{RPREFIX}NO_PREEMPT}), then the task will not relinquish
 control of the processor until it terminates, blocks, or
 re-enables preemption.  Even tasks which become ready to run and
 possess higher priority levels will not be allowed to execute.
@@ -146,8 +146,8 @@ Timeslicing or round-robin scheduling is an
 additional method which can be used to alter the basic
 scheduling algorithm.  Like preemption, timeslicing is specified
 on a task by task basis using the timeslicing mode flag
-(@code{TIMESLICE_MASK}).  If timeslicing is enabled for a task
-(@code{TIMESLICE}), then RTEMS will limit the amount of time the task
+(@code{@value{RPREFIX}TIMESLICE_MASK}).  If timeslicing is enabled for a task
+(@code{@value{RPREFIX}TIMESLICE}), then RTEMS will limit the amount of time the task
 can execute before the processor is allocated to another task.
 Each tick of the real-time clock reduces the currently running
 task's timeslice.  When the execution time equals the timeslice,
@@ -167,7 +167,7 @@ entire timeslice.
 The final mechanism for altering the RTEMS scheduling
 algorithm is called manual round-robin.  Manual round-robin is
 invoked by using the task_wake_after directive with a time
-interval of @code{YIELD_PROCESSOR}.  This allows a task to give up the
+interval of @code{@value{RPREFIX}YIELD_PROCESSOR}.  This allows a task to give up the
 processor and be immediately returned to the ready chain at the
 end of its priority group.  If no other tasks of the same
 priority are ready to run, then the task does not lose control
@@ -195,12 +195,12 @@ saved or restored for a context switch is located either in the
 TCB or on the task's stacks.
 
 Tasks that utilize a numeric coprocessor and are
-created with the @code{FLOATING_POINT} attribute require additional
+created with the @code{@value{RPREFIX}FLOATING_POINT} attribute require additional
 operations during a context switch.  These additional operations
 are necessary to save and restore the floating point context of
-@code{FLOATING_POINT} tasks.  To avoid unnecessary save and restore
+@code{@value{RPREFIX}FLOATING_POINT} tasks.  To avoid unnecessary save and restore
 operations, the state of the numeric coprocessor is only saved
-when a @code{FLOATING_POINT} task is dispatched and that task was not
+when a @code{@value{RPREFIX}FLOATING_POINT} task is dispatched and that task was not
 the last task to utilize the coprocessor.
 
 @ifinfo

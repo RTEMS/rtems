@@ -35,12 +35,12 @@ implement tasks which execute in a periodic fashion.  The
 directives provided by the rate monotonic manager are:
 
 @itemize @bullet
-@item @code{rate_monotonic_create} - Create a rate monotonic period
-@item @code{rate_monotonic_ident} - Get ID of a period
-@item @code{rate_monotonic_cancel} - Cancel a period
-@item @code{rate_monotonic_delete} - Delete a rate monotonic period
-@item @code{rate_monotonic_period} - Conclude current/Start next period
-@item @code{rate_monotonic_get_status} - Obtain status information on period
+@item @code{@value{DIRPREFIX}rate_monotonic_create} - Create a rate monotonic period
+@item @code{@value{DIRPREFIX}rate_monotonic_ident} - Get ID of a period
+@item @code{@value{DIRPREFIX}rate_monotonic_cancel} - Cancel a period
+@item @code{@value{DIRPREFIX}rate_monotonic_delete} - Delete a rate monotonic period
+@item @code{@value{DIRPREFIX}rate_monotonic_period} - Conclude current/Start next period
+@item @code{@value{DIRPREFIX}rate_monotonic_get_status} - Obtain status information on period
 @end itemize
 
 @ifinfo
@@ -739,18 +739,18 @@ returns immediately with a timeout error status.
 @subsection Obtaining a Period's Status
 
 If the rate_monotonic_period directive is invoked
-with a period of @code{PERIOD_STATUS} ticks, the current state of the
+with a period of @code{@value{RPREFIX}PERIOD_STATUS} ticks, the current state of the
 specified rate monotonic period will be returned.  The following
 table details the relationship between the period's status and
 the directive status code returned by the rate_monotonic_period
 directive:
 
 @itemize @bullet
-@item @code{SUCCESSFUL} - period is running
+@item @code{@value{RPREFIX}SUCCESSFUL} - period is running
 
-@item @code{TIMEOUT} - period has expired
+@item @code{@value{RPREFIX}TIMEOUT} - period has expired
 
-@item @code{NOT_DEFINED} - period has never been initiated
+@item @code{@value{RPREFIX}NOT_DEFINED} - period has never been initiated
 @end itemize
 
 Obtaining the status of a rate monotonic period does
@@ -966,9 +966,9 @@ procedure Rate_Monotonic_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - rate monotonic period created successfully@*
-@code{INVALID_NAME} - invalid task name@*
-@code{TOO_MANY} - too many periods created
+@code{@value{RPREFIX}SUCCESSFUL} - rate monotonic period created successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}TOO_MANY} - too many periods created
 
 @subheading DESCRIPTION:
 
@@ -1012,8 +1012,8 @@ procedure Rate_Monotonic_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - period identified successfully@*
-@code{INVALID_NAME} - period name not found
+@code{@value{RPREFIX}SUCCESSFUL} - period identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - period name not found
 
 @subheading DESCRIPTION:
 
@@ -1055,9 +1055,9 @@ procedure Rate_Monotonic_Cancel (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - period canceled successfully@*
-@code{INVALID_ID} - invalid rate monotonic period id@*
-@code{NOT_OWNER_OF_RESOURCE} - rate monotonic period not created by calling task
+@code{@value{RPREFIX}SUCCESSFUL} - period canceled successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid rate monotonic period id@*
+@code{@value{RPREFIX}NOT_OWNER_OF_RESOURCE} - rate monotonic period not created by calling task
 
 @subheading DESCRIPTION:
 
@@ -1099,8 +1099,8 @@ procedure Rate_Monotonic_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - period deleted successfully@*
-@code{INVALID_ID} - invalid rate monotonic period id
+@code{@value{RPREFIX}SUCCESSFUL} - period deleted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid rate monotonic period id
 
 @subheading DESCRIPTION:
 
@@ -1144,12 +1144,12 @@ procedure Rate_Monotonic_Period (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - period initiated successfully@*
-@code{INVALID_ID} - invalid rate monotonic period id@*
-@code{NOT_OWNER_OF_RESOURCE} - period not created by calling task@*
-@code{NOT_DEFINED} - period has never been initiated (only
+@code{@value{RPREFIX}SUCCESSFUL} - period initiated successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid rate monotonic period id@*
+@code{@value{RPREFIX}NOT_OWNER_OF_RESOURCE} - period not created by calling task@*
+@code{@value{RPREFIX}NOT_DEFINED} - period has never been initiated (only
 possible when period is set to PERIOD_STATUS)@*
-@code{TIMEOUT} - period has expired
+@code{@value{RPREFIX}TIMEOUT} - period has expired
 
 @subheading DESCRIPTION:
 
@@ -1160,7 +1160,7 @@ reinitiating the period with the specified period.  If id was
 not running (either expired or never initiated), the period is
 immediately initiated and the directive returns immediately.
 
-If invoked with a period of @code{PERIOD_STATUS} ticks, the
+If invoked with a period of @code{@value{RPREFIX}PERIOD_STATUS} ticks, the
 current state of id will be returned.  The directive status
 indicates the current state of the period.  This does not alter
 the state or period of the period.
@@ -1198,9 +1198,9 @@ procedure Rate_Monotonic_Get_Status (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - period initiated successfully@*
-@code{INVALID_ID} - invalid rate monotonic period id@*
-@code{INVALID_ADDRESS} - invalid address of status@*
+@code{@value{RPREFIX}SUCCESSFUL} - period initiated successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid rate monotonic period id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid address of status@*
 
 @subheading DESCRIPTION:
 

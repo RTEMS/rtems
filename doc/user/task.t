@@ -31,19 +31,19 @@ create, delete, and administer tasks.  The directives provided
 by the task manager are:
 
 @itemize @bullet
-@item @code{task_create} - Create a task 
-@item @code{task_ident} - Get ID of a task 
-@item @code{task_start} - Start a task 
-@item @code{task_restart} - Restart a task 
-@item @code{task_delete} - Delete a task 
-@item @code{task_suspend} - Suspend a task 
-@item @code{task_resume} - Resume a task 
-@item @code{task_set_priority} - Set task priority 
-@item @code{task_mode} - Change current task's mode 
-@item @code{task_get_note} - Get task notepad entry 
-@item @code{task_set_note} - Set task notepad entry 
-@item @code{task_wake_after} - Wake up after interval 
-@item @code{task_wake_when} - Wake up when specified  
+@item @code{@value{DIRPREFIX}task_create} - Create a task 
+@item @code{@value{DIRPREFIX}task_ident} - Get ID of a task 
+@item @code{@value{DIRPREFIX}task_start} - Start a task 
+@item @code{@value{DIRPREFIX}task_restart} - Restart a task 
+@item @code{@value{DIRPREFIX}task_delete} - Delete a task 
+@item @code{@value{DIRPREFIX}task_suspend} - Suspend a task 
+@item @code{@value{DIRPREFIX}task_resume} - Resume a task 
+@item @code{@value{DIRPREFIX}task_set_priority} - Set task priority 
+@item @code{@value{DIRPREFIX}task_mode} - Change current task's mode 
+@item @code{@value{DIRPREFIX}task_get_note} - Get task notepad entry 
+@item @code{@value{DIRPREFIX}task_set_note} - Set task notepad entry 
+@item @code{@value{DIRPREFIX}task_wake_after} - Wake up after interval 
+@item @code{@value{DIRPREFIX}task_wake_when} - Wake up when specified  
 @end itemize
 
 @ifinfo
@@ -195,46 +195,46 @@ execution environment of the task.
 
 The preemption component allows a task to determine when control
 of the processor is relinquished.  If preemption is disabled
-(NO_PREEMPT), the task will retain control of the processor as
+(@code{@value{RPREFIX}NO_PREEMPT}), the task will retain control of the processor as
 long as it is in the executing state -- even if a higher
-priority task is made ready.  If preemption is enabled (PREEMPT)
+priority task is made ready.  If preemption is enabled (@code{@value{RPREFIX}PREEMPT})
 and a higher priority task is made ready, then the processor
 will be taken away from the current task immediately and given
 to the higher priority task.
 
 The timeslicing component is used by the RTEMS scheduler to
 determine how the processor is allocated to tasks of equal
-priority.  If timeslicing is enabled (TIMESLICE), then RTEMS
+priority.  If timeslicing is enabled (@code{@value{RPREFIX}TIMESLICE}), then RTEMS
 will limit the amount of time the task can execute before the
 processor is allocated to another ready task of equal priority. 
 The length of the timeslice is application dependent and
 specified in the Configuration Table.  If timeslicing is
-disabled (NO_TIMESLICE), then the task will be allowed to
+disabled (@code{@value{RPREFIX}NO_TIMESLICE}), then the task will be allowed to
 execute until a task of higher priority is made ready.  If
-NO_PREEMPT is selected, then the timeslicing component is
+@code{@value{RPREFIX}NO_PREEMPT} is selected, then the timeslicing component is
 ignored by the scheduler.
 
 The asynchronous signal processing component is used to
 determine when received signals are to be processed by the task.
- If signal processing is enabled (ASR), then signals sent to the
+ If signal processing is enabled (@code{@value{RPREFIX}ASR}), then signals sent to the
 task will be processed the next time the task executes.  If
-signal processing is disabled (NO_ASR), then all signals
+signal processing is disabled (@code{@value{RPREFIX}NO_ASR}), then all signals
 received by the task will remain posted until signal processing
 is enabled.  This component affects only tasks which have
 established a routine to process asynchronous signals. 
 
 The interrupt level component is used to determine which
 interrupts will be enabled when the task is executing. 
-INTERRUPT_LEVEL(n) specifies that the task will execute at
-interrupt level n.
+@code{@value{RPREFIX}INTERRUPT_LEVEL(n)}
+specifies that the task will execute at interrupt level n.
 
 @itemize  @bullet
-@item @code{PREEMPT} - enable preemption (default) 
-@item @code{NO_PREEMPT} - disable preemption
-@item @code{NO_TIMESLICE} - disable timeslicing (default) 
-@item @code{TIMESLICE} - enable timeslicing
-@item @code{ASR} - enable ASR processing (default) 
-@item @code{NO_ASR} - disable ASR processing
+@item @code{@value{RPREFIX}PREEMPT} - enable preemption (default) 
+@item @code{@value{RPREFIX}NO_PREEMPT} - disable preemption
+@item @code{@value{RPREFIX}NO_TIMESLICE} - disable timeslicing (default) 
+@item @code{@value{RPREFIX}TIMESLICE} - enable timeslicing
+@item @code{@value{RPREFIX}ASR} - enable ASR processing (default) 
+@item @code{@value{RPREFIX}NO_ASR} - disable ASR processing
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} - enable all interrupts (default) 
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} - execute at interrupt level n
 @end itemize
@@ -274,12 +274,12 @@ single argument as an index into an array of parameter blocks.
 @end ifinfo
 @subsection Floating Point Considerations
 
-Creating a task with the @code{FLOATING_POINT} flag results in
+Creating a task with the @code{@value{RPREFIX}FLOATING_POINT} flag results in
 additional memory being allocated for the TCB to store the state
 of the numeric coprocessor during task switches.  This
-additional memory is @b{NOT} allocated for @code{NO_FLOATING_POINT} tasks. 
-Saving and restoring the context of a @code{FLOATING_POINT} task takes
-longer than that of a @code{NO_FLOATING_POINT} task because of the
+additional memory is @b{NOT} allocated for @code{@value{RPREFIX}NO_FLOATING_POINT} tasks. 
+Saving and restoring the context of a @code{@value{RPREFIX}FLOATING_POINT} task takes
+longer than that of a @code{@value{RPREFIX}NO_FLOATING_POINT} task because of the
 relatively large amount of time required for the numeric
 coprocessor to save or restore its computational state.
 
@@ -287,41 +287,41 @@ Since RTEMS was designed specifically for embedded military
 applications which are floating point intensive, the executive
 is optimized to avoid unnecessarily saving and restoring the
 state of the numeric coprocessor.  The state of the numeric
-coprocessor is only saved when a @code{FLOATING_POINT} task is
+coprocessor is only saved when a @code{@value{RPREFIX}FLOATING_POINT} task is
 dispatched and that task was not the last task to utilize the
-coprocessor.  In a system with only one @code{FLOATING_POINT} task, the
+coprocessor.  In a system with only one @code{@value{RPREFIX}FLOATING_POINT} task, the
 state of the numeric coprocessor will never be saved or
 restored.  
 
-Although the overhead imposed by @code{FLOATING_POINT} tasks is
+Although the overhead imposed by @code{@value{RPREFIX}FLOATING_POINT} tasks is
 minimal, some applications may wish to completely avoid the
-overhead associated with @code{FLOATING_POINT} tasks and still utilize
+overhead associated with @code{@value{RPREFIX}FLOATING_POINT} tasks and still utilize
 a numeric coprocessor.  By preventing a task from being
 preempted while performing a sequence of floating point
-operations, a @code{NO_FLOATING_POINT} task can utilize the numeric
-coprocessor without incurring the overhead of a @code{FLOATING_POINT}
+operations, a @code{@value{RPREFIX}NO_FLOATING_POINT} task can utilize the numeric
+coprocessor without incurring the overhead of a @code{@value{RPREFIX}FLOATING_POINT}
 context switch.  This approach also avoids the allocation of a
 floating point context area.  However, if this approach is taken
 by the application designer, NO tasks should be created as
-@code{FLOATING_POINT} tasks.  Otherwise, the floating point context
+@code{@value{RPREFIX}FLOATING_POINT} tasks.  Otherwise, the floating point context
 will not be correctly maintained because RTEMS assumes that the
 state of the numeric coprocessor will not be altered by
-@code{NO_FLOATING_POINT} tasks.
+@code{@value{RPREFIX}NO_FLOATING_POINT} tasks.
 
 If the supported processor type does not have hardware floating
 capabilities or a standard numeric coprocessor, RTEMS will not
 provide built-in support for hardware floating point on that
 processor.  In this case, all tasks are considered
-@code{NO_FLOATING_POINT} whether created as @code{FLOATING_POINT} or
-@code{NO_FLOATING_POINT} tasks.  A floating point emulation software
+@code{@value{RPREFIX}NO_FLOATING_POINT} whether created as @code{@value{RPREFIX}FLOATING_POINT} or
+@code{@value{RPREFIX}NO_FLOATING_POINT} tasks.  A floating point emulation software
 library must be utilized for floating point operations.
 
 On some processors, it is possible to disable the floating point
 unit dynamically.  If this capability is supported by the target
 processor, then RTEMS will utilize this capability to enable the
 floating point unit only for tasks which are created with the
-@code{FLOATING_POINT} attribute.  The consequence of a
-@code{NO_FLOATING_POINT} task attempting to access the floating point
+@code{@value{RPREFIX}FLOATING_POINT} attribute.  The consequence of a
+@code{@value{RPREFIX}NO_FLOATING_POINT} task attempting to access the floating point
 unit is CPU dependent but will i general result in an exception
 condition.
 
@@ -335,10 +335,10 @@ desired components.  The set of valid task attribute components
 is listed below:
 
 @itemize @bullet
-@item @code{NO_FLOATING_POINT} - does not use coprocessor (default)
-@item @code{FLOATING_POINT} - uses numeric coprocessor
-@item @code{LOCAL} - local task (default)
-@item @code{GLOBAL} - global task
+@item @code{@value{RPREFIX}NO_FLOATING_POINT} - does not use coprocessor (default)
+@item @code{@value{RPREFIX}FLOATING_POINT} - uses numeric coprocessor
+@item @code{@value{RPREFIX}LOCAL} - local task (default)
+@item @code{@value{RPREFIX}GLOBAL} - global task
 @end itemize
 
 Attribute values are specifically designed to be mutually
@@ -347,14 +347,14 @@ equivalent as long as each attribute appears exactly once in the
 component list.  A component listed as a default is not required
 to appear in the component list, although it is a good
 programming practice to specify default components.  If all
-defaults are desired, then @code{DEFAULT_ATTRIBUTES} should be used.
+defaults are desired, then @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be used.
 
 This example demonstrates the attribute_set parameter needed to
 create a local task which utilizes the numeric coprocessor.  The
-attribute_set parameter could be @code{FLOATING_POINT} or
+attribute_set parameter could be @code{@value{RPREFIX}FLOATING_POINT} or
 @code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}FLOATING_POINT}.  
 The attribute_set parameter can be set to
-@code{FLOATING_POINT} because @code{LOCAL} is the default for all created
+@code{@value{RPREFIX}FLOATING_POINT} because @code{@value{RPREFIX}LOCAL} is the default for all created
 tasks.  If the task were global and used the numeric
 coprocessor, then the attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}FLOATING_POINT}. 
@@ -371,29 +371,29 @@ listed below:
 
 @ifset use-ascii
 @itemize @bullet
-@item @code{PREEMPT} is masked by
-@code{PREEMPT_MASK} and enables preemption
+@item @code{@value{RPREFIX}PREEMPT} is masked by
+@code{@value{RPREFIX}PREEMPT_MASK} and enables preemption
 
-@item @code{NO_PREEMPT} is masked by
-@code{PREEMPT_MASK} and disables preemption
+@item @code{@value{RPREFIX}NO_PREEMPT} is masked by
+@code{@value{RPREFIX}PREEMPT_MASK} and disables preemption
 
-@item @code{NO_TIMESLICE} is masked by
-@code{TIMESLICE_MASK} and disables timeslicing
+@item @code{@value{RPREFIX}NO_TIMESLICE} is masked by
+@code{@value{RPREFIX}TIMESLICE_MASK} and disables timeslicing
 
-@item @code{TIMESLICE} is masked by
-@code{TIMESLICE_MASK} and enables timeslicing
+@item @code{@value{RPREFIX}TIMESLICE} is masked by
+@code{@value{RPREFIX}TIMESLICE_MASK} and enables timeslicing
 
-@item @code{ASR} is masked by
-@code{ASR_MASK} and enables ASR processing
+@item @code{@value{RPREFIX}ASR} is masked by
+@code{@value{RPREFIX}ASR_MASK} and enables ASR processing
 
-@item @code{NO_ASR} is masked by
-@code{ASR_MASK} and disables ASR processing
+@item @code{@value{RPREFIX}NO_ASR} is masked by
+@code{@value{RPREFIX}ASR_MASK} and disables ASR processing
 
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} is masked by
-@code{INTERRUPT_MASK} and enables all interrupts
+@code{@value{RPREFIX}INTERRUPT_MASK} and enables all interrupts
 
-@item @code{@value{RPREFIX}INTERRUPT_LEVEL}(n)} is masked by
-@code{INTERRUPT_MASK} and sets interrupts level n
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} is masked by
+@code{@value{RPREFIX}INTERRUPT_MASK} and sets interrupts level n
 @end itemize
 @end ifset
 
@@ -401,29 +401,29 @@ listed below:
 @sp 1
 @c this is temporary
 @itemize @bullet
-@item @code{PREEMPT} is masked by
-@code{PREEMPT_MASK} and enables preemption
+@item @code{@value{RPREFIX}PREEMPT} is masked by
+@code{@value{RPREFIX}PREEMPT_MASK} and enables preemption
 
-@item @code{NO_PREEMPT} is masked by
-@code{PREEMPT_MASK} and disables preemption
+@item @code{@value{RPREFIX}NO_PREEMPT} is masked by
+@code{@value{RPREFIX}PREEMPT_MASK} and disables preemption
 
-@item @code{NO_TIMESLICE} is masked by
-@code{TIMESLICE_MASK} and disables timeslicing
+@item @code{@value{RPREFIX}NO_TIMESLICE} is masked by
+@code{@value{RPREFIX}TIMESLICE_MASK} and disables timeslicing
 
-@item @code{TIMESLICE} is masked by
-@code{TIMESLICE_MASK} and enables timeslicing
+@item @code{@value{RPREFIX}TIMESLICE} is masked by
+@code{@value{RPREFIX}TIMESLICE_MASK} and enables timeslicing
 
-@item @code{ASR} is masked by
-@code{ASR_MASK} and enables ASR processing
+@item @code{@value{RPREFIX}ASR} is masked by
+@code{@value{RPREFIX}ASR_MASK} and enables ASR processing
 
-@item @code{NO_ASR} is masked by
-@code{ASR_MASK} and disables ASR processing
+@item @code{@value{RPREFIX}NO_ASR} is masked by
+@code{@value{RPREFIX}ASR_MASK} and disables ASR processing
 
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} is masked by
-@code{INTERRUPT_MASK} and enables all interrupts
+@code{@value{RPREFIX}INTERRUPT_MASK} and enables all interrupts
 
-@item @code{@value{RPREFIX}INTERRUPT_LEVEL}(n)} is masked by
-@code{INTERRUPT_MASK} and sets interrupts level n
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} is masked by
+@code{@value{RPREFIX}INTERRUPT_MASK} and sets interrupts level n
  
 @end itemize
 
@@ -476,7 +476,7 @@ long as each mode appears exactly once in the component list.  A
 mode component listed as a default is not required to appear in
 the mode component list, although it is a good programming
 practice to specify default components.  If all defaults are
-desired, the mode @code{DEFAULT_MODES} and the mask @code{ALL_MODE_MASKS}
+desired, the mode @code{@value{RPREFIX}DEFAULT_MODES} and the mask @code{@value{RPREFIX}ALL_MODE_MASKS}
 should be used.
 
 The following example demonstrates the mode and mask parameters
@@ -598,7 +598,7 @@ The task_wake_after directive creates a sleep timer which allows
 a task to go to sleep for a specified interval.  The task is
 blocked until the delay interval has elapsed, at which time the
 task is unblocked.  A task calling the task_wake_after directive
-with a delay interval of @code{YIELD_PROCESSOR} ticks will yield the
+with a delay interval of @code{@value{RPREFIX}YIELD_PROCESSOR} ticks will yield the
 processor to any other ready task of equal or greater priority
 and remain ready to execute.
 
@@ -744,23 +744,23 @@ procedure Task_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - task created successfully@*
-@code{INVALID_NAME} - invalid task name@*
-@code{INVALID_SIZE} - stack too small@*
-@code{INVALID_PRIORITY} - invalid task priority@*
-@code{MP_NOT_CONFIGURED} - multiprocessing not configured@*
-@code{TOO_MANY} - too many tasks created@*
-@code{UNSATISFIED} - not enough memory for stack/FP context@*
-@code{TOO_MANY} - too many global objects
+@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_SIZE} - stack too small@*
+@code{@value{RPREFIX}INVALID_PRIORITY} - invalid task priority@*
+@code{@value{RPREFIX}MP_NOT_CONFIGURED} - multiprocessing not configured@*
+@code{@value{RPREFIX}TOO_MANY} - too many tasks created@*
+@code{@value{RPREFIX}UNSATISFIED} - not enough memory for stack/FP context@*
+@code{@value{RPREFIX}TOO_MANY} - too many global objects
 
 @subheading DESCRIPTION:
 This directive creates a task which resides on the local node. 
 It  allocates and initializes a TCB, a stack, and an optional
 floating point context area.  The mode parameter contains values
 which sets the task's initial execution mode.  The
-@code{FLOATING_POINT} attribute should be specified if the created task
+@code{@value{RPREFIX}FLOATING_POINT} attribute should be specified if the created task
 is to use a numeric coprocessor.  For performance reasons, it is
 recommended that tasks not using the numeric coprocessor should
-specify the @code{NO_FLOATING_POINT} attribute.  If the GLOBAL
+specify the @code{@value{RPREFIX}NO_FLOATING_POINT} attribute.  If the GLOBAL
 attribute is specified, the task can be accessed from remote
 nodes.  The task id, returned in id, is used in other task
 related directives to access the task.  When created, a task is
@@ -776,8 +776,8 @@ RTEMS supports a maximum of 256 interrupt levels which are
 mapped onto the interrupt levels actually supported by the
 target processor.
 
-The requested stack size should be at least @code{MINIMUM_STACK_SIZE}
-bytes.  The value of @code{MINIMUM_STACK_SIZE} is processor dependent. 
+The requested stack size should be at least @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
+bytes.  The value of @code{@value{RPREFIX}MINIMUM_STACK_SIZE} is processor dependent. 
 Application developers should consider the stack usage of the
 device drivers when calculating the stack size required for
 tasks which utilize the driver.
@@ -785,21 +785,21 @@ tasks which utilize the driver.
 The following task attribute constants are defined by RTEMS:
 
 @itemize @bullet
-@item @code{NO_FLOATING_POINT} - does not use coprocessor (default)
-@item @code{FLOATING_POINT} - uses numeric coprocessor
-@item @code{LOCAL} - local task (default)
-@item @code{GLOBAL} - global task
+@item @code{@value{RPREFIX}NO_FLOATING_POINT} - does not use coprocessor (default)
+@item @code{@value{RPREFIX}FLOATING_POINT} - uses numeric coprocessor
+@item @code{@value{RPREFIX}LOCAL} - local task (default)
+@item @code{@value{RPREFIX}GLOBAL} - global task
 @end itemize
 
 The following task mode constants are defined by RTEMS:
 
 @itemize  @bullet
-@item @code{PREEMPT} - enable preemption (default) 
-@item @code{NO_PREEMPT} - disable preemption
-@item @code{NO_TIMESLICE} - disable timeslicing (default) 
-@item @code{TIMESLICE} - enable timeslicing
-@item @code{ASR} - enable ASR processing (default) 
-@item @code{NO_ASR} - disable ASR processing
+@item @code{@value{RPREFIX}PREEMPT} - enable preemption (default) 
+@item @code{@value{RPREFIX}NO_PREEMPT} - disable preemption
+@item @code{@value{RPREFIX}NO_TIMESLICE} - disable timeslicing (default) 
+@item @code{@value{RPREFIX}TIMESLICE} - enable timeslicing
+@item @code{@value{RPREFIX}ASR} - enable ASR processing (default) 
+@item @code{@value{RPREFIX}NO_ASR} - disable ASR processing
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} - enable all interrupts (default) 
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} - execute at interrupt level n
 @end itemize
@@ -845,14 +845,14 @@ procedure Task_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task identified successfully@*
-@code{INVALID_NAME} - invalid task name@*
-@code{INVALID_NODE} - invalid node id
+@code{@value{RPREFIX}SUCCESSFUL} - task identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_NODE} - invalid node id
 
 @subheading DESCRIPTION:
 This directive obtains the task id associated with the task name
 specified in name.  A task may obtain its own id by specifying
-@code{SELF} or its own task name in name.  If the task name is not
+@code{@value{RPREFIX}SELF} or its own task name in name.  If the task name is not
 unique, then the task id returned will match one of the tasks
 with that name.  However, this task id is not guaranteed to
 correspond to the desired task.  The task id, returned in id, is
@@ -861,7 +861,7 @@ used in other task related directives to access the task.
 @subheading NOTES:
 This directive will not cause the running task to be preempted.
 
-If node is @code{SEARCH_ALL_NODES}, all nodes are searched with the
+If node is @code{@value{RPREFIX}SEARCH_ALL_NODES}, all nodes are searched with the
 local node being searched first.  All other nodes are searched
 with the lowest numbered node searched first.
 
@@ -902,11 +902,11 @@ procedure Task_Start (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - ask started successfully@*
-@code{INVALID_ADDRESS} - invalid task entry point@*
-@code{INVALID_ID} - invalid task id@*
-@code{INCORRECT_STATE} - task not in the dormant state@*
-@code{ILLEGAL_ON_REMOTE_OBJECT} - cannot start remote task
+@code{@value{RPREFIX}SUCCESSFUL} - ask started successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid task entry point@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}INCORRECT_STATE} - task not in the dormant state@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot start remote task
 
 @subheading DESCRIPTION:
 This directive readies the task, specified by tid, for execution
@@ -952,10 +952,10 @@ procedure Task_Restart (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task restarted successfully@*
-@code{INVALID_ID} - task id invalid@*
-@code{INCORRECT_STATE} - task never started@*
-@code{ILLEGAL_ON_REMOTE_OBJECT} - cannot restart remote task
+@code{@value{RPREFIX}SUCCESSFUL} - task restarted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - task id invalid@*
+@code{@value{RPREFIX}INCORRECT_STATE} - task never started@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot restart remote task
 
 @subheading DESCRIPTION:
 This directive resets the task specified by id to begin
@@ -976,7 +976,7 @@ task, and allowing that task to release resources back to RTEMS
 and then delete itself.
 
 @subheading NOTES:
-If id is @code{SELF}, the calling task will be restarted and will not
+If id is @code{@value{RPREFIX}SELF}, the calling task will be restarted and will not
 return from this directive.
 
 The calling task will be preempted if its preemption mode is
@@ -1011,15 +1011,15 @@ procedure Task_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task restarted successfully@*
-@code{INVALID_ID} - task id invalid@*
-@code{ILLEGAL_ON_REMOTE_OBJECT} - cannot restart remote task
+@code{@value{RPREFIX}SUCCESSFUL} - task restarted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - task id invalid@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot restart remote task
 
 @subheading DESCRIPTION:
 This directive deletes a task, either the calling task or
 another task, as specified by id.  RTEMS stops the execution of
 the task and reclaims the stack memory, any allocated delay or
-timeout timers, the TCB, and, if the task is @code{FLOATING_POINT}, its
+timeout timers, the TCB, and, if the task is @code{@value{RPREFIX}FLOATING_POINT}, its
 floating point context area.  RTEMS does not reclaim the
 following resources: region segments, partition buffers,
 semaphores, timers, or rate monotonic periods.
@@ -1034,7 +1034,7 @@ resources before deletion.  A task can be directed to release
 its resources and delete itself by restarting it with a special
 argument or by sending it a message, an event, or a signal.
 
-Deletion of the current task (@code{SELF}) will force RTEMS to select
+Deletion of the current task (@code{@value{RPREFIX}SELF}) will force RTEMS to select
 another task to execute.
 
 When a global task is deleted, the task id must be transmitted
@@ -1070,9 +1070,9 @@ procedure Task_Suspend (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task restarted successfully@*
-@code{INVALID_ID} - task id invalid@*
-@code{ALREADY_SUSPENDED} - task already suspended
+@code{@value{RPREFIX}SUCCESSFUL} - task restarted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - task id invalid@*
+@code{@value{RPREFIX}ALREADY_SUSPENDED} - task already suspended
 
 @subheading DESCRIPTION:
 This directive suspends the task specified by id from further
@@ -1083,7 +1083,7 @@ the task_resume directive for this task and any blocked state
 has been removed.
 
 @subheading NOTES:
-The requesting task can suspend itself by specifying @code{SELF} as id.
+The requesting task can suspend itself by specifying @code{@value{RPREFIX}SELF} as id.
 In this case, the task will be suspended and a successful
 return code will be returned when the task is resumed.
 
@@ -1120,9 +1120,9 @@ procedure Task_Resume (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task restarted successfully@*
-@code{INVALID_ID} - task id invalid@*
-@code{INCORRECT_STATE} - task not suspended
+@code{@value{RPREFIX}SUCCESSFUL} - task restarted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - task id invalid@*
+@code{@value{RPREFIX}INCORRECT_STATE} - task not suspended
 
 @subheading DESCRIPTION:
 This directive removes the task specified by id from the
@@ -1172,13 +1172,13 @@ procedure Task_Set_Priority (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task priority set successfully@*
-@code{INVALID_ID} - invalid task id@*
-@code{INVALID_PRIORITY} - invalid task priority
+@code{@value{RPREFIX}SUCCESSFUL} - task priority set successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}INVALID_PRIORITY} - invalid task priority
 
 @subheading DESCRIPTION:
 This directive manipulates the priority of the task specified by
-id.  An id of @code{SELF} is used to indicate the calling task.  When
+id.  An id of @code{@value{RPREFIX}SELF} is used to indicate the calling task.  When
 new_priority is not equal to CURRENT_PRIORITY, the specified
 task's previous priority is returned in old_priority.  When
 new_priority is CURRENT_PRIORITY, the specified task's current
@@ -1234,7 +1234,7 @@ procedure Task_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task mode set successfully
+@code{@value{RPREFIX}SUCCESSFUL} - task mode set successfully
 
 @subheading DESCRIPTION:
 This directive manipulates the execution mode of the calling
@@ -1252,7 +1252,7 @@ a higher priority task is ready to run.
 Enabling timeslicing has no effect if preemption is enabled.
 
 A task can obtain its current execution mode, without modifying
-it, by calling this directive with a mask value of @code{CURRENT_MODE}.
+it, by calling this directive with a mask value of @code{@value{RPREFIX}CURRENT_MODE}.
 
 To temporarily disable the processing of a valid ASR, a task
 should call this directive with the NO_ASR indicator specified
@@ -1360,9 +1360,9 @@ procedure Task_Get_Note (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - note obtained successfully@*
-@code{INVALID_ID} - invalid task id@*
-@code{INVALID_NUMBER} - invalid notepad location
+@code{@value{RPREFIX}SUCCESSFUL} - note obtained successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid notepad location
 
 @subheading DESCRIPTION:
 This directive returns the note contained in the notepad
@@ -1371,14 +1371,14 @@ location of the task specified by id.
 @subheading NOTES:
 This directive will not cause the running task to be preempted.
 
-If id is set to @code{SELF}, the calling task accesses its own notepad.
+If id is set to @code{@value{RPREFIX}SELF}, the calling task accesses its own notepad.
 
 @c This version of the paragraph avoids the overfull hbox error.
 @c The constants NOTEPAD_0 through NOTEPAD_15 can be used to access the
 @c sixteen notepad locations.
 
 The sixteen notepad locations can be accessed using the constants
-@code{NOTEPAD_0} through @code{NOTEPAD_15}.
+@code{@value{RPREFIX}NOTEPAD_0} through @code{@value{RPREFIX}NOTEPAD_15}.
 
 Getting a note of a global task which does not reside on the
 local node will generate a request to the remote node to obtain
@@ -1414,16 +1414,16 @@ procedure Task_Set_Note (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - task's note set successfully@*
-@code{INVALID_ID} - invalid task id@*
-@code{INVALID_NUMBER} - invalid notepad location
+@code{@value{RPREFIX}SUCCESSFUL} - task's note set successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid notepad location
 
 @subheading DESCRIPTION:
 This directive sets the notepad entry for the task specified by
 id to the value note.
 
 @subheading NOTES:
-If id is set to @code{SELF}, the calling task accesses its own notepad
+If id is set to @code{@value{RPREFIX}SELF}, the calling task accesses its own notepad
 locations.
 
 This directive will not cause the running task to be preempted.
@@ -1433,7 +1433,7 @@ This directive will not cause the running task to be preempted.
 @c sixteen notepad locations.
 
 The sixteen notepad locations can be accessed using the constants
-@code{NOTEPAD_0} through @code{NOTEPAD_15}.
+@code{@value{RPREFIX}NOTEPAD_0} through @code{@value{RPREFIX}NOTEPAD_15}.
 
 Setting a notepad location of a global task which does not
 reside on the local node will generate a request to the remote
@@ -1465,7 +1465,7 @@ procedure Task_Wake_After (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - always successful
+@code{@value{RPREFIX}SUCCESSFUL} - always successful
 
 @subheading DESCRIPTION:
 This directive blocks the calling task for the specified number
@@ -1478,7 +1478,7 @@ Setting the system date and time with the clock_set directive
 has no effect on a task_wake_after blocked task.
 
 A task may give up the processor and remain in the ready state
-by specifying a value of @code{YIELD_PROCESSOR} in ticks.
+by specifying a value of @code{@value{RPREFIX}YIELD_PROCESSOR} in ticks.
 
 The maximum timer interval that can be specified is the maximum
 value which can be represented by the rtems_unsigned32 type.
@@ -1512,9 +1512,9 @@ procedure Task_Wake_When (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - awakened at date/time successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - awakened at date/time successfully@*
 @code{INVALID_TIME_OF_DAY} - invalid time buffer@*
-@code{NOT_DEFINED} - system date and time is not set
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
 
 @subheading DESCRIPTION:
 This directive blocks a task until the date and time specified

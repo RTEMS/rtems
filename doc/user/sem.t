@@ -30,11 +30,11 @@ exclusion capabilities.  The directives provided by the
 semaphore manager are:
 
 @itemize @bullet
-@item @code{semaphore_create} -  Create a semaphore
-@item @code{semaphore_ident} - Get ID of a semaphore
-@item @code{semaphore_delete} - Delete a semaphore
-@item @code{semaphore_obtain} - Acquire a semaphore
-@item @code{semaphore_release} - Release a semaphore
+@item @code{@value{DIRPREFIX}semaphore_create} -  Create a semaphore
+@item @code{@value{DIRPREFIX}semaphore_ident} - Get ID of a semaphore
+@item @code{@value{DIRPREFIX}semaphore_delete} - Delete a semaphore
+@item @code{@value{DIRPREFIX}semaphore_obtain} - Acquire a semaphore
+@item @code{@value{DIRPREFIX}semaphore_release} - Release a semaphore
 @end itemize
 
 @ifinfo
@@ -230,17 +230,17 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute @code{DEFAULT_ATTRIBUTES} should be
+defaults are desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
 specified on this call.
 
 This example demonstrates the attribute_set parameter
 needed to create a local semaphore with the task priority
 waiting queue discipline.  The attribute_set parameter passed to
 the semaphore_create directive could be either
-@code{PRIORITY} or
+@code{@value{RPREFIX}PRIORITY} or
 @code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}PRIORITY}.  
-The attribute_set parameter can be set to @code{PRIORITY}
-because @code{LOCAL} is the default for all created tasks.  If a
+The attribute_set parameter can be set to @code{@value{RPREFIX}PRIORITY}
+because @code{@value{RPREFIX}LOCAL} is the default for all created tasks.  If a
 similar semaphore were to be known globally, then the
 attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
@@ -255,8 +255,8 @@ desired option components.  The set of valid options for the
 semaphore_obtain directive are listed in the following table:
 
 @itemize @bullet
-@item @code{WAIT} - task will wait for semaphore (default)
-@item @code{NO_WAIT} - task should not wait
+@item @code{@value{RPREFIX}WAIT} - task will wait for semaphore (default)
+@item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
 Option values are specifically designed to be
@@ -265,12 +265,12 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An option listed as a default is not
 required to appear in the list, although it is a good
 programming practice to specify default options.  If all
-defaults are desired, the option @code{DEFAULT_OPTIONS} should be
+defaults are desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should be
 specified on this call.
 
 This example demonstrates the option parameter needed
 to poll for a semaphore.  The option parameter passed to the
-semaphore_obtain directive should be @code{NO_WAIT}.
+semaphore_obtain directive should be @code{@value{RPREFIX}NO_WAIT}.
 
 @ifinfo
 @node Semaphore Manager Operations, Creating a Semaphore, Building a SEMAPHORE_OBTAIN Option Set, Semaphore Manager
@@ -347,7 +347,7 @@ one of the following situations applies:
 @item By default, the calling task will wait forever to
 acquire the semaphore.
 
-@item Specifying @code{NO_WAIT} forces an immediate return with an
+@item Specifying @code{@value{RPREFIX}NO_WAIT} forces an immediate return with an
 error status code.
 
 @item Specifying a timeout limits the interval the task will
@@ -456,13 +456,13 @@ procedure Semaphore_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - semaphore created successfully@*
-@code{INVALID_NAME} - invalid task name@*
-@code{TOO_MANY} - too many semaphores created@*
-@code{NOT_DEFINED} - invalid attribute set@*
-@code{INVALID_NUMBER} - invalid starting count for binary semaphore@*
-@code{MP_NOT_CONFIGURED} - multiprocessing not configured@*
-@code{TOO_MANY} - too many global objects
+@code{@value{RPREFIX}SUCCESSFUL} - semaphore created successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}TOO_MANY} - too many semaphores created@*
+@code{@value{RPREFIX}NOT_DEFINED} - invalid attribute set@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid starting count for binary semaphore@*
+@code{@value{RPREFIX}MP_NOT_CONFIGURED} - multiprocessing not configured@*
+@code{@value{RPREFIX}TOO_MANY} - too many global objects
 
 @subheading DESCRIPTION:
 
@@ -545,9 +545,9 @@ procedure Semaphore_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - semaphore identified successfully@*
-@code{INVALID_NAME} - semaphore name not found@*
-@code{INVALID_NODE} - invalid node id
+@code{@value{RPREFIX}SUCCESSFUL} - semaphore identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - semaphore name not found@*
+@code{@value{RPREFIX}INVALID_NODE} - invalid node id
 
 @subheading DESCRIPTION:
 
@@ -563,7 +563,7 @@ by other semaphore related directives to access the semaphore.
 This directive will not cause the running task to be
 preempted.
 
-If node is @code{SEARCH_ALL_NODES}, all nodes are searched
+If node is @code{@value{RPREFIX}SEARCH_ALL_NODES}, all nodes are searched
 with the local node being searched first.  All other nodes are
 searched with the lowest numbered node searched first.
 
@@ -601,10 +601,10 @@ procedure Semaphore_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} -  semaphore deleted successfully@*
-@code{INVALID_ID} - invalid semaphore id@*
-@code{ILLEGAL_ON_REMOTE_OBJECT} - cannot delete remote semaphore@*
-@code{RESOURCE_IN_USE} - binary semaphore is in use
+@code{@value{RPREFIX}SUCCESSFUL} -  semaphore deleted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid semaphore id@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot delete remote semaphore@*
+@code{@value{RPREFIX}RESOURCE_IN_USE} - binary semaphore is in use
 
 @subheading DESCRIPTION:
 
@@ -666,20 +666,20 @@ procedure Semaphore_Obtain (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - semaphore obtained successfully@*
-@code{UNSATISFIED} - semaphore not available@*
-@code{TIMEOUT} - timed out waiting for semaphore@*
-@code{OBJECT_WAS_DELETED} - semaphore deleted while waiting@*
-@code{INVALID_ID} - invalid semaphore id
+@code{@value{RPREFIX}SUCCESSFUL} - semaphore obtained successfully@*
+@code{@value{RPREFIX}UNSATISFIED} - semaphore not available@*
+@code{@value{RPREFIX}TIMEOUT} - timed out waiting for semaphore@*
+@code{@value{RPREFIX}OBJECT_WAS_DELETED} - semaphore deleted while waiting@*
+@code{@value{RPREFIX}INVALID_ID} - invalid semaphore id
 
 @subheading DESCRIPTION:
 
 This directive acquires the semaphore specified by
-id.  The @code{WAIT} and @code{NO_WAIT} components of the options parameter
+id.  The @code{@value{RPREFIX}WAIT} and @code{@value{RPREFIX}NO_WAIT} components of the options parameter
 indicate whether the calling task wants to wait for the
 semaphore to become available or return immediately if the
-semaphore is not currently available.  With either @code{WAIT} or
-@code{NO_WAIT}, if the current semaphore count is positive, then it is
+semaphore is not currently available.  With either @code{@value{RPREFIX}WAIT} or
+@code{@value{RPREFIX}NO_WAIT}, if the current semaphore count is positive, then it is
 decremented by one and the semaphore is successfully acquired by
 returning immediately with a successful return code.
 
@@ -690,23 +690,23 @@ If the calling task chooses to wait for a semaphore and the
 current semaphore count is zero or negative, then it is
 decremented by one and the calling task is placed on the
 semaphore's wait queue and blocked.  If the semaphore was
-created with the @code{PRIORITY} attribute, then the calling task is
+created with the @code{@value{RPREFIX}PRIORITY} attribute, then the calling task is
 inserted into the queue according to its priority.  However, if
-the semaphore was created with the @code{FIFO} attribute, then the
+the semaphore was created with the @code{@value{RPREFIX}FIFO} attribute, then the
 calling task is placed at the rear of the wait queue.  If the
-binary semaphore was created with the @code{INHERIT_PRIORITY}
+binary semaphore was created with the @code{@value{RPREFIX}INHERIT_PRIORITY}
 attribute, then the priority of the task currently holding the
 binary semaphore is guaranteed to be greater than or equal to
 that of the blocking task.  If the binary semaphore was created
-with the @code{PRIORITY_CEILING} attribute, a task successfully obtains
+with the @code{@value{RPREFIX}PRIORITY_CEILING} attribute, a task successfully obtains
 the semaphore, and the priority of that task is greater than the
 ceiling priority for this semaphore, then the priority of the
 task obtaining the semaphore is elevated to that of the ceiling.
 
 The timeout parameter specifies the maximum interval
 the calling task is willing to be blocked waiting for the
-semaphore.  If it is set to @code{NO_TIMEOUT}, then the calling task
-will wait forever.  If the semaphore is available or the @code{NO_WAIT}
+semaphore.  If it is set to @code{@value{RPREFIX}NO_TIMEOUT}, then the calling task
+will wait forever.  If the semaphore is available or the @code{@value{RPREFIX}NO_WAIT}
 option component is set, then timeout is ignored.
 
 @subheading NOTES:
@@ -714,14 +714,14 @@ The following semaphore acquisition option constants
 are defined by RTEMS:
 
 @itemize @bullet
-@item @code{WAIT} - task will wait for semaphore (default)
-@item @code{NO_WAIT} - task should not wait
+@item @code{@value{RPREFIX}WAIT} - task will wait for semaphore (default)
+@item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
 Attempting to obtain a global semaphore which does not reside on
 the local node will generate a request to the remote node to
 access the semaphore.  If the semaphore is not available and
-@code{NO_WAIT} was not specified, then the task must be blocked until
+@code{@value{RPREFIX}NO_WAIT} was not specified, then the task must be blocked until
 the semaphore is released.  A proxy is allocated on the remote
 node to represent the task until the semaphore is released.
 
@@ -754,9 +754,9 @@ procedure Semaphore_Release (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - semaphore released successfully@*
-@code{INVALID_ID} - invalid semaphore id@*
-@code{NOT_OWNER_OF_RESOURCE} - calling task does not own semaphore
+@code{@value{RPREFIX}SUCCESSFUL} - semaphore released successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid semaphore id@*
+@code{@value{RPREFIX}NOT_OWNER_OF_RESOURCE} - calling task does not own semaphore
 
 @subheading DESCRIPTION:
 

@@ -29,14 +29,14 @@ synchronization capabilities using RTEMS message queues.  The
 directives provided by the message manager are:
 
 @itemize @bullet
-@item @code{message_queue_create} - Create a queue
-@item @code{message_queue_ident} - Get ID of a queue
-@item @code{message_queue_delete} - Delete a queue
-@item @code{message_queue_send} - Put message at rear of a queue
-@item @code{message_queue_urgent} - Put message at front of a queue
-@item @code{message_queue_broadcast} - Broadcast N messages to a queue
-@item @code{message_queue_receive} - Receive message from a queue
-@item @code{message_queue_get_number_pending} - Get number of messages pending on a queue
+@item @code{@value{DIRPREFIX}message_queue_create} - Create a queue
+@item @code{@value{DIRPREFIX}message_queue_ident} - Get ID of a queue
+@item @code{@value{DIRPREFIX}message_queue_delete} - Delete a queue
+@item @code{@value{DIRPREFIX}message_queue_send} - Put message at rear of a queue
+@item @code{@value{DIRPREFIX}message_queue_urgent} - Put message at front of a queue
+@item @code{@value{DIRPREFIX}message_queue_broadcast} - Broadcast N messages to a queue
+@item @code{@value{DIRPREFIX}message_queue_receive} - Receive message from a queue
+@item @code{@value{DIRPREFIX}message_queue_get_number_pending} - Get number of messages pending on a queue
 @item @code{message_queue_flush} - Flush all messages on a queue
 @end itemize
 
@@ -92,10 +92,10 @@ of the desired attribute components.  The set of valid message
 queue attributes is provided in the following table:
 
 @itemize @bullet
-@item @code{FIFO} - tasks wait by FIFO (default)
-@item @code{PRIORITY} - tasks wait by priority
-@item @code{LOCAL} - local message queue (default)
-@item @code{GLOBAL} - global message queue
+@item @code{@value{RPREFIX}FIFO} - tasks wait by FIFO (default)
+@item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
+@item @code{@value{RPREFIX}LOCAL} - local message queue (default)
+@item @code{@value{RPREFIX}GLOBAL} - global message queue
 @end itemize
 
 
@@ -103,17 +103,17 @@ queue attributes is provided in the following table:
 An attribute listed as a default is not required to
 appear in the attribute list, although it is a good programming
 practice to specify default attributes.  If all defaults are
-desired, the attribute @code{DEFAULT_ATTRIBUTES} should be specified on
+desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be specified on
 this call.
 
 This example demonstrates the attribute_set parameter
 needed to create a local message queue with the task priority
 waiting queue discipline.  The attribute_set parameter to the
 message_queue_create directive could be either 
-@code{PRIORITY} or
+@code{@value{RPREFIX}PRIORITY} or
 @code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}PRIORITY}.  
-The attribute_set parameter can be set to @code{PRIORITY}
-because @code{LOCAL} is the default for all created message queues.  If
+The attribute_set parameter can be set to @code{@value{RPREFIX}PRIORITY}
+because @code{@value{RPREFIX}LOCAL} is the default for all created message queues.  If
 a similar message queue were to be known globally, then the
 attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
@@ -129,19 +129,19 @@ message_queue_receive directive are listed in the following
 table:
 
 @itemize @bullet
-@item @code{WAIT} - task will wait for a message (default)
-@item @code{NO_WAIT} - task should not wait
+@item @code{@value{RPREFIX}WAIT} - task will wait for a message (default)
+@item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
 An option listed as a default is not required to
 appear in the option OR list, although it is a good programming
 practice to specify default options.  If all defaults are
-desired, the option @code{DEFAULT_OPTIONS} should be specified on this
+desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should be specified on this
 call.
 
 This example demonstrates the option parameter needed
 to poll for a message to arrive.  The option parameter passed to
-the message_queue_receive directive should be @code{NO_WAIT}.
+the message_queue_receive directive should be @code{@value{RPREFIX}NO_WAIT}.
 
 @ifinfo
 @node Message Manager Operations, Creating a Message Queue, Building a MESSAGE_QUEUE_RECEIVE Option Set, Message Manager
@@ -209,7 +209,7 @@ applies:
 @item By default, the calling task will wait forever for the
 message to arrive.
 
-@item Specifying the @code{NO_WAIT} option forces an immediate return
+@item Specifying the @code{@value{RPREFIX}NO_WAIT} option forces an immediate return
 with an error status code.
 
 @item Specifying a timeout limits the period the task will
@@ -326,13 +326,13 @@ procedure Message_Queue_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - queue created successfully@*
-@code{INVALID_NAME} - invalid task name@*
-@code{INVALID_NUMBER} - invalid message count@*
-@code{INVALID_SIZE} - invalid message size@*
-@code{TOO_MANY} - too many queues created@*
-@code{MP_NOT_CONFIGURED} - multiprocessing not configured@*
-@code{TOO_MANY} - too many global objects
+@code{@value{RPREFIX}SUCCESSFUL} - queue created successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid message count@*
+@code{@value{RPREFIX}INVALID_SIZE} - invalid message size@*
+@code{@value{RPREFIX}TOO_MANY} - too many queues created@*
+@code{@value{RPREFIX}MP_NOT_CONFIGURED} - multiprocessing not configured@*
+@code{@value{RPREFIX}TOO_MANY} - too many global objects
 
 @subheading DESCRIPTION:
 
@@ -344,9 +344,9 @@ for the specified count of messages, each of max_message_size
 bytes in length.  The RTEMS-assigned queue id, returned in id,
 is used to access the message queue.
 
-Specifying @code{PRIORITY} in attribute_set causes tasks
+Specifying @code{@value{RPREFIX}PRIORITY} in attribute_set causes tasks
 waiting for a message to be serviced according to task priority.
-When @code{FIFO} is specified, waiting tasks are serviced in First
+When @code{@value{RPREFIX}FIFO} is specified, waiting tasks are serviced in First
 In-First Out order.
 
 @subheading NOTES:
@@ -358,10 +358,10 @@ The following message queue attribute constants are
 defined by RTEMS:
 
 @itemize @bullet
-@item @code{FIFO} - tasks wait by FIFO (default)
-@item @code{PRIORITY} - tasks wait by priority
-@item @code{LOCAL} - local message queue (default)
-@item @code{GLOBAL} - global message queue
+@item @code{@value{RPREFIX}FIFO} - tasks wait by FIFO (default)
+@item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
+@item @code{@value{RPREFIX}LOCAL} - local message queue (default)
+@item @code{@value{RPREFIX}GLOBAL} - global message queue
 @end itemize
 
 Message queues should not be made global unless
@@ -410,9 +410,9 @@ procedure Message_Queue_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - queue identified successfully@*
-@code{INVALID_NAME} - queue name not found@*
-@code{INVALID_NODE} - invalid node id
+@code{@value{RPREFIX}SUCCESSFUL} - queue identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - queue name not found@*
+@code{@value{RPREFIX}INVALID_NODE} - invalid node id
 
 @subheading DESCRIPTION:
 
@@ -428,7 +428,7 @@ related directives to access the message queue.
 This directive will not cause the running task to be
 preempted.
 
-If node is @code{SEARCH_ALL_NODES}, all nodes are searched
+If node is @code{@value{RPREFIX}SEARCH_ALL_NODES}, all nodes are searched
 with the local node being searched first.  All other nodes are
 searched with the lowest numbered node searched first.
 
@@ -466,9 +466,9 @@ procedure Message_Queue_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - queue deleted successfully@*
-@code{INVALID_ID} - invalid queue id@*
-@code{ILLEGAL_ON_REMOTE_OBJECT} - cannot delete remote queue
+@code{@value{RPREFIX}SUCCESSFUL} - queue deleted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot delete remote queue
 
 @subheading DESCRIPTION:
 
@@ -534,11 +534,11 @@ procedure Message_Queue_Send (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - message sent successfully@*
-@code{INVALID_ID} - invalid queue id@*
-@code{INVALID_SIZE} - invalid message size@*
-@code{UNSATISFIED} - out of message buffers@*
-@code{TOO_MANY} - queue's limit has been reached
+@code{@value{RPREFIX}SUCCESSFUL} - message sent successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
+@code{@value{RPREFIX}INVALID_SIZE} - invalid message size@*
+@code{@value{RPREFIX}UNSATISFIED} - out of message buffers@*
+@code{@value{RPREFIX}TOO_MANY} - queue's limit has been reached
 
 @subheading DESCRIPTION:
 
@@ -595,11 +595,11 @@ procedure Message_Queue_Urgent (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - message sent successfully@*
-@code{INVALID_ID} - invalid queue id@*
-@code{INVALID_SIZE} - invalid message size@*
-@code{UNSATISFIED} - out of message buffers@*
-@code{TOO_MANY} - queue's limit has been reached
+@code{@value{RPREFIX}SUCCESSFUL} - message sent successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
+@code{@value{RPREFIX}INVALID_SIZE} - invalid message size@*
+@code{@value{RPREFIX}UNSATISFIED} - out of message buffers@*
+@code{@value{RPREFIX}TOO_MANY} - queue's limit has been reached
 
 @subheading DESCRIPTION:
 
@@ -659,9 +659,9 @@ procedure Message_Queue_Broadcast (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - message broadcasted successfully@*
-@code{INVALID_ID} - invalid queue id@*
-@code{INVALID_SIZE} - invalid message size
+@code{@value{RPREFIX}SUCCESSFUL} - message broadcasted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
+@code{@value{RPREFIX}INVALID_SIZE} - invalid message size
 
 @subheading DESCRIPTION:
 
@@ -727,16 +727,16 @@ procedure Message_Queue_Receive (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - message received successfully@*
-@code{INVALID_ID} - invalid queue id@*
-@code{UNSATISFIED} - queue is empty@*
-@code{TIMEOUT} - timed out waiting for message@*
-@code{OBJECT_WAS_DELETED} - queue deleted while waiting
+@code{@value{RPREFIX}SUCCESSFUL} - message received successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
+@code{@value{RPREFIX}UNSATISFIED} - queue is empty@*
+@code{@value{RPREFIX}TIMEOUT} - timed out waiting for message@*
+@code{@value{RPREFIX}OBJECT_WAS_DELETED} - queue deleted while waiting
 
 @subheading DESCRIPTION:
 
 This directive receives a message from the message
-queue specified in id.  The @code{WAIT} and @code{NO_WAIT} options of the
+queue specified in id.  The @code{@value{RPREFIX}WAIT} and @code{@value{RPREFIX}NO_WAIT} options of the
 options parameter allow the calling task to specify whether to
 wait for a message to become available or return immediately.
 For either option, if there is at least one message in the
@@ -749,16 +749,16 @@ the queue is empty, then a status code indicating this condition
 is returned.  If the calling task chooses to wait at the message
 queue and the queue is empty, then the calling task is placed on
 the message wait queue and blocked.  If the queue was created
-with the @code{PRIORITY} option specified, then the calling task is
+with the @code{@value{RPREFIX}PRIORITY} option specified, then the calling task is
 inserted into the wait queue according to its priority.  But, if
-the queue was created with the @code{FIFO} option specified, then the
+the queue was created with the @code{@value{RPREFIX}FIFO} option specified, then the
 calling task is placed at the rear of the wait queue.
 
 A task choosing to wait at the queue can optionally
 specify a timeout value in the timeout parameter.  The timeout
 parameter specifies the maximum interval to wait before the
 calling task desires to be unblocked.  If it is set to
-@code{NO_TIMEOUT}, then the calling task will wait forever.
+@code{@value{RPREFIX}NO_TIMEOUT}, then the calling task will wait forever.
 
 @subheading NOTES:
 
@@ -766,14 +766,14 @@ The following message receive option constants are
 defined by RTEMS:
 
 @itemize @bullet
-@item @code{WAIT} - task will wait for a message (default)
-@item @code{NO_WAIT} - task should not wait
+@item @code{@value{RPREFIX}WAIT} - task will wait for a message (default)
+@item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
 Receiving a message from a global message queue which
 does not reside on the local node will generate a request to the
 remote node to obtain a message from the specified message
-queue.  If no message is available and @code{WAIT} was specified, then
+queue.  If no message is available and @code{@value{RPREFIX}WAIT} was specified, then
 the task must be blocked until a message is posted.  A proxy is
 allocated on the remote node to represent the task until the
 message is posted.
@@ -809,8 +809,8 @@ procedure Message_Queue_Get_Number_Pending (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - number of messages pending returned successfully@*
-@code{INVALID_ID} - invalid queue id
+@code{@value{RPREFIX}SUCCESSFUL} - number of messages pending returned successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid queue id
 
 @subheading DESCRIPTION:
 
@@ -854,8 +854,8 @@ procedure Message_Queue_Flush (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - message queue flushed successfully@*
-@code{INVALID_ID} - invalid queue id
+@code{@value{RPREFIX}SUCCESSFUL} - message queue flushed successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid queue id
 
 @subheading DESCRIPTION:
 

@@ -31,9 +31,9 @@ system events.  The directives provided by the user extensions
 manager are:
 
 @itemize @bullet
-@item @code{extension_create} - Create an extension set
-@item @code{extension_ident} - Get ID of an extension set
-@item @code{extension_delete} - Delete an extension set
+@item @code{@value{DIRPREFIX}extension_create} - Create an extension set
+@item @code{@value{DIRPREFIX}extension_ident} - Get ID of an extension set
+@item @code{@value{DIRPREFIX}extension_delete} - Delete an extension set
 @end itemize
 
 @ifinfo
@@ -498,7 +498,7 @@ recover, then a fatal error may be reported.  If the user does
 not provide a TASK_EXITTED extension or the provided handler
 returns control to RTEMS, then the RTEMS default handler will be
 used.  This default handler invokes the directive
-fatal_error_occurred with the @code{TASK_EXITTED} directive status.
+fatal_error_occurred with the @code{@value{RPREFIX}TASK_EXITTED} directive status.
 
 @lowersections
 
@@ -688,9 +688,9 @@ procedure Extension_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} -  extension set created successfully@*
-@code{INVALID_NAME} - invalid extension set name@*
-@code{TOO_MANY} - too many extension sets created
+@code{@value{RPREFIX}SUCCESSFUL} -  extension set created successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid extension set name@*
+@code{@value{RPREFIX}TOO_MANY} - too many extension sets created
 
 @subheading DESCRIPTION:
 
@@ -734,8 +734,8 @@ procedure Extension_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} -  extension set identified successfully@*
-@code{INVALID_NAME} - extension set name not found
+@code{@value{RPREFIX}SUCCESSFUL} -  extension set identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - extension set name not found
 
 @subheading DESCRIPTION:
 
@@ -778,8 +778,8 @@ procedure Extension_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} -  extension set deleted successfully@*
-@code{INVALID_ID} - invalid extension set id
+@code{@value{RPREFIX}SUCCESSFUL} -  extension set deleted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid extension set id
 
 @subheading DESCRIPTION:
 

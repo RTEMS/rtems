@@ -29,11 +29,11 @@ dynamically allocate memory in fixed-size units.  The directives
 provided by the partition manager are:
 
 @itemize @bullet
-@item @code{partition_create} - Create a partition
-@item @code{partition_ident} - Get ID of a partition
-@item @code{partition_delete} - Delete a partition
-@item @code{partition_get_buffer} - Get buffer from a partition
-@item @code{partition_return_buffer} - Return buffer to a partition
+@item @code{@value{DIRPREFIX}partition_create} - Create a partition
+@item @code{@value{DIRPREFIX}partition_ident} - Get ID of a partition
+@item @code{@value{DIRPREFIX}partition_delete} - Delete a partition
+@item @code{@value{DIRPREFIX}partition_get_buffer} - Get buffer from a partition
+@item @code{@value{DIRPREFIX}partition_return_buffer} - Return buffer to a partition
 @end itemize
 
 @ifinfo
@@ -88,7 +88,7 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute @code{DEFAULT_ATTRIBUTES} should be
+defaults are desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
 specified on this call.  The attribute_set parameter should be
 GLOBAL to indicate that the partition is to be known globally.
 
@@ -224,15 +224,15 @@ procedure Partition_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - partition created successfully@*
-@code{INVALID_NAME} - invalid task name@*
-@code{TOO_MANY} - too many partitions created@*
-@code{INVALID_ADDRESS} - address not on four byte boundary@*
-@code{INVALID_SIZE} - length or buffer size is 0@*
-@code{INVALID_SIZE} - length is less than the buffer size@*
-@code{INVALID_SIZE} - buffer size not a multiple of 4@*
-@code{MP_NOT_CONFIGURED} - multiprocessing not configured@*
-@code{TOO_MANY} - too many global objects
+@code{@value{RPREFIX}SUCCESSFUL} - partition created successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}TOO_MANY} - too many partitions created@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
+@code{@value{RPREFIX}INVALID_SIZE} - length or buffer size is 0@*
+@code{@value{RPREFIX}INVALID_SIZE} - length is less than the buffer size@*
+@code{@value{RPREFIX}INVALID_SIZE} - buffer size not a multiple of 4@*
+@code{@value{RPREFIX}MP_NOT_CONFIGURED} - multiprocessing not configured@*
+@code{@value{RPREFIX}TOO_MANY} - too many global objects
 
 @subheading DESCRIPTION:
 
@@ -307,9 +307,9 @@ procedure Partition_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - partition identified successfully@*
-@code{INVALID_NAME} - partition name not found@*
-@code{INVALID_NODE} - invalid node id
+@code{@value{RPREFIX}SUCCESSFUL} - partition identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - partition name not found@*
+@code{@value{RPREFIX}INVALID_NODE} - invalid node id
 
 @subheading DESCRIPTION:
 
@@ -325,7 +325,7 @@ with other partition related directives to access the partition.
 This directive will not cause the running task to be
 preempted.
 
-If node is @code{SEARCH_ALL_NODES}, all nodes are searched
+If node is @code{@value{RPREFIX}SEARCH_ALL_NODES}, all nodes are searched
 with the local node being searched first.  All other nodes are
 searched with the lowest numbered node searched first.
 
@@ -363,10 +363,10 @@ procedure Partition_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - partition deleted successfully@*
-@code{INVALID_ID} - invalid partition id@*
-@code{RESOURCE_IN_USE} - buffers still in use@*
-@code{ILLEGAL_ON_REMOTE_OBJECT} - cannot delete remote partition
+@code{@value{RPREFIX}SUCCESSFUL} - partition deleted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid partition id@*
+@code{@value{RPREFIX}RESOURCE_IN_USE} - buffers still in use@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot delete remote partition
 
 @subheading DESCRIPTION:
 
@@ -419,9 +419,9 @@ procedure Partition_Get_Buffer (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - buffer obtained successfully@*
-@code{INVALID_ID} - invalid partition id@*
-@code{UNSATISFIED} - all buffers are allocated
+@code{@value{RPREFIX}SUCCESSFUL} - buffer obtained successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid partition id@*
+@code{@value{RPREFIX}UNSATISFIED} - all buffers are allocated
 
 @subheading DESCRIPTION:
 
@@ -470,9 +470,9 @@ procedure Partition_Return_Buffer (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - buffer returned successfully@*
-@code{INVALID_ID} - invalid partition id@*
-@code{INVALID_ADDRESS} - buffer address not in partition
+@code{@value{RPREFIX}SUCCESSFUL} - buffer returned successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid partition id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - buffer address not in partition
 
 @subheading DESCRIPTION:
 

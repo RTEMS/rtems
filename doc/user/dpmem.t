@@ -30,11 +30,11 @@ representations for multiple dual-ported memory areas (DPMA).
 The directives provided by the dual-ported memory manager are:
 
 @itemize @bullet
-@item @code{port_create} - Create a port
-@item @code{port_ident} - Get ID of a port
-@item @code{port_delete} - Delete a port
-@item @code{port_external_to_internal} - Convert external to internal address
-@item @code{port_internal_to_external} - Convert internal to external address
+@item @code{@value{DIRPREFIX}port_create} - Create a port
+@item @code{@value{DIRPREFIX}port_ident} - Get ID of a port
+@item @code{@value{DIRPREFIX}port_delete} - Delete a port
+@item @code{@value{DIRPREFIX}port_external_to_internal} - Convert external to internal address
+@item @code{@value{DIRPREFIX}port_internal_to_external} - Convert internal to external address
 @end itemize
 
 @ifinfo
@@ -175,10 +175,10 @@ procedure Port_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - port created successfully@*
-@code{INVALID_NAME} - invalid task name@*
-@code{INVALID_ADDRESS} - address not on four byte boundary@*
-@code{TOO_MANY} - too many DP memory areas created
+@code{@value{RPREFIX}SUCCESSFUL} - port created successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
+@code{@value{RPREFIX}TOO_MANY} - too many DP memory areas created
 
 @subheading DESCRIPTION:
 
@@ -229,8 +229,8 @@ procedure Port_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - port identified successfully@*
-@code{INVALID_NAME} - port name not found
+@code{@value{RPREFIX}SUCCESSFUL} - port identified successfully@*
+@code{@value{RPREFIX}INVALID_NAME} - port name not found
 
 @subheading DESCRIPTION:
 
@@ -272,8 +272,8 @@ procedure Port_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - port deleted successfully@*
-@code{INVALID_ID} - invalid port id
+@code{@value{RPREFIX}SUCCESSFUL} - port deleted successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid port id
 
 @subheading DESCRIPTION:
 
@@ -320,7 +320,7 @@ procedure Port_External_To_Internal (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} -  always successful
+@code{@value{RPREFIX}SUCCESSFUL} -  always successful
 
 @subheading DESCRIPTION:
 
@@ -367,7 +367,7 @@ procedure Port_Internal_To_External (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} -  always successful
+@code{@value{RPREFIX}SUCCESSFUL} -  always successful
 
 @subheading DESCRIPTION:
 

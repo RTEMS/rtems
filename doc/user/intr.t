@@ -34,11 +34,11 @@ exit from an ISR.  The interrupt manager includes the following
 directive:
 
 @itemize @bullet
-@item @code{interrupt_catch} - Establish an ISR
-@item @code{interrupt_disable} - Disable Interrupts
-@item @code{interrupt_enable} - Enable Interrupts
-@item @code{interrupt_flash} - Flash Interrupt
-@item @code{interrupt_is_in_progress} - Is an ISR in Progress
+@item @code{@value{DIRPREFIX}interrupt_catch} - Establish an ISR
+@item @code{@value{DIRPREFIX}interrupt_disable} - Disable Interrupts
+@item @code{@value{DIRPREFIX}interrupt_enable} - Enable Interrupts
+@item @code{@value{DIRPREFIX}interrupt_flash} - Flash Interrupt
+@item @code{@value{DIRPREFIX}interrupt_is_in_progress} - Is an ISR in Progress
 @end itemize
 
 @ifinfo
@@ -313,9 +313,9 @@ procedure Interrupt_Catch (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - ISR established successfully@*
-@code{INVALID_NUMBER} - illegal vector number@*
-@code{INVALID_ADDRESS} - illegal ISR entry point or invalid old_isr_handler
+@code{@value{RPREFIX}SUCCESSFUL} - ISR established successfully@*
+@code{@value{RPREFIX}INVALID_NUMBER} - illegal vector number@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - illegal ISR entry point or invalid old_isr_handler
 
 @subheading DESCRIPTION:
 
@@ -360,7 +360,7 @@ NONE
 
 This directive disables all maskable interrupts and returns
 the previous @code{level}.  A later invocation of the
-@code{interrupt_enable} directive should be used to
+@code{@value{DIRPREFIX}interrupt_enable} directive should be used to
 restore the interrupt level.
 
 @subheading NOTES:
@@ -403,9 +403,9 @@ NONE
 @subheading DESCRIPTION:
 
 This directive enables maskable interrupts to the @code{level}
-which was returned by a previous call to @code{interrupt_disable}.
+which was returned by a previous call to @code{@value{DIRPREFIX}interrupt_disable}.
 Immediately prior to invoking this directive, maskable interrupts should
-be disabled by a call to @code{interrupt_disable} and will be enabled
+be disabled by a call to @code{@value{DIRPREFIX}interrupt_disable} and will be enabled
 when this directive returns to the caller.
 
 @subheading NOTES:
@@ -444,9 +444,9 @@ NONE
 @subheading DESCRIPTION:
 
 This directive temporarily enables maskable interrupts to the @code{level}
-which was returned by a previous call to @code{interrupt_disable}.  
+which was returned by a previous call to @code{@value{DIRPREFIX}interrupt_disable}.  
 Immediately prior to invoking this directive, maskable interrupts should
-be disabled by a call to @code{interrupt_disable} and will be redisabled
+be disabled by a call to @code{@value{DIRPREFIX}interrupt_disable} and will be redisabled
 when this directive returns to the caller.
 
 @subheading NOTES:

@@ -29,8 +29,8 @@ for asynchronous communication.  The directives provided by the
 signal manager are:
 
 @itemize @bullet
-@item @code{signal_catch} - Establish an ASR
-@item @code{signal_send} - Send signal set to a task
+@item @code{@value{DIRPREFIX}signal_catch} - Establish an ASR
+@item @code{@value{DIRPREFIX}signal_send} - Send signal set to a task
 @end itemize
 
 @ifinfo
@@ -100,8 +100,8 @@ result, does not have a task mode.
 @subsection Building a Signal Set
 
 A signal set is built by a bitwise OR of the desired
-signals.  The set of valid signals is @code{SIGNAL_0} through
-@code{SIGNAL_31}.  If a signal is not explicitly specified in the
+signals.  The set of valid signals is @code{@value{RPREFIX}SIGNAL_0} through
+@code{@value{RPREFIX}SIGNAL_31}.  If a signal is not explicitly specified in the
 signal set, then it is not present.  Signal values are
 specifically designed to be mutually exclusive, therefore
 bitwise OR and addition operations are equivalent as long as
@@ -109,7 +109,7 @@ each signal appears exactly once in the component list.
 
 This example demonstrates the signal parameter used
 when sending the signal set consisting of 
-@code{SIGNAL_6}, @code{SIGNAL_15}, and @code{SIGNAL_31}.  
+@code{@value{RPREFIX}SIGNAL_6}, @code{@value{RPREFIX}SIGNAL_15}, and @code{@value{RPREFIX}SIGNAL_31}.  
 The signal parameter provided to the signal_send directive should be
 @code{@value{RPREFIX}SIGNAL_6 @value{OR} 
 @value{RPREFIX}SIGNAL_15 @value{OR} @value{RPREFIX}SIGNAL_31}.
@@ -126,29 +126,29 @@ directives.  A complete list of mode options is provided in the
 following table:
 
 @itemize @bullet
-@item @code{PREEMPT} is masked by
-@code{PREEMPT_MASK} and enables preemption
+@item @code{@value{RPREFIX}PREEMPT} is masked by
+@code{@value{RPREFIX}PREEMPT_MASK} and enables preemption
 
-@item @code{NO_PREEMPT} is masked by
-@code{PREEMPT_MASK} and disables preemption
+@item @code{@value{RPREFIX}NO_PREEMPT} is masked by
+@code{@value{RPREFIX}PREEMPT_MASK} and disables preemption
 
-@item @code{NO_TIMESLICE} is masked by
-@code{TIMESLICE_MASK} and disables timeslicing
+@item @code{@value{RPREFIX}NO_TIMESLICE} is masked by
+@code{@value{RPREFIX}TIMESLICE_MASK} and disables timeslicing
 
-@item @code{TIMESLICE} is masked by
-@code{TIMESLICE_MASK} and enables timeslicing
+@item @code{@value{RPREFIX}TIMESLICE} is masked by
+@code{@value{RPREFIX}TIMESLICE_MASK} and enables timeslicing
 
-@item @code{ASR} is masked by
-@code{ASR_MASK} and enables ASR processing
+@item @code{@value{RPREFIX}ASR} is masked by
+@code{@value{RPREFIX}ASR_MASK} and enables ASR processing
 
-@item @code{NO_ASR} is masked by
-@code{ASR_MASK} and disables ASR processing
+@item @code{@value{RPREFIX}NO_ASR} is masked by
+@code{@value{RPREFIX}ASR_MASK} and disables ASR processing
 
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} is masked by
-@code{INTERRUPT_MASK} and enables all interrupts
+@code{@value{RPREFIX}INTERRUPT_MASK} and enables all interrupts
 
-@item @code{@value{RPREFIX}INTERRUPT_LEVEL}(n)} is masked by
-@code{INTERRUPT_MASK} and sets interrupts level n
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} is masked by
+@code{@value{RPREFIX}INTERRUPT_MASK} and sets interrupts level n
 @end itemize
 
 Mode values are specifically designed to be mutually
@@ -318,7 +318,7 @@ procedure Signal_Catch (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - always successful
+@code{@value{RPREFIX}SUCCESSFUL} - always successful
 
 @subheading DESCRIPTION:
 
@@ -339,29 +339,29 @@ preempted.
 The following task mode constants are defined by RTEMS:
 
 @itemize @bullet
-@item @code{PREEMPT} is masked by
-@code{PREEMPT_MASK} and enables preemption
+@item @code{@value{RPREFIX}PREEMPT} is masked by
+@code{@value{RPREFIX}PREEMPT_MASK} and enables preemption
 
-@item @code{NO_PREEMPT} is masked by
-@code{PREEMPT_MASK} and disables preemption
+@item @code{@value{RPREFIX}NO_PREEMPT} is masked by
+@code{@value{RPREFIX}PREEMPT_MASK} and disables preemption
 
-@item @code{NO_TIMESLICE} is masked by
-@code{TIMESLICE_MASK} and disables timeslicing
+@item @code{@value{RPREFIX}NO_TIMESLICE} is masked by
+@code{@value{RPREFIX}TIMESLICE_MASK} and disables timeslicing
 
-@item @code{TIMESLICE} is masked by
-@code{TIMESLICE_MASK} and enables timeslicing
+@item @code{@value{RPREFIX}TIMESLICE} is masked by
+@code{@value{RPREFIX}TIMESLICE_MASK} and enables timeslicing
 
-@item @code{ASR} is masked by
-@code{ASR_MASK} and enables ASR processing
+@item @code{@value{RPREFIX}ASR} is masked by
+@code{@value{RPREFIX}ASR_MASK} and enables ASR processing
 
-@item @code{NO_ASR} is masked by
-@code{ASR_MASK} and disables ASR processing
+@item @code{@value{RPREFIX}NO_ASR} is masked by
+@code{@value{RPREFIX}ASR_MASK} and disables ASR processing
 
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} is masked by
-@code{INTERRUPT_MASK} and enables all interrupts
+@code{@value{RPREFIX}INTERRUPT_MASK} and enables all interrupts
 
-@item @code{@value{RPREFIX}INTERRUPT_LEVEL}(n)} is masked by
-@code{INTERRUPT_MASK} and sets interrupts level n
+@item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} is masked by
+@code{@value{RPREFIX}INTERRUPT_MASK} and sets interrupts level n
 @end itemize
 
 @page
@@ -392,9 +392,9 @@ procedure Signal_Send (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - signal sent successfully@*
-@code{INVALID_ID} - task id invalid@*
-@code{NOT_DEFINED} - ASR invalid
+@code{@value{RPREFIX}SUCCESSFUL} - signal sent successfully@*
+@code{@value{RPREFIX}INVALID_ID} - task id invalid@*
+@code{@value{RPREFIX}NOT_DEFINED} - ASR invalid
 
 @subheading DESCRIPTION:
 

@@ -29,8 +29,8 @@ of intertask communication and synchronization.  The directives
 provided by the event manager are:
 
 @itemize @bullet
-@item @code{event_send} - Send event set to a task
-@item @code{event_receive} - Receive event condition
+@item @code{@value{DIRPREFIX}event_send} - Send event set to a task
+@item @code{@value{DIRPREFIX}event_receive} - Receive event condition
 @end itemize
 
 @ifinfo
@@ -80,9 +80,9 @@ not received.  An event condition is used to specify the events
 which the task desires to receive and the algorithm which will
 be used to determine when the request is satisfied. An event
 condition is satisfied based upon one of two algorithms which
-are selected by the user.  The @code{EVENT_ANY} algorithm states that
+are selected by the user.  The @code{@value{RPREFIX}EVENT_ANY} algorithm states that
 an event condition is satisfied when at least a single requested
-event is posted.  The @code{EVENT_ALL} algorithm states that an event
+event is posted.  The @code{@value{RPREFIX}EVENT_ALL} algorithm states that an event
 condition is satisfied when every requested event is posted.
 
 @ifinfo
@@ -91,15 +91,15 @@ condition is satisfied when every requested event is posted.
 @subsection Building an Event Set or Condition
 
 An event set or condition is built by a bitwise OR of
-the desired events.  The set of valid events is @code{EVENT_0} through
-@code{EVENT_31}.  If an event is not explicitly specified in the set or
+the desired events.  The set of valid events is @code{@value{RPREFIX}EVENT_0} through
+@code{@value{RPREFIX}EVENT_31}.  If an event is not explicitly specified in the set or
 condition, then it is not present.  Events are specifically
 designed to be mutually exclusive, therefore bitwise OR and
 addition operations are equivalent as long as each event appears
 exactly once in the event set list.
 
 For example, when sending the event set consisting of
-@code{EVENT_6}, @code{EVENT_15}, and @code{EVENT_31},
+@code{@value{RPREFIX}EVENT_6}, @code{@value{RPREFIX}EVENT_15}, and @code{@value{RPREFIX}EVENT_31},
 the event parameter to the event_send directive should be 
 @code{@value{RPREFIX}EVENT_6 @value{OR}
 @value{RPREFIX}EVENT_15 @value{OR} @value{RPREFIX}EVENT_31}.
@@ -114,10 +114,10 @@ desired option components.  The set of valid options for the
 event_receive directive are listed in the following table:
 
 @itemize @bullet
-@item @code{WAIT} - task will wait for event (default)
-@item @code{NO_WAIT} - task should not wait
-@item @code{EVENT_ALL} - return after all events (default)
-@item @code{EVENT_ANY} - return after any events
+@item @code{@value{RPREFIX}WAIT} - task will wait for event (default)
+@item @code{@value{RPREFIX}NO_WAIT} - task should not wait
+@item @code{@value{RPREFIX}EVENT_ALL} - return after all events (default)
+@item @code{@value{RPREFIX}EVENT_ANY} - return after any events
 @end itemize
 
 Option values are specifically designed to be
@@ -126,7 +126,7 @@ are equivalent as long as each option appears exactly once in
 the component list.  An option listed as a default is not
 required to appear in the option list, although it is a good
 programming practice to specify default options.  If all
-defaults are desired, the option @code{DEFAULT_OPTIONS} should be
+defaults are desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should be
 specified on this call.
 
 This example demonstrates the option parameter needed
@@ -134,8 +134,8 @@ to poll for all events in a particular event condition to
 arrive.  The option parameter passed to the event_receive
 directive should be either
 @code{@value{RPREFIX}EVENT_ALL @value{OR} @value{RPREFIX}NO_WAIT}
-or @code{NO_WAIT}.  The option parameter can be set to
-@code{NO_WAIT} because @code{EVENT_ALL} is the
+or @code{@value{RPREFIX}NO_WAIT}.  The option parameter can be set to
+@code{@value{RPREFIX}NO_WAIT} because @code{@value{RPREFIX}EVENT_ALL} is the
 default condition for event_receive.
 
 @ifinfo
@@ -200,7 +200,7 @@ satisfied, then one of the following situations applies:
 @item By default, the calling task will wait forever for the
 event condition to be satisfied.
 
-@item Specifying the @code{NO_WAIT} option forces an immediate return
+@item Specifying the @code{@value{RPREFIX}NO_WAIT} option forces an immediate return
 with an error status code.
 
 @item Specifying a timeout limits the period the task will
@@ -224,11 +224,11 @@ the calling task but the event set is left unaltered.
 
 A task can receive all of the currently pending
 events by calling the event_receive directive with a value of
-@code{ALL_EVENTS} for the input event condition and
+@code{@value{RPREFIX}ALL_EVENTS} for the input event condition and
 @code{@value{RPREFIX}NO_WAIT @value{OR} @value{RPREFIX}EVENT_ANY}
 for the option set.  The pending events are returned to the
 calling task and the event set is cleared.  If no events are
-pending then the @code{UNSATISFIED} status code will be returned.
+pending then the @code{@value{RPREFIX}UNSATISFIED} status code will be returned.
 
 @ifinfo
 @node Event Manager Directives, EVENT_SEND - Send event set to a task, Receiving all Pending Events, Event Manager
@@ -274,8 +274,8 @@ procedure Event_Send (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - event set sent successfully@*
-@code{INVALID_ID} - invalid task id
+@code{@value{RPREFIX}SUCCESSFUL} - event set sent successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id
 
 @subheading DESCRIPTION:
 
@@ -289,7 +289,7 @@ events, then the events sent are left pending.
 
 @subheading NOTES:
 
-Specifying @code{SELF} for id results in the event set being
+Specifying @code{@value{RPREFIX}SELF} for id results in the event set being
 sent to the calling task.
 
 Identical events sent to a task are not queued.  In
@@ -336,19 +336,19 @@ procedure Event_Receive (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - event received successfully@*
-@code{UNSATISFIED} - input event not satisfied (@code{NO_WAIT})@*
-@code{TIMEOUT} - timed out waiting for event
+@code{@value{RPREFIX}SUCCESSFUL} - event received successfully@*
+@code{@value{RPREFIX}UNSATISFIED} - input event not satisfied (@code{@value{RPREFIX}NO_WAIT})@*
+@code{@value{RPREFIX}TIMEOUT} - timed out waiting for event
 
 @subheading DESCRIPTION:
 
 This directive attempts to receive the event
 condition specified in event_in.  If event_in is set to
-@code{PENDING_EVENTS}, then the current pending events are returned in
-event_out and left pending.  The @code{WAIT} and @code{NO_WAIT} options in the
+@code{@value{RPREFIX}PENDING_EVENTS}, then the current pending events are returned in
+event_out and left pending.  The @code{@value{RPREFIX}WAIT} and @code{@value{RPREFIX}NO_WAIT} options in the
 option_set parameter are used to specify whether or not the task
 is willing to wait for the event condition to be satisfied.
-@code{EVENT_ANY} and @code{EVENT_ALL} are used in the option_set parameter are
+@code{@value{RPREFIX}EVENT_ANY} and @code{@value{RPREFIX}EVENT_ALL} are used in the option_set parameter are
 used to specify whether a single event or the complete event set
 is necessary to satisfy the event condition.  The event_out
 parameter is returned to the calling task with the value that
@@ -357,13 +357,13 @@ corresponds to the events in event_in that were satisfied.
 If pending events satisfy the event condition, then
 event_out is set to the satisfied events and the pending events
 in the event condition are cleared.  If the event condition is
-not satisfied and @code{NO_WAIT} is specified, then event_out is set to
+not satisfied and @code{@value{RPREFIX}NO_WAIT} is specified, then event_out is set to
 the currently satisfied events.  If the calling task chooses to
 wait, then it will block waiting for the event condition.
 
 If the calling task must wait for the event condition
 to be satisfied, then the timeout parameter is used to specify
-the maximum interval to wait.  If it is set to @code{NO_TIMEOUT}, then
+the maximum interval to wait.  If it is set to @code{@value{RPREFIX}NO_TIMEOUT}, then
 the calling task will wait forever.
 
 @subheading NOTES:
@@ -376,10 +376,10 @@ The following event receive option constants are defined by
 RTEMS:
 
 @itemize @bullet
-@item @code{WAIT} 	task will wait for event (default)
-@item @code{NO_WAIT} 	task should not wait
-@item @code{EVENT_ALL} 	return after all events (default)
-@item @code{EVENT_ANY} 	return after any events
+@item @code{@value{RPREFIX}WAIT} 	task will wait for event (default)
+@item @code{@value{RPREFIX}NO_WAIT} 	task should not wait
+@item @code{@value{RPREFIX}EVENT_ALL} 	return after all events (default)
+@item @code{@value{RPREFIX}EVENT_ANY} 	return after any events
 @end itemize
 
 A clock tick is required to support the functionality of this directive.

@@ -33,10 +33,10 @@ also initializes the interprocessor communications layer.  The
 directives provided by the initialization manager are:
 
 @itemize @bullet
-@item @code{initialize_executive} - Initialize RTEMS
-@item @code{initialize_executive_early} - Initialize RTEMS and do NOT Start Multitasking
-@item @code{initialize_executive_late} - Complete Initialization and Start Multitasking
-@item @code{shutdown_executive} - Shutdown RTEMS
+@item @code{@value{DIRPREFIX}initialize_executive} - Initialize RTEMS
+@item @code{@value{DIRPREFIX}initialize_executive_early} - Initialize RTEMS and do NOT Start Multitasking
+@item @code{@value{DIRPREFIX}initialize_executive_late} - Complete Initialization and Start Multitasking
+@item @code{@value{DIRPREFIX}shutdown_executive} - Shutdown RTEMS
 @end itemize
 
 @ifinfo

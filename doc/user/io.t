@@ -30,14 +30,14 @@ structured methodology for organizing device drivers.  The
 directives provided by the I/O manager are:
 
 @itemize @bullet
-@item @code{io_initialize} - Initialize a device driver
-@item @code{io_register_name} - Register a device name
-@item @code{io_lookup_name} - Look up a device name
-@item @code{io_open} - Open a device
-@item @code{io_close} - Close a device
-@item @code{io_read} - Read from a device
-@item @code{io_write} - Write to a device
-@item @code{io_control} - Special device services
+@item @code{@value{DIRPREFIX}io_initialize} - Initialize a device driver
+@item @code{@value{DIRPREFIX}io_register_name} - Register a device name
+@item @code{@value{DIRPREFIX}io_lookup_name} - Look up a device name
+@item @code{@value{DIRPREFIX}io_open} - Open a device
+@item @code{@value{DIRPREFIX}io_close} - Close a device
+@item @code{@value{DIRPREFIX}io_read} - Read from a device
+@item @code{@value{DIRPREFIX}io_write} - Write to a device
+@item @code{@value{DIRPREFIX}io_control} - Special device services
 @end itemize
 
 
@@ -79,7 +79,7 @@ entry points:
 
 If the device driver does not support a particular
 entry point, then that entry in the Configuration Table should
-be NULL.  RTEMS will return @code{SUCCESSFUL} as the executive's and
+be NULL.  RTEMS will return @code{@value{RPREFIX}SUCCESSFUL} as the executive's and
 zero (0) as the device driver's return code for these device
 driver entry points.
 
@@ -298,8 +298,8 @@ procedure IO_Initialize (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - successfully initialized@*
-@code{INVALID_NUMBER} - invalid major device number
+@code{@value{RPREFIX}SUCCESSFUL} - successfully initialized@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number
 
 @subheading DESCRIPTION:
 
@@ -350,8 +350,8 @@ procedure IO_Register_Name (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - successfully initialized@*
-@code{TOO_MANY} - too many devices registered
+@code{@value{RPREFIX}SUCCESSFUL} - successfully initialized@*
+@code{@value{RPREFIX}TOO_MANY} - too many devices registered
 
 @subheading DESCRIPTION:
 
@@ -391,8 +391,8 @@ procedure IO_Lookup_Name (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - successfully initialized@*
-@code{UNSATISFIED} - name not registered
+@code{@value{RPREFIX}SUCCESSFUL} - successfully initialized@*
+@code{@value{RPREFIX}UNSATISFIED} - name not registered
 
 @subheading DESCRIPTION:
 
@@ -435,8 +435,8 @@ procedure IO_Open (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - successfully initialized@*
-@code{INVALID_NUMBER} - invalid major device number
+@code{@value{RPREFIX}SUCCESSFUL} - successfully initialized@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number
 
 @subheading DESCRIPTION:
 
@@ -482,8 +482,8 @@ procedure IO_Close (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - successfully initialized@*
-@code{INVALID_NUMBER} - invalid major device number
+@code{@value{RPREFIX}SUCCESSFUL} - successfully initialized@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number
 
 @subheading DESCRIPTION:
 
@@ -529,8 +529,8 @@ procedure IO_Read (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - successfully initialized@*
-@code{INVALID_NUMBER} - invalid major device number
+@code{@value{RPREFIX}SUCCESSFUL} - successfully initialized@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number
 
 @subheading DESCRIPTION:
 
@@ -577,8 +577,8 @@ procedure IO_Write (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - successfully initialized@*
-@code{INVALID_NUMBER} - invalid major device number
+@code{@value{RPREFIX}SUCCESSFUL} - successfully initialized@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number
 
 @subheading DESCRIPTION:
 
@@ -625,8 +625,8 @@ procedure IO_Control (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - successfully initialized@*
-@code{INVALID_NUMBER} - invalid major device number
+@code{@value{RPREFIX}SUCCESSFUL} - successfully initialized@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid major device number
 
 @subheading DESCRIPTION:
 
