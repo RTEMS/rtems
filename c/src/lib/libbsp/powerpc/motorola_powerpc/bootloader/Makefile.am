@@ -59,16 +59,16 @@ all-local: $(TMPINSTALL_FILES)
 
 TMPINSTALL_FILES =
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT): bootloader.$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT)
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT)
+$(PROJECT_LIB)/bootloader.$(OBJEXT): bootloader.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/bootloader.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/bootloader.$(OBJEXT)
 
-${PROJECT_RELEASE}/lib/ppcboot.lds: ../../shared/bootloader/ppcboot.lds ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/ppcboot.lds
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/ppcboot.lds
+$(PROJECT_LIB)/ppcboot.lds: ../../shared/bootloader/ppcboot.lds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/ppcboot.lds
+TMPINSTALL_FILES += $(PROJECT_LIB)/ppcboot.lds
 
 include $(top_srcdir)/../../../../automake/local.am
