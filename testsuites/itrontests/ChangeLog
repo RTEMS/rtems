@@ -1,3 +1,15 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* itronhello/Makefile.am: Remove all-local: $(ARCH).
+	* itronmbf01/Makefile.am: Remove all-local: $(ARCH).
+	* itronmbox01/Makefile.am: Remove all-local: $(ARCH).
+	* itronsem01/Makefile.am: Remove all-local: $(ARCH).
+	* itrontask01/Makefile.am: Remove all-local: $(ARCH).
+	* itrontask02/Makefile.am: Remove all-local: $(ARCH).
+	* itrontask03/Makefile.am: Remove all-local: $(ARCH).
+	* itrontask04/Makefile.am: Remove all-local: $(ARCH).
+	* itrontime01/Makefile.am: Remove all-local: $(ARCH).
+
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having moved to testsuites/.

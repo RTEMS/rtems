@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 TEST = itrontask03
 PGM = ${ARCH}/$(TEST).exe
 
@@ -34,7 +33,7 @@ include $(top_srcdir)/itrontests.am
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES) $(DOCS)
 
