@@ -10,7 +10,7 @@ TARGOPTS = targopts.h
 
 H_FILES = $(TARGOPTS)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score \
     $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
 $(PROJECT_INCLUDE)/rtems/score:

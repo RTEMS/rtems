@@ -1,3 +1,8 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* shmdr/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use SUBDIRS = instead of SUBDIRS += to make

@@ -40,7 +40,7 @@ $(PROJECT_INCLUDE)/shm_driver.h: shm_driver.h
 $(PROJECT_INCLUDE)/mpci.h: mpci.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/shm_driver.h \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/shm_driver.h \
     $(PROJECT_INCLUDE)/mpci.h
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/shmdr$(LIB_VARIANT).rel
