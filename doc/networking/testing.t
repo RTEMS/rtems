@@ -48,6 +48,51 @@ the network.
 
 @end itemize
 
+@section Debug Output 
+
+There are a number of sources of debug output that can be enabled 
+to aid in tracing the behavior of the network stack.  The following
+is a list of them:
+
+@itemize @bullet
+
+@item mbuf activity
+
+There are commented out calls to @code{printf} in the file 
+@code{sys/mbuf.h} in the network stack code.  Uncommenting
+these lines results in output when mbuf's are allocated
+and freed.  This is very useful for findind memory leaks.
+
+@item TX and RX queuing
+
+There are commented out calls to @code{printf} in the file 
+@code{net/if.h} in the network stack code.  Uncommenting
+these lines results in output when packets are placed
+on or removed from one of the transmit or receive packet
+queues.  These queues can be viewed as the boundary line
+between a device driver and the network stack.  If the 
+network stack is enqueuing packets to be transmitted that
+the device driver is not dequeuing, then that is indicative
+of a problem in the transmit side of the device driver.
+Conversely, if the device driver is enqueueing packets
+as it receives them (via a call to @code{ether_input}) and
+they are not being dequeued by the network stack,
+then there is a problem.  This situation would likely indicate
+that the network server task is not running.
+
+@item TCP state transitions
+
+In the unlikely event that one would actually want to see 
+TCP state transitions, the @code{TCPDEBUG} macro can be defined
+in the file @code{opt_tcpdebug.h}.  This results in the routine
+@code{tcp_trace()} being called by the network stack and
+the state transitions logged into the @code{tcp_debug} data
+structure.  If the variable @code{tcpconsdebug} in the file
+@code{netinet/tcp_debug.c} is set to 1, then the state transitions
+will also be printed to the console.
+
+@end itemize
+
 @section Driver basic operation
 
 The network demonstration program @code{netdemo} may be used for these tests.
