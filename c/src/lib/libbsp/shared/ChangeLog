@@ -1,3 +1,8 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	* bootcard.c: Use __USE_INIT_FINI__ since USE_INIT_FINI
