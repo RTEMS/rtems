@@ -115,9 +115,9 @@ void __assert (const char *file, int line, const char *msg)
    /*
    * Close console
    */
-  __rtems_close(2);
-  __rtems_close(1);
-  __rtems_close(0);
+  close(2);
+  close(1);
+  close(0);
 
   printk("\nassert failed: %s: ", file);
   printk("%d: ", line);
