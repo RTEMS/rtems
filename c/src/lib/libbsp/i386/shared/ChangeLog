@@ -1,3 +1,7 @@
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* irq/irq_asm.S: Convert #..-comments to /*..*/ comments.
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add PREINSTALL_DIRS.

@@ -49,8 +49,8 @@ SYM (_ISR_Handler):
          *  Now switch stacks if necessary
          */
 
-	movw	  SYM (i8259s_cache), ax # move current i8259 interrupt mask in ax
-	pushl	  eax			      # push it on the stack
+	movw	  SYM (i8259s_cache), ax /* move current i8259 interrupt mask in ax */
+	pushl	  eax			      /* push it on the stack */
 	/*
 	 * compute the new PIC mask:
 	 *
@@ -80,9 +80,9 @@ SYM (_ISR_Handler):
 	
 .check_stack_switch:
 	pushl	  ebp
-        movl      esp, ebp                  # ebp = previous stack pointer
-        cmpl      $0, SYM (_ISR_Nest_level) # is this the outermost interrupt?
-        jne       nested                    # No, then continue
+        movl      esp, ebp                  /* ebp = previous stack pointer */
+        cmpl      $0, SYM (_ISR_Nest_level) /* is this the outermost interrupt? */
+        jne       nested                    /* No, then continue */
         movl      SYM (_CPU_Interrupt_stack_high), esp
 
         /*
@@ -93,8 +93,8 @@ SYM (_ISR_Handler):
          */
 
 nested:
-        incl      SYM (_ISR_Nest_level)     # one nest level deeper
-        incl      SYM (_Thread_Dispatch_disable_level) # disable multitasking
+        incl      SYM (_ISR_Nest_level)     /* one nest level deeper */
+        incl      SYM (_Thread_Dispatch_disable_level) /* disable multitasking */
 	/*
 	 * re-enable interrupts at processor level as the current
 	 * interrupt source is now masked via i8259
@@ -106,15 +106,15 @@ nested:
 	 *  so we must save it again.
 	 */
 	
-        pushl     ecx                       # push vector number
+        pushl     ecx                       /* push vector number */
         mov       SYM (current_irq) (,ecx,4),eax
-                                            # eax = Users handler
-        call      *eax                      # invoke user ISR
+                                            /* eax = Users handler */
+        call      *eax                      /* invoke user ISR */
 	/*
 	 * disable interrupts_again
 	 */
 	cli
-        popl       ecx                       # ecx = vector number
+        popl       ecx                       /* ecx = vector number */
 	/*
 	 * restore stack
 	 */
@@ -131,23 +131,23 @@ nested:
 	outb	  $PIC_SLAVE_IMR_IO_PORT
 	
 	
-        decl      SYM (_ISR_Nest_level)     # one less ISR nest level
-                                            # If interrupts are nested,
-                                            #   then dispatching is disabled
+        decl      SYM (_ISR_Nest_level)     /* one less ISR nest level */
+                                            /* If interrupts are nested, */
+                                            /*   then dispatching is disabled */
 
         decl      SYM (_Thread_Dispatch_disable_level)
-                                            # unnest multitasking
-                                            # Is dispatch disabled
-        jne       .exit                     # Yes, then exit
+                                            /* unnest multitasking */
+                                            /* Is dispatch disabled */
+        jne       .exit                     /* Yes, then exit */
 
         cmpl      $0, SYM (_Context_Switch_necessary)
-                                            # Is task switch necessary?
-        jne	  .schedule		    # Yes, then call the scheduler
+                                            /* Is task switch necessary? */
+        jne	  .schedule		    /* Yes, then call the scheduler */
 
         cmpl      $0, SYM (_ISR_Signals_to_thread_executing)
-                                            # signals sent to Run_thread
-                                            #   while in interrupt handler?
-        je        .exit                     # No, exit
+                                            /* signals sent to Run_thread */
+                                            /*   while in interrupt handler? */
+        je        .exit                     /* No, exit */
 
 	
 .bframe:
