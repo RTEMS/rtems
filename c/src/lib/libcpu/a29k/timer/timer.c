@@ -24,7 +24,7 @@ static char _sccsid[] = "@(#)timer.c 05/07/96     1.4\n";
 #endif
 
 #include <rtems.h>
-#include <bsp.h>
+/* #include <bsp.h> */
 
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ )
 #define TIMER_MAX_VALUE 0xffffffff
@@ -45,7 +45,7 @@ void Timer_initialize( void )
    *  Somehow start the timer
    */
 
-  /* Timer on 4650 is always running */
+  /* Timer is always running */
 }
 
 /*

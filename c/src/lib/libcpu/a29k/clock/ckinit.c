@@ -21,9 +21,11 @@ static char _sccsid[] = "@(#)ckinit.c 03/15/96     1.1\n";
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <bsp.h>
+/* #include <bsp.h> */
 
 #include "clock.h"
+
+extern int CPU_CLOCK_RATE_MHZ; /* provided in bsp */
 
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ ) /* equivalent to CPU clock speed in MHz */
 
@@ -123,13 +125,13 @@ void Install_clock(
    *  wants a clock tick.
    */
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
+  if ( rtems_configuration_get_ticks_per_timeslice() ) {
     Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
     /*
      *  Hardware specific initialize goes here
      */
 
-    a29k_timer_rate = BSP_Configuration.microseconds_per_tick * CLOCKS_PER_MICROSECOND;
+    a29k_timer_rate = rtems_configuration_get_microseconds_per_tick() * CLOCKS_PER_MICROSECOND;
     a29k_init_timer( a29k_timer_rate );
   }
 
@@ -146,7 +148,7 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
+  if ( rtems_configuration_get_ticks_per_timeslice() ) {
 
     /* a29k: turn off the timer interrupts */
     a29k_disable_timer();

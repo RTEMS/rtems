@@ -1,3 +1,10 @@
+2000-09-25	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c: Removed include of <bsp.h>.  Also switch to
+	macros to get configuration data.
+	* timer/timer.c: Removed include of <bsp.h>.  Fixed comment 
+	that said 4650 (a mips part).
+
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
 	*  clock/clock.S: Commented out non-GNU assembly.
