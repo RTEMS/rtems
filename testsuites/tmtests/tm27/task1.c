@@ -19,6 +19,7 @@
 #define TEST_INIT
 #include "system.h"
 
+#define RTEMS_TM27
 #include <bsp.h>
 
 rtems_task Task_1(
