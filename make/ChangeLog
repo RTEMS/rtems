@@ -1,3 +1,8 @@
+2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* Makefile.am: Add MVME2100 BSP.
+	* custom/mvme2100.cfg: New file.
+
 2004-11-05	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/csb336.cfg, custom/csb337.cfg: RTEMS_CPU must match an
