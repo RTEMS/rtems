@@ -1,3 +1,7 @@
+2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/regs.S: Remove.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h, start/start.S, startup/bspstart.c,
