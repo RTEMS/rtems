@@ -53,12 +53,6 @@ int sched_setscheduler(
   const struct sched_param *param
 )
 {
-  /*
-   *  Only supported for the "calling process" (i.e. this node).
-   */
-
-  assert( pid == getpid() );
-
   errno = ENOSYS;
   return -1;
 }
@@ -72,12 +66,6 @@ int sched_getscheduler(
   pid_t                     pid
 )
 {
-  /*
-   *  Only supported for the "calling process" (i.e. this node).
-   */
-
-  assert( pid == getpid() );
-
   errno = ENOSYS;
   return -1;
 }
