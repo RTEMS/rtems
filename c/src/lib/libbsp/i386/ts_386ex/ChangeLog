@@ -1,3 +1,8 @@
+2000-10-17	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/Makefile.am: Added idt.c since it has been moved libcpu/i386
+	to libbsp/i386/shared/irq.
+
 2000-09-29	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
 
 	* startup/linkcmds: Added lines so DWARF debug information

@@ -8,8 +8,8 @@ VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/irq:@srcdir@/../
 
 PGM = $(ARCH)/startup.rel
 
-C_FILES = bsplibc.c bsppost.c bspstart.c exit.c irq.c irq_init.c bootcard.c \
-    main.c sbrk.c i386-stub.c i386-stub-glue.c uart.c pcibios.c \
+C_FILES = bsplibc.c bsppost.c bspstart.c exit.c idt.c irq.c irq_init.c \
+    bootcard.c main.c sbrk.c i386-stub.c i386-stub-glue.c uart.c pcibios.c \
     gnatinstallhandler.c gdb_glue.c tty_drv.c
 
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
