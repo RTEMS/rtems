@@ -149,13 +149,14 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _Thread_Dispatch_initialization();
 
-  _User_extensions_Handler_initialization(
-    configuration_table->User_extension_table
-  );
-
   _Workspace_Handler_initialization(
      (void *)configuration_table->work_space_start,
      configuration_table->work_space_size
+  );
+
+  _User_extensions_Handler_initialization(
+    configuration_table->number_of_initial_extensions,
+    configuration_table->User_extension_table
   );
 
   _ISR_Handler_initialization();

@@ -81,6 +81,7 @@ typedef struct {
   unsigned32                        maximum_devices;
   unsigned32                        number_of_device_drivers;
   rtems_driver_address_table       *Device_driver_table;
+  unsigned32                        number_of_initial_extensions;
   rtems_extensions_table           *User_extension_table;
   rtems_multiprocessing_table      *User_multiprocessing_table;
   rtems_api_configuration_table    *RTEMS_api_configuration;

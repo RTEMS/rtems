@@ -17,6 +17,8 @@
 #ifndef __USER_EXTENSIONS_inl
 #define __USER_EXTENSIONS_inl
 
+#include <rtems/score/wkspace.h>
+
 /*PAGE
  *
  *  _User_extensions_Handler_initialization
@@ -27,14 +29,23 @@
  */
 
 RTEMS_INLINE_ROUTINE void _User_extensions_Handler_initialization (
+    unsigned32              number_of_extensions,
     User_extensions_Table  *initial_extensions
 )
 {
+  User_extensions_Control *extension;
+  unsigned32               i;
+
   _Chain_Initialize_empty( &_User_extensions_List );
 
   if ( initial_extensions ) {
-    _User_extensions_Initial.Callouts = *initial_extensions;
-    _Chain_Append( &_User_extensions_List, &_User_extensions_Initial.Node );
+    for (i=0 ; i<number_of_extensions ; i++ ) {
+      extension =
+         _Workspace_Allocate_or_fatal_error( sizeof(User_extensions_Control) );
+
+      extension->Callouts = initial_extensions[i];
+      _Chain_Append( &_User_extensions_List, &extension->Node );
+    }
   }
 }
 

@@ -284,8 +284,29 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_TICKS_PER_TIMESLICE        50
 #endif
 
-#ifndef CONFIGURE_INITIAL_EXTENSIONS  
-#define CONFIGURE_INITIAL_EXTENSIONS         NULL
+/*
+ *  Initial Extension Set
+ */
+
+#ifdef CONFIGURE_INIT
+#ifdef STACK_CHECKER_ON
+#include <stackchk.h>
+#endif
+
+rtems_extensions_table Configuration_Initial_Extensions[] = {
+#ifdef CONFIGURE_INITIAL_EXTENSIONS
+    CONFIGURE_INITIAL_EXTENSIONS,
+#endif
+#ifdef STACK_CHECKER_ON
+    STACK_CHECKER_EXTENSION,
+#endif
+    { NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+};
+
+#define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
+  ((sizeof(Configuration_Initial_Extensions) / \
+    sizeof(rtems_extensions_table)) - 1)
+
 #endif
 
 /*
@@ -530,7 +551,8 @@ rtems_configuration_table Configuration = {
   sizeof (Device_drivers)/
     sizeof(rtems_driver_address_table),      /* number of device drivers */
   Device_drivers,                            /* pointer to driver table */
-  CONFIGURE_INITIAL_EXTENSIONS,              /* pointer to initial extensions */
+  CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,    /* number of initial extensions */
+  Configuration_Initial_Extensions,          /* pointer to initial extensions */
   CONFIGURE_MULTIPROCESSING_TABLE,           /* pointer to MP config table */
   &Configuration_RTEMS_API,                  /* pointer to RTEMS API config */
 #ifdef RTEMS_POSIX_API

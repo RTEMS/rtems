@@ -101,13 +101,6 @@ typedef struct {
 }   User_extensions_Control;
 
 /*
- *  The following contains the static extension set which may be
- *  configured by the application.
- */
-
-SCORE_EXTERN User_extensions_Control _User_extensions_Initial;
-
-/*
  *  The following is used to manage the list of active extensions.
  */
 
