@@ -211,10 +211,10 @@ console_tbl	Console_Port_Tbl[] = {
 		Z85C30_CTRL_B,			/* ulCtrlPort1 */
 		Z85C30_CTRL_A,			/* ulCtrlPort2 */
 		Z85C30_DATA_B,			/* ulDataPort */
-		Read_z85c30_register,		/* getRegister */
-		Write_z85c30_register,		/* setRegister */
-		Read_z85c30_data,		/* getData */
-		Write_z85c30_data,		/* setData */
+		z85c30_get_register,		/* getRegister */
+		z85c30_set_register,		/* setRegister */
+		z85c30_get_data,		/* getData */
+		z85c30_set_data,		/* setData */
                 Z85C30_CLOCK,                   /* ulClock */
 		DMV170_SCC_IRQ			/* ulIntVector */
 	}
