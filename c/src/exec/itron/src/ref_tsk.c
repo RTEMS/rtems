@@ -30,12 +30,12 @@ ER ref_tsk(
   Objects_Locations        location;
   Priority_Control         core_priority;  
 
-  the_thread = _ITRON_Task_Get( tskid, &location );
-  if (!the_thread)
-    _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
-
   if (!pk_rtsk)
-    _ITRON_return_errorno( E_PAR );
+    return E_PAR;
+
+  the_thread = _ITRON_Task_Get( tskid, &location );
+  if ( location != OBJECTS_LOCAL)
+    _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
 
   /*
    * The following are extended functions [level X ].
@@ -76,7 +76,7 @@ ER ref_tsk(
   if ((the_thread->current_state & STATES_BLOCKED) != 0)
     pk_rtsk->tskstat = TTS_WAI;
 
-  return E_OK;           /* XXX - Should never get here */
+  _ITRON_return_errorno( E_OK );
 }
 
 
