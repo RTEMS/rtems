@@ -60,11 +60,10 @@ unsigned32 rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
 
 #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
 rtems_filesystem_mount_table_t configuration_mount_table = {
-#define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM /* XXX for now */
-#ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-  &IMFS_ops,
-#else  /* using miniIMFS as base filesystem */
+#ifdef CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
   &miniIMFS_ops,
+#else  /* using IMFS as base filesystem */
+  &IMFS_ops,
 #endif
   RTEMS_FILESYSTEM_READ_WRITE,
   NULL,
