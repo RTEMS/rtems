@@ -1,3 +1,9 @@
+2004-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: Merge-in sh7032/ChangeLog, sh7045/ChangeLog,
+	sh7750/ChangeLog.
+	* sh7032/ChangeLog, sh7045/ChangeLog, sh7750/ChangeLog: Remove.
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Unconditionally build subdirs sh7032, sh7045, sh7750.
@@ -9,86 +15,485 @@
 	* sh7032/.cvsignore, sh7045/.cvsignore, sh7750/.cvsignore:  Reflect
 	changes above.
 
+2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/configure.ac: Require automake 1.8.2. Add subdir-objects to
+	AUTOMAKE_OPTIONS. Add AM_PROG_CC_C_0.
+	* sh7032/Makefile.am: Use automake compilation rules.
+	* sh7045/configure.ac: Require automake 1.8.2. Add subdir-objects to
+	AUTOMAKE_OPTIONS. Add AM_PROG_CC_C_0.
+	* sh7045/Makefile.am: Use automake compilation rules.
+	* sh7750/configure.ac: Require automake 1.8.2. Add subdir-objects to
+	AUTOMAKE_OPTIONS. Add AM_PROG_CC_C_0.
+	* sh7750/Makefile.am: Use automake compilation rules.
+
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
+	* sh7045/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
+	* sh7750/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+	* sh7032/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* sh7032/configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+	* sh7045/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* sh7045/configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+	* sh7750/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* sh7750/configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/Makefile.am: Misc cleanups and fixes.
+	* sh7045/Makefile.am: Misc cleanups and fixes.
+	* sh7750/Makefile.am: Misc cleanups and fixes.
+
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/Makefile.am: Remove all-local: $(ARCH).
+	* sh7045/Makefile.am: Remove all-local: $(ARCH).
+	* sh7750/Makefile.am: Remove all-local: $(ARCH).
+
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/Makefile.am: Reformat. Use dirstamps for preinstallation.
+	* sh7045/Makefile.am: Reformat. Use dirstamps for preinstallation.
+	* sh7750/Makefile.am: Reformat. Use dirstamps for preinstallation.
 
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.
+	* sh7032/configure.ac: Remove RTEMS_CANONICAL_HOST.
+	* sh7045/configure.ac: Remove RTEMS_CANONICAL_HOST.
+	* sh7750/configure.ac: Remove RTEMS_CANONICAL_HOST.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_CPU.
+	* sh7032/configure.ac: Remove RTEMS_CHECK_CPU.
+	* sh7045/configure.ac: Remove RTEMS_CHECK_CPU.
+	* sh7750/configure.ac: Remove RTEMS_CHECK_CPU.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* sh7032/clock/ckinit.c, sh7032/delay/delay.c,
+	sh7032/include/iosh7032.h, sh7032/include/ispsh7032.h,
+	sh7032/include/sci.h, sh7032/include/sh7_pfc.h,
+	sh7032/include/sh7_sci.h, sh7032/sci/sci.c, sh7032/score/cpu_asm.c,
+	sh7032/score/ispsh7032.c, sh7032/timer/timer.c: URL for license changed.
+	* sh7032/score/cpu_asm.c: Removed incorrect statement about copyright
+	assignment.
+	* sh7045/clock/ckinit.c, sh7045/include/io_types.h,
+	sh7045/include/iosh7045.h, sh7045/include/ispsh7045.h,
+	sh7045/include/sci.h, sh7045/include/sci_termios.h,
+	sh7045/include/sh7_pfc.h, sh7045/include/sh7_sci.h, sh7045/sci/sci.c,
+	sh7045/sci/sci_termios.c, sh7045/score/cpu_asm.c,
+	sh7045/score/ispsh7045.c, sh7045/timer/timer.c: URL for license changed.
+	* sh7045/score/cpu_asm.c: Removed incorrect statement about copyright
+	assignment.
+	* sh7750/clock/ckinit.c, sh7750/include/rtems/score/iosh7750.h,
+	sh7750/include/rtems/score/ipl.h,
+	sh7750/include/rtems/score/ispsh7750.h,
+	sh7750/include/rtems/score/sh4_regs.h,
+	sh7750/include/rtems/score/sh7750_regs.h, sh7750/include/sh/sh4uart.h,
+	sh7750/sci/console.c, sh7750/sci/sh4uart.c, sh7750/score/cpu_asm.c,
+	sh7750/score/ispsh7750.c, sh7750/timer/timer.c: URL for license changed.
+	* sh7750/score/cpu_asm.c: Removed incorrect statement about copyright
+	assignment.
 
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
+	* sh7032/Makefile.am: Reflect having moved aclocal/.
+	* sh7045/Makefile.am: Reflect having moved aclocal/.
+	* sh7750/Makefile.am: Reflect having moved aclocal/.
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved automake/.
+	* sh7032/Makefile.am: Reflect having moved automake/.
+	* sh7045/Makefile.am: Reflect having moved automake/.
+	* sh7750/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+	* sh7032/configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
+	* sh7045/configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
+	* sh7750/configure.ac: Use rtems-bugs@rtems.com as bug report email
+	address.
+
+2003-08-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/Makefile.am: Preinstall $(PROJECT_INCLUDE)/rtems/score.
+	* sh7045/Makefile.am: Preinstall $(PROJECT_INCLUDE)/rtems/score.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* sh7032/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* sh7045/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* sh7750/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* configure.ac: AC_PREREQ(2.57).
+	* sh7032/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* sh7032/configure.ac: AC_PREREQ(2.57).
+	* sh7045/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* sh7045/configure.ac: AC_PREREQ(2.57).
+	* sh7750/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* sh7750/configure.ac: AC_PREREQ(2.57).
+
+2003-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* sh7032/score/cpu_asm.c: Rework logic that decides when to call
+	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru> determined
+	that _ISR_Signals_to_thread_executing was not being honored and/or
+	cleared properly.
+	* sh7045/score/cpu_asm.c: Rework logic that decides when to call
+	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru> determined
+	that _ISR_Signals_to_thread_executing was not being honored and/or
+	cleared properly.
+	* sh7750/score/cpu_asm.c: Rework logic that decides when to call
+	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru> determined
+	that _ISR_Signals_to_thread_executing was not being honored and/or
+	cleared properly.
+
+2003-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	PR 338/filesystem
+	* sh7045/sci/sci.c: Side-effect of fixing reentrancy problem with 
+	rtems_io_lookup_name() (API change).
+
+2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/Makefile.am: Merge-in subdir Makefile.ams.
+	* sh7032/configure.ac: Reflect changes above.
+	* sh7032/score/Makefile.am: Removed.
+	* sh7032/sci/Makefile.am: Removed.
+	* sh7032/timer/Makefile.am: Removed.
+	* sh7032/clock/Makefile.am: Removed.
+	* sh7032/delay/Makefile.am: Removed.
+	* sh7045/Makefile.am: Merge-in subdir Makefile.ams.
+	* sh7045/configure.ac: Reflect changes above.
+	* sh7045/score/Makefile.am: Removed.
+	* sh7045/sci/Makefile.am: Removed.
+	* sh7045/timer/Makefile.am: Removed.
+	* sh7045/clock/Makefile.am: Removed.
+	* sh7750/Makefile.am: Merge-in subdir Makefile.ams.
+	* sh7750/configure.ac: Reflect changes above.
+	* sh7750/score/Makefile.am: Removed.
+	* sh7750/sci/Makefile.am: Removed.
+	* sh7750/timer/Makefile.am: Removed.
+	* sh7750/clock/Makefile.am: Removed.
+
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7045/sci/Makefile.am: Apply 2002-12-14 patch (Apparently dropped by
+	CVS).
+	* sh7045/score/Makefile.am: Likewise.
+	* sh7045/timer/Makefile.am: Likewise.
+
+2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/clock/Makefile.am: Eliminate *_O_FILES. Don't include
+	@RTEMS_BSP@.cfg.
+	* sh7032/delay/Makefile.am: Ditto.
+	* sh7032/sci/Makefile.am: Ditto.
+	* sh7032/score/Makefile.am: Ditto.
+	* sh7032/timer/Makefile.am: Ditto.
+	* sh7045/clock/Makefile.am: Eliminate *_O_FILES. Don't include
+	@RTEMS_BSP@.cfg.
+	* sh7045/sci/Makefile.am: Ditto.
+	* sh7045/score/Makefile.am: Ditto.
+	* sh7045/timer/Makefile.am: Ditto.
+	* sh7045/configure.ac: Apply 2002-11-07 patch (Apparently dropped by
+	CVS).
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
+	* sh7032/configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
+	* sh7045/configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
+	* sh7750/configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
+
+2002-11-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/Makefile.am: Merge in include/Makefile.am.
+	* sh7032/include/Makefile.am: Remove.
+	* sh7032/configure.ac: Reflect changes above.
+	* sh7045/Makefile.am: Merge in include/Makefile.am.
+	* sh7045/include/Makefile.am: Remove.
+	* sh7045/configure.ac: Reflect changes above.
+	* sh7750/Makefile.am: Merge in include/Makefile.am.
+	* sh7750/include/Makefile.am: Remove.
+	* sh7750/configure.ac: Reflect changes above.
 
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* sh7045/score/ispsh7045.c: Fixed typos.
 	* sh7045/score/cpu_asm.c: Fixed typo.
+	* sh7032/delay/delay.c, sh7032/score/ispsh7032.c: Removed warnings.
+	* sh7045/score/cpu_asm.c, sh7045/score/ispsh7045.c: Removed warnings.
+	* sh7750/score/cpu_asm.c, sh7750/score/ispsh7750.c: Removed warnings.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+	* sh7032/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+	* sh7045/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+	* sh7750/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7032/delay/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7032/sci/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7032/score/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7032/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7045/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7045/sci/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7045/score/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7045/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7750/clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7750/sci/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7750/score/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* sh7750/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/score/cpu_asm.c: Adapt inline asm to gcc-3.0.4.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7032/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* sh7032/clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7032/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7032/delay/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7032/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7032/sci/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7032/score/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7032/timer/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7045/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* sh7045/clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7045/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7045/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7045/sci/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7045/score/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7045/timer/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7750/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* sh7750/clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7750/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7750/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7750/sci/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7750/score/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sh7750/timer/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7750/clock/Makefile.am: Eliminate @RTEMS_BSP@.cfg, $(C_O_FILES).
+	* sh7750/sci/Makefile.am: Likewise.
+	* sh7750/score/Makefile.am: Likewise.
+	* sh7750/timer/Makefile.am: Likewise.
+
+2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/include/Makefile.am: Remove EXTRA_DIST.
+
+2001-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7045/include/iosh7045.h: Add SCI0_SMR, SCI1_SMR for sh7032
+	compatibility to make simsh happy.
+
+2001-10-28	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* sh7750/include/rtems/score/sh7750_regs.h: Fix definitions of 
+	SH7750_SCBRR1 and SH7750_SCBRR2 so things compile.
+
+2001-10-26	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* sh7750/include/sh/sh4uart.h, sh7750/sci/sh4uart.c: Minor fixes post
+	merge.
+
+2001-10-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7750/include/sh4uart.h: move to include/sh/sh4uart.h.
+	* sh7750/include/ispsh7750.h: move to include/rtems/score/ispsh7750.h.
+	* sh7750/include/iosh7750.h: move include/rtems/score/iosh7750.h.
+	* sh7750/include/sh7750_regs.h: move to
+	include/rtems/score/sh7750_regs.h.
+	* sh7750/include/rtems/score/ipl.h: move to include/rtems/score/ipl.h.
+	* sh7750/include/rtems/score/sh4_regs.h: Reintroduce from Alexandra
+	Kossovsky's original sources.
+	* sh7750/include/Makefile.am: reflect changes above, remove EXTRA_DIST,
+	require automake 1.5.
+	* sh7750/sci/Makefile.am: Disable compilation of console.c.
+	* sh7750/sci/sh4uart.c: include <sh/sh4uart.h>, add SH7750_SCSMR_CHK_S,
+	remove SH4_CPU_HZ_Frequency.
+	* sh7750/score/isph7750.c: Remove #if !defined(sh7750), include
+	sh4_regs.h.
 
 2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add sh7750.
+
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* sh7032/clock/ckinit.c, sh7032/delay/delay.c,
+	sh7032/include/iosh7032.h, sh7032/include/ispsh7032.h,
+	sh7032/include/sci.h, sh7032/include/sh7_pfc.h,
+	sh7032/include/sh7_sci.h, sh7032/sci/sci.c, sh7032/score/cpu_asm.c,
+	sh7032/score/ispsh7032.c, sh7032/timer/timer.c: Fixed typo.
+	* sh7045/clock/ckinit.c, sh7045/include/iosh7045.h,
+	sh7045/include/ispsh7045.h, sh7045/include/sci.h,
+	sh7045/include/sh7_pfc.h, sh7045/include/sh7_sci.h, sh7045/sci/sci.c,
+	sh7045/score/cpu_asm.c, sh7045/score/ispsh7045.c, sh7045/timer/timer.c:
+	Fixed typo.
+	* sh7750/include/sh4_regs.h: Deleted and contents merged in score/cpu to
+	avoid dependencies.
+	* sh7750/include/Makefile.am: Reflects above.
 
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
 	* configure.in: Remove.
 	* configure.ac: New file, generated from configure.in by autoupdate.
+	* sh7032/.cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* sh7032/configure.in: Remove.
+	* sh7032/configure.ac: New file, generated from configure.in by
+	autoupdate.
+	* sh7045/.cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* sh7045/configure.in: Remove.
+	* sh7045/configure.ac: New file, generated from configure.in by
+	autoupdate.
+
+2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* sh7750/clock/Makefile.am, sh7750/clock/ckinit.c,
+	sh7750/clock/.cvsignore, sh7750/Makefile.am, sh7750/include/Makefile.am,
+	sh7750/include/iosh7750.h, sh7750/include/ipl.h,
+	sh7750/include/ispsh7750.h, sh7750/include/sh4_regs.h,
+	sh7750/include/sh4uart.h, sh7750/include/sh7750_regs.h,
+	sh7750/include/.cvsignore, sh7750/sci/Makefile.am, sh7750/sci/console.c,
+	sh7750/sci/sh4uart.c, sh7750/sci/.cvsignore, sh7750/score/Makefile.am,
+	sh7750/score/cpu_asm.c, sh7750/score/ispsh7750.c,
+	sh7750/score/.cvsignore, sh7750/timer/Makefile.am, sh7750/timer/timer.c,
+	sh7750/timer/.cvsignore, sh7750/configure.ac, sh7750/.cvsignore,
+	sh7750/ChangeLog:  New files.   Reviewed and updated to latest automake
+	and autoconf standards by Ralf Corsepius <corsepiu@faw.uni-ulm.de>.
 
 2001-10-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: AC_PREREQ(2.52), Adapt CONFIG_SUBDIRS to autoconf-2.52.
 
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/include/Makefile.am: Use 'TMPINSTALL_FILES ='.
+	* sh7045/include/Makefile.am: Use 'TMPINSTALL_FILES ='.
+
+2001-08-10	Radzislaw Galler  <rgaller@et.put.poznan.pl>
+
+	* sh7045/score/cpu_asm.c (sh_set_irq_priority): Changed interrupt vector
+	number range check and handling of interrupt priority regs to conform
+	SH2 specs.
+	* sh7045/sci/sci_termios.c: New file.
+	* sh7045/include/sci_termios.h: New file.
+	* sh7045/include/Makefile.am (EXTRA_DIST): Added sci_termios.h.
+	(include_sh_HEADERS): Added sci_termios.h.
+	* sh7045/score/ispsh7045.c (isp): Calling an ISR with immediate argument
+	casued negative sign extension for vector numbers of 128 and above. This
+	was fixed.
+	* sh7045/sci/sci.c: Cleaned initialization of SCI registers; added
+	necessary setup for new TERMIOS console cooperation.
+
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* sh7032/include/ispsh7032.h, sh7032/score/ispsh7032.c: Account for name
+	change.
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* sh7045/include/ispsh7045.h, sh7045/score/ispsh7045.c: Account for name
+	change.
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* sh7750/include/rtems/score/ispsh7750.h, sh7750/score/ispsh7750.c:
+	Account for name change.
+
+2001-02-18	Ralf Corsepiu <corsepius@faw.uni-ulm.de>
+
+	* sh7032/include/Makefile.am: Apply include_*HEADERS instead of H_FILES.
+	* sh7045/include/Makefile.am: Apply include_*HEADERS instead of H_FILES.
+
+2001-01-22	Radzislaw Galler  <rgaller@et.put.poznan.pl>
+
+	* sh7045/clock/ckinit.c (Install_clock): Modified MTU timer 0
+	initialization to generate an interrupt exactly every 1us.
+
+2001-01-05	Joel Sherrill <joel@OARcorp.com>
+
+	* /dev/null moved to libmisc.
+	* sh7032/Makefile.am, sh7032/configure.in: Removed null directory.
+	* sh7032/include/Makefile.am: Removed null.h.
+	* sh7032/include/null.h, sh7032/null/.cvsignore,
+	sh7032/null/Makefile.am, sh7032/null/close.c, sh7032/null/cntrl.c,
+	sh7032/null/init.c, sh7032/null/open.c, sh7032/null/read.c,
+	sh7032/null/write.c: Removed.
+	* /dev/null moved to libmisc.
+	* sh7045/Makefile.am, sh7045/configure.in: Removed null directory.
+	* sh7045/include/Makefile.am: Removed null.h.
+	* sh7045/include/null.h, sh7045/null/.cvsignore,
+	sh7045/null/Makefile.am, sh7045/null/close.c, sh7045/null/cntrl.c,
+	sh7045/null/init.c, sh7045/null/open.c, sh7045/null/read.c,
+	sh7045/null/write.c: Removed.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+	* sh7032/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+	* sh7045/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+	* sh7032/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
+	* sh7045/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
 
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
 	canonicalization.
+	* sh7032/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
+	to GNU canonicalization.
+	* sh7045/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
+	to GNU canonicalization.
+
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sh7032/clock/Makefile.am, sh7032/delay/Makefile.am,
+	sh7032/null/Makefile.am, sh7032/sci/Makefile.am,
+	sh7032/timer/Makefile.am, sh7032/score/Makefile.am: Include compile.am.
+	* sh7045/clock/Makefile.am, sh7045/null/Makefile.am,
+	sh7045/sci/Makefile.am, sh7045/timer/Makefile.am,
+	sh7045/score/Makefile.am: Include compile.am.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+	* sh7032/ChangeLog: New file.
+	* sh7045/ChangeLog: New file.
 
