@@ -1,3 +1,16 @@
+2004-03-14	Chris Johns  <chrisj@rtems.org>
+
+	* cs8900.c.bsp, cs8900.h.bsp: Updated the BSP example code.
+
+	* cs8900.c, cs8900.h:
+	Changes made to support the DIMMPC. This is a pc396 target with IO port
+	support.
+	Minor formating clean up.
+	Add documentation to the header file.
+
+	* README.cs8900:
+	The CS8900 driver is documented in the cs8900.h header file.
+
 2004-03-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libchip/network/dec21140.c: Use __PPC__ instead of __PPC.
