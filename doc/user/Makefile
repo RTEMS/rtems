@@ -54,7 +54,7 @@ view: ps
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-html:
+html: $(FILES)
 	-mkdir $(WWW_INSTALL)/c_user
 	cp rtemsarc.gif rtemspie.gif states.gif $(WWW_INSTALL)/c_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
