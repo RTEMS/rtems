@@ -43,8 +43,7 @@ if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/network.c network/lan91c11x.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(network_CPPFLAGS)
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

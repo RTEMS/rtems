@@ -35,8 +35,7 @@ startup_rel_SOURCES = ../../mips/shared/gdbstub/mips-stub.c \
     ../../shared/bootcard.c ../../shared/main.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
     startup/gdb-support.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(startup_CPPFLAGS)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(startup_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # FIXME: clockdrv.c and clockdrv_shell.c are structurally flawed

@@ -34,8 +34,7 @@ libnetchip_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_LIBRARIES += libnetchip.a
 libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
     network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c
-libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(libnetchip_CPPFLAGS)
+libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS) $(libnetchip_CPPFLAGS)
 endif
 endif
 

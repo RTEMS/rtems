@@ -30,8 +30,7 @@ endif
 noinst_PROGRAMS += interrupts.rel
 interrupts_rel_SOURCES = interrupts/installisrentries.c \
     interrupts/vectorexceptions.c interrupts/isr_entries.S
-interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(interrupts_CPPFLAGS)
+interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) $(interrupts_CPPFLAGS)
 interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 all-local: $(PREINSTALL_FILES)

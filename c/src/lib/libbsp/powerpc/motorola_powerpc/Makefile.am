@@ -72,8 +72,7 @@ console_rel_SOURCES = ../../powerpc/shared/console/polled_io.c \
     ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/console/keyboard.h \
     ../../powerpc/shared/console/uart.h
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(console_CPPFLAGS)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(console_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h

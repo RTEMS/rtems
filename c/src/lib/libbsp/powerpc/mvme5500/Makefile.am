@@ -105,8 +105,7 @@ include_bsp_HEADERS += network/GT64260eth.h network/GT64260ethreg.h
 network_CPPFLAGS = -D_KERNEL
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/GT64260eth.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    $(network_CPPFLAGS)
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 ##
