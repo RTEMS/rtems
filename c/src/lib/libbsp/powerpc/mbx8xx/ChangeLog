@@ -1,3 +1,9 @@
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* include/coverhd.h: Per PR261 removed include of
+	<rtems/score/targopts.h> because the file is no longer being 
+	generated and really wasn't being used anyway.
+
 2002-07-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/Makefile.am: Add bsplib_DATA = linkcmds.
