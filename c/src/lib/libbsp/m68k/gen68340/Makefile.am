@@ -18,8 +18,6 @@ include_HEADERS += include/m68340.h
 include_HEADERS += include/m68340.inc
 include_HEADERS += include/m68349.inc
 
-EXTRA_DIST = times
-
 S_FILES = start/start.S
 $(ARCH)/%$(LIB_VARIANT).$(OBJEXT): start/start.S $(ARCH)/$(dirstamp)
 	$(CCASCOMPILE) -DASM -o $@ -c $<
