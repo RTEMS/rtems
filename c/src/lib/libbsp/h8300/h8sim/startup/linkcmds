@@ -2,12 +2,13 @@
  *  $Id$
  */
 
+OUTPUT_ARCH(h8300h)
 /*
  * Declare some sizes.
  */
 _RamBase = DEFINED(_RamBase) ? _RamBase : 0x0;
 _RamSize = DEFINED(_RamSize) ? _RamSize : 1M;
-_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x4000;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 ENTRY("_start")
@@ -39,22 +40,26 @@ SECTIONS
 
     .text : 
     { 
-	 CREATE_OBJECT_SYMBOLS
 	*(.text) 
-	 _etext = .;
 	
-/*
-	___CTOR_LIST__ = .;
-	LONG((___CTOR_END__ - ___CTOR_LIST__) / 4 - 2)
-	*(.ctors)
-	LONG(0)
-	___CTOR_END__ = .;
-	___DTOR_LIST__ = .;
-	LONG((___DTOR_END__ - ___DTOR_LIST__) / 4 - 2)
-	*(.dtors)
-	LONG(0)
-	___DTOR_END__ = .;
-*/
+        /*
+         * Read-only data
+         */
+        . = ALIGN (16);
+        PROVIDE(_rodata_start = . );
+        *(.rodata)
+        *(.gnu.linkonce.r*)
+        PROVIDE(_erodata = . );
+
+	 _etext = .;
+    }  >ram
+   .tors : {
+        ___ctors = . ; 
+        *(.ctors)
+        ___ctors_end = . ;
+        ___dtors = . ;
+        *(.dtors)
+        ___dtors_end = . ;
     }  >ram
     .data SIZEOF(.text) + ADDR(.text):
     { 
@@ -72,7 +77,7 @@ SECTIONS
 	_stack_init = .;
 	_clear_end = .;
 	_WorkspaceBase = .;
-	. += 512K;	/* reserve some memory for workspace */
+	. += 64K;	/* reserve some memory for workspace */
 	_HeapBase = .;
 	. += _HeapSize;	/* reserve some memory for heap */
 	 _end = .;
