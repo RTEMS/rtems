@@ -24,7 +24,7 @@ the installed RTEMS image built to target your particular CPU and
 board support package combination. 
 
 @example
-export RTEMS_MAKEFILE_PATH=<INSTALLATION_POINT>/<BOARD_SUPPORT_PACKAGE>
+export RTEMS_MAKEFILE_PATH=<INSTALLATION_POINT>/<CPU>-rtems/<BOARD_SUPPORT_PACKAGE>
 @end example
 
 Where <INSTALLATION_POINT> and <BOARD_SUPPORT_PACKAGE> are those used when
