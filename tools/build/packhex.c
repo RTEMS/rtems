@@ -388,7 +388,10 @@ Rec_vitals  *formats[] =
 *
 *******************************************************************************/
 
-void main( void )
+int main(
+  int argc,
+  char **argv
+)
 {
 
     char       inbuff[ MAX_LINE_SIZE ], outbuff[ MAX_LINE_SIZE ];

@@ -83,8 +83,10 @@ long getparm(char *s, long min, long max, char *msg);
 #define stol(p) strtol(p, (char **) NULL, 0)
 int  Open(), Read(), Write();
 
-int
-main(int argc, char **argv, char **env)
+int main(
+  int argc,
+  char **argv
+)
 {
     register int c;
     int showusage = FALSE;                      /* usage error? */
