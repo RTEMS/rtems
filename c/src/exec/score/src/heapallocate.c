@@ -43,7 +43,15 @@ void *_Heap_Allocate(
   Heap_Block *temporary_block;
   void       *ptr;
   unsigned32  offset;
-  
+
+  /*
+   * Catch the case of a user allocating close to the limit of the
+   * unsigned32.
+   */
+
+  if ( size >= (-1 - HEAP_BLOCK_USED_OVERHEAD) )
+    return( NULL );
+
   excess   = size % the_heap->page_size;
   the_size = size + the_heap->page_size + HEAP_BLOCK_USED_OVERHEAD;
   

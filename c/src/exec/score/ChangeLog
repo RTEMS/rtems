@@ -1,3 +1,12 @@
+	
+2000-11-28	Chris Johns <ccj@acm.org>
+
+	* src/heapallocate.c: Do not allow the size to overflow when
+	adjusting it.  A test allocated a stack of -1 (~0). This
+	actually resulted in a stack being allocated but with a
+	size of 0xb. The allocator did not test the size to see if
+	it rolled through 0 and so allowed the allocation to happen, the
+	thread to get created. The task crashed as you would expect.
 
 2000-11-02	Joel Sherrill <joel@OARcorp.com>
 
