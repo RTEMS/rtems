@@ -21,6 +21,13 @@ MEMORY {
 /*
  * Declare some sizes
  */
+
+/*
+ *  XXX: The assignment of ". += XyzSize;" fails in older gld's if the
+ *       number used there is not constant so the calculated sizes are 
+ *       ignored below and the default number is used instead.
+ */
+
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
 
@@ -29,6 +36,7 @@ StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
  */
 SECTIONS {
         .text : {
+		_RamBase = .;
 		__RamBase = .;
 		CREATE_OBJECT_SYMBOLS
 		*(.text)
@@ -41,6 +49,7 @@ SECTIONS {
 		_edata = .;
         } >ram
         .bss : {
+		M68Kvec = .;
 		_M68Kvec = .;
 		. += (256 * 4);
 		clear_start = .;
@@ -49,13 +58,21 @@ SECTIONS {
 		. = ALIGN (16);
 		_end = .;
 
+		_HeapStart = .;
 		__HeapStart = .;
-		. += HeapSize;
-		. += StackSize;
+		/* XXX:  Temporary to get around a gld bug
+		 *
+		 *  . += HeapSize;
+		 *  . += StackSize;
+		 */
+		. += 0x10000;   /* XXX */
+		. += 0x1000;   /* XXX */
+
 		. = ALIGN (16);
 		stack_init = .;
 		clear_end = .;
 
+		_WorkspaceBase = .;
 		__WorkspaceBase = .;
 	} >ram
 
@@ -63,6 +80,7 @@ SECTIONS {
 	 * On-chip memory/peripherals
 	 */
 	dpram : {
+		m360 = .;
 		_m360 = .;
 		. += (8 * 1024);
 
@@ -72,6 +90,7 @@ SECTIONS {
 	 * Boot PROM
 	 */
 	rom : {
+		_RomBase = .;
 		__RomBase = .;
 	} >rom
 }
