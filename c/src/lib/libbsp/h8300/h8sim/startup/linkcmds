@@ -21,7 +21,8 @@ MEMORY
   vectors : o = 0x0000, l = 0xc4
   magicvectors : o = 0xc4, l = 0x3c
   /* We still only use 256k as the main ram size.  */
-  ram    : o = 0x0100, l = 0x3fefc
+  ram    : o = 0x0100, l = 0xffefc  /* RTEMS lies so everything links */
+  /* ram    : o = 0x0100, l = 0x3fefc */
   /* The stack starts at the top of main ram.  */
   topram : o = 0x3fffc, l = 0x4
   /* This holds variables in the "tiny" sections.  */
@@ -46,10 +47,15 @@ SECTIONS
          * Special FreeBSD sysctl sections.
          */
         . = ALIGN (16);
+        ___start_set_sysctl_set = .;
         __start_set_sysctl_set = .;
+        *(set_sys*);
         *(set_sysctl_*);
+        ___stop_set_sysctl_set = ABSOLUTE(.);
         __stop_set_sysctl_set = ABSOLUTE(.);
+        *(set_dom*);
         *(set_domain_*);
+        *(set_pse*);
         *(set_pseudo_*);
 
         /*
