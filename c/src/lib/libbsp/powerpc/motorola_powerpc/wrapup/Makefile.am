@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-BSP_PIECES = clock console irq openpic pci residual startup vectors motorola
+BSP_PIECES = clock console irq openpic pci residual startup vectors motorola vme
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \

@@ -45,6 +45,7 @@ residual/Makefile
 start/Makefile
 startup/Makefile
 vectors/Makefile
+vme/Makefile
 wrapup/Makefile])
 
 RTEMS_PPC_EXCEPTIONS([new])
