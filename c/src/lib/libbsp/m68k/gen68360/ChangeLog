@@ -1,3 +1,7 @@
+2001-09-14	Eric Norum <eric.norum@usask.ca>
+
+	* startup/init68360.c: Modifications to make gcc 3.x happy.
+
 2001-09-19	Eric Norum <eric.norum@usask.ca>
 
 	* README: Bring it more in line with reality.

@@ -15,12 +15,6 @@
 #include <m68360.h>
 
 /*
- * Declare the m360 structure here for the benefit of the debugger
- */
-
-m360_t m360;
-
-/*
  * Send a command to the CPM RISC processer
  */
 
