@@ -22,7 +22,6 @@ The directives provided by the clock manager are:
 @item @code{nanosleep} -
 @item @code{gettimeofday} - Get the Time of Day
 @item @code{time} - Get time in seconds
-@item @code{times} - Get process times
 @end itemize
 
 @section Background
@@ -268,36 +267,6 @@ measured in seconds
 
 If @code{tloc} in non null, the return value is also stored in the 
 memory pointed to by @code{t}.
- 
-@subheading NOTES:
-
-NONE
- 
-@page
-@subsection times - Get process times
- 
-@subheading CALLING SEQUENCE:
- 
-@example
-#include <sys/time.h>
- 
-int time(
-  clock_t times(struct tms *buf
-);
-@end example
- 
-@subheading STATUS CODES:
-
-This routine returns the process times
-
-@subheading DESCRIPTION:
-
-@code{times} stores the current process times in @code{buf}.
-
-@code{struct tms} is as defined in @code{/usr/include/sys/times.h}
-
-@code{times} returns the number of clock ticks that have elapsed
-since the systm has been up.
  
 @subheading NOTES:
 
