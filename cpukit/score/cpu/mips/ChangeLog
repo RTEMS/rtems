@@ -1,3 +1,8 @@
+2001-01-09	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu_asm.S: Use SR_INTERRUPT_ENABLE_BITS instead of SR_XXX constants
+	to make it easier to conditionalize the code for various ISA levels.
+
 2001-01-08	Joel Sherrill <joel@OARcorp.com>
 
 	* idtcpu.h: Commented out definition of "wait".  It was stupid to

@@ -367,7 +367,7 @@ ENDFRAME(_CPU_Context_switch)
 FRAME(_CPU_Context_switch,sp,0,ra)
 
         mfc0 t0,C0_SR
-	li t1,~SR_IEC
+	li t1,~(SR_INTERRUPT_ENABLE_BITS)
         sw t0,C0_SR_OFFSET*4(a0)        /* save status register */
         and t0,t1
         mtc0 t0,C0_SR                   /* first disable ie bit (recommended) */
@@ -402,12 +402,12 @@ _CPU_Context_switch_restore:
         lw t0,C0_EPC_OFFSET*4(a1)
         mtc0 t0,C0_EPC
 	lw t0, C0_SR_OFFSET*4(a1)
-        andi t0,SR_IEC                  /* we know IEC=0, e.g. disabled */
-        beq t0,$0,_CPU_Context_1        /* set IEC level from restore context */
+        andi t0,(SR_INTERRUPT_ENABLE_BITS) /* we know 0 disabled */
+        beq t0,$0,_CPU_Context_1        /* set level from restore context */
 	mfc0 t0,C0_SR
         nop
-        or  t0,SR_IEC                   /* new_sr = sr | SR_IEC */
-        mtc0 t0,C0_SR                   /* set with enabled */
+        or  t0,(SR_INTERRUPT_ENABLE_BITS)  /* new_sr = old sr with enabled  */
+        mtc0 t0,C0_SR                      /* set with enabled */
         
 
 _CPU_Context_1:

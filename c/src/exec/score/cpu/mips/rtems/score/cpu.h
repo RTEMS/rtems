@@ -599,7 +599,7 @@ extern unsigned int mips_interrupt_number_of_vectors;
 #define _CPU_ISR_Disable( _level ) \
   do { \
     mips_get_sr( _level ); \
-    mips_set_sr( (_level) & ~SR_IMASK ); \
+    mips_set_sr( (_level) & ~SR_INTERRUPT_ENABLE_BITS ); \
   } while(0)
 
 /*

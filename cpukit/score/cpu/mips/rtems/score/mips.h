@@ -23,6 +23,22 @@ extern "C" {
 #endif
 
 /*
+ *  SR bits that enable/disable interrupts
+ *
+ *  NOTE: XXX what about SR_ERL?
+ */
+
+#if __mips == 3
+#ifdef ASM
+#define SR_INTERRUPT_ENABLE_BITS 0x03
+#else
+#define SR_INTERRUPT_ENABLE_BITS SR_IE|SR_EXL
+#endif
+#else
+#define SR_INTERRUPT_ENABLE_BITS SR_IEC
+#endif
+
+/*
  *  This file contains the information required to build
  *  RTEMS for a particular member of the "no cpu"
  *  family when executing in protected mode.  It does
