@@ -104,8 +104,8 @@ rtems_status_code rtems_region_return_segment(
        *  NOTE: The following loop is O(n) where n is the number of
        *        threads whose memory request is satisfied.
        */
-      _RTEMS_Unlock_allocator();
       _Thread_Disable_dispatch();
+      _RTEMS_Unlock_allocator();
 
       for ( ; ; ) {
         the_thread = _Thread_queue_First( &the_region->Wait_queue );

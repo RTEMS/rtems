@@ -1,3 +1,11 @@
+2005-03-17	Joel Sherrill <joel@OARcorp.com>
+
+	PR 692/rtems
+	* src/regiongetsegment.c, src/regionreturnsegment.c: The Region
+	Manager did not follow the proper protocol when blocking and
+	unblocking tasks waiting on buffers. This was a bug introduced with
+	the transition to an Allocation Mutex.
+
 2005-03-17      Joel Sherrill <joel@OARcorp.com>
 
 	PR 745/rtems
