@@ -12,22 +12,52 @@ echo
 echo "@chapter Compliance Summary"
 echo
 
+wc2()
+{
+  grep "$1" $2 | wc -l
+}
+
+wc3()
+{
+  grep "$1" $2 | grep "$3" | wc -l
+}
+
 summarize_chapter()
 {
   grep "^@chapter" $1 | \
     sed -e "s/^.chapter/@section/"  \
         -e "s/$/ Chapter/" 
   echo
-  functions_total=`grep "()" $1 | wc -l`
-  functions_implemented=`grep "()" $1 | grep Implemented | wc -l`
-  functions_unimplemented=`grep "()" $1 | grep Unimplemented | wc -l`
-  functions_unmplementable=`grep "()" $1 | grep Unimplementable | wc -l`
+
+  functions_total=`wc2 "()" $1 `
+  functions_implemented=`wc3 "()" $1 "Implemented"`
+  functions_unimplemented=`wc3 "()" $1 "Unimplemented"`
+  functions_unmplementable=`wc3 "()" $1 "Unimplementable"`
+  functions_dummy=`wc3 "()" $1 "Dummy Implementation"`
+  functions_untested=`wc3 "()" $1 "Untested Implementation"`
+
+  datatypes_total=`grep "Type," $1 | wc -l`
+  datatypes_implemented=`grep "Type," $1 | grep Implemented | wc -l`
+  datatypes_unimplemented=`grep "Type," $1 | grep Unimplemented | wc -l`
+  datatypes_unmplementable=`grep "Type," $1 | grep Unimplementable | wc -l`
 
   echo "@example"
-  echo "Total Number of Functions: ${functions_total} @*"
-  echo "Functions Implemented    : ${functions_implemented} @*"
-  echo "Functions Unimplemented  : ${functions_unimplemented} @*"
-  echo "Functions Unimplementable: ${functions_unmplementable} @*"
+  echo "Functions:"
+  echo "    Total Number   : ${functions_total}"
+  echo "    Implemented    : ${functions_implemented}"
+  echo "    Unimplemented  : ${functions_unimplemented}"
+  echo "    Unimplementable: ${functions_unmplementable}"
+  echo "    Working Dummies: ${functions_dummy}"
+  echo "    Untested       : ${functions_untested}"
+  echo "@end example"
+  echo
+
+  echo "@example"
+  echo "Data Types:"
+  echo "    Total Number   : ${datatypes_total}"
+  echo "    Implemented    : ${datatypes_implemented}"
+  echo "    Unimplemented  : ${datatypes_unimplemented}"
+  echo "    Unimplementable: ${datatypes_unmplementable}"
   echo "@end example"
   echo
 }
