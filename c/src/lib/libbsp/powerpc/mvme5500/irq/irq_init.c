@@ -136,10 +136,11 @@ unsigned int mainIrqTbl[64]={ BSP_MAIN_GPP31_24_IRQ, /* 59:watchdog timer */
 
 unsigned int GPP7_0IrqTbl[8]={0, /* COM1/COM2 */
                                -1, -1, -1, -1, -1, -1, -1};
-unsigned int GPP15_8IrqTbl[8]={4, /* VME (12-8=4) */
-				-1, -1, -1, -1, -1, -1, -1};
-unsigned int GPP23_16IrqTbl[8]={4, /* 82544 1GHZ ethernet (20-16=4)*/
-				-1, -1, -1, -1, -1, -1, -1};
+unsigned int GPP15_8IrqTbl[8]={ 0, 1, 2, 3, /* PMC1 INT A, B, C, D */
+				4, 5, 6, 7  /* VME interrupt 0-3 */};
+unsigned int GPP23_16IrqTbl[8]={0, 1, 2, 3, /* PMC2 INT A, B, C, D */
+				4, /* 82544 1GHZ ethernet (20-16=4)*/
+											-1, -1, -1};
 unsigned int GPP31_24IrqTbl[8]={1, /* watchdog timer (25-24=1) */
 				-1, -1, -1, -1, -1, -1, -1};
 
