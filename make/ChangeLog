@@ -1,5 +1,12 @@
 2002-11-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* custom/default.cfg: Remove RTEMS_BSP_SPECS. Remove reference to
+	obsolete Makefile.
+	* leaf.cfg: Various changes to LIBVARIANT processing.
+	* main.cfg: Ditto.
+
+2002-11-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Add compilers/*.
 	* compilers/Makefile.am: Remove.
 	* lib.cfg: Remove.
