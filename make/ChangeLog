@@ -1,3 +1,7 @@
+2003-01-20	Duane Gustavus <duane@unt.edu>
+
+	* custom/m2m332.cfg: Fix path to linkcmds_ROM.
+
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/Cygwin-posix.cfg: Remove WORKSPACE_MB and HEAPSPACE_MB.
