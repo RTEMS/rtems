@@ -37,14 +37,21 @@ extern "C" {
 #define TEST_EXTERN extern
 #endif
 
+#include <buffer_test_io.h>
+
+/*
+ *  Check that that the dispatch disable level is proper for the
+ *  mode/state of the test.  Normally it should be 0 when in task space.
+ */
+
 #define check_dispatch_disable_level( _expect ) \
   do { \
     extern volatile rtems_unsigned32 _Thread_Dispatch_disable_level; \
     if ( (_expect) != -1 && _Thread_Dispatch_disable_level != (_expect) ) { \
       printf( "\n_Thread_Dispatch_disable_level is (%d) not %d\n", \
               _Thread_Dispatch_disable_level, (_expect) ); \
-      fflush(stdout); \
-      exit( 1 ); \
+      FLUSH_OUTPUT(); \
+      rtems_test_exit( 1 ); \
     } \
   } while ( 0 ) 
 
@@ -67,8 +74,8 @@ extern "C" {
     if ( (_stat) != (_desired) ) { \
       printf( "\n%s FAILED -- expected (%s) got (%s)\n", \
               (_msg), rtems_status_text(_desired), rtems_status_text(_stat) ); \
-      fflush(stdout); \
-      exit( _stat ); \
+      FLUSH_OUTPUT(); \
+      rtems_test_exit( _stat ); \
     } \
   } while ( 0 )
 
@@ -100,8 +107,8 @@ extern "C" {
               (_msg), _desired, strerror(_desired), _stat, strerror(_stat) ); \
       printf( "\n FAILED -- errno (%d - %s)\n", \
               errno, strerror(errno) ); \
-      fflush(stdout); \
-      exit( _stat ); \
+      FLUSH_OUTPUT(); \
+      rtems_test_exit( _stat ); \
     } \
   } while ( 0 )
 
@@ -125,8 +132,8 @@ extern "C" {
     if ( (_stat) != (_desired) ) { \
       printf( "\n%s FAILED -- expected (%d) got (%d)\n", \
               (_msg), (_desired), (_stat) ); \
-      fflush(stdout); \
-      exit( _stat ); \
+      FLUSH_OUTPUT(); \
+      rtems_test_exit( _stat ); \
     } \
   } while ( 0 )
 
@@ -147,13 +154,12 @@ extern "C" {
     printf( "%s%02d:%02d:%02d   %02d/%02d/%04d%s", \
        _s1, (_tb)->hour, (_tb)->minute, (_tb)->second, \
        (_tb)->month, (_tb)->day, (_tb)->year, _s2 ); \
-    fflush(stdout); \
   } while ( 0 )
 
 #define put_dot( _c ) \
   do { \
     putchar( _c ); \
-    fflush( stdout ); \
+    FLUSH_OUTPUT(); \
   } while ( 0 )
 
 #define new_line  puts( "" )
@@ -163,18 +169,21 @@ extern "C" {
 #ifdef RTEMS_TEST_NO_PAUSE
 #define rtems_test_pause() \
     do { \
-      printf( "<pause>\n" ); fflush( stdout ); \
+      printf( "<pause>\n" ); \
+      FLUSH_OUTPUT(); \
   } while ( 0 )
 
 #define rtems_test_pause_and_screen_number( _screen ) \
   do { \
-    printf( "<pause - screen %d>\n", (_screen) ); fflush( stdout ); \
+    printf( "<pause - screen %d>\n", (_screen) ); \
+    FLUSH_OUTPUT(); \
   } while ( 0 )
 #else
 #define rtems_test_pause() \
   do { \
     char buffer[ 80 ]; \
-    printf( "<pause>" ); fflush( stdout ); \
+    printf( "<pause>" ); \
+    FLUSH_OUTPUT(); \
     gets( buffer ); \
     puts( "" ); \
   } while ( 0 )
@@ -182,7 +191,8 @@ extern "C" {
 #define rtems_test_pause_and_screen_number( _screen ) \
   do { \
     char buffer[ 80 ]; \
-    printf( "<pause - screen %d>", (_screen) ); fflush( stdout ); \
+    printf( "<pause - screen %d>", (_screen) ); \
+    FLUSH_OUTPUT(); \
     gets( buffer ); \
     puts( "" ); \
   } while ( 0 )

@@ -1,3 +1,13 @@
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR47 add support for buffered test output.  This involved
+	adding defines to redirect output to a buffer and dump it when
+	full, at "test pause", and at exit.  To avoid problems when redefining
+	exit(), all tests were modified to call rtems_test_exit().
+	Some tests, notable psxtests, had to be modified to include 
+	the standard test macro .h file (pmacros.h or tmacros.h) to
+	enable this support.
+	* include/buffer_test_io.h: New file. 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
