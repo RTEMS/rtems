@@ -1,3 +1,9 @@
+
+2000-08-04	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
+	* mvme167.cfg: Add specification of printk port, console port
+	* custom/mvme167.cfg: Add specification of printk port, console port
+	and serial I/O mode.  Arrange for the stripped executable to
+	be copied up the build tree.
         
 2000-08-10	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 	* mbx8xx.cfg: Support for shared printk and no termios.
