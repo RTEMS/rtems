@@ -1,3 +1,8 @@
+2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* project.am: Remove $(PROJECT).info* from CLEANFILES (Doesn't work
+	with automake-1.7f/1.8 anymore).
+
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add missing '\'. Reformat.
