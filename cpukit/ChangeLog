@@ -1,5 +1,12 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/poll.h: Replace with sys/poll.h wrapper.
+	* libnetworking/sys/poll.h: New (Original FreeBSD file).
+	* libnetworking/Makefile.am: Don't install opt_ipfw.h,
+	opt_mrouting.h, opt_tcpdebug.h.	Add sys/poll.h.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libmisc/serdbg/serdbgcnf.h: Include <rtems/serdbg.h> instead of
         <serdbg.h>
 	* libmisc/serdbg/termios_printk_cnf.h: Include <rtems/termios_printk.h>

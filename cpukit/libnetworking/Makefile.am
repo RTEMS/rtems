@@ -10,7 +10,10 @@ AM_CPPFLAGS += -I$(top_builddir)
 EXTRA_DIST = README
 CLEANFILES =
 
+# poll is not supported
 UNUSED_FILES = poll.h
+# Original FreeBSD file
+UNUSED_FILES += sys/poll.h
 
 UNUSED_FILES += net/zlib.c net/zlib.h
 UNUSED_FILES += net/ppp.h net/ppp-deflate.c net/bsd-comp.c
@@ -35,8 +38,11 @@ TMP_LIBS = libnetworking$(LIB_VARIANT).a
 
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
-include_HEADERS = bpfilter.h loop.h netdb.h opt_ipfw.h opt_mrouting.h \
-    opt_tcpdebug.h resolv.h syslog.h memory.h
+include_HEADERS = bpfilter.h loop.h netdb.h
+include_HEADERS += resolv.h syslog.h memory.h
+
+libnetworking_a_SOURCES += opt_ipfw.h opt_mrouting.h opt_tcpdebug.h
+
 # arpa
 
 include_arpadir = $(includedir)/arpa
@@ -223,18 +229,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/loop.h
 $(PROJECT_INCLUDE)/netdb.h: netdb.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netdb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netdb.h
-
-$(PROJECT_INCLUDE)/opt_ipfw.h: opt_ipfw.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/opt_ipfw.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/opt_ipfw.h
-
-$(PROJECT_INCLUDE)/opt_mrouting.h: opt_mrouting.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/opt_mrouting.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/opt_mrouting.h
-
-$(PROJECT_INCLUDE)/opt_tcpdebug.h: opt_tcpdebug.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/opt_tcpdebug.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/opt_tcpdebug.h
 
 $(PROJECT_INCLUDE)/resolv.h: resolv.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/resolv.h
