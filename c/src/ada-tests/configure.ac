@@ -23,10 +23,13 @@ RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_CPU
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 
 AS_IF([test x"$HAVE_GNAT" = x"no"],[
   AC_MSG_ERROR([No acceptable GNATMAKE found.])
 ])
+
+AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 RTEMS_CHECK_TOOL([GNATPREP],[gnatprep],[])
 
@@ -43,13 +46,18 @@ AC_CONFIG_FILES([support/Makefile])
 
 AC_CONFIG_FILES([
 samples/Makefile
+samples/base_sp/Makefile
 samples/hello/Makefile
 samples/ticker/Makefile
-samples/base_sp/Makefile
+])
+
+if test "$HAS_MP" = "yes"; then
+AC_CONFIG_FILES([
 samples/base_mp/Makefile
 samples/base_mp/node1/Makefile
 samples/base_mp/node2/Makefile
 ])
+fi
 
 AC_CONFIG_FILES([
 sptests/Makefile
@@ -112,6 +120,7 @@ tmtests/tmck/Makefile
 tmtests/tmoverhd/Makefile
 ])
 
+if test "$HAS_MP" = "yes"; then
 AC_CONFIG_FILES([
 mptests/Makefile
 mptests/mp01/Makefile
@@ -131,5 +140,6 @@ mptests/mp01/node2/Makefile
 #mptests/mp12/Makefile
 #mptests/mp13/Makefile
 #mptests/mp14/Makefile
+fi
 
 AC_OUTPUT
