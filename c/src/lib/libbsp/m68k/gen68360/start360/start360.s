@@ -307,6 +307,7 @@ uhoh:	nop				| Leave spot for breakpoint
 /*
  * Initial PC
  */
+        .global start
 start:	
 	/*
 	 * Step 2: Stay in Supervisor Mode
