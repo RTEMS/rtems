@@ -1,5 +1,10 @@
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+ 	* configure.in, Makefile.am: add exec to the GNU canonicalized 
+ 	subdirectories.
+
+2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
  	* configure.in: add librtems++ to the GNU canonicalized subdirectories.
 
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

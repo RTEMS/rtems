@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS = @cfg_subdirs@ @hst_subdirs@ wrapup tests
+SUBDIRS = @cfg_subdirs1@ @hst_subdirs1@ @cfg_subdirs@ @hst_subdirs@ wrapup tests
 
 rtems_bspdir = $(prefix)/@RTEMS_BSP@
 
