@@ -1,3 +1,7 @@
+2003-12-01	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+
+	* Makefile.am: Reformat.
+
 2003-09-26	Joel Sherrill <joel@OARcorp.com>
 
 	* hppa1.1/.cvsignore, hppa1.1/ChangeLog, hppa1.1/Makefile.am,
