@@ -34,8 +34,8 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	@(#)igmp_var.h	8.1 (Berkeley) 7/19/93
- * $Id$
+ *	from: @(#)igmp_var.h	8.1 (Berkeley) 7/19/93
+ * $FreeBSD: src/sys/netinet/igmp_var.h,v 1.19 2002/03/19 21:25:46 alfred Exp $
  */
 
 #ifndef _NETINET_IGMP_VAR_H_
@@ -87,12 +87,12 @@ extern struct igmpstat igmpstat;
  */
 #define IGMP_AGE_THRESHOLD			540
 
-void	igmp_init __P((void));
-void	igmp_input __P((struct mbuf *, int));
-void	igmp_joingroup __P((struct in_multi *));
-void	igmp_leavegroup __P((struct in_multi *));
-void	igmp_fasttimo __P((void));
-void	igmp_slowtimo __P((void));
+void	igmp_init(void);
+void	igmp_input(struct mbuf *, int);
+void	igmp_joingroup(struct in_multi *);
+void	igmp_leavegroup(struct in_multi *);
+void	igmp_fasttimo(void);
+void	igmp_slowtimo(void);
 
 SYSCTL_DECL(_net_inet_igmp);
 
