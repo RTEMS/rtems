@@ -32,7 +32,7 @@ int sigaddset(
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( !signo )
-    return 0;
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( !is_valid_signo(signo) )
     rtems_set_errno_and_return_minus_one( EINVAL );

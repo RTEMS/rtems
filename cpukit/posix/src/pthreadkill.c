@@ -34,7 +34,10 @@ int pthread_kill(
   Thread_Control     *the_thread;
   Objects_Locations  location;
 
-  if ( sig && !is_valid_signo(sig) )
+  if ( !sig )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
+  if ( !is_valid_signo(sig) )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
 /* commented out when posix timers added 

@@ -43,7 +43,7 @@ int sigaction(
     *oact = _POSIX_signals_Vectors[ sig ];
 
   if ( !sig )
-    return 0;
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( !is_valid_signo(sig) )
     rtems_set_errno_and_return_minus_one( EINVAL );

@@ -66,10 +66,13 @@ int killinfo(
     rtems_set_errno_and_return_minus_one( ESRCH );
 
   /*
-   *  Validate the signal passed if not 0.
+   *  Validate the signal passed.
    */
  
-  if ( sig && !is_valid_signo(sig) ) {
+  if ( !sig )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
+  if ( !is_valid_signo(sig) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
@@ -77,7 +80,7 @@ int killinfo(
    *  If the signal is being ignored, then we are out of here.
    */
 
-  if ( !sig || _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
+  if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
     return 0;
   }
 
