@@ -157,7 +157,7 @@ void tcp_init()
 				   detection circuit. */
 
   /* I had trouble getting the tcp to be completely
-     flexabale to supply modes (i.e., automatically
+     flexible to supply modes (i.e., automatically
      selecting single or normal battery backup modes based
      on inputs at power-up. If single supply mode is
      selected, the low battery detect is disabled and the
