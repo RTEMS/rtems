@@ -105,10 +105,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
  *  to OBJECTS_ERROR and the_condition variable is undefined.
  */
  
+#if 0
 RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
   Objects_Id        *id,
   Objects_Locations *location
 );
+#endif
  
 /*
  *  _POSIX_Condition_variables_Is_null

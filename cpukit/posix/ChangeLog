@@ -1,5 +1,11 @@
 2000-12-01	Joel Sherrill <joel@OARcorp.com>
 
+	* include/rtems/posix/cond.h: #if 0'ed out prototype of 
+	_POSIX_Condition_variables_Get to avoid conflict with macro
+	implementation.
+
+2000-12-01	Joel Sherrill <joel@OARcorp.com>
+
 	* Added macro support to POSIX API.  This is known to compile.
 	* macros/rtems/posix/cond.inl, macros/rtems/posix/intr.inl,
 	macros/rtems/posix/key.inl, macros/rtems/posix/mqueue.inl,
