@@ -140,7 +140,6 @@ See .doc file, verify correct
 @itemize @bullet
 @item Not implemented
 @end itemize
-@end itemize
 
 @end itemize
 
