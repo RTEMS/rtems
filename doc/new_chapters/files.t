@@ -19,19 +19,20 @@ The directives provided by the files and directories manager are:
 @item @code{readdir} - Reads a directory
 @item @code{readdir_r} - 
 @item @code{rewinddir} - 
-@item @code{scandir} - 
+@item @code{scandir} - Scan a directory for matching entries
 @item @code{telldir} - 
 @item @code{closedir} - 
+@item @code{getdents}
 @item @code{chdir} - Changes the current working directory
 @item @code{getcwd} - Gets current working directory
 @item @code{open} - Opens a file
-@item @code{creat} - 
+@item @code{creat} - Create a new file or rewrite an existing one
 @item @code{umask} - Sets a file creation mask
 @item @code{link} - Creates a link to a file
 @item @code{mkdir} - Makes a directory
 @item @code{mkfifo} - 
 @item @code{unlink} - Removes a directory entry 
-@item @code{rmdir} - 
+@item @code{rmdir} - Delete a directory
 @item @code{rename} - Renames a file 
 @item @code{stat} - Gets information about a file.
 @item @code{fstat} - 
@@ -39,7 +40,7 @@ The directives provided by the files and directories manager are:
 @item @code{chmod} - Changes file mode
 @item @code{fchmod} - 
 @item @code{chown} - Changes the owner and/ or group of a file
-@item @code{utime} - 
+@item @code{utime} - Change access and/or modification times of an inode
 @item @code{ftrunctate} - 
 @item @code{pathconf} - 
 @item @code{fpathconf} - 
@@ -205,13 +206,18 @@ The
 The routine is implemented in Cygnus newlib.
 
 @page
-@subsection scandir -
+@subsection scandir - Scan a directory for matching entries
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int scandir(
+#include <dirent.h>
+
+int scandir(const char      *dir,
+            struct direct ***namelist,
+            int (*select)(const struct dirent *),
+            int (*compar)(const struct dirent **, const struct dirent **)
 );
 @end example
 @end ifset
@@ -222,12 +228,19 @@ int scandir(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOMEM
+Insufficient memory to complete the operation.
 
 @end table
 
 @subheading DESCRIPTION:
+
+The @code{scandir()} function scans the directory @code{dir}, calling
+@code{select()} on each directory entry.  Entries for which @code{select()}
+returns non-zero are stored in strings allocated via @code{malloc()}, 
+sorted using @code{qsort()} with the comparison function @code{compar()},
+and collected in array @code{namelist} which is allocated via @code{malloc()}.
+If @code{select} is NULL, all entries are selected.
 
 @subheading NOTES:
 
@@ -504,13 +517,18 @@ descriptor.
 
 
 @page
-@subsection creat - 
+@subsection creat - Create a new file or rewrite an existing one 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int creat(
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+int creat(const char *path, 
+          mode_t      mode
 );
 @end example
 @end ifset
@@ -521,14 +539,46 @@ int creat(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EEXIST
+@code{Path} already exists and O_CREAT and O_EXCL were used.
+@item EISDIR
+@code{Path} refers to a directory and the access requested involved
+writing
+@item ETXTBSY
+@code{Path} refers to an executable image which is currently being
+executed and write access was requested
+@item EFAULT
+@code{Path} points outside your accessible address space
+@item EACCES
+The requested access to the file is not allowed, or one of the 
+directories in @code{path} did not allow search (execute) permission.
+@item ENAMETOOLONG
+@code{Path} was too long.
+@item ENOENT
+A directory component in @code{path} does not exist or is a dangling
+symbolic link.
+@item ENOTDIR
+A component used as a directory in @code{path} is not, in fact, a 
+directory.
+@item EMFILE
+The process alreadyh has the maximum number of files open.
+@item ENFILE
+The limit on the total number of files open on the system has been 
+reached.
+@item ENOMEM
+Insufficient kernel memory was available.
+@item EROFS
+@code{Path} refers to a file on a read-only filesystem and write access
+was requested
 
 @end table
 
 @subheading DESCRIPTION:
 
-@subheading NOTES:
+@code{creat} attempts to create a file and return a file descriptor for
+use in read, write, etc.
+
+@subheading NOTES: None
 
 The routine is implemented in Cygnus newlib.
 
@@ -766,13 +816,15 @@ file is no longer accessible.
 @subheading NOTES: None
 
 @page
-@subsection rmdir - 
+@subsection rmdir - Delete a directory 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int rmdir(
+#include <unistd.h>
+
+int rmdir(const char *pathname
 );
 @end example
 @end ifset
@@ -783,14 +835,50 @@ int rmdir(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EPERM
+The filesystem containing @code{pathname} does not support the removal
+of directories.
+@item EFAULT
+@cdoe{Pathname} points ouside your accessible address space.
+@item EACCES
+Write access to the directory containing @code{pathname} was not
+allowed for the process's effective uid, or one of the directories in 
+@code{pathname} did not allow search (execute) permission.
+@item EPERM
+The directory containing @code{pathname} has the stickybit (S_ISVTX) 
+set and the process's effective uid is neither the uid of the file to 
+be delected nor that of the director containing it.
+@item ENAMETOOLONG
+@code{Pathname} was too long.
+@item ENOENT
+A dirctory component in @code{pathname} does not exist or is a 
+dangling sybolic link.
+@item ENOTDIR
+@code{Pathname}, or a component used as a directory in @code{pathname},
+is not, in fact, a directory.
+@item ENOTEMPTY
+@code{Pathname} contains entries other than . and .. .
+@item EBUSY
+@code{Pathname} is the current working directory or root directory of 
+some process
+@item EBUSY
+@code{Pathname} is the current directory or root directory of some 
+process.
+@item ENOMEM
+Insufficient kernel memory was available
+@item EROGS
+@code{Pathname} refers to a file on a read-only filesystem.
+@itemELOOP
+@code{Pathname} contains a reference to a circular symbolic link
 
 @end table
 
 @subheading DESCRIPTION:
 
-@subheading NOTES:
+@code{rmdir} deletes a directory, whic must be empty
+
+
+@subheading NOTES: None
 
 @page
 @subsection rename - Renames a file 
@@ -1136,13 +1224,16 @@ can be used to test the _PC_CHOWN_RESTRICTED flag.
 
 
 @page
-@subsection utime - 
+@subsection utime - Change access and/or modification times of an inode 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int utime(
+#include <sys/types.h>
+
+int utime(const char     *filename,
+          struct utimbuf *buf
 );
 @end example
 @end ifset
@@ -1153,12 +1244,19 @@ int utime(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EACCES
+Permission to write the file is denied
+@item ENOENT
+@code{Filename} does not exist
 
 @end table
 
 @subheading DESCRIPTION:
+
+@code{Utime} changes the access and modification times of the inode
+specified by @code{filename} to the @code{actime} and @code{modtime}
+fields of @code{buf} respectively.  If @code{buf} is NULL, then the 
+access and modification times of the file are set to the current time.  
 
 @subheading NOTES:
 
