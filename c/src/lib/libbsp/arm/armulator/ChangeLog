@@ -1,3 +1,7 @@
+2000-09-13	Joel Sherrill <joel@OARcorp.com>
+
+	* bsp_specs, console/Makefile.am, include/Makefile.am: Clean up.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am, console/Makefile.am, start/Makefile.am,
