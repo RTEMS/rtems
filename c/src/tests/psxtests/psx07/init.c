@@ -32,6 +32,8 @@ void print_schedparam(
   printf( "%s_POSIX_SPORADIC_SERVER is not defined\n" );
 #endif
 }
+ 
+extern rtems_configuration_table BSP_Configuration;
 
 void *POSIX_Init(
   void *argument
@@ -98,6 +100,11 @@ void *POSIX_Init(
   attr.stacksize = 0;
  
   puts( "Init: pthread_create - EINVAL (stacksize too small)" );
+  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  assert( status == EINVAL );
+
+  attr.stacksize = BSP_Configuration.work_space_size;
+  puts( "Init: pthread_create - EINVAL (stacksize too large)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EINVAL );
 
