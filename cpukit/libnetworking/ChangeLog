@@ -1,3 +1,8 @@
+2002-10-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* net/if_ethersubr.c: Add comments to #endif NETATALK to stop
+	gcc from complaining.
+
 2002-10-07	Eric Norum <eric.norum@usask.ca>
 
 	* netinet/tcp_var.h: Corrected typo in ARM alignment patch which 

@@ -99,7 +99,7 @@ extern struct ifqueue pkintrq;
 
 extern u_char	at_org_code[ 3 ];
 extern u_char	aarp_org_code[ 3 ];
-#endif NETATALK
+#endif /* NETATALK */
 
 u_char	etherbroadcastaddr[6] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 #define senderr(e) { error = (e); goto bad;}
@@ -134,7 +134,7 @@ ether_output(ifp, m0, dst, rt0)
 	struct arpcom *ac = (struct arpcom *)ifp;
 #ifdef NETATALK
 	struct at_ifaddr *aa;
-#endif NETATALK
+#endif /* NETATALK */
 
 	if ((ifp->if_flags & (IFF_UP|IFF_RUNNING)) != (IFF_UP|IFF_RUNNING))
 		senderr(ENETDOWN);
@@ -228,7 +228,7 @@ ether_output(ifp, m0, dst, rt0)
 #ifdef NETATALKDEBUG
                 	extern char *prsockaddr(struct sockaddr *);
                 	printf("aarpresolv: failed for %s\n", prsockaddr(dst));
-#endif NETATALKDEBUG
+#endif /* NETATALKDEBUG */
                 	return (0);
         	}
 
@@ -258,7 +258,7 @@ ether_output(ifp, m0, dst, rt0)
 		type = htons(ETHERTYPE_AT);
 	    }
 	    break;
-#endif NETATALK
+#endif /* NETATALK */
 #ifdef NS
 	case AF_NS:
 		switch(ns_nettype){
@@ -528,7 +528,7 @@ ether_input(ifp, eh, m)
 		/* probably this should be done with a NETISR as well */
                 aarpinput((struct arpcom *)ifp, m); /* XXX */
                 return;
-#endif NETATALK
+#endif /* NETATALK */
 	default:
 #ifdef NS
 		checksum = mtod(m, ushort *);
@@ -578,7 +578,7 @@ ether_input(ifp, eh, m)
 			goto dropanyway;
 		    }
 		    break;
-#endif NETATALK	
+#endif /* NETATALK */
 #ifdef	ISO
 		case LLC_ISO_LSAP:
 			switch (l->llc_control) {
