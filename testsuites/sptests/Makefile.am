@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
 
 ## sp10 and spfatal are not included for now
 SUBDIRS = sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 sp09 sp11 sp12 sp13 sp14 \
