@@ -18,14 +18,15 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi
 
-GENERATED_FILES=clock.texi
+GENERATED_FILES= clock.texi cond.texi key.texi mutex.texi \
+  sched.texi signal.texi thread.texi
 
 FILES= clock.texi cond.texi key.texi mutex.texi $(PROJECT).texi preface.texi \
   sched.texi signal.texi thread.texi $(COMMON_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: dirs $(PROJECT)
+info: dirs $(FILES) $(PROJECT)
 #	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
 	cp $(PROJECT) $(INFO_INSTALL)
 
@@ -42,7 +43,7 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-html: dirs
+html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
 	-cd .. ; gmake headers
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
@@ -53,11 +54,6 @@ clean:
 	rm -f *.o $(PROG) *.txt core *.html 
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
-
-preface.texi: preface.t Makefile
-	 $(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" ${*}.t
 
 thread.texi: thread.t Makefile
 	 $(BMENU) -p "" \
