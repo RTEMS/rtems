@@ -44,8 +44,5 @@ shmdr/Makefile
 shared/Makefile
 shared/gdbstub/Makefile
 shared/include/Makefile
-include/Makefile
-include/rtems/Makefile
-include/rtems/score/Makefile
 ])
 AC_OUTPUT
