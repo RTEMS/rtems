@@ -72,7 +72,9 @@ int unlink( const char *path )
   return -1;
 }
 
-char *getcwd( char *_buf, size_t _size) {
+char *getcwd( char *_buf, size_t _size)
+{
+
 /*  assert( FALSE ); */
   errno = ENOSYS;
   return 0;
