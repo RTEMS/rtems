@@ -47,7 +47,7 @@ RTEMS_CONFIG_SUBDIRS(c)
 if test "$target_alias" != "$host_alias"; then
 changequote(,)dnl
 TARGET_SUBDIRS=`echo "$target_subdirs" | \
- sed -e "s%\([^ ]\+\)%$target_alias/\1%g"`
+ sed -e "s%\([a-zA-Z0-9][a-zA-Z0-9]*\)%${target_alias}/\1%g"`
 changequote([,])dnl
 else
 TARGET_SUBDIRS="$target_subdirs"
