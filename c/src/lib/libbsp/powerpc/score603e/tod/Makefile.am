@@ -13,7 +13,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 TOD_C_FILES = tod.c
 
 C_FILES = $(TOD_C_FILES)
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

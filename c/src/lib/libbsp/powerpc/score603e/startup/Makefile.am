@@ -16,7 +16,7 @@ STARTUP_C_FILES = FPGA.c
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c main.c sbrk.c \
     setvec.c Hwr_init.c spurious.c genpvec.c $(STARTUP_C_FILES) \
     gnatinstallhandler.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

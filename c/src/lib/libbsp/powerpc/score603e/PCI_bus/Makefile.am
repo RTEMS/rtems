@@ -6,7 +6,7 @@
 PGM = $(ARCH)/PCI_bus.rel
 
 C_FILES = universe.c PCI.c flash.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
