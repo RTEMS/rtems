@@ -1,3 +1,8 @@
+2004-10-13	Eric Norum <norume@aps.anl.gov>
+
+	PR 688/bsps
+	* shared/tod.c: Set RTEMS time during TOD initialization
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* ide_ctrl.c: Include <rtems/chain.h> instead of <chain.h>.
