@@ -67,7 +67,6 @@ Objects_Control *_Objects_Get_by_index(
    *  With just an index, you can't access a remote object.
    */
 
-  _Thread_Enable_dispatch();
   *location = OBJECTS_ERROR;
   return NULL;
 }
