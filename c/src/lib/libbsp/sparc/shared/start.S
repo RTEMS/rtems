@@ -10,7 +10,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 
 /*
  *  Unexpected trap will halt the processor by forcing it to error state
