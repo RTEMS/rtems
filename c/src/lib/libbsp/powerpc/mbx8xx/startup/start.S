@@ -242,6 +242,8 @@ spin:
 /*	
  * #define LOADED_BY_EPPCBUG
  */
+#define LOADED_BY_EPPCBUG
+#define EARLY_CONSOLE		
 /*
  * Initialization code 
  */
@@ -275,7 +277,10 @@ spin:
         /* Clear the bss section. */
         bl      bssclr
         nop
-
+#if defined(EARLY_CONSOLE) && defined(LOADED_BY_EPPCBUG)
+	EXTERN_PROC (serial_init)
+	bl	PROC (serial_init)
+#endif	
 	lis	r5,environ@ha
         la	r5,environ@l(r5)		/* environp */
         /* clear argc and argv */

@@ -1,3 +1,19 @@
+2000-06-08	Eric Valette <valette@crf.canon.fr>
+
+	* console/console.c, include/commproc.h, startup/start.S:
+	The printk/printf did not work when loaded by EPPCBUG. They did
+	work when loaded with the BDM debugger.  I suspected EPPBUG 
+	made some nasty things like patching Communication processor
+	microcode...  Anyway, the attached patch:
+          1) Enables to have printk nearly immediately after boot,
+          2) Make printf work automagically (I do not know why except I make a 
+	different initialization for printk that should be overwritten by 
+	console init later ?)
+
+	I let the default to be using EPPCBUG embedded firmware to boot and 
+	using this printk early enabler code (LOADED_BY_EPPCBUG and 
+	EARLY_CONSOLE) are on.
+
 2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
