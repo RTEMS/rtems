@@ -1,3 +1,8 @@
+2002-02-08	Joel Sherrill <joel@OARcorp.com>
+
+	* iregdef.h, rtems/score/cpu.h: Reordered register in the
+	exception stack frame to better match gdb's expectations.
+
 2001-02-05	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu_asm.S: Enhanced to save/restore more registers on 

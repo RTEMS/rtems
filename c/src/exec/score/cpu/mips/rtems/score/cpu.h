@@ -443,128 +443,132 @@ typedef struct {
  *  Similarly, this structure is used by debugger stubs and exception
  *  processing routines so be careful when changing the format.
  *
- *  NOTE: The comments with this structure and cpu_asm.S should be kep
+ *  NOTE: The comments with this structure and cpu_asm.S should be kept
  *        in sync.  When in doubt, look in the  code to see if the
  *        registers you're interested in are actually treated as expected.
+ *        The order of the first portion of this structure follows the
+ *        order of registers expected by gdb.
  */
 
 typedef struct
 {
-  __MIPS_REGISTER_TYPE     r0;    /*  r0 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE     at;    /*  r1 -- saved always */
-  __MIPS_REGISTER_TYPE     v0;    /*  r2 -- saved always */
-  __MIPS_REGISTER_TYPE     v1;    /*  r3 -- saved always */
-  __MIPS_REGISTER_TYPE     a0;    /*  r4 -- saved always */
-  __MIPS_REGISTER_TYPE     a1;    /*  r5 -- saved always */
-  __MIPS_REGISTER_TYPE     a2;    /*  r6 -- saved always */
-  __MIPS_REGISTER_TYPE     a3;    /*  r7 -- saved always */
-  __MIPS_REGISTER_TYPE     t0;    /*  r8 -- saved always */
-  __MIPS_REGISTER_TYPE     t1;    /*  r9 -- saved always */
-  __MIPS_REGISTER_TYPE     t2;    /* r10 -- saved always */
-  __MIPS_REGISTER_TYPE     t3;    /* r11 -- saved always */
-  __MIPS_REGISTER_TYPE     t4;    /* r12 -- saved always */
-  __MIPS_REGISTER_TYPE     t5;    /* r13 -- saved always */
-  __MIPS_REGISTER_TYPE     t6;    /* r14 -- saved always */
-  __MIPS_REGISTER_TYPE     t7;    /* r15 -- saved always */
-  __MIPS_REGISTER_TYPE     s0;    /* r16 -- saved on exceptions */
-  __MIPS_REGISTER_TYPE     s1;    /* r17 -- saved on exceptions */
-  __MIPS_REGISTER_TYPE     s2;    /* r18 -- saved on exceptions */
-  __MIPS_REGISTER_TYPE     s3;    /* r19 -- saved on exceptions */
-  __MIPS_REGISTER_TYPE     s4;    /* r20 -- saved on exceptions */
-  __MIPS_REGISTER_TYPE     s5;    /* r21 -- saved on exceptions */
-  __MIPS_REGISTER_TYPE     s6;    /* r22 -- saved on exceptions */
-  __MIPS_REGISTER_TYPE     s7;    /* r23 -- saved on exceptions */
-  __MIPS_REGISTER_TYPE     t8;    /* r24 -- saved always */
-  __MIPS_REGISTER_TYPE     t9;    /* r25 -- saved always */
-  __MIPS_REGISTER_TYPE     k0;    /* r26 -- NOT FILLED IN, kernel tmp reg */
-  __MIPS_REGISTER_TYPE     k1;    /* r27 -- NOT FILLED IN, kernel tmp reg */
-  __MIPS_REGISTER_TYPE     gp;    /* r28 -- saved always */
-  __MIPS_REGISTER_TYPE     sp;    /* r29 -- saved on exceptions NOT RESTORED */
-  __MIPS_REGISTER_TYPE     fp;    /* r30 -- saved always */
-  __MIPS_REGISTER_TYPE     ra;    /* r31 -- saved always */
-  __MIPS_FPU_REGISTER_TYPE f0;    /* r32 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f1;    /* r33 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f2;    /* r34 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f3;    /* r35 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f4;    /* r36 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f5;    /* r37 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f6;    /* r38 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f7;    /* r39 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f8;    /* r40 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f9;    /* r41 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f10;   /* r42 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f11;   /* r43 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f12;   /* r44 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f13;   /* r45 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f14;   /* r46 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f15;   /* r47 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f16;   /* r48 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f17;   /* r49 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f18;   /* r50 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f19;   /* r51 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f20;   /* r52 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f21;   /* r53 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f22;   /* r54 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f23;   /* r55 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f24;   /* r56 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f25;   /* r57 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f26;   /* r58 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f27;   /* r59 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f28;   /* r60 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f29;   /* r61 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f30;   /* r62 -- saved if FP enabled */
-  __MIPS_FPU_REGISTER_TYPE f31;   /* r63 -- saved if FP enabled */
-  __MIPS_REGISTER_TYPE  epc;      /* r64 -- saved always, read-only register */
-                                  /*        but logically restored */
-  __MIPS_REGISTER_TYPE  mdhi;     /* r65 -- saved always */
-  __MIPS_REGISTER_TYPE  mdlo;     /* r66 -- saved always */
-  __MIPS_REGISTER_TYPE  sr;       /* r67 -- saved always, some bits are */
+  __MIPS_REGISTER_TYPE  r0;       /*  0 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  at;       /*  1 -- saved always */
+  __MIPS_REGISTER_TYPE  v0;       /*  2 -- saved always */
+  __MIPS_REGISTER_TYPE  v1;       /*  3 -- saved always */
+  __MIPS_REGISTER_TYPE  a0;       /*  4 -- saved always */
+  __MIPS_REGISTER_TYPE  a1;       /*  5 -- saved always */
+  __MIPS_REGISTER_TYPE  a2;       /*  6 -- saved always */
+  __MIPS_REGISTER_TYPE  a3;       /*  7 -- saved always */
+  __MIPS_REGISTER_TYPE  t0;       /*  8 -- saved always */
+  __MIPS_REGISTER_TYPE  t1;       /*  9 -- saved always */
+  __MIPS_REGISTER_TYPE  t2;       /* 10 -- saved always */
+  __MIPS_REGISTER_TYPE  t3;       /* 11 -- saved always */
+  __MIPS_REGISTER_TYPE  t4;       /* 12 -- saved always */
+  __MIPS_REGISTER_TYPE  t5;       /* 13 -- saved always */
+  __MIPS_REGISTER_TYPE  t6;       /* 14 -- saved always */
+  __MIPS_REGISTER_TYPE  t7;       /* 15 -- saved always */
+  __MIPS_REGISTER_TYPE  s0;       /* 16 -- saved on exceptions */
+  __MIPS_REGISTER_TYPE  s1;       /* 17 -- saved on exceptions */
+  __MIPS_REGISTER_TYPE  s2;       /* 18 -- saved on exceptions */
+  __MIPS_REGISTER_TYPE  s3;       /* 19 -- saved on exceptions */
+  __MIPS_REGISTER_TYPE  s4;       /* 20 -- saved on exceptions */
+  __MIPS_REGISTER_TYPE  s5;       /* 21 -- saved on exceptions */
+  __MIPS_REGISTER_TYPE  s6;       /* 22 -- saved on exceptions */
+  __MIPS_REGISTER_TYPE  s7;       /* 23 -- saved on exceptions */
+  __MIPS_REGISTER_TYPE  t8;       /* 24 -- saved always */
+  __MIPS_REGISTER_TYPE  t9;       /* 25 -- saved always */
+  __MIPS_REGISTER_TYPE  k0;       /* 26 -- NOT FILLED IN, kernel tmp reg */
+  __MIPS_REGISTER_TYPE  k1;       /* 27 -- NOT FILLED IN, kernel tmp reg */
+  __MIPS_REGISTER_TYPE  gp;       /* 28 -- saved always */
+  __MIPS_REGISTER_TYPE  sp;       /* 29 -- saved on exceptions NOT RESTORED */
+  __MIPS_REGISTER_TYPE  fp;       /* 30 -- saved always */
+  __MIPS_REGISTER_TYPE  ra;       /* 31 -- saved always */
+  __MIPS_REGISTER_TYPE  c0_sr;    /* 32 -- saved always, some bits are */
                                   /*    manipulated per-thread          */
-  __MIPS_REGISTER_TYPE  cause;    /* r68 -- saved on exceptions NOT restored */
+  __MIPS_REGISTER_TYPE  mdlo;     /* 33 -- saved always */
+  __MIPS_REGISTER_TYPE  mdhi;     /* 34 -- saved always */
+  __MIPS_REGISTER_TYPE  badvaddr; /* 35 -- saved on exceptions, read-only */
+  __MIPS_REGISTER_TYPE  cause;    /* 36 -- saved on exceptions NOT restored */
+  __MIPS_REGISTER_TYPE  epc;      /* 37 -- saved always, read-only register */
+                                  /*        but logically restored */
+  __MIPS_FPU_REGISTER_TYPE f0;    /* 38 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f1;    /* 39 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f2;    /* 40 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f3;    /* 41 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f4;    /* 42 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f5;    /* 43 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f6;    /* 44 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f7;    /* 45 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f8;    /* 46 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f9;    /* 47 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f10;   /* 48 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f11;   /* 49 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f12;   /* 50 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f13;   /* 51 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f14;   /* 52 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f15;   /* 53 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f16;   /* 54 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f17;   /* 55 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f18;   /* 56 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f19;   /* 57 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f20;   /* 58 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f21;   /* 59 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f22;   /* 60 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f23;   /* 61 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f24;   /* 62 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f25;   /* 63 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f26;   /* 64 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f27;   /* 65 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f28;   /* 66 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f29;   /* 67 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f30;   /* 68 -- saved if FP enabled */
+  __MIPS_FPU_REGISTER_TYPE f31;   /* 69 -- saved if FP enabled */
+  __MIPS_REGISTER_TYPE     fcsr;  /* 70 -- saved on exceptions */
+                                  /*    (oddly not documented on MGV) */
+  __MIPS_REGISTER_TYPE     feir;  /* 71 -- saved on exceptions */
+                                  /*    (oddly not documented on MGV) */
 
-  __MIPS_REGISTER_TYPE  tlbhi;    /* r69 - NOT FILLED IN, doesn't exist on */
+  /* GDB does not seem to care about anything past this point */
+
+  __MIPS_REGISTER_TYPE  tlbhi;    /* 72 - NOT FILLED IN, doesn't exist on */
                                   /*         all MIPS CPUs (at least MGV) */
 #if __mips == 1
-  __MIPS_REGISTER_TYPE  tlblo;    /* r70 - NOT FILLED IN, doesn't exist on */
+  __MIPS_REGISTER_TYPE  tlblo;    /* 73 - NOT FILLED IN, doesn't exist on */
                                   /*         all MIPS CPUs (at least MGV) */
 #endif
 #if  __mips == 3
-  __MIPS_REGISTER_TYPE  tlblo0;   /* r70 - NOT FILLED IN, doesn't exist on */
+  __MIPS_REGISTER_TYPE  tlblo0;   /* 73 - NOT FILLED IN, doesn't exist on */
                                   /*         all MIPS CPUs (at least MGV) */
 #endif
 
-  __MIPS_REGISTER_TYPE  badvaddr; /* r71 -- saved on exceptions, read-only */
-  __MIPS_REGISTER_TYPE  inx;      /* r72 -- NOT FILLED IN, doesn't exist on */
+  __MIPS_REGISTER_TYPE  inx;      /* 74 -- NOT FILLED IN, doesn't exist on */
                                   /*         all MIPS CPUs (at least MGV) */
-  __MIPS_REGISTER_TYPE  rand;     /* r73 -- NOT FILLED IN, doesn't exist on */
+  __MIPS_REGISTER_TYPE  rand;     /* 75 -- NOT FILLED IN, doesn't exist on */
                                   /*         all MIPS CPUs (at least MGV) */
-  __MIPS_REGISTER_TYPE  ctxt;     /* r74 -- NOT FILLED IN, doesn't exist on */
+  __MIPS_REGISTER_TYPE  ctxt;     /* 76 -- NOT FILLED IN, doesn't exist on */
                                   /*         all MIPS CPUs (at least MGV) */
-  __MIPS_REGISTER_TYPE  exctype;  /* r75 -- NOT FILLED IN (not enough info) */
-  __MIPS_REGISTER_TYPE  mode;     /* r76 -- NOT FILLED IN (not enough info) */
-  __MIPS_REGISTER_TYPE  prid;     /* r77 -- NOT FILLED IN (not need to do so) */
-  __MIPS_REGISTER_TYPE  fcsr;     /* r78 -- saved on exceptions */
-                                  /*    (oddly not documented on MGV) */
-  __MIPS_REGISTER_TYPE  feir;     /* r79 -- saved on exceptions */
-                                  /*    (oddly not documented on MGV) */
+  __MIPS_REGISTER_TYPE  exctype;  /* 77 -- NOT FILLED IN (not enough info) */
+  __MIPS_REGISTER_TYPE  mode;     /* 78 -- NOT FILLED IN (not enough info) */
+  __MIPS_REGISTER_TYPE  prid;     /* 79 -- NOT FILLED IN (not need to do so) */
   /* end of __mips == 1 so NREGS == 80 */
 #if  __mips == 3
-  __MIPS_REGISTER_TYPE  tlblo1;   /* r80 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  pagemask; /* r81 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  wired;    /* r82 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  count;    /* r83 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  compare;  /* r84 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  config;   /* r85 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  lladdr;   /* r86 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  watchlo;  /* r87 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  watchhi;  /* r88 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  ecc;      /* r89 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  cacheerr; /* r90 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  taglo;    /* r91 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  taghi;    /* r92 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  errpc;    /* r93 -- NOT FILLED IN */
-  __MIPS_REGISTER_TYPE  xctxt;    /* r94 -- NOT FILLED IN */
- /* end of __mips == 3 so NREGS == 94 */
+  __MIPS_REGISTER_TYPE  tlblo1;   /* 80 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  pagemask; /* 81 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  wired;    /* 82 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  count;    /* 83 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  compare;  /* 84 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  config;   /* 85 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  lladdr;   /* 86 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  watchlo;  /* 87 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  watchhi;  /* 88 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  ecc;      /* 89 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  cacheerr; /* 90 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  taglo;    /* 91 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  taghi;    /* 92 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  errpc;    /* 93 -- NOT FILLED IN */
+  __MIPS_REGISTER_TYPE  xctxt;    /* 94 -- NOT FILLED IN */
+ /* end of __mips == 3 so NREGS == 95 */
 #endif
 
 } CPU_Interrupt_frame;

@@ -148,7 +148,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
 
 /*
-** relative position of registers in save reg area
+** relative position of registers in interrupt/exception frame
 */
 #define	R_R0		0
 #define	R_R1		1
@@ -182,60 +182,61 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	R_R29		29
 #define	R_R30		30
 #define	R_R31		31
-#define	R_F0		32
-#define	R_F1		33
-#define	R_F2		34
-#define	R_F3		35
-#define	R_F4		36
-#define	R_F5		37
-#define	R_F6		38
-#define	R_F7		39
-#define	R_F8		40
-#define	R_F9		41
-#define	R_F10		42
-#define	R_F11		43
-#define	R_F12		44
-#define	R_F13		45
-#define	R_F14		46
-#define	R_F15		47
-#define	R_F16		48
-#define	R_F17		49
-#define	R_F18		50
-#define	R_F19		51
-#define	R_F20		52
-#define	R_F21		53
-#define	R_F22		54
-#define	R_F23		55
-#define	R_F24		56
-#define	R_F25		57
-#define	R_F26		58
-#define	R_F27		59
-#define	R_F28		60
-#define	R_F29		61
-#define	R_F30		62
-#define	R_F31		63
-#define NCLIENTREGS	64
-#define	R_EPC		64
-#define	R_MDHI		65
-#define	R_MDLO		66
-#define	R_SR		67
-#define	R_CAUSE		68
-#define	R_TLBHI		69
+
+#define	R_SR		32
+#define	R_MDLO		33
+#define	R_MDHI		34
+#define	R_BADVADDR	35
+#define	R_CAUSE		36
+#define	R_EPC		37
+
+#define	R_F0		38
+#define	R_F1		39
+#define	R_F2		40
+#define	R_F3		41
+#define	R_F4		42
+#define	R_F5		43
+#define	R_F6		44
+#define	R_F7		45
+#define	R_F8		46
+#define	R_F9		47
+#define	R_F10		48
+#define	R_F11		49
+#define	R_F12		50
+#define	R_F13		41
+#define	R_F14		42
+#define	R_F15		43
+#define	R_F16		44
+#define	R_F17		45
+#define	R_F18		56
+#define	R_F19		57
+#define	R_F20		58
+#define	R_F21		59
+#define	R_F22		60
+#define	R_F23		61
+#define	R_F24		62
+#define	R_F25		63
+#define	R_F26		64
+#define	R_F27		65
+#define	R_F28		66
+#define	R_F29		67
+#define	R_F30		68
+#define	R_F31		69
+#define R_FCSR		70
+#define R_FEIR		71
+#define	R_TLBHI		72
 #if __mips == 1
-#define	R_TLBLO		70
+#define	R_TLBLO		73
 #endif
 #if  __mips == 3
-#define	R_TLBLO0	70
+#define	R_TLBLO0	74
 #endif
-#define	R_BADVADDR	71
-#define	R_INX		72
-#define	R_RAND		73
-#define	R_CTXT		74
-#define	R_EXCTYPE	75
-#define R_MODE		76
-#define	R_PRID		77
-#define R_FCSR		78
-#define R_FEIR		79
+#define	R_INX		74
+#define	R_RAND		75
+#define	R_CTXT		76
+#define	R_EXCTYPE	77
+#define R_MODE		78
+#define	R_PRID		79
 #if __mips == 1
 #define NREGS		80
 #endif
@@ -254,7 +255,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define R_TAGLO		91
 #define R_TAGHI		92
 #define R_ERRPC		93
-#define R_XCTXT     94  /* Ketan added from SIM64bit */
+#define R_XCTXT         94  /* Ketan added from SIM64bit */
 
 #define	NREGS		95
 #endif
