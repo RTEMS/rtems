@@ -9,7 +9,7 @@ include_rdbgdir = $(includedir)/rdbg
 if HAS_RDBG
 include_rdbg_HEADERS = rdbg.h servrpc.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rdbg \
     $(include_rdbg_HEADERS:%=$(PROJECT_INCLUDE)/rdbg/%)
 
 $(PROJECT_INCLUDE)/rdbg:

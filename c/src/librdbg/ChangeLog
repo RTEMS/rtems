@@ -1,3 +1,13 @@
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rdbg/i386/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/rdbg/m68k/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/rdbg/powerpc/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/rdbg/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* src/i386/any/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* src/m68k/any/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* src/powerpc/new_exception_processing/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/i386/any/Makefile.am: Move MAINTAINERCLEANFILES before the

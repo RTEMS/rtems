@@ -8,7 +8,7 @@ include_rdbgdir = $(includedir)/rdbg
 
 include_rdbg_HEADERS = rdbg_f.h reg.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rdbg \
     $(include_rdbg_HEADERS:%=$(PROJECT_INCLUDE)/rdbg/%)
 
 $(PROJECT_INCLUDE)/rdbg:

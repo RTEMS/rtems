@@ -80,7 +80,7 @@ $(PROJECT_INCLUDE)/rdbg/remdeb.h: $(srcdir)/remdeb.h
 $(PROJECT_INCLUDE)/rdbg:
 	@$(mkinstalldirs) $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg $(PROJECT_INCLUDE)/rdbg/remdeb.h
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rdbg $(PROJECT_INCLUDE)/rdbg/remdeb.h
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
