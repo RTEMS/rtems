@@ -17,13 +17,13 @@ dirs:
 
 headers:
 	sed -e 's/RTEMS_VERSION/$(RTEMS_VERSION)/' \
-	    <index.html >$(WWW_INSTALL)/index.html
+	    <$(SRCDIR)/index.html >$(WWW_INSTALL)/index.html
 	sed -e 's/RTEMS_VERSION/$(RTEMS_VERSION)/' \
-	    <rtems_support.html >$(WWW_INSTALL)/rtems_support.html
+	    <$(SRCDIR)/rtems_support.html >$(WWW_INSTALL)/rtems_support.html
 	sed -e 's/RTEMS_VERSION/$(RTEMS_VERSION)/' \
-	    <rtems_header.html >$(WWW_INSTALL)/rtems_header.html
+	    <$(SRCDIR)/rtems_header.html >$(WWW_INSTALL)/rtems_header.html
 	sed -e 's/RTEMS_VERSION/$(RTEMS_VERSION)/' \
-	    <rtems_footer.html >$(WWW_INSTALL)/rtems_footer.html
+	    <$(SRCDIR)/rtems_footer.html >$(WWW_INSTALL)/rtems_footer.html
 
 info: env
 	./do_docs $(BASEDIR) info
