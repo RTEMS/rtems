@@ -129,10 +129,11 @@ _Init68360 (void)
 	/*
 	 * Step 13: Copy  the exception vector table to system RAM
 	 */
-	asm volatile ("movec vbr,%0" : "=r" (vbr) : );
+  
+  m68k_get_vbr( vbr );
 	for (i = 0; i < 256; ++i)
 		M68Kvec[i] = vbr[i];
-	asm volatile ("movec %0,vbr" : : "r" (M68Kvec));
+  m68k_set_vbr( M68Kvec );
 	
 	/*
 	 * Step 14: More system initialization
