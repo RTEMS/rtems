@@ -13,5 +13,5 @@ DIST_SUBDIRS = shared shmdr @libbsp_cpu_subdir@
 
 EXTRA_DIST = MERGE.PROCEDURE bsp.am
 
-include $(top_srcdir)/../../automake/subdirs.am
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/subdirs.am
+include $(top_srcdir)/automake/local.am

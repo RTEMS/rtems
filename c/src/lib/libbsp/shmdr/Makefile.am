@@ -9,8 +9,8 @@ C_FILES = addlq.c cnvpkt.c getlq.c dump.c fatal.c getpkt.c init.c initlq.c \
     intr.c mpisr.c poll.c receive.c retpkt.c send.c setckvec.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -50,4 +50,4 @@ EXTRA_DIST = README addlq.c cnvpkt.c dump.c fatal.c getlq.c getpkt.c init.c \
     initlq.c intr.c mpisr.c poll.c receive.c retpkt.c send.c \
     setckvec.c
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am
