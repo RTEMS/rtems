@@ -20,13 +20,26 @@ Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      @gcc_version@newlib@newlib_version@
 Summary:      rtems gcc and newlib C Library for target @target_alias@
-Source0:	gcc-@gcc_version@.tar.gz
-Source1:	newlib-@newlib_version@.tar.gz
+Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
+Source1:	ftp://sourceware.cygnus/com/pub/newlib/newlib-@newlib_version@.tar.gz
 Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
 Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
 
+#
+# The original sources are not included in the source RPM.
+# If we included them, then the source RPMs for each target
+# would duplicate MBs of source unnecessarily.  This is 
+# a duplication of over 30 MBs of source for each of
+# the more than 10 targets it is possible to build.
+#
+# You can get them yourself from the Internet and copy them to
+# your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+# Or you can try the ftp options of rpm :-)
+#
+NoSource:      0, 1
+
 Buildroot:    	@rpm_build_root@
-# Patch:
+
 %description
 RTEMS is an open source operating system for embedded systems.
 

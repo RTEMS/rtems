@@ -21,12 +21,24 @@ Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      @gdb_version@
 Summary:      gdb for target @target_alias@
-Source0:      	gdb-@gdb_version@.tar.gz
-Patch0:		gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
+Source0:      ftp://ftp.gnu.org/pub/gnu/gdbgdb-@gdb_version@.tar.gz
+Patch0:	      gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
+#
+# The original sources are not included in the source RPM.
+# If we included them, then the source RPMs for each target
+# would duplicate MBs of source unnecessarily.  This is 
+# a duplication of over 30 MBs of source for each of
+# the more than 10 targets it is possible to build.
+#
+# You can get them yourself from the Internet and copy them to
+# your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+# Or you can try the ftp options of rpm :-)
+#
+NoSource:      0
+
 
 Buildroot:    	@rpm_build_root@
 
-# Patch:
 %description
 RTEMS is an open source operating system for embedded systems.
 

@@ -20,10 +20,22 @@ Packager:     corsepiu@faw.uni-ulm.de
 Version:      @Version@
 Summary:      A free operating system for embedded systems
 Source:       rtems-@Version@.tar.gz
+#
+# The original sources are not included in the source RPM.
+# If we included them, then the source RPMs for each target
+# would duplicate MBs of source unnecessarily.  This is 
+# a duplication of over 30 MBs of source for each of
+# the more than 10 targets it is possible to build.
+#
+# You can get them yourself from the Internet and copy them to
+# your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+# Or you can try the ftp options of rpm :-)
+#
+NoSource:      0
 # We claim to be relocatible, but in fact we are not
 Prefix:	      /opt
 Buildroot:    @rpm_build_root@
-# Patch:
+
 %description
 RTEMS is a free operating system for embedded systems.
 

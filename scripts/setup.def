@@ -10,3 +10,4 @@ gccnewlib_rpm_release=1
 gdb_version=4.18
 gdb_patch_version=19991015
 gdb_rpm_release=1
+rpm_build_root=/tmp
