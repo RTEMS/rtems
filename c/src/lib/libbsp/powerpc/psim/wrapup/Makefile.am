@@ -5,14 +5,13 @@
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
+OBJS = ../startup$(LIB_VARIANT).rel ../clock$(LIB_VARIANT).rel \
+    ../console$(LIB_VARIANT).rel ../timer$(LIB_VARIANT).rel \
+    ../vectors$(LIB_VARIANT).rel
 if HAS_MP
-BSP_MP_O_PIECES = shmsupp
+OBJS += ../shmsupp$(LIB_VARIANT).rel
 endif
-BSP_PIECES = startup clock console timer vectors $(BSP_MP_O_PIECES)
-
-# bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel
+OBJS += ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel
 
 $(ARCH)/libbsp.a: $(OBJS)
 	$(make-library)

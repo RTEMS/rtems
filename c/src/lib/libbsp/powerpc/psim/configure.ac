@@ -36,12 +36,6 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-shmsupp/Makefile
-startup/Makefile
-timer/Makefile
-vectors/Makefile
 wrapup/Makefile])
 
 RTEMS_PPC_EXCEPTIONS([old])
