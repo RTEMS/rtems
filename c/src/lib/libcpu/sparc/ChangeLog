@@ -1,3 +1,9 @@
+2000-11-27	Joel Sherrill <joel@OARcorp.com>
+
+	* cache/cache.h: Fix reference to MC68040 and put in stubs
+	for missing support routines.  The functionality of these
+	routines needs to be addressed.
+
 2000-11-14	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* Makefile.am, configure.in: Added support for instruction

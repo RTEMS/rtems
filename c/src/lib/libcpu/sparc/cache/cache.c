@@ -1,5 +1,5 @@
 /*
- *  Cache Management Support Routines for the MC68040
+ *  Cache Management Support Routines for the SPARC
  *
  *  $Id$
  */
@@ -14,6 +14,23 @@ void _CPU_cache_invalidate_entire_instruction ( void )
 {
   asm volatile ("flush");
 }
-#endif
 
+/* XXX these need to be addressed */
+void _CPU_cache_freeze_instruction ( void )
+{
+}
+
+void _CPU_cache_unfreeze_instruction ( void )
+{
+}
+
+void _CPU_cache_enable_instruction ( void )
+{
+}
+
+void _CPU_cache_disable_instruction (   void )
+{
+}
+
+#endif
 /* end of file */
