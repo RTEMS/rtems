@@ -1,3 +1,9 @@
+2003-10-22	Joel Sherrill <joel@OARcorp.com>
+
+	PR 512/core
+	* src/tasks.c, src/taskvariabledelete.c: Run task variable destructor
+	when task variable is deleted. Also some style cleanup.
+
 2003-09-11	Joel Sherrill <joel@OARcorp.com>
 
 	PR 488/rtems
