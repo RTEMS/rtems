@@ -1,3 +1,7 @@
+2003-01-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/local.am: Remove distclean-local.
+
 2001-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-cpu-subdirs.m4: Print out RTEMS_CPU in error message.

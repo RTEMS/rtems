@@ -31,8 +31,5 @@ clean-local:
 	$(RM) -r o-optimize o-debug o-profile $(CLEANDIRS)
 	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp Depends-o-profile.tmp
 
-distclean-local:
-	$(RM) Depends-o-optimize Depends-o-debug Depends-o-profile
-
 PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
 
