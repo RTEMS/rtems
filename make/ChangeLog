@@ -1,4 +1,10 @@
 
+2001-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/shsim.cfg: Remove HZ, BSP_CPPFLAGS, make-target-options.
+	* custom/mvme2307.cfg: Fix PPC_USE_SPRG in make-target-options,
+	re-adopt mcp750.cfg's make-exe.
+
 2001-11-13	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/helas403.cfg, custom/gen405.cfg: Removed dependency on
