@@ -30,11 +30,10 @@
 
 /* msdos_creat_node --
  *     Create a new node. If a new node is file, FAT 32 Bytes Directory 
- *     Entry Structure (see M$ White Paper) is initialized, free space is 
- *     found in parent directory and structure is written to the disk.
- *     In case of directory, all above steps present and also new cluster
- *     is allocated for a new directory and dot and dotdot nodes are created 
- *     in alloceted cluster.
+ *     Entry Structure is initialized, free space is found in parent 
+ *     directory and structure is written to the disk. In case of directory, 
+ *     all above steps present and also new cluster is allocated for a 
+ *     new directory and dot and dotdot nodes are created in alloceted cluster.
  *
  * PARAMETERS:
  *     parent_loc - parent (directory we are going to create node in)
@@ -94,8 +93,7 @@ msdos_creat_node(
 
     /* 
      * find free space in the parent directory and write new initialized 
-     * FAT 32 Bytes Directory Entry Structure (see M$ White Paper) 
-     * to the disk
+     * FAT 32 Bytes Directory Entry Structure to the disk
      */
     rc = msdos_get_name_node(parent_loc, NULL, &aux, new_node);
     if ( rc != RC_OK )
