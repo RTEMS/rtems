@@ -8,7 +8,7 @@ TEST = tmoverhd
 MANAGERS = io
 
 C_FILES = testtask.c empty.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h dumrtems.h
 noinst_HEADERS = $(H_FILES)

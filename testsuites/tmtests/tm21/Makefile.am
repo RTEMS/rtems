@@ -8,7 +8,7 @@ TEST = tm21
 MANAGERS = io dpmem message partition region semaphore rate_monotonic timer
 
 C_FILES = task1.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)

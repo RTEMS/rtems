@@ -1,3 +1,37 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tm01/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm02/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm03/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm04/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm05/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm06/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm07/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm08/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm09/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm10/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm11/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm12/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm13/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm14/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm15/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm16/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm17/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm18/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm19/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm20/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm21/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm22/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm23/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm24/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm25/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm26/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm27/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm28/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tm29/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tmck/Makefile.am: Use $(OBJEXT) instead of .o.
+	* tmoverhd/Makefile.am: Use $(OBJEXT) instead of .o.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR47 add support for buffered test output.  This involved
