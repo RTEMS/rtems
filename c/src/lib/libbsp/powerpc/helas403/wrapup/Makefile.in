@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../..
-subdir = powerpc/helas403/wrapup
+top_builddir = ..
+subdir = wrapup
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -17,7 +17,7 @@ BSP_PIECES = startup dlentry flashentry
 # pieces to pick up out of libcpu/ppc
 # CPU_PIECES = ppc403/clock ppc403/timer ppc403/console ppc403/vectors \
 #     ppc403/ictrl
-CPU_PIECES = 
+CPU_PIECES =
 GENERIC_PIECES =
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
