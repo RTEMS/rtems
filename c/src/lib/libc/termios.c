@@ -280,7 +280,7 @@ rtems_termios_open (
 		/*
 		 * Set default parameters
 		 */
-		tty->termios.c_iflag = BRKINT | ICRNL | IXON | IMAXBEL;
+		tty->termios.c_iflag = BRKINT | ICRNL | IMAXBEL;
 		tty->termios.c_oflag = OPOST | ONLCR | XTABS;
 		tty->termios.c_cflag = B9600 | CS8 | CREAD;
 		tty->termios.c_lflag = ISIG | ICANON | IEXTEN | ECHO | ECHOK | ECHOE | ECHOCTL;
