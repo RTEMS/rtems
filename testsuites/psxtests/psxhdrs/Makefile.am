@@ -5,9 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 # C source names
-UNUSED_C_FILES = clock06.c
-
-C_FILES = clock01.c clock02.c clock03.c clock04.c clock05.c cond01.c \
+C_FILES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c cond01.c \
     cond02.c cond03.c cond04.c cond05.c cond06.c cond07.c cond08.c cond09.c \
     cond10.c key01.c key02.c key03.c key04.c mutex01.c mutex02.c mutex03.c \
     mutex04.c mutex05.c mutex06.c mutex07.c mutex08.c mutex09.c mutex10.c \
@@ -37,6 +35,6 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 
 all-local: ${ARCH} ${OBJS}
 
-EXTRA_DIST = $(C_FILES) $(UNUSED_C_FILES)
+EXTRA_DIST = $(C_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
