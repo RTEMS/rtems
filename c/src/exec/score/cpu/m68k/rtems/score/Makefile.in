@@ -1,0 +1,59 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_PIECES=cpu.h m68k.h m68ktypes.h
+H_FILES=$(H_PIECES:%=$(srcdir)/%)
+
+# Assembly source names, if any, go here -- minus the .S
+S_PIECES=
+S_FILES=$(S_PIECES:%=%.S)
+S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
+
+SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
+OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   += 
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS += $(BUILT_SOURCES)
+
+# Install the program(s), appending _g or _p as appropriate.
+# for include files, just use $(INSTALL)
+all: install-headers
+
+install-headers: ${H_FILES}
+	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
+
+preinstall: install-headers
