@@ -66,7 +66,7 @@ static unsigned long *table_alloc(int size){
     if(((unsigned long)next_avail + size) > MAX_TABLE_ADDR){
 	return 0;
     }
-    bzero((void *)addr,size);
+    memset((void *)addr,0, size);
     next_avail =(unsigned long *)((unsigned long)next_avail + size);
     return addr;
 }
@@ -97,12 +97,12 @@ void page_table_init(){
        Ignore FC2 for match.
        Noncachable.
        Not write protected.*/
-    asm volatile ("movec %0,%%dtt0
+    asm volatile ("movec %0,%%dtt0\n\
                    movec %0,%%itt0"
 		  :: "d" (0x807fc040));
 
     /* Point urp and srp at root page table. */
-    asm volatile ("movec %0,%%urp
+    asm volatile ("movec %0,%%urp\n\
                    movec %0,%%srp"
 		  :: "d" (BASE_TABLE_ADDR));
 
@@ -122,12 +122,12 @@ void page_table_teardown(){
     next_avail=(unsigned long *)BASE_TABLE_ADDR;
     /* Turn off paging.  Turn off the cache. Flush the cache. Tear down
        the transparent translations. */
-    asm volatile ("movec %0,%%tc
-                   movec %0,%%cacr
-                   cpusha %%bc
-                   movec %0,%%dtt0
-                   movec %0,%%itt0
-                   movec %0,%%dtt1
+    asm volatile ("movec %0,%%tc\n\
+                   movec %0,%%cacr\n\
+                   cpusha %%bc\n\
+                   movec %0,%%dtt0\n\
+                   movec %0,%%itt0\n\
+                   movec %0,%%dtt1\n\
                    movec %0,%%itt1"
 		  :: "d" (0) );
 }
@@ -193,7 +193,7 @@ int page_table_map(void *addr, unsigned long size, int cache_type){
     }
 
     /* Flush the ATC. Push and invalidate the cache. */
-    asm volatile ("pflusha
+    asm volatile ("pflusha\n\
                    cpusha %bc");
 
     return  PTM_SUCCESS;
