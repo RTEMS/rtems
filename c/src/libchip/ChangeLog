@@ -6,14 +6,6 @@
 	* network/elnk.c, network/if_media.h, network/mii.h: New files.
 	* network/Makefile.am: Reflect new files.
 
-2003-06-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
-
-	PR 405/bsps
-	PR 393/networking
-	* network/dec21140.c: Fix leak also known as PR393.
-	* network/elnk.c, network/if_media.h, network/mii.h: New files.
-	* network/Makefile.am: Reflect new files.
-
 2003-04-15	Joel Sherrill <joel@OARcorp.com>
 
 	PR 387/rtems_misc
