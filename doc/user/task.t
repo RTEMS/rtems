@@ -714,7 +714,6 @@ procedure Task_Create (
 @code{@value{RPREFIX}SUCCESSFUL} - task created successfully@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
-@code{@value{RPREFIX}INVALID_SIZE} - stack too small@*
 @code{@value{RPREFIX}INVALID_PRIORITY} - invalid task priority@*
 @code{@value{RPREFIX}MP_NOT_CONFIGURED} - multiprocessing not configured@*
 @code{@value{RPREFIX}TOO_MANY} - too many tasks created@*
@@ -743,9 +742,10 @@ This directive will not cause the calling task to be preempted.
 
 Valid task priorities range from a high of 1 to a low of 255.
 
-The requested stack size should be at least
-@code{@value{RPREFIX}MINIMUM_STACK_SIZE}
-bytes.  The value of @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
+If the requested stack size is less than
+@code{@value{RPREFIX}MINIMUM_STACK_SIZE} bytes, then RTEMS
+will use @code{@value{RPREFIX}MINIMUM_STACK_SIZE} as the
+stack size.  The value of @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
 is processor dependent. 
 Application developers should consider the stack usage of the
 device drivers when calculating the stack size required for
