@@ -30,6 +30,9 @@ CHMOD=@CHMOD@
 SED=@SED@
 M4=@M4@
 
+# Global tools
+PACKHEX=$(PROJECT_TOOLS)/packhex
+
 INSTALL=$(PROJECT_TOOLS)/install-if-change
 INSTALL_VARIANT=$(PROJECT_TOOLS)/install-if-change -V "$(LIB_VARIANT)"
 
