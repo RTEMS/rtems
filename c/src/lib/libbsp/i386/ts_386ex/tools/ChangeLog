@@ -1,3 +1,8 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* debug_ada/init.c, network_ada/listener/init.c,
+	network_ada/tcprelay/init.c, ts_1325_ada/init.c: Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
