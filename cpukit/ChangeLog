@@ -1,3 +1,7 @@
+2002-11-18	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/version.m4: Updated to rtems-ss-20021118.
+
 2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/userenv.h: Rely upon <limits.h> for
