@@ -44,7 +44,7 @@ available at http://www.zeecube.com/bdm.
 The efi332 project has a home-built BDM module and gdb backend for 
 Linux.  See http://efi332.eng.ohio-state.edu/efi332/hardware.html)
 for details.  The device driver and gdb backend are based on those
-by Gunter Magin (magin@skil.camelot.de) available from
+by Gunter Magin (magin@@skil.camelot.de) available from
 ftp.lpr.e-technik.tu-muenchen.de.
 
 Pavel Pisa (pisa@@cmp.felk.cvut.cz) has one available at
