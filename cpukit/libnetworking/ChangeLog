@@ -1,3 +1,10 @@
+2002-09-14	Vyacheslav V. Burdjanadze <wr@zelax.ru>
+
+	* kern/uipc_mbuf.c, sys/mbuf.h, netinet/udp_usrreq.c: Add 
+	optional UDP broadcast forwarding support. 
+	* netinet/Makefile.am: Defined FORWARD_PROTOCOL to enabled UDP
+	broadcast forwarding.
+
 2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* netinet/in_cksum.c: #include <string.h> for puts in generic

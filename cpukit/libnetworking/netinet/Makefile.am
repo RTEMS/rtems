@@ -23,7 +23,7 @@ include $(top_srcdir)/../automake/lib.am
 #
 
 AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
-    -DBOOTP_COMPAT
+    -DBOOTP_COMPAT -DFORWARD_PROTOCOL
 
 $(LIB): $(OBJS)
 	$(make-library)

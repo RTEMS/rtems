@@ -354,9 +354,10 @@ nospace:
 
 /*
  * Copy data from an mbuf chain starting "off" bytes from the beginning,
- * continuing for "len" bytes, into the indicated buffer.
+ * continuing for "len" bytes, into the indicated buffer. Return -1 if requested
+ * size is bigger than available
  */
-void
+int
 m_copydata(m, off, len, cp)
 	register struct mbuf *m;
 	register int off;
@@ -364,20 +365,36 @@ m_copydata(m, off, len, cp)
 	caddr_t cp;
 {
 	register unsigned count;
+	struct mbuf *m0 = m;
 
 	if (off < 0 || len < 0)
 		panic("m_copydata");
 	while (off > 0) {
-		if (m == 0)
-			panic("m_copydata");
+		if (m == 0) {
+			/*printf("m_copydata: offset > mbuf length (");
+			while(m0) {
+			    printf("[%d] ",m0->m_len);
+			    m0 = m0->m_next;
+			}
+			printf(")\n");*/
+			return -1;
+		}
 		if (off < m->m_len)
 			break;
 		off -= m->m_len;
 		m = m->m_next;
 	}
 	while (len > 0) {
-		if (m == 0)
-			panic("m_copydata");
+		if (m == 0) {
+			/*printf("m_copydata: length > mbuf length (");
+			while(m0) {
+			    printf("[%d] ",m0->m_len);
+			    m0 = m0->m_next;
+			}
+			printf(")\n");*/
+			
+			return -1;
+		    }
 		count = min(m->m_len - off, len);
 		bcopy(mtod(m, caddr_t) + off, cp, count);
 		len -= count;
@@ -385,6 +402,7 @@ m_copydata(m, off, len, cp)
 		off = 0;
 		m = m->m_next;
 	}
+    return 0;
 }
 
 /*
@@ -699,7 +717,7 @@ m_devget(buf, totlen, off0, ifp, copy)
  * starting "off" bytes from the beginning, extending the mbuf
  * chain if necessary.
  */
-void
+int
 m_copyback(m0, off, len, cp)
 	struct	mbuf *m0;
 	register int off;
@@ -717,8 +735,10 @@ m_copyback(m0, off, len, cp)
 		totlen += mlen;
 		if (m->m_next == 0) {
 			n = m_getclr(M_DONTWAIT, m->m_type);
-			if (n == 0)
-				goto out;
+			if (n == 0) {
+				/*panic("m_copyback() : malformed chain\n");*/
+				return -1;
+				}
 			n->m_len = min(MLEN, len + off);
 			m->m_next = n;
 		}
@@ -732,17 +752,23 @@ m_copyback(m0, off, len, cp)
 		mlen += off;
 		off = 0;
 		totlen += mlen;
-		if (len == 0)
+		if (len == 0) {
+			m->m_len = mlen;
 			break;
+		}
 		if (m->m_next == 0) {
 			n = m_get(M_DONTWAIT, m->m_type);
-			if (n == 0)
-				break;
+			if (n == 0) {
+				/*panic("m_copyback() : malformed chain 2\n");*/
+				return -1;
+				};
 			n->m_len = min(MLEN, len);
 			m->m_next = n;
 		}
+		m->m_len = mlen;
 		m = m->m_next;
 	}
 out:	if (((m = m0)->m_flags & M_PKTHDR) && (m->m_pkthdr.len < totlen))
 		m->m_pkthdr.len = totlen;
+	return 0;
 }
