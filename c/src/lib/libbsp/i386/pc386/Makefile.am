@@ -50,7 +50,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 EXTRA_PROGRAMS += clock.rel
 CLEANFILES += clock.rel
-clock_rel_SOURCES = clock/ckinit.c clock/rtc.c
+clock_rel_SOURCES = clock/ckinit.c clock/todcfg.c ../../shared/tod.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

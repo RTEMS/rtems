@@ -32,7 +32,8 @@ typedef struct _rtc_fns {
 typedef enum {
   RTC_M48T08,                  /* SGS-Thomsom M48T08 or M48T18 */
   RTC_ICM7170,                 /* Harris ICM-7170 */
-  RTC_CUSTOM                   /* BSP specific driver */
+  RTC_CUSTOM,                  /* BSP specific driver */
+  RTC_MC146818A                /* Motorola MC146818A */
 } rtc_devs;
 
 /*

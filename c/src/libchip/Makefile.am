@@ -66,14 +66,15 @@ EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
 
 # rtc
 if LIBCHIP
-include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h
+include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h rtc/mc146818a.h
 
 EXTRA_LIBRARIES += librtcio.a
 CLEANFILES += librtcio.a
 librtcio_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 librtcio_a_SOURCES = rtc/rtcprobe.c rtc/icm7170.c rtc/icm7170_reg.c \
     rtc/icm7170_reg2.c rtc/icm7170_reg4.c rtc/icm7170_reg8.c rtc/m48t08.c \
-    rtc/m48t08_reg.c rtc/m48t08_reg2.c rtc/m48t08_reg4.c rtc/m48t08_reg8.c
+    rtc/m48t08_reg.c rtc/m48t08_reg2.c rtc/m48t08_reg4.c rtc/m48t08_reg8.c \
+    rtc/mc146818a.c rtc/mc146818a_ioreg.c
 
 EXTRA_LIBRARIES += librtcio_g.a
 CLEANFILES += librtcio_g.a
