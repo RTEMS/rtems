@@ -1,5 +1,10 @@
 2003-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* vectors/Makefile.am: Fix typos.
+	* vme/Makefile.am: Fix typos.
+
+2003-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* bootloader/Makefile.am: Eliminate VPATH.
 	* clock/Makefile.am: Eliminate VPATH.
 	* console/Makefile.am: Eliminate VPATH.

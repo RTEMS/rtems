@@ -10,7 +10,7 @@ include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS = $(top_srcdir)/../../powerpc/shared/vectors/vectors.h
 
 powerpc_shared_vectors_C_FILES = \
-    $(top_srcdir)/../..//powerpc/shared/vectors/vectors_init.c
+    $(top_srcdir)/../../powerpc/shared/vectors/vectors_init.c
 OBJS = \
     $(powerpc_shared_vectors_C_FILES:$(top_srcdir)/../../powerpc/shared/vectors/%.c=$(ARCH)/%.$(OBJEXT))
 

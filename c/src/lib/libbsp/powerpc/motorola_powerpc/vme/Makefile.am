@@ -21,7 +21,7 @@ include_bsp_HEADERS += $(top_srcdir)/../../powerpc/shared/vme/VME.h
 powerpc_shared_vme_C_FILES = \
     $(top_srcdir)/../../powerpc/shared/vme/vmeconfig.c
 OBJS += \
-    $(powerpc_sharec_vme_C_FILES:$(top_srcdir)/../../powerpc/shared/vme/%.c=$(ARCH)/%.$(OBJEXT))
+    $(powerpc_shared_vme_C_FILES:$(top_srcdir)/../../powerpc/shared/vme/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../powerpc/shared/vme/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
