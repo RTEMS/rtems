@@ -22,11 +22,16 @@ if HAS_LIBBSP
 LIBBSP = ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/wrapup/$(ARCH)/libbsp.a
 endif
 
-SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
-    $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
+if LIBCHIP
+LIBCHIP = \
     ../libchip/rtc/$(ARCH)/librtcio.a \
     ../libchip/serial/$(ARCH)/libserialio.a \
-    $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a) \
+    $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a)
+endif
+
+SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
+    $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
+    $(LIBCHIP) \
     ../libmisc/wrapup/$(ARCH)/libmisc.a \
     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 

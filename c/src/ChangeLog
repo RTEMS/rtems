@@ -1,3 +1,11 @@
+2002-08-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Posix-BSP-Hacks:
+	* configure.ac: Add AM_CONDITIONAL(LIBCHIP).
+	Pass RTEMS_HOST to make/bsp.mak
+	* Makefile.am: Pass RTEMS_HOST to make/bsp.mak.
+	* wrapup/Makefile.am: Apply AM_CONDITIONAL(LIBCHIP).
+
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.

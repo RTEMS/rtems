@@ -54,6 +54,7 @@ cp ${srcdir}/make/custom/default.cfg.in make/custom/default.cfg
 AC_MSG_NOTICE([creating make/${RTEMS_BSP}.cache])
 ${MAKE-make} -f ${srcdir}/make/bsp.mak \
 RTEMS_BSP=${RTEMS_BSP} \
+RTEMS_HOST=${RTEMS_HOST} \
 BARE_CPU_MODEL=${BARE_CPU_MODEL} \
 RTEMS_ROOT=. make/${RTEMS_BSP}.cache
 
@@ -114,8 +115,12 @@ BSP_SUBDIRS="$BSP_SUBDIRS tests"
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
 
-AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes" )
-AM_CONDITIONAL(HAS_RDBG, test "$HAS_RDBG" = "yes" )
+AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
+AM_CONDITIONAL([HAS_RDBG],[test "$HAS_RDBG" = "yes"])
+
+# The posix bsp doesn't support libchip
+# FIXME: We should use a feature based check, here
+AM_CONDITIONAL([LIBCHIP],[test "$RTEMS_BSP_FAMILY" != "posix"])
 
 # The bare bsp doesn't have libbsp.a
 # FIXME: We should use a feature based check, here
