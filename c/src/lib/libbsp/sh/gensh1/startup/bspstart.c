@@ -151,14 +151,6 @@ void bsp_start(void)
 
   BSP_Configuration = Configuration;
 
-#ifdef STACK_CHECKER_ON
-    /*
-     * Add 1 extension for stack checker
-     */
- 
-    BSP_Configuration.maximum_extensions++;
-#endif
-
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is

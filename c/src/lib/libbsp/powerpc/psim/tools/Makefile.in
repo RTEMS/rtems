@@ -20,6 +20,7 @@ INSTALLED=$(PGMS:%=$(DESTDIR)/%)
 all:	$(DESTDIR) $(PGMS) install
 
 install:  $(INSTALLED)
+	rm -f $(DESTDIR)/psim-gdb
 	cp $(DESTDIR)/psim $(DESTDIR)/psim-gdb
 
 # Install the program

@@ -151,14 +151,6 @@ void bsp_start( void )
 
   BSP_Configuration = Configuration;
 
-#ifdef STACK_CHECKER_ON
-    /*
-     * Add 1 extension for stack checker
-     */
- 
-    BSP_Configuration.maximum_extensions++;
-#endif
-
   /*
    * Tell libio how many fd's we want and allow it to tweak config
    */

@@ -346,14 +346,6 @@ void bsp_start(void)
     }
 #endif
 
-#ifdef STACK_CHECKER_ON
-    /*
-     * Add 1 extension for stack checker
-     */
-
-    BSP_Configuration.maximum_extensions++;
-#endif
-
 #if SIMHPPA_FAST_IDLE
     /*
      * Add 1 extension for fast idle

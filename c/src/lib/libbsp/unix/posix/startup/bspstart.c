@@ -302,14 +302,6 @@ bsp_start(void)
 
     Cpu_table.extra_mpci_receive_server_stack = 0;
 
-#ifdef STACK_CHECKER_ON
-  /*
-   * Add 1 extension for stack checker
-   */
-
-    BSP_Configuration.maximum_extensions++;
-#endif
-
   /*
    * Tell libio how many fd's we want and allow it to tweak config
    */

@@ -187,14 +187,6 @@ void bsp_start( void )
      (RAM_END - BSP_Configuration.work_space_size);
  
   /*
-   * Add another extension if using the stack checker
-   */
- 
-#ifdef STACK_CHECKER_ON
-    BSP_Configuration.maximum_extensions++;
-#endif
- 
-  /*
    * Tell libio how many fd's we want and allow it to tweak config
    */
 

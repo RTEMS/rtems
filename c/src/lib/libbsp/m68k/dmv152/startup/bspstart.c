@@ -186,14 +186,6 @@ void bsp_start( void )
   console_reserve_resources( &BSP_Configuration );
 
   /*
-   * Add another extension if using the stack checker
-   */
-
-#ifdef STACK_CHECKER_ON
-    BSP_Configuration.maximum_extensions++;
-#endif
-
-  /*
    * Tell libio how many fd's we want and allow it to tweak config
    */
 

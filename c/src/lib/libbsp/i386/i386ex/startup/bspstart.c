@@ -172,11 +172,9 @@ void bsp_start( void )
 
 
   /*
-   * Add another extension if using the stack checker
+   * Tell libio how many fd's we want and allow it to tweak config
    */
 
-#ifdef STACK_CHECKER_ON
-    BSP_Configuration.maximum_extensions++;
-#endif
+  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
 }

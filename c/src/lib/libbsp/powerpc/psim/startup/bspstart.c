@@ -310,13 +310,6 @@ void bsp_start( void )
 #endif
 
   /*
-   * Add 1 extension for MPCI_fatal
-   */
-
-  if (BSP_Configuration.User_multiprocessing_table)
-    BSP_Configuration.maximum_extensions++;
-
-  /*
    * Set the "clicks per tick" for the simulator
    *  used by XXX/clock/clock.c to schedule interrupts
    *
