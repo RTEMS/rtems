@@ -1,3 +1,17 @@
+2000-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	* POSIX include files merged into newlib.  This resulted in
+	some definitions moving to other files and thus some secondary
+	effects in RTEMS source code.
+	* src/rpc/Makefile.am, src/rpc/auth_time.c, src/rpc/clnt_simple.c,
+	src/rpc/clnt_tcp.c, src/rpc/clnt_udp.c, src/rpc/clnt_unix.c,
+	src/rpc/get_myaddress.c, src/rpc/pmap_clnt.c, src/rpc/pmap_getmaps.c,
+	src/rpc/pmap_getport.c, src/rpc/pmap_rmt.c, src/rpc/rtime.c,
+	src/rpc/svc_tcp.c, src/rpc/svc_udp.c, src/rpc/svc_unix.c:
+	Use of _read, _write, and _close as macros conflicted with
+	newlib's use of these as routine names.  They were renamed to
+	include "_RPC_" prefix.
+
 2000-10-25      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.

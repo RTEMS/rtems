@@ -34,7 +34,7 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS += '-D__P(x)=x' -D_read=read -D_write=write -D_close=close -D_RTEMS_RPC_INTERNAL_
+AM_CPPFLAGS += '-D__P(x)=x' -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close -D_RTEMS_RPC_INTERNAL_
 
 $(LIB): $(OBJS)
 	$(make-library)

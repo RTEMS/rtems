@@ -80,7 +80,7 @@ pmap_getmaps(address)
 		CLNT_DESTROY(client);
 	}
 	if (socket != -1)
-		(void)_close(socket);
+		(void)_RPC_close(socket);
 	address->sin_port = 0;
 	return (head);
 }

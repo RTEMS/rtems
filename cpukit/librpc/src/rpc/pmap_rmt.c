@@ -98,7 +98,7 @@ pmap_rmtcall(addr, prog, vers, proc, xdrargs, argsp, xdrres, resp, tout, port_pt
 		stat = RPC_FAILED;
 	}
 	if (socket != -1)
-		(void)_close(socket);
+		(void)_RPC_close(socket);
 	addr->sin_port = 0;
 	return (stat);
 }
@@ -408,7 +408,7 @@ done_broad:
 	if (fds != &readfds)
 		free(fds);
 	if (sock >= 0)
-		(void)_close(sock);
+		(void)_RPC_close(sock);
 	AUTH_DESTROY(unix_auth);
 	return (stat);
 }

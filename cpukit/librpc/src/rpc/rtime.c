@@ -129,7 +129,7 @@ rtime(addrp, timep, timeout)
 			do_close(s);
 			return(-1);
 		}
-		res = _read(s, (char *)&thetime, sizeof(thetime));
+		res = _RPC_read(s, (char *)&thetime, sizeof(thetime));
 		do_close(s);
 		if (res < 0) {
 			return(-1);
@@ -152,6 +152,6 @@ do_close(s)
 	int save;
 
 	save = errno;
-	(void)_close(s);
+	(void)_RPC_close(s);
 	errno = save;
 }

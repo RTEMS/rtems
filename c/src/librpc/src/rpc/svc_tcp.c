@@ -145,7 +145,7 @@ svctcp_create(sock, sendsize, recvsize)
 	if (ioctl(sock, FIONBIO, &on) < 0) {
 		perror("svc_tcp.c - cannot turn on non-blocking mode");
 		if (madesock)
-		       (void)_close(sock);
+		       (void)_RPC_close(sock);
 		return ((SVCXPRT *)NULL);
 	}
 	memset(&addr, 0, sizeof (addr));
@@ -159,7 +159,7 @@ svctcp_create(sock, sendsize, recvsize)
 	    (listen(sock, 2) != 0)) {
 		perror("svctcp_.c - cannot getsockname or listen");
 		if (madesock)
-		       (void)_close(sock);
+		       (void)_RPC_close(sock);
 		return ((SVCXPRT *)NULL);
 	}
 	r = (struct tcp_rendezvous *)mem_alloc(sizeof(*r));
@@ -257,7 +257,7 @@ rendezvous_request(xprt)
 	 * Guard against FTP bounce attacks.
 	 */
 	if (addr.sin_port == htons(20)) {
-		_close(sock);
+		_RPC_close(sock);
 		return (FALSE);
 	}
 	/*
@@ -265,7 +265,7 @@ rendezvous_request(xprt)
 	 */
 	off = 0;
 	if (ioctl(sock, FIONBIO, &off) < 0) {
-		_close(sock);
+		_RPC_close(sock);
 		return (FALSE);
 	}
 	/*
@@ -291,7 +291,7 @@ svctcp_destroy(xprt)
 	register struct tcp_conn *cd = (struct tcp_conn *)xprt->xp_p1;
 
 	xprt_unregister(xprt);
-	(void)_close(xprt->xp_sock);
+	(void)_RPC_close(xprt->xp_sock);
 	if (xprt->xp_port != 0) {
 		/* a rendezvouser socket */
 		xprt->xp_port = 0;
@@ -373,7 +373,7 @@ readtcp(xprt, buf, len)
 			}
 		}
 	} while (!FD_ISSET(sock, fds));
-	if ((len = _read(sock, buf, len)) > 0) {
+	if ((len = _RPC_read(sock, buf, len)) > 0) {
 		if (fds != NULL)
 			free(fds);
 		return (len);
@@ -398,7 +398,7 @@ writetcp(xprt, buf, len)
 	register int i, cnt;
 
 	for (cnt = len; cnt > 0; cnt -= i, buf += i) {
-		if ((i = _write(xprt->xp_sock, buf, cnt)) < 0) {
+		if ((i = _RPC_write(xprt->xp_sock, buf, cnt)) < 0) {
 			((struct tcp_conn *)(xprt->xp_p1))->strm_stat =
 			    XPRT_DIED;
 			return (-1);
