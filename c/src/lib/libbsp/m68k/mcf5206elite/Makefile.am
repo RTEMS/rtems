@@ -22,28 +22,28 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/i2c.h: include/i2c.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2c.h
 
-$(PROJECT_INCLUDE)/i2cdrv.h: include/i2cdrv.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/i2cdrv.h: include/i2cdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cdrv.h
 
-$(PROJECT_INCLUDE)/ds1307.h: include/ds1307.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/ds1307.h: include/ds1307.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ds1307.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ds1307.h
 
-$(PROJECT_INCLUDE)/nvram.h: include/nvram.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nvram.h: include/nvram.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nvram.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nvram.h
 
-$(PROJECT_INCLUDE)/tod.h: $(top_srcdir)/../../shared/tod.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/tod.h: $(top_srcdir)/../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

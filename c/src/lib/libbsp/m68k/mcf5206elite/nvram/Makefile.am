@@ -2,7 +2,6 @@
 ## $Id$
 ## 
 
-
 PGM = $(ARCH)/nvram.rel
 
 C_FILES = nvram.c

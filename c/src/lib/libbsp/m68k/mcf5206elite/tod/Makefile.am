@@ -2,7 +2,6 @@
 ## $Id$
 ## 
 
-
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 PGM = $(ARCH)/tod.rel

@@ -2,7 +2,6 @@
 ## $Id$
 ## 
 
-
 PGM = $(ARCH)/i2c.rel
 
 C_FILES = i2c.c i2cdrv.c
