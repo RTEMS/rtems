@@ -1,5 +1,9 @@
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	Makefile.am: Fix macro-file installation.
+
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	Makefile.am: Move include/rtems/score/cpuopts.h to STD_H_FILES.
 
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

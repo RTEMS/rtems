@@ -102,7 +102,7 @@ STD_M_FILES = macros/rtems/score/address.inl macros/rtems/score/chain.inl \
     macros/rtems/score/wkspace.inl
 if MACROS
 include_rtems_score_HEADERS += $(STD_M_FILES)
-PREINSTALL_FILES += $(MP_M_FILES:inline/%.inl=$(PROJECT_INCLUDE)/%.inl)
+PREINSTALL_FILES += $(STD_M_FILES:macros/%.inl=$(PROJECT_INCLUDE)/%.inl)
 endif
 
 EXTRA_DIST += $(STD_M_FILES) $(MP_M_FILES) macros/README
