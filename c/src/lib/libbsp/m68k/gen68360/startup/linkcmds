@@ -71,8 +71,6 @@ SECTIONS {
                 CREATE_OBJECT_SYMBOLS
                 *(.text)
                 . = ALIGN (16);
-                etext = .;
-                _etext = .;
 
 		/*
 		 * C++ constructors
@@ -87,6 +85,9 @@ SECTIONS {
 		*(.dtors)
 		LONG(0)
 		__DTOR_END__ = .;
+
+                etext = .;
+                _etext = .;
         } >ram 
         .data : {
                 copy_start = .;
