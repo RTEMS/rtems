@@ -13,7 +13,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(srcdir)/bsp.h $(srcdir)/../../../shared/coverhd.h
+H_FILES = $(srcdir)/bsp.h $(srcdir)/../../../shared/include/coverhd.h
 
 RTEMS_H_PIECES = ttydrv
 RTEMS_H_FILES = $(RTEMS_H_PIECES:%=$(srcdir)/%.h)

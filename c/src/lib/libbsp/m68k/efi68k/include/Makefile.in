@@ -13,7 +13,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(srcdir)/bsp.h $(srcdir)/../../../shared/coverhd.h \
+H_FILES = $(srcdir)/bsp.h $(srcdir)/../../../shared/include/coverhd.h \
      $(srcdir)/efi68k.h $(srcdir)/16550.h $(srcdir)/DP8570A.h 
 
 #
