@@ -24,7 +24,6 @@
  *
  *  $Id$
  */
-// #define RTEMS_TEST_IO_STREAM
 
 #include <rtems.h>
 #include <stdio.h>
