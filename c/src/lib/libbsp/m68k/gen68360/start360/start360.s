@@ -327,8 +327,8 @@ start:
 	 */
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
 	oriw	#0x3000,sr		| Switch to Master Stack Pointer
-	lea	SYM(m360)+1024-64,a7	| Load stack pointer with space
-					|   for the Interrupt Stack
+	lea	SYM(m360)+1024-64,a7	| Put stack in dual-port ram
+					| a little below the interrupt stack
 #endif
 
 	/*

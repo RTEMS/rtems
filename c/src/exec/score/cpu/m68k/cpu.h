@@ -34,19 +34,16 @@ extern "C" {
 /*
  *  Use the m68k's hardware interrupt stack support and have the
  *  interrupt manager allocate the memory for it.
- *
- *  NOTE:  The definitions when M68K_HAS_SEPARATE_STACKS is 0 should
- *         change when the software interrupt stack support is implemented.
  */
 
 #if ( M68K_HAS_SEPARATE_STACKS == 1)
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK TRUE
-#define CPU_ALLOCATE_INTERRUPT_STACK     TRUE
+#define CPU_HAS_SOFTWARE_INTERRUPT_STACK 0
+#define CPU_HAS_HARDWARE_INTERRUPT_STACK 1
+#define CPU_ALLOCATE_INTERRUPT_STACK     1
 #else
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
-#define CPU_ALLOCATE_INTERRUPT_STACK     FALSE
+#define CPU_HAS_SOFTWARE_INTERRUPT_STACK 1
+#define CPU_HAS_HARDWARE_INTERRUPT_STACK 0
+#define CPU_ALLOCATE_INTERRUPT_STACK     1
 #endif
 
 /*

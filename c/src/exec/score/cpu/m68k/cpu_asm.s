@@ -108,9 +108,8 @@ norst:  frestore a0@+                     | restore the fp state frame
  *    transfer control to the interrupt dispatcher.
  */
 
-/*  m68000 notes:
- *
- *  with this approach, lower interrupts (1-5 for efi68k) may
+/*
+ *  With this approach, lower priority interrupts may
  *  execute twice if a higher priority interrupt is
  *  acknowledged before _Thread_Dispatch_disable is
  *  increamented and the higher priority interrupt
@@ -119,9 +118,6 @@ norst:  frestore a0@+                     | restore the fp state frame
  *  higher priority interrupt in the new context if
  *  permitted by the new interrupt level mask, and (2) when
  *  the original context regains the cpu.
- *
- *  XXX: Code for switching to a software maintained interrupt stack is
- *       not in place.
  */
  
 #if ( M68K_HAS_VBR == 1)
@@ -141,21 +137,25 @@ norst:  frestore a0@+                     | restore the fp state frame
 
 SYM (_ISR_Handler):
         addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking
-        addql   #1,SYM (_ISR_Nest_level) | one nest level deeper
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
-
-/*
- *  NOTE FOR CPUs WITHOUT HARDWARE INTERRUPT STACK:
- *
- *  After the interrupted codes registers have been saved, it is save
- *  to switch to the software maintained interrupt stack.
- *
- *  PLEASE, if you have a m68k without a dedicated interrupt stack,
- *          implement the stack switching code.
- */
-
         movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
         andl    #0x0fff,d0               | d0 = vector offset in vbr
+
+
+#if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
+	movew	sr,d1			| Save status register
+	oriw	#0x700,sr		| Disable interrupts
+	tstl	SYM (_ISR_Nest_level)	| Interrupting an interrupt handler?
+	bne	1f			| Yes, just skip over stack switch code
+	movel	SYM(_CPU_Interrupt_stack_high),a0	| End of interrupt stack
+	movel	a7,a0@-			| Save task stack pointer
+	movel	a0,a7			| Switch to interrupt stack
+1:
+	addql   #1,SYM(_ISR_Nest_level)	| one nest level deeper
+	movew	d1,sr			| Restore status register
+#else
+	addql   #1,SYM (_ISR_Nest_level) | one nest level deeper
+#endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
 
 #if ( M68K_HAS_PREINDEXING == 1 )
         movel   @( SYM (_ISR_Vector_table),d0:w:1),a0| fetch the ISR
@@ -170,7 +170,18 @@ SYM (_ISR_Handler):
         jbsr    a0@                      | invoke the user ISR
         addql   #4,a7                    | remove vector number
 
-        subql   #1,SYM (_ISR_Nest_level) | one less nest level
+#if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
+	movew	sr,d0			| Save status register
+	oriw	#0x700,sr		| Disable interrupts
+	subql	#1,SYM(_ISR_Nest_level)	| Reduce interrupt-nesting count
+	bne	1f			| Skip if return to interrupt
+	movel	(a7),a7			| Restore task stack pointer
+1:
+	movew	d0,sr			| Restore status register
+#else
+	subql   #1,SYM (_ISR_Nest_level) | one less nest level
+#endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
+
         subql   #1,SYM (_Thread_Dispatch_disable_level)
                                          | unnest multitasking
         bne     exit                     | If dispatch disabled, exit
