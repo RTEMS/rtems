@@ -1,3 +1,9 @@
+2004-07-25	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 620/networking
+	* libnetworking/lib/rtems_bsdnet_ntp.c,
+	libnetworking/rtems/rtems_bsdnet.h: Enhance NTP API.
+
 2004-07-25	Thomas Rauscher <trauscher@loytec.com>
 
 	PR 609/rtems

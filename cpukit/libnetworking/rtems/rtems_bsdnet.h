@@ -180,6 +180,73 @@ int rtems_bsdnet_ifconfig (const char *ifname, uint32_t   cmd, void *param);
 void rtems_bsdnet_do_bootp (void);
 void rtems_bsdnet_do_bootp_and_rootfs (void);
 
+/* NTP tuning parameters */
+extern int rtems_bsdnet_ntp_retry_count;
+extern int rtems_bsdnet_ntp_timeout_secs;
+extern int rtems_bsdnet_ntp_bcast_timeout_secs;
+
+
+struct timestamp {
+	rtems_unsigned32	integer;
+	rtems_unsigned32	fraction;
+};
+
+/* Data is passed in network byte order */
+struct ntpPacketSmall {
+	rtems_unsigned8		li_vn_mode;
+	rtems_unsigned8		stratum;
+	rtems_signed8		poll_interval;
+	rtems_signed8		precision;
+	rtems_signed32		root_delay;
+	rtems_signed32		root_dispersion;
+	char			reference_identifier[4];
+	struct timestamp	reference_timestamp;
+	struct timestamp	originate_timestamp;
+	struct timestamp	receive_timestamp;
+	struct timestamp	transmit_timestamp;
+};
+
+/* NOTE: packet data is *only* accessible from the callback
+ *
+ * 'callback' is invoked twice, once prior to sending a request
+ * to the server and one more time after receiving a valid reply.
+ * This allows for the user to measure round-trip times.
+ *
+ * Semantics of the 'state' parameter:
+ *
+ *    state ==  1:  1st call, just prior to sending request. The
+ *                  packet has been set up already but may be
+ *                  modified by the callback (e.g. to set the originate
+ *                  timestamp).
+ *    state == -1:  1st call - no request will be sent but we'll
+ *                  wait for a reply from a broadcast server. The
+ *                  packet has not been set up.
+ *    state ==  0:  2nd call. The user is responsible for keeping track
+ *                  of the 'state' during the first call in order to
+ *                  know if it makes sense to calculate 'round-trip' times.
+ *
+ * RETURN VALUE: the callback should return 0 if processing the packet was
+ *               successful and -1 on error in which case rtems_bsdnet_get_ntp()
+ *				 may try another server.
+ */
+typedef int (*rtems_bsdnet_ntp_callback_t)(
+	struct ntpPacketSmall  *packet,
+	int                     state,
+	void                   *usr_data);
+
+/* Obtain time from a NTP server and call user callback to process data;
+ * socket parameter may be -1 to request the routine to open and close its own socket.
+ * Networking parameters as configured are used...
+ *
+ * It is legal to pass a NULL callback pointer. In this case, a default callback
+ * is used which determines the current time by contacting an NTP server. The current
+ * time is converted to a 'struct timespec' (seconds/nanoseconds) and passed into *usr_data.
+ * The caller is responsible for providing a memory area >= sizeof(struct timespec).
+ *
+ * RETURNS: 0 on success, -1 on failure.
+ */
+int rtems_bsdnet_get_ntp(int socket, rtems_bsdnet_ntp_callback_t callback, void *usr_data);
+
 int rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority);
 
 /*
