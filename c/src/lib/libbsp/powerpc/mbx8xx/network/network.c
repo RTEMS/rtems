@@ -606,7 +606,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
 static void
 m8xx_Enet_retire_tx_bd (struct m8xx_enet_struct *sc)
 {
-  rtems_unsigned16 status;
+  uint16_t   status;
   int i;
   int nRetired;
   struct mbuf *m, *n;
@@ -679,7 +679,7 @@ scc_rxDaemon (void *arg)
   struct m8xx_enet_struct *sc = (struct m8xx_enet_struct *)arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
-  rtems_unsigned16 status;
+  uint16_t   status;
   m8xxBufferDescriptor_t *rxBd;
   int rxBdIndex;
   
@@ -764,7 +764,7 @@ scc_rxDaemon (void *arg)
       
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
-        sizeof(rtems_unsigned32) -
+        sizeof(uint32_t) -
         sizeof(struct ether_header);
       eh = mtod (m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
@@ -823,7 +823,7 @@ fec_rxDaemon (void *arg)
   struct m8xx_enet_struct *sc = (struct m8xx_enet_struct *)arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
-  rtems_unsigned16 status;
+  uint16_t   status;
   m8xxBufferDescriptor_t *rxBd;
   int rxBdIndex;
   
@@ -900,7 +900,7 @@ fec_rxDaemon (void *arg)
       
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
-        sizeof(rtems_unsigned32) -
+        sizeof(uint32_t) -
         sizeof(struct ether_header);
       eh = mtod (m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
@@ -956,7 +956,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
   struct m8xx_enet_struct *sc = ifp->if_softc;
   volatile m8xxBufferDescriptor_t *firstTxBd, *txBd;
   struct mbuf *l = NULL;
-  rtems_unsigned16 status;
+  uint16_t   status;
   int nAdded;
   
   /*
@@ -1084,7 +1084,7 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
   struct m8xx_enet_struct *sc = ifp->if_softc;
   volatile m8xxBufferDescriptor_t *firstTxBd, *txBd;
   /*  struct mbuf *l = NULL; */
-  rtems_unsigned16 status;
+  uint16_t   status;
   int nAdded;
   
   /*

@@ -68,14 +68,14 @@ boolean mbx8xx_pcmciaide_probe
    * FIXME: this should be depending on state of VS1/2 pins
    * FIXME: there should be a shadow variable for the BSP for CSR2 access
    */
-  *((volatile unsigned8 *)MBX_CSR2) = 0xb0;
+  *((volatile uint8_t*)MBX_CSR2) = 0xb0;
   /*
    * check card information service whether card is a ATA like disk
    * -> scan for tuple of type 0x21 with content 0x04 0xXX (fixed disk)
    * -> scan for tuple of type 0x22 with content 0x01 0x01
    */
   if (ide_card_plugged) {
-#define CIS_BYTE(pos) (((unsigned8 *)PCMCIA_ATTRB_ADDR)[(pos)*2])
+#define CIS_BYTE(pos) (((uint8_t*)PCMCIA_ATTRB_ADDR)[(pos)*2])
     int cis_pos = 0;
     boolean fixed_disk_tuple_found = FALSE;
     boolean ata_disk_tuple_found   = FALSE;
@@ -144,25 +144,25 @@ void mbx8xx_pcmciaide_read_reg
 \*-------------------------------------------------------------------------*/
  int                        minor,  /* controller minor number       */
  int                        reg,    /* register index to access      */
- unsigned16                *value   /* ptr to return value location  */
+ uint16_t                  *value   /* ptr to return value location  */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  unsigned32  port = IDE_Controller_Table[minor].port1;
+  uint32_t    port = IDE_Controller_Table[minor].port1;
 
   if (reg == IDE_REGISTER_DATA_WORD) {
 #ifdef DATAREG_16BIT
-    *value = *(volatile unsigned16 *)(port+reg);    
+    *value = *(volatile uint16_t*)(port+reg);    
 #else
-    *value = ((*(volatile unsigned8 *)(port+reg) << 8) + 
-	      (*(volatile unsigned8 *)(port+reg+1) ));    
+    *value = ((*(volatile uint8_t*)(port+reg) << 8) + 
+	      (*(volatile uint8_t*)(port+reg+1) ));    
 #endif
   }
   else {
-    *value = *(volatile unsigned8 *)(port+reg);    
+    *value = *(volatile uint8_t*)(port+reg);    
   }
 #ifdef DEBUG_OUT
   printk("mbx8xx_pcmciaide_read_reg(0x%x)=0x%x\r\n",reg,*value & 0xff);
@@ -182,28 +182,28 @@ void mbx8xx_pcmciaide_write_reg
 \*-------------------------------------------------------------------------*/
  int                        minor,  /* controller minor number       */
  int                        reg,    /* register index to access      */
- unsigned16                 value   /* value to write                */
+ uint16_t                   value   /* value to write                */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  unsigned32  port = IDE_Controller_Table[minor].port1;
+  uint32_t    port = IDE_Controller_Table[minor].port1;
 
 #ifdef DEBUG_OUT
   printk("mbx8xx_pcmciaide_write_reg(0x%x,0x%x)\r\n",reg,value & 0xff);
 #endif
   if (reg == IDE_REGISTER_DATA_WORD) {
 #ifdef DATAREG_16BIT
-    *(volatile unsigned16 *)(port+reg) = value;    
+    *(volatile uint16_t*)(port+reg) = value;    
 #else
-    *(volatile unsigned8 *)(port+reg) = value >> 8;    
-    *(volatile unsigned8 *)(port+reg+1) = value;    
+    *(volatile uint8_t*)(port+reg) = value >> 8;    
+    *(volatile uint8_t*)(port+reg+1) = value;    
 #endif
   }
   else {
-    *(volatile unsigned8 *)(port+reg)= value;    
+    *(volatile uint8_t*)(port+reg)= value;    
   }
 }
 
@@ -219,39 +219,39 @@ void mbx8xx_pcmciaide_read_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor, 
- unsigned16 block_size, 
+ uint16_t   block_size, 
  blkdev_sg_buffer *bufs, 
- rtems_unsigned32 *cbuf,
- rtems_unsigned32 *pos
+ uint32_t   *cbuf,
+ uint32_t   *pos
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  unsigned32  port = IDE_Controller_Table[minor].port1;
-  unsigned16  cnt = 0;
+  uint32_t    port = IDE_Controller_Table[minor].port1;
+  uint16_t    cnt = 0;
 #ifdef DEBUG_OUT
   printk("mbx8xx_pcmciaide_read_block()\r\n");
 #endif
 #ifdef DATAREG_16BIT
-  unsigned16 *lbuf = (unsigned16 *)
-    ((unsigned8 *)(bufs[(*cbuf)].buffer) + (*pos));
+  uint16_t   *lbuf = (uint16_t*)
+    ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 #else
-  unsigned8 *lbuf = (unsigned8 *)
-    ((unsigned8 *)(bufs[(*cbuf)].buffer) + (*pos));
+  uint8_t   *lbuf = (uint8_t*)
+    ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 #endif
-  unsigned32  llength = bufs[(*cbuf)].length;
+  uint32_t    llength = bufs[(*cbuf)].length;
     
-  while (((*(volatile unsigned8 *)(port+IDE_REGISTER_STATUS)) 
+  while (((*(volatile uint8_t*)(port+IDE_REGISTER_STATUS)) 
 	  & IDE_REGISTER_STATUS_DRQ) && 
 	 (cnt < block_size)) {
 #ifdef DATAREG_16BIT
-    *lbuf++ = *(volatile unsigned16 *)(port+8); /* 16 bit data port */
+    *lbuf++ = *(volatile uint16_t*)(port+8); /* 16 bit data port */
     cnt += 2; 
     (*pos) += 2;
 #else
-    *lbuf++ = *(volatile unsigned8 *)(port+IDE_REGISTER_DATA);
+    *lbuf++ = *(volatile uint8_t*)(port+IDE_REGISTER_DATA);
     cnt += 1; 
     (*pos) += 1;
 #endif
@@ -276,40 +276,40 @@ void mbx8xx_pcmciaide_write_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor, 
- unsigned16 block_size, 
+ uint16_t   block_size, 
  blkdev_sg_buffer *bufs, 
- rtems_unsigned32 *cbuf,
- rtems_unsigned32 *pos
+ uint32_t   *cbuf,
+ uint32_t   *pos
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  unsigned32  port = IDE_Controller_Table[minor].port1;
-  unsigned16  cnt = 0;
+  uint32_t    port = IDE_Controller_Table[minor].port1;
+  uint16_t    cnt = 0;
 
 #ifdef DEBUG_OUT
   printk("mbx8xx_pcmciaide_write_block()\r\n");
 #endif
 #ifdef DATA_REG_16BIT
-  unsigned16 *lbuf = (unsigned16 *)
-    ((unsigned8 *)(bufs[(*cbuf)].buffer) + (*pos));
+  uint16_t   *lbuf = (uint16_t*)
+    ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 #else
-  unsigned8 *lbuf = (unsigned8 *)
-    ((unsigned8 *)(bufs[(*cbuf)].buffer) + (*pos));
+  uint8_t   *lbuf = (uint8_t*)
+    ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 #endif
-  unsigned32  llength = bufs[(*cbuf)].length;
+  uint32_t    llength = bufs[(*cbuf)].length;
     
-  while (((*(volatile unsigned8 *)(port+IDE_REGISTER_STATUS)) 
+  while (((*(volatile uint8_t*)(port+IDE_REGISTER_STATUS)) 
 	  & IDE_REGISTER_STATUS_DRQ) && 
 	 (cnt < block_size)) {
 #ifdef DATAREG_16BIT
-    *(volatile unsigned16 *)(port+8) = *lbuf++; /* 16 bit data port */
+    *(volatile uint16_t*)(port+8) = *lbuf++; /* 16 bit data port */
     cnt += 2; 
     (*pos) += 2;
 #else
-    *(volatile unsigned8 *)(port+IDE_REGISTER_DATA) = *lbuf++;
+    *(volatile uint8_t*)(port+IDE_REGISTER_DATA) = *lbuf++;
     cnt += 1; 
     (*pos) += 1;
 #endif
@@ -334,7 +334,7 @@ int mbx8xx_pcmciaide_control
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int  minor,                        /* controller minor number       */
- unsigned32 cmd,                    /* command to send               */
+ uint32_t   cmd,                    /* command to send               */
  void * arg                         /* optional argument             */
  )
 /*-------------------------------------------------------------------------*\
@@ -357,7 +357,7 @@ rtems_status_code mbx8xx_pcmciaide_config_io_speed
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int       minor,                   /* controller minor number       */
- unsigned8 modes_avail              /* optional argument             */
+ uint8_t   modes_avail              /* optional argument             */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |

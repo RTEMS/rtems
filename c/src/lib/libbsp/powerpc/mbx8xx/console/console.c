@@ -368,7 +368,7 @@ static rtems_status_code do_poll_read(
     pollRead = m8xx_uart_pollRead;
 
   while( (c = (*pollRead)(minor)) == -1 );
-  rw_args->buffer[0] = (unsigned8)c;
+  rw_args->buffer[0] = (uint8_t)c;
   if( rw_args->buffer[0] == '\r' )
       rw_args->buffer[0] = '\n';
   rw_args->bytes_moved = 1;
@@ -383,7 +383,7 @@ static rtems_status_code do_poll_read(
 #endif
 
   while( (c = BSP_READ(minor)) == -1 );
-  rw_args->buffer[0] = (unsigned8)c;
+  rw_args->buffer[0] = (uint8_t)c;
   if( rw_args->buffer[0] == '\r' )
       rw_args->buffer[0] = '\n';
   rw_args->bytes_moved = 1;
@@ -421,7 +421,7 @@ static rtems_status_code do_poll_write(
 )
 {
   rtems_libio_rw_args_t *rw_args = arg;
-  unsigned32 i;
+  uint32_t   i;
   char cr ='\r';
 
 #if NVRAM_CONFIGURE == 1

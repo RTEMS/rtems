@@ -25,7 +25,7 @@
  *  course, the code will not be safely restartable, but then again,
  *  a lot of the library code isn't either, so there!
  */
-unsigned32 simask_copy = 0;
+uint32_t   simask_copy = 0;
 
 /*
  *  The memory controller's UPMA Ram array values.
@@ -44,7 +44,7 @@ unsigned32 simask_copy = 0;
  *  as being 50 MHz, while the MBXA/IH2.1 manual lists it as 40 MHz.
  *  We think the MBX821_001B is an entry level board and thus is 50 MHz,
  */
-static unsigned32 upmaTable[64] = {
+static uint32_t   upmaTable[64] = {
 
 #if ( defined(mbx860_001b) || \
         defined(mbx821_001b) || \
@@ -154,8 +154,8 @@ static unsigned32 upmaTable[64] = {
  */
 void _InitMBX8xx (void)
 {
-  register unsigned32 r1, i;
-  extern unsigned32 simask_copy;
+  register uint32_t   r1, i;
+  extern uint32_t   simask_copy;
 
   /*			
    *  Initialize the Debug Enable Register (DER) to an appropriate
