@@ -650,6 +650,13 @@ SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
 #define SPARC_REAL_TRAP_NUMBER( _trap )     ((_trap) % 256)
 
 /*
+ *  This is defined if the port has a special way to report the ISR nesting
+ *  level.  Most ports maintain the variable _ISR_Nest_level.
+ */
+
+#define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
+
+/*
  *  Should be large enough to run all tests.  This insures
  *  that a "reasonable" small application should not have any problems.
  *

@@ -215,6 +215,13 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
+ *  This is defined if the port has a special way to report the ISR nesting
+ *  level.  Most ports maintain the variable _ISR_Nest_level.
+ */
+
+#define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
+
+/*
  *  Minimum size of a thread's stack.
  *
  *  NOTE:  See CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK

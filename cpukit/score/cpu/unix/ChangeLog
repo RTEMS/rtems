@@ -1,3 +1,17 @@
+2001-11-28	Joel Sherrill <joel@OARcorp.com>,
+
+	This was tracked as PR91.
+	* rtems/score/cpu.h: Added CPU_PROVIDES_ISR_IS_IN_PROGRESS macro which
+	is used to specify if the port uses the standard macro for this (FALSE).
+	A TRUE setting indicates the port provides its own implementation.
+
+2001-11-28	Joel Sherrill <joel@OARcorp.com>,
+
+	This was tracked as PR91.
+	* rtems/score/cpu.h: Added CPU_PROVIDES_ISR_IS_IN_PROGRESS macro which
+	is used to specify if the port uses the standard macro for this (FALSE).
+	A TRUE setting indicates the port provides its own implementation.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
