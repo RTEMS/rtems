@@ -1,3 +1,24 @@
+2002-07-01    Joel Sherrill <joel@OARcorp.com>
+
+	* Mega patch merge to change the format of the object IDs to
+	loosen the dependency between the SCORE and the various APIs.
+	There was considerable work to simplify the object name management
+        and it appears that the name_table field is no longer needed.
+	This patch also includes the addition of the internal mutex
+	which is currently only used to protect some types of allocation
+	and deallocation.  This significantly can reduce context 
+	switch latency under certain circumstances.  In particular,
+	some heap/region operations were O(n) and had dispatching
+	disabled.  This should help enormously.  With this merge,
+	the patch is not as clean as it should be.  In particular,
+	the documentation has not been modified to reflect the new object
+	ID layout, the IDs in the test screens are not updated, and
+	_Objects_Get_information needs to be a real routine not inlined.
+	As part of this patch a lot of MP code for thread/proxy blocking
+	was made conditional and cleaned up.
+	* include/confdefs.h, src/exinit.c, src/extension.c, src/itronapi.c,
+	src/posixapi.c, src/rtemsapi.c:  Modified as part of above.
+
 2001-05-09	Joel Sherrill <joel@OARcorp.com>
 
 	* src/exinit.c: Slightly rework initialization so there

@@ -40,6 +40,8 @@
 #include <rtems/rtems/signal.h>
 #include <rtems/rtems/timer.h>
 
+Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
+
 /*PAGE
  *
  *  _RTEMS_API_Initialize
@@ -54,6 +56,8 @@ void _RTEMS_API_Initialize(
   rtems_api_configuration_table *api_configuration;
 
   api_configuration = configuration_table->RTEMS_api_configuration;
+
+  _Objects_Information_table[OBJECTS_CLASSIC_API] = _RTEMS_Objects;
 
   _Attributes_Handler_initialization();
  

@@ -60,6 +60,7 @@ itron_api_configuration_table _ITRON_Default_configuration = {
   NULL                           /* User_initialization_tasks_table */
 };
 
+Objects_Information *_ITRON_Objects[ OBJECTS_ITRON_CLASSES_LAST + 1 ];
 
 void _ITRON_API_Initialize(
   rtems_configuration_table *configuration_table
@@ -75,6 +76,8 @@ void _ITRON_API_Initialize(
   if ( !api_configuration ) 
     api_configuration = &_ITRON_Default_configuration;
 
+  _Objects_Information_table[OBJECTS_ITRON_API] = _ITRON_Objects;
+    
   _ITRON_Task_Manager_initialization(
     api_configuration->maximum_tasks,
     api_configuration->number_of_initialization_tasks,

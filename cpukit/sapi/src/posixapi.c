@@ -61,6 +61,8 @@ posix_api_configuration_table _POSIX_Default_configuration = {
   NULL                           /* User_initialization_threads_table */
 };
 
+Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
+
 
 void _POSIX_API_Initialize(
   rtems_configuration_table *configuration_table
@@ -75,6 +77,8 @@ void _POSIX_API_Initialize(
   api_configuration = configuration_table->POSIX_api_configuration;
   if ( !api_configuration ) 
     api_configuration = &_POSIX_Default_configuration;
+
+  _Objects_Information_table[OBJECTS_POSIX_API] = _POSIX_Objects;
 
   _POSIX_signals_Manager_Initialization(
     api_configuration->maximum_queued_signals

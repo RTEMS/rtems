@@ -36,12 +36,16 @@ void _Extension_Manager_initialization(
 {
   _Objects_Initialize_information(
     &_Extension_Information,
+    OBJECTS_CLASSIC_API,                 /* object API */
     OBJECTS_RTEMS_EXTENSIONS,
-    FALSE,
     maximum_extensions,
     sizeof( Extension_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+    FALSE,                     /* TRUE if the name is a string */
+    RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                     /* TRUE if this is a global object class */
+    NULL                       /* Proxy extraction support callout */
+#endif
   );
 }

@@ -22,7 +22,8 @@
  *         the above.  This procedure has evolved from just enough to
  *         support the RTEMS Test Suites into something that can be
  *         used remarkably reliably by most applications.
- *  COPYRIGHT (c) 1989-1999.
+ *
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

@@ -29,9 +29,7 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/apiext.h>
-#if 0
 #include <rtems/score/apimutex.h>
-#endif
 #include <rtems/score/copyrt.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
@@ -58,6 +56,7 @@
 #include <rtems/itron/itronapi.h>
 #endif
 
+Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
 /*PAGE
  *
@@ -125,7 +124,6 @@ rtems_interrupt_level rtems_initialize_executive_early(
   multiprocessing_table = NULL;
 
   _System_state_Handler_initialization( FALSE );
-
 #endif
 
   /*
@@ -182,6 +180,8 @@ rtems_interrupt_level rtems_initialize_executive_early(
     multiprocessing_table->maximum_global_objects
   );
 
+  _Objects_Information_table[OBJECTS_INTERNAL_API] = _Internal_Objects;
+
   _Priority_Handler_initialization();
 
   _Watchdog_Handler_initialization();
@@ -203,6 +203,8 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
 /* MANAGERS */
 
+  _RTEMS_API_Initialize( configuration_table );
+
   _Extension_Manager_initialization( configuration_table->maximum_extensions );
 
   _IO_Manager_initialization(
@@ -211,8 +213,6 @@ rtems_interrupt_level rtems_initialize_executive_early(
     configuration_table->maximum_drivers,
     configuration_table->maximum_devices
   );
-
-  _RTEMS_API_Initialize( configuration_table );
 
 #ifdef RTEMS_POSIX_API
   _POSIX_API_Initialize( configuration_table );
