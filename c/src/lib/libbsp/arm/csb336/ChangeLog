@@ -1,5 +1,10 @@
 2004-07-15	Jay Monkman
 
+	* console/.cvsignore, include/.cvsignore, network/.cvsignore,
+	start/.cvsignore, startup/.cvsignore: New files.
+
+2004-07-15	Jay Monkman
+
 	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac, times,
 	console/uart.c, include/bsp.h, include/tm27.h, network/lan91c11x.c,
 	network/lan91c11x.h, network/network.c, start/start.S,
