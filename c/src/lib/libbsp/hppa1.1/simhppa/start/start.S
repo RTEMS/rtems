@@ -127,6 +127,7 @@ _sr4export:
 	.PROCEND
 
 
+#if 0
         .subspa $UNWIND_START$,QUAD=0,ALIGN=8,ACCESS=0x2c,SORT=56
         .export $UNWIND_START
 $UNWIND_START
@@ -141,6 +142,7 @@ $RECOVER_START
         .subspa $RECOVER_END$,QUAD=0,ALIGN=4,ACCESS=0x2c,SORT=88
         .export $RECOVER_END
 $RECOVER_END
+#endif
 
 /*
  * Here we set up the standard date sub spaces.
@@ -151,6 +153,7 @@ $RECOVER_END
  * can find it. The stack grows towards the higher addresses.
  */
 
+#if 0
         .subspa $DATA$,QUAD=1,ALIGN=8,ACCESS=0x1f,SORT=16
         .subspa $SHORTDATA$,QUAD=1,ALIGN=8,ACCESS=0x1f,SORT=24
         .subspa $GLOBAL$,QUAD=1,ALIGN=8,ACCESS=0x1f,SORT=40
@@ -160,6 +163,7 @@ $global$
         .subspa $BSS$,QUAD=1,ALIGN=8,ACCESS=0x1f,SORT=82,ZERO
 
         .subspa $STACK$,QUAD=1,ALIGN=8,ACCESS=0x1f,SORT=88,ZERO
+#endif
 
         .export crt_stack
 crt_stack
