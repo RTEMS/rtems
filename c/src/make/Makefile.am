@@ -9,7 +9,7 @@ rtems_makedir = $(prefix)/make
 
 GENERIC_FILES = host.cfg
 
-MAKE_FILES = README directory.cfg leaf.cfg lib.cfg
+MAKE_FILES = README directory.cfg lib.cfg
 
 rtems_make_DATA = $(MAKE_FILES) $(GENERIC_FILES)
 
@@ -38,6 +38,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 	@echo rtems_cv_RTEMS_BSP_FAMILY=\$${rtems_cv_RTEMS_BSP_FAMILY=$(RTEMS_BSP_FAMILY)} >> $@
 
 DISTCLEANFILES = @RTEMS_BSP@.cache
+
+EXTRA_DIST = leaf.cfg
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
