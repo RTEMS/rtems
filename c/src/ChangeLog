@@ -1,3 +1,12 @@
+2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: New.
+	* Makefile.am: Remove tar-installation. 
+	Prepend @exec@ to SUBDIRS.
+	* configure.ac: Switch to AC_CONFIG_SRCDIR([optman]).
+	Add RTEMS_ENABLE_MULTIPROCESSING.
+	Add RTEMS_CONFIG_SUBDIR([exec]...).
+
 2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove librpc.

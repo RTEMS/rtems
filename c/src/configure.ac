@@ -4,7 +4,7 @@
 
 AC_PREREQ(2.52)
 AC_INIT([rtems-c-src],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
-AC_CONFIG_SRCDIR([exec])
+AC_CONFIG_SRCDIR([optman])
 RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)
 
@@ -19,6 +19,7 @@ AM_INIT_AUTOMAKE([no-define foreign 1.6])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTILIB
+RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_CPU
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
@@ -29,9 +30,13 @@ RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 AC_CONFIG_SUBDIRS(make)
 
 ## Exclude exec from building if multilibs are enabled
-if test x"$multilib" = x"no"; then
-AC_CONFIG_SUBDIRS(exec)
-fi
+AS_IF([test x"$multilib" = x"no"],[
+  RTEMS_CHECK_MULTIPROCESSING
+# RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],[--with-project-root="../../"])
+  RTEMS_CONFIG_SUBDIR([exec],[exec],[--with-project-root="../../"])
+  AC_SUBST([exec],[exec])
+])
+
 AC_CONFIG_SUBDIRS(optman)
 AC_CONFIG_SUBDIRS(lib/libcpu)
 AC_CONFIG_SUBDIRS(lib/libbsp)
