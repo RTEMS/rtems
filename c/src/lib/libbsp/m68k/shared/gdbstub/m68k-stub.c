@@ -1072,9 +1072,9 @@ void handle_exception(int exceptionVector)
           {
               if (remote_debug)
                   printf("frame at 0x%x has pc=0x%x, except#=%d\n",
-                         (unsigned32) frame,
-			 (unsigned32) frame->exceptionPC,
-                         (unsigned32) frame->exceptionVector);
+                         (uint32_t) frame,
+			 (uint32_t) frame->exceptionPC,
+                         (uint32_t) frame->exceptionVector);
               if (frame->exceptionPC == newPC) break;  /* bingo! a match */
               /*
                * for a breakpoint instruction, the saved pc may
@@ -1113,7 +1113,7 @@ void handle_exception(int exceptionVector)
                   {
                       if (remote_debug)
                           printf("frame at 0x%x has pc=0x%x, except#=%d\n",
-                                 (unsigned32) frame,
+                                 (uint32_t) frame,
 				 frame->exceptionPC,
                                  frame->exceptionVector);
                       /* re-use the last frame, we're skipping it (longjump?)*/
