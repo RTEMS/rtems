@@ -70,6 +70,7 @@ typedef struct {
   boolean              is_timeslice;
   unsigned32           isr_level;
   Priority_Control     initial_priority; /* initial priority                */
+  boolean              core_allocated_stack;
   Stack_Control        Initial_stack;    /* stack information               */
   void                *fp_context;       /* initial FP context area address */
   void                *stack;            /* initial FP context area address */
