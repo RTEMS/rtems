@@ -1,6 +1,6 @@
-2003-02-14	Joel Sherrill <joel@OARcorp.com>
+2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* preface.texi: Remove a29k references and update.
+	* fatal.t: Reflect c/src/exec having moved to cpukit.
 
 2003-02-03	Joel Sherrill <joel@OARcorp.com>
 
