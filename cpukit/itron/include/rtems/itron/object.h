@@ -34,7 +34,7 @@ typedef Objects_Control ITRON_Objects_Control;
  */
 
 #define _ITRON_Objects_Open( _the_information, _the_object ) \
-    _Objects_Open( (_the_information), (_the_object) )
+    _Objects_Open( (_the_information), (_the_object), NULL )
 
 /*
  *  _ITRON_Objects_Close
