@@ -2,8 +2,8 @@
  *  $Id$
  */
 
-#include <rtems/score/iregdef.h>
-#include <rtems/score/idtcpu.h>
+#include <iregdef.h>
+#include <idtcpu.h>
 
 #define FRAME(name,frm_reg,offset,ret_reg)      \
         .globl  name;                           \

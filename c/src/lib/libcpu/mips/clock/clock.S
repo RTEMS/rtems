@@ -21,9 +21,9 @@
  */
 /* @(#)clock.S       08/20/96     1.2 */
 
-#include <rtems/score/iregdef.h>
-#include <rtems/score/idtcpu.h>
-#include <rtems/score/idtmon.h>
+#include <iregdef.h>
+#include <idtcpu.h>
+#include <idtmon.h>
 
 FRAME(mips_set_timer,sp,0,ra)
 	.set noreorder

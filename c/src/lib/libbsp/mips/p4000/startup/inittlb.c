@@ -2,7 +2,7 @@
  *  $Id$
  */
 
-#include <rtems/score/idtcpu.h>
+#include <idtcpu.h>
 
 extern void resettlb( int i );
 

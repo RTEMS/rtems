@@ -2,9 +2,9 @@
  *  $Id$
  */
 
-#include <rtems/score/iregdef.h>
-#include <rtems/score/idtmon.h>
-#include <rtems/score/idtcpu.h>
+#include <iregdef.h>
+#include <idtmon.h>
+#include <idtcpu.h>
 
 
 FRAME(mips_leddisplay,sp,0,ra)

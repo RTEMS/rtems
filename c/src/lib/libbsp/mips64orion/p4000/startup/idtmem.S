@@ -38,9 +38,9 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
  * to set mem_size. 
  */
 
-#include <rtems/score/iregdef.h>
-#include <rtems/score/idtcpu.h>
-#include <rtems/score/idtmon.h>
+#include <iregdef.h>
+#include <idtcpu.h>
+#include <idtmon.h>
 
 	.data
 mem_size:
