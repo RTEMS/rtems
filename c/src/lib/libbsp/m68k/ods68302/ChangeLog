@@ -1,3 +1,12 @@
+2002-08-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/Makefile.am: Remove -DGDB_MONITOR_ACTIVE (Not used
+	anywhere).
+	Add ODS60302_DEBUG conditional.
+	* include/bsp.h: Fix broken bsp_cat macros (Not compliant to gcc31).
+	* configure.ac: Add --enable-ods60302-debug.
+	Add ODS60302_DEBUG conditional.
+
 2002-08-05	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR260 eliminate use of make-target-options.  This impacted

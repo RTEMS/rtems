@@ -44,11 +44,11 @@ extern "C" {
 #if defined(VARIANT)
 
 #define __bsp_cat(x, y) x ## y
-#define __bsp_xcat(x, y) __bsp_cat(x, y)
+#define __bsp_xcat(x, y) __bsp_cat(x,y)
 #define __bsp_str(s) #s
 #define __bsp_xstr(s) __bsp_str(s)
 
-#define __BSP_HEADER_FILE__ __bsp_xcat(VARIANT, .h)
+#define __BSP_HEADER_FILE__ __bsp_xcat(VARIANT,.h)
 #define __BSP_HEADER_FILE_STR__ __bsp_xstr(__BSP_HEADER_FILE__)
 
 #include __BSP_HEADER_FILE_STR__
