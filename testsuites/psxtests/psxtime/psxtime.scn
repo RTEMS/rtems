@@ -260,6 +260,43 @@ time:         Wed Mar 03 10:06:24 2010
 localtime:    Wed Mar 03 10:06:24 2010
 gmtime:       Wed Mar 03 10:06:24 2010
 
+rtems_clock_set          15:00:59   04/04/2020
+rtems_clock_get          15:00:59   04/04/2020
+gettimeofday: Sat Apr 04 15:00:59 2020
+time:         Sat Apr 04 15:00:59 2020
+localtime:    Sat Apr 04 15:00:59 2020
+gmtime:       Sat Apr 04 15:00:59 2020
+
+rtems_clock_get          15:01:04   04/04/2020
+gettimeofday: Sat Apr 04 15:01:04 2020
+time:         Sat Apr 04 15:01:04 2020
+localtime:    Sat Apr 04 15:01:04 2020
+gmtime:       Sat Apr 04 15:01:04 2020
+
+rtems_clock_get          15:01:09   04/04/2020
+gettimeofday: Sat Apr 04 15:01:09 2020
+time:         Sat Apr 04 15:01:09 2020
+localtime:    Sat Apr 04 15:01:09 2020
+gmtime:       Sat Apr 04 15:01:09 2020
+
+rtems_clock_get          15:01:14   04/04/2020
+gettimeofday: Sat Apr 04 15:01:14 2020
+time:         Sat Apr 04 15:01:14 2020
+localtime:    Sat Apr 04 15:01:14 2020
+gmtime:       Sat Apr 04 15:01:14 2020
+
+rtems_clock_get          15:01:19   04/04/2020
+gettimeofday: Sat Apr 04 15:01:19 2020
+time:         Sat Apr 04 15:01:19 2020
+localtime:    Sat Apr 04 15:01:19 2020
+gmtime:       Sat Apr 04 15:01:19 2020
+
+rtems_clock_get          15:01:24   04/04/2020
+gettimeofday: Sat Apr 04 15:01:24 2020
+time:         Sat Apr 04 15:01:24 2020
+localtime:    Sat Apr 04 15:01:24 2020
+gmtime:       Sat Apr 04 15:01:24 2020
+
 
 
 *** END OF TIME OF DAY TEST 01 ***
