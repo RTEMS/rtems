@@ -1,3 +1,11 @@
+2001-11-08	Jiri Gaisler <jiri@gaisler.com>
+
+	This fix is in response to test results reported by Jerry Needell
+	<jerry.needell@unh.edu> for the SPARC/ERC32 and tracked as PR80.
+	* include/bsp.h: TM27 was not running properly because the ERC32
+	and LEON cannot nest interrupts at the same level.  The BSP test support
+	had to be modified to support using two different interrupt sources.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

@@ -4,6 +4,7 @@
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -25,8 +26,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <bspopts.h>
 
 #include <rtems.h>
 #include <iosupp.h>
@@ -94,15 +93,17 @@ extern "C" {
 
 #define TEST_INTERRUPT_SOURCE LEON_INTERRUPT_EXTERNAL_1
 #define TEST_VECTOR LEON_TRAP_TYPE( TEST_INTERRUPT_SOURCE )
- 
+#define TEST_INTERRUPT_SOURCE2 LEON_INTERRUPT_EXTERNAL_1+1
+#define TEST_VECTOR2 LEON_TRAP_TYPE( TEST_INTERRUPT_SOURCE2 )
 #define MUST_WAIT_FOR_INTERRUPT 1
  
 #define Install_tm27_vector( handler ) \
-  set_vector( (handler), TEST_VECTOR, 1 );
+  set_vector( (handler), TEST_VECTOR, 1 ); \
+  set_vector( (handler), TEST_VECTOR2, 1 );
  
 #define Cause_tm27_intr() \
   do { \
-    LEON_Force_interrupt( TEST_INTERRUPT_SOURCE ); \
+    LEON_Force_interrupt( TEST_INTERRUPT_SOURCE+(Interrupt_nest>>1)); \
     nop(); \
     nop(); \
     nop(); \
@@ -122,7 +123,7 @@ extern "C" {
 
 extern void Clock_delay(rtems_unsigned32 microseconds);
 
-#define rtems_bsp_delay( microseconds ) Clock_delay(microseconds)
+#define delay( microseconds ) Clock_delay(microseconds)
 
 /* Constants */
 
