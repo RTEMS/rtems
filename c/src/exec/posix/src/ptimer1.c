@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <signal.h>
 
+#include <rtems/posix/seterr.h>
 #include <rtems/posix/timer.h>
 
 /*****************************/
@@ -327,7 +328,7 @@ int timer_create(
           ( evp->sigev_notify != SIGEV_SIGNAL ) ) {
        /* The value of the field sigev_notify is not valid */
 
-       return (-1);
+       set_errno_and_return_minus_one( EINVAL );
 
      }
   }
@@ -355,9 +356,7 @@ int timer_create(
            /* There is not position for another timers in spite of RTEMS 
 	    * supports it. It will necessaty to increase the structure used */
 
-           errno = EAGAIN;
-
-           return -1;
+           set_errno_and_return_minus_one( EAGAIN );
         }
 
         /* Exit parameter */
@@ -397,9 +396,7 @@ int timer_create(
 
        PRINT_MSG_S ("ERROR: rtems create timer RTEMS_INVALID_NAME");
 
-       errno = EINVAL;
-       return (-1);
-
+       set_errno_and_return_minus_one( EINVAL );
 
      case RTEMS_TOO_MANY :
 
@@ -407,9 +404,7 @@ int timer_create(
  
        /* There has been created too much timers for the same process */
 
-       errno = EAGAIN;
-
-       return (-1);
+       set_errno_and_return_minus_one( EAGAIN );
      
      default :
 
@@ -419,7 +414,7 @@ int timer_create(
         * rtems_timer_create can not return other different value. 
         */
 
-       return (-1);
+       set_errno_and_return_minus_one( EINVAL );
 
   }
 
@@ -427,7 +422,7 @@ int timer_create(
    * The next sentence is used to avoid singular situations 
    */
 
-  return (-1);
+  set_errno_and_return_minus_one( EINVAL );
 
 }
 
@@ -459,9 +454,7 @@ int timer_delete(
 
    if ( timer_pos == BAD_TIMER_C ) {
       /* The timer identifier is erroneus */
-
-      errno = EINVAL;
-      return -1;
+      set_errno_and_return_minus_one( EINVAL );
    }
 
    /* The timer is deleted */
@@ -469,16 +462,13 @@ int timer_delete(
    status = rtems_timer_delete ( timerid );
 
    if ( status == RTEMS_INVALID_ID ) {
-      /* The timer identifier is erroneus */
-
-      errno = EINVAL;
-      return -1;
+     /* The timer identifier is erroneus */
+     set_errno_and_return_minus_one( EINVAL );
    }
 
    /* Initializes the data of the timer */
 
    TIMER_INITIALIZE_S ( timer_pos );
-
    return 0;
 }
 
@@ -509,19 +499,15 @@ int timer_settime(
    timer_pos = TIMER_POSITION_F ( timerid );
 
    if ( timer_pos == BAD_TIMER_C ) {
-      /* The timer identifier is erroneus */
-
-      errno = EINVAL;
-      return -1;
+     /* The timer identifier is erroneus */
+     set_errno_and_return_minus_one( EINVAL );
    }
 
    if ( value == NULL ) {
      /* The stucture of times of the timer is free, and then returns an
 	error but the variable errno is not actualized */
 
-     /* errno = ?????? */
-
-     return -1;
+     set_errno_and_return_minus_one( EINVAL );
    }
 
    /* If the function reaches this point, then it will be necessary to do
@@ -564,9 +550,7 @@ int timer_settime(
          ( value->it_value.tv_nsec < MIN_NSEC_C ) ) {
        /* The number of nanoseconds is not correct */
 
-       errno = EINVAL;
-
-       return -1;
+       set_errno_and_return_minus_one( EINVAL );
     }
 
    /* Then, "value" must be converted from seconds and nanoseconds to clock
@@ -695,9 +679,7 @@ int timer_settime(
               /* The timer identifier is not correct. In theory, this 
                * situation can not occur, but the solution is easy */ 
 
-              errno = EINVAL;
-
-              return -1;
+              set_errno_and_return_minus_one( EINVAL );
 
               break;
 
@@ -714,8 +696,7 @@ int timer_settime(
                * errno = EINVAL;
                */
 
-              return -1;
-
+              set_errno_and_return_minus_one( EINVAL );
               break;
            
            default:
@@ -764,7 +745,6 @@ int timer_gettime(
   */
  
   rtems_time_of_day current_time;
-  rtems_status_code return_v;
   int               timer_pos;
   unsigned32        hours;
   unsigned32        minutes;
@@ -780,13 +760,8 @@ int timer_gettime(
   timer_pos = TIMER_POSITION_F ( timerid );
 
   if ( timer_pos == BAD_TIMER_C ) {
-
-     /* The timer identifier is erroneus */  
-
-     errno = EINVAL;
-
-     return (-1);
-
+    /* The timer identifier is erroneus */  
+    set_errno_and_return_minus_one( EINVAL );
   }
 
   /* Calculates the difference between the start time of the timer and
@@ -872,11 +847,8 @@ int timer_getoverrun(
   timer_pos = TIMER_POSITION_F ( timerid );
 
   if ( timer_pos == BAD_TIMER_C ) {
-     /* The timer identifier is erroneus */
-
-     errno = EINVAL;
-
-     return -1;
+    /* The timer identifier is erroneus */
+    set_errno_and_return_minus_one( EINVAL );
   }
 
   /* The overflow count of the timer is stored in "overrun" */

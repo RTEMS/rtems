@@ -1,5 +1,10 @@
 2000-08-15	Joel Sherrill <joel@OARcorp.com>
 
+	* posix/src/ptimer1.c: Switched to using set_errno_and_return_minus_one()
+	to ensure that errno was always set.
+
+2000-08-15	Joel Sherrill <joel@OARcorp.com>
+
 	* posix/src/ptimer1.c (timer_settime): Converted use of rtems_clock_get
 	to use SuperCore _TOD_Current variable.
 
