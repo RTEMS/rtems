@@ -105,7 +105,7 @@ if HAS_MP
 libbsp_a_LIBADD += shmsupp$(LIB_VARIANT).rel
 endif
 libbsp_a_LIBADD += \
-    ../../../../libcpu/@RTEMS_CPU@/i960ca/score$(LIB_VARIANT).rel
+    ../../../libcpu/@RTEMS_CPU@/i960ca/score$(LIB_VARIANT).rel
 
 EXTRA_LIBRARIES += libbsp_g.a
 CLEANFILES += libbsp_g.a
