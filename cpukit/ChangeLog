@@ -1,5 +1,12 @@
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/xdr.h: Remove questionable comments.
+	* librpc/include/rpc/auth.h: Remove __P, ansi-fy.
+	* librpc/src/rpc/auth_none.c: Reflect changes above.
+	Partial update from FreeBSD.
+
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* posix/include/rtems/posix/cond.h,
 	file posix/include/rtems/posix/mutex.h: Cosmetics.
 

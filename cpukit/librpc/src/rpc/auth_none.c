@@ -45,16 +45,16 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/auth_none.c,v 1.9 1999/08/28 00
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 #include <rpc/auth.h>
-#define MAX_MARSHEL_SIZE 20
+#define MAX_MARSHAL_SIZE 20
 
 /*
  * Authenticator operations routines
  */
-static void	authnone_verf();
-static void	authnone_destroy();
-static bool_t	authnone_marshal();
-static bool_t	authnone_validate();
-static bool_t	authnone_refresh();
+static void	authnone_verf(AUTH*);
+static void	authnone_destroy(AUTH*);
+static bool_t	authnone_marshal(AUTH*, XDR*);
+static bool_t	authnone_validate(AUTH*, struct opaque_auth *);
+static bool_t	authnone_refresh(AUTH*);
 
 static struct auth_ops ops = {
 	authnone_verf,
@@ -66,16 +66,16 @@ static struct auth_ops ops = {
 
 static struct authnone_private {
 	AUTH	no_client;
-	char	marshalled_client[MAX_MARSHEL_SIZE];
+	char	marshalled_client[MAX_MARSHAL_SIZE];
 	u_int	mcnt;
 } *authnone_private;
 
 AUTH *
 authnone_create()
 {
-	register struct authnone_private *ap = authnone_private;
+	struct authnone_private *ap = authnone_private;
 	XDR xdr_stream;
-	register XDR *xdrs;
+	XDR *xdrs;
 
 	if (ap == 0) {
 		ap = (struct authnone_private *)calloc(1, sizeof (*ap));
@@ -87,7 +87,7 @@ authnone_create()
 		ap->no_client.ah_cred = ap->no_client.ah_verf = _null_auth;
 		ap->no_client.ah_ops = &ops;
 		xdrs = &xdr_stream;
-		xdrmem_create(xdrs, ap->marshalled_client, (u_int)MAX_MARSHEL_SIZE,
+		xdrmem_create(xdrs, ap->marshalled_client, (u_int)MAX_MARSHAL_SIZE,
 		    XDR_ENCODE);
 		(void)xdr_opaque_auth(xdrs, &ap->no_client.ah_cred);
 		(void)xdr_opaque_auth(xdrs, &ap->no_client.ah_verf);
@@ -99,11 +99,9 @@ authnone_create()
 
 /*ARGSUSED*/
 static bool_t
-authnone_marshal(client, xdrs)
-	AUTH *client;
-	XDR *xdrs;
+authnone_marshal(AUTH *client, XDR *xdrs)
 {
-	register struct authnone_private *ap = authnone_private;
+	struct authnone_private *ap = authnone_private;
 
 	if (ap == 0)
 		return (0);
@@ -112,25 +110,25 @@ authnone_marshal(client, xdrs)
 }
 
 static void
-authnone_verf()
+authnone_verf(AUTH *client)
 {
 }
 
 static bool_t
-authnone_validate()
+authnone_validate(AUTH *client, struct opaque_auth *opaque)
 {
 
 	return (TRUE);
 }
 
 static bool_t
-authnone_refresh()
+authnone_refresh(AUTH *client)
 {
 
 	return (FALSE);
 }
 
 static void
-authnone_destroy()
+authnone_destroy(AUTH *client)
 {
 }

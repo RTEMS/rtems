@@ -78,7 +78,7 @@ union des_block {
 };
 typedef union des_block des_block;
 __BEGIN_DECLS
-extern bool_t xdr_des_block __P((XDR *, des_block *));
+extern bool_t xdr_des_block (XDR *, des_block *);
 __END_DECLS
 
 /*
@@ -90,7 +90,7 @@ struct opaque_auth {
 	u_int	oa_length;		/* not to exceed MAX_AUTH_BYTES */
 };
 __BEGIN_DECLS
-bool_t xdr_opaque_auth __P((XDR *xdrs, struct opaque_auth *ap));
+bool_t xdr_opaque_auth (XDR *xdrs, struct opaque_auth *ap);
 __END_DECLS
 
 
@@ -102,16 +102,16 @@ typedef struct __rpc_auth {
 	struct	opaque_auth	ah_verf;
 	union	des_block	ah_key;
 	struct auth_ops {
-		void	(*ah_nextverf) __P((struct __rpc_auth *));
+		void	(*ah_nextverf) (struct __rpc_auth *);
 		/* nextverf & serialize */
-		int	(*ah_marshal) __P((struct __rpc_auth *, XDR *));
+		int	(*ah_marshal) (struct __rpc_auth *, XDR *);
 		/* validate verifier */
-		int	(*ah_validate) __P((struct __rpc_auth *,
-				struct opaque_auth *));
+		int	(*ah_validate) (struct __rpc_auth *,
+				struct opaque_auth *);
 		/* refresh credentials */
-		int	(*ah_refresh) __P((struct __rpc_auth *));
+		int	(*ah_refresh) (struct __rpc_auth *);
 		/* destroy this structure */
-		void	(*ah_destroy) __P((struct __rpc_auth *));
+		void	(*ah_destroy) (struct __rpc_auth *);
 	} *ah_ops;
 	caddr_t ah_private;
 } AUTH;
@@ -168,9 +168,9 @@ extern struct opaque_auth _null_auth;
  */
 __BEGIN_DECLS
 struct sockaddr_in;
-extern AUTH *authunix_create		__P((char *, int, int, int, int *));
-extern AUTH *authunix_create_default	__P((void));
-extern AUTH *authnone_create		__P((void));
+extern AUTH *authunix_create		(char *, int, int, int, int *);
+extern AUTH *authunix_create_default	(void);
+extern AUTH *authnone_create		(void);
 __END_DECLS
 
 /* Forward compatibility with TI-RPC */
@@ -186,7 +186,7 @@ __END_DECLS
  * 	des_block *ckey;		- optional conversation key to use
  */
 __BEGIN_DECLS
-extern AUTH *authdes_create __P(( char *, u_int, struct sockaddr *, des_block * ));
+extern AUTH *authdes_create ( char *, u_int, struct sockaddr *, des_block * );
 #ifdef NOTYET
 /*
  * TI-RPC supports this call, but it requires the inclusion of
@@ -194,9 +194,9 @@ extern AUTH *authdes_create __P(( char *, u_int, struct sockaddr *, des_block * 
  * headers which would result in a tangled mess. For now, the NIS+
  * code prototypes this routine internally.
  */
-extern AUTH *authdes_pk_create __P(( char *, netobj *, u_int,
+extern AUTH *authdes_pk_create ( char *, netobj *, u_int,
 				     struct sockaddr *, des_block *,
-				     nis_server * ));
+				     nis_server * );
 #endif
 __END_DECLS
 
@@ -204,12 +204,12 @@ __END_DECLS
  * Netname manipulation routines.
  */
 __BEGIN_DECLS
-extern int netname2user __P(( char *, uid_t *, gid_t *, int *, gid_t *));
-extern int netname2host __P(( char *, char *, int ));
-extern int getnetname __P(( char * ));
-extern int user2netname __P(( char *, uid_t, char * ));
-extern int host2netname __P(( char *, char *, char * ));
-extern void passwd2des __P(( char *, char * ));
+extern int netname2user ( char *, uid_t *, gid_t *, int *, gid_t *);
+extern int netname2host ( char *, char *, int );
+extern int getnetname ( char * );
+extern int user2netname ( char *, uid_t, char * );
+extern int host2netname ( char *, char *, char * );
+extern void passwd2des ( char *, char * );
 __END_DECLS
 
 /*
@@ -229,24 +229,24 @@ struct netstarg {
 };
 
 __BEGIN_DECLS
-extern int key_decryptsession __P(( const char *, des_block * ));
-extern int key_decryptsession_pk __P(( char *, netobj *, des_block * ));
-extern int key_encryptsession __P(( const char *, des_block * ));
-extern int key_encryptsession_pk __P(( char *, netobj *, des_block * ));
-extern int key_gendes __P(( des_block * ));
-extern int key_setsecret __P(( const char * ));
-extern int key_secretkey_is_set __P(( void ));
-extern int key_setnet __P(( struct netstarg * ));
-extern int key_get_conv __P(( char *, des_block * ));
+extern int key_decryptsession ( const char *, des_block * );
+extern int key_decryptsession_pk ( char *, netobj *, des_block * );
+extern int key_encryptsession ( const char *, des_block * );
+extern int key_encryptsession_pk ( char *, netobj *, des_block * );
+extern int key_gendes ( des_block * );
+extern int key_setsecret ( const char * );
+extern int key_secretkey_is_set ( void );
+extern int key_setnet ( struct netstarg * );
+extern int key_get_conv ( char *, des_block * );
 __END_DECLS
 
 /*
  * Publickey routines.
  */
 __BEGIN_DECLS
-extern int getpublickey __P(( char *, char * ));
-extern int getpublicandprivatekey __P(( char *, char * ));
-extern int getsecretkey __P(( char *, char *, char * ));
+extern int getpublickey ( char *, char * );
+extern int getpublicandprivatekey ( char *, char * );
+extern int getsecretkey ( char *, char *, char * );
 __END_DECLS
 
 
