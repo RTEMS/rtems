@@ -1,4 +1,5 @@
 ;
+#if 0
 ;	.include "register.ah"
         .include "amd.ah"
         .include "pswmacro.ah"
@@ -52,9 +53,11 @@ timer_disable_sup:
 	andn	it0,it1,it0
 	mtsr	ops,it0
 	iret
+#endif
 
 	.global	_a29k_init_timer
 _a29k_init_timer:
+#if 0
 	push	msp,lr0
 	const	lr2,INIT_TIMER
 	consth	lr2,INIT_TIMER
@@ -96,21 +99,28 @@ _a29k_init_timer:
 	pop	lr0,msp
 	jmpi	lr0
 	nop
+#endif
 
 	.global	_a29k_clear_timer
 _a29k_clear_timer:
+#if 0
 ;	asneq	CLEAR_TIMER,gr1,gr1
 	jmpi lr0
 	nop
+#endif
 
 	.global	_a29k_disable_timer
 _a29k_disable_timer:
+#if 0
 	asneq	DISABLE_TIMER,gr1,gr1
 	jmpi lr0
 	nop
+#endif
 
 	.global	_a29k_get_timer
 _a29k_get_timer:
+#if 0
 	asneq	GET_TIMER,gr1,gr1
 	jmpi lr0
 	nop
+#endif
