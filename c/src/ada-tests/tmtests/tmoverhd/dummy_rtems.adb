@@ -724,7 +724,6 @@ package body DUMMY_RTEMS is
       MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
       MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
       ARGUMENT     : in     RTEMS.ADDRESS;
-      RETURN_VALUE :    out RTEMS.UNSIGNED32;
       RESULT       :    out RTEMS.STATUS_CODES
    ) is
    begin
@@ -737,7 +736,6 @@ package body DUMMY_RTEMS is
       MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
       MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
       ARGUMENT     : in     RTEMS.ADDRESS;
-      RETURN_VALUE :    out RTEMS.UNSIGNED32;
       RESULT       :    out RTEMS.STATUS_CODES
    ) is
    begin
@@ -750,7 +748,6 @@ package body DUMMY_RTEMS is
       MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
       MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
       ARGUMENT     : in     RTEMS.ADDRESS;
-      RETURN_VALUE :    out RTEMS.UNSIGNED32;
       RESULT       :    out RTEMS.STATUS_CODES
    ) is
    begin
@@ -763,7 +760,6 @@ package body DUMMY_RTEMS is
       MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
       MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
       ARGUMENT     : in     RTEMS.ADDRESS;
-      RETURN_VALUE :    out RTEMS.UNSIGNED32;
       RESULT       :    out RTEMS.STATUS_CODES
    ) is
    begin
@@ -776,7 +772,6 @@ package body DUMMY_RTEMS is
       MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
       MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
       ARGUMENT     : in     RTEMS.ADDRESS;
-      RETURN_VALUE :    out RTEMS.UNSIGNED32;
       RESULT       :    out RTEMS.STATUS_CODES
    ) is
    begin
@@ -789,7 +784,6 @@ package body DUMMY_RTEMS is
       MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
       MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
       ARGUMENT     : in     RTEMS.ADDRESS;
-      RETURN_VALUE :    out RTEMS.UNSIGNED32;
       RESULT       :    out RTEMS.STATUS_CODES
    ) is
    begin

@@ -8,9 +8,7 @@ include $(top_srcdir)/ada.am
 
 AM_ADAFLAGS += -I.
 
-if EXPADA
 noinst_PROGRAMS = sp19
-endif
 
 sp19_SOURCES = sp19.adb sptest.adb config.h sptest.ads
 

@@ -76,7 +76,6 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      RESULT       : RTEMS.Unsigned32;
       STATUS       : RTEMS.STATUS_CODES;
    begin
 
@@ -154,7 +153,6 @@ package body SPTEST is
          SPTEST.STUB_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RESULT,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_INITIALIZE" );

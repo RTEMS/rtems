@@ -6,9 +6,7 @@ include $(top_srcdir)/../../../automake/lib.am
 
 include $(top_srcdir)/ada.am
 
-if EXPADA
 noinst_PROGRAMS = sp21
-endif
 
 sp21_SOURCES = sp21.adb config.h sptest.adb sptest.ads
 
