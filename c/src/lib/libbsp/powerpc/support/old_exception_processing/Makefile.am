@@ -19,7 +19,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../automake/lib.am
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o

@@ -25,7 +25,7 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
     $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(c_clock_rel_OBJECTS)

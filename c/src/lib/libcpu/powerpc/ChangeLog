@@ -1,3 +1,16 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* new_exception_processing/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* old_exception_processing/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* mpc6xx/mmu/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* mpc6xx/clock/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* mpc6xx/exceptions/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* mpc8xx/include/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* mpc8xx/exceptions/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* shared/include/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* shared/src/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* shared/src/Makefile.am: Use 'CLEANFILES ='.
+
 2000-06-08	Eric Valette <valette@crf.canon.fr>
 
 	* mpc8xx/console-generic/console-generic.c:

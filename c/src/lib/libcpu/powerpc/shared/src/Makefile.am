@@ -30,12 +30,12 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 cache.h: $(top_srcdir)/../shared/include/cache.h
 	cp $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
     $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 
-CLEANFILES += cache.h
+CLEANFILES = cache.h
 
 EXTRA_DIST = cache.c cache_.h
 

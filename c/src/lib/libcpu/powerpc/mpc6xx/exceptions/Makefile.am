@@ -33,7 +33,7 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 $(PGM): $(exceptions_rel_OBJECTS)
 	$(make-rel)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
     $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(exceptions_rel_OBJECTS) $(PGM)
