@@ -28,6 +28,19 @@ with System.Storage_Elements;
 package SPTEST is
 
 --
+--  Buffer Record similar to that used by RTEMS 3.2.1.  Using this
+--  avoids changes to the test.
+--
+
+   type BUFFER is
+      record
+         FIELD1 : RTEMS.UNSIGNED32;   -- TEMPORARY UNTIL VARIABLE LENGTH
+         FIELD2 : RTEMS.UNSIGNED32;
+         FIELD3 : RTEMS.UNSIGNED32;
+         FIELD4 : RTEMS.UNSIGNED32;
+      end record;
+
+--
 --  These arrays contain the IDs and NAMEs of all RTEMS tasks created
 --  by this test.
 --

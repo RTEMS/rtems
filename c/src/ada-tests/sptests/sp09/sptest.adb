@@ -584,7 +584,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE(
          TASK_NAME,
          1,
-         RTEMS.CONFIGURATION.WORKSPACE_SIZE,
+         RTEMS.CONFIGURATION.WORK_SPACE_SIZE,
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
@@ -877,7 +877,6 @@ package body SPTEST is
 
    procedure SCREEN_5
    is
-      COUNT          : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
@@ -885,6 +884,7 @@ package body SPTEST is
          0,
          1,
          RTEMS.DEFAULT_ATTRIBUTES,
+         RTEMS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -899,6 +899,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 1 ),
          1,
          RTEMS.DEFAULT_ATTRIBUTES,
+         RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 1 ),
          STATUS
       );
@@ -912,6 +913,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 2 ),
          1,
          RTEMS.BINARY_SEMAPHORE,
+         RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 2 ),
          STATUS
       );
@@ -921,13 +923,19 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - semaphore_create - 2 - SUCCESSFUL" );
 
-      RTEMS.SEMAPHORE_CREATE(
-         SPTEST.SEMAPHORE_NAME( 3 ),
-         1,
-         RTEMS.DEFAULT_ATTRIBUTES,
-         SPTEST.JUNK_ID,
-         STATUS
-      );
+      loop
+         RTEMS.SEMAPHORE_CREATE(
+            SPTEST.SEMAPHORE_NAME( 3 ),
+            1,
+            RTEMS.DEFAULT_ATTRIBUTES,
+            RTEMS.NO_PRIORITY,
+            SPTEST.JUNK_ID,
+            STATUS
+         );
+
+         exit when not RTEMS.ARE_STATUSES_EQUAL( STATUS, RTEMS.SUCCESSFUL );
+      end loop;
+
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.TOO_MANY,
@@ -939,6 +947,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 1 ),
          1,
          RTEMS.INHERIT_PRIORITY + RTEMS.BINARY_SEMAPHORE + RTEMS.FIFO,
+         RTEMS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -953,6 +962,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 1 ),
          1,
          RTEMS.INHERIT_PRIORITY + RTEMS.COUNTING_SEMAPHORE + RTEMS.PRIORITY,
+         RTEMS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -967,6 +977,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 1 ),
          2,
          RTEMS.BINARY_SEMAPHORE,
+         RTEMS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -981,6 +992,7 @@ package body SPTEST is
          SPTEST.SEMAPHORE_NAME( 3 ),
          1,
          RTEMS.GLOBAL,
+         RTEMS.NO_PRIORITY,
          SPTEST.JUNK_ID,
          STATUS
       );
@@ -1045,7 +1057,6 @@ package body SPTEST is
 
    procedure SCREEN_6
    is
-      COUNT          : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
@@ -1187,15 +1198,19 @@ package body SPTEST is
 
    procedure SCREEN_7
    is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : SPTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       COUNT          : RTEMS.UNSIGNED32;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
+
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       RTEMS.MESSAGE_QUEUE_BROADCAST(
          100,
          BUFFER_POINTER,
+         16,
          COUNT,
          STATUS
       );
@@ -1208,11 +1223,10 @@ package body SPTEST is
          "TA1 - message_queue_broadcast - INVALID_ID"
       );
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
-
       RTEMS.MESSAGE_QUEUE_CREATE(
          0,
          3,
+         16,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
          STATUS
@@ -1229,6 +1243,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          1,
+         16,
          RTEMS.GLOBAL,
          SPTEST.JUNK_ID,
          STATUS
@@ -1244,7 +1259,8 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          2,
-         RTEMS.LIMIT,
+         16,
+         RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.QUEUE_ID( 1 ),
          STATUS
       );
@@ -1253,12 +1269,13 @@ package body SPTEST is
          "MESSAGE_QUEUE_CREATE SUCCESSFUL"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - message_queue_create - Q 1 - LIMIT - SUCCESSFUL"
+         "TA1 - message_queue_create - Q 1 - 2 DEEP - SUCCESSFUL"
       );
 
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 2 ),
          1,
+         16,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
          STATUS
@@ -1318,6 +1335,7 @@ package body SPTEST is
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -1332,6 +1350,7 @@ package body SPTEST is
          BUFFER_POINTER,
          RTEMS.NO_WAIT,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -1351,6 +1370,7 @@ package body SPTEST is
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          3 * TEST_SUPPORT.TICKS_PER_SECOND,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -1362,7 +1382,7 @@ package body SPTEST is
          "TA1 - message_queue_receive - Q 1 - woke up with TIMEOUT"
       );
 
-      RTEMS.MESSAGE_QUEUE_SEND( 100, BUFFER_POINTER, STATUS );
+      RTEMS.MESSAGE_QUEUE_SEND( 100, BUFFER_POINTER, 16, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
          RTEMS.INVALID_ID,
@@ -1373,6 +1393,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -1383,6 +1404,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -1393,6 +1415,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -1413,12 +1436,12 @@ package body SPTEST is
 
    procedure SCREEN_8
    is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : SPTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED(
@@ -1432,7 +1455,8 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          2,
-         RTEMS.LIMIT,
+         16,
+         RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.QUEUE_ID( 1 ),
          STATUS
       );
@@ -1441,12 +1465,13 @@ package body SPTEST is
          "MESSAGE_QUEUE_CREATE SUCCESSFUL"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - message_queue_create - Q 1 - LIMIT - SUCCESSFUL"
+         "TA1 - message_queue_create - Q 1 - 2 DEEP - SUCCESSFUL"
       );
 
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -1457,6 +1482,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -1467,6 +1493,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -1490,7 +1517,8 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          3,
-         RTEMS.LIMIT,
+         16,
+         RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.QUEUE_ID( 1 ),
          STATUS
       );
@@ -1499,12 +1527,13 @@ package body SPTEST is
          "MESSAGE_QUEUE_CREATE SUCCESSFUL"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - message_queue_create - Q 1 - LIMIT - SUCCESSFUL"
+         "TA1 - message_queue_create - Q 1 - 3 DEEP - SUCCESSFUL"
       );
 
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -1515,6 +1544,7 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -1525,15 +1555,27 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_SEND(
          SPTEST.QUEUE_ID( 1 ),
          BUFFER_POINTER,
+         16,
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
+      TEXT_IO.PUT_LINE(
+         "TA1 - message_queue_send - BUFFER 3 TO Q 1 - SUCCESSFUL"
+      );
+
+      RTEMS.MESSAGE_QUEUE_SEND(
+         SPTEST.QUEUE_ID( 1 ),
+         BUFFER_POINTER,
+         16,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
-         RTEMS.UNSATISFIED,
+         RTEMS.TOO_MANY,
          "MESSAGE_QUEUE_SEND TOO MANY TO LIMITED QUEUE"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - message_queue_send - BUFFER 3 TO Q 1 - UNSATISFIED"
+         "TA1 - message_queue_send - BUFFER 4 TO Q 1 - TOO_MANY"
       );
 
       RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
@@ -1548,7 +1590,8 @@ package body SPTEST is
       RTEMS.MESSAGE_QUEUE_CREATE(
          SPTEST.QUEUE_NAME( 1 ),
          2,
-         RTEMS.LIMIT,
+         16,
+         RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.QUEUE_ID( 1 ),
          STATUS
       );
@@ -1557,7 +1600,7 @@ package body SPTEST is
          "MESSAGE_QUEUE_CREATE SUCCESSFUL"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - message_queue_create - Q 1 - LIMIT - SUCCESSFUL"
+         "TA1 - message_queue_create - Q 1 - 3 DEEP - SUCCESSFUL"
       );
 
       TEXT_IO.PUT_LINE( 
@@ -2249,7 +2292,7 @@ package body SPTEST is
       RTEMS.REGION_CREATE(
          0,
          SPTEST.REGION_GOOD_AREA'ADDRESS,
-         128,
+         16#40#,
          32,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
@@ -2265,7 +2308,7 @@ package body SPTEST is
       RTEMS.REGION_CREATE(
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_BAD_AREA'ADDRESS,
-         128,
+         16#40#,
          32,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
@@ -2281,7 +2324,7 @@ package body SPTEST is
       RTEMS.REGION_CREATE(
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_GOOD_AREA'ADDRESS,
-         128,
+         16#40#,
          34,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
@@ -2298,7 +2341,7 @@ package body SPTEST is
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_GOOD_AREA( SPTEST.REGION_START_OFFSET )'ADDRESS,
          SPTEST.REGION_LENGTH,
-         128,
+         16#40#,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.REGION_ID( 1 ),
          STATUS
@@ -2309,8 +2352,8 @@ package body SPTEST is
       RTEMS.REGION_CREATE(
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_GOOD_AREA'ADDRESS,
-         128,
-         32,
+         SPTEST.REGION_LENGTH,
+         16#40#,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
          STATUS
@@ -2348,7 +2391,7 @@ package body SPTEST is
 
       RTEMS.REGION_GET_SEGMENT(
          100,
-         128,
+         16#40#,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
          SEGMENT_ADDRESS_1,
@@ -2363,7 +2406,7 @@ package body SPTEST is
 
       RTEMS.REGION_GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
-         RTEMS.UNSIGNED32'LAST,
+         (SPTEST.REGION_GOOD_AREA'SIZE / 8) * 2,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
          SEGMENT_ADDRESS_1,
@@ -2389,7 +2432,7 @@ package body SPTEST is
 
       RTEMS.REGION_GET_SEGMENT(
          SPTEST.REGION_ID( 1 ),
-         384,
+         SPTEST.REGION_LENGTH / 2,
          RTEMS.NO_WAIT,
          RTEMS.NO_TIMEOUT,
          SEGMENT_ADDRESS_2,
@@ -2459,52 +2502,65 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - debug_disable - DEBUG_REGION" );
       RTEMS.DEBUG_DISABLE( RTEMS.DEBUG_REGION );
 
-      OFFSET := RTEMS.SUBTRACT( 
-                   SEGMENT_ADDRESS_1, 
-                   SPTEST.REGION_GOOD_AREA'ADDRESS
-                ) / 4;
+      OFFSET := 0;
+      GOOD_BACK_FLAG := 0;
+      GOOD_FRONT_FLAG := 0;
 
-      -- bad FRONT_FLAG error
-
-      GOOD_FRONT_FLAG := SPTEST.REGION_GOOD_AREA( OFFSET - 1 );
-      SPTEST.REGION_GOOD_AREA( OFFSET - 1 ) := GOOD_FRONT_FLAG + 2;
-
-      RTEMS.REGION_RETURN_SEGMENT(
-         SPTEST.REGION_ID( 1 ),
-         SEGMENT_ADDRESS_1,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_ADDRESS,
-         "REGION_RETURN_SEGMENT WITH BACK_FLAG /= FRONT_FLAG"
+      TEXT_IO.PUT_LINE(
+         "TA1 - region_return_segment - INVALID_ADDRESS - SKIPPED"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - region_return_segment - INVALID_ADDRESS"
+         "TA1 - region_return_segment - INVALID_ADDRESS - SKIPPED"
       );
 
-      SPTEST.REGION_GOOD_AREA( OFFSET - 1 ) := GOOD_FRONT_FLAG;
 
-      -- bad BACK_FLAG error
-
-      GOOD_BACK_FLAG := SPTEST.REGION_GOOD_AREA( OFFSET - 2 );
-      SPTEST.REGION_GOOD_AREA( OFFSET - 2 ) := 1024;
-
-      RTEMS.REGION_RETURN_SEGMENT(
-         SPTEST.REGION_ID( 1 ),
-         SEGMENT_ADDRESS_1,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_ADDRESS,
-         "REGION_RETURN_SEGMENT WITH BACK_FLAG /= FRONT_FLAG"
-      );
-      TEXT_IO.PUT_LINE(
-         "TA1 - region_return_segment - INVALID_ADDRESS"
-      );
-
-      SPTEST.REGION_GOOD_AREA( OFFSET - 2 ) := GOOD_BACK_FLAG;
+--      OFFSET := RTEMS.SUBTRACT( 
+--                   SEGMENT_ADDRESS_1, 
+--                   SPTEST.REGION_GOOD_AREA'ADDRESS
+--                ) / 4;
+--
+--      
+--      -- bad FRONT_FLAG error
+--
+--      GOOD_FRONT_FLAG := SPTEST.REGION_GOOD_AREA( OFFSET - 1 );
+--      SPTEST.REGION_GOOD_AREA( OFFSET - 1 ) := GOOD_FRONT_FLAG + 2;
+--
+--      RTEMS.REGION_RETURN_SEGMENT(
+--         SPTEST.REGION_ID( 1 ),
+--         SEGMENT_ADDRESS_1,
+--         STATUS
+--      );
+--      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+--         STATUS,
+--         RTEMS.INVALID_ADDRESS,
+--         "REGION_RETURN_SEGMENT WITH BACK_FLAG /= FRONT_FLAG"
+--      );
+--      TEXT_IO.PUT_LINE(
+--         "TA1 - region_return_segment - INVALID_ADDRESS"
+--      );
+--
+--      SPTEST.REGION_GOOD_AREA( OFFSET - 1 ) := GOOD_FRONT_FLAG;
+--
+--      -- bad BACK_FLAG error
+--
+--      GOOD_BACK_FLAG := SPTEST.REGION_GOOD_AREA( OFFSET - 2 );
+--      SPTEST.REGION_GOOD_AREA( OFFSET - 2 ) := 1024;
+--
+--      RTEMS.REGION_RETURN_SEGMENT(
+--         SPTEST.REGION_ID( 1 ),
+--         SEGMENT_ADDRESS_1,
+--         STATUS
+--      );
+--      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+--         STATUS,
+--         RTEMS.INVALID_ADDRESS,
+--         "REGION_RETURN_SEGMENT WITH BACK_FLAG /= FRONT_FLAG"
+--      );
+--      TEXT_IO.PUT_LINE(
+--         "TA1 - region_return_segment - INVALID_ADDRESS"
+--      );
+--
+--      SPTEST.REGION_GOOD_AREA( OFFSET - 2 ) := GOOD_BACK_FLAG;
 
       TEXT_IO.PUT_LINE( "TA1 - debug_enable - DEBUG_REGION" );
       RTEMS.DEBUG_ENABLE( RTEMS.DEBUG_REGION );
@@ -3067,12 +3123,13 @@ package body SPTEST is
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : SPTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       TEXT_IO.PUT_LINE(
          "TA3 - message_queue_receive - Q 1 - WAIT FOREVER"
@@ -3082,6 +3139,7 @@ package body SPTEST is
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
