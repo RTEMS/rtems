@@ -39,7 +39,7 @@ package TMTEST is
 --   and is currently timing an operation.
 --
 
-   TIME_SET  : RTEMS.BOOLEAN;
+   TIME_SET  : Standard.BOOLEAN;
 
 --
 --  The following variable is set to the execution time returned
