@@ -259,11 +259,11 @@ static inline unsigned int m68k_swap_u32(
 
 #define CPU_swap_u32( value )  m68k_swap_u32( value )
 
+#endif  /* !ASM */
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif  /* !ASM */
 
 #endif
 /* end of include file */
