@@ -20,5 +20,10 @@ setup.cache: setup.def
 
 DISTCLEANFILES = setup.cache
 
+noinst_DATA += rtems/rtems-source.spec
+rtems/rtems-source.spec: $(top_builddir)/common/common.add rtems/rtems-source.add \
+	$(top_builddir)/common/clean.add
+	cat $^ | sed 's,[@]rtems_version[@],$(RTEMS_VERSION),g' > $@
+
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

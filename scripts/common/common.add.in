@@ -23,7 +23,7 @@
 # Work around to a bug in rpm-4.2
 %define __os_install_post	%{nil}
 
-Vendor: 	OARCorp
+Vendor: 	www.rtems.com
 Distribution: 	Linux
 
 BuildRoot:	%{_defaultbuildroot}
