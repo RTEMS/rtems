@@ -1,3 +1,9 @@
+2003-02-20	Wolfram Wadepohl <W.Wadepohl@indumat.de>
+
+	PR 357/rtems_misc
+	* src/termios.c (rtems_termios_open):  Fixed code the incorrectly
+	checked that the wrong pointer during allocation was NULL.
+
 2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/privateenv.c: Fix prototype for free_user_env.

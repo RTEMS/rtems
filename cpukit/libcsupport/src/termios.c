@@ -183,7 +183,7 @@ rtems_termios_open (
 		 */
 		tty->rawOutBuf.Size = RAW_OUTPUT_BUFFER_SIZE;
 		tty->rawOutBuf.theBuf = malloc (tty->rawOutBuf.Size);
-		if (tty->rawInBuf.theBuf == NULL) {
+		if (tty->rawOutBuf.theBuf == NULL) {
 		        free((void *)(tty->rawInBuf.theBuf));
 		        free(tty);
 			rtems_semaphore_release (rtems_termios_ttyMutex);
