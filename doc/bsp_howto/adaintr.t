@@ -60,9 +60,13 @@ done separately, typically by writing various device register.
 
 @section Example Ada95 Interrupt Program
 
-An example program is available to show how interrupts
-can be handled in Ada95. Note that generation of the test
-interrupt (irqforce.c) is bsp specific and must be edited.
+An example program (@code{irq_test}) is included in the
+Ada examples package to show how interrupts can be handled
+in Ada95. Note that generation of the test interrupt
+(@code{irqforce.c}) is bsp specific and must be edited.
+
+NOTE: The @code{irq_test} example was written for the SPARC/ERC32
+BSP.
 
 @section Version Requirements
 
