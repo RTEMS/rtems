@@ -1,5 +1,9 @@
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add BSP_SUBDIRS.
 	* Makefile.am: Use BSP_SUBDIRS to setup SUBDIRS.
 

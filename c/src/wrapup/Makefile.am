@@ -28,7 +28,7 @@ SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
     ../libchip/serial/$(ARCH)/libserialio.a \
     $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a) \
     ../libmisc/wrapup/$(ARCH)/libmisc.a \
-    $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
+    $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
 TMPINSTALL_FILES += $(LIB)
 
@@ -40,7 +40,7 @@ $(LIB): $(SRCS)
 	test -d $(ARCH) || mkdir $(ARCH)
 	for f in $(SRCS); do \
 	  case $$f in \
-	  *.o | *.rel) \
+	  *.$(OBJEXT) | *.rel) \
 	    if test -f $(ARCH)/`basename $$f`; then \
 	      if cmp $$f $(ARCH)/`basename $$f`; then \
 		true; \
