@@ -426,12 +426,6 @@ typedef struct CPU_Interrupt_frame {
 /*
  *  The following table contains the information required to configure
  *  the PowerPC processor specific parameters.
- *
- *  NOTE: The interrupt_stack_size field is required if
- *        CPU_ALLOCATE_INTERRUPT_STACK is defined as TRUE.
- *
- *        The pretasking_hook, predriver_hook, and postdriver_hook,
- *        and the do_zero_of_workspace fields are required on ALL CPUs.
  */
 
 typedef struct {
@@ -442,6 +436,10 @@ typedef struct {
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
   unsigned32   extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( unsigned32 );
+  void       (*stack_free_hook)( void* );
+  /* end of fields required on all CPUs */
+
   unsigned32   clicks_per_usec;	/* Timer clicks per microsecond */
   unsigned32   serial_per_sec;	/* Serial clocks per second */
   boolean      serial_external_clock;

@@ -146,6 +146,10 @@ typedef struct {
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
   unsigned32   extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( unsigned32 );
+  void       (*stack_free_hook)( void* );
+  /* end of fields required on all CPUs */
+
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
   i960ca_PRCB *Prcb;
 #endif
