@@ -69,7 +69,7 @@ int console_inbyte_nonblocking(
  *  To support printk
  */
 
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 void PSIM_output_char(char c) { console_outbyte_polled( 0, c ); }
 

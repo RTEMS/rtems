@@ -115,7 +115,7 @@ int console_inbyte_nonblocking(
   return -1;
 }
 
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 void JMR3904_output_char(char c) { console_outbyte_polled( 0, c ); }
 
