@@ -27,8 +27,6 @@
 
 #include <rtems/core/coresem.h>
 
-#include <rtems/rtems/status.h> /* XXX for TIMEOUT */
-
 /*PAGE
  *
  *  _MPCI_Handler_initialization
@@ -37,7 +35,8 @@
  */
 
 void _MPCI_Handler_initialization( 
-  MPCI_Control            *users_mpci_table
+  MPCI_Control            *users_mpci_table,
+  unsigned32               timeout_status
 )
 {
   CORE_semaphore_Attributes    attributes;
@@ -67,7 +66,7 @@ void _MPCI_Handler_initialization(
     THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_RPC_REPLY,
     NULL,
-    RTEMS_TIMEOUT   /* XXX */
+    timeout_status
   );
 }
 

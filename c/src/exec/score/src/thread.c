@@ -16,7 +16,6 @@
 #include <rtems/system.h>
 #include <rtems/core/context.h>
 #include <rtems/core/interr.h>
-#include <rtems/core/intthrd.h>
 #include <rtems/core/isr.h>
 #include <rtems/core/object.h>
 #include <rtems/core/priority.h>

@@ -22,8 +22,6 @@
 #include <rtems/core/threadq.h>
 #include <rtems/core/tqdata.h>
 
-#include <rtems/rtems/status.h>
-
 /*PAGE
  *
  *  _Thread_queue_Initialize

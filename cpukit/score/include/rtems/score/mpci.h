@@ -132,7 +132,8 @@ EXTERN MPCI_Packet_processor _MPCI_Packet_processors[MP_PACKET_CLASSES_LAST+1];
  */
 
 void _MPCI_Handler_initialization( 
-  MPCI_Control            *users_mpci_table
+  MPCI_Control            *users_mpci_table,
+  unsigned32               timeout_status
 );
 
 /*
