@@ -1,5 +1,10 @@
 2004-07-24	Joel Sherrill <joel@OARcorp.com>
 
+	PR 661/rtems
+	* score/src/objectmp.c: Fix invalid dereference.
+
+2004-07-24	Joel Sherrill <joel@OARcorp.com>
+
 	PR 660/rtems
 	* score/cpu/m68k/rtems/score/m68k.h, score/cpu/mips/cpu_asm.S,
 	score/src/threadinitialize.c, score/src/threadstackallocate.c: Check
