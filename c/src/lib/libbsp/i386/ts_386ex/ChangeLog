@@ -1,3 +1,7 @@
+2001-05-17	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Per PR224, added wild card math to .rodata.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/bsp.h: include <libcpu/cpu.h>.

@@ -76,7 +76,7 @@ SECTIONS
 	__DTOR_END__ = .;
 
 	_rodata_start = . ;
-	*(.rodata)
+	*(.rodata*)
 	. = ALIGN(0x20);
 	_erodata = .;
 
