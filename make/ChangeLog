@@ -1,3 +1,14 @@
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/Cygwin-posix.cfg: Remove WORKSPACE_MB and HEAPSPACE_MB.
+	* custom/FreeBSD-posix.cfg: Remove WORKSPACE_MB and HEAPSPACE_MB.
+	* custom/HPUX9-posix.cfg: Remove WORKSPACE_MB and HEAPSPACE_MB.
+	* custom/Linux-posix.cfg: Remove WORKSPACE_MB and HEAPSPACE_MB.
+	Move -D_BSD_SOURCE to CPU_CFLAGS.
+	* custom/Solaris-posix.cfg: Remove WORKSPACE_MB and HEAPSPACE_MB.
+	Move -Dsolaris2 to CPU_CFLAGS.
+	Remove -D__EXTENSIONS__. 
+
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/posix.cfg: Remove comment referring to host.cfg.
