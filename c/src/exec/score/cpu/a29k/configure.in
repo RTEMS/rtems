@@ -1,0 +1,40 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl $Id$
+
+AC_PREREQ(2.13)
+AC_INIT(cpu_asm.S)
+RTEMS_TOP(../../../../../..)
+AC_CONFIG_AUX_DIR(../../../../../..)
+
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_INIT_AUTOMAKE(rtems-c-src-exec-score-cpu-a29k,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_ENABLE_LIBCDIR
+
+RTEMS_ENV_RTEMSBSP
+
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
+
+RTEMS_PROJECT_ROOT
+
+dnl check target cc
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
+
+RTEMS_CHECK_NEWLIB
+
+# Check if there is custom/*.cfg for this BSP
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+
+PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
+AC_SUBST(PROJECT_INCLUDE)
+
+# Try to explicitly list a Makefile here 
+AC_OUTPUT( 
+Makefile
+rtems/Makefile
+rtems/score/Makefile)
