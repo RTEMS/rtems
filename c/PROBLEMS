@@ -28,18 +28,7 @@ This is the list of outstanding problems in this release.
 
 +   UNIX port notes:
 
-       + Some of the tests run correctly when run interactively but
-         the screen and output do not match when the output is 
-         redirected to a file.
-
        + sometimes a stray SIGALRM is reported as spfatal completes.
-
-       + multiple BSPs need to be merged into a single source one.
-
-       + CPU code appears to not set the interrupt level correctly
-         when doing a context initialization and sigsetjmp should be used.
-
-       + General cleanup and reorganization to enhance portability.
 
        +  Currently the routines which need to make access to the 
           native library (not newlib) are spread across a number of 
