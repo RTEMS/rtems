@@ -4,13 +4,13 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+
+
+
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
-# renamed main.c to pppmain.c
-C_FILES = auth.c cbcp.c ccp.c chap.c chap_ms.c chat.c demand.c fsm.c ipcp.c \
-    ipxcp.c lcp.c magic.c options.c upap.c md4.c md5.c rtems-ppp.c \
-    pppmain.c
+C_FILES = auth.c ccp.c chap.c chap_ms.c chat.c demand.c fsm.c ipcp.c lcp.c magic.c options.c upap.c md4.c md5.c utils.c sys-rtems.c rtemsmain.c rtemspppd.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -23,24 +23,25 @@ include $(top_srcdir)/../../../automake/lib.am
 # Add local stuff here using +=
 #
 
-# DEFINES += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
-#     -DBOOTP_COMPAT
-
 $(LIB): $(OBJS)
 	$(make-library)
 
-EXTRA_FILES = modem_example/16550.h modem_example/README \
-    modem_example/modem.c modem_example/modem.h modem_example/ppp.c \
-    modem_example/ppp.h modem_example/pppcompress.c
-
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = README STATUS auth.c cbcp.c cbcp.h ccp.c ccp.h chap.c chap.h \
-    chap_ms.c chap_ms.h chat.c demand.c fsm.c fsm.h ipcp.c ipcp.h ipxcp.c \
-    ipxcp.h lcp.c lcp.h magic.c magic.h main.c md4.c md4.h md5.c md5.h \
-    options.c patchlevel.h pathnames.h ppp_tty.c pppd.h rtems-ppp.c upap.c \
-    upap.h pppmain.c $(EXTRA_FILES)
+EXTRA_DIST = auth.c ccp.c ccp.h chap.c chap.h chap_ms.c chap_ms.h \
+chat.c demand.c fsm.c fsm.h ipcp.c ipcp.h ipxcp.c ipxcp.h \
+lcp.c lcp.h magic.c magic.h md4.c md4.h md5.c md5.h options.c \
+patchlevel.h pathnames.h pppd.h rtemsmain.c rtemspppd.c rtemspppd.h \
+sys-rtems.c upap.c upap.h utils.c
+
+include_HEADERS = rtemspppd.h
+
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+$(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
 
 include $(top_srcdir)/../../../automake/local.am

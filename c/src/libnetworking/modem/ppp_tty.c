@@ -433,13 +433,13 @@ int
 ppptioctl(struct rtems_termios_tty *tty,
 	  rtems_libio_ioctl_args_t *args)
 {
-  struct ppp_softc *sc=tty->t_sc;
-  int cmd;
-  caddr_t data;
-  int error=RTEMS_SUCCESSFUL;
+  int                 error = RTEMS_SUCCESSFUL;
+  struct ppp_softc   *sc    = tty->t_sc;
+  int                 cmd;
+  caddr_t             data;
 
-  data=args->buffer;
   cmd=args->command;
+  data=args->buffer;
 
   switch (cmd) {
   case RTEMS_IO_GET_ATTRIBUTES:
@@ -447,8 +447,11 @@ ppptioctl(struct rtems_termios_tty *tty,
   case RTEMS_IO_TCDRAIN:
   case TIOCGETD:	
   case TIOCSETD:	
-    return RTEMS_UNSATISFIED;
+  case RTEMS_IO_SNDWAKEUP:
+  case RTEMS_IO_RCVWAKEUP:
+    error = rtems_termios_ioctl(args);
     break;	
+
   case PPPIOCSASYNCMAP:
     sc->sc_asyncmap[0] = *(u_int *)data;
     break;

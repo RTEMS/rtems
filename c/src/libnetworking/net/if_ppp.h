@@ -38,6 +38,7 @@
 #define SC_LOG_OUTPKT	0x00040000	/* log contents of pkts sent */
 #define SC_LOG_RAWIN	0x00080000	/* log all chars received */
 #define SC_LOG_FLUSH	0x00100000	/* log all chars flushed */
+#define SC_SYNC		0x00200000	/* synchrounous HDLC */
 #define SC_RCV_B7_0	0x01000000	/* have rcvd char with bit 7 = 0 */
 #define SC_RCV_B7_1	0x02000000	/* have rcvd char with bit 7 = 1 */
 #define SC_RCV_EVNP	0x04000000	/* have rcvd char with even parity */

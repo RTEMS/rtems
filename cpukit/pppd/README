@@ -2,57 +2,19 @@
 #  $Id$
 #
 
-This directory contains a port of ppp-2.3.5.  The official site for 
+This directory contains a port of ppp-2.3.11.  The official site for 
 the original source for this PPP implementation is:
 
 ftp://cs.anu.edu.au/pub/software/ppp
 
-NOTE:  As of 11/30/1999, the current version of this source is 2.3.10.
+================================================================
+History
 
-The port was performed by Tomasz Domin <dot@comarch.pl> of ComArch SA
-and has only been tested on the mpc823.  The modem driver should 
-work with minor modifications on other systems.
+The original port was of 2.3.5 by Tomasz Domin <dot@comarch.pl> of
+ComArch SA and was initially only tested on the mpc823.  He 
+provided the modem driver as well.
+
+The port was updated to 2.3.11 by Mike Siers <mikes@poliac.com>
+who added an example test.
 =================================================================
-Some comments:
-
-+ "SetStatusInfo is a function which displays given message on 
-  bottom side of the screen."
-
-  The issue of how to deal with SetStatusInfo in a generic, portable
-  fashion is still open.
-
-+ "Dialer returns positive integer when an error occurs, and negative one
-  which is parsed from modem aswer, when connection is done (for example
-  -28000 if connection speed is 28000 baud ...)"
-
-+   PPP_User/PPP_Password
-   "When this field is set, it is sent to the server when there is need
-   to login ....
-   When it is blank - it is using other method of authentification ... or
-   none ...
-   PPP_Password is also used in CHAT and PAP  - because there is no
-   configuration files in RTEMS ..."
-
-   This falls into the general question of how to generally configure this.
-
-+ ConnectionStatus
-
-  This is the method of synchronization between pppd task and others.
-  ConnectionStatus field is set by pppd - when connection occurs it`s state
-  is set to Connected. WantConnection is set by client application (and
-  the appriopriate event is sent then) so pppd knows what user wants to do ...
-
-+ Around line 270 of main.c, there is code to change the default
-  nameserver... why?
-
-  Becouse in my application user can change it anytime  ... - without need of
-  rebooting the system
-  When PPP connection is configured there is needed additional info about
-  nameservers - PPP layer cant discover them itself
-
-
-
-
-
-
 

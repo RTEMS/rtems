@@ -55,8 +55,8 @@
 /*
  *  Challenge lengths (for challenges we send) and other limits.
  */
-#define MIN_CHALLENGE_LENGTH	32
-#define MAX_CHALLENGE_LENGTH	64
+#define MIN_CHALLENGE_LENGTH	16
+#define MAX_CHALLENGE_LENGTH	24
 #define MAX_RESPONSE_LENGTH	64	/* sufficient for MD5 or MS-CHAP */
 
 /*

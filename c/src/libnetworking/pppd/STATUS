@@ -2,28 +2,5 @@
 #  $Id$
 #
 
-Overall, this code should still be considered in its early stages.  It
-works but has some distance to go before it is fully documented and 
-easily configurable.
-
-+ Compare the code to the original 2.3.5 and eliminate spurious changes.
-
-+ Update the code to 2.3.10.
-
-+ Eliminate items specific to Tomasz' system.  In particular, the
-  code reports status and gets configuration information in a system
-  specific manner.   main.c is particularly guilty of this although
-  other files suffer from this also.
-
-+ Find comments in Polish and get Tomasz to translate them. :) 
- (DONE but not sure if completely 
-  Radzislaw Galler <rgaller@et.put.poznan.pl>)
-
-+ Add netdemo showing configuration and initialization.
-
-+ Get feature list.
-
-+ Document dialer setup.
-
-+ Only modem driver is system specific so there is the possibility
-  that shareable code exists in it.
+This file needs to be redone to reflect tasks left after the 2.3.11 
+update.

@@ -28,12 +28,12 @@
  */
 
 typedef struct ccp_options {
-    u_int bsd_compress: 1;	/* do BSD Compress? */
-    u_int deflate: 1;		/* do Deflate? */
-    u_int predictor_1: 1;	/* do Predictor-1? */
-    u_int predictor_2: 1;	/* do Predictor-2? */
-    u_int deflate_correct: 1;	/* use correct code for deflate? */
-    u_int deflate_draft: 1;	/* use draft RFC code for deflate? */
+    bool bsd_compress;		/* do BSD Compress? */
+    bool deflate;		/* do Deflate? */
+    bool predictor_1;		/* do Predictor-1? */
+    bool predictor_2;		/* do Predictor-2? */
+    bool deflate_correct;	/* use correct code for deflate? */
+    bool deflate_draft;		/* use draft RFC code for deflate? */
     u_short bsd_bits;		/* # bits/code for BSD Compress */
     u_short deflate_size;	/* lg(window size) for Deflate */
     short method;		/* code for chosen compression method */

@@ -22,7 +22,7 @@
 /*
  * Packet header = Code, id, length.
  */
-#define UPAP_HEADERLEN	(sizeof (u_char) + sizeof (u_char) + sizeof (u_short))
+#define UPAP_HEADERLEN	4
 
 
 /*

@@ -1,0 +1,6 @@
+#
+#  $Id$
+#
+
+This is an example user application using pppd.  It is built using
+the RTEMS application Makefiles.

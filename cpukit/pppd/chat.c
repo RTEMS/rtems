@@ -156,7 +156,6 @@ int Verbose       = 0;
 int quiet         = 0;
 int report        = 0;
 int exit_code     = 0;
-static int speed=0;
 char *report_file = (char *) 0;
 char *chat_file   = (char *) 0;
 char *phone_num   = (char *) 0;
@@ -167,8 +166,8 @@ int have_tty_parameters = 0;
 
 #ifdef TERMIOS
 #define term_parms struct termios
-#define get_term_param(param) tcgetattr(modem_fd, param)
-#define set_term_param(param) tcsetattr(modem_fd, TCSANOW, param)
+#define get_term_param(param) tcgetattr(ttyfd, param)
+#define set_term_param(param) tcsetattr(ttyfd, TCSANOW, param)
 struct termios saved_tty_parameters;
 #endif
 
@@ -260,52 +259,35 @@ char *getnextcommand(char **string)
 }
 
  
-extern int modem_fd;
-int
-	chatmain(argv)
-     char *argv;
+extern int ttyfd;
+int chatmain(argv)
+char *argv;
 {
-    char *arg;
-	int i;
-	char *t;
-	exit_code=0;
-	speed=0;
-/*
- * Default the report file to the stderr location
- */
-/*    if (report_fp == NULL)
-	report_fp = stderr;
-*/
-    init();
-	while ( (arg = getnextcommand(&argv)) != NULL) {
-	    chat_expect(arg);
-		if (exit_code>0) break;
-	    t=temp2;
+  char    *arg;
 
-		while(*t)
-		{
-			if (strncmp("CARRIER",t,7)==0)
-			{/* parse speed information */
-				i=0;
-				while(!isdigit(t[i]))
-					i++;
-				t=&t[i];
-				i=0;
-				while(isdigit(t[i]))
-					i++;
-				t[i]=0;
-				sscanf(t,"%d",&speed);
-				break;				
-			}
-			t++;
-		}
-	    if ((arg = getnextcommand(&argv)) != NULL)
-		chat_send(arg);
-		if (exit_code>0) break;
-	}
+  /* initialize exit code */
+  exit_code = 0;
 
-    if (exit_code) return exit_code;
-    return -speed;
+printf("chat_main: %s\n", argv);
+
+  /* get first expect string */
+  arg = getnextcommand(&argv);
+  while ( arg != NULL ) {
+    /* process the expect string */
+    chat_expect(arg);
+
+    /* get the next send string */
+    arg = getnextcommand(&argv);
+    if ( arg != NULL ) {
+      /* process the send string */
+      chat_send(arg);
+
+      /* get the next expect string */
+      arg = getnextcommand(&argv);
+    }
+  }
+
+  return 0;
 }
 
 
@@ -317,7 +299,6 @@ int
 void init()
 {
     set_tty_parameters();
-	speed=0;
 }
 
 void set_tty_parameters()
@@ -657,7 +638,7 @@ register char *s;
     if (say_next) {
 	say_next = 0;
 	s = clean(s,0);
-	write(modem_fd, s, strlen(s));
+	write(ttyfd, s, strlen(s));
         free(s);
 	return;
     }
@@ -681,63 +662,6 @@ register char *s;
 
 	return;
     }
-
-
-/*    if (report_next) {
-	char *s1;
-	
-	report_next = 0;
-	if (n_reports >= MAX_REPORTS)
-	    {
-	      exit_code=2;
-	      return;
-	    }
-	
-	s1 = clean(s, 0);
-	
-	if (strlen(s1) > strlen(s) || strlen(s1) > sizeof fail_buffer - 1)
-	    {
-	      exit_code=1;
-	      return;
-	    }
-	
-	report_string[n_reports++] = s1;
-	
-	return;
-    }
-*/
-/*    if (clear_report_next) {
-	char *s1;
-	int   i;
-	int   old_max;
-	int   pack = 0;
-	
-	clear_report_next = 0;
-	
-	s1 = clean(s, 0);
-	
-	if (strlen(s1) > strlen(s) || strlen(s1) > sizeof fail_buffer - 1)
-	    {
-	      exit_code=1;
-	      return;
-	    }
-
-	old_max = n_reports;
-	for (i=0; i < n_reports; i++) {
-	    if ( strcmp(s1,report_string[i]) == 0 ) {
-		free(report_string[i]);
-		report_string[i] = NULL;
-		pack++;
-		n_reports--;
-	    }
-	}
-        free(s1);
-        if (pack)
-	    pack_array(report_string,old_max);
-	
-	return;
-    }
-*/
 
     if (timeout_next) {
 	timeout=atoi(s);
@@ -770,7 +694,7 @@ int get_char()
 
 	while(tries)
 	{
-	    status = read(modem_fd, &c, 1);
+	    status = read(ttyfd, &c, 1);
 	    switch (status) {
 		   case 1:
 				return ((int)c & 0x7F);
@@ -789,7 +713,7 @@ int c;
 
 	/* inter-character typing delay (?) */
 
-    status = write(modem_fd, &ch, 1);
+    status = write(ttyfd, &ch, 1);
 
     switch (status) {
     case 1:
@@ -814,8 +738,6 @@ int c;
 int put_string (s)
 register char *s;
 {
-
-
     quiet = 0;
     s = clean(s, 1);
     while (*s) {
@@ -898,10 +820,10 @@ register char *string;
     char *logged = temp2;
     struct termios tios;
 
-    tcgetattr(modem_fd, &tios);
+    tcgetattr(ttyfd, &tios);
     tios.c_cc[VMIN] = 0;
     tios.c_cc[VTIME] = timeout*10/MAX_TIMEOUTS;
-    tcsetattr(modem_fd, TCSANOW, &tios);
+    tcsetattr(ttyfd, TCSANOW, &tios);
 		
     string = clean(string, 0);
     len = strlen(string);

@@ -1,6 +1,6 @@
 /* $Id$ */
-#define	PATCHLEVEL	5
+#define	PATCHLEVEL	11
 
 #define VERSION		"2.3"
 #define IMPLEMENTATION	""
-#define DATE		"4 May 1998"
+#define DATE		"23 December 1999"

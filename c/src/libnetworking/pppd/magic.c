@@ -17,18 +17,18 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#ifndef lint
-/* static char rcsid[] = "$Id$"; */
-#endif
+#define RCSID	"$Id$"
 
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
 
 #include "pppd.h"
 #include "magic.h"
+
+static const char rcsid[] = RCSID;
 
 extern long mrand48 __P((void));
 extern void srand48 __P((long));
@@ -64,7 +64,7 @@ magic()
  * Substitute procedures for those systems which don't have
  * drand48 et al.
  */
-/* #include <stdlib.h> */
+
 double
 drand48()
 {
@@ -83,4 +83,3 @@ long seedval;
 {
     srand((int)seedval);
 }
-

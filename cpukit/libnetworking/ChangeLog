@@ -1,3 +1,29 @@
+2001-08-16	Mike Siers <mikes@poliac.com>
+
+	* Update of PPPD to 2.3.11 from 2.3.5 and addition of an example
+	application.  Mike's notes on the modifications:
+	   - renamed error() function because of namespace problems
+	   - removed calls to the exit() funciton
+	   - removed extra files from the pppd source directory
+	   - defined pppd task constant values in rtemspppd.h
+	   - modifyied example code to get actual tick per second value
+	   - placed the pppd 2.3.11 man page file (pppd.8) into the pppd
+	   directory
+	* pppd/cbcp.c, pppd/cbcp.h, pppd/main.c, pppd/ppp_tty.c,
+	pppd/pppmain.c, pppd/rtems-ppp.c, pppd/rtems-ppp.c: Deleted.
+	* pppd/pppd.8, pppd/rtemsmain.c, pppd/rtemspppd.c, pppd/rtemspppd.h,
+	pppd/sys-rtems.c, pppd/utils.c, pppd/example/Makefile,
+	pppd/example/README, pppd/example/init.c, pppd/example/netconfig.h,
+	pppd/example/ppp.conf, pppd/example/pppdapp.c, pppd/example/system.h:
+	New files.
+	* modem/ppp_tty.c, net/if_ppp.h, pppd/Makefile.am, pppd/README,
+	pppd/STATUS, pppd/auth.c, pppd/ccp.c, pppd/ccp.h, pppd/chap.c,
+	pppd/chap.h, pppd/chap_ms.c, pppd/chap_ms.h, pppd/chat.c,
+	pppd/demand.c, pppd/fsm.c, pppd/fsm.h, pppd/ipcp.c, pppd/ipcp.h,
+	pppd/ipxcp.c, pppd/ipxcp.h, pppd/lcp.c, pppd/lcp.h, pppd/magic.c,
+	pppd/magic.h, pppd/options.c, pppd/patchlevel.h,
+	pppd/pathnames.h, pppd/pppd.h, pppd/upap.c, pppd/upap.h: Modified.
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems_telnetd/.cvsignore: New file.
