@@ -28,10 +28,17 @@ extern "C" {
  */
 
 /*
- * FIXME: Instead of targopts.h, cpuopts.h should be included here.
- * #include <rtems/score/cpuopts.h>
+ * FIXME: cpuopts.h should be included here.
  */
+#if defined(__sh__) \
+  || defined(__mc68000__) \
+  || defined(__i960__)
+  /* these cpus are ready to apply cpuopts.h */
+#include <rtems/score/cpuopts.h>
+#else
+  /* fallback to targopts.h */
 #include <rtems/score/targopts.h>
+#endif
 
 /*
  *  The following insures that all data is declared in the space
