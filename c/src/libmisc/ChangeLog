@@ -1,5 +1,9 @@
 2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
+
+2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* capture/Makefile.am: Don't include @RTEMS_BSP@.cfg.
 	* cpuuse/Makefile.am: Don't include @RTEMS_BSP@.cfg.
 	* devnull/Makefile.am: Don't include @RTEMS_BSP@.cfg.
