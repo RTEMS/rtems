@@ -155,8 +155,6 @@ libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
 
-all-local: $(PREINSTALL_FILES)
-
 DISTCLEANFILES += include/rtems/score/cpuopts.h
 
 all-local: $(PREINSTALL_FILES)

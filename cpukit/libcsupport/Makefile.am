@@ -96,8 +96,6 @@ endif
 
 EXTRA_DIST = src/TODO src/CASES src/README
 
-## PREINSTALLATION STUFF - Do not edit below
-
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am

@@ -5,8 +5,16 @@ $(srcdir)/preinstall.am: Makefile.am
 	$(top_srcdir)/ampolish3 $(srcdir)/Makefile.am > $(srcdir)/preinstall.am
 endif
 
+PREINSTALL_DIRS =
+DISTCLEANFILES += $(PREINSTALL_DIRS)
+
 TMPINSTALL_FILES =
 CLEANFILES += $(TMPINSTALL_FILES)
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/librtemscpu.a: librtemscpu.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemscpu.a
