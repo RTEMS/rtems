@@ -1004,8 +1004,10 @@ void verify_with_threads()
   int               status;
   pthread_t         id;
   Test_Message_t   *ptr;
+#if 0
   unsigned int      priority;
   char              message[100];
+#endif
 
 
 #if 0

@@ -80,7 +80,7 @@ void dump_statbuf( struct stat *buf )
   printf( "....st_dev     (0x%x:0x%x)\n", major1, minor1 );
   printf( "....st_ino     %x  may vary by small amount\n",
       (unsigned int) buf->st_ino );
-  printf( "....mode  = %08o\n", buf->st_mode );
+  printf( "....mode  = %08o\n", (unsigned int) buf->st_mode );
   printf( "....nlink = %d\n", buf->st_nlink );
 
   printf( "....uid = %d\n", buf->st_uid );
