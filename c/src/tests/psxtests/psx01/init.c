@@ -113,6 +113,11 @@ void *POSIX_Init(
   printf( "sec (%d), nsec (%d) remaining\n", (int)tr.tv_sec, (int)tr.tv_nsec );
   assert( !tr.tv_sec && !tr.tv_nsec );
 
+  /* get id of this thread */
+
+  Init_id = pthread_self();
+  printf( "Init's ID is 0x%08x\n", Init_id );
+
   /* create a thread */
 
   status = pthread_create( &thread_id, NULL, Task_1_through_3, NULL );

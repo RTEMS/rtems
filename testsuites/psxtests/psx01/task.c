@@ -26,25 +26,25 @@ void *Task_1_through_3(
 )
 {
   int seconds;
+  int status;
 
   /* XXX temporary */
 
+  /* get id of this thread */
+
+  Task_id = pthread_self();
+  printf( "Task's ID is 0x%08x\n", Task_id );
+
+  status = pthread_equal( Task_id, Task_id );
+  if ( status )
+    puts( "pthread_equal match case passed" );
+  assert( status );
+
+  status = pthread_equal( Init_id, Task_id );
+  if ( !status )
+    puts( "pthread_equal different case passed" );
+  assert( !status );
+
   puts( "*** END OF POSIX TEST 1 ***" );
   exit( 0 );
-
-  for ( ; ; ) {
-    /* grab the tod */
-
-    /* if we have run longer 35 seconds exit */
-
-    if ( seconds >= 35 ) {
-      puts( "*** END OF POSIX TEST 1 ***" );
-      exit( 0 );
-    }
-
-    /* put our task number and the current time */
-
-    /* delay based on our thread number */
- 
-  }
 }
