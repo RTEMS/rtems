@@ -10,7 +10,7 @@ PGM = $(ARCH)/console.rel
 ## sources
 C_FILES = console.c
 
-console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
+console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
