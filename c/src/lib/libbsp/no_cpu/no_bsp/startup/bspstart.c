@@ -38,7 +38,7 @@ char *rtems_progname;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -57,9 +57,9 @@ void bsp_libc_init( void *, unsigned32, int );
 void bsp_pretasking_hook(void)
 {
     extern int end;
-    rtems_unsigned32        heap_start;
+    uint32_t                heap_start;
 
-    heap_start = (rtems_unsigned32) &end;
+    heap_start = (uint32_t) &end;
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 

@@ -44,9 +44,9 @@ void Shm_Lock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-  rtems_unsigned32 isr_level;
-  rtems_unsigned32 *lockptr = (rtems_unsigned32 *) &lq_cb->lock;
-  rtems_unsigned32 lock_value;
+  uint32_t         isr_level;
+  uint32_t         *lockptr = (uint32_t*) &lq_cb->lock;
+  uint32_t         lock_value;
 
   lock_value = 0x80000000;
   rtems_interrupt_disable( isr_level );
@@ -76,7 +76,7 @@ void Shm_Unlock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-  rtems_unsigned32 isr_level;
+  uint32_t         isr_level;
 
   lq_cb->lock = SHM_UNLOCK_VALUE;
   isr_level = Shm_isrstat;

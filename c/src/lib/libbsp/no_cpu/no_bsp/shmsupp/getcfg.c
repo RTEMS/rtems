@@ -46,7 +46,7 @@ XXX: FIX THE COMMENTS BELOW WHEN THE CPU IS KNOWN
 shm_config_table BSP_shm_cfgtbl;
 
 void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
+  uint32_t           localnode,
   shm_config_table **shmcfg
 )
 {

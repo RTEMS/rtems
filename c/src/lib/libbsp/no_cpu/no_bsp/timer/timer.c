@@ -21,7 +21,7 @@
 #include <rtems.h>
 #include <bsp.h>
 
-rtems_unsigned32 Timer_interrupts;
+uint32_t         Timer_interrupts;
 rtems_boolean Timer_driver_Find_average_overhead;
 
 void Timer_initialize( void )
@@ -56,8 +56,8 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  rtems_unsigned32 clicks;
-  rtems_unsigned32 total;
+  uint32_t         clicks;
+  uint32_t         total;
 
   /*
    *  Read the timer and see how many clicks it has been since we started.
