@@ -1,6 +1,8 @@
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* ChangeLog: Merge-in optman/ChangeLog.
+	* ChangeLog: Merge-in librdbg/ChangeLog.
+	* librdbg/ChangeLog: Remove.
+	* ChangeLog: Merge-in libchip/ChangeLog.
 	* libchip/ChangeLog: Remove.
 	* ChangeLog: Merge-in optman/ChangeLog.
 	* optman/ChangeLog: Remove.
@@ -11,6 +13,13 @@
 	* wrapup/Makefile.am: Reflect changes to librdbg.
 	* aclocal/enable-bare.m4: Convert to autoconf-2.59.
 	* libchip/Makefile.am: Add PREINSTALL_DIRS.
+	* librdbg/include/rdbg/Makefile.am: Add PREINSTALL_DIRS.
+	* librdbg/include/rdbg/i386/Makefile.am: Add PREINSTALL_DIRS.
+	* librdbg/include/rdbg/m68k/Makefile.am: Add PREINSTALL_DIRS.
+	* librdbg/include/rdbg/powerpc/Makefile.am: Add PREINSTALL_DIRS.
+	* librdbg/src/i386/Makefile.am: Add PREINSTALL_DIRS.
+	* librdbg/src/m68k/Makefile.am: Add PREINSTALL_DIRS.
+	* librdbg/src/powerpc/Makefile.am: Add PREINSTALL_DIRS.
 
 2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -41,6 +50,14 @@
 	PRE/TMPINSTALL_FILES to CLEANFILES.
 	* libchip/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
 	PRE/TMPINSTALL_FILES to CLEANFILES.
+	* librdbg/include/rdbg/Makefile.am: Re-add dirstamps to
+	PRE/TMPINSTALL_FILES. Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* librdbg/include/rdbg/i386/Makefile.am: Ditto.
+	* librdbg/include/rdbg/m68k/Makefile.am: Ditto.
+	* librdbg/include/rdbg/powerpc/Makefile.am: Ditto.
+	* librdbg/src/i386/Makefile.am: Ditto.
+	* librdbg/src/m68k/Makefile.am: Ditto.
+	* librdbg/src/powerpc/Makefile.am: Ditto.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -90,6 +107,12 @@
 	* wrapup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
 	* optman/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
 	* libchip/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+	* librdbg/src/i386/Makefile.am:
+	s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+	* librdbg/src/m68k/Makefile.am:
+	s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+	* librdbg/src/powerpc/Makefile.am:
+	s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -104,6 +127,20 @@
 	* optman/Makefile.am: Remove project_libdir.
 	* libchip/Makefile.am: Use mkdir_p. Remove dirs from
 	PRE/TMPINSTALL_FILES.
+	* librdbg/include/rdbg/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* librdbg/include/rdbg/i386/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* librdbg/include/rdbg/m68k/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* librdbg/include/rdbg/powerpc/Makefile.am: Use mkdir_p. Remove dirs
+	from PRE/TMPINSTALL_FILES.
+	* librdbg/src/i386/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* librdbg/src/m68k/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* librdbg/src/powerpc/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -116,6 +153,16 @@
 	* configure.ac: Reflect changes to librdbg.
 	* optman/Makefile.am: Add tmpinstall dirstamp support.
 	* libchip/Makefile.am: Fix variant-tmpinstall support.
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am: Remove.
+	* librdbg/src/powerpc/Makefile.am: Merge-in former
+	new_exception_processing/Makefile.am.
+	* librdbg/src/m68k/any/Makefile.am: Remove.
+	* librdbg/src/m68k/Makefile.am: Merge-in former any/Makefile.am.
+	* librdbg/src/i386/any/Makefile.am: Remove.
+	* librdbg/src/i386/Makefile.am: Merge-in former any/Makefile.am.
+	* librdbg/src/Makefile.am: Cosmetics.
+	* librdbg/include/Makefile.am: Cosmetics.
+	* librdbg/Makefile.am: Cosmetics.
 
 2003-12-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -149,6 +196,10 @@
 	* libchip/network/Makefile.am: Remove all-local: $(ARCH).
 	* libchip/rtc/Makefile.am: Remove all-local: $(ARCH).
 	* libchip/serial/Makefile.am: Remove all-local: $(ARCH).
+	* librdbg/src/i386/any/Makefile.am: Remove all-local: $(ARCH).
+	* librdbg/src/m68k/any/Makefile.am: Remove all-local: $(ARCH).
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am: Remove
+	all-local: $(ARCH).
 
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -158,6 +209,19 @@
 	* libchip/ide/Makefile.am: Use dirstamps for preinstallation. Reformat.
 	* libchip/network/Makefile.am, libchip/rtc/Makefile.am,
 	libchip/serial/Makefile.am: Ditto.
+	* librdbg/Makefile.am: Reformat. Apply dirstamps to preinstallation.
+	* librdbg/include/Makefile.am: Ditto.
+	* librdbg/include/rdbg/Makefile.am: Ditto.
+	* librdbg/include/rdbg/i386/Makefile.am: Ditto.
+	* librdbg/include/rdbg/m68k/Makefile.am: Ditto.
+	* librdbg/include/rdbg/powerpc/Makefile.am: Ditto.
+	* librdbg/src/Makefile.am: Ditto.
+	* librdbg/src/i386/Makefile.am: Ditto.
+	* librdbg/src/i386/any/Makefile.am: Ditto.
+	* librdbg/src/m68k/Makefile.am: Ditto.
+	* librdbg/src/m68k/any/Makefile.am: Ditto.
+	* librdbg/src/powerpc/Makefile.am: Ditto.
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am: Ditto.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -273,6 +337,12 @@
 	* aclocal/rtems-top.m4: Add RTEMS_API.
 	AC_DEFAULT_PREFIX([/opt/rtems-][RTEMS_API]).
 
+2003-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* librdbg/src/i386/any/Makefile.am, librdbg/src/m68k/any/Makefile.am,
+	librdbg/src/powerpc/new_exception_processing/Makefile.am: Don't include
+	@RTEMS_BSP@.cfg.
+
 2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libchip/ide/Makefile.am: Don't include @RTEMS_BSP@.cfg.
@@ -353,6 +423,21 @@
 	* libchip/network/Makefile.am: Reflect having moved automake/.
 	* libchip/rtc/Makefile.am: Reflect having moved automake/.
 	* libchip/serial/Makefile.am: Reflect having moved automake/.
+	* librdbg/Makefile.am: Reflect having moved automake/.
+	* librdbg/include/Makefile.am: Reflect having moved automake/.
+	* librdbg/include/rdbg/Makefile.am: Reflect having moved automake/.
+	* librdbg/include/rdbg/i386/Makefile.am: Reflect having moved automake/.
+	* librdbg/include/rdbg/m68k/Makefile.am: Reflect having moved automake/.
+	* librdbg/include/rdbg/powerpc/Makefile.am: Reflect having moved
+	automake/.
+	* librdbg/src/Makefile.am: Reflect having moved automake/.
+	* librdbg/src/i386/Makefile.am: Reflect having moved automake/.
+	* librdbg/src/i386/any/Makefile.am: Reflect having moved automake/.
+	* librdbg/src/m68k/Makefile.am: Reflect having moved automake/.
+	* librdbg/src/m68k/any/Makefile.am: Reflect having moved automake/.
+	* librdbg/src/powerpc/Makefile.am: Reflect having moved automake/.
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am: Reflect
+	having moved automake/.
 
 2003-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -371,6 +456,8 @@
 	* configure.ac: Reflect having added lib/Makefile.am.
 	* configure.ac: Merge-in lib/libcpu/configure.ac. Merge-in
 	lib/libbsp/configure.ac.
+	* librdbg/include/rdbg/Makefile.am: Add DIST_SUBDIRS = $(RTEMS_CPU).
+	* librdbg/src/Makefile.am: Add DIST_SUBDIRS = $(RTEMS_CPU).
 
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -382,6 +469,22 @@
 	libchip/rtc/Makefile.am, libchip/ serial/Makefile.am: Add conditional
 	LIBCHIP. Conditionally build include-dirs.
 	* libchip/network/if_fxp.c: Replace deprecated b* funcs by mem* funcs.
+	* librdbg/configure.ac: Remove (Merged into ../configure.ac).
+	* librdbg/Makefile.am, librdbg/include/Makefile.am,
+	librdbg/include/rdbg/Makefile.am, librdbg/include/rdbg/i386/Makefile.am,
+	librdbg/include/rdbg/m68k/Makefile.am,
+	librdbg/include/rdbg/powerpc/Makefile.am, librdbg/src/Makefile.am,
+	librdbg/src/i386/Makefile.am, librdbg/src/i386/any/Makefile.am,
+	librdbg/src/m68k/Makefile.am, librdbg/src/m68k/any/Makefile.am,
+	librdbg/src/powerpc/Makefile.am, librdbg/
+	src/powerpc/new_exception_processing/Makefile.am: Reflect having merged
+	configure.ac into ../configure.ac.
+
+2003-07-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 427/rtems
+	* librdbg/src/rdbg.c: Use memset instead of bzero (deprecated).
+	* librdbg/src/servtsp.c: Ditto.
 
 2003-07-18	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
@@ -464,6 +567,7 @@
 	* wrapup/Makefile.am: Add support/libsupport.a.
 	* optman/configure.ac: Remove AC_CONFIG_AUX_DIR.
 	* libchip/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* librdbg/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -484,6 +588,8 @@
 	* optman/configure.ac: AC_PREREQ(2.57).
 	* libchip/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* libchip/configure.ac: AC_PREREQ(2.57).
+	* librdbg/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* librdbg/configure.ac: AC_PREREQ(2.57).
 
 2003-02-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -537,6 +643,7 @@
 	* configure.ac: Append CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V,
 	CFLAGS_PROFILE_V, RTEMS_BSP_FAMILY to ac_configure_args.
 	* optman/configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
+	* librdbg/configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
 
 2002-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -568,9 +675,20 @@
 	* configure.ac: Use "'"-quotes for args to RTEMS_CONFIG_SUBDIRS. Fix
 	braino in comment on "exec". Extend --enable-ada handling.
 
+2002-11-04	Joel Sherrill <joel@OARcorp.com>
+
+	* librdbg/src/_servtgt.c: Removed warning by adding support for ITRON
+	tasks and rolling multiple loops into 1.
+	* librdbg/src/m68k/rdbg_f.c: Removed warning.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/network/dec21140.c: Removed warnings.
+	* librdbg/src/i386/any/remdeb_xdr.c: Removed warnings.
+	* librdbg/src/rdbg.c, librdbg/src/servtsp.c, librdbg/src/m68k/rdbg_f.c,
+	librdbg/src/m68k/any/remdeb_xdr.c,
+	librdbg/src/powerpc/new_exception_processing/remdeb_xdr.c: Removed
+	warnings.
 
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
@@ -585,6 +703,8 @@
 	* wrapup/.cvsignore: Remove autom4te.cache.
 	* optman/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 	* libchip/.cvsignore: Reformat. Add autom4te*cache. Remove
+	autom4te.cache.
+	* librdbg/.cvsignore: Reformat. Add autom4te*cache. Remove
 	autom4te.cache.
 
 2002-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -633,6 +753,12 @@
 	* libchip/network/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* libchip/rtc/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* libchip/serial/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* librdbg/configure.ac: Remove RTEMS_BSP_ALIAS. Add
+	RTEMS_CHECK_BSP_CACHE.
+	* librdbg/src/i386/any/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* librdbg/src/m68k/any/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am: Use
+	.$(OBJEXT) instead of .o.
 
 2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -691,6 +817,12 @@
 	* configure.ac: Switch to AC_CONFIG_SRCDIR([optman]). Add
 	RTEMS_ENABLE_MULTIPROCESSING. Add RTEMS_CONFIG_SUBDIR([exec]...).
 
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* librdbg/src/_servtgt.c, librdbg/src/ptrace.c: Corrected use of
+	_Objects_Information_table now that it is a two dimensional array based
+	upon API and class.
+
 2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove librpc.
@@ -715,9 +847,20 @@
 
 	* configure.ac: Remove lib.
 
+2002-05-14	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* librdbg/src/m68k/rdbg_cpu_asm.S: Per PR163, Fix incorrect assumption
+	that exception stack frames on M68K members with VBR always are 6 byte
+	long. The incorrect assumption resulted in some gdb commands like "next"
+	to fail on the 68360.
+
 2002-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* config-ml.in: Take out arm and sh variants RTEMS does not support.
+	PR 220
+	* librdbg/src/i386/any/remdeb_svc.c, librdbg/src/m68k/any/remdeb_svc.c,
+	librdbg/ src/powerpc/new_exception_processing/remdeb_svc.c: Remove from
+	CVS.
 
 2002-05-07	Chris Johns <ccj@acm.org>
 
@@ -729,6 +872,9 @@
 
 	* libchip/network/dec21140.c: Reflect changes to powerpc's
 	rtems/score/cpu.h. Use __PPC__ for gcc-3.x compliance.
+	* librdbg/src/powerpc/rdbg_cpu_asm.S: Reflect changes to
+	<rtems/score/cpu.h>.
+	* librdbg/src/powerpc/rdbg_f.c: Ditto.
 
 2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -766,11 +912,77 @@
 	* libchip/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* libchip/rtc/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* libchip/serial/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* librdbg/include/rdbg/i386/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/include/rdbg/m68k/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/include/rdbg/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/include/rdbg/powerpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/src/i386/any/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/src/i386/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/src/m68k/any/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/src/m68k/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/src/powerpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am: Remove
+	AUTOMAKE_OPTIONS.
+
+2002-03-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 149
+	* librdbg/src/i386/any/Makefile.am: s/$(SED)/sed/.
+	* librdbg/src/m68k/any/Makefile.am: s/$(SED)/sed/.
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am:
+	s/$(SED)/sed/. (Reported by Till Straumann <strauman@SLAC.Stanford.EDU>).
 
 2002-02-28	Victor V. Vengerov <vvv@oktet.ru>
 
 	* DOS filesystem including FAT12, FAT16, and FAT32 support submitted.
 	* configure.ac: Modified to reflect addition.
+
+2002-02-01	Eric Valette <valette@crf.canon.fr>
+
+	* librdbg/So many patches have been posted recently on the mailing list
+	and  because we were unable to find correct solution to compile on
+	various  linux distros (due to rpcgen incompatibilities), librdbg/and
+	because the coding  style of rdbg was rather inconsistant among various
+	pieces of code, librdbg/I  decided to: 1) make some cleaning regarding
+	global coding style (using indent + manual edits), 2) incorporate/review
+	the paches send by various people (S. Holford, T. Strauman), 3) Fix the
+	bug due to varying rpcgen code generation in remdeb_svc.c, 4) Remove
+	some dead code, 5) Apply a patches enabling to call enterRdbg imediately
+	after rdbg initialization is done, NB : the paches is huge but it is
+	mainly due to coding styke chnages.  Only few lines of codes have been
+	really changed and they do not impact  rdbg functionnality (AFAIKT).
+	* librdbg/include/rdbg/servrpc.h, librdbg/include/rdbg/i386/rdbg_f.h,
+	librdbg/include/rdbg/m68k/rdbg_f.h,
+	librdbg/include/rdbg/powerpc/rdbg_f.h, librdbg/src/_servtgt.c,
+	librdbg/src/awk.svc, librdbg/src/excep.c, librdbg/src/ptrace.c,
+	librdbg/src/rdbg.c, librdbg/src/remdeb.x, librdbg/src/servbkpt.c,
+	librdbg/src/servcon.c, librdbg/src/servrpc.c, librdbg/src/servtgt.c,
+	librdbg/src/servtsp.c, librdbg/src/servutil.c,
+	librdbg/src/i386/excep_f.c, librdbg/src/i386/rdbg_f.c,
+	librdbg/src/i386/any/Makefile.am, librdbg/src/i386/any/remdeb.h,
+	librdbg/src/i386/any/remdeb_svc.c, librdbg/src/i386/any/remdeb_xdr.c,
+	librdbg/src/m68k/excep_f.c, librdbg/src/m68k/rdbg_f.c,
+	librdbg/src/m68k/any/Makefile.am, librdbg/src/m68k/any/remdeb.h,
+	librdbg/src/m68k/any/remdeb_svc.c, librdbg/src/m68k/any/remdeb_xdr.c,
+	librdbg/src/powerpc/excep_f.c, librdbg/src/powerpc/rdbg_f.c,
+	librdbg/src/powerpc/new_exception_processing/Makefile.am,
+	librdbg/src/powerpc/new_exception_processing/remdeb.h,
+	librdbg/src/powerpc/new_exception_processing/remdeb_svc.c,
+	librdbg/src/powerpc/new_exception_processing/remdeb_xdr.c: Modified.
+
+2002-01-18	Till Straumann <strauman@slac.stanford.edu>
+
+	* librdbg/src/powerpc/excep_f.c: This patch addresses the following
+	issues: - exception handler needs to enable MSR_FP if the interrupted
+	thread is FP enabled. - printk message for MSR fixed and added
+	stacktrace. NOTE: this requires the stacktrace patch to
+	lib/libbsp/powerpc/shared/vectors/vector_init.c (#ifdef DDEBUG only,
+	however).
 
 2002-01-06	Joel Sherrill <joel@OARcorp.com>
 
@@ -798,6 +1010,15 @@
 
 	* libchip/network/sonic.h: Fix typo.
 
+2001-10-30	Victor V. Vengerov <vvv@oktet.ru>
+
+	* librdbg/src/m68k/rdbg_cpu_asm.S: Now compiles on ColdFire.
+
+2001-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* librdbg/configure.ac: Fix latent bug exposed by removal of
+	config.cache's which prevented powerpc targets librdbg from building.
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use SUBDIRS = @subdirs@, require automake-1.5.
@@ -817,6 +1038,10 @@
 	* libchip/configure.in: Remove.
 	* libchip/configure.ac: New file, generated from configure.in by
 	autoupdate.
+	* librdbg/.cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* librdbg/configure.in: Remove.
+	* librdbg/configure.ac: New file, generated from configure.in by
+	autoupdate.
 
 2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -827,6 +1052,24 @@
 2001-09-27	Joel Sherrill <joel@OARcorp.com>
 
 	* libchip/ChangeLog: Fixed typo in date.
+
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* librdbg/include/rdbg/i386/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* librdbg/include/rdbg/m68k/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* librdbg/include/rdbg/powerpc/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* librdbg/include/rdbg/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* librdbg/src/i386/any/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* librdbg/src/m68k/any/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am: Use
+	'PREINSTALL_FILES ='.
+
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* librdbg/src/i386/any/Makefile.am: Move MAINTAINERCLEANFILES before the
+	includes and use MAINTAINERCLEANFILES = to make automake-1.5 happy.
+	* librdbg/src/m68k/any/Makefile.am: Ditto.
+	* librdbg/src/powerpc/new_exception_processing/Makefile.am: Ditto.
 
 2001-09-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -841,6 +1084,17 @@
 	* libchip/network/README.i82586, libchip/network/i82586.c,
 	libchip/network/i82586reg.h, libchip/network/i82586var.h: New files. 
 	Network driver for Intel i82586.
+
+2001-09-14	Eric Norum <eric.norum@usask.ca>
+
+	* librdbg/include/rdbg/rdbg.h, librdbg/src/ptrace.c: Modifications to
+	make gcc 3.x happy.
+
+2001-05-15	Joel Sherrill <joel@OARcorp.com>
+
+	* librdbg/src/i386/any/remdeb_svc.c, librdbg/src/m68k/any/remdeb_svc.c,
+	librdbg/src/powerpc/new_exception_processing/remdeb_svc.c: Readding as I
+	accidentally deleted the incorrectly empty versions.
 
 2001-05-14	Till Straumann <strauman@slac.stanford.edu>
 
@@ -860,6 +1114,31 @@
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libchip/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
+
+2001-04-20	Eric Valette <valette@crf.canon.fr>
+
+	* mcp750 directory renamed new_exception processing as it supports many
+	more CPU models.
+	* librdbg/configure.in, librdbg/src/powerpc/Makefile.am,
+	librdbg/src/powerpc/new_exception_processing/Makefile.am,
+	librdbg/src/powerpc/new_exception_processing/remdeb_f.x: New files
+	formerly in mcp750 plus modifications.
+	* librdbg/src/powerpc/mcp750/.cvsignore,
+	librdbg/src/powerpc/mcp750/Makefile.am,
+	librdbg/src/powerpc/mcp750/remdeb.h,
+	librdbg/src/powerpc/mcp750/remdeb_f.x,
+	librdbg/src/powerpc/mcp750/remdeb_svc.c,
+	librdbg/src/powerpc/mcp750/remdeb_xdr.c: Removed when moved to
+	new_exception_processing.
+	* librdbg/configure.in, librdbg/src/powerpc/Makefile.am,
+	librdbg/src/powerpc/new_exception_processing/Makefile.am,
+	librdbg/src/powerpc/new_exception_processing/remdeb_f.x: Modified as
+	part of this effort to add support for the MPC8xx.
+
+2001-04-19	Joel Sherrill <joel@OARcorp.com>
+
+	* librdbg/src/powerpc/rdbg_f.c: Always include <rtems.h> instead of 
+	internal include files.
 
 2001-03-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -881,6 +1160,14 @@
 	libchip/serial/z85c30.c, libchip/serial/z85c30.h,
 	libchip/serial/z85c30_p.h, libchip/serial/z85c30_reg.c: Corrected header.
 
+2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* librdbg/include/rdbg/Makefile.am,
+	librdbg/include/rdbg/i386/Makefile.am,
+	librdbg/include/rdbg/m68k/Makefile.am,
+	librdbg/include/rdbg/powerpc/Makefile.am: Cleanup including more proper
+	style on include files.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libchip/network/Makefile.am, libchip/rtc/Makefile.am,
@@ -890,6 +1177,15 @@
 2001-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: install to $(exec_prefix)/@RTEMS_BSP@.
+
+2001-01-18	Joel Sherrill <joel@OARcorp.com>
+
+	* librdbg/src/powerpc/new_exception_processing/remdeb_svc.c: Corrected 
+	macro using variable arguments.
+	* librdbg/src/powerpc/new_exception_processing/remdeb.h,
+	librdbg/src/powerpc/new_exception_processing/remdeb_xdr.c: Regenerated
+	since I updated the main RTEMS development machine to RedHat 7.2 and
+	apparently got a new version of rpcgen.
 
 2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
@@ -903,6 +1199,8 @@
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 	* libchip/Makefile.am: Use ... instead of RTEMS_TOPdir in
 	ACLOCAL_AMFLAGS.
+	* librdbg/Makefile.am: Use ... instead of RTEMS_TOPdir in
+	ACLOCAL_AMFLAGS.
 
 2000-11-03	Chris Johns <ccj@acm.org>
 
@@ -913,6 +1211,8 @@
 
 	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
 	* libchip/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
+	* librdbg/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
 	$(RTEMS_TOPdir)/aclocal.
 
 2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -946,6 +1246,8 @@
 	subdirectories.
 	* libchip/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
 	Switch to GNU canonicalization.
+	* librdbg/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+	Switch to GNU canonicalization.
 
 2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -959,6 +1261,23 @@
 
 	* libchip/network/dec21140.c: Corrected attach to include "int attach"
 	parameter.
+
+2000-10-19	Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
+
+	* librdbg/src/m68k/any/remdeb.h, librdbg/src/m68k/any/remdeb_xdr.c,
+	librdbg/src/m68k/any/remdeb_svc.c: New files missed in merger.
+	* librdbg/configure.in: Add m68k support.
+	* librdbg/include/rdbg/m68k, librdbg/src/m68k, librdbg/src/m68k/any: New
+	subdirectory.
+	* librdbg/src/_servtgt.c: add status text to prinf upon task creation
+	failure.
+	* librdbg/src/rdbg.c: reconnect rdbg exception handlers upon RPC calls.
+	* librdbg/src/m68k/Makefile.am, librdbg/src/m68k/any/Makefile.am,
+	librdbg/src/m68k/any/remdeb_f.x, librdbg/src/m68k/any/.cvsignore,
+	librdbg/src/m68k/any/remdeb.h, librdbg/src/m68k/any/remdeb_xdr.c,
+	librdbg/src/m68k/any/remdeb_svc.c, librdbg/src/m68k/excep_f.c,
+	librdbg/src/m68k/rdbg_cpu_asm.S, librdbg/src/m68k/rdbg_f.c,
+	librdbg/src/m68k/.cvsignore: New files.
 
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
@@ -983,6 +1302,8 @@
 	* wrapup/Makefile.am: Include compile.am.
 	* libchip/network/Makefile.am, libchip/rtc/Makefile.am,
 	libchip/serial/Makefile.am: Include compile.am.
+	* librdbg/src/i386/any/Makefile.am,
+	librdbg/src/powerpc/mcp750/Makefile.am: Include compile.am.
 
 2000-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -992,4 +1313,5 @@
 
 	* ChangeLog: New file.
 	* libchip/ChangeLog: New file.
+	* librdbg/ChangeLog: New file.
 
