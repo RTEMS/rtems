@@ -4,19 +4,16 @@
 
 Various non BSP dependant support routines.
 
-clock - Uses the 403 PIT (Programmable interval timer) to
+clock - Uses the MPC860 PITPIT (Programmable interval timer) to
 	generate RTEMS clock ticks.
 
-console - Uses the 403 Internal serial port to do RTEMS
-	console I/O.  Not ALL members of the 403 family
-	have this.
+console_generic - Uses the MPC860 SCCs and SMCs to to serial I/O
 
-include - Currently empty
+include - console.h: function declarations for console related functions
 
-timer - Uses the 403 timebase register for timing
-	tests.  Other PowerPCs have slightly different
-	timebase register definitions.
+timer - Uses the MPC860 timebase register for timing
+	tests.  It only uses the lower 32 bits
 
-vectors - PowerPC 403 specific vector entry points.
+vectors - MPC860 specific vector entry points.
 	Includes CPU dependant, application independant
 	handlers: alignment.

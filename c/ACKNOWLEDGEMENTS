@@ -136,8 +136,9 @@ The following persons/organizations have made contributions:
   Puchheim,Germany submitted some improvements to the PPC403 
   support and added the helas403 BSP.
 
-+ Jay Monkman (jmonkman@frasca.com) of Frasca submitted the
-  eth_comm BSP and support for the MPC860 PowerPC CPU model.
++ Jay Monkman (jmonkman@frasca.com) of Frasca International, Inc
+  submitted the support for the Motorola MPC860 CPU including the
+  'eth_comm' BSP
 
 + Charles Gauthier <Charles.Gauthier@iit.nrc.ca> of the Institute for
   Information Technology for the National Research Council of Canada
