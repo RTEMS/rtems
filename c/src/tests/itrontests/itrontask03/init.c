@@ -57,7 +57,7 @@ void ITRON_Init( void )
   puts( "INIT - ref_tsk PREEMPT - Validate DORMANT STATE" );
   status = ref_tsk( &pk_rtsk, PREEMPT_TASK_ID );
   directive_failed( status, "INIT - ref_tsk of RTEMS_PREEMPT");
-  assert( pk_rtsk.tskstat == TTS_DMT );
+  fatal_directive_status(pk_rtsk.tskstat,TTS_DMT,"tskstat of PREEMPT");
   
   /*
    * Restart the Preempt Task.
@@ -70,8 +70,7 @@ void ITRON_Init( void )
   directive_failed( status, "rot_rdq" );
   puts( "INIT - ref_tsk PREEMPT - Validate no longer exists" );
   status = ref_tsk( &pk_rtsk, PREEMPT_TASK_ID );
-  assert( status == E_NOEXS );
-
+  fatal_directive_status( status, E_NOEXS, "tskstat of PREEMPT");
   status = chg_pri( TSK_SELF, PREEMPT_PRIORITY );
   directive_failed( status, "chg_pri of SELF" );
   
@@ -98,17 +97,17 @@ void ITRON_Init( void )
   directive_failed( status, "sta_tsk of TA2" );
   status  = sta_tsk( TA3_ID, 0 );
   directive_failed( status, "sta_tsk of TA3" );
-  puts( "INIT - ref_tsk TA1 - Validate READY STATE" );
+
   status = ref_tsk( &pk_rtsk, TA1_ID);
   directive_failed( status, "INIT - ref_tsk of TA1");
-  assert( pk_rtsk.tskstat == TTS_RDY );
+  fatal_directive_status( pk_rtsk.tskstat, TTS_RDY , "tskstat of TA1");
 
   puts( "INIT - suspending TA2 while middle task on a ready chain" );
   status = sus_tsk( TA2_ID  );
   directive_failed( status, "sus_tsk of TA2" );
   status = ref_tsk( &pk_rtsk, TA2_ID);
   directive_failed( status, "INIT - ref_tsk of TA2");
-  assert( pk_rtsk.tskstat == TTS_SUS );
+  fatal_directive_status( pk_rtsk.tskstat, TTS_SUS, "tskstat of TA2");
 
   status = ter_tsk( TA1_ID );
   directive_failed( status, "ter_tsk of TA1" );
@@ -130,7 +129,7 @@ void ITRON_Init( void )
   directive_failed( status, "sta_tsk of TA2" );
   status  = sta_tsk( TA3_ID, 0 );
   directive_failed( status, "sta_tsk of TA3" );
-  
+
   exd_tsk();
   assert(0);
 }

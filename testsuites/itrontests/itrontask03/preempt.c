@@ -30,7 +30,7 @@ void Preempt_task()
 
   puts( "PREEMPT - ref_tsk validation"  );
   status = ref_tsk( &pk_rtsk, PREEMPT_TASK_ID );
-  assert( status          == E_OK );
+  fatal_directive_status( status, E_OK , "ref_tsk of PREEMPT");
   assert( pk_rtsk.tskpri  == PREEMPT_PRIORITY );
   assert( pk_rtsk.itskpri == PREEMPT_PRIORITY );
   assert( pk_rtsk.task    == Preempt_task );
