@@ -32,8 +32,6 @@ AM_CONDITIONAL(UNIX,test x"$RTEMS_CPU" = x"unix")
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-AC_CONFIG_SUBDIRS($cfg_subdirs)
-
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
