@@ -1,6 +1,14 @@
 
 2000-11-25	Joel Sherrill <joel@OARcorp.com>
 
+	* custom/pc386.cfg: make-exe rule would write into
+	$(PROJECT_RELEASE) area.  This is not cool because it $(PROJECT_RELEASE)
+	is generally not writeable after the BSP is installed and you do not
+	want every application installed there by default.  Reported by
+	Eric Norum <eric.norum@usask.ca>.
+
+2000-11-25	Joel Sherrill <joel@OARcorp.com>
+
 	* custom/Makefile.am: Updated to add jmr3904.cfg
 	* custom/jmr3904.cfg: New file.
 
