@@ -127,14 +127,14 @@ use to GNAT/RTEMS users.
 
 @subsection RTEMS Mailing List
 
-rtems-users@@OARcorp.com
+rtems-users@@rtems.com
 
 This mailing list is dedicated to the discussion of issues related
 to RTEMS, including GNAT/RTEMS.  If you have questions about RTEMS,
 wish to make suggestions, or just want to pick up hints, this is a
 good list to subscribe to.  Subscribe by sending an empty mail
-message to rtems-users-subscribe@@OARcorp.com.  Messages sent
-to rtems-users@@OARcorp.com are posted to the list.
+message to rtems-users-subscribe@@rtems.com.  Messages sent
+to rtems-users@@rtems.com are posted to the list.
 
 @subsection CrossGCC Mailing List
 

@@ -21,6 +21,7 @@
 
 @include version.texi
 @include common/setup.texi
+@include common/rtems.texi
 
 @c
 @c  Now set all the tool version dependent information
