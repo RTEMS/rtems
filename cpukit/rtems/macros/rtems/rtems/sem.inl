@@ -44,6 +44,11 @@
   (Semaphore_Control *) \
   _Objects_Get( &_Semaphore_Information, (_id), (_location) )
 
+#define _Semaphore_Get_interrupt_disable( _id, _location, _level ) \
+  (Semaphore_Control *) \
+  _Objects_Get_isr_disable( \
+    &_Semaphore_Information, (_id), (_location), (_level) )
+
 /*PAGE
  *
  *  _Semaphore_Is_null
