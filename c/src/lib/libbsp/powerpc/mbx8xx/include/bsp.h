@@ -30,6 +30,30 @@ extern "C" {
 #include <mpc8xx/mmu.h>
 #include <mpc8xx/console.h>
 
+
+/*
+ *  Representation of initialization data in NVRAM
+ */
+typedef volatile struct nvram_config_ {
+  unsigned char  cache_mode;            /* 0xFA001000 */
+  unsigned char  console_mode;          /* 0xFA001001 */
+  unsigned char  console_printk_port;   /* 0xFA001002 */
+  unsigned char  eppcbug_smc1;          /* 0xFA001003 */
+  unsigned long	 ipaddr;                /* 0xFA001004 */
+  unsigned long	 netmask;               /* 0xFA001008 */
+  unsigned char	 enaddr[6];             /* 0xFA00100C */
+  unsigned short processor_id;          /* 0xFA001012 */
+  unsigned long	 rma_start;             /* 0xFA001014 */
+  unsigned long	 vma_start;             /* 0xFA001018 */
+  unsigned long	 ramsize;               /* 0xFA00101C */
+} nvram_config;
+
+/*
+ *  Pointer to the base of User Area NVRAM
+ */
+#define nvram			((nvram_config * const) 0xFA001000)
+
+
 /*
  * Network driver configuration
  */
@@ -69,11 +93,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 #define Clear_tm27_intr()
 
 #define Lower_tm27_intr()
-
-/* Constants -- THESE SHOULD BE DEFINED IN THE LINKER SCRIPT */
-
-#define RAM_START 0
-#define RAM_END   0x100000
 
 /* miscellaneous stuff assumed to exist */
 

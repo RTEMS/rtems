@@ -52,6 +52,9 @@
 #define TX_BUF_COUNT     8
 #define TX_BD_PER_BUF    4
 
+#define INET_ADDR_MAX_BUF_SIZE (sizeof "255.255.255.255")
+
+
 /*
  * RTEMS event used by interrupt handler to signal daemons.
  * This must *not* be the same event used by the TCP/IP task synchronization.
@@ -1537,6 +1540,8 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
   int mtu;
   int unitNumber;
   char *unitName;
+  char *pAddr;
+  unsigned long addr;
 
 	/*
 	 * Parse driver name
@@ -1561,12 +1566,60 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
   /*
    * Process options
    */
+ #if NVRAM_CONFIGURE == 1
+ 
+  /* Configure from NVRAM */
+  if ( (addr = nvram->ipaddr) ) {
+    /* We have a non-zero entry, copy the value */
+    if ( (pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT )) )
+      config->ip_address = (char *)inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
+    else
+      rtems_panic("Can't allocate ip_address buffer!\n");
+  }
+  
+  if ( (addr = nvram->netmask) ) {
+    /* We have a non-zero entry, copy the value */
+    if ( (pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT )) )
+      config->ip_netmask = (char *)inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
+    else
+      rtems_panic("Can't allocate ip_netmask buffer!\n");
+  }
+
+  /* Ethernet address requires special handling -- it must be copied into
+   * the arpcom struct. The following if construct serves only to give the
+   * User Area NVRAM parameter the highest priority.
+   * 
+   * If the ethernet address is specified in NVRAM, go ahead and copy it.
+   * (ETHER_ADDR_LEN = 6 bytes).
+   */
+  if ( nvram->enaddr[0] || nvram->enaddr[1] || nvram->enaddr[2] ) {
+    /* Anything in the first three bytes indicates a non-zero entry, copy value */
+  	memcpy ((void *)sc->arpcom.ac_enaddr, &nvram->enaddr, ETHER_ADDR_LEN);
+  }
+  else if ( config->hardware_address ) {
+    /* There is no entry in NVRAM, but there is in the ifconfig struct, so use it. */
+    memcpy ((void *)sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
+  }
+  else {
+    /* There is no ethernet address provided, so it could be read
+     * from the Ethernet protocol block of SCC1 in DPRAM.
+     */
+    rtems_panic("No Ethernet address specified!\n");
+  }
+    
+ #else /* NVRAM_CONFIGURE != 1 */
+ 
   if (config->hardware_address) {
     memcpy (sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
   }
   else {
-		/* FIXME to read the enaddr from NVRAM */
+    /* There is no ethernet address provided, so it could be read
+     * from the Ethernet protocol block of SCC1 in DPRAM.
+     */
+    rtems_panic("No Ethernet address specified!\n");
   }
+  
+#endif /* NVRAM_CONFIGURE != 1 */
 
   if (config->mtu)
     mtu = config->mtu;

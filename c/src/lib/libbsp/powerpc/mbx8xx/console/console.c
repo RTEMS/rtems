@@ -81,19 +81,12 @@
 #include <rtems/libio.h>
 #include <termios.h>
 
-#if UARTS_IO_MODE == 0
-#define BSP_WRITE m8xx_uart_pollWrite
-#define BSP_READ  m8xx_uart_pollRead
-#elif UARTS_IO_MODE == 1
-#define BSP_WRITE m8xx_uart_write
-#elif UARTS_IO_MODE == 2
-#define BSP_WRITE _EPPCBug_pollWrite
-#define BSP_READ  _EPPCBug_pollRead
-#endif
-
 static int _EPPCBug_pollRead( int minor );
 static int _EPPCBug_pollWrite( int minor, const char *buf, int len );
 static void _BSP_output_char( char c );
+static rtems_status_code do_poll_read( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
+static rtems_status_code do_poll_write( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
+
 
 BSP_output_char_function_type BSP_output_char = _BSP_output_char;
 
@@ -112,7 +105,7 @@ BSP_output_char_function_type BSP_output_char = _BSP_output_char;
  *  Return value: char returned as positive signed int
  *                -1 if no character is present in the input FIFO.
  */
-int _EPPCBug_pollRead(
+static int _EPPCBug_pollRead(
   int minor
 )
 {
@@ -220,7 +213,7 @@ int _EPPCBug_pollRead(
  *
  *  Return value: IGNORED
  */
-int _EPPCBug_pollWrite(
+static int _EPPCBug_pollWrite(
   int minor,
   const char *buf,
   int len
@@ -331,16 +324,182 @@ error:
 
 
 /*
+ *  do_poll_read
+ *
+ *  Input characters through polled I/O. Returns has soon as a character has
+ *  been received. Otherwise, if we wait for the number of requested characters,
+ *  we could be here forever!
+ *
+ *  CR is converted to LF on input. The terminal should not send a CR/LF pair
+ *  when the return or enter key is pressed.
+ *
+ *  Input parameters:
+ *    major - ignored. Should be the major number for this driver.
+ *    minor - selected channel.
+ *    arg->buffer - where to put the received characters.
+ *    arg->count  - number of characters to receive before returning--Ignored.
+ *
+ *  Output parameters:
+ *    arg->bytes_moved - the number of characters read. Always 1.
+ *
+ *  Return value: RTEMS_SUCCESSFUL
+ *
+ *  CANNOT BE COMBINED WITH INTERRUPT DRIVEN I/O!
+ */
+static rtems_status_code do_poll_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  rtems_libio_rw_args_t *rw_args = arg;
+  int c;
+
+#if NVRAM_CONFIGURE == 1
+
+  int (*pollRead)( int minor );
+  
+  if ( (nvram->console_mode & 0x06) == 0x04 )
+    pollRead = _EPPCBug_pollRead;
+  else
+    pollRead = m8xx_uart_pollRead;
+
+  while( (c = (*pollRead)(minor)) == -1 );
+  rw_args->buffer[0] = (unsigned8)c;
+  if( rw_args->buffer[0] == '\r' )
+      rw_args->buffer[0] = '\n';
+  rw_args->bytes_moved = 1;
+  return RTEMS_SUCCESSFUL;
+
+#else
+
+#if UARTS_IO_MODE == 2
+#define BSP_READ  _EPPCBug_pollRead
+#else
+#define BSP_READ  m8xx_uart_pollRead
+#endif
+
+  while( (c = BSP_READ(minor)) == -1 );
+  rw_args->buffer[0] = (unsigned8)c;
+  if( rw_args->buffer[0] == '\r' )
+      rw_args->buffer[0] = '\n';
+  rw_args->bytes_moved = 1;
+  return RTEMS_SUCCESSFUL;
+
+#endif
+}
+
+
+/*
+ *  do_poll_write
+ *
+ *  Output characters through polled I/O. Returns only once every character has
+ *  been sent.
+ *
+ *  CR is transmitted AFTER a LF on output. 
+ *
+ *  Input parameters:
+ *    major - ignored. Should be the major number for this driver.
+ *    minor - selected channel
+ *    arg->buffer - where to get the characters to transmit.
+ *    arg->count  - the number of characters to transmit before returning.
+ *
+ *  Output parameters:
+ *    arg->bytes_moved - the number of characters read
+ *
+ *  Return value: RTEMS_SUCCESSFUL
+ *
+ *  CANNOT BE COMBINED WITH INTERRUPT DRIVEN I/O!
+ */
+static rtems_status_code do_poll_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  rtems_libio_rw_args_t *rw_args = arg;
+  unsigned32 i;
+  char cr ='\r';
+
+#if NVRAM_CONFIGURE == 1
+
+  int (*pollWrite)(int minor, const char *buf, int len);
+  
+  if ( (nvram->console_mode & 0x06) == 0x04 )
+    pollWrite = _EPPCBug_pollWrite;
+  else
+    pollWrite = m8xx_uart_pollWrite;
+
+  for( i = 0; i < rw_args->count; i++ ) {
+    (*pollWrite)(minor, &(rw_args->buffer[i]), 1);
+    if ( rw_args->buffer[i] == '\n' )
+      (*pollWrite)(minor, &cr, 1);
+  }
+  rw_args->bytes_moved = i;
+  return RTEMS_SUCCESSFUL;
+
+#else
+
+#if UARTS_IO_MODE == 2
+#define BSP_WRITE _EPPCBug_pollWrite
+#else
+#define BSP_WRITE m8xx_uart_pollWrite
+#endif
+
+  for( i = 0; i < rw_args->count; i++ ) {
+    BSP_WRITE(minor, &(rw_args->buffer[i]), 1);
+    if ( rw_args->buffer[i] == '\n' )
+      BSP_WRITE(minor, &cr, 1);
+  }
+  rw_args->bytes_moved = i;
+  return RTEMS_SUCCESSFUL;
+
+#endif
+}
+
+
+/*
  *  Print functions prototyped in bspIo.h
  */
 
-void _BSP_output_char( char c )
+static void _BSP_output_char( char c )
 {
   char cr = '\r';
   
-  BSP_WRITE( PRINTK_MINOR, &c, 1 );
+  /* 
+   *  Can't rely on console_initialize having been called before this function
+   *  is used, so it may fail unless output is done through EPPC-Bug.
+   */
+#if NVRAM_CONFIGURE == 1
+
+  rtems_device_minor_number printk_minor;
+
+  /* Use NVRAM info for configuration */
+  printk_minor = (nvram->console_printk_port & 0x70) >> 4;
+  if( (nvram->console_mode & 0x30) == 0x20 ) {
+    _EPPCBug_pollWrite( printk_minor, &c, 1 );
+    if( c == '\n' )
+      _EPPCBug_pollWrite( printk_minor, &cr, 1 );
+  }
+  else {
+    m8xx_uart_pollWrite( printk_minor, &c, 1 );
+    if( c == '\n' )
+      m8xx_uart_pollWrite( PRINTK_MINOR, &cr, 1 );
+	}
+	
+#else  
+
+#if PRINTK_IO_MODE == 2
+#define PRINTK_WRITE _EPPCBug_pollWrite
+#else
+#define PRINTK_WRITE m8xx_uart_pollWrite
+#endif
+
+  PRINTK_WRITE( PRINTK_MINOR, &c, 1 );
   if( c == '\n' )
-    BSP_WRITE( PRINTK_MINOR, &cr, 1 );
+    PRINTK_WRITE( PRINTK_MINOR, &cr, 1 );
+    
+#endif
 }
 
 
@@ -362,13 +521,62 @@ rtems_device_driver console_initialize(
 )
 {
   rtems_status_code status;
+  rtems_device_minor_number console_minor;
   
   /*
-   * Set up TERMIOS
+   * Set up TERMIOS if needed
    */
+#if NVRAM_CONFIGURE == 1
+  /* Use NVRAM info for configuration */
+  console_minor = nvram->console_printk_port & 0x07;
+        
+  if ( nvram->console_mode & 0x01 )
+    /* termios */
+    rtems_termios_initialize ();
+
+  /*
+   *  Do common initialization.
+   */
+  m8xx_uart_initialize();
+  
+  /*
+   * Do device-specific initialization
+   */
+  if ( !nvram->eppcbug_smc1 &&
+    ( ((nvram->console_mode & 0x30) != 0x20) ||
+     (((nvram->console_printk_port & 0x30) >> 4) != SMC1_MINOR) ) )
+    m8xx_uart_smc_initialize(SMC1_MINOR); /* /dev/tty0 */
+
+  if ( ((nvram->console_mode & 0x30) != 0x20) ||
+      (((nvram->console_printk_port & 0x30) >> 4) != SMC2_MINOR) )
+    m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */                             
+
+  if ( ((nvram->console_mode & 0x30) != 0x20) ||
+      (((nvram->console_printk_port & 0x30) >> 4) != SCC2_MINOR) )
+    m8xx_uart_scc_initialize(SCC2_MINOR); /* /dev/tty2    */
+                           
+#ifdef mpc860
+
+  if ( ((nvram->console_mode & 0x30) != 0x20) ||
+      (((nvram->console_printk_port & 0x30) >> 4) != SCC3_MINOR) )
+    m8xx_uart_scc_initialize(SCC3_MINOR); /* /dev/tty3    */
+
+  if ( ((nvram->console_mode & 0x30) != 0x20) ||
+      (((nvram->console_printk_port & 0x30) >> 4) != SCC4_MINOR) )
+    m8xx_uart_scc_initialize(SCC4_MINOR); /* /dev/tty4    */
+
+#endif /* mpc860 */
+
+#else /* NVRAM_CONFIGURE != 1 */
+
+    console_minor = CONSOLE_MINOR;
+    
 #if UARTS_USE_TERMIOS == 1
-  rtems_termios_initialize();
-#endif
+
+    rtems_termios_initialize ();
+    
+#endif /* UARTS_USE_TERMIOS */
+    
   /*
    *  Do common initialization.
    */
@@ -401,6 +609,9 @@ rtems_device_driver console_initialize(
 
 #endif /* mpc860 */
 
+#endif /* NVRAM_CONFIGURE != 1 */
+
+
   /*
    * Set up interrupts
    */
@@ -430,7 +641,7 @@ rtems_device_driver console_initialize(
 #endif /* mpc860 */
     
   /* Now register the RTEMS console */
-  status = rtems_io_register_name ("/dev/console", major, CONSOLE_MINOR);
+  status = rtems_io_register_name ("/dev/console", major, console_minor);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
     
@@ -448,14 +659,11 @@ rtems_device_driver console_open(
 )
 {
   /* Used to track termios private data for callbacks */
-#if UARTS_IO_MODE == 1
   extern struct rtems_termios_tty *ttyp[];
+  
   rtems_libio_open_close_args_t *args = arg;
-#endif
-
   rtems_status_code sc;
-
-#if UARTS_USE_TERMIOS == 1
+  
   static const rtems_termios_callbacks sccEPPCBugCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
@@ -465,6 +673,7 @@ rtems_device_driver console_open(
     NULL,                       	/* startRemoteTx */
     0                           	/* outputUsesInterrupts */
   };
+  
   static const rtems_termios_callbacks intrCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
@@ -475,6 +684,7 @@ rtems_device_driver console_open(
     NULL,                       	/* startRemoteTx */
     1                           	/* outputUsesInterrupts */
   };
+  
   static const rtems_termios_callbacks pollCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
@@ -485,35 +695,53 @@ rtems_device_driver console_open(
     NULL,                       	/* startRemoteTx */
     0                           	/* outputUsesInterrupts */
   };
-#endif
    
   if ( minor > NUM_PORTS-1 ) 
     return RTEMS_INVALID_NUMBER;
 
+#if NVRAM_CONFIGURE == 1
+
+  /* Use NVRAM info for configuration */ 
+  if ( nvram->console_mode & 0x01 ) {
+    /* Use termios */
+    if ( (nvram->console_mode & 0x06) == 0x02 ) {
+      /* interrupt-driven I/O */
+      sc = rtems_termios_open( major, minor, arg, &intrCallbacks );
+      ttyp[minor] = args->iop->data1;        /* Keep cookie returned by termios_open */
+      return sc;
+    }
+    else if ( (nvram->console_mode & 0x06) == 0x04 )
+      /* polled I/O through EPPC-Bug, better be through SMC1 */
+      return rtems_termios_open( major, minor, arg, &sccEPPCBugCallbacks );
+    else
+      /* normal polled I/O */
+      return rtems_termios_open( major, minor, arg, &pollCallbacks );
+  }
+  else
+    /* no termios -- default to polled I/O */
+    return RTEMS_SUCCESSFUL;
+	  
+#else /* NVRAM_CONFIGURE != 1 */
+
 #if UARTS_USE_TERMIOS == 1
 
 #if UARTS_IO_MODE == 2    /* EPPCBug polled I/O with termios */
-
-  sc = rtems_termios_open (major, minor, arg, &sccEPPCBugCallbacks);
-  
+  sc = rtems_termios_open( major, minor, arg, &sccEPPCBugCallbacks );
 #elif UARTS_IO_MODE == 1  /* RTEMS interrupt-driven I/O with termios */
-
-  sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
+  sc = rtems_termios_open( major, minor, arg, &intrCallbacks );
   ttyp[minor] = args->iop->data1;        /* Keep cookie returned by termios_open */
-  
 #else                     /* RTEMS polled I/O with termios */
-
-  sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
-  
+  sc = rtems_termios_open( major, minor, arg, &pollCallbacks );
 #endif
 
-#else                     /* Nothing to do if termios is not used */
-
+#else /* UARTS_USE_TERMIOS != 1 */
+  /* no termios -- default to polled I/O */
   sc = RTEMS_SUCCESSFUL;
-  
-#endif
+#endif /* UARTS_USE_TERMIOS != 1 */
 
   return sc;
+  
+#endif /* NVRAM_CONFIGURE != 1 */
 }
 
 
@@ -529,11 +757,25 @@ rtems_device_driver console_close(
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
+#if NVRAM_CONFIGURE == 1
+
+  /* Use NVRAM info for configuration */ 
+  if ( nvram->console_mode & 0x01 )
+    /* use termios */
+    return rtems_termios_close( arg );
+  else
+    /* no termios */
+    return RTEMS_SUCCESSFUL;
+
+#else /* NVRAM_CONFIGURE != 1 */
+
 #if UARTS_USE_TERMIOS == 1
-  return rtems_termios_close (arg);
+  return rtems_termios_close( arg );
 #else
   return RTEMS_SUCCESSFUL;
 #endif
+
+#endif /* NVRAM_CONFIGURE != 1 */
 }
 
 
@@ -546,33 +788,25 @@ rtems_device_driver console_read(
   void *arg
 )
 {
-#if UARTS_USE_TERMIOS != 1
-  rtems_libio_rw_args_t *rw_args = arg;
-  int c;
-#endif
-  
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
-#if UARTS_USE_TERMIOS == 1
+#if NVRAM_CONFIGURE == 1
 
-  return rtems_termios_read(arg);
-  
+  /* Use NVRAM info for configuration */ 
+  if ( nvram->console_mode & 0x01 )
+    /* use termios */
+    return rtems_termios_read( arg );
+  else
+    /* no termios -- default to polled */
+    return do_poll_read( major, minor, arg );
+
 #else
 
-#if UARTS_IO_MODE != 1    /* Polled I/O without termios */
-
-  while( (c = BSP_READ( minor )) == -1 );
-  rw_args->buffer[0] = (unsigned8)c;
-  if( rw_args->buffer[0] == '\r' )
-      rw_args->buffer[0] = '\n';
-  rw_args->bytes_moved = 1;
-  return RTEMS_SUCCESSFUL;
-  
-#else                     /* RTEMS interrupt-driven I/O without termios */
-
-  #error "Interrupt-driven input without termios is not yet supported"
-  
+#if UARTS_USE_TERMIOS == 1
+  return rtems_termios_read( arg );
+#else
+  return do_poll_read( major, minor, arg );
 #endif
 
 #endif
@@ -588,36 +822,26 @@ rtems_device_driver console_write(
   void *arg
 )
 {
-#if UARTS_USE_TERMIOS != 1
-  rtems_libio_rw_args_t *rw_args = arg;
-  unsigned32 i;
-  char cr = '\r';
-#endif
-
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
-#if UARTS_USE_TERMIOS == 1
+#if NVRAM_CONFIGURE == 1
 
-  return rtems_termios_write(arg);
-  
+  /* Use NVRAM info for configuration */ 
+  if ( nvram->console_mode & 0x01 )
+    /* use termios */
+    return rtems_termios_write( arg );
+  else
+    /* no termios -- default to polled */
+    return do_poll_write( major, minor, arg );
+
 #else
 
-#if UARTS_IO_MODE != 1     /* Polled I/O without termios*/
-
-  /* Must add carriage return to line feeds */
-  for( i = 0; i < rw_args->count; i++ ) {
-    BSP_WRITE( minor, &(rw_args->buffer[i]), 1 );
-    if( rw_args->buffer[i] == '\n' )
-      BSP_WRITE( minor, &cr, 1 );
-  }
-  rw_args->bytes_moved = i;
-  return RTEMS_SUCCESSFUL;
-    
-#else                     /* RTEMS interrupt-driven I/O without termios */
-
-  #error "Interrupt-driven output without termios is not yet supported"
-  
+#if UARTS_USE_TERMIOS == 1
+  return rtems_termios_write( arg );
+#else
+    /* no termios -- default to polled */
+  return do_poll_write( major, minor, arg );
 #endif
 
 #endif
@@ -636,10 +860,24 @@ rtems_device_driver console_control(
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
+#if NVRAM_CONFIGURE == 1
+
+  /* Uuse NVRAM info for configuration */ 
+  if ( nvram->console_mode & 0x01 )
+    /* termios */
+    return rtems_termios_ioctl( arg );
+  else
+    /* no termios -- default to polled */
+    return RTEMS_SUCCESSFUL;
+
+#else
+
 #if UARTS_USE_TERMIOS == 1
-  return rtems_termios_ioctl (arg);
+  return rtems_termios_ioctl( arg );
 #else
   return RTEMS_SUCCESSFUL;
+#endif
+
 #endif
 }
 

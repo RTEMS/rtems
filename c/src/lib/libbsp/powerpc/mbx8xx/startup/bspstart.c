@@ -135,13 +135,19 @@ void bsp_start(void)
   /*
    * Enable instruction and data caches. Do not force writethrough mode.
    */
-  #ifdef INSTRUCTION_CACHE_ENABLE
-	rtems_cache_enable_instruction();
-  #endif
-
-  #ifdef DATA_CACHE_ENABLE
-	rtems_cache_enable_data();
-  #endif
+#if NVRAM_CONFIGURE == 1
+  if ( nvram->cache_mode & 0x02 )
+    rtems_cache_enable_instruction();
+  if ( nvram->cache_mode & 0x01 )
+    rtems_cache_enable_data();
+#else
+#ifdef INSTRUCTION_CACHE_ENABLE
+  rtems_cache_enable_instruction();
+#endif
+#ifdef DATA_CACHE_ENABLE
+  rtems_cache_enable_data();
+#endif
+#endif
    
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from

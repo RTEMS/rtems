@@ -1,16 +1,24 @@
+#
+#  $Id$
+#
+
 This is a README file for the MBX860/MBX821 port of RTEMS 4.5.0
 
 Please send any comments, improvements, or bug reports to:
 
-Darlene A. Stewart
+Charles-Antoine Gauthier
+charles.gauthier@nrc.ca
+
+or
+
+Darlene Stewart
+Darlene.Stewart@nrc.ca
+  
 Software Engineering Group
 Institute for Information Technology
 National Research Council of Canada
 Ottawa, ON, K1A 0R6
-Canada
-
-Darlene.Stewart@nrc.ca
-  
+Canada  
 
 
 Disclaimer
@@ -124,10 +132,10 @@ On-chip resources:
 
 Board description
 -----------------
-Clock rate:	50MHz Entry level boards, 40 MHz others.
-Bus width:	8/32 bit Flash, 32 bit DRAM
-FLASH:		  2-4MB, 120ns
-RAM:		    4-16MB EDO, 60ns DRAM DIMM
+Clock rate:     50MHz Entry level boards, 40 MHz others.
+Bus width:      8/32 bit Flash, 32 bit DRAM
+FLASH:	        2-4MB, 120ns
+RAM:            4-16MB EDO, 60ns DRAM DIMM
 
 
 Installation
@@ -165,11 +173,12 @@ Port Description
 Console driver
 ---------------
 
-This BSP includes an termios-capable asynchronous serial line driver
-that supports SMC1, SMC2, SCC2, and SCC3 and SCC4 if present. The RTEMS
-console is selected in rtems/make/custom/mbx8xx.cfg with the
-CONSOLE_MINOR variable. We normally run with the RTEMS application
-console on SMC2. SMC1 is used by the debugger.
+This BSP includes an termios-capable asynchronous serial line driver that
+supports SMC1, SMC2, SCC2, and SCC3 and SCC4 if present. The RTEMS console is
+selected in rtems/make/custom/mbx8xx.cfg with the CONSOLE_MINOR variable, or
+in NVRAM if that option is enabled in the rtems/make/custom/mbx8xx.cfg file.
+We normally run with the RTEMS application console on SMC2. SMC1 is used by
+the debugger.
 
 Support is provided for five different modes of operation:
 
@@ -180,20 +189,24 @@ Support is provided for five different modes of operation:
   5. interrupt-driven I/O done by the supplied device driver with termios
      support.
      
-The mode of operation of the serial driver is determined at build time
-by the value of the UARTS_IO_MODE constant in rtems/make/custom/mbx8xx.cfg.
-Edit the file to select the type of I/O desired before building RTEMS.
-The choices are:
+If NVRAM_CONFIGURE is set to 1 in rtems/make/custom/mbx8xx.cfg, the mode of
+operation of the driver is determined at boot time from the values stored
+in the user area in NVRAM. See the Configuration Parameters section below for
+instructions on setting up NVRAM. Otherwise, the mode of operation of the
+serial driver is determined at build time in part by the value of the
+UARTS_IO_MODE constant in rtems/make/custom/mbx8xx.cfg. Edit the file to select
+the type of I/O desired before building RTEMS. The choices are:
 
   0 - polled I/O done by the supplied device driver,
   1 - interrupt-driven I/O done by the supplied device driver,
   2 - polled I/O done by EPPC-Bug.
   
-Also set the value of UARTS_USE_TERMIOS to select whether termios should
-be used to perform buffering and input/output processing. Without termios
-support, input processing is limited to the substitution of LF for a
-received CR, and output processing is limited to the transmission of a
-CR following the transmission of a LF. The choices for UARTS_USE_TERMIOS are:
+Also, if NVRAM_CONFIGURE is not set to 1 in rtems/make/custom/mbx8xx.cfg, set
+the value of UARTS_USE_TERMIOS to select whether termios should be used to
+perform buffering and input/output processing. Without termios support, input
+processing is limited to the substitution of LF for a received CR, and output
+processing is limited to the transmission of a CR following the transmission of
+a LF. The choices for UARTS_USE_TERMIOS are:
 
   0 - do not use termios
   1 - use termios
@@ -226,21 +239,31 @@ interrupts disabled.
 Support is provided to send printk output to any port. Specify the desired
 port at build time in rtems/make/custom/mbx8xx.cfg by setting the value
 of PRINTK_MINOR to one of SMC1_MINOR, SMC2_MINOR, SCC2_MINOR, SCC3_MINOR,
-or SCC4_MINOR.
+or SCC4_MINOR. Alternatively, if NVRAM_CONFIGURE is set to 1 in
+rtems/make/custom/mbx8xx.cfg, the printk port is selected based on data that
+is stored in the user area in NVRAM. See the Configuration Parameters section
+below for instructions on setting up NVRAM. 
 
 Select the type of output desired for printk() by setting the value of
 PRINTK_IO_MODE in rtems/make/custom/mbx8xx.cfg. The choices are:
 
   0 - polled I/O done by the supplied device driver,
-  1 - interrupt-driven I/O done by the supplied device driver,
+  1 - polled I/O done by the supplied device driver,
   2 - polled I/O done by EPPC-Bug.
   
 printk() does not use termios.
 
 If the printk() port is opened by RTEMS, then PRINK_IO_MODE mode must have
 the same value as UARTS_IO_MODE, otherwise the I/O functions will be in
-conflict. Interrupt-driven printk() output is only possible if the port is
-opened before hand by an RTEMS application, and is of dubious value...
+conflict. Interrupt-driven printk() output did not work, although we think
+that it should have. It would have been of dubious value anyways. If
+interrupt-driven I/O is selected (value of 1), the driver defaults to using
+polled I/O through the RTEMS driver.
+
+IMPORTANT: Polled I/O through the RTEMS driver requires that the driver be
+initialized. Consequently, to debug startup code using printk prior to the
+initialization of the serial driver, use mode 2: polled I/O through EPPC-Bug,
+and read the next section.
 
 
 EPPC-Bug and I/O
@@ -305,10 +328,15 @@ set language auto
 end
 
 IMPORTANT: When using EPPC-Bug on SMC1, either for debugging or for polled I/O,
-EPPCBUG_SMC1 must be defined in rtems/make/custom/mbx8xx.cfg. Defining this
-constant prevents the device driver from re-initializing SMC1. It also causes
-the network driver, the clock driver, and the asynchronous serial line driver
-to maintain simask_copy for use by gdb.
+EPPCBUG_SMC1 must be defined in rtems/make/custom/mbx8xx.cfg, or the eppc_bug
+field set to non-zero in NVRAM. Defining this constant prevents the device
+driver from re-initializing SMC1. It also causes the network driver, the clock
+driver, and the asynchronous serial line driver to maintain simask_copy for use
+by gdb.
+
+Polled I/O through EPPC-Bug is pretty funky... If your are old enough, it might
+bring back fond memories of the days of 300 baud modems. If not, you can
+experience for yourself what the state of the art used to be.
 
 
 Floating-point
@@ -317,6 +345,89 @@ Floating-point
 The MPC860 and MPC821 do not have floating-point units. All code should
 get compiled with the appropriate -mcpu flag. The nof variants of the gcc
 runtime libraries should be used for linking.
+
+
+Configuration Parameters
+------------------------
+
+If NVRAM_CONFIGURE is set in rtems/make/custom/mbx8xx.cfg, certain
+configuration parameters will be read from the first 31 bytes of the  NVRAM
+User Area, which starts at 0xFA001000. The user is responsible for writing
+the appropriate values in NVRAM (via EPPC-Bug). The paramaters
+that are configurable and their default settings are described below. 
+		
+  Cache Mode (0xFA001000 - 1 byte)
+    Set the following bits in the byte to control the caches:
+      bit 0
+        0 - data cache disable
+        1 - data cache enable
+      bit 1
+        0 - instruction cache disable
+        1 - instruction cache enable
+    If enabled, all of RAM except for the last 512 KB will be cached using
+    copyback mode. The last 512 KB of RAMis for the use of EPPC-Bug.
+    
+  Console driver I/O mode (0xFA001001 - 1 byte)
+    Set the following bits in the byte to set the desired I/O mode
+    for the rtems ports:
+      bit 0
+        0 - do not use termios
+        1 - use termios
+      bit 2 & 1
+        00 - polled I/O through RTEMS driver
+        01 - interrupt-driven I/O
+	10 - polled I/O through EPPC-Bug
+    Set the following bits in the byte to set the desired I/O mode
+    for printk:
+      bit 5 & 4
+        00 - polled I/O through RTEMS driver
+        01 - polled I/O through RTEMS driver
+	10 - polled I/O through EPPC-Bug
+
+  Console driver ports (0xFA001002 - 1 byte)
+    Set the following bits in the byte to select the console and printk ports:
+    bit 2, 1  & 0 select the RTEMS console port
+        000 - /dev/tty0, SMC1
+        001 - /dev/tty1, SMC2
+        011 - /dev/tty2, SCC2
+        100 - /dev/tty3, SCC3
+        101 - /dev/tty4, SCC4
+    bit 6, 5 & 4 select the RTEMS printk port
+        000 - /dev/tty0, SMC1
+        001 - /dev/tty1, SMC2
+        011 - /dev/tty2, SCC2
+        100 - /dev/tty3, SCC3
+        101 - /dev/tty4, SCC4
+  If the printk port is the same as some other port that will be opened by an
+  RTEMS application, then the driver must use polled I/O, or the printk port
+  must not be used.
+
+  EPPC-Bug in use on SMC1 (0xFA001003 - 1 byte)
+    Set to non-zero to indicate that EPPC-Bug is using SMC1. This will prevent
+    the SMC1 port from being re-initialized.
+
+  IP Address (0xFA001004 - 4 bytes)
+    Write the hexadecimal representation of the IP address of the board in this
+    location, e.g. 192.168.1.2 = 0xC0A80102
+
+  Netmask (0xFA001008 - 4 bytes)
+    Write the hexadecimal representation of the netmask in this location
+    for example, 255.255.255.0 = 0xFFFFFF00
+
+  Ethernet Address (0xFA00100C - 6 bytes)
+    Write the Ethernet address of the board in this location
+
+  Processor ID (0xFA001012 - 2 bytes)
+    Reserved for future use
+		
+  RMA start (0xFA001014 - 4 bytes)
+    Reserved for future use
+		
+  VMA start (0xFA001018 - 4 bytes)
+    Reserved for future use
+		
+  RamSize (0xFA00101C - 4 bytes)
+    Reserved for future use
 
 
 Miscellaneous
@@ -349,41 +460,17 @@ should have been documented in the rtems/c/src/tests/PROBLEMS file. The moral
 of this story is: do not do I/O from the constructors or destructors of static
 objects.
 
-The cpuuse and malloctest tests do not work properly, either with polled I/O
-or interrupt-driven I/O. They are known not to work with interrupt-driven I/O,
-but should work with polled I/O?
-
-Output stops prematurely in the termios test when the console is operating in
-interrupt-driven mode because the serial port is re-initialized before all
-characters in the last raw output buffer are sent. Adding calls to tcdrain()
-in the test task helps, but it does not solve the problem. What happens is
-that the CD2401 raises a transmit interrupt when the last character in the
-DMA buffer is written into the transmit FIFO, not when the last character
-has been transmitted. When tcdrain() returns, there might be up to 16
-characters in the output FIFO. The call to tcsetattr() causes the serial port
-to re-initialize, at which point the output FIFO is cleared. We could not find
-a way to detect whether characters are still in the FIFO and to wait for them
-to be transmitted.
-
-The first raw buffer to be transmitted after the console is re-initialized
-with tcsetattr() is garbled. At this time, it does not seem worth while to
-track this problem down.
-
-In the stackchk test, an access fault exception is raised after the stack is
-blown. This is one case were overwritting the first or last 16 bytes of the
-stack does cause problems (but hey, an exception occurred, which is better
-than propagating the error).
-
-When using interrupt-driven I/O, psx08 produces all the expected output, but
-it does not return control to 167Bug. Is this test supposed to work with
-interrupt-driven console I/O?
+When using interrupt-driven I/O, psx08 fails with an internal assertion error.
 
 
-What's new
+What is new
 ----------
 
 All known problems with use of the caches on the MBX860-002 and MBX821-001
 have been resolved.
+
+Configuration of the console and network is now possible at boot time through
+NVRAM parameters.
 
 
 Thanks
