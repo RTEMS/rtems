@@ -46,11 +46,6 @@ typedef void *__gthread_mutex_t;
 #define DEBUG_GXX_WRAPPERS 1
 */
 
-
-/* prototype for the terminate() */
-extern void __terminate( void );
-
-
 #ifdef DEBUG_GXX_WRAPPERS
 /* local function to return the ID of the calling thread */
 static rtems_id get_tid( void )
@@ -145,7 +140,7 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
      */
     if( rtems_task_variable_add( RTEMS_SELF, (void **)key, NULL ) != RTEMS_SUCCESSFUL )
     {
-       __terminate ();
+       rtems_panic ("rtems_gxx_getspecific");
     }
     *( void ** )key = (void *)0;
   }
@@ -188,7 +183,7 @@ void rtems_gxx_mutex_init (__gthread_mutex_t *mutex)
                              0,
                              (rtems_id *)mutex ) != RTEMS_SUCCESSFUL )
   {
-      __terminate ();
+      rtems_panic ("rtems_gxx_mutex_init");
   }
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: mutex init complete =%X\n", *mutex );
