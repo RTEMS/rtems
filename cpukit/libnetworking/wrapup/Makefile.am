@@ -18,9 +18,6 @@ include $(top_srcdir)/../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(project_libdir)/libnetworking$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(ARCH) $(LIB)
 
 include $(top_srcdir)/../automake/local.am
