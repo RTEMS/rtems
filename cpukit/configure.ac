@@ -83,7 +83,14 @@ AC_MSG_RESULT([$LIBRPC])
 ])
 AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
 
-AC_ARG_ENABLE([ada],[enable ada support])
+AC_ARG_ENABLE([ada],
+[AC_HELP_STRING([--enable-ada],[enable ada support])],
+[case "${enable_ada}" in
+  yes) ;;
+  no) ;;
+  *)  AC_MSG_ERROR([bad value ${enable_ada} for --enable-ada]) ;;
+esac],[enable_ada=no])
+
 AS_IF([test x"$enable_ada" = x"yes"],[
   AS_IF([test x"$HAS_POSIX_API" = x"yes"],[
     AC_CONFIG_SUBDIRS([ada])
