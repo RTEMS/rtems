@@ -1,3 +1,9 @@
+2000-11-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Adapt m4-quoting to autoconf-2.49b, use $host
+	instead of $target to setup RPM_CPU, move chmod 755 buildall to 
+	AC_OUTPUT's extra-cmds.
+	
 2000-10-30	Joel Sherrill <joel@OARcorp.com>
 
 	* buildall.in, mkgdbspec.in, setup.def, binutils/Makefile.am,
