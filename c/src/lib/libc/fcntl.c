@@ -29,6 +29,7 @@ int fcntl(
   rtems_libio_t *iop;
   rtems_libio_t *diop;
   int            fd2;
+  int            flags;
   
   va_start( ap, cmd );
 
@@ -84,10 +85,24 @@ int fcntl(
       return 0;
 
     case F_GETFL:        /* more flags (cloexec) */
-      return -1;
+      return rtems_libio_to_fcntl_flags( iop->flags );
 
     case F_SETFL:
-      return -1;
+      flags = rtems_libio_fcntl_flags( va_arg( ap, int ) );
+
+      /*
+       *  XXX Double check this in the POSIX spec.  According to the Linux
+       *  XXX man page, only these flags can be added.
+       */
+
+      flags &= ~(O_APPEND | O_NONBLOCK);
+
+      /*
+       *  XXX If we are turning on append, should we seek to the end?
+       */
+
+      iop->flags |= flags;
+      return 0;
 
     case F_GETLK:
       return -1;

@@ -221,6 +221,10 @@ unsigned32 rtems_libio_fcntl_flags(
   unsigned32 fcntl_flags
 );
 
+unsigned32 rtems_libio_to_fcntl_flags(
+  unsigned32 flags
+);
+
 void rtems_libio_free(
   rtems_libio_t *iop
 );

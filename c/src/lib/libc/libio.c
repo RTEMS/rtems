@@ -147,6 +147,24 @@ unsigned32 rtems_libio_fcntl_flags(
 }
 
 /*
+ *  rtems_libio_to_fcntl_flags
+ * 
+ *  Convert RTEMS internal flags to UNIX fnctl(2) flags
+ */
+
+unsigned32 rtems_libio_to_fcntl_flags(
+  unsigned32 flags
+)
+{
+  unsigned32 fcntl_flags = 0;
+
+  fcntl_flags = rtems_assoc_remote_by_local( access_modes_assoc, flags );
+  fcntl_flags |=
+     rtems_assoc_remote_by_local_bitfield(status_flags_assoc, flags);
+  return fcntl_flags;
+}
+
+/*
  *  rtems_libio_allocate
  *
  *  This routine searches the IOP Table for an unused entry.  If it 
