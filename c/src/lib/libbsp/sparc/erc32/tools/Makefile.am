@@ -4,7 +4,9 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
 
-noinst_SCRIPTS = runtest
+transform =
+bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests
+bsptools_bin_SCRIPTS = runtest
 
 TMPINSTALL_FILES = $(PROJECT_ROOT)/erc32/tests \
     $(PROJECT_ROOT)/erc32/tests/runtest
