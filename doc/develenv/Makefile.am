@@ -37,3 +37,5 @@ $(srcdir)/utils.texi: utils.t
 	    -n "Command and Variable Index" < $< > $@
 
 CLEANFILES += develenv.info
+
+EXTRA_DIST = direct.t sample.t utils.t
