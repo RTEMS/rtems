@@ -1,3 +1,7 @@
+2002-11-17	Joel Sherrill <joel@OARcorp.com>
+
+	* network/network.c: Fix inconsistency in prototyping.
+
 2002-11-13	Joel Sherrill <joel@OARcorp.com>
 
 	* network/network.c: Removed warning per Jay's suggestion.

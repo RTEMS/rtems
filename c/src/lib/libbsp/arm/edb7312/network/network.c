@@ -7,7 +7,7 @@
 unsigned int bsp_cs8900_io_base = 0;
 unsigned int bsp_cs8900_memory_base = 0;
 cs8900_device *g_cs;
-rtems_irq_hdl cs8900_isr(rtems_vector_number v);
+rtems_isr cs8900_isr(rtems_vector_number v);
 rtems_irq_connect_data cs8900_isr_data = {BSP_EINT3,
                                          (rtems_irq_hdl)cs8900_isr,
                                          NULL,
