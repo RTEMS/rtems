@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/unix.h>
+#include <rtems/score/unix.h>              /* pick up machine definitions */
 #ifndef ASM
 #include <rtems/score/unixtypes.h>
 #endif
