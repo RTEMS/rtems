@@ -353,8 +353,17 @@ static unsigned32 _Thread_Stack_Allocate(
  *  Deallocate the Thread's stack.
  */
 
-static void _Thread_Stack_Free(void *stack_addr)
+static void _Thread_Stack_Free(
+  Thread_Control *the_thread
+)
 {
+    /*
+     *  If the API provided the stack space, then don't free it.
+     */
+
+    if ( !the_thread->Start.core_allocated_stack )
+      return;
+
     /*
      * Call ONLY the CPU table stack free hook, or the
      * the RTEMS workspace free.  This is so the free
@@ -362,9 +371,9 @@ static void _Thread_Stack_Free(void *stack_addr)
      */
 
     if ( _CPU_Table.stack_free_hook )
-        (*_CPU_Table.stack_free_hook)( stack_addr );
+        (*_CPU_Table.stack_free_hook)( the_thread->Start.Initial_stack.area );
     else
-        _Workspace_Free( stack_addr );
+        _Workspace_Free( the_thread->Start.Initial_stack.area );
 }
 
 /*PAGE
@@ -388,8 +397,8 @@ boolean _Thread_Initialize(
   
 )
 {
-  unsigned32           actual_stack_size;
-  void                *stack;
+  unsigned32           actual_stack_size = 0;
+  void                *stack = NULL;
   void                *fp_area;
   void                *extensions_area;
 
@@ -397,23 +406,29 @@ boolean _Thread_Initialize(
    *  Allocate and Initialize the stack for this thread.
    */
 
-  if ( !_Stack_Is_enough( stack_size ) )
-    actual_stack_size = STACK_MINIMUM_SIZE;
-  else
-    actual_stack_size = stack_size;
-
-  actual_stack_size = _Stack_Adjust_size( actual_stack_size );
-  stack             = stack_area;
 
   if ( !stack ) {
+    if ( !_Stack_Is_enough( stack_size ) )
+      actual_stack_size = STACK_MINIMUM_SIZE;
+    else
+      actual_stack_size = stack_size;
+
+    actual_stack_size = _Stack_Adjust_size( actual_stack_size );
+    stack             = stack_area;
+
     actual_stack_size = _Thread_Stack_Allocate( the_thread, stack_size );
  
     if ( !actual_stack_size ) 
       return FALSE;                     /* stack allocation failed */
 
     stack = the_thread->Start.stack;
-  } else
-    the_thread->Start.stack = NULL;
+
+    the_thread->Start.core_allocated_stack = TRUE;
+  } else {
+    stack = stack_area;
+    actual_stack_size = stack_size;
+    the_thread->Start.core_allocated_stack = FALSE;
+  }
 
   _Stack_Initialize(
      &the_thread->Start.Initial_stack,
@@ -429,8 +444,7 @@ boolean _Thread_Initialize(
 
     fp_area = _Workspace_Allocate( CONTEXT_FP_SIZE );
     if ( !fp_area ) {
-      if ( the_thread->Start.stack )
-        (void) _Thread_Stack_Free( the_thread->Start.stack );
+      _Thread_Stack_Free( the_thread );
       return FALSE;
     }
     fp_area = _Context_Fp_start( fp_area, 0 );
@@ -440,7 +454,6 @@ boolean _Thread_Initialize(
 
   the_thread->fp_context       = fp_area;
   the_thread->Start.fp_context = fp_area;
-  
 
   /*
    *  Allocate the extensions area for this thread
@@ -455,8 +468,7 @@ boolean _Thread_Initialize(
       if ( fp_area )
         (void) _Workspace_Free( fp_area );
 
-      if ( the_thread->Start.stack )
-        (void) _Thread_Stack_Free( the_thread->Start.stack );
+      _Thread_Stack_Free( the_thread );
 
       return FALSE;
     }
@@ -498,8 +510,7 @@ boolean _Thread_Initialize(
     if ( fp_area )
       (void) _Workspace_Free( fp_area );
 
-    if ( the_thread->Start.stack )
-      (void) _Thread_Stack_Free( the_thread->Start.stack );
+    _Thread_Stack_Free( the_thread->Start.stack );
 
     return FALSE;
   }
@@ -629,8 +640,7 @@ void _Thread_Close(
   if ( the_thread->Start.fp_context )
   (void) _Workspace_Free( the_thread->Start.fp_context );
 
-  if ( the_thread->Start.stack )
-    (void) _Thread_Stack_Free( the_thread->Start.stack );
+  _Thread_Stack_Free( the_thread );
 
   if ( the_thread->extensions )
     (void) _Workspace_Free( the_thread->extensions );
