@@ -2,9 +2,6 @@
 ## $Id$
 ##
 
-
-PGMS = $(ARCH)/start.o $(ARCH)/start16.bin
-
 S_FILES = start16.S start.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
@@ -19,6 +16,9 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 #
 
 LINKCMDS = $(top_srcdir)/startup/linkcmds
+
+bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
+bsplib_DATA += $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin
 
 $(ARCH)/start16.o: start16.S
 	$(COMPILE.S) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ $<
