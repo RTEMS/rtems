@@ -37,6 +37,7 @@
 #ifndef _NETINET_IF_ETHER_H_
 #define _NETINET_IF_ETHER_H_
 
+#include <netinet/in.h>
 #include <net/ethernet.h>
 
 #define	ETHERTYPE_PUP		0x0200	/* PUP protocol */
@@ -82,7 +83,7 @@
  * RFC 826.
  */
 struct	ether_arp {
-	struct	arphdr ea_hdr;	/* fixed-size header */
+	struct	arphdr ea_hdr BYTE_PACK;	/* fixed-size header */
 	u_char	arp_sha[ETHER_ADDR_LEN];	/* sender hardware address */
 	u_char	arp_spa[4];	/* sender protocol address */
 	u_char	arp_tha[ETHER_ADDR_LEN];	/* target hardware address */
