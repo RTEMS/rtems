@@ -98,9 +98,9 @@ _start16:
         | load the other segment registers
         +---------------------------------------------------------------------*/
 	movl	$PROT_DATA_SEG, %eax
-	movl	%ax, %ds
-	movl	%ax, %es
-	movl	%ax, %ss
+	movw	%ax, %ds
+	movw	%ax, %es
+	movw	%ax, %ss
 	movl	$start16 + STACKOFF, %esp	# set up stack pointer
 	addl	$start16 + STACKOFF, %ebp	# set up stack pointer
 
