@@ -159,7 +159,7 @@ rtems_task Task_1(
   Put_address_from_area_1( address_8 );
   new_line;
 
-pause();
+rtems_test_pause();
 
   puts_nocr(
     "TA1 - rtems_region_return_segment - return segment to region 1 - "

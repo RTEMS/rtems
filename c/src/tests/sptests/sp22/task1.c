@@ -82,7 +82,7 @@ rtems_task Task_1(
 
   Print_time();
 
-  pause();
+  rtems_test_pause();
 
   /*
    *  Reset the time since we do not know how long the user waited

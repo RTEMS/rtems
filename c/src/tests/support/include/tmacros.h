@@ -69,7 +69,7 @@ extern "C" {
 
 #define puts_nocr printf
 
-#define pause() \
+#define rtems_test_pause() \
   do { \
     char buffer[ 80 ]; \
     printf( "<pause>" ); fflush( stdout ); \
@@ -77,7 +77,7 @@ extern "C" {
     puts( "" ); \
   } while ( 0 )
 
-#define pause_and_screen_number( _screen ) \
+#define rtems_test_pause_and_screen_number( _screen ) \
   do { \
     char buffer[ 80 ]; \
     printf( "<pause - screen %d>", (_screen) ); fflush( stdout ); \

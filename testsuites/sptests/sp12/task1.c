@@ -66,7 +66,7 @@ rtems_task Task_1(
   status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
   directive_failed( status, "rtems_task_wake_after" );
 
-pause();
+rtems_test_pause();
 
   puts( "TA1 - rtems_semaphore_release - release SM1" );
   status = rtems_semaphore_release( Semaphore_id[ 1 ] );
@@ -91,7 +91,7 @@ pause();
   status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
   directive_failed( status, "rtems_task_wake_after" );
 
-pause();
+rtems_test_pause();
 
   puts( "TA1 - rtems_task_delete - delete TA3" );
   status = rtems_task_delete( Task_id[ 3 ] );

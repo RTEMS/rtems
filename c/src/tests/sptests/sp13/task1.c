@@ -88,7 +88,7 @@ rtems_task Task_1(
   status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
   directive_failed( status, "rtems_task_wake_after" );
 
-pause();
+rtems_test_pause();
 
   Fill_buffer( "BUFFER 1 TO Q 2", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 2" );
@@ -122,7 +122,7 @@ pause();
   status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
   directive_failed( status, "rtems_task_wake_after" );
 
-pause();
+rtems_test_pause();
 
   Fill_buffer( "BUFFER 2 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 3" );
@@ -183,7 +183,7 @@ pause();
   Put_buffer( buffer );
   new_line;
 
-pause();
+rtems_test_pause();
 
   puts( "TA1 - rtems_message_queue_delete - delete queue 1" );
   status = rtems_message_queue_delete( Queue_id[ 1 ] );
@@ -233,7 +233,7 @@ pause();
   status = rtems_message_queue_flush( Queue_id[ 3 ], &count );
   printf( "TA1 - %d messages were flushed from Q 3\n", count );
 
-pause();
+rtems_test_pause();
 
   puts( "TA1 - create message queue of 20 bytes on queue 1" );
   status = rtems_message_queue_create(
@@ -251,7 +251,7 @@ pause();
   status = rtems_message_queue_delete( Queue_id[ 1 ] );
   directive_failed( status, "rtems_message_queue_delete" );
 
-pause();
+rtems_test_pause();
   
   puts( "TA1 - rtems_message_queue_create - variable sizes " );
   for (queue_size = 1; queue_size < 1030; queue_size++)

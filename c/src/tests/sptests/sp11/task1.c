@@ -73,7 +73,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_clock_get" );
   print_time( "TA1 - rtems_clock_get - ", &time, "\n" );
 
-pause();
+rtems_test_pause();
 
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds");
   status = rtems_timer_fire_after(
@@ -132,7 +132,7 @@ pause();
   directive_failed( status, "rtems_event_receive" );
   printf( "TA1 - RTEMS_EVENT_4 received - eventout => %08x\n", eventout );
 
-pause();
+rtems_test_pause();
 
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds");
   status = rtems_timer_fire_after(
@@ -222,7 +222,7 @@ pause();
   status = rtems_timer_cancel( Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_cancel" );
 
-pause();
+rtems_test_pause();
 
   time.day = 13;
   puts( "TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 1 day" );
@@ -291,7 +291,7 @@ pause();
   directive_failed( status, "rtems_event_receive" );
   printf( "TA1 - RTEMS_EVENT_11 received - eventout => %08x\n", eventout );
 
-pause();
+rtems_test_pause();
 
   puts( "TA1 - rtems_event_send/rtems_event_receive combination" );
   status = rtems_timer_fire_after(

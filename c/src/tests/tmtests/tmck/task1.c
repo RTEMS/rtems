@@ -71,7 +71,7 @@ rtems_task Task_1(
   rtems_unsigned32 index;
 
   check_read_timer();
-pause();
+rtems_test_pause();
 
   Timer_initialize();
   end_time = Read_timer();

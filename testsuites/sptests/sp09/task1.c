@@ -20,52 +20,48 @@
 
 #include "system.h"
 
-#ifdef pause
-#undef pause
-#endif
-
 rtems_task Task_1(
   rtems_task_argument argument
 )
 {
   Screen1();
-  pause_and_screen_number( 2 );
+  rtems_test_pause_and_screen_number( 2 );
 
   Screen2();
-  pause_and_screen_number( 3 );
+  rtems_test_pause_and_screen_number( 3 );
 
   Screen3();
-  pause_and_screen_number( 4 );
+  rtems_test_pause_and_screen_number( 4 );
 
   Screen4();
-  pause_and_screen_number( 5 );
+  rtems_test_pause_and_screen_number( 5 );
 
   Screen5();
-  pause_and_screen_number( 6 );
+  rtems_test_pause_and_screen_number( 6 );
 
   Screen6();
-  pause_and_screen_number( 7 );
+  rtems_test_pause_and_screen_number( 7 );
 
   Screen7();
-  pause_and_screen_number( 8 );
+  rtems_test_pause_and_screen_number( 8 );
 
   Screen8();
-  pause_and_screen_number( 9 );
+  rtems_test_pause_and_screen_number( 9 );
 
   Screen9();
-  pause_and_screen_number( 10 );
+  rtems_test_pause_and_screen_number( 10 );
 
   Screen10();
-  pause_and_screen_number( 11 );
+  rtems_test_pause_and_screen_number( 11 );
 
   Screen11();
-  pause_and_screen_number( 12 );
+  rtems_test_pause_and_screen_number( 12 );
 
   Screen12();
-  pause_and_screen_number( 13 );
+  rtems_test_pause_and_screen_number( 13 );
 
   Screen13();
-  pause_and_screen_number( 14 );
+  rtems_test_pause_and_screen_number( 14 );
 
   Screen14();
 

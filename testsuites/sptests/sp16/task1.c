@@ -81,7 +81,7 @@ rtems_task Task_1(
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after" );
 
-pause();
+rtems_test_pause();
 
   puts_nocr(
     "TA1 - rtems_region_return_segment - return segment to region 1 - "
@@ -123,7 +123,7 @@ pause();
   status = rtems_task_delete( Task_id[ 3 ] );
   directive_failed( status, "rtems_task_delete of TA3" );
 
-pause();
+rtems_test_pause();
 
   status = rtems_task_create(
     Task_name[ 4 ],

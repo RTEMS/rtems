@@ -384,7 +384,7 @@ rtems_task Task_1(
          0
       );
 
-pause();
+rtems_test_pause();
 
 /* rtems_timer_create */
 
@@ -720,7 +720,7 @@ pause();
          0
       );
 
-pause();
+rtems_test_pause();
 
 /* rtems_event_send */
 
@@ -1046,7 +1046,7 @@ pause();
          0
       );
 
-pause();
+rtems_test_pause();
 
 /* rtems_io_initialize */
 

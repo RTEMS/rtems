@@ -29,7 +29,7 @@ rtems_task Task_1(
   rtems_task_priority the_priority;
   rtems_task_priority previous_priority;
 
-  pause();
+  rtems_test_pause();
 
   status = rtems_task_set_priority(
     RTEMS_SELF,
