@@ -74,7 +74,7 @@ int IMFS_initialize_support(
   fs_info->directory_handlers = directory_handlers;
 
   jnode = temp_mt_entry->mt_fs_root.node_access;
-  jnode->st_ino = fs_info->ino_count;
+  jnode->stat_ino = fs_info->ino_count;
 
   return 0;
 }

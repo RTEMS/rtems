@@ -38,12 +38,12 @@ int IMFS_chown(
 #if defined(RTEMS_POSIX_API)
   st_uid = geteuid();
 
-  if ( ( st_uid != jnode->st_uid ) && ( st_uid != 0 ) )
+  if ( ( st_uid != jnode->stat_uid ) && ( st_uid != 0 ) )
     set_errno_and_return_minus_one( EPERM );
 #endif
 
-  jnode->st_uid = owner;
-  jnode->st_gid = group;
+  jnode->stat_uid = owner;
+  jnode->stat_gid = group;
 
   IMFS_update_ctime( jnode );
 

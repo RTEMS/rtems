@@ -53,9 +53,9 @@ int IMFS_unlink(
      *  to remove the node that is a link and the node itself.
      */
 
-    node->info.hard_link.link_node->st_nlink --;
+    node->info.hard_link.link_node->stat_nlink --;
     IMFS_update_ctime( node->info.hard_link.link_node );
-    if ( node->info.hard_link.link_node->st_nlink < 1) {
+    if ( node->info.hard_link.link_node->stat_nlink < 1) {
       result = (*the_link.handlers->rmnod)( &the_link );
       if ( result != 0 )
         return -1;

@@ -34,7 +34,7 @@ int IMFS_fchmod(
 #if defined(RTEMS_POSIX_API)
   st_uid = geteuid();
 
-  if ( ( st_uid != jnode->st_uid ) && ( st_uid != 0 ) )
+  if ( ( st_uid != jnode->stat_uid ) && ( st_uid != 0 ) )
     set_errno_and_return_minus_one( EPERM );
 #endif
 
@@ -44,8 +44,8 @@ int IMFS_fchmod(
   if ( mode & (~ (S_IRWXU | S_IRWXG | S_IRWXO ) ) )
     set_errno_and_return_minus_one( EPERM );
 
-  jnode->st_mode &= ~(S_IRWXU | S_IRWXG | S_IRWXO);
-  jnode->st_mode |= mode;
+  jnode->stat_mode &= ~(S_IRWXU | S_IRWXG | S_IRWXO);
+  jnode->stat_mode |= mode;
 
   IMFS_update_ctime( jnode );
 

@@ -82,8 +82,8 @@ int IMFS_evaluate_permission(
   st_uid = geteuid();
   st_gid = getegid(); 
 #else
-  st_uid = jnode->st_uid;
-  st_gid = jnode->st_gid;
+  st_uid = jnode->stat_uid;
+  st_gid = jnode->stat_gid;
 #endif
   
   /*
@@ -92,9 +92,9 @@ int IMFS_evaluate_permission(
   
   flags_to_test = flags;
 
-  if ( st_uid == jnode->st_uid )
+  if ( st_uid == jnode->stat_uid )
     flags_to_test <<= 6;
-  else if ( st_gid == jnode->st_gid )
+  else if ( st_gid == jnode->stat_gid )
     flags_to_test <<= 3;
   else 
     /* must be other - do nothing */;
@@ -103,7 +103,7 @@ int IMFS_evaluate_permission(
    * If all of the flags are set we have permission
    * to do this.
    */
-  if ( ( flags_to_test & jnode->st_mode) == flags_to_test )
+  if ( ( flags_to_test & jnode->stat_mode) == flags_to_test )
     return 1;
 
   return 0;
