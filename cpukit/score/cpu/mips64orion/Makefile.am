@@ -2,31 +2,44 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
-
-SUBDIRS = rtems
-
-C_FILES = cpu.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
-
-include_HEADERS = asm.h cpu_asm.h idtcpu.h idtmon.h iregdef.h
-
-S_FILES = cpu_asm.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 include $(top_srcdir)/../../../../../../automake/multilib.am
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
-$(PROJECT_INCLUDE):
-	$(mkinstalldirs) $@
-
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
+$(PROJECT_INCLUDE):
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/rtems:
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/rtems/score:
+	$(mkinstalldirs) $@
+
+include_HEADERS = asm.h cpu_asm.h idtcpu.h idtmon.h iregdef.h
+PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+include_rtems_scoredir = $(includedir)/rtems/score
+include_rtems_score_HEADERS = \
+    rtems/score/cpu.h \
+    rtems/score/mips64orion.h \
+    rtems/score/mipstypes.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+    $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
+
 $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
 	$(INSTALL_DATA) $< $@
+
+C_FILES = cpu.c
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+
+S_FILES = cpu_asm.S
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 REL = $(ARCH)/rtems-cpu.rel
 
@@ -34,8 +47,6 @@ rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
 
@@ -46,5 +57,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
 
 EXTRA_DIST = cpu.c cpu_asm.S rtems.c
 
-include $(top_srcdir)/../../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../../automake/local.am
