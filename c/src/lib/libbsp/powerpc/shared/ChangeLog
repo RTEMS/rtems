@@ -1,3 +1,9 @@
+
+2001-05-14	Tom Armistead <tom_armistead@phx.mcd.mot.com>
+
+ 	* start/start.S: Increased BAT0 mapping of RAM from 64 meg to
+	256 meg to allow operation on boards with larger RAM sizes.
+	* vectors/vectors_init.c: Modified to call 'generic' powerpc
 	vector function (mpc60x_vector_is_valid) instead of MPC750 
 	specific function to allow operation on boards with CPUs other
 	than the MPC750.

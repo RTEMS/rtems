@@ -34,7 +34,7 @@ extern board_memory_map *ptr_mem_map;
 extern unsigned long ticks_per_ms;
 
 extern int select_console(ioType t);
-extern int printk(const char *, ...) __attribute__((format(printf, 1, 2)));
+/* extern int printk(const char *, ...) __attribute__((format(printf, 1, 2))); */
 extern void udelay(int);
 extern void debug_putc(const unsigned char c);
 extern int debug_getc(void);
