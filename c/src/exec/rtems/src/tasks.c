@@ -94,8 +94,8 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
   Thread_Control *deleted
 )
 {
-  RTEMS_API_Control            *api;
-  struct rtems_task_variable_t *tvp, *next;
+  RTEMS_API_Control     *api;
+  rtems_task_variable_t *tvp, *next;
 
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
 
@@ -132,8 +132,8 @@ void _RTEMS_tasks_Switch_extension(
   Thread_Control *heir
 )
 {
-  RTEMS_API_Control            *api;
-  struct rtems_task_variable_t *tvp;
+  RTEMS_API_Control     *api;
+  rtems_task_variable_t *tvp;
 
   /*
    *  Per Task Variables

@@ -28,10 +28,10 @@ rtems_status_code rtems_task_variable_add(
   int *ptr
 )
 {
-  Thread_Control               *the_thread;
-  Objects_Locations             location;
-  RTEMS_API_Control            *api;
-  struct rtems_task_variable_t *tvp, *new;
+  Thread_Control        *the_thread;
+  Objects_Locations      location;
+  RTEMS_API_Control     *api;
+  rtems_task_variable_t *tvp, *new;
 
   the_thread = _Thread_Get (tid, &location);
   switch (location) {

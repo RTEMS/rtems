@@ -150,11 +150,11 @@ typedef struct {
  *  Per task variable structure
  */
 
-struct rtems_task_variable_t {
+typedef struct {
   struct rtems_task_variable_t  *next;
   int                           *ptr;
   int                            var;
-};
+} rtems_task_variable_t;
 
 /*
  *  This is the API specific information required by each thread for
@@ -163,11 +163,11 @@ struct rtems_task_variable_t {
 
  
 typedef struct {
-  unsigned32                    Notepads[ RTEMS_NUMBER_NOTEPADS ];
-  rtems_event_set               pending_events;
-  rtems_event_set               event_condition;
-  ASR_Information               Signal;
-  struct rtems_task_variable_t *task_variables;
+  unsigned32               Notepads[ RTEMS_NUMBER_NOTEPADS ];
+  rtems_event_set          pending_events;
+  rtems_event_set          event_condition;
+  ASR_Information          Signal;
+  rtems_task_variable_t   *task_variables;
 }  RTEMS_API_Control;
 
 /*
