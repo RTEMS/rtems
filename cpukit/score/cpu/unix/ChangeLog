@@ -1,3 +1,7 @@
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+
 2003-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add PREINSTALL_FILES and TMPINSTALL_FILES to

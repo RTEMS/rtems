@@ -1,3 +1,7 @@
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+
 2003-05-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/Makefile.am: Remove -DBSP_IS_I386EX=1 (unused).

@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.57)
-AC_INIT([rtems-c-src-lib-libcpu-sh],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-c-src-lib-libcpu-sh],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([sh7032])
 RTEMS_TOP(../../../../..)
 

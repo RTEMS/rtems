@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.57)
-AC_INIT([rtems-c-src-lib-libbsp-c4x-c4xsim],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-c-src-lib-libbsp-c4x-c4xsim],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 

@@ -1,7 +1,7 @@
 ## $Id$
 
 AC_PREREQ(2.57)
-AC_INIT([rtems-contrib-cygwin],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-contrib-cygwin],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([setup])
 
 AM_INIT_AUTOMAKE([no-define foreign 1.7.2])

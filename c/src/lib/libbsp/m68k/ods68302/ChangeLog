@@ -1,3 +1,7 @@
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+
 2003-06-22	Chris Johns <cjohns@cybertec.com.au>
 
 	PR 264/bsps
