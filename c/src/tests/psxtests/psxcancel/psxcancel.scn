@@ -1,3 +1,14 @@
-*** POSIX CANCEL TEST ***
 
+
+*** POSIX CANCEL TEST ***
+countTaskDeferred: elapsed time (second):  0
+countTaskDeferred: elapsed time (second):  1
+countTaskDeferred: elapsed time (second):  2
+countTaskDeferred: elapsed time (second):  3
+countTaskDeferred: elapsed time (second):  4
+countTaskAsync: elapsed time (second):  0
+countTaskAsync: elapsed time (second):  1
+countTaskAsync: elapsed time (second):  2
+countTaskAsync: elapsed time (second):  3
+countTaskAsync: elapsed time (second):  4
 *** END OF POSIX CANCEL TEST ***

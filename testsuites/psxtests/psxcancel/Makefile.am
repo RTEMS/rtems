@@ -10,7 +10,7 @@ MANAGERS = all
 C_FILES = init.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-H_FILES = system.h
+H_FILES = 
 noinst_HEADERS = $(H_FILES)
 
 DOCTYPES = scn
