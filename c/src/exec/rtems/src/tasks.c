@@ -1078,6 +1078,9 @@ void _RTEMS_tasks_Initialize_user_tasks( void )
   user_tasks = _RTEMS_tasks_User_initialization_tasks;
   maximum    = _RTEMS_tasks_Number_of_initialization_tasks;
 
+  if ( !user_tasks || maximum == 0 )
+    return;
+
   for ( index=0 ; index < maximum ; index++ ) {
     return_value = rtems_task_create(
       user_tasks[ index ].name,
