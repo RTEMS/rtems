@@ -1,5 +1,9 @@
 2003-08-13	Joel Sherrill <joel@OARcorp.com>
 
+	* fileio/.cvsignore: New file.
+
+2003-08-13	Joel Sherrill <joel@OARcorp.com>
+
 	PR 451/bsps
 	* pppd/system.h: Depend on TTY driver being in BSPs not simply i386.
 
