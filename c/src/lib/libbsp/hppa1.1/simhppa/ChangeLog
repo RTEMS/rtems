@@ -1,3 +1,10 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h, shmsupp/addrconv.c, shmsupp/cause_intr.c,
+	shmsupp/getcfg.c, shmsupp/lock.c, shmsupp/mpisr.c,
+	startup/bspclean.c, startup/bspstart.c, startup/setvec.c,
+	tools/print_dump.c, tty/tty.c: URL for license changed.
+
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 445/bsps
