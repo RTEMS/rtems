@@ -46,7 +46,7 @@
  * management routines. If a given function has no meaning for the CPU,
  * it does nothing by default.
  */
-#if ( defined(__mc68020__) || defined(__mc68030__) )
+#if ( (defined(__mc68020__) && !defined(__mcpu32__)) || defined(__mc68030__) )
 
 #if defined(__mc68030__)
 

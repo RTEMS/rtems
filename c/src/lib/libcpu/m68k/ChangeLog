@@ -1,3 +1,9 @@
+2004-11-19	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* shared/cache/cache.c, shared/cache/cache_.h:
+	Use (defined(__mc68020__) && !defined(__mcpu32__))
+	instead of defined(__mc68020__) to reflect GCC-3.4's expectations.
+
 2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_ENABLE_BARE.

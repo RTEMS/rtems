@@ -5,7 +5,7 @@
 #ifndef __M68K_CACHE_h
 #define __M68K_CACHE_h
 
-#if defined(__mc68020__)
+#if (defined(__mc68020__) && !defined(__mcpu32__))
 #define M68K_INSTRUCTION_CACHE_ALIGNMENT 16
 #elif defined(__mc68030__)
 #define M68K_INSTRUCTION_CACHE_ALIGNMENT 16
