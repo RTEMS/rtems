@@ -1,5 +1,13 @@
 2003-10-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* cpukit/target-cpukit.add: New.
+	* cpukit/Makefile.am: Reflect having added target-cpukit.add.
+	Acknowledge osversion.
+	* cpukit/mkspec.in: Acknowledge osversion and rpmgroup.
+	* cpukit/rtems-cpukit.add: Reflect new RTEMS spec conventions.
+
+2003-10-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* autotools/automake-rtems.spec.in: Automake-1.7.8.
 
 2003-09-26	Joel Sherrill <joel@OARcorp.com>

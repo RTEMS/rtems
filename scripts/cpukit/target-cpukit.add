@@ -1,0 +1,3 @@
+%files
+%{_prefix}/%{rtems_target}
+%exclude %{_prefix}/man

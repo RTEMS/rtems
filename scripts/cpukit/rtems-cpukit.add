@@ -1,18 +1,25 @@
-Name:         @target_alias@-cpukit
+%define rtems_version @rtems_version@
+%define rtems_target  @target_alias@
+%define rpmvers %{expand: %%(echo %rtems_version | tr - _ )}
+
+Name:         %{rpmprefix}@target_alias@-cpukit
 Release:      @Release@
 License:      Various, Open Source.
-Group:        rtems
+Group:        %{rpmgroup}
 
 Autoreqprov:  on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
-BuildPreReq:    @target_alias@-binutils
-BuildPreReq:    @target_alias@-gcc 
-Requires:     	@target_alias@-binutils
-Requires:     	@target_alias@-gcc 
+BuildPreReq:    %{rpmprefix}%{rtems_target}-binutils
+BuildPreReq:    %{rpmprefix}%{rtems_target}-gcc 
+Requires:     	%{rpmprefix}%{rtems_target}-binutils
+Requires:     	%{rpmprefix}%{rtems_target}-gcc 
 
-Version:      @rpm_version@
+# These are target libs, arch doesn't matter for the host
+BuildArch:	noarch
+
+Version:      %{rpmvers}
 Summary:      A free operating system for embedded systems
-Source:       rtems-@rtems_version@.tar.gz
+Source:       rtems-%{rtems_version}.tar.bz2
 
 #
 # The original sources are not included in the source RPM.
@@ -32,7 +39,7 @@ Prefix:		%{_prefix}
 %description
 RTEMS is a free operating system for embedded systems.
 
-This package contains the cpukit for cpu @target_alias@.
+This package contains the cpukit for cpu %{rtems_target}.
 
 Authors:
 --------
@@ -45,18 +52,14 @@ test -d build || mkdir build
 %build
 cd build
 # rtems does not support building inside the source tree
-  ../rtems-@rtems_version@/cpukit/configure \
-  --build=`../rtems-@rtems_version@/config.guess` \
+  ../rtems-%{rtems_version}/cpukit/configure \
+  --build=`../rtems-%{rtems_version}/config.guess` \
   --prefix=%{_prefix} \
-  --host=@target_alias@ --target=@target_alias@ \
-  --exec-prefix=%{_prefix}/@target_alias@ \
+  --host=%{rtems_target} --target=%{rtems_target} \
+  --exec-prefix=%{_prefix}/%{rtems_target} \
   --enable-multilib
   make RTEMS_BSP=
 %install
 cd build
   make RTEMS_BSP= DESTDIR=${RPM_BUILD_ROOT} install
 
-%files
-%{_prefix}/@target_alias@
-# ignore
-# %{_mandir}
