@@ -19,9 +19,10 @@
  *             Networks makes no representations about the suitability
  *             of this software for any purpose.
  *    2000: Reworked by Alan Cudmore <alanc@linuxstart.com> to become
- *          the more general MIPS port.  Joel Sherrill <joel@OARcorp.com>
- *          continued this rework, rewriting as much as possible in
- *          C and testing on the TX39.
+ *          the baseline of the more general MIPS port.  
+ *    2001: Joel Sherrill <joel@OARcorp.com> continued this rework,
+ *          rewriting as much as possible in C and added the JMR3904 BSP
+ *          so testing could be performed on a simulator.
  *  
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
@@ -40,21 +41,44 @@
 #define EXCP_STACK_SIZE (NREGS*R_SZ)
 #define ISR_VEC_SIZE 4
 
-#if 1  /* 32 bit unsigned32 types */
-#define sint sw
-#define lint lw
-#define stackadd addiu
-#define intadd addu
-#define SZ_INT 4
-#define SZ_INT_POW2 2
-#else /* 64 bit unsigned32 types */
-#define sint dw
-#define lint dw
-#define stackadd daddiu
-#define intadd daddu
+/*  Ifdefs prevent the duplication of code for MIPS ISA Level 3 ( R4xxx )
+ *  and MIPS ISA Level 1 (R3xxx).
+ */
+
+#if __mips == 3
+/* 64 bit register operations */
+#define ADD   dadd
+#define STREG sd
+#define LDREG ld
+#define MFCO  dmfc0
+#define MTCO  dmtc0
+#define ADDU   addu
+#define ADDIU  addiu
+#define R_SZ  8
+#define F_SZ  8
 #define SZ_INT 8
 #define SZ_INT_POW2 3
+
+/* XXX if we don't always want 64 bit register ops, then another ifdef */
+
+#elif __mips == 1
+/* 32 bit register operations*/
+#define ADD   add
+#define STREG sw
+#define LDREG lw
+#define MFCO  mfc0
+#define MTCO  mtc0
+#define ADDU  add
+#define ADDIU addi
+#define R_SZ  4
+#define F_SZ  4
+#define SZ_INT 4
+#define SZ_INT_POW2 2
+
+#else
+#error "mips assembly: what size registers do I deal with?"
 #endif
+
 
 #ifdef __GNUC__
 #define ASM_EXTERN(x,size) .extern x,size
@@ -112,76 +136,6 @@
 #define FP31_OFFSET 31 
 
 
-/*PAGE
- *
- *  _CPU_ISR_Get_level
- *
- *  unsigned32 _CPU_ISR_Get_level( void )
- *
- *  This routine returns the current interrupt level.
- */
-
-#if __mips == 3
-/* return the current exception level for the 4650 */
-FRAME(_CPU_ISR_Get_level,sp,0,ra)
-	mfc0 v0,C0_SR
-	nop
-	andi v0,SR_EXL 
-	srl v0,1
-	j ra
-ENDFRAME(_CPU_ISR_Get_level)
-
-FRAME(_CPU_ISR_Set_level,sp,0,ra)
-	nop
-	mfc0 v0,C0_SR
-	nop
-	andi v0,SR_EXL 
-	beqz v0,_CPU_ISR_Set_1		/* normalize v0 */
-	nop
-	li v0,1         
-_CPU_ISR_Set_1:
-	beq v0,a0,_CPU_ISR_Set_exit	/* if (current_level != new_level ) */
-	nop
-	bnez a0,_CPU_ISR_Set_2
-	nop
-        nop
-	mfc0 t0, C0_SR
-	nop
-	li t1,~SR_EXL
-	and t0,t1
-	nop
-	mtc0 t0,C0_SR                   /* disable exception level */
-	nop
-	j ra 
-	nop
-_CPU_ISR_Set_2:
-	nop
-	mfc0 t0,C0_SR
-	nop
-	li t1,~SR_IE
-	and t0,t1
-	nop
-	mtc0 t0,C0_SR                   /* first disable ie bit (recommended) */
-	nop
-	ori  t0, SR_EXL|SR_IE		/* enable exception level */ 	
-	nop
-	mtc0 t0,C0_SR         
-	nop
-_CPU_ISR_Set_exit:
-	j ra
-	nop
-ENDFRAME(_CPU_ISR_Set_level)
-
-#elif __mips == 1
-
-/* MIPS ISA 1 ( R3000 ) */
-/* _CPU_ISR_Get/Set_level are called as part of task mode manipulation. */
-/*  and are defined in C for the __mips == 1 */
-
-#else
-   #error "__mips is set to 1 or 3"
-#endif
-
 /*
  *  _CPU_Context_save_fp_context
  *
@@ -200,45 +154,47 @@ ENDFRAME(_CPU_ISR_Set_level)
  * );
  */
 
+#if ( CPU_HARDWARE_FP == FALSE )
 FRAME(_CPU_Context_save_fp,sp,0,ra)
-	.set noat
-	ld a1,(a0)
-	swc1 $f0,FP0_OFFSET*4(a1)
-	swc1 $f1,FP1_OFFSET*4(a1)
-	swc1 $f2,FP2_OFFSET*4(a1)
-	swc1 $f3,FP3_OFFSET*4(a1)
-	swc1 $f4,FP4_OFFSET*4(a1)
-	swc1 $f5,FP5_OFFSET*4(a1)
-	swc1 $f6,FP6_OFFSET*4(a1)
-	swc1 $f7,FP7_OFFSET*4(a1)
-	swc1 $f8,FP8_OFFSET*4(a1)
-	swc1 $f9,FP9_OFFSET*4(a1)
-	swc1 $f10,FP10_OFFSET*4(a1)
-	swc1 $f11,FP11_OFFSET*4(a1)
-	swc1 $f12,FP12_OFFSET*4(a1)
-	swc1 $f13,FP13_OFFSET*4(a1)
-	swc1 $f14,FP14_OFFSET*4(a1)
-	swc1 $f15,FP15_OFFSET*4(a1)
-	swc1 $f16,FP16_OFFSET*4(a1)
-	swc1 $f17,FP17_OFFSET*4(a1)
-	swc1 $f18,FP18_OFFSET*4(a1)
-	swc1 $f19,FP19_OFFSET*4(a1)
-	swc1 $f20,FP20_OFFSET*4(a1)
-	swc1 $f21,FP21_OFFSET*4(a1)
-	swc1 $f22,FP22_OFFSET*4(a1)
-	swc1 $f23,FP23_OFFSET*4(a1)
-	swc1 $f24,FP24_OFFSET*4(a1)
-	swc1 $f25,FP25_OFFSET*4(a1)
-	swc1 $f26,FP26_OFFSET*4(a1)
-	swc1 $f27,FP27_OFFSET*4(a1)
-	swc1 $f28,FP28_OFFSET*4(a1)
-	swc1 $f29,FP29_OFFSET*4(a1)
-	swc1 $f30,FP30_OFFSET*4(a1)
-	swc1 $f31,FP31_OFFSET*4(a1)
-	j ra
-	nop
-	.set at
+        .set noat
+        ld a1,(a0)
+        swc1 $f0,FP0_OFFSET*F_SZ(a1)
+        swc1 $f1,FP1_OFFSET*F_SZ(a1)
+        swc1 $f2,FP2_OFFSET*F_SZ(a1)
+        swc1 $f3,FP3_OFFSET*F_SZ(a1)
+        swc1 $f4,FP4_OFFSET*F_SZ(a1)
+        swc1 $f5,FP5_OFFSET*F_SZ(a1)
+        swc1 $f6,FP6_OFFSET*F_SZ(a1)
+        swc1 $f7,FP7_OFFSET*F_SZ(a1)
+        swc1 $f8,FP8_OFFSET*F_SZ(a1)
+        swc1 $f9,FP9_OFFSET*F_SZ(a1)
+        swc1 $f10,FP10_OFFSET*F_SZ(a1)
+        swc1 $f11,FP11_OFFSET*F_SZ(a1)
+        swc1 $f12,FP12_OFFSET*F_SZ(a1)
+        swc1 $f13,FP13_OFFSET*F_SZ(a1)
+        swc1 $f14,FP14_OFFSET*F_SZ(a1)
+        swc1 $f15,FP15_OFFSET*F_SZ(a1)
+        swc1 $f16,FP16_OFFSET*F_SZ(a1)
+        swc1 $f17,FP17_OFFSET*F_SZ(a1)
+        swc1 $f18,FP18_OFFSET*F_SZ(a1)
+        swc1 $f19,FP19_OFFSET*F_SZ(a1)
+        swc1 $f20,FP20_OFFSET*F_SZ(a1)
+        swc1 $f21,FP21_OFFSET*F_SZ(a1)
+        swc1 $f22,FP22_OFFSET*F_SZ(a1)
+        swc1 $f23,FP23_OFFSET*F_SZ(a1)
+        swc1 $f24,FP24_OFFSET*F_SZ(a1)
+        swc1 $f25,FP25_OFFSET*F_SZ(a1)
+        swc1 $f26,FP26_OFFSET*F_SZ(a1)
+        swc1 $f27,FP27_OFFSET*F_SZ(a1)
+        swc1 $f28,FP28_OFFSET*F_SZ(a1)
+        swc1 $f29,FP29_OFFSET*F_SZ(a1)
+        swc1 $f30,FP30_OFFSET*F_SZ(a1)
+        swc1 $f31,FP31_OFFSET*F_SZ(a1)
+        j ra
+        nop
+        .set at
 ENDFRAME(_CPU_Context_save_fp)
+#endif
 
 /*
  *  _CPU_Context_restore_fp_context
@@ -258,45 +214,47 @@ ENDFRAME(_CPU_Context_save_fp)
  * )
  */
 
+#if ( CPU_HARDWARE_FP == FALSE )
 FRAME(_CPU_Context_restore_fp,sp,0,ra)
-	.set noat
-	ld a1,(a0)
-	lwc1 $f0,FP0_OFFSET*4(a1)
-	lwc1 $f1,FP1_OFFSET*4(a1)
-	lwc1 $f2,FP2_OFFSET*4(a1)
-	lwc1 $f3,FP3_OFFSET*4(a1)
-	lwc1 $f4,FP4_OFFSET*4(a1)
-	lwc1 $f5,FP5_OFFSET*4(a1)
-	lwc1 $f6,FP6_OFFSET*4(a1)
-	lwc1 $f7,FP7_OFFSET*4(a1)
-	lwc1 $f8,FP8_OFFSET*4(a1)
-	lwc1 $f9,FP9_OFFSET*4(a1)
-	lwc1 $f10,FP10_OFFSET*4(a1)
-	lwc1 $f11,FP11_OFFSET*4(a1)
-	lwc1 $f12,FP12_OFFSET*4(a1)
-	lwc1 $f13,FP13_OFFSET*4(a1)
-	lwc1 $f14,FP14_OFFSET*4(a1)
-	lwc1 $f15,FP15_OFFSET*4(a1)
-	lwc1 $f16,FP16_OFFSET*4(a1)
-	lwc1 $f17,FP17_OFFSET*4(a1)
-	lwc1 $f18,FP18_OFFSET*4(a1)
-	lwc1 $f19,FP19_OFFSET*4(a1)
-	lwc1 $f20,FP20_OFFSET*4(a1)
-	lwc1 $f21,FP21_OFFSET*4(a1)
-	lwc1 $f22,FP22_OFFSET*4(a1)
-	lwc1 $f23,FP23_OFFSET*4(a1)
-	lwc1 $f24,FP24_OFFSET*4(a1)
-	lwc1 $f25,FP25_OFFSET*4(a1)
-	lwc1 $f26,FP26_OFFSET*4(a1)
-	lwc1 $f27,FP27_OFFSET*4(a1)
-	lwc1 $f28,FP28_OFFSET*4(a1)
-	lwc1 $f29,FP29_OFFSET*4(a1)
-	lwc1 $f30,FP30_OFFSET*4(a1)
-	lwc1 $f31,FP31_OFFSET*4(a1)
-	j ra
-	nop
-	.set at
+        .set noat
+        ld a1,(a0)
+        lwc1 $f0,FP0_OFFSET*4(a1)
+        lwc1 $f1,FP1_OFFSET*4(a1)
+        lwc1 $f2,FP2_OFFSET*4(a1)
+        lwc1 $f3,FP3_OFFSET*4(a1)
+        lwc1 $f4,FP4_OFFSET*4(a1)
+        lwc1 $f5,FP5_OFFSET*4(a1)
+        lwc1 $f6,FP6_OFFSET*4(a1)
+        lwc1 $f7,FP7_OFFSET*4(a1)
+        lwc1 $f8,FP8_OFFSET*4(a1)
+        lwc1 $f9,FP9_OFFSET*4(a1)
+        lwc1 $f10,FP10_OFFSET*4(a1)
+        lwc1 $f11,FP11_OFFSET*4(a1)
+        lwc1 $f12,FP12_OFFSET*4(a1)
+        lwc1 $f13,FP13_OFFSET*4(a1)
+        lwc1 $f14,FP14_OFFSET*4(a1)
+        lwc1 $f15,FP15_OFFSET*4(a1)
+        lwc1 $f16,FP16_OFFSET*4(a1)
+        lwc1 $f17,FP17_OFFSET*4(a1)
+        lwc1 $f18,FP18_OFFSET*4(a1)
+        lwc1 $f19,FP19_OFFSET*4(a1)
+        lwc1 $f20,FP20_OFFSET*4(a1)
+        lwc1 $f21,FP21_OFFSET*4(a1)
+        lwc1 $f22,FP22_OFFSET*4(a1)
+        lwc1 $f23,FP23_OFFSET*4(a1)
+        lwc1 $f24,FP24_OFFSET*4(a1)
+        lwc1 $f25,FP25_OFFSET*4(a1)
+        lwc1 $f26,FP26_OFFSET*4(a1)
+        lwc1 $f27,FP27_OFFSET*4(a1)
+        lwc1 $f28,FP28_OFFSET*4(a1)
+        lwc1 $f29,FP29_OFFSET*4(a1)
+        lwc1 $f30,FP30_OFFSET*4(a1)
+        lwc1 $f31,FP31_OFFSET*4(a1)
+        j ra
+        nop
+        .set at
 ENDFRAME(_CPU_Context_restore_fp)
+#endif
 
 /*  _CPU_Context_switch
  *
@@ -308,118 +266,72 @@ ENDFRAME(_CPU_Context_restore_fp)
  *   Context_Control  *heir
  * )
  */
-#if __mips == 3
-/* MIPS ISA Level 3 ( R4xxx ) */
 
 FRAME(_CPU_Context_switch,sp,0,ra)
 
-	mfc0 t0,C0_SR
-	li t1,~SR_IE
-	sd t0,C0_SR_OFFSET*8(a0)	/* save status register */
-	and t0,t1
-	mtc0 t0,C0_SR                   /* first disable ie bit (recommended) */
-	ori t0,SR_EXL|SR_IE		/* enable exception level to disable interrupts */
-	mtc0 t0,C0_SR
+        mfc0  t0,C0_SR
+        li    t1,~(SR_INTERRUPT_ENABLE_BITS)
+        STREG t0,C0_SR_OFFSET*4(a0)   /* save status register */
+        and   t0,t1
+        mtc0  t0,C0_SR                /* first disable ie bit (recommended) */
+#if __mips == 3
+        ori t0,SR_EXL|SR_IE   /* enable exception level to disable interrupts */
+        mtc0  t0,C0_SR
+#endif
 
-	sd ra,RA_OFFSET*8(a0)           /* save current context */
-	sd sp,SP_OFFSET*8(a0)
-	sd fp,FP_OFFSET*8(a0)
-	sd s1,S1_OFFSET*8(a0)
-	sd s2,S2_OFFSET*8(a0)
-	sd s3,S3_OFFSET*8(a0)
-	sd s4,S4_OFFSET*8(a0)
-	sd s5,S5_OFFSET*8(a0)
-	sd s6,S6_OFFSET*8(a0)
-	sd s7,S7_OFFSET*8(a0)
-	dmfc0 t0,C0_EPC
-	sd t0,C0_EPC_OFFSET*8(a0)
+        STREG ra,RA_OFFSET*R_SZ(a0)         /* save current context */
+        STREG sp,SP_OFFSET*R_SZ(a0)
+        STREG fp,FP_OFFSET*R_SZ(a0)
+        STREG s0,S0_OFFSET*R_SZ(a0)
+        STREG s1,S1_OFFSET*R_SZ(a0)
+        STREG s2,S2_OFFSET*R_SZ(a0)
+        STREG s3,S3_OFFSET*R_SZ(a0)
+        STREG s4,S4_OFFSET*R_SZ(a0)
+        STREG s5,S5_OFFSET*R_SZ(a0)
+        STREG s6,S6_OFFSET*R_SZ(a0)
+        STREG s7,S7_OFFSET*R_SZ(a0)
+
+        MFC0  t0,C0_EPC
+        STREG t0,C0_EPC_OFFSET*R_SZ(a0)
 
 _CPU_Context_switch_restore:
-	ld s0,S0_OFFSET*8(a1)		/* restore context */
-	ld s1,S1_OFFSET*8(a1)
-	ld s2,S2_OFFSET*8(a1)
-	ld s3,S3_OFFSET*8(a1)
-	ld s4,S4_OFFSET*8(a1)
-	ld s5,S5_OFFSET*8(a1)
-	ld s6,S6_OFFSET*8(a1)
-	ld s7,S7_OFFSET*8(a1)
-	ld fp,FP_OFFSET*8(a1) 
-	ld sp,SP_OFFSET*8(a1)
-	ld ra,RA_OFFSET*8(a1)
-	ld t0,C0_EPC_OFFSET*8(a1)
-	dmtc0 t0,C0_EPC
-	ld t0,C0_SR_OFFSET*8(a1)
-	andi t0,SR_EXL
-	bnez t0,_CPU_Context_1		/* set exception level from restore context */
-	li t0,~SR_EXL
-	mfc0 t1,C0_SR
-	nop
-	and t1,t0
-	mtc0 t1,C0_SR
-_CPU_Context_1:
-	j ra
-	nop
-ENDFRAME(_CPU_Context_switch)
+        LDREG s0,S0_OFFSET*R_SZ(a1)           /* restore context */
+        LDREG s1,S1_OFFSET*R_SZ(a1)
+        LDREG s2,S2_OFFSET*R_SZ(a1)
+        LDREG s3,S3_OFFSET*R_SZ(a1)
+        LDREG s4,S4_OFFSET*R_SZ(a1)
+        LDREG s5,S5_OFFSET*R_SZ(a1)
+        LDREG s6,S6_OFFSET*R_SZ(a1)
+        LDREG s7,S7_OFFSET*R_SZ(a1)
+        LDREG fp,FP_OFFSET*R_SZ(a1)
+        LDREG sp,SP_OFFSET*R_SZ(a1)
+        LDREG ra,RA_OFFSET*R_SZ(a1)
+        LDREG t0,C0_EPC_OFFSET*R_SZ(a1)
+        MTC0  t0,C0_EPC
+        LDREG t0, C0_SR_OFFSET*R_SZ(a1)
+
+#if __mips == 3
+        andi  t0,SR_EXL
+        bnez  t0,_CPU_Context_1   /* set exception level from restore context */
+        li    t0,~SR_EXL
+        mfc0  t1,C0_SR
+        nop
+        and   t1,t0
+        mtc0  t1,C0_SR
 
 #elif __mips == 1
-/* MIPS ISA Level 1 ( R3000 ) */
-
-FRAME(_CPU_Context_switch,sp,0,ra)
-
-        mfc0 t0,C0_SR
-	li t1,~(SR_INTERRUPT_ENABLE_BITS)
-        sw t0,C0_SR_OFFSET*4(a0)        /* save status register */
-        and t0,t1
-        mtc0 t0,C0_SR                   /* first disable ie bit (recommended) */
-
-        sw ra,RA_OFFSET*4(a0)           /* save current context */
-        sw sp,SP_OFFSET*4(a0)
-        sw fp,FP_OFFSET*4(a0)
-        sw s0,S0_OFFSET*4(a0)
-        sw s1,S1_OFFSET*4(a0)
-        sw s2,S2_OFFSET*4(a0)
-        sw s3,S3_OFFSET*4(a0)
-        sw s4,S4_OFFSET*4(a0)
-        sw s5,S5_OFFSET*4(a0)
-        sw s6,S6_OFFSET*4(a0)
-        sw s7,S7_OFFSET*4(a0)
-
-        mfc0 t0,C0_EPC
-        sw t0,C0_EPC_OFFSET*4(a0)
-
-_CPU_Context_switch_restore:
-        lw s0,S0_OFFSET*4(a1)           /* restore context */
-        lw s1,S1_OFFSET*4(a1)
-        lw s2,S2_OFFSET*4(a1)
-        lw s3,S3_OFFSET*4(a1)
-        lw s4,S4_OFFSET*4(a1)
-        lw s5,S5_OFFSET*4(a1)
-        lw s6,S6_OFFSET*4(a1)
-        lw s7,S7_OFFSET*4(a1)
-        lw fp,FP_OFFSET*4(a1)
-        lw sp,SP_OFFSET*4(a1)
-        lw ra,RA_OFFSET*4(a1)
-        lw t0,C0_EPC_OFFSET*4(a1)
-        mtc0 t0,C0_EPC
-	lw t0, C0_SR_OFFSET*4(a1)
-        andi t0,(SR_INTERRUPT_ENABLE_BITS) /* we know 0 disabled */
-        beq t0,$0,_CPU_Context_1        /* set level from restore context */
-	mfc0 t0,C0_SR
+        andi  t0,(SR_INTERRUPT_ENABLE_BITS) /* we know 0 disabled */
+        beq   t0,$0,_CPU_Context_1          /* set level from restore context */
+        mfc0  t0,C0_SR
         nop
-        or  t0,(SR_INTERRUPT_ENABLE_BITS)  /* new_sr = old sr with enabled  */
-        mtc0 t0,C0_SR                      /* set with enabled */
-        
+        or    t0,(SR_INTERRUPT_ENABLE_BITS) /* new_sr = old sr with enabled  */
+        mtc0  t0,C0_SR                      /* set with enabled */
+#endif
 
 _CPU_Context_1:
         j ra
         nop
 ENDFRAME(_CPU_Context_switch)
-
-#else
-
-   #error "__mips is not set to 1 or 3"
-
-#endif
 
 /*
  *  _CPU_Context_restore
@@ -434,27 +346,11 @@ ENDFRAME(_CPU_Context_switch)
  *  );
  */
 
-#if __mips == 3
-
 FRAME(_CPU_Context_restore,sp,0,ra)
-	dadd a1,a0,zero
-	j _CPU_Context_switch_restore
-	nop
+        ADD a1,a0,zero
+        j   _CPU_Context_switch_restore
+        nop
 ENDFRAME(_CPU_Context_restore)
-
-#elif __mips == 1
-
-FRAME(_CPU_Context_restore,sp,0,ra)
-	add  a1,a0,zero
-	j _CPU_Context_switch_restore
-	nop
-ENDFRAME(_CPU_Context_restore)
-
-#else
-
-      #error "__mips is not set to 1 or 3"
-
-#endif
 
 ASM_EXTERN(_ISR_Nest_level, SZ_INT)
 ASM_EXTERN(_Thread_Dispatch_disable_level,SZ_INT)
@@ -491,312 +387,68 @@ ASM_EXTERN(_ISR_Signals_to_thread_executing,SZ_INT)
  *
  */
 
-#if __mips == 3
-/* ----------------------------------------------------------------------------- */
 FRAME(_ISR_Handler,sp,0,ra)
-.set noreorder
-#if USE_IDTKIT
-/* IDT/Kit incorrectly adds 4 to EPC before returning.  This compensates */
-	lreg    k0, R_EPC*R_SZ(sp)
-	daddiu    k0,k0,-4
-	sreg    k0, R_EPC*R_SZ(sp)
-	lreg    k0, R_CAUSE*R_SZ(sp)
-	li	k1, ~CAUSE_BD
-	and     k0, k1 
-	sreg    k0, R_CAUSE*R_SZ(sp)
-#endif
-	
-/* save registers not already saved by IDT/sim */
-	stackadd sp,sp,-EXCP_STACK_SIZE /* store ra on the stack */
+        .set noreorder
 
-	sreg    ra, R_RA*R_SZ(sp)
-	sreg    v0, R_V0*R_SZ(sp)
-	sreg    v1, R_V1*R_SZ(sp)
-	sreg    a0, R_A0*R_SZ(sp)
-	sreg    a1, R_A1*R_SZ(sp)
-	sreg    a2, R_A2*R_SZ(sp)
-	sreg    a3, R_A3*R_SZ(sp)
-	sreg    t0, R_T0*R_SZ(sp)
-	sreg    t1, R_T1*R_SZ(sp)
-	sreg    t2, R_T2*R_SZ(sp)
-	sreg    t3, R_T3*R_SZ(sp)
-	sreg    t4, R_T4*R_SZ(sp)
-	sreg    t5, R_T5*R_SZ(sp)
-	sreg    t6, R_T6*R_SZ(sp)
-	sreg    t7, R_T7*R_SZ(sp)
-	mflo    k0
-	sreg    t8, R_T8*R_SZ(sp)
-	sreg    k0, R_MDLO*R_SZ(sp)
-	sreg    t9, R_T9*R_SZ(sp)
-	mfhi    k0
-	sreg    gp, R_GP*R_SZ(sp)
-	sreg    fp, R_FP*R_SZ(sp)
-	sreg    k0, R_MDHI*R_SZ(sp)
-	.set noat
-	sreg    AT, R_AT*R_SZ(sp)
-	.set at
+        /* Q: _ISR_Handler, not using IDT/SIM ...save extra regs? */
 
-	stackadd sp,sp,-40		/* store ra on the stack */
-	sd ra,32(sp)
+        /* wastes a lot of stack space for context?? */
+        ADDIU    sp,sp,-EXCP_STACK_SIZE
 
-/* determine if an interrupt generated this exception */
-	mfc0 k0,C0_CAUSE
-	and k1,k0,CAUSE_EXCMASK
-        bnez k1,_ISR_Handler_prom_exit /* not an external interrupt,
-						pass exception to Monitor */
-        mfc0 k1,C0_SR
-	and k0,k1
-	and k0,CAUSE_IPMASK
-	beq k0,zero,_ISR_Handler_quick_exit /* external interrupt not
-							enabled, ignore */
-	nop
-
-  /*
-   *  save some or all context on stack
-   *  may need to save some special interrupt information for exit
-   *
-   *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-   *    if ( _ISR_Nest_level == 0 )
-   *      switch to software interrupt stack
-   *  #endif
-   */
-#if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-	lint t0,_ISR_Nest_level
-	beq t0, zero,  _ISR_Handler_1
-	nop
-	/* switch stacks */	
-_ISR_Handler_1:
-#else
-	lint t0,_ISR_Nest_level
-#endif
-  /*
-   *  _ISR_Nest_level++;
-   */
-	addi t0,t0,1
-	sint t0,_ISR_Nest_level
-  /*
-   *  _Thread_Dispatch_disable_level++;
-   */
-	lint t1,_Thread_Dispatch_disable_level
-	addi t1,t1,1
-	sint t1,_Thread_Dispatch_disable_level
-#if 0
-	nop
-	j _ISR_Handler_4
-	nop
-  /*
-   *  while ( interrupts_pending(cause_reg) ) {
-   *     vector = BITFIELD_TO_INDEX(cause_reg);
-   *     (*_ISR_Vector_table[ vector ])( vector );
-   *  }
-   */
-_ISR_Handler_2:
-/* software interrupt priorities can be applied here */
-	li t1,-1
-/* convert bit field into interrupt index */
-_ISR_Handler_3:
-	andi t2,t0,1
-	addi t1,1
-	beql t2,zero,_ISR_Handler_3
-	dsrl t0,1
-	li t1,7
-	dsll t1,3			/* convert index to byte offset (*8) */
-	la t3,_ISR_Vector_table
-	intadd t1,t3
-	lint t1,(t1)
-	jalr t1
-	nop
-	j _ISR_Handler_5
-	nop
-_ISR_Handler_4:
-	mfc0 t0,C0_CAUSE
-	andi t0,CAUSE_IPMASK
-	bne t0,zero,_ISR_Handler_2
-	dsrl t0,t0,8
-_ISR_Handler_5:
-#else
-	nop
-	li t1,7
-	dsll t1,t1,SZ_INT_POW2
-	la t3,_ISR_Vector_table
-	intadd t1,t3
-	lint t1,(t1)
-	jalr t1
-	nop
-#endif
-  /*
-   *  --_ISR_Nest_level;
-   */
-        lint t2,_ISR_Nest_level
-	addi t2,t2,-1
-        sint t2,_ISR_Nest_level
-  /*
-   *  --_Thread_Dispatch_disable_level;
-   */
-	lint t1,_Thread_Dispatch_disable_level
-	addi t1,t1,-1
-	sint t1,_Thread_Dispatch_disable_level
-  /*
-   *  if ( _Thread_Dispatch_disable_level || _ISR_Nest_level )
-   *    goto the label "exit interrupt (simple case)"
-   */
-	or t0,t2,t1
-	bne t0,zero,_ISR_Handler_exit
-	nop
-  /*
-   *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-   *    restore stack
-   *  #endif
-   *  
-   *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
-   *    goto the label "exit interrupt (simple case)"
-   */
-	lint t0,_Context_Switch_necessary
-	lint t1,_ISR_Signals_to_thread_executing
-	or t0,t0,t1
-	beq t0,zero,_ISR_Handler_exit
-	nop
-
-  /*
-   *  call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
-   */
-	jal _Thread_Dispatch
-	nop
-  /*
-   *  prepare to get out of interrupt
-   *  return from interrupt  (maybe to _ISR_Dispatch)
-   *
-   *  LABEL "exit interrupt (simple case):
-   *  prepare to get out of interrupt
-   *  return from interrupt
-   */
-_ISR_Handler_exit:
-	ld ra,32(sp)
-	stackadd sp,sp,40
-
-/* restore interrupt context from stack */
-	lreg    k0, R_MDLO*R_SZ(sp)
-	mtlo    k0
-	lreg    k0, R_MDHI*R_SZ(sp)
-	lreg    a2, R_A2*R_SZ(sp)
-	mthi    k0
-	lreg    a3, R_A3*R_SZ(sp)
-	lreg    t0, R_T0*R_SZ(sp)
-	lreg    t1, R_T1*R_SZ(sp)
-	lreg    t2, R_T2*R_SZ(sp)
-	lreg    t3, R_T3*R_SZ(sp)
-	lreg    t4, R_T4*R_SZ(sp)
-	lreg    t5, R_T5*R_SZ(sp)
-	lreg    t6, R_T6*R_SZ(sp)
-	lreg    t7, R_T7*R_SZ(sp)
-	lreg    t8, R_T8*R_SZ(sp)
-	lreg    t9, R_T9*R_SZ(sp)
-	lreg    gp, R_GP*R_SZ(sp)
-	lreg    fp, R_FP*R_SZ(sp)
-	lreg    ra, R_RA*R_SZ(sp)
-	lreg    a0, R_A0*R_SZ(sp)
-	lreg    a1, R_A1*R_SZ(sp)
-	lreg    v1, R_V1*R_SZ(sp)
-	lreg    v0, R_V0*R_SZ(sp)
-	.set noat
-	lreg    AT, R_AT*R_SZ(sp)
-	.set at
-
-	stackadd sp,sp,EXCP_STACK_SIZE /* store ra on the stack */
-
-#if USE_IDTKIT
-/* we handled exception, so return non-zero value */
-	li v0,1
-#endif
-
-_ISR_Handler_quick_exit:
-#ifdef USE_IDTKIT
-	j ra
-#else
-	eret
-#endif
-	nop
-
-_ISR_Handler_prom_exit:
-#if __mips == 1
-	la      k0, (R_VEC+((48)*8))
-#endif
-
-#if __mips == 3
-	la      k0, (R_VEC+((112)*8)) /* R4000 Sim's location is different */
-#endif
-	j       k0
-	nop
-
-       .set    reorder
-
-ENDFRAME(_ISR_Handler)
-
-/* ---------------------------------------------------------------------- */
-#elif __mips == 1
-/* MIPS ISA Level 1 */
-
-FRAME(_ISR_Handler,sp,0,ra)
-.set noreorder
-
-	/* Q: _ISR_Handler, not using IDT/SIM ...save extra regs? */
-
-	addiu sp,sp,-EXCP_STACK_SIZE       /* wastes alot of stack space for context?? */
-
-	sw    ra, R_RA*R_SZ(sp)  /* store ra on the stack */ 
-	sw    v0, R_V0*R_SZ(sp)
-	sw    v1, R_V1*R_SZ(sp)
-	sw    a0, R_A0*R_SZ(sp)
-	sw    a1, R_A1*R_SZ(sp)
-	sw    a2, R_A2*R_SZ(sp)
-	sw    a3, R_A3*R_SZ(sp)
-	sw    t0, R_T0*R_SZ(sp)
-	sw    t1, R_T1*R_SZ(sp)
-	sw    t2, R_T2*R_SZ(sp)
-	sw    t3, R_T3*R_SZ(sp)
-	sw    t4, R_T4*R_SZ(sp)
-	sw    t5, R_T5*R_SZ(sp)
-	sw    t6, R_T6*R_SZ(sp)
-	sw    t7, R_T7*R_SZ(sp)
-	mflo    k0
-	sw    t8, R_T8*R_SZ(sp)
-	sw    k0, R_MDLO*R_SZ(sp) 
-	sw    t9, R_T9*R_SZ(sp)
-	mfhi    k0
-	sw    gp, R_GP*R_SZ(sp)
-	sw    fp, R_FP*R_SZ(sp)
-	sw    k0, R_MDHI*R_SZ(sp) 
-	.set noat
-	sw    AT, R_AT*R_SZ(sp)
-	.set at
+        STREG ra, R_RA*R_SZ(sp)  /* store ra on the stack */ 
+        STREG v0, R_V0*R_SZ(sp)
+        STREG v1, R_V1*R_SZ(sp)
+        STREG a0, R_A0*R_SZ(sp)
+        STREG a1, R_A1*R_SZ(sp)
+        STREG a2, R_A2*R_SZ(sp)
+        STREG a3, R_A3*R_SZ(sp)
+        STREG t0, R_T0*R_SZ(sp)
+        STREG t1, R_T1*R_SZ(sp)
+        STREG t2, R_T2*R_SZ(sp)
+        STREG t3, R_T3*R_SZ(sp)
+        STREG t4, R_T4*R_SZ(sp)
+        STREG t5, R_T5*R_SZ(sp)
+        STREG t6, R_T6*R_SZ(sp)
+        STREG t7, R_T7*R_SZ(sp)
+        mflo  k0
+        STREG t8, R_T8*R_SZ(sp)
+        STREG k0, R_MDLO*R_SZ(sp) 
+        STREG t9, R_T9*R_SZ(sp)
+        mfhi  k0
+        STREG gp, R_GP*R_SZ(sp)
+        STREG fp, R_FP*R_SZ(sp)
+        STREG k0, R_MDHI*R_SZ(sp) 
+        .set noat
+        STREG AT, R_AT*R_SZ(sp)
+        .set at
 
         /* Q: Why hardcode -40 for stack add??? */
         /* This needs to be figured out.........*/
-	addiu sp,sp,-40	
-	sw ra,32(sp)	/* store ra on the stack */
+        ADDIU    sp,sp,-40
+        STREG    ra,32(sp)                /* store ra on the stack */
 
 /* determine if an interrupt generated this exception */
 
-	mfc0 k0,C0_CAUSE
-	and k1,k0,CAUSE_EXCMASK
-        beq k1, 0, _ISR_Handler_1
+        mfc0     k0,C0_CAUSE
+        and      k1,k0,CAUSE_EXCMASK
+        beq      k1, 0, _ISR_Handler_1
         nop
 
 _ISR_Handler_Exception:
         nop
-        b  _ISR_Handler_Exception       /* Jump to the exception code */
+        b        _ISR_Handler_Exception       /* Jump to the exception code */
         nop
 
 _ISR_Handler_1:
 
-        mfc0 k1,C0_SR
-	and k0,k1
-	and k0,CAUSE_IPMASK
-	beq k0,zero,_ISR_Handler_exit
-		/* external interrupt not enabled, ignore */
+        mfc0     k1,C0_SR
+        and      k0,k1
+        and      k0,CAUSE_IPMASK
+        beq      k0,zero,_ISR_Handler_exit
+                /* external interrupt not enabled, ignore */
                 /* but if it's not an exception or an interrupt, */
-		/* Then where did it come from??? */
-	nop
+                /* Then where did it come from??? */
+        nop
 
   /*
    *  save some or all context on stack
@@ -811,43 +463,43 @@ _ISR_Handler_1:
   /*
    *  _ISR_Nest_level++;
    */
-	lw   t0,_ISR_Nest_level
-	addi t0,t0,1
-	sw   t0,_ISR_Nest_level
+        LDREG  t0,_ISR_Nest_level
+        ADD    t0,t0,1
+        STREG  t0,_ISR_Nest_level
   /*
    *  _Thread_Dispatch_disable_level++;
    */
-	lw   t1,_Thread_Dispatch_disable_level
-	addi t1,t1,1
-	sw   t1,_Thread_Dispatch_disable_level
+        LDREG  t1,_Thread_Dispatch_disable_level
+        ADD    t1,t1,1
+        STREG  t1,_Thread_Dispatch_disable_level
 
   /*
    *  Call the CPU model or BSP specific routine to decode the
    *  interrupt source and actually vector to device ISR handlers.
    */
 
-	jal	mips_vector_isr_handlers
+        jal    mips_vector_isr_handlers
         nop
 
   /*
    *  --_ISR_Nest_level;
    */
-        lw   t2,_ISR_Nest_level
-	addi t2,t2,-1
-        sw   t2,_ISR_Nest_level
+        LDREG  t2,_ISR_Nest_level
+        ADD    t2,t2,-1
+        STREG  t2,_ISR_Nest_level
   /*
    *  --_Thread_Dispatch_disable_level;
    */
-	lw   t1,_Thread_Dispatch_disable_level
-	addi t1,t1,-1
-	sw   t1,_Thread_Dispatch_disable_level
+        LDREG  t1,_Thread_Dispatch_disable_level
+        ADD    t1,t1,-1
+        STREG  t1,_Thread_Dispatch_disable_level
   /*
    *  if ( _Thread_Dispatch_disable_level || _ISR_Nest_level )
    *    goto the label "exit interrupt (simple case)"
    */
-	or  t0,t2,t1
-	bne t0,zero,_ISR_Handler_exit
-	nop
+        or  t0,t2,t1
+        bne t0,zero,_ISR_Handler_exit
+        nop
   /*
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
    *    restore stack
@@ -856,16 +508,16 @@ _ISR_Handler_1:
    *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
    *    goto the label "exit interrupt (simple case)"
    */
-	lw  t0,_Context_Switch_necessary
-	lw  t1,_ISR_Signals_to_thread_executing
-	or  t0,t0,t1
-	beq t0,zero,_ISR_Handler_exit
-	nop
+        LDREG t0,_Context_Switch_necessary
+        LDREG t1,_ISR_Signals_to_thread_executing
+        or    t0,t0,t1
+        beq   t0,zero,_ISR_Handler_exit
+        nop
   /*
    *  call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
    */
-	jal _Thread_Dispatch
-	nop
+        jal _Thread_Dispatch
+        nop
   /*
    *  prepare to get out of interrupt
    *  return from interrupt  (maybe to _ISR_Dispatch)
@@ -876,62 +528,56 @@ _ISR_Handler_1:
    */
 
 _ISR_Handler_exit:
-	ld ra,32(sp)
-	addiu sp,sp,40    /* Q: Again with the 40...Is this needed? */
+        LDREG    ra,32(sp)
+        ADDIU    sp,sp,40    /* Q: Again with the 40...Is this needed? */
 
 /* restore interrupt context from stack */
       
-	lw    k0, R_MDLO*R_SZ(sp)           
-	mtlo  k0
-	lw    k0, R_MDHI*R_SZ(sp)           
-	lw    a2, R_A2*R_SZ(sp)
-	mthi  k0
-	lw    a3, R_A3*R_SZ(sp)
-	lw    t0, R_T0*R_SZ(sp)
-	lw    t1, R_T1*R_SZ(sp)
-	lw    t2, R_T2*R_SZ(sp)
-	lw    t3, R_T3*R_SZ(sp)
-	lw    t4, R_T4*R_SZ(sp)
-	lw    t5, R_T5*R_SZ(sp)
-	lw    t6, R_T6*R_SZ(sp)
-	lw    t7, R_T7*R_SZ(sp)
-	lw    t8, R_T8*R_SZ(sp)
-	lw    t9, R_T9*R_SZ(sp)
-	lw    gp, R_GP*R_SZ(sp)
-	lw    fp, R_FP*R_SZ(sp)
-	lw    ra, R_RA*R_SZ(sp)
-	lw    a0, R_A0*R_SZ(sp)
-	lw    a1, R_A1*R_SZ(sp)
-	lw    v1, R_V1*R_SZ(sp)
-	lw    v0, R_V0*R_SZ(sp)
-	.set noat
-	lw    AT, R_AT*R_SZ(sp)
-	.set at
+        LDREG k0, R_MDLO*R_SZ(sp)           
+        mtlo  k0
+        LDREG k0, R_MDHI*R_SZ(sp)           
+        LDREG a2, R_A2*R_SZ(sp)
+        mthi  k0
+        LDREG a3, R_A3*R_SZ(sp)
+        LDREG t0, R_T0*R_SZ(sp)
+        LDREG t1, R_T1*R_SZ(sp)
+        LDREG t2, R_T2*R_SZ(sp)
+        LDREG t3, R_T3*R_SZ(sp)
+        LDREG t4, R_T4*R_SZ(sp)
+        LDREG t5, R_T5*R_SZ(sp)
+        LDREG t6, R_T6*R_SZ(sp)
+        LDREG t7, R_T7*R_SZ(sp)
+        LDREG t8, R_T8*R_SZ(sp)
+        LDREG t9, R_T9*R_SZ(sp)
+        LDREG gp, R_GP*R_SZ(sp)
+        LDREG fp, R_FP*R_SZ(sp)
+        LDREG ra, R_RA*R_SZ(sp)
+        LDREG a0, R_A0*R_SZ(sp)
+        LDREG a1, R_A1*R_SZ(sp)
+        LDREG v1, R_V1*R_SZ(sp)
+        LDREG v0, R_V0*R_SZ(sp)
+        .set noat
+        LDREG AT, R_AT*R_SZ(sp)
+        .set at
 
-	addiu sp,sp,EXCP_STACK_SIZE 
+        ADDIU     sp,sp,EXCP_STACK_SIZE 
 
-	mfc0	k0, C0_EPC
-	
+        MFC0      k0, C0_EPC
+        
         rfe  /* Might not need to do RFE here... */
-	j k0
-	nop
+        j         k0
+        nop
 
        .set    reorder
 ENDFRAME(_ISR_Handler)
 
-#else
-
-   #error "__mips is not set to 1 or 3 "
-
-#endif
-
 FRAME(mips_break,sp,0,ra)
 #if 1
-	break 0x0
-	j mips_break
+        break 0x0
+        j mips_break
 #else
-	j ra
+        j ra
 #endif
-	nop
+        nop
 ENDFRAME(mips_break)
 

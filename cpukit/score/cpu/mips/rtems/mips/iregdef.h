@@ -295,6 +295,8 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	R_FP		R_R30
 #define	R_RA		R_R31
 
+/* disabled for RTEMS */
+#if 0
 /* Ketan added the following */
 #if __mips == 1
 #define sreg	sw
@@ -320,6 +322,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #endif
 /* #endif __mips == 3 */
 /* Ketan till here */
+#endif
 
 #endif /* __IREGDEF_H__ */
 

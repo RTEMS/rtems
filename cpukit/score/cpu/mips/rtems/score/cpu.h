@@ -353,72 +353,70 @@ extern "C" {
  */
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
-typedef struct {
 #if __mips == 1
-    unsigned32 s0;
-    unsigned32 s1;
-    unsigned32 s2;
-    unsigned32 s3;
-    unsigned32 s4;
-    unsigned32 s5;
-    unsigned32 s6;
-    unsigned32 s7;
-    unsigned32 sp;
-    unsigned32 fp;
-    unsigned32 ra;
-    unsigned32 c0_sr;
-    unsigned32 c0_epc;
+#define __MIPS_REGISTER_TYPE     unsigned32
+#define __MIPS_FPU_REGISTER_TYPE unsigned32
+#elif __mips == 3
+#define __MIPS_REGISTER_TYPE     unsigned64
+#define __MIPS_FPU_REGISTER_TYPE unsigned64
 #else
-    unsigned64 s0;
-    unsigned64 s1;
-    unsigned64 s2;
-    unsigned64 s3;
-    unsigned64 s4;
-    unsigned64 s5;
-    unsigned64 s6;
-    unsigned64 s7;
-    unsigned64 sp;
-    unsigned64 fp;
-    unsigned64 ra;
-    unsigned64 c0_sr;
-    unsigned64 c0_epc;
+#error "mips register size: unknown architecture level!!"
 #endif
+typedef struct {
+    __MIPS_REGISTER_TYPE s0;
+    __MIPS_REGISTER_TYPE s1;
+    __MIPS_REGISTER_TYPE s2;
+    __MIPS_REGISTER_TYPE s3;
+    __MIPS_REGISTER_TYPE s4;
+    __MIPS_REGISTER_TYPE s5;
+    __MIPS_REGISTER_TYPE s6;
+    __MIPS_REGISTER_TYPE s7;
+    __MIPS_REGISTER_TYPE sp;
+    __MIPS_REGISTER_TYPE fp;
+    __MIPS_REGISTER_TYPE ra;
+    __MIPS_REGISTER_TYPE c0_sr;
+    __MIPS_REGISTER_TYPE c0_epc;
 } Context_Control;
 
-/* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
+/* WARNING: If this structure is modified, the constants in cpu.h
+ *          must also be updated.
+ */
+
 typedef struct {
-    unsigned32      fp0;
-    unsigned32      fp1;
-    unsigned32      fp2;
-    unsigned32      fp3;
-    unsigned32      fp4;
-    unsigned32      fp5;
-    unsigned32      fp6;
-    unsigned32      fp7;
-    unsigned32      fp8;
-    unsigned32      fp9;
-    unsigned32      fp10;
-    unsigned32      fp11;
-    unsigned32      fp12;
-    unsigned32      fp13;
-    unsigned32      fp14;
-    unsigned32      fp15;
-    unsigned32      fp16;
-    unsigned32      fp17;
-    unsigned32      fp18;
-    unsigned32      fp19;
-    unsigned32      fp20;
-    unsigned32      fp21;
-    unsigned32      fp22;
-    unsigned32      fp23;
-    unsigned32      fp24;
-    unsigned32      fp25;
-    unsigned32      fp26;
-    unsigned32      fp27;
-    unsigned32      fp28;
-    unsigned32      fp29;
-    unsigned32      fp30;
-    unsigned32      fp31;
+#if ( CPU_HARDWARE_FP == TRUE )
+    __MIPS_FPU_REGISTER_TYPE fp0;
+    __MIPS_FPU_REGISTER_TYPE fp1;
+    __MIPS_FPU_REGISTER_TYPE fp2;
+    __MIPS_FPU_REGISTER_TYPE fp3;
+    __MIPS_FPU_REGISTER_TYPE fp4;
+    __MIPS_FPU_REGISTER_TYPE fp5;
+    __MIPS_FPU_REGISTER_TYPE fp6;
+    __MIPS_FPU_REGISTER_TYPE fp7;
+    __MIPS_FPU_REGISTER_TYPE fp8;
+    __MIPS_FPU_REGISTER_TYPE fp9;
+    __MIPS_FPU_REGISTER_TYPE fp10;
+    __MIPS_FPU_REGISTER_TYPE fp11;
+    __MIPS_FPU_REGISTER_TYPE fp12;
+    __MIPS_FPU_REGISTER_TYPE fp13;
+    __MIPS_FPU_REGISTER_TYPE fp14;
+    __MIPS_FPU_REGISTER_TYPE fp15;
+    __MIPS_FPU_REGISTER_TYPE fp16;
+    __MIPS_FPU_REGISTER_TYPE fp17;
+    __MIPS_FPU_REGISTER_TYPE fp18;
+    __MIPS_FPU_REGISTER_TYPE fp19;
+    __MIPS_FPU_REGISTER_TYPE fp20;
+    __MIPS_FPU_REGISTER_TYPE fp21;
+    __MIPS_FPU_REGISTER_TYPE fp22;
+    __MIPS_FPU_REGISTER_TYPE fp23;
+    __MIPS_FPU_REGISTER_TYPE fp24;
+    __MIPS_FPU_REGISTER_TYPE fp25;
+    __MIPS_FPU_REGISTER_TYPE fp26;
+    __MIPS_FPU_REGISTER_TYPE fp27;
+    __MIPS_FPU_REGISTER_TYPE fp28;
+    __MIPS_FPU_REGISTER_TYPE fp29;
+    __MIPS_FPU_REGISTER_TYPE fp30;
+    __MIPS_FPU_REGISTER_TYPE fp31;
+#endif
 } Context_Control_fp;
 
 typedef struct {
@@ -641,25 +639,9 @@ extern unsigned int mips_interrupt_number_of_vectors;
  *  manipulates the IEC.
  */
 
-#if __mips == 3
-extern void _CPU_ISR_Set_level( unsigned32 _new_level );
-
-unsigned32 _CPU_ISR_Get_level( void ); /* in cpu_asm.S */
-#elif __mips == 1
-
-#define _CPU_ISR_Set_level( _new_level ) \
-  do { \
-    unsigned int _sr; \
-    mips_get_sr(_sr); \
-    (_sr) &= ~SR_IEC;                    /* clear the IEC bit */ \
-    if ( !(_new_level) ) (_sr) |= SR_IEC; /* enable interrupts */ \
-    mips_set_sr(_sr); \
-  } while (0)
-
 unsigned32 _CPU_ISR_Get_level( void );  /* in cpu.c */
-#else
-#error "CPU ISR level: unknown MIPS level for SR handling"
-#endif
+
+void _CPU_ISR_Set_level( unsigned32 );  /* in cpu.c */
 
 /* end of ISR handler macros */
 
@@ -689,7 +671,8 @@ unsigned32 _CPU_ISR_Get_level( void );  /* in cpu.c */
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                  _isr, _entry_point, _is_fp ) \
   { \
- 	unsigned32 _stack_tmp = (unsigned32)(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
+ 	unsigned32 _stack_tmp = \
+           (unsigned32)(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
   	_stack_tmp &= ~(CPU_STACK_ALIGNMENT - 1); \
   	(_the_context)->sp = _stack_tmp; \
   	(_the_context)->fp = _stack_tmp; \
@@ -740,10 +723,12 @@ unsigned32 _CPU_ISR_Get_level( void );  /* in cpu.c */
  *  a "null FP status word" in the correct place in the FP context.
  */
 
+#if ( CPU_HARDWARE_FP == TRUE )
 #define _CPU_Context_Initialize_fp( _destination ) \
   { \
    *((Context_Control_fp *) *((void **) _destination)) = _CPU_Null_fp_context; \
   }
+#endif
 
 /* end of Context handler macros */
 

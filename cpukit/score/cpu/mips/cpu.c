@@ -90,22 +90,60 @@ void _CPU_Initialize(
  *  This routine returns the current interrupt level.
  */
    
-#if __mips == 3
-
-/* in cpu_asm.S for now */
-
-#elif __mips == 1
 unsigned32 _CPU_ISR_Get_level( void )
 {
   unsigned int sr;
 
   mips_get_sr(sr);
 
+#if __mips == 3
+  return ((sr & SR_EXL) >> 1);
+
+#elif __mips == 1
   return ((sr & SR_IEC) ? 0 : 1);
-}
+
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
+}
+
+void _CPU_ISR_Set_level( unsigned32 new_level )
+{
+  unsigned int sr;
+
+  mips_get_sr(sr);
+
+#if __mips == 3
+  if ( (new_level & SR_EXL) == (sr & SR_EXL) )
+    return;
+
+  if ( (new_level & SR_EXL) == 0 ) {
+    sr &= ~SR_EXL;                    /* clear the EXL bit */
+    mips_set_sr(sr);
+  } else {
+    sr &= ~SR_IE;
+    mips_set_sr(sr);                 /* first disable ie bit (recommended) */
+
+    sr |= SR_EXL|SR_IE;              /* enable exception level */
+    mips_set_sr(sr);                 /* first disable ie bit (recommended) */
+  }
+ 
+#elif __mips == 1
+
+  if ( (new_level & SR_IEC) == (sr & SR_IEC) )
+    return;
+
+  sr &= ~SR_IEC;                    /* clear the IEC bit */
+  if ( !new_level )
+    sr |= SR_IEC;                   /* enable interrupts */
+
+  mips_set_sr(sr);
+
+#else
+#error "CPU ISR level: unknown MIPS level for SR handling"
+#endif
+
+}
 
 /*PAGE
  *

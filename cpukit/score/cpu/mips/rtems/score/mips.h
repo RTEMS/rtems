@@ -30,12 +30,16 @@ extern "C" {
 
 #if __mips == 3
 #ifdef ASM
-#define SR_INTERRUPT_ENABLE_BITS 0x03
+#define SR_INTERRUPT_ENABLE_BITS 0x01
 #else
-#define SR_INTERRUPT_ENABLE_BITS SR_IE|SR_EXL
+#define SR_INTERRUPT_ENABLE_BITS SR_IE
 #endif
-#else
+
+#elif __mips == 1
 #define SR_INTERRUPT_ENABLE_BITS SR_IEC
+
+#else
+#error "mips interrupt enable bits: unknown architecture level!"
 #endif
 
 /*
