@@ -1,3 +1,8 @@
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	* network/network.c: Remove warnings for unused routines left from
+	original code.
+
 2004-02-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect changes to bsp.am. 

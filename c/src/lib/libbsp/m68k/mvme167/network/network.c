@@ -126,14 +126,17 @@ char uti596initSetup[] = {
 static unsigned long word_swap ( unsigned long );
 static void * malloc_16byte_aligned ( void **, void ** adjusted_pointer, size_t );
 RTEMS_INLINE_ROUTINE void uti596_writePortFunction ( volatile void *, unsigned long );
+/* currently unused by RTEMS */
+#if 0
 RTEMS_INLINE_ROUTINE void uti596_portReset( void );
 static unsigned long uti596_portSelfTest( i596_selftest * );
 static int uti596_portDump ( i596_dump_result * );
+static void uti596_CU_dump ( i596_dump_result * );
+#endif
 static int uti596_wait ( uti596_softc_ *, unsigned8 );
 static int uti596_issueCA ( uti596_softc_ *, unsigned8 );
 static void uti596_addCmd ( i596_cmd * );
 static void uti596_addPolledCmd ( i596_cmd * );
-static void uti596_CU_dump ( i596_dump_result * );
 static void uti596_dump_scb ( void );
 static int uti596_setScpAndScb ( uti596_softc_ * );
 static int uti596_diagnose ( void );
@@ -313,6 +316,8 @@ RTEMS_INLINE_ROUTINE void uti596_portReset( void )
 }
 
 
+/* currently unused by RTEMS */
+#if 0
 /*
  *  uti596_portSelfTest
  *
@@ -363,8 +368,11 @@ static unsigned long uti596_portSelfTest(
 		return stp->results;
 	}
 }
+#endif
 
   
+/* currently unused by RTEMS */
+#if 0
 /*
  *  uti596_portDump
  *
@@ -413,6 +421,7 @@ static int uti596_portDump(
 		return dp->dump_status;
 	}
 }
+#endif
 
 
 /*
@@ -640,6 +649,8 @@ void uti596_addPolledCmd(
 }
 
 
+/* currently unused by RTEMS */
+#if 0
 /*
  *  uti596_CU_dump
  * 
@@ -665,6 +676,7 @@ static void uti596_CU_dump ( i596_dump_result * drp)
   uti596_addCmd ( (i596_cmd *) &dumpCmd );
 
 }
+#endif
 
 
 /*
