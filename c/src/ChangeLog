@@ -1,3 +1,7 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* wrapup/Makefile.am: Added libfs.
+
 2000-10-18	 Chris Johns <ccj@acm.org>
 
 	* libfs created.

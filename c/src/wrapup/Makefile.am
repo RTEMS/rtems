@@ -33,6 +33,7 @@ SRCS = $(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a) \
     $(PROJECT_RELEASE)/lib/libcsupport$(LIB_VARIANT).a \
     $(PROJECT_RELEASE)/lib/libmisc$(LIB_VARIANT).a \
+    $(PROJECT_RELEASE)/lib/libfs$(LIB_VARIANT).a \
     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
