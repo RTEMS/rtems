@@ -1,3 +1,7 @@
+2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: Fix dates.
+
 2002-03-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libc/rcmd.c: Replace __rtems w/ __rtems__.
@@ -71,17 +75,17 @@
 	is no route.  This was a bug in the original FreeBSD code and this
 	fix is from an updated version of their code.
 
-2001-02-01	Mike Siers <mikes@poliac.com>
+2002-02-01	Mike Siers <mikes@poliac.com>
 
 	* pppd/rtemspppd.c (rtems_pppd_disconnect): Modified to avoid bringing
 	the link down too fast.
 	NOTE: Mike reports successfully running at 56K baud on a direct link.
 
-2001-01-31	Mike Siers <mikes@poliac.com>
+2002-01-31	Mike Siers <mikes@poliac.com>
 
 	* pppd/rtemsdialer.h: New file missed in previous commit.
 
-2001-01-31	Mike Siers <mikes@poliac.com>
+2002-01-31	Mike Siers <mikes@poliac.com>
 
 	* Nice Update of PPPD support which eliminates the
 	requiremetn that drivers be in the termios TASK_DRIVEN mode.
@@ -117,7 +121,7 @@
 	Remove printf (Reported by Till Straumann
 	<strauman@SLAC.Stanford.EDU>).
 
-2001-01-16	Eric Norum <eric.norum@usask.ca>
+2002-02-16	Eric Norum <eric.norum@usask.ca>
 
 	* lib/tftpDriver.clib/tftpDriver.c: Fix TFTP block number checking.
 
