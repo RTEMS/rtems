@@ -13,7 +13,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <clockdrv.h>
+#include <rtems/clockdrv.h>
 #include <zilog/z8036.h>
 
 void bsp_return_to_monitor_trap()
