@@ -4,11 +4,19 @@
 #
 
 RTEMS_DIR=`dirname $0`
-RTEMS_VERSION=`grep Version ${RTEMS_DIR}/../VERSION | \
-sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
 
 target_alias=$1
-release=0
+
+# RPM release number
+rpm_release=0
+
+# gcc version number
+gcc_version=2.95.1
+gcc_patch_version=19991015
+
+# newlib version number
+newlib_version=1.8.2
+newlib_patch_version=19991015
 
 # Some linux distributions use /usr/src/packages
 # redhat uses /usr/src/redhat
@@ -24,11 +32,14 @@ then
 dst=/usr/src/SPECS;
 fi
 
-sed -e "s%@Version@%${RTEMS_VERSION}%g" \
--e "s%@bsp@%${bsp}%g" \
--e "s%@Release@%${release}%g" \
--e "s%@target_alias@%${target_alias}%g" \
+specfile=${dst}/$target_alias-gcc-${gcc_version}-newlib-${newlib_version}.spec
+sed -e "s%@Release@%${rpm_release}%g" \
+    -e "s%@target_alias@%${target_alias}%g" \
+    -e "s%@gcc_version@%${gcc_version}%g" \
+    -e "s%@gcc_patch_version@%${gcc_patch_version}%g" \
+    -e "s%@newlib_version@%${newlib_version}%g" \
+    -e "s%@newlib_patch_version@%${newlib_patch_version}%g" \
 < ${RTEMS_DIR}/gccnewlib.spec.in \
-> ${dst}/$target_alias-gcc_newlib.spec
+> ${specfile}
 
-echo Generated ${dst}/$target_alias-gcc_newlib.spec.
+echo Generated ${specfile}.

@@ -19,12 +19,12 @@ Provides:     @target_alias@-gcc-newlib
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      @Version@
+Version:      gcc-@gcc_version@-newlib-@newlib_version@
 Summary:      rtems gcc and newlib C Library for target @target_alias@
-Source0:	gcc-2.95.1.tar.gz
-Source1:	newlib-1.8.2.tar.gz
-Patch0:		gcc-2.95.1-rtems-19991015.diff
-Patch1:		newlib-1.8.2-rtems-19991015.diff
+Source0:	gcc-@gcc_version@.tar.gz
+Source1:	newlib-@newlib_version@.tar.gz
+Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
+Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
 
 Buildroot:    /tmp
 # Patch:
@@ -39,22 +39,22 @@ Authors:
     ...
 
 %prep
-# untar the sources inside @target_alias@-gcc-newlib -@Version@
+# untar the sources inside @target_alias@-gcc-newlib
 %setup -c -n @target_alias@-gcc-newlib -a 0 -a 1
 
 %patch0 -p0
 %patch1 -p0
 
-( cd gcc-2.95.1
+( cd gcc-@gcc_version@
 
   # Now link the C library into the source tree 
-  ln -s ../newlib-1.8.2/newlib .
+  ln -s ../newlib-@newlib_version@/newlib .
 )
 
 %build
 test -d build || mkdir build
 ( cd build
-  ../gcc-2.95.1/configure --target=@target_alias@ \
+  ../gcc-@gcc_version@/configure --target=@target_alias@ \
     --with-gnu-as --with-gnu-ld --with-newlib --verbose \
     --prefix=/opt/rtems 
 
@@ -69,7 +69,7 @@ test -d build || mkdir build
   test -d $RPM_BUILD_ROOT/opt/rtems/@target_alias@/sys-include \
     || mkdir $RPM_BUILD_ROOT/opt/rtems/@target_alias@/sys-include
 
-  srclimits=../gcc-2.95.1/newlib/libc/sys/rtems/include/limits.h
+  srclimits=../gcc-@gcc_version@/newlib/libc/sys/rtems/include/limits.h
   for dir in $RPM_BUILD_ROOT/opt/rtems/@target_alias@/include \
              $RPM_BUILD_ROOT/opt/rtems/@target_alias@/sys-include
   do
@@ -111,7 +111,7 @@ test -d build || mkdir build
 /opt/rtems/bin/@target_alias@-g++
 /opt/rtems/bin/@target_alias@-gcc
 /opt/rtems/bin/@target_alias@-gcj
-/opt/rtems/lib/gcc-lib/@target_alias@/2.95.1
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@
 /opt/rtems/@target_alias@/include*
 /opt/rtems/@target_alias@/sys-include
 /opt/rtems/@target_alias@/lib*
