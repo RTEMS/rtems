@@ -1,3 +1,7 @@
+2002-05-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add preinstall-stamp.
+
 2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove ENABLE_GCC28.
