@@ -165,6 +165,10 @@ extern "C" {
 #define MC68681_FRAMING_ERROR                               0x40
 #define MC68681_RECEIVED_BREAK                              0x80
 
+#define MC68681_RX_ERRORS \
+  (MC68681_OVERRUN_ERROR|MC68681_PARITY_ERROR| \
+   MC68681_FRAMING_ERROR|MC68681_RECEIVED_BREAK)
+
 /*
  * Interupt Status Register Definitions.
  *
@@ -225,7 +229,6 @@ extern "C" {
 typedef struct _mc68681_context
 {
   int        mate;
-  unsigned8  ucModemCtrl;
 } mc68681_context;
 
 /*
@@ -255,22 +258,6 @@ static int mc68681_close(
 static void mc68681_write_polled(
   int   minor, 
   char  cChar
-);
-
-static int mc68681_assert_RTS(
-  int minor
-);
-
-static int mc68681_negate_RTS(
-  int minor
-);
-
-static int mc68681_assert_DTR(
-  int minor
-);
-
-static int mc68681_negate_DTR(
-  int minor
 );
 
 static void mc68681_initialize_interrupts(int minor);

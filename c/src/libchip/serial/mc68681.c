@@ -30,18 +30,6 @@
  * Flow control is only supported when using interrupts
  */
 
-console_flow mc68681_flow_RTSCTS =
-{
-  mc68681_negate_RTS,             /* deviceStopRemoteTx */
-  mc68681_assert_RTS              /* deviceStartRemoteTx */
-};
-
-console_flow mc68681_flow_DTRCTS =
-{
-  mc68681_negate_DTR,             /* deviceStopRemoteTx */
-  mc68681_assert_DTR              /* deviceStartRemoteTx */
-};
-
 console_fns mc68681_fns =
 {
   mc68681_probe,                  /* deviceProbe */
@@ -122,6 +110,10 @@ static int mc68681_baud_rate(
   }
 
   if ( !acr_bit ) {
+    /*
+     *  Baud Rate Set 1 
+     */
+
     switch (baud & CBAUD) {
       case B50:    baud_mask = 0x00; break;
       case B110:   baud_mask = 0x01; break;
@@ -148,6 +140,10 @@ static int mc68681_baud_rate(
         break;
     }
   } else {
+    /*
+     *  Baud Rate Set 2
+     */
+
     switch (baud & CBAUD) {
       case B75:    baud_mask = 0x00; break;
       case B110:   baud_mask = 0x01; break;
@@ -201,8 +197,8 @@ static int mc68681_set_attributes(
   setRegister_f          setReg;
   rtems_interrupt_level  Irql;
 
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
 
   /*
@@ -293,7 +289,6 @@ static void mc68681_initialize_context(
     }
   }
 
-  pmc68681Context->ucModemCtrl = 0x00;   /* XXX */
 }
 
 /*
@@ -305,7 +300,8 @@ static void mc68681_initialize_context(
  */
 
 static unsigned int mc68681_build_imr(
-  int minor
+  int  minor,
+  int  enable_flag
 )
 {
   int              mate;
@@ -343,11 +339,13 @@ static unsigned int mc68681_build_imr(
    */
 
   mask = 0;
-  if ( Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts ) {
-    if ( pMC68681 == pMC68681_port )
-       mask = 0x03;
-    else
-       mask = 0x30;
+  if ( enable_flag ) {
+    if ( Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts ) {
+      if ( pMC68681 == pMC68681_port )
+         mask = 0x03;
+      else
+         mask = 0x30;
+    }
   }
 
   return mask | mate_mask;
@@ -373,8 +371,8 @@ static void mc68681_init(int minor)
 
   mc68681_initialize_context( minor, pmc68681Context );
 
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
   getReg        = Console_Port_Tbl[minor].getRegister;
 
@@ -393,6 +391,12 @@ static void mc68681_init(int minor)
 
   (*setReg)( pMC68681, MC68681_MODE_REG_1A, 0x00 );
   (*setReg)( pMC68681, MC68681_MODE_REG_2A, 0x02 );
+
+  /*
+   *  Disable interrupts on RX and TX for this port
+   */
+
+  (*setReg)( pMC68681, MC68681_INTERRUPT_MASK_REG, mc68681_build_imr(minor, 0));
 }
 
 /*
@@ -441,15 +445,7 @@ static int mc68681_open(
 
   (*setReg)( pMC68681, MC68681_INTERRUPT_VECTOR_REG, vector );
 
-  /*
-   * Assert DTR
-   */
-
-  if(Console_Port_Tbl[minor].pDeviceFlow != &mc68681_flow_DTRCTS) {
-    mc68681_assert_DTR(minor);
-  }
-
-  return(RTEMS_SUCCESSFUL);
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
@@ -478,14 +474,6 @@ static int mc68681_close(
 
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_TX );
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_RX );
-
-  /*
-   * Negate DTR
-   */
-
-  if(Console_Port_Tbl[minor].pDeviceFlow != &mc68681_flow_DTRCTS) {
-    mc68681_negate_DTR(minor);
-  }
 
   return(RTEMS_SUCCESSFUL);
 }
@@ -539,210 +527,90 @@ static void mc68681_write_polled(
 }
 
 /*
- * These routines provide control of the RTS and DTR lines
+ *  mc68681_process
+ *
+ *  This routine is the per port console interrupt handler.
  */
 
-/*
- *  mc68681_assert_RTS
- */
-
-static int mc68681_assert_RTS(int minor)
+static void mc68681_process(
+  int  minor
+)
 {
-/* XXX */
-
   unsigned32              pMC68681;
-  unsigned32              Irql;
-  mc68681_context        *pmc68681Context;
+  unsigned32              pMC68681_port;
+  volatile unsigned8      ucLineStatus; 
+  char                    cChar;
+  getRegister_f           getReg;
   setRegister_f           setReg;
 
-
-  pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
-
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
-
-  /*
-   * Assert RTS
-   */
-  rtems_interrupt_disable(Irql);
-#if 0
-  pmc68681Context->ucModemCtrl |= SP_MODEM_RTS;
-  (*setReg)(pMC68681, MC68681_MODEM_CONTROL, pmc68681Context->ucModemCtrl);
-#endif
-  rtems_interrupt_enable(Irql);
-  return 0;
-}
-
-/*
- *  mc68681_negate_RTS
- */
-
-static int mc68681_negate_RTS(int minor)
-{
-/* XXX */
-  unsigned32              pMC68681;
-  unsigned32              Irql;
-  mc68681_context        *pmc68681Context;
-  setRegister_f           setReg;
-
-  pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
-
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  getReg        = Console_Port_Tbl[minor].getRegister;
+  setReg        = Console_Port_Tbl[minor].setRegister;
 
   /*
-   * Negate RTS
+   * Deal with any received characters
    */
-  rtems_interrupt_disable(Irql);
-#if 0
-  pmc68681Context->ucModemCtrl &= ~SP_MODEM_RTS;
-  (*setReg)(pMC68681, MC68681_MODEM_CONTROL, pmc68681Context->ucModemCtrl);
-#endif
-  rtems_interrupt_enable(Irql);
-  return 0;
-}
-
-/*
- * These flow control routines utilize a connection from the local DTR
- * line to the remote CTS line
- */
-
-/*
- *  mc68681_assert_DTR
- */
-
-static int mc68681_assert_DTR(int minor)
-{
-/* XXX */
-  unsigned32              pMC68681;
-  unsigned32              Irql;
-  mc68681_context        *pmc68681Context;
-  setRegister_f           setReg;
-
-  pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
-
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
+  while(TRUE) {
+    ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
+    if(!(ucLineStatus & MC68681_RX_READY)) {
+      break;
+    }
+    /*
+     *  If there is a RX error, then dump all the data.
+     */
+    if ( ucLineStatus & MC68681_RX_ERRORS ) {
+      do {
+        cChar = (*getReg)(pMC68681_port, MC68681_RX_BUFFER);
+        ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
+      } while ( ucLineStatus & MC68681_RX_READY );
+      continue;
+    }
+    cChar = (*getReg)(pMC68681_port, MC68681_RX_BUFFER);
+    rtems_termios_enqueue_raw_characters( 
+      Console_Port_Data[minor].termios_data,
+      &cChar, 
+      1 
+    );
+  }
 
   /*
-   * Assert DTR
+   *  Deal with the transmitter
    */
-  rtems_interrupt_disable(Irql);
-#if 0
-  pmc68681Context->ucModemCtrl |= SP_MODEM_DTR;
-  (*setReg)(pMC68681, MC68681_MODEM_CONTROL, pmc68681Context->ucModemCtrl);
-#endif
-  rtems_interrupt_enable(Irql);
-  return 0;
-}
 
-/*
- *  mc68681_negate_DTR
- */
+  while(TRUE) {
+    if(Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
+      Console_Port_Data[minor].bActive = FALSE;
 
-static int mc68681_negate_DTR(int minor)
-{
-/* XXX */
-  unsigned32              pMC68681;
-  unsigned32              Irql;
-  mc68681_context        *pmc68681Context;
-  setRegister_f           setReg;
+      /*
+       * There is no data to transmit
+       */
+      break;
+    }
 
-  pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
+    ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
+    if(!(ucLineStatus & (MC68681_TX_EMPTY|MC68681_TX_READY))) {
+      /*
+       *  We'll get another interrupt when the TX can take another character.
+       */
+      break;
+    }
 
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
+    Ring_buffer_Remove_character( &Console_Port_Data[minor].TxBuffer, cChar);
+    /*
+     * transmit character
+     */
+    (*setReg)(pMC68681_port, MC68681_TX_BUFFER, cChar);
+  }
 
-  /*
-   * Negate DTR
-   */
-  rtems_interrupt_disable(Irql);
-#if 0
-  pmc68681Context->ucModemCtrl &= ~SP_MODEM_DTR;
-  (*setReg)(pMC68681, MC68681_MODEM_CONTROL,pmc68681Context->ucModemCtrl);
-#endif
-  rtems_interrupt_enable(Irql);
-  return 0;
 }
 
 /*
  *  mc68681_isr
  *
- *  This routine is the console interrupt handler.
+ *  This is the single interrupt entry point which parcels interrupts
+ *  out to the various ports.
  */
-
-static void mc68681_process(
-        int             minor
-)
-{
-/* XXX */
-  unsigned32              pMC68681;
-  volatile unsigned8      ucLineStatus; 
-  volatile unsigned8      ucInterruptId;
-  char                    cChar;
-  getRegister_f           getReg;
-  setRegister_f           setReg;
-
-#if 1
-cChar = ucInterruptId = ucLineStatus = 0;
-#endif
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  getReg   = Console_Port_Tbl[minor].getRegister;
-  setReg   = Console_Port_Tbl[minor].setRegister;
-
-#if 0
-  do {
-    /*
-     * Deal with any received characters
-     */
-    while(TRUE) {
-      ucLineStatus = (*getReg)(pMC68681, MC68681_LINE_STATUS);
-      if(~ucLineStatus & SP_LSR_RDY) {
-        break;
-      }
-      cChar = (*getReg)(pMC68681, MC68681_RECEIVE_BUFFER);
-      rtems_termios_enqueue_raw_characters( 
-        Console_Port_Data[minor].termios_data,
-        &cChar, 
-        1 
-      );
-    }
-
-    while(TRUE) {
-      if(Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
-        Console_Port_Data[minor].bActive = FALSE;
-        if(Console_Port_Tbl[minor].pDeviceFlow != &mc68681_flow_RTSCTS) {
-          mc68681_negate_RTS(minor);
-        }
-
-        /*
-         * There is no data to transmit
-         */
-        break;
-      }
-
-      ucLineStatus = (*getReg)(pMC68681, MC68681_LINE_STATUS);
-      if(~ucLineStatus & SP_LSR_THOLD) {
-        /*
-         * We'll get another interrupt when
-         * the transmitter holding reg. becomes
-         * free again
-         */
-        break;
-      }
-
-      Ring_buffer_Remove_character( &Console_Port_Data[minor].TxBuffer, cChar);
-      /*
-       * transmit character
-       */
-      (*setReg)(pMC68681, MC68681_TRANSMIT_BUFFER, cChar);
-    }
-
-    ucInterruptId = (*getReg)(pMC68681, MC68681_INTERRUPT_ID);
-  }
-  while((ucInterruptId&0xf) != 0x1);
-#endif
-}
 
 static rtems_isr mc68681_isr(
   rtems_vector_number vector
@@ -802,7 +670,7 @@ static void mc68681_enable_interrupts(
    *  Enable interrupts on RX and TX -- not break
    */
 
-  (*setReg)( pMC68681, MC68681_INTERRUPT_MASK_REG, mc68681_build_imr( minor ));
+  (*setReg)( pMC68681, MC68681_INTERRUPT_MASK_REG, mc68681_build_imr(minor, 1));
 }
 
 /*
@@ -848,9 +716,6 @@ static int mc68681_write_support_int(
          */
         rtems_interrupt_disable(Irql);
         Console_Port_Data[minor].bActive = TRUE;
-        if(Console_Port_Tbl[minor].pDeviceFlow != &mc68681_flow_RTSCTS) {
-          mc68681_assert_RTS(minor);
-        }
         mc68681_process(minor);
         rtems_interrupt_enable(Irql);
       } else {
@@ -881,9 +746,6 @@ static int mc68681_write_support_int(
      */
     rtems_interrupt_disable(Irql);
     Console_Port_Data[minor].bActive = TRUE;
-    if(Console_Port_Tbl[minor].pDeviceFlow != &mc68681_flow_RTSCTS) {
-      mc68681_assert_RTS(minor);
-    }
     mc68681_process(minor);
     rtems_interrupt_enable(Irql);
   }

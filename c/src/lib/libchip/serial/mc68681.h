@@ -46,13 +46,6 @@ extern "C" {
 extern console_fns mc68681_fns;
 extern console_fns mc68681_fns_polled;
 
-/*
- * Flow control function tables
- */
-
-extern console_flow mc68681_flow_RTSCTS;
-extern console_flow mc68681_flow_DTRCTS;
-
 #ifdef __cplusplus
 }
 #endif
