@@ -56,6 +56,7 @@ boolean _RTEMS_tasks_Create_extension(
  
   api->pending_events = EVENT_SETS_NONE_PENDING;
   _ASR_Initialize( &api->Signal );
+  api->task_variables = NULL;
   return TRUE;
 }
 
@@ -93,7 +94,28 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
   Thread_Control *deleted
 )
 {
-  (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_RTEMS ] );
+  RTEMS_API_Control            *api;
+  struct rtems_task_variable_t *tvp, *next;
+
+  api = executing->API_Extensions[ THREAD_API_RTEMS ];
+
+  /*
+   *  Free per task variable memory
+   */
+
+  tvp = api->task_variables;
+  api->task_variables = NULL;
+  while (tvp) {
+    next = tvp->next;
+    _Workspace_Free( tvp );
+    tvp = next;
+  }
+
+  /*
+   *  Free API specific memory
+   */
+
+  (void) _Workspace_Free( api );
  
   deleted->API_Extensions[ THREAD_API_RTEMS ] = NULL;
 }
@@ -106,6 +128,41 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
  */
  
 void _RTEMS_tasks_Switch_extension(
+  Thread_Control *executing,
+  Thread_Control *heir
+)
+{
+  RTEMS_API_Control            *api;
+  struct rtems_task_variable_t *tvp;
+
+  /*
+   *  Per Task Variables
+   */
+
+
+  api = executing->API_Extensions[ THREAD_API_RTEMS ];
+  tvp = api->task_variables;
+  while (tvp) {
+    tvp->var = *tvp->ptr;
+    tvp = tvp->next;
+  }
+
+  api = heir->API_Extensions[ THREAD_API_RTEMS ];
+  tvp = api->task_variables;
+  while (tvp) {
+    *tvp->ptr = tvp->var;
+    tvp = tvp->next;
+  } 
+}
+
+/*PAGE
+ *
+ *  _RTEMS_tasks_Post_switch_extension
+ *
+ *  This extension routine is invoked at each context switch.
+ */
+ 
+void _RTEMS_tasks_Post_switch_extension(
   Thread_Control *executing
 )
 {
@@ -116,6 +173,11 @@ void _RTEMS_tasks_Switch_extension(
   Modes_Control      prev_mode;
 
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
+
+  /*
+   *  Signal Processing
+   */
+
   asr = &api->Signal;
  
   _ISR_Disable( level );
@@ -141,7 +203,7 @@ API_extensions_Control _RTEMS_tasks_API_extensions = {
   { NULL, NULL },
   NULL,                                     /* predriver */
   _RTEMS_tasks_Initialize_user_tasks,       /* postdriver */
-  _RTEMS_tasks_Switch_extension             /* post switch */
+  _RTEMS_tasks_Post_switch_extension        /* post switch */
 };
 
 User_extensions_Control _RTEMS_tasks_User_extensions = {
@@ -150,7 +212,7 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
     _RTEMS_tasks_Start_extension,             /* start */
     _RTEMS_tasks_Start_extension,             /* restart */
     _RTEMS_tasks_Delete_extension,            /* delete */
-    NULL,                                     /* switch */
+    _RTEMS_tasks_Switch_extension,            /* switch */
     NULL,                                     /* begin */
     NULL,                                     /* exitted */
     NULL                                      /* fatal */

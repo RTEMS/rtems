@@ -24,7 +24,8 @@ MP_C_PIECES = $(MP_C_PIECES_$(HAS_MP)_V)
 
 TASK_C_PIECES = tasks taskcreate taskdelete taskgetnote taskident \
     taskinitusers taskissuspended taskmode taskrestart taskresume tasksetnote \
-    tasksetpriority taskstart tasksuspend taskwakeafter taskwakewhen
+    tasksetpriority taskstart tasksuspend taskwakeafter taskwakewhen \
+    taskvariableadd taskvariabledelete
 
 RATEMON_C_PIECES = ratemon ratemoncancel ratemoncreate ratemondelete \
     ratemongetstatus ratemonident ratemonperiod ratemontimeout
