@@ -1,5 +1,9 @@
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* Makefile.am: Remove include from SUBDIRS.
+
+2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* include/Makefile.am: Remove.
 	* Makefile.am: Merge-in include/Makefile.am.
 	* configure.ac: Reflect changes above.
