@@ -43,13 +43,10 @@ include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
 ## sys
 
 include_sysdir = $(includedir)/sys
-include_sys_HEADERS = include/sys/ioccom.h
-
 if NEWLIB
-# FIXME: We should not install to include/sys unless using newlib.
-include_sys_HEADERS += include/sys/filio.h include/sys/ioctl.h \
-    include/sys/sockio.h include/sys/ttycom.h
-include_sys_HEADERS += include/sys/termios.h include/sys/utsname.h
+include_sys_HEADERS += include/sys/ioccom.h include/sys/filio.h \
+    include/sys/ioctl.h include/sys/sockio.h include/sys/ttycom.h \
+    include/sys/termios.h include/sys/utsname.h
 endif
 
 if NEED_SYS_CDEFS_H
@@ -194,7 +191,7 @@ $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/motorola/mc68230.h: include/rtems/motorola/mc68230.h $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/motorola/mc68230.h: include/motorola/mc68230.h $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/motorola/mc68230.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/motorola/mc68230.h
 
@@ -235,11 +232,11 @@ $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
+if NEWLIB
 $(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
 
-if NEWLIB
 $(PROJECT_INCLUDE)/sys/filio.h: include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
