@@ -559,7 +559,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
    CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVEREHAD + \
    (((CONFIGURE_MEMORY_OVERHEAD)+1) * 1024) + \
-   (CONFIGURE_EXTRA_TASK_STACKS) \
+   (CONFIGURE_EXTRA_TASK_STACKS) + (CONFIGURE_ADA_TASKS_STACK) \
 ) & 0xfffffc00)
 #endif
 
@@ -579,7 +579,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 /* Ada tasks are allocated twice the minimum stack space */
 #define CONFIGURE_ADA_TASKS_STACK \
-  (CONFIGURE_MAXIMUM_ADA_TASKS * RTEMS_MINIMUM_STACK_SIZE)
+  (CONFIGURE_MAXIMUM_ADA_TASKS * (RTEMS_MINIMUM_STACK_SIZE + (6 * 1024)))
 
 #else
 #define CONFIGURE_GNAT_MUTEXES           0
