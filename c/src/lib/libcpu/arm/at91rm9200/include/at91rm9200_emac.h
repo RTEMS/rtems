@@ -83,6 +83,7 @@
 #define EMAC_CFG_CLK_16 (1 << 10)       // MII Clock = HCLK divided by 16
 #define EMAC_CFG_CLK_32 (2 << 10)       // MII Clock = HCLK divided by 32
 #define EMAC_CFG_CLK_64 (3 << 10)       // MII Clock = HCLK divided by 64
+#define EMAC_CFG_CLK_MASK (3 << 10)       // MII Clock mask
 #define EMAC_CFG_RTY    BIT12           // Retry Test Mode - Must be 0 
 #define EMAC_CFG_RMII   BIT13           // Reduced MII Mode Enable
 
@@ -128,12 +129,13 @@
 
 // PHY Maintenance Register, EMAC_MAN, Offset 0x34
 #define EMAC_MAN_DATA(_x_)      ((_x_ & 0xFFFF) <<  0)  // PHY data register
-#define EMAC_MAN_CODE           (0x3 << 6)              // IEEE Code
+#define EMAC_MAN_CODE           (0x2 << 16)             // IEEE Code
 #define EMAC_MAN_REGA(_x_)      ((_x_ & 0x1F) << 18)    // PHY register address
 #define EMAC_MAN_PHYA(_x_)      ((_x_ & 0x1F) << 23)    // PHY address
 #define EMAC_MAN_WRITE          (0x1 << 28)             // Transfer is a write
 #define EMAC_MAN_READ           (0x2 << 28)             // Transfer is a read
 #define EMAC_MAN_HIGH           BIT30                   // Must be set
+#define EMAC_MAN_LOW            BIT31 
 
 // Bit assignments for Receive Buffer Descriptor
 // Address - Word 0
