@@ -23,6 +23,8 @@
 #include <fcntl.h>
 #include <stdio.h>
  
+#define RXGEN960_INIT
+
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>

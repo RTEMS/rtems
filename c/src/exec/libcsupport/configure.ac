@@ -39,9 +39,5 @@ AM_CONFIG_HEADER(libc/config.h)
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 include/Makefile
-include/rtems/Makefile
-include/sys/Makefile
-include/motorola/Makefile
-include/zilog/Makefile
 libc/Makefile])
 AC_OUTPUT

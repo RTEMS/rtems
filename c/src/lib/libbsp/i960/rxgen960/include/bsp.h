@@ -112,18 +112,13 @@ static inline i960_PRCB *get_prcb( void )
   return ( _prcb );
 }
 
-/*
-#ifdef C961_INIT
+#ifdef RXGEN960_INIT
 #undef BSP_EXTERN
 #define BSP_EXTERN
 #else
 #undef BSP_EXTERN
 #define BSP_EXTERN extern
 #endif
-*/
-
-#undef BSP_EXTERN
-#define BSP_EXTERN
 
 /* miscellaneous stuff assumed to exist */
 

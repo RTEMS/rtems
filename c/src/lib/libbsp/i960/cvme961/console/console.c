@@ -11,8 +11,6 @@
  *  $Id$
  */
 
-#define C961_INIT
-
 #include <bsp.h>
 #include <rtems/libio.h>
 

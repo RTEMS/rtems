@@ -1,3 +1,12 @@
+2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/zilog/Makefile.am: Remove.
+	* include/motorola/Makefile.am: Remove.
+	* include/sys/Makefile.am: Remove.
+	* include/rtems/Makefile.am: Remove.
+	* include/Makefile.am: Handle subdirs, require automake-1.5
+	* Makefile.am: Require automake-1.5.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* include/chain.h: Fixed typo.
