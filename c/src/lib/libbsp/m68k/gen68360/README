@@ -9,6 +9,14 @@
 #
 
 #
+#  As of 1998/01/22, no gcc version (gcc 2.8.0 and egcs 1.0 are current)
+#  includes proper multilib support for the 68360.  This is basically
+#  a m68020 without bitfields from gcc's perspective and there is
+#  no multilib entry which corresponds to this.  See the tool build
+#  INSTRUCTIONS for information on how to address this.
+#
+
+#
 # Please send any comments, improvements, or bug reports to:
 #	W. Eric Norum
 #	Saskatchewan Accelerator Laboratory
