@@ -28,10 +28,12 @@ typedef	unsigned int		vm_size_t;
 #include "../machine/param.h"
 
 #include <sys/time.h>
+/*
 struct  itimerval {
   struct  timeval it_interval;
   struct  timeval it_value;
 };
+*/
 struct mdproc {
 	int	md_flags;
 	int	*md_regs;

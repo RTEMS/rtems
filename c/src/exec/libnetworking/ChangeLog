@@ -1,3 +1,13 @@
+2000-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	* POSIX include files merged into newlib.  This resulted in
+	some definitions moving to other files and thus some secondary
+	effects in RTEMS source code.
+	* machine/types.h: Added _CLOCKID_T_ and _TIMER_T_ to be in sync
+	with newlib's <machine/types.h>.
+	* rtems/rtems_bsdnet_internal.h: newlib now includes definition
+	of struct itimerval in <sys/time.h>.
+
 2000-10-25      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.

@@ -26,6 +26,8 @@ typedef unsigned8	u_int8_t;
 
 #define	_CLOCK_T_	unsigned long
 #define	_TIME_T_	long
+#define _CLOCKID_T_     unsigned long
+#define _TIMER_T_       unsigned long
 
 #ifdef _COMPILING_BSD_KERNEL_
 #include <rtems/rtems_bsdnet_internal.h>
