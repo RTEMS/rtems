@@ -1,5 +1,10 @@
 2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* make/Cygwin-posix.cfg: Remove DEFINES + LIBC_DEFINES (Meaningless
+	with Cygwin and now unused).
+
+2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* make/Linux-posix.cfg: Merge LIBC_DEFINES into CPU_CFLAGS.
 
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
