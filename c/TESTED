@@ -2,55 +2,50 @@
 #  $Id$
 #
 
-The RTEMS Project does not have all of the development computers or
-target boards included in the RTEMS distribution.  Many of the BSPs
-are user supplied and we try to insure that they compile before each
-full release.  This file describes the range of configurations the 
-RTEMS project can internally test.
+This file is current as of the 3.5.17 snapshot.
 
-Host Development Systems
-========================
+The RTEMS project uses SparcStations running the Solaris 2.3 operating
+system internally for development.  This release has been tested on the
+following Languages/CPUs/Targets using Solaris 2.3/SPARC as the host
+environment:
 
-All RTEMS development is done on a Sun SPARCStation running Solaris 2.3 and
-all other host systems are not tested internally.
+            CPU     CPU
+  LANGUAGE FAMILY  MODEL         TARGET             SUITES
+  ======== ====== ========= =================== ===============
+     C      m68k   m68000    efi68k                 (note 1)
+     C      m68k   m68020    Motorola MVME136      ALL TESTS
+     C      m68k   m68020    Motorola MVME147       (note 1)
+     C      m68k  m68lc040   Motorola MVME162       (note 1)
+     C      m68k  m68ec040   Motorola IDP           (note 1)
+     C      m68k   m68020    DY-4 DMV152            (note 1)
+     C      m68k   m68302    generic 68302          (note 1)
+     C      m68k   m68332    efi332                 (note 1)
+     C      m68k   m68302    generic 68360          (note 1)
+     C      i386  i386_fp    Force CPU-386         ALL TESTS
+     C      i386   i486      DJGPP/PC-AT           ALL TESTS
+     C      i386  pentium    DJGPP/PC-AT           ALL TESTS
+     C      i960  i960ca     Cyclone CVME961        (note 4)
+     C      hppa  hppa7100   simhppa                (note 1)
+     C      ppc    403       Papyrus                (note 1)
+     C      UNIX     NA      Solaris 2 (SPARC)     ALL TESTS (inlines)
+     C      UNIX     NA      Solaris 2 (SPARC)     ALL TESTS (macros)
+     C      UNIX     NA      Linux (i386)          NOT TESTED
+     C      UNIX     NA      HPUX (PA-RISC)         (note 2)
+     C     no_cpu    NA      no_bsp                 (note 3)
 
-Target Systems
-==============
+NOTES:
 
-The following table describes the testability of each BSP by the RTEMS project:
+"NOT TESTED" indicates that this was not tested in the testing cycle
+immediately preceding the snapshot.
 
-    CPU     CPU
-   FAMILY  MODEL         TARGET              STATUS
-   ====== ========= =================== =================
-    m68k   m68000    efi68k                 (note 1)
-    m68k   m68020    Motorola MVME136   TESTED INTERNALLY
-    m68k  m68lc040   Motorola MVME162       (note 1)
-    m68k  m68ec040   Motorola IDP           (note 1)
-    m68k   m68020    DY-4 DMV152            (note 1)
-    m68k   m68302    generic 68302          (note 1)
-    m68k   m68332    efi332                 (note 1)
-    i386  i386_fp    Force CPU-386      TESTED INTERNALLY
-    i386   i486      DJGPP/PC-AT        TESTED INTERNALLY
-    i386  pentium    DJGPP/PC-AT        TESTED INTERNALLY
-    i960  i960ca     Cyclone CVME961        (note 4)
-    hppa  hppa7100   simhppa                (note 2)
-    ppc    403       Papyrus                (note 2)
-    UNIX     NA      Solaris 2 (SPARC)  TESTED INTERNALLY (inlines)
-    UNIX     NA      Solaris 2 (SPARC)  TESTED INTERNALLY (macros)
-    UNIX     NA      Linux (i386)           (note 5)
-    UNIX     NA      HPUX (PA-RISC)         (note 2)
-   no_cpu    NA      no_bsp                 (note 3)
-
- 
 (1) Target board is not owned by RTEMS Project.  The target is known
     to compile and link with all appropriate tests successfully.
     If the target does not support multiprocessor configurations, then
     "ALL TESTS" does not include the multiprocessor tests.
- 
-(2) RTEMS Project cannot internally compile or test this target.
- 
-(3) Target is not intended to be executed.  It is only an example.
- 
-(4) The RTEMS Project owns this board but it is broken at the moment.
 
-(5) The RTEMS Project owns a Linux host but does not regularly test this BSP.
+(2) RTEMS Project cannot internally compile or test this target.
+
+(3) Target is not intended to be executed.  It is only an example.
+
+(4) The board owned by the RTEMS Project is broken.  The BSP is known
+    to compile and link with all appropriate tests successfully.
