@@ -8,7 +8,7 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 EXTRA_DIST = Spec.doc
 
 noinst_PROGRAMS = \
-bin2boot
+bin2boot$(EXEEXT)
 
 bin2boot_SOURCES = bin2boot.c
 
@@ -19,7 +19,7 @@ $(PROJECT_ROOT)/pc386/build-tools/bin2boot$(EXEEXT)
 $(PROJECT_ROOT)/pc386/build-tools:
 	$(mkinstalldirs) $@
 
-$(PROJECT_ROOT)/pc386/build-tools/bin2boot$(EXEEXT): bin2boot
+$(PROJECT_ROOT)/pc386/build-tools/bin2boot$(EXEEXT): bin2boot$(EXEEXT)
 	$(INSTALL_PROGRAM) $< $@
 
 ## HACK: install into build-tree
