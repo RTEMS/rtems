@@ -66,12 +66,6 @@ CFLAGS_PROFILE_V=-pg
 CXXFLAGS_PROFILE_V=-pg
 LDFLAGS_PROFILE_V =
 
-# ld flag for incomplete link
-LDFLAGS_INCOMPLETE = -r
-
-# ld flags for profiling, debugging
-LDFLAGS=$(LDFLAGS_PROFILE) $(LDFLAGS_DEBUG)
-
 #
 # Client compiler and support tools
 #
@@ -92,6 +86,10 @@ CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 
+CCAS = $(CC)
+CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
+
+# OBSOLETE: Don't use
 AS = $(CC)
 ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
 
@@ -103,21 +101,9 @@ ${ARCH}/%.o: %.cc
 	test -d $(ARCH) || mkdir $(ARCH)
 	${CXXCOMPILE} -o $@ -c $<
 
-${ARCH}/%.o: %.cpp
-	test -d $(ARCH) || mkdir $(ARCH)
-	${CXXCOMPILE} -o $@ -c $<
-
-${ARCH}/%.o: %.cxx
-	test -d $(ARCH) || mkdir $(ARCH)
-	${CXXCOMPILE} -o $@ -c $<
-
-${ARCH}/%.o: %.C
-	test -d $(ARCH) || mkdir $(ARCH)
-	${CXXCOMPILE} -o $@ -c $<
-
 ${ARCH}/%.o: %.S
 	test -d $(ARCH) || mkdir $(ARCH)
-	${ASCOMPILE} -DASM -o $@ -c $<
+	${CCASCOMPILE} -DASM -o $@ -c $<
 
 # Dependency files for use by gmake
 # NOTE: we don't put them into $(ARCH)
@@ -219,7 +205,7 @@ if RTEMS_USE_GCC
 ## gcc >= gcc-2.8
 RTEMS_CFLAGS_OPTIMIZE_V =
 RTEMS_CFLAGS_DEBUG_V = -qrtems_debug -Wno-unused
-RTEMS_CFLAGS_PROFILE_V =
+RTEMS_CFLAGS_PROFILE_V = -pg
 
 ## non-gcc
 ## We can't guess what flags might be required here.
