@@ -413,8 +413,9 @@ package RTEMS is
       Not_Owner_Of_Resource,    -- not owner of resource
       Not_Implemented,          -- directive not implemented
       Internal_Error,           -- RTEMS inconsistency detected
+      No_Memory,                -- no memory left in heap
+      IO_Error,                 -- driver IO error
       Proxy_Blocking,           -- internal multiprocessing only
-      No_Memory                 -- no memory left in heap
    );
 
    for Status_Codes'Size use 32;
@@ -446,8 +447,9 @@ package RTEMS is
       Not_Owner_Of_Resource       => 23,
       Not_ImplementeD             => 24,
       Internal_Error              => 25,
-      Proxy_Blocking              => 26,
-      No_Memory                   => 27
+      No_Memory                   => 26,
+      IO_Error                    => 27,
+      Proxy_Blocking              => 28
    );
 
    --
