@@ -1,3 +1,8 @@
+2003-02-14	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 352/rtems_misc
+	* shell/shell.c: make rtems_shell main task an FP enabled task.
+
 2003-01-27	Dan Smisko <dan@balanced.com>
 
 	* stackchk/check.c: Fix problem where _Objects_Get_information()
