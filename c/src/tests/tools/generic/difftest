@@ -92,7 +92,7 @@ do
        mp*)
            mptest=`echo $t | sed 's/_.//'`
            node=`echo $t | sed 's/...._//'`
-           scn_file=mptests/$mptest/node$node/$mptest.scn;;
+           scn_file=mptests/node$node/$mptest.scn;;
        sp*)
            scn_file=sptests/$t.scn;;
        psx*)
