@@ -144,7 +144,6 @@ mc68681_baud_t
 boolean dmv177_z85c30_probe(int minor);
 
 console_tbl	Console_Port_Tbl[] = {
-#if 0
 	{
 		"/dev/com0",			/* sDeviceName */
                 SERIAL_MC68681,                 /* deviceType */
@@ -183,7 +182,6 @@ console_tbl	Console_Port_Tbl[] = {
                 (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
 		DMV170_DUART_IRQ		/* ulIntVector */
 	},
-#endif
 	{
 		"/dev/com3",			/* sDeviceName */
                 SERIAL_Z85C30,                  /* deviceType */
