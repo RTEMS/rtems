@@ -84,9 +84,68 @@ void *POSIX_Init(
   status = pthread_attr_destroy( &destroyed_attr );
   assert( status == EINVAL );
 
+  /* check some errors in pthread_create */
+
+  puts( "Init: pthread_create - EINVAL (attr not initialized)" );
+  status = pthread_create( &Task_id, &destroyed_attr, Task_1, NULL );
+  assert( status == EINVAL );
+
+  /* junk stack address */
+  status = pthread_attr_setstackaddr( &attr, (void *)&schedparam );
+  assert( !status );
+ 
+  /* must go around pthread_attr_setstacksize to set a bad stack size */
+  attr.stacksize = 0;
+ 
+  puts( "Init: pthread_create - EINVAL (stacksize too small)" );
+  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  assert( status == EINVAL );
+
+  status = pthread_attr_init( &attr );
+  assert( !status );
+
+  /* must go around pthread_attr_set routines to set a bad value */
+  attr.inheritsched = -1;
+  
+  puts( "Init: pthread_create - EINVAL (invalid inherit scheduler)" );
+  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  assert( status == EINVAL );
+
+  /* check out the error case for system scope not supported */
+
+  status = pthread_attr_init( &attr );
+  assert( !status );
+
+  /* must go around pthread_attr_set routines to set a bad value */
+  attr.contentionscope = PTHREAD_SCOPE_SYSTEM;
+
+  puts( "Init: pthread_create - ENOSYS (unsupported system contention scope)" );
+  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  assert( status == ENOSYS );
+
+  status = pthread_attr_init( &attr );
+  assert( !status );
+
+  /* now check out pthread_create for inherit scheduler */
+
+  status = pthread_attr_setinheritsched( &attr, PTHREAD_INHERIT_SCHED );
+  assert( !status );
+  
+  puts( "Init: pthread_create - SUCCESSFUL (inherit scheduler)" );
+  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  assert( !status );
+
+  status = pthread_join( Task_id, NULL );
+  assert( !status );
+
+    /* switch to Task_1 */
+
   /* exercise get and set scope */
 
   empty_line();
+
+  status = pthread_attr_init( &attr );
+  assert( !status );
 
   puts( "Init: pthread_attr_setscope - EINVAL (NULL attr)" );
   status = pthread_attr_setscope( NULL, PTHREAD_SCOPE_PROCESS );
