@@ -14,6 +14,7 @@ include $(top_srcdir)/../../../automake/lib.am
 TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a \
     ../untar/$(ARCH)/libuntar-tmp.a ../stackchk/$(ARCH)/libstackchk-tmp.a \
     ../cpuuse/$(ARCH)/libcpuuse-tmp.a ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \
+    ../shell/$(ARCH)/libshell-tmp.a \
     ../dumpbuf/$(ARCH)/libdumpbuf-tmp.a ../devnull/$(ARCH)/libdevnull-tmp.a \
     ../mw-fb/$(ARCH)/libmw-fb-tmp.a
 

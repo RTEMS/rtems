@@ -1,3 +1,9 @@
+2001-04-20  Correo Fernando-ruiz <correo@fernando-ruiz.com>
+
+	* Added initial shell functionality.
+	* Makefile.am, configure.in, wrapup/Makefile.am:
+	* shell/.cvsignore, shell/Makefile.am, shell/README,
+	shell/cmds.c, shell/shell.c, shell/shell.h: New files.
 2001-04-20	Joel Sherrill <joel@OARcorp.com>
 
 	* devnull/devnull.c (null_initialize): Added check to 

@@ -1,0 +1,479 @@
+/*
+ * Author: Fernando RUIZ CASAS
+ *
+ *  Work: fernando.ruiz@ctv.es
+ *  Home: correo@fernando-ruiz.com
+ *
+ * This file is inspired in rtems_monitor & Chris John MyRightBoot
+ * 
+ * But I want to make it more user friendly
+ * A 'monitor' command is added to adapt the call rtems monitor commands
+ * at my call procedure
+ * 
+ * MINIX date.c is adapted to run here. Like a exercise only....
+ *
+ * TODO: A lot of improvements of course. 
+ *      cat, cp, rm, mv, ...
+ *      hexdump,
+ *      
+ *      More? Say me it, please...
+ *      
+ *      The BSP Specific are not welcome here.
+ *      
+ * C&S welcome...
+ *
+ *  $Id$
+ */
+
+#undef  __STRICT_ANSI__ /* fileno() */
+#include <stdio.h>
+#include <termios.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <dirent.h>
+#include <time.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <stddef.h>
+
+#include <rtems.h>
+#include <rtems/monitor.h>
+#include <rtems/score/tod.h>
+
+#include <imfs.h>
+#include <rtems/shell.h>
+
+/* ----------------------------------------------- *
+  - str to int "0xaffe" "0b010010" "0123" "192939"
+ * ----------------------------------------------- */
+int str2int(char * s) {
+ int sign=1;	
+ int base=10;
+ int value=0;
+ int digit;
+ if (!s) return 0;
+ if (*s) {
+  if (*s=='-') {
+   sign=-1;
+   s++;
+   if (!*s) return 0;
+  };
+  if (*s=='0') {
+   s++;
+   switch(*s) {
+    case 'x':
+    case 'X':s++;
+ 	     base=16;
+	     break;
+    case 'b':
+    case 'B':s++;
+	     base=2;
+	     break;
+    default :base=8;
+	     break;
+   }
+  }; 
+  while (*s) {
+   switch(*s) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':digit=*s-'0';
+ 	     break;
+    case 'A':	   
+    case 'B':	   
+    case 'C':	   
+    case 'D':	   
+    case 'E':	   
+    case 'F':digit=*s-'A'+10;
+	     break;
+    case 'a':	   
+    case 'b':	   
+    case 'c':	   
+    case 'd':	   
+    case 'e':	   
+    case 'f':digit=*s-'a'+10;
+	     break;
+    default:return value*sign;	     
+   };
+   if (digit>base) return value*sign;
+   value=value*base+digit;
+   s++;
+  };
+ };
+ return value*sign;	
+}
+/*----------------------------------------------------------------------------*
+ * RAM MEMORY COMMANDS
+ *----------------------------------------------------------------------------*/
+
+#define mdump_adr (current_shell_env->mdump_adr)  /* static value */
+
+int main_mdump(int argc,char * argv[]) {
+ unsigned char n,m,max=0;
+ int adr=mdump_adr;
+ unsigned char * pb;
+ if (argc>1) adr=str2int(argv[1]);
+ if (argc>2) max=str2int(argv[2]);
+ max/=16;
+ if (!max) max=20;
+ for (m=0;m<max;m++) {
+  printf("0x%08X ",adr);
+  pb=(unsigned char*) adr;
+  for (n=0;n<16;n++)
+   printf("%02X%c",pb[n],n==7?'-':' ');
+  for (n=0;n<16;n++) {
+   printf("%c",isprint(pb[n])?pb[n]:'.');
+  };
+  printf("\n");
+  adr+=16;
+ };
+ mdump_adr=adr;
+ return 0;
+}
+/*----------------------------------------------------------------------------*/
+int main_mwdump(int argc,char * argv[]) {
+ unsigned char n,m,max=0;
+ int adr=mdump_adr;
+ unsigned short * pw;
+ if (argc>1) adr=str2int(argv[1]);
+ if (argc>2) max=str2int(argv[2]);
+ max/=16;
+ if (!max) max=20;
+ for (m=0;m<max;m++) {
+  printf("0x%08X ",adr);
+  pw=(unsigned short*) adr;
+  for (n=0;n<8;n++)
+   printf("%02X %02X%c",pw[n]/0x100,pw[n]%0x100,n==3?'-':' ');
+  for (n=0;n<8;n++) {
+   printf("%c",isprint(pw[n]/0x100)?pw[n]/0x100:'.');
+   printf("%c",isprint(pw[n]%0x100)?pw[n]%0x100:'.');
+  };
+  printf("\n");
+  adr+=16;
+ };
+ mdump_adr=adr;
+ return 0;
+}
+/*----------------------------------------------------------------------------*/
+int main_medit(int argc,char * argv[]) {
+ unsigned char * pb;
+ int n,i;
+ if (argc<3) {
+  printf("too few arguments\n");
+  return 0;
+ };
+ pb=(unsigned char*)str2int(argv[1]);
+ i=2;
+ n=0;
+ while (i<=argc) {
+  pb[n++]=str2int(argv[i++])%0x100;
+ }
+ mdump_adr=(int)pb;
+ return main_mdump(0,NULL);
+}
+/*----------------------------------------------------------------------------*/
+int main_mfill(int argc,char * argv[]) {
+ int  adr;
+ int  size;
+ unsigned char value;
+ if (argc<4) {
+  printf("too few arguments\n");
+  return 0;
+ };
+ adr  =str2int(argv[1]);
+ size =str2int(argv[2]);
+ value=str2int(argv[3])%0x100;
+ memset((unsigned char*)adr,size,value);
+ mdump_adr=adr;
+ return main_mdump(0,NULL);
+}
+/*----------------------------------------------------------------------------*/
+int main_mmove(int argc,char * argv[]) {
+ int  src;
+ int  dst;
+ int  size;
+ if (argc<4) {
+  printf("too few arguments\n");
+  return 0;
+ };
+ dst  =str2int(argv[1]);
+ src  =str2int(argv[2]);
+ size =str2int(argv[3]);
+ memcpy((unsigned char*)dst,(unsigned char*)src,size);
+ mdump_adr=dst;
+ return main_mdump(0,NULL);
+}
+/*----------------------------------------------------------------------------*/
+#ifdef MALLOC_STATS  /* /rtems/s/src/lib/libc/malloc.c */
+int main_malloc_dump(int argc,char * argv[]) {
+ void malloc_dump(void); 
+ malloc_dump();	
+ return 0;
+}
+#endif
+/*----------------------------------------------------------------------------
+ * Reset. Assumes that the watchdog is present.
+ *----------------------------------------------------------------------------*/
+int main_reset (int argc, char **argv)
+{
+  rtems_interrupt_level level;
+  printf ("Waiting for watchdog ... ");
+  tcdrain(fileno(stdout));
+
+  rtems_interrupt_disable (level);
+  for (;;) 
+      ;
+  return 0;
+}
+/*----------------------------------------------------------------------------
+ * Alias. make an alias
+ *----------------------------------------------------------------------------*/
+int main_alias (int argc, char **argv)
+{
+ if (argc<3) {
+  printf("too few arguments\n");
+  return 1;
+ };
+ if (!shell_alias_cmd(argv[1],argv[2])) {
+  printf("unable to make an alias(%s,%s)\n",argv[1],argv[2]);
+ };
+ return 0;
+}  
+/*-----------------------------------------------------------*  	
+ * Directory commands
+ *-----------------------------------------------------------*/
+int main_ls(int argc, char *argv[])
+{
+   char * fname;
+   DIR                 *dirp;
+   struct dirent       *dp;
+   struct stat         stat_buf;
+   char   sbuf[256];
+   char   nbuf[1024];
+   int  n,size;
+
+   fname=".";
+   if (argc>1) fname=argv[1];
+
+   if ((dirp = opendir(fname)) == NULL)
+   {
+      printf("%s: No such file or directory.\n", fname);
+      return errno;
+   }
+   n=0;
+   size=0;
+   while ((dp = readdir(dirp)) != NULL)
+   {
+      strcpy(nbuf,fname);
+      if (nbuf[strlen(nbuf)-1]!='/') strcat(nbuf,"/");
+      strcat(nbuf,dp->d_name); /* always the fullpathname. Avoid ftpd problem.*/
+      if (stat(nbuf, &stat_buf) == 0)
+      { /* AWFUL buts works...*/
+	 strftime(sbuf,sizeof(sbuf)-1,"%b %d %H:%M",gmtime(&stat_buf.st_atime));     
+         printf("%c%c%c%c%c%c%c%c%c%c %3d rtems  rtems  %11d %s %s%c\n",
+                 (S_ISLNK(stat_buf.st_mode)?('l'):
+                    (S_ISDIR(stat_buf.st_mode)?('d'):('-'))),
+                 (stat_buf.st_mode & S_IRUSR)?('r'):('-'),
+                 (stat_buf.st_mode & S_IWUSR)?('w'):('-'),
+                 (stat_buf.st_mode & S_IXUSR)?('x'):('-'),
+                 (stat_buf.st_mode & S_IRGRP)?('r'):('-'),
+                 (stat_buf.st_mode & S_IWGRP)?('w'):('-'),
+                 (stat_buf.st_mode & S_IXGRP)?('x'):('-'),
+                 (stat_buf.st_mode & S_IROTH)?('r'):('-'),
+                 (stat_buf.st_mode & S_IWOTH)?('w'):('-'),
+                 (stat_buf.st_mode & S_IXOTH)?('x'):('-'),
+                 (int)stat_buf.st_nlink,
+                 (int)stat_buf.st_size,
+		 sbuf,
+                 dp->d_name,
+                 S_ISDIR(stat_buf.st_mode)?'/':' ');
+	 n++;
+	 size+=stat_buf.st_size;
+      }
+   }
+   printf("%d files %d bytes occupied\n",n,size);
+   closedir(dirp);
+   return 0;
+}
+/*-----------------------------------------------------------*/  	
+int main_pwd (int argc, char *argv[]) {
+   char dir[1024];
+   getcwd(dir,1024);
+   printf("%s\n",dir);
+   return 0;
+}
+/*-----------------------------------------------------------*/  	
+int main_chdir (int argc, char *argv[]) {
+   char *dir;
+   dir="/";
+   if (argc>1) dir=argv[1];
+   if (chdir(dir)) {
+    printf("chdir to '%s' failed:%s\n",dir,strerror(errno));
+    return errno;
+   }; 
+   return 0;
+}
+/*-----------------------------------------------------------*/  	
+int main_mkdir (int argc, char *argv[]) {
+   char *dir;
+   dir=NULL;
+   if (argc>1) dir=argv[1];
+   if (mkdir(dir,S_IRWXU|S_IRWXG|S_IRWXO)) {
+     printf("mkdir '%s' failed:%s\n",dir,strerror(errno));
+   };  
+   return errno;
+}
+/*-----------------------------------------------------------*/  	
+int main_rmdir (int argc, char *argv[])
+{
+   char *dir;
+   dir=NULL;
+   if (argc>1) dir=argv[1];
+   if (rmdir(dir)) printf("rmdir '%s' failed:%s\n",dir,strerror(errno));
+   return errno;
+}
+/*-----------------------------------------------------------*/  	
+int main_chroot(int argc,char * argv[]) {
+ char * new_root="/";
+ if (argc==2) new_root=argv[1];
+ if (chroot(new_root)<0) {
+  printf("error %s:chroot(%s);\n",strerror(errno),new_root);
+  return -1;
+ };
+ return 0;
+}
+/*-----------------------------------------------------------*/  	
+/* date - print or set time and date		Author: Jan Looyen */
+/* MINIX 1.5 GPL'ed */
+
+
+#define	MIN	60L		/* # seconds in a minute */
+#define	HOUR	(60 * MIN)	/* # seconds in an hour */
+#define	DAY	(24 * HOUR)	/* # seconds in a day */
+#define	YEAR	(365 * DAY)	/* # seconds in a year */
+
+static int conv(unsigned32 *value,char **ptr,unsigned32 max) 
+{
+  int buf;
+  *ptr -= 2;
+  buf = atoi(*ptr);
+  **ptr = 0;
+  if (buf < 0 || buf > max) {
+   fprintf(stderr, "Date: bad conversion\n");
+   return 0;
+  }; 
+  *value=buf;
+  return 1;
+}
+
+static int set_time(char *t) 
+{
+  rtems_time_of_day tod;	
+  FILE * rtc;
+  char *tp;
+  int len;
+  if (rtems_clock_get(RTEMS_CLOCK_GET_TOD,&tod)!=RTEMS_SUCCESSFUL) 
+	  memset(&tod,0,sizeof(tod));
+  len = strlen(t);
+  if (len != 12 && len != 10 && len != 6 && len != 4) return 0;
+  tp = t;
+  while (*tp)
+   if (!isdigit(*tp++)) {
+    fprintf(stderr, "date: bad conversion\n");
+    return 0;
+   };
+  if (len == 6 || len == 12) 
+   if (!conv(&tod.second,&tp, 59)) return 0;
+  if (!conv(&tod.minute,&tp, 59)) return 0;
+  if (!conv(&tod.hour,&tp, 23)) return 0;
+  if (len == 12 || len == 10) {
+   if (!conv(&tod.year,&tp, 99)) return 0;
+   tod.year+=1900;
+   if (tod.year<TOD_BASE_YEAR) tod.year+=100;
+   if (!conv(&tod.day   ,&tp, 31)) return 0;
+   if (!conv(&tod.month ,&tp, 12)) return 0;
+  }
+  if (!_TOD_Validate(&tod)) {
+    fprintf(stderr, "Invalid date value\n");
+  } else {
+   rtems_clock_set(&tod);	  
+   rtems_clock_get(RTEMS_CLOCK_GET_TOD,&tod);	  
+   rtc=fopen("/dev/rtc","r+");
+   if (rtc) {
+    fwrite(&tod,sizeof(tod),1,rtc);
+    fclose(rtc);
+   };
+  };
+  return 1;
+}
+
+int main_date(int argc,char *argv[]) 
+{
+  time_t t;
+  if (argc == 2) set_time(argv[1]);
+  time(&t);
+  printf("%s", ctime(&t));
+  return 0;
+}
+/*-----------------------------------------------------------*  	
+ * with this you can call at all the rtems monitor commands.
+ * Not all work fine but you can show the rtems status and more.
+ *-----------------------------------------------------------*/  	
+int main_monitor(int argc,char * argv[]) {
+ rtems_monitor_command_entry_t *command;
+ extern rtems_monitor_command_entry_t rtems_monitor_commands[];
+ rtems_task_ident(RTEMS_SELF,0,&rtems_monitor_task_id);
+ rtems_monitor_node = rtems_get_node(rtems_monitor_task_id);
+ rtems_monitor_default_node = rtems_monitor_node;
+ if ((command=rtems_monitor_command_lookup(rtems_monitor_commands,argc,argv)))
+  command->command_function(argc, argv, command->command_arg, 0);
+ return 0;
+}
+/*-----------------------------------------------------------*/  	
+void register_cmds(void) {
+  rtems_monitor_command_entry_t *command;
+  extern rtems_monitor_command_entry_t rtems_monitor_commands[];
+  /* dir[ectories] topic */
+  shell_add_cmd  ("ls"    ,"dir","ls [dir]     # list files in the directory" ,main_ls   );
+  shell_add_cmd  ("chdir" ,"dir","chdir [dir]  # change the current directory",main_chdir);
+  shell_add_cmd  ("rmdir" ,"dir","rmdir  dir   # remove directory"            ,main_rmdir);
+  shell_add_cmd  ("mkdir" ,"dir","mkdir  dir   # make a directory"            ,main_mkdir);
+  shell_add_cmd  ("pwd"   ,"dir","pwd          # print work directory"        ,main_pwd  );
+  shell_add_cmd  ("chroot","dir","chroot [dir] # change the root directory"   ,main_chroot);
+
+  shell_alias_cmd("ls"    ,"dir");
+  shell_alias_cmd("chdir" ,"cd");
+
+  /* misc. topic */
+  shell_add_cmd  ("date" ,"misc","date [[MMDDYY]hhmm[ss]]"                    ,main_date);
+  shell_add_cmd  ("reset","misc","reset the BSP"                              ,main_reset);
+  shell_add_cmd  ("alias","misc","alias old new"                              ,main_alias);
+
+  /* memory topic */
+  shell_add_cmd  ("mdump","mem"  ,"mdump [adr [size]]"           ,main_mdump);
+  shell_add_cmd  ("wdump","mem"  ,"wdump [adr [size]]"           ,main_mwdump);
+  shell_add_cmd  ("medit","mem"  ,"medit adr value [value ...]"  ,main_medit);
+  shell_add_cmd  ("mfill","mem"  ,"mfill adr size value"         ,main_mfill);
+  shell_add_cmd  ("mmove","mem"  ,"mmove dst src size"           ,main_mmove);
+#ifdef MALLOC_STATS  /* /rtems/s/src/lib/libc/malloc.c */
+  shell_add_cmd  ("malloc","mem","mem  show memory malloc'ed"                 ,main_mem);
+#endif  
+  /* monitor topic */
+  command=rtems_monitor_commands;
+  while (command) {
+   shell_add_cmd(command->command,"monitor",
+                 command->usage  ,main_monitor);
+   command=command->next;
+  };
+}
+/*-----------------------------------------------------------*/  	
