@@ -37,6 +37,8 @@ void *Task_1_through_3(
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
+#define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  10
+
 #include <confdefs.h>
 
 /* global variables */
