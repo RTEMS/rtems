@@ -3,4 +3,6 @@
 #
 
 This is an example user application using pppd.  It is built using
-the RTEMS application Makefiles.
+the RTEMS application Makefiles.  The file Makefile-user should
+be renamed to Makefile or the -f option given to make.  The file
+is renamed to avoid bootstrap -c removing it.
