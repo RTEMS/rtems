@@ -26,9 +26,7 @@ aclocal/check-bsps.m4 \
 aclocal/check-bsp-cache.m4 \
 aclocal/check-cpu.m4 \
 aclocal/check-cxx.m4 \
-aclocal/check-files-in.m4 \
 aclocal/check-itron.m4 \
-aclocal/check-makefile.m4 \
 aclocal/check-multiprocessing.m4 \
 aclocal/check-networking.m4 \
 aclocal/check-newlib.m4 \
