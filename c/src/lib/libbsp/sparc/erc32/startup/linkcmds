@@ -94,8 +94,10 @@ SECTIONS
     *(.text)
     . = ALIGN (16);
 
-    *(.eh_fram)
+    *(.eh_frame)
     . = ALIGN (16);
+
+    *(.gnu.linkonce.t*)
 
     /*
      * C++ constructors
@@ -110,18 +112,14 @@ SECTIONS
     *(.dtors)
     LONG(0)
     __DTOR_END__ = .;
+
+    _rodata_start = . ;
+    *(.rodata)
+    *(.gnu.linkonce.r*)
+    _erodata = ALIGN( 0x10 ) ;
+
     etext = ALIGN(0x10);
     _etext = .;
-    __CTOR_LIST__ = .;
-    LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
-    *(.ctors)
-    LONG(0)
-    __CTOR_END__ = .;
-    __DTOR_LIST__ = .;
-    LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
-    *(.dtors)
-    LONG(0)
-    __DTOR_END__ = .;
     *(.lit)
     *(.shdata)
     _endtext = .;
@@ -140,7 +138,8 @@ SECTIONS
     _data_start = .;
     _sdata = . ;
     *(.data)
-    CONSTRUCTORS
+    *(.gnu.linkonce.d*)
+    *(.gcc_except_table)
     edata = ALIGN(0x10);
     _edata = .;
   } > ram
