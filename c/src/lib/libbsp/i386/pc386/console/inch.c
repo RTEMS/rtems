@@ -71,6 +71,18 @@ static char             kbd_buffer[KBD_BUF_SIZE];
 static rtems_unsigned16 kbd_first = 0;
 static rtems_unsigned16 kbd_last  = 0;
 
+/*-------------------------------------------------------------------------+
+|         Function: rtemsReboot
+|      Description: Reboot the PC.
+| Global Variables: None.
+|        Arguments: None.
+|          Returns: Nothing.
++--------------------------------------------------------------------------*/
+void rtemsReboot(void)
+{
+  /* shutdown and reboot */
+  outport_byte(0x64, 0xFE);        /* use keyboard controler to do the job... */
+} /* rtemsReboot */
 
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_scankey
