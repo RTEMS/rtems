@@ -171,6 +171,24 @@ Tasks in an RTEMS system must always be in one of the
 five allowable task states.  These states are: executing, ready,
 blocked, dormant, and non-existent.
 
+A task occupies the non-existent state before a
+@code{@value{DIRPREFIX}task_create} has been
+issued on its behalf.  A task enters the
+non-existent state from any other state in the system when it is
+deleted with the @code{@value{DIRPREFIX}task_delete}
+directive.  While a task occupies
+this state it does not have a TCB or a task ID assigned to it;
+therefore, no other tasks in the system may reference this task.
+
+When a task is created via the @code{@value{DIRPREFIX}task_create} directive
+it enters the dormant state.  This state is not entered through
+any other means.  Although the task exists in the system, it
+cannot actively compete for system resources.  It will remain in
+the dormant state until it is started via the @code{@value{DIRPREFIX}task_start}
+directive, at which time it enters the ready state.  The task is
+now permitted to be scheduled for the processor and to compete
+for other system resources.
+
 @ifset use-ascii
 @example
 @group
@@ -205,7 +223,8 @@ blocked, dormant, and non-existent.
 @end ifset
 
 @ifset use-tex
-@c for now use the ascii version
+@c @page
+@c @image{states,5in,4in}
 @example
 @group
      +-------------------------------------------------------------+
@@ -236,33 +255,13 @@ blocked, dormant, and non-existent.
      +-------------------------------------------------------------+
 @end group
 @end example
-@tex
-@end tex
 @end ifset
 
 @ifset use-html
 @html
-<IMG SRC="states.gif" WIDTH=550 HEIGHT=400 ALT="RTEMS Task States">
+<IMG SRC="states.png" WIDTH=550 HEIGHT=400 ALT="RTEMS Task States">
 @end html
 @end ifset
-
-A task occupies the non-existent state before a
-@code{@value{DIRPREFIX}task_create} has been
-issued on its behalf.  A task enters the
-non-existent state from any other state in the system when it is
-deleted with the @code{@value{DIRPREFIX}task_delete}
-directive.  While a task occupies
-this state it does not have a TCB or a task ID assigned to it;
-therefore, no other tasks in the system may reference this task.
-
-When a task is created via the @code{@value{DIRPREFIX}task_create} directive
-it enters the dormant state.  This state is not entered through
-any other means.  Although the task exists in the system, it
-cannot actively compete for system resources.  It will remain in
-the dormant state until it is started via the @code{@value{DIRPREFIX}task_start}
-directive, at which time it enters the ready state.  The task is
-now permitted to be scheduled for the processor and to compete
-for other system resources.
 
 A task occupies the blocked state whenever it is
 unable to be scheduled to run.  A running task may block itself

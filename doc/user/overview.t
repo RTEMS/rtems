@@ -270,7 +270,7 @@ application systems.  The following figure illustrates this organization:
 
 @ifset use-html
 @html
-<IMG SRC="rtemspie.gif" WIDTH=500 HEIGHT=300 ALT="RTEMS Architecture">
+<IMG SRC="rtemspie.png" WIDTH=500 HEIGHT=300 ALT="RTEMS Architecture">
 @end html
 @end ifset
 Subsequent chapters present a detailed description of the capabilities

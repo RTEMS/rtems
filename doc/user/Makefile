@@ -54,7 +54,7 @@ $(PROJECT).dvi: $(FILES)
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_user
-	cp rtemsarc.gif rtemspie.gif states.gif $(WWW_INSTALL)/c_user
+	cp rtemsarc.png rtemspie.png states.png $(WWW_INSTALL)/c_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
