@@ -29,6 +29,8 @@ AM_CPPFLAGS += -DUSE_INIT_FINI -I @srcdir@/../../shared/gdbstub
 $(PGM): $(OBJS)
 	$(make-rel)
 
+bsplib_DATA = linkcmds linkcmds.prom linkcmds.bootp
+
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
