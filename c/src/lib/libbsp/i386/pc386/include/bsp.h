@@ -140,13 +140,6 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #define	TIMER_TICK     1193182  /* The internal tick rate in ticks per second */
 
 /*-------------------------------------------------------------------------+
-| Define the time limits for RTEMS Test Suite test durations. Long test and
-| short test duration limits are provided. These values are in seconds and
-| need to be converted to ticks for the application.
-+--------------------------------------------------------------------------*/
-#define MAX_LONG_TEST_DURATION       300  /* 5 minutes = 300 seconds */
-
-/*-------------------------------------------------------------------------+
 | Macros
 +--------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------+

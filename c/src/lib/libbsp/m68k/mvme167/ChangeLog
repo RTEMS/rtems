@@ -1,5 +1,10 @@
 2004-04-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	PR 613/bsps
+	* include/bsp.h: Remove MAX_LONG_TEST_DURATION.
+
+2004-04-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	PR 614/bsps
 	* include/bsp.h: Remove MAX_SHORT_TEST_DURATION (Unused).
 

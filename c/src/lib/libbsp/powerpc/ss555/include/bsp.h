@@ -76,16 +76,6 @@ typedef struct cpld_ {
 extern volatile cpld_t cpld;              /* defined in linkcmds */
 
 /*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-
-/*
  * Stuff for Time Test 27
  *
  * The following require that IRQ7 be jumpered to ground.  On the SS555,

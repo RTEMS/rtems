@@ -28,15 +28,6 @@
 #define DUART_ADDR	0xb00003   /* base address of the MC68681 DUART */
 
 /*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- */
-
-#define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-
-/*
  *  Define the interrupt mechanism for Time Test 27
  *
  *  NOTE: tm27 apparently not supported.

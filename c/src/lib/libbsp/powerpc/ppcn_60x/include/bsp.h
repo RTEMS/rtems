@@ -355,16 +355,6 @@ void InitializeNvRAM(void);
   (int) (((_value) * 4000) / (ulCpuBusClock/10000))
 
 /*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-
-/*
  *  Stuff for Time Test 27
  */
 

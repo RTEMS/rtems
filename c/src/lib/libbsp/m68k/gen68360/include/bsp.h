@@ -55,16 +55,6 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_scc1_driver_attach
 
 /*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-
-/*
  *  Stuff for Time Test 27
  *  Don't bother with hardware -- just use a software-interrupt
  */

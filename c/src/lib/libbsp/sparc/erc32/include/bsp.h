@@ -54,16 +54,6 @@ extern int rtems_erc32_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_erc32_sonic_driver_attach
 
 /*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       3   /* 3 seconds */
-
-/*
  *  Define the interrupt mechanism for Time Test 27
  *
  *  NOTE: Since the interrupt code for the SPARC supports both synchronous
