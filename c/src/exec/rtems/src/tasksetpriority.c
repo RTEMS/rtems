@@ -83,6 +83,7 @@ rtems_status_code rtems_task_set_priority(
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
+      /* XXX convert from core priority */
       *old_priority = the_thread->current_priority;
       if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
         the_thread->real_priority = new_priority;
