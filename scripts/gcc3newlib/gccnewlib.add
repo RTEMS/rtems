@@ -21,9 +21,10 @@ Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      	gcc@gcc_version@newlib@newlib_version@
 # gcc 3.x and gcc 2.9
+Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
 # Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.bz2
 # gcc 2.95.x
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.bz2
+# Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.bz2
 Source1:	ftp://sources.redhat.com/pub/newlib/newlib-@newlib_version@.tar.gz
 @PATCH1@
 @PATCH3@

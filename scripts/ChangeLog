@@ -1,3 +1,8 @@
+2002-08-21	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, gcc3newlib/gccnewlib.add: Updated the tools for 
+	gcc 3.2 and Ada.
+
 2002-08-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/gccnewlib.add: Re-add i386-rtems Ada.
