@@ -31,7 +31,12 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 # find all the CPU dependent library Makefiles
-RTEMS_CHECK_MAKEFILE($RTEMS_CPU)
+if test -f $srcdir/$RTEMS_CPU/configure.in; then
+  cfg_subdirs="$RTEMS_CPU"
+else
+  RTEMS_CHECK_MAKEFILE($RTEMS_CPU)
+fi
+AC_CONFIG_SUBDIRS($cfg_subdirs)
 
 AC_OUTPUT( 
 Makefile

@@ -5,8 +5,12 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ..
-subdir = powerpc
+top_builddir = .
+
+ACLOCAL = aclocal
+AUTOCONF = autoconf
+ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ACLOCAL_AMFLAGS = -I @RTEMS_TOPdir@/aclocal
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -20,13 +24,21 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 
 ifeq ($(RTEMS_CPU_MODEL),mpc750)
 SHARED_LIB = shared mpc6xx
-endif
+endif 
 ifeq ($(RTEMS_CPU_MODEL),mpc604)
 SHARED_LIB = shared mpc6xx
-endif
+endif 
 
 SUBDIRS = $(SHARED_LIB) $(wildcard $(RTEMS_CPU_MODEL)) wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
-	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+	 && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ configure.in
+	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
+
+config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+	$(SHELL) ./config.status --recheck
+$(srcdir)/configure: @MAINTAINER_MODE_TRUE@$(srcdir)/configure.in $(ACLOCAL_M4)
+	cd $(srcdir) && $(AUTOCONF)

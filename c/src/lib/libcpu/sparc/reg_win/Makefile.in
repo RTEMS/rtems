@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../..
-subdir = sparc/reg_win
+top_builddir = ..
+subdir = reg_win
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
