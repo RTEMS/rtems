@@ -83,6 +83,7 @@ static rtems_irq_connect_data clockIrqData = {PC_386_PERIODIC_TIMER,
 					      ClockOff,
 					      ClockIsOn};
 
+
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -94,7 +95,9 @@ rtems_device_driver Clock_initialize(
   
   Clock_driver_ticks = 0;
 
-  Clock_isrs = Clock_initial_isr_value = BSP_Configuration.microseconds_per_tick / 1000; /* ticks per clock_isr */
+  Clock_isrs = 
+    Clock_initial_isr_value = 
+    BSP_Configuration.microseconds_per_tick / 1000; /* ticks per clock_isr */
   
   /*
    * configure the counter timer ( should be based on microsecs/tick )
@@ -106,9 +109,6 @@ rtems_device_driver Clock_initialize(
   timer_counter_init_value  =  BSP_Configuration.microseconds_per_tick / Clock_isrs;
   clock_lsb = (unsigned char)timer_counter_init_value;
   clock_msb = timer_counter_init_value >> 8;
-
-  printk("timer_counter_init_value = 0x%x, lsb = 0x%x, msb = 0x%x, Clock_isrs = %d\n",timer_counter_init_value,
-	 clock_lsb, clock_msb, Clock_isrs);
   
   outport_byte  ( TMRCON , 0x34 ); 
   outport_byte	( TMR0   , clock_lsb );       /* load LSB first */
