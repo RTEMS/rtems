@@ -589,6 +589,7 @@ int timer_settime(
    rtems_status_code return_v;   /* Return of the calls to RTEMS        */
    int               timer_pos;  /* Position of the timer in the table  */
    rtems_time_of_day rtems_time; /* Time in RTEMS                       */
+   
 
    /* First the position in the table of timers is obtained */
 
@@ -623,7 +624,8 @@ int timer_settime(
 
       /* The old data of the timer are returned */
 
-      COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
+      if ( ovalue )
+        COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
 
       /* The new data are set */
 
@@ -682,7 +684,8 @@ int timer_settime(
               /* Actualizes the data of the structure and 
                * returns the old ones in "ovalue" */
 
-              COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
+              if ( ovalue )
+                COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
 
               COPY_ITIMERSPEC_S ( value, &timer_struct[timer_pos].timer_data );
  
@@ -757,7 +760,8 @@ int timer_settime(
               /* Actualizes the data of the structure and 
                * returns the old ones in "ovalue" */
 
-              COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
+              if ( ovalue )
+                COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
 
               COPY_ITIMERSPEC_S ( value, &timer_struct[timer_pos].timer_data );
  
