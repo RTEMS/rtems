@@ -19,6 +19,10 @@
 
 /*PAGE
  *
+ *  sem_close
+ *  
+ *  Routine to close a semaphore that has been opened or initialized.
+ *  
  *  11.2.4 Close a Named Semaphore, P1003.1b-1993, p.224
  */
 
