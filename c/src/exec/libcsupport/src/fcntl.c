@@ -27,6 +27,8 @@ int fcntl(
 {
   va_list        ap;
   rtems_libio_t *iop;
+  rtems_libio_t *diop;
+  int            fd2;
   
   va_start( ap, cmd );
 
@@ -50,18 +52,22 @@ int fcntl(
 
   switch ( cmd ) {
     case F_DUPFD:        /* dup */
-      /*
-       *  This is how it appears that this case should work:
-       *
-       *     filedes2 = va_arg( ap, int )
-       *     if filedes2 is 0
-       *       duplicate fd into a new descriptor
-       *     else
-       *       duplicate fd into specified descriptor after error checking it
-       *
-       *  See dup2() in case we can eliminate stuff in there.
-       */
-      return -1;
+      fd2 = va_arg( ap, int );
+      if ( fd2 )
+        diop = rtems_libio_iop( fd2 );
+      else {
+        /* allocate a file control block */
+        diop = rtems_libio_allocate();
+        if ( diop == 0 )
+          return -1;
+      }
+
+      diop->handlers   = iop->handlers;
+      diop->file_info  = iop->file_info;
+      diop->flags      = iop->flags;
+      diop->pathinfo   = iop->pathinfo;
+      
+      return 0;
 
     case F_GETFD:        /* get f_flags */
       if ( iop->flags & LIBIO_FLAGS_CLOSE_ON_EXEC )
