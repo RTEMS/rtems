@@ -27,6 +27,6 @@ all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = start.S
+EXTRA_DIST = start.c
 
 include $(top_srcdir)/../../../../../../automake/local.am
