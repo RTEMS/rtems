@@ -1,3 +1,9 @@
+2004-07-25	Thomas Rauscher <trauscher@loytec.com>
+
+	PR 609/rtems
+	* score/src/threaddispatch.c: Close race condition between
+	_Thread_Dispatch and _Thread_Tickle_timeslice.
+
 2004-07-25	Victor Vengerov <Victor.Vengerov@oktetlabs.ru>
 
 	PR 654/rtems

@@ -70,6 +70,8 @@ void _Thread_Dispatch( void )
     _Thread_Executing = heir;
     executing->rtems_ada_self = rtems_ada_self;
     rtems_ada_self = heir->rtems_ada_self;
+    if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
+      heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
     _ISR_Enable( level );
 
     heir->ticks_executed++;
@@ -83,9 +85,6 @@ void _Thread_Dispatch( void )
     }
 
     _User_extensions_Thread_switch( executing, heir );
-
-    if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
-      heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
 
     /*
      *  If the CPU has hardware floating point, then we must address saving
