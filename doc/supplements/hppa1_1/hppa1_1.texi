@@ -116,6 +116,6 @@ There are currently no Command and Variable Index entries.
 There are currently no Concept Index entries.
 @c @printindex cp
 
-@c @contents
+@contents
 @bye
 
