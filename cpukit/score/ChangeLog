@@ -1,3 +1,7 @@
+2003-06-13	Joel Sherrill <joel@OARcorp.com>
+
+	* src/threadloadenv.c: Removed warnings.
+
 2003-06-12	Joel Sherrill <joel@OARcorp.com>
 
 	* src/objectmp.c: Removed warnings.
