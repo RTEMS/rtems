@@ -26,7 +26,7 @@ struct uart_data
 static struct uart_data uart_data[2];
 
 /* 
- * Macros to read/wirte register of uart, if configuration is
+ * Macros to read/write register of uart, if configuration is
  * different just rewrite these macros
  */ 
 
