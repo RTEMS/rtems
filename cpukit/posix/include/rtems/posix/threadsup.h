@@ -26,7 +26,7 @@ typedef struct {
   /*
    *  POSIX Interrupts 
    */
-  unsigned32              interrupts_installed;
+  uint32_t                interrupts_installed;
   CORE_semaphore_Control  Interrupt_Semaphore;
 #endif
 

@@ -34,7 +34,7 @@ typedef struct {
    int                     process_shared;
    boolean                 named;
    boolean                 linked;
-   unsigned32              open_count;
+   uint32_t                open_count;
    CORE_semaphore_Control  Semaphore;
 }  POSIX_Semaphore_Control;
 
@@ -54,7 +54,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Semaphore_Information;
  */
  
 void _POSIX_Semaphore_Manager_initialization(
-  unsigned32 maximum_semaphorees
+  uint32_t   maximum_semaphorees
 );
  
 /*

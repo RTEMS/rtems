@@ -33,7 +33,7 @@
  */
  
 void _POSIX_Mutex_Manager_initialization(
-  unsigned32 maximum_mutexes
+  uint32_t   maximum_mutexes
 )
 {
   _Objects_Initialize_information(

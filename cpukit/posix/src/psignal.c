@@ -153,7 +153,7 @@ void _POSIX_signals_Manager_Initialization(
   int  maximum_queued_signals
 )
 {
-  unsigned32 signo;
+  uint32_t   signo;
 
   /*
    *  Ensure we have the same number of vectors and default vector entries

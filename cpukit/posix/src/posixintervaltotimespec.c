@@ -28,7 +28,7 @@ void _POSIX_Interval_to_timespec(
   struct timespec   *time
 )
 {
-  unsigned32  usecs;
+  uint32_t    usecs;
 
   usecs = ticks * _TOD_Microseconds_per_tick;
 

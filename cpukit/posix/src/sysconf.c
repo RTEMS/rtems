@@ -28,7 +28,7 @@ long sysconf(
       return _TOD_Ticks_per_second;
 
     case _SC_OPEN_MAX: {
-        extern unsigned32 rtems_libio_number_iops;
+        extern uint32_t   rtems_libio_number_iops;
         return rtems_libio_number_iops;
       }
 

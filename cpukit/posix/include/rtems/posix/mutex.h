@@ -55,7 +55,7 @@ extern const pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
  */
  
 void _POSIX_Mutex_Manager_initialization(
-  unsigned32 maximum_mutexes
+  uint32_t   maximum_mutexes
 );
  
 /*

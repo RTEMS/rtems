@@ -71,7 +71,7 @@ POSIX_EXTERN POSIX_Interrupt_Control
  */
  
 void _POSIX_Interrupt_Manager_initialization( 
-  unsigned32  maximum_interrupt_handlers
+  uint32_t    maximum_interrupt_handlers
 );
  
 /*

@@ -30,10 +30,10 @@ void _POSIX_Keys_Run_destructors(
   Thread_Control *thread
 )
 {
-  unsigned32           index;
-  unsigned32           pthread_index;
-  unsigned32           pthread_class;
-  unsigned32           iterations;
+  uint32_t             index;
+  uint32_t             pthread_index;
+  uint32_t             pthread_class;
+  uint32_t             iterations;
   boolean              are_all_null;
   POSIX_Keys_Control  *the_key;
   void                *value;

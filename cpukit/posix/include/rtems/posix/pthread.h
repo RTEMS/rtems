@@ -38,7 +38,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Threads_Information;
  
 POSIX_EXTERN posix_initialization_threads_table 
                    *_POSIX_Threads_User_initialization_threads;
-POSIX_EXTERN unsigned32   _POSIX_Threads_Number_of_initialization_threads;
+POSIX_EXTERN uint32_t     _POSIX_Threads_Number_of_initialization_threads;
 
 extern const pthread_attr_t _POSIX_Threads_Default_attributes;
  
@@ -51,8 +51,8 @@ extern const pthread_attr_t _POSIX_Threads_Default_attributes;
  */
  
 void _POSIX_Threads_Manager_initialization(
-  unsigned32                          maximum_pthreads,
-  unsigned32                          number_of_initialization_threads,
+  uint32_t                            maximum_pthreads,
+  uint32_t                            number_of_initialization_threads,
   posix_initialization_threads_table *user_threads
 );
  

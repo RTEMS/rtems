@@ -43,7 +43,7 @@
  */
  
 int _POSIX_Message_queue_Translate_core_message_queue_return_code(
-  unsigned32 the_message_queue_status
+  uint32_t   the_message_queue_status
 )
 {
   switch ( the_message_queue_status ) {

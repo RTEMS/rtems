@@ -34,10 +34,10 @@
  */
  
 void _POSIX_Interrupt_Manager_initialization( 
-  unsigned32  maximum_interrupt_handlers
+  uint32_t    maximum_interrupt_handlers
 )
 {
-  unsigned32                index;
+  uint32_t                  index;
   POSIX_Interrupt_Control  *the_vector;
 
   _Objects_Initialize_information(

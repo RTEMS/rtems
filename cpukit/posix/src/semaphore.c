@@ -33,7 +33,7 @@
  */
  
 void _POSIX_Semaphore_Manager_initialization(
-  unsigned32 maximum_semaphores
+  uint32_t   maximum_semaphores
 )
 {
   _Objects_Initialize_information(

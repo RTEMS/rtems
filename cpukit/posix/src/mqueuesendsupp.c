@@ -41,8 +41,8 @@
 int _POSIX_Message_queue_Send_support(
   mqd_t               mqdes,
   const char         *msg_ptr,
-  unsigned32          msg_len,
-  unsigned32          msg_prio,
+  uint32_t            msg_len,
+  uint32_t            msg_prio,
   Watchdog_Interval   timeout
 )
 {

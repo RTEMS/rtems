@@ -1,5 +1,26 @@
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* posix/include/rtems/posix/cond.h,
+	posix/include/rtems/posix/intr.h, posix/include/rtems/posix/key.h,
+	posix/include/rtems/posix/mqueue.h,
+	posix/include/rtems/posix/mutex.h,
+	posix/include/rtems/posix/pthread.h,
+	posix/include/rtems/posix/semaphore.h,
+	posix/include/rtems/posix/threadsup.h,
+	posix/include/rtems/posix/timer.h, posix/src/cond.c,
+	posix/src/intr.c, posix/src/key.c, posix/src/keycreate.c,
+	posix/src/keydelete.c, posix/src/keygetspecific.c,
+	posix/src/keyrundestructors.c, posix/src/keysetspecific.c,
+	posix/src/killinfo.c, posix/src/mqueue.c,
+	posix/src/mqueuerecvsupp.c, posix/src/mqueuesendsupp.c,
+	posix/src/mqueuetranslatereturncode.c, posix/src/mutex.c,
+	posix/src/posixintervaltotimespec.c,
+	posix/src/posixtimespecsubtract.c, posix/src/psignal.c,
+	posix/src/pthread.c, posix/src/ptimer1.c, posix/src/semaphore.c,
+	posix/src/sysconf.c: Convert to using c99 fixed size types.
+
+2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* score/include/rtems/system.h: include <stdint.h>.
 
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>

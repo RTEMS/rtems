@@ -50,7 +50,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
  */
  
 void _POSIX_Key_Manager_initialization(
-  unsigned32 maximum_keys
+  uint32_t   maximum_keys
 );
  
 /*

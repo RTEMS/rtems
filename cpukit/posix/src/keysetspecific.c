@@ -27,8 +27,8 @@ int pthread_setspecific(
 )
 {
   register POSIX_Keys_Control *the_key;
-  unsigned32                   index;
-  unsigned32                   class;
+  uint32_t                     index;
+  uint32_t                     class;
   Objects_Locations            location;
  
   the_key = _POSIX_Keys_Get( key, &location );

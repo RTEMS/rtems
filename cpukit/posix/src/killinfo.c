@@ -44,9 +44,9 @@ int killinfo(
 {
   sigset_t                     mask;
   POSIX_API_Control           *api;
-  unsigned32                   the_api;
-  unsigned32                   index;
-  unsigned32                   maximum;
+  uint32_t                     the_api;
+  uint32_t                     index;
+  uint32_t                     maximum;
   Objects_Information         *the_info;
   Objects_Control            **object_table;
   Thread_Control              *the_thread;

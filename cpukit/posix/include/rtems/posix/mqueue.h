@@ -34,7 +34,7 @@ typedef struct {
    int                         process_shared;
    boolean                     named;
    boolean                     linked;
-   unsigned32                  open_count;
+   uint32_t                    open_count;
    CORE_message_queue_Control  Message_queue;
    struct sigevent             notification;
 }  POSIX_Message_queue_Control;
@@ -63,7 +63,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information_fds;
  */
  
 void _POSIX_Message_queue_Manager_initialization(
-  unsigned32 maximum_message_queues
+  uint32_t   maximum_message_queues
 );
  
 /*
@@ -123,8 +123,8 @@ ssize_t _POSIX_Message_queue_Receive_support(
 int _POSIX_Message_queue_Send_support(
   mqd_t               mqdes,
   const char         *msg_ptr,
-  unsigned32          msg_len,
-  unsigned32          msg_prio,
+  uint32_t            msg_len,
+  uint32_t            msg_prio,
   Watchdog_Interval   timeout
 );
 
@@ -231,7 +231,7 @@ RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
  */
 
 int _POSIX_Message_queue_Translate_core_message_queue_return_code(
-  unsigned32 the_message_queue_status
+  uint32_t   the_message_queue_status
 );
 
 

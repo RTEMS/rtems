@@ -31,7 +31,7 @@
  */
  
 void _POSIX_Condition_variables_Manager_initialization(
-  unsigned32 maximum_condition_variables
+  uint32_t   maximum_condition_variables
 )
 {
   _Objects_Initialize_information(

@@ -26,8 +26,8 @@ void *pthread_getspecific(
 )
 {
   register POSIX_Keys_Control *the_key;
-  unsigned32                   index;
-  unsigned32                   class;
+  uint32_t                     index;
+  uint32_t                     class;
   Objects_Locations            location;
   void                        *key_data;
  

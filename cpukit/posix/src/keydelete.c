@@ -27,7 +27,7 @@ int pthread_key_delete(
 {
   register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
-  unsigned32                   the_api;
+  uint32_t                     the_api;
  
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {

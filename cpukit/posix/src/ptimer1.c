@@ -672,11 +672,11 @@ int timer_gettime(
  
   rtems_time_of_day current_time;
   int               timer_pos;
-  unsigned32        hours;
-  unsigned32        minutes;
-  unsigned32        seconds;
-  unsigned32        ticks;
-  unsigned32        nanosec;
+  uint32_t          hours;
+  uint32_t          minutes;
+  uint32_t          seconds;
+  uint32_t          ticks;
+  uint32_t          nanosec;
  
 
   /* Reads the current time */

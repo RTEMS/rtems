@@ -61,8 +61,8 @@ void _POSIX_Threads_Sporadic_budget_TSR(
   void           *argument
 )
 {
-  unsigned32          ticks;
-  unsigned32          new_priority;
+  uint32_t            ticks;
+  uint32_t            new_priority;
   Thread_Control     *the_thread;
   POSIX_API_Control  *api;
 
@@ -102,7 +102,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
 )
 {
   POSIX_API_Control *api;
-  unsigned32         new_priority;
+  uint32_t           new_priority;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
@@ -257,8 +257,8 @@ User_extensions_routine _POSIX_Threads_Exitted_extension(
 void _POSIX_Threads_Initialize_user_threads( void )
 {
   int                                 status;
-  unsigned32                          index;
-  unsigned32                          maximum;
+  uint32_t                            index;
+  uint32_t                            maximum;
   posix_initialization_threads_table *user_threads;
   pthread_t                           thread_id;
   pthread_attr_t                      attr;
@@ -335,8 +335,8 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  */
  
 void _POSIX_Threads_Manager_initialization(
-  unsigned32                          maximum_pthreads,
-  unsigned32                          number_of_initialization_threads,
+  uint32_t                            maximum_pthreads,
+  uint32_t                            number_of_initialization_threads,
   posix_initialization_threads_table *user_threads
   
 )
