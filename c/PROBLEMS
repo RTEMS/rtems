@@ -4,10 +4,17 @@
 
 This is the list of outstanding problems in this release.
 
-+   The POSIX threads and real time extensions code in this tree are
-    not completely tested yet.  Some of the POSIX tests do run but none
-    of the POSIX code is in the normal build path.
++   The POSIX threads and real-time extensions are tested but this is
+    the first release with them included.  They are not enabled by 
+    default.  The environment variable RTEMS_HAS_POSIX_API must be
+    set to "yes" and the C language macro RTEMS_POSIX_API must be defined
+    before this api is included in the build.
 
++   The shell scripts runtest and difftest do not work properly when 
+    testing "debug" executables.
+
++   AMD 29k port is based on a non-GNU toolset.
+ 
 +   The test spfatal is out of date and as a result will NOT execute
     correctly.  The addition of POSIX and consequent ongoing initialization
     reorganization makes it pointless to fix this until the POSIX support
@@ -28,6 +35,10 @@ This is the list of outstanding problems in this release.
 +   Some of the BSPs still define RAM_START and RAM_END in the bsp.h file.
     It is better to define these in the linkcmds file.  It is also nice
     to use the linkcmds file to place overlays for on-board hardware.
+
++   The __read(), __write(), etc. routines should be renamed __rtems_read(),
+    etc. to avoid potential naming conflicts.  [NOTE: This is already
+    necessary under some versions of Linux with the unix port.]
 
 +   The __read() system call in all of the BSPs using single
     character input/output needs to be smarter.  The following
