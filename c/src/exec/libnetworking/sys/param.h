@@ -42,6 +42,8 @@
 #ifndef _SYS_PARAM_H_
 #define _SYS_PARAM_H_
 
+#include <unistd.h>
+
 #define	BSD	199506		/* System version (year & month). */
 #define BSD4_3	1
 #define BSD4_4	1
@@ -168,7 +170,9 @@
  * It should be set high enough to allow all legitimate uses, but halt
  * infinite loops reasonably quickly.
  */
+#if !defined(__rtems__)
 #define	MAXPATHLEN	PATH_MAX
+#endif
 #define MAXSYMLINKS	32
 
 /* Bit map related macros. */

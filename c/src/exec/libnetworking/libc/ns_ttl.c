@@ -15,9 +15,11 @@
  * SOFTWARE.
  */
 
-#ifndef lint
+#if !defined(__rtems__)
+#if !defined(LINT) && !defined(CODECENTER)
 static char rcsid[] = "$Id$";
-#endif
+#endif /* not lint */
+#endif /* not rtems */
 
 /* Import. */
 
@@ -44,7 +46,7 @@ int
 ns_format_ttl(u_long src, char *dst, size_t dstlen) {
 	char *odst = dst;
 	int secs, mins, hours, days, weeks, x;
-	char tmp[50], *p;
+	char *p;
 
 	secs = src % 60;   src /= 60;
 	mins = src % 60;   src /= 60;

@@ -21,7 +21,7 @@ getprotobyname (const char *name)
 
 	for (i = 0 ; i < (sizeof prototab / sizeof prototab[0]) ; i++) {
 		if (strcmp (name, prototab[i].p_name) == 0)
-			return &prototab[i];
+			return (struct protoent *) &prototab[i];
 	}
 	return NULL;
 }
@@ -36,7 +36,7 @@ getprotobynumber (int proto)
 
 	for (i = 0 ; i < (sizeof prototab / sizeof prototab[0]) ; i++) {
 		if (proto == prototab[i].p_proto)
-			return &prototab[i];
+			return (struct protoent *) &prototab[i];
 	}
 	return NULL;
 }

@@ -15,9 +15,11 @@
  * SOFTWARE.
  */
 
-#ifndef lint
+#if !defined(__rtems__)
+#if !defined(LINT) && !defined(CODECENTER)
 static char rcsid[] = "$Id$";
-#endif
+#endif /* not lint */
+#endif /* not rtems */
 
 #include <sys/types.h>
 
@@ -244,7 +246,7 @@ ns_name_unpack(const u_char *msg, const u_char *eom, const u_char *src,
 {
 	const u_char *srcp, *dstlim;
 	u_char *dstp;
-	int n, c, len, checked;
+	int n, len, checked;
 
 	len = -1;
 	checked = 0;

@@ -216,7 +216,7 @@ in_pcbbind(inp, nam)
 			last  = ipport_hilastauto;
 			lastport = &inp->inp_pcbinfo->lasthi;
 		} else if (inp->inp_flags & INP_LOWPORT) {
-			if (error = suser(p->p_ucred, &p->p_acflag))
+			if ((error = suser(p->p_ucred, &p->p_acflag)))
 				return (EACCES);
 			first = ipport_lowfirstauto;	/* 1023 */
 			last  = ipport_lowlastauto;	/* 600 */
@@ -410,7 +410,7 @@ in_pcbconnect(inp, nam)
 	/*
 	 *   Call inner routine, to assign local interface address.
 	 */
-	if (error = in_pcbladdr(inp, nam, &ifaddr))
+	if ((error = in_pcbladdr(inp, nam, &ifaddr)))
 		return(error);
 
 	if (in_pcblookuphash(inp->inp_pcbinfo, sin->sin_addr, sin->sin_port,

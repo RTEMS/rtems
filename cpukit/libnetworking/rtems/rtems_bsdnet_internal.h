@@ -35,7 +35,7 @@ extern void soconnsleep (struct socket *so);
 extern void soconnwakeup (struct socket *so);
 #define splnet()	0
 #define splimp()	0
-#define splx(s)		
+#define splx(_s)	do { (_s) = 0; } while(0)
 
 #define ovbcopy(f,t,n) bcopy(f,t,n)
 #define copyout(f,t,n) (memcpy(t,f,n),0)

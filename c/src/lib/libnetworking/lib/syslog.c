@@ -13,6 +13,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#include <unistd.h>
+
 static int LogStatus = LOG_CONS;
 static const char *LogTag = "syslog";
 static int LogFacility = LOG_USER;

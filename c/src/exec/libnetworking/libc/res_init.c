@@ -337,7 +337,7 @@ res_init()
 			    break;
 			net = cp;
 			while (*cp && !ISSORTMASK(*cp) && *cp != ';' &&
-			       isascii(*cp) && !isspace(*cp))
+			       isascii((int)*cp) && !isspace((int)*cp))
 				cp++;
 			n = *cp;
 			*cp = 0;
@@ -347,7 +347,7 @@ res_init()
 				*cp++ = n;
 				net = cp;
 				while (*cp && *cp != ';' &&
-					isascii(*cp) && !isspace(*cp))
+					isascii((int)*cp) && !isspace((int)*cp))
 				    cp++;
 				n = *cp;
 				*cp = 0;

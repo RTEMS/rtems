@@ -20,9 +20,11 @@
  * <viraj_bais@ccm.fm.intel.com>
  */
 
+#if !defined(__rtems__)
 #if !defined(lint) && !defined(SABER)
 static char rcsid[] = "$Id$";
 #endif /* not lint */
+#endif /* not rtems */
 
 #include <sys/types.h>
 #include <sys/param.h>
@@ -64,9 +66,9 @@ int
 res_mkupdate(ns_updrec *rrecp_in, u_char *buf, int buflen) {
 	ns_updrec *rrecp_start = rrecp_in;
 	HEADER *hp;
-	u_char c, *cp, *cp1, *sp1, *sp2, *startp, *endp;
-	int n, i, j, found, soanum, multiline;
-	ns_updrec *rrecp, *tmprrecp, *recptr = NULL;
+	u_char *cp, *sp1, *sp2, *startp, *endp;
+	int n, i, soanum, multiline;
+	ns_updrec *rrecp;
 	struct in_addr ina;
         char buf2[MAXDNAME];
 	int section, numrrs = 0, counts[ns_s_max];
@@ -350,7 +352,6 @@ static int
 getnum_str(u_char **startpp, u_char *endp) {
         int c, n;
         int seendigit = 0;
-        int seendecimal = 0;
         int m = 0;
 
         for (n = 0; *startpp <= endp; ) {

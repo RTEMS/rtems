@@ -79,9 +79,11 @@ int	 skpc __P((int, int, char *));
 void	 srandom __P((u_long));
 char	*strcat __P((char *, const char *));
 int	 strcmp __P((const char *, const char *));
+char	*strdup __P((const char *s));
 char	*strcpy __P((char *, const char *));
 size_t	 strlen __P((const char *));
 int	 strncmp __P((const char *, const char *, size_t));
 char	*strncpy __P((char *, const char *, size_t));
+char	*strerror __P((int errnum));
 
 #endif /* !_SYS_LIBKERN_H_ */

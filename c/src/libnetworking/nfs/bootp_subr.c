@@ -69,7 +69,6 @@
 #include <nfs/krpc.h>
 #include <nfs/xdr_subs.h>
 
-
 #define BOOTP_MIN_LEN		300	/* Minimum size of bootp udp packet */
 
 /*
@@ -106,6 +105,7 @@ extern int nfs_diskless_valid;
 extern struct nfsv3_diskless nfsv3_diskless;
 
 /* mountd RPC */
+#if !defined(__rtems__)
 static int md_mount __P((struct sockaddr_in *mdsin, char *path,
 	u_char *fhp, int *fhsizep, struct nfs_args *args,struct proc *procp));
 static int md_lookup_swap __P((struct sockaddr_in *mdsin,char *path,
@@ -113,12 +113,15 @@ static int md_lookup_swap __P((struct sockaddr_in *mdsin,char *path,
 			       struct nfs_args *args,
 			       struct proc *procp));
 static int setfs __P((struct sockaddr_in *addr, char *path, char *p));
+#endif
 static int getdec __P((char **ptr));
 static char *substr __P((char *a,char *b));
+#if !defined(__rtems__)
 static void mountopts __P((struct nfs_args *args, char *p)); 
 static int xdr_opaque_decode __P((struct mbuf **ptr,u_char *buf,
 				  int len));
 static int xdr_int_decode __P((struct mbuf **ptr,int *iptr));
+#endif
 static void printip __P((char *prefix,struct in_addr addr));
 
 #ifdef BOOTP_DEBUG
@@ -260,12 +263,11 @@ bootpc_call(call,reply,procp)
      struct proc *procp;
 {
 	struct socket *so;
-	struct sockaddr_in *sin,sa;
+	struct sockaddr_in *sin;
 	struct mbuf *m, *nam;
 	struct uio auio;
 	struct iovec aio;
 	int error, rcvflg, timo, secs, len;
-	u_int tport;
 
 	/* Free at end if not null. */
 	nam = NULL;
@@ -602,6 +604,7 @@ bootpc_adjust_interface(struct ifreq *ireq,struct socket *so,
   return 0;
 }
 
+#if !defined(__rtems__)
 static int setfs(addr, path, p)
 	struct sockaddr_in *addr;
 	char *path;
@@ -634,6 +637,7 @@ static int setfs(addr, path, p)
 	strncpy(path,p,MNAMELEN-1);
 	return(1);
 }
+#endif
 
 static int getdec(ptr)
 	char **ptr;
@@ -690,7 +694,7 @@ bootpc_init(void)
   struct socket *so;
   int error;
   int code,ncode,len;
-  int i,j;
+  int j;
   char *p;
   unsigned int ip;
 
@@ -699,12 +703,16 @@ bootpc_init(void)
   struct sockaddr_in gw;
   int gotgw=0;
   int gotnetmask=0;
+#if !defined(__rtems__)
   int gotrootpath=0;
   int gotswappath=0;
+#endif
   char lookup_path[24];
 
 #define EALEN 6
+#if !defined(__rtems__)
   unsigned char ea[EALEN];
+#endif
   struct ifaddr *ifa;
   struct sockaddr_dl *sdl = NULL;
   char *delim;

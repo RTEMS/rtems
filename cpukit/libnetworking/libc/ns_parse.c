@@ -15,9 +15,11 @@
  * SOFTWARE.
  */
 
-#ifndef lint
+#if !defined(__rtems__)
+#if !defined(LINT) && !defined(CODECENTER)
 static char rcsid[] = "$Id$";
-#endif
+#endif /* not lint */
+#endif /* not rtems */
 
 #include <sys/types.h>
 

@@ -120,14 +120,18 @@ ether_output(ifp, m0, dst, rt0)
 {
 	short type;
 	int s, error = 0;
- 	u_char *cp, edst[6];
-	register struct mbuf *m2, *m = m0;
+#ifdef NS
+ 	u_char *cp
+	register struct ifqueue *inq;
+	register struct mbuf *m2;
+#endif
+	u_char  edst[6];
+	register struct mbuf *m = m0;
 	register struct rtentry *rt;
 	struct mbuf *mcopy = (struct mbuf *)0;
 	register struct ether_header *eh;
 	int off, len = m->m_pkthdr.len;
 	struct arpcom *ac = (struct arpcom *)ifp;
-	register struct ifqueue *inq;
 #ifdef NETATALK
 	struct at_ifaddr *aa;
 #endif NETATALK
@@ -457,7 +461,10 @@ ether_input(ifp, eh, m)
 	struct mbuf *m;
 {
 	register struct ifqueue *inq;
-	u_short ether_type, *checksum;
+	u_short ether_type;
+#ifdef NS
+	u_short *checksum;
+#endif
 	int s;
 #if defined (ISO) || defined (LLC) || defined(NETATALK)
 	register struct llc *l;

@@ -99,11 +99,13 @@ static char rcsid[] = "$Id$";
 
 #include "res_config.h"
 
+#if !defined(__rtems__)
 #ifdef NOPOLL			/* libc_r doesn't wrap poll yet() */
 static int use_poll = 0;
 #else
 static int use_poll = 1;	/* adapt to poll() syscall availability */
 				/* 0 = not present, 1 = try it, 2 = exists */
+#endif
 #endif
 
 static int s = -1;		/* socket used for communications */
@@ -375,7 +377,9 @@ res_send(buf, buflen, ans, anssiz)
 
 		if (v_circuit) {
 			int truncated;
+#if !defined(__rtems__)
 			struct iovec iov[2];
+#endif
 			u_short len;
 			u_char *cp;
 
@@ -411,7 +415,7 @@ res_send(buf, buflen, ans, anssiz)
 			 * Send length & message
 			 */
 			putshort((u_short)buflen, (u_char*)&len);
-#if 0
+#if !defined(__rtems__)
 			iov[0].iov_base = (caddr_t)&len;
 			iov[0].iov_len = INT16SZ;
 			iov[1].iov_base = (caddr_t)buf;
@@ -536,8 +540,10 @@ read_len:
 			int msec;
 #endif
 			struct timeval timeout;
+#ifndef NOSELECT
 			fd_set dsmask, *dsmaskp;
 			int dsmasklen;
+#endif
 			struct sockaddr_in from;
 			int fromlen;
 

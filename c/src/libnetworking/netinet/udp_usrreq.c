@@ -250,7 +250,7 @@ udp_input(m, iphlen)
 			 * port.  It * assumes that an application will never
 			 * clear these options after setting them.
 			 */
-			if ((last->inp_socket->so_options&(SO_REUSEPORT|SO_REUSEADDR) == 0))
+			if (((last->inp_socket->so_options&(SO_REUSEPORT|SO_REUSEADDR)) == 0))
 				break;
 		}
 

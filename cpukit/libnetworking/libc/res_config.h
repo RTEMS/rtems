@@ -6,3 +6,11 @@
 #define MULTI_PTRS_ARE_ALIASES 1 /* fold multiple PTR records into aliases */
 #define	CHECK_SRVR_ADDR 1 /* confirm that the server requested sent the reply */
 #define BIND_UPDATE 1	/* update support */
+
+#if defined(__rtems__)
+u_int16_t _getshort(const u_char *src);
+u_int32_t _getlong(const u_char *src);
+int gethostname (char *name, int namelen);
+int sethostname (char *name, int namelen);
+int issetugid (void);
+#endif

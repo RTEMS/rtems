@@ -74,17 +74,19 @@ int 	tcp_mssdflt = TCP_MSS;
 SYSCTL_INT(_net_inet_tcp, TCPCTL_MSSDFLT, mssdflt,
 	CTLFLAG_RW, &tcp_mssdflt , 0, "");
 
+static int	tcp_do_rfc1323 = 1;
+static int	tcp_do_rfc1644 = 1;
+#if !defined(__rtems__)
 static int 	tcp_rttdflt = TCPTV_SRTTDFLT / PR_SLOWHZ;
 SYSCTL_INT(_net_inet_tcp, TCPCTL_RTTDFLT, rttdflt,
 	CTLFLAG_RW, &tcp_rttdflt , 0, "");
 
-static int	tcp_do_rfc1323 = 1;
 SYSCTL_INT(_net_inet_tcp, TCPCTL_DO_RFC1323, rfc1323,
 	CTLFLAG_RW, &tcp_do_rfc1323 , 0, "");
 
-static int	tcp_do_rfc1644 = 1;
 SYSCTL_INT(_net_inet_tcp, TCPCTL_DO_RFC1644, rfc1644,
 	CTLFLAG_RW, &tcp_do_rfc1644 , 0, "");
+#endif
 
 static void	tcp_cleartaocache(void);
 static void	tcp_notify __P((struct inpcb *, int));

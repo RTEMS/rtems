@@ -40,9 +40,11 @@
  * IF IBM IS APPRISED OF THE POSSIBILITY OF SUCH DAMAGES.
  */
 
+#if !defined(__rtems__)
 #if !defined(LINT) && !defined(CODECENTER)
 static char rcsid[] = "$Id$";
 #endif /* not lint */
+#endif /* not rtems */
 
 #include <sys/types.h>
 #include <sys/param.h>

@@ -1,6 +1,8 @@
+#if !defined(__rtems__)
 #if !defined(lint) && !defined(SABER)
 static char rcsid[] = "$Id$";
 #endif /* not lint */
+#endif /* not rtems */
 
 /*
  * Copyright (c) 1996 by Internet Software Consortium.

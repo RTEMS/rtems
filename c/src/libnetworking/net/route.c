@@ -517,7 +517,7 @@ rtrequest(req, dst, gateway, netmask, flags, ret_nrt)
 			senderr(ENOBUFS);
 		Bzero(rt, sizeof(*rt));
 		rt->rt_flags = RTF_UP | flags;
-		if (error = rt_setgate(rt, dst, gateway)) {
+		if ((error = rt_setgate(rt, dst, gateway))) {
 			Free(rt);
 			senderr(error);
 		}

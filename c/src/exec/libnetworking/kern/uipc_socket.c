@@ -350,7 +350,7 @@ sosend(so, addr, uio, top, control, flags)
 	 * Also check to make sure that MSG_EOR isn't used on SOCK_STREAM
 	 * type sockets since that's an error.
 	 */
-	if (resid < 0 || so->so_type == SOCK_STREAM && (flags & MSG_EOR)) {
+	if ((resid < 0) || (so->so_type == SOCK_STREAM && (flags & MSG_EOR))) {
 		error = EINVAL;
 		goto out;
 	}

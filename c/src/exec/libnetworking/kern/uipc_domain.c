@@ -56,6 +56,7 @@
  * passed to the doamin_add() function.
  */
 
+#if !defined(__rtems__)
 static int	x_save_spl;			/* used by kludge*/
 static void kludge_splimp __P((void *));
 static void kludge_splx __P((void *));
@@ -63,6 +64,7 @@ static void kludge_splx __P((void *));
 SYSINIT(splimp, SI_SUB_PROTO_BEGIN, SI_ORDER_FIRST, kludge_splimp, &x_save_spl)
 SYSINIT(domain, SI_SUB_PROTO_DOMAIN, SI_ORDER_FIRST, domaininit, NULL)
 SYSINIT(splx, SI_SUB_PROTO_END, SI_ORDER_FIRST, kludge_splx, &x_save_spl)
+#endif
 
 static void	pffasttimo __P((void *));
 static void	pfslowtimo __P((void *));
@@ -81,7 +83,7 @@ void
 domaininit(dummy)
 	void *dummy;
 {
-	register struct domain *dp, **dpp;
+	register struct domain *dp;
 	register struct protosw *pr;
 
 /* - not in our sources
