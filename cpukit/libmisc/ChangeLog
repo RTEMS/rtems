@@ -1,3 +1,7 @@
+2003-07-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_BSP from RTEMS_CHECK_MULTIPROCESSING.
+
 2003-06-04	Joel Sherrill <joel@OARcorp.com>
 
 	* stackchk/check.c: Removed warnings.
