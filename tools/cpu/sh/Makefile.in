@@ -1,0 +1,62 @@
+#
+#  $Id$
+#
+#  FIXME: $ARCH shouldn't be used inside of host-tools.
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+# we use the host compiler here 
+USE_HOST_COMPILER=yes
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=shgen sci
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES=sci.h
+
+SRCS=$(C_FILES) $(H_FILES)
+OBJS=$(C_O_FILES)
+
+PGMS=${ARCH}/shgen@EXEEXT@
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+#
+# Add local stuff here using +=
+#
+
+DEFINES  += -Wall
+CPPFLAGS += -I.
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   += -lm
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+DESTDIR=${PROJECT_RELEASE}/bin
+
+all:	$(ARCH) $(PGMS)
+
+${PGMS}: $(OBJS) $(LINK_FILES)
+	$(make-exe)
+
+$(DESTDIR):
+	$(BSDINSTALL) $(INSTDIRFLAGS) $@
+
+# Install the program
+install:  $(DESTDIR) $(PGMS)
+	$(BSDINSTALL) $(INSTBINFLAGS) ${PGMS} $(DESTDIR)
