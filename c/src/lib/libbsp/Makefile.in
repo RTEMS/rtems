@@ -11,9 +11,8 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-# mptests are the multiprocessing test suite
-# We only build them if HAS_MP was defined
- 
+# shmdr is a portable shared memory MPCI layer
+# We only build it if HAS_MP was defined
 MP_DRIVERS_yes_V = shmdr
 MP_DRIVERS = $(MP_DRIVERS_$(HAS_MP)_V)
  
