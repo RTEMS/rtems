@@ -23,6 +23,8 @@ int main(
   char **environp
 )
 {
+  extern void bsp_start( int, char**, char ** );
+
   bsp_start( argc, argv, environp );
 
   /*
@@ -31,4 +33,6 @@ int main(
    */
 
   rtems_fatal_error_occurred( 0 );
+
+  return 0; /* just to satisfy the native compiler */
 }
