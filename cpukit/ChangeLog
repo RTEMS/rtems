@@ -1,3 +1,10 @@
+2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/env-rtemscpu.m4: Remove RTEMS_ROOT (Unused).
+	* aclocal/env-rtemsbsp.m4: Remove RTEMS_ROOT (Unused).
+	Remove RTEMS_PROJECT_ROOT (Unused).
+	* aclocal/tool-paths.m4: Delete.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

@@ -19,9 +19,6 @@ if test x"$multilib" = x"yes"; then
   project_libdir="\$(PROJECT_ROOT)/lib"
   AC_SUBST(project_libdir)
 
-  RTEMS_ROOT="${PROJECT_ROOT}"
-  AC_SUBST(RTEMS_ROOT)
-
   includedir="\${exec_prefix}/lib/include"
   libdir="${libdir}\$(MULTISUBDIR)"
 else
