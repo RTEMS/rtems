@@ -49,6 +49,9 @@ rtems_status_code rtems_port_internal_to_external(
   Objects_Locations                    location;
   unsigned32                           ending;
 
+  if ( !external )
+    return RTEMS_INVALID_ADDRESS;
+
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:        /* this error cannot be returned */

@@ -47,7 +47,7 @@ rtems_status_code rtems_partition_create(
   void               *starting_address,
   unsigned32          length,
   unsigned32          buffer_size,
-  rtems_attribute  attribute_set,
+  rtems_attribute     attribute_set,
   Objects_Id         *id
 )
 {
@@ -55,6 +55,12 @@ rtems_status_code rtems_partition_create(
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
+
+  if ( !starting_address )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
 
   if ( length == 0 || buffer_size == 0 || length < buffer_size ||
          !_Partition_Is_buffer_size_aligned( buffer_size ) )

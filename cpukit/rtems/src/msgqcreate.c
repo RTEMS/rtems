@@ -67,6 +67,9 @@ rtems_status_code rtems_message_queue_create(
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
+
 #if defined(RTEMS_MULTIPROCESSING)
   if ( (is_global = _Attributes_Is_global( attribute_set ) ) && 
        !_System_state_Is_multiprocessing )

@@ -60,6 +60,12 @@ rtems_status_code rtems_message_queue_broadcast(
   Objects_Locations               location;
   CORE_message_queue_Status       core_status;
 
+  if ( !buffer )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !count )
+    return RTEMS_INVALID_ADDRESS;
+
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:

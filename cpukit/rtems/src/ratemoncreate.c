@@ -32,9 +32,9 @@
  *    id   - pointer to rate monotonic id
  *
  *  Output parameters:
- *    id                - rate monotonic id
+ *    id               - rate monotonic id
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_rate_monotonic_create(
@@ -46,6 +46,9 @@ rtems_status_code rtems_rate_monotonic_create(
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
+
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();            /* to prevent deletion */
 

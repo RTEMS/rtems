@@ -51,6 +51,9 @@ rtems_status_code rtems_timer_fire_after(
   if ( ticks == 0 )
     return RTEMS_INVALID_NUMBER;
 
+  if ( !routine )
+    return RTEMS_INVALID_ADDRESS;
+
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:            /* should never return this */

@@ -55,6 +55,9 @@ rtems_status_code rtems_timer_fire_when(
   if ( !_TOD_Validate( wall_time ) )
     return RTEMS_INVALID_CLOCK;
 
+  if ( !routine )
+    return RTEMS_INVALID_ADDRESS;
+
   seconds = _TOD_To_seconds( wall_time );
   if ( seconds <= _TOD_Seconds_since_epoch )
     return RTEMS_INVALID_CLOCK;

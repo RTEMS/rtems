@@ -57,6 +57,9 @@ rtems_status_code rtems_timer_server_fire_when(
   if ( !_TOD_Is_set )
     return RTEMS_NOT_DEFINED;
 
+  if ( !routine )
+    return RTEMS_INVALID_ADDRESS;
+
   if ( !_TOD_Validate( wall_time ) )
     return RTEMS_INVALID_CLOCK;
 

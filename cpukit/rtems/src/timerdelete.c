@@ -39,8 +39,8 @@ rtems_status_code rtems_timer_delete(
   Objects_Id id
 )
 {
-  Timer_Control   *the_timer;
-  Objects_Locations       location;
+  Timer_Control     *the_timer;
+  Objects_Locations  location;
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {

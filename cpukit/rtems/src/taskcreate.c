@@ -75,6 +75,9 @@ rtems_status_code rtems_task_create(
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
+
   /* 
    *  Core Thread Initialize insures we get the minimum amount of
    *  stack space.

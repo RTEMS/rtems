@@ -1,3 +1,26 @@
+2004-05-06	Joel Sherrill <joel@OARcorp.com>
+
+	PR 618/rtems
+	* include/rtems/rtems/status.h, src/clockget.c, src/clockset.c,
+	src/dpmemcreate.c, src/dpmemexternal2internal.c,
+	src/dpmeminternal2external.c, src/eventmp.c, src/eventreceive.c,
+	src/eventsend.c, src/msgqbroadcast.c, src/msgqcreate.c,
+	src/msgqflush.c, src/msgqgetnumberpending.c, src/msgqreceive.c,
+	src/msgqsubmit.c, src/partcreate.c, src/partdelete.c,
+	src/partgetbuffer.c, src/ratemoncancel.c, src/ratemoncreate.c,
+	src/ratemondelete.c, src/ratemongetstatus.c, src/ratemonident.c,
+	src/ratemonperiod.c, src/regioncreate.c, src/regiondelete.c,
+	src/regionextend.c, src/regiongetsegment.c,
+	src/regiongetsegmentsize.c, src/regionreturnsegment.c,
+	src/semcreate.c, src/semdelete.c, src/semflush.c, src/semident.c,
+	src/taskcreate.c, src/taskgetnote.c, src/taskmode.c,
+	src/taskrestart.c, src/taskresume.c, src/tasksetnote.c,
+	src/tasksuspend.c, src/taskvariableadd.c, src/taskvariabledelete.c,
+	src/taskvariableget.c, src/taskwakewhen.c, src/timercreate.c,
+	src/timerdelete.c, src/timerfireafter.c, src/timerfirewhen.c,
+	src/timerserverfireafter.c, src/timerserverfirewhen.c: Add NULL
+	checks.
+
 2004-02-26	Thomas Rauscher <trauscher@loytec.com.
 
 	PR 584/RTEMS

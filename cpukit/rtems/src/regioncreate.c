@@ -48,7 +48,7 @@ rtems_status_code rtems_region_create(
   void               *starting_address,
   unsigned32          length,
   unsigned32          page_size,
-  rtems_attribute  attribute_set,
+  rtems_attribute     attribute_set,
   Objects_Id         *id
 )
 {
@@ -56,6 +56,12 @@ rtems_status_code rtems_region_create(
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
+
+  if ( !starting_address )
+    return RTEMS_INVALID_ADDRESS;
+
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
 
   if ( !_Addresses_Is_aligned( starting_address ) )
     return RTEMS_INVALID_ADDRESS;

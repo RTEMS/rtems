@@ -65,6 +65,7 @@ extern rtems_status_code _Status_Object_name_errors_to_status[];
 rtems_status_code _Status_Object_name_errors_to_status[] = {
   RTEMS_SUCCESSFUL,      /* OBJECTS_SUCCESSFUL */
   RTEMS_INVALID_NAME,    /* OBJECTS_INVALID_NAME */
+  RTEMS_INVALID_ADDRESS, /* OBJECTS_INVALID_ADDRESS */
   RTEMS_INVALID_NODE     /* OBJECTS_INVALID_NODE */
 };
 #endif

@@ -52,6 +52,9 @@ rtems_status_code rtems_port_create(
   if ( !rtems_is_name_valid( name) )
     return RTEMS_INVALID_NAME;
 
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
+
   if ( !_Addresses_Is_aligned( internal_start ) ||
        !_Addresses_Is_aligned( external_start ) )
     return RTEMS_INVALID_ADDRESS;

@@ -41,9 +41,9 @@
  *    note    - pointer to note
  *
  *  Output parameters:
- *    note              - filled in if successful
+ *    note             - filled in if successful
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_task_get_note(
@@ -55,6 +55,9 @@ rtems_status_code rtems_task_get_note(
   register Thread_Control *the_thread;
   Objects_Locations        location;
   RTEMS_API_Control       *api;
+
+  if ( !note )
+    return RTEMS_INVALID_ADDRESS;
 
   /*
    *  NOTE:  There is no check for < RTEMS_NOTEPAD_FIRST because that would

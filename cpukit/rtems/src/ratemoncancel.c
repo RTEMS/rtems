@@ -31,7 +31,7 @@
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful and caller is not the owning thread
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_rate_monotonic_cancel(
@@ -39,7 +39,7 @@ rtems_status_code rtems_rate_monotonic_cancel(
 )
 {
   Rate_monotonic_Control *the_period;
-  Objects_Locations              location;
+  Objects_Locations       location;
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {

@@ -40,7 +40,7 @@
 rtems_status_code _Event_MP_Send_request_packet (
   Event_MP_Remote_operations operation,
   Objects_Id                 event_id,
-  rtems_event_set         event_in
+  rtems_event_set            event_in
 )
 {
   Event_MP_Packet *the_packet;

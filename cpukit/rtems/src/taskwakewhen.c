@@ -40,17 +40,20 @@
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_task_wake_when(
-rtems_time_of_day *time_buffer
+  rtems_time_of_day *time_buffer
 )
 {
   Watchdog_Interval   seconds;
 
   if ( !_TOD_Is_set )
     return RTEMS_NOT_DEFINED;
+
+  if ( !time_buffer )
+    return RTEMS_INVALID_ADDRESS;
 
   time_buffer->ticks = 0;
 
