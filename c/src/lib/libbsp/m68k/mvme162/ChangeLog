@@ -1,5 +1,12 @@
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* consolex/Makefile.am: Ditto.
+	* startup/Makefile.am: Ditto.
+
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* start/.cvsignore: Remove.
 	* start/Makefile.am: Remove.
 	* Makefile.am: Merge-in start/Makefile.am.
