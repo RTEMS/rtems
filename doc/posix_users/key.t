@@ -15,10 +15,10 @@ The key manager ...
 The directives provided by the key manager are:
 
 @itemize @bullet
-@item @code{pthread_key_create} -
-@item @code{pthread_key_delete} -
-@item @code{pthread_setspecific} -
-@item @code{pthread_getspecific} -
+@item @code{pthread_key_create} - Create Thread Specific Data Key
+@item @code{pthread_key_delete} - Delete Thread Specific Data Key
+@item @code{pthread_setspecific} - Set Thread Specific Key Value
+@item @code{pthread_getspecific} - Get Thread Specific Key Value
 @end itemize
 
 @section Background
@@ -40,7 +40,7 @@ and status codes.
 @c
 @c
 @page
-@subsection pthread_key_create
+@subsection pthread_key_create - Create Thread Specific Data Key
 
 @subheading CALLING SEQUENCE:
 
@@ -68,7 +68,7 @@ Insufficient memory exists to create the key.
 @c
 @c
 @page
-@subsection pthread_key_delete
+@subsection pthread_key_delete - Delete Thread Specific Data Key
 
 @subheading CALLING SEQUENCE:
 
@@ -96,7 +96,7 @@ The key was invalid
 @c
 @c
 @page
-@subsection pthread_setspecific
+@subsection pthread_setspecific - Set Thread Specific Key Value
 
 @subheading CALLING SEQUENCE:
 
@@ -124,7 +124,7 @@ The specified key is invalid.
 @c
 @c
 @page
-@subsection pthread_getspecific
+@subsection pthread_getspecific - Get Thread Specific Key Value
 
 @subheading CALLING SEQUENCE:
 
