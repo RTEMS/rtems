@@ -17,6 +17,7 @@
 #include "system.h"
 #include <libcsupport.h>    /* for malloc_dump, malloc_walk */
 #include <string.h>         /* for memset */
+#include <stdlib.h>
 
 #define NUM_PASSES 100
 
@@ -37,8 +38,10 @@ rtems_task Task_1_through_5(
 
   while (TRUE)
   {
-    if ( passes++ > NUM_PASSES )
+    if ( passes++ > NUM_PASSES ) {
+	puts("*** END OF MALLOC TEST ***");
         exit(0);
+    }
 
     status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
     directive_failed( status, "rtems_clock_get" );
@@ -46,9 +49,12 @@ rtems_task Task_1_through_5(
     put_name( Task_name[ task_number( tid ) ], FALSE );
     print_time( " - rtems_clock_get - ", &time, "\n" );
 
-    mem_amt = rand() * task_number( tid );
+    mem_amt = ((int)((float)rand()*1000.0/(float)RAND_MAX));
+    while (!(mem_ptr = malloc ( mem_amt))) {
+	printf("out of memory... trying again.\n");
+	mem_amt = ((int)((float)rand()*1000.0/(float)RAND_MAX));
+    }
     printf("mallocing %d bytes\n",mem_amt);
-    mem_ptr = malloc ( mem_amt);
     memset( mem_ptr, mem_amt, mem_amt );
     malloc_dump();
     malloc_walk(1,FALSE);

@@ -39,13 +39,13 @@ void blow_stack( void );
 
 #define TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE*3)
 
-#define CONFIGURE_EXTRA_TASK_STACKS (10 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <confdefs.h>
 
 /* global variables */
 
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 6 ];         /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 6 ];       /* array of task names */
 
 /* end of include file */
