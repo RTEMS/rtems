@@ -1,3 +1,11 @@
+2002-04-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/prog-cc.m4: Remove GCC272 support. 
+	Remove ENABLE_LIBCDIR.
+	* aclocal/prog-cxx.m4: Ditto.
+	* aclocal/enable-gcc28.m4: Remove.
+	* aclocal/enable-libcdir.m4: Ditto.
+
 2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/enable-libcdir.m4, aclocal/enable-gcc28.m4: Remove

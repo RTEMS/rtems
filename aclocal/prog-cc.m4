@@ -9,8 +9,6 @@ AC_DEFUN(RTEMS_PROG_CC,
 AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_BEFORE([$0], [AC_PROG_CC])dnl
 AC_BEFORE([$0], [RTEMS_CANONICALIZE_TOOLS])dnl
-AC_REQUIRE([RTEMS_ENABLE_LIBCDIR])dnl
-AC_REQUIRE([RTEMS_ENABLE_GCC28])dnl
 
 RTEMS_CHECK_TOOL(CC,gcc)
 test -z "$CC" && \
@@ -30,12 +28,10 @@ RTEMS_GCC_SPECS
 dnl check if the target compiler may use --pipe
 RTEMS_GCC_PIPE
 dnl check if the compiler supports --specs if gcc28 is requested
-if test "$RTEMS_USE_GCC272" != "yes" ; then
-  if test "$rtems_cv_gcc_specs" = "no"; then
-    AC_MSG_WARN([*** disabling --enable-gcc28])
-      RTEMS_USE_GCC272=yes
-  fi
-fi
+#  if test "$rtems_cv_gcc_specs" = "no"; then
+#    AC_MSG_WARN([*** disabling --enable-gcc28])
+#      RTEMS_USE_GCC272=yes
+#  fi
 test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 
 if test "$GCC" = yes; then
@@ -44,10 +40,6 @@ m4_if([$1],,[],[CPPFLAGS="$CPPFLAGS $1"])
 [
 CFLAGS="-g -Wall"
 fi
-## Conditional for automake files
-AM_CONDITIONAL(RTEMS_USE_GCC272, test x"$RTEMS_USE_GCC272" = x"yes")
-## Make variable for autoconf fragments (*.cfg)
-AC_SUBST(RTEMS_USE_GCC272)
 
 dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*
 case $build_os in
