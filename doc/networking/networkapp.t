@@ -238,7 +238,8 @@ with the following exceptions:
 
 @itemize @bullet
 @item A given socket can be read or written by only one task at a time.
-@item There is no @code{select} function.
+@item The @code{select} function only works for file descriptors associated
+with sockets.
 @item You must call @code{openlog} before calling any of the @code{syslog} functions.
 @item @b{Some of the network functions are not thread-safe.}
 For example the following functions return a pointer to a static
