@@ -12,14 +12,24 @@ cables which were plugged into DB-25 or DB-9 adapters wired as described.
 Matching the colors of the wires in the shell is the easiest way to 
 make sure the cable is built properly.
 
+The board is configured as follows:
+
+  - An MC68681 is the first two serial ports.  These are RS-232 and may
+    be accessed via the front panel or the P2.  The front panel connector
+    has both A and B serial ports on a single connector. DY-4 part number
+    "OBYC3ASSY901132-000 Rev-" brings these ports out to two DB-25 
+    female connectors.
+
+  - The MC68681 serial ports are also accessible on the P2 connector.
+    DY-4 part number "OBYC3ASSY901080-004 Rev A" brings these out
+    to DB-9 female connectors.  These were not used in this effort.
+
 References
 ==========
 
   - Linux Serial FAQ
   - http://ahmed.egypt.com/electronics/serial 
   - DY-4 Documentation
-
-
 
 Front Panel RS-232 Connection to a PC
 =====================================
