@@ -12,18 +12,6 @@
 
 #include <bsp.h>
 
-#ifdef PROVIDES_GETPID
-#include <unistd.h>
-pid_t getpid()
-{
-#ifndef PID
-  return 1;
-#else
-  return PID;
-#endif
-}
-#endif
-
 void *POSIX_Init(
   void *argument
 )
@@ -35,21 +23,6 @@ void *POSIX_Init(
   exit( 0 );
 }
 
-/* configuration information */
-
-#define CONFIGURE_SPTEST
-
-#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
-
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE
-
-#define CONFIGURE_MAXIMUM_POSIX_THREADS              20
-#define CONFIGURE_MAXIMUM_POSIX_KEYS                 20
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES              30
-#define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  20
-
 #define CONFIGURE_INIT
-
-#include <confdefs.h>
+#include "config.h"
 
