@@ -28,7 +28,6 @@ EXTRA_DIST = README.configure SUPPORT VERSION LICENSE $(noinst_SCRIPTS)
 EXTRA_DIST += $(ACLOCAL_FILES)
 EXTRA_DIST += config-ml.in
 
-
 dist-hook:
 	@files=`(cd $(srcdir); find doc cpukit c scripts testsuites tools \
 	   -name configure.ac -print | sed 's,/configure.ac,,' | sort)`; \
