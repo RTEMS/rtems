@@ -75,7 +75,7 @@ cpumodels.texi: cpumodels.t
 	    -n "CPU Initialization" ${*}.t
 
 cpuinit.texi: cpuinit.t
-	$(BMENU) -p "CPU Model Variations Introduction" \
+	$(BMENU) -p "CPU Model Variations Coding Issues" \
 	    -u "Top" \
 	    -n "Interrupts" ${*}.t
 
