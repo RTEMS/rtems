@@ -1,5 +1,12 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* console/console.c, hw_init/hw_init.c, include/bsp.h,
+	include/coverhd.h, include/sdram.h, start/start.S,
+	startup/bspstart.c, startup/linkcmds, startup/linkcmds.rom,
+	startup/linkcmds.rom2ram: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* console/console.c: Removed incorrect statement about copyright
 	assignment.
 
