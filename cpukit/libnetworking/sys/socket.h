@@ -167,7 +167,7 @@ struct sockaddr {
  */
 struct sockproto {
 	unsigned short	sp_family;		/* address family */
-	uusigned short	sp_protocol;		/* protocol */
+	unsigned short	sp_protocol;		/* protocol */
 };
 
 /*
@@ -343,7 +343,7 @@ struct omsghdr {
 	int	msg_namelen;		/* size of address */
 	struct	iovec *msg_iov;		/* scatter/gather array */
 	int	msg_iovlen;		/* # elements in msg_iov */
-	void	*msg_accrights;		/* access rights sent/received */
+	char	*msg_accrights;		/* access rights sent/received */
 	int	msg_accrightslen;
 };
 
