@@ -14,12 +14,12 @@
 #include <rtems/bspIo.h>
 
 int
-BSP_pciFindDevice(unsigned short vendorid, unsigned short deviceid,
-                int instance, int *pbus, int *pdev, int *pfun)
+BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
+                   int instance, int *pbus, int *pdev, int *pfun )
 {
-unsigned int d;
-unsigned short s;
-unsigned char bus,dev,fun,hd;
+   unsigned int d;
+   unsigned short s;
+   unsigned char bus,dev,fun,hd;
 
 	for (bus=0; bus<BusCountPCI(); bus++) {
       for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
@@ -53,3 +53,5 @@ unsigned char bus,dev,fun,hd;
 	}
     return -1;
 }
+
+/* eof */

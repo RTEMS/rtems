@@ -29,7 +29,13 @@
 
 typedef unsigned int u32;
 
-/*#define DEBUG*/
+
+/*
+#define DEBUG
+#define PCI_DEBUG
+*/
+
+
 /* Used to reorganize PCI space on stupid machines which spread resources
  * across a wide address space. This is bad when P2P bridges are present
  * or when it limits the mappings that a resource hog like a PCI<->VME
@@ -215,14 +221,39 @@ static void insert_resource(pci_resource *r) {
     *   limits have hopefully been set high enough to avoid problems.
     */
 
-#if 0
+   /*
+   ** This is little ugly below.  It seems that at least on the MCP750,
+   ** the PBC has some default IO space mappings that the bsp #defines
+   ** that read/write to PCI I/O space assume, particuarly the i8259
+   ** manipulation code.  So, if we allow the small IO spaces on PCI bus
+   ** 0 and 1 to be remapped, the registers can shift out from under the
+   ** #defines.  This is particuarly awful, but short of redefining the
+   ** PCI I/O primitives to be functions with base addresses read from
+   ** the hardware, we are stuck with the kludge below.  Note that
+   ** everything is remapped on the CPCI backplane and any downstream
+   ** hardware, its just the builtin stuff we're tiptoeing around.
+   ** 
+   ** Gregm, 7/16/2003
+   */
+   if( r->dev->bus->number <= 1 )
+   {
    if ((r->type==PCI_BASE_ADDRESS_SPACE_IO) 
        ? (r->base && r->base <0x10000)
        : (r->base && r->base <0x1000000)) {
+
+#ifdef PCI_DEBUG
+         printk("freeing region;  %p:%p %d:%02x (%04x:%04x) %08lx %08lx %d\n", 
+                r, r->next,
+                r->dev->bus->number, PCI_SLOT(r->dev->devfn), 
+                r->dev->vendor, r->dev->device,
+                r->base,
+                r->size,
+                r->type); 
+#endif
       sfree(r);
       return;
    }
-#endif
+   }
 
    if ((r->type==PCI_BASE_ADDRESS_SPACE_IO) 
        ? (r->size >= 0x10000)
@@ -482,7 +513,7 @@ static void reconfigure_bus_space(u_char bus, u_char type, pci_area_head *h)
 #define BUSREST_IO_START        0x20000
 #define BUSREST_IO_END          0x7ffff
 #define BUSREST_MEM_START       0xb000000
-#define BUSREST_MEM_END        0x30000000
+#define BUSREST_MEM_END        0x10000000
 
 
 
@@ -1111,7 +1142,6 @@ static pci_resource *enum_device_resources( struct pci_dev *pdev, int i )
 
 
 
-#define MEMORY_IO_GRANULARITY   256
 
 
 
@@ -1247,16 +1277,13 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 
 #ifdef WRITE_BRIDGE_ENABLE
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_BRIDGE_CONTROL, (unsigned16)( PCI_BRIDGE_CTL_PARITY |
-                                                                                                     PCI_BRIDGE_CTL_SERR |
-                                                                                                     PCI_BRIDGE_CTL_FAST_BACK));
+                                                                                                     PCI_BRIDGE_CTL_SERR ));
 
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_COMMAND, (unsigned16)( PCI_COMMAND_IO | 
                                                                                               PCI_COMMAND_MEMORY |
                                                                                               PCI_COMMAND_MASTER |
                                                                                               PCI_COMMAND_PARITY |
-                                                                                              PCI_COMMAND_WAIT |
-                                                                                              PCI_COMMAND_SERR |
-                                                                                              PCI_COMMAND_FAST_BACK ));
+                                                                                              PCI_COMMAND_SERR ));
 #endif
       }
    }
@@ -1315,7 +1342,7 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
                      astart.start_pciio = (((astart.start_pciio / r->size) + 1) * r->size);
 
                   r->base = astart.start_pciio;
-                  astart.start_pciio += (alloc= ((r->size / MEMORY_IO_GRANULARITY) + 1) * MEMORY_IO_GRANULARITY);
+                  astart.start_pciio += (alloc= ((r->size / PAGE_SIZE) + 1) * PAGE_SIZE);
 #ifdef PCI_DEBUG
                   printk("pci:      io  %08X, size %08X, alloc %08X\n", r->base, r->size, alloc );
 #endif
@@ -1329,7 +1356,7 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
                      astart.start_pcimem = (((astart.start_pcimem / r->size) + 1) * r->size);
 
                   r->base = astart.start_pcimem;
-                  astart.start_pcimem += (alloc= ((r->size / MEMORY_IO_GRANULARITY) + 1) * MEMORY_IO_GRANULARITY);
+                  astart.start_pcimem += (alloc= ((r->size / PAGE_SIZE) + 1) * PAGE_SIZE);
 #ifdef PCI_DEBUG
                   printk("pci:      mem %08X, size %08X, alloc %08X\n", r->base, r->size, alloc );
 #endif
@@ -1405,6 +1432,7 @@ void pci_init(void)
    print_pci_resources("Installed PCI resources:\n");
 
    recursive_bus_reconfigure(NULL);
+
    reconfigure_pci();
 
    print_pci_resources("Allocated PCI resources:\n");
