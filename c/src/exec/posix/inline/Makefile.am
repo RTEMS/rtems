@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 include_rtems_posixdir = $(includedir)/rtems/posix
 
