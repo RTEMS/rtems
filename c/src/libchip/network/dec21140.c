@@ -1193,17 +1193,12 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
 #if defined(__PPC__)
    pci_write_config_word(pbus, pdev, pfun,
-                         PCI_COMMAND,
-                         (uint16_t) ( PCI_COMMAND_MEMORY |
-                                        PCI_COMMAND_MASTER |
-                                        PCI_COMMAND_INVALIDATE |
-                                        PCI_COMMAND_WAIT |
-                                        PCI_COMMAND_FAST_BACK ) );
 #endif
 #if defined(__i386__)
-   pcib_conf_write16(signature, 0x04, ( 0x2 | 0x4 | 0x10 | 0x80 | 0x200) );
+   pcib_conf_write16(signature, 
 #endif
-
+      PCI_COMMAND,
+      (uint16_t) ( PCI_COMMAND_IO | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER ) );
 
    /*
    ** Store the interrupt name, we'll use it later when we initialize
