@@ -8,12 +8,12 @@ AC_CONFIG_SRCDIR([c])
 RTEMS_TOP([.])
 
 # Abort if trying to build inside of the source tree.
-if test -f aclocal/version.m4; then
+AS_IF([test -f aclocal/version.m4],[
   rm -f config.cache config.log confdefs.h
   AC_MSG_ERROR([***]
     [Attempt to build inside of the source tree]
     [Please use a separate build directory, instead] )
-fi
+])
 
 AC_CANONICAL_TARGET([])
 AM_INIT_AUTOMAKE([no-define foreign 1.6])

@@ -306,24 +306,18 @@ m4_append([_RTEMS_HOST_CONFIGDIRS_LIST],[ $1])dnl
 
 if test $build = $host;
 then
-  if test $host = $target;
-  then
-    _RTEMS_SUBST_IFNOT([build_configdirs],[$1])
-  else
-    _RTEMS_SUBST_IFNOT([build_configdirs],[$1])
-  fi
+  AS_IF([test $host = $target],
+    [_RTEMS_SUBST_IFNOT([build_configdirs],[$1])],
+    [_RTEMS_SUBST_IFNOT([build_configdirs],[$1])]
+  )
 else
-  if test $host = $target;
-  then
-    _RTEMS_SUBST_IFNOT([host_configdirs],[$1])
-  else
-    if test $build = $target;
-    then
-      _RTEMS_SUBST_IFNOT([host_configdirs],[$1])
-    else
-      _RTEMS_SUBST_IFNOT([host_configdirs],[$1])
-    fi
-  fi
+  AS_IF([test $host = $target],
+    [_RTEMS_SUBST_IFNOT([host_configdirs],[$1])],
+    [AS_IF([test $build = $target],
+      [_RTEMS_SUBST_IFNOT([host_configdirs],[$1])],
+      [_RTEMS_SUBST_IFNOT([host_configdirs],[$1])]
+    )]
+  )
 fi
 
 m4_divert_text([DEFAULTS],
@@ -350,24 +344,18 @@ m4_append([_RTEMS_TARGET_CONFIGDIRS_LIST],[ $1])
 
 if test $build = $host;
 then
-  if test $host = $target;
-  then
-    _RTEMS_SUBST_IFNOT([build_configdirs],[$1])
-  else
-    _RTEMS_SUBST_IFNOT([target_configdirs],[$1])
-  fi
+  AS_IF([test $host = $target],
+    [_RTEMS_SUBST_IFNOT([build_configdirs],[$1])],
+    [_RTEMS_SUBST_IFNOT([target_configdirs],[$1])]
+  )
 else
-  if test $host = $target;
-  then
-    _RTEMS_SUBST_IFNOT([host_configdirs],[$1])
-  else
-    if test $build = $target;
-    then
-      _RTEMS_SUBST_IFNOT([build_configdirs],[$1])
-    else
-      _RTEMS_SUBST_IFNOT([target_configdirs],[$1])
-    fi
-  fi
+  AS_IF([test $host = $target],
+    [_RTEMS_SUBST_IFNOT([host_configdirs],[$1])],
+    [AS_IF([test $build = $target],
+      [_RTEMS_SUBST_IFNOT([build_configdirs],[$1])],
+      [_RTEMS_SUBST_IFNOT([target_configdirs],[$1])]
+    )]
+  )
 fi
 
 m4_divert_text([DEFAULTS],
