@@ -278,7 +278,11 @@ extern "C" {
  *         in the executive to justify turning this on.
  */
 
+#ifdef __GNUC__
 #define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (32)))
+#else
+#define CPU_STRUCTURE_ALIGNMENT
+#endif
 
 /*
  *  The following defines the number of bits actually used in the

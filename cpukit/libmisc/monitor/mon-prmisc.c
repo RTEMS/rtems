@@ -70,7 +70,7 @@ rtems_monitor_dump_assoc_bitfield(
 {  
     unsigned32 b;
     unsigned32 length = 0;
-    char *name;
+    const char *name;
 
     for (b = 1; b; b <<= 1)
         if (b & value)

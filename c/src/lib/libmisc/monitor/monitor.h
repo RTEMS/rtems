@@ -1,6 +1,7 @@
 /*
- *      @(#)monitor.h	1.14 - 95/08/02
+ *      @(#)monitor.h	1.20 - 95/12/12
  *      
+ *
  *  $Id$
  */
 
@@ -318,6 +319,7 @@ void    rtems_monitor_wakeup(void);
 void    rtems_monitor_pause_cmd(int, char **, unsigned32, boolean);
 void    rtems_monitor_fatal_cmd(int, char **, unsigned32, boolean);
 void    rtems_monitor_continue_cmd(int, char **, unsigned32, boolean);
+void    rtems_monitor_debugger_cmd(int, char **, unsigned32, boolean);
 void    rtems_monitor_node_cmd(int, char **, unsigned32, boolean);
 void    rtems_monitor_symbols_loadup(void);
 void    rtems_monitor_task(rtems_task_argument);

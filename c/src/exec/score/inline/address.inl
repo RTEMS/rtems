@@ -58,7 +58,7 @@ STATIC INLINE unsigned32 _Addresses_Subtract (
   void *right
 )
 {
-  return (left - right);
+  return ((char *) left - (char *) right);
 }
 
 /*PAGE

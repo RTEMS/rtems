@@ -49,6 +49,7 @@
 
 isr_arg0           .reg    %cr24
 isr_r9             .reg    %cr25
+isr_r8             .reg    %cr26
 
 #
 # Interrupt stack frame looks like this
@@ -105,30 +106,25 @@ isr_r9             .reg    %cr25
 #
 #  The following macro and the 32 instantiations of the macro
 #  are necessary to determine which interrupt vector occurred.
-#  The following macro allows a unique entry point to be defined
-#  for each vector.
 #
-# r9 was loaded with the vector before branching here
-#   scratch registers available:   gr1, gr8, gr9, gr16, gr17, gr24
+#  r9 is loaded with the vector number and then we jump to
+#    the first level interrupt handler.  In most cases this
+#    is _Generic_ISR_Handler.  In a few cases (such as TLB misc)
+#    it may be to some other entry point.
 #
-# NOTE:
-#  .align 32   doesn not seem to work in the continuation below
-#  so just have to count 8 instructions
-#
-# NOTE:
-#    this whole scheme needs to be rethought for TLB traps which
-#    have requirements about what tlb faults they can incur.
-#    ref:  TLB Operation Requirements in 1.1 arch book
+
+# table for first level interrupt handlers
+        .import   HPPA_first_level_interrupt_handler, data
 
 #define THANDLER(vector) \
-        mtctl   %r9,  isr_r9 !         \
-        b       _Generic_ISR_Handler!        \
-        ldi     vector, %r9!       \
-        nop ! \
-        nop ! \
-        nop ! \
-        nop ! \
-        nop
+        mtctl   %r9,  isr_r9 ! \
+        mtctl   %r8,  isr_r8 ! \
+        ldi     vector, %r9  ! \
+        ldil    L%HPPA_first_level_interrupt_handler,%r8 ! \
+        ldo     R%HPPA_first_level_interrupt_handler(%r8),%r8 ! \
+        ldwx,s  %r9(%r8),%r8 ! \
+        bv      0(%r8) ! \
+        mfctl   isr_r8, %r8
 
         .align 4096
 	.EXPORT IVA_Table,ENTRY,PRIV_LEV=0
@@ -210,10 +206,6 @@ _Generic_ISR_Handler:
 	.CALLINFO FRAME=0,NO_CALLS
 	.ENTRY
 
-# Turn on the D bit in psw so we can start saving stuff on stack
-# (interrupt context pieces that need to be saved before the RFI)
-
-        ssm       HPPA_PSW_D, %r0
         mtctl     arg0, isr_arg0
 
 # save interrupt state
@@ -236,31 +228,6 @@ _Generic_ISR_Handler:
         mfctl     %sar, arg0
         stw       arg0, SAR_OFFSET(sp)
 
-# Prepare to re-enter virtual mode
-# We need Q in case the interrupt handler enables interrupts
-#
-
-        ldil      L%CPU_PSW_DEFAULT, arg0
-        ldo       R%CPU_PSW_DEFAULT(arg0), arg0
-        mtctl     arg0, ipsw
-
-# Now jump to "rest_of_isr_handler" with the rfi
-# We are assuming the space queues are all correct already
-
-	ldil 	  L%rest_of_isr_handler, arg0
-	ldo	  R%rest_of_isr_handler(arg0), arg0
-	mtctl	  arg0, pcoq
-	ldo	  4(arg0), arg0
-	mtctl	  arg0, pcoq
-
-        rfi
-	nop
-
-# At this point we are back in virtual mode and all our
-#  normal addressing is once again ok.
-
-rest_of_isr_handler:
-
 #
 # Build an interrupt frame to hold the contexts we will need.
 # We have already saved the interrupt items on the stack
@@ -281,7 +248,7 @@ rest_of_isr_handler:
         stw         %r6,R6_OFFSET(sp)
         stw         %r7,R7_OFFSET(sp)
         stw         %r8,R8_OFFSET(sp)
-        stw         %r9,R9_OFFSET(sp)
+# skip r9
         stw         %r10,R10_OFFSET(sp)
         stw         %r11,R11_OFFSET(sp)
         stw         %r12,R12_OFFSET(sp)
@@ -298,7 +265,7 @@ rest_of_isr_handler:
         stw         %r23,R23_OFFSET(sp)
         stw         %r24,R24_OFFSET(sp)
         stw         %r25,R25_OFFSET(sp)
-        stw         %r26,R26_OFFSET(sp)
+# skip arg0
         stw         %r27,R27_OFFSET(sp)
         stw         %r28,R28_OFFSET(sp)
         stw         %r29,R29_OFFSET(sp)
@@ -324,7 +291,33 @@ rest_of_isr_handler:
 #
 # At this point we are done with isr_arg0, and isr_r9 control registers
 #
+# Prepare to re-enter virtual mode
+# We need Q in case the interrupt handler enables interrupts
+#
 
+        ldil      L%CPU_PSW_DEFAULT, arg0
+        ldo       R%CPU_PSW_DEFAULT(arg0), arg0
+        mtctl     arg0, ipsw
+
+# Now jump to "rest_of_isr_handler" with the rfi
+# We are assuming the space queues are all correct already
+
+	ldil 	  L%rest_of_isr_handler, arg0
+	ldo	  R%rest_of_isr_handler(arg0), arg0
+	mtctl	  arg0, pcoq
+	ldo	  4(arg0), arg0
+	mtctl	  arg0, pcoq
+
+        rfi
+	nop
+
+# At this point we are back in virtual mode and all our
+#  normal addressing is once again ok.
+#
+#  It is now ok to take an exception or trap
+#
+
+rest_of_isr_handler:
 
 # Point to beginning of float context and
 # save the floating point context -- doing whatever patches are necessary
@@ -408,7 +401,7 @@ post_user_interrupt_handler:
 # have turned them on) and return to the interrupted task stack (assuming
 # (_ISR_Nest_level == 0)
 
-        rsm        HPPA_PSW_I, %r0
+        rsm        HPPA_PSW_I + HPPA_PSW_R, %r0
         ldw        -4(sp), sp
 
 #    r3  -- &_ISR_Nest_level
@@ -448,6 +441,7 @@ post_user_interrupt_handler:
 	ldw	   R%_ISR_Signals_to_thread_executing(%r8),%r8
 	comibt,=,n 0,%r8,isr_restore
 
+
 # OK, something happened while in ISR and we need to switch to a task
 # other than the one which was interrupted or the
 #    ISR_Signals_to_thread_executing case
@@ -465,9 +459,10 @@ ISR_dispatch:
 
         ldo        -128(sp),sp
 
-        rsm        HPPA_PSW_I, %r0
-
 isr_restore:
+
+# enable interrupts during most of restore
+        ssm        HPPA_PSW_I, %r0
 
 # Get a pointer to beginning of our stack frame
         ldo        -CPU_INTERRUPT_FRAME_SIZE(sp), %arg1
@@ -488,21 +483,6 @@ isr_restore:
 
 	.EXPORT _CPU_Context_restore
 _CPU_Context_restore:
-
-# Turn off Q & I so we can write pcoq
-        rsm        HPPA_PSW_Q + HPPA_PSW_I, %r0
-
-        ldw        IPSW_OFFSET(arg0), %r8
-        mtctl      %r8, ipsw
-
-        ldw        SAR_OFFSET(arg0), %r9
-        mtctl      %r9, sar
-
-        ldw        PCOQFRONT_OFFSET(arg0), %r10
-        mtctl      %r10, pcoq
-
-        ldw        PCOQBACK_OFFSET(arg0), %r11
-        mtctl      %r11, pcoq
 
 #
 # restore integer state
@@ -531,15 +511,32 @@ _CPU_Context_restore:
         ldw         R22_OFFSET(arg0),%r22
         ldw         R23_OFFSET(arg0),%r23
         ldw         R24_OFFSET(arg0),%r24
-        ldw         R25_OFFSET(arg0),%r25
-# skipping r26 (aka arg0) until we are done with it
+# skipping r25; used as scratch register below
+# skipping r26 (arg0) until we are done with it
         ldw         R27_OFFSET(arg0),%r27
         ldw         R28_OFFSET(arg0),%r28
         ldw         R29_OFFSET(arg0),%r29
         ldw         R30_OFFSET(arg0),%r30
         ldw         R31_OFFSET(arg0),%r31
 
-# Must load r26 last since it is arg0
+# Turn off Q & R & I so we can write interrupt control registers
+        rsm        HPPA_PSW_Q + HPPA_PSW_R + HPPA_PSW_I, %r0
+
+        ldw        IPSW_OFFSET(arg0), %r25
+        mtctl      %r25, ipsw
+
+        ldw        SAR_OFFSET(arg0), %r25
+        mtctl      %r25, sar
+
+        ldw        PCOQFRONT_OFFSET(arg0), %r25
+        mtctl      %r25, pcoq
+
+        ldw        PCOQBACK_OFFSET(arg0), %r25
+        mtctl      %r25, pcoq
+
+# Load r25 with interrupts off
+        ldw         R25_OFFSET(arg0),%r25
+# Must load r26 (arg0) last
         ldw         R26_OFFSET(arg0),%r26
 
 isr_exit:

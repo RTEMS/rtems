@@ -188,5 +188,5 @@ void Screen2()
     RTEMS_INVALID_CLOCK,
     "rtems_task_wake_when before current time"
   );
-  puts( " -  RTEMS_INVALID_CLOCK" );
+  puts( " - RTEMS_INVALID_CLOCK" );
 }

@@ -21,8 +21,7 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <bsp.h>
+#include <bsp.h>    /* includes <rtems.h> */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,23 +39,29 @@ extern "C" {
     fatal_directive_status( dirstat, RTEMS_SUCCESSFUL, failmsg )
 
 #define fatal_directive_status( stat, desired, msg ) \
-     { \
+     do { \
        if ( (stat) != (desired) ) { \
          printf( "\n%s FAILED -- expected (%d) got (%d)\n", \
                  (msg), (desired), (stat) ); \
+         fflush(stdout); \
          exit( stat ); \
        } \
-     }
+     } while ( 0 ) 
 
 #define sprint_time(str,s1,tb,s2) \
+  do { \
     sprintf( (str), "%s%02d:%02d:%02d   %02d/%02d/%04d%s", \
        s1, (tb)->hour, (tb)->minute, (tb)->second, \
-       (tb)->month, (tb)->day, (tb)->year, s2 );
+       (tb)->month, (tb)->day, (tb)->year, s2 ); \
+  } while ( 0 )
 
 #define print_time(s1,tb,s2) \
+  do { \
     printf( "%s%02d:%02d:%02d   %02d/%02d/%04d%s", \
        s1, (tb)->hour, (tb)->minute, (tb)->second, \
-       (tb)->month, (tb)->day, (tb)->year, s2 );
+       (tb)->month, (tb)->day, (tb)->year, s2 ); \
+    fflush(stdout); \
+  } while ( 0 )
 
 #define put_dot( c ) putchar( c ); fflush( stdout )
 

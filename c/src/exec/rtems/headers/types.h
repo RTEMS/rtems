@@ -33,12 +33,18 @@ extern "C" {
 typedef unsigned8       rtems_unsigned8;  /* unsigned 8-bit value  */
 typedef unsigned16      rtems_unsigned16; /* unsigned 16-bit value */
 typedef unsigned32      rtems_unsigned32; /* unsigned 32-bit value */
-typedef unsigned64      rtems_unsigned64; /* unsigned 64-bit value */
 
 typedef signed8         rtems_signed8;    /* signed 8-bit value  */
 typedef signed16        rtems_signed16;   /* signed 16-bit value */
 typedef signed32        rtems_signed32;   /* signed 32-bit value */
+
+/*
+ * some C++ compilers (eg: HP's) don't do 'long long'
+ */
+#if defined(__GNUC__)
+typedef unsigned64      rtems_unsigned64; /* unsigned 64-bit value */
 typedef signed64        rtems_signed64;   /* signed 64-bit value */
+#endif
 
 typedef single_precision rtems_single;    /* single precision float */
 typedef double_precision rtems_double;    /* double precision float */

@@ -29,14 +29,14 @@ void RTEMS_Malloc_Initialize(
   size_t  sbrk_amount
 );
 
+extern void malloc_dump(void);
 extern void libc_init(int reentrant);
+extern int  host_errno(void);
+extern void fix_syscall_errno(void);
 
 #ifdef __cplusplus
 }
 #endif
-
-extern int  host_errno(void);
-extern void fix_syscall_errno(void);
 
 #endif
 /* end of include file */

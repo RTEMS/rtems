@@ -87,7 +87,7 @@ void _CPU_ISR_From_CPU_Init()
    */
 
   sigemptyset(&posix_empty_mask);
- 
+
   /*
    * Block all the signals except SIGTRAP for the debugger
    * and SIGABRT for fatal errors.
@@ -602,7 +602,6 @@ void _CPU_ISR_Handler(int vector)
   extern unsigned32  _Thread_Dispatch_disable_level;
   extern boolean     _Context_Switch_necessary;
 
-
   if (_ISR_Nest_level++ == 0) {
       /* switch to interrupt stack */
   }
@@ -635,19 +634,34 @@ void _CPU_ISR_Handler(int vector)
 
 void _CPU_Stray_signal(int sig_num)
 {
-  char buffer[ 4 ];   
-
-  /* 
-   *  We avoid using the stdio section of the library.
-   *  The following is generally safe.
+  char buffer[ 4 ];
+ 
+  /*
+   * print "stray" msg about ones which that might mean something
+   * Avoid using the stdio section of the library.
+   * The following is generally safe.
    */
-
-  buffer[ 0 ] = (sig_num >> 4) + 0x30;
-  buffer[ 1 ] = (sig_num & 0xf) + 0x30;
-  buffer[ 2 ] = '\n';
-
-  write( 2, "Stray signal 0x", 12 );
-  write( 2, buffer, 3 );
+ 
+  switch (sig_num)
+  {
+      case SIGCLD:
+          break;
+ 
+      default:
+      {
+          /*
+           *  We avoid using the stdio section of the library.
+           *  The following is generally safe.
+           */
+ 
+          buffer[ 0 ] = (sig_num >> 4) + 0x30;
+          buffer[ 1 ] = (sig_num & 0xf) + 0x30;
+          buffer[ 2 ] = '\n';
+ 
+          write( 2, "Stray signal 0x", 12 );
+          write( 2, buffer, 3 );
+      }
+  }
  
   /*
    * If it was a "fatal" signal, then exit here

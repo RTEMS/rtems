@@ -1,13 +1,12 @@
 /*
- *	@(#)assoc.c	1.4 - 95/08/02
- *	
+ *	@(#)assoc.c	1.6 - 95/10/25
+ *
  *
  * assoc.c
  *      rtems assoc routines
  *
  *  $Id$
  */
-
 
 #include <rtems.h>
 #include "assoc.h"
@@ -18,13 +17,13 @@
 #define STREQ(a,b)      (strcmp((a), (b)) == 0)
 #define rtems_assoc_is_default(ap)  ((ap)->name && STREQ(ap->name, RTEMS_ASSOC_DEFAULT_NAME))
 
-rtems_assoc_t *
+const rtems_assoc_t *
 rtems_assoc_ptr_by_name(
-    rtems_assoc_t *ap,
-    char *name
+    const rtems_assoc_t *ap,
+    const char *name
   )
 {
-    rtems_assoc_t *default_ap = 0;
+    const rtems_assoc_t *default_ap = 0;
 
     if (rtems_assoc_is_default(ap))
         default_ap = ap++;
@@ -36,13 +35,13 @@ rtems_assoc_ptr_by_name(
     return default_ap;
 }
 
-rtems_assoc_t *
+const rtems_assoc_t *
 rtems_assoc_ptr_by_local(
-    rtems_assoc_t *ap,
+    const rtems_assoc_t *ap,
     unsigned32     local_value
   )
 {
-    rtems_assoc_t *default_ap = 0;
+    const rtems_assoc_t *default_ap = 0;
 
     if (rtems_assoc_is_default(ap))
         default_ap = ap++;
@@ -55,13 +54,13 @@ rtems_assoc_ptr_by_local(
 }
 
 
-rtems_assoc_t *
+const rtems_assoc_t *
 rtems_assoc_ptr_by_remote(
-    rtems_assoc_t *ap,
+    const rtems_assoc_t *ap,
     unsigned32     remote_value
   )
 {
-    rtems_assoc_t *default_ap = 0;
+    const rtems_assoc_t *default_ap = 0;
 
     if (rtems_assoc_is_default(ap))
         default_ap = ap++;
@@ -80,11 +79,11 @@ rtems_assoc_ptr_by_remote(
 
 unsigned32
 rtems_assoc_remote_by_local(
-    rtems_assoc_t *ap,
+    const rtems_assoc_t *ap,
     unsigned32     local_value
   )
 {
-    rtems_assoc_t *nap;
+    const rtems_assoc_t *nap;
     nap = rtems_assoc_ptr_by_local(ap, local_value);
     if (nap)
         return nap->remote_value;
@@ -94,11 +93,11 @@ rtems_assoc_remote_by_local(
 
 unsigned32
 rtems_assoc_local_by_remote(
-    rtems_assoc_t *ap,
+    const rtems_assoc_t *ap,
     unsigned32     remote_value
   )
 {
-    rtems_assoc_t *nap;
+    const rtems_assoc_t *nap;
     nap = rtems_assoc_ptr_by_remote(ap, remote_value);
     if (nap)
         return nap->local_value;
@@ -108,11 +107,11 @@ rtems_assoc_local_by_remote(
 
 unsigned32
 rtems_assoc_remote_by_name(
-    rtems_assoc_t *ap,
-    char          *name
+    const rtems_assoc_t *ap,
+    const char          *name
   )
 {
-    rtems_assoc_t *nap;
+    const rtems_assoc_t *nap;
     nap = rtems_assoc_ptr_by_name(ap, name);
     if (nap)
         return nap->remote_value;
@@ -122,11 +121,11 @@ rtems_assoc_remote_by_name(
 
 unsigned32
 rtems_assoc_local_by_name(
-    rtems_assoc_t *ap,
-    char          *name
+    const rtems_assoc_t *ap,
+    const char          *name
   )
 {
-    rtems_assoc_t *nap;
+    const rtems_assoc_t *nap;
     nap = rtems_assoc_ptr_by_name(ap, name);
     if (nap)
         return nap->local_value;
@@ -139,25 +138,29 @@ rtems_assoc_local_by_name(
  * this is not reentrant, but it really shouldn't be invoked anyway
  */
 
-char *
+const char *
 rtems_assoc_name_bad(
     unsigned32 bad_value
 )
 {
+#ifdef RTEMS_DEBUG
     static char bad_buffer[32];
 
     sprintf(bad_buffer, "< %d [0x%x] >", bad_value, bad_value);
+#else
+    static char bad_buffer[32] = "<assoc.c: BAD NAME>";
+#endif
     return bad_buffer;
 }
 
 
-char *
+const char *
 rtems_assoc_name_by_local(
-    rtems_assoc_t *ap,
+    const rtems_assoc_t *ap,
     unsigned32     local_value
   )
 {
-    rtems_assoc_t *nap;
+    const rtems_assoc_t *nap;
     nap = rtems_assoc_ptr_by_local(ap, local_value);
     if (nap)
         return nap->name;
@@ -165,13 +168,13 @@ rtems_assoc_name_by_local(
     return rtems_assoc_name_bad(local_value);
 }
 
-char *
+const char *
 rtems_assoc_name_by_remote(
-    rtems_assoc_t *ap,
+    const rtems_assoc_t *ap,
     unsigned32     remote_value
   )
 {
-    rtems_assoc_t *nap;
+    const rtems_assoc_t *nap;
     nap = rtems_assoc_ptr_by_remote(ap, remote_value);
     if (nap)
         return nap->name;
@@ -185,7 +188,7 @@ rtems_assoc_name_by_remote(
  */
 
 unsigned32 rtems_assoc_remote_by_local_bitfield(
-    rtems_assoc_t *ap,
+    const rtems_assoc_t *ap,
     unsigned32     local_value
   )
 {  
@@ -201,7 +204,7 @@ unsigned32 rtems_assoc_remote_by_local_bitfield(
 
 
 unsigned32 rtems_assoc_local_by_remote_bitfield(
-    rtems_assoc_t *ap,
+    const rtems_assoc_t *ap,
     unsigned32     remote_value
   )
 {  
@@ -215,8 +218,9 @@ unsigned32 rtems_assoc_local_by_remote_bitfield(
     return local_value;
 }
 
-char *rtems_assoc_name_by_remote_bitfield(
-    rtems_assoc_t *ap,
+char *
+rtems_assoc_name_by_remote_bitfield(
+    const rtems_assoc_t *ap,
     unsigned32     value,
     char          *buffer
   )
@@ -236,8 +240,9 @@ char *rtems_assoc_name_by_remote_bitfield(
     return buffer;
 }
 
-char *rtems_assoc_name_by_local_bitfield(
-    rtems_assoc_t *ap,
+char *
+rtems_assoc_name_by_local_bitfield(
+    const rtems_assoc_t *ap,
     unsigned32     value,
     char          *buffer
   )

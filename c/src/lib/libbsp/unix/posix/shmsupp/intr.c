@@ -21,6 +21,7 @@
 
 #include <bsp.h>
 #include <shm.h>
+#include <sys/types.h>      /* pid_t */
 
 void Shm_Cause_interrupt_unix(
   rtems_unsigned32 node
@@ -29,5 +30,5 @@ void Shm_Cause_interrupt_unix(
   Shm_Interrupt_information *intr;
   intr = &Shm_Interrupt_table[node];
  
-  _CPU_SHM_Send_interrupt( (int) intr->address, (int) intr->value );
+  _CPU_SHM_Send_interrupt( (pid_t) intr->address, intr->value );
 }

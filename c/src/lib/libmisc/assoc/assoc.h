@@ -1,5 +1,5 @@
 /*
- *	@(#)assoc.h	1.2 - 95/06/28
+ *	@(#)assoc.h	1.4 - 95/10/25
  *	
  *
  *  Rtems associativity routines.  Mainly used to convert a value from
@@ -13,7 +13,7 @@
 #define _INCLUDE_ASSOC_H
 
 typedef struct {
-    char *name;
+    const char   *name;
     unsigned32   local_value;
     unsigned32   remote_value;
 } rtems_assoc_t;
@@ -24,21 +24,21 @@ typedef struct {
 
 #define RTEMS_ASSOC_DEFAULT_NAME "(default)"
 
-rtems_assoc_t *rtems_assoc_ptr_by_name(rtems_assoc_t *, char *);
-rtems_assoc_t *rtems_assoc_ptr_by_value(rtems_assoc_t *, unsigned32);
-rtems_assoc_t *rtems_assoc_ptr_by_remote(rtems_assoc_t *, unsigned32);
+const rtems_assoc_t *rtems_assoc_ptr_by_name(const rtems_assoc_t *, const char *);
+const rtems_assoc_t *rtems_assoc_ptr_by_value(const rtems_assoc_t *, unsigned32);
+const rtems_assoc_t *rtems_assoc_ptr_by_remote(const rtems_assoc_t *, unsigned32);
 
-unsigned32   rtems_assoc_remote_by_local(rtems_assoc_t *, unsigned32);
-unsigned32   rtems_assoc_local_by_remote(rtems_assoc_t *, unsigned32);
-unsigned32   rtems_assoc_remote_by_name(rtems_assoc_t *, char *);
-unsigned32   rtems_assoc_local_by_name(rtems_assoc_t *, char *);
-char        *rtems_assoc_name_by_local(rtems_assoc_t *, unsigned32);
-char        *rtems_assoc_name_by_remote(rtems_assoc_t *, unsigned32);
+unsigned32   rtems_assoc_remote_by_local(const rtems_assoc_t *, unsigned32);
+unsigned32   rtems_assoc_local_by_remote(const rtems_assoc_t *, unsigned32);
+unsigned32   rtems_assoc_remote_by_name(const rtems_assoc_t *, const char *);
+unsigned32   rtems_assoc_local_by_name(const rtems_assoc_t *, const char *);
+const char  *rtems_assoc_name_by_local(const rtems_assoc_t *, unsigned32);
+const char  *rtems_assoc_name_by_remote(const rtems_assoc_t *, unsigned32);
 
-unsigned32   rtems_assoc_remote_by_local_bitfield(rtems_assoc_t *, unsigned32);
-char        *rtems_assoc_name_by_local_bitfield(rtems_assoc_t *, unsigned32, char *);
-char        *rtems_assoc_name_by_remote_bitfield(rtems_assoc_t *, unsigned32, char *);
-unsigned32   rtems_assoc_local_by_remote_bitfield(rtems_assoc_t *ap, unsigned32);
+unsigned32   rtems_assoc_remote_by_local_bitfield(const rtems_assoc_t *, unsigned32);
+char  *rtems_assoc_name_by_local_bitfield(const rtems_assoc_t *, unsigned32, char *);
+char  *rtems_assoc_name_by_remote_bitfield(const rtems_assoc_t *, unsigned32, char *);
+unsigned32   rtems_assoc_local_by_remote_bitfield(const rtems_assoc_t *, unsigned32);
 
 
 #endif /* ! _INCLUDE_ASSOC_H */

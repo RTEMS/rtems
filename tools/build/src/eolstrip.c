@@ -8,19 +8,6 @@
  *           -v          -- verbose
  *
  * $Id$
- * $Log$
- * Revision 1.4  1995/10/06  20:00:39  joel
- * SPARC merged and successfully tested w/o interrupt support
- *
- * Revision 1.3  1995/10/06 16:32:21  joel
- * moved to new development machine and went to gcc 2.7.0
- *
- * Revision 1.2  1995/05/31  16:44:28  joel
- * fixing revision
- *
- * Revision 1.1.1.1  1995/05/11  17:35:12  joel
- * Release 3.1.15
- *
  */
 
 #define GETOPTARGS "vt"
@@ -261,8 +248,8 @@ error(int error_flag, ...)
     {
         if (error_flag & ERR_FATAL)
         {
-            error(0, local_errno ? "fatal error, exiting" : "exiting");
-            exit(local_errno);
+            error(0, "fatal error, exiting");
+            exit(local_errno ? local_errno : 1);
         }
         else
         {

@@ -20,8 +20,6 @@
 #include <bsp.h>
 #include <shm.h>
 
-extern int      semid;
-
 /*
  *  Shm_Initialize_lock
  *

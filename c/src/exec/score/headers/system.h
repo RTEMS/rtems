@@ -56,14 +56,15 @@ extern "C" {
  */
 
 #ifdef USE_INLINES
-#define STATIC static
-#define INLINE __inline__
+# define STATIC static
+# ifdef __GNUC__
+#  define INLINE __inline__
+# else
+#  define INLINE inline
+# endif
 #else
-/*
-#error Only the GNU C compiler is currently supported!!!
-*/
-#define STATIC
-#define INLINE
+# define STATIC
+# define INLINE
 #endif
 
 /*

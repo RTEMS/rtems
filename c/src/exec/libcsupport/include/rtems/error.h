@@ -1,11 +1,15 @@
+
 /*
- *	@(#)error.h	1.1 - 95/08/02
+ *	@(#)error.h	1.3 - 95/10/25
  *	
  *
  *  Defines and externs for rtems error reporting
  *
  *  $Id$
  */
+
+#ifndef __RTEMS_ERROR_h
+#define __RTEMS_ERROR_h
 
 /*
  * rtems_error() and rtems_panic() support
@@ -18,9 +22,11 @@
 #define RTEMS_ERROR_MASK  (RTEMS_ERROR_ERRNO | RTEMS_ERROR_ABORT | \
                              RTEMS_ERROR_PANIC) /* all */
 
-char *rtems_status_text(rtems_status_code);
-int   rtems_error(int error_code, char *printf_format, ...);
-void  rtems_panic(char *printf_format, ...);
+const char *rtems_status_text(rtems_status_code);
+int   rtems_error(int error_code, const char *printf_format, ...);
+void  rtems_panic(const char *printf_format, ...);
 
 extern int rtems_panic_in_progress;
 
+#endif
+/* end of include file */

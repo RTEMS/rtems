@@ -22,6 +22,8 @@
 #include <stdio.h>
 
 #include <rtems.h>
+#include <rtems/error.h>
+
 #include <shm.h>
 
 void Shm_Cause_interrupt_pxfl(
@@ -38,13 +40,12 @@ void Shm_Cause_interrupt_pxfl(
   switch ( intr->length ) {
     case NO_INTERRUPT:
        break;
+
     case LONG:
       u32   = (rtems_unsigned32 *)intr->address;
       HPPA_ASM_STWAS( value, 0, u32 );
       break;
     default:
       fprintf( stderr, "Shm_Cause_interrupt_pxfl: Unsupported length!!!\n" );
-      rtems_shutdown_executive( 0 );
-      break;
   }
 }

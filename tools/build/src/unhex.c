@@ -708,8 +708,8 @@ error(int error_flag, ...)
     {
         if (error_flag & ERR_FATAL)
         {
-            error(0, local_errno ? "fatal error, exiting" : "exiting");
-            exit(local_errno);
+            error(0, "fatal error, exiting");
+            exit(local_errno ? local_errno : 1);
         }
         else
         {

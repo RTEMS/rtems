@@ -27,10 +27,11 @@
 
 #include <bsp.h>
 #include <shm.h>
+#include <sys/types.h>    /* pid_t */
 
 shm_config_table BSP_shm_cfgtbl;
 
-int              semid;
+int semid;
 
 void Shm_Cause_interrupt_unix(
   rtems_unsigned32 node

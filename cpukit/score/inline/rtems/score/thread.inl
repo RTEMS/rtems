@@ -241,29 +241,35 @@ STATIC INLINE Thread_Control *_Thread_Get (
 {
   Objects_Classes      the_class;
   Objects_Information *information;
+  Thread_Control      *tp = (Thread_Control *) 0;
  
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ) {
     _Thread_Disable_dispatch();
     *location = OBJECTS_LOCAL;
-    return( _Thread_Executing );
+    tp = _Thread_Executing;
+    goto done;
   }
  
   the_class = _Objects_Get_class( id );
  
   if ( the_class > OBJECTS_CLASSES_LAST ) {
     *location = OBJECTS_ERROR;
-    return (Thread_Control *) 0;
+    goto done;
   }
  
   information = _Objects_Information_table[ the_class ];
  
   if ( !information || !information->is_thread ) {
     *location = OBJECTS_ERROR;
-    return (Thread_Control *) 0;
+    goto done;
   }
  
-  return (Thread_Control *) _Objects_Get( information, id, location );
+  tp = (Thread_Control *) _Objects_Get( information, id, location );
+ 
+done:
+  return tp;
 }
+
 
 /*
  *  _Thread_Is_proxy_blocking

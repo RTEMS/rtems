@@ -196,6 +196,17 @@ typedef struct {
 } CPU_Interrupt_frame;
 
 /*
+ * Our interrupt handlers take a 2nd argument:
+ *   a pointer to a CPU_Interrupt_frame
+ * So we use our own prototype instead of rtems_isr_entry
+ */
+
+typedef void ( *hppa_rtems_isr_entry )(
+    unsigned32,
+    CPU_Interrupt_frame *
+ );
+
+/*
  * The following table contains the information required to configure
  * the HPPA specific parameters.
  */
@@ -226,7 +237,7 @@ typedef struct {
   unsigned32   external_interrupts;   /* # of external interrupts we use */
   unsigned32   external_interrupt[HPPA_EXTERNAL_INTERRUPTS];
 
-  void       (*spurious_handler)( unsigned32 mask, CPU_Interrupt_frame *);
+  hppa_rtems_isr_entry spurious_handler;
 
   unsigned32   itimer_clicks_per_microsecond; /* for use by Clock driver */
 }   rtems_cpu_table;
@@ -238,14 +249,18 @@ EXTERN unsigned32          _CPU_Default_gr27;
 EXTERN void               *_CPU_Interrupt_stack_low;
 EXTERN void               *_CPU_Interrupt_stack_high;
 
+/* entry points */
+void hppa_external_interrupt_spurious_handler(unsigned32, CPU_Interrupt_frame *);
+
 #endif          /* ! ASM */
 
 /*
- *  context size area for floating point
+ *  context sizes
  */
 
 #ifndef ASM
-#define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
+#define CPU_CONTEXT_SIZE     sizeof( Context_Control )
+#define CPU_CONTEXT_FP_SIZE  sizeof( Context_Control_fp )
 #endif
 
 /*
@@ -439,9 +454,9 @@ unsigned32 _CPU_ISR_Get_level( void );
  *    + disable interrupts and halt the CPU
  */
 
-void    hppa_cpu_halt(unsigned32 type_of_halt, unsigned32 the_error);
+void    hppa_cpu_halt(unsigned32 the_error);
 #define _CPU_Fatal_halt( _error ) \
-    hppa_cpu_halt(0, _error)
+    hppa_cpu_halt(_error)
 
 /* end of Fatal Error manager macros */
 

@@ -55,7 +55,7 @@ do
             fatal;;
     esac
 done
-((shiftcount = $OPTIND - 1))
+shiftcount=`expr $OPTIND - 1`
 shift $shiftcount
 
 args=$*

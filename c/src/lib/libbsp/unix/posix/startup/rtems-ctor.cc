@@ -1,5 +1,5 @@
-// 	@(#)rtems-ctor.cc	1.6 - 95/04/25
 // 
+// 	@(#)rtems-ctor.cc	1.6 - 95/04/25
 //
 
 /*
@@ -81,6 +81,8 @@ RTEMS::~RTEMS()
 }
 
 extern "C" {
+    extern void invoke_non_gnu_constructors(void);
+
     int
     main(int argc,
          char **argv,
@@ -94,6 +96,12 @@ extern "C" {
             rtems_progname = argv[0];
         else
             rtems_progname = "RTEMS";
+
+        /*
+         * run any non-gnu constructors we may need
+         */
+        
+        invoke_non_gnu_constructors();
 
         /*
          *  Start multitasking

@@ -1,4 +1,4 @@
-#if  !defined(RTEMS_LIBC) && !defined(RTEMS_NEWLIB) && !defined(RTEMS_UNIX)
+#if  !defined(RTEMS_NEWLIB) && !defined(RTEMS_UNIX)
 
 /*  no_libc.h
  *

@@ -1,6 +1,7 @@
 /*
- *	@(#)monitor.c	1.18 - 95/08/02
+ *	@(#)monitor.c	1.22 - 95/11/02
  *	
+ *
  *
  * RTEMS monitor main body
  *	
@@ -17,6 +18,10 @@
  *      should have a separate monitor FILE stream (ala the debugger)
  *      remote request/response stuff should be cleaned up
  *         maybe we can use real rpc??
+ *      'info' commadn to print out:
+ *           interrupt stack location, direction and size
+ *           floating point config stuff
+ *           interrupt config stuff
  *
  *  $Id$
  */
@@ -227,7 +232,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       "  Enter the debugger, if possible.\n"
       "  A continue from the debugger will return to the monitor.\n",
       0,
-      CPU_INVOKE_DEBUGGER,
+      rtems_monitor_debugger_cmd,
       0,
     },
 #endif            
@@ -296,6 +301,18 @@ rtems_monitor_continue_cmd(
     rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
 }
 
+void
+rtems_monitor_debugger_cmd(
+    int        argc,
+    char     **argv,
+    unsigned32 command_arg,
+    boolean    verbose
+)
+{
+#ifdef CPU_INVOKE_DEBUGGER
+    CPU_INVOKE_DEBUGGER;
+#endif
+}
 
 void
 rtems_monitor_node_cmd(
@@ -338,22 +355,14 @@ rtems_monitor_node_cmd(
  *              400a708c ? _Thread_Dispatch_disable_level
  *              400a7090 ? _Configuration_Table
  *
- *
  *      We ignore the type field.
- *
- *  Parameters:
- *
- *
- *  Returns:
- *
  *
  *  Side Effects:
  *      Creates and fills in 'rtems_monitor_symbols' table
  *
- *  Notes:
- *
- *
- *  Deficiencies/ToDo:
+ *  TODO
+ *      there should be a BSP #define or something like that
+ *         to do this;  Assuming stdio is crazy.
  *      Someday this should know BFD
  *              Maybe we could get objcopy to just copy the symbol areas
  *              and copy that down.
@@ -373,7 +382,7 @@ rtems_monitor_symbols_loadup(void)
     if (rtems_monitor_symbols == 0)
         return;
 
-#ifdef simhppa
+#ifdef SIMHPPA
     fp = fdopen(8, "r");                /* don't ask; don't tell */
 #else
     fp = fopen("symbols", "r");

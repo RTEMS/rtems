@@ -29,7 +29,7 @@ TA2 - rtems_task_delete - deletes self
 TA1 - RTEMS_EVENT_18 received - eventout => 00040000
 TA1 - rtems_clock_get - 08:15:05   02/12/1988
 TA1 - rtems_event_send - send RTEMS_EVENT_3 to self
-TA1 - rtems_event_receive - RTEMS_EVENT_3 or RTEMS_EVENT_22 - NO_WAIT and ANY 
+TA1 - rtems_event_receive - RTEMS_EVENT_3 or RTEMS_EVENT_22 - NO_WAIT and ANY
 TA1 - RTEMS_EVENT_3 received - eventout => 00000008
 TA1 - rtems_event_send - send RTEMS_EVENT_4 to self
 TA1 - rtems_event_receive - RTEMS_EVENT_4 or RTEMS_EVENT_5 - forever and ANY
@@ -63,10 +63,10 @@ TA1 - rtems_clock_set - 08:15:00   02/12/1988
 TA1 - rtems_event_receive all outstanding events
 TA1 - rtems_event_send - sending RTEMS_EVENT_10 to self in 1 day
 TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 2 days
-TA1 - rtems_clock_set - 07:15:00 02/12/1988
+TA1 - rtems_clock_set - 07:15:00   02/12/1988
 TA1 - set time backwards
 TA1 - no events received
-TA1 - rtems_clock_set - 07:15:00 02/14/1988
+TA1 - rtems_clock_set - 07:15:00   02/14/1988
 TA1 - set time forwards (leave a timer)
 TA1 - RTEMS_EVENT_10 received
 TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 100 ticks

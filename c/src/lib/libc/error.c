@@ -1,10 +1,9 @@
 /*
- *	@(#)error.c	1.2 - 95/08/02
+ *	@(#)error.c	1.6 - 95/12/12
  *	
  *
- * report errors and panics to RTEMS' stderr.
- * Currently just used by RTEMS monitor.
- *
+ *  report errors and panics to RTEMS' stderr.
+ *  Currently just used by RTEMS monitor.
  *
  *  $Id$
  */
@@ -97,7 +96,7 @@ rtems_assoc_t rtems_status_assoc[] = {
 };
 
 
-char *
+const char *
 rtems_status_text(
     rtems_status_code status
 )
@@ -108,7 +107,7 @@ rtems_status_text(
 
 static int rtems_verror(
     unsigned32   error_flag,
-    char        *printf_format,
+    const char   *printf_format,
     va_list      arglist
 )
 {
@@ -181,7 +180,7 @@ static int rtems_verror(
 
 int rtems_error(
     int   error_flag,
-    char *printf_format,
+    const char *printf_format,
     ...
   )
 {
@@ -200,7 +199,7 @@ int rtems_error(
  */
 
 void rtems_panic(
-    char *printf_format,
+    const char *printf_format,
     ...
   )
 {

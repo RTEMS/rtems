@@ -1,6 +1,6 @@
 /*
- *	@(#)hppa.h	1.13 - 95/09/21
- *	
+ * @(#)hppa.h	1.17 - 95/12/13
+ * 
  *
  *  Description:
  *		
@@ -209,6 +209,7 @@ extern "C" {
 
 #define HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER         HPPA_INTERRUPT_EXTERNAL_0
 #define HPPA_EXTERNAL_INTERRUPTS                       32
+#define HPPA_INTERNAL_INTERRUPTS                       32
 
 /* BSP defined interrupts begin here */
 
@@ -646,7 +647,11 @@ extern "C" {
 #define HPPA_BREAK(i5,i13)      (((i5) & 0x1F) | (((i13) & 0x1FFF) << 13))
 
 
-#ifndef ASM
+/*
+ * this won't work in ASM or non-GNU compilers
+ */
+
+#if !defined(ASM) && defined(__GNUC__)
 
 /*
  * static inline utility functions to get at control registers
@@ -699,21 +704,15 @@ EMIT_CONTROLS(tr5, HPPA_TR5);                /* CR29 */
 EMIT_CONTROLS(tr6, HPPA_TR6);                /* CR30 */
 EMIT_CONTROLS(tr7, HPPA_CR31);               /* CR31 */
 
+#endif /* ASM and GNU */
+
 /*
  * If and How to invoke the debugger (a ROM debugger generally)
  */
-
-#ifdef SIMHPPA_ROM
-/* invoke the pflow debugger */
-#define CPU_INVOKE_DEBUGGER  \
+#define CPU_INVOKE_DEBUGGER \
     do { \
-        extern void debugger_break(void); \
-        debugger_break(); \
+        HPPA_ASM_BREAK(1,1); \
     } while (0)
-#endif
-
-
-#endif /* ASM */
 
 #ifdef __cplusplus
 }

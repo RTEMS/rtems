@@ -15,12 +15,13 @@
 
 #include <stdio.h>                      /* O_RDONLY, et.al. */
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
-#include <sys/fcntl.h>                      /* O_RDONLY, et.al. */
+
 #if defined(solaris2)
 #define O_NDELAY O_NONBLOCK
 #elif  defined(RTEMS_NEWLIB)
 #define O_NDELAY _FNBIO
 #endif
+
 #include <errno.h>
 #include <string.h>                     /* strcmp */
 #include <unistd.h>
@@ -208,7 +209,7 @@ rtems_libio_allocate(void)
 
             rc = rtems_semaphore_create(
               RTEMS_LIBIO_IOP_SEM(iop - rtems_libio_iops),
-              1, 
+              1,
               RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
               RTEMS_NO_PRIORITY,
               &iop->sem
