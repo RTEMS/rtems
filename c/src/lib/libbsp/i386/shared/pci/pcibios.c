@@ -213,6 +213,69 @@ pcib_find_by_class(int classCode, int idx, int *sig)
   
   
 
+
+#define PCI_MULTI_FUNCTION       0x80
+#define PCI_MAX_DEVICES		 16
+#define PCI_MAX_FUNCTIONS	 8
+
+
+int
+BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
+                   int instance, int *pbus, int *pdev, int *pfun )
+{
+   int sig;
+   unsigned int d;
+   unsigned short s;
+   unsigned char bus,dev,fun,hd;
+
+   for (bus=0; bus<BusCountPCI(); bus++) 
+   {
+      for (dev=0; dev<PCI_MAX_DEVICES; dev++) 
+      {
+         sig = PCIB_DEVSIG_MAKE(bus,dev,0);
+
+         /* pci_read_config_byte(bus,dev,0, PCI_HEADER_TYPE, &hd); */
+         pcib_conf_read8(sig, 0xe, &hd); 
+
+         hd = (hd & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
+
+         for (fun=0; fun<hd; fun++) {
+            /* 
+             * The last devfn id/slot is special; must skip it
+             */
+            if( PCI_MAX_DEVICES-1 == dev && PCI_MAX_FUNCTIONS-1 == fun )
+               break;
+
+            /*pci_read_config_dword(bus,dev,fun,PCI_VENDOR_ID,&d); */
+            pcib_conf_read32(sig, 0, &d); 
+            if( d == -1 )
+               continue;
+#ifdef PCI_DEBUG
+            printk("BSP_pciFindDevice: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
+#endif
+            /* pci_read_config_word(bus,dev,fun,PCI_VENDOR_ID,&s); */
+            pcib_conf_read16(sig, 0, &s); 
+            if (vendorid != s)
+               continue;
+
+            /* pci_read_config_word(bus,dev,fun,PCI_DEVICE_ID,&s); */
+            pcib_conf_read16(sig, 0x2, &s); 
+            if (deviceid == s) {
+               if (instance--) continue;
+               *pbus=bus; 
+               *pdev=dev; 
+               *pfun=fun;
+               return 0;
+            }
+         }
+      }
+   }
+   return -1;
+}
+
+
+  
+
 /* 
  * Generate Special Cycle
  */
