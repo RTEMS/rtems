@@ -1,3 +1,7 @@
+2000-10-23	Joel Sherrill <joel@OARcorp.com>
+
+	* console/serial_mouse.c: Fixed typos introduced by removal of CR/LF.
+
 2000-10-20	Rosimildo da Silva <rdasilva@connecttel.com>
 
 	* console/serial_mouse.c: Added support for changing serial parameters.

@@ -18,6 +18,11 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.3  2000/10/20 16:01:13  joel
+ * 2000-10-20	Rosimildo da Silva <rdasilva@connecttel.com>
+ *
+ * 	* console/serial_mouse.c: Added support for changing serial parameters.
+ *
  ****************************************************************************/
 
 #include <stdio.h>
@@ -367,10 +372,10 @@ conSetAttr(int port, int minor, const struct termios *t)
     stopbits = 0;
   }
   printk("Mouse baud, port=%X, baud=%d\n", port, baud );
-  BSP_uart_set_attributes(port, baud, databits, parity, stopbits)
+  BSP_uart_set_attributes(port, baud, databits, parity, stopbits);
 
   return 0;
-
+}
 
 /*
  * Handle ioctl request for ttyS2.
