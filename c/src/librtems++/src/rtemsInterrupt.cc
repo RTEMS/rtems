@@ -54,6 +54,11 @@ rtemsInterrupt::rtemsInterrupt()
   }
 }
 
+rtemsInterrupt::~rtemsInterrupt()
+{
+  release();
+}
+
 const rtems_status_code rtemsInterrupt::isr_catch(const rtems_vector_number vec)
 {
   if (vec >= CPU_INTERRUPT_NUMBER_OF_VECTORS)
