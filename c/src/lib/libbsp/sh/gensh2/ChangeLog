@@ -1,3 +1,12 @@
+2001-08-01  Radzislaw Galler  <rgaller@et.put.poznan.pl>
+
+	* include/bsp.h: Disabled redefinition of
+	CONSOLE_DRIVER_TABLE_ENTRY. Some "FIXME:" comments added.
+	* console/config.c: New file. Definitions of externs referenced
+	from libbsp/shared/console.c.
+	* console/Makefile.am: Changed VPATH to point to
+	libbsp/shared. Added config.c to C_FILES and EXTRA_DIST.
+
 2001-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add bspopts.h.

@@ -62,8 +62,14 @@ extern "C" {
 #define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVNULL_DRIVER_TABLE_ENTRY
 #else
 #include <sh/sci.h>
+/* FIXME:
+ *   These definitions will be no longer necessary if the old
+ *   implementation of SCI driver will be droped
+ */
 #define BSP_CONSOLE_DEVNAME "/dev/sci0"
+#define BSP_CONSOLE_MINOR_NUMBER ((rtems_device_minor_number) 0)
 #define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVSCI_DRIVER_TABLE_ENTRY
+#define BSP_CONSOLE_DEVICE_TERMIOS_HANDLERS (sh_sci_get_termios_handlers(TRUE))
 #endif
 
 /*
@@ -131,13 +137,18 @@ extern void bsp_cleanup( void );
 
 /*
  * We redefine CONSOLE_DRIVER_TABLE_ENTRY to redirect /dev/console
+ *
+ * FIXME: Since console driver works properly this is not
+ * necessary. When enabled - causes error in console_initialize.
  */
+#if 0
 #undef CONSOLE_DRIVER_TABLE_ENTRY
 #define CONSOLE_DRIVER_TABLE_ENTRY \
   BSP_CONSOLE_DRIVER_TABLE_ENTRY, \
   { console_initialize, console_open, console_close, \
       console_read, console_write, console_control }
- 
+#endif
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

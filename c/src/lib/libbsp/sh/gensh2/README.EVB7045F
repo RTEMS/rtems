@@ -138,7 +138,7 @@ Hello World
   an MS stuff anymore... ;)
 
   It is possible to repeat the success on MS Windows only. To do the
-  same on Linux only you a tool to downlad 'gdbstubs' on the
+  same on Linux only you need a tool to downlad 'gdbstubs' on the
   board. This should be no problem to find it on the net but right now
   I don't know about it.
 
