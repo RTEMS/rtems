@@ -12,9 +12,8 @@ EXTRA_DIST += irq/irq_asm.S irq/irq_init.c
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/uart.h: comm/uart.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h

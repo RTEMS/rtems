@@ -34,9 +34,8 @@ EXTRA_DIST = TODO $(C_FILES) $(S_FILES) $(UNUSED_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: rtems/score/ppc_offs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h

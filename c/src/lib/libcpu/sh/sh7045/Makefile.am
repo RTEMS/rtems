@@ -75,14 +75,12 @@ all-local: $(PGMS) $(TMPINSTALL_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/sh/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sh
+	@$(mkdir_p) $(PROJECT_INCLUDE)/sh
 	@: > $(PROJECT_INCLUDE)/sh/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/sh/io_types.h: include/io_types.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/io_types.h

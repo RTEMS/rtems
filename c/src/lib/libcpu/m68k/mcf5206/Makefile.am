@@ -19,7 +19,7 @@ clock_OBJS = $(clock_C_FILES:clock/%.c=clock/$(ARCH)/%.$(OBJEXT))
 EXTRA_DIST = $(clock_C_FILES)
 
 clock/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) clock/$(ARCH)
+	@$(mkdir_p) clock/$(ARCH)
 	@: > clock/$(ARCH)/$(dirstamp)
 clock/$(ARCH)/%.$(OBJEXT): clock/%.c clock/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -34,7 +34,7 @@ console_OBJS = $(console_C_FILES:console/%.c=console/$(ARCH)/%.$(OBJEXT))
 EXTRA_DIST += $(console_C_FILES)
 
 console/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) console/$(ARCH)
+	@$(mkdir_p) console/$(ARCH)
 	@: > console/$(ARCH)/$(dirstamp)
 console/$(ARCH)/%.$(OBJEXT): console/%.c console/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -49,7 +49,7 @@ mbus_OBJS = $(mbus_C_FILES:mbus/%.c=mbus/$(ARCH)/%.$(OBJEXT))
 EXTRA_DIST += $(mbus_C_FILES)
 
 mbus/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) mbus/$(ARCH)
+	@$(mkdir_p) mbus/$(ARCH)
 	@: > mbus/$(ARCH)/$(dirstamp)
 mbus/$(ARCH)/%.$(OBJEXT): mbus/%.c mbus/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -68,7 +68,7 @@ timer_OBJS += $(timer_S_FILES:timer/%.S=timer/$(ARCH)/%.$(OBJEXT))
 EXTRA_DIST += $(timer_S_FILES)
 
 timer/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) timer/$(ARCH)
+	@$(mkdir_p) timer/$(ARCH)
 	@: > timer/$(ARCH)/$(dirstamp)
 timer/$(ARCH)/%.$(OBJEXT): timer/%.c timer/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -88,9 +88,8 @@ CLEANDIRS = */$(ARCH)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/mcf5206/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/mcf5206
+	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5206
 	@: > $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mcf5206/mcf5206e.h: include/mcf5206e.h $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5206/mcf5206e.h
