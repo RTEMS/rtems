@@ -18,6 +18,7 @@ SECTIONS
 	 CREATE_OBJECT_SYMBOLS
 	*(.text) 
 	*(.rodata*) 
+        *(.gnu.linkonce.r*)
 
         /*
          * Special FreeBSD sysctl sections.
