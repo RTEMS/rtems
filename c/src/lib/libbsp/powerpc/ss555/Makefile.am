@@ -74,6 +74,22 @@ startup_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += startup$(LIB_VARIANT).rel
 
+EXTRA_PROGRAMS += tm27supp.rel
+CLEANFILES += tm27supp.rel
+tm27supp_rel_SOURCES = startup/tm27supp.c
+tm27supp_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+tm27supp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += tm27supp$(LIB_VARIANT).rel
+
+EXTRA_PROGRAMS += tm27supp_g.rel
+CLEANFILES += tm27supp_g.rel
+tm27supp_g_rel_SOURCES = $(tm27supp_rel_SOURCES)
+tm27supp_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+tm27supp_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += tm27supp$(LIB_VARIANT).rel
+
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 PREINSTALL_DIRS =

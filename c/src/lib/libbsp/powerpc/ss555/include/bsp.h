@@ -84,30 +84,9 @@ extern volatile cpld_t cpld;              /* defined in linkcmds */
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-#define Declarations_for_tm27						\
-void tm27On()								\
-{									\
-}									\
-									\
-void tm27Off()								\
-{									\
-}									\
-									\
-int tm27IsOn()								\
-{									\
-  return 1;								\
-}									\
-									\
-rtems_irq_connect_data tm27IrqData = {					\
-  CPU_USIU_EXT_IRQ_7,							\
-  (rtems_irq_hdl)0,							\
-  (rtems_irq_enable)tm27On,						\
-  (rtems_irq_disable)tm27Off,						\
-  (rtems_irq_is_enabled)tm27IsOn					\
-};
-
 #define Install_tm27_vector( handler )					\
 {									\
+  extern rtems_irq_connect_data tm27IrqData;                            \
   usiu.siel |= (1 << 17); 						\
   usiu.sipend |= (1 << 17); 						\
 									\
