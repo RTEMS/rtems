@@ -36,6 +36,7 @@ void _Extension_Manager_initialization(
 {
   _Objects_Initialize_information(
      &_Extension_Information,
+     OBJECTS_RTEMS_EXTENSIONS,
      FALSE,
      maximum_extensions,
      sizeof( Extension_Control )

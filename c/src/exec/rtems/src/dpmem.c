@@ -37,6 +37,7 @@ void _Dual_ported_memory_Manager_initialization(
 {
   _Objects_Initialize_information(
      &_Dual_ported_memory_Information,
+     OBJECTS_RTEMS_PORTS,
      FALSE,
      maximum_ports,
      sizeof( Dual_ported_memory_Control )

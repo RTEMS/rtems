@@ -39,6 +39,7 @@ void _Region_Manager_initialization(
 {
   _Objects_Initialize_information(
      &_Region_Information,
+     OBJECTS_RTEMS_REGIONS,
      FALSE,
      maximum_regions,
      sizeof( Region_Control )

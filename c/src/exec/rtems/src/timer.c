@@ -38,6 +38,7 @@ void _Timer_Manager_initialization(
 {
   _Objects_Initialize_information(
      &_Timer_Information,
+     OBJECTS_RTEMS_TIMERS,
      FALSE,
      maximum_timers,
      sizeof( Timer_Control )

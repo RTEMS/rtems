@@ -143,7 +143,6 @@ rtems_status_code rtems_task_create(
     return( RTEMS_TOO_MANY );
   }
 
-  the_thread->name                   = name;
   the_thread->attribute_set          = the_attribute_set;
   the_thread->current_state          = STATES_DORMANT;
   the_thread->current_modes          = initial_modes;

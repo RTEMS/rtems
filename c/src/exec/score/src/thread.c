@@ -59,6 +59,7 @@ void _Thread_Handler_initialization(
 
   _Objects_Initialize_information(
      &_Thread_Information,
+     OBJECTS_RTEMS_TASKS,
      TRUE,
      maximum_tasks,
      sizeof( Thread_Control )

@@ -45,6 +45,7 @@ void _Message_queue_Manager_initialization(
 {
   _Objects_Initialize_information(
     &_Message_queue_Information,
+    OBJECTS_RTEMS_MESSAGE_QUEUES,
     TRUE,
     maximum_message_queues,
     sizeof( Message_queue_Control )
@@ -285,7 +286,7 @@ rtems_status_code rtems_message_queue_delete(
           MESSAGE_QUEUE_MP_ANNOUNCE_DELETE,
           the_message_queue->Object.id,
           0,                                 /* Not used */
-          MPCI_DEFAULT_TIMEOUT
+          0
         );
       }
 

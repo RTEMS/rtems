@@ -51,7 +51,8 @@ void _Objects_Handler_initialization(
  *  This routine initializes all object information related data structures.
  *
  *  Input parameters:
- *    information     - object class
+ *    information     - object information table
+ *    the_class       - object class
  *    supports_global - TRUE if this is a global object class
  *    maximum         - maximum objects of this class
  *    size            - size of this object's control block
@@ -61,25 +62,27 @@ void _Objects_Handler_initialization(
 
 void _Objects_Initialize_information(
   Objects_Information *information,
-  boolean                     supports_global,
-  unsigned32                  maximum,
-  unsigned32                  size
+  Objects_Classes      the_class,
+  boolean              supports_global,
+  unsigned32           maximum,
+  unsigned32           size
 )
 {
   unsigned32       minimum_index;
   unsigned32       index;
   Objects_Control *the_object;
 
-  information->maximum = maximum;
+  information->maximum   = maximum;
+  information->the_class = the_class; 
 
   if ( maximum == 0 ) minimum_index = 0;
   else                minimum_index = 1;
 
   information->minimum_id =
-    _Objects_Build_id( _Objects_Local_node, minimum_index );
+    _Objects_Build_id( the_class, _Objects_Local_node, minimum_index );
 
   information->maximum_id =
-    _Objects_Build_id( _Objects_Local_node, maximum );
+    _Objects_Build_id( the_class, _Objects_Local_node, maximum );
 
   information->local_table = _Workspace_Allocate_or_fatal_error(
     (maximum + 1) * sizeof(Objects_Control *)
@@ -110,7 +113,8 @@ void _Objects_Initialize_information(
     for ( index=1;
           index <= maximum ;
           index++ ) {
-      the_object->id = _Objects_Build_id( _Objects_Local_node, index );
+      the_object->id = 
+        _Objects_Build_id( the_class, _Objects_Local_node, index );
       the_object = (Objects_Control *) the_object->Node.next;
     }
 
@@ -172,7 +176,11 @@ rtems_status_code _Objects_Name_to_id(
           index++
          )
       if ( name == names[ index ] ) {
-        *id = _Objects_Build_id( _Objects_Local_node, index );
+        *id = _Objects_Build_id(
+          information->the_class,
+          _Objects_Local_node,
+          index
+        );
         return( RTEMS_SUCCESSFUL );
       }
   }
@@ -213,6 +221,7 @@ Objects_Control *_Objects_Get(
   unsigned32       index;
 
   index = id - information->minimum_id;
+
   if ( information->maximum >= index ) {
     _Thread_Disable_dispatch();
     if ( (the_object = information->local_table[index+1]) != NULL ) {
@@ -273,7 +282,7 @@ _Objects_Get_next(
 
     do {
         /* walked off end of list? */
-        if (next_id > information->maximum_id)
+        if (rtems_get_index(next_id) > information->maximum)
         {
             *location_p = OBJECTS_ERROR;
             goto final;

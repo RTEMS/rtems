@@ -39,6 +39,7 @@ void _Partition_Manager_initialization(
 {
   _Objects_Initialize_information(
     &_Partition_Information,
+    OBJECTS_RTEMS_PARTITIONS,
     TRUE,
     maximum_partitions,
     sizeof( Partition_Control )

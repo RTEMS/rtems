@@ -56,6 +56,7 @@ void _Semaphore_Manager_initialization(
 {
   _Objects_Initialize_information(
     &_Semaphore_Information,
+     OBJECTS_RTEMS_SEMAPHORES,
     TRUE,
     maximum_semaphores,
     sizeof( Semaphore_Control )

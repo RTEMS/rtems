@@ -41,6 +41,7 @@ void _Rate_monotonic_Manager_initialization(
 {
   _Objects_Initialize_information(
      &_Rate_monotonic_Information,
+     OBJECTS_RTEMS_PERIODS,
      FALSE,
      maximum_periods,
      sizeof( Rate_monotonic_Control )

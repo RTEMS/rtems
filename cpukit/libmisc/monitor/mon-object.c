@@ -120,12 +120,16 @@ rtems_monitor_id_fixup(
     {
 #if 0
         /* XXX Uncomment this when types are added to id's */
-        if (rtems_get_type(id) != RTEMS_OBJECT_INVALID)
-            type = rtems_get_type(id);
+        if (rtems_get_class(id) != OBJECTS_NO_CLASS)
+            type = rtems_get_class(id);
 
         id = _Objects_Build_id(type, default_node, rtems_get_index(id));
 #else
-        id = _Objects_Build_id(default_node, rtems_get_index(id));
+#warning "TONY... FIX ME!!!!!"
+#if defined(hppa1_1)
+#error "TONY... I SAID TO FIX ME!!!!!  <HAHAHAHAHA>" 
+#endif
+        id = _Objects_Build_id(0, default_node, rtems_get_index(id));
 #endif
     }
     return id;
