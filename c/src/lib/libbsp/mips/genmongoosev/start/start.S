@@ -33,7 +33,9 @@
 **           Added cache flush routines.
 */
 
+#ifndef LANGUAGE_ASSEMBLY
 #define LANGUAGE_ASSEMBLY
+#endif
 
 
 #include <asm.h>

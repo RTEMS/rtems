@@ -1,3 +1,7 @@
+2001-03-08	Joel Sherrill <joel@OARcorp.com>
+
+	* start/start.S, startup/bspstart.c: Removed warnings.
+
 2002-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* startup/gdb-support.c: Added calls into the mips-support gdb stub

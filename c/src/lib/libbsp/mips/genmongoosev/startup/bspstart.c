@@ -68,7 +68,6 @@ void bsp_pretasking_hook(void)
     extern int HeapSize;
     void         *heapStart = &HeapBase;
     unsigned long heapSize = (unsigned long)&HeapSize;
-    unsigned long ramSpace;
 
     bsp_libc_init(heapStart, (unsigned32) heapSize, 0);
 
