@@ -17,7 +17,7 @@ bin2boot_SOURCES = bin2boot.c
 @PROJECT_RELEASE@/build-tools/bin2boot$(EXEEXT): bin2boot$(EXEEXT)
 	$(INSTALL_PROGRAM) $< $@
 
-PREINSTALL_FILES += @PROJECT_RELEASE@/build-tools \
+PREINSTALL_FILES = @PROJECT_RELEASE@/build-tools \
     @PROJECT_RELEASE@/build-tools/bin2boot$(EXEEXT)
 
 ## HACK: install into build-tree
