@@ -256,7 +256,7 @@ extern "C" {
 
 #if ( M68K_COLDFIRE_ARCH == 1 )
 #define m68k_disable_interrupts( _level ) \
-   do { register unsigned32 _tmpsr = 0x0700; \
+   do { register uint32_t   _tmpsr = 0x0700; \
         asm volatile ( "move.w %%sr,%0\n\t" \
  		       "or.l   %0,%1\n\t" \
  		       "move.w %1,%%sr" \
@@ -274,7 +274,7 @@ extern "C" {
 
 #if ( M68K_COLDFIRE_ARCH == 1 )
 #define m68k_flash_interrupts( _level ) \
-   do { register unsigned32 _tmpsr = 0x0700; \
+   do { register uint32_t   _tmpsr = 0x0700; \
 	asm volatile ( "move.w %2,%%sr\n\t" \
 		       "or.l   %2,%1\n\t" \
 		       "move.w %1,%%sr" \
@@ -289,7 +289,7 @@ extern "C" {
 
 #define m68k_get_interrupt_level( _level ) \
   do { \
-    register unsigned32 _tmpsr; \
+    register uint32_t   _tmpsr; \
     \
     asm volatile( "move.w %%sr,%0" : "=d" (_tmpsr)); \
     _level = (_tmpsr & 0x0700) >> 8; \
@@ -297,7 +297,7 @@ extern "C" {
     
 #define m68k_set_interrupt_level( _newlevel ) \
   do { \
-    register unsigned32 _tmpsr; \
+    register uint32_t   _tmpsr; \
     \
     asm volatile( "move.w  %%sr,%0" : "=d" (_tmpsr)); \
     _tmpsr = (_tmpsr & 0xf8ff) | ((_newlevel) << 8); \
@@ -339,7 +339,7 @@ static inline unsigned int m68k_swap_u32(
   unsigned int value
   )
 {
-  unsigned32 byte1, byte2, byte3, byte4, swapped;
+  uint32_t   byte1, byte2, byte3, byte4, swapped;
     
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;

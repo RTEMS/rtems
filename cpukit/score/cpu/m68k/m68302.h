@@ -39,13 +39,13 @@
  * BAR - Base Address Register
  * Section 2.7
  */
-#define M302_BAR	(*((volatile rtems_unsigned16 *) 0xf2))
+#define M302_BAR	(*((volatile uint16_t   *) 0xf2))
 
 /*
  * SCR - System Control Register
  * Section 3.8.1
  */
-#define M302_SCR	(*((volatile rtems_unsigned32 *) 0xf4))
+#define M302_SCR	(*((volatile uint32_t   *) 0xf4))
 /*
  * SCR bits
  */
@@ -236,14 +236,14 @@ enum m68302_ivec_e {
  * Then simply use pointer references (e.g. dram->count = 3).
  */
 typedef struct {
-    rtems_unsigned16	dram_high;	/* DRAM high address and FC */
-    rtems_unsigned16	dram_low;	/* DRAM low address */
-    rtems_unsigned16	increment;	/* increment step (bytes/row) */
-    rtems_unsigned16	count;		/* RAM refresh cycle count (#rows) */
-    rtems_unsigned16	t_ptr_h;	/* temporary refresh high addr & FC */
-    rtems_unsigned16	t_ptr_l;	/* temporary refresh low address */
-    rtems_unsigned16	t_count;	/* temporary refresh cycles count */
-    rtems_unsigned16	res;		/* reserved */
+    uint16_t  	dram_high;	/* DRAM high address and FC */
+    uint16_t  	dram_low;	/* DRAM low address */
+    uint16_t  	increment;	/* increment step (bytes/row) */
+    uint16_t  	count;		/* RAM refresh cycle count (#rows) */
+    uint16_t  	t_ptr_h;	/* temporary refresh high addr & FC */
+    uint16_t  	t_ptr_l;	/* temporary refresh low address */
+    uint16_t  	t_count;	/* temporary refresh cycles count */
+    uint16_t  	res;		/* reserved */
 } m302_DRAM_refresh_t;
 
 
@@ -275,9 +275,9 @@ typedef struct {
  * Section 4.5.5
  */
 typedef struct m302_SCC_bd {
-    rtems_unsigned16 status;			/* status and control */
-    rtems_unsigned16 length;			/* data length */
-    volatile rtems_unsigned8  *buffer;		/* data buffer pointer */
+    uint16_t   status;			/* status and control */
+    uint16_t   length;			/* data length */
+    volatile uint8_t    *buffer;		/* data buffer pointer */
 } m302_SCC_bd_t;
 
 typedef struct {
@@ -297,21 +297,21 @@ typedef struct {
  * portion of the SCC parameter RAM.
  */
 typedef struct {
-    rtems_unsigned8	rfcr;		/* Rx Function Code */
-    rtems_unsigned8	tfcr;		/* Tx Function Code */
-    rtems_unsigned16	mrblr;		/* Maximum Rx Buffer Length */
-    rtems_unsigned16	_rstate;	/* Rx Internal State */
-    rtems_unsigned8	res2;
-    rtems_unsigned8	rbd;		/* Rx Internal Buffer Number */
-    rtems_unsigned32	_rdptr;		/* Rx Internal Data Pointer */
-    rtems_unsigned16	_rcount;	/* Rx Internal Byte Count */
-    rtems_unsigned16	_rtmp;		/* Rx Temp */
-    rtems_unsigned16	_tstate;	/* Tx Internal State */
-    rtems_unsigned8	res7;
-    rtems_unsigned8	tbd;		/* Tx Internal Buffer Number */
-    rtems_unsigned32	_tdptr;		/* Tx Internal Data Pointer */
-    rtems_unsigned16	_tcount;	/* Tx Internal Byte Count */
-    rtems_unsigned16	_ttmp;		/* Tx Temp */
+    uint8_t  	rfcr;		/* Rx Function Code */
+    uint8_t  	tfcr;		/* Tx Function Code */
+    uint16_t  	mrblr;		/* Maximum Rx Buffer Length */
+    uint16_t  	_rstate;	/* Rx Internal State */
+    uint8_t  	res2;
+    uint8_t  	rbd;		/* Rx Internal Buffer Number */
+    uint32_t  	_rdptr;		/* Rx Internal Data Pointer */
+    uint16_t  	_rcount;	/* Rx Internal Byte Count */
+    uint16_t  	_rtmp;		/* Rx Temp */
+    uint16_t  	_tstate;	/* Tx Internal State */
+    uint8_t  	res7;
+    uint8_t  	tbd;		/* Tx Internal Buffer Number */
+    uint32_t  	_tdptr;		/* Tx Internal Data Pointer */
+    uint16_t  	_tcount;	/* Tx Internal Byte Count */
+    uint16_t  	_ttmp;		/* Tx Temp */
 } m302_SCC_parameters_t;
 
 /*
@@ -319,17 +319,17 @@ typedef struct {
  * Section 4.5.11.3
  */
 typedef struct {
-    rtems_unsigned16	max_idl;	/* Maximum IDLE Characters (rx) */
-    rtems_unsigned16	idlc;		/* Temporary rx IDLE counter */
-    rtems_unsigned16	brkcr;		/* Break Count Register (tx) */
-    rtems_unsigned16	parec;		/* Receive Parity Error Counter */
-    rtems_unsigned16	frmec;		/* Receive Framing Error Counter */
-    rtems_unsigned16	nosec;		/* Receive Noise Counter */
-    rtems_unsigned16	brkec;		/* Receive Break Condition Counter */
-    rtems_unsigned16	uaddr1;		/* UART ADDRESS Character 1 */
-    rtems_unsigned16	uaddr2;		/* UART ADDRESS Character 2 */
-    rtems_unsigned16	rccr;		/* Receive Control Character Register */
-    rtems_unsigned16	character[8];	/* Control Characters 1 through 8*/
+    uint16_t  	max_idl;	/* Maximum IDLE Characters (rx) */
+    uint16_t  	idlc;		/* Temporary rx IDLE counter */
+    uint16_t  	brkcr;		/* Break Count Register (tx) */
+    uint16_t  	parec;		/* Receive Parity Error Counter */
+    uint16_t  	frmec;		/* Receive Framing Error Counter */
+    uint16_t  	nosec;		/* Receive Noise Counter */
+    uint16_t  	brkec;		/* Receive Break Condition Counter */
+    uint16_t  	uaddr1;		/* UART ADDRESS Character 1 */
+    uint16_t  	uaddr2;		/* UART ADDRESS Character 2 */
+    uint16_t  	rccr;		/* Receive Control Character Register */
+    uint16_t  	character[8];	/* Control Characters 1 through 8*/
 } m302_SCC_UartSpecific_t;
 /*
  *  This definition allows for the checking of receive buffers
@@ -388,27 +388,27 @@ typedef struct {
  * c_mask_h is a don't care  for 16-bit CRC, 0x20E2 for 32-bit CRC
  */
 typedef struct {
-    rtems_unsigned16	rcrc_l;		/* Temp Receive CRC Low */
-    rtems_unsigned16	rcrc_h;		/* Temp Receive CRC High */
-    rtems_unsigned16	c_mask_l;	/* CRC Mask Low */
-    rtems_unsigned16	c_mask_h;	/* CRC Mask High */
-    rtems_unsigned16	tcrc_l;		/* Temp Transmit CRC Low */
-    rtems_unsigned16	tcrc_h;		/* Temp Transmit CRC High */
+    uint16_t  	rcrc_l;		/* Temp Receive CRC Low */
+    uint16_t  	rcrc_h;		/* Temp Receive CRC High */
+    uint16_t  	c_mask_l;	/* CRC Mask Low */
+    uint16_t  	c_mask_h;	/* CRC Mask High */
+    uint16_t  	tcrc_l;		/* Temp Transmit CRC Low */
+    uint16_t  	tcrc_h;		/* Temp Transmit CRC High */
 
-    rtems_unsigned16	disfc;		/* Discard Frame Counter */
-    rtems_unsigned16	crcec;		/* CRC Error Counter */
-    rtems_unsigned16	abtsc;		/* Abort Sequence Counter */
-    rtems_unsigned16	nmarc;		/* Nonmatching Address Received Cntr */
-    rtems_unsigned16	retrc;		/* Frame Retransmission Counter */
+    uint16_t  	disfc;		/* Discard Frame Counter */
+    uint16_t  	crcec;		/* CRC Error Counter */
+    uint16_t  	abtsc;		/* Abort Sequence Counter */
+    uint16_t  	nmarc;		/* Nonmatching Address Received Cntr */
+    uint16_t  	retrc;		/* Frame Retransmission Counter */
 
-    rtems_unsigned16	mflr;		/* Maximum Frame Length Register */
-    rtems_unsigned16	max_cnt;	/* Maximum_Length Counter */
+    uint16_t  	mflr;		/* Maximum Frame Length Register */
+    uint16_t  	max_cnt;	/* Maximum_Length Counter */
 
-    rtems_unsigned16	hmask;		/* User Defined Frame Address Mask */
-    rtems_unsigned16	haddr1;		/* User Defined Frame Address */
-    rtems_unsigned16	haddr2;		/* " */
-    rtems_unsigned16	haddr3;		/* " */
-    rtems_unsigned16	haddr4;		/* " */
+    uint16_t  	hmask;		/* User Defined Frame Address Mask */
+    uint16_t  	haddr1;		/* User Defined Frame Address */
+    uint16_t  	haddr2;		/* " */
+    uint16_t  	haddr3;		/* " */
+    uint16_t  	haddr4;		/* " */
 } m302_SCC_HdlcSpecific_t;
 /*
  * HDLC receiver buffer descriptor bit definitions
@@ -461,7 +461,7 @@ typedef struct {
 	m302_SCC_UartSpecific_t  uart;
 	m302_SCC_HdlcSpecific_t  hdlc;
     } prot;
-    rtems_unsigned8	   res[0x040];	/* +0C0 reserved, (not implemented) */
+    uint8_t  	   res[0x040];	/* +0C0 reserved, (not implemented) */
 } m302_SCC_t;
 
 
@@ -469,17 +469,17 @@ typedef struct {
  * Common SCC Registers
  */
 typedef struct {
-    rtems_unsigned16	res1;
-    rtems_unsigned16	scon;	/* SCC Configuration Register        4.5.2 */
-    rtems_unsigned16	scm;	/* SCC Mode Register                 4.5.3 */
-    rtems_unsigned16	dsr;	/* SCC Data Synchronization Register 4.5.4 */
-    rtems_unsigned8	scce;	/* SCC Event Register  4.5.8.1 */
-    rtems_unsigned8	res2;
-    rtems_unsigned8	sccm;	/* SCC Mask Register   4.5.8.2 */
-    rtems_unsigned8	res3;
-    rtems_unsigned8	sccs;	/* SCC Status Register 4.5.8.3 */
-    rtems_unsigned8	res4;
-    rtems_unsigned16	res5;
+    uint16_t  	res1;
+    uint16_t  	scon;	/* SCC Configuration Register        4.5.2 */
+    uint16_t  	scm;	/* SCC Mode Register                 4.5.3 */
+    uint16_t  	dsr;	/* SCC Data Synchronization Register 4.5.4 */
+    uint8_t  	scce;	/* SCC Event Register  4.5.8.1 */
+    uint8_t  	res2;
+    uint8_t  	sccm;	/* SCC Mask Register   4.5.8.2 */
+    uint8_t  	res3;
+    uint8_t  	sccs;	/* SCC Status Register 4.5.8.3 */
+    uint8_t  	res4;
+    uint16_t  	res5;
 } m302_SCC_Registers_t;
 
 /*
@@ -509,77 +509,77 @@ typedef struct {
  */
 typedef struct {
     /* offset +800 */
-    rtems_unsigned16	res0;
-    rtems_unsigned16	cmr;		/* IDMA Channel Mode Register */
-    rtems_unsigned32	sapr;		/* IDMA Source Address Pointer */
-    rtems_unsigned32	dapr;		/* IDMA Destination Address Pointer */
-    rtems_unsigned16	bcr;		/* IDMA Byte Count Register */
-    rtems_unsigned8	csr;		/* IDMA Channel Status Register */
-    rtems_unsigned8	res1;
-    rtems_unsigned8	fcr;		/* IDMA Function Code Register */
-    rtems_unsigned8	res2;
+    uint16_t  	res0;
+    uint16_t  	cmr;		/* IDMA Channel Mode Register */
+    uint32_t  	sapr;		/* IDMA Source Address Pointer */
+    uint32_t  	dapr;		/* IDMA Destination Address Pointer */
+    uint16_t  	bcr;		/* IDMA Byte Count Register */
+    uint8_t  	csr;		/* IDMA Channel Status Register */
+    uint8_t  	res1;
+    uint8_t  	fcr;		/* IDMA Function Code Register */
+    uint8_t  	res2;
 
     /* offset +812 */
-    rtems_unsigned16	gimr;		/* Global Interrupt Mode Register */
-    rtems_unsigned16	ipr;		/* Interrupt Pending Register */
-    rtems_unsigned16	imr;		/* Interrupt Mask Register */
-    rtems_unsigned16	isr;		/* Interrupt In-Service Register */
-    rtems_unsigned16	res3;
-    rtems_unsigned16	res4;
+    uint16_t  	gimr;		/* Global Interrupt Mode Register */
+    uint16_t  	ipr;		/* Interrupt Pending Register */
+    uint16_t  	imr;		/* Interrupt Mask Register */
+    uint16_t  	isr;		/* Interrupt In-Service Register */
+    uint16_t  	res3;
+    uint16_t  	res4;
 
     /* offset +81e */
-    rtems_unsigned16	pacnt;		/* Port A Control Register */
-    rtems_unsigned16	paddr;		/* Port A Data Direction Register */
-    rtems_unsigned16	padat;		/* Port A Data Register */
-    rtems_unsigned16	pbcnt;		/* Port B Control Register */
-    rtems_unsigned16	pbddr;		/* Port B Data Direction Register */
-    rtems_unsigned16	pbdat;		/* Port B Data Register */
-    rtems_unsigned16	res5;
+    uint16_t  	pacnt;		/* Port A Control Register */
+    uint16_t  	paddr;		/* Port A Data Direction Register */
+    uint16_t  	padat;		/* Port A Data Register */
+    uint16_t  	pbcnt;		/* Port B Control Register */
+    uint16_t  	pbddr;		/* Port B Data Direction Register */
+    uint16_t  	pbdat;		/* Port B Data Register */
+    uint16_t  	res5;
 
     /* offset +82c */
-    rtems_unsigned16	res6;
-    rtems_unsigned16	res7;
+    uint16_t  	res6;
+    uint16_t  	res7;
 
-    rtems_unsigned16	br0;		/* Base Register   (CS0) */
-    rtems_unsigned16	or0;		/* Option Register (CS0) */
-    rtems_unsigned16	br1;		/* Base Register   (CS1) */
-    rtems_unsigned16	or1;		/* Option Register (CS1) */
-    rtems_unsigned16	br2;		/* Base Register   (CS2) */
-    rtems_unsigned16	or2;		/* Option Register (CS2) */
-    rtems_unsigned16	br3;		/* Base Register   (CS3) */
-    rtems_unsigned16	or3;		/* Option Register (CS3) */
+    uint16_t  	br0;		/* Base Register   (CS0) */
+    uint16_t  	or0;		/* Option Register (CS0) */
+    uint16_t  	br1;		/* Base Register   (CS1) */
+    uint16_t  	or1;		/* Option Register (CS1) */
+    uint16_t  	br2;		/* Base Register   (CS2) */
+    uint16_t  	or2;		/* Option Register (CS2) */
+    uint16_t  	br3;		/* Base Register   (CS3) */
+    uint16_t  	or3;		/* Option Register (CS3) */
 
     /* offset +840 */
-    rtems_unsigned16	tmr1;		/* Timer Unit 1 Mode Register */
-    rtems_unsigned16	trr1;		/* Timer Unit 1 Reference Register */
-    rtems_unsigned16	tcr1;		/* Timer Unit 1 Capture Register */
-    rtems_unsigned16	tcn1;		/* Timer Unit 1 Counter */
-    rtems_unsigned8	res8;
-    rtems_unsigned8	ter1;		/* Timer Unit 1 Event Register */
-    rtems_unsigned16	wrr;		/* Watchdog Reference Register */
-    rtems_unsigned16	wcn;		/* Watchdog Counter */
-    rtems_unsigned16	res9;
-    rtems_unsigned16	tmr2;		/* Timer Unit 2 Mode Register */
-    rtems_unsigned16	trr2;		/* Timer Unit 2 Reference Register */
-    rtems_unsigned16	tcr2;		/* Timer Unit 2 Capture Register */
-    rtems_unsigned16	tcn2;		/* Timer Unit 2 Counter */
-    rtems_unsigned8	resa;
-    rtems_unsigned8	ter2;		/* Timer Unit 2 Event Register */
-    rtems_unsigned16	resb;
-    rtems_unsigned16	resc;
-    rtems_unsigned16	resd;
+    uint16_t  	tmr1;		/* Timer Unit 1 Mode Register */
+    uint16_t  	trr1;		/* Timer Unit 1 Reference Register */
+    uint16_t  	tcr1;		/* Timer Unit 1 Capture Register */
+    uint16_t  	tcn1;		/* Timer Unit 1 Counter */
+    uint8_t  	res8;
+    uint8_t  	ter1;		/* Timer Unit 1 Event Register */
+    uint16_t  	wrr;		/* Watchdog Reference Register */
+    uint16_t  	wcn;		/* Watchdog Counter */
+    uint16_t  	res9;
+    uint16_t  	tmr2;		/* Timer Unit 2 Mode Register */
+    uint16_t  	trr2;		/* Timer Unit 2 Reference Register */
+    uint16_t  	tcr2;		/* Timer Unit 2 Capture Register */
+    uint16_t  	tcn2;		/* Timer Unit 2 Counter */
+    uint8_t  	resa;
+    uint8_t  	ter2;		/* Timer Unit 2 Event Register */
+    uint16_t  	resb;
+    uint16_t  	resc;
+    uint16_t  	resd;
 
     /* offset +860 */
-    rtems_unsigned8	cr;		/* Command Register */
-    rtems_unsigned8	rese[0x1f];
+    uint8_t  	cr;		/* Command Register */
+    uint8_t  	rese[0x1f];
 
     /* offset +880, +890, +8a0 */
     m302_SCC_Registers_t scc[3];	/* SCC1, SCC2, SCC3 Registers */
 
     /* offset +8b0 */
-    rtems_unsigned16	spmode;		/* SCP,SMC Mode and Clock Cntrl Reg */
-    rtems_unsigned16	simask;		/* Serial Interface Mask Register */
-    rtems_unsigned16	simode;		/* Serial Interface Mode Register */
+    uint16_t  	spmode;		/* SCP,SMC Mode and Clock Cntrl Reg */
+    uint16_t  	simask;		/* Serial Interface Mask Register */
+    uint16_t  	simode;		/* Serial Interface Mode Register */
 } m302_internalReg_t ;
 
 
@@ -589,12 +589,12 @@ typedef struct {
  * Section 2.8
  */
 typedef struct {
-    rtems_unsigned8	mem[0x240];	/* +000 User Data Memory */
-    rtems_unsigned8	res1[0x1c0];	/* +240 reserved, (not implemented) */
+    uint8_t  	mem[0x240];	/* +000 User Data Memory */
+    uint8_t  	res1[0x1c0];	/* +240 reserved, (not implemented) */
     m302_SCC_t		scc1;		/* +400 SCC1 */
     m302_SCC_t		scc2;		/* +500 SCC2 */
     m302_SCC_t		scc3;		/* +600 SCC3 */
-    rtems_unsigned8	res2[0x100];	/* +700 reserved, (not implemented) */
+    uint8_t  	res2[0x100];	/* +700 reserved, (not implemented) */
     m302_internalReg_t	reg;		/* +800 68302 Internal Registers */
 } m302_dualPortRAM_t;
 

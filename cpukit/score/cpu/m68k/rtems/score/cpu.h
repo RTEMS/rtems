@@ -105,13 +105,13 @@ extern "C" {
  */
 
 typedef struct {
-  unsigned32  sr;                /* (sr) status register */
-  unsigned32  d2;                /* (d2) data register 2 */
-  unsigned32  d3;                /* (d3) data register 3 */
-  unsigned32  d4;                /* (d4) data register 4 */
-  unsigned32  d5;                /* (d5) data register 5 */
-  unsigned32  d6;                /* (d6) data register 6 */
-  unsigned32  d7;                /* (d7) data register 7 */
+  uint32_t    sr;                /* (sr) status register */
+  uint32_t    d2;                /* (d2) data register 2 */
+  uint32_t    d3;                /* (d3) data register 3 */
+  uint32_t    d4;                /* (d4) data register 4 */
+  uint32_t    d5;                /* (d5) data register 5 */
+  uint32_t    d6;                /* (d6) data register 6 */
+  uint32_t    d7;                /* (d7) data register 7 */
   void       *a2;                /* (a2) address register 2 */
   void       *a3;                /* (a3) address register 3 */
   void       *a4;                /* (a4) address register 4 */
@@ -134,12 +134,12 @@ typedef struct {
  */
 
 typedef struct {
-  unsigned16   _exception_bits;
-  unsigned16   _trap_enable_bits;
-  unsigned16   _sticky_bits;
-  unsigned16   _rounding_mode;
-  unsigned16   _format;
-  unsigned16   _last_operation;
+  uint16_t     _exception_bits;
+  uint16_t     _trap_enable_bits;
+  uint16_t     _sticky_bits;
+  uint16_t     _rounding_mode;
+  uint16_t     _format;
+  uint16_t     _last_operation;
   union {
     float sf;
     double df;
@@ -157,7 +157,7 @@ typedef struct {
  */
 
 typedef struct {
-  unsigned8   fp_save_area[332];    /*   216 bytes for FSAVE/FRESTORE    */
+  uint8_t     fp_save_area[332];    /*   216 bytes for FSAVE/FRESTORE    */
                                     /*    96 bytes for FMOVEM FP0-7      */
                                     /*    12 bytes for FMOVEM CREGS      */
                                     /*     4 bytes for non-null flag     */
@@ -172,15 +172,15 @@ typedef struct {
  */
 
 typedef struct {
-  unsigned32 vecnum; /* vector number */
+  uint32_t   vecnum; /* vector number */
 } CPU_Interrupt_frame;
 
 typedef struct {
-  unsigned32 vecnum; /* vector number */
-  unsigned32 sr; /* status register */
-  unsigned32 pc; /* program counter */
-  unsigned32 d0, d1, d2, d3, d4, d5, d6, d7;
-  unsigned32 a0, a1, a2, a3, a4, a5, a6, a7;
+  uint32_t   vecnum; /* vector number */
+  uint32_t   sr; /* status register */
+  uint32_t   pc; /* program counter */
+  uint32_t   d0, d1, d2, d3, d4, d5, d6, d7;
+  uint32_t   a0, a1, a2, a3, a4, a5, a6, a7;
 } CPU_Exception_frame;
 
 /*
@@ -194,10 +194,10 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
@@ -236,10 +236,10 @@ extern char                         _VBR[];
  */
 
 typedef struct {
-  unsigned16 move_a7;            /* move #FORMAT_ID,%a7@- */
-  unsigned16 format_id;
-  unsigned16 jmp;                /* jmp  _ISR_Handlers */
-  unsigned32 isr_handler;
+  uint16_t   move_a7;            /* move #FORMAT_ID,%a7@- */
+  uint16_t   format_id;
+  uint16_t   jmp;                /* jmp  _ISR_Handlers */
+  uint32_t   isr_handler;
 } _CPU_ISR_handler_entry;
 
 #define M68K_MOVE_A7 0x3F3C
@@ -337,7 +337,7 @@ SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256];
 #define _CPU_ISR_Set_level( _newlevel ) \
    m68k_set_interrupt_level( _newlevel )
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -354,10 +354,10 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                  _isr, _entry_point, _is_fp ) \
    do { \
-     unsigned32 _stack; \
+     uint32_t   _stack; \
      \
      (_the_context)->sr      = 0x3000 | ((_isr) << 8); \
-     _stack                  = (unsigned32)(_stack_base) + (_size) - 4; \
+     _stack                  = (uint32_t  )(_stack_base) + (_size) - 4; \
      (_the_context)->a7_msp  = (void *)_stack; \
      *(void **)_stack        = (void *)(_entry_point); \
    } while ( 0 )
@@ -407,10 +407,10 @@ unsigned32 _CPU_ISR_Get_level( void );
    )
 
 #define _CPU_Context_Initialize_fp( _fp_area ) \
-   { unsigned32 *_fp_context = (unsigned32 *)*(_fp_area); \
+   { uint32_t   *_fp_context = (uint32_t   *)*(_fp_area); \
      \
      *(--(_fp_context)) = 0; \
-     *(_fp_area) = (unsigned8 *)(_fp_context); \
+     *(_fp_area) = (uint8_t   *)(_fp_context); \
    }
 #endif
 
@@ -586,7 +586,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -598,7 +598,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32       vector,
+  uint32_t         vector,
   proc_ptr         new_handler,
   proc_ptr        *old_handler
 );
@@ -671,7 +671,7 @@ void _CPU_Context_restore_fp(
 void M68KFPSPInstallExceptionHandlers (void);
 
 SCORE_EXTERN int (*_FPSP_install_raw_handler)(
-  unsigned32 vector,
+  uint32_t   vector,
   proc_ptr new_handler,
   proc_ptr *old_handler
 );
