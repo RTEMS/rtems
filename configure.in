@@ -423,6 +423,7 @@ case "${target}" in
   no_cpu-rtems*)
 	rtems_bsp=no_bsp
 	makefiles=$no_cpu_mk
+	RTEMS_HAS_POSIX_API=no
 	;;
   powerpc-rtems*)
 	rtems_bsp=papyrus

@@ -1103,6 +1103,7 @@ case "${target}" in
   no_cpu-rtems*)
 	rtems_bsp=no_bsp
 	makefiles=$no_cpu_mk
+	RTEMS_HAS_POSIX_API=no
 	;;
   powerpc-rtems*)
 	rtems_bsp=papyrus
@@ -1151,7 +1152,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1155: checking for $ac_word" >&5
+echo "configure:1156: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AWK'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1180,7 +1181,7 @@ test -n "$AWK" && break
 done
 
 echo $ac_n "checking whether ln -s works""... $ac_c" 1>&6
-echo "configure:1184: checking whether ln -s works" >&5
+echo "configure:1185: checking whether ln -s works" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_LN_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
