@@ -1,3 +1,7 @@
+2003-09-16	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/version.m4: Updated to rtems-4.6.0.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/bspIo.h, include/rtems/fs.h, include/rtems/userenv.h,
