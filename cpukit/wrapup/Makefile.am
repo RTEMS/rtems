@@ -8,10 +8,10 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-CPU_OBJS = $(wildcard ../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.o)
-CORE_OBJS = $(wildcard ../score/src/$(ARCH)/*.o)
-SAPI_OBJS = $(wildcard ../sapi/src/$(ARCH)/*.o)
-RTEMS_OBJS = $(wildcard ../rtems/src/$(ARCH)/*.o)
+CPU_OBJS = $(wildcard ../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.$(OBJEXT))
+CORE_OBJS = $(wildcard ../score/src/$(ARCH)/*.$(OBJEXT))
+SAPI_OBJS = $(wildcard ../sapi/src/$(ARCH)/*.$(OBJEXT))
+RTEMS_OBJS = $(wildcard ../rtems/src/$(ARCH)/*.$(OBJEXT))
 
 if HAS_POSIX
 POSIX_OBJS = ../posix/src/$(ARCH)/libposix.a
@@ -47,7 +47,7 @@ $(LIB): ${OBJS}
 	rm -rf $(ARCH)/*
 	for f in $(OBJS); do \
 	  case $$f in \
-	  *.o | *.rel) \
+	  *.$(OBJEXT) | *.rel) \
 	    if test -f $(ARCH)/`basename $$f`; then \
 	      if cmp $$f $(ARCH)/`basename $$f`; then \
 		true; \
@@ -70,7 +70,7 @@ $(LIB): ${OBJS}
 	done
 	test -d $(project_libdir)$(MULTISUBDIR) || $(mkinstalldirs) $(project_libdir)$(MULTISUBDIR)
 	$(AR) rc $@ $(ARCH)/*
-	rm -f $(ARCH)/*.o
+	rm -f $(ARCH)/*.$(OBJEXT)
 	$(RANLIB) $@
 
 TMPINSTALL_FILES += $(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a
