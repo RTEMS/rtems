@@ -19,17 +19,19 @@
 
 #
 # This board support package works with several different versions of
-# MC68360 systems.  The choice of hardware is made at the final link-edit
-# phase by setting the Makefile CLAGS_LD definition appropriately.
+# MC68360 systems.  See the conditional-compile tests in startup/init68360.c
+# for examples.
 #
 # Decisions made at compile time include:
 #	- If the CPU is a member of the 68040 family, the BSP is
 #	  compiled for a generic 68040/68360 system as described
-#	  in Chapter 9 of the MC68360 User's Manual.
+#	  in Chapter 9 of the MC68360 User's Manual.  This version
+#	  can be used with the Arnewsh SBC360 card.
 #	- If the preprocessor symbol M68360_ATLAS_HSB is defined,
 #	  the BSP is compiled for an Atlas HSB card.
 #	- Otherwise, the BSP is compiled for a generic 68360 system
-#	  as described in Chapter 9 of the MC68360 User's Manual.
+#	  as described in Chapter 9 of the MC68360 User's Manual.  This
+#	  version works with the Atlas ACE360 card.
 #
 # Decisions to be made a link-edit time are:
 #     - The size of the memory allocator heap.  The default value is
