@@ -17,8 +17,8 @@
  *  $Id$
  */
  
-#ifndef __RTEMS_POSIX_CONDITION_VARIABLES_inl
-#define __RTEMS_POSIX_CONDITION_VARIABLES_inl
+#ifndef _RTEMS_POSIX_COND_INL
+#define _RTEMS_POSIX_COND_INL
  
 #include <pthread.h>
 

@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __POSIX_TIMER_inl
-#define __POSIX_TIMER_inl
+#ifndef _RTEMS_POSIX_TIMER_INL
+#define _RTEMS_POSIX_TIMER_INL
 
 /*PAGE
  *

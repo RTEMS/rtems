@@ -17,8 +17,8 @@
  *  $Id$
  */
  
-#ifndef __RTEMS_POSIX_MUTEX_inl
-#define __RTEMS_POSIX_MUTEX_inl
+#ifndef _RTEMS_POSIX_MUTEX_INL
+#define _RTEMS_POSIX_MUTEX_INL
  
 /*PAGE
  *

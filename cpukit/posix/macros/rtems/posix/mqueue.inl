@@ -17,8 +17,8 @@
  *  $Id$
  */
  
-#ifndef __RTEMS_POSIX_MESSAGE_QUEUE_inl
-#define __RTEMS_POSIX_MESSAGE_QUEUE_inl
+#ifndef _RTEMS_POSIX_MQUEUE_INL
+#define _RTEMS_POSIX_MQUEUE_INL
  
 /*
  *  _POSIX_Message_queue_Allocate

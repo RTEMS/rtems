@@ -17,8 +17,8 @@
  *  $Id$
  */
  
-#ifndef __RTEMS_POSIX_SEMAPHORE_inl
-#define __RTEMS_POSIX_SEMAPHORE_inl
+#ifndef _RTEMS_POSIX_SEMAPHORE_INL
+#define _RTEMS_POSIX_SEMAPHORE_INL
  
 /*PAGE
  *

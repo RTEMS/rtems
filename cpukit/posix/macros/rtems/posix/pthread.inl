@@ -17,8 +17,8 @@
  *  $Id$
  */
  
-#ifndef __RTEMS_POSIX_THREADS_inl
-#define __RTEMS_POSIX_THREADS_inl
+#ifndef _RTEMS_POSIX_PTHREAD_INL
+#define _RTEMS_POSIX_PTHREAD_INL
  
 /*PAGE
  *

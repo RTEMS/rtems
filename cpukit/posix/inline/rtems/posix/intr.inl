@@ -17,8 +17,8 @@
  *  $Id$
  */
  
-#ifndef __RTEMS_POSIX_INTERRUPT_inl
-#define __RTEMS_POSIX_INTERRUPT_inl
+#ifndef _RTEMS_POSIX_INTR_INL
+#define _RTEMS_POSIX_INTR_INL
 
 /*PAGE
  *

@@ -17,8 +17,8 @@
  *  $Id$
  */
  
-#ifndef __RTEMS_POSIX_KEY_inl
-#define __RTEMS_POSIX_KEY_inl
+#ifndef _RTEMS_POSIX_KEY_INL
+#define _RTEMS_POSIX_KEY_INL
  
 /*PAGE
  *

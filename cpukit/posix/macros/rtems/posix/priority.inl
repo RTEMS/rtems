@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_PRIORITY_inl
-#define __RTEMS_POSIX_PRIORITY_inl
+#ifndef _RTEMS_POSIX_PRIORITY_INL
+#define _RTEMS_POSIX_PRIORITY_INL
 
 /*
  *  1003.1b-1993,2.2.2.80 definition of priority, p. 19
