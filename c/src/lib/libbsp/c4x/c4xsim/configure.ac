@@ -15,9 +15,7 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
-
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
@@ -29,5 +27,3 @@ startup/Makefile
 timer/Makefile
 wrapup/Makefile])
 AC_OUTPUT
-
-RTEMS_OUTPUT_BUILD_SUBDIRS(RTEMS_BUILD_SUBDIRS)

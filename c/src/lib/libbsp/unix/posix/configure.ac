@@ -28,7 +28,6 @@ AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
@@ -39,5 +38,3 @@ startup/Makefile
 timer/Makefile
 wrapup/Makefile])
 AC_OUTPUT
-
-RTEMS_OUTPUT_BUILD_SUBDIRS(RTEMS_BUILD_SUBDIRS)

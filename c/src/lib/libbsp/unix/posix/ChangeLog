@@ -1,3 +1,8 @@
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_OUTPUT_BUILD_SUBDIRS. Cosmetical
+	changes.
+
 2002-11-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Unconditionally check for CXX (Hack to bug in 

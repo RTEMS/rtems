@@ -21,7 +21,6 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
@@ -36,5 +35,3 @@ wrapup/Makefile])
 AC_OUTPUT
 
 ## consolex/Makefile
-
-RTEMS_OUTPUT_BUILD_SUBDIRS(RTEMS_BUILD_SUBDIRS)
