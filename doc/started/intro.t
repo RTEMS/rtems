@@ -137,8 +137,7 @@ It is in the reader's and tool maintainers' interest that one read the
 documentation before posting a problem to a mailing list or news group.
 The RTEMS Project provides formatted documentation for the primary
 tools in the cross development toolset including BINUTILS, GCC,
-NEWLIB, and GDB at
-@uref{http://www.oarcorp.com/rtemsdoc-4.5.0, http://www.oarcorp.com/rtemsdoc-4.5.0}.
+NEWLIB, and GDB with the pre-built versions of those tools.
 
 Much of the documentation is available at other sites on the Internet.
 The following is a list of URLs where one can find HTML versions of
@@ -147,7 +146,8 @@ the GNU manuals:
 @table @b
 
 @item Free Software Foundation
-@uref{http://www.gnu.org/manual/manual.html, http://www.gnu.org/manual/manual.html}
+@uref{http://www.gnu.org/manual/manual.html,
+http://www.gnu.org/manual/manual.html}
 
 @item Delorie Software
 @uref{http://www.delorie.com/gnu/docs, http://www.delorie.com/gnu/docs}
@@ -177,9 +177,8 @@ focus on embedded issues.  Information on subscribing
 to this mailing list is included in the 
 @uref{http://www.objsw.com/CrossGCC/,CrossGCC FAQ}.
 
-The CrossGCC FAQ as well as a number of patches and utilities
-of interest to cross development system users are available
-at @uref{ftp://ftp.cygnus.com/pub/embedded/crossgcc}.
+The CrossGCC FAQ and Wiki are are available
+at @uref{http://www.billgatliff.com,http://www.billgatliff.com}.
 
 @subsection GCC Mailing Lists
 

@@ -1,3 +1,15 @@
+2004-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,
+	rtems_support.html.in, FAQ/basic.t, gnu_docs/gnu_footer.html,
+	gnu_docs/index.html, gnu_docs/refcard.html,
+	gnu_docs/rtems_tools_index.html, started/binaries.t,
+	started/buildc.t, started/buildrt.t, started/intro.t,
+	started/require.t, started/sample.t, started/tversions.texi.in:
+	Attempt to make the documentation more accurately reflect the state
+	of the world. These changes were primarily concerned with server
+	layout.
+
 2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add RTEMSRPMGROUP.

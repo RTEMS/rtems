@@ -257,15 +257,14 @@ tools/hello_world_ada/o-optimize/<filename>.exe
 
 How this executable is downloaded to the target board is very dependent
 on the BOARD_SUPPORT_PACKAGE selected.
-----------------------------------------------------
 
 @c
 @c More Information on RTEMS Application Makefiles
 @c
 @section More Information on RTEMS Application Makefiles
 
-The hello world sample application is a simple example of an
-RTEMS application that uses the RTEMS Application Makefile 
+These sample applications are examples of simple
+RTEMS applications that use the RTEMS Application Makefile 
 system.  This Makefile system simplifies building
 RTEMS applications by providing Makefile templates and
 capturing the configuration information used to build

@@ -1,7 +1,7 @@
 <HTML>
 <HEAD><TITLE>RTEMS @VERSION@ On-Line Library</TITLE></HEAD>
 <BODY BGCOLOR="FFFFFF">
-<A HREF="http://www.oarcorp.com" target="Text Frame">
+<A HREF="http://www.rtems.com" target="Text Frame">
   <IMG align=right BORDER=0 SRC="images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
 <H1>RTEMS RTEMS_VERSION On-Line Library</H1>
 <HR>
@@ -55,5 +55,5 @@ RTEMS LogoMENU>
 
 </MENU>
 <HR>
-Copyright &copy; 1988-2003 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+Copyright &copy; 1988-2004 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
 </BODY></HTML>

@@ -92,7 +92,7 @@ of each component as well as any required RTEMS specific patches.
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
     FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}/c_tools/source
+    Directory:   @value{RTEMSFTPDIR}/@value{VERSION}
 @ifset BINUTILSPATCHVERSION
     File:        @value{BINUTILSRTEMSPATCH}
 @end ifset
@@ -103,8 +103,8 @@ of each component as well as any required RTEMS specific patches.
     File:        @value{GCCRTEMSPATCH}
 @end ifset
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source,Download RTEMS Patches and Scripts}
-    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES,Download RTEMS Patches and Scripts}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES
 @end ifset
 @end example
 
@@ -437,11 +437,9 @@ of the RPMS directory under the RPM root directory.
 
 @example
 @value{RTEMSRPMPREFIX}rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}rtems-base-chill-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @value{RTEMSRPMPREFIX}rtems-base-g77-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @value{RTEMSRPMPREFIX}rtems-base-gcj-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @value{RTEMSRPMPREFIX}i386-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
-@value{RTEMSRPMPREFIX}i386-rtems-chill-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @value{RTEMSRPMPREFIX}i386-rtems-g77-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @value{RTEMSRPMPREFIX}i386-rtems-gcj-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @value{RTEMSRPMPREFIX}i386-rtems-objc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
@@ -667,10 +665,10 @@ of each component as well as any required RTEMS specific patches.
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
     FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}/c_tools/source
+    Directory:   @value{RTEMSFTPDIR}/SOURCES
 @ifset GDBPATCHVERSION
     File:        @value{GDBRTEMSPATCH}
-    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source/@value{GDBRTEMSPATCH},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source/@value{GDBRTEMSPATCH}}
+    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{GDBRTEMSPATCH},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{GDBRTEMSPATCH}}
 @end ifset
 @end example
 

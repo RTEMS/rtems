@@ -88,4 +88,4 @@
 @set RTEMSUNTAR     rtems-@value{VERSION}
 @set RTEMSTAR       @value{RTEMSUNTAR}.tar.bz2
 @set RTEMSFTPSITE   ftp.rtems.com
-@set RTEMSFTPDIR    /pub/rtems/releases/@value{VERSION}
+@set RTEMSFTPDIR    /pub/rtems
