@@ -206,11 +206,40 @@ extern "C" {
 #define DMV170_LIRQ3                           ( DMV170_IRQ_FIRST + 3 )
 #define DMV170_LIRQ4                           ( DMV170_IRQ_FIRST + 4 )
 #define DMV170_LIRQ5                           ( DMV170_IRQ_FIRST + 5 )
+#define DMV170_L7IACF                          ( DMV170_IRQ_FIRST + 6 )
+#define DMV170_L7ISYS                          ( DMV170_IRQ_FIRST + 7 )
+#define DMV170_L7IMNI                          ( DMV170_IRQ_FIRST + 8 )
+#define DMV170_BIMODE                          ( DMV170_IRQ_FIRST + 9 )
 
-#define MAX_BOARD_IRQS                         DMV170_LIRQ5
+#define DMV170_DUART_IRQ                       DMV170_LIRQ5
+#define DMV170_ETHERNET_IRQ                    DMV170_LIRQ5
+#define DMV170_SCSI_IRQ                        DMV170_LIRQ5
+#define DMV170_SCC_IRQ                         DMV170_LIRQ5
+#define DMV170_MEZZANINE_IRQ_0                 DMV170_LIRQ4       
+#define DMV170_TICK_IRQ                        DMV170_LIRQ3
+#define DMV170_LOCATION_MON_IRQ                DMV170_LIRQ2        
+#define DMV170_SCV64_IRQ                       DMV170_LIRQ1 
+#define DMV170_RTC_IRQ                         DMV170_LIRQ0
+
+#define DMV170_ACFAIL_IRQ                      DMV170_L7IACF
+#define DMV170_SYSFAIL_IRQ                     DMV170_L7ISYS
+#define DMV170_WATCHDOG_IRQ                    DMV170_L7IMNI
+#define DMV170_BI_IRQ                          DMV170_BIMODE
+#define DMV170_RAM_PARITY_IRQ                  ( DMV170_IRQ_FIRST + 10)
+#define DMV170_DARF_BUS_ERROR_IRQ              ( DMV170_IRQ_FIRST + 11)
+#define DMV170_PERIPHERAL_IRQ                  ( DMV170_IRQ_FIRST + 12)
+
+
+#define MAX_BOARD_IRQS                         DMV170_PERIPHERAL_IRQ
 #ifdef __cplusplus
 }
 #endif
  
 #endif /* !_INCLUDE_DMV170_h */
 /* end of include file */
+
+
+
+
+
+
