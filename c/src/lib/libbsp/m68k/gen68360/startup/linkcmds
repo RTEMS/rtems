@@ -81,10 +81,10 @@ SECTIONS {
 
                 _HeapStart = .;
                 __HeapStart = .;
-                /* . += HeapSize;  */ /* XXX -- Old gld can't handle this */
-                /* . += StackSize; */ /* XXX -- Old gld can't handle this */
-                . += 0x10000; /* HeapSize for old gld */
-                . += 0x1000;  /* StackSize for old gld */
+                . += HeapSize;  /* XXX -- Old gld can't handle this */
+                . += StackSize; /* XXX -- Old gld can't handle this */
+                /* . += 0x10000; */ /* HeapSize for old gld */
+                /* . += 0x1000;  */ /* StackSize for old gld */
                 . = ALIGN (16);
                 stack_init = .;
                 clear_end = .;
