@@ -16,6 +16,10 @@
 #include <rtems/error.h>
 #include <rdbg/rdbg.h>
 #include <rdbg/servrpc.h>
+#include <rtems/rtems_bsdnet.h>
+#include <rpc/pmap_clnt.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 u_short  rtemsPort = RTEMS_PORT;
 int	 BackPort = RTEMS_BACK_PORT;
@@ -67,20 +71,18 @@ rdbgInit (void)
         return -3;
     }
     rtemsSock = sock;
+    if (!svc_register(rtemsXprt, REMOTEDEB, REMOTEVERS, remotedeb_2, 0)) {
+        printf(stderr, "unable to register (REMOTEDEB, REMOTEVERS, udp).");
+	return -4;
+    }
+
     return 0;
 }
 
     rtems_task
 rdbgDaemon (rtems_task_argument argument)
 {
-  for (;;){
-
-    if (TotalReboot == 1){
-      rtemsReboot();
-    }
-
-    svc_processrequest(	rtemsXprt, REMOTEDEB, REMOTEVERS, remotedeb_2);
-  }
+  svc_run();
 }
 
     void
