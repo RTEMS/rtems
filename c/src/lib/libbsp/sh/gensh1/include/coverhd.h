@@ -15,7 +15,7 @@
  *         all calling overhead including passing of arguments.
  *
  *
- * These are the figures tmoverhd.exe reported with egcs-980205 -O3 
+ * These are the figures tmoverhd.exe reported with egcs-980205 -O3
  * on a Diesner OktagonSH/Amos-2.1 board with SH7032/20MHz
  *
  * These results are assumed to be applicable to most SH7032/20MHz boards
@@ -27,7 +27,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).

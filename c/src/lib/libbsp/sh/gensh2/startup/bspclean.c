@@ -17,9 +17,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program; If not, write to the Free Software Foundation, 
- *  675 Mass Ave, Cambridge, MA 02139, USA. 
- * 
+ *  along with this program; If not, write to the Free Software Foundation,
+ *  675 Mass Ave, Cambridge, MA 02139, USA.
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).

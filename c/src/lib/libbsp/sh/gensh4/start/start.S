@@ -19,7 +19,7 @@
  *  TGA Technologies, Inc.
  *  100 Pinnacle Way, Suite 140
  *  Norcross, GA 30071 U.S.A.
- *  
+ *
  *
  *  This modified file may be copied and distributed in accordance
  *  the above-referenced license. It is provided for critique and
@@ -74,7 +74,7 @@ fake_func:
         movt    r9      ! r9 == ! boot_mode
         neg     r9, r9
         add     #1, r9  ! r9 == boot_mode
-        
+
         ! what is in boot_mode?
         cmp/pl  r9      ! r9 > 0  ->  T = 1
 
@@ -84,7 +84,7 @@ fake_func:
 
 #if defined(START_HW_INIT)	/* from $RTEMS_BSP.cfg */
         ! Initialize minimal hardware
-        ! to run hw_init we need to calculate its address 
+        ! to run hw_init we need to calculate its address
         ! as it is before data coping
         mov.l	hw_init_k, r0
         mov.l   copy_start_k, r1
@@ -172,7 +172,7 @@ zero_bss:
         lds     r0,fpscr
 
 
-        ! call the mainline	
+        ! call the mainline
         mov #0,r4		! argc
         mov.l main_k,r0
         jsr @r0
@@ -213,7 +213,7 @@ _vbr_base_k:
 __VBR_Saved_k:
         .long   SYM(_VBR_Saved)
 stack_k:
-        .long	SYM(stack)	
+        .long	SYM(stack)
 __bss_start_k:
         .long   __bss_start
 __bss_end_k:

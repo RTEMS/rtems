@@ -10,7 +10,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -123,7 +123,7 @@ extern uint32_t         WorkSpaceEnd ;
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
 
-  
+
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;

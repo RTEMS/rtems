@@ -14,7 +14,7 @@ ___trap34:
 ret:
         rts
         nop
-         
+
         .align  2
 perrno:
         .long   _errno

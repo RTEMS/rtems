@@ -52,6 +52,6 @@ early_hw_init (void)
  * RETURNS:
  *     none
  */
-void bsp_hw_init (void) 
+void bsp_hw_init (void)
 {
 }

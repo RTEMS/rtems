@@ -13,7 +13,7 @@
  *  TGA Technologies, Inc.
  *  100 Pinnacle Way, Suite 140
  *  Norcross, GA 30071 U.S.A.
- *  
+ *
  *
  *  This modified file may be copied and distributed in accordance
  *  the above-referenced license. It is provided for critique and
@@ -75,7 +75,7 @@ SYM (start):
 	mova	vects_k,r0
 	mov.l	@r0, r1	! Shadow vect tbl addr
 	stc		vbr, r2	! Original vect tbl addr
-	and		#0, r0 
+	and		#0, r0
 	mov		r0, r4	! 0 in r4 and r0
 
 !trapa #32
@@ -135,7 +135,7 @@ SYM (start):
 	ldc     r0,vbr
 #endif /* ! STANDALONE_EVB */
 
-	! call the mainline	
+	! call the mainline
 	mov #0,r4		! argc
 	mov.l main_k,r0
 	jsr @r0
@@ -157,7 +157,7 @@ SYM (start):
 
 	.align 2
 stack_k:
-	.long	SYM(stack)	
+	.long	SYM(stack)
 edata_k:
 	.long	SYM(edata)
 end_k:

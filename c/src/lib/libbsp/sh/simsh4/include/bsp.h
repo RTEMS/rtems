@@ -15,7 +15,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998-2001.
  *  On-Line Applications Research Corporation (OAR).
@@ -116,7 +116,7 @@ extern uint32_t         WorkSpaceEnd ;
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
 
-  
+
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
@@ -137,8 +137,8 @@ extern void bsp_cleanup( void );
 #define RAMDISK_DRIVER_TABLE_ENTRY \
   { ramdisk_initialize, ramdisk_open, ramdisk_close, \
         ramdisk_read, ramdisk_write, ramdisk_control }
-      
- 
+
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

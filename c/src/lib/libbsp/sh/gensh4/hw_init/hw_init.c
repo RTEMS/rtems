@@ -39,12 +39,12 @@ early_hw_init(void)
 {
     /* Explicitly turn off the MMU */
     write32(0, SH7750_MMUCR);
-    
+
     /* Disable instruction and operand caches */
     write32(0, SH7750_CCR);
-    
+
     /* Setup Clock Generator */
-    /* 
+    /*
      * Input clock frequency is 16 MHz, MD0=1,
      * CPU clock frequency already selected to 96MHz.
      * Bus clock frequency should be set to 48 MHz, therefore divider 2
@@ -57,7 +57,7 @@ early_hw_init(void)
             SH7750_WTCSR_KEY, SH7750_WTCSR);
     write16(SH7750_WTCSR_MODE_IT | SH7750_WTCSR_CKS_DIV4096 |
             SH7750_WTCSR_KEY, SH7750_WTCSR);
-    
+
     /* Turn PLL1 on */
     write16(0x40 | SH7750_WTCNT_KEY, SH7750_WTCNT);
     write16(read16(SH7750_FRQCR) | SH7750_FRQCR_PLL1EN, SH7750_FRQCR);
@@ -71,7 +71,7 @@ early_hw_init(void)
     /* Turn PLL2 on */
     write16(0x40 | SH7750_WTCNT_KEY, SH7750_WTCNT);
     write16(read16(SH7750_FRQCR) | SH7750_FRQCR_PLL2EN, SH7750_FRQCR);
-    
+
     /* Bus State Controller Initialization */
     /*
      * Area assignments:
@@ -93,7 +93,7 @@ early_hw_init(void)
         SH7750_BCR1_DRAMTP_2SDRAM_3SDRAM  /* Select Area 2 SDRAM type */
         /* Area 5,6 programmed as a SRAM interface (not PCMCIA) */,
         SH7750_BCR1);
-    
+
     write16(
         (SH7750_BCR2_SZ_8 << SH7750_BCR2_A0SZ_S) |  /* These bits is read-only
                                                        and set during reset */
@@ -105,7 +105,7 @@ early_hw_init(void)
         (SH7750_BCR2_SZ_32 << SH7750_BCR2_A1SZ_S) | /* GDC is 32-bit width */
         SH7750_BCR2_PORTEN,                         /* Use D32-D51 as a port */
         SH7750_BCR2);
-    
+
     write32(
         (0 << SH7750_WCR1_DMAIW_S) |  /* 0 required for SDRAM RAS down mode */
         (7 << SH7750_WCR1_A6IW_S) |   /* Area 6 not used */
@@ -125,9 +125,9 @@ early_hw_init(void)
         (SH7750_WCR2_WS15   << SH7750_WCR2_A4W_S) | /* Area 4 not used */
         (SH7750_WCR2_WS15   << SH7750_WCR2_A3W_S) | /*Area 3 not used*/
         (SH7750_WCR2_SDRAM_CAS_LAT2 << SH7750_WCR2_A2W_S) | /* SDRAM CL = 2 */
-        (SH7750_WCR2_WS15   << SH7750_WCR2_A1W_S) | /* Area 1 (GDC) 
+        (SH7750_WCR2_WS15   << SH7750_WCR2_A1W_S) | /* Area 1 (GDC)
                                                        requirements not known*/
-        (SH7750_WCR2_WS6    << SH7750_WCR2_A0W_S) | /* 4 wait states required 
+        (SH7750_WCR2_WS6    << SH7750_WCR2_A0W_S) | /* 4 wait states required
                                                        at 48MHz for 70ns mem.,
                                                        set closest greater */
         (SH7750_WCR2_BPWS7  << SH7750_WCR2_A0B_S),  /* burst mode disabled for
@@ -171,21 +171,21 @@ early_hw_init(void)
 
     /* Clear refresh timer counter */
     write16(SH7750_RTCNT_KEY | 0, SH7750_RTCNT);
-    
+
     /* Time between auto-refresh commands is 15.6 microseconds; refresh
        timer counter frequency is 12 MHz; 1.56e-5*1.2e7= 187.2, therefore
        program the refresh timer divider to 187 */
-    write16(SH7750_RTCOR_KEY | 187, SH7750_RTCOR); 
-    
+    write16(SH7750_RTCOR_KEY | 187, SH7750_RTCOR);
+
     /* Clear refresh counter */
     write16(SH7750_RFCR_KEY | 0, SH7750_RFCR);
-    
+
     /* Select refresh counter base frequency as bus frequency/4 = 12 MHz */
     write16(SH7750_RTCSR_CKS_CKIO_DIV4 | SH7750_RTCSR_KEY, SH7750_RTCSR);
 
     /* Initialize Memory Control Register; disable refresh */
     write32((MCRDEF & ~SH7750_MCR_RFSH) | SH7750_MCR_PALL, SH7750_MCR);
-    
+
     /* SDRAM power-up initialization require 100 microseconds delay after
        stable power and clock fed; 100 microseconds corresponds to 7 refresh
        intervals */
@@ -193,10 +193,10 @@ early_hw_init(void)
 
     /* Clear refresh timer counter */
     write16(SH7750_RTCNT_KEY | 0, SH7750_RTCNT);
-    
+
     /* Clear refresh counter */
     write16(SH7750_RFCR_KEY | 0, SH7750_RFCR);
-    
+
     /* Execute Precharge All command */
     write32(0, SH7750_SDRAM_MODE_A2_32BIT(0));
 
@@ -210,27 +210,27 @@ early_hw_init(void)
     /* SDRAM data width is 32 bit (4 bytes), cache line size is 32 bytes,
        therefore burst length is 8 (32 / 4) */
     write8(0,SH7750_SDRAM_MODE_A2_32BIT(
-        SDRAM_MODE_BL_8 | 
-        SDRAM_MODE_BT_SEQ |    /* Only sequential burst mode supported 
+        SDRAM_MODE_BL_8 |
+        SDRAM_MODE_BT_SEQ |    /* Only sequential burst mode supported
                                   in SH7750 */
         SDRAM_MODE_CL_2 |      /* CAS latency is 2 */
         SDRAM_MODE_OPC_BRBW)   /* Burst read/burst write */
     );
     /* Bus State Controller initialized now */
-    
+
     /* Disable DMA controller */
     write32(0, SH7750_DMAOR);
-    
+
     /* I/O port setup */
     /* Configure all port bits as output - to fasciliate debugging */
     write32(
-        SH7750_PCTRA_PBOUT(0)  | SH7750_PCTRA_PBOUT(1) | 
+        SH7750_PCTRA_PBOUT(0)  | SH7750_PCTRA_PBOUT(1) |
         SH7750_PCTRA_PBOUT(2)  | SH7750_PCTRA_PBOUT(3) |
-        SH7750_PCTRA_PBOUT(4)  | SH7750_PCTRA_PBOUT(5) | 
+        SH7750_PCTRA_PBOUT(4)  | SH7750_PCTRA_PBOUT(5) |
         SH7750_PCTRA_PBOUT(6)  | SH7750_PCTRA_PBOUT(7) |
-        SH7750_PCTRA_PBOUT(8)  | SH7750_PCTRA_PBOUT(9) | 
+        SH7750_PCTRA_PBOUT(8)  | SH7750_PCTRA_PBOUT(9) |
         SH7750_PCTRA_PBOUT(10) | SH7750_PCTRA_PBOUT(11) |
-        SH7750_PCTRA_PBOUT(12) | SH7750_PCTRA_PBOUT(13) | 
+        SH7750_PCTRA_PBOUT(12) | SH7750_PCTRA_PBOUT(13) |
         SH7750_PCTRA_PBOUT(14) | SH7750_PCTRA_PBOUT(15),
         SH7750_PCTRA);
     write32(
@@ -240,7 +240,7 @@ early_hw_init(void)
     /* Clear data in port */
     write32(0, SH7750_PDTRA);
     write32(0, SH7750_PDTRB);
-    
+
     /* Interrupt Controller Initialization */
     write16(SH7750_ICR_IRLM, SH7750_ICR); /* IRLs serves as an independent
                                              interrupt request lines */
@@ -254,7 +254,7 @@ early_hw_init(void)
     write16(
         (0 << SH7750_IPRB_WDT_S) |
         (0 << SH7750_IPRB_REF_S) |
-        (0 << SH7750_IPRB_SCI1_S), 
+        (0 << SH7750_IPRB_SCI1_S),
         SH7750_IPRB);
     write16(
         (0 << SH7750_IPRC_GPIO_S) |
@@ -265,17 +265,17 @@ early_hw_init(void)
 
 }
 
-/* 
+/*
  * cache_on --
- *      Enable instruction and operand caches 
+ *      Enable instruction and operand caches
  */
 void bsp_cache_on(void)
 {
     switch (boot_mode)
     {
         case SH4_BOOT_MODE_FLASH:
-            write32(SH7750_CCR_ICI | SH7750_CCR_ICE | 
-                    SH7750_CCR_OCI | SH7750_CCR_CB | SH7750_CCR_OCE, 
+            write32(SH7750_CCR_ICI | SH7750_CCR_ICE |
+                    SH7750_CCR_OCI | SH7750_CCR_CB | SH7750_CCR_OCE,
                     SH7750_CCR);
             break;
         case SH4_BOOT_MODE_IPL:

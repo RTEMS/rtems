@@ -2,7 +2,7 @@
  *  This file contains the hardware specific portions of the TTY driver
  *  for the simulators stdin/out.
  *
- *  Logic based on newlib-1.8.2/newlib/libc/sys/sh/syscalls.c 
+ *  Logic based on newlib-1.8.2/newlib/libc/sys/sh/syscalls.c
  *
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
@@ -56,7 +56,7 @@ void console_outbyte_polled(
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */

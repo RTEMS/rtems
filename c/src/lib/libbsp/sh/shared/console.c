@@ -1,12 +1,12 @@
 /*
  * /dev/console for Hitachi SH 703X
  *
- * The SH doesn't have a designated console device. Therefore we "alias" 
- * another device as /dev/console and revector all calls to /dev/console 
+ * The SH doesn't have a designated console device. Therefore we "alias"
+ * another device as /dev/console and revector all calls to /dev/console
  * to this device.
  *
- * This approach is similar to installing a sym-link from one device to 
- * another device. If rtems once will support sym-links for devices files, 
+ * This approach is similar to installing a sym-link from one device to
+ * another device. If rtems once will support sym-links for devices files,
  * this implementation could be dropped.
  *
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
@@ -16,7 +16,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -57,7 +57,7 @@ rtems_device_driver console_initialize(
 )
 {
   rtems_device_driver status;
-  
+
   status = rtems_io_register_name(
     "/dev/console",
     major,
@@ -89,7 +89,7 @@ rtems_device_driver console_open(
     low_level_device_info.minor,
     arg );
 }
- 
+
 /*
  *  Close entry point
  */
@@ -121,7 +121,7 @@ rtems_device_driver console_read(
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
 
 rtems_device_driver console_write(

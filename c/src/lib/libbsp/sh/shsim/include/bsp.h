@@ -10,7 +10,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *  COPYRIGHT (c) 2001.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -78,9 +78,9 @@ extern "C" {
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
- * 
+ *
  * FIXME: Not applicable with gdb's simulator
- * Kept for sourcecode compatibility with other sh-BSPs 
+ * Kept for sourcecode compatibility with other sh-BSPs
  */
 #define rtems_bsp_delay( microseconds ) CPU_delay(microseconds)
 #define sh_delay( microseconds ) CPU_delay(microseconds)
@@ -97,7 +97,7 @@ extern uint32_t         WorkSpaceEnd ;
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
 
-  
+
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
@@ -116,7 +116,7 @@ extern void bsp_cleanup( void );
   BSP_CONSOLE_DRIVER_TABLE_ENTRY, \
   { console_initialize, console_open, console_close, \
       console_read, console_write, console_control }
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

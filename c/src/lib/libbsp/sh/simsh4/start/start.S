@@ -19,7 +19,7 @@
  *  TGA Technologies, Inc.
  *  100 Pinnacle Way, Suite 140
  *  Norcross, GA 30071 U.S.A.
- *  
+ *
  *
  *  This modified file may be copied and distributed in accordance
  *  the above-referenced license. It is provided for critique and
@@ -81,7 +81,7 @@ SYM (start):
         mov.l   initial_fpscr_k,r0
         lds     r0,fpscr
 
-	! call the mainline	
+	! call the mainline
 	mov #0,r4		! argc
 	mov.l main_k,r0
 	jsr @r0
@@ -107,7 +107,7 @@ ___trap34:
 !ret:
 	rts
 	nop
-	
+
 !	.align	2
 !perrno:
 !	.long	_errno
@@ -122,7 +122,7 @@ _vbr_base_k:
         .long   SYM(_vbr_base)
 
 stack_k:
-	.long	SYM(stack)	
+	.long	SYM(stack)
 edata_k:
 	.long	SYM(edata)
 end_k:

@@ -29,7 +29,7 @@ volatile uint32_t         Clock_driver_ticks;
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -39,8 +39,8 @@ static void
 set_clock_period(uint32_t         period)
 {
     asm volatile ("\tmov %0,r0\n"
-                  "\ttrapa\t#4\n" 
-                  : 
+                  "\ttrapa\t#4\n"
+                  :
                   : "r" (period)
                   : "r0" );
 }
@@ -103,15 +103,15 @@ Install_clock(rtems_isr_entry clock_isr)
     if (BSP_Configuration.ticks_per_timeslice)
     {
         rtems_isr_entry  old_isr;
-        period = Cpu_table.clicks_per_second / 
+        period = Cpu_table.clicks_per_second /
                  BSP_Configuration.ticks_per_timeslice;
-        
+
         /* Configure timer interrupts */
         set_clock_period(period);
-        
+
         /* Register the interrupt handler */
         rtems_interrupt_catch(clock_isr, CLOCK_VECTOR, &old_isr);
-        
+
         /* Register the driver exit procedure so we can shutdown */
         atexit(Clock_exit);
     }
@@ -137,14 +137,14 @@ Clock_initialize(rtems_device_major_number major,
                  void *pargp)
 {
     Install_clock (Clock_isr);
- 
+
     /* Make major/minor avail to others such as shared memory driver */
     rtems_clock_major = major;
     rtems_clock_minor = minor;
- 
+
     return RTEMS_SUCCESSFUL;
 }
- 
+
 
 /* Clock_control --
  *     I/O control (IOCTL) function for Clock driver. At this moment this
@@ -174,7 +174,7 @@ Clock_control(rtems_device_major_number major,
          * This is hokey, but until we get a defined interface
          * to do this, it will just be this simple...
          */
-        if (args->command == rtems_build_name('I', 'S', 'R', ' ')) 
+        if (args->command == rtems_build_name('I', 'S', 'R', ' '))
         {
             Clock_isr(CLOCK_VECTOR);
         }

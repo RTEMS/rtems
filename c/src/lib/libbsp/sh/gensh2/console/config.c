@@ -1,4 +1,4 @@
-/* 
+/*
  * This file contains the TTY driver table. The implementation is
  * based on libchip/serial drivers, but it uses internal SHx SCI so
  * the implementation of the driver is placed in
@@ -25,7 +25,7 @@
 #include <rtems/termiostypes.h>
 
 
-/* 
+/*
  * Function set for interrupt enabled termios console
  */
 console_fns sh_sci_fns =
@@ -41,7 +41,7 @@ console_fns sh_sci_fns =
     TERMIOS_IRQ_DRIVEN           /* deviceOutputUsesInterrupts */
 };
 
-/* 
+/*
  * Function set for polled termios console
  */
 console_fns sh_sci_fns_polled =
@@ -81,7 +81,7 @@ static const struct termios term2 = {
     0,
     { 0 }
 };
-    
+
 
 console_tbl	Console_Port_Tbl[] = {
     {

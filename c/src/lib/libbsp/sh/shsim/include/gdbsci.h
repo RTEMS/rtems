@@ -8,7 +8,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *  $Id$
  */
 
@@ -20,7 +20,7 @@ extern "C" {
 #endif
 
 /*
- */ 
+ */
 
 #define DEVGDBSCI_DRIVER_TABLE_ENTRY \
   { sh_gdbsci_initialize, sh_gdbsci_open, sh_gdbsci_close, sh_gdbsci_read, \

@@ -33,12 +33,12 @@
 #include <sh/sh7_pfc.h>
 #include <sh/sci.h>
 
-/* 
- * gdb assumes area 5/char access (base address & 0x0500000), 
+/*
+ * gdb assumes area 5/char access (base address & 0x0500000),
  * the RTEMS's sh7045 code however defaults to area 5/int/short/char access
  * [Very likely a bug in the sh7045 code, RC.]
  */
- 
+
 #define GDBSCI_BASE 0x05ffffff
 
 #define GDBSCI0_SMR (SCI0_SMR & GDBSCI_BASE)
@@ -58,7 +58,7 @@
 /*
  * NOTE: Only device 1 is valid for the simulator
  */
-  
+
 #define SH_GDBSCI_MINOR_DEVICES       2
 
 /* Force SIGBUS by using an unsupported address for /dev/gdbsci0 */
@@ -91,13 +91,13 @@ static int _sci_set_cflags(
 {
   uint8_t  	smr;
   uint8_t  	brr;
-  
+
   if ( c_cflag & CBAUD )
   {
     if ( _sci_get_brparms( c_cflag, &smr, &brr ) != 0 )
       return -1 ;
   }
-                    
+
   if ( c_cflag & CSIZE )
   {
     if ( c_cflag & CS8 )
@@ -122,28 +122,28 @@ static int _sci_set_cflags(
     smr |= SCI_ODD_PARITY ;
   else
     smr &= ~SCI_ODD_PARITY;
-    
+
   write8( smr, sci_dev->addr + SCI_SMR );
   write8( brr, sci_dev->addr + SCI_BRR );
-  
+
   return 0 ;
 }
 #endif
 
-static void _sci_init( 
+static void _sci_init(
   rtems_device_minor_number minor )
 {
 #if NOT_SUPPORTED_BY_GDB
   uint16_t  	temp16 ;
 
-  /* Pin function controller initialisation for asynchronous mode */  
+  /* Pin function controller initialisation for asynchronous mode */
   if( minor == 0)
     {
       temp16 = read16( PFC_PBCR1);
       temp16 &= ~( PB8MD | PB9MD );
       temp16 |= (PB_TXD0 | PB_RXD0);
       write16( temp16, PFC_PBCR1);
-    } 
+    }
   else
     {
       temp16 = read16( PFC_PBCR1);
@@ -173,7 +173,7 @@ static void _sci_tx_polled(
   const char buf )
 {
   struct scidev_t *scidev = &sci_device[minor] ;
-#if NOT_SUPPORTED_BY_GDB                
+#if NOT_SUPPORTED_BY_GDB
   int8_t           ssr ;
 
   while ( !inb((scidev->addr + SCI_SSR) & SCI_TDRE ))
@@ -181,18 +181,18 @@ static void _sci_tx_polled(
 #endif
   write8(buf,scidev->addr+SCI_TDR);
 
-#if NOT_SUPPORTED_BY_GDB                
+#if NOT_SUPPORTED_BY_GDB
   ssr = inb(scidev->addr+SCI_SSR);
   ssr &= ~SCI_TDRE ;
   write8(ssr,scidev->addr+SCI_SSR);
 #endif
-} 
+}
 
 static int _sci_rx_polled (
   int minor)
 {
   struct scidev_t *scidev = &sci_device[minor] ;
-	
+
   unsigned char c;
 #if NOT_SUPPORTED_BY_GDB
   char ssr ;
@@ -203,9 +203,9 @@ static int _sci_rx_polled (
 
   if ( !(ssr & SCI_RDRF) )
     return -1;
-#endif		
+#endif
   c = read8(scidev->addr + SCI_RDR) ;
-#if NOT_SUPPORTED_BY_GDB  
+#if NOT_SUPPORTED_BY_GDB
   write8(ssr & ~SCI_RDRF,scidev->addr + SCI_SSR);
 #endif
   return c;
@@ -222,7 +222,7 @@ rtems_device_driver sh_gdbsci_initialize(
 {
   rtems_device_driver status ;
   rtems_device_minor_number     i;
-  
+
   /*
    * register all possible devices.
    * the initialization of the hardware is done by sci_open
@@ -239,7 +239,7 @@ rtems_device_driver sh_gdbsci_initialize(
   }
 
   /* default hardware setup */
-  
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -261,14 +261,14 @@ rtems_device_driver sh_gdbsci_open(
    {
      return RTEMS_INVALID_NUMBER;
    }
- 
+
  /* device already opened */
   if ( sci_device[minor].opened > 0 )
   {
     sci_device[minor].opened++ ;
     return RTEMS_SUCCESSFUL ;
   }
-  
+
   _sci_init( minor );
 
 #if NOT_SUPPORTED_BY_GDB
@@ -291,17 +291,17 @@ rtems_device_driver sh_gdbsci_open(
 
 /* FIXME: Should be one bit delay */
     CPU_delay(50000); /* microseconds */
-    
+
     temp8 |= SCI_RE | SCI_TE;
     write8(temp8, sci_device[minor].addr + SCI_SCR);	/* Enable clock output */
-  }  
+  }
 #endif
 
   sci_device[minor].opened++ ;
 
   return RTEMS_SUCCESSFUL ;
 }
- 
+
 /*
  *  Close entry point
  */
@@ -318,7 +318,7 @@ rtems_device_driver sh_gdbsci_close(
     }
 
   sci_device[minor].opened-- ;
-    
+
   return RTEMS_SUCCESSFUL ;
 }
 
@@ -333,7 +333,7 @@ rtems_device_driver sh_gdbsci_read(
 )
 {
   int count = 0;
- 
+
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *) arg;
   char * buffer = rw_args->buffer;
   int maximum = rw_args->count;

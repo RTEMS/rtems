@@ -26,11 +26,11 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
- 
+
 #include <rtems/libcsupport.h>
- 
+
 #include <string.h>
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -49,7 +49,7 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -65,11 +65,11 @@ void bsp_libc_init( void *, uint32_t, int );
  *      not yet initialized.
  *
  */
- 
+
 void bsp_pretasking_hook(void)
 {
     bsp_libc_init(&HeapStart, (char *)&HeapEnd - (char *)&HeapStart, 0);
- 
+
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -84,10 +84,10 @@ void bsp_pretasking_hook(void)
 void bsp_start(void)
 {
   /*
-     For real boards you need to setup the hardware 
+     For real boards you need to setup the hardware
      and need to copy the vector table from rom to ram.
 
-     Depending on the board this can ether be done from inside the rom 
+     Depending on the board this can ether be done from inside the rom
      startup code, rtems startup code or here.
    */
 
@@ -111,10 +111,10 @@ void bsp_start(void)
    */
 
   BSP_Configuration.work_space_start = (void *) &WorkSpaceStart ;
-  BSP_Configuration.work_space_size  = 
-    (uint32_t) &WorkSpaceEnd - 
+  BSP_Configuration.work_space_size  =
+    (uint32_t) &WorkSpaceEnd -
     (uint32_t) &WorkSpaceStart ;
-  
+
   /*
    *  initialize the CPU table for this BSP
    */
@@ -124,7 +124,7 @@ void bsp_start(void)
   _CPU_Interrupt_stack_high = &CPU_Interrupt_stack_high ;
 
   /* This isn't used anywhere */
-  Cpu_table.interrupt_stack_size = 
+  Cpu_table.interrupt_stack_size =
     (uint32_t) (&CPU_Interrupt_stack_high) -
     (uint32_t) (&CPU_Interrupt_stack_low) ;
 #endif

@@ -14,7 +14,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998-2001.
  *  On-Line Applications Research Corporation (OAR).
@@ -140,7 +140,7 @@ extern void *CPU_Interrupt_stack_high ;
 extern uint32_t   boot_mode;
 #define SH4_BOOT_MODE_FLASH 0
 #define SH4_BOOT_MODE_IPL   1
-  
+
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
@@ -159,7 +159,7 @@ extern void bsp_cleanup( void );
 #define CONSOLE_DRIVER_TABLE_ENTRY \
   { console_initialize, console_open, console_close, \
       console_read, console_write, console_control }
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

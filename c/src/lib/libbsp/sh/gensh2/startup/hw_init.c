@@ -27,7 +27,7 @@
  *  TGA Technologies, Inc.
  *  100 Pinnacle Way, Suite 140
  *  Norcross, GA 30071 U.S.A.
- *  
+ *
  *
  *  This file may be copied and distributed in accordance
  *  the above-referenced license. It is provided for critique and
@@ -74,7 +74,7 @@ void early_hw_init (void)
 };
 
 /*  to be called from 'bspstart.c' */
-void bsp_hw_init (void) 
+void bsp_hw_init (void)
 {
   uint16_t   temp16;
 
@@ -83,7 +83,7 @@ void bsp_hw_init (void)
   /* no STANDALONE_EVB: accepts defaults, adds RESET */
 
   /* FIXME: replace 'magic numbers' */
-	
+
   write16(0x5000, PFC_PACRH);  /* Pin function controller - WRHH, WRHL */
   write16(0x1550, PFC_PACRL1); /* Pin fun. controller - WRH,WRL,RD,CS1 */
   write16(0x0000, PFC_PBCR1);  /* Pin function controller - default */

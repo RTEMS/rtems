@@ -164,7 +164,7 @@ console_first_open(int major, int minor, void *arg)
     {
         return RTEMS_INVALID_NUMBER; /* Single console supported */
     }
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -251,8 +251,8 @@ console_initialize(rtems_device_major_number major,
  * RETURNS:
  *     RTEMS error code
  */
-rtems_device_driver 
-console_open(rtems_device_major_number major, 
+rtems_device_driver
+console_open(rtems_device_major_number major,
              rtems_device_minor_number minor,
              void *arg)
 {
@@ -281,10 +281,10 @@ console_open(rtems_device_major_number major,
     {
         case CONSOLE_MODE_RAW:
             return RTEMS_SUCCESSFUL;
-            
+
         case CONSOLE_MODE_INT:
             return rtems_termios_open(major, minor, arg, &intr_callbacks);
-            
+
         case CONSOLE_MODE_POLL:
             return rtems_termios_open(major, minor, arg, &poll_callbacks);
 
@@ -305,7 +305,7 @@ console_open(rtems_device_major_number major,
  * RETURNS:
  *     RTEMS error code
  */
-rtems_device_driver 
+rtems_device_driver
 console_close(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void *arg)
@@ -415,7 +415,7 @@ rtems_device_driver
 console_control(rtems_device_major_number major,
                 rtems_device_minor_number minor,
                 void *arg)
-{ 
+{
     if (console_mode != CONSOLE_MODE_RAW)
     {
         return rtems_termios_ioctl (arg);

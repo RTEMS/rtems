@@ -53,7 +53,7 @@ SYM (start):
 	mov.l   vects_k,r0   	! update vbr to point to vectab
 	ldc     r0,vbr
 
-	! call the mainline	
+	! call the mainline
 	mov #0,r4		! argc
 	mov.l main_k,r0
 	jsr @r0
@@ -69,7 +69,7 @@ SYM (start):
 
 	.align 2
 stack_k:
-	.long	SYM(stack)	
+	.long	SYM(stack)
 edata_k:
 	.long	SYM(edata)
 end_k:

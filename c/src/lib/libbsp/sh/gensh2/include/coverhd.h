@@ -15,7 +15,7 @@
  *         all calling overhead including passing of arguments.
  *
  *
- * These are the figures tmoverhd.exe reported with gcc-2.95.1 -O4 
+ * These are the figures tmoverhd.exe reported with gcc-2.95.1 -O4
  * on a Hitachi SH7045F Evaluation Board with SH7045F at 29 MHz
  *
  * These results are assumed to be applicable to most SH7045/29MHz boards
@@ -27,7 +27,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
