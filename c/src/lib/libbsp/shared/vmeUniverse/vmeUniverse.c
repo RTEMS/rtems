@@ -6,7 +6,51 @@
  */
 
 #if 0
+/*
  * $Log$
+ * Revision 1.34  2003/02/10 23:20:05  till
+ *  - added some macro magic to make porting easier (ppcn_60x BSP in mind)
+ *  - made mgrInstalled public (vmeUniverseIrqMgrInstalled) so BSPs can
+ *    supply their own versions of the mgrInstall() routine.
+ *  - added READMEs to CVS
+ *
+ * Revision 1.33.2.1  2003/02/10 23:01:40  till
+ *  - added some macro magic to make porting easier (ppcn_60x BSP in mind)
+ *  - made mgrInstalled public (vmeUniverseIrqMgrInstalled) so BSPs can
+ *    supply their own versions of the mgrInstall() routine.
+ *
+ * Revision 1.32  2002/09/05 02:50:41  till
+ *  - use k_vsprintf(), not vsprintf() during early boot (RTEMS)
+ *
+ * Revision 1.31  2002/08/16 23:35:15  strauman
+ *  - fixed typos
+ *
+ * Revision 1.30  2002/08/16 22:53:37  till
+ *  - made address translation more generic; allow to look for reverse mappings
+ *    also.
+ *  - removed vmeUniverseLocalToBus() and vmeUniverseBusToLocal() and made
+ *    vmeUniverseXlateAddr() public instead.
+ *
+ * Revision 1.29  2002/08/16 22:16:25  till
+ *  - tweak U2SPEC (fix Joerger vtr10012_8 problem) the same
+ *    way the synergy BSP does (rev 2 chips only)
+ *
+ * Revision 1.28  2002/08/15 23:16:01  till
+ *  - bugfix: vmeUniverseISRGet() dereferenced a possibly NULL pointer
+ *
+ * Revision 1.25  2002/07/19 05:18:40  till
+ *  - CVS log: again a problem. Cannot embed /_* *_/ comments in the log
+ *    because the log has to be commented as a whole. I had tried
+ *    #if 0 #endif - doesn't work because cpp expands char constants???
+ *    WHAT A NUISANCE
+ *
+ * Revision 1.24  2002/07/19 02:44:14  till
+ *  - added a new parameter to the IRQ manager install routine:
+ *    the main interrupt's line can now also be specified (reading
+ *    from PCI config does not always work - some boards don't
+ *    have correct information there - PMC's will have a similar
+ *    problem, though!)
+ *
  * Revision 1.21  2002/04/11 06:54:48  till
  *  - silenced message about 'successfully configured a port'
  *
@@ -32,14 +76,13 @@
  *
  * Revision 1.15  2002/01/23 06:15:30  till
  *   - changed master port data width to 64 bit.
- *     /* NOTE: reading the CY961 (Echotek ECDR814) with VDW32
- *      *       generated bus errors when reading 32-bit words
- *      *       - very weird, because the registers are 16-bit
- *      *         AFAIK.
- *      *       - 32-bit accesses worked fine on vxWorks which
- *      *         has the port set to 64-bit.
- *      *       ????????
- *      */
+ *        NOTE: reading the CY961 (Echotek ECDR814) with VDW32
+ *              generated bus errors when reading 32-bit words
+ *              - very weird, because the registers are 16-bit
+ *                AFAIK.
+ *              - 32-bit accesses worked fine on vxWorks which
+ *                has the port set to 64-bit.
+ *              ????????
  *
  * Revision 1.14  2002/01/11 19:30:54  till
  *  - added more register defines to header
@@ -55,7 +98,7 @@
  *
  * Revision 1.11  2002/01/08 03:59:52  till
  *  - vxworks always defines _LITTLE_ENDIAN, fixed the conditionals
- *    so it should work on __vxworks and on __rtems now.
+ *    so it should work on __vxworks and on __rtems__ now.
  *  - rtems uprintf wrapper reverts to printk if stdio is not yet
  *    initialized (uses _impure_ptr->__sdidinit)
  *  - tested bus address translation utility routines
@@ -89,7 +132,7 @@
  *
  * Revision 1.1.1.1  2001/07/12 23:15:19  till
  *  - cvs import
- *
+ */
 #endif
 
 #include <stdio.h>
@@ -137,16 +180,23 @@
 /* we rely on a vxWorks definition here */
 #define VX_AM_SUP		4
 
-#ifdef __rtems
+#ifdef __rtems__
 
 #include <stdlib.h>
 #include <rtems/bspIo.h>	/* printk */
 #include <bsp/pci.h>
 #include <bsp.h>
 
-#define pciFindDevice	BSP_pciFindDevice
-#define pciConfigInLong pci_read_config_dword
-#define pciConfigInByte pci_read_config_byte
+/* allow the BSP to override the default routines */
+#ifndef BSP_PCI_FIND_DEVICE
+#define BSP_PCI_FIND_DEVICE		BSP_pciFindDevice
+#endif
+#ifndef BSP_PCI_CONFIG_IN_LONG
+#define BSP_PCI_CONFIG_IN_LONG	pci_read_config_dword
+#endif
+#ifndef BSP_PCI_CONFIG_IN_BYTE
+#define BSP_PCI_CONFIG_IN_BYTE	pci_read_config_byte
+#endif
 
 typedef unsigned int pci_ulong;
 #define PCI_TO_LOCAL_ADDR(memaddr) ((pci_ulong)(memaddr) + PCI_MEM_BASE)
@@ -155,11 +205,16 @@ typedef unsigned int pci_ulong;
 #elif defined(__vxworks)
 typedef unsigned long pci_ulong;
 #define PCI_TO_LOCAL_ADDR(memaddr) (memaddr)
-#define PCI_INTERRUPT_LINE	0x3c
+#define BSP_PCI_FIND_DEVICE		pciFindDevice
+#define BSP_PCI_CONFIG_IN_LONG	pciConfigInLong
+#define BSP_PCI_CONFIG_IN_BYTE	pciConfigInByte
 #else
 #error "vmeUniverse not ported to this architecture yet"
 #endif
 
+#ifndef PCI_INTERRUPT_LINE
+#define PCI_INTERRUPT_LINE		0x3c
+#endif
 
 volatile LERegister *vmeUniverse0BaseAddr=0;
 int vmeUniverse0PciIrqLine=-1;
@@ -192,7 +247,7 @@ WRITE_LE(
 #elif (defined(_ARCH_PPC) || defined(__PPC__) || defined(__PPC)) && (__BIG_ENDIAN__ == 1)
 	/* offset is in bytes and MUST not end up in r0 */
 	__asm__ __volatile__("stwbrx %1, %0, %2" :: "b"(off),"r"(val),"r"(adrs));
-#elif defined(__rtems)
+#elif defined(__rtems__)
 	st_le32((volatile unsigned long*)(((unsigned long)adrs)+off), val);
 #else
 #error "little endian register writing not implemented"
@@ -221,7 +276,7 @@ READ_LE0(volatile LERegister *adrs)
 register unsigned long rval;
 __asm__ __volatile__("lwbrx %0, 0, %1":"=r"(rval):"r"(adrs));
 	return rval;
-#elif defined(__rtems)
+#elif defined(__rtems__)
 	return ld_le32((volatile unsigned long*)adrs);
 #else
 #error "little endian register reading not implemented"
@@ -254,17 +309,18 @@ return READ_LE0((volatile LERegister *)(((unsigned long)adrs)+off));
 
 #define UNIV_REV(base) (READ_LE(base,2*sizeof(LERegister)) & 0xff)
 	
-#ifdef __rtems
+#ifdef __rtems__
 static int
 uprintk(char *fmt, va_list ap)
 {
 int		rval;
+extern int k_vsprintf(char *, char *, va_list);
 /* during bsp init, there is no malloc and no stdio,
  * hence we assemble the message on the stack and revert
  * to printk
  */
 char	buf[200];
-	rval = vsprintf(buf,fmt,ap);
+	rval = k_vsprintf(buf,fmt,ap);
 	if (rval > sizeof(buf))
 			BSP_panic("vmeUniverse/uprintk: buffer overrun");
 	printk(buf);
@@ -280,7 +336,7 @@ uprintf(FILE *f, char *fmt, ...)
 va_list	ap;
 int	rval;
 	va_start(ap, fmt);
-#ifdef __rtems
+#ifdef __rtems__
 	if (!f || !_impure_ptr->__sdidinit) {
 		/* Might be called at an early stage when
 		 * stdio is not yet initialized.
@@ -307,7 +363,7 @@ int bus,dev,fun;
 pci_ulong busaddr;
 unsigned char irqline;
 
-	if (pciFindDevice(
+	if (BSP_PCI_FIND_DEVICE(
 			PCI_VENDOR_TUNDRA,
 			PCI_DEVICE_UNIVERSEII,
 			instance,
@@ -315,17 +371,17 @@ unsigned char irqline;
 			&dev,
 			&fun))
 		return -1;
-	if (pciConfigInLong(bus,dev,fun,PCI_UNIVERSE_BASE0,&busaddr))
+	if (BSP_PCI_CONFIG_IN_LONG(bus,dev,fun,PCI_UNIVERSE_BASE0,&busaddr))
 		return -1;
 	if ((unsigned long)(busaddr) & 1) {
 		/* it's IO space, try BASE1 */
-		if (pciConfigInLong(bus,dev,fun,PCI_UNIVERSE_BASE1,&busaddr)
+		if (BSP_PCI_CONFIG_IN_LONG(bus,dev,fun,PCI_UNIVERSE_BASE1,&busaddr)
 		   || ((unsigned long)(busaddr) & 1))
 			return -1;
 	}
 	*pbase=(volatile LERegister*)PCI_TO_LOCAL_ADDR(busaddr);
 
-	if (pciConfigInByte(bus,dev,fun,PCI_INTERRUPT_LINE,&irqline))
+	if (BSP_PCI_CONFIG_IN_BYTE(bus,dev,fun,PCI_INTERRUPT_LINE,&irqline))
 		return -1;
 	else
 		vmeUniverse0PciIrqLine = irqline;
@@ -608,6 +664,7 @@ showUniversePort(
 typedef struct XlatRec_ {
 	unsigned long	address;
 	unsigned long	aspace;
+	unsigned 		reverse; /* find reverse mapping of this port */
 } XlatRec, *Xlat;
 
 /* try to translate an address through the bridge
@@ -653,12 +710,22 @@ unsigned long cntrl, start, bound, offst, mask, x;
 	offst = READ_LE0(preg++) & mask;
 
 	/* translate address to the other bus */
-	x = l->address - offst;
+	if (l->reverse) {
+		/* reverse mapping, i.e. for master ports we map from
+		 * VME to PCI, for slave ports we map from VME to PCI
+		 */
+		if (l->address >= start && l->address < bound) {
+				l->address+=offst;
+				return 1;
+		}
+	} else {
+		x = l->address - offst;
 
-	if (x >= start && x < bound) {
-		/* valid address found */
-		l->address = x;
-		return 1;
+		if (x >= start && x < bound) {
+			/* valid address found */
+			l->address = x;
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -711,29 +778,24 @@ showUniversePorts(int ismaster, FILE *f)
 	mapOverAll(ismaster,showUniversePort,f);
 }
 
-static int xlate(int ismaster, unsigned long as, unsigned long aIn, unsigned long *paOut)
+int
+vmeUniverseXlateAddr(
+	int master, 		/* look in the master windows */
+	int reverse,		/* reverse mapping; for masters: map local to VME */
+	unsigned long as,	/* address space */
+	unsigned long aIn,	/* address to look up */
+	unsigned long *paOut/* where to put result */
+	)
 {
 int	rval;
 XlatRec l;
-	l.aspace = as;
+	l.aspace  = as;
 	l.address = aIn;
+	l.reverse = reverse;
 	/* map result -1/0/1 to -2/-1/0 with 0 on success */
-	rval = mapOverAll(ismaster,xlatePort,(void*)&l) - 1;
+	rval = mapOverAll(master,xlatePort,(void*)&l) - 1;
 	*paOut = l.address;
 	return rval;
-}
-
-/* public functions */
-int
-vmeUniverseLocalToBusAdrs(unsigned long as, unsigned long localAdrs, unsigned long *pbusAdrs)
-{
-	return xlate(0,as,localAdrs,pbusAdrs);
-}
-
-int
-vmeUniverseBusToLocalAdrs(unsigned long as, unsigned long busAdrs, unsigned long *plocalAdrs)
-{
-	return xlate(1,as,busAdrs,plocalAdrs);
 }
 
 void
@@ -764,6 +826,21 @@ vmeUniverseReset(void)
 
 	/* disable VME bus image of VME CSR */
 	vmeUniverseWriteReg(0, UNIV_REGOFF_VCSR_CTL);
+
+
+	/* I had problems with a Joerger vtr10012_8 card who would
+	 * only be accessible after tweaking the U2SPEC register
+	 * (the t27 parameter helped).
+	 * I use the same settings here that are used by the
+	 * Synergy VGM-powerpc BSP for vxWorks.
+	 */
+	if (2==UNIV_REV(vmeUniverse0BaseAddr))
+		vmeUniverseWriteReg(UNIV_U2SPEC_DTKFLTR |
+						UNIV_U2SPEC_MASt11   |
+						UNIV_U2SPEC_READt27_NODELAY |
+						UNIV_U2SPEC_POSt28_FAST |
+						UNIV_U2SPEC_PREt28_FAST,
+						UNIV_REGOFF_U2SPEC);
 
 	/* disable interrupts, reset routing */
 	vmeUniverseWriteReg(0, UNIV_REGOFF_LINT_EN);
@@ -924,7 +1001,7 @@ register unsigned long *p=ptr+num;
 			"stwbrx 0, 0, %0\n"
 			: "=r"(p) : "r"(p) : "r0"
 			);
-#elif defined(__rtems)
+#elif defined(__rtems__)
 		p--; st_le32(p, *p);
 #else
 #error	"vmeUniverse: endian conversion not implemented for this architecture"
@@ -935,7 +1012,7 @@ register unsigned long *p=ptr+num;
 
 /* RTEMS interrupt subsystem */
 
-#ifdef __rtems
+#ifdef __rtems__
 #include <bsp/irq.h>
 
 typedef struct
@@ -944,16 +1021,18 @@ UniverseIRQEntryRec_ {
 		void			*usrData;
 } UniverseIRQEntryRec, *UniverseIRQEntry;
 
-static UniverseIRQEntry universeHdlTbl[257]={0};
+static UniverseIRQEntry universeHdlTbl[UNIV_NUM_INT_VECS]={0};
 
-static int mgrInstalled=0;
+int        vmeUniverseIrqMgrInstalled=0;
 static int vmeIrqUnivOut=-1;
 static int specialIrqUnivOut=-1;
 
 VmeUniverseISR
 vmeUniverseISRGet(unsigned long vector, void **parg)
 {
-	if (vector>255) return 0;
+	if (vector>=UNIV_NUM_INT_VECS ||
+		! universeHdlTbl[vector])
+		return 0;
 	if (parg)
 		*parg=universeHdlTbl[vector]->usrData;
 	return universeHdlTbl[vector]->isr;
@@ -962,10 +1041,29 @@ vmeUniverseISRGet(unsigned long vector, void **parg)
 static void
 universeSpecialISR(void)
 {
-UniverseIRQEntry ip;
-	/* try the special handler */
-	if ((ip=universeHdlTbl[UNIV_SPECIAL_IRQ_VECTOR])) {
-		ip->isr(ip->usrData, UNIV_SPECIAL_IRQ_VECTOR);
+register UniverseIRQEntry	ip;
+register unsigned			vec;
+register unsigned long		status;
+
+	status=vmeUniverseReadReg(UNIV_REGOFF_LINT_STAT);
+
+	/* scan all LINT bits except for the 'normal' VME interrupts */
+
+	/* do VOWN first */
+	vec=UNIV_VOWN_INT_VEC;
+	if ( (status & UNIV_LINT_STAT_VOWN) && (ip=universeHdlTbl[vec]))
+		ip->isr(ip->usrData,vec);
+
+	/* now continue with DMA and scan through all bits;
+	 * we assume the vectors are in the right order!
+	 *
+	 * The initial right shift brings the DMA bit into position 0;
+	 * the loop is left early if there are no more bits set.
+	 */
+	for (status>>=8; status; status>>=1) {
+		vec++;
+		if ((status&1) && (ip=universeHdlTbl[vec]))
+			ip->isr(ip->usrData,vec);
 	}
 	/* clear all special interrupts */
 	vmeUniverseWriteReg(
@@ -1092,16 +1190,25 @@ my_isOn(const rtems_irq_connect_data *arg)
 }
 
 int
-vmeUniverseInstallIrqMgr(int vmeOut, int specialOut, int specialIrqPicLine)
+vmeUniverseInstallIrqMgr(int vmeOut,
+						 int vmeIrqPicLine,
+						 int specialOut,
+						 int specialIrqPicLine)
 {
 rtems_irq_connect_data aarrggh;
 
 	/* check parameters */
 	if ((vmeIrqUnivOut=vmeOut) < 0 || vmeIrqUnivOut > 7) return -1;
 	if ((specialIrqUnivOut=specialOut) > 7) return -2;
-	if (specialIrqPicLine < 0) return -3;
+	if (specialOut >=0 && specialIrqPicLine < 0) return -3;
+	/* give them a chance to override buggy PCI info */
+	if (vmeIrqPicLine >= 0) {
+		uprintf(stderr,"Overriding main IRQ line PCI info with %i\n",
+				vmeIrqPicLine);
+		vmeUniverse0PciIrqLine=vmeIrqPicLine;
+	}
 
-	if (mgrInstalled) return -4;
+	if (vmeUniverseIrqMgrInstalled) return -4;
 
 	aarrggh.on=my_no_op; /* at _least_ they could check for a 0 pointer */
 	aarrggh.off=my_no_op;
@@ -1142,7 +1249,7 @@ rtems_irq_connect_data aarrggh;
 		 UNIV_LINT_MAP1_DMA(specialIrqUnivOut)
 		),
 		UNIV_REGOFF_LINT_MAP1);
-	mgrInstalled=1;
+	vmeUniverseIrqMgrInstalled=1;
 	return 0;
 }
 
@@ -1152,7 +1259,7 @@ vmeUniverseInstallISR(unsigned long vector, VmeUniverseISR hdl, void *arg)
 {
 UniverseIRQEntry ip;
 
-		if (vector>sizeof(universeHdlTbl)/sizeof(universeHdlTbl[0]) || !mgrInstalled)
+		if (vector>sizeof(universeHdlTbl)/sizeof(universeHdlTbl[0]) || !vmeUniverseIrqMgrInstalled)
 				return -1;
 
 		ip=universeHdlTbl[vector];
@@ -1170,7 +1277,7 @@ vmeUniverseRemoveISR(unsigned long vector, VmeUniverseISR hdl, void *arg)
 {
 UniverseIRQEntry ip;
 
-		if (vector>sizeof(universeHdlTbl)/sizeof(universeHdlTbl[0]) || !mgrInstalled)
+		if (vector>sizeof(universeHdlTbl)/sizeof(universeHdlTbl[0]) || !vmeUniverseIrqMgrInstalled)
 				return -1;
 
 		ip=universeHdlTbl[vector];
@@ -1185,7 +1292,7 @@ UniverseIRQEntry ip;
 int
 vmeUniverseIntEnable(unsigned int level)
 {
-		if (!mgrInstalled || level<1 || level>7)
+		if (!vmeUniverseIrqMgrInstalled || level<1 || level>7)
 				return -1;
 		vmeUniverseWriteReg(
 				(vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) | 
@@ -1198,7 +1305,7 @@ vmeUniverseIntEnable(unsigned int level)
 int
 vmeUniverseIntDisable(unsigned int level)
 {
-		if (!mgrInstalled || level<1 || level>7)
+		if (!vmeUniverseIrqMgrInstalled || level<1 || level>7)
 				return -1;
 		vmeUniverseWriteReg(
 				(vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) & 
