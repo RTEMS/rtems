@@ -1,3 +1,9 @@
+2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rdbg/Makefile.am, include/rdbg/i386/Makefile.am,
+	include/rdbg/m68k/Makefile.am, include/rdbg/powerpc/Makefile.am:
+	Cleanup including more proper style on include files.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

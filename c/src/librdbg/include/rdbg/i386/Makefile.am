@@ -4,21 +4,12 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = rdbg_f.h reg.h
+include_rdbgdir = $(includedir)/rdbg
 
-noinst_HEADERS = $(H_FILES)
-
-##PREINSTALL_FILES = \
-##$(PROJECT_INCLUDE)/rdbg/i386 \
-##$(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rdbg/i386/%)
-
-##$(PROJECT_INCLUDE)/rdbg/i386:
-##	@$(mkinstalldirs) $@
-##$(PROJECT_INCLUDE)/rdbg/i386/%.h: %.h
-##	$(INSTALL_DATA) $< $@
+include_rdbg_HEADERS = rdbg_f.h reg.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg \
-    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rdbg/%)
+    $(include_rdbg_HEADERS:%=$(PROJECT_INCLUDE)/rdbg/%)
 
 $(PROJECT_INCLUDE)/rdbg:
 	@$(mkinstalldirs) $@
