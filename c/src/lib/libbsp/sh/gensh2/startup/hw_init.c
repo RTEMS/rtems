@@ -20,7 +20,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  Adapted from Hitachi EVB7045F tutorial files by:
  *  John M. Mills (jmills@tga.com)
