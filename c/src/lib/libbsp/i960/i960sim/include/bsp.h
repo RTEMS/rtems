@@ -53,23 +53,6 @@ extern "C" {
 
 #define Lower_tm27_intr()
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define delay( microseconds ) \
-  { register rtems_unsigned32 _delay=(microseconds); \
-    register rtems_unsigned32 _tmp = 0; /* initialized to avoid warning */ \
-    asm volatile( "0: \
-                     remo      3,31,%0 ; \
-                     cmpo      0,%0 ; \
-                     subo      1,%1,%1 ; \
-                     cmpobne.t 0,%1,0b " \
-                  : "=d" (_tmp), "=d" (_delay) \
-                  : "0"  (_tmp), "1"  (_delay) ); \
-  }
-
 /* Constants */
 
 /* miscellaneous stuff assumed to exist */
