@@ -2,12 +2,12 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/timer.rel
 
 C_FILES = timer.c
 S_FILES = timerisr.S
-timer_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
+timer_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) \
+    $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
