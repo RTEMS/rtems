@@ -1,4 +1,4 @@
-@chapter = The Makefiles
+@chapter = Makefiles
 
 @subsection = Makefiles Used During The BSP Building Process
 

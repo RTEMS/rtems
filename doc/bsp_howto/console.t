@@ -1,4 +1,4 @@
-@chapter = The Console Driver
+@chapter = Console Driver
 
 @subsection = Introduction
 

@@ -1,4 +1,4 @@
-@chapter = The Clock Driver
+@chapter = Clock Driver
 
 @subsection = Introduction
 

@@ -1,4 +1,4 @@
-@chapter =  The Board Support Package Structure
+@chapter = Board Support Package Structure
 
 The BSP are all kept in the $RTEMS_ROOT/c/src/lib/libbsp directory. They
 are filed under the processor family (m68k, powerpc, etc.). A given BSP

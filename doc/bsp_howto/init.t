@@ -1,4 +1,4 @@
-@chapter = The Initialization Code
+@chapter = Initialization Code
 
 @subsection = Introduction
 

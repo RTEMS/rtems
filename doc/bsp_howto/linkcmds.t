@@ -1,4 +1,4 @@
-@chapter = The Linkcmds
+@chapter = Linkcmds
 
 @subsection = What is a "linkcmds" file?
 
