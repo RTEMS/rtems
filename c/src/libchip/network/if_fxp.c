@@ -190,13 +190,20 @@ struct fxp_ident {
  * particular variants, but we don't currently differentiate between
  * them.
  */
-#ifdef NOTUSED
 static struct fxp_ident fxp_ident_table[] = {
+#ifdef NOTUSED
+	/* currently untested */
     { 0x1229,		"Intel Pro 10/100B/100+ Ethernet" },
     { 0x2449,		"Intel Pro/100 Ethernet" },
+#endif
     { 0x1209,		"Intel Embedded 10/100 Ethernet" },
+#ifdef NOTUSED
+	/* currently untested */
     { 0x1029,		"Intel Pro/100 Ethernet" },
+#endif
     { 0x1030,		"Intel Pro/100 Ethernet" },
+#ifdef NOTUSED
+	/* currently untested */
     { 0x1031,		"Intel Pro/100 Ethernet" },
     { 0x1032,		"Intel Pro/100 Ethernet" },
     { 0x1033,		"Intel Pro/100 Ethernet" },
@@ -205,9 +212,9 @@ static struct fxp_ident fxp_ident_table[] = {
     { 0x1036,		"Intel Pro/100 Ethernet" },
     { 0x1037,		"Intel Pro/100 Ethernet" },
     { 0x1038,		"Intel Pro/100 Ethernet" },
+#endif
     { 0,		NULL },
 };
-#endif
 
 #if 0
 static int		fxp_probe(device_t dev);
@@ -456,11 +463,20 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * find device on pci bus
 	 */	
-	i = pcib_find_by_devid(0x8086,0x1209,unitNumber-1,
-			       &(sc->pci_signature));
-	DBGLVL_PRINTK(2,"fxp_attach: find_devid returned %d "
+    { int j;
+
+      for (j=0; fxp_ident_table[j].devid; j++ ) {
+		i = pcib_find_by_devid( 0x8086,
+								fxp_ident_table[j].devid,
+								unitNumber-1,
+			       				&(sc->pci_signature));
+		DBGLVL_PRINTK(2,"fxp_attach: find_devid returned %d "
 		      "and pci signature 0x%x\n",
 		      i,sc->pci_signature);
+        if (PCIB_ERR_SUCCESS == i)
+			break;
+	  }			
+	}
 
 	/*
 	 * FIXME: add search for more device types...
