@@ -26,8 +26,6 @@ rtems_task Init(
 
 /* configuration information */
  
-#define CONFIGURE_TMTEST
- 
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_TIMER_DRIVER
 #define CONFIGURE_TEST_NEEDS_STUB_DRIVER

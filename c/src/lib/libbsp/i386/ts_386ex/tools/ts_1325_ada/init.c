@@ -65,7 +65,6 @@ void *POSIX_Init( void *argument )
 
 /* configuration information */
 
-#define CONFIGURE_SPTEST
 #define CONFIGURE_GNAT_RTEMS
 
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER

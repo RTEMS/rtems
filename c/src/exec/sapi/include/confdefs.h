@@ -231,7 +231,7 @@ rtems_driver_address_table Device_drivers[] = {
  *  customize the environment. 
  */
 
-#ifdef CONFIGURE_MPTEST
+#ifdef CONFIGURE_MP_APPLICATION
 #ifndef CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
 
 #ifndef CONFIGURE_MP_NODE_NUMBER
@@ -273,7 +273,7 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 
 #define CONFIGURE_MULTIPROCESSING_TABLE    NULL
 
-#endif /* CONFIGURE_MPTEST */
+#endif /* CONFIGURE_MP_APPLICATION */
  
 /*
  *  Default Configuration Table.  This table contains the most values set in
@@ -756,7 +756,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #define CONFIGURE_MEMORY_FOR_DEVICES(_devices) \
   (((_devices) + 1) * ( sizeof(rtems_driver_name_t) ) )
 
-#ifdef CONFIGURE_MPTEST
+#ifdef CONFIGURE_MP_APPLICATION
 
 #ifndef CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
 

@@ -35,7 +35,7 @@ rtems_task Test_task3(
 
 /* configuration information */
  
-#define CONFIGURE_MPTEST
+#define CONFIGURE_MP_APPLICATION
  
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER

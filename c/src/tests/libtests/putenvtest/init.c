@@ -35,8 +35,6 @@ rtems_task Init(
 
 /* configuration information */
 
-#define CONFIGURE_SPTEST
-
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 

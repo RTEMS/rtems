@@ -44,8 +44,6 @@ rtems_status_code Empty_directive();
 
 /* configuration information */
  
-#define CONFIGURE_TMTEST
- 
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_TIMER_DRIVER
 
