@@ -47,7 +47,6 @@ void Timer_initialize()
 #define AVG_OVERHEAD     24  /* It typically takes 24 instructions */
                              /*     to start/stop the timer. */
 #define LEAST_VALID       1  /* Don't trust a value lower than this */
-                             /* psim can count instructions. :) */
 
 /*  PAGE
  *
