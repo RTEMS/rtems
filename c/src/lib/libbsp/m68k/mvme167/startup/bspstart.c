@@ -10,7 +10,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  Modifications of respective RTEMS files:
  *  Copyright (c) 1998, National Research Council of Canada
