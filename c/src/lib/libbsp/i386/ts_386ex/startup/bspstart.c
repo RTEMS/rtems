@@ -92,8 +92,10 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-     /*
-    *  we do not use the pretasking_hook.
+  void rtems_irq_mngt_init();
+
+  /*
+   *  we do not use the pretasking_hook.
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */

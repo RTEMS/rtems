@@ -23,6 +23,7 @@
 void bsp_clean_up(void);
 
 #include <bsp.h>
+#include <irq.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 
@@ -93,6 +94,8 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
+  void rtems_irq_mngt_init();
+
   /*
    *  we do not use the pretasking_hook.
    */
