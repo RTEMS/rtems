@@ -183,6 +183,7 @@ do
            *)
                echo "load $tfile"
                echo "go 0x02000000"
+               echo ""
                echo "perf"
                echo "quit"
                ;;
@@ -239,12 +240,16 @@ do
            ;;
        *)
            output_it=1
-           sed -e '1,12d' \
+           sed -e '1,9d' \
                -e 's///' -e '/^$/d' < ${logfile}.tmp | 
              while read line
               do
                 if [ $output_it -eq 1 ] ; then
                    if [ "$line" = "sis> perf" ] ; then 
+                     output_it=0
+                   elif [ "$line" = "sis> quit" ] ; then 
+                     output_it=0
+                   elif [ "$line" = "sis>" ] ; then 
                      output_it=0
                    else
                      echo "$line"
