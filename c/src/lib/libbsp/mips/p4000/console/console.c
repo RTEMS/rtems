@@ -30,9 +30,13 @@
  */
 
 
-#ifndef lint
-static char _sccsid[] = "@(#)console.c 08/20/96     1.6\n";
-#endif
+/*
+ *  Rather than deleting this, it is commented out to (hopefully) help
+ *  the submitter send updates.
+ *
+ *  static char _sccsid[] = "@(#)console.c 08/20/96     1.6\n";
+ */
+
 
 
 #include <bsp.h>
@@ -149,7 +153,7 @@ void outbyte(
     mips_leddisplay( led_chars[0], led_chars[1], led_chars[2], led_chars[3] );
     cur_led = 0;
   }
-  else if ( isalnum( ch ) && cur_led < NUM_LEDS )
+  else if ( isalnum( (unsigned char) ch ) && cur_led < NUM_LEDS )
   {
     led_chars[cur_led++] = ch;
   }
@@ -157,7 +161,9 @@ void outbyte(
 }
 
 
+#if 0
 static int console_fd = -1;
+#endif
 
 /*
  *  Open entry point
