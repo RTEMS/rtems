@@ -193,7 +193,7 @@ rtems_extension libc_delete_hook(
   if (current_task == deleted_task) {
     ptr = _REENT;
   } else {
-    ptr = (struct _reent *) deleted_task->libc_reent;
+    ptr = deleted_task->libc_reent;
   }
 
   /* if (ptr) */
@@ -264,7 +264,7 @@ libc_init(int reentrant)
 #endif
     libc_extension.thread_delete  = libc_delete_hook;
 
-    _Thread_Set_libc_reent ((void**) &_REENT);
+    _Thread_Set_libc_reent (&_REENT);
 
     rc = rtems_extension_create(rtems_build_name('L', 'I', 'B', 'C'),
                           &libc_extension, &extension_id);
