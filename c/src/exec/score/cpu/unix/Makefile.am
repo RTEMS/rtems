@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.5
 ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
 
 include  $(top_srcdir)/../../../../../../automake/multilib.am

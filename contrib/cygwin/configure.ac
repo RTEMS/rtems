@@ -1,10 +1,10 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT
+AC_INIT([rtems-contrib-cygwin],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([setup])
 
-AM_INIT_AUTOMAKE(cygwin-rpmsscripts,20010426,no)
+AM_INIT_AUTOMAKE([no-define foreign 1.6])
 
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache

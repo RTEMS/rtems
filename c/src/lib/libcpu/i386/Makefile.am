@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
 VPATH = @srcdir@:@srcdir@/../shared/src

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
 
 EXTRA_DIST = Spec.doc

@@ -3,14 +3,14 @@
 #
 
 AC_PREREQ(2.52)
-AC_INIT
+AC_INIT([rtems-tools-build],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([install-if-change.in])
 RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)
 
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE(rtems-tools-build,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE([no-define foreign 1.6])
 AM_MAINTAINER_MODE
 AC_EXEEXT
 

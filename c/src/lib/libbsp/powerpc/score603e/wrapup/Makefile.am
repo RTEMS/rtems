@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 BSP_PIECES = startup clock console timer tod vectors PCI_bus
 # pieces to pick up out of libcpu/$(RTEMS_CPU)

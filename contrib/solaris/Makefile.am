@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 RPM_SPECS_DATA = \
     sparc-solaris-binutils.spec \

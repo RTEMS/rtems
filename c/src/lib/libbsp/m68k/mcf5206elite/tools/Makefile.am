@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.5
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 noinst_SCRIPTS = runtest

@@ -1,3 +1,10 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-10-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Add gensh4 and simsh4.

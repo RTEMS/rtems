@@ -2,13 +2,13 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.52)
 
-AC_INIT
+AC_INIT([rtems-doc],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([project.am])
 AC_CONFIG_AUX_DIR([.])
 
 RTEMS_VERSION=Snapshot
 
-AM_INIT_AUTOMAKE(rtemsdoc,${RTEMS_VERSION},no)
+AM_INIT_AUTOMAKE([no-define foreign 1.6])
 AM_MAINTAINER_MODE
 
 AC_ARG_ENABLE(html,

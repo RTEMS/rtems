@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = em86.c lib.c misc.c mm.c pci.c zlib.c
 

@@ -2,7 +2,6 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 # NOTE: The order of the directories is essential.
 #       + tools, common and images are shared across many documents

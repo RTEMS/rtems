@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = console.c inch.c polled_io.c uart.c
 

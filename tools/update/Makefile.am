@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
 ## NOTE: It doesn't make much sense to install these files

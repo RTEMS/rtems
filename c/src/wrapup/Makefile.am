@@ -4,7 +4,6 @@
 ##  build and install "glommed" librtemsbsp.a
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.5
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
