@@ -169,12 +169,26 @@ void _CPU_Context_Initialize(
 );
 @end example
 
-This is_fp parameter is TRUE if the thread is to be a floating point
+The @code{is_fp} parameter is TRUE if the thread is to be a floating point
 thread.  This is typically only used on CPUs where the FPU may be easily
 disabled by software such as on the SPARC where the PSR contains an enable
 FPU bit.  The use of an FPU enable bit allows RTEMS to ensure that a
 non-floating point task is unable to access the FPU.  This guarantees that
 a deferred floating point context switch is safe.
+
+The @code{_stack_base} parameter is the base address of the memory area
+allocated for use as the task stack.  It is critical to understand that
+@code{_stack_base} may not be the starting stack pointer for this task.
+On CPU families where the stack grows from high addresses to lower ones,
+(i.e. @code{CPU_STACK_GROWS_UP} is FALSE) the starting stack point
+will be near the end of the stack memory area or close to 
+@code{_stack_base} + @code{_size}.  Even on CPU families where the stack
+grows from low to higher addresses, there may be some required
+outermost stack frame that must be put at the address @code{_stack_base}.
+
+The @code{_size} parameter is the requested size in bytes of the stack for 
+this task.  It is assumed that the memory area @code{_stack_base}
+is of this size.
 
 XXX explain other parameters and check prototype
 
@@ -188,6 +202,47 @@ void _CPU_Context_switch(
   Context_Control  *run,
   Context_Control  *heir
 );
+@end example
+
+This routine begins by saving the current state of the
+CPU (i.e. the context) in the context area at @code{run}.
+Then the routine should load the CPU context pointed to
+by @code{heir}.  Loading the new context will cause a
+branch to its task code, so the task that invoked
+@code{_CPU_Context_switch} will not run for a while.  
+When, eventually, a context switch is made to load
+context from @code{*run} again, this task will resume
+and @code{_CPU_Context_switch} will return to its caller.
+
+Care should be exercise when writing this routine.  All
+registers assumed to be preserved across subroutine calls
+must be preserved.  These registers may be saved in
+the task's context area or on its stack.  However, the
+stack pointer and address to resume executing the task
+at must be included in the context (normally the subroutine
+return address to the caller of @code{_Thread_Dispatch}.
+The decision of where to store the task's context is based
+on numerous factors including the capabilities of
+the CPU architecture itself and simplicity as well
+as external considerations such as debuggers wishing
+to examine a task's context.  In this case, it is
+often simpler to save all data in the context area.
+
+Also there may be special considerations
+when loading the stack pointers or interrupt level of the
+incoming task.  Independent of CPU specific considerations,
+if some context is saved on the task stack, then the porter
+must ensure that the stack pointer is adjusted @b{BEFORE}
+to make room for this context information before the
+information is written.  Otherwise, an interrupt could
+occur writing over the context data.  The following is
+an example of an @b{INCORRECT} sequence:
+
+@example
+save part of context beyond current top of stack
+interrupt pushes context -- overwriting written context
+interrupt returns
+adjust stack pointer
 @end example
 
 @subsection Restoring a Context

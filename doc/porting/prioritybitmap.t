@@ -27,9 +27,26 @@ ready task at that priority.  The bit array can be efficiently searched to
 determine the highest priority ready task.  This family of data type and
 routines is used to maintain and search the bit map array.
 
+When manipulating the bitmap array, RTEMS internally divides the 
+8 bits of the task priority into "major" and "minor" components.
+The most significant 4 bits are the major component, while the least
+significant are the minor component.  The major component of a priority
+value is used to determine which 16-bit wide entry in the
+@code{_Priority_Bit_map} array is associated with this priority.
+Each element in the @code{_Priority_Bit_map} array has a bit
+in the @code{_Priority_Major_bit_map} associated with it.  
+That bit is cleared when all of the bits in a particular
+@code{_Priority_Bit_map} array entry are zero.
+
+The minor component of a priority is used to determine
+specifically which bit in @code{_Priority_Bit_map[major]}
+indicates whether or not there is a ready to execute task
+at the priority.
+
+ 
 @section _Priority_Bit_map_control Type
 
-The _Priority_Bit_map_Control type is the fundamental data type of the
+The @code{_Priority_Bit_map_Control} type is the fundamental data type of the
 priority bit map array used to determine which priorities have ready
 tasks.  This type may be either 16 or 32 bits wide although only the 16
 least significant bits will be used.  The data type is based upon what is
@@ -41,8 +58,8 @@ instruction.
 @section Find First Bit Routine
 
 The _CPU_Bitfield_Find_first_bit routine sets _output to the bit number of
-the first bit set in _value.  _value is of CPU dependent type
-Priority_Bit_map_control.  A stub version of this routine is as follows:
+the first bit set in @code{_value}.  @code{_value} is of CPU dependent type
+@code{Priority_Bit_map_control}.  A stub version of this routine is as follows:
 
 @example
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
@@ -50,6 +67,8 @@ Priority_Bit_map_control.  A stub version of this routine is as follows:
     (_output) = 0;   /* do something to prevent warnings */ \
   @}
 @end example
+
+
 
 There are a number of variables in using a "find first bit" type
 instruction.
@@ -69,7 +88,7 @@ instruction.
 RTEMS guarantees that (1) will never happen so it is not a concern.  
 Cases (2),(3), (4) are handled by the macros _CPU_Priority_mask() and
 _CPU_Priority_bits_index().  These three form a set of routines which must
-logically operate together.  Bits in the _value are set and cleared based
+logically operate together.  Bits in the @code{_value} are set and cleared based
 on masks built by CPU_Priority_mask().  The basic major and minor values
 calculated by _Priority_Major() and _Priority_Minor() are "massaged" by
 _CPU_Priority_bits_index() to properly range between the values returned
@@ -154,7 +173,21 @@ _CPU_Bitfield_Find_first_bit searches for the most significant bit set:
 
 @section Bit Scan Support
 
-The _CPU_Priority_bits_index routine translates the bit numbers returned by _CPU_Bitfield_Find_first_bit() into something suitable for use as a major or minor component of a priority.  For example, the find first bit routine may number the bits in a way that is difficult to map into the major and minor components of the priority.  This routine allows that unwieldy form to be converted into something easier to process.  See the discussion of that routine for more details.
+The @code{_CPU_Priority_bits_index} routine translates the bit numbers
+returned by @code{_CPU_Bitfield_Find_first_bit()} into something
+suitable for use as a major or minor component of a priority.  
+The find first bit routine may number the bits in a
+way that is difficult to map into the major and minor components
+of the priority.  For example, when finding the first bit set in 
+the value 0x8000, a CPU may indicate that bit 15 or 16 is set
+based on whether the least significant bit is "zero" or "one".
+Similarly, a CPU may only scan 32-bit values and consider the
+most significant bit to be bit zero or one.  In this case, this
+would be bit 16 or 17.
+
+This routine allows that unwieldy form to be converted
+into a normalized form that is easier to process and use
+as an index.  
 
 @example
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)

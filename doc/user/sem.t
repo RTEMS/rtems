@@ -193,7 +193,7 @@ the set of valid semaphore attributes:
 @item @code{@value{RPREFIX}COUNTING_SEMAPHORE} - no restriction on values
 
 @item @code{@value{RPREFIX}SIMPLE_BINARY_SEMAPHORE} - restrict values to
-0 and 1 and do not allow nested access.
+0 and 1, do not allow nested access, allow deletion of locked semaphore.
 
 @item @code{@value{RPREFIX}NO_INHERIT_PRIORITY} - do not use priority
 inheritance (default)
@@ -452,7 +452,7 @@ defined by RTEMS:
 @item @code{@value{RPREFIX}COUNTING_SEMAPHORE} - no restriction on values
 
 @item @code{@value{RPREFIX}SIMPLE_BINARY_SEMAPHORE} - restrict values to
-0 and 1 and do not allow nested access.
+0 and 1, block on nested access, allow deletion of locked semaphore.
 
 @item @code{@value{RPREFIX}NO_INHERIT_PRIORITY} - do not use priority
 inheritance (default)

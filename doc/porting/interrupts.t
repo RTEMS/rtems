@@ -193,7 +193,7 @@ NOTE: This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE.
 #define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 @end example
 
-If the CPU_HAS_SOFTWARE_INTERRUPT_STACK macro is set to TRUE, then RTEMS automatically allocates the stack memory in the initialization of the Interrupt Manager and the switch to that stack is performed in _ISR_Handler on the outermost interrupt.  The _CPU_Interrupt_stack_low and _CPU_Interrupt_stack_high variables contain the addresses of the the lowest and highest addresses of the memory allocated for the interrupt stack.  Although technically only one of these addresses is required to switch to the interrupt stack, by always providing both addresses, the port has more options avaialble to it without requiring modifications to the portable parts of the executive.  Whether the stack  grows up or down, this give the CPU dependent code the option of picking the version it wants to use.
+If the CPU_HAS_SOFTWARE_INTERRUPT_STACK macro is set to TRUE, then RTEMS automatically allocates the stack memory in the initialization of the Interrupt Manager and the switch to that stack is performed in @code{_ISR_Handler} on the outermost interrupt.  The _CPU_Interrupt_stack_low and _CPU_Interrupt_stack_high variables contain the addresses of the the lowest and highest addresses of the memory allocated for the interrupt stack.  Although technically only one of these addresses is required to switch to the interrupt stack, by always providing both addresses, the port has more options avaialble to it without requiring modifications to the portable parts of the executive.  Whether the stack  grows up or down, this give the CPU dependent code the option of picking the version it wants to use.
 
 @example
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
@@ -283,7 +283,7 @@ _CPU_ISR_install_raw_handler( vector, new_handler, old_handler );
 @end example
 
 We put the actual user ISR address in _ISR_vector_table.  This will be
-used by the _ISR_Handler so the user gets control.
+used by the @code{_ISR_Handler} so the user gets control.
 
 @example
 _ISR_Vector_table[ vector ] = new_handler;
@@ -312,7 +312,7 @@ typedef struct @{
 
 @subsection Interrupt Dispatching
 
-The _ISR_Handler routine provides the RTEMS interrupt management.
+The @code{_ISR_Handler} routine provides the RTEMS interrupt management.
  
 @example
 void _ISR_Handler()
@@ -326,18 +326,26 @@ allowing the ISR to preserve only those that would normally be corrupted
 by a subroutine call.
 
 Also note that the exact order is to a large extent flexible.  Hardware
-will dictate a sequence for a certain subset of _ISR_Handler while
+will dictate a sequence for a certain subset of @code{_ISR_Handler} while
 requirements for setting the RTEMS state variables that indicate the
-interrupt nest level (XX) and dispatching disable level (XXX) will also
+interrupt nest level (@code{_ISR_Nest_level}) and dispatching disable
+level (@code{_Thread_Dispatch_disable_level}) will also
 restrict the allowable order.
 
-Upon entry to the "common" _ISR_Handler, the vector number must be
+Upon entry to @code{_ISR_Handler}, @code{_Thread_Dispatch_disable_level} is
+zero if the interrupt occurred while outside an RTEMS service call.
+Conversely, it will be non-zero if interrupting an RTEMS service
+call.  Thus, @code{_Thread_Dispatch_disable_level} will always be
+greater than or equal to @code{_ISR_Nest_level} and not strictly
+equal.  
+
+Upon entry to the "common" @code{_ISR_Handler}, the vector number must be
 available.  On some CPUs the hardware puts either the vector number or the
 offset into the vector table for this ISR in a known place.  If the
 hardware does not provide this information, then the assembly portion of
 RTEMS for this port will contain a set of distinct interrupt entry points
 which somehow place the vector number in a known place (which is safe if
-another interrupt nests this one) and branches to _ISR_Handler.
+another interrupt nests this one) and branches to @code{_ISR_Handler}.
 
 @example
 save some or all context on stack
@@ -361,8 +369,9 @@ if ( !_Context_Switch_necessary )
     goto the label "exit interrupt (simple case)"
   
 if ( !_ISR_Signals_to_thread_executing )
-    _ISR_Signals_to_thread_executing = FALSE;
     goto the label "exit interrupt (simple case)"
+
+_ISR_Signals_to_thread_executing = FALSE;
 
 call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
 prepare to get out of interrupt
@@ -372,6 +381,15 @@ LABEL "exit interrupt (simple case):
  prepare to get out of interrupt
  return from interrupt
 @end example
+
+Some ports have the special routine @code{_ISR_Dispatch} because
+the CPU has a special "interrupt mode" and RTEMS must switch back
+to the task stack and/or non-interrupt mode before invoking
+@code{_Thread_Dispatch}.  For example, consider the MC68020 where 
+upon return from the outermost interrupt, the CPU must switch
+from the interrupt stack to the master stack before invoking
+@code{_Thread_Dispatch}.  @code{_ISR_Dispatch} is the special port
+specific wrapper for @code{_Thread_Dispatch} used in this case.
   
 @subsection ISR Invoked with Frame Pointer
 

@@ -32,8 +32,11 @@ Use the following command to start the build of the sample application:
 
 @example
 cd tools/hello_world_ada
-gmake -f Makefile.<BOARD_SUPPORT_PACKAGE>
+make -f Makefile.<BOARD_SUPPORT_PACKAGE>
 @end example
+
+NOTE: GNU make is the preferred @code{make} utility.  Other @code{make}
+implementations may work but all testing is done with GNU make.
 
 If the BSP specific modifications to the Makefile were correct and
 no errors are detected during the sample application build, it is
@@ -47,7 +50,7 @@ If the sample application has successfully been build, then the application
 executable is placed in the following directory: 
 
 @example
-tools/hello_world_ada/o-<BOARD_SUPPORT_PACKAGE>/<filename>.exe
+tools/hello_world_ada/o-optimize/<filename>.exe
 @end example
 
 How this executable is downloaded to the target board is very dependent

@@ -67,15 +67,6 @@ find . -name "*.rej" -print
 If any files are found with the .rej extension, a patch has been rejected.
 This should not happen with a good patch file.
 
-To see the files that have been modified use the sequence:
-
-@example
-cd tools/@value{GDB-UNTAR}
-find . -name "*.orig" -print
-@end example
-
-The files that are found, have been modified by the patch file.
-
 @end ifset
 
 @section Using the bit_gdb script
