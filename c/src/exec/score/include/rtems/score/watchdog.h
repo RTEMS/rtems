@@ -28,6 +28,8 @@ extern "C" {
  *  intervals.
  */
 
+#define WATCHDOG_MAXIMUM_INTERVAL ((Watchdog_Interval) 0xffffffff)
+
 typedef unsigned32 Watchdog_Interval;
 
 /*

@@ -1,3 +1,7 @@
+2002-01-29	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/score/watchdog.h: Added WATCHDOG_MAXIMUM_INTERVAL.
+
 2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/system.h: Fix typo in yesterday's change:
