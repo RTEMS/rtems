@@ -29,17 +29,17 @@ sparc_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 #  Chapters which get automatic processing
 #
 
-$(srcdir)/cpumodel.texi: cpumodel.t
+cpumodel.texi: cpumodel.t
 	$(BMENU2) -p "Preface" \
 	    -u "Top" \
 	    -n "Calling Conventions" < $< > $@
 
-$(srcdir)/callconv.texi: callconv.t
+callconv.texi: callconv.t
 	$(BMENU2) -p "CPU Model Dependent Features CPU Model Implementation Notes" \
 	    -u "Top" \
 	    -n "Memory Model" < $< > $@
 
-$(srcdir)/memmodel.texi: memmodel.t
+memmodel.texi: memmodel.t
 	$(BMENU2) -p "Calling Conventions User-Provided Routines" \
 	    -u "Top" \
 	    -n "Interrupt Processing" < $< > $@
@@ -47,23 +47,23 @@ $(srcdir)/memmodel.texi: memmodel.t
 # Interrupt Chapter:
 #  1.  Replace Times and Sizes
 #  2.  Build Node Structure
-$(srcdir)/intr.texi: intr_NOTIMES.t ERC32_TIMES
+intr.texi: intr_NOTIMES.t ERC32_TIMES
 	${REPLACE2} -p $(srcdir)/ERC32_TIMES $(srcdir)/intr_NOTIMES.t  | \
 	$(BMENU2) -p "Memory Model Flat Memory Model" \
 	    -u "Top" \
 	    -n "Default Fatal Error Processing" > $@
 
-$(srcdir)/fatalerr.texi: fatalerr.t
+fatalerr.texi: fatalerr.t
 	$(BMENU2) -p "Interrupt Processing Interrupt Stack" \
 	    -u "Top" \
 	    -n "Board Support Packages" < $< > $@
 
-$(srcdir)/bsp.texi: bsp.t
+bsp.texi: bsp.t
 	$(BMENU2) -p "Default Fatal Error Processing Default Fatal Error Handler Operations" \
 	    -u "Top" \
 	    -n "Processor Dependent Information Table" < $< > $@
 
-$(srcdir)/cputable.texi: cputable.t
+cputable.texi: cputable.t
 	$(BMENU2) -p "Board Support Packages Processor Initialization" \
 	    -u "Top" \
 	    -n "Memory Requirements" < $< > $@
@@ -73,7 +73,7 @@ $(srcdir)/cputable.texi: cputable.t
 #  2.  Replace Times and Sizes
 #  3.  Build Node Structure
 
-$(srcdir)/wksheets.texi: $(top_srcdir)/common/wksheets.t ERC32_TIMES
+wksheets.texi: $(top_srcdir)/common/wksheets.t ERC32_TIMES
 	${REPLACE2} -p $(srcdir)/ERC32_TIMES $(top_srcdir)/common/wksheets.t | \
 	$(BMENU2) -p "Processor Dependent Information Table CPU Dependent Information Table" \
 	    -u "Top" \
@@ -82,7 +82,7 @@ $(srcdir)/wksheets.texi: $(top_srcdir)/common/wksheets.t ERC32_TIMES
 # Timing Specification Chapter:
 #  1.  Copy the Shared File
 #  3.  Build Node Structure
-$(srcdir)/timing.texi: $(top_srcdir)/common/timing.t
+timing.texi: $(top_srcdir)/common/timing.t
 	$(BMENU2) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
             -u "Top" \
             -n "ERC32 Timing Data" < $< > $@
@@ -92,7 +92,7 @@ $(srcdir)/timing.texi: $(top_srcdir)/common/timing.t
 #  2.  Replace Times and Sizes
 #  3.  Build Node Structure
 
-$(srcdir)/timeERC32.texi: $(top_srcdir)/common/timetbl.t timeERC32.t
+timeERC32.texi: $(top_srcdir)/common/timetbl.t timeERC32.t
 	cat $(srcdir)/timeERC32.t $(top_srcdir)/common/timetbl.t   >timeERC32_.t
 	@echo                                               >>timeERC32_.t
 	@echo "@tex"                                        >>timeERC32_.t

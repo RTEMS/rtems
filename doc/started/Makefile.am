@@ -24,42 +24,42 @@ FILES = tversions.texi
 info_TEXINFOS = started.texi
 started_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(srcdir)/intro.texi: intro.t tversions.texi
+intro.texi: intro.t tversions.texi
 	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
 	    -n "Requirements" < $< > $@
 
-$(srcdir)/require.texi: require.t tversions.texi
+require.texi: require.t tversions.texi
 	$(BMENU2) -c -p "GCC Mailing Lists" \
 	    -u "Top" \
 	    -n "Prebuilt Toolset Executables" < $< > $@
 
-$(srcdir)/binaries.texi: binaries.t tversions.texi
+binaries.texi: binaries.t tversions.texi
 	$(BMENU2) -c -p "Archive and Build Directory Format" \
 	    -u "Top" \
 	    -n "Building the GNU C/C++ Cross Compiler Toolset" < $< > $@
 
-$(srcdir)/buildc.texi: buildc.t tversions.texi
+buildc.texi: buildc.t tversions.texi
 	$(BMENU2) -c -p "Removing Zipped Tar Files" \
 	    -u "Top" \
 	    -n "Building RTEMS" < $< > $@
 
-$(srcdir)/buildrt.texi: buildrt.t tversions.texi
+buildrt.texi: buildrt.t tversions.texi
 	$(BMENU2) -c -p "Error Messages Indicating Configuration Problems" \
 	    -u "Top" \
 	    -n "Building the Sample Application" < $< > $@
 
-$(srcdir)/sample.texi: sample.t tversions.texi
+sample.texi: sample.t tversions.texi
 	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \
 	    -u "Top" \
 	    -n "Where To Go From Here" < $< > $@
 
-$(srcdir)/nextstep.texi: nextstep.t tversions.texi
+nextstep.texi: nextstep.t tversions.texi
 	$(BMENU2) -c -p "More Information on RTEMS Application Makefiles" \
 	    -u "Top" \
 	    -n "Using MS-Windows as a Development Host" < $< > $@
 
-$(srcdir)/nt.texi: nt.t tversions.texi
+nt.texi: nt.t tversions.texi
 	$(BMENU2) -c -p "Writing an Application" \
 	    -u "Top" \
 	    -n "" < $< > $@

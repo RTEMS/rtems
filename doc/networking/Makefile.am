@@ -26,7 +26,7 @@ FILES = networktasks.texi preface.texi
 info_TEXINFOS = networking.texi
 networking_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(PROJECT).dvi: ./networkflow.eps ./PCIreg.eps ./recvbd.eps
+$(PROJECT).dvi: networkflow.eps PCIreg.eps recvbd.eps
 
 PDF_IMAGES = networkflow.pdf PCIreg.pdf recvbd.pdf
 
@@ -34,32 +34,32 @@ if USE_HTML
 html_project_DATA += networkflow.jpg networkflow.png PCIreg.jpg recvbd.jpg
 endif
 
-$(srcdir)/networktasks.texi: networktasks.t
+networktasks.texi: networktasks.t
 	$(BMENU2) -p "Preface" \
 	   -u "Top" \
 	   -n "Networking Driver" < $< > $@
 
-$(srcdir)/driver.texi: driver.t
+driver.texi: driver.t
 	$(BMENU2) -p "Network Task Structure and Data Flow" \
 	   -u "Top" \
 	   -n "Using Networking in an RTEMS Application" < $< > $@
 
-$(srcdir)/networkapp.texi: networkapp.t
+networkapp.texi: networkapp.t
 	$(BMENU2) -p "Write the Driver Statistic-Printing Function" \
 	   -u "Top" \
 	   -n "Testing the Driver" < $< > $@
 
-$(srcdir)/testing.texi: testing.t
+testing.texi: testing.t
 	$(BMENU2) -p "Time Synchronization Using NTP" \
 	   -u "Top" \
 	   -n "Network Servers" < $< > $@
 
-$(srcdir)/servers.texi: servers.t
+servers.texi: servers.t
 	$(BMENU2) -p "Throughput" \
 	   -u "Top" \
 	   -n "DEC 21140 Driver" < $< > $@
 
-$(srcdir)/decdriver.texi: decdriver.t
+decdriver.texi: decdriver.t
 	$(BMENU2) -p "Using Hooks" \
 	   -u "Top" \
 	   -n "Command and Variable Index" < $< > $@

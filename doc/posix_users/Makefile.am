@@ -26,112 +26,112 @@ FILES = preface.texi
 info_TEXINFOS = posix_users.texi
 posix_users_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(srcdir)/process.texi: process.t
+process.texi: process.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/procenv.texi: procenv.t
+procenv.texi: procenv.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/files.texi: files.t
+files.texi: files.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/thread.texi: thread.t
+thread.texi: thread.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/signal.texi: signal.t
+signal.texi: signal.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/mutex.texi: mutex.t
+mutex.texi: mutex.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/cond.texi: cond.t
+cond.texi: cond.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/key.texi: key.t
+key.texi: key.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/clock.texi: clock.t
+clock.texi: clock.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/timer.texi: timer.t
+timer.texi: timer.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/sched.texi: sched.t
+sched.texi: sched.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/io.texi: io.t
+io.texi: io.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/device.texi: device.t
+device.texi: device.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/cspecific.texi: cspecific.t
+cspecific.texi: cspecific.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/semaphores.texi: semaphores.t
+semaphores.texi: semaphores.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/memorymgmt.texi: memorymgmt.t
+memorymgmt.texi: memorymgmt.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/message.texi: message.t
+message.texi: message.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/cancel.texi: cancel.t
+cancel.texi: cancel.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/systemdb.texi: systemdb.t
+systemdb.texi: systemdb.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/status.texi: status.t
+status.texi: status.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/libc.texi: libc.t
+libc.texi: libc.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/libm.texi: libm.t
+libm.texi: libm.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@

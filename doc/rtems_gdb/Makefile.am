@@ -28,32 +28,32 @@ rtems_gdb_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 #  Process Automatically Generated Files
 #
 
-$(srcdir)/intro.texi: intro.t
+intro.texi: intro.t
 	$(BMENU2) -p "Top" \
 	    -u "Top" \
 	    -n "Software Architecture" < $< > $@
 
-$(srcdir)/swarch.texi: swarch.t
+swarch.texi: swarch.t
 	$(BMENU2) -p "Introduction" \
 	    -u "Top" \
 	    -n "Getting Started" < $< > $@
 
-$(srcdir)/started.texi: started.t
+started.texi: started.t
 	$(BMENU2) -p "Software Architecture" \
 	    -u "Top" \
 	    -n "Commands" < $< > $@
 
-$(srcdir)/commands.texi: commands.t
+commands.texi: commands.t
 	$(BMENU2) -p "Getting Started Attaching To The System" \
 	    -u "Top" \
 	    -n "Troubleshooting" < $< > $@
 
-$(srcdir)/trouble.texi: trouble.t
+trouble.texi: trouble.t
 	$(BMENU2) -p "Commands Thread control" \
 	    -u "Top" \
 	    -n "Debug Session Example" < $< > $@
 
-$(srcdir)/example.texi: example.t
+example.texi: example.t
 	$(BMENU2) -p "Troubleshooting Debug server not present" \
 	    -u "Top" \
 	    -n "" < $< > $@

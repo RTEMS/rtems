@@ -35,42 +35,42 @@ endif
 #  Process Automatically Generated Files
 #
 
-$(srcdir)/intro.texi: intro.t
+intro.texi: intro.t
 	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
 	    -n "Document Revision History" < $< > $@
 
-$(srcdir)/revision.texi: revision.t
+revision.texi: revision.t
 	$(BMENU2) -c -p "Introduction" \
 	    -u "Top" \
 	    -n "Objectives" < $< > $@
 
-$(srcdir)/objectives.texi: objectives.t
+objectives.texi: objectives.t
 	$(BMENU2) -c -p "Document Revision History" \
 	    -u "Top" \
 	    -n "A Rapid Tour of GDB Internals" < $< > $@
 
-$(srcdir)/gdbinternals.texi: gdbinternals.t
+gdbinternals.texi: gdbinternals.t
 	$(BMENU2) -c -p "Implied Restrictions" \
 	    -u "Top" \
 	    -n "Interfacing GDB with RTEMS as a Target" < $< > $@
 
-$(srcdir)/interfacing.texi: interfacing.t
+interfacing.texi: interfacing.t
 	$(BMENU2) -c -p "A Rapid Tour of GDB Internals" \
 	    -u "Top" \
 	    -n "Communication with GDB" < $< > $@
 
-$(srcdir)/comm.texi: comm.t
+comm.texi: comm.t
 	$(BMENU2) -c -p "Interfacing GDB with RTEMS as a Target" \
 	    -u "Top" \
 	    -n "RTEMS Debugger Server Daemon" < $< > $@
 
-$(srcdir)/daemon.texi: daemon.t
+daemon.texi: daemon.t
 	$(BMENU2) -c -p "Communication with GDB" \
 	    -u "Top" \
 	    -n "Conclusion" < $< > $@
 
-$(srcdir)/conclusion.texi: conclusion.t
+conclusion.texi: conclusion.t
 	$(BMENU2) -c -p "Output of a Debug Session with the Prototype" \
 	    -u "Top" \
 	    -n "" < $< > $@

@@ -1,3 +1,7 @@
+2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Put GENERATED_FILES into $builddir.
+
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* version.texi: Remove from CVS.

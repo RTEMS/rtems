@@ -25,47 +25,47 @@ FILES =
 info_TEXINFOS = new_chapters.texi
 new_chapters_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(srcdir)/eventlog.texi: eventlog.t
+eventlog.texi: eventlog.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/dumpcontrol.texi: dumpcontrol.t
+dumpcontrol.texi: dumpcontrol.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/confspace.texi: confspace.t
+confspace.texi: confspace.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/adminiface.texi: adminiface.t
+adminiface.texi: adminiface.t
 	 $(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/stackchk.texi: stackchk.t
+stackchk.texi: stackchk.t
 	$(BMENU2) -p "" \
             -u "Top" \
             -n "" < $< > $@
 
-$(srcdir)/rtmonuse.texi: rtmonuse.t
+rtmonuse.texi: rtmonuse.t
 	$(BMENU2) -p "" \
             -u "Top" \
             -n "" < $< > $@
 
-$(srcdir)/cpuuse.texi: cpuuse.t
+cpuuse.texi: cpuuse.t
 	$(BMENU2) -p "" \
             -u "Top" \
             -n "" < $< > $@
 
-$(srcdir)/error.texi: error.t
+error.texi: error.t
 	$(BMENU2) -p "" \
             -u "Top" \
             -n "" < $< > $@
 
-$(srcdir)/monitor.texi: monitor.t
+monitor.texi: monitor.t
 	$(BMENU2) -p "" \
             -u "Top" \
             -n "" < $< > $@

@@ -24,32 +24,32 @@ FILES = tversions.texi
 info_TEXINFOS = started_ada.texi
 started_ada_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(srcdir)/intro.texi: intro.t tversions.texi
+intro.texi: intro.t tversions.texi
 	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
 	    -n "Requirements" < $< > $@
 
-$(srcdir)/require.texi: require.t tversions.texi
+require.texi: require.t tversions.texi
 	$(BMENU2) -c -p "GNAT Chat Mailing List" \
 	    -u "Top" \
 	    -n "Building the GNAT Cross Compiler Toolset" < $< > $@
 
-$(srcdir)/buildada.texi: buildada.t tversions.texi
+buildada.texi: buildada.t tversions.texi
 	$(BMENU2) -c -p "Insure GCC and GNAT Environment Variables Are Not Set" \
 	    -u "Top" \
 	    -n "Building RTEMS" < $< > $@
 
-$(srcdir)/buildrt.texi: ../started/buildrt.t tversions.texi
+buildrt.texi: $(top_srcdir)/started/buildrt.t tversions.texi
 	$(BMENU2) -c -p "Error Messages Indicating Configuration Problems" \
 	    -u "Top" \
 	    -n "Building the Sample Application" < $< > $@
 
-$(srcdir)/sample.texi: sample.t tversions.texi
+sample.texi: sample.t tversions.texi
 	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \
 	    -u "Top" \
 	    -n "Building the GNU Debugger" < $< > $@
 
-$(srcdir)/gdb.texi: gdb.t tversions.texi
+gdb.texi: gdb.t tversions.texi
 	$(BMENU2) -c -p "Application Executable" \
 	    -u "Top" \
 	    -n "" < $< > $@

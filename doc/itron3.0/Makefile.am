@@ -25,72 +25,72 @@ FILES = preface.texi
 info_TEXINFOS = itron.texi
 itron_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(srcdir)/status.texi: status.t
+status.texi: status.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/task.texi: task.t
+task.texi: task.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/tasksync.texi: tasksync.t
+tasksync.texi: tasksync.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/semaphore.texi: semaphore.t
+semaphore.texi: semaphore.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/eventflags.texi: eventflags.t
+eventflags.texi: eventflags.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/mailbox.texi: mailbox.t
+mailbox.texi: mailbox.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/msgbuffer.texi: msgbuffer.t
+msgbuffer.texi: msgbuffer.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/rendezvous.texi: rendezvous.t
+rendezvous.texi: rendezvous.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/interrupt.texi: interrupt.t
+interrupt.texi: interrupt.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/memorypool.texi: memorypool.t
+memorypool.texi: memorypool.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/fixedblock.texi: fixedblock.t
+fixedblock.texi: fixedblock.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/time.texi: time.t
+time.texi: time.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/config.texi: config.t
+config.texi: config.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-$(srcdir)/network.texi: network.t
+network.texi: network.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@

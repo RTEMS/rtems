@@ -38,122 +38,122 @@ if USE_HTML
 html_project_DATA += $(PNG_FILES)
 endif
 
-$(srcdir)/overview.texi: overview.t
+overview.texi: overview.t
 	$(BMENU2) -p "Preface" \
 	    -u "Top" \
 	    -n "Key Concepts" < $< > $@
 
-$(srcdir)/concepts.texi: concepts.t
+concepts.texi: concepts.t
 	$(BMENU2) -p "Overview Manual Organization" \
 	    -u "Top" \
 	    -n "RTEMS Data Types" < $< > $@
 
-$(srcdir)/datatypes.texi: datatypes.t
+datatypes.texi: datatypes.t
 	$(BMENU2) -p "Key Concepts Memory Management" \
 	    -u "Top" \
 	    -n "Initialization Manager" < $< > $@
 
-$(srcdir)/init.texi: init.t
+init.texi: init.t
 	$(BMENU2) -p "RTEMS Data Types List of Data Types" \
 	    -u "Top" \
 	    -n "Task Manager" < $< > $@
 
-$(srcdir)/task.texi: task.t
+task.texi: task.t
 	$(BMENU2) -p "Initialization Manager SHUTDOWN_EXECUTIVE - Shutdown RTEMS" \
 	    -u "Top" \
 	    -n "Interrupt Manager" < $< > $@
 
-$(srcdir)/intr.texi: intr.t
+intr.texi: intr.t
 	$(BMENU2) -p "Task Manager TASK_VARIABLE_DELETE - Remove per task variable" \
 	    -u "Top" \
 	    -n "Clock Manager" < $< > $@
 
-$(srcdir)/clock.texi: clock.t
+clock.texi: clock.t
 	$(BMENU2) \
 	 -p "Interrupt Manager INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress" \
 	    -u "Top" \
 	    -n "Timer Manager" < $< > $@
 
-$(srcdir)/timer.texi: timer.t
+timer.texi: timer.t
 	$(BMENU2) -p "Clock Manager CLOCK_TICK - Announce a clock tick" \
 	    -u "Top" \
 	    -n "Semaphore Manager" < $< > $@
 
-$(srcdir)/sem.texi: sem.t
+sem.texi: sem.t
 	$(BMENU2) -p "Timer Manager TIMER_RESET - Reset an interval timer" \
 	    -u "Top" \
 	    -n "Message Manager" < $< > $@
 
-$(srcdir)/msg.texi: msg.t
+msg.texi: msg.t
 	$(BMENU2) -p "Semaphore Manager SEMAPHORE_FLUSH - Unblock all tasks waiting on a semaphore" \
 	    -u "Top" \
 	    -n "Event Manager" < $< > $@
 
-$(srcdir)/event.texi: event.t
+event.texi: event.t
 	$(BMENU2) \
 	-p "Message Manager MESSAGE_QUEUE_FLUSH - Flush all messages on a queue" \
 	    -u "Top" \
 	    -n "Signal Manager" < $< > $@
 
-$(srcdir)/signal.texi: signal.t
+signal.texi: signal.t
 	$(BMENU2) -p "Event Manager EVENT_RECEIVE - Receive event condition" \
 	    -u "Top" \
 	    -n "Partition Manager" < $< > $@
 
-$(srcdir)/part.texi: part.t
+part.texi: part.t
 	$(BMENU2) -p "Signal Manager SIGNAL_SEND - Send signal set to a task" \
 	    -u "Top" \
 	    -n "Region Manager" < $< > $@
 
-$(srcdir)/region.texi: region.t
+region.texi: region.t
 	$(BMENU2) \
 -p "Partition Manager PARTITION_RETURN_BUFFER - Return buffer to a partition" \
 	    -u "Top" \
 	    -n "Dual-Ported Memory Manager" < $< > $@
 
-$(srcdir)/dpmem.texi: dpmem.t
+dpmem.texi: dpmem.t
 	$(BMENU2) \
 	  -p "Region Manager REGION_GET_SEGMENT_SIZE - Obtain size of a segment" \
 	    -u "Top" \
 	    -n "I/O Manager" < $< > $@
 
-$(srcdir)/io.texi: io.t
+io.texi: io.t
 	$(BMENU2) -p "Dual-Ported Memory Manager PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address" \
 	    -u "Top" \
 	    -n "Fatal Error Manager" < $< > $@
 
-$(srcdir)/fatal.texi: fatal.t
+fatal.texi: fatal.t
 	$(BMENU2) -p "I/O Manager IO_CONTROL - Special device services" \
 	    -u "Top" \
 	    -n "Scheduling Concepts" < $< > $@
 
-$(srcdir)/schedule.texi: schedule.t
+schedule.texi: schedule.t
 	$(BMENU2) \
 -p "Fatal Error Manager FATAL_ERROR_OCCURRED - Invoke the fatal error handler" \
 	    -u "Top" \
 	    -n "Rate Monotonic Manager" < $< > $@
 
-$(srcdir)/rtmon.texi: rtmon.t
+rtmon.texi: rtmon.t
 	$(BMENU2) -p "Scheduling Concepts Task State Transitions" \
 	    -u "Top" \
 	    -n "Board Support Packages" < $< > $@
 
-$(srcdir)/bsp.texi: bsp.t
+bsp.texi: bsp.t
 	$(BMENU2) -p "Rate Monotonic Manager RATE_MONOTONIC_GET_STATUS - Obtain status information on period" \
 	    -u "Top" \
 	    -n "User Extensions Manager" < $< > $@
 
-$(srcdir)/userext.texi: userext.t
+userext.texi: userext.t
 	$(BMENU2) -p "Board Support Packages Heterogeneous Systems" \
 	    -u "Top" \
 	    -n "Configuring a System" < $< > $@
 
-$(srcdir)/conf.texi: conf.t
+conf.texi: conf.t
 	$(BMENU2) -p "User Extensions Manager EXTENSION_DELETE - Delete a extension set" \
 	    -u "Top" \
 	    -n "Multiprocessing Manager" < $< > $@
 
-$(srcdir)/mp.texi: mp.t
+mp.texi: mp.t
 	$(BMENU2) -p "Configuring a System Sizing the RTEMS RAM Workspace" \
 	    -u "Top" \
 	    -n "Directive Status Codes" < $< > $@

@@ -27,52 +27,52 @@ COMMON_FILES = $(top_srcdir)/common/setup.texi \
 info_TEXINFOS = porting.texi
 porting_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(srcdir)/developtools.texi: developtools.t
+developtools.texi: developtools.t
 	$(BMENU2) -p "Preface" \
 	    -u "Top" \
 	    -n "Source Code Organization" < $< > $@
 
-$(srcdir)/sourcecode.texi: sourcecode.t
+sourcecode.texi: sourcecode.t
 	$(BMENU2) -p "Development Tools" \
 	    -u "Top" \
 	    -n "CPU Model Variations" < $< > $@
 
-$(srcdir)/cpumodels.texi: cpumodels.t
+cpumodels.texi: cpumodels.t
 	$(BMENU2) -p "Source Code Organization Introduction" \
 	    -u "Top" \
 	    -n "CPU Initialization" < $< > $@
 
-$(srcdir)/cpuinit.texi: cpuinit.t
+cpuinit.texi: cpuinit.t
 	$(BMENU2) -p "CPU Model Variations Coding Issues" \
 	    -u "Top" \
 	    -n "Interrupts" < $< > $@
 
-$(srcdir)/interrupts.texi: interrupts.t
+interrupts.texi: interrupts.t
 	$(BMENU2) -p "CPU Initialization Initializing the CPU" \
 	    -u "Top" \
 	    -n "Task Context Management" < $< > $@
 
-$(srcdir)/taskcontext.texi: taskcontext.t
+taskcontext.texi: taskcontext.t
 	$(BMENU2) -p "Interrupts Pointer to _Thread_Dispatch Routine" \
 	    -u "Top" \
 	    -n "IDLE Thread" < $< > $@
 
-$(srcdir)/idlethread.texi: idlethread.t
+idlethread.texi: idlethread.t
 	$(BMENU2) -p "Task Context Management Restoring a Floating Point Context" \
 	    -u "Top" \
 	    -n "Priority Bitmap Manipulation" < $< > $@
 
-$(srcdir)/prioritybitmap.texi: prioritybitmap.t
+prioritybitmap.texi: prioritybitmap.t
 	$(BMENU2) -p "IDLE Thread Idle Thread Body" \
 	    -u "Top" \
 	    -n "Code Tuning Parameters" < $< > $@
 
-$(srcdir)/codetuning.texi: codetuning.t
+codetuning.texi: codetuning.t
 	$(BMENU2) -p "Priority Bitmap Manipulation Bit Scan Support" \
 	    -u "Top" \
 	    -n "Miscellaneous" < $< > $@
 
-$(srcdir)/miscellaneous.texi: miscellaneous.t
+miscellaneous.texi: miscellaneous.t
 	$(BMENU2) -p "Code Tuning Parameters Partition Element Alignment" \
 	    -u "Top" \
 	    -n "Command and Variable Index" < $< > $@
