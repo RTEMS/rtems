@@ -1,5 +1,9 @@
 2005-01-28	Eric Norum <norume@aps.anl.gov>
 
+	* shared/cache/cache_.h: Add ColdFire entries
+
+2005-01-28	Eric Norum <norume@aps.anl.gov>
+
 	* Makefile.am, configure.ac, mcf5282/Makefile.am,
 	  mcf5282/include/Makefile.am, mcf5282/include/mcf5282.h: New BSP/CPU
 
