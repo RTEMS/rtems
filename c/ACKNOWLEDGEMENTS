@@ -13,9 +13,9 @@ much better product.
 
 The following persons/organizations have made contributions:
 
-+ Dr. Mikhail (Misha) Savitski (mms@eiscathq.irf.se) of the EISCAT Scientific
-  Association submitted the BSP and other miscellaneous support for the
-  Motorola MVME162 (M68040LC CPU) VMEbus single board computer.
++ Dr. Mikhail (Misha) Savitski (mikhail.savitski@styrex.se) of the EISCAT
+  Scientific Association submitted the BSP and other miscellaneous support
+  for the Motorola MVME162 (M68040LC CPU) VMEbus single board computer.
 
 + Division Inc. of Chapel Hill, NC for sponsoring On-Line Applications
   Research to port RTEMS to the Hewlett-Packard PA-RISC architecture (V1.1)
@@ -47,7 +47,7 @@ The following persons/organizations have made contributions:
 + Bryce Cogswell (cogswell@cs.uoregon.edu) submitted the support for MS-DOS 
   as a development environment as well as djgpp/go32 as a target environment.
 
-+ Andy Bray (andy@i-cubed.demon.co.uk) of I-CUBED Ltd. in Cambridge U.K.
++ Andy Bray (andy@chaos.org.uk) of I-CUBED Ltd. in Cambridge U.K.
   for porting RTEMS to the PowerPC.  This effort included support for the
   IBM 403 as well as the Motorola 601, 603, and 604 variants.  A special
   thanks to Dom Latter (dom@i-cubed.demon.co.uk) for being an RTEMS
