@@ -130,10 +130,23 @@ mc68681_baud_t
 #define MC68681_PORT_CONFIG  \
   (MC68681_DATA_BAUD_RATE_SET_1|MC68681_XBRG_ENABLED) 
 
+/*
+ *  Based on BSP configuration information decide whether to do polling IO
+ *  or interrupt driven IO.
+ */
+
+#if (CONSOLE_USE_INTERRUPTS)
+#define MC68681_FUNCTIONS &mc68681_fns
+#define Z85C30_FUNCTIONS  &z85c30_fns
+#else
+#define MC68681_FUNCTIONS &mc68681_fns_polled
+#define Z85C30_FUNCTIONS  &z85c30_fns_polled
+#endif
+
 console_tbl	Console_Port_Tbl[] = {
 	{
 		"/dev/com0",			/* sDeviceName */
-		&mc68681_fns_polled,		/* pDeviceFns */
+		MC68681_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -151,7 +164,7 @@ console_tbl	Console_Port_Tbl[] = {
 	},
 	{
 		"/dev/com1",			/* sDeviceName */
-		&mc68681_fns_polled,		/* pDeviceFns */
+		MC68681_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -169,7 +182,7 @@ console_tbl	Console_Port_Tbl[] = {
 	},
 	{
 		"/dev/com3",			/* sDeviceName */
-		&z85c30_fns_polled,		/* pDeviceFns */
+		Z85C30_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -187,7 +200,7 @@ console_tbl	Console_Port_Tbl[] = {
 	},
 	{
 		"/dev/com4",			/* sDeviceName */
-		&z85c30_fns_polled,		/* pDeviceFns */
+		Z85C30_FUNCTIONS,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
