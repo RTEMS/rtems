@@ -322,7 +322,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 
 int _BSP_vme_bridge_irq = -1;
  
-unsigned spuriousIntr = 0;
+unsigned BSP_spuriousIntr = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
