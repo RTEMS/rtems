@@ -6,25 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Sample Applications, Sample Applications Introduction, Test Suite Source Directory, Top
-@end ifinfo
 @chapter Sample Applications
-@ifinfo
-@menu
-* Sample Applications Introduction::
-* Sample Applications Hello World::
-* Sample Applications Clock Tick::
-* Sample Applications Base Single Processor Application::
-* Sample Applications Base Multiple Processor Application::
-* Sample Applications Constructor/Destructor C++ Application::
-* Sample Applications Paranoia Floating Point Application::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Sample Applications Introduction, Sample Applications Hello World, Sample Applications, Sample Applications
-@end ifinfo
 @section Introduction
 
 RTEMS is shipped with the following sample applications:
@@ -53,9 +36,6 @@ device drivers.
 The reader should be familiar with the terms used and
 material presented in the RTEMS Applications User's Guide.
 
-@ifinfo
-@node Sample Applications Hello World, Sample Applications Clock Tick, Sample Applications Introduction, Sample Applications
-@end ifinfo
 @section Hello World
 
 This sample application is in the following directory:
@@ -84,9 +64,6 @@ single initialization task.  If the above messages are not
 printed correctly, then either the BSP start up code or the
 console output routine is not operating properly.
 
-@ifinfo
-@node Sample Applications Clock Tick, Sample Applications Base Single Processor Application, Sample Applications Hello World, Sample Applications
-@end ifinfo
 @section Clock Tick
 
 This sample application is in the following directory:
@@ -134,9 +111,6 @@ task, TA3, every fifteen seconds. If the time printed does not
 match the above output, then the clock device driver is not
 operating properly.
 
-@ifinfo
-@node Sample Applications Base Single Processor Application, Sample Applications Base Multiple Processor Application, Sample Applications Clock Tick, Sample Applications
-@end ifinfo
 @section Base Single Processor Application
 
 This sample application is in the following directory:
@@ -164,9 +138,6 @@ The first two messages are printed from the
 application's single initialization task.  The final messages
 are printed from the single application task.
 
-@ifinfo
-@node Sample Applications Base Multiple Processor Application, Sample Applications Constructor/Destructor C++ Application, Sample Applications Base Single Processor Application, Sample Applications
-@end ifinfo
 @section Base Multiple Processor Application
 
 This sample application is in the following directory:
@@ -216,9 +187,6 @@ Configuration Table. This file is not shared because the node
 number field in the RTEMS Multiprocessor Configuration Table
 must be unique on each node.
 
-@ifinfo
-@node Sample Applications Constructor/Destructor C++ Application, Sample Applications Paranoia Floating Point Application, Sample Applications Base Multiple Processor Application, Sample Applications
-@end ifinfo
 @section Constructor/Destructor C++ Application
 
 This sample application is in the following directory:
@@ -265,9 +233,6 @@ Hey I'M in base class constructor number 1 for 0x400010cc.
 @end group
 @end example
 
-@ifinfo
-@node Sample Applications Paranoia Floating Point Application, RTEMS Specific Utilities, Sample Applications Constructor/Destructor C++ Application, Sample Applications
-@end ifinfo
 @section Paranoia Floating Point Application
 
 This sample application is in the following directory:

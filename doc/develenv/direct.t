@@ -6,15 +6,7 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Directory Structure, Directory Structure Suites, Introduction, Top
-@end ifinfo
 @chapter Directory Structure
-@ifinfo
-@menu
-* Directory Structure Suites::
-@end menu
-@end ifinfo
 
 The RTEMS directory structure is designed to meet
 the following requirements:
@@ -24,7 +16,7 @@ the following requirements:
 
 @item isolate processor and target dependent code, while
 allowing as much common source code as possible to be shared
-across multiple processors and targets.
+across multiple processors and target boards.
 
 @item allow multiple RTEMS users to perform simultaneous
 compilation of RTEMS and its support facilities for different
@@ -32,12 +24,14 @@ processors and targets.
 @end itemize
 
 The resulting directory structure has processor and
-target dependent source files isolated from generic files.  When
-RTEMS is built, object directories and an install point will be
-automatically created based upon the target BSP selected.  The
-placement of object files based upon the selected BSP name
-insures that object files are not mixed across CPUs or targets.
-This in combination with the make files allows the specific
+board dependent source files isolated from generic files.  When
+RTEMS is configured and built, object directories and
+an install point will be automatically created based upon
+the target CPU family and BSP selected.  
+
+The placement of object files based upon the selected BSP name
+ensures that object files are not mixed across CPUs or targets.
+This in combination with the makefiles allows the specific
 compilation options to be tailored for a particular target
 board.  For example, the efficiency of the memory subsystem for
 a particular target board may be sensitive to the alignment of
@@ -47,389 +41,317 @@ options could specify very strict alignment requirements, while
 on the second the data structures could be "packed" to conserve
 memory.  It is impossible to achieve this degree of flexibility
 without providing source code.
-@ifinfo
-@node Directory Structure Suites, C Suites, Directory Structure, Directory Structure
-@end ifinfo
-@section Suites
-@ifinfo
-@menu
-* C Suites::
-* Executive Source Directory::
-* Support Library Source Directory::
-* Test Suite Source Directory::
-@end menu
-@end ifinfo
+
+@c
+@c  Directory Organization
+@c
+@section Directory Organization
 
 The RTEMS source tree is organized based on the
-following four variables:
+following variables:
 
 @itemize @bullet
-@item language,
 
-@item target processor,
+@item functionality,
+@item target processor family,
+@item target processor model,
+@item peripherals, and
+@item target board.
 
-@item target board, and
-
-@item compiler vendor (Ada only).
 @end itemize
-
-The language may be either C or Ada and there is
-currently nothing shared between the source trees for these two
-implementations of RTEMS.  The user generally selects the
-subdirectory for the implementation they are using and ignores
-that for the other implementation.  The only exceptions to this
-normally occurs when comparing the source code for the two
-implementations or when porting both to a new CPU or target
-board.  The following shows the top level RTEMS directory
-structure which includes directories for each language
-implementation and a language independent source documentation
-directory.  The source documentation directory is currently not
-supported.
-
-@c
-@c  Tree 1 - Top Level
-@c
-
-@ifset use-ascii
-@example
-@group
-                      RTEMS
-                        |
-+-----------------------+-----------------------+
-|                                               |
-c                                              doc
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@sp 1
-
-@tex
-{\parskip=0pt\offinterlineskip%
-\hskip 15.0em
-\hskip 1.25em\hbox to 3.00em{\hss{RTEMS}\hss}%
-\vrule width0em height1.972ex depth0.812ex\par\penalty10000
-\hskip 15.0em
-\hskip 2.75em\vrule width.04em%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 15.0em
-\hskip 0.25em\vrule width2.50em height-0.407ex depth0.500ex%
-\vrule width.04em\vrule width2.50em height-0.407ex depth0.500ex%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 15.0em
-\hskip 0.25em\vrule width.04em%
-\hskip 4.92em\vrule width.04em%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 15.0em
-\hskip 0.00em\hbox to 0.50em{\hss{c}\hss}%
-\hskip 1.50em\hbox to 1.50em{\hss{   }\hss}%
-\hskip 1.00em\hbox to 1.50em{\hss{doc}\hss}%
-\vrule width0em height1.972ex depth0.812ex\par}
-@end tex
-@end ifset
-
-@c
-@c for now continue to use the ascii
-@c
-@ifset use-html
-@example
-@group
-                      RTEMS
-                        |
-+-----------------------+-----------------------+
-|                                               |
-c                                              doc
-@end group
-@end example
-@html
-@end html
-@end ifset
 
 Each of the following sections will describe the
 contents of the directories in the RTEMS source
-tree.
+tree.  The top of the tree will be referenced
+as @code{$@{RTEMS_ROOT@}} in this discussion.
 
-@ifinfo
-@node C Suites, Executive Source Directory, Directory Structure Suites, Directory Structure Suites
-@end ifinfo
-@subsection C Suites
+@c
+@c  Top Level Tree
+@c
 
-The following table lists the suites currently included with the
-C implementation of RTEMS and the directory in which they may be located:
+@c @ifset use-ascii
+@example
+@group
+                      rtems-VERSION
+                           |
+   +--------+----+----+----+--+-----+---+------+-----+
+   |        |    |    |       |     |   |      |     |
+aclocal automake c contrib  cpukit doc make scripts tools
+@end group
+@end example
+@c @end ifset
 
-@ifset use-texinfo-tables
+@ifset use-tex
+@end ifset
+
+@ifset use-html
+@html
+@end html
+@end ifset
+
 @table @code
-@item Support Libraries (BSPs, C library, CPU support)
-$RTEMS_ROOT/c/src/lib
+@item $@{RTEMS_ROOT@}/aclocal/
+This directory contains the custom M4 macros which are available to
+the various GNU autoconf @code{configure.ac} scripts throughout 
+the RTEMS source tree.  GNU autoconf interprets @code{configure.ac}
+files to produce the @code{configure} files used to tailor 
+RTEMS build for a particular host and target environment.  The
+contents of this directory will not be discussed further in this
+document.
 
-@item Single Processor Tests
-$RTEMS_ROOT/c/src/tests/sptests
+@item $@{RTEMS_ROOT@}/automake/
+This directory contains the custom GNU automake fragments 
+which are used to support the various @code{Makefile.am}
+files throughout the RTEMS source tree.  The
+contents of this directory will not be discussed
+further in this document.
 
-@item Timing Tests
-$RTEMS_ROOT/c/src/tests/tmtests
+@item $@{RTEMS_ROOT@}/c/
+This directory is the root of the portions of the RTEMS source
+tree which must be built tailored for a particular CPU model
+or BSP.  The contents of this directory will be discussed
+in the @ref{Directory Structure c/ Directory} section.
 
-@item Multiprocessor Tests
-$RTEMS_ROOT/c/src/tests/mptests
+@item $@{RTEMS_ROOT@}/contrib/
+This directory contains contributed support software.  Currently
+this directory contains the RPM specifications for cross-compilers
+hosted on GNU/Linux that target Cygwin and Solaris.  The 
+cross-compilers produced using these specifications are then
+used in a Canadian cross build procedure to produce the Cygwin
+and Solaris hosted RTEMS toolsets on a GNU/Linux host.  This
+directory will not be discussed further in this document.
 
-@item Sample Applications
-$RTEMS_ROOT/c/src/tests/samples
+@item $@{RTEMS_ROOT@}/cpukit/
+This directory is the root for all of the "multilib'able"
+portions of RTEMS.  This is a GNU way of saying the the
+contents of this directory can be compiled like the 
+C Library (@code{libc.a}) and the functionality is 
+neither CPU model nor BSP specific.  The source code
+for most RTEMS services reside under this directory.
+The contents of this directory will be discussed
+in the @ref{Directory Structure CPUKit Directory} section.
 
-@item RTEMS Build Tools
-$RTEMS_SRC_BASE/c/build_tools
+@item $@{RTEMS_ROOT@}/doc/
+This directory is the root for all RTEMS documentation.
+The source for RTEMS is written in GNU TeXinfo and 
+used to produce HTML, PDF, and "info" files.
+The RTEMS documentation is configured, built,
+and installed separately from the RTEMS executive and tests.
+The contents of this directory will be discussed
+in the @ref{Directory Structure Documentation Directory} section.
 
-@item Make Support
-$RTEMS_ROOT/c/make
+@item $@{RTEMS_ROOT@}/make/
+This directory contains files which support the
+RTEMS Makefile's.  From a user's perspective, the
+most important parts are found in the @code{custom/}
+subdirectory.  Each ".cfg" file in this directory
+is associated with a specific BSP and describes
+the CPU model, compiler flags, and procedure to
+a produce an executable for the target board.
+These files are described in detail in the
+@b{RTEMS BSP and Device Driver Development Guide}
+and will not be discussed further in this document.
+
+@item $@{RTEMS_ROOT@}/scripts/
+This directory contains the RPM specifications for the
+prebuilt cross-compilation toolsets provided by the
+RTEMS project.  There are separate subdirectories
+for each of the components in the RTEMS Cross Compilation
+Environment including @code{binutils/}, @code{gcc3newlib/},
+and @code{gdb/}.  This directory is configured, built,
+and installed separately from the RTEMS executive
+and tests.  This directory will not be discussed further
+in this document.
+
+@item $@{RTEMS_ROOT@}/tools/
+This directory contains RTEMS specific support utilities which
+execute on the development host.  These utilities are divided
+into subdirectories based upon whether they are used in the process
+of building RTEMS and applications, are CPU specific, or are
+used to assist in updating the RTEMS source tree and applications. 
+The support utilities used in the process of building RTEMS are
+described in @ref{RTEMS Specific Utilities}.  These are the
+only components of this subtree that will be discussed in this
+document. 
+
 @end table
-@end ifset
-
-@ifclear use-texinfo-tables
-@html
-<CENTER>
-  <TABLE COLS=2 WIDTH="80%" BORDER=2>
-<TR><TD ALIGN=center>Support Libraries (BSPs, C library, CPU support)</TD>
-    <TD ALIGN=center>$RTEMS_ROOT/c/src/lib</TD></TR>
-<TR><TD ALIGN=center>Single Processor Tests</TD>
-    <TD ALIGN=center>$RTEMS_ROOT/c/src/tests/sptests</TD></TR>
-<TR><TD ALIGN=center>Timing Tests</TD>
-    <TD ALIGN=center>$RTEMS_ROOT/c/src/tests/tmtests</TD></TR>
-<TR><TD ALIGN=center>Multiprocessor Tests</TD>
-    <TD ALIGN=center>$RTEMS_ROOT/c/src/tests/mptests</TD></TR>
-<TR><TD ALIGN=center>Sample Applications</TD>
-    <TD ALIGN=center>$RTEMS_ROOT/c/src/tests/samples</TD></TR>
-<TR><TD ALIGN=center>RTEMS Build Tools</TD>
-    <TD ALIGN=center>$RTEMS_SRC_BASE/c/build_tools</TD></TR>
-<TR><TD ALIGN=center>Make Support</TD>
-    <TD ALIGN=center>$RTEMS_ROOT/c/make</TD></TR>
-  </TABLE>
-</CENTER>
-@end html
-@end ifclear
 
 
-The top level directory structure for the C implementation of RTEMS 
-is as follows:
 
 @c
-@c  Tree 2 - Top C Level
+@c  c/ Directions
 @c
+@subsection c/ Directory
 
-@ifset use-ascii
-@example
-@group
-                     C
-                     |
-    +----------+-----------+----------+
-    |          |           |          |
-build_tools   make        src   update_tools
-@end group
-@end example
-@end ifset
+The @code{$@{RTEMS_ROOT@}/c/} directory was formerly
+the root directory of all RTEMS source code.  At this time, it contains
+the root directory for only those RTEMS components
+which must be compiled or linked in a way that is specific to a
+particular CPU model or board.  This directory contains the 
+following subdirectories:
 
-@ifset use-tex
-@sp 1
+@table @code
+@item $@{RTEMS_ROOT@}/c/src/
+This directory is logically the root for the RTEMS components
+which are CPU model or board dependent.  Thus this directory
+is the root for the BSPs and the various Test Suites as well
+as CPU model and BSP dependent libraries.  The contents of
+this directory are discussed in the
+@ref{Directory Structure c/src/ Directory} section.
 
-@tex
-{\parskip=0pt\offinterlineskip%
-\hskip 08.0em
-\hskip 13.00em\hbox to 0.50em{\hss{C}\hss}%
-\vrule width0em height1.972ex depth0.812ex\par\penalty10000
-\hskip 08.0em
-\hskip 13.25em\vrule width.04em%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 08.0em
-\hskip 1.75em\vrule width11.50em height-0.407ex depth0.500ex%
-\vrule width.04em\vrule width11.50em height-0.407ex depth0.500ex%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 08.0em
-\hskip 1.75em\vrule width.04em%
-\hskip 5.71em\vrule width.04em%
-\hskip 5.71em\vrule width.04em%
-\hskip 5.71em\vrule width.04em%
-\hskip 5.71em\vrule width.04em%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 08.0em
-\hskip 0.00em\hbox to 3.50em{\hss{Modules}\hss}%
-\hskip 1.00em\hbox to 6.00em{\hss{build\_tools}\hss}%
-\hskip 1.75em\hbox to 2.00em{\hss{make}\hss}%
-\hskip 4.00em\hbox to 1.50em{\hss{src}\hss}%
-\hskip 1.75em\hbox to 6.50em{\hss{update\_tools}\hss}%
-\vrule width0em height1.972ex depth0.812ex\par}
-@end tex
-@end ifset
+@item $@{RTEMS_ROOT@}/c/make/
+This directory is used to generate the file @code{target.cfg}
+which is installed as part of the Application Makefiles.  This
+file contains settings for various Makefile variables to 
+tailor them to the particular CPU model and BSP configured.
 
-@ifset use-html
-@example
-@group
-                     C
-                     |
-    +----------+-----------+----------+
-    |          |           |          |
-build_tools   make        src   update_tools
-@end group
-@end example
-@html
-@end html
-@end ifset
-
-This directory contains the subdirectories which
-contain the entire C implementation of the RTEMS executive.  
-The "build-tools" directory contains an assortment of support tools
-for the RTEMS development environment.  Two subdirectories exist
-under "build-tools" which contain scripts (executables) and
-source for the support tools.  The "make" directory contains
-configuration files and subdirectories which provide a robust
-host and cross-target makefile system supporting the building of
-the  executive for numerous application environments.  The
-"update_tools" directory contains utilities which aid in the
-updating from a previous version to the current version of the
-RTEMS executive.
-
-The "src" directory structure for the C implementation of RTEMS is as follows:
+@end table
 
 @c
-@c  Tree 3 - Top C src Level
-@c
+@c c/src/ Directory
+@c 
+@subsubsection c/src/ Directory
 
-@ifset use-ascii
-@example
-@group
-                     C Source
-                         |
- +-----------------------+-----------------------+
- |                       |                       |
-exec                    lib                    tests
-@end group
-@end example
-@end ifset
+As mentioned previously, this directory is logically
+the root for the RTEMS components
+which are CPU model or board dependent.  The 
+following is a list of the subdirectories in this
+directorie and a description of each.
 
-@ifset use-tex
-@sp 1
+@table @code
+@item $@{RTEMS_ROOT@}/c/src/ada-tests/
+This directory contains the test suite for the Ada
+language bindings to the Classic API.
 
-@tex
-{\parskip=0pt\offinterlineskip%
-\hskip 15.0em
-\hskip 2.00em\hbox to 4.00em{\hss{C Source}\hss}%
-\vrule width0em height1.972ex depth0.812ex\par\penalty10000
-\hskip 15.0em
-\hskip 4.00em\vrule width.04em%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 15.0em
-\hskip 1.00em\vrule width3.00em height-0.407ex depth0.500ex%
-\vrule width.04em\vrule width3.00em height-0.407ex depth0.500ex%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 15.0em
-\hskip 1.00em\vrule width.04em%
-\hskip 2.96em\vrule width.04em%
-\hskip 2.96em\vrule width.04em%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 15.0em
-\hskip 0.00em\hbox to 2.00em{\hss{exec}\hss}%
-\hskip 1.25em\hbox to 1.50em{\hss{lib}\hss}%
-\hskip 1.00em\hbox to 2.50em{\hss{tests}\hss}%
-\vrule width0em height1.972ex depth0.812ex\par}
-@end tex
-@end ifset
+@item $@{RTEMS_ROOT@}/c/src/lib/
 
-@ifset use-html
-@example
-@group
-                     C Source
-                         |
- +-----------------------+-----------------------+
- |                       |                       |
-exec                    lib                    tests
-@end group
-@end example
-@html
-@end html
-@end ifset
+@item $@{RTEMS_ROOT@}/c/src/libchip/
+This directory contains device drivers for various
+peripheral chips which are designed to be CPU and
+board dependent.  This directory contains a variety
+of drivers for serial devices, network interface
+controllers, and real-time clocks.
 
-This directory contains all source files that
-comprises the RTEMS executive, supported target board support
-packages, and the RTEMS Test Suite.
+@item $@{RTEMS_ROOT@}/c/src/libmisc/
+This directory contains support facilities which 
+are RTEMS specific but otherwise unclassified.  In
+general, they do not adhere to a standard API.  
+Among the support facilities in this directory are
+a @code{/dev/null} device driver, the Stack
+Overflow Checker, a mini-shell, the CPU and 
+rate monotonic period usage monitoring libraries,
+and a utility to "dump a buffer" in a nicely
+formatted way similar to many ROM monitors.
 
-@ifinfo
-@node Executive Source Directory, Support Library Source Directory, C Suites, Directory Structure Suites
-@end ifinfo
-@subsection Executive Source Directory
+@item $@{RTEMS_ROOT@}/c/src/libnetworking/
+This directory contains the networking components which
+might be tailored based upon the particular BSP.  This
+includes the RTEMS telnetd, httpd, and ftpd servers.
 
-The "exec" directory structure for the C implementation is as follows:
+@item $@{RTEMS_ROOT@}/c/src/librdbg/
+This directory contains the Ethernet-based remote debugging
+stub.  This software must be built to be intimately aware
+of a particular CPU model.
+
+@item $@{RTEMS_ROOT@}/c/src/librtems++/
+
+@item $@{RTEMS_ROOT@}/c/src/make/
+
+@item $@{RTEMS_ROOT@}/c/src/optman/
+
+@item $@{RTEMS_ROOT@}/c/src/tests/
+This directory contains the test suites for the 
+various RTEMS APIs and support libraries.  This
+contents of this directory are discussed in the
+@ref{Directory Structure Test Suites} section.
+
+@item $@{RTEMS_ROOT@}/c/src/wrapup/
+
+@end table
 
 @c
-@c  Tree 4 - C Executive Tree
+@c  Test Suites
+@c
+@lowersections
+@subsubsection Test Suites
+
+The following table lists the test suites currently included with the
+RTEMS and the directory in which they may be located:
+
+@table @code
+
+@item @{RTEMS_ROOT@}c/src/tests/itrontests
+ITRON API Tests
+
+@item @{RTEMS_ROOT@}c/src/tests/libtests
+Support Library Tests
+
+@item @{RTEMS_ROOT@}c/src/tests/mptests
+Classic API Multiprocessor Tests
+
+@item @{RTEMS_ROOT@}c/src/tests/psxtests
+POSIX API Tests
+
+@item @{RTEMS_ROOT@}c/src/tests/samples
+Sample Applications
+
+@item @{RTEMS_ROOT@}c/src/tests/sptests
+Classic API Single Processor Tests
+
+@item @{RTEMS_ROOT@}c/src/tests/support
+Test Support Software
+
+@item @{RTEMS_ROOT@}c/src/tests/tmitrontests
+ITRON API Timing Tests
+
+@item @{RTEMS_ROOT@}c/src/tests/tmtests
+Classic API Timing Tests
+
+@item @{RTEMS_ROOT@}c/src/tests/tools
+XXX
+
+@end table
+
+@raisesections
+
+
+@c
+@c  CPUKit Directory
+@c
+@subsection CPUKit Directory
+
+The @code{cpukit/} directory structure is as follows:
+
+@c
+@c  CPUKit Tree
 @c
 
 @ifset use-ascii
 @example
 @group
-                    C Executive
+                       CPUKit
                          |
   +-----------+----------+-----------+----------+
   |           |          |           |          |
 posix       rtems       sapi       score     wrapup
 @end group
 @end example
-@end ifset
-
-@ifset use-tex
-@sp 1
-
-@tex
-{\parskip=0pt\offinterlineskip%
-\hskip 10.0em
-\hskip 6.00em\hbox to 5.50em{\hss{C Executive}\hss}%
-\vrule width0em height1.972ex depth0.812ex\par\penalty10000
-\hskip 10.0em
-\hskip 8.75em\vrule width.04em%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 10.0em
-\hskip 1.25em\vrule width7.50em height-0.407ex depth0.500ex%
-\vrule width.04em\vrule width7.50em height-0.407ex depth0.500ex%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 10.0em
-\hskip 1.25em\vrule width.04em%
-\hskip 3.71em\vrule width.04em%
-\hskip 3.71em\vrule width.04em%
-\hskip 3.71em\vrule width.04em%
-\hskip 3.71em\vrule width.04em%
-\vrule width0em height1.500ex depth0.500ex\par\penalty10000
-\hskip 10.0em
-\hskip 0.00em\hbox to 2.50em{\hss{posix}\hss}%
-\hskip 1.25em\hbox to 2.50em{\hss{rtems}\hss}%
-\hskip 1.50em\hbox to 2.00em{\hss{sapi}\hss}%
-\hskip 1.50em\hbox to 2.50em{\hss{score}\hss}%
-\hskip 1.00em\hbox to 3.00em{\hss{wrapup}\hss}%
-\vrule width0em height1.972ex depth0.812ex\par}
-@end tex
-@end ifset
-
-@ifset use-html
-@example
-@group
-                    C Executive
-                         |
-  +-----------+----------+-----------+----------+
-  |           |          |           |          |
-posix       rtems       sapi       score     wrapup
-@end group
-@end example
-@html
-@end html
 @end ifset
 
 This directory contains a set of subdirectories which
 contains the source files comprising the executive portion of
-the RTEMS development environment.  At this point the API
-specific and "supercore" source code files are separated into
-distinct directory trees.  The "rtems" and the "posix"
-subdirectories contain the C language source files for each
+the RTEMS development environment as well as portable support
+libraries such as support for the C Library and filesystems.
+The API specific and "SuperCore" (e.g. @code{score/} directory)
+source code files are separated into
+distinct directory trees.  The @code{rtems/}, @code{posix/}, and
+@code{itron/} subdirectories contain the C language source files for each
 module comprising the respective API.  Also included in this
-directory are the subdirectories "sapi" and "score" which are
-the supercore modules.  Within the "score" directory the CPU
+directory are the subdirectories @code{sapi/} and @code{score/} which are
+the SuperCore modules.  Within the @code{score/} directory the CPU
 dependent modules are found.
 
-The "cpu" directory contains a subdirectory for each
+The @code{score/cpu/} subdirectory contains a subdirectory for each
 target CPU supported by the @value{RELEASE} release of the RTEMS
 executive.  Each processor directory contains the CPU dependent
 code necessary to host RTEMS.  The "no_cpu" directory provides a
@@ -438,9 +360,17 @@ processor.  The files contained within the "no_cpu" directory
 may also be used as a reference for the other ports to specific
 processors.
 
-@ifinfo
-@node Support Library Source Directory, Test Suite Source Directory, Executive Source Directory, Directory Structure Suites
-@end ifinfo
+
+@c
+@c  
+@c
+@subsection Documentation Directory
+
+XXX 
+
+@c
+@c  
+@c
 @subsection Support Library Source Directory
 
 The "lib" directory contains the support libraries and BSPS.  
@@ -549,9 +479,9 @@ clock      console    include       ...      startup     timer
 @end html
 @end ifset
 
-@ifinfo
-@node Test Suite Source Directory, Sample Applications, Support Library Source Directory, Directory Structure Suites
-@end ifinfo
+@c
+@c  
+@c
 @subsection Test Suite Source Directory
 
 The "tests" directory structure for the C

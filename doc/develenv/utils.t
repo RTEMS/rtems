@@ -6,16 +6,7 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node RTEMS Specific Utilities, RTEMS Specific Utilities C Language Specific Utilities, Sample Applications Paranoia Floating Point Application, Top
-@end ifinfo
 @chapter RTEMS Specific Utilities
-@ifinfo
-@menu
-* RTEMS Specific Utilities C Language Specific Utilities::
-* RTEMS Specific Utilities Ada Language Specific Utilities::
-@end menu
-@end ifinfo
 
 This section describes the additional commands
 available within the RTEMS Development Environment.  Although
@@ -101,17 +92,7 @@ For example, ls(1) means see the standard ls command
 in section 1 of the UNIX documentation.  gcc020(1G) means see
 the description of gcc020 in section 1 of the GNU documentation.
 
-@ifinfo
-@node RTEMS Specific Utilities C Language Specific Utilities, packhex - Compress Hexadecimal File, RTEMS Specific Utilities, RTEMS Specific Utilities
-@end ifinfo
 @section C Language Specific Utilities
-@ifinfo
-@menu
-* packhex - Compress Hexadecimal File::
-* unhex - Convert Hexadecimal File into Binary::
-* size_rtems - report RTEMS size information::
-@end menu
-@end ifinfo
 
 The C language utilities provide a powerful set of
 tools which combine to allow operations within the RTEMS
@@ -120,9 +101,6 @@ effort was devoted to providing as close to the standard UNIX
 and GNU style of operations as possible.  Each of these
 utilities are described in the section below.
 
-@ifinfo
-@node packhex - Compress Hexadecimal File, unhex - Convert Hexadecimal File into Binary, RTEMS Specific Utilities C Language Specific Utilities, RTEMS Specific Utilities C Language Specific Utilities
-@end ifinfo
 @subsection packhex - Compress Hexadecimal File
 
 @subheading SYNOPSIS
@@ -166,9 +144,6 @@ issue of Embedded Systems magazine.  The code was downloaded
 from their BBS.  Unfortunately, the author's name was not
 provided in the listing.
 
-@ifinfo
-@node unhex - Convert Hexadecimal File into Binary, size_rtems - report RTEMS size information, packhex - Compress Hexadecimal File, RTEMS Specific Utilities C Language Specific Utilities
-@end ifinfo
 @subsection unhex - Convert Hexadecimal File into Binary Equivalent
 
 @subheading SYNOPSIS
@@ -218,9 +193,6 @@ file binary.bin:
 unhex -o binary.bin downloadA.sr downloadB.sr
 @end example
 
-@ifinfo
-@node size_rtems - report RTEMS size information, RTEMS Specific Utilities Ada Language Specific Utilities, unhex - Convert Hexadecimal File into Binary, RTEMS Specific Utilities C Language Specific Utilities
-@end ifinfo
 @subsection size_rtems - report RTEMS size information
 
 @subheading SYNOPSIS
@@ -291,22 +263,5 @@ mp      : 8     0       0
 @subheading SEE ALSO
 
 gsize020(1G), gsize386(1G), gsize960(1G)
-
-
-@ifinfo
-@node RTEMS Specific Utilities Ada Language Specific Utilities, Command and Variable Index, size_rtems - report RTEMS size information, RTEMS Specific Utilities
-@end ifinfo
-@section Ada Language Specific Utilities
-
-The Ada language utilities provide a powerful set of
-tools which combine to allow operations within the RTEMS
-Development Environment to be consistent and easy to use.  Much
-effort was devoted to providing as close to the standard UNIX
-and GNU style of operations as possible.  Each of these
-utilities are described in the section below.
-
-NOTE:  The Ada implementation is not included in this
-release.
-
 
 

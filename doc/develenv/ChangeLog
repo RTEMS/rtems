@@ -1,3 +1,10 @@
+2003-02-18	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, develenv.texi: Relect generating .texi from .t's.
+	* direct.t, sample.t, utils.t: New files.
+	* direct.texi, sample.texi, utils.texi: Removed. Now generated from
+	corresponding .t files which are in the process of being updated.
+	This commit is a anspshot of the update effort.
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* develenv.texi: Set @setfilename develenv.info.
