@@ -139,7 +139,7 @@ void bsp_start( void )
   vme_lcsr->master_configuration = 1;
   /* Disable D32 transfers : they don't work on my VMEbus rack */
 
-  m68k_enable_caching();
+  rtems_cache_enable_instruction();
 
   /*
    *  we only use a hook to get the C library initialized.

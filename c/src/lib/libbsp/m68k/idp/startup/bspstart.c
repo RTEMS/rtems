@@ -90,7 +90,7 @@ void bsp_start( void )
 
   m68k_set_vbr( &M68Kvec );
 
-  m68k_enable_caching();
+  rtems_cache_enable_instruction();
 
   /*
    *  we only use a hook to get the C library initialized.

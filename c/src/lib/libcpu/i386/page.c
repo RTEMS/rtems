@@ -45,7 +45,7 @@ extern rtems_unsigned32 rtemsFreeMemStart;
 void _CPU_disable_paging() {
   cr0 regCr0;
 
-  rtems_flush_entire_data_cache();
+  rtems_cache_flush_entire_data();
   regCr0.i = i386_get_cr0();
   regCr0.cr0.paging = 0;
   i386_set_cr0( regCr0.i );
@@ -60,7 +60,7 @@ void _CPU_enable_paging() {
   regCr0.i = i386_get_cr0();
   regCr0.cr0.paging = 1;
   i386_set_cr0( regCr0.i );
-  rtems_flush_entire_data_cache();
+  rtems_cache_flush_entire_data();
 }
 
 

@@ -746,7 +746,7 @@ scc_rxDaemon (void *arg)
    		/*
 			 * Invalidate the buffer for this descriptor
 			 */
-			rtems_invalidate_multiple_data_cache_lines(rxBd->buffer, rxBd->length);
+			rtems_cache_invalidate_multiple_data_lines(rxBd->buffer, rxBd->length);
       
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
@@ -882,7 +882,7 @@ fec_rxDaemon (void *arg)
     	/*
 			 * Invalidate the buffer for this descriptor
 			 */
-			rtems_invalidate_multiple_data_cache_lines(rxBd->buffer, rxBd->length);
+			rtems_cache_invalidate_multiple_data_lines(rxBd->buffer, rxBd->length);
       
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
@@ -1022,7 +1022,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
       /*
        * Flush the buffer for this descriptor
        */
-      rtems_flush_multiple_data_cache_lines(txBd->buffer, txBd->length);
+      rtems_cache_flush_multiple_data_lines(txBd->buffer, txBd->length);
       
       sc->txMbuf[sc->txBdHead] = m;
       nAdded++;
@@ -1150,7 +1150,7 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
       /*
        * Flush the buffer for this descriptor
        */
-      rtems_flush_multiple_data_cache_lines(txBd->buffer, txBd->length);
+      rtems_cache_flush_multiple_data_lines(txBd->buffer, txBd->length);
       
       sc->txMbuf[sc->txBdHead] = m;
       nAdded++;

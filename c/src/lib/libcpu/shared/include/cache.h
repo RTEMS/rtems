@@ -9,24 +9,20 @@
 
 #include <sys/types.h>
 
-void _CPU_disable_cache();
-void _CPU_enable_cache();
-
-void _CPU_flush_1_data_cache_line(const void *d_addr);
-void _CPU_invalidate_1_data_cache_line(const void *d_addr);
-void _CPU_freeze_data_cache(void);
-void _CPU_unfreeze_data_cache(void);
-void _CPU_invalidate_1_inst_cache_line(const void *d_addr);
-void _CPU_freeze_inst_cache(void);
-void _CPU_unfreeze_inst_cache(void);
-
-void _CPU_flush_entire_data_cache(void);
-void _CPU_invalidate_entire_data_cache(void);
-void _CPU_enable_data_cache(void);
-void _CPU_disable_data_cache(void);
-void _CPU_invalidate_entire_inst_cache(void);
-void _CPU_enable_inst_cache(void);
-void _CPU_disable_inst_cache(void);
+void _CPU_cache_flush_1_data_line(const void *d_addr);
+void _CPU_cache_invalidate_1_data_line(const void *d_addr);
+void _CPU_cache_freeze_data(void);
+void _CPU_cache_unfreeze_data(void);
+void _CPU_cache_invalidate_1_instruction_line(const void *d_addr);
+void _CPU_cache_freeze_instruction(void);
+void _CPU_cache_unfreeze_instruction(void);
+void _CPU_cache_flush_entire_data(void);
+void _CPU_cache_invalidate_entire_data(void);
+void _CPU_cache_enable_data(void);
+void _CPU_cache_disable_data(void);
+void _CPU_cache_invalidate_entire_instruction(void);
+void _CPU_cache_enable_instruction(void);
+void _CPU_cache_disable_instruction(void);
 
 #endif
 /* end of include file */

@@ -399,7 +399,7 @@ m8xx_scc2_interrupt_handler (rtems_vector_number v)
 
     /* Check that the buffer is ours */
     if ((RxBd[SCC2_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_invalidate_multiple_data_cache_lines( 
+      rtems_cache_invalidate_multiple_data_lines( 
         (const void *) RxBd[SCC2_MINOR]->buffer, 
         RxBd[SCC2_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
@@ -442,7 +442,7 @@ m8xx_scc3_interrupt_handler (rtems_vector_number v)
 
     /* Check that the buffer is ours */
     if ((RxBd[SCC3_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_invalidate_multiple_data_cache_lines( 
+      rtems_cache_invalidate_multiple_data_lines( 
         (const void *) RxBd[SCC3_MINOR]->buffer, 
         RxBd[SCC3_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
@@ -484,7 +484,7 @@ m8xx_scc4_interrupt_handler (rtems_vector_number v)
 
     /* Check that the buffer is ours */
     if ((RxBd[SCC4_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_invalidate_multiple_data_cache_lines( 
+      rtems_cache_invalidate_multiple_data_lines( 
         (const void *) RxBd[SCC4_MINOR]->buffer, 
         RxBd[SCC4_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
@@ -526,7 +526,7 @@ m8xx_smc1_interrupt_handler (rtems_vector_number v)
 
     /* Check that the buffer is ours */
     if ((RxBd[SMC1_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_invalidate_multiple_data_cache_lines( 
+      rtems_cache_invalidate_multiple_data_lines( 
         (const void *) RxBd[SMC1_MINOR]->buffer, 
         RxBd[SMC1_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
@@ -568,7 +568,7 @@ m8xx_smc2_interrupt_handler (rtems_vector_number v)
 
     /* Check that the buffer is ours */
     if ((RxBd[SMC2_MINOR]->status & M8xx_BD_EMPTY) == 0) {
-      rtems_invalidate_multiple_data_cache_lines( 
+      rtems_cache_invalidate_multiple_data_lines( 
         (const void *) RxBd[SMC2_MINOR]->buffer, 
         RxBd[SMC2_MINOR]->length );
       nb_overflow = rtems_termios_enqueue_raw_characters(
@@ -984,7 +984,7 @@ m8xx_uart_pollRead(
   if (RxBd[minor]->status & M8xx_BD_EMPTY) {
     return -1;
   }
-  rtems_invalidate_multiple_data_cache_lines( 
+  rtems_cache_invalidate_multiple_data_lines( 
     (const void *) RxBd[minor]->buffer,
     RxBd[minor]->length
   );
@@ -1004,7 +1004,7 @@ m8xx_uart_write(
   int len
 )
 {
-  rtems_flush_multiple_data_cache_lines( buf, len );
+  rtems_cache_flush_multiple_data_lines( buf, len );
   TxBd[minor]->buffer = (char *) buf;
   TxBd[minor]->length = len;
   TxBd[minor]->status = M8xx_BD_READY | M8xx_BD_WRAP | M8xx_BD_INTERRUPT;
@@ -1023,7 +1023,7 @@ m8xx_uart_pollWrite(
     while (TxBd[minor]->status & M8xx_BD_READY)
       continue;
     txBuf[minor] = *buf++;
-    rtems_flush_multiple_data_cache_lines(
+    rtems_cache_flush_multiple_data_lines(
        (const void *) TxBd[minor]->buffer,
        TxBd[minor]->length
     );

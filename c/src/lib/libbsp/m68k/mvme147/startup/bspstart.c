@@ -79,7 +79,7 @@ void bsp_start( void )
   (*(rtems_unsigned8 *)0xfffe2001) = 0x08; 
       /* make VME access round-robin */
 
-  m68k_enable_caching();
+  rtems_cache_enable_instruction();
 
   /*
    *  we only use a hook to get the C library initialized.

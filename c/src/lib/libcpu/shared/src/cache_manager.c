@@ -11,17 +11,18 @@
  *  
  *  The functions in this file implement the API to the RTEMS Cache Manager and
  *  are divided into data cache and instruction cache functions. Data cache
- *  functions are only declared if a data cache is supported. Instruction
- *  cache functions are only declared if an instruction cache is supported.
- *  Support for a particular cache exists only if _CPU_x_CACHE_ALIGNMENT is
- *  defined, where x E {DATA, INST}. These definitions are found in the CPU
- *  dependent source files in the supercore, often
+ *  functions only have bodies if a data cache is supported. Instruction
+ *  cache functions only have bodies if an instruction cache is supported.
+ *  Support for a particular cache exists only if CPU_x_CACHE_ALIGNMENT is
+ *  defined, where x E {DATA, INSTRUCTION}. These definitions are found in
+ *  the Cache Manager Wrapper header files, often
  *  
- *  rtems/c/src/exec/score/cpu/CPU/rtems/score/CPU.h
+ *  rtems/c/src/lib/libcpu/CPU/cache_.h
  *  
  *  The functions below are implemented with CPU dependent inline routines
- *  also found in the above file. In the event that a CPU does not support a
- *  specific function, the CPU dependent routine does nothing (but does exist).
+ *  found in the cache.c files for each CPU. In the event that a CPU does
+ *  not support a specific function for a cache it has, the CPU dependent
+ *  routine does nothing (but does exist).
  *  
  *  At this point, the Cache Manager makes no considerations, and provides no
  *  support for BSP specific issues such as a secondary cache. In such a system,
@@ -45,9 +46,9 @@
  * back and then perform the copybacks.
  */
 void
-rtems_flush_multiple_data_cache_lines( const void * d_addr, size_t n_bytes )
+rtems_cache_flush_multiple_data_lines( const void * d_addr, size_t n_bytes )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
   const void * final_address;
 
  /*
@@ -57,10 +58,10 @@ rtems_flush_multiple_data_cache_lines( const void * d_addr, size_t n_bytes )
   */
 
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
-  d_addr = (void *)((size_t)d_addr & ~(_CPU_DATA_CACHE_ALIGNMENT - 1));
+  d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
   while( d_addr <= final_address )  {
-    _CPU_flush_1_data_cache_line( d_addr );
-    d_addr = (void *)((size_t)d_addr + _CPU_DATA_CACHE_ALIGNMENT);
+    _CPU_cache_flush_1_data_line( d_addr );
+    d_addr = (void *)((size_t)d_addr + CPU_DATA_CACHE_ALIGNMENT);
   }
 #endif
 }
@@ -73,9 +74,9 @@ rtems_flush_multiple_data_cache_lines( const void * d_addr, size_t n_bytes )
  */
 
 void
-rtems_invalidate_multiple_data_cache_lines( const void * d_addr, size_t n_bytes )
+rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
   const void * final_address;
 
  /*
@@ -85,10 +86,10 @@ rtems_invalidate_multiple_data_cache_lines( const void * d_addr, size_t n_bytes 
   */
 
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
-  d_addr = (void *)((size_t)d_addr & ~(_CPU_DATA_CACHE_ALIGNMENT - 1));
+  d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
   while( final_address > d_addr ) {
-    _CPU_invalidate_1_data_cache_line( d_addr );
-    d_addr = (void *)((size_t)d_addr + _CPU_DATA_CACHE_ALIGNMENT);
+    _CPU_cache_invalidate_1_data_line( d_addr );
+    d_addr = (void *)((size_t)d_addr + CPU_DATA_CACHE_ALIGNMENT);
   }
 #endif
 }
@@ -99,13 +100,13 @@ rtems_invalidate_multiple_data_cache_lines( const void * d_addr, size_t n_bytes 
  * It flushes the entire cache.
  */
 void
-rtems_flush_entire_data_cache( void )
+rtems_cache_flush_entire_data( void )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
    /*
     * Call the CPU-specific routine
     */
-   _CPU_flush_entire_data_cache();
+   _CPU_cache_flush_entire_data();
 #endif
 }
 
@@ -115,14 +116,14 @@ rtems_flush_entire_data_cache( void )
  * invalidate. It invalidates the entire cache.
  */
 void
-rtems_invalidate_entire_data_cache( void )
+rtems_cache_invalidate_entire_data( void )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
  /*
   * Call the CPU-specific routine
   */
 
- _CPU_invalidate_entire_data_cache();
+ _CPU_cache_invalidate_entire_data();
 #endif
 }
 
@@ -131,10 +132,10 @@ rtems_invalidate_entire_data_cache( void )
  * This function returns the data cache granularity.
  */
 int
-rtems_get_data_cache_line_size( void )
+rtems_cache_get_data_line_size( void )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
-  return _CPU_DATA_CACHE_ALIGNMENT;
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
+  return CPU_DATA_CACHE_ALIGNMENT;
 #else
   return 0;
 #endif
@@ -146,10 +147,10 @@ rtems_get_data_cache_line_size( void )
  * are not replaced.
  */
 void
-rtems_freeze_data_cache( void )
+rtems_cache_freeze_data( void )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
-  _CPU_freeze_data_cache();
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
+  _CPU_cache_freeze_data();
 #endif
 }
 
@@ -157,30 +158,30 @@ rtems_freeze_data_cache( void )
 /*
  * This function unfreezes the instruction cache.
  */
-void rtems_unfreeze_data_cache( void )
+void rtems_cache_unfreeze_data( void )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
-  _CPU_unfreeze_data_cache();
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
+  _CPU_cache_unfreeze_data();
 #endif
 }
 
 
 /* Turn on the data cache. */
 void
-rtems_enable_data_cache( void )
+rtems_cache_enable_data( void )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
-  _CPU_enable_data_cache();
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
+  _CPU_cache_enable_data();
 #endif
 }
 
 
 /* Turn off the data cache. */
 void
-rtems_disable_data_cache( void )
+rtems_cache_disable_data( void )
 {
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
-  _CPU_disable_data_cache();
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
+  _CPU_cache_disable_data();
 #endif
 }
 
@@ -196,9 +197,9 @@ rtems_disable_data_cache( void )
  * and then perform the invalidations.
  */
 void
-rtems_invalidate_multiple_inst_cache_lines( const void * i_addr, size_t n_bytes )
+rtems_cache_invalidate_multiple_instruction_lines( const void * i_addr, size_t n_bytes )
 {
-#if defined(_CPU_INST_CACHE_ALIGNMENT)
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
   const void * final_address;
 
  /*
@@ -208,10 +209,10 @@ rtems_invalidate_multiple_inst_cache_lines( const void * i_addr, size_t n_bytes 
   */
 
   final_address = (void *)((size_t)i_addr + n_bytes - 1);
-  i_addr = (void *)((size_t)i_addr & ~(_CPU_INST_CACHE_ALIGNMENT - 1));
+  i_addr = (void *)((size_t)i_addr & ~(CPU_INSTRUCTION_CACHE_ALIGNMENT - 1));
   while( final_address > i_addr ) {
-    _CPU_invalidate_1_inst_cache_line( i_addr );
-    i_addr = (void *)((size_t)i_addr + _CPU_INST_CACHE_ALIGNMENT);
+    _CPU_cache_invalidate_1_instruction_line( i_addr );
+    i_addr = (void *)((size_t)i_addr + CPU_INSTRUCTION_CACHE_ALIGNMENT);
   }
 #endif
 }
@@ -222,14 +223,14 @@ rtems_invalidate_multiple_inst_cache_lines( const void * i_addr, size_t n_bytes 
  * invalidate. It invalidates the entire cache.
  */
 void
-rtems_invalidate_entire_inst_cache( void )
+rtems_cache_invalidate_entire_instruction( void )
 {
-#if defined(_CPU_INST_CACHE_ALIGNMENT)
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
  /*
   * Call the CPU-specific routine
   */
 
- _CPU_invalidate_entire_inst_cache();
+ _CPU_cache_invalidate_entire_instruction();
 #endif
 }
 
@@ -238,10 +239,10 @@ rtems_invalidate_entire_inst_cache( void )
  * This function returns the instruction cache granularity.
  */
 int
-rtems_get_inst_cache_line_size( void )
+rtems_cache_get_instruction_line_size( void )
 {
-#if defined(_CPU_INST_CACHE_ALIGNMENT)
-  return _CPU_INST_CACHE_ALIGNMENT;
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
+  return CPU_INSTRUCTION_CACHE_ALIGNMENT;
 #else
   return 0;
 #endif
@@ -253,10 +254,10 @@ rtems_get_inst_cache_line_size( void )
  * are not replaced.
  */
 void
-rtems_freeze_inst_cache( void )
+rtems_cache_freeze_instruction( void )
 {
-#if defined(_CPU_INST_CACHE_ALIGNMENT)
-  _CPU_freeze_inst_cache();
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
+  _CPU_cache_freeze_instruction();
 #endif
 }
 
@@ -264,29 +265,29 @@ rtems_freeze_inst_cache( void )
 /*
  * This function unfreezes the instruction cache.
  */
-void rtems_unfreeze_inst_cache( void )
+void rtems_cache_unfreeze_instruction( void )
 {
-#if defined(_CPU_INST_CACHE_ALIGNMENT)
-  _CPU_unfreeze_inst_cache();
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
+  _CPU_cache_unfreeze_instruction();
 #endif
 }
 
 
 /* Turn on the instruction cache. */
 void
-rtems_enable_inst_cache( void )
+rtems_cache_enable_instruction( void )
 {
-#if defined(_CPU_INST_CACHE_ALIGNMENT)
-  _CPU_enable_inst_cache();
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
+  _CPU_cache_enable_instruction();
 #endif
 }
 
 
 /* Turn off the instruction cache. */
 void
-rtems_disable_inst_cache( void )
+rtems_cache_disable_instruction( void )
 {
-#if defined(_CPU_INST_CACHE_ALIGNMENT)
-  _CPU_disable_inst_cache();
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
+  _CPU_cache_disable_instruction();
 #endif
 }

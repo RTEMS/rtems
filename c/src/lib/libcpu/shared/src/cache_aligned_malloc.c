@@ -32,10 +32,10 @@ void *rtems_cache_aligned_malloc (
    * Arrange to have the user storage start on the first cache
    * block beyond the header.
    */
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
   return (void *) ((((unsigned long)
-     malloc( nbytes + _CPU_DATA_CACHE_ALIGNMENT - 1 ))
-        + _CPU_DATA_CACHE_ALIGNMENT - 1 ) &(~(_CPU_DATA_CACHE_ALIGNMENT - 1)) );
+     malloc( nbytes + CPU_DATA_CACHE_ALIGNMENT - 1 ))
+        + CPU_DATA_CACHE_ALIGNMENT - 1 ) &(~(CPU_DATA_CACHE_ALIGNMENT - 1)) );
 #else
   return malloc( nbytes );
 #endif

@@ -136,11 +136,11 @@ void bsp_start(void)
    * Enable instruction and data caches. Do not force writethrough mode.
    */
   #ifdef INSTRUCTION_CACHE_ENABLE
-	rtems_enable_inst_cache();
+	rtems_cache_enable_instruction();
   #endif
 
   #ifdef DATA_CACHE_ENABLE
-	rtems_enable_data_cache();
+	rtems_cache_enable_data();
   #endif
    
   /*

@@ -42,7 +42,7 @@
       ); \
   } while (0)
 
-void _CPU_enable_data_cache (
+void _CPU_cache_enable_data (
 	void )
 {
   unsigned32 value;
@@ -51,7 +51,7 @@ void _CPU_enable_data_cache (
   PPC_Set_HID0( value );
 }
 
-void _CPU_disable_data_cache (
+void _CPU_cache_disable_data (
 	void )
 {
   unsigned32 value;
@@ -60,7 +60,7 @@ void _CPU_disable_data_cache (
   PPC_Set_HID0( value );
 }
 
-void _CPU_enable_inst_cache (
+void _CPU_cache_enable_inst (
 	void )
 {
   unsigned32 value;
@@ -69,7 +69,7 @@ void _CPU_enable_inst_cache (
   PPC_Set_HID0( value );
 }
 
-void _CPU_disable_inst_cache (
+void _CPU_cache_disable_inst (
 	void )
 {
   unsigned32 value;
@@ -85,26 +85,26 @@ void _CPU_disable_inst_cache (
 #define isync \
   __asm__ volatile ("isync\n"::)
 
-void _CPU_flush_1_data_cache_line(
+void _CPU_cache_flush_1_data_line(
 	const void * _address )
 {
   register const void *__address = _address;
   asm volatile ( "dcbf 0,%0" :: "r" (__address) );
 }
 
-void _CPU_invalidate_1_data_cache_line(
+void _CPU_cache_invalidate_1_data_line(
 	const void * _address )
 {
   register const void *__address = _address;
   asm volatile ( "dcbi 0,%0" :: "r" (__address) );
 }
 
-void _CPU_flush_entire_data_cache ( void ) {}
-void _CPU_invalidate_entire_data_cache ( void ) {}
-void _CPU_freeze_data_cache ( void ) {}
-void _CPU_unfreeze_data_cache ( void ) {}
+void _CPU_cache_flush_entire_data ( void ) {}
+void _CPU_cache_invalidate_entire_data ( void ) {}
+void _CPU_cache_freeze_data ( void ) {}
+void _CPU_cache_unfreeze_data ( void ) {}
 
-void _CPU_enable_data_cache ( void )
+void _CPU_cache_enable_data ( void )
 {
   unsigned32 r1;
   r1 = (0x2<<24);
@@ -112,7 +112,7 @@ void _CPU_enable_data_cache ( void )
   isync;
 }
 
-void _CPU_disable_data_cache ( void )
+void _CPU_cache_disable_data ( void )
 {
   unsigned32 r1;
   r1 = (0x4<<24);
@@ -120,18 +120,18 @@ void _CPU_disable_data_cache ( void )
   isync;
 }
 
-void _CPU_invalidate_1_inst_cache_line(
+void _CPU_cache_invalidate_1_inst_line(
 	const void * _address )
 {
   register const void *__address = _address;
   asm volatile ( "icbi 0,%0" :: "r" (__address) );
 }
 
-void _CPU_invalidate_entire_inst_cache ( void ) {}
-void _CPU_freeze_inst_cache ( void ) {}
-void _CPU_unfreeze_inst_cache ( void ) {}
+void _CPU_cache_invalidate_entire_inst ( void ) {}
+void _CPU_cache_freeze_inst ( void ) {}
+void _CPU_cache_unfreeze_inst ( void ) {}
 
-void _CPU_enable_inst_cache ( void )
+void _CPU_cache_enable_inst ( void )
 {
   unsigned32 r1;
   r1 = (0x2<<24);
@@ -139,7 +139,7 @@ void _CPU_enable_inst_cache ( void )
   isync;
 }
 
-void _CPU_disable_inst_cache ( void )
+void _CPU_cache_disable_inst ( void )
 {
   unsigned32 r1;
   r1 = (0x4<<24);
