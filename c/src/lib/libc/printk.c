@@ -117,10 +117,14 @@ printk(char *fmt, ...)
             BSP_output_char(*str);
           break;
         case 'c':
+#if 0
 #if defined(_TMS320C3x) || defined(_TMS320C4x)
           BSP_output_char(va_arg(ap, int));
 #else
           BSP_output_char(va_arg(ap, char));
+#endif
+#else
+          BSP_output_char(va_arg(ap, int));
 #endif
           break;
         default:
