@@ -201,6 +201,7 @@ tty0SetAttributes (int minor, const struct termios *t)
   return 0;
 }
 
+#ifndef TTY0_USE_INTERRUPT
 static int
 tty0PollRead (int minor)
 {
@@ -222,6 +223,7 @@ tty0PollWrite(int minor,const char *buf,int len)
   }
   return 0;
 }
+#endif
 
 /* ================ Termios support  =================*/
     
