@@ -1302,6 +1302,7 @@
 #define SH7750_SCSMR_STOP_2    0x08 /*     2 stop bit */
 #define SH7750_SCSMR1_MP       0x04 /* Multiprocessor Mode */
 #define SH7750_SCSMR_CKS       0x03 /* Clock Select */
+#define SH7750_SCSMR_CKS_S     0
 #define SH7750_SCSMR_CKS_DIV1  0x00 /*     Periph clock */
 #define SH7750_SCSMR_CKS_DIV4  0x01 /*     Periph clock / 4 */
 #define SH7750_SCSMR_CKS_DIV16 0x02 /*     Periph clock / 16 */
@@ -1386,8 +1387,8 @@
 /* SCI Bit Rate Register - SCBRR1(byte), SCBRR2(byte) */
 #define SH7750_SCBRR_REGOFS(n) ((n) == 1 ? 0xE00004 : 0xE80004) /* offset */
 #define SH7750_SCBRR(n)       SH7750_P4_REG32(SH7750_SCBRR_REGOFS(n))
-#define SH7750_SCBRR1         SH7750_SCBRR(1)
-#define SH7750_SCBRR2         SH7750_SCBRR(2)
+#define SH7750_SCBRR1         SH7750_SCBRR_P4(1)
+#define SH7750_SCBRR2         SH7750_SCBRR_P4(2)
 #define SH7750_SCBRR_A7(n)    SH7750_A7_REG32(SH7750_SCBRR_REGOFS(n))
 #define SH7750_SCBRR1_A7      SH7750_SCBRR(1)
 #define SH7750_SCBRR2_A7      SH7750_SCBRR(2)

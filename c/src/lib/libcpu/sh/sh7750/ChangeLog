@@ -1,3 +1,8 @@
+2001-10-28	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* include/rtems/score/sh7750_regs.h: Fix definitions of 
+	SH7750_SCBRR1 and SH7750_SCBRR2 so things compile.
+
 2001-10-26	Alexandra Kossovsky <sasha@oktet.ru>
 
 	* include/sh/sh4uart.h, sci/sh4uart.c: Minor fixes post merge.
