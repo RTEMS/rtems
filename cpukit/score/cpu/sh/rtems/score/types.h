@@ -1,3 +1,7 @@
+/**
+ * @file rtems/score/types.h
+ */
+
 /*
  *  This include file contains information pertaining to the Hitachi SH
  *  processor.

@@ -1,3 +1,7 @@
+/**
+ * @file rtems/score/sh_io.h
+ */
+
 /*
  * These are some macros to access memory mapped devices
  * on the SH7000-architecture.
