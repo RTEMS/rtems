@@ -1,3 +1,11 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* pppd/Makefile.am: Remove all-local: $(ARCH).
+	* rtems_servers/Makefile.am: Remove all-local: $(ARCH).
+	* rtems_telnetd/Makefile.am: Remove all-local: $(ARCH).
+	* rtems_webserver/Makefile.am: Remove all-local: $(ARCH).
+	* wrapup/Makefile.am: Remove all-local: $(ARCH).
+
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reformat. Apply dirstamps to preinstallation.

@@ -23,7 +23,7 @@ include_HEADERS = rtemspppd.h rtemsdialer.h
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(OBJS) $(LIB)
 endif
 
 .PRECIOUS: $(LIB)

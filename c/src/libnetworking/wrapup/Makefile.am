@@ -21,7 +21,7 @@ if HAS_NETWORKING
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(OBJS) $(LIB)
 endif
 
 PREINSTALL_FILES =

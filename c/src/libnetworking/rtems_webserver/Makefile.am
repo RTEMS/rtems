@@ -31,7 +31,7 @@ include_HEADERS = rtems_webserver.h
 include_goahead_HEADERS = ej.h ejIntrn.h emfdb.h md5.h uemf.h um.h webs.h \
     wsIntrn.h
 
-all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(OBJS) $(LIB)
 endif
 endif
 

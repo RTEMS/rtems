@@ -22,7 +22,7 @@ include_rtems_HEADERS = pty.h telnetd.h
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(OBJS) $(LIB)
 endif
 
 .PRECIOUS: $(LIB)
