@@ -1,3 +1,15 @@
+2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* itrontask03/Makefile.am: include leaf.am instead of leaf.cfg.
+	* itrontask04/Makefile.am: include leaf.am instead of leaf.cfg.
+	* itronmbf01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* itronsem01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* itronhello/Makefile.am: include leaf.am instead of leaf.cfg.
+	* itrontime01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* itrontask01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* itrontask02/Makefile.am: include leaf.am instead of leaf.cfg.
+	* itronmbox01/Makefile.am: include leaf.am instead of leaf.cfg.
+
 2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
