@@ -1,3 +1,8 @@
+2004-07-14	Joel Sherrill <joel@OARcorp.com>
+
+	PR 651/core
+	* src/taskident.c: Add NULL check for id.
+
 2004-06-29	Joel Sherrill <joel@OARcorp.com>
 
 	PR 631/rtems

@@ -54,6 +54,9 @@ rtems_status_code rtems_task_ident(
 {
   Objects_Name_to_id_errors  status;
 
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
+
   if ( name == OBJECTS_ID_OF_SELF ) {
     *id = _Thread_Executing->Object.id;
     return RTEMS_SUCCESSFUL;
