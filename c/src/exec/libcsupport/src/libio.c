@@ -338,7 +338,6 @@ __rtems_close(
             return -1;
         }
         status = (*fp)(fd);
-        rtems_libio_free(iop);
         return status;
     }
     iop = rtems_libio_iop(fd);
