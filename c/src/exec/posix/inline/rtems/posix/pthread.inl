@@ -22,10 +22,9 @@
  *  _POSIX_Threads_Allocate
  */
  
-STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Allocate( void )
+STATIC INLINE Thread_Control *_POSIX_Threads_Allocate( void )
 {
-  return (POSIX_Threads_Control *) 
-     _Objects_Allocate( &_POSIX_Threads_Information );
+  return (Thread_Control *) _Objects_Allocate( &_POSIX_Threads_Information );
 }
  
 /*PAGE
@@ -34,7 +33,7 @@ STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Allocate( void )
  */
  
 STATIC INLINE void _POSIX_Threads_Free (
-  POSIX_Threads_Control *the_pthread
+  Thread_Control *the_pthread
 )
 {
   _Objects_Free( &_POSIX_Threads_Information, &the_pthread->Object );
@@ -45,13 +44,13 @@ STATIC INLINE void _POSIX_Threads_Free (
  *  _POSIX_Threads_Get
  */
  
-STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Get (
-  Objects_Id        *id,
+STATIC INLINE Thread_Control *_POSIX_Threads_Get (
+  pthread_t          id,
   Objects_Locations *location
 )
 {
-  return (POSIX_Threads_Control *)
-    _Objects_Get( &_POSIX_Threads_Information, *id, location );
+  return (Thread_Control *)
+    _Objects_Get( &_POSIX_Threads_Information, (Objects_Id)id, location );
 }
  
 /*PAGE
@@ -60,7 +59,7 @@ STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Get (
  */
  
 STATIC INLINE boolean _POSIX_Threads_Is_null (
-  POSIX_Threads_Control *the_pthread
+  Thread_Control *the_pthread
 )
 {
   return !the_pthread;

@@ -178,7 +178,7 @@ void _POSIX_Threads_Manager_initialization(
     OBJECTS_POSIX_THREADS,
     FALSE,                               /* does not support global */
     maximum_pthreads,
-    sizeof( POSIX_Threads_Control ),
+    sizeof( Thread_Control ),
     TRUE,
     5,                                   /* length is arbitrary for now */
     TRUE                                 /* this class is threads */
@@ -586,6 +586,7 @@ int pthread_create(
   boolean                status;
   Thread_Control        *the_thread;
   char                  *default_name = "psx";
+  POSIX_API_Control     *api;
 
   attrp = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
@@ -683,6 +684,16 @@ int pthread_create(
     return EINVAL;
   }
 
+  /*
+   *  finish initializing the per API structure
+   */
+
+  
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  api->Attributes = *attrp;
+  api->detachstate = attr->detachstate;
+
   status = _Thread_Start(
     the_thread,
     THREAD_START_POINTER,
@@ -724,7 +735,28 @@ int pthread_join(
   void      **value_ptr
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  register Thread_Control *the_thread;
+  POSIX_API_Control       *api;
+  Objects_Locations        location;
+
+  the_thread = _POSIX_Threads_Get( thread, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:
+      return ESRCH;
+    case OBJECTS_LOCAL:
+      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+      if ( api->detachstate == PTHREAD_CREATE_DETACHED )
+        return EINVAL;
+
+      /*  XXX do something useful here */
+
+      return POSIX_NOT_IMPLEMENTED();
+      break;
+  }
+
+  return POSIX_BOTTOM_REACHED();
 }
 
 /*PAGE
@@ -736,7 +768,23 @@ int pthread_detach(
   pthread_t   thread
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  register Thread_Control *the_thread;
+  POSIX_API_Control       *api;
+  Objects_Locations        location;
+ 
+  the_thread = _POSIX_Threads_Get( thread, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:
+      return ESRCH;
+    case OBJECTS_LOCAL:
+
+      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+      api->detachstate = PTHREAD_CREATE_DETACHED;
+      return 0;
+  }
+ 
+  return POSIX_BOTTOM_REACHED();
 }
 
 /*PAGE
@@ -787,11 +835,36 @@ int pthread_equal(
   pthread_t  t2
 )
 {
-#ifdef RTEMS_DEBUG
+  Objects_Locations  location;
+
  /* XXX may want to do a "get" to make sure both are valid. */
  /* XXX behavior is undefined if not valid pthread_t's */
-#endif
-  return _Objects_Are_ids_equal( t1, t1 ); 
+ 
+  /*
+   *  Validate the first id and return 0 if it is not valid
+   */
+
+  (void) _POSIX_Threads_Get( t1, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:
+      return 0;
+    case OBJECTS_LOCAL:
+      break;
+  }
+
+  /*
+   *  Validate the second id and return 0 if it is not valid
+   */
+
+  (void) _POSIX_Threads_Get( t2, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:
+      return 0;
+    case OBJECTS_LOCAL:
+      return _Objects_Are_ids_equal( t1, t2 ); 
+  }
 }
 
 /*PAGE
