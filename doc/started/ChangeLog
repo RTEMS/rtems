@@ -1,3 +1,8 @@
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* nt.t: Significant update of Windows information. Hopefully this is
+	now more useful.
+
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merger from rtems-4-6-branch.
