@@ -124,6 +124,8 @@ void bsp_start( void )
   extern void *_WorkspaceBase;
   extern m68k_isr_entry M68Kvec[];
   
+  void M68KFPSPInstallExceptionHandlers (void);
+  
   m68k_isr_entry *rom_monitor_vector_table;
   int index;
 
@@ -146,6 +148,9 @@ void bsp_start( void )
 
   /* Any exceptions during initialization should be trapped by 167Bug */
   m68k_set_vbr( &M68Kvec );
+  
+  /* Install the 68040 FPSP here */
+  M68KFPSPInstallExceptionHandlers();
 
   /*
    *  You may wish to make the VME arbitration round-robin here, currently

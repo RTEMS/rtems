@@ -49,6 +49,8 @@ if you want S-records.
 
 
 Port Description
+Console driver
+
 ----------------
 
 This BSP includes an termios-capable console driver that supports all
@@ -70,6 +72,63 @@ Limited support is provided for polled terminal I/O. This is used when running
 the timing tests. Set the CD2401_POLLED_IO manifest constant to 1 in
 rtems/c/src/lib/libbsp/m68k/mvme167/console/console.c to enable polled I/O.
 In this case, I/O is done through 167Bug, usually to the Serial Port 1/Console
+
+Floating-point
+
+The MC68040 has a built-in FPU. This FPU does not implement all the
+instruction of the MC68881/MC68882 floating-point coprocessors in hardware.
+The -m68040 compilation options instructs gcc to not generate the missing
+instructions. All of the RTEMS code is built this way. Some of the missing
+functionality must be supplied by external libraries. The required functions
+are part of libgcc.a.
+
+The issue gets complicated because libc, libm and libgcc do not come as
+m68040-specific variants. The default variants of these libraries are for the
+MC68020 and MC68030. There are specific variants for the MC68000 (which has
+limited addressing modes with respect to later family members), and specific
+variants for systems without a floating-point unit, either a built-in FPU or
+a coprocessor. These latter variants will be referred to as the msoft-float
+variants. There is a msoft-float variant for the MC68000, and one for the
+other family members.
+
+The default variants of libc, libm and libgcc appear to work just fine for the
+MC68040, AS LONG AS NO FLOATING POINT FUNCTIONS ARE CALLED. In particular,
+printf() and scanf() raise unimplemented floating-point instruction exceptions
+at run time. Expect almost every function that must compute a floating-point
+result to also raise unimplemented floating-point instruction exceptions. Do
+not use these variants if your application does any floating-point operations,
+unless you use the Motorola FPSP package (described further down).
+
+The msoft-float variants do print out floating-point numbers properly, but we
+have not tested them extensively, so use them with caution. In particular,
+the Paranoia test fails when linked with the msoft-float variants of the
+libraries; it goes into an infinite loop after milestone 40.
+
+MSOFT_FLOAT VARIANTS MUST BE USED TOGETHER. If you use the msoft-float variant
+of libc and libm, you must also linked with the msoft-float variant of libgcc,
+otherwise calls such as printf() print out floating-point values incorrectly.
+
+RTEMS comes with the Motorola FPSP (Floating-Point Support Package) for the
+MC68040 (rtems/c/src/lib/libcp/m68k/m68040/fpsp). This package emulates the
+missing floating-point instructions. It is built automatically for the
+MVME167 and installed in bsp_start().
+
+The FPSP allows the use of the default variants of libc, libm and libgcc.
+It also runs the paranoia test properly, and prints out the correct results.
+It should probably be used in preference to the msoft-float libraries, as it
+appears to work better. The disadvantage of the FPSP is that it increases the
+size of the executable by about 60KB and that it relies on run time
+exceptions.
+
+If your application does not do any floating-point operations at all, you
+should consider disabling the FPSP. In bsp_start(), emove the call to
+M68KFPSPInstallExceptionHandlers(), and uncomment the three lines in
+mvme167.cfg that redefine which variants of libc, libm and libgcc to link
+against.
+
+
+Miscellaneous
+
 port. Interrupt-driven and polled I/O cannot be mixed in the MVME167.
 
 The timer and clock drivers were patterned after the MVME162 and MVME152
@@ -94,6 +153,16 @@ tools were used:
       m68k-rtems target;
     - GNU binutils 2.9.1 configured for a powerpc-ibm-aix4.2.0.0 host and
       m68k-rtems target;
+It was also tested on a Pentium II-based PC running Windows NT Workstation 4.0
+and the Cygnus Cygwin32 release b20.1 environment, witht he following tools:
+
+    - EGCS 1.1.1 configured for a i586-cygwin32 host and m68k-rtems target;
+    - GNU binutils 2.9.4 configured for a i586-cygwin32 host and m68k-rtems
+      target;
+    - Cygnus newlib 1.8.0 with RTEMS 4.0.0 patches.
+
+With the latter environment, be patient; builds take a very looong time...
+
     - Cygnus newlib 1.8.0 with RTEMS 4.0.0 patches.
 
 
@@ -127,10 +196,6 @@ to be transmitted.
 The first raw buffer to be transmitted after the console is re-initialized
 with tcsetattr() is garbled. At this time, it does not seem worth while to
 track this problem down.
-
-In the rtmonuse test, an unimplemented floating point instruction exception
-is raised at the end of the test when CPU_usage_Dump() is called. The faulting
-instruction is FCMP.X FP0,FP2 in cvt().
 
 In the stackchk test, an access fault exception is raised after the stack is
 blown. This is one case were overwritting the first or last 16 bytes of the
@@ -174,14 +239,19 @@ Test Results
 ------------
 
 Single processor tests:  All tests passed, except the following ones:
-  sp19 and rtmonuse failed with an unimplemented floating point instruction
-  exception (FCMP.X FP0,FP2). We do not have a floating point emulation
-  library at this time.
-  cpuuse and malloctest did not work.
-  The stackchk test got an access fault exception before the RTEMS stack
-  checker had had a chance to detect the corrupted stack.
+
+  - paranoia required the FPSP and the default variants of libm (and libc and
+    libgcc) for us. It may work with the msoft-float variants for you, but it
+    does require the FPSP.
+  
+  - cpuuse and malloctest did not work.
+  
+  - The stackchk test got an access fault exception before the RTEMS stack
+    checker had had a chance to detect the corrupted stack.
+                         
                          
 Multi-processort tests:  not applicable -- No MPCI layer yet.
+
 
 Timing tests:
 
