@@ -2,6 +2,7 @@
 
 	* configure.ac: Add score/cpu/avr/Makefile.am.
 	* score/cpu/Makefile.am: Add avr.
+	* libnetworking/Makefile.am: Don't include subdirs.am.
 
 2004-09-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
