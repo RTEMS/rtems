@@ -11,7 +11,7 @@
 GDB is not currently RTEMS aware. The following configurations have been
 successfully used with RTEMS applications:
 
-@itemize bullet
+@itemize @bullet
 @item Sparc Instruction Simulator (SIS)
 @item PowerPC Instruction Simulator (PSIM)
 @item DINK32
@@ -28,6 +28,8 @@ Use the following commands to unarchive the gdb distribution:
 cd tools
 tar xzf ../arc/@value{GDB-TAR}
 @end example
+
+The directory @value{GDB-UNTAR} is created under the tools directory.
 
 @c
 @c  GDB Patch
@@ -73,8 +75,6 @@ The files that are found, have been modified by the patch file.
 
 
 @section GDB with Sparc Instruction Simulation (SIS)
-
-The directory @value{GDB-UNTAR} is created under the tools directory.
 
 @subheading Make the build directory
 
@@ -153,7 +153,7 @@ gmake all install
 @end example
 
 
-@section GDB with Dink32
+@section GDB for DINK32
 
 @subheading Unarchive the gdb distribution
 

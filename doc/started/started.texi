@@ -56,7 +56,7 @@ END-INFO-DIR-ENTRY
 @finalout
 
 @title Getting Started with RTEMS for C/C++ Users
-@subtitle Edition @value{edition}, for RTEMS @value{version}
+@subtitle Edition @value{edition}, for @value{version}
 @sp 1
 @subtitle @value{update-month}
 @author On-Line Applications Research Corporation
@@ -87,27 +87,27 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 * Building RTEMS::
 * Building the Sample Application::
 * Building the GNU Debugger::
-* Command and Variable Index::
-* Concept Index::
 @end menu
 
+@c * Command and Variable Index::
+@c * Concept Index::
 @end ifinfo
 @c 
 @c 
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, Make the debugger (DINK32), Top
-@unnumbered Command and Variable Index
+@c @node Command and Variable Index, Concept Index, GDB for DINK32, Top
+@c @unnumbered Command and Variable Index
 
-There are currently no Command and Variable Index entries.
+@c There are currently no Command and Variable Index entries.
 
 @c @printindex fn
 
-@node Concept Index, , Command and Variable Index, Top
-@unnumbered Concept Index
+@c @node Concept Index, , Command and Variable Index, Top
+@c @unnumbered Concept Index
 
-There are currently no Concept Index entries.
+@c There are currently no Concept Index entries.
 @c @printindex cp
 
 @contents

@@ -211,7 +211,7 @@ The files that are found, have been modified by the patch file.
 @c  Modify the bit script
 @c
 
-@section Modify the bit script
+@section Modify the bit Script
 
 Copy the @code{bit} script from arc to the tools directory.
 
@@ -306,7 +306,7 @@ BUILD_OTHER_LANGUAGES=yes
 
 @end table
 
-@section Running the bit script
+@section Running the bit Script
 
 After the @code{bit} script has been modified to reflect the
 local installation, the modified @code{bit} script is run

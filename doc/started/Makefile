@@ -60,7 +60,7 @@ buildc.texi: buildc.t versions.texi
 	    -n "Building RTEMS" ${*}.t
 
 buildrt.texi: buildrt.t versions.texi
-	$(BMENU) -c -p "GNU C/C++ cross compiler toolset complete" \
+	$(BMENU) -c -p "Running the bit Script" \
 	    -u "Top" \
 	    -n "Building the Sample Application" ${*}.t
 
@@ -72,7 +72,7 @@ sample.texi: sample.t versions.texi
 gdb.texi: gdb.t versions.texi
 	$(BMENU) -c -p "Application executable" \
 	    -u "Top" \
-	    -n "Command and Variable Index" ${*}.t
+	    -n "" ${*}.t
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
