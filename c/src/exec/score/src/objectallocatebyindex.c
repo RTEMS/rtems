@@ -44,7 +44,7 @@ Objects_Control *_Objects_Allocate_by_index(
   Objects_Control *the_object;
 
   if ( index && information->maximum >= index ) {
-    the_object = _Objects_Get_local_object( information, index );
+    the_object = information->local_table[ index ];
     if ( the_object )
       return NULL;
 

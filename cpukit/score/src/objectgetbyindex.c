@@ -54,7 +54,8 @@ Objects_Control *_Objects_Get_by_index(
 
   if ( information->maximum >= index ) {
     _Thread_Disable_dispatch();
-    if ( (the_object = _Objects_Get_local_object( information, index )) != NULL ) {
+    the_object = information->local_table[ index ];
+    if ( the_object ) {
       *location = OBJECTS_LOCAL;
       return( the_object );
     }
