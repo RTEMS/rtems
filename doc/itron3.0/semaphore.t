@@ -128,7 +128,7 @@ restricts the semaphore to being a binary semaphore.  When the
 binary semaphore is available, the count is 1.  When the binary
 semaphore is unavailable, the count is 0.;
 
-@section Directives
+@section System Calls
 
 This section details the semaphore manager's services.
 A subsection is dedicated to each of this manager's services
