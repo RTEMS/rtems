@@ -17,7 +17,6 @@
 # define M68K_INSTRUCTION_CACHE_ALIGNMENT 16
 # if ( defined(__mcf528x__) )
 #  define M68K_DATA_CACHE_ALIGNMENT 16
-#  warning "COLDFIRE_DATA_CACHE_ALIGNMENT"
 # endif
 #endif
 

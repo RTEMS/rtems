@@ -1,3 +1,7 @@
+2005-02153	Eric Norum <norume@aps.anl.gov>
+
+	* shared/cache/cache_.h: Remove development warning.
+
 2005-02-03	Eric Norum <norume@aps.anl.gov>
 
 	* shared/misc/memProbe.c: Memory probe support
