@@ -43,9 +43,10 @@
  * Working on page table. Caching partially set up, but can't currently
  * set tc register.
  *
-*/
+ */
+
 #include <string.h>
-#include "page_table.h"
+#include <page_table.h>
 
 /* All page table must fit between BASE_TABLE_ADDR and
    MAX_TABLE_ADDR. */

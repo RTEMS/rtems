@@ -29,6 +29,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <page_table.h>
  
 #include <libcsupport.h>
  
