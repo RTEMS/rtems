@@ -23,9 +23,9 @@
 extern "C" {
 #endif
 
-#include "rtems/score/or1k.h"            /* pick up machine definitions */
+#include "rtems/score/or32.h"            /* pick up machine definitions */
 #ifndef ASM
-#include "rtems/score/or1ktypes.h"
+#include "rtems/score/types.h"
 #endif
 
 /* conditional compilation parameters */

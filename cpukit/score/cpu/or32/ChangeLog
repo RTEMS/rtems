@@ -1,3 +1,8 @@
+2002-08-06	Joel Sherrill <joel@OARcorp.com>
+
+	* asm.h, rtems/score/cpu.h: Correct items that have changed since
+	RTEMS version or32 port was based upon.
+
 2002-08-05	Chris Ziomkowski <chris@asics.ws>
 
 	* asm.h, cpu.c, cpu_asm.c, rtems/score/cpu.h, rtems/score/or32.h,
