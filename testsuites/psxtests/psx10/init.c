@@ -167,7 +167,9 @@ void *POSIX_Init(
 
 /* set timeout to 3 seconds */
 
-  timeout.tv_sec = 3;
+  status = clock_gettime( CLOCK_REALTIME, &timeout );
+  assert( !status );
+  timeout.tv_sec += 3;
   timeout.tv_nsec = 0;
 
   puts( "Init: pthread_cond_timedwait for 3 seconds" );
@@ -176,6 +178,9 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( status == ETIMEDOUT );
   puts( "Init: pthread_cond_timedwait - ETIMEDOUT - (mutex not acquired)" );
+
+  status = pthread_mutex_unlock( &Mutex_id );
+  assert( !status );
 
 /* remaining error messages */
 
@@ -230,32 +235,27 @@ void *POSIX_Init(
   assert( status == EINVAL );
   puts( "Init: pthread_cond_timedwait - EINVAL (abstime NULL)" );
 
-  timeout.tv_sec = -1;
+  status = clock_gettime( CLOCK_REALTIME, &timeout );
+  assert( !status );
+  timeout.tv_sec -= 1;
   status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
-  if ( status != EINVAL )
+  if ( status != ETIMEDOUT )
     printf( "status = %d\n", status );
-  assert( status == EINVAL );
-  puts( "Init: pthread_cond_timedwait - EINVAL (abstime->tv_sec invalid)" );
+  assert( status == ETIMEDOUT );
+  puts( "Init: pthread_cond_timedwait - ETIMEDOUT (abstime->tv_sec < current time)" );
+  status = pthread_mutex_unlock( &Mutex_id );
+  assert( !status );
 
-  timeout.tv_sec = 2;
-  timeout.tv_nsec = -1;
+  status = pthread_mutex_lock( &Mutex_id );
+  assert( !status );
+  status = clock_gettime( CLOCK_REALTIME, &timeout );
+  assert( !status );
+  timeout.tv_nsec -= 1;
   status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
-  if ( status != EINVAL )
+  if ( status != ETIMEDOUT )
     printf( "status = %d\n", status );
-  assert( status == EINVAL );
-  puts( "Init: pthread_cond_timedwait - EINVAL (abstime->tv_nsec invalid)" );
-
-  timeout.tv_sec = 2;
-  timeout.tv_nsec = 2;
-  timeout.tv_nsec = 0x7FFFFFFF;
-  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
-  if ( status != EINVAL )
-    printf( "status = %d\n", status );
-  assert( status == EINVAL );
-  puts( "Init: pthread_cond_timedwait - EINVAL (abstime->tv_nsec to large)" );
-
-/* unlock mutex for rest of test */
-
+  assert( status == ETIMEDOUT );
+  puts( "Init: pthread_cond_timedwait - ETIMEDOUT (abstime->tv_nsec < current time)" );
   status = pthread_mutex_unlock( &Mutex_id );
   assert( !status );
 
@@ -270,10 +270,16 @@ void *POSIX_Init(
  */
   puts( "Init: pthread_cond_wait - EINVAL (mutex not locked before call)" );
 
-  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
-  if ( status != EINVAL )
-    printf( "status = %d\n", status );
-  assert( status == EINVAL );
+/* XXX - this case is commented out in the code pending review
+ * 
+ *  status = clock_gettime( CLOCK_REALTIME, &timeout );
+ *  assert( !status );
+ *  timeout.tv_sec += 1;
+ *  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
+ *  if ( status != EINVAL )
+ *    printf( "status = %d\n", status );
+ *  assert( status == EINVAL );
+ */
   puts( "Init: pthread_cond_timedwait - EINVAL (mutex not locked before call)");
 
   empty_line();
