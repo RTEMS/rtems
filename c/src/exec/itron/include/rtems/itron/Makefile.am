@@ -10,7 +10,7 @@ include_rtems_itron_HEADERS = config.h eventflags.h fmempool.h intr.h itronapi.h
     msgbuffer.h network.h object.h port.h semaphore.h sysmgmt.h task.h \
     time.h vmempool.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/itron \
     $(include_rtems_itron_HEADERS:%=$(PROJECT_INCLUDE)/rtems/itron/%)
 
 $(PROJECT_INCLUDE)/rtems/itron:

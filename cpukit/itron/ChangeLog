@@ -1,3 +1,11 @@
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/itronsys/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/rtems/itron/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* inline/rtems/itron/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* macros/rtems/itron/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/Makefile.am: Revamp INCLUDES handling to make automake-1.5
