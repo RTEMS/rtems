@@ -65,16 +65,16 @@
 
 #define print_current_time(s1, s2) \
   do { \
-    char buffer[32]; \
-    int  status; \
-    struct timespec tv; \
+    char _buffer[32]; \
+    int  _status; \
+    struct timespec _tv; \
     \
-    status = clock_gettime( CLOCK_REALTIME, &tv ); \
-    assert( !status ); \
+    _status = clock_gettime( CLOCK_REALTIME, &_tv ); \
+    assert( !_status ); \
     \
-    (void) ctime_r( &tv.tv_sec, buffer ); \
-    buffer[ strlen( buffer ) - 1 ] = 0; \
-    printf( "%s%s%s\n", s1, buffer, s2 ); \
+    (void) ctime_r( &_tv.tv_sec, _buffer ); \
+    _buffer[ strlen( _buffer ) - 1 ] = 0; \
+    printf( "%s%s%s\n", s1, _buffer, s2 ); \
     fflush(stdout); \
   } while ( 0 )
 
