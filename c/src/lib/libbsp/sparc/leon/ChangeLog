@@ -1,0 +1,16 @@
+2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs,
+	configure.in, times, clock/.cvsignore, clock/Makefile.am,
+	clock/ckinit.c, console/.cvsignore, console/Makefile.am,
+	console/console.c, console/consolereserveresources.c,
+	console/debugputs.c, gnatsupp/.cvsignore,
+	gnatsupp/Makefile.am, gnatsupp/gnatsupp.c,
+	include/.cvsignore, include/Makefile.am, include/bsp.h,
+	include/coverhd.h, include/leon.h, start/.cvsignore,
+	start/Makefile.am, startup/.cvsignore, startup/Makefile.am,
+	startup/boardinit.S, startup/linkcmds, startup/setvec.c,
+	startup/spurious.c, timer/.cvsignore, timer/Makefile.am,
+	timer/timer.c, tools/.cvsignore, tools/Makefile.am,
+	tools/configure.in, tools/runtest.in, wrapup/.cvsignore,
+	wrapup/Makefile.am: New file.
