@@ -1,3 +1,8 @@
+2004-09-15	Joel Sherrill <joel@OARcorp.com>
+
+	* README, times, network/network.c, start/start.S, startup/bspclean.c,
+	startup/bspstart.c, startup/init5272.c, startup/linkcmds: Use CVS Id.
+
 2004-08-03	Jay Monkman <jtm@lopingdog.com>
 
 	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.ac,

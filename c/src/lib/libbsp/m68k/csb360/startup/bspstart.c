@@ -23,7 +23,7 @@
  *
  *  http://www.OARcorp.com/rtems/license.html.
  * 
- *  bspstart.c,v 1.2 2002/11/04 14:26:32 joel Exp
+ *  $Id$
  */
 
 #include <bsp.h>

@@ -21,7 +21,7 @@
  *  and Charles-Antoine Gauthier <charles.gauthier@iit.nrc.ca>
  *  Copyright (c) 1999, National Research Council of Canada
  *
- *  network.c,v 1.9 2002/11/04 22:18:26 joel Exp
+ *  $Id$
  */
 #include <bsp.h>
 #include <stdio.h>

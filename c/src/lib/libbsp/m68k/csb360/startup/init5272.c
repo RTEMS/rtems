@@ -26,7 +26,7 @@
  *
  *  http://www.OARcorp.com/rtems/license.html.
  * 
- *  init5206e.c,v 1.1 2001/10/26 19:30:11 joel Exp
+ *  $Id$
  */
 
 #include <rtems.h>
