@@ -18,4 +18,3 @@ EXTRA_DIST += timer_driver.ads
 EXTRA_DIST += unsigned32_io.ads
 
 include $(top_srcdir)/../../../testsuites/automake/local.am
-

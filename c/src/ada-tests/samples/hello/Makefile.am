@@ -13,8 +13,7 @@ init.$(OBJEXT): ../../support/init.c
 
 noinst_PROGRAMS = hello
 
-hello_SOURCES = hello.adb \
-config.h sptest.adb sptest.ads
+hello_SOURCES = hello.adb config.h sptest.adb sptest.ads
 
 EXTRA_DIST = hello.scn
 

@@ -13,8 +13,7 @@ init.$(OBJEXT): ../../support/init.c
 
 noinst_PROGRAMS = base_sp
 
-base_sp_SOURCES = base_sp.adb \
-config.h sptest.adb sptest.ads
+base_sp_SOURCES = base_sp.adb config.h sptest.adb sptest.ads
 
 EXTRA_DIST = base_sp.scn
 

@@ -1,3 +1,14 @@
+2003-12-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mptests/mp01/Makefile.am: Cosmetics.
+	* samples/Makefile.am: Cosmetics.
+	* samples/base_mp/Makefile.am: Cosmetics.
+	* samples/base_sp/Makefile.am: Cosmetics.
+	* samples/hello/Makefile.am: Cosmetics.
+	* samples/ticker/Makefile.am: Cosmetics.
+	* support/Makefile.am: Cosmetics.
+	* tmtests/tmoverhd/Makefile.am: Cosmetics.
+
 2003-11-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved tests/.

@@ -13,8 +13,7 @@ init.$(OBJEXT): ../../support/init.c
 
 noinst_PROGRAMS = ticker
 
-ticker_SOURCES = ticker.adb \
-config.h sptest.adb sptest.ads
+ticker_SOURCES = ticker.adb config.h sptest.adb sptest.ads
 
 EXTRA_DIST = ticker.scn
 
