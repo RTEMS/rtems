@@ -74,6 +74,14 @@ void _Thread_Dispatch( void )
 
     heir->ticks_executed++;
 
+    /*
+     * Switch libc's task specific data.
+     */
+    if ( _Thread_libc_reent ) {
+      executing->libc_reent = *_Thread_libc_reent;
+      *_Thread_libc_reent = heir->libc_reent;
+    }
+
     _User_extensions_Thread_switch( executing, heir );
 
     if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )

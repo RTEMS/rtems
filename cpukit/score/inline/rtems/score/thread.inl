@@ -387,5 +387,35 @@ RTEMS_INLINE_ROUTINE void _Thread_Internal_free (
   _Objects_Free( &_Thread_Internal_information, &the_task->Object );
 }
 
+/*PAGE
+ *
+ *  _Thread_Get_libc_reent
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine returns the C library re-enterant pointer.
+ */
+ 
+RTEMS_INLINE_ROUTINE void **_Thread_Get_libc_reent( void )
+{
+  return _Thread_libc_reent;
+}
+
+/*PAGE
+ *
+ *  _Thread_Set_libc_reent
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine set the C library re-enterant pointer.
+ */
+ 
+RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
+  void **libc_reent
+)
+{
+  _Thread_libc_reent = libc_reent;
+}
+
 #endif
 /* end of include file */

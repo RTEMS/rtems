@@ -115,6 +115,12 @@ boolean _Thread_Initialize(
 #endif
 
   /*
+   * Clear the libc reent hook.
+   */
+  
+  the_thread->libc_reent = NULL;
+  
+  /*
    *  Allocate the extensions area for this thread
    */
 
