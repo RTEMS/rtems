@@ -103,7 +103,6 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
   _Thread_Enable_dispatch();
 }
-#endif
 
 #endif
 /* end of include file */

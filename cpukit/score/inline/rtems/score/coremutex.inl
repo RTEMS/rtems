@@ -188,8 +188,6 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
 
   return 1;
 }
- 
-#endif
 
 #endif
 /* end of include file */
