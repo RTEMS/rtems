@@ -522,8 +522,13 @@ c/src/Makefile
 c/src/exec/Makefile
 c/src/exec/score/Makefile
 c/src/exec/score/cpu/Makefile
-c/src/exec/score/headers/Makefile
+c/src/exec/score/include/Makefile
+c/src/exec/score/include/rtems/Makefile
+c/src/exec/score/include/rtems/wrap/Makefile
+c/src/exec/score/include/rtems/score/Makefile
 c/src/exec/score/${inline_dir}/Makefile
+c/src/exec/score/${inline_dir}/rtems/Makefile
+c/src/exec/score/${inline_dir}/rtems/score/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile

@@ -19,15 +19,7 @@ H_PIECES= address apiext bitfield chain context copyrt coremsg coremutex \
     tod tqdata userext watchdog wkspace
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
-# H_FILES that get installed in the rtems subdirectoy
-SAPI_H_PIECES=debug system
-SAPI_H_FILES=$(SAPI_H_PIECES:%=$(srcdir)/%.h)
-
-# H_FILES that get installed at the top level
-EXTERNAL_H_PIECES = 
-EXTERNAL_H_FILES=$(EXTERNAL_H_PIECES:%=$(srcdir)/%.h)
-
-SRCS=$(H_FILES) $(SAPI_H_FILES) $(EXTERNAL_H_FILES)
+SRCS=$(H_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
@@ -44,5 +36,3 @@ CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
-	$(INSTALL) -m 444 ${SAPI_H_FILES} $(PROJECT_INCLUDE)/rtems/
-#	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
