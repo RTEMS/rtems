@@ -326,7 +326,7 @@ rtems_monitor_node_cmd(
             break;
 
         default:
-            printf("invalid syntax, try 'help node'\n");
+            fprintf(stdout,"invalid syntax, try 'help node'\n");
             break;
     }
 
@@ -398,13 +398,13 @@ rtems_monitor_symbols_loadup(void)
                                      (uint32_t  ) strtoul(value, 0, 16));
             if (sp == 0)
             {
-                printf("could not define symbol '%s'\n", symbol);
+                fprintf(stdout,"could not define symbol '%s'\n", symbol);
                 goto done;
             }
         }
         else
         {
-            printf("parsing error on '%s'\n", buffer);
+            fprintf(stdout,"parsing error on '%s'\n", buffer);
             goto done;
         }
     }
@@ -478,7 +478,7 @@ rtems_monitor_task(
 
     if (tcgetattr (STDIN_FILENO, &term) < 0)
     {
-      printf("rtems-monitor: cannot get terminal attributes.\n");
+      fprintf(stdout,"rtems-monitor: cannot get terminal attributes.\n");
     }
     else
     {
@@ -499,7 +499,7 @@ rtems_monitor_task(
 
       if (tcsetattr (STDIN_FILENO, TCSANOW, &term) < 0)
       {
-        printf("cannot set terminal attributes\n");
+        fprintf(stdout,"cannot set terminal attributes\n");
       }
     }
 
@@ -526,7 +526,7 @@ rtems_monitor_task(
                                                     argv)) == 0)
         {
             /* no command */
-            printf("Unrecognised command; try 'help'\n");
+            fprintf(stdout,"Unrecognised command; try 'help'\n");
             continue;
         }
 

@@ -16,13 +16,13 @@
 #ifndef __SHELL_H__
 #define __SHELL_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <stdio.h>
 #include <termios.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef int (*shell_command_t)(int argc,char * argv[]);
 

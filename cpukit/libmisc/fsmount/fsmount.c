@@ -136,7 +136,7 @@ int rtems_fsmount
       tmp_rc = rtems_fsmount_create_mountpoint(fstab_ptr->mount_point);
       if (tmp_rc != 0) {
 	if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNTPNT_CRTERR)) {
-	  printf("fsmount: creation of mount point \"%s\" failed: %s\n",
+	  fprintf(stdout,"fsmount: creation of mount point \"%s\" failed: %s\n",
 		 fstab_ptr->mount_point,
 		 strerror(errno));
 	}
@@ -157,7 +157,7 @@ int rtems_fsmount
 		     fstab_ptr->mount_point);
       if (tmp_rc != RTEMS_SUCCESSFUL) {
 	if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNT_FAILED)) {
-	  printf("fsmount: mounting of \"%s\" to"
+	  fprintf(stdout,"fsmount: mounting of \"%s\" to"
 		 " \"%s\" failed: %s\n",
 		 fstab_ptr->dev,
 		 fstab_ptr->mount_point,
@@ -170,7 +170,7 @@ int rtems_fsmount
       }
       else {
 	if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNT_OK)) {
-	  printf("fsmount: mounting of \"%s\" to"
+	  fprintf(stdout,"fsmount: mounting of \"%s\" to"
 		 " \"%s\" succeeded\n",
 		 fstab_ptr->dev,
 		 fstab_ptr->mount_point);

@@ -235,9 +235,9 @@ rtems_monitor_line_editor (
   pos     = 0;
 
   if (!logged_in)
-    printf ("\nMonitor ready, press enter to login.\n\n");
+    fprintf(stdout,"\nMonitor ready, press enter to login.\n\n");
   else
-    printf ("%s $ ", monitor_prompt);
+    fprintf(stdout,"%s $ ", monitor_prompt);
 
   while (1)
   {
@@ -258,7 +258,7 @@ rtems_monitor_line_editor (
          * The prompt has changed from `>' to `$' to help know
          * which version of the monitor code people are using.
          */
-        printf("%s $ ", monitor_prompt);
+        fprintf(stdout,"%s $ ", monitor_prompt);
       }
     }
     else
@@ -268,12 +268,12 @@ rtems_monitor_line_editor (
         switch (c)
         {
           case KEYS_END:
-            printf (buffer + pos);
+            fprintf(stdout,buffer + pos);
             pos = (int) strlen (buffer);
             break;
 
           case KEYS_HOME:
-            printf ("\r%s $ ", monitor_prompt);
+            fprintf(stdout,"\r%s $ ", monitor_prompt);
             pos = 0;
             break;
 
@@ -312,8 +312,8 @@ rtems_monitor_line_editor (
               memcpy (buffer, history_buffer[history],
                       RTEMS_COMMAND_BUFFER_SIZE);
               pos = history_pos[history];
-              printf ("\r%*c", RTEMS_COMMAND_BUFFER_SIZE, ' ');
-              printf ("\r%s $ %s", monitor_prompt, buffer);
+              fprintf(stdout,"\r%*c", RTEMS_COMMAND_BUFFER_SIZE, ' ');
+              fprintf(stdout,"\r%s $ %s", monitor_prompt, buffer);
               end = (int) strlen (buffer);
               for (bs = 0; bs < (end - pos); bs++)
                 putchar ('\b');
@@ -329,8 +329,8 @@ rtems_monitor_line_editor (
               memcpy (buffer, history_buffer[history],
                       RTEMS_COMMAND_BUFFER_SIZE);
               pos = history_pos[history];
-              printf ("\r%*c", RTEMS_COMMAND_BUFFER_SIZE, ' ');
-              printf ("\r%s $ %s", monitor_prompt, buffer);
+              fprintf(stdout,"\r%*c", RTEMS_COMMAND_BUFFER_SIZE, ' ');
+              fprintf(stdout,"\r%s $ %s", monitor_prompt, buffer);
               end = (int) strlen (buffer);
               for (bs = 0; bs < (end - pos); bs++)
                 putchar ('\b');
@@ -343,7 +343,7 @@ rtems_monitor_line_editor (
               int end;
               int bs;
               strcpy (&buffer[pos], &buffer[pos + 1]);
-              printf ("\r%s $ %s", monitor_prompt, buffer);
+              fprintf(stdout,"\r%s $ %s", monitor_prompt, buffer);
               end = (int) strlen (buffer);
               for (bs = 0; bs < (end - pos); bs++)
                 putchar ('\b');
@@ -363,7 +363,7 @@ rtems_monitor_line_editor (
               int bs;
               pos--;
               strcpy (buffer + pos, buffer + pos + 1);
-              printf ("\b%s \b", buffer + pos);
+              fprintf(stdout,"\b%s \b", buffer + pos);
               for (bs = 0; bs < ((int) strlen (buffer) - pos); bs++)
                 putchar ('\b');
             }
@@ -373,7 +373,7 @@ rtems_monitor_line_editor (
             /*
              * Process the command.
              */
-            printf ("\n");
+            fprintf(stdout,"\n");
             repeating = 1;
             /*
              * Only process the history if we have a command and
@@ -431,7 +431,7 @@ rtems_monitor_line_editor (
                 int ch, bs;
                 for (ch = end + 1; ch > pos; ch--)
                   buffer[ch] = buffer[ch - 1];
-                printf (buffer + pos);
+                fprintf(stdout,buffer + pos);
                 for (bs = 0; bs < (end - pos + 1); bs++)
                   putchar ('\b');
               }
@@ -505,7 +505,7 @@ rtems_monitor_command_read(char *command,
 
 #if defined(RTEMS_UNIX)
   /* RTEMS on unix gets so many interrupt system calls this is hosed */
-  printf ("%s> ", monitor_prompt);
+  fprintf(stdout,"%s> ", monitor_prompt);
   fflush (stdout);
   while (gets(command) == (char *) 0)
     ;
@@ -589,20 +589,20 @@ rtems_monitor_show_help (
     int         line_one = 1;
     int         c;
 
-    printf ("%s", help_cmd->command);
+    fprintf(stdout,"%s", help_cmd->command);
 
     if (help_len == 0)
     {
-      printf (" - No help associated.\n");
+      fprintf(stdout," - No help associated.\n");
       return;
     }
 
     while (help_len)
     {
-      printf ("%*c", spaces, ' ');
+      fprintf(stdout,"%*c", spaces, ' ');
 
       if (line_one)
-        printf (" - ");
+        fprintf(stdout," - ");
 
       spaces   = max_cmd_len + 2;
       line_one = 0;
@@ -638,7 +638,7 @@ rtems_monitor_show_help (
         else
           putchar (help[c]);
 
-      printf ("\n");
+      fprintf(stdout,"\n");
 
       help     += show_this_line;
       help_len -= show_this_line;
@@ -688,7 +688,7 @@ rtems_monitor_command_usage(
     if (command)
       rtems_monitor_show_help (command, strlen (command_string));
     else
-      printf ("Unrecognised command; try just 'help'\n");
+      fprintf(stdout,"Unrecognised command; try just 'help'\n");
     return;
   }
 

@@ -1,3 +1,18 @@
+2004-04-17	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libmisc/capture/capture-cli.c, libmisc/cpuuse/cpuuse.c,
+	libmisc/dumpbuf/dumpbuf.c, libmisc/fsmount/fsmount.c,
+	libmisc/monitor/mon-command.c, libmisc/monitor/mon-config.c,
+	libmisc/monitor/mon-dname.c, libmisc/monitor/mon-driver.c,
+	libmisc/monitor/mon-extension.c, libmisc/monitor/mon-itask.c,
+	libmisc/monitor/mon-monitor.c, libmisc/monitor/mon-mpci.c,
+	libmisc/monitor/mon-object.c, libmisc/monitor/mon-prmisc.c,
+	libmisc/monitor/mon-queue.c, libmisc/monitor/mon-symbols.c,
+	libmisc/monitor/mon-task.c, libmisc/rtmonuse/rtmonuse.c,
+	libmisc/shell/cmds.c, libmisc/shell/shell.c, libmisc/shell/shell.h,
+	libmisc/stackchk/check.c, libmisc/untar/untar.c: Use
+	fprintf(stdout,...) instead of printf.
+
 2004-04-14	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* sapi/include/rtems/sptables.h: Remove _RTEMS_version.

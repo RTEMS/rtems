@@ -180,11 +180,11 @@ int shell_make_args(char * cmd,
 int shell_help_cmd(shell_cmd_t * shell_cmd) {
   char * pc;
   int    col,line;
-  printf("%-10.10s -",shell_cmd->name);
+  fprintf(stdout,"%-10.10s -",shell_cmd->name);
   col=12;
   line=1;
   if (shell_cmd->alias) {
-   printf("is an <alias> for command '%s'",shell_cmd->alias->name);
+   fprintf(stdout,"is an <alias> for command '%s'",shell_cmd->alias->name);
   } else
   if (shell_cmd->usage) {
    pc=shell_cmd->usage;
@@ -206,7 +206,7 @@ int shell_help_cmd(shell_cmd_t * shell_cmd) {
      };
     };
     if (!col && *pc) {
-      printf("            ");
+      fprintf(stdout,"            ");
       col=12;line++;
     };
    };
@@ -224,51 +224,51 @@ int shell_help(int argc,char * argv[]) {
   shell_topic_t *topic;
   shell_cmd_t * shell_cmd=shell_first_cmd;
   if (argc<2) {
-   printf("help: ('r' repeat last cmd - 'e' edit last cmd)\n"
+   fprintf(stdout,"help: ('r' repeat last cmd - 'e' edit last cmd)\n"
           "  TOPIC? The topics are\n");
    topic=shell_first_topic;
    col=0;
    while (topic) {
     if (!col){
-     col=printf("   %s",topic->topic);
+     col=fprintf(stdout,"   %s",topic->topic);
     } else {
      if ((col+strlen(topic->topic)+2)>78){
-      printf("\n");
-      col=printf("   %s",topic->topic);
+      fprintf(stdout,"\n");
+      col=fprintf(stdout,"   %s",topic->topic);
      } else {
-      col+=printf(", %s",topic->topic);
+      col+=fprintf(stdout,", %s",topic->topic);
      };
     };
     topic=topic->next;
    };
-   printf("\n");
+   fprintf(stdout,"\n");
    return 1;
   };
   line=0;
   for (arg=1;arg<argc;arg++) {
    if (line>16) {
-    printf("Press any key to continue...");getchar();
-    printf("\n");
+    fprintf(stdout,"Press any key to continue...");getchar();
+    fprintf(stdout,"\n");
     line=0;
    };
    topic=shell_lookup_topic(argv[arg]);
    if (!topic){
     if ((shell_cmd=shell_lookup_cmd(argv[arg]))==NULL) {
-     printf("help: topic or cmd '%s' not found. Try <help> alone for a list\n",argv[arg]);
+     fprintf(stdout,"help: topic or cmd '%s' not found. Try <help> alone for a list\n",argv[arg]);
      line++;
     } else {
      line+=shell_help_cmd(shell_cmd);
     }
     continue;
    };
-   printf("help: list for the topic '%s'\n",argv[arg]);
+   fprintf(stdout,"help: list for the topic '%s'\n",argv[arg]);
    line++;
    while (shell_cmd) {
     if (!strcmp(topic->topic,shell_cmd->topic))
      line+=shell_help_cmd(shell_cmd);
     if (line>16) {
-     printf("Press any key to continue...");getchar();
-     printf("\n");
+     fprintf(stdout,"Press any key to continue...");getchar();
+     fprintf(stdout,"\n");
      line=0;
     };
     shell_cmd=shell_cmd->next;
@@ -569,7 +569,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
    setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
    stderr=fopen(devname,"r+");
    if (!stderr) {
-    printf("shell:unable to open stderr.%s:%s\n",devname,strerror(errno));
+    fprintf(stdout,"shell:unable to open stderr.%s:%s\n",devname,strerror(errno));
    };
    /* when the future user environment runs ok
     * a freopen() reopens the terminals. Now this don't work
@@ -588,7 +588,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
    cat_file(stdout,"/etc/motd");
    strcpy(last_cmd,"");
    strcpy(cmd,"");
-   printf("\n"
+   fprintf(stdout,"\n"
           "RTEMS SHELL (Ver.1.0-FRC):%s. "__DATE__". 'help' to list commands.\n",devname);
    chdir("/"); /* XXX: chdir to getpwent homedir */
    shell_env->exit_shell=FALSE;
@@ -596,7 +596,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
     /* Prompt section */
     /* XXX: show_prompt user adjustable */
     getcwd(curdir,sizeof(curdir));
-    printf("%s [%s] %c ",shell_env->taskname,curdir,geteuid()?'$':'#');
+    fprintf(stdout,"%s [%s] %c ",shell_env->taskname,curdir,geteuid()?'$':'#');
     /* getcmd section */
     if (!shell_scanline(cmd,sizeof(cmd),stdin,stdout)) break; /*EOF*/
     /* evaluate cmd section */
@@ -621,7 +621,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
      if ((shell_cmd=shell_lookup_cmd(argv[0]))!=NULL) {
       shell_env->errorlevel=shell_cmd->command(argc,argv);
      } else {
-      printf("shell:%s command not found\n",argv[0]);
+      fprintf(stdout,"shell:%s command not found\n",argv[0]);
       shell_env->errorlevel=-1;
      };
     };
@@ -629,7 +629,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
     if (shell_env->exit_shell)  break;
     cmd[0]=0;
    };
-   printf("\nGoodbye from RTEMS SHELL :-(\n");
+   fprintf(stdout,"\nGoodbye from RTEMS SHELL :-(\n");
   };
   } while (shell_env->forever);
   fclose(stdin );

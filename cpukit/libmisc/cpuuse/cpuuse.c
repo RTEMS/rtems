@@ -60,11 +60,11 @@ void CPU_usage_Dump( void )
     }
   }
 
-  printf("CPU Usage by thread\n");
+  fprintf(stdout,"CPU Usage by thread\n");
 #if defined(unix) || ( CPU_HARDWARE_FP == TRUE )
-  printf( "   ID        NAME        TICKS    PERCENT\n" );
+  fprintf(stdout, "   ID        NAME        TICKS    PERCENT\n" );
 #else
-  printf( "   ID        NAME        TICKS\n" );
+  fprintf(stdout, "   ID        NAME        TICKS\n" );
 #endif
 
   for ( api_index = 1 ;
@@ -102,7 +102,7 @@ void CPU_usage_Dump( void )
         if ( !isprint(name[3]) ) name[3] = '*';
 
 #if defined(unix) || ( CPU_HARDWARE_FP == TRUE )
-        printf( "0x%08x   %4s    %8d     %5.3f\n",
+        fprintf(stdout, "0x%08x   %4s    %8d     %5.3f\n",
           the_thread->Object.id,
           name,
           the_thread->ticks_executed,
@@ -111,7 +111,7 @@ void CPU_usage_Dump( void )
             (double)total_units
         );
 #else
-        printf( "0x%08x   %4s   %8d\n",
+        fprintf(stdout, "0x%08x   %4s   %8d\n",
           the_thread->Object.id,
           name,
           the_thread->ticks_executed
@@ -121,11 +121,11 @@ void CPU_usage_Dump( void )
     }
   }
 
-  printf(
+  fprintf(stdout,
     "\nTicks since last reset = %d\n",
     _Watchdog_Ticks_since_boot - CPU_usage_Ticks_at_last_reset
   );
-  printf( "\nTotal Units = %d\n", total_units );
+  fprintf(stdout, "\nTotal Units = %d\n", total_units );
 }
 
 /*PAGE

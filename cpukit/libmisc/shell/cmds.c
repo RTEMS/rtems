@@ -130,14 +130,14 @@ int main_mdump(int argc,char * argv[]) {
  max/=16;
  if (!max) max=20;
  for (m=0;m<max;m++) {
-  printf("0x%08X ",adr);
+  fprintf(stdout,"0x%08X ",adr);
   pb=(unsigned char*) adr;
   for (n=0;n<16;n++)
-   printf("%02X%c",pb[n],n==7?'-':' ');
+   fprintf(stdout,"%02X%c",pb[n],n==7?'-':' ');
   for (n=0;n<16;n++) {
-   printf("%c",isprint(pb[n])?pb[n]:'.');
+   fprintf(stdout,"%c",isprint(pb[n])?pb[n]:'.');
   };
-  printf("\n");
+  fprintf(stdout,"\n");
   adr+=16;
  };
  mdump_adr=adr;
@@ -153,15 +153,15 @@ int main_mwdump(int argc,char * argv[]) {
  max/=16;
  if (!max) max=20;
  for (m=0;m<max;m++) {
-  printf("0x%08X ",adr);
+  fprintf(stdout,"0x%08X ",adr);
   pw=(unsigned short*) adr;
   for (n=0;n<8;n++)
-   printf("%02X %02X%c",pw[n]/0x100,pw[n]%0x100,n==3?'-':' ');
+   fprintf(stdout,"%02X %02X%c",pw[n]/0x100,pw[n]%0x100,n==3?'-':' ');
   for (n=0;n<8;n++) {
-   printf("%c",isprint(pw[n]/0x100)?pw[n]/0x100:'.');
-   printf("%c",isprint(pw[n]%0x100)?pw[n]%0x100:'.');
+   fprintf(stdout,"%c",isprint(pw[n]/0x100)?pw[n]/0x100:'.');
+   fprintf(stdout,"%c",isprint(pw[n]%0x100)?pw[n]%0x100:'.');
   };
-  printf("\n");
+  fprintf(stdout,"\n");
   adr+=16;
  };
  mdump_adr=adr;
@@ -172,7 +172,7 @@ int main_medit(int argc,char * argv[]) {
  unsigned char * pb;
  int n,i;
  if (argc<3) {
-  printf("too few arguments\n");
+  fprintf(stdout,"too few arguments\n");
   return 0;
  };
  pb=(unsigned char*)str2int(argv[1]);
@@ -190,7 +190,7 @@ int main_mfill(int argc,char * argv[]) {
  int  size;
  unsigned char value;
  if (argc<4) {
-  printf("too few arguments\n");
+  fprintf(stdout,"too few arguments\n");
   return 0;
  };
  adr  =str2int(argv[1]);
@@ -206,7 +206,7 @@ int main_mmove(int argc,char * argv[]) {
  int  dst;
  int  size;
  if (argc<4) {
-  printf("too few arguments\n");
+  fprintf(stdout,"too few arguments\n");
   return 0;
  };
  dst  =str2int(argv[1]);
@@ -230,7 +230,7 @@ int main_malloc_dump(int argc,char * argv[]) {
 int main_reset (int argc, char **argv)
 {
   rtems_interrupt_level level;
-  printf ("Waiting for watchdog ... ");
+  fprintf(stdout,"Waiting for watchdog ... ");
   tcdrain(fileno(stdout));
 
   rtems_interrupt_disable (level);
@@ -244,11 +244,11 @@ int main_reset (int argc, char **argv)
 int main_alias (int argc, char **argv)
 {
  if (argc<3) {
-  printf("too few arguments\n");
+  fprintf(stdout,"too few arguments\n");
   return 1;
  };
  if (!shell_alias_cmd(argv[1],argv[2])) {
-  printf("unable to make an alias(%s,%s)\n",argv[1],argv[2]);
+  fprintf(stdout,"unable to make an alias(%s,%s)\n",argv[1],argv[2]);
  };
  return 0;
 }
@@ -274,7 +274,7 @@ int main_ls(int argc, char *argv[])
 
    if ((dirp = opendir(fname)) == NULL)
    {
-      printf("%s: No such file or directory.\n", fname);
+      fprintf(stdout,"%s: No such file or directory.\n", fname);
       return errno;
    }
    n=0;
@@ -291,7 +291,7 @@ int main_ls(int argc, char *argv[])
 	 user=pwd?pwd->pw_name:"nouser";
 	 grp=getgrgid(stat_buf.st_gid);
 	 group=grp?grp->gr_name:"nogrp";
-         printf("%c%c%c%c%c%c%c%c%c%c %3d %6.6s %6.6s %11d %s %s%c\n",
+         fprintf(stdout,"%c%c%c%c%c%c%c%c%c%c %3d %6.6s %6.6s %11d %s %s%c\n",
                  (S_ISLNK(stat_buf.st_mode)?('l'):
                     (S_ISDIR(stat_buf.st_mode)?('d'):('-'))),
                  (stat_buf.st_mode & S_IRUSR)?('r'):('-'),
@@ -313,7 +313,7 @@ int main_ls(int argc, char *argv[])
 	 size+=stat_buf.st_size;
       }
    }
-   printf("%d files %d bytes occupied\n",n,size);
+   fprintf(stdout,"%d files %d bytes occupied\n",n,size);
    closedir(dirp);
    return 0;
 }
@@ -321,7 +321,7 @@ int main_ls(int argc, char *argv[])
 int main_pwd (int argc, char *argv[]) {
    char dir[1024];
    getcwd(dir,1024);
-   printf("%s\n",dir);
+   fprintf(stdout,"%s\n",dir);
    return 0;
 }
 /*-----------------------------------------------------------*/
@@ -330,7 +330,7 @@ int main_chdir (int argc, char *argv[]) {
    dir="/";
    if (argc>1) dir=argv[1];
    if (chdir(dir)) {
-    printf("chdir to '%s' failed:%s\n",dir,strerror(errno));
+    fprintf(stdout,"chdir to '%s' failed:%s\n",dir,strerror(errno));
     return errno;
    };
    return 0;
@@ -343,7 +343,7 @@ int main_mkdir (int argc, char *argv[]) {
    while (n<argc) {
     dir=argv[n++];
     if (mkdir(dir,S_IRWXU|S_IRWXG|S_IRWXO)) {
-      printf("mkdir '%s' failed:%s\n",dir,strerror(errno));
+      fprintf(stdout,"mkdir '%s' failed:%s\n",dir,strerror(errno));
     };
    };
    return errno;
@@ -356,7 +356,7 @@ int main_rmdir (int argc, char *argv[])
    n=1;
    while (n<argc) {
     dir=argv[n++];
-    if (rmdir(dir)) printf("rmdir '%s' failed:%s\n",dir,strerror(errno));
+    if (rmdir(dir)) fprintf(stdout,"rmdir '%s' failed:%s\n",dir,strerror(errno));
    };
    return errno;
 }
@@ -365,7 +365,7 @@ int main_chroot(int argc,char * argv[]) {
  char * new_root="/";
  if (argc==2) new_root=argv[1];
  if (chroot(new_root)<0) {
-  printf("error %s:chroot(%s);\n",strerror(errno),new_root);
+  fprintf(stdout,"error %s:chroot(%s);\n",strerror(errno),new_root);
   return -1;
  };
  return 0;
@@ -385,7 +385,7 @@ int main_rm    (int argc, char *argv[])
    n=1;
    while (n<argc) {
     if (unlink(argv[n])) {
-     printf("error %s:rm %s\n",strerror(errno),argv[n]);
+     fprintf(stdout,"error %s:rm %s\n",strerror(errno),argv[n]);
      return -1;
     };
     n++;
@@ -399,20 +399,20 @@ int main_date(int argc,char *argv[])
 {
   time_t t;
   time(&t);
-  printf("%s", ctime(&t));
+  fprintf(stdout,"%s", ctime(&t));
   return 0;
 }
 /*-----------------------------------------------------------*/
 int main_logoff(int argc,char *argv[])
 {
-  printf("logoff from the system...");
+  fprintf(stdout,"logoff from the system...");
   current_shell_env->exit_shell=TRUE;
   return 0;
 }
 /*-----------------------------------------------------------*/
 int main_tty   (int argc,char *argv[])
 {
-  printf("%s\n",ttyname(fileno(stdin)));
+  fprintf(stdout,"%s\n",ttyname(fileno(stdin)));
   return 0;
 }
 /*-----------------------------------------------------------*/
@@ -420,7 +420,7 @@ int main_whoami(int argc,char *argv[])
 {
    struct passwd     * pwd;
    pwd=getpwuid(getuid());
-   printf("%s\n",pwd?pwd->pw_name:"nobody");
+   fprintf(stdout,"%s\n",pwd?pwd->pw_name:"nobody");
    return 0;
 }
 /*-----------------------------------------------------------*/
@@ -430,12 +430,12 @@ int main_id    (int argc,char *argv[])
    struct group      * grp;
    pwd=getpwuid(getuid());
    grp=getgrgid(getgid());
-   printf("uid=%d(%s),gid=%d(%s),",
+   fprintf(stdout,"uid=%d(%s),gid=%d(%s),",
 		   getuid(),pwd?pwd->pw_name:"",
 		   getgid(),grp?grp->gr_name:"");
    pwd=getpwuid(geteuid());
    grp=getgrgid(getegid());
-   printf("euid=%d(%s),egid=%d(%s)\n",
+   fprintf(stdout,"euid=%d(%s),egid=%d(%s)\n",
 		   geteuid(),pwd?pwd->pw_name:"",
 		   getegid(),grp?grp->gr_name:"");
    return 0;
@@ -447,7 +447,7 @@ int main_umask(int argc,char *argv[])
    if (argc == 2) msk=str2int(argv[1]);
    umask(msk);
    msk=umask(0);
-   printf("0%o\n", (unsigned int) msk);
+   fprintf(stdout,"0%o\n", (unsigned int) msk);
    umask(msk);
    return 0;
 }

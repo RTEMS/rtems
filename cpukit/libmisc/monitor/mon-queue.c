@@ -30,7 +30,7 @@ rtems_monitor_queue_dump_header(
     boolean verbose
 )
 {
-    printf("\
+    fprintf(stdout,"\
   ID       NAME   ATTRIBUTES   PEND   MAXPEND  MAXSIZE\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
@@ -64,5 +64,5 @@ rtems_monitor_queue_dump(
     length += rtems_monitor_pad(48, length);
     length += rtems_monitor_dump_decimal(monitor_queue->maximum_message_size);
 
-    printf("\n");
+    fprintf(stdout,"\n");
 }

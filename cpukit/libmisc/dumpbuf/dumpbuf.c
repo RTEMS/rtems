@@ -75,5 +75,5 @@ static inline void Dump_Line(
 
   strcat( line_buffer, "|\n" );
 
-  printf( line_buffer );
+  fprintf(stdout, line_buffer );
 }

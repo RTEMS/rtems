@@ -204,7 +204,7 @@ Untar_FromMemory(unsigned char *tar_buf, unsigned long size)
          nblocks = (((file_size) + 511) & ~511) / 512;
          if ((fp = fopen(fname, "w")) == NULL)
          {
-            printf("Untar failed to create file %s\n", fname);
+            fprintf(stdout,"Untar failed to create file %s\n", fname);
             ptr += 512 * nblocks;
          }
          else
@@ -222,7 +222,7 @@ Untar_FromMemory(unsigned char *tar_buf, unsigned long size)
                n = fwrite(&tar_buf[ptr], 1, len, fp);
                if (n != len)
                {
-                  printf("Error during write\n");
+                  fprintf(stdout,"Error during write\n");
                   break;
                }
                ptr += 512;

@@ -84,7 +84,7 @@ rtems_monitor_config_dump_header(
     boolean verbose
 )
 {
-    printf("\
+    fprintf(stdout,"\
 INITIAL (startup) Configuration Info\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
@@ -101,24 +101,24 @@ rtems_monitor_config_dump(
     uint32_t     length = 0;
 
     length = 0;
-    length += printf("WORKSPACE");
+    length += fprintf(stdout,"WORKSPACE");
     length += rtems_monitor_pad(DATACOL, length);
-    length += printf("start: %p;  size: 0x%x\n",
+    length += fprintf(stdout,"start: %p;  size: 0x%x\n",
                      monitor_config->work_space_start,
                      monitor_config->work_space_size);
 
     length = 0;
-    length += printf("TIME");
+    length += fprintf(stdout,"TIME");
     length += rtems_monitor_pad(DATACOL, length);
-    length += printf("usec/tick: %d;  tick/timeslice: %d;  tick/sec: %d\n",
+    length += fprintf(stdout,"usec/tick: %d;  tick/timeslice: %d;  tick/sec: %d\n",
                      monitor_config->microseconds_per_tick,
                      monitor_config->ticks_per_timeslice,
                      1000000 / monitor_config->microseconds_per_tick);
 
     length = 0;
-    length += printf("MAXIMUMS");
+    length += fprintf(stdout,"MAXIMUMS");
     length += rtems_monitor_pad(DATACOL, length);
-    length += printf("tasks: %d;  timers: %d;  sems: %d;  que's: %d;  ext's: %d\n",
+    length += fprintf(stdout,"tasks: %d;  timers: %d;  sems: %d;  que's: %d;  ext's: %d\n",
                      monitor_config->maximum_tasks,
                      monitor_config->maximum_timers,
                      monitor_config->maximum_semaphores,
@@ -126,7 +126,7 @@ rtems_monitor_config_dump(
                      monitor_config->maximum_extensions);
     length = 0;
     length += rtems_monitor_pad(CONTCOL, length);
-    length += printf("partitions: %d;  regions: %d;  ports: %d;  periods: %d\n",
+    length += fprintf(stdout,"partitions: %d;  regions: %d;  ports: %d;  periods: %d\n",
                      monitor_config->maximum_partitions,
                      monitor_config->maximum_regions,
                      monitor_config->maximum_ports,

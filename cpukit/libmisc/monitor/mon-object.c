@@ -330,7 +330,7 @@ rtems_monitor_object_cmd(
     {
         if (type == RTEMS_MONITOR_OBJECT_INVALID)
         {
-            printf("A type must be specified to \"dump all\"\n");
+            fprintf(stdout,"A type must be specified to \"dump all\"\n");
             goto done;
         }
 
@@ -371,7 +371,7 @@ rtems_monitor_object_cmd(
 
             if (info == 0)
             {
-not_found:      printf("Invalid or unsupported type %d\n", type);
+not_found:      fprintf(stdout,"Invalid or unsupported type %d\n", type);
                 goto done;
             }
 

@@ -97,7 +97,7 @@ rtems_monitor_mpci_dump_header(
     boolean verbose
 )
 {
-    printf("\
+    fprintf(stdout,"\
            max     max     max     default    max\n\
    node   nodes  globals  proxies  timeout  pktsize\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
@@ -116,9 +116,9 @@ rtems_monitor_mpci_dump(
     uint32_t     length = 0;
 
     length += rtems_monitor_pad(2, length);
-    length += printf("  %d", monitor_mpci->node);
+    length += fprintf(stdout,"  %d", monitor_mpci->node);
     length += rtems_monitor_pad(11, length);
-    length += printf("%d", monitor_mpci->maximum_nodes);
+    length += fprintf(stdout,"%d", monitor_mpci->maximum_nodes);
 
     length += rtems_monitor_pad(18, length);
     length += rtems_monitor_dump_decimal(monitor_mpci->maximum_global_objects);
@@ -132,31 +132,31 @@ rtems_monitor_mpci_dump(
     length += rtems_monitor_pad(46, length);
     length += rtems_monitor_dump_decimal(monitor_mpci->maximum_packet_size);
 
-    printf("\n");
+    fprintf(stdout,"\n");
     length = 0;
     length += rtems_monitor_pad(DATACOL, length);
 
-    length += printf("init: ");
+    length += fprintf(stdout,"init: ");
     length += rtems_monitor_symbol_dump(&monitor_mpci->initialization, verbose);
 
-    printf("\n");
+    fprintf(stdout,"\n");
     length = 0;
     length += rtems_monitor_pad(DATACOL, length);
 
-    length += printf("get: ");
+    length += fprintf(stdout,"get: ");
     length += rtems_monitor_symbol_dump(&monitor_mpci->get_packet, verbose);
-    length += printf(";  return: ");
+    length += fprintf(stdout,";  return: ");
     length += rtems_monitor_symbol_dump(&monitor_mpci->return_packet, verbose);
 
-    printf("\n");
+    fprintf(stdout,"\n");
     length = 0;
     length += rtems_monitor_pad(DATACOL, length);
 
-    length += printf("send: ");
+    length += fprintf(stdout,"send: ");
     length += rtems_monitor_symbol_dump(&monitor_mpci->send_packet, verbose);
-    length += printf(";  receive: ");
+    length += fprintf(stdout,";  receive: ");
     length += rtems_monitor_symbol_dump(&monitor_mpci->receive_packet, verbose);
 
-    printf("\n");
+    fprintf(stdout,"\n");
     length = 0;
 }

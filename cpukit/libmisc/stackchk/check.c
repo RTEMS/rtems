@@ -480,7 +480,7 @@ void Stack_check_Dump_threads_usage(
     name[ 4 ] = '\0';
   }
 
-  printf( "0x%08x  %4s  0x%08x  0x%08x   %8d   %8d\n",
+  fprintf(stdout, "0x%08x  %4s  0x%08x  0x%08x   %8d   %8d\n",
           the_thread ? the_thread->Object.id : ~0,
           name,
           (uint32_t  ) stack->area,
@@ -524,8 +524,8 @@ void Stack_check_Dump_usage( void )
   if (stack_check_initialized == 0)
       return;
 
-  printf("Stack usage by thread\n");
-  printf(
+  fprintf(stdout,"Stack usage by thread\n");
+  fprintf(stdout,
     "    ID      NAME       LOW        HIGH     AVAILABLE      USED\n"
   );
 

@@ -95,7 +95,7 @@ rtems_monitor_driver_dump_header(
     boolean verbose
 )
 {
-    printf("\
+    fprintf(stdout,"\
   Major      Entry points\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
@@ -110,31 +110,31 @@ rtems_monitor_driver_dump(
 {
     uint32_t            length = 0;
 
-    length += printf("  %d", monitor_driver->id);
+    length += fprintf(stdout,"  %d", monitor_driver->id);
 
     length += rtems_monitor_pad(13, length);
-    length += printf("init: ");
+    length += fprintf(stdout,"init: ");
     length += rtems_monitor_symbol_dump(&monitor_driver->initialization, verbose);
-    length += printf(";  control: ");
+    length += fprintf(stdout,";  control: ");
     length += rtems_monitor_symbol_dump(&monitor_driver->control, verbose);
-    length += printf("\n");
+    length += fprintf(stdout,"\n");
     length = 0;
 
     length += rtems_monitor_pad(13, length);
 
-    length += printf("open: ");
+    length += fprintf(stdout,"open: ");
     length += rtems_monitor_symbol_dump(&monitor_driver->open, verbose);
-    length += printf(";  close: ");
+    length += fprintf(stdout,";  close: ");
     length += rtems_monitor_symbol_dump(&monitor_driver->close, verbose);
-    length += printf("\n");
+    length += fprintf(stdout,"\n");
     length = 0;
 
     length += rtems_monitor_pad(13, length);
 
-    length += printf("read: ");
+    length += fprintf(stdout,"read: ");
     length += rtems_monitor_symbol_dump(&monitor_driver->read, verbose);
-    length += printf(";  write: ");
+    length += fprintf(stdout,";  write: ");
     length += rtems_monitor_symbol_dump(&monitor_driver->write, verbose);
-    length += printf("\n");
+    length += fprintf(stdout,"\n");
     length = 0;
 }

@@ -52,7 +52,7 @@ rtems_monitor_task_dump_header(
     boolean verbose
 )
 {
-    printf("\
+    fprintf(stdout,"\
   ID       NAME   PRIO   STAT   MODES  EVENTS   WAITID  WAITARG  NOTES\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
@@ -92,5 +92,5 @@ rtems_monitor_task_dump(
 
     length += rtems_monitor_pad(65, length);
     length += rtems_monitor_dump_notepad(monitor_task->notepad);
-    printf("\n");
+    fprintf(stdout,"\n");
 }

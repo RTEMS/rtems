@@ -74,7 +74,7 @@ rtems_monitor_init_task_dump_header(
     boolean verbose
 )
 {
-    printf("\
+    fprintf(stdout,"\
   #    NAME   ENTRY        ARGUMENT    PRIO   MODES  ATTRIBUTES   STACK SIZE\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
@@ -101,7 +101,7 @@ rtems_monitor_init_task_dump(
     length += rtems_monitor_symbol_dump(&monitor_itask->entry, verbose);
 
     length += rtems_monitor_pad(25, length);
-    length += printf("%d [0x%x]", monitor_itask->argument, monitor_itask->argument);
+    length += fprintf(stdout,"%d [0x%x]", monitor_itask->argument, monitor_itask->argument);
 
     length += rtems_monitor_pad(39, length);
     length += rtems_monitor_dump_priority(monitor_itask->priority);
@@ -113,7 +113,7 @@ rtems_monitor_init_task_dump(
     length += rtems_monitor_dump_attributes(monitor_itask->attributes);
 
     length += rtems_monitor_pad(66, length);
-    length += printf("%d [0x%x]", monitor_itask->stack_size, monitor_itask->stack_size);
+    length += fprintf(stdout,"%d [0x%x]", monitor_itask->stack_size, monitor_itask->stack_size);
 
-    printf("\n");
+    fprintf(stdout,"\n");
 }

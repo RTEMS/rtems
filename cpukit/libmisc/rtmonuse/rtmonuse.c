@@ -137,12 +137,12 @@ void Period_usage_Dump( void )
   Objects_Information    *information;
 
   if ( !Period_usage_Information ) {
-    printf( "Period statistics library is not initialized\n" );
+    fprintf(stdout, "Period statistics library is not initialized\n" );
     return;
   }
 
-  printf( "Period information by period\n" );
-  printf( "   ID      OWNER   PERIODS  MISSED    CPU TIME    WALL TIME\n" );
+  fprintf(stdout, "Period information by period\n" );
+  fprintf(stdout, "   ID      OWNER   PERIODS  MISSED    CPU TIME    WALL TIME\n" );
 
   /*
    *  RTEMS does not use an index of zero for object ids.
@@ -191,7 +191,7 @@ void Period_usage_Dump( void )
     if ( !isprint(name[3]) ) name[3] = '*';
 
 
-    printf(
+    fprintf(stdout,
       "0x%08x  %4s   %6d   %3d       %d/%d/%5.2f    %d/%d/%3.2f\n",
       the_usage->id,
       name,

@@ -396,19 +396,19 @@ rtems_monitor_symbol_dump(
     if (canonical_symbol->name[0] && (canonical_symbol->value != 0))
     {
         if (canonical_symbol->offset == 0)
-            length += printf("%.*s",
+            length += fprintf(stdout,"%.*s",
                              (int) sizeof(canonical_symbol->name),
                              canonical_symbol->name);
         else
-            length += printf("<%.*s+0x%x>",
+            length += fprintf(stdout,"<%.*s+0x%x>",
                              (int) sizeof(canonical_symbol->name),
                              canonical_symbol->name,
                              canonical_symbol->offset);
         if (verbose)
-            length += printf(" [0x%x]", canonical_symbol->value);
+            length += fprintf(stdout," [0x%x]", canonical_symbol->value);
     }
     else
-        length += printf("[0x%x]", canonical_symbol->value);
+        length += fprintf(stdout,"[0x%x]", canonical_symbol->value);
 
     return length;
 }
@@ -439,7 +439,7 @@ rtems_monitor_symbol_dump_all(
 
         rtems_monitor_symbol_canonical(&canonical_symbol, sp);
         rtems_monitor_symbol_dump(&canonical_symbol, TRUE);
-        printf("\n");
+        fprintf(stdout,"\n");
     }
 }
 
@@ -480,7 +480,7 @@ rtems_monitor_symbol_cmd(
         {
             rtems_monitor_symbol_canonical_by_name(&canonical_symbol, argv[arg]);
             rtems_monitor_symbol_dump(&canonical_symbol, verbose);
-            printf("\n");
+            fprintf(stdout,"\n");
         }
     }
 }

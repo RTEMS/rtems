@@ -86,7 +86,7 @@ rtems_monitor_dname_dump_header(
     boolean verbose
 )
 {
-    printf("\
+    fprintf(stdout,"\
   Major:Minor   Name\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
@@ -103,14 +103,14 @@ rtems_monitor_dname_dump(
 
     length += rtems_monitor_pad(6, length);
     length += rtems_monitor_dump_hex(monitor_dname->major);
-    length += printf(":");
+    length += fprintf(stdout,":");
     length += rtems_monitor_dump_hex(monitor_dname->minor);
 
     length += rtems_monitor_pad(16, length);
-    length += printf("%.*s",
+    length += fprintf(stdout,"%.*s",
                      (int) sizeof(monitor_dname->name_string),
                      (char *) monitor_dname->name_string);
 
-    length += printf("\n");
+    length += fprintf(stdout,"\n");
     length = 0;
 }

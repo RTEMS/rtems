@@ -46,7 +46,7 @@ rtems_monitor_extension_dump_header(
     boolean verbose
 )
 {
-    printf("\
+    fprintf(stdout,"\
   ID       NAME\n");
 /*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 0         1         2         3         4         5         6         7       */
@@ -72,31 +72,31 @@ rtems_monitor_extension_dump(
     length += rtems_monitor_dump_name(monitor_extension->name);
 
     length += rtems_monitor_pad(18, length);
-    length += printf("create: ");
+    length += fprintf(stdout,"create: ");
     length += rtems_monitor_symbol_dump(&monitor_extension->e_create, verbose);
-    length += printf(";  start: ");
+    length += fprintf(stdout,";  start: ");
     length += rtems_monitor_symbol_dump(&monitor_extension->e_start, verbose);
-    length += printf(";  restart: ");
+    length += fprintf(stdout,";  restart: ");
     length += rtems_monitor_symbol_dump(&monitor_extension->e_restart, verbose);
-    length += printf("\n");
+    length += fprintf(stdout,"\n");
     length = 0;
 
     length += rtems_monitor_pad(18, length);
-    length += printf("delete: ");
+    length += fprintf(stdout,"delete: ");
     length += rtems_monitor_symbol_dump(&monitor_extension->e_delete, verbose);
-    length += printf(";  switch: ");
+    length += fprintf(stdout,";  switch: ");
     length += rtems_monitor_symbol_dump(&monitor_extension->e_tswitch, verbose);
-    length += printf(";  begin: ");
+    length += fprintf(stdout,";  begin: ");
     length += rtems_monitor_symbol_dump(&monitor_extension->e_begin, verbose);
-    length += printf("\n");
+    length += fprintf(stdout,"\n");
     length = 0;
 
     length += rtems_monitor_pad(18, length);
-    length += printf("exitted: ");
+    length += fprintf(stdout,"exitted: ");
     length += rtems_monitor_symbol_dump(&monitor_extension->e_exitted, verbose);
-    length += printf(";  fatal: ");
+    length += fprintf(stdout,";  fatal: ");
     length += rtems_monitor_symbol_dump(&monitor_extension->e_fatal, verbose);
-    length += printf("\n");
+    length += fprintf(stdout,"\n");
     length = 0;
-    printf("\n");
+    fprintf(stdout,"\n");
 }
