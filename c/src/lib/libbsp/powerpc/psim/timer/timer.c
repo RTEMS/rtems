@@ -1,21 +1,9 @@
-/*  timer.c
+/* 
+ *  This file implements a benchmark timer using the PPC decrement register.
  *
- *  This file implements a benchmark timer using the General Purpose Timer on
- *  the MEC.
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
- *
- *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
- *  Agency (ESA).
- *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
- *  European Space Agency.
  *
  *  $Id$
  */
@@ -34,10 +22,7 @@ void Timer_initialize()
    *  Timer runs long and accurate enough not to require an interrupt.
    */
 
-
   Timer_driver_Start_time = PPC_Get_timebase_register();
-  
-
 }
 
 #define AVG_OVERHEAD     24  /* It typically takes 24 instructions */
