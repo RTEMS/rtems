@@ -77,6 +77,7 @@ void *POSIX_Init(
 {
   int                  status;
   pthread_mutexattr_t  attr;
+  struct timespec      times;
 
   puts( "\n\n*** POSIX TEST 5 ***" );
 
@@ -163,6 +164,18 @@ void *POSIX_Init(
   if ( status != EPERM )
     printf( "status = %d\n", status );
   assert( status == EPERM );
+
+  times.tv_sec = 0;
+  times.tv_nsec = 500000000;
+  printf( "Init: pthread_mutex_timedlock time out in 1/2 second\n" );
+  status = pthread_mutex_timedlock( &Mutex_id, &times );
+  if ( status != EAGAIN )
+    printf( "status = %d\n", status );
+  assert( status == EAGAIN );
+
+     /* switch to idle */
+
+  printf( "Init: correctly timed out waiting for mutex\n" );
 
   puts( "*** END OF POSIX TEST 5 ***" );
   exit( 0 );

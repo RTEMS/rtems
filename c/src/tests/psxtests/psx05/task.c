@@ -40,8 +40,14 @@ void *Task_1_through_3(
     printf( "status = %d\n", status );
   assert( !status );
 
+     /* switch to init */
+
   printf( "Task: mutex acquired\n" );
 
+  printf( "Task: sleep for 2 seconds\n" );
+  sleep( 2 );
+
+     /* switch to init */
 
   printf( "Task: exit\n" );
   pthread_exit( NULL );
