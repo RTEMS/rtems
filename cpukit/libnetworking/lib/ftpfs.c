@@ -348,7 +348,7 @@ int rtems_ftp_split_names
     }
     else {
       chunk_len = chunk_end-chunk_start;
-      *usernamep = malloc(chunk_len);
+      *usernamep = malloc(chunk_len+1);
       if (*usernamep == NULL) {
 	rc = ENOMEM;
       }
@@ -374,7 +374,7 @@ int rtems_ftp_split_names
        * this is the end of the password
        */
       chunk_len = chunk_end-chunk_start;
-      *passwordp = malloc(chunk_len);
+      *passwordp = malloc(chunk_len+1);
       if (*passwordp == NULL) {
 	rc = ENOMEM;
       }
@@ -406,7 +406,7 @@ int rtems_ftp_split_names
 	 * we have found a proper '/'
 	 */
 	chunk_len = chunk_end-chunk_start;
-	*hostnamep = malloc(chunk_len);
+	*hostnamep = malloc(chunk_len+1);
 	if (*hostnamep == NULL) {
 	  rc = ENOMEM;
 	}
@@ -439,7 +439,7 @@ int rtems_ftp_split_names
     }
     else {
       chunk_len = strlen(chunk_start);
-      *filenamep = malloc(chunk_len);
+      *filenamep = malloc(chunk_len+1);
       if (*filenamep == NULL) {
 	rc = ENOMEM;
       }

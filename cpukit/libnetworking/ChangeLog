@@ -1,3 +1,9 @@
+2003-02-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 341/networking
+	* lib/ftpfs.c: Account for NULL at end of strings when malloc()'ing
+	memory.
+
 2003-01-28	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Add kern/kern_sysctl.c to Makefile.am so networking
