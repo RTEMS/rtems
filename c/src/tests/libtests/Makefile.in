@@ -10,4 +10,4 @@ VPATH=@srcdir@
 include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/directory.cfg
 
-SUB_DIRS=malloctest stackchk
+SUB_DIRS=cpuuse rtmonuse malloctest stackchk
