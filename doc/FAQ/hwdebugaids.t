@@ -59,7 +59,13 @@ Information in this section from:
 
 @end itemize
 
+
 @section MPC8xx BDM Support for GDB
+
+@c "Adrian Bocaniciu" <a.bocaniciu@computer.org> has a driver
+@c for NT and is willing to share it but he needs to be emailed
+@c privately since he needs to explain somethings about it.
+@c It has been used for over a year as of 08/18/99.
 
 Christian Haan <chn@@intego.de> has written a driver for FreeBSD 
 based for"a slightly changed ICD BDM module (because of changes
