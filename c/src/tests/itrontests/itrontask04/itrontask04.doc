@@ -12,12 +12,36 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name: 2
-  This test check task suspend and resume functionality.
+test set name: itrontask04
 
 directives:
+  chg_pri cre_tsk dis_dsp ena_dsp exd_tsk frsm_tsk rot_rdq rsm_tsk 
+  sta_tsk sus_tsk
 
-concepts:
+concepts: 
 
-  a.  
+  a.  This test check task suspend and resume functionality.
+  
+  b.  Verifies the suspend count works correctly.
 
+  c.  Verifies the forced resume works correctly
+
+  d.  Verifies the rotate ready queue works correctly
+
+  e.  Verifies a task called with rtems suspend can be resumed 
+      with an itron resume call. ( XXX - May not be necessary. )
+
+
+notes: 
+
+  This verision of ITRON does not provide a way for a task to 
+  suspend itself (only another task can suspend it).  Therefore,
+  the test calls rtems_task_suspend to suspend it.
+
+  rtems_task_wake_after calls should be replaced with itron call
+  when the ITRON functionality is finished.
+ 
+output:
+
+  XXX - Verify the output messages on this test.  It looks like
+        the suspend count doesn't look correct. ??? Nov 10, 99

@@ -10,19 +10,19 @@
 #  http://www.OARcorp.com/rtems/license.html.
 #
 
-
-
 This file describes the directives and concepts tested by this test set.
+This test is based upon the test in sp0.
 
-test set name:  test2
+test set name:  itrontask03
 
 directives:
-  ext_tsk, cre_tsk, sta_tsk, rot_rdq
+  chg_pri cre_tsk del_tsk exd_tsk rot_rdq sta_tsk sus_tsk ter_tsk
 
-  ex_start, t_create, t_start, tm_tick, i_return, t_ident,
-  t_delete, tm_wkafter, t_setpri, t_suspend
+concepts: XXX - Verify 
 
-concepts:
+  a.  verifies rot_rdq can be used by a task to correctly yeild the processor
+
+  b.  Verifies sus_tsk suspends another task.
 
   a.  Verifies that a task can delete another task and also delete itself.
 
@@ -38,3 +38,16 @@ concepts:
   f.  Verifies the break statement in the _Block_activate routine.
 
   g.  Verifies the while loop in the _Prev_tcb routine.
+
+notes:
+  
+  rtems_wake_after calls should be replaced with itron calls when
+  the time functionality is added.
+
+output:
+  
+
+
+
+
+

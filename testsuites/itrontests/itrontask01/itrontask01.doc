@@ -13,12 +13,10 @@
 This file describes the directives and concepts tested by this test set.
 This test is based upon the test in sp01.
 
-test set name:  test1
+test set name: itrontask01
 
 directives:
-  cre_tsk, sta_tsk, exd_tsk, get_tid
-  ex_init, ex_start, t_create, t_start, tm_tick, i_return, t_ident,
-  tm_set, tm_get, tm_wkafter
+  cre_tsk, exd_tsk, get_tid, sta_tsk
 
 concepts:  XXX verify
 

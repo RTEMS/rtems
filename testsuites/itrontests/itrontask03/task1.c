@@ -38,7 +38,7 @@ void Task_1()
 
   puts( "TA1 - chg_pri - set TA3's priority to 2" );
 
-  puts( "TA1 - rtems_task_suspend - suspend TA2" );
+  puts( "TA1 - sus_tsk - suspend TA2" );
   status = sus_tsk( TA2_ID  );
   directive_failed( status, "sus_tsk of TA2" );
 

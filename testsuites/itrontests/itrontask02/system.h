@@ -15,6 +15,7 @@
  */
 
 #include <tmacros.h>
+#include <itron.h>
 
 /* functions */
 
