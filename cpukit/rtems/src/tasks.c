@@ -45,6 +45,7 @@ boolean _RTEMS_tasks_Create_extension(
 )
 {
   RTEMS_API_Control *api;
+  int                i;
 
   api = _Workspace_Allocate( sizeof( RTEMS_API_Control ) );
 
@@ -56,6 +57,10 @@ boolean _RTEMS_tasks_Create_extension(
   api->pending_events = EVENT_SETS_NONE_PENDING;
   _ASR_Initialize( &api->Signal );
   created->task_variables = NULL;
+
+  for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++) 
+    api->Notepads[i] = 0;
+
   return TRUE;
 }
 

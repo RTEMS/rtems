@@ -45,9 +45,9 @@
  *    id               - pointer to thread id
  *
  *  Output parameters:
- *    id                - thread id
+ *    id               - thread id
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_task_create(
