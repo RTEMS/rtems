@@ -1,5 +1,9 @@
 2004-04-14	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* sapi/include/rtems/sptables.h: Remove _RTEMS_version.
+
+2004-04-14	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libcsupport/Makefile.am: Install include_sys_HEADERS for NEWLIB
 	only. Merge sys/cdefs.h into general include_sys_HEADERS.
 

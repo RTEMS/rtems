@@ -63,8 +63,6 @@ extern const rtems_multiprocessing_table
        _Initialization_Default_multiprocessing_table;
 #endif
 
-extern const char _RTEMS_version[];
-
 #ifdef __cplusplus
 }
 #endif
