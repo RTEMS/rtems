@@ -1,0 +1,9 @@
+2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: New.
+	* .cvsignore: New.
+	* configure.ac: New.
+	* runtest: Removed.
+	* runtest.in: New (Copied from runtest).
+	* Makefile.am: Reflect changes above.
+	Use @RTEMS_BSP@ instead of simsh4.
