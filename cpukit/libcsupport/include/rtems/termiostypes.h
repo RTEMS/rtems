@@ -25,7 +25,7 @@ extern "C" {
  * Wakeup callback data structure
  */
 struct ttywakeup {
-  void      (*sw_pfn)__P((struct termios *tty, void *arg));
+  void      (*sw_pfn)(struct termios *tty, void *arg);
   void      *sw_arg;
 };
 
