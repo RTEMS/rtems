@@ -103,34 +103,34 @@ int rtems_rpc_start_portmapper (int priority);
 struct _rtems_rpc_task_variables {
 	int		svc_svc_maxfd;
 	fd_set		svc_svc_fdset;
-	void		*svc_xports;
+	SVCXPRT **	svc_xports;
 	int		svc_xportssize;
 	int		svc__svc_fdsetsize;
-	void		*svc__svc_fdset;
-	void		*svc_svc_head;
+	fd_set		*svc__svc_fdset;
+	struct svc_callout	*svc_svc_head;
 
-	void		*clnt_perror_buf;
+	char		*clnt_perror_buf;
 
-	void		*clnt_raw_private;
+	struct clnt_raw_private *clnt_raw_private;
 
 	void		*call_rpc_private;
 
-	void		*svc_raw_private;
+	struct call_rpc_private *svc_raw_private;
 
-	void		*svc_simple_proglst;
-	void		*svc_simple_pl;
-	void		*svc_simple_transp;
+	struct prog_lst *svc_simple_proglst;
+	struct prog_lst *svc_simple_pl;
+	SVCXPRT		*svc_simple_transp;
 
-	void		*rpcdname_default_domain;
+	char		*rpcdname_default_domain;
 
-	void		*svc_auths_Auths;
+	struct authsvc *svc_auths_Auths;
 };
 extern struct _rtems_rpc_task_variables *rtems_rpc_task_variables;
 
 #define svc_maxfd (rtems_rpc_task_variables->svc_svc_maxfd)
-#define svc_fdset ((rtems_rpc_task_variables)->svc_svc_fdset)
+#define svc_fdset (rtems_rpc_task_variables->svc_svc_fdset)
 #define __svc_fdsetsize (rtems_rpc_task_variables->svc__svc_fdsetsize)
-#define __svc_fdset (fd_set *)(rtems_rpc_task_variables->svc__svc_fdset)
+#define __svc_fdset (rtems_rpc_task_variables->svc__svc_fdset)
 
 #endif /* _RTEMS_RPC_INTERNAL_ */
 

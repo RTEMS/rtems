@@ -1,3 +1,13 @@
+2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* librpc/include/rpc/rpc.h (struct _rtems_rpc_task_variables):
+	Use pointers to types instead of void* to avoid casts.
+	* librpc/src/rpc/clnt_perror.c, librpc/src/rpc/clnt_raw.c,
+	librpc/src/rpc/clnt_simple.c, librpc/src/rpc/rpcdname.c,
+	librpc/src/rpc/svc.c, librpc/src/rpc/svc_auth.c,
+	librpc/src/rpc/svc_simple.c:
+	Eliminate lvalue casts gcc-3.4 warns about.
+
 2004-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libfs/src/dosfs/dosfs.h: Add doxygen preamble.

@@ -49,7 +49,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc.c,v 1.14 1999/08/28 00:00:4
 #include <rpc/rpc.h>
 #include <rpc/pmap_clnt.h>
 
-#define xports ((SVCXPRT **) rtems_rpc_task_variables->svc_xports)
+#define xports (rtems_rpc_task_variables->svc_xports)
 #define xportssize (rtems_rpc_task_variables->svc_xportssize)
 
 #define NULL_SVC ((struct svc_callout *)0)
@@ -69,7 +69,7 @@ struct svc_callout {
 	u_long		    sc_vers;
 	void		    (*sc_dispatch)();
 };
-#define svc_head (struct svc_callout *)((rtems_rpc_task_variables)->svc_svc_head)
+#define svc_head (rtems_rpc_task_variables->svc_svc_head)
 
 static struct svc_callout *svc_find();
 

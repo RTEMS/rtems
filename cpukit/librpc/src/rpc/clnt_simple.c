@@ -55,7 +55,7 @@ struct call_rpc_private {
 	int	oldprognum, oldversnum, valid;
 	char	*oldhost;
 };
-#define callrpc_private ((struct call_rpc_private *)(rtems_rpc_task_variables)->call_rpc_private)
+#define callrpc_private (rtems_rpc_task_variables->call_rpc_private)
 
 int
 callrpc(host, prognum, versnum, procnum, inproc, in, outproc, out)

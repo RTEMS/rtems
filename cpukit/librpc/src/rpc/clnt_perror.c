@@ -50,7 +50,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_perror.c,v 1.11 1999/08/28
 static char *auth_errmsg();
 #define CLNT_PERROR_BUFLEN 256
 
-#define buf ((char  *)(rtems_rpc_task_variables)->clnt_perror_buf)
+#define buf (rtems_rpc_task_variables->clnt_perror_buf)
 
 static char *
 _buf()
