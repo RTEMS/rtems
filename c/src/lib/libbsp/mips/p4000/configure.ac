@@ -16,10 +16,5 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-console/Makefile
-liblnk/Makefile
-start/Makefile
-startup/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
