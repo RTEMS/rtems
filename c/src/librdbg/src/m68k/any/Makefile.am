@@ -80,7 +80,7 @@ include_rdbg_HEADERS = $(srcdir)/remdeb.h
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
-all-local: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = remdeb_f.x $(GEN_C_FILES)
 

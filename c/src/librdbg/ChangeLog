@@ -1,3 +1,9 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/i386/any/Makefile.am: Remove all-local: $(ARCH).
+	* src/m68k/any/Makefile.am: Remove all-local: $(ARCH).
+	* src/powerpc/new_exception_processing/Makefile.am: Remove all-local: $(ARCH).
+
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reformat. Apply dirstamps to preinstallation.
