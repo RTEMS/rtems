@@ -125,7 +125,21 @@ struct rtems_termios_tty {
 	 * Callbacks to device-specific routines
 	 */
 	rtems_termios_callbacks	device;
+        volatile unsigned int   flow_ctrl;
+        unsigned int            lowwater,highwater;
 };
+
+/* fields for "flow_ctrl" status */
+#define FL_IREQXOF 1        /* input queue requests stop of incoming data */
+#define FL_ISNTXOF 2        /* XOFF has been sent to other side of line   */
+#define FL_IRTSOFF 4        /* RTS has been turned off for other side..   */
+
+#define FL_ORCVXOF 0x10     /* XOFF has been received                     */
+#define FL_OSTOP   0x20     /* output has been stopped due to XOFF        */
+
+#define FL_MDRTS   0x100    /* input controlled with RTS/CTS handshake    */
+#define FL_MDXON   0x200    /* input controlled with XON/XOFF protocol    */
+#define FL_MDXOF   0x400    /* output controlled with XON/XOFF protocol   */
 
 static struct rtems_termios_tty *ttyHead, *ttyTail;
 static rtems_id ttyMutex;
@@ -270,6 +284,7 @@ rtems_termios_open (
 		tty->termios.c_oflag = OPOST | ONLCR | XTABS;
 		tty->termios.c_cflag = B9600 | CS8 | CREAD;
 		tty->termios.c_lflag = ISIG | ICANON | IEXTEN | ECHO | ECHOK | ECHOE | ECHOCTL;
+
 		tty->termios.c_cc[VINTR] = '\003';
 		tty->termios.c_cc[VQUIT] = '\034';
 		tty->termios.c_cc[VERASE] = '\177';
@@ -285,11 +300,19 @@ rtems_termios_open (
 		tty->termios.c_cc[VWERASE] = '\027';
 		tty->termios.c_cc[VLNEXT] = '\026';
 
+		/* setup flow control mode, clear flow control flags */
+		tty->flow_ctrl = FL_MDXON;
+		/*
+		 * set low/highwater mark for XON/XOFF support
+		 */
+		tty->lowwater  = RAW_INPUT_BUFFER_SIZE * 1/2;
+		tty->highwater = RAW_INPUT_BUFFER_SIZE * 3/4;
 		/*
 		 * Bump name characer
 		 */
 		if (c++ == 'z')
 			c = 'a';
+
 	}
 	args->iop->data1 = tty;
 	if (!tty->refcount++ && tty->device.firstOpen)
@@ -356,6 +379,75 @@ rtems_termios_close (void *arg)
 	return RTEMS_SUCCESSFUL;
 }
 
+static void 
+termios_set_flowctrl(struct rtems_termios_tty *tty)
+{
+  rtems_interrupt_level level;
+  /* 
+   * check for flow control options to be switched off 
+   */
+
+  /* check for outgoing XON/XOFF flow control switched off */
+  if (( tty->flow_ctrl & FL_MDXON) &&
+      !(tty->termios.c_iflag & IXON)) {
+    /* clear related flags in flow_ctrl */
+    tty->flow_ctrl &= ~(FL_MDXON | FL_ORCVXOF);
+
+    /* has output been stopped due to received XOFF? */
+    if (tty->flow_ctrl & FL_OSTOP) {
+      /* disable interrupts    */
+      rtems_interrupt_disable(level);
+      tty->flow_ctrl &= ~FL_OSTOP;
+      /* check for chars in output buffer (or rob_state?) */
+      if (tty->rawOutBufState != rob_idle) {
+	/* if chars available, call write function... */
+	(*tty->device.write)(tty->minor,
+			     (char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
+      }
+      /* reenable interrupts */
+      rtems_interrupt_enable(level);
+    }
+  }
+  /* check for incoming XON/XOFF flow control switched off */
+  if (( tty->flow_ctrl & FL_MDXOF) &&
+      !(tty->termios.c_iflag & IXOFF)) {
+    /* clear related flags in flow_ctrl */
+    tty->flow_ctrl &= ~(FL_MDXOF);
+    /* FIXME: what happens, if we had sent XOFF but not yet XON? */
+    tty->flow_ctrl &= ~(FL_ISNTXOF);
+  }
+
+  /* check for incoming RTS/CTS flow control switched off */
+  if (( tty->flow_ctrl & FL_MDRTS) &&
+      !(tty->termios.c_cflag & CRTSCTS)) {
+    /* clear related flags in flow_ctrl */
+    tty->flow_ctrl &= ~(FL_MDRTS);
+    
+    /* restart remote Tx, if it was stopped */
+    if ((tty->flow_ctrl & FL_IRTSOFF) &&
+	(tty->device.startRemoteTx != NULL)) {
+      tty->device.startRemoteTx(tty->minor);
+    }
+    tty->flow_ctrl &= ~(FL_IRTSOFF);
+  }    
+  
+  /* 
+   * check for flow control options to be switched on  
+   */
+  /* check for incoming RTS/CTS flow control switched on */
+  if (tty->termios.c_cflag & CRTSCTS) {
+    tty->flow_ctrl |= FL_MDRTS;
+  }
+  /* check for incoming XON/XOF flow control switched on */
+  if (tty->termios.c_iflag & IXOFF) {
+    tty->flow_ctrl |= FL_MDXOF;
+  }
+  /* check for outgoing XON/XOF flow control switched on */
+  if (tty->termios.c_iflag & IXON) {
+    tty->flow_ctrl |= FL_MDXON;
+  }
+}
+
 rtems_status_code
 rtems_termios_ioctl (void *arg)
 {
@@ -380,6 +472,10 @@ rtems_termios_ioctl (void *arg)
 
 	case RTEMS_IO_SET_ATTRIBUTES:
 		tty->termios = *(struct termios *)args->buffer;
+
+		/* check for and process change in flow control options */
+		termios_set_flowctrl(tty);
+
 		if (tty->termios.c_lflag & ICANON) {
 			tty->rawInBufSemaphoreOptions = RTEMS_WAIT;
 			tty->rawInBufSemaphoreTimeout = RTEMS_NO_TIMEOUT;
@@ -464,9 +560,16 @@ osend (const char *buf, int len, struct rtems_termios_tty *tty)
 		tty->rawOutBuf[tty->rawOutBufHead] = *buf++;
 		tty->rawOutBufHead = newHead;
 		if (tty->rawOutBufState == rob_idle) {
+		  /* check, whether XOFF has been received */
+		  if (!(tty->flow_ctrl & FL_ORCVXOF)) {
 			(*tty->device.write)(tty->minor,
-				(char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
-			tty->rawOutBufState = rob_busy;
+				(char *)&tty->rawOutBuf[tty->rawOutBufTail],1);
+		  }
+		  else {
+		    /* remember that output has been stopped due to flow ctrl*/
+		    tty->flow_ctrl |= FL_OSTOP; 
+		  }
+		  tty->rawOutBufState = rob_busy;
 		}
 		rtems_interrupt_enable (level);
 		len--;
@@ -807,6 +910,30 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 			newHead = (tty->rawInBufHead + 1) % RAW_INPUT_BUFFER_SIZE;
 			c = tty->rawInBuf[newHead];
 			tty->rawInBufHead = newHead;
+			if(((tty->rawInBufTail-newHead+RAW_INPUT_BUFFER_SIZE)
+			    % RAW_INPUT_BUFFER_SIZE) 
+			   < tty->lowwater) {
+			  tty->flow_ctrl &= ~FL_IREQXOF;
+			  /* if tx stopped and XON should be sent... */
+			  if (((tty->flow_ctrl & (FL_MDXON | FL_ISNTXOF))
+			       ==                (FL_MDXON | FL_ISNTXOF))
+			      && ((tty->rawOutBufState == rob_idle)
+				  || (tty->flow_ctrl & FL_OSTOP))) {
+			    /* XON should be sent now... */
+			    (*tty->device.write)(tty->minor, 
+						 &(tty->termios.c_cc[VSTART]),
+						 1);
+			  }
+			  else if (tty->flow_ctrl & FL_MDRTS) {		    
+			    tty->flow_ctrl &= ~FL_IRTSOFF;		
+			    /* activate RTS line */
+			    if (tty->device.startRemoteTx != NULL) {
+			      tty->device.startRemoteTx(tty->minor);
+			    }
+			  }
+			}
+
+			/* continue processing new character */
 			if (tty->termios.c_lflag & ICANON) {
 				if  (siproc (c, tty))
 					return RTEMS_SUCCESSFUL;
@@ -866,26 +993,106 @@ rtems_termios_read (void *arg)
  * Place characters on raw queue.
  * NOTE: This routine runs in the context of the
  *       device receive interrupt handler.
- * Returns the number of characters dropped because of overlow.
+ * Returns the number of characters dropped because of overflow.
  */
 int
 rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 {
 	struct rtems_termios_tty *tty = ttyp;
 	unsigned int newTail;
+	char c;
+	int dropped = 0;
+	boolean flow_rcv = FALSE; /* TRUE, if flow control char received */
+	rtems_interrupt_level level;
 
-	while (len) {
+	while (len--) {
+	  c = *buf++;
+	  /* FIXME: implement IXANY: any character restarts output */
+	  /* if incoming XON/XOFF controls outgoing stream: */
+	  if (tty->flow_ctrl & FL_MDXON) {	    
+	    /* if received char is V_STOP and V_START (both are equal value) */
+	    if (c == tty->termios.c_cc[VSTOP]) {
+	      if (c == tty->termios.c_cc[VSTART]) {
+		/* received VSTOP and VSTART==VSTOP? */
+		/* then toggle "stop output" status  */
+		tty->flow_ctrl = tty->flow_ctrl ^ FL_ORCVXOF;
+	      }
+	      else {
+		/* VSTOP received (other code than VSTART) */
+		/* stop output                             */
+		tty->flow_ctrl |= FL_ORCVXOF;
+	      }
+	      flow_rcv = TRUE;
+	    }
+	    else if (c == tty->termios.c_cc[VSTART]) {
+	      /* VSTART received */
+	      /* restart output  */
+	      tty->flow_ctrl &= ~FL_ORCVXOF;
+	      flow_rcv = TRUE;
+	    }
+	  }
+	  if (flow_rcv) {
+	    /* restart output according to FL_ORCVXOF flag */
+	    if ((tty->flow_ctrl & (FL_ORCVXOF | FL_OSTOP)) == FL_OSTOP) {
+	      /* disable interrupts    */
+	      rtems_interrupt_disable(level);
+	      tty->flow_ctrl &= ~FL_OSTOP;
+	      /* check for chars in output buffer (or rob_state?) */
+	      if (tty->rawOutBufState != rob_idle) {
+	      /* if chars available, call write function... */
+		(*tty->device.write)(tty->minor,
+				     (char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
+	      }
+	      /* reenable interrupts */
+	      rtems_interrupt_enable(level);
+	    }
+	  }	
+	  else {
 		newTail = (tty->rawInBufTail + 1) % RAW_INPUT_BUFFER_SIZE;
-		if (newTail == tty->rawInBufHead) {
-			tty->rawInBufDropped += len;
-			break;
+		/* if chars_in_buffer > highwater                */
+		rtems_interrupt_disable(level);
+		if ((((newTail - tty->rawInBufHead + RAW_INPUT_BUFFER_SIZE) 
+		      % RAW_INPUT_BUFFER_SIZE)
+		     > tty->highwater) && 
+		    !(tty->flow_ctrl & FL_IREQXOF)) {
+		  /* incoming data stream should be stopped */
+		  tty->flow_ctrl |= FL_IREQXOF; 
+		  if ((tty->flow_ctrl & (FL_MDXOF | FL_ISNTXOF)) 
+		      ==                (FL_MDXOF             ) ){
+		    if ((tty->flow_ctrl & FL_OSTOP) || 
+			(tty->rawOutBufState == rob_idle)) {
+		      /* if tx is stopped due to XOFF or out of data */
+		      /*    call write function here                 */
+		      tty->flow_ctrl |= FL_ISNTXOF;
+		      (*tty->device.write)(tty->minor,
+					   &(tty->termios.c_cc[VSTOP]),
+					   1);
+		    }
+		  }
+		  else if ((tty->flow_ctrl & (FL_MDRTS | FL_IRTSOFF)) 
+			   ==                (FL_MDRTS             ) ) {
+		    tty->flow_ctrl |= FL_IRTSOFF;		
+		    /* deactivate RTS line */
+		    if (tty->device.stopRemoteTx != NULL) {
+		      tty->device.stopRemoteTx(tty->minor);
+		    }
+		  }
 		}
-		tty->rawInBuf[newTail] = *buf++;
-		len--;
-		tty->rawInBufTail = newTail;
+		/* reenable interrupts */
+		rtems_interrupt_enable(level);
+
+		if (newTail == tty->rawInBufHead) {
+		        dropped++;
+		}
+		else {
+		        tty->rawInBuf[newTail] = c;
+		        tty->rawInBufTail = newTail;
+		}		
+	  }
 	}
+	tty->rawInBufDropped += dropped;
 	rtems_semaphore_release (tty->rawInBufSemaphore);
-	return len;
+	return dropped;
 }
 
 /*
@@ -904,31 +1111,64 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 	unsigned int newTail;
 	int nToSend;
 
-	if (tty->rawOutBufState == rob_wait)
-		rtems_semaphore_release (tty->rawOutBufSemaphore);
-	if ( tty->rawOutBufHead == tty->rawOutBufTail )
-		return 0;
-	newTail = (tty->rawOutBufTail + len) % RAW_OUTPUT_BUFFER_SIZE;
-	if (newTail == tty->rawOutBufHead) {
-		/*
-		 * Buffer empty
-		 */
-		tty->rawOutBufState = rob_idle;
-		nToSend = 0;
+	/* check for XOF/XON to send */
+	if ((tty->flow_ctrl & (FL_MDXOF | FL_IREQXOF | FL_ISNTXOF))
+	    == (FL_MDXOF | FL_IREQXOF)) {
+	  /* XOFF should be sent now... */
+	  (*tty->device.write)(tty->minor, 
+			       &(tty->termios.c_cc[VSTOP]), 1);
+	  tty->flow_ctrl |= FL_ISNTXOF;
+	  nToSend = 1;
+	}
+	else if ((tty->flow_ctrl & (FL_IREQXOF | FL_ISNTXOF))
+		 == FL_ISNTXOF) {
+	  /* NOTE: send XON even, if no longer in XON/XOFF mode... */
+	  /* XON should be sent now... */
+	  (*tty->device.write)(tty->minor, 
+			       &(tty->termios.c_cc[VSTART]), 1);
+	  tty->flow_ctrl &= ~FL_ISNTXOF;
+	  nToSend = 1;
 	}
 	else {
-		/*
-		 * Buffer not empty, start tranmitter
-		 */
-		if (newTail > tty->rawOutBufHead)
-			nToSend = RAW_OUTPUT_BUFFER_SIZE - newTail;
-		else
-			nToSend = tty->rawOutBufHead - newTail;
-		(*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[newTail], nToSend);
-		tty->rawOutBufState = rob_busy;
+	  if (tty->rawOutBufState == rob_wait)
+	    rtems_semaphore_release (tty->rawOutBufSemaphore);
+	  if ( tty->rawOutBufHead == tty->rawOutBufTail )
+	    return 0;	
+	  newTail = (tty->rawOutBufTail + len) % RAW_OUTPUT_BUFFER_SIZE;
+	  if (newTail == tty->rawOutBufHead) {
+	    /*
+	     * Buffer empty
+	     */
+	    tty->rawOutBufState = rob_idle;
+	    nToSend = 0;
+	  }
+	  /* check, whether output should stop due to received XOFF */
+	  else if ((tty->flow_ctrl & (FL_MDXON | FL_ORCVXOF)) 
+		   ==                (FL_MDXON | FL_ORCVXOF)) {
+            /* Buffer not empty, but output stops due to XOFF */
+	    /* set flag, that output has been stopped */
+	    tty->flow_ctrl |= FL_OSTOP;
+	    nToSend = 0;
+	  }
+	  else {
+	    /*
+	     * Buffer not empty, start tranmitter
+	     */
+	    if (newTail > tty->rawOutBufHead)
+	      nToSend = RAW_OUTPUT_BUFFER_SIZE - newTail;
+	    else
+	      nToSend = tty->rawOutBufHead - newTail;
+	    /* when flow control XON or XOF, don't send blocks of data     */
+	    /* to allow fast reaction on incoming flow ctrl and low latency*/
+	    /* for outgoing flow control                                   */
+	    if (tty->flow_ctrl & (FL_MDXON | FL_MDXOF)) {
+	      nToSend = 1;
+	    }
+	    (*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[newTail], nToSend);
+	    tty->rawOutBufState = rob_busy;
+	  }
+	  tty->rawOutBufTail = newTail;
 	}
-	tty->rawOutBufTail = newTail;
-
 	return nToSend;
 }
 
