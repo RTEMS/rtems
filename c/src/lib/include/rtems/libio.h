@@ -128,20 +128,30 @@ void rtems_register_libio_handler(int handler_flag,
 #define       RTEMS_IO_SET_ATTRIBUTES 2
 
 /*
- * Termios prototypes
+ * Callbacks from TERMIOS routines to device-dependent code
+ */
+#include <termios.h>
+typedef struct rtems_termios_callbacks {
+  int       (*firstOpen)(int major, int minor, void *arg);
+  int       (*lastClose)(int major, int minor, void *arg);
+  int       (*pollRead)(int minor);
+  int       (*write)(int minor, const char *buf, int len);
+  int       (*setAttributes)(int minor, const struct termios *t);
+  int       (*stopRemoteTx)(int minor);
+  int       (*startRemoteTx)(int minor);
+  int       outputUsesInterrupts;
+} rtems_termios_callbacks;
+
+/*
+ * Device-independent TERMIOS routines
  */
 void rtems_termios_initialize (void);
 rtems_status_code rtems_termios_open (
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg,
-  int                       (*deviceFirstOpen)(int major, int minor, void *arg),
-  int                       (*deviceLastClose)(int major, int minor, void *arg),
-  int                       (*deviceRead)(int minor),
-  int                       (*deviceWrite)(int minor, const char *buf, int len),
-  int                         deviceOutputUsesInterrupts
+  rtems_device_major_number      major,
+  rtems_device_minor_number      minor,
+  void                          *arg,
+  const rtems_termios_callbacks *callbacks
   );
-
 rtems_status_code rtems_termios_close (void *arg);
 rtems_status_code rtems_termios_read (void *arg);
 rtems_status_code rtems_termios_write (void *arg);

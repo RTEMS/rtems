@@ -99,7 +99,6 @@ struct rtems_termios_tty {
 	/*
 	 * Raw output character buffer
 	 */
-	char			outputUsesInterrupts;
 	volatile char		rawOutBuf[RAW_OUTPUT_BUFFER_SIZE];
 	volatile unsigned int	rawOutBufHead;
 	volatile unsigned int	rawOutBufTail;
@@ -109,9 +108,7 @@ struct rtems_termios_tty {
 	/*
 	 * Callbacks to device-specific routines
 	 */
-	int		(*lastClose)(int major, int minor, void *arg);
-	int		(*read)(int minor);
-	int		(*write)(int minor, const char *buf, int len);
+	rtems_termios_callbacks	device;
 };
 
 static struct rtems_termios_tty *ttyHead, *ttyTail;
@@ -167,14 +164,10 @@ rtems_termios_initialize (void)
  */
 rtems_status_code
 rtems_termios_open (
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg,
-  int                      (*deviceFirstOpen)(int major, int minor, void *arg),
-  int                      (*deviceLastClose)(int major, int minor, void *arg),
-  int                      (*deviceRead)(int minor),
-  int                      (*deviceWrite)(int minor, const char *buf, int len),
-  int                        deviceOutputUsesInterrupts
+  rtems_device_major_number      major,
+  rtems_device_minor_number      minor,
+  void                          *arg,
+  const rtems_termios_callbacks *callbacks
   )
 {
 	rtems_status_code sc;
@@ -244,9 +237,8 @@ rtems_termios_open (
 		/*
 		 * Set callbacks
 		 */
-		tty->write = deviceWrite;
-		tty->lastClose = deviceLastClose;
-		if ((tty->read = deviceRead) == NULL) {
+		tty->device = *callbacks;
+		if (!tty->device.pollRead) {
 			sc = rtems_semaphore_create (
 				rtems_build_name ('T', 'R', 'r', c),
 				0,
@@ -264,7 +256,6 @@ rtems_termios_open (
 		 */
 		tty->column = 0;
 		tty->cindex = tty->ccount = 0;
-		tty->outputUsesInterrupts = deviceOutputUsesInterrupts;
 
 		/*
 		 * Set default parameters
@@ -291,8 +282,8 @@ rtems_termios_open (
 		/*
 		 * Device-specific open
 		 */
-		if (deviceFirstOpen)
-			(*deviceFirstOpen) (major, minor, arg);
+		if (tty->device.firstOpen)
+			(*tty->device.firstOpen)(major, minor, arg);
 
 		/*
 		 * Bump name characer
@@ -317,8 +308,8 @@ rtems_termios_close (void *arg)
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_fatal_error_occurred (sc);
 	if (--tty->refcount == 0) {
-		if (tty->lastClose)
-			 (*tty->lastClose) (tty->major, tty->minor, arg);
+		if (tty->device.lastClose)
+			 (*tty->device.lastClose)(tty->major, tty->minor, arg);
 		if (tty->forw == NULL)
 			ttyTail = tty->back;
 		else
@@ -330,7 +321,7 @@ rtems_termios_close (void *arg)
 		rtems_semaphore_delete (tty->isem);
 		rtems_semaphore_delete (tty->osem);
 		rtems_semaphore_delete (tty->rawOutBufSemaphore);
-		if (tty->read == NULL)
+		if (!tty->device.pollRead)
 			rtems_semaphore_delete (tty->rawInBufSemaphore);
 		free (tty);
 	}
@@ -390,6 +381,8 @@ rtems_termios_ioctl (void *arg)
 				}
 			}
 		}
+		if (tty->device.setAttributes)
+			(*tty->device.setAttributes)(tty->minor, &tty->termios);
 		break;
 	}
 	rtems_semaphore_release (tty->osem);
@@ -407,8 +400,8 @@ osend (const char *buf, int len, struct rtems_termios_tty *tty)
 	rtems_interrupt_level level;
 	rtems_status_code sc;
 
-	if (!tty->outputUsesInterrupts) {
-		(*tty->write)(tty->minor, buf, len);
+	if (!tty->device.outputUsesInterrupts) {
+		(*tty->device.write)(tty->minor, buf, len);
 		return;
 	}
 	newHead = tty->rawOutBufHead;
@@ -442,7 +435,7 @@ osend (const char *buf, int len, struct rtems_termios_tty *tty)
 		if (tty->rawOutBufState == rob_idle) {
 			rtems_interrupt_enable (level);
 			tty->rawOutBufState = rob_busy;
-			(*tty->write)(tty->minor, (char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
+			(*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
 		}
 		else {
 			rtems_interrupt_enable (level);
@@ -718,7 +711,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 
 	if (tty->termios.c_lflag & ICANON) {
 		for (;;) {
-			n = (*tty->read)(tty->minor);
+			n = (*tty->device.pollRead)(tty->minor);
 			if (n < 0) {
 				rtems_task_wake_after (1);
 			}
@@ -733,7 +726,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 		if (!tty->termios.c_cc[VMIN] && tty->termios.c_cc[VTIME])
 			rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then);
 		for (;;) {
-			n = (*tty->read)(tty->minor);
+			n = (*tty->device.pollRead)(tty->minor);
 			if (n < 0) {
 				if (tty->termios.c_cc[VMIN]) {
 					if (tty->termios.c_cc[VTIME] && tty->ccount) {
@@ -824,7 +817,7 @@ rtems_termios_read (void *arg)
 	if (tty->cindex == tty->ccount) {
 		tty->cindex = tty->ccount = 0;
 		tty->read_start_column = tty->column;
-		if (tty->read)
+		if (tty->device.pollRead)
 			sc = fillBufferPoll (tty);
 		else
 			sc = fillBufferQueue (tty);
@@ -897,7 +890,7 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 			nToSend = RAW_OUTPUT_BUFFER_SIZE - newTail;
 		else
 			nToSend = tty->rawOutBufHead - newTail;
-		(*tty->write)(tty->minor, (char *)&tty->rawOutBuf[newTail], nToSend);
+		(*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[newTail], nToSend);
 	}
 	tty->rawOutBufTail = newTail;
 }
