@@ -1,3 +1,7 @@
+2004-09-08	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* FAQ/build45.t: Misc. corrections.
+
 2004-08-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rgdb_specs/layers.txt, rgdb_specs/process.txt,
