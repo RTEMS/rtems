@@ -1,3 +1,14 @@
+2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mptests/Makefile.am: New.
+	* mptests/mp01/Makefile.am: New.
+	* mptests/mp01/node1/Makefile.am: New.
+	* mptests/mp01/node2/Makefile.am: New.
+	* samples/base_mp/Makefile.am: Comment out building mptest$(EXEEXT).
+	* samples/base_mp/node1/Makefile.am: New.
+	* samples/base_mp/node2/Makefile.am: New.
+	* configure.ac: Add mptests/mp01. Add samples/base_mp.
+
 2002-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* tmtests/tm20/Makefile.am: Remove EXPADA.
