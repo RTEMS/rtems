@@ -54,7 +54,9 @@ Objects_Control *_Objects_Get(
   unsigned32       index;
 
   /* index = _Objects_Get_index( id ); */
-  index = (unsigned16) id;
+  index = id & 0x0000ffff;
+  /* This should work but doesn't always :( */
+  /* index = (unsigned16) id; */
 
   if ( information->maximum >= index ) {
     _Thread_Disable_dispatch();

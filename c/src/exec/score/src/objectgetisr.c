@@ -58,7 +58,9 @@ Objects_Control *_Objects_Get_isr_disable(
   ISR_Level        level;
 
   /* index = _Objects_Get_index( id ); */
-  index = (unsigned16) id;
+  index = id & 0x0000ffff;
+  /* This should work but doesn't always :( */
+  /* index = (unsigned16) id; */
 
   _ISR_Disable( level );
   if ( information->maximum >= index ) {
