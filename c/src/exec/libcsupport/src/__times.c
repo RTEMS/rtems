@@ -63,3 +63,10 @@ clock_t times(
   return _times( ptms );
 }
 
+clock_t _times_r(
+   struct _reent *ptr,
+   struct tms  *ptms
+)
+{
+  return _times(ptms);
+}
