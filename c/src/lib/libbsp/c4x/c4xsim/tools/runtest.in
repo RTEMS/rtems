@@ -131,7 +131,7 @@ do
    TEST_TYPE="single"
 
    case $tname in
-       monitor)
+       monitor* | termios* | fileio*)
            if [ $run_to_completion = "yes" ]
            then
                 warn "Skipping $tname; it is interactive"
