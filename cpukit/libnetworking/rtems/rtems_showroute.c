@@ -2,8 +2,6 @@
  *  $Id$
  */
 
-/* #include <stdlib.h> */
-
 #include <sys/param.h>
 #include <sys/queue.h>
 #include <sys/systm.h>
@@ -24,10 +22,11 @@
 #include <arpa/inet.h>
 
 /*
- * We'll use the application versions of malloc and free.
+ * We'll use the application versions of realloc and free.
  */
-#undef malloc
 #undef free
+#undef malloc
+#include <stdlib.h>
 
 /*
  * Information per route
