@@ -102,9 +102,9 @@ int open(
   /*
    *  See if the file exists.
    */
-  
 
-  status = rtems_filesystem_evaluate_path( pathname, eval_flags, &temp_loc, TRUE );
+  status = rtems_filesystem_evaluate_path(
+     pathname, eval_flags, &temp_loc, TRUE );
 
   if ( status == -1 ) {
     if ( errno != ENOENT ) {

@@ -70,7 +70,7 @@ int IMFS_evaluate_permission(
   IMFS_jnode_t *jnode;
   int           flags_to_test;
 
-  if (! rtems_libio_is_valid_perms( flags ) ) {
+  if ( !rtems_libio_is_valid_perms( flags ) ) {
     assert( 0 );
     set_errno_and_return_minus_one( EIO );    
   }
@@ -141,7 +141,7 @@ int IMFS_evaluate_hard_link(
    * Verify we have the correct permissions for this node.
    */
 
-  if (! IMFS_evaluate_permission( node, flags ) )
+  if ( !IMFS_evaluate_permission( node, flags ) )
     set_errno_and_return_minus_one( EACCES );
 
   return result;
@@ -203,7 +203,7 @@ int IMFS_evaluate_sym_link(
    * Verify we have the correct permissions for this node.
    */
 
-  if (! IMFS_evaluate_permission( node, flags ) )
+  if ( !IMFS_evaluate_permission( node, flags ) )
     set_errno_and_return_minus_one( EACCES );
 
   return result;
@@ -307,7 +307,7 @@ int IMFS_evaluate_for_make(
 
     if ( type != IMFS_NO_MORE_PATH )
       if ( node->type == IMFS_DIRECTORY )
-        if (! IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_SEARCH ) )
+        if ( !IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_SEARCH ) )
            set_errno_and_return_minus_one( EACCES );
 
     node = pathloc->node_access;
@@ -422,7 +422,7 @@ int IMFS_evaluate_for_make(
    */
 
   for( ; path[i] != '\0'; i++) {
-    if (! IMFS_is_separator( path[ i ] ) ) 
+    if ( !IMFS_is_separator( path[ i ] ) ) 
       set_errno_and_return_minus_one( ENOENT );
   }
 
@@ -443,7 +443,7 @@ int IMFS_evaluate_for_make(
    * We must have Write and execute permission on the returned node.
    */
 
-  if (! IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_WX ) )
+  if ( !IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_WX ) )
     set_errno_and_return_minus_one( EACCES );
   
   return result;
@@ -472,7 +472,7 @@ int IMFS_eval_path(
   IMFS_jnode_t                       *node;
   int                                 result; 
 
-  if (! rtems_libio_is_valid_perms( flags ) ) {
+  if ( !rtems_libio_is_valid_perms( flags ) ) {
     assert( 0 );
     set_errno_and_return_minus_one( EIO );    
   }
@@ -501,7 +501,7 @@ int IMFS_eval_path(
      */
     if ( type != IMFS_NO_MORE_PATH )
       if ( node->type == IMFS_DIRECTORY )
-        if (! IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_SEARCH ) )
+        if ( !IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_SEARCH ) )
            set_errno_and_return_minus_one( EACCES );
 
     node = pathloc->node_access;
@@ -622,7 +622,7 @@ int IMFS_eval_path(
    * Verify we have the correct permissions for this node.
    */
 
-  if (! IMFS_evaluate_permission( pathloc, flags ) )
+  if ( !IMFS_evaluate_permission( pathloc, flags ) )
     set_errno_and_return_minus_one( EACCES );
 
   return result;

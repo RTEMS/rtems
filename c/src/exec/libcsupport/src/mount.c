@@ -101,20 +101,25 @@ int mount(
 /* XXX add code to check for required operations */
 
   /*
-   *  Are the file system options valid?
+   *  Is there a file system operations table?
    */
 
-  options = get_file_system_options( fsoptions );
-  if ( options == RTEMS_FILESYSTEM_BAD_OPTIONS ){
+  if ( fs_ops == NULL ) {
     errno = EINVAL;
     return -1;
   }
 
   /*
-   *  Is the file system type valid?
+   *  Are the file system options valid?
    */
 
-  if ( fs_ops == NULL ){
+  if ( fsoptions == NULL ) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  options = get_file_system_options( fsoptions );
+  if ( options == RTEMS_FILESYSTEM_BAD_OPTIONS ) {
     errno = EINVAL;
     return -1;
   }
@@ -125,12 +130,17 @@ int mount(
 
    temp_mt_entry = malloc( sizeof(rtems_filesystem_mount_table_entry_t) );
 
+   if ( !temp_mt_entry ) {
+     errno = ENOMEM;
+     return -1;
+   }
+
    temp_mt_entry->mt_fs_root.mt_entry = temp_mt_entry;
    temp_mt_entry->options = options;
-   if( device )
-      sprintf( temp_mt_entry->dev, "%s", device );
+   if ( device )
+     sprintf( temp_mt_entry->dev, "%s", device );
    else
-      temp_mt_entry->dev = 0;
+     temp_mt_entry->dev = 0;
 
   /*
    *  The mount_point should be a directory with read/write/execute
@@ -149,7 +159,7 @@ int mount(
       * Test to see if it is a directory
       */
 
-     if ( temp_loc.ops->node_type( &temp_loc ) != RTEMS_FILESYSTEM_DIRECTORY ){ 
+     if ( temp_loc.ops->node_type( &temp_loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
        errno = ENOTDIR;
        goto cleanup_and_bail;
      }
@@ -158,7 +168,7 @@ int mount(
       *  You can only mount one file system onto a single mount point.
       */
 
-     if ( search_mt_for_mount_point( &temp_loc ) == FOUND ){
+     if ( search_mt_for_mount_point( &temp_loc ) == FOUND ) {
        errno = EBUSY;
        goto cleanup_and_bail;
      }
@@ -179,8 +189,8 @@ int mount(
       */
 
      if ( !temp_loc.ops->mount ){
-      errno = ENOTSUP;
-      goto cleanup_and_bail;
+       errno = ENOTSUP;
+       goto cleanup_and_bail;
      }
 
      if ( temp_loc.ops->mount( temp_mt_entry ) ) {
@@ -282,7 +292,7 @@ int search_mt_for_mount_point(
   rtems_filesystem_location_info_t *location_of_mount_point
 )
 {
-  Chain_Node  *the_node;
+  Chain_Node                           *the_node;
   rtems_filesystem_mount_table_entry_t *the_mount_entry;
 
   for ( the_node = rtems_filesystem_mount_table_control.first;
