@@ -1,3 +1,18 @@
+2000-12-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Added macro support to ITRON API.  This is known to compile.
+	* Makefile.am: Added macros directory.
+	* configure.in: Removed error check for enabling macros.
+	* macros/.cvsignore, macros/Makefile.am,
+	macros/rtems/.cvsignore, macros/rtems/Makefile.am,
+	macros/rtems/itron/.cvsignore, macros/rtems/itron/Makefile.am,
+	macros/rtems/itron/eventflags.inl, macros/rtems/itron/fmempool.inl,
+	macros/rtems/itron/intr.inl, macros/rtems/itron/mbox.inl,
+	macros/rtems/itron/msgbuffer.inl, macros/rtems/itron/network.inl,
+	macros/rtems/itron/port.inl, macros/rtems/itron/semaphore.inl,
+	macros/rtems/itron/sysmgmt.inl, macros/rtems/itron/task.inl,
+	macros/rtems/itron/time.inl, macros/rtems/itron/vmempool.inl: New files.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
