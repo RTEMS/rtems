@@ -36,7 +36,7 @@ include $(top_srcdir)/sample.am
 
 AM_CPPFLAGS += -DNOSIGNAL -DCYGNUS -DNOMAIN
 
-LD_LIBS += -lm
+LD_LIBS = -lm
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 

@@ -1,3 +1,7 @@
+2001-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* paranoia/Makefile.am: Use LD_LIBS = -lm to make automake-1.5 happy.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* unlimited/init.c, unlimited/system.h, unlimited/test1.c,
