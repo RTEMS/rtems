@@ -31,7 +31,6 @@ all-local: $(TMPINSTALL_FILES)
 # They should either be installed or removed
 EXTRA_DIST = \
 ipl.h \
-sh4_regs.h \
 sh4uart.h \
 sh7750_regs.h
 

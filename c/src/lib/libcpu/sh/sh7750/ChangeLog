@@ -1,3 +1,9 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* include/sh4_regs.h: Deleted and contents merged in score/cpu
+	to avoid dependencies.
+	* include/Makefile.am: Reflects above.
+
 2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
 
 	* clock/Makefile.am, clock/ckinit.c, clock/.cvsignore, Makefile.am,
