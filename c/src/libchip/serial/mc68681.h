@@ -34,10 +34,28 @@ extern "C" {
 
 /*
  *  Data Port bit map configuration
+ *
+ *   D0      : Baud Rate Set Selection
+ *   D1 - D2 : Extended Baud Rate Setting
  */
 
-#define MC68681_DATA_BAUD_RATE_SET_1      0
-#define MC68681_DATA_BAUD_RATE_SET_2      1
+#define MC68681_DATA_BAUD_RATE_SET_1      0  /* ACR[7] = 0 */
+#define MC68681_DATA_BAUD_RATE_SET_2      1  /* ACR[7] = 1 */
+
+#define MC68681_XBRG_IGNORED              (0 << 1)
+#define MC68681_XBRG_ENABLED              (1 << 1)
+#define MC68681_XBRG_DISABLED             (2 << 1)
+#define MC68681_XBRG_MASK                 (3 << 1)
+
+/*
+ *  Custom baud rate table information
+ */
+
+typedef unsigned char mc68681_baud_t;
+typedef mc68681_baud_t mc68681_baud_table_t[RTEMS_TERMIOS_NUMBER_BAUD_RATES];
+/* typedef mc68681_baud_t[RTEMS_TERMIOS_NUMBER_BAUD_RATES] mc68681_baud_table_t;*/
+
+#define MC68681_BAUD_NOT_VALID 0xFF
 
 /*
  * Driver function table
