@@ -7,6 +7,9 @@
 @c
 
 @set CYGWIN-VERSION B19
+@set CYGWIN-FTP http://www.cygnus.com/misc/gnu-win32
+@set DOS2UNIX-FTP ftp://ftp.micros.hensa.ac.uk/platforms/ibm-pc/ms-dos/simtelnet/txtutl/dos2unix.zip
+@set PFE-FTP http://www.lancs.ac.uk/people/cpaap/pfe/
 
 @chapter Using MS-Windows as a Development Host
 
@@ -53,7 +56,7 @@ the GNU @code{zip} and @code{tar} programs as shown below:
 tar -xzvf archive.gzip 
 @end example
 
-XXX Is tar provided with Cygwin32?  If not, recommend a url.
+@code{tar} is provided with Cygwin32.
 
 @subsection Text Editor
 
@@ -61,8 +64,8 @@ You absolutely have to use a text editor which can
 save files with Unix format (so don't use Notepad 
 nor Wordpad). If you do not have an appropriate
 text editor, try @b{Programmers File Editor}, it is
-free and very convenient (see 
-http://www.lancs.ac.uk/people/cpaap/pfe/).
+free and very convenient.  This editor may be downloaded
+from @href{@value{PFE-FTP},,@value{PFE-FTP}}.
 
 @subsection Bug in Patch Utility
 
@@ -75,6 +78,10 @@ be used to put them back into Unix format as shown below:
 @example
 dos2unix XXX
 @end example
+
+The dos2unix utility may be downloaded from:
+
+@href{@value{DOS2UNIX-FTP},,,@value{DOS2UNIX-FTP}}.
 
 @subsection Files Needed
 
@@ -89,10 +96,10 @@ Web browser or ftp client.
 @table @b
 
 @item cdk.exe
-http://www.cygnus.com/misc/gnu-win32
+@ref{@value{CYGWIN-FTP},,@value{CYGWIN-FTP}}
 
 @item usertools.exe
-http://www.cygnus.com/misc/gnu-win32
+@ref{@value{CYGWIN-FTP},,@value{CYGWIN-FTP}}
 
 @end table
 
@@ -141,7 +148,17 @@ mkdir /build
 mkdir /usr
 @end example
 
-@item Copy "sh.exe" in /bin. @b{XXX to where, WHY?}
+@item The light Bourne shell provided with Cygwin B19 is buggy.
+You should copy it to a fake name and copy @code{bash.exe} to @code{sh.exe}:
+
+@example
+cd <RTOS>/GnuWin32/b19/bin
+mv sh.exe old_sh.exe
+cp bash.exe sh.exe
+@end example
+
+The Bourne shell often has to be present in /bin directory when installing
+new packages.
 
 @item Open the file 
 @code{/gnuwin32/b19/H-i386-cygwin32/lib/gcc-lib/i386-cygwin32/2.7-b19/specs},
@@ -183,7 +200,7 @@ command to configure @value{BINUTILS-VERSION}:
 @example
 @value{BINUTILS-UNTAR}/configure --verbose --target=m68k-rtems \
     --prefix=/gcc-m68k-rtems --with-gnu-as \
-    --with-gnu-ld --with-targets=all --with-newlib
+    --with-gnu-ld --with-targets=all --with-newlib --with-multilib
 @end example
 
 Replace @code{m68k-rtems} with the target configuration
@@ -230,7 +247,7 @@ to the cross-compiler executables to your search path
 by adding the following line:
 
 @example
-PATH=\gcc-m68k-rtems\bin;%PATH%
+PATH=O:\gcc-m68k-rtems\bin;%PATH%
 @end example
 
 @item You can erase the /build directory content.
@@ -277,7 +294,7 @@ or Objective-C):
 @example
 ../@value{GCC-UNTAR}/configure --verbose --target=m68k-rtems \
     --prefix=/gcc-m68k --with-gnu-as --with-gnu-ld \
-    --with-targets=all --with-newlib
+    --with-targets=all --with-newlib --with-multilib
 @end example
 
 Replace @code{m68k-rtems} with the target configuration
