@@ -31,11 +31,11 @@
 shm_config_table BSP_shm_cfgtbl;
 
 void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
+  uint32_t           localnode,
   shm_config_table **shmcfg
 )
 {
-   BSP_shm_cfgtbl.base         = (rtems_unsigned32 *)0xc0000000;
+   BSP_shm_cfgtbl.base         = (uint32_t*)0xc0000000;
    BSP_shm_cfgtbl.length       = 64 * 1024;
    BSP_shm_cfgtbl.format       = SHM_BIG;
 
