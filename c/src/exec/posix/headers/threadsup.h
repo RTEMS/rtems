@@ -25,7 +25,7 @@ typedef struct {
   int                     cancelation_requested;
   Chain_Control           Cancellation_Handlers;
 
-} POSIX_API_Thread_Support_Control;
+} POSIX_API_Control;
 
 #endif
 /* end of include file */

@@ -7,9 +7,13 @@
 #include <limits.h>
 
 #include <rtems/system.h>
+#include <rtems/score/apiext.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/userext.h>
+#include <rtems/score/wkspace.h>
 #include <rtems/posix/pthread.h>
+#include <rtems/posix/config.h>
 
 /*PAGE
  *
@@ -35,6 +39,100 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
 
 /*PAGE
  *
+ *  _POSIX_Threads_Create_extension
+ *
+ *  XXX
+ */
+ 
+boolean _POSIX_Threads_Create_extension(
+  Thread_Control *executing,
+  Thread_Control *created
+)
+{
+  POSIX_API_Control *api;
+ 
+  api = _Workspace_Allocate( sizeof( POSIX_API_Control ) );
+ 
+  if ( !api )
+    return FALSE;
+ 
+  created->API_Extensions[ THREAD_API_POSIX ] = api;
+ 
+  /* XXX something should go here */
+
+  return TRUE;
+}
+ 
+/*PAGE
+ *
+ *  _POSIX_Threads_Delete_extension
+ *
+ *  XXX
+ */
+ 
+User_extensions_routine _POSIX_Threads_Delete_extension(
+  Thread_Control *executing,
+  Thread_Control *deleted
+)
+{
+  (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_POSIX ] );
+ 
+  deleted->API_Extensions[ THREAD_API_POSIX ] = NULL;
+}
+
+/*PAGE
+ *
+ *  _POSIX_Threads_Initialize_user_tasks
+ *
+ *  This routine creates and starts all configured user
+ *  initialzation threads.
+ *
+ *  Input parameters: NONE
+ *
+ *  Output parameters:  NONE
+ */
+ 
+void _POSIX_Threads_Initialize_user_tasks( void )
+{
+  unsigned32                        index;
+  unsigned32                        maximum;
+  posix_initialization_tasks_table *user_tasks;
+ 
+  /*
+   *  NOTE:  This is slightly different from the Ada implementation.
+   */
+ 
+  user_tasks = _POSIX_Threads_User_initialization_tasks;
+  maximum    = _POSIX_Threads_Number_of_initialization_tasks;
+ 
+  for ( index=0 ; index < maximum ; index++ ) {
+    ; 
+  }
+}
+
+API_extensions_Control _POSIX_Threads_API_extensions = {
+  { NULL, NULL },
+  NULL,                                     /* predriver */
+  _POSIX_Threads_Initialize_user_tasks,     /* postdriver */
+  NULL,                                     /* post switch */
+};
+ 
+User_extensions_Control _POSIX_Threads_User_extensions = {
+  { NULL, NULL },
+  { _POSIX_Threads_Create_extension,          /* create */
+    NULL,                                     /* start */
+    NULL,                                     /* restart */
+    _POSIX_Threads_Delete_extension,          /* delete */
+    NULL,                                     /* switch */
+    NULL,                                     /* begin */
+    NULL,                                     /* exitted */
+    NULL                                      /* fatal */
+  }
+};
+ 
+
+/*PAGE
+ *
  *  _POSIX_Threads_Manager_initialization
  *
  *  This routine initializes all threads manager related data structures.
@@ -46,9 +144,19 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
  */
  
 void _POSIX_Threads_Manager_initialization(
-  unsigned32 maximum_pthreads
+  unsigned32                        maximum_pthreads,
+  unsigned32                        number_of_initialization_tasks,
+  posix_initialization_tasks_table *user_tasks
+  
 )
 {
+  _POSIX_Threads_Number_of_initialization_tasks = 
+                                                 number_of_initialization_tasks;
+  _POSIX_Threads_User_initialization_tasks = user_tasks;
+
+  if ( user_tasks == NULL || number_of_initialization_tasks == 0 )
+    _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, TRUE, EINVAL );
+
   _Objects_Initialize_information(
     &_POSIX_Threads_Information,
     OBJECTS_POSIX_THREADS,
@@ -59,6 +167,8 @@ void _POSIX_Threads_Manager_initialization(
     _POSIX_PATH_MAX,
     TRUE
   );
+
+  /* XXX add api extensions */
 }
 
 /*PAGE
@@ -402,7 +512,29 @@ int pthread_create(
   void                  *arg
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  const pthread_attr_t  *local_attr;
+
+  local_attr = (attr) ? attr : &_POSIX_Threads_Default_attributes;
+
+  if ( !local_attr->is_initialized )
+    return EINVAL;
+
+  /*
+   *  Core Thread Initialize insures we get the minimum amount of
+   *  stack space.
+   */
+
+#if 0
+  int contentionscope;
+  int inheritsched;
+  int schedpolicy;
+  struct sched_param schedparam;
+
+#if defined(_POSIX_THREAD_CPUTIME)
+  int  cputime_clock_allowed;  /* see time.h */
+#endif
+  int  detachstate;
+#endif
 }
 
 /*PAGE

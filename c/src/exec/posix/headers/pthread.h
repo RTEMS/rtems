@@ -21,6 +21,9 @@
 extern "C" {
 #endif
 
+#include <rtems/posix/config.h>
+#include <rtems/posix/threadsup.h>
+
 /*
  *  Data Structure used to manage a POSIX thread 
  */
@@ -33,6 +36,15 @@ typedef Thread_Control POSIX_Threads_Control;
  */
  
 EXTERN Objects_Information  _POSIX_Threads_Information;
+
+/*
+ *  These are used to manage the user initialization tasks.
+ */
+ 
+EXTERN posix_initialization_tasks_table 
+                   *_POSIX_Threads_User_initialization_tasks;
+EXTERN unsigned32   _POSIX_Threads_Number_of_initialization_tasks;
+
  
 /*
  *  _POSIX_Threads_Manager_initialization
@@ -43,7 +55,9 @@ EXTERN Objects_Information  _POSIX_Threads_Information;
  */
  
 void _POSIX_Threads_Manager_initialization(
-  unsigned32 maximum_pthreads
+  unsigned32                        maximum_pthreads,
+  unsigned32                        number_of_initialization_tasks,
+  posix_initialization_tasks_table *user_tasks
 );
  
 /*
