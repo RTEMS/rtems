@@ -203,11 +203,6 @@ m68k_isr_entry set_vector(
   int                 type
 );
 
-/*
- * Values assigned by link editor
- */
-extern void *_RomBase, *_RamBase;
-
 #ifdef __cplusplus
 }
 #endif
