@@ -19,10 +19,10 @@ Provides:     @target_alias@-gdb
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      @Version@
+Version:      gdb-@gdb_version@
 Summary:      gdb for target @target_alias@
-Source0:      	gdb-4.18.tar.gz
-Patch0:		gdb-4.18-rtems-19991015.diff
+Source0:      	gdb-@gdb_version@.tar.gz
+Patch0:		gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
 
 Buildroot:    /tmp
 # Patch:
@@ -37,7 +37,7 @@ Authors:
     ...
 
 %prep
-# untar the sources inside @target_alias@-gdb-@Version@
+# untar the sources inside @target_alias@-gdb
 %setup -c -n @target_alias@-gdb -a 0
 
 %patch0 -p0
@@ -45,7 +45,7 @@ Authors:
 %build
 test -d build || mkdir build
 ( cd build
-  ../gdb-4.18/configure --target=@target_alias@ \
+  ../gdb-@gdb_version@/configure --target=@target_alias@ \
     --verbose --prefix=/opt/rtems 
 
   test -d $RPM_BUILD_ROOT/opt \
