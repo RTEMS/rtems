@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-TEST=file02
+TEST=psxfile02
 
 MANAGERS=all
 
