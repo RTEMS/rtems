@@ -423,7 +423,7 @@ SONIC_STATIC void sonic_retire_tda (struct sonic *dp)
   while ((dp->tdaActiveCount != 0)
       && ((status = dp->tdaTail->status) != 0)) {
 
-/* printf( "retire TDA %p (0x%04x)\n", dp->tdaTail, status ); */
+printf( "retire TDA %p (0x%04x)\n", dp->tdaTail, status );
     /*
      * Check for errors which stop the transmitter.
      */
@@ -480,6 +480,7 @@ SONIC_STATIC void sonic_retire_tda (struct sonic *dp)
      * Move to the next transmit descriptor
      */
     dp->tdaTail = dp->tdaTail->next;
+printf( "next TDA %p\n", dp->tdaTail );
   }
 }
 
