@@ -4,12 +4,12 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = utsname.h
+include_sysdir = $(includedir)/sys
 
-noinst_HEADERS = $(H_FILES)
+include_sys_HEADERS = utsname.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
-    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/sys/%)
+    $(include_sys_HEADERS:%=$(PROJECT_INCLUDE)/sys/%)
 
 $(PROJECT_INCLUDE)/sys:
 	@$(mkinstalldirs) $@

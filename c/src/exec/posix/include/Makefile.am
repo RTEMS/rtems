@@ -4,16 +4,12 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-UNUSED_H_FILES = devctl.h intr.h
+noinst_HEADERS = devctl.h intr.h
 
-H_FILES = sched.h aio.h mqueue.h semaphore.h
-
-# H_FILES = pthread.h sched.h aio.h mqueue.h semaphore.h
-
-noinst_HEADERS = $(H_FILES)
+include_HEADERS = sched.h aio.h mqueue.h semaphore.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) \
-    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/%)
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 $(PROJECT_INCLUDE):
 	@$(mkinstalldirs) $@
@@ -24,7 +20,7 @@ all-local: $(PREINSTALL_FILES)
 
 SUBDIRS = rtems sys
 
-EXTRA_DIST = $(UNUSED_H_FILES)
+EXTRA_DIST = $(noinst_HEADERS)
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
