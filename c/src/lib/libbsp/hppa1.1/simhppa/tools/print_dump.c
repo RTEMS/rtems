@@ -28,6 +28,24 @@ usage:  print_dump  [ -v ] \n\
 #include <memory.h>
 #include <stdarg.h>
 
+#include "../../../../../../build-tools/src/config.h"
+
+#ifndef VMS
+#ifndef HAVE_STRERROR
+#if defined(__linux__) && (__GLIBC__ < 2)
+extern char *sys_errlist[];
+#endif
+
+#define strerror( _err ) \
+  ((_err) < sys_nerr) ? sys_errlist [(_err)] : "unknown error"
+
+#else   /* HAVE_STRERROR */
+char *strerror ();
+#endif
+#else   /* VMS */
+char *strerror (int,...);
+#endif
+
 #define Failed(x)       (((int) (x)) == -1)
 #define TRUE    1
 #define FALSE   0
@@ -280,8 +298,6 @@ error(int error_flag, ...)
 {
     va_list arglist;
     register char *format;
-    extern char *sys_errlist[];
-    extern int sys_nerr;
     int local_errno;
 
     extern int errno;
@@ -299,12 +315,9 @@ error(int error_flag, ...)
     va_end(arglist);
 
     if (local_errno)
-        if ((local_errno > 0) && (local_errno < sys_nerr))
-            (void) fprintf(stderr, " (%s)\n", sys_errlist[local_errno]);
-        else
-            (void) fprintf(stderr, " (unknown errno=%d)\n", local_errno);
+      (void) fprintf(stderr, " (%s)\n", strerror(local_errno));
     else
-        (void) fprintf(stderr, "\n");
+      (void) fprintf(stderr, "\n");
 
     (void) fflush(stderr);
 

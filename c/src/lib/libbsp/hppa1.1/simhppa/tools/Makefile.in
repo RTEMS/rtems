@@ -31,7 +31,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 #
 
 DEFINES  +=
-CPPFLAGS +=
+CPPFLAGS += -I.
 CFLAGS   +=
 
 LD_PATHS  +=
