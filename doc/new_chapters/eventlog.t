@@ -84,9 +84,44 @@ An I/O error occurred in writing to the system event log.
 
 @subheading DESCRIPTION:
 
-The @code{log_write} function writes an event record, consisting 
-of event attributes, and the data identified by the @code{buf} 
-argument, to the system log.
+If {_POSIX_LOGGING} is defined:
+
+   The @code{log_write} function writes an event record, consisting 
+   of event attributes, and the data identified by the @code{buf} 
+   argument, to the system log.  The @code{len} argument specifies
+   the length in bytes of the buffer pointed to by @code{buf}.  The
+   @code{len} argument shall specify the value of the event record
+   length attribute.  The value of @code{len} shall be less than or 
+   equal to {LOG_ENTRY_MAXLEN} or the @code{log_write} shall fail.
+
+   The @code{event_id} argument identifies the type of event record
+   being written.  The @code{event_id} argument shall specify the value
+   of the event ID attribute of the event record.
+
+   The argument @code{facility} indicates the facility from which the
+   event type is drawn.  The @code{facility} aargument shall specify the
+   value of the event record facility attribute.  The value of the
+   @code{facility} argument shall be a valid log facility or the 
+   @code{log_write} function shall fail.
+
+   The @code{severity} argument indicates the severity level of the
+   event record.  The @code{severity} argument shall specify the value
+   of the event record severity attribute.  The value of the 
+   @code{severity} argument shall be less than or equal to 
+   {LOG_SEVERITY_MAX} or the @code{log_write} function shall fail.  
+
+   The effective_UID of the calling process shall specify the event
+   record UID attribute.  The efective-GID of the calling process 
+   shall specify the event record GID attribute.  The process ID
+   of the calling process shall specify the event record process ID
+   attribute.  The process group ID of the calling process shall
+   specify the event record process group ID attribute.  The current
+   value of the system clock shall specify the event record timestamp
+   attribute.
+
+Otherwise:
+
+   The @code{log_write} function shall fail.
 
 @subheading NOTES:
 
