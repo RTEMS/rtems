@@ -14,12 +14,14 @@
  *  $Id$
  */
 
-#ifndef __NO_BSP_h
-#define __NO_BSP_h
+#ifndef __ORP_h
+#define __ORP_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <bspopts.h>
 
 #include <rtems.h>
 #include <console.h>

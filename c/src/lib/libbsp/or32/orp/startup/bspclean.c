@@ -22,4 +22,5 @@
 
 void bsp_cleanup( void )
 {
+    exit(0);
 }
