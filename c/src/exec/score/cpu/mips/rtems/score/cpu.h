@@ -18,7 +18,7 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from source copyrighted as follows:
+ *  Derived from c/src/exec/score/cpu/no_cpu/cpu.h:
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -93,7 +93,7 @@ extern void mips_fatal_error ( int error );
 /*
  *  Does RTEMS manage a dedicated interrupt stack in software?
  *
- *  If TRUE, then a stack is allocated in _ISR_Handler_initialization.
+ *  If TRUE, then a stack is allocated in _Interrupt_Manager_initialization.
  *  If FALSE, nothing is done.
  *
  *  If the CPU supports a dedicated interrupt stack in hardware,
@@ -162,19 +162,18 @@ extern void mips_fatal_error ( int error );
  *  If there is a FP coprocessor such as the i387 or mc68881, then
  *  the answer is TRUE.
  *
- *  The macro name "MIPS64ORION_HAS_FPU" should be made CPU specific.
+ *  The macro name "MIPS_HAS_FPU" should be made CPU specific.
  *  It indicates whether or not this CPU model has FP support.  For
  *  example, it would be possible to have an i386_nofp CPU model
  *  which set this to false to indicate that you have an i386 without
  *  an i387 and wish to leave floating point support out of RTEMS.
  */
 
-#if ( MIPS64ORION_HAS_FPU == 1 )
+#if ( MIPS_HAS_FPU == 1 )
 #define CPU_HARDWARE_FP     TRUE
 #else
 #define CPU_HARDWARE_FP     FALSE
 #endif
-#define CPU_SOFTWARE_FP     FALSE
 
 /*
  *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
@@ -444,7 +443,7 @@ typedef struct {
  */
 
 /*
- *  Macros to access MIPS64ORION specific additions to the CPU Table
+ *  Macros to access MIPS specific additions to the CPU Table
  */
 
 #define rtems_cpu_configuration_get_clicks_per_microsecond() \

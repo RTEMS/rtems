@@ -19,7 +19,7 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from source copyrighted as follows:
+ *  Derived from c/src/exec/score/cpu/no_cpu/cpu_asm.s:
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -45,16 +45,8 @@ name:;                                          \
 #define ENDFRAME(name)                          \
         .end name
 
-
 #define EXCP_STACK_SIZE (NREGS*R_SZ)
-
-#if __ghs__
-#define sd sw
-#define ld lw
-#define dmtc0 mtc0
-#define dsll sll
-#define dmfc0 mfc0
-#endif
+#define ISR_VEC_SIZE 4
 
 #if 1  /* 32 bit unsigned32 types */
 #define sint sw
@@ -141,6 +133,8 @@ unsigned32 _CPU_ISR_Get_level( void )
    */
 }
 #endif
+
+#if __mips == 3
 /* return the current exception level for the 4650 */
 FRAME(_CPU_ISR_Get_level,sp,0,ra)
 	mfc0 v0,C0_SR
@@ -163,8 +157,8 @@ _CPU_ISR_Set_1:
 	nop
 	bnez a0,_CPU_ISR_Set_2
 	nop
-	nop
-	mfc0 t0,C0_SR
+        nop
+	mfc0 t0, C0_SR
 	nop
 	li t1,~SR_EXL
 	and t0,t1
@@ -182,7 +176,7 @@ _CPU_ISR_Set_2:
 	nop
 	mtc0 t0,C0_SR                   /* first disable ie bit (recommended) */
 	nop
-	ori t0,SR_EXL|SR_IE		/* enable exception level  */
+	ori  t0, SR_EXL|SR_IE		/* enable exception level */ 	
 	nop
 	mtc0 t0,C0_SR         
 	nop
@@ -190,6 +184,32 @@ _CPU_ISR_Set_exit:
 	j ra
 	nop
 ENDFRAME(_CPU_ISR_Set_level)
+
+#elif __mips == 1
+
+/* MIPS ISA 1 ( R3000 ) */
+/* These routines might not be needed for the R3000 */
+/* Q:Who calls _CPU_ISR_Get/Set_level? */
+FRAME(_CPU_ISR_Get_level,sp,0,ra)
+        mfc0 v0,C0_SR
+        nop
+        andi v0, SR_IEC
+        j ra
+ENDFRAME(_CPU_ISR_Get_level)
+
+FRAME(_CPU_ISR_Set_level,sp,0,ra)
+        nop
+        mfc0 t0,C0_SR
+        andi a0, SR_IEC 
+	or   t0, a0
+	mtc0 t0,C0_SR
+	nop
+	j ra
+ENDFRAME(_CPU_ISR_Set_level)
+
+#else
+   #error "__mips is set to 1 or 3"
+#endif
 
 /*
  *  _CPU_Context_save_fp_context
@@ -323,6 +343,8 @@ ENDFRAME(_CPU_Context_restore_fp)
  * {
  * }
  */
+#if __mips == 3
+/* MIPS ISA Level 3 ( R4xxx ) */
 
 FRAME(_CPU_Context_switch,sp,0,ra)
 
@@ -337,7 +359,6 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	sd ra,RA_OFFSET*8(a0)           /* save current context */
 	sd sp,SP_OFFSET*8(a0)
 	sd fp,FP_OFFSET*8(a0)
-	sd s0,S0_OFFSET*8(a0)
 	sd s1,S1_OFFSET*8(a0)
 	sd s2,S2_OFFSET*8(a0)
 	sd s3,S3_OFFSET*8(a0)
@@ -375,6 +396,62 @@ _CPU_Context_1:
 	nop
 ENDFRAME(_CPU_Context_switch)
 
+#elif __mips == 1
+/* MIPS ISA Level 1 ( R3000 ) */
+
+FRAME(_CPU_Context_switch,sp,0,ra)
+
+        mfc0 t0,C0_SR
+        li t1,~SR_IEC
+        sw t0,C0_SR_OFFSET*4(a0)        /* save status register */
+        and t0,t1
+        mtc0 t0,C0_SR                   /* first disable ie bit (recommended) */
+
+        sw ra,RA_OFFSET*4(a0)           /* save current context */
+        sw sp,SP_OFFSET*4(a0)
+        sw fp,FP_OFFSET*4(a0)
+        sw s0,S0_OFFSET*4(a0)
+        sw s1,S1_OFFSET*4(a0)
+        sw s2,S2_OFFSET*4(a0)
+        sw s3,S3_OFFSET*4(a0)
+        sw s4,S4_OFFSET*4(a0)
+        sw s5,S5_OFFSET*4(a0)
+        sw s6,S6_OFFSET*4(a0)
+        sw s7,S7_OFFSET*4(a0)
+
+        mfc0 t0,C0_EPC
+        sw t0,C0_EPC_OFFSET*4(a0)
+
+_CPU_Context_switch_restore:
+        lw s0,S0_OFFSET*4(a1)           /* restore context */
+        lw s1,S1_OFFSET*4(a1)
+        lw s2,S2_OFFSET*4(a1)
+        lw s3,S3_OFFSET*4(a1)
+        lw s4,S4_OFFSET*4(a1)
+        lw s5,S5_OFFSET*4(a1)
+        lw s6,S6_OFFSET*4(a1)
+        lw s7,S7_OFFSET*4(a1)
+        lw fp,FP_OFFSET*4(a1)
+        lw sp,SP_OFFSET*4(a1)
+        lw ra,RA_OFFSET*4(a1)
+        lw t0,C0_EPC_OFFSET*4(a1)
+        mtc0 t0,C0_EPC
+	lw t1, C0_SR_OFFSET*4(a1)
+        mtc0 t1,C0_SR
+
+	/* Q:Changes needed to SR_IEC bit in SR/_CPU_Context_switch_restore? */
+
+_CPU_Context_1:
+        j ra
+        nop
+ENDFRAME(_CPU_Context_switch)
+
+#else
+
+   #error "__mips is not set to 1 or 3"
+
+#endif
+
 /*
  *  _CPU_Context_restore
  *
@@ -392,11 +469,27 @@ void _CPU_Context_restore(
 }
 #endif
 
+#if __mips == 3
+
 FRAME(_CPU_Context_restore,sp,0,ra)
 	dadd a1,a0,zero
 	j _CPU_Context_switch_restore
 	nop
 ENDFRAME(_CPU_Context_restore)
+
+#elif __mips == 1
+
+FRAME(_CPU_Context_restore,sp,0,ra)
+	add  a1,a0,zero
+	j _CPU_Ccontext_switch_restore
+	nop
+ENDFRAME(_CPU_Context_restore)
+
+#else
+
+      #error "__mips is not set to 1 or 3"
+
+#endif
 
 EXTERN(_ISR_Nest_level, SZ_INT)
 EXTERN(_Thread_Dispatch_disable_level,SZ_INT)
@@ -438,6 +531,9 @@ void _ISR_Handler()
    *
    */
 #endif
+
+#if __mips == 3
+/* ----------------------------------------------------------------------------- */
 FRAME(_ISR_Handler,sp,0,ra)
 .set noreorder
 #if USE_IDTKIT
@@ -487,8 +583,9 @@ FRAME(_ISR_Handler,sp,0,ra)
 /* determine if an interrupt generated this exception */
 	mfc0 k0,C0_CAUSE
 	and k1,k0,CAUSE_EXCMASK
-	bnez k1,_ISR_Handler_prom_exit /* not an external interrupt, pass exception to Monitor */
-	mfc0 k1,C0_SR
+        bnez k1,_ISR_Handler_prom_exit /* not an external interrup
+t, pass exception to Monitor */
+        mfc0 k1,C0_SR
 	and k0,k1
 	and k0,CAUSE_IPMASK
 	beq k0,zero,_ISR_Handler_quick_exit /* external interrupt not enabled, ignore */
@@ -661,11 +758,11 @@ _ISR_Handler_quick_exit:
 	nop
 
 _ISR_Handler_prom_exit:
-#ifdef CPU_R3000
+#if __mips == 1
 	la      k0, (R_VEC+((48)*8))
 #endif
 
-#ifdef CPU_R4000
+#if __mips == 3
 	la      k0, (R_VEC+((112)*8)) /* R4000 Sim's location is different */
 #endif
 	j       k0
@@ -675,6 +772,268 @@ _ISR_Handler_prom_exit:
 
 ENDFRAME(_ISR_Handler)
 
+/* ---------------------------------------------------------------------- */
+#elif __mips == 1
+/* MIPS ISA Level 1 */
+
+FRAME(_ISR_Handler,sp,0,ra)
+.set noreorder
+
+	/* Q: _ISR_Handler, not using IDT/SIM ...save extra regs? */
+
+	addiu sp,sp,-EXCP_STACK_SIZE       /* wastes alot of stack space for context?? */
+
+	sw    ra, R_RA*R_SZ(sp)  /* store ra on the stack */ 
+	sw    v0, R_V0*R_SZ(sp)
+	sw    v1, R_V1*R_SZ(sp)
+	sw    a0, R_A0*R_SZ(sp)
+	sw    a1, R_A1*R_SZ(sp)
+	sw    a2, R_A2*R_SZ(sp)
+	sw    a3, R_A3*R_SZ(sp)
+	sw    t0, R_T0*R_SZ(sp)
+	sw    t1, R_T1*R_SZ(sp)
+	sw    t2, R_T2*R_SZ(sp)
+	sw    t3, R_T3*R_SZ(sp)
+	sw    t4, R_T4*R_SZ(sp)
+	sw    t5, R_T5*R_SZ(sp)
+	sw    t6, R_T6*R_SZ(sp)
+	sw    t7, R_T7*R_SZ(sp)
+	mflo    k0
+	sw    t8, R_T8*R_SZ(sp)
+	sw    k0, R_MDLO*R_SZ(sp) 
+	sw    t9, R_T9*R_SZ(sp)
+	mfhi    k0
+	sw    gp, R_GP*R_SZ(sp)
+	sw    fp, R_FP*R_SZ(sp)
+	sw    k0, R_MDHI*R_SZ(sp) 
+	.set noat
+	sw    AT, R_AT*R_SZ(sp)
+	.set at
+
+        /* Q: Why hardcode -40 for stack add??? */
+        /* This needs to be figured out.........*/
+	addiu sp,sp,-40	
+	sw ra,32(sp)	/* store ra on the stack */
+
+/* determine if an interrupt generated this exception */
+
+	mfc0 k0,C0_CAUSE
+	and k1,k0,CAUSE_EXCMASK
+        beq k1, 0, _ISR_Handler_1
+        nop
+
+_ISR_Handler_Exception:
+        nop
+        b  _ISR_Handler_Exception       /* Jump to the exception code */
+        nop
+
+_ISR_Handler_1:
+
+        mfc0 k1,C0_SR
+	and k0,k1
+	and k0,CAUSE_IPMASK
+	beq k0,zero,_ISR_Handler_exit /* external interrupt not enabled, ignore */
+	                              /* but if it's not an exception or an interrupt,
+				      /* Then where did it come from??? */
+	nop
+
+  /*
+   *  save some or all context on stack
+   *  may need to save some special interrupt information for exit
+   *
+   *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
+   *    if ( _ISR_Nest_level == 0 )
+   *      switch to software interrupt stack
+   *  #endif
+   */
+
+  /*
+   *  _ISR_Nest_level++;
+   */
+	lw   t0,_ISR_Nest_level
+	addi t0,t0,1
+	sw   t0,_ISR_Nest_level
+  /*
+   *  _Thread_Dispatch_disable_level++;
+   */
+	lw   t1,_Thread_Dispatch_disable_level
+	addi t1,t1,1
+	sw   t1,_Thread_Dispatch_disable_level
+
+  /*
+   *  while ( interrupts_pending(cause_reg) ) {
+   *     vector = BITFIELD_TO_INDEX(cause_reg);
+   *     (*_ISR_Vector_table[ vector ])( vector );
+   *  }
+   */
+        /* k0 has the SR interrupt bits */
+        la t3, _ISR_vector_table
+
+        /* The bits you look at can be prioritized here just by */
+        /*  changing what bit is looked at. I.E. SR_IBITx */
+        /* This code might become a loop, servicing all ints before returning.. */
+        /*   Right now, it will go thru the whole list once */
+
+_ISR_check_bit_0:
+	and k1, k0, SR_IBIT1
+        beq k1, zero, _ISR_check_bit_1
+        nop
+	li  t1, ISR_VEC_SIZE*0 
+	add t3, t1
+        jal t3  
+        nop
+_ISR_check_bit_1:
+	and k1, k0, SR_IBIT2
+        beq k1, zero, _ISR_check_bit_2
+        nop
+	li  t1, ISR_VEC_SIZE*1
+	add t3, t1
+        jal t3 
+        nop
+_ISR_check_bit_2:
+	and k1, k0, SR_IBIT3
+        beq k1, zero, _ISR_check_bit_3
+        nop
+	li  t1, ISR_VEC_SIZE*2
+	add t3, t1
+        jal t3 
+        nop
+_ISR_check_bit_3:
+	and k1, k0, SR_IBIT4
+        beq k1, zero, _ISR_check_bit_4
+        nop
+	li  t1, ISR_VEC_SIZE*3
+	add t3, t1
+        jal t3 
+        nop
+_ISR_check_bit_4:
+	and k1, k0, SR_IBIT5
+        beq k1, zero, _ISR_check_bit_5
+        nop
+	li  t1, ISR_VEC_SIZE*4
+	add t3, t1
+        jal t3 
+        nop
+_ISR_check_bit_5:
+	and k1, k0, SR_IBIT6
+        beq k1, zero, _ISR_check_bit_6
+        nop
+	li  t1, ISR_VEC_SIZE*5
+	add t3, t1
+        jal t3 
+        nop
+_ISR_check_bit_6:
+	and k1, k0, SR_IBIT7
+        beq k1, zero, _ISR_check_bit_7
+        nop
+	li  t1, ISR_VEC_SIZE*6
+	add t3, t1
+        jal t3 
+        nop
+_ISR_check_bit_7:
+	and k1, k0, SR_IBIT8
+        beq k1, zero, _ISR_exit_int_check
+        nop
+	li  t1, ISR_VEC_SIZE*7
+	add t3, t1
+        jal t3 
+        nop
+
+_ISR_exit_int_check:
+
+  /*
+   *  --_ISR_Nest_level;
+   */
+        lw   t2,_ISR_Nest_level
+	addi t2,t2,-1
+        sw   t2,_ISR_Nest_level
+  /*
+   *  --_Thread_Dispatch_disable_level;
+   */
+	lw   t1,_Thread_Dispatch_disable_level
+	addi t1,t1,-1
+	sw   t1,_Thread_Dispatch_disable_level
+  /*
+   *  if ( _Thread_Dispatch_disable_level || _ISR_Nest_level )
+   *    goto the label "exit interrupt (simple case)"
+   */
+	or  t0,t2,t1
+	bne t0,zero,_ISR_Handler_exit
+	nop
+  /*
+   *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
+   *    restore stack
+   *  #endif
+   *  
+   *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
+   *    goto the label "exit interrupt (simple case)"
+   */
+	lw  t0,_Context_Switch_necessary
+	lw  t1,_ISR_Signals_to_thread_executing
+	or  t0,t0,t1
+	beq t0,zero,_ISR_Handler_exit
+	nop
+  /*
+   *  call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+   */
+	jal _Thread_Dispatch
+	nop
+  /*
+   *  prepare to get out of interrupt
+   *  return from interrupt  (maybe to _ISR_Dispatch)
+   *
+   *  LABEL "exit interrupt (simple case):
+   *  prepare to get out of interrupt
+   *  return from interrupt
+   */
+
+_ISR_Handler_exit:
+	ld ra,32(sp)
+	addiu sp,sp,40    /* Q: Again with the 40...Is this needed? */
+
+/* restore interrupt context from stack */
+      
+	lw    k0, R_MDLO*R_SZ(sp)           
+	mtlo  k0
+	lw    k0, R_MDHI*R_SZ(sp)           
+	lw    a2, R_A2*R_SZ(sp)
+	mthi  k0
+	lw    a3, R_A3*R_SZ(sp)
+	lw    t0, R_T0*R_SZ(sp)
+	lw    t1, R_T1*R_SZ(sp)
+	lw    t2, R_T2*R_SZ(sp)
+	lw    t3, R_T3*R_SZ(sp)
+	lw    t4, R_T4*R_SZ(sp)
+	lw    t5, R_T5*R_SZ(sp)
+	lw    t6, R_T6*R_SZ(sp)
+	lw    t7, R_T7*R_SZ(sp)
+	lw    t8, R_T8*R_SZ(sp)
+	lw    t9, R_T9*R_SZ(sp)
+	lw    gp, R_GP*R_SZ(sp)
+	lw    fp, R_FP*R_SZ(sp)
+	lw    ra, R_RA*R_SZ(sp)
+	lw    a0, R_A0*R_SZ(sp)
+	lw    a1, R_A1*R_SZ(sp)
+	lw    v1, R_V1*R_SZ(sp)
+	lw    v0, R_V0*R_SZ(sp)
+	.set noat
+	lw    AT, R_AT*R_SZ(sp)
+	.set at
+
+	addiu sp,sp,EXCP_STACK_SIZE 
+	
+        rfe  /* Might not need to do RFE here... */
+	j ra
+	nop
+
+       .set    reorder
+ENDFRAME(_ISR_Handler)
+
+#else
+
+   #error "__mips is not set to 1 or 3 "
+
+#endif
 
 FRAME(mips_enable_interrupts,sp,0,ra)
 	mfc0 t0,C0_SR		/* get status reg */
@@ -696,6 +1055,8 @@ FRAME(mips_disable_interrupts,sp,0,ra)
 	nop
 ENDFRAME(mips_disable_interrupts)
 
+#if __mips == 3
+
 FRAME(mips_enable_global_interrupts,sp,0,ra)
 	mfc0 t0,C0_SR		/* get status reg */
 	nop
@@ -715,6 +1076,33 @@ FRAME(mips_disable_global_interrupts,sp,0,ra)
 	nop
 ENDFRAME(mips_disable_global_interrupts)
 
+#elif __mips == 1
+
+FRAME(mips_enable_global_interrupts,sp,0,ra)
+	mfc0 t0,C0_SR		/* get status reg */
+	nop
+	ori t0,SR_IEC
+	mtc0 t0,C0_SR		/* save updated status reg */
+	j ra
+	nop
+ENDFRAME(mips_enable_global_interrupts)
+
+FRAME(mips_disable_global_interrupts,sp,0,ra)
+	li t1,SR_IEC
+	mfc0 t0,C0_SR		/* get status reg */
+	not t1
+	and t0,t1
+	mtc0 t0,C0_SR		/* save updated status reg */
+	j ra
+	nop
+ENDFRAME(mips_disable_global_interrupts)
+
+#else
+
+   #error "__mips is not set to 1 or 3"
+
+#endif
+
 /* return the value of the status register in v0.  Used for debugging */
 FRAME(mips_get_sr,sp,0,ra)
 	mfc0 v0,C0_SR
@@ -731,6 +1119,47 @@ FRAME(mips_break,sp,0,ra)
 #endif
 	nop
 ENDFRAME(mips_break)
+
+
+/**************************************************************************
+**
+** enable_int(mask) - enables interrupts - mask is positioned so it only
+**                      needs to be or'ed into the status reg. This
+**                      also does some other things !!!! caution should
+**                      be used if invoking this while in the middle
+**                      of a debugging session where the client may have
+**                      nested interrupts.
+**
+****************************************************************************/
+FRAME(enable_int,sp,0,ra)
+        .set    noreorder
+        mfc0    t0,C0_SR
+        or      a0,1
+        or      t0,a0
+        mtc0    t0,C0_SR
+        j       ra
+        nop
+        .set    reorder
+ENDFRAME(enable_int)
+
+
+/***************************************************************************
+**
+**      disable_int(mask) - disable the interrupt - mask is the complement
+**                          of the bits to be cleared - i.e. to clear ext int
+**                          5 the mask would be - 0xffff7fff
+**
+****************************************************************************/
+FRAME(disable_int,sp,0,ra)
+        .set    noreorder
+        mfc0    t0,C0_SR
+        nop
+        and     t0,a0
+        mtc0    t0,C0_SR
+        j       ra
+        nop
+ENDFRAME(disable_int)
+
 
 /*PAGE
  *
@@ -749,13 +1178,27 @@ ENDFRAME(mips_break)
  *     hook with caution.
  */
 
+#if __mips == 3
+
 FRAME(_CPU_Thread_Idle_body,sp,0,ra)
 	wait			/* enter low power mode */
 	j _CPU_Thread_Idle_body
 	nop
 ENDFRAME(_CPU_Thread_Idle_body)
 
-#define VEC_CODE_LENGTH 10*4
+#elif __mips == 1
+
+FRAME(_CPU_Thread_Idle_body,sp,0,ra)
+	nop			/* no wait instruction */
+	j _CPU_Thread_Idle_body
+	nop
+ENDFRAME(_CPU_Thread_Idle_body)
+
+#else
+
+   #error "__mips not set to 1 or 3"
+   
+#endif
 
 /**************************************************************************
 **
@@ -770,10 +1213,12 @@ ENDFRAME(_CPU_Thread_Idle_body)
 **
 ***************************************************************************/
 
-#define INITEXCFRM ((2*4)+4)		/* ra + 2 arguments */
+#define VEC_CODE_LENGTH 10*4
+
 FRAME(init_exc_vecs,sp,0,ra)
-/* This code yanked from SIM */
-#if defined(CPU_R3000)
+
+#if __mips == 1
+
 	.set	noreorder
 	la	t1,exc_utlb_code
 	la	t2,exc_norm_code
@@ -793,7 +1238,7 @@ FRAME(init_exc_vecs,sp,0,ra)
 	addiu	t2,4
 	move	t5,ra		# assumes clear_cache doesnt use t5
 	li	a0,UT_VEC
-	jal	clear_cache
+	jal	clear_cache          /* Check out clear cache.... */
 	li	a1,VEC_CODE_LENGTH
 	nop
 	li	a0,E_VEC
@@ -803,8 +1248,9 @@ FRAME(init_exc_vecs,sp,0,ra)
 	j	ra
 	nop
 	.set	reorder
-#endif
-#if defined(CPU_R4000)
+
+#elif __mips == 3 
+
 	.set reorder
 	move	t5,ra		# assumes clear_cache doesnt use t5
 
@@ -874,98 +1320,60 @@ FRAME(init_exc_vecs,sp,0,ra)
 
 	move	ra,t5		# restore ra
 	j	ra
+
+#else
+   #error "__mips not set to 1 or 3"
 #endif
+
 ENDFRAME(init_exc_vecs)
-
-
-#if defined(CPU_R4000)
-FRAME(exc_tlb_code,sp,0,ra)
-#ifdef CPU_R3000
-        la      k0, (R_VEC+((48)*8))
-#endif
-
-#ifdef CPU_R4000
-        la      k0, (R_VEC+((112)*8)) /* R4000 Sim's location is different */
-#endif
-        j       k0
-	nop
-
-ENDFRAME(exc_tlb_code)
-
-
-FRAME(exc_xtlb_code,sp,0,ra)
-#ifdef CPU_R3000
-        la      k0, (R_VEC+((48)*8))
-#endif
-
-#ifdef CPU_R4000
-        la      k0, (R_VEC+((112)*8)) /* R4000 Sim's location is different */
-#endif
-        j       k0
-	nop
-
-ENDFRAME(exc_xtlb_code)
-
-
-FRAME(exc_cache_code,sp,0,ra)
-#ifdef CPU_R3000
-        la      k0, (R_VEC+((48)*8))
-#endif
-
-#ifdef CPU_R4000
-        la      k0, (R_VEC+((112)*8)) /* R4000 Sim's location is different */
-#endif
-        j       k0
-	nop
-
-ENDFRAME(exc_cache_code)
-
 
 FRAME(exc_norm_code,sp,0,ra)
 	la	k0, _ISR_Handler /* generic external int hndlr */
 	j	k0
 	nop
-	subu	sp, EXCP_STACK_SIZE		/* set up local stack frame */
 ENDFRAME(exc_norm_code)
+
+/* 
+** Again, reliance on SIM. Not good.
+*/
+#if __mips == 3
+
+FRAME(exc_tlb_code,sp,0,ra)
+        la      k0, (R_VEC+((112)*8)) /* R4000 Sim location */
+        j       k0
+	nop
+ENDFRAME(exc_tlb_code)
+
+FRAME(exc_xtlb_code,sp,0,ra)
+        la      k0, (R_VEC+((112)*8)) /* R4000 Sim location */
+        j       k0
+	nop
+
+ENDFRAME(exc_xtlb_code)
+
+FRAME(exc_cache_code,sp,0,ra)
+        la      k0, (R_VEC+((112)*8)) /* R4000 Sim location */
+        j       k0
+	nop
+ENDFRAME(exc_cache_code)
+
+#elif __mips == 1
+/* ------------------------------------------------------ */
+FRAME(exc_tlb_code,sp,0,ra)
+        la      k0, (R_VEC+((48)*8))  /* Need something else here besides IDT/SIM call */
+        j       k0
+	nop
+ENDFRAME(exc_tlb_code)
+
+FRAME(exc_cache_code,sp,0,ra)
+        la      k0, (R_VEC+((48)*8))
+        j       k0
+	nop
+ENDFRAME(exc_cache_code)
+
+#else
+
+   #error "__mips is not set to 1 or 3"
+
 #endif
-
-/**************************************************************************
-**
-** enable_int(mask) - enables interrupts - mask is positioned so it only
-**                      needs to be or'ed into the status reg. This
-**                      also does some other things !!!! caution should
-**                      be used if invoking this while in the middle
-**                      of a debugging session where the client may have
-**                      nested interrupts.
-**
-****************************************************************************/
-FRAME(enable_int,sp,0,ra)
-        .set    noreorder
-        mfc0    t0,C0_SR
-        or      a0,1
-        or      t0,a0
-        mtc0    t0,C0_SR
-        j       ra
-        nop
-        .set    reorder
-ENDFRAME(enable_int)
-
-
-/***************************************************************************
-**
-**      disable_int(mask) - disable the interrupt - mask is the complement
-**                          of the bits to be cleared - i.e. to clear ext int
-**                          5 the mask would be - 0xffff7fff
-**
-****************************************************************************/
-FRAME(disable_int,sp,0,ra)
-        .set    noreorder
-        mfc0    t0,C0_SR
-        nop
-        and     t0,a0
-        mtc0    t0,C0_SR
-        j       ra
-        nop
-ENDFRAME(disable_int)
-
 

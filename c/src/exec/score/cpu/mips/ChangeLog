@@ -1,3 +1,29 @@
+2000-10-24	Alan Cudmore <alanc@linuxstart.com> and
+	Joel Sherrill <joel@OARcorp.com>
+
+	* This is a major reworking of the mips64orion port to use 
+	gcc predefines as much as possible and a big push to multilib
+	the mips port.  The mips64orion port was copied/renamed to mips
+	to be more like other GNU tools.  Alan did most of the technical
+	work of determining how to map old macro names used by the mips64orion
+	port to standard compiler macro definitions.  Joel did the merge
+	with CVS magic to keep individual file history and did the BSP
+	modifications. Details follow:
+	* Makefile.am: idtmon.h in mips64orion port not present.
+	* asm.h: MIPS64ORION replaced with MIPS. Frame setup macros added.
+	* cpu.c: Comments added.
+	* cpu_asm.S: Conditionals changed.  MIPS ISA level 1 support added.
+	First attempt at exception/interrupt processing for ISA level 1 
+	and minus any use of IDT/MON added.
+	* idtcpu.h: Conditionals changed to use gcc predefines.
+	* iregdef.h: Ditto.
+	* cpu_asm.h: No real change.  Merger required commit.
+	* rtems/Makefile.am: Ditto.
+	* rtems/score/Makefile.am: Ditto.
+	* rtems/score/cpu.h: Change MIPS64ORION to MIPS.
+	* rtems/score/mips64orion.h: Change MIPS64ORION to MIPS.  Convert
+	from using RTEMS_CPU_MODEL to gcc predefines to figre things out.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am.

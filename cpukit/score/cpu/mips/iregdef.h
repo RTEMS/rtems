@@ -221,10 +221,10 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	R_SR		67
 #define	R_CAUSE		68
 #define	R_TLBHI		69
-#if defined(CPU_R3000)
+#if __mips == 1
 #define	R_TLBLO		70
 #endif
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define	R_TLBLO0	70
 #endif
 #define	R_BADVADDR	71
@@ -236,10 +236,10 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	R_PRID		77
 #define R_FCSR		78
 #define R_FEIR		79
-#if defined(CPU_R3000)
+#if __mips == 1
 #define NREGS		80
 #endif
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define	R_TLBLO1	80
 #define R_PAGEMASK	81
 #define R_WIRED		82
@@ -296,15 +296,15 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	R_RA		R_R31
 
 /* Ketan added the following */
-#ifdef CPU_R3000
+#ifdef __mips == 1
 #define sreg	sw
 #define lreg	lw
 #define rmfc0	mfc0
 #define rmtc0	mtc0
 #define R_SZ	4
-#endif CPU_R3000
+#endif /* __mips == 1 */
 
-#ifdef CPU_R4000
+/* #ifdef  __mips == 3 */
 #if __mips < 3
 #define sreg	sw
 #define lreg	lw
@@ -318,7 +318,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define rmtc0	dmtc0
 #define R_SZ	8
 #endif
-#endif CPU_R4000
+/* #endif __mips == 3 */
 /* Ketan till here */
 
 #endif /* __IREGDEF_H__ */

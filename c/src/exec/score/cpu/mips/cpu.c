@@ -1,22 +1,24 @@
 /*
  *  Mips CPU Dependent Source
  *
- *  Author:     Craig Lebakken <craigl@transition.com>
+ *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
+ *           Joel Sherrill <joel@OARcorp.com>.
  *
- *  COPYRIGHT (c) 1996 by Transition Networks Inc.
+ *  Original MIP64ORION port by Craig Lebakken <craigl@transition.com>
+ *           COPYRIGHT (c) 1996 by Transition Networks Inc.
  *
- *  To anyone who acknowledges that this file is provided "AS IS"
- *  without any express or implied warranty:
- *      permission to use, copy, modify, and distribute this file
- *      for any purpose is hereby granted without fee, provided that
- *      the above copyright notice and this notice appears in all
- *      copies, and that the name of Transition Networks not be used in
- *      advertising or publicity pertaining to distribution of the
- *      software without specific, written prior permission.
- *      Transition Networks makes no representations about the suitability
- *      of this software for any purpose.
+ *         To anyone who acknowledges that this file is provided "AS IS"
+ *         without any express or implied warranty:
+ *             permission to use, copy, modify, and distribute this file
+ *             for any purpose is hereby granted without fee, provided that
+ *             the above copyright notice and this notice appears in all
+ *             copies, and that the name of Transition Networks not be used in
+ *             advertising or publicity pertaining to distribution of the
+ *             software without specific, written prior permission.
+ *             Transition Networks makes no representations about the 
+ *             suitability of this software for any purpose.
  *
- *  Derived from source copyrighted as follows:
+ *  Derived from c/src/exec/score/cpu/no_cpu/cpu.c:
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -124,7 +126,7 @@ void _CPU_ISR_install_raw_handler(
    *  This is where we install the interrupt handler into the "raw" interrupt
    *  table used by the CPU to dispatch interrupt handlers.
    */
-
+/* Q: This will become necessary for Non IDT/Sim use...*/
 #if 0 /* not necessary */
 /* use IDT/Sim to set interrupt vector.  Needed to co-exist with debugger. */
    add_ext_int_func( vector, new_handler );

@@ -15,7 +15,7 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from source copyrighted as follows:
+ *  Derived from c/src/exec/score/cpu/no_cpu/no_cpu.h:
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -28,8 +28,8 @@
  */
 /* @(#)mips64orion.h       08/29/96     1.3 */
 
-#ifndef _INCLUDE_MIPS64ORION_h
-#define _INCLUDE_MIPS64ORION_h
+#ifndef _INCLUDE_MIPS_h
+#define _INCLUDE_MIPS_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,40 +44,33 @@ extern "C" {
  *  of the family.
  */
  
-#if defined(rtems_multilib)
-/*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines. 
- */
-
-#define CPU_MODEL_NAME  "rtems_multilib"
-#define MIPS64ORION_HAS_FPU     1
-
-#elif defined(R4650)
- 
-#define CPU_MODEL_NAME  "R4650"
-#define MIPS64ORION_HAS_FPU     1
- 
-#elif defined(R4600)
- 
-#define CPU_MODEL_NAME  "R4600"
-#define MIPS64ORION_HAS_FPU     1
-
+#if defined(__mips_soft_float)
+#define MIPS_HAS_FPU 0
 #else
- 
-#error "Unsupported CPU Model"
- 
+#define MIPS_HAS_FPU 1
+#endif 
+
+#if (__mips == 1)
+#define CPU_MODEL_NAME  "ISA Level 1 or 2"
+#elif (__mips == 3)
+#if defined(__mips64)
+#define CPU_MODEL_NAME  "ISA Level 4"
+#else
+#define CPU_MODEL_NAME  "ISA Level 3"
+#endif
+#else
+#error "Unknown MIPS ISA level"
 #endif
 
 /*
  *  Define the name of the CPU family.
  */
 
-#define CPU_NAME "MIPS R46xxx"
+#define CPU_NAME "MIPS"
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* ! _INCLUDE_MIPS64ORION_h */
+#endif /* ! _INCLUDE_MIPS_h */
 /* end of include file */

@@ -45,7 +45,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define K1SIZE	0x20000000
 #define K2BASE	0xc0000000
 #define K2SIZE	0x20000000
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define KSBASE	0xe0000000
 #define KSSIZE	0x20000000
 #endif
@@ -56,11 +56,11 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 /*
 ** Exception Vectors
 */
-#if defined(CPU_R3000)
+#if  __mips == 1
 #define	UT_VEC	K0BASE			/* utlbmiss vector */
 #define E_VEC	(K0BASE+0x80)		/* exception vevtor */
 #endif
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define	T_VEC	(K0BASE+0x000)		/* tlbmiss vector */
 #define X_VEC	(K0BASE+0x080)		/* xtlbmiss vector */
 #define C_VEC	(K0BASE+0x100)		/* cache error vector */
@@ -89,7 +89,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	MINCACHE	0x200		/* 512       For 3041. */
 #define	MAXCACHE	0x40000		/* 256*1024   256k */	
 
-#if defined(CPU_R4000)
+#if  __mips == 3
 /* R4000 configuration register definitions */
 #define CFG_CM		0x80000000	/* Master-Checker mode */
 #define CFG_ECMASK	0x70000000	/* System Clock Ratio */
@@ -184,7 +184,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 /*
 ** TLB resource defines
 */
-#if defined(CPU_R3000)
+#if  __mips == 1
 #define	N_TLB_ENTRIES	64
 #define TLB_PGSIZE	0x1000
 #define RANDBASE	8
@@ -214,7 +214,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	TLBCTXT_VPNMASK		0x001ffffc
 #define	TLBCTXT_VPNSHIFT	2
 #endif
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define	N_TLB_ENTRIES	48
 
 #define	TLBHI_VPN2MASK	0xffffe000
@@ -249,7 +249,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define TLBPGMASK_MASK		0x01ffe000
 #endif
 
-#if defined(CPU_R3000)
+#if  __mips == 1
 #define	SR_CUMASK	0xf0000000	/* coproc usable bits */
 #define	SR_CU3		0x80000000	/* Coprocessor 3 usable */
 #define	SR_CU2		0x40000000	/* Coprocessor 2 usable */
@@ -300,7 +300,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	SR_IEC		0x00000001	/* cur interrupt enable, 1 => enable */
 #endif
 
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define	SR_CUMASK	0xf0000000	/* coproc usable bits */
 #define	SR_CU3		0x80000000	/* Coprocessor 3 usable */
 #define	SR_CU2		0x40000000	/* Coprocessor 2 usable */
@@ -375,30 +375,30 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 */
 #define	C0_INX		$0		/* tlb index */
 #define	C0_RAND		$1		/* tlb random */
-#if defined(CPU_R3000)
+#if  __mips == 1
 #define	C0_TLBLO	$2		/* tlb entry low */
 #endif
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define	C0_TLBLO0	$2		/* tlb entry low 0 */
 #define	C0_TLBLO1	$3		/* tlb entry low 1 */
 #endif
 
 #define	C0_CTXT		$4		/* tlb context */
 
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define C0_PAGEMASK	$5		/* tlb page mask */
 #define C0_WIRED	$6		/* number of wired tlb entries */
 #endif
 
 #define	C0_BADVADDR	$8		/* bad virtual address */
 
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define C0_COUNT	$9		/* cycle count */
 #endif
 
 #define	C0_TLBHI	$10		/* tlb entry hi */
 
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define C0_COMPARE	$11		/* cyccle count comparator  */
 #endif
 
@@ -407,11 +407,11 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	C0_EPC		$14		/* exception pc */
 #define	C0_PRID		$15		/* revision identifier */
 
-#if defined(CPU_R3000)
+#if  __mips == 1
 #define C0_CONFIG   $3     /* configuration register R3081*/
 #endif
 
-#if defined(CPU_R4000)
+#if  __mips == 3
 #define C0_CONFIG	$16		/* configuration register */
 #define C0_LLADDR	$17		/* linked load address */
 #define C0_WATCHLO	$18		/* watchpoint trap register */

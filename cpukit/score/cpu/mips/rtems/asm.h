@@ -24,8 +24,8 @@
  */
 /* @(#)asm.h       03/15/96     1.1 */
 
-#ifndef __MIPS64ORION_ASM_h
-#define __MIPS64ORION_ASM_h
+#ifndef __NO_CPU_ASM_h
+#define __NO_CPU_ASM_h
 
 /*
  *  Indicate we are in an assembly file and get the basic CPU definitions.
@@ -96,7 +96,27 @@
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
 
+/*
+ *  Debugger macros for assembly language routines. Allows the
+ *  programmer to set up the necessary stack frame info
+ *  required by debuggers to do stack traces.
+ */
+
+#ifndef XDS
+#define FRAME(name,frm_reg,offset,ret_reg)      \
+        .globl  name;                           \
+        .ent    name;                           \
+name:;                                          \
+        .frame  frm_reg,offset,ret_reg
+#define ENDFRAME(name)                          \
+        .end name
+#else
+#define FRAME(name,frm_reg,offset,ret_reg)      \
+        .globl  _##name;\
+_##name:
+#define ENDFRAME(name)
+#endif  XDS
+
 #endif
 /* end of include file */
-
 
