@@ -1,0 +1,56 @@
+"Network" initializing!
+"Network" initialized!
+Try running client with no server present.
+Should fail with `connection refused'.
+Connect to server.
+Can't connect to server: Connection refused
+Client closing connection.
+
+Start server.
+
+Try running client with server present.
+Create socket.
+Connect to server.
+Bind socket.
+Can't connect to server: Connection refused
+Client closing connection.
+Client task terminating.
+
+Try running two clients.
+Connect to server.
+Connect to server.
+ACCEPTED:7F000001
+ACCEPTED:7F000001
+Write 22-byte message to server.
+Write 22-byte message to server.
+Read 43 from server: Server received 22 (Hi there, server (2).)
+Read 43 from server: Server received 22 (Hi there, server (3).)
+Client closing connection.
+Client task terminating.
+Worker task terminating.
+Client closing connection.
+Client task terminating.
+Worker task terminating.
+
+Try running three clients.
+Connect to server.
+Connect to server.
+Connect to server.
+ACCEPTED:7F000001
+ACCEPTED:7F000001
+ACCEPTED:7F000001
+Write 22-byte message to server.
+Write 22-byte message to server.
+Write 22-byte message to server.
+Read 43 from server: Server received 22 (Hi there, server (4).)
+Read 43 from server: Server received 22 (Hi there, server (5).)
+Read 43 from server: Server received 22 (Hi there, server (6).)
+Client closing connection.
+Client task terminating.
+Worker task terminating.
+Client closing connection.
+Client task terminating.
+Worker task terminating.
+Client closing connection.
+Client task terminating.
+Worker task terminating.
