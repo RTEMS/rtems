@@ -1,0 +1,12 @@
+2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* Makefile.am, README, bsp_specs, .cvsignore, include/Makefile.am,
+	include/bsp.h, include/coverhd.h, include/sdram.h, include/.cvsignore,
+	start/Makefile.am, start/start.S, start/.cvsignore, startup/Makefile.am,
+	startup/bspstart.c, startup/linkcmds, startup/linkcmds.rom,
+	startup/linkcmds.rom2ram, startup/.cvsignore, wrapup/Makefile.am,
+	wrapup/.cvsignore, hw_init/Makefile.am, hw_init/hw_init.c,
+	hw_init/.cvsignore, times, configure.ac, ChangeLog:  New files.  
+	Reviewed and updated to latest automake and autoconf standards
+	by Ralf Corsepius <corsepiu@faw.uni-ulm.de>.
+
