@@ -508,6 +508,12 @@ int log_severity_before(
 @subheading STATUS CODES:
 
 @table @b
+@item 0
+The severity of @code{s1} is less than that of @code{s2}.
+
+@item 1
+The severity of @code{s1} is greater than or equal that of @code{s2}.
+
 @item EINVAL 
 The value of either s1 or s2 exceeds @code{LOG_SEVERITY_MAX}.
 
@@ -515,19 +521,22 @@ The value of either s1 or s2 exceeds @code{LOG_SEVERITY_MAX}.
 
 @subheading DESCRIPTION:
 
-The @code{log_severity_before} function shall compare the severity order
-of the @code{s1} and @code{s2} arguments.  Severity values ordered 
-according to this function shall be according to decreasing severity.
+The @code{log_severity_before} function compares the severity order
+of the @code{s1} and @code{s2} arguments.  If @code{s1} is of 
+severity greater than or equal to that of @code{s2}, then this
+function returns 1.  Otherwise, it returns 0.
 
-If @code{s1} is ordered before or is equal to @code{s2} then the ordering
-predicate shall return 1, otherwise the predicate shall return 0.  If 
-either @code{s1} or @code{s2} specify invalid severity values, the return
-value of @code{log_severity_before} is unspecified.
+If either @code{s1} or @code{s2} specify invalid severity values, the
+return value of @code{log_severity_before} is unspecified.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+The POSIX specification of the return value for this function is ambiguous.
+If @code{EINVAL} is equal to 1 in an implementation, then the application
+can not distinguish between greater than and an error condition.
 
 @page
 @subsection log_facilityemptyset - Manipulate log facility sets
