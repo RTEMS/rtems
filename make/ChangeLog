@@ -1,4 +1,9 @@
 
+2001-10-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/gensh4.cfg: Remove START_HW_INIT.
+	* custom/simsh4.cfg: Remove START_HW_INIT, RTEMS_CPU_MODEL=sh7750.
+
 2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/gensh4.cfg: Remove HZ.
