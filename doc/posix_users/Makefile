@@ -24,8 +24,8 @@ FILES= clock.texi cond.texi key.texi mutex.texi $(PROJECT).texi preface.texi \
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
 info: dirs $(PROJECT)
-#	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
-	cp $(PROJECT) $(INFO_INSTALL)
+	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
+	#cp $(PROJECT) $(INFO_INSTALL)
 
 posix_users: $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
