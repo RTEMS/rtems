@@ -82,6 +82,10 @@ typedef volatile struct _SP_WRITE_REGISTERS {
 #define SP_INT_LS_ENABLE  0x04
 #define SP_INT_MS_ENABLE  0x08
 
+#define NS16550_ENABLE_ALL_INTR           (SP_INT_RX_ENABLE | SP_INT_TX_ENABLE)
+#define NS16550_DISABLE_ALL_INTR          0x00
+#define NS16550_ENABLE_ALL_INTR_EXCEPT_TX (SP_INT_RX_ENABLE)
+
 /*
  * Define serial port interrupt id register structure.
  */
@@ -201,8 +205,6 @@ NS16550_STATIC int ns16550_negate_DTR(
 
 NS16550_STATIC void ns16550_initialize_interrupts(int minor);
 
-NS16550_STATIC int ns16550_flush(int major, int minor, void *arg);
-
 NS16550_STATIC int ns16550_write_support_int(
   int   minor,
   const char *buf,
@@ -217,6 +219,11 @@ NS16550_STATIC int ns16550_write_support_polled(
 
 NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
   int minor
+);
+
+NS16550_STATIC void ns16550_enable_interrupts(
+  int minor,
+  int mask
 );
 
 #ifdef __cplusplus

@@ -48,7 +48,7 @@ console_fns ns16550_fns =
 {
   libchip_serial_default_probe,   /* deviceProbe */
   ns16550_open,                   /* deviceFirstOpen */
-  ns16550_flush,                  /* deviceLastClose */
+  NULL,                           /* deviceLastClose */
   NULL,                           /* deviceRead */
   ns16550_write_support_int,      /* deviceWrite */
   ns16550_initialize_interrupts,  /* deviceInitialize */
@@ -97,13 +97,15 @@ NS16550_STATIC void ns16550_init(int minor)
    */
 
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, 0x0);
-  (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, 0x0);
+  ns16550_enable_interrupts(minor, NS16550_DISABLE_ALL_INTR);
 
   /* Set the divisor latch and set the baud rate. */
 
   ulBaudDivisor=NS16550_Baud((unsigned32)Console_Port_Tbl[minor].pDeviceParams);
   ucDataByte = SP_LINE_DLAB;
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
+
+  /* XXX */
   (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, ulBaudDivisor&0xff);
   (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (ulBaudDivisor>>8)&0xff);
 
@@ -119,11 +121,7 @@ NS16550_STATIC void ns16550_init(int minor)
   ucDataByte = SP_FIFO_ENABLE | SP_FIFO_RXRST | SP_FIFO_TXRST;
   (*setReg)(pNS16550, NS16550_FIFO_CONTROL, ucDataByte);
 
-  /*
-   * Disable interrupts
-   */
-  ucDataByte = 0;
-  (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, ucDataByte);
+  ns16550_enable_interrupts(minor, NS16550_DISABLE_ALL_INTR);
 
   /* Set data terminal ready. */
   /* And open interrupt tristate line */
@@ -169,6 +167,7 @@ NS16550_STATIC int ns16550_close(
 /* 
  *  ns16550_write_polled
  */
+
 NS16550_STATIC void ns16550_write_polled(
   int   minor, 
   char  cChar
@@ -335,7 +334,7 @@ NS16550_STATIC void ns16550_process(
   unsigned32              pNS16550;
   volatile unsigned8      ucLineStatus; 
   volatile unsigned8      ucInterruptId;
-  char                    cChar;
+  unsigned char           cChar;
   getRegister_f           getReg;
   setRegister_f           setReg;
 
@@ -360,39 +359,42 @@ NS16550_STATIC void ns16550_process(
       );
     }
 
+    /*
+     *  TX all the characters we can
+     */
+
     while(TRUE) {
-      if(Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
-        Console_Port_Data[minor].bActive=FALSE;
-        if(Console_Port_Tbl[minor].pDeviceFlow !=&ns16550_flow_RTSCTS) {
-          ns16550_negate_RTS(minor);
+        ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
+        if(~ucLineStatus & SP_LSR_THOLD) {
+          /*
+           * We'll get another interrupt when
+           * the transmitter holding reg. becomes
+           * free again
+           */
+          break;
         }
 
-        /*
-         * There is no data to transmit
-         */
+#if 0
+        /* XXX flow control not completely supported in libchip */
+
+        if(Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_RTSCTS) {
+          ns16550_negate_RTS(minor);
+        }
+#endif
+
+      if (!rtems_termios_dequeue_characters(
+                  Console_Port_Data[minor].termios_data, 1)) {
+        if (Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_RTSCTS) {
+          ns16550_negate_RTS(minor);
+        }
+        Console_Port_Data[minor].bActive = FALSE;
+        ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
         break;
       }
 
-      ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
-      if(~ucLineStatus & SP_LSR_THOLD) {
-        /*
-         * We'll get another interrupt when
-         * the transmitter holding reg. becomes
-         * free again
-         */
-        break;
-      }
-
-      Ring_buffer_Remove_character( &Console_Port_Data[minor].TxBuffer, cChar);
-      /*
-       * transmit character
-       */
-      (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, cChar);
+      ucInterruptId = (*getReg)(pNS16550, NS16550_INTERRUPT_ID);
     }
-
-    ucInterruptId = (*getReg)(pNS16550, NS16550_INTERRUPT_ID);
-  }
-  while((ucInterruptId&0xf)!=0x1);
+  } while((ucInterruptId&0xf)!=0x1);
 }
 
 NS16550_STATIC rtems_isr ns16550_isr(
@@ -410,132 +412,82 @@ NS16550_STATIC rtems_isr ns16550_isr(
 }
 
 /*
- *  ns16550_flush
+ *  ns16550_enable_interrupts
+ *
+ *  This routine initializes the port to have the specified interrupts masked.
  */
-NS16550_STATIC int ns16550_flush(int major, int minor, void *arg)
+
+NS16550_STATIC void ns16550_enable_interrupts(
+  int minor,
+  int mask
+)
 {
-  while(!Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
-    /*
-     * Yield while we wait
-     */
-    if(_System_state_Is_up(_System_state_Get())) {
-      rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-    }
-  }
+  unsigned32     pNS16550;
+  setRegister_f  setReg;
 
-  ns16550_close(major, minor, arg);
+  pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
+  setReg   = Console_Port_Tbl[minor].setRegister;
 
-  return(RTEMS_SUCCESSFUL);
+  (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, mask);
 }
 
 /*
  *  ns16550_initialize_interrupts
  *
- *  This routine initializes the console's receive and transmit
- *  ring buffers and loads the appropriate vectors to handle the interrupts.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters: NONE
- *
- *  Return values:     NONE
- */
-
-NS16550_STATIC void ns16550_enable_interrupts(
-  int minor
-)
-{
-  unsigned32            pNS16550;
-  unsigned8             ucDataByte;
-  setRegister_f           setReg;
-
-  pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
-
-  /*
-   * Enable interrupts
-   */
-  ucDataByte = SP_INT_RX_ENABLE | SP_INT_TX_ENABLE;
-  (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, ucDataByte);
-
-}
+ *  This routine initializes the port to operate in interrupt driver mode.
+ */ 
 
 NS16550_STATIC void ns16550_initialize_interrupts(int minor)
 {
   ns16550_init(minor);
 
-  Ring_buffer_Initialize(&Console_Port_Data[minor].TxBuffer);
-
   Console_Port_Data[minor].bActive = FALSE;
 
   set_vector(ns16550_isr, Console_Port_Tbl[minor].ulIntVector, 1);
 
-  ns16550_enable_interrupts(minor);
+  ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
 }
 
 /* 
  *  ns16550_write_support_int
  *
  *  Console Termios output entry point.
- *
  */
+
 NS16550_STATIC int ns16550_write_support_int(
   int   minor, 
   const char *buf, 
   int   len
 )
 {
-  int i;
-  unsigned32 Irql;
+  unsigned32     Irql;
+  unsigned32     pNS16550;
+  setRegister_f  setReg;
 
-  for(i=0; i<len;) {
-    if(Ring_buffer_Is_full(&Console_Port_Data[minor].TxBuffer)) {
-      if(!Console_Port_Data[minor].bActive) {
-        /*
-         * Wake up the device
-         */
-        rtems_interrupt_disable(Irql);
-        Console_Port_Data[minor].bActive = TRUE;
-        if(Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_RTSCTS) {
-          ns16550_assert_RTS(minor);
-        }
-        ns16550_process(minor);
-        rtems_interrupt_enable(Irql);
-      } else {
-        /*
-         * Yield
-         */
-        rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-      }
-
-      /*
-       * Wait for ring buffer to empty
-       */
-      continue;
-    }
-    else {
-      Ring_buffer_Add_character( &Console_Port_Data[minor].TxBuffer, buf[i]);
-      i++;
-    }
-  }
+  setReg   = Console_Port_Tbl[minor].setRegister;
+  pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
 
   /*
-   * Ensure that characters are on the way
+   *  We are using interrupt driven output and termios only sends us
+   *  one character at a time.
    */
-  if(!Console_Port_Data[minor].bActive) {
-    /*
-     * Wake up the device
-     */
-    rtems_interrupt_disable(Irql);
-    Console_Port_Data[minor].bActive = TRUE;
-    if(Console_Port_Tbl[minor].pDeviceFlow !=&ns16550_flow_RTSCTS) {
-      ns16550_assert_RTS(minor);
-    }
-    ns16550_process(minor);
-    rtems_interrupt_enable(Irql);
+
+  if ( !len )
+    return 0;
+
+  if(Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_RTSCTS) {
+    ns16550_assert_RTS(minor);
   }
 
-  return (len);
+  rtems_interrupt_disable(Irql);
+    if ( Console_Port_Data[minor].bActive == FALSE) {
+      Console_Port_Data[minor].bActive = TRUE;
+      ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
+    }
+    (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, *buf);
+  rtems_interrupt_enable(Irql);
+
+  return 1;
 }
 
 /* 
@@ -544,6 +496,7 @@ NS16550_STATIC int ns16550_write_support_int(
  *  Console Termios output entry point.
  *
  */
+
 NS16550_STATIC int ns16550_write_support_polled(
   int         minor, 
   const char *buf, 

@@ -35,9 +35,8 @@ NS16650
 + Not tested in libchip context.  Based on Radstone PPC2 driver which worked 
   well.
 
-+ Interrupt code needs to be reworked to eliminate Ring_buffer usage.  This
-  will probably require managing the interrupt mask register as is 
-  done in the mc68681 and z85c30 drivers.
++ Interrupt code has been reworked to not use ring buffer and may be broken
+  as it has not been tested since this was done.
 
 + Missing set attributes function.
 
