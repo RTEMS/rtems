@@ -1,3 +1,11 @@
+2000-08-30	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Updated to gnat-3.13p and adjusted all versions
+	and revisions.
+	* gnatnewlib/gnatnewlib.spec.in: Include gcov per gnat 3.13p
+	build instructions.
+	* NOTE: GNAT 3.13p was not successfully built when this was committed.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.

@@ -212,15 +212,15 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
     cd gcc
     echo "Starting build of GNAT proper."
     make prefix=$RPM_BUILD_ROOT/opt/gnatrtems \
-     CC=gcc CFLAGS="-O2" LANGUAGES="c ada"
+     CC=gcc CFLAGS="-O2" LANGUAGES="c ada gcov"
 
     echo "Starting build of cross GNAT tools"
     make prefix=$RPM_BUILD_ROOT/opt/gnatrtems \
-     CC=gcc CFLAGS="-O2 -g" LANGUAGES="c ada" cross-gnattools
+     CC=gcc CFLAGS="-O2 -g" LANGUAGES="c ada gcov" cross-gnattools
 
     echo "Starting build of ada.all.cross"
     make prefix=$RPM_BUILD_ROOT/opt/gnatrtems \
-     CC=gcc CFLAGS="-O2" LANGUAGES="c ada" ada.all.cross
+     CC=gcc CFLAGS="-O2" LANGUAGES="c ada gcov" ada.all.cross
 
     # must have -gnato to pass validation
     # may want CC=gcc GNATLIBCFLAGS="-O3" GNATLIBFLAGS="-gnatpgn" gnatliy
