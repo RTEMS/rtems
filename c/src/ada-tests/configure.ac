@@ -5,7 +5,7 @@
 AC_PREREQ(2.59)
 AC_INIT([rtems-ada-tests],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([support])
-RTEMS_TOP(../../..)
+RTEMS_TOP([../../..],[])
 
 RTEMS_CANONICAL_TARGET_CPU
 
@@ -46,15 +46,10 @@ samples/Makefile
 samples/base_sp/Makefile
 samples/hello/Makefile
 samples/ticker/Makefile
-])
-
-if test "$HAS_MP" = "yes"; then
-AC_CONFIG_FILES([
 samples/base_mp/Makefile
 samples/base_mp/node1/Makefile
 samples/base_mp/node2/Makefile
 ])
-fi
 
 AC_CONFIG_FILES([
 sptests/Makefile
@@ -117,7 +112,6 @@ tmtests/tmck/Makefile
 tmtests/tmoverhd/Makefile
 ])
 
-if test "$HAS_MP" = "yes"; then
 AC_CONFIG_FILES([
 mptests/Makefile
 mptests/mp01/Makefile
@@ -137,6 +131,5 @@ mptests/mp01/node2/Makefile
 #mptests/mp12/Makefile
 #mptests/mp13/Makefile
 #mptests/mp14/Makefile
-fi
 
 AC_OUTPUT

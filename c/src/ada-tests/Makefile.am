@@ -2,14 +2,14 @@
 
 ACLOCAL_AMFLAGS = -I aclocal -I ../../../testsuites/aclocal
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 SUBDIRS = support samples sptests tmtests
-
 if HAS_MP
 SUBDIRS += mptests
 endif
+
+DIST_SUBDIRS = support samples sptests tmtests mptests
 
 EXTRA_DIST = ada.am
 
