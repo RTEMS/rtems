@@ -563,9 +563,10 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	 * No need to copy the packet to a contiguous buffer
 	 * since the hardware is capable of scatter/gather DMA.
 	 */
+	status = 0;
 	nAdded = 0;
 	txBd = firstTxBd = sc->txBdBase + sc->txBdHead;
-	for (;;) {
+	while (m) {
 		/*
 		 * Wait for buffer descriptor to become available.
 		 */
@@ -578,7 +579,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 			/*
 			 * Wait for buffer descriptor to become available.
 			 * Note that the buffer descriptors are checked
-			 * *before* * entering the wait loop -- this catches
+			 * *before* entering the wait loop -- this catches
 			 * the possibility that a buffer descriptor became
 			 * available between the `if' above, and the clearing
 			 * of the event register.
@@ -605,33 +606,28 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 		}
 
 		/*
-		 * Don't set the READY flag till the
-		 * whole packet has been readied.
-		 */
-		status = nAdded ? M360_BD_READY : 0;
-
-		/*
-		 *  FIXME: Why not deal with empty mbufs at at higher level?
 		 * The IP fragmentation routine in ip_output
 		 * can produce packet fragments with zero length.
-		 * I think that ip_output should be changed to get
-		 * rid of these zero-length mbufs, but for now,
-		 * I'll deal with them here.
 		 */
 		if (m->m_len) {
 			/*
-			 * Fill in the buffer descriptor
+			 * Fill in the buffer descriptor.
+			 * Don't set the READY flag in the first buffer
+			 * descriptor till the whole packet has been readied.
 			 */
+			txBd = sc->txBdBase + sc->txBdHead;
 			txBd->buffer = mtod (m, void *);
 			txBd->length = m->m_len;
 			sc->txMbuf[sc->txBdHead] = m;
-			nAdded++;
+			status = nAdded ? M360_BD_READY : 0;
 			if (++sc->txBdHead == sc->txBdCount) {
 				status |= M360_BD_WRAP;
 				sc->txBdHead = 0;
 			}
+			txBd->status = status;
 			l = m;
 			m = m->m_next;
+			nAdded++;
 		}
 		else {
 			/*
@@ -643,22 +639,14 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 			if (l != NULL)
 				l->m_next = m;
 		}
-
+	}
+	if (nAdded) {
 		/*
-		 * Set the transmit buffer status.
-		 * Break out of the loop if this mbuf is the last in the frame.
+		 * Send the packet
 		 */
-		if (m == NULL) {
-			if (nAdded) {
-				status |= M360_BD_PAD | M360_BD_LAST | M360_BD_TX_CRC | M360_BD_INTERRUPT;
-				txBd->status = status;
-				firstTxBd->status |= M360_BD_READY;
-				sc->txBdActiveCount += nAdded;
-			}
-			break;
-		}
-		txBd->status = status;
-		txBd = sc->txBdBase + sc->txBdHead;
+		txBd->status = status | M360_BD_PAD | M360_BD_LAST | M360_BD_TX_CRC | M360_BD_INTERRUPT;
+		firstTxBd->status |= M360_BD_READY;
+		sc->txBdActiveCount += nAdded;
 	}
 }
 
