@@ -11,7 +11,7 @@
 	   will have priority. */
 
 	/* Vector 0:	RESET:	Initial SSP */
-	.long	__end_of_ram
+	.long	_RamEnd
 	/* Vector 1:	RESET:	Initial PC */
 	.long	start
 

@@ -87,11 +87,8 @@ extern char _edata[];
 extern char _clear_start[];
 extern char end[];
 extern char _copy_data_from_rom[];
-extern char __end_of_ram[];
 
 /* constants */
-
-#define RAM_END ((int)__end_of_ram)
 
 #ifdef __START_C__
 #define STACK_SIZE "#0x800"

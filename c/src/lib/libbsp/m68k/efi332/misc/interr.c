@@ -83,7 +83,12 @@ void volatile _Internal_error_Occurred(
   RAW_PUTS("\r\nRTEMS: A fatal error has occured.\r\n");
   RAW_PUTS("RTEMS:    fatal error ");
   RAW_PUTI( the_error );
-  RAW_PUTS(".\r\n");
+  RAW_PUTS(" (");
+  outbyte( (char)((the_error>>24) & 0xff) );
+  outbyte( (char)((the_error>>16) & 0xff) );
+  outbyte( (char)((the_error>>8) & 0xff) );
+  outbyte( (char)(the_error & 0xff) );
+  RAW_PUTS(").\r\n");
 
   /* configure peripherals for a safe exit */
   bsp_cleanup();
