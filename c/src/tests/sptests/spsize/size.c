@@ -102,7 +102,7 @@
 #define SYSTEM_IDLE_FP (long) 0
 #endif
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if !defined(RTEMS_MULTIPROCESSING)
 #define MPCI_RECEIVE_SERVER_STACK_SIZE 0
 #endif
 
