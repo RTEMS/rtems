@@ -20,7 +20,10 @@
 struct uart_data
 {
   int hwFlow;
-  int baud;
+  unsigned long baud;
+  unsigned long databits;
+  unsigned long parity;
+  unsigned long stopbits;
 };
 
 static struct uart_data uart_data[2];
@@ -92,7 +95,15 @@ inline void uartError(int uart)
  * and longest rx fifo setting
  */
 void
-BSP_uart_init(int uart, int baud, int hwFlow)
+BSP_uart_init
+(
+  int uart,
+  unsigned long baud,
+  unsigned long databits,
+  unsigned long parity,
+  unsigned long stopbits,
+  int hwFlow
+)
 {
   unsigned char tmp;
   
@@ -128,7 +139,7 @@ BSP_uart_init(int uart, int baud, int hwFlow)
   uwrite(uart, DLM,  ((BSPBaseBaud/baud) >> 8) & 0xff); 
 
   /* 8-bit, no parity , 1 stop */
-  uwrite(uart, LCR, CHR_8_BITS);
+  uwrite(uart, LCR, databits | parity | stopbits);
   
 
   /* Set DTR, RTS and OUT2 high */
@@ -155,7 +166,14 @@ BSP_uart_init(int uart, int baud, int hwFlow)
  * Set baud
  */
 void
-BSP_uart_set_baud(int uart, int baud)
+BSP_uart_set_attributes
+(
+  int uart,
+  unsigned long baud,
+  unsigned long databits,
+  unsigned long parity,
+  unsigned long stopbits
+)
 {
   unsigned char mcr, ier;
 
@@ -168,7 +186,10 @@ BSP_uart_set_baud(int uart, int baud)
    * indeed required
    */
 
-  if(baud == uart_data[uart].baud)
+  if( (baud     == uart_data[uart].baud)     &&
+      (databits == uart_data[uart].databits) &&
+      (parity   == uart_data[uart].parity)   &&
+      (stopbits == uart_data[uart].stopbits) )
     {
       return;
     }
@@ -176,7 +197,7 @@ BSP_uart_set_baud(int uart, int baud)
   mcr = uread(uart, MCR);
   ier = uread(uart, IER);
 
-  BSP_uart_init(uart, baud, uart_data[uart].hwFlow);
+  BSP_uart_init(uart, baud, databits, parity, stopbits, uart_data[uart].hwFlow);
 
   uwrite(uart, MCR, mcr);
   uwrite(uart, IER, ier);

@@ -18,6 +18,19 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.1  2000/08/30 08:18:56  joel
+ * 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
+ *
+ * 	* shared/comm: Added "/dev/ttyS1" & "/dev/ttyS2" support for
+ * 	the i386 BSPs.
+ * 	* shared/comm/gdb_glue.c: New file.
+ * 	* shared/comm/i386_io.c: New file.
+ * 	* shared/comm/tty_drv.c: New file.
+ * 	* shared/comm/tty_drv.h: New file.
+ * 	* shared/comm/Makefile.am: Account for new files.
+ * 	* shared/comm/uart.c: Adds support for sending characters to
+ * 	another "line discipline."
+ *
  ****************************************************************************/
 
 #include <stdio.h>
@@ -119,7 +132,7 @@ tty1_initialize(rtems_device_major_number major,
    * Do device-specific initialization
    */
   /* 9600-8-N-1, without hardware flow control */
-  BSP_uart_init( BSP_UART_COM1, 9600, 0 );
+  BSP_uart_init( BSP_UART_COM1, 9600, CHR_8_BITS, 0, 0, 0 );
   status = BSP_install_rtems_irq_handler( &tty1_isr_data );
   if( !status )
   {
@@ -259,7 +272,7 @@ tty1_control(rtems_device_major_number major,
 static int
 conSetAttr(int port, int minor, const struct termios *t)
 {
-  int baud;
+  unsigned long baud, databits, parity, stopbits;
 
   switch (t->c_cflag & CBAUD) 
     {
@@ -319,8 +332,40 @@ conSetAttr(int port, int minor, const struct termios *t)
       rtems_fatal_error_occurred (RTEMS_INTERNAL_ERROR);
       return 0;
     }
-  printk("Setting baud, port=%X, baud=%d\n", port, baud );
-  BSP_uart_set_baud( port, baud );
+  if (t->c_cflag & PARENB) {
+    /* Parity is enabled */
+    if (t->c_cflag & PARODD) {
+      /* Parity is odd */
+      parity = PEN;
+    }
+    else {
+      /* Parity is even */
+      parity = PEN | EPS;
+    }
+  }
+  else {
+    /* No parity */
+    parity = 0;
+  }
+  
+  switch (t->c_cflag & CSIZE) {
+    case CS5: databits = CHR_5_BITS; break;
+    case CS6: databits = CHR_6_BITS; break;
+    case CS7: databits = CHR_7_BITS; break;
+    case CS8: databits = CHR_8_BITS; break;
+  }
+
+  if (t->c_cflag & CSTOPB) {
+    /* 2 stop bits */
+    stopbits = STB;
+  }
+  else {
+    /* 1 stop bit */
+    stopbits = 0;
+  }
+
+  printk("Setting attributes, port=%X, baud=%d, linemode = 0x%02x\n", port, baud, databits | parity | stopbits );
+  BSP_uart_set_attributes(port, baud, databits, parity, stopbits);
   return 0;
 }
 
@@ -362,7 +407,7 @@ tty2_initialize(rtems_device_major_number major,
    * Do device-specific initialization
    */
   /* 9600-8-N-1, without hardware flow control */
-  BSP_uart_init( BSP_UART_COM2, 9600, 0);
+  BSP_uart_init( BSP_UART_COM2, 9600, CHR_8_BITS, 0, 0, 0);
   status = BSP_install_rtems_irq_handler( &tty2_isr_data );
   if( !status )
   {

@@ -37,7 +37,7 @@ i386_stub_glue_init(int uart)
 
   uart_current = uart;
 
-  BSP_uart_init(uart, 38400, 0); 
+  BSP_uart_init(uart, 38400, CHR_8_BITS, 0, 0, 0); 
 }
 
 void BSP_uart_on(const rtems_raw_irq_connect_data* used)
