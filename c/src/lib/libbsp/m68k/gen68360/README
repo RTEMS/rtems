@@ -86,7 +86,7 @@ Board description
 clock rate:	25 MHz
 bus width:	8-bit PROM, 32-bit DRAM
 ROM:		To 1 MByte, 180 nsec (3 wait states), chip select 0
-RAM:		1 to 16 MByte DRAM SIMM, 60 nsec (0 wait states), parity or nonparity
+RAM:		4 or 16 MBytes of 60 nsec parity DRAM (1Mx36) to RAS1*/CAS1*
 
 Host System
 -----------
@@ -268,6 +268,11 @@ Timing tests:
 	rtems_rate_monotonic_period: obtain status 37
 	rtems_rate_monotonic_period: initiate period -- returns to caller 58
 	rtems_rate_monotonic_period: conclude periods -- caller blocks 75
+
+Network tests:
+       TCP throughput (as measured by ttcp):
+               Receive: 1081 kbytes/sec
+               Transmit: 953 kbytes/sec
 
 Porting
 -------
