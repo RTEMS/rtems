@@ -76,7 +76,7 @@ int mount(
 )
 {
   rtems_filesystem_location_info_t      loc;
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry;
+  rtems_filesystem_mount_table_entry_t *temp_mt_entry = NULL;
   rtems_filesystem_location_info_t     *loc_to_free = NULL;
   size_t size;
 
