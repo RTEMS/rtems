@@ -1,5 +1,32 @@
 2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* itron/inline/rtems/itron/eventflags.inl,
+	itron/inline/rtems/itron/fmempool.inl,
+	itron/inline/rtems/itron/intr.inl,
+	itron/inline/rtems/itron/mbox.inl,
+	itron/inline/rtems/itron/msgbuffer.inl,
+	itron/inline/rtems/itron/network.inl,
+	itron/inline/rtems/itron/port.inl,
+	itron/inline/rtems/itron/semaphore.inl,
+	itron/inline/rtems/itron/sysmgmt.inl,
+	itron/inline/rtems/itron/task.inl,
+	itron/inline/rtems/itron/time.inl,
+	itron/inline/rtems/itron/vmempool.inl,
+	itron/macros/rtems/itron/eventflags.inl,
+	itron/macros/rtems/itron/fmempool.inl,
+	itron/macros/rtems/itron/intr.inl,
+	itron/macros/rtems/itron/mbox.inl,
+	itron/macros/rtems/itron/msgbuffer.inl,
+	itron/macros/rtems/itron/network.inl,
+	itron/macros/rtems/itron/port.inl,
+	itron/macros/rtems/itron/semaphore.inl,
+	itron/macros/rtems/itron/sysmgmt.inl,
+	itron/macros/rtems/itron/task.inl,
+	itron/macros/rtems/itron/time.inl,
+	itron/macros/rtems/itron/vmempool.inl: New header guards.
+
+2005-02-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* posix/inline/rtems/posix/cond.inl,
 	posix/inline/rtems/posix/intr.inl,
 	posix/inline/rtems/posix/key.inl,
