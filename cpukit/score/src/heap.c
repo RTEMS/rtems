@@ -149,7 +149,8 @@ Heap_Extend_status _Heap_Extend(
 
   } else {                                              /* cases 4 and 5 */
 
-    the_block  = (Heap_Block *) (starting_address - HEAP_OVERHEAD);
+    the_block = (Heap_Block *)
+       _Addresses_Subtract_offset( starting_address, HEAP_OVERHEAD );
     if ( the_block != the_heap->final )
       return HEAP_EXTEND_NOT_IMPLEMENTED;                   /* case 5 */
   }
@@ -258,7 +259,7 @@ void *_Heap_Allocate(
    */
   
   offset = the_heap->page_size - (((unsigned32) ptr) & (the_heap->page_size - 1));
-  ptr += offset;
+  ptr = _Addresses_Add_offset( ptr, offset );
   *(((unsigned32 *) ptr) - 1) = offset;
 
 #ifdef RTEMS_DEBUG
