@@ -64,6 +64,35 @@ const pthread_mutexattr_t _POSIX_Mutex_Default_attributes = {
 
 /*PAGE
  *
+ *  _POSIX_Mutex_From_core_mutex_status
+ */
+
+int _POSIX_Mutex_From_core_mutex_status(
+  CORE_mutex_Status  status
+)
+{
+  switch ( status ) {
+    case CORE_MUTEX_STATUS_SUCCESSFUL:
+      return 0;
+    case CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT:
+      return EBUSY;
+    case CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED:
+      return EDEADLK;
+    case CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE:
+      return EPERM;
+    case CORE_MUTEX_WAS_DELETED:
+      return EINVAL;
+    case CORE_MUTEX_TIMEOUT:
+      return EAGAIN;
+    default:
+      break;
+  }
+  assert( 0 );
+  return 0;
+}
+
+/*PAGE
+ *
  *  _POSIX_Mutex_Manager_initialization
  *
  *  This routine initializes all mutex manager related data structures.
@@ -364,8 +393,9 @@ int _POSIX_Mutex_Lock_support(
         timeout
       );
       _Thread_Enable_dispatch();
-      return _Thread_Executing->Wait.return_code;
-      break;
+      return _POSIX_Mutex_From_core_mutex_status(
+        (CORE_mutex_Status) _Thread_Executing->Wait.return_code
+      );
   }
   return POSIX_BOTTOM_REACHED();
 }
@@ -419,6 +449,7 @@ int pthread_mutex_unlock(
 {
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
+  CORE_mutex_Status             status;
  
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
@@ -432,13 +463,13 @@ int pthread_mutex_unlock(
           MPCI_DEFAULT_TIMEOUT
       );
     case OBJECTS_LOCAL:
-      _CORE_mutex_Surrender(
+      status = _CORE_mutex_Surrender(
         &the_mutex->Mutex,
         the_mutex->Object.id, 
         POSIX_Threads_mutex_MP_support
       );
       _Thread_Enable_dispatch();
-      return _Thread_Executing->Wait.return_code; /* XXX return status */
+      return _POSIX_Mutex_From_core_mutex_status( status );
       break;
   }
   return POSIX_BOTTOM_REACHED();
