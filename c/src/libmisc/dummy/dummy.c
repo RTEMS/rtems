@@ -23,13 +23,17 @@ rtems_task Init(
 {
 }
 
+int main( int, char **, char **);
+
 /* configuration information */
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 10
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 20
+#define CONFIGURE_INIT_TASK_ENTRY_POINT   (void *)main
 
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_INIT
 
 #include <confdefs.h>
