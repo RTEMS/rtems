@@ -1,6 +1,5 @@
-/*  bsp.h
- *
- *  This include file definitions related to the Force CPU-386 board.
+/*
+ *  This include file definitions related to an Intel i386ex board.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -109,6 +108,24 @@ extern "C" {
 #undef BSP_EXTERN
 #define BSP_EXTERN extern
 #endif
+
+/*
+ *  Device Driver Table Entries
+ */
+ 
+/*
+ * NOTE: Use the standard Console driver entry
+ */
+ 
+/*
+ * NOTE: Use the standard Clock driver entry
+ */
+ 
+/*
+ * How many libio files we want
+ */
+ 
+#define BSP_LIBIO_MAX_FDS       20
 
 /* miscellaneous stuff assumed to exist */
 
