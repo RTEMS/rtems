@@ -43,45 +43,11 @@ rtems_cpu_table Cpu_table;
 extern rtems_unsigned32  rdb_start;
 
 /*
- *  bsp_libc_init
- *
- *  Initialize whatever libc we are using called from bsp_postdriver_hook.
+ *  Use the shared implementations of the following routines
  */
-
  
-void bsp_libc_init()
-{
-    extern int heap_bottom;
-    rtems_unsigned32 heap_start;
-    rtems_unsigned32 heap_size;
-
-    heap_start = (rtems_unsigned32) &heap_bottom;
-    if (heap_start & (CPU_ALIGNMENT-1))
-      heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-
-    heap_size = BSP_Configuration.work_space_start -(void *) heap_start ;
-    heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
-
-    heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
-    RTEMS_Malloc_Initialize((void *) heap_start, heap_size, 0);
-
-    /*
-     *  Init the RTEMS libio facility to provide UNIX-like system
-     *  calls for use by newlib (ie: provide __rtems_open, __rtems_close, etc)
-     *  Uses malloc() to get area for the iops, so must be after malloc init
-     */
- 
-    rtems_libio_init();
- 
-    /*
-     * Set up for the libc handling.
-     */
- 
-    if (BSP_Configuration.ticks_per_timeslice > 0)
-        libc_init(1);                /* reentrant if possible */
-    else
-        libc_init(0);                /* non-reentrant */
-}
+void bsp_postdriver_hook(void);
+void bsp_libc_init( void *, unsigned32, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -97,22 +63,32 @@ void bsp_libc_init()
  *
  */
  
-void
-bsp_pretasking_hook(void)
+void bsp_pretasking_hook(void)
 {
-    bsp_libc_init();
- 
+    extern int heap_bottom;
+    rtems_unsigned32 heap_start;
+    rtems_unsigned32 heap_size;
+
+    heap_start = (rtems_unsigned32) &heap_bottom;
+    if (heap_start & (CPU_ALIGNMENT-1))
+      heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+
+    heap_size = BSP_Configuration.work_space_start -(void *) heap_start ;
+    heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
+
+    heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
+    bsp_libc_init((void *) heap_start, heap_size, 0);
+
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 }
 
-
 /*
- *  Use the shared bsp_postdriver_hook() implementation 
+ *  bsp_start
+ *
+ *  This routine does the bulk of the system initialization.
  */
- 
-void bsp_postdriver_hook(void);
 
 void bsp_start( void )
 {

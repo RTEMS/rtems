@@ -1,15 +1,8 @@
-/*  bsp_start()
- *
+/*
  *  This routine starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
- *
- *  Called by RTEMS::RTEMS constructor in startup-ctor.cc
- *
- *  INPUT:  NONE
- *
- *  OUTPUT: NONE
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -56,9 +49,10 @@ rtems_unsigned32 CPU_HPPA_CLICKS_PER_TICK;
  * Try to speed those tests up by speeding up the clock when in idle
  */
 
-rtems_extension
-fast_idle_switch_hook(rtems_tcb *current_task,
-                      rtems_tcb *heir_task)
+rtems_extension fast_idle_switch_hook(
+  rtems_tcb *current_task,
+  rtems_tcb *heir_task
+)
 {
     static rtems_unsigned32 normal_clock = ~0;
     static rtems_unsigned32 fast_clock;
@@ -86,32 +80,26 @@ fast_idle_switch_hook(rtems_tcb *current_task,
 #endif
 
 /*
- *  Function:   bsp_libc_init
- *  Created:    94/12/6
+ *  Use the shared implementations of the following routines
+ */
+ 
+void bsp_postdriver_hook(void);
+void bsp_libc_init( void *, unsigned32, int );
+
+/*
+ *  Function:   bsp_pretasking_hook
+ *  Created:    95/03/10
  *
  *  Description:
- *      Initialize whatever libc we are using
- *      called from bsp_postdriver_hook
- *
- *
- *  Parameters:
- *      none
- *
- *  Returns:
- *      none.
- *
- *  Side Effects:
- *
+ *      BSP pretasking hook.  Called just before drivers are initialized.
+ *      Used to setup libc and install any BSP extensions.
  *
  *  Notes:
- *
- *  Deficiencies/ToDo:
- *
- *
+ *      Must not use libc (to do io) from here, since drivers are
+ *      not yet initialized.
  */
 
-void
-bsp_libc_init(void)
+void bsp_pretasking_hook(void)
 {
     extern int end;
     rtems_unsigned32        heap_start;
@@ -120,25 +108,7 @@ bsp_libc_init(void)
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-    RTEMS_Malloc_Initialize((void *) heap_start, 64 * 1024, 0);
-
-    /*
-     *  Init the RTEMS libio facility to provide UNIX-like system
-     *  calls for use by newlib (ie: provide __rtems_open, __rtems_close, etc)
-     *  Uses malloc() to get area for the iops, so must be after malloc init
-     */
-
-    rtems_libio_init();
-
-    /*
-     * Set up for the libc handling.
-     * XXX; this should allow for case of some other non-clock interrupts
-     */
-
-    if (BSP_Configuration.ticks_per_timeslice > 0)
-        libc_init(1);                /* reentrant if possible */
-    else
-        libc_init(0);                /* non-reentrant */
+    bsp_libc_init((void *) heap_start, 64 * 1024, 0);
 
     /*
      * on MP systems, always use the print buffer
@@ -151,39 +121,6 @@ bsp_libc_init(void)
 #ifdef SIMHPPA_ROM
     use_print_buffer = 1;
 #endif
-}
-
-
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  Parameters:
- *      none
- *
- *  Returns:
- *      nada
- *
- *  Side Effects:
- *      installs a few extensions
- *
- *  Notes:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- *  Deficiencies/ToDo:
- *
- *
- */
-
-void
-bsp_pretasking_hook(void)
-{
-    bsp_libc_init();
 
 #if SIMHPPA_FAST_IDLE
     /*
@@ -212,38 +149,6 @@ bsp_pretasking_hook(void)
     }
 #endif
 }
-
-/*
- *  Use the shared bsp_postdriver_hook() implementation 
- */
- 
-void bsp_postdriver_hook(void);
-
-/*
- *  Function:   bsp_start
- *  Created:    94/12/6
- *
- *  Description:
- *      called by crt0 as our "main" equivalent
- *
- *
- *
- *  Parameters:
- *
- *
- *  Returns:
- *
- *
- *  Side Effects:
- *
- *
- *  Notes:
- *
- *
- *  Deficiencies/ToDo:
- *
- *
- */
 
 void bsp_start(void)
 {

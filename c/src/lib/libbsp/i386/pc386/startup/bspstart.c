@@ -66,38 +66,8 @@ char            *rtems_progname;               /* Program name - from main(). */
 | External Prototypes
 +--------------------------------------------------------------------------*/
 extern void _exit(int);  /* define in exit.c */
-
-/*-------------------------------------------------------------------------+
-|         Function: bsp_libc_init
-|      Description: Initialize whatever libc we are using. Called from
-|                   pretasking hook. 
-| Global Variables: rtemsFreeMemStart.
-|        Arguments: None.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static void
-bsp_libc_init(void)
-{
-  if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
-    rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-
-  RTEMS_Malloc_Initialize((void *)rtemsFreeMemStart, HEAP_SIZE << 10, 0);
-  rtemsFreeMemStart += HEAP_SIZE << 10;           /* HEAP_SIZE is in KBytes */
-
-  /* Init the RTEMS libio facility to provide UNIX-like system calls for use by
-     newlib (ie: provide __rtems_open, __rtems_close, etc). Uses malloc()
-     to get area for the iops, so must be after malloc initialization. */
-
-  rtems_libio_init();
-
-  /* Set up for the libc handling. */
-
-  if (BSP_Configuration.ticks_per_timeslice > 0)
-    libc_init(1); /* reentrant if possible */
-  else
-    libc_init(0); /* non-reentrant         */
-} /* bsp_libc_init */
-
+void bsp_libc_init( void *, unsigned32, int );
+void bsp_postdriver_hook(void);
  
 /*-------------------------------------------------------------------------+
 |         Function: bsp_pretasking_hook
@@ -109,10 +79,14 @@ bsp_libc_init(void)
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-void
-bsp_pretasking_hook(void)
+void bsp_pretasking_hook(void)
 {
-  bsp_libc_init();
+  if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
+    rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+
+  bsp_libc_init((void *)rtemsFreeMemStart, HEAP_SIZE << 10, 0);
+  rtemsFreeMemStart += HEAP_SIZE << 10;           /* HEAP_SIZE is in KBytes */
+
 
 #ifdef RTEMS_DEBUG
 
@@ -121,13 +95,6 @@ bsp_pretasking_hook(void)
 #endif /* RTEMS_DEBUG */
 } /* bsp_pretasking_hook */
  
-
-/*
- *  Use the shared bsp_postdriver_hook() implementation 
- */
- 
-void bsp_postdriver_hook(void);
-
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start

@@ -1,8 +1,17 @@
 /*  vectors.s	1.1 - 95/12/04
  *
  *  This file contains the assembly code for the PowerPC 
- *  interrupt veneers for RTEMS.
+ *  interrupt vectors for RTEMS.
  *
+ *  COPYRIGHT (c) 1989-1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
  */
 
 /*
@@ -21,8 +30,6 @@
  *  The variable 'PPC_VECTOR_FILE_BASE' must be defined to be the
  *  offset from 0x????0000 to the first location in the file.  This
  *  will usually be 0x0000 or 0x0100.
- *
- *  $Id$
  */
 
 #include "asm.h"

@@ -12,7 +12,7 @@ PGM=${ARCH}/startup.rel
 NO_CTOR_LIB=${ARCH}/libno-ctor.a
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bspclean bspstart setvec
+C_PIECES=bspclean bsplibc bspstart setvec
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

@@ -1,13 +1,8 @@
-/*  bsp_start()
- *
+/*
  *  This routine starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
- *
- *  INPUT:  NONE
- *
- *  OUTPUT: NONE
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -39,41 +34,12 @@ rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
 
-/*      Initialize whatever libc we are using
- *      called from postdriver hook
+/*
+ *  Use the shared implementations of the following routines
  */
-
-void bsp_libc_init()
-{
-    extern void *_HeapStart;
-    extern rtems_unsigned32 _HeapSize;
-
-    /*
-     *  The last parameter to RTEMS_Malloc_Initialize is the "chunk"
-     *  size which a multiple of will be requested on each sbrk()
-     *  call by malloc().  A value of 0 indicates that sbrk() should
-     *  not be called to extend the heap.
-     */
-
-    RTEMS_Malloc_Initialize(&_HeapStart, _HeapSize, 0);
-
-    /*
-     *  Init the RTEMS libio facility to provide UNIX-like system
-     *  calls for use by newlib (ie: provide __rtems_open, __rtems_close, etc)
-     *  Uses malloc() to get area for the iops, so must be after malloc init
-     */
-
-    rtems_libio_init();
-
-    /*
-     * Set up for the libc handling.
-     */
-
-    if (BSP_Configuration.ticks_per_timeslice > 0)
-        libc_init(1);                /* reentrant if possible */
-    else
-        libc_init(0);                /* non-reentrant */
-}
+ 
+void bsp_postdriver_hook(void);
+void bsp_libc_init( void *, unsigned32, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -89,22 +55,23 @@ void bsp_libc_init()
  *
  */
  
-void
-bsp_pretasking_hook(void)
+void bsp_pretasking_hook(void)
 {
-    bsp_libc_init();
+    extern void *_HeapStart;
+    extern rtems_unsigned32 _HeapSize;
+
+    bsp_libc_init(&_HeapStart, _HeapSize, 0);
  
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 }
  
-
 /*
- *  Use the shared bsp_postdriver_hook() implementation 
+ *  bsp_start
+ *
+ *  This routine does the bulk of the system initialization.
  */
- 
-void bsp_postdriver_hook(void);
 
 void bsp_start( void )
 {

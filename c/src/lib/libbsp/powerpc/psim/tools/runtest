@@ -1,11 +1,19 @@
 #!/bin/sh -p
 #
-#  $Id$
-#
 # Run rtems tests on the powerpc simulator
 # This program generates a simulator script to run each test
 # Typically the test is then run, although it can be generated
 # and left as a file using -s
+#
+#  COPYRIGHT (c) 1989-1998.
+#  On-Line Applications Research Corporation (OAR).
+#  Copyright assigned to U.S. Government, 1994.
+#
+#  The license and distribution terms for this file may be
+#  found in found in the file LICENSE in this distribution or at
+#  http://www.OARcorp.com/rtems/license.html.
+#
+#  $Id$
 #
 
 # progname=`basename $0`
