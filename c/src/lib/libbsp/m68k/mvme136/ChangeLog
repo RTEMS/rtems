@@ -1,5 +1,9 @@
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* startup/Makefile.am: Remove USE_INIT_FINI.
+
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
 
 2003-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

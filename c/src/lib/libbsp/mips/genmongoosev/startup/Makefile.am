@@ -20,7 +20,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -I @srcdir@/../../shared/gdbstub
+AM_CPPFLAGS += -I@srcdir@/../../shared/gdbstub
 
 $(PGM): $(OBJS)
 	$(make-rel)

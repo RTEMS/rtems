@@ -21,8 +21,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -DUSE_INIT_FINI
-
 $(PGM): $(OBJS)
 	$(make-rel)
 

@@ -22,8 +22,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-# USE_INIT_FINI tells main.c what C++ help we need.
-AM_CPPFLAGS += -DUSE_INIT_FINI -I @srcdir@/../../shared/gdbstub
+AM_CPPFLAGS += -I@srcdir@/../../shared/gdbstub
 
 $(PGM): $(OBJS)
 	$(make-rel)

@@ -1,5 +1,9 @@
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* startup/Makefile.am: Remove USE_INIT_FINI.
+
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* bsp_specs: Remove -D__USE_INIT_FINI__.
 	Remove *.cpp (Now unused).
 
