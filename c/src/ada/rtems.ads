@@ -157,7 +157,7 @@ package RTEMS is
          Device_Name_Length : RTEMS.Unsigned32;
          Major              : RTEMS.Device_Major_Number;
          Minor              : RTEMS.Device_Minor_Number;
-         
+
       end record;
 
    --
@@ -184,6 +184,19 @@ package RTEMS is
 
    Default_Modes      : constant RTEMS.Mode      := 16#0000#;
 
+   All_Mode_Masks     : constant RTEMS.Mode := 16#0000_ffff#;
+   Current_Mode       : constant RTEMS.Mode := 16#0000_0000#;
+   Preempt_Mask       : constant RTEMS.Mode := 16#0000_0100#;
+   Timeslice_Mask     : constant RTEMS.Mode := 16#0000_0200#;
+   ASR_Mask           : constant RTEMS.Mode := 16#0000_0400#;
+   -- Interrupt_Mask  : constant RTEMS.Mode := CPU_Modes_Interrupt_Mask;
+   Preempt            : constant RTEMS.Mode := 16#0000_0000#;
+   No_Preempt         : constant RTEMS.Mode := 16#0000_0100#;
+   No_Timeslice       : constant RTEMS.Mode := 16#0000_0000#;
+   Timeslice          : constant RTEMS.Mode := 16#0000_0200#;
+   ASR                : constant RTEMS.Mode := 16#0000_0000#;
+   No_ASR             : constant RTEMS.Mode := 16#0000_0400#;
+
    --
    --  Attribute constants
    --
@@ -196,7 +209,11 @@ package RTEMS is
    function Interrupt_Level (
       Level : in     RTEMS.Unsigned32
    ) return RTEMS.Attribute;
-   
+
+   Minimum_Stack_Size : RTEMS.Unsigned32;
+   pragma Import (C, Minimum_Stack_Size, "rtems_minimum_stack_size");
+
+
    --
    --  Notepad index constants
    --
@@ -332,7 +349,7 @@ package RTEMS is
      Expired_While_Blocking  => 3,
      Expired                 => 4
    );
- 
+
    type Rate_Monotonic_Period_Status is
       record
          State                            : RTEMS.Rate_Monotonic_Period_States;
@@ -503,7 +520,7 @@ package RTEMS is
 
    type POSIX_Initialization_Threads_Table_Pointer is access all
        POSIX_Initialization_Threads_Table;
-   
+
    type POSIX_API_Configuration_Table_Entry is
       record
          Maximum_Threads                 : Interfaces.C.Int;
@@ -512,7 +529,7 @@ package RTEMS is
          Maximum_Keys                    : Interfaces.C.Int;
          Maximum_Queued_Signals          : Interfaces.C.Int;
          Number_Of_Initialization_Tasks  : Interfaces.C.Int;
-         User_Initialization_Tasks_Table : 
+         User_Initialization_Tasks_Table :
             RTEMS.POSIX_Initialization_Threads_Table_Pointer;
       end record;
 
@@ -1328,9 +1345,7 @@ package RTEMS is
 
   Configuration : RTEMS.Configuration_Table_Pointer;
   pragma Import (C, Configuration, "_Configuration_Table");
-  -- function Configuration 
-  -- return RTEMS.Configuration_Table_Pointer;
 
-  
+
 private
 end RTEMS;
