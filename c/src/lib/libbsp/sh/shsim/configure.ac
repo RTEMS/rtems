@@ -14,7 +14,6 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-
 ## bsp-specific options
 RTEMS_BSP_ARG_ENABLE([console],
 [  --enable-console=[[null|gdbsci1]]],[
@@ -64,12 +63,10 @@ RTEMS_BSPOPTS_HELP([CPU_CLOCK_RATE_HZ],
 ## Used in scitab/Makefile.am
 AC_SUBST(CPU_CLOCK_RATE_HZ)
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 scitab/Makefile
 gdbsci/Makefile
 start/Makefile

@@ -14,7 +14,6 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-
 ## bsp-specific options 
 RTEMS_BSPOPTS_SET([CPU_CLOCK_RATE_HZ],[*],[29491200])
 RTEMS_BSPOPTS_HELP([CPU_CLOCK_RATE_HZ],[cpu clock rate in HZ])
@@ -31,11 +30,9 @@ RTEMS_BSPOPTS_SET([STANDALONE_EVB],[*],[])
 RTEMS_BSPOPTS_HELP([STANDALONE_EVB],
 [If defined, compiles code to jump-start from FLASH, without a monitor])
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 console/Makefile
-include/Makefile
 scitab/Makefile
 start/Makefile
 startup/Makefile

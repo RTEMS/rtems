@@ -14,7 +14,6 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-
 ## bsp-specific options
 CPU_CLOCK_RATE_HZ=${CPU_CLOCK_RATE_HZ-96000000}
 AC_DEFINE_UNQUOTED(
@@ -32,10 +31,8 @@ AC_DEFINE_UNQUOTED(
   [$START_HW_INIT],
   [Whether to call early_hw_init from start.S])
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-include/Makefile
 start/Makefile
 startup/Makefile
 hw_init/Makefile

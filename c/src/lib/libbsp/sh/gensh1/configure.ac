@@ -14,7 +14,6 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-
 ## bsp-specific options
 RTEMS_BSPOPTS_SET([CPU_CLOCK_RATE_HZ],[*],[20000000])
 RTEMS_BSPOPTS_HELP([CPU_CLOCK_RATE_HZ],[cpu clock rate in HZ])
@@ -22,11 +21,9 @@ RTEMS_BSPOPTS_HELP([CPU_CLOCK_RATE_HZ],[cpu clock rate in HZ])
 ## Used in scitab/Makefile.am
 AC_SUBST(CPU_CLOCK_RATE_HZ)
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 console/Makefile
-include/Makefile
 scitab/Makefile
 start/Makefile
 startup/Makefile
