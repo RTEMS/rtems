@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 SUBDIRS = dummy dumpbuf stackchk monitor cpuuse rtmonuse untar mw-fb wrapup
 

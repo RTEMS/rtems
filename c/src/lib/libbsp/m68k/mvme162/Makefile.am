@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
 
 # consolex is a predecessor of the termios and libchip concepts.
 # It is no longer being compiled into the source.

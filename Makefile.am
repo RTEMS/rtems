@@ -7,7 +7,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+ACLOCAL_AMFLAGS = -I aclocal
 
 SUBDIRS = doc make tools $(HOST_SUBDIRS) $(TARGET_SUBDIRS)
 

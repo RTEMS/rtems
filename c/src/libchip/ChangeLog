@@ -1,3 +1,7 @@
+2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+
 2000-11-03	Chris Johns <ccj@acm.org>
 
 	* network/README.cs8900, network/cs8900.c, network/cs8900.h: New files.

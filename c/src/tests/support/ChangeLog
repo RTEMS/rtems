@@ -1,3 +1,7 @@
+2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* stubdr/Makefile.am: Replace leaf.cfg w/ automake/lib.am.
