@@ -1,3 +1,10 @@
+2003-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Remove -D__embedded__ -Asystem(embedded)
+	-DUSE_ENHANCED_INTR_API from cpp.
+	Remove cpp, old_cpp (now unused).
+	* configure.ac: Add -DUSE_ENHANCED_INTR_API to bspopts.h.
+
 2003-03-27	Joel Sherrill <joel@OARcorp.com>
 
 	* bootloader/Makefile.am: Eliminate EABI CFLAGS from those used to

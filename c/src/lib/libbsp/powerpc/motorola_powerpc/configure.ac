@@ -29,6 +29,10 @@ RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
  of PowerPC 603e revisions and emulator versions.
  The BSP actually contains the call that enables this.])
 
+## HACK: This should better be propagated through the BSP's bsp.h.
+## however, this BSP doesn't have one :(
+AC_DEFINE_UNQUOTED([USE_ENHANCED_INTR_API],[1],
+ [Use enhanced intr API])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
