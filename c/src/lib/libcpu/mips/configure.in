@@ -40,4 +40,5 @@ shared/cache/Makefile
 shared/interrupts/Makefile
 tx39/Makefile
 tx39/include/Makefile
+tx39/vectorisrs/Makefile
 timer/Makefile)

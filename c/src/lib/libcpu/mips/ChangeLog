@@ -1,5 +1,17 @@
 2000-12-13	Joel Sherrill <joel@OARcorp.com>
 
+	* configure.in: Added new directories.
+	* shared/interrupts/Makefile.am: Added AM_CPPFLAGS to define TX39
+	when compiling for a TX3904.
+	* shared/interrupts/maxvectors.c: Corrected conditional logic.
+	* tx39/Makefile.am: Added vectorisrs.
+	* tx39/vectorisrs/Makefile.am, tx39/vectorisrs/vectorisrs.c,
+	* tx39/vectorisrs/.cvsignore: New files.  This decodes the
+	interrupt pending information on the TX3904 and vectors
+	an interrupt.
+
+2000-12-13	Joel Sherrill <joel@OARcorp.com>
+
 	* shared/.cvsignore, shared/Makefile.am,
 	shared/cache/.cvsignore, shared/cache/Makefile.am,
 	shared/cache/cache.c, shared/cache/cache_.h,

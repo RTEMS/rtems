@@ -18,11 +18,11 @@
  *  controller so that these four bits map to 16 unique interrupts.
  *  So you have: 2 software interrupts, an NMI, and 16 others.
  */
-#if defined(tx3904)
+#if defined(TX39)
 #define MAX_VECTORS 19
 #endif
 
-#ifndef MAX
+#ifndef MAX_VECTORS
 #define MAX_VECTORS 8
 #endif
 

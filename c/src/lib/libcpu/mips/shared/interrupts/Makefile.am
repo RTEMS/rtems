@@ -20,6 +20,12 @@ include $(top_srcdir)/../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
+if tx39
+EXTRA_FLAGS = -DTX39
+endif
+
+AM_CPPFLAGS += $(EXTRA_FLAGS)
+
 $(PGM): $(interrupts_rel_OBJECTS)
 	$(make-rel)
 
