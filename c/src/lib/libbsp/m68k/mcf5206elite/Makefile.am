@@ -114,7 +114,7 @@ libbsp_a_LIBADD += \
     ../../../libcpu/@RTEMS_CPU@/shared/cache$(LIB_VARIANT).rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc$(LIB_VARIANT).rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/clock$(LIB_VARIANT).rel \
-    ../../../libcpu/@RTEMS_CPU@/mcf5206/console$(LIB_VARIANT).rel \
+    ../../../libcpu/@RTEMS_CPU@/mcf5206/mcfuart$(LIB_VARIANT).rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/timer$(LIB_VARIANT).rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/mbus$(LIB_VARIANT).rel
 
