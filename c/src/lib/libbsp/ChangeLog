@@ -1,3 +1,7 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shmdr/Makefile.am: Remove all-local: $(ARCH).
+
 2003-09-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp.am: Reworked.
