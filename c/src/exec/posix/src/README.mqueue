@@ -1,0 +1,27 @@
+#
+#  $Id$
+#
+
+This program should print out the default attribute settings for a 
+POSIX message queue.
+
+#include <mqueue.h>
+
+main()
+{
+  mqd_t mqfd;
+  struct mq_attr mqstat;
+  int status;
+
+  mqfd = mq_open("myipc",O_WRONLY|O_CREAT,NULL);
+
+  status = mq_getattr(mqfd, &mqstat);
+  printf( "status: %d\n", status );
+  if ( !status ) {
+    printf( "mq_maxmsg: %d\n", mqstat.mq_maxmsg );
+    printf( "mq_msgsize: %d\n", mqstat.mq_msgsize );
+    printf( "mq_curmsgs: %d\n", mqstat.mq_curmsgs );
+  }
+  exit( 0 );
+}
+
