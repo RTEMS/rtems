@@ -1,3 +1,13 @@
+2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in subdir Makefile.ams
+	* configure.ac: Reflect changes above.
+	* score/Makefile.am: Removed.
+	* sci/Makefile.am: Removed.
+	* timer/Makefile.am: Removed.
+	* clock/Makefile.am: Removed.
+	* delay/Makefile.am: Removed.
+
 2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Eliminate *_O_FILES.
