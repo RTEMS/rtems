@@ -34,6 +34,7 @@ rtems_isr Spurious_Isr(
 )
 {
   //int sp = 0;
+#if 0
   const char * const VectDescrip[] = {
     _Spurious_Error_[0],   _Spurious_Error_[0],  _Spurious_Error_[1], 
     _Spurious_Error_[2],   _Spurious_Error_[3],  _Spurious_Error_[4], 
@@ -57,6 +58,7 @@ rtems_isr Spurious_Isr(
     _Spurious_Error_[26], _Spurious_Error_[26], _Spurious_Error_[27], 
     _Spurious_Error_[27], _Spurious_Error_[27], _Spurious_Error_[27], 
     _Spurious_Error_[27], _Spurious_Error_[28]};
+#endif
 
   //asm volatile ( "movea.l   %%sp,%0 " : "=a" (sp) : "0" (sp) );
 

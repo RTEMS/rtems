@@ -36,6 +36,18 @@
 * $Id$
 *
 * $Log$
+* Revision 1.1  2002/02/28 23:10:39  joel
+* 2002-02-28	Mike Panetta <ahuitzot@mindspring.com>
+*
+* 	* console/sci.c, console/sci.h,
+* 	console/console.c: Added new SCI driver.
+* 	* start/start.c: Removed file.
+* 	* start/start.S: New file, the asm portion of the updated start code.
+* 	* start/configure.am: Added start.S, removed start.c
+* 	* startup/start_c.c: New file, the C portion of the updated start code. 	Contains most of the code that was in the old start.c.
+* 	* startup/configure.am: Added start_c.c to C_FILES.
+* 	* include/bsp.h: Added include <rtems/bspIo.h>
+*
 *****************************************************************************/
 
 
@@ -105,8 +117,9 @@
   Section A - Include Files
 *****************************************************************************/
 
-//#include <stdlib.h>
 #include <bsp.h>
+#include <rtems/bspIo.h>
+#include <stdio.h>
 #include <rtems/libio.h>
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
@@ -152,19 +165,6 @@
 /*****************************************************************************
   Section D - External Functions
 *****************************************************************************/
-
-void printf();
-void printk();
-
-#if 0 // Why are these here?  They are defined in unistd.h
-
-unsigned16 open();
-unsigned16 close();
-unsigned16 read();
-unsigned16 write();
-unsigned16 ioctl();
-
-#endif
 
 
 
@@ -965,7 +965,7 @@ rtems_device_driver SciInitialize (
     void * arg
 )
 {
-    rtems_status_code status;
+//     rtems_status_code status;
 
 //printk("%s\r\n", __FUNCTION__);
 
@@ -1603,6 +1603,7 @@ void SciSendBreak( void )
 * Scope:    public
 ****************************************************************************/
 
+#if 0
 #define O_RDWR LIBIO_FLAGS_READ_WRITE           // dont like this but...
 
 void SciUnitTest()
@@ -1628,6 +1629,7 @@ printk("SCI read result=%d,byte=%x\r\n",result,byte);
 
     return;
 }
+#endif
 
 
 /****************************************************************************
@@ -1640,18 +1642,18 @@ printk("SCI read result=%d,byte=%x\r\n",result,byte);
 
 void SciPrintStats ( void )
 {
-    printf("\r\n");
+    printk("\r\n");
 
-    printf( "SYS_CLOCK is %2.6f Mhz\r\n\n", SYS_CLOCK / 1000000.0 );
+    printk( "SYS_CLOCK is %2.6f Mhz\r\n\n", SYS_CLOCK / 1000000.0 );
 
-    printf( "Current baud rate is %d bps or %d cps\r\n\n", SciBaud, SciBaud / 10 );
+    printk( "Current baud rate is %d bps or %d cps\r\n\n", SciBaud, SciBaud / 10 );
 
-    printf( "SCI Uart chars in       %8d\r\n", SciBytesIn       );
-    printf( "SCI Uart chars out      %8d\r\n", SciBytesOut      );
-    printf( "SCI Uart framing errors %8d\r\n", SciErrorsFraming );
-    printf( "SCI Uart parity  errors %8d\r\n", SciErrorsParity  );
-    printf( "SCI Uart overrun errors %8d\r\n", SciErrorsOverrun );
-    printf( "SCI Uart noise   errors %8d\r\n", SciErrorsNoise   );
+    printk( "SCI Uart chars in       %8d\r\n", SciBytesIn       );
+    printk( "SCI Uart chars out      %8d\r\n", SciBytesOut      );
+    printk( "SCI Uart framing errors %8d\r\n", SciErrorsFraming );
+    printk( "SCI Uart parity  errors %8d\r\n", SciErrorsParity  );
+    printk( "SCI Uart overrun errors %8d\r\n", SciErrorsOverrun );
+    printk( "SCI Uart noise   errors %8d\r\n", SciErrorsNoise   );
 
     return;
 }
