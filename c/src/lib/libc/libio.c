@@ -25,6 +25,8 @@
 #if ! defined(O_NDELAY)
 # if defined(solaris2)
 #  define O_NDELAY O_NONBLOCK
+# elif defined(__CYGWIN__)
+#   define O_NDELAY _FNBIO
 # elif defined(RTEMS_NEWLIB)
 #  define O_NDELAY _FNBIO
 # endif
