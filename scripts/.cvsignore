@@ -1,0 +1,16 @@
+Makefile
+Makefile.in
+aclocal.m4
+buildall
+config.cache
+config.guess
+config.log
+config.status
+config.sub
+configure
+depcomp
+mkbinutilspec
+mkbspspec
+mkgccnewlibspec
+mkgdbspec
+setup.cache
