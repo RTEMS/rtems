@@ -1,3 +1,7 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* include/tm27.h: i960 obsoleted and all references removed.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
