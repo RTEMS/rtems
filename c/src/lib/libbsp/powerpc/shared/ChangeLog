@@ -1,3 +1,19 @@
+ 
+2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* residual/residual.c: Include <string.h>.
+	* vectors/vectors_init.c: Include <rtems/bspIo.h> for printk.
+	* bootloader/mm.c: Ditto.
+	* bootloader/pci.c: Ditto.
+	* console/console.c: Ditto.
+	* openpic/openpic.c: Ditto.
+
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootloader/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* console/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* irq/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* motorola/Makefile.am: Remove AUTOMAKE_OPTIONS.
