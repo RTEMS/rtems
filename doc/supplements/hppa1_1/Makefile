@@ -20,12 +20,14 @@ dirs:
 
 COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
-GENERATED_FILES= \
-  cpumodel.texi timing.texi wksheets.texi
+GENERATED_FILES=\
+  cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
+  bsp.texi cputable.texi wksheets.texi 
+
+# timing.texi timeBSP.texi
 
 FILES= $(PROJECT).texi \
-  bsp.texi callconv.texi cputable.texi fatalerr.texi \
-  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi \
+  preface.texi timetbl.texi timedata.texi \
   $(GENERATED_FILES)
 
 info: dirs c_hppa1_1
@@ -55,20 +57,43 @@ cpumodel.texi: cpumodel.t Makefile
             -u "Top" \
             -n "Calling Conventions" ${*}.t
 
-# Calling Conventions
-# Memory Model
+callconv.texi: callconv.t Makefile
+	$(BMENU) -p "CPU Model Dependent Features CPU Model Name" \
+	    -u "Top" \
+	    -n "Memory Model" ${*}.t
+
+memmodel.texi: memmodel.t Makefile
+	$(BMENU) -p "Calling Conventions User-Provided Routines" \
+	    -u "Top" \
+	    -n "Interrupt Processing" ${*}.t
 
 # Interrupt Chapter:
 #  1.  Replace Times and Sizes
 #  2.  Build Node Structure
 
-intr.texi: intr.t TIMES
-	${REPLACE} -p TIMES intr.t
-	mv intr.t.fixed intr.texi
+intr.t: intr_NOTIMES.t SIMHPPA_TIMES
+	${REPLACE} -p SIMHPPA_TIMES intr_NOTIMES.t
+	mv intr_NOTIMES.t.fixed intr.t
 
-# Fatal Error
-# BSP
-# CPU Table
+intr.texi: intr.t Makefile
+	$(BMENU) -p "Memory Model Flat Memory Model" \
+	    -u "Top" \
+
+fatalerr.texi: fatalerr.t Makefile
+	$(BMENU) -p "Interrupt Processing Interrupt Stack" \
+	    -u "Top" \
+	    -n "Board Support Packages" ${*}.t
+
+bsp.texi: bsp.t Makefile
+	$(BMENU) -p "Default Fatal Error Processing Default Fatal Error Handler Operations" \
+	    -u "Top" \
+	    -n "Processor Dependent Information Table" ${*}.t
+
+cputable.texi: cputable.t Makefile
+	$(BMENU) -p "Board Support Packages Processor Initialization" \
+	    -u "Top" \
+	    -n "Memory Requirements" ${*}.t
+
 
 # Worksheets Chapter:
 #  1.  Obtain the Shared File
@@ -78,8 +103,8 @@ intr.texi: intr.t TIMES
 wksheets_NOTIMES.t: ../../common/wksheets.t
 	cp ../../common/wksheets.t wksheets_NOTIMES.t
 
-wksheets.t: wksheets_NOTIMES.t TIMES
-	${REPLACE} -p TIMES wksheets_NOTIMES.t
+wksheets.t: wksheets_NOTIMES.t SIMHPPA_TIMES
+	${REPLACE} -p SIMHPPA_TIMES wksheets_NOTIMES.t
 	mv wksheets_NOTIMES.t.fixed wksheets.t
 
 wksheets.texi: wksheets.t Makefile
@@ -105,12 +130,12 @@ timetbl.t: ../../common/timetbl.t
 	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
             <../../common/timetbl.t >timetbl.t
 
-timetbl.texi: timetbl.t TIMES
-	${REPLACE} -p TIMES timetbl.t
+timetbl.texi: timetbl.t SIMHPPA_TIMES
+	${REPLACE} -p SIMHPPA_TIMES timetbl.t
 	mv timetbl.t.fixed timetbl.texi
 
-timedata.texi: timedata.t TIMES
-	${REPLACE} -p TIMES timedata.t
+timedata.texi: timedata.t SIMHPPA_TIMES
+	${REPLACE} -p SIMHPPA_TIMES timedata.t
 	mv timedata.t.fixed timedata.texi
 
 html: dirs $(FILES)
@@ -123,7 +148,7 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_hppa1_1 c_hppa1_1-*
-	rm -f timedata.texi timetbl.texi timetbl.t intr.texi
+	rm -f timedata.texi timetbl.texi timetbl.t intr.t
 	rm -f timing.t timing.texi
 	rm -f wksheets.t wksheets_NOTIMES.t $(GENERATED_FILES)
 	rm -f *.fixed _*

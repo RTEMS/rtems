@@ -6,24 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Calling Conventions, Calling Conventions Introduction, CPU Model Dependent Features CPU Model Name, Top
-@end ifinfo
 @chapter Calling Conventions
-@ifinfo
-@menu
-* Calling Conventions Introduction::
-* Calling Conventions Processor Background::
-* Calling Conventions Calling Mechanism::
-* Calling Conventions Register Usage::
-* Calling Conventions Parameter Passing::
-* Calling Conventions User-Provided Routines::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Calling Conventions Introduction, Calling Conventions Processor Background, Calling Conventions, Calling Conventions
-@end ifinfo
 @section Introduction
 
 Each high-level language compiler generates
@@ -50,9 +34,6 @@ This chapter describes the calling conventions used
 by the GNU C and standard HP-UX compilers for the PA-RISC
 architecture.
 
-@ifinfo
-@node Calling Conventions Processor Background, Calling Conventions Calling Mechanism, Calling Conventions Introduction, Calling Conventions
-@end ifinfo
 @section Processor Background
 
 The PA-RISC architecture supports a simple yet
@@ -72,9 +53,6 @@ not automatically save or restore any registers.  It is the
 responsibility of the high-level language compiler to define the
 register preservation and usage convention.
 
-@ifinfo
-@node Calling Conventions Calling Mechanism, Calling Conventions Register Usage, Calling Conventions Processor Background, Calling Conventions
-@end ifinfo
 @section Calling Mechanism
 
 All RTEMS directives are invoked as standard
@@ -82,9 +60,6 @@ subroutines via a bl or a blr instruction with the return address
 assumed to be in r2 and return to the user application via the
 bv instruction.
 
-@ifinfo
-@node Calling Conventions Register Usage, Calling Conventions Parameter Passing, Calling Conventions Calling Mechanism, Calling Conventions
-@end ifinfo
 @section Register Usage
 
 As discussed above, the bl and blr instructions do
@@ -131,9 +106,6 @@ possible to modify the PA-RISC specific code such that all tasks
 are considered floating point only when this option is not used.
 @end itemize
 
-@ifinfo
-@node Calling Conventions Parameter Passing, Calling Conventions User-Provided Routines, Calling Conventions Register Usage, Calling Conventions
-@end ifinfo
 @section Parameter Passing
 
 RTEMS assumes that the first four (4) arguments are
@@ -160,9 +132,6 @@ as the stack pointer.  The standard stack frame consists of a
 minimum of sixty-four (64) bytes and is the responsibility of
 the callee to maintain.
 
-@ifinfo
-@node Calling Conventions User-Provided Routines, Memory Model, Calling Conventions Parameter Passing, Calling Conventions
-@end ifinfo
 @section User-Provided Routines
 
 All user-provided routines invoked by RTEMS, such as
