@@ -1,7 +1,3 @@
-// 
-// 	@(#)rtems-ctor.cc	1.6 - 95/04/25
-//
-
 /*
  *  rtems-ctor.cc
  *
@@ -90,7 +86,6 @@ extern "C" {
     {
         rtems_argc = argc;
         rtems_argv = argv;
-        rtems_envp = environp;
 
         if ((argc > 0) && argv && argv[0])
             rtems_progname = argv[0];

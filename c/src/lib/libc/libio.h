@@ -1,7 +1,4 @@
 /*
- *	@(#)libio.h	1.1 - 95/06/02
- *	
- *
  * General purpose communication channel for RTEMS to allow UNIX/POSIX
  *    system call behavior on top of RTEMS IO devices.
  *

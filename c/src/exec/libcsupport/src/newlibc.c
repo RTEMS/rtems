@@ -1,17 +1,6 @@
-/*
- *	@(#)newlibc.c	1.9 - 95/05/16
- *	
- */
-
 #if defined(RTEMS_NEWLIB)
 
 /*
- *  File:	newlibc.c,v
- *  Project:	PixelFlow
- *  Created:	94/12/7
- *  Revision:	1.2
- *  Last Mod:	1995/05/09 20:24:37
- *
  *  COPYRIGHT (c) 1994 by Division Incorporated
  *
  *  To anyone who acknowledges that this file is provided "AS IS"
@@ -47,8 +36,25 @@
 
 #include <sys/reent.h>          /* for extern of _REENT (aka _impure_ptr) */
 
-#ifdef RTEMS_UNIX
-#include <stdio.h>              /* for setvbuf() */
+/*
+ *  NOTE: When using RTEMS fake stat, fstat, and isatty, all output
+ *        is line buffered so this setvbuf is not necessary.  This
+ *        setvbuf insures that we can redirect the output of a test
+ *        on the UNIX simulator and it is in the same order as for a
+ *        real target.
+ *  NOTE:
+ *        There is some problem with doing this on the hpux version
+ *        of the UNIX simulator (symptom is printf core dumps), so
+ *        we just don't for now.
+ *        Not sure if this is a problem with hpux, newlib, or something else.
+ */
+ 
+#if defined(RTEMS_UNIX) && !defined(hpux)
+#define NEED_SETVBUF
+#endif
+ 
+#ifdef NEED_SETVBUF
+#include <stdio.h>
 #endif
 
 #include "internal.h"
@@ -196,18 +202,19 @@ libc_delete_hook(rtems_tcb *current_task,
 
     if (current_task == deleted_task)
     {
-        ptr = _REENT;
+      ptr = _REENT;
     }
     else
     {
-        ptr = (struct _reent *) MY_task_get_note(deleted_task, LIBC_NOTEPAD);
+      ptr = (struct _reent *) MY_task_get_note(deleted_task, LIBC_NOTEPAD);
     }
 
     /* if (ptr) */
     if (ptr && ptr != &libc_global_reent)
     {
-        _wrapup_reent(ptr);
-        _reclaim_reent(ptr);
+      _wrapup_reent(ptr);
+      _reclaim_reent(ptr);
+      free(ptr);
     }
 
     MY_task_set_note(deleted_task, LIBC_NOTEPAD, 0);
@@ -218,7 +225,7 @@ libc_delete_hook(rtems_tcb *current_task,
 
     if (current_task == deleted_task)
     {
-        _REENT = 0;
+      _REENT = 0;
     }
 }
 

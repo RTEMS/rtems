@@ -25,12 +25,14 @@
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>    /* sbrk(2) */
 
 rtems_id RTEMS_Malloc_Heap;
 size_t RTEMS_Malloc_Sbrk_amount;
 
 #ifdef RTEMS_DEBUG
 #define MALLOC_STATS
+#define MALLOC_DIRTY
 #endif
 
 #ifdef MALLOC_STATS
@@ -202,7 +204,11 @@ void *malloc(
           malloc_stats.max_depth = current_depth;
   }
 #endif
-  
+
+#ifdef MALLOC_DIRTY
+  (void) memset(return_this, 0xCF, size);
+#endif
+
   return return_this;
 }
 
@@ -220,6 +226,8 @@ void *calloc(
   cptr = malloc( length );
   if ( cptr )
     memset( cptr, '\0', length );
+
+  MSBUMP(malloc_calls, -1);   /* subtract off the malloc */
 
   return cptr;
 }

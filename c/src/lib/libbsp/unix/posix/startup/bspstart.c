@@ -1,8 +1,3 @@
-/*
- *      @(#)bspstart.c  1.7 - 95/04/07
- *
- */
-
 /*  bsp_start()
  *
  *  This routine starts the application.  It includes application,
@@ -55,7 +50,6 @@ rtems_unsigned32             bsp_isr_level;
 rtems_unsigned32             Heap_size;
 int                          rtems_argc;
 char                       **rtems_argv;
-char                       **rtems_envp;
 
 /*
  * May be overridden by RTEMS_WORKSPACE_SIZE and RTEMS_HEAPSPACE_SIZE
@@ -167,6 +161,13 @@ bsp_pretasking_hook(void)
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
+
+    /*
+     * Dump malloc stats on exit...
+     */
+#if defined(RTEMS_DEBUG)
+  atexit(malloc_dump);
+#endif
 }
 
 /*
@@ -198,11 +199,6 @@ bsp_postdriver_hook(void)
   if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 #endif
-
-#if defined(MALLOC_STATS)
-  atexit(malloc_dump);
-#endif
-
 }
 
 /*

@@ -1,7 +1,4 @@
 /*
- *	@(#)libio.c	1.1 - 95/06/02
- *	
- *
  * Provide UNIX/POSIX-like io system calls for RTEMS using the
  *  RTEMS IO manager
  *

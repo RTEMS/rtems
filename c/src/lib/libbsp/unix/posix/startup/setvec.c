@@ -31,7 +31,7 @@ set_vector(                                     /* returns old vector */
     int                 type                    /* RTEMS or RAW intr  */
 )
 {
-    rtems_isr_entry  rtems_isr_ptr;
+    rtems_isr_entry  rtems_isr_ptr = 0;
     proc_ptr         raw_isr_ptr;
 
     if ( type ) {
