@@ -86,21 +86,28 @@ The cfg_mount() function is not supported by this implementation.
 @end table
 
 @subheading DESCRIPTION:
-The @code{cfg_mount} function maps a configuration space defined
-by the file identified by the the @code{file} argument.  The 
-distinguished node of the mapped configuration space shall be
-mounted in the active space at the point identified bt the
-@code{cfgpath} configuration pathname.
 
-The @code{notification} argument specifies how changes to the
-mapped configuration space shall be communicated to the application.
-If the @code{notification} argument is NULL, no notification shall
-be performed for the mapped configuration space.  If the Event
-Logging option is defined, the notification argument defines the
-facility to which changes in the mapped configuration space shall
-be logged.  Otherwise, the @code{notification} argument shall
-specify an implementation defined method of notifying the application
-of changes to the mapped configuration space.
+If {_POSIX_CFG} is defined:
+
+   The @code{cfg_mount} function maps a configuration space defined
+   by the file identified by the the @code{file} argument.  The 
+   distinguished node of the mapped configuration space shall be
+   mounted in the active space at the point identified bt the
+   @code{cfgpath} configuration pathname.
+
+   The @code{notification} argument specifies how changes to the
+   mapped configuration space shall be communicated to the application.
+   If the @code{notification} argument is NULL, no notification shall
+   be performed for the mapped configuration space.  If the Event
+   Logging option is defined, the notification argument defines the
+   facility to which changes in the mapped configuration space shall
+   be logged.  Otherwise, the @code{notification} argument shall
+   specify an implementation defined method of notifying the application
+   of changes to the mapped configuration space.
+
+Otherwise:
+
+   The @code{cfg_mount} function shall fail.
 
 @subheading NOTES:
 
@@ -153,10 +160,16 @@ resolution of the cfgpath argument
 
 @subheading DESCRIPTION:
 
-The @code{cfg_umount} function unmaps the configuration space whose 
-distinguished node is mapped in the active space at the location defined
-by @code{cfgpatah} configuration pathname.  All system resources 
-allocated for this configuration space should be deallocated.
+If {_POSIX_CFG} is defined:
+
+   The @code{cfg_umount} function unmaps the configuration space whose 
+   distinguished node is mapped in the active space at the location defined
+   by @code{cfgpatah} configuration pathname.  All system resources 
+   allocated for this configuration space should be deallocated.
+
+Otherwise:
+
+   The @code{cfg_umount} function shall fail.
 
 @subheading NOTES:
 
@@ -215,12 +228,18 @@ The named node resides on a read-only configuration space.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_mknod} function creates a new node in the configuration
-space which contains the pathname prefix of @cod{cfgpath}.  T he node
-name shall be defined by the pathname suffix of @code{cfgpath}.  The
-node name shall be defined by the pathname suffix of @code{cfgpath}. 
-The node permissions shall be specified by the value of @code{mode}.
-The node type shall be specified by the value of @code{type}.
+If {_POSIX_CFG} is defined:
+
+   The @code{cfg_mknod} function creates a new node in the configuration
+   space which contains the pathname prefix of @cod{cfgpath}.  T he node
+   name shall be defined by the pathname suffix of @code{cfgpath}.  The
+   node name shall be defined by the pathname suffix of @code{cfgpath}. 
+   The node permissions shall be specified by the value of @code{mode}.
+   The node type shall be specified by the value of @code{type}.
+
+Otherwise:
+
+   The @code{cfg_mknod} function shall fail.
 
 @subheading NOTES:
 
@@ -267,9 +286,16 @@ resolution of the cfgpath argument.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_get} function stores the value attribute of the
-configuration node identified by @code{cfgpath}, into the buffer
-described by the @code{value} pointer.
+If {_POSIX_CFG} is defined:
+
+   The @code{cfg_get} function stores the value attribute of the
+   configuration node identified by @code{cfgpath}, into the buffer
+   described by the @code{value} pointer.
+
+Otherwise:
+
+   The @code{cfg_get} function shall fail.
+
 
 @subheading NOTES:
 
@@ -316,9 +342,16 @@ resolution of the cfgpath argument.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_set} function stores the value specified by the
-@code{value} argument in the configuration node defined by the 
-@code{cfgpath} argument.
+If {_POSIX_CFG} is defined:
+
+   The @code{cfg_set} function stores the value specified by the
+   @code{value} argument in the configuration node defined by the 
+   @code{cfgpath} argument.
+
+Otherwise:
+
+   The @code{cfg_set} function shall fail.
+
 
 @subheading NOTES:
 
@@ -386,17 +419,23 @@ resolution of the cfgpath argument.
 
 @subheading DESCRIPTION:
 
-The @code{src} and @code{dest}arguments point to pathnnames which 
-name existing nodes.  The @code{cfg_link} function shall atomically 
-create a link between specified nodes, and increment by one the link 
-count of the node specified by the @code{src} argument. 
+If {_POSIX_CFG} is defined:
 
-If the @code{cfg_lin} function fails, no link shall be created, and
-the link count of the node shall remain unchanged by this function
-call.
+   The @code{src} and @code{dest}arguments point to pathnnames which 
+   name existing nodes.  The @code{cfg_link} function shall atomically 
+   create a link between specified nodes, and increment by one the link 
+   count of the node specified by the @code{src} argument. 
 
-This implementation may require that the calling process has permission 
-to access the specified nodes.
+   If the @code{cfg_lin} function fails, no link shall be created, and
+   the link count of the node shall remain unchanged by this function
+   call.
+
+   This implementation may require that the calling process has permission 
+   to access the specified nodes.
+
+Otherwise:
+
+   The @code{cfg_link} functioin shall fail.
 
 @subheading NOTES:
 
@@ -457,13 +496,19 @@ resolution of the cfgpath argument.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_unlink} function  removes the link between the node
-specified by the @code{cfgpath} path prefix and the parent node 
-specified by @code{cfgpaht}, and shall decrement the link count 
-of the @code{cfgpath} node.
+If {_POSIX_CFG} is defined:
 
-When the link count of the node becomes zero, the space occupied
-by the node shall be freed and the node shall no longer be accessible.
+   The @code{cfg_unlink} function removes the link between the node
+   specified by the @code{cfgpath} path prefix and the parent node 
+   specified by @code{cfgpaht}, and shall decrement the link count 
+   of the @code{cfgpath} node.
+
+   When the link count of the node becomes zero, the space occupied
+   by the node shall be freed and the node shall no longer be accessible.
+
+Otherwise:
+
+   The @code{unlink} function shall fail.
 
 @subheading NOTES:
 
@@ -519,40 +564,46 @@ the substituted pathname string exceeded {PATH_MAX}.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_open} function shall open a configuration traversal stream
-rooted in the configuration nodes name by the @code{pathnames} argument.
-It shall store a pointer to a CFG object that represents that stream at 
-the location identified the @code{cfgstream} pointer.  The @code{pathnames}
-argument is an array of character pointers to NULL-terminated strings. 
-The last member of this array shall be a NULL pointer.
+If {_POSIX_CFG} is defined:
 
-The value of @code{options} is the bitwise inclusive OR of values from the 
-following lists.  Applications shall supply exactly one of the first two 
-values below in @code{options}.
-   CFG_LOGICAL
-   CFG_PHYSICAL
+   The @code{cfg_open} function shall open a configuration traversal stream
+   rooted in the configuration nodes name by the @code{pathnames} argument.
+   It shall store a pointer to a CFG object that represents that stream at 
+   the location identified the @code{cfgstream} pointer.  The @code{pathnames}
+   argument is an array of character pointers to NULL-terminated strings. 
+   The last member of this array shall be a NULL pointer.
 
-Any combination of the remaining flags can be specified in the value of 
-@code{options}
-   CFG_COMFOLLOW
-   CFG_XDEV
+   The value of @code{options} is the bitwise inclusive OR of values from the 
+   following lists.  Applications shall supply exactly one of the first two 
+   values below in @code{options}.
+      CFG_LOGICAL
+      CFG_PHYSICAL
 
-The @code{cfg_open} argument @code{compar} shall either be NULL or point
-to a function that shall be called with two pointers to pointers to CFGENT 
-structures that shall return less than, equal to , or greater than zero if 
-the node referenced by the first argument is considered to be respectively
-less than, equal to, or greater than the node referenced by the second.
-The CFGENT structure fields provided to the comparison routine shall be as 
-described with the exception that the contents of the @code{cfg_path} and
-@code{cfg_pathlen} fields are unspecified.
+   Any combination of the remaining flags can be specified in the value of 
+   @code{options}
+      CFG_COMFOLLOW
+      CFG_XDEV
 
-This comparison routine is used to determine the order in which nodes in
-directories encountered during the traversal are returned, and the order
-of traversal when more than one node is specified in the @code{pathnames}
-argument to @code{cfg_open}.  If a comparison routine is specified, the
-order of traversal shall be from the least to the greatest.  If the 
-@code{compar} argument is NULL, the order of traversal shall be as listed
-in the @code{pathnames} argument. 
+   The @code{cfg_open} argument @code{compar} shall either be NULL or point
+   to a function that shall be called with two pointers to pointers to CFGENT 
+   structures that shall return less than, equal to , or greater than zero if 
+   the node referenced by the first argument is considered to be respectively
+   less than, equal to, or greater than the node referenced by the second.
+   The CFGENT structure fields provided to the comparison routine shall be as 
+   described with the exception that the contents of the @code{cfg_path} and
+   @code{cfg_pathlen} fields are unspecified.
+
+   This comparison routine is used to determine the order in which nodes in
+   directories encountered during the traversal are returned, and the order
+   of traversal when more than one node is specified in the @code{pathnames}
+   argument to @code{cfg_open}.  If a comparison routine is specified, the
+   order of traversal shall be from the least to the greatest.  If the 
+   @code{compar} argument is NULL, the order of traversal shall be as listed
+   in the @code{pathnames} argument. 
+
+Otherwise:
+
+   The @code{cfg_open} shall fail.
 
 @subheading NOTES:
 
@@ -602,13 +653,47 @@ substituted pathname string exceeded {PATH_MATH}.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_read} function returns a pointer to a CFGENT sturcture
-representing a node in the configuration space to which @code{cfgp}
-refers.  The returned pointer shall be stored at the location 
-indicated by the @code{node} argument.
+if {_POSIX_CFG} is defined:
 
-The child nodes of each node in the configuration tree is returned
-by @code{cfg_read}.
+   The @code{cfg_read} function returns a pointer to a CFGENT sturcture
+   representing a node in the configuration space to which @code{cfgp}
+   refers.  The returned pointer shall be stored at the location 
+   indicated by the @code{node} argument.
+
+   The child nodes of each node in the configuration tree is returned
+   by @code{cfg_read}.  If a comparison routine is specified to the
+   @code{cfg_open} function, the order of return of the child nodes shall
+   be as specified by the routine, from least to greatest.  Otherwise
+   the order of return is unspecified.
+
+   Structures referencing nodes with children shall be returned by the 
+   function @code{cfg_read} at least twice [unless the application
+   specifies otherwise with @code{cfg_mark}]-once immediately before
+   the structures representing their descendants, are returned 
+   (pre-order), and once immediately after structures representing all
+   of their descendants, if any, are returned (post-order).  The 
+   CFGENT structure returned in post-porder (with the exception of the 
+   @code{cfg_info} field) shall be identical to that returned in pre-order.
+   Structures referencing nodes of other types shall be returned at least
+   once.
+
+   The fields of the CFGENT structure shall contain the following 
+   informatation:
+      cfg_parent 
+      cfg_link
+      cfg_cycle
+      cfg_number
+      cfg_pointer
+      cfg_path
+      cfg_name
+      cfg_pathlen
+      cfg_namelen
+      cfg_level
+      cfg_info
+ 
+Otherwise:
+
+   The @code{cfg_read} function shall fail.
 
 @subheading NOTES:
 
@@ -657,6 +742,28 @@ The function cfg_children() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
+If {_POSIX_CFG} is defined:
+
+   The first @code{cfg_children} call after a @code{cfg_read} shall 
+   return information about the first node without children under the
+   node returned by @code}{cfg_read}.  Subsequent calls to 
+   @code{cfg_children} without the intervening @code{cfg_read} shall
+   return information about the remaining nodes without children under
+   that same node.
+
+   If @code{cfg_read} has not yet been called for the configuration
+   traversal stream represented by @code{cfgp}, @code{cfg_children}
+   shall return a pointer to the first entry in a list of the nodes 
+   represented by the @code{pathnames} argument to @code{cfg_open}.
+
+   In either case, the list shall be NULL-terminated, ordered by the 
+   user-specified comparison function, if any, and linked through the
+   cfg_link field.
+
+Otherwise:
+
+   The @code{cfg_children} function shall fail.
+
 @subheading NOTES:
 
 @page
@@ -692,10 +799,25 @@ The function cfg_mark() is not supported by this implementation.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_mark} function modifies the subsequent behavior of
-the cfg functions with regard to the node referenced by the structure
-pointed to by the argument f or the configuration space referenced by
-the structure pointed to by the argument @code{cfgp}.
+If {_POSIX_CF} is defined:
+
+   The @code{cfg_mark} function modifies the subsequent behavior of
+   the cfg functions with regard to the node referenced by the structure
+   pointed to by the argument @code{f} or the configuration space referenced 
+   by the structure pointed to by the argument @code{cfgp}.
+
+   Exactly one of the @code{f} argument and the @code{cfgp} argument shall
+   be NULL.
+
+   The value of the @code{options} argument shall be exactly one of the
+   flags specified in the following list:
+      CFG_AGAIN
+      CFG_SKIP
+      CFG_FOLLOW
+
+Otherwise:
+   
+   The @code{cfg_mark} function shall fail.
 
 @subheading NOTES:
 
@@ -728,8 +850,17 @@ The function cfg_close() is not supported by this implementatioin.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_close} function closes a configuration space transversal
-stream.
+if {_POSIX_CFG} is defined:
+
+   The @code{cfg_close} function closes a configuration space transversal
+   stream represented by the CFG structure pointed at by the @code{cfgp}
+   argument.  All system resources allocated for this configuration space
+   travsversal stream should be deallocated.  Upon return, the value of 
+   @code{cfgp} need not point to an accessible object of type CFG.
+
+Otherwise:
+
+   The @code{cfg_close} function shall fail.
 
 @subheading NOTES:
 
