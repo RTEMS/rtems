@@ -16,23 +16,24 @@
 int POSIX_MP_NOT_IMPLEMENTED()
 {
   assert( 0 );
+  return 0;
 }
 
 int POSIX_BOTTOM_REACHED()
 {
   assert( 0 );
+  return 0;
 }
 
 int POSIX_NOT_IMPLEMENTED()
 {
   assert( 0 );
+  return 0;
 }
 
 /*
  * END OF TEMPORARY
  */
-
-#ifdef NOT_IMPLEMENTED_YET
 
 /*PAGE
  *
@@ -144,7 +145,7 @@ int getgroups(
 
 char *getlogin( void )
 {
-  return (char *)POSIX_NOT_IMPLEMENTED();
+  return (char *) POSIX_NOT_IMPLEMENTED();
 }
 
 /*PAGE
@@ -154,9 +155,12 @@ char *getlogin( void )
  *  NOTE:  P1003.1c/D10, p. 49 adds getlogin_r().
  */
 
-char *getlogin_r( void )
+int getlogin_r(
+  char   *name,
+  size_t  namesize
+)
 {
-  return (char *)POSIX_NOT_IMPLEMENTED();
+  return POSIX_NOT_IMPLEMENTED();
 }
 
 /*PAGE
@@ -191,5 +195,3 @@ int setpgid(
 {
   return POSIX_NOT_IMPLEMENTED();
 }
-
-#endif

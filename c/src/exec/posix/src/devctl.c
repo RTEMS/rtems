@@ -7,8 +7,6 @@
 
 #include <rtems/system.h>
 
-#ifdef NOT_IMPLEMENTED_YET
-
 /*PAGE
  *
  *  21.2.1 Control a Device, P1003.4b/D8, p. 65
@@ -23,5 +21,3 @@ int devctl(
 {
   return POSIX_NOT_IMPLEMENTED();
 }
-
-#endif

@@ -7,8 +7,6 @@
 
 #include <rtems/system.h>
 
-#ifdef NOT_IMPLEMENTED_YET
-
 /*PAGE
  *
  *  6.7.2 Asynchronous Read, P1003.1b-1993, p. 154
@@ -112,4 +110,3 @@ int aio_fsync(
 {
   return POSIX_NOT_IMPLEMENTED();
 }
-#endif

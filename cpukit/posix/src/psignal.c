@@ -8,8 +8,6 @@
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
 
-#ifdef NOT_IMPLEMENTED_YET
-
 /*
  *  3.3.2 Send a Signal to a Process, P1003.1b-1993, p. 68
  *
@@ -234,8 +232,6 @@ int pause( void )
 {
   return POSIX_NOT_IMPLEMENTED();
 }
-
-#endif
 
 /*
  *  3.4.3 Delay Process Execution, P1003.1b-1993, p. 73

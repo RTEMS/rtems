@@ -57,7 +57,6 @@ time_t time(
   return seconds_since_epoch;
 }
 
-#ifdef NOT_IMPLEMENTED_YET
 /*
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
  */
@@ -202,5 +201,3 @@ int clock_getenable_attr(
 {
   return POSIX_NOT_IMPLEMENTED();
 }
-
-#endif

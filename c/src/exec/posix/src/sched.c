@@ -10,8 +10,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/posix/priority.h>
 
-#ifdef NOT_IMPLEMENTED_YET
-
 /*PAGE
  *
  *  13.3.1 Set Scheduling Parameters, P1003.1b-1993, p. 252
@@ -65,8 +63,6 @@ int sched_getscheduler(
 {
   return POSIX_NOT_IMPLEMENTED();
 }
-
-#endif
 
 /*PAGE
  *

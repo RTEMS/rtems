@@ -45,8 +45,6 @@ int uname(
   return 0;
 }
 
-#ifdef NOT_IMPLEMENTED_YET
-
 /*PAGE
  *
  *  4.5.2 Get Process Times, P1003.1b-1993, p. 92
@@ -58,5 +56,3 @@ clock_t times(
 {
   return POSIX_NOT_IMPLEMENTED();
 }
-
-#endif

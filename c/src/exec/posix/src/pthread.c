@@ -2,6 +2,7 @@
  *  $Id$
  */
 
+#include <assert.h>
 #include <errno.h>
 #include <pthread.h>
 #include <limits.h>
@@ -94,9 +95,11 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
  
 void _POSIX_Threads_Initialize_user_tasks( void )
 {
+  int                               status;
   unsigned32                        index;
   unsigned32                        maximum;
   posix_initialization_tasks_table *user_tasks;
+  pthread_t                         thread_id;
  
   /*
    *  NOTE:  This is slightly different from the Ada implementation.
@@ -104,9 +107,13 @@ void _POSIX_Threads_Initialize_user_tasks( void )
  
   user_tasks = _POSIX_Threads_User_initialization_tasks;
   maximum    = _POSIX_Threads_Number_of_initialization_tasks;
+
+  if ( !user_tasks || maximum == 0 )
+    return;
  
   for ( index=0 ; index < maximum ; index++ ) {
-    ; 
+    status = pthread_create(&thread_id,  NULL, user_tasks[ index ].entry, NULL);
+    assert( !status );
   }
 }
 
@@ -130,7 +137,6 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
   }
 };
  
-
 /*PAGE
  *
  *  _POSIX_Threads_Manager_initialization
@@ -174,7 +180,19 @@ void _POSIX_Threads_Manager_initialization(
     TRUE
   );
 
-  /* XXX add api extensions */
+  /*
+   *  Add all the extensions for this API
+   */
+ 
+  _User_extensions_Add_API_set( &_POSIX_Threads_User_extensions );
+ 
+  _API_extensions_Add( &_POSIX_Threads_API_extensions );
+ 
+  /*
+   *  If we supported MP, then here we would ...
+   *       Register the MP Process Packet routine.
+   */
+ 
 }
 
 /*PAGE
@@ -643,8 +661,6 @@ int pthread_once(
   return 0;
 }
 
-#ifdef NOT_IMPLEMENTED_YET
-
 /*PAGE
  *
  *  20.1.6 Accessing a Thread CPU-time Clock, P1003.4b/D8, p. 58
@@ -658,8 +674,6 @@ int pthread_getcpuclockid(
   return POSIX_NOT_IMPLEMENTED();
 }
 
-#endif
- 
 /*PAGE
  *
  *  20.1.7 CPU-time Clock Thread Creation Attribute, P1003.4b/D8, p. 59
