@@ -19,7 +19,7 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES= \
-    basic.texi debug.texi
+    basic.texi tools.texi debug.texi
 
 FILES=$(PROJECT).texi $(GENERATED_FILES)
 
@@ -61,6 +61,11 @@ clean:
 #
 
 basic.texi: basic.t Makefile
+	$(BMENU) -c -p "Top" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+tools.texi: tools.t Makefile
 	$(BMENU) -c -p "Top" \
 	    -u "Top" \
 	    -n "" ${*}.t

@@ -11,6 +11,10 @@
 The questions in this category are related to the GNU development tools
 in a non-language specific way.
 
+@section What is GNU?
+
+Take a look at http://www.gnu.org for information on the GNU Project.
+
 @section How do I generate a patch?
 
 The RTEMS patches to the development tools are generated using a 
