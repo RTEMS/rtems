@@ -11,22 +11,12 @@
  *  $Id$
  */
 
-#define NO_BSP_INIT
-
-
-/* only one of the following can be defined */
-#define SERIAL_INPUT  /* use serial input */
-/* #define HIF_INPUT */     /* use HIF input */
+#include <bsp.h>
 
 #if defined(SERIAL_INPUT) && defined(HIF_INPUT)
 #error SERIAL_INPUT and HIF_INPUT cannot both be defined!!!
 #endif
 
-/* both of the following can be defined */
-#define SERIAL_OUTPUT /* remove to disable serial port console output */
-/* #define HIF_OUTPUT */   /* remove to disable HIF console output */
-
-#include <bsp.h>
 #include <rtems/libio.h>
 #include "serial.h"
 #include "concntl.h"

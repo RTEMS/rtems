@@ -1,3 +1,10 @@
+2001-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_BSPOPTS_* for SERIAL_INPUT, HIF_INPUT, 
+	SERIAL_OUTPUT, HIF_OUTPUT.
+	* console/console.c: Remove NO_BSP_INIT, SERIAL_INPUT, HIF_INPUT,
+	SERIAL_OUTPUT, HIF_OUTPUT, add #include <bsp.h>.
+
 2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.
