@@ -1,5 +1,10 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-cpu.m4: Peek into cpukit/score/cpu instead of
+	exec/score/cpu.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/bsp-configure.m4: Add RTEMS_CHECK_MULTIPROCESSING.
 	* automake/compile.am: Add test -d $(ARCH) || mkdir $(ARCH) to all
 	compilation rules (Work-around to an automake bug).
