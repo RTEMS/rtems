@@ -88,7 +88,7 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler ) set_vector( (handler), 0, 1 )
+#define Install_tm27_vector( handler ) /* set_vector( (handler), 0, 1 ) */
 
 #define Cause_tm27_intr()
 
