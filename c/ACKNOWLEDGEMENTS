@@ -144,6 +144,11 @@ The following persons/organizations have made contributions:
   Information Technology for the National Research Council of Canada
   submitted the Motorola MVME167 BSP.
 
++ Tony Ambardar (tonya@ece.ubc.ca) at the University of British Columbia
+  ported RTEMS to the TS-1325 embedded PC from Technologic Systems
+  (http://www.t-systems.com), and provided patches to enable software
+  floating-point emulation for x86 targets. 
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
