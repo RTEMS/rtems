@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../mvme147/console
 PGM = $(ARCH)/console.rel
 
 C_FILES = console.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

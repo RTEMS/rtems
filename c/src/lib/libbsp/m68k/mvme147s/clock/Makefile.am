@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../mvme147/clock
 PGM = $(ARCH)/clock.rel
 
 C_FILES = ckinit.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
