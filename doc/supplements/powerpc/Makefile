@@ -20,13 +20,12 @@ dirs:
 
 COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
-GENERATED_FILES= \
-  timing.texi wksheets.texi
+GENERATED_FILES=\
+  cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
+  bsp.texi cputable.texi timing.texi wksheets.texi timePSIM.texi timeDMV177.texi
 
 FILES= $(PROJECT).texi \
-  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
-  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi \
-  timedatadmv177.texi timetbldmv177.texi \
+  preface.texi \
   $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
@@ -47,23 +46,51 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-replace: timedata.texi
-
 #
 #  Chapters which get automatic processing
 #
 
-# CPU Model
-# Calling Conventions
-# Memory Model
+cpumodel.texi: cpumodel.t Makefile
+	$(BMENU) -p "Preface" \
+	    -u "Top" \
+	    -n "Calling Conventions" ${*}.t
 
-intr.texi: intr.t PSIM_TIMES
-	${REPLACE} -p PSIM_TIMES intr.t
-	mv intr.t.fixed intr.texi
+callconv.texi: callconv.t Makefile
+	$(BMENU) -p "CPU Model Dependent Features Low Power Model" \
+	    -u "Top" \
+	    -n "Memory Model" ${*}.t
 
-# Fatal Error
-# BSP
-# CPU Table
+memmodel.texi: memmodel.t Makefile
+	$(BMENU) -p "Calling Conventions User-Provided Routines" \
+	    -u "Top" \
+	    -n "Interrupt Processing" ${*}.t
+
+# Interrupt Chapter:
+#  1.  Replace Times and Sizes
+#  2.  Build Node Structure
+intr.t: intr_NOTIMES.t PSIM_TIMES
+	${REPLACE} -p PSIM_TIMES intr_NOTIMES.t
+	mv intr_NOTIMES.t.fixed intr.t
+
+intr.texi: intr.t Makefile
+	$(BMENU) -p "Memory Model Flat Memory Model" \
+	    -u "Top" \
+	    -n "Default Fatal Error Processing" ${*}.t
+
+fatalerr.texi: fatalerr.t Makefile
+	$(BMENU) -p "Interrupt Processing Interrupt Stack" \
+	    -u "Top" \
+	    -n "Board Support Packages" ${*}.t
+
+bsp.texi: bsp.t Makefile
+	$(BMENU) -p "Default Fatal Error Processing Default Fatal Error Handler Operations" \
+	    -u "Top" \
+	    -n "Processor Dependent Information Table" ${*}.t
+
+cputable.texi: cputable.t Makefile
+	$(BMENU) -p "Board Support Packages Processor Initialization" \
+	    -u "Top" \
+	    -n "Memory Requirements" ${*}.t
 
 # Worksheets Chapter:
 #  1.  Obtain the Shared File
@@ -94,29 +121,45 @@ timing.texi: timing.t Makefile
             -u "Top" \
             -n "PSIM Timing Data" ${*}.t
 
-timetbl.t: ../../common/timetbl.t
-	sed -e 's/TIMETABLE_NEXT_LINK/DMV177 Timing Data/' \
-            <../../common/timetbl.t >timetbl.t
+# Timing Data for PSIM BSP Chapter:
+#  1.  Copy the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
 
-timetbldmv177.t: ../../common/timetbl.t
-	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-            <../../common/timetbl.t >timetbldmv177.t
+timePSIM_.t: ../../common/timetbl.t timePSIM.t
+	cat timePSIM.t ../../common/timetbl.t             >timePSIM_.t
+	@echo                                               >>timePSIM_.t
+	@echo "@tex"                                        >>timePSIM_.t
+	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timePSIM_.t
+	@echo "@end tex"                                    >>timePSIM_.t
+	${REPLACE} -p PSIM_TIMES timePSIM_.t
+	mv timePSIM_.t.fixed timePSIM_.t
 
-timetbl.texi: timetbl.t PSIM_TIMES
-	${REPLACE} -p PSIM_TIMES timetbl.t
-	mv timetbl.t.fixed timetbl.texi
+timePSIM.texi: timePSIM_.t Makefile
+	$(BMENU) -p "Timing Specification Terminology" \
+	    -u "Top" \
+	    -n "DMV177 Timing Data" timePSIM_.t
+	mv timePSIM_.texi timePSIM.texi
 
-timedata.texi: timedata.t PSIM_TIMES
-	${REPLACE} -p PSIM_TIMES timedata.t
-	mv timedata.t.fixed timedata.texi
+# Timing Data for DMV177 BSP Chapter:
+#  1.  Copy the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
 
-timetbldmv177.texi: timetbldmv177.t DMV177_TIMES
-	${REPLACE} -p DMV177_TIMES timetbldmv177.t
-	mv timetbldmv177.t.fixed timetbldmv177.texi
+timeDMV177_.t: ../../common/timetbl.t timeDMV177.t
+	cat timeDMV177.t ../../common/timetbl.t             >timeDMV177_.t
+	@echo                                               >>timeDMV177_.t
+	@echo "@tex"                                        >>timeDMV177_.t
+	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeDMV177_.t
+	@echo "@end tex"                                    >>timeDMV177_.t
+	${REPLACE} -p DMV177_TIMES timeDMV177_.t
+	mv timeDMV177_.t.fixed timeDMV177_.t
 
-timedatadmv177.texi: timedatadmv177.t DMV177_TIMES
-	${REPLACE} -p DMV177_TIMES timedatadmv177.t
-	mv timedatadmv177.t.fixed timedatadmv177.texi
+timeDMV177.texi: timeDMV177_.t Makefile
+	$(BMENU) -p "PSIM Timing Data Rate Monotonic Manager" \
+	    -u "Top" \
+	    -n "Command and Variable Index" timeDMV177_.t
+	mv timeDMV177_.texi timeDMV177.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
@@ -128,8 +171,9 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_$(PROJECT) c_$(PROJECT)-*
-	rm -f timedata.texi timetbl.texi intr.texi $(GENERATED_FILES)
-	rm -f timedatadmv177.texi timetbldmv177.texi
+	rm -f intr.t $(GENERATED_FILES)
 	rm -f timetbl.t wksheets.t wksheets_NOTIMES.t timing.t
+	rm -f timePSIM_.t timePSIM_.texi
+	rm -f timeDMV177_.t timeDMV177_.texi
 	rm -f *.fixed _*
 

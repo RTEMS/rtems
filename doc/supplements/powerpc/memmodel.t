@@ -6,20 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Memory Model, Memory Model Introduction, Calling Conventions User-Provided Routines, Top
-@end ifinfo
 @chapter Memory Model
-@ifinfo
-@menu
-* Memory Model Introduction::
-* Memory Model Flat Memory Model::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Memory Model Introduction, Memory Model Flat Memory Model, Memory Model, Memory Model
-@end ifinfo
 @section Introduction
 
 A processor may support any combination of memory
@@ -31,9 +19,6 @@ memory of any kind.  The appropriate memory model for RTEMS
 provided by the targeted processor and related characteristics
 of that model are described in this chapter.
 
-@ifinfo
-@node Memory Model Flat Memory Model, Interrupt Processing, Memory Model Introduction, Memory Model
-@end ifinfo
 @section Flat Memory Model
 
 The PowerPC architecture supports a variety of memory models.

@@ -6,24 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Interrupt Processing, Interrupt Processing Introduction, Memory Model Flat Memory Model, Top
-@end ifinfo
 @chapter Interrupt Processing
-@ifinfo
-@menu
-* Interrupt Processing Introduction::
-* Interrupt Processing Synchronous Versus Asynchronous Exceptions::
-* Interrupt Processing Vectoring of Interrupt Handler::
-* Interrupt Processing Interrupt Levels::
-* Interrupt Processing Disabling of Interrupts by RTEMS::
-* Interrupt Processing Interrupt Stack::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Interrupt Processing Introduction, Interrupt Processing Synchronous Versus Asynchronous Exceptions, Interrupt Processing, Interrupt Processing
-@end ifinfo
 @section Introduction
 
 Different types of processors respond to the
@@ -46,9 +30,6 @@ interrupt and vector.  In the PowerPC architecture, these terms
 correspond to exception and exception handler, respectively.  The terms will
 be used interchangeably in this manual.
 
-@ifinfo
-@node Interrupt Processing Synchronous Versus Asynchronous Exceptions, Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing Introduction, Interrupt Processing
-@end ifinfo
 @section Synchronous Versus Asynchronous Exceptions
 
 In the PowerPC architecture exceptions can be either precise or 
@@ -72,9 +53,6 @@ floating point enabled exception.  All other synchronous exceptions are
 precise.  The synchronization occuring during asynchronous precise 
 exceptions conforms to the requirements for context synchronization.
 
-@ifinfo
-@node Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing Interrupt Levels, Interrupt Processing Synchronous Versus Asynchronous Exceptions, Interrupt Processing
-@end ifinfo
 @section Vectoring of Interrupt Handler
 
 Upon determining that an exception can be taken the PowerPC automatically
@@ -124,9 +102,6 @@ A nested interrupt is processed similarly with the
 exception that the current stack need not be switched to the
 interrupt stack.
 
-@ifinfo
-@node Interrupt Processing Interrupt Levels, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing
-@end ifinfo
 @section Interrupt Levels
 
 The PowerPC architecture supports only a single external
@@ -163,9 +138,6 @@ Setting bit 2 of the interrupt level enables External Interrupt execptions.
 
 All other bits in the RTEMS task interrupt level are ignored.
 
-@ifinfo
-@node Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing Interrupt Stack, Interrupt Processing Interrupt Levels, Interrupt Processing
-@end ifinfo
 @section Disabling of Interrupts by RTEMS
 
 During the execution of directive calls, critical
@@ -189,9 +161,6 @@ unpredictable results may occur due to the inability of RTEMS
 to protect its critical sections.  However, ISRs that make no
 system calls may safely execute as non-maskable interrupts.
 
-@ifinfo
-@node Interrupt Processing Interrupt Stack, Default Fatal Error Processing, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing
-@end ifinfo
 @section Interrupt Stack
 
 The PowerPC architecture does not provide for a

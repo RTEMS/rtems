@@ -13,36 +13,8 @@
 \global\advance \smallskipamount by -4pt
 @end tex
 
-@ifinfo
-@node RTEMS_BSP Timing Data, RTEMS_BSP Timing Data Introduction, PSIM Timing Data Rate Monotonic Manager, Top
-@end ifinfo
 @chapter RTEMS_BSP Timing Data
-@ifinfo
-@menu
-* RTEMS_BSP Timing Data Introduction::
-* RTEMS_BSP Timing Data Hardware Platform::
-* RTEMS_BSP Timing Data Interrupt Latency::
-* RTEMS_BSP Timing Data Context Switch::
-* RTEMS_BSP Timing Data Directive Times::
-* RTEMS_BSP Timing Data Task Manager::
-* RTEMS_BSP Timing Data Interrupt Manager::
-* RTEMS_BSP Timing Data Clock Manager::
-* RTEMS_BSP Timing Data Timer Manager::
-* RTEMS_BSP Timing Data Semaphore Manager::
-* RTEMS_BSP Timing Data Message Manager::
-* RTEMS_BSP Timing Data Event Manager::
-* RTEMS_BSP Timing Data Signal Manager::
-* RTEMS_BSP Timing Data Partition Manager::
-* RTEMS_BSP Timing Data Region Manager::
-* RTEMS_BSP Timing Data Dual-Ported Memory Manager::
-* RTEMS_BSP Timing Data I/O Manager::
-* RTEMS_BSP Timing Data Rate Monotonic Manager::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node RTEMS_BSP Timing Data Introduction, RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data, RTEMS_BSP Timing Data
-@end ifinfo
 @section Introduction
 
 The timing data for RTEMS on the DY-4 RTEMS_BSP board
@@ -54,9 +26,6 @@ provided.  Also, provided is a description of the interrupt
 latency and the context switch times as they pertain to the
 PowerPC version of RTEMS.
 
-@ifinfo
-@node RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data Introduction, RTEMS_BSP Timing Data
-@end ifinfo
 @section Hardware Platform
 
 All times reported in this chapter were measured using a RTEMS_BSP board.
@@ -90,9 +59,6 @@ All sources of hardware interrupts were disabled,
 although traps were enabled and the interrupt level of the
 PowerPC allows all interrupts.
 
-@ifinfo
-@node RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data
-@end ifinfo
 @section Interrupt Latency
 
 The maximum period with traps disabled or the
@@ -120,9 +86,6 @@ generated on the PSIM benchmark platform using the PowerPC's
 decrementer register.  This register was programmed to generate
 an interrupt after one countdown.
 
-@ifinfo
-@node RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data Directive Times, RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data
-@end ifinfo
 @section Context Switch
 
 The RTEMS processor context switch time is RTEMS_NO_FP_CONTEXTS
@@ -147,11 +110,4 @@ the numeric coprocessor.
 
 The following table summarizes the context switch
 times for the RTEMS_BSP benchmark platform:
-
-@include timetbldmv177.texi
-
-@tex
-\global\advance \smallskipamount by 4pt
-@end tex
-
 
