@@ -11,5 +11,7 @@ configure
 depcomp
 install-sh
 install.sh
+mdate-sh
 missing
 mkinstalldirs
+texinfo.tex
