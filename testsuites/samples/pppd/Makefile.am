@@ -35,4 +35,6 @@ endif
 
 EXTRA_DIST = $(C_FILES) $(H_FILES)
 
+CLEANFILES = $(TMPINSTALL_FILES)
+
 include $(top_srcdir)/../automake/local.am

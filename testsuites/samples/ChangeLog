@@ -1,3 +1,19 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* base_mp/node1/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* base_mp/node2/Makefile.am: Ditto.
+	* base_sp/Makefile.am: Ditto.
+	* cdtest/Makefile.am: Ditto.
+	* fileio/Makefile.am: Ditto.
+	* hello/Makefile.am: Ditto.
+	* loopback/Makefile.am: Ditto.
+	* minimum/Makefile.am: Ditto.
+	* paranoia/Makefile.am: Ditto.
+	* pppd/Makefile.am: Ditto.
+	* ticker/Makefile.am: Ditto.
+	* unlimited/Makefile.am: Ditto.
+
 2003-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* samples.am: Fix yet another stupid typo in yesterday's patch.
