@@ -1,0 +1,12 @@
+2002-08-06	Chris Ziomkowski <chris@asics.ws>
+
+	* .cvsignore, Makefile.am, README, bsp_specs, configure.ac, times,
+	clock/.cvsignore, clock/Makefile.am, clock/clockdrv.c,
+	console/.cvsignore, console/Makefile.am, console/console.c,
+	console/console.h, include/.cvsignore, include/Makefile.am,
+	include/bsp.h, start/.cvsignore, start/Makefile.am, start/start.S,
+	startup/.cvsignore, startup/bspclean.c, startup/bspstart.c,
+	startup/linkcmds, startup/main.c, startup/setvec.c, timer/.cvsignore,
+	timer/Makefile.am, timer/timer.c, timer/timerisr.c,
+	wrapup/.cvsignore, wrapup/Makefile.am, ChangeLog: New files added
+	as part of merge from OpenCores repository.

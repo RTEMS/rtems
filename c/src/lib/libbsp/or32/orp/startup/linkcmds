@@ -1,0 +1,63 @@
+/*
+ *  This file contains directives for the GNU linker which are specific
+ *  to the NO_CPU NO_BSP BOARD.
+ *
+ *  COPYRIGHT (c) 1989-1999.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
+MEMORY
+	{
+	ram : org = 0x0, l = 1M
+	}
+
+SECTIONS
+{
+        .text 0x0 :
+	{
+	text_start = . ;
+	_text_start = . ;
+        *(.text)
+	. = ALIGN (16);
+
+	*(.eh_fram)
+	. = ALIGN (16);
+
+	/*
+	 * C++ constructors
+	 */
+	__CTOR_LIST__ = .;
+	LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+	*(.ctors)
+	LONG(0)
+	__CTOR_END__ = .;
+	__DTOR_LIST__ = .;
+	LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+	*(.dtors)
+	LONG(0)
+	__DTOR_END__ = .;
+	_etext = ALIGN( 0x10 ) ;
+        }
+        .data ADDR( .text ) + SIZEOF( .text ):
+	{
+	data_start = . ;
+	_data_start = . ;
+        *(.data)
+	_edata = ALIGN( 0x10 ) ;
+        }
+        .bss ADDR( .data ) + SIZEOF( .data ):
+        {
+	bss_start = . ;
+	_bss_start = . ;
+	*(.bss)
+	*(COMMON)
+	end = . ;
+	__end = . ;
+	}
+}
