@@ -138,7 +138,7 @@ rtems_status_code rtems_message_queue_create(
   _Objects_Open(
     &_Message_queue_Information,
     &the_message_queue->Object,
-    name
+    (Objects_Name) name
   );
 
   *id = the_message_queue->Object.id;

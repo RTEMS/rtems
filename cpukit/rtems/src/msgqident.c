@@ -58,7 +58,7 @@ rtems_status_code rtems_message_queue_ident(
 
   status = _Objects_Name_to_id(
     &_Message_queue_Information,
-    name,
+    (Objects_Name) name,
     node,
     id 
   );

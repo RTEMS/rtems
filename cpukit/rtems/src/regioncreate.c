@@ -92,7 +92,11 @@ rtems_status_code rtems_region_create(
     RTEMS_TIMEOUT
   );
 
-  _Objects_Open( &_Region_Information, &the_region->Object, name );
+  _Objects_Open(
+    &_Region_Information,
+    &the_region->Object,
+    (Objects_Name) name
+  );
 
   *id = the_region->Object.id;
   _RTEMS_Unlock_allocator();

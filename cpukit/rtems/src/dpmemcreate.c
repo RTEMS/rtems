@@ -72,7 +72,7 @@ rtems_status_code rtems_port_create(
   _Objects_Open( 
     &_Dual_ported_memory_Information,
     &the_port->Object,
-    name
+    (Objects_Name) name
   );
 
   *id = the_port->Object.id;

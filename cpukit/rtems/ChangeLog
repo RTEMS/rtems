@@ -1,3 +1,12 @@
+2002-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* src/dpmemcreate.c, src/dpmemident.c, src/msgqcreate.c,
+	src/msgqident.c, src/partcreate.c, src/partident.c,
+	src/ratemoncreate.c, src/ratemonident.c, src/regioncreate.c,
+	src/regionident.c, src/semcreate.c, src/semident.c, src/taskcreate.c,
+	src/taskident.c, src/timercreate.c, src/timerident.c: Added casts
+	to Objects_Name to eliminate warnings.
+
 2002-08-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/Makefile.am: Add librtems.a.
