@@ -33,5 +33,14 @@ rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   NULL,             /* fpathconf */
   NULL,             /* fsync */
   IMFS_fdatasync,
-  IMFS_fcntl
+  IMFS_fcntl,
+  IMFS_rmnod
 };
+
+
+
+
+
+
+
+

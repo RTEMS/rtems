@@ -121,6 +121,10 @@ typedef int (*rtems_filesystem_fcntl_t)(
   rtems_libio_t *iop
 );
 
+typedef int (*rtems_filesystem_rmnod_t)(
+ rtems_filesystem_location_info_t      *pathloc       /* IN */
+);
+
 typedef struct {
     rtems_filesystem_open_t         open;
     rtems_filesystem_close_t        close;
@@ -135,6 +139,7 @@ typedef struct {
     rtems_filesystem_fsync_t        fsync;
     rtems_filesystem_fdatasync_t    fdatasync;
     rtems_filesystem_fcntl_t        fcntl;
+    rtems_filesystem_rmnod_t        rmnod;
 } rtems_filesystem_file_handlers_r;
 
 /*
@@ -190,10 +195,6 @@ typedef int (*rtems_filesystem_chown_t)(
 );
 
 typedef int (*rtems_filesystem_freenode_t)(
- rtems_filesystem_location_info_t      *pathloc       /* IN */
-);
-
-typedef int (*rtems_filesystem_rmnod_t)(
  rtems_filesystem_location_info_t      *pathloc       /* IN */
 );
 
@@ -254,7 +255,6 @@ typedef struct {
     rtems_filesystem_unlink_t        unlink;
     rtems_filesystem_node_type_t     node_type;
     rtems_filesystem_mknod_t         mknod;
-    rtems_filesystem_rmnod_t         rmnod;
     rtems_filesystem_chown_t         chown;
     rtems_filesystem_freenode_t      freenod;
     rtems_filesystem_mount_t         mount;

@@ -53,12 +53,12 @@ int rmdir(
    * Use the filesystems rmnod to remove the node.
    */
 
-  if ( !loc.ops->rmnod ){
+  if ( !loc.handlers->rmnod ){
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result =  (*loc.ops->rmnod)( &loc );  
+  result =  (*loc.handlers->rmnod)( &loc );  
 
   rtems_filesystem_freenode( &loc );
   

@@ -33,5 +33,6 @@ rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   NULL,   /* fpathconf */
   NULL,   /* fsync */
   NULL,   /* fdatasync */
-  NULL    /* fcntl */
+  NULL,   /* fcntl */
+  IMFS_rmnod
 };

@@ -37,7 +37,6 @@ rtems_filesystem_operations_table  IMFS_ops = {
   IMFS_unlink,
   IMFS_node_type,
   IMFS_mknod,
-  IMFS_rmnod,
   IMFS_chown,
   IMFS_freenodinfo,
   IMFS_mount,
