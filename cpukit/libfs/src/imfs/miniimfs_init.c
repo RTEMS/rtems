@@ -60,14 +60,13 @@ int miniIMFS_initialize(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry
 )
 {
-   IMFS_initialize_support(
+    return IMFS_initialize_support(
       temp_mt_entry,
       &miniIMFS_ops,
       &rtems_filesystem_null_handlers,  /* for linearfiles */
       &rtems_filesystem_null_handlers,  /* for memfiles */
       &rtems_filesystem_null_handlers   /* for directories */
    );
-   return 0;
 }
 
 

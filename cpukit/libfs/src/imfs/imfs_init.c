@@ -60,12 +60,11 @@ int IMFS_initialize(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry
 )
 {
-   IMFS_initialize_support(
+   return IMFS_initialize_support(
      temp_mt_entry,
      &IMFS_ops,
      &IMFS_linearfile_handlers,
      &IMFS_memfile_handlers,
      &IMFS_directory_handlers
    );
-   return 0;
 }

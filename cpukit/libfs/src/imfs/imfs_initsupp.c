@@ -24,6 +24,7 @@
 
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 #if defined(IMFS_DEBUG)
 #include <stdio.h>
@@ -68,7 +69,7 @@ int IMFS_initialize_support(
   fs_info = calloc( 1, sizeof( IMFS_fs_info_t ) );
   if ( !fs_info ){
     free(temp_mt_entry->mt_fs_root.node_access);
-    return 1;
+    rtems_set_errno_and_return_minus_one(ENOMEM);
   }
   temp_mt_entry->fs_info = fs_info;
 
