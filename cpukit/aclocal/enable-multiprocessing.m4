@@ -8,5 +8,5 @@ AC_HELP_STRING([--enable-multiprocessing],[enable multiprocessing interface]),
   yes) ;;
   no) ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-multiprocessing option) ;;
-esac],[$enable_multiprocessing=no])
+esac],[enable_multiprocessing=no])
 ])
