@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <DP8570A.h>
 
 #define CLOCK_VECTOR  (TCP_ISR_LEVEL+24)
 

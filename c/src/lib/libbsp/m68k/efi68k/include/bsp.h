@@ -26,7 +26,6 @@ extern "C" {
 #include <console.h>
 #include <iosupp.h>
 #include <efi68k.h>
-#include <DP8570A.h>
 #include <16550.h>
 
 /*

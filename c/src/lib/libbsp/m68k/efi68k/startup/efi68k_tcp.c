@@ -17,6 +17,7 @@
  */
 
 #include <bsp.h>
+#include <DP8570A.h>
 
 /* define tcp struct pointers */
 struct clock_ram * const tcp_power_up =

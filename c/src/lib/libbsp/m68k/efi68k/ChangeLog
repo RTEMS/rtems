@@ -1,3 +1,10 @@
+2003-10-02	Joel Sherrill <joel@OARcorp.com>
+
+	PR 503/bsps
+	* clock/ckinit.c, include/bsp.h, startup/efi68k_tcp.c, timer/timer.c:
+	Do not include DP8570A.h from bsp.h but still install it. This avoids
+	polluting the namespace.
+
 2003-09-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in include/Makefile.am.
