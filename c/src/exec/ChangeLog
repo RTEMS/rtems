@@ -1,3 +1,12 @@
+2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Copied over from automake/.
+	* automake/lib.am: Copied over from automake/.
+	* automake/local.am: Copied over from automake/.
+	* automake/multilib.am: Copied over from automake/.
+	* automake/subdirs.am: Copied over from automake/.
+	* Makefile.am: Add automake/*.am.
+
 2002-05-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add libnetworking.
