@@ -32,8 +32,8 @@ void ext_tsk( void )
 
   _Thread_Disable_dispatch();
 
-  _Thread_Restart( _Thread_Executing, NULL, 0 );
   _Thread_Set_state( _Thread_Executing, STATES_DORMANT );
+  _Thread_Reset( _Thread_Executing, NULL, 0 );
 
   _Thread_Enable_dispatch();  
 }
