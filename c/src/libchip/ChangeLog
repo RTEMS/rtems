@@ -1,3 +1,9 @@
+2003-04-15	Joel Sherrill <joel@OARcorp.com>
+
+	PR 387/rtems_misc
+	* ide/ata.c: Removed warning and moved to use of simpler libc routines.
+	* ide/ata_internal.h: Added missing newline and end of file.
+
 2003-03-27	Joel Sherrill <joel@OARcorp.com>
 
 	* ide/Makefile.am: ATA code depends upon libchip/ide which is not

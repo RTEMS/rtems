@@ -1185,8 +1185,10 @@ ata_initialize(rtems_device_major_number major,
             ata_devs[ata_devs_number].ctrl_minor = ctrl_minor;
             ata_devs[ata_devs_number].device = dev;
 
-            snprintf(name, ATA_MAX_NAME_LENGTH, "/dev/hd%c", 
-                     'a' + 2 * ctrl_minor + dev);
+            /* The space leaves a hole for the character. */
+            strcpy(name, "/dev/hd ");
+            name[7] = 'a' + 2 * ctrl_minor + dev;
+
             device = rtems_filesystem_make_dev_t(
                          major, 
                          (ata_devs_number * 
@@ -1314,3 +1316,4 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
             break;          
     }
 }
+
