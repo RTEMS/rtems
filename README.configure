@@ -93,7 +93,7 @@ To build, run make in the build directory. To specify which bsps to build,
 add the RTEMS_BSP="bsp1 bsp2 .." to the make command.  Specifying multiple
 BSPs to build only works from the top level build directory.
 
-Installation is done under $(prefix)/$(target)/rtems.
+Installation is done under $(prefix)/rtems.
 
 As an example, to build and install the mvme136 and dmv152 bsps for m68k do:
 
