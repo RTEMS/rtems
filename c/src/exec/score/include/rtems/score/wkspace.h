@@ -33,33 +33,6 @@ extern "C" {
 EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
 
 /*
- *  _Workspace_Handler_initialization
- *
- *  DESCRIPTION:
- *
- *  This routine performs the initialization necessary for this handler.
- */
-
-STATIC INLINE void _Workspace_Handler_initialization(
-  void       *starting_address,
-  unsigned32  size
-);
-
-/*
- *  _Workspace_Allocate
- *
- *  DESCRIPTION:
- *
- *  This routine returns the address of a block of memory of size
- *  bytes.  If a block of the appropriate size cannot be allocated
- *  from the workspace, then NULL is returned.
- */
-
-STATIC INLINE void *_Workspace_Allocate(
-  unsigned32 size
-);
-
-/*
  *  _Workspace_Allocate_or_fatal_error
  *
  *  DESCRIPTION:
@@ -73,21 +46,9 @@ void *_Workspace_Allocate_or_fatal_error(
   unsigned32   size
 );
 
-/*
- *  _Workspace_Free
- *
- *  DESCRIPTION:
- *
- *  This function frees the specified block of memory.  If the block
- *  belongs to the Workspace and can be successfully freed, then
- *  TRUE is returned.  Otherwise FALSE is returned.
- */
-
-STATIC INLINE boolean _Workspace_Free(
-  void *block
-);
-
+#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/wkspace.inl>
+#endif
 
 #ifdef __cplusplus
 }
