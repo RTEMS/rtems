@@ -76,7 +76,6 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      RETURN_VALUE : RTEMS.UNSIGNED32;
       STATUS       : RTEMS.STATUS_CODES;
    begin
 
@@ -86,7 +85,6 @@ package body SPTEST is
          SPTEST.NO_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_INITIALIZE" );
@@ -98,7 +96,6 @@ package body SPTEST is
          SPTEST.NO_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_OPEN" );
@@ -110,7 +107,6 @@ package body SPTEST is
          SPTEST.NO_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_CLOSE" );
@@ -122,7 +118,6 @@ package body SPTEST is
          SPTEST.NO_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_READ" );
@@ -134,7 +129,6 @@ package body SPTEST is
          SPTEST.NO_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_WRITE" );
@@ -146,7 +140,6 @@ package body SPTEST is
          SPTEST.NO_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_CONTROL" );
@@ -160,7 +153,6 @@ package body SPTEST is
          SPTEST.STUB_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_INITIALIZE" );
@@ -172,7 +164,6 @@ package body SPTEST is
          SPTEST.STUB_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_OPEN" );
@@ -184,7 +175,6 @@ package body SPTEST is
          SPTEST.STUB_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_CLOSE" );
@@ -196,7 +186,6 @@ package body SPTEST is
          SPTEST.STUB_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_READ" );
@@ -208,7 +197,6 @@ package body SPTEST is
          SPTEST.STUB_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_WRITE" );
@@ -220,7 +208,6 @@ package body SPTEST is
          SPTEST.STUB_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_CONTROL" );
@@ -234,7 +221,6 @@ package body SPTEST is
          SPTEST.INVALID_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS( 
@@ -250,7 +236,6 @@ package body SPTEST is
          SPTEST.INVALID_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RETURN_VALUE,
          STATUS 
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS( 
