@@ -12,6 +12,7 @@
  */
 
 /* for strcasecmp in linux and solaris */
+#undef __STRICT_ANSI__
 #include <string.h>
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__

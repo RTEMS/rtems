@@ -98,7 +98,7 @@ int init_paging() {
   Tables += (PG_SIZE - (int)Tables) & 0xFFF;
 
   /* Reset Tables */
-  bzero( Tables, nbTables*sizeof(page_table) );
+  memset( Tables, 0, nbTables*sizeof(page_table) );
   pageDirectory = (page_directory *) Tables;
   pageTable     = (page_table *)((int)Tables + PG_SIZE);
 
@@ -243,7 +243,7 @@ int _CPU_map_phys_address
       Tables += (PG_SIZE - (int)Tables) & 0xFFF;
 
       /* Reset Table */
-      bzero( Tables, sizeof(page_table) );      
+      memset( Tables, 0, sizeof(page_table) );      
       pageDirectory->pageDirEntry[directoryEntry].bits.page_frame_address =
 	(unsigned int)Tables >> 12;
       pageDirectory->pageDirEntry[directoryEntry].bits.available      = 0;

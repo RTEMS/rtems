@@ -58,7 +58,7 @@ typedef enum {
   BSP_RT_TIMER1	      	= 	8,
   
   BSP_RT_TIMER3		= 	10
-}rtems_irq_symbolic_name;
+} rtems_irq_symbolic_name;
 
     
 
@@ -111,7 +111,7 @@ typedef struct __rtems_irq_connect_data__ {
    * if someone manipulates the i8259s interrupt mask without care...
    */
     rtems_irq_is_enabled	isOn;
-}rtems_irq_connect_data;
+} rtems_irq_connect_data;
 
 typedef struct {
   /*

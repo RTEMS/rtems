@@ -137,6 +137,8 @@ void bsp_pretasking_hook(void)
 +--------------------------------------------------------------------------*/
 void bsp_start_default( void )
 {
+  void Calibrate_loop_1ms(void);
+
   /*
    * Calibrate variable for 1ms-loop (see timer.c)
    */

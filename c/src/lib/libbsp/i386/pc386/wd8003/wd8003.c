@@ -126,8 +126,8 @@ static struct wd_softc wd_softc[NWDDRIVER];
 /*
  * WD interrupt handler
  */
-static rtems_isr
-wd8003Enet_interrupt_handler (rtems_vector_number v)
+static void
+wd8003Enet_interrupt_handler (void)
 {
   unsigned int tport;
   unsigned char status, status2;

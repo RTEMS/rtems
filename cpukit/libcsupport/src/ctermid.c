@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 
-static ctermid_name = "/dev/console";
+static char *ctermid_name = "/dev/console";
 
 char *ctermid(
   char *s

@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <unistd.h>
 #undef __assert
 void __assert (const char *file, int line, const char *msg);
 
@@ -68,7 +69,7 @@ extern BSP_polling_getchar_function_type BSP_poll_char;
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern void _IBMPC_keyboard_isr(rtems_vector_number);
+extern void _IBMPC_keyboard_isr(void);
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 extern char BSP_wait_polled_input(void);
 extern void _IBMPC_initVideo(void);

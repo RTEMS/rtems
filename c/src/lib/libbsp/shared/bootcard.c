@@ -18,6 +18,10 @@
 
 #include <bsp.h>
 
+#ifdef USE_INIT_FINI 
+#include <stdlib.h> /* for atexit() */
+#endif
+
 extern void bsp_start( void );
 extern void bsp_cleanup( void );
 

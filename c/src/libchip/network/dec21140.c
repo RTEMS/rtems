@@ -173,7 +173,7 @@ struct MD {
 #define bus_to_phys(address) ((unsigned int)(address) - PREP_PCI_DRAM_OFFSET)
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PPC_CACHE_ALIGNMENT
 #else
-#define phys_to_bus(address) address
+#define phys_to_bus(address) (unsigned int) address
 #define bus_to_phys(address) address
 #define delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE

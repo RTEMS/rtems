@@ -330,8 +330,8 @@ ne_check_status (struct ne_softc *sc)
 
 /* Handle an NE2000 interrupt.  */
 
-static rtems_isr
-ne_interrupt_handler (rtems_vector_number v)
+static void
+ne_interrupt_handler (void)
 {
   struct ne_softc *sc;
 
