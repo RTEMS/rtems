@@ -1,0 +1,4 @@
+for i in config eventflags fixedblock interrupt mailbox memorypool msgbuffer network rendezvous task tasksync time
+do
+  sh ./gen_section $i  | tr -d "\r" >${i}.t
+done
