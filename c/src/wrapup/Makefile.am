@@ -26,7 +26,7 @@ SRCS += ../libnetworking/rtems_telnetd/libtelnetd$(LIB_VARIANT).a
 endif
 
 if HAS_RDBG
-SRCS += ../librdbg/src/$(RTEMS_CPU)/$(ARCH)/librdbg.a
+SRCS += ../librdbg/src/@RTEMS_CPU@/librdbg$(LIB_VARIANT).a
 endif
 
 SRCS += $(wildcard $(PROJECT_LIB)/libcpu$(LIB_VARIANT).a)
