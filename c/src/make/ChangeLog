@@ -1,3 +1,8 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-itron.m4: 
+	Fix underquoting to silence automake-1.8.
+
 2003-11-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* target.cfg.in: Remove RTEMS_USE_MACROS.
