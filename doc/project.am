@@ -3,13 +3,14 @@
 SUFFIXES += .t
 
 ## Texinfo support
-TEXINFO_TEX = $(top_srcdir)/texinfo/texinfo.tex
+TEXINFO_TEX = ../texinfo/texinfo.tex
 TEXINPUTS = $(srcdir):$(top_srcdir)
+TEXI_COMMON = -I ..
 
 .texi:
 	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
-	cd $(srcdir) \
-	  && $(MAKEINFO) -I $(top_srcdir) `echo $< | sed 's,.*/,,'`
+	cd $(srcdir) && \
+	  $(MAKEINFO) $(TEXI_COMMON) `echo $< | sed 's,.*/,,'`
 
 $(srcdir)/stamp-vti: $(PROJECT).texi $(top_srcdir)/configure.in
 	@echo "@set UPDATED `$(SHELL) $(srcdir)/mdate-sh \

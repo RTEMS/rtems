@@ -3,8 +3,7 @@
 @setfilename started
 @syncodeindex vr fn
 @synindex ky cp
-@paragraphindent 0
-@c @smallbook
+@c @paragraphindent 0
 @c %**end of header
 
 @c

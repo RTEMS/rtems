@@ -4,7 +4,6 @@
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
-@c @smallbook
 @c %**end of header
 
 @c

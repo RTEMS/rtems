@@ -49,6 +49,19 @@ esac],
 [enable_ps="yes"]
 )
 
+AC_ARG_ENABLE(papersize,
+[  --enable-papersize=[letter|a4|]    set papersize [default:system defaults]],
+[case $enableval in
+a4) papersize=a4 ;;
+letter) papersize=letter ;;
+yes) papersize= ;;
+no) papersize= ;;
+*) AC_MSG_ERROR([Invalid papersize])
+;;
+esac],
+[papersize=]
+)
+
 htmldir='$(pkgdatadir)/html'
 AC_SUBST(htmldir)
 
@@ -63,10 +76,8 @@ AC_SUBST(TEXI2WWW)
 AC_CHECK_PROGS(GS,gs)
 AM_CONDITIONAL(GS,test x"$GS" != x"")
 
-# TEXI2DVI='$(PERL) $(top_srcdir)/tools/texi2www/texi2dvi'
 AC_CHECK_PROGS(TEXI2DVI,texi2dvi)
 AM_CONDITIONAL(TEXI2DVI,test x"$TEXI2DVI" != x"")
-
 if test "$enable_pdf" = "yes"; then
   AC_CHECK_PROGS(EPSTOPDF,epstopdf)
   AM_CONDITIONAL(EPSTOPDF,test x"$EPSTOPDF" != x"")
@@ -91,6 +102,21 @@ AM_CONDITIONAL(USE_PDF,
   test "$enable_pdf" = "yes" \
     && test x"$TEXI2DVI" != x"" \
     && test x"$TEXI2PDF" != x"" )
+
+case $papersize in
+a4) 
+  TEXI2DVI="${TEXI2DVI} --texinfo=@afourpaper"
+  TEXI2PDF="${TEXI2PDF} --texinfo=@afourpaper"
+  DVIPS="dvips -t a4"
+;;
+letter)
+  DVIPS="dvips -t letter"
+  ;;
+*)
+  DVIPS="dvips"
+;;
+esac
+AC_SUBST(DVIPS)
 
 BMENU2='$(top_builddir)/tools/bmenu/bmenu2'
 AC_SUBST(BMENU2)

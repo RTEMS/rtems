@@ -13,8 +13,8 @@
 @c
 
 @set use-ascii
-@clear use-html
-@clear use-tex
+@c @clear use-html
+@c @clear use-tex
  
 @iftex
 @clear use-ascii
