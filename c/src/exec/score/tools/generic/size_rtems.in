@@ -58,7 +58,6 @@ case $target in
     cpu=`echo $target | sed -e 's/-.*//'`
     case $cpu in
       hppa1.1) rtems_cpu=hppa1_1 ;;
-      powerpc) rtems_cpu=ppc ;;
       *)       rtems_cpu=$cpu ;;
     esac
     ;;
