@@ -135,11 +135,13 @@ do
     # now build gcc/newlib
     #    NOTE: This requires having binutils installed and we immediately
     #          remove it once finished.
+    base_binutils_rpm=${dst}/../RPMS/i386/rtems-base-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
     binutils_rpm=${dst}/../RPMS/i386/${target}-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
     if [ ! -f ${binutils_rpm} ] ; then
       echo There is no RPM for binutils for ${target}.
       echo Looked for ${binutils_rpm}.
     fi
+    ${ECHO} rpm -i ${base_binutils_rpm}
     ${ECHO} rpm -i ${binutils_rpm}
 
     logfile=log/${target}-gccnewlib

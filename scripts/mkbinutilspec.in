@@ -55,7 +55,7 @@ sed -e "s%@Release@%${binutils_rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
     -e "s%@binutils_version@%${binutils_version}%g" \
     -e "s%@binutils_patch_version@%${binutils_patch_version}%g" \
-    -e "s%@ext_ext@%${ext_ext}%g" \
+    -e "s%@exe_ext@%${exe_ext}%g" \
 < ${RTEMS_DIR}/binutils/binutils.spec.in \
 > ${specfile}
 

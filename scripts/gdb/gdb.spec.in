@@ -10,11 +10,11 @@
 
 Vendor:       OAR Corporation
 Distribution: Linux
-Name:         @target_alias@-gdb
+Name:         @target_alias@-gdb-collection
 Release:      @Release@
 Copyright:    1999 OARCorp
 Group:        rtems
-Provides:     @target_alias@-gdb
+Provides:     rtems-base-gdb @target_alias@-gdb
 
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
@@ -42,10 +42,32 @@ RTEMS is an open source operating system for embedded systems.
 
 This is the GNU gdb for RTEMS targetting @target_alias@.
 
+%package -n rtems-base-gdb
+Summary:      base package for rtems gdb
+Group: rtems
+
+%description -n rtems-base-gdb
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the base for gdb regardless of target CPU.
+
+%package -n @target_alias@-gdb
+Summary:      rtems gdb for @target_alias@
+Group: rtems
+Requires: rtems-base-gdb
+
+%description -n @target_alias@-gdb
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the GNU gdb for RTEMS targetting @target_alias@.
+
 Authors:
 --------
     Joel Sherrill (joel@oarcorp.com)
     ...
+
 
 %prep
 echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
@@ -93,7 +115,8 @@ test -d build || mkdir build
     done
   fi
 
-%files
+%files -n rtems-base-gdb
+
 %dir /opt/rtems/info
 %doc /opt/rtems/info/gdb.info*
 %doc /opt/rtems/info/mmalloc.info*
@@ -101,7 +124,6 @@ test -d build || mkdir build
 
 %dir /opt/rtems/man
 %dir /opt/rtems/man/man1
-%doc /opt/rtems/man/man1/@target_alias@-gdb.1
 
 %dir /opt/rtems/include
 # We install libbfd from binutils
@@ -113,6 +135,9 @@ test -d build || mkdir build
 # /opt/rtems/lib/libbfd*
 # We use libiberty from gcc
 # /opt/rtems/lib/libiberty*
+
+%files -n @target_alias@-gdb
+%doc /opt/rtems/man/man1/@target_alias@-gdb.1
 
 %dir /opt/rtems/bin
 /opt/rtems/bin/@target_alias@-gdb@exe_ext@
