@@ -10,7 +10,11 @@
 #include <rtems/score/priority.h>
 
 /*
- *  RTEMS Core has priorities run in the opposite sense of the POSIX API.
+ *  1003.1b-1993,2.2.2.80 definition of priority, p. 19
+ *
+ *  "Numericallly higher values represent higher priorities."
+ *
+ *  Thus, RTEMS Core has priorities run in the opposite sense of the POSIX API.
  */
 
 #define POSIX_SCHEDULER_MAXIMUM_PRIORITY (255)

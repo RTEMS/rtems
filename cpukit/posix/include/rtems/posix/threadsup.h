@@ -14,7 +14,7 @@ typedef struct {
   int                     detachstate;
   Thread_queue_Control    Join_List;
   int                     schedpolicy;
-  struct sched_param      Schedule;
+  struct sched_param      schedparam;
 
 #if 0
   /*
