@@ -290,5 +290,8 @@ void rtems_shutdown_executive(
    unsigned32 result
 )
 {
-  _Thread_Stop_multitasking();
+  if ( _System_state_Current != SYSTEM_STATE_SHUTDOWN ) {
+    _System_state_Set( SYSTEM_STATE_SHUTDOWN );
+    _Thread_Stop_multitasking();
+  }
 }
