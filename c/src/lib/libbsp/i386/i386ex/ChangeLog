@@ -1,5 +1,9 @@
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* include/bsp.h: include <libcpu/cpu.h>.
+
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac:
 	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
