@@ -69,7 +69,6 @@ char *BSP_commandline_string = 0;
 
 BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
 
-extern char *BSP_build_date;
 extern void _return_to_ppcbug();
 extern unsigned long __rtems_end[];
 extern void L1_caches_enables();
@@ -413,7 +412,6 @@ void bsp_start( void )
 
   printk("-----------------------------------------\n");
   printk("Welcome to %s on MVME5500-0163\n", _RTEMS_version );
-  printk("Build Date: %s\n",BSP_build_date);
   printk("-----------------------------------------\n");
 
 #ifdef TEST_RETURN_TO_PPCBUG  

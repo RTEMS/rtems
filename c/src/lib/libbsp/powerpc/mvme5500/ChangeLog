@@ -1,5 +1,9 @@
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* startup/bspstart.c: Remove BSP_build_date.
+
+2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* GT64260/Makefile.am, clock/Makefile.am, console/Makefile.am,
 	include/Makefile.am, irq/Makefile.am, network/Makefile.am,
 	pci/Makefile.am, start/Makefile.am, startup/Makefile.am,
