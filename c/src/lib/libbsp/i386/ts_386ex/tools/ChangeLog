@@ -1,3 +1,8 @@
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove duplicate
+	AC_CONFIG_FILES(ts_1325_ada/Makefile).
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

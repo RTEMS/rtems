@@ -26,6 +26,5 @@ network_ada/Makefile
 network_ada/adasockets/Makefile
 network_ada/listener/Makefile
 network_ada/tcprelay/Makefile
-ts_1325_ada/Makefile
 ])
 AC_OUTPUT
