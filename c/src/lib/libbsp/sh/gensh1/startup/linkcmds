@@ -35,7 +35,7 @@ MEMORY
 {
   rom           : o = 0x00000000, l = 128k
   onchip_peri	: o = 0x05000000, l = 512
-  ram           : o = 0x0A040000, l = 256k
+  ram           : o = 0x0A040000, l = 512k  /* enough to link all tests */
 
   onchip_ram    : o = 0x0f000000, l = 8k
 }
