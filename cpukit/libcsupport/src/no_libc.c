@@ -42,4 +42,14 @@ void _exit(int status)
 {
 }
 
+#else
+
+/* remove ANSI errors.
+ *  A program must contain at least one external-declaration
+ *  (X3.159-1989 p.82,L3).
+ */
+void no_libc_dummy_function( void )
+{
+}
+
 #endif
