@@ -1,5 +1,5 @@
 #
-#  $Id $
+#  $Id$
 #
 # OS-specific configuration 
 #
@@ -27,7 +27,6 @@ MV=@MV@
 LN=@LN@
 MKDIR=@MKDIR@
 CHMOD=@CHMOD@
-ED=@ED@
 SED=@SED@
 M4=@M4@
 
