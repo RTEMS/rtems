@@ -42,34 +42,40 @@ int mq_unlink(
   Objects_Id                        the_mq_id;
   Objects_Locations                 location;
  
+  _Thread_Disable_dispatch();
+
   status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id );
-   if ( status != 0 )
+   if ( status != 0 ) {
+    _Thread_Enable_dispatch();
     set_errno_and_return_minus_one( status );
- 
-  the_mq = _POSIX_Message_queue_Get( the_mq_id, &location );
-  switch ( location ) {
-    case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
-    case OBJECTS_LOCAL:
- 
-#if defined(RTEMS_MULTIPROCESSING)
-      _Objects_MP_Close(
-        &_POSIX_Message_queue_Information,
-        the_mq->Object.id
-      );
-#endif
- 
-      the_mq->linked = FALSE;
- 
-      _POSIX_Message_queue_Delete( the_mq );
- 
-      _Thread_Enable_dispatch();
-      return 0;
+   }
+
+  /*
+   *  Don't support unlinking a remote message queue.
+   */
+
+  if ( !_Objects_Is_local_id(the_mq_id) ) {
+    _Thread_Enable_dispatch();
+    set_errno_and_return_minus_one( ENOSYS );
   }
-  return POSIX_BOTTOM_REACHED();
+
+  the_mq = (POSIX_Message_queue_Control *) _Objects_Get_local_object(
+    &_POSIX_Message_queue_Information,
+    _Objects_Get_index( the_mq_id )
+  );
+  
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( the_mq->process_shared == PTHREAD_PROCESS_SHARED ) {
+    _Objects_MP_Close( &_POSIX_Message_queue_Information, the_mq_id );
+  }
+#endif
+
+ 
+  the_mq->linked = FALSE;
+  _POSIX_Message_queue_Namespace_remove( the_mq );
+  _POSIX_Message_queue_Delete( the_mq );
+
+  _Thread_Enable_dispatch();
+  return 0;
 }
 

@@ -47,7 +47,10 @@ mqd_t mq_open(
   int                            status;
   Objects_Id                     the_mq_id;
   POSIX_Message_queue_Control   *the_mq;
+  Objects_Locations              location;
  
+  _Thread_Disable_dispatch();
+
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
     mode = (mode_t) va_arg( arg, mode_t );
@@ -66,31 +69,37 @@ mqd_t mq_open(
  
   if ( status ) {
  
-    if ( status == EINVAL ) {      /* name -> ID translation failed */
-      if ( !(oflag & O_CREAT) ) {  /* willing to create it? */
-        set_errno_and_return_minus_one( ENOENT );
-        return (mqd_t) -1;
-      }
-      /* we are willing to create it */
+    /*
+     * Unless provided a valid name that did not already exist
+     * and we are willing to create then it is an error.
+     */
+
+    if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
+      _Thread_Enable_dispatch();
+      set_errno_and_return_minus_one_cast( status, mqd_t );
     }
-    set_errno_and_return_minus_one( status ); /* some type of error */
-    return (mqd_t) -1;
- 
+
   } else {                /* name -> ID translation succeeded */
  
+    /*
+     * Check for existence with creation.
+     */
+
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
-      set_errno_and_return_minus_one( EEXIST );
-      return (mqd_t) -1;
+      _Thread_Enable_dispatch();
+      set_errno_and_return_minus_one_cast( EEXIST, mqd_t );
     }
- 
+
     /*
      * XXX In this case we need to do an ID->pointer conversion to
      *     check the mode.   This is probably a good place for a subroutine.
      */
- 
+
+    the_mq = _POSIX_Message_queue_Get( the_mq_id, &location );
     the_mq->open_count += 1;
- 
-    return (mqd_t)&the_mq->Object.id;
+    _Thread_Enable_dispatch();
+    _Thread_Enable_dispatch();
+    return (mqd_t)the_mq->Object.id;
  
   }
  
@@ -108,9 +117,15 @@ mqd_t mq_open(
     &the_mq
   );
  
+  /*
+   * errno was set by Create_support, so don't set it again.
+   */
+
+  _Thread_Enable_dispatch();
+
   if ( status == -1 )
     return (mqd_t) -1;
  
-  return (mqd_t) &the_mq->Object.id;
+  return (mqd_t) the_mq->Object.id;
 }
 
