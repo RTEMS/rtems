@@ -1,3 +1,8 @@
+2001-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Apply RTEMS_CPU_SUBDIRS for potential CPU-subdirs.
+	* Makefile.am: Require automake-1.5.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

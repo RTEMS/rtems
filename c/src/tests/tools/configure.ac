@@ -17,9 +17,7 @@ RTEMS_TOOLPATHS
 AC_SUBST(program_prefix)
 
 RTEMS_CONFIG_BUILD_SUBDIRS(generic)
-if test -d $srcdir/$RTEMS_CPU; then
-AC_CONFIG_SUBDIRS($RTEMS_CPU)
-fi
+RTEMS_CPU_SUBDIRS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
