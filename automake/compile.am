@@ -75,11 +75,11 @@ endif # RTEMS_USE_GCC
 
 DEFS = @DEFS@
 
-CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(CPU_CFLAGS) \
+CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) \
    $(DEFINES) $(XCPPFLAGS) $(CPPFLAGS_GCC)
-CFLAGS   = $(CFLAGS_DEFAULT) $(XCFLAGS)
-CXXFLAGS = $(CFLAGS_DEFAULT) $(XCXXFLAGS)
-ASFLAGS  = $(CPU_ASFLAGS) $(XASFLAGS)
+CFLAGS   = $(CFLAGS_DEFAULT) $(CPU_CFLAGS) $(XCFLAGS)
+CXXFLAGS = $(CFLAGS_DEFAULT) $(CPU_CFLAGS) $(XCXXFLAGS)
+ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
 LINK_LIBS = $(LINK_LIBS_GCC272) $(LD_LIBS)
 
@@ -108,17 +108,24 @@ LDFLAGS=$(LDFLAGS_PROFILE) $(LDFLAGS_DEBUG) $(LD_PATHS:%=-L %)
 # Client compiler and support tools
 #
 
-ARFLAGS=ruv
-
 #
 # How to compile stuff into ${ARCH} subdirectory
 #
 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+        $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
+CXXLD = $(CXX)
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+
+AS = $(CC)
+ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS) -o $@
 
 ${ARCH}/%.o: %.c
 	${COMPILE} -o $@ -c $<
@@ -136,7 +143,7 @@ ${ARCH}/%.o: %.C
 	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.S
-	${COMPILE.S} $(AM_CPPFLAGS) -DASM -o $@ $<
+	${ASCOMPILE} -DASM -c $<
 
 # Make foo.rel from foo.o
 ${ARCH}/%.rel: ${ARCH}/%.o
@@ -197,20 +204,18 @@ LINK_FILES =\
 if RTEMS_USE_GCC
 if RTEMS_USE_GCC272
 define make-rel
-	$(LD) $(LDFLAGS_INCOMPLETE) $(XLDFLAGS) -o $@ $^
+	$(LINK) -nostdlib -Wl,-r $(XLDFLAGS) -o $@ $^
 endef
 else
 ## gcc >= 2.8
 define make-rel
-	$(LINK.c) $(AM_CFLAGS) $(AM_LDFLAGS) \
-	  -qnolinkcmds -nostdlib -Wl,-r $(XLDFLAGS) -o $@ $^
+	$(LINK) -qnolinkcmds -nostdlib -Wl,-r $(XLDFLAGS) $^
 endef
 endif
 else
 ## non-gcc
 define make-rel
-	$(LINK.c) $(AM_CFLAGS) $(AM_LDFLAGS) \
-	  $(XLDFLAGS) -o $@ $^
+	$(LINK) $(XLDFLAGS) $^
 endef
 endif
 

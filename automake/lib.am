@@ -6,6 +6,8 @@
 AR = @AR@
 RANLIB = @RANLIB@
 
+ARFLAGS = ruv
+
 define make-library
 $(RM) $@
 $(AR) $(ARFLAGS) $@ $^

@@ -1,3 +1,13 @@
+2001-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Adopt more automake rules:
+	* automake/compile.am: Add LINK, CXXLINK, AS, ASCOMPILE; 
+	Remove ARFLAGS, LINK.c, COMPILE.S, LINK.cc; 
+	Add CPU_CFLAGS to CXXFLAGS, CFLAGS, ASFLAGS;
+	* automake/leaf.am: Add CXXLINK_APP, LINK_APP, make-exe, apply
+	CXXLINK_APP in make-cxx-exe.
+	* automake/lib.am: Add ARFLAGS.
+
 2001-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-rdbg.m4: Fix latent bug exposed by removal of
