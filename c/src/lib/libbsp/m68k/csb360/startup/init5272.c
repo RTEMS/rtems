@@ -99,7 +99,6 @@ init5272(void)
 {
     extern void clear_bss(void);
     extern void start_csb360(void);
-    int i;
 
     /* Invalidate the cache - WARNING: It won't complete for 64 clocks */
     m68k_set_cacr(MCF5272_CACR_CINV);

@@ -16,7 +16,7 @@
 #include <rtems/libio.h>
 #include <mcf5272/mcf5272.h>
 
-volatile g_cnt = 0;
+volatile int g_cnt = 0;
 
 /*
  *  console_initialize_hardware
