@@ -122,12 +122,6 @@ void _CORE_mutex_Seize(
     return;
   }
 
-  if ( !wait ) {
-    _ISR_Enable( level );
-    executing->Wait.return_code = CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
-    return;
-  }
-
   if ( _Objects_Are_ids_equal(
               _Thread_Executing->Object.id, the_mutex->holder_id ) ) {
     if ( _CORE_mutex_Is_nesting_allowed( &the_mutex->Attributes ) )
@@ -136,6 +130,12 @@ void _CORE_mutex_Seize(
       executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
 
     _ISR_Enable( level );
+    return;
+  }
+
+  if ( !wait ) {
+    _ISR_Enable( level );
+    executing->Wait.return_code = CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
     return;
   }
 
