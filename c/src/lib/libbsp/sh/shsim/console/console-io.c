@@ -24,6 +24,17 @@
 #define SYS_read        3
 #define SYS_write       4
 
+/*
+ *  console_initialize_hardware
+ *
+ *  This routine initializes the console hardware.
+ *
+ */
+
+void console_initialize_hardware(void)
+{
+  return;
+}
 
 /*
  *  console_outbyte_polled

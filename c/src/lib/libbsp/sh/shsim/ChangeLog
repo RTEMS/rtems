@@ -1,3 +1,7 @@
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console-io.c: Added console_initialize_hardware().
+
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
 	* The shsim is for the SH simulator in gdb. It should be able

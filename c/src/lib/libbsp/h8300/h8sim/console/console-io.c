@@ -18,7 +18,17 @@
 #include <stdlib.h>
 #include <assert.h>
 
-/* external prototypes for monitor interface routines */
+/*
+ *  console_initialize_hardware
+ *
+ *  This routine initializes the console hardware.
+ *
+ */
+
+void console_initialize_hardware(void)
+{
+  return;
+}
 
 /*
  *  console_outbyte_polled

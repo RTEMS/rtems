@@ -20,15 +20,27 @@
 
 /* external prototypes for monitor interface routines */
 
+extern int armulator_stdin;
+extern int armulator_stdout;
+extern int armulator_stderr;
+
+/*
+ *  console_initialize_hardware
+ *
+ *  This routine initializes the console hardware.
+ *
+ */
+
+void console_initialize_hardware(void)
+{
+  return;
+}
+
 /*
  *  console_outbyte_polled
  *
  *  This routine transmits a character using polling.
  */
-
-extern int armulator_stdin;
-extern int armulator_stdout;
-extern int armulator_stderr;
 
 void console_outbyte_polled(
   int  port,
