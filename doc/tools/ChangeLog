@@ -1,3 +1,9 @@
+2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Autoupdate to 2.52. 
+	Remove pdl2texi.
+	* Makefile.am: Remove pdl2texi.
+
 2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Require automake-1.5.
