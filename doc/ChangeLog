@@ -1,3 +1,17 @@
+2004-08-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* rgdb_specs/layers.txt, rgdb_specs/process.txt,
+	rgdb_specs/seqbreak.txt, rgdb_specs/seqdetach.txt,
+	rgdb_specs/seqinit.txt: New.
+	* rgdb_specs/comm.t, rgdb_specs/conclusion.t,
+	rgdb_specs/gdbinternals.t: Use @image for
+	ASCII figures (Reflect changes above).
+
+2004-07-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* common/rtems.texi.in, FAQ/basic.t: Remove RTEMSSNAPSHOTS,
+	RTEMSSNAPSHOTSSUBSCRIBE.
+
 2004-07-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* FAQ/basic.texi, FAQ/bsp.texi, FAQ/build45.texi, FAQ/concepts.texi,
