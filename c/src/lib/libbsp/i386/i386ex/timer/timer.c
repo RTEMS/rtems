@@ -47,7 +47,7 @@ void TimerOn(const rtems_raw_irq_connect_data* used)
   Ttimer_val = 0;                           /* clear timer ISR count */
 
   outport_byte  ( TMRCON , 0xb0 ); /* select tmr2, stay in mode 0 */
-  outport_byte  ( TMR1   , 0xd2 ); /* set to 250 usec interval */
+  outport_byte  ( TMR1   , 0xfa ); /* set to 250 usec interval */
   outport_byte	( TMR1   , 0x00 );
   outport_byte  ( TMRCON , 0x64 ); /* change to mode 2 ( starts timer ) */ 
                                    /* interrupts ARE enabled */
@@ -78,7 +78,7 @@ static rtems_raw_irq_connect_data timer_raw_irq_data = {
 void Timer_exit()
 {
  if (!i386_delete_idt_entry(&timer_raw_irq_data)) {
-      printk("Timer raw handler deconnexion failed\n");
+      printk("Timer_exit:Timer raw handler removal failed\n");
       rtems_fatal_error_occurred(1);
  }
 }
@@ -94,7 +94,7 @@ void Timer_initialize()
 
     atexit(Timer_exit); /* Try not to hose the system at exit. */
     if (!i386_set_idt_entry (&timer_raw_irq_data)) {
-      printk("raw handler connexion failed\n");
+      printk("Timer_initialize: raw handler installation failed\n");
       rtems_fatal_error_occurred(1);
     }
   }

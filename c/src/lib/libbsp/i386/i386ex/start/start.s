@@ -65,7 +65,6 @@ SYM(Interrupt_descriptor_table):   /* Now in data section */
 END_DATA	
 	
 BEGIN_DATA
-/*	.section	.gdt */
 	 PUBLIC (_Global_descriptor_table)
 			
 SYM(GDTR):	DESC3( GDT_TABLE, 0x1f ); # one less than the size
@@ -344,20 +343,6 @@ SYM(SetUCS1):
 * The GDT must be in RAM since it must be writeable,
 * So, move the whole data section down.
 ********************************************************/
-		
-/* SYM(xfer_gdt):		
-	movw $ _ram_gdt_offset	, di
-	movw $ _ram_gdt_segment	, cx 
-	mov  cx                 , es
-
-	movw $ _gdt_size	, cx 
-	movw $ _rom_gdt_segment	, ax 
-	movw $ _rom_gdt_offset	, si 
-	mov  ax                 , ds
-	
-	repne
-	movsb
-*/
 
 	movw $ _ram_data_offset	, di
 	movw $ _ram_data_segment, cx 
@@ -376,14 +361,10 @@ SYM(SetUCS1):
  * Table Register
  ****************************/
 	
-/*	movw $ _ram_gdt_segment, ax */
-
 #ifdef NEXT_GAS	
 	data32
 	addr32
 #endif	
-/*        lgdt	_ram_gdt_offset	    #  location of GDT */
-
         lgdt SYM(GDTR) #  location of GDT
 
 	
@@ -405,13 +386,11 @@ SYM(SetUCS):
  * and load CS selector
  *********************/
 
-/*	ljmpl $ GDT_CODE_PTR , $  SYM(_copy_data) # sets the code selector*/
 	ljmpl $ GDT_CODE_PTR , $  SYM(_load_segment_registers) # sets the code selector
 	
 /*
- * Copy the data section down to RAM
+ * Load the segment registers
  */
-/*SYM(_copy_data): */
 SYM(_load_segment_registers):	
 	.code32
 	pLOAD_SEGMENT( GDT_DATA_PTR, fs)
@@ -420,12 +399,6 @@ SYM(_load_segment_registers):
 	pLOAD_SEGMENT( GDT_DATA_PTR, ds)
 	pLOAD_SEGMENT( GDT_DATA_PTR, es)
 	
-/*	movl		$ SYM(_data_start)	, edi # ram destination
-	movl		$ SYM(_rom_data_start)	, esi # rom data source
-	movl		$ SYM(_data_size)	, ecx # amount to move
-	repne					      # while ecx != 0
-	movsb					      #   move a byte	
-*/
 /*
  *  Set up the stack
  */
@@ -459,8 +432,9 @@ SYM (zero_bss):
         pushl   $0                       # argc
 	call SYM(boot_card)
         addl    $12,esp
-	
-	hlt
+
+	cli                              # stops interrupts from being processed after hlt!
+	hlt                              # shutdown
 
 END
 
