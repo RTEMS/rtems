@@ -1,3 +1,9 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
+	Add PREINSTALL_FILES to CLEANFILES.
+	Add cpuopts.h to DISTCLEANFILES.
+
 2004-01-12  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* cpu/Makefile.am: Use @RTEMS_CPU@ instead of $(RTEMS_CPU).
