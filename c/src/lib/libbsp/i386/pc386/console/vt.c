@@ -119,7 +119,7 @@ do_kdsk_ioctl(int cmd, struct kbentry *user_kbe, int perm, struct kbd_struct *kb
 	ushort *key_map, val;
 
 	tmp = *user_kbe;
-	if (i >= NR_KEYS || s >= MAX_NR_KEYMAPS)
+	if (i >= NR_KEYS)  /*  s cannot be >= MAX_NR_KEYMAPS */
 		return -EINVAL;
 
 	switch (cmd) {

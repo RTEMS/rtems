@@ -1,3 +1,8 @@
+2005-01-04	Joel Sherrill <joel@OARcorp.com>
+
+	* console/keyboard.c, console/ps2_mouse.c, console/vt.c: Remove
+	warnings.
+
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove build-variant support.

@@ -1,32 +1,7 @@
 /*
- * linux/drivers/char/keyboard.c
+ *   $Id$
  *
- * Written for linux by Johan Myreen as a translation from
- * the assembly version by Linus (with diacriticals added)
- *
- * Some additional features added by Christoph Niemann (ChN), March 1993
- *
- * Loadable keymaps by Risto Kankkunen, May 1993
- *
- * Diacriticals redone & other small changes, aeb@cwi.nl, June 1993
- * Added decr/incr_console, dynamic keymaps, Unicode support,
- * dynamic function/string keys, led setting,  Sept 1994
- * `Sticky' modifier keys, 951006.
- *
- * 11-11-96: SAK should now work in the raw mode (Martin Mares)
- *
- * Modified to provide 'generic' keyboard support by Hamish Macdonald
- * Merge with the m68k keyboard driver and split-off of the PC low-level
- * parts by Geert Uytterhoeven, May 1997
- *
- * 27-05-97: Added support for the Magic SysRq Key (Martin Mares)
- * 30-07-98: Dead keys redone, aeb@cwi.nl.
- * -------------------------------------------------------------------
- * End of Linux - Copyright notes...
- *
- * Ported to RTEMS to provide the basic fuctionality to the console driver.
- * by: Rosimildo da Silva:  rdasilva@connecttel.com
- *
+ *   Rosimildo da Silva:  rdasilva@connecttel.com
  */
 
 #include <sys/types.h>

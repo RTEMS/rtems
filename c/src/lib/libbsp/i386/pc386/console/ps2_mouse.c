@@ -33,7 +33,9 @@
 #include "mouse_parser.h"
 
 static void kbd_write_command_w(int data);
+#if 0
 static void kbd_write_output_w(int data);
+#endif
 
 static unsigned char handle_kbd_event(void);
 
@@ -236,6 +238,7 @@ static void ps2_mouse_interrupt()
  *
  * Don't use 'jiffies', so that we don't depend on interrupts
  */
+#if 0
 static int send_data(unsigned char data)
 {
 	int retries = 3;
@@ -266,7 +269,9 @@ static int send_data(unsigned char data)
 #endif
 	return 0;
 }
+#endif
 
+#if 0
 #define KBD_NO_DATA	(-1)	/* No data */
 #define KBD_BAD_DATA	(-2)	/* Parity or other error */
 
@@ -308,6 +313,7 @@ static int kbd_wait_for_input(void)
 	} while (--timeout);
 	return -1;
 }
+#endif
 
 static void kbd_write_command_w(int data)
 {
@@ -315,11 +321,13 @@ static void kbd_write_command_w(int data)
 	kbd_write_command(data);
 }
 
+#if 0
 static void kbd_write_output_w(int data)
 {
 	kb_wait();
 	kbd_write_output(data);
 }
+#endif
 
 static void kbd_write_cmd(int cmd)
 {
@@ -496,12 +504,14 @@ static int write_aux( int minor, const char * buffer, int count )
 	return retval;
 }
 
+#if 0
 static unsigned int aux_poll()
 {
 	if( !queue_empty() )
 		return 1;
 	return 0;
 }
+#endif
 
 static int psaux_init( void )
 {
@@ -588,17 +598,6 @@ static int write_aux_echo( int minor, const char * buffer, int count )
 }
 
 /*
- * Some initialization if necessary
- */
-static rtems_device_driver
-paux_first_open( rtems_device_minor_number major,
-                 rtems_device_minor_number minor,
-                 void                      *arg)
-{
-   return RTEMS_SUCCESSFUL;
-}
-
-/*
  * paux device driver OPEN entry point
  */
 rtems_device_driver
@@ -609,14 +608,14 @@ paux_open(rtems_device_major_number major,
   rtems_status_code              status;
   static rtems_termios_callbacks cb =
   {
-    NULL,	              /* firstOpen */
+    NULL,	          /* firstOpen */
     paux_last_close,      /* lastClose */
     NULL,                 /* poll read  */
     write_aux_echo,       /* write */
-    NULL,	              /* setAttributes */
-    NULL,	              /* stopRemoteTx */
-    NULL,	              /* startRemoteTx */
-    0		                 /* outputUsesInterrupts */
+    NULL,	          /* setAttributes */
+    NULL,	          /* stopRemoteTx */
+    NULL,	          /* startRemoteTx */
+    0		          /* outputUsesInterrupts */
   };
 
   status = rtems_termios_open (major, minor, arg, &cb );
@@ -629,8 +628,8 @@ paux_open(rtems_device_major_number major,
  */
 rtems_device_driver
 paux_close(rtems_device_major_number major,
-              rtems_device_minor_number minor,
-              void                      *arg)
+           rtems_device_minor_number minor,
+           void                      *arg)
 {
   return (rtems_termios_close (arg));
 }
@@ -641,8 +640,8 @@ paux_close(rtems_device_major_number major,
  */
 rtems_device_driver
 paux_read(rtems_device_major_number major,
-             rtems_device_minor_number minor,
-             void                      *arg)
+          rtems_device_minor_number minor,
+         void                      *arg)
 {
   return rtems_termios_read (arg);
 } /* tty_read */
@@ -653,8 +652,8 @@ paux_read(rtems_device_major_number major,
  */
 rtems_device_driver
 paux_write(rtems_device_major_number major,
-              rtems_device_minor_number minor,
-              void                    * arg)
+          rtems_device_minor_number minor,
+          void                    * arg)
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   char                  *buffer  = rw_args->buffer;
@@ -668,8 +667,8 @@ paux_write(rtems_device_major_number major,
  */
 rtems_device_driver
 paux_control(rtems_device_major_number major,
-		rtems_device_minor_number minor,
-		void                      * arg
+             rtems_device_minor_number minor,
+             void                      * arg
 )
 {
 	rtems_libio_ioctl_args_t *args = arg;
