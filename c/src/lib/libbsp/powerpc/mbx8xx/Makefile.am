@@ -21,9 +21,8 @@ all-local: $(PREINSTALL_FILES)
 EXTRA_DIST = times
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
+	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
 $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
