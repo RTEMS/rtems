@@ -7,6 +7,8 @@ AUTOMAKE_OPTIONS = foreign 1.4
 LIBNAME = libcsupport
 LIB = ${ARCH}/${LIBNAME}.a
 
+INCLUDES = -I.
+
 ERROR_C_FILES = error.c
 
 ASSOCIATION_C_FILES = assoc.c assocnamebad.c
@@ -69,7 +71,6 @@ OBJS = $(C_O_FILES)
 #
 
 AM_CFLAGS += $(LIBC_DEFINES)
-INCLUDES += -I.
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 
