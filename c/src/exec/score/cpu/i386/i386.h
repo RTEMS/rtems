@@ -190,7 +190,7 @@ static inline unsigned int i386_swap_U32(
                 "rorl  $16,%0;"
                 "rorw  $8,%%ax" : "=a" (lout) : "0" (value) );
 #else
-    __asm__ volatile( "bswap %0" : "=r"  (lout) : "0"   (lin));
+    __asm__ volatile( "bswap %0" : "=r"  (lout) : "0"   (value));
 #endif
   return( lout );
 }
