@@ -1,3 +1,9 @@
+2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove references to POSIX, ITRON, MULTILIB.
+	* Makefile.ac: Remove librtems, libposix, libitron. Build
+	librtemsbsp instead of librtemsall.
+
 2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add AM_CONDITIONAL for enable_multilib,

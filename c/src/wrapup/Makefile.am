@@ -1,7 +1,7 @@
 ##
 ##  $Id$
 ##
-##  build and install "glommed" librtemsall.a
+##  build and install "glommed" librtemsbsp.a
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
@@ -11,17 +11,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-LIB = $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
-
-# HACK: We need to evaluate CFLAGS at make-time, because these
-#	fscking <bsp>.cfgs change CFLAGS and can change 
-#	MULTISUBDIR on-the-fly - A true PITA :(
-if MULTILIB
-MULTISUBDIR = /$(shell $(CC) --print-multi-directory $(CFLAGS))
-PROJECT_CPUdir = $(PROJECT_ROOT)/lib$(MULTISUBDIR)
-else
-PROJECT_CPUdir = $(PROJECT_RELEASE)/lib
-endif
+LIB = $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
 
 if HAS_NETWORKING
 LIBNETWORKING = $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a \
@@ -33,17 +23,8 @@ if HAS_RDBG
 LIBRDBG = $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a
 endif
 
-if HAS_POSIX
-LIBPOSIX = $(PROJECT_CPUdir)/libposix$(LIB_VARIANT).a
-endif
-
-if HAS_ITRON
-LIBITRON = $(PROJECT_CPUdir)/libitron$(LIB_VARIANT).a
-endif
-
 SRCS =  $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
-SRCS += $(PROJECT_CPUdir)/librtems$(LIB_VARIANT).a
-SRCS += $(LIBNETWORKING) $(LIBRDBG) $(LIBPOSIX) $(LIBITRON) \
+SRCS += $(LIBNETWORKING) $(LIBRDBG) \
     $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/librtcio$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libserialio$(LIB_VARIANT).a) \
@@ -53,7 +34,7 @@ SRCS += $(LIBNETWORKING) $(LIBRDBG) $(LIBPOSIX) $(LIBITRON) \
     $(PROJECT_RELEASE)/lib/libfs$(LIB_VARIANT).a \
     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
 
 all-local: $(ARCH) $(TMPINSTALL_FILES)
 
