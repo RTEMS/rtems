@@ -11,6 +11,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *  Ported to ERC32 implementation of the SPARC by On-Line Applications
+ *  Research Corporation (OAR) under contract to the European Space 
+ *  Agency (ESA).
+ *
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  European Space Agency.
+ *
  *  $Id$
  */
 
@@ -490,13 +497,14 @@ dont_switch_stacks:
          *  when the interrupt handler returns.
          */
 
+        mov      %l0, %g5
+	and	 %l3, 0x0ff, %g4
+
 /* This is a fix for ERC32 with FPU rev.B or rev.C */
 
 #if defined(FPU_REVB)
 
 
-        mov      %l0, %g5
-	and	 %l3, 0x0ff, %g4
         subcc    %g4, 0x08, %g0
 	be	 fpu_revb
         subcc    %g4, 0x11, %g0
@@ -555,7 +563,6 @@ __sparc_fq:
 
 #else
 
-        mov      %l0, %g5
         subcc    %g4, 0x11, %g0
         bl       dont_fix_pil
         subcc    %g4, 0x1f, %g0

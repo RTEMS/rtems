@@ -1,3 +1,7 @@
+2000-11-21	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* cpu_asm.S: Fix for CPUs with FPU revision B or C.
+
 2000-11-14	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* cpu.c, rtems/cpu/sparc.h: Make floating point optional based
