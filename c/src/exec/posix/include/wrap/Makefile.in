@@ -17,7 +17,7 @@ VPATH = @srcdir@
 
 # RTEMS unistd.h needs to be checked against newlib's and removed
 #H_PIECES= aio devctl intr mqueue semaphore
-H_PIECES= pthread sched
+H_PIECES= pthread sched aio mqueue semaphore
 H_FILES=$(H_PIECES:%=$(srcdir)/../%.h)
 
 SRCS=$(H_FILES)
