@@ -1,3 +1,11 @@
+2001-11-20	Joel Sherrill <joel@OARcorp.com>
+
+	* src/threadhandler.c: When __USE__MAIN__ is defined by the toolset,
+	invoke the global constructors via __main.  Reported as tested by 
+	Alexandra Kossovsky <sasha@oktet.ru> and  Victor V. Vengerov
+	<vvv@oktet.ru> in conjunction with a new set of tool RPMs
+	(gcc2.95.3newlib1.9.0-3).  This was tracked as GNATS PR tools/84.
+
 2001-11-07	Joel Sherrill <joel@OARcorp.com>
 
 	Reported by Todor.Todorov@barco.com and tracked as PR36.

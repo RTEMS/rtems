@@ -58,7 +58,7 @@ void _Thread_Handler( void )
 {
   ISR_Level  level;
   Thread_Control *executing;
-#if defined(__USE_INIT_FINI__)
+#if defined(__USE_INIT_FINI__) || defined(__USE__MAIN__)
   static char doneConstructors;
   char doneCons;
 #endif
@@ -73,7 +73,7 @@ void _Thread_Handler( void )
   level = executing->Start.isr_level;
   _ISR_Set_level(level);
 
-#if defined(__USE_INIT_FINI__)
+#if defined(__USE_INIT_FINI__) || defined(__USE__MAIN__)
   doneCons = doneConstructors;
   doneConstructors = 1;
 #endif
@@ -95,6 +95,11 @@ void _Thread_Handler( void )
   if (!doneCons)
     _init ();
 #endif
+#if defined(__USE__MAIN__)
+  if (!doneCons)
+    __main ();
+#endif
+
  
   switch ( executing->Start.prototype ) {
     case THREAD_START_NUMERIC:
