@@ -67,7 +67,6 @@ $(LIB): $(SRCS)
 	rm -f $(ARCH)/*
 	$(RANLIB) $@
 
-bsplibdir = $(libdir)/@RTEMS_BSP@/lib
 bsplib_DATA = $(LIB)
 
 include $(top_srcdir)/../../../automake/local.am
