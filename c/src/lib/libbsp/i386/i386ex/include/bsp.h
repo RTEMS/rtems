@@ -45,8 +45,12 @@ extern "C" {
 
 #define MUST_WAIT_FOR_INTERRUTPT 0
 
-#define Install_tm27_vector( handler ) set_vector( (handler), 0x90, 1 )
 
+#define Install_tm27_vector(handler) \
+{ \
+  rtems_isr_entry dummy; \
+  rtems_interrupt_catch(handler, 0x90, &dummy); \
+}
 #define Cause_tm27_intr()              asm volatile( "int $0x90" : : );
 
 #define Clear_tm27_intr()

@@ -19,6 +19,11 @@
  *
  *  $Id$
  */
+#define TMR0	  0xF040
+#define TMR1	  0xF041
+#define TMR2	  0xF042
+#define TMRCON	  0xF043
+#define TMRCFG    0xF834
 
 #include <bsp.h>
 #include <irq.h>
@@ -58,21 +63,12 @@ void Clock_isr()
 
 void ClockOff(const rtems_irq_connect_data* unused)
 {
-     /* should do something here */;
+  /* should do something here */;
+  outport_byte	( TMRCFG , 0x80 );
 }
 
 void ClockOn(const rtems_irq_connect_data* unused)
 {
-/*  The following is already set up in interns.s -> 
-    ( This is test code only... production code will move the 
-      TMRCFG stuff here )
-*/
-#define TMR0	  0xF040
-#define TMR1	  0xF041
-#define TMR2	  0xF042
-#define TMRCON	  0xF043
-#define TMRCFG    0xF834
-	
   outport_byte	( TMRCFG , 0x80 );
 
   outport_byte    ( TMRCON , 0x34 ); 
@@ -141,6 +137,10 @@ rtems_device_driver Clock_control(
 	printk("Error installing clock interrupt handler!\n");
 	rtems_fatal_error_occurred(1);
       }
+#ifdef DEBUG
+      else
+	printk("Clock installed AGAIN\n");
+#endif
     }
  
 done:
@@ -149,5 +149,6 @@ done:
 
 void Clock_exit()
 {
+  ClockOff(&clockIrqData);  
   pc386_remove_rtems_irq_handler (&clockIrqData);
 }

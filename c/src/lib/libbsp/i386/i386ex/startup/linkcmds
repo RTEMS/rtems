@@ -11,108 +11,43 @@
  *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
+ * 
+ * Memory layout:
+ *
+ * 0x3f80000 -> 0x3ff0000 : text section
+ * 0x3ff0000 -> 0x3ff0028 : global descriptor table in ROM
+ * 0x3ff0028 -> 0x3fff000 : data section ( copied by start.s to RAM )
+ * 0x3fff000 -> 0x3fffff0 : initial section ( init 386ex, goto protected mode, copy ROM-RAM ) 
+ * 0x3fffff0 -> 0x4000000 : reset section ( jmp to initial only )
  */
-
 
 	ENTRY(reset) ;
 SECTIONS
 {
 
-/*******************************************************************************
- * Interrupts section:
- * 
- *  This section defines the layout of the interrupts in ROM ( VMA ) as well as their
- *  location in RAM (LMA). The _rom_ and _ram_ variables are used in start.s
- *  in order for the code to move the interrupt vector tables from ROM to RAM 
- *  while still running in real-mode.  The tables are moved from ROM, as the IDT
- *  is initialized with only 16-bit offsets for the interrupt handlers.
- *  This is purely an implementation issue.  If you prefer the interrupt handlers
- *  to be resident in flash, then you must provide the code to create the interrupt
- *  gates with full 32bit offsets.  The code in the current start.s does NOT support 
- *  interrupts in ROM by merely redefining their location.
- ******************************************************************************/
-	_rom_ints            = 0x3ff0000;    /* was 0x3fb0000 */
-        _rom_ints_segment    = 0xF000 ;
-        _rom_ints_offset     = 0x0000 ;
-
-	_ram_ints_segment    = 0x0000 ;   
-	_ram_ints_offset     = 0x0100 ;
-
-
-	.ints _ram_ints_offset :
-	AT ( _rom_ints ) 
-	{
-	_sints = .;
-	*(.ints);
-	_eints = ALIGN (0x010);
-	}	
-
-	_ints_size     = _eints - _sints ;       
-/**************************************************************************************
- * GDT section:
- *
- * This section defines the locations of the GDT in ROM as well as in RAM.  The _rom_ and 
- * _ram_ variables are used by start.s to copy the GDT from ROM to RAM when still in 
- * real-mode.  The move from ROM to RAM is made as a writeable GDT is required for the 
- * jump to protected mode to be successful.
- **************************************************************************************/
-
-        _rom_gdt           = _rom_ints + _ints_size;
-	_rom_gdt_segment   = 0xF000; 
-	_rom_gdt_offset    = _rom_ints_offset + _ints_size; 
-
-	_ram_gdt_segment   = 0x0000 ;
-	_ram_gdt_offset    = _ram_ints_offset + _ints_size;
-
-	.gdt  _ram_gdt_offset  :
-        AT ( _rom_gdt )
-	{
-	_sgdt = .;
-	*(.gdt);
-	_egdt = ALIGN (0x10);
-	}
-	_gdt_size      = _egdt - _sgdt;
-
-/*****************************************************************************************
- * IDT section:
- *
- * This section defines the locations of the IDT in ROM as well as in RAM.  The _rom_ and
- * _ram_ variables are used by start.s to copy the IDT from ROM to RAM when still in real-mode.
- * The move from ROM to RAM is required to enable RTEMS to hook the interrupts, however, 
- * this move could be made when in protected mode.
- ****************************************************************************************/
-
-        _rom_idt                = _rom_gdt + _gdt_size ;
-	_rom_idt_segment	= 0xF000 ;
-	_rom_idt_offset   	= _rom_gdt_offset + _gdt_size ;
-
- 	_ram_idt_segment	= 0x0000 ; 
-	_ram_idt_offset		= _ram_gdt_offset + _gdt_size ; 
-
-	.idt _ram_idt_offset :
-	AT ( _rom_idt )
-	{
-	_sidt = .;
-	*(.idt);
-	_eidt = ALIGN (0x10);
-	}
-	_idt_size		= _eidt - _sidt;
-
 /****************************************************************************************
  * data section:
  *
  * This section defines the locations of the data section in ROM as well as in RAM.  
- * start.s copies the data section to RAM when in protected mode.
+ * start.s copies the data section to RAM in real mode.  This is done PRIOR to the lgdt
+ * instruction since the data section contains the Global_descriptor_table and GDTR.
  ***********************************************************************************/
 
-	_rom_data_start = _rom_idt + _idt_size ;
+	_rom_data_start = 0x3ff0000;
+
+	_rom_data_segment   = 0xF000; 
+	_rom_data_offset    = 0x0; 
+
+	_ram_data_segment   = 0x0000 ;
+	_ram_data_offset    = 0x0;
+	_ram_data_location  = _ram_data_segment * 16 + _ram_data_offset;
 
         .data  : 
-        AT ( _rom_data_start )  
+        AT ( _rom_data_start ) 
         {
         _sdata = .;
         *(.data);
-        _edata = ALIGN( 0x10 ) ;
+        _edata = .;
    	}
         _data_start       = ADDR(.data) ;
 	 data_start       = _data_start ;
@@ -123,6 +58,7 @@ SECTIONS
  *
  * The bss section is the last section in RAM.  
  *************************************************************************************/
+	_edata = ALIGN( 0x10 );  
 	.bss :
 	{
 	_bss_start = .;
@@ -143,7 +79,7 @@ SECTIONS
  * the heap used by RTEMS is as large as the RAM remaining after all workspace configurations 
  * are complete.
  *************************************************************************************/
-        stack_size  = 0x1000 ;
+        stack_size  = 0x8000 ;
 	stack_origin = end + stack_size ;
 	heap_bottom  = stack_origin + 4 ;  
 
@@ -186,7 +122,8 @@ SECTIONS
  *
  * This section is defined after the data section.  It must be in the top 64K of memory
  * to enable the initial short jmp from the reset section while still in real-mode. It 
- * contains ALL initialization and data movement directives.
+ * initializes the i386ex, moves the gdt from ROM to RAM,loads the gdt,
+ * jumps to protected mode, copies the data section from ROM to RAM and loads the idt.
  ******************************************************************************************/
 
 	.initial _rom_data_start + _data_size :
@@ -195,13 +132,13 @@ SECTIONS
 	}
 
 /*******************************************************************************************
- * reset section:
+ * board reset section:
  *
  * This section contains the short jmp from the reset section to the initial section.  It is 
  * the first code executed on reset/power on.
  ******************************************************************************************/
 
-	.reset		0x3fffff0:
+	.reset 0x3fffff0:
 	{
 	*(.reset);
         }

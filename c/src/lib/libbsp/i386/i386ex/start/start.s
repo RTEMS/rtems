@@ -27,6 +27,12 @@
  *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
+
+	
+changes:	
+    SetExRegByte(ICW3S  , 0x02 ) # MUST be 0x02 according to intel
+    SetExRegByte(ICW3M  , 0x04 ) # IR2 is cascaded internally: was 0x02 => IR1 is cascaded
+	
  */
 
 #include "asm.h"
@@ -38,75 +44,32 @@
  * #define NEXT_GAS
  */			
 
-        EXTERN (main)              /* exits to bspstart   */ 
-	EXTERN (stack_start)       /* defined in startup/linkcmds */
+#define NEXT_GAS
 	
-	.section .idt
+        EXTERN (boot_card)         /* exits to bspstart   */ 
+	EXTERN (stack_start)       /* defined in startup/linkcmds */
+	EXTERN (Clock_exit)
 
-BEGIN_DATA 
         PUBLIC (Interrupt_descriptor_table)
-	PUBLIC(SYM(IDTR) )
-SYM(IDTR):	DESC3( SYM(IDT), 0x188 ); 
-SYM (Interrupt_descriptor_table):
-SYM(IDT):	
-SYM(GATE_DIVIDE_ERROR):		INTERRUPT_GATE( DIVIDE_ERROR  ); 
-SYM(GATE_DEBUG_EXCEPTION):	INTERRUPT_GATE( DEBUG_EXCEPTION   ); 
-SYM(GATE_NMI_INTERRUPT):	INTERRUPT_GATE( NMI_INTERRUPT ); 
-SYM(GATE_BREAKPOINT):		INTERRUPT_GATE( BREAKPOINT ); 
-SYM(GATE_INTO_OVERFLOW ): 	INTERRUPT_GATE( INTO_OVERFLOW ); 
-SYM(GATE_BOUND_EXCEEDED ): 	INTERRUPT_GATE( BOUND_EXCEEDED ); 
-SYM(GATE_INVALID_OPCODE ):	INTERRUPT_GATE( INVALID_OPCODE );
-SYM(GATE_COPRO_NA ):		INTERRUPT_GATE( COPRO_NA ); 
-SYM(GATE_DOUBLE_FAULT ):	INTERRUPT_GATE( DOUBLE_FAULT ); 
-SYM(GATE_COPRO_SEG_OVERRUN ):	INTERRUPT_GATE( COPRO_SEG_OVERRUN ); 
-SYM(GATE_INVALID_TSS ):		INTERRUPT_GATE( INVALID_TSS ); 
-SYM(GATE_SEGMENT_NOT_PRESENT ):	INTERRUPT_GATE( SEGMENT_NOT_PRESENT ); 
-SYM(GATE_STACK_FAULT ):		INTERRUPT_GATE( STACK_FAULT ); 
-SYM(GATE_GPF ):			INTERRUPT_GATE( GPF         ); 
-SYM(GATE_PAGE_FAULT ):		INTERRUPT_GATE( PAGE_FAULT  ); 
-SYM(GATE_RESERVED_1 ):		INTERRUPT_GATE( RESERVED    ); 
-SYM(GATE_COPRO_ERROR ):		INTERRUPT_GATE( COPRO_ERROR ); 
-SYM(GATE_RESERVED_17):		INTERRUPT_GATE( RESERVED_17 ); 
-SYM(GATE_RESERVED_18):		INTERRUPT_GATE( RESERVED_18 ); 
-SYM(GATE_RESERVED_19):		INTERRUPT_GATE( RESERVED_19 ); 
-SYM(GATE_RESERVED_20):		INTERRUPT_GATE( RESERVED_20 ); 
-SYM(GATE_RESERVED_21):		INTERRUPT_GATE( RESERVED_21 ); 
-SYM(GATE_RESERVED_22):		INTERRUPT_GATE( RESERVED_22 ); 
-SYM(GATE_RESERVED_23):		INTERRUPT_GATE( RESERVED_23 ); 
-SYM(GATE_RESERVED_24):		INTERRUPT_GATE( RESERVED_24 ); 
-SYM(GATE_RESERVED_25):		INTERRUPT_GATE( RESERVED_25 ); 
-SYM(GATE_RESERVED_26):		INTERRUPT_GATE( RESERVED_26 ); 
-SYM(GATE_RESERVED_27):		INTERRUPT_GATE( RESERVED_27 ); 
-SYM(GATE_RESERVED_28):		INTERRUPT_GATE( RESERVED_28 ); 
-SYM(GATE_RESERVED_29):		INTERRUPT_GATE( RESERVED_29 ); 
-SYM(GATE_RESERVED_30):		INTERRUPT_GATE( RESERVED_30 ); 
-SYM(GATE_RESERVED_31):		INTERRUPT_GATE( RESERVED_31 );
-	 
-SYM ( GATE_TIMINT0):			INTERRUPT_GATE( TIMINT0 ); 
-SYM ( GATE_MASTER_IR2 ):		INTERRUPT_GATE( MASTER_IR2 ); 
-SYM ( GATE_SIOINT1    ):		INTERRUPT_GATE( SIOINT1    ); 
-SYM ( GATE_SIOINT2    ):		INTERRUPT_GATE( SIOINT2 ); 
-SYM ( GATE_DMAINT     ):		INTERRUPT_GATE( DMAINT    ); 
-SYM ( GATE_UNUSED_IR5 ):		INTERRUPT_GATE( UNUSED_IR5); 
-SYM ( GATE_UNUSED_IR6 ):		INTERRUPT_GATE( UNUSED_IR6); 
-SYM ( GATE_UNUSED_IR7 ):		INTERRUPT_GATE( UNUSED_IR7); 
-SYM ( GATE_SLAVE_IR0  ):		INTERRUPT_GATE( SLAVE_IR0 ); 
-SYM ( GATE_SLAVE_IR1  ):		INTERRUPT_GATE( SLAVE_IR1 ); 
-SYM ( GATE_SLAVE_IR2  ):		INTERRUPT_GATE( SLAVE_IR2 ); 
-SYM ( GATE_SLAVE_IR3  ):		INTERRUPT_GATE( SLAVE_IR3 ); 
-SYM ( GATE_SLAVE_IR4  ):		INTERRUPT_GATE( SLAVE_IR4 ); 
-SYM ( GATE_SLAVE_IR5  ):		INTERRUPT_GATE( SLAVE_IR5 ); 
-SYM ( GATE_SLAVE_IR6  ):		INTERRUPT_GATE( SLAVE_IR6 ); 
-SYM ( GATE_SLAVE_IR7  ):		INTERRUPT_GATE( SLAVE_IR7 );
+	PUBLIC ( SYM(IDTR) )
+	PUBLIC( SYM(_initInternalRegisters) )
+	
+BEGIN_DATA 
+SYM(IDTR):	DESC3( SYM(Interrupt_descriptor_table), 0x07ff );
+	
+SYM(Interrupt_descriptor_table):   /* Now in data section */
+	.rept 256
+	.word 0,0,0,0
+	.endr
+
 END_DATA	
 	
-	.section	.gdt
 BEGIN_DATA
-	        PUBLIC (_Global_descriptor_table)
-		
+/*	.section	.gdt */
+	 PUBLIC (_Global_descriptor_table)
+			
 SYM(GDTR):	DESC3( GDT_TABLE, 0x1f ); # one less than the size
 SYM (_Global_descriptor_table): 
-SYM(GDT):	
 SYM(GDT_TABLE):	DESC2(0,0,0,0,0,0);
 SYM(GDT_ALIAS):	DESC2(32,0x1000,0x0,0x93,0,0x0); 
 SYM(GDT_CODE):	DESC2(0xffff,0,0x0,0x9B,0xDF,0x00);
@@ -121,71 +84,13 @@ END_DATA
    correct vector offsets.  It is for symbol definition only.
 */
 	
-	.section	.ints
-	
-SYM(INTERRUPT_HANDLERS):	
-SYM(DIVIDE_ERROR):		jmp SYM(DIVIDE_ERROR)	
-SYM(DEBUG_EXCEPTION):		jmp SYM(DEBUG_EXCEPTION)	
-SYM(NMI_INTERRUPT):		jmp SYM(NMI_INTERRUPT)	
-SYM(BREAKPOINT):		jmp SYM(BREAKPOINT)	
-SYM(INTO_OVERFLOW):		jmp SYM(INTO_OVERFLOW)	
-SYM(BOUND_EXCEEDED):		jmp SYM(BOUND_EXCEEDED)
-SYM(INVALID_OPCODE):		jmp SYM(INVALID_OPCODE)
-SYM(COPRO_NA):			jmp SYM(COPRO_NA)	
-SYM(DOUBLE_FAULT):		jmp SYM(DOUBLE_FAULT)	
-SYM(COPRO_SEG_OVERRUN):		jmp SYM(COPRO_SEG_OVERRUN)
-SYM(INVALID_TSS):		jmp SYM(INVALID_TSS)
-SYM(RESERVED):			JMP SYM(RESERVED)	
-SYM(COPRO_ERROR):		JMP SYM(COPRO_ERROR)	
-SYM(PAGE_FAULT):		JMP SYM(PAGE_FAULT)	
-SYM(GPF):			JMP SYM(GPF)	
-SYM(STACK_FAULT):		JMP SYM(STACK_FAULT)
-SYM(SEGMENT_NOT_PRESENT):	jmp SYM(SEGMENT_NOT_PRESENT)
-SYM(RESERVED_17):		jmp SYM(RESERVED_17)	
-SYM(RESERVED_18):		jmp SYM(RESERVED_18)	
-SYM(RESERVED_19):		jmp SYM(RESERVED_19)	
-SYM(RESERVED_20):		jmp SYM(RESERVED_20)	
-SYM(RESERVED_21):		jmp SYM(RESERVED_21)	
-SYM(RESERVED_22):		jmp SYM(RESERVED_22)	
-SYM(RESERVED_23):		jmp SYM(RESERVED_23)	
-SYM(RESERVED_24):		jmp SYM(RESERVED_24)	
-SYM(RESERVED_25):		jmp SYM(RESERVED_25)	
-SYM(RESERVED_26):		jmp SYM(RESERVED_26)	
-SYM(RESERVED_27):		jmp SYM(RESERVED_27)	
-SYM(RESERVED_28):		jmp SYM(RESERVED_28)	
-SYM(RESERVED_29):		jmp SYM(RESERVED_29)	
-SYM(RESERVED_30):		jmp SYM(RESERVED_30)	
-SYM(RESERVED_31):		jmp SYM(RESERVED_31)	
-SYM(TIMINT0):			nop; iret
-SYM(MASTER_IR2):		jmp SYM(MASTER_IR2)
-SYM(SIOINT1):			jmp SYM(SIOINT1)
-SYM(SIOINT2):			jmp SYM(SIOINT2)
-SYM(DMAINT):			jmp SYM(DMAINT)
-SYM(UNUSED_IR5):		jmp SYM(UNUSED_IR5)
-SYM(UNUSED_IR6):		JMP SYM(UNUSED_IR6)
-SYM(UNUSED_IR7):		JMP SYM(UNUSED_IR7)
-SYM(SLAVE_IR0):			JMP SYM(SLAVE_IR0)
-SYM(SLAVE_IR1):			JMP SYM(SLAVE_IR1)
-SYM(SLAVE_IR2):			nop; iret
-SYM(SLAVE_IR3):			JMP SYM(SLAVE_IR3)
-SYM(SLAVE_IR4):			JMP SYM(SLAVE_IR4)
-SYM(SLAVE_IR5):			JMP SYM(SLAVE_IR5)
-SYM(SLAVE_IR6):			JMP SYM(SLAVE_IR6)
-SYM(SLAVE_IR7):			JMP SYM(SLAVE_IR7)
-	
-	PUBLIC( SYM(_initInternalRegisters) )
 
-	
 	.section .reset                        
 
 		PUBLIC ( SYM(reset) ) 
-SYM(reset):
-	.code16
+SYM(reset):	
 	nop
 	cli
-#ifdef NEXT_GAS	
-	addr32
-#endif	
 	jmp     SYM(_initInternalRegisters) /* different section in this file */
 	.code32                             /* in case this section moves     */
 	nop                                 /* required by CHIP LAB to pad out size */
@@ -193,9 +98,11 @@ SYM(reset):
 	nop
 	nop
 	nop
-		
-	.section .initial
 
+	
+	
+	.section .initial
+	
 /*
  * Enable access to peripheral register at expanded I/O addresses
  */
@@ -219,8 +126,11 @@ SYM(A20):
 	orb	$0x02	, al   # Bit 1 Fast A20 = 0 (always 0) else enabled.
 	outb	al	, dx
 
-SYM(Watchdog):		
-	SetExRegByte( WDTSTATUS, 0x01 ) # disable watchdog timer
+SYM(Watchdog):
+	movw	$WDTSTATUS	, dx    # address the WDT status port
+	inb	dx		, al	# get the WDT status
+	orb	$0x01		, al	# set the CLKDIS bit 
+	outb	al		, dx	# disable the clock to the WDT
 
 /*
  * Initialize Refresh Control Unit for:	
@@ -408,16 +318,18 @@ SYM(InitInt):
 	
 	SetExRegByte(ICW1S  , 0x11 ) # EDGE TRIGGERED
 	SetExRegByte(ICW2S  , 0x28 ) # Slave base vector after Master
-	SetExRegByte(ICW3S  , 0x04 ) # ( was 0x02! )slave cascaded to IR2 on master
+	SetExRegByte(ICW3S  , 0x02 ) # slave cascaded to IR2 on master
 	SetExRegByte(ICW4S  , 0x01 ) # must be 0x01
 
 	SetExRegByte(ICW1M  , 0x11 ) # edge triggered
-	SetExRegByte(ICW2M  , 0x20 )  # base vector starts at byte 32
-	SetExRegByte(ICW3M  , 0x02 ) # IR2 is cascaded internally
+	SetExRegByte(ICW2M  , 0x20 ) # base vector starts at byte 32
+	SetExRegByte(ICW3M  , 0x04)  # IR2 is cascaded internally
 	SetExRegByte(ICW4M  , 0x01 ) # idem
 	
 	SetExRegByte(OCW1M  , 0xde ) # IR0  only = 0xfe.  for IR5 and IR0 active use 0xde
 	SetExRegByte(INTCFG , 0x00 )
+	
+	movw    $0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
 	
 SYM(SetCS4):	
 	SetExRegWord(CS4ADL , 0x702)         #Configure chip select 4
@@ -430,45 +342,13 @@ SYM(SetUCS1):
  	SetExRegWord(UCSADH , 0x03F8)
 	SetExRegWord(UCSMSKH, 0x03F7)	
 	SetExRegWord(UCSMSKL, 0xFC01)     # configure upper chip select
-			
-SYM(xfer_idt):
-	movw $ _ram_idt_offset  , di 
-	movw $ _ram_idt_segment , cx 	
-	mov	cx, es
+
+/******************************************************
+* The GDT must be in RAM since it must be writeable,
+* So, move the whole data section down.
+********************************************************/
 		
-	movw $ _rom_idt_offset   , si
-	movw $ _rom_idt_segment  , ax 
-	mov   ax                 , ds
-		
-	movw $ _idt_size , cx
-	
-	repne
-	movsb
-	
-SYM(xfer_ints):
-			
-	movw $ _ram_ints_offset	  , di 	
-	movw $ _ram_ints_segment  , ax 
-	mov  ax                   , es
-	
-	movw $ _rom_ints_offset	, si 
-	movw $ _rom_ints_segment, ax 
-	mov  ax                 , ds
-
-	movw $ _ints_size	, cx
-	
-	repne
-	movsb
-	
-SYM(lidt):
-	movw $ _ram_idt_offset	,   di 
-	movw $ 0x0              ,   si 
-
-	movw $ _ram_idt_segment	,   ax 
-
-	mov  ax                 , ds 
-	lidt	_ram_idt_offset	
-SYM(xfer_gdt):		
+/* SYM(xfer_gdt):		
 	movw $ _ram_gdt_offset	, di
 	movw $ _ram_gdt_segment	, cx 
 	mov  cx                 , es
@@ -480,23 +360,38 @@ SYM(xfer_gdt):
 	
 	repne
 	movsb
+*/
+
+	movw $ _ram_data_offset	, di
+	movw $ _ram_data_segment, cx 
+	mov  cx                 , es
+
+	movw $ _data_size	, cx 
+	movw $ _rom_data_segment, ax 
+	movw $ _rom_data_offset	, si 
+	mov  ax                 , ds
+	
+	repne
+	movsb
 	
 /*****************************
  * Load the Global Descriptor
  * Table Register
  ****************************/
 	
-	movw $ _ram_gdt_segment, ax
-	mov    ax              , ds
+/*	movw $ _ram_gdt_segment, ax */
+
 #ifdef NEXT_GAS	
 	data32
 	addr32
 #endif	
-        lgdt	_ram_gdt_offset	    #  location of GDT
+/*        lgdt	_ram_gdt_offset	    #  location of GDT */
+
+        lgdt SYM(GDTR) #  location of GDT
 
 	
 SYM(SetUCS):		
- 	SetExRegWord(UCSADL, 0x0704)      # now 512K starting at 0x3f80000.	
+ 	SetExRegWord(UCSADL, 0x0702)      # now 512K starting at 0x3f80000.	
  	SetExRegWord(UCSADH, 0x03f8)
 	SetExRegWord(UCSMSKH, 0x0007)	
 	SetExRegWord(UCSMSKL, 0xFC01)     # configure upper chip select
@@ -513,11 +408,14 @@ SYM(SetUCS):
  * and load CS selector
  *********************/
 
-	ljmpl $ GDT_CODE_PTR , $  SYM(_copy_data) # sets the code selector
+/*	ljmpl $ GDT_CODE_PTR , $  SYM(_copy_data) # sets the code selector*/
+	ljmpl $ GDT_CODE_PTR , $  SYM(_load_segment_registers) # sets the code selector
+	
 /*
  * Copy the data section down to RAM
  */
-SYM(_copy_data): 
+/*SYM(_copy_data): */
+SYM(_load_segment_registers):	
 	.code32
 	pLOAD_SEGMENT( GDT_DATA_PTR, fs)
 	pLOAD_SEGMENT( GDT_DATA_PTR, gs)
@@ -525,21 +423,21 @@ SYM(_copy_data):
 	pLOAD_SEGMENT( GDT_DATA_PTR, ds)
 	pLOAD_SEGMENT( GDT_DATA_PTR, es)
 	
-	movl		$ SYM(_data_start)	, edi # ram destination
+/*	movl		$ SYM(_data_start)	, edi # ram destination
 	movl		$ SYM(_rom_data_start)	, esi # rom data source
-	movl		$ SYM(_edata)		, ecx # end of data section
-	subl		$ SYM(_data_start) 	, ecx # length of data section
-                                                      # es, ds preloaded
+	movl		$ SYM(_data_size)	, ecx # amount to move
 	repne					      # while ecx != 0
 	movsb					      #   move a byte	
-
+*/
 /*
  *  Set up the stack
  */
 
+SYM(lidtr):
+	lidt	SYM(IDTR)
+
 SYM (_establish_stack):
 	movl	$end, eax               # stack starts right after bss
-/*	movl    eax, stack_start	# save for brk() routine */
 	movl	$stack_origin, esp      # this is the high starting address
 	movl	$stack_origin, ebp
 /*
@@ -562,21 +460,10 @@ SYM (zero_bss):
         pushl   $0                       # environp
         pushl   $0                       # argv
         pushl   $0                       # argc
-        call    SYM (main)               # does not return
+	call SYM(boot_card)
         addl    $12,esp
-
-BEGIN_DATA_DCL
-
-/*        .align  2
-        PUBLIC (start_frame)
-SYM (start_frame):
-        .long 0  
-*/
-/*        PUBLIC (stack_start)
-SYM (stack_start):
-        .long  0
-*/
-
-END_DATA_DCL
+	
+	hlt
 
 END
+

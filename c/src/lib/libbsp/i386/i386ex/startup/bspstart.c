@@ -21,6 +21,8 @@
  *  $Id$
  */
 
+void bsp_clean_up(void);
+
 #include <bsp.h>
 #include <rtems/libio.h>
  
@@ -79,6 +81,7 @@ void bsp_pretasking_hook(void)
     heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
     bsp_libc_init((void *) heap_start, heap_size, 0);
 
+
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -92,22 +95,27 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  /*
-   *  we do not use the pretasking_hook.
+     /*
+    *  we do not use the pretasking_hook.
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_table_segment = get_ds();
   Cpu_table.interrupt_table_offset = (void *)Interrupt_descriptor_table;
-  Cpu_table.interrupt_stack_size = 4096;  /* STACK_MINIMUM_SIZE */
+  Cpu_table.interrupt_stack_size = 8192;  /* changed Sept 14 STACK_MINIMUM_SIZE */
 
 #if defined(RTEMS_POSIX_API)
   BSP_Configuration.work_space_size *= 3;
 #endif
 
-  BSP_Configuration.work_space_start = (void *)
+  /* BSP_Configuration.work_space_size += 128 * RTEMS_MINIMUM_STACK_SIZE; */
+
+    BSP_Configuration.work_space_start = (void *)
      RAM_END - BSP_Configuration.work_space_size;
+#ifdef DEBUG  
+  printk("workspace size = 0x%x\nstart = 0x%x, RAM_END = 0x%x\n",BSP_Configuration.work_space_size,  BSP_Configuration.work_space_start, RAM_END );
+#endif
 
   /*
    *  Account for the console's resources
@@ -118,4 +126,7 @@ void bsp_start( void )
    * Init rtems_interrupt_management
    */
   rtems_irq_mngt_init();
+}
+void bsp_clean_up(void) {
+  printk("bsp_cleanup called\n");
 }
