@@ -18,6 +18,12 @@ if test $# -lt 1 ; then
   usage "not enough arguments."
 fi
 
+user_name=`grep ^$LOGNAME /etc/passwd | cut -d':' -f5 | cut -d',' -f1`
+# If you don't have user information, then we won't commit anything.
+if test "X${user_name}" = "X" ; then
+  echo "User information not set"
+  usage
+fi
 case $1 in
   name)
     echo "RTEMS"
