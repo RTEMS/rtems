@@ -81,7 +81,7 @@ extern "C" {
 /*
  *  Does RTEMS manage a dedicated interrupt stack in software?
  *
- *  If TRUE, then a stack is allocated in _Interrupt_Manager_initialization.
+ *  If TRUE, then a stack is allocated in _ISR_Handler_initialization.
  *  If FALSE, nothing is done.
  *
  *  If the CPU supports a dedicated interrupt stack in hardware,
