@@ -1,3 +1,8 @@
+2003-01-10	Joel Sherrill <joel@OARcorp.com>
+
+	* src/objectmp.c: Corrected use of name parameter to reflect that it
+	is actually the name not a pointer to the name.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	Makefile.am: Don't create $ARCH.
