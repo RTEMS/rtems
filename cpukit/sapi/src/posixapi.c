@@ -51,6 +51,7 @@ posix_api_configuration_table _POSIX_Default_configuration = {
   0,                             /* maximum_mutexes */
   0,                             /* maximum_condition_variables */
   0,                             /* maximum_keys */
+  0,                             /* maximum_queued_signals */
   0,                             /* number_of_initialization_tasks */
   NULL                           /* User_initialization_tasks_table */
 };
