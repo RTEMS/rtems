@@ -28,6 +28,7 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 AC_CONFIG_SUBDIRS(tools)
 
+AC_SUBST(RTEMS_BSP)
 # Explicitly list all Makefile here 
 AC_OUTPUT( 
 Makefile
