@@ -106,6 +106,12 @@ DOMAIN     - DNS domain name (precompiled value from CONFIG_SITE).
 NTPSERVER  - Internet address of NTP server (SERVER).
 BOOTFILE   - Path to executable (epics/iocNobody/bin/RTEMS-uC5282/myApp.boot).
 CMDLINE    - Path to startup script (epics/iocBoot/iocNobody/st.cmd).
+NFSMOUNT   - NFS information: www.xxx.yyy.zzz:/remote/path /localpath
+             If NFSMOUNT is not set, SERVER will be used as the NFS server,
+             and the remote and local paths will be taken from the first
+             component of CMDLINE.  If CMDLINE does not begin with a /
+             then '/tftpboot' is prepended to the remote path.  This allows
+             a remote TFTP and NFS server to be handled transaparently.
 
 
 ============================================================================
