@@ -480,13 +480,11 @@ osend (const char *buf, int len, struct rtems_termios_tty *tty)
 		tty->rawOutBuf[tty->rawOutBufHead] = *buf++;
 		tty->rawOutBufHead = newHead;
 		if (tty->rawOutBufState == rob_idle) {
-			rtems_interrupt_enable (level);
 			tty->rawOutBufState = rob_busy;
-			(*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
+			(*tty->device.write)(tty->minor,
+				(char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
 		}
-		else {
-			rtems_interrupt_enable (level);
-		}
+		rtems_interrupt_enable (level);
 		len--;
 	}
 }
