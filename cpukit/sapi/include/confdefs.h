@@ -38,7 +38,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
- 
+
+/*
+ * Include the executive's configuration
+ */
+#include <rtems/score/cpuopts.h>
+
 extern rtems_initialization_tasks_table Initialization_tasks[];
 extern rtems_driver_address_table       Device_drivers[];
 extern rtems_configuration_table        Configuration;
@@ -56,7 +61,9 @@ extern itron_api_configuration_table    Configuration_ITRON_API;
  *  NOTE:  This ends up defining these even when newlib is not used.
  */
 
+#ifdef RTEMS_NEWLIB
 #define CONFIGURE_NEWLIB_EXTENSION 1
+#endif
 #define CONFIGURE_MALLOC_REGION 1
 
 /*
@@ -262,7 +269,7 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
-#include <stubdrv.h>
+#include <rtems/devnull.h>
 #endif
 
 #ifndef CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
@@ -276,7 +283,7 @@ rtems_driver_address_table Device_drivers[] = {
   CLOCK_DRIVER_TABLE_ENTRY,
 #endif
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
-  STUB_DRIVER_TABLE_ENTRY,
+  DEVNULL_DRIVER_TABLE_ENTRY,
 #endif
   NULL_DRIVER_TABLE_ENTRY
 };
