@@ -170,9 +170,9 @@ union mcluster {
  * prevents a section of code from from being interrupted by network
  * drivers.
  */
-#define	MBUFLOCK(_code) \
+#define	MBUFLOCK(code) \
 	{ int ms = splimp(); \
-	  { _code } \
+	  { code } \
 	  splx(ms); \
 	}
 
@@ -186,45 +186,43 @@ union mcluster {
  * allocates an mbuf and initializes it to contain a packet header
  * and internal data.
  */
-#define	MGET(_m, _how, _type) { \
+#define	MGET(m, how, type) { \
 	  int _ms = splimp(); \
 	  if (mmbfree == 0) \
-		(void)m_mballoc(1, (_how)); \
-	  if (((_m) = mmbfree) != 0) { \
-		mmbfree = (_m)->m_next; \
-/* printf( "MGET: %p\n", (_m) ); */ \
+		(void)m_mballoc(1, (how)); \
+	  if (((m) = mmbfree) != 0) { \
+		mmbfree = (m)->m_next; \
 		mbstat.m_mtypes[MT_FREE]--; \
-		(_m)->m_type = (_type); \
-		mbstat.m_mtypes[_type]++; \
-		(_m)->m_next = (struct mbuf *)NULL; \
-		(_m)->m_nextpkt = (struct mbuf *)NULL; \
-		(_m)->m_data = (_m)->m_dat; \
-		(_m)->m_flags = 0; \
+		(m)->m_type = (type); \
+		mbstat.m_mtypes[type]++; \
+		(m)->m_next = (struct mbuf *)NULL; \
+		(m)->m_nextpkt = (struct mbuf *)NULL; \
+		(m)->m_data = (m)->m_dat; \
+		(m)->m_flags = 0; \
 		splx(_ms); \
 	} else { \
 		splx(_ms); \
-		(_m) = m_retry((_how), (_type)); \
+		(m) = m_retry((how), (type)); \
 	} \
 }
 
-#define	MGETHDR(_m, _how, _type) { \
+#define	MGETHDR(m, how, type) { \
 	  int _ms = splimp(); \
 	  if (mmbfree == 0) \
-		(void)m_mballoc(1, (_how)); \
-	  if (((_m) = mmbfree) != 0) { \
-		mmbfree = (_m)->m_next; \
-/* printf( "MGETHDR: %p\n", (_m) ); */ \
+		(void)m_mballoc(1, (how)); \
+	  if (((m) = mmbfree) != 0) { \
+		mmbfree = (m)->m_next; \
 		mbstat.m_mtypes[MT_FREE]--; \
-		(_m)->m_type = (_type); \
-		mbstat.m_mtypes[_type]++; \
-		(_m)->m_next = (struct mbuf *)NULL; \
-		(_m)->m_nextpkt = (struct mbuf *)NULL; \
-		(_m)->m_data = (_m)->m_pktdat; \
-		(_m)->m_flags = M_PKTHDR; \
+		(m)->m_type = (type); \
+		mbstat.m_mtypes[type]++; \
+		(m)->m_next = (struct mbuf *)NULL; \
+		(m)->m_nextpkt = (struct mbuf *)NULL; \
+		(m)->m_data = (m)->m_pktdat; \
+		(m)->m_flags = M_PKTHDR; \
 		splx(_ms); \
 	} else { \
 		splx(_ms); \
-		(_m) = m_retryhdr((_how), (_type)); \
+		(m) = m_retryhdr((how), (type)); \
 	} \
 }
 
@@ -236,33 +234,33 @@ union mcluster {
  * MCLFREE releases a reference to a cluster allocated by MCLALLOC,
  * freeing the cluster if the reference count has reached 0.
  */
-#define	MCLALLOC(_p, _how) \
+#define	MCLALLOC(p, how) \
 	MBUFLOCK( \
 	  if (mclfree == 0) \
-		(void)m_clalloc(1, (_how)); \
-	  if (((_p) = (caddr_t)mclfree) != 0) { \
-		++mclrefcnt[mtocl(_p)]; \
+		(void)m_clalloc(1, (how)); \
+	  if (((p) = (caddr_t)mclfree) != 0) { \
+		++mclrefcnt[mtocl(p)]; \
 		mbstat.m_clfree--; \
-		mclfree = ((union mcluster *)(_p))->mcl_next; \
+		mclfree = ((union mcluster *)(p))->mcl_next; \
 	  } \
 	)
 
-#define	MCLGET(_m, _how) \
-	{ MCLALLOC((_m)->m_ext.ext_buf, (_how)); \
-	  if ((_m)->m_ext.ext_buf != NULL) { \
-		(_m)->m_data = (_m)->m_ext.ext_buf; \
-		(_m)->m_flags |= M_EXT; \
-		(_m)->m_ext.ext_free = NULL;  \
-		(_m)->m_ext.ext_ref = NULL;  \
-		(_m)->m_ext.ext_size = MCLBYTES;  \
+#define	MCLGET(m, how) \
+	{ MCLALLOC((m)->m_ext.ext_buf, (how)); \
+	  if ((m)->m_ext.ext_buf != NULL) { \
+		(m)->m_data = (m)->m_ext.ext_buf; \
+		(m)->m_flags |= M_EXT; \
+		(m)->m_ext.ext_free = NULL;  \
+		(m)->m_ext.ext_ref = NULL;  \
+		(m)->m_ext.ext_size = MCLBYTES;  \
 	  } \
 	}
 
-#define	MCLFREE(_p) \
+#define	MCLFREE(p) \
 	MBUFLOCK ( \
-	  if (--mclrefcnt[mtocl(_p)] == 0) { \
-		((union mcluster *)(_p))->mcl_next = mclfree; \
-		mclfree = (union mcluster *)(_p); \
+	  if (--mclrefcnt[mtocl(p)] == 0) { \
+		((union mcluster *)(p))->mcl_next = mclfree; \
+		mclfree = (union mcluster *)(p); \
 		mbstat.m_clfree++; \
 	  } \
 	)
@@ -272,16 +270,15 @@ union mcluster {
  * Free a single mbuf and associated external storage.
  * Place the successor, if any, in n.
  */
-#define	MFREE(_m, _n) \
+#define	MFREE(m, n) \
 	MBUFLOCK(  \
-/* printf( "MFREE: %p\n", (_m) ); */ \
-	  mbstat.m_mtypes[(_m)->m_type]--; \
-	  if ((_m)->m_flags & M_EXT) { \
-		if ((_m)->m_ext.ext_free) \
-			(*((_m)->m_ext.ext_free))((_m)->m_ext.ext_buf, \
-			    (_m)->m_ext.ext_size); \
+	  mbstat.m_mtypes[(m)->m_type]--; \
+	  if ((m)->m_flags & M_EXT) { \
+		if ((m)->m_ext.ext_free) \
+			(*((m)->m_ext.ext_free))((m)->m_ext.ext_buf, \
+			    (m)->m_ext.ext_size); \
 		else { \
-			char *p = (_m)->m_ext.ext_buf; \
+			char *p = (m)->m_ext.ext_buf; \
 			if (--mclrefcnt[mtocl(p)] == 0) { \
 				((union mcluster *)(p))->mcl_next = mclfree; \
 				mclfree = (union mcluster *)(p); \
@@ -289,53 +286,53 @@ union mcluster {
 			} \
 		} \
 	  } \
-	  (_n) = (_m)->m_next; \
-	  (_m)->m_type = MT_FREE; \
+	  (n) = (m)->m_next; \
+	  (m)->m_type = MT_FREE; \
 	  mbstat.m_mtypes[MT_FREE]++; \
-	  (_m)->m_next = mmbfree; \
-	  mmbfree = (_m); \
+	  (m)->m_next = mmbfree; \
+	  mmbfree = (m); \
 	)
 
 /*
  * Copy mbuf pkthdr from from to to.
  * from must have M_PKTHDR set, and to must be empty.
  */
-#define	M_COPY_PKTHDR(_to, _from) { \
-	(_to)->m_pkthdr = (_from)->m_pkthdr; \
-	(_to)->m_flags = (_from)->m_flags & M_COPYFLAGS; \
-	(_to)->m_data = (_to)->m_pktdat; \
+#define	M_COPY_PKTHDR(to, from) { \
+	(to)->m_pkthdr = (from)->m_pkthdr; \
+	(to)->m_flags = (from)->m_flags & M_COPYFLAGS; \
+	(to)->m_data = (to)->m_pktdat; \
 }
 
 /*
  * Set the m_data pointer of a newly-allocated mbuf (m_get/MGET) to place
  * an object of the specified size at the end of the mbuf, longword aligned.
  */
-#define	M_ALIGN(_m, _len) \
-	{ (_m)->m_data += (MLEN - (_len)) &~ (sizeof(long) - 1); }
+#define	M_ALIGN(m, len) \
+	{ (m)->m_data += (MLEN - (len)) &~ (sizeof(long) - 1); }
 /*
  * As above, for mbufs allocated with m_gethdr/MGETHDR
  * or initialized by M_COPY_PKTHDR.
  */
-#define	MH_ALIGN(_m, _len) \
-	{ (_m)->m_data += (MHLEN - (_len)) &~ (sizeof(long) - 1); }
+#define	MH_ALIGN(m, len) \
+	{ (m)->m_data += (MHLEN - (len)) &~ (sizeof(long) - 1); }
 
 /*
  * Compute the amount of space available
  * before the current start of data in an mbuf.
  */
-#define	M_LEADINGSPACE(_m) \
-	((_m)->m_flags & M_EXT ? /* (_m)->m_data - (_m)->m_ext.ext_buf */ 0 : \
-	    (_m)->m_flags & M_PKTHDR ? (_m)->m_data - (_m)->m_pktdat : \
-	    (_m)->m_data - (_m)->m_dat)
+#define	M_LEADINGSPACE(m) \
+	((m)->m_flags & M_EXT ? /* (m)->m_data - (m)->m_ext.ext_buf */ 0 : \
+	    (m)->m_flags & M_PKTHDR ? (m)->m_data - (m)->m_pktdat : \
+	    (m)->m_data - (m)->m_dat)
 
 /*
  * Compute the amount of space available
  * after the end of data in an mbuf.
  */
-#define	M_TRAILINGSPACE(_m) \
-	((_m)->m_flags & M_EXT ? (_m)->m_ext.ext_buf + (_m)->m_ext.ext_size - \
-	    ((_m)->m_data + (_m)->m_len) : \
-	    &(_m)->m_dat[MLEN] - ((_m)->m_data + (_m)->m_len))
+#define	M_TRAILINGSPACE(m) \
+	((m)->m_flags & M_EXT ? (m)->m_ext.ext_buf + (m)->m_ext.ext_size - \
+	    ((m)->m_data + (m)->m_len) : \
+	    &(m)->m_dat[MLEN] - ((m)->m_data + (m)->m_len))
 
 /*
  * Arrange to prepend space of size plen to mbuf m.
@@ -343,20 +340,20 @@ union mcluster {
  * If how is M_DONTWAIT and allocation fails, the original mbuf chain
  * is freed and m is set to NULL.
  */
-#define	M_PREPEND(_m, _plen, _how) { \
-	if (M_LEADINGSPACE(_m) >= (_plen)) { \
-		(_m)->m_data -= (_plen); \
-		(_m)->m_len += (_plen); \
+#define	M_PREPEND(m, plen, how) { \
+	if (M_LEADINGSPACE(m) >= (plen)) { \
+		(m)->m_data -= (plen); \
+		(m)->m_len += (plen); \
 	} else \
-		(_m) = m_prepend((_m), (_plen), (_how)); \
-	if ((_m) && (_m)->m_flags & M_PKTHDR) \
-		(_m)->m_pkthdr.len += (_plen); \
+		(m) = m_prepend((m), (plen), (how)); \
+	if ((m) && (m)->m_flags & M_PKTHDR) \
+		(m)->m_pkthdr.len += (plen); \
 }
 
 /* change mbuf to new type */
-#define MCHTYPE(_m, _t) { \
-	MBUFLOCK(mbstat.m_mtypes[(_m)->m_type]--; mbstat.m_mtypes[t]++;) \
-	(_m)->m_type = t;\
+#define MCHTYPE(m, t) { \
+	MBUFLOCK(mbstat.m_mtypes[(m)->m_type]--; mbstat.m_mtypes[t]++;) \
+	(m)->m_type = t;\
 }
 
 /* length to m_copy to copy all */
