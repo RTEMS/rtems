@@ -1,5 +1,12 @@
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* Makefile.am: Build networking.rel conditionally.
+	Reformat. Cosmetics.
+	* wrapup/Makefile.am: Build networking.rel conditionally.
+	* startup/bspstart.c: Eliminate RTEMS fixed size types.
+
+2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* startup/bspstart.c: Remove BSP_build_date.
 
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>

@@ -170,7 +170,7 @@ char *rtems_progname;
  
 extern void bsp_postdriver_hook(void); /* see c/src/lib/libbsp/shared/bsppost.c */
 
-extern void bsp_libc_init( void *, unsigned32, int );
+extern void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -365,7 +365,7 @@ void bsp_start( void )
   stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((unsigned32 *)stack) = 0;
+  *((uint32_t *)stack) = 0;
 
   /* fill stack with pattern for debugging */
   __asm__ __volatile__("mr %0, %%r1":"=r"(r1sp));
@@ -383,10 +383,10 @@ void bsp_start( void )
   intrStack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
-  (unsigned32)intrStack &= ~(CPU_STACK_ALIGNMENT-1);
+  (uint32_t)intrStack &= ~(CPU_STACK_ALIGNMENT-1);
 
   /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((unsigned32 *)intrStack) = 0;
+  *((uint32_t *)intrStack) = 0;
 
   _write_SPRG1((unsigned int)intrStack);
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);

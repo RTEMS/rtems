@@ -103,7 +103,8 @@ include_bsp_HEADERS += irq/irq.h
 
 EXTRA_PROGRAMS += irq.rel
 CLEANFILES += irq.rel
-irq_rel_SOURCES = irq/irq_init.c irq/GT64260Int.c irq/irq.c ../../powerpc/shared/irq/irq_asm.S
+irq_rel_SOURCES = irq/irq_init.c irq/GT64260Int.c irq/irq.c \
+    ../../powerpc/shared/irq/irq_asm.S
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -169,6 +170,7 @@ GT64260_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_DATA += GT64260$(LIB_VARIANT).rel
 
 ##
+if HAS_NETWORKING
 include_bsp_HEADERS += network/GT64260eth.h network/GT64260ethreg.h
 
 EXTRA_PROGRAMS += network.rel
@@ -184,7 +186,7 @@ network_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 network_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += network$(LIB_VARIANT).rel
-
+endif
 ##
 include_bsp_HEADERS += vme/VME.h vme/VMEConfig.h
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h
@@ -222,7 +224,9 @@ mvme5500start_g___OBJEXT__SOURCES = $(mvme5500start___OBJEXT__SOURCES)
 mvme5500start_g___OBJEXT__CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 mvme5500start_g___OBJEXT__LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_DATA += mvme5500start$(LIB_VARIANT).rel
+project_lib_DATA += mvme5500start$(LIB_VARIANT).$(OBJEXT)
+
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 ###
 
@@ -309,6 +313,7 @@ $(PROJECT_INCLUDE)/bsp/VPD.h: GT64260/VPD.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VPD.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VPD.h
 
+if HAS_NETWORKING
 $(PROJECT_INCLUDE)/bsp/GT64260eth.h: network/GT64260eth.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/GT64260eth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/GT64260eth.h
@@ -316,6 +321,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/GT64260eth.h
 $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h: network/GT64260ethreg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h
+endif
 
 $(PROJECT_INCLUDE)/bsp/VME.h: vme/VME.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
@@ -333,9 +339,9 @@ $(PROJECT_LIB)/rtems_crti$(LIB_VARIANT).$(OBJEXT): rtems_crti$(LIB_VARIANT).$(OB
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems_crti$(LIB_VARIANT).$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/rtems_crti$(LIB_VARIANT).$(OBJEXT)
 
-$(PROJECT_LIB)/mvme5500start$(LIB_VARIANT).rel: mvme5500start$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/mvme5500start$(LIB_VARIANT).rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/mvme5500start$(LIB_VARIANT).rel
+$(PROJECT_LIB)/mvme5500start$(LIB_VARIANT).$(OBJEXT): mvme5500start$(LIB_VARIANT).$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/mvme5500start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/mvme5500start$(LIB_VARIANT).$(OBJEXT)
 
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)

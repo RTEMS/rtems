@@ -10,8 +10,11 @@ ___libbsp_a_SOURCES =
 ___libbsp_a_LIBADD = ../pclock$(LIB_VARIANT).rel ../console$(LIB_VARIANT).rel \
     ../irq$(LIB_VARIANT).rel ../pci$(LIB_VARIANT).rel \
     ../startup$(LIB_VARIANT).rel ../tod$(LIB_VARIANT).rel \
-    ../vectors$(LIB_VARIANT).rel ../GT64260$(LIB_VARIANT).rel \
-    ../network$(LIB_VARIANT).rel ../vme$(LIB_VARIANT).rel
+    ../vectors$(LIB_VARIANT).rel ../GT64260$(LIB_VARIANT).rel
+if HAS_NETWORKING
+    ../network$(LIB_VARIANT).rel
+endif
+___libbsp_a_LIBADD += ../vme$(LIB_VARIANT).rel
 
 EXTRA_LIBRARIES += ../libbsp_g.a
 CLEANFILES += ../libbsp_g.a
