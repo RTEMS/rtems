@@ -110,6 +110,35 @@ The value returned is the value returned by the @code{rtems_event_receive}.
 
 @end itemize
 
+@section Network Driver Makefile
+
+Network drivers are considered part of the BSD network package and as such
+are to be compiled with the appropriate flags.
+
+@example
+-D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC -DBOOTP_COMPAT
+@end example
+
+Defining these macros tells the network header files that the driver
+is to be compiled with extended visibility into the network stack.  This
+is in sharp contrast to applications that simply use the network stack.
+Applications do not require this level of visibility and should stick
+to the portable application level API.
+
+As a direct result of being logically internal to the network stack,
+network drivers use the BSD memory allocation routines   This means,
+for example, that malloc takes three arguments.  See the SONIC
+device driver (@code{c/src/lib/libchip/network/sonic.c}) for an example
+of this.  Because of this, network drivers should not include 
+@code{<stdlib.h>}.  Doing so will result in conflicting definitions
+of @code{malloc()}.
+
+@b{Application level} code including network servers such as the FTP
+daemon are @b{not} part of the BSD network package and should not be
+compiled with the BSD network flags.  They should include
+@code{<stdlib.h>} and not define the network stack visibility
+macros.
+
 @section Write the Driver Attach Function
 The driver attach function is responsible for configuring the driver
 and making the connection between the network stack
