@@ -20,10 +20,10 @@
 #include "system.h"
 #include <string.h>             /* for memcmp */
 
-char    big_send_buffer[2048];
-char    big_receive_buffer[2048];
+unsigned char big_send_buffer[2048];
+unsigned char big_receive_buffer[2048];
 
-long    buffer[ MESSAGE_SIZE / sizeof(long) ];
+long buffer[ MESSAGE_SIZE / sizeof(long) ];
 
 void dope_buffer(unsigned char *buff,
                  int   buff_size,
@@ -47,12 +47,12 @@ rtems_task Task_1(
 )
 {
   rtems_id          qid;
-  uint32_t    index;
-  uint32_t    count;
+  uint32_t          index;
+  uint32_t          count;
   rtems_status_code status;
-  uint32_t    size;
-  uint32_t    queue_size;
-  char             *cp;
+  uint32_t          size;
+  uint32_t          queue_size;
+  unsigned char    *cp;
 
   status = rtems_message_queue_ident(
     Queue_name[ 1 ],

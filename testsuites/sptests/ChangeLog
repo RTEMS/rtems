@@ -1,3 +1,7 @@
+2005-03-07	Joel Sherrill <joel@OARcorp.com>
+
+	* sp13/task1.c: Removed warnings.
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* spsize/size.c: i960 obsoleted and all references removed.
