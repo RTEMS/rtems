@@ -27,9 +27,6 @@ DISTCLEANFILES += @CUSTOM_CFG_FILES@
 make/custom/default.cfg: $(srcdir)/make/custom/default.cfg.in
 	cp $< $@
 
-make/custom/%.cfg: $(srcdir)/$(cfg_dir)/custom/%.cfg
-	cp $< $@
-
 noinst_DATA += make/custom/default.cfg
 DISTCLEANFILES += make/custom/default.cfg
 
@@ -46,6 +43,9 @@ CLEANFILES = preinstall-stamp
 pkgconfigdir = $(prefix)/lib/pkgconfig
 pkgconfig_DATA = @host_alias@-@RTEMS_BSP@.pc
 DISTCLEANFILES += @host_alias@-@RTEMS_BSP@.pc
+
+DISTCLEANFILES += $(DEPDIR)/cfg.P
+include $(DEPDIR)/cfg.P
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
