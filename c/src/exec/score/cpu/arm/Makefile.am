@@ -17,7 +17,7 @@ H_FILES = asm.h
 
 REL = $(ARCH)/rtems-cpu.rel
 
-rtems_cpu_rel_OBJECTS = $(C_O_FILES)
+rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am
