@@ -19,6 +19,7 @@ $usage = <<EOT;
 Usage: texi2www [option ...] texinfo_file
 where options are:
   -dir directory    -- Specify output directory.  Default is `.'.
+  -dirfile path     -- Specifies a replacement for ../dir.html
   -header path      -- Specifies the path to a file containing HTML;
                        this files gets inserted near the top of each
                        generated HTML file.
@@ -27,7 +28,8 @@ where options are:
                        generated HTML file.
   -icons path       -- Specifies the path, relative to the output directory,
                        to the arrow files.  Default is `..'.
-  -dirfile path     -- Specifies a replacement for ../dir.html
+  -base             -- Specify the base part fo the genrated short file names
+  -uselongnames     -- Use long names for generated html files
   -verbose          -- Verbose output.
 
 The complete user\'s is available at
@@ -36,15 +38,23 @@ EOT
 
 ########################################################################
 
-$icons = ".."; $dir = "."; $dirfile = "../dir.html";
+%lookup = ();                      # clear the name mapping hash
+$uselongnames=0;                   # default to using short names
+$base = "a";                       # default short name base (BASEnnnnn.html)
+$outcount = 0;                     # count for the nnnnn part of short names
+$icons = "..";                     # where are the icons
+$dir = ".";                        # where are the generated files to go
+$dirfile = "../dir.html";          # "up" node pointer
 while ($ARGV[0] =~ /^-/) {
     $_ = shift;
+    if (/-base/) {$base = shift; next;}
     if (/-dirfile/) {$dirfile = shift; next;}
     if (/-dir/) {$_ = shift; s!/$!!; s!$!/!; $dir = $_; next;}
-    if (/-verbose/) {$verbose = 1; next;}
     if (/-footer/) {$footer = shift; next;}
     if (/-header/) {$header = shift; next;}
     if (/-icons/) {$_ = shift; s!\/$!!; $icons = $_; next;}
+    if (/-uselongnames/) {$uselongnames = 1; next;}
+    if (/-verbose/) {$verbose = 1; next;}
     die $usage;
 }
 
@@ -102,7 +112,21 @@ sub canonical # (node_name)
 	$n = $1 . sprintf("\$%02x",ord($2)) . $3;
     }
 
-    return "$p$n.html" if ($n);
+    if ($uselongnames) {
+      return "$p$n.html" if ($n);
+    } else {
+      if ($n eq 'Top') {
+        $lookup{"$p$n"}= "Top.html"; 
+        return $lookup{"$p$n"};
+      } elsif ($n) {
+        if (! $lookup{"$p$n"})  {
+          $outcount = $outcount + 1;
+          #$lookup{"$p$n"}= "$base$outcount.html"; 
+          $lookup{"$p$n"} = sprintf "%s%05d.html", $base, $outcount;
+        }
+        return $lookup{"$p$n"};
+      }
+    }
     return "";
 } # canonical
 
@@ -775,6 +799,7 @@ sub print_arrows
     &printHTML("<LINK REL=\"Precedes\" HREF=\"$cnext\">\n") if $next;
     &printHTML("<LINK REV=\"Precedes\" HREF=\"$cprev\">\n") if $prev;
     &printHTML("<LINK REV=\"Subdocument\" HREF=\"$cup\">\n") if $up;
+    &printHTML("<LINK REV=\"Library\" HREF=\"$dirfile\">\n") if $dirfile;
     &printHTML("</HEAD><BODY><P>\n");
     if ($cprev) {
         &printHTML("<A HREF=\"$cprev\"><IMG ALIGN=MIDDLE "
@@ -797,7 +822,14 @@ sub print_arrows
         &printHTML("<A><IMG ALIGN=MIDDLE "
                    . "SRC=\"$icons/missing-arrow.gif\" ALT=\"next\"></A>\n");
     }
-
+    if ($dirfile) {
+# XXX need new graphic for this one
+        &printHTML("<A HREF=\"$dirfile\"> <IMG ALIGN=MIDDLE "
+                   . "SRC=\"$icons/dir-arrow.gif\" ALT=\"Bookshelf\"></A>\n");
+    } else {
+        &printHTML("<A><IMG ALIGN=MIDDLE "
+                   . "SRC=\"$icons/missing-arrow.gif\" ALT=\"Bookshelf\"></A>\n");
+    }
     &printHTML("<CITE>$title</CITE>") if $title;
 }
 
