@@ -302,7 +302,7 @@ extern void   xdrrec_create	__P((XDR *, u_int, u_int, char *,
 				int (*) __P((caddr_t, caddr_t, int))));
 
 /* make end of xdr record */
-extern bool_t xdrrec_endofrecord __P((XDR *, int));
+extern bool_t xdrrec_endofrecord __P((XDR *, bool_t));
 
 /* move to beginning of next record */
 extern bool_t xdrrec_skiprecord	__P((XDR *));
