@@ -10,46 +10,82 @@
 
 @section Introduction
 
-The mutex manager ...
+The mutex manager implements the functionality required of the mutex
+manager as defined by POSIX 1003.1b-1996.  This standard requires that
+a compliant operating system provide the facilties to ensure that
+threads can operate with mutual exclusion from one another and
+defines the API that must be provided.
 
-The directives provided by the mutex manager are:
+The services provided by the mutex manager are:
 
 @itemize @bullet
-@item @code{pthread_mutexattr_init} - 
-@item @code{pthread_mutexattr_destroy} - 
-@item @code{pthread_mutexattr_setprotocol} - 
-@item @code{pthread_mutexattr_getprotocol} - 
-@item @code{pthread_mutexattr_setprioceiling} - 
-@item @code{pthread_mutexattr_getprioceiling} - 
-@item @code{pthread_mutexattr_setpshared} - 
-@item @code{pthread_mutexattr_getpshared} - 
-@item @code{pthread_mutex_init} - 
-@item @code{pthread_mutex_destroy} - 
-@item @code{pthread_mutex_lock} - 
-@item @code{pthread_mutex_trylock} - 
-@item @code{pthread_mutex_timedlock} - 
-@item @code{pthread_mutex_unlock} - 
-@item @code{pthread_mutex_setprioceiling} - 
-@item @code{pthread_mutex_getprioceiling} - 
+@item @code{pthread_mutexattr_init} - Initialize a Mutex Attribute Set
+@item @code{pthread_mutexattr_destroy} - Destroy a Mutex Attribute Set
+@item @code{pthread_mutexattr_setprotocol} - Set the Blocking Protocol
+@item @code{pthread_mutexattr_getprotocol} - Get the Blocking Protocol
+@item @code{pthread_mutexattr_setprioceiling} - Set the Priority Ceiling
+@item @code{pthread_mutexattr_getprioceiling} - Get the Priority Ceiling
+@item @code{pthread_mutexattr_setpshared} - Set the Visibility
+@item @code{pthread_mutexattr_getpshared} - Get the Visibility
+@item @code{pthread_mutex_init} - Initialize a Mutex
+@item @code{pthread_mutex_destroy} - Destroy a Mutex
+@item @code{pthread_mutex_lock} - Lock a Mutex
+@item @code{pthread_mutex_trylock} - Poll to Lock a Mutex
+@item @code{pthread_mutex_timedlock} - Lock a Mutex with Timeout
+@item @code{pthread_mutex_unlock} - Unlock a Mutex
+@item @code{pthread_mutex_setprioceiling} - Dynamically Set the Priority Ceiling
+@item @code{pthread_mutex_getprioceiling} - Dynamically Get the Priority Ceiling
 @end itemize
 
 @section Background
 
-There is currently no text in this section.
+@subsection Mutex Attributes
+
+Mutex attributes are utilized only at mutex creation time.  A mutex
+attribute structure may be initialized and passed as an argument to
+the @code{mutex_init} routine.  Note that the priority ceiling of
+a mutex may be set at run-time.
+
+@table @b
+@item blocking protcol
+is the XXX
+
+@item priority ceiling
+is the XXX
+
+@item pshared
+is the XXX
+
+@end table
+
+@subsection PTHREAD_MUTEX_INITIALIZER
+
+This is a special value that a variable of type @code{pthread_mutex_t}
+may be statically initialized to as shown below:
+
+@example
+pthread_mutex_t my_mutex = PTHREAD_MUTEX_INITIALIZER;
+@end example
+
+This indicates that @code{my_mutex} will be automatically initialized
+by an implicit call to @code{pthread_mutex_init} the first time
+the mutex is used.  
+
+Note that the mutex will be initialized with default attributes.
 
 @section Operations
 
 There is currently no text in this section.
 
-@section Directives
+@section Services
 
-This section details the mutex manager's directives.
-A subsection is dedicated to each of this manager's directives
+This section details the mutex manager's services.
+A subsection is dedicated to each of this manager's services
 and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection pthread_mutexattr_init
+@subsection pthread_mutexattr_init - Initialize a Mutex Attribute Set
 
 @subheading CALLING SEQUENCE:
 
@@ -71,10 +107,16 @@ The attribute pointer argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_mutexattr_init} routine initializes the mutex attributes
+object specified by @code{attr} with the default value for all of the
+individual attributes.
+
 @subheading NOTES:
 
+XXX insert list of default attributes here.
+
 @page
-@subsection pthread_mutexattr_destroy
+@subsection pthread_mutexattr_destroy - Destroy a Mutex Attribute Set
 
 @subheading CALLING SEQUENCE:
 
@@ -99,10 +141,16 @@ The attribute set is not initialized.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_mutex_attr_destroy} routine is used to destroy a mutex
+attributes object.  The behavior of using an attributes object after
+it is destroyed is implementation dependent.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection pthread_mutexattr_setprotocol
+@subsection pthread_mutexattr_setprotocol - Set the Blocking Protocol
 
 @subheading CALLING SEQUENCE:
 
@@ -131,10 +179,34 @@ The protocol argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_mutexattr_setprotocol} routine is used to set value of the
+@code{protocol} attribute.  This attribute controls the order in which
+threads waiting on this mutex will receive it.
+
+The @code{protocol} can be one of the following:
+
+@table @b
+
+@item @code{PTHREAD_PRIO_NONE}
+in which case blocking order is FIFO.
+
+@item @code{PTHREAD_PRIO_INHERIT}
+in which case blocking order is  priority with the priority inheritance
+protocol in effect.
+
+@item @code{PTHREAD_PRIO_PROTECT}
+in which case blocking order is  priority with the priority ceiling
+protocol in effect.
+
+@end table
+
 @subheading NOTES:
 
+There is currently no way to get simple priority blocking ordering
+with POSIX mutexes even though this could easily by supported by RTEMS.
+
 @page
-@subsection pthread_mutexattr_getprotocol
+@subsection pthread_mutexattr_getprotocol - Get the Blocking Protocol
  
 @subheading CALLING SEQUENCE:
  
@@ -163,10 +235,16 @@ The protocol pointer argument is invalid.
  
 @subheading DESCRIPTION:
  
+The @code{pthread_mutexattr_getprotocol} routine is used to obtain
+the value of the @code{protocol} attribute.  This attribute controls
+the order in which threads waiting on this mutex will receive it.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection pthread_mutexattr_setprioceiling
+@subsection pthread_mutexattr_setprioceiling - Set the Priority Ceiling
 
 @subheading CALLING SEQUENCE:
 
@@ -195,10 +273,18 @@ The prioceiling argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_mutexattr_setprioceiling} routine is used to set value of the
+@code{prioceiling} attribute.  This attribute specifies the priority that
+is the ceiling for threads obtaining this mutex.  Any task obtaining this
+mutex may not be of greater priority that the ceiling.  If it is of lower
+priority, then its priority will be elevated to @code{prioceiling}.  
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection pthread_mutexattr_getprioceiling
+@subsection pthread_mutexattr_getprioceiling - Get the Priority Ceiling
 
 @subheading CALLING SEQUENCE:
 
@@ -227,10 +313,17 @@ The prioceiling pointer argument is invalid.
 
 @subheading DESCRIPTION:
 
+The @code{pthread_mutexattr_getprioceiling} routine is used to obtain the
+value of the @code{prioceiling} attribute.  This attribute specifies the
+priority ceiling for this mutex.
+
+
 @subheading NOTES:
 
+
+NONE
 @page
-@subsection pthread_mutexattr_setpshared
+@subsection pthread_mutexattr_setpshared - Set the Visibility
 
 @subheading CALLING SEQUENCE:
 
@@ -262,7 +355,7 @@ The pshared argument is invalid.
 @subheading NOTES:
 
 @page
-@subsection pthread_mutexattr_getpshared
+@subsection pthread_mutexattr_getpshared - Get the Visibility
 
 @subheading CALLING SEQUENCE:
 
@@ -294,7 +387,7 @@ The pshared pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@subsection pthread_mutex_init
+@subsection pthread_mutex_init - Initialize a Mutex
 
 @subheading CALLING SEQUENCE:
 
@@ -333,7 +426,7 @@ initialized, but not yet destroyed.
 @subheading NOTES:
 
 @page
-@subsection pthread_mutex_destroy
+@subsection pthread_mutex_destroy - Destroy a Mutex
 
 @subheading CALLING SEQUENCE:
 
@@ -362,7 +455,7 @@ referenced by another thread.
 @subheading NOTES:
 
 @page
-@subsection pthread_mutex_lock
+@subsection pthread_mutex_lock - Lock a Mutex
 
 @subheading CALLING SEQUENCE:
 
@@ -395,7 +488,7 @@ The current thread already owns the mutex.
 @subheading NOTES:
 
 @page
-@subsection pthread_mutex_trylock
+@subsection pthread_mutex_trylock - Poll to Lock a Mutex
  
 @subheading CALLING SEQUENCE:
  
@@ -428,7 +521,7 @@ The current thread already owns the mutex.
 @subheading NOTES:
  
 @page
-@subsection pthread_mutex_timedlock
+@subsection pthread_mutex_timedlock - Lock a Mutex with Timeout
  
 @subheading CALLING SEQUENCE:
  
@@ -467,7 +560,7 @@ The current thread already owns the mutex.
  
 
 @page
-@subsection pthread_mutex_unlock
+@subsection pthread_mutex_unlock - Unlock a Mutex
 
 @subheading CALLING SEQUENCE:
 
@@ -492,7 +585,7 @@ The specified mutex is invalid.
 @subheading NOTES:
 
 @page
-@subsection pthread_mutex_setprioceiling
+@subsection pthread_mutex_setprioceiling - Dynamically Set the Priority Ceiling
 
 @subheading CALLING SEQUENCE:
 
@@ -525,7 +618,7 @@ The specified mutex is invalid.
 @subheading NOTES:
 
 @page
-@subsection pthread_mutex_getprioceiling
+@subsection pthread_mutex_getprioceiling - Get the Current Priority Ceiling
 
 @subheading CALLING SEQUENCE:
 
