@@ -119,6 +119,18 @@ void _CORE_mutex_Seize(
     the_mutex->nest_count = 1;
     executing->resource_count++;
     _ISR_Enable( level );
+    switch ( the_mutex->Attributes.discipline ) {
+      case CORE_MUTEX_DISCIPLINES_FIFO:
+      case CORE_MUTEX_DISCIPLINES_PRIORITY:
+      case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
+        break;
+      case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
+        _Thread_Change_priority(
+          executing,
+          the_mutex->Attributes.priority_ceiling
+        );
+        break;
+    }
     return;
   }
 
