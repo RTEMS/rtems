@@ -28,6 +28,9 @@ typedef unsigned16     uint16_t;
 typedef unsigned32     uint32_t;
 typedef unsigned64     uint64_t;
 
+typedef signed long	intptr_t;
+typedef unsigned long 	uintptr_t;
+
 #ifdef __cplusplus
 }
 #endif
