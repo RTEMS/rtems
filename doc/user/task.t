@@ -32,7 +32,7 @@ by the task manager are:
 @item @code{@value{DIRPREFIX}task_wake_after} - Wake up after interval 
 @item @code{@value{DIRPREFIX}task_wake_when} - Wake up when specified  
 @item @code{@value{DIRPREFIX}task_variable_add} - Associate per task variable
-@item @code{@value{DIRPREFIX}task_variable_add} - Obtain value of a a per task variable
+@item @code{@value{DIRPREFIX}task_variable_get} - Obtain value of a a per task variable
 @item @code{@value{DIRPREFIX}task_variable_delete} - Remove per task variable
 @end itemize
 
