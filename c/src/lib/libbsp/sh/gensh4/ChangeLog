@@ -1,3 +1,7 @@
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove build-variant support.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

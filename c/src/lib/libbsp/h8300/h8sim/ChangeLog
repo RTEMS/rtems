@@ -1,3 +1,7 @@
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove build-variant support.
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h, include/tm27.h: i960 obsoleted and all references
