@@ -5,8 +5,11 @@ include $(top_srcdir)/../../../automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-hello$(EXEEXT): hello.adb
+hello$(EXEEXT): hello.adb init.o
 	$(GNATCOMPILE) -margs -a $< -o $@
+
+init.o: ../../support/init.c
+	$(COMPILE.c) -I$(srcdir) -c $<
 
 noinst_PROGRAMS = hello
 

@@ -1,3 +1,8 @@
+2002-09-13	Joel Sherrill <joel@OARcorp.com>
+
+	* samples/hello/Makefile.am: Make sure init.c is compiled and
+	included.  This test now runs.
+
 2002-09-07	Joel Sherrill <joel@OARcorp.com>
 
 	* samples/base_mp/config.h: New file previously missed.
