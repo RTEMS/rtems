@@ -9,7 +9,7 @@ PGMS = $(ARCH)/start.o
 S_FILES = start.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
-H_FILES = 80386ex.h
+noinst_HEADERS = 80386ex.h 80386ex.inc macros.inc
 
 OBJS = $(S_O_FILES)
 
@@ -28,6 +28,6 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
 all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
 
-EXTRA_DIST = 80386ex.h 80386ex.inc macros.inc start.S
+EXTRA_DIST = start.S
 
 include $(top_srcdir)/../../../../../../automake/local.am

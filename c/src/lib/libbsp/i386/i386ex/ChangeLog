@@ -1,4 +1,13 @@
-2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
+2001-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add bspopts.h.
+	* include/bsp.h: Include bspopts.h.
+	* include/.cvsignore: Add bspopts.h*, stamp-h*.
+	* include/Makefile.am: Use *_HEADERS instead of *H_FILES.
+	* start/Makefile.am: Dito.
+	* network/Makefile.am: Dito.
+
+2001-05-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
 
