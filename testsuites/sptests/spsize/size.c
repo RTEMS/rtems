@@ -405,25 +405,6 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 
 #endif
 
-#ifdef __i960__
-
-/* cpu.h */
-uninitialized += (sizeof _CPU_Interrupt_stack_low) +
-                 (sizeof _CPU_Interrupt_stack_high);
-
-#endif
-
-#ifdef __hppa__
-
-/* cpu.h */
-uninitialized += (sizeof _CPU_Null_fp_context) +
-#if !defined(RTEMS_UNIX)
-                 (sizeof _CPU_Default_gr27) +
-#endif
-                 (sizeof _CPU_Interrupt_stack_low) +
-                 (sizeof _CPU_Interrupt_stack_high);
-#endif
-
 #ifdef __mc68000__
 
 /* cpu.h */
