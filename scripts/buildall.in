@@ -6,6 +6,8 @@
 RTEMS_DIR=`dirname $0`
 CFG=./setup.cache
 dst=@RPM_SPECSdir@
+target=@target@
+rpm_cpu=@RPM_CPU@
 
 usage()
 {
@@ -135,8 +137,8 @@ do
     # now build gcc/newlib
     #    NOTE: This requires having binutils installed and we immediately
     #          remove it once finished.
-    base_binutils_rpm=${dst}/../RPMS/i386/rtems-base-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
-    binutils_rpm=${dst}/../RPMS/i386/${target}-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
+    base_binutils_rpm=${dst}/../RPMS/${rpm_cpu}/rtems-base-binutils-${binutils}-${binutils_rpm_release}.${rpm_cpu}.rpm
+    binutils_rpm=${dst}/../RPMS/${rpm_cpu}/${target}-binutils-${binutils}-${binutils_rpm_release}.${rpm_cpu}.rpm
     if [ ! -f ${binutils_rpm} ] ; then
       echo There is no RPM for binutils for ${target}.
       echo Looked for ${binutils_rpm}.

@@ -31,6 +31,21 @@ fi
 AC_MSG_RESULT($RPM_SPECSdir)
 AC_SUBST(RPM_SPECSdir)
 
+AC_CANONICAL_HOST
+
+AC_MSG_CHECKING(for RPM CPU type)
+changequote(,)dnl
+case "${host}" in
+  i[34567]86-*linux*)    RPM_CPU=i386 ;;
+  i[34567]86-pc-cygwin*) RPM_CPU=i386 ;;
+  sparc-sun-solaris*)    RPM_CPU=sparc ;;
+  *)
+    AC_MSG_ERROR(RPM CPU for ${target} is unknown)
+    ;;
+esac
+changequote([,])dnl
+AC_MSG_RESULT($RPM_CPU)
+
 GCCNEWLIBVERS="gcc-${gcc_version}-newlib-${newlib_version}"
 AC_SUBST(GCCNEWLIBVERS)
 BINUTILSVERS="binutils-${binutils_version}"
@@ -40,6 +55,7 @@ AC_SUBST(GDBVERS)
 BSPVERS="${rtems_version}"
 AC_SUBST(RTEMS_VERSION)
 AC_SUBST(BSPVERS)
+AC_SUBST(RPM_CPU)
 
 AC_OUTPUT(
 Makefile
