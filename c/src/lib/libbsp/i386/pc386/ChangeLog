@@ -1,3 +1,7 @@
+2003-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ide/.cvsignore: New.
+
 2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 368/filesystems
