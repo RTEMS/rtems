@@ -29,7 +29,6 @@ int _POSIX_Semaphore_Wait_support(
 {
   register POSIX_Semaphore_Control *the_semaphore;
   Objects_Locations                 location;
-  int                               code;
  
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
@@ -37,7 +36,6 @@ int _POSIX_Semaphore_Wait_support(
       set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      return POSIX_MP_NOT_IMPLEMENTED();
       set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       _CORE_semaphore_Seize(
@@ -47,20 +45,23 @@ int _POSIX_Semaphore_Wait_support(
         timeout
       );
       _Thread_Enable_dispatch();
-      code = _Thread_Executing->Wait.return_code;
-      switch (_Thread_Executing->Wait.return_code) {
-        case 1:
-	  errno = EAGAIN;
-	  code = -1;
+      switch ( _Thread_Executing->Wait.return_code ) {
+        case CORE_SEMAPHORE_STATUS_SUCCESSFUL:
 	  break;
-	case 3:
-	  errno = ETIMEDOUT;
-	  code = -1;
+        case CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT:
+          set_errno_and_return_minus_one( EAGAIN );
+        case CORE_SEMAPHORE_WAS_DELETED:
+          set_errno_and_return_minus_one( EAGAIN );
+        case CORE_SEMAPHORE_TIMEOUT:
+          set_errno_and_return_minus_one( ETIMEDOUT );
 	  break;
+        case CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED:
+          /*
+           *  This error can not occur since we set the maximum
+           *  count to the largest value the count can hold.
+           */
+ 	  break;
       }
-
-      /*return _Thread_Executing->Wait.return_code;*/
-      return code;
   }
-  return POSIX_BOTTOM_REACHED();
+  return 0;
 }
