@@ -37,7 +37,11 @@
 #include <sys/param.h>
 #include <sys/mbuf.h>
 
-#if (defined(__GNUC__) && (defined(__mc68000__) || defined(__m68k__)) && (!__mcf5200__))
+#if (defined (__mcf5200__))
+# define IS_COLDFIRE 1
+#else
+# define IS_COLDFIRE 0
+#endif
 
 #define REDUCE { sum = (sum & 0xFFFF) + (sum >> 16); if (sum > 0xFFFF) sum -= 0xFFFF; }
 
@@ -109,15 +113,21 @@ in_cksum(m, len)
 		 * It should work for all 68k family members.
 		 */
 		{
-		unsigned long tcnt = mlen, t1;
+		unsigned long tcnt = mlen, t1, t2;
 		__asm__ volatile (
 		"movel   %2,%3\n\t"
 		"lsrl    #6,%2       | count/64 = # loop traversals\n\t"
 		"andl    #0x3c,%3    | Then find fractions of a chunk\n\t"
 		"negl    %3\n\t      | Each long uses 4 instruction bytes\n\t"
+#if IS_COLDFIRE
+		"move    %%cc,%4     | Move the CC into a temp reg\n\t"
+		"andil   #0xf,%4     | Clear X (extended carry flag)\n\t"
+		"move    %4,%%cc     | Move the modified value back to the cc\n\t"
+#else
 		"andi    #0xf,%%cc   | Clear X (extended carry flag)\n\t"
+#endif
 		"jmp     %%pc@(lcsum2_lbl-.-2:b,%3)  | Jump into loop\n"
-		"lcsum1_lbl:     | Begin inner loop...\n\t"
+		"lcsum1_lbl:         | Begin inner loop...\n\t"
 		"movel   %1@+,%3     |  0: Fetch 32-bit word\n\t"
 		"addxl   %3,%0       |    Add word + previous carry\n\t"
 		"movel   %1@+,%3     |  1: Fetch 32-bit word\n\t"
@@ -150,14 +160,31 @@ in_cksum(m, len)
 		"addxl   %3,%0       |    Add word + previous carry\n\t"
 		"movel   %1@+,%3     |  F: Fetch 32-bit word\n\t"
 		"addxl   %3,%0       |    Add word + previous carry\n"
-		"lcsum2_lbl:\n\tdbf    %2,lcsum1_lbl   | (NB- dbra doesn't affect X)\n\t"
-		"movel    %0,%3         | Fold 32 bit sum to 16 bits\n\t"
-		"swap    %3             | (NB- swap doesn't affect X)\n\t"
-		"addxw   %3,%0          |\n\t"
-		"moveq   #0,%3          | Add in last carry\n\t"
-		"addxw   %3,%0          |\n\t"
+		"lcsum2_lbl:         |  End of unrolled loop\n\t"
+#if IS_COLDFIRE
+		"moveq   #0,%3       | Add in last carry\n\t"
+		"addxl   %3,%0       |\n\t"
+		"subql 	 #1,%2       | Update loop count\n\t"
+		"bplb    lcsum1_lbl  | Loop (with X clear) if not done\n\t"
+		"movel   #0xffff,%2  | Get word mask\n\t"
+		"movel   %0,%3       | Fold 32 bit sum to 16 bits\n\t"
+		"swap    %3          |\n\t"
+		"andl    %2,%0       |\n\t"
+		"andl    %2,%3       |\n\t"
+		"addl    %3,%0       |\n\t"
+		"movel   %0,%3       | Add in last carry\n\t"
+		"swap    %3          |\n\t"
+		"addl    %3,%0       |\n\t"
+#else
+		"dbf     %2,lcsum1_lbl | (NB- dbf doesn't affect X)\n\t"
+		"movel   %0,%3       | Fold 32 bit sum to 16 bits\n\t"
+		"swap    %3          | (NB- swap doesn't affect X)\n\t"
+		"addxw   %3,%0       |\n\t"
+		"moveq   #0,%3       | Add in last carry\n\t"
+		"addxw   %3,%0       |\n\t"
+#endif
 		"andl    #0xffff,%0     | Mask to 16-bit sum\n" :
-			"=d" (sum), "=a" (w), "=d" (tcnt) , "=d" (t1) :
+			"=d" (sum), "=a" (w), "=d" (tcnt) , "=d" (t1), "=d" (t2) :
 			"0" (sum), "1" (w), "2" (tcnt) :
 			"cc", "memory");
 		}
@@ -193,119 +220,3 @@ in_cksum(m, len)
 	REDUCE;
 	return (~sum & 0xffff);
 }
-
-
-#else
-/*
- * Checksum routine for Internet Protocol family headers (Portable Version).
- *
- * This routine is very heavily used in the network
- * code and should be modified for each CPU to be as fast as possible.
- */
-
-#define ADDCARRY(x)  (x > 65535 ? x -= 65535 : x)
-#define REDUCE \
-  {l_util.l = sum; sum = l_util.s[0] + l_util.s[1];  ADDCARRY(sum);}
-
-int
-in_cksum(m, len)
-	register struct mbuf *m;
-	register int len;
-{
-	register u_short *w;
-	register int sum = 0;
-	register int mlen = 0;
-	int byte_swapped = 0;
-
-	union {
-		char	c[2];
-		u_short	s;
-	} s_util;
-	union {
-		u_short s[2];
-		long	l;
-	} l_util;
-
-	for (;m && len; m = m->m_next) {
-		if (m->m_len == 0)
-			continue;
-		w = mtod(m, u_short *);
-		if (mlen == -1) {
-			/*
-			 * The first byte of this mbuf is the continuation
-			 * of a word spanning between this mbuf and the
-			 * last mbuf.
-			 *
-			 * s_util.c[0] is already saved when scanning previous
-			 * mbuf.
-			 */
-			s_util.c[1] = *(char *)w;
-			sum += s_util.s;
-			w = (u_short *)((char *)w + 1);
-			mlen = m->m_len - 1;
-			len--;
-		} else
-			mlen = m->m_len;
-		if (len < mlen)
-			mlen = len;
-		len -= mlen;
-		/*
-		 * Force to even boundary.
-		 */
-		if ((1 & (int) w) && (mlen > 0)) {
-			REDUCE;
-			sum <<= 8;
-			s_util.c[0] = *(u_char *)w;
-			w = (u_short *)((char *)w + 1);
-			mlen--;
-			byte_swapped = 1;
-		}
-		/*
-		 * Unroll the loop to make overhead from
-		 * branches &c small.
-		 */
-		while ((mlen -= 32) >= 0) {
-			sum += w[0]; sum += w[1]; sum += w[2]; sum += w[3];
-			sum += w[4]; sum += w[5]; sum += w[6]; sum += w[7];
-			sum += w[8]; sum += w[9]; sum += w[10]; sum += w[11];
-			sum += w[12]; sum += w[13]; sum += w[14]; sum += w[15];
-			w += 16;
-		}
-		mlen += 32;
-		while ((mlen -= 8) >= 0) {
-			sum += w[0]; sum += w[1]; sum += w[2]; sum += w[3];
-			w += 4;
-		}
-		mlen += 8;
-		if (mlen == 0 && byte_swapped == 0)
-			continue;
-		REDUCE;
-		while ((mlen -= 2) >= 0) {
-			sum += *w++;
-		}
-		if (byte_swapped) {
-			REDUCE;
-			sum <<= 8;
-			byte_swapped = 0;
-			if (mlen == -1) {
-				s_util.c[1] = *(char *)w;
-				sum += s_util.s;
-				mlen = 0;
-			} else
-				mlen = -1;
-		} else if (mlen == -1)
-			s_util.c[0] = *(char *)w;
-	}
-	if (len)
-		printf("cksum: out of data\n");
-	if (mlen == -1) {
-		/* The last mbuf has odd # of bytes. Follow the
-		   standard (the odd byte may be shifted left by 8 bits
-		   or not as determined by endian-ness of the machine) */
-		s_util.c[1] = 0;
-		sum += s_util.s;
-	}
-	REDUCE;
-	return (~sum & 0xffff);
-}
-#endif
