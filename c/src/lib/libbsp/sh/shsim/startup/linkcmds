@@ -102,7 +102,7 @@ SECTIONS
     *(set_sysc*);   /* set_sysctl_* but name is truncated by SH-coff */
     ___stop_set_sysctl_set = ABSOLUTE(.);
     *(set_doma*);   /* set_domain_* but name is truncated by SH-coff */
-    *(set_pseudo_*);
+    *(set_pseu*);   /* set_pseudo_* but name is truncated by SH-coff */
 
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
