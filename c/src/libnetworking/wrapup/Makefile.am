@@ -2,13 +2,11 @@
 ## $Id$
 ##
 
-
 if HAS_POSIX
 POSIX_PIECES = rtems_webserver
 endif
 
-NET_O_PIECES = rtems_servers \
-    rtems_telnetd pppd $(POSIX_PIECES)
+NET_O_PIECES = rtems_servers rtems_telnetd pppd $(POSIX_PIECES)
 OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libnetapps.a
 
@@ -25,5 +23,7 @@ $(LIB): $(OBJS)
 
 all-local: $(ARCH) $(OBJS) $(LIB)
 endif
+
+PREINSTALL_FILES =
 
 include $(top_srcdir)/automake/local.am
