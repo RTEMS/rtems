@@ -1,3 +1,8 @@
+2001-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	* binutils/binutils.add: Commented out patch since binutils 2.12
+	does not require one.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
