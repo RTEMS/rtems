@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
@@ -29,7 +28,6 @@ include $(top_srcdir)/../../../../automake/lib.am
 # If neither are defined, then hard coded defaults will be used
 # to create the program's environment.
 AM_CPPFLAGS += -DARM_RDI_MONITOR
-
 
 $(PGM): $(OBJS)
 	$(make-rel)
