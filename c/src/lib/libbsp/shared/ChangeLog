@@ -1,3 +1,8 @@
+2004-12-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 704/bsps.
+	* ide_ctrl.c: Removed (obsolete).
+
 2004-11-20      Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
         PR 703/filesystem
