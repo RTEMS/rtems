@@ -7,7 +7,7 @@ include $(top_srcdir)/automake/compile.am
 EXTRA_LIBRARIES =
 CLEANFILES =
 
-AM_CPPFLAGS += -DWEBS -DUEMF -DOS="RTEMS"
+AM_CPPFLAGS += -DWEBS -DUEMF
 
 if HAS_NETWORKING
 if HAS_POSIX

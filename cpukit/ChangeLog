@@ -1,3 +1,7 @@
+2004-12-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* httpd/Makefile.am: Remove -DOS="RTEMS".
+
 2004-12-29	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/score/chain.h:
