@@ -212,7 +212,7 @@ void _Thread_Start_multitasking( void )
     */
  
 
-#if ( CPU_HARDWARE_FP == TRUE )
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
    /*
     *  don't need to worry about saving BSP's floating point state
     */

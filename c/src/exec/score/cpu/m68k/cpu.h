@@ -52,12 +52,22 @@ extern "C" {
 /*
  *  Some family members have no FP, some have an FPU such as the
  *  MC68881/MC68882 for the MC68020, others have it built in (MC68030, 040).
+ *
+ *  NOTE:  If on a CPU without hardware FP, then one can use software
+ *         emulation.  The gcc software FP emulation code has data which
+ *         must be contexted switched on a per task basis.
  */
 
 #if ( M68K_HAS_FPU == 1 )
 #define CPU_HARDWARE_FP     TRUE
+#define CPU_SOFTWARE_FP     FALSE
 #else
 #define CPU_HARDWARE_FP     FALSE
+#if defined(__GCC__)
+#define CPU_SOFTWARE_FP     TRUE
+#else
+#define CPU_SOFTWARE_FP     FALSE
+#endif
 #endif
 
 /*
@@ -108,6 +118,38 @@ typedef struct {
 }   Context_Control;
 
 /*
+ *  Floating point context ares
+ */
+
+#if (CPU_SOFTWARE_FP == TRUE)
+
+/*
+ *  This is the same as gcc's view of the software FP condition code
+ *  register _fpCCR.  The implementation of the emulation code is
+ *  in the gcc-VERSION/config/m68k directory.  This structure is
+ *  correct as of gcc 2.7.2.2.
+ */
+
+typedef struct {
+  unsigned16   _exception_bits;
+  unsigned16   _trap_enable_bits;
+  unsigned16   _sticky_bits;
+  unsigned16   _rounding_mode;
+  unsigned16   _format;
+  unsigned16   _last_operation;
+  union {
+    float sf;
+    double df;
+  } _operand1;
+  union {
+    float sf;
+    double df;
+  } _operand2;
+} Context_Control_fp;
+
+#else 
+
+/*
  *  FP context save area for the M68881/M68882 numeric coprocessors.
  */
 
@@ -117,6 +159,7 @@ typedef struct {
                                     /*    12 bytes for FMOVEM CREGS      */
                                     /*     4 bytes for non-null flag     */
 } Context_Control_fp;
+#endif
 
 /*
  *  The following structure defines the set of information saved
@@ -291,6 +334,34 @@ unsigned32 _CPU_ISR_Get_level( void );
         : "0" ((_the_context)->sr), "1" ((_the_context)->a7_msp) ); \
   }
 
+/*
+ *  Floating Point Context Area Support routines
+ */
+
+#if (CPU_SOFTWARE_FP == TRUE)
+
+/*
+ *  This software FP implementation is only for GCC.
+ */
+
+#define _CPU_Context_Fp_start( _base, _offset ) \
+   ((void *) _Addresses_Add_offset( (_base), (_offset) ) )
+
+
+#define _CPU_Context_Initialize_fp( _fp_area ) \
+   { \
+   Context_Control_fp *_fp; \
+   _fp = *(Context_Control_fp **)_fp_area; \
+   _fp->_exception_bits = 0; \
+   _fp->_trap_enable_bits = 0; \
+   _fp->_sticky_bits = 0; \
+   _fp->_rounding_mode = 0;  /* ROUND_TO_NEAREST */ \
+   _fp->_format = 0;         /* NIL */ \
+   _fp->_last_operation = 0;  /* NOOP */ \
+   _fp->_operand1.df = 0; \
+   _fp->_operand2.df = 0; \
+   }
+#else
 #define _CPU_Context_Fp_start( _base, _offset ) \
    ((void *) \
      _Addresses_Add_offset( \
@@ -305,6 +376,7 @@ unsigned32 _CPU_ISR_Get_level( void );
      *(--(_fp_context)) = 0; \
      *(_fp_area) = (unsigned8 *)(_fp_context); \
    }
+#endif
 
 /* end of Context handler macros */
 

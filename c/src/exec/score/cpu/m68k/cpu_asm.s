@@ -51,7 +51,13 @@ restore:  movml    a0@,d1-d7/a2-a7     | restore context
  *
  *         CPU_FP_CONTEXT_SIZE is higher than expected to account for the
  *         -1 pushed at end of this sequence.
+ *
+ *         Neither of these entries is required if we have software FPU
+ *         emulation.  But if we don't have an FPU or emulation, then
+ *         we need the stub versions of these routines.
  */
+
+#if (CPU_SOFTWARE_FP == FALSE)
 
 .set FPCONTEXT_ARG,   4                    | save FP context argument
 
@@ -86,6 +92,7 @@ norst:  frestore a0@+                     | restore the fp state frame
         movl     a0,a1@                   | save pointer to saved context
 #endif
         rts
+#endif
 
 /*PAGE
  *  void _ISR_Handler()
