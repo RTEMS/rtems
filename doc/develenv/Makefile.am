@@ -29,11 +29,11 @@ $(srcdir)/direct.texi: direct.t
 	    -n "Sample Applications" < $< > $@
 
 $(srcdir)/sample.texi: sample.t
-	$(BMENU2) -p "Directory Structure Test Suite Source Directory" \
+	$(BMENU2) -p "Directory Structure Documentation Directory" \
 	    -u "Top" \
 	    -n "RTEMS Specific Utilities" < $< > $@
 
 $(srcdir)/utils.texi: utils.t
-	$(BMENU2) -p "Sample Applications Paranoia Floating Point Application" \
+	$(BMENU2) -p "Sample Applications Network Loopback Test" \
 	    -u "Top" \
 	    -n "Command and Variable Index" < $< > $@

@@ -1,3 +1,7 @@
+2003-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Fix next/previous section names.
+
 2003-03-24	Joel Sherrill <joel@OARcorp.com>
 
 	* direct.t, sample.t, utils.t: Significantly updated.
