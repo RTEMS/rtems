@@ -159,8 +159,7 @@ rtems_status_code rtems_semaphore_create(
           break;
       }
     } else {
-      /* just to avoid warnings */
-      the_mutex_attributes.lock_nesting_behavior = CORE_MUTEX_NESTING_IS_ERROR;
+      the_mutex_attributes.lock_nesting_behavior = CORE_MUTEX_NESTING_BLOCKS;
       the_mutex_attributes.only_owner_release = FALSE;
     }
 
