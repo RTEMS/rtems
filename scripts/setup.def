@@ -14,11 +14,6 @@ rtems_rpm_release=1
 rpm_build_root=%{_tmppath}
 gcc3newlib_version=1.11.0
 gcc3newlib_patch_version=20030507
-# GCC 3.3.2 settings
-#gcc3_version=3.3.2
-#gcc3_patch_version=20031216
-#gcc3newlib_rpm_release=3
-# GCC 3.2.3 settings
-gcc3_version=3.2.3
-gcc3_patch_version=20040108
-gcc3newlib_rpm_release=2
+gcc3_version=3.3.2
+gcc3_patch_version=20040219
+gcc3newlib_rpm_release=1

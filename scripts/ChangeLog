@@ -1,3 +1,8 @@
+2004-02-24	Joel Sherrill <joel@OARcorp.com>
+
+	PR 580/tools
+	* setup.def: Fix setup.def to match current reality.
+
 2004-02-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gdb/base-gdb.add: Add annotate.info.
