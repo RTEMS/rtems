@@ -1,3 +1,9 @@
+2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* custom/FreeBSD-posix.cfg: Remove LIBC_DEFINES (Meaningless
+	with FreeBSD and now unused).
+	* custom/Solaris-posix.cfg: Add -D__EXTENSIONS__ to CPU_CFLAGS.
+
 2004-04-12	David Querbach <querbach@realtime.bc.ca>
 
 	* custom/ss555.cfg: New file.
