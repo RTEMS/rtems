@@ -1,5 +1,12 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/p_clock.c, include/bsp.h, include/coverhd.h, irq/irq.c,
+	irq/irq.h, irq/irq_asm.S, irq/irq_init.c, network/if_hdlcsubr.h,
+	startup/bspstart.c, startup/setvec.c, vectors/vectors.h,
+	vectors/vectors_init.c: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* clock/p_clock.c, network/if_hdlcsubr.h: Removed incorrect statement
 	about copyright assignment.
 
