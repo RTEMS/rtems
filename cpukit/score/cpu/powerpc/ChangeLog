@@ -1,5 +1,17 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/old-exceptions/cpu.h (_CPU_Context_Initialize,
+	_CPU_Context_Restart_self, _CPU_Context_Fp_start,
+	_CPU_Context_Initialize_fp): Remove.
+	* rtems/new-exceptions/cpu.h (_CPU_Context_Initialize,
+	_CPU_Context_Restart_self, _CPU_Context_Fp_start,
+	_CPU_Context_Initialize_fp): Remove.
+	* rtems/score/cpu.h (_CPU_Context_Initialize,
+	_CPU_Context_Restart_self, _CPU_Context_Fp_start,
+	_CPU_Context_Initialize_fp): New.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/old-exceptions/cpu.h (PPC_Get_timebase_register): Remove.
 	* rtems/powerpc/registers.h (PPC_Get_timebase_register,
 	PPC_Set_timebase_register): Remove.
