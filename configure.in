@@ -111,13 +111,7 @@ AC_PROG_LN_S
 AC_PATH_PROG(CHMOD,chmod)
 AC_PATH_PROG(SORT,sort)
 AC_PROG_INSTALL
-AC_PATH_PROG(PERL,perl)
-if test -z "$PERL" ; then
-AC_MSG_WARN(
-[***]
-[   perl was not found]
-[   Note: Some tools will not be built.])
-fi
+RTEMS_PATH_PERL
 
 dnl check mkdir behaviour, try to get mkdir -p -m 0755
 RTEMS_PATH_MKDIR
@@ -132,16 +126,7 @@ AC_PATH_PROG(CMP,cmp)
 AC_PATH_PROG(SED,sed)
 AC_PATH_PROGS(M4,gm4 m4)
 
-dnl NOTE: prefer bash over ksh over sh
-AC_PATH_PROGS(KSH,bash ksh sh)
-
-if test -z "$KSH"; then
-dnl NOTE: This cannot happen -- /bin/sh must always exist
-AC_MSG_ERROR(
-[***]
-[    Cannot determine a usable shell bash/ksh/sh]
-[    Please contact your system administrator] );
-fi
+RTEMS_PATH_KSH
 
 dnl BEGIN configure.target.in
 
@@ -163,43 +148,39 @@ dnl a BSP library would be used to link an application.
 
 RTEMS_HOST=$host_os
 
+RTEMS_CANONICAL_TARGET_CPU
+
+changequote(,)dnl
 case "${target}" in
   # hpux unix port should go here
-  i[[3456]]86-go32-rtems*)
-	target_cpu=i386
+  i[3456]86-go32-rtems*)
 	rtems_bsp="go32 go32_p5"
        	skip_startfiles="yes"
 	RTEMS_HAS_POSIX_API=no
 	;;
-  i[[3456]]86-pc-linux*)         # unix "simulator" port
-	target_cpu=unix
+  i[3456]86-pc-linux*)         # unix "simulator" port
         RTEMS_HOST=Linux
         # override these settings
 	RTEMS_HAS_POSIX_API=no
 	;;
-  i[[3456]]86-*freebsd2*) # unix "simulator" port
-	target_cpu=unix
+  i[3456]86-*freebsd2*) # unix "simulator" port
         RTEMS_HOST=FreeBSD
         # override these settings
 	RTEMS_HAS_POSIX_API=no
 	;;
   no_cpu-*rtems*)
-        target_cpu=no_cpu
 	RTEMS_HAS_POSIX_API=no
 	;;
-  ppc*-*rtems*)
-	target_cpu=powerpc
-	;;
   sparc-sun-solaris*)             # unix "simulator" port
-	target_cpu=unix
         RTEMS_HOST=Solaris
         # override these settings
 	RTEMS_HAS_POSIX_API=no
 	;;
   *) 
-	RTEMS_CANONICAL_TARGET_CPU
 	;;
 esac
+changequote([,])dnl
+
 
 # Override the set of BSPs to be built.
 AC_ARG_ENABLE(rtemsbsp, \
