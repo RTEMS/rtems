@@ -687,7 +687,7 @@ out:
 }
 
 
-void raw_input( struct termios *tp )
+static void raw_input( struct termios *tp )
 {
   printf( "\nTesting raw input input\n\n" );
   printf( "Hit 'q' to terminate the test\n" );
