@@ -1,3 +1,9 @@
+2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
+
+	* psxchroot01/.cvsignore, psxchroot01/Makefile.am, psxchroot01/main.c,
+	psxchroot01/psxchroot01.scn, psxchroot01/test.c:  Implemented the
+	psxchroot01 test.
+
 2001-05-25	Joel Sherrill <joel@OARcorp.com>
 
  	* Added once version of psxchroot01 test for user review.

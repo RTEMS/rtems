@@ -77,11 +77,11 @@ int main(
 #touch /one/one.test
 #touch /one/two/two.test
 #chroot /one
-#if !fileexits(/one/one.test) echo "FAIL"
-#if fileexits(/two/two.test) echo "SUCCESSFUL"
+#if !fileexists(/one/one.test) echo "SUCCESSFUL"
+#if fileexists(/two/two.test) echo "SUCCESSFUL"
 #rtems_set_private_env() ! reset at the global environment
-#if !fileexits(/one/one.test) echo "SUCESSFUL"
-#if fileexits(/two/two.test) echo "FAIL"
+#if fileexists(/one/one.test) echo "SUCESSFUL"
+#if !fileexists(/two/two.test) echo "SUCCESSFUL"
 */
 
   printf( "\n\n*** CHROOT01 TEST ***\n" );
@@ -111,10 +111,10 @@ int main(
   rtems_libio_set_private_env();
    
   status = fileexists( "/one/one.test" );
-  printf( "%s on /one/one.test\n", (!status) ? "SUCCESS" : "FAILURE" );
+  printf( "%s on /one/one.test\n", ( status) ? "SUCCESS" : "FAILURE" );
 
   status = fileexists( "/two/two.test" );
-  printf( "%s on /two/two.test\n", (status) ? "SUCCESS" : "FAILURE" );
+  printf( "%s on /two/two.test\n", (!status) ? "SUCCESS" : "FAILURE" );
 
   printf( "*** END OF CHROOT01 TEST ***\n" );
   exit(0);
