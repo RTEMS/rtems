@@ -511,5 +511,3 @@ InitializeNvRAM(void)
 	ulPRePOSAreaLength=ulLength;
 	ulPRePOSAreaOffset=ulOffset;
 }
-
-

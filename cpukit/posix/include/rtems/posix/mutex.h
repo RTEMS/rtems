@@ -155,4 +155,3 @@ int _POSIX_Mutex_From_core_mutex_status(
  
 #endif
 /*  end of include file */
-

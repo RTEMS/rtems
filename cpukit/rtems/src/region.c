@@ -69,4 +69,3 @@ void _Region_Manager_initialization(
 #endif
 
 }
-

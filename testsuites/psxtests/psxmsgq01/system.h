@@ -71,5 +71,3 @@ void *Task_3( void *argument );
 void *Task_4( void *argument );
 
 /* end of include file */
-
-

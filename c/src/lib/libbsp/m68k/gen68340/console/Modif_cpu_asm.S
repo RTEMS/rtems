@@ -179,5 +179,3 @@ Debug_exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
 
         rte                              | return to thread
                                          |   OR _Isr_dispatch
-
-

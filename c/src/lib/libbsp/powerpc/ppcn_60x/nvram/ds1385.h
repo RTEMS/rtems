@@ -36,4 +36,3 @@ typedef struct _DS1385_NVRAM_MAP {
   } DS1385_NVRAM_MAP, *PDS1385_NVRAM_MAP;
 
 #endif /* _DS1385_H */
-

@@ -879,4 +879,3 @@ stack_base:
         .space  0x2000, 0
 stack_end:
         .long   0
- 

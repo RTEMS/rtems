@@ -17,4 +17,3 @@ extern void faultHndlEntry(void);
 /*-------------*/
 /* End of file */
 /*-------------*/
-

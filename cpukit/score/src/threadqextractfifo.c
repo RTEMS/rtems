@@ -70,4 +70,3 @@ void _Thread_queue_Extract_fifo(
 #endif
  
 }
-

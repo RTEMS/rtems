@@ -54,4 +54,3 @@ int console_inbyte_nonblocking( int port )
   sim_read(1, &c, 1);
   return c;
 }
-

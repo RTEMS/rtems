@@ -98,4 +98,3 @@ void _Thread_queue_Enqueue_fifo (
 #endif
 
 }
-

@@ -58,5 +58,3 @@ void ITRON_Init( void )
   printf( "*** END OF ITRON TIME TEST 01 ***\n" );
   rtems_test_exit( 0 );
 }
-
-

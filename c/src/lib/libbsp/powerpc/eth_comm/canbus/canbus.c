@@ -476,5 +476,3 @@ rtems_device_driver canbus_control(
 
   return RTEMS_SUCCESSFUL;
 #endif
-
-

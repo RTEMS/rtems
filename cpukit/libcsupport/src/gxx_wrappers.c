@@ -215,4 +215,3 @@ int rtems_gxx_mutex_unlock (__gthread_mutex_t *mutex)
 #endif
   return (rtems_semaphore_release( (rtems_id)*mutex ) ==  RTEMS_SUCCESSFUL) ? 0 :-1;
 }
-

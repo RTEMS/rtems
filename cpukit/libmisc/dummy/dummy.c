@@ -43,4 +43,3 @@ int main( int, char **, char **);
 #include <rtems/confdefs.h>
 
 /* global variables */
-

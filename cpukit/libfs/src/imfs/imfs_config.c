@@ -33,5 +33,3 @@ rtems_filesystem_limits_and_options_t IMFS_LIMITS_AND_OPTIONS = {
    5,   /* posix_sync_io */
    6    /* posix_vdisable */
 };
-
-

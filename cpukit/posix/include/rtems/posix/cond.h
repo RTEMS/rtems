@@ -166,4 +166,3 @@ int _POSIX_Condition_variables_Wait_support(
  
 #endif
 /*  end of include file */
-

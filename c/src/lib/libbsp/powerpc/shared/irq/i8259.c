@@ -149,4 +149,3 @@ void BSP_i8259s_init(void)
   outport_byte(PIC_SLAVE_IMR_IO_PORT, 0xFF); /* Mask all */
   
 }
-

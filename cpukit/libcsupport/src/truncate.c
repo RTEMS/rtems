@@ -41,4 +41,3 @@ int truncate(
 
   return status;
 }
-

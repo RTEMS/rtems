@@ -63,4 +63,3 @@ typedef void ( *sh_isr_entry )( void );
 #endif  /* !ASM */
 
 #endif
-

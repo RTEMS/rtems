@@ -198,5 +198,3 @@ int page_table_map(void *addr, unsigned long size, int cache_type){
 
     return  PTM_SUCCESS;
 }
-
-

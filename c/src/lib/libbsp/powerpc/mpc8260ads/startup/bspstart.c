@@ -375,4 +375,3 @@ Thread _Thread_Idle_body(
 
   return 0; /* to remove warning */
 }
-

@@ -324,4 +324,3 @@ void set_vme_slave_size (uint32_t         size)
   temp = temp + (size & 0xFFFFF000);
   PCI_bus_write( &UNIVERSE->VSI0_BD, temp );
 }
-

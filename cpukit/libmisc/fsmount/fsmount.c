@@ -193,4 +193,3 @@ int rtems_fsmount
   }
   return rc;
 }
-

@@ -186,4 +186,3 @@ extern unsigned char aux_device_present;
 #define  mark_bh(x)  
 
 #endif /* _I386_KEYBOARD_H */
-

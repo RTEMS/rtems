@@ -1263,4 +1263,3 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
   return 1;
 }
-

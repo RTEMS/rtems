@@ -58,4 +58,3 @@ void powerpc_data_cache_enable ()
 
   PPC_Set_HID0( value );
 }
-

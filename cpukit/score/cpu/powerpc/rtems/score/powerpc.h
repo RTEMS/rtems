@@ -742,5 +742,3 @@ extern "C" {
 
 #endif /* ! _INCLUDE_PPC_h */
 /* end of include file */
-
-

@@ -575,8 +575,3 @@ void em86_main(struct pci_dev *dev){
 	vunmap(p->vbase+0xc0000);
 	pfree(p->rom);
 }
-
-
-
-
-

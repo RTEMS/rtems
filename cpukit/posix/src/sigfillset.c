@@ -33,4 +33,3 @@ int sigfillset(
   *set = SIGNAL_ALL_MASK;
   return 0;
 }
-

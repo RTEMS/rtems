@@ -120,4 +120,3 @@ get_mem_info (mem)
 {
   mem->size = 0x1000000;        /* XXX figure out something here */
 }
-

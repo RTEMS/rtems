@@ -323,4 +323,3 @@ static char * faultUnknownSbtpStr(unsigned int sbtp)
 /*-------------*/
 /* End of file */
 /*-------------*/
-

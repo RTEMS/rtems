@@ -195,4 +195,3 @@ void rtems_exception_init_mngt()
       }
       _CPU_ISR_Enable(level);
 }
-      

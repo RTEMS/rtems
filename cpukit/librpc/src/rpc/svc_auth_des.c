@@ -528,4 +528,3 @@ invalidate(cred)
 	((struct bsdcred *)cred)->grouplen = INVALID;
 }
 #endif
-

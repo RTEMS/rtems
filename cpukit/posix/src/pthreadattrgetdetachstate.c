@@ -29,4 +29,3 @@ int pthread_attr_getdetachstate(
   *detachstate = attr->detachstate;
   return 0;
 }
-

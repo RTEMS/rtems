@@ -65,5 +65,3 @@ void VME_interrupt_Enable (
 
   *VME_interrupt_enable = value;
 }
-
-

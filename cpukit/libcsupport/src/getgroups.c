@@ -27,4 +27,3 @@ int getgroups(
 {
   return 0;  /* no supplemental group ids */
 }
-

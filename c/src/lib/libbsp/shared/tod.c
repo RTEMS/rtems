@@ -240,4 +240,3 @@ int checkRealTime()
 
   return rtems_time - rtc_time;
 }
-

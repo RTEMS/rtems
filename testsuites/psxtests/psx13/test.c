@@ -675,16 +675,3 @@ int main(
   printf( "\n\n*** END OF TEST PSX13 ***" );
   rtems_test_exit(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
- 

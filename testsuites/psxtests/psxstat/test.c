@@ -848,10 +848,3 @@ int main(
   puts( "\n\n*** END OF STAT TEST 01 ***" );
   rtems_test_exit(0);
 }
-
-
-
-
-
-
-

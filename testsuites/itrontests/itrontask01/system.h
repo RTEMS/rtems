@@ -37,6 +37,3 @@ void Task_2_through_4();
 /* global variables */
 
 /* end of include file */
-
-
-

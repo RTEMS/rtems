@@ -995,9 +995,3 @@ asm ("   movb  $0x20, %al");
 asm ("   outb  %al, $0x20");
 asm ("   movl  sav, %eax");      /* Restore eax */
 asm ("   iret");                 /* Done */
-
-
-
-
-
-

@@ -36,4 +36,3 @@ int pthread_attr_setcputime(
       return EINVAL;
   }
 }
-

@@ -51,4 +51,3 @@ void Task_2_through_4()
     directive_failed( status, "rtems_task_wake_after" );
   }
 }
-

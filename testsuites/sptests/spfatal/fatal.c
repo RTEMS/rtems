@@ -133,4 +133,3 @@ void Process_case()
   rtems_initialize_executive(
     &New_Configuration, rtems_cpu_configuration_get_table() );
 }
-

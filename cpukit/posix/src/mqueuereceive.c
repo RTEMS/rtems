@@ -54,4 +54,3 @@ ssize_t mq_receive(
     THREAD_QUEUE_WAIT_FOREVER
   );
 }
-

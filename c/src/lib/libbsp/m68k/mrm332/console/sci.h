@@ -241,5 +241,3 @@ const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled );
 
 
 #endif  // _sci_h_
-
-

@@ -270,4 +270,3 @@ const void *motorolaIntSwizzle(motorolaBoard board)
   if (board == MOTOROLA_UNKNOWN) return NULL;
   return (void *)mot_boards[board].swizzler;
 }
-

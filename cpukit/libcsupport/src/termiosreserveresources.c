@@ -34,4 +34,3 @@ void rtems_termios_reserve_resources (
         rtems_config->maximum_semaphores += (4 * number_of_devices);
 #endif
 }
-

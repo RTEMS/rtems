@@ -28,4 +28,3 @@ int mkdir(
 {
   return mknod( pathname, mode | S_IFDIR, 0LL);
 }
-

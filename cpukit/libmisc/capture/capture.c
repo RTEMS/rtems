@@ -1567,4 +1567,3 @@ rtems_capture_get_control_list ()
 {
   return capture_controls;
 }
-

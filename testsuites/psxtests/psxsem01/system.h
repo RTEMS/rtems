@@ -52,4 +52,3 @@ TEST_EXTERN pthread_t        Init_id;
 TEST_EXTERN pthread_t        Task_id;
 
 /* end of include file */
-

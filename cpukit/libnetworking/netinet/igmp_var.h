@@ -110,5 +110,3 @@ SYSCTL_DECL(_net_inet_igmp);
 }
 
 #endif
-
-

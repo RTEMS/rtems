@@ -59,4 +59,3 @@ Thread_Control *_Thread_queue_Dequeue(
 
   return( the_thread );
 }
-

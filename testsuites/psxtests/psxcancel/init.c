@@ -124,4 +124,3 @@ int main(){
   rtems_test_exit(EXIT_SUCCESS);
 #endif
 }
-

@@ -206,4 +206,3 @@ gdtptr:
 	.byte	0, 0x93, 0xcf, 0
 
 	.set	gdtlen, . - gdtptr	# length of GDT
-	

@@ -363,5 +363,3 @@ void TestTrcv()
     assert(status == E_TMOUT);
     put_time( "Init - time out at ");
 }
-
-

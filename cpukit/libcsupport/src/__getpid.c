@@ -15,4 +15,3 @@ pid_t __getpid(void)
 {
   return getpid();
 }
-

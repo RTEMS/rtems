@@ -59,4 +59,3 @@ void init_remote_gdb( void )
   /* breakpoint();     */
   /* BREAKPOINT();     */
 }
-

@@ -29,4 +29,3 @@ int pthread_attr_getschedpolicy(
   *policy = attr->schedpolicy;
   return 0;
 }
-

@@ -551,4 +551,3 @@ void Stack_check_Dump_usage( void )
   /* dump interrupt stack info if any */
   Stack_check_Dump_threads_usage((Thread_Control *) -1);
 }
-

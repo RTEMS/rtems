@@ -42,4 +42,3 @@ int sigismember(
 
   return 0;
 }
-

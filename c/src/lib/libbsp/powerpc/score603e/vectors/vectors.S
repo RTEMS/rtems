@@ -162,17 +162,3 @@ SYM (__vectors):
 	ba  0xfff01400  
 	ba  0xfff01400  
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

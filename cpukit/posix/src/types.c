@@ -44,4 +44,3 @@ int POSIX_NOT_IMPLEMENTED()
 /*
  * END OF TEMPORARY
  */
-

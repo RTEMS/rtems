@@ -68,4 +68,3 @@ void _CPU_Thread_Idle_body( void )
     LEON_REG.Power_Down = LEON_REG.Power_Down;   /* make sure on load follows store to power-down reg */
   }
 }
-

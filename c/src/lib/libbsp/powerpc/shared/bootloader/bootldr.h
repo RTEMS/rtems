@@ -253,6 +253,3 @@ int find_max_mem(struct pci_dev *);
 #endif
 
 #endif
-
-
-

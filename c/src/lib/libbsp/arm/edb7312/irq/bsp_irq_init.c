@@ -114,4 +114,3 @@ void BSP_rtems_irq_mngt_init()
 	}
 	int_stat = *EP7312_INTSR3;
 }
-

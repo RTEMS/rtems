@@ -405,5 +405,3 @@ static void fmt_str( int minor, const char* str )
       while( *str )
 	 dbug_out_char( minor, *str++ );
 }
-
-

@@ -20,4 +20,3 @@
 #include "consolebsp.h"
 
 int console_reserve_resources_removed;
-

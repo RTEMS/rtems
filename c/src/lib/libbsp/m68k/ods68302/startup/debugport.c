@@ -160,4 +160,3 @@ void debug_port_banner(void)
   debug_port_write(_Copyright_Notice);
   debug_port_write("\n\r  " CARD_ID "\n\r");
 }
-

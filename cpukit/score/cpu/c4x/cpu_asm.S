@@ -767,4 +767,3 @@ SYM(rtems_irq_prologue_3F):
 	push	ar2
 	ldi	0x3f,ar2
 	br	SYM(_ISR_Handler_save_registers)
-

@@ -55,4 +55,3 @@ int ftruncate(
 
   return (*iop->handlers->ftruncate_h)( iop, length );
 }
-  

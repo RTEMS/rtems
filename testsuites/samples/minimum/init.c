@@ -38,4 +38,3 @@ rtems_task Init(
 #include <rtems/confdefs.h>
 
 /* global variables */
-

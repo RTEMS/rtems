@@ -148,4 +148,3 @@ void bsp_start( void )
 void bsp_clean_up(void) {
   printk("bsp_cleanup called\n");
 }
-

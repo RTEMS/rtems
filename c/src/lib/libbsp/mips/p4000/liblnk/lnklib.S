@@ -59,4 +59,3 @@ ENDFRAME(idtsim_init_sbrk)
 FRAME(idtsim_init_file,sp,0,ra)
 	j	ra
 ENDFRAME(idtsim_init_file)
-

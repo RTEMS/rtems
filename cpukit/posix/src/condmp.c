@@ -43,4 +43,3 @@ void _POSIX_Condition_variables_MP_Send_extract_proxy(
 /*
  *  END OF TEMPORARY
  */
-

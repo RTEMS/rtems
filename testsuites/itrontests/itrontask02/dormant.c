@@ -40,5 +40,4 @@ void Non_Dormant_task()
     status = rtems_task_wake_after( 120*TICKS_PER_SECOND );
     directive_failed( status, "rtems_task_wake_after" );
   }
-}  
-
+}

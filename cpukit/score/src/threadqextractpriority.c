@@ -101,4 +101,3 @@ void _Thread_queue_Extract_priority(
   else
     _ISR_Enable( level );
 }
-

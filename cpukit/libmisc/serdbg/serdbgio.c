@@ -254,4 +254,3 @@ int getDebugChar
   }
   return c;
 }
-

@@ -153,6 +153,3 @@ extern int BSPBaseBaud;
 #define TRIG_LEVEL  		0xc0 /* Mask for the trigger level 		*/
 
 #endif /* _BSPUART_H */
-
-
-

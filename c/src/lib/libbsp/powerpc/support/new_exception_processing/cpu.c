@@ -150,4 +150,3 @@ void _CPU_Context_Initialize(
 void _CPU_Install_interrupt_stack( void )
 {
 }
-

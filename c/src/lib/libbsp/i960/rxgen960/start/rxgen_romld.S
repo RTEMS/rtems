@@ -166,4 +166,3 @@ _bssEnd:
 _bssStart_1:
 _bssEnd_1:
 _intStackPtr:
-

@@ -118,4 +118,3 @@ int main(
   printf( "*** END OF CHROOT01 TEST ***\n" );
   rtems_test_exit(0);
 }
-

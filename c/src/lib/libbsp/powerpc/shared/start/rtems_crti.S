@@ -32,4 +32,4 @@
 _init:
 	stwu	r1,-16(r1)
 	mflr	r0
-	stw		r0,20(r1)	
+	stw		r0,20(r1)

@@ -32,5 +32,3 @@ void ITRON_Init( void )
   printf( "*** END OF ITRON MBOX TEST 01 ***\n" );
   rtems_test_exit( 0 );
 }
-
-

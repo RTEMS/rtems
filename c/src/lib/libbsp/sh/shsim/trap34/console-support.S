@@ -18,4 +18,3 @@ ret:
         .align  2
 perrno:
         .long   _errno
-

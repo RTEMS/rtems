@@ -176,6 +176,3 @@ extern int BSPBaseBaud;
 
 
 #endif /* _BSPUART_H */
-
-
-

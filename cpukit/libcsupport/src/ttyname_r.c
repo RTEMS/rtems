@@ -116,4 +116,3 @@ char *ttyname(
     return buf;
   return NULL;
 }
-

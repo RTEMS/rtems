@@ -191,11 +191,3 @@ void bsp_spurious_initialize()
   set_vector( bsp_stub_handler, PPC_IRQ_TRACE, 1 );
   set_vector( bsp_stub_handler, PPC_IRQ_SYS_MGT, 1 );
 }
-
-
-
-
-
-
-
-

@@ -186,6 +186,3 @@ clear_bss:
 
         bdnz    clear_bss                       /* dec counter and loop */
         blr                                     /* return */
-
-
-

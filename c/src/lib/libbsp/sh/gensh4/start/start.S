@@ -274,4 +274,3 @@ __sh4sim_dummy_register:
         .global _boot_mode
 _boot_mode:
         .long   0
-

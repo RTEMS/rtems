@@ -14,6 +14,40 @@
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.2  2003/07/08 08:38:48  ralf
+// 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+//
+// 	* capture/capture-cli.c: Add config-header support.
+// 	* capture/capture.c: Add config-header support.
+// 	* cpuuse/cpuuse.c: Add config-header support.
+// 	* devnull/devnull.c: Add config-header support.
+// 	* dummy/dummy.c: Add config-header support.
+// 	* dumpbuf/dumpbuf.c: Add config-header support.
+// 	* monitor/mon-command.c: Add config-header support.
+// 	* monitor/mon-config.c: Add config-header support.
+// 	* monitor/mon-dname.c: Add config-header support.
+// 	* monitor/mon-driver.c: Add config-header support.
+// 	* monitor/mon-extension.c: Add config-header support.
+// 	* monitor/mon-itask.c: Add config-header support.
+// 	* monitor/mon-manager.c: Add config-header support.
+// 	* monitor/mon-monitor.c: Add config-header support.
+// 	* monitor/mon-mpci.c: Add config-header support.
+// 	* monitor/mon-object.c: Add config-header support.
+// 	* monitor/mon-prmisc.c: Add config-header support.
+// 	* monitor/mon-queue.c: Add config-header support.
+// 	* monitor/mon-server.c: Add config-header support.
+// 	* monitor/mon-symbols.c: Add config-header support.
+// 	* monitor/mon-task.c: Add config-header support.
+// 	* mw-fb/mw_fb.c: Add config-header support.
+// 	* mw-fb/mw_uid.c: Add config-header support.
+// 	* rtmonuse/rtmonuse.c: Add config-header support.
+// 	* serdbg/serdbg.c: Add config-header support.
+// 	* serdbg/serdbgio.c: Add config-header support.
+// 	* serdbg/termios_printk.c: Add config-header support.
+// 	* shell/cmds.c: Add config-header support.
+// 	* stackchk/check.c: Add config-header support.
+// 	* untar/untar.c: Add config-header support.
+//
 // Revision 1.1  2000/08/30 08:21:24  joel
 // 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
 //
@@ -155,4 +189,3 @@
  {
     return 0;
  }
-

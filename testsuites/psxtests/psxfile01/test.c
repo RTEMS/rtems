@@ -543,5 +543,3 @@ void test_file (char *filename, char *mode)
   if (fclose (fp))
       perror ("fclose");
 }
-
-

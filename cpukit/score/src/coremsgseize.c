@@ -134,4 +134,3 @@ void _CORE_message_queue_Seize(
 
   _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
 }
-

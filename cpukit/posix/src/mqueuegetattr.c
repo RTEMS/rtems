@@ -77,4 +77,3 @@ int mq_getattr(
   }
   return POSIX_BOTTOM_REACHED();
 }
-

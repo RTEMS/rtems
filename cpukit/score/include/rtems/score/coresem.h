@@ -152,4 +152,3 @@ void _CORE_semaphore_Flush(
  
 #endif
 /*  end of include file */
-

@@ -99,4 +99,3 @@ void _POSIX_Timer_Manager_initialization ( int max_timers )
 
    timer_max = max_timers;
 }
-

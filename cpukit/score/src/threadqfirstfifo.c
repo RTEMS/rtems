@@ -44,4 +44,3 @@ Thread_Control *_Thread_queue_First_fifo(
 
   return NULL;
 }
-

@@ -121,4 +121,3 @@ int rtems_filesystem_evaluate_parent(
 
   return result;
 }
-

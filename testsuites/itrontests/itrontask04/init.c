@@ -90,4 +90,3 @@ void ITRON_Init( void )
   exd_tsk();
   directive_failed( 0, "exd_tsk" );
 }
-

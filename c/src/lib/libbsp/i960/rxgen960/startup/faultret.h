@@ -18,4 +18,3 @@ extern void faultRet(unsigned int * faultState);
 /*-------------*/
 /* End of file */
 /*-------------*/
-

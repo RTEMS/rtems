@@ -343,4 +343,3 @@ extern PnP_TAG_PACKET *PnP_find_large_vendor_packet(unsigned char *p,
 						    int n);
 #endif /* ASM */
 #endif  /* ndef _RESIDUAL_ */
-

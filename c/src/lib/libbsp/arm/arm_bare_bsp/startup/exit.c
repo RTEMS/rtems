@@ -38,11 +38,3 @@ void bsp_cleanup(void)
   ch = BSP_poll_char();
   rtemsReboot();
 }
-
-
-
-
-
-
-
-

@@ -88,5 +88,3 @@ environ:
 
         .global stack_size
         .set    stack_size,0x1000
-
-

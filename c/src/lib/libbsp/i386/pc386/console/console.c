@@ -573,5 +573,3 @@ BSP_output_char_function_type BSP_output_char =
                        (BSP_output_char_function_type) _IBMPC_outch;
 
 BSP_polling_getchar_function_type BSP_poll_char = BSP_wait_polled_input;
-
-

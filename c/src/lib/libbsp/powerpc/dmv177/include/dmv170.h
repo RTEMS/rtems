@@ -286,4 +286,3 @@ uint32_t   SCV64_Get_Interrupt_Enable();
  
 #endif /* !_INCLUDE_DMV170_h */
 /* end of include file */
-

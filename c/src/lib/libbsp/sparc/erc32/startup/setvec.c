@@ -68,4 +68,3 @@ void _CPU_Thread_Idle_body( void )
     ERC32_MEC.Power_Down = 0;   /* value is irrelevant */
   }
 }
-

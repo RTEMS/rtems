@@ -91,4 +91,3 @@ boolean _POSIX_signals_Check_signal(
 
   return TRUE;
 }
-

@@ -331,5 +331,3 @@ int rtems_libio_is_file_open(
 
   return result;
 }
-
-

@@ -60,5 +60,3 @@ int IMFS_symlink(
 
   return 0;
 }
-
-

@@ -60,4 +60,3 @@ boolean _Heap_Size_of_user_area(
   *size = the_size;
   return( TRUE );
 }
-

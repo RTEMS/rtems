@@ -401,4 +401,3 @@
 
 #define LR33300_IC_SIZE 0x1000      /* 33300 Inst cache = 4Kbytes */
 #define LR33300_DC_SIZE 0x800       /* 33300 Data cache = 2Kbytes */
-

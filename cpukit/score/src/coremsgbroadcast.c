@@ -109,4 +109,3 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
   *count = number_broadcasted;
   return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
 }
-

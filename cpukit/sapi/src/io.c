@@ -417,4 +417,3 @@ rtems_status_code rtems_io_control(
     callout = _IO_Driver_address_table[major].control_entry;
     return callout ? callout(major, minor, argument) : RTEMS_SUCCESSFUL;
 }
-

@@ -383,4 +383,3 @@ Untar_FromFile(char *tar_name)
 
    return(retval);
 }
-

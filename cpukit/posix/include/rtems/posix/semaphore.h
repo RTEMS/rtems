@@ -178,4 +178,3 @@ int _POSIX_Semaphore_Name_to_id(
  
 #endif
 /*  end of include file */
-

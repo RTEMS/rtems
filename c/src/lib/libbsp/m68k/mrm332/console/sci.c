@@ -36,6 +36,13 @@
 * $Id$
 *
 * $Log$
+* Revision 1.5  2004/03/31 04:37:05  ralf
+* 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+*
+* 	* clock/ckinit.c, console/sci.c, console/sci.h, include/bsp.h,
+* 	misc/interr.c, startup/bspstart.c, timer/timer.c: Convert to using
+* 	c99 fixed size types.
+*
 * Revision 1.4  2004/01/07 21:13:50  joel
 * 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 *
@@ -1681,6 +1688,3 @@ void SciPrintStats ( void )
 
     return;
 }
-
-
-

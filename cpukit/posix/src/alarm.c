@@ -80,4 +80,3 @@ unsigned int alarm(
 
   return remaining;
 }
-

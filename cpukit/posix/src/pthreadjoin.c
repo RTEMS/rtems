@@ -69,4 +69,3 @@ int pthread_join(
 
   return POSIX_BOTTOM_REACHED();
 }
-

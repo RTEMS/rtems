@@ -105,4 +105,3 @@ int mq_notify(
   }
   return POSIX_BOTTOM_REACHED();
 }
-

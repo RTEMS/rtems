@@ -105,4 +105,3 @@ void _Thread_Handler_initialization(
   );
 
 }
-

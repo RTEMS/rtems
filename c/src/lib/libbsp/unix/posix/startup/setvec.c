@@ -42,5 +42,3 @@ set_vector(                                     /* returns old vector */
     }
    
 }
-
-

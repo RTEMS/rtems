@@ -837,4 +837,3 @@ tcp_usrclosed(tp)
 	}
 	return (tp);
 }
-

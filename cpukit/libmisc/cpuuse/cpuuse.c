@@ -146,4 +146,3 @@ void CPU_usage_Reset( void )
 
   rtems_iterate_over_all_threads(CPU_usage_Per_thread_handler);
 }
-

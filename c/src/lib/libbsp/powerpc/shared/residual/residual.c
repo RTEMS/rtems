@@ -105,4 +105,3 @@ PnP_TAG_PACKET *PnP_find_large_vendor_packet(unsigned char *p,
 	};
 	return 0; /* not found */
 }
-

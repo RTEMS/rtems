@@ -48,4 +48,3 @@ void  rtems_irq_mngt_init()
     /* Initialize the INT at the BSP level */
     BSP_rtems_irq_mngt_init();
 }
-

@@ -132,4 +132,3 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Keys_Is_null (
  
 #endif
 /*  end of include file */
-

@@ -192,4 +192,3 @@ SYM(stack):
 #endif
 SYM(vbrtemp):
 	.long	0x0
-

@@ -55,4 +55,3 @@ int mq_timedreceive(                  /* XXX: should this be ssize_t */
     _POSIX_Timespec_to_interval( timeout )
   );
 }
-

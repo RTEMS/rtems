@@ -357,5 +357,3 @@ conSetAttr(int minor, const struct termios *t)
 
   return 0;
 }
-
-

@@ -29,4 +29,3 @@ int pthread_attr_getinheritsched(
   *inheritsched = attr->inheritsched;
   return 0;
 }
-

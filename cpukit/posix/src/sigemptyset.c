@@ -33,4 +33,3 @@ int sigemptyset(
   *set = 0;
   return 0;
 }
-

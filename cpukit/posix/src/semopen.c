@@ -120,5 +120,3 @@ sem_t *sem_open(
 
   return (sem_t *) &the_semaphore->Object.id;
 }
-
-

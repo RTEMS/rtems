@@ -706,4 +706,3 @@ fat_fat32_update_fsinfo_sector(
 
     return RC_OK;
 }
-

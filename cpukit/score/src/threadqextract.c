@@ -51,4 +51,3 @@ void _Thread_queue_Extract(
       break;
    }
 }
-

@@ -550,4 +550,4 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
 
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;
-} 
+}

@@ -200,4 +200,3 @@ void bsp_start(void)
    */
   BSP_rtems_irq_mng_init(0);
 }
-

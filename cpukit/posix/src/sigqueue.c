@@ -30,4 +30,3 @@ int sigqueue(
 {
   return killinfo( pid, signo, &value );
 }
-

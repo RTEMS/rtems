@@ -143,4 +143,3 @@ struct aux_queue {
  */
 
 #define AUX_IRQ 12
-

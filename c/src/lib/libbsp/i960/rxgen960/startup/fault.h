@@ -55,4 +55,3 @@ extern int faultOk(int fault);
 /*-------------*/
 /* End of file */
 /*-------------*/
-

@@ -159,4 +159,3 @@ static void uart_init(int minor)
     
 
 }
-

@@ -26,4 +26,3 @@ rtems_attribute rtems_interrupt_level_attribute(
 {
   return RTEMS_INTERRUPT_LEVEL(level);
 }
-

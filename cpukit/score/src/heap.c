@@ -90,4 +90,3 @@ uint32_t   _Heap_Initialize(
 
   return ( the_size - HEAP_BLOCK_USED_OVERHEAD );
 }
-

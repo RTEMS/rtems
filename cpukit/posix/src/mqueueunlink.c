@@ -83,4 +83,3 @@ int mq_unlink(
   _Thread_Enable_dispatch();
   return 0;
 }
-

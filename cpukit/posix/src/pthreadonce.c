@@ -42,4 +42,3 @@ int pthread_once(
   }
   return 0;
 }
-

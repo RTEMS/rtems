@@ -311,4 +311,3 @@ void add_to_queue( unsigned short b )
     kbd_last = next;
  }
 }
-

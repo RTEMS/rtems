@@ -75,4 +75,3 @@ boolean dmv177_icm7170_probe(int minor)
 
   return FALSE;
 }
-

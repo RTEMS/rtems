@@ -37,4 +37,3 @@ int	hdlc_output __P((struct ifnet *,
 int	hdlc_ioctl __P((struct ifnet *, int , caddr_t ));
 
 #endif
-

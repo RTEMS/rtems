@@ -199,5 +199,3 @@ void _User_extensions_Fatal (
       (*the_extension->Callouts.fatal)( the_source, is_internal, the_error );
   }
 }
- 
-

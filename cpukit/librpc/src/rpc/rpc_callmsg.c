@@ -190,4 +190,3 @@ xdr_callmsg(xdrs, cmsg)
 	    return (xdr_opaque_auth(xdrs, &(cmsg->rm_call.cb_verf)));
 	return (FALSE);
 }
-

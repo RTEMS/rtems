@@ -155,4 +155,3 @@ printk(char *fmt, ...)
   vprintk(fmt, ap);
   va_end(ap); /* clean up when done */
 } /* printk */
-

@@ -133,4 +133,3 @@ static inline uint32_t   get_ticks_per_second( void )
      rtems_configuration_get_rtems_api_configuration()->number_of_initialization_tasks )
 
 /* end of include file */
-

@@ -474,14 +474,3 @@ void console_outbyte_interrupts(
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

@@ -480,4 +480,3 @@ static boolean config_z85c30_probe(int minor)
 
 	return(TRUE);
 }
-

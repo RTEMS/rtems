@@ -925,4 +925,3 @@ int kbd_init(void)
 	mark_bh(KEYBOARD_BH);
 	return 0;
 }
-

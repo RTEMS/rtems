@@ -55,4 +55,3 @@ int mq_timedsend(
     _POSIX_Timespec_to_interval( timeout )
   );
 }
-

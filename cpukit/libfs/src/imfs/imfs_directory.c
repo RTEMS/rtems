@@ -349,5 +349,3 @@ int imfs_dir_rmnod(
   return 0;
 
 }
-
-

@@ -329,4 +329,3 @@ rtems_create_root_fs ()
   
   return 0;
 }
-

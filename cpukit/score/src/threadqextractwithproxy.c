@@ -60,4 +60,3 @@ boolean _Thread_queue_Extract_with_proxy(
   }
   return FALSE;
 }
-

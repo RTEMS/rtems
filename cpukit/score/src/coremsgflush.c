@@ -52,4 +52,3 @@ uint32_t   _CORE_message_queue_Flush(
   else
     return 0;
 }
-

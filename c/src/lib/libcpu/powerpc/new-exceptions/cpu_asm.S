@@ -402,4 +402,3 @@ PROC (_CPU_Context_restore):
 #endif
 
 	blr
-

@@ -43,4 +43,3 @@ int pthread_mutexattr_setpshared(
       return EINVAL;
   }
 }
-

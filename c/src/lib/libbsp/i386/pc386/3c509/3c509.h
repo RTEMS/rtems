@@ -420,4 +420,3 @@ typedef unsigned char  u_char;
 #define UTP 				0x4
 
 #define RX_BYTES_MASK			(u_short) (0x07ff)
-

@@ -50,4 +50,3 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define RSCNT   9
 
 #endif /*__REGS_H__*/
-

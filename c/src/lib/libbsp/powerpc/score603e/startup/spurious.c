@@ -252,8 +252,3 @@ void bsp_set_trap_vectors( void )
   *ptr = 0x48000000;
 
 }
-
-
-
-
-

@@ -92,4 +92,3 @@ useconds_t ualarm(
 
   return remaining;
 }
-

@@ -343,4 +343,3 @@ msdos_file_link(rtems_filesystem_location_info_t *to_loc,
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;
 }
-

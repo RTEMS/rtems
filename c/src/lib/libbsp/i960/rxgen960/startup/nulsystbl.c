@@ -82,4 +82,3 @@ SystemTbl nulsystemTbl = {
 /*-------------*/
 /* End of file */
 /*-------------*/
-

@@ -500,4 +500,3 @@ int main(
   printf( "\n\n*** END OF READDIR TEST ***\n" );
   rtems_test_exit(0);
 }
-

@@ -260,4 +260,3 @@ struct kbdiacr accent_table[MAX_DIACR] = {
 };
 
 unsigned int accent_table_size = 68;
-

@@ -382,4 +382,3 @@ ide_ctrl_fns_t mbx8xx_pcmciaide_ctrl_fns = {
   mbx8xx_pcmciaide_write_block,
   mbx8xx_pcmciaide_config_io_speed
 };
-

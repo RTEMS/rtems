@@ -151,4 +151,3 @@ clear_bss:
 #endif
 
 	.comm	environ,4,4
-

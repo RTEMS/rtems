@@ -222,4 +222,3 @@ __CPU_Context_save_fp:
 
 __CPU_Context_restore_fp:
 	rts
-

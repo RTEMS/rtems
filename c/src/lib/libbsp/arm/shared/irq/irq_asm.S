@@ -164,8 +164,3 @@ _ISR_Dispatch_p_4:
 
         /* Finally, we can return to the interrupted task */
         subs    pc, lr, #4
-
-
-
-
-

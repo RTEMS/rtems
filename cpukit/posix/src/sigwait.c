@@ -42,4 +42,3 @@ int sigwait(
 
   return errno;
 }
-

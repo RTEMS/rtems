@@ -97,4 +97,3 @@ void *POSIX_Init( void *argument )
 #define CONFIGURE_INIT
 
 #include <confdefs.h>
-

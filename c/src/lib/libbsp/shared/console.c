@@ -268,6 +268,3 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
-
-
-

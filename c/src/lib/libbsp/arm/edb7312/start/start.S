@@ -166,5 +166,3 @@ init2 :
 	ldmia	sp!, {r4-r12, lr}
 	mov	sp, r12
 	mov	pc, lr
-
-

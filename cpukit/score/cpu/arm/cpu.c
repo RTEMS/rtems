@@ -318,6 +318,3 @@ void do_data_abort(uint32_t   insn, uint32_t   spsr,
     }
     return;
 }
-
-
-    

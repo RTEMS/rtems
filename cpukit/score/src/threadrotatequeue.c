@@ -84,9 +84,3 @@ void _Thread_Rotate_Ready_Queue(
 
   _ISR_Enable( level );
 }
-
-
-
-
-
-

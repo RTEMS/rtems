@@ -237,15 +237,3 @@ init2 :
 /* --- Now we enter the C code */
 
     B	boot_card
-
-
-
-
-
-
-
-
-
-
-
-

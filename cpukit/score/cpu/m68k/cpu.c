@@ -210,4 +210,3 @@ void CPU_Context_restore_fp (void **fp_context_ptr)
   _fpCCR = *fp;
 }
 #endif
-

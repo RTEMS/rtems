@@ -154,4 +154,3 @@ xdr_vector(xdrs, basep, nelem, elemsize, xdr_elem)
 	}
 	return(TRUE);
 }
-

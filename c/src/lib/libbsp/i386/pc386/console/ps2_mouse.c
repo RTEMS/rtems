@@ -704,6 +704,3 @@ paux_control(rtems_device_major_number major,
  	args->ioctl_return = 0;
    return RTEMS_SUCCESSFUL;
 }
-
-
-

@@ -120,4 +120,3 @@
 /* end of include file */
 
 	asm( \".h8300h\" );
-

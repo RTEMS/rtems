@@ -169,11 +169,3 @@ void ICM7170_SetTOD(
 
   ICM7170_SetField( imc1770_regs,  0x11, (0x0c | icm1770_freq) );
 }
-
-
-
-
-
-
-
-

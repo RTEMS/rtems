@@ -301,6 +301,3 @@
 #define MC68681_BAUD_RATE_MASK_TIMER_1X     0xff   
 
 #endif
-
-
-

@@ -357,7 +357,3 @@ int console_sps_kbhit()
         stat = *uart;
         return ( stat != 0);
 }
-
-
-
-

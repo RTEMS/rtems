@@ -158,4 +158,3 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     printk("RTEMS IRQ management is now operationnal\n");
 #endif
 }
-

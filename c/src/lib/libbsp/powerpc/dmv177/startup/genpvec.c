@@ -226,13 +226,3 @@ rtems_isr_entry  set_EE_vector(
    */
   return 0;
 }
-
-
-
-
-
-
-
-
-
-

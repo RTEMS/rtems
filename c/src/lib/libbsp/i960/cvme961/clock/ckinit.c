@@ -133,4 +133,3 @@ rtems_isr Clock_isr(
     Clock_isrs -= 1;
   i960_clear_intr( 5 );
 }
-

@@ -52,4 +52,3 @@
 #define Z8530_WRITE_CHARACTER_BITS_5          0x00
 
 #endif
-

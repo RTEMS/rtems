@@ -617,4 +617,3 @@ static vme_isdigit(char ch)
 /*-------------*/
 /* End of file */
 /*-------------*/
-

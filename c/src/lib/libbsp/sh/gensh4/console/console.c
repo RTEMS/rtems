@@ -485,6 +485,3 @@ console_control(rtems_device_major_number major,
         return RTEMS_SUCCESSFUL;
     }
 }
-
-
-

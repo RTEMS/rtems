@@ -46,4 +46,3 @@ int fchmod(
 
   return (*iop->pathinfo.handlers->fchmod_h)( &iop->pathinfo, mode );
 }
-

@@ -52,4 +52,3 @@ void _Thread_queue_Flush(
       the_thread->Wait.return_code = status;
   }
 }
-

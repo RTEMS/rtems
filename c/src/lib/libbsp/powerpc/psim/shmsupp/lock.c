@@ -65,4 +65,3 @@ void Shm_Unlock(
 
   (void) p[2];
 }
-

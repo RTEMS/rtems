@@ -35,4 +35,3 @@ m68k_isr_entry set_vector(                      /* returns old vector */
   }
   return (m68k_isr_entry) previous_isr;
 }
-

@@ -315,4 +315,3 @@ void _Timer_Server_process_seconds_chain(void)
   }
   _Timer_Server_seconds_last_time = snapshot;
 }
-

@@ -148,4 +148,3 @@ universal(rqstp, atransp)
 	(void) fprintf(stderr, "never registered prog %d\n", prog);
 	exit(1);
 }
-

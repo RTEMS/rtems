@@ -186,4 +186,3 @@ int _fcntl_r(
   return fcntl( fd, cmd, arg );
 }
 #endif
-

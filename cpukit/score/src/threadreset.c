@@ -62,4 +62,3 @@ void _Thread_Reset(
     _Thread_Set_priority( the_thread, the_thread->Start.initial_priority );
   }
 }
-

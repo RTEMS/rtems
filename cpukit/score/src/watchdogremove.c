@@ -67,4 +67,3 @@ Watchdog_States _Watchdog_Remove(
   _ISR_Enable( level );
   return( previous_state );
 }
-

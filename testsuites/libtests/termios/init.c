@@ -778,4 +778,3 @@ Init (rtems_task_argument ignored)
     }
   }
 }
-

@@ -55,4 +55,3 @@ Thread_Control *_Thread_queue_First(
 
   return the_thread;
 }
-

@@ -61,4 +61,3 @@ void * sbrk(ptrdiff_t incr)
   }
   return rval;
 }
-

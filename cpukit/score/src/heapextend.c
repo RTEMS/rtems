@@ -109,4 +109,3 @@ Heap_Extend_status _Heap_Extend(
   
   return HEAP_EXTEND_SUCCESSFUL;
 }
-

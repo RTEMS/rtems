@@ -48,4 +48,3 @@ wr_cursor:	pushl	%ecx
 		outb	(%dx)			/* Update low location cursor */
 		popl	%ecx
 		ret
-

@@ -156,8 +156,3 @@ mqd_t mq_open(
 
   return (mqd_t) the_mq_fd->Object.id;
 }
-
-
-
-
-

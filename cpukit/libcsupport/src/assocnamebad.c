@@ -37,5 +37,3 @@ rtems_assoc_name_bad(
 #endif
     return bad_buffer;
 }
-
-

@@ -102,4 +102,3 @@ void  Write_pci_device_register(
    */
   PCI_bus_write( (volatile uint32_t*)SCORE603E_PCI_IO_CFG_DATA, data );
 }
-

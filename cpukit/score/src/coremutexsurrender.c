@@ -139,4 +139,3 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   return CORE_MUTEX_STATUS_SUCCESSFUL;
 }
-

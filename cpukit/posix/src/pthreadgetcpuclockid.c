@@ -27,4 +27,3 @@ int pthread_getcpuclockid(
 {
   return POSIX_NOT_IMPLEMENTED();
 }
-

@@ -76,4 +76,3 @@ void _POSIX_Message_queue_Delete(
  
   }
 }
-

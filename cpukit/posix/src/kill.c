@@ -49,4 +49,3 @@ int _kill_r(
   return kill( pid, sig );
 }
 #endif
-

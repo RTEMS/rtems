@@ -294,4 +294,3 @@ waitfortx:
 	li		r4,0x00
 	b		display_exc
 #endif
-

@@ -329,4 +329,3 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #endif
 
 #endif /* __IREGDEF_H__ */
-

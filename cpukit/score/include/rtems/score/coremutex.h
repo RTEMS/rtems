@@ -234,4 +234,3 @@ void _CORE_mutex_Flush(
  
 #endif
 /*  end of include file */
-

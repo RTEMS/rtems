@@ -200,4 +200,3 @@ SYSCTL_NODE(_net_inet, IPPROTO_IGMP,	igmp,	CTLFLAG_RW, 0,	"IGMP");
 #ifdef IPDIVERT
 SYSCTL_NODE(_net_inet, IPPROTO_DIVERT,	div,	CTLFLAG_RW, 0,	"DIVERT");
 #endif
-

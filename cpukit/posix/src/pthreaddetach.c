@@ -45,4 +45,3 @@ int pthread_detach(
 
   return POSIX_BOTTOM_REACHED();
 }
-

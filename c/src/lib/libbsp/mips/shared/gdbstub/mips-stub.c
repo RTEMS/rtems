@@ -1674,6 +1674,3 @@ void mips_gdb_stub_install(int enableThreads)
    /* get the attention of gdb */
    /* mips_break(1);  disabled so user code can choose to invoke it or not */
 }
-
-
-

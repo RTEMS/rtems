@@ -381,4 +381,3 @@ in_inithead(void **head, int off)
 	in_rtqtimo(rnh);	/* kick off timeout first time */
 	return 1;
 }
-

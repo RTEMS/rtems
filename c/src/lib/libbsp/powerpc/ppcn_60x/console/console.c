@@ -346,4 +346,3 @@ DEBUG_puth(
 
 	rtems_interrupt_enable(Irql);
 }
-

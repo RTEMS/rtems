@@ -299,9 +299,3 @@ _IBMPC_inch_sleep(void)
 	
     return c;
 } /* _IBMPC_inch */
-
-
-
-
-
-

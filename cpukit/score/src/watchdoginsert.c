@@ -107,4 +107,3 @@ exit_insert:
   _Watchdog_Sync_count--;
   _ISR_Enable( level );
 }
-

@@ -112,4 +112,3 @@ int main(
   puts( "\n\n*** END OF TIME OF DAY TEST 01 ***" );
   rtems_test_exit(0);
 }
-

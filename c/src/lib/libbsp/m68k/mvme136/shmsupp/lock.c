@@ -71,4 +71,3 @@ void Shm_Unlock(
   isr_level = Shm_isrstat;
   rtems_interrupt_enable( isr_level );
 }
-

@@ -218,4 +218,3 @@ synchronize:
     _Thread_MP_Free_proxy( the_thread );
 #endif
 }
-

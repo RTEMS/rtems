@@ -52,4 +52,3 @@ extern "C" {
 
 #endif /* __BSP_H_ */
 /* end of include file */
-

@@ -110,4 +110,3 @@ _start:
 	.size	_start,.Lstart-_start
 
 	.comm	environ,4,4
-

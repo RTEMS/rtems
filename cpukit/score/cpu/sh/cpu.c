@@ -252,4 +252,3 @@ void _CPU_Context_Initialize(
     _the_context->sr |= SH4_SR_FD;
 #endif
 }
-

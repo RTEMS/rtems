@@ -983,8 +983,3 @@ waitabit (void)
   int i;
   for (i = 0; i < waitlimit; i++);
 }
-
-
-
-
-

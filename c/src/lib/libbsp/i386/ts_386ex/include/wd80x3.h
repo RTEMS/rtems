@@ -120,4 +120,3 @@
 #define SMK_FU    0x20		/* FIFO underrun */
 #define SMK_CDH   0x40		/* collision detect heartbeat */
 #define SMK_OWC	  0x80		/* out of window collision */
-

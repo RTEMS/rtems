@@ -153,4 +153,3 @@ rtems_device_driver Clock_control(
 done:
     return RTEMS_SUCCESSFUL;
 }
-

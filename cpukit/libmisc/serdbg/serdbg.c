@@ -92,4 +92,3 @@ int serdbg_init_dbg
    */
   return rc;
 }
-

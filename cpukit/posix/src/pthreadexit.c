@@ -46,4 +46,3 @@ void pthread_exit(
 
   _Thread_Enable_dispatch();
 }
-

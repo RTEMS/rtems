@@ -288,4 +288,3 @@ void _RTEMS_tasks_Manager_initialization(
 #endif
 
 }
-

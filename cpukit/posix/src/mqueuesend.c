@@ -54,4 +54,3 @@ int mq_send(
     THREAD_QUEUE_WAIT_FOREVER
   );
 }
-

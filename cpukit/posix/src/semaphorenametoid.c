@@ -49,4 +49,3 @@ int _POSIX_Semaphore_Name_to_id(
 
   return ENOENT;
 }
-

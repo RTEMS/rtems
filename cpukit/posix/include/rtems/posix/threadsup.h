@@ -42,4 +42,3 @@ typedef struct {
 
 #endif
 /* end of include file */
-

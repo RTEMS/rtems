@@ -86,4 +86,3 @@ void _CORE_mutex_Initialize(
     CORE_MUTEX_TIMEOUT
   );
 }
-

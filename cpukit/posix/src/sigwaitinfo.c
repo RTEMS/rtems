@@ -31,4 +31,3 @@ int sigwaitinfo(
 {
   return sigtimedwait( set, info, NULL );
 }
-

@@ -75,4 +75,3 @@ _sys_exit (n)
 {
   return __trap34 (SYS_exit, n, 0, 0);
 }
-

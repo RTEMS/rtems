@@ -147,13 +147,3 @@ void scc_out(int channel, unsigned char character)
     }
   }  
 }
-
-
-
-
-
-
-
-
-
-

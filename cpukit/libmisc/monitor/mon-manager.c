@@ -52,4 +52,3 @@ rtems_monitor_manager_next(
 done:
     return object;
 }
-

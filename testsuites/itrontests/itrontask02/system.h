@@ -40,8 +40,3 @@ void Non_Dormant_task();
 TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
 
 /* end of include file */
-
-
-
-
-

@@ -30,4 +30,3 @@ gid_t getegid( void )
 {
   return _POSIX_types_Egid;
 }
-

@@ -91,4 +91,3 @@ int sigaction(
 
   return 0;
 }
-

@@ -70,4 +70,3 @@ RTEMS_EXTERN Objects_Information  _POSIX_Timer_Information;
 
 #endif
 /* end of include file */
-

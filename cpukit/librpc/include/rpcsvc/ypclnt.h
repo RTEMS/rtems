@@ -91,4 +91,3 @@ int	ypprot_err	__P((unsigned int incode));
 __END_DECLS
 
 #endif /* _RPCSVC_YPCLNT_H_ */
-

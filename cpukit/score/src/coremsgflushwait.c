@@ -67,4 +67,3 @@ void _CORE_message_queue_Flush_waiting_threads(
     CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT
   );
 }
-

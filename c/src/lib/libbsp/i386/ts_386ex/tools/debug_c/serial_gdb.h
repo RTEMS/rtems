@@ -15,4 +15,3 @@ void init_serial_gdb( void );
 #ifdef __cplusplus
 }
 #endif
-

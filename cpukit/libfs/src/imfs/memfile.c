@@ -1141,5 +1141,3 @@ int  memfile_check_rmnod( IMFS_jnode_t *the_jnode ){
 
   return 0;
 }
-
-

@@ -103,8 +103,3 @@ unsigned int SCORE603e_FLASH_Enable_writes(
 
   return RTEMS_SUCCESSFUL;
 }
-
-
-
-
-

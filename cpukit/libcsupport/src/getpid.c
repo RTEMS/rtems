@@ -42,4 +42,3 @@ pid_t _getpid_r(
   return getpid();
 }
 #endif
-

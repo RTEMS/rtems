@@ -37,4 +37,3 @@ int IMFS_freenodinfo(
 {
   return 0;
 }
-

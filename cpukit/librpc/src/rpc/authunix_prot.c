@@ -65,4 +65,3 @@ xdr_authunix_parms(xdrs, p)
 	}
 	return (FALSE);
 }
-

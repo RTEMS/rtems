@@ -300,4 +300,3 @@ interpret(val, len)
 	*q = NULL;
 	return (&d->rpc);
 }
-

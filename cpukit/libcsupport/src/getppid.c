@@ -26,4 +26,3 @@ pid_t getppid( void )
 {
   return _POSIX_types_Ppid;
 }
-

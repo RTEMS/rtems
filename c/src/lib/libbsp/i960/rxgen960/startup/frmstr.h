@@ -41,4 +41,3 @@ extern int unformat_string(const char * fmt, int ** argp, const char * buffer);
 
   /* End of File
    */
-

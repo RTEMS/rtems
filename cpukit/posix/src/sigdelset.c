@@ -44,4 +44,3 @@ int sigdelset(
   *set &= ~signo_to_mask(signo);
   return 0;
 }
-

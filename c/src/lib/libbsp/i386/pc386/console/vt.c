@@ -347,4 +347,3 @@ int vt_ioctl( unsigned int cmd, unsigned long arg)
 		return -EINVAL;
 	}
 }
-

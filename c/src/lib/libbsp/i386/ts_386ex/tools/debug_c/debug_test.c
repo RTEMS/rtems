@@ -22,4 +22,3 @@ void debug_test(void)
     printf("Current sum = %d\n", sum);
   }
 }
-

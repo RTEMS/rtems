@@ -105,4 +105,3 @@ ssize_t _POSIX_Message_queue_Receive_support(
   }
   return POSIX_BOTTOM_REACHED();
 }
-

@@ -61,4 +61,3 @@ inline unsigned int Swap16(
 
         return( usSwapped );
 }
-

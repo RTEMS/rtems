@@ -94,4 +94,3 @@ rtems_monitor_task_dump(
     length += rtems_monitor_dump_notepad(monitor_task->notepad);
     printf("\n");
 }
-

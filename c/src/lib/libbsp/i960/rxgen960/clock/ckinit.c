@@ -171,4 +171,3 @@ rtems_isr Clock_isr(
 
   i960_clear_intr( 12 );
 }
-

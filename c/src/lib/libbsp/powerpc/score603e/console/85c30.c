@@ -430,4 +430,3 @@ rtems_isr ISR_85c30_Async(
 }
 
 #endif
-

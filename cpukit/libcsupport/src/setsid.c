@@ -24,5 +24,3 @@ pid_t setsid( void )
 {
   rtems_set_errno_and_return_minus_one( EPERM );
 }
-
-

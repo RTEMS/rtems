@@ -13,4 +13,3 @@ void init_tlb(void)
         for (i = 0; i < N_TLB_ENTRIES; i++ )
                 resettlb(i);
 }
-

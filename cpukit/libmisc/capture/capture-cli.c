@@ -1468,4 +1468,3 @@ rtems_capture_cli_init (rtems_capture_timestamp timestamp)
 
   return RTEMS_SUCCESSFUL;
 }
-

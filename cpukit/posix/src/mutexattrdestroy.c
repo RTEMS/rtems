@@ -35,4 +35,3 @@ int pthread_mutexattr_destroy(
   attr->is_initialized = FALSE;
   return 0;
 }
-

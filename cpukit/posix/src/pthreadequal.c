@@ -80,4 +80,3 @@ int pthread_equal(
   return status;
 #endif
 }
-

@@ -234,9 +234,3 @@ void breakpoint(void);
 
 #endif /* __BSP_H_ */
 /* end of include file */
-
-
-
-
-
-

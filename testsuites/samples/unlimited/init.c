@@ -120,8 +120,3 @@ boolean status_code_bad(
   }
   return FALSE;
 }
-
-
-
-
-

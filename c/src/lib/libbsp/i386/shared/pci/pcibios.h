@@ -54,4 +54,3 @@ BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
 #endif
 
 #endif /* _PCIB_H */
-

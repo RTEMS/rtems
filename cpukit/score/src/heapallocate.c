@@ -111,4 +111,3 @@ void *_Heap_Allocate(
 
   return ptr;
 }
-

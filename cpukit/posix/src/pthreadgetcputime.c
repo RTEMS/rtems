@@ -29,4 +29,3 @@ int pthread_attr_getcputime(
   *clock_allowed = attr->cputime_clock_allowed;
   return 0;
 }
-

@@ -102,4 +102,3 @@ int _link_r(
   return link( existing, new );
 }
 #endif
-

@@ -217,5 +217,3 @@ int unmount(
 
   return 0;
 }
-
-

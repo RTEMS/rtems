@@ -61,4 +61,3 @@ uint32_t   _TOD_To_seconds(
 
   return( time );
 }
-

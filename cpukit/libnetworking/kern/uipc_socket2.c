@@ -962,4 +962,3 @@ pru_sense_null(struct socket *so, struct stat *sb)
 	sb->st_blksize = so->so_snd.sb_hiwat;
 	return 0;
 }
-

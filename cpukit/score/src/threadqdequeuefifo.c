@@ -83,4 +83,3 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
   }
   return NULL;                /* this is only to prevent warnings */
 }
-

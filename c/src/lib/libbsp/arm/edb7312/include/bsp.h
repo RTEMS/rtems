@@ -66,4 +66,3 @@ extern rtems_configuration_table BSP_Configuration;
 #endif
 
 #endif /* __BSP_H__ */
-

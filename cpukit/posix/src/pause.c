@@ -38,4 +38,3 @@ int pause( void )
 
   return status;
 }
-

@@ -135,6 +135,3 @@ typedef volatile unsigned int *   portl;  /* 32-bit port */
 #define WPREL12  (*(portw) (MBASE+0x064C)) /* Timer Preload 1 Reg 2     */
 #define WPREL22  (*(portw) (MBASE+0x064E)) /* Timer Preload 2 Reg 2     */
 #define TCOM2    (*(portw) (MBASE+0x0650)) /* Timer Compare Reg 2       */
-
-
-

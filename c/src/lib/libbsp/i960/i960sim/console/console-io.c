@@ -65,4 +65,3 @@ int console_inbyte_nonblocking(
     return c;
   return -1;
 }
-

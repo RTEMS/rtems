@@ -74,4 +74,3 @@ extern const void               *motorolaIntSwizzle(motorolaBoard board);
 
 
 #endif /* LIBBSP_POWERPC_SHARED_MOTOROLA_MOTOROLA_H */
-

@@ -215,5 +215,3 @@ void bsp_start(void)
 #endif  
 
 }
-
-

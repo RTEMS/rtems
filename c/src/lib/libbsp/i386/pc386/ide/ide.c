@@ -314,4 +314,3 @@ ide_ctrl_fns_t pc386_ide_ctrl_fns = {
   pc386_ide_write_block,
   pc386_ide_config_io_speed
 };
-

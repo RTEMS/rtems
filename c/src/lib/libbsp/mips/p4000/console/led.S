@@ -20,4 +20,3 @@ ENDFRAME(sbddisplay)
 FRAME(sbdblank,sp,0,ra)
 	j	ra
 ENDFRAME(sbdblank)
-

@@ -221,5 +221,3 @@ rtc_read(rtems_time_of_day *tod)
 
   return (long int)sec;
 } /* rtc_read */
-
-

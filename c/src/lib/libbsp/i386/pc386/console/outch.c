@@ -326,4 +326,3 @@ int whereY( void )
 {
   return column;
 }
-

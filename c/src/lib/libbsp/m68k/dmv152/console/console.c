@@ -237,4 +237,3 @@ rtems_device_driver console_control(
 {
   return rtems_termios_ioctl (arg);
 }
-

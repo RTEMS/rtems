@@ -136,9 +136,3 @@ void ITRON_Init( void )
   exd_tsk();
   assert(0);
 }
-
-
-
-
-
-

@@ -934,5 +934,3 @@ FRAME(set_memory_size,sp,0,ra)
 	sw	a0, mem_size
 	j	ra
 ENDFRAME(set_memory_size)
-
-

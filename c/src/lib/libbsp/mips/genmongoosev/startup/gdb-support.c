@@ -152,4 +152,3 @@ void putDebugChar (char c)
       * printf("bpc is %08X, bpc_mask is %08X, dcic is now %08X\n", reg, mask, dcic ); *
    }
 */
-

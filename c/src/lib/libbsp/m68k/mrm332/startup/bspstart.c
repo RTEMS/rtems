@@ -80,4 +80,3 @@ void bsp_start( void )
 
   /* Clock_exit is done as an atexit() function */
 }
-

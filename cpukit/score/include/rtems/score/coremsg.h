@@ -297,4 +297,3 @@ void _CORE_message_queue_Insert_message(
  
 #endif
 /*  end of include file */
-

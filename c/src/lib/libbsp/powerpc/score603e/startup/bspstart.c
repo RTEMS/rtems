@@ -291,4 +291,3 @@ void bsp_start( void )
   data_cache_enable ();
 #endif
 }
-

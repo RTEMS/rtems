@@ -479,4 +479,3 @@ int mbx8xx_console_get_configuration(void)
 #endif
 
 }
-

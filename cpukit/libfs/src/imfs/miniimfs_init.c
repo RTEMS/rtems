@@ -68,6 +68,3 @@ int miniIMFS_initialize(
       &rtems_filesystem_null_handlers   /* for directories */
    );
 }
-
-
-

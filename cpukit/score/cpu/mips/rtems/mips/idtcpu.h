@@ -475,4 +475,3 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #endif
 
 #endif /* _IDTCPU_H__ */
-

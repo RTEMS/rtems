@@ -413,4 +413,3 @@ done_broad:
 	AUTH_DESTROY(unix_auth);
 	return (stat);
 }
-

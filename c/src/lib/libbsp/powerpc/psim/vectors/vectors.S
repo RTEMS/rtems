@@ -120,4 +120,3 @@ SYM (__vectors):
 
 	li      r0, PPC_IRQ_DECREMENTER
 	b       PROC (_ISR_Handler)
-

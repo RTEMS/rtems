@@ -71,4 +71,3 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
 
   return status;
 }
-

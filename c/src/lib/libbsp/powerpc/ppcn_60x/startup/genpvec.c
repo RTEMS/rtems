@@ -351,4 +351,3 @@ void En_Ext_Interrupt(int level)
 
 	_ISR_Enable(Irql);
 }
-

@@ -444,4 +444,3 @@ int main(
   printf( "\n\n*** END OF MOUNT/UNMOUNT TEST ***\n" );
   rtems_test_exit(0);
 }
-

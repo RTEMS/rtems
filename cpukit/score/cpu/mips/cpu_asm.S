@@ -1086,4 +1086,3 @@ FRAME(mips_break,sp,0,ra)
         NOP
        .set    reorder
 ENDFRAME(mips_break)
-

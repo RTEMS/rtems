@@ -122,4 +122,3 @@ dequeue:
 #endif
   return( the_thread );
 }
-

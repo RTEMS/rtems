@@ -77,6 +77,3 @@ int IMFS_rmnod(
   return 0;
 
 }
-
-
-

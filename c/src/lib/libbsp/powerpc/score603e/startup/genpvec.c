@@ -200,6 +200,3 @@ rtems_isr external_exception_ISR (
   }
 
 }
-
-
-

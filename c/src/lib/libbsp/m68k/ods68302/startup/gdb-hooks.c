@@ -73,4 +73,3 @@ void exceptionHandler(unsigned int vector, void *handler)
 
   interrupt_table[vector] = (uint32_t) &gdb_jump_table[vector];
 }
-
