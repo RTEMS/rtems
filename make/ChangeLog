@@ -1,4 +1,9 @@
 
+2001-03-30	Eric Valette <valette@crf.canon.fr>
+
+	* custom/mbx860_005b.cfg:  This switches the MBX8xx BSP to the
+	use the "new exception processing model."
+
 2001-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/genmongossev.cfg: New file.
