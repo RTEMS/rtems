@@ -17,8 +17,8 @@ include_libcpu_HEADERS = cpu.h cpuModel.h cache.h
 S_FILES = cpuModel.S idtr.S
 OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 AM_CPPFLAGS += -I$(srcdir)
 
@@ -41,4 +41,4 @@ CLEANFILES = cache.h
 EXTRA_DIST = cache.c cache_.h cpu.h cpuModel.S cpuModel.h displayCpu.c idt.c \
     idtr.S page.c registers.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

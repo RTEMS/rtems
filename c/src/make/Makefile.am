@@ -32,4 +32,4 @@ endif
 rtems_make_compilersdir = $(rtems_makedir)/compilers
 dist_rtems_make_compilers_DATA = compilers/gcc-target-default.cfg
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

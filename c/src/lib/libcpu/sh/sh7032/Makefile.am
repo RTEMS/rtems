@@ -4,8 +4,8 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts
@@ -101,4 +101,4 @@ all-local: $(ARCH) $(PGMS) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGMS)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
