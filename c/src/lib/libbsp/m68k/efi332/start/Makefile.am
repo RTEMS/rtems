@@ -7,8 +7,8 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 S_FILES = except_vect_332_ROM.S
 OBJS += $(S_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -67,4 +67,4 @@ all-local: $(ARCH) $(OBJS) $(ARCH)/start.$(OBJEXT) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.c except_vect_332_ROM.S ram_init.ld ram_init.sed
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
