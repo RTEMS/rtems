@@ -9,4 +9,3 @@ SUBDIRS = include @RTEMS_CPU_MODEL@
 
 include $(top_srcdir)/../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../automake/local.am
-
