@@ -98,51 +98,51 @@ extern "C" {
  */
 
 typedef struct {
-  volatile unsigned32  Control;                              /* offset 0x00 */
-  volatile unsigned32  Software_Reset;                       /* offset 0x04 */
-  volatile unsigned32  Power_Down;                           /* offset 0x08 */
-  volatile unsigned32  Unimplemented_0;                      /* offset 0x0c */
-  volatile unsigned32  Memory_Configuration;                 /* offset 0x10 */
-  volatile unsigned32  IO_Configuration;                     /* offset 0x14 */
-  volatile unsigned32  Wait_State_Configuration;             /* offset 0x18 */
-  volatile unsigned32  Unimplemented_1;                      /* offset 0x1c */
-  volatile unsigned32  Memory_Access_0;                      /* offset 0x20 */
-  volatile unsigned32  Memory_Access_1;                      /* offset 0x24 */
-  volatile unsigned32  Unimplemented_2[ 7 ];                 /* offset 0x28 */
-  volatile unsigned32  Interrupt_Shape;                      /* offset 0x44 */
-  volatile unsigned32  Interrupt_Pending;                    /* offset 0x48 */
-  volatile unsigned32  Interrupt_Mask;                       /* offset 0x4c */
-  volatile unsigned32  Interrupt_Clear;                      /* offset 0x50 */
-  volatile unsigned32  Interrupt_Force;                      /* offset 0x54 */
-  volatile unsigned32  Unimplemented_3[ 2 ];                 /* offset 0x58 */
+  volatile uint32_t    Control;                              /* offset 0x00 */
+  volatile uint32_t    Software_Reset;                       /* offset 0x04 */
+  volatile uint32_t    Power_Down;                           /* offset 0x08 */
+  volatile uint32_t    Unimplemented_0;                      /* offset 0x0c */
+  volatile uint32_t    Memory_Configuration;                 /* offset 0x10 */
+  volatile uint32_t    IO_Configuration;                     /* offset 0x14 */
+  volatile uint32_t    Wait_State_Configuration;             /* offset 0x18 */
+  volatile uint32_t    Unimplemented_1;                      /* offset 0x1c */
+  volatile uint32_t    Memory_Access_0;                      /* offset 0x20 */
+  volatile uint32_t    Memory_Access_1;                      /* offset 0x24 */
+  volatile uint32_t    Unimplemented_2[ 7 ];                 /* offset 0x28 */
+  volatile uint32_t    Interrupt_Shape;                      /* offset 0x44 */
+  volatile uint32_t    Interrupt_Pending;                    /* offset 0x48 */
+  volatile uint32_t    Interrupt_Mask;                       /* offset 0x4c */
+  volatile uint32_t    Interrupt_Clear;                      /* offset 0x50 */
+  volatile uint32_t    Interrupt_Force;                      /* offset 0x54 */
+  volatile uint32_t    Unimplemented_3[ 2 ];                 /* offset 0x58 */
                                                              /* offset 0x60 */
-  volatile unsigned32  Watchdog_Program_and_Timeout_Acknowledge; 
-  volatile unsigned32  Watchdog_Trap_Door_Set;               /* offset 0x64 */
-  volatile unsigned32  Unimplemented_4[ 6 ];                 /* offset 0x68 */
-  volatile unsigned32  Real_Time_Clock_Counter;              /* offset 0x80 */
-  volatile unsigned32  Real_Time_Clock_Scalar;               /* offset 0x84 */
-  volatile unsigned32  General_Purpose_Timer_Counter;        /* offset 0x88 */
-  volatile unsigned32  General_Purpose_Timer_Scalar;         /* offset 0x8c */
-  volatile unsigned32  Unimplemented_5[ 2 ];                 /* offset 0x90 */
-  volatile unsigned32  Timer_Control;                        /* offset 0x98 */
-  volatile unsigned32  Unimplemented_6;                      /* offset 0x9c */
-  volatile unsigned32  System_Fault_Status;                  /* offset 0xa0 */
-  volatile unsigned32  First_Failing_Address;                /* offset 0xa4 */
-  volatile unsigned32  First_Failing_Data;                   /* offset 0xa8 */
-  volatile unsigned32  First_Failing_Syndrome_and_Check_Bits;/* offset 0xac */
-  volatile unsigned32  Error_and_Reset_Status;               /* offset 0xb0 */
-  volatile unsigned32  Error_Mask;                           /* offset 0xb4 */
-  volatile unsigned32  Unimplemented_7[ 2 ];                 /* offset 0xb8 */
-  volatile unsigned32  Debug_Control;                        /* offset 0xc0 */
-  volatile unsigned32  Breakpoint;                           /* offset 0xc4 */
-  volatile unsigned32  Watchpoint;                           /* offset 0xc8 */
-  volatile unsigned32  Unimplemented_8;                      /* offset 0xcc */
-  volatile unsigned32  Test_Control;                         /* offset 0xd0 */
-  volatile unsigned32  Test_Data;                            /* offset 0xd4 */
-  volatile unsigned32  Unimplemented_9[ 2 ];                 /* offset 0xd8 */
-  volatile unsigned32  UART_Channel_A;                       /* offset 0xe0 */
-  volatile unsigned32  UART_Channel_B;                       /* offset 0xe4 */
-  volatile unsigned32  UART_Status;                          /* offset 0xe8 */
+  volatile uint32_t    Watchdog_Program_and_Timeout_Acknowledge; 
+  volatile uint32_t    Watchdog_Trap_Door_Set;               /* offset 0x64 */
+  volatile uint32_t    Unimplemented_4[ 6 ];                 /* offset 0x68 */
+  volatile uint32_t    Real_Time_Clock_Counter;              /* offset 0x80 */
+  volatile uint32_t    Real_Time_Clock_Scalar;               /* offset 0x84 */
+  volatile uint32_t    General_Purpose_Timer_Counter;        /* offset 0x88 */
+  volatile uint32_t    General_Purpose_Timer_Scalar;         /* offset 0x8c */
+  volatile uint32_t    Unimplemented_5[ 2 ];                 /* offset 0x90 */
+  volatile uint32_t    Timer_Control;                        /* offset 0x98 */
+  volatile uint32_t    Unimplemented_6;                      /* offset 0x9c */
+  volatile uint32_t    System_Fault_Status;                  /* offset 0xa0 */
+  volatile uint32_t    First_Failing_Address;                /* offset 0xa4 */
+  volatile uint32_t    First_Failing_Data;                   /* offset 0xa8 */
+  volatile uint32_t    First_Failing_Syndrome_and_Check_Bits;/* offset 0xac */
+  volatile uint32_t    Error_and_Reset_Status;               /* offset 0xb0 */
+  volatile uint32_t    Error_Mask;                           /* offset 0xb4 */
+  volatile uint32_t    Unimplemented_7[ 2 ];                 /* offset 0xb8 */
+  volatile uint32_t    Debug_Control;                        /* offset 0xc0 */
+  volatile uint32_t    Breakpoint;                           /* offset 0xc4 */
+  volatile uint32_t    Watchpoint;                           /* offset 0xc8 */
+  volatile uint32_t    Unimplemented_8;                      /* offset 0xcc */
+  volatile uint32_t    Test_Control;                         /* offset 0xd0 */
+  volatile uint32_t    Test_Data;                            /* offset 0xd4 */
+  volatile uint32_t    Unimplemented_9[ 2 ];                 /* offset 0xd8 */
+  volatile uint32_t    UART_Channel_A;                       /* offset 0xe0 */
+  volatile uint32_t    UART_Channel_B;                       /* offset 0xe4 */
+  volatile uint32_t    UART_Status;                          /* offset 0xe8 */
 } ERC32_Register_Map;
 
 #endif
@@ -342,7 +342,7 @@ extern ERC32_Register_Map ERC32_MEC;
 
 #define ERC32_Force_interrupt( _source ) \
   do { \
-    unsigned32 _level; \
+    uint32_t   _level; \
     \
     _level = sparc_disable_interrupts(); \
     ERC32_MEC.Test_Control = ERC32_MEC.Test_Control | 0x80000; \
@@ -358,7 +358,7 @@ extern ERC32_Register_Map ERC32_MEC;
  
 #define ERC32_Mask_interrupt( _source ) \
   do { \
-    unsigned32 _level; \
+    uint32_t   _level; \
     \
     _level = sparc_disable_interrupts(); \
       ERC32_MEC.Interrupt_Mask |= (1 << (_source)); \
@@ -367,7 +367,7 @@ extern ERC32_Register_Map ERC32_MEC;
  
 #define ERC32_Unmask_interrupt( _source ) \
   do { \
-    unsigned32 _level; \
+    uint32_t   _level; \
     \
     _level = sparc_disable_interrupts(); \
       ERC32_MEC.Interrupt_Mask &= ~(1 << (_source)); \
@@ -376,8 +376,8 @@ extern ERC32_Register_Map ERC32_MEC;
 
 #define ERC32_Disable_interrupt( _source, _previous ) \
   do { \
-    unsigned32 _level; \
-    unsigned32 _mask = 1 << (_source); \
+    uint32_t   _level; \
+    uint32_t   _mask = 1 << (_source); \
     \
     _level = sparc_disable_interrupts(); \
       (_previous) = ERC32_MEC.Interrupt_Mask; \
@@ -388,8 +388,8 @@ extern ERC32_Register_Map ERC32_MEC;
  
 #define ERC32_Restore_interrupt( _source, _previous ) \
   do { \
-    unsigned32 _level; \
-    unsigned32 _mask = 1 << (_source); \
+    uint32_t   _level; \
+    uint32_t   _mask = 1 << (_source); \
     \
     _level = sparc_disable_interrupts(); \
       ERC32_MEC.Interrupt_Mask = \
@@ -448,7 +448,7 @@ extern ERC32_Register_Map ERC32_MEC;
 #define ERC32_MEC_TIMER_COUNTER_DEFINED_MASK       0x0000000F
 #define ERC32_MEC_TIMER_COUNTER_CURRENT_MODE_MASK  0x00000005
 
-extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
+extern uint32_t   _ERC32_MEC_Timer_Control_Mirror;
 
 /*
  *  This macros manipulate the General Purpose Timer portion of the 
@@ -458,9 +458,9 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
 
 #define ERC32_MEC_Set_General_Purpose_Timer_Control( _value ) \
   do { \
-    unsigned32 _level; \
-    unsigned32 _control; \
-    unsigned32 __value; \
+    uint32_t   _level; \
+    uint32_t   _control; \
+    uint32_t   __value; \
     \
     __value = ((_value) & 0x0f); \
     _level = sparc_disable_interrupts(); \
@@ -487,9 +487,9 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
  
 #define ERC32_MEC_Set_Real_Time_Clock_Timer_Control( _value ) \
   do { \
-    unsigned32 _level; \
-    unsigned32 _control; \
-    unsigned32 __value; \
+    uint32_t   _level; \
+    uint32_t   _control; \
+    uint32_t   __value; \
     \
     __value = ((_value) & 0x0f) << 8; \
     _level = sparc_disable_interrupts(); \

@@ -23,7 +23,7 @@ static const char digits[16] = "0123456789abcdef";
 
 /* Simple integer-to-string conversion */
 
-void itos(unsigned32 u, char *s)
+void itos(uint32_t   u, char *s)
 {
   int i;
 
@@ -44,7 +44,7 @@ rtems_isr bsp_spurious_handler(
 )
 {
   char line[ 80 ];
-  rtems_unsigned32 real_trap;
+  uint32_t         real_trap;
 
   real_trap = SPARC_REAL_TRAP_NUMBER(trap);
 
@@ -161,9 +161,9 @@ rtems_isr bsp_spurious_handler(
 
 void bsp_spurious_initialize()
 {
-  rtems_unsigned32 trap;
-  unsigned32 level = 15;
-  unsigned32 mask;
+  uint32_t         trap;
+  uint32_t   level = 15;
+  uint32_t   mask;
 
   sparc_disable_interrupts(level);
   mask = ERC32_MEC.Interrupt_Mask;

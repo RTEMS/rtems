@@ -17,11 +17,11 @@
 
 void erc32_sonic_write_register(
   void       *base,
-  unsigned32  regno,
-  unsigned32  value
+  uint32_t    regno,
+  uint32_t    value
 )
 {
-  volatile unsigned32 *p = base;
+  volatile uint32_t   *p = base;
 
 #if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
   printf( "%p Write 0x%04x to %s (0x%02x)\n",
@@ -31,13 +31,13 @@ void erc32_sonic_write_register(
   p[regno] = 0x0ffff & value;
 }
 
-unsigned32 erc32_sonic_read_register(
+uint32_t   erc32_sonic_read_register(
   void       *base,
-  unsigned32  regno
+  uint32_t    regno
 )
 {
-  volatile unsigned32 *p = base;
-  unsigned32           value;
+  volatile uint32_t   *p = base;
+  uint32_t             value;
 
   value = p[regno];
 #if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)

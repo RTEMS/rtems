@@ -39,7 +39,7 @@
  *  Clock ticks since initialization
  */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t         Clock_driver_ticks;
 
 /*
  *  This is the value programmed into the count down timer.  It
@@ -48,7 +48,7 @@ volatile rtems_unsigned32 Clock_driver_ticks;
  *  the simulator.
  */
 
-extern rtems_unsigned32 CPU_SPARC_CLICKS_PER_TICK;
+extern uint32_t         CPU_SPARC_CLICKS_PER_TICK;
 
 rtems_isr_entry  Old_ticker;
 
@@ -229,7 +229,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)

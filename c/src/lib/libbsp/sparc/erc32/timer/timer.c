@@ -60,7 +60,7 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned32  total;
+  uint32_t          total;
 
   total = ERC32_MEC.General_Purpose_Timer_Counter;
 

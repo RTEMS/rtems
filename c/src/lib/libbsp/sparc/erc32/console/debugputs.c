@@ -101,7 +101,7 @@ void DEBUG_puts(
 )
 {
   char *s;
-  unsigned32 old_level;
+  uint32_t   old_level;
 
   ERC32_Disable_interrupt( ERC32_INTERRUPT_UART_A_RX_TX, old_level );
     for ( s = string ; *s ; s++ ) 
