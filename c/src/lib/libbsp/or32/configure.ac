@@ -4,7 +4,7 @@
 
 AC_PREREQ(2.52)
 AC_INIT([rtems-c-src-lib-libbsp-or32],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
-AC_CONFIG_SRCDIR([or1ksim])
+AC_CONFIG_SRCDIR([or32sim])
 RTEMS_TOP(../../../../..)
 AC_CONFIG_AUX_DIR(../../../../..)
 

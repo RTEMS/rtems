@@ -1,5 +1,10 @@
 2002-08-06	Joel Sherrill <joel@OARcorp.com>
 
+	* acinclude.m4, configure.ac: Update and fix minor things so this
+	BSP compiles and almost completely links.
+
+2002-08-06	Joel Sherrill <joel@OARcorp.com>
+
 	* .cvsignore: New file.
 
 2002-08-06	Joel Sherrill <joel@OARcorp.com>
