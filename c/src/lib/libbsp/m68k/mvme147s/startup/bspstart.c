@@ -41,7 +41,7 @@ char *rtems_progname;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */
 
 /*
@@ -54,7 +54,7 @@ void bsp_start( void )
 {
   m68k_isr_entry       *monitors_vector_table;
   int                   index;
-  rtems_unsigned8       node_number;
+  uint8_t               node_number;
   extern void          *_WorkspaceBase;
   extern void          *_RamSize;
   extern unsigned long  _M68k_Ramsize;
@@ -95,7 +95,7 @@ void bsp_start( void )
 
   
   node_number = 
-    (rtems_unsigned8) 
+    (uint8_t) 
     (Configuration.User_multiprocessing_table->node - 1) & 0xF;
   /* Get and store node ID, first node_number = 0 */
   vme_gcsr->board_identification = node_number;

@@ -36,18 +36,18 @@
 
 shm_config_table BSP_shm_cfgtbl;
 
-rtems_unsigned32 *BSP_int_address()
+uint32_t         *BSP_int_address()
 {
-  rtems_unsigned32 id, offset;
+  uint32_t         id, offset;
 
-  id      = (rtems_unsigned32) vme_lcsr->gcsr_base_address;
+  id      = (uint32_t) vme_lcsr->gcsr_base_address;
   offset  = (id << 4) & 0xF0;
   offset |= 0xffff0003; /* points to GCSR global 1 */
-  return( (rtems_unsigned32 * ) offset );
+  return( (uint32_t         * ) offset );
 }
 
 void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
+  uint32_t           localnode,
   shm_config_table **shmcfg
 )
 {

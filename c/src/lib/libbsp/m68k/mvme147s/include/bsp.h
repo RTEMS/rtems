@@ -51,45 +51,45 @@ extern "C" {
 
 struct pcc_map {
   /* 32 bit registers */
-  rtems_unsigned32 dma_table_address;            /* 0xfffe1000 */
-  rtems_unsigned32 dma_data_address;             /* 0xfffe1004 */
-  rtems_unsigned32 dma_bytecount;                /* 0xfffe1008 */
-  rtems_unsigned32 dma_data_holding;             /* 0xfffe100c */
+  uint32_t         dma_table_address;            /* 0xfffe1000 */
+  uint32_t         dma_data_address;             /* 0xfffe1004 */
+  uint32_t         dma_bytecount;                /* 0xfffe1008 */
+  uint32_t         dma_data_holding;             /* 0xfffe100c */
 
   /* 16 bit registers */
-  rtems_unsigned16 timer1_preload;               /* 0xfffe1010 */
-  rtems_unsigned16 timer1_count;                 /* 0xfffe1012 */
-  rtems_unsigned16 timer2_preload;               /* 0xfffe1014 */
-  rtems_unsigned16 timer2_count;                 /* 0xfffe1016 */
+  uint16_t         timer1_preload;               /* 0xfffe1010 */
+  uint16_t         timer1_count;                 /* 0xfffe1012 */
+  uint16_t         timer2_preload;               /* 0xfffe1014 */
+  uint16_t         timer2_count;                 /* 0xfffe1016 */
 
   /* 8 bit registers */
-  rtems_unsigned8 timer1_int_control;            /* 0xfffe1018 */
-  rtems_unsigned8 timer1_control;                /* 0xfffe1019 */
-  rtems_unsigned8 timer2_int_control;            /* 0xfffe101a */
-  rtems_unsigned8 timer2_control;                /* 0xfffe101b */
+  uint8_t         timer1_int_control;            /* 0xfffe1018 */
+  uint8_t         timer1_control;                /* 0xfffe1019 */
+  uint8_t         timer2_int_control;            /* 0xfffe101a */
+  uint8_t         timer2_control;                /* 0xfffe101b */
 
-  rtems_unsigned8 acfail_int_control;            /* 0xfffe101c */
-  rtems_unsigned8 watchdog_control;              /* 0xfffe101d */
+  uint8_t         acfail_int_control;            /* 0xfffe101c */
+  uint8_t         watchdog_control;              /* 0xfffe101d */
 
-  rtems_unsigned8 printer_int_control;           /* 0xfffe101e */
-  rtems_unsigned8 printer_control;               /* 0xfffe102f */
+  uint8_t         printer_int_control;           /* 0xfffe101e */
+  uint8_t         printer_control;               /* 0xfffe102f */
 
-  rtems_unsigned8 dma_int_control;               /* 0xfffe1020 */
-  rtems_unsigned8 dma_control;                   /* 0xfffe1021 */
-  rtems_unsigned8 bus_error_int_control;         /* 0xfffe1022 */
-  rtems_unsigned8 dma_status;                    /* 0xfffe1023 */
-  rtems_unsigned8 abort_int_control;             /* 0xfffe1024 */
-  rtems_unsigned8 table_address_function_code;   /* 0xfffe1025 */
-  rtems_unsigned8 serial_port_int_control;       /* 0xfffe1026 */
-  rtems_unsigned8 general_purpose_control;       /* 0xfffe1027 */
-  rtems_unsigned8 lan_int_control;               /* 0xfffe1028 */
-  rtems_unsigned8 general_purpose_status;        /* 0xfffe1029 */
-  rtems_unsigned8 scsi_port_int_control;         /* 0xfffe102a */
-  rtems_unsigned8 slave_base_address;            /* 0xfffe102b */
-  rtems_unsigned8 software_int_1_control;        /* 0xfffe102c */
-  rtems_unsigned8 int_base_vector;               /* 0xfffe102d */
-  rtems_unsigned8 software_int_2_control;        /* 0xfffe102e */
-  rtems_unsigned8 revision_level;                /* 0xfffe102f */
+  uint8_t         dma_int_control;               /* 0xfffe1020 */
+  uint8_t         dma_control;                   /* 0xfffe1021 */
+  uint8_t         bus_error_int_control;         /* 0xfffe1022 */
+  uint8_t         dma_status;                    /* 0xfffe1023 */
+  uint8_t         abort_int_control;             /* 0xfffe1024 */
+  uint8_t         table_address_function_code;   /* 0xfffe1025 */
+  uint8_t         serial_port_int_control;       /* 0xfffe1026 */
+  uint8_t         general_purpose_control;       /* 0xfffe1027 */
+  uint8_t         lan_int_control;               /* 0xfffe1028 */
+  uint8_t         general_purpose_status;        /* 0xfffe1029 */
+  uint8_t         scsi_port_int_control;         /* 0xfffe102a */
+  uint8_t         slave_base_address;            /* 0xfffe102b */
+  uint8_t         software_int_1_control;        /* 0xfffe102c */
+  uint8_t         int_base_vector;               /* 0xfffe102d */
+  uint8_t         software_int_2_control;        /* 0xfffe102e */
+  uint8_t         revision_level;                /* 0xfffe102f */
 };
 
 #define pcc      ((volatile struct pcc_map * const) 0xfffe1000)
@@ -97,56 +97,56 @@ struct pcc_map {
 /* VME chip configuration registers */
 
 struct vme_lcsr_map {
-  rtems_unsigned8 unused_1;
-  rtems_unsigned8 system_controller;             /* 0xfffe2001 */
-  rtems_unsigned8 unused_2;
-  rtems_unsigned8 vme_bus_requester;             /* 0xfffe2003 */
-  rtems_unsigned8 unused_3;
-  rtems_unsigned8 master_configuration;          /* 0xfffe2005 */
-  rtems_unsigned8 unused_4;
-  rtems_unsigned8 slave_configuration;           /* 0xfffe2007 */
-  rtems_unsigned8 unused_5;
-  rtems_unsigned8 timer_configuration;           /* 0xfffe2009 */
-  rtems_unsigned8 unused_6;
-  rtems_unsigned8 slave_address_modifier;        /* 0xfffe200b */
-  rtems_unsigned8 unused_7;
-  rtems_unsigned8 master_address_modifier;       /* 0xfffe200d */
-  rtems_unsigned8 unused_8;
-  rtems_unsigned8 interrupt_handler_mask;        /* 0xfffe200f */
-  rtems_unsigned8 unused_9;
-  rtems_unsigned8 utility_interrupt_mask;        /* 0xfffe2011 */
-  rtems_unsigned8 unused_10;
-  rtems_unsigned8 utility_interrupt_vector;      /* 0xfffe2013 */
-  rtems_unsigned8 unused_11;
-  rtems_unsigned8 interrupt_request;             /* 0xfffe2015 */
-  rtems_unsigned8 unused_12;
-  rtems_unsigned8 vme_bus_status_id;             /* 0xfffe2017 */
-  rtems_unsigned8 unused_13;
-  rtems_unsigned8 bus_error_status;              /* 0xfffe2019 */
-  rtems_unsigned8 unused_14;
-  rtems_unsigned8 gcsr_base_address;             /* 0xfffe201b */
+  uint8_t         unused_1;
+  uint8_t         system_controller;             /* 0xfffe2001 */
+  uint8_t         unused_2;
+  uint8_t         vme_bus_requester;             /* 0xfffe2003 */
+  uint8_t         unused_3;
+  uint8_t         master_configuration;          /* 0xfffe2005 */
+  uint8_t         unused_4;
+  uint8_t         slave_configuration;           /* 0xfffe2007 */
+  uint8_t         unused_5;
+  uint8_t         timer_configuration;           /* 0xfffe2009 */
+  uint8_t         unused_6;
+  uint8_t         slave_address_modifier;        /* 0xfffe200b */
+  uint8_t         unused_7;
+  uint8_t         master_address_modifier;       /* 0xfffe200d */
+  uint8_t         unused_8;
+  uint8_t         interrupt_handler_mask;        /* 0xfffe200f */
+  uint8_t         unused_9;
+  uint8_t         utility_interrupt_mask;        /* 0xfffe2011 */
+  uint8_t         unused_10;
+  uint8_t         utility_interrupt_vector;      /* 0xfffe2013 */
+  uint8_t         unused_11;
+  uint8_t         interrupt_request;             /* 0xfffe2015 */
+  uint8_t         unused_12;
+  uint8_t         vme_bus_status_id;             /* 0xfffe2017 */
+  uint8_t         unused_13;
+  uint8_t         bus_error_status;              /* 0xfffe2019 */
+  uint8_t         unused_14;
+  uint8_t         gcsr_base_address;             /* 0xfffe201b */
 };
 
 #define vme_lcsr      ((volatile struct vme_lcsr_map * const) 0xfffe2000)
 
 
 struct vme_gcsr_map {
-  rtems_unsigned8 unused_1;
-  rtems_unsigned8 global_0;                      /* 0xfffe2021 */
-  rtems_unsigned8 unused_2;
-  rtems_unsigned8 global_1;                      /* 0xfffe2023 */
-  rtems_unsigned8 unused_3;
-  rtems_unsigned8 board_identification;          /* 0xfffe2025 */
-  rtems_unsigned8 unused_4;
-  rtems_unsigned8 general_purpose_0;             /* 0xfffe2027 */
-  rtems_unsigned8 unused_5;
-  rtems_unsigned8 general_purpose_1;             /* 0xfffe2029 */
-  rtems_unsigned8 unused_6;
-  rtems_unsigned8 general_purpose_2;             /* 0xfffe202b */
-  rtems_unsigned8 unused_7;
-  rtems_unsigned8 general_purpose_3;             /* 0xfffe202d */
-  rtems_unsigned8 unused_8;
-  rtems_unsigned8 general_purpose_4;             /* 0xfffe202f */
+  uint8_t         unused_1;
+  uint8_t         global_0;                      /* 0xfffe2021 */
+  uint8_t         unused_2;
+  uint8_t         global_1;                      /* 0xfffe2023 */
+  uint8_t         unused_3;
+  uint8_t         board_identification;          /* 0xfffe2025 */
+  uint8_t         unused_4;
+  uint8_t         general_purpose_0;             /* 0xfffe2027 */
+  uint8_t         unused_5;
+  uint8_t         general_purpose_1;             /* 0xfffe2029 */
+  uint8_t         unused_6;
+  uint8_t         general_purpose_2;             /* 0xfffe202b */
+  uint8_t         unused_7;
+  uint8_t         general_purpose_3;             /* 0xfffe202d */
+  uint8_t         unused_8;
+  uint8_t         general_purpose_4;             /* 0xfffe202f */
 };
 
 #define vme_gcsr      ((volatile struct vme_gcsr_map * const) 0xfffe2020)
