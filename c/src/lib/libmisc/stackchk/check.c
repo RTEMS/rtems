@@ -509,7 +509,7 @@ void Stack_check_Dump_usage( void )
 
   printf("Stack usage by thread\n");
   printf(
-    "   ID          NAME         LOW        HIGH      AVAILABLE     USED\n"
+    "    ID      NAME       LOW        HIGH     AVAILABLE      USED\n"
   );
 
   for ( class_index = OBJECTS_CLASSES_FIRST ; 
