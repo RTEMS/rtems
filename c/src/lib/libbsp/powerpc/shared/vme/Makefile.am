@@ -2,12 +2,7 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
-
-H_FILES = VMEConfig.h  VME.h
-
-C_FILES = vmeconfig.c
-
-EXTRA_DIST = vmeconfig.c
+# FIXME: This doesn't make much sense here
+EXTRA_DIST = vmeconfig.c VMEConfig.h VME.h
 
 include $(top_srcdir)/../../../automake/local.am

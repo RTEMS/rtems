@@ -1,3 +1,20 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootloader/Makefile.am: Put all files into EXTRA_DIST.
+	* vme/Makefile.am: Ditto.
+	* console/Makefile.am: Move H_FILES to include_bsp_HEADERS.
+	Add preinstallation dirstamp support.
+	* irq/Makefile.am: Ditto.
+	* motorola/Makefile.am: Ditto.
+	* openpic/Makefile.am: Ditto.
+	* pci/Makefile.am: Ditto.
+	* residual/Makefile.am: Ditto.
+	* vectors/Makefile.am: Ditto.
+	* Makefile.am: Remove empty lines.
+	* clock/Makefile.am: Ditto.
+	* include/Makefile.am: Ditto.
+	* startup/Makefile.am: Ditto.
+
 2003-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 510/bsps

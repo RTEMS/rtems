@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 C_FILES = p_clock.c
 
 EXTRA_DIST = p_clock.c

@@ -2,22 +2,24 @@
 ## $Id$
 ##
 
-
 C_FILES = pci.c detect_raven_bridge.c pcifinddevice.c
 
-H_FILES = pci.h
-
-$(PROJECT_INCLUDE)/bsp:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/bsp/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
-    $(H_FILES:%.h=$(PROJECT_INCLUDE)/bsp/%.h)
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS = pci.h
 
 all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = pci.c pci.h detect_raven_bridge.c pcifinddevice.c
+EXTRA_DIST = pci.c detect_raven_bridge.c pcifinddevice.c
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
+$(PROJECT_INCLUDE)/bsp/pci.h: pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pci.h
 
 include $(top_srcdir)/../../../automake/local.am
