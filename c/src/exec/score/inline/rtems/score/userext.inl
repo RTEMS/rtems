@@ -99,29 +99,5 @@ STATIC INLINE void _User_extensions_Thread_switch (
   }
 }
 
-/*PAGE
- *
- *  _User_extensions_Thread_post_switch
- *
- */
- 
-STATIC INLINE void _User_extensions_Thread_post_switch (
-  Thread_Control *executing
-)
-{
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
- 
-  for ( the_node = _User_extensions_List.first ;
-        !_Chain_Is_tail( &_User_extensions_List, the_node ) ;
-        the_node = the_node->next ) {
- 
-    the_extension = (User_extensions_Control *) the_node;
- 
-    if ( the_extension->Callouts.thread_post_switch != NULL )
-      (*the_extension->Callouts.thread_post_switch)( executing );
-  }
-}
-
 #endif
 /* end of include file */

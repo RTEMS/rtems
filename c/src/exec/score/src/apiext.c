@@ -81,4 +81,25 @@ void _API_extensions_Run_postdriver( void )
   }
 }
 
+/*PAGE
+ *
+ *  _API_extensions_Run_postswitch
+ */
+
+void _API_extensions_Run_postswitch( void )
+{
+  Chain_Node             *the_node;
+  API_extensions_Control *the_extension;
+ 
+  for ( the_node = _API_extensions_List.first ;
+        !_Chain_Is_tail( &_API_extensions_List, the_node ) ;
+        the_node = the_node->next ) {
+ 
+    the_extension = (API_extensions_Control *) the_node;
+ 
+    if ( the_extension->postswitch_hook )
+      (*the_extension->postswitch_hook)( _Thread_Executing );
+  }
+}
+
 /* end of file */

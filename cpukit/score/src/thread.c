@@ -14,6 +14,7 @@
  */
 
 #include <rtems/system.h>
+#include <rtems/score/apiext.h>
 #include <rtems/score/context.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
@@ -200,7 +201,10 @@ void _Thread_Dispatch( void )
 
   _ISR_Enable( level );
 
-  _User_extensions_Thread_post_switch( executing );
+  if ( executing->do_post_task_switch_extension ) {
+    executing->do_post_task_switch_extension = FALSE;
+    _API_extensions_Run_postswitch();
+  }
  
 }
 
@@ -813,6 +817,7 @@ void _Thread_Load_environment(
     is_fp = TRUE;
   }
 
+  the_thread->do_post_task_switch_extension = FALSE;
   the_thread->is_preemptible = the_thread->Start.is_preemptible;
   the_thread->is_timeslice   = the_thread->Start.is_timeslice;
 

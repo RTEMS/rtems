@@ -122,14 +122,5 @@
 #define _User_extensions_Thread_switch( _executing, _heir ) \
   _User_extensions_Run_list_forward(thread_switch, (_executing, _heir) )
 
-/*PAGE
- *
- *  _User_extensions_Thread_post_switch
- *
- */
-
-#define _User_extensions_Thread_post_switch( _executing ) \
-  _User_extensions_Run_list_forward(thread_post_switch, (_executing) )
-
 #endif
 /* end of include file */

@@ -100,7 +100,7 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
  *  XXX
  */
  
-User_extensions_routine _RTEMS_tasks_Switch_extension(
+void _RTEMS_tasks_Switch_extension(
   Thread_Control *executing
 )
 {
@@ -135,7 +135,8 @@ User_extensions_routine _RTEMS_tasks_Switch_extension(
 API_extensions_Control _RTEMS_tasks_API_extensions = {
   { NULL, NULL },
   NULL,                                     /* predriver */
-  _RTEMS_tasks_Initialize_user_tasks        /* postdriver */
+  _RTEMS_tasks_Initialize_user_tasks,       /* postdriver */
+  _RTEMS_tasks_Switch_extension             /* post switch */
 };
 
 User_extensions_Control _RTEMS_tasks_User_extensions = {
@@ -145,7 +146,6 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
     _RTEMS_tasks_Start_extension,             /* restart */
     _RTEMS_tasks_Delete_extension,            /* delete */
     NULL,                                     /* switch */
-    _RTEMS_tasks_Switch_extension,            /* post switch */
     NULL,                                     /* begin */
     NULL,                                     /* exitted */
     NULL                                      /* fatal */
@@ -806,8 +806,10 @@ rtems_status_code rtems_task_mode(
     if ( is_asr_enabled != asr->is_enabled ) {
       asr->is_enabled = is_asr_enabled;
       _ASR_Swap_signals( asr );
-      if ( _ASR_Are_signals_pending( asr ) )
+      if ( _ASR_Are_signals_pending( asr ) ) {
         needs_asr_dispatching = TRUE;
+        executing->do_post_task_switch_extension = TRUE;
+      }
     }
   }
 

@@ -60,10 +60,6 @@ typedef User_extensions_routine ( *User_extensions_thread_switch_extension )(
                  Thread_Control *
              );
  
-typedef User_extensions_routine (*User_extensions_thread_post_switch_extension)(
-                 Thread_Control *
-             );
- 
 typedef User_extensions_routine ( *User_extensions_thread_begin_extension )(
                  Thread_Control *
              );
@@ -85,7 +81,6 @@ typedef struct {
   User_extensions_thread_restart_extension      thread_restart;
   User_extensions_thread_delete_extension       thread_delete;
   User_extensions_thread_switch_extension       thread_switch;
-  User_extensions_thread_post_switch_extension  thread_post_switch;
   User_extensions_thread_begin_extension        thread_begin;
   User_extensions_thread_exitted_extension      thread_exitted;
   User_extensions_fatal_extension               fatal;
@@ -228,21 +223,6 @@ STATIC INLINE void _User_extensions_Thread_switch (
   Thread_Control *executing,
   Thread_Control *heir
 );
-
-/*
- *  _User_extensions_Thread_post_switch
- *
- *  DESCRIPTION:
- *
- *  This routine is used to invoke the user extension which is invoked 
- *  after a context switch occurs (i.e. we are running in the context
- *  of the new thread).
- */
- 
-STATIC INLINE void _User_extensions_Thread_post_switch (
-  Thread_Control *executing
-);
- 
 
 /*
  *  _User_extensions_Thread_begin

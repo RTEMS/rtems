@@ -148,6 +148,7 @@ typedef struct {
   MP_packet_Prefix         *receive_packet;
      /****************** end of common block ********************/
   boolean                   is_global;
+  boolean                   do_post_task_switch_extension;
   Chain_Control            *ready;
   Priority_Information      Priority_map;
   Thread_Start_information  Start;

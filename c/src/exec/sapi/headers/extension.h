@@ -43,8 +43,6 @@ typedef User_extensions_thread_delete_extension   rtems_task_delete_extension;
 typedef User_extensions_thread_start_extension    rtems_task_start_extension;
 typedef User_extensions_thread_restart_extension  rtems_task_restart_extension;
 typedef User_extensions_thread_switch_extension   rtems_task_switch_extension;
-typedef User_extensions_thread_post_switch_extension  
-  rtems_task_post_switch_extension;
 typedef User_extensions_thread_begin_extension    rtems_task_begin_extension;
 typedef User_extensions_thread_exitted_extension  rtems_task_exitted_extension;
 typedef User_extensions_fatal_extension           rtems_fatal_extension;
