@@ -1,3 +1,7 @@
+2003-02-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AC_SUBST(RTEMS_VERSION,_RTEMS_VERSION).
+
 2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/gcc-isystem.m4: New.
