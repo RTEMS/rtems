@@ -23,9 +23,12 @@ TMPINSTALL_FILES =
 $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools
 	@: > $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp)
 
 $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/bin2boot$(EXEEXT): bin2boot$(EXEEXT) $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/bin2boot$(EXEEXT)
 TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/build-tools/bin2boot$(EXEEXT)
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../automake/host.am
