@@ -647,7 +647,6 @@ m8xx_uart_scc_initialize (int minor)
   unsigned char brg;
   volatile m8xxSCCparms_t *sccparms = 0;
   volatile m8xxSCCRegisters_t *sccregs = 0;
-  int res;
 
   /*
    * Check that minor number is valid
