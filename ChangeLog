@@ -1,5 +1,10 @@
 2002-12-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* bootstrap: Require autoconf 2.54 or 2.57.
+	Require automake-1.7.2.
+
+2002-12-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/bsp-configure.m4: Remove RTEMS_CHECK_BSP_CACHE.
 	* aclocal/env-rtemsbsp.m4: Add comments to AC_ARG_VARs.
 	Add AC_ARG_VAR(RTEMS_CPU_MODEL).

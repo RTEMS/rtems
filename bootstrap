@@ -12,8 +12,8 @@
 # to be run from the toplevel directory of RTEMS'
 # source tree
 
-AUTOCONF_VERS=2\.5[234567]
-AUTOMAKE_VERS=1\.[67]
+AUTOCONF_VERS=2\.5[47]
+AUTOMAKE_VERS=1\.7\.2
 
 progname=`basename $0`
 top_srcdir=`dirname $0`
