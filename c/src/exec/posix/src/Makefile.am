@@ -29,6 +29,8 @@ ID_C_FILES = getegid.c geteuid.c getgid.c getgroups.c getlogin.c getpgrp.c \
 KEY_C_FILES = key.c keycreate.c keydelete.c keygetspecific.c \
     keyrundestructors.c keysetspecific.c
 
+MEMORY_C_FILES = getpagesize.c mprotect.c
+
 MESSAGE_QUEUE_C_FILES = mqueue.c mqueueclose.c mqueuecreatesupp.c \
     mqueuedeletesupp.c mqueuegetattr.c mqueuenametoid.c mqueuenotify.c \
     mqueueopen.c mqueuereceive.c mqueuerecvsupp.c mqueuesend.c \
@@ -77,10 +79,10 @@ TIME_C_FILES = time.c posixtimespecsubtract.c posixtimespectointerval.c \
 TIMER_C_FILES = ptimer.c ptimer1.c
 
 C_FILES = adasupp.c $(CANCEL_C_FILES) $(CONDITION_VARIABLE_C_FILES) \
-    $(ID_C_FILES) $(KEY_C_FILES) $(MESSAGE_QUEUE_C_FILES) $(MUTEX_C_FILES) \
-    $(PTHREAD_C_FILES) $(PSIGNAL_C_FILES) sched.c $(SEMAPHORE_C_FILES) \
-    sysconf.c $(TIME_C_FILES) $(TIMER_C_FILES) types.c $(ENOSYS_C_FILES) \
-    $(BUILD_FOR_NOW_C_FILES) utsname.c
+    $(ID_C_FILES) $(KEY_C_FILES) $(MEMORY_C_FILES) $(MESSAGE_QUEUE_C_FILES) \
+    $(MUTEX_C_FILES) $(PTHREAD_C_FILES) $(PSIGNAL_C_FILES) sched.c \
+    $(SEMAPHORE_C_FILES) sysconf.c $(TIME_C_FILES) $(TIMER_C_FILES) types.c \
+    $(ENOSYS_C_FILES) $(BUILD_FOR_NOW_C_FILES) utsname.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 OBJS = $(C_O_FILES)

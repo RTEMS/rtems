@@ -1,3 +1,12 @@
+2001-09-13	Joel Sherrill <joel@OARcorp.com>
+
+	* src/mprotect.c: New file. Stub required by some gcc's to pass tests.
+	In particular, about 350 ACATS tests fail if this is not present.
+	* src/getpagesize.c: Ditto.
+	* src/sysconf.c: Addition of Solaris value for _SC_STACK_PROT required
+	to pass about 350 ACATS test cases.
+	* src/Makefile.am: Added new files.
+
 2001-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/posix/mqueue.inl: Add cast so negation works.

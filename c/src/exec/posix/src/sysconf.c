@@ -26,10 +26,15 @@ long sysconf(
     case _SC_CLK_TCK:
       return _TOD_Ticks_per_second;
 
-    case _SC_OPEN_MAX: {
+o   case _SC_OPEN_MAX: {
         extern unsigned32 rtems_libio_number_iops;
         return rtems_libio_number_iops;
       }
+
+#if defined(__sparc__)
+    case 515: /* Solaris _SC_STACK_PROT */
+     return 0;
+#endif
 
     default:
       break;
