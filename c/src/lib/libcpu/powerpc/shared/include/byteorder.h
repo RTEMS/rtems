@@ -55,9 +55,9 @@ extern __inline__ void st_le32(volatile unsigned *addr, unsigned val)
 #  define __arch_swab16(x) ld_le16(&x)
 #  define __arch_swab32(x) ld_le32(&x)
 #else
-static __inline__ __const__ __unsigned short ___arch__swab16(__unsigned short value)
+static __inline__ __const__ unsigned short ___arch__swab16(unsigned short value)
 {
-	__unsigned int tmp;
+	unsigned int tmp;
 
 	__asm__("rlwimi %0,%0,8,0xff0000"
 	    : "=r" (tmp)
@@ -65,9 +65,9 @@ static __inline__ __const__ __unsigned short ___arch__swab16(__unsigned short va
 	return (tmp&0x00ffff00)>>8;
 }
 
-static __inline__ __const__ __unsigned int ___arch__swab32(__unsigned int value)
+static __inline__ __const__ unsigned int ___arch__swab32(unsigned int value)
 {
-	__unsigned int result;
+	unsigned int result;
 
 	__asm__("rotlwi %0,%1,24\n\t"
 	    "rlwimi %0,%1,8,0xff\n\t"

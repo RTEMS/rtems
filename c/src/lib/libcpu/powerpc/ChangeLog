@@ -1,3 +1,8 @@
+2002-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shared/include/byteorder.h: Use unsigned instead of __unsigned 
+	(GCC-3.0.x compatibility).
+	
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
