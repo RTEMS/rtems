@@ -1,3 +1,8 @@
+2003-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove stray comments.
+	* automake/local.am, automake/host.am: Remove "debug".
+
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	Makefile.am: Reflect having moved automake.

@@ -123,7 +123,6 @@ BSP_SUBDIRS="$BSP_SUBDIRS optman"
 RTEMS_CPU_SUBDIRS(lib/libcpu)
 if test -d "${srcdir}/lib/libcpu/${RTEMS_CPU}"; then
   libcpu_cpu_subdir="${RTEMS_CPU}"
-#  BSP_SUBDIRS="$BSP_SUBDIRS lib/libcpu/${RTEMS_CPU}"
 else
   libcpu_cpu_subdir=
 fi
@@ -133,11 +132,9 @@ AC_SUBST(libcpu_cpu_subdir)
 # The bare bsp is a special case as it is not under the RTEMS_CPU path
 if test "$RTEMS_BSP_FAMILY" = "bare" ; then
   AC_CONFIG_SUBDIRS([lib/libbsp/bare])
-#  BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp/bare"
   AC_SUBST(libbsp_cpu_subdir,bare)
 else
   RTEMS_CPU_SUBDIRS([lib/libbsp])
-#  BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp/${RTEMS_CPU}"
   AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
 fi
 
