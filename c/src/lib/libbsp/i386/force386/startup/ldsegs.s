@@ -48,7 +48,7 @@ BEGIN_CODE
 
 #define LOAD_SEGMENTS(_value,_segment) \
         movw      $ ## _value, ax ; \
-        movw      _segment, ax
+        movw      ax, _segment
 
         EXTERN (establish_stack)
 
