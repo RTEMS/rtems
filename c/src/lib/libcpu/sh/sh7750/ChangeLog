@@ -1,3 +1,7 @@
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CHECK_CPU.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, include/rtems/score/iosh7750.h,
