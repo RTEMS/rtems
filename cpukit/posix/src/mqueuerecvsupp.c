@@ -47,6 +47,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   Objects_Locations                     location;
   unsigned32                            status = 0;
   unsigned32                            length_out;
+  CORE_message_queue_Submit_types       core_priority;
  
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
@@ -57,6 +58,11 @@ ssize_t _POSIX_Message_queue_Receive_support(
       return POSIX_MP_NOT_IMPLEMENTED();
       set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
+      if ( (the_mq->oflag & O_ACCMODE) == O_WRONLY ) {
+        _Thread_Enable_dispatch();
+        set_errno_and_return_minus_one( EBADF );
+      }
+
       /* XXX need to define the options argument to this */
       length_out = msg_len;
       _CORE_message_queue_Seize(
@@ -64,11 +70,16 @@ ssize_t _POSIX_Message_queue_Receive_support(
         mqdes,
         msg_ptr,
         &length_out,
-        /* msg_prio,    XXXX */
         the_mq->blocking,
+        &core_priority,
         timeout
       );
+      
+      *msg_prio = _POSIX_Message_queue_Priority_from_core( core_priority );
+
+      /* XXX convert message priority from core to POSIX */
       _Thread_Enable_dispatch();
+      *msg_prio = _Thread_Executing->Wait.count;
       if ( !status )
         return length_out;
       /* XXX --- the return codes gotta be looked at .. fix this */
