@@ -539,7 +539,7 @@ rtems_ide_part_table_initialize(char *dev_name)
                                    part_desc->size, name);
         if (rc != RTEMS_SUCCESSFUL)
         {
-            printf("Cannot create device %s, error code %d\n", name, rc);
+            fprintf(stdout,"Cannot create device %s, error code %d\n", name, rc);
             continue;
         }
     }

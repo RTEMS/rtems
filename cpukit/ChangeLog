@@ -1,5 +1,10 @@
 2004-04-17	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libblock/src/ide_part_table.c: Use fprintf(stdout,...) instead of
+	printf.
+
+2004-04-17	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libmisc/capture/capture-cli.c, libmisc/cpuuse/cpuuse.c,
 	libmisc/dumpbuf/dumpbuf.c, libmisc/fsmount/fsmount.c,
 	libmisc/monitor/mon-command.c, libmisc/monitor/mon-config.c,
