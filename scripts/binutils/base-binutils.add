@@ -38,13 +38,16 @@ This is the base for binutils regardless of target CPU.
 %dir %{_prefix}/info
 %doc %{_prefix}/info/dir
 %doc %{_prefix}/info/as.info.gz
-%doc %{_prefix}/info/as.info-*.gz
 %doc %{_prefix}/info/bfd.info.gz
-%doc %{_prefix}/info/bfd.info-?.gz
 %doc %{_prefix}/info/binutils.info.gz
-%doc %{_prefix}/info/binutils.info-?.gz
 %doc %{_prefix}/info/ld.info.gz
+%if "%{binutils_version}" < "2.14"
+# binutils >= 2.14 ships monolytic infos.
+%doc %{_prefix}/info/as.info-*.gz
+%doc %{_prefix}/info/bfd.info-?.gz
+%doc %{_prefix}/info/binutils.info-?.gz
 %doc %{_prefix}/info/ld.info-?.gz
+%endif
 # deleted as of 2.13
 # %doc %{_prefix}/info/gasp.info.gz
 %doc %{_prefix}/info/standards.info.gz

@@ -1,3 +1,9 @@
+2003-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* binutils/binutils.add: Preps for 2.14.
+	Use %{binutils_version} instead of @binutils_version@.
+	* binutils/base_binutils.add: Preps for 2.14.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
