@@ -1,4 +1,4 @@
-#! /bin/sh -p
+#!@KSH@ -p
 #
 # Run rtems tests on the Motorola MCF5206eLITE Coldfire Evaluation board
 # using gdb configured with P&E Micro Background Debug Mode debugging

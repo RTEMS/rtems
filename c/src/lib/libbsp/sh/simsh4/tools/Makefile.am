@@ -2,19 +2,21 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
-noinst_SCRIPTS = runtest
+transform =
+bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests
+bsptools_bin_SCRIPTS = runtest
 
-TMPINSTALL_FILES += $(PROJECT_ROOT)/simsh4/tests \
-    $(PROJECT_ROOT)/simsh4/tests/runtest
+TMPINSTALL_FILES = $(PROJECT_ROOT)/@RTEMS_BSP@/tests \
+    $(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest
 
-$(PROJECT_ROOT)/simsh4/tests:
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests:
 	$(mkinstalldirs) $@
 
-$(PROJECT_ROOT)/simsh4/tests/runtest: runtest
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest: runtest
 	$(INSTALL_SCRIPT) $< $@
 
 all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../automake/host.am
+include $(top_srcdir)/../../../../../automake/host.am
