@@ -164,6 +164,7 @@ do
            continue;;
        *-node1*)
            warn "Running both nodes associated with $tname"
+           variant=`echo $tname | sed 's/.*-node[12]//' | sed 's/\.exe//'`
            tname=`echo $tname | sed 's/-node.*//'`
            TEST_TYPE="mp"
            ;;
@@ -193,7 +194,7 @@ do
            -o "/shm@0xc0000000/key 0x1234" \
            -o "/sem@0xc0010000/reg 0xc0010000 12" \
            -o "/sem@0xc0010000/key 0x1234" \
-           -o "/sem@0xc0010000/value 1" ${tname}-node1.exe | \
+           -o "/sem@0xc0010000/value 1" ${tname}-node1${variant}.exe | \
          sed -e 's///' -e '/^$/d' > ${logfile1} &
 
        ${simulator} $extra_options -c ${instruction_limit} \
@@ -203,7 +204,7 @@ do
            -o "/shm@0xc0000000/key 0x1234" \
            -o "/sem@0xc0010000/reg 0xc0010000 12" \
            -o "/sem@0xc0010000/key 0x1234" \
-           -o "/sem@0xc0010000/value -1" ${tname}-node2.exe | \
+           -o "/sem@0xc0010000/value -1" ${tname}-node2${variant}.exe | \
          sed -e 's///' -e '/^$/d' > ${logfile2} &
 
        wait
