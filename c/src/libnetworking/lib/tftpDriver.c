@@ -25,16 +25,12 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 #include <rtems/rtems_bsdnet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
-#ifndef set_errno_and_return_minus_one
-#define set_errno_and_return_minus_one( _error ) \
-  do { errno = (_error); return -1; } while(0)
-#endif
 
 #ifdef RTEMS_TFTP_DRIVER_DEBUG
 int rtems_tftp_driver_debug = 1;
@@ -228,7 +224,7 @@ static int rtems_tftp_mount_me(
   );
 
   if (sc != RTEMS_SUCCESSFUL)
-    set_errno_and_return_minus_one( ENOMEM ); 
+    rtems_set_errno_and_return_minus_one( ENOMEM ); 
 
   return 0;
 }
@@ -431,7 +427,7 @@ static int rtems_tftp_evaluate_for_make(
 )
 {  
   pathloc->node_access = NULL;
-  set_errno_and_return_minus_one( EIO );    
+  rtems_set_errno_and_return_minus_one( EIO );    
 }
 
 /*
@@ -508,18 +504,18 @@ static int rtems_tftp_eval_path(
          * Reject attempts to open() directories
          */
         if (flags & RTEMS_LIBIO_PERMS_RDWR)
-            set_errno_and_return_minus_one( EISDIR );
+            rtems_set_errno_and_return_minus_one( EISDIR );
         if (isRelative) {
             cp = malloc (strlen(pathloc->node_access)+strlen(pathname)+1);
             if (cp == NULL)
-                set_errno_and_return_minus_one( ENOMEM );
+                rtems_set_errno_and_return_minus_one( ENOMEM );
             strcpy (cp, pathloc->node_access);
             strcat (cp, pathname);
         }
         else {
             cp = strdup (pathname);
             if (cp == NULL)
-                set_errno_and_return_minus_one( ENOMEM );
+                rtems_set_errno_and_return_minus_one( ENOMEM );
         }
         fixPath (cp);
         pathloc->node_access = cp;
@@ -533,7 +529,7 @@ static int rtems_tftp_eval_path(
      */
     flags &= RTEMS_LIBIO_PERMS_READ | RTEMS_LIBIO_PERMS_WRITE;
     if ((flags != RTEMS_LIBIO_PERMS_READ) && (flags != RTEMS_LIBIO_PERMS_WRITE) )
-        set_errno_and_return_minus_one( EINVAL );
+        rtems_set_errno_and_return_minus_one( EINVAL );
     return 0;
 }
 
@@ -847,20 +843,20 @@ static int rtems_tftp_read(
                     tp->eof = (tp->nleft < TFTP_BUFSIZE);
                     tp->blocknum++;
                     if (sendAck (tp) != 0)
-                        set_errno_and_return_minus_one( EIO );
+                        rtems_set_errno_and_return_minus_one( EIO );
                     break;
                 }
                 if (opcode == TFTP_OPCODE_ERROR)
-                        set_errno_and_return_minus_one( tftpErrno (tp) );
+                        rtems_set_errno_and_return_minus_one( tftpErrno (tp) );
             }
 
             /*
              * Keep trying?
              */
             if (++retryCount == IO_RETRY_LIMIT)
-                set_errno_and_return_minus_one( EIO );
+                rtems_set_errno_and_return_minus_one( EIO );
             if (sendAck (tp) != 0)
-                set_errno_and_return_minus_one( EIO );
+                rtems_set_errno_and_return_minus_one( EIO );
         }
     }
     return count - nwant;
@@ -977,7 +973,7 @@ static int rtems_tftp_write(
             int e = rtems_tftp_flush (tp);
             if (e) {
                 tp->writing = 0;
-                set_errno_and_return_minus_one (e);
+                rtems_set_errno_and_return_minus_one (e);
             }
         }
     }

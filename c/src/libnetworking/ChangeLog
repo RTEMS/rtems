@@ -1,3 +1,9 @@
+2002-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* lib/tftpDriver.c: Remove set_errno_and_return_minus_one, include
+	<rtems/seterr.h>.
+
+
 2001-12-18	Eric Norum <eric.norum@usask.ca>
 
 	* lib/tftpDriver.c: Allow chdir() to work on TFTP `directories'
