@@ -11,8 +11,8 @@ C_FILES = tty_drv.c
 
 tty_drv_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -27,4 +27,4 @@ all-local: $(ARCH) $(tty_drv_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = tty_drv.c tty_drv.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

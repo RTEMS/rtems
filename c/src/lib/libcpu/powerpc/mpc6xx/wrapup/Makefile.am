@@ -13,8 +13,8 @@ OBJS = \
     $(foreach piece, $(GENERIC_FILES), ../../mpc6xx/$(piece)/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libcpuspec.a
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -27,4 +27,4 @@ $(LIB): ${OBJS}
 
 all-local: ${ARCH} $(LIB)
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

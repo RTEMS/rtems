@@ -11,8 +11,8 @@ include_libcpu_HEADERS = c_clock.h
 
 c_clock_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 $(PROJECT_INCLUDE)/libcpu:
 	$(mkinstalldirs) $@
@@ -30,4 +30,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(c_clock_rel_OBJECTS)
 
 EXTRA_DIST = c_clock.c c_clock.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

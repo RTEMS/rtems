@@ -15,8 +15,8 @@ include_libcpu_HEADERS = raw_exception.h
 exceptions_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) \
     $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 $(PROJECT_INCLUDE)/libcpu:
 	$(mkinstalldirs) $@
@@ -39,4 +39,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(exceptions_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = asm_utils.S raw_exception.c raw_exception.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

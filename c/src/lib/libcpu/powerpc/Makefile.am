@@ -53,5 +53,5 @@ SUBDIRS = $(SHARED_LIB) $(CPU_SUBDIR) wrapup
 
 all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/subdirs.am
+include $(top_srcdir)/../../../automake/local.am

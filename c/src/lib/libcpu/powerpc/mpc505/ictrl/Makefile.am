@@ -11,8 +11,8 @@ include_HEADERS = ictrl.h
 
 ictrl_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
@@ -35,4 +35,4 @@ all-local: $(ARCH) $(ictrl_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = ictrl.c ictrl.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

@@ -14,8 +14,8 @@ FAMILY_OBJS = \
 
 LIB = $(ARCH)/libcpu.a
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -33,4 +33,4 @@ $(LIB): $(libcpu_a_OBJECTS)
 
 all-local: ${ARCH} $(LIB) $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

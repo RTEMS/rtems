@@ -13,8 +13,8 @@ include_libcpu_HEADERS = spr.h io.h mmu.h page.h byteorder.h pgtable.h \
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 LIB = $(ARCH)/libcpuspec.a
 
@@ -40,4 +40,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 EXTRA_DIST = cpuIdent.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

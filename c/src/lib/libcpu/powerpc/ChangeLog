@@ -1,3 +1,42 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+	mpc505/Makefile.am: Reflect having moved automake.
+	mpc505/ictrl/Makefile.am: Reflect having moved automake.
+	mpc505/timer/Makefile.am: Reflect having moved automake.
+	mpc505/vectors/Makefile.am: Reflect having moved automake.
+	mpc6xx/Makefile.am: Reflect having moved automake.
+	mpc6xx/clock/Makefile.am: Reflect having moved automake.
+	mpc6xx/exceptions/Makefile.am: Reflect having moved automake.
+	mpc6xx/mmu/Makefile.am: Reflect having moved automake.
+	mpc6xx/timer/Makefile.am: Reflect having moved automake.
+	mpc6xx/wrapup/Makefile.am: Reflect having moved automake.
+	mpc8260/Makefile.am: Reflect having moved automake.
+	mpc8260/clock/Makefile.am: Reflect having moved automake.
+	mpc8260/console-generic/Makefile.am: Reflect having moved automake.
+	mpc8260/cpm/Makefile.am: Reflect having moved automake.
+	mpc8260/exceptions/Makefile.am: Reflect having moved automake.
+	mpc8260/mmu/Makefile.am: Reflect having moved automake.
+	mpc8260/timer/Makefile.am: Reflect having moved automake.
+	mpc8xx/Makefile.am: Reflect having moved automake.
+	mpc8xx/clock/Makefile.am: Reflect having moved automake.
+	mpc8xx/console-generic/Makefile.am: Reflect having moved automake.
+	mpc8xx/cpm/Makefile.am: Reflect having moved automake.
+	mpc8xx/exceptions/Makefile.am: Reflect having moved automake.
+	mpc8xx/mmu/Makefile.am: Reflect having moved automake.
+	mpc8xx/timer/Makefile.am: Reflect having moved automake.
+	ppc403/Makefile.am: Reflect having moved automake.
+	ppc403/clock/Makefile.am: Reflect having moved automake.
+	ppc403/console/Makefile.am: Reflect having moved automake.
+	ppc403/ictrl/Makefile.am: Reflect having moved automake.
+	ppc403/timer/Makefile.am: Reflect having moved automake.
+	ppc403/tty_drv/Makefile.am: Reflect having moved automake.
+	ppc403/vectors/Makefile.am: Reflect having moved automake.
+	shared/Makefile.am: Reflect having moved automake.
+	shared/include/Makefile.am: Reflect having moved automake.
+	shared/src/Makefile.am: Reflect having moved automake.
+	wrapup/Makefile.am: Reflect having moved automake.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.

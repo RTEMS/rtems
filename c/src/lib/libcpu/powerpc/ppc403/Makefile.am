@@ -10,5 +10,5 @@ if ppc405
 SUBDIRS = console tty_drv clock timer vectors ictrl
 endif
 
-include $(top_srcdir)/../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/subdirs.am
+include $(top_srcdir)/../../../automake/local.am
