@@ -1,0 +1,163 @@
+\input ../texinfo/texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename ada_user
+@syncodeindex vr fn
+@synindex ky cp
+@paragraphindent 0
+@c @smallbook
+@c %**end of header
+
+@c
+@c  COPYRIGHT (c) 1988-1996.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+
+@c
+@c   Master file for the Ada User's Guide
+@c
+
+@c Joel's Questions
+@c
+@c  1.  Why does paragraphindent only impact makeinfo?
+@c  2.  Why does paragraphindent show up in HTML?
+@c
+
+@include ../common/setup.texi
+
+@ignore
+@ifinfo
+@format
+START-INFO-DIR-ENTRY
+* RTEMS Ada User: (ada_user).             The Ada User's Guide
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+@end ignore
+
+@c variable substitution info:
+@c
+@clear is-C
+@set is-Ada
+@set RTEMS-LANGUAGE Ada
+@set RTEMS-STRUCTURE record
+@set RTEMS-ROUTINE subprogram
+@c the language is @value{RTEMS-LANGUAGE}
+@c NOTE:  don't use underscore in the name
+@c
+
+@c
+@c  Title Page Stuff
+@c
+
+@set edition 4.1.0a
+@set update-date 1 June 97
+@set update-month June 97
+
+@c
+@c  I don't really like having a short title page.  --joel
+@c
+@c @shorttitlepage RTEMS Applications Ada User's Guide
+
+@setchapternewpage odd
+@settitle RTEMS Ada User's Guide
+@titlepage
+@finalout
+
+@title RTEMS Applications Ada User's Guide
+@subtitle Edition @value{edition}, for RTEMS 4.1.0
+@sp 1
+@subtitle @value{update-month}
+@author On-Line Applications Research Corporation
+@page
+@include ../common/cpright.texi
+@end titlepage
+
+@c  This prevents a black box from being printed on "overflow" lines.
+@c  The alternative is to rework a sentence to avoid this problem.
+
+@include ../user/preface.texi
+@include ../user/overview.texi
+@include ../user/concepts.texi
+@include ../user/init.texi
+@include ../user/task.texi
+@include ../user/intr.texi
+@include ../user/clock.texi
+@include ../user/timer.texi
+@include ../user/sem.texi
+@include ../user/msg.texi
+@include ../user/event.texi
+@include ../user/signal.texi
+@include ../user/part.texi
+@include ../user/region.texi
+@include ../user/dpmem.texi
+@include ../user/io.texi
+@include ../user/fatal.texi
+@include ../user/schedule.texi
+@include ../user/rtmon.texi
+@include ../user/bsp.texi
+@include ../user/userext.texi
+@include ../user/conf.texi
+@include ../user/mp.texi
+@include ../user/dirstat.texi
+@include ../user/example.texi
+@include ../user/glossary.texi
+@ifinfo
+@node Top, Preface, (dir), (dir)
+@top ada_user
+
+This is the online version of the RTEMS Ada User's Guide.
+
+@menu
+* Preface::
+* Overview::
+* Key Concepts::
+* Initialization Manager::
+* Task Manager::
+* Interrupt Manager::
+* Clock Manager::
+* Timer Manager::
+* Semaphore Manager::
+* Message Manager::
+* Event Manager::
+* Signal Manager::
+* Partition Manager::
+* Region Manager::
+* Dual-Ported Memory Manager::
+* I/O Manager::
+* Fatal Error Manager::
+* Scheduling Concepts::
+* Rate Monotonic Manager::
+* Board Support Packages::
+* User Extensions Manager::
+* Configuring a System::
+* Multiprocessing Manager::
+* Directive Status Codes::
+* Example Application::
+* Glossary::
+* Command and Variable Index::
+* Concept Index::
+@end menu
+
+@end ifinfo
+@c 
+@c 
+@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
+@c
+
+@node Command and Variable Index, Concept Index, Glossary, Top
+@unnumbered Command and Variable Index
+
+There are currently no Command and Variable Index entries.
+
+@c @printindex fn
+
+@node Concept Index, , Command and Variable Index, Top
+@unnumbered Concept Index
+
+There are currently no Concept Index entries.
+@c @printindex cp
+
+@contents
+@bye
+

@@ -2,7 +2,7 @@
 
 basedir=$1
 shift
-manuals="develenv hppa1_1 i386 i960 m68k relnotes sparc user ka9q"
+manuals="develenv hppa1_1 i386 i960 m68k relnotes sparc c_user ka9q"
 # posix_test_plan manual left out in 4.1.0
 
 for action in $*
