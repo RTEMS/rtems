@@ -93,6 +93,8 @@ char *Usage_Strings[] = {
 typedef enum {
   UNUSED,                            /* dummy 0 slot */
   KEYWORD_CHAPTER,
+  KEYWORD_APPENDIX,
+  KEYWORD_PREFACE,
   KEYWORD_CHAPHEADING,
   KEYWORD_SECTION,
   KEYWORD_SUBSECTION,
@@ -156,6 +158,8 @@ typedef struct {
 Keyword_info_t Keywords[] = {
   { "unused",         0, 0, 0, NULL }, /* so 0 can be invalid */
   { "@chapter",       SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "@appendix",      SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "@preface",       SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
   { "@chapheading",   SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
   { "@section",       SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
   { "@subsection",    SUBSECTION, RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
@@ -641,6 +645,10 @@ void StripBlanks( void )
 
     if ( strstr( line->Contents, "@chapter" ) )
       line->keyword = KEYWORD_CHAPTER;
+    else if ( strstr( line->Contents, "@appendix" ) )
+      line->keyword = KEYWORD_APPENDIX;
+    else if ( strstr( line->Contents, "@preface" ) )
+      line->keyword = KEYWORD_PREFACE;
     else if ( strstr( line->Contents, "@chapheading" ) )
       line->keyword = KEYWORD_CHAPHEADING;
     else if ( strstr( line->Contents, "@section" ) )
@@ -718,6 +726,8 @@ void BuildTexinfoNodes( void )
     LineCopyFromRight( line, NodeName );
 
     if ( line->keyword == KEYWORD_CHAPTER ||
+         line->keyword == KEYWORD_APPENDIX ||
+         line->keyword == KEYWORD_PREFACE ||
          line->keyword == KEYWORD_CHAPHEADING ) {
     
       strcpy( ChapterName, NodeName );
@@ -911,6 +921,8 @@ void FormatToTexinfo( void )
         line->level = -1;
         break;
       case KEYWORD_CHAPTER:
+      case KEYWORD_APPENDIX:
+      case KEYWORD_PREFACE:
       case KEYWORD_CHAPHEADING:
         currentlevel = 0;
         line->level = baselevel + currentlevel;
