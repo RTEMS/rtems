@@ -9,7 +9,7 @@
 
 
 #include <bsp.h>
-#include <m68302.h>
+#include <rtems/m68k/m68302.h>
 #include <m68302scc.h>
 
 #define M68302_SCC_COUNT (3)

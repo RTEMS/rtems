@@ -33,7 +33,7 @@
 /*****************************************************************************/
 
 #include <bsp.h>
-#include <m68302.h>
+#include <rtems/m68k/m68302.h>
 #include <debugport.h>
 #include <crc.h>
 

@@ -9,7 +9,7 @@
 
 
 #include <bsp.h>
-#include <m68302.h>
+#include <rtems/m68k/m68302.h>
 #include <m68302scc.h>
 
 static int initialised = 0;

@@ -1,3 +1,14 @@
+2004-04-03	Ralf Corsepiu <ralf_corsepiu@rtems.org>
+
+	* c/src/lib/libbsp/m68k/ods68302/clock/ckinit.c,
+	c/src/lib/libbsp/m68k/ods68302/include/bsp.h,
+	c/src/lib/libbsp/m68k/ods68302/startup/cpuboot.c,
+	c/src/lib/libbsp/m68k/ods68302/startup/crc.c,
+	c/src/lib/libbsp/m68k/ods68302/startup/gdb-hooks.c,
+	c/src/lib/libbsp/m68k/ods68302/startup/m68302scc.c,
+	c/src/lib/libbsp/m68k/ods68302/timer/timer.c: Include
+	<rtems/m68k/m68302.h> instead of <m68302.h>.
+
 2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* timer/timerisr.S: Include <rtems/asm.h> instead of <asm.h>.

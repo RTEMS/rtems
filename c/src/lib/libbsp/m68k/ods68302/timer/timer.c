@@ -22,7 +22,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include "m68302.h"
+#include <rtems/m68k/m68302.h>
 
 
 #define TMR2_VAL 0x071b	/* Timer mode register

@@ -27,7 +27,7 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <rtems/clockdrv.h>
-#include <m68302.h>
+#include <rtems/m68k/m68302.h>
 
 /*
  *  confdefs.h overrides for this BSP:
