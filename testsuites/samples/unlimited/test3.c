@@ -30,12 +30,12 @@ void test3()
   uint32_t      remove_task;
   uint32_t      block;
   uint32_t      task_count = 0;
-  
+
   char               c1 = 'a';
   char               c2 = 'a';
   char               c3 = '0';
   char               c4 = '0';
-  
+
   printf( "\n TEST3 : free more than 3 x allocation size, but not the same block,\n"
             "         then free a block\n");
 
@@ -48,17 +48,17 @@ void test3()
     printf( " FAIL3 : task allocation size must be greater than 4.\n");
     exit( 1 );
   }
-  
+
    /*
    *  Allocate as many tasks as possible.
    */
-  
+
   while (task_count < MAX_TASKS)
   {
     rtems_name name;
 
     printf(" TEST3 : creating task '%c%c%c%c', ", c1, c2, c3, c4);
-    
+
     name = rtems_build_name(c1, c2, c3, c4);
 
     result = rtems_task_create(name,
@@ -70,23 +70,23 @@ void test3()
 
     if (status_code_bad(result))
       break;
-    
+
     printf("number = %3i, id = %08x, starting, ", task_count, task_id[task_count]);
     fflush(stdout);
-    
+
     result = rtems_task_start(task_id[task_count],
                               test_task,
                               (rtems_task_argument) task_count);
-    
+
     if (status_code_bad(result))
       break;
-    
+
     /*
      *  Update the name.
      */
-    
+
     NEXT_TASK_NAME(c1, c2, c3, c4);
-    
+
     task_count++;
   }
 
@@ -127,7 +127,7 @@ void test3()
    *  Remove a complete block, not the first, forces a scan of the blocks in the
    *  allocator's free routine
    */
-   
+
   for (remove_task = (TASK_ALLOCATION_SIZE - TASK_INDEX_OFFSET);
        remove_task < ((TASK_ALLOCATION_SIZE * 2) - - TASK_INDEX_OFFSET);
        remove_task++)
@@ -139,8 +139,8 @@ void test3()
       task_id[remove_task] = 0;
     }
   }
-  
+
   destory_all_tasks("TEST3");
-  
+
   printf( " TEST3 : completed\n" );
 }

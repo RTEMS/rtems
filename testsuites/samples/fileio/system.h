@@ -44,7 +44,7 @@ rtems_driver_address_table Device_drivers[] =
 #ifdef RTEMS_BSP_HAS_IDE_DRIVER
 	,IDE_CONTROLLER_DRIVER_TABLE_ENTRY
 	/* important: ATA driver must be after ide drivers */
-	,ATA_DRIVER_TABLE_ENTRY 
+	,ATA_DRIVER_TABLE_ENTRY
 #endif
 	};
 

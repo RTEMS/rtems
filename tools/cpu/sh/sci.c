@@ -12,11 +12,11 @@
 
 /*
    n .. baudrate generator source 0,1,2,3
-   
+
    N .. BRR setting (0..255)
-   
+
    Phi .. processor baud rate
-   
+
    B .. bitrate
  */
 
@@ -51,20 +51,20 @@ static unsigned int bitrate [] = {
 
 static sci_tab_t test_array[4] ;
 
-static void Compute( 
-  unsigned int n, 
-  unsigned int B, 
+static void Compute(
+  unsigned int n,
+  unsigned int B,
   double   Phi,
   struct sci_tab *entry )
 {
   int    a = ( 32 << ( 2 * n ) ) * B ;
-  
+
   entry->n = n ;
   entry->B = B ;
   entry->N = rint( ( Phi / a ) - 1.0 ) ;
 
-  if ( ( entry->N > 0 ) && ( entry->N < 256 ) ) 
-    entry->err = 
+  if ( ( entry->N > 0 ) && ( entry->N < 256 ) )
+    entry->err =
       ( ( Phi / ( (entry->N + 1) * a ) - 1.0 ) * 100.0 );
   else
   {
@@ -74,17 +74,17 @@ static void Compute(
   }
 }
 
-static sci_tab_t *SelectN( 
+static sci_tab_t *SelectN(
   unsigned int 	B,
   double 	Phi )
 {
   unsigned int i ;
   struct sci_tab* best = NULL ;
-    
+
   for ( i = 0 ; i < 4 ; i++ )
-  { 
+  {
     double err ;
-    
+
     Compute( i, B, Phi, &test_array[i] );
     err = fabs( test_array[i].err );
 
@@ -97,7 +97,7 @@ static sci_tab_t *SelectN(
       best = &test_array[i] ;
   }
 
-  return best ; 
+  return best ;
 }
 
 int shgen_gensci(
@@ -106,7 +106,7 @@ int shgen_gensci(
 {
   unsigned int i ;
 
-  fprintf( file, 
+  fprintf( file,
     "/*\n * Bitrate table for the serial devices (sci) of the SH at %.3f MHz\n"
     " */\n\n", Phi / 1000000.0 );
   fprintf( file,
@@ -118,13 +118,13 @@ int shgen_gensci(
     " *   We experienced values less than 2%% to be stable\n"
     " */\n\n" );
   fprintf( file, "#include <termios.h>\n\n" );
-  fprintf( file, 
+  fprintf( file,
     "static struct sci_bitrate_t {\n"
     "  unsigned char n ;\n"
     "  unsigned char N ;\n"
     "} _sci_bitrates[] = {\n"
     "/*  n    N      error */\n" );
-  
+
   for ( i = 0 ; i < sizeof(bitrate)/sizeof(int) ; i++ )
   {
     struct sci_tab* best = SelectN( bitrate[i], Phi );
@@ -143,7 +143,7 @@ int shgen_gensci(
 
   fprintf( file, "\n};\n\n" );
 
-  fprintf( file, 
+  fprintf( file,
     "int _sci_get_brparms( \n"
     "  tcflag_t      cflag,\n"
     "  unsigned char *smr,\n"
@@ -160,6 +160,6 @@ int shgen_gensci(
     "  *brr =  _sci_bitrates[offset].N;\n\n"
     "  return 0;\n"
     "}\n" );
-    
+
   return 0 ;
 }

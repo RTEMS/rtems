@@ -111,7 +111,7 @@ void error(int errn, ...);
 #else
 #define stol(p) strtol(p, (char **) NULL, 0)
 #endif
- 
+
 int   unhex(FILE *ifp, char *inm, FILE *ofp, char *onm);
 int   convert_Intel_records(FILE *ifp, char *inm, FILE *ofp, char *onm);
 int   convert_S_records(FILE *ifp, char *inm, FILE *ofp, char *onm);

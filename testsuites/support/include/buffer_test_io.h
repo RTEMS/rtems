@@ -1,6 +1,6 @@
 /*
  *  Support for running the test output through a buffer
- * 
+ *
  *  $Id$
  */
 
@@ -27,7 +27,7 @@ extern "C" {
 #undef printf
 #define printf(...) \
   do { \
-     iprintf( __VA_ARGS__); \ 
+     iprintf( __VA_ARGS__); \
   } while (0)
 #endif
 
@@ -58,7 +58,7 @@ void _test_output_flush(void);
 #define printf(...) \
   do { \
      char _buffer[128]; \
-     sprintf( _buffer, __VA_ARGS__); \ 
+     sprintf( _buffer, __VA_ARGS__); \
      _test_output_append( _buffer ); \
   } while (0)
 
@@ -66,7 +66,7 @@ void _test_output_flush(void);
 #define puts(_string) \
   do { \
      char _buffer[128]; \
-     sprintf( _buffer, "%s\n", _string ); \ 
+     sprintf( _buffer, "%s\n", _string ); \
      _test_output_append( _buffer ); \
   } while (0)
 
@@ -90,7 +90,7 @@ int _test_output_buffer_index = 0;
 void _test_output_append(char *_buffer)
 {
   char *p;
-  
+
   for ( p=_buffer ; *p ; p++ ) {
     _test_output_buffer[_test_output_buffer_index++] = *p;
     _test_output_buffer[_test_output_buffer_index]   = '\0';
@@ -101,7 +101,7 @@ void _test_output_append(char *_buffer)
      _test_output_buffer[0]   = '\0';
     }
 #endif
-    if ( _test_output_buffer_index >= (_TEST_OUTPUT_BUFFER_SIZE - 80) ) 
+    if ( _test_output_buffer_index >= (_TEST_OUTPUT_BUFFER_SIZE - 80) )
       _test_output_flush();
   }
 }

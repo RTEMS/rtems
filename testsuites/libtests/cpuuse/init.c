@@ -1,4 +1,4 @@
-/*  
+/*
  *  This is a clone of sp04 which has been modified to use the cpu monitoring
  *  library.
  *

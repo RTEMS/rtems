@@ -1,7 +1,7 @@
 /*
  *  This is a simple test whose only purpose is to start the Monitor
  *  task.  The Monitor task can be used to obtain information about
- *  a variety of RTEMS objects.  
+ *  a variety of RTEMS objects.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

@@ -203,12 +203,12 @@ void fileio_list_file(void)
 	flen += n;
       }
     } while (n > 0);
-    
+
     rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &curr_tick);
-    
+
     printf("\n ******** End of file reached, flen = %d\n",flen);
     close(fd);
-    
+
     rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_sec);
     printf("time elapsed for read:  %g seconds\n",
 	   ((double)curr_tick-start_tick)/ticks_per_sec);
@@ -262,11 +262,11 @@ void fileio_write_file(void)
   rtems_interval start_tick,curr_tick,ticks_per_sec;
   char *bufptr = NULL;
   boolean failed = FALSE;
-  static const char write_test_string[] = 
+  static const char write_test_string[] =
     "The quick brown fox jumps over the lazy dog\n";
-  static const char write_block_string[] = 
+  static const char write_block_string[] =
     "\n----- end of write buffer ------\n";
-  
+
   printf(" =========================\n");
   printf(" WRITE FILE ...           \n");
   printf(" =========================\n");
@@ -370,7 +370,7 @@ void fileio_write_file(void)
     printf("... writing to file\n");
     rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_tick);
     curr_pos = 0;
-    do {      
+    do {
       bytes_to_copy = buf_size;
       do {
 	n = write(fd,
@@ -422,7 +422,7 @@ void fileio_read_file(void)
   rtems_interval start_tick,curr_tick,ticks_per_sec;
   char *bufptr = NULL;
   boolean failed = FALSE;
-  
+
   printf(" =========================\n");
   printf(" READ FILE ...            \n");
   printf(" =========================\n");
@@ -489,7 +489,7 @@ void fileio_read_file(void)
     printf("... reading from file\n");
     rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_tick);
     curr_pos = 0;
-    do {      
+    do {
       n = read(fd,
 	       bufptr,
 	       buf_size);
@@ -511,7 +511,7 @@ void fileio_read_file(void)
       printf("time elapsed for read:  %g seconds\n",
 	     ((double)curr_tick-start_tick)/ticks_per_sec);
       printf("read data rate: %g KBytes/second\n",
-	     (((double)curr_pos) / 1024.0 / 
+	     (((double)curr_pos) / 1024.0 /
 	      (((double)curr_tick-start_tick)/ticks_per_sec)));
     }
   }
@@ -554,30 +554,30 @@ void fileio_menu (void)
     fgets(inbuf,sizeof(inbuf),stdin);
     switch (inbuf[0]) {
     case 'l':
-      fileio_list_file ();			
+      fileio_list_file ();
       break;
     case 'r':
-      fileio_read_file ();			
+      fileio_read_file ();
       break;
     case 'w':
-      fileio_write_file ();			
+      fileio_write_file ();
       break;
     case 'p':
-      fileio_part_table_initialize ();			
+      fileio_part_table_initialize ();
       break;
     case 'f':
-      fileio_fsmount ();			
+      fileio_fsmount ();
       break;
 #ifdef USE_SHELL
     case 's':
-      fileio_start_shell ();			
+      fileio_start_shell ();
       break;
 #endif
     default:
       printf("Selection `%c` not implemented\n",inbuf[0]);
       break;
     }
-    
+
   }
   exit (0);
 }

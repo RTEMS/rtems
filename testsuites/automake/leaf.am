@@ -13,4 +13,3 @@ define make-exe
 	$(LINK_APP)
 endef
 @ENDIF@
-

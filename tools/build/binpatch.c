@@ -13,7 +13,7 @@
 
 static char buf[512];
 
-static void 
+static void
 usage(void)
 {
   printf("usage: binpatch [-h] <ofile> <ifile> <reloc> <off> <byte0> "
@@ -40,8 +40,8 @@ main(int argc, char **argv)
   FILE  *ofp, *ifp;
   char  patch[4], *end;
   int   patchLen, tmp, i, off, cnt, patched, len, reloc;
-  
-  
+
+
   /* parse command line options */
   while ((c = getopt(argc, argv, "h")) >= 0)
     {
@@ -93,7 +93,7 @@ main(int argc, char **argv)
 	}
       patch[i] = tmp;
     }
-      
+
   ifp = fopen(argv[2], "r");
   if(ifp == NULL)
     {
@@ -137,7 +137,7 @@ main(int argc, char **argv)
 	    }
 	  patched = 1;
 	}
-	  
+
       fwrite(buf, 1, len, ofp);
 
       cnt += len;
@@ -145,7 +145,7 @@ main(int argc, char **argv)
 
   fclose(ifp);
   fclose(ofp);
-  
+
   if(!patched)
     {
       fprintf(stderr, "warning: offset is beyond input file length\n");

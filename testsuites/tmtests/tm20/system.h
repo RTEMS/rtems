@@ -25,7 +25,7 @@ rtems_task Init(
 #include <timesys.h>
 
 /* configuration information */
- 
+
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
@@ -34,7 +34,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_PARTITIONS         1
 #define CONFIGURE_MAXIMUM_REGIONS            1
 #define CONFIGURE_TICKS_PER_TIMESLICE        0
- 
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>

@@ -35,7 +35,7 @@ rtems_task Init(
   rtems_status_code status;
 
   /*
-   *  Tell the Timer Driver what we are doing 
+   *  Tell the Timer Driver what we are doing
    */
 
   Set_find_average_overhead( 1 );
@@ -152,12 +152,12 @@ void check_read_timer()
     end_time = Read_timer();
     if ( end_time > MAXIMUM_DISTRIBUTION ) {
       /*
-       *  Under UNIX a simple process swap takes longer than we 
+       *  Under UNIX a simple process swap takes longer than we
        *  consider valid for our testing purposes.
        */
       printf( "TOO LONG (%d) at index %d!!!\n", end_time, index );
 #if defined(unix)
-      index--; 
+      index--;
       continue;
 #else
       rtems_test_exit( 1 );

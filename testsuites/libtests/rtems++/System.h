@@ -22,7 +22,7 @@
 /* functions */
 
 extern "C"
-{  
+{
   rtems_task Init(
     rtems_task_argument argument
     );
@@ -37,7 +37,7 @@ class Task1
   : public rtemsTask
 {
   void print_mode(rtems_mode mode, rtems_mode mask);
-  
+
   void screen1(void);
   void screen2(void);
   void screen3(void);
@@ -59,7 +59,7 @@ class Task2
 protected:
   virtual void body(rtems_task_argument argument);
 
-public:  
+public:
   Task2(const char* name,
         const rtems_task_priority initial_priority,
         const uint32_t   stack_size);
@@ -73,7 +73,7 @@ class Task3
 protected:
   virtual void body(rtems_task_argument argument);
 
-public:  
+public:
   Task3(const char* name,
         const rtems_task_priority initial_priority,
         const uint32_t   stack_size);
@@ -85,7 +85,7 @@ class EndTask
 protected:
   virtual void body(rtems_task_argument argument);
 
-public:  
+public:
   EndTask(const char* name,
           const rtems_task_priority initial_priority,
           const uint32_t   stack_size);
@@ -126,7 +126,7 @@ class Io_during_interrupt
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_INIT_TASK_STACK_SIZE      (4 * RTEMS_MINIMUM_STACK_SIZE) 
+#define CONFIGURE_INIT_TASK_STACK_SIZE      (4 * RTEMS_MINIMUM_STACK_SIZE)
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
 

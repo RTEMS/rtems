@@ -3,7 +3,7 @@
 ##
 
 ## -------------------------------------------------------------------------
-## NOTE: This file is rather immature and has to be considered to be 
+## NOTE: This file is rather immature and has to be considered to be
 ## almost experimental.
 ##
 ## Expect frequent changes -- It deserves to be cleaned up :(
@@ -12,7 +12,7 @@
 ## The section below is based on make/compilers/gcc-target-default.cfg
 ## used in former versions of RTEMS.
 
-## 
+##
 ## Set up the flags for the toolchains:
 ##
 ## We are considering 3 different building schemes here:
@@ -24,19 +24,19 @@
 ## Automake conditionals in use:
 ## RTEMS_USE_GCC     .. if we are using GCC
 
-## NOTES: 
+## NOTES:
 ## * The gcc-2.8 building scheme is the nominal building scheme and
 ##   is actively supported.
-## * The non-gcc building scheme requires manually setting up environment 
+## * The non-gcc building scheme requires manually setting up environment
 ##   variables and is hardly tested at all
 
 ## CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V are the values we
 ## would want the corresponding macros to be set to.
 ##
-## CFLAGS_OPTIMIZE, CFLAGS_DEBUG are set by the 
+## CFLAGS_OPTIMIZE, CFLAGS_DEBUG are set by the
 ## 'VARIANT=<OPTIMIZE|DEBUG>' targets to their _V values.
 
-## XCPPFLAGS, XCFLAGS, XCXXFLAGS, XASFLAGS 
+## XCPPFLAGS, XCFLAGS, XCXXFLAGS, XASFLAGS
 ## are used to add flags from the shell
 ## cf. make.info ("Implicit rules/variables" for details)
 
@@ -127,7 +127,7 @@ depend-gcc: $(C_FILES) $(CC_FILES) $(S_FILES)
 	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
 	mv $(DEPEND).tmp $(DEPEND)
 
-# pull in dependencies if they exist  
+# pull in dependencies if they exist
 ifeq (${DEPEND},$(wildcard ${DEPEND}))
 include ${DEPEND}
 @ENDIF@

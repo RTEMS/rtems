@@ -11,7 +11,7 @@
  */
 
 /*
- *  WARNING!!!!!!!!!   
+ *  WARNING!!!!!!!!!
  *
  *  THIS TEST USES INTERNAL RTEMS VARIABLES!!!
  */
@@ -189,7 +189,7 @@ rtems_task Task_1(
 }
 
 /*
- *  NOTE:  When this task is executing, some of the assumptions made 
+ *  NOTE:  When this task is executing, some of the assumptions made
  *         regarding the placement of the currently executing task's TCB
  *         on the ready chains have been violated.  At least the assumption
  *         that this task is at the head of the chain for its priority
@@ -228,9 +228,9 @@ rtems_task Task_2(
    */
 
   _Thread_Dispatch_disable_level = 0;
- 
+
   _Thread_Heir = (rtems_tcb *) _Thread_Ready_chain[254].first;
- 
+
   _Context_Switch_necessary = 1;
 
   _Thread_Dispatch();

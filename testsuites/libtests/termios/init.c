@@ -1,6 +1,6 @@
 /*
  * RTEMS configuration/initialization
- * 
+ *
  * This program may be distributed and used for any purpose.
  * I ask only that you:
  *  1. Leave this author information intact.
@@ -11,7 +11,7 @@
  * University of Saskatchewan
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
- * 
+ *
  * Additions:
  * Charles-Antoine Gauthier
  * Software Engineering Group
@@ -103,25 +103,25 @@ void print_c_oflag( struct termios * tp )
 
   if( tp->c_oflag & OPOST )
     printf( "OPOST " );
-    
+
   if( tp->c_oflag & OLCUC )
     printf( "OLCUC " );
-    
+
   if( tp->c_oflag & ONLCR )
     printf( "ONLCR " );
-    
+
   if( tp->c_oflag & OCRNL )
     printf( "OCRNL " );
-    
+
   if( tp->c_oflag & ONOCR )
     printf( "ONOCR " );
-    
+
   if( tp->c_oflag & ONLRET )
     printf( "ONLRET " );
-    
+
   if( tp->c_oflag & OFILL )
     printf( "OFILL " );
-    
+
   if( tp->c_oflag & OFDEL )
     printf( "OFDEL " );
 
@@ -129,73 +129,73 @@ void print_c_oflag( struct termios * tp )
     case NL0:
       printf( "NL0 " );
       break;
-      
+
     case NL1:
       printf( "NL1 " );
       break;
   }
-  
+
   switch( tp->c_oflag & CRDLY ) {
     case CR0:
       printf( "CR0 " );
       break;
-      
+
     case CR1:
       printf( "CR1 " );
       break;
-      
+
     case CR2:
       printf( "CR2 " );
       break;
-      
+
     case CR3:
       printf( "CR3 " );
       break;
   }
-  
+
   switch( tp->c_oflag & TABDLY ) {
     case TAB0:
       printf( "TAB0 " );
       break;
-      
+
     case TAB1:
       printf( "TAB1 " );
       break;
-      
+
     case TAB2:
       printf( "TAB2 " );
       break;
-      
+
     case TAB3:
       printf( "TAB3 " );
       break;
   }
-  
+
   switch( tp->c_oflag & BSDLY ) {
     case BS0:
       printf( "BS0 " );
       break;
-      
+
     case BS1:
       printf( "BS1 " );
       break;
   }
-  
+
   switch( tp->c_oflag & VTDLY ) {
     case VT0:
       printf( "VT0 " );
       break;
-      
+
     case VT1:
       printf( "VT1 " );
       break;
   }
-  
+
   switch( tp->c_oflag & FFDLY ) {
     case FF0:
       printf( "FF0" );
       break;
-      
+
     case FF1:
       printf( "FF1" );
       break;
@@ -229,7 +229,7 @@ void print_c_lflag( struct termios * tp )
     "unknown",     /* 2000000 */
     "unknown",     /* 4000000 */
   };
-  
+
   printf( "c_lflag = 0x%08x\n\t", tp->c_lflag );
   print_32bits( tp->c_lflag, sizeof( c_lflag_bits )/sizeof( char * ), c_lflag_bits );
   printf( "\n" );
@@ -239,99 +239,99 @@ void print_c_lflag( struct termios * tp )
 void print_c_cflag( struct termios * tp )
 {
   unsigned int baud;
-  
+
   printf( "c_cflag = 0x%08x\n", tp->c_cflag );
 
   baud = (tp->c_cflag & CBAUD) ;
-#if defined(__sh2__) 
+#if defined(__sh2__)
   if ( tp->c_cflag & CBAUDEX )
 #endif
   switch( baud ) {
     case B0:
       printf( "\tCBAUD =\tB0\n" );
       break;
-      
+
     case B50:
       printf( "\tCBAUD =\tB50\n" );
       break;
-      
+
     case B75:
       printf( "\tCBAUD =\tB75\n" );
       break;
-      
+
     case B110:
       printf( "\tCBAUD =\tB110\n" );
       break;
-      
+
     case B134:
       printf( "\tCBAUD =\tB134\n" );
       break;
-      
+
     case B150:
       printf( "\tCBAUD =\tB150\n" );
       break;
-      
+
     case B200:
       printf( "\tCBAUD =\tB200\n" );
       break;
-      
+
     case B300:
       printf( "\tCBAUD =\tB300\n" );
       break;
-      
+
     case B600:
       printf( "\tCBAUD =\tB600\n" );
       break;
-      
+
     case B1200:
       printf( "\tCBAUD =\tB1200\n" );
       break;
-      
+
     case B1800:
       printf( "\tCBAUD =\tB1800\n" );
       break;
-      
+
     case B2400:
       printf( "\tCBAUD =\tB2400\n" );
       break;
-      
+
     case B4800:
       printf( "\tCBAUD =\tB4800\n" );
       break;
-      
+
     case B9600:
       printf( "\tCBAUD =\tB9600\n" );
       break;
-      
+
     case B19200:
       printf( "\tCBAUD =\tB19200\n" );
       break;
-      
+
     case B38400:
       printf( "\tCBAUD =\tB38400\n" );
       break;
 #if defined(__sh2__)
-    } 
-    else 
-    switch ( baud ) 
+    }
+    else
+    switch ( baud )
     {
 #endif
     case B57600:
       printf( "\tCBAUD =\tB57600\n" );
       break;
-      
+
     case B115200:
       printf( "\tCBAUD =\tB115200\n" );
       break;
-      
+
     case B230400:
       printf( "\tCBAUD =\tB230400\n" );
       break;
-      
+
     case B460800:
       printf( "\tCBAUD =\tB460800\n" );
       break;
-      
+
     default:
       printf( "\tCBAUD =\tunknown (0x%08x)\n", baud );
       break;
@@ -341,15 +341,15 @@ void print_c_cflag( struct termios * tp )
     case CS5:
       printf( "\tCSIZE =\tCS5\n" );
       break;
-      
+
     case CS6:
       printf( "\tCSIZE =\tCS6\n" );
       break;
-      
+
     case CS7:
       printf( "\tCSIZE =\tCS7\n" );
       break;
-      
+
     case CS8:
       printf( "\tCSIZE =\tCS8\n" );
       break;
@@ -359,39 +359,39 @@ void print_c_cflag( struct termios * tp )
     printf( "\tCSTOPB set: send 2 stop bits\n" );
   else
     printf( "\tCSTOPB clear: send 1 stop bit\n" );
-  
+
   if( tp->c_cflag & PARENB )
     printf( "\tPARENB set: parity enabled\n" );
   else
     printf( "\tPARENB clear: parity disabled\n" );
-  
+
   if( tp->c_cflag & PARODD )
     printf( "\tPARODD set: parity odd\n" );
   else
     printf( "\tPARODD clear: parity even\n" );
-  
+
   if( tp->c_cflag & CREAD )
     printf( "\tCREAD set: receiver enabled\n" );
   else
     printf( "\tCREAD clear: treceiver disabled\n" );
-  
+
   if( tp->c_cflag & HUPCL )
     printf( "\tHUPCL set: enabled\n" );
   else
     printf( "\tHUPCL clear: disabled\n" );
-  
+
   if( tp->c_cflag & CLOCAL )
     printf( "\tCLOCAL set: ignore modem lines\n" );
   else
     printf( "\tCLOCAL clear: don't ignore modem lines\n" );
-  
+
 #if defined(CBAUDEX)
   if( tp->c_cflag & CBAUDEX )
     printf( "\tCBAUDEX set: What does this do?\n" );
   else
     printf( "\tCBAUDEX clear: What does this do?\n" );
 #endif
-  
+
   if( tp->c_cflag & CRTSCTS )
     printf( "\tCRTSCTS: harware flow control enabled?\n" );
   else
@@ -445,7 +445,7 @@ void print_termios( struct termios *tp )
 unsigned long get_baud_rate( void )
 {
   unsigned long baud_rate;
-  
+
   while( TRUE ) {
     printf( "Enter the numerical value for the new baud rate.\n" );
     printf( "Choices are: 50, 75, 110, 134, 150, 200, 300, 600, 1200, 1800\n" );
@@ -485,7 +485,7 @@ unsigned long get_baud_rate( void )
 unsigned long get_parity()
 {
   int parity;
-  
+
   while( TRUE ) {
     printf( "Enter the numerical value for the new parity\n" );
     printf( "Choices are: 0 for no parity, 1 for even parity, 2 for odd parity\n" );
@@ -523,7 +523,7 @@ unsigned long get_stop_bits()
     switch( stop_bits ) {
       case 1:
         return 0;
-        
+
       case 2:
         return CSTOPB;
 
@@ -548,13 +548,13 @@ unsigned long get_data_bits()
     switch( data_bits ) {
       case 5:
         return CS5;
-        
+
       case 6:
         return CS6;
-        
+
       case 7:
         return CS7;
-        
+
       case 8:
         return CS8;
 
@@ -569,9 +569,9 @@ unsigned long get_data_bits()
 void change_line_settings( struct termios *tp )
 {
   unsigned long baud_rate, parity, stop_bits, data_bits, sleep_time;
-    
+
   printf( "\nSetting line characteristics\n\n" );
-  
+
   baud_rate = get_baud_rate();
   parity = get_parity();
   stop_bits = get_stop_bits();
@@ -587,7 +587,7 @@ void change_line_settings( struct termios *tp )
   printf( "Setting line to new termios settings in %lu seconds.\n", sleep_time );
 
   sleep( sleep_time );
-  
+
   tp->c_cflag = CLOCAL | CREAD | parity | stop_bits | data_bits | baud_rate;
   if( tcsetattr( fileno( stdin ), TCSADRAIN, tp ) < 0 ) {
     perror( "change_line_settings(): tcsetattr() failed" );
@@ -600,17 +600,17 @@ void change_line_settings( struct termios *tp )
 void canonical_input( struct termios *tp )
 {
   char c, first_time = TRUE;
-    
+
   printf( "\nTesting canonical input\n\n" );
 
   printf( "Setting line to canonical input mode.\n" );
-  tp->c_lflag = ISIG | ICANON | ECHO | ECHONL | ECHOK | ECHOE | ECHOPRT | ECHOCTL | IEXTEN; 
+  tp->c_lflag = ISIG | ICANON | ECHO | ECHONL | ECHOK | ECHOE | ECHOPRT | ECHOCTL | IEXTEN;
   tp->c_iflag = BRKINT | ICRNL | IXON | IMAXBEL;
   if( tcsetattr( fileno( stdin ), TCSADRAIN, tp ) < 0 ) {
     perror( "canonical_input(): tcsetattr() failed" );
     rtems_test_exit( 1 );
   }
-  
+
   while ( ( c = getchar () ) != '\n');
   printf( "Testing getchar(). Type some text followed by carriage return\n" );
   printf( "Each character you entered will be echoed back to you\n\n" );
@@ -639,13 +639,13 @@ void do_raw_input( int vmin, int vtime )
   unsigned char cbuf[100];
 
   printf( "Raw input test with VMIN=%d  VTIME=%d\n", vmin, vtime );
-  
+
   rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond );
   if ( tcgetattr( fileno ( stdin ), &old ) < 0 ) {
     perror( "do_raw_input(): tcgetattr() failed" );
     return;
   }
-  
+
   new = old;
   new.c_lflag &= ~( ICANON | ECHO | ECHONL | ECHOK | ECHOE | ECHOPRT | ECHOCTL );
   new.c_cc[VMIN] = vmin;
@@ -654,7 +654,7 @@ void do_raw_input( int vmin, int vtime )
     perror ("do_raw_input(): tcsetattr() failed" );
     return;
   }
-  
+
   do {
     rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then );
     count = 0;
@@ -672,17 +672,17 @@ void do_raw_input( int vmin, int vtime )
     msec = (now - then) * 1000 / ticksPerSecond;
     printf( "Count:%-10lu  Interval:%3u.%3.3d  Char:",
           count, msec / 1000, msec % 1000 );
-          
+
     for( i = 0 ; i < nread ; i++ )
       printf (" 0x%2.2x", cbuf[i]);
     printf ("\n");
-    
+
   } while( cbuf[0] != 'q' );
-  
+
 out:
   if( tcsetattr( fileno( stdin ), TCSADRAIN, &old) < 0 )
     perror("do_raw_input(): tcsetattr() failed: %s\n" );
-    
+
   printf ("*** End of Raw input  VMIN=%d  VTIME=%d ***\n", vmin, vtime);
 }
 
@@ -696,7 +696,7 @@ static void raw_input( struct termios *tp )
   do_raw_input( 0, 20 );
   do_raw_input( 5, 0 );
   do_raw_input( 5, 20 );
-  
+
   printf( "\nRaw input test done.\n" );
 }
 
@@ -722,7 +722,7 @@ Init (rtems_task_argument ignored)
 {
   char c ;
   struct termios orig_termios, test_termios;
-  
+
   printf( "\n\n*** TEST OF TERMIOS INPUT CAPABILITIES ***\n" );
 
   if( tcgetattr( fileno( stdin ), &orig_termios ) < 0 ) {
@@ -770,7 +770,7 @@ Init (rtems_task_argument ignored)
 
       case '\n':
         break;
-          
+
       default:
         printf( "\n%c is not a valid choice. Try again\n\n", c );
         usage();

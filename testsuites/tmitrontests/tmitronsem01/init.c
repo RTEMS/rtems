@@ -56,7 +56,7 @@ void ITRON_Init( void )
    *  time one invocation of del_sem
    */
 
-  Timer_initialize(); 
+  Timer_initialize();
     (void) del_sem( 1 );
   end_time = Read_timer();
   put_time(
@@ -107,8 +107,8 @@ void ITRON_Init( void )
   /*
    *  time sig_sem (no waiting tasks)
    */
-  
-  Timer_initialize(); 
+
+  Timer_initialize();
     for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
       (void) sig_sem( 1 );
   end_time = Read_timer();

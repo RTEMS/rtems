@@ -26,12 +26,12 @@ rtems_task Test_task(
 );
 
 /* configuration information */
- 
+
 #define CONFIGURE_MP_APPLICATION
- 
+
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
- 
+
 #define CONFIGURE_MAXIMUM_TASKS           4
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_GLOBAL

@@ -30,9 +30,9 @@ rtems_task Test_task2(
 );
 
 /* configuration information */
- 
+
 #define CONFIGURE_MP_APPLICATION
- 
+
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
@@ -53,7 +53,7 @@ TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
 
 TEST_EXTERN rtems_id   Queue_id[ 2 ];       /* array of message queue ids */
 TEST_EXTERN rtems_name Queue_name[ 2 ];     /* array of message queue names */
- 
+
 TEST_EXTERN rtems_id   Semaphore_id[ 2 ];   /* array of semaphore ids */
 TEST_EXTERN rtems_name Semaphore_name[ 2 ]; /* array of semaphore names */
 

@@ -28,12 +28,12 @@ void test1()
   rtems_status_code result;
   uint32_t    task_count = 0;
   Objects_Information *the_information;
-  
+
   char              c1 = 'a';
   char              c2 = 'a';
   char              c3 = '0';
   char              c4 = '0';
-    
+
   printf( "\n TEST1 : auto-extend disabled.\n" );
 
   /*
@@ -41,17 +41,17 @@ void test1()
    * saves having another test.
    */
 
-  the_information = 
+  the_information =
     _Objects_Information_table[OBJECTS_CLASSIC_API][OBJECTS_RTEMS_TASKS];
   auto_extend = the_information->auto_extend;
   the_information->auto_extend = FALSE;
-  
+
   while (task_count < MAX_TASKS)
   {
     rtems_name name;
 
     printf(" TEST1 : creating task '%c%c%c%c', ", c1, c2, c3, c4);
-    
+
     name = rtems_build_name(c1, c2, c3, c4);
 
     result = rtems_task_create(name,
@@ -63,29 +63,29 @@ void test1()
 
     if (status_code_bad(result))
       break;
-    
+
     printf("number = %3i, id = %08x, starting, ", task_count, task_id[task_count]);
-    
+
     fflush(stdout);
     result = rtems_task_start(task_id[task_count],
                               test_task,
                               (rtems_task_argument) task_count);
-    
+
     if (status_code_bad(result))
       break;
-    
+
     /*
      *  Update the name.
      */
-    
+
     NEXT_TASK_NAME(c1, c2, c3, c4);
-    
+
     task_count++;
   }
 
   if (task_count >= MAX_TASKS)
     printf( "\nMAX_TASKS too small for work-space size, please make larger !!\n\n" );
-    
+
   if (task_count != (TASK_ALLOCATION_SIZE - 1)) {
     printf( " FAIL1 : the number of tasks does not equal the expected size -\n"
             "           task created = %i, required number = %i\n",
@@ -94,8 +94,8 @@ void test1()
   }
 
   destory_all_tasks("TEST1");
-  
+
   the_information->auto_extend = auto_extend;
-  
+
   printf( " TEST1 : completed\n" );
 }

@@ -493,7 +493,7 @@ int main(
         }
         length = strlen(inbuff);
         inbuff[length - 1] = '\0';
-        
+
     }
 
 

@@ -29,7 +29,7 @@ rtems_task Test_task(
 
 /*
  *  Keep the names and IDs in global variables so another task can use them.
- */ 
+ */
 
 extern rtems_id   Task_id[ 4 ];         /* array of task ids */
 extern rtems_name Task_name[ 4 ];       /* array of task names */

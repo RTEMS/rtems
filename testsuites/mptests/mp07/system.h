@@ -26,12 +26,12 @@ rtems_task Test_task(
 );
 
 /* configuration information */
- 
+
 #define CONFIGURE_MP_APPLICATION
- 
+
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
- 
+
 #define CONFIGURE_MAXIMUM_TASKS               2
 #define CONFIGURE_MAXIMUM_TIMERS              1
 
@@ -46,7 +46,7 @@ TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
 
 TEST_EXTERN rtems_id   Timer_id[ 4 ];     /* array of timer ids */
 TEST_EXTERN rtems_name Timer_name[ 4 ];   /* array of timer names */
- 
+
 TEST_EXTERN volatile rtems_boolean Stop_Test;
 
 /* end of include file */

@@ -118,7 +118,7 @@ rtems_task High_task(
 )
 {
   uint32_t   size;
-  
+
   Timer_initialize();
      (void) rtems_message_queue_receive(
               Queue_id,
@@ -134,7 +134,7 @@ rtems_task Middle_tasks(
 )
 {
   uint32_t   size;
-  
+
   (void) rtems_message_queue_receive(
            Queue_id,
            (long (*)[4]) Buffer,

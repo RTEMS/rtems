@@ -1,8 +1,8 @@
 ## $Id$
 
-## NOTE: This is a temporary work-around to keep 
+## NOTE: This is a temporary work-around to keep
 ## RTEMS's non automake standard make targets working.
-## Once automake is fully integrated these make targets 
+## Once automake is fully integrated these make targets
 ## and this file will probably be removed
 
 preinstall-am: $(PREINSTALL_FILES)

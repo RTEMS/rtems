@@ -40,23 +40,23 @@ rtems_task Init(
   uint32_t      task;
 
   /* lower the task priority to allow created tasks to execute */
-  
+
   rtems_task_set_priority(RTEMS_SELF, 20, &old_priority);
   rtems_task_mode(RTEMS_PREEMPT,  RTEMS_PREEMPT_MASK, &old_mode);
-  
+
   printf( "\n*** UNLIMITED TASK TEST ***\n" );
 
   /*
    * Invalid state if the task id is 0
    */
-    
+
   for (task = 0; task < MAX_TASKS; task++)
     task_id[task] = 0;
 
   test1();
   test2();
   test3();
-  
+
   printf( "\n*** END OF UNLIMITED TASK TEST ***\n" );
   exit( 0 );
 }
@@ -66,11 +66,11 @@ rtems_task test_task(
   )
 {
   rtems_event_set out;
-  
+
   printf( "task %i has started.\n",  my_number);
 
   rtems_event_receive(1, RTEMS_WAIT | RTEMS_EVENT_ANY, 0, &out);
-  
+
   printf( "task %i ending.\n",  my_number);
 
   rtems_task_delete(RTEMS_SELF);
@@ -81,11 +81,11 @@ void destory_all_tasks(
 )
 {
   uint32_t   task;
-  
+
   /*
    *  If the id is not zero, signal the task to delete.
    */
-  
+
   for (task = 0; task < MAX_TASKS; task++)
     if (task_id[task])
     {
@@ -103,15 +103,15 @@ boolean status_code_bad(
   if (status_code != RTEMS_SUCCESSFUL)
   {
     printf("failure, ");
-    
+
     if (status_code == RTEMS_TOO_MANY)
     {
-      printf("too many.\n");     
+      printf("too many.\n");
       return TRUE;
     }
     if (status_code == RTEMS_UNSATISFIED)
     {
-      printf("unsatisfied.\n");     
+      printf("unsatisfied.\n");
       return TRUE;
     }
 

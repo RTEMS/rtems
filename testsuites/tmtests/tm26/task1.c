@@ -197,15 +197,15 @@ rtems_task High_task(
   Timer_initialize();
     rtems_interrupt_disable( level );
   isr_disable_time = Read_timer();
- 
+
   Timer_initialize();
     rtems_interrupt_flash( level );
   isr_flash_time = Read_timer();
- 
+
   Timer_initialize();
     rtems_interrupt_enable( level );
   isr_enable_time = Read_timer();
- 
+
   Timer_initialize();
     _Thread_Disable_dispatch();
   thread_disable_dispatch_time = Read_timer();
@@ -445,7 +445,7 @@ void complete_test( void )
     0,
     0
   );
- 
+
   put_time(
     "_ISR_Enable",
     isr_enable_time,
@@ -453,7 +453,7 @@ void complete_test( void )
     0,
     0
   );
- 
+
   put_time(
     "_Thread_Disable_dispatch",
     thread_disable_dispatch_time,

@@ -30,12 +30,12 @@ void Receive_messages( void );
 void Send_messages( void );
 
 /* configuration information */
- 
+
 #define CONFIGURE_MP_APPLICATION
- 
+
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
- 
+
 #define CONFIGURE_MAXIMUM_TASKS               2
 #define CONFIGURE_MAXIMUM_TIMERS              1
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
@@ -51,7 +51,7 @@ TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
 
 TEST_EXTERN rtems_id   Queue_id[ 2 ];    /* array of message queue ids */
 TEST_EXTERN rtems_name Queue_name[ 2 ];  /* array of message queue names */
- 
+
 extern char buffer1[16];
 extern char buffer2[16];
 extern char buffer3[16];

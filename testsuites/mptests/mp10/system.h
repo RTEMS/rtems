@@ -20,26 +20,26 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_task Test_task1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Test_task2(
   rtems_task_argument argument
 );
- 
+
 rtems_task Test_task3(
   rtems_task_argument restart
 );
 
 /* configuration information */
- 
+
 #define CONFIGURE_MP_APPLICATION
- 
+
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
- 
+
 #if ( NODE_NUMBER == 1 )
 #define CONFIGURE_MAXIMUM_TASKS               1
 #define CONFIGURE_MAXIMUM_SEMAPHORES          1

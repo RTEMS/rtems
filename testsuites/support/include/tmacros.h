@@ -31,7 +31,7 @@ extern "C" {
 #define FOREVER 1                  /* infinite loop */
 
 #ifdef TEST_INIT
-#define TEST_EXTERN 
+#define TEST_EXTERN
 #define CONFIGURE_INIT
 #else
 #define TEST_EXTERN extern
@@ -53,7 +53,7 @@ extern "C" {
       FLUSH_OUTPUT(); \
       rtems_test_exit( 1 ); \
     } \
-  } while ( 0 ) 
+  } while ( 0 )
 
 /*
  *  These macros properly report errors within the Classic API
@@ -83,7 +83,7 @@ extern "C" {
   do { \
     check_dispatch_disable_level( _level ); \
     fatal_directive_check_status_only( _stat, _desired, _msg ); \
-  } while ( 0 ) 
+  } while ( 0 )
 
 /*
  *  These macros properly report errors from the POSIX API
