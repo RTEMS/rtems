@@ -1,3 +1,9 @@
+2003-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* dlentry/Makefile.am: Eliminate VPATH.
+	* flashentry/Makefile.am: Eliminate VPATH.
+	* startup/Makefile.am: Eliminate VPATH.
+
 2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/linkcmds: Remove SEARCH_DIR.
