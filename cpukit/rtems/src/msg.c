@@ -48,14 +48,19 @@ void _Message_queue_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_Message_queue_Information,
-    OBJECTS_RTEMS_MESSAGE_QUEUES,
-    TRUE,
-    maximum_message_queues,
+    &_Message_queue_Information,  /* object information table */
+    OBJECTS_CLASSIC_API,          /* object API */
+    OBJECTS_RTEMS_MESSAGE_QUEUES, /* object class */
+    maximum_message_queues,       /* maximum objects of this class */
     sizeof( Message_queue_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+                               /* size of this object's control block */
+    FALSE,                     /* TRUE if names of this object are strings */
+    RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                     /* TRUE if this is a global object class */
+    NULL                       /* Proxy extraction support callout */
+#endif
   );
 
   /*

@@ -60,7 +60,6 @@ rtems_status_code rtems_message_queue_create(
 {
   register Message_queue_Control *the_message_queue;
   CORE_message_queue_Attributes   the_msgq_attributes;
-  void                           *handler;
 #if defined(RTEMS_MULTIPROCESSING)
   boolean                         is_global;
 #endif
@@ -119,18 +118,12 @@ rtems_status_code rtems_message_queue_create(
   else
     the_msgq_attributes.discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
 
-  handler = NULL;
-#if defined(RTEMS_MULTIPROCESSING)
-  handler = _Message_queue_MP_Send_extract_proxy;
-#endif
-
   if ( ! _CORE_message_queue_Initialize(
            &the_message_queue->message_queue,
-           OBJECTS_RTEMS_MESSAGE_QUEUES,
            &the_msgq_attributes,
            count,
-           max_message_size,
-           handler ) ) {
+           max_message_size
+         ) ) {
 #if defined(RTEMS_MULTIPROCESSING)
     if ( is_global )
         _Objects_MP_Close(
@@ -145,7 +138,7 @@ rtems_status_code rtems_message_queue_create(
   _Objects_Open(
     &_Message_queue_Information,
     &the_message_queue->Object,
-    &name
+    name
   );
 
   *id = the_message_queue->Object.id;

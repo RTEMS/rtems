@@ -20,6 +20,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/apimutex.h>
 
 /*PAGE
  *
@@ -44,12 +45,15 @@ rtems_status_code rtems_region_delete(
   register Region_Control *the_region;
   Objects_Locations               location;
 
+  _RTEMS_Lock_allocator();
   the_region = _Region_Get( id, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:        /* this error cannot be returned */
+      _RTEMS_Unlock_allocator();
       return RTEMS_INTERNAL_ERROR;
 
     case OBJECTS_ERROR:
+      _RTEMS_Unlock_allocator();
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
@@ -57,10 +61,10 @@ rtems_status_code rtems_region_delete(
       if ( the_region->number_of_used_blocks == 0 ) {
         _Objects_Close( &_Region_Information, &the_region->Object );
         _Region_Free( the_region );
-        _Thread_Enable_dispatch();
+        _RTEMS_Unlock_allocator();
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _RTEMS_Unlock_allocator();
       return RTEMS_RESOURCE_IN_USE;
   }
 

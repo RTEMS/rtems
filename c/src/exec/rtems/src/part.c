@@ -39,14 +39,18 @@ void _Partition_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_Partition_Information,
-    OBJECTS_RTEMS_PARTITIONS,
-    TRUE,
-    maximum_partitions,
-    sizeof( Partition_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+    &_Partition_Information,     /* object information table */
+    OBJECTS_CLASSIC_API,         /* object API */
+    OBJECTS_RTEMS_PARTITIONS,    /* object class */
+    maximum_partitions,          /* maximum objects of this class */
+    sizeof( Partition_Control ), /* size of this object's control block */
+    FALSE,                       /* TRUE if the name is a string */
+    RTEMS_MAXIMUM_NAME_LENGTH    /* maximum length of an object name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                       /* TRUE if this is a global object class */
+    NULL                         /* Proxy extraction support callout */
+#endif
   );
 
   /*

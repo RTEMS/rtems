@@ -20,6 +20,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/apimutex.h>
 
 /*PAGE
  *
@@ -37,15 +38,23 @@ void _Region_Manager_initialization(
   unsigned32 maximum_regions
 )
 {
+  /* XXX move me */
+  _API_Mutex_Initialization( 1 );
+  _API_Mutex_Allocate( _RTEMS_Allocator_Mutex );
+
   _Objects_Initialize_information(
-    &_Region_Information,
-    OBJECTS_RTEMS_REGIONS,
-    FALSE,
-    maximum_regions,
-    sizeof( Region_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+    &_Region_Information,      /* object information table */
+    OBJECTS_CLASSIC_API,       /* object API */
+    OBJECTS_RTEMS_REGIONS,     /* object class */
+    maximum_regions,           /* maximum objects of this class */
+    sizeof( Region_Control ),  /* size of this object's control block */
+    FALSE,                     /* TRUE if the name is a string */
+    RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                     /* TRUE if this is a global object class */
+    NULL                       /* Proxy extraction support callout */
+#endif
   );
 
   /*

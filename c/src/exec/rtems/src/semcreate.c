@@ -172,14 +172,8 @@ rtems_status_code rtems_semaphore_create(
 
     _CORE_mutex_Initialize(
       &the_semaphore->Core_control.mutex,
-      OBJECTS_RTEMS_SEMAPHORES,
       &the_mutex_attributes,
-      lock,
-#if defined(RTEMS_MULTIPROCESSING)
-      _Semaphore_MP_Send_extract_proxy
-#else
-      NULL
-#endif
+      lock
     );
   } else {
     if ( _Attributes_Is_priority( attribute_set ) )
@@ -202,18 +196,12 @@ rtems_status_code rtems_semaphore_create(
 
     _CORE_semaphore_Initialize(
       &the_semaphore->Core_control.semaphore,
-      OBJECTS_RTEMS_SEMAPHORES,
       &the_semaphore_attributes,
-      count,
-#if defined(RTEMS_MULTIPROCESSING)
-      _Semaphore_MP_Send_extract_proxy
-#else
-      NULL
-#endif
+      count
     );
   }
 
-  _Objects_Open( &_Semaphore_Information, &the_semaphore->Object, &name );
+  _Objects_Open( &_Semaphore_Information, &the_semaphore->Object, name );
 
   *id = the_semaphore->Object.id;
 

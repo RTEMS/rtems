@@ -1,3 +1,31 @@
+2002-07-01    Joel Sherrill <joel@OARcorp.com>
+
+	* Mega patch merge to change the format of the object IDs to
+	loosen the dependency between the SCORE and the various APIs.
+	There was considerable work to simplify the object name management
+        and it appears that the name_table field is no longer needed.
+	This patch also includes the addition of the internal mutex
+	which is currently only used to protect some types of allocation
+	and deallocation.  This significantly can reduce context 
+	switch latency under certain circumstances.  In particular,
+	some heap/region operations were O(n) and had dispatching
+	disabled.  This should help enormously.  With this merge,
+	the patch is not as clean as it should be.  In particular,
+	the documentation has not been modified to reflect the new object
+	ID layout, the IDs in the test screens are not updated, and
+	_Objects_Get_information needs to be a real routine not inlined.
+	As part of this patch a lot of MP code for thread/proxy blocking
+	was made conditional and cleaned up.
+	* include/rtems.h, inline/rtems/rtems/region.inl,
+	macros/rtems/rtems/region.inl, src/dpmem.c, src/dpmemcreate.c,
+	src/msg.c, src/msgqcreate.c, src/part.c, src/partcreate.c,
+	src/ratemon.c, src/ratemoncreate.c, src/region.c, src/regioncreate.c,
+	src/regiondelete.c, src/regionextend.c, src/regiongetinfo.c,
+	src/regiongetsegment.c, src/regiongetsegmentsize.c,
+	src/regionident.c, src/regionreturnsegment.c, src/rtemstimer.c,
+	src/sem.c, src/semcreate.c, src/taskcreate.c, src/taskident.c,
+	src/tasks.c, src/timercreate.c: Modified as part of above.
+
 2001-04-08	Joel Sherrill <joel@OARcorp.com>
 
 	* src/tasks.c: Pre-initialized switch extension for list.

@@ -58,7 +58,7 @@ rtems_status_code rtems_timer_create(
 
   the_timer->the_class = TIMER_DORMANT;
 
-  _Objects_Open( &_Timer_Information, &the_timer->Object, &name );
+  _Objects_Open( &_Timer_Information, &the_timer->Object, name );
 
   *id = the_timer->Object.id;
   _Thread_Enable_dispatch();

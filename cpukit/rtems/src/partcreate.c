@@ -97,7 +97,7 @@ rtems_status_code rtems_partition_create(
   _Chain_Initialize( &the_partition->Memory, starting_address,
                         length / buffer_size, buffer_size );
 
-  _Objects_Open( &_Partition_Information, &the_partition->Object, &name );
+  _Objects_Open( &_Partition_Information, &the_partition->Object, name );
 
   *id = the_partition->Object.id;
 #if defined(RTEMS_MULTIPROCESSING)

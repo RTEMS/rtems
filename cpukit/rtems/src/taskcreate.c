@@ -182,7 +182,7 @@ rtems_status_code rtems_task_create(
       THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */
     _Modes_Get_interrupt_level(initial_modes),
-    &name
+    name
   );
 
   if ( !status ) {

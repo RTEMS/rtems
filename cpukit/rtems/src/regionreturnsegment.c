@@ -28,6 +28,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/apimutex.h>
 
 /*PAGE
  *
@@ -58,13 +59,16 @@ rtems_status_code rtems_region_return_segment(
 #endif
   int                      status;
 
+  _RTEMS_Lock_allocator();
   the_region = _Region_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_REMOTE:        /* this error cannot be returned */
+      _RTEMS_Unlock_allocator();
       return RTEMS_INTERNAL_ERROR;
 
     case OBJECTS_ERROR:
+      _RTEMS_Unlock_allocator();
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
@@ -75,7 +79,7 @@ rtems_status_code rtems_region_return_segment(
       if ( _Heap_Size_of_user_area( &the_region->Memory, segment, size ) ) {
         memset(segment, (RTEMS_REGION_FREE_SHRED_PATTERN & 0xFF), size);
       } else {
-        _Thread_Enable_dispatch();
+        _RTEMS_Unlock_allocator();
         return RTEMS_INVALID_ADDRESS;
       }
 #endif
@@ -85,7 +89,7 @@ rtems_status_code rtems_region_return_segment(
       _Region_Debug_Walk( the_region, 4 );
 
       if ( !status ) {
-        _Thread_Enable_dispatch();
+        _RTEMS_Unlock_allocator();
         return RTEMS_INVALID_ADDRESS;
       }
 
@@ -110,7 +114,7 @@ rtems_status_code rtems_region_return_segment(
         the_thread->Wait.return_code = RTEMS_SUCCESSFUL;
       }
 
-      _Thread_Enable_dispatch();
+      _RTEMS_Unlock_allocator();
       return RTEMS_SUCCESSFUL;
   }
 

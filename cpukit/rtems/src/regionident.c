@@ -20,6 +20,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/apimutex.h>
 
 /*PAGE
  *

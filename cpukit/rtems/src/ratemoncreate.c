@@ -59,7 +59,7 @@ rtems_status_code rtems_rate_monotonic_create(
   the_period->owner = _Thread_Executing;
   the_period->state = RATE_MONOTONIC_INACTIVE;
 
-  _Objects_Open( &_Rate_monotonic_Information, &the_period->Object, &name );
+  _Objects_Open( &_Rate_monotonic_Information, &the_period->Object, name );
 
   *id = the_period->Object.id;
   _Thread_Enable_dispatch();

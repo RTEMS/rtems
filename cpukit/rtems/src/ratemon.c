@@ -41,13 +41,17 @@ void _Rate_monotonic_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_Rate_monotonic_Information,
-    OBJECTS_RTEMS_PERIODS,
-    FALSE,
-    maximum_periods,
-    sizeof( Rate_monotonic_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+    &_Rate_monotonic_Information,     /* object information table */
+    OBJECTS_CLASSIC_API,              /* object API */
+    OBJECTS_RTEMS_PERIODS,            /* object class */
+    maximum_periods,                  /* maximum objects of this class */
+    sizeof( Rate_monotonic_Control ), /* size of this object's control block */
+    FALSE,                            /* TRUE if the name is a string */
+    RTEMS_MAXIMUM_NAME_LENGTH         /* maximum length of an object name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                     /* TRUE if this is a global object class */
+    NULL                       /* Proxy extraction support callout */
+#endif
   );
 }

@@ -38,13 +38,18 @@ void _Dual_ported_memory_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_Dual_ported_memory_Information,
-    OBJECTS_RTEMS_PORTS,
-    FALSE,
-    maximum_ports,
+    &_Dual_ported_memory_Information, /* object information table */
+    OBJECTS_CLASSIC_API,              /* object API */
+    OBJECTS_RTEMS_PORTS,              /* object class */
+    maximum_ports,                    /* maximum objects of this class */
     sizeof( Dual_ported_memory_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+                                  /* size of this object's control block */
+    FALSE,                        /* TRUE if names of this object are strings */
+    RTEMS_MAXIMUM_NAME_LENGTH     /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                        /* TRUE if this is a global object class */
+    NULL                          /* Proxy extraction support callout */
+#endif
   );
 }

@@ -82,8 +82,8 @@ extern "C" {
  
 #define RTEMS_OBJECT_ID_INITIAL_INDEX        OBJECTS_ID_INITIAL_INDEX
 #define RTEMS_OBJECT_ID_FINAL_INDEX          OBJECTS_ID_FINAL_INDEX
+#define RTEMS_OBJECT_ID_INITIAL(api, class, node) OBJECTS_ID_INITIAL(api, class, node)
  
-#define RTEMS_OBJECT_ID_INITIAL(class, node) OBJECTS_ID_INITIAL(class, node)
 #define RTEMS_OBJECT_ID_FINAL                OBJECTS_ID_FINAL
  
 /*

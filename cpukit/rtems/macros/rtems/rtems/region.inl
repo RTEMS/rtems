@@ -42,7 +42,7 @@
 
 #define _Region_Get( _id, _location ) \
   (Region_Control *) \
-   _Objects_Get( &_Region_Information, (_id), (_location) )
+   _Objects_Get_no_protection( &_Region_Information, (_id), (_location) )
 
 /*PAGE
  *

@@ -20,6 +20,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/apimutex.h>
 
 /*PAGE
  *
@@ -58,18 +59,21 @@ rtems_status_code rtems_region_get_segment(
   if ( size == 0 )
     return RTEMS_INVALID_SIZE;
 
+  _RTEMS_Lock_allocator();
   executing  = _Thread_Executing;
   the_region = _Region_Get( id, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:        /* this error cannot be returned */
+      _RTEMS_Unlock_allocator();
       return RTEMS_INTERNAL_ERROR;
 
     case OBJECTS_ERROR:
+      _RTEMS_Unlock_allocator();
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       if ( size > the_region->maximum_segment_size ) {
-        _Thread_Enable_dispatch();
+        _RTEMS_Unlock_allocator();
         return RTEMS_INVALID_SIZE;
       }
 
@@ -81,13 +85,13 @@ rtems_status_code rtems_region_get_segment(
 
       if ( the_segment ) {
         the_region->number_of_used_blocks += 1;
-        _Thread_Enable_dispatch();
+        _RTEMS_Unlock_allocator();
         *segment = the_segment;
         return RTEMS_SUCCESSFUL;
       }
 
       if ( _Options_Is_no_wait( option_set ) ) {
-        _Thread_Enable_dispatch();
+        _RTEMS_Unlock_allocator();
         return RTEMS_UNSATISFIED;
       }
 
@@ -100,7 +104,7 @@ rtems_status_code rtems_region_get_segment(
 
       _Thread_queue_Enqueue( &the_region->Wait_queue, timeout );
 
-      _Thread_Enable_dispatch();
+      _RTEMS_Unlock_allocator();
       return (rtems_status_code) executing->Wait.return_code;
   }
 

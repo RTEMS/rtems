@@ -20,6 +20,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/apimutex.h>
 
 /*PAGE
  *
@@ -59,12 +60,12 @@ rtems_status_code rtems_region_create(
   if ( !_Addresses_Is_aligned( starting_address ) )
     return RTEMS_INVALID_ADDRESS;
 
-  _Thread_Disable_dispatch();             /* to prevent deletion */
+  _RTEMS_Lock_allocator();                      /* to prevent deletion */
 
   the_region = _Region_Allocate();
 
   if ( !the_region ) {
-    _Thread_Enable_dispatch();
+    _RTEMS_Unlock_allocator();
     return RTEMS_TOO_MANY;
   }
 
@@ -73,7 +74,7 @@ rtems_status_code rtems_region_create(
 
   if ( !the_region->maximum_segment_size ) {
     _Region_Free( the_region );
-    _Thread_Enable_dispatch();
+    _RTEMS_Unlock_allocator();
     return RTEMS_INVALID_SIZE;
   }
 
@@ -85,21 +86,15 @@ rtems_status_code rtems_region_create(
 
   _Thread_queue_Initialize(
     &the_region->Wait_queue,
-    OBJECTS_RTEMS_REGIONS,
     _Attributes_Is_priority( attribute_set ) ? 
        THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_SEGMENT,
-#if defined(RTEMS_MULTIPROCESSING)
-    _Region_MP_Send_extract_proxy,
-#else
-    NULL,
-#endif
     RTEMS_TIMEOUT
   );
 
-  _Objects_Open( &_Region_Information, &the_region->Object, &name );
+  _Objects_Open( &_Region_Information, &the_region->Object, name );
 
   *id = the_region->Object.id;
-  _Thread_Enable_dispatch();
+  _RTEMS_Unlock_allocator();
   return RTEMS_SUCCESSFUL;
 }

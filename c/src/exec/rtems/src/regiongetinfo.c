@@ -19,6 +19,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
+#include <rtems/score/apimutex.h>
 #include <rtems/score/thread.h>
 
 /*PAGE
@@ -48,21 +49,24 @@ rtems_status_code rtems_region_get_information(
   if ( !the_info )
     return RTEMS_INVALID_ADDRESS;
 
+  _RTEMS_Lock_allocator();
   the_region = _Region_Get( id, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:        /* this error cannot be returned */
+      _RTEMS_Unlock_allocator();
       return RTEMS_INTERNAL_ERROR;
 
     case OBJECTS_ERROR:
+      _RTEMS_Unlock_allocator();
       return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
 
       if ( _Heap_Get_information( &the_region->Memory, the_info ) ) {
-        _Thread_Enable_dispatch();
+        _RTEMS_Unlock_allocator();
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _RTEMS_Unlock_allocator();
       return RTEMS_INVALID_ADDRESS;
   }
 

@@ -67,7 +67,7 @@ RTEMS_INLINE_ROUTINE Region_Control *_Region_Get (
 )
 {
   return (Region_Control *)
-    _Objects_Get( &_Region_Information, id, location );
+    _Objects_Get_no_protection( &_Region_Information, id, location );
 }
 
 /*PAGE

@@ -249,14 +249,18 @@ void _RTEMS_tasks_Manager_initialization(
 #endif
 
   _Objects_Initialize_information(
-    &_RTEMS_tasks_Information,
-    OBJECTS_RTEMS_TASKS,
-    TRUE,
-    maximum_tasks,
-    sizeof( Thread_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    TRUE
+    &_RTEMS_tasks_Information, /* object information table */
+    OBJECTS_CLASSIC_API,       /* object API */
+    OBJECTS_RTEMS_TASKS,       /* object class */
+    maximum_tasks,             /* maximum objects of this class */
+    sizeof( Thread_Control ),  /* size of this object's control block */
+    FALSE,                     /* TRUE if the name is a string */
+    RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                     /* TRUE if this is a global object class */
+    NULL                       /* Proxy extraction support callout */
+#endif
   );
 
   /*

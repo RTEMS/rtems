@@ -38,14 +38,18 @@ void _Timer_Manager_initialization(
 )
 {
   _Objects_Initialize_information(
-    &_Timer_Information,
-    OBJECTS_RTEMS_TIMERS,
-    FALSE,
-    maximum_timers,
-    sizeof( Timer_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+    &_Timer_Information,       /* object information table */
+    OBJECTS_CLASSIC_API,       /* object API */
+    OBJECTS_RTEMS_TIMERS,      /* object class */
+    maximum_timers,            /* maximum objects of this class */
+    sizeof( Timer_Control ),   /* size of this object's control block */
+    FALSE,                     /* TRUE if the name is a string */
+    RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                     /* TRUE if this is a global object class */
+    NULL                       /* Proxy extraction support callout */
+#endif
   );
 
   /*
