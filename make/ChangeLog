@@ -1,4 +1,14 @@
 
+2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
+
+	This modification is part of the submitted modifications necessary to
+	support the IBM PPC405 family.  This submission was reviewed by
+	Thomas Doerfler <Thomas.Doerfler@imd-systems.de> who ensured it did
+	not negatively impact the ppc403 BSPs.  The submission and tracking
+	process was captured as PR50.
+	* custom/gen405.cfg: New file.
+	* custom/helas403.cfg: Modified to generate Srecords.
+
 2001-10-30	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/sim68000.cfg: Generate symbols off executable not Srecords.
