@@ -22,14 +22,14 @@
 /*
  * Declare some sizes.
  */
-_RamBase = DEFINED(_RamBase) ? _RamBase : 0x100000;
+_RamBase = DEFINED(_RamBase) ? _RamBase : 0x20000;
 _RamSize = DEFINED(_RamSize) ? _RamSize : 1M;
 _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 MEMORY
 {
-        ram : org = 0x100000, l = 1M
+        ram : org = 0x000000, l = 1M
 }
 
 SECTIONS
@@ -41,7 +41,7 @@ SECTIONS
         /*
          * Text, data and bss segments
          */
-        .text : {
+        .text 0x20000 : {
                 *(.text)
 
 		/*
