@@ -1,3 +1,8 @@
+2004-04-09	Joel Sherrill <joel@OARcorp.com>
+
+	PR 605/bsps
+	* cpu.c: Do not use C++ style comments.
+
 2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Remove (Merged into $(top_srcdir)/configure.ac).
