@@ -1,3 +1,10 @@
+2003-09-03	Jiri Gaisler <jiri@gaisler.com>
+
+	PR 477/networking
+	* network/Makefile.am: Add driver for OpenCores NIC.
+	* network/README.open_eth, network/open_eth.c, network/open_eth.h:
+	New files.
+
 2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ide/Makefile.am: Don't include @RTEMS_BSP@.cfg.
