@@ -14,7 +14,6 @@
 #include "system.h"
 #include <sched.h>
 
-
 void *POSIX_Init(
   void *argument
 )
@@ -90,17 +89,27 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init: ID is 0x%08x\n", Init_id );
 
-  /* print the minimum priority */
+  /* exercise get minimum priority */
 
   priority = sched_get_priority_min( SCHED_FIFO );
-  printf( "Init: Minimum priority for FIFO is %d\n", priority );
+  printf( "Init: sched_get_priority_min (SCHED_FIFO) -- %d\n", priority );
   assert( priority != -1 );
 
-  /* print the maximum priority */
+  puts( "Init: sched_get_priority_min -- EINVAL (invalid policy)" );
+  priority = sched_get_priority_min( -1 );
+  assert( priority == -1 );
+  assert( errno == EINVAL );
+
+  /* exercise get maximum priority */
  
   priority = sched_get_priority_max( SCHED_FIFO );
-  printf( "Init: Maximum priority for FIFO is %d\n", priority );
+  printf( "Init: sched_get_priority_max (SCHED_FIFO) -- %d\n", priority );
   assert( priority != -1 );
+
+  puts( "Init: sched_get_priority_min -- EINVAL (invalid policy)" );
+  priority = sched_get_priority_min( -1 );
+  assert( priority == -1 );
+  assert( errno == EINVAL );
 
   /* print the round robin time quantum */
  
@@ -114,12 +123,28 @@ void *POSIX_Init(
   
   /* create a thread */
 
+  puts( "Init: pthread_create - SUCCESSFUL" );
   status = pthread_create( &thread_id, NULL, Task_1_through_3, NULL );
   assert( !status );
 
+  /* too may threads error */
+
+  puts( "Init: pthread_create - EINVAL (too many threads)" );
+  status = pthread_create( &thread_id, NULL, Task_1_through_3, NULL );
+  assert( status == EINVAL );
+
+  puts( "Init: sched_yield to Task_1" );
+  status = sched_yield();
+  assert( !status );
+
+    /* switch to Task_1 */
+
   /* exit this thread */
 
+  puts( "Init: pthread_exit" );
   pthread_exit( NULL );
+
+    /* switch to Task_1 */
 
   return NULL; /* just so the compiler thinks we returned something */
 }
