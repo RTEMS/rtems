@@ -7,10 +7,9 @@
  *
  */
 
-#include <libcpu/cpu.h>
-#include <libcpu/io.h>
-#include <rtems/score/targopts.h>
 #include <asm.h>
+#include <rtems/score/cpu.h>
+#include <libcpu/io.h>
 
         BEGIN_CODE
 

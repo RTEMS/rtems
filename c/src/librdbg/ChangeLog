@@ -1,3 +1,9 @@
+2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/powerpc/rdbg_cpu_asm.S: Reflect changes to
+	<rtems/score/cpu.h>.
+	* src/powerpc/rdbg_f.c: Ditto.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
