@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-INCLUDES += -I.
+INCLUDES = -I.
 
 LIBNAME = libimfs
 LIB = ${ARCH}/${LIBNAME}.a
