@@ -1,3 +1,8 @@
+2001-08-30	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Modified to work better with gcc 2.8.1 and
+	gnat 3.13p.
+
 2001-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add bspopts.h.
