@@ -26,22 +26,22 @@ long fpathconf(
   rtems_libio_t                          *iop;
   rtems_filesystem_limits_and_options_t  *the_limits;
 
+  rtems_libio_check_fd(fd);
+  iop = rtems_libio_iop(fd);
+  rtems_libio_check_permissions(iop, LIBIO_FLAGS_READ);
+
   /*
    *  If this file descriptor is mapped to an external set of handlers,
    *  then it is an error since fpathconf() is not included in the 
    *  set.
    */
 
-  if ( rtems_file_descriptor_type( fd ) )
+  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK )
     set_errno_and_return_minus_one( EBADF );
 
   /*
    *  Now process the information request.
    */
-
-  iop = rtems_libio_iop(fd);
-  rtems_libio_check_fd(fd);
-  rtems_libio_check_permissions(iop, LIBIO_FLAGS_READ);
 
   the_limits = &iop->pathinfo.mt_entry->pathconf_limits_and_options;
 

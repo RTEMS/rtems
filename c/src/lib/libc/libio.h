@@ -393,11 +393,15 @@ typedef struct {
 #define LIBIO_FLAGS_NO_DELAY      0x0001  /* return immediately if no data */
 #define LIBIO_FLAGS_READ          0x0002  /* reading */
 #define LIBIO_FLAGS_WRITE         0x0004  /* writing */
-#define LIBIO_FLAGS_LINE_BUFFERED 0x0008  /* line buffered io (^h, ^u, etc) */
 #define LIBIO_FLAGS_OPEN          0x0100  /* device is open */
 #define LIBIO_FLAGS_APPEND        0x0200  /* all writes append */
 #define LIBIO_FLAGS_CREATE        0x0400  /* create file */
 #define LIBIO_FLAGS_CLOSE_ON_EXEC 0x0800  /* close on process exec() */
+
+#define LIBIO_FLAGS_HANDLER_SHIFT 12
+#define LIBIO_FLAGS_HANDLER_MASK  0xF000  /* mask for external handler type */
+#define LIBIO_FLAGS_HANDLER_RTEMS 0x0000  /* `traditional' RTEMS I/O */
+#define LIBIO_FLAGS_HANDLER_SOCK  0x1000  /* BSD socket */
 
 #define LIBIO_FLAGS_READ_WRITE    (LIBIO_FLAGS_READ | LIBIO_FLAGS_WRITE)
 

@@ -65,6 +65,7 @@ extern rtems_id        rtems_libio_semaphore;
 extern unsigned32      rtems_libio_number_iops;
 extern rtems_libio_t  *rtems_libio_iops;
 extern rtems_libio_t  *rtems_libio_last_iop;
+extern rtems_libio_t *rtems_libio_iop_freelist;
 
 /*
  *  External I/O Handlers Table

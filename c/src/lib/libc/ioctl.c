@@ -26,15 +26,19 @@ int ioctl(
   rtems_status_code  rc;
   rtems_libio_t     *iop;
 
+  rtems_libio_check_fd( fd );
+  iop = rtems_libio_iop( fd );
+
   /*
    *  If this file descriptor is mapped to an external set of handlers,
    *  then pass the request on to them.
    */ 
 
-  if ( rtems_file_descriptor_type( fd ) ) {
+  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK ) {
     rtems_libio_ioctl_t fp;
 
-    fp = rtems_libio_handlers[rtems_file_descriptor_type_index(fd)].ioctl;
+    fp = rtems_libio_handlers[
+           (iop->flags >> LIBIO_FLAGS_HANDLER_SHIFT) - 1].ioctl;
     if ( fp == NULL )
       set_errno_and_return_minus_one( EBADF );
 
@@ -44,9 +48,6 @@ int ioctl(
   /*
    *  Now process the ioctl().
    */
-
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_fd( fd );
 
   if ( !iop->handlers->ioctl )
     set_errno_and_return_minus_one( ENOTSUP );

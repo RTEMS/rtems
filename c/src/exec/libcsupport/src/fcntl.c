@@ -32,19 +32,19 @@ int fcntl(
   
   va_start( ap, cmd );
 
+  rtems_libio_check_fd( fd );
+  iop = rtems_libio_iop( fd );
+
   /*
    *  If this is not a file system based entity, it is an error.
    */
 
-  if ( rtems_file_descriptor_type( fd ) )
+  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK )
     set_errno_and_return_minus_one( EBADF );
 
   /*
    *  Now process the fcntl().
    */
-
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_fd( fd );
 
   /*
    *  This switch should contain all the cases from POSIX.

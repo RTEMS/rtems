@@ -25,19 +25,20 @@ int ftruncate(
   rtems_libio_t                    *iop;
   rtems_filesystem_location_info_t  loc;
   
+  rtems_libio_check_fd( fd );
+  iop = rtems_libio_iop( fd );
+
   /*
    *  If this is not a file system based entity, it is an error.
    */
 
-  if ( rtems_file_descriptor_type( fd ) )
+  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK )
     set_errno_and_return_minus_one( EBADF );
 
   /*
    *  Now process the ftruncate() request.
    */
   
-  iop = rtems_libio_iop( fd );
-
   /*
    *  Make sure we are not working on a directory
    */
@@ -49,7 +50,6 @@ int ftruncate(
   if ( (*loc.ops->node_type)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY )
     set_errno_and_return_minus_one( EISDIR );
 
-  rtems_libio_check_fd( fd );
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
   if ( !iop->handlers->ftruncate )

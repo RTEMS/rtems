@@ -16,7 +16,7 @@ C_PIECES=sghostname issetugid \
         rtems_glue rtems_syscall rtems_bootp \
         rtems_showmbuf rtems_showroute \
         rtems_showifstat rtems_showipstat rtems_showicmpstat \
-        rtems_showtcpstat rtems_showudpstat
+        rtems_showtcpstat rtems_showudpstat rtems_select
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

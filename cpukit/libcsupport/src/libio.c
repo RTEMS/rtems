@@ -3,9 +3,6 @@
  *  table of integer style file descriptors used by the low level
  *  POSIX system calls like open(), read, fstat(), etc.
  *
- *  This provides the foundation for POSIX compliant IO system calls
- *  for RTEMS.
- *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
@@ -18,16 +15,54 @@
  */
 
 #include "libio_.h"                   /* libio_.h pulls in rtems */
+#include <rtems.h>
+#include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
+
+#include <stdio.h>                      /* O_RDONLY, et.al. */
+#include <fcntl.h>                      /* O_RDONLY, et.al. */
+#include <assert.h>
+#include <errno.h>
+
+#if ! defined(O_NDELAY)
+# if defined(solaris2)
+#  define O_NDELAY O_NONBLOCK
+# elif defined(RTEMS_NEWLIB)
+#  define O_NDELAY _FNBIO
+# endif
+#endif
+
+
+#include <errno.h>
+#include <string.h>                     /* strcmp */
+#include <unistd.h>
+#include <stdlib.h>                     /* calloc() */
+
+#include "libio.h"                      /* libio.h not pulled in by rtems */
+
+/*                            
+ *  File descriptor Table Information
+ */         
+
+extern unsigned32  rtems_libio_number_iops;
+rtems_id           rtems_libio_semaphore;
+rtems_libio_t     *rtems_libio_iops;
+rtems_libio_t     *rtems_libio_last_iop;
+rtems_libio_t     *rtems_libio_iop_freelist;
 
 /*
- *  Global variables used to manage the File Descriptor Table.
- *  IOP = IO Pointer.
+ *  External I/O Handlers Table
+ *
+ *  Space for all possible handlers is preallocated
+ *  to speed up dispatch to external handlers.
  */
 
-rtems_id                rtems_libio_semaphore;
-rtems_libio_t          *rtems_libio_iops;
-rtems_libio_t          *rtems_libio_last_iop;
 rtems_libio_handler_t   rtems_libio_handlers[15];
+
+/*
+ *  Default mode for all files.
+ */
+
+mode_t    rtems_filesystem_umask;
 
 /*
  *  rtems_register_libio_handler
@@ -44,8 +79,7 @@ void rtems_register_libio_handler(
   const rtems_libio_handler_t *handler
 )
 {
-  int handler_index = rtems_file_descriptor_type_index( handler_flag );
-
+  int handler_index = (handler_flag >> LIBIO_FLAGS_HANDLER_SHIFT) - 1;
 
   if ((handler_index < 0) || (handler_index >= 15))
     rtems_fatal_error_occurred( RTEMS_INVALID_NUMBER );
@@ -61,21 +95,22 @@ void rtems_register_libio_handler(
 
 void rtems_libio_init( void )
 {
-  rtems_status_code rc;
+    rtems_status_code rc;
+    int i;
+    rtems_libio_t *iop;
 
-  /*
-   *  Allocate memory for the IOP Table
-   */
+    if (rtems_libio_number_iops > 0)
+    {
+        rtems_libio_iops = (rtems_libio_t *) calloc(rtems_libio_number_iops,
+                                                    sizeof(rtems_libio_t));
+        if (rtems_libio_iops == NULL)
+            rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
 
-  if ( rtems_libio_number_iops > 0 ) {
-    rtems_libio_iops =
-      (rtems_libio_t *) calloc(rtems_libio_number_iops, sizeof(rtems_libio_t));
-
-    if (rtems_libio_iops == NULL)
-        rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
-
-    rtems_libio_last_iop = rtems_libio_iops + (rtems_libio_number_iops - 1);
-  }
+        iop = rtems_libio_iop_freelist = rtems_libio_iops;
+	for (i = 0 ; i < (rtems_libio_number_iops - 1) ; i++, iop++)
+		iop->data1 = iop + 1;
+	iop->data1 = NULL;
+    }
 
   /*
    *  Create the binary semaphore used to provide mutual exclusion
@@ -157,24 +192,21 @@ rtems_libio_t *rtems_libio_allocate( void )
   
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
-  for (iop = rtems_libio_iops; iop <= rtems_libio_last_iop; iop++)
-    if ((iop->flags & LIBIO_FLAGS_OPEN) == 0) {
-      /*
-       *  Got an IOP -- create a semaphore for it.
-       */
-
-      rc = rtems_semaphore_create(
-        RTEMS_LIBIO_IOP_SEM(iop - rtems_libio_iops),
-        1,
-        RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-        RTEMS_NO_PRIORITY,
-        &iop->sem
-      );
-      if ( rc != RTEMS_SUCCESSFUL )
-        goto failed;
-    
-      iop->flags = LIBIO_FLAGS_OPEN;
-      goto done;
+  if (rtems_libio_iop_freelist) {
+    iop = rtems_libio_iop_freelist;
+    rc = rtems_semaphore_create(
+      RTEMS_LIBIO_IOP_SEM(iop - rtems_libio_iops),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+      RTEMS_NO_PRIORITY,
+      &iop->sem
+    );
+    if (rc != RTEMS_SUCCESSFUL)
+      goto failed;
+    rtems_libio_iop_freelist = iop->data1;
+    iop->data1 = 0;
+    iop->flags = LIBIO_FLAGS_OPEN;
+    goto done;
   }
   
 failed:
@@ -198,19 +230,20 @@ void rtems_libio_free(
 {
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
-  if (iop->sem)
-    rtems_semaphore_delete(iop->sem);
+    if (iop->sem)
+      rtems_semaphore_delete(iop->sem);
 
-  (void) memset(iop, 0, sizeof(*iop));
+    iop->data1 = rtems_libio_iop_freelist;
+    rtems_libio_iop_freelist = iop;
 
-  rtems_semaphore_release( rtems_libio_semaphore );
+  rtems_semaphore_release(rtems_libio_semaphore);
 }
 
 /*
  *  rtems_libio_is_open_files_in_fs
  *
  *  This routine scans the entire file descriptor table to determine if the
- *  are any active file descriptors that refer to the atleast one node in the
+ *  are any active file descriptors that refer to the at least one node in the
  *  file system that we are trying to dismount.
  *
  *  If there is at least one node in the file system referenced by the mount 
@@ -225,19 +258,19 @@ int rtems_libio_is_open_files_in_fs(
   int                result = 0;
 
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-
+              
   /*
    *  Look for any active file descriptor entry.
-   */
-
+   */         
+     
   for ( iop=rtems_libio_iops ; iop <= rtems_libio_last_iop ; iop++ ) {
-
+        
     if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
-
+        
        /*
         *  Check if this node is under the file system that we
         *  are trying to dismount.
-        */ 
+        */
 
        if ( iop->pathinfo.mt_entry == fs_mt_entry ) {
           result = 1;
@@ -247,7 +280,7 @@ int rtems_libio_is_open_files_in_fs(
   }
 
   rtems_semaphore_release( rtems_libio_semaphore );
-
+ 
   return result;
 }
 
@@ -256,7 +289,7 @@ int rtems_libio_is_open_files_in_fs(
  *
  *  This routine scans the entire file descriptor table to determine if the
  *  given file refers to an active file descriptor.
- *
+ * 
  *  If the given file is open a 1 is returned, otherwise a 0 is returned.
  */
 
@@ -265,22 +298,22 @@ int rtems_libio_is_file_open(
 )
 {
   rtems_libio_t     *iop;
-  int                result=0; 
+  int                result=0;
 
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
   /*
    *  Look for any active file descriptor entry.
    */
-
+  
   for ( iop=rtems_libio_iops ; iop <= rtems_libio_last_iop ; iop++ ) {
-
+  
     if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
-
+  
        /*
         *  Check if this node is under the file system that we
         *  are trying to dismount.
-        */ 
+        */
 
        if ( iop->pathinfo.node_access == node_access ) {
           result = 1;
@@ -293,3 +326,5 @@ int rtems_libio_is_file_open(
 
   return result;
 }
+
+

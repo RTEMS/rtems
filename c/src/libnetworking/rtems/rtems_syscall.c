@@ -26,77 +26,6 @@
 #include <net/route.h>
 
 /*
- *********************************************************************
- *              Map RTEMS file descriptor to BSD socket              *
- *********************************************************************
- */
-struct fdsock {
-	int		indexFreeNext;
-	struct socket	*sock;
-};
-static struct fdsock *fdsock;
-static int fdsockCount;
-static int indexFreeHead = -1;
-
-/*
- * Convert an RTEMS file descriptor to a BSD socket pointer.
- */
-static struct socket *
-fdToSocket (int fd)
-{
-	int i;
-	struct socket *s;
-
-	if ((fd < 0)
-	 || (rtems_file_descriptor_type(fd) != RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET)
-	 || ((i = rtems_file_descriptor_base(fd)) >= fdsockCount)
-	 || ((s = fdsock[i].sock) == NULL)) {
-		errno = EBADF;
-		return NULL;
-	}
-	return s;
-}
-
-/*
- * Enlarge the size of the file-descritor/socket pointer map.
- */
-static int
-enlargeFdMap (void)
-{
-	struct fdsock *nfdsock;
-	int i;
-
-	nfdsock = realloc (fdsock, sizeof *fdsock * (fdsockCount + 20));
-	if (nfdsock == NULL) {
-		errno = ENFILE;
-		return 0;
-	}
-	fdsock = nfdsock;
-	for (i = fdsockCount, fdsockCount += 20 ; i < fdsockCount ; i++) {
-		fdsock[i].sock = NULL;
-		fdsock[i].indexFreeNext = indexFreeHead;
-		indexFreeHead = i;
-	}
-	return 1;
-}
-
-/*
- * Create a file descriptor for a new socket
- */
-static int
-makeFd (struct socket *s)
-{
-	int i;
-
-	if ((indexFreeHead < 0) && !enlargeFdMap ())
-		return -1;
-	i = indexFreeHead;
-	indexFreeHead = fdsock[i].indexFreeNext;
-	fdsock[i].sock = s;
-	return rtems_make_file_descriptor(i,RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET);
-}
-
-/*
  * Package system call argument into mbuf.
  */
 static int
@@ -128,14 +57,14 @@ sockargstombuf (struct mbuf **mp, const void *buf, int buflen, int type)
 int
 socket (int domain, int type, int protocol)
 {
-	int fd = -1;
+	int fd;
 	int error;
 	struct socket *so;
 
 	rtems_bsdnet_semaphore_obtain ();
 	error = socreate(domain, &so, type, protocol, NULL);
 	if (error == 0) {
-		fd = makeFd (so);
+		fd = rtems_bsdnet_makeFdForSocket (so);
 		if (fd < 0)
 			soclose (so);
 	}
@@ -156,7 +85,7 @@ bind (int s, struct sockaddr *name, int namelen)
 	struct mbuf *nam;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (s)) != NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (s)) != NULL) {
 		error = sockargstombuf (&nam, name, namelen, MT_SONAME);
 		if (error == 0) {
 			error = sobind (so, nam);
@@ -183,7 +112,7 @@ connect (int s, struct sockaddr *name, int namelen)
 	struct mbuf *nam;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (s)) == NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (s)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -233,7 +162,7 @@ listen (int s, int backlog)
 	struct socket *so;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (s)) != NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (s)) != NULL) {
 		error = solisten (so, backlog);
 		if (error == 0)
 			ret = 0;
@@ -252,7 +181,7 @@ accept (int s, struct sockaddr *name, int *namelen)
 	struct mbuf *nam;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((head = fdToSocket (s)) == NULL) {
+	if ((head = rtems_bsdnet_fdToSocket (s)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -284,7 +213,7 @@ accept (int s, struct sockaddr *name, int *namelen)
 	TAILQ_REMOVE(&head->so_comp, so, so_list);
 	head->so_qlen--;
 
-	fd = makeFd (so);
+	fd = rtems_bsdnet_makeFdForSocket (so);
 	if (fd < 0) {
 		TAILQ_INSERT_HEAD(&head->so_comp, so, so_list);
 		head->so_qlen++;
@@ -325,7 +254,7 @@ sendmsg (int s, const struct msghdr *mp, int flags)
 	int len;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (s)) == NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (s)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -428,7 +357,7 @@ recvmsg (int s, struct msghdr *mp, int flags)
 	int len;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (s)) == NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (s)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -547,7 +476,7 @@ setsockopt (int s, int level, int name, const void *val, int len)
 	int error;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (s)) == NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (s)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -584,7 +513,7 @@ getsockopt (int s, int level, int name, void *aval, int *avalsize)
 	int error;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (s)) == NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (s)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -626,7 +555,7 @@ getpeersockname (int s, struct sockaddr *name, int *namelen, int pflag)
 	int error;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (s)) == NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (s)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
@@ -676,16 +605,12 @@ rtems_bsdnet_close (int fd)
 {
 	struct socket *so;
 	int error;
-	int i;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (fd)) == NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (fd)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
-	i = rtems_file_descriptor_base(fd);
-	fdsock[i].indexFreeNext = indexFreeHead;;
-	indexFreeHead = i;
 	error = soclose (so);
 	rtems_bsdnet_semaphore_release ();
 	if (error) {
@@ -737,7 +662,7 @@ rtems_bsdnet_ioctl (int fd, unsigned32 command, void *buffer)
 	int error;
 
 	rtems_bsdnet_semaphore_obtain ();
-	if ((so = fdToSocket (fd)) == NULL) {
+	if ((so = rtems_bsdnet_fdToSocket (fd)) == NULL) {
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}

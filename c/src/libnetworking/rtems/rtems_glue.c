@@ -31,19 +31,6 @@
 #include <net/route.h>
 
 /*
- * Events used by networking routines.
- * Everything will break if the application
- * tries to use these events or if the `sleep'
- * events are equal to any of the NETISR * events.
- */
-#define SBWAIT_EVENT	RTEMS_EVENT_24
-#define SOSLEEP_EVENT	RTEMS_EVENT_25
-#define NETISR_IP_EVENT		(1 << NETISR_IP)
-#define NETISR_ARP_EVENT	(1 << NETISR_ARP)
-#define NETISR_EVENTS	(NETISR_IP_EVENT|NETISR_ARP_EVENT)
-
-
-/*
  * Memory allocation
  */
 static int nmbuf	= (64 * 1024) / MSIZE;
@@ -246,7 +233,7 @@ rtems_bsdnet_initialize (void)
 	/*
 	 * Register as an external I/O handler
 	 */
-	rtems_register_libio_handler (RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET,
+	rtems_register_libio_handler (LIBIO_FLAGS_HANDLER_SOCK,
 						&rtems_bsdnet_io_handler);
 
 	/*
@@ -305,15 +292,8 @@ sbwait(sb)
 	/*
 	 * Set this task as the target of the wakeup operation.
 	 */
-	if (sb->sb_sel.si_pid)
-		rtems_panic ("Another task is already sleeping on that socket buffer");
 	rtems_task_ident (RTEMS_SELF, 0, &tid);
 	sb->sb_sel.si_pid = tid;
-
-	/*
-	 * Mark the socket buffer as waiting.
-	 */
-	sb->sb_flags |= SB_WAIT;
 
 	/*
 	 * Release the network semaphore.
@@ -329,12 +309,6 @@ sbwait(sb)
 	 * Reobtain the network semaphore.
 	 */
 	rtems_bsdnet_semaphore_obtain ();
-
-	/*
-	 * Relinquish ownership of the socket buffer
-	 */
-	sb->sb_flags &= ~SB_WAIT;
-	sb->sb_sel.si_pid = 0;
 
 	/*
 	 * Return the status of the wait.
@@ -355,9 +329,11 @@ sowakeup(so, sb)
 	register struct socket *so;
 	register struct sockbuf *sb;
 {
-	if (sb->sb_flags & SB_WAIT) {
-		sb->sb_flags &= ~SB_WAIT;
-		rtems_event_send (sb->sb_sel.si_pid, SBWAIT_EVENT);
+	rtems_id tid;
+
+	if ((tid = sb->sb_sel.si_pid) != 0) {
+		sb->sb_sel.si_pid = 0;
+		rtems_event_send (tid, SBWAIT_EVENT);
 	}
 }
 

@@ -22,21 +22,21 @@ int fdatasync(
 {
   rtems_libio_t *iop;
 
+  rtems_libio_check_fd( fd );
+  iop = rtems_libio_iop( fd );
+  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
+
   /*
    *  If this file descriptor is mapped to an external set of handlers,
    *  then pass the request on to them.
    */
 
-  if ( rtems_file_descriptor_type( fd ) )
+  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK )
     set_errno_and_return_minus_one( EBADF );
 
   /*
    *  Now process the fdatasync().
    */
-
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_fd( fd );
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
   if ( !iop->handlers->fdatasync )
     set_errno_and_return_minus_one( ENOTSUP );

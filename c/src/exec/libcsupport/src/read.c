@@ -26,15 +26,22 @@ int read(
   int             rc;  /* XXX change to a size_t when prototype is fixed */
   rtems_libio_t *iop;
 
+  rtems_libio_check_fd( fd );
+  iop = rtems_libio_iop( fd );
+  rtems_libio_check_buffer( buffer );
+  rtems_libio_check_count( count );
+  rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
+
   /*
    *  If this file descriptor is mapped to an external set of handlers,
    *  then pass the request on to them.
    */ 
 
-  if ( rtems_file_descriptor_type( fd ) ) {
+  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK ) {
     rtems_libio_read_t fp;
 
-    fp = rtems_libio_handlers[rtems_file_descriptor_type_index(fd)].read;
+    fp = rtems_libio_handlers[
+           (iop->flags >> LIBIO_FLAGS_HANDLER_SHIFT) - 1].read;
     if ( fp == NULL )
       set_errno_and_return_minus_one( EBADF );
 
@@ -44,12 +51,6 @@ int read(
   /*
    *  Now process the read().
    */
-
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_fd( fd );
-  rtems_libio_check_buffer( buffer );
-  rtems_libio_check_count( count );
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
 
   if ( !iop->handlers->read )
     set_errno_and_return_minus_one( ENOTSUP );

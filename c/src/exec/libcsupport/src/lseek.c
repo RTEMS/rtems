@@ -24,15 +24,19 @@ off_t lseek(
 {
   rtems_libio_t *iop;
 
+  rtems_libio_check_fd( fd );
+  iop = rtems_libio_iop( fd );
+
   /*
    *  If this file descriptor is mapped to an external set of handlers,
    *  then pass the request on to them.
    */
 
-  if ( rtems_file_descriptor_type( fd ) ) {
+  if ( iop->flags & LIBIO_FLAGS_HANDLER_MASK ) {
     rtems_libio_lseek_t fp;
 
-    fp = rtems_libio_handlers[rtems_file_descriptor_type_index(fd)].lseek;
+    fp = rtems_libio_handlers[
+           (iop->flags >> LIBIO_FLAGS_HANDLER_SHIFT) - 1].lseek;
     if ( fp == NULL )
       set_errno_and_return_minus_one( EBADF );
 
@@ -42,9 +46,6 @@ off_t lseek(
   /*
    *  Now process the lseek().
    */
-
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_fd( fd );
 
   switch ( whence ) {
     case SEEK_SET:

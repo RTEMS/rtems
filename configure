@@ -806,7 +806,7 @@ case "${enableval}" in
   *)  { echo "configure: error: bad value ${enableval} for enable-rdbg option" 1>&2; exit 1; } ;;
 esac
 else
-  RTEMS_HAS_RDBG=yes
+  RTEMS_HAS_RDBG=no
 fi
 
 
