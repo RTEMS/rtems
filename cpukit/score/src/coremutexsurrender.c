@@ -63,13 +63,13 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   if ( the_mutex->Attributes.only_owner_release ) {
     if ( !_Thread_Is_executing( holder ) )
-      return( CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE );
+      return CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE;
   }
 
   /* XXX already unlocked -- not right status */
 
   if ( !the_mutex->nest_count ) 
-    return( CORE_MUTEX_STATUS_SUCCESSFUL );
+    return CORE_MUTEX_STATUS_SUCCESSFUL;
 
   the_mutex->nest_count--;
 
@@ -139,6 +139,6 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   } else
     the_mutex->lock = CORE_MUTEX_UNLOCKED;
 
-  return( CORE_MUTEX_STATUS_SUCCESSFUL );
+  return CORE_MUTEX_STATUS_SUCCESSFUL;
 }
 
