@@ -63,6 +63,132 @@ For each configuration parameter in the configuration tables, the
 macro corresponding to that field is discussed.  Most systems
 can be easily configured using the @code{confdefs.h} mechanism.
 
+The following subsection list all of the constants which can be
+set by the user.
+
+@subsection Library Support Definitions
+
+@itemize @bullet
+@item CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
+@item CONFIGURE_HAS_OWN_MOUNT_TABLE
+@item CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+@item STACK_CHECKER_ON
+@item CONFIGURE_MEMORY_OVERHEAD
+@item CONFIGURE_EXTRA_TASK_STACKS
+@end itemize
+
+@subsection Basic System Information
+
+@itemize @bullet
+@item CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
+@item CONFIGURE_INTERRUPT_STACK_MEMORY
+@item CONFIGURE_EXECUTIVE_RAM_WORK_AREA
+@item CONFIGURE_MICROSECONDS_PER_TICK
+@item CONFIGURE_TICKS_PER_TIMESLICE
+@end itemize
+
+NOTE: The required size of the Executive RAM Work Area is calculated
+automatically when using the @code{confdefs.h} mechanism.
+
+@subsection Device Driver Table
+
+@itemize @bullet
+@item CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
+@item CONFIGURE_HAS_OWN_NUMBER_OF_DEVICES
+@item CONFIGURE_MAXIMUM_DEVICES
+@item CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+@item CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+@item CONFIGURE_TEST_NEEDS_STUB_DRIVER
+@end itemize
+
+@subsection Multiprocessing Configuration
+
+@itemize @bullet
+@item CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
+@item CONFIGURE_MP_NODE_NUMBER
+@item CONFIGURE_MP_MAXIMUM_NODES
+@item CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
+@item CONFIGURE_MP_MAXIMUM_PROXIES
+@item CONFIGURE_MP_MPCI_TABLE_POINTER
+@end itemize
+
+@subsection Classic API Configuration
+
+@itemize @bullet
+@item CONFIGURE_MAXIMUM_TASKS
+@item CONFIGURE_MAXIMUM_TIMERS
+@item CONFIGURE_MAXIMUM_SEMAPHORES
+@item CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+@item CONFIGURE_MAXIMUM_PARTITIONS
+@item CONFIGURE_MAXIMUM_REGIONS
+@item CONFIGURE_MAXIMUM_PORTS
+@item CONFIGURE_MAXIMUM_PERIODS
+@item CONFIGURE_MAXIMUM_USER_EXTENSIONS
+@end itemize
+
+@subsection Initialization Tasks Table Configuration
+
+@itemize @bullet
+@item CONFIGURE_INIT_TASK_NAME
+@item CONFIGURE_INIT_TASK_STACK_SIZE
+@item CONFIGURE_INIT_TASK_PRIORITY
+@item CONFIGURE_INIT_TASK_ATTRIBUTES
+@item CONFIGURE_INIT_TASK_ENTRY_POINT
+@item CONFIGURE_INIT_TASK_INITIAL_MODES
+@item CONFIGURE_INIT_TASK_ARGUMENTS
+@end itemize
+
+
+@subsection POSIX API Configuration
+
+@itemize @bullet
+@item CONFIGURE_MAXIMUM_POSIX_THREADS
+@item CONFIGURE_MAXIMUM_POSIX_MUTEXES
+@item CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
+@item CONFIGURE_MAXIMUM_POSIX_KEYS
+@item CONFIGURE_MAXIMUM_POSIX_TIMERS
+@item CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
+@item CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
+@item CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
+@end itemize
+
+@subsection POSIX Initialization Thread Table Configuration
+
+@itemize @bullet
+@item CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
+@item CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
+@end itemize
+
+@subsection ITRON API Configuration
+
+@itemize @bullet
+@item CONFIGURE_MAXIMUM_ITRON_TASKS
+@item CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
+@item CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS
+@item CONFIGURE_MAXIMUM_ITRON_MAILBOXES
+@item CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS
+@item CONFIGURE_MAXIMUM_ITRON_PORTS
+@item CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS
+@item CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS
+@end itemize
+
+@subsection ITRON Initialization Task Table Configuration
+
+@itemize @bullet
+@item CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT
+@item CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES
+@item CONFIGURE_ITRON_INIT_TASK_PRIORITY
+@item CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
+@item CONFIGURE_ITRON_INIT_TASK_STACK_SIZES
+@end itemize
+
+@subsection Ada Tasks
+
+@itemize @bullet
+@item CONFIGURE_MAXIMUM_ADA_TASKS
+@item CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
+@end itemize
+
 @section Configuration Table
 
 @cindex Configuration Table
