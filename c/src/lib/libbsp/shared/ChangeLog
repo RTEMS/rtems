@@ -1,3 +1,9 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* bootcard.c, bspclean.c, clockdrv_shell.c, console-polled.c,
+	console.c, ide_ctrl.c, main.c, sbrk.c, setvec.c, tod.c, tod.h,
+	include/coverhd.h: URL for license changed.
+
 2003-06-30	Joel Sherrill <joel@OARcorp.com>
 
 	* console-polled.c: Corrected comments in header.
