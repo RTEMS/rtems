@@ -1,5 +1,10 @@
 2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in FAQ/ChangeLog.
+	* FAQ/ChangeLog: Remove.
+
+2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* ChangeLog: Merge-in user/ChangeLog.
 	* user/ChangeLog: Remove.
 
@@ -44,11 +49,13 @@
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 	* develenv/Makefile.am: Cosmetics.
 	* user/Makefile.am: Cosmetics.
+	* FAQ/Makefile.am: Cosmetics.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* develenv/Makefile.am: Cosmetics.
 	* user/Makefile.am: Cosmetics.
+	* FAQ/Makefile.am: Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -57,6 +64,8 @@
 	* develenv/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 	* user/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* FAQ/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 
 2003-11-25	Joel Sherrill <joel@OARcorp.com>
@@ -84,6 +93,11 @@
 
 	* user/preface.texi: Eliminate references to HPPA.
 
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* FAQ/basic.t, FAQ/entry: Obsoleting HP PA-RISC port and removing all
+	references.
+
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* images/ChangeLog: Removed.
@@ -98,6 +112,7 @@
 	* rtems_support.html.in: Purge hppa1.1.
 	* develenv/Makefile.am: Merger from rtems-4-6-branch.
 	* user/Makefile.am: Merger from rtems-4-6-branch.
+	* FAQ/Makefile.am: Merger from rtems-4-6-branch.
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -111,6 +126,8 @@
 	develenv/utils.t: Merge from branch.
 	* user/c_user.texi, user/fatal.t, user/preface.texi, user/rtmon.t: Merge
 	from branch.
+	* FAQ/FAQ.texi, FAQ/basic.t, FAQ/build45.t, FAQ/entry, FAQ/tools.t:
+	Merge from branch.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -119,6 +136,7 @@
 2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* user/fatal.t: Reflect c/src/exec having moved to cpukit.
+	* FAQ/build45.t: Fix typo (config.long).
 
 2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -158,6 +176,7 @@
 2003-02-14	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Removed a29k reference.
+	* FAQ/basic.t, FAQ/entry: Remove A29k references and update.
 
 2003-02-03	Steven Johnson <sjohnson@neurizon.net>
 
@@ -182,6 +201,7 @@
 	* project.am: Add version.texi hack.
 	* develenv/develenv.texi: Set @setfilename develenv.info.
 	* user/c_user.texi: Set @setfilename c_user.info.
+	* FAQ/FAQ.texi: Set @setfilename FAQ.info.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -190,6 +210,7 @@
 	* project.am: Add AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF. Override
 	automake's .dvi.ps:-rule.
 	* user/Makefile.am: Put GENERATED_FILES into $builddir.
+	* FAQ/Makefile.am: Put GENERATED_FILES into $builddir.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -206,11 +227,19 @@
 	* user/version.texi: Remove from CVS.
 	* user/stamp-vti: Remove from CVS.
 	* user/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* FAQ/build45.t: Fix typo in previous patch.
+	* FAQ/build45.t: Several fixes and additions.
+	* FAQ/FAQ.texi: Rename section "Building RTEMS 4.5" into "Building
+	RTEMS". build45.t: Remove references to 4.5. Several minor updates.
+	* FAQ/version.texi: Remove from CVS.
+	* FAQ/stamp-vti: Remove from CVS.
+	* FAQ/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 	* user/stamp-vti, user/version.texi: Regenerated.
+	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -226,12 +255,14 @@
 	is largely obsolete now that GNAT is in GCC.
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 	* user/stamp-vti, user/version.texi: Regenerated.
+	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Add links to multiple missing CPU supplements.
 	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 	* user/stamp-vti, user/version.texi: Regenerated.
+	* FAQ/stamp-vti, FAQ/version.texi: Regenerated.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -287,6 +318,7 @@
 	* images/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* develenv/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* user/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* FAQ/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-03-27	Eric Norum <eric.norum@usask.ca>
 
@@ -335,6 +367,7 @@
 	* images/Makefile.am: Require automake-1.5.
 	* develenv/Makefile.am: include main.am, require automake-1.5.
 	* user/Makefile.am: include main.am, require automake-1.5.
+	* FAQ/Makefile.am: include main.am, require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -361,6 +394,7 @@
 	* user/timer.t: Added task-based timer information including the new
 	directives rtems_timer_initiate(), rtems_timer_server_fire_after(), and
 	rtems_timer_server_fire_when().
+	* FAQ/.cvsignore: Added rtems_header.html and rtems_footer.html.
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -372,4 +406,5 @@
 	* ChangeLog: New file.
 	* develenv/ChangeLog: New file.
 	* user/ChangeLog: New file.
+	* FAQ/ChangeLog: New file.
 
