@@ -4,8 +4,6 @@
 
 LIB=$(ARCH)/libitron.a
 
-INCLUDES = -I.
-
 TASK_C_FILES = task.c cre_tsk.c del_tsk.c sta_tsk.c ext_tsk.c exd_tsk.c \
     ter_tsk.c dis_dsp.c ena_dsp.c chg_pri.c rot_rdq.c rel_wai.c get_tid.c \
     ref_tsk.c
@@ -51,7 +49,7 @@ include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am
 
-AM_CPPFLAGS += -D__RTEMS_INSIDE__
+AM_CPPFLAGS += -I.  -D__RTEMS_INSIDE__
 
 all-local: ${ARCH} ${LIB}
 

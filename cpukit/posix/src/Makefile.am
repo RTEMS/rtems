@@ -4,8 +4,6 @@
 
 LIB=$(ARCH)/libposix.a
 
-INCLUDES = -I.
-
 # following are semi-implemented and untested
 UNUSED_C_FILES = devctl.c intr.c
 
@@ -95,7 +93,7 @@ include $(top_srcdir)/../automake/lib.am
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -D__RTEMS_INSIDE__
+AM_CPPFLAGS += -I. -D__RTEMS_INSIDE__
 
 all-local: ${ARCH} $(LIB)
 
