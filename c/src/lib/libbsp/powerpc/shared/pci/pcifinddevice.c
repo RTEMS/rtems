@@ -37,7 +37,7 @@ unsigned char bus,dev,fun,hd;
 			if (PCI_INVALID_VENDORDEVICEID == d)
 				continue;
 #ifdef PCI_DEBUG
-			printk("BSP_pciFindDevice: found 0x%08x at %i/%i/%i\n",d,bus,dev,fun);
+			printk("BSP_pciFindDevice: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
 #endif
 			(void) pci_read_config_word(bus,dev,fun,PCI_VENDOR_ID,&s);
 			if (vendorid != s)

@@ -1,3 +1,20 @@
+2003-06-13	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 405/bsps
+	* bootloader/pci.c: Added support for configuring devices for pci
+	busses > 0
+	* pci/pci.c, pci/pci.h: Added FixupPCI() to store vectors in the
+	INTERRUPT_LINE register of pci devices any # of hops away
+	from the host processor.
+	* motorola/motorola.c, motorola/motorola.h: Added interrupt
+	routing tables in support of FixupPCI.  This is board-specific,
+	each board will have to supply information for FixupPCI() to do
+	anything for it.
+	* startup/bspstart.c: Extended bat2 to cover entire PCI address space.
+	* irq/irq.c, irq/irq.h: Added support for shared interrupts.
+	Existing single hander vectors are undisturbed, a new function
+	added to allow adding/removing handlers from a vector.
+
 2003-06-13  Till Straumann <strauman@slac.stanford.edu>
 
 	PR 415/bsps

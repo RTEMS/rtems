@@ -16,6 +16,14 @@
 #define LIBBSP_POWERPC_SHARED_MOTOROLA_MOTOROLA_H
 
 #include <bsp/residual.h>
+#include <bsp/pci.h>
+
+
+
+
+
+
+
 
 typedef enum {
   PREP_IBM 	= 0,
@@ -61,6 +69,8 @@ extern prep_t 			currentPrepType;
 extern motorolaBoard		getMotorolaBoard();
 extern motorolaBoard		currentBoard;
 extern const char*		motorolaBoardToString(motorolaBoard);
+extern const struct _int_map    *motorolaIntMap(motorolaBoard board);
+extern const void               *motorolaIntSwizzle(motorolaBoard board);
 
 
 #endif /* LIBBSP_POWERPC_SHARED_MOTOROLA_MOTOROLA_H */

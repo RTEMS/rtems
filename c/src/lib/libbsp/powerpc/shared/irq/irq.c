@@ -118,6 +118,70 @@ static int isValidInterrupt(int irq)
   return 1;
 }
 
+
+/*
+ * ------------------------ RTEMS Shared Irq Handler Mngt Routines ----------------
+ */
+int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
+{
+    unsigned int level;
+    rtems_irq_connect_data* vchain;
+  
+    if (!isValidInterrupt(irq->name)) {
+      printk("Invalid interrupt vector %i\n",irq->name);
+      return 0;
+    }
+    if ( (int)rtems_hdl_tbl[irq->name].next_handler  == -1 ) {
+      printk("IRQ vector %i already connected to an unshared handler\n",irq->name);
+      return 0;
+    }
+    _CPU_ISR_Disable(level);
+
+
+     vchain = (rtems_irq_connect_data*)malloc(sizeof(rtems_irq_connect_data));
+
+    /* save off topmost handler */
+    vchain[0]= rtems_hdl_tbl[irq->name];
+    
+    /*
+     * store the data provided by user
+     */
+    rtems_hdl_tbl[irq->name] = *irq;
+
+    /* link chain to new topmost handler */
+    rtems_hdl_tbl[irq->name].next_handler = (void *)vchain;
+
+    
+    if (is_isa_irq(irq->name)) {
+      /*
+       * Enable interrupt at PIC level
+       */
+      BSP_irq_enable_at_i8259s (irq->name);
+    }
+    
+    if (is_pci_irq(irq->name)) {
+      /*
+       * Enable interrupt at OPENPIC level
+       */
+      openpic_enable_irq ((int) irq->name - BSP_PCI_IRQ_LOWEST_OFFSET);
+    }
+
+    if (is_processor_irq(irq->name)) {
+      /*
+       * Enable exception at processor level
+       */
+    }
+    /*
+     * Enable interrupt on device
+     */
+    irq->on(irq);
+    
+    _CPU_ISR_Enable(level);
+
+    return 1;
+}
+
+
 /*
  * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
  */
@@ -147,6 +211,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * store the data provided by user
      */
     rtems_hdl_tbl[irq->name] = *irq;
+    rtems_hdl_tbl[irq->name].next_handler = (void *)-1;
     
     if (is_isa_irq(irq->name)) {
       /*
@@ -189,6 +254,7 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
+   rtems_irq_connect_data *pchain= NULL, *vchain = NULL;
     unsigned int level;
   
     if (!isValidInterrupt(irq->name)) {
@@ -205,6 +271,35 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
       return 0;
     }
     _CPU_ISR_Disable(level);
+
+    if( (int)rtems_hdl_tbl[irq->name].next_handler != -1 )
+    {
+       int found = 0;
+
+       for( (pchain= NULL, vchain = &rtems_hdl_tbl[irq->name]);
+            (vchain->hdl != default_rtems_entry.hdl);
+            (pchain= vchain, vchain = (rtems_irq_connect_data*)vchain->next_handler) )
+       {
+          if( vchain->hdl == irq->hdl )
+          {
+             found= -1; break;
+          }
+       }
+
+       if( !found )
+       {
+          _CPU_ISR_Enable(level);
+          return 0;
+       }
+    }
+    else
+    {
+       if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) 
+       {
+          _CPU_ISR_Enable(level);
+         return 0;
+       }
+    }
 
     if (is_isa_irq(irq->name)) {
       /*
@@ -232,7 +327,27 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * restore the default irq value
      */
-    rtems_hdl_tbl[irq->name] = default_rtems_entry;
+    if( !vchain )
+    {
+       /* single handler vector... */
+       rtems_hdl_tbl[irq->name] = default_rtems_entry;
+    }
+    else
+    {
+       if( pchain )
+       {
+          /* non-first handler being removed */
+          pchain->next_handler = vchain->next_handler;
+       }
+       else
+       {
+          /* first handler isn't malloc'ed, so just overwrite it.  Since
+          the contents of vchain are being struct copied, vchain itself
+          goes away */
+          rtems_hdl_tbl[irq->name]= *vchain;
+       }
+       free(vchain);
+    }
 
     _CPU_ISR_Enable(level);
 
@@ -265,12 +380,31 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 
     for (i=BSP_ISA_IRQ_LOWEST_OFFSET; i < BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	BSP_irq_enable_at_i8259s (i);
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+         BSP_irq_enable_at_i8259s (i);
+
+         /* rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]); */
+         {
+            rtems_irq_connect_data* vchain;
+            for( vchain = &rtems_hdl_tbl[i];
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 vchain = (rtems_irq_connect_data*)vchain->next_handler )
+            {
+               vchain->on(vchain);
+            }
+         }
       }
       else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	BSP_irq_disable_at_i8259s (i);
+         /* rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]); */
+         {
+            rtems_irq_connect_data* vchain;
+            for( vchain = &rtems_hdl_tbl[i];
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 vchain = (rtems_irq_connect_data*)vchain->next_handler )
+            {
+               vchain->off(vchain);
+            }
+         }
+         BSP_irq_disable_at_i8259s (i);
       }
     }
     /*
@@ -287,12 +421,32 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
       openpic_set_source_priority(i - BSP_PCI_IRQ_LOWEST_OFFSET,
 				  internal_config->irqPrioTbl[i]);
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	openpic_enable_irq ((int) i - BSP_PCI_IRQ_LOWEST_OFFSET);
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+         openpic_enable_irq ((int) i - BSP_PCI_IRQ_LOWEST_OFFSET);
+         /* rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]); */
+         {
+            rtems_irq_connect_data* vchain;
+            for( vchain = &rtems_hdl_tbl[i];
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 vchain = (rtems_irq_connect_data*)vchain->next_handler )
+            {
+               vchain->on(vchain);
+            }
+         }
+
       }
       else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	openpic_disable_irq ((int) i - BSP_PCI_IRQ_LOWEST_OFFSET);
+         /* rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]); */
+         {
+            rtems_irq_connect_data* vchain;
+            for( vchain = &rtems_hdl_tbl[i];
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 vchain = (rtems_irq_connect_data*)vchain->next_handler )
+            {
+               vchain->off(vchain);
+            }
+         }
+         
+         openpic_disable_irq ((int) i - BSP_PCI_IRQ_LOWEST_OFFSET);
       }
     }
     /*
@@ -304,10 +458,30 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
      */
     for (i=BSP_PROCESSOR_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+         /* rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]); */
+         {
+            rtems_irq_connect_data* vchain;
+            for( vchain = &rtems_hdl_tbl[i];
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 vchain = (rtems_irq_connect_data*)vchain->next_handler )
+            {
+               vchain->on(vchain);
+            }
+         }
+
       }
       else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+         /* rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]); */
+         {
+            rtems_irq_connect_data* vchain;
+            for( vchain = &rtems_hdl_tbl[i];
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 vchain = (rtems_irq_connect_data*)vchain->next_handler )
+            {
+               vchain->off(vchain);
+            }
+         }
+
       }
     }
     _CPU_ISR_Enable(level);
@@ -373,7 +547,17 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   new_msr = msr | MSR_EE;
   _CPU_MSR_SET(new_msr);
     
-  rtems_hdl_tbl[irq].hdl();
+  /* rtems_hdl_tbl[irq].hdl(); */
+  {
+     rtems_irq_connect_data* vchain;
+     for( vchain = &rtems_hdl_tbl[irq];
+          ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
+          vchain = (rtems_irq_connect_data*)vchain->next_handler )
+     {
+        vchain->hdl();
+     }
+  }
+
 
   _CPU_MSR_SET(msr);
 
