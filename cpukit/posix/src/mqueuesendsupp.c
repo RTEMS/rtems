@@ -44,7 +44,6 @@ int _POSIX_Message_queue_Send_support(
 {
   register POSIX_Message_queue_Control *the_mq;
   Objects_Locations                     location;
-  CORE_message_queue_Status             status;
 
   /*
    * Validate the priority.
