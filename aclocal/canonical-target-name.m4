@@ -10,7 +10,7 @@ dnl and we have to fix it for rtems ourselves
 
 AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
 [
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 AC_MSG_CHECKING(rtems target cpu)
 case "${target}" in
   # hpux unix port should go here

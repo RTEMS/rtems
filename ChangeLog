@@ -1,3 +1,13 @@
+2001-09-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/canonical-target-name.m4: Use AC_CANONICAL_TARGET instead
+	of AC_CANONICAL_SYSTEM.
+	* aclocal/config-subdirs.m4: Use AS_MKDIR_P instead of
+	mkinstalldirs and mkdir.
+	* aclocal/target.m4: Obsolete RTEMS_OUTPUT_BUILD_SUBDIRS,
+	hack RTEMS_CONFIG_BUILD_SUBDIRS, introduce
+	_RTEMS_OUTPUT_BUILD_SUBDIRS.
+	
 2001-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* missing: Updated to latest version.

@@ -15,16 +15,9 @@ AC_DEFUN(_RTEMS_PUSH_BUILDDIR,
 [
 # _RTEMS_PUSH_BUILDDIR
     echo configuring in $1
-## We use mkinstalldirs below as a workaround to mkdir -p not being
-## available everywhere, but us wanting to support deep directories.
     case "$srcdir" in
     .) ;;
-    *)
-      if ${ac_aux_dir}/mkinstalldirs $1; 
-      then :;
-      else
-        AC_MSG_ERROR([can not create `pwd`/$1])
-      fi
+    *) AS_MKDIR_P([$1])
       ;;
     esac
 
@@ -130,7 +123,11 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-  test -n "$target_configdirs" && test -d $target_subdir || mkdir $target_subdir
+  if test -n "$target_configdirs" && test -d $target_subdir; 
+  then :;
+  else
+    AS_MKDIR_P(["$target_subdir"])
+  fi
 
   for ac_config_dir in $target_configdirs; do
     # Do not complain, so a configure script can configure whichever
@@ -207,7 +204,11 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-  test -n "$host_configdirs" && test -d $host_subdir || mkdir $host_subdir
+  if test -n "$host_configdirs" && test -d $host_subdir;
+  then :;
+  else
+    AS_MKDIR_P(["$host_subdir"])
+  fi
 
   for ac_config_dir in $host_configdirs; do
     # Do not complain, so a configure script can configure whichever
