@@ -1,4 +1,4 @@
-2005-03-03	Ralf Corsepius <ralf_corsepius@rtems.org>
+2005-03-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* acinclude.m4: Remove arm_bare_bsp.
 
@@ -18,7 +18,7 @@
 	arm_bare_bsp/start/start.S, arm_bare_bsp/startup/bspstart.c,
 	arm_bare_bsp/startup/exit.c, arm_bare_bsp/startup/linkcmds: Removed.
 
-2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+2004-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
 
