@@ -13,8 +13,6 @@ include_rtems_HEADERS =
 noinst_LIBRARIES = libimfs.a
 libimfs_a_CPPFLAGS = $(AM_CPPFLAGS)
 
-UNUSED_FILES = src/imfs/imfs_load_tar.c
-
 libimfs_a_SOURCES =
 
 if UNIX
@@ -32,7 +30,7 @@ libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_handlers_link.c src/imfs/imfs_handlers_memfile.c \
     src/imfs/imfs_debug.c src/imfs/imfs_rmnod.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_readlink.c src/imfs/imfs_fdatasync.c src/imfs/imfs_fcntl.c \
-    src/imfs/ioman.c src/imfs/miniimfs_init.c
+    src/imfs/ioman.c src/imfs/miniimfs_init.c src/imfs/imfs_load_tar.c
 endif
 
 include_rtems_HEADERS += src/imfs/imfs.h

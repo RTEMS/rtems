@@ -1,3 +1,7 @@
+2005-02-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libfs/Makefile.am: Build libfs/src/imfs/imfs_load_tar.c.
+
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/libc/res_init.c, libnetworking/netinet/in.h,
