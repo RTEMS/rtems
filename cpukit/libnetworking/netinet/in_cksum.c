@@ -203,6 +203,9 @@ in_cksum(m, len)
  * code and should be modified for each CPU to be as fast as possible.
  */
 
+#define ADDCARRY(x)  (x > 65535 ? x -= 65535 : x)
+#define REDUCE \
+  {l_util.l = sum; sum = l_util.s[0] + l_util.s[1];  ADDCARRY(sum);}
 
 int
 in_cksum(m, len)
