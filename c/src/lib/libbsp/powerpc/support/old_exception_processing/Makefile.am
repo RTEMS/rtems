@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 # C source names
-C_FILES = cpu.c ppccache.c
+C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 ROOT_H_FILES =

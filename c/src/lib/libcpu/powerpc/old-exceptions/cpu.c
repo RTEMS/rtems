@@ -50,6 +50,9 @@
 
 static void ppc_spurious(int, CPU_Interrupt_frame *);
 
+int _CPU_spurious_count = 0;
+int _CPU_last_spurious = 0;
+
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
@@ -369,6 +372,8 @@ static void ppc_spurious(int v, CPU_Interrupt_frame *i)
                 "=&r" ((r)) : "0" ((r))); /* TSR */
 	}
 #endif
+    ++_CPU_spurious_count;
+    _CPU_last_spurious = v;
 }
 
 void _CPU_Fatal_error(unsigned32 _error)
@@ -748,7 +753,7 @@ unsigned32  ppc_exception_vector_addr(
     case PPC_IRQ_LVL7:
       Offset = 0x23c0;
       break;
-    case PPC_IRQ_CPM_RESERVED_0:
+    case PPC_IRQ_CPM_ERROR:
       Offset = 0x2400;
       break;
     case PPC_IRQ_CPM_PC4:

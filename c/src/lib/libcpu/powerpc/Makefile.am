@@ -16,11 +16,8 @@ endif
 if mpc6xx
 CPU_SUBDIR = mpc6xx
 endif
-if mpc821
-CPU_SUBDIR = mpc821
-endif
-if mpc860
-CPU_SUBDIR = mpc860
+if mpc8xx
+CPU_SUBDIR = mpc8xx
 endif
 if ppc403
 CPU_SUBDIR = ppc403

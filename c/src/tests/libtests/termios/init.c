@@ -24,6 +24,7 @@
 
 #include <bsp.h>
 
+
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
@@ -587,6 +588,7 @@ void change_line_settings( struct termios *tp )
 
 void canonical_input( struct termios *tp )
 {
+    char buffer[256];
     char c, first_time = TRUE;
     
   printf( "\nTesting canonical input\n\n" );
@@ -611,6 +613,7 @@ void canonical_input( struct termios *tp )
   }
   printf( "\n\nCanonical input test done.\n" );
 }
+
 
 /*
  * Test raw (ICANON=0) input
@@ -707,7 +710,7 @@ void usage( void )
 rtems_task
 Init (rtems_task_argument ignored)
 {
-  char c;
+  char c, done;
   struct termios orig_termios, test_termios;
   
   printf( "\n\n*** TEST OF TERMIOS INPUT CAPABILITIES ***\n" );

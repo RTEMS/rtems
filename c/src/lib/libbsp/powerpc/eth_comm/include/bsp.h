@@ -24,6 +24,10 @@ extern "C" {
 #include <rtems.h>
 #include <console.h>
 #include <clockdrv.h>
+#include <mpc8xx.h>
+#include <mpc8xx/cpm.h>
+#include <mpc8xx/mmu.h>
+#include <mpc8xx/console.h>
 
 /*
  *  confdefs.h overrides for this BSP:

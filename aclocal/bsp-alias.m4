@@ -14,6 +14,7 @@ AC_DEFUN(RTEMS_BSP_ALIAS,
     gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
     p4600)        $2=p4000            ;; # mips64orion - p4000 board w/IDT 4600
     p4650)        $2=p4000            ;; # mips64orion - p4000 board w/IDT 4650
+    mbx8*)        $2=mbx8xx           ;; # MBX821/MBX860 board
     pc486)        $2=pc386            ;; # i386 - PC with i486DX
     pc586)        $2=pc386            ;; # i386 - PC with Pentium
     pc686)        $2=pc386            ;; # i386 - PC with PentiumPro

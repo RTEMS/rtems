@@ -44,6 +44,8 @@
 extern "C" {
 #endif
 
+#include <rtems/score/ppctypes.h>
+
 /*
  *  Define the name of the CPU family.
  */
@@ -220,6 +222,7 @@ extern "C" {
 #elif defined(mpc860)
 /* 
  *  Added by Jay Monkman (jmonkman@frasca.com) 6/28/98 
+ *  with some changes by Darlene Stewart (Darlene.Stewart@iit.nrc.ca)
  */ 
 #define CPU_MODEL_NAME  "PowerPC MPC860"
 
@@ -231,7 +234,6 @@ extern "C" {
 #define PPC_HAS_FPU     	0
 #define PPC_HAS_DOUBLE		0
 #define PPC_USE_MULTIPLE	1
-#define PPC_USE_SPRG            1
 
 #define PPC_MSR_0		0x00009000
 #define PPC_MSR_1		0x00001000
@@ -381,6 +383,157 @@ extern "C" {
 #else
 #error "Undefined power of 2 for PPC_CACHE_ALIGNMENT"
 #endif
+
+#ifndef ASM
+
+/*
+ * CACHE MANAGER: The following functions are CPU-specific.
+ * They provide the basic implementation for the rtems_* cache
+ * management routines. If a given function has no meaning for the CPU,
+ * it does nothing by default.
+ * 
+ * FIXME: Some functions simply have not been implemented.
+ */
+ 
+#if defined(ppc603)			/* And possibly others */
+#define _CPU_DATA_CACHE_ALIGNMENT PPC_CACHE_ALIGNMENT
+#define _CPU_INST_CACHE_ALIGNMENT PPC_CACHE_ALIGNMENT
+
+/* Helpful macros */
+#define PPC_Get_HID0( _value ) \
+  do { \
+      _value = 0;        /* to avoid warnings */ \
+      asm volatile( \
+          "mfspr %0, 0x3f0;"     /* get HID0 */ \
+          "isync" \
+          : "=r" (_value) \
+          : "0" (_value) \
+      ); \
+  } while (0)
+
+#define PPC_Set_HID0( _value ) \
+  do { \
+      asm volatile( \
+          "isync;" \
+          "mtspr 0x3f0, %0;"     /* load HID0 */ \
+          "isync" \
+          : "=r" (_value) \
+          : "0" (_value) \
+      ); \
+  } while (0)
+
+static inline void _CPU_enable_data_cache (
+	void )
+{
+  unsigned32 value;
+  PPC_Get_HID0( value );
+  value |= 0x00004000;        /* set DCE bit */
+  PPC_Set_HID0( value );
+}
+
+static inline void _CPU_disable_data_cache (
+	void )
+{
+  unsigned32 value;
+  PPC_Get_HID0( value );
+  value &= 0xFFFFBFFF;        /* clear DCE bit */
+  PPC_Set_HID0( value );
+}
+
+static inline void _CPU_enable_inst_cache (
+	void )
+{
+  unsigned32 value;
+  PPC_Get_HID0( value );
+  value |= 0x00008000;       /* Set ICE bit */
+  PPC_Set_HID0( value );
+}
+
+static inline void _CPU_disable_inst_cache (
+	void )
+{
+  unsigned32 value;
+  PPC_Get_HID0( value );
+  value &= 0xFFFF7FFF;       /* Clear ICE bit */
+  PPC_Set_HID0( value );
+}
+
+#elif ( defined(mpc860) || defined(mpc821) )
+
+#define _CPU_DATA_CACHE_ALIGNMENT PPC_CACHE_ALIGNMENT
+#define _CPU_INST_CACHE_ALIGNMENT PPC_CACHE_ALIGNMENT
+
+#define mtspr(_spr,_reg)   __asm__ volatile ( "mtspr %0, %1\n" : : "i" ((_spr)), "r" ((_reg)) )
+#define isync   __asm__ volatile ("isync\n"::)
+
+static inline void _CPU_flush_1_data_cache_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "dcbf 0,%0" :: "r" (__address) );
+}
+
+static inline void _CPU_invalidate_1_data_cache_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "dcbi 0,%0" :: "r" (__address) );
+}
+
+static inline void _CPU_flush_entire_data_cache ( void ) {}
+static inline void _CPU_invalidate_entire_data_cache ( void ) {}
+static inline void _CPU_freeze_data_cache ( void ) {}
+static inline void _CPU_unfreeze_data_cache ( void ) {}
+
+static inline void _CPU_enable_data_cache (
+	void )
+{
+  unsigned32 r1;
+  r1 = (0x2<<24);
+  mtspr( 568, r1 );
+  isync;
+}
+
+static inline void _CPU_disable_data_cache (
+	void )
+{
+  unsigned32 r1;
+  r1 = (0x4<<24);
+  mtspr( 568, r1 );
+  isync;
+}
+
+static inline void _CPU_invalidate_1_inst_cache_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "icbi 0,%0" :: "r" (__address) );
+}
+
+static inline void _CPU_invalidate_entire_inst_cache ( void ) {}
+static inline void _CPU_freeze_inst_cache ( void ) {}
+static inline void _CPU_unfreeze_inst_cache ( void ) {}
+
+static inline void _CPU_enable_inst_cache (
+	void )
+{
+  unsigned32 r1;
+  r1 = (0x2<<24);
+  mtspr( 560, r1 );
+  isync;
+}
+
+static inline void _CPU_disable_inst_cache (
+	void )
+{
+  unsigned32 r1;
+  r1 = (0x4<<24);
+  mtspr( 560, r1 );
+  isync;
+}
+#endif
+
+#endif  /* !ASM */
 
 /*
  *  Unless otherwise specified, assume the model has an IP/EP bit to
@@ -550,7 +703,7 @@ extern "C" {
 #define PPC_IRQ_LVL6		(PPC_STD_IRQ_LAST + 23)
 #define PPC_IRQ_IRQ7		(PPC_STD_IRQ_LAST + 24)
 #define PPC_IRQ_LVL7		(PPC_STD_IRQ_LAST + 25)
-#define PPC_IRQ_CPM_RESERVED_0	(PPC_STD_IRQ_LAST + 26)
+#define PPC_IRQ_CPM_ERROR	(PPC_STD_IRQ_LAST + 26)
 #define PPC_IRQ_CPM_PC4		(PPC_STD_IRQ_LAST + 27)
 #define PPC_IRQ_CPM_PC5		(PPC_STD_IRQ_LAST + 28)
 #define PPC_IRQ_CPM_SMC2	(PPC_STD_IRQ_LAST + 29)

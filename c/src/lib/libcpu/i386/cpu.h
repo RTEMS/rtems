@@ -133,47 +133,6 @@ static inline unsigned short i386_get_gs()
 }
 
 /*
- * Added for pagination management
- */
-
-static inline unsigned int i386_get_cr0()
-{
-  register unsigned int segment = 0;
-
-  asm volatile ( "movl %%cr0,%0" : "=r" (segment) : "0" (segment) );
-
-  return segment;
-}
-
-static inline void i386_set_cr0(unsigned int segment)
-{
-  asm volatile ( "movl %0,%%cr0" : "=r" (segment) : "0" (segment) );
-}
-
-static inline unsigned int i386_get_cr2()
-{
-  register unsigned int segment = 0;
-
-  asm volatile ( "movl %%cr2,%0" : "=r" (segment) : "0" (segment) );
-
-  return segment;
-}
-
-static inline unsigned int i386_get_cr3()
-{
-  register unsigned int segment = 0;
-
-  asm volatile ( "movl %%cr3,%0" : "=r" (segment) : "0" (segment) );
-
-  return segment;
-}
-
-static inline void i386_set_cr3(unsigned int segment)
-{
-  asm volatile ( "movl %0,%%cr3" : "=r" (segment) : "0" (segment) );
-}
-
-/*
  *  IO Port Access Routines
  */
 
@@ -478,12 +437,6 @@ typedef struct {
 typedef struct {
   page_table_entry pageTableEntry[MAX_ENTRY];
 } page_table;
-
-static inline void flush_cache()
-{
-  /* Would this be better as a macro? */
-  asm ("wbinvd");  /* gcc did not like a volatile being on this */
-}
 
 
 /* C declaration for paging management */

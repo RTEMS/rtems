@@ -32,6 +32,9 @@ rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
 
+/* Amount of RAM on this board. Dynamically set in start.S */
+unsigned long _M68K_RamSize;
+
 /*
  *  Use the shared implementations of the following routines
  */

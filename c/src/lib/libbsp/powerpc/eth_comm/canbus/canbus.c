@@ -16,7 +16,6 @@
  */
 #include <stdio.h>
 #include <bsp.h>
-#include <mpc860.h>
 #include <rtems/error.h>
 #include <canbus.h>
 /* How many CAN interfaces are there? */
@@ -309,9 +308,9 @@ rtems_device_driver canbus_open(
   candev[minor]->ctrl |= I82527_CTRL_IE;
   candev[minor]->ctrl &= ~(I82527_CTRL_CCE | I82527_CTRL_INIT);
   switch (minor) {
-  case 0: m860.simask |= M860_SIMASK_IRM3; break;
-  case 1: m860.simask |= M860_SIMASK_IRM4; break;
-  case 2: m860.simask |= M860_SIMASK_IRM2; break;
+  case 0: m8xx.simask |= M8xx_SIMASK_IRM3; break;
+  case 1: m8xx.simask |= M8xx_SIMASK_IRM4; break;
+  case 2: m8xx.simask |= M8xx_SIMASK_IRM2; break;
   default: return;
   }
 

@@ -157,6 +157,7 @@ extern "C" {
 # endif
  
 #elif defined(__mc68302__)
+
 #define CPU_MODEL_NAME          "m68302"
 #define M68K_HAS_VBR             0
 #define M68K_HAS_SEPARATE_STACKS 0
@@ -350,16 +351,238 @@ static inline unsigned int m68k_swap_u16(
   return( swapped );
 }
 
-/* XXX this is only valid for some m68k family members and should be fixed */
-
-#define m68k_enable_caching() \
-  { register unsigned32 _ctl=0x01; \
-    asm volatile ( "movec   %0,%%cacr" \
-                       : "=d" (_ctl) : "0" (_ctl) ); \
-  }
-
 #define CPU_swap_u32( value )  m68k_swap_u32( value )
 #define CPU_swap_u16( value )  m68k_swap_u16( value )
+
+
+/*
+ *  _CPU_virtual_to_physical
+ *
+ *  DESCRIPTION:
+ *
+ *	This function is used to map virtual addresses to physical
+ *	addresses.
+ * 
+ *	FIXME: ASSUMES THAT VIRTUAL ADDRESSES ARE THE SAME AS THE
+ *	PHYSICAL ADDRESSES
+ */
+static inline void * _CPU_virtual_to_physical (
+  const void * d_addr )
+{
+  return (void *) d_addr;
+}
+
+
+/*  
+ *  Since the cacr is common to all mc680x0, provide macros
+ *  for masking values in that register.
+ */
+
+/* 
+ *  Used to clear bits in the cacr.
+ */
+#define _CPU_CACR_AND(mask)                                        \
+  {                                                                \
+  register unsigned long _value = mask;                            \
+  register unsigned long _ctl = 0;                                 \
+  asm volatile ( "movec %%cacr, %0;           /* read the cacr */  \
+                  andl %2, %0;                /* and with _val */  \
+                  movec %1, %%cacr"           /* write the cacr */ \
+   : "=d" (_ctl) : "0" (_ctl), "d" (_value) : "%%cc" );            \
+  }
+
+
+/*  
+ *  Used to set bits in the cacr.
+ */
+#define _CPU_CACR_OR(mask)                                         \
+	{                                                                \
+  register unsigned long _value = mask;                            \
+  register unsigned long _ctl = 0;                                 \
+  asm volatile ( "movec %%cacr, %0;           /* read the cacr */  \
+                  orl %2, %0;                 /* or with _val */   \
+                  movec %1, %%cacr"           /* write the cacr */ \
+   : "=d" (_ctl) : "0" (_ctl), "d" (_value) : "%%cc" );            \
+  }
+
+   
+/*
+ * CACHE MANAGER: The following functions are CPU-specific.
+ * They provide the basic implementation for the rtems_* cache
+ * management routines. If a given function has no meaning for the CPU,
+ * it does nothing by default.
+ */
+#if ( defined(__mc68020__) || defined(__mc68030__) )
+#define M68K_INST_CACHE_ALIGNMENT 16
+
+#if defined(__mc68030__)
+#define M68K_DATA_CACHE_ALIGNMENT 16
+
+/* Only the mc68030 has a data cache; it is writethrough only. */
+
+static inline void _CPU_flush_1_data_cache_line ( const void * d_addr ) {}
+static inline void _CPU_flush_entire_data_cache ( const void * d_addr ) {}
+
+static inline void _CPU_invalidate_1_data_cache_line (
+  const void * d_addr )
+{
+  void * p_address = (void *) _CPU_virtual_to_physical( d_addr );
+  asm volatile ( "movec %0, %%caar" :: "a" (p_address) );      /* write caar */
+  _CPU_CACR_OR(0x00000400);
+}
+
+static inline void _CPU_invalidate_entire_data_cache (
+	void )
+{
+  _CPU_CACR_OR( 0x00000800 );
+}
+
+static inline void _CPU_freeze_data_cache (
+	void )
+{
+  _CPU_CACR_OR( 0x00000200 );
+}
+
+static inline void _CPU_unfreeze_data_cache (
+	void )
+{
+  _CPU_CACR_AND( 0xFFFFFDFF );
+}
+
+static inline void _CPU_enable_data_cache (	void )
+{
+  _CPU_CACR_OR( 0x00000100 );
+}
+static inline void _CPU_disable_data_cache (	void )
+{
+  _CPU_CACR_AND( 0xFFFFFEFF );
+}
+#endif
+
+
+/* Both the 68020 and 68030 have instruction caches */
+
+static inline void _CPU_invalidate_1_inst_cache_line (
+  const void * d_addr )
+{
+  void * p_address = (void *) _CPU_virtual_to_physical( d_addr );
+  asm volatile ( "movec %0, %%caar" :: "a" (p_address) );      /* write caar */
+  _CPU_CACR_OR( 0x00000004 );
+}
+
+static inline void _CPU_invalidate_entire_inst_cache (
+	void )
+{
+  _CPU_CACR_OR( 0x00000008 );
+}
+
+static inline void _CPU_freeze_inst_cache (
+	void )
+{
+  _CPU_CACR_OR( 0x00000002);
+}
+
+static inline void _CPU_unfreeze_inst_cache (
+	void )
+{
+  _CPU_CACR_AND( 0xFFFFFFFD );
+}
+
+static inline void _CPU_enable_inst_cache (	void )
+{
+  _CPU_CACR_OR( 0x00000001 );
+}
+
+static inline void _CPU_disable_inst_cache (	void )
+{
+  _CPU_CACR_AND( 0xFFFFFFFE );
+}
+
+
+#elif ( defined(__mc68040__) || defined (__mc68060__) )
+
+#define M68K_INST_CACHE_ALIGNMENT 16
+#define M68K_DATA_CACHE_ALIGNMENT 16
+
+/* Cannot be frozen */
+static inline void _CPU_freeze_data_cache ( void ) {}
+static inline void _CPU_unfreeze_data_cache ( void ) {}
+static inline void _CPU_freeze_inst_cache ( void ) {}
+static inline void _CPU_unfreeze_inst_cache ( void ) {}
+
+static inline void _CPU_flush_1_data_cache_line (
+  const void * d_addr )
+{
+  void * p_address = (void *) _CPU_virtual_to_physical( d_addr );
+  asm volatile ( "cpushl %%dc,(%0)" :: "a" (p_address) );
+}
+
+static inline void _CPU_invalidate_1_data_cache_line (
+  const void * d_addr )
+{
+  void * p_address = (void *) _CPU_virtual_to_physical( d_addr );
+  asm volatile ( "cinvl %%dc,(%0)" :: "a" (p_address) );
+}
+
+static inline void _CPU_flush_entire_data_cache (
+	void )
+{
+	asm volatile ( "cpusha %%dc" :: );
+}
+
+static inline void _CPU_invalidate_entire_data_cache (
+	void )
+{
+	asm volatile ( "cinva %%dc" :: );
+}
+
+static inline void _CPU_enable_data_cache (
+	void )
+{
+  _CPU_CACR_OR( 0x80000000 );
+}
+
+static inline void _CPU_disable_data_cache (
+	void )
+{
+  _CPU_CACR_AND( 0x7FFFFFFF );
+}
+
+static inline void _CPU_invalidate_1_inst_cache_line (
+  const void * i_addr )
+{
+  void * p_address = (void *)  _CPU_virtual_to_physical( i_addr );
+  asm volatile ( "cinvl %%ic,(%0)" :: "a" (p_address) );
+}
+
+static inline void _CPU_invalidate_entire_inst_cache (
+	void )
+{
+		asm volatile ( "cinva %%ic" :: );
+}
+
+static inline void _CPU_enable_inst_cache (
+	void )
+{
+  _CPU_CACR_OR( 0x00008000 );
+}
+
+static inline void _CPU_disable_inst_cache (
+	void )
+{
+	_CPU_CACR_AND( 0xFFFF7FFF );
+}
+#endif
+
+
+#if defined(M68K_DATA_CACHE_ALIGNMENT)
+#define _CPU_DATA_CACHE_ALIGNMENT M68K_DATA_CACHE_ALIGNMENT
+#endif
+
+#if defined(M68K_INST_CACHE_ALIGNMENT)
+#define _CPU_INST_CACHE_ALIGNMENT M68K_INST_CACHE_ALIGNMENT
+#endif
+
 
 #endif  /* !ASM */
 
@@ -367,5 +590,5 @@ static inline unsigned int m68k_swap_u16(
 }
 #endif
 
-#endif
+#endif /* __M68K_h */
 /* end of include file */

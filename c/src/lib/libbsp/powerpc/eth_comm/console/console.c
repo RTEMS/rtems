@@ -27,9 +27,8 @@
  *  $Id$
  */
 
+#include <bsp.h>                /* Must be before libio.h */
 #include <rtems/libio.h>
-#include <mpc860.h>
-#include <mpc860/console.h>
 #include <termios.h>
 
 rtems_device_driver console_initialize(rtems_device_major_number major,
@@ -37,8 +36,6 @@ rtems_device_driver console_initialize(rtems_device_major_number major,
                                        void *arg)
 {
   rtems_status_code status;
-  rtems_isr_entry old_handler;
-  rtems_status_code sc;
   
 #ifdef I_WANT_TERMIOS
   /*
@@ -48,34 +45,23 @@ rtems_device_driver console_initialize(rtems_device_major_number major,
 #endif
 
   /*
-   * Set up Buffer Descriptors
+   *  Do common initialization.
    */
-  m860_console_initialize();
+  m8xx_uart_initialize();
 
   /*
    * Do device-specific initialization
    */
-  m860_scc_initialize(2);  /* /dev/console */
-  m860_scc_initialize(3);  /* /dev/tty3   */
-  m860_scc_initialize(4);  /* /dev/tty4   */
-  m860_smc_initialize(1);  /* /dev/tty0   */
-  m860_smc_initialize(2);  /* /dev/tty1   */
+  m8xx_uart_smc_initialize(SMC1_MINOR); /* /dev/tty0 */
+  m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */                             
+  m8xx_uart_scc_initialize(SCC2_MINOR); /* /dev/tty2    */
+  m8xx_uart_scc_initialize(SCC3_MINOR); /* /dev/tty3    */
+  m8xx_uart_scc_initialize(SCC4_MINOR); /* /dev/tty4    */
   
-  sc = rtems_interrupt_catch (m860_scc2_console_interrupt_handler,
-                              PPC_IRQ_CPM_SCC2,
-                              &old_handler);
-  sc = rtems_interrupt_catch (m860_scc3_console_interrupt_handler,
-                              PPC_IRQ_CPM_SCC3,
-                              &old_handler);
-  sc = rtems_interrupt_catch (m860_scc4_console_interrupt_handler,
-                              PPC_IRQ_CPM_SCC4,
-                              &old_handler);
-  sc = rtems_interrupt_catch (m860_smc1_console_interrupt_handler,
-                              PPC_IRQ_CPM_SMC1,
-                              &old_handler);
-  sc = rtems_interrupt_catch (m860_smc2_console_interrupt_handler,
-                              PPC_IRQ_CPM_SMC2,
-                              &old_handler);
+  /*
+   * Set up interrupts
+   */
+   m8xx_uart_interrupts_initialize();
 
   /*
    * Register the devices
@@ -102,15 +88,15 @@ rtems_device_driver console_open(rtems_device_major_number major,
                                  rtems_device_minor_number minor,
                                  void *arg)
 {
-  volatile m860SCCRegisters_t *sccregs;
+  volatile m8xxSCCRegisters_t *sccregs;
 
 #ifdef I_WANT_TERMIOS
   static const rtems_termios_callbacks sccPollCallbacks = {
     NULL,                       /* firstOpen */
     NULL,                       /* lastClose */
-    m860_char_poll_read,        /* pollRead */
-    m860_char_poll_write,       /* write */
-    m860_scc_set_attributes,    /* setAttributes */
+    m8xx_uart_pollRead,        /* pollRead */
+    m8xx_uart_pollWrite,       /* write */
+    m8xx_uart_setAttributes,    /* setAttributes */
     NULL,                       /* stopRemoteTx */
     NULL,                       /* startRemoteTx */
     0                           /* outputUsesInterrupts */
@@ -121,30 +107,30 @@ rtems_device_driver console_open(rtems_device_major_number major,
 
   switch (minor) {
   case 0:
-    m860.smc1.smcm = 1;           /* Enable SMC1 RX interrupts */
-    m860.cimr |= 1UL <<  4;       /* Enable SMC1 interrupts */
+    m8xx.smc1.smcm = 1;           /* Enable SMC1 RX interrupts */
+    m8xx.cimr |= 1UL <<  4;       /* Enable SMC1 interrupts */
     break;
   case 1:
-    m860.smc2.smcm = 1;           /* Enable SMC2 RX interrupts */
-    m860.cimr |= 1UL <<  3;       /* Enable SMC2 interrupts */
+    m8xx.smc2.smcm = 1;           /* Enable SMC2 RX interrupts */
+    m8xx.cimr |= 1UL <<  3;       /* Enable SMC2 interrupts */
     break;
   case 2:
-    m860.cimr |= 1UL << 30;      /* Enable SCC1 interrupts */
-    sccregs = &m860.scc1;
+    m8xx.cimr |= 1UL << 30;      /* Enable SCC1 interrupts */
+    sccregs = &m8xx.scc1;
     break;
   case 3: 
 #ifndef I_WANT_TERMIOS
-    m860.cimr |= 1UL << 29;      /* Enable SCC2 interrupts */
+    m8xx.cimr |= 1UL << 29;      /* Enable SCC2 interrupts */
 #endif /* I_WANT_TERMIOS */
-    sccregs = &m860.scc2;
+    sccregs = &m8xx.scc2;
     break;
   case 4:
-    m860.cimr |= 1UL << 28;      /* Enable SCC3 interrupts */
-    sccregs = &m860.scc3;
+    m8xx.cimr |= 1UL << 28;      /* Enable SCC3 interrupts */
+    sccregs = &m8xx.scc3;
     break;
   case 5:
-    m860.cimr |= 1UL << 27;      /* Enable SCC4 interrupts */
-    sccregs = &m860.scc4;
+    m8xx.cimr |= 1UL << 27;      /* Enable SCC4 interrupts */
+    sccregs = &m8xx.scc4;
     break;
   default:
     rtems_panic ("CONSOLE: bad minor number");
@@ -186,14 +172,18 @@ rtems_device_driver console_read(rtems_device_major_number major,
                                  void *arg)
 {
 #ifdef I_WANT_TERMIOS
+  /*
   if (minor == SCC2_MINOR) {
+  */
     return rtems_termios_read(arg);
+  /*
   }
   else {
-    return m860_console_read(major, minor, arg);
+    return m8xx_console_read(major, minor, arg);
   }
+  */
 #else
-  return m860_console_read(major, minor, arg);
+  return m8xx_console_read(major, minor, arg);
 #endif
 }
 
@@ -202,14 +192,18 @@ rtems_device_driver console_write(rtems_device_major_number major,
                                   void *arg)
 {
 #ifdef I_WANT_TERMIOS
+  /*
   if (minor == SCC2_MINOR) {
+  */
     return rtems_termios_write(arg);
+  /*
   }
   else {
-    return m860_console_write(major, minor, arg);
+    return m8xx_console_write(major, minor, arg);
   }
+  */
 #else
-  return m860_console_write(major, minor, arg);
+  return m8xx_console_write(major, minor, arg);
 #endif
 }
 

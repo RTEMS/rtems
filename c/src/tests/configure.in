@@ -67,6 +67,7 @@ AC_SUBST(BARE_CPU_MODEL)
 AC_CONFIG_SUBDIRS(tools)
 AC_CONFIG_SUBDIRS(support)
 AC_CONFIG_SUBDIRS(samples)
+AC_CONFIG_SUBDIRS(libffi)
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 
 # Explicitly list all Makefiles here

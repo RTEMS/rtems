@@ -181,6 +181,7 @@ int	tcflow(int, int);
 int	tcflush(int, int);
 int	tcgetattr(int, struct termios *);
 int	tcsetattr(int, int, struct termios *);
+int	tcdrain(int);
 pid_t	tcgetprgrp(int);
 int	tcsetprgrp(int, pid_t);
 int	tcsendbreak(int, int);

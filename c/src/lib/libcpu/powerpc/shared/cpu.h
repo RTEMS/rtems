@@ -1,7 +1,7 @@
 /*
  * cpu.h
  *
- *	    This file contains some powerpc MSR and registers access definitions.
+ * This file contains some powerpc MSR and registers access definitions.
  *
  * It is a stripped down version of linux ppc processor.h file...
  *
@@ -15,10 +15,12 @@
  *  $Id$
  */
 
-#ifndef __ASM_PPC_PROCESSOR_H
-#define __ASM_PPC_PROCESSOR_H
+#ifndef __PPC_CPU_H
+#define __PPC_CPU_H
 
-#include <bsp/residual.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Bit encodings for Machine State Register (MSR) */
 #define MSR_POW		(1<<18)		/* Enable Power Management */
@@ -247,16 +249,6 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
   }
 
 
-#define _CPU_Data_Cache_Block_Flush( _address ) \
-  do { register void *__address = (_address); \
-       register unsigned32 _zero = 0; \
-       asm volatile ( "dcbf %0,%1" : \
-		      "=r" (_zero), "=r" (__address) : \
-                      "0" (_zero), "1" (__address) \
-       ); \
-  } while (0)
-
-
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
  *  This indicates the end of an RTEMS critical section.  The parameter
@@ -325,7 +317,12 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
-#endif /* __ASM_PPC_PROCESSOR_H */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __PPC_CPU_H */
 
 
 

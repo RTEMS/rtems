@@ -45,7 +45,7 @@ extern rtems_unsigned32 rtemsFreeMemStart;
 void _CPU_disable_paging() {
   cr0 regCr0;
 
-  flush_cache();
+  rtems_flush_entire_data_cache();
   regCr0.i = i386_get_cr0();
   regCr0.cr0.paging = 0;
   i386_set_cr0( regCr0.i );
@@ -60,7 +60,7 @@ void _CPU_enable_paging() {
   regCr0.i = i386_get_cr0();
   regCr0.cr0.paging = 1;
   i386_set_cr0( regCr0.i );
-  flush_cache();
+  rtems_flush_entire_data_cache();
 }
 
 
@@ -151,32 +151,6 @@ int init_paging() {
   _CPU_enable_paging();  
 
   return 0;
-}
-
-/*
- * Disable the entire cache
- */
-void _CPU_disable_cache() {
-  cr0 regCr0;
-
-  regCr0.i = i386_get_cr0();
-  regCr0.cr0.page_level_cache_disable = 1;
-  regCr0.cr0.no_write_through = 1;
-  i386_set_cr0( regCr0.i );
-  flush_cache();
-}
-
-/*
- * Disable the entire cache
- */
-void _CPU_enable_cache() {
-  cr0 regCr0;
-
-  regCr0.i = i386_get_cr0();
-  regCr0.cr0.page_level_cache_disable = 0;
-  regCr0.cr0.no_write_through = 0;
-  i386_set_cr0( regCr0.i );
-  /*flush_cache();*/
 }
 
 /*

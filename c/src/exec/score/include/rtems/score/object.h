@@ -444,6 +444,21 @@ Objects_Control *_Objects_Get (
 );
 
 /*
+ * _Objects_Get_by_index
+ *
+ *  DESCRIPTION:
+ *
+ * This routine sets the object pointer for the given
+ * object id based on the given object information structure.
+ */
+
+Objects_Control *_Objects_Get_by_index(
+  Objects_Information *information,
+  unsigned32           index,
+  Objects_Locations   *location
+);
+
+/*
  *  _Objects_Get_next
  *
  *  DESCRIPTION:
@@ -457,6 +472,25 @@ Objects_Control *_Objects_Get_next(
     Objects_Id           id,
     Objects_Locations   *location_p,
     Objects_Id          *next_id_p
+);
+
+/*
+ *  _Objects_Local_iterate
+ *
+ *  DESCRIPTION:
+ *
+ *  This function invokes the callback function for each existing object
+ *  of the type specified by the information block pointer. Iteration
+ *  continues until either all objects have been processed, or, if
+ *  break_on_error is TRUE, until an invocation of the callback returns
+ *  something other than 0.
+ */
+
+unsigned32 _Objects_Local_iterate(
+  Objects_Information *information,
+  unsigned32 (*callback)(Objects_Control *object, void * arg),
+  void * arg,
+  boolean break_on_error
 );
 
 /*

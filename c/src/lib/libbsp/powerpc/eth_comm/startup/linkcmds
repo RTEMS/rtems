@@ -128,8 +128,8 @@ SECTIONS
 	
         dpram : 
 	{
-          m860 = .;
-          _m860 = .;
+          m8xx = .;
+          _m8xx = .;
           . += (8 * 1024);
         } >dpram
 

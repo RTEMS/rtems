@@ -18,7 +18,6 @@
  */
 
 #include <bsp.h>
-#include <mpc860.h>
 #include <rtems/libio.h>
  
 #include <libcsupport.h>
@@ -115,6 +114,10 @@ void bsp_start(void)
   extern int _end;
   rtems_unsigned32  heap_start;
   rtems_unsigned32  ws_start;
+
+  cpu_init();
+  mmu_init();
+  
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside
@@ -166,16 +169,14 @@ void bsp_start(void)
    * transciever that is used for 10/100 Mbps ethernet now, so that 
    * we can attempt to read it later in rtems_enet_driver_attach()
   */
-  m860.fec.mii_speed = 0x0a;
-  m860.fec.mii_data = 0x680a0000;
+  m8xx.fec.mii_speed = 0x0a;
+  m8xx.fec.mii_data = 0x680a0000;
 
 
-  m860.scc2.sccm=0;
-  m860.scc2p.rbase=0;
-  m860.scc2p.tbase=0;
-  M860ExecuteRISC(M860_CR_OP_STOP_TX | M860_CR_CHAN_SCC2);
-
-  mmu_init(); 
+  m8xx.scc2.sccm=0;
+  m8xx.scc2p.rbase=0;
+  m8xx.scc2p.tbase=0;
+  m8xx_cp_execute_cmd( M8xx_CR_OP_STOP_TX | M8xx_CR_CHAN_SCC2 );
 }
 
 

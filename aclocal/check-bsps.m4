@@ -23,6 +23,7 @@ AC_MSG_CHECKING([for bsps])
         gen68360)          rtems_bsp="$rtems_bsp gen68360 gen68360_040";;
         p4000)             rtems_bsp="$rtems_bsp p4600 p4650";;
         mvme162)           rtems_bsp="$rtems_bsp mvme162 mvme162lx";;
+        mbx8xx)            rtems_bsp="$rtems_bsp mbx821_001 mbx860_002";;
 	motorola_powerpc)  rtems_bsp="$rtems_bsp mvme2307 mcp750";;
 	pc386)             rtems_bsp="$rtems_bsp pc386 pc486 pc586 pc686";;
         *) $1="[$]$1 $file";;

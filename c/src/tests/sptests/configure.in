@@ -67,6 +67,7 @@ sp27/Makefile
 sp28/Makefile
 sp29/Makefile
 spsize/Makefile
+threaditerate/Makefile
 )
 
 # spfatal/Makefile

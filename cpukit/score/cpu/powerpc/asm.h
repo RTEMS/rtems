@@ -164,14 +164,20 @@
  */
 #define srr0	0x01a
 #define srr1	0x01b
+#ifdef ppc403
 #define srr2	0x3de	/* IBM 400 series only */
 #define srr3	0x3df	/* IBM 400 series only */
+#endif /* ppc403 */
+
 #define sprg0	0x110
 #define sprg1	0x111
 #define sprg2	0x112
 #define sprg3	0x113
 
+#define dar     0x013   /* Data Address Register */
+#define dec		0x016	/* Decrementer Register */
 
+#if defined(ppc403)
 /* the following SPR/DCR registers exist only in IBM 400 series */
 #define dear	0x3d5	
 #define evpr    0x3d6   /* SPR: exception vector prefix register   */
@@ -190,9 +196,13 @@
 #define br7     0x087   /* DCR: memory bank register 7             */
 /* end of IBM400 series register definitions */
 
+#elif defined(mpc860) || defined(mpc821)
 /* The following registers are for the MPC8x0 */
 #define der     0x095   /* Debug Enable Register */
+#define ictrl   0x09E   /* Instruction Support Control Register */
+#define immr    0x27E   /* Internal Memory Map Register */
 /* end of MPC8x0 registers */
+#endif
 
 /*
  *  Following must be tailor for a particular flavor of the C compiler.

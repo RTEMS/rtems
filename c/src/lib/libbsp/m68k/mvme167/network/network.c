@@ -40,6 +40,8 @@
 
 #define UTI_596_ETH_MIN_SIZE  60
 
+#define INET_ADDR_MAX_BUF_SIZE (sizeof "255.255.255.255")
+
 /*
  * RTEMS events
  */
@@ -57,9 +59,11 @@
 #include <sys/mbuf.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
+#include <sys/types.h>
 #include <net/if.h>
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
+#include <arpa/inet.h>
 
 #include "uti596.h"
 
@@ -79,10 +83,10 @@
 #define UTI596_DUMP_PORT_FUNCTION     	3
 
 /* Types of waiting for commands */
-#define UTI596_NO_WAIT  				0
-#define UTI596_WAIT_FOR_CU_ACCEPT  		1
-#define UTI596_WAIT_FOR_INITIALIZATION  2
-#define UTI596_WAIT_FOR_STAT_C 			3
+#define UTI596_NO_WAIT									0
+#define UTI596_WAIT_FOR_CU_ACCEPT				1
+#define UTI596_WAIT_FOR_INITIALIZATION	2
+#define UTI596_WAIT_FOR_STAT_C					3
 
 /* Device dependent data structure */
 static uti596_softc_ uti596_softc;
@@ -417,6 +421,7 @@ static int uti596_portDump(
  *  Input parameters:
  *    sc - pointer to the uti596_softc struct
  *    wait_type - UTI596_NO_WAIT
+ *    						UTI596_WAIT
  *                UTI596_WAIT_FOR_CU_ACCEPT
  *                UTI596_WAIT_FOR_INITIALIZATION
  *                UTI596_WAIT_FOR_STAT_C
@@ -432,16 +437,18 @@ static int uti596_wait(
 )
 {
   rtems_interval ticks_per_second, start_ticks, end_ticks;
-  
+
+  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second);
+	rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
+	end_ticks = start_ticks + ticks_per_second;
+
   switch( waitType ) {
+  
     case UTI596_NO_WAIT:
       return 0;
 
-    case UTI596_WAIT_FOR_CU_ACCEPT:
-      rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second);
-		  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
-		  end_ticks = start_ticks + ticks_per_second;
 
+    case UTI596_WAIT_FOR_CU_ACCEPT:
 		  do {
 			  if (sc->scb.command == 0)
 				  break;
@@ -459,10 +466,6 @@ static int uti596_wait(
         return 0;
  
     case UTI596_WAIT_FOR_INITIALIZATION:
-      rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second);
-		  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
-		  end_ticks = start_ticks + ticks_per_second;
-
 		  do {
 		    if( !sc->iscp.busy )
 		      break;
@@ -484,10 +487,6 @@ static int uti596_wait(
 			}
 
 	 case UTI596_WAIT_FOR_STAT_C:
-	   rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second);
-		 rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
-		 end_ticks = start_ticks + ticks_per_second;
-
 		 do {
 		   if( *sc->pCurrent_command_status & STAT_C )
 		      break;
@@ -1550,12 +1549,6 @@ void send_packet(
     }
   } while( m != NULL && ++bd_count < 16 );
 
-  /* This should never happen */
-  if ( bd_count == 16 ) {
-    printk(("TX ERROR:Too many mbufs in the packet!!!\n"))
-    printk(("Must coalesce!\n"))
-  }
-
   if ( length < UTI_596_ETH_MIN_SIZE ) {
     pTbd->data = (char *) word_swap ((unsigned long) sc->zeroes); /* add padding to pTbd */
     pTbd->size = UTI_596_ETH_MIN_SIZE - length; /* zeroes have no effect on the CRC */
@@ -1661,9 +1654,10 @@ int uti596_attach(
 {
   uti596_softc_ *sc = &uti596_softc;				/* device dependent data structure */
   struct ifnet * ifp = &sc->arpcom.ac_if;   /* ifnet structure */
-
-        int unitNumber;
-        char *unitName;
+	int unitNumber;
+	char *unitName;
+	char *pAddr;
+	int addr;
 
 	#ifdef DBG_ATTACH
   printk(("uti596_attach: begins\n"))
@@ -1689,16 +1683,45 @@ int uti596_attach(
   else
     ifp->if_mtu = ETHERMTU;
 
-  /* Ethernet address can be specified in the ifconfig structure or
-   * it can be read in from BBRAM at $FFFC1F2C (6 bytes)
-   * mvme167 manual p. 1-47
+  /* 
+   * If an IP address and netmask are provided in NVRAM, cheat,
+   * and stuff them into the ifconfig structure, overriding any
+   * existing or NULL values.
+   * 
+   * Warning: If values are provided in NVRAM, the ifconfig entries
+   * should be NULL because buffer memory allocated to hold the
+   * structure values is unrecoverable and would be lost here.
    */
-  if ( pConfig->hardware_address) {
+  if ( addr = nvram->ipaddr ) {
+  	if ( pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT ) )
+			pConfig->ip_address = inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
+		else
+			rtems_panic("Can't allocate ip_address buffer!\n");
+  }
+  if ( addr = nvram->netmask ) {
+  	if ( pAddr = malloc ( INET_ADDR_MAX_BUF_SIZE, 0, M_NOWAIT ) )
+			pConfig->ip_netmask = inet_ntop(AF_INET, &addr, pAddr, INET_ADDR_MAX_BUF_SIZE -1 );
+		else
+			rtems_panic("Can't allocate ip_netmask buffer!\n");
+  }
+
+  /* Ethernet address can be specified in NVRAM, or in the ifconfig
+   * structure. It will be read by default from BBRAM at $FFFC1F2C
+   * (6 bytes) mvme167 manual p. 1-47
+   */
+  if ( nvram->enaddr ) {
+  	memcpy (sc->arpcom.ac_enaddr, &nvram->enaddr, ETHER_ADDR_LEN);
+  }
+  else if ( pConfig->hardware_address) {
     memcpy (sc->arpcom.ac_enaddr, pConfig->hardware_address, ETHER_ADDR_LEN);
   }
   else {
     memcpy (sc->arpcom.ac_enaddr, (char *)0xFFFC1F2C, ETHER_ADDR_LEN);
   }
+
+  /* Possibly override default acceptance of broadcast packets */
+  if (pConfig->ignore_broadcast)
+  	uti596initSetup[8] |= 0x02;
 
   /* Assign requested receive buffer descriptor count */
   if (pConfig->rbuf_count)
@@ -1715,7 +1738,7 @@ int uti596_attach(
   /* Set up fields in the ifnet structure*/
   ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
   ifp->if_snd.ifq_maxlen = ifqmaxlen;
-        ifp->if_init = uti596_init;
+  ifp->if_init = uti596_init;
   ifp->if_ioctl = uti596_ioctl;
   ifp->if_start = uti596_start;
   ifp->if_output = ether_output;

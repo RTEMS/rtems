@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <sys/filio.h>
 
 /*
  *  FreeBSD does not support a full POSIX termios so we have to help it out
@@ -243,7 +244,7 @@ rtems_termios_open (
 		/*
 		 * Set default parameters
 		 */
-		tty->termios.c_iflag = BRKINT | ICRNL | IMAXBEL;
+		tty->termios.c_iflag = BRKINT | ICRNL | IXON | IMAXBEL;
 		tty->termios.c_oflag = OPOST | ONLCR | XTABS;
 		tty->termios.c_cflag = B9600 | CS8 | CREAD | CLOCAL;
 		tty->termios.c_lflag = ISIG | ICANON | IEXTEN | ECHO | ECHOK | ECHOE | ECHOCTL;
@@ -473,6 +474,11 @@ rtems_termios_ioctl (void *arg)
 
 	case RTEMS_IO_TCDRAIN:
 		drainOutput (tty);
+		break;
+
+ 	case FIONREAD:
+		/* Half guess that this is the right operation */
+		*(int *)args->buffer = tty->ccount - tty->cindex;
 		break;
 	}
 	rtems_semaphore_release (tty->osem);

@@ -1,5 +1,5 @@
 /* 
- *  wait() - POSIX 1003.1b 3.2.1
+ *  waitpid() - POSIX 1003.1 3.2.1
  *
  *  $Id$
  */

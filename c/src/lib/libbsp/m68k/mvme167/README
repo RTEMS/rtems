@@ -8,30 +8,18 @@ Please send any comments, improvements, or bug reports to:
 
 Charles-Antoine Gauthier
 charles.gauthier@nrc.ca
+
 or
 
 Darlene Stewart
 Darlene.Stewart@nrc.ca
-
+  
 Software Engineering Group
 Institute for Information Technology
 National Research Council of Canada
 Ottawa, ON, K1A 0R6
 Canada
 
-
-WARNING:
---------
-
-The network driver is currently being worked on. It is somewhat functional,
-but it does run out of buffers under certain conditions. The code is
-also undergoing a substantial reorganization. Before making any changes,
-you should check with us for the availability of updates.
-
-Note from Joel:  The ttcp performance reported is very nice even if the
-driver is still early in its life. :)
-
-  
 
 Disclaimer
 ----------
@@ -67,7 +55,6 @@ this file if you want S-records.
 
 Port Description
 Console driver
-
 ---------------
 
 This BSP includes an termios-capable console driver that supports all
@@ -147,7 +134,61 @@ mvme167.cfg that redefine which variants of libc, libm and libgcc to link
 against.
 
 
+Configuration Parameters
+
+If Jumper J1-4 is installed, certain configuration parameters may be read from
+the first 31 bytes of User Area NVRAM starting at 0xFFFC0000. In this case, the
+user is responsible for writing the appropriate values to this memory location
+(via 167Bug) in order to alter the default behaviour. A zero value results in
+the default behaviour. The paramaters that are configurable and their default
+settings are described below. 
+
+	Data Cache Enable (0xFFFC0000 - 1 byte)
+		write a non-zero value to this location to enable the data cache
+		default: disabled
+	
+	Instruction Cache Activation (0xFFFC0001 - 1 byte)
+		write a non-zero value to this location to enable the instruction cache
+		default: disabled
+		
+	Cache Mode (0xFFFC0002 - 2 bytes)
+		0xFFF0 = cachable, write-through
+		0xFFF1 = cachable, copyback
+		0xFFF2 = noncachable, serialized
+		0xFFF3 = noncachable,
+		default: cachable, copyback
+
+	IP Address (0xFFFC0004 - 4 bytes)
+		write the hexidecimal representation of the board's IP address in this
+		location for example, 192.168.1.2 = 0xC0A80102
+		default: obtain the IP address from an rtems_bsdnet_ifconfig structure
+
+	Netmask (0xFFFC0008 - 4 bytes)
+		write the hexidecimal representation of the netmask in this location
+		for example, 255.255.255.0 = 0xFFFFFF00
+		default: obtain the netmask from an rtems_bsdnet_ifconfig structure
+		
+	Ethernet Address (0xFFFC000C - 6 bytes)
+		write the board's hardware address in this location
+		default: obtain the hardware address from an rtems_bsdnet_ifconfig structure
+
+	Processor ID (0xFFFC0012 - 2 bytes)
+		reserved for future use
+		
+	RMA start (0xFFFC0014 - 4 bytes)
+		reserved for future use
+		
+	VMA start (0xFFFC0018 - 4 bytes)
+		reserved for future use
+		
+	RamSize (0xFFFC001C - 4 bytes)
+		reserved for future use
+
+
 Cache Control and Memory Mapping
+
+If configuration is not obtained from non-volatile RAM (ie. J1-4 is off),
+cache control is done through the remaining J1 jumpers as follows:
 
 If Jumper J1-7 is installed, the data cache will be turned on. If Jumper
 J1-6 is installed, the instruction cache will be turned on. Removing the
@@ -499,5 +540,4 @@ Timing tests:
     rtems_rate_monotonic_period: initiate period -- returns to caller 23
     rtems_rate_monotonic_period: conclude periods -- caller blocks 25
     rtems_rate_monotonic_period: obtain status 13
-
 
