@@ -1,3 +1,7 @@
+2000-10-19	Joel Sherrill <joel@OARcorp.com>
+
+	* page.c: Readd deleted comment lines.
+
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* page.c: Replaced prototype of printk() with include of <bspIo.h>.
