@@ -82,12 +82,10 @@ console_fns z85c30_fns_polled =
   z85c30_init,                       /* deviceInitialize */
   z85c30_write_polled,               /* deviceWritePolled */
   NULL,                              /* deviceSetAttributes */
-  FALSE,                             /* deviceOutputUsesInterrupts */
+  FALSE                              /* deviceOutputUsesInterrupts */
 };
 
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
-
-
 
 /* 
  * z85c30_initialize_port
@@ -493,6 +491,10 @@ Z85C30_STATIC int z85c30_set_attributes(
   } else {
     wr4 |= SCC_WR4_1_STOP;                      /* 1 stop bits */
   }
+
+  /*
+   *  Now actually set the chip
+   */
 
   rtems_interrupt_disable(Irql);
     (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR4, wr4 );
