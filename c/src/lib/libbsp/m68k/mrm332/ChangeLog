@@ -1,3 +1,7 @@
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove build-variant support.
+
 2004-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmds_ROM: Add new bss sections .bss.*
