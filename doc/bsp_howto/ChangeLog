@@ -1,3 +1,8 @@
+2003-05-21	Ralf corsepius <corsepiu@faw.uni-ulm.de>
+
+	* adaintr.t, ata.t, ide-ctrl.t, target.t: Various typo-fixes, Update
+	to reflect introduction of the cpukit.
+
 2003-01-28	Joel Sherrill <joel@OARcorp.com>
 
 	* makefiles.t, support.t: Updated to reflect use of automake in

@@ -15,8 +15,8 @@ ATA device - physical device attached to an IDE controller
 @section Introduction
 
 ATA driver provides generic interface to an ATA device. ATA driver is
-hardware independant implementation of ATA standart defined in working draft
-"AT Attachment Interface with Extentions (ATA-2)" X3T10/0948D revision 4c, 
+hardware independent implementation of ATA standard defined in working draft
+"AT Attachment Interface with Extensions (ATA-2)" X3T10/0948D revision 4c, 
 March 18, 1996. ATA Driver based on IDE Controller Driver and may be used for 
 computer systems with single IDE controller and with multiple as well. Although
 current implementation has several restrictions detailed below ATA driver
@@ -29,7 +29,7 @@ commands are implemented
 @end itemize
 
 The reference implementation for ATA driver can be found in 
-@code{c/src/exec/libblock/src/ata.c}.  
+@code{cpukit/libblock/src/ata.c}.  
 
 @section Initialization
 
@@ -52,7 +52,7 @@ rtems_device_driver ata_initialize(
 
    for each IDE controller successfully initialized by the IDE Controller 
        driver
-     if the controller is interuupt driven
+     if the controller is interrupt driven
        set up interrupt handler 
 
      obtain information about ATA devices attached to the controller
@@ -67,7 +67,7 @@ rtems_device_driver ata_initialize(
 @end example
 
 Special processing of ATA commands is required because of absence of 
-multitasking enviroment during the driver initialization.
+multitasking environment during the driver initialization.
 
 Detected ATA devices are registered in the system as physical block devices
 (see libblock library description). Device names are formed based on IDE
@@ -118,7 +118,7 @@ typedef struct ata_req_s @{
 
 ATA driver supports separate ATA requests queues for each IDE
 controller (one queue per controller). The following structure contains 
-inforamtion about controller's queue and devices attached to the controller:
+information about controller's queue and devices attached to the controller:
 
 @example
 @group
@@ -128,7 +128,7 @@ inforamtion about controller's queue and devices attached to the controller:
  */
 typedef struct ata_ide_ctrl_s @{
     rtems_boolean present;   /* controller state */
-    ata_dev_t     device[2]; /* ata diveces description */
+    ata_dev_t     device[2]; /* ata devices description */
     Chain_Control reqs;      /* requests chain */
 @} ata_ide_ctrl_t;
 @end group
@@ -137,7 +137,7 @@ typedef struct ata_ide_ctrl_s @{
 Driver uses array of the structures indexed by the controllers minor
 number.
 
-The following struture allows to map an ATA device to the pair (IDE 
+The following structure allows to map an ATA device to the pair (IDE 
 controller minor number device is attached to, device number
 on the controller): 
 
@@ -176,14 +176,14 @@ typedef enum ata_msg_type_s @{
 All ATA driver functionality is available via ATA driver ioctl. Current
 implementation supports only two ioctls: BLKIO_REQUEST and
 ATAIO_SET_MULTIPLE_MODE. Each ATA driver ioctl() call generates an 
-ATA request which is appended to the apropriate controller queue depending
+ATA request which is appended to the appropriate controller queue depending
 on ATA device the request belongs to. If appended request is single request in
 the controller's queue then ATA driver event is generated.
 
 ATA driver task which manages queue of ATA driver events is core of ATA
 driver. In current driver version queue of ATA driver events implemented
 as RTEMS message queue. Each message contains event type, IDE controller
-minor number on which event happaned and error if an error occured. Events
+minor number on which event happened and error if an error occurred. Events
 may be generated either by ATA driver ioctl call or by ATA driver task itself.
 Each time ATA driver task receives an event it gets controller minor number
 from event, takes first ATA request from controller queue and processes it 

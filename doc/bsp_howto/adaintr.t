@@ -32,7 +32,7 @@ SIGFPE and SIGSEGV. These signals should be raised when a spurious
 or erroneous trap occurs.
 
 To enable gnat interrupt and error exception support for a particular 
-bsp, the following has to be done:
+BSP, the following has to be done:
 
 @enumerate
 
@@ -42,12 +42,12 @@ signal depending on the interrupt/trap number.
 @item Install the interrupt handler for all interrupts/traps that will be
 handled by gnat (including spurious).
 
-@item At startup, gnat calls @code{__gnat_install_handler()}. The bsp 
+@item At startup, gnat calls @code{__gnat_install_handler()}. The BSP 
 must provide this function which installs the interrupt/trap handlers.
 
 @end enumerate
 
-Which cpu-interrupt will generate which signal is implementation
+Which CPU-interrupt will generate which signal is implementation
 defined. There are 32 POSIX signals (1 - 32), and all except the
 three error signals (SIGILL, SIGFPE and SIGSEGV) can be used. I
 would suggest to use the upper 16 (17 - 32) which do not
@@ -63,7 +63,7 @@ done separately, typically by writing various device register.
 An example program (@code{irq_test}) is included in the
 Ada examples package to show how interrupts can be handled
 in Ada95. Note that generation of the test interrupt
-(@code{irqforce.c}) is bsp specific and must be edited.
+(@code{irqforce.c}) is BSP specific and must be edited.
 
 NOTE: The @code{irq_test} example was written for the SPARC/ERC32
 BSP.
