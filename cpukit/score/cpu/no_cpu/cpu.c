@@ -67,6 +67,8 @@ unsigned32 _CPU_ISR_Get_level( void )
   /*
    *  This routine returns the current interrupt level.
    */
+
+  return 0;
 }
 
 /*PAGE
