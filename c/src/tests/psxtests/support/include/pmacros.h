@@ -38,6 +38,7 @@
 #define TM_NOVEMBER   12
 #define TM_DECEMBER   12
  
+#ifndef build_time
 #define build_time( TM, WEEKDAY, MON, DAY, YR, HR, MIN, SEC ) \
   { (TM)->tm_year = YR;  \
     (TM)->tm_mon  = MON; \
@@ -46,6 +47,7 @@
     (TM)->tm_hour = HR;  \
     (TM)->tm_min  = MIN; \
     (TM)->tm_sec  = SEC; }
+#endif
 
 #define set_time( WEEKDAY, MON, DAY, YR, HR, MIN, SEC ) \
   do { \
