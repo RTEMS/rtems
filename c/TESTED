@@ -38,6 +38,9 @@ RedHat Linux 4.2 as the host environment:
  powerpc  ppc403     helas403                     (note 1, 6)
  powerpc  ppc403     Papyrus                      (note 1)
  powerpc  ppc403     psim                         (note 5)
+ powerpc  ppc603e    Radstone PPCn_60x            (note 1, 8)
+ powerpc  ppc603e    DY-4 DMV-177                 (note 1)
+ powerpc  ppc603e    Vista Score603e              (note 1)
  powerpc  mpc860     eth_comm (custom)            (note 1, 6)
    sh     sh7032     generic sh1                  (note 1)
   sparc    erc32     generic erc32               ALL TESTS (note 5)
@@ -74,3 +77,6 @@ immediately preceding the snapshot.
 
 (7) The BSP is deprecated.  For information on what would be 
     required to update it contact rtems@OARcorp.com.
+
+(8) The Radstone ppcn_60x BSP was written by Radstone and designed
+    to support any Radstone PowerPC board with only minor modifications.
