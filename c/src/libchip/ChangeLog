@@ -1,3 +1,9 @@
+2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtc/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* network/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* serial/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-27	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Fixed typo in date.

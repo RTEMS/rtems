@@ -23,7 +23,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
     $(include_libchip_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a

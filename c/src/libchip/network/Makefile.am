@@ -40,7 +40,7 @@ $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
 if HAS_NETWORKING
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
     $(include_libchip_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%) 
 endif
 
