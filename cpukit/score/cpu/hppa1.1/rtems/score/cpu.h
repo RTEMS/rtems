@@ -24,7 +24,7 @@ extern "C" {
 
 #include <rtems/score/hppa.h>              /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/hppatypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */

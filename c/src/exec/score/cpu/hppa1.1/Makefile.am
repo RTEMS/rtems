@@ -28,7 +28,7 @@ include_rtems_score_HEADERS = \
     rtems/score/cpu.h \
     rtems/score/cpu_asm.h \
     rtems/score/hppa.h \
-    rtems/score/hppatypes.h \
+    rtems/score/types.h \
     rtems/score/offsets.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
