@@ -449,7 +449,6 @@ extern "C" {
 typedef struct {
   jmp_buf   regs;
   sigset_t  isr_level;
-  int       junk;
 } Context_Control;
 
 typedef struct {
