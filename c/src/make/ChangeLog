@@ -1,3 +1,7 @@
+2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Switch to GNU canonicalized autoconf macros.
+
 2000-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* leaf.cfg: Remove Depends inclusion.
