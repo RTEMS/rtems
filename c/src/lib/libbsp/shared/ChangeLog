@@ -1,3 +1,7 @@
+2003-06-30	Joel Sherrill <joel@OARcorp.com>
+
+	* console-polled.c: Corrected comments in header.
+
 2003-04-10	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 380/bsps
