@@ -1,4 +1,9 @@
 
+2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/gensh4.cfg: Remove HZ.
+	* custom/simsh4.cfg: Remove HZ.
+
 2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
 
 	* custom/gensh4.cfg, custom/simsh4.cfg: New files in support
