@@ -50,7 +50,7 @@ CLOBBER_ADDITIONS +=
 
 $(LIB): ${OBJS}
 	$(make-library)
-	cd $(PROJECT_ROOT) ; \
+	# cd $(PROJECT_ROOT) ; \
 	 $(SHELL) $(PROJECT_ROOT)/c/src/exec/score/tools/generic/size_rtems ${RTEMS_BSP} $(ARCH) \
 	 >$(PROJECT_RELEASE)/lib/sizeinfo$(LIB_VARIANT).txt
 
