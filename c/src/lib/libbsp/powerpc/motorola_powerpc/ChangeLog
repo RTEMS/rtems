@@ -1,3 +1,20 @@
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* bootloader/Makefile.am, console/Makefile.am, pci/Makefile.am:
+	Per PR216, "libbsp/powerpc/shared" BSP has been modified considerably
+	with the goal to make it more flexible and reusable by other
+	BSPs. The main strategies were:
+	    - eliminate hardcoded base addresses; devices use offsets
+	      and a BSP defined base address.
+	    - separate functionality into different files (e.g. reboot from
+	      inch.c to reboot.c) which can be overridden by a 'derived' BSP.
+	    - separate initialization code into separate files (e.g.  PCI
+	      bridge detection/initialization was separated from the more
+	      generic PCI access routines), also to make it easier for
+	      'derived' BSPs to substitute their own initialization code.
+	There are also a couple of enhancements and fixes:
+	    - IRQ handling code now has a hook for attaching a VME bridge.
+	    - OpenPIC is now explicitely initialized (polarities, senses).
 	      Eliminated the implicit assumption on the presence of an ISA PIC.
 	    - UART and console driver now supports more than 1 port. The current
 	      maximum of 2 can easily be extended by enlarging a table (it
