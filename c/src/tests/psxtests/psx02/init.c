@@ -15,12 +15,19 @@
 #include <signal.h>
 
 volatile int Signal_occurred;
+volatile int Signal_count;
 
 void Signal_handler(
   int signo
 )
 {
-  printf( "Signal: %d caught by 0x%x\n", signo, pthread_self() );
+  Signal_count++;
+  printf(
+    "Signal: %d caught by 0x%x (%d)\n",
+    signo,
+    pthread_self(),
+    Signal_count
+  );
   Signal_occurred = 1;
 }
 
@@ -32,6 +39,8 @@ void *POSIX_Init(
   struct timespec   tv;
   struct timespec   tr;
   struct sigaction  act;
+  sigset_t          mask;
+  sigset_t          pending_set;
 
   puts( "\n\n*** POSIX TEST 2 ***" );
 
@@ -56,7 +65,41 @@ void *POSIX_Init(
 
   /* simple signal to self */
 
+  Signal_count = 0;
+  Signal_occurred = 0;
+
   status = pthread_kill( Init_id, SIGUSR1 );
+  assert( !status );
+
+  Signal_occurred = 0;
+
+  /* now block the signal, send it, see if it is pending, and unblock it */
+
+  status = sigemptyset( &mask );
+  assert( !status );
+
+  status = sigaddset( &mask, SIGUSR1 );
+  assert( !status );
+
+  printf( "Init: Block SIGUSR1\n" );
+  status = sigprocmask( SIG_BLOCK, &mask, NULL );
+  assert( !status );
+
+  status = sigpending( &pending_set );
+  assert( !status );
+  printf( "Init: Signals pending 0x%08x\n", pending_set );
+  
+  
+  printf( "Init: send SIGUSR1 to self\n" );
+  status = pthread_kill( Init_id, SIGUSR1 );
+  assert( !status );
+
+  status = sigpending( &pending_set );
+  assert( !status );
+  printf( "Init: Signals pending 0x%08x\n", pending_set );
+  
+  printf( "Init: Unblock SIGUSR1\n" );
+  status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
   assert( !status );
 
   /* create a thread */
