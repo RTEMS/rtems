@@ -1,12 +1,19 @@
 /*
  * TERMIOS serial line support
  *
- *  Author:
+ *  Authors:
  *    W. Eric Norum
  *    Saskatchewan Accelerator Laboratory
  *    University of Saskatchewan
  *    Saskatoon, Saskatchewan, CANADA
  *    eric@skatter.usask.ca
+ *
+ *    AND
+ * 
+ *    Katsutoshi Shibuya
+ *    BU Denken Co.,Ltd.
+ *    Sapporo, JAPAN
+ *    shibuya@mxb.meshnet.or.jp
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
