@@ -4,8 +4,7 @@ AC_PREREQ(2.57)
 
 AC_INIT([rtems-doc-tools],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([word-replace2])
-AC_CONFIG_AUX_DIR([../..])
-RTEMS_VERSIONING
+RTEMS_TOP([../..])
 
 AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 dnl Checks for programs.
