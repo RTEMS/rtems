@@ -19,6 +19,7 @@
 #if defined(RTEMS_NEWLIB)
 
 #include <stdio.h>
+#include <string.h>
 
 static char *ctermid_name = "/dev/console";
 

@@ -14,6 +14,7 @@
 #include <dirent.h>
 #include <termios.h>
 #include <unistd.h>
+#include <string.h>
 #include <paths.h>
 #include <_syslist.h>
 #include <errno.h>
