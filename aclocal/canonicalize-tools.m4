@@ -1,3 +1,4 @@
+dnl
 dnl $Id$
 dnl
 dnl Set target tools

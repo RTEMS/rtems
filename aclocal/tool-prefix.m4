@@ -1,3 +1,6 @@
+dnl
+dnl  $Id$
+dnl 
 dnl Set program_prefix
 dnl
 dnl 98/05/20 Ralf Corsepius	(corsepiu@faw.uni-ulm.de)

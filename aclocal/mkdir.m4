@@ -1,4 +1,6 @@
+dnl
 dnl $Id$
+dnl
 
 dnl macro to detect mkdir
 AC_DEFUN(RTEMS_PATH_MKDIR,

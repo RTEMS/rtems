@@ -1,4 +1,6 @@
+dnl
 dnl $Id$
+dnl
 
 dnl RTEMS_CHECK_MAKEFILE(path)
 dnl Search for Makefile.in's within the directory starting

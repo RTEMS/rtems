@@ -1,4 +1,6 @@
+dnl
 dnl $Id$
+dnl
 
 dnl canonicalize target name
 dnl NOTE: Most rtems targets do not fullfil autoconf's

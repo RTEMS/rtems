@@ -1,3 +1,6 @@
+dnl
+dnl  $Id$
+dnl 
 dnl Detect the Cygwin32 environment (unix under Win32)
 dnl
 dnl 98/06/16 David Fiddes   	(D.J.Fiddes@hw.ac.uk)

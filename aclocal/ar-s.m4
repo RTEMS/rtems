@@ -1,3 +1,7 @@
+dnl
+dnl $Id$
+dnl
+
 AC_DEFUN(RTEMS_AR_FOR_TARGET_S,
 [
 AC_CACHE_CHECK(whether $AR_FOR_TARGET -s works,

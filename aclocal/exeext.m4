@@ -1,3 +1,6 @@
+dnl
+dnl  $Id$
+dnl 
 dnl Set the EXE extension
 dnl
 dnl 98/06/16 David Fiddes   	(D.J.Fiddes@hw.ac.uk)

@@ -1,9 +1,12 @@
+dnl
 dnl $Id$
+dnl
 
 dnl RTEMS_CHECK_FILES_IN(path,file,var)
 dnl path .. path relative to srcdir, where to start searching for files
 dnl file .. name of the files to search for
 dnl var  .. shell variable to append files found
+
 AC_DEFUN(RTEMS_CHECK_FILES_IN,
 [
 AC_MSG_CHECKING(for $2.in in $1)
