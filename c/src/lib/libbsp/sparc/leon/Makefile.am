@@ -18,12 +18,12 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/leon.h: include/leon.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/leon.h: include/leon.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/leon.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/leon.h
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

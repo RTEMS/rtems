@@ -1,5 +1,19 @@
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Add dirstamp support to preinstallation.
+	* clock/Makefile.am: Cosmetics.
+	* console/Makefile.am: Cosmetics.
+	* gnatsupp/Makefile.am: Cosmetics.
+	* leon_open_eth/Makefile.am: Correct paths to automake/*.am..
+	* startup/Makefile.am: Cosmetics.
+	* timer/Makefile.am: Cosmetics.
+	* wrapup/Makefile.am: Cosmetics.
+
+	PR 538/bsps:
+	* wrapup/Makefile.am: Add leon_open_eth.rel
+
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* clock/Makefile.am: Remove all-local: $(ARCH).
 	* console/Makefile.am: Remove all-local: $(ARCH).
 	* gnatsupp/Makefile.am: Remove all-local: $(ARCH).
