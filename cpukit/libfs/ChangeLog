@@ -1,5 +1,11 @@
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/dosfs/fat_file.c: Remove bsp.h. 
+	fat_file_write(.. const char*buf ..).
+	* src/dosfs/fat_file.h: fat_file_write(.. const char*buf ..).
+
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac:
 	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).

@@ -156,7 +156,7 @@ fat_file_write(rtems_filesystem_mount_table_entry_t *mt_entry,
                fat_file_fd_t                        *fat_fd,
                unsigned32                            start,
                unsigned32                            count,
-               char                                 *buf);
+               const char                            *buf);
 
 int
 fat_file_extend(rtems_filesystem_mount_table_entry_t *mt_entry,

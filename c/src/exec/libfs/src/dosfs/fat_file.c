@@ -10,7 +10,6 @@
  *
  */
 
-#include <bsp.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -355,7 +354,7 @@ fat_file_write(
     fat_file_fd_t                        *fat_fd,
     unsigned32                            start,
     unsigned32                            count,
-    char                                 *buf
+    const char                            *buf
     )
 {
     int            rc = 0;
@@ -363,7 +362,7 @@ fat_file_write(
     fat_fs_info_t *fs_info = mt_entry->fs_info;
     unsigned32     cmpltd = 0;
     unsigned32     cur_cln = 0;
-    unsigned32     save_cln; 
+    unsigned32     save_cln = 0; /* FIXME: This might be incorrect, cf. below */
     unsigned32     cl_start = 0;
     unsigned32     ofs = 0;  
     unsigned32     save_ofs;
