@@ -50,7 +50,7 @@
 #include <vm/vm_kern.h>
 #include <vm/vm_extern.h>
 
-static void mbinit __P((void *));
+static void mbinit __P((void *))  __attribute__ ((unused));
 SYSINIT(mbuf, SI_SUB_MBUF, SI_ORDER_FIRST, mbinit, NULL)
 
 struct mbuf *mbutl;

@@ -113,8 +113,8 @@ static int md_lookup_swap __P((struct sockaddr_in *mdsin,char *path,
 			       struct nfs_args *args,
 			       struct proc *procp));
 static int setfs __P((struct sockaddr_in *addr, char *path, char *p));
-#endif
 static int getdec __P((char **ptr));
+#endif
 static char *substr __P((char *a,char *b));
 #if !defined(__rtems__)
 static void mountopts __P((struct nfs_args *args, char *p)); 

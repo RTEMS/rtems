@@ -115,6 +115,7 @@ domaininit(dummy)
 }
 
 
+#if !defined(__rtems__)
 /*
  * The following two operations are kludge code.  Most likely, they should
  * be done as a "domainpreinit()" for the first function and then rolled
@@ -140,8 +141,7 @@ kludge_splx(udata)
 
 	splx( *savesplp);
 }
-
-
+#endif /* !defined(__rtems__) */
 
 struct protosw *
 pffindtype(int family, int type)
