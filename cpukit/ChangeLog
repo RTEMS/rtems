@@ -1,5 +1,38 @@
 2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* itron/include/itron.h,
+	itron/include/itronsys/eventflags.h,
+	itron/include/itronsys/fmempool.h,
+	itron/include/itronsys/intr.h,
+	itron/include/itronsys/mbox.h,
+	itron/include/itronsys/msgbuffer.h,
+	itron/include/itronsys/network.h,
+	itron/include/itronsys/port.h,
+	itron/include/itronsys/semaphore.h,
+	itron/include/itronsys/status.h,
+	itron/include/itronsys/sysmgmt.h,
+	itron/include/itronsys/task.h,
+	itron/include/itronsys/time.h,
+	itron/include/itronsys/types.h,
+	itron/include/itronsys/vmempool.h,
+	itron/include/rtems/itron/config.h,
+	itron/include/rtems/itron/eventflags.h,
+	itron/include/rtems/itron/fmempool.h,
+	itron/include/rtems/itron/intr.h,
+	itron/include/rtems/itron/itronapi.h,
+	itron/include/rtems/itron/mbox.h,
+	itron/include/rtems/itron/msgbuffer.h,
+	itron/include/rtems/itron/network.h,
+	itron/include/rtems/itron/object.h,
+	itron/include/rtems/itron/port.h,
+	itron/include/rtems/itron/semaphore.h,
+	itron/include/rtems/itron/sysmgmt.h,
+	itron/include/rtems/itron/task.h,
+	itron/include/rtems/itron/time.h,
+	itron/include/rtems/itron/vmempool.h: New header guards.
+
+2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libblock/include/rtems/bdbuf.h, libblock/include/rtems/blkdev.h,
 	libblock/include/rtems/diskdevs.h,
 	libblock/include/rtems/ide_part_table.h,
