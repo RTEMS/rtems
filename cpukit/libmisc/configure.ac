@@ -70,6 +70,7 @@ serdbg/Makefile
 stackchk/Makefile
 capture/Makefile
 untar/Makefile
+fsmount/Makefile
 mw-fb/Makefile
 wrapup/Makefile
 ])

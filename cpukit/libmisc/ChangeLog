@@ -1,3 +1,11 @@
+2003-08-06	Thomas Doerfler<Thomas.Doerfler@imd-systems.de>
+
+	PR 369/filesystem
+	* Makefile.am, shell/cmds.c, wrapup/Makefile.am: sample application to
+	show the use of the DOSFS functions
+	* fsmount/Makefile.am, fsmount/README, fsmount/fsmount.c,
+	fsmount/fsmount.h: New files.
+
 2003-08-05	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 436/rtems_misc
