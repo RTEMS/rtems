@@ -152,7 +152,6 @@ int file_systems_below_this_mountpoint(
 {
   Chain_Node                           *the_node;
   rtems_filesystem_mount_table_entry_t *the_mount_entry;
-  rtems_filesystem_mount_table_entry_t *current_fs_mt_entry;
 
   /*
    *  Is the path even a valid node name in the existing tree?

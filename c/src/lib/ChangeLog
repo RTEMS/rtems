@@ -1,4 +1,10 @@
 
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/mallocfreespace.c: Name of routine is
+	rtems_region_get_information() NOT region_get_information().
+	* libc/unmount.c: Removed unused variable.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/Makefile.am: Added termiostypes.h.
