@@ -1,4 +1,9 @@
 
+2001-10-11	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/mbx8xx.cfg, custom/mvme167.cfg: Rewrote use of strip command
+	to avoid using the apparently broken or deprecated -o argument.
+
 2001-09-28	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/ods68302.cfg: Add custom make-cxx-exe rule to account
