@@ -11,32 +11,16 @@
 --  $Id$
 --
 
-This is a README file for the MVME162 port of RTEMS.
-
-Disclaimer
-----------
-This is my first attempt at porting RTEMS. The resulting code obviously
-contains bugs (know and unknown) and limitations. I assume no
-responsibility for quality and support of the software in question.
-
-Now on more optimistic note:
-
-I have run most of the standard RTEMS sptests, and neither of them
-failed. My present (short) experience of developing RTEMS applications
-is essentially positive and suggestive of a long-term commitment. In
-any case I am ready to answer questions regarding the port and intend
-to follow the future RTEMS versions. I will do my best to provide
-whatever support I can afford time-wise.
-
 MVME162 Models
 --------------
 
 MVME162 model uses 68040.
 
-MVME162FX modele uses XXX.
+MVME162FX model uses XXX.
 
-MVME162LX model uses 68LC040 and 2 ZCC chips so that it supports
-4 serial ports.
+MVME162LX model uses 68LC040.
+
+Do all models have 2 ZCC chips for a total of 4 serial ports?
 
 Extended Console Driver
 -----------------------
