@@ -48,40 +48,31 @@
 
 /*PAGE
  *
- *  _Semaphore_Manager_initialization
+ *  rtems_semaphore_ident
  *
- *  This routine initializes all semaphore manager related data structures.
+ *  This directive returns the system ID associated with
+ *  the semaphore name.
  *
  *  Input parameters:
- *    maximum_semaphores - maximum configured semaphores
+ *    name - user defined semaphore name
+ *    node - node(s) to be searched
+ *    id   - pointer to semaphore id
  *
- *  Output parameters:  NONE
+ *  Output parameters:
+ *    *id      - semaphore id
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code - if unsuccessful
  */
 
-void _Semaphore_Manager_initialization(
-  unsigned32 maximum_semaphores
+rtems_status_code rtems_semaphore_ident(
+  rtems_name  name,
+  unsigned32  node,
+  Objects_Id *id
 )
 {
-  _Objects_Initialize_information(
-    &_Semaphore_Information,
-    OBJECTS_RTEMS_SEMAPHORES,
-    TRUE,
-    maximum_semaphores,
-    sizeof( Semaphore_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
-  );
+  Objects_Name_to_id_errors  status;
  
-  /*
-   *  Register the MP Process Packet routine.
-   */
+  status = _Objects_Name_to_id( &_Semaphore_Information, &name, node, id );
  
-#if defined(RTEMS_MULTIPROCESSING)
-  _MPCI_Register_packet_processor(
-    MP_PACKET_SEMAPHORE,
-    _Semaphore_MP_Process_packet
-  );
-#endif
-
+  return _Status_Object_name_errors_to_status[ status ];
 }

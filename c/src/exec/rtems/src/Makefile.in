@@ -36,9 +36,13 @@ MESSAGE_QUEUE_PIECES=\
   msgqflush msgqgetnumberpending msgqident msgqreceive \
   msgqsend msgqsubmit msgqtranslatereturncode msgqurgent
 
+SEMAPHORE_PIECES=\
+  sem semcreate semdelete semident semobtain semrelease \
+  semtranslatereturncode
+
 C_PIECES=attr $(CLOCK_PIECES) dpmem event intr intrbody \
    $(MESSAGE_QUEUE_PIECES) \
-   part ratemon $(REGION_PIECES) sem signal \
+   part ratemon $(REGION_PIECES) $(SEMAPHORE_PIECES) signal \
    $(TASK_PIECES) timer $(MP_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
