@@ -82,4 +82,3 @@ void _CPU_Thread_Idle_body ()
     asm volatile ("hlt");
   }
 }
-     

@@ -123,21 +123,20 @@ typedef struct {
  */
 
 typedef struct {
-
-    unsigned32	    edi,
-    	    	    esi,
-    	    	    ebp,
-    		    esp0,
-		    ebx,
-		    edx,
-		    ecx,
-		    eax,
-    	    	    idtIndex,
-		    faultCode,
-      		    eip,
-		    cs,
-		    eflags;
-}CPU_Exception_frame;
+  unsigned32  edi;
+  unsigned32  esi;
+  unsigned32  ebp;
+  unsigned32  esp0;
+  unsigned32  ebx;
+  unsigned32  edx;
+  unsigned32  ecx;
+  unsigned32  eax;
+  unsigned32  idtIndex;
+  unsigned32  faultCode;
+  unsigned32  eip;
+  unsigned32  cs;
+  unsigned32  eflags;
+} CPU_Exception_frame;
 
 /*
  *  The following structure defines the set of information saved
