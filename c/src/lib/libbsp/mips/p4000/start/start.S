@@ -95,7 +95,7 @@ FRAME(start,sp,0,ra)
 	                                /* 4650: Need fr to be set anyway */
 #else
 	li	v0,SR_CU1|SR_DE 	/* initally clear ERL, enable FPA 32bit regs*/
-#endif mips3
+#endif /* mips3 */
 #endif
 
 	mtc0	v0,C0_SR		/* clr IntMsks/ kernel/disabled mode */
