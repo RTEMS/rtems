@@ -12,16 +12,15 @@ AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
 [
 AC_CANONICAL_SYSTEM
 AC_MSG_CHECKING(rtems target cpu)
-changequote(,)dnl
 case "${target}" in
   # hpux unix port should go here
-  i[34567]86-*linux*)		# unix "simulator" port
+  i[[34567]]86-*linux*)		# unix "simulator" port
 	RTEMS_CPU=unix
 	;;
-  i[34567]86-*freebsd*) 	# unix "simulator" port
+  i[[34567]]86-*freebsd*) 	# unix "simulator" port
 	RTEMS_CPU=unix
 	;;
-  i[34567]86-pc-cygwin*) 	# Cygwin is just enough unix like :)
+  i[[34567]]86-pc-cygwin*) 	# Cygwin is just enough unix like :)
 	RTEMS_CPU=unix
 	;;
   no_cpu-*rtems*)
@@ -31,10 +30,9 @@ case "${target}" in
 	RTEMS_CPU=unix
 	;;
   *) 
-	RTEMS_CPU=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
+	RTEMS_CPU=`echo $target | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
 	;;
 esac
-changequote([,])dnl
 AC_SUBST(RTEMS_CPU)
 AC_MSG_RESULT($RTEMS_CPU)
 ])

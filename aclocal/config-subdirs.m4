@@ -45,13 +45,11 @@ dnl _RTEMS_GIVEN_INSTALL
 dnl
 AC_DEFUN(_RTEMS_GIVEN_INSTALL,
 [
-ifdef([AC_PROVIDE_AC_PROG_INSTALL],
-      [  case "$ac_given_INSTALL" in
-changequote(, )dnl
-        [/$]*) INSTALL="$ac_given_INSTALL" ;;
-changequote([, ])dnl
-        *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
-        esac
+ifdef([AC_PROVIDE_AC_PROG_INSTALL],[  
+  case "$ac_given_INSTALL" in
+  [[\\/]]* | ?:[[\\/]]*) INSTALL="$ac_given_INSTALL" ;;
+  *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
+  esac
 ])dnl
 ])
 
@@ -73,7 +71,7 @@ AC_DEFUN(_RTEMS_ADJUST_SRCDIR,[
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
       $1=$srcdir ;;
-    /*) # Absolute path.
+    [[\\/]]* | ?:[[\\/]]*) # Absolute path.
       $1=$srcdir/$2 ;;
     *) # Relative path.
       $1=$ac_dots$srcdir/$2 ;;
