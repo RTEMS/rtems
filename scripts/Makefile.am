@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-SUBDIRS = . binutils gccnewlib gdb rtems
+SUBDIRS = . binutils gccnewlib gdb rtems autotools
 
 noinst_SCRIPTS = setup buildall buildalltar mkbinutilspec mkbspspec \
     mkgccnewlibspec mkgdbspec mkrpms mkspec

@@ -75,7 +75,8 @@ mkbspspec
 binutils/Makefile
 gccnewlib/Makefile
 gdb/Makefile
-rtems/Makefile,
+rtems/Makefile
+autotools/Makefile,
 chmod 755 buildall
 chmod 755 buildalltar
 )
