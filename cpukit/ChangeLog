@@ -21,18 +21,10 @@
 
 2004-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Add PREINSTALL_DIRS.
-	* itron/Makefile.am: Add PREINSTALL_DIRS.
-	* posix/Makefile.am: Add PREINSTALL_DIRS.
-	* score/Makefile.am: Add PREINSTALL_DIRS.
-	* sapi/Makefile.am: Add PREINSTALL_DIRS.
-	* rtems/Makefile.am: Add PREINSTALL_DIRS.
-	* libmisc/Makefile.am: Add PREINSTALL_DIRS.
-	* librpc/Makefile.am: Add PREINSTALL_DIRS.
-	* libblock/Makefile.am: Add PREINSTALL_DIRS.
-	* libfs/Makefile.am: Add PREINSTALL_DIRS.
-	* libcsupport/Makefile.am: Add PREINSTALL_DIRS.
-	* libnetworking/Makefile.am: Add PREINSTALL_DIRS.
+	* Makefile.am, itron/Makefile.am, posix/Makefile.am, score/Makefile.am,
+	sapi/Makefile.am, rtems/Makefile.am, libmisc/Makefile.am,
+	librpc/Makefile.am, libblock/Makefile.am, libfs/Makefile.am,
+	libcsupport/Makefile.am, libnetworking/Makefile.am: Add PREINSTALL_DIRS.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -42,28 +34,14 @@
 	PREINSTALL_FILES to CLEANFILES.
 	* automake/local.am: Remove depend-am.
 	* automake/subdirs.am: Remove depend-recursive.
-	* itron/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
-	* posix/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
+	* itron/Makefile.am, posix/Makefile.am: Re-add dirstamps to
+	PREINSTALL_FILES. Add PREINSTALL_FILES to CLEANFILES.
 	* score/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
 	PREINSTALL_FILES to CLEANFILES. Add cpuopts.h to DISTCLEANFILES.
-	* sapi/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
-	* rtems/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
-	* libmisc/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
-	* librpc/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
-	* libblock/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
-	* libfs/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
-	* libcsupport/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
-	* libnetworking/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
+	* sapi/Makefile.am, rtems/Makefile.am, libmisc/Makefile.am,
+	librpc/Makefile.am, libblock/Makefile.am, libfs/Makefile.am,
+	libcsupport/Makefile.am, libnetworking/Makefile.am: Re-add dirstamps to
+	PREINSTALL_FILES. Add PREINSTALL_FILES to CLEANFILES.
 	* libnetworking/netinet/in_cksum.c: #include netinet/in_cksum_<cpu>.h.
 
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -111,12 +89,10 @@
 	Use AS_HELP_STRING instead of AC_HELP_STRING (deprecated in
 	autoconf-2.59).
 	* automake/local.am: Remove clean-local, depend-gcc.
-	* itron/Makefile.am: Include compile.am, again.
-	* posix/Makefile.am: Include compile.am, again.
-	* score/Makefile.am: Include compile.am, again.
+	* itron/Makefile.am, posix/Makefile.am, score/Makefile.am: Include
+	compile.am, again.
 	* score/macros/rtems/score/README: Remove (Redundant with macros/README).
-	* sapi/Makefile.am: Include compile.am, again.
-	* rtems/Makefile.am: Include compile.am, again.
+	* sapi/Makefile.am, rtems/Makefile.am: Include compile.am, again.
 	* libmisc/Makefile.am: Include compile.am again. Misc fixes.
 	* librpc/Makefile.am: Include compile.am, again. Put man-pages into
 	EXTRA_DIST to work around automake not distributing conditionally
@@ -139,7 +115,7 @@
 	amcompile.am.
 	* wrapup/Makefile.am: Use ../*/*$(LIB_VARIANT).a instead of
 	$(ARCH)/lib*.a.
-	* wrapup/Makefile.am:  Reflect changes to libblock/Makefile.am. Reflect
+	* wrapup/Makefile.am: Reflect changes to libblock/Makefile.am. Reflect
 	changes to libcsupport/Makefile.am.
 	* itron/Makefile.am: Add libs to CLEANFILES. Set lib*_g_a_SOURCES =
 	lib*_a_SOURCES.
@@ -173,7 +149,7 @@
 	lib*_a_SOURCES.
 	* libblock/include/rtems/blkdev.h,
 	libblock/include/rtems/ide_part_table.h, libblock/src/bdbuf.c,
-	libblock/src/ide_part_table.c, libblock/src/ramdisk.c:  Switch to using
+	libblock/src/ide_part_table.c, libblock/src/ramdisk.c: Switch to using
 	c99 fixed size types instead of RTEMS-types.
 	* libblock/Makefile.am: Build libblock$(LIB_VARIANT).a instead of
 	$(ARCH)/libblock.a.
@@ -196,35 +172,16 @@
 	* wrapup/Makefile.am: Reflect changes to library Makefile.ams.
 	* automake/amcompile.am: New.
 	* configure.ac: Add subdir-objects, AM_PROG_CC_C_O.
-	* itron/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* posix/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* score/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* sapi/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* rtems/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* libmisc/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* librpc/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* libblock/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* libfs/Makefile.am: Build library using EXTRA_LIBRARIES and automake
-	rules.
-	* libcsupport/Makefile.am: Build library using EXTRA_LIBRARIES and
-	automake rules.
-	* libnetworking/Makefile.am: Build library using EXTRA_LIBRARIES and
-	automake rules.
+	* itron/Makefile.am, posix/Makefile.am, score/Makefile.am,
+	sapi/Makefile.am, rtems/Makefile.am, libmisc/Makefile.am,
+	librpc/Makefile.am, libblock/Makefile.am, libfs/Makefile.am,
+	libcsupport/Makefile.am, libnetworking/Makefile.am: Build library using
+	EXTRA_LIBRARIES and automake rules.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
-	* aclocal/rtems-cpu-subdirs.m4: mips64orion port removed as mips port
-	more completely covers the MIPS family.
-	* score/cpu/Makefile.am: mips64orion port removed as mips port more
-	completely covers the MIPS family.
+	* aclocal/rtems-cpu-subdirs.m4, score/cpu/Makefile.am: mips64orion port
+	removed as mips port more completely covers the MIPS family.
 	* score/cpu/mips64orion/.cvsignore, score/cpu/mips64orion/ChangeLog,
 	score/cpu/mips64orion/Makefile.am, score/cpu/mips64orion/asm.h,
 	score/cpu/mips64orion/configure.ac, score/cpu/mips64orion/cpu.c,
@@ -270,26 +227,18 @@
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* wrapup/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* Makefile.am, wrapup/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
 	* wrapup/Makefile.am: Reworked.
 	* aclocal/lead-dot.m4: Remove (Use the version in automake-1.8).
 	* automake/lib.am: Remove $(project_libdir)$(MULTISUBDIR).
 	* aclocal/env-rtemscpu.m4: Reflect new definition of project_lib.
 	* Makefile.am: Remove BUILT_SOURCES.
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
-	* itron/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* posix/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* score/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* sapi/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* rtems/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* libmisc/Makefile.am: Use mkdir_p. Remove dirs from
-	PRE/TMPINSTALL_FILES.
-	* librpc/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* libblock/Makefile.am: Use mkdir_p. Remove dirs from
-	PRE/TMPINSTALL_FILES.
-	* libfs/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
-	* libcsupport/Makefile.am: Use mkdir_p. Remove dirs from
+	* itron/Makefile.am, posix/Makefile.am, score/Makefile.am,
+	sapi/Makefile.am, rtems/Makefile.am, libmisc/Makefile.am,
+	librpc/Makefile.am, libblock/Makefile.am, libfs/Makefile.am,
+	libcsupport/Makefile.am: Use mkdir_p. Remove dirs from
 	PRE/TMPINSTALL_FILES.
 	* libcsupport/Makefile.am: Remove BUILT_SOURCES.
 	* libnetworking/Makefile.am: Use mkdir_p. Remove dirs from
