@@ -22,6 +22,7 @@ RTEMS-specific option are supported:
 	--disable-ka9q
         --enable-cpp
         --enable-gcc28
+        --enable-gmake-print-directory
         --enable-libcdir=<DIRECTORY>
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 
@@ -161,7 +162,7 @@ i386-go32	: go32 go32_p5
 i960		: cvme961
 hppa1_1		: simhppa
 m68k		: dmv152 efi332 efi68k gen68302 gen68360 gen68360_040 idp
-		  mvme136 mvme147 mvme147s mvme162
+		  mvme136 mvme147 mvme147s mvme162 ods68302
 no_cpu          : no_bsp
 mips64orion 	: p4600 p4650 (p4000 port with either R4600 or R4650)
 powerpc		: papyrus
