@@ -1,3 +1,8 @@
+2002-08-09	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/getservent.c: Per PR265, add  #include <netinet/in.h> for
+	ntohl() function.
+
 2002-08-07	Joel Sherrill <joel@OARcorp.com>
 
 	* netinet/in.h: Per PR263, added include of <machine/endian.h>
