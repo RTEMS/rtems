@@ -10,4 +10,4 @@ $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs: bsp_specs
 
 ## FIXME: Do not split this line into several lines
 ## A bug in automake-1.4 will generate incorrect results otherwise
-PREINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/lib $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs
+PREINSTALL_FILES = $(PROJECT_ROOT)/@RTEMS_BSP@/lib $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs
