@@ -3,25 +3,15 @@
 #
 
 
-	The doit shell file cd's to $H, which refers to the directory
-that contains the hello world test.  The console is a raw com port.  
-Certain test programs behave differently with different com port speeds.
-To test the programs, it is required that you hook up a terminal 
-( or minicom or procomm it doesn't really matter ) to the comm port of 
-the target hardware.  You must ensure that the baud rate, parity etc
-is set properly.  This is done on the target hardware within interns.s .
-( Set your terminal emulator to match. ) Currently, the settings
-are 9600,8,n,1 .
+The requirements for this BSP are only that the GAS used supports the
+.code16 directive.  The GAS released with any GCC version 2.8.0 or better
+is required.  The BSP was built with an egcs snapshot pre-1.0.2 and
+post-1.0.1.  However, any egcs should work. 
 
-The format and layout of the file interns.s is taken from the 
-intel ApBuilder software, freely distributed by Intel.  Some
-easy macros ( SetExRegByte and SetExRegWord ) are basically lifted
-from the Intel macros.  Similarly for the names of the IO ports.
 
-This "port" begain with the forceCPU bsp.  Hence I am sure that 
-there is some real trash that is not appropriate.  For example
-the act of copying the Interrupt Descriptor tables and Global
-descriptor tables "into our space". ( in start.s I think ) 
+The only "real" differences are in bspstart.c, where the initialization now
+configures all available RAM, (after setting up the Workspaces) as heap. 
+The location of the stack was changed so that the heap was not trapped
+between low memory and the stack; the stack comes before the heap. 
 
-Erik
 

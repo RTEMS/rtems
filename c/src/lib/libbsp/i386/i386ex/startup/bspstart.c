@@ -1,13 +1,8 @@
-/*  bsp_start()
- *
+/*
  *  This routine starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
- *
- *  INPUT:  NONE
- *
- *  OUTPUT: NONE
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -17,6 +12,12 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *  Ported to the i386ex and submitted by:
+ *
+ *    Erik Ivanenko 
+ *    University of Toronto
+ *    erik.ivanenko@utoronto.ca
+ *  
  *  $Id$
  */
 
@@ -24,12 +25,9 @@
 #include <rtems/libio.h>
  
 #include <libcsupport.h>
- 
-#include <fcntl.h>
 
-#ifdef PRINTON
-extern char inbyte(void);
-extern void outbyte(char);
+#ifdef STACK_CHECKER_ON
+#include <stackchk.h>
 #endif
 
 /*
@@ -42,23 +40,35 @@ rtems_configuration_table  BSP_Configuration;
 
 rtems_cpu_table Cpu_table;
 
-char *rtems_progname;
-
-/*      Initialize whatever libc we are using
- *      called from postdriver hook
+/*
+ *  Tells us where to put the workspace in case remote debugger is present.
  */
+
+extern rtems_unsigned32  rdb_start;
+
+/*
+ *  bsp_libc_init
+ *
+ *  Initialize whatever libc we are using called from bsp_postdriver_hook.
+ */
+
  
 void bsp_libc_init()
 {
-    extern int end;
-    rtems_unsigned32        heap_start;
- 
-    heap_start = (rtems_unsigned32) &end;
+    extern int heap_bottom;
+    rtems_unsigned32 heap_start;
+    rtems_unsigned32 heap_size;
+
+    heap_start = (rtems_unsigned32) &heap_bottom;
     if (heap_start & (CPU_ALIGNMENT-1))
-        heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
- 
-    RTEMS_Malloc_Initialize((void *) heap_start, 64 * 1024, 0);
- 
+      heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+
+    heap_size = BSP_Configuration.work_space_start -(void *) heap_start ;
+    heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
+
+    heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
+    RTEMS_Malloc_Initialize((void *) heap_start, heap_size, 0);
+
     /*
      *  Init the RTEMS libio facility to provide UNIX-like system
      *  calls for use by newlib (ie: provide __rtems_open, __rtems_close, etc)
@@ -104,7 +114,7 @@ bsp_pretasking_hook(void)
  
     Stack_check_Initialize();
 #endif
- 
+
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -112,45 +122,13 @@ bsp_pretasking_hook(void)
 
 
 /*
- * After drivers are setup, register some "filenames"
- * and open stdin, stdout, stderr files
- *
- * Newlib will automatically associate the files with these
- * (it hardcodes the numbers)
+ *  Use the shared bsp_postdriver_hook() implementation 
  */
  
-void
-bsp_postdriver_hook(void)
-{
-  int stdin_fd, stdout_fd, stderr_fd;
-  int error_code;
- 
-  error_code = 'S' << 24 | 'T' << 16;
- 
-  if ((stdin_fd = __rtems_open("/dev/console", O_RDONLY, 0)) == -1)
-    rtems_fatal_error_occurred( error_code | 'D' << 8 | '0' );
- 
-  if ((stdout_fd = __rtems_open("/dev/console", O_WRONLY, 0)) == -1)
-    rtems_fatal_error_occurred( error_code | 'D' << 8 | '1' );
- 
-  if ((stderr_fd = __rtems_open("/dev/console", O_WRONLY, 0)) == -1)
-    rtems_fatal_error_occurred( error_code | 'D' << 8 | '2' );
- 
-  if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
-    rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
-}
-
+void bsp_postdriver_hook(void);
 
 void bsp_start( void )
 {
-
-#ifdef PRINTON   
-  outbyte('a');
-  outbyte('b');
-  outbyte('c');
-  outbyte ('S');
-#endif
-
   /*
    *  we do not use the pretasking_hook.
    */
@@ -169,7 +147,7 @@ void bsp_start( void )
  
   Cpu_table.interrupt_table_offset = (void *)Interrupt_descriptor_table;
  
-  Cpu_table.interrupt_stack_size = 4096;
+  Cpu_table.interrupt_stack_size = 4096;  /* STACK_MINIMUM_SIZE */
  
   Cpu_table.extra_mpci_receive_server_stack = 0;
 
@@ -179,23 +157,25 @@ void bsp_start( void )
 
   BSP_Configuration = Configuration;
 
+#if defined(RTEMS_POSIX_API)
+  BSP_Configuration.work_space_size *= 3;
+#endif
+
   BSP_Configuration.work_space_start = (void *)
      RAM_END - BSP_Configuration.work_space_size;
-
-
-#ifdef SPRINTON 
-  sprintf( x_buffer, "ram end : %u, work_space_size: %d\n", 
-           RAM_END ,  BSP_Configuration.work_space_size ); 
-  do {
-    outbyte ( x_buffer[i] );
-  } while ( x_buffer[i++] != '\n');
-#endif
 
   /*
    * Add 1 region for Malloc in libc_low
    */
 
   BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
+
+  /*
+   *  Account for the console's resources
+   */
+
+  /*   console_reserve_resources( &BSP_Configuration ); */
+
 
   /*
    * Add 1 extension for newlib libc

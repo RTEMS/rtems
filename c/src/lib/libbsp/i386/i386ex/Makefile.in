@@ -16,4 +16,4 @@ include $(RTEMS_ROOT)/make/directory.cfg
 #was:
 #SUB_DIRS=include startup clock console shmsupp timer wrapup
 #is
-SUB_DIRS=include startup clock console timer wrapup
+SUB_DIRS=include start startup clock console timer wrapup

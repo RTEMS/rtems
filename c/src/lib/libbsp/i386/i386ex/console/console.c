@@ -19,7 +19,7 @@
  
 #include <stdlib.h>
 
-#include "../startup/80386ex.h"
+#include "../start/80386ex.h"
 
 /*  console_cleanup
  *
