@@ -14,7 +14,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <vmeintr.h>
+#include <rtems/vmeintr.h>
 
 /* PAGE
  *
