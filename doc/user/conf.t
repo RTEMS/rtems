@@ -36,7 +36,7 @@ RTEMS provides the @code{confdefs.h} C language header file that
 based on the setting of a variety of macros can automatically
 produce nearly all of the configuration tables required
 by an RTEMS application.  Rather than building the individual
-tables by hand. the application simply specifies the values
+tables by hand, the application simply specifies the values
 for the configuration parameters it wishes to set.  In the following
 example, the configuration information for a simple system with
 a message queue and a time slice of 50 milliseconds is configured:
@@ -1803,8 +1803,8 @@ of memory required more accurate:
 
 @itemize @bullet
 
-CONFIGURE_MEMORY_OVERHEAD
-CONFIGURE_EXTRA_TASK_STACKS
+@item @code{CONFIGURE_MEMORY_OVERHEAD}
+@item @code{CONFIGURE_EXTRA_TASK_STACKS}
 
 @end itemize
 
