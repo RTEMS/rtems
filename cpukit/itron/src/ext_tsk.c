@@ -23,6 +23,13 @@
 
 void ext_tsk( void )
 {
+  /*
+   *  Figure out what to do if this happens.
+   *  We can not return regardless
+      if ( _ITRON_Is_in_non_task_state() )
+        return E_CTX;
+  */
+
   _Thread_Disable_dispatch();
 
   _Thread_Restart( _Thread_Executing, NULL, 0 );
