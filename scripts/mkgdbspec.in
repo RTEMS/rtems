@@ -44,14 +44,11 @@ fi
 # target to build for
 target_alias=$1
 
-# RPM release number
-rpm_release=0
-
 . ./$CFG
 
 specfile=${dst}/$target_alias-gdb-${gdb_version}.spec
 
-sed -e "s%@Release@%${rpm_release}%g" \
+sed -e "s%@Release@%${gdb_rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
     -e "s%@gdb_version@%${gdb_version}%g" \
     -e "s%@gdb_patch_version@%${gdb_patch_version}%g" \

@@ -18,7 +18,7 @@ Requires:     @target_alias@-binutils
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      gcc@gcc_version@newlib@newlib_version@
+Version:      @gcc_version@newlib@newlib_version@
 Summary:      rtems gcc and newlib C Library for target @target_alias@
 Source0:	gcc-@gcc_version@.tar.gz
 Source1:	newlib-@newlib_version@.tar.gz
@@ -38,6 +38,7 @@ Authors:
     ...
 
 %prep
+echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 # untar the sources inside @target_alias@-gcc-newlib -@Version@
 %setup -c -n @target_alias@-gcc-newlib -a 0 -a 1
 

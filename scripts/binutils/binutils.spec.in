@@ -16,10 +16,10 @@ Provides:     @target_alias@-binutils
 
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
-Buildroot:    	/tmp
+Buildroot:    	/opt/tmp
 Prefix:		/opt
 
-Version:      	binutils@binutils_version@
+Version:      	@binutils_version@
 Summary:      	binutils for target @target_alias@
 Source0:      	binutils-@binutils_version@.tar.gz
 Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
@@ -35,6 +35,7 @@ Authors:
     ...
 
 %prep
+echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 # untar the sources inside @target_alias@-binutils
 %setup -c -n @target_alias@-binutils -a 0
 

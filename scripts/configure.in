@@ -1,5 +1,5 @@
 AC_INIT(binutils)
-AM_INIT_AUTOMAKE(scripts,19991020-0,no)
+AM_INIT_AUTOMAKE(scripts,19991020-1,no)
 
 test -f ./setup.cache || cp ./setup.def ./setup.cache
 . ./setup.cache
@@ -33,10 +33,12 @@ AC_SUBST(GDBVERS)
 
 AC_OUTPUT(
 Makefile
+buildall
 mkbinutilspec
 mkgccnewlibspec
 mkgdbspec
 binutils/Makefile
 gccnewlib/Makefile
 gdb/Makefile
+rtems/Makefile
 )

@@ -45,14 +45,11 @@ fi
 # target to build for
 target_alias=$1
 
-# RPM release number
-rpm_release=0
-
 . ./$CFG
 
 specfile=${dst}/$target_alias-binutils-${binutils_version}.spec
 
-sed -e "s%@Release@%${rpm_release}%g" \
+sed -e "s%@Release@%${binutils_rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
     -e "s%@binutils_version@%${binutils_version}%g" \
     -e "s%@binutils_patch_version@%${binutils_patch_version}%g" \
