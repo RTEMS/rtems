@@ -46,9 +46,9 @@ C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../../automake/multilib.am
-include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../automake/multilib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
@@ -59,4 +59,4 @@ UNUSED_C_FILES = cre_mbx.c del_mbx.c mboxtranslatereturncode.c network.c \
 
 EXTRA_DIST = $(C_FILES) $(UNUSED_C_FILES)
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

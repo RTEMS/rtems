@@ -1,3 +1,12 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	Use ../aclocal.
+	* inline/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* macros/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+
 2001-05-17	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/posix/mqueue.inl: Implemented missing routines

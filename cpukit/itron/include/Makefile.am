@@ -52,4 +52,4 @@ EXTRA_DIST += rtems/itron/README
 ## General
 all-local: $(PREINSTALL_FILES)
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

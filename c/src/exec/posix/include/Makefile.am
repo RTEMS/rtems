@@ -52,4 +52,4 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = $(noinst_HEADERS)
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

@@ -1,3 +1,12 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	Use ../aclocal.
+	* inline/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* macros/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+
 2001-04-22	Joel Sherrill <joel@OARcorp.com>
 
 	* src/task.c (_ITRON_Task_User_extensions): Add new fields to 
