@@ -1,3 +1,8 @@
+2001-05-11	Joel Sherrill <joel@OARcorp.com>
+
+	* tools/runtest: Add functionality to avoid letting simulator
+	run too long.
+
 2001-04-20	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h (Clear_tm27_intr): Stop the timer and disable

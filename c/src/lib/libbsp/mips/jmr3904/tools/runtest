@@ -213,12 +213,33 @@ do
      fi
 
      # Spin off the simulator in the background
-     #   -c sets an instruction limit
 
-     # XXX need to make sure it won't run forever... 
+       ${simulator} --board=jmr3904 $tfile | \
+         sed -e 's///' -e '/^$/d' > ${logfile} 2>&1 &
+       pid=$!
 
-     ${simulator} --board=jmr3904 $tfile | \
-         sed -e 's///' -e '/^$/d' > ${logfile}
+       # Make sure it won't run forever...
+       time_run=0
+       while [ $time_run -lt $max_run_time ]
+       do
+           # sleep 5s at a time waiting for job to finish or timer to expire
+           # if job has exited, then we exit, too.
+           sleep 5
+           kill -0 $pid 2> /dev/null
+           running=$?
+           if [ $running -eq 0 ]
+           then
+               time_run=$((time_run + 5))
+               if [ $time_run -ge $max_run_time ]
+               then
+                   kill -9 $pid 2> /dev/null
+                   ran_too_long="yes"
+               fi
+           else
+               ran_too_long="no"
+               break
+           fi
+       done
    fi
 
    # Create the info files
