@@ -1,4 +1,14 @@
 
+2001-01-25	Fernando Ruiz <fernando.ruiz@ctv.es>
+
+	* Alternate email is correo@fernando-ruiz.com
+	* libc/privateenv.c: New file.
+	* include/rtems/libio_.h, libc/Makefile.am, libc/base_fs.c, 
+	libc/unmount.c: Moved default umask, current working directory,
+	root, and links followed count into a structure "user environment"
+	that can then be treated as a unit.  This enable giving unique
+	copies of these to individual threads or collection of threads.
+
 2001-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add libc/config.h
