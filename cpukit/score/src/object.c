@@ -125,15 +125,16 @@ void _Objects_Extend_information(
     void             *old_tables;    
     
     /*
-     *  Growing the tables means allocating a new area, doing a copy and updating
-     *  the information table.
+     *  Growing the tables means allocating a new area, doing a copy and
+     *  updating the information table.
      *
-     *  If the maximum is minimum we do not have a table to copy. First time through.
+     *  If the maximum is minimum we do not have a table to copy. First
+     *  time through.
      *
      *  The allocation has :
      *
      *      void            *objects[block_count];
-     *      unsiged32        inactive_count[block_count];
+     *      unsigned32       inactive_count[block_count];
      *      Objects_Name    *name_table[block_count];
      *      Objects_Control *local_table[maximum];
      *
@@ -156,7 +157,8 @@ void _Objects_Extend_information(
     if ( information->auto_extend ) {
       object_blocks = (void**)
         _Workspace_Allocate(
-          block_count * (sizeof(void *) + sizeof(unsigned32) + sizeof(Objects_Name *)) +
+          block_count *
+             (sizeof(void *) + sizeof(unsigned32) + sizeof(Objects_Name *)) +
           ((maximum + minimum_index) * sizeof(Objects_Control *))
           );
 
@@ -166,7 +168,8 @@ void _Objects_Extend_information(
     else {
       object_blocks = (void**)
         _Workspace_Allocate_or_fatal_error(
-          block_count * (sizeof(void *) + sizeof(unsigned32) + sizeof(Objects_Name *)) +
+          block_count * 
+             (sizeof(void *) + sizeof(unsigned32) + sizeof(Objects_Name *)) +
           ((maximum + minimum_index) * sizeof(Objects_Control *))
         );
     }
@@ -176,17 +179,16 @@ void _Objects_Extend_information(
      *
      */
      
-    inactive_per_block =
-      (unsigned32 *) _Addresses_Add_offset( object_blocks, block_count * sizeof(void*) );
-    name_table =
-        (Objects_Name *) _Addresses_Add_offset( inactive_per_block,
-                                                block_count * sizeof(unsigned32) );
-    local_table =
-      (Objects_Control **) _Addresses_Add_offset( name_table,
-                                                  block_count * sizeof(Objects_Name *) );
+    inactive_per_block = (unsigned32 *) _Addresses_Add_offset(
+        object_blocks, block_count * sizeof(void*) );
+    name_table = (Objects_Name *) _Addresses_Add_offset(
+        inactive_per_block, block_count * sizeof(unsigned32) );
+    local_table = (Objects_Control **) _Addresses_Add_offset(
+        name_table, block_count * sizeof(Objects_Name *) );
     
     /*
-     *  Take the block count down. Saves all the (block_count - 1) in the copies.
+     *  Take the block count down. Saves all the (block_count - 1)
+     *  in the copies.
      */
 
     block_count--;
@@ -417,13 +419,14 @@ void _Objects_Shrink_information(
  *  This routine initializes all object information related data structures.
  *
  *  Input parameters:
- *    information     - object information table
- *    the_class       - object class
- *    supports_global - TRUE if this is a global object class
- *    maximum         - maximum objects of this class
- *    is_string       - TRUE if names for this object are strings
- *    size            - size of this object's control block
- *    is_thread       - TRUE if this class is threads
+ *    information         - object information table
+ *    the_class           - object class
+ *    supports_global     - TRUE if this is a global object class
+ *    maximum             - maximum objects of this class
+ *    size                - size of this object's control block
+ *    is_string           - TRUE if names for this object are strings
+ *    maximum_name_length - maximum length of each object's name
+ *    is_thread           - TRUE if this class is threads
  *
  *  Output parameters:  NONE
  */
@@ -583,8 +586,8 @@ Objects_Control *_Objects_Allocate(
     if ( the_object ) {
       unsigned32 block;
     
-      block = 
-        _Objects_Get_index( the_object->id ) - _Objects_Get_index( information->minimum_id );
+      block = _Objects_Get_index( the_object->id ) -
+              _Objects_Get_index( information->minimum_id );
       block /= information->allocation_size;
       
       information->inactive_per_block[ block ]--;
@@ -594,6 +597,58 @@ Objects_Control *_Objects_Allocate(
   
   return the_object;
 }
+
+/*PAGE
+ *
+ *  _Objects_Allocate_by_index
+ *
+ *  DESCRIPTION:
+ *
+ *  This function allocates the object control block 
+ *  specified by the index from the inactive chain of 
+ *  free object control blocks.
+ */
+
+Objects_Control *_Objects_Allocate_by_index(
+  Objects_Information *information,
+  unsigned32           index,
+  unsigned32           sizeof_control
+)
+{
+  Objects_Control *the_object;
+  void            *p;
+
+  if ( index && information->maximum >= index ) {
+    the_object = _Objects_Get_local_object( information, index );
+    if ( the_object )
+      return NULL;
+
+    /* XXX
+     *  This whole section of code needs to be addressed.
+     *    +  The 0 should be dealt with more properly so we can autoextend.
+     *    +  The pointer arithmetic is probably too expensive.
+     *    +  etc.
+     */
+    
+    p = _Addresses_Add_offset( information->object_blocks[ 0 ],
+        (information->allocation_size * information->name_length) ),
+
+    p = _Addresses_Add_offset( p, (sizeof_control * (index - 1)) );
+    the_object = (Objects_Control *)p;
+    _Chain_Extract( &the_object->Node );
+ 
+    return the_object;   
+  }    
+
+  /*
+   *  Autoextend will have to be thought out as it applies
+   *  to user assigned indices.
+   */
+
+  return NULL;
+}
+
+
 
 /*PAGE
  *
@@ -833,8 +888,8 @@ Objects_Name_to_id_errors _Objects_Name_to_id(
  *   location    - address of where to store the location
  *
  * Output parameters:
- *   returns - address of object if local
- *   location    - one of the following:
+ *   returns  - address of object if local
+ *   location - one of the following:
  *                  OBJECTS_ERROR  - invalid object ID
  *                  OBJECTS_REMOTE - remote object
  *                  OBJECTS_LOCAL  - local object
@@ -863,13 +918,65 @@ Objects_Control *_Objects_Get(
   }
   *location = OBJECTS_ERROR;
 #if defined(RTEMS_MULTIPROCESSING)
-  _Objects_MP_Is_remote( information, id, location, &the_object );
+  _Objects_MP_Is_remote(
+    information,
+    _Objects_Build_id( information->the_class, _Objects_Local_node, index ),
+    location,
+    &the_object
+  );
   return the_object;
 #else
   return NULL;
 #endif
 }
 
+/*PAGE
+ *
+ * _Objects_Get_by_index
+ *
+ * This routine sets the object pointer for the given
+ * object id based on the given object information structure.
+ *
+ * Input parameters:
+ *   information - pointer to entry in table for this class
+ *   index       - object index to check for
+ *   location    - address of where to store the location
+ *
+ * Output parameters:
+ *   returns  - address of object if local
+ *   location - one of the following:
+ *                  OBJECTS_ERROR  - invalid object ID
+ *                  OBJECTS_REMOTE - remote object
+ *                  OBJECTS_LOCAL  - local object
+ */
+
+Objects_Control *_Objects_Get_by_index(
+  Objects_Information *information,
+  unsigned32           index,
+  Objects_Locations   *location
+)
+{
+  Objects_Control *the_object;
+
+  if ( information->maximum >= index ) {
+    _Thread_Disable_dispatch();
+    if ( (the_object = _Objects_Get_local_object( information, index )) != NULL ) {
+      *location = OBJECTS_LOCAL;
+      return( the_object );
+    }
+    _Thread_Enable_dispatch();
+    *location = OBJECTS_ERROR;
+    return( NULL );
+  }
+
+  /*
+   *  With just an index, you can't access a remote object.
+   */
+
+  _Thread_Enable_dispatch();
+  *location = OBJECTS_ERROR;
+  return NULL;
+}
 
 /*PAGE
  *
