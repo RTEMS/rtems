@@ -27,6 +27,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <rtems.h>
 #include <rtems/capture-cli.h>

@@ -1,3 +1,8 @@
+2002-07-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* capture/capture.c: include <string.h> for memset.
+	* capture/capture-cli.c: include <string.h> for memset.
+
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
 	* capture/capture-cli.c, cpuuse/cpuuse.c, monitor/mon-monitor.c,

@@ -24,6 +24,7 @@
 */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "capture.h"
 #include <rtems/score/states.inl>
