@@ -232,8 +232,7 @@ typedef unsigned long uintptr_t;
 
 #undef __EXP
 
-/* Macros for minimum-width integer constant expressions */
-
+/** Macros for minimum-width integer constant expressions */
 #define INT8_C(x)	x
 #define UINT8_C(x)	x##U
 
@@ -248,7 +247,6 @@ typedef unsigned long uintptr_t;
 #define UINT32_C(x)	x##U
 #endif
 
-/* Macros for greatest-width integer constant expression */
 #if __int64_t_defined
 #if __rtems_longlong64
 #define INT64_C(x)	x##LL
@@ -259,6 +257,7 @@ typedef unsigned long uintptr_t;
 #endif
 #endif
 
+/** Macros for greatest-width integer constant expression */
 #if __rtems_longlong64
 #define INTMAX_C(x)	x##LL
 #define UINTMAX_C(x)	x##ULL
@@ -272,4 +271,4 @@ typedef unsigned long uintptr_t;
 }
 #endif
 
-#endif
+#endif /* _STDINT_H */

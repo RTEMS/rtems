@@ -1,3 +1,7 @@
+2004-11-20	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
+	* libcsupport/include/stdint.h: Move mal-placed comment.
+
 2004-11-10	Joel Sherrill <joel@oarcorp.com>
 
 	* include/rtems/pci.h: BSPs use the name BSP_pci_configuration not pci.
