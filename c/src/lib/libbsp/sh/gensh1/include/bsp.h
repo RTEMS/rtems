@@ -100,7 +100,7 @@ extern "C" {
  * Do not rely on them being present in future
  */
 #define CPU_delay( microseconds ) delay( microseconds )
-#define sh_deley( microseconds ) delay( microseconds )
+#define sh_delay( microseconds ) delay( microseconds )
 
 /*
  * Defined in the linker script 'linkcmds'
