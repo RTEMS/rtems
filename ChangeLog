@@ -1,3 +1,9 @@
+2001-04-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* README.cdn-X: Update.
+	* automake/compile.am: Remove -ansi -fasm from CFLAGS_DEFAULT, add
+	@CPPFLAGS@ to CPPFLAGS.
+
 2001-04-20	Eric Valette <valette@crf.canon.fr>
 
  	* aclocal/check-rdbg.m4: Added check to determine which PowerPC

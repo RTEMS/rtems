@@ -47,7 +47,7 @@
 if RTEMS_USE_GCC
 ## All the stuff below is specific to gcc
 
-CFLAGS_DEFAULT=-g -Wall -ansi -fasm
+CFLAGS_DEFAULT=-g -Wall
 
 if RTEMS_USE_GCC272
 ## gcc <= 2.7.2
@@ -75,7 +75,7 @@ endif # RTEMS_USE_GCC
 
 DEFS = @DEFS@
 
-CPPFLAGS += $(CPU_DEFINES) $(CPU_CFLAGS) \
+CPPFLAGS += @CPPFLAGS@ $(CPU_DEFINES) $(CPU_CFLAGS) \
    $(DEFINES) $(XCPPFLAGS) $(CPPFLAGS_GCC)
 CFLAGS   = $(CFLAGS_DEFAULT) $(XCFLAGS)
 CXXFLAGS = $(CFLAGS_DEFAULT) $(XCXXFLAGS)
