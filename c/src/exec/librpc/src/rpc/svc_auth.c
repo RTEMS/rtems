@@ -30,7 +30,7 @@
  * Copyright (c) 1986-1991 by Sun Microsystems Inc. 
  */
 
-#ident	"@(#)svc_auth.c	1.16	94/04/24 SMI"
+/* #ident	"@(#)svc_auth.c	1.16	94/04/24 SMI" */
 
 #if !defined(lint) && defined(SCCSIDS)
 #if 0
