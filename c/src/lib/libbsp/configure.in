@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 dnl
 dnl $Id$
 
-AC_PREREQ(2.13)
+AC_PREREQ(2.52)
 AC_INIT(README)
 RTEMS_TOP(../../../..)
 AC_CONFIG_AUX_DIR(../../../..)
@@ -28,15 +28,12 @@ RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
 # Is there code where there should be for this BSP?
 # The bare bsp is a special case as it is not under the RTEMS_CPU path
 if test "$bspdir" = "bare" ; then
-  RTEMS_LIBBSP_CPU_SUBDIR="bare"
+  AC_CONFIG_SUBDIRS([bare])
 else
-  RTEMS_LIBBSP_CPU_SUBDIR=$RTEMS_CPU
+  RTEMS_CPU_SUBDIRS
 fi
-AC_SUBST(RTEMS_LIBBSP_CPU_SUBDIR)
-cfg_subdirs="$RTEMS_LIBBSP_CPU_SUBDIR"
 
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
-AC_CONFIG_SUBDIRS($cfg_subdirs)
 
 RTEMS_PROJECT_ROOT
 
