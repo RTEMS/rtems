@@ -1,3 +1,7 @@
+2002-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c: Removed __assert() which conflicts with newlib.
+
 2002-11-17	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* irq/irq_init.c, motorola/motorola.c: Support for MTX603e.

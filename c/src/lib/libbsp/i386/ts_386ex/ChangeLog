@@ -1,3 +1,7 @@
+2002-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c: Removed __assert() which conflicts with newlib.
+
 2002-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.

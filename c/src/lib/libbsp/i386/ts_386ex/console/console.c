@@ -37,10 +37,6 @@
 #include <assert.h>
 #include <rtems/error.h>
 
-/* workaround for gcc development tools */
-#undef __assert
-void __assert (const char *file, int line, const char *msg);
-
 #include <bsp.h>
 #include <irq.h>
 #include <rtems/libio.h>
@@ -95,32 +91,6 @@ isr_is_on(const rtems_irq_connect_data *irq)
 {
   return BSP_irq_enabled_at_i8259s(irq->name);
 }
-
-void __assert (const char *file, int line, const char *msg)
-{
-    static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
-  unsigned char  ch;
-   
-  /*
-   * Note we cannot call exit or printf from here, 
-   * assert can fail inside ISR too
-   */
-
-   /*
-   * Close console
-   */
-  close(2);
-  close(1);
-  close(0);
-
-  printk("\nassert failed: %s: ", file);
-  printk("%d: ", line);
-  printk("%s\n\n", msg);
-  printk(exit_msg);
-  ch = BSP_poll_char();
-  printk("\nShould jump to reset now!\n");
-}
-
 
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.

@@ -26,8 +26,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#undef __assert
-void __assert (const char *file, int line, const char *msg);
 extern int close(int fd);
 
 #include <bsp.h>
@@ -55,33 +53,6 @@ int BSPBaseBaud    = BSP_UART_BAUD_BASE;
 +--------------------------------------------------------------------------*/
 
 static int  conSetAttr(int minor, const struct termios *);
-
-void __assert (const char *file, int line, const char *msg)
-{
-    static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
-  unsigned char  ch;
-   
-  /*
-   * Note we cannot call exit or printf from here, 
-   * assert can fail inside ISR too
-   */
-
-   /*
-    * Close console
-   */
-  close(2);
-  close(1);
-  close(0);
-
-  printk("\nassert failed: %s: ", file);
-  printk("%d: ", line);
-  printk("%s\n\n", msg);
-  printk(exit_msg);
-  ch = debug_getc();
-  printk("\n\n");
-  rtemsReboot();
-
-}
 
 typedef struct TtySTblRec_ {
 		char	*name;
