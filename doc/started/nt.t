@@ -10,7 +10,9 @@
 @set CYGWIN-FTP http://www.cygnus.com/misc/gnu-win32/
 @set CYGWIN-COOLVIEW http://www.lexa.ru/sos/
 @set DOS2UNIX-FTP ftp://ftp.micros.hensa.ac.uk/platforms/ibm-pc/ms-dos/simtelnet/txtutl/dos2unix.zip
-@set PFE-FTP http://www.lancs.ac.uk/people/cpaap/pfe/
+
+@c @set PFE-FTP http://www.lancs.ac.uk/people/cpaap/pfe
+@set PFE-FTP http://www.simtel.net/pub/simtelnet/win95/editor/pfe101i.zip
 
 @chapter Using MS-Windows as a Development Host
 
@@ -62,13 +64,29 @@ tar -xzvf archive.tgz
 
 You absolutely have to use a text editor which can 
 save files with Unix format (so don't use Notepad 
-nor Wordpad). If you do not have an appropriate
-text editor, try @b{Programmers File Editor}, it is
-free and very convenient.  This editor may be downloaded
-from:
+nor Wordpad).  There are a number of editors
+freely available that can be used.  
+
+
+@itemize @bullet
+@item @b{VIM} (@b{Vi IMproved}) is available from
+@b{http://www.vim.org/}.  This editor has the very
+handy ability to easily read and write files in 
+either DOS or UNIX style.
+
+@item @b{GNU Emacs} is available for many platforms
+including MS-Windows.  The official homepage 
+is @b{http://www.gnu.org/software/emacs/emacs.html}.
+The GNU Emacs on Windows NT and Windows 95/98 FAQ is
+at @b{http://www.gnu.org/software/emacs/windows/ntemacs.html}.
+
+@item @b{PFE} (@b{Programmers File Editor}) may be downloaded
+from @b{@value{PFE-FTP},@value{PFE-FTP}}.  Note this
+editor is no longer actively supported.
 
 @c @uref{@value{PFE-FTP},@value{PFE-FTP}}
-@b{@value{PFE-FTP},@value{PFE-FTP}}
+
+@end itemize
 
 @subsection Bug in Patch Utility
 
