@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* bspspuriousinit.c, c3xspurious.c, c4xspurious.c: URL for license
+	changed.
+
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved automake/.
