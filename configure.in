@@ -123,9 +123,6 @@ RTEMS_HOST=$host_os
 
 case "${target}" in
   # hpux unix port should go here
-  hppa1.1-*-rtems*)
-	target_cpu=hppa1_1
-	;;
   i[[3456]]86-go32-rtems*)
 	target_cpu=i386
 	rtems_bsp="go32 go32_p5"
