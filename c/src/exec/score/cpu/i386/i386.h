@@ -36,25 +36,30 @@ extern "C" {
  *    i486sx
  *    pentium
  *
- *  Floating point is the only feature which currently varies.  Eventually
- *  the i486-plus level instruction for endian swapping should be added
- *  to this feature list.
+ *  CPU Model Feature Flags:
+ *
+ *  I386_HAS_BSWAP:  Defined to "1" if the instruction for endian swapping 
+ *                   (bswap) should be used.  This instruction appears to
+ *                   be present in all i486's and above.
+ *
+ *  I386_HAS_FPU:    Defined to "1" if the CPU has an FPU.
+ *
  */
 
 #if defined(i386_fp)
 
 #define CPU_MODEL_NAME  "i386 with i387"
-#define I386_HAS_FPU 1
+#define I386_HAS_BSWAP 0
 
 #elif defined(i386_nofp)
 
 #define CPU_MODEL_NAME  "i386 w/o i387"
-#define I386_HAS_FPU 0
+#define I386_HAS_FPU   0
+#define I386_HAS_BSWAP 0
 
 #elif defined(i486dx)
 
 #define CPU_MODEL_NAME  "i486dx"
-#define I386_HAS_FPU 1
 
 #elif defined(i486sx)
 
@@ -64,12 +69,25 @@ extern "C" {
 #elif defined(pentium)
 
 #define CPU_MODEL_NAME  "Pentium"
-#define I386_HAS_FPU 1
 
 #else
 
 #error "Unsupported CPU Model"
 
+#endif
+
+/*
+ *  Set default values for CPU model feature flags
+ *
+ *  NOTE: These settings are chosen to reflect most of the family members.
+ */
+
+#ifndef I386_HAS_FPU
+#define I386_HAS_FPU 1
+#endif
+
+#ifndef I386_HAS_BSWAP
+#define I386_HAS_BSWAP 1
 #endif
 
 /*
@@ -167,13 +185,13 @@ static inline unsigned int i386_swap_U32(
 {
   unsigned long lout;
 
+#if (I386_HAS_BSWAP == 0)
   asm volatile( "rorw  $8,%%ax;"
                 "rorl  $16,%0;"
                 "rorw  $8,%%ax" : "=a" (lout) : "0" (value) );
-/* this should be better for i486dx and above */
-/*
+#else
     __asm__ volatile( "bswap %0" : "=r"  (lout) : "0"   (lin));
-*/
+#endif
   return( lout );
 }
 
