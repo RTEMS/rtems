@@ -1,0 +1,23 @@
+#!/bin/sh
+# Just a Q&D prog to convert a bunch of RTEMS generated COFF files to raw
+# binary images that can be loaded on the TS-1325. The converted files are
+# saved in the current directory.
+#
+# Tony Ambardar
+
+OBJCOPY=/usr/local/rtems/bin/i386-rtems-objcopy
+
+if [ $# = 0 ]
+then
+  echo "Description: Convert RTEMS coff files to raw binary files."
+  echo "Usage: coff2bin <list-of-coff-files>"
+  echo
+  exit 1
+fi
+
+for i in $*
+do
+  OUTFILE=$(basename `echo $i | sed 's/\.[a-zA-Z0-9]*$//g'`.bin)
+  $OBJCOPY -O binary $i $OUTFILE
+done
+

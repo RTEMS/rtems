@@ -1,0 +1,50 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+top_builddir = ../../../../../../..
+subdir = c/src/lib/libbsp/i386/ts_386ex/include
+
+INSTALL = @INSTALL@
+
+RTEMS_ROOT = $(top_srcdir)/@RTEMS_TOPdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+VPATH = @srcdir@
+
+# We only install wd80x3.h if HAS_NETWORKING was defined
+NE2000_yes_V = $(srcdir)/wd80x3.h
+NE2000 = $(NE2000_$(HAS_NETWORKING)_V)
+
+H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h $(NE2000)
+
+#
+#  Equate files are for including from assembly preprocessed by
+#  gm4 or gasp.  No examples are provided except for those for
+#  other CPUs.  The best way to generate them would be to
+#  provide a program which generates the constants used based
+#  on the C equivalents.
+#
+
+EQ_FILES =
+
+SRCS=$(H_FILES) $(EQ_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	$(SRCS)
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(EQ_FILES) $(PROJECT_INCLUDE)
+
+install:  all
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

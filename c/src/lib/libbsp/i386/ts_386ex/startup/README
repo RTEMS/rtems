@@ -1,0 +1,17 @@
+#
+#  $Id$
+#
+
+
+The requirements for this BSP are only that the GAS used supports the
+.code16 directive.  The GAS released with any GCC version 2.8.0 or better
+is required.  The BSP was built with an egcs snapshot pre-1.0.2 and
+post-1.0.1.  However, any egcs should work. 
+
+
+The only "real" differences are in bspstart.c, where the initialization now
+configures all available RAM, (after setting up the Workspaces) as heap. 
+The location of the stack was changed so that the heap was not trapped
+between low memory and the stack; the stack comes before the heap. 
+
+

@@ -1,0 +1,124 @@
+/*
+ *  This file contains directives for the GNU linker which are specific
+ *  to the Technologic Systems TS-1325 (i386ex) board.
+ *
+ *  Copyright (c) 1989-1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ * 
+ * Memory layout:
+ *
+ * 0x0008000 ->    ...    : initial section ( init 386ex, goto protected mode) 
+ *    ...    ->    ...    : text section ( executable code )
+ *    ...    -> 0x00A0000 : data section ( initialized storage )
+ * 0x0100000 -> 0x0200000 : bss section, stack space, heap storage
+ */
+
+	ENTRY(_init_i386ex) ;
+SECTIONS
+{
+
+/***************************************************************************
+ * initial section:
+ *
+ * This section is the first in memory, preceding the text and data sections.
+ * It initializes the i386ex, sets up the gdt in RAM, loads the gdt,
+ * jumps to protected mode, loads the idt, zeros the bss section, sets up
+ * the stack and calls the rest of the RTEMS initialization.
+ ***************************************************************************/
+
+	_DOS_ld_addr	=	0x0008000 ;
+
+	.initial _DOS_ld_addr :
+	{
+	*(.initial);
+	}
+
+/***************************************************************************
+ * text section:
+ *
+ * Nobody here but us opcodes.
+ ***************************************************************************/
+
+        .text BLOCK(0x10) :
+        {
+         CREATE_OBJECT_SYMBOLS
+	text_start = . ;
+        _text_start = . ;
+        *(.text ) ;
+	. = ALIGN (16);
+
+	*(.eh_fram)
+	. = ALIGN (16);
+
+	/*
+	 * C++ constructors
+	 */
+	__CTOR_LIST__ = .;
+	LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+	*(.ctors)
+	LONG(0)
+	__CTOR_END__ = .;
+	. = ALIGN (4) ;
+	__DTOR_LIST__ = .;
+	LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+	*(.dtors)
+	LONG(0)
+	__DTOR_END__ = .;
+	_rodata_start = . ;
+	*(.rodata)
+	*(.gnu.linkonce.r*)
+	_erodata = ALIGN( 0x10 ) ;
+        _etext = ALIGN( 0x10 );
+	_endtext = . ; 
+        }
+
+/***************************************************************************
+ * data section:
+ *
+ * This section defines the location of the data section in RAM.  
+ ***************************************************************************/
+
+        .data  BLOCK(0x10) : 
+        {
+        _sdata = .;
+        *(.data);
+        _edata = .;
+   	}
+        _data_size        = _edata - _sdata ;
+
+/***************************************************************************
+ * bss section:
+ *
+ * The bss section is the first section in extended RAM ( > 1MB).  
+ ***************************************************************************/
+
+	.bss 0x100000 (NOLOAD) :
+	{
+	_bss_start = .;
+	*(.bss);
+	*(COMMON);
+	_ebss = ALIGN(0x10);
+	}
+        _bss_size   = _ebss - _bss_start ;
+
+/***************************************************************************
+ * General variables:
+ *
+ * The stack_size variable is customizable here.  The heap is located directly
+ * after the stack in RAM.  A routine within bspstart.c uses these variables
+ * to ensure that the heap used by RTEMS is as large as the RAM remaining
+ * after all workspace configurations are complete.
+ ***************************************************************************/
+
+        stack_size  = 0x8000 ;
+	stack_origin = _ebss + stack_size ;
+	heap_bottom  = stack_origin + 4 ;  
+
+}

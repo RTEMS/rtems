@@ -1,0 +1,43 @@
+#
+#  $Id$
+#
+
+This BSP is for the Technologic Systems TS-1325, an i386EX PC/AT
+compatible SBC equipped with 2 standard serial ports and a parallel
+port suitable for general digital I/O. It comes with 2MB RAM and 1MB
+Flash ROM. Additional information is available at the TS web site:
+http://www.t-systems.com.
+
+The BSP uses software floating-point emulation, so one must build the
+cross-compilation tools with this support. The BSP also supports the
+on-board RTC, and an NE2000 compatible network card. It has been used
+successfully with C (gcc-2.8.1) and Ada95 (gnat-3.11p), including
+networking applications in both languages.
+
+The TS-1325 runs a version of DOS, and should be configured with a RAM
+disk and Zmodem software (see WWW site). RTEMS executables are loaded
+and run in DOS conventional memory, giving a 600K file-size limit. The
+1MB extended memory is used for the RTEMS workspace, heap, stack and
+BSS. Console output is to COM2 @ 115200 baud, 8-N-1. The high baud
+rate is needed to speed up serial-line Zmodem file transfers. The
+TS-1325 DOS console I/O is by default 9600 baud, and should be changed
+to 115200 baud (see WWW site).
+
+A typical development cycle involves these steps:
+
+1. Cross-compile the application, yielding a COFF executable. Convert this
+   to raw binary format, using objcopy or the coff2bin script (see the
+   tools subdirectory in the BSP).
+
+2. Use Zmodem to download the raw exec to the TS-1325's ram-disk
+   (faster than  the A: flash disk). A terminal program supporting
+   Zmodem is needed on the host e.g. minicom under Linux.
+
+3. Use the DOS-based RTEMS loader "loader.com" (see tools
+   subdirectory) to load and run the executable.
+
+Additional documentation and support software is in the tools BSP subdirectory.
+
+Happy Coding!
+
+Tony Ambardar, 4/21/99

@@ -1,0 +1,68 @@
+This directory contains various support software for using RTEMS on
+the TS-1325. Descriptions follow.
+
+
+DOS Loader
+==========
+
+The dos_sup directory contains a DOS-based loader (loader.com) for
+RTEMS executables on the TS-1325. Fully commented source code is
+included.
+
+Once an application has been compiled and the resulting COFF
+executable converted to raw binary format and transferred to the
+TS-1325, the DOS loader program must be used to load and execute
+it. The loader is simply invoked as "loader filename", where the
+filename cannot contain an explicit path.  
+
+The loader will work with files stored either on the C: ram disk or
+the A: flash disk. Since Zmodem transfers to the C: ram disk are much
+faster than to the A: disk, most development work will be done using
+the C: disk. Once completed, an application may copied to the
+(non-volatile) A: disk. Additionally, one may add the line "loader
+filename" to the AUTOEXEC.BAT file, allow ing the application to be
+run automatically at boot time.
+
+Note that the DOS loader will abort and exit if it detects that the
+push-button switch is pressed, thus allowing one to break out of a
+patho logical "boot loop" situation.
+
+
+coff2bin
+========
+
+The coff2bin script is just a convenient wrapper for the objcopy
+command. It can convert a list of RTEMS-generated COFF files to raw
+binary images that can be loaded on the TS-1325. The converted files
+are saved in the current directory with a ".bin" extension.
+
+
+TS-1325 Ada95 Support
+=====================
+
+The TS-1325 includes a few peripherals which are very useful for
+embedded development: a push-button switch, an LED, and a parallel
+port which may be used for digital I/O. Note that the pinout for the
+parallel port is given in the TS-1325 manual.
+
+These devices are all supported by Ada packages allowing easy access;
+they may be found in the ts_1325_ada directory. Doing a make command
+here will build a program that tests and exercises all these support
+packages. Plugging in some kind of parallel-port "loop-back" connector
+would be useful during this test.
+
+Brief descriptions of the main packages are as follows:
+ 
+* ts1325-button: allows one to check or wait for a button press.  
+
+* ts1325-led: allows safe reading and setting of the LED colour.
+
+* ts1325-parallel: used to read and write byte date to the parallel
+  port.  
+
+* i386_ports: code to access the I/O address space, using Ada
+  inline assembly.
+
+
+Tony Ambardar, 4/21/99
+

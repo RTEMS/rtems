@@ -1,0 +1,252 @@
+/*
+ *  Submitted by:
+ *
+ *    Erik Ivanenko
+ *    University of Toronto
+ *    erik.ivanenko@utoronto.ca
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
+/* REMAP ADDRESSING Registers */
+.set REMAPCFGH	 , 0x0023
+.set REMAPCFGL	 , 0x0022
+.set REMAPCFG	 , 0x0022
+/* INTERRUPT CONTROL REGISTERS -- SLOT 15 ADDRESSES */
+.set ICW1M	 , 0xF020
+.set ICW1S	 , 0xF0A0
+.set ICW2M	 , 0xF021
+.set ICW2S	 , 0xF0A1
+.set ICW3M	 , 0xF021
+.set ICW3S	 , 0xF0A1
+.set ICW4M	 , 0xF021
+.set ICW4S	 , 0xF0A1
+.set OCW1M	 , 0xF021
+.set OCW1S	 , 0xF0A1
+.set OCW2M	 , 0xF020
+.set OCW2S	 , 0xF0A0
+.set OCW3M	 , 0xF020
+.set OCW3S	 , 0xF0A0
+/* INTERRUPT CONTROL REGISTERS -- SLOT 0 ADDRESSES */
+.set ICW1MDOS	 , 0x0020
+.set ICW1SDOS	 , 0x00A0
+.set ICW2MDOS	 , 0x0021
+.set ICW2SDOS	 , 0x00A1
+.set ICW3MDOS	 , 0x0021
+.set ICW3SDOS	 , 0x00A1
+.set ICW4MDOS	 , 0x0021
+.set ICW4SDOS	 , 0x00A1
+.set OCW1MDOS	 , 0x0021
+.set OCW1SDOS	 , 0x00A1
+.set OCW2MDOS	 , 0x0020
+.set OCW2SDOS	 , 0x00A0
+.set OCW3MDOS	 , 0x0020
+.set OCW3SDOS	 , 0x00A0
+
+
+/* CONFIGURATION Registers */
+.set DMACFG	 , 0xF830
+.set INTCFG	 , 0xF832
+.set TMRCFG	 , 0xF834
+.set SIOCFG	 , 0xF836
+.set P1CFG	 , 0xF820
+.set P2CFG	 , 0xF822
+.set P3CFG	 , 0xF824
+.set PINCFG	 , 0xF826
+
+/* WATCHDOG TIMER Registers */
+.set WDTRLDH	 , 0xF4C0
+.set WDTRLDL	 , 0xF4C2
+.set WDTCNTH	 , 0xF4C4
+.set WDTCNTL	 , 0xF4C6
+.set WDTCLR	 , 0xF4C8
+.set WDTSTATUS   , 0xF4CA
+
+/* TIMER CONTROL REGISTERS -- SLOT 15 ADDRESSES */
+.set TMR0	 , 0xF040
+.set TMR1	 , 0xF041
+.set TMR2	 , 0xF042
+.set TMRCON	 , 0xF043
+/* TIMER CONTROL REGISTERS -- SLOT 0 ADDRESSES */
+.set TMR0DOS	 , 0x0040
+.set TMR1DOS	 , 0x0041
+.set TMR2DOS	 , 0x0042
+.set TMRCONDOS   , 0x0043
+
+/* INPUT/OUTPUT PORT UNIT Registers */
+.set P1PIN	 , 0xF860
+.set P1LTC	 , 0xF862
+.set P1DIR	 , 0xF864
+.set P2PIN	 , 0xF868
+.set P2LTC	 , 0xF86A
+.set P2DIR	 , 0xF86C
+.set P3PIN	 , 0xF870
+.set P3LTC	 , 0xF872
+.set P3DIR	 , 0xF874
+
+/* ASYNCHRONOUS SERIAL CHANNEL 0 -- SLOT 15 ADDRESSES */
+.set RBR0	 , 0xF4F8
+.set THR0	 , 0xF4F8
+.set TBR0	 , 0xF4F8
+.set DLL0	 , 0xF4F8
+.set IER0	 , 0xF4F9
+.set DLH0	 , 0xF4F9
+.set IIR0	 , 0xF4FA
+.set LCR0	 , 0xF4FB
+.set MCR0	 , 0xF4FC
+.set LSR0	 , 0xF4FD
+.set MSR0	 , 0xF4FE
+.set SCR0	 , 0xF4FF
+/* ASYNCHRONOUS SERIAL CHANNEL 0 -- SLOT 0 ADDRESSES */
+.set RBR0DOS	 , 0x03F8
+.set THR0DOS	 , 0x03F8
+.set TBR0DOS	 , 0x03F8
+.set DLL0DOS	 , 0x03F8
+.set IER0DOS	 , 0x03F9
+.set DLH0DOS	 , 0x03F9
+.set IIR0DOS	 , 0x03FA
+.set LCR0DOS	 , 0x03FB
+.set MCR0DOS	 , 0x03FC
+.set LSR0DOS	 , 0x03FD
+.set MSR0DOS	 , 0x03FE
+.set SCR0DOS	 , 0x03FF
+
+/* ASYNCHRONOUS SERIAL CHANNEL 1 -- SLOT 15 ADDRESSES */
+.set RBR1	 , 0xF8F8
+.set THR1	 , 0xF8F8
+.set TBR1	 , 0XF8F8
+.set DLL1	 , 0xF8F8
+.set IER1	 , 0xF8F9
+.set DLH1	 , 0xF8F9
+.set IIR1	 , 0xF8FA
+.set LCR1	 , 0xF8FB
+.set MCR1	 , 0xF8FC
+.set LSR1	 , 0xF8FD
+.set MSR1	 , 0xF8FE
+.set SCR1	 , 0xF8FF
+/* ASYNCHRONOUS SERIAL CHANNEL 1 -- SLOT 0 ADDRESSES */
+.set RBR1DOS	 , 0x02F8
+.set THR1DOS	 , 0x02F8
+.set TBR1DOS	 , 0x02F8
+.set DLL1DOS	 , 0x02F8
+.set IER1DOS	 , 0x02F9
+.set DLH1DOS	 , 0x02F9
+.set IIR1DOS	 , 0x02FA
+.set LCR1DOS	 , 0x02FB
+.set MCR1DOS	 , 0x02FC
+.set LSR1DOS	 , 0x02FD
+.set MSR1DOS	 , 0x02FE
+.set SCR1DOS	 , 0x02FF
+
+/* SYNCHRONOUS SERIAL CHANNEL REGISTERS */
+.set SSIOTBUF	 , 0xF480
+.set SSIORBUF	 , 0xF482
+.set SSIOBAUD	 , 0xF484
+.set SSIOCON1	 , 0xF486
+.set SSIOCON2	 , 0xF488
+.set SSIOCTR	 , 0xF48A
+
+/* CHIP SELECT UNIT Registers */
+.set CS0ADL	 , 0xF400
+.set CS0ADH	 , 0xF402
+.set CS0MSKL	 , 0xF404
+.set CS0MSKH	 , 0xF406
+.set CS1ADL	 , 0xF408
+.set CS1ADH	 , 0xF40A
+.set CS1MSKL	 , 0xF40C
+.set CS1MSKH	 , 0xF40E
+.set CS2ADL	 , 0xF410
+.set CS2ADH	 , 0xF412
+.set CS2MSKL	 , 0xF414
+.set CS2MSKH	 , 0xF416
+.set CS3ADL	 , 0xF418
+.set CS3ADH	 , 0xF41A
+.set CS3MSKL	 , 0xF41C
+.set CS3MSKH	 , 0xF41E
+.set CS4ADL	 , 0xF420
+.set CS4ADH	 , 0xF422
+.set CS4MSKL	 , 0xF424
+.set CS4MSKH	 , 0xF426
+.set CS5ADL	 , 0xF428
+.set CS5ADH	 , 0xF42A
+.set CS5MSKL	 , 0xF42C
+.set CS5MSKH	 , 0xF42E
+.set CS6ADL	 , 0xF430
+.set CS6ADH	 , 0xF432
+.set CS6MSKL	 , 0xF434
+.set CS6MSKH	 , 0xF436
+.set UCSADL	 , 0xF438
+.set UCSADH	 , 0xF43A
+.set UCSMSKL	 , 0xF43C
+.set UCSMSKH	 , 0xF43E
+
+/* REFRESH CONTROL UNIT Registers */
+
+.set RFSBAD	 , 0xF4A0
+.set RFSCIR	 , 0xF4A2
+.set RFSCON	 , 0xF4A4
+.set RFSADD	 , 0xF4A6
+
+/* POWER MANAGEMENT CONTROL Registers */
+
+.set PWRCON	 , 0xF800
+.set CLKPRS	 , 0xF804
+
+/* DMA UNIT REGISTERS -- SLOT 15 ADDRESSES */
+.set DMA0TAR	 , 0xF000
+.set DMA0BYC	 , 0xF001
+.set DMA1TAR	 , 0xF002
+.set DMA1BYC	 , 0xF003
+.set DMACMD1	 , 0xF008
+.set DMASTS	 , 0xF008
+.set DMASRR	 , 0xF009
+.set DMAMSK	 , 0xF00A
+.set DMAMOD1	 , 0xF00B
+.set DMACLRBP	 , 0xF00C
+.set DMACLR	 , 0xF00D
+.set DMACLRMSK   , 0xF00E
+.set DMAGRPMSK   , 0xF00F
+.set DMA0REQL	 , 0xF010
+.set DMA0REQH	 , 0xF011
+.set DMA1REQL	 , 0xF012
+.set DMA1REQH	 , 0xF013
+.set DMABSR	 , 0xF018
+.set DMACHR	 , 0xF019
+.set DMAIS	 , 0xF019
+.set DMACMD2	 , 0xF01A
+.set DMAMOD2	 , 0xF01B
+.set DMAIEN	 , 0xF01C
+.set DMAOVFE	 , 0xF01D
+.set DMACLRTC	 , 0xF01E
+.set DMA1TARPL   , 0xF083
+.set DMA1TARPH   , 0xF085
+.set DMA0TARPH   , 0xF086
+.set DMA0TARPL   , 0xF087
+.set DMA0BYCH	 , 0xF098
+.set DMA1BYCH	 , 0xF099
+
+/* DMA UNIT REGISTERS -- SLOT 0 ADDRESSES */
+.set DMA0TARDOS	 , 0x0000
+.set DMA0BYCDOS	 , 0x0001
+.set DMA1TARDOS	 , 0x0002
+.set DMA1BYCDOS	 , 0x0003
+.set DMACMD1DOS	 , 0x0008
+.set DMASTSDOS	 , 0x0008
+.set DMASRRDOS	 , 0x0009
+.set DMAMSKDOS	 , 0x000A
+.set DMAMOD1DOS	 , 0x000B
+.set DMACLRBPDOS , 0x000C
+.set DMACLRDOS	 , 0x000D
+.set DMACLRMSKDOS  , 0x000E
+.set DMAGRPMSKDOS  , 0x000F
+.set DMA1TARPLDOS  , 0x0083
+.set DMA0TARPLDOS  , 0x0087
+
+/* A20GATE AND FAST CPU RESET -- SLOT 15 ADDRESS */
+.set PORT92	 , 0xF092
+/* A20GATE AND FAST CPU RESET -- SLOT 0 ADDRESS */
+.set PORT92DOS   , 0x0092
