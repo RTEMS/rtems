@@ -65,11 +65,11 @@ extern "C" {
  * Parameters and return id's for _Objects_Get_next
  */
  
-#define RTEMS_OBJECT_ID_INITIAL_INDEX   OBJECTS_ID_INITIAL_INDEX
-#define RTEMS_OBJECT_ID_FINAL_INDEX     OBJECTS_ID_FINAL_INDEX
+#define RTEMS_OBJECT_ID_INITIAL_INDEX        OBJECTS_ID_INITIAL_INDEX
+#define RTEMS_OBJECT_ID_FINAL_INDEX          OBJECTS_ID_FINAL_INDEX
  
-#define RTEMS_OBJECT_ID_INITIAL(node)   OBJECTS_ID_INITIAL(node)
-#define RTEMS_OBJECT_ID_FINAL           OBJECTS_ID_FINAL
+#define RTEMS_OBJECT_ID_INITIAL(class, node) OBJECTS_ID_INITIAL(class, node)
+#define RTEMS_OBJECT_ID_FINAL                OBJECTS_ID_FINAL
  
 /*
  *  The following constant defines the minimum stack size which every

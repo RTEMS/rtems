@@ -187,10 +187,9 @@ EXTERN Objects_Information
 #define OBJECTS_ID_INITIAL_INDEX   (0)
 #define OBJECTS_ID_FINAL_INDEX     (0xffff)
 
-#define OBJECTS_ID_INITIAL(node)   (_Objects_Build_id(      \
-                                      OBJECTS_NO_CLASS, \
-                                      node, \
-                                      OBJECTS_ID_INITIAL_INDEX))
+#define OBJECTS_ID_INITIAL(_class, _node) \
+  _Objects_Build_id( (_class), (_node), OBJECTS_ID_INITIAL_INDEX )
+
 #define OBJECTS_ID_FINAL           ((Objects_Id)~0)
 
 /*
