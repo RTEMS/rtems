@@ -426,6 +426,10 @@ int _POSIX_Condition_variables_Wait_support(
       else
         status = ETIMEDOUT;
 
+      /*
+       *  When we get here the dispatch disable level is 0.
+       */
+
       mutex_status = pthread_mutex_lock( mutex );
       if ( mutex_status )
         return EINVAL;
