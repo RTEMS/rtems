@@ -85,11 +85,10 @@ install: all
 	 -$(MKDIR) $(prefix)/rtems/make
 	 -$(MKDIR) $(prefix)/rtems/make/compilers
 	 -$(MKDIR) $(prefix)/rtems/make/custom
-	 -$(MKDIR) $(prefix)/rtems/make/os
 	-rm -rf $(prefix)/rtems/$(RTEMS_BSP)
 	cd ../; tar cf - make $(RTEMS_BSP)/[bilsu]* | \
 		(cd $(prefix)/rtems; tar xpBf - )
-	(echo RTEMS_BSP = $(RTEMS_BSP) ; cat make/Templates/Makefile.inc ) \
+	(echo RTEMS_BSP = $(RTEMS_BSP) ; $(CAT) make/Templates/Makefile.inc ) \
 		> $(prefix)/rtems/$(RTEMS_BSP)/Makefile.inc
 
 tests:
