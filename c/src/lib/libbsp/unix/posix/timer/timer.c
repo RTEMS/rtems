@@ -19,6 +19,7 @@
 #include <rtems.h>
 
 #include <time.h>
+#include <sys/time.h>
 
 struct timeval  Timer_start;
 struct timeval  Timer_stop;

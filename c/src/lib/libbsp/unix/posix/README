@@ -1,0 +1,18 @@
+#
+#  $Id$
+#
+
+
+This is a "generic" BSP for a modern UNIX system which is enough
+System V and POSIX compliant to support at least the following:
+ 
+  + semaphores
+  + itimers
+  + mmap
+  + shared memory
+
+At the moment, this BSP is known to work with the following UNIXes:
+
+  + HP-UX 9.0.x
+  + Solaris 2.x
+  + Linux 1.1.x (single processor only -- mmap is broken)

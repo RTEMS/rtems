@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <time.h>
+#include <sys/time.h>
 
 extern rtems_configuration_table Configuration;
 extern sigset_t                  UNIX_SIGNAL_MASK;
