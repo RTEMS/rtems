@@ -6,9 +6,10 @@
 basedir=$1
 shift
 public_docs="user develenv ka9q posix_users"
-support_docs="hppa1_1 i386 i960 m68k sparc newlib gcc"
+support_docs="supplements/hppa1_1 supplements/i386 \
+    supplements/i960 supplements/m68k supplements/sparc newlib gcc"
 partners_docs="posix1003.1 posix1003.1h"
-oar_manuals="ada_user hwapi powerpc tools/texi2www"
+oar_manuals="ada_user hwapi supplements/powerpc tools/texi2www"
 
 # relnotes  is obsolete
 # posix_users manual left out until finished
