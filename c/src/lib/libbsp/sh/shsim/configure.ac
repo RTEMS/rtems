@@ -69,7 +69,6 @@ clock/Makefile
 console/Makefile
 scitab/Makefile
 gdbsci/Makefile
-start/Makefile
 startup/Makefile
 wrapup/Makefile])
 AC_OUTPUT

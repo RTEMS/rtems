@@ -33,7 +33,6 @@ AC_DEFINE_UNQUOTED(
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-start/Makefile
 startup/Makefile
 hw_init/Makefile
 console/Makefile

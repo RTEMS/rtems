@@ -1,5 +1,11 @@
 2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* start/Makefile.am: Remove.
+	* Makefile.am: Merge-in start/Makefile.am.
+	* configure.ac: Reflect changes above.
+
+2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Eliminate $(LIB). 
 	Use noinst_DATA to trigger building libbsp.a.
 

@@ -34,7 +34,6 @@ RTEMS_BSPOPTS_HELP([STANDALONE_EVB],
 AC_CONFIG_FILES([Makefile
 console/Makefile
 scitab/Makefile
-start/Makefile
 startup/Makefile
 wrapup/Makefile])
 AC_OUTPUT

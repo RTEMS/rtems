@@ -36,7 +36,6 @@ AC_DEFINE_UNQUOTED(
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 console/Makefile
-start/Makefile
 startup/Makefile
 clock/Makefile
 timer/Makefile

@@ -25,7 +25,6 @@ AC_SUBST(CPU_CLOCK_RATE_HZ)
 AC_CONFIG_FILES([Makefile
 console/Makefile
 scitab/Makefile
-start/Makefile
 startup/Makefile
 wrapup/Makefile])
 AC_OUTPUT
