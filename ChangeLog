@@ -1,5 +1,9 @@
 2002-11-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* bootstrap: Allow autoconf > 2.52, automake > 1.6.
+
+2002-11-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove make/Templates/Makefile.
 	* README.configure: Minor massaging.
 

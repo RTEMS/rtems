@@ -12,8 +12,8 @@
 # to be run from the toplevel directory of RTEMS'
 # source tree
 
-AUTOCONF_VERS=2.52
-AUTOMAKE_VERS=1.6.[123]
+AUTOCONF_VERS=2\.5[2345]
+AUTOMAKE_VERS=1\.[76]
 
 progname=`basename $0`
 top_srcdir=`dirname $0`
@@ -99,8 +99,7 @@ generate)
   if test -z "$AUTOCONF"; then
     echo "You must have autoconf installed to run $program"
   fi
-  AUTOCONF_VER=`$AUTOCONF --version 2>/dev/null` 
-  if test -z "`echo $AUTOCONF_VER | grep \" $AUTOCONF_VERS\"`"; then
+  if test -z "`$AUTOCONF --version 2>/dev/null | grep -e \" $AUTOCONF_VERS\"`"; then
 cat << EOF
 RTEMS requires autoconf version $AUTOCONF_VERS.
 
@@ -113,8 +112,7 @@ EOF
   if test -z "$AUTOMAKE"; then
     echo "You must have automake installed to run $program"
   fi
-  AUTOMAKE_VER=`$AUTOMAKE --version 2>/dev/null` 
-  if test -z "`echo $AUTOMAKE_VER | grep \" $AUTOMAKE_VERS\"`"; then
+  if test -z "`$AUTOMAKE --version 2>/dev/null | grep -e \" $AUTOMAKE_VERS\"`"; then
 cat << EOF
 RTEMS requires automake version $AUTOMAKE_VERS.
 
