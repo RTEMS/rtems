@@ -1,5 +1,10 @@
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* posix/include/rtems/posix/cond.h,
+	file posix/include/rtems/posix/mutex.h: Cosmetics.
+
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* librpc/include/rpc/svc.h, librpc/include/rpc/xdr.h:
 	Remove __P(xx).
 
