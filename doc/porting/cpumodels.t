@@ -46,7 +46,6 @@ has been ported to a variety of microprocessor families including:
 @item MIPS
 @item PowerPC 4xx, 5xx, 6xx, 7xx, 8xx, and 84xx
 @item SPARC
-@item Hewlett-Packard PA-RISC
 @item Hitachi H8/300
 @item Hitachi SH
 @item OpenCores OR32
