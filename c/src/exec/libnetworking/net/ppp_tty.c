@@ -562,10 +562,8 @@ pppasyncctlp(sc)
 int
 pppstart(struct rtems_termios_tty *tp)
 {
-  char                c;
   char               *sendBegin;
-  char                cFrame  = (char         )PPP_FLAG;
-  u_char              ioffset = (u_char       )0;
+  u_long              ioffset = (u_long       )0;
   struct mbuf        *m       = (struct mbuf *)0;
   struct ppp_softc   *sc      = tp->t_sc;
 
@@ -596,7 +594,8 @@ pppstart(struct rtems_termios_tty *tp)
       else {
         /* done with this packet */
         sc->sc_outflag &= ~SC_TX_BUSY;
-        (*tp->device.write)(tp->minor, &cFrame, 1);
+	sc->sc_outchar = (u_char)PPP_FLAG;
+        (*tp->device.write)(tp->minor, &sc->sc_outchar, 1);
         rtems_event_send(sc->sc_txtask, TX_TRANSMIT);
       }
     }
@@ -604,11 +603,11 @@ pppstart(struct rtems_termios_tty *tp)
     /* check to see if there is some data to write out */
     if ( sc->sc_outoff < sc->sc_outlen ) {
       /* check to see if character needs to be escaped */
-      c = sc->sc_outbuf[sc->sc_outoff];
-      if ( ESCAPE_P(c) ) {
+      sc->sc_outchar = sc->sc_outbuf[sc->sc_outoff];
+      if ( ESCAPE_P(sc->sc_outchar) ) {
         if ( sc->sc_outflag & SC_TX_ESCAPE ) {
           /* last sent character was the escape character */
-          c = c ^ PPP_TRANS;
+          sc->sc_outchar = sc->sc_outchar ^ PPP_TRANS;
 
           /* clear the escape flag and increment the offset */
           sc->sc_outflag &= ~SC_TX_ESCAPE;
@@ -616,18 +615,18 @@ pppstart(struct rtems_termios_tty *tp)
         }
         else {
           /* need to send the escape character */
-          c = PPP_ESCAPE;
+          sc->sc_outchar = PPP_ESCAPE;
 
           /* set the escape flag */
           sc->sc_outflag |= SC_TX_ESCAPE;
         }
-	sendBegin = &c;
+	sendBegin = &sc->sc_outchar;
       }
       else {
         /* escape not needed - increment the offset as much as possible */
-	while ((!ESCAPE_P(c)) && ((sc->sc_outoff + ioffset) < sc->sc_outlen)) {
+	while ((!ESCAPE_P(sc->sc_outchar)) && ((sc->sc_outoff + ioffset) < sc->sc_outlen)) {
 	    ioffset++;
-	    c = sc->sc_outbuf[sc->sc_outoff + ioffset];
+	    sc->sc_outchar = sc->sc_outbuf[sc->sc_outoff + ioffset];
 	}
 	sendBegin = &sc->sc_outbuf[sc->sc_outoff];
       }

@@ -243,7 +243,6 @@ static rtems_task ppp_rxdaemon(rtems_task_argument arg)
 static rtems_task ppp_txdaemon(rtems_task_argument arg)
 {
   rtems_event_set             events;
-  char                        cFrame   = (char              )PPP_FLAG;
   int                         iprocess = (int               )0;
   struct ppp_softc           *sc       = (struct ppp_softc *)arg;
   struct mbuf                *mp;
@@ -351,7 +350,8 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
         microtime(&sc->sc_if.if_lastchange);
   
         /* write out frame byte to start the transmission */
-        (*tp->device.write)(tp->minor, &cFrame, 1);
+	sc->sc_outchar = (u_char)PPP_FLAG;
+        (*tp->device.write)(tp->minor, &sc->sc_outchar, 1);
       }
 
       /* check to see if we need to free some empty mbufs */

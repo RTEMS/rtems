@@ -105,6 +105,7 @@ struct ppp_softc {
 	short	sc_outfcslen;		     /* length of output fcs data */
 	u_char	sc_outfcsbuf[8];	     /* output packet fcs buffer */
 	u_char *sc_outbuf;		     /* pointer to output data */
+	u_char  sc_outchar;
 
 	rtems_id sc_rxtask;
 	rtems_id sc_txtask;
