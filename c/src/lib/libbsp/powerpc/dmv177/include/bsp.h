@@ -33,11 +33,16 @@ extern "C" {
 
 #include <dmv170.h>
 
+#if 0
 #define Enable_Debug() \
   DMV170_WRITE( 0xffffbd0c, 0 )
 
 #define Debug_Entry( num ) \
   DMV170_WRITE( 0xffffbd06, num )
+#else
+#define Enable_Debug()
+#define Debug_Entry( num )
+#endif
 
 /*
  * The following macro calculates the Baud constant. For the Z8530 chip.
