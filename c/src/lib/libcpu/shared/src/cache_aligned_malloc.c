@@ -14,6 +14,7 @@
 
 #include <rtems.h>
 #include <cache_.h>
+#include <stdlib.h>
 
 /*
  *  rtems_cache_aligned_malloc

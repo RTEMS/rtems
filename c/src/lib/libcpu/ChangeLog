@@ -1,3 +1,8 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/src/cache_aligned_malloc.c: Added include of <stdlib.h>
+	to eliminate warnings.
+
 2000-11-14	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* shared/src/cache_manager.c
