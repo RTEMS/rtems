@@ -1,3 +1,8 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Build libcpu.a.
+	Don't preinstall libcpu.a
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc505/ictrl/Makefile.am: Remove all-local: $(ARCH).

@@ -22,13 +22,8 @@ include $(top_srcdir)/../../../automake/lib.am
 libcpu_a_OBJECTS = $(CPU_SPECIFIC_OBJS) $(FAMILY_OBJS)
 
 $(LIB): $(libcpu_a_OBJECTS)
-#	${make-library}
+	${make-library}
 
-#$(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a: $(LIB)
-#	$(INSTALL_DATA) $< $@
-#
-#TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a
-
-all-local: $(LIB) $(TMPINSTALL_FILES)
+all-local: $(LIB)
 
 include $(top_srcdir)/../../../automake/local.am
