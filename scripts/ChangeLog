@@ -1,5 +1,14 @@
 2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* README.cdn-X: New.
+	* binutils/binutils.add: Add --build=%_build --host=%_host.
+	* cpukit/.cvsignore: Add *.spec.in.
+	* gcc3newlib/gccnewlib.add: Add --build=%_build --host=%_host.
+	* gdb/gdb.add: Add --build=%_build --host=%_host.
+	* rtemsdoc/.cvsignore: Add *.spec.in.
+
+2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* gcc3newlib/gccnewlib.add: Remove Buildroot.
 	* common/.cvsignore: New.
 

@@ -1,0 +1,122 @@
+Applying RTEMS-toolchain RPM-specs for Canadian Cross Compilation
+=================================================================
+
+Example: Building a Cygwin-based xxx-rtems toolchain under Linux:
+
+Quickstart
+----------
+The command to invoke rpm for building RTEMS's gnu toolchain cdn. cross
+under Linux is:
+rpmbuild -ba xxx-rtems-yyy.spec \
+--define='_build i686-pc-linux-gnu'
+--define='_host i386-cygwin' \
+--target=i386-cygwin
+
+[If using rpm < 4.1, use "rpm" instead of "rpmbuild".]
+
+
+If you don't understand this, read on ... :-)
+
+1. Prerequisites
+----------------
+* a native Linux-toolchain (eg. gcc, binutils).
+Prebuild binaries should come with any Linux distribution.
+We further on assume this toolchain to be installed in /usr, such that
+/usr/bin/gcc is supposed to be your native CC.
+
+* a Linux -> Cygwin cross-toolchain
+RPM-specs are available in the contrib/cygwin directory in RTEMS's sourcetree.
+Prebuild binaries should be available from 
+	ftp://ftp.OARCorp.com 
+	http://packman.links2linux.de
+
+We further on assume this toolchain to be installed in /opt/i386-cygwin,
+i.e. /opt/i386-cygwin/bin/i386-cygwin-gcc is assumed to be the linux->cygwin
+cross compiler.
+
+2. Preparations
+---------------
+
+* Make sure to have /usr/bin and /opt/i386-cygwin/bin in $PATH.
+
+* Download the source-tarballs and patches. Put them into a directory where
+rpm can pick them up (/usr/src/redhat/SOURCES under RH)
+
+* configure this directory 
+./configure
+[Many files being generated]
+
+Among these files the rpm.specs will be generated, one per tool in its
+corresponding subdirectory.
+
+The spec-files you are looking for are: 
+binutils/xxx-rtems-binutils.spec
+gcc3newlib/xxx-rtems-gccnewlib.spec
+gdb/xxx-rtems-gdb.spec
+
+[You must have appropriate versions of autoconf and 
+automake installed.]
+
+3. Building
+-----------
+
+rpmbuild -ba binutils/xxx-rtems-binutils-<binutilsvers>.spec \
+--define='_build=i686-pc-linux-gnu' \
+--define='_host=i386-cygwin' \
+--target=i386-cygwin
+
+rpmbuild -ba gcc3newlib/xxx-rtems-gcc-<gccvers>-newlib-<newlibvers>.spec \
+--define='_build=i686-pc-linux-gnu' \
+--define='_host=i386-cygwin' \
+--target=i386-cygwin
+
+rpmbuild -ba
+gdb/xxx-rtems-gdb-<gdbvers>.spec \
+--define='_build=i686-pc-linux-gnu' \
+--define='_host=i386-cygwin' \
+--target=i386-cygwin
+
+Each of these commands builds several corresponding rpms.
+[Beware: This can take several hours.]
+
+NOTE: These packages will be packaged as Linux' rpms, but contain Cygwin
+binaries. If using the default rpm-directories, this will put the rpms into
+your linux RPM-directories, i.e. pollute these directories with foreign
+RPMs.
+
+To avoid this, I recommend to set up RPM's internal variable %_rpmdir to
+point to a different directory than the default or to use a different root for the cygwin
+RPM directory tree, i.e. to set %_topdir. [1]
+
+4. Repackaging the RPMS into tarballs
+-------------------------------------
+
+Basically, there exist two ways:
+
+* Applying "alien". 
+I highly recommend using this, but unfortunately alien is not
+shipped with all Linux distributions.
+[alien can also be applied to repackage the rpms into other packaging
+formats.]
+
+* Manual unpacking and tar-ing
+cd <empty-directory>
+rpmcpio xxx-rtems-yyy.<arch>.rpm | cpio -i --make-directories
+tar cjvf <where-ever>/xxx-rtems-yyy.<arch>.tar.bz2 opt/rtems
+rm -rf opt/rtems
+
+NOTE: You might want to consider performing repackaging as root to avoid
+loosing file permissions.
+
+5. Other platforms
+------------------
+The procedure to build for other platforms (Solaris, ...) is analogous. Just
+replace i386-cygwin with your target, eg sun-sparc-solaris2.8
+
+Ralf Corsepius		2003-01-31
+
+[1] Setting up an rpm variable can be done:
+* on the command line:
+rpmbuild --define='_topdir /home/user/src/cygwin' ...
+* from a user's ~/.rpmmacros
+_topdir /home/user/src/cygwin
