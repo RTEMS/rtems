@@ -559,46 +559,29 @@ int log_facilityemptyset(
 @subheading STATUS CODES:
 
 @table @b
-@item EINVAL
-The facilityno argument is not a valid facility.
+@item EFAULT
+The @code{set} argument is an invalid pointer.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The facilitysetops primitives manipulate sets of facilities.  They 
-operate on data objects addressable by the application.
-
 The @code{log_facilityemptyset} function initializes the facility
 set pointed to by the argument @code{set}, such that all facilities
-are included.
-
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
-@code{log_facilityset_t} prior to any other use of that object.  If
-such an object is not initialized in this way, but is nonetheless 
-supplied as an argument  to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
-
-The @code{log_facilityaddset} and @code{log_facilitydelset} functions
-respectively add or delete the individual facility specified by the
-value of the argument @code{facilityno} to or from the facility set
-pointed to by the argument @code{set}
-
-The @code{log_facilityismember} function tests whether the facility
-specified by the value of the argument @code{facilityno} is a member
-of the set pointed to by the argument @code{set}.  Upon successful
-completion, the @code{log_facilityismember} function either returns
-a value of one to the location specified by @code{member} if the 
-specified facility is a member of the specified set or returns a 
-value of zero to the location specified by @code{member} if the
-specified facility is not a member of the specified set.
+are excluded.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+Applications shall call either @code{log_facilityemptyset} or 
+@code{log_facilityfillset} at least once for each object of type
+@code{log_facilityset_t} prior to any other use of that object.  If
+such an object is not initialized in this way, but is nonetheless 
+supplied as an argument to any of the @code{log_facilityaddset}, 
+@code{logfacilitydelset}, @code{log_facilityismember} or 
+@code{log_open} functions, the results are undefined.
 
 @page
 @subsection log_facilityfillset - Manipulate log facility sets
@@ -621,46 +604,29 @@ int log_facilityfillset(
 @subheading STATUS CODES:
 
 @table @b
-@item EINVAL
-The facilityno argument is not a valid facility.
+@item EFAULT
+The @code{set} argument is an invalid pointer.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The facilitysetops primitives manipulate sets of facilities.  They 
-operate on data objects addressable by the application.
-
-The @code{log_facilityemptyset} function initializes the facility
+The @code{log_facilityfillset} function initializes the facility
 set pointed to by the argument @code{set}, such that all facilities
 are included.
-
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
-@code{log_facilityset_t} prior to any other use of that object.  If
-such an object is not initialized in this way, but is nonetheless 
-supplied as an argument  to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
-
-The @code{log_facilityaddset} and @code{log_facilitydelset} functions
-respectively add or delete the individual facility specified by the
-value of the argument @code{facilityno} to or from the facility set
-pointed to by the argument @code{set}
-
-The @code{log_facilityismember} function tests whether the facility
-specified by the value of the argument @code{facilityno} is a member
-of the set pointed to by the argument @code{set}.  Upon successful
-completion, the @code{log_facilityismember} function either returns
-a value of one to the location specified by @code{member} if the 
-specified facility is a member of the specified set or returns a 
-value of zero to the location specified by @code{member} if the
-specified facility is not a member of the specified set.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+Applications shall call either @code{log_facilityemptyset} or 
+@code{log_facilityfillset} at least once for each object of type
+@code{log_facilityset_t} prior to any other use of that object.  If
+such an object is not initialized in this way, but is nonetheless 
+supplied as an argument to any of the @code{log_facilityaddset}, 
+@code{logfacilitydelset}, @code{log_facilityismember} or 
+@code{log_open} functions, the results are undefined.
 
 @page
 @subsection log_facilityaddset - Manipulate log facility sets
@@ -673,7 +639,7 @@ this service is available.
 
 int log_facilityaddset(
   log_facility_set_t  *set,
-  log_facility_t      facilityno
+  log_facility_t       facilityno
 );
 @end example
 @end ifset
@@ -684,46 +650,32 @@ int log_facilityaddset(
 @subheading STATUS CODES:
 
 @table @b
+@item EFAULT
+The @code{set} argument is an invalid pointer.
+
 @item EINVAL
-The facilityno argument is not a valid facility.
+The @code{facilityno} argument is not a valid facility.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The facilitysetops primitives manipulate sets of facilities.  They 
-operate on data objects addressable by the application.
-
-The @code{log_facilityemptyset} function initializes the facility
-set pointed to by the argument @code{set}, such that all facilities
-are included.
-
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
-@code{log_facilityset_t} prior to any other use of that object.  If
-such an object is not initialized in this way, but is nonetheless 
-supplied as an argument  to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
-
-The @code{log_facilityaddset} and @code{log_facilitydelset} functions
-respectively add or delete the individual facility specified by the
-value of the argument @code{facilityno} to or from the facility set
-pointed to by the argument @code{set}
-
-The @code{log_facilityismember} function tests whether the facility
-specified by the value of the argument @code{facilityno} is a member
-of the set pointed to by the argument @code{set}.  Upon successful
-completion, the @code{log_facilityismember} function either returns
-a value of one to the location specified by @code{member} if the 
-specified facility is a member of the specified set or returns a 
-value of zero to the location specified by @code{member} if the
-specified facility is not a member of the specified set.
+The @code{log_facilityaddset} function adds the individual
+facility specified by the value of the argument @code{facilityno}
+to the facility set pointed to by the argument @code{set}.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+Applications shall call either @code{log_facilityemptyset} or 
+@code{log_facilityfillset} at least once for each object of type
+@code{log_facilityset_t} prior to any other use of that object.  If
+such an object is not initialized in this way, but is nonetheless 
+supplied as an argument to any of the @code{log_facilityaddset}, 
+@code{logfacilitydelset}, @code{log_facilityismember} or 
+@code{log_open} functions, the results are undefined.
 
 @page
 @subsection log_facilitydelset - Manipulate log facility sets
@@ -736,7 +688,7 @@ this service is available.
 
 int log_facilitydelset(
   log_facility_set_t  *set,
-  log_facility_t      facilityno
+  log_facility_t       facilityno
 );
 @end example
 @end ifset
@@ -747,46 +699,32 @@ int log_facilitydelset(
 @subheading STATUS CODES:
 
 @table @b
+@item EFAULT
+The @code{set} argument is an invalid pointer.
+
 @item EINVAL
-The facilityno argument is not a valid facility.
+The @code{facilityno} argument is not a valid facility.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The facilitysetops primitives manipulate sets of facilities.  They 
-operate on data objects addressable by the application.
-
-The @code{log_facilityemptyset} function initializes the facility
-set pointed to by the argument @code{set}, such that all facilities
-are included.
-
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
-@code{log_facilityset_t} prior to any other use of that object.  If
-such an object is not initialized in this way, but is nonetheless 
-supplied as an argument  to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
-
-The @code{log_facilityaddset} and @code{log_facilitydelset} functions
-respectively add or delete the individual facility specified by the
-value of the argument @code{facilityno} to or from the facility set
-pointed to by the argument @code{set}
-
-The @code{log_facilityismember} function tests whether the facility
-specified by the value of the argument @code{facilityno} is a member
-of the set pointed to by the argument @code{set}.  Upon successful
-completion, the @code{log_facilityismember} function either returns
-a value of one to the location specified by @code{member} if the 
-specified facility is a member of the specified set or returns a 
-value of zero to the location specified by @code{member} if the
-specified facility is not a member of the specified set.
+The @code{log_facilitydelset} function deletes the individual
+facility specified by the value of the argument @code{facilityno}
+from the facility set pointed to by the argument @code{set}.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+Applications shall call either @code{log_facilityemptyset} or 
+@code{log_facilityfillset} at least once for each object of type
+@code{log_facilityset_t} prior to any other use of that object.  If
+such an object is not initialized in this way, but is nonetheless 
+supplied as an argument to any of the @code{log_facilityaddset}, 
+@code{logfacilitydelset}, @code{log_facilityismember} or 
+@code{log_open} functions, the results are undefined.
 
 @page
 @subsection log_facilityismember - Manipulate log facility sets
@@ -811,46 +749,37 @@ int log_facilityismember(
 @subheading STATUS CODES:
 
 @table @b
+@item EFAULT
+The @code{set} or @code{member} argument is an invalid pointer.
+
 @item EINVAL
-The facilityno argument is not a valid facility.
+The @code{facilityno} argument is not a valid facility.
 
 @end table
 
 @subheading DESCRIPTION:
-
-The facilitysetops primitives manipulate sets of facilities.  They 
-operate on data objects addressable by the application.
-
-The @code{log_facilityemptyset} function initializes the facility
-set pointed to by the argument @code{set}, such that all facilities
-are included.
-
-Applications shall call either @code{log_facilityemptyset} or 
-@code{log_facilityfillset} at least once for each object of type
-@code{log_facilityset_t} prior to any other use of that object.  If
-such an object is not initialized in this way, but is nonetheless 
-supplied as an argument  to any of the @code{log_facilityaddset}, 
-@code{logfacilitydelset}, @code{log_facilityismember} or 
-@code{log_open} functions, the results are undefined.
-
-The @code{log_facilityaddset} and @code{log_facilitydelset} functions
-respectively add or delete the individual facility specified by the
-value of the argument @code{facilityno} to or from the facility set
-pointed to by the argument @code{set}
 
 The @code{log_facilityismember} function tests whether the facility
 specified by the value of the argument @code{facilityno} is a member
 of the set pointed to by the argument @code{set}.  Upon successful
 completion, the @code{log_facilityismember} function either returns
 a value of one to the location specified by @code{member} if the 
-specified facility is a member of the specified set or returns a 
-value of zero to the location specified by @code{member} if the
-specified facility is not a member of the specified set.
+specified facility is a member of the specified set or value of
+zero to the location specified by @code{member} if the specified
+facility is not a member of the specified set.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+Applications shall call either @code{log_facilityemptyset} or 
+@code{log_facilityfillset} at least once for each object of type
+@code{log_facilityset_t} prior to any other use of that object.  If
+such an object is not initialized in this way, but is nonetheless 
+supplied as an argument to any of the @code{log_facilityaddset}, 
+@code{logfacilitydelset}, @code{log_facilityismember} or 
+@code{log_open} functions, the results are undefined.
 
 @page
 @subsection log_create - Creates a log file
