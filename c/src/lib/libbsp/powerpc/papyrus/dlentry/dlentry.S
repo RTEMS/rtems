@@ -223,6 +223,10 @@ bss_addr:
 	stw	r3, 4(r1)
 	stw	r3, 8(r1)
 	stw	r3, 12(r1)
+        lis	r5,environ@ha
+        la	r5,environ@l(r5)	/* environp */
+	li	r4, 0			/* argv */
+	li	r3, 0			/* argc */
         .extern SYM (boot_card)
         b       SYM (boot_card) 	 /* call the first C routine */
 
@@ -249,3 +253,5 @@ clear_bss:
 #if PPC_ABI == PPC_ABI_POWEROPEN
 	DESCRIPTOR (startup)
 #endif
+
+	.comm	environ,4,4

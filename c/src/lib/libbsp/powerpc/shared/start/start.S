@@ -107,6 +107,10 @@ enter_C_code:
 	/*
 	 * We are know in a environment that is totally independent from bootloader setup.
 	 */
+        lis	r5,environ@ha
+        la	r5,environ@l(r5)	/* environp */
+	li	r4, 0			/* argv */
+	li	r3, 0			/* argc */
 	bl	boot_card
 	bl	_return_to_ppcbug
 	
@@ -194,3 +198,5 @@ flush_tlbs:
 	sync
 	blr
 	
+
+	.comm	environ,4,4

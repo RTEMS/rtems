@@ -146,6 +146,10 @@ past_constants:
 	stw	r0,0(sp)		/* clear back chain */
 	stwu	sp,-56(sp)		/* push another stack frame */
 
+        lis	r5,environ@ha
+        la	r5,environ@l(r5)	/* environp */
+	li	r4, 0			/* argv */
+	li	r3, 0			/* argc */
 	/* Let her rip */
 	bl	FUNC_NAME(boot_card)
 
@@ -154,3 +158,5 @@ past_constants:
 	trap
 .Lstart:
 	.size	_start,.Lstart-_start
+
+	.comm	environ,4,4

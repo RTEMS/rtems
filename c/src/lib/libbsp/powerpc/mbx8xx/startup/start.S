@@ -270,6 +270,8 @@ spin:
         bl      bssclr
         nop
 
+        lis 5,environ@ha
+        la 5,environ@l(5)		/* environp */
         /* clear argc and argv */
         xor     r3, r3, r3
         xor     r4, r4, r4
@@ -381,3 +383,5 @@ initregs:
 	blr			/* return */
 	
 .L_text_e:
+
+	.comm	environ,4,4

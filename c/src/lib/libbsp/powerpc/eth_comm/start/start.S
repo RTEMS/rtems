@@ -128,10 +128,10 @@ cpy_b:  lwz     r5, 0(r3)                /* In with the old ...  */
         addi    r9, r9, 0x0007
         mtspr   0x9e, r9
 
-        /* clear argc and argv */
-        xor     r3, r3, r3
-        xor     r4, r4, r4
-        
+        lis	r5,environ@ha
+        la	r5,environ@l(r5)	/* environp */
+	li	r4, 0			/* argv */
+	li	r3, 0			/* argc */
         .extern SYM (boot_card)
         bl      SYM (boot_card)                  /* call the first C routine */
 loopstop:
@@ -154,3 +154,5 @@ clear_bss:
 
         bdnz    clear_bss                       /* dec counter and loop */
         blr                                     /* return */
+
+	.comm	environ,4,4
