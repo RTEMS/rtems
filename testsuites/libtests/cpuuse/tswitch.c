@@ -31,7 +31,7 @@ rtems_extension Task_switch(
   rtems_tcb *heir
 )
 {
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_time_of_day time;
   rtems_status_code status;
 

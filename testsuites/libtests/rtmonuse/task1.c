@@ -23,19 +23,19 @@
 #include <rtems/cpuuse.h>
 #include <rtems/rtmonuse.h>
 
-rtems_unsigned32    Periods[6]    = { 0,   2,   2,   2,   2, 100 };
-rtems_unsigned32    Iterations[6] = { 0,  50,  50,  50,  50,   1 };
+uint32_t      Periods[6]    = { 0,   2,   2,   2,   2, 100 };
+uint32_t      Iterations[6] = { 0,  50,  50,  50,  50,   1 };
 rtems_task_priority Priorities[6] = { 0,   1,   1,   3,   4,   5 };
 
 rtems_task Task_1_through_5(
-  rtems_unsigned32 argument
+  uint32_t   argument
 )
 {
   rtems_id          rmid;
   rtems_id          test_rmid;
-  rtems_unsigned32  index;
-  rtems_unsigned32  pass;
-  rtems_unsigned32  failed;
+  uint32_t    index;
+  uint32_t    pass;
+  uint32_t    failed;
   rtems_status_code status;
 
   status = rtems_rate_monotonic_create( argument, &rmid );

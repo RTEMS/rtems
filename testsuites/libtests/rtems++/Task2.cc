@@ -22,7 +22,7 @@
 
 Task2::Task2(const char* name,
              const rtems_task_priority initial_priority,
-             const rtems_unsigned32 stack_size)
+             const uint32_t   stack_size)
   : rtemsTask(name, initial_priority, stack_size, RTEMS_NO_PREEMPT)
 {
 }

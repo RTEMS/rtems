@@ -21,7 +21,7 @@
 rtems_task_priority Priorities[6] = { 0,   1,   1,   3,   4,   5 };
 
 rtems_task Task_1_through_5(
-  rtems_unsigned32 argument
+  uint32_t   argument
 )
 {
   rtems_status_code status;
@@ -38,7 +38,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_status_code status;
 
   puts( "\n\n*** MONITOR TASK TEST ***" );

@@ -240,8 +240,8 @@ void Task1::screen2(void)
   task_2.set_priority(current_priority, priority);
   printf("%s, priority was %i\n", task_2.last_status_string(), priority);
 
-  rtems_unsigned32 current_note;
-  rtems_unsigned32 note;
+  uint32_t   current_note;
+  uint32_t   note;
   
   // notepad registers for this object
 
@@ -502,7 +502,7 @@ void Task1::screen6(void)
   char *u1 = "normal send";
   char *u2 = "urgent send";
   char in[100];
-  rtems_unsigned32 size;
+  uint32_t   size;
   
   printf("%s - send u1 to mq_2 - ", name_string());
   mq_2.send(u1, strlen(u1) + 1);
@@ -573,7 +573,7 @@ void Task1::screen6(void)
   wake_after(3000000);
   
   char *b1 = "broadcast message";
-  rtems_unsigned32 count;
+  uint32_t   count;
   
   printf("%s - broadcast send b1 ...\n", name_string());
   mq_2.broadcast(b1, strlen(b1) + 1, count);
@@ -668,7 +668,7 @@ void Task1::print_mode(rtems_mode mode, rtems_mode mask)
 
 EndTask::EndTask(const char* name,
                  const rtems_task_priority initial_priority,
-                 const rtems_unsigned32 stack_size)
+                 const uint32_t   stack_size)
   : rtemsTask(name, initial_priority, stack_size, RTEMS_NO_PREEMPT)
 {
 }

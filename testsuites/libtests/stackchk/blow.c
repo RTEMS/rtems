@@ -19,7 +19,7 @@ void b() {}
 
 void blow_stack( void )
 {
-  volatile unsigned32 *low, *high;
+  volatile uint32_t   *low, *high;
   unsigned char *area;
 
 b();
@@ -30,8 +30,8 @@ b();
 
  area = (unsigned char *)_Thread_Executing->Start.Initial_stack.area;
 
- low  = (volatile unsigned32 *) (area + HEAP_OVERHEAD);
- high = (volatile unsigned32 *)
+ low  = (volatile uint32_t   *) (area + HEAP_OVERHEAD);
+ high = (volatile uint32_t   *)
             (area + _Thread_Executing->Start.Initial_stack.size - 16);
 
 

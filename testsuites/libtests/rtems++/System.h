@@ -62,7 +62,7 @@ protected:
 public:  
   Task2(const char* name,
         const rtems_task_priority initial_priority,
-        const rtems_unsigned32 stack_size);
+        const uint32_t   stack_size);
 };
 
 class Task3
@@ -76,7 +76,7 @@ protected:
 public:  
   Task3(const char* name,
         const rtems_task_priority initial_priority,
-        const rtems_unsigned32 stack_size);
+        const uint32_t   stack_size);
 };
 
 class EndTask
@@ -88,7 +88,7 @@ protected:
 public:  
   EndTask(const char* name,
           const rtems_task_priority initial_priority,
-          const rtems_unsigned32 stack_size);
+          const uint32_t   stack_size);
 };
 
 #if 0

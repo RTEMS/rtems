@@ -18,7 +18,7 @@
 /* types */
 
 struct counters {
-  rtems_unsigned32 count[6];
+  uint32_t   count[6];
 };
 
 /* functions */
