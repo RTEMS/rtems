@@ -40,6 +40,7 @@ extern "C" {
  *     -m68302        (no FP) (deprecated, use -m68000)
  *     -m68332        (no FP) (deprecated, use -mcpu32)
  *     -mcpu32        (no FP)
+ *     -m5200         (no FP)
  *
  *  As of gcc 2.8.1 and egcs 1.1, there is no distinction made between
  *  the CPU32 and CPU32+.  The option -mcpu32 generates code which can
@@ -164,6 +165,19 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_FPSP_PACKAGE    0
 
+#elif defined(__mcf5200__)
+/* Motorola ColdFire V2 core - RISC/68020 hybrid */ 
+#define CPU_MODEL_NAME         "m5200"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_PREINDEXING     0
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+#define M68K_HAS_FPU             0
+#define M68K_HAS_FPSP_PACKAGE    0
+#define M68K_COLDFIRE_ARCH       1
+
 #elif defined(__mc68000__)
  
 #define CPU_MODEL_NAME          "m68000"
@@ -188,31 +202,64 @@ extern "C" {
 #endif
 
 /*
+ *  If the above did not specify a ColdFire architecture, then set
+ *  this flag to indicate that it is not a ColdFire CPU.
+ */
+
+#if !defined(M68K_COLDFIRE_ARCH)
+#define M68K_COLDFIRE_ARCH       0
+#endif
+
+/*
  *  Define the name of the CPU family.
  */
 
-#define CPU_NAME "Motorola MC68xxx"
+#if ( M68K_COLDFIRE_ARCH == 1 )
+  #define CPU_NAME "Motorola ColdFire"
+#else
+  #define CPU_NAME "Motorola MC68xxx"
+#endif
 
 #ifndef ASM
 
+#if ( M68K_COLDFIRE_ARCH == 1 )
 #define m68k_disable_interrupts( _level ) \
-  asm volatile ( "movew   %%sr,%0\n\t" \
-                 "orw     #0x0700,%%sr" \
+   do { register unsigned32 _tmpsr = 0x0700; \
+        asm volatile ( "move.w %%sr,%0\n\t" \
+ 		       "or.l   %0,%1\n\t" \
+ 		       "move.w %1,%%sr" \
+ 		       : "=d" (_level), "=d"(_tmpsr) : "1"(_tmpsr) ); \
+   } while( 0 )
+#else
+#define m68k_disable_interrupts( _level ) \
+  asm volatile ( "move.w  %%sr,%0\n\t" \
+                 "or.w    #0x0700,%%sr" \
                     : "=d" (_level))
+#endif
 
 #define m68k_enable_interrupts( _level ) \
-  asm volatile ( "movew   %0,%%sr " : : "d" (_level));
+  asm volatile ( "move.w  %0,%%sr " : : "d" (_level));
 
+#if ( M68K_COLDFIRE_ARCH == 1 )
 #define m68k_flash_interrupts( _level ) \
-  asm volatile ( "movew   %0,%%sr\n\t" \
-                 "orw     #0x0700,%%sr" \
+   do { register unsigned32 _tmpsr = 0x0700; \
+	asm volatile ( "move.w %2,%%sr\n\t" \
+		       "or.l   %2,%1\n\t" \
+		       "move.w %1,%%sr" \
+		       : "=d"(_tmpsr) : "0"(_tmpsr), "d"(_level) ); \
+   } while( 0 )
+#else
+#define m68k_flash_interrupts( _level ) \
+  asm volatile ( "move.w  %0,%%sr\n\t" \
+                 "or.w    #0x0700,%%sr" \
                     : : "d" (_level))
+#endif
 
 #define m68k_get_interrupt_level( _level ) \
   do { \
     register unsigned32 _tmpsr; \
     \
-    asm volatile( "movw  %%sr,%0" : "=d" (_tmpsr)); \
+    asm volatile( "move.w %%sr,%0" : "=d" (_tmpsr)); \
     _level = (_tmpsr & 0x0700) >> 8; \
   } while (0)
     
@@ -220,17 +267,28 @@ extern "C" {
   do { \
     register unsigned32 _tmpsr; \
     \
-    asm volatile( "movw  %%sr,%0" : "=d" (_tmpsr)); \
+    asm volatile( "move.w  %%sr,%0" : "=d" (_tmpsr)); \
     _tmpsr = (_tmpsr & 0xf8ff) | ((_newlevel) << 8); \
-    asm volatile( "movw  %0,%%sr" : : "d" (_tmpsr)); \
+    asm volatile( "move.w  %0,%%sr" : : "d" (_tmpsr)); \
   } while (0)
 
-#if ( M68K_HAS_VBR == 1 )
+#if ( M68K_HAS_VBR == 1 && M68K_COLDFIRE_ARCH == 0 )
 #define m68k_get_vbr( vbr ) \
   asm volatile ( "movec   %%vbr,%0 " : "=r" (vbr))
 
 #define m68k_set_vbr( vbr ) \
   asm volatile ( "movec   %0,%%vbr " : : "r" (vbr))
+
+#elif ( M68K_COLDFIRE_ARCH == 1 )
+#define m68k_get_vbr( _vbr ) _vbr = (void *)_VBR
+
+#define m68k_set_vbr( _vbr ) \
+    asm volatile ("move.l  %%a7,%%d1 \n\t" \
+	          "move.l  %0,%%a7\n\t"    \
+	          "movec   %%a7,%%vbr\n\t" \
+                  "move.l  %%d1,%%a7\n\t"  \
+		  : : "d" (_vbr) : "d1" );
+  
 #else
 #define m68k_get_vbr( _vbr ) _vbr = (void *)_VBR
 #define m68k_set_vbr( _vbr )

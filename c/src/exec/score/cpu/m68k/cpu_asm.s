@@ -120,7 +120,11 @@ norst:  frestore a0@+                     | restore the fp state frame
  *  the original context regains the cpu.
  */
  
-#if ( M68K_HAS_VBR == 1)
+#if ( M68K_COLDFIRE_ARCH == 1 )
+.set SR_OFFSET,    2                     | Status register offset
+.set PC_OFFSET,    4                     | Program Counter offset
+.set FVO_OFFSET,   0                     | Format/vector offset
+#elif ( M68K_HAS_VBR == 1)
 .set SR_OFFSET,    0                     | Status register offset
 .set PC_OFFSET,    2                     | Program Counter offset
 .set FVO_OFFSET,   6                     | Format/vector offset
@@ -137,14 +141,31 @@ norst:  frestore a0@+                     | restore the fp state frame
 
 SYM (_ISR_Handler):
         addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking
+#if ( M68K_COLDFIRE_ARCH == 0 )
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
         movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
         andl    #0x0fff,d0               | d0 = vector offset in vbr
+#else
+	lea	a7@(-SAVED),a7
+	movm.l  d0-d1/a0-a1,a7@		 | save d0-d1,a0-a1
+	movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
+	andl    #0x0ffc,d0               | d0 = vector offset in vbr
+#endif
 
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
+  #if ( M68K_COLDFIRE_ARCH == 0 )
 	movew	sr,d1			| Save status register
 	oriw	#0x700,sr		| Disable interrupts
+  #else
+	move.l  d0,a7@-			| Save d0 value
+	move.l  0x700,d0		| Load in disable ints value
+	move.w  sr,d1			| Grab SR
+	or.l    d1,d0			| Create new SR
+	move.w  d0,sr			| Disable interrupts
+	move.l  a7@+,d0			| Restore d0 value
+  #endif
+  
 	tstl	SYM (_ISR_Nest_level)	| Interrupting an interrupt handler?
 	bne	1f			| Yes, just skip over stack switch code
 	movel	SYM(_CPU_Interrupt_stack_high),a0	| End of interrupt stack
@@ -171,8 +192,16 @@ SYM (_ISR_Handler):
         addql   #4,a7                    | remove vector number
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
+  #if ( M68K_COLDFIRE_ARCH == 0 )
 	movew	sr,d0			| Save status register
 	oriw	#0x700,sr		| Disable interrupts
+  #else
+	move.l  0x700,d1		| Load in disable int value
+	move.w  sr,d0			| Grab SR
+	or.l    d0,d1			| Create new SR
+	move.w  d1,sr			| Load to disable interrupts
+  #endif
+
 	subql	#1,SYM(_ISR_Nest_level)	| Reduce interrupt-nesting count
 	bne	1f			| Skip if return to interrupt
 	movel	(a7),a7			| Restore task stack pointer
@@ -215,7 +244,13 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
         jsr SYM (_Thread_Dispatch)       | Perform context switch
 #endif
 
-exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
+#if ( M68K_COLDFIRE_ARCH == 0 )
+exit:   moveml  a7@+,d0-d1/a0-a1	 | restore d0-d1,a0-a1
+#else
+exit:	moveml	a7@,d0-d1/a0-a1		 | restore d0-d1,a0-a1
+	lea     a7@(SAVED),a7
+#endif
+
 #if ( M68K_HAS_VBR == 0 )
         addql   #2,a7                    | pop format/id
 #endif /* M68K_HAS_VBR */
@@ -238,9 +273,18 @@ exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
 
         .global SYM (_ISR_Dispatch)
 SYM (_ISR_Dispatch):
+#if ( M68K_COLDFIRE_ARCH == 0 )
         movml   d0-d1/a0-a1,a7@-
         jsr     SYM (_Thread_Dispatch)
         movml   a7@+,d0-d1/a0-a1
+#else
+	lea     a7@(-SAVED),a7
+	movml   d0-d1/a0-a1,a7@
+	jsr     SYM (_Thread_Dispatch)
+	movml   a7@,d0-d1/a0-a1
+	lea     a7@(SAVED),a7
+#endif
+
 #if ( M68K_HAS_VBR == 0 )
         addql   #2,a7                    | pop format/id
 #endif /* M68K_HAS_VBR */

@@ -391,11 +391,25 @@ unsigned32 _CPU_ISR_Get_level( void );
  *    + disable interrupts and halt the CPU
  */
 
+#if ( M68K_COLDFIRE_ARCH == 1 )
+#define _CPU_Fatal_halt( _error ) \
+  { asm volatile( "move.w %%sr,%%d0\n\t" \
+		  "or.l %2,%%d0\n\t" \
+		  "move.w %%d0,%%sr\n\t" \
+		  "move.l %1,%%d0\n\t" \
+		  "move.l #0xDEADBEEF,%%d1\n\t" \
+                  "halt" \
+		  : "=g" (_error) \
+		  : "0" (_error), "d"(0x0700) \
+		  : "d0", "d1" ); \
+  }
+#else
 #define _CPU_Fatal_halt( _error ) \
   { asm volatile( "movl  %0,%%d0; " \
                   "orw   #0x0700,%%sr; " \
                   "stop  #0x2700" : "=d" ((_error)) : "0" ((_error)) ); \
   }
+#endif
 
 /* end of Fatal Error manager macros */
 
@@ -425,7 +439,28 @@ unsigned32 _CPU_ISR_Get_level( void );
 /* duplicates BFFFO results for 16 bits (i.e., 15-(_priority) in
    _CPU_Priority_bits_index is not needed), handles the 0 case, and
    does not molest _value -- jsg */
-#if ( M68K_HAS_EXTB_L == 1 )
+#if ( M68K_COLDFIRE_ARCH == 1 )
+#define _CPU_Bitfield_Find_first_bit( _value, _output ) \
+  { \
+    extern const unsigned char __BFFFOtable[256]; \
+    register int dumby; \
+    \
+    asm volatile ( \
+       "   clr.l   %1\n"         \
+       "   move.w  %2,%1\n"      \
+       "   lsr.l   #8,%1\n"      \
+       "   beq.s   1f\n"         \
+       "   move.b  (%3,%1),%0\n" \
+       "   bra.s   0f\n"         \
+       "1: move.w  %2,%1\n"      \
+       "   move.b  (%3,%1),%0\n" \
+       "   addq.l  #8,%0\n"      \
+       "0: and.l   #0xff,%0\n"   \
+       : "=&d" ((_output)), "=&d" ((dumby))    \
+       : "d" ((_value)), "ao" ((__BFFFOtable)) \
+       : "cc" ) ; \
+  }
+#elif ( M68K_HAS_EXTB_L == 1 )
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
     extern const unsigned char __BFFFOtable[256]; \
@@ -463,7 +498,7 @@ unsigned32 _CPU_ISR_Get_level( void );
        : "d" ((_value)), "ao" ((__BFFFOtable)) \
        : "cc" ) ; \
   }
-#endif /* M68K_HAS_EXTB_L */
+#endif
 
 #endif
 
