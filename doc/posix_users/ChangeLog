@@ -1,3 +1,10 @@
+2004-01-09	Joel Sherrill <joel@OARcorp.com>
+
+	PR 464/doc
+	* clock.t, signal.t: Add documentation for usleep() and ualarm(). Also
+	fixed a couple of calls which have the wrong .h files per the
+	OpenGroup site documentation.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.

@@ -35,6 +35,7 @@ The directives provided by the signal manager are:
 @item @code{sigtimedwait} - Synchronously Accept a Signal with Timeout
 @item @code{sigqueue} - Queue a Signal to a Process
 @item @code{alarm} - Schedule Alarm
+@item @code{ualarm} - Schedule Alarm in Microseconds
 @end itemize
 
 @section Background
@@ -860,7 +861,7 @@ NONE
 @subheading CALLING SEQUENCE:
 
 @example
-#include <signal.h>
+#include <unistd.h>
 
 unsigned int alarm(
   unsigned int seconds
@@ -871,13 +872,74 @@ unsigned int alarm(
 
 This call always succeeds.
 
-@subheading DESCRIPTION:
-
 If there was a previous @code{alarm()} request with time remaining,
 then this routine returns the number of seconds until that outstanding
 alarm would have fired. If no previous @code{alarm()} request was
 outstanding, then zero is returned.
 
+@subheading DESCRIPTION:
+
+The @code{alarm()} service causes the @code{SIGALRM} signal to
+be generated after the number of seconds specified by
+@code{seconds} has elapsed.
+
 @subheading NOTES:
 
-NONE
+Alarm requests do not queue.  If @code{alarm} is called while
+a previous request is outstanding, the call will result in 
+rescheduling the time at which the @code{SIGALRM} signal
+will be generated.
+
+If the notification signal, @code{SIGALRM}, is not caught or ignored, the
+calling process is terminated.
+
+@c
+@c
+@c
+@page
+@subsection ualarm - Schedule Alarm in Microseconds
+
+@findex alarm
+@findex microseonds alarm
+@findex usecs alarm
+@cindex schedule alarm in microseonds
+
+@subheading CALLING SEQUENCE:
+
+@example
+#include <unistd.h>
+
+useconds_t ualarm(
+  useconds_t useconds,
+  useconds_t interval
+);
+@end example
+
+@subheading STATUS CODES:
+
+This call always succeeds.
+
+If there was a previous @code{ualarm()} request with time remaining,
+then this routine returns the number of seconds until that outstanding
+alarm would have fired. If no previous @code{alarm()} request was
+outstanding, then zero is returned.
+
+@subheading DESCRIPTION:
+
+The @code{ualarm()} service causes the @code{SIGALRM} signal to
+be generated after the number of microseconds specified by
+@code{useconds} has elapsed.
+
+When @code{interval} is non-zero, repeated timeout notification occurs
+with a period in microseconds specified by @code{interval}.
+
+@subheading NOTES:
+
+Alarm requests do not queue.  If @code{alarm} is called while
+a previous request is outstanding, the call will result in 
+rescheduling the time at which the @code{SIGALRM} signal
+will be generated.
+
+If the notification signal, @code{SIGALRM}, is not caught or ignored, the
+calling process is terminated.
+

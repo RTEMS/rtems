@@ -10,7 +10,11 @@
 
 @section Introduction
 
-The clock manager ...
+The clock manager provides services two primary classes
+of services.  The first focuses on obtaining and setting
+the current date and time.  The other category of services
+focus on allowing a thread to delay for a specific length
+of time.
 
 The directives provided by the clock manager are:
 
@@ -19,6 +23,7 @@ The directives provided by the clock manager are:
 @item @code{clock_settime} - Set Time of Day
 @item @code{clock_getres} - Get Clock Resolution
 @item @code{sleep} - Delay Process Execution
+@item @code{usleep} - Delay Process Execution in Microseconds
 @item @code{nanosleep} - Delay with High Resolution
 @item @code{gettimeofday} - Get the Time of Day
 @item @code{time} - Get time in seconds
@@ -39,7 +44,7 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
-@subsection clock_gettime -Obtain Time of Day
+@subsection clock_gettime - Obtain Time of Day
 
 @findex clock_gettime
 @cindex obtain time of day
@@ -166,7 +171,7 @@ If res is NULL, then the resolution is not returned.
 @subheading CALLING SEQUENCE:
 
 @example
-#include <time.h>
+#include <unistd.h>
 
 unsigned int sleep(
   unsigned int seconds
@@ -185,6 +190,57 @@ number of @code{seconds}.
 @subheading NOTES:
 
 This call is interruptible by a signal.
+
+@c
+@c
+@c
+@page
+@subsection usleep - Delay Process Execution in Microseconds
+
+@findex usleep
+@cindex  delay process execution
+@cindex  delay process execution
+@cindex  usecs delay process execution
+@cindex  microsecond delay process execution
+
+@subheading CALLING SEQUENCE:
+
+@example
+#include <time.h>
+
+useconds_t usleep(
+  useconds_t useconds
+);
+@end example
+
+@subheading STATUS CODES:
+
+This routine returns the number of unslept seconds.
+
+@subheading DESCRIPTION:
+
+The @code{sleep()} function delays the calling thread by the specified
+number of @code{seconds}.
+
+The @code{usleep()} function suspends the calling thread from execution
+until either the number of microseconds specified by the
+@code{useconds} argument has elapsed or a signal is delivered to the
+calling thread and its action is to invoke a signal-catching function
+or to terminate the process.
+
+Because of other activity, or because of the time spent in
+processing the call, the actual length of time the thread is
+blocked may be longer than
+the amount of time specified.
+
+@subheading NOTES:
+
+This call is interruptible by a signal.
+
+The Single UNIX Specification allows this service to be implemented using
+the same timer as that used by the @code{alarm()} service.  This is 
+@b{NOT} the case for @b{RTEMS} and this call has no interaction with
+the @code{SIGALRM} signal.
 
 @c
 @c
