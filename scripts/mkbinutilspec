@@ -4,11 +4,15 @@
 #
 
 RTEMS_DIR=`dirname $0`
-RTEMS_VERSION=`grep Version ${RTEMS_DIR}/../VERSION | \
-sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
 
 target_alias=$1
-release=0
+
+# RPM release number
+rpm_release=0
+
+# binutils version number
+binutils_version=990901
+binutils_patch_version=19991015
 
 # Some linux distributions use /usr/src/packages
 # redhat uses /usr/src/redhat
@@ -24,11 +28,13 @@ then
 dst=/usr/src/SPECS;
 fi
 
-sed -e "s%@Version@%${RTEMS_VERSION}%g" \
--e "s%@bsp@%${bsp}%g" \
--e "s%@Release@%${release}%g" \
--e "s%@target_alias@%${target_alias}%g" \
-< ${RTEMS_DIR}/binutils.spec.in \
-> ${dst}/$target_alias-binutils.spec
+specfile=${dst}/$target_alias-binutils-${binutils_version}.spec
 
-echo Generated ${dst}/$target_alias-binutils.spec.
+sed -e "s%@Release@%${release}%g" \
+    -e "s%@target_alias@%${target_alias}%g" \
+    -e "s%@binutils_version@%${binutils_version}%g" \
+    -e "s%@binutils_patch_version@%${binutils_patch_version}%g" \
+< ${RTEMS_DIR}/binutils.spec.in \
+> ${specfile}
+
+echo Generated ${specfile}.

@@ -19,10 +19,10 @@ Provides:     @target_alias@-binutils
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      @Version@
+Version:      binutils-@binutils_version@
 Summary:      binutils for target @target_alias@
-Source0:      	binutils-990901.tar.gz
-Patch0:		binutils-990901-rtems-19991015.diff
+Source0:      	binutils-@binutils_version@.tar.gz
+Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
 
 Buildroot:    /tmp
 # Patch:
@@ -37,7 +37,7 @@ Authors:
     ...
 
 %prep
-# untar the sources inside @target_alias@-binutils-@Version@
+# untar the sources inside @target_alias@-binutils
 %setup -c -n @target_alias@-binutils -a 0
 
 %patch0 -p0
@@ -45,7 +45,7 @@ Authors:
 %build
 test -d build || mkdir build
 ( cd build
-  ../binutils-990901/configure --target=@target_alias@ \
+  ../binutils-@binutils_version@/configure --target=@target_alias@ \
     --verbose --prefix=/opt/rtems 
 
   test -d $RPM_BUILD_ROOT/opt \
