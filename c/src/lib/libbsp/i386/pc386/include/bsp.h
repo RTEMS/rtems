@@ -142,20 +142,6 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 /*-------------------------------------------------------------------------+
 | Macros
 +--------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------+
-| Define the interrupt mechanism for Time Test 27.
-| NOTE: Use a software interrupt for the i386 family.
-+--------------------------------------------------------------------------*/
-#define MUST_WAIT_FOR_INTERRUPT 0
-#define Install_tm27_vector(handler) \
-{ \
-  rtems_isr_entry dummy; \
-  rtems_interrupt_catch(handler, 0x90, &dummy); \
-}
-#define Cause_tm27_intr() asm volatile("int $0x90" : :);
-#define Clear_tm27_intr()
-#define Lower_tm27_intr()
-
 /* does anyone need this? if so, report it so we can rename this macro */
 #if 0
 /*-------------------------------------------------------------------------+
