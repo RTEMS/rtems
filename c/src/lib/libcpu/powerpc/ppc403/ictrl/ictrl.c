@@ -195,13 +195,14 @@ ictrl_isr(rtems_vector_number vector,CPU_Interrupt_frame *cpu_frame)
   for (exvec = 0;exvec < PPC_IRQ_EXT_MAX;exvec++) {
     mask = VEC_TO_EXMSK(exvec);
     if (0 != (istat & mask)) {
-      clr_exisr(mask);
+      /*clr_exisr(mask); too early to ack*/
       handler = ictrl_vector_table[exvec];
       if (handler) {
 	istat &= ~mask;
 	global_vec = exvec + PPC_IRQ_EXT_BASE;
 	(handler)(global_vec);
       }
+      clr_exisr(mask);/* now we can ack*/
     }
   }
   if (istat != 0) { /* anything left? then we have a spurious interrupt */
