@@ -13,157 +13,159 @@
 ANSI C Section 4.2 --- Diagnostics
 
 @example
-assert(), Function
+assert(), Function, Implemented
 @end example
 
 ANSI C Section 4.3 --- Character Handling
 
 @example
-isalnum(), Function
-isalpha(), Function
-iscntrl(), Function
-isdigit(), Function
-isgraph(), Function
-islower(), Function
-isprint(), Function
-ispunct(), Function
-isspace(), Function
-isupper(), Function
-isxdigit(), Function
-tolower(), Function
-toupper(), Function
+isalnum(), Function, Implemented
+isalpha(), Function, Implemented
+iscntrl(), Function, Implemented
+isdigit(), Function, Implemented
+isgraph(), Function, Implemented
+islower(), Function, Implemented
+isprint(), Function, Implemented
+ispunct(), Function, Implemented
+isspace(), Function, Implemented
+isupper(), Function, Implemented
+isxdigit(), Function, Implemented
+tolower(), Function, Implemented
+toupper(), Function, Implemented
 @end example
 
 ANSI C Section 4.4 --- Localization
 
 @example
-setlocale(), Function
+setlocale(), Function, Partial Implementation
 @end example
 
 ANSI C Section 4.5 --- Mathematics
 
 @example
-acos(), Function
-asin(), Function
-atan(), Function
-atan2(), Function
-cos(), Function
-sin(), Function
-tan(), Function
-cosh(), Function
-sinh(), Function
-tanh(), Function
-exp(), Function
-frexp(), Function
-ldexp(), Function
-log(), Function
-log10(), Function
-modf(), Function
-pow(), Function
-sqrt(), Function
-ceil(), Function
-fabs(), Function
-floor(), Function
-fmod(), Function
+acos(), Function, Implemented
+asin(), Function, Implemented
+atan(), Function, Implemented
+atan2(), Function, Implemented
+cos(), Function, Implemented
+sin(), Function, Implemented
+tan(), Function, Implemented
+cosh(), Function, Implemented
+sinh(), Function, Implemented
+tanh(), Function, Implemented
+exp(), Function, Implemented
+frexp(), Function, Implemented
+ldexp(), Function, Implemented
+log(), Function, Implemented
+log10(), Function, Implemented
+modf(), Function, Implemented
+pow(), Function, Implemented
+sqrt(), Function, Implemented
+ceil(), Function, Implemented
+fabs(), Function, Implemented
+floor(), Function, Implemented
+fmod(), Function, Implemented
 @end example
 
 ANSI C Section 4.6 --- Non-Local Jumps
 
 @example
-setjmp(), Function
-longjmp(), Function
+setjmp(), Function, Implemented
+longjmp(), Function, Implemented
 @end example
 
 ANSI C Section 4.9 --- Input/Output
 
 @example
-clearerr(), Function
-fclose(), Function
-feof(), Function
-ferror(), Function
-fflush(), Function
-fgetc(), Function
-fgets(), Function
-fopen(), Function
-fputc(), Function
-fputs(), Function
-fread(), Function
-freopen(), Function
-fseek(), Function
-ftell(), Function
-fwrite(), Function
-getc(), Function
-getchar(), Function
-gets(), Function
-perror(), Function
-printf(), Function
-fprintf(), Function
-sprintf(), Function
-putc(), Function
-putchar(), Function
-puts(), Function
-remove(), Function
-rename(), Function
-rewind(), Function
-scanf(), Function
-fscanf(), Function
-sscanf(), Function
-setbuf(), Function
-tmpfile(), Function
-tmpnam(), Function
-ungetc(), Function
+clearerr(), Function, Implemented
+fclose(), Function, Implemented
+feof(), Function, Implemented
+ferror(), Function, Implemented
+fflush(), Function, Implemented
+fgetc(), Function, Implemented
+fgets(), Function, Implemented
+fopen(), Function, Implemented
+fputc(), Function, Implemented
+fputs(), Function, Implemented
+fread(), Function, Implemented
+freopen(), Function, Implemented
+fseek(), Function, Implemented
+ftell(), Function, Implemented
+fwrite(), Function, Implemented
+getc(), Function, Implemented
+getchar(), Function, Implemented
+gets(), Function, Implemented
+perror(), Function, Implemented
+printf(), Function, Implemented
+fprintf(), Function, Implemented
+sprintf(), Function, Implemented
+putc(), Function, Implemented
+putchar(), Function, Implemented
+puts(), Function, Implemented
+remove(), Function, Implemented
+rename(), Function, Implemented
+rewind(), Function, Implemented
+scanf(), Function, Implemented
+fscanf(), Function, Implemented
+sscanf(), Function, Implemented
+setbuf(), Function, Implemented
+tmpfile(), Function, Implemented
+tmpnam(), Function, Implemented
+ungetc(), Function, Implemented
 @end example
 
 ANSI C Section 4.10 --- General Utilities
 
 @example
-abs(), Function
-atof(), Function
-atoi(), Function
-atol(), Function
-rand(), Function
-srand(), Function
-calloc(), Function
-free(), Function
-malloc(), Function
-realloc(), Function
-abort(), Function
-exit(), Function
-getenv(), Function
-bsearch(), Function
-qsort(), Function
+abs(), Function, Implemented
+atof(), Function, Implemented
+atoi(), Function, Implemented
+atol(), Function, Implemented
+rand(), Function, Implemented
+srand(), Function, Implemented
+calloc(), Function, Implemented
+free(), Function, Implemented
+malloc(), Function, Implemented
+realloc(), Function, Implemented
+abort(), Function, Implemented
+exit(), Function, Implemented
+getenv(), Function, Implemented
+bsearch(), Function, Implemented
+qsort(), Function, Implemented
 @end example
 
 ANSI C Section 4.11 --- String Handling
 
 @example
-strcpy(), Function
-strncpy(), Function
-strcat(), Function
-strncat(), Function
-strcmp(), Function
-strncmp(), Function
-strchr(), Function
-strcspn(), Function
-strpbrk(), Function
-strrchr(), Function
-strspn(), Function
-strstr(), Function
-strtok(), Function
-strlen(), Function
+strcpy(), Function, Implemented
+strncpy(), Function, Implemented
+strcat(), Function, Implemented
+strncat(), Function, Implemented
+strcmp(), Function, Implemented
+strncmp(), Function, Implemented
+strchr(), Function, Implemented
+strcspn(), Function, Implemented
+strpbrk(), Function, Implemented
+strrchr(), Function, Implemented
+strspn(), Function, Implemented
+strstr(), Function, Implemented
+strtok(), Function, Implemented
+strlen(), Function, Implemented
 @end example
 
 ANSI C Section 4.12 --- Date and Time Handling
 
 @example
-time(), Function
-asctime(), Function
-ctime(), Function
-gmtime(), Function
-localtime(), Function
-mktime(), Function
-strftime(), Function
+time(), Function, Implemented
+asctime(), Function, Implemented
+ctime(), Function, Implemented
+gmtime(), Function, Implemented
+localtime(), Function, Implemented
+mktime(), Function, Implemented
+strftime(), Function, Implemented
 @end example
+
+NOTE: RTEMS has no notion of time zones.
 
 @subsection Extensions to Time Functions
 
@@ -174,13 +176,13 @@ strftime(), Function
 @subsection Map a Stream Pointer to a File Descriptor
 
 @example
-fileno(), Function
+fileno(), Function, Implemented
 @end example
 
 @subsection Open a Stream on a File Descriptor
 
 @example
-fdopen(), Function
+fdopen(), Function, Implemented
 @end example
 
 @subsection Interactions of Other FILE-Type C Functions
@@ -192,18 +194,18 @@ fdopen(), Function
 @subsection Stdio Locking Functions
 
 @example
-flockfile(), Function
-ftrylockfile(), Function
-funlockfile(), Function
+flockfile(), Function, Unimplemented
+ftrylockfile(), Function, Unimplemented
+funlockfile(), Function, Unimplemented
 @end example
 
 @subsection Stdio With Explicit Client Locking
 
 @example
-getc_unlocked(), Function
-getchar_unlocked(), Function
-putc_unlocked(), Function
-putchar_unlocked(), Function
+getc_unlocked(), Function, Unimplemented
+getchar_unlocked(), Function, Unimplemented
+putc_unlocked(), Function, Unimplemented
+putchar_unlocked(), Function, Unimplemented
 @end example
 
 @section Other C Language Functions
@@ -211,50 +213,49 @@ putchar_unlocked(), Function
 @subsection Nonlocal Jumps
 
 @example
-sigsetjmp(), Function
-siglongjmp(), Function
+sigsetjmp(), Function, Unimplemented
+siglongjmp(), Function, Unimplemented
 @end example
 
 @subsection Set Time Zone
 
 @example
-tzset(), Function
+tzset(), Function, Unimplemented
 @end example
 
 @subsection Find String Token
 
 @example
-strtok_r(), Function
+strtok_r(), Function, Implemented
 @end example
 
 @subsection ASCII Time Representation
 
 @example
-asctime_r(), Function
+asctime_r(), Function, Implemented
 @end example
 
 @subsection Current Time Representation
 
 @example
-ctime_r(), Function
+ctime_r(), Function, Implemented
 @end example
 
 @subsection Coordinated Universal Time
 
 @example
-gmtime_r(), Function
+gmtime_r(), Function, Implemented
 @end example
 
 @subsection Local Time
 
 @example
-localtime_r(), Function
+localtime_r(), Function, Implemented
 @end example
 
 @subsection Pseudo-Random Sequence Generation Functions
 
 @example
-rand_r(), Function
+rand_r(), Function, Implemented
 @end example
-
 

@@ -36,7 +36,11 @@
 
 @subsection Parameters That Can Be Set
 
-@subsubsection termios Structure
+@subsubsection @code{termios} Structure
+
+@example
+struct termios, Type, Partial Implementation
+@end example
 
 @subsubsection Input Modes
 
@@ -51,6 +55,13 @@
 @subsection Baud Rate Values
 
 @subsubsection Baud Rate Functions
+
+@example
+cfgetospeed(), Function, Unimplemented
+cfsetospeed(), Function, Unimplemented
+cfgetispeed(), Function, Unimplemented
+cfsetispeed(), Function, Unimplemented
+@end example
 
 @subsubsection Synopsis
 
@@ -67,28 +78,28 @@
 @subsection Get and Set State
 
 @example
-tcgetattr(), Function
-tcsetattr(), Function
+tcgetattr(), Function, Implemented
+tcsetattr(), Function, Implemented
 @end example
 
 @subsection Line Control Functions
 
 @example
-tcsendbreak(), Function
-tcdrain(), Function
-tcflush(), Function
-tcflow(), Function
+tcsendbreak(), Function, Unimplemented
+tcdrain(), Function, Unimplemented
+tcflush(), Function, Unimplemented
+tcflow(), Function, Unimplemented
 @end example
 
 @subsection Get Foreground Process Group ID
 
 @example
-tcgetprgrp(), Function
+tcgetprgrp(), Function, Unimplemented
 @end example
 
 @subsection Set Foreground Process Group ID
 
 @example
-tcsetprgrp(), Function
+tcsetprgrp(), Function, Unimplemented
 @end example
 

@@ -15,50 +15,50 @@
 @subsection Initialize an Unnamed Semaphore
 
 @example
-sem_init(), Function
+sem_init(), Function, Untested Implementation
 @end example
 
 @subsection Destroy an Unnamed Semaphore
 
 @example
-sem__destroy(), Function
+sem_destroy(), Function, Untested Implementation
 @end example
 
 @subsection Initialize/Open a Named Semaphore
 
 @example
-sem_open(), Function
+sem_open(), Function, Untested Implementation
 @end example
 
 @subsection Close a Named Semaphore
 
 @example
-sem_close(), Function
+sem_close(), Function, Untested Implementation
 @end example
 
 @subsection Remove a Named Semaphore
 
 @example
-sem_unlink(), Function
+sem_unlink(), Function, Untested Implementation
 @end example
 
 @subsection Lock a Semaphore
 
 @example
-sem_wait(), Function
-sem_trywait(), Function
+sem_wait(), Function, Untested Implementation
+sem_trywait(), Function, Untested Implementation
 @end example
 
 @subsection Unlock a Semaphore
 
 @example
-sem_post(), Function
+sem_post(), Function, Untested Implementation
 @end example
 
 @subsection Get the Value of a Semaphore
 
 @example
-sem_getvalue(), Function
+sem_getvalue(), Function, Untested Implementation
 @end example
 
 @section Mutexes

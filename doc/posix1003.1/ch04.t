@@ -13,8 +13,8 @@
 @subsection Get Process and Parent Process IDs
 
 @example
-getpid(), Function
-getppid(), Function
+getpid(), Function, Dummy Implementation
+getppid(), Function, Dummy Implementation
 @end example
 
 @section User Identification
@@ -92,7 +92,7 @@ struct tms, Type,
 times(), Function, Implemented
 @end example
 
-NOTE: times() always returns 0 for tms_stime, tms_cutime, and
+NOTE: @code{times} always returns 0 for tms_stime, tms_cutime, and
 tms_cstime fields of the @code{struct tms} returned.
 
 @section Environment Variables
@@ -115,8 +115,8 @@ ctermid(), Function, Unimplemented
 
 @example
 ttyname(), Function, Untested Implementation, assumes directory services
-ttyname_r(), Unimplemented
-isatty(), Function, Dummy Implementation
+ttyname_r(), Function, Unimplemented
+isatty(), Function, Partial Implementation
 @end example
 
 @section Configurable System Variables

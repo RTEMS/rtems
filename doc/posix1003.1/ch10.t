@@ -12,7 +12,15 @@
 
 @subsection Extended tar Format
 
+@example
+tar format, Type, 
+@end example
+
 @subsection Extended cpio Format
+
+@example
+cpio format, Type, 
+@end example
 
 @subsection Multiple Volumes
 

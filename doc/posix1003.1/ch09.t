@@ -15,18 +15,20 @@
 @subsection Group Database Access
 
 @example
-getgrgid(), Function
-getgrgid_r(), Function
-getgrname(), Function
-getgrnam_r(), Function
+struct group, Type, 
+getgrgid(), Function, Unimplemented
+getgrgid_r(), Function, Unimplemented
+getgrname(), Function, Unimplemented
+getgrnam_r(), Function, Unimplemented
 @end example
 
 @subsection User Database Access
 
 @example
-getpwuid(), Function
-getpwuid_r(), Function
-getpwnam(), Function
-getpwnam_r(), Function
+struct passwd, Type, 
+getpwuid(), Function, Untested Implemented, assumes /etc/passwd exists
+getpwuid_r(), Function, Unimplemented
+getpwnam(), Function, Untested Implemented, assumes /etc/passwd exists
+getpwnam_r(), Function, Unimplemented
 @end example
 
