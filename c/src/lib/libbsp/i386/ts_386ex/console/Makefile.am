@@ -9,7 +9,7 @@ VPATH = @srcdir@:@srcdir@/../../shared/io
 PGM = $(ARCH)/console.rel
 
 ## sources
-C_FILES = console.c printk.c
+C_FILES = console.c
 
 console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 

@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../shared/io
 
 PGM = $(ARCH)/console.rel
 
-C_FILES = console.c inch.c outch.c printk.c
+C_FILES = console.c inch.c outch.c
 S_FILES = videoAsm.S
 
 console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
