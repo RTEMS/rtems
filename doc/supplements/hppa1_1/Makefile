@@ -44,6 +44,21 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
+html: dirs $(FILES)
+	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
+ 	    $(PROJECT).texi
+
+clean:
+	rm -f *.o $(PROG) *.txt core 
+	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
+	rm -f $(PROJECT) $(PROJECT)-*
+	rm -f c_hppa1_1 c_hppa1_1-*
+	rm -f intr.t
+	rm -f timing.t timing.texi
+	rm -f wksheets.t wksheets_NOTIMES.t $(GENERATED_FILES)
+	rm -f *.fixed _*
+
 #
 #  Chapters which get automatic processing
 #
@@ -130,19 +145,3 @@ timeSIMHPPA.texi: timeSIMHPPA.t Makefile
 	$(BMENU) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "Command and Variable Index" ${*}.t
-
-html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
-	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
- 	    $(PROJECT).texi
-
-clean:
-	rm -f *.o $(PROG) *.txt core 
-	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f $(PROJECT) $(PROJECT)-*
-	rm -f c_hppa1_1 c_hppa1_1-*
-	rm -f intr.t
-	rm -f timing.t timing.texi
-	rm -f wksheets.t wksheets_NOTIMES.t $(GENERATED_FILES)
-	rm -f *.fixed _*
-

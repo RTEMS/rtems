@@ -46,6 +46,21 @@ $(PROJECT).ps: dirs $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
+html: dirs $(FILES)
+	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
+ 	    $(PROJECT).texi
+
+clean:
+	rm -f *.o $(PROG) *.txt core 
+	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
+	rm -f $(PROJECT) $(PROJECT)-*
+	rm -f c_$(PROJECT) c_$(PROJECT)-*
+	rm -f intr.t $(GENERATED_FILES)
+	rm -f wksheets.t wksheets_NOTIMES.t timing.t
+	rm -f timeERC32_.t timeERC32_.texi
+	rm -f *.fixed _*
+
 #
 #  Chapters which get automatic processing
 #
@@ -141,20 +156,3 @@ timeERC32.texi: timeERC32_.t Makefile
 	    -u "Top" \
 	    -n "Command and Variable Index" timeERC32_.t
 	mv timeERC32_.texi timeERC32.texi
-
-
-html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
-	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
- 	    $(PROJECT).texi
-
-clean:
-	rm -f *.o $(PROG) *.txt core 
-	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f $(PROJECT) $(PROJECT)-*
-	rm -f c_$(PROJECT) c_$(PROJECT)-*
-	rm -f intr.t $(GENERATED_FILES)
-	rm -f wksheets.t wksheets_NOTIMES.t timing.t
-	rm -f timeERC32_.t timeERC32_.texi
-	rm -f *.fixed _*
-

@@ -44,6 +44,21 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
+html: dirs $(FILES)
+	-mkdir -p $(WWW_INSTALL)/c_m68k
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
+ 	    $(PROJECT).texi
+
+clean:
+	rm -f *.o $(PROG) *.txt core 
+	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
+	rm -f $(PROJECT) $(PROJECT)-*
+	rm -f c_m68k c_m68k-*
+	rm -f intr.t $(GENERATED_FILES)
+	rm -f wksheets.t wksheets_NOTIMES.t
+	rm -f timeMVME136_.t timeMVME136_.texi
+	rm -f *.fixed _* timing.t
+
 #
 #  Chapters which get automatic processing
 #
@@ -148,18 +163,3 @@ timeMVME136.texi: timeMVME136_.t Makefile
 	    -u "Top" \
 	    -n "Command and Variable Index" timeMVME136_.t
 	mv timeMVME136_.texi timeMVME136.texi
-
-html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/c_m68k
-	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
- 	    $(PROJECT).texi
-
-clean:
-	rm -f *.o $(PROG) *.txt core 
-	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f $(PROJECT) $(PROJECT)-*
-	rm -f c_m68k c_m68k-*
-	rm -f intr.t $(GENERATED_FILES)
-	rm -f wksheets.t wksheets_NOTIMES.t
-	rm -f timeMVME136_.t timeMVME136_.texi
-	rm -f *.fixed _* timing.t

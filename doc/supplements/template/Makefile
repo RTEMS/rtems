@@ -45,6 +45,22 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
+html: dirs $(FILES)
+	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
+ 	    $(PROJECT).texi
+
+clean:
+	rm -f *.o $(PROG) *.txt core 
+	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
+	rm -f $(PROJECT) $(PROJECT)-*
+	rm -f c_$(PROJECT) c_$(PROJECT)-*
+	rm -f wksheets.t wksheets_NOTIMES.t 
+	rm -f intr.t 
+	rm -f timeBSP_.t timing.t
+	rm -f *.fixed _* $(GENERATED_FILES)
+	rm -f timeBSP_.t
+
 #
 #  Chapters which get automatic processing
 #
@@ -136,19 +152,3 @@ timeBSP.texi: timeBSP_.t Makefile
 	    -u "Top" \
 	    -n "Command and Variable Index" timeBSP_.t
 	mv timeBSP_.t timeBSP.texi
-
-html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
-	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
- 	    $(PROJECT).texi
-
-clean:
-	rm -f *.o $(PROG) *.txt core 
-	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f $(PROJECT) $(PROJECT)-*
-	rm -f c_$(PROJECT) c_$(PROJECT)-*
-	rm -f wksheets.t wksheets_NOTIMES.t 
-	rm -f intr.t 
-	rm -f timeBSP_.t timing.t
-	rm -f *.fixed _* $(GENERATED_FILES)
-	rm -f timeBSP_.t
