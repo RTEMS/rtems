@@ -50,8 +50,8 @@ void _TOD_Set(
        seconds_since_epoch - _TOD_Seconds_since_epoch );
 
   ticks_until_next_second = _TOD_Ticks_per_second;
-  if ( ticks_until_next_second > _TOD_Current.ticks )
-    ticks_until_next_second -= _TOD_Current.ticks;
+  if ( ticks_until_next_second > the_tod->ticks )
+    ticks_until_next_second -= the_tod->ticks;
 
   _TOD_Current             = *the_tod;
   _TOD_Seconds_since_epoch = seconds_since_epoch;
