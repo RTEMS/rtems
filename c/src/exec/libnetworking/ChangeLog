@@ -1,5 +1,10 @@
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
+	* modem/ppp_tty.c: Changed to include <rtems/termiostypes.h> since
+	that is an RTEMS specific header file.
+
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
 	* sys/ttycom.h: Moved to lib/include/sys.
 	* Makefile.am: Modified to reflect above.
 

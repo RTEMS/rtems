@@ -122,7 +122,7 @@
 #include <rtems/libio.h>
 #include <sys/ttycom.h>
 #include <termios.h>
-#include <termiostypes.h>
+#include <rtems/termiostypes.h>
 
 #ifdef PPP_FILTER
 #include <net/bpf.h>
