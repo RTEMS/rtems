@@ -447,7 +447,7 @@ int main_umask(int argc,char *argv[])
    if (argc == 2) msk=str2int(argv[1]);
    umask(msk);
    msk=umask(0);
-   printf("0%o\n",msk);
+   printf("0%o\n", (unsigned int) msk);
    umask(msk);
    return 0;
 }

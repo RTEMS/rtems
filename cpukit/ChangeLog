@@ -1,5 +1,9 @@
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
+	* libmisc/shell/cmds.c: Remove warning.
+
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
 	* libnetworking/lib/ftpfs.c: Switch bcopy to memcpy.
 
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
