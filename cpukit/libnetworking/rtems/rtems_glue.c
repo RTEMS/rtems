@@ -78,18 +78,19 @@ int nfs_diskless_valid;
 /*
  * BOOTP values
  */
-struct in_addr rtems_bsdnet_log_host_address;
-struct in_addr rtems_bsdnet_bootp_server_address;
-char *rtems_bsdnet_bootp_boot_file_name;
-char *rtems_bsdnet_bootp_server_name;
-char *rtems_bsdnet_domain_name;
+struct in_addr rtems_bsdnet_log_host_address = {0};
+struct in_addr rtems_bsdnet_bootp_server_address = {0};
+char *rtems_bsdnet_bootp_boot_file_name = 0;
+char *rtems_bsdnet_bootp_server_name = 0;
+char *rtems_bsdnet_domain_name = 0;
+char *rtems_bsdnet_bootp_cmdline = 0;
 struct in_addr rtems_bsdnet_nameserver[sizeof rtems_bsdnet_config.name_server /
 			sizeof rtems_bsdnet_config.name_server[0]];
-int rtems_bsdnet_nameserver_count;
+int rtems_bsdnet_nameserver_count = 0;
 struct in_addr rtems_bsdnet_ntpserver[sizeof rtems_bsdnet_config.ntp_server /
 			sizeof rtems_bsdnet_config.ntp_server[0]];
-int rtems_bsdnet_ntpserver_count;
-long rtems_bsdnet_timeoffset;
+int rtems_bsdnet_ntpserver_count = 0;
+long rtems_bsdnet_timeoffset = 0;
 
 /*
  * Perform FreeBSD memory allocation.
@@ -873,10 +874,13 @@ rtems_bsdnet_setup (void)
 			broadcast.sin_addr.s_addr = 
 					address.sin_addr.s_addr | ~netmask.sin_addr.s_addr;
 			if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFBRDADDR, &broadcast) < 0) {
-				struct in_addr in_addr;
+				struct in_addr	in_addr;
+				char			buf[20];
 				in_addr.s_addr = broadcast.sin_addr.s_addr;
+				if (!inet_ntop(AF_INET, &in_addr, buf, sizeof(buf)))
+						strcpy(buf,"?.?.?.?");
 				printf ("Can't set %s broadcast address %s: %s\n",
-					ifp->name, inet_ntoa (in_addr), strerror (errno));
+					ifp->name, buf, strerror (errno));
 			}
 		}
 	}

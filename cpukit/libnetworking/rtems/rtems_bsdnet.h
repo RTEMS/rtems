@@ -35,6 +35,7 @@
 extern struct in_addr rtems_bsdnet_bootp_server_address;
 extern char *rtems_bsdnet_bootp_server_name;
 extern char *rtems_bsdnet_bootp_boot_file_name;
+extern char *rtems_bsdnet_bootp_cmdline;
 extern struct in_addr rtems_bsdnet_ntpserver[];
 extern int rtems_bsdnet_ntpserver_count;
 extern long rtems_bsdnet_timeoffset;
