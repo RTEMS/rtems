@@ -1,3 +1,33 @@
+2003-04-17	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, develenv.texi: Merged from head.
+	* direct.t, sample.t, utils.t: New files.
+	* compile.texi, direct.texi, sample.texi, utils.texi: Removed.
+
+2003-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, develenv.texi: Remove unused file.
+	* compile.texi: Removed.
+
+2003-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Fix next/previous section names.
+
+2003-03-24	Joel Sherrill <joel@OARcorp.com>
+
+	* direct.t, sample.t, utils.t: Significantly updated.
+
+2003-02-28	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Add newly generated .texi files.
+
+2003-02-18	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, develenv.texi: Relect generating .texi from .t's.
+	* direct.t, sample.t, utils.t: New files.
+	* direct.texi, sample.texi, utils.texi: Removed. Now generated from
+	corresponding .t files which are in the process of being updated.
+	This commit is a anspshot of the update effort.
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* develenv.texi: Set @setfilename develenv.info.

@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename develenv.info
+@setfilename develenv
 @setcontentsaftertitlepage
 @syncodeindex vr fn
 @synindex ky cp
@@ -71,7 +71,6 @@
 
 @include intro.texi
 @include direct.texi
-@c @include compile.texi
 @include sample.texi
 @include utils.texi
 
@@ -80,8 +79,6 @@
 @top develenv
 
 This is the online version of the RTEMS Development Environment Guide.
-
-@c * Compilation and GNU Make Stanzas::
 
 @menu
 * Introduction::
@@ -98,7 +95,7 @@ This is the online version of the RTEMS Development Environment Guide.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, RTEMS Specific Utilities Ada Language Specific Utilities, Top
+@node Command and Variable Index, Concept Index, RTEMS Specific Utilities size_rtems - report RTEMS size information, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.
