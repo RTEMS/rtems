@@ -14,8 +14,8 @@ include $(top_srcdir)/project.am
 
 COMMON_FILES= $(top_srcdir)/common/cpright.texi \
   $(top_srcdir)/user/bsp.texi $(top_srcdir)/user/clock.texi \
-  $(top_srcdir)/user/concepts.texi $(top_srcdir)/user/conf.texi \
-  $(top_srcdir)/user/dirstat.texi \
+  $(top_srcdir)/user/concepts.texi $(top_srcdir)/user/datatypes.texi \
+  $(top_srcdir)/user/conf.texi $(top_srcdir)/user/dirstat.texi \
   $(top_srcdir)/user/dpmem.texi $(top_srcdir)/user/event.texi \
   $(top_srcdir)/user/fatal.texi $(top_srcdir)/user/glossary.texi $(top_srcdir)/user/init.texi \
   $(top_srcdir)/user/intr.texi $(top_srcdir)/user/io.texi $(top_srcdir)/user/mp.texi $(top_srcdir)/user/msg.texi \

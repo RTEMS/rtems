@@ -85,6 +85,7 @@ END-INFO-DIR-ENTRY
 @include ../user/preface.texi
 @include ../user/overview.texi
 @include ../user/concepts.texi
+@include ../user/datatypes.texi
 @include ../user/init.texi
 @include ../user/task.texi
 @include ../user/intr.texi
@@ -118,6 +119,7 @@ This is the online version of the RTEMS Ada User's Guide.
 * Preface::
 * Overview::
 * Key Concepts::
+* RTEMS Data Types::
 * Initialization Manager::
 * Task Manager::
 * Interrupt Manager::
