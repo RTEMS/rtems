@@ -8,7 +8,7 @@ RTEMS_TOP(../../../../..)
 AC_CONFIG_AUX_DIR(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-mips64orion,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-mips,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSBSP

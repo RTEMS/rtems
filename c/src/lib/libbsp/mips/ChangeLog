@@ -1,3 +1,7 @@
+2000-11-27	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.in: Change mips64orion reference to mips.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
