@@ -1,5 +1,9 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* src/Makefile.am: Eliminate LIBNAME. Cosmetical cleanups.
 
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

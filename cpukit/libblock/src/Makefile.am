@@ -6,7 +6,7 @@ LIB = ${ARCH}/libblock.a
 
 C_FILES = bdbuf.c blkdev.c diskdevs.c ramdisk.c
 
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
