@@ -19,7 +19,7 @@ Prefix:		/opt/solaris
 BuildRoot:	@RPM_BUILD_ROOT@
 
 Version:      	%binutils_rpmvers
-Source0:	ftp://ftp.gnu.org.com/pub/gnu/binutils/binutils-%{binutils_version}.tar.gz
+Source0:	ftp://ftp.gnu.org.com/pub/gnu/binutils/binutils-%{binutils_version}.tar.bz2
 NoSource: 	0
 %description
 

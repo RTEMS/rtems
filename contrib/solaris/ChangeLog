@@ -1,3 +1,11 @@
+2001-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Added missing files.
+	* setup.def: New shot using gcc 3.0.4 RPMs.
+	* sparc-solaris-binutils.spec.in: Switched to bz2 file.
+	* sparc-solaris-gcc.spec.in: Use gcc3 file naming for archive
+	and use find to pick up all files.
+ 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

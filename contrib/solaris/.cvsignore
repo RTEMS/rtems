@@ -4,3 +4,7 @@ aclocal.m4
 autom4te.cache
 config.*
 configure
+setup.cache
+sparc-solaris-binutils.spec
+sparc-solaris-gcc.spec
+sparc-solaris-libs.spec

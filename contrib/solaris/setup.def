@@ -3,10 +3,10 @@
 #
 # $Id$
 #
-binutils_version=2.11.2
+binutils_version=2.12
 binutils_rpm_release=1
 solaris_version=8
-solaris_rpm_release=1
-gcc_version=2.95.3
+solaris_rpm_release=2
+gcc_version=3.0.4
 gcc_rpm_release=1
 rpm_build_root=/var/tmp
