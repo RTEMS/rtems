@@ -99,14 +99,14 @@ void *POSIX_Init(
   /* must go around pthread_attr_setstacksize to set a bad stack size */
   attr.stacksize = 0;
  
-  puts( "Init: pthread_create - EAGAIN (stacksize too small)" );
-  status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  assert( status == EAGAIN );
-
-  attr.stacksize = BSP_Configuration.work_space_size;
-  puts( "Init: pthread_create - EINVAL (stacksize too large)" );
+  puts( "Init: pthread_create - EINVAL (stacksize too small)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EINVAL );
+
+  attr.stacksize = BSP_Configuration.work_space_size;
+  puts( "Init: pthread_create - EAGAIN (stacksize too large)" );
+  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  assert( status == EAGAIN );
 
   status = pthread_attr_init( &attr );
   assert( !status );
@@ -126,9 +126,9 @@ void *POSIX_Init(
   /* must go around pthread_attr_set routines to set a bad value */
   attr.contentionscope = PTHREAD_SCOPE_SYSTEM;
 
-  puts( "Init: pthread_create - ENOSYS (unsupported system contention scope)" );
+  puts( "Init: pthread_create - ENOTSUP (unsupported system contention scope)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
-  assert( status == ENOSYS );
+  assert( status == ENOTSUP );
 
   status = pthread_attr_init( &attr );
   assert( !status );
@@ -204,9 +204,9 @@ void *POSIX_Init(
      pthread_attr_setinheritsched( &destroyed_attr, PTHREAD_INHERIT_SCHED );
   assert( status == EINVAL );
  
-  puts( "Init: pthread_attr_setinheritsched - EINVAL (invalid inheritsched)" );
+  puts( "Init: pthread_attr_setinheritsched - ENOTSUP (invalid inheritsched)" );
   status = pthread_attr_setinheritsched( &attr, -1 );
-  assert( status == EINVAL );
+  assert( status == ENOTSUP );
  
   puts( "Init: pthread_attr_setinheritsched - SUCCESSFUL" );
   status = pthread_attr_setinheritsched( &attr, PTHREAD_INHERIT_SCHED );
@@ -242,9 +242,9 @@ void *POSIX_Init(
      pthread_attr_setschedpolicy( &destroyed_attr, SCHED_OTHER );
   assert( status == EINVAL );
  
-  puts( "Init: pthread_attr_setschedpolicy - EINVAL (invalid schedpolicy)" );
+  puts( "Init: pthread_attr_setschedpolicy - ENOTSUP (invalid schedpolicy)" );
   status = pthread_attr_setschedpolicy( &attr, -1 );
-  assert( status == EINVAL );
+  assert( status == ENOTSUP );
  
   puts( "Init: pthread_attr_setschedpolicy - SUCCESSFUL" );
   status = pthread_attr_setschedpolicy( &attr, SCHED_RR );
