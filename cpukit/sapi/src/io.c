@@ -240,46 +240,6 @@ rtems_status_code rtems_io_register_name(
 
 /*PAGE
  *
- *  rtems_io_lookup_name
- *
- *  Find what driver "owns" this name
- *
- *  Input Paramters:
- *    name - name to lookup the associated device
- *
- *  Output Parameters: 
- *    device_info      - device associate with name
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
-
-#if 0
-rtems_status_code rtems_io_lookup_name(
-    const char           *name,
-    rtems_driver_name_t **device_info
-)
-{
-    rtems_driver_name_t *np;
-    unsigned32 index;
-
-    for( index=0, np = _IO_Driver_name_table ;
-         index < _IO_Number_of_devices ; 
-         index++, np++ )
-        if (np->device_name)
-            if (strncmp(np->device_name, name, np->device_name_length) == 0)
-            {                
-                *device_info = np;
-                return RTEMS_SUCCESSFUL;
-            }
-    
-    *device_info = 0;
-    return RTEMS_UNSATISFIED;
-}
-#endif
-
-
-/*PAGE
- *
  *  rtems_io_initialize
  *
  *  This routine is the initialization directive of the IO manager.
