@@ -88,15 +88,12 @@ AS = $(CC)
 ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
 
 ${ARCH}/%.o: %.c
-	test -d $(ARCH) || mkdir $(ARCH)
 	${COMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.cc
-	test -d $(ARCH) || mkdir $(ARCH)
 	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.S
-	test -d $(ARCH) || mkdir $(ARCH)
 	${CCASCOMPILE} -DASM -o $@ -c $<
 
 # Dependency files for use by gmake
