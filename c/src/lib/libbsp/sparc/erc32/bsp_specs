@@ -3,7 +3,7 @@
 %rename link old_link
 
 *endfile:
-crtend.o%s crtn.o%s
+%{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s crtn.o%s}
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems: \
