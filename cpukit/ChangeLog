@@ -1,5 +1,11 @@
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/res_init.c, libnetworking/netinet/in.h,
+	libnetworking/netinet/in_pcb.c, libnetworking/netinet/raw_ip.c:
+	Misc. part. updates from FreeBSD.
+
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* automake/compile.am: Remove depend: (Redundant).
 
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
