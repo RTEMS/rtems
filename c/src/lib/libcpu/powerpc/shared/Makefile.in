@@ -58,7 +58,10 @@ preinstall :
 	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/libcpu
 
 all:	${ARCH} $(SRCS) preinstall $(OBJ) $(LIB)
-	# cd wrapup; $(MAKE)
+	if [ $(RTEMS_CPU_MODEL) == "mpc750" ]; \
+	then \
+		 cd wrapup; $(MAKE); \
+	fi
 
 # the .rel file built here will be put into libcpu.a by ../wrapup/Makefile
 install:  all
