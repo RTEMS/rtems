@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/scv64.rel
 
 C_FILES = scv64.c

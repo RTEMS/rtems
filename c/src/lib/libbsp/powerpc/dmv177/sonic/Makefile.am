@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/sonic.rel
 
 C_FILES = dmvsonic.c

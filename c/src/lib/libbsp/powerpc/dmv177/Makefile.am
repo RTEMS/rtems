@@ -19,16 +19,16 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = QUIRKS README.net STATUS cable.doc times
 
-$(PROJECT_INCLUDE)/dmv170.h: include/dmv170.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/dmv170.h: include/dmv170.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dmv170.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dmv170.h
 
-$(PROJECT_INCLUDE)/tod.h: $(top_srcdir)/../../shared/tod.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/tod.h: $(top_srcdir)/../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
-$(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am
