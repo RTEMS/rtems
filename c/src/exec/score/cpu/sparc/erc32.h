@@ -427,7 +427,7 @@ extern ERC32_Register_Map ERC32_MEC;
  *          1 = enable counting
  *          0 = hold scaler and counter
  *
- *    D2 - Scaler Load
+ *    D3 - Scaler Load
  *          1 = load scalar with preset value and restart
  *          0 = no function
  *
@@ -469,7 +469,7 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
     sparc_disable_interrupts( _level ); \
       _control = _ERC32_MEC_Timer_Control_Mirror; \
       _control &= ERC32_MEC_TIMER_COUNTER_DEFINED_MASK << 8; \
-      _ERC32_MEC_Timer_Control_Mirror = _control | _value; \
+      _ERC32_MEC_Timer_Control_Mirror = _control | __value; \
       _control &= (ERC32_MEC_TIMER_COUNTER_CURRENT_MODE_MASK << 8); \
       _control |= __value; \
       /* printf( "GPT 0x%x 0x%x 0x%x\n", _value, __value, _control );  */ \
@@ -479,7 +479,7 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
 
 #define ERC32_MEC_Get_General_Purpose_Timer_Control( _value ) \
   do { \
-    (_value) = _ERC32_MEC_Timer_Control_Mirror & 0xf; \
+    (_value) = (_ERC32_MEC_Timer_Control_Mirror >> 8) & 0xf; \
   } while ( 0 )
 
 /*
