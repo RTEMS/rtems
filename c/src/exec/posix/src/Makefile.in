@@ -7,8 +7,9 @@ srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH=@srcdir@
 
-#C_PIECES= aio cancel cond devctl intr key mqueue mutex pthread \
-#    ptimer sched semaphore signal time types unistd utsname
+# following are semi-implemented and untested
+# C_PIECES=aio cancel devctl intr mqueue ptimer semaphore time utsname
+
 C_PIECES= adasupp cond getpid key mutex pthread psignal sched time \
   types unistd
 C_FILES=$(C_PIECES:%=%.c)
