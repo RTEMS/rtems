@@ -5,10 +5,11 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 LIB = $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
 
@@ -70,4 +71,4 @@ $(LIB): $(SRCS)
 	rm -f $(ARCH)/*
 	$(RANLIB) $@
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

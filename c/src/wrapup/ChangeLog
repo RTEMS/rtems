@@ -1,0 +1,6 @@
+2000-10-30	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: New file.
+	* Makefile.am: Switch to GNU-canonicalized autoconf macros.
+	* configure.in: New file.
+	* .cvsignore: Add aclocal.m4, configure.
