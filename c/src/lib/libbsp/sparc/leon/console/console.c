@@ -304,13 +304,6 @@ int console_write_support (int minor, const char *buf, int len)
   return nwrite;
 }
 
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources( configuration, 2 );
-}
-
 /*
  *  Console Device Driver Entry Points
  *

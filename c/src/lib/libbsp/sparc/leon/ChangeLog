@@ -1,3 +1,7 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c: Removed console_reserve_resources().
+
 2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Cleanup.
