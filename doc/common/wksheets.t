@@ -3,6 +3,12 @@
 @c   RTEMS RAM Workspace Worksheet
 @c   RTEMS Code Space Worksheet
 @c
+@c  COPYRIGHT (c) 1988-1997.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
 
 @ifinfo
 @node Memory Requirements, Memory Requirements Introduction, WORKSHEETS_PREVIOUS_LINK, Top

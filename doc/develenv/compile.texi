@@ -5,6 +5,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Compilation and GNU Make Stanzas, Compilation and GNU Make Stanzas Building the Entire Tree, Test Suite Source Directory, Top

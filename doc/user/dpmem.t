@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Dual-Ported Memory Manager, Dual-Ported Memory Manager Introduction, REGION_GET_SEGMENT_SIZE - Obtain size of a segment, Top

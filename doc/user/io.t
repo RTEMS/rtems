@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node I/O Manager, I/O Manager Introduction, PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address, Top

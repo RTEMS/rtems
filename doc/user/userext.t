@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node User Extensions Manager, User Extensions Manager Introduction, Heterogeneous Systems, Top

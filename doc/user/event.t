@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Event Manager, Event Manager Introduction, MESSAGE_QUEUE_FLUSH - Flush all messages on a queue, Top

@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node CPU Model Dependent Features, CPU Model Dependent Features Introduction, Preface, Top

@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Timer Manager, Timer Manager Introduction, CLOCK_TICK - Announce a clock tick, Top

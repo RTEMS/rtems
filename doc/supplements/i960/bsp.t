@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Board Support Packages, Board Support Packages Introduction, Default Fatal Error Processing Default Fatal Error Handler Operations, Top

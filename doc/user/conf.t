@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Configuring a System, Configuring a System Configuration Table, EXTENSION_DELETE - Delete a extension set, Top

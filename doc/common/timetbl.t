@@ -1,6 +1,12 @@
-@c
-@c Time Table Template
 @c 
+@c Time Table Template
+@c
+@c  COPYRIGHT (c) 1988-1997.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
 
 @ifset use-tex
 @sp 1

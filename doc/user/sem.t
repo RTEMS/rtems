@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Semaphore Manager, Semaphore Manager Introduction, TIMER_RESET - Reset an interval timer, Top

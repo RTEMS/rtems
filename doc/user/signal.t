@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Signal Manager, Signal Manager Introduction, EVENT_RECEIVE - Receive event condition, Top

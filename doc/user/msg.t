@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Message Manager, Message Manager Introduction, SEMAPHORE_RELEASE - Release a semaphore, Top

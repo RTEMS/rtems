@@ -1,3 +1,10 @@
+/*
+ *  COPYRIGHT (c) 1988-1997.
+ *  On-Line Applications Research Corporation (OAR).
+ *  All rights reserved.
+ *
+ *  $Id$
+ */
 
 #ifndef __PDL2AMI_h
 #define __PDL2AMI_h

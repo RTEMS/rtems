@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Board Support Packages, Board Support Packages Introduction, RATE_MONOTONIC_GET_STATUS - Obtain status information on period, Top

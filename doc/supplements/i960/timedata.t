@@ -1,3 +1,11 @@
+@c
+@c  COPYRIGHT (c) 1988-1997.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
 @include ../common/timemac.texi
 @tex
 \global\advance \smallskipamount by -4pt

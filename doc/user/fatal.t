@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Fatal Error Manager, Fatal Error Manager Introduction, IO_CONTROL - Special device services, Top

@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Clock Manager, Clock Manager Introduction, INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress, Top

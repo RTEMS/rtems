@@ -3,6 +3,8 @@
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 #
+#  $Id$
+#
 
 CC=gcc
 #CFLAGS=-O4 -fomit-frame-pointer

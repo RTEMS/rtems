@@ -1,7 +1,5 @@
 #!/bin/ksh
 #
-# update,v 1.2 1995/05/31 17:20:58 joel Exp
-#
 # Either bash or ksh will be ok for this; requires 'test -ot'
 #  (-p above just says to not parse $ENV file; makes it faster for
 #   those of us who set $ENV)
@@ -10,6 +8,9 @@
 # NOTE
 #
 #   This is potentially a very dangerous program.
+#
+#  $Id$
+#
 
 # progname=`basename $0`
 progname=${0##*/}        # fast basename hack for ksh, bash

@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Partition Manager, Partition Manager Introduction, SIGNAL_SEND - Send signal set to a task, Top

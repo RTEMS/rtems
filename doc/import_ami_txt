@@ -4,6 +4,8 @@
 #  into a reasonably acceptable form of Texinfo.  The output of this program
 #  is fed into another program which inserts texinfo node and menu infomation.
 #
+#  $Id$
+#
 
 #set -x
 

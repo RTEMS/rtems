@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Region Manager, Region Manager Introduction, PARTITION_RETURN_BUFFER - Return buffer to a partition, Top

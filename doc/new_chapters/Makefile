@@ -3,51 +3,52 @@
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 #
+#  $Id$
+#
 
 include ../Make.config
 
-PROJECT=posix
-DOCNAME=posix_test_plan
+PROJECT=posix_test_plan
 
 all:  
 
 COMMON_FILES=../common/cpright.texi
-FILES= clock.texi cond.texi key.texi mutex.texi $(DOCNAME).texi preface.texi \
+FILES= clock.texi cond.texi key.texi mutex.texi $(PROJECT).texi preface.texi \
   sched.texi signal.texi thread.texi $(COMMON_FILES)
 
 all:
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: $(DOCNAME)
-#	cp $(DOCNAME) $(DOCNAME)-* $(INFO_INSTALL)
-	cp $(DOCNAME) $(INFO_INSTALL)
+info: $(PROJECT)
+#	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
+	cp $(PROJECT) $(INFO_INSTALL)
 
 posix_test_plan: $(FILES)
-	$(MAKEINFO) $(DOCNAME).texi
+	$(MAKEINFO) $(PROJECT).texi
 
 vinfo: info
-	$(INFO) -f ./$(DOCNAME)
+	$(INFO) -f ./$(PROJECT)
 
-dvi: $(DOCNAME).dvi
-ps: $(DOCNAME).ps
+dvi: $(PROJECT).dvi
+ps: $(PROJECT).ps
 	
-$(DOCNAME).ps: $(DOCNAME).dvi
-	dvips -o $(DOCNAME).ps $(DOCNAME).dvi
+$(PROJECT).ps: $(PROJECT).dvi
+	dvips -o $(PROJECT).ps $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
 
 dv: dvi
-	$(XDVI) $(DOCNAME).dvi
+	$(XDVI) $(PROJECT).dvi
 
 view: ps
-	$(GHOSTVIEW) $(DOCNAME).ps
+	$(GHOSTVIEW) $(PROJECT).ps
 
-$(DOCNAME).dvi: $(FILES)
-	$(TEXI2DVI) $(DOCNAME).texi
+$(PROJECT).dvi: $(FILES)
+	$(TEXI2DVI) $(PROJECT).texi
 
 html:
-	-mkdir $(WWW_INSTALL)/$(DOCNAME)
-	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
+	-mkdir $(WWW_INSTALL)/$(PROJECT)
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 	cp ../rtems.html $(WWW_INSTALL)
 
@@ -55,5 +56,5 @@ html:
 clean:
 	rm -f *.o $(PROG) *.txt core *.html 
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f $(DOCNAME) $(DOCNAME)-* _*
+	rm -f $(PROJECT) $(PROJECT)-* _*
 

@@ -3,6 +3,8 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
+@c  $Id$
+@c
 
 @ifinfo
 @node Processor Dependent Information Table, Processor Dependent Information Table Introduction, Board Support Packages Processor Initialization, Top
