@@ -8,13 +8,13 @@ CFG=user.cfg
 dst=@RPM_SPECSdir@
 
 usage()
-
+{
   echo "$0 [options] <target_alias>"
   echo "  options:"
   echo "    -cfg <user.cfg>"
   echo "    -o <rpm-spec-dir>"
   exit 1 ;
-
+}
 
 while test $# -ge 2; do
 case $1 in
@@ -44,14 +44,18 @@ fi
 # target to build for
 target_alias=$1
 
+# RPM release number
 rpm_release=0
 
+. ./$CFG
+
+specfile=${dst}/$target_alias-gdb.spec
 sed -e "s%@Release@%${rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
     -e "s%@gdb_version@%${gdb_version}%g" \
     -e "s%@gdb_patch_version@%${gdb_patch_version}%g" \
 < ${RTEMS_DIR}/gdb.spec.in \
-> ${dst}/$target_alias-gdb.spec
+> ${specfile}
 
 case ${target} in
   powerpc*)
@@ -62,6 +66,6 @@ case ${target} in
      echo "/opt/rtems/bin/@target_alias@-sis" 
      ;;
   *) ;;
-esac >> ${dst}/$target_alias-gdb.spec
+esac >> ${specfile}
 
-echo Generated ${dst}/$target_alias-gdb.spec.
+echo Generated ${specfile}
