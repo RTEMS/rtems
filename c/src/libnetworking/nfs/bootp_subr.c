@@ -730,7 +730,12 @@ processOptions (unsigned char *optbuf, int optbufSize)
       dhcp_gotnetmask = 1;
       break;
 
-    case 2:    /* Time offset, unused */
+    case 2:    /* Time offset */
+      /* Time offset */
+      if (len!=4) 
+        panic("bootpc: time offset len is %d",len);
+      bcopy (p, &rtems_bsdnet_timeoffset, 4);
+      rtems_bsdnet_timeoffset = ntohl (rtems_bsdnet_timeoffset);
       break;
 
     case 3:
@@ -740,6 +745,32 @@ processOptions (unsigned char *optbuf, int optbufSize)
       if (len > 0) {
         bcopy(p, &dhcp_gw.sin_addr, 4);
 	dhcp_gotgw = 1;
+      }
+      break;
+
+    /*
+     * Some old BOOTP daemons don't support the NTP server (42) tag,
+     * but do support the RFC 868 time server (4) tag.  Cheat here
+     * and assume they mean the same thing.
+     */
+    case 4:
+    case 42:
+      /* Time servers */
+      if (len % 4) 
+        panic ("bootpc: time server Len is %d", len);
+      {
+      int tlen = 0;
+      while ((tlen < len) &&
+             (rtems_bsdnet_ntpserver_count < sizeof rtems_bsdnet_config.ntp_server /
+             sizeof rtems_bsdnet_config.ntp_server[0])) {
+        bcopy (p+tlen,
+		&rtems_bsdnet_ntpserver[rtems_bsdnet_ntpserver_count],
+		4);
+        printip("Time Server",
+          rtems_bsdnet_ntpserver[rtems_bsdnet_ntpserver_count]);
+        rtems_bsdnet_ntpserver_count++;
+        tlen += 4;
+      }
       }
       break;
 

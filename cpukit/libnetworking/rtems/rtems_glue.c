@@ -77,6 +77,10 @@ char *rtems_bsdnet_domain_name;
 struct in_addr rtems_bsdnet_nameserver[sizeof rtems_bsdnet_config.name_server /
 			sizeof rtems_bsdnet_config.name_server[0]];
 int rtems_bsdnet_nameserver_count;
+struct in_addr rtems_bsdnet_ntpserver[sizeof rtems_bsdnet_config.ntp_server /
+			sizeof rtems_bsdnet_config.ntp_server[0]];
+int rtems_bsdnet_ntpserver_count;
+long rtems_bsdnet_timeoffset;
 
 /*
  * Perform FreeBSD memory allocation.
@@ -733,6 +737,7 @@ rtems_bsdnet_setup (void)
 	struct sockaddr_in broadcast;
 	struct sockaddr_in gateway;
 	int i;
+	extern char *strdup (const char *cp);
 
 	/*
 	 * Set local parameters
@@ -752,6 +757,13 @@ rtems_bsdnet_setup (void)
 			break;
 		rtems_bsdnet_nameserver[rtems_bsdnet_nameserver_count++].s_addr
 			= inet_addr (rtems_bsdnet_config.name_server[i]);
+	}
+	for (i = 0 ; i < sizeof rtems_bsdnet_config.ntp_server /
+			sizeof rtems_bsdnet_config.ntp_server[0] ; i++) {
+		if (!rtems_bsdnet_config.ntp_server[i])
+			break;
+		rtems_bsdnet_ntpserver[rtems_bsdnet_ntpserver_count++].s_addr
+			= inet_addr (rtems_bsdnet_config.ntp_server[i]);
 	}
 
 	/*

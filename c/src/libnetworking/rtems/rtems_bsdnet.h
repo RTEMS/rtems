@@ -35,6 +35,9 @@
 extern struct in_addr rtems_bsdnet_bootp_server_address;
 extern char *rtems_bsdnet_bootp_server_name;
 extern char *rtems_bsdnet_bootp_boot_file_name;
+extern struct in_addr rtems_bsdnet_ntpserver[];
+extern int rtems_bsdnet_ntpserver_count;
+extern long rtems_bsdnet_timeoffset;
 
 /*
  * Manipulate routing tables
@@ -127,6 +130,7 @@ struct rtems_bsdnet_config {
 	char			*gateway;		/* BOOTP	*/
 	char			*log_host;		/* BOOTP	*/
 	char			*name_server[3];	/* BOOTP	*/
+	char			*ntp_server[3];		/* BOOTP	*/
 };
 extern struct rtems_bsdnet_config rtems_bsdnet_config;
 int rtems_bsdnet_initialize_network (void);
