@@ -56,6 +56,7 @@ typedef struct {
  
 typedef struct {
   Chain_Node                 Node;
+  int                        priority;
   CORE_message_queue_Buffer  Contents;
 }   CORE_message_queue_Buffer_control;
 
@@ -72,12 +73,17 @@ typedef enum {
  *  The following enumerated type details the modes in which a message
  *  may be submitted to a message queue.  The message may be posted
  *  in a send or urgent fashion.
+ *
+ *  NOTE:  All other values are message priorities.  Numerically smaller
+ *         priorities indicate higher priority messages.
+ *
+ *  XXX these constants should be changed to be compiler dependent.
  */
  
-typedef enum {
-  CORE_MESSAGE_QUEUE_SEND_REQUEST   = 0,
-  CORE_MESSAGE_QUEUE_URGENT_REQUEST = 1
-}  CORE_message_queue_Submit_types;
+#define  CORE_MESSAGE_QUEUE_SEND_REQUEST   0x7fffffff
+#define  CORE_MESSAGE_QUEUE_URGENT_REQUEST -(0x7fffffff)
+
+typedef int CORE_message_queue_Submit_types;
 
 /*
  *  Core Message queue handler return statuses.

@@ -422,7 +422,8 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
 
   _CORE_message_queue_Copy_buffer( buffer, the_message->Contents.buffer, size );
   the_message->Contents.size = size;
-  
+  the_message->priority  = submit_type;
+
   the_message_queue->number_of_pending_messages += 1;
 
   switch ( submit_type ) {
@@ -432,7 +433,38 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     case CORE_MESSAGE_QUEUE_URGENT_REQUEST:
       _CORE_message_queue_Prepend( the_message_queue, the_message );
       break;
+    default:
+      /* XXX interrupt critical section needs to be addressed */
+      {
+        CORE_message_queue_Buffer_control *this_message;
+        Chain_Node                        *the_node;
+
+        the_message->priority = submit_type;
+        for ( the_node = the_message_queue->Pending_messages.first ;
+           !_Chain_Is_tail( &the_message_queue->Pending_messages, the_node ) ;
+           the_node = the_node->next ) {
+
+          this_message = (CORE_message_queue_Buffer_control *) the_node;
+
+          if ( this_message->priority >= the_message->priority )
+            continue;
+
+          _Chain_Insert( the_node, &the_message->Node );
+          break;
+        }
+      }
+      break;
   }
 
+  /*
+   *  According to POSIX, does this happen before or after the message
+   *  is actually enqueued.  It is logical to think afterwards, because
+   *  the message is actually in the queue at this point.
+   */
+
+  if ( the_message_queue->number_of_pending_messages == 1 && 
+       the_message_queue->notify_handler )
+    (*the_message_queue->notify_handler)( the_message_queue->notify_argument );
+  
   return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
 }
