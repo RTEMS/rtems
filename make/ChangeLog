@@ -1,4 +1,9 @@
 
+2001-05-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/gensh1.cfg: Remove HZ, BSP_CPPFLAGS.
+	* custom/gensh2.cfg: Dito.
+
 2001-05-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* leaf.cfg: Remove CFLAGS_DEBUG_OPTIMIZE_V.
