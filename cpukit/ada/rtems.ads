@@ -781,6 +781,10 @@ package RTEMS is
       Right  : in     RTEMS.Address
    ) return RTEMS.Unsigned32;
 
+   function Are_Equal (
+      Left   : in     RTEMS.Address;
+      Right  : in     RTEMS.Address
+   ) return Standard.Boolean;
    --
    --  RTEMS API
    --

@@ -36,7 +36,11 @@ package body RTEMS is
    ) return RTEMS.Boolean is
    begin
 
-      return 1;
+      if Ada_Boolean = Standard.True then
+         return RTEMS.True;
+      end if;
+
+      return RTEMS.False;
 
    end From_Ada_Boolean;
  
@@ -45,7 +49,11 @@ package body RTEMS is
    ) return Standard.Boolean is
    begin
 
-      return TRUE;
+      if RTEMS_Boolean = RTEMS.True then
+         return Standard.True;
+      end if;
+
+      return Standard.False;
 
    end To_Ada_Boolean;
 
@@ -61,9 +69,12 @@ package body RTEMS is
    function Milliseconds_To_Ticks (
       Milliseconds : RTEMS.Unsigned32
    ) return RTEMS.Interval is
+      Ticks_Per_Second : RTEMS.Interval;
+      pragma Import (C, Ticks_Per_Second, "_TOD_Ticks_per_second");
+
    begin
 
-      return 0;
+      return Milliseconds / Ticks_Per_Second;
 
    end Milliseconds_To_Ticks;
 
@@ -158,10 +169,10 @@ package body RTEMS is
    begin
 
       if Status = Desired then
-         return True;
+         return Standard.True;
       end if;
 
-      return False;
+      return Standard.False;
 
    end Are_Statuses_Equal;
 
@@ -171,10 +182,10 @@ package body RTEMS is
    begin
 
       if Status = RTEMS.Successful then
-         return True;
+         return Standard.True;
       end if;
 
-      return False;
+      return Standard.False;
 
    end Is_Status_Successful;
 
@@ -188,6 +199,18 @@ package body RTEMS is
    begin
       return To_Unsigned32(Left) - To_Unsigned32(Right);
    end Subtract;
+
+   function Are_Equal (
+      Left   : in     RTEMS.Address;
+      Right  : in     RTEMS.Address
+   ) return Standard.Boolean is
+      function To_Unsigned32 is
+         new Ada.Unchecked_Conversion (System.Address, RTEMS.Unsigned32);
+
+   begin
+      return (To_Unsigned32(Left) = To_Unsigned32(Right));
+   end Are_Equal;
+
 
    --
    --
@@ -559,6 +582,7 @@ package body RTEMS is
  
    end Interrupt_Catch;
 
+   -- XXX
    function Interrupt_Disable
    return RTEMS.ISR_Level is
    begin
@@ -582,7 +606,7 @@ package body RTEMS is
    function Interrupt_Is_In_Progress
    return RTEMS.Boolean is
    begin
-      return RTEMS.From_Ada_Boolean (True);
+      return RTEMS.From_Ada_Boolean (Standard.True);
    end Interrupt_Is_In_Progress;
 
    --
