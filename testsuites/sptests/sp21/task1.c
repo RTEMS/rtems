@@ -21,7 +21,7 @@
 #include "system.h"
 
 #define STUB_DRIVER_MAJOR     0x2
-#define NO_DRIVER_MAJOR       0x1
+#define NO_DRIVER_MAJOR       0x3
 #define INVALID_DRIVER_MAJOR  0x5
 
 rtems_task Task_1(
