@@ -1,3 +1,7 @@
+2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/ata.c: Remove.
+
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add $(dirstamp) to compilation rules.
