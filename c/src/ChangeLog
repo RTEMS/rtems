@@ -1,3 +1,8 @@
+2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/canonicalize-tools.m4: Don't check for NM, OBJCOPY, SIZE,
+	STRIP.
+
 2004-02-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* librdbg/include/Makefile.am: Merge-in
