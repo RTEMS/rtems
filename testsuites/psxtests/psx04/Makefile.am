@@ -24,8 +24,8 @@ PRINT_SRCS = $(DOCS)
 PGM = ${ARCH}/$(TEST).exe
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../../../automake/leaf.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/leaf.am
 include $(top_srcdir)/psxtests.am
 
 #
@@ -41,4 +41,4 @@ all-local: $(ARCH) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES) $(DOCS)
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

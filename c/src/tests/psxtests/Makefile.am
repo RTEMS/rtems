@@ -17,5 +17,5 @@ SUBDIRS = $(SHARED_DIRS) $(POSIX_DIRS) $(POSIX_FILES_DIRS) $(UNUSED_DIRS)
 
 EXTRA_DIST = psxtests.am
 
-include $(top_srcdir)/../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am

@@ -1,3 +1,32 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+	include/Makefile.am: Reflect having moved automake.
+	psx01/Makefile.am: Reflect having moved automake.
+	psx02/Makefile.am: Reflect having moved automake.
+	psx03/Makefile.am: Reflect having moved automake.
+	psx04/Makefile.am: Reflect having moved automake.
+	psx05/Makefile.am: Reflect having moved automake.
+	psx06/Makefile.am: Reflect having moved automake.
+	psx07/Makefile.am: Reflect having moved automake.
+	psx08/Makefile.am: Reflect having moved automake.
+	psx09/Makefile.am: Reflect having moved automake.
+	psx10/Makefile.am: Reflect having moved automake.
+	psx11/Makefile.am: Reflect having moved automake.
+	psx12/Makefile.am: Reflect having moved automake.
+	psx13/Makefile.am: Reflect having moved automake.
+	psxcancel/Makefile.am: Reflect having moved automake.
+	psxchroot01/Makefile.am: Reflect having moved automake.
+	psxfile01/Makefile.am: Reflect having moved automake.
+	psxhdrs/Makefile.am: Reflect having moved automake.
+	psxmount/Makefile.am: Reflect having moved automake.
+	psxmsgq01/Makefile.am: Reflect having moved automake.
+	psxreaddir/Makefile.am: Reflect having moved automake.
+	psxsem01/Makefile.am: Reflect having moved automake.
+	psxstat/Makefile.am: Reflect having moved automake.
+	psxtime/Makefile.am: Reflect having moved automake.
+	psxtimer/Makefile.am: Reflect having moved automake.
+
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
 	PR 408/filesystem
