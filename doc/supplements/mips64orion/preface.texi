@@ -35,6 +35,8 @@ documentation for the family as a whole.
 
 @subheading Architecture Documents
 
+IDT docs are online at http://www.idt.com/products/risc/Welcome.html
+
 For information on the XXX architecture,
 refer to the following documents available from VENDOR
 (@file{http//www.XXX.com/}):

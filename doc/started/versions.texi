@@ -21,13 +21,13 @@
 @c  GCC/EGCS Version
 @c
 
-@set GCC-VERSION     egcs 1.1.1
-@set GCC-TAR         egcs-1.1.1.tar.gz
-@set GCC-UNTAR       egcs-1.1.1
+@set GCC-VERSION     egcs 1.1.2
+@set GCC-TAR         egcs-1.1.2.tar.gz
+@set GCC-UNTAR       egcs-1.1.2
 @set GCC-FTPSITE     egcs.cygnus.com
-@set GCC-FTPDIR      /pub/egcs/releases/egcs-1.1.1
+@set GCC-FTPDIR      /pub/egcs/releases/egcs-1.1.2
 @set GCC-HTTPDIR     /pub/egcs/releases/index.html
-@set GCC-RTEMSPATCH  egcs-1.1.1-rtems-diff-19990121.gz
+@set GCC-RTEMSPATCH  egcs-1.1.2-rtems-diff-19990331
 
 @c
 @c  BINUTILS Version
@@ -39,7 +39,7 @@
 @set BINUTILS-UNTAR       binutils-2.9.1
 @set BINUTILS-FTPSITE     ftp.gnu.org
 @set BINUTILS-FTPDIR      /pub/gnu
-@set BINUTILS-RTEMSPATCH  binutils-2.9.1-rtems-diff-19981027.gz
+@set BINUTILS-RTEMSPATCH  binutils-2.9.1-rtems-diff-19981012.gz
 
 @c When forced to use a snapshot
 @c @set BINUTILS-VERSION     gas 980314
@@ -58,7 +58,7 @@
 @set NEWLIB-UNTAR       newlib-1.8.1
 @set NEWLIB-FTPSITE     ftp.cygnus.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.8.1-rtems-diff-19990121.gz
+@set NEWLIB-RTEMSPATCH  newlib-1.8.1-rtems-diff-19990302.gz
 
 @c
 @c  GDB Version
@@ -69,18 +69,18 @@
 @set GDB-UNTAR       gdb-4.17
 @set GDB-FTPSITE     ftp.gnu.org
 @set GDB-FTPDIR      /pub/gnu
-@set GDB-RTEMSPATCH  gdb-4.17-rtems-diff-19981027.gz
+@set GDB-RTEMSPATCH  gdb-4.17-rtems-diff-19990302.gz
 
 
 @c
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS 19990302
-@set RTEMS-TAR       rtems-19990302.tgz
-@set RTEMS-UNTAR     rtems-19990302
+@set RTEMS-VERSION   RTEMS 19990423
+@set RTEMS-TAR       rtems-19990423.tgz
+@set RTEMS-UNTAR     rtems-19990423
 @set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/19990302
-@set BUILDTOOLS-TAR  c_build_scripts-19990210.tgz
+@set RTEMS-FTPDIR    /pub/rtems/19990423
+@set BUILDTOOLS-TAR  c_build_scripts-4.0.0.tgz
 
 

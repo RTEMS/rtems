@@ -23,13 +23,10 @@ fi
 
 case ${MANUAL_SET} in
   public)
-    manuals="$public_docs"
-    ;;
-  support)
+  #  manuals="$public_docs"
+  #  ;;
+  #support)
     manuals="$public_docs $support_docs"
-    ;;
-  partners)
-    manuals="$public_docs $support_docs $partners_docs"
     ;;
   *)
     echo "ERROR: Unknown manual set ${MANUAL_SET}"

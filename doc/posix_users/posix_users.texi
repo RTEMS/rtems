@@ -1,6 +1,6 @@
 \input ../texinfo/texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename posix_users_new
+@setfilename posix_users
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -105,7 +105,7 @@ END-INFO-DIR-ENTRY
 @include cancel.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top posix_users_new
+@top posix_users
 
 This is the online version of the RTEMS POSIX API User's Guide
 

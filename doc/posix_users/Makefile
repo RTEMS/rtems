@@ -6,7 +6,7 @@
 #  $Id$
 #
 
-PROJECT=posix_users_new
+PROJECT=posix_users
 DISTRIBUTION_LEVEL=public
 
 include ../Make.config
