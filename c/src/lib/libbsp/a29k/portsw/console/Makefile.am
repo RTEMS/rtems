@@ -9,7 +9,8 @@ PGM = $(ARCH)/console.rel
 C_FILES = console.c serial.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = concntl.h
+include_HEADERS = concntl.h
+noinst_HEADERS = serial.h
 
 OBJS = $(C_O_FILES)
 
@@ -24,11 +25,14 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-$(PROJECT_INCLUDE)/concntl.h: concntl.h
+$(PROJECT_INCLUDE):
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/concntl.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
