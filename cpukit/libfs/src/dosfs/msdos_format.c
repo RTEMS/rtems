@@ -868,7 +868,7 @@ int msdos_format
     ret_val = msdos_format_write_sec(fd, 
 				     0, 
 				     fmt_params.bytes_per_sector,
-				     (void *)tmp_sec);
+				     tmp_sec);
   }
   if ((ret_val == 0) && 
       (fmt_params.mbr_copy_sec != 0)) {
@@ -878,7 +878,7 @@ int msdos_format
     ret_val = msdos_format_write_sec(fd, 
 				     fmt_params.mbr_copy_sec , 
 				     fmt_params.bytes_per_sector,
-				     (void *)tmp_sec);
+				     tmp_sec);
   }
   /*
    * for FAT32: initialize info sector on disk
@@ -895,7 +895,7 @@ int msdos_format
     ret_val = msdos_format_write_sec(fd, 
 				     fmt_params.fsinfo_sec,
 				     fmt_params.bytes_per_sector,
-				     (void *)tmp_sec);
+				     tmp_sec);
   }
   /*
    * write FAT as all empty

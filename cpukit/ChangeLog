@@ -1,5 +1,11 @@
 2004-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libfs/src/dosfs/dosfs.h: Add doxygen preamble.
+	* libfs/src/dosfs/msdos.h: Remove RC_OK.
+	* libfs/src/dosfs/msdos_format.c: Remove unnecessary casts.
+
+2004-11-20	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	PR 720/filesystem:
 	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.c,
 	libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos_format.c:

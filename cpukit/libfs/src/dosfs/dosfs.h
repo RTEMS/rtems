@@ -1,8 +1,10 @@
-/*
- *  dosfs.h
+/**
+ *  @file rtems/dosfs.h
  *
  *  Application interface to MSDOS filesystem.
- *
+ */
+ 
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

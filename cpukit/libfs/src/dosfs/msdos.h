@@ -25,10 +25,6 @@ extern "C" {
 #include "fat.h"
 #include "fat_file.h"
 
-#ifndef RC_OK
-#define RC_OK 0x00000000
-#endif
-
 #define MSDOS_NAME_NOT_FOUND_ERR  0xDD000001
 
 /*
