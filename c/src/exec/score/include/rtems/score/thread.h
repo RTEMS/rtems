@@ -342,6 +342,39 @@ void _Thread_Start_multitasking( void );
 void _Thread_Dispatch( void );
 
 /*
+ *  _Thread_Stack_Allocate
+ *  
+ *  DESCRIPTION:
+ *
+ *  Allocate the requested stack space for the thread.
+ *  return the actual size allocated after any adjustment
+ *  or return zero if the allocation failed.
+ *  Set the Start.stack field to the address of the stack
+ *
+ *  NOTES: NONE
+ *
+ */
+
+unsigned32 _Thread_Stack_Allocate(
+  Thread_Control *the_thread,
+  unsigned32 stack_size
+);
+
+/*
+ *  _Thread_Stack_Free
+ *
+ *  DESCRIPTION:
+ *
+ *  Deallocate the Thread's stack.
+ *  NOTES: NONE
+ *
+ */
+
+void _Thread_Stack_Free(
+  Thread_Control *the_thread
+);
+
+/*
  *  _Thread_Initialize
  *
  *  DESCRIPTION:
