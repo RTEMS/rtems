@@ -30,6 +30,7 @@
 #include <rpc/rpc.h>
 #include <rpc/pmap_prot.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <malloc.h>
 #include <netdb.h>
