@@ -234,7 +234,7 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 #HACK: install to build-tree
 install-exec-local: $(SCRIPTS)
-	$(mkinstalldir) $(PROJECT_ROOT)/${RTEMS_BSP}/tests
+	$(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/tests
 	$(INSTALL_SCRIPT) runtest $(PROJECT_ROOT)/${RTEMS_BSP}/tests
 
 debug-am:
