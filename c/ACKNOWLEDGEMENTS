@@ -86,6 +86,9 @@ The following persons/organizations have made contributions:
   includes complete support for the R4650 as well as partial support
   for the R4600.
 
++ Erik Ivanenko (ccms@utcc.utoronto.ca) of the University of Toronto
+  for submitting the i386ex bsp.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
