@@ -70,6 +70,9 @@ void _CPU_Context_Initialize(
   unsigned32 sp;
 
   sp = (unsigned32)stack_base + size - CPU_MINIMUM_STACK_FRAME_SIZE;
+
+  sp &= ~(CPU_STACK_ALIGNMENT-1);
+
   *((unsigned32 *)sp) = 0;
   the_context->gpr1 = sp;
    
@@ -109,6 +112,24 @@ void _CPU_Context_Initialize(
 #endif
 
   the_context->pc = (unsigned32)entry_point;
+
+#if (PPC_ABI == PPC_ABI_SVR4)
+  { unsigned    r13 = 0;
+    asm volatile ("mr %0, 13" : "=r" ((r13)));
+   
+    the_context->gpr13 = r13;
+  }
+#elif (PPC_ABI == PPC_ABI_EABI)
+  { unsigned32  r2 = 0;
+    unsigned    r13 = 0;
+    asm volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
+ 
+    the_context->gpr2 = r2;
+    the_context->gpr13 = r13;
+  }
+#else
+#error unsupported PPC_ABI
+#endif
 }
 
 
