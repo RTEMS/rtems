@@ -1254,14 +1254,11 @@ int pthread_kill(
    *  RTEMS does not support sending  a siginfo signal to a specific thread.
    */
 
-  if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO )
-    return ENOSYS;
-
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
-      return ESRCH;
+      set_errno_and_return_minus_one( ESRCH );
     case OBJECTS_LOCAL:
       /*
        *  If sig == 0 then just validate arguments
@@ -1271,14 +1268,17 @@ int pthread_kill(
 
       if ( sig ) {
 
+        if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO )
+          set_errno_and_return_minus_one( ENOSYS );
+
         /* XXX critical section */
 
         api->signals_pending |= signo_to_mask( sig );
 
         (void) _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
-    }
-    _Thread_Enable_dispatch();
-    return 0;
+      }
+      _Thread_Enable_dispatch();
+      return 0;
   }
 
   return POSIX_BOTTOM_REACHED();
