@@ -1,3 +1,8 @@
+2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: Reflect changes to bootstrap.
+	* configure.ac: Remove RTEMS_CHECK_CUSTON_BSP.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
