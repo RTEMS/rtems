@@ -1,4 +1,8 @@
 
+2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/gensh2.cfg: Fix comments.
+
 2000-09-12	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/mvme167.cfg (CPP_CFLAGS): Corrected to only include
