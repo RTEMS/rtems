@@ -2,29 +2,26 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
-
 PGM = $(ARCH)/gnatsupp.rel
-
-C_FILES = gnatsupp.c gnatcommon.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+C_FILES = gnatsupp.c
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+
+sparc_shared_C_FILES = $(top_srcdir)/../../sparc/shared/gnatcommon.c
+OBJS += \
+    $(sparc_shared_C_FILES:$(top_srcdir)/../../sparc/shared/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../sparc/shared/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
 
 $(PGM): $(OBJS)
 	$(make-rel)
 
-all-local: $(OBJS) $(PGM)
+noinst_DATA = $(PGM)
 
-.PRECIOUS: $(PGM)
-
-EXTRA_DIST = gnatsupp.c gnatcommon.c
+EXTRA_DIST = $(C_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
