@@ -24,8 +24,6 @@ extern "C" {
 #include <rtems/score/types.h>
 #endif
 
-#include <rtems/score/unixsize.h>
-
 #if defined(solaris2)
 #undef  _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 3

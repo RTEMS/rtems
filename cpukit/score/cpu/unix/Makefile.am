@@ -2,16 +2,13 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../aclocal
-
-include $(top_srcdir)/../../../automake/multilib.am
-include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -DCPU_SYNC_IO $(LIBC_DEFINES)
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/types.h rtems/score/cpu.h \
-    rtems/score/unix.h rtems/score/unixsize.h
+    rtems/score/unix.h
 
 EXTRA_LIBRARIES = libscorecpu.a
 CLEANFILES = libscorecpu.a
@@ -45,11 +42,7 @@ $(PROJECT_INCLUDE)/rtems/score/unix.h: rtems/score/unix.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/unix.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/unix.h
 
-$(PROJECT_INCLUDE)/rtems/score/unixsize.h: rtems/score/unixsize.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/unixsize.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/unixsize.h
-
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/automake/local.am
