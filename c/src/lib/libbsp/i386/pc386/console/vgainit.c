@@ -65,8 +65,8 @@ extern int		ROM_CHAR_HEIGHT;	/* ROM character height*/
 #endif
 
 /* local data*/
-extern REGIO 		graphics_on[];
-extern REGIO 		graph_off[];
+static REGIO 		graphics_on[];
+static REGIO 		graph_off[];
 
 /* entry points*/
 void		ega_hwinit(void);
