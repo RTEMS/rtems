@@ -11,7 +11,8 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 SUBDIRS = doc make tools @TARGET_SUBDIRS@
 
-AUTOMAKE_FILES = automake/subdirs.am automake/local.am automake/lib.am
+AUTOMAKE_FILES = automake/compile.am automake/host.am automake/lib.am \
+   automake/local.am automake/multilib.am automake/subdirs.am
 
 ACLOCAL_FILES += aclocal/ar-s.m4 aclocal/bsp-alias.m4 \
     aclocal/canonical-host.m4 aclocal/canonical-target-name.m4 \
