@@ -1,3 +1,8 @@
+2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	capture/capture-cli.c: Add proper definition to avoid compiler
+	warnings. Apply int = getchar().
+
 2003-02-14	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 352/rtems_misc
