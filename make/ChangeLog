@@ -1,4 +1,9 @@
 
+2001-01-03	Emmanuel Raguet <raguet@crf.canon.fr>
+
+	* custom/mcp750.cfg (make-exe): Rewrite to avoid writing to
+	install point or assuming BSP build tree is available.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/psim.cfg: Removed unused variables.
