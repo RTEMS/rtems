@@ -19,6 +19,16 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 RTEMS_CANONICAL_HOST
 
+## bsp-specific options
+## setup environment variable
+CPU_CLOCK_RATE_HZ=${CPU_CLOCK_RATE_HZ-20000000}
+
+## Propagate options to Makefile.ams
+AC_SUBST(CPU_CLOCK_RATE_HZ)
+
+## Propagate options to compilation options/auto config headers
+AC_DEFINE_UNQUOTED([CPU_CLOCK_RATE_HZ],[$CPU_CLOCK_RATE_HZ],[cpu clock rate in HZ])
+
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here

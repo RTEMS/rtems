@@ -1,5 +1,10 @@
 2001-01-05	Joel Sherrill <joel@OARcorp.com>
 
+	* scitab/Makefile.am, startup/bspstart.c, configure.in: Removed
+	rest of make-target-options and moved them to BSP configure options.
+
+2001-01-05	Joel Sherrill <joel@OARcorp.com>
+
 	* include/bsp.h: Changed <sh/null.h> to <rtems/devnull.h> to reflect
 	the movement of this component to libmisc.
 	* wrapup/Makefile.am: /dev/null driver is no longer in libcpu/sh.
