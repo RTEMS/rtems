@@ -179,6 +179,9 @@ void printk(char *fmt, ...);             /* from 'printk.c' */
 
 void rtemsReboot(void);                  /* from 'exit.c'   */
 
+void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
+
+
 /* Definitions for BSPConsolePort */
 #define BSP_CONSOLE_PORT_CONSOLE (-1)
 #define BSP_CONSOLE_PORT_COM1    (BSP_UART_COM1)
