@@ -47,6 +47,7 @@ $(PROJECT).dvi: $(FILES)
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
+	cp $(wildcard *.jpg) $(WWW_INSTALL)/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
@@ -54,7 +55,7 @@ clean:
 	rm -f *.o $(PROG) *.txt core 
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* $(GENERATED_FILES)
-	rm -f *.fixed _* network.t
+	rm -f *.fixed _* 
 
 #
 #  Process Automatically Generated Files

@@ -77,11 +77,39 @@ two communication sockets. GDB will use its own mean to choose its port numbers
 (probably the Unix portmapper). The figure layer shows the different
 layers we need to implement. 
 
+@c
+@c Communications Layers Figure
+@c
+
+@ifset use-ascii
 @example
+@group
 XXXXX reference it in the previous paragraph
 XXXXX insert layers.eps
 XXXXX Caption Communications Layers
+@end group
 @end example
+@end ifset
+
+@ifset use-tex
+@example
+@group
+XXXXX reference it in the previous paragraph
+XXXXX insert layers.eps
+XXXXX Caption Communications Layers
+@end group
+@end example
+@end ifset
+
+@c @image{layers}
+
+@ifset use-html
+@c <IMG SRC="layers.jpg" WIDTH=500 HEIGHT=600 ALT="Communications Layers">
+@html
+<IMG SRC="layers.jpg" ALT="Communications Layers">
+@end html
+@end ifset
+
 
 
 

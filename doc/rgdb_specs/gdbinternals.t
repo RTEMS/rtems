@@ -197,18 +197,108 @@ the host debugger on the target are only simple actions which look like :
 @end itemize
 
 
-@example
-XXX Figure seg_init.eps
-XXX Debug session initialization
-@end example
+@c
+@c Debug session initialization Figure
+@c
 
+@ifset use-ascii
 @example
-XXX Figure seq_break.eps
-XXX Breakpoint and process execution
+@group
+XXXXX reference it in the previous paragraph
+XXXXX insert seg_init.eps
+XXXXX Caption Debug session initialization
+@end group
 @end example
+@end ifset
 
+@ifset use-tex
 @example
-XXX Figure seq_detach.eps
-XXX Detach a process and close a connection
+@group
+XXXXX reference it in the previous paragraph
+XXXXX insert seg_init.eps
+XXXXX Caption Debug session initialization
+@end group
 @end example
+@end ifset
+
+@c @image{seg_init}
+
+@ifset use-html
+@c <IMG SRC="seg_init.jpg" WIDTH=500 HEIGHT=600 ALT="Debug session initialization">
+@html
+<IMG SRC="seg_init.jpg" ALT="Debug session initialization">
+@end html
+@end ifset
+
+
+@c
+@c Breakpoint and process execution Figure
+@c
+
+@ifset use-ascii
+@example
+@group
+XXXXX reference it in the previous paragraph
+XXXXX insert seq_break.eps
+XXXXX Caption Breakpoint and process execution
+@end group
+@end example
+@end ifset
+
+@ifset use-tex
+@example
+@group
+XXXXX reference it in the previous paragraph
+XXXXX insert seq_break.eps
+XXXXX Caption Breakpoint and process execution
+@end group
+@end example
+@end ifset
+
+@c @image{seq_break}
+
+@ifset use-html
+@c <IMG SRC="seq_break.jpg" WIDTH=500 HEIGHT=600 ALT="Breakpoint and process execution">
+@html
+<IMG SRC="seq_break.jpg" ALT="Breakpoint and process execution">
+@end html
+@end ifset
+
+
+
+@c
+@c Detach a process and close a connection Figure
+@c
+
+@ifset use-ascii
+@example
+@group
+XXXXX reference it in the previous paragraph
+XXXXX insert seq_detach.eps
+XXXXX Caption Detach a process and close a connection
+@end group
+@end example
+@end ifset
+
+@ifset use-tex
+@example
+@group
+XXXXX reference it in the previous paragraph
+XXXXX insert seq_detach.eps
+XXXXX Caption Detach a process and close a connection
+@end group
+@end example
+@end ifset
+
+@c @image{seq_detach}
+
+@ifset use-html
+@c <IMG SRC="seq_detach.jpg" WIDTH=500 HEIGHT=600 ALT="Detach a process and close a connection">
+@html
+<IMG SRC="seq_detach.jpg" ALT="Detach a process and close a connection">
+@end html
+@end ifset
+
+
+
 
