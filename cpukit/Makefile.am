@@ -46,6 +46,21 @@ include_HEADERS += backward/itron.h
 endif
 endif
 
+if NEWLIB
+include_sysdir = $(includedir)/sys
+include_sys_HEADERS =
+
+include_HEADERS += libcsupport/include/stdint.h
+include_HEADERS += libcsupport/include/inttypes.h
+include_HEADERS += libcsupport/include/tar.h
+
+include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
+    libcsupport/include/sys/filio.h libcsupport/include/sys/ioctl.h \
+    libcsupport/include/sys/sockio.h libcsupport/include/sys/ttycom.h \
+    libcsupport/include/sys/termios.h libcsupport/include/sys/utsname.h \
+    libcsupport/include/sys/cdefs.h
+endif
+
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/rtems/bspIo.h include/rtems/userenv.h \
     include/rtems/fs.h include/rtems/pci.h include/rtems/stdint.h \
@@ -149,6 +164,57 @@ $(PROJECT_INCLUDE)/itron.h: backward/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/itron.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/itron.h
 endif
+endif
+
+if NEWLIB
+$(PROJECT_INCLUDE)/sys/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
+	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
+
+$(PROJECT_INCLUDE)/stdint.h: libcsupport/include/stdint.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/stdint.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
+
+$(PROJECT_INCLUDE)/inttypes.h: libcsupport/include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/inttypes.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
+
+$(PROJECT_INCLUDE)/tar.h: libcsupport/include/tar.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tar.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tar.h
+
+$(PROJECT_INCLUDE)/sys/ioccom.h: libcsupport/include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
+
+$(PROJECT_INCLUDE)/sys/filio.h: libcsupport/include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
+
+$(PROJECT_INCLUDE)/sys/ioctl.h: libcsupport/include/sys/ioctl.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioctl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioctl.h
+
+$(PROJECT_INCLUDE)/sys/sockio.h: libcsupport/include/sys/sockio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/sockio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sockio.h
+
+$(PROJECT_INCLUDE)/sys/ttycom.h: libcsupport/include/sys/ttycom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttycom.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
+
+$(PROJECT_INCLUDE)/sys/termios.h: libcsupport/include/sys/termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/termios.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h
+
+$(PROJECT_INCLUDE)/sys/utsname.h: libcsupport/include/sys/utsname.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
+
+$(PROJECT_INCLUDE)/sys/cdefs.h: libcsupport/include/sys/cdefs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/cdefs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
 endif
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):

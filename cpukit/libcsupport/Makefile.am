@@ -15,21 +15,6 @@ include_rtems_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h include/spurious.h \
     include/timerdrv.h include/vmeintr.h
 
-include_HEADERS =
-
-#if NEWLIB
-include_sysdir = $(includedir)/sys
-include_sys_HEADERS =
-
-if RTEMS_PROVIDES_STDINT_H
-include_HEADERS += include/stdint.h
-endif
-
-if RTEMS_PROVIDES_INTTYPES_H
-include_HEADERS += include/inttypes.h
-endif
-#endif
-
 ## motorola
 
 include_rtems_motoroladir = $(includedir)/rtems/motorola
@@ -41,14 +26,6 @@ include_rtems_motorola_HEADERS = include/motorola/mc68230.h \
 include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
     include/rtems/libcsupport.h include/rtems/libio.h include/rtems/libio_.h \
     include/rtems/termiostypes.h include/rtems/cdefs.h
-
-## sys
-
-if NEWLIB
-include_sys_HEADERS += include/sys/ioccom.h include/sys/filio.h \
-    include/sys/ioctl.h include/sys/sockio.h include/sys/ttycom.h \
-    include/sys/termios.h include/sys/utsname.h include/sys/cdefs.h
-endif
 
 ## zilog
 
@@ -153,11 +130,6 @@ endif
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
@@ -199,23 +171,6 @@ $(PROJECT_INCLUDE)/rtems/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vmeintr.h
 
-$(PROJECT_INCLUDE)/sys/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
-	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
-
-if RTEMS_PROVIDES_STDINT_H
-$(PROJECT_INCLUDE)/stdint.h: include/stdint.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/stdint.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
-endif
-
-if RTEMS_PROVIDES_INTTYPES_H
-$(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/inttypes.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
-endif
-
 $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/motorola
 	@: > $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
@@ -256,40 +211,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/termiostypes.h
 $(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
-
-if NEWLIB
-$(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
-
-$(PROJECT_INCLUDE)/sys/filio.h: include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
-
-$(PROJECT_INCLUDE)/sys/ioctl.h: include/sys/ioctl.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioctl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioctl.h
-
-$(PROJECT_INCLUDE)/sys/sockio.h: include/sys/sockio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/sockio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sockio.h
-
-$(PROJECT_INCLUDE)/sys/ttycom.h: include/sys/ttycom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttycom.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
-
-$(PROJECT_INCLUDE)/sys/termios.h: include/sys/termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/termios.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h
-
-$(PROJECT_INCLUDE)/sys/utsname.h: include/sys/utsname.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
-
-$(PROJECT_INCLUDE)/sys/cdefs.h: include/sys/cdefs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/cdefs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
-endif
 
 $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/zilog

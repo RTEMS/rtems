@@ -1,5 +1,12 @@
 2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/tar.h: New (SUSv3).
+	* Makefile.am: Integrate newlib-specific headers.
+	Add libcsupport/include/tar.h.
+	* libcsupport/Makefile.am: Remove newlib-specific headers.
+
+2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libmisc/fsmount/fsmount.c: Include config.h.
 
 2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
