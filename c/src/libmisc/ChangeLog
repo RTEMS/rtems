@@ -1,3 +1,9 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* stackchk/check.c: Corrected use of
+	_Objects_Information_table now that it is a two dimensional
+	array based upon API and class.
+
 2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	* With the addition of serdbg, the standard polled I/O functions

@@ -150,7 +150,7 @@ void Stack_check_Initialize( void )
   unsigned32          *p;
 #if 0
   unsigned32           i;
-  unsigned32           class_index;
+  unsigned32           api_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
 #endif
@@ -204,11 +204,13 @@ void Stack_check_Initialize( void )
 #endif
 
 #if 0
-  for ( class_index = OBJECTS_CLASSES_FIRST ;
-        class_index <= OBJECTS_CLASSES_LAST ;
-        class_index++ ) {
-    information = _Objects_Information_table[ class_index ];
-    if ( information && information->is_thread ) {
+  for ( api_index = 1;
+        api_index <= OBJECTS_APIS_LAST ;
+        api_index++ ) {
+    if ( !_Objects_Information_table[ api_index ] )
+      continue;
+    information = _Objects_Information_table[ api_index ][ 1 ];
+    if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
         Stack_check_Create_extension( the_thread, the_thread );
@@ -495,7 +497,7 @@ void Stack_check_Fatal_extension(
 void Stack_check_Dump_usage( void )
 {
   unsigned32           i;
-  unsigned32           class_index;
+  unsigned32           api_index;
   Thread_Control      *the_thread;
   unsigned32           hit_running = 0;
   Objects_Information *information;
@@ -508,11 +510,13 @@ void Stack_check_Dump_usage( void )
     "    ID      NAME       LOW        HIGH     AVAILABLE      USED\n"
   );
 
-  for ( class_index = OBJECTS_CLASSES_FIRST ; 
-        class_index <= OBJECTS_CLASSES_LAST ; 
-        class_index++ ) {
-    information = _Objects_Information_table[ class_index ];
-    if ( information && information->is_thread ) {
+  for ( api_index = 1 ; 
+        api_index <= OBJECTS_APIS_LAST ; 
+        api_index++ ) {
+    if ( !_Objects_Information_table[ api_index ] )
+      continue;
+    information = _Objects_Information_table[ api_index ][ 1 ];
+    if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
         Stack_check_Dump_threads_usage( the_thread );
