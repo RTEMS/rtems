@@ -45,7 +45,7 @@
 #include <stdlib.h>
 
 #include <rtems/libio.h>
-#include <iosupp.h>
+#include <rtems/iosupp.h>
 #include <rtems/score/sh_io.h>
 #include <rtems/score/ispsh7045.h>
 #include <rtems/score/iosh7045.h>

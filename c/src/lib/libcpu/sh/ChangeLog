@@ -1,3 +1,9 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* sh7032/sci/sci.c: Include <rtems/iosupp.h> instead of <iosupp.h>.
+	* sh7045/sci/sci.c: Include <rtems/iosupp.h> instead of <iosupp.h>.
+	* sh7045/sci/sci_termios.c: Include <rtems/iosupp.h> instead of <iosupp.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* sh7032/clock/ckinit.c, sh7750/include/sh/sh4uart.h,

@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 #include <rtems/libio.h>
-#include <iosupp.h>
+#include <rtems/iosupp.h>
 #include <rtems/score/sh_io.h>
 #include <rtems/score/ispsh7032.h>
 #include <rtems/score/iosh7032.h>
