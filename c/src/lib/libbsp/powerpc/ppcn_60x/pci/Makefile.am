@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/pci.rel
 
 C_FILES = pci.c

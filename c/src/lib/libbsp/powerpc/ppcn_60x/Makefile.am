@@ -19,20 +19,20 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = STATUS
 
-$(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/tod.h: include/tod.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/tod.h: include/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
-$(PROJECT_INCLUDE)/nvram.h: include/nvram.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/nvram.h: include/nvram.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/nvram.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/nvram.h
 
-$(PROJECT_INCLUDE)/pci.h: include/pci.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/pci.h: include/pci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/pci.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

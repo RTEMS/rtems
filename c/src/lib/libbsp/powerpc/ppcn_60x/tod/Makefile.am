@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/tod.rel
 
 C_FILES = tod.c

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/universe.rel
 
 C_FILES = universe.c

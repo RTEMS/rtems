@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/network.rel
 
 C_FILES = amd79c970.c

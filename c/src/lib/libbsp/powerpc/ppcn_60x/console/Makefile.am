@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/console.rel
 
 C_FILES = console.c i8042vga.c i8042.c ns16550cfg.c z85c30cfg.c vga.c
