@@ -1,3 +1,7 @@
+2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am, configure.ac: Remove (Unused).
+
 2005-02-10	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* cpu.c, cpu_asm.S, irq_stub.S, rtems/score/ppc_offs.h:
