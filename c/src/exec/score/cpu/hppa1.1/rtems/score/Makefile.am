@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-GENOFFSETS = $(PROJECT_ROOT)/tools/cpu/hppa1.1/genoffsets
+GENOFFSETS = $(PROJECT_TOPdir)/tools/cpu/hppa1.1/genoffsets
 
 GENERIC_H_FILES = offsets.h
 STATIC_H_FILES = cpu.h cpu_asm.h hppa.h hppatypes.h
