@@ -213,6 +213,18 @@ rtems_test_pause();
   status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
   directive_failed( status, "rtems_message_queue_send" );
 
+  /* this broadcast should have no effect on the queue */
+  Fill_buffer( "NO BUFFER TO Q1", (long *)buffer );
+  puts( "TA3 - rtems_message_queue_broadcast - NO BUFFER TO Q1" );
+  status = rtems_message_queue_broadcast(
+    Queue_id[ 1 ],
+    (long (*)[4])buffer,
+    16,
+    &count
+  );
+  printf( "TA3 - number of tasks awakened = %d\n", count );
+
+
   puts( "TA1 - rtems_message_queue_get_number_pending - SUCCESSFUL\n" );
   status = rtems_message_queue_get_number_pending( Queue_id[ 3 ], &count );
   printf( "TA1 - %d messages are pending on Q 3\n", count );
