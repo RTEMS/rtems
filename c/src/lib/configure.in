@@ -32,8 +32,8 @@ AM_CONDITIONAL(UNIX,test x"$RTEMS_CPU" = x"unix")
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
 # find all the CPU dependent library Makefiles
-AC_CONFIG_SUBDIRS(libcpu)
-AC_CONFIG_SUBDIRS(libbsp)
+# AC_CONFIG_SUBDIRS(libcpu)
+# AC_CONFIG_SUBDIRS(libbsp)
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 

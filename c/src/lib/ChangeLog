@@ -1,4 +1,9 @@
 
+2000-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Remove libcpu and libbsp
+	* Makefile.am: Remove libcpu and libbsp
+
 2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libc/fs_null_handlers.c: Added missing rmnod entry.
