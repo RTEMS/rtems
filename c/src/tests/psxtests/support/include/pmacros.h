@@ -78,6 +78,8 @@
     fflush(stdout); \
   } while ( 0 )
 
+#define empty_line() puts( "" )
+
 #endif
 
 /* end of file */
