@@ -1,3 +1,9 @@
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* mpc505/Makefile.am, mpc5xx/Makefile.am, mpc6xx/Makefile.am,
+	mpc8260/Makefile.am, mpc8xx/Makefile.am, ppc403/Makefile.am,
+	shared/Makefile.am: Remove build-variant support.
+
 2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
 
 	PR 581/bsps

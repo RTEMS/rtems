@@ -2,9 +2,8 @@
 ## $Id$
 ##
 
-EXTRA_PROGRAMS =
+noinst_PROGRAMS =
 CLEANFILES =
-noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
 
@@ -15,53 +14,29 @@ include_libcpudir = $(includedir)/libcpu
 include_libcpu_HEADERS = include/io.h include/mmu.h include/page.h \
     include/byteorder.h include/pgtable.h
 
-EXTRA_PROGRAMS += cpuIdent.rel
-CLEANFILES += cpuIdent.rel
+noinst_PROGRAMS += cpuIdent.rel
 cpuIdent_rel_SOURCES = include/cpuIdent.c include/cpuIdent.h
 cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += cpuIdent_g.rel
-CLEANFILES += cpuIdent_g.rel
-cpuIdent_g_rel_SOURCES = $(cpuIdent_rel_SOURCES)
-cpuIdent_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-cpuIdent_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += cpuIdent$(LIB_VARIANT).rel
 include_libcpu_HEADERS += include/cpuIdent.h
 
 ## cache
-EXTRA_PROGRAMS += cache.rel
-CLEANFILES += cache.rel
+noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = src/cache.c src/cache_.h \
     ../../shared/src/cache_aligned_malloc.c ../../shared/src/cache_manager.c \
     ../../shared/include/cache.h
 cache_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -I$(srcdir)/src
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += cache_g.rel
-CLEANFILES += cache_g.rel
-cache_g_rel_SOURCES = $(cache_rel_SOURCES)
-cache_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) -I$(srcdir)/src
-cache_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += cache$(LIB_VARIANT).rel
 include_libcpu_HEADERS += ../../shared/include/cache.h
 
 ## stack
-EXTRA_PROGRAMS += stack.rel
-CLEANFILES += stack.rel
+noinst_PROGRAMS += stack.rel
 stack_rel_SOURCES = src/stack.c include/spr.h src/stackTrace.h
 stack_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 stack_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += stack_g.rel
-CLEANFILES += stack_g.rel
-stack_g_rel_SOURCES = $(stack_rel_SOURCES)
-stack_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-stack_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += stack$(LIB_VARIANT).rel
 include_libcpu_HEADERS += include/spr.h
 include_libcpu_HEADERS += src/stackTrace.h
 endif
