@@ -247,6 +247,31 @@ accept (int s, struct sockaddr *name, int *namelen)
 }
 
 /*
+ *  Shutdown routine
+ */
+
+int
+shutdown (int s, int how)
+{
+      struct socket *so;
+      int error;
+
+      rtems_bsdnet_semaphore_obtain ();
+      if ((so = rtems_bsdnet_fdToSocket (s)) == NULL) {
+              rtems_bsdnet_semaphore_release ();
+              return -1;
+      }
+      error = soshutdown(so, how);
+      if (error) {
+              errno = error;
+              rtems_bsdnet_semaphore_release ();
+              return -1;
+      }
+      rtems_bsdnet_semaphore_release ();
+      return 0;
+}
+
+/*
  * All `transmit' operations end up calling this routine.
  */
 ssize_t
