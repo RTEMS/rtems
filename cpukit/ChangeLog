@@ -1,5 +1,10 @@
 2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libblock/Makefile.am: Build libblock for !UNIX only.
+	* libcsupport/Makefile.am: Build $(TERMIOS_C_FILES) for !UNIX only.
+
+2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libblock/Makefile.am: Remove LIBC_DEFINES (Unsupported).
 	* libfs/Makefile.am: Remove LIBC_DEFINES (Unsupported).
 
@@ -11,7 +16,7 @@
 
 	* libcsupport/Makefile.am: Remove $(LIBC_DEFINES) (Unsupported).
 	Install motorola-headers to $(includedir)/rtems/motorola.
-	Install zilog-header $(includedir)/rtems/zilog.
+	Install zilog-headers to $(includedir)/rtems/zilog.
 
 2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
 

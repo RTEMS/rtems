@@ -110,7 +110,7 @@ LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
 BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c
 
 libcsupport_a_SOURCES = src/gxx_wrappers.c src/printk.c $(BSD_LIBC_C_FILES) \
-    $(BASE_FS_C_FILES) $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
+    $(BASE_FS_C_FILES) $(MALLOC_C_FILES) $(ERROR_C_FILES) \
     $(ASSOCIATION_C_FILES)
 
 if UNIX
@@ -118,13 +118,13 @@ libcsupport_a_SOURCES += src/unixlibc.c src/hosterr.c
 else
 libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
-    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) src/envlock.c
+    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) src/envlock.c \
+    $(TERMIOS_C_FILES)
 endif
 
 libcsupport_g_a_SOURCES = $(libcsupport_a_SOURCES)
 
 EXTRA_DIST = src/TODO src/CASES src/README
-EXTRA_DIST += $(UNUSED_FILES)
 
 DISTCLEANFILES =
 

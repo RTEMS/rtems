@@ -7,10 +7,13 @@ include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -I$(top_builddir)
 
+CLEANFILES =
+
+if !UNIX
 include_rtemsdir = $(includedir)/rtems
 
 EXTRA_LIBRARIES = libblock.a
-CLEANFILES = libblock.a
+CLEANFILES += libblock.a
 libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 EXTRA_LIBRARIES += libblock_g.a
@@ -27,10 +30,12 @@ libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c \
 libblock_g_a_SOURCES = $(libblock_a_SOURCES)
 
 all-local: $(PREINSTALL_FILES) libblock$(LIB_VARIANT).a
+endif
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
+if !UNIX
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
@@ -55,6 +60,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ramdisk.h
 $(PROJECT_INCLUDE)/rtems/ide_part_table.h: include/rtems/ide_part_table.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ide_part_table.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ide_part_table.h
+endif
 
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
