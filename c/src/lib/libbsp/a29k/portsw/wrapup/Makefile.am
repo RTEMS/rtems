@@ -4,11 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-if HAS_MP
-MP_BSP_O_FILES = shmsupp
-endif
-
-BSP_FILES = startup console iic ethernet flash nvram $(MP_BSP_O_FILES)
+BSP_FILES = startup console iic ethernet flash nvram
 CPU_FILES = clock timer
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x

@@ -1,5 +1,9 @@
 2001-01-08	Joel Sherrill <joel@OARcorp.com>
 
+	* wrapup/Makefile.am: Remove warning missed in shmsupp removal.
+
+2001-01-08	Joel Sherrill <joel@OARcorp.com>
+
 	* Shared memory support removed since it was non-functional.
 	* shmsupp/.cvsignore, shmsupp/Makefile.am, shmsupp/addrconv.c,
 	shmsupp/getcfg.c, shmsupp/lock.c, shmsupp/mpisr.c: Removed.
