@@ -48,7 +48,7 @@ package body TMTEST is
 
       RTEMS.MESSAGE_QUEUE_CREATE( 
          RTEMS.BUILD_NAME( 'M', 'Q', '1', ' ' ),
-         0,
+         100,
          16,
          RTEMS.DEFAULT_ATTRIBUTES,
          TMTEST.MESSAGE_QUEUE_ID,
