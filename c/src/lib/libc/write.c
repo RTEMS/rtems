@@ -22,13 +22,10 @@
  * to the file associated with the open file descriptor, fildes.
  */
 
-/* XXX newlib has the prototype for this wrong.  It will be a bit painful */
-/* XXX to fix so we are choosing to delay fixing this. */
-
-int write(                        /* XXX this should return a ssize_t */
+ssize_t write(
   int         fd,
   const void *buffer,
-  unsigned32  count               /* XXX this should be a size_t */
+  size_t      count
 )
 {
   rtems_status_code  rc;

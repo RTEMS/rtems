@@ -14,13 +14,10 @@
 
 #include "libio_.h"
 
-/* XXX newlib has the prototype for this wrong.  It will be a bit painful */
-/* XXX to fix so we are choosing to delay fixing this. */
-
-int read(
+ssize_t read(
   int         fd,
   void       *buffer,
-  unsigned32  count
+  size_t      count
 )
 {
   int             rc;  /* XXX change to a size_t when prototype is fixed */
