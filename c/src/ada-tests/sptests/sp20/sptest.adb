@@ -37,7 +37,6 @@ package body SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      INDEX  : RTEMS.UNSIGNED32;
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -249,7 +248,6 @@ package body SPTEST is
    is
       PREVIOUS_MODE : RTEMS.MODE;
       STATUS        : RTEMS.STATUS_CODES;
-      INDEX         : RTEMS.UNSIGNED32;
    begin
 
       RTEMS.TASK_MODE(
