@@ -248,6 +248,14 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define NULL_DRIVER_TABLE_ENTRY \
  { NULL, NULL, NULL, NULL, NULL, NULL }
 
+#ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#include <console.h>
+#endif
+
+#ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#include <clockdrv.h>
+#endif
+
 #ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 #include <timerdrv.h>
 #endif
