@@ -1,4 +1,10 @@
+2002-10-24	<strauman@slac.stanford.edu>
+
+	* src/eval.c: Per PR293, added freenode calls for evaluate
+          link failures.
+
 2002-10-23	<strauman@slac.stanford.edu>
+
 	* src/mount.c per PR290, add check for ops->node_type_h
         * src/mknod.c per PR291, remove erroneous call to freenod
 
