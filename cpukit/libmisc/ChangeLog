@@ -1,3 +1,8 @@
+2002-03-20	Chris Johns <ccj@acm.org>
+
+	* PR148.
+	* monitor/mon-prmisc.c: Fixed to print task states correctly.
+
 2002-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shell/shell.c: Remove #undef __STRICT_ANSI__.

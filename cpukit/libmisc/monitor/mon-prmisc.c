@@ -133,7 +133,12 @@ rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "Wsem",   STATES_WAITING_FOR_SEMAPHORE },
     { "Wtime",  STATES_WAITING_FOR_TIME },
     { "Wrpc",   STATES_WAITING_FOR_RPC_REPLY },
+    { "Wmutex", STATES_WAITING_FOR_MUTEX },
+    { "Wcvar",  STATES_WAITING_FOR_CONDITION_VARIABLE },
+    { "Wjatx",  STATES_WAITING_FOR_JOIN_AT_EXIT },
+    { "Wsig",   STATES_WAITING_FOR_SIGNAL },
     { "WRATE",  STATES_WAITING_FOR_PERIOD },
+    { "Wisig",  STATES_INTERRUPTIBLE_BY_SIGNAL },
     { 0, 0, 0 },
 };
 
