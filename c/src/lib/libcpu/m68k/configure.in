@@ -31,6 +31,8 @@ AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "m68020" \
 || test "$RTEMS_CPU_MODEL" = "m68030" \
 || test "$RTEMS_CPU_MODEL" = "m68lc040" \
 || test "$RTEMS_CPU_MODEL" = "m68040" \
+|| test "$RTEMS_CPU_MODEL" = "m68ec040" \
+|| test "$RTEMS_CPU_MODEL" = "m68lc040" \
 || test "$RTEMS_CPU_MODEL" = "m68060" )
 
 AM_CONDITIONAL(m68040, test "$RTEMS_CPU_MODEL" = "m68040")
