@@ -1,3 +1,9 @@
+2001-04-08	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/userext.inl: Updated to reflect modifications
+	to inline version from PR142.
+	* inline/rtems/score/userext.inl: Cleanup as side-effect of above.
+ 
 2002-04-08	Chris Johns <ccj@acm.org>
 
 	* Per PR142, make task switch extension its own list.

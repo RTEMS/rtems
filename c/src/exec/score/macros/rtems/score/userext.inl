@@ -23,20 +23,28 @@
  */
 
 #define _User_extensions_Handler_initialization( \
-  number_of_extensions, _initial_extensions \
+  _number_of_extensions, _initial_extensions \
 ) \
   { \
     User_extensions_Control *extension; \
     unsigned32               i; \
+    \
     _Chain_Initialize_empty( &_User_extensions_List ); \
+    _Chain_Initialize_empty( &_User_extensions_Switches_list ); \
     \
     if ( (_initial_extensions) ) { \
-      for (i=0 ; i<number_of_extensions ; i++ ) { \
-        extension = \
-           _Workspace_Allocate_or_fatal_error( sizeof(User_extensions_Control) ); \
-        \
-        extension->Callouts = _initial_extensions[i]; \
-        _Chain_Append( &_User_extensions_List, &extension->Node ); \
+      extension = _Workspace_Allocate_or_fatal_error( \
+          sizeof(User_extensions_Control) * _number_of_extensions ); \
+      \
+      memset ( \
+        extension, \
+        0, \
+        _number_of_extensions * sizeof( User_extensions_Control ) \
+      ); \
+      \
+      for ( i = 0 ; i < _number_of_extensions ; i++ ) { \
+        _User_extensions_Add_set (extension, &_initial_extensions[i]); \
+        extension++; \
       } \
     } \
   }
@@ -50,8 +58,18 @@
   do { \
     (_the_extension)->Callouts = *(_extension_table); \
     \
-    _Chain_Append( &_User_extensions_List, &(_the_extension)->Node ); \
+    _Chain_Prepend( &_User_extensions_List, &(_the_extension)->Node ); \
+    \
+    if ( (_the_extension)->Callouts.thread_switch != NULL ) { \
+      (_the_extension)->Switch.thread_switch = \
+        (_the_extension)->Callouts.thread_switch; \
+      _Chain_Append( \
+        &_User_extensions_Switches_list, \
+        &(_the_extension)->Switch.Node \
+     ); \
+    } \
   } while ( 0 )
+ 
 
 /*PAGE
  *
@@ -59,16 +77,29 @@
  */
  
 #define _User_extensions_Add_API_set( _the_extension ) \
-  _Chain_Prepend( &_User_extensions_List, &(_the_extension)->Node )
+  do { \
+    _Chain_Prepend( &_User_extensions_List, &(_the_extension)->Node ); \
+    \
+    if ( (_the_extension)->Callouts.thread_switch != NULL ) { \
+      _Chain_Append( \
+        &_User_extensions_Switches_list, &(_the_extension)->Switch.Node ); \
+    } \
+  } while ( 0 )
  
-
+ 
 /*PAGE
  *
  *  _User_extensions_Remove_set
  */
 
 #define _User_extensions_Remove_set( _the_extension ) \
-  _Chain_Extract( &(_the_extension)->Node )
+  do { \
+    _Chain_Extract( &(_the_extension)->Node ); \
+    \
+    if ( (_the_extension)->Callouts.thread_switch != NULL ) { \
+      _Chain_Extract( &(_the_extension)->Node ); \
+    } \
+  } while (0)
 
 /*PAGE
  *
@@ -78,13 +109,13 @@
  *         messing up the name and function call expansion.
  */
 
-#define _User_extensions_Run_list_forward( _name, _arguments ) \
+#define _User_extensions_Run_list_forward( _list, _name, _arguments ) \
   do { \
     Chain_Node              *the_node; \
     User_extensions_Control *the_extension; \
     \
-    for ( the_node = _User_extensions_List.first ; \
-          !_Chain_Is_tail( &_User_extensions_List, the_node ) ; \
+    for ( the_node = (_list).first ; \
+          !_Chain_Is_tail( &(_list), the_node ) ; \
           the_node = the_node->next ) { \
       the_extension = (User_extensions_Control *) the_node; \
       \
@@ -103,13 +134,13 @@
  *         messing up the name and function call expansion.
  */
 
-#define _User_extensions_Run_list_backward( _name, _arguments ) \
+#define _User_extensions_Run_list_backward( _list, _name, _arguments ) \
   do { \
     Chain_Node              *the_node; \
     User_extensions_Control *the_extension; \
     \
-    for ( the_node = _User_extensions_List.last ; \
-          !_Chain_Is_head( &_User_extensions_List, the_node ) ; \
+    for ( the_node = (_list).last ; \
+          !_Chain_Is_head( &(_list), the_node ) ; \
           the_node = the_node->previous ) { \
       the_extension = (User_extensions_Control *) the_node; \
       \
@@ -127,7 +158,11 @@
  */
 
 #define _User_extensions_Thread_switch( _executing, _heir ) \
-  _User_extensions_Run_list_forward(thread_switch, (_executing, _heir) )
+  _User_extensions_Run_list_forward( \
+    _User_extensions_Switches_list, \
+    thread_switch, \
+    (_executing, _heir) \
+  )
 
 #endif
 /* end of include file */

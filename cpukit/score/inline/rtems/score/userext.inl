@@ -39,6 +39,7 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Add_set (
   /*
    * If a switch handler is present, append it to the switch chain.
    */
+
   if ( extension_table->thread_switch != NULL ) {
     the_extension->Switch.thread_switch = extension_table->thread_switch;
     _Chain_Append( &_User_extensions_Switches_list, &the_extension->Switch.Node );
@@ -97,7 +98,16 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Add_API_set (
   User_extensions_Control *the_extension
 )
 {
-  _User_extensions_Add_set( the_extension );
+  _Chain_Append( &_User_extensions_List, &the_extension->Node );
+
+  /*
+   *  If a switch handler is present, append it to the switch chain.
+   */
+
+  if ( extension_table->thread_switch != NULL ) {
+    _Chain_Append( 
+      &_User_extensions_Switches_list, &the_extension->Switch.Node );
+  }
 }
 
 /*PAGE
