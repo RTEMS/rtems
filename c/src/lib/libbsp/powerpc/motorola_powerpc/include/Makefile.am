@@ -5,11 +5,12 @@
 include_HEADERS = bspopts.h
 
 include_HEADERS += ../../shared/include/nvram.h ../../shared/include/bsp.h \
-    ../../../shared/include/coverhd.h
+    ../../../shared/include/coverhd.h ../../../shared/tod.h
 
 include_bspdir = $(includedir)/bsp
-include_bsp_HEADERS = ../../shared/console/consoleIo.h ../../shared/console/uart.h \
-    ../../shared/irq/irq.h ../../shared/motorola/motorola.h
+include_bsp_HEADERS = ../../shared/console/consoleIo.h \
+    ../../shared/console/uart.h ../../shared/irq/irq.h \
+    ../../shared/motorola/motorola.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
@@ -29,6 +30,9 @@ $(PROJECT_INCLUDE)/bsp.h: ../../shared/include/bsp.h
 $(PROJECT_INCLUDE)/coverhd.h: ../../../shared/include/coverhd.h
 	$(INSTALL_DATA) $< $@
 
+$(PROJECT_INCLUDE)/tod.h: ../../../shared/tod.h
+	$(INSTALL_DATA) $< $@
+
 $(PROJECT_INCLUDE)/bsp/consoleIo.h: ../../shared/console/consoleIo.h
 	$(INSTALL_DATA) $< $@
 
@@ -46,6 +50,7 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
 TMPINSTALL_FILES += $(PROJECT_INCLUDE)/nvram.h
 TMPINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
 TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp
 TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h

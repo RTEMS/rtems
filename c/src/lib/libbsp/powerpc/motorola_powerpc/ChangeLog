@@ -1,3 +1,9 @@
+2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* Makefile.am, configure.ac, bootloader/Makefile.am,
+	include/Makefile.am, wrapup/Makefile.am: Add MVME2100 BSP.
+	* README.MVME2100, tod/.cvsignore, tod/Makefile.am: New files.
+
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 533/bsps

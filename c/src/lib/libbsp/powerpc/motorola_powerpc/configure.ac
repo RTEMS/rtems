@@ -20,6 +20,16 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AS=$CC
 AM_PROG_AS
 
+RTEMS_BSPOPTS_SET([mvme2100],[mvme2100],[1])
+RTEMS_BSPOPTS_SET([mvme2100],[*],[])
+RTEMS_BSPOPTS_HELP([mvme2100],
+[Defined for MVME2100 -- undefined for others])
+
+RTEMS_BSPOPTS_SET([mpc8240],[mvme2100],[1])
+RTEMS_BSPOPTS_SET([mpc8240],[*],[])
+RTEMS_BSPOPTS_HELP([mpc8240],
+[Defined for boards with MPC8240 -- undefined for others])
+
 RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[1])
 RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
 [If defined, then the PowerPC specific code in RTEMS will use
@@ -43,6 +53,7 @@ pci/Makefile
 residual/Makefile
 start/Makefile
 startup/Makefile
+tod/Makefile
 vectors/Makefile
 vme/Makefile
 wrapup/Makefile])
