@@ -18,7 +18,7 @@ SRCS=README
 # in place of "CONSOLE_DRIVER_TABLE_ENTRY".  See consolex/cTest.c for
 # an example.
 
-ifeq $(RTEMS_MVME162_MODEL,mvme162lx)
+ifeq ($(RTEMS_MVME162_MODEL),mvme162lx)
 CONSOLEX=consolex
 endif
 
