@@ -6,8 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <memory.h>
-
+#include <string.h>
 
 static unsigned char buf[512];
 
