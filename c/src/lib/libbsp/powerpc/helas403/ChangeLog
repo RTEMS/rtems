@@ -1,3 +1,14 @@
+2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove . from SUBDIRS, add @exceptions@ to
+	SUBDIRS.
+	* configure.ac:  Add RTEMS_BSPOPTS_*(PPC_USE_SPRG),
+	RTEMS_BSPOPTS_*(PPC_VECTOR_FILE_BASE), 
+	RTEMS_PPC_EXCEPTIONS([old]).
+	* include/Makefile.am: Convert PREINSTALL_FILES to
+	TMPINSTALL_FILES, include force-preinstall.am.
+	* wrapup/Makefile.am: Apply @exceptions@.
+
 2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
 
 	This modification is part of the submitted modifications necessary to
