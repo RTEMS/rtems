@@ -215,6 +215,17 @@ arm-*-rtems*)
 	  done
 	;;
 
+h8300-*-rtems*)
+	  old_multidirs=${multidirs}
+	  multidirs=""
+	  for x in ${old_multidirs}; do
+	    case "${x}" in
+	      *normal* ) : ;;
+	      *) multidirs="${multidirs} ${x}" ;;
+	    esac
+	  done
+	;;
+
 sh-*-rtems*)
 	  old_multidirs=${multidirs}
 	  multidirs=""

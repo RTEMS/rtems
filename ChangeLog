@@ -1,5 +1,10 @@
 2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* config-ml.in: Don't built multilib variant normal (-mn) for
+	h8300-*-rtems*.
+
+2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/config-subdirs.m4: Remove.
 	* Makefile.am: Reflect changes above.
 
