@@ -58,6 +58,9 @@ rtems_status_code rtems_interrupt_catch(
   if ( !_ISR_Is_valid_user_handler( (void *) new_isr_handler ) )
     return RTEMS_INVALID_ADDRESS;
 
+  if ( !_ISR_Is_valid_user_handler( (void *) old_isr_handler ) )
+    return RTEMS_INVALID_ADDRESS;
+
   _ISR_Install_vector(
     vector, (proc_ptr)new_isr_handler, (proc_ptr *)old_isr_handler );
 
