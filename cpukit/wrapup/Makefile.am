@@ -16,11 +16,11 @@ SAPI_OBJS = ../sapi/src/$(ARCH)/libsapi.a
 RTEMS_OBJS = ../rtems/src/$(ARCH)/librtems.a
 
 if HAS_POSIX
-POSIX_OBJS = ../posix/src/$(ARCH)/libposix.a
+POSIX_OBJS = ../posix/$(ARCH)/libposix.a
 endif
 
 if HAS_ITRON
-ITRON_OBJS = ../itron/src/$(ARCH)/libitron.a
+ITRON_OBJS = ../itron/$(ARCH)/libitron.a
 endif
 
 LIBCSUPPORT_OBJS = ../libcsupport/$(ARCH)/libcsupport.a
