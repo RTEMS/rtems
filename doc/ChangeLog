@@ -1,5 +1,8 @@
 2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in filesystem/ChangeLog.
+	* ChangeLog: Merge-in networking/ChangeLog.
+	* filesystem/ChangeLog, networking/ChangeLog: Remove.
 	* ChangeLog: Merge-in posix_users/ChangeLog.
 	* ChangeLog: Merge-in posix1003.1/ChangeLog.
 	* ChangeLog: Merge-in itron3.0/ChangeLog.
@@ -62,6 +65,8 @@
 	* posix_users/Makefile.am: Cosmetics.
 	* posix1003.1/Makefile.am: Cosmetics.
 	* itron3.0/Makefile.am: Cosmetics.
+	* filesystem/Makefile.am: Cosmetics.
+	* networking/Makefile.am: Cosmetics.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -71,6 +76,8 @@
 	* posix_users/Makefile.am: Cosmetics.
 	* posix1003.1/Makefile.am: Cosmetics.
 	* itron3.0/Makefile.am: Cosmetics.
+	* filesystem/Makefile.am: Cosmetics.
+	* networking/Makefile.am: Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -87,6 +94,10 @@
 	* posix1003.1/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 	* itron3.0/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* filesystem/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* networking/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 
 2003-11-25	Joel Sherrill <joel@OARcorp.com>
@@ -109,6 +120,12 @@
 	* Makefile.am, index.html.in: Rename Getting Started to be non-language
 	specific and remove link to Ada Getting Started. Also install missing
 	graphic.
+
+2003-10-02	Gene Smith <gene.smith@siemens.com>
+
+	* networking/networkapp.t, networking/preface.texi: Improve
+	documentation for SO_RCVWAKEUP and SO_SNDWAKEUP and update the
+	references in the preface.
 
 2003-09-29	Joel Sherrill <joel@OARcorp.com>
 
@@ -137,6 +154,8 @@
 	* posix_users/Makefile.am: Merger from rtems-4-6-branch.
 	* posix1003.1/Makefile.am: Merger from rtems-4-6-branch.
 	* itron3.0/Makefile.am: Merger from rtems-4-6-branch.
+	* filesystem/Makefile.am: Merger from rtems-4-6-branch.
+	* networking/Makefile.am: Merger from rtems-4-6-branch.
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -156,6 +175,8 @@
 	* posix1003.1/ch07.t, posix1003.1/posix1003_1.texi,
 	posix1003.1/preface.texi: Merge from branch.
 	* itron3.0/itron.texi: Merge from branch.
+	* filesystem/filesystem.texi: Merge from branch.
+	* networking/networking.texi: Merge from branch.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
@@ -211,6 +232,16 @@
 	* index.html.in: Removed a29k reference.
 	* FAQ/basic.t, FAQ/entry: Remove A29k references and update.
 
+2003-02-11	Mike Siers <mikes@poliac.com>
+
+	* networking/networkapp.t: Add an example code snippet for adding an IP
+	alias.
+
+2003-02-11	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* networking/networkapp.t: Add an example code snippet for adding a
+	default route.
+
 2003-02-03	Steven Johnson <sjohnson@neurizon.net>
 
 	PR 338/filesystem
@@ -238,6 +269,8 @@
 	* posix_users/posix_users.texi: Set @setfilename posix_users.info.
 	* posix1003.1/posix1003_1.texi: Set @setfilename posix1003_1.info.
 	* itron3.0/itron.texi: Set @setfilename itron.info.
+	* filesystem/filesystem.texi: Set @setfilename filesystem.info.
+	* networking/networking.texi: Set @setfilename networking.info.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -250,6 +283,8 @@
 	* posix_users/Makefile.am: Put GENERATED_FILES into $builddir.
 	* posix1003.1/Makefile.am: Put GENERATED_FILES into $builddir.
 	* itron3.0/Makefile.am: Put GENERATED_FILES into $builddir.
+	* filesystem/Makefile.am: Put GENERATED_FILES into $builddir.
+	* networking/Makefile.am: Put GENERATED_FILES into $builddir.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -282,6 +317,12 @@
 	* itron3.0/version.texi: Remove from CVS.
 	* itron3.0/stamp-vti: Remove from CVS.
 	* itron3.0/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* filesystem/version.texi: Remove from CVS.
+	* filesystem/stamp-vti: Remove from CVS.
+	* filesystem/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* networking/version.texi: Remove from CVS.
+	* networking/stamp-vti: Remove from CVS.
+	* networking/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -291,6 +332,8 @@
 	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
 	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
 	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
+	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
+	* networking/stamp-vti, networking/version.texi: Regenerated.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -310,6 +353,8 @@
 	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
 	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
 	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
+	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
+	* networking/stamp-vti, networking/version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
@@ -320,6 +365,8 @@
 	* posix_users/stamp-vti, posix_users/version.texi: Regenerated.
 	* posix1003.1/stamp-vti, posix1003.1/version.texi: Regenerated.
 	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
+	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
+	* networking/stamp-vti, networking/version.texi: Regenerated.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -379,6 +426,8 @@
 	* posix_users/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* posix1003.1/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* itron3.0/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* filesystem/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* networking/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-03-27	Eric Norum <eric.norum@usask.ca>
 
@@ -431,6 +480,8 @@
 	* posix_users/Makefile.am: include main.am, require automake-1.5.
 	* posix1003.1/Makefile.am: include main.am, require automake-1.5.
 	* itron3.0/Makefile.am: include main.am, require automake-1.5.
+	* filesystem/Makefile.am: include main.am, require automake-1.5.
+	* networking/Makefile.am: include main.am, require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -468,6 +519,8 @@
 	* posix_users/.cvsignore: Added rtems_header.html and rtems_footer.html.
 	* posix1003.1/.cvsignore: Added rtems_header.html and rtems_footer.html.
 	* itron3.0/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* filesystem/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* networking/.cvsignore: Added rtems_header.html and rtems_footer.html.
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -483,4 +536,6 @@
 	* posix_users/ChangeLog: New file.
 	* posix1003.1/ChangeLog: New file.
 	* itron3.0/ChangeLog: New file.
+	* filesystem/ChangeLog: New file.
+	* networking/ChangeLog: New file.
 
