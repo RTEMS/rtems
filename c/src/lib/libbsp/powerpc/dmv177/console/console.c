@@ -43,13 +43,14 @@ extern console_data  Console_Port_Data[];
 extern unsigned long  Console_Port_Count;
 extern rtems_device_minor_number  Console_Port_Minor;
  
-/* PAGE
+/*PAGE
  *
  *  console_open
  *
  *  open a port as a termios console.
  *
  */
+
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -115,6 +116,13 @@ rtems_device_driver console_open(
   return status;
 }
  
+/*PAGE
+ *
+ *  console_reserve_resources
+ *
+ *  This routine uses the termios driver to reserve resources.
+ */
+
 void console_reserve_resources(
   rtems_configuration_table *configuration
 )
@@ -122,6 +130,13 @@ void console_reserve_resources(
   rtems_termios_reserve_resources( configuration, 4 );
 }
 
+
+/*PAGE
+ *
+ *  console_close
+ *
+ *  This routine closes a port that has been opened as console.
+ */
 
 rtems_device_driver console_close(
   rtems_device_major_number major,
@@ -140,6 +155,13 @@ rtems_device_driver console_close(
   return rtems_termios_close (arg);
 }
  
+/*PAGE
+ *
+ *  console_read
+ *
+ *  This routine uses the termios driver to read a character.
+ */
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -149,6 +171,13 @@ rtems_device_driver console_read(
   return rtems_termios_read (arg);
 }
  
+/*PAGE
+ *
+ *  console_write
+ *
+ *  this routine uses the termios driver to write a character.
+ */
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -158,6 +187,13 @@ rtems_device_driver console_write(
   return rtems_termios_write (arg);
 }
  
+/*PAGE
+ *
+ *  console_control
+ *
+ *  this routine uses the termios driver to process io
+ */
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -167,7 +203,7 @@ rtems_device_driver console_control(
   return rtems_termios_ioctl (arg);
 }
 
-/* PAGE
+/*PAGE
  *
  *  console_initialize
  *
@@ -249,4 +285,6 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
+
+
 

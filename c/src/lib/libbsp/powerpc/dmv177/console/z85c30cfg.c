@@ -16,7 +16,8 @@
 #include <rtems.h>
 #include <bsp.h>
 
-/* 
+/*PAGE
+ * 
  *  Read_z85c30_register
  */
 
@@ -36,7 +37,8 @@ unsigned8 Read_z85c30_register(
 
 }
 
-/*
+/*PAGE
+ *
  *  Write_z85c30_register
  */
 
@@ -56,7 +58,8 @@ void  Write_z85c30_register(
   *port = ucData;
 }
 
-/* 
+/*PAGE
+ * 
  *  Read_z85c30_data
  */
 
@@ -70,7 +73,8 @@ unsigned8 Read_z85c30_data(
   return *port;
 }
 
-/*
+/*PAGE
+ *
  *  Write_z85c30_data
  */
 
@@ -84,3 +88,9 @@ void  Write_z85c30_data(
   port = (unsigned8 *)ulDataPort;
   *port = ucData;
 }
+
+
+
+
+
+
