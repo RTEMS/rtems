@@ -37,15 +37,6 @@
 
 /*PAGE
  *
- *  _Thread_queue_Get_number_waiting
- *
- */
- 
-#define _Thread_queue_Get_number_waiting( _the_thread_queue ) \
-  ( (_the_thread_queue)->count )
-
-/*PAGE
- *
  *  _Thread_queue_Enter_critical_section
  *
  */
