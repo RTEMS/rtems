@@ -69,6 +69,8 @@
 #define       RTEMS_IO_GET_ATTRIBUTES 1
 #define       RTEMS_IO_SET_ATTRIBUTES 2
 #define       RTEMS_IO_TCDRAIN        3
+#define       RTEMS_IO_RCVWAKEUP      4
+#define       RTEMS_IO_SNDWAKEUP      5
 
 /* copied from libnetworking/sys/filio.h and commented out there */
 /* Generic file-descriptor ioctl's. */

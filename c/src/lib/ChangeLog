@@ -1,5 +1,10 @@
 2001-08-16	Mike Siers <mikes@poliac.com>
 
+	* include/rtems/termiostypes.h, include/sys/ioccom.h:
+	Update of PPPD to 2.3.11 from 2.3.5 touched these files.
+
+2001-08-16	Mike Siers <mikes@poliac.com>
+
 	* libc/termios.c: Fix a bug in the termios implementation in
 	the following scenario:
 	  The General Terminal Interface document that me states that

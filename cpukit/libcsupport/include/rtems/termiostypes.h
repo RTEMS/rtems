@@ -22,6 +22,14 @@ extern "C" {
 #endif
 
 /*
+ * Wakeup callback data structure
+ */
+struct ttywakeup {
+  void      (*sw_pfn)__P((struct termios *tty, void *arg));
+  void      *sw_arg;
+};
+
+/*
  * Variables associated with the character buffer
  */
 struct rtems_termios_rawbuf {
@@ -111,6 +119,12 @@ struct rtems_termios_tty {
 	 */
         int t_line;   /* id of line discipline                       */
         void *t_sc;   /* hook for discipline-specific data structure */
+        /*
+	 * Wakeup callback variables
+	 */
+	struct ttywakeup tty_snd;
+	struct ttywakeup tty_rcv;
+	int              tty_rcvwakeup;
 };
 
 struct linesw {
