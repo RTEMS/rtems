@@ -26,16 +26,16 @@
 
         PUBLIC(timerisr)
 
-SYM (timerisr):	
- 	addl    $250,_Ttimer_val   # another 250 microseconds
-	push	edx
-	push	eax
-	movw	$0x20,dx
-	mov	edx,eax
-	outb	al,(dx)	# touch interrupt controller
-	pop	eax
-	pop	edx
- 	iret
+SYM (timerisr): 
+        addl    $250,_Ttimer_val   # another 250 microseconds
+        push    edx
+        push    eax
+        movw    $0x20,dx
+        mov     edx,eax
+        outb    al,(dx) # touch interrupt controller
+        pop     eax
+        pop     edx
+        iret
 
 END_CODE
 END

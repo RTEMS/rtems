@@ -40,7 +40,7 @@ extern "C" {
  *  NOTE: Use a software interrupt for the i386.
  */
 
-#define MUST_WAIT_FOR_INTERRUTPT 0
+#define MUST_WAIT_FOR_INTERRUPT 0
 
 #define Install_tm27_vector( handler ) set_vector( (handler), 0x90, 1 )
 

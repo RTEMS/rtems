@@ -20,7 +20,6 @@
  *  $Id$
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
 
@@ -35,33 +34,54 @@ static inline unsigned long long rdtsc( void )
     __asm __volatile( ".byte 0x0F, 0x31" : "=A" (result) );
     return result;
 }
+static void restore_timer( void )
+{
+    CLOCK_ENABLE();
+}
 #else /* pentium */
 rtems_isr timerisr();
 #endif /* pentium */
 
 void Timer_initialize()
 {
+    static int First = 1;
 #if defined(pentium)
+    if ( First )  {
+        extern int atexit( void (*)(void) );
+        First = 0;
+        /* Disable the programmable timer. */
+        CLOCK_DISABLE();
+        /* Try not to hose the system on return to DOS. */
+        atexit( restore_timer );
+    }
     Ttimer_val = rdtsc();
 #else /* pentium */
-    static int First = 1;
+
+#define WAIT() \
+  { \
+    Ttimer_val = 0; \
+    while ( Ttimer_val == 0 ) \
+      continue; \
+    Ttimer_val = 0; \
+  }
+
     if ( First )  {
+        First = 0;
+
         /* install ISR */
         set_vector( timerisr, 0x8, 0 );
 
-        /* Wait for ISR to be called at least once */
-        Ttimer_val = 0;
-        while ( Ttimer_val == 0 )
-            continue;
+       /* Wait for ISR to be called at least once */
+       WAIT();
 
-        /* load timer for 250 microsecond period */
-        outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
-        outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 0 & 0xff);
-        outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 8 & 0xff);
-
-        First = 0;
+       /* load timer for 250 microsecond period */
+       outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
+       outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 0 & 0xff);
+       outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 8 & 0xff);
     }
-    Ttimer_val = 0;                           /* clear timer ISR count */
+
+    /* Wait for ISR to be called at least once */
+    WAIT();
 #endif /* PENTIUM */
 }
 
@@ -81,7 +101,7 @@ int Read_timer()
     inport_byte( TIMER_CNTR0, lsb );
     inport_byte( TIMER_CNTR0, msb );
     clicks = msb << 8 | lsb;
-    total = Ttimer_val + 250 - TICK_TO_US( clicks );
+    total = Ttimer_val + (250 - TICK_TO_US( clicks ));
 #endif /* pentium */
 
     if ( Timer_driver_Find_average_overhead == 1 )
@@ -104,3 +124,4 @@ void Set_find_average_overhead(
 {
   Timer_driver_Find_average_overhead = find_flag;
 }
+

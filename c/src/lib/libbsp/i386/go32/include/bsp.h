@@ -38,14 +38,13 @@ extern "C" {
 /*
  *  Define the interrupt mechanism for Time Test 27
  *
- *  NOTE: Use a software interrupt for the i386.
+ *  NOTE:  Use a software interrupt for the i386 family.
  */
-#define MUST_WAIT_FOR_INTERRUTPT 0
+#define MUST_WAIT_FOR_INTERRUPT 0
 #define Install_tm27_vector( handler ) set_vector( (handler), 0x90, 1 )
 #define Cause_tm27_intr()              asm volatile( "int $0x90" : : );
 #define Clear_tm27_intr()
 #define Lower_tm27_intr()
-
 
 /*
  *  Simple spin delay in microsecond units for device drivers.
@@ -105,6 +104,11 @@ extern "C" {
 #define         TIMER_16BIT     0x30    /* r/w counter 16 bits, LSB first */
 #define         TIMER_BCD       0x01    /* count in BCD */
 
+#define CLOCK_DISABLE()	\
+    ({ char mask; inport_byte( 0x21, mask ); outport_byte( 0x21, mask | 1 ); })
+#define	CLOCK_ENABLE()	\
+    ({ char mask; inport_byte( 0x21, mask ); outport_byte( 0x21, mask & ~1); })
+
 /*	The internal tick rate in ticks per second */
 #define		TIMER_TICK	1193182
 #define		US_TO_TICK(us)	(((us)*105+44)/88)
@@ -153,4 +157,5 @@ i386_isr_entry set_vector(
 
 #endif
 /* end of include file */
+
 

@@ -37,30 +37,9 @@ i386_isr_entry set_vector(                      /* returns old vector */
   i386_isr_entry   previous_isr;
 
   if ( type )  {
-      rtems_interrupt_catch( handler, vector, 
-			     (rtems_isr_entry *) &previous_isr );
+     rtems_interrupt_catch( handler, vector, (rtems_isr_entry *) &previous_isr);
   } else {
-      /* Interrupt goes straight to the supplied ISR.  This code is	*/
-      /* slightly different than that in _CPU_ISR_install_vector	*/
-      /* (which is eventually called by the above) in that this code	*/
-      /* returns the raw entry point as the old handler, while the	*/
-      /* other version returns the old entry point pointed at by the	*/
-      /* rtems ISR table.						*/
-      _go32_dpmi_seginfo	handler_info;
-
-      /* get the address of the old handler */
-      _go32_dpmi_get_protected_mode_interrupt_vector( vector, &handler_info);
-
-      /* Notice how we're failing to save the pm_segment portion of the	*/
-      /* structure here?  That means we might crash the system if we	*/
-      /* try to restore the ISR.  Can't fix this until i386_isr	is	*/
-      /* redefined.  XXX [BHC].						*/
-      previous_isr = (i386_isr_entry) handler_info.pm_offset;
-     
-      /* install the IDT entry */
-      handler_info.pm_offset   = (u_long)handler;
-      handler_info.pm_selector = _go32_my_cs();
-      _go32_dpmi_set_protected_mode_interrupt_vector( vector, &handler_info);
+     _CPU_ISR_install_raw_handler( vector, handler, (proc_ptr *)&previous_isr);
   }
   return previous_isr;
 }
