@@ -153,7 +153,7 @@ void _CPU_ISR_install_raw_handler(
    *  table used by the CPU to dispatch interrupt handlers.
    *
    *  Because all interrupts are vectored through the same exception handler
-   *  this is not necessary on thi sport.
+   *  this is not necessary on this port.
    */
 }
 

@@ -1,3 +1,7 @@
+2001-07-03	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Fixed typo.
+
 2000-05-24	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/mips.h: Added constants for MIPS exception numbers.
