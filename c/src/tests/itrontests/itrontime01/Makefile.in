@@ -25,8 +25,8 @@ C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES = system.h
 
-DOCTYPES = doc scn
-DOCS = $(DOCTYPES:%=$(TEST).%)
+## DOCTYPES = doc scn
+## DOCS = $(DOCTYPES:%=$(TEST).%)
 
 SRCS = $(DOCS) $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
@@ -72,8 +72,8 @@ CLOBBER_ADDITIONS +=
 
 all: ${ARCH} $(SRCS) $(PGM)
 	@$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
-	$(INSTALL_CHANGE) $(srcdir)/$(TEST).scn \
-	    $(PROJECT_RELEASE)/tests/screens/itrontests/$(TEST).scn
+##	$(INSTALL_CHANGE) $(srcdir)/$(TEST).scn \
+##	    $(PROJECT_RELEASE)/tests/screens/itrontests/$(TEST).scn
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
