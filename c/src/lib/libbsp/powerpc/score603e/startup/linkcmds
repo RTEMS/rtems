@@ -63,11 +63,10 @@ SECTIONS
   .init		  : { _init = .; __init = .; *(.init)		}
   .fini		  : { _fini = .; __fini = .; *(.fini)		}
   .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) }
-  .rodata1	  : {
-     *(.rodata1)
-     _etext = .;
-     PROVIDE (_etext = .);
-  }
+  .rodata1	  : { *(.rodata1)		}
+  .eh_frame	  : { *.(eh_frame)		}
+  _etext = .;
+  PROVIDE (_etext = .);
   PROVIDE (__SDATA2_START__ = .);
   .sdata2   	  : { *(.sdata2) 	}
   .sbss2   	  : { *(.sbss2) 	}

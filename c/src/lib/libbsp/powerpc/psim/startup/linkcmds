@@ -68,6 +68,7 @@ SECTIONS
   .fini		  : { _fini = .; __fini = .; *(.fini)		} >RAM
   .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) } >RAM
   .rodata1	  : { *(.rodata1) 	} >RAM
+  .eh_frame	  : { *.(eh_frame)		} >RAM
   PROVIDE (_etext = .);
   PROVIDE (etext = .);
   PROVIDE (__SDATA2_START__ = .);

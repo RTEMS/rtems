@@ -40,6 +40,7 @@ SECTIONS
 	     *(.entry2)
 	     *(.text)
 	     *(.rodata)
+             *(.eh_frame)
              *(.gnu.linkonce.r*)
 	     *(.rodata1)
              *(.gnu.linkonce.t.*)

@@ -53,6 +53,7 @@ SECTIONS
   .fini		  : { _fini = .; *(.fini)	}
   .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) }
   .rodata1	  : { *(.rodata1) }
+  .eh_frame	  : { *.(eh_frame) }
   _etext = .;
   PROVIDE (etext = .);
   PROVIDE (__SDATA2_START__ = .);
