@@ -32,28 +32,6 @@ extern "C" {
 #endif
 
 /*
- *  The following define the CPU Family and Model within the family
- *
- *  NOTE: The string "REPLACE_THIS_WITH_THE_CPU_MODEL" is replaced
- *        with the name of the appropriate macro for this target CPU.
- */
- 
-#ifdef hppa1_1
-#undef hppa1_1
-#endif
-#define hppa1_1
-
-#ifdef REPLACE_THIS_WITH_THE_CPU_MODEL
-#undef REPLACE_THIS_WITH_THE_CPU_MODEL
-#endif
-#define REPLACE_THIS_WITH_THE_CPU_MODEL
-
-#ifdef REPLACE_THIS_WITH_THE_BSP
-#undef REPLACE_THIS_WITH_THE_BSP
-#endif
-#define REPLACE_THIS_WITH_THE_BSP
-
-/*
  *  This section contains the information required to build
  *  RTEMS for a particular member of the Hewlett Packard
  *  PA-RISC family.  It does this by setting variables to

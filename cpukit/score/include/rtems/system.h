@@ -23,16 +23,12 @@ extern "C" {
 #endif
 
 /*
- *  The following define the CPU Family and Model within the family
- *
- *  NOTE: The string "REPLACE_THIS_WITH_USE_INLINE_OR_MACROS" is replaced
- *        with either "USE_INLINES" or "USE_MACROS" based upon the
- *        whether this target configuration uses the inline or
- *        macro implementations of the inlined RTEMS routines.
+ *  The target options include file defines all target dependent 
+ *  parameters for this build of RTEMS.  It must be included
+ *  first so the basic macro definitions are in place.
  */
- 
 
-#define REPLACE_THIS_WITH_USE_INLINE_OR_MACROS
+#include <rtems/score/targopts.h>
 
 /*
  *  The following insures that all data is declared in the space

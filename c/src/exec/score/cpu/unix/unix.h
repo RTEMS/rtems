@@ -22,38 +22,6 @@ extern "C" {
 #endif
 
 /*
- *  The following define the CPU Family and Model within the family
- *
- *  NOTE: The string "REPLACE_THIS_WITH_THE_CPU_MODEL" is replaced
- *        with the name of the appropriate macro for this target CPU.
- */
- 
-#ifdef unix
-#undef unix
-#endif
-#define unix
-
-#ifdef REPLACE_THIS_WITH_THE_CPU_FAMILY
-#undef REPLACE_THIS_WITH_THE_CPU_FAMILY
-#endif
-#define REPLACE_THIS_WITH_THE_CPU_FAMILY
-
-#ifdef REPLACE_THIS_WITH_THE_BSP
-#undef REPLACE_THIS_WITH_THE_BSP
-#endif
-#define REPLACE_THIS_WITH_THE_BSP
-
-#ifdef REPLACE_THIS_WITH_THE_CPU_MODEL
-#undef REPLACE_THIS_WITH_THE_CPU_MODEL
-#endif
-#define REPLACE_THIS_WITH_THE_CPU_MODEL
-
-#ifdef REPLACE_THIS_WITH_THE_UNIX_FLAVOR
-#undef REPLACE_THIS_WITH_THE_UNIX_FLAVOR
-#endif
-#define REPLACE_THIS_WITH_THE_UNIX_FLAVOR
-
-/*
  *  This file contains the information required to build
  *  RTEMS for a particular member of the "unix"
  *  family when executing in protected mode.  It does
