@@ -47,11 +47,12 @@ void _CPU_Initialize(
    *  Manual and should work on any coprocessor greater than
    *  the i80287.
    *
-   *  NOTE: The NO RTEMS_WAIT form of the coprocessor instructions
+   *  NOTE: The NO WAIT form of the coprocessor instructions
    *        MUST be used in case there is not a coprocessor
    *        to wait for.
    */
 
+#if CPU_HARDWARE_FP
   fp_status = 0xa5a5;
   asm volatile( "fninit" );
   asm volatile( "fnstsw %0" : "=a" (fp_status) : "0" (fp_status) );
@@ -64,6 +65,8 @@ void _CPU_Initialize(
                                : "0"  (fp_context)
                 );
   }
+#endif
+
 }
 
 /*PAGE

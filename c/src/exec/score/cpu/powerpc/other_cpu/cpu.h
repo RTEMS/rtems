@@ -301,7 +301,7 @@ typedef void ( *ppc_isr_entry )( int, struct CPU_Interrupt_frame * );
  *  routines are handled.
  */
 
-#define CPU_CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
+#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
 

@@ -312,7 +312,7 @@ extern void a29k_sigdfl_sup(void);
 
 #error "Check these definitions!!!"
 
-#define CPU_CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
+#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
 
