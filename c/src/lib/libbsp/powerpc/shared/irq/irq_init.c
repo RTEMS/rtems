@@ -85,7 +85,7 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   /*
    * PCI Interrupts
    */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* for raven prio 0 means unactive... */
+  8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, /* for raven prio 0 means unactive... */
   /*
    * Processor exceptions handled as interrupts
    */

@@ -19,6 +19,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apiext.h>
 #include <libcpu/raw_exception.h>
+#include <libcpu/io.h>
 #include <bsp/vectors.h>
 
 #include <rtems/bspIo.h> /* for printk */
@@ -280,7 +281,11 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
      * continue with PCI IRQ
      */
     for (i=BSP_PCI_IRQ_LOWEST_OFFSET; i < BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER ; i++) {
-      openpic_set_priority(0, internal_config->irqPrioTbl [i]);
+      /*
+       * Note that openpic_set_priority() sets the TASK priority of the PIC
+       */
+      openpic_set_source_priority(i - BSP_PCI_IRQ_LOWEST_OFFSET,
+				  internal_config->irqPrioTbl[i]);
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
 	openpic_enable_irq ((int) i - BSP_PCI_IRQ_LOWEST_OFFSET);
 	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
@@ -317,7 +322,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 
 int _BSP_vme_bridge_irq = -1;
  
-static unsigned spuriousIntr = 0;
+unsigned spuriousIntr = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
@@ -344,7 +349,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   }
   irq = openpic_irq(0);
   if (irq == OPENPIC_VEC_SPURIOUS) {
-    ++spuriousIntr;
+    ++BSP_spuriousIntr;
     return;
   }
   isaIntr = (irq == BSP_PCI_ISA_BRIDGE_IRQ);

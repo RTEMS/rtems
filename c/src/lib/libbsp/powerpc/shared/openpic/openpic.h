@@ -334,5 +334,7 @@ extern void openpic_initirq(unsigned int irq, unsigned int pri, unsigned int vec
 			    int is_level);
 extern void openpic_mapirq(unsigned int irq, unsigned int cpumask);
 extern void openpic_set_sense(unsigned int irq, int sense);
+extern unsigned int openpic_get_source_priority(unsigned int irq);
+extern void openpic_set_source_priority(unsigned int irq, unsigned int pri);
 
 #endif /* RTEMS_OPENPIC_H */
