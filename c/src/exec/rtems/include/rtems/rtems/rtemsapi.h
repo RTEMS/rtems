@@ -22,7 +22,9 @@
  *
  *  _RTEMS_API_Initialize
  *
- *  XXX
+ *  This routine initializes the RTEMS API by invoking the initialization
+ *  routine for each RTEMS manager with the appropriate parameters
+ *  from the configuration_table.
  */
  
 void _RTEMS_API_Initialize(
