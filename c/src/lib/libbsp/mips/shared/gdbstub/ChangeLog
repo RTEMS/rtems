@@ -1,5 +1,11 @@
 2002-02-08	Joel Sherrill <joel@OARcorp.com>
 
+	* mips-stub.c (handle_exception): Prototype changed to be an RTEMS 
+	entry point.  Added comments about possible need to flush cache.
+	(mips_gdb_stub_install): New routine.
+
+2002-02-08	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile, stubinit.S, r46kstub.ld, ioaddr.h: Removed as unused
 	with RTEMS.
 	* r46kstub.c: Renamed to mips-stub.c.

@@ -779,8 +779,7 @@ computeSignal (void)
  * it figures out why it was activated and tells gdb, and then it
  * reacts to gdb's requests.
  */
-void
-handle_exception (CPU_Interrupt_frame *frame)
+void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
 {
   int host_has_detached = 0;
   int sigval;
@@ -906,5 +905,27 @@ handle_exception (CPU_Interrupt_frame *frame)
       /* reply to the request */
       putpacket (outBuffer);
     }
+
+   /*
+    *  The original code did this in the assembly wrapper.  We should consider
+    *  doing it here before we return.
+    *
+    *  On exit from the exception handler invalidate each line in the I-cache
+    *  and write back each dirty line in the D-cache.  This needs to be done
+    *  before the target program is resumed in order to ensure that software
+    *  breakpoints and downloaded code will actually take effect.
+    */
+
   return;
+}
+
+void mips_gdb_stub_install(void) 
+{
+  rtems_isr_entry old;
+
+  rtems_interrupt_catch( (rtems_isr_entry) handle_exception, MIPS_EXCEPTION_SYSCALL, &old );
+  /* rtems_interrupt_catch( handle_exception, MIPS_EXCEPTION_BREAK, &old ); */
+
+  /* get the attention of gdb */
+  mips_break();
 }
