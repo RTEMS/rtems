@@ -362,7 +362,7 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
         installed[source/8] |= (1 << (source % 8));
         rtems_interrupt_enable(level);
         for (l = 1 ; l < 7 ; l++) {
-            for (p = 0 ; p < 7 ; p++) {
+            for (p = 0 ; p < 8 ; p++) {
                 if ((source < 8)
                  || (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL)) {
                     if (source >= 8)
