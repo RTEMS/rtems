@@ -1,3 +1,8 @@
+	TMPINSTALL_FILES, include force-preinstall.am.
+	* wrapup/Makefile.am: Apply @exceptions@.
+
+2001-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add bspopts.h.
 	* include/.cvsignore: Add stamp-h* and bspopts.h*.
 	* include/Makefile.am: Add bspopts.h.

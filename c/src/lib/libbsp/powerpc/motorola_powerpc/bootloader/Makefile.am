@@ -2,40 +2,44 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+## NOTE: This Makefile.am applies automake compilation rules and does not 
+## apply RTEMS's compilation rules.
 
-VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/console:@srcdir@/../../shared/bootloader
+AUTOMAKE_OPTIONS = foreign no-exeext 1.5
 
-LIB = $(ARCH)/bootloader.o
-LDS = ppcboot.lds
+VPATH = @srcdir@:@srcdir@/../../shared/bootloader:@srcdir@/../../shared/console
 
-C_FILES = misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+noinst_PROGRAMS = bootloader.o
 
-H_FILES = bootldr.h zlib.h pci.h
-
-S_FILES = head.S exception.S em86real.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
-
-OBJS = $(S_O_FILES) $(C_O_FILES)
+bootloader_o_SOURCES = misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
+bootloader_o_SOURCES += bootldr.h zlib.h pci.h keyboard.h
+bootloader_o_SOURCES += head.S exception.S em86real.S
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+NM = @NM@
+LD = @LD@
 
-## FIXME:
-## ASFLAGS = -mrelocatable
-CFLAGS_DEBUG_V = $(CFLAGS_OPTIMIZE_V)
+# ----
+## Custom compilation vars, stripped versions of what is used in
+## automake/compile.am and by automake-1.5's standard rules.
+COMPILE = $(CC) $(INCLUDES) $(AM_CPPFLAGS) $(AM_CFLAGS)
+ASCOMPILE = $(CC) $(AM_ASFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
-AM_CPPFLAGS += -D__BOOT__ -DDEBUG -mrelocatable
-AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
-    -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata
+# ----
+DEFAULT_INCLUDES =
 
-CLEANFILES = bootloader.o
+AM_CPPFLAGS = -D__BOOT__ -DDEBUG
+AM_CFLAGS = \
+    $(GCC_SPECS) -specs bsp_specs -qrtems -mrelocatable \
+    -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
+    -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata \
+    $(CPU_CFLAGS)
+AM_ASFLAGS = $(INCLUDES) $(AM_CPPFLAGS) \
+    $(GCC_SPECS) -specs bsp_specs -qrtems -mrelocatable \
+    -DASM $(CPU_CFLAGS)
 
 #
 # CAUTION :
@@ -46,18 +50,26 @@ CLEANFILES = bootloader.o
 #
 # NEVER remove lib.c. You have been warned...
 #
+bootloader.o: $(bootloader_o_OBJECTS)
+	$(LD) -r -o $@ $(bootloader_o_OBJECTS)
+	$(NM)  $@ | grep ' U '
+	@echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
 
-$(LIB) : $(OBJS) 
-	$(LD) -r -o $(ARCH)/bootloader.o $(OBJS)
-	$(NM)  $(ARCH)/bootloader.o | grep ' U '
-	echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
+# FIXME: We might want to apply this in future.
+# ppcbootdir = $(exec_prefix)/@RTEMS_BSP@/lib
+# ppcboot_DATA = bootloader.o
+# ppcboot_DATA += ../../shared/bootloader/ppcboot.lds
 
-$(PROJECT_RELEASE)/lib/bootloader.o : $(LIB)
+# FIXME: Tmp-install stuff to make mcp750.cfg's make-exe happy.
+# As mcp750.cfg's make-exe doesn't work outside of the source-tree. 
+# We might consider to use this directory directly for in-source-tree 
+# building, instead.
+$(PROJECT_RELEASE)/lib/%: %
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_RELEASE)/lib/ppcboot.lds : $(LDS)
-	$(INSTALL_DATA) $< $@
+TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib/bootloader.o \
+    $(PROJECT_RELEASE)/lib/ppcboot.lds
 
-all-local: $(ARCH) $(PROJECT_RELEASE)/lib/bootloader.o $(PROJECT_RELEASE)/lib/ppcboot.lds
+all-local: $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../../automake/local.am

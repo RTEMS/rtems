@@ -25,6 +25,9 @@ RTEMS_CANONICAL_HOST
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AM_CONDITIONAL(need_motorola_powerpc, test "$RTEMS_BSP_FAMILY" = "motorola_powerpc")
 
+AS=$CC
+AM_PROG_AS
+
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
