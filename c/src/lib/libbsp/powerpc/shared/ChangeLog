@@ -1,3 +1,7 @@
+2004-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Don't install, just distribute the files.
+
 2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove SUBDIRS.
