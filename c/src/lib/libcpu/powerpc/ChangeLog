@@ -1,3 +1,8 @@
+2001-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc8260/exceptions/Makefile.am, mpc8260/include/Makefile.am,
+	mpc8xx/exceptions/Makefile.am: Updated to autoconf 2.52.
+
 2001-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc8260/include/mpc8260.h: "or" is a keyword in C++.  

@@ -4,14 +4,14 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = mpc8260.h
-MPC8260_H_FILES = console.h mmu.h cpm.h
+include_mpc8260dir = $(includedir)/mpc8260
 
-noinst_HEADERS = $(H_FILES) $(MPC8260_H_FILES)
+include_HEADERS = mpc8260.h
+include_mpc8260_HEADERS = console.h mmu.h cpm.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260 \
-    $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
-    $(MPC8260_H_FILES:%.h=$(PROJECT_INCLUDE)/mpc8260/%.h)
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/mpc8260 \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%) \
+    $(include_mpc8260_HEADERS:%=$(PROJECT_INCLUDE)/mpc8260/%)
 
 $(PROJECT_INCLUDE)/mpc8260:
 	$(mkinstalldirs) $@
