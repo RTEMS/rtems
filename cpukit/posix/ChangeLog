@@ -1,3 +1,19 @@
+2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 449/rtems:
+	* src/getegid.c: Remove (Moved to ../libcsupport/src).
+	* src/geteuid.c: Remove (Moved to ../libcsupport/src).
+	* src/getgid.c: Remove (Moved to ../libcsupport/src).
+	* src/getgroups.c: Remove (Moved to ../libcsupport/src).
+	* src/getlogin.c: Remove (Moved to ../libcsupport/src).
+	* src/getpgrp.c: Remove (Moved to ../libcsupport/src).
+	* src/getpid.c: Remove (Moved to ../libcsupport/src).
+	* src/getppid.c: Remove (Moved to ../libcsupport/src).
+	* src/getuid.c: Remove (Moved to ../libcsupport/src).
+	* src/setpgid.c: Remove (Moved to ../libcsupport/src).
+	* src/setsid.c: Remove (Moved to ../libcsupport/src).
+	* Makefile.am: Reflect changes above
+
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
 	* src/mqueuenametoid.c, src/semaphorenametoid.c: Added ID to name
