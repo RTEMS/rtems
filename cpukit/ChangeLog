@@ -1,5 +1,10 @@
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/net/if.h; Cosmetical updates from FreeBSD.
+	Remove if_poll* (Not implemented in RTEMS, abandoned by FreeBSD).
+
+2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libmisc/monitor/mon-prmisc.c, libmisc/monitor/monitor.h:
 	rtems_monitor_dump_char(char ch).
 

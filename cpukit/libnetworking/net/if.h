@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,9 +27,13 @@
  * SUCH DAMAGE.
  *
  *	@(#)if.h	8.1 (Berkeley) 6/10/93
- * $Id$
+ * $FreeBSD: src/sys/net/if.h,v 1.92 2004/09/08 04:50:55 brooks Exp $
  */
 
+/*
+ * $Id$
+ */
+ 
 #ifndef _NET_IF_H_
 #define	_NET_IF_H_
 
@@ -333,7 +333,7 @@ struct ifaddr {
  */
 struct if_msghdr {
 	u_short	ifm_msglen;	/* to skip over non-understood messages */
-	u_char	ifm_version;	/* future binary compatability */
+	u_char	ifm_version;	/* future binary compatibility */
 	u_char	ifm_type;	/* message type */
 	int	ifm_addrs;	/* like rtm_addrs */
 	int	ifm_flags;	/* value of if_flags */
@@ -347,7 +347,7 @@ struct if_msghdr {
  */
 struct ifa_msghdr {
 	u_short	ifam_msglen;	/* to skip over non-understood messages */
-	u_char	ifam_version;	/* future binary compatability */
+	u_char	ifam_version;	/* future binary compatibility */
 	u_char	ifam_type;	/* message type */
 	int	ifam_addrs;	/* like rtm_addrs */
 	int	ifam_flags;	/* value of ifa_flags */
@@ -441,29 +441,20 @@ int	ether_output __P((struct ifnet *,
 	   struct mbuf *, struct sockaddr *, struct rtentry *));
 int	ether_ioctl __P((struct ifnet *, int , caddr_t ));
 
-void	if_attach __P((struct ifnet *));
-void	if_down __P((struct ifnet *));
-void	if_up __P((struct ifnet *));
-#ifdef vax
-void	ifubareset __P((int));
-#endif
+void	if_attach(struct ifnet *);
+void	if_down(struct ifnet *);
+void	if_up(struct ifnet *);
+
 /*void	ifinit __P((void));*/ /* declared in systm.h for main() */
-int	ifioctl __P((struct socket *, int, caddr_t, struct proc *));
-int	ifpromisc __P((struct ifnet *, int));
-struct	ifnet *ifunit __P((char *));
+int	ifioctl(struct socket *, int, caddr_t, struct proc *);
+int	ifpromisc(struct ifnet *, int);
+struct	ifnet *ifunit(char *);
 
-int	if_poll_recv_slow __P((struct ifnet *ifp, int *quotap));
-void	if_poll_xmit_slow __P((struct ifnet *ifp, int *quotap));
-void	if_poll_throttle __P((void));
-void	if_poll_unthrottle __P((void *));
-void	if_poll_init __P((void));
-void	if_poll __P((void));
-
-struct	ifaddr *ifa_ifwithaddr __P((struct sockaddr *));
-struct	ifaddr *ifa_ifwithdstaddr __P((struct sockaddr *));
-struct	ifaddr *ifa_ifwithnet __P((struct sockaddr *));
-struct	ifaddr *ifa_ifwithroute __P((int, struct sockaddr *,
-					struct sockaddr *));
+struct	ifaddr *ifa_ifwithaddr(struct sockaddr *);
+struct	ifaddr *ifa_ifwithdstaddr(struct sockaddr *);
+struct	ifaddr *ifa_ifwithnet(struct sockaddr *);
+struct	ifaddr *ifa_ifwithroute(int, struct sockaddr *,
+					struct sockaddr *);
 struct	ifaddr *ifaof_ifpforaddr __P((struct sockaddr *, struct ifnet *));
 void	ifafree __P((struct ifaddr *));
 
