@@ -348,7 +348,6 @@ See .doc file, verify correct
 
 @item Notes:
 @itemize @bullet
-@item Implement Using SuperCore Message Queue Handler
 @item Passes Addresses of Messages
 @item FIFO or Priority Task Blocking
 @item FIFO or Priority Message Ordering
@@ -359,8 +358,7 @@ See .doc file, verify correct
 
 @item Executive Modifications
 @itemize @bullet
-@item None Expected
-@item Functionality Completely Supported by SuperCore Message Queue Handler
+@item None
 @end itemize
 
 @item Testing
