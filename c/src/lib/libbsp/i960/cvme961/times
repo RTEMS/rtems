@@ -64,7 +64,7 @@ Column B:             unused
    rtems_message_queue_send: no waiting tasks                           37
    rtems_message_queue_urgent: no waiting tasks                         37
    rtems_message_queue_receive: available                               31
-   rtems_message_queue_flush: no messages flushed                                     12
+   rtems_message_queue_flush: no messages flushed                       12
    rtems_message_queue_flush: messages flushed                          16
    rtems_message_queue_delete                                           26
 
@@ -128,6 +128,7 @@ Column B:             unused
    rtems_rate_monotonic_ident                                          145
 
 22 rtems_message_queue_broadcast: task readied -- returns to caller     42
+   rtems_message_queue_broadcast: no waiting tasks                      17
    rtems_message_queue_broadcast: task readied -- preempts caller       78
 
 23 rtems_timer_create                                                   14
