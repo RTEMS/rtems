@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* asm.h, cpu.c, rtems/score/cpu.h, rtems/score/sh.h,
+	rtems/score/sh_io.h, rtems/score/types.h: URL for license changed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
