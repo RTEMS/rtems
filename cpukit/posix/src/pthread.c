@@ -42,6 +42,60 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
 
 /*PAGE
  *
+ *  _POSIX_Threads_Sporadic_budget_TSR
+ */
+
+void _POSIX_Threads_Sporadic_budget_TSR(
+  Objects_Id      id,
+  void           *argument
+)
+{
+  Thread_Control     *the_thread;
+  POSIX_API_Control  *api;
+
+  the_thread = argument;
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  the_thread->cpu_time_budget =
+    _POSIX_Timespec_to_interval( &api->schedparam.ss_initial_budget );
+
+  _Thread_Change_priority(
+    the_thread,
+    _POSIX_Priority_To_core( api->schedparam.sched_priority )
+  );
+  
+  _Watchdog_Insert_ticks(
+    &api->Sporadic_timer,
+    _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period )
+  );
+}
+
+/*PAGE
+ *
+ *  _POSIX_Threads_Sporadic_budget_callout
+ */
+
+void _POSIX_Threads_Sporadic_budget_callout(
+  Thread_Control *the_thread
+)
+{
+  POSIX_API_Control                  *api;
+
+  /* XXX really should be based on MAX_U32 */
+
+  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+
+  the_thread->cpu_time_budget = 0xFFFFFFFF;
+
+  _Thread_Change_priority(
+    the_thread, 
+    _POSIX_Priority_To_core( api->schedparam.ss_low_priority )
+  );
+}
+
+/*PAGE
+ *
  *  _POSIX_Threads_Create_extension
  *
  *  XXX
@@ -421,16 +475,58 @@ int pthread_setschedparam(
   struct sched_param *param
 )
 {
-  register Thread_Control *the_thread;
-  POSIX_API_Control       *api;
-  Objects_Locations        location;
+  register Thread_Control             *the_thread;
+  POSIX_API_Control                   *api;
+  Thread_CPU_budget_algorithms         budget_algorithm;
+  Thread_CPU_budget_algorithm_callout  budget_callout;
+  Objects_Locations                    location;
  
+  /*
+   *  Check all the parameters
+   */
+
   if ( !param )
     return EINVAL;
 
-  /* XXX need to reschedule after doing this to the thread */
-  /* XXX need to have one routine called by create and here */
-#warning "pthread_setschedparam needs work"
+  if ( !_POSIX_Priority_Is_valid( param->sched_priority ) )
+    return EINVAL;
+
+  budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+  budget_callout = NULL;
+
+  switch ( policy ) {
+    case SCHED_OTHER:
+      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
+      break;
+ 
+    case SCHED_FIFO:
+      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+      break;
+ 
+    case SCHED_RR:
+      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
+      break;
+ 
+    case SCHED_SPORADIC:
+      budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
+      budget_callout = _POSIX_Threads_Sporadic_budget_callout;
+ 
+      if ( _POSIX_Timespec_to_interval( &param->ss_replenish_period ) <
+           _POSIX_Timespec_to_interval( &param->ss_initial_budget ) )
+        return EINVAL;
+ 
+      if ( !_POSIX_Priority_Is_valid( param->ss_low_priority ) )
+        return EINVAL;
+ 
+      break;
+ 
+    default:
+      return EINVAL;
+  }
+
+  /*
+   *  Actually change the scheduling policy and parameters
+   */
 
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
@@ -438,23 +534,33 @@ int pthread_setschedparam(
     case OBJECTS_REMOTE:
       return ESRCH;
     case OBJECTS_LOCAL:
-      switch ( policy ) {
-        case SCHED_OTHER:
-        case SCHED_FIFO:
-        case SCHED_RR:
-        case SCHED_SPORADIC:
-          /* XXX this is where the interpretation work should go */
-          break;
- 
-        default:
-          _Thread_Enable_dispatch();
-          return EINVAL;
-      }
-
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+      if ( api->schedpolicy == SCHED_SPORADIC )
+        (void) _Watchdog_Remove( &api->Sporadic_timer );
 
       api->schedpolicy = policy;
       api->schedparam  = *param;
+      the_thread->budget_algorithm = budget_algorithm;
+      the_thread->budget_callout   = budget_callout;
+
+      switch ( api->schedpolicy ) {
+        case SCHED_OTHER:
+        case SCHED_FIFO:
+        case SCHED_RR:
+          the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
+
+          _Thread_Change_priority(
+            the_thread, 
+            _POSIX_Priority_To_core( api->schedparam.sched_priority )
+          );
+          break;
+ 
+        case SCHED_SPORADIC:
+          _POSIX_Threads_Sporadic_budget_TSR( 0, the_thread );
+          break;
+      }
+
       _Thread_Enable_dispatch();
       return 0;
   }
@@ -607,60 +713,6 @@ int pthread_attr_setdetachstate(
 
 /*PAGE
  *
- *  _POSIX_Threads_Sporadic_budget_TSR
- */
-
-void _POSIX_Threads_Sporadic_budget_TSR(
-  Objects_Id      id,
-  void           *argument
-)
-{
-  Thread_Control     *the_thread;
-  POSIX_API_Control  *api;
-
-  the_thread = argument;
-
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-
-  the_thread->cpu_time_budget =
-    _POSIX_Timespec_to_interval( &api->schedparam.ss_initial_budget );
-
-  _Thread_Change_priority(
-    the_thread,
-    _POSIX_Priority_To_core( api->schedparam.sched_priority )
-  );
-  
-  _Watchdog_Insert_ticks(
-    &api->Sporadic_timer,
-    _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period )
-  );
-}
-
-/*PAGE
- *
- *  _POSIX_Threads_Sporadic_budget_callout
- */
-
-void _POSIX_Threads_Sporadic_budget_callout(
-  Thread_Control *the_thread
-)
-{
-  POSIX_API_Control                  *api;
-
-  /* XXX really should be based on MAX_U32 */
-
-  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
-
-  the_thread->cpu_time_budget = 0xFFFFFFFF;
-
-  _Thread_Change_priority(
-    the_thread, 
-    _POSIX_Priority_To_core( api->schedparam.ss_low_priority )
-  );
-}
-
-/*PAGE
- *
  *  16.1.2 Thread Creation, P1003.1c/Draft 10, p. 144
  */
 
@@ -775,6 +827,9 @@ int pthread_create(
         return EINVAL;
 
       break;
+
+    default:
+      return EINVAL;
   }
 
   /*
@@ -997,6 +1052,9 @@ void pthread_exit(
   while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )
       *(void **)the_thread->Wait.return_argument = value_ptr;
 
+  if ( api->schedpolicy == SCHED_SPORADIC )
+    (void) _Watchdog_Remove( &api->Sporadic_timer );
+
   /* XXX run _POSIX_Keys_Run_destructors here? */
 
   _POSIX_Threads_Free( executing );
@@ -1017,6 +1075,8 @@ pthread_t pthread_self( void )
 /*PAGE
  *
  *  16.1.7 Compare Thread IDs, p1003.1c/Draft 10, p. 153
+ *
+ *  NOTE:  POSIX does not define the behavior when either thread id is invalid. 
  */
 
 int pthread_equal( 
@@ -1027,9 +1087,6 @@ int pthread_equal(
   int               status;
   Objects_Locations location;
 
- /* XXX may want to do a "get" to make sure both are valid. */
- /* XXX behavior is undefined if not valid pthread_t's */
- 
   /*
    *  By default this is not a match.
    */
