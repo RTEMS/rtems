@@ -71,7 +71,7 @@ rtems_boolean is_character_ready(
 {
   if (debug_port_status(0))
   {
-    ch = debug_port_in();
+    *ch = debug_port_in();
     return TRUE;
   }
   return FALSE;
