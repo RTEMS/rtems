@@ -4,11 +4,9 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
+PGM = $(ARCH)/erc32sonic.rel
 
-PGM = $(ARCH)/gnatsupp.rel
-
-C_FILES = gnatsupp.c gnatcommon.c
+C_FILES = erc32sonic.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -21,13 +19,17 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
+AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 $(PGM): $(OBJS)
 	$(make-rel)
+
+# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
 all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = gnatsupp.c gnatcommon.c
+EXTRA_DIST = erc32sonic.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

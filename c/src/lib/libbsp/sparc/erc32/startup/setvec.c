@@ -60,3 +60,12 @@ rtems_isr_entry set_vector(                   /* returns old vector */
   return previous_isr;
 }
 
+/* ERC32 power-down function */
+
+void _CPU_Thread_Idle_body( void )
+{
+  while (1) {
+    ERC32_MEC.Power_Down = 0;   /* value is irrelevant */
+  }
+}
+

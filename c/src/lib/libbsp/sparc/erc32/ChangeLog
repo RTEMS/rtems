@@ -1,3 +1,25 @@
+2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* Makefile.am, configure.in, gnatsupp/Makefile.am,
+	gnatsupp/gnatsupp.c, include/Makefile.am, include/bsp.h,
+	start/Makefile.am, startup/Makefile.am, startup/setvec.c,
+	wrapup/Makefile.am:
+	* erc32sonic: New directory.
+	* erc32sonic/Makefile.am, erc32sonic/erc32sonic.c,
+	erc32sonic/.cvsignore: New files.
+	* include/erc32.h: New file.
+	* startup/boardinit.S: New file.
+	Big update of SPARC support for ERC32 and LEON.
+	Added support for ERC32 without floating point.
+	Added SONIC support as configured on Tharsys ERC32 board.
+	The bsp's share various code in the shared directory:
+	   gnat-support, start-up code, etc.
+	To decrease the foot-print, I removed the 16 kbyte start-up
+	stack that was put in .bss and never reused once the system
+	was up. The stack is now put between the heap and the
+	workspace. To reclaim it, the user can do a rtems_region_extend
+	to merge the stack to the heap region once the system is up.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

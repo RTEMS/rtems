@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = bsp.h coverhd.h
+H_FILES = bsp.h coverhd.h erc32.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@

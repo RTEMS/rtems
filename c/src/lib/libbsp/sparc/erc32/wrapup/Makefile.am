@@ -4,7 +4,12 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-BSP_PIECES = startup console clock timer gnatsupp
+# We only build the networking device driver if HAS_NETWORKING was defined
+if HAS_NETWORKING
+NETWORKING_DRIVER = erc32sonic
+endif
+
+BSP_PIECES = startup console clock timer gnatsupp $(NETWORKING_DRIVER)
 # pieces to pick up out of libcpu/sparc
 CPU_PIECES = reg_win syscall
 

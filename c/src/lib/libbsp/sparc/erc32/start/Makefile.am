@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+VPATH = @srcdir@:@srcdir@/../../shared
+
 PGM = $(ARCH)/start.o
 
 S_FILES = start.S
