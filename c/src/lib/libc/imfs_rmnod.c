@@ -56,7 +56,7 @@ int IMFS_rmnod(
   if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
 
     /* 
-     * Is the rtems_filesystem_current is this node?
+     * Is rtems_filesystem_current this node?
      */
 
     if ( rtems_filesystem_current.node_access == pathloc->node_access )
