@@ -1,3 +1,10 @@
+2004-03-30	David Querbach <querbach@realtime.bc.ca>
+
+	PR 596/tests
+	* sp32/init.c: A missing definition of TEST_INIT before including
+	<tmacros.h> means that buffered output will not work even if selected
+	in buffer_test_io.h.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* sp02/task1.c, sp04/system.h, sp04/task1.c, sp04/tswitch.c,

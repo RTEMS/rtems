@@ -7,6 +7,7 @@
  * $Id$
  */
 
+#define TEST_INIT
 #include <tmacros.h>  /* includes bsp.h, stdio, etc... */
 
 /* prototype */
