@@ -158,6 +158,49 @@ in_cksum_update(struct ip *ip)
 }
 
 /*
+ *  SPARC Version
+ */
+
+#elif (defined(__GNUC__) && defined(sparc))
+
+static __inline u_int
+in_cksum_hdr(const struct ip *ip)
+{
+   register u_int sum = 0;
+   register u_int tmp_o2;
+   register u_int tmp_o3;
+
+   __asm__ volatile ("
+     ld [%0], %1 ; \
+     ld [%0+4], %2 ; \
+     addcc %1, %2, %1 ; \
+     ld [%0+8], %2 ; \
+     addxcc %1, %2, %1 ; \
+     ld [%0+12], %2 ; \
+     addxcc %1, %2, %1 ; \
+     ld [%0+16], %2 ; \
+     addxcc %1, %2, %1 ; \
+     set 0x0ffff, %3 ; \
+     srl %1, 16, %2 ; \
+     and %1, %3, %1 ; \
+     addx %1, %2, %1 ; \
+     srl %1, 16, %1 ; \
+     add %1, %%g0, %1 ; \
+     neg %1 ; \
+     and %1, %3, %1 ; \
+    " : "=r" (ip), "=r" (sum), "=r" (tmp_o2), "=r" (tmp_o3)
+      : "0" (ip), "1" (sum)
+  );
+  return sum;
+}
+
+#define	in_cksum_update(ip) \
+	do { \
+		int __tmpsum; \
+		__tmpsum = (int)ntohs(ip->ip_sum) + 256; \
+		ip->ip_sum = htons(__tmpsum + (__tmpsum >> 16)); \
+	} while(0)
+/*
  *  Here is the generic, portable, inefficient algorithm.
  */
 
