@@ -14,13 +14,19 @@ extern "C" {
 #endif
 
 /* XXX some of these may need to be moved */
+/* 
+ *  XXX: These names are too short and conflict with numerous 
+ *       off the shell programs including paranoia.
+ */
 
+#if 0
 typedef signed8      B;       /* signed 8-bit integer */
 typedef signed16     H;       /* signed 16-bit integer */
 typedef signed32     W;       /* signed 32-bit integer */
 typedef unsigned8    UB;      /* unsigned 8-bit integer */
 typedef unsigned16   UH;      /* unsigned 16-bit integer */
 typedef unsigned32   UW;      /* unsigned 32-bit integer */
+#endif
 
 typedef unsigned32   VW;      /* unpredictable data type (32-bit size) */
 typedef unsigned16   VH;      /* unpredictable data type (16-bit size) */
