@@ -29,12 +29,17 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 RTEMS_CHECK_POSIX_API(RTEMS_BSP)
 RTEMS_CHECK_ITRON_API(RTEMS_BSP)
+RTEMS_CHECK_TESTS
 
-AC_CONFIG_SUBDIRS(tools)
-AC_CONFIG_SUBDIRS(support)
-AC_CONFIG_SUBDIRS(samples)
+case $enable_tests in
+yes | samples )
+  AC_CONFIG_SUBDIRS(tools)
+  AC_CONFIG_SUBDIRS(support)
+  AC_CONFIG_SUBDIRS(samples)
+  ;;
+esac
 
-if test "$tests_enabled" = "yes"; then
+if test "$enable_tests" = "yes"; then
   # do functionality tests first, then performance tests
   AC_CONFIG_SUBDIRS(libtests sptests)
   if test "$HAS_MP" = "yes"; then

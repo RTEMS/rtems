@@ -2,14 +2,12 @@ dnl $Id$
 
 AC_DEFUN(RTEMS_ENABLE_TESTS,
 [
-# If the tests are enabled, then find all the test suite Makefiles
-AC_MSG_CHECKING([if the test suites are enabled? ])
 AC_ARG_ENABLE(tests,
-[AC_HELP_STRING([--enable-tests],[enable tests (default:disabled)])],
+[AC_HELP_STRING([--enable-tests],[enable tests (default:samples)])],
   [case "${enableval}" in
-    yes) tests_enabled=yes ;;
-    no)  tests_enabled=no ;;
-    *)   AC_MSG_ERROR(bad value ${enableval} for tests option) ;;
-  esac], [tests_enabled=no])
-AC_MSG_RESULT([$tests_enabled])
+    samples) enable_tests=samples;;
+    yes) enable_tests=yes ;;
+    no)  enable_tests=no ;;
+    *)   AC_MSG_ERROR([bad value ${enableval} for --enable-tests]) ;;
+  esac], [enable_tests=samples])
 ])
