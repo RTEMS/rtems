@@ -28,6 +28,8 @@ AM_CPPFLAGS += -DUSE_INIT_FINI
 $(PGM): $(OBJS)
 	$(make-rel)
 
+bsplib_DATA = linkcmds
+
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
