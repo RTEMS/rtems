@@ -19,12 +19,11 @@ PGM = ${ARCH}/startup.rel
 #C_PIECES = bspclean bsplibc bsppost bspstart bootcard main sbrk setvec \
 #    gnatinstallhandler
 C_PIECES = bspstart cntrltbl exit fault flttbl frmstr intrtbl kkprintf \
-   nmi nulsystbl prcb rom_cntrltbl rom_ibr rom_prcb save_systbl
-   sctns setvec systbl
+   nmi nulsystbl prcb rom_cntrltbl rom_ibr rom_prcb sctns setvec systbl
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-S_PIECES = asmfault asmstub ihandler rxgen_romld systbl
+S_PIECES = asmfault asmstub ihandler rxgen_romld
 S_FILES = $(S_PIECES:%=%.S)
 S_O_FILES = $(S_PIECES:%=${ARCH}/%.o)
 
