@@ -1,5 +1,6 @@
 2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 541/bsps
 	* startup/linkcmds: Remove SEARCH_DIR.
 
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
