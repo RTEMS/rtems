@@ -8,8 +8,8 @@
  *  $Id$
  */
 
-#ifndef __UNTAR_H__
-#define __UNTAR_H__
+#ifndef _RTEMS_UNTAR_H
+#define _RTEMS_UNTAR_H
 
 #include <stddef.h>
 #include <rtems/tar.h>
@@ -46,4 +46,4 @@ _rtems_tar_header_checksum(const char *bufr);
 }
 #endif
 
-#endif  /* __UNTAR_H__ */
+#endif  /* _RTEMS_UNTAR_H */
