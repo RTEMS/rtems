@@ -27,7 +27,7 @@ EXTRA_DIST += common/cpright.texi common/setup.texi common/timemac.texi \
 html_imagesdir = $(htmldir)/images
 
 HTML_IMAGES = images/dir-arrow.gif images/dvi.gif images/missing-arrow.gif \
-    images/next-arrow.gif images/oaronly.jpg images/pdf.gif images/pdf1.gif 
+    images/next-arrow.gif images/oaronly.jpg images/pdf.gif images/pdf1.gif \
     images/rtems_logo.jpg images/prev-arrow.gif images/ps.gif \
     images/up-arrow.gif
 
