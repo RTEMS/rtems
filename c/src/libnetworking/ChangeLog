@@ -1,5 +1,9 @@
 2003-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* pppd/fsm.c: Make peer_mru global again.
+
+2003-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* pppd/magic.c: Remove *rand48.
 	* pppd/chap.c: Remove prototypes of *rand48.
 

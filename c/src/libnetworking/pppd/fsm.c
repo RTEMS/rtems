@@ -45,7 +45,7 @@ static void fsm_sconfreq __P((fsm *, int));
 
 #define PROTO_NAME(f)	((f)->callbacks->proto_name)
 
-static int peer_mru[NUM_PPP];
+int peer_mru[NUM_PPP];
 
 
 /*
