@@ -41,10 +41,11 @@
  * Overlay for ip header used by other protocols (tcp, udp).
  */
 struct ipovly {
-	caddr_t	ih_next, ih_prev;	/* for protocol sequence q's */
+	caddr_t	ih_next BYTE_PACK;
+        caddr_t ih_prev BYTE_PACK;	/* for protocol sequence q's */
 	u_char	ih_x1;			/* (unused) */
 	u_char	ih_pr;			/* protocol */
-	u_short	ih_len;			/* protocol length */
+	u_short	ih_len BYTE_PACK;		/* protocol length */
 	struct	in_addr ih_src;		/* source internet address */
 	struct	in_addr ih_dst;		/* destination internet address */
 };
@@ -59,12 +60,12 @@ struct ipq {
 	struct	ipq *next,*prev;	/* to other reass headers */
 	u_char	ipq_ttl;		/* time for reass q to live */
 	u_char	ipq_p;			/* protocol of this fragment */
-	u_short	ipq_id;			/* sequence id for reassembly */
+	u_short	ipq_id BYTE_PACK;	/* sequence id for reassembly */
 	struct	ipasfrag *ipq_next,*ipq_prev;
 					/* to ip headers of fragments */
 	struct	in_addr ipq_src,ipq_dst;
 #ifdef IPDIVERT
-	u_short ipq_divert;		/* divert protocol port */
+	u_short ipq_divert BYTE_PACK;	/* divert protocol port */
 #endif
 };
 
@@ -85,12 +86,12 @@ struct	ipasfrag {
 	u_char	ipf_mff;		/* XXX overlays ip_tos: use low bit
 					 * to avoid destroying tos;
 					 * copied from (ip_off&IP_MF) */
-	u_short	ip_len;
-	u_short	ip_id;
-	u_short	ip_off;
+	u_short	ip_len BYTE_PACK;
+	u_short	ip_id BYTE_PACK;
+	u_short	ip_off BYTE_PACK;
 	u_char	ip_ttl;
 	u_char	ip_p;
-	u_short	ip_sum;
+	u_short	ip_sum BYTE_PACK;
 	struct	ipasfrag *ipf_next;	/* next fragment */
 	struct	ipasfrag *ipf_prev;	/* previous fragment */
 };

@@ -204,12 +204,12 @@
  * have a fit if we use.
  */
 #define IPPORT_RESERVEDSTART	600
-
+#define BYTE_PACK __attribute__((packed))
 /*
  * Internet address (a structure for historical reasons)
  */
 struct in_addr {
-	u_long s_addr;
+	u_long s_addr BYTE_PACK;
 };
 
 /*

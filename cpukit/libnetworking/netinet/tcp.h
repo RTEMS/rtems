@@ -45,10 +45,10 @@ typedef u_long	tcp_cc;			/* connection count per rfc1644 */
  * Per RFC 793, September, 1981.
  */
 struct tcphdr {
-	u_short	th_sport;		/* source port */
-	u_short	th_dport;		/* destination port */
-	tcp_seq	th_seq;			/* sequence number */
-	tcp_seq	th_ack;			/* acknowledgement number */
+	u_short	th_sport BYTE_PACK;	/* source port */
+	u_short	th_dport BYTE_PACK;	/* destination port */
+	tcp_seq	th_seq BYTE_PACK;	/* sequence number */
+	tcp_seq	th_ack BYTE_PACK;	/* acknowledgement number */
 #if BYTE_ORDER == LITTLE_ENDIAN
 	u_char	th_x2:4,		/* (unused) */
 		th_off:4;		/* data offset */
@@ -66,9 +66,9 @@ struct tcphdr {
 #define	TH_URG	0x20
 #define TH_FLAGS (TH_FIN|TH_SYN|TH_RST|TH_ACK|TH_URG)
 
-	u_short	th_win;			/* window */
-	u_short	th_sum;			/* checksum */
-	u_short	th_urp;			/* urgent pointer */
+	u_short	th_win BYTE_PACK;	/* window */
+	u_short	th_sum BYTE_PACK;	/* checksum */
+	u_short	th_urp BYTE_PACK;	/* urgent pointer */
 };
 
 #define	TCPOPT_EOL		0
