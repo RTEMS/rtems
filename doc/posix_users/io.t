@@ -104,7 +104,7 @@ in a future version.
 #include <unistd.h>
 
 int dup(
-int fildes
+  int fildes
 );
 @end example
 @end ifset
@@ -152,8 +152,8 @@ NONE
 #include <unistd.h>
 
 int dup2(
-int fildes,
-int fildes2
+  int fildes,
+  int fildes2
 );
 @end example
 @end ifset
@@ -203,7 +203,7 @@ NONE
 #include <unistd.h>
 
 int close(
-int fildes
+  int fildes
 );
 @end example
 @end ifset
@@ -249,9 +249,9 @@ may or may not be closed.
 #include <unistd.h>
 
 int read(
-int fildes,
-void *buf,
-unsigned int nbyte
+  int fildes,
+  void *buf,
+  unsigned int nbyte
 );
 @end example
 @end ifset
@@ -350,9 +350,9 @@ NONE
 #include <unistd.h>
 
 int write(
-int fildes,
-const void *buf,
-unsigned int nbytes
+  int fildes,
+  const void *buf,
+  unsigned int nbytes
 );
 @end example
 @end ifset
@@ -423,8 +423,8 @@ NONE
 #include <unistd.h>
 
 int fcntl(
-int fildes,
-int cmd
+  int fildes,
+  int cmd
 );
 @end example
 @end ifset
@@ -560,9 +560,9 @@ The errors returned by @code{dup2} are different from those returned by
 #include <unistd.h>
 
 int lseek(
-int fildes,
-off_t offset,
-int whence
+  int fildes,
+  off_t offset,
+  int whence
 );
 @end example
 @end ifset
@@ -632,7 +632,7 @@ NONE
 @ifset is-C
 @example
 int fsync(
-int fd
+  int fd
 );
 @end example
 @end ifset
@@ -682,7 +682,7 @@ NONE
 @ifset is-C
 @example
 int fdatasync(
-int fd
+  int fd
 );
 @end example
 @end ifset
@@ -745,11 +745,11 @@ NONE
 #include <linux/fs.h>
 
 int mount(
-const char *specialfile,
-const char CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t dir,
-const char CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t filesystemtype,
-unsigned long rwflag,
-const void CVS Makefile cancel.t clock.t cond.t cspecific.t device.t files.t io.t j key.t memorymgmt.t message.t mutex.t nodesc nodescr posix_users.cps posix_users.fns posix_users.texi preface.texi procenv.t process.t psxmsg.t sched.t semaphores.t signal.t systemdb.t thread.t data
+  const char   *specialfile,
+  const char    dir,
+  const char    filesystemtype,
+  unsigned long rwflag,
+  const void    data
 );
 @end example
 @end ifset
@@ -846,7 +846,7 @@ NONE
 #include <linux/fs.h>
 
 int umount(
-const char *specialfile
+  const char *specialfile
 );
 @end example
 @end ifset
