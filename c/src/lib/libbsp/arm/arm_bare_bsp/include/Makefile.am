@@ -22,4 +22,4 @@ all: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bspio.h bsp.h uart.h registers.h
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

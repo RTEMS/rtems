@@ -24,8 +24,8 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -40,4 +40,4 @@ all: $(PREINSTALL_FILES) $(ARCH) $(irq_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = irq.c bsp_irq_init.c bsp_irq_asm.S
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
