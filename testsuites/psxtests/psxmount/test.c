@@ -156,7 +156,7 @@ int main(
   status = mount(
      &mt_entry,
      &IMFS_ops,
-     "RW",
+     RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      mount_point_string );
   assert( status == 0 );
@@ -217,21 +217,21 @@ int main(
   status = mount(
    &mt_entry,
    NULL,
-   "RW",
+   RTEMS_FILESYSTEM_READ_WRITE,
    NULL,
    mount_point_string );
   assert( status == -1 );
   assert( errno == EINVAL );
 
   /*
-   * Verify mount with option RA fails with EINVAL
+   * Verify mount with option of -62 fails with EINVAL
    */
 
-  printf("mount with option RA should fail with EINVAL\n");
+  printf("mount with option of -62 should fail with EINVAL\n");
   status = mount(
      &mt_entry,
      &IMFS_ops,
-     "RA",
+     -62,
      NULL,
      "/c/y/my_mount_point" );
   assert( status == -1 );
@@ -245,7 +245,7 @@ int main(
   status = mount(
      &mt_entry,
      &IMFS_ops,
-     "RO",
+     RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      "/c/y/my_mount_point" );
   assert( status == 0 );
@@ -276,7 +276,7 @@ int main(
   status = mount(
      &mt_entry,
      &IMFS_ops,
-     "RO",
+     RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      "/c/y/my_mount_point" );
   assert( status == -1 );
@@ -290,7 +290,7 @@ int main(
   status = mount(
      &mt_entry,
      &IMFS_ops,
-     "RO",
+     RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      "/b/my_file" );
   assert( status == -1 );
@@ -342,7 +342,7 @@ int main(
   status = mount(
      &mt_entry,
      &IMFS_ops,
-     "RO",
+     RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      "/c/y/my_mount_point" );
   assert( status == 0 );
@@ -391,7 +391,7 @@ int main(
   status = mount(
      &mt_entry,
      &IMFS_ops,
-     "RW",
+     RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      "/c/y/my_mount_point/my_dir");
   assert( status == 0 );
