@@ -46,15 +46,18 @@ typedef unsigned32 States_Control;
 #define STATES_WAITING_FOR_SEMAPHORE           0x0200
 #define STATES_WAITING_FOR_MUTEX               0x0400
 #define STATES_WAITING_FOR_CONDITION_VARIABLE  0x0800
-#define STATES_WAITING_FOR_RPC_REPLY           0x1000
-#define STATES_WAITING_FOR_PERIOD              0x2000
+#define STATES_WAITING_FOR_JOIN_AT_EXIT        0x1000
+#define STATES_WAITING_FOR_RPC_REPLY           0x2000
+#define STATES_WAITING_FOR_PERIOD              0x4000
+#define STATES_INTERRUPTIBLE_BY_SIGNAL         0x8000
 
 #define STATES_LOCALLY_BLOCKED ( STATES_WAITING_FOR_BUFFER             | \
                                  STATES_WAITING_FOR_SEGMENT            | \
                                  STATES_WAITING_FOR_MESSAGE            | \
+                                 STATES_WAITING_FOR_SEMAPHORE          | \
                                  STATES_WAITING_FOR_MUTEX              | \
                                  STATES_WAITING_FOR_CONDITION_VARIABLE | \
-                                 STATES_WAITING_FOR_SEMAPHORE   )
+                                 STATES_WAITING_FOR_JOIN_AT_EXIT )
 
 #define STATES_WAITING_ON_THREAD_QUEUE \
                                ( STATES_LOCALLY_BLOCKED         | \
