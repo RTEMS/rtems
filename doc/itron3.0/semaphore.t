@@ -11,7 +11,8 @@
 @section Introduction
 
 The semaphore manager provides functions to allocate, delete, and
-control counting semaphores.
+control counting semaphores.  This manager is based on the 
+ITRON 3.0 standard.
 
 The services provided by the semaphore manager are:
 
