@@ -28,6 +28,17 @@ any case I am ready to answer questions regarding the port and intend
 to follow the future RTEMS versions. I will do my best to provide
 whatever support I can afford time-wise.
 
+MVME162 Models
+--------------
+
+MVME162 model uses 68040.
+
+MVME162FX modele uses XXX.
+
+MVME162LX model uses 68LC040 and 2 ZCC chips so that it supports
+4 serial ports.
+
+
 MVME162FX and DMA on the IP bus
 -------------------------------
 
