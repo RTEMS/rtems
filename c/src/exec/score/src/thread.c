@@ -866,7 +866,7 @@ void _Thread_Set_transient(
 
 void _Thread_Reset_timeslice( void )
 {
-  ISR_Level              level;
+  ISR_Level       level;
   Thread_Control *executing;
   Chain_Control  *ready;
 
