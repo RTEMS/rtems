@@ -40,7 +40,7 @@ int BSP_PCIxFindDevice(unsigned short vendorid, unsigned short deviceid,
      	      if (PCI_INVALID_VENDORDEVICEID == d)
 		 continue;
 #ifdef PCI_DEBUG
-	      printk("BSP_pciFindDevice: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
+	      printk("pci_find_device: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
 #endif
 	      (void)PCIx_read_config_word(pciNum, bus,dev,fun,PCI0_VENDOR_ID,&s);
       	      if (vendorid != s)
@@ -57,7 +57,7 @@ int BSP_PCIxFindDevice(unsigned short vendorid, unsigned short deviceid,
   return -1;
 }
 
-int BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
+int pci_find_device( unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun )
 {
   return(BSP_PCIxFindDevice(vendorid,deviceid,instance,0,pbus,pdev,pfun));

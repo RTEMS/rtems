@@ -1194,7 +1194,7 @@ extern void pci_initialize();
 
 int BSP_PCIxFindDevice(unsigned short vendorid, unsigned short deviceid,
 		       int instance, int pciNum, int *pbus, int *pdev, int *pfun );
-int BSP_pciFindDevice(unsigned short vendorid, unsigned short deviceid,
+int pci_find_device(unsigned short vendorid, unsigned short deviceid,
                 int instance, int *pbus, int *pdev, int *pfun);
 
 #endif /* RTEMS_PCI_H */

@@ -1,3 +1,8 @@
+2005-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* pci/pci.h, pci/pcifinddevice.c: Continue PCI API unification. All use
+	pci_find_device().
+
 2005-03-04	Joel Sherrill <joel@OARcorp.com>
 
 	* pci/pci.c, pci/pci.h, startup/bspstart.c: Make PCI initialize
