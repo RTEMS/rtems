@@ -519,20 +519,13 @@ int rtems_tftp_open(
     int try = (now + retryCount) % 10;
 
     tp->myAddress.sin_family = AF_INET;
-    /*
-     *  XXX Eric .. how do we get the minor information???
-     * tp->myAddress.sin_port = htons (UDP_PORT_BASE + nStreams * try + minor);
-     */
-    tp->myAddress.sin_port = htons (UDP_PORT_BASE + nStreams * try);
+    tp->myAddress.sin_port = htons (UDP_PORT_BASE + nStreams * try + s);
     tp->myAddress.sin_addr.s_addr = htonl (INADDR_ANY);
     if (bind (tp->socket, (struct sockaddr *)&tp->myAddress, sizeof tp->myAddress) >= 0)
       break;
     if (++retryCount == 10) {
       close (tp->socket);
-      /*
-       *  XXX Eric .. how do we get the minor information to release this???
-        releaseStream (minor);
-       */
+      releaseStream (s);
       return EBUSY;
     }
   }
@@ -554,10 +547,6 @@ int rtems_tftp_open(
      * Create the request
      */
     tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_RRQ);
-      /*
-       *  XXX Eric .. is this cast taking the const off right?
-       */
-
     cp1 = (char *) tp->pkbuf.tftpRWRQ.filename_mode;
     cp2 = (char *) remoteFilename;
     while ((*cp1++ = *cp2++) != '\0')
@@ -574,10 +563,7 @@ int rtems_tftp_open(
           (struct sockaddr *)&tp->farAddress,
           sizeof tp->farAddress) < 0) {
       close (tp->socket);
-      /*
-       *  XXX Eric .. how do we get the minor information to release this???
-        releaseStream (minor);
-       */
+      releaseStream (s);
       return EIO;
     }
 
@@ -595,11 +581,7 @@ int rtems_tftp_open(
         tp->eof = (tp->nleft < TFTP_BUFSIZE);
         if (sendAck (tp) != 0) {
           close (tp->socket);
-      /*
-       *  XXX Eric .. how do we get the minor information to release this???
-          releaseStream (minor);
-       */
-
+          releaseStream (s);
           return EIO;
         }
         break;
@@ -607,10 +589,7 @@ int rtems_tftp_open(
       if (opcode == TFTP_OPCODE_ERROR) {
         tftpSetErrno (tp);
         close (tp->socket);
-      /*
-       *  XXX Eric .. how do we get the minor information to release this???
-       *  releaseStream (minor);
-       */
+        releaseStream (s);
         return EIO;
       }
     }
@@ -620,10 +599,7 @@ int rtems_tftp_open(
      */
     if (++retryCount >= OPEN_RETRY_LIMIT) {
       close (tp->socket);
-      /*
-       *  XXX Eric .. how do we get the minor information to release this???
-        releaseStream (minor);
-       */
+      releaseStream (s);
       return EIO;
     }
   }
