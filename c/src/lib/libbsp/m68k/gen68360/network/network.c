@@ -942,7 +942,7 @@ scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
  * Attach an SCC driver to the system
  */
 int
-rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
+rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int attaching)
 {
 	struct scc_softc *sc;
 	struct ifnet *ifp;
@@ -950,6 +950,14 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	int unitNumber;
 	char *unitName;
 
+	/*
+	 * Make sure we're really being attached
+	 */
+	if (!attaching) {
+		printf ("SCC1 driver can not be detached.\n");
+		return 0;
+	}
+		
 	/*
  	 * Parse driver name
 	 */
@@ -1049,4 +1057,4 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	if_attach (ifp);
 	ether_ifattach (ifp);
 	return 1;
-};
+}

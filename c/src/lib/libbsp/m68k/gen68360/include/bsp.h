@@ -48,7 +48,7 @@ extern "C" {
  * Network driver configuration
  */
 struct rtems_bsdnet_ifconfig;
-extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config);
+extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"scc1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_scc1_driver_attach
 
