@@ -22,11 +22,14 @@ extern "C" {
 
 #if !defined(TESTS_BUFFER_OUTPUT)
 
+/* do not use iprintf if strict ansi mode */
+#ifndef __STRICT_ANSI__
 #undef printf
 #define printf(...) \
   do { \
      iprintf( __VA_ARGS__); \ 
   } while (0)
+#endif
 
 #define rtems_test_exit(_s) \
   do { \
