@@ -160,7 +160,7 @@ libc_C_FILES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/res_comp.c libc/res_data.c libc/res_debug.c libc/res_init.c \
     libc/res_mkquery.c libc/res_mkupdate.c libc/res_query.c libc/res_send.c \
     libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c
-libc_OBJS = $(libc/C_FILES:libc/%.c=libc/$(ARCH)/%.$(OBJEXT))
+libc_OBJS = $(libc_C_FILES:libc/%.c=libc/$(ARCH)/%.$(OBJEXT))
 
 man_MANS = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
