@@ -300,7 +300,6 @@ static int mc68681_open(
   void    *arg
 )
 {
-/* XXX */
   unsigned32             pMC68681;
   unsigned32             pMC68681_port;
   unsigned int           baud;
@@ -309,16 +308,18 @@ static int mc68681_open(
   unsigned int           vector;
   rtems_interrupt_level  Irql;
   setRegister_f          setReg;
-  getRegister_f          getReg;
 
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  getReg        = Console_Port_Tbl[minor].getRegister;
   setReg        = Console_Port_Tbl[minor].setRegister;
   port          = Console_Port_Tbl[minor].ulDataPort;
   vector        = Console_Port_Tbl[minor].ulIntVector;
 
   (void) mc68681_baud_rate( minor, B9600, &baud, &acr );
+
+  /*
+   *  Set the DUART channel to a default useable state
+   */
 
   rtems_interrupt_disable(Irql);
     (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr );
@@ -356,10 +357,33 @@ static int mc68681_close(
   void    *arg
 )
 {
-/* XXX */
+  unsigned32      pMC68681;
+  unsigned32      pMC68681_port;
+  unsigned int    port;
+  setRegister_f   setReg;
+
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor].setRegister;
+  port          = Console_Port_Tbl[minor].ulDataPort;
+
+  /*
+   *  Disable interrupts from this channel and then disable it totally.
+   */
+
+  (*setReg)(
+     pMC68681,
+     MC68681_INTERRUPT_MASK_REG,
+     MC68681_PORT_MASK( port, 0x03 )  /* intr on RX and TX -- not break */
+  );
+
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_TX );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_RX );
+
   /*
    * Negate DTR
    */
+
   if(Console_Port_Tbl[minor].pDeviceFlow != &mc68681_flow_DTRCTS) {
     mc68681_negate_DTR(minor);
   }
