@@ -228,7 +228,8 @@ avl_insert(bdbuf_buffer **root, bdbuf_buffer *node)
     blkdev_bnum block = node->block;
 
     bdbuf_buffer *p = *root;
-    bdbuf_buffer *q, *p1, *p2;
+    bdbuf_buffer *q = NULL;
+    bdbuf_buffer *p1, *p2;
     bdbuf_buffer *buf_stack[AVL_MAX_HEIGHT];
     bdbuf_buffer **buf_prev = buf_stack;
 

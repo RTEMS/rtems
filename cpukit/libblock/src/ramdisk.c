@@ -12,6 +12,12 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
+
 #include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>

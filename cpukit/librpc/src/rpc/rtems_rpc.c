@@ -1,5 +1,7 @@
 /*
  * RTEMS multi-tasking support
+ *
+ * $Id$
  */
 
 #include <rpc/rpc.h>
@@ -44,7 +46,8 @@ int rtems_rpc_task_init (void)
 		 *	- Go through and free linked list elements
 		 *	- Free other allocated memory (e.g. clnt_perror_buf)
 		 */
-		sc = rtems_task_variable_add (RTEMS_SELF, &rtems_rpc_task_variables, NULL);
+		sc = rtems_task_variable_add (
+			RTEMS_SELF, (void *)&rtems_rpc_task_variables, NULL);
 		if (sc != RTEMS_SUCCESSFUL) {
 			free (tvp);
 			return sc;

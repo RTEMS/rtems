@@ -60,6 +60,11 @@
 #else
 #include <sys/buf.h>
 
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
+
 #include <stdio.h>                                /* for snprintf() */
 size_t   strlcpy(char *, const char *, size_t);
 #endif

@@ -30,6 +30,11 @@ static char rcsid[] = "$Id$";
 #include <arpa/nameser.h>
 #include <arpa/inet.h>
 
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
+
 #include <assert.h>
 #include <errno.h>
 #include <resolv.h>

@@ -43,6 +43,11 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc.c,v 1.14 1999/08/28 00:00:4
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
+
 #include <string.h>
 #include <stdlib.h>
 #include <sys/errno.h>

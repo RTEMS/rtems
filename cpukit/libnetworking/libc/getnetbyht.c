@@ -47,6 +47,11 @@ static char orig_rcsid[] = "From: Id: getnetent.c,v 8.4 1997/06/01 20:34:37 vixi
 static chat rcsid[] = "$Id$";
 #endif /* LIBC_SCCS and not lint */
 
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>

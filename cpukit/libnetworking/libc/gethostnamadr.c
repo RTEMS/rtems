@@ -28,6 +28,11 @@ static char sccsid[] = "@(#)$Id$";
 static char rcsid[] = "$Id$";
 #endif /* LIBC_SCCS and not lint */
 
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
+
 #include <sys/param.h>
 #include <sys/socket.h>
 #include <netinet/in.h>

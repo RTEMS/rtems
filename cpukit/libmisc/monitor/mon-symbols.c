@@ -15,13 +15,17 @@
 #include "config.h"
 #endif
 
-#include <string.h>
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-#include <rtems.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+#include <rtems.h>
 #include <rtems/monitor.h>
 #include "symbols.h"
 

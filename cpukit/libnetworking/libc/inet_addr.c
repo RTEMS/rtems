@@ -58,6 +58,11 @@ static char sccsid[] = "@(#)inet_addr.c	8.1 (Berkeley) 6/17/93";
 static char rcsid[] = "$Id$";
 #endif /* LIBC_SCCS and not lint */
 
+/* Since we compile with strict ANSI we need to undef it to get
+ * prototypes for extensions
+ */
+#undef __STRICT_ANSI__
+
 #include <sys/param.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
