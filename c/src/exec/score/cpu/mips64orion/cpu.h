@@ -932,6 +932,15 @@ static inline unsigned int CPU_swap_u32(
   return( swapped );
 }
 
+/*
+ *  Miscellaneous prototypes 
+ *
+ *  NOTE:  The names should have mips64orion in them.
+ */
+
+void disable_int( unsigned32 mask );
+void enable_int( unsigned32 mask );
+
 #ifdef __cplusplus
 }
 #endif
