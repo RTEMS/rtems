@@ -30,6 +30,8 @@
 #include <rtems.h>
 #include <bsp.h>
 
+void idtsim__exit();
+
 void bsp_cleanup( void )
 {
   idtsim__exit();
