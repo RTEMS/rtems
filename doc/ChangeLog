@@ -1,3 +1,8 @@
+2002-11-13	Joel Sherrill <joel@OARcorp.com>
+
+	* index.html.in: Note that the Getting Started with GNAT/RTEMS 
+	manual is largely obsolete now that GNAT is in GCC.
+
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Add links to multiple missing CPU supplements.

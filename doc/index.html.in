@@ -77,7 +77,11 @@
             <A HREF="../dvi/started_ada.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="started_ada/index.html">
-               Getting Started with GNAT/RTEMS</A>
+               Getting Started with GNAT/RTEMS</A> (NOTE: Build procedures
+               apply only to gnat 3.13p not the GNAT in gcc 3.2.  The 
+               hello world and testing the native GNAT are applicable though.
+               The relevant portions of this manual need to be merged into
+               the Getting Started for C/C++ Users document.) 
             </LI>
         <LI><A HREF="../pdf/ada_user.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
