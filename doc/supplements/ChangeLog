@@ -1,3 +1,11 @@
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* hppa1_1/.cvsignore, hppa1_1/ChangeLog, hppa1_1/Makefile.am,
+	hppa1_1/SIMHPPA_TIMES, hppa1_1/bsp.t, hppa1_1/callconv.t,
+	hppa1_1/cpumodel.t, hppa1_1/cputable.t, hppa1_1/fatalerr.t,
+	hppa1_1/hppa1_1.texi, hppa1_1/intr_NOTIMES.t, hppa1_1/memmodel.t,
+	hppa1_1/preface.texi, hppa1_1/timeSIMHPPA.t: Removed.
+
 2003-09-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* supplement.am: Add -I $(top_builddir) TEXI2WWW_ARGS.
