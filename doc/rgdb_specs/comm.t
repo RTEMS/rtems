@@ -81,26 +81,9 @@ layers we need to implement.
 @c Communications Layers Figure
 @c
 
-@ifset use-ascii
-@example
-@group
-XXXXX reference it in the previous paragraph
-XXXXX insert layers.eps
-XXXXX Caption Communications Layers
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@example
-@group
-@c XXXXX reference it in the previous paragraph
-@c XXXXX insert layers.eps
-@c XXXXX Caption Communications Layers
-@end group
-@end example
-@image{layers,,6in}
-@end ifset
+@ifclear use-html
+@image{layers,,6in,"Communications Layers"}
+@end ifclear
 
 
 @ifset use-html

@@ -20,32 +20,14 @@ Circuit Emulator (ICE) or use of BDM extension on the target board are the ultim
 way to really debug any portion of an RTOS. BDM support in GDB is still weak
 but people are working on it and we may get something better in a near future.
 
-@ifset use-ascii
-@example
-@group
-XXXXX reference it in the previous paragraph
-XXXXX insert process.eps
-XXXXX Caption remote debugger tasks and handlers
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@example
-@group
-@c XXXXX reference it in the previous paragraph
-@c XXXXX insert process.eps
-@c XXXXX Caption remote debugger tasks and handlers
-@end group
-@end example
-@image{process,6in,}
-@end ifset
-
+@ifclear use-html
+@image{process,6in,,"Remote debugger tasks and handlers"}
+@end ifclear
 
 @ifset use-html
-@c <IMG SRC="process.jpg" WIDTH=500 HEIGHT=600 ALT="remote debugger tasks and handlers">
+@c <IMG SRC="process.jpg" WIDTH=500 HEIGHT=600 ALT="Remote debugger tasks and handlers">
 @html
-<IMG SRC="process.jpg" ALT="remote debugger tasks and handlers">
+<IMG SRC="process.jpg" ALT="Remote debugger tasks and handlers">
 @end html
 @end ifset
 

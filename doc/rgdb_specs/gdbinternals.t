@@ -204,27 +204,9 @@ the host debugger on the target are only simple actions which look like :
 @c Debug session initialization Figure
 @c
 
-@ifset use-ascii
-@example
-@group
-XXXXX reference it in the previous paragraph
-XXXXX insert seqinit.eps
-XXXXX Caption Debug session initialization
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@example
-@group
-@c XXXXX reference it in the previous paragraph
-@c XXXXX insert seqinit.eps
-@c XXXXX Caption Debug session initialization
-@end group
-@end example
-@page
-@image{seqinit}
-@end ifset
+@ifclear use-html
+@image{seqinit,,,"Debug session initialization"}
+@end ifclear
 
 
 @ifset use-html
@@ -239,28 +221,9 @@ XXXXX Caption Debug session initialization
 @c Breakpoint and process execution Figure
 @c
 
-@ifset use-ascii
-@example
-@group
-XXXXX reference it in the previous paragraph
-XXXXX insert seqbreak.eps
-XXXXX Caption Breakpoint and process execution
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@example
-@group
-@c XXXXX reference it in the previous paragraph
-@c XXXXX insert seqbreak.eps
-@c XXXXX Caption Breakpoint and process execution
-@end group
-@end example
-@page
-@sp 5
-@image{seqbreak,,9in}
-@end ifset
+@ifclear use-html
+@image{seqbreak,,9in,"Caption Breakpoint and process execution"}
+@end ifclear
 
 @ifset use-html
 @c <IMG SRC="seqbreak.jpg" WIDTH=500 HEIGHT=600 ALT="Breakpoint and process execution">
@@ -275,27 +238,9 @@ XXXXX Caption Breakpoint and process execution
 @c Detach a process and close a connection Figure
 @c
 
-@ifset use-ascii
-@example
-@group
-XXXXX reference it in the previous paragraph
-XXXXX insert seqdetach.eps
-XXXXX Caption Detach a process and close a connection
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@example
-@group
-@c XXXXX reference it in the previous paragraph
-@c XXXXX insert seqdetach.eps
-@c XXXXX Caption Detach a process and close a connection
-@end group
-@end example
-@sp 10
-@image{seqdetach}
-@end ifset
+@ifclear use-html
+@image{seqdetach,,,"Detach a process and close a connection"}
+@end ifclear
 
 @ifset use-html
 @c <IMG SRC="seqdetach.jpg" WIDTH=500 HEIGHT=600 ALT="Detach a process and close a connection">
