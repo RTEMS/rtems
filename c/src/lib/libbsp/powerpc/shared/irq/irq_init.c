@@ -25,6 +25,10 @@
 #include <libcpu/raw_exception.h>
 #include <bsp/motorola.h>
 
+/*
+#define SHOW_ISA_PCI_BRIDGE_SETTINGS
+*/
+
 typedef struct {
   unsigned char bus;	/* few chance the PCI/ISA bridge is not on first bus but ... */
   unsigned char device;
@@ -126,9 +130,7 @@ void VIA_isa_bridge_interrupts_setup(void)
 #ifdef SCAN_PCI_PRINT       
       printk("Vendor/device = %x\n", temp);
 #endif
-      if ( (temp == (((unsigned short) PCI_VENDOR_ID_VIA) | (PCI_DEVICE_ID_VIA_82C586_1 << 16)))
-	   ||
-	   (temp == (((unsigned short) PCI_VENDOR_ID_VIA) | (PCI_DEVICE_ID_VIA_82C586_0 << 16)))
+      if ((temp == (((unsigned short) PCI_VENDOR_ID_VIA) | (PCI_DEVICE_ID_VIA_82C586_0 << 16)))
 	 ) {
 	bridge = pci_dev;
 	via_82c586 = &bridge;
@@ -196,27 +198,6 @@ loop_exit:
 #ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
     printk(" PCI ISA bridge control2 = %x\n", (unsigned) tmp);
 #endif       
-    /*
-     * Enable 4D0/4D1 ISA interrupt level/edge config registers
-     */
-    tmp |= 0x20;
-    pci_write_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			  0x47, tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
-    tmp = inb(ISA8259_S_ELCR);
-    printk(" PCI ISA bridge slave edge/level control bit = %x\n", (unsigned) tmp);
-    tmp = inb(ISA8259_M_ELCR);;
-    printk(" PCI ISA bridge master edge/level control bit = %x\n", (unsigned) tmp);
-#endif       
-    /*
-     * Must disable the 4D0/4D1 ISA interrupt level/edge config registers
-     * or the card will die a soon as we we will enable external interrupts
-     */
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			 0x47,  &tmp);
-    tmp &= ~(0x20);
-    pci_write_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			  0x47, tmp);
     /*
      * Show the Interrupt inputs inverting/non-inverting level status
      */
