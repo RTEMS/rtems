@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-SUBDIRS = mcp750
+SUBDIRS = new_exception_processing
 
 EXTRA_DIST = excep_f.c rdbg_cpu_asm.S rdbg_f.c
 

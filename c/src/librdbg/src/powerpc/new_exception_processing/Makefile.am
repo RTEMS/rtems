@@ -40,7 +40,7 @@ include $(top_srcdir)/../../../automake/lib.am
 
 MAINTAINERCLEANFILES += $(H_FILES) $(GEN_C_FILES)
 
-FRONTEND = \"$(RTEMS_CPU)/mcp750/remdeb_f.x\"
+FRONTEND = \"$(RTEMS_CPU)/new_exception_processing/remdeb_f.x\"
 
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
@@ -53,14 +53,14 @@ if RPCTOOLS
 	@rm -f $@
 	( cd $(top_srcdir)/src; \
 	$(RPCGEN) -h -DFRONTEND=$(FRONTEND) \
-	  -o powerpc/mcp750/remdeb.h remdeb.x )
+	  -o powerpc/new_exception_processing/remdeb.h remdeb.x )
 endif
 $(srcdir)/remdeb_xdr.c: $(X_FILES)
 if RPCTOOLS
 	@rm -f $@
 	( cd $(top_srcdir)/src; \
 	$(RPCGEN) -c -DFRONTEND=$(FRONTEND) \
-	  -o powerpc/mcp750/remdeb_xdr.c remdeb.x )
+	  -o powerpc/new_exception_processing/remdeb_xdr.c remdeb.x )
 endif
 
 $(srcdir)/remdeb_svc.c: $(X_FILES)
@@ -68,10 +68,10 @@ if RPCTOOLS
 	@rm -f $@ tmpSvc.c
 	( cd $(top_srcdir)/src; \
 	$(RPCGEN) -m -DFRONTEND=$(FRONTEND) \
-	  -o powerpc/mcp750/tmpSvc.c remdeb.x; \
-	$(AWK) -f ./awk.svc THEPROG="remdeb.h" powerpc/mcp750/tmpSvc.c \
-	  > powerpc/mcp750/remdeb_svc.c; \
-	rm -f powerpc/mcp750/tmpSvc.c )
+	  -o powerpc/new_exception_processing/tmpSvc.c remdeb.x; \
+	$(AWK) -f ./awk.svc THEPROG="remdeb.h" powerpc/new_exception_processing/tmpSvc.c \
+	  > powerpc/new_exception_processing/remdeb_svc.c; \
+	rm -f powerpc/new_exception_processing/tmpSvc.c )
 endif
 
 $(PROJECT_INCLUDE)/rdbg/remdeb.h: $(srcdir)/remdeb.h

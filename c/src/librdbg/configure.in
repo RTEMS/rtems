@@ -59,7 +59,7 @@ src/Makefile
 src/i386/Makefile
 src/i386/any/Makefile
 src/powerpc/Makefile
-src/powerpc/mcp750/Makefile
+src/powerpc/new_exception_processing/Makefile
 src/m68k/Makefile
 src/m68k/any/Makefile
 )

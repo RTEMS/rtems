@@ -1,3 +1,20 @@
+2001-04-20	Eric Valette <valette@crf.canon.fr>
+
+ 	* mcp750 directory renamed new_exception processing as it
+	supports many more CPU models.
+	* configure.in, src/powerpc/Makefile.am,
+	src/powerpc/new_exception_processing/Makefile.am,
+	src/powerpc/new_exception_processing/remdeb_f.x: New files
+	formerly in mcp750 plus modifications.
+	* src/powerpc/mcp750/.cvsignore, src/powerpc/mcp750/Makefile.am,
+	src/powerpc/mcp750/remdeb.h, src/powerpc/mcp750/remdeb_f.x,
+	src/powerpc/mcp750/remdeb_svc.c, src/powerpc/mcp750/remdeb_xdr.c:
+	Removed when moved to new_exception_processing.
+	* configure.in, src/powerpc/Makefile.am,
+	src/powerpc/new_exception_processing/Makefile.am,
+	src/powerpc/new_exception_processing/remdeb_f.x: Modified as
+	part of this effort to add support for the MPC8xx.
+
 2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rdbg/Makefile.am, include/rdbg/i386/Makefile.am,
