@@ -38,10 +38,7 @@ AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "mpc750" \
 
 ## there are no 601 or 602 BSPs currently.  The 505 BSPs are in user land.
 AM_CONDITIONAL(new_exception_processing, \
-test "$RTEMS_CPU_MODEL" = "mpc750" || \
-test "$RTEMS_CPU_MODEL" = "mpc604" || \
-test "$RTEMS_CPU_MODEL" = "mpc860" \
-)
+test "$RTEMS_CPU_MODEL" = "mpc860" )
 
 ## The goal is to get rid of the old exception processing code but
 ## but all BSPs in the distribution must be migrated to the new model
