@@ -31,7 +31,13 @@
  */
 
 #define _Event_sets_Post( _the_new_events, _the_event_set ) \
-   *(_the_event_set) |= (_the_new_events)
+   do { \
+     ISR_Level level; \
+     \
+     _ISR_Disable( level ); \
+       *(_the_event_set) |= (_the_new_events); \
+     _ISR_Enable( level ); \
+   } while (0);
 
 /*PAGE
  *

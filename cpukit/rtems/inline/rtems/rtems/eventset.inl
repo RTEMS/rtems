@@ -48,7 +48,11 @@ RTEMS_INLINE_ROUTINE void _Event_sets_Post(
   rtems_event_set *the_event_set
 )
 {
-   *the_event_set |= the_new_events;
+  ISR_Level level;
+
+  _ISR_Disable( level );
+    *the_event_set |= the_new_events;
+  _ISR_Enable( level );
 }
 
 /*PAGE
