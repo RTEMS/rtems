@@ -1,0 +1,193 @@
+#! /bin/sh
+#
+# helps bootstrapping, when checked out from CVS
+# requires GNU autoconf and GNU automake
+#
+# $Id$
+
+# this is not meant to be exported outside the source tree
+
+# NOTE: Inspired by libtool's autogen script
+
+# to be run from the toplevel directory of RTEMS'
+# source tree
+
+progname=`basename $0`
+top_srcdir=`dirname $0`
+
+verbose="";
+quiet="false"
+mode="generate"
+
+usage()
+{
+  echo
+  echo "usage: ${progname} [-h|-q|-v]"
+  echo
+  echo "options:"
+  echo "	-h .. display this message and exit";
+  echo "	-q .. quiet, don't display directories";
+  echo "	-v .. verbose, pass -v to automake when invoking automake"
+  echo "	-c .. clean, remove all aclocal/autoconf/automake generated files"
+  echo
+  exit 1;
+}
+
+generate_bspdir_acinclude()
+{
+cat << EOF > acinclude.m4~
+# RTEMS_CHECK_BSPDIR(RTEMS_BSP)
+AC_DEFUN([RTEMS_CHECK_BSPDIR],
+[
+  RTEMS_BSP_ALIAS(ifelse([\$1],,[\${RTEMS_BSP}],[\$1]),bspdir)
+  case "\$bspdir" in
+EOF
+
+for i in */bsp_specs; do
+  d=`dirname $i`
+cat << EOF >> acinclude.m4~
+  $d )
+    AC_CONFIG_SUBDIRS([$d]);;
+EOF
+done
+cat << EOF >> acinclude.m4~
+  *)
+    AC_MSG_ERROR([Invalid BSP]);;
+  esac
+])
+EOF
+if cmp -s acinclude.m4 acinclude.m4~ 2>/dev/null; then
+  echo "acinclude.m4 is unchanged";
+else
+  cp acinclude.m4~ acinclude.m4
+fi
+rm -f acinclude.m4~
+}
+
+if test ! -f $top_srcdir/aclocal/version.m4; then
+  echo "${progname}:"
+  echo "	Installation problem: Can't find file aclocal/version.m4"
+  exit 1;
+fi
+
+while test $# -gt 0; do
+case $1 in
+-h|--he|--hel|--help)
+  usage ;;
+-q|--qu|--qui|--quie|--quiet)
+  quiet="true";
+  shift;;
+-v|--ve|--ver|--verb|--verbo|--verbos|--verbose)
+  verbose="-v";
+  shift;;
+-c|--cl|--cle|--clea|--clean)
+  mode="clean";
+  shift;;
+-*) echo "unknown option $1" ;
+  usage ;;
+*) echo "invalid parameter $1" ;
+  usage ;;
+esac
+done
+
+case $mode in
+generate)
+  AUTOCONF=${AUTOCONF-autoconf}
+  if test -z "$AUTOCONF"; then
+    echo "You must have autoconf installed to run $program"
+    exit 1
+  fi
+  
+  AUTOHEADER=${AUTOHEADER-autoheader}
+  if test -z "$AUTOHEADER"; then
+    echo "You must have autoconf installed to run $program"
+    exit 1
+  fi
+  
+  AUTOMAKE=${AUTOMAKE-automake}
+  if test -z "$AUTOMAKE"; then
+    echo "You must have automake installed to run $program"
+    exit 1
+  fi
+  
+  ACLOCAL=${ACLOCAL-aclocal}
+  if test -z "$ACLOCAL"; then
+    echo "You must have automake installed to run $program"
+    exit 1
+  fi
+
+  case $top_srcdir in
+  /* ) aclocal_dir=$top_srcdir
+    ;;
+  *) aclocal_dir=`pwd`/$top_srcdir
+    ;;
+  esac
+
+  confs=`find . \( -name 'configure.in' -o -name 'configure.ac' \) -print`
+  for i in $confs; do
+  dir=`dirname $i`;
+  configure=`basename $i`;
+  ( test "$quiet" = "true" || echo "$dir";
+    cd $dir;
+    test -n "`grep RTEMS_CHECK_BSPDIR ${configure}`" && \
+      generate_bspdir_acinclude;
+    pat="s,\$(RTEMS_TOPdir),${aclocal_dir},g"
+    aclocal_args=`grep '^[ ]*ACLOCAL_AMFLAGS' Makefile.am | \
+      sed -e 's%.*ACLOCAL_AMFLAGS.*\=[ ]*%%g' -e $pat ` ;
+    test "$verbose" = "-v" && echo "${ACLOCAL} $aclocal_args"
+    ${ACLOCAL} $aclocal_args;
+    test -n "`grep CONFIG_HEADER ${configure}`" && ${AUTOHEADER} \
+      && test "$verbose" = "-v" && echo "${AUTOHEADER}";
+    test -n "`grep RTEMS_BSP_CONFIGURE ${configure}`" && ${AUTOHEADER} \
+      && test "$verbose" = "-v" && echo "${AUTOHEADER}";
+    test -f Makefile.am && ${AUTOMAKE} -a -c $verbose ;
+    ${AUTOCONF};
+    test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
+      && echo timestamp > stamp-h.in
+  )
+  done
+  ;;
+
+clean)
+  test "$quiet" = "true" || echo "removing automake generated Makefile.in files"
+  files=`find . -name 'Makefile.am' -print | sed -e 's%\.am%\.in%g'` ;
+  for i in $files; do if test -f $i; then
+    rm -f $i
+    test "$verbose" = "-v" && echo "$i"    
+  fi; done
+
+  test "$quiet" = "true" || echo "removing configure files"
+  files=`find . -name 'configure' -print` ;
+  test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
+  for i in $files; do if test -f $i; then
+    # The config.sub shipped with automake <= 1.7.5 does handle c4x/tic4x-* correctly.
+    # rm -f config.sub
+    rm -f $i config.guess depcomp install-sh mdate-sh missing \
+	mkinstalldirs texinfo.tex
+    test "$verbose" = "-v" && echo "$i"    
+  fi; done
+  
+  test "$quiet" = "true" || echo "removing aclocal.m4 files"
+  files=`find . -name 'aclocal.m4' -print` ;
+  test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
+  for i in $files; do if test -f $i; then
+    rm -f $i
+    test "$verbose" = "-v" && echo "$i"    
+  fi; done
+
+  find . -name '*~' -print | xargs rm -f
+  find . -name 'bspopts.h*' -print | xargs rm -f
+  find . -name '*.orig' -print | xargs rm -f
+  find . -name '*.rej' -print | xargs rm -f
+  find . -name 'config.status' -print | xargs rm -f
+  find . -name 'config.log' -print | xargs rm -f
+  find . -name 'config.cache' -print | xargs rm -f
+  find . -name 'Makefile' -print | xargs rm -f
+  find . -name '.deps' -print | xargs rm -rf
+  find . -name '.libs' -print | xargs rm -rf
+  find . -name 'stamp-h.in' | xargs rm -rf
+  find . -name 'autom4te*.cache' | xargs rm -rf
+  ;;
+esac
+
+exit 0
