@@ -74,22 +74,6 @@ extern "C" {
 
 #define Lower_tm27_intr()
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define delay( microseconds ) \
-  { \
-    unsigned32 start, ticks, now; \
-    asm volatile ("mfspr %0, 0x3dd" : "=r" (start)); /* TBLO */ \
-    ticks = (microseconds) * Cpu_table.clicks_per_usec; \
-    do \
-      asm volatile ("mfspr %0, 0x3dd" : "=r" (now)); /* TBLO */ \
-    while (now - start < ticks); \
-  }
-
-
 /* Constants */
 
 #define RAM_START 0
