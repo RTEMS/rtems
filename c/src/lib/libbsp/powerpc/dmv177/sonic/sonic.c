@@ -30,8 +30,9 @@ void break_when_you_get_here();
  *    DY 4 Systems Inc., Kanata, Ontario, September, 1996.
  */
 
-#include <rtems/rtems_bsdnet.h>
+#include <bsp.h>   /* XXX JRS changed order */
 #include "sonic.h"
+#include <rtems/rtems_bsdnet.h>
 
 #include <stdio.h>
 
@@ -54,36 +55,29 @@ void break_when_you_get_here();
  *
  */
 
-#define SONIC_DEBUG_NONE             0x0000
-#define SONIC_DEBUG_ALL              0xFFFF
-#define SONIC_DEBUG_PRINT_REGISTERS  0x0001
-#define SONIC_DEBUG_MEMORY           0x0002
-#define SONIC_DEBUG_MEMORY_ALLOCATE  0x0004
-#define SONIC_DEBUG_FRAGMENTS        0x0008
-#define SONIC_DEBUG_CAM              0x0008
-#define SONIC_DEBUG_DESCRIPTORS      0x0010
-#define SONIC_DEBUG_ERRORS           0x0020
-#define SONIC_DEBUG_DUMP_TX_MBUFS    0x0040
-#define SONIC_DEBUG_DUMP_RX_MBUFS    0x0080
+#define SONIC_DEBUG_NONE                0x0000
+#define SONIC_DEBUG_ALL                 0xFFFF
+#define SONIC_DEBUG_PRINT_REGISTERS     0x0001
+#define SONIC_DEBUG_MEMORY              0x0002
+#define SONIC_DEBUG_MEMORY_ALLOCATE     0x0004
+#define SONIC_DEBUG_MEMORY_DESCRIPTORS  0x0008
+#define SONIC_DEBUG_FRAGMENTS           0x0008
+#define SONIC_DEBUG_CAM                 0x0010
+#define SONIC_DEBUG_DESCRIPTORS         0x0020
+#define SONIC_DEBUG_ERRORS              0x0040
+#define SONIC_DEBUG_DUMP_TX_MBUFS       0x0080
+#define SONIC_DEBUG_DUMP_RX_MBUFS       0x0100
 
 #define SONIC_DEBUG_DUMP_MBUFS \
   (SONIC_DEBUG_DUMP_TX_MBUFS|SONIC_DEBUG_DUMP_RX_MBUFS)
 
-#define SONIC_DEBUG_MEDIUM \
+#define SONIC_DEBUG  (SONIC_DEBUG_ERRORS)
+
+/*
   ((SONIC_DEBUG_ALL) & ~(SONIC_DEBUG_PRINT_REGISTERS|SONIC_DEBUG_DUMP_MBUFS))
-  /*
   ((SONIC_DEBUG_ALL) & ~(SONIC_DEBUG_DUMP_MBUFS))
 */
 
-#define SONIC_DEBUG  SONIC_DEBUG_ALL
-
-/* ((SONIC_DEBUG_ALL) & ~SONIC_DEBUG_PRINT_REGISTERS)  */
-  /* (SONIC_DEBUG_ALL) */
-
-/* (SONIC_DEBUG_ALL) */
-/* (SONIC_DEBUG_ERRORS) */
-
-/* (SONIC_DEBUG_MEMORY|SONIC_DEBUG_DESCRIPTORS) */
 
 #if (SONIC_DEBUG & SONIC_DEBUG_DUMP_MBUFS)
 #include <rtems/dumpbuf.h>
@@ -156,13 +150,16 @@ void break_when_you_get_here();
 /*
  * Default sizes of transmit and receive descriptor areas
  */
-#define RDA_COUNT     20
-#define TDA_COUNT     10
+#define RDA_COUNT     20 /* 20 */
+#define TDA_COUNT     10 /* 10 */
 
 /*
  * 
  * As suggested by National Application Note 746, make the
  * receive resource area bigger than the receive descriptor area.
+ *
+ * NOTE:  Changing this may break this driver since it currently
+ *        assumes a 1<->1 mapping.
  */
 #define RRA_EXTRA_COUNT  0
 
@@ -188,7 +185,8 @@ void break_when_you_get_here();
  * Check Sequence) rounded up to a 4-byte boundary.
  */
 #define RBUF_SIZE  ((sizeof (void *) + (MAXIMUM_FRAME_SIZE) + 3) & ~3)
-#define RBUF_WC    ((((MAXIMUM_FRAME_SIZE) + 3) & ~3) / 2)
+/* #define RBUF_WC    ((((MAXIMUM_FRAME_SIZE) + 3) & ~3) / 2) */
+#define RBUF_WC    (RBUF_SIZE / 2)
 
 /*
  * Macros for manipulating 32-bit pointers as 16-bit fragments
@@ -213,13 +211,6 @@ struct sonic_softc {
    * This area must be non-cacheable, guarded.
    */
   void                             *sonic;
-
-  /*
-   *  Tables to map the mbufs from chip to stack
-   */
-
-  struct mbuf             **rxMbuf;
-  struct mbuf             **txMbuf;
 
   /*
    * Interrupt vector
@@ -279,6 +270,52 @@ struct sonic_softc {
   unsigned long                   txRawWait;
 };
 SONIC_STATIC struct sonic_softc sonic_softc[NSONIC];
+
+
+/*
+ ******************************************************************
+ *                                                                *
+ *                         Debug Routines                         *
+ *                                                                *
+ ******************************************************************
+ */
+
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY_DESCRIPTORS)
+void sonic_print_tx_descriptor(
+  TransmitDescriptorPointer_t tdp
+)
+{
+  printf( "TXD ==> %p", tdp );
+  printf( "  pkt_config = 0x%04x", tdp->pkt_config & 0xffff);
+  printf( "  pkt_size = 0x%04x\n", tdp->pkt_size & 0xffff );
+  printf( "  frag_count = %d", tdp->frag_count & 0xffff );
+  /* could print all the fragments */
+  printf( "  next = %p", tdp->next );
+  printf( "  linkp = %p\n", tdp->linkp );
+  printf( "  mbufp = %p", tdp->mbufp );
+  if ( tdp->mbufp )
+    printf( "  mbufp->data = %p", mtod ( tdp->mbufp, void *) );
+  puts("");
+}
+
+void sonic_print_rx_descriptor(
+  ReceiveDescriptorPointer_t rdp
+)
+{
+  printf( "RXD ==> %p\n", rdp );
+  printf( "  status = 0x%04x", rdp->status & 0xffff );
+  printf( "  byte_count = 0x%04x\n", rdp->byte_count & 0xffff );
+  printf( "  pkt = 0x%04x%04x", rdp->pkt_msw, rdp->pkt_lsw );
+  printf( "  seq_no = %d", rdp->seq_no );
+  printf( "  link = %d\n", rdp->link );
+  printf( "  in_use = %d", rdp->in_use );
+  printf( "  next = %p", rdp->next );
+  printf( "  mbufp = %p", rdp->mbufp );
+  if ( rdp->mbufp )
+    printf( "  mbufp->data = %p", mtod ( rdp->mbufp, void *) );
+  puts("");
+}
+#endif
 
 /*
  ******************************************************************
@@ -475,7 +512,8 @@ SONIC_STATIC void sonic_retire_tda (struct sonic_softc *sc)
 
 #if (SONIC_DEBUG & SONIC_DEBUG_ERRORS)
     if ( status != 0x0001 )
-      printf( "ERROR: retire TDA %p (0x%04x)\n", sc->tdaTail, status );
+      printf( "ERROR: retire TDA %p (0x%08x)\n",
+                sc->tdaTail, sc->tdaTail->status );
 #endif
 
     /*
@@ -528,8 +566,11 @@ SONIC_STATIC void sonic_retire_tda (struct sonic_softc *sc)
      *  Free the packet and reset a couple of fields
      */
     sc->tdaActiveCount--;
-    m = (struct mbuf *)&sc->tdaTail->mbufp;
-    MFREE(m, n);
+    m = sc->tdaTail->mbufp;
+    while ( m ) {
+      MFREE(m, n);
+      m = n;
+    }
 
     sc->tdaTail->frag[0].frag_link = LSW(sc->tdaTail->link_pad);
     sc->tdaTail->frag_count        = 0;
@@ -887,7 +928,6 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
   ReceiveDescriptorPointer_t rdp;
   ReceiveResourcePointer_t rwp, rea;
   rtems_unsigned16 newMissedTally, oldMissedTally;
-  unsigned32 rxMbufIndex;
 
   rwp = sc->rsa;
   rea = sc->rea;
@@ -901,7 +941,6 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
   /*
    * Input packet handling loop
    */
-  rxMbufIndex = 0;
   for (;;) {
     /*
      * Wait till SONIC supplies a Receive Descriptor.
@@ -930,6 +969,9 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
        * ===CACHE===
        * Invalidate cache entries for this memory.
        */
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY_DESCRIPTORS)
+      sonic_print_rx_descriptor( rdp );
+#endif
       m = rdp->mbufp;
       m->m_len = m->m_pkthdr.len = rdp->byte_count -
                           sizeof(rtems_unsigned32) -
@@ -962,7 +1004,6 @@ SONIC_STATIC void sonic_rxDaemon (void *arg)
        * Allocate a new mbuf.
        */
 
-      m= (void *)0xA0000000; /* hope for a fault :) */
       MGETHDR (m, M_WAIT, MT_DATA);
       MCLGET (m, M_WAIT);
       m->m_pkthdr.rcvif = ifp;
@@ -1059,19 +1100,6 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
   }
   
   /*
-   *  Allocate memory so we can figure out from the descriptor which
-   *  mbuf to send to the stack.
-   */
-
-  sc->txMbuf = malloc (sc->tdaCount * sizeof *sc->txMbuf, M_MBUF, M_NOWAIT);
-  if (!sc->txMbuf)
-     rtems_panic ("No memory for TX mbuf pointers");
-
-  sc->rxMbuf = malloc (sc->rdaCount * sizeof *sc->rxMbuf, M_MBUF, M_NOWAIT);
-  if (!sc->rxMbuf)
-     rtems_panic ("No memory for RX mbuf pointers");
-
-  /*
    *  Set up circular linked list in Transmit Descriptor Area.
    *  Use the PINT bit in the transmit configuration field to
    *  request an interrupt on every other transmitted packet.
@@ -1089,7 +1117,6 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
     /*
      *  Start off with the table of outstanding mbuf's 
      */
-    sc->txMbuf[i] = NULL;
 
     /*
      *  status, pkt_config, pkt_size, and all fragment fields 
@@ -1106,6 +1133,9 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
     tdp->link_pad          = LSW(tdp + 1) | TDA_LINK_EOL;
     tdp->linkp             = &((tdp + 1)->frag[0].frag_link);
     tdp->next              = (TransmitDescriptor_t *)(tdp + 1);
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY_DESCRIPTORS)
+    sonic_print_tx_descriptor( tdp );
+#endif
     tdp++;
   }
   tdp--;
@@ -1182,7 +1212,6 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
     MGETHDR (m, M_WAIT, MT_DATA);
     MCLGET (m, M_WAIT);
     m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
-    sc->rxMbuf[i] = m;
     sc->rda[i].mbufp = m;
 
     p = mtod (m, void *);
@@ -1194,6 +1223,9 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
     rwp->buff_ptr_msw = MSW(p);
     rwp->buff_wc_lsw = RBUF_WC;
     rwp->buff_wc_msw = 0;
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY_DESCRIPTORS)
+    sonic_print_rx_descriptor( &sc->rda[i] );
+#endif
   }
   sc->rea = rwp;
 #if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
@@ -1623,17 +1655,14 @@ char SONIC_Reg_name[64][6]= {
     "DCR2"        /* 0x3F */
 };
 #endif
-void sonic_write_register(
+
+inline void sonic_write_register(
   void       *base,
   unsigned32  regno,
   unsigned32  value
 )
 {
   volatile unsigned32 *p = base;
-{
-  volatile unsigned32 *C = (void *)0x34CDF0;
-  if ( *C ) printf( "W. *C = 0x%x\n", *C );
-}
 
 #if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
   printf( "%p Write 0x%04x to %s (0x%02x)\n",
@@ -1643,18 +1672,13 @@ void sonic_write_register(
   p[regno] = value;
 }
 
-unsigned32 sonic_read_register(
+inline unsigned32 sonic_read_register(
   void       *base,
   unsigned32  regno
 )
 {
   volatile unsigned32 *p = base;
   unsigned32           value;
-
-{
-  volatile unsigned32 *C = (void *)0x34CDF0;
-  if ( *C ) printf( "R. *C = 0x%x\n", *C );
-}
 
   value = p[regno];
 #if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
