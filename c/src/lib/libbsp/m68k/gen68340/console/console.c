@@ -66,17 +66,6 @@ unsigned char Error_Status_B = 0; /* error status on Channel A */
 #define Disable_Interrupts_Tx_B if (USE_INTERRUPTS_B) unset_DUIER(m340_TxRDYB)
 
 /******************************************************
-  Name: erreur
-  Input parameters: string
-  Output parameters: -
-  Description: small error routine :)
- *****************************************************/
-static void erreur (char * string)
-{
- fprintf(stderr, string);
-}
-
-/******************************************************
   Name: InterruptHandler
   Input parameters: vector number
   Output parameters: -
@@ -307,7 +296,6 @@ dbugInitialise ()
 	   rtems_isr_entry old_handler;
 	   rtems_status_code sc;
 
-	   proc_ptr ignored;
 	   extern void _Debug_ISR_Handler_Console(void);
 
 	   sc = rtems_interrupt_catch (InterruptHandler,
@@ -317,7 +305,10 @@ dbugInitialise ()
 	   /* uncomment this if you want to pass control to your own ISR handler
 	      it may be usefull to do so to check for performances with an oscilloscope */
 	   /*
-	   _CPU_ISR_install_raw_handler( CONSOLE_VECTOR, _Debug_ISR_Handler_Console, &ignored );
+	   {
+	    proc_ptr ignored;
+	    _CPU_ISR_install_raw_handler( CONSOLE_VECTOR, _Debug_ISR_Handler_Console, &ignored );
+	   }
 	   */
 
 	   /*
@@ -391,7 +382,6 @@ dbugInitialise ()
 	   rtems_isr_entry old_handler;
 	   rtems_status_code sc;
 
-	   proc_ptr ignored;
 	   extern void _Debug_ISR_Handler_Console(void);
 
 	   sc = rtems_interrupt_catch (InterruptHandler,
@@ -401,7 +391,10 @@ dbugInitialise ()
 	   /* uncomment this if you want to pass control to your own ISR handler
 	      it may be usefull to do so to check for performances with an oscilloscope */
 	   /*
-	   _CPU_ISR_install_raw_handler( CONSOLE_VECTOR, _Debug_ISR_Handler_Console, &ignored );
+	   {
+	    proc_ptr ignored;
+	    _CPU_ISR_install_raw_handler( CONSOLE_VECTOR, _Debug_ISR_Handler_Console, &ignored );
+	   }
 	   */
 
 	   /*
@@ -474,8 +467,8 @@ dbugInitialise ()
 	       in the receive buffer
   TO DO: add the channel # to check for!!
  *****************************************************/
-static void
-SetAttributes (struct termios *t, int minor)
+static int
+SetAttributes (int minor, const struct termios *t)
 {
  rtems_interrupt_level level;
  float ispeed, ospeed;
@@ -526,6 +519,8 @@ SetAttributes (struct termios *t, int minor)
     dbugInitialise();
     rtems_interrupt_enable (level);
  }
+
+ return 0;
 }
 
 /******************************************************
@@ -734,7 +729,7 @@ rtems_device_driver console_control(
  	rtems_libio_ioctl_args_t *args = arg;
  
  	if (args->command == RTEMS_IO_SET_ATTRIBUTES)
- 		SetAttributes ((struct termios *)args->buffer, minor);
+ 		SetAttributes (minor, (struct termios *)args->buffer);
  
 	return rtems_termios_ioctl (arg);
 }

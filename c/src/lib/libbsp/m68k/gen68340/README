@@ -24,6 +24,7 @@
 #
 # WARNING: there's still no KA9Q driver! I hope it will come in the next RTEMS version!
 #
+
 BSP NAME:	    gen68340
 BOARD:              Generic 68360 as described in Motorola MC68340 User's Manual
 BOARD:              Home made MC68340 board
@@ -34,6 +35,7 @@ COPROCESSORS:       none
 MODE:               not applicable
 
 DEBUG MONITOR:      none (Hardware provides BDM)
+DEBUG SETUP:	    EST Vision Ice
 
 PERIPHERALS
 ===========

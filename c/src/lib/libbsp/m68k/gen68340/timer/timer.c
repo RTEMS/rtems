@@ -191,7 +191,6 @@ void Fifo_Full_Timer_initialize (void)
          rtems_isr_entry old_handler;
 	 rtems_status_code sc;
 
-	 proc_ptr ignored;
 	 extern void _Debug_ISR_Handler_Console(void);
 
 	 sc = rtems_interrupt_catch (InterruptHandler,
@@ -201,7 +200,10 @@ void Fifo_Full_Timer_initialize (void)
 	 /* uncomment this if you want to pass control to your own ISR handler
 	    it may be usefull to do so to check for performances with an oscilloscope */
 	 /*
-	 _CPU_ISR_install_raw_handler( TIMER1_VECTOR, _Debug_ISR_Handler_Console, &ignored );
+	 {
+	  proc_ptr ignored;
+	  _CPU_ISR_install_raw_handler( TIMER1_VECTOR, _Debug_ISR_Handler_Console, &ignored );
+	 }
 	 */
         }
        } /* fifo full mode on a uart */

@@ -342,7 +342,7 @@ BEGIN_CODE
         dc.l    _crt0_cold_start         /* reset PC */
         dc.l    _crt0_warm_start
 
-	.ascii	"BOOT XHM68K/Spectra for ASTECC PLATFORM"
+	.ascii	"RTEMS"
 	dc.w	0
 
 .align 2
@@ -413,9 +413,7 @@ sync_wait:
 	moveq.l #0x07,d1
 
 _b_cs:
-/*	move.l  (a1)+, (a2)+ */
-	move.l  (a1)+, d2
-	move.l  d2, (a2)+
+	move.l  (a1)+, (a2)+
 	dbra    d1,_b_cs
 
 	/* fill RAM if COLDSTART */
@@ -431,8 +429,6 @@ _fill_loop:
         subq.l	#1,d1
         bne	_fill_loop
         
-/*	jsr	__initcopy */
-
 _dont_fill:
 	jmp	SYM(_Init68340)		| Start C code (which never returns)
 
