@@ -350,6 +350,7 @@ int _POSIX_Condition_variables_Wait_support(
  
       the_cond->Mutex = *mutex;
  
+/* XXX .. enter critical section .. */
       _Thread_queue_Enqueue( &the_cond->Wait_queue, 0 );
 
       _Thread_Enable_dispatch();

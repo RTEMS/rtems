@@ -355,7 +355,7 @@ rtems_status_code rtems_region_get_segment(
       executing->Wait.count           = size;
       executing->Wait.return_argument = (unsigned32 *) segment;
 
-      the_region->Wait_queue.sync = TRUE;
+      _Thread_queue_Enter_critical_section( &the_region->Wait_queue );
 
       _Thread_queue_Enqueue( &the_region->Wait_queue, timeout );
 

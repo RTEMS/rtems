@@ -284,7 +284,7 @@ void _CORE_message_queue_Seize(
     return;
   }
 
-  the_message_queue->Wait_queue.sync = TRUE;
+  _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
   executing->Wait.queue              = &the_message_queue->Wait_queue;
   executing->Wait.id                 = id;
   executing->Wait.return_argument    = (void *)buffer;

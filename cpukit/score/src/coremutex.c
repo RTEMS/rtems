@@ -139,7 +139,7 @@ void _CORE_mutex_Seize(
     return;
   }
 
-  the_mutex->Wait_queue.sync = TRUE;
+  _Thread_queue_Enter_critical_section( &the_mutex->Wait_queue );
   executing->Wait.queue      = &the_mutex->Wait_queue;
   executing->Wait.id         = id;
   _ISR_Enable( level );

@@ -146,7 +146,7 @@ void _CORE_semaphore_Seize(
     return;
   }
 
-  the_semaphore->Wait_queue.sync = TRUE;
+  _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
   executing->Wait.queue          = &the_semaphore->Wait_queue;
   executing->Wait.id             = id;
   _ISR_Enable( level );

@@ -195,7 +195,7 @@ unsigned32 _MPCI_Send_request_packet (
 
     (*_MPCI_table->send_packet)( destination, the_packet );
 
-    _MPCI_Remote_blocked_threads.sync = TRUE;
+    _Thread_queue_Enter_critical_section( &_MPCI_Remote_blocked_threads );
 
     /*
      *  See if we need a default timeout
