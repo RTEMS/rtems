@@ -46,7 +46,7 @@ END-INFO-DIR-ENTRY
 @c  Title Page Stuff
 @c
 
-@set edition 4.0.0a
+@set edition 4.1.0a
 @set update-date 1 June 97
 @set update-month June 97
 
@@ -61,7 +61,7 @@ END-INFO-DIR-ENTRY
 @finalout
 
 @title RTEMS POSIX API Test Plan
-@subtitle Edition @value{edition}, for RTEMS 4.0.0
+@subtitle Edition @value{edition}, for RTEMS 4.1.0
 @sp 1
 @subtitle @value{update-month}
 @author On-Line Applications Research Corporation
