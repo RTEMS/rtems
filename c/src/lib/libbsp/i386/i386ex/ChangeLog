@@ -1,3 +1,10 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, console/console.c, include/bsp.h, include/coverhd.h,
+	start/80386ex.h, start/80386ex.inc, start/macros.inc, start/start.S,
+	startup/bspstart.c, startup/linkcmds, startup/setvec.c,
+	timer/timer.c, timer/timerisr.S: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
