@@ -1,3 +1,11 @@
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	PR 576/doc
+	* FAQ/FAQ.texi, FAQ/Makefile.am: Remove embedded information as it was
+	out of date and frequently duplicated information available from
+	other public sources like the CrossGCC Wiki.
+	* FAQ/embeddedinfo.t: Removed.
+
 2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* index.html.in: Change header URL to www.rtems.com.
