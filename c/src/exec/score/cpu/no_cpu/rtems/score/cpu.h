@@ -22,7 +22,7 @@ extern "C" {
 
 #include <rtems/score/no_cpu.h>            /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/no_cputypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
