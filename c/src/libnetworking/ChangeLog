@@ -1,3 +1,8 @@
+2003-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* pppd/magic.c: Remove *rand48.
+	* pppd/chap.c: Remove prototypes of *rand48.
+
 2003-03-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* pppd/utils.c: Remove strlcpy, strlcat.
