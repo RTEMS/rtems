@@ -90,27 +90,19 @@ void *
 rtems_bsdnet_malloc (unsigned long size, int type, int flags)
 {
 	void *p;
+	int try = 0;
 
 	for (;;) {
 		p = malloc (size);
-		if (p)
+		if (p || (flags & M_NOWAIT))
 			return p;
-		if (flags & M_NOWAIT)
-			return p;
-		/*
-		 * FIXME: This should be redone as:
-		 * static volatile int rtems_bsdnet_need_memory;
-		 *     
-		 *	rtems_bsdnet_need_memory = 1;
-		 *	message_queue_receive
-		 *
-		 * Then in rtems_bsdnet_freee:
-		 *	free (....);
-		 *	if (rtems_bsdnet_need_memory)
-		 *		rtems_bsdnet_need_memory = 0;
-		 *		message_queue_broadcast
-		 */
+		rtems_bsdnet_semaphore_release ();
+		if (++try >= 30) {
+			printf ("rtems_bsdnet_malloc still waiting.\n");
+			try = 0;
+		}
 		rtems_task_wake_after (rtems_bsdnet_ticks_per_second);
+		rtems_bsdnet_semaphore_obtain ();
 	}
 }
 
@@ -158,7 +150,7 @@ bsd_init ()
 	 */
 
 	p = malloc(nmbuf * MSIZE + MSIZE - 1);
-	p = (char *)(((unsigned long)p + MSIZE - 1) & ~(MSIZE - 1));
+	p = (char *)(((unsigned int)p + MSIZE - 1) & ~(MSIZE - 1));
 	if (p == NULL)
 		rtems_panic ("Can't get network memory.");
 	for (i = 0; i < nmbuf; i++) {
@@ -656,7 +648,7 @@ timeout(void (*ftn)(void *), void *arg, int ticks)
 
 /*
  * Ticks till specified time
- * FIXME: This version worries only about seconds, but that's good
+ * XXX: This version worries only about seconds, but that's good
  * enough for the way the network code uses this routine.
  */
 int
@@ -938,12 +930,21 @@ m_mballoc (int nmb, int nowait)
 		return 0;
 	m_reclaim ();
 	if (mmbfree == NULL) {
+		int try = 0;
+		int print_limit = 30 * rtems_bsdnet_ticks_per_second;
+
 		mbstat.m_wait++;
-		do {
+		for (;;) {
 			rtems_bsdnet_semaphore_release ();
 			rtems_task_wake_after (1);
 			rtems_bsdnet_semaphore_obtain ();
-		} while (mmbfree == NULL);
+			if (mmbfree)
+				break;
+			if (++try >= print_limit) {
+				printf ("Still waiting for mbuf.\n");
+				try = 0;
+			}
+		}
 	}
 	else {
 		mbstat.m_drops++;
@@ -958,12 +959,21 @@ m_clalloc(ncl, nowait)
 		return 0;
 	m_reclaim ();
 	if (mclfree == NULL) {
+		int try = 0;
+		int print_limit = 30 * rtems_bsdnet_ticks_per_second;
+
 		mbstat.m_wait++;
-		do {
+		for (;;) {
 			rtems_bsdnet_semaphore_release ();
 			rtems_task_wake_after (1);
 			rtems_bsdnet_semaphore_obtain ();
-		} while (mclfree == NULL);
+			if (mclfree)
+				break;
+			if (++try >= print_limit) {
+				printf ("Still waiting for mbuf cluster.\n");
+				try = 0;
+			}
+		}
 	}
 	else {
 		mbstat.m_drops++;
