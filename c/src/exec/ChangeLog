@@ -1,3 +1,11 @@
+2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove references to RTEMS_BSP.
+	* aclocal/check-multiprocessing.m4: Remove references to RTEMS_BSP.
+	Allow building w/ --enable-multiprocessing --enable-multilib.
+	* aclocal/enable-multiprocessing.m4: 
+	Eliminate RTEMS_HAS_MULTIPROCESSING.
+
 2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Fix stupid typo in previous patch.
