@@ -1,5 +1,9 @@
 2002-08-27	Joel Sherrill <joel@OARcorp.com>
 
+	* sptests/sp19/sptest.adp: Added from old Ada implementation.
+
+2002-08-27	Joel Sherrill <joel@OARcorp.com>
+
 	* tmtests/tm27/.cvsignore: Removed.  Missed in previous attempts.
 
 2002-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
