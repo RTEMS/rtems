@@ -34,6 +34,8 @@ DIRECTORY_SCAN_C_FILES = opendir.c closedir.c readdir.c rewinddir.c \
 
 MALLOC_C_FILES = malloc.c mallocfreespace.c __brk.c __sbrk.c
 
+ENVIRON_C_FILES = envlock.c
+
 PASSWORD_GROUP_C_FILES = getpwent.c getgrent.c
 
 TERMINAL_IDENTIFICATION_C_FILES = ctermid.c isatty.c ttyname.c ttyname_r.c
@@ -44,7 +46,7 @@ LIBC_GLUE_C_FILES = __getpid.c __gettod.c __times.c truncate.c access.c \
 UNIX_LIBC_C_FILES = unixlibc.c hosterr.c
 
 COMMON_C_FILES = gxx_wrappers.c printk.c $(BASE_FS_C_FILES) \
-    $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
+    $(MALLOC_C_FILES) $(ENVIRON_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
     $(ASSOCIATION_C_FILES)
 
 UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
