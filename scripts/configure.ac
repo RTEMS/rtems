@@ -1,7 +1,7 @@
 ## $Id$
 
 AC_PREREQ(2.57)
-AC_INIT([rtems-scripts],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-scripts],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([binutils])
 RTEMS_TOP([..])
 AC_PREFIX_DEFAULT([/opt/rtems])

@@ -1,3 +1,7 @@
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+
 2003-03-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add AC_CHECK_HEADERS(getopt.h) to work around a bug

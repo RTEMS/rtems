@@ -1,5 +1,5 @@
 AC_PREREQ(2.57)
-AC_INIT([rtems-c-src-lib-libbsp-powerpc-support-new_exception_processing],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-c-src-lib-libbsp-powerpc-support-new_exception_processing],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([cpu.c])
 RTEMS_TOP(../../../../../../..)
 

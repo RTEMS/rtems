@@ -1,3 +1,7 @@
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+
 2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* lib/Makefile.am: New (Required by 'make dist').
