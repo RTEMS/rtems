@@ -1,3 +1,7 @@
+2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rpc/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rpc/Makefile.am: Apply include_*HEADERS instead of

@@ -12,7 +12,7 @@ H_FILES = auth.h auth_des.h auth_unix.h clnt.h des.h des_crypt.h pmap_clnt.h \
 
 if HAS_NETWORKING
 include_rpc_HEADERS = $(H_FILES)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rpc \
     $(H_FILES:%=$(PROJECT_INCLUDE)/rpc/%)
 
 $(PROJECT_INCLUDE)/rpc:
