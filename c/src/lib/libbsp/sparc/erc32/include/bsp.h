@@ -29,11 +29,11 @@ extern "C" {
 #include <bspopts.h>
 
 #include <rtems.h>
-#include <iosupp.h>
+#include <rtems/iosupp.h>
 #include <erc32.h>
-#include <clockdrv.h>
+#include <rtems/clockdrv.h>
 
-#include <console.h>
+#include <rtems/console.h>
 
 /*
  *  confdefs.h overrides for this BSP:

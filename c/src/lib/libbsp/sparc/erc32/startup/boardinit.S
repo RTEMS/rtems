@@ -6,7 +6,7 @@
  *  $Id$
  */
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include <erc32.h>
 
         .global __bsp_board_init

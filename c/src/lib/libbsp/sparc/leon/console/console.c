@@ -68,7 +68,7 @@ int console_inbyte_nonblocking( int port );
  *  Buffers between task and ISRs
  */
 
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
  
 Ring_buffer_t  TX_Buffer[ 2 ];
 boolean        Is_TX_active[ 2 ];
