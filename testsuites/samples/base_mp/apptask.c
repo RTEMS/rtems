@@ -21,7 +21,7 @@
 
 #include "system.h"
 #include <stdio.h>
-#include <unistd.h>
+#include <stdlib.h>
 
 rtems_task Application_task(
   rtems_task_argument node
