@@ -70,9 +70,10 @@ extern void debugPollingGetChar();
 | External Prototypes
 +--------------------------------------------------------------------------*/
 extern void _exit(int);  /* define in exit.c */
+extern void _IBMPC_initVideo(void); 
+extern void rtems_irq_mngt_init();
 void bsp_libc_init( void *, unsigned32, int );
 void bsp_postdriver_hook(void);
-extern void rtems_irq_mngt_init();
 extern void _IBMPC_initVideo(void);
 
 /*-------------------------------------------------------------------------+
@@ -144,6 +145,8 @@ void bsp_pretasking_hook(void)
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
 void bsp_start( void )
+  /* Initialize printk channel */
+  _IBMPC_initVideo();
 {
 
   /*
