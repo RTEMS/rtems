@@ -68,8 +68,7 @@ struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ] = {
   /* SIGRT    28 */  SIGACTION_TERMINATE,
   /* SIGRT    29 */  SIGACTION_TERMINATE,
   /* SIGRT    30 */  SIGACTION_TERMINATE,
-  /* SIGRT    31 */  SIGACTION_TERMINATE,
-  /* SIGRTMAX 32 */  SIGACTION_TERMINATE
+  /* SIGRTMAX 31 */  SIGACTION_TERMINATE
 };
 
 struct sigaction _POSIX_signals_Vectors[ SIG_ARRAY_MAX ];
