@@ -216,7 +216,7 @@
 #define TPC_NDERH 	0x05ffffF2 /* short */
 #define TPC_NDERL 	0x05ffffF3 /* short */
 #define TPC_NDRB 	0x05ffffF4 /* char  */
-#define TPC_NDRA 	0x05ffff5F /* char  */
+#define TPC_NDRA 	0x05ffffF5 /* char  */
 #define TPC_NDRB1 	0x05ffffF6 /* char  */
 #define TPC_NDRA1 	0x05ffffF7 /* char  */
 
