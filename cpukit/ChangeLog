@@ -1,5 +1,9 @@
 2004-01-07  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Reflect changes to library Makefile.ams.
+
+2004-01-07  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/amcompile.am: New.
 	* configure.ac: Add subdir-objects, AM_PROG_CC_C_O.
 
