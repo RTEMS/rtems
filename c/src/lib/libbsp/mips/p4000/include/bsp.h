@@ -12,7 +12,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  bsp.h,v 1.4 1995/09/11 19:29:04 joel Exp
+ *  $Id$
  */
 /* @(#)bsp.h       03/15/96     1.1 */
 
@@ -62,6 +62,12 @@ extern unsigned32 mips_get_timer( void );
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
+ *
+ *  NOTE: This macro generates a warning like "integer constant out 
+ *        of range" which is safe to ignore.  In 64 bit mode, unsigned32
+ *        types are actually 64 bits long so that comparisons between
+ *        unsigned32 types and pointers are valid.  The warning is caused
+ *        by code in the delay macro that is necessary for 64 bit mode.
  */
 
 #define delay( microseconds ) \

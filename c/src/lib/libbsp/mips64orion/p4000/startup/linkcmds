@@ -1,4 +1,7 @@
-/* @(#)linkcmds       04/08/96     1.2 */
+/*
+ *   $Id$
+ */
+
 OUTPUT_FORMAT("elf32-bigmips")
 OUTPUT_ARCH(mips)
 /* Do we need any of these for elf?

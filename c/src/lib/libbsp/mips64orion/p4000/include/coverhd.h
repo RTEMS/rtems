@@ -22,7 +22,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  coverhd.h,v 1.2 1995/05/31 16:56:15 joel Exp
+ *  $Id$
  */
 /* @(#)coverhd.h       04/08/96     1.3 */
 

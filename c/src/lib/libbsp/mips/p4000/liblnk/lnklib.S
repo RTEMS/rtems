@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #include <rtems/score/iregdef.h>
 #include <rtems/score/idtcpu.h>
 

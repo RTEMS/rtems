@@ -1,3 +1,6 @@
+/*
+ *  $Id$
+ */
 
 #include <rtems/score/iregdef.h>
 #include <rtems/score/idtmon.h>

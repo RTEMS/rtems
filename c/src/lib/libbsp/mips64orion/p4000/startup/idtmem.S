@@ -20,6 +20,8 @@ two paragraphs in the transferred software.
 COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
+  $Id$
+
 */
 
 /************************************************************************
@@ -39,8 +41,6 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #include <rtems/score/iregdef.h>
 #include <rtems/score/idtcpu.h>
 #include <rtems/score/idtmon.h>
-/* #include <rtems/score/saunder.h> XXX - missing*/
-
 
 	.data
 mem_size:
