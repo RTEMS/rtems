@@ -7,7 +7,8 @@ manuals.
 
 General Issues
 ==============
-Need a Roadmap
+May need a Documentation Roadmap - for now, the "Where to
+go from here" chapter in Getting Started is it.
 
 Need a description of hello world and writing an application.
 
@@ -20,19 +21,11 @@ Redraw pictures as appropriate in open source tools
 
 Getting Started (C and Ada versions)
 ====================================
-Produce PDF
+Switch back to using @url{} when pdf generation error is fixed.
 
 Classic Users Guide
 ===================
-
-Add Primitive Data Types Chapter
-
-Add descriptions for confdefs.h macros in configuring a system
-chapter.
-
-Add defaults for all confdefs.h values.
-
-Replace example configuration
+May need to enhance descriptions in Primitive Data Types Chapter
 
 POSIX User Notes
 ================
@@ -60,7 +53,6 @@ The last paragraph of "C Suites" is vague and could
 be written better.  It should include the subdirectory
 names as part of the textual description.
 
-
 Should this documentation even use the phrase "C Implementation"
 any longer?
 
@@ -75,11 +67,6 @@ stubdr directory which is no longer there.
 Update this section to include discussion of the shared
 subdirectory and its relationship to the BSPs.  Write this
 in such a way that it can be passed on to Geoffroy Montel.
-
-Include a better discussion of the subdirectories
-under each BSP.  This can be a starting point for
-Geoffroy Montel.  The sample tests also deserve mention
-in a BSP development guide.
 
 In the section, "Test Suite Source Directory", there is a
 numeric count of the number of tests in each suite.  This
