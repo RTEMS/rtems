@@ -2,6 +2,12 @@
 2001-01-25	Fernando Ruiz <fernando.ruiz@ctv.es>
 
 	* Alternate email is correo@fernando-ruiz.com
+	* libc/chroot.c: New file.
+	* libc/Makefile.am: Reflect above.
+
+2001-01-25	Fernando Ruiz <fernando.ruiz@ctv.es>
+
+	* Alternate email is correo@fernando-ruiz.com
 	* libc/privateenv.c: New file.
 	* include/rtems/libio_.h, libc/Makefile.am, libc/base_fs.c, 
 	libc/unmount.c: Moved default umask, current working directory,
