@@ -8,6 +8,8 @@
 #ifndef _NET_ETHERNET_H_
 #define _NET_ETHERNET_H_
 
+#include <netinet/in.h>
+
 /*
  * The number of bytes in an ethernet (MAC) address.
  */
@@ -50,7 +52,7 @@
 struct	ether_header {
 	u_char	ether_dhost[ETHER_ADDR_LEN];
 	u_char	ether_shost[ETHER_ADDR_LEN];
-	u_short	ether_type;
+	u_short	ether_type BYTE_PACK;
 };
 
 /*
