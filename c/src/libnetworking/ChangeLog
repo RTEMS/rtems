@@ -1,3 +1,7 @@
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).

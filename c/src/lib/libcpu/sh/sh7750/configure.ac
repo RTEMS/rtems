@@ -6,7 +6,6 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-c-src-lib-libcpu-sh-sh7750],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([include])
 RTEMS_TOP(../../../../../..)
-AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
