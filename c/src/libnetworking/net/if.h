@@ -240,6 +240,7 @@ typedef void if_init_f_t __P((void *));
 #define	IF_QFULL(ifq)		((ifq)->ifq_len >= (ifq)->ifq_maxlen)
 #define	IF_DROP(ifq)		((ifq)->ifq_drops++)
 #define	IF_ENQUEUE(ifq, m) { \
+/* printf(" IF_ENQUEUE: %p %p\n", ifq, m ); */ \
 	(m)->m_nextpkt = 0; \
 	if ((ifq)->ifq_tail == 0) \
 		(ifq)->ifq_head = m; \
@@ -249,6 +250,7 @@ typedef void if_init_f_t __P((void *));
 	(ifq)->ifq_len++; \
 }
 #define	IF_PREPEND(ifq, m) { \
+/* printf(" IF_PREPEND: %p %p\n", ifq, m ); */ \
 	(m)->m_nextpkt = (ifq)->ifq_head; \
 	if ((ifq)->ifq_tail == 0) \
 		(ifq)->ifq_tail = (m); \
@@ -258,6 +260,7 @@ typedef void if_init_f_t __P((void *));
 #define	IF_DEQUEUE(ifq, m) { \
 	(m) = (ifq)->ifq_head; \
 	if (m) { \
+/* printf(" IF_DEQUEUE: %p %p\n", ifq, m ); */ \
 		if (((ifq)->ifq_head = (m)->m_nextpkt) == 0) \
 			(ifq)->ifq_tail = 0; \
 		(m)->m_nextpkt = 0; \
