@@ -814,7 +814,8 @@ information.
 char                      *mount_point
 
 This is a pathname to a directory in a currently mounted filesystem that 
-allows read, write and execute permissions.
+allows read, write and execute permissions.  If successful, the node
+found by evaluating this name, is stored in the mt_entry.
 
 @subheading Processing: 
 
@@ -847,7 +848,7 @@ another filesystem mounted at the mount point we are trying to mount
 onto.
 
 If a mount function is defined in the ops table for the filesystem 
-containing the mount point, it is called at this time.
+containing the mount point, it is called at this time. 
 
 If no mount point is specified:
 Processing if performed to set up the mount table chain entry as the base 
