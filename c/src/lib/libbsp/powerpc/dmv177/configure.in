@@ -29,18 +29,6 @@ AC_DEFINE_UNQUOTED([CONSOLE_USE_INTERRUPTS],
   [$CONSOLE_USE_INTERRUPTS],
   [whether using console interrupts])
 
-## FIXME: this is redundant to CONSOLE_USE_INTERRUPTS
-CONSOLE_USE_POLLED="!CONSOLE_USE_INTERRUPTS"
-AC_DEFINE_UNQUOTED([CONSOLE_USE_POLLED],
-  [$CONSOLE_USE_POLLED],
-  [whether using polled console])
-
-## FIXME: This is not used anywhere
-HAS_RTC=${HAS_RTC-yes}
-AC_DEFINE_UNQUOTED([HAS_RTC],
-  [$HAS_RTC],
-  [whether this BSP has an RTC])
-
 AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 

@@ -1,3 +1,7 @@
+2001-05-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Remove CONSOLE_USE_POLLED, HAS_RTC.
+
 2001-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add bspopts.h, AC_DEFINE CONSOLE_USE_INTERRUPTS,
