@@ -11,5 +11,5 @@
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <rtems/score/ppc.h> is deprecated, use <rtems/rtems/score/powerpc.h> instead
 #endif
-#include <rtems/rtems/score/ppc.h>
+#include <rtems/score/powerpc.h>
 #endif
