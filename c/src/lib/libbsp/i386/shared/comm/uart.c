@@ -387,6 +387,22 @@ BSP_uart_polled_write(int uart, int val)
 
   uwrite(uart, THR, val & 0xff);
       
+  /*
+   * Wait for character to be transmitted.
+   * This ensures that printk and printf play nicely together
+   * when using the same serial port.
+   * Yes, there's a performance hit here, but if we're doing
+   * polled writes to a serial port we're probably not that
+   * interested in efficiency anyway.....
+   */
+  for(;;)
+    {
+      if((val1=uread(uart, LSR)) & THRE)
+      {
+      break;
+      }
+    }
+
   return;
 }
 

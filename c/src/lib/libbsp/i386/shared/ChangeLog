@@ -1,3 +1,11 @@
+2002-07-16	Eric Norum <eric.norum@usask.ca>
+
+	* comm/uart.c: I am using a PC-104 card with no video output.  I
+	found that things would lock up if a printk was followed closely by
+	a printf when BSPConsolePort = BSP_UART_COM2 and
+	BSPPrintkPort = BSP_UART_COM1.  With this change in place,
+	printf/printk calls can be intermingled with no apparent problems.
+
 2002-05-01	Eric Norum <eric.norum@usask.ca>
 
 	* console/console.c, fatal/bspfatal.c, startup/bspclean.c, 
