@@ -28,6 +28,44 @@
 #ifndef _SONIC_DP83932_
 #define _SONIC_DP83932_
 
+
+ /*
+  * Debug levels
+  *
+  */
+
+#define SONIC_DEBUG_NONE                0x0000
+#define SONIC_DEBUG_ALL                 0xFFFF
+#define SONIC_DEBUG_PRINT_REGISTERS     0x0001
+#define SONIC_DEBUG_MEMORY              0x0002
+#define SONIC_DEBUG_MEMORY_ALLOCATE     0x0004
+#define SONIC_DEBUG_MEMORY_DESCRIPTORS  0x0008
+#define SONIC_DEBUG_FRAGMENTS           0x0008
+#define SONIC_DEBUG_CAM                 0x0010
+#define SONIC_DEBUG_DESCRIPTORS         0x0020
+#define SONIC_DEBUG_ERRORS              0x0040
+#define SONIC_DEBUG_DUMP_TX_MBUFS       0x0080
+#define SONIC_DEBUG_DUMP_RX_MBUFS       0x0100
+
+#define SONIC_DEBUG_DUMP_MBUFS \
+      (SONIC_DEBUG_DUMP_TX_MBUFS|SONIC_DEBUG_DUMP_RX_MBUFS)
+
+#define SONIC_DEBUG  (SONIC_DEBUG_NONE)
+/*
+#define SONIC_DEBUG  (SONIC_DEBUG_ERRORS | SONIC_DEBUG_PRINT_REGISTERS |\
+      SONIC_DEBUG_DESCRIPTORS)
+*/
+
+/*
+  ((SONIC_DEBUG_ALL) & ~(SONIC_DEBUG_PRINT_REGISTERS|SONIC_DEBUG_DUMP_MBUFS))
+  ((SONIC_DEBUG_ALL) & ~(SONIC_DEBUG_DUMP_MBUFS))
+*/
+
+#if (SONIC_DEBUG & SONIC_DEBUG_PRINT_REGISTERS)
+extern char SONIC_Reg_name[64][6];
+#endif
+
+
 /*
  *  Configuration Information
  */
@@ -234,16 +272,19 @@ typedef struct {
 #define DCR2_EXPO2      0x4000
 #define DCR2_EXPO1      0x2000
 #define DCR2_EXPO0      0x1000
+#define DCR2_HBDIS      0x0800
 #define DCR2_PH         0x0010
 #define DCR2_PCM        0x0004
 #define DCR2_PCNM       0x0002
 #define DCR2_RJCM       0x0001
 
 /*
- *  Known values for the Silicon Revision Register
+ *  Known values for the Silicon Revision Register.
+ *  Note that DP83934 has revision 5 and seems to work.
  */
 
 #define SONIC_REVISION_B   4
+#define SONIC_REVISION_DP83934   5
 #define SONIC_REVISION_C   6
 
 /*
@@ -412,5 +453,9 @@ int rtems_sonic_driver_attach (
   struct rtems_bsdnet_ifconfig *config,
   sonic_configuration_t *chip
 );
+
+#ifdef CPU_U32_FIX
+void ipalign(struct mbuf *m);
+#endif
 
 #endif /* _SONIC_DP83932_ */

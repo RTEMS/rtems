@@ -85,10 +85,10 @@ ifeq (${RTEMS_USE_MACROS},yes)
 else
 	@echo "#define USE_INLINES 1"                          >>$@
 endif
-ifeq ($(RTEMS_HAS_MULTIPROCESSING),yes)
+ifeq ($(HAS_MULTIPROCESSING),yes)
 	@echo "#define RTEMS_MULTIPROCESSING 1"                >>$@
 endif
-ifeq ($(RTEMS_HAS_POSIX_API),yes)
+ifeq ($(HAS_POSIX_API),yes)
 	@echo "#define RTEMS_POSIX_API 1"                      >>$@
 endif
 ifeq ($(RTEMS_USE_NEWLIB),yes)

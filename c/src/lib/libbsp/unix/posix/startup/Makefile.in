@@ -38,7 +38,7 @@ OBJS=$(C_O_FILES)
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
-ifeq ($(RTEMS_HAS_CPLUSPLUS),yes)
+ifeq ($(HAS_CPLUSPLUS),yes)
 NO_CTOR_LIB=${ARCH}/libno-ctor.a
 INSTALLED_O_FILES=$(ARCH)/rtems-ctor.o
 CXX_MAIN=rtems-ctor
