@@ -56,7 +56,7 @@ int clock_settime(
                       _TOD_Microseconds_per_tick;
 
       if ( !_TOD_Validate( &tod ) )
-        set_errno_and_return_minus_one( EINVAL );
+        rtems_set_errno_and_return_minus_one( EINVAL );
  
       /*
        *  We can't use the tp->tv_sec field because it is based on 
@@ -81,7 +81,7 @@ int clock_settime(
       break;
 #endif
     default:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
  
   }
   return 0;

@@ -70,7 +70,7 @@ int sigtimedwait(
 
     if ( timeout->tv_nsec < 0 ||
          timeout->tv_nsec >= TOD_NANOSECONDS_PER_SECOND) {
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
     interval = _POSIX_Timespec_to_interval( timeout );

@@ -47,16 +47,16 @@ int mq_getattr(
   CORE_message_queue_Attributes        *the_mq_attr;
  
   if ( !mqstat )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EBADF );
+      rtems_set_errno_and_return_minus_one( EBADF );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       /*
        *  Return the old values.

@@ -80,7 +80,7 @@ mqd_t mq_open(
 
     if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
       _Thread_Enable_dispatch();
-      set_errno_and_return_minus_one_cast( status, mqd_t );
+      rtems_set_errno_and_return_minus_one_cast( status, mqd_t );
     }
 
   } else {                /* name -> ID translation succeeded */
@@ -91,7 +91,7 @@ mqd_t mq_open(
 
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
       _Thread_Enable_dispatch();
-      set_errno_and_return_minus_one_cast( EEXIST, mqd_t );
+      rtems_set_errno_and_return_minus_one_cast( EEXIST, mqd_t );
     }
 
     /*

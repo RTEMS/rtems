@@ -36,11 +36,11 @@ int sem_getvalue(
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       *sval = _CORE_semaphore_Get_count( &the_semaphore->Semaphore );
       _Thread_Enable_dispatch();

@@ -33,7 +33,7 @@ int clock_gettime(
   long           ticks;
 
   if ( !tp )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   switch ( clock_id ) {
 
@@ -62,7 +62,7 @@ int clock_gettime(
       break;
 #endif
     default:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
 
   }
   return 0;

@@ -67,12 +67,12 @@ int _POSIX_Message_queue_Create_support(
   } else {
     if ( attr_ptr->mq_maxmsg < 0 ){
       _Thread_Enable_dispatch();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
     if ( attr_ptr->mq_msgsize < 0 ){
       _Thread_Enable_dispatch();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
     attr = *attr_ptr;
@@ -84,14 +84,14 @@ int _POSIX_Message_queue_Create_support(
                             the_mq->Object.id, FALSE ) ) ) {
     _POSIX_Message_queue_Free( the_mq );
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENFILE );
+    rtems_set_errno_and_return_minus_one( ENFILE );
   }
 #endif
  
   the_mq = _POSIX_Message_queue_Allocate();
   if ( !the_mq ) {
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENFILE );
+    rtems_set_errno_and_return_minus_one( ENFILE );
   }
  
   the_mq->process_shared  = pshared;
@@ -130,7 +130,7 @@ int _POSIX_Message_queue_Create_support(
  
     _POSIX_Message_queue_Free( the_mq );
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENOSPC );
+    rtems_set_errno_and_return_minus_one( ENOSPC );
   }
 
   _Objects_Open(

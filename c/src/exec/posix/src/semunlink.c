@@ -43,7 +43,7 @@ int sem_unlink(
   status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id );
   if ( status != 0 ) {
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( status );
+    rtems_set_errno_and_return_minus_one( status );
   }
 
   /*
@@ -52,7 +52,7 @@ int sem_unlink(
 
   if ( !_Objects_Is_local_id(the_semaphore_id) ) {
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENOSYS );
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   }
 
   the_semaphore = (POSIX_Semaphore_Control *) _Objects_Get_local_object(

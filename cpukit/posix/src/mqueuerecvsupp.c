@@ -55,20 +55,20 @@ ssize_t _POSIX_Message_queue_Receive_support(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EBADF );
+      rtems_set_errno_and_return_minus_one( EBADF );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       if ( (the_mq->oflag & O_ACCMODE) == O_WRONLY ) {
         _Thread_Enable_dispatch();
-        set_errno_and_return_minus_one( EBADF );
+        rtems_set_errno_and_return_minus_one( EBADF );
       }
 
       if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
         _Thread_Enable_dispatch();
-        set_errno_and_return_minus_one( EMSGSIZE );
+        rtems_set_errno_and_return_minus_one( EMSGSIZE );
       }
  
       /*
@@ -94,7 +94,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
       if ( !_Thread_Executing->Wait.return_code )
         return length_out;
 
-      set_errno_and_return_minus_one(
+      rtems_set_errno_and_return_minus_one(
         _POSIX_Message_queue_Translate_core_message_queue_return_code(
           _Thread_Executing->Wait.return_code
         )

@@ -37,7 +37,7 @@ int uname(
   */
 
   if ( !name )
-    set_errno_and_return_minus_one( EFAULT );
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   strcpy( name->sysname, "RTEMS" );
 

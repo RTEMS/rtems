@@ -37,10 +37,10 @@ int _POSIX_Semaphore_Wait_support(
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       _CORE_semaphore_Seize(
         &the_semaphore->Semaphore,
@@ -53,11 +53,11 @@ int _POSIX_Semaphore_Wait_support(
         case CORE_SEMAPHORE_STATUS_SUCCESSFUL:
 	  break;
         case CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT:
-          set_errno_and_return_minus_one( EAGAIN );
+          rtems_set_errno_and_return_minus_one( EAGAIN );
         case CORE_SEMAPHORE_WAS_DELETED:
-          set_errno_and_return_minus_one( EAGAIN );
+          rtems_set_errno_and_return_minus_one( EAGAIN );
         case CORE_SEMAPHORE_TIMEOUT:
-          set_errno_and_return_minus_one( ETIMEDOUT );
+          rtems_set_errno_and_return_minus_one( ETIMEDOUT );
 	  break;
         case CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED:
           /*

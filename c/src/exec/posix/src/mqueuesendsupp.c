@@ -56,23 +56,23 @@ int _POSIX_Message_queue_Send_support(
    */
 
   if ( msg_prio > MQ_PRIO_MAX )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
 
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EBADF );
+      rtems_set_errno_and_return_minus_one( EBADF );
 
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
 
     case OBJECTS_LOCAL:
       if ( (the_mq->oflag & O_ACCMODE) == O_RDONLY ) {
         _Thread_Enable_dispatch();
-        set_errno_and_return_minus_one( EBADF );
+        rtems_set_errno_and_return_minus_one( EBADF );
       }
 
       msg_status = _CORE_message_queue_Submit(
@@ -105,7 +105,7 @@ int _POSIX_Message_queue_Send_support(
       if ( !msg_status )
         return msg_status;
 
-      set_errno_and_return_minus_one(
+      rtems_set_errno_and_return_minus_one(
         _POSIX_Message_queue_Translate_core_message_queue_return_code(
           msg_status 
         )

@@ -47,11 +47,11 @@ int mq_close(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EBADF );
+      rtems_set_errno_and_return_minus_one( EBADF );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       the_mq->open_count -= 1;
       _POSIX_Message_queue_Delete( the_mq );

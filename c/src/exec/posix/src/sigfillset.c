@@ -28,7 +28,7 @@ int sigfillset(
 )
 {
   if ( !set )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   *set = SIGNAL_ALL_MASK;
   return 0;

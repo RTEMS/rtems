@@ -13,6 +13,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <limits.h>
+#include <string.h>	/* strlen */
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
@@ -44,13 +45,13 @@ int _POSIX_Semaphore_Create_support(
   /* Sharing semaphores among processes is not currently supported */
   if (pshared != 0) {
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENOSYS );
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   }
 
   if ( name ) {
     if( strlen(name) > PATH_MAX ) { 
       _Thread_Enable_dispatch();
-      set_errno_and_return_minus_one( ENAMETOOLONG );
+      rtems_set_errno_and_return_minus_one( ENAMETOOLONG );
     }
   }
 
@@ -58,7 +59,7 @@ int _POSIX_Semaphore_Create_support(
  
   if ( !the_semaphore ) {
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENOSPC );
+    rtems_set_errno_and_return_minus_one( ENOSPC );
   }
  
 #if defined(RTEMS_MULTIPROCESSING)
@@ -67,7 +68,7 @@ int _POSIX_Semaphore_Create_support(
                             the_semaphore->Object.id, FALSE ) ) ) {
     _POSIX_Semaphore_Free( the_semaphore );
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( EAGAIN );
+    rtems_set_errno_and_return_minus_one( EAGAIN );
   }
 #endif
  

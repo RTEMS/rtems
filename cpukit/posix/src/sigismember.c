@@ -29,13 +29,13 @@ int sigismember(
 )
 {
   if ( !set )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( !signo )
     return 0;
 
   if ( !is_valid_signo(signo) )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( *set & signo_to_mask(signo) )
     return 1;

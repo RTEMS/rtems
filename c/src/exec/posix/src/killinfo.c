@@ -63,14 +63,14 @@ int killinfo(
    */
  
   if ( pid != getpid() )
-    set_errno_and_return_minus_one( ESRCH );
+    rtems_set_errno_and_return_minus_one( ESRCH );
 
   /*
    *  Validate the signal passed if not 0.
    */
  
   if ( sig && !is_valid_signo(sig) ) {
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   /*
@@ -320,7 +320,7 @@ post_process_signal:
     psiginfo = (POSIX_signals_Siginfo_node *)
                _Chain_Get( &_POSIX_signals_Inactive_siginfo );
     if ( !psiginfo ) {
-      set_errno_and_return_minus_one( EAGAIN );
+      rtems_set_errno_and_return_minus_one( EAGAIN );
     }
 
     psiginfo->Info = *siginfo;

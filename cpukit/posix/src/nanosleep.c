@@ -32,7 +32,7 @@ int nanosleep(
   struct timespec   *the_rqtp;
 
   if ( !rqtp )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   the_rqtp = (struct timespec *)rqtp;
 
@@ -47,10 +47,10 @@ int nanosleep(
     the_rqtp->tv_sec = 0;
 
   if ( /* the_rqtp->tv_sec < 0 || */ the_rqtp->tv_nsec < 0 )
-    set_errno_and_return_minus_one( EAGAIN );
+    rtems_set_errno_and_return_minus_one( EAGAIN );
 
   if ( the_rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
  
   ticks = _POSIX_Timespec_to_interval( the_rqtp );
 
@@ -97,7 +97,7 @@ int nanosleep(
      */
 
     if ( ticks )
-      set_errno_and_return_minus_one( EINTR );
+      rtems_set_errno_and_return_minus_one( EINTR );
   }
 
   return 0;

@@ -28,7 +28,7 @@ int sched_setparam(
   const struct sched_param *param
 )
 {
-  set_errno_and_return_minus_one( ENOSYS );
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -41,7 +41,7 @@ int sched_getparam(
   const struct sched_param *param
 )
 {
-  set_errno_and_return_minus_one( ENOSYS );
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -56,7 +56,7 @@ int sched_setscheduler(
   const struct sched_param *param
 )
 {
-  set_errno_and_return_minus_one( ENOSYS );
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -68,7 +68,7 @@ int sched_getscheduler(
   pid_t                     pid
 )
 {
-  set_errno_and_return_minus_one( ENOSYS );
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -88,7 +88,7 @@ int sched_get_priority_max(
       break;
  
     default:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   return POSIX_SCHEDULER_MAXIMUM_PRIORITY;
@@ -111,7 +111,7 @@ int sched_get_priority_min(
       break;
  
     default:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   return POSIX_SCHEDULER_MINIMUM_PRIORITY;
@@ -134,10 +134,10 @@ int sched_rr_get_interval(
    */
 
   if ( pid && pid != getpid() )
-    set_errno_and_return_minus_one( ESRCH );
+    rtems_set_errno_and_return_minus_one( ESRCH );
 
   if ( !interval )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   _POSIX_Interval_to_timespec( _Thread_Ticks_per_timeslice, interval );
   return 0;

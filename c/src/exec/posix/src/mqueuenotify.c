@@ -70,16 +70,16 @@ int mq_notify(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EBADF );
+      rtems_set_errno_and_return_minus_one( EBADF );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       if ( notification ) {
         if ( _CORE_message_queue_Is_notify_enabled( &the_mq->Message_queue ) ) {
           _Thread_Enable_dispatch();
-          set_errno_and_return_minus_one( EBUSY );
+          rtems_set_errno_and_return_minus_one( EBUSY );
         }
 
         _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL, NULL );

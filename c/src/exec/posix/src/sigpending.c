@@ -30,7 +30,7 @@ int sigpending(
   POSIX_API_Control  *api;
 
   if ( !set )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
 

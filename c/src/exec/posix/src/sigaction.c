@@ -46,7 +46,7 @@ int sigaction(
     return 0;
 
   if ( !is_valid_signo(sig) )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   
   /* 
    *  Some signals cannot be ignored (P1003.1b-1993, pp. 70-72 and references.
@@ -56,7 +56,7 @@ int sigaction(
    */
 
   if ( sig == SIGKILL )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   
   /*
    *  Evaluate the new action structure and set the global signal vector

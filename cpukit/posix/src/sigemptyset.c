@@ -28,7 +28,7 @@ int sigemptyset(
 )
 {
   if ( !set )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   *set = 0;
   return 0;

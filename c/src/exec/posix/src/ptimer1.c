@@ -281,7 +281,7 @@ int timer_create(
     if ( ( evp->sigev_notify != SIGEV_NONE ) && 
          ( evp->sigev_notify != SIGEV_SIGNAL ) ) {
        /* The value of the field sigev_notify is not valid */
-       set_errno_and_return_minus_one( EINVAL );
+       rtems_set_errno_and_return_minus_one( EINVAL );
      }
   }
  
@@ -306,7 +306,7 @@ int timer_create(
            /* There is not position for another timers in spite of RTEMS 
 	    * supports it. It will necessaty to increase the structure used */
 
-           set_errno_and_return_minus_one( EAGAIN );
+           rtems_set_errno_and_return_minus_one( EAGAIN );
         }
 
         /* Exit parameter */
@@ -338,12 +338,12 @@ int timer_create(
 
      case RTEMS_INVALID_NAME : /* The assigned name is not valid */
 
-       set_errno_and_return_minus_one( EINVAL );
+       rtems_set_errno_and_return_minus_one( EINVAL );
 
      case RTEMS_TOO_MANY :
 
        /* There has been created too much timers for the same process */
-       set_errno_and_return_minus_one( EAGAIN );
+       rtems_set_errno_and_return_minus_one( EAGAIN );
      
      default :
 
@@ -353,14 +353,14 @@ int timer_create(
         * rtems_timer_create can not return other different value. 
         */
 
-       set_errno_and_return_minus_one( EINVAL );
+       rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   /* 
    * The next sentence is used to avoid singular situations 
    */
 
-  set_errno_and_return_minus_one( EINVAL );
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }
 
 /*
@@ -391,7 +391,7 @@ int timer_delete(
 
    if ( timer_pos == BAD_TIMER_C ) {
       /* The timer identifier is erroneus */
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
    }
 
    /* The timer is deleted */
@@ -400,7 +400,7 @@ int timer_delete(
 
    if ( status == RTEMS_INVALID_ID ) {
      /* The timer identifier is erroneus */
-     set_errno_and_return_minus_one( EINVAL );
+     rtems_set_errno_and_return_minus_one( EINVAL );
    }
 
    /* Initializes the data of the timer */
@@ -437,14 +437,14 @@ int timer_settime(
 
    if ( timer_pos == BAD_TIMER_C ) {
      /* The timer identifier is erroneus */
-     set_errno_and_return_minus_one( EINVAL );
+     rtems_set_errno_and_return_minus_one( EINVAL );
    }
 
    if ( value == NULL ) {
      /* The stucture of times of the timer is free, and then returns an
 	error but the variable errno is not actualized */
 
-     set_errno_and_return_minus_one( EINVAL );
+     rtems_set_errno_and_return_minus_one( EINVAL );
    }
 
    /* If the function reaches this point, then it will be necessary to do
@@ -487,7 +487,7 @@ int timer_settime(
          ( value->it_value.tv_nsec < MIN_NSEC_C ) ) {
        /* The number of nanoseconds is not correct */
 
-       set_errno_and_return_minus_one( EINVAL );
+       rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
    /* Then, "value" must be converted from seconds and nanoseconds to clock
@@ -610,7 +610,7 @@ int timer_settime(
               /* The timer identifier is not correct. In theory, this 
                * situation can not occur, but the solution is easy */ 
 
-              set_errno_and_return_minus_one( EINVAL );
+              rtems_set_errno_and_return_minus_one( EINVAL );
 
               break;
 
@@ -625,7 +625,7 @@ int timer_settime(
                * errno = EINVAL;
                */
 
-              set_errno_and_return_minus_one( EINVAL );
+              rtems_set_errno_and_return_minus_one( EINVAL );
               break;
            
            default: break;
@@ -687,7 +687,7 @@ int timer_gettime(
 
   if ( timer_pos == BAD_TIMER_C ) {
     /* The timer identifier is erroneus */  
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   /* Calculates the difference between the start time of the timer and
@@ -774,7 +774,7 @@ int timer_getoverrun(
 
   if ( timer_pos == BAD_TIMER_C ) {
     /* The timer identifier is erroneus */
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   /* The overflow count of the timer is stored in "overrun" */

@@ -35,11 +35,11 @@ int sem_destroy(
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       /*
        *  Undefined operation on a named semaphore.
@@ -47,7 +47,7 @@ int sem_destroy(
 
       if ( the_semaphore->named == TRUE ) {
         _Thread_Enable_dispatch();
-        set_errno_and_return_minus_one( EINVAL );
+        rtems_set_errno_and_return_minus_one( EINVAL );
       }
  
       _POSIX_Semaphore_Delete( the_semaphore );

@@ -50,7 +50,7 @@ int mq_unlink(
   status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id );
    if ( status != 0 ) {
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( status );
+    rtems_set_errno_and_return_minus_one( status );
    }
 
   /*
@@ -59,7 +59,7 @@ int mq_unlink(
 
   if ( !_Objects_Is_local_id(the_mq_id) ) {
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENOSYS );
+    rtems_set_errno_and_return_minus_one( ENOSYS );
   }
 
   the_mq = (POSIX_Message_queue_Control *) _Objects_Get_local_object(

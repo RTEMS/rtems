@@ -35,18 +35,18 @@ int pthread_kill(
   Objects_Locations  location;
 
   if ( sig && !is_valid_signo(sig) )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
 /* commented out when posix timers added 
   if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO )
-    set_errno_and_return_minus_one( ENOSYS );
+    rtems_set_errno_and_return_minus_one( ENOSYS );
 */
 
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
-      set_errno_and_return_minus_one( ESRCH );
+      rtems_set_errno_and_return_minus_one( ESRCH );
     case OBJECTS_LOCAL:
       /*
        *  If sig == 0 then just validate arguments

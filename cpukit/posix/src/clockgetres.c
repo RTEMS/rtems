@@ -29,7 +29,7 @@ int clock_getres(
 )
 {
   if ( !res )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
  
   switch ( clock_id ) {
  
@@ -48,7 +48,7 @@ int clock_getres(
       break;
  
     default:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
  
   }
   return 0;
