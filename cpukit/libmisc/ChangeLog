@@ -1,5 +1,11 @@
 2003-01-27	Dan Smisko <dan@balanced.com>
 
+	* stackchk/check.c: Fix problem where _Objects_Get_information()
+	will dereference a null pointer when checking the interrupt stack.
+	If there's something at 0, you may be ok at run time but it is wrong.
+
+2003-01-27	Dan Smisko <dan@balanced.com>
+
 	* monitor/mon-command.c: Correct two potential NULL references.
 
 2002-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

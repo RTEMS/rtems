@@ -454,9 +454,9 @@ void Stack_check_Dump_threads_usage(
   else
     used = 0;
 
-  info = _Objects_Get_information(the_thread->Object.id);
   name = name_str;
   if ( the_thread ) {
+    info = _Objects_Get_information(the_thread->Object.id);
     if ( info->is_string ) {
       name = (char *) the_thread->Object.name;
     } else {
