@@ -2,49 +2,48 @@
 #  $Id$
 #
 
-BSP NAME:           psim
-BOARD:              PowerPC Simulator
-BUS:                N/A
-CPU FAMILY:         ppc
-CPU:                PowerPC 603, 603e, 604
+BSP NAME:           dmv177
+BOARD:              DY-4 DMV177
+BUS:                VMEBus
+CPU FAMILY:         powerpc
+CPU:                PowerPC 603e
 COPROCESSORS:       N/A
 MODE:               32 bit mode
 
-DEBUG MONITOR:      BUG mode (emulates Motorola debug monitor)
+DEBUG MONITOR:      DY-4 General Purpose Monitor (GPM)
 
 PERIPHERALS
 ===========
 TIMERS:             PPC internal Timebase register
   RESOLUTION:         ???
-SERIAL PORTS:       simulated via bug
+SERIAL PORTS:       2 RS-232 provided by a Exar 88681
+                    2 RS-422 provided by a Zilog Z8530
 REAL-TIME CLOCK:    PPC internal Decrementer register
 DMA:                none
+RTC:                Harris ICM7170
 VIDEO:              none
-SCSI:               none
-NETWORKING:         none
+SCSI:               QLogic FAS216 SCSI-2 (unsupported)
+NETWORKING:         National Semiconductor SONIC DP83932B (Ethernet)
 
 DRIVER INFORMATION
 ==================
 CLOCK DRIVER:       PPC internal
-IOSUPP DRIVER:      N/A
 SHMSUPP:            N/A
 TIMER DRIVER:       PPC internal
-TTY DRIVER:         PPC internal
+CONSOLE DRIVER:     Uses libchip drivers for Exar 88681 and Zilog Z8530.
 
 STDIO
 =====
+
+These are the default settings.
+
 PORT:               Console port 0
-ELECTRICAL:         na
-BAUD:               na
-BITS PER CHARACTER: na
-PARITY:             na
-STOP BITS:          na
+ELECTRICAL:         RS-232
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             N
+STOP BITS:          1
 
 Notes
 =====
-
-Based on papyrus bsp which only really supports
-the PowerOpen ABI with an ELF assembler.
-
-Need to Modify external_exception_ISR with correct code to read the vector,
-and to clear the interrupt.
+The console and real-time clock drivers use the libchip library.
