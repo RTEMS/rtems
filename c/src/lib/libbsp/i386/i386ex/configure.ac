@@ -11,7 +11,8 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.8])
 RTEMS_BSP_CONFIGURE
 
-RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
+# RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
+RTEMS_PROG_CC_FOR_TARGET([-fasm])
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
@@ -23,13 +24,6 @@ AM_CONDITIONAL(RTEMS_GAS_CODE16,test "$RTEMS_GAS_CODE16" = "yes")
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-startup/Makefile
-timer/Makefile
-network/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
