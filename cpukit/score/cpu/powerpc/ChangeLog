@@ -1,5 +1,9 @@
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/powerp.c: Remove PPC_HAS_EXCEPTION_PREFIX (Unused).
+
+2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/powerpc.h: Remove PPC_CACHE_ALIGN_POWER (Unused).
 
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>

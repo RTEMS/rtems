@@ -69,7 +69,6 @@ extern "C" {
  *
  *    + PPC_INTERRUPT_MAX        - 16
  *    + PPC_CACHE_ALIGNMENT      - 32
- *    + PPC_HAS_EXCEPTION_PREFIX - 1
  *    + PPC_HAS_FPU              - 1
  *    + PPC_HAS_DOUBLE           - 1 if PPC_HAS_FPU, 
  *                               - 0 otherwise
@@ -97,8 +96,6 @@ extern "C" {
 #define PPC_ALIGNMENT		4  
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_HAS_RFCI    	1
-
-#define PPC_HAS_EXCEPTION_PREFIX 0
 
 #elif defined(mpc555)
 
@@ -294,15 +291,6 @@ extern "C" {
 
 #ifndef PPC_CACHE_ALIGNMENT
 #define PPC_CACHE_ALIGNMENT 32
-#endif
-
-/*
- *  Unless otherwise specified, assume the model has an IP/EP bit to
- *  set the exception address prefix.
- */
-
-#ifndef PPC_HAS_EXCEPTION_PREFIX
-#define PPC_HAS_EXCEPTION_PREFIX 1
 #endif
 
 /*
