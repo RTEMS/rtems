@@ -1,5 +1,9 @@
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* bootloader/Makefile.am: Fix that crappy Makefile.am once again.
+
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* bootloader/Makefile.am: Use .$(OBJEXT) instead of .o.
  	* clock/Makefile.am: Use .$(OBJEXT) instead of .o.
  	* console/Makefile.am: Use .$(OBJEXT) instead of .o.

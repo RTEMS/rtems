@@ -9,12 +9,12 @@ AUTOMAKE_OPTIONS = no-exeext
 
 VPATH = @srcdir@:@srcdir@/../../shared/bootloader:@srcdir@/../../shared/console
 
-noinst_PROGRAMS = bootloader.$(OBJEXT)
+noinst_PROGRAMS = bootloader
 
 ## IMPORTANT: head.S must be first, T. Straumann 12/17/2001
-bootloader_o_SOURCES = head.S exception.S em86real.S
-bootloader_o_SOURCES += misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
-bootloader_o_SOURCES += bootldr.h zlib.h pci.h keyboard.h
+bootloader_SOURCES = head.S exception.S em86real.S
+bootloader_SOURCES += misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
+bootloader_SOURCES += bootldr.h zlib.h pci.h keyboard.h
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 
@@ -43,10 +43,12 @@ AM_CCASFLAGS = $(AM_CPPFLAGS) \
 #
 # NEVER remove lib.c. You have been warned...
 #
-bootloader.$(OBJEXT): $(bootloader_o_OBJECTS)
-	$(LD) -r -o $@ $(bootloader_o_OBJECTS)
+bootloader$(EXEEXT): $(bootloader_OBJECTS)
+	$(LD) -r -o $@ $(bootloader_OBJECTS)
 	$(NM)  $@ | grep ' U '
 	@echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
+bootloader.$(OBJEXT): bootloader$(EXEEXT)
+	cp $< $@
 
 ppcbootdir = $(bsplibdir)
 ppcboot_DATA = bootloader.$(OBJEXT)
