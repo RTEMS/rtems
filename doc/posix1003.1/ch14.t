@@ -46,21 +46,21 @@ clock_getres(), Function, Implemented
 @subsection Create a Per-Process Timer
 
 @example
-timer_create(), Function, Dummy Implementation
+timer_create(), Function, Implemented
 @end example
 
 @subsection Delete a Per-Process Timer
 
 @example
-timer_delete(), Function, Dummy Implementation
+timer_delete(), Function, Implemented
 @end example
 
 @subsection Per-Process Timers
 
 @example
-timer_settime(), Function, Dummy Implementation
-timer_gettime(), Function, Dummy Implementation
-timer_getoverrun(), Function, Dummy Implementation
+timer_settime(), Function, Implemented
+timer_gettime(), Function, Implemented
+timer_getoverrun(), Function, Implemented
 @end example
 
 @subsection High Resolution Sleep
