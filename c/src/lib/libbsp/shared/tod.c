@@ -98,6 +98,7 @@ rtems_device_driver rtc_initialize(
     }
   }
 
+  setRealTimeToRTEMS();
   return RTEMS_SUCCESSFUL;
 }
 
