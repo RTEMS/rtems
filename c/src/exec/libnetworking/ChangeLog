@@ -1,6 +1,7 @@
 2001-05-14	Till Straumann <strauman@slac.stanford.edu>
 
-	* network/dec21140.c: Per PR215 address the following issues:
+	* bootloader/Makefile.am, console/Makefile.am, pci/Makefile.am:
+	Per PR215 address the following issues:
 	    - _IO_BASE, _ISA_MEM_BASE and PCI_DRAM_OFFSET
 	      are no longer defined by libcpu (powerpc/shared/include/io.h)
 	      but by the BSP (who is the only one to know the values)
