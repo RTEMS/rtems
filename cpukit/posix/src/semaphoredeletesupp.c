@@ -26,6 +26,18 @@ void _POSIX_Semaphore_Delete(
 )
 {
   if ( !the_semaphore->linked && !the_semaphore->open_count ) {
+      _Objects_Close( &_POSIX_Semaphore_Information, &the_semaphore->Object );
+ 
+      _CORE_semaphore_Flush(
+        &the_semaphore->Semaphore,
+#if defined(RTEMS_MULTIPROCESSING)
+        _POSIX_Semaphore_MP_Send_object_was_deleted,
+#else
+        NULL,
+#endif
+        -1  /* XXX should also seterrno -> EINVAL */
+      );
+
     _POSIX_Semaphore_Free( the_semaphore );
 
 #if defined(RTEMS_MULTIPROCESSING)
