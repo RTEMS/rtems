@@ -51,7 +51,7 @@ The order of precedence for selecting the IDLE thread body is:
 
 @item generic (if no BSP and no CPU dependent)
 
-@end itemize
+@end enumerate
 
 The following illustrates setting the CPU_PROVIDES_IDLE_THREAD_BODY macro:
 

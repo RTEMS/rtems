@@ -56,7 +56,7 @@ instruction.
 
 @item The "find first bit" instruction may search from MSB or LSB.
 
-@end itemize
+@end enumerate
 
 RTEMS guarantees that (1) will never happen so it is not a concern.  
 Cases (2),(3), (4) are handled by the macros _CPU_Priority_mask() and

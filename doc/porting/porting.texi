@@ -106,7 +106,7 @@ This is the online version of the RTEMS Porting Guide.
 * CPU Model Variations::
 * CPU Initialization::
 * Interrupts::
-* Task Context::
+* Task Context Management::
 * IDLE Thread::
 * Priority Bitmap Manipulation::
 * Code Tuning Parameters::

@@ -20,7 +20,7 @@ FILES=preface.texi developtools.texi sourcecode.texi cpumodels.texi \
   cpuinit.texi interrupts.texi taskcontext.texi idlethread.texi \
   prioritybitmap.texi codetuning.texi miscellaneous.texi $(COMMON_FILES)
 
-GENERATED_FILES=preface.texi developtools.texi sourcecode.texi cpumodels.texi \
+GENERATED_FILES=developtools.texi sourcecode.texi cpumodels.texi \
   cpuinit.texi interrupts.texi taskcontext.texi idlethread.texi \
   prioritybitmap.texi codetuning.texi miscellaneous.texi
 
@@ -51,7 +51,6 @@ $(PROJECT).dvi: $(FILES)
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
-	cp rtemsarc.png rtemspie.png states.png $(WWW_INSTALL)/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
 	    $(PROJECT).texi
 
@@ -60,58 +59,53 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
 
-preface.texi: preface.t
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" .t
-
 developtools.texi: developtools.t
-	$(BMENU) -p "" \
+	$(BMENU) -p "Preface" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 sourcecode.texi: sourcecode.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 cpumodels.texi: cpumodels.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 cpuinit.texi: cpuinit.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 interrupts.texi: interrupts.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 taskcontext.texi: taskcontext.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 idlethread.texi: idlethread.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 prioritybitmap.texi: prioritybitmap.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 codetuning.texi: codetuning.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 
 miscellaneous.texi: miscellaneous.t
 	$(BMENU) -p "" \
 	    -u "Top" \
-	    -n "" .t
+	    -n "" ${*}.t
 

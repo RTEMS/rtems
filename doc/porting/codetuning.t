@@ -1,6 +1,6 @@
 @chapter Code Tuning Parameters
 
-@subsection Inline Thread_Enable_dispatch
+@section Inline Thread_Enable_dispatch
 
 Should the calls to _Thread_Enable_dispatch be inlined?
 
@@ -23,7 +23,7 @@ then one subroutine call is avoided entirely.]
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
 @end example
 
-@subsection Inline Thread_queue_Enqueue_priority
+@section Inline Thread_queue_Enqueue_priority
 
 Should the body of the search loops in _Thread_queue_Enqueue_priority be
 unrolled one time?  In unrolled each iteration of the loop examines two
@@ -47,7 +47,7 @@ when setting this parameter.
 @end example
 
 
-@subsection Structure Alignment Optimization
+@section Structure Alignment Optimization
 
 The following macro may be defined to the attribute setting used to force
 alignment of critical RTEMS structures.  On some processors it may make
@@ -82,7 +82,7 @@ structures:
 #define CPU_STRUCTURE_ALIGNMENT
 @end example
 
-@subsection Data Alignment Requirements
+@section Data Alignment Requirements
 
 @subsection Data Element Alignment
 
