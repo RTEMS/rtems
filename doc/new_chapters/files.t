@@ -41,13 +41,19 @@ The directives provided by the files and directories manager are:
 @item @code{chown} - Changes the owner and/ or group of a file
 @item @code{utime} - Change access and/or modification times of an inode
 @item @code{ftruncate} - Truncate a file to a specified length
+@itme @code{truncate} - Truncate a file to a specified length
 @item @code{pathconf} - Gets configuration values for files
 @item @code{fpathconf} - Get configuration values for files
+@itme @code{mknod} - Create a directory
 @end itemize
 
 @section Background
 
+There is currently no text in this section.
+
 @section Operations
+
+There is currently no text in this section.
 
 @section Directives
 
@@ -95,7 +101,7 @@ Directory does not exist, or @code{name} is an empty string.
 Insufficient memory to complete the operation.
 
 @item ENOTDIR
-@item{Name} is not a directory.
+@code{name} is not a directory.
 
 @end table
 
@@ -149,11 +155,11 @@ The data pointed to be @code{readdir()} may be overwritten by another call to
 @code{readdir()} for the same directory stream.  It will not be overwritten by 
 a call for another directory.
 
-@subheading NOTES:
+@subheading NOTES: 
 
 If @code{ptr} is not a pointer returned by @code{malloc()}, @code{calloc()}, or 
-@code{realloc()} or has been deallocated with @code{free()} or @code{realloc()}, 
-the results are not portable and are probably disastrous.
+@code{realloc()} or has been deallocated with @code{free()} or
+@code{realloc()}, the results are not portable and are probably disastrous.
 
 The routine is implemented in Cygnus newlib.
 
@@ -176,7 +182,9 @@ void rewinddir(
 @ifset is-Ada
 @end ifset
 
-@subheading STATUS CODES: No value is returned.
+@subheading STATUS CODES:
+
+No value is returned.
 
 @subheading DESCRIPTION:
 
@@ -184,7 +192,9 @@ The @code{rewinddir()} function resets the position associated with
 the directory stream pointed to by @code{dirp}.  It also causes the
 directory stream to refer to the current state of the directory.
 
-@subheading NOTES:
+@subheading NOTES: 
+
+NONE
 
 If @code{dirp} is not a pointer by @code{opendir()}, the results are
 undefined.
@@ -264,10 +274,9 @@ Invalid directory stream descriptor @code{dir}.
 The @code{telldir()} function returns the current location associated with the
 directory stream @code{dir}.
 
-@subheading NOTES:
+@subheading NOTES: 
 
 The routine is implemented in Cygnus newlib.
-
 
 @page
 @subsection closedir - Ends directory read operation 
@@ -302,7 +311,9 @@ The directory stream associated with @code{dirp} is closed.
 The value in @code{dirp} may not be usable after a call to
 @code{closedir()}.
 
-@subheading NOTES:
+@subheading NOTES: 
+
+NONE
 
 The argument to @code{closedir()} must be a pointer returned by 
 @code{opendir()}.  If it is not, the results are not portable and
@@ -358,7 +369,7 @@ changed.
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection getcwd - Gets current working directory 
@@ -433,32 +444,44 @@ int open(
 @subheading STATUS CODES:
 
 @table @b
+
 @item EACCES
 Search permission is denied for a directory in a file's path prefix.
+
 @item EEXIST
 The named file already exists.
+
 @item EINTR
 Function was interrupted by a signal.
+
 @item EISDIR
 Attempt to open a directory for writing or to rename a file to be a
 directory.
+
 @item EMFILE
 Too many file descriptors are in use by this process.
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
 effect.
+
 @item ENFILE
 Too many files are currently open in the system.
+
 @item ENOENT
 A file or directory does not exist.
+
 @item ENOSPC
 No space left on disk.
+
 @item ENOTDIR
 A component of the specified pathname was not a directory when a directory
 was expected.
+
 @item ENXIO
 No such device.  This error may also occur when a device is not ready, for 
 example, a tape drive is off-line.
+
 @item EROFS
 Read-only file system.
 @end table
@@ -520,8 +543,9 @@ causes the file to be tuncated to zero length..
 Upon successful completion, @code{open} returns a non-negative file 
 descriptor.
 
-@subheading NOTES:
+@subheading NOTES: 
 
+NONE
 
 @page
 @subsection creat - Create a new file or rewrite an existing one 
@@ -549,32 +573,43 @@ int creat(
 @table @b
 @item EEXIST
 @code{path} already exists and O_CREAT and O_EXCL were used.
+
 @item EISDIR
 @code{path} refers to a directory and the access requested involved
 writing
+
 @item ETXTBSY
 @code{path} refers to an executable image which is currently being
 executed and write access was requested
+
 @item EFAULT
 @code{path} points outside your accessible address space
+
 @item EACCES
 The requested access to the file is not allowed, or one of the 
 directories in @code{path} did not allow search (execute) permission.
+
 @item ENAMETOOLONG
 @code{path} was too long.
+
 @item ENOENT
 A directory component in @code{path} does not exist or is a dangling
 symbolic link.
+
 @item ENOTDIR
 A component used as a directory in @code{path} is not, in fact, a 
 directory.
+
 @item EMFILE
 The process alreadyh has the maximum number of files open.
+
 @item ENFILE
 The limit on the total number of files open on the system has been 
 reached.
+
 @item ENOMEM
 Insufficient kernel memory was available.
+
 @item EROFS
 @code{path} refers to a file on a read-only filesystem and write access
 was requested
@@ -588,7 +623,7 @@ use in read, write, etc.
 
 @subheading NOTES:
 
-None
+NONE
 
 The routine is implemented in Cygnus newlib.
 
@@ -621,9 +656,9 @@ The file creation mask is used during @code{open()}, @code{creat()}, @code{mkdir
 Bit positions that are set in @code{cmask} are cleared in the mode of the
 created file.
 
-@subheading NOTES:
+@subheading NOTES: 
 
-None
+NONE
 
 The @code{cmask} argument should have only permission bits set.  All other 
 bits should be zero.
@@ -655,27 +690,36 @@ int link(
 @subheading STATUS CODES:
 
 @table @b
+
 @item EACCES
 Search permission is denied for a directory in a file's path prefix
+
 @item EEXIST
 The named file already exists.
+
 @item EMLINK
 The number of links would exceed @code{LINK_MAX}.
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
 effect.
+
 @item ENOENT
 A file or directory does not exist.
 @item ENOSPC
 No space left on disk.
+
 @item ENOTDIR
 A component of the specified pathname was not a directory when a directory
 was expected.
+
 @item EPERM
 Operation is not permitted.  Process does not have the appropriate priviledges
 or permissions to perform the requested operations.
+
 @item EROFS
 Read-only file system.
+
 @item EXDEV
 Attempt to link a file to another file system.
 
@@ -683,10 +727,10 @@ Attempt to link a file to another file system.
 
 @subheading DESCRIPTION:
 
-The @code{link} function atomically creates a new link for an existing file
+The @code{link()} function atomically creates a new link for an existing file
 and increments the link count for the file.
 
-If the @code{link} function fails, no directories are modified.
+If the @code{link()} function fails, no directories are modified.
 
 The @code{existing} argument should not be a directory.
 
@@ -694,7 +738,7 @@ The callder may (or may not) need permission to access the existing file.
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection mkdir - Makes a directory
@@ -721,20 +765,27 @@ int mkdir(
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix
+
 @item EEXIST
 The name file already exist.  
+
 @item EMLINK
 The number of links would exceed LINK_MAX
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
 effect.
+
 @item ENOENT
 A file or directory does not exist.
+
 @item ENOSPC
 No space left on disk.
+
 @item ENOTDIR
 A component of the specified pathname was not a directory when a directory
 was expected.
+
 @item EROFS
 Read-only file system.
 
@@ -752,7 +803,7 @@ empty.
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection mkfifo - Makes a FIFO special file
@@ -780,15 +831,20 @@ int mkfifo(
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix
+
 @item EEXIST
 The named file already exists.
+
 @item ENOENT
 A file or directory does not exist.
+
 @item ENOSPC
 No space left on disk.
+
 @item ENOTDIR
 A component of the specified @code{path} was not a directory when a directory
 was expected.
+
 @item EROFS
 Read-only file system.
 
@@ -803,7 +859,7 @@ user ID and group ID.
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection unlink - Removes a directory entry
@@ -828,19 +884,25 @@ int unlink(
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix
+
 @item EBUSY
 The directory is in use.
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
 effect.
+
 @item ENOENT
 A file or directory does not exist.
+
 @item ENOTDIR
 A component of the specified @code{path} was not a directory when a directory
 was expected.
+
 @item EPERM
 Operation is not permitted.  Process does not have the appropriate priviledges
 or permissions to perform the requested operations.
+
 @item EROFS
 Read-only file system.
 
@@ -855,7 +917,7 @@ file is no longer accessible.
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection rmdir - Delete a directory 
@@ -881,36 +943,48 @@ int rmdir(
 @item EPERM
 The filesystem containing @code{pathname} does not support the removal
 of directories.
+
 @item EFAULT
 @code{pathname} points ouside your accessible address space.
+
 @item EACCES
 Write access to the directory containing @code{pathname} was not
 allowed for the process's effective uid, or one of the directories in 
 @code{pathname} did not allow search (execute) permission.
+
 @item EPERM
 The directory containing @code{pathname} has the stickybit (S_ISVTX) 
 set and the process's effective uid is neither the uid of the file to 
 be delected nor that of the director containing it.
+
 @item ENAMETOOLONG
 @code{pathname} was too long.
+
 @item ENOENT
 A dirctory component in @code{pathname} does not exist or is a 
 dangling sybolic link.
+
 @item ENOTDIR
 @code{pathname}, or a component used as a directory in @code{pathname},
 is not, in fact, a directory.
+
 @item ENOTEMPTY
 @code{pathname} contains entries other than . and .. .
+
 @item EBUSY
 @code{pathname} is the current working directory or root directory of 
 some process
+
 @item EBUSY
 @code{pathname} is the current directory or root directory of some 
 process.
+
 @item ENOMEM
 Insufficient kernel memory was available
+
 @item EROGS
 @code{pathname} refers to a file on a read-only filesystem.
+
 @item ELOOP
 @code{pathname} contains a reference to a circular symbolic link
 
@@ -923,7 +997,7 @@ Insufficient kernel memory was available
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection rename - Renames a file 
@@ -949,31 +1023,43 @@ int rename(
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix.
+
 @item EBUSY
 The directory is in use.
+
 @item EEXIST
 The named file already exists.
+
 @item EINVAL
 Invalid argument.
+
 @item EISDIR
 Attempt to open a directory for writing or to rename a file to be a 
 directory.
+
 @item EMLINK
 The number of links would exceed LINK_MAX.
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is
 in effect.
+
 @item ENOENT
 A file or directory does no exist.
+
 @item ENOSPC
 No space left on disk.
+
 @item ENOTDIR
 A component of the specified pathname was not a directory when a 
 directory was expected.
+
 @item ENOTEMPTY
 Attempt to delete or rename a non-empty directory.
+
 @item EROFS
 Read-only file system
+
 @item EXDEV
 Attempt to link a file to another file system.
 @end table
@@ -1025,13 +1111,17 @@ int stat(
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix.
+
 @item EBADF
 Invalid file descriptor.
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is
 in effect.
+
 @item ENOENT
 A file or directory does not exist.
+
 @item ENOTDIR
 A component of the specified pathname was not a directory when a 
 directory was expected.
@@ -1048,7 +1138,7 @@ information about the named file and writes it to the area pointed to by
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection fstat - Gets file status 
@@ -1086,6 +1176,8 @@ to by the @code{buf} argument.
 
 @subheading NOTES:
 
+NONE
+
 @page
 @subsection access - Check user's permissions for a file
 
@@ -1111,18 +1203,24 @@ int access(
 @item EACCES
 The requested access would be denied, either to the file itself or
 one of the directories in @code{pathname}.
+
 @item EFAULT
 @code{pathname} points outside your accessible address space.
+
 @item EINVAL
 @code{Mode} was incorrectly specified.
+
 @item ENAMETOOLONG
 @code{pathname} is too long.
+
 @item ENOENT
 A directory component in @code{pathname} would have been accessible but
 does not exist or was a dangling symbolic link.
+
 @item ENOTDIR
 A component used as a directory in @code{pathname} is not, in fact, 
 a directory.
+
 @item ENOMEM
 Insufficient kernel memory was available.
 
@@ -1139,7 +1237,7 @@ file referred by this symbolic link are tested.
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection chmod - Changes file mode.
@@ -1166,17 +1264,22 @@ int chmod(
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
 effect.
+
 @item ENOENT
 A file or directory does not exist.
+
 @item ENOTDIR
 A component of the specified pathname was not a directory when a directory
 was expected.
+
 @item EPERM
 Operation is not permitted.  Process does not have the appropriate priviledges
 or permissions to perform the requested operations.
+
 @item EROFS
 Read-only file system.
 
@@ -1191,6 +1294,8 @@ the appropriate privileges, @code{chmod()} returns -1 and sets @code{errno} to
 @code{EPERM}.
 
 @subheading NOTES:
+
+NONE
 
 @page
 @subsection fchmod - Changes permissions of a file 
@@ -1217,27 +1322,37 @@ int fchmod(
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix.
+
 @item EBADF
 The descriptor is not valid.
+
 @item EFAULT
 @code{path} points outside your accessible address space.
+
 @item EIO
 A low-level I/o error occurred while modifying the inode.
+
 @item ELOOP
 @code{path} contains a circular reference
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is
 in effect.
+
 @item ENOENT
 A file or directory does no exist.
+
 @item ENOMEM
 Insufficient kernel memory was avaliable.
+
 @item ENOTDIR
 A component of the specified pathname was not a directory when a 
 directory was expected.
+
 @item EPERM
 The effective UID does not match the owner of the file, and is not 
 zero
+
 @item EROFS
 Read-only file system
 @end table
@@ -1249,7 +1364,7 @@ The mode of the file given by @code{path} or referenced by
 
 @subheading NOTES:
 
-None
+NONE
 
 @page
 @subsection getdents - Get directory entries
@@ -1285,6 +1400,8 @@ The
 
 @subheading NOTES:
 
+NONE
+
 @page
 @subsection chown - Changes the owner and/or group of a file.
 
@@ -1311,19 +1428,25 @@ int chown(
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix
+
 @item EINVAL
 Invalid argument
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
 effect.
+
 @item ENOENT
 A file or directory does not exist.
+
 @item ENOTDIR
 A component of the specified pathname was not a directory when a directory
 was expected.
+
 @item EPERM
 Operation is not permitted.  Process does not have the appropriate priviledges
 or permissions to perform the requested operations.
+
 @item EROFS
 Read-only file system.
 
@@ -1374,6 +1497,7 @@ int utime(
 @table @b
 @item EACCES
 Permission to write the file is denied
+
 @item ENOENT
 @code{Filename} does not exist
 
@@ -1386,7 +1510,9 @@ specified by @code{filename} to the @code{actime} and @code{modtime}
 fields of @code{buf} respectively.  If @code{buf} is NULL, then the 
 access and modification times of the file are set to the current time.  
 
-@subheading NOTES: None
+@subheading NOTES:
+
+NONE
 
 @page
 @subsection ftruncate - truncate a file to a specified length
@@ -1398,6 +1524,83 @@ access and modification times of the file are set to the current time.
 #include <unistd.h>
 
 int ftrunctate(
+  int     fd,
+  size_t  length
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item ENOTDIR
+A component of the path prefix is not a directory.
+
+@item EINVAL
+The pathname contains a character with the high-order bit set.
+
+@item ENAMETOOLONG
+A component of a pathname exceeded 255 characters, or an entire
+path name exceeded 1023 characters.
+
+@item ENOENT
+The named file does not exist.
+
+@item EACCES
+The named file is not writable by the user.
+
+@item EACCES
+Search permission is denied for a component of the path prefix.
+
+@item ELOOP
+Too many symbolic links were encountered in translating the 
+pathname
+
+@item EISDIR
+The named file is a directory.
+
+@item EROFS
+The named file resides on a read-only file system
+
+@item ETXTBSY
+The file is a pure procedure (shared text) file that is being 
+executed
+
+@item EIO
+An I/O error occurred updating the inode.
+
+@item EFAULT
+@code{Path} points outside the process's allocated address space.
+
+@item EBADF
+The @code{fd} is not a valid descriptor.
+
+@end table
+
+@subheading DESCRIPTION:
+
+@code{truncate()} causes the file named by @code{path} or referenced by 
+@code{fd} to be truncated to at most @code{length} bytes in size.  If the  
+file previously was larger than this size, the extra data is lost.  With 
+@code{ftruncate()}, the file must be open for writing.
+
+@subheading NOTES:
+
+NONE
+
+@page
+@subsection truncate - truncate a file to a specified length
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <unistd.h>
+
+int trunctate(
   const char *path,
   size_t      length
 );
@@ -1456,12 +1659,14 @@ The @code{fd} is not a valid descriptor.
 
 @subheading DESCRIPTION:
 
-2code{Truncate} causes the file named by @code{path} or referenced by 
+@code{truncate()} causes the file named by @code{path} or referenced by 
 @code{fd} to be truncated to at most @code{length} bytes in size.  If the  
 file previously was larger than this size, the extra data is lost.  With 
-@code{ftruncate}, the file must be open for writing.
+@code{ftruncate()}, the file must be open for writing.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+NONE
 
 @page
 @subsection pathconf - Gets configuration values for files
@@ -1509,50 +1714,51 @@ directory was expected.
 @code{pathconf()} gets a value for the configuration option @code{name}
 for the open file descriptor @code{filedes}.
 
-The possible values for name are:
+The possible values for @code{name} are:
 
 @table @b
 @item _PC_LINK_MAX
 returns the maximum number of links to the file.  If @code{filedes} or 
 @code{path} refer to a directory, then the value applies to the whole
-directory.  The corresponding macro is _POSIX_LINK_MAX.
+directory.  The corresponding macro is @code{_POSIX_LINK_MAX}.
 
 @item _PC_MAX_CANON
 returns  the maximum length of a formatted input line, where @code{filedes}
 or @code{path} must refer to a terminal.  The corresponding macro is 
-_POSIX_MAX_CANON.
+@code{_POSIX_MAX_CANON}.
 
 @item _PC_MAX_INPUT
 returns the maximum length of an input line, where @code{filedes} or 
 @code{path} must refer to a terminal.  The corresponding macro is 
-_POSIX_MAX_INPUT.
+@code{_POSIX_MAX_INPUT}.
 
 @item _PC_NAME_MAX
 returns the maximum length of a filename in the directory @code{path} or 
 @code{filedes}.  The process is allowed to create. The corresponding macro 
-is _POSIX_NAME_MAX.
+is @code{_POSIX_NAME_MAX}.
 
 @item _PC_PATH_MAX
 returns the maximum length of a relative pathname when @code{path} or 
 @code{filedes} is the current working directory.  The corresponding macro 
-is _POSIX_PATH_MAX.
+is @code{_POSIX_PATH_MAX}.
 
 @item _PC_PIPE_BUF
 returns the size of the pipe buffer, where @code{filedes} must refer to a 
 pipe or FIFO and @code{path} must refer to a FIFO.  The corresponding macro 
-is _POSIX_PIPE_BUF.
+is @code{_POSIX_PIPE_BUF}.
 
 @item _PC_CHOWN_RESTRICTED
 returns nonzero if the chown(2) call may not be used on this file.  If 
 @code{filedes} or @code{path} refer to a directory, then this applies to all 
-files in that directory.  The corresponding macro is _POSIX_CHOWN_RESTRICTED.
+files in that directory.  The corresponding macro is
+@code{_POSIX_CHOWN_RESTRICTED}.
 
 @end table
 
 @subheading NOTES:
 
 Files with name lengths longer than the value returned for @code{name} equal 
-_PC_NAME_MAX may exist in the given directory.
+@code{_PC_NAME_MAX} may exist in the given directory.
 
 @page
 @subsection fpathconf - Gets configuration values for files
@@ -1612,34 +1818,121 @@ directory.  The corresponding macro is _POSIX_LINK_MAX.
 @item _PC_MAX_CANON
 returns  the maximum length of a formatted input line, where @code{filedes}
 or @code{path} must refer to a terminal.  The corresponding macro is 
-_POSIX_MAX_CANON.
+@code{_POSIX_MAX_CANON}.
 
 @item _PC_MAX_INPUT
 returns the maximum length of an input line, where @code{filedes} or 
 @code{path} must refer to a terminal.  The corresponding macro is 
-_POSIX_MAX_INPUT.
+@code{_POSIX_MAX_INPUT}.
 
 @item _PC_NAME_MAX
 returns the maximum length of a filename in the directory @code{path} or 
 @code{filedes}.  The process is allowed to create. The corresponding macro 
-is _POSIX_NAME_MAX.
+is @code{_POSIX_NAME_MAX}.
 
 @item _PC_PATH_MAX
 returns the maximum length of a relative pathname when @code{path} or 
 @code{filedes} is the current working directory.  The corresponding macro 
-is _POSIX_PATH_MAX.
+is @code{_POSIX_PATH_MAX}.
 
 @item _PC_PIPE_BUF
 returns the size of the pipe buffer, where @code{filedes} must refer to a 
 pipe or FIFO and @code{path} must refer to a FIFO.  The corresponding macro 
-is _POSIX_PIPE_BUF.
+is @code{_POSIX_PIPE_BUF}.
 
 @item _PC_CHOWN_RESTRICTED
 returns nonzero if the @code{chown()} call may not be used on this file.  If 
 @code{filedes} or @code{path} refer to a directory, then this applies to all 
-files in that directory.  The corresponding macro is _POSIX_CHOWN_RESTRICTED.
+files in that directory.  The corresponding macro is
+@code{_POSIX_CHOWN_RESTRICTED}.
 
 @end table
+
+@subheading NOTES:
+
+NONE
+
+@page
+@subsection mknod - create a directory
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+long mknod(
+  const char *pathname,
+  mode_t      mode,
+  dev_t       dev
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@code{mknod} returns zero on success, or -1 if an error occurred (in which case, 
+errno is set appropriately).
+
+@table @b
+@item ENAMETOOLONG
+@code{pathname} was too long.
+
+@item ENOENT
+A directory component in @code{pathname} does not exist or is a dangling symbolic
+link.
+
+@item ENOTDIR
+A component used in the directory @code{pathname} is not, in fact, a directory.
+
+@item ENOMEM
+Insufficient kernel memory was available
+
+@item EROFS
+@code{pathname} refers to a file on a read-only filesystem.
+
+@item ELOOP
+@code{pathname} contains a reference to a circular symbolic link, ie a symbolic
+link whose expansion contains a reference to itself.
+
+@item ENOSPC
+The device containing @code{pathname} has no room for the new node.
+
+@end table
+
+@subheading DESCRIPTION:
+
+@code{mknod} attempts to create a filesystem node (file, device special file or
+named pipe) named @code{pathname}, specified by @code{mode} and @code{dev}.
+
+@code{mode} specifies both the permissions to use and the type of node to be created.
+
+It should be a combination (using bitwise OR) of one of the file types listed
+below and the permissions for the new node.
+
+The permissions are modified by the process's @code{umask} in the usual way: the 
+permissions of the created node are @code{(mode & ~umask)}.
+
+The file type should be one of @code{S_IFREG}, @code{S_IFCHR}, @code{S_IFBLK} and 
+@code{S_IFIFO} to specify a normal file (which will be created empty), character 
+special file, block special file or FIFO (named pipe), respectively, or zero, which 
+will create a normal file.
+
+If the file type is @code{S_IFCHR} or @code{S_IFBLK} then @code{dev} specifies the major  
+and minor numbers of the newly created device special file; otherwise it is ignored.
+
+The newly created node will be owned by the effective uid of the process.  If the
+directory containing the node has the set group id bit set, or if the filesystem
+is mounted with BSD group semantics, the new node will inherit the group ownership
+from its parent directory; otherwise it will be owned by the effective gid of the 
+process.
+
 
 @subheading NOTES:
 
