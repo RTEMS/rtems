@@ -23,9 +23,7 @@
 char    big_send_buffer[2048];
 char    big_receive_buffer[2048];
 
-long    buffer[ 4 ];
-
-#define MESSAGE_SIZE (sizeof(long) * 4)
+long    buffer[ MESSAGE_SIZE / sizeof(long) ];
 
 void dope_buffer(unsigned char *buff,
                  int   buff_size,

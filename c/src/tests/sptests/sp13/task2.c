@@ -20,8 +20,6 @@
 
 #include "system.h"
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
-
 rtems_task Task_2(
   rtems_task_argument argument
 )

@@ -20,21 +20,18 @@
 
 #include "system.h"
 
-#define MESSAGE_SIZE (4)
-
 void Put_buffer(
   long *buffer
 )
 {
-  int i;
-/*
-  printf( "%16s", (char *)buffer );
-*/
-  for ( i=0 ; i< MESSAGE_SIZE ; i++ ) {
-    printf( "%c%c%c%c", (char) (buffer[i] >> 24),
-                        (char) (buffer[i] >> 16 & 0xff),
-                        (char) (buffer[i] >> 8 & 0xff),
-                        (char) (buffer[i] >> 0 & 0xff) );
-  }
+  int i, j;
+  char c;
 
+  for ( i = 0; i < MESSAGE_SIZE / sizeof(long); i++ ) {
+    for ( j = sizeof(long) - 1; j >= 0; j-- ) {
+      if ( (c = (buffer[i] >> (8 * j)) & 0xFF) == 0 )
+        return;
+      printf( "%c", c );
+    }
+  }
 }
