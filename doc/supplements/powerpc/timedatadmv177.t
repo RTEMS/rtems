@@ -60,16 +60,33 @@ PowerPC version of RTEMS.
 @section Hardware Platform
 
 All times reported in this chapter were measured using a RTEMS_BSP board.
+All data and code caching was disabled.  This results in very deterministic
+times which represent the worst possible performance.  Many embedded 
+applications disable caching to insure that execution times are
+repeatable.  Moreover, the JTAG port on certain revisions of the PowerPC
+603e does not operate properly if caching is enabled.  Thus during 
+development and debug, caching must be off.
 
 The PowerPC decrementer register was was used to gather
 all timing information.  In the PowerPC architecture,
 this register typically counts
 something like CPU cycles or is a function of the clock
-speed.  On the PPC603e decrements based on bus cycles.
-This is a very accurate number and given the high clock
-speed of the PowerPC family, Thus all measurements in this 
+speed.  On the PPC603e decrements once for every four (4) bus cycles.
+On the RTEMS_BSP, the bus operates at a clock speed of 
+33 Mhz.  This result in a very accurate number since it is a function of the 
+microprocessor itself.  Thus all measurements in this 
 chapter are reported as the actual number of decrementer
-clicks reported.  All sources of hardware interrupts were disabled,
+clicks reported.  
+
+To convert the numbers reported to microseconds, one should
+divide the number reported by 8.650752.  This number was derived as
+shown below:
+
+@example
+((33 * 1048576) / 1000000) / 4 = 8.650752
+@end example
+
+All sources of hardware interrupts were disabled,
 although traps were enabled and the interrupt level of the
 PowerPC allows all interrupts.
 
