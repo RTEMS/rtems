@@ -9,10 +9,10 @@ include_rtemsdir = $(includedir)/rtems
 LIBNAME = libshell-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
-C_FILES = cmds.c shell.c pty.c telnetd.c
+C_FILES = cmds.c shell.c pty.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-include_rtems_HEADERS = shell.h telnetd.h
+include_rtems_HEADERS = shell.h
 
 OBJS = $(C_O_FILES)
 
@@ -39,6 +39,6 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = README shell.c cmds.c pty.c telnetd.c shell.h telnetd.h
+EXTRA_DIST = README shell.c cmds.c pty.c shell.h 
 
 include $(top_srcdir)/../../../automake/local.am

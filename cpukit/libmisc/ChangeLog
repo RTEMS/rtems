@@ -1,3 +1,10 @@
+2001-06-14	Joel Sherrill <joel@OARcorp.com>
+
+ 	* shell/telnetd.c, shell/telnetd.h: Moved to
+	libnetworking/rtems_servers so the network stack to address network
+	depenendency.
+	* shell/Makefile.am: Modified to reflect above.
+
 2001-05-25	Joel Sherrill <joel@OARcorp.com>
 
  	* shell/cmds.c: Removed code from inappropriate source.
