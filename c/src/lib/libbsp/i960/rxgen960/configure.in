@@ -32,6 +32,7 @@ clock/Makefile
 console/Makefile
 include/Makefile
 shmsupp/Makefile
+start/Makefile
 startup/Makefile
 timer/Makefile
 wrapup/Makefile)

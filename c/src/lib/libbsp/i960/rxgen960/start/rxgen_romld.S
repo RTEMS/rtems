@@ -7,10 +7,13 @@
 	BEGIN_CODE
 
 	.globl _romStart
+	.globl start
 	.globl _start
 	.globl _romFaultStart
 	.globl _led_array
 	.text   
+start:  /* JRS */
+_start:  /* JRS */
 SYM(romStart ): 
 SYM(_romStart ): 
           # This line is to make compiler happy.
@@ -121,3 +124,46 @@ SYM(led_array):
 	.byte 0xa
 	.byte 0xb
 	.byte 0xc
+
+
+/* just to compile and link application XXX JOEL */
+	.globl _faultStart
+	.globl _faultEnd
+	.globl _faultCheckSum
+	.globl _faultBuffer
+	.globl _svrStackPtr
+	.globl _console_pmr_getc
+	.globl _console_pmr_kbhit
+	.globl _console_pmr_init
+	.globl _console_pmr_putc
+	.globl _DBGConsole_make_sync
+	.globl _codeRamStart
+	.globl _codeRomStart
+	.globl _codeRamEnd
+	.globl _codeRomEnd
+	.globl _bssStart
+	.globl _bssEnd
+	.globl _bssStart_1
+	.globl _bssEnd_1
+	.globl _intStackPtr
+	
+_faultStart:
+_faultEnd:
+_faultCheckSum:
+_faultBuffer:
+_svrStackPtr:
+_console_pmr_getc:
+_console_pmr_kbhit:
+_console_pmr_init:
+_console_pmr_putc:
+_DBGConsole_make_sync:
+_codeRamStart:
+_codeRomStart:
+_codeRamEnd:
+_codeRomEnd:
+_bssStart:
+_bssEnd:
+_bssStart_1:
+_bssEnd_1:
+_intStackPtr:
+

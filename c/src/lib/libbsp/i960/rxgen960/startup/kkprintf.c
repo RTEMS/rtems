@@ -56,13 +56,3 @@ kkputs( const char * buf)
 		*consoleOP = (unsigned int)c;
 	}
 }
-
-
-/* we have got an error during build for 'isatty()' wo/ good reason
-   we temporarily use this fix....
-*/
-isatty(int fd)
-{
-        return 1;
-}
-

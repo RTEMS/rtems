@@ -24,6 +24,7 @@
 #include <rtems.h>
 #include "bsp.h"
 
+#if 0
 void _exit( )
 {
   asm volatile( "mov   0,g0; \
@@ -36,3 +37,4 @@ void _exit( )
   *  application if the user types "go".
   */
 }
+#endif

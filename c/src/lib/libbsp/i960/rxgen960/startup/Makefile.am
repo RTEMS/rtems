@@ -10,15 +10,16 @@ PGM = $(ARCH)/startup.rel
 
 #C_PIECES = bspclean bsplibc bsppost bspstart bootcard main sbrk setvec \
 #    gnatinstallhandler
-C_FILES = bspstart.c cntrltbl.c exit.c fault.c flttbl.c frmstr.c intrtbl.c \
-    kkprintf.c nmi.c nulsystbl.c prcb.c rom_cntrltbl.c rom_ibr.c rom_prcb.c \
-    sctns.c setvec.c systbl.c
+C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c cntrltbl.c \
+    exit.c fault.c flttbl.c frmstr.c intrtbl.c kkprintf.c main.c nmi.c \
+    nulsystbl.c prcb.c rom_cntrltbl.c rom_ibr.c rom_prcb.c sbrk.c sctns.c \
+    setvec.c systbl.c
 
 H_FILES = asmfault.h asmstub.h cntrltbl.h fault.h faultret.h flttbl.h \
     frmstr.h i960.h ihandler.h intrtbl.h main.h memchnl.h pmc901_memmap.h \
     prcb.h rom_ibr.h rommon.h sctns.h systbl.h time.h types.h
 
-S_FILES = asmfault.S asmstub.S ihandler.S rxgen_romld.S
+S_FILES = asmfault.S asmstub.S ihandler.S
 
 OBJS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
 
