@@ -1,3 +1,7 @@
+2001-04-11	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Removed duplicate declaration for _ISR_Vector_table.
+
 2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, rtems/score/Makefile.am: 
