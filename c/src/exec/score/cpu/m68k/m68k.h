@@ -243,6 +243,17 @@ static inline unsigned int m68k_swap_u32(
   return( swapped );
 }
 
+static inline unsigned int m68k_swap_u16(
+  unsigned int value
+)
+{
+  unsigned short swapped = value;
+
+  asm volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
+
+  return( swapped );
+}
+
 /* XXX this is only valid for some m68k family members and should be fixed */
 
 #define m68k_enable_caching() \
@@ -252,6 +263,7 @@ static inline unsigned int m68k_swap_u32(
   }
 
 #define CPU_swap_u32( value )  m68k_swap_u32( value )
+#define CPU_swap_u16( value )  m68k_swap_u16( value )
 
 #endif  /* !ASM */
 

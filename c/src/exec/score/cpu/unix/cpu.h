@@ -991,6 +991,9 @@ static inline unsigned int CPU_swap_u32(
   return( swapped );
 }
 
+#define CPU_swap_u16( value ) \
+  (((value&0xff) << 8) | ((value >> 8)&0xff))
+
 /*
  *  Special Purpose Routines to hide the use of UNIX system calls.
  */

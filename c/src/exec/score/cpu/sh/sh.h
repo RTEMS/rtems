@@ -134,7 +134,19 @@ static inline unsigned int sh_swap_u32(
   return( swapped );
 }
 
+static inline unsigned int sh_swap_u32(
+  unsigned int value
+)
+{
+  register unsigned int swapped ;
+
+  asm volatile ( "swap.b %1,%0 : "=r" (swapped) : "r"  (value) );
+
+  return( swapped );
+}
+
 #define CPU_swap_u32( value ) sh_swap_u32( value )
+#define CPU_swap_u16( value ) sh_swap_u16( value )
 
 /*
  *  Simple spin delay in microsecond units for device drivers.

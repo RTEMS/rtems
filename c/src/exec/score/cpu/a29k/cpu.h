@@ -961,7 +961,11 @@ void _CPU_Context_restore_fp(
  */
  
 #define CPU_swap_u32( value ) \
-  ((value&0xff) << 24) | (((value >> 8)&0xff) << 16) | (((value >> 16)&0xff) << 8) | ((value>>24)&0xff) 
+  ((value&0xff) << 24) | (((value >> 8)&0xff) << 16) | \
+    (((value >> 16)&0xff) << 8) | ((value>>24)&0xff) 
+
+#define CPU_swap_u16( value ) \
+  (((value&0xff) << 8) | ((value >> 8)&0xff))
 
 #ifdef __cplusplus
 }

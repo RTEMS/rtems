@@ -165,10 +165,26 @@ static inline unsigned int i386_swap_U32(
   unsigned int value
 )
 {
+  unsigned long lout;
+
   asm volatile( "rorw  $8,%%ax;"
                 "rorl  $16,%0;"
-                "rorw  $8,%%ax" : "=a" (value) : "0" (value) );
-  return( value );
+                "rorw  $8,%%ax" : "=a" (lout) : "0" (value) );
+/* this should be better for i486dx and above */
+/*
+    __asm__ volatile( "bswap %0" : "=r"  (lout) : "0"   (lin));
+*/
+  return( lout );
+}
+
+static inline unsigned int i386_swap_U16(
+  unsigned int value
+)
+{
+    unsigned short      sout;
+
+    __asm__ volatile( "rorw $8,%0" : "=r"  (sout) : "0"   (value));
+    return (sout);
 }
 
 /*
@@ -439,6 +455,7 @@ void i386_Install_idt(
 #define get_gs()   i386_get_gs()
  
 #define CPU_swap_u32( _value )  i386_swap_U32( _value )
+#define CPU_swap_u16( _value )  i386_swap_U16( _value )
  
 /* i80x86 I/O instructions */
  

@@ -599,6 +599,9 @@ CPU_swap_u32(unsigned32 value)
   return( swapped );
 }
 
+#define CPU_swap_u16( value ) \
+  (((value&0xff) << 8) | ((value >> 8)&0xff))
+
 #endif   /* ! ASM */
 
 #ifdef __cplusplus
