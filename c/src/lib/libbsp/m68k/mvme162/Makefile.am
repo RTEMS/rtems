@@ -28,21 +28,23 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
-$(PROJECT_INCLUDE)/page_table.h: include/page_table.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/page_table.h
-
-$(PROJECT_INCLUDE)/tod.h: include/tod.h
-	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
-
-$(PROJECT_INCLUDE)/mvme16x_hw.h: \
     $(top_srcdir)/../shared/mvme/mvme16x_hw.h
 	$(INSTALL_DATA) $< $@
+
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+
+$(PROJECT_INCLUDE)/page_table.h: include/page_table.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/page_table.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/page_table.h
+
+$(PROJECT_INCLUDE)/tod.h: include/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
+
+$(PROJECT_INCLUDE)/mvme16x_hw.h: $(top_srcdir)/../shared/mvme/mvme16x_hw.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mvme16x_hw.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mvme16x_hw.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

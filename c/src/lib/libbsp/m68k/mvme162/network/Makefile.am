@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../mvme167/network
 
 PGM = $(ARCH)/network.rel

@@ -15,3 +15,4 @@ install-exec-local: $(PROGRAMS)
 	$(INSTALL_PROGRAM) $(PROGRAMS) $(PROJECT_ROOT)/@RTEMS_BSP@/bin
 endif
 include $(top_srcdir)/../../../../../automake/host.am
+

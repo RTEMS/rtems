@@ -10,10 +10,12 @@ endif
 BSP_PIECES = startup clock console timer tod $(NETWORKING_DRIVER)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
-    $(wildcard ../consolex/$(ARCH)/consolex.rel) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel)
+OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
+    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(wildcard \
+    ../consolex/$(ARCH)/consolex.rel) $(wildcard \
+    ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/*.$(OBJEXT)) \
+    $(wildcard \
+    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel)
 
 LIB = $(ARCH)/libbsp.a
 

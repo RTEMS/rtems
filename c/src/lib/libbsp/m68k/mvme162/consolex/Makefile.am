@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/consolex.rel
 
 C_FILES = consolex.c
@@ -22,19 +21,21 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-$(PROJECT_INCLUDE):
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
-    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
-
 all-local: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
 EXTRA_DIST = README cTest.c consolex.c consolex.h
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/consolex.h: consolex.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/consolex.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/consolex.h
 
 include $(top_srcdir)/../../../../automake/local.am
