@@ -61,6 +61,6 @@ dnl Stripped down version of autoconf-2.52's AC_ARG_VAR.
 AC_DEFUN([RTEMS_ARG_VAR],
 [
 m4_expand_once([m4_divert_once([HELP_VAR],
-[AC_HELP_STRING([$1], [$2], [              ])])],
+[AS_HELP_STRING($1,$2,              )])],
       [$0($1)])dnl
 ])
