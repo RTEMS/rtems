@@ -168,7 +168,7 @@ do
            tname=`echo $tname | sed 's/-node.*//'`
            TEST_TYPE="mp"
            ;;
-       minimum*|stackchk*|spfatal*)
+       minimum*|stackchk*|spfatal*|termio*)
            continue
            ;;
    esac
@@ -177,8 +177,8 @@ do
    then
        cpus="1 2"
 
-       logfile1=$logdir/${tname}_1
-       logfile2=$logdir/${tname}_2
+       logfile1=$logdir/${tname}_1${variant}
+       logfile2=$logdir/${tname}_2${variant}
        infofile1=$logfile1.info
        infofile2=$logfile2.info
 
