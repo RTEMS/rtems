@@ -43,6 +43,18 @@ NoSource:	1
 %define _gnat	%{?gnat:%gnat}%{!?gnat:0}
 %endif
 
+# Use rpm -ba --define 'gcj [0|1]' xxx.spec to override building gcj for 
+# those targets wanting to support gcj.
+
+%if "@gcc_version@" >= "3.2"
+# default to building gcj
+%define _gcj	%{?gcj:%gcj}%{!?gcj:1}
+%else
+# default to not building gcj
+%define _gcj	%{?gnat:%gcj}%{!?gcj:0}
+%endif
+
+
 %define build_cxx 	1
 %define build_g77 	0
 %define build_objc	0
@@ -50,7 +62,7 @@ NoSource:	1
 %define build_gnat	0
 
 %if "@target_alias@" == "arm-rtems"
-%define build_gcj 	1
+%define build_gcj	%_gcj
 %endif
 
 %if "@target_alias@" == "c4x-rtems"
@@ -59,7 +71,7 @@ NoSource:	1
 
 %if "@target_alias@" == "i386-rtems"
 %define build_gnat      %_gnat
-%define build_gcj 	1
+%define build_gcj	%_gcj
 %endif
 
 %if "@target_alias@" == "i960-rtems"
@@ -67,22 +79,22 @@ NoSource:	1
 %endif
 
 %if "@target_alias@" == "m68k-rtems"
-%define build_gcj 	1
+%define build_gcj	%_gcj
 %endif
 
 %if "@target_alias@" == "mips-rtems"
 %define build_gnat      %_gnat
-%define build_gcj 	1
+%define build_gcj	%_gcj
 %endif
 
 %if "@target_alias@" == "powerpc-rtems"
 %define build_gnat      %_gnat
-%define build_gcj 	1
+%define build_gcj	%_gcj
 %endif
 
 %if "@target_alias@" == "sparc-rtems"
 %define build_gnat      %_gnat
-%define build_gcj 	1
+%define build_gcj	%_gcj
 %endif
 
 %if %build_gcj
@@ -166,6 +178,14 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     --enable-version-specific-runtime-libs \
     --enable-threads=rtems --prefix=%{_prefix} \
     --enable-languages=$languages ${libgcj_flag}
+
+%if "%_host" != "%_build"
+  # Bug in gcc-3.2.1:
+  # Somehow, gcc doesn't get syslimits.h right for Cdn-Xs
+  test -d gcc/include || mkdir -p gcc/include
+  cp ../gcc-@gcc_version@/gcc/gsyslimits.h gcc/include/syslimits.h
+%endif
+
 %if %build_gnat
   cd ../gcc-@gcc_version@/gcc/ada
   touch treeprs.ads [es]info.h nmake.ad[bs]

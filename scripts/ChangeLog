@@ -1,3 +1,10 @@
+2003-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/target-gcc.add: Remove %{_exeext} from gccbug.
+	* gcc3newlib/gccnewlib.add: Add %gcj to support to disabling building
+	gcj from rpmbuild command line.
+	Copy gsyslimits.h for CDN-X compilation.
+
 2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* README.cdn-X: New.
