@@ -584,6 +584,8 @@ in addition to this single static set.  The format of each entry
 in the User Extensions Table is defined in the following @value{LANGUAGE}
 @value{STRUCTURE}:
 
+@ifset is-C
+@example
 typedef User_extensions_routine                   rtems_extension;
 typedef User_extensions_thread_create_extension   rtems_task_create_extension;
 typedef User_extensions_thread_delete_extension   rtems_task_delete_extension;
@@ -596,8 +598,6 @@ typedef User_extensions_fatal_extension           rtems_fatal_extension;
 
 typedef User_extensions_Table                     rtems_extensions_table;
 
-@ifset is-C
-@example
 typedef struct @{
   rtems_task_create_extension      thread_create;
   rtems_task_start_extension       thread_start;
