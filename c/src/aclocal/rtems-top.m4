@@ -20,7 +20,7 @@ AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 AC_SUBST([RTEMS_TOPdir],["$1"])
 
 # HACK: The sed pattern in rtems_updir matches c/src/
-rtems_updir=m4_if([$2],[],[`echo "$1/" | sed s,^\.\.\/\.\.\/,,`],[$2/])
+rtems_updir=m4_if([$2],[],[`echo "$1/" | sed 's,^\.\.\/\.\.\/,,'`],[$2/])
 
 AS_IF([test -n "${with_target_subdir}"],
   [project_top="../${with_project_top}"],

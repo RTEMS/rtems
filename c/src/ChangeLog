@@ -1,3 +1,7 @@
+2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4 (rtems_updir): Quote sed args.
+
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* make/bsp.mak: Remove CFLAGS_DEBUG_V.

@@ -1,5 +1,9 @@
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/rtems-top.m4 (rtems_updir): Quote sed args.
+
+2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/if_ppp.c, libnetworking/net/if_pppvar.h:
 	Ansification, cosmetics from FreeBSD.
 

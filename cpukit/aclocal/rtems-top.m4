@@ -20,7 +20,7 @@ AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 AC_SUBST([RTEMS_TOPdir],["$1"])
 
 # HACK: The sed pattern below strips of "../", corresponding to "cpukit/"
-rtems_updir="/"m4_if([$2],[],[`echo "$1/" | sed s,^\.\.\/,,`],[$2/])
+rtems_updir="/"m4_if([$2],[],[`echo "$1/" | sed 's,^\.\.\/,,'`],[$2/])
 
 AS_IF([test -n "$with_multisubdir"],
   [MULTIBUILDTOP=`echo "/$with_multisubdir" | sed 's,/[[^\\/]]*,../,g'`])
