@@ -1,5 +1,7 @@
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in libblock/ChangeLog, libfs/ChangeLog.
+	* libblock/ChangeLog, libfs/ChangeLog: Remove.
 	* ChangeLog: Merge-in libmisc/ChangeLog, librpc/ChangeLog.
 	* libmisc/ChangeLog, librpc/ChangeLog: Remove.
 	* ChangeLog: Merge-in itron/ChangeLog, posix/ChangeLog, score/ChangeLog,
@@ -23,6 +25,8 @@
 	* rtems/Makefile.am: Add PREINSTALL_DIRS.
 	* libmisc/Makefile.am: Add PREINSTALL_DIRS.
 	* librpc/Makefile.am: Add PREINSTALL_DIRS.
+	* libblock/Makefile.am: Add PREINSTALL_DIRS.
+	* libfs/Makefile.am: Add PREINSTALL_DIRS.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -45,6 +49,10 @@
 	* libmisc/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
 	PREINSTALL_FILES to CLEANFILES.
 	* librpc/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
+	* libblock/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
+	* libfs/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
 	PREINSTALL_FILES to CLEANFILES.
 
 2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -86,6 +94,9 @@
 	* librpc/Makefile.am: Include compile.am, again. Put man-pages into
 	EXTRA_DIST to work around automake not distributing conditionally
 	installed *_MANS. Distribute include/rpcsvc.
+	* libblock/Makefile.am: Include compile.am, again. Eliminate C_FILES.
+	Reformat.
+	* libfs/Makefile.am: Include compile.am, again. Reformat/Cleanup.
 
 2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -127,6 +138,18 @@
 	lib*_a_SOURCES.
 	* librpc/Makefile.am: Build lib*$(LIB_VARIANT).a instead of
 	$(ARCH)/lib*.a.
+	* libblock/Makefile.am: Add libs to CLEANFILES Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
+	* libblock/include/rtems/blkdev.h,
+	libblock/include/rtems/ide_part_table.h, libblock/src/bdbuf.c,
+	libblock/src/ide_part_table.c, libblock/src/ramdisk.c:  Switch to using
+	c99 fixed size types instead of RTEMS-types.
+	* libblock/Makefile.am: Build libblock$(LIB_VARIANT).a instead of
+	$(ARCH)/libblock.a.
+	* libfs/Makefile.am: Add libs to CLEANFILES. Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
+	* libfs/Makefile.am: Build lib*$(LIB_VARIANT).a instead of
+	$(ARCH)/lib*.a.
 
 2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -146,6 +169,10 @@
 	* libmisc/Makefile.am: Build library using EXTRA_LIBRARIES and automake
 	rules.
 	* librpc/Makefile.am: Build library using EXTRA_LIBRARIES and automake
+	rules.
+	* libblock/Makefile.am: Build library using EXTRA_LIBRARIES and automake
+	rules.
+	* libfs/Makefile.am: Build library using EXTRA_LIBRARIES and automake
 	rules.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
@@ -210,6 +237,9 @@
 	* libmisc/Makefile.am: Use mkdir_p. Remove dirs from
 	PRE/TMPINSTALL_FILES.
 	* librpc/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* libblock/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* libfs/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -223,6 +253,10 @@
 	PR 531/rtems_misc
 	* libmisc/rtmonuse/rtmonuse.c, libmisc/stackchk/check.c: Correct
 	indexing.
+
+2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libblock/src/ata.c: Remove.
 
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -254,6 +288,10 @@
 	* libmisc/Makefile.am: Add $(dirstamp) to preinstallation rules.
 	* librpc/Makefile.am: Add $(dirstamp) to compilation rules.
 	* librpc/Makefile.am: Add $(dirstamp) to preinstallation rules.
+	* libblock/Makefile.am: Add $(dirstamp) to compilation rules.
+	* libblock/Makefile.am: Add $(dirstamp) to preinstallation rules.
+	* libfs/Makefile.am: Add $(dirstamp) to compilation rules.
+	* libfs/Makefile.am: Add $(dirstamp) to preinstallation rules.
 
 2003-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -305,6 +343,10 @@
 	librpc/src/rpc/rtems_rpc.c, librpc/src/rpc/svc.c, librpc/
 	src/rpc/svc_auth.c, librpc/src/rpc/svc_raw.c,
 	librpc/src/rpc/svc_simple.c: Reflect changes above.
+	* libfs/Makefile.am: Merge-in src/Makefile.am, src/imfs/Makefile.am,
+	src/dosfs/Makefile.am.
+	* libfs/src/Makefile.am, libfs/src/imfs/Makefile.am,
+	libfs/src/dosfs/Makefile.am: Removed.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -353,6 +395,7 @@
 	* itron/Makefile.am: Reworked.
 	* posix/Makefile.am: Reworked.
 	* rtems/Makefile.am: Reworked.
+	* libblock/Makefile.am: Reworked.
 
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -403,17 +446,51 @@
 	* libmisc/untar/config.h: Remove.
 	* libmisc/untar/Makefile.am: Remove config.h. AM_CPPFLAGS +=
 	-I$(top_builddir).
+	* libblock/Makefile.am: AM_CPPFLAGS += -I$(top_builddir). Use
+	AM_CPPFLAGS instead of AM_CFLAGS.
+	* libblock/src/ata.c: Include config.h.
+	* libblock/src/bdbuf.c: Ditto.
+	* libblock/src/blkdev.c: Ditto.
+	* libblock/src/diskdevs.c: Ditto.
+	* libblock/src/ide_part_table.c: Ditto.
+	* libblock/src/ramdisk.c: Ditto.
+	* libfs/src/dosfs/config.h: Remove.
+	* libfs/src/dosfs/Makefile.am: Remove config.h AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libfs/src/imfs/config.h: Remove.
+	* libfs/src/imfs/Makefile.am: Remove config.h AM_CPPFLAGS +=
+	-I$(top_builddir).
+
+2003-11-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libfs/Makefile.am: Cosmetics.
 
 2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/src/regiongetsegment.c: Remove unneccessary typecast in
 	assignment to thread->Wait.return_argment.
 
+2003-10-22	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 515/filesystem
+	* libfs/src/dosfs/fat_fat_operations.c: Remove commented out code.
+
+2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 509/filesystem
+	* libfs/src/dosfs/fat.c: _fat_block_read and _fat_block_write return
+	error codes instead of -1 in case of errors, as they are supposed to do
+	according to the comments documenting these functions.
+
 2003-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 512/core
 	* rtems/src/tasks.c, rtems/src/taskvariabledelete.c: Run task variable
 	destructor when task variable is deleted. Also some style cleanup.
+	PR 440/filesystem
+	* libfs/src/dosfs/fat_fat_operations.c: Improve write speed with FAT12
+	and FAT16 filesystems. Previously merged on 4.6 branch.
+	* libfs/ChangeLog: Correct line length.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -443,6 +520,12 @@
 	sys/cdefs.h providing it.
 	* librpc/src/xdr/Makefile.am: Remove __P from AM_CPPFLAGS. Rely on
 	sys/cdefs.h providing it.
+	* libfs/src/dosfs/Makefile.am: noinst_HEADERS += fat.h.
+	* libfs/src/dosfs/msdos_file.c (msdos_file_read,
+	libfs/msdos_file_write): Use '0' as initial value for ret instead of
+	RC_OK.
+	* libfs/src/dosfs/msdos_conv.c: Remove isupper, islower, toupper,
+	tolower (Unused).
 
 2003-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -482,6 +565,8 @@
 	score/cpu/hppa1.1/rtems/score/cpu_asm.h,
 	score/cpu/hppa1.1/rtems/score/hppa.h,
 	score/cpu/hppa1.1/rtems/score/types.h: Removed.
+	PR 492/filesystem
+	* libfs/src/dosfs/fat_file.c: Fix inconsistent types in va_args call.
 
 2003-09-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -526,6 +611,11 @@
 
 	PR 488/rtems
 	* rtems/src/taskcreate.c, rtems/src/tasks.c: Ensure notepads are zeroed.
+
+2003-09-09	Ralf Corsepius <ralf_corsepius@rtems.com>
+
+	PR 487/filesystem
+	* libfs/src/dosfs/fat_file.c: Correct typing per gcc 3.3 warnings.
 
 2003-09-08	Mikec Ivica <mikici@acm.org>
 
@@ -855,6 +945,41 @@
 	libmisc/serdbg/termios_printk.c, libmisc/stackchk/check.c,
 	libmisc/stackchk/internal.h, libmisc/stackchk/stackchk.h,
 	libmisc/untar/untar.c, libmisc/untar/untar.h: URL for license changed.
+	* libblock/include/rtems/ide_part_table.h, libblock/src/ata.c,
+	libblock/src/ide_part_table.c: URL for license changed.
+	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.h,
+	libfs/src/dosfs/fat_fat_operations.h, libfs/src/dosfs/fat_file.h,
+	libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_create.c,
+	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_eval.c,
+	libfs/src/dosfs/msdos_file.c, libfs/src/dosfs/msdos_free.c,
+	libfs/src/dosfs/msdos_fsunmount.c, libfs/src/dosfs/msdos_handlers_dir.c,
+	libfs/src/dosfs/msdos_handlers_file.c, libfs/src/dosfs/msdos_init.c,
+	libfs/src/dosfs/msdos_initsupp.c, libfs/src/dosfs/msdos_misc.c,
+	libfs/src/dosfs/msdos_mknod.c, libfs/src/dosfs/msdos_node_type.c,
+	libfs/src/imfs/deviceio.c, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_chown.c, libfs/src/imfs/imfs_config.c,
+	libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
+	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/imfs_fcntl.c,
+	libfs/src/imfs/imfs_fdatasync.c, libfs/src/imfs/imfs_free.c,
+	libfs/src/imfs/imfs_fsunmount.c, libfs/src/imfs/imfs_getchild.c,
+	libfs/src/imfs/imfs_gtkn.c, libfs/src/imfs/imfs_handlers_device.c,
+	libfs/src/imfs/imfs_handlers_directory.c,
+	libfs/src/imfs/imfs_handlers_link.c,
+	libfs/src/imfs/imfs_handlers_memfile.c, libfs/src/imfs/imfs_init.c,
+	libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/imfs_link.c,
+	libfs/src/imfs/imfs_mknod.c, libfs/src/imfs/imfs_mount.c,
+	libfs/src/imfs/imfs_ntype.c, libfs/src/imfs/imfs_readlink.c,
+	libfs/src/imfs/imfs_rmnod.c, libfs/src/imfs/imfs_stat.c,
+	libfs/src/imfs/imfs_symlink.c, libfs/src/imfs/imfs_unixstub.c,
+	libfs/src/imfs/imfs_unlink.c, libfs/src/imfs/imfs_unmount.c,
+	libfs/src/imfs/imfs_utime.c, libfs/src/imfs/ioman.c,
+	libfs/src/imfs/linearfile.c, libfs/src/imfs/memfile.c,
+	libfs/src/imfs/miniimfs_init.c: URL for license changed.
+
+2003-09-03	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/msdos_create.c: Remove unused variable warning.
 
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -957,6 +1082,36 @@
 	* libmisc/monitor/mon-monitor.c: monitor registered commands list
 	manipulation bugs.
 
+2003-08-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 440/filesystem
+	* libfs/src/dosfs/fat_fat_operations.c: Improve write data speed for
+	DOSFS FAT12/FAT16 systems.
+	PR 439/filesystem
+	* libfs/src/dosfs/fat_file.c: flush temporary buffer when closing files.
+
+2003-08-05	<djc915@mail.usask.ca>
+
+	PR 443/filesystem
+	* libfs/src/imfs/deviceio.c: deviceio.c mishandles return codes.
+
+2003-08-04	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 441/filesystem
+	* libfs/src/dosfs/msdos.h: add rename support to DOSFS.
+	* libfs/src/dosfs/msdos_create.c: add rename support to DOSFS.
+	* libfs/src/dosfs/msdos_file.c: add rename support to DOSFS.
+	* libfs/src/dosfs/msdos_init.c: add rename support to DOSFS.
+	* libfs/src/dosfs/msdos_mknod.c: add rename support to DOSFS.
+
+2003-07-24	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	PR 434/filesystem
+	* libfs/src/imfs/imfs_init.c: Modified to return error code.
+	* libfs/src/imfs/miniimfs_init.c: Modified to return error code.
+	* libfs/src/imfs/imfs_initsup.c: Modified to set error upon memory
+	failure.
+
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 430/rtems
@@ -973,10 +1128,20 @@
 	_ISR_Nest_level. See also PR288 which provides fixes for the affected
 	BSPs distributed with RTEMS.
 
+2003-07-16	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/ChangeLog: Correct format.
+
 2003-07-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Remove '/' after $(DESTDIR).
 	* wrapup/Makefile.am: Remove bogus $(MULTISUBDIR).
+
+2003-07-15	Chris Johns <cjohns@cybertec.com.au>
+
+	PR 431/filesystem
+	* libfs/src/dosfs/msdos.h: MSDOS Volume semaphore timeout is now NO
+	TIMEOUT. MSDOS volume opertations will wait for ever.
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1083,6 +1248,22 @@
 	librpc/src/Makefile.am, librpc/src/rpc/Makefile.am,
 	librpc/src/xdr/Makefile.am: Reflect having merged configure.ac into
 	../configure.ac.
+	* libblock/configure.ac: Remove (Merged into ../configure.ac).
+	* libblock/Makefile.am: Reflect having merged configure.ac into
+	../configure.ac.
+	* libfs/configure.ac: Remove (Merged-in into ../configure.ac).
+	* libfs/Makefile.am, libfs/src/Makefile.am, libfs/src/dosfs/Makefile.am,
+	libfs/src/imfs/Makefile.am: Reflect having merged configure.ac into
+	../configure.ac.
+	* libfs/src/dosfs/config.h: New.
+	* libfs/src/dosfs/Makefile.am: Add config.h.
+	* libfs/src/imfsfs/config.h: New.
+	* libfs/src/imfs/Makefile.am: Add config.h.  Remove COMMON_C_FILES,
+	DOC_FILES (Unused).
+	* libfs/src/dosfs/fat.c: include config-header "config.h".
+	* libfs/src/dosfs/fat_fat_operations.c: Ditto.
+	* libfs/src/dosfs/fat_file.c: Ditto.
+	* libfs/src/dosfs/msdos_conv.c: Ditto.
 
 2003-07-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1099,6 +1280,15 @@
 
 	* aclocal/version.m4: Updated to rtems-ss-20030703.
 
+2003-07-02	Chris Johns <cjohns@cybertec.com.au>
+
+	* libfs/src/dosfs/Makefile.am, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_conv.c, libfs/src/dosfs/msdos_create.c,
+	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_misc.c: Patch from
+	Victor V. Vengerov <vvv@oktet.ru> to remove Linux code.
+	* libfs/src/dosfs/fat.c, libfs/src/dosfs/fat.h: Comment have been
+	updated.
+
 2003-06-13	Joel Sherrill <joel@OARcorp.com>
 
 	* score/src/threadloadenv.c: Removed warnings.
@@ -1111,9 +1301,16 @@
 	rtems/src/msgmp.c, rtems/src/partmp.c, rtems/src/regionmp.c,
 	rtems/src/semmp.c: Removed warnings.
 
+2003-06-10	Phil Torre <ptorre@zetron.com>
+
+	PR 411/filesystem
+	* libfs/src/imfs/imfs_unlink.c: Fix bug where renaming a memfile and
+	then unlinking it causes a memory leak.
+
 2003-06-04	Joel Sherrill <joel@OARcorp.com>
 
 	* libmisc/stackchk/check.c: Removed warnings.
+	* libblock/src/ide_part_table.c: Removed warnings.
 
 2003-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1157,6 +1354,31 @@
 	* aclocal/version.m4: Updated to rtems-ss-20030411.
 	* aclocal/version.m4: Updated to rtems-ss-20020411.
 
+2003-03-27	Joel Sherrill <joel@OARcorp.com>
+
+	* libblock/Makefile.am: ATA code depends upon libchip/ide which is not
+	allowed in the cpukit source code since it must be buildable independent
+	of any BSP. These files were moved to libchip/ide.
+	* libblock/include/rtems/ata.h, libblock/include/rtems/ata_internal.h,
+	libblock/src/ata.c: Removed.
+
+2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 367/filesystem
+	* libblock/Makefile.am, libblock/include/rtems/ide_part_table.h,
+	libblock/src/ata.c, libblock/src/ide_part_table.c: Some bugs were still
+	present in the DOSFS implementation: - FAT12 did not work properly on
+	Big-Endian machines - Some synchronization and error handling problems
+	were present - Some legal codings for EOC were not recognized.
+	PR 367/filesystem
+	* libfs/src/dosfs/Makefile.am, libfs/src/dosfs/fat.c,
+	libfs/src/dosfs/fat.h, libfs/src/dosfs/fat_fat_operations.c,
+	libfs/src/dosfs/fat_file.c, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_dir.c: Some bugs were still present in the DOSFS
+	implementation: - FAT12 did not work properly on Big-Endian machines. -
+	Some synchronization and error handling problems were present. - Some
+	legal codings for EOC were not recognized.
+
 2003-03-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 356/bsps
@@ -1198,6 +1420,8 @@
 	* sapi/macros/rtems/.cvsignore: Remove.
 	* sapi/src/.cvsignore: Remove.
 	* libmisc/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* libblock/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* libfs/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1221,9 +1445,8 @@
 	Add ${ARCH}. depend-gcc.
 	* aclocal/prog-cc.m4: Set up RTEMS_CPPFLAGS.
 	* aclocal/env-rtemscpu.m4: Remove GCC_SPECS.
-	* aclocal/env-rtemsbsp.m4: Remove GCC_SPECS.
-	capture/capture-cli.c: Add proper definition to avoid compiler
-	warnings. Apply int = getchar().
+	* aclocal/env-rtemsbsp.m4: Remove GCC_SPECS. capture/capture-cli.c: Add
+	proper definition to avoid compiler warnings. Apply int = getchar().
 
 2003-02-14	Till Straumann <strauman@slac.stanford.edu>
 
@@ -1256,6 +1479,16 @@
 	* posix/configure.ac: AC_PREREQ(2.57).
 	* librpc/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* librpc/configure.ac: AC_PREREQ(2.57).
+	* libblock/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* libblock/configure.ac: AC_PREREQ(2.57).
+	* libfs/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* libfs/configure.ac: AC_PREREQ(2.57).
+
+2003-02-03	Steven Johnson <sjohnson@neurizon.net>
+
+	PR 338/filesystem
+	* libfs/src/imfs/ioman.c: Fix reentrancy problem with 
+	rtems_io_lookup_name() (API change).
 
 2003-02-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -1271,6 +1504,11 @@
 
 	* posix/src/ptimer1.c: Correct problem which could lead to overflow in
 	time math.
+
+2003-01-27	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* libblock/src/blkdev.c: Per PR331 fix bug which is tripped by writing
+	512 byte blocks to 512 byte aligned positions.
 
 2003-01-27	Dan Smisko <dan@balanced.com>
 
@@ -1305,6 +1543,14 @@
 
 	* posix/src/mqueueopen.c: Actually open the message queue descriptor so
 	it is available for others to use.
+
+2003-01-03	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* libblock/src/ata.c, libblock/src/bdbuf.c: Correct invocation of
+	rtems_task_mode() so the task's preemption mode setting is properly
+	maintained.
+	* libfs/src/dosfs/msdos_initsupp.c: Specify inherited priority as 0
+	since this is a FIFO queuing semaphore.
 
 2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1362,6 +1608,9 @@
 	* libmisc/stackchk/Makefile.am: Ditto.
 	* libmisc/untar/Makefile.am: Ditto.
 	* libmisc/wrapup/Makefile.am: Reflect new path.
+	* libblock/Makefile.am: Eliminate C_O_FILES. Eliminate SRCS.
+	* libfs/src/imfs/Makefile.am: Eliminate C_O_FILES.
+	* libfs/src/dosfs/Makefile.am: Ditto.
 
 2002-12-11	Vladimir Nesic <vnesic@dkts.co.yu>
 
@@ -1461,6 +1710,9 @@
 	* rtems/include/rtems/rtems/support.h: Added casts to eliminate warnings
 	on 16 bit targets like the h8300.
 	* libmisc/stackchk/check.c: Better handling of task name.
+	* libblock/src/bdbuf.c: Added cast to remove warning.
+	* libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos.h: Added casts to remove
+	warnings on 16 bit targets like the h8300.
 
 2002-11-29	Eric Norum <eric.norum@usask.ca>
 
@@ -1478,6 +1730,9 @@
 	* posix/configure.ac: Cosmetical fixes.
 	* posix/configure.ac: Fix package name.
 	* librpc/configure.ac: Fix package name.
+	* libblock/configure.ac: Fix package name.
+	* libfs/configure.ac: Cosmetical fixes.
+	* libfs/configure.ac: Fix package name.
 
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1495,6 +1750,7 @@
 	* automake/compile.am: Acknowledge configuration-time CFLAGS. Remove
 	CFLAGS_DEFAULT.
 	* libmisc/monitor/mon-commands.c: Removed warnings for RTEMS_UNIX.
+	* libblock/src/diskdevs.c: Include <unistd.h> to remove warning.
 
 2002-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1567,6 +1823,14 @@
 	* librpc/src/rpc/rpcdname.c: Add prototype of getdomainname() to
 	eliminate warning.
 
+2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* Added ATA  support.
+	* libblock/include/rtems/blkdev.h: Added last IO status.
+	* libblock/include/rtems/ata.h, libblock/include/rtems/ata_internal.h,
+	libblock/include/rtems/ide_part_table.h, libblock/src/ata.c,
+	libblock/src/ide_part_table.c: New files.
+
 2002-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libmisc/monitor/mon-command.c: Don't build rtems_monitor_line_editor
@@ -1578,6 +1842,8 @@
 	* itron/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 	* posix/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 	* librpc/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+	* libblock/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+	* libfs/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 
 2002-10-24	Fabrizio Pirovano <pirovano.thysys@tiscalinet.it>
 
@@ -1593,6 +1859,9 @@
 	* libmisc/.cvsignore: Reformat. Add autom4te*cache. Remove
 	autom4te.cache.
 	* librpc/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+	* libblock/.cvsignore: Reformat. Add autom4te*cache. Remove
+	autom4te.cache.
+	* libfs/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-10-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -1607,6 +1876,12 @@
 	* aclocal/version.m4: Updated to rtems-JUNK.
 	* aclocal/version.m4: Updated to rtems-ss-20021004.
 
+2002-10-02	Jennifer Averett <jennifer@OARcorp.com>
+
+	* libfs/src/imfs/memfile.c: Fixed case where last close of unlinked file
+	did not remove the resources associated with that file.  Reported by
+	Till Straumann <strauman@slac.stanford.edu> on the mailing list.
+
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/src/psignal.c: Remove duplication from rtems/posix/psignal.h.
@@ -1618,6 +1893,21 @@
 	rtems/src/taskcreate.c, rtems/src/taskident.c, rtems/src/timercreate.c,
 	rtems/src/timerident.c: Added casts to Objects_Name to eliminate
 	warnings.
+	* libfs/src/dosfs/fat.c, libfs/src/imfs/deviceio.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_directory.c,
+	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/memfile.c: Eliminated
+	warnings.  A lot of this focus was on changing read and write entry
+	points to return ssize_t as read(2) and write(2) now do.
+
+2002-09-07	Joel Sherrill <joel@OARcorp.com>
+
+	* libblock/src/bdbuf.c: Previous fix for PR282 regressed mutex changes.
+
+2002-09-06	Alexander M. Kukuta <kam@oktet.ru>
+
+	* libblock/src/bdbuf.c: Per PR282, correct problem in function
+	rtems_bdbuf_read() where device ioctl() is called with the logical
+	device number used instead of corresponding physical device number.
 
 2002-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1735,6 +2025,13 @@
 	* wrapup/Makefile.am: LIBBLOCK_OBJS = ../libblock/$(ARCH)/libblock.a.
 	* posix/src/mqueuecreatesupp.c: #include <stdlib.h> (malloc).
 	* score/src/Makefile.am: Build into libscore.a.
+	* libblock/Makefile.am: Merge src/Makefile.am.
+	* libblock/src/Makefile.am: Remove.
+	* libblock/configure.ac: Remove src/Makefile.am.
+	* libfs/wrapup/Makefile.am: Remove.
+	* libfs/wrapup/.cvsignore: Remove.
+	* libfs/Makefile.am: Remove wrapup SUBDIR.
+	* libfs/configure.ac: Remove wrapup/Makefile.
 
 2002-07-31	Joel Sherrill <joel@OARcorp.com>
 
@@ -1797,6 +2094,8 @@
 	* librpc/src/rpc/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* librpc/src/xdr/Makefile.am: Eliminate LIBNAME.
 	* librpc/src/rpc/Makefile.am: Eliminate LIBNAME.
+	* libblock/src/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libblock/src/Makefile.am: Eliminate LIBNAME. Cosmetical cleanups.
 
 2002-07-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -1833,6 +2132,8 @@
 	* itron/configure.ac: RTEMS_TOP(../..).
 	* posix/configure.ac: RTEMS_TOP(../..).
 	* librpc/configure.ac: RTEMS_TOP(../..).
+	* libblock/configure.ac: RTEMS_TOP(../..).
+	* libfs/configure.ac: RTEMS_TOP(../..).
 
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
@@ -1869,6 +2170,8 @@
 	* itron/configure.ac: Remove RTEMS_PROJECT_ROOT.
 	* posix/configure.ac: Remove RTEMS_PROJECT_ROOT.
 	* librpc/configure.ac: Remove RTEMS_PROJECT_ROOT.
+	* libblock/configure.ac: Remove RTEMS_PROJECT_ROOT.
+	* libfs/configure.ac: Remove RTEMS_PROJECT_ROOT.
 
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -1992,6 +2295,21 @@
 	target has 64 bit pointers.
 	* libmisc/stackchk/check.c: Corrected use of _Objects_Information_table
 	now that it is a two dimensional array based upon API and class.
+	* Mega patch merge to change the format of the object IDs to loosen the
+	dependency between the SCORE and the various APIs. There was
+	considerable work to simplify the object name management and it appears
+	that the name_table field is no longer needed. This patch also includes
+	the addition of the internal mutex which is currently only used to
+	protect some types of allocation and deallocation.  This significantly
+	can reduce context  switch latency under certain circumstances.  In
+	particular, some heap/region operations were O(n) and had dispatching
+	disabled.  This should help enormously.  With this merge, the patch is
+	not as clean as it should be.  In particular, the documentation has not
+	been modified to reflect the new object ID layout, the IDs in the test
+	screens are not updated, and _Objects_Get_information needs to be a real
+	routine not inlined. As part of this patch a lot of MP code for
+	thread/proxy blocking was made conditional and cleaned up.
+	* libblock/src/bdbuf.c:  Modified as part of above.
 
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2005,6 +2323,9 @@
 	* itron/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 	* posix/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 	* librpc/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
+	* libblock/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
+	AC_PROG_RANLIB.
+	* libfs/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2018,6 +2339,8 @@
 	* posix/configure.ac: Remove references to RTEMS_BSP.
 	* posix/src/Makefile.am: Add libposix.a.
 	* libmisc/wrapup/Makefile.am: Don't preinstall libmisc.a.
+	* libblock/src/Makefile.am: Don't preinstall libblock.a.
+	* libfs/wrapup/Makefile.am: Don't preinstall libfs.a.
 
 2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
@@ -2062,6 +2385,9 @@
 
 	* wrapup/Makefile.am: Use relative path to lib*.a for LIBCSUPPORT_OBJS,
 	LIBBLOCK_OBJS, LIBDOSFS_OBJS, LIBIMFS_OBJS.
+	* libblock/Makefile.am: Merge-in include/Makefile.am.
+	* libblock/include/Makefile.am: Remove.
+	* libblock/configure.ac: Reflect changes above.
 
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2131,6 +2457,16 @@
 	* posix/inline/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	* posix/macros/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	* posix/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libblock/include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libblock/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
+	../aclocal.
+	* libblock/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libfs/src/dosfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libfs/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libfs/src/imfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libfs/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
+	../aclocal.
+	* libfs/wrapup/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 
 2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2154,6 +2490,16 @@
 
 	* configure.ac: Add libblock. Add libfs. Add AM_CONDITIONAL(UNIX).
 	* wrapup/Makefile.am: Add libblock, libfs/dosfs, libfs/imfs.
+	* libblock/configure.ac, libblock/Makefile.am,
+	libblock/include/Makefile.am, libblock/src/Makefile.am: Reflect move
+	from c/src/libblock to c/src/exec/libblock.
+	Move from c/src/libfs to c/src/exec/libfs
+	* libfs/configure.ac: Reflect move.
+	* libfs/Makefile.am: Ditto.
+	* libfs/src/Makefile.am: Ditto.
+	* libfs/src/dosfs/Makefile.am: Ditto.
+	* libfs/src/imfs/Makefile.am: Ditto.
+	* libfs/wrapup/Makefile.am: Ditto.
 
 2002-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2226,6 +2572,17 @@
 
 	* score/include/rtems/system.h: Add i386 to multilib-able targets.
 
+2002-04-10	Victor V. Vengerov <vvv@oktet.ru>
+
+	PR 385/filesystem
+	* libblock/src/ramdisk.c: The "from" and "to" locations are calculated
+	as the start of the block within the ram that data is to be transferred
+	from/to for reads and writes respectively.  However, within the loops,
+	the "from" and "to" locations are never updated.  The loop should have
+	been updated as: from += rd->block_size; and to += rd->block_size;
+	within the for loops in the ramdisk_read and ramdisk_write routines,
+	respectively.
+
 2002-04-08	Chris Johns <ccj@acm.org>
 
 	* Per PR142, make task switch extension its own list.
@@ -2250,10 +2607,28 @@
 
 	* include/rtems/bspIo.h: Fix cpp-guards, remove references to i386.
 	* posix/src/psignal.c: Include <stdlib.h>.
+	* libblock/src/ramdisk.c: include <string.h>.
+	* libblock/src/blkdev.c: include <string.h>.
+	* libfs/src/imfs/imfs_getchild.c: include <string.h>.
+	* libfs/src/imfs/imfs_gtkn.c: Include <string.h>.
+	* libfs/src/imfs/ioman.c: Include <string.h>.
+	* libfs/src/imfs/linearfile.c: Include <string.h>.
+	* libfs/src/imfs/memfile.c: Include <string.h>.
 
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libmisc/monitor/mon-monitor.c: Replace done with return (gcc3).
+	* libfs/src/dosfs/fat.h: Include <string.h>. Remove DBG1 and DBG2
+	(unused).
+	* Per PR169.
+	* libfs/src/dosfs/config.h.in, libfs/src/dosfs/stamp-h2.in: Removed from
+	CVS.
+
+2002-04-03	Alexander Kukuta <kam@oktet.ru>
+
+	* libblock/include/rtems/bdbuf.h: Address PR168 by changing
+	bdbuf_buffer.avl.bal and bdbuf_buffer.avl.cache to signed char instead
+	of char.
 
 2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2325,6 +2700,28 @@
 	* librpc/src/rpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* librpc/src/xdr/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* librpc/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libblock/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* libblock/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libblock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libblock/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libfs/src/dosfs/fat_file.c: Remove bsp.h.  fat_file_write(.. const
+	char*buf ..).
+	* libfs/src/dosfs/fat_file.h: fat_file_write(.. const char*buf ..).
+	* libfs/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* libfs/src/dosfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libfs/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libfs/src/imfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libfs/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-03-21	Alexander Kukuta <kam@oktet.ru>
+
+	* libblock/src/bdbuf.c (avl_insert, libblock/avl_remove): Reimplemented
+	from scratch to avoid using GPLed sources in RTEMS core.
+	* libblock/src/bdbuf.c, libblock/include/rtems/bdbuf.h: Remove "binary
+	tree" implementation which was used for debugging only.
 
 2002-03-20	Chris Johns <ccj@acm.org>
 
@@ -2334,6 +2731,32 @@
 	when enter is pressed.
 	* PR148.
 	* libmisc/monitor/mon-prmisc.c: Fixed to print task states correctly.
+
+2002-03-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Addressing PR 140.
+	* libfs/src/dosfs/config.h.in: Removed.
+	* libfs/src/dosfs/stamp-h2.in: Removed.
+	* libfs/.cvsignore: Add config.h*, stamp-h*.
+	* libfs/configure.ac: Remove AC_SRC_DIR(.../dosfs.h). Remove
+	AM_CONFIG_HEADER(src/dosfs/config.h). Remove
+	AM_CONFIG_HEADER(src/imfs/config.h). Add AM_CONFIG_HEADER(config.h).
+	* libfs/src/dosfs/Makefile.am: INCLUDES = -I../...
+	* libfs/src/imfs/Makefile.am: INCLUDES = -I../...
+
+2002-03-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Reported and tracked as PR130.
+	* libfs/src/dosfs/Makefile.am: Reworked, Disable dosfs for UNIX.
+	* libfs/wrapup/Makefile.am: Disable dosfs for UNIX.
+
+2002-03-13	Victor V. Vengerov <vvv@oktet.ru>
+
+	* libblock/src/bdbuf.c (find_or_assign_buffer,
+	libblock/rtems_bdbuf_read, libblock/rtems_bdbuf_sync,
+	libblock/rtems_bdbuf_syncdev, libblock/bdbuf_swapout_task): Fix bug:
+	disable interrupts and set level properly before _CORE_mutex_Seize
+	invocation).
 
 2002-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2345,9 +2768,42 @@
 	pthread_once init function.  This is slightly less heavy handed than
 	disabling dispatching and seems better than consuming a mutex.
 
+2002-02-28	Victor V. Vengerov <vvv@oktet.ru>
+
+	* DOS filesystem including FAT12, FAT16, and FAT32 support submitted.
+	* libfs/src/dosfs, libfs/src/dosfs/Makefile.am,
+	libfs/src/dosfs/stamp-h2.in, libfs/src/dosfs/config.h.in,
+	libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.c, libfs/src/dosfs/fat.h,
+	libfs/src/dosfs/fat_fat_operations.c,
+	libfs/src/dosfs/fat_fat_operations.h, libfs/src/dosfs/fat_file.c,
+	libfs/src/dosfs/fat_file.h, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_dir.c,
+	libfs/src/dosfs/msdos_eval.c, libfs/src/dosfs/msdos_file.c,
+	libfs/src/dosfs/msdos_free.c, libfs/src/dosfs/msdos_fsunmount.c,
+	libfs/src/dosfs/msdos_handlers_dir.c,
+	libfs/src/dosfs/msdos_handlers_file.c, libfs/src/dosfs/msdos_init.c,
+	libfs/src/dosfs/msdos_initsupp.c, libfs/src/dosfs/msdos_misc.c,
+	libfs/src/dosfs/msdos_mknod.c, libfs/src/dosfs/msdos_node_type.c,
+	libfs/src/dosfs/.cvsignore: New files.
+	* libfs/configure.ac, libfs/src/Makefile.am, libfs/wrapup/Makefile.am:
+	Modified to reflect addition.
+
 2002-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* score/include/rtems/system.h: Add __RTEMS_MAJOR__, __RTEMS_MINOR__.
+
+2002-02-28	Joel Sherrill <joel@OARcorp.com>
+
+	* Submitted by Victor V. Vengerov <vvv@oktet.ru> and merged into the
+	RTEMS source.
+	* libblock/ChangeLog, libblock/Makefile.am, libblock/README,
+	libblock/configure.ac, libblock/include/Makefile.am,
+	libblock/include/rtems/bdbuf.h, libblock/include/rtems/blkdev.h,
+	libblock/include/rtems/diskdevs.h, libblock/include/rtems/ramdisk.h,
+	libblock/include/rtems/.cvsignore, libblock/include/.cvsignore,
+	libblock/src/Makefile.am, libblock/src/bdbuf.c, libblock/src/blkdev.c,
+	libblock/src/diskdevs.c, libblock/src/ramdisk.c,
+	libblock/src/.cvsignore, libblock/.cvsignore: New files.
 
 2002-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2418,6 +2874,9 @@
 	* include/rtems/userenv.h: New. extracted from libio_.h.
 	* libmisc/rootfs/Makefile.am: Use include_rtems_HEADERS instead of
 	H_FILES.
+	* libfs/src/imfs/imfs_load_tar.c: Add include <sys/types.h>. Add include
+	<sys/stat.h>. Add include <fcntl.h>.
+	* libfs/src/imfs/imfs_rmnod.c: Add include <stdlib.h>.
 
 2002-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -2443,6 +2902,38 @@
 	* score/include/rtems/seterr.h: Add do {..} while (0) in defines. Rename
 	set_errno_and_return_minus_one into rtems_set_errno_and_return_minus_one.
 	* libmisc/mw-fb/mw_uid.c: Apply rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_eval.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/memfile.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_readlink.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_unlink.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_link.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_chown.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/ioman.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_mount.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_directory.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_stat.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_fchmod.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_symlink.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_mknod.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/linearfile.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs_unmount.c: Include <rtems/seterr.h>. Apply
+	rtems_set_errno_and_return_minus_one.
+	* libfs/src/imfs/imfs.h: Apply rtems_set_errno_and_return_minus_one.
+	Comment out increment_and_check_linkcounts.
 
 2002-01-04	Joel Sherrill <joel@OARcorp.com>
 
@@ -2484,6 +2975,10 @@
 	* rtems/src/Makefile.am: Add multilib support.
 	* rtems/optman/Makefile.am: Add multilib support.
 
+2001-11-29	Victor V. Vengerov <vvv@oktet.ru>
+
+	* AVL trees implementation added.
+
 2001-11-28	Joel Sherrill <joel@OARcorp.com>,
 
 	PR 91
@@ -2493,6 +2988,14 @@
 	overrides this macro, it must provide a non-inlined function
 	implementation.
 
+2001-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libfs/wrapup/Makefile.am: Remove HAS_IMFS.
+
+2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libfs/src/imfs/Makefile.am: Cleanup.
+
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
 
 	* score/src/threadhandler.c: When __USE__MAIN__ is defined by the
@@ -2500,6 +3003,22 @@
 	by  Alexandra Kossovsky <sasha@oktet.ru> and  Victor V. Vengerov
 	<vvv@oktet.ru> in conjunction with a new set of tool RPMs
 	(gcc2.95.3newlib1.9.0-3).  This was tracked as GNATS PR tools/84.
+
+2001-11-16	Victor V. Vengerov <vvv@oktet.ru>
+
+	* libblock/include/rtems/bdbuf.h,
+	libblock/src/bdbuf.c(rtems_bdbuf_syncdev): New.
+
+2001-11-07	Victor V. Vengerov <vvv@oktet.ru>
+
+	* libblock/ChangeLog: New file.
+	* libblock/src/, libblock/include/, libblock/include/rtems/: New
+	directories.
+	* libblock/README, libblock/configure.ac, libblock/Makefile.am,
+	libblock/src/Makefile.am, libblock/include/Makefile.am: New files.
+	* libblock/include/rtems/bdbuf.h include/rtems/blkdev.h  
+	include/rtems/diskdevs.h include/rtems/ramdisk.h src/bdbuf.c
+	src/blkdev.c src/diskdevs.c src/ramdisk.c: New files.
 
 2001-11-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -2512,6 +3031,16 @@
 	* score/src/objectget.c, score/src/objectgetisr.c: Corrected procedure
 	for getting index from Id so it is correct and optimal for both single
 	and multiprocessor configurations.
+
+2001-11-07	Jennifer Averett <jennifer@OARcorp.com>
+
+	Reported by Ibragimov Ilya <ibr@oktet.ru> and tracked as PR49.
+	* libfs/ src/imfs/imfs_directory.c: Do not calculate the offset twice.
+
+2001-10-26	Victor V. Vengerov <vvv@oktet.ru>
+
+	* libfs/src/imfs/imfs_load_tar.c: Minor modification so this will
+	compile with gcc-2.95.3 with the arguments "-m5200 -O4".
 
 2001-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2594,6 +3123,8 @@
 	sapi/src/io.c: Added a device driver register/unregister interface to
 	allow device drivers to be installed and removed at runtime. This means
 	you do not need devices present in the device table when you build.
+	* libfs/imfs/imfs_load_tar.c: Changed the code around to remove an
+	internal compiler error on the Coldfire target.
 
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
@@ -2621,6 +3152,15 @@
 	* librpc/configure.in: Remove.
 	* librpc/configure.ac: New file, generated from configure.in by
 	autoupdate.
+	* libfs/.cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* libfs/configure.in: Remove.
+	* libfs/configure.ac: New file, generated from configure.in by
+	autoupdate.
+
+2001-10-10	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/imfs/imfs_getchild.c: Correct length of static string as
+	reported by Ibragimov Ilya <ibr@oktet.ru>.
 
 2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2647,6 +3187,7 @@
 	* libmisc/cpuuse/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* libmisc/rootfs/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* librpc/include/rpc/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libfs/src/imfs/Makefile.am: Use 'PREINSTALL_FILES ='.
 
 2001-09-28	Joel Sherrill <joel@OARcorp.com>
 
@@ -2691,6 +3232,8 @@
 	* posix/optman/Makefile.am: Adapt ASM4FLAGS to automake-1.5 happy.
 	* posix/src/Makefile.am: Adapt INCLUDES to make automake-1.5 happy.
 	* sapi/optman/Makefile.am: Adapt ASM4FLAGS to automake-1.5.
+	* libfs/src/imfs/Makefile.am: Revamp INCLUDES handling to make
+	automake-1.5 happy.
 
 2001-09-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -2808,6 +3351,13 @@
 	* libmisc/shell/pty.c: Moved to libnetworking/rtems_telnetd.
 	* libmisc/shell/Makefile.am, libmisc/shell/README, libmisc/shell/cmds.c,
 	libmisc/shell/shell.c, libmisc/shell/shell.h: Updates.
+	* libfs/src/imfs/imfs_eval.c: The CD_UP problem in imfs_eval has been
+	touched. The order of the questions is the key.
+
+2001-07-06	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* libfs/src/imfs/deviceio.c: Make sure errno gets set to reflect the
+	status from the driver.
 
 2001-06-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -2825,6 +3375,10 @@
 2001-05-25	Joel Sherrill <joel@OARcorp.com>
 
 	* libmisc/shell/cmds.c: Removed code from inappropriate source.
+	* libfs/src/imfs/imfs_initsupp.c: Create the root node with the desired
+	permissions.  Nodes should be created with the right permissions because
+	chmod() is not supported by the miniIMFS so changing after creation is
+	not possible.
 
 2001-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
 
@@ -2898,6 +3452,7 @@
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
 	* itron/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
 	* posix/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
+	* libfs/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
 
 2001-04-26	Joel Sherrill <joel@OARcorp.com>
 
@@ -2920,6 +3475,13 @@
 	_Objects_Compare_name_string was broken and a simple version using
 	strncmp() was substituted.
 
+2001-04-24	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/imfs/memfile.c (memfile_open): Did not set iop->size and
+	thus the value was incorrect.  Before this field was cleared, this
+	resulted in the value from the last time that IOP was used being still
+	in place.  Discovered by  Andrew Bythell <abythell@nortelnetworks.com>.
+
 2001-04-22	Joel Sherrill <joel@OARcorp.com>
 
 	* itron/src/task.c (_ITRON_Task_User_extensions): Add new fields to  be
@@ -2931,6 +3493,11 @@
 	that the driver is only initialized once.  Otherwise, it will abort when
 	the device /dev/null is present. (null_write): Do not dereference a NULL
 	pointer.
+	* libfs/src/imfs/imfs_debug.c (IMFS_print_jnode): Modified to print only
+	information that does not vary based on target or memory configuration. 
+	The old prints are still there in case they are needed in the future to
+	debug.  Printing target dependent addresses makes the test output vary
+	by target unnecessarily.
 
 2001-04-20	Fernando Ruiz Casas <correo@fernando-ruiz.com>
 
@@ -2961,6 +3528,11 @@
 	* rtems/src/tasks.c: Pre-initialized switch extension for list.
 	* rtems/macros/rtems/score/timer.inl: Corrected typo on end of line.
 
+2001-04-04	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/dosfs/Makefile.am: Per PR129 do not install as many files to
+	the $(includedir).
+
 2001-03-29	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR126, configuration structures now match docs.
@@ -2990,6 +3562,13 @@
 	unblocked. This makes sure that subsequent event send thinks the task is
 	still blocked and overwrites the initial events received.
 
+2001-03-23	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/imfs/memfile.c: Reapply fix from bug report from Jose
+	Sturniolo <jsturnio@nec.com.ar> where NULL pointer was dereferenced when
+	freeing a triply indirect file.   The fix was applied to the 4.5 release
+	branch and not the development branch.
+
 2001-03-19	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/sys/utsname.h: Added C++ wrapper.
@@ -3000,6 +3579,10 @@
 	* sapi/src/extensioncreate.c, sapi/src/extensiondelete.c,
 	sapi/src/extensionident.c: New files. src/Makefile.am: Modified to
 	reflect above.
+
+2001-03-01	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/imfs/.cvsignore: Added stamp-h1.in.
 
 2001-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3037,6 +3620,7 @@
 	libmisc/cpuuse/Makefile.am: Apply include_*HEADERS instead of H_FILES.
 	* librpc/include/rpc/Makefile.am: Apply include_*HEADERS instead of
 	H_FILES.
+	* libfs/src/imfs/Makefile.am: Apply include_*HEADERS instead of H_FILES.
 
 2001-01-31	Joel Sherrill <joel@OARcorp.com>
 
@@ -3106,6 +3690,13 @@
 
 	* ChangeLog: Deleted duplicate blank line.
 
+2001-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libfs/configure.in: Add src/imfs/config.h.
+	* libfs/src/imfs/Makefile.am: Add INCLUDES += -I. to pickup config.h.
+	* libfs/src/imfs/.cvsignore: Add config.h and stamp-h.
+	* libfs/src/imfs/*.c: Add config.h support.
+
 2001-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/inline/rtems/posix/mutex.inl (_POSIX_Mutex_Get_support):
@@ -3136,6 +3727,21 @@
 	an interval to a timespec -- it is actually a real number of
 	microseconds.
 	* posix/src/README.mqueue: Enhanced example.
+
+2001-01-12	Jake Janovetz <janovetz@uiuc.edu>
+
+	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_creat.c,
+	libfs/src/imfs/imfs_debug.c, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/imfs_handlers_memfile.c,
+	libfs/src/imfs/imfs_init.c, libfs/src/imfs/imfs_initsupp.c,
+	libfs/src/imfs/imfs_stat.c, libfs/src/imfs/memfile.c,
+	libfs/src/imfs/miniimfs_init.c: Final developmental update to "tarfs".
+	When rtems_tarfs_load() is called, it checks the permissions on each
+	file.  If there is write permission, it just creates a  standard file
+	using "creat()" and therefore, uses the IMFS MEMORY_FILE. If there is no
+	write permission, it creates a LINEAR_FILE node with the appropriate
+	properties.  If the permission is ever changed to writeable, IMFS_fchmod
+	converts it to a regular memory file.
 
 2001-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3178,6 +3784,20 @@
 	* score/include/rtems/score/isr.h, score/src/isr.c: Allocate it from the
 	workspace rather than explicitly declaring it.  This allows the size to
 	be a non-constant from the perspective of score/cpu.
+
+2000-12-12	Jake Janovetz <janovetz@uiuc.edu>
+
+	* libfs/ src/imfs/linearfile.c, libfs/src/imfs/imfs_load_tar.c: New
+	files.
+	* libfs/src/imfs/Makefile.am, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
+	libfs/src/imfs/imfs_eval.c, libfs/src/imfs/imfs_handlers_memfile.c,
+	libfs/src/imfs/imfs_init.c, libfs/src/imfs/imfs_initsupp.c,
+	libfs/src/imfs/imfs_stat.c, libfs/src/imfs/miniimfs_init.c: Added
+	"tarfs". This is not really a tar filesystem.  It is a way to load a tar
+	image into the IMFS but actually leave bulky file contents in the
+	original tar image.  It essentially adds the linear file type and
+	associated support and a loader routine.
 
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
@@ -3252,6 +3872,11 @@
 	_Semaphore_Get_interrupt_disable().
 	* libmisc/mw-fb/mw_uid.c: Removed unnecessary dependency on <bsp.h>.
 
+2000-11-28	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/imfs/memfile.c: Bug report from Sturniolo Jose
+	<jsturnio@nec.com.ar> where NULL pointer was dereferenced.
+
 2000-11-28	Chris Johns <ccj@acm.org>
 
 	* score/src/heapallocate.c: Do not allow the size to overflow when
@@ -3265,6 +3890,11 @@
 
 	* posix/src/sysconf.c: Add support for _SC_CLK_TCK and _SC_OPEN_MAX.
 
+2000-11-17	Jennifer Averret <jennifer@OARcorp.com>
+
+	* libfs/src/imfs/imfs_eval.c: Always return imaginary node at mount
+	points.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
@@ -3273,6 +3903,7 @@
 	* libmisc/Makefile.am: Use ... instead of RTEMS_TOPdir in
 	ACLOCAL_AMFLAGS.
 	* librpc/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+	* libfs/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3285,6 +3916,8 @@
 	$(RTEMS_TOPdir)/aclocal.
 	* librpc/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
 	$(RTEMS_TOPdir)/aclocal.
+	* libfs/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
 
 2000-11-02	Joel Sherrill <joel@OARcorp.com>
 
@@ -3294,6 +3927,26 @@
 	* score/include/rtems/system.h: Add prototypes for
 	POSIX_MP_NOT_IMPLEMENTED(), POSIX_NOT_IMPLEMENTED(),
 	POSIX_BOTTOM_REACHED() removed from newlib.
+
+2000-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/imfs/Makefile.am, libfs/src/imfs/deviceio.c,
+	libfs/src/imfs/imfs_chown.c, libfs/src/imfs/imfs_config.c,
+	libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
+	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/imfs_free.c,
+	libfs/src/imfs/imfs_fsunmount.c, libfs/src/imfs/imfs_gtkn.c,
+	libfs/src/imfs/imfs_init.c, libfs/src/imfs/imfs_initsupp.c,
+	libfs/src/imfs/imfs_link.c, libfs/src/imfs/imfs_mknod.c,
+	libfs/src/imfs/imfs_mount.c, libfs/src/imfs/imfs_readlink.c,
+	libfs/src/imfs/imfs_rmnod.c, libfs/src/imfs/imfs_stat.c,
+	libfs/src/imfs/imfs_symlink.c, libfs/src/imfs/imfs_unixstub.c,
+	libfs/src/imfs/imfs_unlink.c, libfs/src/imfs/imfs_unmount.c,
+	libfs/src/imfs/imfs_utime.c, libfs/src/imfs/ioman.c,
+	libfs/src/imfs/memfile.c, libfs/src/imfs/miniimfs_init.c: assoc.h,
+	error.h, libio_.h, libio.h, and libcsupport.h moved  from libc to
+	lib/include/rtems and now must be referenced as <rtems/XXX.h>.  Now we
+	do not have to reach up and over to libc to pick them up.
 
 2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3348,6 +4001,27 @@
 	* librpc/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
 	to GNU canonicalization.
 
+2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libfs/Makefile.am, libfs/configure.in:  Introduce GNU canonicalization
+	to libfs/. The approach is currently a bit of a hack as GNU
+	canonicalization does not support the per-BSP build some of the other
+	directories require.  As more of the tree is converted, this will become
+	less  of an issue.
+
+2000-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/src/imfs/imfs_config.c: New file containing IMFS configuration
+	information split from libc/base_fs.c.
+	* libfs/src/imfs/ioman.c: New file. Moved from lib/libc. Missed
+	previously.
+	* libfs/src/imfs/Makefile.am: Added imfs_config.c and ioman.c.
+
+2000-10-19	Joel Sherrill <joel@OARcorp.com>
+
+	* libfs/.cvsignore, libfs/src/.cvsignore, libfs/src/imfs/.cvsignore,
+	libfs/wrapup/.cvsignore: New files.
+
 2000-10-18	Nick Simon <Nick.SIMON@syntegra.bt.co.uk>
 
 	* score/src/heapgetinfo.c, score/include/rtems/score/heap.h,
@@ -3366,6 +4040,31 @@
 	rtems/include/rtems/rtems/types.h, rtems/src/Makefile.am: Added
 	region_get_information() and information control block.
 	* rtems/src/regiongetinfo.c: New file.
+
+2000-10-18	Chris Johns <ccj@acm.org>
+
+	* libfs created.
+	* libfs/src, libfs/src/imfs, libfs/wrapup: New directories.
+	* libfs/ChangeLog, libfs/Makefile.am, libfs/README, libfs/configure.in,
+	libfs/src/Makefile.am, libfs/wrapup/Makefile.am: New files.
+	* libfs/src/imfs/deviceio.c, libfs/src/imfs/imfs_getchild.c,
+	libfs/src/imfs/imfs_readlink.c, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_gtkn.c, libfs/src/imfs/imfs_rmnod.c,
+	libfs/src/imfs/imfs_chown.c, libfs/src/imfs/imfs_handlers_device.c,
+	libfs/src/imfs/imfs_stat.c, libfs/src/imfs/imfs_creat.c,
+	libfs/src/imfs/imfs_handlers_directory.c, libfs/src/imfs/imfs_symlink.c,
+	libfs/src/imfs/imfs_debug.c, libfs/src/imfs/imfs_handlers_link.c,
+	libfs/src/imfs/imfs_unixstub.c, libfs/src/imfs/imfs_directory.c,
+	libfs/src/imfs/imfs_handlers_memfile.c, libfs/src/imfs/imfs_unlink.c,
+	libfs/src/imfs/imfs_eval.c, libfs/src/imfs/imfs_init.c,
+	libfs/src/imfs/imfs_unmount.c, libfs/src/imfs/imfs_fchmod.c,
+	libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/imfs_utime.c,
+	libfs/src/imfs/imfs_fcntl.c, libfs/src/imfs/imfs_link.c,
+	libfs/src/imfs/memfile.c, libfs/src/imfs/imfs_fdatasync.c,
+	libfs/src/imfs/imfs_mknod.c, libfs/src/imfs/miniimfs_init.c,
+	libfs/src/imfs/imfs_free.c, libfs/src/imfs/imfs_mount.c,
+	libfs/src/imfs/imfs_fsunmount.c, libfs/src/imfs/imfs_ntype.c: New files.
+	Moved from libc.
 
 2000-10-12	Joel Sherrill <joel@OARcorp.com>
 
