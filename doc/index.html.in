@@ -295,6 +295,16 @@
                RTEMS AMD 29K Applications Supplement</A>
             </LI>
 
+        <LI><A HREF="../pdf/c4x.pdf">
+                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../ps/c4x.ps">
+                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../dvi/c4x.dvi">
+                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="supplements/c4x/index.html">
+               RTEMS TMS C4x Applications Supplement</A>
+            </LI>
+
         <LI><A HREF="HELP.html">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="HELP.html">

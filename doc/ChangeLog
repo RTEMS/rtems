@@ -1,5 +1,9 @@
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* index.html.in: Add c4x.
+
+2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add c4x.
 	* project.am: Add version.texi hack.
 
