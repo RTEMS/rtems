@@ -20,8 +20,9 @@ The directives provided by the clock manager are:
 @item @code{clock_getres} -
 @item @code{sleep} - Delay Process Execution
 @item @code{nanosleep} -
-@item @code{gettimeofday} -
-@item @code{time} -
+@item @code{gettimeofday} - Get the Time of Day
+@item @code{time} - Get time in seconds
+@item @code{times} - Get process times
 @end itemize
 
 @section Background
@@ -203,7 +204,7 @@ field.
 This call is interruptible by a signal.
 
 @page
-@subsection gettimeofday -
+@subsection gettimeofday - Get the Time of Day
 
 @subheading CALLING SEQUENCE:
 
@@ -219,16 +220,32 @@ int gettimeofday(
 
 @subheading STATUS CODES:
 
-On error, this routine returns -1 and sets errno as appropriate.
+On error, this routine returns -1 and sets @code{errno} as appropriate.
+
+@table @b
+@item EPERM
+@code{settimeofdat} is called by someone other than the superuser.
+
+@item EINVAL
+Timezone (or something else) is invalid.
+
+@item EFAULT
+One of @code{tv} or @code{tz} pointed outside your accessible address 
+space
+
+@end table
 
 @subheading DESCRIPTION:
 
+This routine returns the current time of day in the @code{tp} structure.
+
 @subheading NOTES:
 
-Currently, the timezone information is not supported.
+Currently, the timezone information is not supported.  The @code{tzp}
+argument is ignored.
 
 @page
-@subsection time -
+@subsection time - Get time in seconds
  
 @subheading CALLING SEQUENCE:
  
@@ -245,6 +262,49 @@ int time(
 This routine returns the number of seconds since the Epoch.
 
 @subheading DESCRIPTION:
+
+@code{time} returns the time since 00:00:00 GMT, January 1, 1970, 
+measured in seconds
+
+If @code{tloc} in non null, the return value is also stored in the 
+memory pointed to by @code{t}.
+ 
+@subheading NOTES:
+
+NONE
+ 
+@page
+@subsection times - Get process times
+ 
+@subheading CALLING SEQUENCE:
+ 
+@example
+#include <sys/time.h>
+ 
+int time(
+  clock_t times(struct tms *buf
+);
+@end example
+ 
+@subheading STATUS CODES:
+
+This routine returns the process times
+
+@subheading DESCRIPTION:
+
+@code{times} stores the current process times in @code{buf}.
+
+@code{struct tms} is as defined in @code{/usr/include/sys/times.h}:
+
+struct  tms  {
+             clock_t tms_utime;  /* user time */
+             clock_t tms_stime;  /* system time */
+             clock_t tms_cutime; /* user time of children */
+             clock_t tms_cstime; /* system time of children */
+             };
+
+@code{times} returns the number of clock ticks that have elapsed
+since the systm has been up.
  
 @subheading NOTES:
 
