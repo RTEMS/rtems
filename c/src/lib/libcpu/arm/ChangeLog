@@ -1,0 +1,4 @@
+2004-07-15	Jay Monkman
+
+	* .cvsignore, ChangeLog, Makefile.am, configure.ac: New files.
+
