@@ -146,7 +146,7 @@ rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority)
 		if (i == 0)
 			rtems_panic ("EOF");
 		if (i < 0) {
-			if (errno == EWOULDBLOCK)
+			if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
 				continue;
 			rtems_panic ("Can't receive: %s", strerror (errno));
 		}
