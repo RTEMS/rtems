@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
 transform =
 bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests
-bsptools_bin_SCRIPTS = psim runtest
+bsptools_bin_SCRIPTS = psim psim-gdb runtest
 
 ## HACK: install to build-tree
 all-local: $(TMPINSTALL_FILES)
