@@ -1,3 +1,8 @@
+2001-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* macros/Makefile.am: Replace INLINES w/ MACROS (Fix stupid typo in
+	previous patch).
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/Makefile.am: Remove.

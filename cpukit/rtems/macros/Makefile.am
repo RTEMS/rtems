@@ -11,7 +11,7 @@ $(PROJECT_INCLUDE)/rtems/rtems:
 $(PROJECT_INCLUDE)/%: %
 	$(INSTALL_DATA) $< $@
 
-if INLINE
+if MACROS
 include_rtems_rtems_HEADERS = rtems/rtems/asr.inl rtems/rtems/attr.inl \
     rtems/rtems/dpmem.inl rtems/rtems/event.inl rtems/rtems/eventset.inl \
     rtems/rtems/message.inl rtems/rtems/modes.inl rtems/rtems/options.inl \
