@@ -37,6 +37,7 @@ usage:    unhex [-va] [ -o file ] [ file [file ... ] ]\n\
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <errno.h>
 
 #include "config.h"
 
@@ -96,7 +97,6 @@ u32 FFfill = 0L;                       /* how far to fill w 0xFF's */
 
 extern char *optarg;                    /* getopt(3) control vars */
 extern int optind;
-extern int errno;
 
 char *progname;                         /* for error() */
 

@@ -34,6 +34,7 @@ maximum line length.  The default maximum line length is 80.\n\
 #include <string.h>
 #include <memory.h>
 #include <stdarg.h>
+#include <errno.h>
 
 #include "config.h"
 
@@ -85,7 +86,6 @@ int line_length = 80;                   /* maximum allowable line length */
 
 extern char *optarg;                    /* getopt(3) control vars */
 extern int optind, opterr;
-extern int errno;
 
 char *progname;                         /* for error() */
 

@@ -29,6 +29,7 @@ Strip the white space from the end of every line on the list of files.\n\
 #include <string.h>
 #include <memory.h>
 #include <stdarg.h>
+#include <errno.h>
 
 #include "config.h"
 
@@ -78,7 +79,6 @@ int test_only = FALSE;                  /* test only */
 
 extern char *optarg;                    /* getopt(3) control vars */
 extern int optind, opterr;
-extern int errno;
 
 char *progname;                         /* for error() */
 
