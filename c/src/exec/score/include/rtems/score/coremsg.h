@@ -20,6 +20,7 @@
 extern "C" {
 #endif
 
+#include <limits.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/priority.h>
@@ -76,12 +77,11 @@ typedef enum {
  *  NOTE:  All other values are message priorities.  Numerically smaller
  *         priorities indicate higher priority messages.
  *
- *  XXX these constants should be changed to be compiler dependent.
  */
- 
-#define  CORE_MESSAGE_QUEUE_SEND_REQUEST   0x7fffffff
-#define  CORE_MESSAGE_QUEUE_URGENT_REQUEST -(0x7fffffff)
 
+#define  CORE_MESSAGE_QUEUE_SEND_REQUEST   INT_MAX
+#define  CORE_MESSAGE_QUEUE_URGENT_REQUEST INT_MIN
+ 
 typedef int CORE_message_queue_Submit_types;
 
 /*
@@ -251,12 +251,13 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  */
  
 void _CORE_message_queue_Seize(
-  CORE_message_queue_Control *the_message_queue,
-  Objects_Id                  id,
-  void                       *buffer,
-  unsigned32                 *size,
-  boolean                     wait,
-  Watchdog_Interval           timeout
+  CORE_message_queue_Control      *the_message_queue,
+  Objects_Id                       id,
+  void                            *buffer,
+  unsigned32                      *size,
+  boolean                          wait,
+  CORE_message_queue_Submit_types *priority,
+  Watchdog_Interval                timeout
 );
 
 #ifndef __RTEMS_APPLICATION__
