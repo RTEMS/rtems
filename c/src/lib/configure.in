@@ -100,6 +100,10 @@ fi
 
 if test "$HAS_MP" = "yes"; then
   makefiles="$makefiles libbsp/shmdr/Makefile"
+else
+  # HACK: sed out shmsupp/Makefile from makefiles
+  t="libbsp/$bspcpudir$bspdir/shmsupp"
+  makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
 fi
 
 AM_CONDITIONAL(UNIX,test "$RTEMS_CPU" = "unix")
@@ -118,13 +122,11 @@ changequote([,])dnl
 esac
 
 # If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
-AC_MSG_CHECKING([if networking is enabled? ])
-AC_MSG_RESULT($RTEMS_HAS_NETWORKING)
-if test "$RTEMS_HAS_NETWORKING" = "yes"; then
+if test "$HAS_NETWORKING" = "yes"; then
   RTEMS_CHECK_MAKEFILE(libnetworking)
   RTEMS_CHECK_MAKEFILE(librpc)
 
-  if test "$RTEMS_HAS_RDBG" = "yes"; then
+  if test "$HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
 
     if test "$HAS_RDBG" = "yes"; then
@@ -144,7 +146,7 @@ if test "$RTEMS_HAS_NETWORKING" = "yes"; then
 fi
 
 # If the C++ support is enabled, then include the Makefiles
-if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+if test "$HAS_CPLUSPLUS" = "yes"; then
   RTEMS_CHECK_MAKEFILE(librtems++)
 fi
 
@@ -175,7 +177,11 @@ AC_SUBST(CC_CFLAGS_PROFILE_V)
 AC_SUBST(CC_LDFLAGS_PROFILE_V)
 
 # pick up all the Makefiles in required parts of the tree
+if test "$RTEMS_CPU" != "unix"; then
+## HACK: Suppress libchip for unix
 RTEMS_CHECK_MAKEFILE(libchip)
+fi
+
 RTEMS_CHECK_MAKEFILE(libmisc)
 
 AC_CONFIG_SUBDIRS($bsptools_cfgdirs)

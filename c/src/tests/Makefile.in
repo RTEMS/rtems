@@ -101,7 +101,7 @@ VERSION = @VERSION@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS = support @subdirs@
+SUBDIRS = @subdirs@
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../../mkinstalldirs
 CONFIG_CLEAN_FILES = 

@@ -1018,18 +1018,17 @@ AC_DEFUN(RTEMS_CHECK_CXX,
 [dnl
 AC_REQUIRE([RTEMS_CHECK_CPU])dnl
 AC_REQUIRE([RTEMS_PROG_CXX_FOR_TARGET])dnl
-AC_CACHE_VAL(rtems_cv_HAS_CPLUSPLUS,
-  [dnl
-    if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+AC_CACHE_CHECK([whether to build rtems++],
+  rtems_cv_HAS_CPLUSPLUS,
+  [ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
       if test -n "$CXX_FOR_TARGET"; then
-        rtems_cv_HAS_CPLUSPLUS="yes";
+        rtems_cv_HAS_CPLUSPLUS="yes"
       else
-        rtems_cv_HAS_CPLUSPLUS="no";
+        rtems_cv_HAS_CPLUSPLUS="no"
       fi
     else
-      rtems_cv_HAS_CPLUSPLUS="no";
-    fi
-  ])dnl
+      rtems_cv_HAS_CPLUSPLUS="no"
+    fi])
 HAS_CPLUSPLUS="$rtems_cv_HAS_CPLUSPLUS";
 AC_SUBST(HAS_CPLUSPLUS)dnl
 ])
@@ -1039,15 +1038,26 @@ dnl
 AC_DEFUN(RTEMS_CHECK_NETWORKING,
 [dnl
 AC_REQUIRE([RTEMS_CHECK_CPU])dnl
-AC_CACHE_VAL(rtems_cv_HAS_NETWORKING,
+AC_CACHE_CHECK([whether BSP supports networking],
+  rtems_cv_HAS_NETWORKING,
   [dnl
-    if test "$RTEMS_HAS_NETWORKING" = "yes"; then
-      rtems_cv_HAS_NETWORKING="yes";
-    else
-      rtems_cv_HAS_NETWORKING="no";
-    fi
-  ])dnl
-HAS_NETWORKING="$rtems_cv_HAS_NETWORKING";
+    case "$RTEMS_CPU" in
+    unix*)
+      rtems_cv_HAS_NETWORKING="no"
+      ;;
+    *)
+      if test "${RTEMS_HAS_NETWORKING}" = "yes"; then
+        rtems_cv_HAS_NETWORKING="yes";
+      else
+        rtems_cv_HAS_NETWORKING="disabled";
+      fi
+      ;;
+    esac])
+if test "$rtems_cv_HAS_NETWORKING" = "yes"; then
+  HAS_NETWORKING="yes";
+else
+  HAS_NETWORKING="no";
+fi
 AC_SUBST(HAS_NETWORKING)dnl
 ])
 
