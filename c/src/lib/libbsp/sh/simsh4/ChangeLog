@@ -1,3 +1,18 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* console/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* start/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* startup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* timer/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tools/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.
