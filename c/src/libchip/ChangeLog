@@ -1,3 +1,10 @@
+2003-03-27	Joel Sherrill <joel@OARcorp.com>
+
+	* ide/Makefile.am: ATA code depends upon libchip/ide which is not
+	allowed in the cpukit source code since it must be buildable
+	independent of any BSP. These files were moved to libchip/ide.
+	* ide/ata.c, ide/ata.h, ide/ata_internal.h: New files.
+
 2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 368/filesystems
