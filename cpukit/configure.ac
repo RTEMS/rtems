@@ -133,7 +133,7 @@ AS_IF([cmp -s score/include/rtems/score/cpuopts.h $tmp/config.h 2>/dev/null],
    mv $tmp/config.h score/include/rtems/score/cpuopts.h])
 ])
 
-AC_ENABLE_MULTILIB([Makefile],[..])
+AM_ENABLE_MULTILIB([Makefile],[..])
 
 ## HACK: Add a define to cpuopts.h to indicate using multilibs
 ## Can be applied to produce compiler errors if using

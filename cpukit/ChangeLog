@@ -1,3 +1,11 @@
+2003-07-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/multi.m4: Don't add --enable-multilib.
+	Rename AC_ENABLE_MULTILIB into AM_ENABLE_MULTILIB.
+	Increment serial to 103 (automake's multi.m4 version + 100).
+	* configure.ac: Use AM_ENABLE_MULTILIB instead of
+	AC_ENABLE_MULTILIB.
+
 2003-07-03	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-4.6.0pre4.
