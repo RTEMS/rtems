@@ -105,7 +105,7 @@ Otherwise both CPU dependent code and the BSP will have to be written.
 This type of development often requires specialized skills.  If
 you need help in making these modifications to RTEMS, please
 consider using one of the RTEMS Service Providers.  The current
-list of these is at @uref(http://www.rtems.com/support.html}.
+list of these is at @uref{@value{RTEMSHTTPURL}/support.html}.
 
 @section CPU Dependent Executive Files
 

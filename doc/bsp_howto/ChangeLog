@@ -1,3 +1,9 @@
+2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+
+	* bsp_howto.texi: include common/rtems.texi.
+	* Makefile.am: Reflect changes to $(top_srcdir)/project.am.
+	* target.t: Use RTEMSHTTPURL instead of www.rtems.com.
+
 2003-05-21	Ralf corsepius <corsepiu@faw.uni-ulm.de>
 
 	* adaintr.t, ata.t, ide-ctrl.t, target.t: Various typo-fixes, Update
