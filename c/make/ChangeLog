@@ -1,3 +1,8 @@
+2001-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Remove rtems_cv_prog_cc_cross reference.
+	* target.cfg.in: Delete commented out lines regarding obsolete lines.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
