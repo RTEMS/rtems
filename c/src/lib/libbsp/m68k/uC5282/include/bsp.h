@@ -67,10 +67,22 @@ extern rtems_configuration_table BSP_Configuration;
 
 /* functions */
 
+typedef struct {
+    unsigned int l;
+    void        *v;
+} bsp_mnode_t;
+
+#define RTEMS_BSP_PGM_ERASE_FIRST   0x1
+#define RTEMS_BSP_PGM_RESET_AFTER   0x2
+#define RTEMS_BSP_PGM_EXEC_AFTER    0x4
+#define RTEMS_BSP_PGM_HALT_AFTER    0x8
+
 uint32_t bsp_get_CPU_clock_speed(void);
 rtems_status_code bsp_allocate_interrupt(int level, int priority);
-unsigned const char *uC5282_gethwaddr(int a);
-const char *uC5282_getbenv(const char *a);
+int bsp_reset(int flags);
+int bsp_program(bsp_mnode_t *chain, int flags);
+unsigned const char *bsp_gethwaddr(int a);
+const char *bsp_getbenv(const char *a);
 
 void bsp_cleanup(void);
 

@@ -808,7 +808,7 @@ rtems_fec_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching )
     if (config->hardware_address) {
         hwaddr = config->hardware_address;
     }
-    else if ((hwaddr = uC5282_gethwaddr(unitNumber - 1)) == NULL) {
+    else if ((hwaddr = bsp_gethwaddr(unitNumber - 1)) == NULL) {
         /* Locally-administered address */
         static const char defaultAddress[ETHER_ADDR_LEN] = {
                                             0x06, 'R', 'T', 'E', 'M', 'S'};
