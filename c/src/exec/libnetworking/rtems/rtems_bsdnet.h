@@ -135,5 +135,6 @@ struct rtems_bsdnet_config {
 extern struct rtems_bsdnet_config rtems_bsdnet_config;
 int rtems_bsdnet_initialize_network (void);
 void rtems_bsdnet_do_bootp (void);
+int rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority);
 
 #endif /* _RTEMS_BSDNET_ */

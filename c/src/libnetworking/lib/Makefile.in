@@ -17,7 +17,7 @@ LIBNAME = lib.a
 LIB = ${ARCH}/${LIBNAME}
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES = getprotoby syslog tftpDriver
+C_PIECES = getprotoby rtems_bsdnet_ntp syslog tftpDriver
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

@@ -730,7 +730,7 @@ processOptions (unsigned char *optbuf, int optbufSize)
       dhcp_gotnetmask = 1;
       break;
 
-    case 2:    /* Time offset */
+    case 2:
       /* Time offset */
       if (len!=4) 
         panic("bootpc: time offset len is %d",len);
@@ -748,14 +748,8 @@ processOptions (unsigned char *optbuf, int optbufSize)
       }
       break;
 
-    /*
-     * Some old BOOTP daemons don't support the NTP server (42) tag,
-     * but do support the RFC 868 time server (4) tag.  Cheat here
-     * and assume they mean the same thing.
-     */
-    case 4:
     case 42:
-      /* Time servers */
+      /* NTP servers */
       if (len % 4) 
         panic ("bootpc: time server Len is %d", len);
       {
