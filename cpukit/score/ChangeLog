@@ -1,6 +1,12 @@
 
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
+	* src/coremutexsurrender.c: Use holder thread not executing
+	thread because even though they may and often are the same
+	it is not guaranteed unless the proper attribute is set.
+
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
 	* include/rtems/score/coremsg.h, src/coremsgsubmit.c: Add a new
 	return status to account for blocking sends.  Otherwise, the
 	caller will think that the returned message status will have
