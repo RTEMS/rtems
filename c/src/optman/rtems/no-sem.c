@@ -35,7 +35,7 @@ rtems_status_code rtems_semaphore_create(
   uint32_t              count,
   rtems_attribute       attribute_set,
   rtems_task_priority   priority_ceiling,
-  Objects_Id           *id
+  rtems_id             *id
 )
 {
   _Internal_error_Occurred(
@@ -49,7 +49,7 @@ rtems_status_code rtems_semaphore_create(
 rtems_status_code rtems_semaphore_ident(
   rtems_name    name,
   uint32_t      node,
-  Objects_Id   *id
+  rtems_id     *id
 )
 {
   _Internal_error_Occurred(
@@ -61,7 +61,7 @@ rtems_status_code rtems_semaphore_ident(
 }
 
 rtems_status_code rtems_semaphore_delete(
-  Objects_Id id
+  rtems_id   id
 )
 {
   _Internal_error_Occurred(
@@ -73,8 +73,8 @@ rtems_status_code rtems_semaphore_delete(
 }
 
 rtems_status_code rtems_semaphore_obtain(
-  Objects_Id        id,
-  uint32_t          option_set,
+  rtems_id       id,
+  uint32_t       option_set,
   rtems_interval timeout
 )
 {
@@ -87,7 +87,7 @@ rtems_status_code rtems_semaphore_obtain(
 }
 
 rtems_status_code rtems_semaphore_release(
-  Objects_Id id
+  rtems_id   id
 )
 {
   _Internal_error_Occurred(

@@ -1,5 +1,9 @@
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* optman/rtems/no-sem.c: Semaphores are rtems_id not Object_id.
+
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems_servers/ftp.c, 
 	libnetworking/rtems_servers/ftp.h,
 	libnetworking/rtems_servers/Makefile.am: 
