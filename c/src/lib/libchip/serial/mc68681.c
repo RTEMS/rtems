@@ -35,7 +35,7 @@ console_fns mc68681_fns =
 {
   libchip_serial_default_probe,   /* deviceProbe */
   mc68681_open,                   /* deviceFirstOpen */
-  mc68681_flush,                  /* deviceLastClose */
+  NULL,                           /* deviceLastClose */
   NULL,                           /* deviceRead */
   mc68681_write_support_int,      /* deviceWrite */
   mc68681_initialize_interrupts,  /* deviceInitialize */
@@ -293,6 +293,7 @@ MC68681_STATIC void mc68681_initialize_context(
     if ( Console_Port_Tbl[port].ulCtrlPort1 == pMC68681 && 
          Console_Port_Tbl[port].ulCtrlPort2 != pMC68681_port ) {
       pmc68681Context->mate = port;
+      pmc68681Context->imr  = 0;
       break;
     }
   }
@@ -328,23 +329,23 @@ MC68681_STATIC void mc68681_init(int minor)
    *  Reset everything and leave this port disabled.
    */
 
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_RX );
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_TX );
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_ERROR );
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_BREAK );
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_STOP_BREAK );
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_TX );
-  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_RX );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_RX );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_TX );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_ERROR );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_BREAK );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_STOP_BREAK );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_TX );
+  (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_RX );
 
 
-  (*setReg)( pMC68681, MC68681_MODE_REG_1A, 0x00 );
-  (*setReg)( pMC68681, MC68681_MODE_REG_2A, 0x02 );
+  (*setReg)( pMC68681_port, MC68681_MODE_REG_1A, 0x00 );
+  (*setReg)( pMC68681_port, MC68681_MODE_REG_2A, 0x02 );
 
   /*
    *  Disable interrupts on RX and TX for this port
    */
 
-  (*setReg)( pMC68681, MC68681_INTERRUPT_MASK_REG, mc68681_build_imr(minor, 0));
+  mc68681_enable_interrupts( minor, MC68681_IMR_DISABLE_ALL );
 }
 
 /*
@@ -498,7 +499,8 @@ MC68681_STATIC rtems_isr mc68681_isr(
   int     minor;
 
   for(minor=0 ; minor<Console_Port_Count ; minor++) {
-    if(vector == Console_Port_Tbl[minor].ulIntVector) {
+    if(Console_Port_Tbl[minor].ulIntVector == vector && 
+       Console_Port_Tbl[minor].deviceType == SERIAL_MC68681 ) {
       mc68681_process(minor);
     }
   }
@@ -513,8 +515,10 @@ MC68681_STATIC rtems_isr mc68681_isr(
  *  NOTE:  This is the "interrupt mode" close entry point.
  */
 
+/* XXX remove me */
 MC68681_STATIC int mc68681_flush(int major, int minor, void *arg)
 {
+#if 0
   while(!Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
     /*
      * Yield while we wait
@@ -526,30 +530,8 @@ MC68681_STATIC int mc68681_flush(int major, int minor, void *arg)
 
   mc68681_close(major, minor, arg);
 
+#endif
   return(RTEMS_SUCCESSFUL);
-}
-
-/*
- *  mc68681_enable_interrupts
- *
- *  This function initializes the hardware for this port to use interrupts.
- */
-
-MC68681_STATIC void mc68681_enable_interrupts(
-  int minor
-)
-{
-  unsigned32            pMC68681;
-  setRegister_f         setReg;
-
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
-
-  /*
-   *  Enable interrupts on RX and TX -- not break
-   */
-
-  (*setReg)( pMC68681, MC68681_INTERRUPT_MASK_REG, mc68681_build_imr(minor, 1));
 }
 
 /*
@@ -563,13 +545,11 @@ MC68681_STATIC void mc68681_initialize_interrupts(int minor)
 {
   mc68681_init(minor);
 
-  Ring_buffer_Initialize(&Console_Port_Data[minor].TxBuffer);
-
   Console_Port_Data[minor].bActive = FALSE;
 
   set_vector(mc68681_isr, Console_Port_Tbl[minor].ulIntVector, 1);
 
-  mc68681_enable_interrupts(minor);
+  mc68681_enable_interrupts(minor,MC68681_IMR_ENABLE_ALL_EXCEPT_TX);
 }
 
 /* 
@@ -584,52 +564,30 @@ MC68681_STATIC int mc68681_write_support_int(
   int         len
 )
 {
-  int i;
-  unsigned32 Irql;
+  unsigned32      Irql;
+  unsigned32      pMC68681_port;
+  setRegister_f   setReg;
 
-  for(i=0 ; i<len ;) {
-    if(Ring_buffer_Is_full(&Console_Port_Data[minor].TxBuffer)) {
-      if(!Console_Port_Data[minor].bActive) {
-        /*
-         * Wake up the device
-         */
-        rtems_interrupt_disable(Irql);
-        Console_Port_Data[minor].bActive = TRUE;
-        mc68681_process(minor);
-        rtems_interrupt_enable(Irql);
-      } else {
-        /*
-         * Yield
-         */
-        rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-      }
-
-      /*
-       * Wait for ring buffer to empty
-       */
-      continue;
-    }
-    else {
-      Ring_buffer_Add_character( &Console_Port_Data[minor].TxBuffer, buf[i]);
-      i++;
-    }
-  }
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor].setRegister;
 
   /*
-   * Ensure that characters are on the way
+   *  We are using interrupt driven output and termios only sends us one character
+   *  at a time.
    */
 
-  if(!Console_Port_Data[minor].bActive) {
-    /*
-     * Wake up the device
-     */
-    rtems_interrupt_disable(Irql);
-    Console_Port_Data[minor].bActive = TRUE;
-    mc68681_process(minor);
-    rtems_interrupt_enable(Irql);
-  }
+  if ( !len )
+    return 0;
 
-  return (len);
+  /*
+   * Wake up the device
+   */
+  rtems_interrupt_disable(Irql);
+    Console_Port_Data[minor].bActive = TRUE;
+    (*setReg)(pMC68681_port, MC68681_TX_BUFFER, *buf);
+    mc68681_enable_interrupts(minor, MC68681_IMR_ENABLE_ALL);
+  rtems_interrupt_enable(Irql);
+  return 1;
 }
 
 /* 
@@ -807,29 +765,13 @@ MC68681_STATIC void mc68681_process(
    *  Deal with the transmitter
    */
 
-  while(TRUE) {
-    if(Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
-      Console_Port_Data[minor].bActive = FALSE;
+  ucLineStatus = (*getReg)(pMC68681, MC68681_INTERRUPT_STATUS_REG);
+  if (pMC68681 != pMC68681_port)
+    ucLineStatus >>= 4;
 
-      /*
-       * There is no data to transmit
-       */
-      break;
-    }
-
-    ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
-    if(!(ucLineStatus & (MC68681_TX_EMPTY|MC68681_TX_READY))) {
-      /*
-       *  We'll get another interrupt when the TX can take another character.
-       */
-      break;
-    }
-
-    Ring_buffer_Remove_character( &Console_Port_Data[minor].TxBuffer, cChar);
-    /*
-     * transmit character
-     */
-    (*setReg)(pMC68681_port, MC68681_TX_BUFFER, cChar);
+  if(ucLineStatus & MC68681_IR_TX_READY) {
+    mc68681_enable_interrupts(minor, MC68681_IMR_ENABLE_ALL_EXCEPT_TX);
+    rtems_termios_dequeue_characters(Console_Port_Data[minor].termios_data, 1);
   }
 
 }
@@ -848,49 +790,79 @@ MC68681_STATIC unsigned int mc68681_build_imr(
 )
 {
   int              mate;
+  int              is_a;
   unsigned int     mask;
   unsigned int     mate_mask;
   unsigned int     pMC68681;
   unsigned int     pMC68681_port;
   mc68681_context *pmc68681Context;
+  mc68681_context *mateContext;
   
   pMC68681        = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port   = Console_Port_Tbl[minor].ulCtrlPort2;
   pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
   mate            = pmc68681Context->mate;
 
+  mask = 0;
   mate_mask = 0;
 
+  is_a = (pMC68681 == pMC68681_port);
+ 
   /*
-   *  Decide if the other port on this DUART is using interrupts
+   *  If there is a mate for this port, get its IMR mask.
    */
 
   if ( mate != -1 ) {
-    if ( Console_Port_Tbl[mate].pDeviceFns->deviceOutputUsesInterrupts )
-      mate_mask = 0x03;
-
-    /*
-     *  If equal, then minor is A so the mate must be B
-     */
-
-    if ( pMC68681 == pMC68681_port )
-      mate_mask <<= 4;
+    mateContext = Console_Port_Data[mate].pDeviceContext;
+    
+    if (mateContext)
+      mate_mask = mateContext->imr;
   }
 
   /*
-   *  Add in minor's mask
+   *  Calculate this port's IMR mask and save it in the context area.
    */
 
-  mask = 0;
-  if ( enable_flag ) {
-    if ( Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts ) {
-      if ( pMC68681 == pMC68681_port )
-         mask = 0x03;
-      else
-         mask = 0x30;
-    }
-  }
+  if ( Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts )
+    mask = enable_flag;
 
-  return mask | mate_mask;
+  pmc68681Context->imr = mask;
+
+  /*
+   *  Now return the full IMR value
+   */
+
+  if (is_a)
+    return (mate_mask << 4) | mask;
+
+  return (mask << 4) | mate_mask;
+}
+
+/*
+ *  mc68681_enable_interrupts
+ *
+ *  This function initializes the hardware for this port to use interrupts.
+ */
+
+MC68681_STATIC void mc68681_enable_interrupts(
+  int minor,
+  int imr_mask
+)
+{
+  unsigned32            pMC68681;
+  setRegister_f         setReg;
+
+  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
+  setReg   = Console_Port_Tbl[minor].setRegister;
+
+  /*
+   *  Enable interrupts on RX and TX -- not break
+   */
+
+  (*setReg)(
+     pMC68681,
+     MC68681_INTERRUPT_MASK_REG,
+     mc68681_build_imr(minor, imr_mask)
+  );
 }
 
