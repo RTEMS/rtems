@@ -1,5 +1,22 @@
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/enable-itron.m4: Remove changequotes (autoconf-2.49b).
+	* aclocal/enable-posix.m4: Remove changequotes (autoconf-2.49b), use
+	$host instead of $target (BUG-FIX).
+	* configure.in: Use $target and $host instead of $target_alias and
+	$host_alias (autoconf-2.49b).
+	* aclocal/check-newlib.m4: Remove CC_FOR_TARGET (BUG-FIX)
+	* aclocal/sysv-ipc.m4: Move AC_DEFINE outside of AC_CACHE (BUG-FIX)
+
+	NOTES:
+	* autoconf-2.49b depredicates using changequotes.
+	* The changes to configure.in are due to cleanups in
+	autoconf-2.49b's implemention of canonicalization. With
+	autoconf-2.1x it wasn't always clear, when to use $xxx or
+	$xxx_alias. Now this is clear.
+
+2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

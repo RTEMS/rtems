@@ -27,10 +27,10 @@ AC_CACHE_CHECK([whether $RTEMS_HOST defines union semun],
 [union semun arg ;],
 [rtems_cv_HAS_UNION_SEMUN="yes"],
 [rtems_cv_HAS_UNION_SEMUN="no"])
-
+])
 if test "$rtems_cv_HAS_UNION_SEMUN" = "yes"; then
     AC_DEFINE(HAS_UNION_SEMUN)
-fi])
+fi
 ])
 
 AC_DEFUN(RTEMS_SYSV_SEM,

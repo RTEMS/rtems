@@ -7,8 +7,6 @@ AC_REQUIRE([RTEMS_CANONICALIZE_TOOLS])dnl
 AC_CACHE_CHECK([for newlib],
   rtems_cv_use_newlib,
   [
-    rtems_save_CC=$CC
-
 dnl some versions of newlib provide not_required_by_rtems
     AC_TRY_LINK(
       [extern void not_required_by_rtems() ;],
@@ -23,7 +21,7 @@ dnl some versions of newlib provide rtems_provides_crt0()
         rtems_cv_use_newlib="yes",
         rtems_cv_use_newlib="no")
     fi
-  CC=$rtems_save_CC])
+  ])
 RTEMS_USE_NEWLIB="$rtems_cv_use_newlib"
 AC_SUBST(RTEMS_USE_NEWLIB)
 
@@ -33,4 +31,3 @@ then
   AC_DEFINE_UNQUOTED(MALLOC_PROVIDED,1,[if malloc is provided])
 fi
 ])
-

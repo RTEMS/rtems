@@ -74,13 +74,13 @@ targargs=`echo "${ac_configure_args}" | \
             -e 's/--bu[a-z-]*=[^ 	]*//' \
             -e 's/--ta[a-z-]*=[^ 	]*//'`;
 
-targargs="--host=${target_alias} --build=${build_alias} ${targargs}"
+targargs="--host=${target_alias} --build=${build} ${targargs}"
 AC_SUBST(targargs)
 
 target_subdir=${target_alias}
 
 changequote(,)dnl
-if test $target_alias = $host_alias; 
+if test $target = $host; 
 then
   HOST_SUBDIRS="$configdirs $target_configdirs"
   TARGET_SUBDIRS=""
@@ -91,7 +91,7 @@ else
 fi
 changequote([,])dnl
 
-if test $host_alias = $build_alias;
+if test $host = $build;
 then
   HOST_SUBDIRS="$build_tools $HOST_SUBDIRS"
 else
@@ -113,7 +113,7 @@ doc/Makefile)
 
 if test "$no_recursion" != yes; then
 
- if test $target_alias != $host_alias; then
+ if test $target != $host; then
   # Remove --srcdir arguments so they do not pile up.
   ac_sub_configure_args=
   ac_prev=
@@ -207,7 +207,7 @@ changequote([, ])dnl
   done
  fi
 
- if test $build_alias != $host_alias; then
+ if test $build != $host; then
   # Remove --srcdir arguments so they do not pile up.
   ac_sub_configure_args=
   ac_prev=
@@ -262,7 +262,7 @@ changequote([, ])dnl
       ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
     esac
 
-    # Check for guested configure; otherwise get Cygnus style configure.
+    # Check for configure
     if test -f $ac_sub_srcdir/configure; then
       ac_sub_configure=$ac_sub_srcdir/configure
     else
@@ -289,7 +289,7 @@ changequote([, ])dnl
       if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure \
 	$ac_sub_configure_args --srcdir=$ac_sub_srcdir \
 	--cache-file=$ac_sub_cache_file \
-        --build=$build_alias --host=$build_alias
+        --build=$build --host=$build
       then :
       else
         AC_MSG_ERROR($ac_sub_configure failed for $ac_config_dir)
