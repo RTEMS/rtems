@@ -1,3 +1,7 @@
+2003-09-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Remove *lib:.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, console/console.c, include/bsp.h, shmsupp/addrconv.c,
