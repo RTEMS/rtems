@@ -1,4 +1,8 @@
 
+2001-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/genmongossev.cfg: New file.
+
 2001-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/pc386dx.cfg: New bsp.
