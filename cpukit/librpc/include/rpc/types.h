@@ -37,6 +37,8 @@
 #ifndef _RPC_TYPES_H
 #define _RPC_TYPES_H
 
+#include <rtems/stdint.h>
+
 #define	bool_t	int32_t
 #define	enum_t	int32_t
 #define __dontcare__	-1

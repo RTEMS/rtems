@@ -84,9 +84,9 @@ void	svc_getreq();
  * Create a client handle for memory based rpc.
  */
 CLIENT *
-clntraw_create(prog, vers)
-	u_long prog;
-	u_long vers;
+clntraw_create(
+	u_long prog,
+	u_long vers )
 {
 	register struct clnt_raw_private *clp = clntraw_private;
 	struct rpc_msg call_msg;
@@ -127,14 +127,14 @@ clntraw_create(prog, vers)
 }
 
 static enum clnt_stat
-clntraw_call(h, proc, xargs, argsp, xresults, resultsp, timeout)
-	CLIENT *h;
-	u_long proc;
-	xdrproc_t xargs;
-	caddr_t argsp;
-	xdrproc_t xresults;
-	caddr_t resultsp;
-	struct timeval timeout;
+clntraw_call(
+	CLIENT *h,
+	u_long proc,
+	xdrproc_t xargs,
+	caddr_t argsp,
+	xdrproc_t xresults,
+	caddr_t resultsp,
+	struct timeval timeout )
 {
 	register struct clnt_raw_private *clp = clntraw_private;
 	register XDR *xdrs = &clp->xdr_stream;
@@ -208,10 +208,10 @@ clntraw_geterr()
 
 
 static bool_t
-clntraw_freeres(cl, xdr_res, res_ptr)
-	CLIENT *cl;
-	xdrproc_t xdr_res;
-	caddr_t res_ptr;
+clntraw_freeres(
+	CLIENT *cl,
+	xdrproc_t xdr_res,
+	caddr_t res_ptr )
 {
 	register struct clnt_raw_private *clp = clntraw_private;
 	register XDR *xdrs = &clp->xdr_stream;

@@ -54,8 +54,8 @@ get_default_domain()
 		return (default_domain);
 	if (getdomainname(temp, sizeof(temp)) < 0)
 		return (0);
-	if ((int) strlen(temp) > 0) {
-		default_domain = (char *)malloc((strlen(temp)+(unsigned)1));
+	if (strlen(temp) > 0) {
+		default_domain = (char *)malloc((strlen(temp)+(size_t)1));
 		if (default_domain == 0)
 			return (0);
 		(void) strcpy(default_domain, temp);
@@ -71,8 +71,8 @@ get_default_domain()
  * get rejected elsewhere in the NIS client package.
  */
 int
-_rpc_get_default_domain(domain)
-	char **domain;
+_rpc_get_default_domain(
+	char **domain )
 {
 	if ((*domain = get_default_domain()) != 0)
 		return (0);

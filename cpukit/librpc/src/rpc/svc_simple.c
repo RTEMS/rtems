@@ -61,10 +61,13 @@ static void universal();
 #define transp (rtems_rpc_task_variables->svc_simple_transp)
 
 int
-registerrpc(prognum, versnum, procnum, progname, inproc, outproc)
-	int prognum, versnum, procnum;
-	char *(*progname)();
-	xdrproc_t inproc, outproc;
+registerrpc(
+	int prognum,
+	int versnum,
+	int procnum,
+	char *(*progname)(),
+	xdrproc_t inproc,
+	xdrproc_t outproc )
 {
 
 	if (procnum == NULLPROC) {
@@ -102,9 +105,9 @@ registerrpc(prognum, versnum, procnum, progname, inproc, outproc)
 }
 
 static void
-universal(rqstp, atransp)
-	struct svc_req *rqstp;
-	SVCXPRT *atransp;
+universal(
+	struct svc_req *rqstp,
+	SVCXPRT *atransp )
 {
 	int prog, proc;
 	char *outdata;

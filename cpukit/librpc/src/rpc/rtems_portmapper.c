@@ -77,7 +77,7 @@ static rtems_task rtems_portmapper (rtems_task_argument unused)
 		rtems_task_delete (RTEMS_SELF);
 	}
 	/* make an entry for ourself */
-	pml = (struct pmaplist *)malloc((u_int)sizeof(struct pmaplist));
+	pml = (struct pmaplist *)malloc(sizeof(struct pmaplist));
 	pml->pml_next = 0;
 	pml->pml_map.pm_prog = PMAPPROG;
 	pml->pml_map.pm_vers = PMAPVERS;
@@ -102,7 +102,7 @@ static rtems_task rtems_portmapper (rtems_task_argument unused)
 		rtems_task_delete (RTEMS_SELF);
 	}
 	/* make an entry for ourself */
-	pml = (struct pmaplist *)malloc((u_int)sizeof(struct pmaplist));
+	pml = (struct pmaplist *)malloc(sizeof(struct pmaplist));
 	pml->pml_map.pm_prog = PMAPPROG;
 	pml->pml_map.pm_vers = PMAPVERS;
 	pml->pml_map.pm_prot = IPPROTO_TCP;
@@ -119,9 +119,10 @@ static rtems_task rtems_portmapper (rtems_task_argument unused)
 }
 
 static struct pmaplist *
-find_service(prog, vers, prot)
-u_long prog;
-u_long vers;
+find_service(
+  u_long prog,
+  u_long vers,
+  int prot )
 {
 register struct pmaplist *hit = NULL;
 register struct pmaplist *pml;
@@ -140,9 +141,9 @@ for (pml = pmaplist; pml != NULL; pml = pml->pml_next) {
 /* 
  * 1 OK, 0 not
  */
-static void reg_service(rqstp, xprt)
-	struct svc_req *rqstp;
-	SVCXPRT *xprt;
+static void reg_service(
+	struct svc_req *rqstp,
+	SVCXPRT *xprt )
 {
 	struct pmap reg;
 	struct pmaplist *pml, *prevpml, *fnd;
@@ -190,7 +191,7 @@ static void reg_service(rqstp, xprt)
 				 * add to END of list
 				 */
 				pml = (struct pmaplist *)
-				    malloc((u_int)sizeof(struct pmaplist));
+				    malloc(sizeof(struct pmaplist));
 				pml->pml_map = reg;
 				pml->pml_next = 0;
 				if (pmaplist == 0) {
@@ -309,9 +310,9 @@ struct encap_parms {
 };
 
 static bool_t
-xdr_encap_parms(xdrs, epp)
-	XDR *xdrs;
-	struct encap_parms *epp;
+xdr_encap_parms(
+	XDR *xdrs,
+	struct encap_parms *epp )
 {
 
 	return (xdr_bytes(xdrs, &(epp->args), (u_int*)&(epp->arglen), ARGSIZE));
@@ -326,9 +327,9 @@ struct rmtcallargs {
 };
 
 static bool_t
-xdr_rmtcall_args(xdrs, cap)
-	register XDR *xdrs;
-	register struct rmtcallargs *cap;
+xdr_rmtcall_args(
+	register XDR *xdrs,
+	register struct rmtcallargs *cap )
 {
 
 	/* does not get a port number */
@@ -341,9 +342,9 @@ xdr_rmtcall_args(xdrs, cap)
 }
 
 static bool_t
-xdr_rmtcall_result(xdrs, cap)
-	register XDR *xdrs;
-	register struct rmtcallargs *cap;
+xdr_rmtcall_result(
+	register XDR *xdrs,
+	register struct rmtcallargs *cap )
 {
 	if (xdr_u_long(xdrs, &(cap->rmt_port)))
 		return (xdr_encap_parms(xdrs, &(cap->rmt_args)));
@@ -355,9 +356,9 @@ xdr_rmtcall_result(xdrs, cap)
  * The arglen must already be set!!
  */
 static bool_t
-xdr_opaque_parms(xdrs, cap)
-	XDR *xdrs;
-	struct rmtcallargs *cap;
+xdr_opaque_parms(
+	XDR *xdrs,
+	struct rmtcallargs *cap )
 {
 
 	return (xdr_opaque(xdrs, cap->rmt_args.args, cap->rmt_args.arglen));
@@ -368,9 +369,9 @@ xdr_opaque_parms(xdrs, cap)
  * and then calls xdr_opaque_parms.
  */
 static bool_t
-xdr_len_opaque_parms(xdrs, cap)
-	register XDR *xdrs;
-	struct rmtcallargs *cap;
+xdr_len_opaque_parms(
+	register XDR *xdrs,
+	struct rmtcallargs *cap )
 {
 	register u_int beginpos, lowpos, highpos, currpos, pos;
 
@@ -401,9 +402,9 @@ xdr_len_opaque_parms(xdrs, cap)
  * back to the portmapper.
  */
 static void
-callit(rqstp, xprt)
-	struct svc_req *rqstp;
-	SVCXPRT *xprt;
+callit(
+	struct svc_req *rqstp,
+	SVCXPRT *xprt )
 {
 	struct rmtcallargs a;
 	struct pmaplist *pml;
