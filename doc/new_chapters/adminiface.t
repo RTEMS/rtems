@@ -16,7 +16,7 @@ administration interface manager is ...
 The directives provided by the administration interface manager are:
 
 @itemize @bullet
-@item @code{admin_shutdown} - 
+@item @code{admin_shutdown} - Shutdown the system
 @end itemize
 
 @section Background
@@ -31,13 +31,15 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection admin_shutdown - 
+@subsection admin_shutdown - Shutdown the system
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int admin_shutdown(
+  struct admin_args_   *args[],
+  size_t                nargs
 );
 @end example
 @end ifset
@@ -48,12 +50,19 @@ int admin_shutdown(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EINVAL
+An invalid argument was passed to the function call.
+@item ENOSYS
+The function admin_shutdown() is not supported by this implementation.
+@item EPERM
+The caller does not have appropriate permission for shutting down the 
+system.
 
 @end table
 
 @subheading DESCRIPTION:
+
+The @code{admin_shutdown} function restarts the system.
 
 @subheading NOTES:
 
