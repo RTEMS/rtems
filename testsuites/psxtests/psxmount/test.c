@@ -378,7 +378,7 @@ int main(
    * Attempt to unmount a directory that is not a mount point.
    */
 
-  printf("Unmount /c/y/my_mount_point/my_dir\n");
+  printf("Unmount /c/y/my_mount_point/my_dir should fail with EACCES\n");
   status = unmount( "/c/y/my_mount_point/my_dir" );
   assert( status == -1 );
   assert( errno == EACCES );

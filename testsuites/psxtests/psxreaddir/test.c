@@ -28,6 +28,8 @@
 #include <assert.h>
 #include <unistd.h>
 #include <errno.h>
+#include <imfs.h>
+#include <assert.h>
 
 DIR *directory;
 DIR *directory2;
@@ -62,6 +64,17 @@ void printdir( DIR *directory )
     d = readdir(directory);
 
   }
+}
+
+void complete_printdir( char *path )
+{
+  DIR *the_dir;
+  int status;
+
+  the_dir = opendir( path );
+  assert( the_dir );
+  printdir( the_dir );
+  status = closedir( the_dir );
 }
 
 char *many_files[] = {
@@ -164,6 +177,44 @@ int compare_descending( struct dirent **a, struct dirent **b )
    );
 
    return i;
+}
+
+int test_across_mount()
+{
+  rtems_filesystem_mount_table_entry_t *mt_entry;
+  int                                  status;
+
+  /*
+   * Verify Readdir works correctly over mount points.
+   */
+
+  printf("Validate readdir across mount point\n");
+  assert( mkdir( "/imfs", 0777 ) == 0 );
+  assert( mkdir( "/imfs/should_be_hidden", 0777 ) == 0 );
+  complete_printdir("/imfs" );
+  printf("Attempting to mount IMFS file system at /imfs \n");
+  status = mount(
+     &mt_entry,
+     &IMFS_ops,
+     RTEMS_FILESYSTEM_READ_WRITE,
+     NULL,
+     "/imfs" );
+  assert( status == 0 );
+  if( mt_entry == NULL ){
+     printf(" NULL mount table entry was returned\n");
+  }
+  printf( "create /imfs/testdir and /imfs/testdir/testsubdir\n");
+
+  status = mkdir( "/imfs/testdir", 0777 );
+  assert( status == 0 );
+  status = mkdir( "/imfs/testdir/testsubdir", 0777 );
+  assert( status == 0 );
+  
+  complete_printdir("/imfs" );
+  complete_printdir("/imfs/" );
+  complete_printdir("/imfs/." );
+  complete_printdir("/imfs/testdir" );
+  complete_printdir("/imfs/testdir/.." );
 }
 
 #if defined(__rtems__)
@@ -442,7 +493,7 @@ int main(
      printf("Selected and Sorted Node Name: %s\n", namelist[i]->d_name );
   }
 
-
+  test_across_mount();
   printf( "\n\n*** END OF READDIR TEST ***\n" );
   exit(0);
 }

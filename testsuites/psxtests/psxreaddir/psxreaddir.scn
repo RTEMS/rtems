@@ -60,50 +60,50 @@ Create aq
 Create ar
 Open /many and print the directory
 name               inode   offset   reclen  type
-a                           1        0    268   0x010c
-b                           1      268    268   0x010c
-c                           1      536    268   0x010c
-d                           1      804    268   0x010c
-e                           1     1072    268   0x010c
-f                           1     1340    268   0x010c
-g                           1     1608    268   0x010c
-h                           1     1876    268   0x010c
-i                           1     2144    268   0x010c
-j                           1     2412    268   0x010c
-k                           1     2680    268   0x010c
-l                           1     2948    268   0x010c
-m                           1     3216    268   0x010c
-n                           1     3484    268   0x010c
-o                           1     3752    268   0x010c
-p                           1     4020    268   0x010c
-q                           1     4288    268   0x010c
-r                           1     4556    268   0x010c
-s                           1     4824    268   0x010c
-t                           1     5092    268   0x010c
-u                           1     5360    268   0x010c
-v                           1     5628    268   0x010c
-w                           1     5896    268   0x010c
-x                           1     6164    268   0x010c
-y                           1     6432    268   0x010c
-z                           1     6700    268   0x010c
-aa                          1     6968    268   0x010c
-ab                          1     7236    268   0x010c
-ac                          1     7504    268   0x010c
-ad                          1     7772    268   0x010c
-ae                          1     8040    268   0x010c
-af                          1     8308    268   0x010c
-ag                          1     8576    268   0x010c
-ah                          1     8844    268   0x010c
-ai                          1     9112    268   0x010c
-aj                          1     9380    268   0x010c
-ak                          1     9648    268   0x010c
-al                          1     9916    268   0x010c
-am                          1    10184    268   0x010c
-an                          1    10452    268   0x010c
-ao                          1    10720    268   0x010c
-ap                          1    10988    268   0x010c
-aq                          1    11256    268   0x010c
-ar                          1    11524    268   0x010c
+a                          17        0    268   0x010c
+b                          18      268    268   0x010c
+c                          19      536    268   0x010c
+d                          20      804    268   0x010c
+e                          21     1072    268   0x010c
+f                          22     1340    268   0x010c
+g                          23     1608    268   0x010c
+h                          24     1876    268   0x010c
+i                          25     2144    268   0x010c
+j                          26     2412    268   0x010c
+k                          27     2680    268   0x010c
+l                          28     2948    268   0x010c
+m                          29     3216    268   0x010c
+n                          30     3484    268   0x010c
+o                          31     3752    268   0x010c
+p                          32     4020    268   0x010c
+q                          33     4288    268   0x010c
+r                          34     4556    268   0x010c
+s                          35     4824    268   0x010c
+t                          36     5092    268   0x010c
+u                          37     5360    268   0x010c
+v                          38     5628    268   0x010c
+w                          39     5896    268   0x010c
+x                          40     6164    268   0x010c
+y                          41     6432    268   0x010c
+z                          42     6700    268   0x010c
+aa                         43     6968    268   0x010c
+ab                         44     7236    268   0x010c
+ac                         45     7504    268   0x010c
+ad                         46     7772    268   0x010c
+ae                         47     8040    268   0x010c
+af                         48     8308    268   0x010c
+ag                         49     8576    268   0x010c
+ah                         50     8844    268   0x010c
+ai                         51     9112    268   0x010c
+aj                         52     9380    268   0x010c
+ak                         53     9648    268   0x010c
+al                         54     9916    268   0x010c
+am                         55    10184    268   0x010c
+an                         56    10452    268   0x010c
+ao                         57    10720    268   0x010c
+ap                         58    10988    268   0x010c
+aq                         59    11256    268   0x010c
+ar                         60    11524    268   0x010c
 open /b/myfile
 scandir a file status: -1
 Open /b/new_file
@@ -114,7 +114,7 @@ fcntl F_GETFL returns current flags
 fcntl F_GETFL returned 0x200
 fcntl F_SETFL to add O_APPEND and O_NONBLOCK
 fcntl F_GETFL return current flags to see changes
-fcntl F_GETFL returned 0x208
+fcntl F_GETFL returned 0x1208
 fcntl F_GETLK should return -1
 fcntl F_SETLK should return -1
 fcntl F_SETLKW should return -1
@@ -129,47 +129,47 @@ Performing stat of directory /
 status for stat : 0, size of directory: 2144
 Open and print directory /
 name               inode   offset   reclen  type
-dev                         1        0    268   0x010c
-a                           1      268    268   0x010c
-b                           1      536    268   0x010c
-c                           1      804    268   0x010c
-d                           1     1072    268   0x010c
-e                           1     1340    268   0x010c
-f                           1     1608    268   0x010c
-many                        1     1876    268   0x010c
+dev                         2        0    268   0x010c
+a                           5      268    268   0x010c
+b                           6      536    268   0x010c
+c                           7      804    268   0x010c
+d                           8     1072    268   0x010c
+e                           9     1340    268   0x010c
+f                          10     1608    268   0x010c
+many                       16     1876    268   0x010c
 mkdir /d/my_dir
 Open /d/my_dir
 remove /d/my_dir.
 close /d/my_dir.
 Opening directory /c
 name               inode   offset   reclen  type
-y                           1        0    268   0x010c
-z                           1      268    268   0x010c
-x                           1      536    268   0x010c
+y                          11        0    268   0x010c
+z                          12      268    268   0x010c
+x                          13      536    268   0x010c
 Opening directory /c/y
 name               inode   offset   reclen  type
-a3333                       1        0    268   0x010c
-j123                        1      268    268   0x010c
+a3333                      14        0    268   0x010c
+j123                       15      268    268   0x010c
 LSEEK to the start of the open directory
 name               inode   offset   reclen  type
-dev                         1        0    268   0x010c
-a                           1      268    268   0x010c
-b                           1      536    268   0x010c
-c                           1      804    268   0x010c
-d                           1     1072    268   0x010c
-e                           1     1340    268   0x010c
-f                           1     1608    268   0x010c
-many                        1     1876    268   0x010c
+dev                         2        0    268   0x010c
+a                           5      268    268   0x010c
+b                           6      536    268   0x010c
+c                           7      804    268   0x010c
+d                           8     1072    268   0x010c
+e                           9     1340    268   0x010c
+f                          10     1608    268   0x010c
+many                       16     1876    268   0x010c
 Rewinding directory
 name               inode   offset   reclen  type
-dev                         1        0    268   0x010c
-a                           1      268    268   0x010c
-b                           1      536    268   0x010c
-c                           1      804    268   0x010c
-d                           1     1072    268   0x010c
-e                           1     1340    268   0x010c
-f                           1     1608    268   0x010c
-many                        1     1876    268   0x010c
+dev                         2        0    268   0x010c
+a                           5      268    268   0x010c
+b                           6      536    268   0x010c
+c                           7      804    268   0x010c
+d                           8     1072    268   0x010c
+e                           9     1340    268   0x010c
+f                          10     1608    268   0x010c
+many                       16     1876    268   0x010c
 Send rewinddir a NULL pointer
 Seek directory
 telldir() should report only sizeof(struct dirent) increments
@@ -218,8 +218,19 @@ scandir status: 3
 Selected and Sorted Node Name: z
 Selected and Sorted Node Name: y
 Selected and Sorted Node Name: x
+Validate readdir across mount point
+name               inode   offset   reclen  type
+should_be_hidden           65        0    268   0x010c
+Attempting to mount IMFS file system at /imfs
+create /imfs/testdir and /imfs/testdir/testsubdir
+name               inode   offset   reclen  type
+testdir                     2        0    268   0x010c
+name               inode   offset   reclen  type
+testdir                     2        0    268   0x010c
+name               inode   offset   reclen  type
+testdir                     2        0    268   0x010c
+name               inode   offset   reclen  type
+testsubdir                  3        0    268   0x010c
+name               inode   offset   reclen  type
+testdir                     2        0    268   0x010c
 *** END OF READDIR TEST ***
-
-
-
-
