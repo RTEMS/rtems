@@ -1063,8 +1063,10 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 
 			/* continue processing new character */
 			if (tty->termios.c_lflag & ICANON) {
-				if  (siproc (c, tty))
+				if  (siproc (c, tty)) {
 					wait = 0;
+               break; /* done */
+            }
 			}
 			else {
 				siproc (c, tty);
@@ -1510,3 +1512,4 @@ static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument)
 		}
 	}
 }
+

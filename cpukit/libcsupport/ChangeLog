@@ -1,3 +1,11 @@
+2003-04-17	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 399/rtems_misc
+	* src/termios.c: In canonical mode, when input is present in the
+	input buffer that contains an EOL character and some following
+	characters, a read call read data behind the EOL character, although
+	it should stop reading with the EOL character.
+
 2003-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/no_posix.c: include <reent.h> instead of <sys/reent.h>
