@@ -1,3 +1,49 @@
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Makefile.am: Reflect having moved automake.
+	mp01/Makefile.am: Reflect having moved automake.
+	mp01/node1/Makefile.am: Reflect having moved automake.
+	mp01/node2/Makefile.am: Reflect having moved automake.
+	mp02/Makefile.am: Reflect having moved automake.
+	mp02/node1/Makefile.am: Reflect having moved automake.
+	mp02/node2/Makefile.am: Reflect having moved automake.
+	mp03/Makefile.am: Reflect having moved automake.
+	mp03/node1/Makefile.am: Reflect having moved automake.
+	mp03/node2/Makefile.am: Reflect having moved automake.
+	mp04/Makefile.am: Reflect having moved automake.
+	mp04/node1/Makefile.am: Reflect having moved automake.
+	mp04/node2/Makefile.am: Reflect having moved automake.
+	mp05/Makefile.am: Reflect having moved automake.
+	mp05/node1/Makefile.am: Reflect having moved automake.
+	mp05/node2/Makefile.am: Reflect having moved automake.
+	mp06/Makefile.am: Reflect having moved automake.
+	mp06/node1/Makefile.am: Reflect having moved automake.
+	mp06/node2/Makefile.am: Reflect having moved automake.
+	mp07/Makefile.am: Reflect having moved automake.
+	mp07/node1/Makefile.am: Reflect having moved automake.
+	mp07/node2/Makefile.am: Reflect having moved automake.
+	mp08/Makefile.am: Reflect having moved automake.
+	mp08/node1/Makefile.am: Reflect having moved automake.
+	mp08/node2/Makefile.am: Reflect having moved automake.
+	mp09/Makefile.am: Reflect having moved automake.
+	mp09/node1/Makefile.am: Reflect having moved automake.
+	mp09/node2/Makefile.am: Reflect having moved automake.
+	mp10/Makefile.am: Reflect having moved automake.
+	mp10/node1/Makefile.am: Reflect having moved automake.
+	mp10/node2/Makefile.am: Reflect having moved automake.
+	mp11/Makefile.am: Reflect having moved automake.
+	mp11/node1/Makefile.am: Reflect having moved automake.
+	mp11/node2/Makefile.am: Reflect having moved automake.
+	mp12/Makefile.am: Reflect having moved automake.
+	mp12/node1/Makefile.am: Reflect having moved automake.
+	mp12/node2/Makefile.am: Reflect having moved automake.
+	mp13/Makefile.am: Reflect having moved automake.
+	mp13/node1/Makefile.am: Reflect having moved automake.
+	mp13/node2/Makefile.am: Reflect having moved automake.
+	mp14/Makefile.am: Reflect having moved automake.
+	mp14/node1/Makefile.am: Reflect having moved automake.
+	mp14/node2/Makefile.am: Reflect having moved automake.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
