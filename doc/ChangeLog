@@ -1,3 +1,9 @@
+2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_ENABLE_RPMPREFIX.
+	Add RTEMSRPMPREFIX.
+	* common/rtems.texi.in: Add RTEMSRPMPREFIX.
+
 2004-01-20	Joel Sherrill <joel@OARcorp.com>
 
 	PR 556/make_build

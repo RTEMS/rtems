@@ -9,6 +9,8 @@ RTEMS_TOP([..])
 AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 AM_MAINTAINER_MODE
 
+RTEMS_ENABLE_RPMPREFIX
+
 AC_ARG_ENABLE(html,
 [  --disable-html          disable html support ],
 [case $enableval in
@@ -167,6 +169,7 @@ cat << EOF > common/rtems.sed~
 :t
 s/@RTEMSAPI@/RTEMS_API/;t t
 s,@RTEMSPREFIX@,$prefix,;t t
+s,@RTEMSRPMPREFIX@,$rpmprefix,;t t
 EOF
 _RTEMS_UPDATE_CONDITIONAL([common/rtems.sed],[common/rtems.sed~])
 ])
