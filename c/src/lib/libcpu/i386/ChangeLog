@@ -1,3 +1,7 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* page.c: Convert to using c99 fixed size types.
+
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Add 2nd argument (rtems_updir) to RTEMS_TOP.

@@ -31,7 +31,7 @@ static int directoryEntry=0;
 static int tableEntry=0;
 static page_directory *pageDirectory;
 
-extern rtems_unsigned32 rtemsFreeMemStart;
+extern uint32_t   rtemsFreeMemStart;
 
 
 /*************************************************************************/
