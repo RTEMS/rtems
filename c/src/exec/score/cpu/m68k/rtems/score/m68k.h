@@ -335,7 +335,7 @@ extern "C" {
 /* There are no rotate commands in Coldfire architecture. We will use
  * generic implementation of endian swapping for Coldfire.
  */
-static inline unsigned int CPU_swap_u32(
+static inline unsigned int m68k_swap_u32(
   unsigned int value
   )
 {

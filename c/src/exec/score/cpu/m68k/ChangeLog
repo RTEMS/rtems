@@ -1,3 +1,7 @@
+2002-03-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/m68k.h: m68k_swap_u32 fix typo.
+
 2002-03-06      Victor V. Vengerov <vvv@oktet.ru>
 
         * rtems/score/m68k.h [M68K_COLDFIRE_ARCH] (CPU_swap_u16, CPU_swap_u32): 
