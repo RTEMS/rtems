@@ -28,7 +28,7 @@
 
 	* rtems/score/types.h: #include <rtems/stdint.h>.
 
-2005-01-07	Ralf Corsepius <ralf.corsepius@freenet.de>
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
 

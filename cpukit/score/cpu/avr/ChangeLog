@@ -28,7 +28,7 @@
 
 	* rtems/score/cpu.h: *_swap_u32( uint32_t ).
 
-2005-01-07	Ralf Corsepius <ralf.corsepius@freenet.de>
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
 
