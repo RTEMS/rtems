@@ -1,5 +1,10 @@
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove RTEMS_PROJECT_ROOT.
+	* aclocal/project-root.m4: Remove.
+
+2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/enable-multiprocessing.m4: Fix typo.
 	* aclocal/prog-cc.m4: Remove obsolete comments.
 	Comment out GCCSED.
