@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
