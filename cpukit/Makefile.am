@@ -20,6 +20,19 @@ preinstall-stamp:
 	touch preinstall-stamp
 CLEANFILES = preinstall-stamp
 
+include_HEADERS = backward/asm.h backward/chain.h backward/clockdrv.h \
+    backward/console.h backward/imfs.h backward/iosupp.h backward/ringbuf.h \
+    backward/rtc.h backward/spurious.h backward/timerdrv.h \
+    backward/vmeintr.h
+
+if !UNIX
+include_HEADERS += backward/dosfs.h
+endif
+
+if HAS_ITRON
+include_HEADERS += backward/itron.h
+endif
+
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/rtems/bspIo.h include/rtems/userenv.h \
     include/rtems/fs.h include/rtems/pci.h include/rtems/stdint.h \
@@ -27,6 +40,67 @@ include_rtems_HEADERS = include/rtems/bspIo.h include/rtems/userenv.h \
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/asm.h: backward/asm.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm.h
+
+$(PROJECT_INCLUDE)/chain.h: backward/chain.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/chain.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/chain.h
+
+$(PROJECT_INCLUDE)/clockdrv.h: backward/clockdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/clockdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/clockdrv.h
+
+$(PROJECT_INCLUDE)/console.h: backward/console.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/console.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/console.h
+
+$(PROJECT_INCLUDE)/imfs.h: backward/imfs.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/imfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/imfs.h
+
+$(PROJECT_INCLUDE)/iosupp.h: backward/iosupp.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/iosupp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/iosupp.h
+
+$(PROJECT_INCLUDE)/ringbuf.h: backward/ringbuf.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ringbuf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ringbuf.h
+
+$(PROJECT_INCLUDE)/rtc.h: backward/rtc.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtc.h
+
+$(PROJECT_INCLUDE)/spurious.h: backward/spurious.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/spurious.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/spurious.h
+
+$(PROJECT_INCLUDE)/timerdrv.h: backward/timerdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/timerdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/timerdrv.h
+
+$(PROJECT_INCLUDE)/vmeintr.h: backward/vmeintr.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vmeintr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/vmeintr.h
+
+if !UNIX
+$(PROJECT_INCLUDE)/dosfs.h: backward/dosfs.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dosfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dosfs.h
+endif
+
+if HAS_ITRON
+$(PROJECT_INCLUDE)/itron.h: backward/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/itron.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/itron.h
+endif
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems

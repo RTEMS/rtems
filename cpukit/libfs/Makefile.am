@@ -9,7 +9,8 @@ AM_CPPFLAGS += -I$(top_builddir)
 
 EXTRA_DIST = README
 
-include_HEADERS =
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS =
 
 EXTRA_LIBRARIES = libimfs.a
 CLEANFILES = libimfs.a
@@ -43,7 +44,7 @@ endif
 
 libimfs_g_a_SOURCES = $(libimfs_a_SOURCES)
 
-include_HEADERS += src/imfs/imfs.h
+include_rtems_HEADERS += src/imfs/imfs.h
 
 IMFSLIB = libimfs$(LIB_VARIANT).a
 
@@ -74,7 +75,7 @@ libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
 
 libdosfs_g_a_SOURCES = $(libdosfs_a_SOURCES)
 
-include_HEADERS += src/dosfs/dosfs.h
+include_rtems_HEADERS += src/dosfs/dosfs.h
 
 DOSFSLIB = libdosfs$(LIB_VARIANT).a
 endif
@@ -88,19 +89,19 @@ all-local: $(PREINSTALL_FILES) $(IMFSLIB) $(DOSFSLIB)
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/imfs.h: src/imfs/imfs.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/imfs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/imfs.h
+$(PROJECT_INCLUDE)/rtems/imfs.h: src/imfs/imfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/imfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/imfs.h
 
 if !UNIX
-$(PROJECT_INCLUDE)/dosfs.h: src/dosfs/dosfs.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dosfs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/dosfs.h
+$(PROJECT_INCLUDE)/rtems/dosfs.h: src/dosfs/dosfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dosfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dosfs.h
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)

@@ -1,5 +1,14 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* Makefile.am: Add backward/*.h headers.
+	* itron/Makefile.am: Install itron.h to $(includedir)/rtems.
+	* libcsupport/Makefile.am: Install RTEMS specific headers to
+	$(includedir)/rtems.
+	* libfs/Makefile.am: Install imfs.h and dosfs.h to
+	$(includedir)/rtems.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libblock/include/rtems/bdbuf.h: Include <rtems/chain.h> instead of <chain.h>.
 	* libblock/include/rtems/ide_part_table.h: Include <rtems/chain.h> instead of <chain.h>.
 	* libcsupport/src/malloc.c: Include <rtems/chain.h> instead of <chain.h>.

@@ -16,10 +16,12 @@ EXTRA_LIBRARIES += libcsupport_g.a
 CLEANFILES += libcsupport_g.a
 libcsupport_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h include/spurious.h \
     include/timerdrv.h include/vmeintr.h
 
+include_HEADERS =
 if NEED_STDINT_H
 include_HEADERS += include/stdint.h
 endif
@@ -35,9 +37,7 @@ include_motorola_HEADERS = include/motorola/mc68230.h \
     include/motorola/mc68681.h
 
 ## rtems
-include_rtemsdir = $(includedir)/rtems
-
-include_rtems_HEADERS = include/rtems/assoc.h include/rtems/error.h \
+include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
     include/rtems/libcsupport.h include/rtems/libio.h include/rtems/libio_.h \
     include/rtems/termiostypes.h include/rtems/cdefs.h
 
@@ -137,41 +137,46 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-$(PROJECT_INCLUDE)/chain.h: include/chain.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/chain.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/chain.h
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/console.h: include/console.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/console.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/console.h
+$(PROJECT_INCLUDE)/rtems/chain.h: include/chain.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/chain.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.h
 
-$(PROJECT_INCLUDE)/clockdrv.h: include/clockdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/clockdrv.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/clockdrv.h
+$(PROJECT_INCLUDE)/rtems/console.h: include/console.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/console.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/console.h
 
-$(PROJECT_INCLUDE)/iosupp.h: include/iosupp.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/iosupp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/iosupp.h
+$(PROJECT_INCLUDE)/rtems/clockdrv.h: include/clockdrv.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/clockdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/clockdrv.h
 
-$(PROJECT_INCLUDE)/ringbuf.h: include/ringbuf.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ringbuf.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/ringbuf.h
+$(PROJECT_INCLUDE)/rtems/iosupp.h: include/iosupp.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/iosupp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/iosupp.h
 
-$(PROJECT_INCLUDE)/rtc.h: include/rtc.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtc.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtc.h
+$(PROJECT_INCLUDE)/rtems/ringbuf.h: include/ringbuf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ringbuf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ringbuf.h
 
-$(PROJECT_INCLUDE)/spurious.h: include/spurious.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/spurious.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/spurious.h
+$(PROJECT_INCLUDE)/rtems/rtc.h: include/rtc.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtc.h
 
-$(PROJECT_INCLUDE)/timerdrv.h: include/timerdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/timerdrv.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/timerdrv.h
+$(PROJECT_INCLUDE)/rtems/spurious.h: include/spurious.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/spurious.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/spurious.h
 
-$(PROJECT_INCLUDE)/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/vmeintr.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/vmeintr.h
+$(PROJECT_INCLUDE)/rtems/timerdrv.h: include/timerdrv.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timerdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timerdrv.h
+
+$(PROJECT_INCLUDE)/rtems/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/vmeintr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vmeintr.h
 
 if NEED_STDINT_H
 $(PROJECT_INCLUDE)/stdint.h: include/stdint.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -197,11 +202,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68230.h
 $(PROJECT_INCLUDE)/motorola/mc68681.h: include/motorola/mc68681.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68681.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68681.h
-
-$(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
-	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/assoc.h

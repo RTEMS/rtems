@@ -11,7 +11,8 @@ CLEANFILES =
 if HAS_ITRON
 ## include
 
-include_HEADERS = include/itron.h
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = include/itron.h
 
 ## itronsys
 
@@ -127,15 +128,15 @@ EXTRA_DIST += $(UNUSED_C_FILES) src/TODO
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 if HAS_ITRON
-$(PROJECT_INCLUDE)/itron.h: include/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/itron.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/itron.h
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/itron.h: include/itron.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron.h
 
 $(PROJECT_INCLUDE)/itronsys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/itronsys
