@@ -130,7 +130,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %build
   cd build
 
-# HACK: This should be %{target} != %{build}, but SuSE's rpm screws it.
+# HACK: This doesn't work
 # %if "%{_target_os}" != "%{_build_os}"
 #    CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
 # %endif

@@ -18,13 +18,16 @@ This is the files for gcc/java (gcj) that are shared by all targets.
 %{_prefix}/bin/jar@exe_ext@
 %{_prefix}/bin/grepjar@exe_ext@
 
+%dir %{_prefix}/info
+%doc %{_prefix}/info/gcj.info*.gz
+
 %dir %{_prefix}/man/man1
-%{_prefix}/man/man1/gcjh.1
-%{_prefix}/man/man1/jv-scan.1
-%{_prefix}/man/man1/jcf-dump.1
-%{_prefix}/man/man1/gij.1
-%{_prefix}/man/man1/jv-convert.1
-%{_prefix}/man/man1/rmic.1
-%{_prefix}/man/man1/rmiregistry.1
+%doc %{_prefix}/man/man1/gcjh.1*
+%doc %{_prefix}/man/man1/jv-scan.1*
+%doc %{_prefix}/man/man1/jcf-dump.1*
+%doc %{_prefix}/man/man1/gij.1*
+%doc %{_prefix}/man/man1/jv-convert.1*
+%doc %{_prefix}/man/man1/rmic.1*
+%doc %{_prefix}/man/man1/rmiregistry.1*
 
 %endif

@@ -51,10 +51,9 @@ This is binutils sources with patches for RTEMS.
   test -d build || mkdir build
 
 %build
-# HACK: This should be %{target} != %{build}, but SuSE's rpm screws it.
-%if "%{_target_os}" != "%{_build_os}"
-  CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
-%endif
+#%if "%{_target_os}" != "%{_build_os}"
+#  CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
+#%endif
 
   cd build
   ../binutils-@binutils_version@/configure ${CONFIGURE_ARGS} --target=@target_alias@ \

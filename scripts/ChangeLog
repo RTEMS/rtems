@@ -1,3 +1,15 @@
+2002-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/gccnewlib.add: Remove %{target} != %{build} comment 
+	(RH-8.0/rpm-4.1 bogusly expands the macros and chokes.)
+	* binutils/binutils.add: Remove %{target} != %{build} comment
+        (RH-8.0/rpm-4.1 bogusly expands the macros and chokes.).
+	Comment out CONFIGURE_ARGS (RH-8.0/rpm-4.1 is broken wrt. _build_os
+	and _target_os)
+	* gcc3newlib/base-gcc.add: Add gccint*infos.
+	* gcc3newlib/base-gcj.add: Add gcj*infos.
+	Mark manpages as %doc and pickup the gzipped versions.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* autotools/automake-rtems.spec.in: Fix my address. Set up PATH

@@ -19,6 +19,7 @@ This is the files for gcc and newlib that are shared by all targets.
 %doc %{_prefix}/info/gcc.info*.gz
 %doc %{_prefix}/info/libc.info*.gz
 %doc %{_prefix}/info/libm.info*.gz
+%doc %{_prefix}/info/gccint.info*.gz
 
 %dir %{_prefix}/man
 %dir %{_prefix}/man/man1
