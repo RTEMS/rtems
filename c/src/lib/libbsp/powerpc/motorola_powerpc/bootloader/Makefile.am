@@ -16,7 +16,6 @@ bootloader_SOURCES = head.S exception.S em86real.S
 bootloader_SOURCES += misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
 bootloader_SOURCES += bootldr.h zlib.h pci.h keyboard.h
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 
 NM = @NM@
 LD = @LD@
