@@ -1,3 +1,8 @@
+2002-07-31	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/rtems-cpu-subdirs.m4:  Removed the or16 port
+	was just a stub and only the OR32 port is getting worked on.
+
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: LIBBLOCK_OBJS = ../libblock/$(ARCH)/libblock.a.
