@@ -8,10 +8,6 @@ include $(top_srcdir)/../../../automake/lib.am
 
 SUBDIRS = support samples sptests tmtests
 
-if HAS_MP
-SUBDIRS += mptests
-endif
-
 EXTRA_DIST = ada.am
 
 include $(top_srcdir)/../../../automake/subdirs.am

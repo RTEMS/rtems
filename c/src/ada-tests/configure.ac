@@ -119,26 +119,4 @@ tmtests/tmck/Makefile
 tmtests/tmoverhd/Makefile
 ])
 
-if test "$HAS_MP" = "yes"; then
-AC_CONFIG_FILES([
-mptests/Makefile
-mptests/mp01/Makefile
-mptests/mp01/node1/Makefile
-mptests/mp01/node2/Makefile
-])
-#mptests/mp02/Makefile
-#mptests/mp03/Makefile
-#mptests/mp04/Makefile
-#mptests/mp05/Makefile
-#mptests/mp06/Makefile
-#mptests/mp07/Makefile
-#mptests/mp08/Makefile
-#mptests/mp09/Makefile
-#mptests/mp10/Makefile
-#mptests/mp11/Makefile
-#mptests/mp12/Makefile
-#mptests/mp13/Makefile
-#mptests/mp14/Makefile
-fi
-
 AC_OUTPUT

@@ -24,7 +24,8 @@ SUBDIRS += sp22
 SUBDIRS += sp23
 SUBDIRS += sp24
 SUBDIRS += sp25
-SUBDIRS += spsize
+# requires rtems_test_support which will have to be pulled from the archives.
+# SUBDIRS += spsize
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
