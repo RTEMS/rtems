@@ -51,13 +51,7 @@
 static const char rcsid[] = "$FreeBSD: src/lib/libc/rpc/auth_des.c,v 1.3 1999/08/28 00:00:32 peter Exp $";
 #endif
 
-extern bool_t __rpc_get_time_offset __P(( struct timeval *, nis_server *,
-						char *, char **, struct sockaddr_in * ));
-extern int rtime __P(( struct sockaddr_in *, struct timeval *, struct timeval *));
-extern bool_t xdr_authdes_cred __P(( XDR *, struct authdes_cred * ));
-extern bool_t xdr_authdes_verf __P(( XDR *, struct authdes_verf * ));
-
-#define MILLION		1000000L
+#define USEC_PER_SEC		1000000L
 #define RTIME_TIMEOUT 5		/* seconds to wait for sync */
 
 #define AUTH_PRIVATE(auth)	(struct ad_private *) auth->ah_private
@@ -65,16 +59,22 @@ extern bool_t xdr_authdes_verf __P(( XDR *, struct authdes_verf * ));
 #define FREE(ptr, size)		mem_free((char *)(ptr), (int) size)
 #define ATTEMPT(xdr_op)		if (!(xdr_op)) return (FALSE)
 
+extern int rtime( struct sockaddr_in *, struct timeval *, struct timeval *);
+extern bool_t xdr_authdes_cred(XDR *, struct authdes_cred *);
+extern bool_t xdr_authdes_verf(XDR *, struct authdes_verf *);
+
+extern bool_t __rpc_get_time_offset( struct timeval *, nis_server *, char *,
+	char **, struct sockaddr_in * );
 #define debug(msg)		 /*printf("%s\n", msg) */
 
 /* 
  * DES authenticator operations vector
  */
-static void	authdes_nextverf();
-static bool_t	authdes_marshal();
-static bool_t	authdes_validate();
-static bool_t	authdes_refresh();
-static void	authdes_destroy();
+static void	authdes_nextverf(AUTH *);
+static bool_t	authdes_marshal(AUTH *, XDR *);
+static bool_t	authdes_validate(AUTH *, struct opaque_auth *);
+static bool_t	authdes_refresh(AUTH *);
+static void	authdes_destroy(AUTH *);
 static struct auth_ops authdes_ops = {
 	authdes_nextverf,
 	authdes_marshal,
@@ -313,8 +313,7 @@ failed:
  */	
 /*ARGSUSED*/
 static void
-authdes_nextverf(auth)
-	AUTH *auth;
+authdes_nextverf(AUTH *auth)
 {
 	/* what the heck am I supposed to do??? */
 }
@@ -325,9 +324,7 @@ authdes_nextverf(auth)
  * 2. Marshal
  */
 static bool_t
-authdes_marshal(auth, xdrs)
-	AUTH *auth;
-	XDR *xdrs;
+authdes_marshal(AUTH *auth, XDR *xdrs)
 {
 	struct ad_private *ad = AUTH_PRIVATE(auth);
 	struct authdes_cred *cred = &ad->ad_cred;
@@ -345,8 +342,8 @@ authdes_marshal(auth, xdrs)
 	(void) gettimeofday(&ad->ad_timestamp, (struct timezone *)NULL);
 	ad->ad_timestamp.tv_sec += ad->ad_timediff.tv_sec;
 	ad->ad_timestamp.tv_usec += ad->ad_timediff.tv_usec;
-	if (ad->ad_timestamp.tv_usec >= MILLION) {
-		ad->ad_timestamp.tv_usec -= MILLION;
+	if (ad->ad_timestamp.tv_usec >= USEC_PER_SEC) {
+		ad->ad_timestamp.tv_usec -= USEC_PER_SEC;
 		ad->ad_timestamp.tv_sec += 1;
 	}
 
@@ -416,9 +413,7 @@ authdes_marshal(auth, xdrs)
  * 3. Validate
  */
 static bool_t
-authdes_validate(auth, rverf)
-	AUTH *auth;
-	struct opaque_auth *rverf;
+authdes_validate(AUTH *auth, struct opaque_auth *rverf)
 {
 	struct ad_private *ad = AUTH_PRIVATE(auth);
 	struct authdes_verf verf;
@@ -472,8 +467,7 @@ authdes_validate(auth, rverf)
  * 4. Refresh
  */
 static bool_t
-authdes_refresh(auth)
-	AUTH *auth;
+authdes_refresh(AUTH *auth)
 {
 	struct ad_private *ad = AUTH_PRIVATE(auth);
 	struct authdes_cred *cred = &ad->ad_cred;
@@ -512,8 +506,7 @@ authdes_refresh(auth)
  * 5. Destroy
  */
 static void
-authdes_destroy(auth)
-	AUTH *auth;
+authdes_destroy(AUTH *auth)
 {
 	struct ad_private *ad = AUTH_PRIVATE(auth);
 
@@ -546,7 +539,7 @@ synchronize(syncaddr, timep)
 	timep->tv_sec -= mytime.tv_sec;
 	if (mytime.tv_usec > timep->tv_usec) {
 		timep->tv_sec -= 1;
-		timep->tv_usec += MILLION;
+		timep->tv_usec += USEC_PER_SEC;
 	}
 	timep->tv_usec -= mytime.tv_usec;
 	return (TRUE);

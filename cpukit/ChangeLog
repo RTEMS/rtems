@@ -1,3 +1,10 @@
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* librpc/include/rpc/auth_des.h, librpc/include/rpc/xdr.h,
+	librpc/src/rpc/auth_des.c, librpc/src/rpc/auth_unix.c,
+	librpc/src/rpc/rpc_prot.c, librpc/src/xdr/xdr.c:
+	Misc. ansi-fications, misc. updates from FreeBSD.
+
 2005-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/libc/res_debug.c: Added const to eliminate warnings.

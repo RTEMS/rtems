@@ -59,11 +59,11 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/auth_unix.c,v 1.12 1999/12/29 0
 /*
  * Unix authenticator operations vector
  */
-static void	authunix_nextverf();
-static bool_t	authunix_marshal();
-static bool_t	authunix_validate();
-static bool_t	authunix_refresh();
-static void	authunix_destroy();
+static void	authunix_nextverf(AUTH*);
+static bool_t	authunix_marshal(AUTH*, XDR*);
+static bool_t	authunix_validate(AUTH*, struct opaque_auth *);
+static bool_t	authunix_refresh(AUTH*);
+static void	authunix_destroy(AUTH*);
 
 static struct auth_ops auth_unix_ops = {
 	authunix_nextverf,
@@ -109,7 +109,7 @@ authunix_create(machname, uid, gid, len, aup_gids)
 	char *machname;
 	int uid;
 	int gid;
-	register int len;
+	int len;
 	int *aup_gids;
 {
 	struct authunix_parms aup;
@@ -218,33 +218,28 @@ authunix_create_default()
  */
 
 static void
-authunix_nextverf(auth)
-	AUTH *auth;
+authunix_nextverf(AUTH *auth)
 {
 	/* no action necessary */
 }
 
 static bool_t
-authunix_marshal(auth, xdrs)
-	AUTH *auth;
-	XDR *xdrs;
+authunix_marshal(AUTH *auth, XDR *xdrs)
 {
-	register struct audata *au = AUTH_PRIVATE(auth);
+	struct audata *au = AUTH_PRIVATE(auth);
 
 	return (XDR_PUTBYTES(xdrs, au->au_marshed, au->au_mpos));
 }
 
 static bool_t
-authunix_validate(auth, verf)
-	register AUTH *auth;
-	struct opaque_auth verf;
+authunix_validate( AUTH *auth, struct opaque_auth *verf )
 {
 	register struct audata *au;
 	XDR xdrs;
 
-	if (verf.oa_flavor == AUTH_SHORT) {
+	if (verf->oa_flavor == AUTH_SHORT) {
 		au = AUTH_PRIVATE(auth);
-		xdrmem_create(&xdrs, verf.oa_base, verf.oa_length, XDR_DECODE);
+		xdrmem_create(&xdrs, verf->oa_base, verf->oa_length, XDR_DECODE);
 
 		if (au->au_shcred.oa_base != NULL) {
 			mem_free(au->au_shcred.oa_base,
@@ -265,14 +260,13 @@ authunix_validate(auth, verf)
 }
 
 static bool_t
-authunix_refresh(auth)
-	register AUTH *auth;
+authunix_refresh(AUTH *auth)
 {
-	register struct audata *au = AUTH_PRIVATE(auth);
+	struct audata *au = AUTH_PRIVATE(auth);
 	struct authunix_parms aup;
 	struct timeval now;
 	XDR xdrs;
-	register int stat;
+	int stat;
 
 	if (auth->ah_cred.oa_base == au->au_origcred.oa_base) {
 		/* there is no hope.  Punt */
@@ -308,10 +302,9 @@ done:
 }
 
 static void
-authunix_destroy(auth)
-	register AUTH *auth;
+authunix_destroy(AUTH *auth)
 {
-	register struct audata *au = AUTH_PRIVATE(auth);
+	struct audata *au = AUTH_PRIVATE(auth);
 
 	mem_free(au->au_origcred.oa_base, au->au_origcred.oa_length);
 
@@ -331,12 +324,11 @@ authunix_destroy(auth)
  * sets private data, au_marshed and au_mpos
  */
 static void
-marshal_new_auth(auth)
-	register AUTH *auth;
+marshal_new_auth(AUTH *auth)
 {
 	XDR		xdr_stream;
-	register XDR	*xdrs = &xdr_stream;
-	register struct audata *au = AUTH_PRIVATE(auth);
+	XDR	*xdrs = &xdr_stream;
+	struct audata *au = AUTH_PRIVATE(auth);
 
 	xdrmem_create(xdrs, au->au_marshed, MAX_AUTH_BYTES, XDR_ENCODE);
 	if ((! xdr_opaque_auth(xdrs, &(auth->ah_cred))) ||

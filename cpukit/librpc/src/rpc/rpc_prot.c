@@ -50,9 +50,12 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/rpc_prot.c,v 1.8 1999/08/28 00:
 
 #include <rpc/rpc.h>
 
+static void accepted(enum accept_stat, struct rpc_err *);
+static void rejected(enum reject_stat, struct rpc_err *);
+
 /* * * * * * * * * * * * * * XDR Authentication * * * * * * * * * * * */
 
-struct opaque_auth _null_auth;
+extern struct opaque_auth _null_auth;
 
 /*
  * XDR an opaque authentication struct
@@ -60,8 +63,8 @@ struct opaque_auth _null_auth;
  */
 bool_t
 xdr_opaque_auth(xdrs, ap)
-	register XDR *xdrs;
-	register struct opaque_auth *ap;
+	XDR *xdrs;
+	struct opaque_auth *ap;
 {
 
 	if (xdr_enum(xdrs, &(ap->oa_flavor)))
@@ -75,8 +78,8 @@ xdr_opaque_auth(xdrs, ap)
  */
 bool_t
 xdr_des_block(xdrs, blkp)
-	register XDR *xdrs;
-	register des_block *blkp;
+	XDR *xdrs;
+	des_block *blkp;
 {
 	return (xdr_opaque(xdrs, (caddr_t)blkp, sizeof(des_block)));
 }
@@ -88,8 +91,8 @@ xdr_des_block(xdrs, blkp)
  */
 bool_t
 xdr_accepted_reply(xdrs, ar)
-	register XDR *xdrs;
-	register struct accepted_reply *ar;
+	XDR *xdrs;
+	struct accepted_reply *ar;
 {
 
 	/* personalized union, rather than calling xdr_union */
@@ -106,7 +109,12 @@ xdr_accepted_reply(xdrs, ar)
 		if (! xdr_u_int32_t(xdrs, &(ar->ar_vers.low)))
 			return (FALSE);
 		return (xdr_u_int32_t(xdrs, &(ar->ar_vers.high)));
-	default:
+
+	case GARBAGE_ARGS:
+	case SYSTEM_ERR:
+	case PROC_UNAVAIL:
+	case PROG_UNAVAIL:
+/*	default: */
 		break;
 	}
 	return (TRUE);  /* TRUE => open ended set of problems */
@@ -117,8 +125,8 @@ xdr_accepted_reply(xdrs, ar)
  */
 bool_t
 xdr_rejected_reply(xdrs, rr)
-	register XDR *xdrs;
-	register struct rejected_reply *rr;
+	XDR *xdrs;
+	struct rejected_reply *rr;
 {
 
 	/* personalized union, rather than calling xdr_union */
@@ -137,9 +145,9 @@ xdr_rejected_reply(xdrs, rr)
 	return (FALSE);
 }
 
-static struct xdr_discrim reply_dscrm[3] = {
-	{ (int)MSG_ACCEPTED, xdr_accepted_reply },
-	{ (int)MSG_DENIED, xdr_rejected_reply },
+static const struct xdr_discrim reply_dscrm[3] = {
+	{ (int)MSG_ACCEPTED, (xdrproc_t)xdr_accepted_reply },
+	{ (int)MSG_DENIED, (xdrproc_t)xdr_rejected_reply },
 	{ __dontcare__, NULL_xdrproc_t } };
 
 /*
@@ -147,8 +155,8 @@ static struct xdr_discrim reply_dscrm[3] = {
  */
 bool_t
 xdr_replymsg(xdrs, rmsg)
-	register XDR *xdrs;
-	register struct rpc_msg *rmsg;
+	XDR *xdrs;
+	struct rpc_msg *rmsg;
 {
 	if (
 	    xdr_u_int32_t(xdrs, &(rmsg->rm_xid)) &&
@@ -167,8 +175,8 @@ xdr_replymsg(xdrs, rmsg)
  */
 bool_t
 xdr_callhdr(xdrs, cmsg)
-	register XDR *xdrs;
-	register struct rpc_msg *cmsg;
+	XDR *xdrs;
+	struct rpc_msg *cmsg;
 {
 
 	cmsg->rm_direction = CALL;
@@ -187,8 +195,8 @@ xdr_callhdr(xdrs, cmsg)
 
 static void
 accepted(acpt_stat, error)
-	register enum accept_stat acpt_stat;
-	register struct rpc_err *error;
+	enum accept_stat acpt_stat;
+	struct rpc_err *error;
 {
 
 	switch (acpt_stat) {
@@ -225,8 +233,8 @@ accepted(acpt_stat, error)
 
 static void
 rejected(rjct_stat, error)
-	register enum reject_stat rjct_stat;
-	register struct rpc_err *error;
+	enum reject_stat rjct_stat;
+	struct rpc_err *error;
 {
 
 	switch (rjct_stat) {
@@ -252,8 +260,8 @@ rejected(rjct_stat, error)
  */
 void
 _seterr_reply(msg, error)
-	register struct rpc_msg *msg;
-	register struct rpc_err *error;
+	struct rpc_msg *msg;
+	struct rpc_err *error;
 {
 
 	/* optimized for normal, SUCCESSful case */
@@ -263,7 +271,7 @@ _seterr_reply(msg, error)
 		if (msg->acpted_rply.ar_stat == SUCCESS) {
 			error->re_status = RPC_SUCCESS;
 			return;
-		};
+		}
 		accepted(msg->acpted_rply.ar_stat, error);
 		break;
 
@@ -291,6 +299,22 @@ _seterr_reply(msg, error)
 		error->re_vers.low = msg->acpted_rply.ar_vers.low;
 		error->re_vers.high = msg->acpted_rply.ar_vers.high;
 		break;
+
+	case RPC_FAILED:
+	case RPC_SUCCESS:
+	case RPC_PROGNOTREGISTERED:
+	case RPC_PMAPFAILURE:
+	case RPC_UNKNOWNPROTO:
+	case RPC_UNKNOWNHOST:
+	case RPC_SYSTEMERROR:
+	case RPC_CANTDECODEARGS:
+	case RPC_PROCUNAVAIL:
+	case RPC_PROGUNAVAIL:
+	case RPC_TIMEDOUT:
+	case RPC_CANTRECV:
+	case RPC_CANTSEND:
+	case RPC_CANTDECODERES:
+	case RPC_CANTENCODEARGS:
 	default:
 		break;
 	}
