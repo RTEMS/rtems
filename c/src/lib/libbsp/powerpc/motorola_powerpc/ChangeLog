@@ -1,3 +1,8 @@
+2004-02-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Reflect changes to bsp.am. 
+	Preinstall dist_project_lib*.
+
 2004-02-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootloader/Makefile.am: Fix up paths having been broken in

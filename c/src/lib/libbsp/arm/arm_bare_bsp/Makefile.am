@@ -11,6 +11,11 @@ noinst_DATA =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
+dist_project_lib_DATA = bsp_specs
+
+include_HEADERS = include/bsp.h
+nodist_include_HEADERS = include/bspopts.h
+
 include_HEADERS += include/registers.h
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
@@ -117,7 +122,30 @@ noinst_DATA += libbsp$(LIB_VARIANT).a
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 PREINSTALL_DIRS =
+PREINSTALL_FILES =
 TMPINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
+
+$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
+PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
+
+$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
+
+$(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 
 $(PROJECT_INCLUDE)/registers.h: include/registers.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/registers.h
@@ -133,14 +161,14 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
 
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
-TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
 $(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES += $(PREINSTALL_DIRS)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
