@@ -23,6 +23,7 @@ include $(RTEMS_ROOT)/make/lib.cfg
 #  Using the wildcard on the Purify support makes sure it may not be there
 
 LIBS=../monitor/$(ARCH)/libmonitor-tmp.a \
+     ../untar/$(ARCH)/libuntar-tmp.a \
      ../error/$(ARCH)/liberror-tmp.a \
      ../assoc/$(ARCH)/libassoc-tmp.a \
      ../stackchk/$(ARCH)/libstackchk-tmp.a \
