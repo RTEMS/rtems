@@ -281,7 +281,10 @@ void _Objects_Extend_information(
       );
   }
   
-  name_area = (Objects_Name *) information->object_blocks[ block ];
+  name_area = (Objects_Name *) _Addresses_Add_offset(
+    information->object_blocks[ block ],
+    (information->allocation_size * information->size)
+  );
   information->name_table[ block ] = name_area;
 
   /*
@@ -290,8 +293,7 @@ void _Objects_Extend_information(
 
   _Chain_Initialize(
     &Inactive,
-    _Addresses_Add_offset( information->object_blocks[ block ],
-                           (information->allocation_size * information->name_length) ),
+    information->object_blocks[ block ],
     information->allocation_size,
     information->size
   );
