@@ -153,12 +153,12 @@ ENDFRAME(_CPU_ISR_Get_level)
 
 FRAME(_CPU_ISR_Set_level,sp,0,ra)
 	nop
-	mfc0 a0,C0_SR
+	mfc0 v0,C0_SR
 	nop
-	andi a0,SR_EXL 
-	beqz a0,_CPU_ISR_Set_1		/* normalize a0 */
+	andi v0,SR_EXL 
+	beqz v0,_CPU_ISR_Set_1		/* normalize v0 */
 	nop
-	li a0,1         
+	li v0,1         
 _CPU_ISR_Set_1:
 	beq v0,a0,_CPU_ISR_Set_exit	/* if (current_level != new_level ) */
 	nop
