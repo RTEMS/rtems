@@ -23,7 +23,5 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = CHANGELOG
-
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am
