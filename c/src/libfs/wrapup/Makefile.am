@@ -13,7 +13,9 @@ include $(top_srcdir)/../../../automake/lib.am
 
 IMFSLIB = ../src/imfs/$(ARCH)/libimfs.a
 
-TMP_LIBS = $(IMFSLIB)
+DOSFSLIB = ../src/dosfs/$(ARCH)/libdosfs.a
+
+TMP_LIBS = $(IMFSLIB) $(DOSFSLIB)
 
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@

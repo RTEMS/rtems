@@ -1,3 +1,20 @@
+2002-02-28	Victor V. Vengerov <vvv@oktet.ru>
+
+	* DOS filesystem including FAT12, FAT16, and FAT32 support submitted.
+	* src/dosfs, src/dosfs/Makefile.am, src/dosfs/stamp-h2.in,
+	src/dosfs/config.h.in, src/dosfs/dosfs.h, src/dosfs/fat.c,
+	src/dosfs/fat.h, src/dosfs/fat_fat_operations.c,
+	src/dosfs/fat_fat_operations.h, src/dosfs/fat_file.c,
+	src/dosfs/fat_file.h, src/dosfs/msdos.h, src/dosfs/msdos_create.c,
+	src/dosfs/msdos_dir.c, src/dosfs/msdos_eval.c, src/dosfs/msdos_file.c,
+	src/dosfs/msdos_free.c, src/dosfs/msdos_fsunmount.c,
+	src/dosfs/msdos_handlers_dir.c, src/dosfs/msdos_handlers_file.c,
+	src/dosfs/msdos_init.c, src/dosfs/msdos_initsupp.c,
+	src/dosfs/msdos_misc.c, src/dosfs/msdos_mknod.c,
+	src/dosfs/msdos_node_type.c, src/dosfs/.cvsignore: New files.
+	* configure.ac, src/Makefile.am, wrapup/Makefile.am: Modified to
+	reflect addition.
+
 2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/imfs/imfs_load_tar.c: Add include <sys/types.h>.

@@ -5,6 +5,7 @@
 AC_PREREQ(2.52)
 AC_INIT
 AC_CONFIG_SRCDIR([src/imfs/imfs.h])
+AC_CONFIG_SRCDIR([src/dosfs/dosfs.h])
 RTEMS_TOP(../../..)
 AC_CONFIG_AUX_DIR(../../..)
 
@@ -27,11 +28,13 @@ RTEMS_CANONICALIZE_TOOLS
 
 AM_CONDITIONAL(UNIX,test x"$RTEMS_CPU" = x"unix")
 AM_CONFIG_HEADER(src/imfs/config.h)
+AM_CONFIG_HEADER(src/dosfs/config.h)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 src/Makefile
 src/imfs/Makefile
+src/dosfs/Makefile
 wrapup/Makefile
 ])
 AC_OUTPUT
