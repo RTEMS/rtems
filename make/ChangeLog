@@ -1,3 +1,8 @@
+2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* custom/Makefile.am: Add MVME2100 BSP.
+	* custom/mvme2100.cfg: New file.
+
 2003-09-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	custom/ppcn_60x.cfg: Remove -fvolatile-global -fvolatile from CFLAGS.
