@@ -27,13 +27,12 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
 ## Note: the order of the directories below is essential
-AC_CONFIG_SUBDIRS(make)
+AC_CONFIG_SUBDIRS([make])
 
-## Exclude exec from building if multilibs are enabled
+## Configure ${srcdir}/../../cpukit as exec/ if multilibs are enabled
 AS_IF([test x"$multilib" = x"no"],[
   RTEMS_CHECK_MULTIPROCESSING
-# RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],[--with-project-root="../../"])
-  RTEMS_CONFIG_SUBDIR([exec],[exec],[--with-project-root="../../"])
+  RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],[--with-project-root="../../"])
   AC_SUBST([exec],[exec])
 ])
 
@@ -42,10 +41,10 @@ AC_CONFIG_SUBDIRS(lib/libcpu)
 AC_CONFIG_SUBDIRS(lib/libbsp)
 AC_CONFIG_SUBDIRS(libmisc)
 
-if test "$RTEMS_CPU" != "unix"; then
+AS_IF([test "$RTEMS_CPU" != "unix"],[
 ## HACK: Suppress libchip for unix
   AC_CONFIG_SUBDIRS(libchip)
-fi
+])
 
 if test "$HAS_NETWORKING" = "yes"; then
   AC_CONFIG_SUBDIRS(libnetworking)

@@ -1,6 +1,6 @@
 # $Id$
 #
-# Some hacks for handling powerpc-exception subdirectories
+# Some hacks for handling special config subdirectories
 #
 # Note: Consider this file a temporary band-aid until a better, more general
 # subdirectory handling solution is introduced to RTEMS.
@@ -66,8 +66,6 @@ if test "$no_recursion" != yes; then
     ac_dots=`echo $ac_sub_builddir |
              sed 's,^\./,,;s,[[^/]]$,&/,;s,[[^/]]*/,../,g'`
 
-echo "*** dots  :$ac_dots"
-echo "*** src   :$srcdir"
     case $srcdir in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir${ac_subdir} ;;
@@ -76,11 +74,6 @@ echo "*** src   :$srcdir"
     *) # Relative path.
       ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
     esac
-
-echo "*** source:$ac_sub_sourcedir"
-echo "*** build :$ac_sub_builddir"
-echo "*** src   :$ac_sub_srcdir"
-echo "*** pwd   :"`pwd`
 
     # Check for guested configure; otherwise get Cygnus style configure.
     if test -f $ac_sub_srcdir/configure.gnu; then
