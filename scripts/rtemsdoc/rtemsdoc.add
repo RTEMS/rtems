@@ -1,0 +1,88 @@
+%define _datadir %{_prefix}/share
+%define _infodir %{_datadir}/info
+
+%define srcvers	@rtems_version@
+%define rpmvers  %{expand:%%(echo @rtems_version@ | tr - _ )}
+
+Name:         rtemsdoc
+Release:      @rtems_rpm_release@
+License:      Distributable
+Group:        rtems
+
+Autoreqprov:  on
+Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+BuildPreReq:    texinfo >= 4.2
+BuildPreReq:    tetex
+BuildPreReq:    perl
+BuildPreReq:    gcc
+
+Version:      %{rpmvers}
+Summary:      A free operating system for embedded systems
+Source:       rtems-%{srcvers}.tar.bz2
+
+#
+# The original sources are not included in the source RPM.
+# If we included them, then the source RPMs for each target
+# would duplicate MBs of source unnecessarily.  This is 
+# a duplication of over 30 MBs of source for each of
+# the more than 10 targets it is possible to build.
+#
+# You can get them yourself from the Internet and copy them to
+# your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+# Or you can try the ftp options of rpm :-)
+#
+NoSource:      0
+Prefix:		%{_prefix}
+Prefix:		%{_infodir}
+Prefix:		%{_datadir}
+BuildRoot:    	%{_tmppath}/%{name}-%{version}-root
+BuildArch:	noarch
+
+%description
+RTEMS is a free operating system for embedded systems.
+
+This package contains the documentation
+
+%prep
+%setup -c -T -n %{name}-%{version} -b0
+test -d build || mkdir build
+%build
+cd build
+# rtems does not support building inside the source tree
+  export PATH=%{_prefix}/bin:$PATH
+  ../rtems-%{srcvers}/doc/configure \
+  --prefix=%{_prefix} \
+  --infodir=%{_infodir} \
+  --datadir=%{_datadir} \
+  --enable-docs
+  make RTEMS_BSP=
+%install
+  rm -rf ${RPM_BUILD_ROOT}
+cd build
+  make RTEMS_BSP= DESTDIR=${RPM_BUILD_ROOT} install
+  rm -f ${RPM_BUILD_ROOT}/%{_infodir}/template*
+  rm -f ${RPM_BUILD_ROOT}/%{_datadir}/rtems/*/template*
+  rm -rf ${RPM_BUILD_ROOT}/%{_datadir}/rtems/html/supplements/template*
+
+  gzip -9qf ${RPM_BUILD_ROOT}/%{_infodir}/*
+  bzip2 -9qf ${RPM_BUILD_ROOT}/%{_datadir}/rtems/ps/*
+
+## base
+
+%package base
+Summary: Documentation for RTEMS ada support
+Group: rtems/documentation
+
+%description base
+RTEMS is a free operating system for embedded systems.
+
+This package contains the files shared between different documentation
+packages.
+
+%files base
+%dir %{_infodir}
+%dir %{_datadir}/rtems
+%dir %{_datadir}/rtems/html
+%{_datadir}/rtems/html/images
+%{_datadir}/rtems/html/*.html
+

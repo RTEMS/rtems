@@ -1,0 +1,14 @@
+#
+# Please send bugfixes or comments to
+# 	http://www.oarcorp.com/cgi-bin/gnatweb.pl
+# or	mailto:@PACKAGE_BUGREPORT@
+#
+
+%define	_prefix			@prefix@
+%define _defaultbuildroot 	%{_tmppath}/%{name}-%{version}-root
+%ifos cygwin cygwin32
+%define _exeext .exe
+%else
+%define _exeext %{nil}
+%endif
+

@@ -1,0 +1,5 @@
+%clean
+# let rpm --clean remove BuildRoot iif using the default BuildRoot
+  test $RPM_BUILD_ROOT = "%{_defaultbuildroot}" && \
+    rm -rf $RPM_BUILD_ROOT
+
