@@ -1,3 +1,15 @@
+2005-01-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* ChangeLog: Merge-in at91rm9200/ChangeLog, mc9328mxl/ChangeLog,
+	shared/ChangeLog.
+	* at91rm9200/ChangeLog, mc9328mxl/ChangeLog, shared/ChangeLog:
+	Remove.
+
+2004-10-20	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* at91rm9200/timer/timer.c, mc9328mxl/timer/timer.c: Use POSIX
+	fixed-size types.
+
 2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_ENABLE_BARE.
@@ -13,5 +25,26 @@
 
 2004-07-15	Jay Monkman
 
-	* .cvsignore, ChangeLog, Makefile.am, configure.ac: New files.
+	* .cvsignore, ChangeLog, Makefile.am, configure.ac,
+	at91rm9200/ChangeLog, at91rm9200/Makefile.am,
+	at91rm9200/clock/.cvsignore, at91rm9200/clock/clock.c,
+	at91rm9200/dbgu/.cvsignore, at91rm9200/dbgu/dbgu.c,
+	at91rm9200/include/at91rm9200.h,
+	at91rm9200/include/at91rm9200_dbgu.h,
+	at91rm9200/include/at91rm9200_emac.h,
+	at91rm9200/include/at91rm9200_gpio.h,
+	at91rm9200/include/at91rm9200_mem.h,
+	at91rm9200/include/at91rm9200_pmc.h, at91rm9200/include/bits.h,
+	at91rm9200/irq/.cvsignore, at91rm9200/irq/bsp_irq_asm.S,
+	at91rm9200/irq/bsp_irq_init.c, at91rm9200/irq/irq.c,
+	at91rm9200/irq/irq.h, at91rm9200/pmc/pmc.c,
+	at91rm9200/timer/.cvsignore, at91rm9200/timer/timer.c,
+	mc9328mxl/ChangeLog, mc9328mxl/Makefile.am,
+	mc9328mxl/clock/.cvsignore, mc9328mxl/clock/clockdrv.c,
+	mc9328mxl/include/mc9328mxl.h, mc9328mxl/irq/.cvsignore,
+	mc9328mxl/irq/bsp_irq_asm.S, mc9328mxl/irq/bsp_irq_init.c,
+	mc9328mxl/irq/irq.c, mc9328mxl/irq/irq.h,
+	mc9328mxl/timer/.cvsignore, mc9328mxl/timer/timer.c,
+	shared/ChangeLog, shared/Makefile.am, shared/arm920/mmu.c,
+	shared/include/mmu.h: New files.
 
