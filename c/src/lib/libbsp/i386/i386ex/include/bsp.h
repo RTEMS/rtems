@@ -21,6 +21,8 @@ extern "C" {
 
 #include <rtems.h>
 #include <iosupp.h>
+#include <console.h>
+#include <clockdrv.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -87,17 +89,6 @@ extern "C" {
 
 
 #define Is_rx_ready( _status ) ( (_status) & 0x01 )
-
-/* Timer constants: WE DON'T use THESE */
-
-#define IERA   0x106     /* Interrupt Enable Register A */
-#define IMRA   0x112     /* Interrupt Mask Register A */
-#define TACR   0x118     /* Timer A Control Register */
-#define TADR   0x11e     /* Timer A Data Register */
-
-#define IERB   0x108     /* Interrupt Enable Register B */
-#define TBCR   0x11a     /* Timer B Control Register */
-#define TBDR   0x120     /* Timer B Data Register */
 
 /* Structures */
 
