@@ -18,7 +18,6 @@ AUTOMAKE_FILES += automake/subdirs.am
 
 ACLOCAL_FILES =
 ACLOCAL_FILES += aclocal/bsp-alias.m4
-ACLOCAL_FILES += aclocal/canonical-host.m4
 ACLOCAL_FILES += aclocal/canonical-target-name.m4
 ACLOCAL_FILES += aclocal/check-bsps.m4
 ACLOCAL_FILES += aclocal/check-custom-bsp.m4
