@@ -239,7 +239,12 @@ User_extensions_routine _POSIX_Threads_Exitted_extension(
   Thread_Control *executing
 )
 {
-  pthread_exit( executing->Wait.return_argument );
+  /*
+   *  If the executing thread was not created with the POSIX API, then this
+   *  API do not get to define its exit behavior.
+   */
+  if ( _Objects_Get_API( executing->Object.id ) == OBJECTS_POSIX_API )
+    pthread_exit( executing->Wait.return_argument );
 }
 
 /*PAGE
