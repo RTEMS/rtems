@@ -22,16 +22,27 @@ SECTIONS
       *(.text)
       *(.text.*)
       *(.gnu.linkonce.t*)
-      *(.init)
       *(.mips16.fn.*)
       *(.mips16.call.*)
       PROVIDE (__runtime_reloc_start = .);
       *(.rel.sdata)
       PROVIDE (__runtime_reloc_stop = .);
-      *(.fini)
-       etext  =  .;
-       _etext  =  .;
-    }  
+
+      *(.gcc_except_table)
+      *(.eh_frame_hdr)
+      *(.eh_frame)
+    }
+
+  .init :
+  {
+	KEEP(*(.init))
+  }
+
+  .fini :
+  {
+	KEEP(*(.fini))
+  }
+
   .ctors    :
   {
     /* gcc uses crtbegin.o to find the start of
@@ -62,9 +73,11 @@ SECTIONS
     KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
     KEEP (*(SORT(.dtors.*)))
     KEEP (*(.dtors))
+
+    etext  =  .;
+    _etext  =  .;
   }
 
-    . = .;
   .rdata : {
     *(.rdata)
     *(.rodata)
@@ -72,30 +85,38 @@ SECTIONS
     *(.gnu.linkonce.r*)
   }
    _fdata = ALIGN(16);
+
   .data : {
     *(.data)
     *(.data.*)
     *(.gnu.linkonce.d*)
-     SORT(CONSTRUCTORS)
+    SORT(CONSTRUCTORS)
   }
   . = ALIGN(8);
-  _gp = . + 0x8000;
+
+  .jcr : {
+	KEEP (*(.jcr))
+  }
+
+  _gp = ALIGN(16) + 0x7440;
   __global = _gp;
+
+  .sdata : {
+    *(.sdata)
+    *(.sdata.*)
+    *(.gnu.linkonce.s*)
+  }
   .lit8 : {
     *(.lit8)
   }
   .lit4 : {
     *(.lit4)
   }
-  .sdata : {
-    *(.sdata)
-    *(.sdata.*)
-    *(.gnu.linkonce.s*)
-  }
-  . = ALIGN(4);
+
    edata  =  .;
    _edata  =  .;
    _fbss = .;
+
   .sbss : {
     *(.sbss)
     *(.scommon)

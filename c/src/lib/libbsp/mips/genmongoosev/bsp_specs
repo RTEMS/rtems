@@ -5,7 +5,7 @@
 %rename link old_link
 
 *cpp:
-%(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
+%(old_cpp) %{qrtems: -D__embedded__ -D__USE_INIT_FINI__ } -Asystem(embedded)
 
 *lib:
 %{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: --start-group \
@@ -15,9 +15,12 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems: \
-%{!qnostartfile: %{!qrtems_debug: start.o%s} \
-		 %{qrtems_debug: start_g.o%s}}}}
+	%{!qnostartfile: %{!qrtems_debug: start.o%s} \
+			 %{qrtems_debug: start_g.o%s}} crti.o%s crtbegin.o%s }}
 
 *link:
 %(old_link) %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}
+
+*endfile:
+%{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s crtn.o%s }
 

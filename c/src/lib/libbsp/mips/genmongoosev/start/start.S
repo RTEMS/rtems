@@ -411,9 +411,9 @@ zerobss:
 ** Function: _init
 */
    .globl  exit .text
-   .globl  _init
-   .ent    _init
-_init:
+   .globl  _initialize_rtems
+   .ent    _initialize_rtems
+_initialize_rtems:
 
    /*
    ** Print 'i'.  Starting to initialize RTEMS.
@@ -445,7 +445,7 @@ _init:
    */
    jal _sys_exit
    nop
-   .end _init
+   .end _initialize_rtems
 
 
 /**********************************************************************
@@ -578,7 +578,10 @@ _cpuinit:
    # INV    = 0:  1       : Disable invalidate mode
    # LOCK   = 0:  0       : Disable cache lock
    #
-   li  t0,0x00027AA0
+   # 0x00027AA0 caches on
+   # 0x00027220 caches off
+   #
+   li  t0,0x00027aa0
    sw  t0,M_BIU
 
    #

@@ -1,3 +1,8 @@
+2002-12-08	Greg Menke <gregory.menke@gsfc.nasa.gov>
+  
+	* bsp_specs: Added crtbegin/crtend and INIT_FINI for C++ support.
+	* linkcmds: Added .init, .fini & related sections.
+
 2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.

@@ -14,7 +14,7 @@
 _RamBase = DEFINED(_RamBase) ? _RamBase : 0x80000000;
 _RamSize = DEFINED(_RamSize) ? _RamSize : 32M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x40000;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x4000;
 ClockRate = DEFINED(ClockRate) ? ClockRate : 12000000;
 
 
@@ -29,11 +29,11 @@ SECTIONS
     .text : 
     { 
        _ftext = . ;
-      *(.init)
-       eprol  =  .;
+
+      */start.o(.text)
+
       *(.text)
       *(.text.*)
-      *(.eh_frame)
       *(.gnu.linkonce.t*)
       *(.mips16.fn.*)
       *(.mips16.call.*)
@@ -41,9 +41,24 @@ SECTIONS
       *(.rel.sdata)
       *(.rel.dyn)
       PROVIDE (__runtime_reloc_stop = .);
-      *(.fini)
+
       *(.gcc_except_table)
+      *(.eh_frame_hdr)
+      *(.eh_frame)
     } >ram  
+
+  .init :
+  {
+     KEEP(*(.init))
+
+  } > ram
+
+  .fini :
+  {
+     KEEP(*(.fini))
+
+  }  > ram 
+
 
   .ctors    : 
   {
@@ -99,13 +114,17 @@ SECTIONS
     *(.gnu.linkonce.d*)
   } >ram  
 
+  .jcr : 
+  {
+    . = ALIGN(8);
+    KEEP (*(.jcr))
+
+    _gp = ALIGN(16) + 0x7440;
+    __global = _gp;
+  } >ram
 
   .lit8 : 
   {
-    . = ALIGN(8);
-
-    _gp = . + 0x8000;
-    __global = _gp;
     *(.lit8)
   } >ram  
 
