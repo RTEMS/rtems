@@ -1,3 +1,7 @@
+2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpumodel.t: Reflect c/src/exec having moved to cpukit.
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* template.texi: Set @setfilename template.info.

@@ -46,7 +46,7 @@ present.
 This chapter presents the set of features which vary
 across i386 implementations and are of importance to RTEMS.
 The set of CPU model feature macros are defined in the file
-c/src/exec/score/cpu/i386/i386.h based upon the particular CPU
+cpukit/score/cpu/i386/i386.h based upon the particular CPU
 model defined on the compilation command line.
 
 @section CPU Model Name

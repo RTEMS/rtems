@@ -46,7 +46,7 @@ present.
 This chapter presents the set of features which vary
 across SPARC implementations and are of importance to RTEMS.
 The set of CPU model feature macros are defined in the file
-c/src/exec/score/cpu/XXX/XXX.h based upon the particular CPU
+cpukit/score/cpu/XXX/XXX.h based upon the particular CPU
 model defined on the compilation command line.
 
 @section CPU Model Name

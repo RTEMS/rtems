@@ -46,7 +46,7 @@ present.
 This chapter presents the set of features which vary
 across i960 implementations and are of importance to RTEMS.
 The set of CPU model feature macros are defined in the file
-c/src/exec/score/cpu/i960/i960.h based upon the particular CPU
+cpukit/score/cpu/i960/i960.h based upon the particular CPU
 model defined on the compilation command line.
 
 @section CPU Model Name

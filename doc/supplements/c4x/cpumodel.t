@@ -47,7 +47,7 @@ This chapter presents the set of features which vary
 across the various implementations of the C3x/C4x architecture
 that are of importance to rtems.
 the set of cpu model feature macros are defined in the file
-c/src/exec/score/cpu/c4x/rtems/score/c4x.h and are based upon
+cpukit/score/cpu/c4x/rtems/score/c4x.h and are based upon
 the particular cpu model defined in the bsp's custom configuration
 file as well as the compilation command line.
 
