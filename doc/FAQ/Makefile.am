@@ -15,8 +15,8 @@ include $(top_srcdir)/project.am
 COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
 
 GENERATED_FILES= \
-    basic.texi tools.texi concepts.texi bsp.texi debug.texi freesw.texi \
-    embeddedinfo.texi hwdebugaids.texi projects.texi endoftime.texi
+    basic.texi tools.texi concepts.texi build45.texi bsp.texi debug.texi \
+    freesw.texi embeddedinfo.texi hwdebugaids.texi projects.texi endoftime.texi
 
 FILES=
 
@@ -38,6 +38,11 @@ tools.texi: tools.t
 	    -n "" $<
 
 concepts.texi: concepts.t
+	$(BMENU) -c -p "" \
+	    -u "Top" \
+	    -n "" $<
+
+build45.texi: build45.t
 	$(BMENU) -c -p "" \
 	    -u "Top" \
 	    -n "" $<

@@ -65,6 +65,7 @@ END-INFO-DIR-ENTRY
 @include basic.texi
 @include tools.texi
 @include concepts.texi
+@include build45.texi
 @include bsp.texi
 @include debug.texi
 @include freesw.texi
@@ -88,6 +89,7 @@ Common questions have been divided into the following categories.
 * Basic Information::
 * General Development Tool Hints::
 * RTEMS Concepts::
+* Building RTEMS 4.5::
 * BSP Questions::
 * Debugging Hints::
 * Free Software that Works with RTEMS::
