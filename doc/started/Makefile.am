@@ -65,7 +65,7 @@ nextstep.texi: nextstep.t tversions.texi
 	    -n "Using MS-Windows as a Development Host" $<
 
 nt.texi: nt.t tversions.texi
-	$(BMENU) -c -p "Where To Go From Here" \
+	$(BMENU) -c -p "Writing an Application" \
 	    -u "Top" \
 	    -n "" $<
 
