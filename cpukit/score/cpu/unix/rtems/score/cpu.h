@@ -24,11 +24,6 @@ extern "C" {
 #include <rtems/score/types.h>
 #endif
 
-#if defined(solaris2)
-#undef  _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE 3
-#endif
-
 #if defined(linux)
 #define MALLOC_0_RETURNS_NULL
 #endif

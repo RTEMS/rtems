@@ -1,3 +1,7 @@
+2004-04-12	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* rtems/score/cpu.h: Remove defining _POSIX_C_SOURCE for solaris.
+
 2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* Makefile.am: Remove LIBC_DEFINES (Unsupported).
