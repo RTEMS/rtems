@@ -1,5 +1,16 @@
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mkgccnewlibspec.in, gccnewlib/.cvsignore, gccnewlib/HISTORY,
+	gccnewlib/Makefile.am, gccnewlib/README, gccnewlib/base-chill.add,
+	gccnewlib/base-g77.add, gccnewlib/base-gcc.add, gccnewlib/base-gcj.add,
+	gccnewlib/gccnewlib.add, gccnewlib/header.add,
+	gccnewlib/target-chill.add, gccnewlib/target-g77.add,
+	gccnewlib/target-gcc.add, gccnewlib/target-gcj.add,
+	gccnewlib/target-objc.add: Remove (Obsolete).
+	* configure.ac, Makefile.am: Reflect changes above.
+
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* gcc3newlib/gcc3newlib.add: Remove info/dir.
 	Cosmetics.
 

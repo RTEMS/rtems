@@ -74,7 +74,6 @@ AC_SUBST(RTEMS_RPM_RELEASE,$rtems_rpm_release)
 AC_SUBST(osversion,$osversion)
 AC_CONFIG_FILES([Makefile
 binutils/Makefile
-gccnewlib/Makefile
 gcc3newlib/Makefile
 gdb/Makefile
 rtems/Makefile
@@ -90,7 +89,6 @@ AC_CONFIG_FILES([buildalltar],[chmod +x buildalltar])
 AC_CONFIG_FILES([buildall],[chmod +x buildall])
 AC_CONFIG_FILES([gdb/mkspec],[chmod +x gdb/mkspec])
 AC_CONFIG_FILES([binutils/mkspec],[chmod +x binutils/mkspec])
-AC_CONFIG_FILES([mkgccnewlibspec],[chmod +x mkgccnewlibspec])
 AC_CONFIG_FILES([mkbspspec],[chmod +x mkbspspec])
 AC_CONFIG_FILES([gcc3newlib/mkspec],[chmod +x gcc3newlib/mkspec])
 AC_CONFIG_FILES([cpukit/mkspec],[chmod +x cpukit/mkspec])
