@@ -34,6 +34,8 @@ extern "C" {
 #include <clockdrv.h>
 #include <console.h>
 
+#include <bspopts.h>
+
 /*
  *  confdefs.h overrides for this BSP:
  *   - number of termios serial ports (defaults to 1)
@@ -53,7 +55,6 @@ extern "C" {
 #define BSP_CONSOLE_DEVNAME "/dev/sci0"
 #define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVSCI_DRIVER_TABLE_ENTRY
 #endif
-
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
