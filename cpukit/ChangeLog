@@ -1,5 +1,9 @@
 2004-10-27	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* configure.ac: Add score/cpu/no_cpu/Makefile.
+
+2004-10-27	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* Makefile.am, configure.ac: Add httpd.
 	* httpd/asp.c, httpd/balloc.c, httpd/cgi.c, httpd/default.c,
 	httpd/ej.h, httpd/ejIntrn.h, httpd/ejlex.c, httpd/ejparse.c,
