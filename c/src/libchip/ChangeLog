@@ -1,3 +1,19 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* ide/ata.c, ide/ata.h, ide/ata_internal.h, ide/ide_controller.c,
+	ide/ide_ctrl.h, ide/ide_ctrl_cfg.h, ide/ide_ctrl_io.h,
+	network/cs8900.c, network/cs8900.c.bsp, network/cs8900.h,
+	network/dec21140.c, network/elnk.c, network/open_eth.c,
+	network/sonic.c, network/sonic.h, rtc/icm7170.c, rtc/icm7170.h,
+	rtc/icm7170_reg.c, rtc/icm7170_reg2.c, rtc/icm7170_reg4.c,
+	rtc/icm7170_reg8.c, rtc/m48t08.c, rtc/m48t08.h, rtc/m48t08_reg.c,
+	rtc/m48t08_reg2.c, rtc/m48t08_reg4.c, rtc/m48t08_reg8.c, rtc/rtc.h,
+	rtc/rtcprobe.c, serial/mc68681.c, serial/mc68681.h,
+	serial/mc68681_p.h, serial/mc68681_reg.c, serial/mc68681_reg2.c,
+	serial/mc68681_reg4.c, serial/mc68681_reg8.c, serial/serial.h,
+	serial/z85c30.c, serial/z85c30.h, serial/z85c30_p.h,
+	serial/z85c30_reg.c: URL for license changed.
+
 2003-09-03	Jiri Gaisler <jiri@gaisler.com>
 
 	PR 477/networking
