@@ -8,7 +8,7 @@
 
 @chapter Status of Implementation
 
-This chapter provides an overview of the status of the implementation 
+This chapter provides an overview of the status of the implementation
 of the POSIX API for RTEMS.  The @i{POSIX 1003.1b Compliance Guide}
 provides more detailed information regarding the implementation of
 each of the numerous functions, constants, and macros specified by
@@ -53,7 +53,7 @@ level of support is appropriate and possible for RTEMS.
 
 @item Documentation
 @itemize @bullet
-@item Most of the service description pages are completed in this
+@item Many of the service description pages are completed in this
 manual.  These need to be completed and information added to the
 background and operations sections.
 @item Example programs (not just tests) would be very nice.
