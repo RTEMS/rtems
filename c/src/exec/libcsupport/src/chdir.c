@@ -37,12 +37,12 @@ int chdir(
    * Verify you can change directory into this node.
    */
 
-  if ( !loc.ops->node_type ) {
+  if ( !loc.ops->node_type_h ) {
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
+  if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTDIR );
   }

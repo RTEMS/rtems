@@ -31,12 +31,12 @@ int chown(
   if ( rtems_filesystem_evaluate_path( path, 0x00, &loc, TRUE ) )
     return -1;
   
-  if ( !loc.ops->chown ) {
+  if ( !loc.ops->chown_h ) {
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result = (*loc.ops->chown)( &loc, owner, group );
+  result = (*loc.ops->chown_h)( &loc, owner, group );
 
   rtems_filesystem_freenode( &loc );
   

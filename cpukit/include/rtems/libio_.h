@@ -168,8 +168,8 @@ extern mode_t    rtems_filesystem_umask;
 
 #define rtems_filesystem_freenode( _node ) \
   do { \
-    if ( (_node)->ops->freenod ) \
-      (*(_node)->ops->freenod)( (_node) ); \
+    if ( (_node)->ops->freenod_h ) \
+      (*(_node)->ops->freenod_h)( (_node) ); \
   } while (0)
 
 /*

@@ -25,8 +25,8 @@ int close(
   rtems_libio_check_is_open(iop);
 
   rc = RTEMS_SUCCESSFUL;
-  if ( iop->handlers->close )
-    rc = (*iop->handlers->close)( iop );
+  if ( iop->handlers->close_h )
+    rc = (*iop->handlers->close_h)( iop );
 
   rtems_libio_free( iop );
 

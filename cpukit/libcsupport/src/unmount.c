@@ -105,7 +105,7 @@ int unmount(
    * XXX   I will step off in space when evaluating past the end of the node.
    */
 
-  if ((temp_mt_entry.mt_point_node.ops->unmount )( temp_loc.mt_entry ) != 0 ) {
+  if ((temp_mt_entry.mt_point_node.ops->unmount_h )( temp_loc.mt_entry ) != 0 ) {
     rtems_filesystem_freenode( &temp_loc );
     return -1;
   }
@@ -114,7 +114,7 @@ int unmount(
    * Run the unmount function for the subordinate file system.
    */
 
-  if ((temp_mt_entry.mt_fs_root.ops->fsunmount_me )( temp_loc.mt_entry ) != 0){
+  if ((temp_mt_entry.mt_fs_root.ops->fsunmount_me_h )( temp_loc.mt_entry ) != 0){
     rtems_filesystem_freenode( &temp_loc );
     return -1;
   }

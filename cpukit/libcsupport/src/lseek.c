@@ -49,10 +49,10 @@ off_t lseek(
       return -1;
   }
 
-  if ( !iop->handlers->lseek )
+  if ( !iop->handlers->lseek_h )
     set_errno_and_return_minus_one( ENOTSUP );
 
-  return (*iop->handlers->lseek)( iop, offset, whence );
+  return (*iop->handlers->lseek_h)( iop, offset, whence );
 }
 
 /*

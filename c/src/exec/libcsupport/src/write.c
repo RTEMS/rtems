@@ -41,10 +41,10 @@ ssize_t write(
    *  Now process the write() request.
    */
 
-  if ( !iop->handlers->write )
+  if ( !iop->handlers->write_h )
     set_errno_and_return_minus_one( ENOTSUP );
 
-  rc = (*iop->handlers->write)( iop, buffer, count );
+  rc = (*iop->handlers->write_h)( iop, buffer, count );
 
   if ( rc > 0 )
     iop->offset += rc;

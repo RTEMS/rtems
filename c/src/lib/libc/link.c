@@ -42,13 +42,13 @@ int link(
 
   rtems_filesystem_get_start_loc( new, &i, &parent_loc );
 
-  if ( !parent_loc.ops->evalformake ) {
+  if ( !parent_loc.ops->evalformake_h ) {
     rtems_filesystem_freenode( &existing_loc );
     rtems_filesystem_freenode( &parent_loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result = (*parent_loc.ops->evalformake)( &new[i], &parent_loc, &name_start );
+  result = (*parent_loc.ops->evalformake_h)( &new[i], &parent_loc, &name_start );
   if ( result != 0 ) {
     rtems_filesystem_freenode( &existing_loc );
     rtems_filesystem_freenode( &parent_loc );
@@ -66,13 +66,13 @@ int link(
     set_errno_and_return_minus_one( EXDEV );
   }
 
-  if ( !parent_loc.ops->link ) {
+  if ( !parent_loc.ops->link_h ) {
     rtems_filesystem_freenode( &existing_loc );
     rtems_filesystem_freenode( &parent_loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result = (*parent_loc.ops->link)( &existing_loc, &parent_loc, name_start );
+  result = (*parent_loc.ops->link_h)( &existing_loc, &parent_loc, name_start );
   
   rtems_filesystem_freenode( &existing_loc );
   rtems_filesystem_freenode( &parent_loc );

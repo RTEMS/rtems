@@ -24,16 +24,16 @@ int symlink(
   int                                 result;
 
   rtems_filesystem_get_start_loc( sympath, &i, &loc );
-  result = (*loc.ops->evalformake)( &sympath[i], &loc, &name_start );
+  result = (*loc.ops->evalformake_h)( &sympath[i], &loc, &name_start );
   if ( result != 0 )
     return -1;
 
-  if ( !loc.ops->symlink ) {
+  if ( !loc.ops->symlink_h ) {
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result = (*loc.ops->symlink)( &loc, actualpath, name_start);
+  result = (*loc.ops->symlink_h)( &loc, actualpath, name_start);
 
   rtems_filesystem_freenode( &loc );
 

@@ -151,7 +151,7 @@ int mount(
      */
 
     loc_to_free = &loc;
-    if ( loc.ops->node_type( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
+    if ( loc.ops->node_type_h( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
       errno = ENOTDIR;
       goto cleanup_and_bail;
     }
@@ -183,12 +183,12 @@ int mount(
      *  below the base file system 
      */
 
-    if ( !loc.ops->mount ){
+    if ( !loc.ops->mount_h ){
       errno = ENOTSUP;
       goto cleanup_and_bail;
     }
 
-    if ( loc.ops->mount( temp_mt_entry ) ) {
+    if ( loc.ops->mount_h( temp_mt_entry ) ) {
       goto cleanup_and_bail;
     }
   } else {
@@ -209,12 +209,12 @@ int mount(
     temp_mt_entry->mt_point_node.mt_entry = NULL;
   }
 
-  if ( !fs_ops->fsmount_me ) {
+  if ( !fs_ops->fsmount_me_h ) {
     errno = ENOTSUP;
     goto cleanup_and_bail;
   }
 
-  if ( fs_ops->fsmount_me( temp_mt_entry ) )
+  if ( fs_ops->fsmount_me_h( temp_mt_entry ) )
     goto cleanup_and_bail;
 
   /*

@@ -37,17 +37,17 @@ int ftruncate(
    */
 
   loc = iop->pathinfo;
-  if ( !loc.ops->node_type )
+  if ( !loc.ops->node_type_h )
     set_errno_and_return_minus_one( ENOTSUP );
     
-  if ( (*loc.ops->node_type)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY )
+  if ( (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY )
     set_errno_and_return_minus_one( EISDIR );
 
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
-  if ( !iop->handlers->ftruncate )
+  if ( !iop->handlers->ftruncate_h )
     set_errno_and_return_minus_one( ENOTSUP );
 
-  return (*iop->handlers->ftruncate)( iop, length );
+  return (*iop->handlers->ftruncate_h)( iop, length );
 }
   

@@ -132,8 +132,8 @@ int fcntl(
       break;
   }
   if (ret >= 0) {    
-    if (iop->handlers->fcntl) {
-      int err = (*iop->handlers->fcntl)( cmd, iop );
+    if (iop->handlers->fcntl_h) {
+      int err = (*iop->handlers->fcntl_h)( cmd, iop );
       if (err) {
         errno = err;
         ret = -1;

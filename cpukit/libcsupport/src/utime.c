@@ -28,10 +28,10 @@ int utime(
   if ( rtems_filesystem_evaluate_path( path, 0x00, &temp_loc, TRUE ) )
     return -1;
 
-  if ( !temp_loc.ops->utime )
+  if ( !temp_loc.ops->utime_h )
     set_errno_and_return_minus_one( ENOTSUP );
 
-  result = (*temp_loc.ops->utime)( &temp_loc, times->actime, times->modtime );
+  result = (*temp_loc.ops->utime_h)( &temp_loc, times->actime, times->modtime );
 
   rtems_filesystem_freenode( &temp_loc );
 

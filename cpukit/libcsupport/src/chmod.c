@@ -38,12 +38,12 @@ int chmod(
     set_errno_and_return_minus_one( EBADF );
   }
 
-  if ( !loc.handlers->fchmod ){
+  if ( !loc.handlers->fchmod_h ){
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result = (*loc.handlers->fchmod)( &loc, mode );
+  result = (*loc.handlers->fchmod_h)( &loc, mode );
 
   rtems_filesystem_freenode( &loc );
   

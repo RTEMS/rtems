@@ -333,7 +333,7 @@ int IMFS_evaluate_for_make(
 	  } else {
             newloc = pathloc->mt_entry->mt_point_node;
             *pathloc = newloc;
-            return (*pathloc->ops->evalformake)( &path[i-len], pathloc, name );
+            return (*pathloc->ops->evalformake_h)( &path[i-len], pathloc, name );
 	  }
 	} else {
 
@@ -381,7 +381,7 @@ int IMFS_evaluate_for_make(
         if ( node->info.directory.mt_fs != NULL ) {
           newloc  = node->info.directory.mt_fs->mt_fs_root;
           *pathloc = newloc;
-          return (*pathloc->ops->evalformake)( &path[i-len], pathloc, name );
+          return (*pathloc->ops->evalformake_h)( &path[i-len], pathloc, name );
 	}
 
 	/*
@@ -526,7 +526,7 @@ int IMFS_eval_path(
 	  } else {
             newloc = pathloc->mt_entry->mt_point_node;
             *pathloc = newloc;
-            return (*pathloc->ops->evalpath)(&(pathname[i-len]),flags,pathloc);
+            return (*pathloc->ops->evalpath_h)(&(pathname[i-len]),flags,pathloc);
 	  }
 	} else {
 
@@ -578,7 +578,7 @@ int IMFS_eval_path(
         if ( node->info.directory.mt_fs != NULL ) {
           newloc   = node->info.directory.mt_fs->mt_fs_root;
           *pathloc = newloc;
-          return (*pathloc->ops->evalpath)( &pathname[i-len], flags, pathloc );
+          return (*pathloc->ops->evalpath_h)( &pathname[i-len], flags, pathloc );
 	}
 
 	/*

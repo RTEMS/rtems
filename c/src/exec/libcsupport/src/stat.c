@@ -57,7 +57,7 @@ int _STAT_NAME(
   if ( status != 0 )
     return -1;
   
-  if ( !loc.handlers->fstat ){
+  if ( !loc.handlers->fstat_h ){
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
@@ -69,7 +69,7 @@ int _STAT_NAME(
 
   memset( buf, 0, sizeof(struct stat) );
 
-  status =  (*loc.handlers->fstat)( &loc, buf );
+  status =  (*loc.handlers->fstat_h)( &loc, buf );
 
   rtems_filesystem_freenode( &loc );
   

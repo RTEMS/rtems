@@ -42,7 +42,7 @@ int fstat(
   if ( !iop->handlers )
     set_errno_and_return_minus_one( EBADF );
 
-  if ( !iop->handlers->fstat )
+  if ( !iop->handlers->fstat_h )
     set_errno_and_return_minus_one( ENOTSUP );
 
   /*
@@ -51,7 +51,7 @@ int fstat(
    */
   memset( sbuf, 0, sizeof(struct stat) );
 
-  return (*iop->handlers->fstat)( &iop->pathinfo, sbuf );
+  return (*iop->handlers->fstat_h)( &iop->pathinfo, sbuf );
 }
 
 /*

@@ -126,20 +126,20 @@ typedef int (*rtems_filesystem_rmnod_t)(
 );
 
 typedef struct {
-    rtems_filesystem_open_t         open;
-    rtems_filesystem_close_t        close;
-    rtems_filesystem_read_t         read;
-    rtems_filesystem_write_t        write;
-    rtems_filesystem_ioctl_t        ioctl;
-    rtems_filesystem_lseek_t        lseek;
-    rtems_filesystem_fstat_t        fstat;
-    rtems_filesystem_fchmod_t       fchmod;
-    rtems_filesystem_ftruncate_t    ftruncate;
-    rtems_filesystem_fpathconf_t    fpathconf;
-    rtems_filesystem_fsync_t        fsync;
-    rtems_filesystem_fdatasync_t    fdatasync;
-    rtems_filesystem_fcntl_t        fcntl;
-    rtems_filesystem_rmnod_t        rmnod;
+    rtems_filesystem_open_t         open_h;
+    rtems_filesystem_close_t        close_h;
+    rtems_filesystem_read_t         read_h;
+    rtems_filesystem_write_t        write_h;
+    rtems_filesystem_ioctl_t        ioctl_h;
+    rtems_filesystem_lseek_t        lseek_h;
+    rtems_filesystem_fstat_t        fstat_h;
+    rtems_filesystem_fchmod_t       fchmod_h;
+    rtems_filesystem_ftruncate_t    ftruncate_h;
+    rtems_filesystem_fpathconf_t    fpathconf_h;
+    rtems_filesystem_fsync_t        fsync_h;
+    rtems_filesystem_fdatasync_t    fdatasync_h;
+    rtems_filesystem_fcntl_t        fcntl_h;
+    rtems_filesystem_rmnod_t        rmnod_h;
 } rtems_filesystem_file_handlers_r;
 
 /*
@@ -249,22 +249,22 @@ typedef int (*rtems_filesystem_readlink_t)(
  * File system types
  */
 typedef struct {
-    rtems_filesystem_evalpath_t      evalpath;
-    rtems_filesystem_evalmake_t      evalformake;
-    rtems_filesystem_link_t          link;
-    rtems_filesystem_unlink_t        unlink;
-    rtems_filesystem_node_type_t     node_type;
-    rtems_filesystem_mknod_t         mknod;
-    rtems_filesystem_chown_t         chown;
-    rtems_filesystem_freenode_t      freenod;
-    rtems_filesystem_mount_t         mount;
-    rtems_filesystem_fsmount_me_t    fsmount_me;
-    rtems_filesystem_unmount_t       unmount;
-    rtems_filesystem_fsunmount_me_t  fsunmount_me;
-    rtems_filesystem_utime_t         utime;
-    rtems_filesystem_evaluate_link_t eval_link;
-    rtems_filesystem_symlink_t       symlink;
-    rtems_filesystem_readlink_t      readlink;
+    rtems_filesystem_evalpath_t      evalpath_h;
+    rtems_filesystem_evalmake_t      evalformake_h;
+    rtems_filesystem_link_t          link_h;
+    rtems_filesystem_unlink_t        unlink_h;
+    rtems_filesystem_node_type_t     node_type_h;
+    rtems_filesystem_mknod_t         mknod_h;
+    rtems_filesystem_chown_t         chown_h;
+    rtems_filesystem_freenode_t      freenod_h;
+    rtems_filesystem_mount_t         mount_h;
+    rtems_filesystem_fsmount_me_t    fsmount_me_h;
+    rtems_filesystem_unmount_t       unmount_h;
+    rtems_filesystem_fsunmount_me_t  fsunmount_me_h;
+    rtems_filesystem_utime_t         utime_h;
+    rtems_filesystem_evaluate_link_t eval_link_h;
+    rtems_filesystem_symlink_t       symlink_h;
+    rtems_filesystem_readlink_t      readlink_h;
 } rtems_filesystem_operations_table;
 
 #define IMFS_FILE_SYSTEM IMFS_ops

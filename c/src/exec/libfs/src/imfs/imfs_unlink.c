@@ -25,7 +25,7 @@ int IMFS_unlink(
 {
   IMFS_jnode_t                      *node;
   rtems_filesystem_location_info_t   the_link;
-  int                                result;
+  int                                result = 0;
   
   node = loc->node_access;
 
@@ -56,7 +56,7 @@ int IMFS_unlink(
     node->info.hard_link.link_node->st_nlink --;
     IMFS_update_ctime( node->info.hard_link.link_node );
     if ( node->info.hard_link.link_node->st_nlink < 1) {
-      result = (*the_link.handlers->rmnod)( &the_link );
+      result = (*the_link.handlers->rmnod_h)( &the_link );
       if ( result != 0 )
         return -1;
     }
@@ -66,7 +66,7 @@ int IMFS_unlink(
    *  Now actually free the node we were asked to free.
    */
 
-  result = (*loc->handlers->rmnod)( loc );
+  result = (*loc->handlers->rmnod_h)( loc );
 
   return result;
 }

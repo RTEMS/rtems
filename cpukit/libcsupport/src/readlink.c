@@ -29,22 +29,22 @@ int readlink(
   if ( result != 0 )
      return -1;
   
-  if ( !loc.ops->node_type ){
+  if ( !loc.ops->node_type_h ){
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_SYM_LINK ){
+  if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_SYM_LINK ){
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( EINVAL );
   }
 
-  if ( !loc.ops->readlink ){
+  if ( !loc.ops->readlink_h ){
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result =  (*loc.ops->readlink)( &loc, buf, bufsize );
+  result =  (*loc.ops->readlink_h)( &loc, buf, bufsize );
 
   rtems_filesystem_freenode( &loc );
   

@@ -1,4 +1,19 @@
 
+2000-09-28	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/libio.h (rtems_filesystem_file_handlers_r,
+	rtems_filesystem_operations_table): Added _h to all structure
+	fields to indicate they are "handlers".
+	* libc/libio_.h, libc/chdir.c, libc/chmod.c, libc/chown.c,
+	libc/close.c, libc/eval.c, libc/fchdir.c, libc/fchmod.c,
+	libc/fcntl.c, libc/fdatasync.c, libc/fstat.c, libc/fsync.c,
+	libc/ftruncate.c, libc/getdents.c, libc/imfs_eval.c,
+	libc/imfs_unlink.c, libc/ioctl.c, libc/ioman.c, libc/link.c,
+	libc/lseek.c, libc/mknod.c, libc/mount.c, libc/open.c, libc/read.c,
+	libc/readlink.c, libc/rmdir.c, libc/stat.c, libc/symlink.c,
+	libc/unlink.c, libc/unmount.c, libc/utime.c, libc/write.c:
+	Modified to reflect above name change.
+
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/newlibc.c: Removed _A29K specific ifdef.

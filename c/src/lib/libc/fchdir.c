@@ -43,11 +43,11 @@ int fchdir(
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  if ( !iop->pathinfo.ops->node_type ) {
+  if ( !iop->pathinfo.ops->node_type_h ) {
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  if (  (*iop->pathinfo.ops->node_type)( &iop->pathinfo ) !=
+  if (  (*iop->pathinfo.ops->node_type_h)( &iop->pathinfo ) !=
                                           RTEMS_FILESYSTEM_DIRECTORY ) {
     set_errno_and_return_minus_one( ENOTDIR );
   }

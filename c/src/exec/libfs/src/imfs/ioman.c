@@ -80,12 +80,12 @@ rtems_status_code rtems_io_lookup_name(
   result = rtems_filesystem_evaluate_path( name, 0x00, &loc, TRUE );
   the_jnode = loc.node_access;
 
-  if ( !loc.ops->node_type ) {
+  if ( !loc.ops->node_type_h ) {
     rtems_filesystem_freenode( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  node_type = (*loc.ops->node_type)( &loc );
+  node_type = (*loc.ops->node_type_h)( &loc );
 
   if ( (result != 0) || node_type != RTEMS_FILESYSTEM_DEVICE ) {
     *device_info = 0;

@@ -44,10 +44,10 @@ int ioctl(
   if ( !iop->handlers )
     set_errno_and_return_minus_one( EBADF );
 
-  if ( !iop->handlers->ioctl )
+  if ( !iop->handlers->ioctl_h )
     set_errno_and_return_minus_one( ENOTSUP );
 
-  rc = (*iop->handlers->ioctl)( iop, command, buffer );
+  rc = (*iop->handlers->ioctl_h)( iop, command, buffer );
 
   return rc;
 } 
