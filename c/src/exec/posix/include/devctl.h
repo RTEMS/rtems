@@ -6,7 +6,11 @@
 #ifndef __POSIX_DEVICE_CONTROL_h
 #define __POSIX_DEVICE_CONTROL_h
 
-#include <rtems/posix/features.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <sys/features.h>
 
 #if defined(_POSIX_DEVICE_CONTROL)
 
@@ -24,6 +28,10 @@ int devctl(
   int    *dev_info_ptr
 );
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

@@ -6,7 +6,11 @@
 #ifndef __POSIX_UNISTD_h
 #define __POSIX_UNISTD_h
 
-#include <rtems/posix/features.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <sys/features.h>
 
 /*
  *  4.8.1 Get Configurable System Variables, P1003.1b-1993, p. 96
@@ -84,6 +88,10 @@
 long sysconf(
   int name
 );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include */

@@ -9,7 +9,11 @@
 #ifndef __POSIX_INTERRUPTS_h
 #define __POSIX_INTERRUPTS_h
 
-#include <rtems/posix/features.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <sys/features.h>
 #include <sys/types.h>
 #include <sys/time.h>
 
@@ -66,6 +70,10 @@ int intr_timed_wait(
   const struct timespec  *timeout
 );
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

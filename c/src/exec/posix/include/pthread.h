@@ -6,6 +6,10 @@
 #ifndef __PTHREAD_h
 #define __PTHREAD_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <sys/features.h>
 
 #if defined(_POSIX_THREADS)
@@ -496,5 +500,10 @@ int pthread_attr_getcputime(
 #endif /* defined(_POSIX_THREAD_CPUTIME) */
 
 #endif /* defined(_POSIX_THREADS) */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
 /* end of include file */

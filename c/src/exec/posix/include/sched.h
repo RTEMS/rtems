@@ -7,6 +7,10 @@
 #ifndef __POSIX_SCHEDULING_h
 #define __POSIX_SCHEDULING_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <sys/features.h>
 
 #if defined(_POSIX_PRIORITY_SCHEDULING)
@@ -82,6 +86,10 @@ int sched_rr_get_interval(
 int sched_yield( void );
 
 #endif /* _POSIX_THREADS or _POSIX_PRIORITY_SCHEDULING */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

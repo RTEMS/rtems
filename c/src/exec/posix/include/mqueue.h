@@ -6,7 +6,11 @@
 #ifndef __POSIX_MESSAGE_QUEUE_h
 #define __POSIX_MESSAGE_QUEUE_h
 
-#include <rtems/posix/features.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <sys/features.h>
 
 #if defined(_POSIX_MESSAGE_PASSING)
 
@@ -140,6 +144,10 @@ int mq_getattr(
 );
 
 #endif /* _POSIX_MESSAGE_PASSING */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

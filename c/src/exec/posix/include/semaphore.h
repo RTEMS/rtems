@@ -6,7 +6,11 @@
 #ifndef __POSIX_SEMAPHORE_h
 #define __POSIX_SEMAPHORE_h
 
-#include <rtems/posix/features.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <sys/features.h>
 
 #if defined(_POSIX_SEMAPHORES)
 
@@ -103,6 +107,10 @@ int sem_getvalue(
 );
 
 #endif   /* _POSIX_SEMAPHORES */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */
