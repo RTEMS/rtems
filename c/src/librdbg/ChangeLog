@@ -1,3 +1,15 @@
+2000-10-19  Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
+
+	* configure.in: Add m68k support.
+	* include/rdbg/m68k, src/m68k, src/m68k/any: New subdirectory.
+	* src/_servtgt.c: add status text to prinf upon task creation failure.
+	* src/rdbg.c: reconnect rdbg exception handlers upon RPC calls.
+	* src/m68k/Makefile.am, src/m68k/any/Makefile.am,
+	src/m68k/any/remdeb_f.x, src/m68k/any/.cvsignore,
+	src/m68k/any/remdeb.h, src/m68k/any/remdeb_xdr.c,
+	src/m68k/any/remdeb_svc.c, src/m68k/excep_f.c, src/m68k/rdbg_cpu_asm.S,
+	src/m68k/rdbg_f.c, src/m68k/.cvsignore: New files.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/i386/any/Makefile.am, src/powerpc/mcp750/Makefile.am: Include

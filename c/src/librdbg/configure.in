@@ -54,9 +54,12 @@ include/Makefile
 include/rdbg/Makefile
 include/rdbg/i386/Makefile
 include/rdbg/powerpc/Makefile
+include/rdbg/m68k/Makefile
 src/Makefile
 src/i386/Makefile
 src/i386/any/Makefile
 src/powerpc/Makefile
 src/powerpc/mcp750/Makefile
+src/m68k/Makefile
+src/m68k/any/Makefile
 )

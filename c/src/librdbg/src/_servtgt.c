@@ -183,7 +183,7 @@ Boolean TgtAttach(
 				   RTEMS_DEFAULT_ATTRIBUTES,
 				   &debugId ))
       != RTEMS_SUCCESSFUL){
-    printf("status = %d\n",status);
+    printf("status = %d (%s)\n",status,rtems_status_text(status));
     rtems_panic ("Can't create task.\n");
   }
 

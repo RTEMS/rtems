@@ -38,7 +38,7 @@ int PID_LIST_INC  = 1;
 int TSP_RETRIES   = 10;
 
 
-    int
+int
 getId()
 {
   rtems_id id;
@@ -47,7 +47,15 @@ getId()
     return (int)(id) ;
 }
 
-    static int
+static void
+remotedeb_2_hook(struct svc_req *rqstp, register SVCXPRT *transp)
+{
+  connect_rdbg_exception(); /* monitor stub changes trace vector */
+  remotedeb_2(rqstp, transp);
+  connect_rdbg_exception();
+}
+
+static int
 rdbgInit (void)
 {
     int sock;
@@ -79,13 +87,13 @@ rdbgInit (void)
     return 0;
 }
 
-    rtems_task
+rtems_task
 rdbgDaemon (rtems_task_argument argument)
 {
   svc_run();
 }
 
-    void
+void
 rtems_rdbg_initialize (void)
 {
   rtems_name        task_name;
@@ -130,13 +138,13 @@ error:
     printf ("initialization failed.\n");
 }
 
-    void
+void
 setErrno (int error)
 {
     errno = error;
 }
 
-    int
+int
 getErrno()
 {
     return errno;
