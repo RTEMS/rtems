@@ -1,3 +1,7 @@
+2003-08-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ide/Makefile.am: Don't include @RTEMS_BPS@.cfg.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
