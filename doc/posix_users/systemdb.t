@@ -16,14 +16,14 @@ system databases manager is ...
 The directives provided by the system databases manager are:
 
 @itemize @bullet
-@item @code{getgrgid} - 
-@item @code{getgrgid_r} - 
-@item @code{getgrnam} - 
-@item @code{getgrnam_r} - 
-@item @code{getpwuid} - 
-@item @code{getpwuid_r} - 
-@item @code{getpwnam} - 
-@item @code{getpwnam_r} - 
+@item @code{getgrgid} - Get Group File Entry for ID
+@item @code{getgrgid_r} - Reentrant Get Group File Entry
+@item @code{getgrnam} - Get Group File Entry for Name
+@item @code{getgrnam_r} - Reentrant Get Group File Entry for Name
+@item @code{getpwuid} - Get Password File Entry for UID
+@item @code{getpwuid_r} - Reentrant Get Password File Entry for UID
+@item @code{getpwnam}  Get Password File Entry for Name
+@item @code{getpwnam_r} - Reentrant Get Password File Entry for Name
 @end itemize
 
 @section Background
@@ -42,7 +42,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection getgrgid - 
+@subsection getgrgid - Get Group File Entry for ID
 
 @subheading CALLING SEQUENCE:
 
@@ -69,7 +69,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getgrgid_r - 
+@subsection getgrgid_r - Reentrant Get Group File Entry
 
 @subheading CALLING SEQUENCE:
 
@@ -96,7 +96,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getgrnam - 
+@subsection getgrnam - Get Group File Entry for Name
 
 @subheading CALLING SEQUENCE:
 
@@ -123,7 +123,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getgrnam_r - 
+@subsection getgrnam_r - Reentrant Get Group File Entry for Name
 
 @subheading CALLING SEQUENCE:
 
@@ -150,7 +150,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getpwuid - 
+@subsection getpwuid - Get Password File Entry for UID
 
 @subheading CALLING SEQUENCE:
 
@@ -177,7 +177,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getpwuid_r - 
+@subsection getpwuid_r - Reentrant Get Password File Entry for UID
 
 @subheading CALLING SEQUENCE:
 
@@ -204,7 +204,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getpwnam - 
+@subsection getpwnam - Password File Entry for Name
 
 @subheading CALLING SEQUENCE:
 
@@ -231,7 +231,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getpwnam_r - 
+@subsection getpwnam_r - Reentrant Get Password File Entry for Name
 
 @subheading CALLING SEQUENCE:
 

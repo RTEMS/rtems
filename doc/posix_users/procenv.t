@@ -10,34 +10,34 @@
 
 @section Introduction
 
-The 
-process environment manager is ...
+The process environment manager is ...
 
 The directives provided by the process environment manager are:
 
 @itemize @bullet
-@item @code{getpid} - 
-@item @code{getppid} - 
-@item @code{getuid} - 
-@item @code{geteuid} - 
-@item @code{getgid} - 
-@item @code{getegid} - 
-@item @code{setuid} - 
-@item @code{setgid} - 
-@item @code{getgroups} - 
-@item @code{getlogin} - 
-@item @code{getlogin_r} - 
-@item @code{getpgrp} - 
-@item @code{setsid} - 
-@item @code{setpgid} - 
-@item @code{uname} - 
-@item @code{times} - Get process times
-@item @code{getenv} - 
-@item @code{ctermid} - 
-@item @code{ttyname} - 
-@item @code{ttyname_r} - 
-@item @code{isatty} - 
-@item @code{sysconf} - 
+@item @code{getpid} - Get Process ID
+@item @code{getppid} - Get Parent Process ID
+@item @code{getuid} - Get User ID
+@item @code{geteuid} - Get Effective User ID
+@item @code{getgid} - Get Real Group ID
+@item @code{getegid} - Get Effective Group ID
+@item @code{setuid} - Set User ID
+@item @code{setgid} - Set Group ID
+@item @code{getgroups} - Get Supplementary Group IDs
+@item @code{getlogin} - Get User Name
+@item @code{getlogin_r} - Reentrant Get User Name
+@item @code{getpgrp} - Get Process Group ID
+@item @code{setsid} - Create Session and Set Process Group ID
+@item @code{setpgid} - Set Process Group ID for Job Control
+@item @code{uname} - Get System Name
+@item @code{times} - Get Process Times
+@item @code{getenv} - Get Environment Variables
+@item @code{setenv} - Set Environment Variables
+@item @code{ctermid} - Generate Terminal Pathname
+@item @code{ttyname} - Determine Terminal Device Name
+@item @code{ttyname_r} - Reentrant Determine Terminal Device Name
+@item @code{isatty} - Determine if File Descriptor is Terminal
+@item @code{sysconf} - Get Configurable System Variables
 @end itemize
 
 @section Background
@@ -56,7 +56,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection getpid - 
+@subsection getpid - Get Process ID
 
 @subheading CALLING SEQUENCE:
 
@@ -83,7 +83,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getppid - 
+@subsection getppid - Get Parent Process ID
 
 @subheading CALLING SEQUENCE:
 
@@ -110,7 +110,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getuid - 
+@subsection getuid - Get User ID
 
 @subheading CALLING SEQUENCE:
 
@@ -137,7 +137,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection geteuid - 
+@subsection geteuid - Get Effective User ID
 
 @subheading CALLING SEQUENCE:
 
@@ -164,7 +164,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getgid - 
+@subsection getgid - Get Real Group ID
 
 @subheading CALLING SEQUENCE:
 
@@ -191,7 +191,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getegid - 
+@subsection getegid - Get Effective Group ID
 
 @subheading CALLING SEQUENCE:
 
@@ -218,7 +218,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection setuid - 
+@subsection setuid - Set User ID
 
 @subheading CALLING SEQUENCE:
 
@@ -245,7 +245,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection setgid - 
+@subsection setgid - Set Group ID
 
 @subheading CALLING SEQUENCE:
 
@@ -272,7 +272,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getgroups - 
+@subsection getgroups - Get Supplementary Group IDs
 
 @subheading CALLING SEQUENCE:
 
@@ -299,7 +299,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getlogin - 
+@subsection getlogin - Get User Name
 
 @subheading CALLING SEQUENCE:
 
@@ -326,7 +326,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getlogin_r - 
+@subsection getlogin_r - Reentrant Get User Name
 
 @subheading CALLING SEQUENCE:
 
@@ -353,7 +353,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection getpgrp - 
+@subsection getpgrp - Get Process Group ID
 
 @subheading CALLING SEQUENCE:
 
@@ -380,7 +380,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection setsid - 
+@subsection setsid - Create Session and Set Process Group ID
 
 @subheading CALLING SEQUENCE:
 
@@ -407,7 +407,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection setpgid - 
+@subsection setpgid - Set Process Group ID for Job Control
 
 @subheading CALLING SEQUENCE:
 
@@ -434,7 +434,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection uname - 
+@subsection uname - Get System Name
 
 @subheading CALLING SEQUENCE:
 
@@ -491,7 +491,7 @@ since the systm has been up.
 NONE
 
 @page
-@subsection getenv - 
+@subsection getenv - Get Environment Variables
 
 @subheading CALLING SEQUENCE:
 
@@ -518,7 +518,34 @@ The
 @subheading NOTES:
 
 @page
-@subsection ctermid - 
+@subsection setenv - Set Environment Variables
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int setenv(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection ctermid - Generate Terminal Pathname
 
 @subheading CALLING SEQUENCE:
 
@@ -545,7 +572,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection ttyname - 
+@subsection ttyname - Determine Terminal Device Name
 
 @subheading CALLING SEQUENCE:
 
@@ -572,7 +599,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection ttyname_r - 
+@subsection ttyname_r - Reentrant Determine Terminal Device Name
 
 @subheading CALLING SEQUENCE:
 
@@ -599,7 +626,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection isatty - 
+@subsection isatty - Determine if File Descriptor is Terminal
 
 @subheading CALLING SEQUENCE:
 
@@ -626,7 +653,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection sysconf - 
+@subsection sysconf - Get Configurable System Variables
 
 @subheading CALLING SEQUENCE:
 
