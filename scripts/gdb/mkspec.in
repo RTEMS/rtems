@@ -52,6 +52,9 @@ sed -e "s%@Release\@%${gdb_rpm_release}%g" \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@prefix\@%@prefix@%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
+    -e "s,@rpmprefix\@,@rpmprefix@,g" \
+    -e "s%@rpmgroup\@%@rpmgroup@%g" \
+    -e "s%@osversion\@%@osversion@%g" \
     -e "s%@gdb_version\@%${gdb_version}%g" \
     -e "s%@gdb_patch_version\@%${gdb_patch_version}%g" \
     -e "s%@extra_configure_arguments\@%${extra_configure_arguments}%g" \

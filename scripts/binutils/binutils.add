@@ -38,8 +38,7 @@ RTEMS is an open source operating system for embedded systems.
 This is binutils sources with patches for RTEMS.
 
 %prep
-# untar the sources inside %{binutils_target}-binutils
-%setup -c -n %{binutils_target}-binutils
+%setup -c -n %{name}-%{version}
 @PATCH2@
   test -d build || mkdir build
 
@@ -63,7 +62,7 @@ This is binutils sources with patches for RTEMS.
   ../binutils-%{binutils_version}/mkinstalldirs \
     $RPM_BUILD_ROOT%{_prefix}/share/locale
 
-  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
+#  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
 # gzip info files
   gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
   gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info-* 2>/dev/null

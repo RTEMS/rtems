@@ -5,7 +5,7 @@
 %package -n %{rpmprefix}%{gcc_target}-gnat
 Summary:	gcc/gnat compiler for %{gcc_target}
 Group: %{rpmgroup}
-Requires: %{rpmprefix}rtems-base-gnat %{rpmprefix}%{gcc_target}-gcc
+Requires: %{rpmprefix}rtems@osversion@-base-gnat %{rpmprefix}%{gcc_target}-gcc
 
 %description -n %{rpmprefix}%{gcc_target}-gnat
 RTEMS is an open source operating system for embedded systems.

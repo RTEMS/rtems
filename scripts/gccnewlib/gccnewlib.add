@@ -47,7 +47,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 
 %prep
 # untar the sources inside @target_alias@-gcc-newlib
-%setup -c -n %{name} -a 0 -a 1
+%setup -c -n %{name}-%{version} -a 0 -a 1
 
 %patch0 -p0
 %patch1 -p0

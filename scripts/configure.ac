@@ -23,6 +23,14 @@ no ) rpmprefix="%{nil}";;
 esac],
 [rpmprefix="rtems-"]RTEMS_API["-"])
 
+AC_ARG_ENABLE([osversions],
+[  --enable-osversions       whether to use version numbers in os-tripples],
+[case $enable_osversions in
+yes ) osversion=RTEMS_API;;
+* ) osversion=;;
+esac],
+[osversion=])
+
 AC_MSG_CHECKING(for rpm SPECS directory)
 # Allow users to override RPM_SPECSdir from the environment.
 if test -z "$RPM_SPECSdir" ;
@@ -79,6 +87,7 @@ AC_SUBST(BSPVERS)
 AC_SUBST(RPM_CPU)
 AC_SUBST(rpmprefix,$rpmprefix)
 AC_SUBST(rpmgroup,[Rtems/][RTEMS_API])
+AC_SUBST(osversion,$osversion)
 
 AC_CONFIG_FILES([Makefile
 binutils/Makefile

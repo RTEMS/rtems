@@ -59,6 +59,8 @@ sed -e "s%@Release\@%${binutils_rpm_release}%g" \
     -e "s%@prefix\@%@prefix@%g" \
     -e "s,@rpmprefix\@,@rpmprefix@,g" \
     -e "s%@rpmgroup\@%@rpmgroup@%g" \
+    -e "s%@rpmgroup\@%@rpmgroup@%g" \
+    -e "s%@osversion\@%@osversion@%g" \
     -e "s%@binutils_version\@%${binutils_version}%g" \
     -e "s%@binutils_patch_version\@%${binutils_patch_version}%g" \
     -e "s,@PATCH1\@,${PATCH1}," \
