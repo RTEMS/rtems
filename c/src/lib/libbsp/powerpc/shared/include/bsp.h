@@ -15,9 +15,9 @@
 #include <bspopts.h>
 
 #include <rtems.h>
-#include <console.h>
+#include <rtems/console.h>
 #include <libcpu/io.h>
-#include <clockdrv.h>
+#include <rtems/clockdrv.h>
 #include <bsp/vectors.h>
 
 /*

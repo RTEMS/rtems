@@ -1,5 +1,5 @@
 /* rtems_crti.S */
-#include <asm.h>
+#include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/io.h>
 
