@@ -1,4 +1,15 @@
 /*
+ *
+ *  Instantatiate a new terminal shell.
+ *
+ *  Author: 
+ *
+ *   WORK: fernando.ruiz@ctv.es 
+ *   HOME: correo@fernando-ruiz.com
+ *
+ *   Thanks at:
+ *    Chris John
+ *
  *  $Id$
  */
 
@@ -53,6 +64,7 @@ typedef struct  {
 
 int shell_scanline(char * line,int size,FILE * in,FILE * out) ;
 void cat_file(FILE * out,char *name);
+void write_file(char *name,char * content);
 	
 rtems_status_code shell_init(char * task_name      ,
                               rtems_unsigned32    task_stacksize,/*0 default*/
@@ -63,42 +75,6 @@ rtems_status_code shell_init(char * task_name      ,
 
 extern shell_env_t global_shell_env,
                 *  current_shell_env;
-/*--------*/
-/* pty.c */ 
-/*--------*/
-
-char * get_pty(int socket);
-
-
-rtems_device_driver pty_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg);
-rtems_device_driver pty_open(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-rtems_device_driver pty_close(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-rtems_device_driver pty_read(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-rtems_device_driver pty_write(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-rtems_device_driver pty_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-
-
-#define PTY_DRIVER_TABLE_ENTRY \
-       { pty_initialize , pty_open , pty_close , \
-	 pty_read , pty_write , pty_control }
 /*--------*/
 /* cmds.c */ 
 /*--------*/

@@ -334,10 +334,13 @@ int main_chdir (int argc, char *argv[]) {
 /*-----------------------------------------------------------*/  	
 int main_mkdir (int argc, char *argv[]) {
    char *dir;
-   dir=NULL;
-   if (argc>1) dir=argv[1];
-   if (mkdir(dir,S_IRWXU|S_IRWXG|S_IRWXO)) {
-     printf("mkdir '%s' failed:%s\n",dir,strerror(errno));
+   int n;
+   n=1;
+   while (n<argc) {
+    dir=argv[n++];
+    if (mkdir(dir,S_IRWXU|S_IRWXG|S_IRWXO)) {
+      printf("mkdir '%s' failed:%s\n",dir,strerror(errno));
+    };  
    };  
    return errno;
 }
@@ -345,9 +348,12 @@ int main_mkdir (int argc, char *argv[]) {
 int main_rmdir (int argc, char *argv[])
 {
    char *dir;
-   dir=NULL;
-   if (argc>1) dir=argv[1];
-   if (rmdir(dir)) printf("rmdir '%s' failed:%s\n",dir,strerror(errno));
+   int n;
+   n=1;
+   while (n<argc) {
+    dir=argv[n++];
+    if (rmdir(dir)) printf("rmdir '%s' failed:%s\n",dir,strerror(errno));
+   };
    return errno;
 }
 /*-----------------------------------------------------------*/  	
@@ -383,43 +389,11 @@ int main_rm    (int argc, char *argv[])
    return 0;
 }
 /*-----------------------------------------------------------*/  	
-/* date - print or set time and date */
-
-static int set_time(char *t) 
-{
-  rtems_time_of_day tod;	
-  FILE * rtc;
-  int len;
-
-  if ( rtems_clock_get(RTEMS_CLOCK_GET_TOD,&tod) != RTEMS_SUCCESSFUL ) 
-     memset( &tod, 0, sizeof(tod) );
-
-  /* JRS
-   *
-   *  This code that was used to parse the command line was taken 
-   *  from an inappropriate source.  It has been removed and needs
-   *  to be replaced.
-   */
-
-  if (!_TOD_Validate(&tod)) {
-    fprintf(stderr, "Invalid date value\n");
-  } else {
-   rtems_clock_set(&tod);	  
-   rtems_clock_get(RTEMS_CLOCK_GET_TOD,&tod);	  
-   rtc=fopen("/dev/rtc","r+");
-   if (rtc) {
-    fwrite(&tod,sizeof(tod),1,rtc);
-    fclose(rtc);
-   };
-  };
-  return 1;
-}
+/* date - print time and date */
 
 int main_date(int argc,char *argv[]) 
 {
   time_t t;
-  if (argc == 2)
-    set_time(argv[1]);
   time(&t);
   printf("%s", ctime(&t));
   return 0;
@@ -528,7 +502,7 @@ void register_cmds(void) {
   /* misc. topic */
   shell_add_cmd  ("logoff","misc","logoff from the system"                    ,main_logoff);
   shell_alias_cmd("logoff","exit"); 
-  shell_add_cmd  ("date" ,"misc","date [[MMDDYY]hhmm[ss]]"                    ,main_date);
+  shell_add_cmd  ("date" ,"misc","date"                                       ,main_date);
   shell_add_cmd  ("reset","misc","reset the BSP"                              ,main_reset);
   shell_add_cmd  ("alias","misc","alias old new"                              ,main_alias);
   shell_add_cmd  ("tty"  ,"misc","show ttyname"                               ,main_tty  );

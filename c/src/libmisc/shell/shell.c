@@ -16,6 +16,7 @@
 #include "config.h"
 #endif
 
+#undef  __STRICT_ANSI__  /* fileno() */
 #include <stdio.h>
 
 #include <rtems.h>
@@ -29,6 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
 #include <pwd.h>
@@ -222,7 +224,8 @@ int shell_help(int argc,char * argv[]) {
   shell_topic_t *topic;
   shell_cmd_t * shell_cmd=shell_first_cmd;
   if (argc<2) {
-   printf("help: TOPIC? The topics are\n");	  
+   printf("help: ('r' repeat last cmd - 'e' edit last cmd)\n"	  
+          "  TOPIC? The topics are\n");	  
    topic=shell_first_topic;
    col=0;
    while (topic) {
@@ -275,11 +278,16 @@ int shell_help(int argc,char * argv[]) {
   return 0;
 }
 /* ----------------------------------------------- *
- * TODO:Change to bash readline() better.
+ * TODO: Add improvements. History, edit vi or emacs, ...
  * ----------------------------------------------- */
 int shell_scanline(char * line,int size,FILE * in,FILE * out) {
   int c,col;
   col=0;
+  if (*line) {
+   col=strlen(line);	  
+   if (out) fprintf(out,"%s",line);
+  };
+  tcdrain(fileno(in ));
   tcdrain(fileno(out));
   for (;;) {
    line[col]=0;	  
@@ -343,6 +351,31 @@ void cat_file(FILE * out,char * name) {
 	};  
 }
 
+void write_file(char * name,char * content) {
+	FILE * fd;
+	fd=fopen(name,"w");
+	if (fd) {
+  	 fwrite(content,1,strlen(content),fd);
+	 fclose(fd);
+	};  
+}
+
+void init_issue(void) {
+ static char issue_inited=FALSE;
+ struct stat buf;
+ if (issue_inited) return;
+ issue_inited=TRUE;
+ getpwnam("root"); /* dummy call to init /etc dir */
+ if (stat("/etc/issue",&buf)) 
+  write_file("/etc/issue",
+ 	     "Welcome to @V\\n"
+	     "Login into @S(@L)\\n");
+ if (stat("/etc/issue.net",&buf)) 
+  write_file("/etc/issue.net",
+ 	     "Welcome to %v\n"
+	     "running on %m\n");
+}
+
 int shell_login(FILE * in,FILE * out) {
 	FILE * fd;
 	int c;
@@ -351,6 +384,7 @@ int shell_login(FILE * in,FILE * out) {
 	char name[128];
 	char pass[128];
 	struct passwd * passwd;
+	init_issue();
         setuid(0);
         setgid(0);
         rtems_current_user_env->euid=
@@ -359,7 +393,47 @@ int shell_login(FILE * in,FILE * out) {
          if((current_shell_env->devname[5]!='p')||
             (current_shell_env->devname[6]!='t')||
             (current_shell_env->devname[7]!='y')) {
-	   cat_file(out,"/etc/issue"); 
+	  fd=fopen("/etc/issue","r");
+	  if (fd) {
+  	   while ((c=fgetc(fd))!=EOF) {
+ 	    if (c=='@')  {
+             switch(c=fgetc(fd)) {
+	      case 'L':fprintf(out,"%s",current_shell_env->devname);
+	 	      break;
+	      case 'B':fprintf(out,"0");
+		      break;
+              case 'T':
+              case 'D':time(&t);
+		      fprintf(out,"%s",ctime(&t));
+		      break;
+              case 'S':fprintf(out,"RTEMS");
+		      break;
+              case 'V':fprintf(out,"%s\n%s",_RTEMS_version,_Copyright_Notice);
+		      break;
+              case '@':fprintf(out,"@");
+		      break;
+	      default :fprintf(out,"@%c",c);
+		      break;
+	     };
+ 	    } else 
+ 	    if (c=='\\')  {
+             switch(c=fgetc(fd)) {
+	      case '\\':fprintf(out,"\\");
+	 	      break;
+	      case 'b':fprintf(out,"\b"); break;
+	      case 'f':fprintf(out,"\f"); break;
+	      case 'n':fprintf(out,"\n"); break;
+	      case 'r':fprintf(out,"\r"); break;
+	      case 's':fprintf(out," "); break;
+	      case 't':fprintf(out,"\t"); break;
+              case '@':fprintf(out,"@"); break;
+	     };
+ 	    } else {
+             fputc(c,out);				
+	    }; 
+	   };
+	   fclose(fd);
+	  } 
 	 } else {  
 	  fd=fopen("/etc/issue.net","r");
 	  if (fd) {
@@ -397,6 +471,8 @@ int shell_login(FILE * in,FILE * out) {
 	 };
  	};
 	times=0;
+	strcpy(name,"");
+	strcpy(pass,"");
 	for (;;) {
 		times++;
 		if (times>3) break;
@@ -406,22 +482,26 @@ int shell_login(FILE * in,FILE * out) {
                 if (!shell_scanline(pass,sizeof(pass),in,NULL)) break;
 		if (out) fprintf(out,"\n");
 		if ((passwd=getpwnam(name))) {
-                 setuid(passwd->pw_uid);			
-                 setgid(passwd->pw_gid);			
-		 rtems_current_user_env->euid=
-		 rtems_current_user_env->egid=0;
-		 chown(current_shell_env->devname,passwd->pw_uid,0);
-		 rtems_current_user_env->euid=passwd->pw_uid;			
-		 rtems_current_user_env->egid=passwd->pw_gid;			
-		 if (!strcmp(passwd->pw_passwd,"*")) {
-		 /* /etc/shadow */
-		  return 0;
-		 } else {
-		  /* crypt() */
-		  return 0;
+		 if (strcmp(passwd->pw_passwd,"!")) { /* valid user */
+                  setuid(passwd->pw_uid);			
+                  setgid(passwd->pw_gid);			
+		  rtems_current_user_env->euid=
+		  rtems_current_user_env->egid=0;
+		  chown(current_shell_env->devname,passwd->pw_uid,0);
+		  rtems_current_user_env->euid=passwd->pw_uid;			
+		  rtems_current_user_env->egid=passwd->pw_gid;			
+		  if (!strcmp(passwd->pw_passwd,"*")) {
+		   /* /etc/shadow */
+		   return 0;
+		  } else {
+		   /* crypt() */
+		   return 0;
+		  };
 		 };
 		};
 		if (out) fprintf(out,"Login incorrect\n");
+	        strcpy(name,"");
+	        strcpy(pass,"");
 	};
 	return -1;
 }
@@ -486,6 +566,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
    if (!stdout) {
     fprintf(stderr,"shell:unable to open stdout.%s:%s\n",devname,strerror(errno));
    };
+   setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
    stderr=fopen(devname,"r+");
    if (!stderr) {
     printf("shell:unable to open stderr.%s:%s\n",devname,strerror(errno));
@@ -497,13 +578,19 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
   };
   shell_add_cmd(NULL,NULL,NULL,NULL); /* init the chain list*/
   do {
+   /* Set again root user and root filesystem, side effect of set_priv..*/	  
+  sc=rtems_libio_set_private_env();
+  if (sc!=RTEMS_SUCCESSFUL) {
+   rtems_error(sc,"rtems_libio_set_private_env():");	 
+   rtems_task_delete(RTEMS_SELF);
+  };
   if (!shell_login(stdin,stdout))  {
    cat_file(stdout,"/etc/motd");
    strcpy(last_cmd,"");
    strcpy(cmd,"");
    printf("\n"
-          "RTEMS SHELL (Version 1.0-FRC):%s. "__DATE__". 'help' to list commands.\n",devname);
-   chdir("/");
+          "RTEMS SHELL (Ver.1.0-FRC):%s. "__DATE__". 'help' to list commands.\n",devname);
+   chdir("/"); /* XXX: chdir to getpwent homedir */
    shell_env->exit_shell=FALSE;
    for (;;) {
     /* Prompt section */	  
@@ -513,7 +600,11 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
     /* getcmd section */	  
     if (!shell_scanline(cmd,sizeof(cmd),stdin,stdout)) break; /*EOF*/
     /* evaluate cmd section */	  
-    if (!strcmp(cmd,"r")) {  /* repeat last command, forced, not automatic */
+    if (!strcmp(cmd,"e")) {  /* edit last command */
+     strcpy(cmd,last_cmd);
+     continue;
+    } else 
+    if (!strcmp(cmd,"r")) {  /* repeat last command */
      strcpy(cmd,last_cmd);
     } else 
     if (strcmp(cmd,"")) { /* only for get a new prompt */
@@ -536,6 +627,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
     };
     /* end exec cmd section */	  
     if (shell_env->exit_shell)  break;
+    cmd[0]=0;
    };
    printf("\nGoodbye from RTEMS SHELL :-(\n");
   };
@@ -588,4 +680,3 @@ rtems_status_code   shell_init (char * task_name,
  shell_env->forever   =forever;
  return rtems_task_start(task_id,shell_shell,(rtems_task_argument) shell_env);
 }
-/* ----------------------------------------------- */
