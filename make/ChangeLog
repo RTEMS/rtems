@@ -1,4 +1,9 @@
 
+2000-11-25	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/Makefile.am: Updated to add jmr3904.cfg
+	* custom/jmr3904.cfg: New file.
+
 2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/leon2.cfg: Removed defines that are now generated
