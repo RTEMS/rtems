@@ -6,17 +6,16 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=develenv
+PROJECT = develenv
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES = $(top_srcdir)/common/cpright.texi
-
 FILES = compile.texi direct.texi intro.texi sample.texi utils.texi
 
-GENERATED_FILES =
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
 info_TEXINFOS = develenv.texi
-develenv_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)   
+develenv_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)

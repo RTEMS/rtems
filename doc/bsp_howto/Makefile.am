@@ -6,108 +6,108 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=bsp_howto
+PROJECT = bsp_howto
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
+GENERATED_FILES = intro.texi target.texi makefiles.texi linkcmds.texi \
+    support.texi adaintr.texi init.texi console.texi clock.texi timer.texi \
+    rtc.texi nvmem.texi network.texi shmsupp.texi analog.texi discrete.texi
 
-GENERATED_FILES= \
-    intro.texi target.texi makefiles.texi linkcmds.texi support.texi \
-    adaintr.texi init.texi console.texi clock.texi timer.texi rtc.texi \
-    nvmem.texi network.texi shmsupp.texi analog.texi discrete.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
-FILES=
+FILES =
 
 info_TEXINFOS = bsp_howto.texi
-bsp_howto_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)   
+bsp_howto_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
 #
 #  Process Automatically Generated Files
 #
 
-intro.texi: intro.t
-	$(BMENU) -p "Top" \
+$(srcdir)/intro.texi: intro.t
+	$(BMENU2) -p "Top" \
 	    -u "Top" \
-	    -n "Target Dependent Files" $<
+	    -n "Target Dependent Files" < $< > $@
 
-target.texi: target.t
-	$(BMENU) -p "Introduction" \
+$(srcdir)/target.texi: target.t
+	$(BMENU2) -p "Introduction" \
 	    -u "Top" \
-	    -n "Makefiles" $<
+	    -n "Makefiles" < $< > $@
 
-makefiles.texi: makefiles.t
-	$(BMENU) -p "Target Dependent Files Board Support Package Structure" \
+$(srcdir)/makefiles.texi: makefiles.t
+	$(BMENU2) -p "Target Dependent Files Board Support Package Structure" \
 	    -u "Top" \
-	    -n "Linker Script" $<
+	    -n "Linker Script" < $< > $@
 
-linkcmds.texi: linkcmds.t
-	$(BMENU) -p "Makefiles Creating a New BSP Make Customization File" \
+$(srcdir)/linkcmds.texi: linkcmds.t
+	$(BMENU2) -p "Makefiles Creating a New BSP Make Customization File" \
 	    -u "Top" \
-	    -n "Ada95 Interrupt Support" $<
+	    -n "Ada95 Interrupt Support" < $< > $@
 
-adaintr.texi: adaintr.t
-	$(BMENU) -p "Linker Script Initialized Data" \
+$(srcdir)/adaintr.texi: adaintr.t
+	$(BMENU2) -p "Linker Script Initialized Data" \
 	    -u "Top" \
-	    -n "Miscellaneous Support Files" $<
+	    -n "Miscellaneous Support Files" < $< > $@
 
-support.texi: support.t
-	$(BMENU) -p "Ada95 Interrupt Support Version Requirements" \
+$(srcdir)/support.texi: support.t
+	$(BMENU2) -p "Ada95 Interrupt Support Version Requirements" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-init.texi: init.t
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" $<
-
-console.texi: console.t
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" $<
-
-clock.texi: clock.t
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" $<
-
-timer.texi: timer.t
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" $<
-
-rtc.texi: rtc.t
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" $<
-
-nvmem.texi: nvmem.t
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" $<
-#
-#  Grab the chapter on writing a network device driver.
-#
-network.texi: ../networking/driver.t
+$(srcdir)/init.texi: init.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
 
-shmsupp.texi: shmsupp.t
-	$(BMENU) -p "" \
+$(srcdir)/console.texi: console.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-analog.texi: analog.t
-	$(BMENU) -p "" \
+$(srcdir)/clock.texi: clock.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-discrete.texi: discrete.t
-	$(BMENU) -p "" \
+$(srcdir)/timer.texi: timer.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
+
+$(srcdir)/rtc.texi: rtc.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+$(srcdir)/nvmem.texi: nvmem.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+#
+#  Grab the chapter on writing a network device driver.
+#
+$(srcdir)/network.texi: ../networking/driver.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+$(srcdir)/shmsupp.texi: shmsupp.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+$(srcdir)/analog.texi: analog.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+$(srcdir)/discrete.texi: discrete.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
 
 EXTRA_DIST = *.t

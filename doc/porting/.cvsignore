@@ -7,6 +7,7 @@ developtools.texi
 idlethread.texi
 index.html
 interrupts.texi
+mdate-sh
 miscellaneous.texi
 porting
 porting*.html

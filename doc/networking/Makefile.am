@@ -6,21 +6,20 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=networking
-
+PROJECT = networking
+EDITION = 1
 include $(top_srcdir)/project.am
 
-# FIXME: Why -c ?
-BMENU+= -c
+BMENU2 += -c
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
+GENERATED_FILES = networkapp.texi driver.texi networktasks.texi testing.texi \
+    servers.texi decdriver.texi
 
-GENERATED_FILES=networkapp.texi driver.texi networktasks.texi testing.texi \
-  servers.texi decdriver.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
-FILES= networktasks.texi preface.texi
+FILES = networktasks.texi preface.texi
 
 info_TEXINFOS = networking.texi
 networking_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
@@ -33,39 +32,37 @@ if USE_HTML
 html_project_DATA += networkflow.jpg networkflow.png PCIreg.jpg recvbd.jpg
 endif
 
-networktasks.texi: networktasks.t
-	$(BMENU) -p "Preface" \
+$(srcdir)/networktasks.texi: networktasks.t
+	$(BMENU2) -p "Preface" \
 	   -u "Top" \
-	   -n "Networking Driver" $<
+	   -n "Networking Driver" < $< > $@
 
-driver.texi: driver.t
-	$(BMENU) -p "Network Task Structure and Data Flow" \
+$(srcdir)/driver.texi: driver.t
+	$(BMENU2) -p "Network Task Structure and Data Flow" \
 	   -u "Top" \
-	   -n "Using Networking in an RTEMS Application" $<
+	   -n "Using Networking in an RTEMS Application" < $< > $@
 
-networkapp.texi: networkapp.t
-	$(BMENU) -p "Write the Driver Statistic-Printing Function" \
+$(srcdir)/networkapp.texi: networkapp.t
+	$(BMENU2) -p "Write the Driver Statistic-Printing Function" \
 	   -u "Top" \
-	   -n "Testing the Driver" $<
+	   -n "Testing the Driver" < $< > $@
 
-testing.texi: testing.t
-	$(BMENU) -p "Time Synchronization Using NTP" \
+$(srcdir)/testing.texi: testing.t
+	$(BMENU2) -p "Time Synchronization Using NTP" \
 	   -u "Top" \
-	   -n "Network Servers" $<
+	   -n "Network Servers" < $< > $@
 
-servers.texi: servers.t
-	$(BMENU) -p "Throughput" \
+$(srcdir)/servers.texi: servers.t
+	$(BMENU2) -p "Throughput" \
 	   -u "Top" \
-	   -n "DEC 21140 Driver" $<
+	   -n "DEC 21140 Driver" < $< > $@
 
-decdriver.texi: decdriver.t
-	$(BMENU) -p "Using Hooks" \
+$(srcdir)/decdriver.texi: decdriver.t
+	$(BMENU2) -p "Using Hooks" \
 	   -u "Top" \
-	   -n "Command and Variable Index" $<
+	   -n "Command and Variable Index" < $< > $@
 
-PICTURE_FILES = \
-PCIreg.eps PCIreg.jpg \
-networkflow.eps networkflow.jpg networkflow.png \
-recvbd.eps  recvbd.jpg
+PICTURE_FILES = PCIreg.eps PCIreg.jpg networkflow.eps networkflow.jpg \
+    networkflow.png recvbd.eps recvbd.jpg
 
 EXTRA_DIST = *.t $(PICTURE_FILES)

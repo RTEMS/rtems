@@ -1,5 +1,5 @@
 <HTML>
-<HEAD><TITLE>RTEMS @RTEMS_VERSION@ On-Line Library</TITLE></HEAD>
+<HEAD><TITLE>RTEMS @VERSION@ On-Line Library</TITLE></HEAD>
 <BODY BGCOLOR="FFFFFF">
 <A HREF="http://www.oarcorp.com" target="Text Frame">
   <IMG align=right BORDER=0 SRC="images/oaronly.jpg" ALT="OAR"> </A>

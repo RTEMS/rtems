@@ -16,7 +16,7 @@ PROJECT=browseable_rtems
 #
 # include $(top_srcdir)/project.am
 #
-# COMMON_FILES=../common/cpright.texi
+# COMMON_FILES=$(top_srcdir)/common/cpright.texi
 #
 #FILES= clock.texi cond.texi key.texi mutex.texi preface.texi \
 #  sched.texi signal.texi thread.texi

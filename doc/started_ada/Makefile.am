@@ -6,54 +6,51 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=started_ada
+PROJECT = started_ada
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
-
-GENERATED_FILES= buildada.texi buildrt.texi gdb.texi intro.texi \
+GENERATED_FILES = buildada.texi buildrt.texi gdb.texi intro.texi \
     require.texi sample.texi
 
-FILES= tversions.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+
+FILES = tversions.texi
 
 info_TEXINFOS = started_ada.texi
 started_ada_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-buildrt.t: $(top_srcdir)/started/buildrt.t
-	$(LN_S) $<
-
-intro.texi: intro.t tversions.texi
-	$(BMENU) -c -p "Top" \
+$(srcdir)/intro.texi: intro.t tversions.texi
+	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
-	    -n "Requirements" $<
+	    -n "Requirements" < $< > $@
 
-require.texi: require.t tversions.texi
-	$(BMENU) -c -p "GNAT Chat Mailing List" \
+$(srcdir)/require.texi: require.t tversions.texi
+	$(BMENU2) -c -p "GNAT Chat Mailing List" \
 	    -u "Top" \
-	    -n "Building the GNAT Cross Compiler Toolset" $<
+	    -n "Building the GNAT Cross Compiler Toolset" < $< > $@
 
-buildada.texi: buildada.t tversions.texi
-	$(BMENU) -c -p "Insure GCC and GNAT Environment Variables Are Not Set" \
+$(srcdir)/buildada.texi: buildada.t tversions.texi
+	$(BMENU2) -c -p "Insure GCC and GNAT Environment Variables Are Not Set" \
 	    -u "Top" \
-	    -n "Building RTEMS" $<
+	    -n "Building RTEMS" < $< > $@
 
-buildrt.texi: buildrt.t tversions.texi
-	$(BMENU) -c -p "Running the bit_ada Script" \
+$(srcdir)/buildrt.texi: ../started/buildrt.t tversions.texi
+	$(BMENU2) -c -p "Running the bit_ada Script" \
 	    -u "Top" \
-	    -n "Building the Sample Application" $<
+	    -n "Building the Sample Application" < $< > $@
 
-sample.texi: sample.t tversions.texi
-	$(BMENU) -c -p "Using the RTEMS configure Script Directly" \
+$(srcdir)/sample.texi: sample.t tversions.texi
+	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \
 	    -u "Top" \
-	    -n "Building the GNU Debugger" $<
+	    -n "Building the GNU Debugger" < $< > $@
 
-gdb.texi: gdb.t tversions.texi
-	$(BMENU) -c -p "Application Executable" \
+$(srcdir)/gdb.texi: gdb.t tversions.texi
+	$(BMENU2) -c -p "Application Executable" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
 EXTRA_DIST = *.t
-CLEANFILES += buildrt.t

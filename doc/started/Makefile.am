@@ -6,67 +6,68 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=started
+PROJECT = started
+EDITION = 1
 
 SUBDIRS = pictures
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
-
-GENERATED_FILES= binaries.texi buildc.texi buildrt.texi gdb.texi intro.texi \
+GENERATED_FILES = binaries.texi buildc.texi buildrt.texi gdb.texi intro.texi \
     nt.texi require.texi nextstep.texi sample.texi
 
-FILES= tversions.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
+
+FILES = tversions.texi
 
 info_TEXINFOS = started.texi
 started_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-intro.texi: intro.t tversions.texi
-	$(BMENU) -c -p "Top" \
+$(srcdir)/intro.texi: intro.t tversions.texi
+	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
-	    -n "Requirements" $<
+	    -n "Requirements" < $< > $@
 
-require.texi: require.t tversions.texi
-	$(BMENU) -c -p "GCC Mailing Lists" \
+$(srcdir)/require.texi: require.t tversions.texi
+	$(BMENU2) -c -p "GCC Mailing Lists" \
 	    -u "Top" \
-	    -n "Prebuilt Toolset Executables" $<
+	    -n "Prebuilt Toolset Executables" < $< > $@
 
-binaries.texi: binaries.t tversions.texi
-	$(BMENU) -c -p "GNU makeinfo Version Requirements" \
+$(srcdir)/binaries.texi: binaries.t tversions.texi
+	$(BMENU2) -c -p "GNU makeinfo Version Requirements" \
 	    -u "Top" \
-	    -n "Building the GNU C/C++ Cross Compiler Toolset" $<
+	    -n "Building the GNU C/C++ Cross Compiler Toolset" < $< > $@
 
-buildc.texi: buildc.t tversions.texi
-	$(BMENU) -c -p "Removing RPMs" \
+$(srcdir)/buildc.texi: buildc.t tversions.texi
+	$(BMENU2) -c -p "Removing RPMs" \
 	    -u "Top" \
-	    -n "Building RTEMS" $<
+	    -n "Building RTEMS" < $< > $@
 
-buildrt.texi: buildrt.t tversions.texi
-	$(BMENU) -c -p "Error Messages Indicating Configuration Problems" \
+$(srcdir)/buildrt.texi: buildrt.t tversions.texi
+	$(BMENU2) -c -p "Error Messages Indicating Configuration Problems" \
 	    -u "Top" \
-	    -n "Building the Sample Application" $<
+	    -n "Building the Sample Application" < $< > $@
 
-sample.texi: sample.t tversions.texi
-	$(BMENU) -c -p "Using the RTEMS configure Script Directly" \
+$(srcdir)/sample.texi: sample.t tversions.texi
+	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \
 	    -u "Top" \
-	    -n "Building the GNU Debugger" $<
+	    -n "Building the GNU Debugger" < $< > $@
 
 gdb.texi: gdb.t tversions.texi
-	$(BMENU) -c -p "More Information on RTEMS Application Makefiles" \
+	$(BMENU2) -c -p "More Information on RTEMS Application Makefiles" \
 	    -u "Top" \
-	    -n "Where To Go From Here" $<
+	    -n "Where To Go From Here" < $< > $@
 
-nextstep.texi: nextstep.t tversions.texi
-	$(BMENU) -c -p "GDB for DINK32" \
+$(srcdir)/nextstep.texi: nextstep.t tversions.texi
+	$(BMENU2) -c -p "GDB for DINK32" \
 	    -u "Top" \
-	    -n "Using MS-Windows as a Development Host" $<
+	    -n "Using MS-Windows as a Development Host" < $< > $@
 
-nt.texi: nt.t tversions.texi
-	$(BMENU) -c -p "Writing an Application" \
+$(srcdir)/nt.texi: nt.t tversions.texi
+	$(BMENU2) -c -p "Writing an Application" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
 EXTRA_DIST = *.t

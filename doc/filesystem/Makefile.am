@@ -6,63 +6,62 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=filesystem
+PROJECT = filesystem
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-BMENU+= -c
+BMENU2 += -c
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
+GENERATED_FILES = patheval.texi init.texi mounting.texi syscalls.texi \
+    fsrequirements.texi imfs.texi miniimfs.texi tftp.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
-GENERATED_FILES=patheval.texi \
-    init.texi mounting.texi syscalls.texi fsrequirements.texi imfs.texi \
-    miniimfs.texi tftp.texi
-
-FILES= preface.texi
+FILES = preface.texi
 
 info_TEXINFOS = filesystem.texi
 filesystem_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-patheval.texi: patheval.t
-	$(BMENU) -p "" \
+$(srcdir)/patheval.texi: patheval.t
+	$(BMENU2) -p "" \
 	   -u "Top" \
-	   -n "" $<
+	   -n "" < $< > $@
 
-init.texi: init.t
-	$(BMENU) -p "" \
+$(srcdir)/init.texi: init.t
+	$(BMENU2) -p "" \
 	   -u "Top" \
-	   -n "" $<
+	   -n "" < $< > $@
 
-mounting.texi: mounting.t
-	$(BMENU) -p "" \
+$(srcdir)/mounting.texi: mounting.t
+	$(BMENU2) -p "" \
 	   -u "Top" \
-	   -n "" $<
+	   -n "" < $< > $@
 
-syscalls.texi: syscalls.t
-	$(BMENU) -p "" \
+$(srcdir)/syscalls.texi: syscalls.t
+	$(BMENU2) -p "" \
 	   -u "Top" \
-	   -n "" $<
+	   -n "" < $< > $@
 
-fsrequirements.texi: fsrequirements.t
-	$(BMENU) -p "" \
+$(srcdir)/fsrequirements.texi: fsrequirements.t
+	$(BMENU2) -p "" \
 	   -u "Top" \
-	   -n "" $<
+	   -n "" < $< > $@
 
-imfs.texi: imfs.t
-	$(BMENU) -p "" \
+$(srcdir)/imfs.texi: imfs.t
+	$(BMENU2) -p "" \
 	   -u "Top" \
-	   -n "" $<
+	   -n "" < $< > $@
 
-miniimfs.texi: miniimfs.t
-	$(BMENU) -p "" \
+$(srcdir)/miniimfs.texi: miniimfs.t
+	$(BMENU2) -p "" \
 	   -u "Top" \
-	   -n "" $<
+	   -n "" < $< > $@
 
-tftp.texi: tftp.t
-	$(BMENU) -p "" \
+$(srcdir)/tftp.texi: tftp.t
+	$(BMENU2) -p "" \
 	   -u "Top" \
-	   -n "" $<
+	   -n "" < $< > $@
 
 EXTRA_DIST = *.t

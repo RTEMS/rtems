@@ -184,6 +184,6 @@ Once approved, RTEMS will be made compliant.
 This document is a detailed users guide for a
 functionally compliant real-time multiprocessor executive.  It
 describes the user interface and run-time behavior of Release
-@value{RTEMS-RELEASE} of the @value{LANGUAGE} interface
+@value{VERSION} of the @value{LANGUAGE} interface
 to RTEMS.
 

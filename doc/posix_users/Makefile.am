@@ -6,136 +6,134 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=posix_users
+PROJECT = posix_users
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi
+GENERATED_FILES = cancel.texi clock.texi cond.texi cspecific.texi \
+    device.texi files.texi io.texi key.texi memorymgmt.texi message.texi \
+    mutex.texi procenv.texi process.texi sched.texi semaphores.texi \
+    signal.texi status.texi systemdb.texi thread.texi timer.texi libc.texi \
+    libm.texi
 
-GENERATED_FILES= \
-   cancel.texi clock.texi cond.texi \
-   cspecific.texi device.texi files.texi \
-   io.texi key.texi memorymgmt.texi message.texi mutex.texi procenv.texi \
-   process.texi sched.texi semaphores.texi signal.texi status.texi \
-   systemdb.texi thread.texi timer.texi libc.texi libm.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
-FILES= preface.texi
-
+FILES = preface.texi
 info_TEXINFOS = posix_users.texi
 posix_users_TEXINFOS = $(FILES) $(GENERATED_FILES)
 
-process.texi: process.t
-	 $(BMENU) -p "" \
+$(srcdir)/process.texi: process.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-procenv.texi: procenv.t
-	 $(BMENU) -p "" \
+$(srcdir)/procenv.texi: procenv.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-files.texi: files.t
-	 $(BMENU) -p "" \
+$(srcdir)/files.texi: files.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-thread.texi: thread.t
-	 $(BMENU) -p "" \
+$(srcdir)/thread.texi: thread.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-signal.texi: signal.t
-	 $(BMENU) -p "" \
+$(srcdir)/signal.texi: signal.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-mutex.texi: mutex.t
-	 $(BMENU) -p "" \
+$(srcdir)/mutex.texi: mutex.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-cond.texi: cond.t
-	 $(BMENU) -p "" \
+$(srcdir)/cond.texi: cond.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-key.texi: key.t
-	 $(BMENU) -p "" \
+$(srcdir)/key.texi: key.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-clock.texi: clock.t
-	 $(BMENU) -p "" \
+$(srcdir)/clock.texi: clock.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-timer.texi: timer.t
-	 $(BMENU) -p "" \
+$(srcdir)/timer.texi: timer.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-sched.texi: sched.t
-	 $(BMENU) -p "" \
+$(srcdir)/sched.texi: sched.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-io.texi: io.t
-	 $(BMENU) -p "" \
+$(srcdir)/io.texi: io.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-device.texi: device.t
-	 $(BMENU) -p "" \
+$(srcdir)/device.texi: device.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-cspecific.texi: cspecific.t
-	 $(BMENU) -p "" \
+$(srcdir)/cspecific.texi: cspecific.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-semaphores.texi: semaphores.t
-	 $(BMENU) -p "" \
+$(srcdir)/semaphores.texi: semaphores.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-memorymgmt.texi: memorymgmt.t
-	 $(BMENU) -p "" \
+$(srcdir)/memorymgmt.texi: memorymgmt.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-message.texi: message.t
-	 $(BMENU) -p "" \
+$(srcdir)/message.texi: message.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-cancel.texi: cancel.t
-	 $(BMENU) -p "" \
+$(srcdir)/cancel.texi: cancel.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-systemdb.texi: systemdb.t
-	 $(BMENU) -p "" \
+$(srcdir)/systemdb.texi: systemdb.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-status.texi: status.t
-	 $(BMENU) -p "" \
+$(srcdir)/status.texi: status.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-libc.texi: libc.t
-	 $(BMENU) -p "" \
+$(srcdir)/libc.texi: libc.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-
-libm.texi: libm.t
-	 $(BMENU) -p "" \
+$(srcdir)/libm.texi: libm.t
+	 $(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
 noinst_SCRIPTS = gen_size_report
 EXTRA_DIST = *.t gen_size_report

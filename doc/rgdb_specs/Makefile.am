@@ -6,22 +6,21 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=rgdb_specs
+PROJECT = rgdb_specs
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
-
-GENERATED_FILES= \
-    intro.texi revision.texi objectives.texi gdbinternals.texi \
+GENERATED_FILES = intro.texi revision.texi objectives.texi gdbinternals.texi \
     interfacing.texi comm.texi daemon.texi conclusion.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
-FILES=
+FILES =
 
 info_TEXINFOS = rgdb_specs.texi
-rgdb_specs_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)   
+rgdb_specs_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
 JPEG_FILES = layers.jpg process.jpg seqinit.jpg seqbreak.jpg seqdetach.jpg
 
@@ -35,51 +34,46 @@ endif
 #  Process Automatically Generated Files
 #
 
-intro.texi: intro.t
-	$(BMENU) -c -p "Top" \
+$(srcdir)/intro.texi: intro.t
+	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
-	    -n "Document Revision History" $<
+	    -n "Document Revision History" < $< > $@
 
-revision.texi: revision.t
-	$(BMENU) -c -p "Introduction" \
+$(srcdir)/revision.texi: revision.t
+	$(BMENU2) -c -p "Introduction" \
 	    -u "Top" \
-	    -n "Objectives" $<
+	    -n "Objectives" < $< > $@
 
-objectives.texi: objectives.t
-	$(BMENU) -c -p "Document Revision History" \
+$(srcdir)/objectives.texi: objectives.t
+	$(BMENU2) -c -p "Document Revision History" \
 	    -u "Top" \
-	    -n "A Rapid Tour of GDB Internals" $<
+	    -n "A Rapid Tour of GDB Internals" < $< > $@
 
-gdbinternals.texi: gdbinternals.t
-	$(BMENU) -c -p "Implied Restrictions" \
+$(srcdir)/gdbinternals.texi: gdbinternals.t
+	$(BMENU2) -c -p "Implied Restrictions" \
 	    -u "Top" \
-	    -n "Interfacing GDB with RTEMS as a Target" $<
+	    -n "Interfacing GDB with RTEMS as a Target" < $< > $@
 
-interfacing.texi: interfacing.t
-	$(BMENU) -c -p "A Rapid Tour of GDB Internals" \
+$(srcdir)/interfacing.texi: interfacing.t
+	$(BMENU2) -c -p "A Rapid Tour of GDB Internals" \
 	    -u "Top" \
-	    -n "Communication with GDB" $<
+	    -n "Communication with GDB" < $< > $@
 
-comm.texi: comm.t
-	$(BMENU) -c -p "Interfacing GDB with RTEMS as a Target" \
+$(srcdir)/comm.texi: comm.t
+	$(BMENU2) -c -p "Interfacing GDB with RTEMS as a Target" \
 	    -u "Top" \
-	    -n "RTEMS Debugger Server Daemon" $<
+	    -n "RTEMS Debugger Server Daemon" < $< > $@
 
-daemon.texi: daemon.t
-	$(BMENU) -c -p "Communication with GDB" \
+$(srcdir)/daemon.texi: daemon.t
+	$(BMENU2) -c -p "Communication with GDB" \
 	    -u "Top" \
-	    -n "Conclusion" $<
+	    -n "Conclusion" < $< > $@
 
-conclusion.texi: conclusion.t
-	$(BMENU) -c -p "Output of a Debug Session with the Prototype" \
+$(srcdir)/conclusion.texi: conclusion.t
+	$(BMENU2) -c -p "Output of a Debug Session with the Prototype" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-noinst_DATA = \
-layers.eps \
-process.eps \
-seqdetach.eps \
-seqbreak.eps \
-seqinit.eps
+noinst_DATA = layers.eps process.eps seqdetach.eps seqbreak.eps seqinit.eps
 
 EXTRA_DIST = *.t $(noinst_DATA) $(JPEG_FILES)

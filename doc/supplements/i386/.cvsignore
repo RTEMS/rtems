@@ -24,6 +24,7 @@ i386.vr
 index.html
 intr.t
 intr.texi
+mdate-sh
 memmodel.texi
 timeFORCE386.texi
 timeFORCE386_.t

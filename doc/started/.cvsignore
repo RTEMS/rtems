@@ -6,13 +6,14 @@ buildrt.texi
 gdb.texi
 index.html
 intro.texi
+mdate-sh
 nextstep.texi
 nt.texi
 require.texi
 sample.texi
 started
-started-?
 started*.html
+started-?
 started.aux
 started.cp
 started.dvi

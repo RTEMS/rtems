@@ -90,6 +90,7 @@ clean)
   find . -name 'install-sh' -print | xargs rm -f
   find . -name 'missing' -print | xargs rm -f
   find . -name 'mkinstalldirs' -print | xargs rm -f
+  find . -name 'mdate-sh' -print | xargs rm -f
 
   test "$quiet" = "true" || echo "removing automake generated Makefile.in files"
   files=`find . -name 'Makefile.am' -print | sed -e 's%\.am%\.in%g'` ;

@@ -11,6 +11,7 @@ io.texi
 key.texi
 libc.texi
 libm.texi
+mdate-sh
 memorymgmt.texi
 message.texi
 mutex.texi

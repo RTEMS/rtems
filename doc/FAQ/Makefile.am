@@ -6,81 +6,81 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=FAQ
+PROJECT = FAQ
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
+GENERATED_FILES = basic.texi tools.texi concepts.texi build45.texi bsp.texi \
+    debug.texi freesw.texi embeddedinfo.texi hwdebugaids.texi projects.texi \
+    endoftime.texi
 
-GENERATED_FILES= \
-    basic.texi tools.texi concepts.texi build45.texi bsp.texi debug.texi \
-    freesw.texi embeddedinfo.texi hwdebugaids.texi projects.texi endoftime.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
-FILES=
+FILES =
 
 info_TEXINFOS = FAQ.texi
-FAQ_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)   
+FAQ_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
 #
 #  Process Automatically Generated Files
 #
 
-basic.texi: basic.t
-	$(BMENU) -c -p "Top" \
+$(srcdir)/basic.texi: basic.t
+	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-tools.texi: tools.t
-	$(BMENU) -c -p "Top" \
+$(srcdir)/tools.texi: tools.t
+	$(BMENU2) -c -p "Top" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-concepts.texi: concepts.t
-	$(BMENU) -c -p "" \
+$(srcdir)/concepts.texi: concepts.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-build45.texi: build45.t
-	$(BMENU) -c -p "" \
+$(srcdir)/build45.texi: build45.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-bsp.texi: bsp.t
-	$(BMENU) -c -p "" \
+$(srcdir)/bsp.texi: bsp.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-debug.texi: debug.t
-	$(BMENU) -c -p "" \
+$(srcdir)/debug.texi: debug.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-freesw.texi: freesw.t
-	$(BMENU) -c -p "" \
+$(srcdir)/freesw.texi: freesw.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-embeddedinfo.texi: embeddedinfo.t
-	$(BMENU) -c -p "" \
+$(srcdir)/embeddedinfo.texi: embeddedinfo.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-hwdebugaids.texi: hwdebugaids.t
-	$(BMENU) -c -p "" \
+$(srcdir)/hwdebugaids.texi: hwdebugaids.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-projects.texi: projects.t
-	$(BMENU) -c -p "" \
+$(srcdir)/projects.texi: projects.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-
-endoftime.texi: endoftime.t
-	$(BMENU) -c -p "" \
+$(srcdir)/endoftime.texi: endoftime.t
+	$(BMENU2) -c -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
 EXTRA_DIST = entry *.t

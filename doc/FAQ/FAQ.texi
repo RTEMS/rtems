@@ -19,26 +19,19 @@
 @c   Master file for the RTEMS FAQ
 @c
 
+@include version.texi
 @include ../common/setup.texi
 
-@ignore
-@ifinfo
-@format
-START-INFO-DIR-ENTRY
-* RTEMS Frequently Asked Questions (FAQ):
-END-INFO-DIR-ENTRY
-@end format
-@end ifinfo
-@end ignore
+@ifset use-ascii
+@dircategory RTEMS On-Line Manual
+@direntry
+* RTEMS FAQ: (FAQ).	               Frequently Asked Questions.
+@end direntry
+@end ifset
 
 @c
 @c  Title Page Stuff
 @c
-
-@set edition @value{RTEMS-EDITION}
-@set version @value{RTEMS-VERSION}
-@set update-date @value{RTEMS-UPDATE-DATE}
-@set update-month @value{RTEMS-UPDATE-MONTH}
 
 @c
 @c  I don't really like having a short title page.  --joel
@@ -51,9 +44,9 @@ END-INFO-DIR-ENTRY
 @finalout
 
 @title RTEMS Frequently Asked Questions
-@subtitle Edition @value{edition}, for @value{version}
+@subtitle Edition @value{EDITION}, for @value{VERSION}
 @sp 1
-@subtitle @value{update-month}
+@subtitle @value{UPDATED}
 @author On-Line Applications Research Corporation
 @page
 @include ../common/cpright.texi

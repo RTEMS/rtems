@@ -4,19 +4,10 @@ AC_PREREQ(2.13)
 
 AC_INIT(project.am)
 
-AM_INIT_AUTOMAKE(rtemsdoc,4.5.0-beta3,no)
+RTEMS_VERSION=4.5.0-beta3
 
-RTEMS_VERSION="$VERSION"
-AC_SUBST(RTEMS_VERSION)
-
-RTEMS_RELEASE="4.5.0-beta3"
-AC_SUBST(RTEMS_RELEASE)
-
-RTEMS_UPDATE_DATE="May 8 2000"
-AC_SUBST(RTEMS_UPDATE_DATE)
-
-RTEMS_UPDATE_MONTH="May 2000"
-AC_SUBST(RTEMS_UPDATE_MONTH)
+AM_INIT_AUTOMAKE(rtemsdoc,${RTEMS_VERSION},no)
+AM_MAINTAINER_MODE
 
 AC_ARG_ENABLE(html,
 [  --disable-html           disable html support ],
@@ -126,7 +117,6 @@ rtems_support.html
 index.html
 images/Makefile
 common/Makefile
-common/setup.texi
 FAQ/Makefile
 develenv/Makefile
 user/Makefile

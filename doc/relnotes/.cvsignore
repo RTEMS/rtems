@@ -1,6 +1,7 @@
 Makefile
 Makefile.in
 index.html
+mdate-sh
 relnotes
 relnotes*.html
 relnotes.aux

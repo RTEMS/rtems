@@ -26,6 +26,7 @@ init.texi
 intro.texi
 linkcmds.texi
 makefiles.texi
+mdate-sh
 network.t
 network.texi
 nvmem.texi

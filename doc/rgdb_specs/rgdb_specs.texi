@@ -19,26 +19,19 @@
 @c   Master file for the Getting Started (C) Guide
 @c
 
+@include version.texi
 @include ../common/setup.texi
 
-@ignore
-@ifinfo
-@format
-START-INFO-DIR-ENTRY
-* RTEMS Remote Debugger Server Specifications (rgdb_specs):
-END-INFO-DIR-ENTRY
-@end format
-@end ifinfo
-@end ignore
+@ifset use-ascii
+@dircategory RTEMS On-Line Manual
+@direntry
+* RTEMS Remote Debugger Server Specifications: (rgdb_specs).
+@end direntry
+@end ifset
 
 @c
 @c  Title Page Stuff
 @c
-
-@set edition @value{RTEMS-EDITION}
-@set version @value{RTEMS-VERSION}
-@set update-date @value{RTEMS-UPDATE-DATE}
-@set update-month @value{RTEMS-UPDATE-MONTH}
 
 @c
 @c  I don't really like having a short title page.  --joel
@@ -51,9 +44,9 @@ END-INFO-DIR-ENTRY
 @finalout
 
 @title RTEMS Remote Debugger Server Specifications
-@subtitle Edition @value{edition}, for @value{version}
+@subtitle Edition @value{EDITION}, for @value{VERSION}
 @sp 1
-@subtitle @value{update-month}
+@subtitle @value{UPDATED}
 @author Emmanuel Raguet and Eric Valette, Canon Research Centre
 @author On-Line Applications Research Corporation
 @page

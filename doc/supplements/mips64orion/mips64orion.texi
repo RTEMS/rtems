@@ -19,26 +19,19 @@
 @c   Master file for the Template Applications Supplement
 @c
 
+@include version.texi
 @include ../../common/setup.texi
 
-@ignore
-@ifinfo
-@format
-START-INFO-DIR-ENTRY
-* RTEMS MIPS64 Orion Applications Supplement (mips64orion):
-END-INFO-DIR-ENTRY
-@end format
-@end ifinfo
-@end ignore
+@ifset use-ascii
+@dircategory RTEMS Target Supplements
+@direntry
+* RTEMS MIPS64 Orion Applications Supplement: (mips64orion).
+@end direntry
+@end ifset
 
 @c
 @c  Title Page Stuff
 @c
-
-@set edition @value{RTEMS-EDITION}
-@set version @value{RTEMS-VERSION}
-@set update-date @value{RTEMS-UPDATE-DATE}
-@set update-month @value{RTEMS-UPDATE-MONTH}
 
 @c
 @c  I don't really like having a short title page.  --joel
@@ -51,9 +44,9 @@ END-INFO-DIR-ENTRY
 @finalout
 
 @title RTEMS MIPS64 Orion Applications Supplement
-@subtitle Edition @value{edition}, for RTEMS @value{version}
+@subtitle Edition @value{EDITION}, for RTEMS @value{VERSION}
 @sp 1
-@subtitle @value{update-month}
+@subtitle @value{UPDATED}
 @author On-Line Applications Research Corporation
 @page
 

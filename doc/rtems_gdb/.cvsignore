@@ -4,6 +4,7 @@ commands.texi
 example.texi
 index.html
 intro.texi
+mdate-sh
 rtems_gdb
 rtems_gdb*.html
 rtems_gdb.aux

@@ -6,94 +6,94 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=itron
+PROJECT = itron
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=
+COMMON_FILES = $(top_srcdir)/common/setup.texi
 
-GENERATED_FILES= \
-    status.texi \
-    task.texi tasksync.texi semaphore.texi eventflags.texi mailbox.texi \
-    msgbuffer.texi rendezvous.texi interrupt.texi memorypool.texi \
-    fixedblock.texi time.texi config.texi network.texi
+GENERATED_FILES = status.texi task.texi tasksync.texi semaphore.texi \
+    eventflags.texi mailbox.texi msgbuffer.texi rendezvous.texi \
+    interrupt.texi memorypool.texi fixedblock.texi time.texi config.texi \
+    network.texi
 
-FILES= preface.texi
+FILES = preface.texi
 
 info_TEXINFOS = itron.texi
 itron_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-status.texi: status.t
-	$(BMENU) -p "" \
+$(srcdir)/status.texi: status.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-task.texi: task.t
-	$(BMENU) -p "" \
+$(srcdir)/task.texi: task.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-tasksync.texi: tasksync.t
-	$(BMENU) -p "" \
+$(srcdir)/tasksync.texi: tasksync.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-semaphore.texi: semaphore.t
-	$(BMENU) -p "" \
+$(srcdir)/semaphore.texi: semaphore.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-eventflags.texi: eventflags.t
-	$(BMENU) -p "" \
+$(srcdir)/eventflags.texi: eventflags.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-mailbox.texi: mailbox.t
-	$(BMENU) -p "" \
+$(srcdir)/mailbox.texi: mailbox.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-msgbuffer.texi: msgbuffer.t
-	$(BMENU) -p "" \
+$(srcdir)/msgbuffer.texi: msgbuffer.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-rendezvous.texi: rendezvous.t
-	$(BMENU) -p "" \
+$(srcdir)/rendezvous.texi: rendezvous.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-interrupt.texi: interrupt.t
-	$(BMENU) -p "" \
+$(srcdir)/interrupt.texi: interrupt.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-memorypool.texi: memorypool.t
-	$(BMENU) -p "" \
+$(srcdir)/memorypool.texi: memorypool.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-fixedblock.texi: fixedblock.t
-	$(BMENU) -p "" \
+$(srcdir)/fixedblock.texi: fixedblock.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-time.texi: time.t
-	$(BMENU) -p "" \
+$(srcdir)/time.texi: time.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-config.texi: config.t
-	$(BMENU) -p "" \
+$(srcdir)/config.texi: config.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
-network.texi: network.t
-	$(BMENU) -p "" \
+$(srcdir)/network.texi: network.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
 noinst_SCRIPTS = gen_all gen_section gen_status_shell
 

@@ -6,73 +6,74 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=porting
+PROJECT = porting
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi
+FILES = preface.texi developtools.texi sourcecode.texi cpumodels.texi \
+    cpuinit.texi interrupts.texi taskcontext.texi idlethread.texi \
+    prioritybitmap.texi codetuning.texi miscellaneous.texi
 
-FILES=preface.texi developtools.texi sourcecode.texi cpumodels.texi \
-  cpuinit.texi interrupts.texi taskcontext.texi idlethread.texi \
-  prioritybitmap.texi codetuning.texi miscellaneous.texi $(COMMON_FILES)
+GENERATED_FILES = developtools.texi sourcecode.texi cpumodels.texi \
+    cpuinit.texi interrupts.texi taskcontext.texi idlethread.texi \
+    prioritybitmap.texi codetuning.texi miscellaneous.texi
 
-GENERATED_FILES=developtools.texi sourcecode.texi cpumodels.texi \
-  cpuinit.texi interrupts.texi taskcontext.texi idlethread.texi \
-  prioritybitmap.texi codetuning.texi miscellaneous.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
 info_TEXINFOS = porting.texi
 porting_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-developtools.texi: developtools.t
-	$(BMENU) -p "Preface" \
+$(srcdir)/developtools.texi: developtools.t
+	$(BMENU2) -p "Preface" \
 	    -u "Top" \
-	    -n "Source Code Organization" $<
+	    -n "Source Code Organization" < $< > $@
 
-sourcecode.texi: sourcecode.t
-	$(BMENU) -p "Development Tools" \
+$(srcdir)/sourcecode.texi: sourcecode.t
+	$(BMENU2) -p "Development Tools" \
 	    -u "Top" \
-	    -n "CPU Model Variations" $<
+	    -n "CPU Model Variations" < $< > $@
 
-cpumodels.texi: cpumodels.t
-	$(BMENU) -p "Source Code Organization Introduction" \
+$(srcdir)/cpumodels.texi: cpumodels.t
+	$(BMENU2) -p "Source Code Organization Introduction" \
 	    -u "Top" \
-	    -n "CPU Initialization" $<
+	    -n "CPU Initialization" < $< > $@
 
-cpuinit.texi: cpuinit.t
-	$(BMENU) -p "CPU Model Variations Coding Issues" \
+$(srcdir)/cpuinit.texi: cpuinit.t
+	$(BMENU2) -p "CPU Model Variations Coding Issues" \
 	    -u "Top" \
-	    -n "Interrupts" $<
+	    -n "Interrupts" < $< > $@
 
-interrupts.texi: interrupts.t
-	$(BMENU) -p "CPU Initialization Initializing the CPU" \
+$(srcdir)/interrupts.texi: interrupts.t
+	$(BMENU2) -p "CPU Initialization Initializing the CPU" \
 	    -u "Top" \
-	    -n "Task Context Management" $<
+	    -n "Task Context Management" < $< > $@
 
-taskcontext.texi: taskcontext.t
-	$(BMENU) -p "Interrupts Pointer to _Thread_Dispatch Routine" \
+$(srcdir)/taskcontext.texi: taskcontext.t
+	$(BMENU2) -p "Interrupts Pointer to _Thread_Dispatch Routine" \
 	    -u "Top" \
-	    -n "IDLE Thread" $<
+	    -n "IDLE Thread" < $< > $@
 
-idlethread.texi: idlethread.t
-	$(BMENU) -p "Task Context Management Restoring a Floating Point Context" \
+$(srcdir)/idlethread.texi: idlethread.t
+	$(BMENU2) -p "Task Context Management Restoring a Floating Point Context" \
 	    -u "Top" \
-	    -n "Priority Bitmap Manipulation" $<
+	    -n "Priority Bitmap Manipulation" < $< > $@
 
-prioritybitmap.texi: prioritybitmap.t
-	$(BMENU) -p "IDLE Thread Idle Thread Body" \
+$(srcdir)/prioritybitmap.texi: prioritybitmap.t
+	$(BMENU2) -p "IDLE Thread Idle Thread Body" \
 	    -u "Top" \
-	    -n "Code Tuning Parameters" $<
+	    -n "Code Tuning Parameters" < $< > $@
 
-codetuning.texi: codetuning.t
-	$(BMENU) -p "Priority Bitmap Manipulation Bit Scan Support" \
+$(srcdir)/codetuning.texi: codetuning.t
+	$(BMENU2) -p "Priority Bitmap Manipulation Bit Scan Support" \
 	    -u "Top" \
-	    -n "Miscellaneous" $<
+	    -n "Miscellaneous" < $< > $@
 
-miscellaneous.texi: miscellaneous.t
-	$(BMENU) -p "Code Tuning Parameters Partition Element Alignment" \
+$(srcdir)/miscellaneous.texi: miscellaneous.t
+	$(BMENU2) -p "Code Tuning Parameters Partition Element Alignment" \
 	    -u "Top" \
-	    -n "Command and Variable Index" $<
+	    -n "Command and Variable Index" < $< > $@
 
 EXTRA_DIST = *.t

@@ -6,54 +6,55 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.4
 
-PROJECT=rtems_gdb
+PROJECT = rtems_gdb
+EDITION = 1
 
 include $(top_srcdir)/project.am
 
-COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
+GENERATED_FILES = intro.texi swarch.texi started.texi commands.texi \
+    trouble.texi example.texi
 
-GENERATED_FILES= \
-    intro.texi swarch.texi started.texi commands.texi trouble.texi example.texi
+COMMON_FILES = $(top_srcdir)/common/setup.texi $(top_srcdir)/common/cpright.texi
 
-FILES=
+FILES =
 
 info_TEXINFOS = rtems_gdb.texi
-rtems_gdb_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)   
+rtems_gdb_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
 #
 #  Process Automatically Generated Files
 #
 
-intro.texi: intro.t
-	$(BMENU) -p "Top" \
+$(srcdir)/intro.texi: intro.t
+	$(BMENU2) -p "Top" \
 	    -u "Top" \
-	    -n "Software Architecture" $<
+	    -n "Software Architecture" < $< > $@
 
-swarch.texi: swarch.t
-	$(BMENU) -p "Introduction" \
+$(srcdir)/swarch.texi: swarch.t
+	$(BMENU2) -p "Introduction" \
 	    -u "Top" \
-	    -n "Getting Started" $<
+	    -n "Getting Started" < $< > $@
 
-started.texi: started.t
-	$(BMENU) -p "Software Architecture" \
+$(srcdir)/started.texi: started.t
+	$(BMENU2) -p "Software Architecture" \
 	    -u "Top" \
-	    -n "Commands" $<
+	    -n "Commands" < $< > $@
 
-commands.texi: commands.t
-	$(BMENU) -p "Getting Started Attaching To The System" \
+$(srcdir)/commands.texi: commands.t
+	$(BMENU2) -p "Getting Started Attaching To The System" \
 	    -u "Top" \
-	    -n "Troubleshooting" $<
+	    -n "Troubleshooting" < $< > $@
 
-trouble.texi: trouble.t
-	$(BMENU) -p "Commands Thread control" \
+$(srcdir)/trouble.texi: trouble.t
+	$(BMENU2) -p "Commands Thread control" \
 	    -u "Top" \
-	    -n "Debug Session Example" $<
+	    -n "Debug Session Example" < $< > $@
 
-example.texi: example.t
-	$(BMENU) -p "Troubleshooting Debug server not present" \
+$(srcdir)/example.texi: example.t
+	$(BMENU2) -p "Troubleshooting Debug server not present" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
 EXTRA_DIST = *.t

@@ -6,9 +6,9 @@ cpumodel.texi
 cputable.texi
 fatalerr.texi
 hppa1_1
+hppa1_1*.html
 hppa1_1-?
 hppa1_1-??
-hppa1_1*.html
 hppa1_1.aux
 hppa1_1.cp
 hppa1_1.dvi
@@ -24,6 +24,7 @@ hppa1_1.vr
 index.html
 intr.t
 intr.texi
+mdate-sh
 memmodel.texi
 timeSIMHPPA.texi
 timing.t

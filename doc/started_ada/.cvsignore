@@ -5,6 +5,7 @@ buildrt.texi
 gdb.texi
 index.html
 intro.texi
+mdate-sh
 require.texi
 sample.texi
 started_ada
