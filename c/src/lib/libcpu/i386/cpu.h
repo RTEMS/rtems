@@ -460,7 +460,7 @@ typedef struct {
 typedef union {
   page_table_bits	bits;
   unsigned int		table_entry;
-}page_table_entry;
+} page_table_entry;
  
 /*
  * definitions related to page table entry
@@ -479,13 +479,14 @@ typedef union {
 
 typedef struct {
   page_dir_entry pageDirEntry[MAX_ENTRY];
-}page_directory;
+} page_directory;
 
 typedef struct {
   page_table_entry pageTableEntry[MAX_ENTRY];
-}page_table;
+} page_table;
 
-static inline void flush_cache(){
+static inline void flush_cache()
+{
   asm volatile ("wbinvd");
 }
 
