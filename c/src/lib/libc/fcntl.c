@@ -88,6 +88,7 @@ int fcntl(
 
     case F_GETFL:        /* more flags (cloexec) */
       ret = rtems_libio_to_fcntl_flags( iop->flags );
+      break;
 
     case F_SETFL:
       flags = rtems_libio_fcntl_flags( va_arg( ap, int ) );
