@@ -1345,7 +1345,7 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
 /* XXX
   (*sc->write_register)( rp, SONIC_REG_IMR, 0 );
 */
-  old_handler = set_vector(sonic_interrupt_handler, sc->vector, 0);
+  old_handler = set_vector(sonic_interrupt_handler, sc->vector, 1);
 
   /*
    * Remainder of hardware initialization is
