@@ -16,37 +16,85 @@
 
 #include <string.h>
 #include <fcntl.h>
-
 #include <bsp.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
+#include <libcpu/cpuIdent.h>
+#include <libcpu/spr.h>
+
+SPR_RW(SPRG0)
+SPR_RW(SPRG1)
+
+
+extern unsigned long __rtems_end[];
+
+void  initialize_exceptions(void);
+
+/*  On psim, each click of the decrementer register corresponds
+ *  to 1 instruction.  By setting this to 100, we are indicating
+ *  that we are assuming it can execute 100 instructions per
+ *  microsecond.  This corresponds to sustaining 1 instruction
+ *  per cycle at 100 Mhz.  Whether this is a good guess or not
+ *  is anyone's guess.
+ */
+
+extern int PSIM_INSTRUCTIONS_PER_MICROSECOND;
 
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
  */
- 
+
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
-
 rtems_cpu_table   Cpu_table;
-rtems_unsigned32  bsp_isr_level;
 
 /*
  *  Tells us where to put the workspace in case remote debugger is present.
  */
 
 #if 0
-extern rtems_unsigned32  rdb_start;
+extern uint32_t          rdb_start;
 #endif
+
+/*
+ * PCI Bus Frequency
+ */
+ unsigned int BSP_bus_frequency;
+ /*
+  *  * Time base divisior (how many tick for 1 second).
+  *   */
+ unsigned int BSP_time_base_divisor;
+
+
 
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
+
+/*
+ * system init stack and soft ir stack size
+ */
+#define INIT_STACK_SIZE 0x1000
+#define INTR_STACK_SIZE CONFIGURE_INTERRUPT_STACK_MEMORY
+
+
+void BSP_panic(char *s)
+{
+    printk("%s PANIC %s\n",_RTEMS_version, s);
+      __asm__ __volatile ("sc");
+}
+
+void _BSP_Fatal_error(unsigned int v)
+{
+    printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
+      __asm__ __volatile ("sc");
+}
 
 /*
  *  bsp_pretasking_hook
@@ -58,10 +106,10 @@ void bsp_libc_init( void *, unsigned32, int );
 void bsp_pretasking_hook(void)
 {
   extern int end;
-  rtems_unsigned32 heap_start;
-  rtems_unsigned32 heap_size;
+  uint32_t         heap_start;
+  uint32_t         heap_size;
 
-  heap_start = (rtems_unsigned32) &end;
+  heap_start = (uint32_t) &end;
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
@@ -84,16 +132,14 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  unsigned char *work_space_start;
+  unsigned char     *work_space_start;
+  register uint32_t  intrStack;
+  register uint32_t *intrStackPtr;
 
-#if 0
-  /* 
-   * Set MSR to show vectors at 0 XXX
+  /*
+   * Note we can not get CPU identification dynamically, so force current_ppc_cpu.
    */
-  _CPU_MSR_Value( msr_value );
-  msr_value &= ~PPC_MSR_EP;
-  _CPU_MSR_SET( msr_value );
-#endif
+  current_ppc_cpu = PPC_PSIM;
 
   /*
    * Set up our hooks
@@ -118,15 +164,18 @@ void bsp_start( void )
 
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
+  BSP_bus_frequency        = (unsigned int)&PSIM_INSTRUCTIONS_PER_MICROSECOND;
+  BSP_time_base_divisor    = 1;
+
   /*
-   *  The monitor likes the exception table to be at 0x0.
+   *  The simulator likes the exception table to be at 0xfff00000.
    */
 
-  Cpu_table.exceptions_in_RAM = TRUE;
+  Cpu_table.exceptions_in_RAM = FALSE;
 
   BSP_Configuration.work_space_size += 1024;
 
-  work_space_start = 
+  work_space_start =
     (unsigned char *)&RAM_END - BSP_Configuration.work_space_size;
 
   if ( work_space_start <= (unsigned char *)&end ) {
@@ -135,5 +184,37 @@ void bsp_start( void )
   }
 
   BSP_Configuration.work_space_start = work_space_start;
+
+  /*
+   * Initialize the interrupt related settings
+   * SPRG1 = software managed IRQ stack
+   *
+   * This could be done latter (e.g in IRQ_INIT) but it helps to understand
+   * some settings below...
+   */
+  intrStack = ((uint32_t) __rtems_end) + 
+          INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+
+  /* make sure it's properly aligned */
+  intrStack &= ~(CPU_STACK_ALIGNMENT-1);
+
+  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
+  intrStackPtr = (uint32_t*) intrStack;
+  *intrStackPtr = 0;
+
+  _write_SPRG1(intrStack);
+
+  /* signal them that we have fixed PR288 - eventually, this should go away */
+  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
+
+  /*
+   * Initialize default raw exception hanlders. See vectors/vectors_init.c
+   */
+  initialize_exceptions();
+
+  /*
+   * Initalize RTEMS IRQ system
+   */
+  BSP_rtems_irq_mng_init(0);
 
 }

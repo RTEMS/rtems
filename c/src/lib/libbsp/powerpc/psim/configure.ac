@@ -38,6 +38,7 @@ AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
 include/Makefile
+irq/Makefile
 shmsupp/Makefile
 start/Makefile
 startup/Makefile
@@ -45,6 +46,6 @@ timer/Makefile
 vectors/Makefile
 wrapup/Makefile])
 
-RTEMS_PPC_EXCEPTIONS([old])
+RTEMS_PPC_EXCEPTIONS([new])
 
 AC_OUTPUT

@@ -54,30 +54,39 @@ extern "C" {
 #else
 #include <rtems.h>
 #include <console.h>
+#include <libcpu/io.h>
 #include <clockdrv.h>
-#include <console.h>
 #include <iosupp.h>
-
-/*
- *  Define the time limits for RTEMS Test Suite test durations.
- *  Long test and short test duration limits are provided.  These
- *  values are in seconds and need to be converted to ticks for the
- *  application.
- *
- */
-
-#define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
-#define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
-
+#include <bsp/vectors.h>
 
 /*
  *  Stuff for Time Test 27
  */
+#if defined(RTEMS_TM27)
+
+#include <bsp/irq.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-#define Install_tm27_vector( _handler ) \
-  set_vector( (_handler), PPC_IRQ_DECREMENTER, 1 )
+/* #define Install_tm27_vector( _handler ) \
+   set_vector( (_handler), PPC_IRQ_DECREMENTER, 1 ) */
+
+void nullFunc() {}
+static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
+                                              0,
+                                              (rtems_irq_enable)nullFunc,
+                                              (rtems_irq_disable)nullFunc,
+                                              (rtems_irq_is_enabled) nullFunc};
+
+void Install_tm27_vector(void (*_handler)())
+{
+  clockIrqData.hdl = _handler;
+  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
+        printk("Error installing clock interrupt handler!\n");
+        rtems_fatal_error_occurred(1);
+  }
+}
+
 
 #define Cause_tm27_intr()  \
   do { \
@@ -100,6 +109,7 @@ extern "C" {
     _msr |=  0x8002; \
     asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
   } while (0)
+#endif
 
 /* Constants */
 
@@ -120,23 +130,13 @@ extern "C" {
  *  Information placed in the linkcmds file.
  */
 
-extern int   RAM_START;
 extern int   RAM_END;
-extern int   RAM_SIZE;
-
-extern int   PROM_START;
-extern int   PROM_END;
-extern int   PROM_SIZE;
-
-extern int   CLOCK_SPEED;
-
 extern int   end;        /* last address in the program */
 
+
+#define BSP_Convert_decrementer( _value ) ( (unsigned long long) _value ) 
+
 /* functions */
-
-void bsp_start( void );
-
-void bsp_cleanup( void );
 
 rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
@@ -144,17 +144,10 @@ rtems_isr_entry set_vector(                    /* returns old vector */
   int                 type                      /* RTEMS or RAW intr  */
 );
 
-void DEBUG_puts( char *string );
-
-void BSP_fatal_return( void );
-
-void bsp_spurious_initialize( void );
+void bsp_cleanup( void );
 
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
-extern rtems_unsigned32          bsp_isr_level;
 
 #endif /* ASM */
 

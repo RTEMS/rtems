@@ -3,9 +3,9 @@
 ##
 
 
-PGM = $(ARCH)/clock.rel
+VPATH = @srcdir@:@srcdir@/../../shared/clock
 
-C_FILES = clock.c
+C_FILES = p_clock.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
@@ -17,15 +17,8 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): $(OBJS)
-	$(make-rel)
-
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all-local: $(ARCH) $(OBJS) $(PGM)
-
-.PRECIOUS: $(PGM)
-
-EXTRA_DIST = clock.c
+all-local: $(ARCH) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

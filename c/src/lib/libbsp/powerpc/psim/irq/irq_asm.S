@@ -16,7 +16,7 @@
  * irq_asm.S,v 1.5.4.3 2003/09/04 18:45:20 joel Exp
  */
   	
-#include <rtems/asm.h>
+#include <asm.h>
 #include <rtems/score/cpu.h>
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
