@@ -16,7 +16,6 @@ Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
 Source1:	ftp://sources.redhat.com/pub/newlib/newlib-@newlib_version@.tar.gz
 @PATCH1@
 @PATCH3@
-Buildroot:	%{_defaultbuildroot}
 BuildPreReq:	texinfo >= 4.2
 BuildPreReq:	@target_alias@-binutils
 #

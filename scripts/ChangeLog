@@ -1,5 +1,10 @@
 2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* gcc3newlib/gccnewlib.add: Remove Buildroot.
+	* common/.cvsignore: New.
+
+2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* common/common.add.in: Add Vendor, Distribution, BuildRoot.
 	* binutils/Makefile.am: Fix path to clean.add.
 	* binutils/binutils.add: Remove BuildRoot.
