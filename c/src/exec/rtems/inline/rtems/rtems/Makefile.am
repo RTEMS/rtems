@@ -13,7 +13,7 @@ I_FILES = asr.inl attr.inl dpmem.inl event.inl eventset.inl message.inl \
 if INLINE
 include_rtems_rtems_HEADERS = $(I_FILES)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/rtems \
     $(include_rtems_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems/rtems:

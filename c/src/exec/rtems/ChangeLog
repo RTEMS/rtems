@@ -1,3 +1,10 @@
+2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* inline/rtems/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* macros/rtems/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-14	Fernando Ruiz <fernando.ruiz@ctv.es>
 
 	* src/tasks.c: Dereference pointer passed to destructor.

@@ -20,7 +20,7 @@ else
 include_rtems_rtems_HEADERS = $(STD_H_FILES) $(MP_H_FILES)
 endif
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/rtems \
     $(include_rtems_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems/rtems:
