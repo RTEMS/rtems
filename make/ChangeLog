@@ -1,4 +1,11 @@
 
+2000-05-25	Matt Cross <profesor@gweep.net>
+
+	* New MRM332 BSP for the Mini RoboMind board based
+	on the 68332 microcontroller designed and build by Mark
+	Castelluccio.  For details on the MRM see http://www.robominds.com.
+	* custom/mrm332.cfg: New file.
+
 2001-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/dmv177.cfg: Remove CONSOLE_USE_INTERRUPTS,
