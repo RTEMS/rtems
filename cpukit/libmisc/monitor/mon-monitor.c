@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <termios.h>
 #include <unistd.h>
 
 #include <rtems/monitor.h>
@@ -54,186 +55,174 @@ unsigned32 rtems_monitor_default_node;  /* current default for commands */
 rtems_symbol_table_t *rtems_monitor_symbols;
 
 /*
+ * User registered commands.
+ */
+
+rtems_monitor_command_entry_t rtems_registered_commands;
+
+/*
  * The top-level commands
  */
 
 rtems_monitor_command_entry_t rtems_monitor_commands[] = {
-    { "--usage--",
-      "\n"
-      "RTEMS monitor\n"
-      "\n"
-      "Commands (may be abbreviated)\n"
-      "\n"
-      "  help      -- get this message or command specific help\n"
-      "  pause     -- pause monitor for a specified number of ticks\n"
-      "  exit      -- invoke a fatal RTEMS error\n"
-      "  symbol    -- show entries from symbol table\n"
-      "  continue  -- put monitor to sleep waiting for explicit wakeup\n"
-      "  config    -- show system configuration\n"
-      "  itask     -- list init tasks\n"
-      "  mpci      -- list mpci config\n"
-      "  task      -- show task information\n"
-      "  queue     -- show message queue information\n"
-      "  extension -- user extensions\n"
-      "  driver    -- show information about named drivers\n"
-      "  dname     -- show information about named drivers\n"
-      "  object    -- generic object information\n"
-      "  node      -- specify default node for commands that take id's\n"
-#ifdef CPU_INVOKE_DEBUGGER
-      "  debugger  -- invoke system debugger\n"
-#endif
-      ,
-      0,
-      0,
-      (unsigned32) rtems_monitor_commands,
-    },
     { "config",
-      "config\n"
-      "  Show the system configuration.\n",
+      "Show the system configuration.",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_CONFIG,
+      &rtems_monitor_commands[1],
     },
     { "itask",
-      "itask\n"
-      "  List init tasks for the system\n",
+      "List init tasks for the system",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_INIT_TASK,
+      &rtems_monitor_commands[2],
     }, 
    { "mpci",
-      "mpci\n"
-      "  Show the MPCI system configuration, if configured.\n",
+      "Show the MPCI system configuration, if configured.",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_MPCI,
+      &rtems_monitor_commands[3],
     },
     { "pause",
-      "pause [ticks]\n"
-      "  monitor goes to \"sleep\" for specified ticks (default is 1)\n"
-      "  monitor will resume at end of period or if explicitly awakened\n",
+      "Monitor goes to \"sleep\" for specified ticks (default is 1). "
+      "Monitor will resume at end of period or if explicitly awakened\n"
+      "  pause [ticks]",
       0,
       rtems_monitor_pause_cmd,
       0,
+      &rtems_monitor_commands[4],
     },
     { "continue",
-      "continue\n"
-      "  put the monitor to sleep waiting for an explicit wakeup from the\n"
-      "  program running.\n",
+      "Put the monitor to sleep waiting for an explicit wakeup from the "
+      "program running.\n",
       0,
       rtems_monitor_continue_cmd,
       0,
+      &rtems_monitor_commands[5],
     },
     { "go",
-      "go\n"
-      "  Alias for 'continue'\n",
+      "Alias for 'continue'",
       0,
       rtems_monitor_continue_cmd,
       0,
+      &rtems_monitor_commands[6],
     },
     { "node",
-      "node [ node number ]\n"
-      "  Specify default node number for commands that take id's\n",
+      "Specify default node number for commands that take id's.\n"
+      "  node [ node number ]",
       0,
       rtems_monitor_node_cmd,
       0,
+      &rtems_monitor_commands[7],
     },
     { "symbol",
-      "symbol [ symbolname [symbolname ... ] ]\n"
-      "  display value associated with specified symbol.\n"
-      "  Defaults to displaying all known symbols.\n",
+      "Display value associated with specified symbol. "
+      "Defaults to displaying all known symbols.\n"
+      "  symbol [ symbolname [symbolname ... ] ]",
       0,
       rtems_monitor_symbol_cmd,
       (unsigned32) &rtems_monitor_symbols,
+      &rtems_monitor_commands[8],
     },
     { "extension",
-      "extension [id [id ...] ]\n"
-      "  display information about specified extensions.\n"
-      "  Default is to display information about all extensions on this node\n",
+      "Display information about specified extensions. "
+      "Default is to display information about all extensions on this node.\n"
+      "  extension [id [id ...] ]",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_EXTENSION,
+      &rtems_monitor_commands[9],
     },
     { "task",
-      "task [id [id ...] ]\n"
-      "  display information about the specified tasks.\n"
-      "  Default is to display information about all tasks on this node\n",
+      "Display information about the specified tasks. "
+      "Default is to display information about all tasks on this node.\n"
+      "  task [id [id ...] ]",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_TASK,
+      &rtems_monitor_commands[10],
     },
     { "queue",
-      "queue [id [id ... ] ]\n"
-      "  display information about the specified message queues\n"
-      "  Default is to display information about all queues on this node\n",
+      "Display information about the specified message queues. "
+      "Default is to display information about all queues on this node.\n"
+      "  queue [id [id ... ] ]",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_QUEUE,
+      &rtems_monitor_commands[11],
     },
     { "object",
-      "object [id [id ...] ]\n"
-      "  display information about specified RTEMS objects.\n"
-      "  Object id's must include 'type' information.\n"
-      "  (which may normally be defaulted)\n",
+      "Display information about specified RTEMS objects. "
+      "Object id's must include 'type' information. "
+      "(which may normally be defaulted)\n"
+      "  object [id [id ...] ]",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_INVALID,
+      &rtems_monitor_commands[12],
     },
     { "driver",
-      "driver [ major [ major ... ] ]\n"
-      "  Display the RTEMS device driver table.\n",
+      "Display the RTEMS device driver table.\n"
+      "  driver [ major [ major ... ] ]",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_DRIVER,
+      &rtems_monitor_commands[13],
     },
     { "dname",
-      "dname\n"
-      "  Displays information about named drivers.\n",
+      "Displays information about named drivers.\n",
       0,
       rtems_monitor_object_cmd,
       RTEMS_MONITOR_OBJECT_DNAME,
+      &rtems_monitor_commands[14],
     },
     { "exit",
-      "exit [status]\n"
-      "  Invoke 'rtems_fatal_error_occurred' with 'status'\n"
-      "  (default is RTEMS_SUCCESSFUL)\n",
+      "Invoke 'rtems_fatal_error_occurred' with 'status' "
+      "(default is RTEMS_SUCCESSFUL)\n"
+      "  exit [status]",
       0,
       rtems_monitor_fatal_cmd,
       RTEMS_SUCCESSFUL,
+      &rtems_monitor_commands[15],
     },
     { "fatal",
-      "fatal [status]\n"
-      "  'exit' with fatal error; default error is RTEMS_TASK_EXITTED\n",
+      "'exit' with fatal error; default error is RTEMS_TASK_EXITTED\n"
+      "  fatal [status]",
       0,
       rtems_monitor_fatal_cmd,
       RTEMS_TASK_EXITTED,			/* exit value */
+      &rtems_monitor_commands[16],
     },
     { "quit",
-      "quit [status]\n"
-      "  Alias for 'exit'\n",
+      "Alias for 'exit'\n",
       0,
       rtems_monitor_fatal_cmd,
       RTEMS_SUCCESSFUL,				/* exit value */
+      &rtems_monitor_commands[17],
     },
     { "help",
-      "help [ command [ command ] ]\n"
-      "  provide information about commands\n"
-      "  Default is show basic command summary.\n",
+      "Provide information about commands. "
+      "Default is show basic command summary.\n"
+      "help [ command [ command ] ]",
       0,
       rtems_monitor_help_cmd,
       (unsigned32) rtems_monitor_commands,
+      &rtems_monitor_commands[18],
     },
 #ifdef CPU_INVOKE_DEBUGGER
     { "debugger",
-      "debugger\n"
-      "  Enter the debugger, if possible.\n"
-      "  A continue from the debugger will return to the monitor.\n",
+      "Enter the debugger, if possible. "
+      "A continue from the debugger will return to the monitor.\n",
       0,
       rtems_monitor_debugger_cmd,
       0,
+      &rtems_monitor_commands[19],
     },
 #endif            
-    { 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, &rtems_registered_commands },
 };
 
 
@@ -418,6 +407,56 @@ done:
     return;
 }
 
+/*
+ * User registered commands.
+ */
+
+int
+rtems_monitor_insert_cmd (
+    rtems_monitor_command_entry_t *command
+)
+{
+    rtems_monitor_command_entry_t *p = rtems_registered_commands.next;
+
+    command->next = 0;
+
+    if (rtems_registered_commands.next)
+    {
+        for (; p->next; p = p->next)
+        {
+            if (STREQ(command->command, p->command))
+                return 0;
+        }
+        p->next = command;
+    }
+    else
+        rtems_registered_commands.next = command;
+  
+    return 1;
+}
+
+int
+rtems_monitor_erase_cmd (
+    rtems_monitor_command_entry_t *command
+)
+{
+    rtems_monitor_command_entry_t *p;
+    rtems_monitor_command_entry_t **p_prev = &rtems_registered_commands.next;
+
+    if (rtems_registered_commands.next)
+    {
+        for (p = rtems_registered_commands.next; p->next; p = p->next)
+        {
+            if (STREQ(command->command, p->command))
+            {
+                *p_prev = p->next;
+                return 1;
+            }
+            p_prev = &p->next;
+        }
+    }
+    return 0;
+}
 
 /*
  * Main monitor command loop
@@ -435,7 +474,39 @@ rtems_monitor_task(
     int argc;
     char *argv[64];        
     boolean verbose = FALSE;
+    struct termios term;
 
+    /*
+     * Make the stdin stream characte not line based.
+     */
+    
+    if (tcgetattr (STDIN_FILENO, &term) < 0)
+    {
+      printf("rtems-monitor: cannot get terminal attributes.\n");
+    }
+    else
+    {
+      /*
+       * No echo, no canonical processing.
+       */
+
+      term.c_lflag &= ~(ECHO | ICANON | IEXTEN);
+  
+      /*
+       * No sigint on BREAK, CR-to-NL off, input parity off,
+       * don't strip 8th bit on input, output flow control off
+       */
+
+      term.c_lflag    &= ~(INPCK | ISTRIP | IXON);
+      term.c_cc[VMIN]  = 1;
+      term.c_cc[VTIME] = 0;
+
+      if (tcsetattr (STDIN_FILENO, TCSANOW, &term) < 0)
+      {
+        printf("cannot set terminal attributes\n");
+      }
+    }
+    
     if (monitor_flags & RTEMS_MONITOR_SUSPEND)
         (void) rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
 
@@ -453,7 +524,11 @@ rtems_monitor_task(
         if ((command = rtems_monitor_command_lookup(rtems_monitor_commands,
                                                     argc,
                                                     argv)) == 0)
+        {
+            /* no command */
+            printf("Unrecognised command; try 'help'\n");
             continue;
+        }
 
         command->command_function(argc, argv, command->command_arg, verbose);
 

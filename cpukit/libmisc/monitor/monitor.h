@@ -294,9 +294,9 @@ struct rtems_monitor_command_entry_s {
     char        *usage;        /* usage string for the command */
     unsigned32   arguments_required;    /* # of required args */
     rtems_monitor_command_function_t command_function;
-
                                /* Some argument for the command */
-    unsigned32          command_arg;
+    unsigned32   command_arg;
+    struct rtems_monitor_command_entry_s *next;
 };
 
 typedef void *(*rtems_monitor_object_next_fn)(void *, void *, rtems_id *);
@@ -325,6 +325,9 @@ void    rtems_monitor_continue_cmd(int, char **, unsigned32, boolean);
 void    rtems_monitor_debugger_cmd(int, char **, unsigned32, boolean);
 void    rtems_monitor_node_cmd(int, char **, unsigned32, boolean);
 void    rtems_monitor_symbols_loadup(void);
+int     rtems_monitor_insert_cmd(rtems_monitor_command_entry_t *);
+int     rtems_monitor_erase_cmd(rtems_monitor_command_entry_t *);
+
 void    rtems_monitor_task(rtems_task_argument);
 
 /* server.c */
