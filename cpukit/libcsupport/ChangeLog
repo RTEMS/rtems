@@ -1,3 +1,7 @@
+2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+
 2002-10-24	<strauman@slac.stanford.edu>
 
 	* src/eval.c: Per PR293, added freenode calls for evaluate
