@@ -1,3 +1,18 @@
+2001-08-10  Radzislaw Galler  <rgaller@et.put.poznan.pl>
+
+	* score/cpu_asm.c (sh_set_irq_priority): Changed interrupt vector
+	number range check and handling of interrupt priority regs to
+	conform SH2 specs.
+	* sci/sci_termios.c: New file.
+	* include/sci_termios.h: New file.
+	* include/Makefile.am (EXTRA_DIST): Added sci_termios.h.
+	(include_sh_HEADERS): Added sci_termios.h.
+	* score/ispsh7045.c (isp): Calling an ISR with immediate argument
+	casued negative sign extension for vector numbers of 128 and
+	above. This was fixed.
+	* sci/sci.c: Cleaned initialization of SCI registers; added
+	necessary setup for new TERMIOS console cooperation
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/lseek.c: Modified after discussion with Eugeny S. Mints
