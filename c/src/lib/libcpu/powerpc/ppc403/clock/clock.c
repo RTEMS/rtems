@@ -52,7 +52,7 @@ void Clock_exit( void );
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
  
-static INLINE rtems_unsigned32 get_itimer(void)
+static inline rtems_unsigned32 get_itimer(void)
 {
     register rtems_unsigned32 rc;
 

@@ -45,7 +45,7 @@ static rtems_boolean Timer_driver_Find_average_overhead;
 /*
  *  This is so small that this code will be reproduced where needed.
  */
-static INLINE rtems_unsigned32 get_itimer(void)
+static inline rtems_unsigned32 get_itimer(void)
 {
    rtems_unsigned32 ret;
 
