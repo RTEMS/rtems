@@ -70,7 +70,7 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Handler_initialization (
   _Chain_Initialize_empty( &_User_extensions_Switches_list );
 
   if ( initial_extensions ) {
-    extension = 
+    extension = (User_extensions_Control *)
       _Workspace_Allocate_or_fatal_error(
         number_of_extensions * sizeof( User_extensions_Control )
       );

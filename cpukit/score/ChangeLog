@@ -1,3 +1,8 @@
+2003-09-08	Mikec Ivica <mikici@acm.org>
+
+	* inline/rtems/score/userext.inl, macros/rtems/score/userext.inl:
+	Add missing cast.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/debug.h, include/rtems/seterr.h,
