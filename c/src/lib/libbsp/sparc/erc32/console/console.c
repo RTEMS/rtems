@@ -60,12 +60,6 @@
  *            share this problem although it was not investigated.
  */
 
-#define CONSOLE_USE_INTERRUPTS
-
-/*
-#define CONSOLE_USE_POLLED
-*/
-
 #ifdef CONSOLE_USE_POLLED
 #define OUTBYTE console_outbyte_polled
 #define INBYTE  console_inbyte_polled
@@ -341,7 +335,7 @@ void console_exit()
  */
 
 #ifdef RDB_BREAK_IN
-  extern int trap_table[];
+  extern unsigned32 trap_table[];
 #endif
 
 void console_initialize_interrupts()
