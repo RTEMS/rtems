@@ -66,7 +66,8 @@ EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
 
 # rtc
 if LIBCHIP
-include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h rtc/mc146818a.h
+include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h \
+    rtc/mc146818a.h
 
 EXTRA_LIBRARIES += librtcio.a
 CLEANFILES += librtcio.a
@@ -228,6 +229,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/icm7170.h
 $(PROJECT_INCLUDE)/libchip/m48t08.h: rtc/m48t08.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/m48t08.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/m48t08.h
+
+$(PROJECT_INCLUDE)/libchip/mc146818a.h: rtc/mc146818a.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mc146818a.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mc146818a.h
 endif
 
 if LIBCHIP

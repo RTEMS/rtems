@@ -1,5 +1,9 @@
 2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libchip/Makefile.am: Reflect addtion of rtc/mc146818*. 
+
+2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* aclocal/env-rtemsbsp.m4: Remove refs to bare BSP.
 	* aclocal/enable-bare.m4: Remove.
 	* configure.ac: Remove BARE_CPU_MODEL.
