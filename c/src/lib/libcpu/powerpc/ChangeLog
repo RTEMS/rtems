@@ -1,5 +1,10 @@
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: subdir-objects.
+	Add compiler check for old/new-style exception processing.
+
+2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* mpc8260/cpm/dpram.c, mpc8xx/cpm/dpram.c:
 	Remove local rtems_panic, use #include <rtems/error.h>.
 

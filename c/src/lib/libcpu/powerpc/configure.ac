@@ -9,7 +9,7 @@ RTEMS_TOP([../../../../..],[../../..])
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.9])
+AM_INIT_AUTOMAKE([no-define foreign subdir-objects 1.9])
 AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSBSP
@@ -17,8 +17,21 @@ RTEMS_ENV_RTEMSBSP
 RTEMS_PROJECT_ROOT
 
 RTEMS_PROG_CC_FOR_TARGET
+AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
+
+AC_MSG_CHECKING([for style of powerpc exceptions])
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM(
+    [],
+    [#if defined(_OLD_EXCEPTIONS)
+     choke me
+     #endif])],
+  [EXCEPTIONS=new],
+  [EXCEPTIONS=old])
+AC_MSG_RESULT([$EXCEPTIONS])
+AM_CONDITIONAL([OLD_EXCEPTIONS],[test "$EXCEPTIONS" = old])
 
 AM_CONDITIONAL(shared, \
    test "$RTEMS_CPU_MODEL" = "mpc750" \
