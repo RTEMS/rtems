@@ -23,7 +23,7 @@ SECTIONS
   .fini    ALIGN(8)  : { *(.fini)    } =0
   .ctors   ALIGN(8)  : { *(.ctors)   }
   .dtors   ALIGN(8)  : { *(.dtors)   }
-  .rodata  ALIGN(8)  : { *(.rodata)  }
+  .rodata  ALIGN(8)  : { *(.rodata)  *(.gnu.linkonce.r*) }
   .rodata1 ALIGN(8)  :
     {
       *(.rodata1)

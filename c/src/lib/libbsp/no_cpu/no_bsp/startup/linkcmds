@@ -1,6 +1,6 @@
 /*
  *  This file contains directives for the GNU linker which are specific
- *  to the FORCE CPU386 board.
+ *  to the NO_CPU NO_BSP BOARD.
  *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).

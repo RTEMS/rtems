@@ -50,7 +50,7 @@ SECTIONS
 
   	.init		: { *(.init)		} >RAM
   	.fini		: { *(.fini)		} >RAM
-  	.rodata	  	: { *(.rodata)  	} >RAM
+  	.rodata	  	: { *(.rodata) *(.gnu.linkonce.r*) } >RAM
 
         .data :
         {

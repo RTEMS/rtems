@@ -35,6 +35,7 @@ SECTIONS
      *(.entry2)
      *(.text)
      *(.rodata)
+     *(.gnu.linkonce.r*)
      *(.rodata1)
      *(.descriptors)
      *(rom_ver)
