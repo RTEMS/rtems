@@ -38,13 +38,14 @@
 
 unsigned32 _Thread_Stack_Allocate(
   Thread_Control *the_thread,
-  unsigned32 stack_size
+  unsigned32      stack_size
 )
 {
   void *stack_addr = 0;
+  unsigned32 the_stack_size = stack_size;
  
-  if ( !_Stack_Is_enough( stack_size ) )
-    stack_size = STACK_MINIMUM_SIZE;
+  if ( !_Stack_Is_enough( the_stack_size ) )
+    the_stack_size = STACK_MINIMUM_SIZE;
  
   /*
    * Call ONLY the CPU table stack allocate hook, _or_ the
@@ -52,9 +53,8 @@ unsigned32 _Thread_Stack_Allocate(
    * routine can call the correct deallocation routine.
    */
 
-  if ( _CPU_Table.stack_allocate_hook )
-  {
-    stack_addr = (*_CPU_Table.stack_allocate_hook)( stack_size );
+  if ( _CPU_Table.stack_allocate_hook ) {
+    stack_addr = (*_CPU_Table.stack_allocate_hook)( the_stack_size );
   } else {
 
     /*
@@ -68,14 +68,14 @@ unsigned32 _Thread_Stack_Allocate(
      *  the context initialization sequence in sync.
      */
 
-    stack_size = _Stack_Adjust_size( stack_size );
-    stack_addr = _Workspace_Allocate( stack_size );
+    the_stack_size = _Stack_Adjust_size( the_stack_size );
+    stack_addr = _Workspace_Allocate( the_stack_size );
   }
  
   if ( !stack_addr )
-      stack_size = 0;
+    the_stack_size = 0;
  
   the_thread->Start.stack = stack_addr;
  
-  return stack_size;
+  return the_stack_size;
 }

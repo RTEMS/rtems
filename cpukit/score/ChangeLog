@@ -1,5 +1,11 @@
 2004-07-24	Joel Sherrill <joel@OARcorp.com>
 
+	PR 660/rtems
+	* src/threadinitialize.c, src/threadstackallocate.c: Check for
+	overflow when allocating stack.
+
+2004-07-24	Joel Sherrill <joel@OARcorp.com>
+
 	PR 659/rtems
 	* src/heapsizeofuserarea.c, src/objectmp.c, src/threadinitialize.c,
 	src/threadstackallocate.c: Check that address specified is in the
