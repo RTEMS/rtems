@@ -450,50 +450,30 @@ _CPU_Context_switch_restore:
 
         LDREG t0, C0_SR_OFFSET*R_SZ(a1)
 	
-//	NOP
-//#if __mips == 3
-//        andi  t0,SR_EXL
-//        bnez  t0,_CPU_Context_1   /* set exception level from restore context */
-//        li    t0,~SR_EXL
-//        MFC0  t1,C0_SR
-//        NOP
-//        and   t1,t0
-//        MTC0  t1,C0_SR
-//
-//#elif __mips == 1
-//
-//        andi  t0,(SR_INTERRUPT_ENABLE_BITS) /* we know 0 disabled */
-//        beq   t0,$0,_CPU_Context_1          /* set level from restore context */
-//        MFC0  t0,C0_SR
-//        NOP
-//        or    t0,(SR_INTERRUPT_ENABLE_BITS) /* new_sr = old sr with enabled  */
-//        MTC0  t0,C0_SR                      /* set with enabled */
-//	  NOP
-
 
 /*
-** Incorporate the incoming task's FP coprocessor state and interrupt mask/enable
-** into the status register.  We jump thru the requisite hoops to ensure we 
-** maintain all other SR bits as global values.
-**
-** Get the task's FPU enable, int mask & int enable bits.  Although we keep the 
-** software int enables on a per-task basis, the rtems_task_create
-** Interrupt Level & int level manipulation functions cannot enable/disable them, 
-** so they are automatically enabled for all tasks.  To turn them off, a task  
-** must itself manipulate the SR register.  
-**
-** Although something of a hack on this processor, we treat the SR register
-** int enables as the RTEMS interrupt level.  We use the int level
-** value as a bitmask, not as any sort of greater than/less than metric.
-** Manipulation of a task's interrupt level directly corresponds to manipulation
-** of that task's SR bits, as seen in cpu.c
-**
-** Note, interrupts are disabled before context is saved, though the task's
-** interrupt enable state is recorded.  The task swapping in will apply its
-** specific SR bits, including interrupt enable.  If further task-specific
-** SR bits are arranged, it is this code, the cpu.c interrupt level stuff and
-** cpu.h task initialization code that will be affected.  
-*/
+ * Incorporate the incoming task's FP coprocessor state and interrupt
+ * mask/enable into the status register.  We jump thru the requisite hoops
+ * to ensure we maintain all other SR bits as global values.
+ *
+ * Get the task's FPU enable, int mask & int enable bits.  Although we keep the 
+ * software int enables on a per-task basis, the rtems_task_create
+ * Interrupt Level & int level manipulation functions cannot enable/disable
+ * them, so they are automatically enabled for all tasks.  To turn them off,
+ * a task must itself manipulate the SR register.  
+ *
+ * Although something of a hack on this processor, we treat the SR register
+ * int enables as the RTEMS interrupt level.  We use the int level
+ * value as a bitmask, not as any sort of greater than/less than metric.
+ * Manipulation of a task's interrupt level directly corresponds to manipulation
+ * of that task's SR bits, as seen in cpu.c
+ *
+ * Note, interrupts are disabled before context is saved, though the task's
+ * interrupt enable state is recorded.  The task swapping in will apply its
+ * specific SR bits, including interrupt enable.  If further task-specific
+ * SR bits are arranged, it is this code, the cpu.c interrupt level stuff and
+ * cpu.h task initialization code that will be affected.  
+ */
 
 	li	t2,SR_CU1
 	or	t2,SR_IMASK
