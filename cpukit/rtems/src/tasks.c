@@ -104,7 +104,7 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
   while (tvp) {
     next = tvp->next;
     if  (tvp->dtor)
-        (*tvp->dtor)( tvp->ptr );
+        (*tvp->dtor)(*tvp->ptr );
     if (executing == deleted)
         *tvp->ptr = tvp->gval;
     _Workspace_Free( tvp );

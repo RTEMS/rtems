@@ -1,3 +1,7 @@
+2001-09-14	Fernando Ruiz <fernando.ruiz@ctv.es>
+
+	* src/tasks.c: Dereference pointer passed to destructor.
+
 2001-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* inline/rtems/rtems/attr.inl: Correct typo and use correct
