@@ -12,7 +12,7 @@ include_libcpu_HEADERS = include/tx3904.h
 
 noinst_PROGRAMS += vectorisrs.rel
 vectorisrs_rel_SOURCES = vectorisrs/maxvectors.c vectorisrs/vectorisrs.c
-vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectorisrs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

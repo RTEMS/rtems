@@ -14,7 +14,7 @@ include_libcpu_HEADERS = ../../shared/include/cache.h
 noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = cache/cache.c ../../shared/src/cache_aligned_malloc.c \
     ../../shared/src/cache_manager.c cache/cache_.h
-cache_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -I$(srcdir)/cache
+cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/cache
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## interrupts
@@ -30,7 +30,7 @@ endif
 noinst_PROGRAMS += interrupts.rel
 interrupts_rel_SOURCES = interrupts/installisrentries.c \
     interrupts/vectorexceptions.c interrupts/isr_entries.S
-interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     $(interrupts_CPPFLAGS)
 interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

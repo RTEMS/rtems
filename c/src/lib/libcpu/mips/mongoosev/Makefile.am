@@ -19,14 +19,14 @@ EXTRA_DIST += duart/README.mguart
 
 noinst_PROGRAMS += duart.rel
 duart_rel_SOURCES = duart/mg5uart.c duart/mg5uart.h duart/mg5uart_reg.c
-duart_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+duart_rel_CPPFLAGS = $(AM_CPPFLAGS)
 duart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## vectorisrs
 
 noinst_PROGRAMS += vectorisrs.rel
 vectorisrs_rel_SOURCES = vectorisrs/maxvectors.c vectorisrs/vectorisrs.c
-vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectorisrs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
