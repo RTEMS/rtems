@@ -3,7 +3,7 @@
 --
 --  DESCRIPTION:
 --
---  This is the entry point for Test TM09 of the Single Processor Test Suite.
+--  This is the entry point for Test TM09 of the Timing Test Suite.
 --
 --  DEPENDENCIES: 
 --
