@@ -19,7 +19,7 @@ cd tools
 tar xzf ../archive/@value{RTEMS-TAR}
 @end example
 
-If you did not build and instal the tools from source, then you
+If you did not build and install the tools from source, then you
 will need to unarchive the build scripts at this point.  In this
 case, you will have to execute the following additional command
 since you did not do it as part of building the tools.
