@@ -17,17 +17,21 @@ VPATH = @srcdir@
 # C_PIECES=aio cancel devctl intr utsname
 
 # These are really in the stand but not really functional
-BUILD_FOR_NOW_C_PIECES = aio cancel utsname
+BUILD_FOR_NOW_C_PIECES = aio utsname
 
 ENOSYS_C_PIECES = execl execle execlp execv execve execvp fork pthreadatfork \
     wait waitpid
 
+CANCEL_C_PIECES= cancel cancelrun cleanuppop cleanuppush setcancelstate \
+    setcanceltype testcancel
+
 CONDITION_VARIABLE_C_PIECES= cond condattrdestroy condattrgetpshared \
     condattrinit condattrsetpshared condbroadcast conddefaultattributes \
-    condmp condsignal condsignalsupp condtimedwait condwait condwaitsupp
+    conddestroy condinit condmp condsignal condsignalsupp condtimedwait \
+    condwait condwaitsupp
 
 KEY_C_PIECES= key keycreate keydelete keygetspecific keyrundestructors \
-  keysetspecific
+    keysetspecific
 
 MESSAGE_QUEUE_C_PIECES= mqueue mqueueclose mqueuecreatesupp mqueuedeletesupp \
     mqueuegetattr mqueuenametoid mqueuenotify mqueueopen mqueuereceive \
@@ -69,7 +73,7 @@ TIME_C_PIECES= time posixtimespecsubtract posixtimespectointerval \
     posixintervaltotimespec clockgetcpuclockid clockgetenableattr \
     clockgetres clockgettime clocksetenableattr clocksettime nanosleep
 
-C_PIECES = adasupp $(CONDITION_VARIABLE_C_PIECES) \
+C_PIECES = adasupp $(CANCEL_C_PIECES) $(CONDITION_VARIABLE_C_PIECES) \
     getpid $(KEY_C_PIECES) $(MESSAGE_QUEUE_C_PIECES) \
     $(MUTEX_C_PIECES) $(PTHREAD_C_PIECES) \
     $(PSIGNAL_C_PIECES) ptimer sched $(SEMAPHORE_C_PIECES) \
