@@ -1,3 +1,12 @@
+2002-08-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/gccnewlib.add: Re-add i386-rtems Ada.
+	Add %_gnat and --define 'gnat [0|1]' support.
+	Enable gnat for gcc-3.2/Disable for gcc-3.1.
+	Add hacks to build gnatlib.
+	Re-activate commented out fragments for old gcc versions.
+	Add @target_alias@-gnatgcc.
+
 2002-08-15	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: New gcc 3.1 RPMs (-7).

@@ -43,6 +43,17 @@ Buildroot:	%{_tmppath}/%{name}
 NoSource:	0
 NoSource:	1
 
+# Use rpm -ba --define 'gnat [0|1]' xxx.spec to override building gnat for 
+# those targets wanting to support ada.
+
+%if "@gcc_version@" >= "3.2"
+# default to building gnat
+%define _gnat	%{?gnat:%gnat}%{!?gnat:1}
+%else
+# default to not building gnat
+%define _gnat	%{?gnat:%gnat}%{!?gnat:0}
+%endif
+
 %define build_cxx 	1
 %define build_g77 	0
 %define build_objc	0
@@ -53,16 +64,20 @@ NoSource:	1
 %define build_cxx	0
 %endif
 
+%if "@target_alias@" == "i386-rtems"
+%define build_gnat 	%_gnat
+%endif
+
 %if "@target_alias@" == "i960-rtems"
 %define build_cxx	0
 %endif
 
 %if "@target_alias@" == "powerpc-rtems"
-%define build_gnat      1
+%define build_gnat      %_gnat
 %endif
 
 %if "@target_alias@" == "sparc-rtems"
-%define build_gnat      1
+%define build_gnat      %_gnat
 %endif
 
 %description
@@ -133,21 +148,36 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %endif
   make all
 %if %build_gnat
+# This gnat configuration is crap :(
+
 # This is what is documented, but it doesn't work for me (RC)
 #  make gnatlib_and_tools
   make -C gcc cross-gnattools
   make -C gcc ada.all.cross
-  make -C gcc gnatlib
+
+# This should work, but doesn't.
+#  make -C gcc gnatlib 
+
+# This is what gcc/ada/Makefile.in contains by default, 
+# but what we override below
+  GNATLIBCFLAGS="-g -O2"
+# Let gnatlib building find newlib's headers
+  GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/@target_alias@/newlib/targ-include"
+  GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/../newlib-@newlib_version@/newlib/libc/include"
+# Without this xgcc doesn't find the target's binutils.
+  GNATLIBCFLAGS="$GNATLIBCFLAGS -B%{_prefix}/@target_alias@/bin/"
+  make -C gcc GNATLIBCFLAGS="${GNATLIBCFLAGS}" gnatlib
 %endif
   make info
 
 %install
   cd build
-#  # Bug in gcc-2.95.1: It doesn't build this installation directory
-#  # If it doesn't find it, gcc doesn't install @target_alias@/bin/gcc
-#  ../gcc-@gcc_version@/mkinstalldirs \
-#    $RPM_BUILD_ROOT%{_prefix}/@target_alias@/bin
-#
+# Bug in gcc-2.95.1: It doesn't build this installation directory
+# If it doesn't find it, gcc doesn't install @target_alias@/bin/gcc
+%if "@gcc_version@" < "3.0"
+  ../gcc-@gcc_version@/mkinstalldirs \
+    $RPM_BUILD_ROOT%{_prefix}/@target_alias@/bin
+%endif
 
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} install
@@ -157,19 +187,29 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # cd back to build/
   cd ../..
 
-  # Bug in gcc-3.0.x: It puts the build dirs into *.la files
+%if %build_gnat
+# Install a copy of gcc as gnatgcc
+# Enables us to mix different versions of gnat and gnatgcc
+  rm -f $RPM_BUILD_ROOT%{_bindir}/@target_alias@-gnatgcc@exe_ext@
+  ln $RPM_BUILD_ROOT%{_bindir}/@target_alias@-gcc@exe_ext@ \
+    $RPM_BUILD_ROOT%{_bindir}/@target_alias@-gnatgcc@exe_ext@
+%endif
+
+  # Bug in gcc-3.x: It puts the build dirs into *.la files
   files=`find ${RPM_BUILD_ROOT}%{_prefix}/@target_alias@/lib -name '*.la'`
   test -n "$files" && for i in $files; do
     rm -f $i
   done
 
+%if "@gcc_version@" < "3.0"
   # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
   # Rename it to target_alias-cpp
-#  if test -f $RPM_BUILD_ROOT%{_prefix}/bin/cpp@exe_ext@;
-#  then
-#    mv $RPM_BUILD_ROOT%{_prefix}/bin/cpp@exe_ext@ \
-#      $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-cpp@exe_ext@
-#  fi
+  if test -f $RPM_BUILD_ROOT%{_prefix}/bin/cpp@exe_ext@;
+  then
+    mv $RPM_BUILD_ROOT%{_prefix}/bin/cpp@exe_ext@ \
+      $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-cpp@exe_ext@
+  fi
+%endif
 
   # gzip info files
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
