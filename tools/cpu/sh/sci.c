@@ -67,7 +67,11 @@ static void Compute(
     entry->err = 
       ( ( Phi / ( (entry->N + 1) * a ) - 1.0 ) * 100.0 );
   else
+  {
     entry->err = 100.0 ;
+    entry->n = 255 ;
+    entry->N = 0 ;
+  }
 }
 
 static sci_tab_t *SelectN( 
@@ -127,11 +131,14 @@ int shgen_gensci(
 
     if ( i > 0 )
       fprintf( file, ",\n" );
-    fprintf( file, "  { %1d, %3d } /* %+7.2f%% ; B%d */",
+    fprintf( file, "  { %1d, %3d } /* %+7.2f%% ; B%d ",
       best->n,
       best->N,
       best->err,
       best->B );
+    if ( best->n > 3 )
+      fprintf( file, "(unusable) " );
+    fprintf( file, "*/" );
   }
 
   fprintf( file, "\n};\n\n" );
@@ -147,6 +154,7 @@ int shgen_gensci(
     "    + ( ( cflag & CBAUDEX ) ? B38400 : 0 );\n"
     "  if ( offset == 0 ) return -1 ;\n"
     "  offset-- ;\n\n"
+    "  if ( _sci_bitrates[offset].n > 3 )  return -1;\n\n"
     "  *smr &= ~0x03;\n"
     "  *smr |= _sci_bitrates[offset].n;\n"
     "  *brr =  _sci_bitrates[offset].N;\n\n"
