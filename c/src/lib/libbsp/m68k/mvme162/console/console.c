@@ -80,7 +80,7 @@ rtems_device_driver console_initialize(
   status = rtems_io_register_name(
     "/dev/console",
     major,
-    (rtems_device_minor_number) 0
+    (rtems_device_minor_number) 1
   );
  
   if (status != RTEMS_SUCCESSFUL)
@@ -98,7 +98,7 @@ rtems_device_driver console_initialize(
   status = rtems_io_register_name(
     "/dev/tty01",
     major,
-    (rtems_device_minor_number) 0
+    (rtems_device_minor_number) 1
   );
  
   if (status != RTEMS_SUCCESSFUL)
@@ -138,7 +138,7 @@ char inbyte(int port)
  *   XON/XOFF flow control.
  */
 
-void outbyte(int port, char ch)
+void outbyte(char ch, int port)
 {
   while (1) {
     if (ZREAD0(port) & TX_BUFFER_EMPTY) break;
