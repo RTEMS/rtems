@@ -572,7 +572,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 #define _CPU_Context_Fp_start( _base, _offset ) \
-   ( (void *) (_base) + (_offset) )
+   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
 
 /*
  *  This routine initializes the FP context area passed to it to.

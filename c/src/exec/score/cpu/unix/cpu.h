@@ -706,7 +706,7 @@ unsigned32 _CPU_ISR_Get_level( void );
  */
 
 #define _CPU_Context_Fp_start( _base, _offset ) \
-   ( (void *) (_base) + (_offset) )
+   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
 
 /*
  *  This routine initializes the FP context area passed to it to.
