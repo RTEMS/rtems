@@ -45,7 +45,10 @@ PTHREAD_C_PIECES = pthread pthreadsetcputime pthreadgetcputime \
     pthreadattrgetinheritsched pthreadattrsetinheritsched \
     pthreadattrgetscope pthreadattrsetscope
 
-PSIGNAL_C_PIECES = psignal alarm kill killinfo pause pthreadkill \
+PSIGNAL_C_PIECES = psignal alarm kill killinfo pause \
+    psignalclearprocesssignals psignalsetprocesssignals \
+    psignalchecksignal psignalclearsignals \
+    psignalunblockthread pthreadkill \
     pthreadsigmask sigaction sigaddset sigdelset sigemptyset sigfillset \
     sigismember sigpending sigprocmask sigqueue sigsuspend sigtimedwait \
     sigwait sigwaitinfo signal_2
