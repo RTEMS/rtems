@@ -10,13 +10,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
-# generation 1
-if SCORE603E_GENERATION_1
-TOD_C_FILES = tod_g1.c
-else
-# generation 2
+# TOD for Generation 2 or later
 TOD_C_FILES = tod.c
-endif
 
 C_FILES = $(TOD_C_FILES)
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
@@ -36,6 +31,6 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = tod.c tod_g1.c
+EXTRA_DIST = tod.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -17,7 +17,6 @@
  *  $Id$
  */
 
-#include <bspopts.h> /* for SCORE603E_GENERATION */
 #include "ppc-asm.h"
 
 	.file	"start.s"
@@ -68,43 +67,8 @@ past_constants:
 	ori     r4,r4,0x0000            /* 0x2030  */
         mtmsr   r4
 	
-#if (SCORE603E_GENERATION == 1)
-	lis     r4,0
-	mtspr   530,r4                  /* Set IBAT1U */
-	mtspr   531,r4                  /* Set IBAT1L */
-	mtspr   534,r4                  /* Set IBAT3U */
-	mtspr   535,r4                  /* Set IBAT3L */
-	mtspr   538,r4                  /* Set DBAT1U */
-	mtspr   539,r4                  /* Set DBAT1L */
-	lis     r4,0
-	ori     r4,r4,0x1fff
-	mtspr   528,r4                  /* Set IBAT0U */
-	mtspr   536,r4                  /* Set DBAT0U */
-	lis     r4,0
-	ori     r4,r4,0x0002	
-	mtspr   529,r4                  /* Set IBAT0L */
-	mtspr   537,r4                  /* Set DBAT0L */
-	lis     r4,-4096                /*  0xf000    */
-	ori     r4,r4,8191              /*  0x1fff    */
-	mtspr   532,r4                  /* Set IBAT2U */
-	mtspr   540,r4                  /* Set DBAT2U */
-	lis     r4,-4096                /*  0xf000    */
-	ori     r4,r4,1	
-	mtspr   533,r4                  /* Set IBAT2L */
-	mtspr   541,r4                  /* Set DBAT2L */
-	lis     r4,-32768               /*  0x8000    */
-	ori     r4,r4,8191              /*  0x1fff    */
-	mtspr   542,r4                  /* Set DBAT3U */
-	lis     r4,-32768               /*  0x8000    */
-	ori     r4,r4,0x003a
-	mtspr   543,r4                  /* Set DBAT3L */
-
-#elif (SCORE603E_GENERATION == 2)
-/* XXX FILL THIS IN WHEN I GET HELLO TO COME UP. */
-	
-#else
-#error "Unknown Generation of  Score603e"
-#endif
+        /* The first generation board needed initialization here but the */
+        /* second does not. */
 
 	bl	.Laddr			/* get current address */
 .Laddr:

@@ -44,15 +44,11 @@ extern "C" {
 #include <clockdrv.h>
 #include <iosupp.h>
 
+/*
+ *  We no longer support the first generation board.
+ */
 
-#if (SCORE603E_GENERATION == 1)
-#include <gen1.h>
-#elif (SCORE603E_GENERATION == 2)
 #include <gen2.h>
-#else
-#error "Unknown Generation of  Score603e"
-#endif
-
 
 /*
  * The following macro calculates the Baud constant. For the Z8530 chip.

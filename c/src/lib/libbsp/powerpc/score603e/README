@@ -3,7 +3,7 @@
 #
 
 BSP NAME:           score603e
-BOARD:              VISTA SCORE 603e Generation I and II
+BOARD:              VISTA SCORE 603e Generation II and beyond
 BUS:                N/A
 CPU FAMILY:         ppc
 CPU:                PowerPC 603e
@@ -17,8 +17,7 @@ PERIPHERALS
 TIMERS:             PPC internal Timebase register
   RESOLUTION:         
 SERIAL PORTS:       2 Z85C30s
-REAL-TIME CLOCK:    Generation  I: SGSM48T18
-                    Generation II: ICM7170AIBG
+REAL-TIME CLOCK:    Generation II and beyond: ICM7170AIBG
 DMA:                none
 VIDEO:              none
 SCSI:               none
@@ -51,5 +50,6 @@ the OAR Boot chip.  The OAR Boot chip contains the basic
 initialization from the SDS debugger and a jump to flash
 location 0x04001200.
 
-The compiler option SCORE603E_GENERATION is set to 1 or 2,
-for the generation to be produced.
+The SCORE603e first generation board is no longer available,
+does not appear to be in use by any RTEMS users, and thus
+is no longer supported.

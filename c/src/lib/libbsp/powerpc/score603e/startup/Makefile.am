@@ -9,10 +9,10 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 PGM = $(ARCH)/startup.rel
 
 #
-# First and second generation use different Bridge chips :(
-#       Generation 1 --> 82378zb
+# First and second generation used different Bridge chips :(
+#       Generation 1 --> 82378zb (now in the CVS Attic)
 #       Generation 2 --> FPGA
-STARTUP_C_FILES = 82378zb.c FPGA.c
+STARTUP_C_FILES = FPGA.c
 
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c main.c sbrk.c \
     setvec.c Hwr_init.c spurious.c genpvec.c $(STARTUP_C_FILES) \
@@ -41,7 +41,7 @@ all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = 82378zb.c FPGA.c Hwr_init.c bspclean.c bspstart.c genpvec.c \
+EXTRA_DIST = FPGA.c Hwr_init.c bspclean.c bspstart.c genpvec.c \
     linkcmds setvec.c spurious.c vmeintr.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

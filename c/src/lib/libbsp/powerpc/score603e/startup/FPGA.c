@@ -1,6 +1,6 @@
-/*  FPGA.c
+/*  FPGA.c -- Bridge for second and subsequent generations
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -11,7 +11,6 @@
  */
 
 #include <bsp.h>
-#if (SCORE603E_GENERATION == 2)
 #include <string.h>
 #include <fcntl.h>
 #include <assert.h>
@@ -164,6 +163,3 @@ rtems_unsigned16 read_and_clear_irq()
 
   return irq;
 }
-
-#endif /* end of generation 2 */
-

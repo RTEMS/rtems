@@ -1,3 +1,12 @@
+2001-11-28	Joel Sherrill <joel@OARcorp.com>,
+
+	This was tracked as PR87.
+	* README, configure.ac, include/Makefile.am, include/bsp.h,
+	start/start.S, startup/FPGA.c, startup/Makefile.am, tod/Makefile.am:
+	Eliminated conditional code for generation 1 boards as these are 
+	no longer available.
+	* include/gen1.h, startup/82378zb.c, tod/tod_g1.c: Deleted.
+
 2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add @exceptions@ to SUBDIRS.
