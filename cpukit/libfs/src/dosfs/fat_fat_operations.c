@@ -78,7 +78,8 @@ fat_scan_fat_for_free_clusters(
             return rc;
         }    
 
-        if ((next_cln & fs_info->vol.mask) == FAT_GENFAT_FREE) 
+        /*if ((next_cln & fs_info->vol.mask) == FAT_GENFAT_FREE)*/
+        if (next_cln == FAT_GENFAT_FREE)
         {
             /*
              * We are enforced to process allocation of the first free cluster
@@ -177,7 +178,7 @@ fat_free_fat_clusters_chain(
     unsigned32     next_cln = 0; 
     unsigned32     freed_cls_cnt = 0;
     
-    while ((cur_cln & fs_info->vol.mask) != fs_info->vol.eoc_val)
+    while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {
         rc = fat_get_fat_cluster(mt_entry, cur_cln, &next_cln);
         if ( rc != RC_OK )
@@ -276,7 +277,6 @@ fat_get_fat_cluster(
                 *ret_val = (*ret_val) >> FAT12_SHIFT;
             else
                 *ret_val = (*ret_val) & FAT_FAT12_MASK;
-
             break;
 
         case FAT_FAT16:
@@ -342,8 +342,16 @@ fat_set_fat_cluster(
         case FAT_FAT12:
             if ( FAT_CLUSTER_IS_ODD(cln) )
             {
+#if 0
+	      /* 
+	       * do not perform endian conversion explicitely,
+	       * because following code will enforce little 
+	       * endian format implicitly!
+	       */		 
                 fat16_clv = CT_LE_W((((unsigned16)in_val) << FAT_FAT12_SHIFT));
-
+#else
+                fat16_clv = ((unsigned16)in_val) << FAT_FAT12_SHIFT;
+#endif
                 *((unsigned8 *)(block0->buffer + ofs)) = 
                         (*((unsigned8 *)(block0->buffer + ofs))) & 0x0F;
 
@@ -379,8 +387,16 @@ fat_set_fat_cluster(
             }
             else
             {
+#if 0
+	      /* 
+	       * do not perform endian conversion explicitely,
+	       * because following code will enforce little 
+	       * endian format implicitly!
+	       */		 
                 fat16_clv = CT_LE_W((((unsigned16)in_val) & FAT_FAT12_MASK));
-
+#else
+                fat16_clv = ((unsigned16)in_val) & FAT_FAT12_MASK;
+#endif
                 *((unsigned8 *)(block0->buffer + ofs)) &= 0x00;
 
                 *((unsigned8 *)(block0->buffer + ofs)) = 

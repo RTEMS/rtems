@@ -27,6 +27,10 @@ include_HEADERS = dosfs.h
 H_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
+PREINSTALL_FILES = $(PROJECT_INCLUDE) \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
+
 $(PROJECT_INCLUDE):
 	@$(mkinstalldirs) $@
 

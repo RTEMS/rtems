@@ -1,3 +1,15 @@
+2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 367/filesystem
+	* src/dosfs/Makefile.am, src/dosfs/fat.c, src/dosfs/fat.h,
+	src/dosfs/fat_fat_operations.c, src/dosfs/fat_file.c,
+	src/dosfs/msdos.h, src/dosfs/msdos_dir.c: Some bugs were still
+	present in the DOSFS implementation:
+	    - FAT12 did not work properly on Big-Endian machines
+	    - Some synchronization and error handling problems were present
+	    - Some legal codings for EOC were not recognized
+
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

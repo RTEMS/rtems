@@ -83,9 +83,9 @@ extern "C" {
  
 #define FAT_UNDEFINED_VALUE     (unsigned32)0xFFFFFFFF 
 
-#define FAT_FAT12_EOC          0x0FFF
-#define FAT_FAT16_EOC          0xFFFF
-#define FAT_FAT32_EOC          (unsigned32)0x0FFFFFFF
+#define FAT_FAT12_EOC          0x0FF8
+#define FAT_FAT16_EOC          0xFFF8
+#define FAT_FAT32_EOC          (unsigned32)0x0FFFFFF8
 
 #define FAT_FAT12_FREE         0x0000
 #define FAT_FAT16_FREE         0x0000
@@ -306,6 +306,7 @@ fat_buf_access(fat_fs_info_t *fs_info, unsigned32 blk, int op_type,
         if (sc != RTEMS_SUCCESSFUL)
             set_errno_and_return_minus_one(EIO);
         fs_info->c.blk_num = blk;    
+	fs_info->c.modified = 0;    
         fs_info->c.state = FAT_CACHE_ACTUAL;    
     }
     
@@ -321,9 +322,10 @@ fat_buf_access(fat_fs_info_t *fs_info, unsigned32 blk, int op_type,
                        fs_info->vol.bps);
             
             sc = rtems_bdbuf_release_modified(fs_info->c.buf);
+	    fs_info->c.state = FAT_CACHE_EMPTY;
+            fs_info->c.modified = 0;    
             if (sc != RTEMS_SUCCESSFUL)
                 set_errno_and_return_minus_one(EIO);
-            fs_info->c.modified = 0;    
             
             if (sec_of_fat && !fs_info->vol.mirror)
             {
@@ -347,6 +349,7 @@ fat_buf_access(fat_fs_info_t *fs_info, unsigned32 blk, int op_type,
         else
         {
             sc = rtems_bdbuf_release(fs_info->c.buf);
+	    fs_info->c.state = FAT_CACHE_EMPTY;
             if (sc != RTEMS_SUCCESSFUL)
                 set_errno_and_return_minus_one(EIO);
         
@@ -358,6 +361,7 @@ fat_buf_access(fat_fs_info_t *fs_info, unsigned32 blk, int op_type,
         if (sc != RTEMS_SUCCESSFUL)
             set_errno_and_return_minus_one(EIO);
         fs_info->c.blk_num = blk;
+	fs_info->c.state = FAT_CACHE_ACTUAL;
     }
     *buf = fs_info->c.buf;
     return RC_OK;

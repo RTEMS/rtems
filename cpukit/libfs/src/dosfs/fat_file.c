@@ -770,7 +770,7 @@ fat_file_datasync(
         return rc;
         
     /* for each cluster of the file ... */
-    while ((cur_cln & fs_info->vol.mask) != fs_info->vol.eoc_val)
+    while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {
         sec = fat_cluster_num_to_sector_num(mt_entry, cur_cln);
         /* for each sector in cluster ... */
@@ -830,7 +830,7 @@ fat_file_size(
   
     fat_fd->fat_file_size = 0;
   
-    while ((cur_cln & fs_info->vol.mask) != fs_info->vol.eoc_val)
+    while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {
         save_cln = cur_cln;
         rc = fat_get_fat_cluster(mt_entry, cur_cln, &cur_cln);
