@@ -1,3 +1,7 @@
+2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ide/Makefile.am: PGM = ide.rel.
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add preinstallation dirstamp support.
