@@ -50,6 +50,7 @@ RedHat Linux 5.1 as the host environment:
    m68k    m68360    68360 in companion mode      (note 1, 6)
    mips   idt4600    p4000                        (note 1)
    mips   idt4650    p4000                        (note 1)
+   mips   tx3904     jmr3904                      (note 5 -- under development)
  powerpc  ppc403     helas403                     (note 1, 6)
  powerpc  ppc403     Papyrus                      (note 1)
  powerpc  ppc5xx     BUILDS - NEEDS WORK
