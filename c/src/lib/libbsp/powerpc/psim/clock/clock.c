@@ -13,7 +13,7 @@
  *  the wall time required to execute the RTEMS test suites.
  */
 
-#define CLOCK_DRIVER_USE_FAST_IDLE
+/* #define CLOCK_DRIVER_USE_FAST_IDLE */
 
 #define CLOCK_VECTOR PPC_IRQ_DECREMENTER
 
