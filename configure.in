@@ -281,8 +281,7 @@ c/src/lib/libhwapi/support/checksum/Makefile \
 c/src/lib/libhwapi/support/wrapup/Makefile \
 c/src/lib/libhwapi/support/dumpbuf/Makefile"
 
-tests_mk="c/src/tests/Makefile \
-c/src/tests/libtests/Makefile \
+tests_mk="c/src/tests/libtests/Makefile \
 c/src/tests/libtests/cpuuse/Makefile \
 c/src/tests/libtests/malloctest/Makefile \
 c/src/tests/libtests/rtmonuse/Makefile \
@@ -347,15 +346,6 @@ c/src/tests/psxtests/psx12/Makefile \
 c/src/tests/psxtests/psxhdrs/Makefile \
 c/src/tests/psxtests/support/Makefile \
 c/src/tests/psxtests/support/include/Makefile \
-c/src/tests/samples/Makefile \
-c/src/tests/samples/base_mp/Makefile \
-c/src/tests/samples/base_mp/node1/Makefile \
-c/src/tests/samples/base_mp/node2/Makefile \
-c/src/tests/samples/base_sp/Makefile \
-c/src/tests/samples/cdtest/Makefile \
-c/src/tests/samples/hello/Makefile \
-c/src/tests/samples/paranoia/Makefile \
-c/src/tests/samples/ticker/Makefile \
 c/src/tests/sptests/Makefile \
 c/src/tests/sptests/sp01/Makefile \
 c/src/tests/sptests/sp02/Makefile \
@@ -382,10 +372,6 @@ c/src/tests/sptests/sp24/Makefile \
 c/src/tests/sptests/sp25/Makefile \
 c/src/tests/sptests/spfatal/Makefile \
 c/src/tests/sptests/spsize/Makefile \
-c/src/tests/support/Makefile \
-c/src/tests/support/include/Makefile \
-c/src/tests/support/stubdr/Makefile \
-c/src/tests/support/wrapup/Makefile \
 c/src/tests/tmtests/Makefile \
 c/src/tests/tmtests/include/Makefile \
 c/src/tests/tmtests/tm01/Makefile \
@@ -418,15 +404,7 @@ c/src/tests/tmtests/tm27/Makefile \
 c/src/tests/tmtests/tm28/Makefile \
 c/src/tests/tmtests/tm29/Makefile \
 c/src/tests/tmtests/tmck/Makefile \
-c/src/tests/tmtests/tmoverhd/Makefile \
-c/src/tests/tools/Makefile \
-c/src/tests/tools/generic/Makefile \
-c/src/tests/tools/hppa1_1/Makefile \
-c/src/tests/tools/hppa1_1/simhppa/Makefile \
-c/src/tests/tools/sparc/Makefile \
-c/src/tests/tools/sparc/erc32/Makefile \
-c/src/tests/tools/unix/Makefile \
-c/src/tests/tools/unix/posix/Makefile"
+c/src/tests/tmtests/tmoverhd/Makefile"
 
 dnl Checks for programs.
 AC_PROG_MAKE_SET
@@ -536,7 +514,7 @@ case "${target}" in
 	makefiles=$no_cpu_mk
 	RTEMS_HAS_POSIX_API=no
 	;;
-  powerpc-rtems*)
+  powerpc-rtems*|ppc-rtems*)
 	rtems_bsp=papyrus
        	makefiles=$powerpc_mk
 	;;
@@ -675,6 +653,28 @@ c/src/lib/libmisc/stackchk/Makefile \
 c/src/lib/libmisc/wrapup/Makefile \
 c/src/lib/start/Makefile \
 c/src/lib/wrapup/Makefile \
+c/src/tests/Makefile \
+c/src/tests/samples/Makefile \
+c/src/tests/samples/base_mp/Makefile \
+c/src/tests/samples/base_mp/node1/Makefile \
+c/src/tests/samples/base_mp/node2/Makefile \
+c/src/tests/samples/base_sp/Makefile \
+c/src/tests/samples/cdtest/Makefile \
+c/src/tests/samples/hello/Makefile \
+c/src/tests/samples/paranoia/Makefile \
+c/src/tests/samples/ticker/Makefile \
+c/src/tests/support/Makefile \
+c/src/tests/support/include/Makefile \
+c/src/tests/support/stubdr/Makefile \
+c/src/tests/support/wrapup/Makefile \
+c/src/tests/tools/Makefile \
+c/src/tests/tools/generic/Makefile \
+c/src/tests/tools/hppa1_1/Makefile \
+c/src/tests/tools/hppa1_1/simhppa/Makefile \
+c/src/tests/tools/sparc/Makefile \
+c/src/tests/tools/sparc/erc32/Makefile \
+c/src/tests/tools/unix/Makefile \
+c/src/tests/tools/unix/posix/Makefile \
 $makefiles \
 c/update-tools/Makefile )
 
