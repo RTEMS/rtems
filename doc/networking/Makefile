@@ -49,7 +49,7 @@ $(PROJECT).dvi: $(FILES)
 networktasks.texi: networktasks.t Makefile
 	$(BMENU) -p "Preface" \
 	   -u "Top" \
-	   -n "Writing RTEMS Network Device Drivers" ${*}.t
+	   -n "Networking Driver" ${*}.t
 
 driver.texi: driver.t Makefile
 	$(BMENU) -p "Network Task Structure and Data Flow" \

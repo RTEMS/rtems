@@ -1,6 +1,6 @@
 \input ../texinfo/texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename posix_users
+@setfilename posix_users_new
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -39,7 +39,16 @@ END-INFO-DIR-ENTRY
 
 @c variable substitution info:
 @c
-@c @set LANGUAGE C
+@c Note: At the moment we do not document the Ada interface but by building
+@c       in the infrastructure Florist support should be simple to add.
+@set is-C
+@clear is-Ada
+@set LANGUAGE C 
+@set STRUCTURE structure
+@set ROUTINE function
+@set OR |
+@set RPREFIX RTEMS_
+@set DIRPREFIX rtems_
 @c the language is @value{LANGUAGE}
 @c NOTE:  don't use underscore in the name
 @c
@@ -76,28 +85,50 @@ END-INFO-DIR-ENTRY
 @c  The alternative is to rework a sentence to avoid this problem.
 
 @include preface.texi
-@include thread.texi
+@include process.texi
 @include signal.texi
+@include procenv.texi
+@include files.texi
+@include io.texi
+@include device.texi
+@include cspecific.texi
+@include systemdb.texi
+@include semaphores.texi
 @include mutex.texi
 @include cond.texi
-@include key.texi
-@include clock.texi
+@include memorymgmt.texi
 @include sched.texi
+@include clock.texi
+@include message.texi
+@include thread.texi
+@include key.texi
+@include cancel.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top posix_users
+@top posix_users_new
 
 This is the online version of the RTEMS POSIX API User's Guide
 
 @menu
 * Preface::
-* Thread Manager::
+* Process Creation and Execution Manager::
 * Signal Manager::
+* Process Environment Manager::
+* Files and Directories Manager::
+* Input and Output Primitives Manager::
+* Device- and Class- Specific Functions Manager::
+* Language-Specific Services for the C Programming Language Manager::
+* System Databases Manager::
+* Semaphores Manager::
 * Mutex Manager::
 * Condition Variable Manager::
-* Key Manager::
-* Clock Manager::
+* Memory Management Manager::
 * Scheduler Manager::
+* Clock Manager::
+* Message Passing Manager::
+* Thread Manager::
+* Key Manager::
+* Thread Cancellation Manager::
 * Command and Variable Index::
 * Concept Index::
 @end menu
@@ -108,7 +139,7 @@ This is the online version of the RTEMS POSIX API User's Guide
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, sched_yield, Top
+@node Command and Variable Index, Concept Index, , Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.

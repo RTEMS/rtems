@@ -76,7 +76,7 @@ This is the online version of the RTEMS Network Supplement.
 @menu
 * Preface::
 * Network Task Structure and Data Flow::
-* Writing RTEMS Network Device Drivers::
+* Networking Driver::
 * Using Networking in an RTEMS Application::
 * Testing the Driver::
 * Command and Variable Index::
