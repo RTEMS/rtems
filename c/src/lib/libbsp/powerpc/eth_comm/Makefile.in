@@ -30,6 +30,6 @@ all: $(SRCS)
 #  from the individual .rel files built in other directories
 SUB_DIRS = include startup start canbus console $(NETWORKING_DRIVER) wrapup
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

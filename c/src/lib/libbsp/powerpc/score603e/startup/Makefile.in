@@ -73,6 +73,6 @@ all: ${ARCH} $(SRCS) $(INSTALLED_O_FILES) $(PGM)
 	$(INSTALL) $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
 	$(INSTALL_VARIANT) $(INSTALLED_O_FILES) $(PROJECT_RELEASE)/lib
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

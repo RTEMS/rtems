@@ -61,6 +61,6 @@ all install:
 	@$(ECHO); $(ECHO)
 	@$(INSTALL_CHANGE) -m 644 $(srcdir)/floss-bsp.h $(PROJECT_INCLUDE)/bsp.h
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

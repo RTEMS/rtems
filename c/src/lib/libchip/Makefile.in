@@ -24,6 +24,6 @@ LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
 
 SUB_DIRS = rtc serial $(LIBNETWORKING)
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

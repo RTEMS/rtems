@@ -82,6 +82,6 @@ not:
 	@echo `grep -i NOT_IMPL $(C_FILES) | grep -v MP_NOT_IMPL | wc -l ` places marked not implemented
 	@echo `wc -l $(C_FILES) | grep total` lines of C code to test
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

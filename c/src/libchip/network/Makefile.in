@@ -67,6 +67,6 @@ preinstall:
 	$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
 	@$(INSTALL_CHANGE) -m 644 $(INSTALLED_H_FILES) $(PROJECT_INCLUDE)/libchip
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

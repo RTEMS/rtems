@@ -601,7 +601,7 @@ print "\$@ CONFIG_HEADERS= \$(SHELL) ./config.status\n";
 }
 else
 {
-print "Makefile: \@MAINTAINER_MODE_TRUE\@ \$(srcdir)/Makefile.in \$(top_builddir)/config.status\n" ;
+print "Makefile: \$(srcdir)/Makefile.in \$(top_builddir)/config.status\n" ;
 print "	cd \$(top_builddir) \\\n" ;
 print "	 && CONFIG_FILES=" ;
 print "\$(subdir)/" if ( "$subdir" );

@@ -32,6 +32,6 @@ MP_DRIVERS = $(MP_DRIVERS_$(HAS_MP)_V)
 SUB_DIRS = include clock console startup startsim $(MP_DRIVERS) timer \
     vectors wrapup tools
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

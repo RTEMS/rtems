@@ -23,6 +23,6 @@ POSIX_DIRS = $(POSIX_DIRS_$(HAS_POSIX_API)_V)
 
 SUB_DIRS = rtems $(POSIX_DIRS)
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

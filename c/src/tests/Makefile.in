@@ -46,6 +46,6 @@ SUB_DIRS = $(wildcard tools support samples libtests sptests $(MP_TESTS) \
 
 preinstall: $(INSTALLDIRS)
 
-Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
