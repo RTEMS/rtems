@@ -15,6 +15,9 @@ AM_MAKEINFOFLAGS = -I $(top_builddir) -I $(top_srcdir)
 TEXI2DVI = @TEXI2DVI@ -I $(top_builddir) -I $(top_srcdir)
 TEXI2PDF = @TEXI2PDF@ -I $(top_builddir) -I $(top_srcdir)
 
+# HACK: Force generation of version.texi
+version.texi: stamp-vti
+
 # Without $(srcdir) in TEXINPUTS, dvips doesn't find the *.eps
 # we distribute in $(srcdir)
 .dvi.ps:
