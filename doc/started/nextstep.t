@@ -66,7 +66,7 @@ C Math Library functionality provided by Newlib's libm.
 @end itemize
 
 Finally, the RTEMS FAQ and mailing list archives are available 
-at @uref{http://www.oarcorp.com}.
+at @uref{@value{RTEMSHTTPURL}}.
 
 There is a wealth of documentation available for RTEMS and
 the GNU tools supporting it.  If you run into something
@@ -75,10 +75,11 @@ that is not clear or missing, bring it to our attention.
 Also, some of the RTEMS documentation is still under
 construction.  If you would like to contribute to this
 effort, please contact the RTEMS Team at
-@uref{mailto:rtems-users@@rtems.com, rtems-users@@rtems.com}.
+@uref{mailto:@value{RTEMSUSERS}, @value{RTEMSUSERS}}.
 If you are interested in sponsoring the development of a new
 feature, BSP, device driver, port of an existing library, etc.,
-please contact @uref{mailto:sales@@OARcorp.com, sales@@OARcorp.com}.
+please contact one of the RTEMS Service Providers listed
+at @uref{@value{RTEMSHTTPURL}/support.html,@value{RTEMSHTTPURL}/support.html}.
 
 @section Writing an Application
 

@@ -12,17 +12,17 @@ Precompiled toolsets are available for Linux, Cygwin, FreeBSD,
 and Solaris.  These are packaged in the following formats:
 
 @itemize @bullet
-@item Linux - RPM and Debian
-@item Cygwin - RPM and zipped tar
-@item FreeBSD - native package
-@item Solaris - RPM and zipped tar
+@item Linux - RPM
+@item Cygwin - tar.bz2
+@item Solaris - tar.bz2
 @end itemize
 
-RPM is an acronym for the RedHat Package Manager.  RPM is the
+RPM is an acronym for the RPM Package Manager.  RPM is the
 native package installer for many Linux distributions including
-RedHat and SuSE.  RPM supports other operating systems including
-Cygwin.  @uref{mailto:D.J@@fiddes.surfaid.org,David Fiddes <D.J@@fiddes.surfaid.org>}
-did the initial groundwork that lead to Cygwin RPMs being available.
+RedHat and SuSE.
+@c RPM supports other operating systems including
+@c Cygwin.  @uref{mailto:D.J@@fiddes.surfaid.org,David Fiddes <D.J@@fiddes.surfaid.org>}
+@c did the initial groundwork that lead to Cygwin RPMs being available.
 
 The prebuilt binaries are intended to be easy to install and
 the instructions are similar regardless of the host environment.  
@@ -39,8 +39,8 @@ across all target architectures.   These are referred to as
 "base" packages.
 
 @item If buildable for a particular CPU, RPMs are provided for 
-Chill, Java (gcj), Fortran (g77), and Objective-C (objc).  These
-binaries are strictly optional.
+Ada (gnat), Chill, Java (gcj), Fortran (g77), and Objective-C (objc).
+These binaries are strictly optional.
 
 @end enumerate
 
@@ -58,18 +58,18 @@ The following is a sample session illustrating the installation
 of a C/C++ toolset targeting the SPARC architecture.  
 
 @example
-rpm -i rtems-base-binutils-2.9.5.0.24-1.i386.rpm
-rpm -i sparc-rtems-binutils-2.9.5.0.24-1.i386.rpm
-rpm -i rtems-base-gcc-gcc2.95.2newlib1.8.2-7.i386.rpm
-rpm -i sparc-rtems-gcc-gcc2.95.2newlib1.8.2-7.i386.rpm
-rpm -i rtems-base-gdb-4.18-4.i386.rpm
-rpm -i sparc-rtems-gdb-4.18-4.i386.rpm
+rpm -i rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -i sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -i rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -i sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -i rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -i sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 @end example
 
 Upon successful completion of the above command sequence, a 
 C/C++ cross development toolset targeting the SPARC is
-installed in @code{/opt/rtems}.  In order to use this toolset,
-the directory @code{/opt/rtems/bin} must be included in your
+installed in @code{@value{RTEMSPREFIX}}.  In order to use this toolset,
+the directory @code{@value{RTEMSPREFIX}/bin} must be included in your
 PATH.
 
 Once you have successfully installed the RPMs for BINUTILS, GCC,
@@ -90,12 +90,12 @@ The following is a sample session illustrating the removal
 of a C/C++ toolset targeting the SPARC architecture.
 
 @example
-rpm -e sparc-rtems-gdb-4.18-2.i386.rpm
-rpm -e rtems-base-gdb-4.18-2.i386.rpm
-rpm -e sparc-rtems-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
-rpm -e rtems-base-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
-rpm -e sparc-rtems-binutils-2.9.5.0.24-1.i386.rpm
-rpm -e rtems-base-binutils-2.9.5.0.24-1.i386.rpm
+rpm -e sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -e rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -e sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -e rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -e sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -e rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 @end example
 
 NOTE:  If you have installed any RTEMS BSPs, then it is likely that
@@ -114,24 +114,24 @@ that GNU tar is installed as @code{tar}:
 
 @example
 cd /
-tar xzf rtems-base-binutils-2.9.5.0.24-1.tgz
-tar xzf sparc-rtems-binutils-2.9.5.0.24-1.tgz
-tar xzf rtems-base-gcc-gcc2.95.2newlib1.8.2-4.tgz
-tar xzf sparc-rtems-gcc-gcc2.95.2newlib1.8.2-4.tgz
-tar xzf rtems-base-gdb-4.18-2.tgz
-tar xzf sparc-rtems-gdb-4.18-2.tgz
+tar xzf rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tgz
+tar xzf sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tgz
+tar xzf rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tgz
+tar xzf sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tgz
+tar xzf rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tgz
+tar xzf sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tgz
 @end example
 
 Upon successful completion of the above command sequence, a
 C/C++ cross development toolset targeting the SPARC is
-installed in @code{/opt/rtems}.  In order to use this toolset,
-the directory @code{/opt/rtems/bin} must be included in your
+installed in @code{@value{RTEMSPREFIX}}.  In order to use this toolset,
+the directory @code{@value{RTEMSPREFIX}} must be included in your
 PATH.
 
 @subsection Removing Zipped Tar Files
 
 There is no automatic way to remove the contents of a @code{tgz} once
-it is installed.  The contents of the directory @code{/opt/rtems}
+it is installed.  The contents of the directory @code{@value{RTEMSPREFIX}}
 can be removed but this will likely result in other packages
 being removed as well.
 

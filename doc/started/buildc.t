@@ -53,39 +53,39 @@ placed in your @code{archive} directory.  Included are the locations
 of each component as well as any required RTEMS specific patches.
 
 @need 1000
-@subheading @value{GCCVERSION}
+@subheading @value{GCCUNTAR}
 @example
     FTP Site:    @value{GCCFTPSITE}
     Directory:   @value{GCCFTPDIR}
     File:        @value{GCCTAR}
-@ifset use-html
-@c    URL:         @uref{Download @value{GCCVERSION}, ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}}
-    URL:         ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}
-@end ifset
+@c @ifset use-html
+    URL:         @uref{ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}/@value{GCCTAR},,ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}/@value{GCCTAR}}
+@c    URL:         ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}
+@c @end ifset
 @end example
 
 @need 1000
-@subheading @value{BINUTILSVERSION}
+@subheading @value{BINUTILSUNTAR}
 @example
     FTP Site:    @value{BINUTILSFTPSITE}
     Directory:   @value{BINUTILSFTPDIR}
     File:        @value{BINUTILSTAR}
-@ifset use-html
-@c    URL:         @uref{ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR},Download @value{BINUTILSVERSION}}
-    URL:         ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}
-@end ifset
+@c @ifset use-html
+    URL:         @uref{ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR},,ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}}
+@c    URL:         ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}
+@c @end ifset
 @end example
 
 @need 1000
-@subheading @value{NEWLIBVERSION}
+@subheading @value{NEWLIBUNTAR}
 @example
     FTP Site:    @value{NEWLIBFTPSITE}
     Directory:   @value{NEWLIBFTPDIR}
     File:        @value{NEWLIBTAR}
-@ifset use-html
-@c    URL:         @uref{ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}, Download @value{NEWLIBVERSION}}
-    URL:         ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}
-@end ifset
+@c @ifset use-html
+    URL:         @uref{ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR},,ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}}
+@c    URL:         ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}
+@c @end ifset
 @end example
 
 @need 1000
@@ -93,16 +93,13 @@ of each component as well as any required RTEMS specific patches.
 @example
     FTP Site:    @value{RTEMSFTPSITE}
     Directory:   @value{RTEMSFTPDIR}/c_tools/source
-@ifset BUILDTOOLSTAR
-    File:        @value{BUILDTOOLSTAR}
-@end ifset
-@ifset BINUTILSRTEMSPATCH
+@ifset BINUTILSPATCHVERSION
     File:        @value{BINUTILSRTEMSPATCH}
 @end ifset
-@ifset NEWLIBRTEMSPATCH
+@ifset NEWLIBPATCHVERSION
     File:        @value{NEWLIBRTEMSPATCH}
 @end ifset
-@ifset GCCRTEMSPATCH
+@ifset GCCPATCHVERSION
     File:        @value{GCCRTEMSPATCH}
 @end ifset
 @ifset use-html
@@ -155,13 +152,13 @@ The tree should look something like the following figure:
             @value{GCCTAR}
             @value{BINUTILSTAR}
             @value{NEWLIBTAR}
-@ifset GCCRTEMSPATCH
+@ifset GCCPATCHVERSION
             @value{GCCRTEMSPATCH}
 @end ifset
-@ifset BINUTILSRTEMSPATCH
+@ifset BINUTILSPATCHVERSION
             @value{BINUTILSRTEMSPATCH}
 @end ifset
-@ifset NEWLIBRTEMSPATCH
+@ifset NEWLIBPATCHVERSION
             @value{NEWLIBRTEMSPATCH}
 @end ifset
         tools/
@@ -191,12 +188,12 @@ to GCC, NEWLIB, and BINUTILS.
 
 @subheading Apply RTEMS Patch to GCC
 
-@ifclear GCCRTEMSPATCH
-No RTEMS specific patches are required for @value{GCCVERSION} to
+@ifclear GCCPATCHVERSION
+No RTEMS specific patches are required for @value{GCCUNTAR} to
 support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset GCCRTEMSPATCH
+@ifset GCCPATCHVERSION
 
 Apply the patch using the following command sequence:
 
@@ -231,12 +228,12 @@ This should not happen with a good patch file which is properly applied.
 
 @subheading Apply RTEMS Patch to binutils
 
-@ifclear BINUTILSRTEMSPATCH
-No RTEMS specific patches are required for @value{BINUTILSVERSION} to
+@ifclear BINUTILSPATCHVERSION
+No RTEMS specific patches are required for @value{BINUTILSUNTAR} to
 support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset BINUTILSRTEMSPATCH
+@ifset BINUTILSPATCHVERSION
 Apply the patch using the following command sequence:
 
 @example
@@ -270,12 +267,12 @@ This should not happen with a good patch file which is properly applied.
 
 @subheading Apply RTEMS Patch to newlib
 
-@ifclear NEWLIBRTEMSPATCH
-No RTEMS specific patches are required for @value{NEWLIBVERSION} to
+@ifclear NEWLIBPATCHVERSION
+No RTEMS specific patches are required for @value{NEWLIBUNTAR} to
 support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset NEWLIBRTEMSPATCH
+@ifset NEWLIBPATCHVERSION
 
 Apply the patch using the following command sequence:
 
@@ -352,14 +349,14 @@ starts by installing the source RPMs as shown in the following
 example:
 
 @example 
-rpm -i i386-rtems-binutils-collection-2.9.5.0.24-1.nosrc.rpm
-rpm -i i386-rtems-gcc-newlib-gcc2.95.2newlib1.8.2-7.nosrc.rpm
+rpm -i i386-rtems-binutils-collection-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.nosrc.rpm
+rpm -i i386-rtems-gcc-newlib-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.nosrc.rpm
 @end example
 
-Because RTEMS tool RPMS are called "nosrc" to indicate that one or
+The RTEMS tool source RPMS are called "nosrc" to indicate that one or
 more source files required to produce the RPMs are not present.  
-The RTEMS source RPMs do not include the large @code{.tar.gz} or
-@code{.tgz} files for
+The RTEMS source RPMs typically include all required patches, but do not 
+include the large @code{.tar.gz} or @code{.tgz} files for
 each component such as BINUTILS, GCC, or NEWLIB.  These are shared
 by all RTEMS RPMs regardless of target CPU and there was no reason
 to duplicate them.  You will have to get the required source
@@ -370,16 +367,21 @@ included or referenced by a particular RPM, use a command like the
 following:
 
 @example
-$ rpm -q -l -p i386-rtems-binutils-collection-2.9.5.0.24-1.nosrc.rpm
-binutils-2.9.5.0.24-rtems-20000207.diff
-binutils-2.9.5.0.24.tar.gz
-i386-rtems-binutils-2.9.5.0.24.spec
+@c Don't use @value{GCC*} below. This is an example
+$ rpm -q -l -p i386-rtems-gcc-newlib-gcc3.2.3newlib1.11.0-1.nosrc.rpm
+gcc-3.2.3-rtems-20030507a.diff
+i386-rtems-gcc-3.2.3-newlib-1.11.0.spec
+newlib-1.11.0-rtems-20030507.diff
 @end example
 
-Notice that there is a patch file (the @code{.diff} file), a source archive
-file (the @code{.tar.gz}), and a file describing the build procedure and
-files produced (the @code{.spec} file).  The @code{.spec} file is placed
-in the @code{SPECS} directory under the RPM root directory.
+Notice that there are patch files (the @code{.diff} files) and a file 
+describing the build procedure and files produced (the @code{.spec} file),
+but no source archives (the @code{*tar.*} files).
+When installing this source RPM 
+(@code{rpm -U i386-rtems-gcc-newlib-gcc3.2.3newlib1.11.0-1.nosrc.rpm}),
+the @code{.spec} file is placed in the @code{SPECS} directory under the RPM root
+directory, while the @code{*.diff} files are placed into the @code{SOURCES}
+directory.
 
 @c
 @c  Configuring and Building BINUTILS using RPM
@@ -393,7 +395,7 @@ RPM.  This example assumes that all of the required source is installed.
 
 @example
 cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems-binutils-2.9.5.0.24.spec
+rpm -bb i386-rtems-binutils-@value{BINUTILSVERSION}.spec
 @end example
 
 If the build completes successfully, RPMS like the following will
@@ -401,8 +403,8 @@ be generated in a build-host architecture specific subdirectory
 of the RPMS directory under the RPM root directory.
 
 @example
-rtems-base-binutils-2.9.5.0.24-1.i386.rpm
-i386-rtems-binutils-2.9.5.0.24-1.i386.rpm
+rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 @end example
 
 NOTE: It may be necessary to remove the build tree in the
@@ -422,11 +424,11 @@ the required source is installed.
 
 @example
 cd <RPM_ROOT_DIRECTORY>/RPMS/i386
-rpm -i rtems-base-binutils-2.9.5.0.24-1.i386.rpm
-rpm -i i386-rtems-binutils-2.9.5.0.24-1.i386.rpm
-export PATH=/opt/rtems/bin:$PATH
+rpm -i rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -i i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+export PATH=@value{RTEMSPREFIX}/bin:$PATH
 cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems-gcc-2.95.2-newlib-1.8.2.spec
+rpm -bb i386-rtems-gcc-@value{GCCVERSION}-newlib-@value{NEWLIBVERSION}.spec
 @end example
 
 If the build completes successfully, a set of RPMS like the following will
@@ -434,15 +436,15 @@ be generated in a build-host architecture specific subdirectory
 of the RPMS directory under the RPM root directory.
 
 @example
-rtems-base-gcc-gcc2.95.2newlib1.8.2-7.i386.rpm
-rtems-base-chill-gcc2.95.2newlib1.8.2-7.i386.rpm
-rtems-base-g77-gcc2.95.2newlib1.8.2-7.i386.rpm
-rtems-base-gcj-gcc2.95.2newlib1.8.2-7.i386.rpm
-i386-rtems-gcc-gcc2.95.2newlib1.8.2-7.i386.rpm
-i386-rtems-chill-gcc2.95.2newlib1.8.2-7.i386.rpm
-i386-rtems-g77-gcc2.95.2newlib1.8.2-7.i386.rpm
-i386-rtems-gcj-gcc2.95.2newlib1.8.2-7.i386.rpm
-i386-rtems-objc-gcc2.95.2newlib1.8.2-7.i386.rpm
+rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rtems-base-chill-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rtems-base-g77-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rtems-base-gcj-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+i386-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+i386-rtems-chill-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+i386-rtems-g77-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+i386-rtems-gcj-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+i386-rtems-objc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
 @end example
 
 NOTE: Some targets do not support building all languages.
@@ -483,7 +485,7 @@ sparc-rtems target:
 mkdir b-binutils
 cd b-binutils
 ../@value{BINUTILSUNTAR}/configure --target=sparc-rtems \
-  --prefix=/opt/rtems
+  --prefix=@value{RTEMSPREFIX}
 make all
 make info
 make install
@@ -502,7 +504,7 @@ the binutils has been installed in. This the prefix used above with
 @file{bin} post-fixed.
 
 @example
-export PATH=$PATH:/opt/rtems/bin
+export PATH=$PATH:@value{RTEMSPREFIX}/bin
 @end example
 
 Failure to have the binutils in the path will cause the GCC and NEWLIB
@@ -543,7 +545,7 @@ mkdir b-gcc
 cd b-gcc
 ../@value{GCCUNTAR}/configure --target=sparc-rtems \
    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
-   --enable-threads --prefix=/opt/rtems
+   --enable-threads --prefix=@value{RTEMSPREFIX}
 make all
 make info
 make install
@@ -606,15 +608,12 @@ placed in your @code{archive} directory.  Included are the locations
 of each component as well as any required RTEMS specific patches.
 
 @need 1000
-@subheading @value{GDBVERSION}
+@subheading @value{GDBUNTAR}
 @example
     FTP Site:    @value{GDBFTPSITE}
     Directory:   @value{GDBFTPDIR}
     File:        @value{GDBTAR}
-@ifset use-html
-@c    URL:         @uref{Download @value{GDBVERSION}, ftp://@value{GDBFTPSITE}@value{GDBFTPDIR}}
-    URL:         ftp://@value{GDBFTPSITE}@value{GDBFTPDIR}
-@end ifset
+    URL:         @uref{@value{GDBFTPURL},,@value{GDBFTPURL}}
 @end example
 
 @need 1000
@@ -622,15 +621,9 @@ of each component as well as any required RTEMS specific patches.
 @example
     FTP Site:    @value{RTEMSFTPSITE}
     Directory:   @value{RTEMSFTPDIR}/c_tools/source
-@ifset BUILDTOOLSTAR
-    File:        @value{BUILDTOOLSTAR}
-@end ifset
-@ifset GDBRTEMSPATCH
+@ifset GDBPATCHVERSION
     File:        @value{GDBRTEMSPATCH}
-@end ifset
-@ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source,Download RTEMS Patches and Scripts}
-    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source
+    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source/@value{GDBRTEMSPATCH},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/c_tools/source/@value{GDBRTEMSPATCH}}
 @end ifset
 @end example
 
@@ -654,12 +647,12 @@ The directory @value{GDBUNTAR} is created under the tools directory.
 
 @subsection Applying RTEMS Patch to GDB
 
-@ifclear GDBRTEMSPATCH
+@ifclear GDBPATCHVERSION
 No RTEMS specific patches are required for @value{GDBVERSION} to
 support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset GDBRTEMSPATCH
+@ifset GDBPATCHVERSION
 
 Apply the patch using the following command sequence:
 
@@ -722,7 +715,7 @@ starts by installing the source RPMs as shown in the following
 example:
 
 @example
-rpm -i i386-rtems-gdb-collection-4.18-4.nosrc.rpm
+rpm -i i386-rtems-gdb-collection-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
 @end example
 
 Because RTEMS tool RPMS are called "nosrc" to indicate that one or
@@ -738,10 +731,10 @@ included or referenced by a particular RPM, use a command like the
 following:
 
 @example
-$ rpm -q -l -p i386-rtems-gdb-collection-4.18-4.nosrc.rpm
-gdb-4.18-rtems-20000524.diff
-gdb-4.18.tar.gz
-i386-rtems-gdb-4.18.spec
+$ rpm -q -l -p i386-rtems-gdb-collection-@value{GDBVERSION}-@value{GDBRPMRELEASE}.nosrc.rpm
+gdb-@value{GDBVERSION}-rtems-@value{GDBPATCHVERSION}.diff
+gdb-@value{GDBVERSION}.tar.gz
+i386-rtems-gdb-@value{GDBVERSION}.spec
 @end example
 
 Notice that there is a patch file (the @code{.diff} file), a source archive
@@ -761,7 +754,7 @@ RPM.  This example assumes that all of the required source is installed.
 
 @example
 cd <RPM_ROOT_DIRECTORY>/SPECS
-rpm -bb i386-rtems-gdb-4.18.spec
+rpm -bb i386-rtems-gdb-@value{GDBVERSION}.spec
 @end example
 
 If the build completes successfully, RPMS like the following will
@@ -769,8 +762,8 @@ be generated in a build-host architecture specific subdirectory
 of the RPMS directory under the RPM root directory.
 
 @example
-rtems-base-gdb-4.18-4.i386.rpm
-i386-rtems-gdb-4.18-4.i386.rpm
+rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+i386-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 @end example
 
 NOTE: It may be necessary to remove the build tree in the
@@ -792,7 +785,7 @@ m68k-rtems target:
 mkdir b-gdb
 cd b-gdb
 ../@value{GDBUNTAR}/configure --target=m68k-rtems \
-  --prefix=/opt/rtems
+  --prefix=@value{RTEMSPREFIX}
 make all
 make info
 make install
