@@ -131,4 +131,17 @@ void bsp_start( void )
 
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = (12 * 1024);
+
+  /*
+   *  Enable whatever caching is desired
+   */
+
+#if ( PPC_USE_INSTRUCTION_CACHE )
+  powerpc_instruction_cache_enable ();
+#endif
+
+#if ( PPC_USE_DATA_CACHE )
+  powerpc_data_cache_enable ();
+#endif
+
 }
