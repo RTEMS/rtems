@@ -880,6 +880,7 @@ int cd2401_setAttributes(
   }
 
   /* Number of bits per char */
+  csize = 0x07; /* to avoid a warning */
   switch ( t->c_cflag & CSIZE ) {
     case CS5:     csize = 0x04;       break;
     case CS6:     csize = 0x05;       break;
