@@ -105,7 +105,7 @@ void _Objects_MP_Close (
  *  object with that name if one is found.
  */
 
-Objects_Name_to_id_errors _Objects_MP_Global_name_search (
+Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
   Objects_Information *information,
   Objects_Name         the_name,
   unsigned32           nodes_to_search,

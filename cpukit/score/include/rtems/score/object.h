@@ -437,6 +437,7 @@ boolean _Objects_Compare_name_raw(
   void       *name_2,
   unsigned32  length
 );
+
 /*
  *  _Objects_Name_to_id
  *
@@ -454,19 +455,39 @@ boolean _Objects_Compare_name_raw(
  */
 
 typedef enum {
-  OBJECTS_SUCCESSFUL,
+  OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL,
   OBJECTS_INVALID_NAME,
+  OBJECTS_INVALID_ID,
   OBJECTS_INVALID_NODE
-} Objects_Name_to_id_errors;
+} Objects_Name_or_id_lookup_errors;
 
-#define OBJECTS_NAME_ERRORS_FIRST OBJECTS_SUCCESSFUL
+#define OBJECTS_NAME_ERRORS_FIRST OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL
 #define OBJECTS_NAME_ERRORS_LAST  OBJECTS_INVALID_NODE
 
-Objects_Name_to_id_errors _Objects_Name_to_id(
+Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   Objects_Information *information,
   Objects_Name         name,
   unsigned32           node,
   Objects_Id          *id
+);
+
+/*
+ *  _Objects_Id_to_Name
+ *
+ *  DESCRIPTION:
+ *
+ *  This function implements the common portion of the object Id
+ *  to name directives.  This function returns the name
+ *  associated with object id.  
+ *
+ *  NOTE:
+ *
+ *  This function currently does not support string names.
+ */
+
+Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
+  Objects_Id      id,
+  Objects_Name   *name
 );
 
 /*

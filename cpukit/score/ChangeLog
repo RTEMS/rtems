@@ -1,5 +1,14 @@
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
+	* Makefile.am, include/rtems/score/object.h,
+	include/rtems/score/objectmp.h, src/objectmp.c, src/objectnametoid.c:
+	Added ID to name lookup service and changed name of id/name
+	translation status code. This propagated to multiple functions. The
+	user API service added was rtems_object_id_to_name()
+	* src/objectidtoname.c: New file.
+
+2003-08-14	Joel Sherrill <joel@OARcorp.com>
+
 	PR 408/filesystem
 	* score/Makefile.am, score/include/rtems/score/thread.h: Added
 	sync() service. As part of adding this service, the

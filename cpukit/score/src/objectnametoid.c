@@ -38,12 +38,12 @@
  *    id          - address of return ID
  *
  *  Output parameters:
- *    id                 - object id
- *    OBJECTS_SUCCESSFUL - if successful
- *    error code         - if unsuccessful
+ *    id                                   - object id
+ *    OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL - if successful
+ *    error code                           - if unsuccessful
  */
 
-Objects_Name_to_id_errors _Objects_Name_to_id(
+Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   Objects_Information *information,
   Objects_Name         name,
   unsigned32           node,
@@ -79,7 +79,7 @@ Objects_Name_to_id_errors _Objects_Name_to_id(
 
       if ( (*compare_them)( name, the_object->name, name_length ) ) {
         *id = the_object->id;
-        return OBJECTS_SUCCESSFUL;
+        return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
       }
     }
   }

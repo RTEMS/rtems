@@ -150,7 +150,7 @@ void _Objects_MP_Close (
  *
  */
 
-Objects_Name_to_id_errors _Objects_MP_Global_name_search (
+Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
   Objects_Information *information,
   Objects_Name         the_name,
   unsigned32           nodes_to_search,
@@ -203,7 +203,7 @@ Objects_Name_to_id_errors _Objects_MP_Global_name_search (
         if ( the_object->name == name_to_use ) {
           *the_id = the_object->Object.id;
           _Thread_Enable_dispatch();
-          return OBJECTS_SUCCESSFUL;
+          return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
         }
       }
     }

@@ -132,7 +132,8 @@ OBJECT_C_FILES = src/object.c src/objectallocate.c src/objectallocatebyindex.c \
     src/objectcopynameraw.c src/objectcopynamestring.c src/objectextendinformation.c \
     src/objectfree.c src/objectget.c src/objectgetisr.c src/objectgetbyindex.c \
     src/objectgetnext.c src/objectinitializeinformation.c src/objectnametoid.c \
-    src/objectshrinkinformation.c src/objectgetnoprotection.c
+    src/objectshrinkinformation.c src/objectgetnoprotection.c \
+    src/objectidtoname.c
 
 THREAD_C_FILES = src/thread.c src/threadchangepriority.c src/threadclearstate.c \
     src/threadclose.c src/threadcreateidle.c src/threaddelayended.c src/threaddispatch.c \
