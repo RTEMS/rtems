@@ -1,0 +1,5 @@
+2002-08-06	Chris Ziomkowski <chris@asics.ws>
+
+	* ChangeLog, acinclude.m4, configure.ac: New files added as part
+	of merge from OpenCores repository.
+
