@@ -22,7 +22,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
 
 Ring_buffer_t  Console_Buffer[2];
 
