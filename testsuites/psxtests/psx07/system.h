@@ -22,14 +22,6 @@ void *POSIX_Init(
   void *argument
 );
 
-void *Task_1(
-  void *argument
-);
-
-void *Task_2(
-  void *argument
-);
-
 /* configuration information */
 
 #define CONFIGURE_SPTEST
@@ -50,6 +42,5 @@ void *Task_2(
 #endif
 
 TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
 
 /* end of include file */
