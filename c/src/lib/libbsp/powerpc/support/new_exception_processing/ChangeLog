@@ -1,3 +1,7 @@
+2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* cpu.c, cpu_asm.S: #include <rtems/powerpc/powerpc.h>.
+
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am, configure.ac: Remove (Unused).

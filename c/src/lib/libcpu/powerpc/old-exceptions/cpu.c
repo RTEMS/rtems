@@ -36,6 +36,7 @@
 #include <rtems/score/interr.h>
 
 #include <rtems/powerpc/cache.h>
+#include <rtems/powerpc/powerpc.h>
 
 /*
  *  These are for testing purposes.

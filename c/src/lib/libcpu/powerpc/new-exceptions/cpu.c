@@ -33,6 +33,7 @@
 #include <rtems/score/context.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
+#include <rtems/powerpc/powerpc.h>
 
 /*  _CPU_Initialize
  *

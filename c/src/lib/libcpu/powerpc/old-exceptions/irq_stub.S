@@ -24,6 +24,7 @@
  * FIXME: this file is bsp dependent.
  */
 #include <bspopts.h>
+#include <rtems/powerpc/powerpc.h>
 
 /*  void __ISR_Handler()
  *

@@ -32,6 +32,7 @@
  */
 
 #include <rtems/asm.h>
+#include <rtems/powerpc/powerpc.h>
 
 /*
  * Offsets for various Contexts

@@ -38,6 +38,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/ppc_offs.h>
+#include <rtems/powerpc/powerpc.h>
 
 	BEGIN_CODE
 /*
