@@ -64,30 +64,35 @@ can only send requests for operations on other nodes but offer no system call
 processing on the issuing node itself are indicated by the lower case letter
 's' or 'e'.
 
-
 @c
 @c Task
 @c
 
-@section Task
+@section Task Status
 
 @itemize @bullet
 
 @item Implementation
 @itemize @bullet
-@item cre_tsk - Stub, Needs to be Fleshed Out
-@item del_tsk - Stub, Needs to be Fleshed Out
-@item sta_tsk - Stub, Needs to be Fleshed Out
-@item ext_tsk - Stub, Needs to be Fleshed Out
-@item exd_tsk - Stub, Needs to be Fleshed Out
-@item ter_tsk - Stub, Needs to be Fleshed Out
-@item dis_dsp - Stub, Needs to be Fleshed Out
-@item ena_dsp - Stub, Needs to be Fleshed Out
-@item chg_pri - Stub, Needs to be Fleshed Out
-@item rot_rdq - Stub, Needs to be Fleshed Out
+@item cre_tsk - Complete, Pending Review
+@item del_tsk - Complete, Pending Review
+@item sta_tsk - Complete, Pending Review
+@item ext_tsk - Complete, Pending Review
+@item exd_tsk - Complete, Pending Review
+@item ter_tsk - Complete, Pending Review
+@item dis_dsp - Complete, Pending Review
+@item ena_dsp - Complete, Pending Review
+@item chg_pri - Complete, Pending Review
+@item rot_rdq - Complete, Pending Review
 @item rel_wai - Stub, Needs to be Fleshed Out
-@item get_tid - Stub, Needs to be Fleshed Out
-@item ref_tsk - Stub, Needs to be Fleshed Out
+@item get_tid - Complete, Pending Review
+@item ref_tsk - Complete, Pending Review
+
+@item Notes:
+@itemize @bullet
+@item None
+@end itemize
+
 @end itemize
 
 @item Executive Modifications
@@ -97,19 +102,33 @@ processing on the issuing node itself are indicated by the lower case letter
 
 @item Testing
 @itemize @bullet
-@item No Tests Written
+@item itron01    - Hello world
+@item itron02    - Semaphore test
+@item itron03    - directives: ex_init, ex_start, t_create,
+t_start, tm_tick, i_return, t_ident, tm_set, tm_get, tm_wkafter
+See .doc file, verify correct
+@item itron04    - Doc file needed
+@item itron05    - directives: ext_tsk, cre_tsk, sta_tsk, rot_rdq
+ex_start, t_create, t_start, tm_tick, i_return, t_ident, t_delete,
+tm_wkafter, t_setpri, t_suspend
+See .doc file, verify correct
+@item itron06    - Doc file needed
+@item itron07    - Doc file needed
+@item itron08    - Doc file needed
+@item itron09    - Doc file needed
+@item itron10    - Doc file needed
+@item tmitron01  - Doc file needed
+@item tm_include - Doc file needed.  Timing test for semaphores.
 @end itemize
 
 @item Documentation
 @itemize @bullet
-@item Shell, Needs to be Fleshed Out
+@item Complete, Pending Review
 @end itemize
 
 @item ITRON 3.0 API Conformance
 @itemize @bullet
 @item Level E - Extended Functionality
-@itemize @bullet
-@item 
 @end itemize
 
 @item Level C - CPU Dependent Functionality
@@ -129,19 +148,25 @@ processing on the issuing node itself are indicated by the lower case letter
 @c Task-Dependent Synchronization
 @c
 
-@section Task-Dependent Synchronization
+@section Task-Dependent Synchronization Status
 
 @itemize @bullet
 
 @item Implementation
 @itemize @bullet
-@item sus_tsk - Stub, Needs to be Fleshed Out
-@item rsm_tsk - Stub, Needs to be Fleshed Out
-@item frsm_tsk - Stub, Needs to be Fleshed Out
-@item slp_tsk - Stub, Needs to be Fleshed Out
+@item sus_tsk  - Complete, Pending Review
+@item rsm_tsk  - Complete, Pending Review
+@item frsm_tsk - Complete, Pending Review
+@item slp_tsk  - Stub, Needs to be Fleshed Out
 @item tslp_tsk - Stub, Needs to be Fleshed Out
-@item wup_tsk - Stub, Needs to be Fleshed Out
-@item can_wup - Stub, Needs to be Fleshed Out
+@item wup_tsk  - Stub, Needs to be Fleshed Out
+@item can_wup  - Stub, Needs to be Fleshed Out
+
+@item Notes:
+@itemize @bullet
+@item None
+@end itemize
+
 @end itemize
 
 @item Executive Modifications
@@ -151,20 +176,19 @@ processing on the issuing node itself are indicated by the lower case letter
 
 @item Testing
 @itemize @bullet
-@item No Tests Written
+@item Functional tests for complete routines.
+@item Yellow line testing needs to be verified.
 @end itemize
 
 @item Documentation
 @itemize @bullet
-@item Shell, Needs to be Fleshed Out
+@item Complete, Pending Review
+@item
 @end itemize
 
 @item ITRON 3.0 API Conformance
 @itemize @bullet
 @item Level E - Extended Functionality
-@itemize @bullet
-@item 
-@end itemize
 
 @item Level C - CPU Dependent Functionality
 @itemize @bullet
