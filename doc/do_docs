@@ -13,8 +13,8 @@ supplements="supplements/hppa1_1 supplements/i386 \
 # relnotes  is obsolete
 
 # Division by access level
-public_docs="FAQ user develenv networking posix_users started started_ada \
-    rtems_gdb rgdb_specs"
+public_docs="FAQ user develenv networking posix_users itron3.0 \
+    started started_ada rtems_gdb rgdb_specs"
 support_docs="${supplements} bsp_howto filesystem porting ada_user posix1003.1"
 
 if [ x${MANUAL_SET} = x ] ; then
