@@ -1,3 +1,9 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
+	rtems/powerpc/registers.h, rtems/score/ppc.h, rtems/score/types.h:
+	URL for license changed.
+
 2003-08-21	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 457/bsps
