@@ -3,7 +3,7 @@ dnl
 dnl $Id$
 
 AC_PREREQ(2.13)
-AC_INIT(new_exception_processing)
+AC_INIT(shared)
 RTEMS_TOP(../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../..)
 
@@ -27,15 +27,7 @@ RTEMS_CHECK_NEWLIB
 # Check if there is custom/*.cfg for this BSP
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
-# FIXME: This is in contradiction to multilibs
-RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
-
-# FIXME: This is in contradiction to multilibs
-AM_CONDITIONAL(PPC_NEW_EXCEPTION_PROCESSING,test "$RTEMS_CPU_MODEL" = "mpc750" -o "$RTEMS_CPU_MODEL" = "mpc604")
-
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
-shared/Makefile
-new_exception_processing/Makefile
-old_exception_processing/Makefile)
+shared/Makefile)

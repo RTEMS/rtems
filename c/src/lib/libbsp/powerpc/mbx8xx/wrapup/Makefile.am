@@ -16,8 +16,9 @@ BSP_PIECES = startup console $(NETWORKING)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.o) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/mpc8xx/*/$(ARCH)/*.o)
+ $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.o) \
+ $(wildcard ../../../../libcpu/powerpc/old_exception_processing/$(ARCH)/*.rel) \
+ $(wildcard ../../../../libcpu/$(RTEMS_CPU)/mpc8xx/*/$(ARCH)/*.o)
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

@@ -10,6 +10,12 @@ if shared
 SHARED_LIB = shared
 endif
 
+if new_exception_processing
+EXCEPTION_SUBDIR = new_exception_processing
+else
+EXCEPTION_SUBDIR = old_exception_processing
+endif
+
 if mpc505
 CPU_SUBDIR = mpc505
 endif
@@ -23,7 +29,7 @@ if ppc403
 CPU_SUBDIR = ppc403
 endif
 
-SUBDIRS = $(SHARED_LIB) $(CPU_SUBDIR) wrapup
+SUBDIRS = $(SHARED_LIB) $(EXCEPTION_SUBDIR) $(CPU_SUBDIR) wrapup
 
 include $(top_srcdir)/../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../automake/local.am

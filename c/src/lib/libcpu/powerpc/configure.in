@@ -34,6 +34,10 @@ AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "mpc750" \
 || test "$RTEMS_CPU_MODEL" = "mpc860" \
 || test "$RTEMS_CPU_MODEL" = "mpc8xx" )
 
+AM_CONDITIONAL(new_exception_processing, \
+test "$RTEMS_CPU_MODEL" = "mpc750" || \
+test "$RTEMS_CPU_MODEL" = "mpc604")
+
 AM_CONDITIONAL(mpc505, test "$RTEMS_CPU_MODEL" = "mpc505")
 AM_CONDITIONAL(mpc6xx, test "$RTEMS_CPU_MODEL" = "mpc6xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc604" \
@@ -70,6 +74,8 @@ mpc6xx/exceptions/Makefile
 mpc6xx/mmu/Makefile
 mpc6xx/timer/Makefile
 mpc6xx/wrapup/Makefile
+new_exception_processing/Makefile
+old_exception_processing/Makefile
 shared/Makefile
 shared/include/Makefile
 shared/src/Makefile

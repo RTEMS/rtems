@@ -3,6 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 # C source names
 C_FILES = cpu.c
@@ -17,7 +18,7 @@ S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../../automake/lib.am
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
     $(ROOT_H_FILES:%=$(PROJECT_INCLUDE)/%) \
@@ -40,7 +41,7 @@ $(PROJECT_INCLUDE)/rtems/score/%: %
 $(PROJECT_INCLUDE)/%: %
 	$(INSTALL_DATA) $< $@
 
-REL = ../$(ARCH)/rtems-cpu.rel
+REL = $(ARCH)/rtems-cpu.rel
 
 $(REL): $(C_O_FILES) $(S_O_FILES)
 	test -d ../$(ARCH) || mkdir ../$(ARCH)
@@ -54,4 +55,4 @@ UNUSED_FILES = irq_stub.S
 
 EXTRA_DIST = TODO rtems.S $(C_FILES) $(S_FILES) $(UNUSED_FILES)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../../automake/local.am
