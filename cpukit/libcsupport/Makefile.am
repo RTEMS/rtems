@@ -28,12 +28,10 @@ include_sys_HEADERS =
 
 if RTEMS_PROVIDES_STDINT_H
 include_HEADERS += include/stdint.h
-include_sys_HEADERS += include/sys/_stdint.h
 endif
 
 if RTEMS_PROVIDES_INTTYPES_H
 include_HEADERS += include/inttypes.h
-include_sys_HEADERS += include/sys/_inttypes.h
 endif
 #endif
 
@@ -229,20 +227,12 @@ if RTEMS_PROVIDES_STDINT_H
 $(PROJECT_INCLUDE)/stdint.h: include/stdint.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/stdint.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
-
-$(PROJECT_INCLUDE)/sys/_stdint.h: include/sys/_stdint.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_stdint.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_stdint.h
 endif
 
 if RTEMS_PROVIDES_INTTYPES_H
 $(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/inttypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
-
-$(PROJECT_INCLUDE)/sys/_inttypes.h: include/sys/_inttypes.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_inttypes.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_inttypes.h
 endif
 
 $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
