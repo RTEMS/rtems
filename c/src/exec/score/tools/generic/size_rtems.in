@@ -29,26 +29,30 @@ program_prefix=@program_prefix@
 gnusize=${program_prefix}size
 
 # check usage
-if [ $# -ne 1 ] ; then
-  echo usage ${0}: bsp
+if [ $# -ne 2 ] ; then
+  echo usage ${0}: bsp object_directory
   exit 1
 fi
 
 bsp=$1
 board=$1
+ARCH=$2
 
 cpu=`echo $target | sed -e 's/-.*//'`
 
-echo $target
 case $target in
   sparc-sun-solaris*)
       rtems_cpu=unix
       bsp=solaris2
+      echo Not supported on unix port.
+      exit 0
       ;;
   i[3456]86-pc-linux-gnu)
       echo linux
       rtems_cpu=unix
       bsp=linux1
+      echo Not supported on unix port.
+      exit 0
       ;;
   *-rtems*)
     cpu=`echo $target | sed -e 's/-.*//'`
@@ -64,9 +68,19 @@ case $target in
     ;;
 esac
 
+case $ARCH in
+  *debug*)   VARIANT=debug ;;
+  *profile*) VARIANT=profile ;;
+  *)         VARIANT=optimized;;
+esac
+
 echo
-echo Generating sizes for CPU ${cpu} on board ${board}
+echo Size Information for the Following Configuration:
+echo CPU: ${cpu}
+echo BSP: ${board}
+echo VARIANT: ${VARIANT}
 echo
+
 
 #
 #  KLUDGE to figure out at runtime how to echo a line without a
@@ -87,11 +101,11 @@ if [ ! -d ${board} ] ; then
 fi
 
 #DIRLIST -- so greps for DIRLIST will find this file
-CPUOBJ=c/src/exec/score/cpu/${rtems_cpu}/o-${bsp}
-COREOBJ=c/src/exec/score/src/o-${bsp}
-RTEMSOBJ=c/src/exec/rtems/src/o-${bsp}
-SAPIOBJ=c/src/exec/sapi/src/o-${bsp}
-OPTOBJ=${board}/lib
+CPUOBJ=c/src/exec/score/cpu/${rtems_cpu}/${ARCH}
+COREOBJ=c/src/exec/score/src/${ARCH}
+RTEMSOBJ=c/src/exec/rtems/src/${ARCH}
+SAPIOBJ=c/src/exec/sapi/src/${ARCH}
+OPTOBJ=c/src/exec/rtems/optman/${ARCH}
 
 MANLIST=" \
 ${RTEMSOBJ}/clock.o \

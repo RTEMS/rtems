@@ -41,11 +41,18 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
+EXTENSION_SUFFIX_$(TARGET_ARCH)_V=
+EXTENSION_SUFFIX_$(TARGET_ARCH)-debug_V=_debug
+EXTENSION_SUFFIX_$(TARGET_ARCH)-profile_V=_profile
+
+EXTENSION_VARIANT=$(EXTENSION_SUFFIX_$(ARCH)_V)
+
+
 $(LIB): ${OBJS}
 	$(make-library)
-	-cd $(PROJECT_ROOT) ; \
-	    $(PROJECT_RELEASE)/bin/size_rtems $(RTEMS_BSP) \
-		>$(PROJECT_RELEASE)/lib/sizeinfo.txt
+	cd $(PROJECT_ROOT) ; \
+	    $(PROJECT_RELEASE)/bin/size_rtems $(RTEMS_BSP) $(ARCH) \
+		>$(PROJECT_RELEASE)/lib/sizeinfo$(EXTENSION_VARIANT).txt
 
 all:	${ARCH} $(SRCS) $(LIB)
 	$(INSTALL_VARIANT) -m 644 $(LIB) ${PROJECT_RELEASE}/lib
