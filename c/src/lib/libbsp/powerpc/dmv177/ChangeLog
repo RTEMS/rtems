@@ -1,3 +1,15 @@
+2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add @exceptions@ to SUBDIRS.
+	* configure.ac: Apply RTEMS_BSPOPTS_*(*) to merge-in settings from
+	make/custom/dmv177.cfg;
+	Rename PPC_USE_INSTRUCTION_CACHE to DMV177_USE_INSTRUCTION_CACHE,
+	Add RTEMS_PPC_EXCEPTIONS([old]).
+	* include/Makefile.am: include force-preinstall.am.
+	* startup/bspstart.c: Rename PPC_USE_INSTRUCTION_CACHE to
+	DMV177_USE_INSTRUCTION_CACHE.
+	* wrapup/Makefile.am: Apply @exceptions@.
+
 2001-10-25	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Added _init and _fini.

@@ -7,7 +7,8 @@ ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUBDIRS = include clock console startup start timer scv64 tod sonic wrapup
+SUBDIRS = include clock console startup start timer scv64 tod sonic \
+    @exceptions@ wrapup
 
 include $(top_srcdir)/../../bsp.am
 

@@ -25,10 +25,32 @@ RTEMS_CANONICAL_HOST
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 ## bsp-specific options
-CONSOLE_USE_INTERRUPTS=${CONSOLE_USE_INTERRUPTS-0}
-AC_DEFINE_UNQUOTED([CONSOLE_USE_INTERRUPTS],
-  [$CONSOLE_USE_INTERRUPTS],
-  [whether using console interrupts])
+RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
+RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
+[whether using console interrupts])
+
+RTEMS_BSPOPTS_SET([PPC_USE_SPRG],[*],[0])
+RTEMS_BSPOPTS_HELP([PPC_USE_SPRG],
+[If defined, then the PowerPC specific code in RTEMS will use some
+of the special purpose registers to slightly optimize interrupt
+response time.  The use of these registers can conflict with
+other tools like debuggers.])
+
+RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[0])
+RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
+[If set != 0, then the PowerPC specific code in RTEMS will use
+ data cache instructions to optimize the context switch code.
+ This code can conflict with debuggers or emulators.  It is known
+ to break the Corelis PowerPC emulator with at least some combinations
+ of PowerPC 603e revisions and emulator versions.
+ The BSP actually contains the call that enables this.])
+
+RTEMS_BSPOPTS_SET([DMV177_USE_INSTRUCTION_CACHE],[*],[1])
+RTEMS_BSPOPTS_HELP([DMV177_USE_INSTRUCTION_CACHE],
+[If set != 0, then the PowerPC specific code in RTEMS will use
+ data cache instructions to optimize the context switch code.
+ This code can conflict with debuggers or emulators.
+ The BSP actually contains the call that enables this.])
 
 AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
@@ -44,5 +66,9 @@ start/Makefile
 startup/Makefile
 timer/Makefile
 tod/Makefile
-wrapup/Makefile])
+wrapup/Makefile
+])
+
+RTEMS_PPC_EXCEPTIONS([old])
+
 AC_OUTPUT

@@ -129,7 +129,7 @@ void bsp_start( void )
    *  Enable whatever caching is desired
    */
 
-#if ( PPC_USE_INSTRUCTION_CACHE )
+#if ( DMV177_USE_INSTRUCTION_CACHE )
   rtems_cache_enable_instruction();
 #endif
 
