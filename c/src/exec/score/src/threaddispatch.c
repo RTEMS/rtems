@@ -93,23 +93,27 @@ void _Thread_Dispatch( void )
      */
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-    if ( (heir->fp_context != NULL) && !_Thread_Is_allocated_fp( heir ) ) {
-      if ( _Thread_Allocated_fp != NULL )
-        _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
-      _Context_Restore_fp( &heir->fp_context );
-      _Thread_Allocated_fp = heir;
-    }
-#else
+#if ( CPU_USE_DEFERRED_FP_SWITCH != TRUE )
     if ( executing->fp_context != NULL )
       _Context_Save_fp( &executing->fp_context );
-
-    if ( heir->fp_context != NULL )
-      _Context_Restore_fp( &heir->fp_context );
 #endif
 #endif
 
     _Context_Switch( &executing->Registers, &heir->Registers );
+
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
+    if ( (executing->fp_context != NULL) && !_Thread_Is_allocated_fp( executing ) ) {
+      if ( _Thread_Allocated_fp != NULL )
+        _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
+      _Context_Restore_fp( &executing->fp_context );
+      _Thread_Allocated_fp = executing;
+    }
+#else
+    if ( executing->fp_context != NULL )
+      _Context_Restore_fp( &executing->fp_context );
+#endif
+#endif
 
     executing = _Thread_Executing;
 

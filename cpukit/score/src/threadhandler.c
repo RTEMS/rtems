@@ -78,6 +78,17 @@ void _Thread_Handler( void )
   doneConstructors = 1;
 #endif
 
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
+  if ( (executing->fp_context != NULL) && !_Thread_Is_allocated_fp( executing ) ) {
+    if ( _Thread_Allocated_fp != NULL )
+      _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
+    _Thread_Allocated_fp = executing;
+  }
+#endif
+#endif
+
+
   /*
    * Take care that 'begin' extensions get to complete before
    * 'switch' extensions can run.  This means must keep dispatch

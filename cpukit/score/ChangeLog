@@ -1,3 +1,24 @@
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* src/threaddispatch.c, src/threadhandler.c: Per PR211 fix
+	saving/restoring floating point context.  The fpsave and fprestore
+	routines are only used in a executing context which _is_ fp and hence
+	has the FPU enabled. The current behavior required the FPU always to
+	be on which is very dangerous if lazy context switching is used.  
+	[Joel Note: Some ports explicitly enabled the FPU in the FP save and
+	restore routines to avoid this.]
+
+	The patch also makes sure (on powerpc only) that the FPU is disabled
+	for integer tasks. Note that this is crucial if deferred fp context
+	switching is used. Otherwise, fp context corruption may go undetected!
+	Also note that even tasks which merely push/pop FP registers to/from
+	the stack without modifying them still MUST be FP tasks - otherwise
+	(if lazy FP context switching is used), FP register corruption (of
+	other, FP, tasks may occur)!
+
+	Furthermore, (on PPC) by default, lazy FP context save/restore
+	is _disabled_.
+
 2001-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* src/objectcomparenamestring.c: Fix typos.
