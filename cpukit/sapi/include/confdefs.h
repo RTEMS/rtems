@@ -50,6 +50,16 @@ extern posix_api_configuration_table    Configuration_POSIX_API;
 #endif
 
 /*
+ *  Interrupt Stack Space
+ */
+
+#if (CPU_ALLOCATE_INTERRUPT_STACK)
+#define CONFIGURE_INTERRUPT_STACK_MEMORY RTEMS_MINIMUM_STACK_SIZE
+#else
+#define CONFIGURE_INTERRUPT_STACK_MEMORY 0
+#endif
+
+/*
  *  Default User Initialization Task Table.  This table guarantees that
  *  one user initialization table is defined.
  */
@@ -439,7 +449,8 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVEREHAD \
   ( CONFIGURE_MEMORY_FOR_TASKS(1) +    /* IDLE */ \
     (256 * 12) +                       /* Ready chains */ \
-    256                                /* name/ptr table overhead */ \
+    256        +                       /* name/ptr table overhead */ \
+    CONFIGURE_INTERRUPT_STACK_MEMORY   /* interrupt stack */ \
   )
 
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
