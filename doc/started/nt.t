@@ -270,7 +270,7 @@ Apply the appropriate RTEMS specific patch as detailed in
 @ref{Applying RTEMS Patches}.
 
 @item In the @code{/build/binutils} directory, execute the following
-command to configure @value{BINUTILSVERSION}:
+command to configure binutils @value{BINUTILSVERSION}:
 
 @example
 /source/@value{BINUTILSUNTAR}/configure \

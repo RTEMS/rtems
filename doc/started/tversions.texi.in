@@ -1,0 +1,91 @@
+@c
+@c  COPYRIGHT (c) 1988-2002.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@c
+@c This file contains all toolset version dependent information
+@c
+
+@c 
+@c Comment out setting the "XYZ-RTEMSPATCH" variable if there is no 
+@c patch required.  The documentation will detect this and print 
+@c an appropriate message in a short section.
+@c 
+
+
+@c
+@c  GCC Version
+@c
+
+@set GCCVERSION     @GCCVERSION@
+@set GCCUNTAR       gcc-@value{GCCVERSION}
+@set GCCTAR         @value{GCCUNTAR}.tar.bz2
+@set GCCFTPSITE     ftp.gnu.org
+@set GCCFTPDIR      /pub/gnu/gcc/@value{GCCUNTAR}
+@set GCCHTTPDIR     /pub/gcc/releases/index.html
+@SETGCCPATCHVERSION@
+@ifset GCCPATCHVERSION
+@set GCCRTEMSPATCH  @value{GCCUNTAR}-rtems-@value{GCCPATCHVERSION}.diff
+@end ifset
+@set GCCRPMRELEASE  @GCCRPMRELEASE@
+
+@c
+@c  BINUTILS Version
+@c
+
+@c The "official" binutils
+@set BINUTILSVERSION     @BINUTILSVERSION@
+@set BINUTILSUNTAR       binutils-@value{BINUTILSVERSION}
+@set BINUTILSTAR         @value{BINUTILSUNTAR}.tar.gz
+@set BINUTILSFTPSITE     ftp.gnu.org
+@set BINUTILSFTPDIR      /pub/gnu/binutils
+@SETBINUTILSPATCHVERSION@
+@ifset BINUTILSPATCHVERSION
+@set BINUTILSRTEMSPATCH @value{BINUTILSUNTAR}-rtems-@value{BINUTILSPATCHVERSION}.diff
+@end ifset
+@set BINUTILSRPMRELEASE	@BINUTILSRPMRELEASE@
+
+@c
+@c  NEWLIB Version
+@c
+
+
+@set NEWLIBVERSION     @NEWLIBVERSION@
+@set NEWLIBUNTAR       newlib-@value{NEWLIBVERSION}
+@set NEWLIBTAR         @value{NEWLIBUNTAR}.tar.gz
+@set NEWLIBFTPSITE     sources.redhat.com
+@set NEWLIBFTPDIR      /pub/newlib
+@SETNEWLIBPATCHVERSION@
+@ifset NEWLIBPATCHVERSION
+@set NEWLIBRTEMSPATCH  @value{NEWLIBUNTAR}-rtems-@value{NEWLIBPATCHVERSION}.diff
+@end ifset
+
+@c
+@c  GDB Version
+@c
+
+@set GDBVERSION     @GDBVERSION@
+@set GDBUNTAR       gdb-@value{GDBVERSION}
+@set GDBTAR         @value{GDBUNTAR}.tar.gz
+@set GDBFTPSITE     ftp.gnu.org
+@set GDBFTPDIR      /pub/gnu/gdb
+@SETGDBPATCHVERSION@
+@ifset GDBPATCHVERSION
+@set GDBRTEMSPATCH  @value{GDBUNTAR}-rtems-@value{GDBPATCHVERSION}.diff
+@end ifset
+@set GDBRPMRELEASE  @GDBRPMRELEASE@
+@set GDBFTPURL	    ftp://@value{GDBFTPSITE}@value{GDBFTPDIR}/@value{GDBTAR}
+
+@c
+@c  RTEMS Version
+@c
+
+@set RTEMSVERSION   RTEMS 4.6.0
+@set RTEMSUNTAR     rtems-4.6.0
+@set RTEMSTAR       @value{RTEMSUNTAR}.tar.bz2
+@set RTEMSFTPSITE   ftp.rtems.com
+@set RTEMSFTPDIR    /pub/rtems/releases/4.6.0

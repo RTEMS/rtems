@@ -31,10 +31,7 @@ placed in your @code{archive} directory.
     FTP Site:    @value{RTEMSFTPSITE}
     Directory:   @value{RTEMSFTPDIR}
     File:        hello_world_c.tgz
-@ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/hello_world_c.tgz, Download RTEMS Hello World}
-    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/hello_world_c.tgz
-@end ifset
+    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/hello_world_c.tgz,,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/hello_world_c.tgz}
 @end example
 
 @c

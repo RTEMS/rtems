@@ -1,3 +1,11 @@
+2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tversions.texi: Remove.
+	* tversions.texi.in: New (dynamically created).
+	* Makefile.am: Reflect changes above.
+	* binaries.t, buildc.t, buildrt.t, intro.t, nextstep.t, nt.t:
+	Various changes (actual tool versions, rtems.com, fixes).
+
 2003-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* intro.t, nextstep.t: Fix mailing list addresses.

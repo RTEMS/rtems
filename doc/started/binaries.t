@@ -58,12 +58,12 @@ The following is a sample session illustrating the installation
 of a C/C++ toolset targeting the SPARC architecture.  
 
 @example
-rpm -i rtems-base-binutils-2.9.5.0.24-1.i386.rpm
-rpm -i sparc-rtems-binutils-2.9.5.0.24-1.i386.rpm
-rpm -i rtems-base-gcc-gcc2.95.2newlib1.8.2-7.i386.rpm
-rpm -i sparc-rtems-gcc-gcc2.95.2newlib1.8.2-7.i386.rpm
-rpm -i rtems-base-gdb-4.18-4.i386.rpm
-rpm -i sparc-rtems-gdb-4.18-4.i386.rpm
+rpm -i rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -i sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -i rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -i sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -i rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -i sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 @end example
 
 Upon successful completion of the above command sequence, a 
@@ -90,12 +90,12 @@ The following is a sample session illustrating the removal
 of a C/C++ toolset targeting the SPARC architecture.
 
 @example
-rpm -e sparc-rtems-gdb-4.18-2.i386.rpm
-rpm -e rtems-base-gdb-4.18-2.i386.rpm
-rpm -e sparc-rtems-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
-rpm -e rtems-base-gcc-gcc2.95.2newlib1.8.2-4.i386.rpm
-rpm -e sparc-rtems-binutils-2.9.5.0.24-1.i386.rpm
-rpm -e rtems-base-binutils-2.9.5.0.24-1.i386.rpm
+rpm -e sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -e rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
+rpm -e sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -e rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.i386.rpm
+rpm -e sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
+rpm -e rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 @end example
 
 NOTE:  If you have installed any RTEMS BSPs, then it is likely that
@@ -114,12 +114,12 @@ that GNU tar is installed as @code{tar}:
 
 @example
 cd /
-tar xzf rtems-base-binutils-2.9.5.0.24-1.tgz
-tar xzf sparc-rtems-binutils-2.9.5.0.24-1.tgz
-tar xzf rtems-base-gcc-gcc2.95.2newlib1.8.2-4.tgz
-tar xzf sparc-rtems-gcc-gcc2.95.2newlib1.8.2-4.tgz
-tar xzf rtems-base-gdb-4.18-2.tgz
-tar xzf sparc-rtems-gdb-4.18-2.tgz
+tar xzf rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tgz
+tar xzf sparc-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.tgz
+tar xzf rtems-base-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tgz
+tar xzf sparc-rtems-gcc-gcc@value{GCCVERSION}newlib@value{NEWLIBVERSION}-@value{GCCRPMRELEASE}.tgz
+tar xzf rtems-base-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tgz
+tar xzf sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tgz
 @end example
 
 Upon successful completion of the above command sequence, a
