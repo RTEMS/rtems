@@ -13,8 +13,8 @@ H_FILES = ../../shared/console/consoleIo.h ../../shared/console/keyboard.h \
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -24,4 +24,4 @@ AM_CPPFLAGS += -DSTATIC_LOG_ALLOC
 
 all-local: $(ARCH) $(OBJS)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

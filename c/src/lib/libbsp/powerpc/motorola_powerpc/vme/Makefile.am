@@ -38,11 +38,11 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
 
 all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS)
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

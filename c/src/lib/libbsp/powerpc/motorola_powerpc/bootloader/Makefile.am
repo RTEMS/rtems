@@ -67,4 +67,4 @@ TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib/bootloader.$(OBJEXT) \
 
 all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

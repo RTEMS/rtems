@@ -14,8 +14,8 @@ H_FILES = ../../shared/openpic/openpic.h
 
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 $(PROJECT_INCLUDE)/bsp:
 	$(mkinstalldirs) $< $@
@@ -31,4 +31,4 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/openpic.h
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
