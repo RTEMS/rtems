@@ -59,6 +59,7 @@ int miniIMFS_initialize(
    IMFS_initialize_support(
       temp_mt_entry,
       &miniIMFS_ops,
+      &rtems_filesystem_null_handlers,  /* for linearfiles */
       &rtems_filesystem_null_handlers,  /* for memfiles */
       &rtems_filesystem_null_handlers   /* for directories */
    );

@@ -100,6 +100,10 @@ IMFS_jnode_t *IMFS_create_node(
       node->info.device.minor = info->device.minor;
       break;
 
+    case IMFS_LINEAR_FILE:
+      node->info.linearfile.size      = 0;
+      node->info.linearfile.direct    = 0;
+
     case IMFS_MEMORY_FILE:
       node->info.file.size            = 0;
       node->info.file.indirect        = 0;

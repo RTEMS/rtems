@@ -1,3 +1,16 @@
+2000-12-12	Jake Janovetz <janovetz@uiuc.edu>
+
+	*  src/imfs/linearfile.c, src/imfs/imfs_load_tar.c: New files.
+	* src/imfs/Makefile.am, src/imfs/imfs.h,
+	src/imfs/imfs_creat.c, src/imfs/imfs_debug.c,
+	src/imfs/imfs_eval.c, src/imfs/imfs_handlers_memfile.c,
+	src/imfs/imfs_init.c, src/imfs/imfs_initsupp.c,
+	src/imfs/imfs_stat.c, src/imfs/miniimfs_init.c: Added "tarfs".
+	This is not really a tar filesystem.  It is a way to load a tar
+	image into the IMFS but actually leave bulky file contents in the
+	original tar image.  It essentially adds the linear file type and
+	associated support and a loader routine.
+
 2000-11-28	Joel Sherrill <joel@OARcorp.com>
 
 	* src/imfs/memfile.c: Bug report from Sturniolo Jose

@@ -34,7 +34,8 @@ char *IMFS_types[ IMFS_NUMBER_OF_TYPES ] = {
   "directory",
   "device",
   "link",
-  "memory file"
+  "memory file",
+  "linear file"
 };
 
 /*
@@ -58,6 +59,13 @@ void IMFS_print_jnode(
     case IMFS_DEVICE:
       printf( " (device %d, %d)",
         the_jnode->info.device.major, the_jnode->info.device.minor );
+      break;
+
+    case IMFS_LINEAR_FILE:
+      printf( " (file %d %p)",
+        (int)the_jnode->info.linearfile.size,
+        the_jnode->info.linearfile.direct
+      );
       break;
 
     case IMFS_MEMORY_FILE:

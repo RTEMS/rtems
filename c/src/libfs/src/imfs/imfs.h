@@ -94,6 +94,11 @@ typedef struct {
   block_ptr  triply_indirect;  /* 128 doubly indirect blocks */
 } IMFS_memfile_t;
 
+typedef struct {
+  off_t      size;             /* size of file in bytes */
+  block_p    direct;           /* pointer to file image */
+} IMFS_linearfile_t;
+
 /*
  *  Important block numbers for "memfiles"
  */
@@ -125,8 +130,9 @@ typedef struct {
 #define IMFS_HARD_LINK     RTEMS_FILESYSTEM_HARD_LINK
 #define IMFS_SYM_LINK      RTEMS_FILESYSTEM_SYM_LINK
 #define IMFS_MEMORY_FILE   RTEMS_FILESYSTEM_MEMORY_FILE
+#define IMFS_LINEAR_FILE   (RTEMS_FILESYSTEM_MEMORY_FILE + 1)
 
-#define IMFS_NUMBER_OF_TYPES  (IMFS_MEMORY_FILE + 1)
+#define IMFS_NUMBER_OF_TYPES  (IMFS_LINEAR_FILE + 1)
 
 typedef union {
   IMFS_directory_t   directory;
@@ -134,6 +140,7 @@ typedef union {
   IMFS_link_t        hard_link;
   IMFS_sym_link_t    sym_link;   
   IMFS_memfile_t     file;   
+  IMFS_linearfile_t  linearfile;   
 } IMFS_types_union;
 
 /*
@@ -195,6 +202,7 @@ struct IMFS_jnode_tt {
 
 typedef struct {
   ino_t                             ino_count;
+  rtems_filesystem_file_handlers_r *linearfile_handlers;
   rtems_filesystem_file_handlers_r *memfile_handlers;
   rtems_filesystem_file_handlers_r *directory_handlers;
 } IMFS_fs_info_t;
@@ -226,6 +234,7 @@ typedef enum {
 extern rtems_filesystem_file_handlers_r       IMFS_directory_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_device_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_link_handlers;
+extern rtems_filesystem_file_handlers_r       IMFS_linearfile_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern rtems_filesystem_operations_table      IMFS_ops;
 extern rtems_filesystem_operations_table      miniIMFS_ops;
@@ -246,6 +255,7 @@ int miniIMFS_initialize(
 int IMFS_initialize_support( 
    rtems_filesystem_mount_table_entry_t *mt_entry,
    rtems_filesystem_operations_table    *op_table,
+   rtems_filesystem_file_handlers_r     *linearfile_handlers,
    rtems_filesystem_file_handlers_r     *memfile_handlers,
    rtems_filesystem_file_handlers_r     *directory_handlers
 );
@@ -254,6 +264,11 @@ int IMFS_fsunmount(
    rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
+int rtems_tarfs_mount(
+   char          *mountpoint,
+   unsigned char *addr,
+   unsigned long length
+);
 
 /*
  * Returns the number of characters copied from path to token.
@@ -396,6 +411,18 @@ int imfs_dir_fstat(
 
 int imfs_dir_rmnod(
   rtems_filesystem_location_info_t      *pathloc       /* IN */
+);
+
+int linearfile_read(
+  rtems_libio_t *iop,             /* IN  */
+  void          *buffer,          /* IN  */
+  unsigned32     count            /* IN  */
+);
+
+int linearfile_lseek(
+  rtems_libio_t        *iop,        /* IN  */
+  off_t                 offset,     /* IN  */
+  int                   whence      /* IN  */
 );
 
 int memfile_open(

@@ -11,10 +11,10 @@ IMFS_C_FILES = imfs_chown.c imfs_config.c imfs_creat.c imfs_directory.c \
     imfs_eval.c imfs_free.c imfs_fsunmount.c imfs_gtkn.c imfs_init.c \
     imfs_initsupp.c imfs_link.c imfs_mknod.c imfs_mount.c imfs_fchmod.c \
     imfs_unlink.c imfs_unmount.c imfs_utime.c imfs_ntype.c imfs_stat.c \
-    imfs_getchild.c memfile.c deviceio.c imfs_handlers_device.c \
+    imfs_getchild.c memfile.c linearfile.c deviceio.c imfs_handlers_device.c \
     imfs_handlers_directory.c imfs_handlers_link.c imfs_handlers_memfile.c \
     imfs_debug.c imfs_rmnod.c imfs_symlink.c imfs_readlink.c imfs_fdatasync.c \
-    imfs_fcntl.c ioman.c miniimfs_init.c
+    imfs_fcntl.c ioman.c miniimfs_init.c imfs_load_tar.c
 
 UNIX_C_FILES = imfs_unixstub.c
 

@@ -35,6 +35,7 @@ int IMFS_stat(
       buf->st_dev = rtems_filesystem_make_dev_t( io->major, io->minor );
       break;
 
+    case IMFS_LINEAR_FILE:
     case IMFS_MEMORY_FILE:
       buf->st_size = the_jnode->info.file.size;
       break;
