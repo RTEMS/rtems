@@ -34,6 +34,7 @@
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
 #include <bsp/motorola.h>
+#include <rtems/powerpc/powerpc.h>
 
 extern void _return_to_ppcbug();
 extern unsigned long __rtems_end[];
@@ -296,7 +297,7 @@ void bsp_start( void )
    * so that It can be printed without accessing R1.
    */
   stack = ((unsigned char*) __rtems_end) +
-               INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+               INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((uint32_t*)stack) = 0;
@@ -309,7 +310,7 @@ void bsp_start( void )
    * some settings below...
    */
   intrStack = ((uint32_t) __rtems_end) + 
-          INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+          INIT_STACK_SIZE + INTR_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
   intrStack &= ~(CPU_STACK_ALIGNMENT-1);

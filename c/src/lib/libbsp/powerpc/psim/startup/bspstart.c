@@ -21,6 +21,8 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
+#include <rtems/powerpc/powerpc.h>
+
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 
@@ -193,7 +195,7 @@ void bsp_start( void )
    * some settings below...
    */
   intrStack = ((uint32_t) __rtems_end) + 
-          INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+          INIT_STACK_SIZE + INTR_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
   intrStack &= ~(CPU_STACK_ALIGNMENT-1);

@@ -32,7 +32,8 @@
 #include <rtems/system.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
-/*#include <bsp/consoleIo.h>*/
+#include <rtems/powerpc/powerpc.h>
+
 #include <libcpu/spr.h>   /* registers.h is included here */
 #include <bsp.h>
 #include <bsp/uart.h>
@@ -43,7 +44,6 @@
 #include <bsp/vectors.h>
 #include <bsp/bspException.h>
 
-/* for RTEMS_VERSION :-( I dont like the preassembled string */
 #include <rtems/sptables.h>
 
 #ifdef __RTEMS_APPLICATION__
@@ -371,7 +371,7 @@ void bsp_start( void )
    * so there is no need to set it in r1 again... It is just for info
    * so that it can be printed without accessing R1.
    */
-  stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+  stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
 
  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((uint32_t *)stack) = 0;
@@ -390,7 +390,7 @@ void bsp_start( void )
    * some settings below...
    */
   intrStack = ((uint32_t) __rtems_end) + 
-          INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+          INIT_STACK_SIZE + INTR_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
   intrStack &= ~(CPU_STACK_ALIGNMENT-1);

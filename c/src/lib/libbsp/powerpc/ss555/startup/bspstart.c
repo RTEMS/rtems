@@ -28,6 +28,7 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
+#include <rtems/powerpc/powerpc.h>
 
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
@@ -155,7 +156,7 @@ void bsp_start(void)
   /*
    * Initialize some SPRG registers related to irq handling
    */
-  intrStack = (((unsigned char*)&intrStackPtr) - CPU_MINIMUM_STACK_FRAME_SIZE);
+  intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
   _write_SPRG1((unsigned int)intrStack);
   /* signal them that we have fixed PR288 - eventually, this should go away */
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
