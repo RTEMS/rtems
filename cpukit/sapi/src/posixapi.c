@@ -14,8 +14,6 @@
  *  $Id$
  */
 
-#ifdef RTEMS_POSIX_API
-
 #include <assert.h>
 
 /*
@@ -25,7 +23,8 @@
 
 #define POSIX_API_INIT
 
-#include <rtems/system.h>
+#include <rtems/system.h>    /* include this before checking RTEMS_POSIX_API */
+#ifdef RTEMS_POSIX_API
 
 #include <sys/types.h>
 #include <rtems/config.h>
