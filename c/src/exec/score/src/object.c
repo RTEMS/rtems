@@ -71,6 +71,7 @@ void _Objects_Handler_initialization(
  *    maximum         - maximum objects of this class
  *    is_string       - TRUE if names for this object are strings
  *    size            - size of this object's control block
+ *    is_thread       - TRUE if this class is threads
  *
  *  Output parameters:  NONE
  */
