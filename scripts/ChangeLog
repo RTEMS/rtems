@@ -1,5 +1,12 @@
 2003-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add rtemsdoc.
+	* Makefile.ac: Add rtemsdoc.
+	* rtemsdoc/README: New.
+	* rtemsdoc/.cvsignore: New.
+
+2003-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* rtemsdoc/Makefile.am: New.
 	* rtemsdoc/mkspec.in: New.
 	* rtemsdoc/rtemsdoc.spec.in: New.

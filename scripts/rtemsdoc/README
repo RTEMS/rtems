@@ -1,0 +1,10 @@
+#
+#  $Id$
+#
+
+This directory contains RPM-spec file fragments (*.add) which are used to
+build RTEMS doc packages.
+
+This spec-file is pretty immature ;)
+
+Ralf Corsepius			2003/01/24
