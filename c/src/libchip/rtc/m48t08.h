@@ -38,5 +38,53 @@
 
 extern rtc_fns m48t08_fns;
 
+/*
+ * Default register access routines
+ */
+
+unsigned32 m48t08_get_register(     /* registers are at 1 byte boundaries */
+  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
+  unsigned8   ucRegNum
+);
+
+void  m48t08_set_register(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned32  ucData
+);
+
+unsigned32 m48t08_get_register_2(   /* registers are at 2 byte boundaries */
+  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
+  unsigned8   ucRegNum
+);
+
+void  m48t08_set_register_2(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned32  ucData
+);
+
+unsigned32 m48t08_get_register_4(   /* registers are at 4 byte boundaries */
+  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
+  unsigned8   ucRegNum
+);
+
+void  m48t08_set_register_4(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned32  ucData
+);
+
+unsigned32 m48t08_get_register_8(   /* registers are at 8 byte boundaries */
+  unsigned32  ulCtrlPort,           /*   and accessed as bytes            */
+  unsigned8   ucRegNum
+);
+
+void  m48t08_set_register_8(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned32  ucData
+);
+
 #endif
 /* end of include file */

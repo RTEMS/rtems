@@ -31,7 +31,7 @@
  *  ICM7170 Get Register Routine
  */
 
-unsigned8 _ICM7170_NAME(icm7170_get_register)(
+unsigned32 _ICM7170_NAME(icm7170_get_register)(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum
 )
@@ -50,7 +50,7 @@ unsigned8 _ICM7170_NAME(icm7170_get_register)(
 void  _ICM7170_NAME(icm7170_set_register)(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum,
-  unsigned8   ucData
+  unsigned32  ucData
 )
 {
   _ICM7170_TYPE *port;

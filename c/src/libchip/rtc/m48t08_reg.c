@@ -31,7 +31,7 @@
  *  M48T08 Get Register Routine
  */
 
-unsigned8 _M48T08_NAME(m48t08_get_register)(
+unsigned32 _M48T08_NAME(m48t08_get_register)(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum
 )
@@ -50,7 +50,7 @@ unsigned8 _M48T08_NAME(m48t08_get_register)(
 void  _M48T08_NAME(m48t08_set_register)(
   unsigned32  ulCtrlPort,
   unsigned8   ucRegNum,
-  unsigned8   ucData
+  unsigned32  ucData
 )
 {
   _M48T08_TYPE *port;
