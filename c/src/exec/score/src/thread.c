@@ -50,6 +50,19 @@ void _Thread_Handler_initialization(
 {
   unsigned32      index;
 
+  /*
+   * BOTH stacks hooks must be set or both must be NULL.
+   * Do not allow mixture.
+   */
+
+  if ( !( ( _CPU_Table.stack_allocate_hook == 0 )
+       == ( _CPU_Table.stack_free_hook == 0 ) ) )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_BAD_STACK_HOOK
+    );
+
   _Context_Switch_necessary = FALSE;
   _Thread_Executing         = NULL;
   _Thread_Heir              = NULL;
@@ -283,6 +296,65 @@ void _Thread_Dispatch( void )
 
 /*PAGE
  *
+ *  _Thread_Stack_Allocate
+ *
+ *  Allocate the requested stack space for the thread.
+ *  return the actual size allocated after any adjustment
+ *  or return zero if the allocation failed.
+ *  Set the Start.stack field to the address of the stack
+ */
+
+static unsigned32 _Thread_Stack_Allocate(
+  Thread_Control *the_thread,
+  unsigned32 stack_size)
+{
+  void *stack_addr = 0;
+ 
+  if ( !_Stack_Is_enough( stack_size ) )
+    stack_size = STACK_MINIMUM_SIZE;
+ 
+  /*
+   * Call ONLY the CPU table stack allocate hook, _or_ the
+   * the RTEMS workspace allocate.  This is so the stack free
+   * routine can call the correct deallocation routine.
+   */
+  if ( _CPU_Table.stack_allocate_hook )
+  {
+    stack_addr = (*_CPU_Table.stack_allocate_hook)( stack_size );
+  } else {
+    stack_size = _Stack_Adjust_size( stack_size );
+    stack_addr = _Workspace_Allocate( stack_size );
+  }
+ 
+  if ( !stack_addr )
+      stack_size = 0;
+ 
+  the_thread->Start.stack = stack_addr;
+ 
+  return stack_size;
+}
+
+/*
+ *  _Thread_Stack_Free
+ *
+ *  Deallocate the Thread's stack.
+ */
+
+static void _Thread_Stack_Free(void *stack_addr)
+{
+    /*
+     * Call ONLY the CPU table stack free hook, or the
+     * the RTEMS workspace free.  This is so the free
+     * routine properly matches the allocation of the stack.
+     */
+    if ( _CPU_Table.stack_free_hook )
+        (*_CPU_Table.stack_free_hook)( stack_addr );
+    else
+        _Workspace_Free( stack_addr );
+}
+
+/*PAGE
+ *
  *  _Thread_Initialize
  *
  *  XXX
@@ -320,12 +392,12 @@ boolean _Thread_Initialize(
   stack             = stack_area;
 
   if ( !stack ) {
-    stack = _Workspace_Allocate( actual_stack_size );
+    actual_stack_size = _Thread_Stack_Allocate( the_thread, stack_size );
  
-    if ( !stack ) 
-      return FALSE;
+    if ( !actual_stack_size ) 
+      return FALSE;                     /* stack allocation failed */
 
-    the_thread->Start.stack = stack;
+    stack = the_thread->Start.stack;
   } else
     the_thread->Start.stack = NULL;
 
@@ -344,7 +416,7 @@ boolean _Thread_Initialize(
     fp_area = _Workspace_Allocate( CONTEXT_FP_SIZE );
     if ( !fp_area ) {
       if ( the_thread->Start.stack )
-        (void) _Workspace_Free( the_thread->Start.stack );
+        (void) _Thread_Stack_Free( the_thread->Start.stack );
       return FALSE;
     }
     fp_area = _Context_Fp_start( fp_area, 0 );
@@ -357,7 +429,7 @@ boolean _Thread_Initialize(
   
 
   /*
-   *  Allocate the floating point area for this thread
+   *  Allocate the extensions area for this thread
    */
 
   if ( _Thread_Maximum_extensions ) {
@@ -370,7 +442,7 @@ boolean _Thread_Initialize(
         (void) _Workspace_Free( fp_area );
 
       if ( the_thread->Start.stack )
-        (void) _Workspace_Free( the_thread->Start.stack );
+        (void) _Thread_Stack_Free( the_thread->Start.stack );
 
       return FALSE;
     }
@@ -413,7 +485,7 @@ boolean _Thread_Initialize(
       (void) _Workspace_Free( fp_area );
 
     if ( the_thread->Start.stack )
-      (void) _Workspace_Free( the_thread->Start.stack );
+      (void) _Thread_Stack_Free( the_thread->Start.stack );
 
     return FALSE;
   }
