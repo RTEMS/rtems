@@ -1,3 +1,11 @@
+2005-03-11	Philippe Simons <loki_666@fastmail.fm>
+
+	* Makefile.am, configure.ac: Added gp32 BSP.
+	* s3c2400/.cvsignore, s3c2400/Makefile.am, s3c2400/clock/clockdrv.c,
+	s3c2400/include/s3c2400.h, s3c2400/irq/bsp_irq_asm.S,
+	s3c2400/irq/bsp_irq_init.c, s3c2400/irq/irq.c, s3c2400/irq/irq.h,
+	s3c2400/timer/timer.c: New files.
+
 2005-03-08	Jay Monkman <jtm@lopingdog.com>
 
 	* mc9328mxl/irq/irq.h: Fixed error in declaration of bsp_vector_table.

@@ -24,14 +24,17 @@ RTEMS_PROG_CCAS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "at91rm9200" || \
-		       test "$RTEMS_CPU_MODEL" = "mc9328mxl")
+		       test "$RTEMS_CPU_MODEL" = "mc9328mxl" || \
+		       test "$RTEMS_CPU_MODEL" = "s3c2400")
 AM_CONDITIONAL(at91rm9200, test "$RTEMS_CPU_MODEL" = "at91rm9200")
 AM_CONDITIONAL(mc9328mxl, test "$RTEMS_CPU_MODEL" = "mc9328mxl")
+AM_CONDITIONAL(s3c2400, test "$RTEMS_CPU_MODEL" = "s3c2400")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 shared/Makefile
 at91rm9200/Makefile
 mc9328mxl/Makefile
+s3c2400/Makefile
 ])
 AC_OUTPUT
