@@ -17,10 +17,12 @@
  */
 
 #define TEST_INIT
-#define RTEMS_TM27
 #include "system.h"
 
 #include <bsp.h>
+
+#define _RTEMS_TMTEST27
+#include <tm27.h>
 
 rtems_task Task_1(
   rtems_task_argument argument
