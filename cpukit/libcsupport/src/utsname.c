@@ -41,7 +41,7 @@ int uname(
 
   strcpy( name->sysname, "RTEMS" );
 
-  sprintf( name->nodename, "Node %", _Objects_Local_node );
+  sprintf( name->nodename, "Node %" PRId32, _Objects_Local_node );
 
   strcpy( name->release, RTEMS_VERSION );
 
