@@ -15,7 +15,7 @@ include_libcpu_HEADERS = exceptions/raw_exception.h
 # exceptions
 noinst_PROGRAMS += exceptions.rel
 exceptions_rel_SOURCES = exceptions/raw_exception.c exceptions/asm_utils.S
-exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
 exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # mmu
@@ -24,7 +24,7 @@ include_libcpu_HEADERS += mmu/bat.h mmu/pte121.h
 noinst_PROGRAMS += mmu.rel
 mmu_rel_SOURCES = mmu/bat.c mmu/bat.h mmu/pte121.c mmu/pte121.h \
     mmu/mmuAsm.S
-mmu_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # clock
@@ -32,13 +32,13 @@ include_libcpu_HEADERS += clock/c_clock.h
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/c_clock.c clock/c_clock.h
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # timer
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

@@ -16,7 +16,7 @@ include_libcpu_HEADERS = include/io.h include/mmu.h include/page.h \
 
 noinst_PROGRAMS += cpuIdent.rel
 cpuIdent_rel_SOURCES = include/cpuIdent.c include/cpuIdent.h
-cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
 cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_libcpu_HEADERS += include/cpuIdent.h
@@ -26,7 +26,7 @@ noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = src/cache.c src/cache_.h \
     ../../shared/src/cache_aligned_malloc.c ../../shared/src/cache_manager.c \
     ../../shared/include/cache.h
-cache_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -I$(srcdir)/src
+cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/src
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_libcpu_HEADERS += ../../shared/include/cache.h
@@ -34,7 +34,7 @@ include_libcpu_HEADERS += ../../shared/include/cache.h
 ## stack
 noinst_PROGRAMS += stack.rel
 stack_rel_SOURCES = src/stack.c include/spr.h src/stackTrace.h
-stack_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+stack_rel_CPPFLAGS = $(AM_CPPFLAGS)
 stack_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_libcpu_HEADERS += include/spr.h

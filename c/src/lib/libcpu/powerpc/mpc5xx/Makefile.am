@@ -17,7 +17,7 @@ include_HEADERS = include/mpc5xx.h
 ## clock
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clock.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## console-generic
@@ -25,7 +25,7 @@ include_mpc5xx_HEADERS = include/console.h
 
 noinst_PROGRAMS += console-generic.rel
 console_generic_rel_SOURCES = console-generic/console-generic.c
-console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## exceptions
@@ -33,7 +33,7 @@ include_libcpu_HEADERS = exceptions/raw_exception.h
 
 noinst_PROGRAMS += exceptions.rel
 exceptions_rel_SOURCES = exceptions/raw_exception.c
-exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
 exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## irq
@@ -41,13 +41,13 @@ include_libcpu_HEADERS += irq/irq.h
 
 noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = irq/irq.c irq/irq_init.c irq/irq_asm.S
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## timer
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## vectors
@@ -55,7 +55,7 @@ include_libcpu_HEADERS += vectors/vectors.h
 
 noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = vectors/vectors_init.c vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

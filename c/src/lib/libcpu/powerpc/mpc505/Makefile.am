@@ -14,13 +14,13 @@ include_HEADERS = ictrl/ictrl.h
 
 noinst_PROGRAMS += ictrl.rel
 ictrl_rel_SOURCES = ictrl/ictrl.c
-ictrl_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+ictrl_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ictrl_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## timer
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## vector
@@ -28,7 +28,7 @@ vectors_S_FILES = vectors/vectors.S
 
 noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

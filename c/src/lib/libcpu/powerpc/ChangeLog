@@ -1,3 +1,9 @@
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* mpc505/Makefile.am, mpc5xx/Makefile.am, mpc6xx/Makefile.am,
+	mpc8260/Makefile.am, mpc8xx/Makefile.am, ppc403/Makefile.am,
+	shared/Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
+
 2005-01-04	Joel Sherrill <joel@OARcorp.com>
 
 	* ppc403/tty_drv/tty_drv.c: Remove warnings.
