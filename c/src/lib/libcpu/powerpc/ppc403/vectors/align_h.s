@@ -429,5 +429,6 @@ align_complete:
         mtspr	srr3, r29		/* SRR 3 */
         mtspr	srr0, r30		/* SRR 0 */
         mtspr	srr1, r31		/* SRR 1 */
-        lmw     r0,Open_gpr0+ALIGN_REGS(r0)
+        lmw     r1,Open_gpr1+ALIGN_REGS(r0)
+        lwz     r0,Open_gpr0+ALIGN_REGS(r0)
         rfi
