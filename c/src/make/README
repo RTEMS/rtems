@@ -217,19 +217,6 @@
             Your own private configuration file.  Specifies which of the above
             files you want to include.
 
-            Example: custom/pc386.cfg
-
-               CONFIG.$(HOST_ARCH).OS = $(RTEMS_ROOT)/make/os/HPUX-9.0.cfg
-
-               # HOST Compiler config file
-               # You may also want to specify where the compiler resides here.
-               CC_$(HOST_ARCH)_DIR=/usr/local
-               CONFIG.$(HOST_ARCH).CC   = $(RTEMS_ROOT)/make/compilers/gcc.cfg
-
-               ## Target compiler config file, if any
-               CC_$(TARGET_ARCH)_DIR=$(RTEMS_GNUTOOLS)
-               CONFIG.$(TARGET_ARCH).CC = $(RTEMS_ROOT)/make/compilers/gcc-pc386.cfg
-
         generic rules file
         ------------------
 
@@ -306,10 +293,6 @@
             a number of MAKE variables are automatically set and maintained by
             the config files.
 
-            CONFIG.$(HOST_ARCH).CC
-                        -- full path of C compilation config file, set by custom
-                           config file.
-
             PROJECT_RELEASE
                         -- release/install directory
                            [ $(PROJECT_ROOT) ]
@@ -328,10 +311,6 @@
 
             ARCH        -- target sub-directory for object code
                            [ eg: o-pc386 or o-pc386-debug ]
-
-            HOST_ARCH
-                        -- host machine architecture name
-                           [ eg: sun4, sparc on SVR4 ]
 
             VARIANTS    -- full list of all possible values for $(ARCH);
                            used mainly for 'make clean'

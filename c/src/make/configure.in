@@ -128,5 +128,4 @@ bsp.cfg
 custom/Makefile
 custom/default.cfg
 compilers/Makefile
-compilers/gcc.cfg
 )
