@@ -18,6 +18,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
+#include <rtems/posix/pthread.h>
 #include <rtems/score/thread.h>
 
 int pthread_equal(
