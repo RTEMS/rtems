@@ -14,7 +14,7 @@
  */
 
 #include <bsp.h>
-#include <clockdrv.h>
+#include <rtems/clockdrv.h>
 
 void _exit( void )
 {
