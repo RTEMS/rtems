@@ -18,6 +18,8 @@ void *POSIX_Init(
   void *argument
 )
 {
+  struct timespec tv;
+  struct timespec tr;
   int             status;
   int             priority;
   pthread_t       thread_id;
@@ -25,10 +27,10 @@ void *POSIX_Init(
   time_t          seconds1;
   time_t          remaining;
   struct tm       tm;
-  struct timespec tv;
-  struct timespec tr;
 
   puts( "\n\n*** POSIX TEST 1 ***" );
+
+  build_time( &tm, TM_FRIDAY, TM_MAY, 24, 96, 11, 5, 0 );
 
   /* error cases in clock_gettime and clock_settime */
 
