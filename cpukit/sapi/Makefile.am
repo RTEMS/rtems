@@ -5,11 +5,10 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-include_HEADERS = include/confdefs.h
-
 include_rtemsdir = $(includedir)/rtems
 
-include_rtems_HEADERS = include/rtems/config.h include/rtems/extension.h \
+include_rtems_HEADERS = include/confdefs.h
+include_rtems_HEADERS += include/rtems/config.h include/rtems/extension.h \
     include/rtems/fatal.h include/rtems/init.h include/rtems/io.h \
     include/rtems/mptables.h include/rtems/sptables.h
 
@@ -46,19 +45,14 @@ all-local: $(PREINSTALL_FILES) libsapi$(LIB_VARIANT).a
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_INCLUDE)/confdefs.h: include/confdefs.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/confdefs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/confdefs.h
-
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/confdefs.h: include/confdefs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/confdefs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/confdefs.h
 
 $(PROJECT_INCLUDE)/rtems/config.h: include/rtems/config.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/config.h
