@@ -82,6 +82,18 @@
  *
  */
 
+/*	$Id$ */
+
+/*
+	Fixes and some Changes by Wilfried Busalski Lancier-Monitoring GmbH Germany 
+	wilfried.busalski@muenster.de
+	
+	Fixes:	put_string()		Free memory allocated by clean()
+			get_string()		Free memory allocated by clean()
+			chat_main()			Will Distroy's no more the chat-script
+			getnextcommand()	sepatator changed to '@'
+*/
+
 #include <stdio.h>
 #include <ctype.h>
 #include <time.h>
@@ -209,43 +221,53 @@ char *s;
     return dup_mem(s, strlen (s) + 1);
 }
 
-char *getnextcommand(char **string)
+char *getnextcommand(char *string,char *buff)
 {
-	char *buf=*string,*res;
-	res=strchr(buf,'|');
-	if (res==NULL)
+	char *token;
+	int len;
+	
+	token=strchr(string,'@');
+	if (token==NULL){
 		return NULL;
-	*res='\0';
-	*string=res+1;
-	return buf;
+	}
+	len=token-string;
+	if(len > 78 ){
+		len=78;
+	}
+	memcpy(buff,string,len);
+	buff[len]=0;
+	return(token+1);
 }
 
 int chatmain(int fd, int mode, char *pScript)
 {
-  char    *arg;
+  char    arg[80];
+  char 	  *script;
 
   /* initialize exit code */
   exit_code = 0;
   ttyfd     = fd;
 
+  script=pScript;
+  
   if ( debug ) {
-    dbglog("chat_main: %s\n", pScript);
+    dbglog("chat_main: %s\n", script);
   }
 
   /* get first expect string */
-  arg = getnextcommand(&pScript);
-  while (( arg != NULL ) && ( exit_code == 0 )) {
+  script = getnextcommand(script,arg);
+  while (( script != NULL ) && ( exit_code == 0 )) {
     /* process the expect string */
     chat_expect(arg);
     if ( exit_code == 0 ) {
       /* get the next send string */
-      arg = getnextcommand(&pScript);
-      if ( arg != NULL ) {
+      script = getnextcommand(script,arg);
+      if ( script != NULL ) {
         /* process the send string */
         chat_send(arg);
 
         /* get the next expect string */
-        arg = getnextcommand(&pScript);
+        script = getnextcommand(script,arg);
       }
     }
   }
@@ -495,43 +517,43 @@ char *s;
     char *reply;
 
     if (strcmp(s, "HANGUP") == 0) {
-	++hup_next;
+		++hup_next;
         return;
     }
  
     if (strcmp(s, "ABORT") == 0) {
-	++abort_next;
-	return;
+		++abort_next;
+		return;
     }
 
     if (strcmp(s, "CLR_ABORT") == 0) {
-	++clear_abort_next;
-	return;
+		++clear_abort_next;
+		return;
     }
 
     if (strcmp(s, "REPORT") == 0) {
-	++report_next;
-	return;
+		++report_next;
+		return;
     }
 
     if (strcmp(s, "CLR_REPORT") == 0) {
-	++clear_report_next;
-	return;
+		++clear_report_next;
+		return;
     }
 
     if (strcmp(s, "TIMEOUT") == 0) {
-	++timeout_next;
-	return;
+		++timeout_next;
+		return;
     }
 
     if (strcmp(s, "ECHO") == 0) {
-	++echo_next;
-	return;
+		++echo_next;
+		return;
     }
 
     if (strcmp(s, "SAY") == 0) {
-	++say_next;
-	return;
+		++say_next;
+		return;
     }
 
 /*
@@ -598,11 +620,11 @@ register char *s;
 /*  char file_data[STR_LEN];  */
 
     if (say_next) {
-	say_next = 0;
-	s = clean(s, 1);
-	write(2, s, strlen(s));
+		say_next = 0;
+		s = clean(s, 1);
+		write(2, s, strlen(s));
         free(s);
-	return;
+		return;
     }
 
     if (hup_next) {
@@ -617,53 +639,56 @@ register char *s;
     }
 
     if (abort_next) {
-	char *s1;
+		char *s1;
 	
-	abort_next = 0;
-	if ( n_aborts < MAX_ABORTS ) {
-	  s1 = clean(s, 0);
-	  if (( strlen(s1) <= strlen(s) ) &&
-              ( strlen(s1) <  sizeof(fail_buffer))) {
-
-	    abort_string[n_aborts++] = s1;
-          }
-        }
-	return;
+		abort_next = 0;
+		if ( n_aborts < MAX_ABORTS ) {
+			s1 = clean(s, 0);
+			if (( strlen(s1) <= strlen(s) ) && ( strlen(s1) <  sizeof(fail_buffer))) {
+	  			abort_string[n_aborts++] = s1;
+        	}
+        	free(s1);
+    	}
+		return;
     }
 
     if (clear_abort_next) {
-	clear_abort_next = 0;
-	return;
+		clear_abort_next = 0;
+		return;
     }
 
     if (report_next) {
-	report_next = 0;
-	return;
+		report_next = 0;
+		return;
     }
 
     if (clear_report_next) {
-	clear_report_next = 0;
-	return;
+		clear_report_next = 0;
+		return;
     }
 
     if (timeout_next) {
-	timeout_next = 0;
-	timeout = atoi(s);
+		timeout_next = 0;
+		timeout = atoi(s);
 	
-	if (timeout <= 0)
-	    timeout = DEFAULT_CHAT_TIMEOUT;
-
-	return;
+		if (timeout <= 0){
+	    	timeout = DEFAULT_CHAT_TIMEOUT;
+	    }
+		return;
     }
 
-    if (strcmp(s, "EOT") == 0)
-	s = "^D\\c";
-    else if (strcmp(s, "BREAK") == 0)
-	s = "\\K\\c";
+    if (strcmp(s, "EOT") == 0){
+		s = "^D\\c";
+	}
+    else{
+    	if (strcmp(s, "BREAK") == 0){
+			s = "\\K\\c";
+		}
 
-    if (!put_string(s)) {
-      exit_code = 2;
-    }
+    	if (!put_string(s)) {
+      		exit_code = 2;
+    	}
+	}
 }
 
 static int get_char()
@@ -690,16 +715,14 @@ int c;
 {
   char ch = c;
 
-  write(ttyfd, &ch, 1);
-
-  return 0;
+  return(write(ttyfd, &ch, 1));
 }
 
 static int write_char (c)
 int c;
 {
-    if (put_char(c) < 0) {
-	return (0);
+    if (put_char(c) < 1) {
+		return (0);
     }
     return (1);
 }
@@ -707,41 +730,49 @@ int c;
 static int put_string (s)
 register char *s;
 {
+	char *out,*free_ptr=0;
+	
     quiet = 0;
-    s = clean(s, 1);
-    while (*s) {
-	register char c = *s++;
+    out = free_ptr = clean(s, 1);
+    while (*out) {
+		register char c = *out++;
 
-	if (c != '\\') {
-	    if (!write_char (c))
-		return 0;
-	    continue;
-	}
+		if (c != '\\') {
+	    	if (!write_char (c)){
+	    		free(free_ptr);
+				return 0;
+			}
+	    	continue;
+		}
 
-	c = *s++;
-	switch (c) {
-	case 'd':
-	    sleep(1);
-	    break;
+		c = *out++;
 
-	case 'K':
-	    break_sequence();
-	    break;
+		switch (c) {
+			case 'd':
+	    		sleep(1);
+		    break;
 
-	case 'p':
+			case 'K':
+	    		break_sequence();
+	    	break;
+
+			case 'p':
 #if 0 /* FIXME!!! */
-	    usleep(10000); 	/* 1/100th of a second (arg is microseconds) */
+	    		usleep(10000); 	/* 1/100th of a second (arg is microseconds) */
 #else
-	    sleep(1);
+	    		sleep(1);
 #endif
-	    break;
+	    	break;
 
-	default:
-	    if (!write_char (c))
-		return 0;
-	    break;
-	}
+			default:
+	    		if (!write_char (c)){
+	    			free(free_ptr);
+					return 0;
+				}
+	    	break;
+		}
     }
+    free(free_ptr);
 
     return (1);
 }
@@ -749,12 +780,13 @@ register char *s;
 /*
  *	'Wait for' this string to appear on this file descriptor.
  */
-static int get_string(string)
-register char *string;
+static int get_string(in_string)
+register char *in_string;
 {
     int c, len, minlen;
     register char *s = temp2, *end = s + STR_LEN;
     char *logged = temp2;
+    char *string=0;
     struct termios tios;
 
     memset(temp2, 0, sizeof(temp2));
@@ -764,13 +796,14 @@ register char *string;
     tios.c_cc[VTIME] = timeout*10/MAX_TIMEOUTS;
     tcsetattr(ttyfd, TCSANOW, &tios);
 		
-    string = clean(string, 0);
+    string = clean(in_string, 0);
     len = strlen(string);
     minlen = (len > sizeof(fail_buffer)? len: sizeof(fail_buffer)) - 1;
 	
     if (len > STR_LEN) {
-	exit_code = 1;
-	return 0;
+		exit_code = 1;
+		free(string);
+		return 0;
     }
 
     if (len == 0) {
@@ -780,12 +813,19 @@ register char *string;
    while ( (c = get_char()) >= 0) {
 		int n, abort_len;
 
-	*s++ = c;
-	*s=0;
+	if(c == '\n' || c == '\r'){
+		s = temp2;
+		*s=0;
+	}
+	else{
+		*s++ = c;
+		*s=0;
+	}
 
 	if (s - temp2 >= len &&
 	    c == string[len - 1] &&
 	    strncmp(s - len, string, len) == 0) {
+	    free(string);
 	    return (1);
 	}
 
@@ -795,6 +835,7 @@ register char *string;
 
 		exit_code = n + 4;
 		strcpy(fail_reason = fail_buffer, abort_string[n]);
+		free(string);
 		return (0);
 	    }
 	}
@@ -811,5 +852,7 @@ register char *string;
     }
 
     exit_code = 3;
+    free(string);
     return (0);
 }
+
