@@ -31,24 +31,30 @@ EXTRA_DIST = cpu.c cpu_asm.S i960RP.h
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/asm.h: asm.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/asm.h: asm.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm.h
 
-$(PROJECT_INCLUDE)/rtems/score:
+$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score
+	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu.h
 
-$(PROJECT_INCLUDE)/rtems/score/i960.h: rtems/score/i960.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/i960.h: rtems/score/i960.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/i960.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/i960.h
 
-$(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
 include $(top_srcdir)/../../../automake/local.am

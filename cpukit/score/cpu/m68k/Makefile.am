@@ -31,40 +31,46 @@ EXTRA_DIST = cpu.c cpu_asm.S
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/asm.h: asm.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/asm.h: asm.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm.h
 
-$(PROJECT_INCLUDE)/m68302.h: m68302.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m68302.h: m68302.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68302.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m68302.h
 
-$(PROJECT_INCLUDE)/m68360.h: m68360.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m68360.h: m68360.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68360.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m68360.h
 
-$(PROJECT_INCLUDE)/qsm.h: qsm.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/qsm.h: qsm.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/qsm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/qsm.h
 
-$(PROJECT_INCLUDE)/sim.h: sim.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/sim.h: sim.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sim.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sim.h
 
-$(PROJECT_INCLUDE)/rtems/score:
+$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score
+	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu.h
 
-$(PROJECT_INCLUDE)/rtems/score/m68k.h: rtems/score/m68k.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/m68k.h: rtems/score/m68k.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/m68k.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/m68k.h
 
-$(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
 include $(top_srcdir)/../../../automake/local.am

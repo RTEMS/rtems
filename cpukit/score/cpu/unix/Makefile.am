@@ -28,24 +28,25 @@ EXTRA_DIST = cpu.c
 
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/rtems/score:
+$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score
+	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
-$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu.h
 
-$(PROJECT_INCLUDE)/rtems/score/unix.h: rtems/score/unix.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/unix.h: rtems/score/unix.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/unix.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/unix.h
 
-$(PROJECT_INCLUDE)/rtems/score/unixsize.h: rtems/score/unixsize.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/rtems/score/unixsize.h: rtems/score/unixsize.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/unixsize.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/unixsize.h
 
 include $(top_srcdir)/../../../automake/local.am
