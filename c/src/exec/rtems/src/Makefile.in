@@ -54,13 +54,17 @@ REGION_PIECES=\
 PARTITION_PIECES=\
   part partcreate partdelete partgetbuffer partident partreturnbuffer
 
+DPMEM_PIECES=\
+  dpmem dpmemcreate dpmemdelete dpmemexternal2internal \
+  dpmemident dpmeminternal2external
+
 C_PIECES=\
   attr $(TASK_PIECES) $(RATEMON_PIECES) \
   intr intrbody \
   $(CLOCK_PIECES) $(TIMER_PIECES) \
   $(SEMAPHORE_PIECES) $(MESSAGE_QUEUE_PIECES) \
   $(EVENT_PIECES) signal
-  $(PARTITION_PIECES) $(REGION_PIECES) dpmem \
+  $(PARTITION_PIECES) $(REGION_PIECES) $(DPMEM_PIECES) \
   $(MP_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)

@@ -23,29 +23,34 @@
 
 /*PAGE
  *
- *  _Dual_ported_memory_Manager_initialization
+ *  rtems_port_ident
  *
- *  This routine initializes all dual-ported memory manager related
- *  data structures.
+ *  This directive returns the system ID associated with
+ *  the port name.
  *
  *  Input parameters:
- *    maximum_ports - number of ports to initialize
+ *    name - user defined port name
+ *    id   - pointer to port id
  *
- *  Output parameters:  NONE
+ *  Output parameters:
+ *    *id      - port id
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code - if unsuccessful
  */
 
-void _Dual_ported_memory_Manager_initialization(
-  unsigned32 maximum_ports
+rtems_status_code rtems_port_ident(
+  rtems_name    name,
+  Objects_Id   *id
 )
 {
-  _Objects_Initialize_information(
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id(
     &_Dual_ported_memory_Information,
-    OBJECTS_RTEMS_PORTS,
-    FALSE,
-    maximum_ports,
-    sizeof( Dual_ported_memory_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH,
-    FALSE
+    &name,
+    OBJECTS_SEARCH_ALL_NODES,
+    id
   );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }
