@@ -61,13 +61,15 @@ void *POSIX_Init(
   empty_line();
 
   Destructor_invoked = 0;
-  printf( "Init: Creating a key\n" );
+  puts( "Init: Creating a key" );
   status = pthread_key_create( &Key_id, Key_destructor );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
 
   printf( "Destructor invoked %d times\n", Destructor_invoked );
+
+
 
   printf( "Init: Setting the key to %d\n", 0 );
   status = pthread_setspecific( Key_id, &Data_array[ 0 ] );
@@ -90,7 +92,7 @@ void *POSIX_Init(
 
   /* delete the key */
 
-  printf( "Init: Deleting a key\n" );
+  puts( "Init: Deleting a key" );
   status = pthread_key_delete( Key_id );
   if ( status )
     printf( "status = %d\n", status );

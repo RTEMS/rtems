@@ -42,8 +42,7 @@ void *Task_1(
     printf( "status = %d\n", status );
   assert( !status );
 
-  printf( "Task_1: exitting\n" );
-
+  puts( "Task_1: exitting" );
   pthread_exit( NULL );
 
      /* switch to task 2 */
