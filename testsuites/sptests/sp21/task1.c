@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,7 +21,8 @@
 
 #define STUB_DRIVER_MAJOR     0x2
 #define NO_DRIVER_MAJOR       0x3
-#define INVALID_DRIVER_MAJOR  0x5
+#define INVALID_DRIVER_MAJOR  (CONFIGURE_MAXIMUM_DRIVERS + 1)
+/* #define INVALID_DRIVER_MAJOR  0xffffffff */
 
 rtems_task Task_1(
   rtems_task_argument argument
