@@ -32,7 +32,12 @@ void bsp_return_to_monitor_trap()
   page_table_teardown();
 
   lcsr->intr_ena = 0;               /* disable interrupts */
+#if defined(mvme162lx)
+  m68k_set_vbr(0x00000000);         /* restore 162Bug vectors */
+#else
   m68k_set_vbr(0xFFE00000);         /* restore 162Bug vectors */
+#endif
+
   asm volatile( "trap   #15"  );    /* trap to 162Bug */
   asm volatile( ".short 0x63" );    /* return to 162Bug (.RETURN) */
                                     /* restart program */

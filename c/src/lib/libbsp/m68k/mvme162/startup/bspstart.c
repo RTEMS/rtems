@@ -164,9 +164,14 @@ int main(
 
   /*
    *  162Bug Vectors are at 0xFFE00000
+   *  162Bug Vectors on LX are at 0x00000000
    */
 
+#if defined(mvme162lx)
+  monitors_vector_table = (m68k_isr_entry *)0x00000000;
+#else
   monitors_vector_table = (m68k_isr_entry *)0xFFE00000;
+#endif
 
   m68k_set_vbr( monitors_vector_table );
 
