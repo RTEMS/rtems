@@ -123,14 +123,9 @@ AC_CONFIG_SUBDIRS([lib/libcpu])
 BSP_SUBDIRS="$BSP_SUBDIRS lib/libcpu"
 AC_CONFIG_SUBDIRS([lib/libbsp])
 BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
-
-AS_IF([test "$HAS_RDBG" = "yes"],[
-  AC_CONFIG_SUBDIRS([librdbg])
-  BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
-])
-
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 BSP_SUBDIRS="$BSP_SUBDIRS libnetworking"
+BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
 
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
   AC_CONFIG_SUBDIRS([librtems++])
@@ -178,7 +173,6 @@ AM_CONDITIONAL([LIBCHIP],[test "$RTEMS_BSP_FAMILY" != "posix"])
 AM_CONDITIONAL([HAS_LIBBSP],[test "$RTEMS_BSP_FAMILY" != "bare"])
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
 
-AM_CONDITIONAL(HAS_RDBG,test "$HAS_RDBG" = "yes")
 AM_CONDITIONAL(RPCTOOLS, test "$rpctools" != "no")
 
 RTEMS_PROJECT_ROOT
@@ -199,12 +193,28 @@ libnetworking/rtems_telnetd/Makefile
 libnetworking/rtems_webserver/Makefile
 libnetworking/wrapup/Makefile
 
+librdbg/Makefile
+librdbg/include/Makefile
+librdbg/include/rdbg/Makefile
+librdbg/include/rdbg/i386/Makefile
+librdbg/include/rdbg/powerpc/Makefile
+librdbg/include/rdbg/m68k/Makefile
+librdbg/src/Makefile
+librdbg/src/i386/Makefile
+librdbg/src/i386/any/Makefile
+librdbg/src/powerpc/Makefile
+librdbg/src/powerpc/new_exception_processing/Makefile
+librdbg/src/m68k/Makefile
+librdbg/src/m68k/any/Makefile
+
 libchip/Makefile
 libchip/network/Makefile
 libchip/rtc/Makefile
 libchip/serial/Makefile
 libchip/ide/Makefile
+
 optman/Makefile
+
 wrapup/Makefile
 ])
 
