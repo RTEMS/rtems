@@ -32,6 +32,8 @@ LIBS += ../libfs/src/dosfs/$(ARCH)/libdosfs.a
 endif
 LIBS += ../libfs/src/imfs/$(ARCH)/libimfs.a
 
+LIBS += ../libmisc/wrapup/$(ARCH)/libmisc.a
+
 if HAS_NETWORKING
 LIBS += ../libnetworking/wrapup/$(ARCH)/libnetworking.a
 endif

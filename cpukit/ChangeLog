@@ -1,5 +1,9 @@
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Add libmisc.
+
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add AC_CONFIG_SUBDIR(libmisc).
 
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
