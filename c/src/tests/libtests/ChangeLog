@@ -1,3 +1,15 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* cpuuse/init.c, cpuuse/system.h, cpuuse/task1.c, cpuuse/task2.c,
+	cpuuse/task3.c, cpuuse/tswitch.c, malloctest/init.c,
+	malloctest/system.h, malloctest/task1.c, monitor/init.c,
+	monitor/system.h, putenvtest/init.c, rtems++/Init.cc,
+	rtems++/System.h, rtems++/Task1.cc, rtems++/Task2.cc,
+	rtems++/Task3.cc, rtems++/rtems++.doc, rtmonuse/getall.c,
+	rtmonuse/init.c, rtmonuse/system.h, rtmonuse/task1.c,
+	stackchk/blow.c, stackchk/init.c, stackchk/system.h,
+	stackchk/task1.c: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
