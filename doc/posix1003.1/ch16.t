@@ -23,6 +23,8 @@ pthread_attr_setstackaddr(), Function, Implemented
 pthread_attr_getstackaddr(), Function, Implemented
 pthread_attr_setdetachstate(), Function, Implemented
 pthread_attr_getdetachstate(), Function, Implemented
+PTHREAD_CREATE_JOINABLE, Constant, 
+PTHREAD_CREATE_DETACHED, Constant, 
 @end example
 
 @subsection Thread Creation
@@ -65,5 +67,6 @@ pthread_equal(), Function, Implemented
 
 @example
 pthread_once(), Function, Implemented
+PTHREAD_ONCE_INIT, Constant, 
 @end example
 

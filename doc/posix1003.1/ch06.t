@@ -56,12 +56,34 @@ write(), Function, Partial Implementation
 @example
 struct flock, Type, Unimplemented
 fcntl(), Function, Unimplemented
+F_DUPFD, Constant, 
+F_GETFD, Constant, 
+F_GETLK, Constant, 
+F_SETFD, Constant, 
+F_GETFL, Constant, 
+F_SETFL, Constant, 
+F_SETLK, Constant, 
+F_SETLKW, Constant, 
+FD_CLOEXEC, Constant, 
+F_RDLCK, Constant, 
+F_UNLCK, Constant, 
+F_WRLCK, Constant, 
+O_ACCMODE, Constant, 
 @end example
+
+NOTE: A number of constants are used by both @code{open} and @code{fcntl}.
+@code{O_CREAT}, @code{O_EXCL}, @code{O_NOCTTY}, @code{O_TRUNC},
+@code{O_APPEND}, @code{O_DSYNC}, @code{O_NONBLOCK}, @code{O_RSYNC},
+@code{O_SYNC}, @code{O_RDONLY}, @code{O_RDWR}, and @code{O_WRONLY}
+are also included in another section.  @xref{Open a File}.
 
 @subsection Reposition Read/Write File Offset
 
 @example
 lseek(), Function, Partial Implementation
+SEEK_SET, Constant, 
+SEEK_CUR, Constant, 
+SEEK_END, Constant, 
 @end example
 
 @section File Synchronization
@@ -82,8 +104,23 @@ fdatasync(), Function, Unimplemented
 
 @subsection Data Definitions for Asynchronous Input and Output
 
+@subsubsection Asynchronous I/O Control Block 
+
 @example
 struct aiocb, Type, Untested Implementation
+@end example
+
+@subsubsection Asynchronous I/O Manifest Constants
+
+@example
+AIO_CANCELED, Constant, 
+AIO_NOTCANCELED, Constant, 
+AIO_ALLDONE, Constant, 
+LIO_WAIT, Constant, 
+LIO_NOWAIT, Constant, 
+LIO_READ, Constant, 
+LIO_WRITE, Constant, 
+LIO_NOP, Constant, 
 @end example
 
 @subsection Asynchronous Read

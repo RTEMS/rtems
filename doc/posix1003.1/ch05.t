@@ -43,6 +43,18 @@ getcwd(), Function, Untested Implementation, assumes directory services
 
 @example
 open(), Function, Implemented, requires rework for directory services
+O_RDONLY, Constant, 
+O_WRONLY, Constant, 
+O_RDWR, Constant, 
+O_APPEND, Constant, 
+O_CREAT, Constant, 
+O_DSYNC, Constant, 
+O_EXCL, Constant, 
+O_NOCTTY, Constant, 
+O_NONBLOCK, Constant, 
+O_RSYNC, Constant, 
+O_SYNC, Constant, 
+O_TRUNC, Constant, 
 @end example
 
 @subsection Create a New File or Rewrite an Existing One
@@ -105,6 +117,40 @@ rename(), Function, Untested Implementation, assumes link/unlink
 struct stat, Type, Untested Implementation
 @end example
 
+@subsubsection <sys/stat.h> File Types
+
+@example
+S_ISDIR(), Function, 
+S_ISCHR(), Function, 
+S_ISBLK(), Function, 
+S_ISREG(), Function, 
+S_ISFIFO(), Function, 
+S_TYPEISMQ(), Function, 
+S_TYPEISSEM(), Function, 
+S_TYPEISSHM(), Function, 
+@end example
+
+@subsubsection <sys/stat.h> File Modes
+
+@example
+S_IRWXU, Constant, 
+S_IRUSR, Constant, 
+S_IWUSR, Constant, 
+S_IXUSR, Constant, 
+S_IRWXG, Constant, 
+S_IRGRP, Constant, 
+S_IWGRP, Constant, 
+S_IXGRP, Constant, 
+S_IRWXO, Constant, 
+S_IROTH, Constant, 
+S_IWOTH, Constant, 
+S_IXOTH, Constant, 
+S_ISUID, Constant, 
+S_ISGID, Constant, 
+@end example
+
+@subsubsection <sys/stat.h> Time Entries
+
 @subsection Get File Status
 
 @example
@@ -146,10 +192,23 @@ ftruncate(), Function, Unimplemented
 
 @section Configurable Pathname Variable
 
+@subsection Get Configurable Pathname Variables
+
 @example
 pathconf(), Function, Unimplemented
 fpathconf(), Function, Unimplemented
+_PC_LINK_MAX, Constant, 
+_PC_MAX_CANON, Constant, 
+_PC_MAX_INPUT, Constant, 
+_PC_MAX_INPUT, Constant, 
+_PC_NAME_MAX, Constant, 
+_PC_PATH_MAX, Constant, 
+_PC_PIPE_BUF, Constant, 
+_PC_ASYNC_IO, Constant, 
+_PC_CHOWN_RESTRICTED, Constant, 
+_PC_NO_TRUNC, Constant, 
+_PC_PRIO_IO, Constant, 
+_PC_SYNC_IO, Constant, 
+_PC_VDISABLE, Constant, 
 @end example
-
-@subsection Get Configurable Pathname Variables
 

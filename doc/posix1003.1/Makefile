@@ -49,8 +49,10 @@ dv: dvi
 view: ps
 	$(GHOSTVIEW) $(PROJECT).ps
 
+# run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
-	$(TEXI2DVI) $(PROJECT).texi
+	$(TEXI2DVI) -v $(PROJECT).texi
+	texi2dvi -v $(PROJECT).texi
 
 ch01.texi: ch01.t
 	$(BMENU) -c -p "Preface" \

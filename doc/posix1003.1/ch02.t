@@ -94,6 +94,10 @@ NOTE: time_t is not listed in this section but is used by many functions.
 
 @subsection Symbols From the C Standard
 
+@example
+NULL, Constant, 
+@end example
+
 @subsection POSIX.1 Symbols
 
 @example
@@ -105,111 +109,111 @@ _POSIX_C_SOURCE, Feature Flag,
 @section C Language Limits
 
 @example
-CHAR_BIT
-CHAR_MAX
-CHAR_MIN
-INT_MAX
-INT_MIN
-LONG_MAX
-LONG_MIN
-MB_LEN_MAX
-SCHAR_MAX
-SCHAR_MIN
-SHRT_MAX
-SHRT_MIN
-UCHAR_MAX
-UINT_MAX
-ULONG_MAX
-USHRT_MAX
+CHAR_BIT, Constant, 
+CHAR_MAX, Constant, 
+CHAR_MIN, Constant, 
+INT_MAX, Constant, 
+INT_MIN, Constant, 
+LONG_MAX, Constant, 
+LONG_MIN, Constant, 
+MB_LEN_MAX, Constant, 
+SCHAR_MAX, Constant, 
+SCHAR_MIN, Constant, 
+SHRT_MAX, Constant, 
+SHRT_MIN, Constant, 
+UCHAR_MAX, Constant, 
+UINT_MAX, Constant, 
+ULONG_MAX, Constant, 
+USHRT_MAX, Constant, 
 @end example
 
 @subsection Minimum Values
 
 @example
-_POSIX_AIO_LISTIO_MAX
-_POSIX_AIO_MAX
-_POSIX_ARG_MAX
-_POSIX_CHILD_MAX
-_POSIX_DELAYTIMER_MAX
-_POSIX_LINK_MAX
-_POSIX_LOGIN_NAME_MAX
-_POSIX_MAX_CANON
-_POSIX_MAX_INPUT
-_POSIX_MQ_OPEN_MAX
-_POSIX_MQ_PRIO_MAX
-_POSIX_NAME_MAX
-_POSIX_NGROUPS_MAX
-_POSIX_OPEN_MAX
-_POSIX_PATH_MAX
-_POSIX_PIPE_BUF
-_POSIX_RTSIG_MAX
-_POSIX_SEM_NSEMS_MAX
-_POSIX_SEM_VALUE_MAX
-_POSIX_SIGQUEUE_MAX
-_POSIX_SSIZE_MAX
-_POSIX_STREAM_MAX
-_POSIX_THREAD_DESTRUCTOR_ITERATIONS
-_POSIX_THREAD_KEYS_MAX
-_POSIX_THREAD_THREADS_MAX
-_POSIX_TTY_NAME_MAX
-_POSIX_TIME_MAX
-_POSIX_TZNAME_MAX
+_POSIX_AIO_LISTIO_MAX, Constant, 
+_POSIX_AIO_MAX, Constant, 
+_POSIX_ARG_MAX, Constant, 
+_POSIX_CHILD_MAX, Constant, 
+_POSIX_DELAYTIMER_MAX, Constant, 
+_POSIX_LINK_MAX, Constant, 
+_POSIX_LOGIN_NAME_MAX, Constant, 
+_POSIX_MAX_CANON, Constant, 
+_POSIX_MAX_INPUT, Constant, 
+_POSIX_MQ_OPEN_MAX, Constant, 
+_POSIX_MQ_PRIO_MAX, Constant, 
+_POSIX_NAME_MAX, Constant, 
+_POSIX_NGROUPS_MAX, Constant, 
+_POSIX_OPEN_MAX, Constant, 
+_POSIX_PATH_MAX, Constant, 
+_POSIX_PIPE_BUF, Constant, 
+_POSIX_RTSIG_MAX, Constant, 
+_POSIX_SEM_NSEMS_MAX, Constant, 
+_POSIX_SEM_VALUE_MAX, Constant, 
+_POSIX_SIGQUEUE_MAX, Constant, 
+_POSIX_SSIZE_MAX, Constant, 
+_POSIX_STREAM_MAX, Constant, 
+_POSIX_THREAD_DESTRUCTOR_ITERATIONS, Constant, 
+_POSIX_THREAD_KEYS_MAX, Constant, 
+_POSIX_THREAD_THREADS_MAX, Constant, 
+_POSIX_TTY_NAME_MAX, Constant, 
+_POSIX_TIME_MAX, Constant, 
+_POSIX_TZNAME_MAX, Constant, 
 @end example
 
 @subsection Run-Time Increasable Values
 
 @example
-_POSIX_NGROUPS_MAX
+_POSIX_NGROUPS_MAX, Constant, 
 @end example
 
 @subsection Run-Time Invariant Values (Possible Indeterminate)
 
 @example
-AIO_LISTIO_MAX
-AIO_MAX
-AIO_PRIO_DELTA_MAX
-ARG_MAX
-CHILD_MAX
-DELAYTIMER_MAX
-LOGIN_NAME_MAX
-MQ_OPEN_MAX
-OPEN_MAX
-PAGESIZE
-PTHREAD_DESTRUCTOR_ITERATIONS
-PTHREAD_KEYS_MAX
-PTHREAD_STACK_MIN
-PTHJREAD_THREADS_MAX
-RTSIG_MAX
-SEM_NSEMS_MAX
-SEM_VALUE_MAX
-SIGQUEUE_MAX
-STREAM_MAX
-TIMER_MAX
-TTY_NAME_MAX
-TZNAME_MAX
+AIO_LISTIO_MAX, Constant, 
+AIO_MAX, Constant, 
+AIO_PRIO_DELTA_MAX, Constant, 
+ARG_MAX, Constant, 
+CHILD_MAX, Constant, 
+DELAYTIMER_MAX, Constant, 
+LOGIN_NAME_MAX, Constant, 
+MQ_OPEN_MAX, Constant, 
+OPEN_MAX, Constant, 
+PAGESIZE, Constant, 
+PTHREAD_DESTRUCTOR_ITERATIONS, Constant, 
+PTHREAD_KEYS_MAX, Constant, 
+PTHREAD_STACK_MIN, Constant, 
+PTHJREAD_THREADS_MAX, Constant, 
+RTSIG_MAX, Constant, 
+SEM_NSEMS_MAX, Constant, 
+SEM_VALUE_MAX, Constant, 
+SIGQUEUE_MAX, Constant, 
+STREAM_MAX, Constant, 
+TIMER_MAX, Constant, 
+TTY_NAME_MAX, Constant, 
+TZNAME_MAX, Constant, 
 @end example
 
 @subsection Pathname Variable Values
 
 @example
-LINK_MAX
-MAX_CANON
-MAX_INPUT
-NAME_MAX
-PATH_MAX
-PIPE_BUF
+LINK_MAX, Constant, 
+MAX_CANON, Constant, 
+MAX_INPUT, Constant, 
+NAME_MAX, Constant, 
+PATH_MAX, Constant, 
+PIPE_BUF, Constant, 
 @end example
 
 @subsection Invariant Values
 
 @example
-SSIZE_MAX
+SSIZE_MAX, Constant, 
 @end example
 
 @subsection Maximum Values
 
 @example
-_POSIX_CLOCKRES_MIN
+_POSIX_CLOCKRES_MIN, Constant, 
 @end example
 
 @section Symbolic Constants
@@ -217,51 +221,57 @@ _POSIX_CLOCKRES_MIN
 @subsection Symbolic Constants for the @code{access} Function
 
 @example
-R_OK
-W_OK
-X_OK
-F_OK
+R_OK, Constant, 
+W_OK, Constant, 
+X_OK, Constant, 
+F_OK, Constant, 
 @end example
 
 @subsection Symbolic Constants for the @code{lseek} Function
 
 @example
-SEEK_SET
-SEEK_CUR
-SEEK_END
+SEEK_SET, Constant, 
+SEEK_CUR, Constant, 
+SEEK_END, Constant, 
 @end example
 
 @subsection Compile-Time Symbolic Constants for Portability Specifications
 
 @example
-_POSIX_ASYNCHRONOUS_IO
-_POSIX_FSYNC
-_POSIX_JOB_CONTROL
-_POSIX_MAPPED_FILES
-_POSIX_MEMLOCK
-_POSIX_MEMLOCK_RANGE
-_POSIX_MEMORY_PROTECTION
-_POSIX_MESSAGE_PASSING
-_POSIX_PRIORITIZED_IO
-_POSIX_PRIORITY_SCHEDULING
-_POSIX_REALTIME_SIGNALS
-_POSIX_SAVED_IDS
-_POSIX_SEMAPHORES
-_POSIX_SHARED_MEMORY_OBJECTS
-_POSIX_SYNCHRONIZED_IO
-_POSIX_THREADS
-_POSIX_THREAD_ATTR_STACKADDR
-_POSIX_THREAD_ATTR_STACKSIZE
-_POSIX_THREAD_PRIORITY_SCHEDULING
-_POSIX_THREAD_PRIO_INHERIT
-_POSIX_THREAD_PRIO_CEILING
-_POSIX_THREAD_PROCESS_SHARED
-_POSIX_THREAD_SAFE_FUNCTIONS
-_POSIX_TIMERS
-_POSIX_VERSION
+_POSIX_ASYNCHRONOUS_IO, Feature Flag, 
+_POSIX_FSYNC, Feature Flag, 
+_POSIX_JOB_CONTROL, Feature Flag, 
+_POSIX_MAPPED_FILES, Feature Flag, 
+_POSIX_MEMLOCK, Feature Flag, 
+_POSIX_MEMLOCK_RANGE, Feature Flag, 
+_POSIX_MEMORY_PROTECTION, Feature Flag, 
+_POSIX_MESSAGE_PASSING, Feature Flag, 
+_POSIX_PRIORITIZED_IO, Feature Flag, 
+_POSIX_PRIORITY_SCHEDULING, Feature Flag, 
+_POSIX_REALTIME_SIGNALS, Feature Flag, 
+_POSIX_SAVED_IDS, Feature Flag, 
+_POSIX_SEMAPHORES, Feature Flag, 
+_POSIX_SHARED_MEMORY_OBJECTS, Feature Flag, 
+_POSIX_SYNCHRONIZED_IO, Feature Flag, 
+_POSIX_THREADS, Feature Flag, 
+_POSIX_THREAD_ATTR_STACKADDR, Feature Flag, 
+_POSIX_THREAD_ATTR_STACKSIZE, Feature Flag, 
+_POSIX_THREAD_PRIORITY_SCHEDULING, Feature Flag, 
+_POSIX_THREAD_PRIO_INHERIT, Feature Flag, 
+_POSIX_THREAD_PRIO_CEILING, Feature Flag, 
+_POSIX_THREAD_PROCESS_SHARED, Feature Flag, 
+_POSIX_THREAD_SAFE_FUNCTIONS, Feature Flag, 
+_POSIX_TIMERS, Feature Flag, 
+_POSIX_VERSION, Feature Flag, 
 @end example
 
 @subsection Execution-Time Symbolic Constants for Portability Specifications
 
 @example
+_POSIX_ASYNC_IO, Feature Flag, 
+_POSIX_CHOWN_RESTRICTED, Feature Flag, 
+_POSIX_NO_TRUNC, Feature Flag, 
+_POSIX_PRIO_IO, Feature Flag, 
+_POSIX_SYNC_IO, Feature Flag, 
+_POSIX_VDISABLE, Feature Flag, 
 @end example

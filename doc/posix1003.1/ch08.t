@@ -173,9 +173,26 @@ NOTE: RTEMS has no notion of time zones.
 NOTE: @code{time} is also included in another section.  
 @ref{Get System Time}.
 
+From Surrounding Text
+
+@example
+EXIT_SUCCESS, Constant, 
+EXIT_FAILURE, Constant, 
+@end example
+
+
 @subsection Extensions to Time Functions
 
 @subsection Extensions to @code{setlocale} Function
+
+@example
+LC_CTYPE, Constant, 
+LC_COLLATE, Constant, 
+LC_TIME, Constant, 
+LC_NUMERIC, Constant, 
+LC_MONETARY, Constant, 
+LC_ALL, Constant, 
+@end example
 
 @section C Language Input/Output Functions
 
@@ -183,6 +200,9 @@ NOTE: @code{time} is also included in another section.
 
 @example
 fileno(), Function, Implemented
+STDIN_FILENO, Constant, 
+STDOUT_FILENO, Constant, 
+STDERR_FILENO, Constant, 
 @end example
 
 @subsection Open a Stream on a File Descriptor

@@ -15,6 +15,8 @@
 @example
 mlockall(), Function, Unimplemented
 munlockall(), Function, Unimplemented
+MCL_CURRENT, Constant, 
+MCL_FUTURE, Constant, 
 @end example
 
 @subsection Lock/Unlock a Rand of Process Address Space
@@ -30,6 +32,13 @@ munlock(), Function, Unimplemented
 
 @example
 mmap(), Function, Unimplemented
+PROT_READ, Constant, 
+PROT_WRITE, Constant, 
+PROT_EXEC, Constant, 
+PROT_NONE, Constant, 
+MAP_SHARED, Constant, 
+MAP_PRIVATE, Constant, 
+MAP_FIXED, Constant, 
 @end example
 
 @subsection Unmap Previously Mapped Addresses
@@ -48,6 +57,9 @@ mprotect(), Function, Unimplemented
 
 @example
 msync(), Function, Unimplemented, Unimplemented
+MS_ASYNC, Constant, 
+MS_SYNC, Constant, 
+MS_INVALIDATE, Constant, 
 @end example
 
 @section Shared Memory Functions

@@ -34,7 +34,7 @@ mq_close(), Function, Untested Implementation
 @subsection Remove a Message Queue
 
 @example
-mq_unlink, Function, Untested Implementation
+mq_unlink(), Function, Untested Implementation
 @end example
 
 @subsection Send a Message to a Message Queue
