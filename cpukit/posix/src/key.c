@@ -116,9 +116,8 @@ int pthread_setspecific(
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:   /* should never happen */
       return EINVAL;
-    case OBJECTS_REMOTE:
-      return EINVAL;       /* should never happen */
     case OBJECTS_LOCAL:
       index = _Objects_Get_index( _Thread_Executing->Object.id );
       class = _Objects_Get_class( _Thread_Executing->Object.id );
@@ -147,9 +146,8 @@ void *pthread_getspecific(
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:   /* should never happen */
       return NULL;
-    case OBJECTS_REMOTE:
-      return 0;       /* should never happen */
     case OBJECTS_LOCAL:
       index = _Objects_Get_index( _Thread_Executing->Object.id );
       class = _Objects_Get_class( _Thread_Executing->Object.id );
@@ -176,9 +174,8 @@ int pthread_key_delete(
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:   /* should never happen */
       return EINVAL;
-    case OBJECTS_REMOTE:
-      return 0;       /* should never happen */
     case OBJECTS_LOCAL:
       _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
 
