@@ -723,7 +723,7 @@ rtems_task Periodic_task(rtems_task_argument arg)
 
   name = rtems_build_name( 'P', 'E', 'R', 'D' );
 
-  status = rate_monotonic_create( name, &period );
+  status = rtems_rate_monotonic_create( name, &period );
   if ( status != RTEMS_STATUS_SUCCESSFUL ) @{
     printf( "rtems_monotonic_create failed with status of %d.\n", rc );
     exit( 1 );
@@ -731,7 +731,7 @@ rtems_task Periodic_task(rtems_task_argument arg)
 
 
   while ( 1 ) @{
-    if ( rate_monotonic_period( period, 100 ) == RTEMS_TIMEOUT )
+    if ( rtems_rate_monotonic_period( period, 100 ) == RTEMS_TIMEOUT )
       break;
 
     /* Perform some periodic actions */
@@ -739,9 +739,9 @@ rtems_task Periodic_task(rtems_task_argument arg)
 
   /* missed period so delete period and SELF */
 
-  status = rate_monotonic_delete( period );
+  status = rtems_rate_monotonic_delete( period );
   if ( status != RTEMS_STATUS_SUCCESSFUL ) @{
-    printf( "rate_monotonic_delete failed with status of %d.\n", status );
+    printf( "rtems_rate_monotonic_delete failed with status of %d.\n", status );
     exit( 1 );
   @}
 
@@ -786,14 +786,14 @@ rtems_task Periodic_task(rtems_task_argument arg)
   name_1 = rtems_build_name( 'P', 'E', 'R', '1' );
   name_2 = rtems_build_name( 'P', 'E', 'R', '2' );
 
-  (void ) rate_monotonic_create( name_1, &period_1 );
-  (void ) rate_monotonic_create( name_2, &period_2 );
+  (void ) rtems_rate_monotonic_create( name_1, &period_1 );
+  (void ) rtems_rate_monotonic_create( name_2, &period_2 );
 
   while ( 1 ) @{
-    if ( rate_monotonic_period( period_1, 100 ) == TIMEOUT )
+    if ( rtems_rate_monotonic_period( period_1, 100 ) == TIMEOUT )
       break;
 
-    if ( rate_monotonic_period( period_2, 40 ) == TIMEOUT )
+    if ( rtems_rate_monotonic_period( period_2, 40 ) == TIMEOUT )
       break;
 
     /*
@@ -801,7 +801,7 @@ rtems_task Periodic_task(rtems_task_argument arg)
      *  ticks 0 and 39 of every 100 ticks.
      */
 
-    if ( rate_monotonic_period( period_2, 30 ) == TIMEOUT )
+    if ( rtems_rate_monotonic_period( period_2, 30 ) == TIMEOUT )
       break;
 
     /*
@@ -811,16 +811,16 @@ rtems_task Periodic_task(rtems_task_argument arg)
      *  Check to make sure we didn't miss the period_2 period.
      */
 
-    if ( rate_monotonic_period( period_2, STATUS ) == TIMEOUT )
+    if ( rtems_rate_monotonic_period( period_2, STATUS ) == TIMEOUT )
       break;
 
-    (void) rate_monotonic_cancel( period_2 );
+    (void) rtems_rate_monotonic_cancel( period_2 );
   @}
 
   /* missed period so delete period and SELF */
 
-  (void ) rate_monotonic_delete( period_1 );
-  (void ) rate_monotonic_delete( period_2 );
+  (void ) rtems_rate_monotonic_delete( period_1 );
+  (void ) rtems_rate_monotonic_delete( period_2 );
   (void ) task_delete( SELF );
 @}
 @end example

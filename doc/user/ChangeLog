@@ -1,3 +1,8 @@
+2002-03-27	Eric Norum <eric.norum@usask.ca>
+
+	* PR161
+        * rtmon.t: Add rtems_ prefix to directives in the example.
+
 2002-03-22      Chris Johns <ccj@acm.org>
 
 	* io.t, conf.t: PR 160. Added the IO Manager's register and 
