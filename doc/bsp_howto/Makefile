@@ -19,7 +19,7 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES= clock.texi console.texi init.texi intro.texi \
-    linkcmds.texi bspstruct.texi makefiles.texi target.texi timer.texi
+    linkcmds.texi makefiles.texi target.texi timer.texi
 
 FILES= $(PROJECT).texi $(GENERATED_FILES)
 
@@ -27,7 +27,7 @@ INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
 info: dirs $(PROJECT)
 	#cp $(wildcard $(PROJECT) $(PROJECT)-*) $(INFO_INSTALL)
-	cp $(PROJECT) $(INFO_INSTALL)
+	# cp $(PROJECT) $(INFO_INSTALL)
 
 $(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
@@ -37,7 +37,7 @@ ps: dirs $(PROJECT).ps
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
-	cp $(PROJECT).ps $(PS_INSTALL)
+	# cp $(PROJECT).ps $(PS_INSTALL)
 
 # run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
@@ -50,11 +50,6 @@ intro.texi: intro.t Makefile
 	    -n "" ${*}.t
 
 target.texi: target.t Makefile
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" ${*}.t
-
-bspstruct.texi: bspstruct.t Makefile
 	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
@@ -90,9 +85,10 @@ timer.texi: timer.t Makefile
 	    -n "" ${*}.t
 
 html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
-	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
- 	    $(PROJECT).texi
+	@echo NOT BUILDING HTML
+	#-mkdir -p $(WWW_INSTALL)/$(PROJECT)
+	#$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
+ 	#    $(PROJECT).texi
 
 clean:
 	rm -f *.o $(PROG) *.txt core 
