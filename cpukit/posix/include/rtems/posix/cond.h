@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_POSIX_CONDITION_VARIABLES_h
 #define __RTEMS_POSIX_CONDITION_VARIABLES_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -33,7 +33,7 @@ extern "C" {
 /*
  *  Data Structure used to manage a POSIX condition variable
  */
- 
+
 typedef struct {
    Objects_Control       Object;
    int                   process_shared;
@@ -45,7 +45,7 @@ typedef struct {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
- 
+
 POSIX_EXTERN Objects_Information  _POSIX_Condition_variables_Information;
 
 /*
@@ -53,7 +53,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Condition_variables_Information;
  */
 
 extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
- 
+
 /*
  *  _POSIX_Condition_variables_Manager_initialization
  *
@@ -61,11 +61,11 @@ extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
+
 void _POSIX_Condition_variables_Manager_initialization(
   uint32_t   maximum_condition_variables
 );
- 
+
 /*
  *  _POSIX_Condition_variables_Allocate
  *
@@ -74,10 +74,10 @@ void _POSIX_Condition_variables_Manager_initialization(
  *  This function allocates a condition variable control block from
  *  the inactive chain of free condition variable control blocks.
  */
- 
-RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control * 
+
+RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *
   _POSIX_Condition_variables_Allocate( void );
- 
+
 /*
  *  _POSIX_Condition_variables_Free
  *
@@ -86,17 +86,17 @@ RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *
  *  This routine frees a condition variable control block to the
  *  inactive chain of free condition variable control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
   POSIX_Condition_variables_Control *the_condition_variable
 );
- 
+
 /*
  *  _POSIX_Condition_variables_Get
  *
  *  DESCRIPTION:
  *
- *  This function maps condition variable IDs to condition variable control 
+ *  This function maps condition variable IDs to condition variable control
  *  blocks.  If ID corresponds to a local condition variable, then it returns
  *  the_condition variable control pointer which maps to ID and location
  *  is set to OBJECTS_LOCAL.  if the condition variable ID is global and
@@ -104,23 +104,23 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
  *  and the_condition variable is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_condition variable is undefined.
  */
- 
+
 #if 0
 RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
   Objects_Id        *id,
   Objects_Locations *location
 );
 #endif
- 
+
 /*
  *  _POSIX_Condition_variables_Is_null
  *
  *  DESCRIPTION:
  *
- *  This function returns TRUE if the_condition variable is NULL 
+ *  This function returns TRUE if the_condition variable is NULL
  *  and FALSE otherwise.
  */
- 
+
 RTEMS_INLINE_ROUTINE boolean _POSIX_Condition_variables_Is_null (
   POSIX_Condition_variables_Control *the_condition_variable
 );
@@ -163,6 +163,6 @@ int _POSIX_Condition_variables_Wait_support(
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

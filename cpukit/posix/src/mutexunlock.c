@@ -23,7 +23,7 @@
 /*PAGE
  *
  *  11.3.3 Locking and Unlocking a Mutex, P1003.1c/Draft 10, p. 93
- *        
+ *
  *  NOTE: P1003.4b/D8 adds pthread_mutex_timedlock(), p. 29
  */
 
@@ -34,7 +34,7 @@ int pthread_mutex_unlock(
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
   CORE_mutex_Status             status;
- 
+
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:
@@ -51,7 +51,7 @@ int pthread_mutex_unlock(
     case OBJECTS_LOCAL:
       status = _CORE_mutex_Surrender(
         &the_mutex->Mutex,
-        the_mutex->Object.id, 
+        the_mutex->Object.id,
 #if defined(RTEMS_MULTIPROCESSING)
         _POSIX_Threads_mutex_MP_support
 #else

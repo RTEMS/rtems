@@ -24,14 +24,14 @@ typedef struct {
 
 #if 0
   /*
-   *  POSIX Interrupts 
+   *  POSIX Interrupts
    */
   uint32_t                interrupts_installed;
   CORE_semaphore_Control  Interrupt_Semaphore;
 #endif
 
   /*
-   *  POSIX Cancelability 
+   *  POSIX Cancelability
    */
   int                     cancelability_state;
   int                     cancelability_type;

@@ -15,7 +15,7 @@ extern "C" {
 #if defined(_POSIX_ASYNCHRONOUS_IO)
 
 /*
- *  6.7.1 Data Definitions for Asynchronous Input and Output, 
+ *  6.7.1 Data Definitions for Asynchronous Input and Output,
  *        P1003.1b-1993, p. 151
  */
 
@@ -95,7 +95,7 @@ int aio_error(
 );
 
 /*
- *  6.7.6 Retrieve Return Status of Asynchronous I/O Operation, 
+ *  6.7.6 Retrieve Return Status of Asynchronous I/O Operation,
  *        P1003.1b-1993, p. 162
  */
 

@@ -30,7 +30,7 @@
  */
 
 /* XXX this routine could probably be cleaned up */
-boolean _POSIX_signals_Unblock_thread( 
+boolean _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,
   int              signo,
   siginfo_t       *info
@@ -62,7 +62,7 @@ boolean _POSIX_signals_Unblock_thread(
       } else {
         *the_info = *info;
       }
-      
+
       _Thread_queue_Extract_with_proxy( the_thread );
       return TRUE;
     }

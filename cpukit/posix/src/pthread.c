@@ -29,11 +29,11 @@
  *
  *  The default pthreads attributes structure.
  *
- *  NOTE: Be careful .. if the default attribute set changes, 
+ *  NOTE: Be careful .. if the default attribute set changes,
  *        _POSIX_Threads_Initialize_user_threads will need to be examined.
  *
  */
- 
+
 const pthread_attr_t _POSIX_Threads_Default_attributes = {
   TRUE,                       /* is_initialized */
   NULL,                       /* stackaddr */
@@ -76,7 +76,7 @@ void _POSIX_Threads_Sporadic_budget_TSR(
     ticks = 1;
 
   the_thread->cpu_time_budget = ticks;
-  
+
   new_priority = _POSIX_Priority_To_core( api->ss_high_priority );
   the_thread->real_priority = new_priority;
 
@@ -128,7 +128,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
  *
  *  XXX
  */
- 
+
 boolean _POSIX_Threads_Create_extension(
   Thread_Control *executing,
   Thread_Control *created
@@ -136,23 +136,23 @@ boolean _POSIX_Threads_Create_extension(
 {
   POSIX_API_Control *api;
   POSIX_API_Control *executing_api;
- 
+
   api = _Workspace_Allocate( sizeof( POSIX_API_Control ) );
- 
+
   if ( !api )
     return FALSE;
- 
+
   created->API_Extensions[ THREAD_API_POSIX ] = api;
- 
+
   /* XXX check all fields are touched */
   api->Attributes  = _POSIX_Threads_Default_attributes;
   api->detachstate = _POSIX_Threads_Default_attributes.detachstate;
   api->schedpolicy = _POSIX_Threads_Default_attributes.schedpolicy;
   api->schedparam  = _POSIX_Threads_Default_attributes.schedparam;
-  api->schedparam.sched_priority = 
+  api->schedparam.sched_priority =
      _POSIX_Priority_From_core( created->current_priority );
- 
-  /*  
+
+  /*
    *  POSIX 1003.1 1996, 18.2.2.2
    */
   api->cancelation_requested = 0;
@@ -180,7 +180,7 @@ boolean _POSIX_Threads_Create_extension(
     STATES_WAITING_FOR_JOIN_AT_EXIT,
     0
   );
- 
+
   _Watchdog_Initialize(
     &api->Sporadic_timer,
     _POSIX_Threads_Sporadic_budget_TSR,
@@ -195,7 +195,7 @@ boolean _POSIX_Threads_Create_extension(
  *
  *  _POSIX_Threads_Delete_extension
  */
- 
+
 User_extensions_routine _POSIX_Threads_Delete_extension(
   Thread_Control *executing,
   Thread_Control *deleted
@@ -206,7 +206,7 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
   void              **value_ptr;
 
   api = deleted->API_Extensions[ THREAD_API_POSIX ];
- 
+
   /*
    *  Run the POSIX cancellation handlers
    */
@@ -216,12 +216,12 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
   /*
    *  Wakeup all the tasks which joined with this one
    */
- 
+
   value_ptr = (void **) deleted->Wait.return_argument;
 
   while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )
       *(void **)the_thread->Wait.return_argument = value_ptr;
- 
+
   if ( api->schedpolicy == SCHED_SPORADIC )
     (void) _Watchdog_Remove( &api->Sporadic_timer );
 
@@ -234,7 +234,7 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
  *
  *  _POSIX_Threads_Exitted_extension
  */
- 
+
 User_extensions_routine _POSIX_Threads_Exitted_extension(
   Thread_Control *executing
 )
@@ -253,7 +253,7 @@ User_extensions_routine _POSIX_Threads_Exitted_extension(
  *
  *  Output parameters:  NONE
  */
- 
+
 void _POSIX_Threads_Initialize_user_threads( void )
 {
   int                                 status;
@@ -262,24 +262,24 @@ void _POSIX_Threads_Initialize_user_threads( void )
   posix_initialization_threads_table *user_threads;
   pthread_t                           thread_id;
   pthread_attr_t                      attr;
- 
+
   user_threads = _POSIX_Threads_User_initialization_threads;
   maximum      = _POSIX_Threads_Number_of_initialization_threads;
 
   if ( !user_threads || maximum == 0 )
     return;
- 
+
   /*
    *  Be careful .. if the default attribute set changes, this may need to.
    *
    *  Setting the attributes explicitly is critical, since we don't want
-   *  to inherit the idle tasks attributes. 
+   *  to inherit the idle tasks attributes.
    */
 
   for ( index=0 ; index < maximum ; index++ ) {
     status = pthread_attr_init( &attr );
     assert( !status );
-      
+
     status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
     assert( !status );
 
@@ -307,7 +307,7 @@ API_extensions_Control _POSIX_Threads_API_extensions = {
   _POSIX_Threads_Initialize_user_threads,   /* postdriver */
   _POSIX_signals_Post_switch_extension,     /* post switch */
 };
- 
+
 User_extensions_Control _POSIX_Threads_User_extensions = {
   { NULL, NULL },
   { { NULL, NULL }, NULL },
@@ -321,7 +321,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
     NULL                                      /* fatal */
   }
 };
- 
+
 /*PAGE
  *
  *  _POSIX_Threads_Manager_initialization
@@ -333,15 +333,15 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  *
  *  Output parameters:  NONE
  */
- 
+
 void _POSIX_Threads_Manager_initialization(
   uint32_t                            maximum_pthreads,
   uint32_t                            number_of_initialization_threads,
   posix_initialization_threads_table *user_threads
-  
+
 )
 {
-  _POSIX_Threads_Number_of_initialization_threads = 
+  _POSIX_Threads_Number_of_initialization_threads =
                                            number_of_initialization_threads;
   _POSIX_Threads_User_initialization_threads = user_threads;
 
@@ -373,15 +373,15 @@ void _POSIX_Threads_Manager_initialization(
   /*
    *  Add all the extensions for this API
    */
- 
+
   _User_extensions_Add_API_set( &_POSIX_Threads_User_extensions );
 
   _API_extensions_Add( &_POSIX_Threads_API_extensions );
 
- 
+
   /*
    *  If we supported MP, then here we would ...
    *       Register the MP Process Packet routine.
    */
- 
+
 }

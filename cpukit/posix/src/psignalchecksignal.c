@@ -45,11 +45,11 @@ boolean _POSIX_signals_Check_signal(
   /*
    *  Since we made a union of these, only one test is necessary but this is
    *  safer.
-   */ 
+   */
 
   assert( _POSIX_signals_Vectors[ signo ].sa_handler ||
           _POSIX_signals_Vectors[ signo ].sa_sigaction );
- 
+
   /*
    *  Just to prevent sending a signal which is currently being ignored.
    */
@@ -86,7 +86,7 @@ boolean _POSIX_signals_Check_signal(
   /*
    *  Restore the previous set of blocked signals
    */
- 
+
   api->signals_blocked = saved_signals_blocked;
 
   return TRUE;

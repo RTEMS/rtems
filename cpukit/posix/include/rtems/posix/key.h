@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_POSIX_KEY_h
 #define __RTEMS_POSIX_KEY_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,7 +26,7 @@ extern "C" {
  *  NOTE:  The Values is a table indexed by the index portion of the
  *         ID of the currently executing thread.
  */
- 
+
 typedef struct {
    Objects_Control     Object;
    boolean             is_active;
@@ -38,9 +38,9 @@ typedef struct {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
- 
+
 POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
- 
+
 /*
  *  _POSIX_Keys_Manager_initialization
  *
@@ -48,11 +48,11 @@ POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
+
 void _POSIX_Key_Manager_initialization(
   uint32_t   maximum_keys
 );
- 
+
 /*
  *  _POSIX_Keys_Run_destructors
  *
@@ -64,7 +64,7 @@ void _POSIX_Key_Manager_initialization(
  *  NOTE:  This is the routine executed when a thread exits to
  *         run through all the keys and do the destructor action.
  */
- 
+
 void _POSIX_Keys_Run_destructors(
   Thread_Control *thread
 );
@@ -77,9 +77,9 @@ void _POSIX_Keys_Run_destructors(
  *  This function allocates a keys control block from
  *  the inactive chain of free keys control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void );
- 
+
 /*
  *  _POSIX_Keys_Free
  *
@@ -88,11 +88,11 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void );
  *  This routine frees a keys control block to the
  *  inactive chain of free keys control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
   POSIX_Keys_Control *the_key
 );
- 
+
 /*
  *  _POSIX_Keys_Get
  *
@@ -106,12 +106,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
  *  and the_key is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_key is undefined.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
   Objects_Id         id,
   Objects_Locations *location
 );
- 
+
 /*
  *  _POSIX_Keys_Is_null
  *
@@ -119,7 +119,7 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
  *
  *  This function returns TRUE if the_key is NULL and FALSE otherwise.
  */
- 
+
 RTEMS_INLINE_ROUTINE boolean _POSIX_Keys_Is_null (
   POSIX_Keys_Control *the_key
 );
@@ -129,6 +129,6 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Keys_Is_null (
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

@@ -21,7 +21,7 @@
  *
  *  11.4.4 Waiting on a Condition, P1003.1c/Draft 10, p. 105
  */
- 
+
 int pthread_cond_wait(
   pthread_cond_t     *cond,
   pthread_mutex_t    *mutex

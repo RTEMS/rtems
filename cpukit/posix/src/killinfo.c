@@ -35,7 +35,7 @@
 
 #define _POSIX_signals_Is_interested( _api, _mask ) \
   ( ~(_api)->signals_blocked & (_mask) )
-          
+
 int killinfo(
   pid_t               pid,
   int                 sig,
@@ -57,18 +57,18 @@ int killinfo(
   siginfo_t                    siginfo_struct;
   siginfo_t                   *siginfo;
   POSIX_signals_Siginfo_node  *psiginfo;
- 
+
   /*
    *  Only supported for the "calling process" (i.e. this node).
    */
- 
+
   if ( pid != getpid() )
     rtems_set_errno_and_return_minus_one( ESRCH );
 
   /*
    *  Validate the signal passed if not 0.
    */
- 
+
   if ( sig && !is_valid_signo(sig) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
@@ -82,7 +82,7 @@ int killinfo(
   }
 
   /*
-   *  P1003.1c/Draft 10, p. 33 says that certain signals should always 
+   *  P1003.1c/Draft 10, p. 33 says that certain signals should always
    *  be directed to the executing thread such as those caused by hardware
    *  faults.
    */
@@ -136,7 +136,7 @@ int killinfo(
        index++ ) {
 
     the_chain = &_POSIX_signals_Wait_queue.Queues.Priority[ index ];
- 
+
     for ( the_node = the_chain->first ;
           !_Chain_Is_tail( the_chain, the_node ) ;
           the_node = the_node->next ) {
@@ -236,7 +236,7 @@ int killinfo(
 
       /*
        *  Now the interested thread is blocked.
-       *  If the thread we are considering is not, the it becomes the 
+       *  If the thread we are considering is not, the it becomes the
        *  interested thread.
        */
 
@@ -256,7 +256,7 @@ int killinfo(
         continue;
 
       /*
-       *  Now both threads are blocked and the interested thread is not 
+       *  Now both threads are blocked and the interested thread is not
        *  interruptible.
        *  If the thread under consideration is interruptible by a signal,
        *  then it becomes the interested thread.
@@ -283,20 +283,20 @@ int killinfo(
    *    + a thread is created with the signal unblocked,
    *    + pthread_sigmask() unblocks the signal,
    *    + sigprocmask() unblocks the signal, OR
-   *    + sigaction() which changes the handler to SIG_IGN. 
+   *    + sigaction() which changes the handler to SIG_IGN.
    */
 
   the_thread = NULL;
   goto post_process_signal;
 
   /*
-   *  We found a thread which was interested, so now we mark that this 
-   *  thread needs to do the post context switch extension so it can 
+   *  We found a thread which was interested, so now we mark that this
+   *  thread needs to do the post context switch extension so it can
    *  evaluate the signals pending.
    */
 
 process_it:
-  
+
   the_thread->do_post_task_switch_extension = TRUE;
 
   /*

@@ -23,7 +23,7 @@
 /*PAGE
  *
  *  sem_unlink
- *  
+ *
  *  Unlinks a named semaphore, sem_close must also be called to remove
  *  the semaphore.
  *
@@ -37,7 +37,7 @@ int sem_unlink(
   int  status;
   register POSIX_Semaphore_Control *the_semaphore;
   sem_t                        the_semaphore_id;
- 
+
   _Thread_Disable_dispatch();
 
   status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id );
@@ -59,7 +59,7 @@ int sem_unlink(
     &_POSIX_Semaphore_Information,
     _Objects_Get_index( the_semaphore_id )
   );
-  
+
 #if defined(RTEMS_MULTIPROCESSING)
   if ( the_semaphore->process_shared == PTHREAD_PROCESS_SHARED ) {
     _Objects_MP_Close( &_POSIX_Semaphore_Information, the_semaphore_id );

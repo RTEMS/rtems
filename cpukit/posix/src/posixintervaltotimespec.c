@@ -22,7 +22,7 @@
  *
  *  _POSIX_Interval_to_timespec
  */
- 
+
 void _POSIX_Interval_to_timespec(
   Watchdog_Interval  ticks,
   struct timespec   *time
@@ -33,6 +33,6 @@ void _POSIX_Interval_to_timespec(
   usecs = ticks * _TOD_Microseconds_per_tick;
 
   time->tv_sec  = usecs / TOD_MICROSECONDS_PER_SECOND;
-  time->tv_nsec = (usecs % TOD_MICROSECONDS_PER_SECOND) * 
+  time->tv_nsec = (usecs % TOD_MICROSECONDS_PER_SECOND) *
                     TOD_NANOSECONDS_PER_MICROSECOND;
 }

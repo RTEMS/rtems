@@ -2,8 +2,8 @@
  *  NOTE:  The structure of the routines is identical to that of POSIX
  *         Message_queues to leave the option of having unnamed message
  *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also 
- *         the reason for the apparently unnecessary tracking of 
+ *         POSIX standard but unnamed message_queues are.  This is also
+ *         the reason for the apparently unnecessary tracking of
  *         the process_shared attribute.  [In addition to the fact that
  *         it would be trivial to add pshared to the mq_attr structure
  *         and have process private message queues.]
@@ -37,7 +37,7 @@
  *
  *  _POSIX_Message_queue_Delete
  */
- 
+
 void _POSIX_Message_queue_Delete(
   POSIX_Message_queue_Control *the_mq
 )
@@ -48,7 +48,7 @@ void _POSIX_Message_queue_Delete(
         _Workspace_Free( the_mq->Object.name );
 
       _Objects_Close( &_POSIX_Message_queue_Information, &the_mq->Object );
- 
+
       _CORE_message_queue_Close(
         &the_mq->Message_queue,
         NULL,        /* no MP support */
@@ -56,15 +56,15 @@ void _POSIX_Message_queue_Delete(
       );
 
     _POSIX_Message_queue_Free( the_mq );
- 
+
 #if 0 && defined(RTEMS_MULTIPROCESSING)
     if ( the_mq->process_shared == PTHREAD_PROCESS_SHARED ) {
- 
+
       _Objects_MP_Close(
         &_POSIX_Message_queue_Information,
         the_mq->Object.id
       );
- 
+
       _POSIX_Message_queue_MP_Send_process_packet(
         POSIX_MESSAGE_QUEUE_MP_ANNOUNCE_DELETE,
         the_mq->Object.id,
@@ -73,6 +73,6 @@ void _POSIX_Message_queue_Delete(
       );
     }
 #endif
- 
+
   }
 }

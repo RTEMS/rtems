@@ -47,8 +47,8 @@ int sigaction(
 
   if ( !is_valid_signo(sig) )
     rtems_set_errno_and_return_minus_one( EINVAL );
-  
-  /* 
+
+  /*
    *  Some signals cannot be ignored (P1003.1b-1993, pp. 70-72 and references.
    *
    *  NOTE: Solaris documentation claims to "silently enforce" this which
@@ -57,7 +57,7 @@ int sigaction(
 
   if ( sig == SIGKILL )
     rtems_set_errno_and_return_minus_one( EINVAL );
-  
+
   /*
    *  Evaluate the new action structure and set the global signal vector
    *  appropriately.
@@ -83,7 +83,7 @@ int sigaction(
   /*
    *  No need to evaluate or dispatch because:
    *
-   *    + If we were ignoring the signal before, none could be pending 
+   *    + If we were ignoring the signal before, none could be pending
    *      now (signals not posted when SIG_IGN).
    *    + If we are now ignoring a signal that was previously pending,
    *      we clear the pending signal indicator.

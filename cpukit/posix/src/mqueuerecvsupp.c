@@ -2,8 +2,8 @@
  *  NOTE:  The structure of the routines is identical to that of POSIX
  *         Message_queues to leave the option of having unnamed message
  *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also 
- *         the reason for the apparently unnecessary tracking of 
+ *         POSIX standard but unnamed message_queues are.  This is also
+ *         the reason for the apparently unnecessary tracking of
  *         the process_shared attribute.  [In addition to the fact that
  *         it would be trivial to add pshared to the mq_attr structure
  *         and have process private message queues.]
@@ -39,7 +39,7 @@
  *  NOTE: XXX Document how size, priority, length, and the buffer go
  *        through the layers.
  */
- 
+
 ssize_t _POSIX_Message_queue_Receive_support(
   mqd_t               mqdes,
   char               *msg_ptr,
@@ -52,7 +52,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   POSIX_Message_queue_Control_fd  *the_mq_fd;
   Objects_Locations                location;
   uint32_t                         length_out;
- 
+
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
@@ -73,7 +73,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
         _Thread_Enable_dispatch();
         rtems_set_errno_and_return_minus_one( EMSGSIZE );
       }
- 
+
       /*
        *  Now if something goes wrong, we return a "length" of -1
        *  to indicate an error.
@@ -89,7 +89,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
         (the_mq_fd->oflag & O_NONBLOCK) ? FALSE : TRUE,
         timeout
       );
-      
+
       _Thread_Enable_dispatch();
       *msg_prio =
         _POSIX_Message_queue_Priority_from_core(_Thread_Executing->Wait.count);

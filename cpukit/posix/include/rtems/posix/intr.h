@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_POSIX_KEY_h
 #define __RTEMS_POSIX_KEY_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -33,15 +33,15 @@ typedef struct {
   int            deferred_count;
   Chain_Control  Handlers;
 } POSIX_Interrupt_Control;
- 
+
 /*
  *  Data Structure used to manage a POSIX Interrupt Handler
  */
- 
+
 typedef struct {
   Objects_Control         Object;
-  int                     is_active; 
-  intr_t                  vector; 
+  int                     is_active;
+  intr_t                  vector;
   Thread_Control         *server;
   int                   (*handler)( void *area );
   volatile void           *user_data_area;
@@ -51,7 +51,7 @@ typedef struct {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
- 
+
 POSIX_EXTERN Objects_Information _POSIX_Interrupt_Handlers_Information;
 
 /*
@@ -59,9 +59,9 @@ POSIX_EXTERN Objects_Information _POSIX_Interrupt_Handlers_Information;
  *  interrupt handlers installed on each vector.
  */
 
-POSIX_EXTERN POSIX_Interrupt_Control 
+POSIX_EXTERN POSIX_Interrupt_Control
                _POSIX_Interrupt_Information[ ISR_NUMBER_OF_VECTORS ];
- 
+
 /*
  *  _POSIX_Interrupt_Manager_initialization
  *
@@ -69,11 +69,11 @@ POSIX_EXTERN POSIX_Interrupt_Control
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
-void _POSIX_Interrupt_Manager_initialization( 
+
+void _POSIX_Interrupt_Manager_initialization(
   uint32_t    maximum_interrupt_handlers
 );
- 
+
 /*
  *  _POSIX_Interrupt_Allocate
  *
@@ -82,10 +82,10 @@ void _POSIX_Interrupt_Manager_initialization(
  *  This function allocates a interrupt handler control block from
  *  the inactive chain of free interrupt handler control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Interrupt_Handler_control *
   _POSIX_Interrupt_Allocate( void );
- 
+
 /*
  *  _POSIX_Interrupt_Free
  *
@@ -94,17 +94,17 @@ RTEMS_INLINE_ROUTINE POSIX_Interrupt_Handler_control *
  *  This routine frees a interrupt handler control block to the
  *  inactive chain of free interrupt handler control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _POSIX_Interrupt_Free (
   POSIX_Interrupt_Handler_control *the_intr
 );
- 
+
 /*
  *  _POSIX_Interrupt_Get
  *
  *  DESCRIPTION:
  *
- *  This function maps interrupt handler IDs to interrupt handler control 
+ *  This function maps interrupt handler IDs to interrupt handler control
  *  blocks.  If ID corresponds to a local interrupt handler, then it returns
  *  the_intr control pointer which maps to ID and location
  *  is set to OBJECTS_LOCAL.  if the interrupt handler ID is global and
@@ -112,12 +112,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Interrupt_Free (
  *  and the_intr is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_intr is undefined.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Interrupt_Control *_POSIX_Interrupt_Get (
   Objects_Id         id,
   Objects_Locations *location
 );
- 
+
 /*
  *  _POSIX_Interrupt_Is_null
  *
@@ -125,11 +125,11 @@ RTEMS_INLINE_ROUTINE POSIX_Interrupt_Control *_POSIX_Interrupt_Get (
  *
  *  This function returns TRUE if the_intr is NULL and FALSE otherwise.
  */
- 
+
 RTEMS_INLINE_ROUTINE boolean _POSIX_Interrupt_Is_null (
   POSIX_Interrupt_Handler_control *the_intr
 );
- 
+
 /*
  *  _POSIX_Interrupt_Handler
  *
@@ -137,7 +137,7 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Interrupt_Is_null (
  *
  *  This function XXX.
  */
- 
+
 void _POSIX_Interrupt_Handler(
   ISR_Vector_number   vector
 );
@@ -147,6 +147,6 @@ void _POSIX_Interrupt_Handler(
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

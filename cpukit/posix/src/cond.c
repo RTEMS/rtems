@@ -21,7 +21,7 @@
  *
  *  _POSIX_Condition_variables_Manager_initialization
  *
- *  This routine initializes all condition variable manager related data 
+ *  This routine initializes all condition variable manager related data
  *  structures.
  *
  *  Input parameters:
@@ -29,7 +29,7 @@
  *
  *  Output parameters:  NONE
  */
- 
+
 void _POSIX_Condition_variables_Manager_initialization(
   uint32_t   maximum_condition_variables
 )
@@ -48,5 +48,5 @@ void _POSIX_Condition_variables_Manager_initialization(
     FALSE,                      /* TRUE if this is a global object class */
     NULL                        /* Proxy extraction support callout */
 #endif
-  ); 
+  );
 }

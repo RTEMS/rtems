@@ -41,7 +41,7 @@ int pthread_sigmask(
 
   if ( oset )
     *oset = api->signals_blocked;
- 
+
   if ( !set )
     return 0;
 
@@ -63,7 +63,7 @@ int pthread_sigmask(
 
   /* XXX evaluate the new set */
 
-  if ( ~api->signals_blocked & 
+  if ( ~api->signals_blocked &
        (api->signals_pending | _POSIX_signals_Pending) ) {
     _Thread_Executing->do_post_task_switch_extension = TRUE;
     _Thread_Dispatch();

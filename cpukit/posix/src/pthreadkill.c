@@ -37,7 +37,7 @@ int pthread_kill(
   if ( sig && !is_valid_signo(sig) )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-/* commented out when posix timers added 
+/* commented out when posix timers added
   if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO )
     rtems_set_errno_and_return_minus_one( ENOSYS );
 */

@@ -33,9 +33,9 @@ int pthread_key_create(
 
 
   _Thread_Disable_dispatch();
- 
+
   the_key = _POSIX_Keys_Allocate();
- 
+
   if ( !the_key ) {
     _Thread_Enable_dispatch();
     return EAGAIN;
@@ -55,7 +55,7 @@ int pthread_key_create(
 
     if ( _Objects_Information_table[ the_api ] &&
          _Objects_Information_table[ the_api ][ 1 ] ) {
-      bytes_to_allocate = sizeof( void * ) * 
+      bytes_to_allocate = sizeof( void * ) *
         (_Objects_Information_table[ the_api ][ 1 ]->maximum + 1);
       table = _Workspace_Allocate( bytes_to_allocate );
       if ( !table ) {
@@ -63,14 +63,14 @@ int pthread_key_create(
               the_api >= 1;
               the_api-- )
           _Workspace_Free( the_key->Values[ the_api ] );
-  
+
         _POSIX_Keys_Free( the_key );
         _Thread_Enable_dispatch();
         return ENOMEM;
       }
 
       the_key->Values[ the_api ] = table;
-      memset( table, '\0', bytes_to_allocate ); 
+      memset( table, '\0', bytes_to_allocate );
     } else {
       the_key->Values[ the_api ] = NULL;
     }
@@ -81,7 +81,7 @@ int pthread_key_create(
   the_key->is_active = TRUE;
 
   _Objects_Open( &_POSIX_Keys_Information, &the_key->Object, 0 );
- 
+
   *key = the_key->Object.id;
 
   _Thread_Enable_dispatch();

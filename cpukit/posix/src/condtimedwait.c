@@ -21,7 +21,7 @@
  *
  *  11.4.4 Waiting on a Condition, P1003.1c/Draft 10, p. 105
  */
- 
+
 int pthread_cond_timedwait(
   pthread_cond_t        *cond,
   pthread_mutex_t       *mutex,
@@ -48,7 +48,7 @@ int pthread_cond_timedwait(
 
   if ( ( difference.tv_sec < 0 ) || ( ( difference.tv_sec == 0 ) &&
        ( difference.tv_nsec < 0 ) ) )
-    already_timedout = TRUE;   
+    already_timedout = TRUE;
 
   timeout = _POSIX_Timespec_to_interval( &difference );
 

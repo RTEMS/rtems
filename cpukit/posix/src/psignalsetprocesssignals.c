@@ -27,13 +27,13 @@
  *
  *  _POSIX_signals_Set_process_signals
  */
- 
+
 void _POSIX_signals_Set_process_signals(
   sigset_t   mask
 )
 {
   ISR_Level  level;
- 
+
   _ISR_Disable( level );
     if ( !_POSIX_signals_Pending )
       _Thread_Do_post_task_switch_extension++;

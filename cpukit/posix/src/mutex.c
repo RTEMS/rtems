@@ -31,7 +31,7 @@
  *
  *  Output parameters:  NONE
  */
- 
+
 void _POSIX_Mutex_Manager_initialization(
   uint32_t   maximum_mutexes
 )

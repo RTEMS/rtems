@@ -49,9 +49,9 @@ void _POSIX_Keys_Run_destructors(
 
     for ( index=1 ; index <= _POSIX_Keys_Information.maximum ; index++ ) {
 
-      the_key = (POSIX_Keys_Control *) 
+      the_key = (POSIX_Keys_Control *)
         _POSIX_Keys_Information.local_table[ index ];
-      
+
       if ( the_key && the_key->is_active && the_key->destructor ) {
         value = the_key->Values[ pthread_class ][ pthread_index ];
         if ( value ) {
@@ -62,7 +62,7 @@ void _POSIX_Keys_Run_destructors(
       }
     }
 
-    if ( are_all_null == TRUE ) 
+    if ( are_all_null == TRUE )
       return;
 
     iterations++;
@@ -75,6 +75,6 @@ void _POSIX_Keys_Run_destructors(
      */
 
     if ( iterations >= PTHREAD_DESTRUCTOR_ITERATIONS )
-      return; 
+      return;
   }
 }

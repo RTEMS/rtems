@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __POSIX_API_h
 #define __POSIX_API_h
- 
+
 #include <rtems/config.h>
 
 /*PAGE
@@ -24,7 +24,7 @@
  *
  *  XXX
  */
- 
+
 void _POSIX_API_Initialize(
   rtems_configuration_table *configuration_table
 );

@@ -51,7 +51,7 @@ int pthread_mutex_init(
     return EINVAL;
 
   /*
-   *  This code should eventually be removed.  
+   *  This code should eventually be removed.
    *
    *  Although the POSIX specification says:
    *
@@ -70,7 +70,7 @@ int pthread_mutex_init(
    *  Joel Sherrill <joel@OARcorp.com>     14 May 1999
    */
 
-  
+
 #if 0
   /* avoid infinite recursion on call to this routine in _POSIX_Mutex_Get */
 
@@ -89,8 +89,8 @@ int pthread_mutex_init(
     }
   }
 #endif
- 
-  if ( !the_attr->is_initialized ) 
+
+  if ( !the_attr->is_initialized )
     return EINVAL;
 
   /*
@@ -103,11 +103,11 @@ int pthread_mutex_init(
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
     return POSIX_MP_NOT_IMPLEMENTED();
 #endif
- 
+
   /*
    *  Determine the discipline of the mutex
    */
-  
+
   switch ( the_attr->protocol ) {
     case PTHREAD_PRIO_NONE:
       the_discipline = CORE_MUTEX_DISCIPLINES_FIFO;
@@ -128,14 +128,14 @@ int pthread_mutex_init(
   _Thread_Disable_dispatch();
 
   the_mutex = _POSIX_Mutex_Allocate();
- 
+
   if ( !the_mutex ) {
     _Thread_Enable_dispatch();
     return EAGAIN;
   }
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED && 
+  if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED &&
        !( _Objects_MP_Allocate_and_open( &_POSIX_Mutex_Information, 0,
                             the_mutex->Object.id, FALSE ) ) ) {
     _POSIX_Mutex_Free( the_mutex );

@@ -68,7 +68,7 @@ int mq_send(
   mqd_t         mqdes,
   const char   *msg_ptr,
   size_t        msg_len,
-  unsigned int  msg_prio 
+  unsigned int  msg_prio
 );
 
 #if defined(_POSIX_TIMEOUTS)
@@ -113,7 +113,7 @@ int mq_timedreceive(                  /* XXX: should this be ssize_t */
 #if defined(_POSIX_REALTIME_SIGNALS)
 
 /*
- *  15.2.6 Notify Process that a Message is Available on a Queue, 
+ *  15.2.6 Notify Process that a Message is Available on a Queue,
  *         P1003.1b-1993, p. 280
  */
 

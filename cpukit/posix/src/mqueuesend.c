@@ -2,8 +2,8 @@
  *  NOTE:  The structure of the routines is identical to that of POSIX
  *         Message_queues to leave the option of having unnamed message
  *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also 
- *         the reason for the apparently unnecessary tracking of 
+ *         POSIX standard but unnamed message_queues are.  This is also
+ *         the reason for the apparently unnecessary tracking of
  *         the process_shared attribute.  [In addition to the fact that
  *         it would be trivial to add pshared to the mq_attr structure
  *         and have process private message queues.]
@@ -43,7 +43,7 @@ int mq_send(
   mqd_t         mqdes,
   const char   *msg_ptr,
   size_t        msg_len,
-  unsigned int  msg_prio 
+  unsigned int  msg_prio
 )
 {
   return _POSIX_Message_queue_Send_support(

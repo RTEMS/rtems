@@ -66,7 +66,7 @@ int aio_error(
 
 /*PAGE
  *
- *  6.7.6 Retrieve Return Status of Asynchronous I/O Operation, 
+ *  6.7.6 Retrieve Return Status of Asynchronous I/O Operation,
  *        P1003.1b-1993, p. 162
  */
 

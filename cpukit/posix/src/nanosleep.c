@@ -37,9 +37,9 @@ int nanosleep(
   the_rqtp = (struct timespec *)rqtp;
 
   /*
-   *  Return EAGAIN if the delay interval is negative.  
+   *  Return EAGAIN if the delay interval is negative.
    *
-   *  NOTE:  This behavior is beyond the POSIX specification.  
+   *  NOTE:  This behavior is beyond the POSIX specification.
    *         FSU pthreads shares this behavior.
    */
 
@@ -51,7 +51,7 @@ int nanosleep(
 
   if ( the_rqtp->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
     rtems_set_errno_and_return_minus_one( EINVAL );
- 
+
   ticks = _POSIX_Timespec_to_interval( the_rqtp );
 
   /*
@@ -64,12 +64,12 @@ int nanosleep(
       _Thread_Yield_processor();
     _Thread_Enable_dispatch();
     if ( rmtp ) {
-       rmtp->tv_sec = 0; 
-       rmtp->tv_nsec = 0; 
+       rmtp->tv_sec = 0;
+       rmtp->tv_nsec = 0;
     }
     return 0;
   }
-  
+
   _Thread_Disable_dispatch();
     _Thread_Set_state(
       _Thread_Executing,
@@ -87,7 +87,7 @@ int nanosleep(
   /* calculate time remaining */
 
   if ( rmtp ) {
-    ticks -= 
+    ticks -=
       _Thread_Executing->Timer.stop_time - _Thread_Executing->Timer.start_time;
 
     _POSIX_Interval_to_timespec( ticks, rmtp );

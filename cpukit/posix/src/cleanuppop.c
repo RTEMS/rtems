@@ -32,9 +32,9 @@ void pthread_cleanup_pop(
   Chain_Control                     *handler_stack;
   POSIX_API_Control                 *thread_support;
   ISR_Level                          level;
- 
+
   thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
- 
+
   handler_stack = &thread_support->Cancellation_Handlers;
 
   _ISR_Disable( level );
@@ -42,11 +42,11 @@ void pthread_cleanup_pop(
       _ISR_Enable( level );
       return;
     }
- 
-    handler = (POSIX_Cancel_Handler_control *) 
+
+    handler = (POSIX_Cancel_Handler_control *)
         _Chain_Tail( handler_stack )->previous;
     _Chain_Extract_unprotected( &handler->Node );
-   
+
   _ISR_Enable( level );
 
   tmp_handler = *handler;

@@ -31,7 +31,7 @@ int pthread_mutex_destroy(
 {
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
- 
+
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:
@@ -52,9 +52,9 @@ int pthread_mutex_destroy(
         _Thread_Enable_dispatch();
         return EBUSY;
       }
- 
+
       _Objects_Close( &_POSIX_Mutex_Information, &the_mutex->Object );
- 
+
       _CORE_mutex_Flush(
         &the_mutex->Mutex,
 #if defined(RTEMS_MULTIPROCESSING)
@@ -64,14 +64,14 @@ int pthread_mutex_destroy(
 #endif
         EINVAL
       );
- 
+
       _POSIX_Mutex_Free( the_mutex );
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
       if ( the_mutex->process_shared == PTHREAD_PROCESS_SHARED ) {
- 
+
         _Objects_MP_Close( &_POSIX_Mutex_Information, the_mutex->Object.id );
- 
+
         _POSIX_Mutex_MP_Send_process_packet(
           POSIX_MUTEX_MP_ANNOUNCE_DELETE,
           the_mutex->Object.id,

@@ -65,7 +65,7 @@ int pthread_create(
    *
    *  If inheritsched is set to PTHREAD_INHERIT_SCHED, then this thread
    *  inherits scheduling attributes from the creating thread.   If it is
-   *  PTHREAD_EXPLICIT_SCHED, then scheduling parameters come from the 
+   *  PTHREAD_EXPLICIT_SCHED, then scheduling parameters come from the
    *  attributes structure.
    */
 
@@ -74,19 +74,19 @@ int pthread_create(
       api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
       schedpolicy = api->schedpolicy;
       schedparam  = api->schedparam;
-      break; 
+      break;
 
     case PTHREAD_EXPLICIT_SCHED:
       schedpolicy = the_attr->schedpolicy;
       schedparam  = the_attr->schedparam;
-      break; 
+      break;
 
     default:
       return EINVAL;
   }
 
   /*
-   *  Check the contentionscope since rtems only supports PROCESS wide 
+   *  Check the contentionscope since rtems only supports PROCESS wide
    *  contention (i.e. no system wide contention).
    */
 
@@ -99,9 +99,9 @@ int pthread_create(
 
   if ( !_POSIX_Priority_Is_valid( schedparam.sched_priority ) )
     return EINVAL;
- 
+
   core_priority = _POSIX_Priority_To_core( schedparam.sched_priority );
- 
+
   /*
    *  Set the core scheduling policy information.
    */
@@ -113,7 +113,7 @@ int pthread_create(
     case SCHED_OTHER:
       budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
       break;
-     
+
     case SCHED_FIFO:
       budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
       break;
@@ -125,7 +125,7 @@ int pthread_create(
     case SCHED_SPORADIC:
       budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
       budget_callout = _POSIX_Threads_Sporadic_budget_callout;
-  
+
       if ( _POSIX_Timespec_to_interval( &schedparam.ss_replenish_period ) <
            _POSIX_Timespec_to_interval( &schedparam.ss_initial_budget ) )
         return EINVAL;
@@ -140,7 +140,7 @@ int pthread_create(
   }
 
   /*
-   *  Currently all POSIX threads are floating point if the hardware 
+   *  Currently all POSIX threads are floating point if the hardware
    *  supports it.
    */
 
@@ -154,9 +154,9 @@ int pthread_create(
   /*
    *  Disable dispatch for protection
    */
- 
+
   _Thread_Disable_dispatch();
- 
+
   /*
    *  Allocate the thread control block.
    *
@@ -173,7 +173,7 @@ int pthread_create(
   /*
    *  Initialize the core thread for this task.
    */
- 
+
   status = _Thread_Initialize(
     &_POSIX_Threads_Information,
     the_thread,
@@ -187,7 +187,7 @@ int pthread_create(
     0,                    /* isr level */
     NULL                  /* posix threads don't have a name */
   );
- 
+
   if ( !status ) {
     _POSIX_Threads_Free( the_thread );
     _Thread_Enable_dispatch();
@@ -198,7 +198,7 @@ int pthread_create(
    *  finish initializing the per API structure
    */
 
-  
+
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   api->Attributes  = *the_attr;

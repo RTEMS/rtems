@@ -1,6 +1,6 @@
 /*
  *  NOTE: Each task has an interrupt semaphore associated with it.
- *        No matter which interrupt occurs that it has registered, 
+ *        No matter which interrupt occurs that it has registered,
  *        the same semaphore is used.
  *
  *  This whole interrupt scheme may have been eliminated in a later draft.
@@ -32,8 +32,8 @@
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
-void _POSIX_Interrupt_Manager_initialization( 
+
+void _POSIX_Interrupt_Manager_initialization(
   uint32_t    maximum_interrupt_handlers
 )
 {
@@ -58,7 +58,7 @@ void _POSIX_Interrupt_Manager_initialization(
 
   for ( index=0 ; index < CPU_INTERRUPT_NUMBER_OF_VECTORS ; index++ ) {
     the_vector = &_POSIX_Interrupt_Information[ index ];
-    
+
     the_vector->number_installed = 0;
     the_vector->lock_count       = 0;
     the_vector->deferred_count   = 0;
@@ -83,14 +83,14 @@ int intr_capture(
   POSIX_API_Thread_Support_Control  *thread_support;
   proc_ptr                           old_handler;
 
-  if ( !_ISR_Is_vector_number_valid( intr ) || 
+  if ( !_ISR_Is_vector_number_valid( intr ) ||
        !_ISR_Is_valid_user_handler( intr_handler ) )
     return EINVAL;
 
   _Thread_Disable_dispatch();
 
   the_intr = _POSIX_Interrupt_Allocate();
- 
+
   if ( !the_intr ) {
     _Thread_Enable_dispatch();
     return ENOMEM;
@@ -123,18 +123,18 @@ int intr_capture(
   if ( !the_vector->number_installed++ )
     _ISR_Install_vector(
       intr,
-      (proc_ptr) _POSIX_Interrupt_Handler, 
+      (proc_ptr) _POSIX_Interrupt_Handler,
       &old_handler
     );
 
   _Objects_Open( &_POSIX_Interrupt_Handlers_Information, &the_intr->Object, 0 );
- 
+
   /*
    *  Normally, an Id would be returned here.
    */
- 
+
   _Thread_Enable_dispatch();
- 
+
   return 0;
 }
 
@@ -190,7 +190,7 @@ int intr_release(
     _Thread_Enable_dispatch();
     return EINVAL;  /* XXX should be ENOISR; */
   }
-    
+
   /*
    *  OK now we have found the interrupt handler and can do some work.
    */
@@ -198,7 +198,7 @@ int intr_release(
   _Chain_Extract( &the_intr->Object.Node );
 
   the_intr->is_active = FALSE;
- 
+
   the_vector->number_installed -= 1;
 
   thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
@@ -213,7 +213,7 @@ int intr_release(
   _Objects_Close( &_POSIX_Interrupt_Handlers_Information, &the_intr->Object );
 
   _POSIX_Interrupt_Free( the_intr );
- 
+
   _Thread_Enable_dispatch();
 
   return 0;
@@ -240,7 +240,7 @@ int intr_lock(
 
   return 0;
 }
-  
+
 /*PAGE
  *
  *  22.3.1 Associate a User-Written ISR with an Interrupt, P1003.4b/D8, p. 74
@@ -251,22 +251,22 @@ int intr_unlock(
 )
 {
   POSIX_Interrupt_Control           *the_vector;
- 
+
   _Thread_Disable_dispatch();
- 
+
   the_vector = &_POSIX_Interrupt_Information[ intr ];
- 
+
   if ( !--the_vector->lock_count ) {
     while ( --the_vector->deferred_count ) {
       _POSIX_Interrupt_Handler( intr );
     }
   }
- 
+
   _Thread_Enable_dispatch();
- 
+
   return 0;
 }
-  
+
 /*
  *  22.3.2 Await Interrupt Notification, P1003.4b/D8, p. 76
  */
@@ -290,7 +290,7 @@ int intr_timed_wait(
       0,             /* XXX does id=0 hurt in this case? */
       TRUE,
       ticks
-    ); 
+    );
   _Thread_Enable_dispatch();
 
   return _Thread_Executing->Wait.return_code;  /* XXX should be POSIX */
@@ -298,7 +298,7 @@ int intr_timed_wait(
 
 /*PAGE
  *
- *  _POSIX_Interrupt_Handler 
+ *  _POSIX_Interrupt_Handler
  *
  */
 
@@ -311,14 +311,14 @@ void _POSIX_Interrupt_Handler(
   POSIX_API_Thread_Support_Control  *thread_support;
   Chain_Node                        *the_node;
   int                                status;
- 
+
   the_vector = &_POSIX_Interrupt_Information[ vector ];
- 
+
   the_node = _Chain_Head( &the_vector->Handlers );
- 
+
   for ( ; !_Chain_Is_tail( &the_vector->Handlers, the_node ) ; ) {
     the_intr = (POSIX_Interrupt_Handler_control *) the_node;
- 
+
     status = (*the_intr->handler)( (void *) the_intr->user_data_area );
 
     switch ( status ) {

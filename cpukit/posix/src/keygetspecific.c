@@ -30,7 +30,7 @@ void *pthread_getspecific(
   uint32_t                     class;
   Objects_Locations            location;
   void                        *key_data;
- 
+
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
     case OBJECTS_ERROR:

@@ -1,5 +1,5 @@
 /*
- *  POSIX Message Queue Error Translation 
+ *  POSIX Message Queue Error Translation
  *
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -41,7 +41,7 @@
  *    rtems status code - translated POSIX status code
  *
  */
- 
+
 int _POSIX_Message_queue_Translate_core_message_queue_return_code(
   uint32_t   the_message_queue_status
 )
@@ -81,7 +81,7 @@ int _POSIX_Message_queue_Translate_core_message_queue_return_code(
       return EBADF;
 
       /*
-       *  POSIX Real-Time Extensions add timeouts to send and receive. 
+       *  POSIX Real-Time Extensions add timeouts to send and receive.
        */
     case CORE_MESSAGE_QUEUE_STATUS_TIMEOUT:
       return ETIMEDOUT;

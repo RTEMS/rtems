@@ -21,7 +21,7 @@
  *
  *  11.4.3 Broadcasting and Signaling a Condition, P1003.1c/Draft 10, p. 101
  */
- 
+
 int pthread_cond_broadcast(
   pthread_cond_t   *cond
 )

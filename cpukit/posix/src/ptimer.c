@@ -5,7 +5,7 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
- 
+
 #include <assert.h>
 #include <time.h>
 #include <errno.h>
@@ -73,7 +73,7 @@ void TIMER_INITIALIZE_S ( int timer_pos )
 /* ***************************************************************************
  * _POSIX_Timer_Manager_initialization
  *
- *  Description: Initialize the internal structure in which the data of all 
+ *  Description: Initialize the internal structure in which the data of all
  *               the timers are stored
  * ***************************************************************************/
 
@@ -88,7 +88,7 @@ void _POSIX_Timer_Manager_initialization ( int max_timers )
    timer_struct = _Workspace_Allocate_or_fatal_error(
       max_timers * sizeof(POSIX_Timer_Control) );
 
-   /* 
+   /*
     *  Initialize all the timers
     */
 

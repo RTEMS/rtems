@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_POSIX_MESSAGE_QUEUE_h
 #define __RTEMS_POSIX_MESSAGE_QUEUE_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,7 +28,7 @@ extern "C" {
 /*
  *  Data Structure used to manage a POSIX message queue
  */
- 
+
 typedef struct {
    Objects_Control             Object;
    int                         process_shared;
@@ -50,10 +50,10 @@ typedef struct {
  *  this class of objects.  The second item is used to manage the set
  *  of "file descriptors" associated with the message queues.
  */
- 
+
 POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information;
 POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information_fds;
- 
+
 /*
  *  _POSIX_Message_queue_Manager_initialization
  *
@@ -61,11 +61,11 @@ POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information_fds;
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
+
 void _POSIX_Message_queue_Manager_initialization(
   uint32_t   maximum_message_queues
 );
- 
+
 /*
  *
  *  _POSIX_Message_queue_Create_support
@@ -75,7 +75,7 @@ void _POSIX_Message_queue_Manager_initialization(
  *  This routine performs the creation of a message queue utilizing the
  *  core message queue.
  */
- 
+
 int _POSIX_Message_queue_Create_support(
   const char                    *name,
   int                            pshared,
@@ -90,8 +90,8 @@ int _POSIX_Message_queue_Create_support(
  *
  *  This routine supports the mq_unlink and mq_close routines by
  *  doing most of the work involved with removing a message queue.
- */ 
-  
+ */
+
 void _POSIX_Message_queue_Delete(
   POSIX_Message_queue_Control *the_mq
 );
@@ -136,9 +136,9 @@ int _POSIX_Message_queue_Send_support(
  *  This function allocates a message queue control block from
  *  the inactive chain of free message queue control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void );
- 
+
 /*
  *  _POSIX_Message_queue_Free
  *
@@ -147,11 +147,11 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate(
  *  This routine frees a message queue control block to the
  *  inactive chain of free message queue control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
   POSIX_Message_queue_Control *the_mq
 );
- 
+
 /*
  *  _POSIX_Message_queue_Get
  *
@@ -165,12 +165,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
  *  and the_message queue is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_mq is undefined.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
   Objects_Id         id,
   Objects_Locations *location
 );
- 
+
 /*
  *  _POSIX_Message_queue_Is_null
  *
@@ -178,7 +178,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
  *
  *  This function returns TRUE if the_message_queue is NULL and FALSE otherwise.
  */
- 
+
 RTEMS_INLINE_ROUTINE boolean _POSIX_Message_queue_Is_null (
   POSIX_Message_queue_Control *the_mq
 );
@@ -199,24 +199,24 @@ int _POSIX_Message_queue_Name_to_id(
 
 /*
  *  _POSIX_Message_queue_Priority_to_core
- * 
+ *
  *  DESCRIPTION:
  *
  *  XXX
  */
- 
+
 RTEMS_INLINE_ROUTINE CORE_message_queue_Submit_types _POSIX_Message_queue_Priority_to_core(
   unsigned int priority
 );
 
 /*
  *  _POSIX_Message_queue_Priority_from_core
- * 
+ *
  *  DESCRIPTION:
  *
  *  XXX
  */
- 
+
 RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
   CORE_message_queue_Submit_types priority
 );
@@ -243,6 +243,6 @@ int _POSIX_Message_queue_Translate_core_message_queue_return_code(
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

@@ -19,17 +19,17 @@
 
 /*PAGE
  *
- *  11.4.2 Initializing and Destroying a Condition Variable, 
+ *  11.4.2 Initializing and Destroying a Condition Variable,
  *         P1003.1c/Draft 10, p. 87
  */
- 
+
 int pthread_cond_destroy(
   pthread_cond_t           *cond
 )
 {
   register POSIX_Condition_variables_Control *the_cond;
   Objects_Locations                           location;
- 
+
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:
@@ -44,27 +44,27 @@ int pthread_cond_destroy(
 
 
     case OBJECTS_LOCAL:
- 
+
       if ( _Thread_queue_First( &the_cond->Wait_queue ) ) {
         _Thread_Enable_dispatch();
         return EBUSY;
       }
- 
+
       _Objects_Close(
         &_POSIX_Condition_variables_Information,
         &the_cond->Object
       );
- 
+
       _POSIX_Condition_variables_Free( the_cond );
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
       if ( the_cond->process_shared == PTHREAD_PROCESS_SHARED ) {
- 
+
         _Objects_MP_Close(
           &_POSIX_Condition_variables_Information,
           the_cond->Object.id
         );
- 
+
         _POSIX_Condition_variables_MP_Send_process_packet(
           POSIX_CONDITION_VARIABLES_MP_ANNOUNCE_DELETE,
           the_cond->Object.id,

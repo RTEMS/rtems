@@ -33,11 +33,11 @@ void pthread_testcancel( void )
    *  and the ISR context is not a thread.
    */
 
-  if ( _ISR_Is_in_progress() ) 
+  if ( _ISR_Is_in_progress() )
     return;
 
   thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
- 
+
   _Thread_Disable_dispatch();
     if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
          thread_support->cancelation_requested )

@@ -56,11 +56,11 @@ int intr_release(
 int intr_lock(
   intr_t  intr
 );
-  
+
 int intr_unlock(
   intr_t  intr
 );
-  
+
 /*
  *  22.3.2 Await Interrupt Notification, P1003.4b/D8, p. 76
  */

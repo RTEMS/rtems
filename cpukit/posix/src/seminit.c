@@ -36,14 +36,14 @@ int sem_init(
 
   if ( !sem )
     rtems_set_errno_and_return_minus_one( EINVAL );
-    
+
   status = _POSIX_Semaphore_Create_support(
     NULL,
     pshared,
     value,
     &the_semaphore
   );
-    
+
   if ( status != -1 )
     *sem = the_semaphore->Object.id;
 

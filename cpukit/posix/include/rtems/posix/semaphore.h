@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_POSIX_SEMAPHORE_h
 #define __RTEMS_POSIX_SEMAPHORE_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,7 +28,7 @@ extern "C" {
 /*
  *  Data Structure used to manage a POSIX semaphore
  */
- 
+
 typedef struct {
    Objects_Control         Object;
    int                     process_shared;
@@ -42,9 +42,9 @@ typedef struct {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
- 
+
 POSIX_EXTERN Objects_Information  _POSIX_Semaphore_Information;
- 
+
 /*
  *  _POSIX_Semaphore_Manager_initialization
  *
@@ -52,11 +52,11 @@ POSIX_EXTERN Objects_Information  _POSIX_Semaphore_Information;
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
+
 void _POSIX_Semaphore_Manager_initialization(
   uint32_t   maximum_semaphorees
 );
- 
+
 /*
  *  _POSIX_Semaphore_Allocate
  *
@@ -65,9 +65,9 @@ void _POSIX_Semaphore_Manager_initialization(
  *  This function allocates a semaphore control block from
  *  the inactive chain of free semaphore control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void );
- 
+
 /*
  *  _POSIX_Semaphore_Free
  *
@@ -76,11 +76,11 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void );
  *  This routine frees a semaphore control block to the
  *  inactive chain of free semaphore control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
   POSIX_Semaphore_Control *the_semaphore
 );
- 
+
 /*
  *  _POSIX_Semaphore_Get
  *
@@ -94,12 +94,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
  *  and the_semaphore is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_semaphore is undefined.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
   sem_t        *id,
   Objects_Locations *location
 );
- 
+
 /*
  *  _POSIX_Semaphore_Is_null
  *
@@ -107,7 +107,7 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
  *
  *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
  */
- 
+
 RTEMS_INLINE_ROUTINE boolean _POSIX_Semaphore_Is_null (
   POSIX_Semaphore_Control *the_semaphore
 );
@@ -175,6 +175,6 @@ int _POSIX_Semaphore_Name_to_id(
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

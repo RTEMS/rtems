@@ -1,4 +1,4 @@
-/* 
+/*
  *  pthread_atfork() - POSIX 1003.1b 3.1.3
  *
  *  3.1.3 Register Fork Handlers, P1003.1c/Draft 10, P1003.1c/Draft 10, p. 27

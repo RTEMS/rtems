@@ -1,5 +1,5 @@
 /*
- *  13.5.2 Dynamic Thread Scheduling Parameters Access, 
+ *  13.5.2 Dynamic Thread Scheduling Parameters Access,
  *         P1003.1c/Draft 10, p. 124
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -35,7 +35,7 @@ int pthread_setschedparam(
   Thread_CPU_budget_algorithms         budget_algorithm;
   Thread_CPU_budget_algorithm_callout  budget_callout;
   Objects_Locations                    location;
- 
+
   /*
    *  Check all the parameters
    */
@@ -53,28 +53,28 @@ int pthread_setschedparam(
     case SCHED_OTHER:
       budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
       break;
- 
+
     case SCHED_FIFO:
       budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
       break;
- 
+
     case SCHED_RR:
       budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
       break;
- 
+
     case SCHED_SPORADIC:
       budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
       budget_callout = _POSIX_Threads_Sporadic_budget_callout;
- 
+
       if ( _POSIX_Timespec_to_interval( &param->ss_replenish_period ) <
            _POSIX_Timespec_to_interval( &param->ss_initial_budget ) )
         return EINVAL;
- 
+
       if ( !_POSIX_Priority_Is_valid( param->ss_low_priority ) )
         return EINVAL;
- 
+
       break;
- 
+
     default:
       return EINVAL;
   }
@@ -114,7 +114,7 @@ int pthread_setschedparam(
              TRUE
           );
           break;
- 
+
         case SCHED_SPORADIC:
           api->ss_high_priority = api->schedparam.sched_priority;
           _Watchdog_Remove( &api->Sporadic_timer );

@@ -46,7 +46,7 @@ int sched_getparam(
 
 /*PAGE
  *
- *  13.3.3 Set Scheduling Policy and Scheduling Parameters, 
+ *  13.3.3 Set Scheduling Policy and Scheduling Parameters,
  *         P1003.1b-1993, p. 254
  */
 
@@ -86,7 +86,7 @@ int sched_get_priority_max(
     case SCHED_RR:
     case SCHED_SPORADIC:
       break;
- 
+
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
   }
@@ -109,7 +109,7 @@ int sched_get_priority_min(
     case SCHED_RR:
     case SCHED_SPORADIC:
       break;
- 
+
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
   }

@@ -30,9 +30,9 @@ int clock_getres(
 {
   if ( !res )
     rtems_set_errno_and_return_minus_one( EINVAL );
- 
+
   switch ( clock_id ) {
- 
+
     /*
      *  All time in rtems is based on the same clock tick.
      */
@@ -46,10 +46,10 @@ int clock_getres(
         /* _POSIX_Interval_to_timespec( _TOD_Microseconds_per_tick, res );  */
       }
       break;
- 
+
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
- 
+
   }
   return 0;
 }

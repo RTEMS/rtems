@@ -37,7 +37,7 @@ int _POSIX_Mutex_Lock_support(
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
   ISR_Level                     level;
- 
+
   the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &location, &level );
   switch ( location ) {
     case OBJECTS_REMOTE:

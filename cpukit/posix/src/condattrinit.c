@@ -19,10 +19,10 @@
 
 /*PAGE
  *
- *  11.4.1 Condition Variable Initialization Attributes, 
+ *  11.4.1 Condition Variable Initialization Attributes,
  *            P1003.1c/Draft 10, p. 96
  */
- 
+
 int pthread_condattr_init(
   pthread_condattr_t *attr
 )

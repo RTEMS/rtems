@@ -68,7 +68,7 @@ int pthread_mutex_setprioceiling(
       the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
       _CORE_mutex_Surrender(
         &the_mutex->Mutex,
-        the_mutex->Object.id, 
+        the_mutex->Object.id,
 #if defined(RTEMS_MULTIPROCESSING)
         _POSIX_Threads_mutex_MP_support
 #else

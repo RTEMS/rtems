@@ -35,10 +35,10 @@ int clock_settime(
   assert( tp );
 
   switch ( clock_id ) {
- 
+
     case CLOCK_REALTIME:
       (void) gmtime_r( &tp->tv_sec, &split_time );
- 
+
       /*
        *  Convert the tm structure format to that used by the TOD Handler
        *
@@ -57,9 +57,9 @@ int clock_settime(
 
       if ( !_TOD_Validate( &tod ) )
         rtems_set_errno_and_return_minus_one( EINVAL );
- 
+
       /*
-       *  We can't use the tp->tv_sec field because it is based on 
+       *  We can't use the tp->tv_sec field because it is based on
        *  a different EPOCH.
        */
 
@@ -68,13 +68,13 @@ int clock_settime(
         _TOD_Set( &tod, seconds );
       _Thread_Enable_dispatch();
       break;
- 
+
 #ifdef _POSIX_CPUTIME
     case CLOCK_PROCESS_CPUTIME:
       return POSIX_NOT_IMPLEMENTED();
       break;
 #endif
- 
+
 #ifdef _POSIX_THREAD_CPUTIME
     case CLOCK_THREAD_CPUTIME:
       return POSIX_NOT_IMPLEMENTED();
@@ -82,7 +82,7 @@ int clock_settime(
 #endif
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
- 
+
   }
   return 0;
 }

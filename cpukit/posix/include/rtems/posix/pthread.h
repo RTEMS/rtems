@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_POSIX_THREADS_h
 #define __RTEMS_POSIX_THREADS_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -29,19 +29,19 @@ extern "C" {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
- 
+
 POSIX_EXTERN Objects_Information  _POSIX_Threads_Information;
 
 /*
  *  These are used to manage the user initialization threads.
  */
- 
-POSIX_EXTERN posix_initialization_threads_table 
+
+POSIX_EXTERN posix_initialization_threads_table
                    *_POSIX_Threads_User_initialization_threads;
 POSIX_EXTERN uint32_t     _POSIX_Threads_Number_of_initialization_threads;
 
 extern const pthread_attr_t _POSIX_Threads_Default_attributes;
- 
+
 /*
  *  _POSIX_Threads_Manager_initialization
  *
@@ -49,13 +49,13 @@ extern const pthread_attr_t _POSIX_Threads_Default_attributes;
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
+
 void _POSIX_Threads_Manager_initialization(
   uint32_t                            maximum_pthreads,
   uint32_t                            number_of_initialization_threads,
   posix_initialization_threads_table *user_threads
 );
- 
+
 /*
  *  _POSIX_Threads_Allocate
  *
@@ -64,9 +64,9 @@ void _POSIX_Threads_Manager_initialization(
  *  This function allocates a pthread control block from
  *  the inactive chain of free pthread control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void );
- 
+
 /*
  *  _POSIX_Threads_Free
  *
@@ -75,11 +75,11 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void );
  *  This routine frees a pthread control block to the
  *  inactive chain of free pthread control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free(
   Thread_Control *the_pthread
 );
- 
+
 /*
  *  _POSIX_Threads_Get
  *
@@ -93,12 +93,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free(
  *  and the_pthread is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_pthread is undefined.
  */
- 
+
 RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get(
   pthread_t          id,
   Objects_Locations *location
 );
- 
+
 /*
  *  _POSIX_Threads_Is_null
  *
@@ -106,7 +106,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get(
  *
  *  This function returns TRUE if the_pthread is NULL and FALSE otherwise.
  */
- 
+
 RTEMS_INLINE_ROUTINE boolean _POSIX_Threads_Is_null(
   Thread_Control *the_pthread
 );
@@ -144,6 +144,6 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

@@ -21,7 +21,7 @@
 #include <rtems/posix/time.h>
 
 /*PAGE
- *  
+ *
  *  The default mutex attributes structure.
  */
 

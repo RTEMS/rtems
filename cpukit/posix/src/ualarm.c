@@ -29,7 +29,7 @@ Watchdog_Control _POSIX_signals_Ualarm_timer;
  *
  *  _POSIX_signals_Ualarm_TSR
  */
- 
+
 void _POSIX_signals_Ualarm_TSR(
   Objects_Id      id,
   void           *argument
@@ -73,7 +73,7 @@ useconds_t ualarm(
          *  this.
          */
 
-	
+
         ticks = the_timer->initial -
          ((the_timer->stop_time - the_timer->start_time) /
 	   _TOD_Ticks_per_second);

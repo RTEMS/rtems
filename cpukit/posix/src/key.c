@@ -23,7 +23,7 @@
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
+
 void _POSIX_Key_Manager_initialization(
   uint32_t   maximum_keys
 )

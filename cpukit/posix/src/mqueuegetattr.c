@@ -2,8 +2,8 @@
  *  NOTE:  The structure of the routines is identical to that of POSIX
  *         Message_queues to leave the option of having unnamed message
  *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also 
- *         the reason for the apparently unnecessary tracking of 
+ *         POSIX standard but unnamed message_queues are.  This is also
+ *         the reason for the apparently unnecessary tracking of
  *         the process_shared attribute.  [In addition to the fact that
  *         it would be trivial to add pshared to the mq_attr structure
  *         and have process private message queues.]
@@ -46,7 +46,7 @@ int mq_getattr(
   POSIX_Message_queue_Control_fd       *the_mq_fd;
   Objects_Locations                     location;
   CORE_message_queue_Attributes        *the_mq_attr;
- 
+
   if ( !mqstat )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
@@ -64,14 +64,14 @@ int mq_getattr(
       /*
        *  Return the old values.
        */
- 
+
       the_mq_attr = &the_mq->Message_queue.Attributes;
- 
+
       mqstat->mq_flags   = the_mq_fd->oflag;
       mqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
       mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
       mqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
- 
+
       _Thread_Enable_dispatch();
       return 0;
   }

@@ -24,7 +24,7 @@
  *  A support routine which implements guts of the broadcast and single task
  *  wake up version of the "signal" operation.
  */
- 
+
 int _POSIX_Condition_variables_Signal_support(
   pthread_cond_t            *cond,
   boolean                    is_broadcast
@@ -33,7 +33,7 @@ int _POSIX_Condition_variables_Signal_support(
   register POSIX_Condition_variables_Control *the_cond;
   Objects_Locations                           location;
   Thread_Control                             *the_thread;
- 
+
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:
@@ -46,8 +46,8 @@ int _POSIX_Condition_variables_Signal_support(
     case OBJECTS_ERROR:
       return EINVAL;
     case OBJECTS_LOCAL:
- 
-      do { 
+
+      do {
         the_thread = _Thread_queue_Dequeue( &the_cond->Wait_queue );
         if ( !the_thread )
           the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;

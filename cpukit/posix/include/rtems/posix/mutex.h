@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_POSIX_MUTEX_h
 #define __RTEMS_POSIX_MUTEX_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,7 +26,7 @@ extern "C" {
 /*
  *  Data Structure used to manage a POSIX mutex
  */
- 
+
 typedef struct {
    Objects_Control     Object;
    int                 process_shared;
@@ -37,7 +37,7 @@ typedef struct {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
- 
+
 POSIX_EXTERN Objects_Information  _POSIX_Mutex_Information;
 
 /*
@@ -45,7 +45,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Mutex_Information;
  */
 
 extern const pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
- 
+
 /*
  *  _POSIX_Mutex_Manager_initialization
  *
@@ -53,11 +53,11 @@ extern const pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
+
 void _POSIX_Mutex_Manager_initialization(
   uint32_t   maximum_mutexes
 );
- 
+
 /*
  *  _POSIX_Mutex_Allocate
  *
@@ -66,9 +66,9 @@ void _POSIX_Mutex_Manager_initialization(
  *  This function allocates a mutexes control block from
  *  the inactive chain of free mutexes control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void );
- 
+
 /*
  *  _POSIX_Mutex_Free
  *
@@ -77,11 +77,11 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void );
  *  This routine frees a mutexes control block to the
  *  inactive chain of free mutexes control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
   POSIX_Mutex_Control *the_mutex
 );
- 
+
 #if 0
 /*
  *  _POSIX_Mutex_Get
@@ -96,12 +96,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
  *  and the_mutex is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_mutex is undefined.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
   Objects_Id        *id,
   Objects_Locations *location
 );
- 
+
 /*
  *  _POSIX_Mutex_Is_null
  *
@@ -109,7 +109,7 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
  *
  *  This function returns TRUE if the_mutex is NULL and FALSE otherwise.
  */
- 
+
 RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
   POSIX_Mutex_Control *the_mutex
 );
@@ -119,7 +119,7 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
  *  _POSIX_Mutex_Lock_support
  *
  *  DESCRIPTION:
- *  
+ *
  *  A support routine which implements guts of the blocking, non-blocking, and
  *  timed wait version of mutex lock.
  */
@@ -152,6 +152,6 @@ int _POSIX_Mutex_From_core_mutex_status(
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif
 /*  end of include file */

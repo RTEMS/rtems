@@ -2,8 +2,8 @@
  *  adjustime() function - required by NTP
  *
  *  I am unaware of the history behind the definition of this service
- *  and don't know if its behavior is covered by any standard. --joel 
- * 
+ *  and don't know if its behavior is covered by any standard. --joel
+ *
  *  $Id$
  */
 
@@ -21,14 +21,14 @@
 static long __adjustment = 0;
 
 int  adjtime ( struct timeval *delta, struct timeval *olddelta )
-{ 
+{
   struct timespec ts;
 
   if ( olddelta ) {
     olddelta->tv_sec  = __adjustment / TOD_MICROSECONDS_PER_SECOND;
     olddelta->tv_usec = __adjustment / TOD_MICROSECONDS_PER_SECOND;
   }
-  
+
   if ( !delta )
     return -1;
 
@@ -36,11 +36,11 @@ int  adjtime ( struct timeval *delta, struct timeval *olddelta )
   /* too small to account for */
   if ( __adjustment < _TOD_Microseconds_per_tick )
     return 0;
-   
+
   clock_gettime( CLOCK_REALTIME, &ts );
 
   ts.tv_sec  += (__adjustment / TOD_MICROSECONDS_PER_SECOND);
-  ts.tv_nsec += (__adjustment % TOD_MICROSECONDS_PER_SECOND) * 
+  ts.tv_nsec += (__adjustment % TOD_MICROSECONDS_PER_SECOND) *
                        TOD_NANOSECONDS_PER_MICROSECOND;
 
   /* if adjustment is too much positive */

@@ -38,15 +38,15 @@ int clock_gettime(
   switch ( clock_id ) {
 
     case CLOCK_REALTIME:
- 
+
       _ISR_Disable( level );
         seconds = _TOD_Seconds_since_epoch;
         ticks   = _TOD_Current.ticks;
       _ISR_Enable( level );
- 
+
       tp->tv_sec  = seconds + POSIX_TIME_SECONDS_1970_THROUGH_1988;
-      tp->tv_nsec = ticks * _TOD_Microseconds_per_tick * 
-                      TOD_NANOSECONDS_PER_MICROSECOND; 
+      tp->tv_nsec = ticks * _TOD_Microseconds_per_tick *
+                      TOD_NANOSECONDS_PER_MICROSECOND;
       break;
 
 #ifdef _POSIX_CPUTIME

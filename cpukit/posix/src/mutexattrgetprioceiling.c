@@ -24,7 +24,7 @@
  *
  *  13.6.1 Mutex Initialization Scheduling Attributes, P1003.1c/Draft 10, p. 128
  */
- 
+
 int pthread_mutexattr_getprioceiling(
   const pthread_mutexattr_t   *attr,
   int                         *prioceiling

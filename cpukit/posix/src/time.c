@@ -41,7 +41,7 @@ time_t time(
    */
 
   seconds_since_epoch = _TOD_Seconds_since_epoch;
-     
+
   seconds_since_epoch += POSIX_TIME_SECONDS_1970_THROUGH_1988;
 
   if ( tloc )

@@ -2,8 +2,8 @@
  *  NOTE:  The structure of the routines is identical to that of POSIX
  *         Message_queues to leave the option of having unnamed message
  *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also 
- *         the reason for the apparently unnecessary tracking of 
+ *         POSIX standard but unnamed message_queues are.  This is also
+ *         the reason for the apparently unnecessary tracking of
  *         the process_shared attribute.  [In addition to the fact that
  *         it would be trivial to add pshared to the mq_attr structure
  *         and have process private message queues.]
@@ -43,9 +43,9 @@ size_t strnlen(const char *, size_t);
  *  _POSIX_Message_queue_Create_support
  *
  *  This routine does the actual creation and initialization of
- *  a poxix message queue.  
+ *  a poxix message queue.
  */
- 
+
 int _POSIX_Message_queue_Create_support(
   const char                    *name_arg,
   int                            pshared,
@@ -60,11 +60,11 @@ int _POSIX_Message_queue_Create_support(
   size_t                         n;
 
   n = strnlen( name_arg, NAME_MAX );
-  if ( n > NAME_MAX ) 
+  if ( n > NAME_MAX )
     return ENAMETOOLONG;
 
   _Thread_Disable_dispatch();
- 
+
   /*
    *  There is no real basis for the default values.  They will work
    *  but were not compared against any existing implementation for
@@ -98,13 +98,13 @@ int _POSIX_Message_queue_Create_support(
     rtems_set_errno_and_return_minus_one( ENFILE );
   }
 #endif
- 
+
   the_mq = _POSIX_Message_queue_Allocate();
   if ( !the_mq ) {
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( ENFILE );
   }
- 
+
   the_mq->process_shared  = pshared;
   the_mq->named = TRUE;
   the_mq->open_count = 1;
@@ -122,7 +122,7 @@ int _POSIX_Message_queue_Create_support(
     rtems_set_errno_and_return_minus_one( ENOMEM );
   }
   strcpy( name, name_arg );
- 
+
   /* XXX
    *
    *  Note that thread blocking discipline should be based on the
@@ -143,7 +143,7 @@ int _POSIX_Message_queue_Create_support(
     if ( pshared == PTHREAD_PROCESS_SHARED )
       _Objects_MP_Close( &_POSIX_Message_queue_Information, the_mq->Object.id );
 #endif
- 
+
     _POSIX_Message_queue_Free( the_mq );
     _Workspace_Free(name);
     _Thread_Enable_dispatch();
@@ -155,9 +155,9 @@ int _POSIX_Message_queue_Create_support(
     &the_mq->Object,
     (char *) name
   );
- 
+
   *message_queue = the_mq;
- 
+
 #if 0 && defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED )
     _POSIX_Message_queue_MP_Send_process_packet(
@@ -167,7 +167,7 @@ int _POSIX_Message_queue_Create_support(
       0                          /* Not used */
     );
 #endif
- 
+
   _Thread_Enable_dispatch();
   return 0;
 }

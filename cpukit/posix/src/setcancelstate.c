@@ -23,7 +23,7 @@
  *  18.2.2 Setting Cancelability State, P1003.1c/Draft 10, p. 183
  */
 
-int pthread_setcancelstate( 
+int pthread_setcancelstate(
   int  state,
   int *oldstate
 )
@@ -36,7 +36,7 @@ int pthread_setcancelstate(
    *  and the ISR context is not a thread.
    */
 
-  if ( _ISR_Is_in_progress() ) 
+  if ( _ISR_Is_in_progress() )
     return EPROTO;
 
   if ( !oldstate )
@@ -46,16 +46,16 @@ int pthread_setcancelstate(
     return EINVAL;
 
   thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
- 
+
   _Thread_Disable_dispatch();
     *oldstate = thread_support->cancelability_state;
     thread_support->cancelability_state = state;
- 
-    if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE && 
+
+    if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
          thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS &&
          thread_support->cancelation_requested )
       _POSIX_Threads_cancel_run( _Thread_Executing );
   _Thread_Enable_dispatch();
- 
+
   return 0;
 }

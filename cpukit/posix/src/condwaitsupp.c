@@ -24,7 +24,7 @@
  *  A support routine which implements guts of the blocking, non-blocking, and
  *  timed wait version of condition variable wait routines.
  */
- 
+
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
@@ -36,7 +36,7 @@ int _POSIX_Condition_variables_Wait_support(
   Objects_Locations                           location;
   int                                         status;
   int                                         mutex_status;
- 
+
   if ( !_POSIX_Mutex_Get( mutex, &location ) ) {
      return EINVAL;
   }
@@ -54,12 +54,12 @@ int _POSIX_Condition_variables_Wait_support(
     case OBJECTS_ERROR:
       return EINVAL;
     case OBJECTS_LOCAL:
- 
+
       if ( the_cond->Mutex && ( the_cond->Mutex != *mutex ) ) {
         _Thread_Enable_dispatch();
         return EINVAL;
       }
- 
+
       (void) pthread_mutex_unlock( mutex );
 /* XXX ignore this for now  since behavior is undefined
       if ( mutex_status ) {
@@ -70,7 +70,7 @@ int _POSIX_Condition_variables_Wait_support(
 
       if ( !already_timedout ) {
         the_cond->Mutex = *mutex;
- 
+
         _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
         _Thread_Executing->Wait.return_code = 0;
         _Thread_Executing->Wait.queue       = &the_cond->Wait_queue;
@@ -81,7 +81,7 @@ int _POSIX_Condition_variables_Wait_support(
         _Thread_Enable_dispatch();
 
         /*
-         *  Switch ourself out because we blocked as a result of the 
+         *  Switch ourself out because we blocked as a result of the
          *  _Thread_queue_Enqueue.
          */
 
@@ -101,7 +101,7 @@ int _POSIX_Condition_variables_Wait_support(
       mutex_status = pthread_mutex_lock( mutex );
       if ( mutex_status )
         return EINVAL;
-    
+
       return status;
   }
   return POSIX_BOTTOM_REACHED();

@@ -40,7 +40,7 @@ int sched_getparam(
 );
 
 /*
- *  13.3.3 Set Scheduling Policy and Scheduling Parameters, 
+ *  13.3.3 Set Scheduling Policy and Scheduling Parameters,
  *         P1003.1b-1993, p. 254
  */
 

@@ -28,7 +28,7 @@ Watchdog_Control _POSIX_signals_Alarm_timer;
  *
  *  _POSIX_signals_Alarm_TSR
  */
- 
+
 void _POSIX_signals_Alarm_TSR(
   Objects_Id      id,
   void           *argument

@@ -33,7 +33,7 @@ int _POSIX_Semaphore_Wait_support(
 {
   register POSIX_Semaphore_Control *the_semaphore;
   Objects_Locations                 location;
- 
+
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:

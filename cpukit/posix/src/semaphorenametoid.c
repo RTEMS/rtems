@@ -41,7 +41,7 @@ int _POSIX_Semaphore_Name_to_id(
   if ( !name[0] )
     return EINVAL;
 
-  status = _Objects_Name_to_id( 
+  status = _Objects_Name_to_id(
     &_POSIX_Semaphore_Information, (char *)name, 0, (Objects_Id*)id );
 
   if ( status == OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL )

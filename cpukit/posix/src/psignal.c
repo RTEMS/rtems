@@ -107,13 +107,13 @@ void _POSIX_signals_Post_switch_extension(
    *  a new signal has been posted that we should process so we
    *  restart the loop if a signal handler was invoked.
    *
-   *  The first thing done is to check there are any signals to be 
+   *  The first thing done is to check there are any signals to be
    *  processed at all.  No point in doing this loop otherwise.
    */
 
 restart:
   _ISR_Disable( level );
-    if ( !(~api->signals_blocked & 
+    if ( !(~api->signals_blocked &
           (api->signals_pending | _POSIX_signals_Pending)) ) {
      _ISR_Enable( level );
      return;
@@ -136,7 +136,7 @@ restart:
 
     if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
       goto restart;
- 
+
     if ( _POSIX_signals_Check_signal( api, signo, TRUE ) )
       goto restart;
 
@@ -163,12 +163,12 @@ void _POSIX_signals_Manager_Initialization(
    sizeof(_POSIX_signals_Vectors) == sizeof(_POSIX_signals_Default_vectors)
   );
 
-  memcpy( 
+  memcpy(
     _POSIX_signals_Vectors,
     _POSIX_signals_Default_vectors,
     sizeof( _POSIX_signals_Vectors )
   );
-  
+
   /*
    *  Initialize the set of pending signals for the entire process
    */
@@ -178,7 +178,7 @@ void _POSIX_signals_Manager_Initialization(
   /*
    *  Initialize the queue we use to block for signals
    */
- 
+
   _Thread_queue_Initialize(
     &_POSIX_signals_Wait_queue,
     THREAD_QUEUE_DISCIPLINE_PRIORITY,
@@ -188,7 +188,7 @@ void _POSIX_signals_Manager_Initialization(
 
   /* XXX status codes */
 
-  /* 
+  /*
    *  Allocate the siginfo pools.
    */
 

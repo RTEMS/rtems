@@ -24,7 +24,7 @@
  *
  *  13.6.1 Mutex Initialization Scheduling Attributes, P1003.1c/Draft 10, p. 128
  */
- 
+
 int pthread_mutexattr_setprotocol(
   pthread_mutexattr_t   *attr,
   int                    protocol
@@ -39,7 +39,7 @@ int pthread_mutexattr_setprotocol(
     case PTHREAD_PRIO_PROTECT:
       attr->protocol = protocol;
       return 0;
- 
+
     default:
       return EINVAL;
   }

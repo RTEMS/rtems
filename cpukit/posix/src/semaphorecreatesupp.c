@@ -41,7 +41,7 @@ int _POSIX_Semaphore_Create_support(
   CORE_semaphore_Attributes *the_sem_attr;
 
   _Thread_Disable_dispatch();
- 
+
   /* Sharing semaphores among processes is not currently supported */
   if (pshared != 0) {
     _Thread_Enable_dispatch();
@@ -49,19 +49,19 @@ int _POSIX_Semaphore_Create_support(
   }
 
   if ( name ) {
-    if( strlen(name) > PATH_MAX ) { 
+    if( strlen(name) > PATH_MAX ) {
       _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one( ENAMETOOLONG );
     }
   }
 
   the_semaphore = _POSIX_Semaphore_Allocate();
- 
+
   if ( !the_semaphore ) {
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( ENOSPC );
   }
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED &&
        !( _Objects_MP_Allocate_and_open( &_POSIX_Semaphore_Information, 0,
@@ -71,7 +71,7 @@ int _POSIX_Semaphore_Create_support(
     rtems_set_errno_and_return_minus_one( EAGAIN );
   }
 #endif
- 
+
   the_semaphore->process_shared  = pshared;
 
   if ( name ) {
@@ -79,16 +79,16 @@ int _POSIX_Semaphore_Create_support(
     the_semaphore->open_count = 1;
     the_semaphore->linked = TRUE;
   }
-  else 
+  else
     the_semaphore->named = FALSE;
 
   the_sem_attr = &the_semaphore->Semaphore.Attributes;
- 
+
   /*
-   *  POSIX does not appear to specify what the discipline for 
-   *  blocking tasks on this semaphore should be.  It could somehow 
+   *  POSIX does not appear to specify what the discipline for
+   *  blocking tasks on this semaphore should be.  It could somehow
    *  be derived from the current scheduling policy.  One
-   *  thing is certain, no matter what we decide, it won't be 
+   *  thing is certain, no matter what we decide, it won't be
    *  the same as  all other POSIX implementations. :)
    */
 
@@ -105,15 +105,15 @@ int _POSIX_Semaphore_Create_support(
   /*
    *  Make the semaphore available for use.
    */
- 
+
   _Objects_Open(
     &_POSIX_Semaphore_Information,
     &the_semaphore->Object,
     (char *) name
   );
- 
+
   *the_sem = the_semaphore;
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED )
     _POSIX_Semaphore_MP_Send_process_packet(
@@ -123,7 +123,7 @@ int _POSIX_Semaphore_Create_support(
       0                           /* proxy id - Not used */
     );
 #endif
- 
+
   _Thread_Enable_dispatch();
   return 0;
 }

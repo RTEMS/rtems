@@ -74,7 +74,7 @@ void _POSIX_signals_Post_switch_extension(
   Thread_Control  *the_thread
 );
 
-boolean _POSIX_signals_Unblock_thread( 
+boolean _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,
   int              signo,
   siginfo_t       *info

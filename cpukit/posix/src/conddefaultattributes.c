@@ -21,7 +21,7 @@
  *
  *  The default condition variable attributes structure.
  */
- 
+
 const pthread_condattr_t _POSIX_Condition_variables_Default_attributes = {
   TRUE,                      /* is_initialized */
   PTHREAD_PROCESS_PRIVATE    /* process_shared */

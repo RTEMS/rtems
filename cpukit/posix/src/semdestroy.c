@@ -31,7 +31,7 @@ int sem_destroy(
 {
   register POSIX_Semaphore_Control *the_semaphore;
   Objects_Locations                 location;
- 
+
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
@@ -49,7 +49,7 @@ int sem_destroy(
         _Thread_Enable_dispatch();
         rtems_set_errno_and_return_minus_one( EINVAL );
       }
- 
+
       _POSIX_Semaphore_Delete( the_semaphore );
       _Thread_Enable_dispatch();
       return 0;

@@ -35,7 +35,7 @@ int pthread_cancel(
    *  Don't even think about deleting a resource from an ISR.
    */
 
-  if ( _ISR_Is_in_progress() ) 
+  if ( _ISR_Is_in_progress() )
     return EPROTO;
 
   the_thread = _POSIX_Threads_Get( thread, &location );
@@ -49,7 +49,7 @@ int pthread_cancel(
 
       thread_support->cancelation_requested = 1;
 
-      if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE && 
+      if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
            thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS ) {
         _POSIX_Threads_cancel_run( the_thread );
       }
@@ -57,6 +57,6 @@ int pthread_cancel(
       _Thread_Enable_dispatch();
       return 0;
   }
- 
+
   return POSIX_BOTTOM_REACHED();
 }
