@@ -27,7 +27,7 @@ rtems_task Task_3(
 {
   rtems_status_code status;
   long              buffer[ 4 ];
-  rtems_unsigned32  size;
+  uint32_t    size;
 
   puts( "TA3 - rtems_message_queue_receive - Q 1 - RTEMS_WAIT FOREVER" );
   status = rtems_message_queue_receive(

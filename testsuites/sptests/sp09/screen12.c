@@ -23,9 +23,9 @@ void Screen12()
   void              *segment_address_1;
   void              *segment_address_2;
   void              *segment_address_3;
-  rtems_unsigned32   offset;
-  rtems_unsigned32   good_front_flag;
-  rtems_unsigned32   good_back_flag;
+  uint32_t     offset;
+  uint32_t     good_front_flag;
+  uint32_t     good_back_flag;
   rtems_status_code  status;
 
   status = rtems_region_create(

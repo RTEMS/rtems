@@ -26,7 +26,7 @@ rtems_task Task_1(
   rtems_event_set   eventout;
   rtems_time_of_day time;
   rtems_status_code status;
-  rtems_unsigned32  index;
+  uint32_t    index;
 
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_16 to TA2" );
   status = rtems_event_send( Task_id[ 2 ], RTEMS_EVENT_16 );

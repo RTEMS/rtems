@@ -44,12 +44,12 @@ TEST_EXTERN rtems_name Task_name[ 6 ];    /* array of task names */
 TEST_EXTERN rtems_id   Region_id[ 2 ];    /* array of region ids */
 TEST_EXTERN rtems_name Region_name[ 2 ];  /* array of region names */
  
-TEST_EXTERN rtems_unsigned8 Area_1[64000]  CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint8_t   Area_1[64000]  CPU_STRUCTURE_ALIGNMENT;
  
 #define BASE_PRIORITY 140
  
 #define Put_address_from_area_1( _to_be_printed ) \
    printf( "0x%08lx", \
-     (unsigned long) ((rtems_unsigned8 *)(_to_be_printed) - Area_1 ) )
+     (unsigned long) ((uint8_t   *)(_to_be_printed) - Area_1 ) )
  
 /* end of include file */

@@ -51,6 +51,6 @@ rtems_task Task_2(
 TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
-TEST_EXTERN rtems_unsigned32 Task_2_preempted;
+TEST_EXTERN uint32_t   Task_2_preempted;
 
 /* end of include file */

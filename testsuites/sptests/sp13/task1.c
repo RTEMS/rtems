@@ -29,7 +29,7 @@ long    buffer[ 4 ];
 
 void dope_buffer(unsigned char *buff,
                  int   buff_size,
-                 unsigned32 v)
+                 uint32_t   v)
 {
     int i;
     unsigned char ch;
@@ -49,11 +49,11 @@ rtems_task Task_1(
 )
 {
   rtems_id          qid;
-  rtems_unsigned32  index;
-  rtems_unsigned32  count;
+  uint32_t    index;
+  uint32_t    count;
   rtems_status_code status;
-  rtems_unsigned32  size;
-  rtems_unsigned32  queue_size;
+  uint32_t    size;
+  uint32_t    queue_size;
   char             *cp;
   
   status = rtems_message_queue_ident(

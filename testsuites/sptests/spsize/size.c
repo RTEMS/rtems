@@ -128,9 +128,7 @@ int getint( void );
     (STACK_MINIMUM_SIZE + sizeof(Thread_Control) + SYSTEM_IDLE_FP + \
      MP_SYSTEM_TASKS)
 
-#define rtems_unsigned32 unsigned32
-
-rtems_unsigned32 sys_req;
+uint32_t   sys_req;
 
 void help_size();
 void print_formula();

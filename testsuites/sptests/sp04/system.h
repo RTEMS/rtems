@@ -62,7 +62,7 @@ TEST_EXTERN rtems_id   Extension_id[ 4 ];
 TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
  
 /* array of task run counts */
-TEST_EXTERN volatile rtems_unsigned32 Run_count[ 4 ];  
+TEST_EXTERN volatile uint32_t   Run_count[ 4 ];  
  
 /*
  * Keep track of task switches

@@ -36,13 +36,13 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  seconds;
-  rtems_unsigned32  old_seconds;
+  uint32_t    seconds;
+  uint32_t    old_seconds;
   rtems_mode        previous_mode;
   rtems_time_of_day time;
   rtems_status_code status;
-  rtems_unsigned32  start_time;
-  rtems_unsigned32  end_time;
+  uint32_t    start_time;
+  uint32_t    end_time;
 
   puts( "TA1 - rtems_task_suspend - on Task 2" );
   status = rtems_task_suspend( Task_id[ 2 ] );

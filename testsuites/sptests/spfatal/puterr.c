@@ -51,7 +51,7 @@ char *Errors[] = {
 /* Task states */
 
 void put_error(
-  rtems_unsigned32  error,
+  uint32_t    error,
   rtems_status_code expected
 )
 {

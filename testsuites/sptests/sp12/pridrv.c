@@ -24,11 +24,11 @@
 #include "system.h"
 
 void Priority_test_driver(
-  rtems_unsigned32 priority_base
+  uint32_t   priority_base
 )
 {
   rtems_task_priority previous_priority;
-  rtems_unsigned32    index;
+  uint32_t      index;
   rtems_status_code   status;
 
   for ( index = 1 ; index <= 5 ; index++ ) {

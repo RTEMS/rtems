@@ -28,7 +28,7 @@ rtems_task Task_1(
 {
   rtems_id          tid2;
   rtems_id          tid3;
-  rtems_unsigned32  pass;
+  uint32_t    pass;
   rtems_status_code status;
 
   status = rtems_task_ident( Task_name[ 2 ], 1, &tid2 );

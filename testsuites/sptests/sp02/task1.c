@@ -27,7 +27,7 @@ rtems_task Task_1(
   rtems_id          tid3;
   rtems_status_code status;
   rtems_name        tid2_name;
-  rtems_unsigned32  previous_priority;
+  uint32_t    previous_priority;
 
   puts( "TA1 - rtems_task_wake_after - sleep 1 second" );
   status = rtems_task_wake_after( 1*TICKS_PER_SECOND );

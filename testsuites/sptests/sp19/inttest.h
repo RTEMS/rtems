@@ -30,7 +30,7 @@
 #define __INTEGER_TEST_h
 
 #include <stdio.h>
-#define REG_VARIABLE rtems_unsigned32
+#define REG_VARIABLE uint32_t  
 
 #define INTEGER_DECLARE \
     REG_VARIABLE int01 = 1; \

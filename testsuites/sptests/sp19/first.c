@@ -30,7 +30,7 @@ rtems_task First_FP_task(
   rtems_status_code status;
   rtems_id          tid;
   rtems_time_of_day time;
-  rtems_unsigned32  task_index;
+  uint32_t    task_index;
   INTEGER_DECLARE;
   FP_DECLARE;
 

@@ -22,7 +22,7 @@ rtems_task Init(
 );
  
 void Priority_test_driver(
-  rtems_unsigned32 priority_base
+  uint32_t   priority_base
 );
  
 rtems_task Priority_task(

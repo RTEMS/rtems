@@ -27,7 +27,7 @@ rtems_task Task_2(
 )
 {
   long                buffer[ 4 ];
-  rtems_unsigned32    size;
+  uint32_t      size;
   rtems_task_priority previous_priority;
   rtems_status_code   status;
 

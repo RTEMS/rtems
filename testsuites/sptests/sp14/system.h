@@ -61,12 +61,12 @@ TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 TEST_EXTERN rtems_id   Timer_id[ 3 ];      /* array of timer ids */
 TEST_EXTERN rtems_name Timer_name[ 3 ];    /* array of timer names */
 
-TEST_EXTERN volatile rtems_unsigned32 Signals_sent;
+TEST_EXTERN volatile uint32_t   Signals_sent;
                                       /* set to TRUE to indicate that a */
                                       /* signal set has been sent from  */
                                       /* an ISR to the executing task   */
 
-TEST_EXTERN volatile rtems_unsigned32 Asr_fired;
+TEST_EXTERN volatile uint32_t   Asr_fired;
                                       /* set to TRUE to indicate that the */
                                       /* RTEMS_ASR has executed and was   */
                                       /* passed the correct signal set    */

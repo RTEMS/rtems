@@ -130,10 +130,10 @@ TEST_EXTERN rtems_id   Junk_id;             /* id used to return errors */
 #define Internal_port_area (void *) 0x00001000
 #define External_port_area (void *) 0x00002000
  
-TEST_EXTERN rtems_unsigned8 Partition_good_area[256] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint8_t   Partition_good_area[256] CPU_STRUCTURE_ALIGNMENT;
 #define Partition_bad_area (void *) 0x00000006
  
-TEST_EXTERN rtems_unsigned32 Region_good_area[4096] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint32_t   Region_good_area[4096] CPU_STRUCTURE_ALIGNMENT;
 #define Region_bad_area    (void *) 0x00000006
 #define REGION_START_OFFSET 1024
 #define REGION_LENGTH       512

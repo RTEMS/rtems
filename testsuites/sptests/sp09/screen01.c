@@ -20,7 +20,7 @@
 
 void Screen1()
 {
-  rtems_unsigned32    notepad_value;
+  uint32_t      notepad_value;
   rtems_id            self_id;
   rtems_task_priority previous_priority;
   rtems_status_code   status;

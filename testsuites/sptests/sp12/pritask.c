@@ -27,7 +27,7 @@ rtems_task Priority_task(
   rtems_task_priority its_priority;
   rtems_task_priority current_priority;
   rtems_status_code   status;
-  rtems_unsigned32    index;
+  uint32_t      index;
 
   its_priority = Task_priority[ its_index ];
 

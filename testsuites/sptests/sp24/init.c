@@ -29,7 +29,7 @@ rtems_task Init(
 )
 {
   rtems_time_of_day time;
-  rtems_unsigned32  index;
+  uint32_t    index;
   rtems_status_code status;
 
   puts( "\n\n*** TEST 24 ***" );

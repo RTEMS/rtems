@@ -23,8 +23,8 @@
 void Screen7()
 {
   long              buffer[ 4 ];
-  rtems_unsigned32  size;
-  rtems_unsigned32  count;
+  uint32_t    size;
+  uint32_t    count;
   rtems_status_code status;
 
   status = rtems_message_queue_broadcast( 100, buffer, MESSAGE_SIZE, &count );

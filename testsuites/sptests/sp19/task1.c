@@ -28,7 +28,7 @@ rtems_task Task_1(
   rtems_status_code status;
   rtems_id          tid;
   rtems_time_of_day time;
-  rtems_unsigned32  task_index;
+  uint32_t    task_index;
   INTEGER_DECLARE;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );

@@ -1,3 +1,17 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* sp02/task1.c, sp04/system.h, sp04/task1.c, sp04/tswitch.c,
+	sp05/task1.c, sp06/task1.c, sp09/screen01.c, sp09/screen07.c,
+	sp09/screen12.c, sp09/system.h, sp09/task3.c, sp11/task1.c,
+	sp12/pridrv.c, sp12/pritask.c, sp12/system.h, sp13/task1.c,
+	sp13/task2.c, sp13/task3.c, sp14/system.h, sp15/system.h,
+	sp16/system.h, sp17/system.h, sp19/first.c, sp19/fptask.c,
+	sp19/inttest.h, sp19/system.h, sp19/task1.c, sp20/init.c,
+	sp20/system.h, sp20/task1.c, sp23/system.h, sp24/init.c,
+	sp25/system.h, sp30/init.c, spfatal/fatal.c, spfatal/puterr.c,
+	spfatal/system.h, spsize/size.c: Convert to using c99 fixed size
+	types.
+
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add 2nd arg to RTEMS_TOP.

@@ -25,8 +25,8 @@ rtems_task Task_3(
 )
 {
   long              buffer[ 4 ];
-  rtems_unsigned32  size;
-  rtems_unsigned32  count;
+  uint32_t    size;
+  uint32_t    count;
   rtems_status_code status;
 
   puts(

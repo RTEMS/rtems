@@ -51,14 +51,14 @@ jmp_buf Restart_Context;
  *  occurs automatically because this is part of the BSS.
  */
 
-rtems_unsigned32  First_Time_Through;
+uint32_t    First_Time_Through;
 
 void Process_case();
 
 rtems_extension Fatal_extension(
-  rtems_unsigned32 source,
+  uint32_t   source,
   boolean          is_internal,
-  rtems_unsigned32 error
+  uint32_t   error
 )
 {
   int index;

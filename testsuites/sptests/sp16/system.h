@@ -63,27 +63,27 @@ TEST_EXTERN rtems_name Task_name[ 6 ];    /* array of task names */
 TEST_EXTERN rtems_id   Region_id[ 5 ];    /* array of region ids */
 TEST_EXTERN rtems_name Region_name[ 5 ];  /* array of region names */
 
-TEST_EXTERN rtems_unsigned8 Area_1[4096] CPU_STRUCTURE_ALIGNMENT;
-TEST_EXTERN rtems_unsigned8 Area_2[4096] CPU_STRUCTURE_ALIGNMENT;
-TEST_EXTERN rtems_unsigned8 Area_3[4096] CPU_STRUCTURE_ALIGNMENT;
-TEST_EXTERN rtems_unsigned8 Area_4[8192] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint8_t   Area_1[4096] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint8_t   Area_2[4096] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint8_t   Area_3[4096] CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint8_t   Area_4[8192] CPU_STRUCTURE_ALIGNMENT;
 
 #define BASE_PRIORITY 140
 
 #define Put_address_from_area_1( _to_be_printed ) \
    printf( "0x%08lx", \
-     (unsigned long) ((rtems_unsigned8 *)(_to_be_printed) - Area_1 ) )
+     (unsigned long) ((uint8_t   *)(_to_be_printed) - Area_1 ) )
 
 #define Put_address_from_area_2( _to_be_printed ) \
    printf( "0x%08lx", \
-     (unsigned long) ((rtems_unsigned8 *)(_to_be_printed) - Area_2 ) )
+     (unsigned long) ((uint8_t   *)(_to_be_printed) - Area_2 ) )
 
 #define Put_address_from_area_3( _to_be_printed ) \
    printf( "0x%08lx", \
-     (unsigned long) ((rtems_unsigned8 *)(_to_be_printed) - Area_3 ) )
+     (unsigned long) ((uint8_t   *)(_to_be_printed) - Area_3 ) )
 
 #define Put_address_from_area_4( _to_be_printed ) \
    printf( "0x%08lx", \
-     (unsigned long) ((rtems_unsigned8 *)(_to_be_printed) - Area_4 ) )
+     (unsigned long) ((uint8_t   *)(_to_be_printed) - Area_4 ) )
 
 /* end of include file */

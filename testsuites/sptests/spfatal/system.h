@@ -22,14 +22,14 @@ rtems_task Init(
 );
  
 void put_error(
-  rtems_unsigned32  error,
+  uint32_t    error,
   rtems_status_code expected
 );
  
 rtems_extension Fatal_extension(
-  rtems_unsigned32 source,
+  uint32_t   source,
   boolean          is_internal,
-  rtems_unsigned32 error
+  uint32_t   error
 );
  
 rtems_task Task_1(

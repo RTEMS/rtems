@@ -26,19 +26,19 @@
 #define TA6_ITERATIONS 10
 #define TA6_PERIOD_FACTOR 10
 
-rtems_unsigned32    Periods[7]    = { 0,   2,   2,   2,   2, 100, 0 };
-rtems_unsigned32    Iterations[7] = { 0,  50,  50,  50,  50,   1, TA6_ITERATIONS };
+uint32_t      Periods[7]    = { 0,   2,   2,   2,   2, 100, 0 };
+uint32_t      Iterations[7] = { 0,  50,  50,  50,  50,   1, TA6_ITERATIONS };
 rtems_task_priority Priorities[7] = { 0,   1,   1,   3,   4,   5, 1 };
 
 rtems_task Task_1_through_6(
-  rtems_unsigned32 argument
+  uint32_t   argument
 )
 {
   rtems_id          rmid;
   rtems_id          test_rmid;
-  rtems_unsigned32  index;
-  rtems_unsigned32  pass;
-  rtems_unsigned32  failed;
+  uint32_t    index;
+  uint32_t    pass;
+  uint32_t    failed;
   rtems_status_code status;
 
   status = rtems_rate_monotonic_create( argument, &rmid );
@@ -120,7 +120,7 @@ rtems_task Task_1_through_6(
     case 6:
       /* test changing periods */
       {
-        unsigned32 time[TA6_ITERATIONS+1];
+        uint32_t   time[TA6_ITERATIONS+1];
         rtems_interval period;
 
         period = 1*TA6_PERIOD_FACTOR;
