@@ -1,3 +1,12 @@
+2002-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in rtems/Makefile.am and sapi/Makefile.am.
+	* sapi/Makefile.am: Removed.
+	* rtems/Makefile.am: Removed.
+	* rel.am: Removed.
+	* configure.ac: Add RTEMS_BSP_CHECK_CACHE.
+	Reflect changes above.
+
 2002-11-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/Makefile.am: Reworked.

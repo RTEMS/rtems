@@ -14,6 +14,7 @@ AM_INIT_AUTOMAKE([no-define foreign 1.6])
 AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSBSP
+RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
@@ -24,8 +25,5 @@ RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-rtems/Makefile
-sapi/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
