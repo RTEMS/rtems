@@ -32,7 +32,9 @@
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This routine frees all memory associated with the specified
+ *  thread and removes it from the local object table so no further
+ *  operations on this thread are allowed.
  */
  
 void _Thread_Close(

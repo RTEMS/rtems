@@ -31,7 +31,10 @@
  *
  *  _Thread_Initialize
  *
- *  XXX
+ *  This routine initializes the specified the thread.  It allocates
+ *  all memory associated with this thread.  It completes by adding
+ *  the thread to the local object table so operations on this
+ *  thread id are allowed.
  */
 
 boolean _Thread_Initialize(

@@ -32,7 +32,9 @@
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This routine initializes the executable information for a thread
+ *  and makes it ready to execute.  After this routine executes, the
+ *  thread competes with all other threads for CPU time.
  */
  
 boolean _Thread_Start(
