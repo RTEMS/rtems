@@ -1,5 +1,5 @@
 #
-#  $Id$
+# $Id$
 #
 
 @SET_MAKE@
@@ -13,13 +13,32 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
+H_FILES = $(srcdir)/runway.h $(srcdir)/semaphore.h 
+
+SRCS = $(H_FILES)
+
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-all: FORCEIT
-	cd ../../../libbsp/$(RTEMS_CPU)/@RTEMS_BSP@/include; $(MAKE) all
+INSTALLDIRS = $(PROJECT_INCLUDE)/hppa1.1
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all: install
+
+# NOTE: Unlike other CPUS, we install into a subdirectory to avoid 
+#       file name conflicts
+
+install: 
+	$(mkinstalldirs) $(PROJECT_INCLUDE)/hppa1.1 
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/hppa1.1
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

@@ -18,7 +18,7 @@
 
 #include <rtems.h>
 
-#include "semaphore.h"
+#include <hppa1.1/semaphore.h>
 
 /*
  * Report fatal semaphore error

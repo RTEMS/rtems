@@ -14,8 +14,8 @@
  *  $Id$
  */
 
-#ifndef _INCLUDE_SEMAPHORE_H
-#define _INCLUDE_SEMAPHORE_H
+#ifndef _INCLUDE_HPPA1_1_SEMAPHORE_H
+#define _INCLUDE_HPPA1_1_SEMAPHORE_H
 
 #ifdef __cplusplus
 extern "C" {
