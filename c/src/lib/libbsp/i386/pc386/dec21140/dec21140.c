@@ -105,7 +105,7 @@ struct MD {
 /*
  * Receive buffer size -- Allow for a full ethernet packet including CRC
  */
-#define RBUF_SIZE	1520
+#define RBUF_SIZE	1536
 
 #define	ET_MINLEN 60		/* minimum message length */
 
