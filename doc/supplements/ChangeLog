@@ -1,3 +1,7 @@
+2003-09-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* supplement.am: Add -I $(top_builddir) TEXI2WWW_ARGS.
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add c4x, cosmetical changes.
