@@ -126,7 +126,7 @@ RTEMS_HOST=$host_os
 
 case "${target}" in
   # hpux unix port should go here
-  hppa1.1-rtems*)
+  hppa1.1-*-rtems*)
 	target_cpu=hppa1_1
 	;;
   i[[3456]]86-go32-rtems*)
@@ -140,11 +140,11 @@ case "${target}" in
 	RTEMS_HAS_POSIX_API=no
         RTEMS_HOST=Linux
 	;;
-  no_cpu-rtems*)
+  no_cpu-*rtems*)
         target_cpu=no_cpu
 	RTEMS_HAS_POSIX_API=no
 	;;
-  powerpc-*tems*)
+  powerpc-*rtems*)
 	target_cpu=ppc
 	;;
   sparc-sun-solaris*)             # unix "simulator" port
