@@ -1,6 +1,10 @@
 
 2001-10-16	Joel Sherrill <joel@OARcorp.com>
 
+	* .cvsignore: Add stamp-h.in.
+
+2001-10-16	Joel Sherrill <joel@OARcorp.com>
+
 	* include/Makefile.am: Fixed path to cpuopts-tmp.h.
 
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
