@@ -1,5 +1,13 @@
 2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am: Remove CONFIG.CC (Unused).
+	Remove CPPFLAGS, CFLAGS, CXXFLAGS, ASFLAGS (Implicitly handled by
+	automake). Add CCAS. Use AM_*FLAGS = RTEMS_*FLAGS.
+	Remove LIB_VARIANT from LINK_*.
+	Cleanup comments.
+
+2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* automake/compile.am: Remove AS, ASCOMPILE, make-rel (Unused).
 	Remove build-variants. Hard-code ARCH=o-optimize.
 
