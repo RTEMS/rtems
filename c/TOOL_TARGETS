@@ -11,32 +11,15 @@ arm:
 c4x:
         c4x-rtems               COFF           Requires patches
 
-hppa:
-	hppa1.1-rtems		ELF
-	
-
 h8300:
         h8300-rtems             COFF
 
 i386:
 	i386-rtems		ELF
-	i386-rtemself		ELF
-	i386-rtemscoff		COFF		Obsoleted
-	i386-go32-rtems		COFF		Obsoleted - no supporting BSP 
-
-i960:
-	i960-rtems		COFF		Switch to ELF when possible
-	i960-rtemscoff		COFF
-	i960-rtemself		ELF		Not currently in any tools
-
-	NOTE: As of October 2002, i960 has been deprecated in gdb and gcc.
 
 m68k:
-	m68k-rtems		COFF		Switch to ELF when possible
-	m68k-rtemscoff		COFF
-	m68k-rtemself		ELF		Not in all tools
+	m68k-rtems		ELF
 
-	NOTE: m68k-elf is in post egcs 1.1.2 snapshots.
 
 mips:
 	mips*-rtems		ELF		Big endian
@@ -61,5 +44,3 @@ sh:
 
 sparc:
 	sparc-rtems		ELF
-	sparc-rtemself		ELF
-	sparc-rtemsaout		A.OUT

@@ -19,10 +19,10 @@ To report problems in RTEMS, please visit:
 Maintainers
 ===========
 
-			Blanket Write Privileges (alphabetical order)
+		Blanket Write Privileges (alphabetical order)
 
 Jennifer Averett				jennifer@oarcorp.com
-Ralf Corsepius					ralf.corsepius@rtems.com
+Ralf Corsepius					ralf.corsepius@rtems.org
 Chris Johns					chris.johns@rtems.com
 Eric Norum					eric.norum@rtems.com
 Joel Sherrill					joel.sherrill@oarcorp.com
@@ -34,10 +34,10 @@ Networking		NAME-TBD		EMAIL-TBD
 			CPU Port Maintainers	(CPU alphabetical order)
 
 arm			Jay Monkman		jtm@lopingdog.com
+avr			Ralf Corsepius		ralf.corsepius@rtems.org
 c4x			Joel Sherrill		joel.sherrill@OARcorp.com
 h8300			NAME-TBD		EMAIL-TBD
 i386			NAME-TBD		EMAIL-TBD
-i960			NAME-TBD		EMAIL-TBD
 m68k			NAME-TBD		EMAIL-TBD
 mips			NAME-TBD		EMAIL-TBD
 no_cpu			NAME-TBD		EMAIL-TBD
@@ -50,4 +50,4 @@ unix			NAME-TBD		EMAIL-TBD
 		    BSP Maintainers		(CPU/BSP alphabetical order)
 
 CPU/BSP			NAME-TBD		EMAIL-TBD
-edb7312  		Jay Monkman		jtm@lopingdog.com
+arm/edb7312  		Jay Monkman		jtm@lopingdog.com
