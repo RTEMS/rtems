@@ -1,3 +1,42 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm01/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm02/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm03/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm04/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm05/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm06/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm07/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm08/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm09/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm10/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm11/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm12/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm13/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm14/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm15/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm16/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm17/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm18/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm19/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm20/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm21/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm22/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm23/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm24/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm25/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm26/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm27/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm28/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tm29/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tmck/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tmoverhd/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-11-08	Jiri Gaisler <jiri@gaisler.com>
 
 	This fix is response to test results reported by Jerry Needell

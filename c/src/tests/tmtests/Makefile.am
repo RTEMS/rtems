@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 SUBDIRS = include tmck tmoverhd tm01 tm02 tm03 tm04 tm05 tm06 tm07 tm08 tm09 \
