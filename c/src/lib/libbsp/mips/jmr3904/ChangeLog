@@ -1,3 +1,18 @@
+2001-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h (Clear_tm27_intr): Stop the timer and disable
+	the interrupt.  This was not quite right before and we were
+	getting uncontrolled interrupt nesting in tm27.
+	* timer/timer.c (Timer_Initialize): Added an extra reset and
+	changed the ITMR register so we will never get an interrupt.
+	(Read_timer): Fixed so the timer actually stops before it
+	is read.  Before some times reported were outraguously high.
+	* start/start.S: Major clean including using stack in linkcmds,
+	deleting unused code, and zeroing the BSS using the linkcmds
+	information.
+	* startup/linkcmds: Put heap in lower memory than workspace
+	and move _clear_end so both are zeroed.
+
 2001-01-12	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h, timer/timer.c: Updated so timer appears to

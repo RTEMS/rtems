@@ -74,7 +74,11 @@ extern "C" {
   } while(0)
 
 #define Clear_tm27_intr() \
-  TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TCR,   0x03 );
+  do { \
+    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_ITMR, 0x0001 ); \
+    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_CCDR, 0x3 ); \
+    TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TISR,   0x00 ); \
+  } while(0)
 
 #define Lower_tm27_intr() \
   mips_enable_in_interrupt_mask( 0xff01 );
