@@ -25,7 +25,7 @@
 
 
 /*
- *  DY-4 is out of their mind and uses a non-standard clock.
+ *  DY-4 uses a non-standard clock for the Exar 88681.
  */
 
 #undef  MC68681_BAUD_RATE_MASK_9600
