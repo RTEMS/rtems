@@ -1,3 +1,8 @@
+2001-05-14	Joel Sherrill <joel@OARcorp.com>
+
+	* dummy/Makefile.am, wrapup/Makefile.am: Fixed to generate
+	a library of the same name.
+
 2002-03-20	Chris Johns <ccj@acm.org>
 
 	* monitor/mon-command.c: Per PR192 the RTEMS monitor makes everything

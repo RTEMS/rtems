@@ -3,8 +3,8 @@
 ##
 
 
-PGMNAME = dummy
-PGM = $(ARCH)/$(PGMNAME).rel
+LIBNAME = libdummy-tmp
+LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = dummy.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
@@ -19,17 +19,14 @@ include $(top_srcdir)/../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): $(OBJS)
-	$(make-rel)
-
-$(PROJECT_RELEASE)/lib/$(PGMNAME)$(LIB_VARIANT).rel: $(PGM)
-	$(INSTALL_DATA) $< $@
+$(LIB): $(OBJS)
+	$(make-library)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(PGMNAME)$(LIB_VARIANT).rel
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
-.PRECIOUS: $(PGM)
+.PRECIOUS: $(LIB)
 
 EXTRA_DIST = README dummy.c
 
