@@ -9,10 +9,10 @@ LIBNAME = libnetchip
 LIB = $(ARCH)/$(LIBNAME).a
 
 # add cs8900.c to work with it and make it compile
-C_FILES = dec21140.c i82586.c sonic.c
+C_FILES = dec21140.c i82586.c sonic.c if_fxp.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-include_libchip_HEADERS = cs8900.h i82586var.h sonic.h
+include_libchip_HEADERS = cs8900.h i82586var.h if_fxpvar.h sonic.h
 
 OBJS = $(C_O_FILES)
 
@@ -52,6 +52,6 @@ endif
 .PRECIOUS: $(LIB)
 
 EXTRA_DIST = README README.cs8900 README.dec21140 README.i82586 README.sonic \
-    cs8900.c dec21140.c i82586.c sonic.c
+    cs8900.c dec21140.c i82586.c if_fxp.c sonic.c
 
 include $(top_srcdir)/../../../automake/local.am
