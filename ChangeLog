@@ -1,3 +1,7 @@
+2003-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/version.m4: Updated to rtems-4.6.0pre1.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootstrap: Remove attempts to detect autoconf and automake using
