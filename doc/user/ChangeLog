@@ -1,3 +1,7 @@
+2003-09-19	Joel Sherrill <joel@OARcorp.com>
+
+	* c_user.texi, fatal.t, preface.texi, rtmon.t: Merge from branch.
+
 2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* fatal.t: Reflect c/src/exec having moved to cpukit.
