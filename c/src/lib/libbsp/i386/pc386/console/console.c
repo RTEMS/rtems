@@ -49,7 +49,14 @@
  *	PC386_UART_COM2
  */
 
-int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
+/*
+ * Possible value for console input/output :
+ *	PC386_CONSOLE_PORT_CONSOLE
+ *	PC386_UART_COM1
+ *	PC386_UART_COM2
+ */
+
+int PC386ConsolePort = PC386_UART_COM2;
 
 static int conSetAttr(int minor, const struct termios *);
 extern BSP_polling_getchar_function_type BSP_poll_char;
