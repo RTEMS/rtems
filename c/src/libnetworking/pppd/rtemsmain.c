@@ -74,7 +74,6 @@ static const char rcsid[] = RCSID;
 char ifname[32];		/* Interface name */
 int pppifunit;			/* Interface unit number */
 
-char *progname;			/* Name of this program */
 char hostname[MAXNAMELEN];	/* Our hostname */
 static char ppp_devnam[MAXPATHLEN]; /* name of PPP tty (maybe ttypx) */
 
@@ -87,7 +86,7 @@ int detached;			/* have detached from terminal */
 struct stat devstat;		/* result of stat() on devnam */
 int prepass = 0;		/* doing prepass to find device name */
 int devnam_fixed;		/* set while in options.ttyxx file */
-volatile int status;		/* exit status for pppd */
+volatile int pppd_status;		/* exit status for pppd */
 int unsuccess;			/* # unsuccessful connection attempts */
 int do_callback;		/* != 0 if we should do callback next */
 int doing_callback;		/* != 0 if we are doing callback */
@@ -102,8 +101,8 @@ static int pty_master;		/* fd for master side of pty */
 static int pty_slave;		/* fd for slave side of pty */
 static int real_ttyfd;		/* fd for actual serial port (not pty) */
 
-int phase;			/* where the link is at */
-int kill_link;
+int pppd_phase;			/* where the link is at */
+int pppd_kill_link;
 int open_ccp_flag;
 
 char **script_env;		/* Env. variable values for scripts */
@@ -195,8 +194,6 @@ pppdmain(argc, argv)
         (*protp->init)(0);
 #endif
 
-    progname = *argv;
-
 
     if (!ppp_available()) {
 	option_error(no_ppp_msg);
@@ -237,7 +234,7 @@ pppdmain(argc, argv)
 	need_holdoff = 1;
 	ttyfd = -1;
 	real_ttyfd = -1;
-	status = EXIT_OK;
+	pppd_status = EXIT_OK;
 	++unsuccess;
 	doing_callback = do_callback;
 	do_callback = 0;
@@ -260,7 +257,7 @@ pppdmain(argc, argv)
 	 * in order to wait for the carrier detect signal from the modem.
 	 */
 	hungup = 0;
-	kill_link = 0;
+	pppd_kill_link = 0;
 	connector = doing_callback? callback_script: connect_script;
 	if (devnam[0] != 0) {
 	    for (;;) {
@@ -275,7 +272,7 @@ pppdmain(argc, argv)
 		errno = err;
 		if (err != EINTR) {
 		    error("Failed to open %s: %m", devnam);
-		    status = EXIT_OPEN_FAILED;
+		    pppd_status = EXIT_OPEN_FAILED;
 		}
 		if (!persist || err != EINTR)
 		    goto fail;
@@ -313,10 +310,10 @@ pppdmain(argc, argv)
 	    if (initializer && initializer[0]) {
 		if (device_script(ttyfd, DIALER_INIT, initializer) < 0) {
 		    error("Initializer script failed");
-		    status = EXIT_INIT_FAILED;
+		    pppd_status = EXIT_INIT_FAILED;
 		    goto fail;
 		}
-		if (kill_link)
+		if (pppd_kill_link)
 		    goto disconnect;
 
 		info("Serial port initialized.");
@@ -325,10 +322,10 @@ pppdmain(argc, argv)
 	    if (connector && connector[0]) {
 		if (device_script(ttyfd, DIALER_CONNECT, connector) < 0) {
 		    error("Connect script failed");
-		    status = EXIT_CONNECT_FAILED;
+		    pppd_status = EXIT_CONNECT_FAILED;
 		    goto fail;
 		}
-		if (kill_link)
+		if (pppd_kill_link)
 		    goto disconnect;
 
 		info("Serial connection established.");
@@ -350,9 +347,9 @@ pppdmain(argc, argv)
 		    break;
 		if (errno != EINTR) {
 		    error("Failed to reopen %s: %m", devnam);
-		    status = EXIT_OPEN_FAILED;
+		    pppd_status = EXIT_OPEN_FAILED;
 		}
-		if (!persist || errno != EINTR || hungup || kill_link)
+		if (!persist || errno != EINTR || hungup || pppd_kill_link)
 		    goto fail;
 	    }
 	    close(i);
@@ -370,7 +367,7 @@ pppdmain(argc, argv)
 	/* set up the serial device as a ppp interface */
 	fd_ppp = establish_ppp(ttyfd);
 	if (fd_ppp < 0) {
-	    status = EXIT_FATAL_ERROR;
+	    pppd_status = EXIT_FATAL_ERROR;
 	    goto disconnect;
 	}
 
@@ -390,19 +387,19 @@ pppdmain(argc, argv)
 	lcp_open(0);		/* Start protocol */
 
 	open_ccp_flag = 0;
-	status = EXIT_NEGOTIATION_FAILED;
+	pppd_status = EXIT_NEGOTIATION_FAILED;
 	new_phase(PHASE_ESTABLISH);
-	while (phase != PHASE_DEAD) {
+	while (pppd_phase != PHASE_DEAD) {
    	    wait_input(timeleft(&timo));
 	    calltimeout();
             get_input();
 
-	    if (kill_link) {
+	    if (pppd_kill_link) {
 		lcp_close(0, "User request");
-		kill_link = 0;
+		pppd_kill_link = 0;
 	    }
 	    if (open_ccp_flag) {
-		if (phase == PHASE_NETWORK || phase == PHASE_RUNNING) {
+		if (pppd_phase == PHASE_NETWORK || pppd_phase == PHASE_RUNNING) {
 		    ccp_fsm[0].flags = OPT_RESTART; /* clears OPT_SILENT */
 		    (*ccp_protent.open)(0);
 		}
@@ -450,7 +447,7 @@ pppdmain(argc, argv)
 	if (!persist || (maxfail > 0 && unsuccess >= maxfail))
 	    break;
 
-	kill_link = 0;
+	pppd_kill_link = 0;
 	if (demand)
 	    demand_discard();
 	t = need_holdoff? holdoff: 0;
@@ -463,18 +460,18 @@ pppdmain(argc, argv)
    	        wait_input(timeleft(&timo));
 
 		calltimeout();
-		if (kill_link) {
-		    kill_link = 0;
+		if (pppd_kill_link) {
+		    pppd_kill_link = 0;
 		    new_phase(PHASE_DORMANT); /* allow signal to end holdoff */
 		}
-	    } while (phase == PHASE_HOLDOFF);
+	    } while (pppd_phase == PHASE_HOLDOFF);
 	    if (!persist)
 		break;
 	}
     }
 
-    die(status);
-    return status;
+    die(pppd_status);
+    return pppd_status;
 }
 
 /*
@@ -591,7 +588,7 @@ get_input(void)
     if (len == 0) {
 	notice("Modem hangup");
 	hungup = 1;
-	status = EXIT_HANGUP;
+	pppd_status = EXIT_HANGUP;
 	lcp_lowerdown(0);	/* serial link is no longer available */
 	link_terminated(0);
 	return;
@@ -621,11 +618,11 @@ get_input(void)
      * Until we get past the authentication phase, toss all packets
      * except LCP, LQR and authentication packets.
      */
-    if (phase <= PHASE_AUTHENTICATE
+    if (pppd_phase <= PHASE_AUTHENTICATE
 	&& !(protocol == PPP_LCP || protocol == PPP_LQR
 	     || protocol == PPP_PAP || protocol == PPP_CHAP)) {
 	MAINDEBUG(("get_input: discarding proto 0x%x in phase %d",
-		   protocol, phase));
+		   protocol, pppd_phase));
 	return;
     }
 
@@ -663,7 +660,7 @@ void
 new_phase(p)
     int p;
 {
-    phase = p;
+    pppd_phase = p;
     if (new_phase_hook)
 	(*new_phase_hook)(p);
 }

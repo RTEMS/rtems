@@ -249,7 +249,7 @@ void
 link_terminated(unit)
     int unit;
 {
-    if (phase == PHASE_DEAD)
+    if (pppd_phase == PHASE_DEAD)
 	return;
     if (pap_logout_hook) {
 	pap_logout_hook();
@@ -283,7 +283,7 @@ link_down(unit)
     }
     num_np_open = 0;
     num_np_up = 0;
-    if (phase != PHASE_DEAD)
+    if (pppd_phase != PHASE_DEAD)
 	new_phase(PHASE_TERMINATE);
 }
 
@@ -323,7 +323,7 @@ link_established(unit)
 	} else if (!wo->neg_upap || !null_login(unit)) {
 	    warn("peer refused to authenticate: terminating link");
 	    lcp_close(unit, "peer refused to authenticate");
-	    status = EXIT_PEER_AUTH_FAILED;
+	    pppd_status = EXIT_PEER_AUTH_FAILED;
 	    return;
 	}
     }
@@ -425,7 +425,7 @@ auth_peer_fail(unit, protocol)
      * Authentication failure: take the link down
      */
     lcp_close(unit, "Authentication failed");
-    status = EXIT_PEER_AUTH_FAILED;
+    pppd_status = EXIT_PEER_AUTH_FAILED;
 }
 
 /*
@@ -483,7 +483,7 @@ auth_withpeer_fail(unit, protocol)
      * authentication secrets.
      */
     lcp_close(unit, "Failed to authenticate ourselves to peer");
-    status = EXIT_AUTH_TOPEER_FAILED;
+    pppd_status = EXIT_AUTH_TOPEER_FAILED;
 }
 
 /*
@@ -531,7 +531,7 @@ np_up(unit, proto)
 	/*
 	 * At this point we consider that the link has come up successfully.
 	 */
-	status = EXIT_OK;
+	pppd_status = EXIT_OK;
 	unsuccess = 0;
 	new_phase(PHASE_RUNNING);
 
@@ -603,7 +603,7 @@ check_idle(arg)
 	notice("Terminating connection due to lack of activity.");
 	lcp_close(0, "Link inactive");
 	need_holdoff = 0;
-	status = EXIT_IDLE_TIMEOUT;
+	pppd_status = EXIT_IDLE_TIMEOUT;
     } else {
 	TIMEOUT(check_idle, NULL, tlim);
     }
@@ -618,7 +618,7 @@ connect_time_expired(arg)
 {
     info("Connect time expired");
     lcp_close(0, "Connect time expired");	/* Close connection */
-    status = EXIT_CONNECT_TIME;
+    pppd_status = EXIT_CONNECT_TIME;
 }
 
 /*

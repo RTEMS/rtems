@@ -140,22 +140,17 @@ static int _O = 0;		/* Internal state */
 #endif
 /*************** Micro getopt() *********************************************/
 
-char *program_name;
-
 #define	MAX_ABORTS		16
 #define	MAX_REPORTS		16
 #define	DEFAULT_CHAT_TIMEOUT	45
 #define MAX_TIMEOUTS            10
 
-int echo             = 0;
-int quiet            = 0;
-int report           = 0;
-int use_env          = 0;
-int exit_code        = 0;
-char *report_file    = (char *) 0;
-char *chat_file      = (char *) 0;
-char *phone_num      = (char *) 0;
-char *phone_num2     = (char *) 0;
+static int echo             = 0;
+static int quiet            = 0;
+static int use_env          = 0;
+static int exit_code        = 0;
+static char *phone_num      = (char *) 0;
+static char *phone_num2     = (char *) 0;
 static int ttyfd;
 static int timeout   = DEFAULT_CHAT_TIMEOUT;
 

@@ -623,7 +623,7 @@ process_option(opt, argv)
 
     if ((opt->flags & OPT_PREPASS) == 0 && prepass)
 	return 1;
-    if ((opt->flags & OPT_INITONLY) && phase != PHASE_INITIALIZE) {
+    if ((opt->flags & OPT_INITONLY) && pppd_phase != PHASE_INITIALIZE) {
 	option_error("it's too late to use the %s option", opt->name);
 	return 0;
     }
@@ -777,15 +777,15 @@ add_options(opt)
 static void
 usage()
 {
-    if (phase == PHASE_INITIALIZE)
+    if (pppd_phase == PHASE_INITIALIZE)
 	fprintf(stderr, usage_string, VERSION, PATCHLEVEL, IMPLEMENTATION,
-		progname);
+		"rtems_pppd");
 }
 
 /*
  * option_error - print a message about an error in an option.
  * The message is logged, and also sent to
- * stderr if phase == PHASE_INITIALIZE.
+ * stderr if pppd_phase == PHASE_INITIALIZE.
  */
 void
 option_error __V((char *fmt, ...))
@@ -1322,7 +1322,7 @@ setdevname(cp)
 	return -1;
     }
 
-    if (phase != PHASE_INITIALIZE) {
+    if (pppd_phase != PHASE_INITIALIZE) {
 	option_error("device name cannot be changed after initialization");
 	return -1;
     } else if (devnam_fixed) {

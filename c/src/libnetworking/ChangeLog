@@ -1,3 +1,13 @@
+2003-04-10	Joel Sherrill <joel@OARcorp.com>
+
+	PR 371/pppd
+	* pppd/auth.c, pppd/chat.c, pppd/demand.c, pppd/fsm.c, pppd/lcp.c,
+	pppd/options.c, pppd/pppd.h, pppd/rtemsmain.c, pppd/rtemspppd.c:
+	Change many symbols to static. There are still global symbols in
+	rtemspppd.h which might need to be changed or converted into member
+	of a structure which is dereferenced with a pointer that is managed
+	as a per task variable. But this patch should avoid many conflicts.
+
 2003-03-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* pppd/utils.c: Remove strlcpy, strlcat.

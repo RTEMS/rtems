@@ -137,16 +137,15 @@ struct wordlist {
  * Global variables.
  */
 
-extern int	kill_link;	/* Signal to terminate processing loop */
+extern int	pppd_kill_link;	/* Signal to terminate processing loop */
 extern int	hungup;		/* Physical layer has disconnected */
 extern int	pppifunit;	/* Interface unit number */
 extern char	ifname[];	/* Interface name */
 extern int	ttyfd;		/* Serial device file descriptor */
 extern char	hostname[];	/* Our hostname */
 extern u_char	outpacket_buf[]; /* Buffer for outgoing packets */
-extern int	phase;		/* Current state of link - see values below */
+extern int	pppd_phase;		/* Current state of link - see values below */
 extern int	baud_rate;	/* Current link speed in bits/sec */
-extern char	*progname;	/* Name of this program */
 extern int	redirect_stderr;/* Connector's stderr should go to file */
 extern char	peer_authname[];/* Authenticated name of peer */
 extern int	privileged;	/* We were run by real-uid root */
@@ -159,7 +158,7 @@ extern struct pppd_stats link_stats; /* byte/packet counts etc. for link */
 extern int	using_pty;	/* using pty as device (notty or pty opt.) */
 extern int	log_to_fd;	/* logging to this fd as well as syslog */
 extern char	*no_ppp_msg;	/* message to print if ppp not in kernel */
-extern volatile int status;	/* exit status for pppd */
+extern volatile int pppd_status;	/* exit status for pppd */
 extern int	devnam_fixed;	/* can no longer change devnam */
 extern int	unsuccess;	/* # unsuccessful connection attempts */
 extern int	do_callback;	/* set if we want to do callback next */

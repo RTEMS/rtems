@@ -177,12 +177,12 @@ int rtems_pppd_set_option(const char *pOption, const char *pValue)
     }
 
     /* save current phase value */
-    prevPhase = phase;
-    phase     = PHASE_INITIALIZE;
+    prevPhase = pppd_phase;
+    pppd_phase     = PHASE_INITIALIZE;
 
     /* process option and reset phase value */
     iReturn = options_from_list(&option, 1);
-    phase   = prevPhase;
+    pppd_phase   = prevPhase;
   }
 
   return ( iReturn );
@@ -200,7 +200,7 @@ static void timeout_terminate(void *arg)
 {
   /* set pppd global variables to disconnect */
   persist   = 0;
-  kill_link = 1;
+  pppd_kill_link = 1;
 }
 
 int rtems_pppd_disconnect(void)
