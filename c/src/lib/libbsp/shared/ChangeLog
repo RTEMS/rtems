@@ -1,3 +1,13 @@
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/README.universe, vmeUniverse/vmeUniverse.c,
+	vmeUniverse/vmeUniverse.h: New files.
+	* Makefile.am: Modified to reflect addition of files.
+	* Per PR214, contributes a driver for the TUNDRA UNIVERSE
+	VME-PCI bridge to libbsp/shared.  
+	NOTE: This driver is maintained _outside_ RTEMS by Till.  Please
+	forward future modifications to him.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.

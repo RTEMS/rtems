@@ -1,0 +1,19 @@
+The universe II driver is in a separate subdir
+because it is maintained at SSRL outside of the
+rtems CVS tree (it supports other OSes as well)
+
+Till Straumann <strauman@slac.stanford.edu> 1/2002
+
+NOTES:
+This driver is maintained _outside_ rtems.
+Please forward future modifications to me.
+
+A BSP that wants to use the vmeUniverse driver
+must implement the following headers / functionality:
+ - <bsp/pci.h> offering an API like 'libbsp/powerpc/shared/pci'
+ - <bsp/irq.h> offering the 'new style' RTEMS irq API
+   (like 'libbsp/powerpc/shared/irq').
+
+The BSP should then use "VPATH magic" (to use Joel's
+words :-) to reach the vmeUniverse.* files in the
+universe subdir.
