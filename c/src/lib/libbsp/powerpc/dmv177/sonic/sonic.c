@@ -40,6 +40,12 @@
 #include <ka9q/commands.h>
 
 /*
+ * XXX
+ */
+
+#include <dmv170.h>
+
+/*
  * Number of devices supported by this driver
  */
 #ifndef NSONIC
