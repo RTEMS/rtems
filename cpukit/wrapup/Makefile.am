@@ -12,10 +12,6 @@ ARCH_DEBUG_V = o-debug
 ARCH__V = $(ARCH_OPTIMIZE_V)
 ARCH = $(ARCH_$(VARIANT_V)_V)
 
-${ARCH}/$(dirstamp):
-	@$(mkdir_p) $(ARCH)
-	@: > $(ARCH)/$(dirstamp)
-
 project_lib_DATA = $(ARCH)/librtemscpu$(LIB_VARIANT).a
 CLEANFILES = o-optimize/librtemscpu.a
 CLEANFILES += o-debug/librtemscpu_g.a
@@ -78,8 +74,9 @@ TMP_LIBS += ../librpc/librpc$(LIB_VARIANT).a
 TMP_LIBS += ../librpc/libxdr$(LIB_VARIANT).a
 endif
 
-$(ARCH)/librtemscpu$(LIB_VARIANT).a: $(TMP_LIBS) $(ARCH)/$(dirstamp)
+$(ARCH)/librtemscpu$(LIB_VARIANT).a: $(TMP_LIBS)
 	rm -f $@
+	$(mkdir_p) $(ARCH)
 	rm -rf $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	for f in $(TMP_LIBS); do \
 	  case $$f in \
@@ -115,9 +112,12 @@ TMPINSTALL_FILES =
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a: $(ARCH)/librtemscpu$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a
 TMPINSTALL_FILES += $(PROJECT_LIB)/librtemscpu$(LIB_VARIANT).a
+
+CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

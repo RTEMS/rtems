@@ -1,5 +1,10 @@
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Remove $(ARCH)/$(dirstamp).
+	Add TMPINSTALL_FILES to CLEANFILES.
+
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
 	Add PREINSTALL_FILES to CLEANFILES.
 	* automake/local.am: Remove depend-am.
