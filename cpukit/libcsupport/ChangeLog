@@ -1,3 +1,9 @@
+2003-02-20	Wolfram Wadepohl <W.Wadepohl@indumat.de>
+
+	PR 357/rtems_misc
+	* src/termios.c (rtems_termios_open):  Fixed code the incorrectly
+	checked that the wrong pointer during allocation was NULL.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
