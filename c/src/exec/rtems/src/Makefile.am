@@ -50,7 +50,7 @@ PARTITION_C_FILES = part.c partcreate.c partdelete.c partgetbuffer.c \
 DPMEM_C_FILES = dpmem.c dpmemcreate.c dpmemdelete.c dpmemexternal2internal.c \
     dpmemident.c dpmeminternal2external.c
 
-STD_C_FILES = attr.c cache.c $(TASK_C_FILES) $(RATEMON_C_FILES) $(INTR_C_FILES) \
+STD_C_FILES = attr.c $(TASK_C_FILES) $(RATEMON_C_FILES) $(INTR_C_FILES) \
     $(CLOCK_C_FILES) $(TIMER_C_FILES) $(SEMAPHORE_C_FILES) \
     $(MESSAGE_QUEUE_C_FILES) $(EVENT_C_FILES) $(SIGNAL_C_FILES) \
     $(PARTITION_C_FILES) $(REGION_C_FILES) $(DPMEM_C_FILES)

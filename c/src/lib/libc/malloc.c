@@ -419,26 +419,4 @@ void _free_r(
   free( ptr );
 }
 
-
-/*
- *  rtems_cache_aligned_malloc
- *
- *  DESCRIPTION:
- *
- *  This function is used to allocate storage that spans an
- *  integral number of cache blocks.
- */
-RTEMS_INLINE_ROUTINE void * rtems_cache_aligned_malloc (
-  size_t nbytes
-)
-{
-  /*
-   * Arrange to have the user storage start on the first cache
-   * block beyond the header.
-   */
-  return (void *) ((((unsigned long) malloc( nbytes + _CPU_DATA_CACHE_ALIGNMENT - 1 ))
-  									+ _CPU_DATA_CACHE_ALIGNMENT - 1 ) &(~(_CPU_DATA_CACHE_ALIGNMENT - 1)) );
-}
-
 #endif
-

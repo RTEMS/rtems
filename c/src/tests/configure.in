@@ -44,7 +44,7 @@ RTEMS_CHECK_ITRON_API(RTEMS_BSP)
 
 if test "$tests_enabled" = "yes"; then
   # do functionality tests first, then performance tests
-  cfg_subdirs="libtests sptests"
+  cfg_subdirs="libtests sptests libffi"
   if test "$HAS_MP" = "yes"; then
     cfg_subdirs="$cfg_subdirs mptests"
   fi
@@ -67,7 +67,6 @@ AC_SUBST(BARE_CPU_MODEL)
 AC_CONFIG_SUBDIRS(tools)
 AC_CONFIG_SUBDIRS(support)
 AC_CONFIG_SUBDIRS(samples)
-AC_CONFIG_SUBDIRS(libffi)
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 
 # Explicitly list all Makefiles here

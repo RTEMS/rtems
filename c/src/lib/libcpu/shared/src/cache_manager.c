@@ -1,5 +1,4 @@
-/*  cache.c
- *
+/*
  *  Cache Manager
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -10,7 +9,7 @@
  *  http://www.OARcorp.com/rtems/license.html.
  *
  *  
- *  The functions in this file define the API to the RTEMS Cache Manager and
+ *  The functions in this file implement the API to the RTEMS Cache Manager and
  *  are divided into data cache and instruction cache functions. Data cache
  *  functions are only declared if a data cache is supported. Instruction
  *  cache functions are only declared if an instruction cache is supported.
@@ -30,15 +29,15 @@
  *  to this Manager.
  */
 
-#include <rtems/system.h>
+#include <rtems.h>
 #include <sys/types.h>
-#include <rtems/rtems/cache.h>
+#include <libcpu/cache.h>
+#include "cache_.h"
 
 
 /*
- * THESE FUNCTIONS ONLY EXIST IF WE HAVE A DATA CACHE
+ * THESE FUNCTIONS ONLY HAVE BODIES IF WE HAVE A DATA CACHE
  */
-#if defined(_CPU_DATA_CACHE_ALIGNMENT)
 
 /*
  * This function is called to flush the data cache by performing cache
@@ -48,18 +47,22 @@
 void
 rtems_flush_multiple_data_cache_lines( const void * d_addr, size_t n_bytes )
 {
-    const void * final_address;
-   /*
-    * Set d_addr to the beginning of the cache line; final_address indicates
-    * the last address_t which needs to be pushed. Increment d_addr and push
-    * the resulting line until final_address is passed.
-    */
-    final_address = (void *)((size_t)d_addr + n_bytes - 1);
-    d_addr = (void *)((size_t)d_addr & ~(_CPU_DATA_CACHE_ALIGNMENT - 1));
-    while( d_addr <= final_address )  {
-        _CPU_flush_1_data_cache_line( d_addr );
-        d_addr = (void *)((size_t)d_addr + _CPU_DATA_CACHE_ALIGNMENT);
-    }
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+  const void * final_address;
+
+ /*
+  * Set d_addr to the beginning of the cache line; final_address indicates
+  * the last address_t which needs to be pushed. Increment d_addr and push
+  * the resulting line until final_address is passed.
+  */
+
+  final_address = (void *)((size_t)d_addr + n_bytes - 1);
+  d_addr = (void *)((size_t)d_addr & ~(_CPU_DATA_CACHE_ALIGNMENT - 1));
+  while( d_addr <= final_address )  {
+    _CPU_flush_1_data_cache_line( d_addr );
+    d_addr = (void *)((size_t)d_addr + _CPU_DATA_CACHE_ALIGNMENT);
+  }
+#endif
 }
 
 
@@ -68,21 +71,26 @@ rtems_flush_multiple_data_cache_lines( const void * d_addr, size_t n_bytes )
  * It must determine how many cache lines need to be invalidated and then
  * perform the invalidations.
  */
+
 void
 rtems_invalidate_multiple_data_cache_lines( const void * d_addr, size_t n_bytes )
 {
-    const void * final_address;
-   /*
-    * Set d_addr to the beginning of the cache line; final_address indicates
-    * the last address_t which needs to be invalidated. Increment d_addr and
-    * invalidate the resulting line until final_address is passed.
-    */
-    final_address = (void *)((size_t)d_addr + n_bytes - 1);
-    d_addr = (void *)((size_t)d_addr & ~(_CPU_DATA_CACHE_ALIGNMENT - 1));
-    while( final_address > d_addr ) {
-        _CPU_invalidate_1_data_cache_line( d_addr );
-        d_addr = (void *)((size_t)d_addr + _CPU_DATA_CACHE_ALIGNMENT);
-    }
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+  const void * final_address;
+
+ /*
+  * Set d_addr to the beginning of the cache line; final_address indicates
+  * the last address_t which needs to be invalidated. Increment d_addr and
+  * invalidate the resulting line until final_address is passed.
+  */
+
+  final_address = (void *)((size_t)d_addr + n_bytes - 1);
+  d_addr = (void *)((size_t)d_addr & ~(_CPU_DATA_CACHE_ALIGNMENT - 1));
+  while( final_address > d_addr ) {
+    _CPU_invalidate_1_data_cache_line( d_addr );
+    d_addr = (void *)((size_t)d_addr + _CPU_DATA_CACHE_ALIGNMENT);
+  }
+#endif
 }
 
 
@@ -93,11 +101,12 @@ rtems_invalidate_multiple_data_cache_lines( const void * d_addr, size_t n_bytes 
 void
 rtems_flush_entire_data_cache( void )
 {
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
    /*
     * Call the CPU-specific routine
     */
    _CPU_flush_entire_data_cache();
-      
+#endif
 }
 
 
@@ -108,10 +117,13 @@ rtems_flush_entire_data_cache( void )
 void
 rtems_invalidate_entire_data_cache( void )
 {
-   /*
-    * Call the CPU-specific routine
-    */
-   _CPU_invalidate_entire_data_cache();
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+ /*
+  * Call the CPU-specific routine
+  */
+
+ _CPU_invalidate_entire_data_cache();
+#endif
 }
 
 
@@ -121,7 +133,11 @@ rtems_invalidate_entire_data_cache( void )
 int
 rtems_get_data_cache_line_size( void )
 {
-	return _CPU_DATA_CACHE_ALIGNMENT;
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+  return _CPU_DATA_CACHE_ALIGNMENT;
+#else
+  return 0;
+#endif
 }
 
 
@@ -132,7 +148,9 @@ rtems_get_data_cache_line_size( void )
 void
 rtems_freeze_data_cache( void )
 {
-	_CPU_freeze_data_cache();
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+  _CPU_freeze_data_cache();
+#endif
 }
 
 
@@ -141,7 +159,9 @@ rtems_freeze_data_cache( void )
  */
 void rtems_unfreeze_data_cache( void )
 {
-	_CPU_unfreeze_data_cache();
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+  _CPU_unfreeze_data_cache();
+#endif
 }
 
 
@@ -149,7 +169,9 @@ void rtems_unfreeze_data_cache( void )
 void
 rtems_enable_data_cache( void )
 {
-	_CPU_enable_data_cache();
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+  _CPU_enable_data_cache();
+#endif
 }
 
 
@@ -157,16 +179,16 @@ rtems_enable_data_cache( void )
 void
 rtems_disable_data_cache( void )
 {
-	_CPU_disable_data_cache();
-}
+#if defined(_CPU_DATA_CACHE_ALIGNMENT)
+  _CPU_disable_data_cache();
 #endif
+}
 
 
 
 /*
- * THESE FUNCTIONS ONLY EXIST IF WE HAVE AN INSTRUCTION CACHE
+ * THESE FUNCTIONS ONLY HAVE BODIES IF WE HAVE AN INSTRUCTION CACHE
  */
-#if defined(_CPU_INST_CACHE_ALIGNMENT)
 
 /*
  * This function is responsible for performing an instruction cache
@@ -176,18 +198,22 @@ rtems_disable_data_cache( void )
 void
 rtems_invalidate_multiple_inst_cache_lines( const void * i_addr, size_t n_bytes )
 {
-    const void * final_address;
-   /*
-    * Set i_addr to the beginning of the cache line; final_address indicates
-    * the last address_t which needs to be invalidated. Increment i_addr and
-    * invalidate the resulting line until final_address is passed.
-    */
-    final_address = (void *)((size_t)i_addr + n_bytes - 1);
-    i_addr = (void *)((size_t)i_addr & ~(_CPU_INST_CACHE_ALIGNMENT - 1));
-    while( final_address > i_addr ) {
-        _CPU_invalidate_1_inst_cache_line( i_addr );
-        i_addr = (void *)((size_t)i_addr + _CPU_INST_CACHE_ALIGNMENT);
-    }
+#if defined(_CPU_INST_CACHE_ALIGNMENT)
+  const void * final_address;
+
+ /*
+  * Set i_addr to the beginning of the cache line; final_address indicates
+  * the last address_t which needs to be invalidated. Increment i_addr and
+  * invalidate the resulting line until final_address is passed.
+  */
+
+  final_address = (void *)((size_t)i_addr + n_bytes - 1);
+  i_addr = (void *)((size_t)i_addr & ~(_CPU_INST_CACHE_ALIGNMENT - 1));
+  while( final_address > i_addr ) {
+    _CPU_invalidate_1_inst_cache_line( i_addr );
+    i_addr = (void *)((size_t)i_addr + _CPU_INST_CACHE_ALIGNMENT);
+  }
+#endif
 }
 
 
@@ -198,10 +224,13 @@ rtems_invalidate_multiple_inst_cache_lines( const void * i_addr, size_t n_bytes 
 void
 rtems_invalidate_entire_inst_cache( void )
 {
-   /*
-    * Call the CPU-specific routine
-    */
-   _CPU_invalidate_entire_inst_cache();
+#if defined(_CPU_INST_CACHE_ALIGNMENT)
+ /*
+  * Call the CPU-specific routine
+  */
+
+ _CPU_invalidate_entire_inst_cache();
+#endif
 }
 
 
@@ -211,7 +240,11 @@ rtems_invalidate_entire_inst_cache( void )
 int
 rtems_get_inst_cache_line_size( void )
 {
-	return _CPU_INST_CACHE_ALIGNMENT;
+#if defined(_CPU_INST_CACHE_ALIGNMENT)
+  return _CPU_INST_CACHE_ALIGNMENT;
+#else
+  return 0;
+#endif
 }
 
 
@@ -222,7 +255,9 @@ rtems_get_inst_cache_line_size( void )
 void
 rtems_freeze_inst_cache( void )
 {
-	_CPU_freeze_inst_cache();
+#if defined(_CPU_INST_CACHE_ALIGNMENT)
+  _CPU_freeze_inst_cache();
+#endif
 }
 
 
@@ -231,7 +266,9 @@ rtems_freeze_inst_cache( void )
  */
 void rtems_unfreeze_inst_cache( void )
 {
-	_CPU_unfreeze_inst_cache();
+#if defined(_CPU_INST_CACHE_ALIGNMENT)
+  _CPU_unfreeze_inst_cache();
+#endif
 }
 
 
@@ -239,7 +276,9 @@ void rtems_unfreeze_inst_cache( void )
 void
 rtems_enable_inst_cache( void )
 {
-	_CPU_enable_inst_cache();
+#if defined(_CPU_INST_CACHE_ALIGNMENT)
+  _CPU_enable_inst_cache();
+#endif
 }
 
 
@@ -247,6 +286,7 @@ rtems_enable_inst_cache( void )
 void
 rtems_disable_inst_cache( void )
 {
-	_CPU_disable_inst_cache();
-}
+#if defined(_CPU_INST_CACHE_ALIGNMENT)
+  _CPU_disable_inst_cache();
 #endif
+}

@@ -42,6 +42,7 @@ extern "C" {
 #include <rtems/init.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/intr.h>
+#include <rtems/rtems/cache.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/extension.h>
 #include <rtems/rtems/timer.h>
