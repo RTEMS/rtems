@@ -67,7 +67,6 @@ AM_CONDITIONAL([LIBSCORECPU],
 [test -f "${srcdir}/score/cpu/${RTEMS_CPU}/cpu.c"])
 
 AC_CONFIG_SUBDIRS([libcsupport])
-AC_CONFIG_SUBDIRS([libblock])
 AC_CONFIG_SUBDIRS([libfs])
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
   AC_CONFIG_SUBDIRS(libnetworking)
@@ -151,9 +150,10 @@ rtems/Makefile
 sapi/Makefile
 score/Makefile
 score/cpu/Makefile
-wrapup/Makefile
 ])
 
+AC_CONFIG_FILES([libblock/Makefile])
 AC_CONFIG_FILES([ada/Makefile])
+AC_CONFIG_FILES([wrapup/Makefile])
 
 AC_OUTPUT
