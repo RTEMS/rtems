@@ -18,8 +18,17 @@ summarize_chapter()
     sed -e "s/^.chapter/@section/"  \
         -e "s/$/ Chapter/" 
   echo
-  num_functions=`grep "()" $1 | wc -l`
-  echo "Functions: ${num_functions}"
+  functions_total=`grep "()" $1 | wc -l`
+  functions_implemented=`grep "()" $1 | grep Implemented | wc -l`
+  functions_unimplemented=`grep "()" $1 | grep Unimplemented | wc -l`
+  functions_unmplementable=`grep "()" $1 | grep Unimplementable | wc -l`
+
+  echo "@example"
+  echo "Total Number of Functions: ${functions_total} @*"
+  echo "Functions Implemented    : ${functions_implemented} @*"
+  echo "Functions Unimplemented  : ${functions_unimplemented} @*"
+  echo "Functions Unimplementable: ${functions_unmplementable} @*"
+  echo "@end example"
   echo
 }
 
