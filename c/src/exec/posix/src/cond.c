@@ -142,8 +142,15 @@ int pthread_condattr_setpshared(
   if ( !attr )
     return EINVAL;
 
-  attr->process_shared = pshared;
-  return 0;
+  switch ( pshared ) {
+    case PTHREAD_PROCESS_SHARED:
+    case PTHREAD_PROCESS_PRIVATE:
+      attr->process_shared = pshared;
+      return 0;
+
+    default:
+      return EINVAL;
+  }
 }
  
 /*PAGE

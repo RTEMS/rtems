@@ -80,6 +80,8 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
   (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_POSIX ] );
  
   deleted->API_Extensions[ THREAD_API_POSIX ] = NULL;
+
+  /* XXX run _POSIX_Keys_Run_destructors here? */
 }
 
 /*PAGE
@@ -225,13 +227,12 @@ int pthread_attr_setscope(
   switch ( contentionscope ) {
     case PTHREAD_SCOPE_PROCESS:
     case PTHREAD_SCOPE_SYSTEM:
-      break;
+      attr->contentionscope = contentionscope;
+      return 0;
+
     default:
       return EINVAL;
   }
-
-  attr->contentionscope = contentionscope;
-  return 0;
 }
 
 /*PAGE
@@ -267,13 +268,12 @@ int pthread_attr_setinheritsched(
   switch ( inheritsched ) {
     case PTHREAD_INHERIT_SCHED:
     case PTHREAD_EXPLICIT_SCHED:
-      break;
+      attr->inheritsched = inheritsched;
+      return 0;
+
     default:
       return EINVAL;
   }
-
-  attr->inheritsched = inheritsched;
-  return 0;
 }
 
 /*PAGE
@@ -306,8 +306,17 @@ int pthread_attr_setschedpolicy(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  attr->schedpolicy = policy;
-  return 0;
+  switch ( policy ) {
+    case SCHED_OTHER:
+    case SCHED_FIFO:
+    case SCHED_RR:
+    case SCHED_SPORADIC:
+      attr->schedpolicy = policy;
+      return 0;
+ 
+    default:
+      return EINVAL;
+  }
 }
 
 /*PAGE
@@ -401,9 +410,18 @@ int pthread_setschedparam(
   if ( !param )
     return EINVAL;
 
-  attr->schedpolicy = policy;
-  attr->schedparam  = *param;
-  return 0;
+  switch ( policy ) {
+    case SCHED_OTHER:
+    case SCHED_FIFO:
+    case SCHED_RR:
+    case SCHED_SPORADIC:
+      attr->schedpolicy = policy;
+      attr->schedparam  = *param;
+      return 0;
+ 
+    default:
+      return EINVAL;
+  }
 }
 
 /*PAGE
@@ -468,7 +486,7 @@ int pthread_attr_setstacksize(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  if ( stacksize < STACK_MINIMUM_SIZE )
+  if (stacksize < STACK_MINIMUM_SIZE)
     attr->stacksize = STACK_MINIMUM_SIZE;
   else
     attr->stacksize = stacksize;
@@ -539,8 +557,15 @@ int pthread_attr_setdetachstate(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  attr->detachstate = detachstate;
-  return 0;
+  switch ( detachstate ) {
+    case PTHREAD_CREATE_DETACHED:
+    case PTHREAD_CREATE_JOINABLE:
+      attr->detachstate = detachstate;
+      return 0;
+ 
+    default:
+      return EINVAL;
+  }
 }
 
 /*PAGE
@@ -733,6 +758,8 @@ void pthread_exit(
    *  XXX Will need to deal with join/detach
    */
 
+  /* XXX run _POSIX_Keys_Run_destructors here? */
+
   _Thread_Close( &_POSIX_Threads_Information, the_thread );
  
   _POSIX_Threads_Free( the_thread );
@@ -829,8 +856,15 @@ int pthread_attr_setcputime(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  attr->cputime_clock_allowed = clock_allowed;
-  return 0;
+  switch ( clock_allowed ) {
+    case CLOCK_ENABLED:
+    case CLOCK_DISABLED:
+      attr->cputime_clock_allowed = clock_allowed;
+      return 0;
+ 
+    default:
+      return EINVAL;
+  }
 }
 
 /*PAGE

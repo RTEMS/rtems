@@ -48,6 +48,12 @@ int sched_setscheduler(
   const struct sched_param *param
 )
 {
+  /*
+   *  Only supported for the "calling process" (i.e. this node).
+   */
+
+  assert( pid == getpid() );
+
   return POSIX_NOT_IMPLEMENTED();
 }
 
@@ -60,6 +66,12 @@ int sched_getscheduler(
   pid_t                     pid
 )
 {
+  /*
+   *  Only supported for the "calling process" (i.e. this node).
+   */
+
+  assert( pid == getpid() );
+
   return POSIX_NOT_IMPLEMENTED();
 }
 
@@ -105,10 +117,14 @@ int sched_rr_get_interval(
 
   /* XXX should get for errors? (bad pid) */
 
+  /* XXX some of the time routines also convert usecs to a timespec -- */
+  /* XXX   should this be a common routine? */
+
   us_per_quantum = _TOD_Microseconds_per_tick * _Thread_Ticks_per_timeslice;
 
   interval->tv_sec  = us_per_quantum / TOD_MICROSECONDS_PER_SECOND;
-  interval->tv_nsec = (us_per_quantum % TOD_MICROSECONDS_PER_SECOND) * 1000;
+  interval->tv_nsec = (us_per_quantum % TOD_MICROSECONDS_PER_SECOND) * 
+                         TOD_NANOSECONDS_PER_MICROSECOND;
   return 0;
 }
 

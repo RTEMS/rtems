@@ -5,6 +5,7 @@
 #include <sys/types.h>
 
 #include <rtems/system.h>
+#include <rtems/score/object.h>
 
 /*PAGE
  *
@@ -13,7 +14,7 @@
 
 pid_t getpid( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  return _Objects_Local_node;
 }
 
 /*PAGE

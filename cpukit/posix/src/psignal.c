@@ -31,6 +31,12 @@ int kill(
   int   sig
 )
 {
+  /*
+   *  Only supported for the "calling process" (i.e. this node).
+   */
+ 
+  assert( pid == getpid() );
+
   /* SIGABRT comes from abort via assert */
   if ( sig == SIGABRT ) {
     exit( 1 );
