@@ -427,6 +427,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 #else
 
+#define CONFIGURE_MAXIMUM_POSIX_THREADS         0
 #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API 0
 #define CONFIGURE_MEMORY_FOR_POSIX              0
 
