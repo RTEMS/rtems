@@ -401,7 +401,7 @@ ZEROLOOPTEST:
 	movel	d0,a7@-			| environp
 	movel	d0,a7@-			| argv
 	movel	d0,a7@-			| argc
-	jsr	SYM(main)		| Call C main
+	jsr	SYM(boot_card)		| Call C main
 
 	PUBLIC (_mainDone)
 SYM(_mainDone):

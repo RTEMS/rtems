@@ -166,17 +166,8 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
-int bsp_start(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
-
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside
@@ -265,12 +256,4 @@ int bsp_start(
   Cpu_table.timer_average_overhead = 2;
 
   Cpu_table.timer_least_valid = 3;
-
-  /*
-   *  Start RTEMS
-   */
-
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-
-  bsp_cleanup();
 }

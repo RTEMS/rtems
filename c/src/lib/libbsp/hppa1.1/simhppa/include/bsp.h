@@ -109,8 +109,6 @@ void bsp_cleanup( void );
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
-extern rtems_unsigned32          bsp_isr_level;
-
 extern int cpu_number;         /* from 0; cpu number in a multi cpu system */
 
 #ifdef __cplusplus

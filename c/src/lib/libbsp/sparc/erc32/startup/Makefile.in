@@ -11,13 +11,9 @@ PROJECT_ROOT = @PROJECT_ROOT@
 PGM=${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bspclean bspstart sbrk setvec spurious
+C_PIECES=bspclean bspstart main sbrk setvec spurious
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
-
-CC_PIECES=rtems-ctor
-CC_FILES=$(CC_PIECES:%=%.cc)
-CC_O_FILES=$(CC_PIECES:%=${ARCH}/%.o)
 
 H_FILES=
 
@@ -28,10 +24,6 @@ S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 
 SRCS=linkcmds $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
 OBJS=$(C_O_FILES)
-
-# We install the RTEMS constructor as a separate .o
-# so it can be easily place correctly by the compiler config file.
-INSTALLED_O_FILES=$(ARCH)/rtems-ctor.o
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
@@ -61,6 +53,5 @@ CLOBBER_ADDITIONS +=
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
-all:	${ARCH} $(SRCS) $(INSTALLED_O_FILES) $(PGM)
+all:	${ARCH} $(SRCS) $(PGM)
 	$(INSTALL) $(srcdir)/linkcmds ${PROJECT_RELEASE}/lib
-	$(INSTALL_VARIANT) $(INSTALLED_O_FILES) ${PROJECT_RELEASE}/lib

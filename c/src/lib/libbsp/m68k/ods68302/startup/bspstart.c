@@ -148,7 +148,7 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
-void bsp_start()
+void bsp_start( void )
 {
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
@@ -230,34 +230,4 @@ void bsp_start()
   /*
    *  Don't forget the other CPU Table entries.
    */
-
-  /*
-   *  Start RTEMS
-   */
-
-  bsp_isr_level = rtems_initialize_executive_early( &BSP_Configuration, &Cpu_table );
 }
-
-int main(int argc, char **argv, char **environ)
-{
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
-
-  rtems_initialize_executive_late( bsp_isr_level );
-
-  bsp_cleanup();
-
-  return 0;
-}
-
-void boot_bsp()
-{
-  /* the atexit hook will be before the static destructor list's entry
-     point */
-  bsp_start();
-
-  exit(main(0, 0, 0));
-}
-

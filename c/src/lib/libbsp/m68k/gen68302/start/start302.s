@@ -216,7 +216,7 @@ loop:   movel   d0,a1@+                | to zero out uninitialized
         movel   d0,a6                 | set base pointer
 
       /*
-       *  RTEMS should maintiain a separate interrupt stack on CPUs
+       *  RTEMS should maintain a separate interrupt stack on CPUs
        *  without one in hardware.  This is currently not supported
        *  on versions of the m68k without a HW intr stack.
        */
@@ -229,7 +229,7 @@ loop:   movel   d0,a1@+                | to zero out uninitialized
         move.l  #0,a7@-               | environp
         move.l  #0,a7@-               | argv
         move.l  #0,a7@-               | argc
-        jsr     SYM (main)
+        jsr     SYM (boot_card)
 
 	nop
 Bad:	bra	Bad

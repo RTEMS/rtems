@@ -161,17 +161,8 @@ bsp_postdriver_hook(void)
 
 extern int end; /* defined by linker */
 
-int bsp_start(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
-
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside
@@ -256,13 +247,4 @@ int bsp_start(
    *  Don't forget the other CPU Table entries.
    */
 
-  /*
-   *  Start RTEMS
-   */
-
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-
-  bsp_cleanup();
-
-  return 0;
 }

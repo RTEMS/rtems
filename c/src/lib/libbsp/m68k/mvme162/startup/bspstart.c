@@ -148,19 +148,10 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
-int main(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
   m68k_isr_entry *monitors_vector_table;
   int             index;
-
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
 
   /*
    *  162Bug Vectors are at 0xFFE00000
@@ -252,11 +243,4 @@ int main(
 
   BSP_Configuration.work_space_start = (void *)
      (RAM_END - BSP_Configuration.work_space_size);
-
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-  /* does not return */
-
-  bsp_cleanup();
-
-  return 0;
 }

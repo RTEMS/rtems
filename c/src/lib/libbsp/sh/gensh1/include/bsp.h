@@ -84,8 +84,6 @@ extern void *CPU_Interrupt_stack_high ;
 
 extern rtems_configuration_table BSP_Configuration;
 
-extern int bsp_start( int argc, char **argv, char **env );
-
 extern void bsp_cleanup( void );
 
 /*

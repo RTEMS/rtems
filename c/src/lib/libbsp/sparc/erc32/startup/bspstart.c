@@ -372,9 +372,4 @@ void bsp_start( void )
    */
 
   rtems_libio_config( &BSP_Configuration, BSP_LIBIO_MAX_FDS );
- 
-  bsp_isr_level = rtems_initialize_executive_early(
-     &BSP_Configuration,
-     &Cpu_table
-  );
 }

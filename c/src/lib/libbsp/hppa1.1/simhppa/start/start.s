@@ -20,7 +20,7 @@ _crt0_argv      .WORD    _progname, 0
 /*
  * stuff we need that is defined elsewhere.
  */
-	.IMPORT main, CODE
+	.IMPORT boot_card, CODE
 	.IMPORT _bss_start, DATA
 	.IMPORT _bss_end, DATA
 	.IMPORT environ, DATA
@@ -75,8 +75,8 @@ bssloop
 	ldi	1,%ret0
 
 /*
- * Call the "main" routine from the application to get it going.
- * We call it as main(1, argv, 0)
+ * Call the "boot_card" routine from the application to get it going.
+ * We call it as boot_card(1, argv, 0)
  */
 
         copy    %r0, %r24
@@ -84,7 +84,7 @@ bssloop
 	ldil 	L%_crt0_argv,%r25
         ldo 	R%_crt0_argv(%r25),%r25
 
-	bl	main,%r2
+	bl	boot_card,%r2
         ldo     1(%r0), %r26
 
         .PROCEND

@@ -289,8 +289,8 @@ zerobss:
         mov     %0, %o2                 ! environ
         mov     %0, %o1                 ! argv
         mov     %0, %o0                 ! argc
-        call    SYM(main)
-        sub     %sp, 0x60, %sp          ! room for main to save args
+        call    SYM(boot_card)
+        sub     %sp, 0x60, %sp          ! room for boot_card to save args
         nop
 
         PUBLIC(BSP_fatal_return)

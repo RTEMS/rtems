@@ -171,8 +171,6 @@ extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
-extern rtems_unsigned32          bsp_isr_level;
-
 #ifdef __cplusplus
 }
 #endif

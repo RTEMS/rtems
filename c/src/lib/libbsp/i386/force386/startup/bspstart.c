@@ -139,17 +139,8 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
-int main(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
- 
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
  
   /*
    *  FORCE documentation incorrectly states that the bus request
@@ -217,9 +208,4 @@ int main(
    */
 
   rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
-
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-  /* does not return */
-  /* no cleanup necessary for Force CPU-386 */
-  return 0;
 }

@@ -11,8 +11,6 @@ m68k_isr_entry vectors[256];
 char * const __argv[]= {"main", ""};
 char * const __env[]= {""};
 
-int main(const int argc, char * const argv[], char * const env[]);
-
 /*
  *  This prototype really should have the noreturn attribute but
  *  that causes a warning since it appears that the routine does
@@ -65,7 +63,8 @@ void  dumby_start() {
   /*
    * Execute main with arguments argv and environment env
    */
-  main(1, __argv, __env);
+  /* main(1, __argv, __env); */
+  boot_card();
 
   reboot();
 }

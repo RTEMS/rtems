@@ -171,20 +171,15 @@ bsp_postdriver_hook(void)
 
 
 /*-------------------------------------------------------------------------+
-|         Function: main
-|      Description: Called from bsp's startup code ('start.s').
+|         Function: bsp_start
+|      Description: Called before main is invoked.
 | Global Variables: None.
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-int main(int argc, char **argv, char **environp)
+void bsp_start( void )
 {
   /* If we don't have command line arguments set default program name. */
-
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
 
   Cpu_table.pretasking_hook         = bsp_pretasking_hook; /* init libc, etc. */
   Cpu_table.predriver_hook          = NULL;                /* use system's    */
@@ -226,6 +221,7 @@ int main(int argc, char **argv, char **environp)
 
   rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
+#if 0
   rtems_initialize_executive(&BSP_Configuration, &Cpu_table);
   /* does not return */
 
@@ -240,4 +236,5 @@ int main(int argc, char **argv, char **environp)
   /* no cleanup necessary for PC386 */
 
   return 0;
-} /* main */
+#endif
+} /* bsp_start */

@@ -39,7 +39,6 @@ extern rtems_configuration_table  Configuration;
 
 rtems_configuration_table BSP_Configuration;
 rtems_cpu_table           Cpu_table;
-rtems_unsigned32          bsp_isr_level;
 
 int cpu_number;
 
@@ -284,9 +283,7 @@ bsp_postdriver_hook(void)
  *
  */
 
-
-void
-bsp_start(void)
+void bsp_start(void)
 {
     /*
      * Set cpu_number to accurately reflect our cpu number
@@ -426,14 +423,4 @@ bsp_start(void)
 
     if (CPU_HPPA_CLICKS_PER_TICK == 0)
         CPU_HPPA_CLICKS_PER_TICK = 0x4000;
-
-    /*
-     *  Start most of RTEMS
-     *  main() will start the rest
-     */
-
-    bsp_isr_level = rtems_initialize_executive_early(
-      &BSP_Configuration,
-      &Cpu_table
-    );
 }

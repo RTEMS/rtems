@@ -74,14 +74,14 @@ init_frames:
         st      fp, _start_frame
 
         /*
-         * Call application mainline.
+         * Call application boot_card.
          *      Someday, real values of argc and argv will be set up.
          *      For now, they are set to 0.
          */
         ldconst 0,g0
         ldconst 0,g1
         ldconst 0,g2
-        call    _main
+        call    _boot_card
         ret
 
 END_CODE

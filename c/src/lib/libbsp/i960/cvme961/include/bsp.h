@@ -114,8 +114,8 @@ static inline i960ca_PRCB *get_prcb( void )
 
 extern rtems_configuration_table BSP_Configuration;
 
-BSP_EXTERN i960ca_PRCB          *Prcb;
-BSP_EXTERN i960ca_control_table *Ctl_tbl;
+BSP_EXTERN i960ca_PRCB           *Prcb;
+BSP_EXTERN i960ca_control_table  *Ctl_tbl;
 
 /*
  *  Device Driver Table Entries

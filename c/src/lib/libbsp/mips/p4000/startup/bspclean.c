@@ -32,4 +32,5 @@
 
 void bsp_cleanup( void )
 {
+  idtsim__exit();
 }

@@ -141,11 +141,7 @@ bsp_postdriver_hook(void)
 }
 
 
-int main(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
 
 #ifdef PRINTON   
@@ -154,11 +150,6 @@ int main(
   outbyte('c');
   outbyte ('S');
 #endif
-
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
 
   /*
    *  we do not use the pretasking_hook.
@@ -222,8 +213,4 @@ int main(
     BSP_Configuration.maximum_extensions++;
 #endif
 
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-  /* does not return */
-  /* no cleanup necessary for i386ex */
-  for (;;);  /* was return 0 to go to the debug monitor */
 }

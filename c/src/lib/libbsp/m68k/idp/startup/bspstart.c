@@ -148,19 +148,10 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
-int main(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
   m68k_isr_entry *monitors_vector_table;
   int             index;
-
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
 
   duart_base = (unsigned char *)DUART_ADDR;
 
@@ -248,9 +239,6 @@ int main(
   rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
 /*  led_putnum('e'); * for debugging purposes only */
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );/* does not return */
- 
-  /* Clock_exit is done as an atexit() function */
 
-  return 0;
+  /* Clock_exit is done as an atexit() function */
 }

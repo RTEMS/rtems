@@ -139,20 +139,11 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
-int main(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
   m68k_isr_entry *monitors_vector_table;
   int             index;
   void           *vbr;
-
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
 
   monitors_vector_table = (m68k_isr_entry *)0;   /* Monitor Vectors are at 0 */
   m68k_set_vbr( monitors_vector_table );
@@ -246,13 +237,5 @@ int main(
 
   rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-  /* does not return */
-
   /* Clock_exit is done as an atexit() function */
-
-  VME_interrupt_Disable( 0xff );
-
-  /* return like a "normal" subroutine to the monitor */
-  return 0;
 }

@@ -245,8 +245,8 @@ bss_addr:
 	stw	r3, 4(r1)
 	stw	r3, 8(r1)
 	stw	r3, 12(r1)
-        .extern SYM (main)
-        b       SYM (main)            /* call the first C routine */
+        .extern SYM (boot_card)
+        b       SYM (boot_card) 	 /* call the first C routine */
 
 /*-------------------------------------------------------------------------------
  * Rom2ram.

@@ -37,4 +37,5 @@
 
 void bsp_cleanup( void )
 {
+  rtems_fatal_error_occurred(0);
 }

@@ -147,11 +147,7 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
  
-int main(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
   void           *vbr;
 
@@ -213,15 +209,6 @@ int main(
 
   rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-  /* does not return */
-
   /* Clock_exit is done as an atexit() function */
-
-  /* configure peripherals for safe exit */
-  bsp_cleanup();
-
-  /* return like a "normal" subroutine to the monitor */
-  return 0;
 }
 

@@ -131,14 +131,6 @@ extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
 /* functions */
 
-int bsp_start(
-  int   argc,
-  char **argv,
-  char **environp
-);
-
-void bsp_cleanup( void );
-
 rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */

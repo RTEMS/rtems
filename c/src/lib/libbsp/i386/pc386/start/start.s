@@ -66,7 +66,7 @@ BEGIN_CODE
 
 	PUBLIC (start)		# GNU default entry point
 
-	EXTERN (main)
+	EXTERN (boot_card)
 	EXTERN (load_segments)
 	EXTERN (exit)
 
@@ -280,7 +280,7 @@ SYM (no_idt_load):
 	pushl	$0			# environp
 	pushl	$0			# argv
         pushl	$0			# argc
-	call	SYM (main)
+	call	SYM (boot_card)
 	addl	$12, esp
 
 	/*---------------------------------------------------------------------+

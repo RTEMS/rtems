@@ -141,17 +141,8 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
-int main(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
-
   /* set node number in SQSIO4 CTL REG */
 
   *((rtems_unsigned32 *)0xc00000b0) =
@@ -234,12 +225,4 @@ int main(
 
   BSP_Configuration.work_space_start = (void *)
      (RAM_END - BSP_Configuration.work_space_size);
-
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-  /* does not return */
-
-  bsp_cleanup();
-
-  return 0;
-
 }
