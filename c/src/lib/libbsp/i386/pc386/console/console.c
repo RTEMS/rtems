@@ -45,6 +45,7 @@
 int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
 
 static int conSetAttr(int minor, const struct termios *);
+extern BSP_polling_getchar_function_type BSP_poll_char;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
@@ -76,9 +77,7 @@ void console_reserve_resources(rtems_configuration_table *conf)
 
 void __assert(const char *file, int line, const char *msg)
 {
-  static   char buf[20];
   static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
-  static   char assert_msg[] = "assert failed: ";
   unsigned char  ch;
   const    unsigned char *cp;
 	
@@ -87,66 +86,12 @@ void __assert(const char *file, int line, const char *msg)
    * Note we cannot call exit or printf from here, 
    * assert can fail inside ISR too
    */
-  if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
-    {
-      printk("\nassert failed: %s: ", file);
-      printk("%d: ", line);
-      printk("%s\n\n", msg);
-      printk(exit_msg);
-      while(!_IBMPC_scankey(&ch));
-      printk("\n\n");
-    }
-  else
-    {
-      PC386_uart_intr_ctrl(PC386ConsolePort, PC386_UART_INTR_CTRL_DISABLE);
-      
-      PC386_uart_polled_write(PC386ConsolePort, '\r');
-      PC386_uart_polled_write(PC386ConsolePort, '\n');
-      
-      for(cp=assert_msg; *cp!=0; cp++)
-	{
-	  PC386_uart_polled_write(PC386ConsolePort, *cp);
-	}
-
-      for(cp=file; *cp!=0; cp++)
-	{
-	  PC386_uart_polled_write(PC386ConsolePort, *cp);
-	}
-      
-      PC386_uart_polled_write(PC386ConsolePort, ':');
-      PC386_uart_polled_write(PC386ConsolePort, ' ');
-
-      sprintf(buf, "%d: ", line);
-
-      for(cp=buf; *cp!=0; cp++)
-	{
-	  PC386_uart_polled_write(PC386ConsolePort, *cp);
-	}
-
-      for(cp=msg; *cp!=0; cp++)
-	{
-	  PC386_uart_polled_write(PC386ConsolePort, *cp);
-	}
-
-      PC386_uart_polled_write(PC386ConsolePort, '\r');
-      PC386_uart_polled_write(PC386ConsolePort, '\n');
-      PC386_uart_polled_write(PC386ConsolePort, '\r');
-      PC386_uart_polled_write(PC386ConsolePort, '\n');
-	  
-      for(cp=exit_msg; *cp != 0; cp++)
-	{
-	  PC386_uart_polled_write(PC386ConsolePort, *cp);
-	}
-
-      PC386_uart_polled_read(PC386ConsolePort);
-
-      PC386_uart_polled_write(PC386ConsolePort, '\r');
-      PC386_uart_polled_write(PC386ConsolePort, '\n');
-      PC386_uart_polled_write(PC386ConsolePort, '\r');
-      PC386_uart_polled_write(PC386ConsolePort, '\n');
-
-    }
-
+  printk("\nassert failed: %s: ", file);
+  printk("%d: ", line);
+  printk("%s\n\n", msg);
+  printk(exit_msg);
+  ch = BSP_poll_char();
+  printk("\n\n");
   rtemsReboot();
 }
 
@@ -215,7 +160,12 @@ console_initialize(rtems_device_major_number major,
 	  console_isr_data.hdl  = PC386_uart_termios_isr_com2;
 	}
 
-      status =pc386_install_rtems_irq_handler(&console_isr_data);
+      status = pc386_install_rtems_irq_handler(&console_isr_data);
+
+      if (!status){
+	  printk("Error installing serial console interrupt handler!\n");
+	  rtems_fatal_error_occurred(status);
+      }
       /*
        * Register the device
        */
@@ -234,6 +184,9 @@ console_initialize(rtems_device_major_number major,
 	{
 	  printk("Initialized console on port COM2 9600-8-N-1\n\n");
 	}
+      printk("Warning : This will be the last message displayed on console\n");
+      BSP_output_char = (BSP_output_char_function_type) BSP_output_char_via_serial;
+      BSP_poll_char   = (BSP_polling_getchar_function_type) BSP_poll_char_via_serial;
     }
 #define  DISPLAY_CPU_INFO 
 #ifdef DISPLAY_CPU_INFO
