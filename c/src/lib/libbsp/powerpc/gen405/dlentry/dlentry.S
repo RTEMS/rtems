@@ -146,8 +146,4 @@ clear_bss:
         blr                             /* return */
 .L_text_e:
 
-#if PPC_ABI == PPC_ABI_POWEROPEN
-	DESCRIPTOR (startup)
-#endif
-
 	.comm	environ,4,4
