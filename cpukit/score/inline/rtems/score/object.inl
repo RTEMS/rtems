@@ -236,7 +236,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Close(
   unsigned32 index;
 
   index = _Objects_Get_index( the_object->id );
-  information->local_table[ index ] = NULL;
+  information->local_table[ index ] = (Objects_Control *) NULL;
   _Objects_Clear_name( the_object->name, information->name_length );
 }
 

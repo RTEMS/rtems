@@ -140,7 +140,7 @@
     unsigned32 _index; \
     \
     _index = _Objects_Get_index( (_the_object)->id ); \
-    (_information)->local_table[ _index ] = NULL; \
+    (_information)->local_table[ _index ] = (Objects_Control *) NULL; \
     _Objects_Clear_name( (_the_object)->name, (_information)->name_length ); \
   }
 
