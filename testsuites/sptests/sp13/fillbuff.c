@@ -21,26 +21,19 @@
 
 #include "system.h"
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
-
 void Fill_buffer(
   char *source,
   long *buffer
 )
 {
   char *p;
-  int i;
-/*
-  memcpy( buffer, source, 16 );
-*/
+  int i, j;
+
   p = source;
-  for ( i=0 ; i<MESSAGE_SIZE ; i++ ) {
-    buffer[i] = *p++;
-    buffer[i] <<= 8;
-    buffer[i] |= *p++;
-    buffer[i] <<= 8;
-    buffer[i] |= *p++;
-    buffer[i] <<= 8;
-    buffer[i] |= *p++;
+  for ( i = 0 ; i < MESSAGE_SIZE / sizeof(long) ; i++ ) {
+    buffer[i] = 0;
+    for ( j = sizeof(long) - 1; j >= 0; j-- ) {
+      buffer[i] |= *p++ << (8 * j);
+    }
   }
 }

@@ -1,5 +1,14 @@
 2004-03-30	David Querbach <querbach@realtime.bc.ca>
 
+	PR 595/tests
+	* sp13/fillbuff.c, sp13/init.c, sp13/putbuff.c, sp13/system.h,
+	sp13/task1.c, sp13/task2.c: Fill_buffer() in fillbuff.c overruns the
+	supplied buffer due to confusion in the definition of MESSAGE_SIZE.
+	Some files in the sp13 test treat MESSAGE_SIZE as a count of bytes,
+	others treat it as a count of longs.
+
+2004-03-30	David Querbach <querbach@realtime.bc.ca>
+
 	PR 596/tests
 	* sp32/init.c: A missing definition of TEST_INIT before including
 	<tmacros.h> means that buffered output will not work even if selected

@@ -66,4 +66,8 @@ TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 TEST_EXTERN rtems_id   Queue_id[ 4 ];        /* array of queue ids */
 TEST_EXTERN rtems_name Queue_name[ 4 ];      /* array of queue names */
 
+/* test configuration */
+
+#define MESSAGE_SIZE (sizeof(long) * 4)  /* must be multiple of sizeof(long) */
+
 /* end of include file */
