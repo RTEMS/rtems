@@ -14,15 +14,9 @@ OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     $(foreach piece, $(GENERIC_FILES), \
     ../../../$(piece)/$(ARCH)/$(piece).rel)
 
-LIB = $(ARCH)/libbsp.a
-
-#
-# (OPTIONAL) Add local stuff here using +=
-#
-
-$(LIB): ${OBJS}
+$(ARCH)/libbsp.a: ${OBJS}
 	$(make-library)
 
-all-local: $(LIB)
+noinst_DATA = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/local.am

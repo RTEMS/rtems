@@ -1,3 +1,8 @@
+2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Eliminate $(LIB). 
+	Use noinst_DATA to trigger building libbsp.a.
+
 2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Build $(ARCH)/start16$(LIB_VARIANT).bin.

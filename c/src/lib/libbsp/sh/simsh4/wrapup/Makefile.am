@@ -17,18 +17,12 @@ OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
     $(foreach piece, $(CPU_PIECES), \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/$(piece).rel)
 
-LIB = $(ARCH)/libbsp.a
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
-
-$(LIB): $(OBJS)
+$(ARCH)/libbsp.a: $(OBJS)
 	$(make-library)
 
-all-local: $(LIB)
+noinst_DATA = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/local.am

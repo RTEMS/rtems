@@ -15,11 +15,9 @@ OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/*.$(OBJEXT))
 
-LIB = $(ARCH)/libbsp.a
-
-$(LIB): ${OBJS}
+$(ARCH)/libbsp.a: ${OBJS}
 	$(make-library)
 
-all-local: $(LIB)
+noinst_DATA = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/local.am

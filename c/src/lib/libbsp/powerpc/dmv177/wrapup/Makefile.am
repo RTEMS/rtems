@@ -14,18 +14,13 @@ BSP_PIECES = startup clock console scv64 timer tod $(NETWORKING)
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     ../@exceptions@/$(ARCH)/rtems-cpu.rel $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT))
-LIB = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
-
-$(LIB): $(OBJS)
+$(ARCH)/libbsp.a: $(OBJS)
 	$(make-library)
 
-all-local: $(LIB)
+noinst_DATA = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/local.am

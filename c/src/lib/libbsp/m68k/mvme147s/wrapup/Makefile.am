@@ -12,12 +12,12 @@ BSP_PIECES = startup clock console timer $(BSP_MP_O_PIECES)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT))
-LIB = $(ARCH)/libbsp.a
+    $(wildcard \
+    ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT))
 
-$(LIB): $(OBJS)
+$(ARCH)/libbsp.a: $(OBJS)
 	$(make-library)
 
-all-local: $(LIB)
+noinst_DATA = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/local.am
