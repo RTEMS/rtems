@@ -6,7 +6,7 @@
  */
 
 #include <stdio.h>
-#include <rtems_bsdnet.h>
+#include <rtems/rtems_bsdnet.h>
 
 void
 rtems_bsdnet_malloc_starvation(void)
