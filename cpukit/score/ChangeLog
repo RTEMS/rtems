@@ -1,3 +1,7 @@
+2002-11-14	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/object.inl: Keep consistent with inline version.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* src/heapgetinfo.c: Fixed comment.

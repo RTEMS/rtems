@@ -182,7 +182,7 @@
 
 #define _Objects_Namespace_remove( _information, _the_object ) \
   (_the_object)->name = 0; \
-  _Objects_Clear_name( (_the_object)->name, (_information)->name_length )
+  /* _Objects_Clear_name( (_the_object)->name, (_information)->name_length ) */
 
 #endif
 /* end of include file */
