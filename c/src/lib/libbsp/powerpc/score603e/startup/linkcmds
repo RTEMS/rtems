@@ -161,7 +161,7 @@ SECTIONS
   {
     PROVIDE (__bss_start = .);
     *(.dynbss)
-    *(.bss)
+    *(.bss .bss.* .gnu.linkonce.b.*)
     *(COMMON)
     . =  ALIGN(8) + 0x8000;
     PROVIDE (__stack = .);
