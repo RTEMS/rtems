@@ -76,7 +76,6 @@
 
 #define IO_MASK  0x3
 #define MEM_MASK  0xF
-#define MASK_OFFSET 0xF
 
 /* command and status registers, 32-bit access, only if IO-ACCESS */
 #define ioCSR0  0x00	/* bus mode register */
@@ -173,6 +172,7 @@ struct MD {
 #define bus_to_phys(address) ((unsigned int)((address)) - PREP_PCI_DRAM_OFFSET)
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PPC_CACHE_ALIGNMENT
 #else
+extern void Wait_X_ms( unsigned int timeToWait );
 #define phys_to_bus(address) ((unsigned int) ((address)))
 #define bus_to_phys(address) ((unsigned int) ((address)))
 #define delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
