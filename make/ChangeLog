@@ -1,4 +1,10 @@
 
+2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* custom/gensh4.cfg, custom/simsh4.cfg: New files in support
+	of Hitachi SH4 BSPs of the same name.  Reviewed and some
+	cleanup by Joel Sherrill <joel@OARcorp.com>.
+
 2001-10-11    Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/gensh2.cfg: Remove -lstdc++ from make-exe.
