@@ -1,3 +1,7 @@
+2005-01-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* tod/todcfg.c: size_t RTC_Count.
+
 2005-01-04	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog, startup/bspstart.c, tod/todcfg.c: Remove warnings.
