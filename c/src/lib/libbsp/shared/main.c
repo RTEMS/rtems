@@ -30,6 +30,12 @@ extern rtems_cpu_table            Cpu_table;
 
 rtems_interrupt_level bsp_isr_level;
 
+/*
+ *  Since there is a forward reference
+ */
+
+int main(int argc, char **argv);
+
 int boot_card(int argc, char **argv)
 {
   int status;

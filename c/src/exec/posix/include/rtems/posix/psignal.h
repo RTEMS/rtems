@@ -25,7 +25,7 @@
       (STATES_WAITING_FOR_SIGNAL|STATES_INTERRUPTIBLE_BY_SIGNAL))
 
 #define SIGACTION_TERMINATE \
-  { 0, SIGNAL_ALL_MASK, {_POSIX_signals_Abormal_termination_handler} }
+  { 0, SIGNAL_ALL_MASK, {_POSIX_signals_Abnormal_termination_handler} }
 #define SIGACTION_IGNORE \
   { 0, SIGNAL_ALL_MASK, {SIG_IGN} }
 #define SIGACTION_STOP \
@@ -109,7 +109,7 @@ void _POSIX_signals_Set_process_signals(
 #define _POSIX_signals_Stop_handler NULL
 #define _POSIX_signals_Continue_handler NULL
 
-void _POSIX_signals_Abormal_termination_handler( int signo );
+void _POSIX_signals_Abnormal_termination_handler( int signo );
 
 #endif
 /* end of file */

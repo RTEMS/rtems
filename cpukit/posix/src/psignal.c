@@ -51,30 +51,30 @@ struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ] = {
   /* SIGTERM  15 */  SIGACTION_TERMINATE,
   /* SIGUSR1  16 */  SIGACTION_TERMINATE,
   /* SIGUSR2  17 */  SIGACTION_TERMINATE,
-  /* SIGRTMIN 18 */  SIGACTION_IGNORE,
-  /* SIGRT    19 */  SIGACTION_IGNORE,
-  /* SIGRT    20 */  SIGACTION_IGNORE,
-  /* SIGRT    21 */  SIGACTION_IGNORE,
-  /* SIGRT    22 */  SIGACTION_IGNORE,
-  /* SIGRT    23 */  SIGACTION_IGNORE,
-  /* SIGRT    24 */  SIGACTION_IGNORE,
-  /* SIGRT    25 */  SIGACTION_IGNORE,
-  /* SIGRT    26 */  SIGACTION_IGNORE,
-  /* SIGRT    27 */  SIGACTION_IGNORE,
-  /* SIGRT    28 */  SIGACTION_IGNORE,
-  /* SIGRT    29 */  SIGACTION_IGNORE,
-  /* SIGRT    30 */  SIGACTION_IGNORE,
-  /* SIGRT    31 */  SIGACTION_IGNORE,
-  /* SIGRTMAX 32 */  SIGACTION_IGNORE
+  /* SIGRTMIN 18 */  SIGACTION_TERMINATE,
+  /* SIGRT    19 */  SIGACTION_TERMINATE,
+  /* SIGRT    20 */  SIGACTION_TERMINATE,
+  /* SIGRT    21 */  SIGACTION_TERMINATE,
+  /* SIGRT    22 */  SIGACTION_TERMINATE,
+  /* SIGRT    23 */  SIGACTION_TERMINATE,
+  /* SIGRT    24 */  SIGACTION_TERMINATE,
+  /* SIGRT    25 */  SIGACTION_TERMINATE,
+  /* SIGRT    26 */  SIGACTION_TERMINATE,
+  /* SIGRT    27 */  SIGACTION_TERMINATE,
+  /* SIGRT    28 */  SIGACTION_TERMINATE,
+  /* SIGRT    29 */  SIGACTION_TERMINATE,
+  /* SIGRT    30 */  SIGACTION_TERMINATE,
+  /* SIGRT    31 */  SIGACTION_TERMINATE,
+  /* SIGRTMAX 32 */  SIGACTION_TERMINATE
 };
 
 /*PAGE
  *
- *  _POSIX_signals_Abormal_termination_handler
+ *  _POSIX_signals_Abnormal_termination_handler
  *
  */
 
-void _POSIX_signals_Abormal_termination_handler( int signo )
+void _POSIX_signals_Abnormal_termination_handler( int signo )
 {
   exit( 1 );
 }
