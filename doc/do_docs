@@ -5,7 +5,7 @@
 
 basedir=$1
 shift
-public_docs="user develenv ka9q posix_users"
+public_docs="user develenv ka9q posix_users started started_ada"
 support_docs="supplements/hppa1_1 supplements/i386 \
     supplements/i960 supplements/m68k supplements/sparc newlib gcc"
 partners_docs="posix1003.1 posix1003.1h"
