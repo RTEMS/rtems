@@ -788,7 +788,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #define CONFIGURE_EXTRA_TASK_STACKS 0
 #endif
 
-#define CONFIGURE_MEMORY_FOR_SYSTEM_OVEREHAD \
+#define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
   ( CONFIGURE_MEMORY_FOR_TASKS(1) +    /* IDLE */ \
     (256 * 12) +                       /* Ready chains */ \
     256        +                       /* name/ptr table overhead */ \
@@ -815,7 +815,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
       CONFIGURE_STACK_CHECKER_EXTENSION ) + \
    CONFIGURE_MEMORY_FOR_DEVICES(CONFIGURE_MAXIMUM_DEVICES) + \
    CONFIGURE_MEMORY_FOR_MP + \
-   CONFIGURE_MEMORY_FOR_SYSTEM_OVEREHAD + \
+   CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
    (((CONFIGURE_MEMORY_OVERHEAD)+1) * 1024) + \
    (CONFIGURE_EXTRA_TASK_STACKS) + (CONFIGURE_ADA_TASKS_STACK) \
 ) & 0xfffffc00)
