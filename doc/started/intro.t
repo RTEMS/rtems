@@ -16,7 +16,7 @@ have a background in Unix, these instructions should provide the bare
 essentials for performing a setup of the following items: 
 
 @itemize @bullet
-@item GNU C/C++ Cross Compilation Tools for RTEMS on your build-host system
+@item GNU Cross Compilation Tools for RTEMS on your build-host system
 @item RTEMS OS for the target
 @item GDB Debugger
 @end itemize
