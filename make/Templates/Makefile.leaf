@@ -45,6 +45,13 @@ DEFINES  +=
 CPPFLAGS +=
 CFLAGS   +=
 
+#
+# CFLAGS_DEBUG_V are used when the `make debug' target is built.
+# To link your application with the non-optimized RTEMS routines,
+# uncomment the following line:
+# CFLAGS_DEBUG_V += -qrtems_debug
+#
+
 LD_PATHS  += xxx-your-EXTRA-library-paths-go-here, if any
 LD_LIBS   += xxx-your-libraries-go-here eg: -lvx
 LDFLAGS   +=
