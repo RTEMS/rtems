@@ -13,7 +13,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 ENOSYS_C_PIECES=\
     execl execle execlp execv execve execvp fork \
-    pthreadatfork
+    pthreadatfork wait waitpid
 
 C_PIECES= adasupp cond getpid key mutex pthread psignal sched time \
   types unistd $(ENOSYS_C_PIECES)
