@@ -1,3 +1,7 @@
+2001-08-17	Joel Sherrill <joel@OARcorp.com>
+
+	* include/Makefile.am: Include coverhd.h so tmtests will compile.
+
 2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add bspopts.h.

@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-include_HEADERS = bsp.h bspopts.h
+include_HEADERS = bsp.h bspopts.h coverhd.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
