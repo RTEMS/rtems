@@ -1,4 +1,8 @@
 
+	* comm/uart.c (BSP_uart_init): Save more line state parameters.
+
+2000-10-18	 Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
 	* comm/i386-stub-glue.c, comm/tty_drv.c, comm/uart.c, comm/uart.h:
 	Add the ability to set parity, number of data bits and
 	number of stop bits to the existing i386 serial drivers.

@@ -157,14 +157,35 @@ BSP_uart_init
   tmp = uread(uart, MSR);
 
   /* Remember state */
-  uart_data[uart].hwFlow     = hwFlow;
   uart_data[uart].baud       = baud;
+  uart_data[uart].databits   = databits;
+  uart_data[uart].parity     = parity;
+  uart_data[uart].stopbits   = stopbits;
+  uart_data[uart].hwFlow     = hwFlow;
   return;
 }
 
 /* 
  * Set baud
  */
+
+void
+BSP_uart_set_baud( 
+  int uart,
+  unsigned long baud
+)
+{
+  /* Sanity check */
+  assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
+
+  BSP_uart_set_attributes( uart, baud, uart_data[uart].databits, 
+    uart_data[uart].parity, uart_data[uart].stopbits );
+}
+
+/*
+ *  Set all attributes
+ */
+
 void
 BSP_uart_set_attributes
 (
