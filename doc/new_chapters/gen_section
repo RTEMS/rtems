@@ -4,7 +4,7 @@
 
 
 # Set this based on which chapter you want to generate a template for.
-chapter="process"
+chapter="files"
 
 case ${chapter} in 
   process)
@@ -19,6 +19,14 @@ case ${chapter} in
     ROUTINES="getpid getppid getgid getegid setuid setgid getgroups \
       getlogin getlogin_r getpgrp setsid setpgid uname times \
       getenv ctermid ttyname ttyname_r isatty sysconf "
+    ;;
+  files)
+    CHAPTER_CAPS="Files and Directories"
+    CHAPTER_LOWER="files and directories"
+    ROUTINES="opendir readdir readdir_r rewinddir closedir \
+       chdir getcwd open creat umask link mkdir mkfifo unlink \
+       rmdir rename stat fstat access chmod fchmod chown \
+       utime ftrunctate pathconf fpathconf"
     ;;
   *)
     echo "Unknown chapter name"
