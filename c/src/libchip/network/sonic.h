@@ -445,7 +445,7 @@ typedef volatile CamDescriptor_t *CamDescriptorPointer_t;
 #define RDA_FREE            0xFFFF  /* SONIC can use it */
   
 /*
- *  Attatch routine
+ *  Attach routine
  */
 
 int rtems_sonic_driver_attach (
