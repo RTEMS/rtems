@@ -19,6 +19,7 @@ MEMORY
 	}
 
 m302 = 0xf7f000;
+_VBR = 0x000000;		/* location of the VBR table (in RAM) */
 
 SECTIONS
 {

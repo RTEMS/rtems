@@ -173,7 +173,7 @@ void _CPU_Signal_initialize( void )
 void _CPU_Context_From_CPU_Init()
 {
 
-#if defined(hppa1_1) && defined(RTEMS_UNIXLIB)
+#if defined(hppa1_1) && defined(RTEMS_UNIXLIB_SETJMP)
     /*
      * HACK - set the _SYSTEM_ID to 0x20c so that setjmp/longjmp
      * will handle the full 32 floating point registers.

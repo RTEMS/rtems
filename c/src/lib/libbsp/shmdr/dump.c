@@ -19,7 +19,6 @@
 
 #include <rtems.h>
 #include <stdio.h>
-#include <libcsupport.h>
 
 #include "shm.h"
 

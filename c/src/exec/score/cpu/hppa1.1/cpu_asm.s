@@ -1,4 +1,4 @@
-# 	@(#)cpu_asm.S	1.6 - 95/05/16
+# 	@(#)cpu_asm.S	1.7 - 95/09/21
 # 	
 # 
 # TODO: 
@@ -24,14 +24,14 @@
 #      Division Incorporated makes no representations about the
 #      suitability of this software for any purpose.
 #
-#  $Id$
+#  cpu_asm.S,v 1.5 1995/09/19 14:49:36 joel Exp
 #
 
-#include <rtems/score/hppa.h>
-#include <rtems/score/cpu_asm.h>
-#include <rtems/score/cpu.h>
+#include <rtems/core/hppa.h>
+#include <rtems/core/cpu_asm.h>
+#include <rtems/core/cpu.h>
 
-#include <rtems/score/offsets.h>
+#include <rtems/core/offsets.h>
 
 	.SPACE $PRIVATE$
 	.SUBSPA $DATA$,QUAD=1,ALIGN=8,ACCESS=31

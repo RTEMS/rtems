@@ -94,11 +94,11 @@ STATIC INLINE Heap_Block *_Heap_Block_at(
 
 /*PAGE
  *
- *  _Heap_User_Block_at
+ *  _Heap_User_block_at
  *
  */
  
-STATIC INLINE Heap_Block *_Heap_User_Block_at(
+STATIC INLINE Heap_Block *_Heap_User_block_at(
   void       *base
 )
 {

@@ -33,6 +33,7 @@ Shm_Envelope_control *Shm_Locked_queue_Get(
 
   tmp_ecb = NULL;
   Shm_Lock( lq_cb );
+
     tmpfront = Shm_Convert(lq_cb->front);
     if ( tmpfront != Shm_Locked_queue_End_of_list ) {
       tmp_ecb = &Shm_Envelopes[ tmpfront ];
@@ -41,6 +42,7 @@ Shm_Envelope_control *Shm_Locked_queue_Get(
         lq_cb->rear = Shm_Locked_queue_End_of_list;
       tmp_ecb->next = Shm_Locked_queue_Not_on_list;
     }
+
   Shm_Unlock( lq_cb );
   return( tmp_ecb );
 }

@@ -128,10 +128,12 @@ void Stack_check_Initialize( void )
   rtems_status_code    status;
   Objects_Id           id_ignored;
   unsigned32          *p;
+#if 0
   unsigned32           i;
   unsigned32           class_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
+#endif
 
   if (stack_check_initialized)
       return;
@@ -420,7 +422,11 @@ void Stack_check_Dump_threads_usage(
  *  Stack_check_Fatal_extension
  */
 
-void Stack_check_Fatal_extension( unsigned32 status )
+void Stack_check_Fatal_extension( 
+    Internal_errors_Source  source,
+    boolean                 is_internal,
+    unsigned32              status
+)
 {
     if (status == 0)
         Stack_check_Dump_usage();
@@ -443,6 +449,7 @@ void Stack_check_Dump_usage( void )
   if (stack_check_initialized == 0)
       return;
 
+  printf("Stack usage by thread\n");
   printf(
     "   ID          NAME         LOW        HIGH      AVAILABLE     USED\n"
   );

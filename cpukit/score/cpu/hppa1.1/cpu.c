@@ -14,12 +14,13 @@
  *      Division Incorporated makes no representations about the
  *      suitability of this software for any purpose.
  *
- *  $Id$
+ *  cpu.c,v 1.7 1995/09/19 14:49:35 joel Exp
  */
 
 #include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/fatal.h>
+#include <rtems/core/isr.h>
+#include <rtems/core/wkspace.h>
 
 void hppa_external_interrupt_initialize(void);
 void hppa_external_interrupt_enable(unsigned32);
@@ -101,6 +102,20 @@ void _CPU_Initialize(
     set_iva(iva);
 
     _CPU_Table = *cpu_table;
+}
+
+/*PAGE
+ *
+ *  _CPU_ISR_Get_level
+ */
+ 
+unsigned32 _CPU_ISR_Get_level(void)
+{
+    int level;
+    HPPA_ASM_SSM(0, level);	/* change no bits; just get copy */
+    if (level & HPPA_PSW_I)
+        return 1;
+    return 0;
 }
 
 /*PAGE

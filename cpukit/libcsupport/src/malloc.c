@@ -14,9 +14,6 @@
  */
 
 #include <rtems.h>
-#ifdef RTEMS_LIBC
-#include <memory.h>
-#endif
 #include "libcsupport.h"
 #ifdef RTEMS_NEWLIB
 #include <sys/reent.h>
@@ -29,21 +26,30 @@
 #include <errno.h>
 #include <string.h>
 
-/* 
- *  XXX: Do we really need to duplicate these? It appears that they
- *       only cause typing problems.
- */
-
-#if 0
-void *malloc(size_t);
-void *calloc(size_t, size_t);
-void *realloc(void *, size_t);
-void free(void *);
-void *sbrk(size_t);
-#endif
-
 rtems_id RTEMS_Malloc_Heap;
 size_t RTEMS_Malloc_Sbrk_amount;
+
+#ifdef RTEMS_DEBUG
+#define MALLOC_STATS
+#endif
+
+#ifdef MALLOC_STATS
+#define MSBUMP(f,n)    malloc_stats.f += (n)
+
+struct {
+    unsigned32  space_available;             /* current size of malloc area */
+    unsigned32  malloc_calls;                /* # calls to malloc */
+    unsigned32  free_calls;
+    unsigned32  realloc_calls;
+    unsigned32  calloc_calls;
+    unsigned32  max_depth;		     /* most ever malloc'd at 1 time */
+    unsigned64  lifetime_allocated;
+    unsigned64  lifetime_freed;
+} malloc_stats;
+
+#else			/* No malloc_stats */
+#define MSBUMP(f,n)
+#endif
 
 void RTEMS_Malloc_Initialize(
   void   *start,
@@ -77,9 +83,9 @@ void RTEMS_Malloc_Initialize(
       old_address = u32_address;
       u32_address = (u32_address + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-      /*
-       *  Adjust the length by whatever we aligned by
-       */
+       /*
+	* adjust the length by whatever we aligned by
+	*/
 
       length -= u32_address - old_address;
     }
@@ -97,12 +103,19 @@ void RTEMS_Malloc_Initialize(
     rtems_build_name( 'H', 'E', 'A', 'P' ),
     starting_address,
     length,
-    8,                     /* XXX : use CPU dependent RTEMS constant */
+    CPU_ALIGNMENT,
     RTEMS_DEFAULT_ATTRIBUTES,
     &RTEMS_Malloc_Heap
   );
   if ( status != RTEMS_SUCCESSFUL )
     rtems_fatal_error_occurred( status );
+
+#ifdef MALLOC_STATS
+  /* zero all the stats */
+  (void) memset(&malloc_stats, 0, sizeof(malloc_stats));
+#endif
+  
+  MSBUMP(space_available, length);
 }
 
 void *malloc(
@@ -114,6 +127,8 @@ void *malloc(
   rtems_unsigned32   the_size;
   rtems_unsigned32   sbrk_amount;
   rtems_status_code  status;
+
+  MSBUMP(malloc_calls, 1);
 
   if ( !size )
     return (void *) 0;
@@ -149,11 +164,6 @@ void *malloc(
     if (((rtems_unsigned32)starting_address = sbrk(the_size)) == -1)
       return (void *) 0;
 
-    /*
-    fprintf(stderr, "Extended the C heap starting at 0x%x for %d bytes\n",
-        (unsigned32)starting_address, the_size);
-     */
-
     status = rtems_region_extend(
       RTEMS_Malloc_Heap,
       starting_address,
@@ -161,10 +171,12 @@ void *malloc(
     );
     if ( status != RTEMS_SUCCESSFUL ) {
       sbrk(-the_size);
-      return(FALSE);
       errno = ENOMEM;
       return (void *) 0;
     }
+    
+    MSBUMP(space_available, the_size);
+
     status = rtems_region_get_segment(
       RTEMS_Malloc_Heap,
        size,
@@ -178,6 +190,17 @@ void *malloc(
     }
   }
 
+#ifdef MALLOC_STATS
+  if (return_this)
+  {
+      unsigned32 current_depth;
+      MSBUMP(lifetime_allocated, size);
+      current_depth = malloc_stats.lifetime_allocated - malloc_stats.lifetime_freed;
+      if (current_depth > malloc_stats.max_depth)
+          malloc_stats.max_depth = current_depth;
+  }
+#endif
+  
   return return_this;
 }
 
@@ -188,6 +211,8 @@ void *calloc(
 {
   register char *cptr;
   int length;
+
+  MSBUMP(calloc_calls, 1);
 
   length = nelem * elsize;
   cptr = malloc( length );
@@ -206,6 +231,8 @@ void *realloc(
   rtems_status_code status;
   char *new_area;
 
+  MSBUMP(realloc_calls, 1);
+
   if ( !ptr )
     return malloc( size );
 
@@ -214,15 +241,15 @@ void *realloc(
     return (void *) 0;
   }
 
-  status = rtems_region_get_segment_size( RTEMS_Malloc_Heap, ptr, &old_size );
-  if ( status != RTEMS_SUCCESSFUL ) {
-    errno = EINVAL;
-    return (void *) 0;
-  }
-
   new_area = malloc( size );
   if ( !new_area ) {
     free( ptr );
+    return (void *) 0;
+  }
+
+  status = rtems_region_get_segment_size( RTEMS_Malloc_Heap, ptr, &old_size );
+  if ( status != RTEMS_SUCCESSFUL ) {
+    errno = EINVAL;
     return (void *) 0;
   }
 
@@ -239,15 +266,56 @@ void free(
 {
   rtems_status_code status;
 
+  MSBUMP(free_calls, 1);
+
   if ( !ptr )
     return;
 
+#ifdef MALLOC_STATS
+  {
+      unsigned32        size;
+      status = rtems_region_get_segment_size( RTEMS_Malloc_Heap, ptr, &size );
+      if ( status == RTEMS_SUCCESSFUL ) {
+          MSBUMP(lifetime_freed, size);
+      }
+  }
+#endif
+  
   status = rtems_region_return_segment( RTEMS_Malloc_Heap, ptr );
   if ( status != RTEMS_SUCCESSFUL ) {
     errno = EINVAL;
     assert( 0 );
   }
 }
+
+#ifdef MALLOC_STATS
+/*
+ * Dump the malloc statistics
+ * May be called via atexit()  (installable by our bsp) or
+ * at any time by user
+ */
+
+void malloc_dump(void)
+{
+    unsigned32 allocated = malloc_stats.lifetime_allocated - malloc_stats.lifetime_freed;
+
+    printf("Malloc stats\n");
+    printf("  avail:%uk  allocated:%uk (%d%%) max:%uk (%d%%) lifetime:%Luk freed:%Luk\n",
+           (unsigned int) malloc_stats.space_available / 1024,
+           (unsigned int) allocated / 1024,
+           /* avoid float! */
+           (allocated * 100) / malloc_stats.space_available,
+           (unsigned int) malloc_stats.max_depth / 1024,
+           (malloc_stats.max_depth * 100) / malloc_stats.space_available,
+           (unsigned long long) malloc_stats.lifetime_allocated / 1024,
+           (unsigned long long) malloc_stats.lifetime_freed / 1024);
+    printf("  Call counts:   malloc:%d   free:%d   realloc:%d   calloc:%d\n",
+           malloc_stats.malloc_calls,
+           malloc_stats.free_calls,
+           malloc_stats.realloc_calls,
+           malloc_stats.calloc_calls);
+}        
+#endif
 
 /*
  *  "Reentrant" versions of the above routines implemented above.

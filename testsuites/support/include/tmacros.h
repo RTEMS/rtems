@@ -26,7 +26,6 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <libcsupport.h>
 
 #define FOREVER 1                  /* infinite loop */
 
@@ -94,8 +93,6 @@ extern "C" {
   if ( crlf ) \
     putchar( '\n' ); \
 }
-
-#define put_buffer( _buffer )  XYZ( _buffer )
 
 #define build_time( TB, MON, DAY, YR, HR, MIN, SEC, TK ) \
   { (TB)->year   = YR;  \

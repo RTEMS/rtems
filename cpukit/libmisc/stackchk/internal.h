@@ -77,7 +77,9 @@ void Stack_check_Switch_extension(
  */
 
 void Stack_check_Fatal_extension(
-  unsigned32
+    Internal_errors_Source  source,
+    boolean                 is_internal,
+    unsigned32              status
 );
 
 /*

@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __SIMHPPA_h
-#define __SIMHPPA_h
+#ifndef __PXFL_BSP_h
+#define __PXFL_BSP_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,7 +23,6 @@ extern "C" {
 #include <rtems.h>
 #include <clockdrv.h>
 #include <rtems/ttydrv.h>
-#include <libcsupport.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

@@ -140,14 +140,14 @@ typedef struct {
     rtems_id                 id;
     rtems_name               name;
   /* end of common portion */
-    rtems_monitor_symbol_t  create;
-    rtems_monitor_symbol_t  start;
-    rtems_monitor_symbol_t  restart;
-    rtems_monitor_symbol_t  delete;
-    rtems_monitor_symbol_t  tswitch;
-    rtems_monitor_symbol_t  begin;
-    rtems_monitor_symbol_t  exitted;
-    rtems_monitor_symbol_t  fatal;
+    rtems_monitor_symbol_t  e_create;
+    rtems_monitor_symbol_t  e_start;
+    rtems_monitor_symbol_t  e_restart;
+    rtems_monitor_symbol_t  e_delete;
+    rtems_monitor_symbol_t  e_tswitch;
+    rtems_monitor_symbol_t  e_begin;
+    rtems_monitor_symbol_t  e_exitted;
+    rtems_monitor_symbol_t  e_fatal;
 } rtems_monitor_extension_t;
 
 /*

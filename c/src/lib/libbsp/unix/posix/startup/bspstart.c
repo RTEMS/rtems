@@ -195,6 +195,11 @@ bsp_postdriver_hook(void)
   if ((stdin_fd != 0) || (stdout_fd != 1) || (stderr_fd != 2))
     rtems_fatal_error_occurred('STIO');
 #endif
+
+#if defined(MALLOC_STATS)
+  atexit(malloc_dump);
+#endif
+
 }
 
 /*

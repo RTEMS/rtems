@@ -1,5 +1,5 @@
 /*
- *	@(#)extension.c	1.3 - 95/07/31
+ *	@(#)extension.c	1.6 - 95/09/25
  *	
  *
  * RTEMS Monitor extension support
@@ -21,22 +21,22 @@ rtems_monitor_extension_canonical(
     Extension_Control     *rtems_extension = (Extension_Control *) extension_void;
     rtems_extensions_table *e = &rtems_extension->Extension.Callouts;
 
-    rtems_monitor_symbol_canonical_by_value(&canonical_extension->create,
+    rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_create,
                                             e->thread_create);
 
-    rtems_monitor_symbol_canonical_by_value(&canonical_extension->start,
+    rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_start,
                                             e->thread_start);
-    rtems_monitor_symbol_canonical_by_value(&canonical_extension->restart,
+    rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_restart,
                                             e->thread_restart);
-    rtems_monitor_symbol_canonical_by_value(&canonical_extension->delete,
+    rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_delete,
                                             e->thread_delete);
-    rtems_monitor_symbol_canonical_by_value(&canonical_extension->tswitch,
+    rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_tswitch,
                                             e->thread_switch);
-    rtems_monitor_symbol_canonical_by_value(&canonical_extension->begin,
+    rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_begin,
                                             e->thread_begin);
-    rtems_monitor_symbol_canonical_by_value(&canonical_extension->exitted,
+    rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_exitted,
                                             e->thread_exitted);
-    rtems_monitor_symbol_canonical_by_value(&canonical_extension->fatal,
+    rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_fatal,
                                             e->fatal);
 }
 
@@ -72,29 +72,29 @@ rtems_monitor_extension_dump(
 
     length += rtems_monitor_pad(18, length);
     length += printf("create: ");
-    length += rtems_monitor_symbol_dump(&monitor_extension->create, verbose);
+    length += rtems_monitor_symbol_dump(&monitor_extension->e_create, verbose);
     length += printf(";  start: ");
-    length += rtems_monitor_symbol_dump(&monitor_extension->start, verbose);
+    length += rtems_monitor_symbol_dump(&monitor_extension->e_start, verbose);
     length += printf(";  restart: ");
-    length += rtems_monitor_symbol_dump(&monitor_extension->restart, verbose);
+    length += rtems_monitor_symbol_dump(&monitor_extension->e_restart, verbose);
     length += printf("\n");
     length = 0;
 
     length += rtems_monitor_pad(18, length);
     length += printf("delete: ");
-    length += rtems_monitor_symbol_dump(&monitor_extension->delete, verbose);
+    length += rtems_monitor_symbol_dump(&monitor_extension->e_delete, verbose);
     length += printf(";  switch: ");
-    length += rtems_monitor_symbol_dump(&monitor_extension->tswitch, verbose);
+    length += rtems_monitor_symbol_dump(&monitor_extension->e_tswitch, verbose);
     length += printf(";  begin: ");
-    length += rtems_monitor_symbol_dump(&monitor_extension->begin, verbose);
+    length += rtems_monitor_symbol_dump(&monitor_extension->e_begin, verbose);
     length += printf("\n");
     length = 0;
 
     length += rtems_monitor_pad(18, length);
     length += printf("exitted: ");
-    length += rtems_monitor_symbol_dump(&monitor_extension->exitted, verbose);
+    length += rtems_monitor_symbol_dump(&monitor_extension->e_exitted, verbose);
     length += printf(";  fatal: ");
-    length += rtems_monitor_symbol_dump(&monitor_extension->fatal, verbose);
+    length += rtems_monitor_symbol_dump(&monitor_extension->e_fatal, verbose);
     length += printf("\n");
     length = 0;
     printf("\n");

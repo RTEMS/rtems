@@ -22,7 +22,9 @@
 #include "shm.h"
 
 void MPCI_Fatal(
-  rtems_unsigned32 error
+  Internal_errors_Source  source,
+  boolean                 is_internal,
+  rtems_unsigned32        error
 )
 {
    /*   Eventually need to attempt to broadcast a K_FATAL message

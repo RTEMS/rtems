@@ -184,7 +184,7 @@ rtems_symbol_string_compare(const void *e1,
 void
 rtems_symbol_sort(rtems_symbol_table_t *table)
 {
-#ifdef simhppa
+#ifdef RTEMS_ON_SIMULATOR
     printf("Sorting symbols ... ");         /* so slow we need a msg */
     fflush(stdout);
 #endif
@@ -195,7 +195,7 @@ rtems_symbol_sort(rtems_symbol_table_t *table)
     qsort((void *) table->symbols, (size_t) table->next,
           sizeof(rtems_symbol_t), rtems_symbol_string_compare);
 
-#ifdef simhppa
+#ifdef RTEMS_ON_SIMULATOR
     /* so slow we need a msg */
     printf("done\n");
 #endif
@@ -401,11 +401,11 @@ rtems_monitor_symbol_dump(
     {
         if (canonical_symbol->offset == 0)
             length += printf("%.*s",
-                             sizeof(canonical_symbol->name),
+                             (int) sizeof(canonical_symbol->name),
                              canonical_symbol->name);
         else
             length += printf("<%.*s+0x%x>",
-                             sizeof(canonical_symbol->name),
+                             (int) sizeof(canonical_symbol->name),
                              canonical_symbol->name,
                              canonical_symbol->offset);
         if (verbose)

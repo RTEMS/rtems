@@ -29,7 +29,6 @@
 
 #include <rtems.h>
 #include <stdio.h>
-#include <libcsupport.h>
 #include <iostream.h>
 
 extern "C" {
@@ -128,7 +127,7 @@ cdtest(void)
 //      in many implementations in order to get global constructors
 //      run.
 //
-//      Ref: c/src/lib/libbsp/hppa1_1/simhppa/startup/bspstart.c
+//      Ref: c/src/lib/libbsp/hppa1_1/pxfl/startup/bspstart.c
 //
 
 

@@ -301,7 +301,7 @@ boolean _Heap_Size_of_user_area(
   Heap_Block        *next_block;
   unsigned32         the_size;
 
-  the_block = _Heap_User_Block_at( starting_address );
+  the_block = _Heap_User_block_at( starting_address );
   
   if ( !_Heap_Is_block_in( the_heap, the_block ) ||
         _Heap_Is_block_free( the_block ) )
@@ -346,7 +346,7 @@ boolean _Heap_Free(
   Heap_Block        *temporary_block;
   unsigned32         the_size;
 
-  the_block = _Heap_User_Block_at( starting_address );
+  the_block = _Heap_User_block_at( starting_address );
 
   if ( !_Heap_Is_block_in( the_heap, the_block ) ||
         _Heap_Is_block_free( the_block ) ) {
@@ -430,6 +430,8 @@ void _Heap_Walk(
   Heap_Block *the_block  = 0;  /* avoid warnings */
   Heap_Block *next_block = 0;  /* avoid warnings */
   int         notdone = 1;
+  int         error = 0;
+  int         passes = 0;
 
   /*
    * We don't want to allow walking the heap until we have
@@ -455,9 +457,14 @@ void _Heap_Walk(
 
   if (the_block->back_flag != HEAP_DUMMY_FLAG) {
     printf("PASS: %d  Back flag of 1st block isn't HEAP_DUMMY_FLAG\n", source);
+    error = 1;
   }
 
   while (notdone) {
+    passes++;
+    if (error && (passes > 10))
+        abort();
+    
     if (do_dump == TRUE) {
       printf("PASS: %d  Block @ 0x%p   Back %d,   Front %d",
               source, the_block,
@@ -477,6 +484,7 @@ void _Heap_Walk(
     if ( the_block->front_flag != HEAP_DUMMY_FLAG ) {
       next_block = _Heap_Next_block(the_block);
       if ( the_block->front_flag != next_block->back_flag ) {
+        error = 1;
         printf("PASS: %d  Front and back flags don't match\n", source);
         printf("         Current Block:  Back - %d,  Front - %d",
                the_block->back_flag, the_block->front_flag);
@@ -510,4 +518,7 @@ void _Heap_Walk(
     else
       the_block = next_block;
   }
+
+  if (error)
+      abort();
 }

@@ -86,7 +86,7 @@ void error(int errn, ...);
 #define ERR_ABORT  (ERR_ERRNO / 4)              /* error is fatal; abort */
 #define ERR_MASK   (ERR_ERRNO | ERR_FATAL | ERR_ABORT) /* all */
 
-#define stol(p) strtol(p, (char **) NULL, 0)
+#define stol(p) strtoul(p, (char **) NULL, 0)
 
 int   unhex(FILE *ifp, char *inm, FILE *ofp, char *onm);
 int   convert_Intel_records(FILE *ifp, char *inm, FILE *ofp, char *onm);

@@ -8,8 +8,6 @@
  *    type    - 0 indicates raw hardware connect
  *              1 indicates RTEMS interrupt connect
  *
- *  NOTE 'type' is ignored on hppa; all interrupts are owned by RTEMS
- *
  *  RETURNS:
  *    address of previous interrupt handler
  *
@@ -25,16 +23,6 @@
  */
 
 #include <bsp.h>
-
-/*
- * Install an interrupt handler in the right place
- * given its vector number from cpu/hppa.h
- * There are 2 places an interrupt can be installed
- *      _ISR_Vector_table
- *      bsp interrupt      XXX: nyi
- *
- * We decide which based on the vector number
- */
 
 rtems_isr_entry
 set_vector(                                     /* returns old vector */

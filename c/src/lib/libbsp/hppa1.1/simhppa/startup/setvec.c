@@ -55,9 +55,9 @@ set_vector(                                     /* returns old vector */
     else if ((vector >= HPPA_INTERRUPT_BSP_BASE) &&
              (vector < (HPPA_INTERRUPT_BSP_BASE + HPPA_BSP_INTERRUPTS)))
     {
-        simhppa_interrupt_install(handler,
-                                  vector - HPPA_INTERRUPT_BSP_BASE,
-                                  (rtems_isr_entry *) &previous_isr);
+        pxfl_interrupt_install(handler,
+                               vector - HPPA_INTERRUPT_BSP_BASE,
+                               (rtems_isr_entry *) &previous_isr);
     }
 #endif
 

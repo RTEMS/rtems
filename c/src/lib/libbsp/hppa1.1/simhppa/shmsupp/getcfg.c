@@ -52,9 +52,7 @@
 
 shm_config_table BSP_shm_cfgtbl;
 
-void Shm_Cause_interrupt_simhppa(
-  rtems_unsigned32 node
-);
+void Shm_Cause_interrupt_pxfl( rtems_unsigned32 node );
 
 void Shm_Get_configuration(
   rtems_unsigned32   localnode,
@@ -65,7 +63,7 @@ void Shm_Get_configuration(
    BSP_shm_cfgtbl.length       = 16 * KILOBYTE;
    BSP_shm_cfgtbl.format       = SHM_BIG;
 
-   BSP_shm_cfgtbl.cause_intr   = Shm_Cause_interrupt_simhppa;
+   BSP_shm_cfgtbl.cause_intr   = Shm_Cause_interrupt_pxfl;
 
 #ifdef NEUTRAL_BIG
    BSP_shm_cfgtbl.convert      = NULL_CONVERT;

@@ -20,7 +20,7 @@
  * Note:
  *      This file is included by both C and assembler code ( -DASM )
  *
- *  $Id$
+ *  cpu.h,v 1.5 1995/09/11 19:24:10 joel Exp
  */
 
 #ifndef __CPU_h
@@ -30,9 +30,9 @@
 extern "C" {
 #endif
 
-#include <rtems/score/hppa.h>              /* pick up machine definitions */
+#include <rtems/core/hppa.h>              /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/hppatypes.h>
+#include <rtems/core/hppatypes.h>
 #endif
 
 /* conditional compilation parameters */
@@ -367,6 +367,9 @@ EXTERN void               *_CPU_Interrupt_stack_high;
         if ( new_level )  HPPA_ASM_RSM(HPPA_PSW_I, ignore); \
         else              HPPA_ASM_SSM(HPPA_PSW_I, ignore); \
   }
+
+/* return current level */
+unsigned32 _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 

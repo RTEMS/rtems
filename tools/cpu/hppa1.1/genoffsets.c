@@ -1,5 +1,5 @@
 /*
- *	@(#)genoffsets.c	1.5 - 95/05/16
+ *	@(#)genoffsets.c	1.7 - 95/09/25
  *	
  *
  *  genoffsets.c
@@ -82,7 +82,7 @@ printf(
     "\n"        \
   );
 
-#if defined(hpux) && defined(__hppa__)
+#if defined(__hpux__) && defined(__hppa__)
 
 /*
  *  Offsets of elements in the Context_control structure.

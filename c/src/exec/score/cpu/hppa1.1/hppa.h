@@ -1,5 +1,5 @@
 /*
- *	@(#)hppa.h	1.9 - 95/06/28
+ *	@(#)hppa.h	1.13 - 95/09/21
  *	
  *
  *  Description:
@@ -24,7 +24,7 @@
  * Note:
  *      This file is included by both C and assembler code ( -DASM )
  *
- *  $Id$
+ *  hppa.h,v 1.4 1995/09/19 14:49:37 joel Exp
  */
 
 #ifndef _INCLUDE_HPPA_H
@@ -64,23 +64,23 @@ extern "C" {
  *  present in a particular member of the family.
  */
 
-#if !defined(CPU_MODEL_NAME)
+#if !defined(RTEMS_MODEL_NAME)
 
 #if defined(hppa7100)
 
-#define CPU_MODEL_NAME  "hppa 7100"
+#define RTEMS_MODEL_NAME  "hppa 7100"
 
 #elif defined(hppa7200)
 
-#define CPU_MODEL_NAME  "hppa 7200"
+#define RTEMS_MODEL_NAME  "hppa 7200"
 
 #else
 
-#error "Unsupported CPU Model"
+#define RTEMS_MODEL_NAME  Unsupported CPU Model	     /* cause an error on usage */
 
 #endif
 
-#endif /* !defined(CPU_MODEL_NAME) */
+#endif /* !defined(RTEMS_MODEL_NAME) */
           
 /*
  *  Define the name of the CPU family.
@@ -220,6 +220,32 @@ extern "C" {
  
 #define HPPA_CACHELINE_SIZE     32
 #define HPPA_CACHELINE_MASK     (HPPA_CACHELINE_SIZE - 1)
+
+
+/*
+ * TLB characteristics
+ *
+ * Flags and Access Control layout for using TLB protection insertion
+ *
+ *                      1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+ *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * |?|?|T|D|B|type |PL1|Pl2|U|           access id               |?|
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *
+ */
+
+/*
+ * Access rights (type + PL1 + PL2)
+ */
+#define HPPA_PROT_R    0x00c00000   /* Read Only, no Write, no Execute */
+#define HPPA_PROT_RW   0x01c00000   /* Read & Write Only, no Execute */
+#define HPPA_PROT_RX   0x02c00000   /* Read & Execute Only, no Write */
+#define HPPA_PROT_RWX  0x03c00000   /* Read, Write, Execute */
+#define HPPA_PROT_X0   0x04c00000   /* Execute Only, Promote to Level 0 */
+#define HPPA_PROT_X1   0x05c00000   /* Execute Only, Promote to Level 1 */
+#define HPPA_PROT_X2   0x06c00000   /* Execute Only, Promote to Level 2 */
+#define HPPA_PROT_X3   0x07c00000   /* Execute Only, Promote to Level 3 */
 
 
 /*

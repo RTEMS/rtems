@@ -59,15 +59,15 @@ restore:  movml    a0@,d1-d7/a2-a7     | restore context
         .global SYM (_CPU_Context_save_fp)
 SYM (_CPU_Context_save_fp):
 #if ( M68K_HAS_FPU == 1 )
-        moval    a7@(FPCONTEXT_ARG),a1   | a1 = &ptr to context area
-        moval    a1@,a0                  | a0 = Save context area
+        moval    a7@(FPCONTEXT_ARG),a1    | a1 = &ptr to context area
+        moval    a1@,a0                   | a0 = Save context area
         fsave    a0@-                     | save 68881/68882 state frame
         tstb     a0@                      | check for a null frame
-        beq      nosv                      | Yes, skip save of user model
-        fmovem   fp0-fp7,a0@-           | save data registers (fp0-fp7)
-        fmovem   fpc/fps/fpi,a0@-      | and save control registers
+        beq      nosv                     | Yes, skip save of user model
+        fmovem   fp0-fp7,a0@-             | save data registers (fp0-fp7)
+        fmovem   fpc/fps/fpi,a0@-         | and save control registers
         movl     #-1,a0@-                 | place not-null flag on stack
-nosv:   movl     a0,a1@                  | save pointer to saved context
+nosv:   movl     a0,a1@                   | save pointer to saved context
 #endif
         rts
 
@@ -75,15 +75,15 @@ nosv:   movl     a0,a1@                  | save pointer to saved context
         .global SYM (_CPU_Context_restore_fp)
 SYM (_CPU_Context_restore_fp):
 #if ( M68K_HAS_FPU == 1 )
-        moval    a7@(FPCONTEXT_ARG),a1   | a1 = &ptr to context area
-        moval    a1@,a0                  | a0 = address of saved context
+        moval    a7@(FPCONTEXT_ARG),a1    | a1 = &ptr to context area
+        moval    a1@,a0                   | a0 = address of saved context
         tstb     a0@                      | Null context frame?
-        beq      norst                     | Yes, skip fp restore
+        beq      norst                    | Yes, skip fp restore
         addql    #4,a0                    | throwaway non-null flag
-        fmovem   a0@+,fpc/fps/fpi      | restore control registers
-        fmovem   a0@+,fp0-fp7           | restore data regs (fp0-fp7)
+        fmovem   a0@+,fpc/fps/fpi         | restore control registers
+        fmovem   a0@+,fp0-fp7             | restore data regs (fp0-fp7)
 norst:  frestore a0@+                     | restore the fp state frame
-        movl     a0,a1@                  | save pointer to saved context
+        movl     a0,a1@                   | save pointer to saved context
 #endif
         rts
 
@@ -112,6 +112,9 @@ norst:  frestore a0@+                     | restore the fp state frame
  *  higher priority interrupt in the new context if
  *  permitted by the new interrupt level mask, and (2) when
  *  the original context regains the cpu.
+ *
+ *  XXX: Code for switching to a software maintained interrupt stack is
+ *       not in place.
  */
  
 #if ( M68K_HAS_VBR == 1)
@@ -133,6 +136,13 @@ SYM (_ISR_Handler):
         addql   #1,SYM (_ISR_Nest_level) | one nest level deeper
         addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
+
+/*
+ *  NOTE FOR CPUs WITHOUT HARDWARE INTERRUPT STACK:
+ *
+ *  After the interrupted codes registers have been saved, it is save
+ *  to switch to the software maintained interrupt stack.
+ */
 
 #if ( M68K_HAS_VBR == 0)
         movel   a7@(SAVED+JSR_OFFSET),d0 | assume the exception table at 0x0000

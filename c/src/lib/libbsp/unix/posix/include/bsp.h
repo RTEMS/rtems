@@ -24,7 +24,6 @@ extern "C" {
 #include <clockdrv.h>
 #include <console.h>
 #include <iosupp.h>
-#include <libcsupport.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

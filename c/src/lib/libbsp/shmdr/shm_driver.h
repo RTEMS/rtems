@@ -470,7 +470,11 @@ void           Shm_Locked_queue_Initialize(
 /* portable routines */
 void           Init_env_pool();
 void           Shm_Print_statistics( void );
-void           MPCI_Fatal( rtems_unsigned32 );
+void           MPCI_Fatal(
+  Internal_errors_Source  source,
+  boolean                 is_internal,
+  rtems_unsigned32        error
+ );
 rtems_task     Shm_Cause_interrupt( rtems_unsigned32 );
 void           Shm_Poll();
 void           Shm_setclockvec();

@@ -39,7 +39,7 @@
  * EXAMPLE
  *        if ((fd = open(pathname, O_RDNLY)) < 0)
  *        {
- *            rtems_error(FLOSS_ERROR_ERRNO, "open of '%s' failed", pathname);
+ *            rtems_error(RTEMS_ERROR_ERRNO, "open of '%s' failed", pathname);
  *            goto failed;
  *        }
  */
