@@ -12,7 +12,7 @@
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* posix/include/rtems/posix/cond.h,
-	file posix/include/rtems/posix/mutex.h: Cosmetics.
+	posix/include/rtems/posix/mutex.h: Cosmetics.
 
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
@@ -106,7 +106,7 @@
 2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/kern/kern_sysctl.c,
-	libnetworking/sys/sysctl.h: Add SYSCTL_CHILDREN_SET
+	libnetworking/sys/sysctl.h: Add SYSCTL_CHILDREN_SET.
 	(Update from FreeBSD for GCC-4.0.0).
 
 2004-12-02	Joel Sherrill <joel@OARcorp.com>
