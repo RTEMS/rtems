@@ -30,7 +30,7 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 $(PGM): $(OBJS)
 	$(make-rel)
 
-PREINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
+PREINSTALL_FILES = $(PROJECT_RELEASE)/lib/linkcmds
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(PGM)
 
