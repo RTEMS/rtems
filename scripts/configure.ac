@@ -23,7 +23,7 @@ test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 
 AC_MSG_CHECKING(for rpm SPECS directory)
 # Allow users to override RPM_SPECSdir from the environment.
-if test x"$RPM_SPECSdir" = x"$RPM_SPECSdir";
+if test -z "$RPM_SPECSdir" ;
 then
 # SuSE uses /usr/src/packages
 # redhat uses /usr/src/redhat

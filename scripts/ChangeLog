@@ -1,3 +1,7 @@
+2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Fix typo to allow custom RPM_SPECSdirs.
+
 2001-10-16	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Bumped the gdb_patch_version to account for a configuration
