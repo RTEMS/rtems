@@ -2,6 +2,7 @@
 #  $Id$
 #
 
+ACLOCAL_AMFLAGS = -I ../aclocal
 
 # NOTE: The order of the directories is essential.
 #       + tools, common and images are shared across many documents
@@ -17,8 +18,6 @@ endif
 
 AUTOMAKE_FILES = project.am main.am
 
-noinst_SCRIPTS = bootstrap
-
 EXTRA_DIST = $(AUTOMAKE_FILES) HELP.html \
-    $(noinst_SCRIPTS) rtems_header.html.in rtems_footer.html.in
+    rtems_header.html.in rtems_footer.html.in
 

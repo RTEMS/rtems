@@ -1,3 +1,12 @@
+2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootstrap: Remove.
+	* VERSION: Remove.
+	* Makefile.am: 
+	Remove bootstrap.
+	Add ACLOCAL_AMFLAGS.
+	* configure.ac: Add RTEMS_TOP.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
