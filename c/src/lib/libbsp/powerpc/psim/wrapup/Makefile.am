@@ -17,7 +17,7 @@ endif
 BSP_PIECES = startup clock console timer vectors $(BSP_MP_O_PIECES)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
+OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
     ../@exceptions@/$(ARCH)/rtems-cpu.rel \
     $(foreach piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
 LIB = $(ARCH)/libbsp.a
