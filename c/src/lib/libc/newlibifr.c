@@ -23,56 +23,70 @@
 #include "internal.h"
 #include "libio.h"
 
-_ssize_t
-_read_r(struct _reent *ptr,
-     int fd,
-     void *buf,
-     size_t nbytes)
-{
-    return __rtems_read(fd, buf, nbytes);
-}
-
-long
-_write_r(struct _reent *ptr,
-     int fd,
-     const void *buf,
-     size_t nbytes
+_ssize_t _read_r(
+  struct _reent *ptr,
+  int fd,
+  void *buf,
+  size_t nbytes
 )
 {
-    return __rtems_write(fd, buf, nbytes);
+  return __rtems_read(fd, buf, nbytes);
 }
 
-int
-_open_r(struct _reent *ptr,
-     const char *buf,
-     int flags,
-     int mode)
+long _write_r(
+  struct _reent *ptr,
+  int fd,
+  const void *buf,
+  size_t nbytes
+)
 {
-    return __rtems_open(buf, flags, mode);
+  return __rtems_write(fd, buf, nbytes);
 }
 
-int
-_close_r(struct _reent *ptr,
-    int fd)
+int _open_r(
+  struct _reent *ptr,
+  const char *buf,
+  int flags,
+  int mode
+)
 {
-    return __rtems_close(fd);
+  return __rtems_open(buf, flags, mode);
 }
 
-off_t
-_lseek_r(struct _reent *ptr,
-      int fd,
-      off_t offset,
-      int whence)
+int _close_r(
+  struct _reent *ptr,
+  int fd
+)
 {
-    return __rtems_lseek(fd, offset, whence);
+  return __rtems_close(fd);
 }
 
-int
-_fstat_r(struct _reent *ptr,
-      int fd,
-      struct stat *buf)
+off_t _lseek_r(
+  struct _reent *ptr,
+  int fd,
+  off_t offset,
+  int whence
+)
 {
-    return __rtems_fstat(fd, buf);
+  return __rtems_lseek(fd, offset, whence);
+}
+
+int _stat_r(
+  struct _reent *ptr,
+  const char *path,
+  struct stat *buf
+)
+{
+  return stat(path, buf);
+}
+
+int _fstat_r(
+  struct _reent *ptr,
+  int fd,
+  struct stat *buf
+)
+{
+  return __rtems_fstat(fd, buf);
 }
 
 pid_t _getpid_r(struct _reent *ptr)
