@@ -294,7 +294,7 @@ generally result in an exception condition.
 
 Per task variables are used to support global variables whose value
 may be unique to a task. After indicating that a variable should be
-treated as private or pre-task.  The task can access and modify the
+treated as private (i.e. per-task) the task can access and modify the
 variable, but the modifications will not appear to other tasks, and
 other tasks' modifications to that variable will not affect the value
 seen by the task.  This is accomplished by saving and restoring the
@@ -1591,7 +1591,8 @@ A clock tick is required to support the functionality of this directive.
 @example
 rtems_status_code rtems_task_variable_add(
   rtems_id  tid,
-  int      *ptr
+  void    **ptr,
+  void    (*dtor)(void *)
 );
 @end example
 @end ifset
@@ -1610,8 +1611,7 @@ procedure Task_Variable_Add (
 @code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid task id@*
 @code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
-@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks
-@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks@*
 
 @subheading DESCRIPTION:
 This directive adds the memory location specified by the
@@ -1621,6 +1621,9 @@ variable, but the modifications will not appear to other tasks, and
 other tasks' modifications to that variable will not affect the value
 seen by the task.  This is accomplished by saving and restoring the
 variable's value each time a task switch occurs to or from the calling task.
+If the dtor argument is non-NULL it specifies the address of a `destructor'
+function which will be called when the task is deleted.  The argument
+passed to the destructor function is the task's value of the variable.
 
 @subheading NOTES:
 
@@ -1629,6 +1632,7 @@ tasks that own them so it is desirable to minimize the number of
 task variables.  One efficient method
 is to have a single task variable that is a pointer to a dynamically
 allocated structure containing the task's private `global' data.
+In this case the destructor function could be `free'.
 
 @page
 
@@ -1645,7 +1649,7 @@ allocated structure containing the task's private `global' data.
 @example
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
-  int      *ptr
+  void    **ptr
 );
 @end example
 @end ifset
@@ -1664,8 +1668,7 @@ procedure Task_Variable_Delete (
 @code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid task id@*
 @code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
-@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks
-@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks@*
 
 @subheading DESCRIPTION:
 This directive removes the given location from a task's context.
@@ -1673,4 +1676,3 @@ This directive removes the given location from a task's context.
 @subheading NOTES:
 
 NONE
-
