@@ -2,16 +2,6 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.12)
 AC_INIT(README)
 
-a29k_mk="c/src/exec/score/cpu/a29k/Makefile \
-c/src/lib/libbsp/a29k/Makefile \
-c/src/lib/libbsp/a29k/portsw/Makefile \
-c/src/lib/libbsp/a29k/portsw/console/Makefile \
-c/src/lib/libbsp/a29k/portsw/include/Makefile \
-c/src/lib/libbsp/a29k/portsw/shmsupp/Makefile \
-c/src/lib/libbsp/a29k/portsw/startup/Makefile \
-c/src/lib/libbsp/a29k/portsw/wrapup/Makefile \
-c/src/lib/start/a29k/Makefile"
-
 i386_mk="c/src/exec/score/cpu/i386/Makefile \
 c/src/lib/libbsp/i386/Makefile \
 c/src/lib/libbsp/i386/force386/Makefile \
@@ -40,202 +30,6 @@ c/src/lib/libbsp/i386/go32/include/Makefile \
 c/src/lib/libbsp/i386/go32/startup/Makefile \
 c/src/lib/libbsp/i386/go32/timer/Makefile \
 c/src/lib/libbsp/i386/go32/wrapup/Makefile"
-
-m68k_mk="c/src/exec/score/cpu/m68k/Makefile \
-c/src/lib/libbsp/m68k/Makefile \
-c/src/lib/libbsp/m68k/dmv152/Makefile \
-c/src/lib/libbsp/m68k/dmv152/clock/Makefile \
-c/src/lib/libbsp/m68k/dmv152/console/Makefile \
-c/src/lib/libbsp/m68k/dmv152/include/Makefile \
-c/src/lib/libbsp/m68k/dmv152/spurious/Makefile \
-c/src/lib/libbsp/m68k/dmv152/startup/Makefile \
-c/src/lib/libbsp/m68k/dmv152/timer/Makefile \
-c/src/lib/libbsp/m68k/dmv152/wrapup/Makefile \
-c/src/lib/libbsp/m68k/efi332/Makefile \
-c/src/lib/libbsp/m68k/efi332/clock/Makefile \
-c/src/lib/libbsp/m68k/efi332/console/Makefile \
-c/src/lib/libbsp/m68k/efi332/include/Makefile \
-c/src/lib/libbsp/m68k/efi332/spurious/Makefile \
-c/src/lib/libbsp/m68k/efi332/startup/Makefile \
-c/src/lib/libbsp/m68k/efi332/start332/Makefile \
-c/src/lib/libbsp/m68k/efi332/timer/Makefile \
-c/src/lib/libbsp/m68k/efi332/wrapup/Makefile \
-c/src/lib/libbsp/m68k/efi68k/Makefile \
-c/src/lib/libbsp/m68k/efi68k/clock/Makefile \
-c/src/lib/libbsp/m68k/efi68k/console/Makefile \
-c/src/lib/libbsp/m68k/efi68k/include/Makefile \
-c/src/lib/libbsp/m68k/efi68k/spurious/Makefile \
-c/src/lib/libbsp/m68k/efi68k/startup/Makefile \
-c/src/lib/libbsp/m68k/efi68k/start68k/Makefile \
-c/src/lib/libbsp/m68k/efi68k/timer/Makefile \
-c/src/lib/libbsp/m68k/efi68k/wrapup/Makefile \
-c/src/lib/libbsp/m68k/gen68302/Makefile \
-c/src/lib/libbsp/m68k/gen68302/clock/Makefile \
-c/src/lib/libbsp/m68k/gen68302/console/Makefile \
-c/src/lib/libbsp/m68k/gen68302/include/Makefile \
-c/src/lib/libbsp/m68k/gen68302/start302/Makefile \
-c/src/lib/libbsp/m68k/gen68302/startup/Makefile \
-c/src/lib/libbsp/m68k/gen68302/timer/Makefile \
-c/src/lib/libbsp/m68k/gen68302/wrapup/Makefile \
-c/src/lib/libbsp/m68k/gen68360/Makefile \
-c/src/lib/libbsp/m68k/gen68360/clock/Makefile \
-c/src/lib/libbsp/m68k/gen68360/console/Makefile \
-c/src/lib/libbsp/m68k/gen68360/include/Makefile \
-c/src/lib/libbsp/m68k/gen68360/start360/Makefile \
-c/src/lib/libbsp/m68k/gen68360/startup/Makefile \
-c/src/lib/libbsp/m68k/gen68360/timer/Makefile \
-c/src/lib/libbsp/m68k/gen68360/network/Makefile \
-c/src/lib/libbsp/m68k/gen68360/wrapup/Makefile \
-c/src/lib/libbsp/m68k/idp/Makefile \
-c/src/lib/libbsp/m68k/idp/clock/Makefile \
-c/src/lib/libbsp/m68k/idp/console/Makefile \
-c/src/lib/libbsp/m68k/idp/include/Makefile \
-c/src/lib/libbsp/m68k/idp/startup/Makefile \
-c/src/lib/libbsp/m68k/idp/timer/Makefile \
-c/src/lib/libbsp/m68k/idp/wrapup/Makefile \
-c/src/lib/libbsp/m68k/mvme136/Makefile \
-c/src/lib/libbsp/m68k/mvme136/clock/Makefile \
-c/src/lib/libbsp/m68k/mvme136/console/Makefile \
-c/src/lib/libbsp/m68k/mvme136/include/Makefile \
-c/src/lib/libbsp/m68k/mvme136/shmsupp/Makefile \
-c/src/lib/libbsp/m68k/mvme136/startup/Makefile \
-c/src/lib/libbsp/m68k/mvme136/timer/Makefile \
-c/src/lib/libbsp/m68k/mvme136/wrapup/Makefile \
-c/src/lib/libbsp/m68k/mvme147/Makefile \
-c/src/lib/libbsp/m68k/mvme147/clock/Makefile \
-c/src/lib/libbsp/m68k/mvme147/console/Makefile \
-c/src/lib/libbsp/m68k/mvme147/include/Makefile \
-c/src/lib/libbsp/m68k/mvme147/startup/Makefile \
-c/src/lib/libbsp/m68k/mvme147/timer/Makefile \
-c/src/lib/libbsp/m68k/mvme147/wrapup/Makefile \
-c/src/lib/libbsp/m68k/mvme147s/Makefile \
-c/src/lib/libbsp/m68k/mvme147s/clock/Makefile \
-c/src/lib/libbsp/m68k/mvme147s/console/Makefile \
-c/src/lib/libbsp/m68k/mvme147s/include/Makefile \
-c/src/lib/libbsp/m68k/mvme147s/shmsupp/Makefile \
-c/src/lib/libbsp/m68k/mvme147s/startup/Makefile \
-c/src/lib/libbsp/m68k/mvme147s/timer/Makefile \
-c/src/lib/libbsp/m68k/mvme147s/wrapup/Makefile \
-c/src/lib/libbsp/m68k/mvme162/Makefile \
-c/src/lib/libbsp/m68k/mvme162/clock/Makefile \
-c/src/lib/libbsp/m68k/mvme162/console/Makefile \
-c/src/lib/libbsp/m68k/mvme162/consolex/Makefile \
-c/src/lib/libbsp/m68k/mvme162/include/Makefile \
-c/src/lib/libbsp/m68k/mvme162/startup/Makefile \
-c/src/lib/libbsp/m68k/mvme162/timer/Makefile \
-c/src/lib/libbsp/m68k/mvme162/tod/Makefile \
-c/src/lib/libbsp/m68k/mvme162/tools/Makefile \
-c/src/lib/libbsp/m68k/mvme162/wrapup/Makefile \
-c/src/lib/libbsp/m68k/ods68302/Makefile \
-c/src/lib/libbsp/m68k/ods68302/clock/Makefile \
-c/src/lib/libbsp/m68k/ods68302/console/Makefile \
-c/src/lib/libbsp/m68k/ods68302/include/Makefile \
-c/src/lib/libbsp/m68k/ods68302/start302/Makefile \
-c/src/lib/libbsp/m68k/ods68302/startup/Makefile \
-c/src/lib/libbsp/m68k/ods68302/timer/Makefile \
-c/src/lib/libbsp/m68k/ods68302/wrapup/Makefile \
-c/src/lib/libcpu/m68k/Makefile \
-c/src/lib/libcpu/m68k/m68040/Makefile \
-c/src/lib/libcpu/m68k/m68040/fpsp/Makefile \
-c/src/lib/start/m68k/Makefile"
-
-no_cpu_mk="c/src/exec/score/cpu/no_cpu/Makefile \
-c/src/lib/libbsp/no_cpu/Makefile \
-c/src/lib/libbsp/no_cpu/no_bsp/Makefile \
-c/src/lib/libbsp/no_cpu/no_bsp/clock/Makefile \
-c/src/lib/libbsp/no_cpu/no_bsp/console/Makefile \
-c/src/lib/libbsp/no_cpu/no_bsp/include/Makefile \
-c/src/lib/libbsp/no_cpu/no_bsp/shmsupp/Makefile \
-c/src/lib/libbsp/no_cpu/no_bsp/startup/Makefile \
-c/src/lib/libbsp/no_cpu/no_bsp/timer/Makefile \
-c/src/lib/libbsp/no_cpu/no_bsp/wrapup/Makefile"
-
-sparc_mk="c/src/exec/score/cpu/sparc/Makefile \
-c/src/lib/libbsp/sparc/Makefile \
-c/src/lib/libbsp/sparc/erc32/Makefile \
-c/src/lib/libbsp/sparc/erc32/clock/Makefile \
-c/src/lib/libbsp/sparc/erc32/console/Makefile \
-c/src/lib/libbsp/sparc/erc32/include/Makefile \
-c/src/lib/libbsp/sparc/erc32/startsis/Makefile \
-c/src/lib/libbsp/sparc/erc32/startup/Makefile \
-c/src/lib/libbsp/sparc/erc32/timer/Makefile \
-c/src/lib/libbsp/sparc/erc32/wrapup/Makefile \
-c/src/lib/libcpu/sparc/Makefile \
-c/src/lib/libcpu/sparc/reg_win/Makefile"
-
-hppa1_1_mk="c/src/exec/score/cpu/hppa1_1/Makefile \
-c/src/exec/score/tools/hppa1_1/Makefile \
-c/src/lib/libbsp/hppa1_1/Makefile \
-c/src/lib/libbsp/hppa1_1/pxfl/Makefile \
-c/src/lib/libbsp/hppa1_1/simhppa/Makefile \
-c/src/lib/libbsp/hppa1_1/simhppa/include/Makefile \
-c/src/lib/libbsp/hppa1_1/simhppa/shmsupp/Makefile \
-c/src/lib/libbsp/hppa1_1/simhppa/startup/Makefile \
-c/src/lib/libbsp/hppa1_1/simhppa/tools/Makefile \
-c/src/lib/libbsp/hppa1_1/simhppa/tty/Makefile \
-c/src/lib/libbsp/hppa1_1/simhppa/wrapup/Makefile \
-c/src/lib/libcpu/hppa1_1/Makefile \
-c/src/lib/libcpu/hppa1_1/clock/Makefile \
-c/src/lib/libcpu/hppa1_1/include/Makefile \
-c/src/lib/libcpu/hppa1_1/milli/Makefile \
-c/src/lib/libcpu/hppa1_1/runway/Makefile \
-c/src/lib/libcpu/hppa1_1/semaphore/Makefile \
-c/src/lib/libcpu/hppa1_1/timer/Makefile \
-c/src/lib/start/hppa1_1/Makefile"
-
-i960_mk="c/src/exec/score/cpu/i960/Makefile \
-c/src/lib/libbsp/i960/Makefile \
-c/src/lib/libbsp/i960/cvme961/Makefile \
-c/src/lib/libbsp/i960/cvme961/clock/Makefile \
-c/src/lib/libbsp/i960/cvme961/console/Makefile \
-c/src/lib/libbsp/i960/cvme961/include/Makefile \
-c/src/lib/libbsp/i960/cvme961/shmsupp/Makefile \
-c/src/lib/libbsp/i960/cvme961/startup/Makefile \
-c/src/lib/libbsp/i960/cvme961/timer/Makefile \
-c/src/lib/libbsp/i960/cvme961/wrapup/Makefile \
-c/src/lib/start/i960/Makefile"
-
-mips64orion_mk="c/src/exec/score/cpu/mips64orion/Makefile \
-c/src/lib/libbsp/mips64orion/Makefile \
-c/src/lib/libbsp/mips64orion/p4000/Makefile \
-c/src/lib/libbsp/mips64orion/p4000/console/Makefile \
-c/src/lib/libbsp/mips64orion/p4000/include/Makefile \
-c/src/lib/libbsp/mips64orion/p4000/liblnk/Makefile \
-c/src/lib/libbsp/mips64orion/p4000/startup/Makefile \
-c/src/lib/libbsp/mips64orion/p4000/wrapup/Makefile \
-c/src/lib/libcpu/mips64orion/Makefile \
-c/src/lib/libcpu/mips64orion/clock/Makefile \
-c/src/lib/libcpu/mips64orion/include/Makefile \
-c/src/lib/libcpu/mips64orion/timer/Makefile \
-c/src/lib/start/mips64orion/Makefile"
-
-powerpc_mk="c/src/exec/score/cpu/ppc/Makefile \
-c/src/lib/libbsp/ppc/Makefile \
-c/src/lib/libbsp/ppc/papyrus/Makefile \
-c/src/lib/libbsp/ppc/papyrus/dlentry/Makefile \
-c/src/lib/libbsp/ppc/papyrus/flashentry/Makefile \
-c/src/lib/libbsp/ppc/papyrus/include/Makefile \
-c/src/lib/libbsp/ppc/papyrus/startup/Makefile \
-c/src/lib/libbsp/ppc/papyrus/wrapup/Makefile \
-c/src/lib/libcpu/ppc/Makefile \
-c/src/lib/libcpu/ppc/ppc403/Makefile \
-c/src/lib/libcpu/ppc/ppc403/clock/Makefile \
-c/src/lib/libcpu/ppc/ppc403/console/Makefile \
-c/src/lib/libcpu/ppc/ppc403/include/Makefile \
-c/src/lib/libcpu/ppc/ppc403/timer/Makefile \
-c/src/lib/libcpu/ppc/ppc403/vectors/Makefile"
-
-posix_mk="c/src/exec/score/cpu/unix/Makefile \
-c/src/exec/score/tools/unix/Makefile \
-c/src/lib/libbsp/unix/Makefile \
-c/src/lib/libbsp/unix/posix/Makefile \
-c/src/lib/libbsp/unix/posix/clock/Makefile \
-c/src/lib/libbsp/unix/posix/console/Makefile \
-c/src/lib/libbsp/unix/posix/include/Makefile \
-c/src/lib/libbsp/unix/posix/shmsupp/Makefile \
-c/src/lib/libbsp/unix/posix/startup/Makefile \
-c/src/lib/libbsp/unix/posix/timer/Makefile \
-c/src/lib/libbsp/unix/posix/wrapup/Makefile"
 
 ka9q_mk="c/src/lib/libka9q/Makefile"
 
@@ -470,10 +264,6 @@ test -d ${enableval} || AC_MSG_ERROR("$enableval is not a directory" ) ] )
 
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
 
-#
-#  Generate the configure.host file
-#
-
 dnl BEGIN configure.host.in
 
 AC_PATH_PROG(CAT,cat)
@@ -570,73 +360,100 @@ dnl AC_SUBST(LIB_MATH)
 
 dnl END configure.host.in
 
+dnl BEGIN configure.target.in
+
+echo "TARGET"
+echo "cpu    $target_cpu"
+echo "os     $target_os"
+echo "vendor $target_vendor"
+
+dnl canonicalize target name
+dnl NOTE: Most rtems targets do not fullfil autoconf 
+dnl targets naming conventions "processor-vendor-os"
+dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
+dnl and we have to fix it for rtems ourselves 
+
+case "${target}" in
+  # hpux unix port should go here
+  hppa1.1-rtems*)
+	target_cpu=hppa1_1
+	;;
+  i[[3456]]86-go32-rtems*)
+	target_cpu=i386
+	rtems_bsp="go32 go32_p5"
+       	aux_makefiles=$i386_go32_mk
+	RTEMS_HAS_POSIX_API=no
+	;;
+  i[[3456]]86-rtems*)
+	target_cpu=i386
+	rtems_bsp="force386 i386ex"
+       	aux_makefiles=$i386_mk
+	;;
+  i[[3456]]86-pc-linux*)         # unix "simulator" port
+	target_cpu=unix
+	RTEMS_HAS_POSIX_API=no
+	;;
+  no_cpu-rtems*)
+        target_cpu=no_cpu
+	RTEMS_HAS_POSIX_API=no
+	;;
+  powerpc-rtems*|ppc-rtems*)
+	target_cpu=ppc
+	;;
+  sparc-sun-solaris*)             # unix "simulator" port
+	target_cpu=unix
+	RTEMS_HAS_POSIX_API=no
+	;;
+  *) 
+	RTEMS_CANONICAL_TARGET_CPU
+	;;
+esac
+
+AC_MSG_CHECKING([if cpu $target_cpu is supported])
+if test -d "$srcdir/c/src/exec/score/cpu/$target_cpu"; then
+  AC_MSG_RESULT(yes)
+  makefiles="c/src/exec/score/cpu/$target_cpu/Makefile"
+else
+  AC_MSG_ERROR(no)
+fi
+
+RTEMS_CHECK_MAKEFILE(c/src/exec/score/tools/$target_cpu)
+
+if test -n "$aux_makefiles";then
+  makefiles="$makefiles $aux_makefiles"
+  echo "MAKEFILES PRESET TO $makefiles"
+else
+AC_MSG_CHECKING([for c/src/lib/libbsp/$target_cpu])
+if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
+  AC_MSG_RESULT(yes)
+  files=`ls $srcdir/c/src/lib/libbsp/$target_cpu`
+  for file in $files; do
+    case $file in
+      shared*);;
+      Makefile*);;
+      READ*);;
+      *) rtems_bsp="$rtems_bsp $file";;
+    esac;
+  done
+  RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/$target_cpu)
+else
+  AC_MSG_RESULT(no)
+fi
+
+RTEMS_CHECK_MAKEFILE(c/src/lib/libcpu/$target_cpu)
+RTEMS_CHECK_MAKEFILE(c/src/lib/start/$target_cpu)
+
+fi	# aux_makefiles
+
+echo "MAKEFILES $makefiles"
+
+dnl END configure.target.in
+
+
 #
 #  Target configurations are listed in alphabetical order.  
 #  The BSPs for a target configuration are also listed in alphabetical order.
 #
-
-case "${target}" in
-  a29k-rtems*)
-	rtems_bsp=portsw
-       	makefiles=$a29k_mk
-	;;
-  # hpux unix port should go here
-  hppa1.1-rtems*)
-	rtems_bsp=simhppa
-	makefiles=$hppa1_1_mk
-	;;
-  i[[3456]]86-go32-rtems*)
-	rtems_bsp="go32 go32_p5"
-       	makefiles=$i386_go32_mk
-	RTEMS_HAS_POSIX_API=no
-	;;
-  i[[3456]]86-rtems*)
-	rtems_bsp="force386 i386ex"
-       	makefiles=$i386_mk
-	;;
-  i[[3456]]86-pc-linux*)         # unix "simulator" port
-	rtems_bsp=posix
-       	makefiles=$posix_mk
-	RTEMS_HAS_POSIX_API=no
-	;;
-  i960-rtems*)
-	rtems_bsp=cvme961
-       	makefiles=$i960_mk
-	;;
-  m68k-rtems*)
-	rtems_bsp="dmv152 efi332 efi68k gen68302 gen68360 gen68360_040 idp \
-                   mvme136 mvme147 mvme147s mvme162 mvme162lx ods68302"
-       	makefiles=$m68k_mk
-	;;
-  mips64orion-rtems*)
-	rtems_bsp="p4600 p4650"
-       	makefiles=$mips64orion_mk
-	;;
-  no_cpu-rtems*)
-	rtems_bsp=no_bsp
-	makefiles=$no_cpu_mk
-	RTEMS_HAS_POSIX_API=no
-	;;
-  powerpc-rtems*|ppc-rtems*)
-	rtems_bsp=papyrus
-       	makefiles=$powerpc_mk
-	;;
-  sparc-sun-solaris*)             # unix "simulator" port
-	rtems_bsp=posix
-       	makefiles=$posix_mk
-	RTEMS_HAS_POSIX_API=no
-	;;
-  sparc-rtems*)         
-	rtems_bsp=erc32 
-	makefiles=$sparc_mk
-	;;
-  *)                    
-	rtems_bsp=no_bsp
-	makefiles=$no_cpu_mk
-	echo Error: RTEMS is not supported on target: $target
-	exit 1
-	;;
-esac
 
 dnl NOTE: host_os is automatically set by autoconf
 
@@ -647,7 +464,6 @@ if [[ "${program_prefix}" = "NONE" ]] ; then
     program_prefix=${target}-
   fi
 fi
-
 
 AC_PROG_LN_S
 dnl AC_PROG_CC
@@ -687,7 +503,9 @@ AC_SUBST(RTEMS_LIBC_DIR)
 AC_SUBST(PROJECT_ROOT)
 AC_SUBST(program_prefix)
 
-AC_OUTPUT( Makefile
+
+AC_OUTPUT( 
+Makefile
 c/Makefile
 c/build-tools/Makefile
 c/build-tools/os/Makefile
@@ -769,7 +587,7 @@ c/src/tests/tools/sparc/erc32/Makefile
 c/src/tests/tools/unix/Makefile
 c/src/tests/tools/unix/posix/Makefile
 $makefiles
-c/update-tools/Makefile )
+c/update-tools/Makefile)
 
 echo
 echo target architecture: $target_cpu.

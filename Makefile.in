@@ -67,10 +67,12 @@ EXIT_CMD = exit 1
 # Don't pass flags from previous make - especially NOT CFLAGS 
 override MAKEFLAGS=
 
+# CVS formerly was xxx -- using CVS covers up a weird feature of the aclocal
+#  file in that it thinks CVS directories need a Makefile generated.
 $(MTARGETS): make_subdir
 	BASEDIR=`pwd`; \
-	for bsp in $(RTEMS_BSP) xxx; \
-	do if [ $$bsp != xxx ] ; then  \
+	for bsp in $(RTEMS_BSP) CVS; \
+	do if [ $$bsp != CVS ] ; then  \
 	    cd $$BASEDIR; \
 	    cmd="cd c; $(MAKE) RTEMS_BSP=$$bsp $(FLAGS_TO_PASS) \
 	    RTEMS_CUSTOM=$(RTEMS_ROOT)/make/custom/$$bsp.cfg \
