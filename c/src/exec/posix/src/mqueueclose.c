@@ -28,30 +28,31 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
+/*
  *
- *  _POSIX_Message_queue_Manager_initialization
- *
- *  This routine initializes all message_queue manager related data structures.
- *
- *  Input parameters:
- *    maximum_message_queues - maximum configured message_queues
- *
- *  Output parameters:  NONE
+ *  15.2.2 Close a Message Queue, P1003.1b-1993, p. 275
  */
- 
-void _POSIX_Message_queue_Manager_initialization(
-  unsigned32 maximum_message_queues
+
+int mq_close(
+  mqd_t  mqdes
 )
 {
-  _Objects_Initialize_information(
-    &_POSIX_Message_queue_Information,
-    OBJECTS_POSIX_MESSAGE_QUEUES,
-    TRUE,
-    maximum_message_queues,
-    sizeof( POSIX_Message_queue_Control ),
-    TRUE,
-    _POSIX_PATH_MAX,
-    FALSE
-  );
+  register POSIX_Message_queue_Control *the_mq;
+  Objects_Locations                     location;
+ 
+  the_mq = _POSIX_Message_queue_Get( mqdes, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+      set_errno_and_return_minus_one( EINVAL );
+    case OBJECTS_REMOTE:
+      _Thread_Dispatch();
+      return POSIX_MP_NOT_IMPLEMENTED();
+      set_errno_and_return_minus_one( EINVAL );
+    case OBJECTS_LOCAL:
+      the_mq->open_count -= 1;
+      _POSIX_Message_queue_Delete( the_mq );
+      _Thread_Enable_dispatch();
+      return 0;
+  }
+  return POSIX_BOTTOM_REACHED();
 }

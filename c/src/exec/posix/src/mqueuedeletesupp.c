@@ -30,28 +30,33 @@
 
 /*PAGE
  *
- *  _POSIX_Message_queue_Manager_initialization
- *
- *  This routine initializes all message_queue manager related data structures.
- *
- *  Input parameters:
- *    maximum_message_queues - maximum configured message_queues
- *
- *  Output parameters:  NONE
+ *  _POSIX_Message_queue_Delete
  */
  
-void _POSIX_Message_queue_Manager_initialization(
-  unsigned32 maximum_message_queues
+void _POSIX_Message_queue_Delete(
+  POSIX_Message_queue_Control *the_mq
 )
 {
-  _Objects_Initialize_information(
-    &_POSIX_Message_queue_Information,
-    OBJECTS_POSIX_MESSAGE_QUEUES,
-    TRUE,
-    maximum_message_queues,
-    sizeof( POSIX_Message_queue_Control ),
-    TRUE,
-    _POSIX_PATH_MAX,
-    FALSE
-  );
+  if ( !the_mq->linked && !the_mq->open_count ) {
+    _POSIX_Message_queue_Free( the_mq );
+ 
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( the_mq->process_shared == PTHREAD_PROCESS_SHARED ) {
+ 
+      _Objects_MP_Close(
+        &_POSIX_Message_queue_Information,
+        the_mq->Object.id
+      );
+ 
+      _POSIX_Message_queue_MP_Send_process_packet(
+        POSIX_MESSAGE_QUEUE_MP_ANNOUNCE_DELETE,
+        the_mq->Object.id,
+        0,                         /* Not used */
+        0                          /* Not used */
+      );
+    }
+#endif
+ 
+  }
 }
+

@@ -30,28 +30,25 @@
 
 /*PAGE
  *
- *  _POSIX_Message_queue_Manager_initialization
+ *  15.2.4 Send a Message to a Message Queue, P1003.1b-1993, p. 277
  *
- *  This routine initializes all message_queue manager related data structures.
- *
- *  Input parameters:
- *    maximum_message_queues - maximum configured message_queues
- *
- *  Output parameters:  NONE
+ *  NOTE: P1003.4b/D8, p. 45 adds mq_timedsend().
  */
- 
-void _POSIX_Message_queue_Manager_initialization(
-  unsigned32 maximum_message_queues
+
+int mq_timedsend(
+  mqd_t                  mqdes,
+  const char            *msg_ptr,
+  size_t                 msg_len,
+  unsigned int           msg_prio,
+  const struct timespec *timeout
 )
 {
-  _Objects_Initialize_information(
-    &_POSIX_Message_queue_Information,
-    OBJECTS_POSIX_MESSAGE_QUEUES,
-    TRUE,
-    maximum_message_queues,
-    sizeof( POSIX_Message_queue_Control ),
-    TRUE,
-    _POSIX_PATH_MAX,
-    FALSE
+  return _POSIX_Message_queue_Send_support(
+    mqdes,
+    msg_ptr,
+    msg_len,
+    msg_prio,
+    _POSIX_Timespec_to_interval( timeout )
   );
 }
+

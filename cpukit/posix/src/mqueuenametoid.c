@@ -30,28 +30,15 @@
 
 /*PAGE
  *
- *  _POSIX_Message_queue_Manager_initialization
+ *  _POSIX_Message_queue_Name_to_id
  *
- *  This routine initializes all message_queue manager related data structures.
- *
- *  Input parameters:
- *    maximum_message_queues - maximum configured message_queues
- *
- *  Output parameters:  NONE
+ *  XXX
  */
- 
-void _POSIX_Message_queue_Manager_initialization(
-  unsigned32 maximum_message_queues
+
+int _POSIX_Message_queue_Name_to_id(
+  const char          *name,
+  Objects_Id          *id
 )
 {
-  _Objects_Initialize_information(
-    &_POSIX_Message_queue_Information,
-    OBJECTS_POSIX_MESSAGE_QUEUES,
-    TRUE,
-    maximum_message_queues,
-    sizeof( POSIX_Message_queue_Control ),
-    TRUE,
-    _POSIX_PATH_MAX,
-    FALSE
-  );
+  return 0; /* XXX fill me in */
 }
