@@ -498,7 +498,7 @@ int sigemptyset(
 )
 {
   if ( !set )
-    set_errno_and_return_minus_one( EFAULT );
+    set_errno_and_return_minus_one( EINVAL );
 
   *set = 0;
   return 0;
@@ -513,7 +513,7 @@ int sigfillset(
 )
 {
   if ( !set )
-    set_errno_and_return_minus_one( EFAULT );
+    set_errno_and_return_minus_one( EINVAL );
 
   *set = SIGNAL_ALL_MASK;
   return 0;
@@ -529,7 +529,7 @@ int sigaddset(
 )
 {
   if ( !set )
-    set_errno_and_return_minus_one( EFAULT );
+    set_errno_and_return_minus_one( EINVAL );
 
   if ( !signo )
     return 0;
@@ -551,7 +551,7 @@ int sigdelset(
 )
 {
   if ( !set )
-    set_errno_and_return_minus_one( EFAULT );
+    set_errno_and_return_minus_one( EINVAL );
  
   if ( !signo )
     return 0;
@@ -573,7 +573,7 @@ int sigismember(
 )
 {
   if ( !set ) 
-    set_errno_and_return_minus_one( EFAULT );
+    set_errno_and_return_minus_one( EINVAL );
  
   if ( !signo )
     return 0;
@@ -687,7 +687,7 @@ int pthread_sigmask(
   POSIX_API_Control  *api;
 
   if ( !set && !oset )
-    set_errno_and_return_minus_one( EFAULT );
+    set_errno_and_return_minus_one( EINVAL );
 
   api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
 
@@ -735,7 +735,7 @@ int sigpending(
   POSIX_API_Control  *api;
  
   if ( !set )
-    set_errno_and_return_minus_one( EFAULT );
+    set_errno_and_return_minus_one( EINVAL );
  
   api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
  
@@ -945,6 +945,13 @@ int killinfo(
  
   if( pid != getpid() )
     set_errno_and_return_minus_one( ESRCH );
+
+  /*
+   *  Validate the signal passed if not 0.
+   */
+ 
+  if ( sig && !is_valid_signo(sig) )
+    set_errno_and_return_minus_one( EINVAL );
 
   /*
    *  If the signal is being ignored, then we are out of here.
