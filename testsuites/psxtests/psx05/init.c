@@ -14,6 +14,8 @@
 #include "system.h"
 #include <errno.h>
 
+#define MUTEX_BAD_ID -2
+
 void Print_mutexattr(
   char                *msg,
   pthread_mutexattr_t *attr
@@ -82,8 +84,12 @@ void *POSIX_Init(
   struct sched_param   param;
   int                  pshared;
   int                  policy;
+  int                  protocol;
   int                  ceiling;
   int                  old_ceiling;
+
+  assert( MUTEX_BAD_ID != PTHREAD_MUTEX_INITIALIZER );
+  Mutex_bad_id = MUTEX_BAD_ID; 
 
   puts( "\n\n*** POSIX TEST 5 ***" );
 
@@ -125,13 +131,15 @@ void *POSIX_Init(
   status = pthread_mutexattr_destroy( &destroyed_attr );
   assert( status == EINVAL );
 
-  /* error cases for set and get attributes routines */
+  /* error cases for set and get pshared attribute */
+
+  empty_line();
 
   puts( "Init: pthread_mutexattr_getpshared - EINVAL (NULL attr)" );
   status = pthread_mutexattr_getpshared( NULL, &pshared );
   assert( status == EINVAL );
  
-  puts( "Init: pthread_mutexattr_getpshared - EINVAL (NULL attr)" );
+  puts( "Init: pthread_mutexattr_getpshared - EINVAL (NULL pshared)" );
   status = pthread_mutexattr_getpshared( &attr, NULL );
   assert( status == EINVAL );
  
@@ -139,7 +147,107 @@ void *POSIX_Init(
   status = pthread_mutexattr_getpshared( &destroyed_attr, &pshared );
   assert( status == EINVAL );
 
-  /* change the attributes structure */
+  pshared = PTHREAD_PROCESS_PRIVATE;
+  puts( "Init: pthread_mutexattr_setpshared - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_setpshared( NULL, pshared );
+  assert( status == EINVAL );
+ 
+  pshared = PTHREAD_PROCESS_PRIVATE;
+  puts( "Init: pthread_mutexattr_setpshared - EINVAL (not initialized)" );
+  status = pthread_mutexattr_setpshared( &destroyed_attr, pshared );
+  assert( status == EINVAL );
+
+  /* error cases for set and get protocol attribute */
+
+  empty_line();
+
+  puts( "Init: pthread_mutexattr_getprotocol - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_getprotocol( NULL, &protocol );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_getprotocol - EINVAL (NULL protocol)" );
+  status = pthread_mutexattr_getprotocol( &attr, NULL );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_getprotocol - EINVAL (not initialized)" );
+  status = pthread_mutexattr_getprotocol( &destroyed_attr, &protocol );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_setprotocol - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_setprotocol( NULL, PTHREAD_PRIO_NONE );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_setprotocol - EINVAL (invalid protocol)" );
+  status = pthread_mutexattr_setprotocol( &attr, -1 );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_setprotocol - EINVAL (not initialized)" );
+  status = pthread_mutexattr_setprotocol( &destroyed_attr, -1 );
+  assert( status == EINVAL );
+
+  /* error cases for set and get prioceiling attribute */
+
+  empty_line();
+ 
+  puts( "Init: pthread_mutexattr_getprioceiling - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_getprioceiling( NULL, &ceiling );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_getprioceiling - EINVAL (NULL prioceiling)" );
+  status = pthread_mutexattr_getprioceiling( &attr, NULL );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_getprioceiling - EINVAL (not initialized)" );
+  status = pthread_mutexattr_getprioceiling( &destroyed_attr, &ceiling );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_setprioceiling - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_setprioceiling( NULL, 128 );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_setprioceiling - EINVAL (invalid priority)" );
+  status = pthread_mutexattr_setprioceiling( &attr, 512 );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+ 
+  puts( "Init: pthread_mutexattr_setprioceiling - EINVAL (not initialized)" );
+  status = pthread_mutexattr_setprioceiling( &destroyed_attr, -1 );
+  assert( status == EINVAL );
+
+  /* create a thread */
+
+  status = pthread_create( &Task_id, NULL, Task_1, NULL );
+  assert( !status );
+
+  /* now try some basic mutex operations */
+
+  empty_line();
+
+  puts( "Init: pthread_mutex_init - EINVAL (not initialized attr)" );
+  status = pthread_mutex_init( &Mutex_id, &destroyed_attr );
+  assert( status == EINVAL );
+
+  /* must get around error checks in attribute set routines */
+  attr.protocol = -1;
+
+  puts( "Init: pthread_mutex_init - EINVAL (bad protocol)" );
+  status = pthread_mutex_init( &Mutex_id, &attr );
+  assert( status == EINVAL );
+
+  /* must get around error checks in attribute set routines */
+  attr.protocol = PTHREAD_PRIO_INHERIT;
+  attr.prio_ceiling = -1;
+
+  puts( "Init: pthread_mutex_init - EINVAL (bad priority ceiling)" );
+  status = pthread_mutex_init( &Mutex_id, &attr );
+  assert( status == EINVAL );
+
+  /* now set up for a success pthread_mutex_init */
+
+  puts( "Init: Resetting mutex attributes" );
+  status = pthread_mutexattr_init( &attr );
+  assert( !status );
 
   puts( "Init: Changing mutex attributes" );
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_INHERIT );
@@ -152,25 +260,22 @@ void *POSIX_Init(
   assert( !status );
  
   Print_mutexattr( "Init: ", &attr );
-
+ 
   puts( "Init: Resetting mutex attributes" );
   status = pthread_mutexattr_init( &attr );
   assert( !status );
-
-  /* create a thread */
-
-  status = pthread_create( &Task_id, NULL, Task_1, NULL );
-  assert( !status );
-
-  /* now try some basic mutex operations */
-
-  empty_line();
 
   puts( "Init: pthread_mutex_init - SUCCESSFUL" );
   status = pthread_mutex_init( &Mutex_id, &attr );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
+
+  puts( "Init: pthread_mutex_trylock - EINVAL (illegal ID)" );
+  status = pthread_mutex_trylock( &Mutex_bad_id );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
 
   puts( "Init: pthread_mutex_trylock - SUCCESSFUL" );
   status = pthread_mutex_trylock( &Mutex_id );
@@ -195,6 +300,12 @@ void *POSIX_Init(
   sleep( 1 );
   
      /* switch to task 1 */
+
+  puts( "Init: pthread_mutex_unlock - EINVAL (invalid id)" );
+  status = pthread_mutex_unlock( &Mutex_bad_id );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
 
   puts( "Init: pthread_mutex_unlock - SUCCESSFUL" );
   status = pthread_mutex_unlock( &Mutex_id );
@@ -230,6 +341,10 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( !status );
 
+  puts( "Init: pthread_mutex_init - ENOMEM (too many)" );
+  status = pthread_mutex_init( &Mutex3_id, &attr );
+  assert( status == ENOMEM );
+
   puts( "Init: pthread_mutexattr_destroy - SUCCESSFUL" );
   status = pthread_mutexattr_destroy( &attr );
   assert( !status );
@@ -237,6 +352,10 @@ void *POSIX_Init(
   puts( "Init: pthread_mutex_destroy - SUCCESSFUL" );
   status = pthread_mutex_destroy( &Mutex2_id );
   assert( !status );
+ 
+  puts( "Init: pthread_mutex_destroy - EINVAL (invalid id)" );
+  status = pthread_mutex_destroy( &Mutex_bad_id );
+  assert( status == EINVAL );
  
   /* destroy a busy mutex */
  
@@ -341,10 +460,32 @@ void *POSIX_Init(
   status = pthread_mutex_init( &Mutex2_id, &attr );
   assert( !status );
  
+  puts( "Init: pthread_mutex_getprioceiling - EINVAL (invalid id)" );
+  status = pthread_mutex_getprioceiling( &Mutex_bad_id, &ceiling );
+  assert( status == EINVAL );
+
+  puts( "Init: pthread_mutex_getprioceiling - EINVAL (NULL ceiling)" );
+  status = pthread_mutex_getprioceiling( &Mutex2_id, NULL );
+  assert( status == EINVAL );
+
   status = pthread_mutex_getprioceiling( &Mutex2_id, &ceiling );
   assert( !status );
   printf( "Init: pthread_mutex_getprioceiling - %d\n", ceiling );
  
+  puts( "Init: pthread_mutex_setprioceiling - EINVAL (invalid id)" );
+  status = pthread_mutex_setprioceiling( &Mutex_bad_id, 200, &old_ceiling );
+  assert( status == EINVAL );
+
+  puts( "Init: pthread_mutex_setprioceiling - EINVAL (illegal priority)" );
+  status = pthread_mutex_setprioceiling( &Mutex2_id, 512, &old_ceiling );
+  assert( status == EINVAL );
+
+  puts( "Init: pthread_mutex_setprioceiling - EINVAL (NULL ceiling)" );
+  status = pthread_mutex_setprioceiling( &Mutex2_id, 128, NULL );
+  assert( status == EINVAL );
+
+  /* normal cases of set priority ceiling */
+
   puts( "Init: pthread_mutex_setprioceiling - new ceiling = 200" );
   status = pthread_mutex_setprioceiling( &Mutex2_id, 200, &old_ceiling );
   assert( !status );
