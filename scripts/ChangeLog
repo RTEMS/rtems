@@ -1,5 +1,9 @@
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* gcc3newlib/gccnewlib.add: Add -Bgcc/ when collecting multilibs.
+
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* gcc3newlib/gccnewlib.spec.in: Removed from CVS.
 
 

@@ -125,7 +125,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 
   # Collect multilib subdirectories
   TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@"
-  f=`gcc/xgcc --print-multi-lib | sed -e 's,;.*$,,'`
+  f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
