@@ -34,7 +34,9 @@ AC_OUTPUT(
 Makefile
 include/Makefile
 include/rpc/Makefile
+include/rpcsvc/Makefile
 src/Makefile
 src/xdr/Makefile
 src/rpc/Makefile
+src/rpc/PSD.doc/Makefile
 )
