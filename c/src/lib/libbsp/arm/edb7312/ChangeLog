@@ -1,5 +1,9 @@
 2002-11-13	Joel Sherrill <joel@OARcorp.com>
 
+	* network/network.c: Removed warning per Jay's suggestion.
+
+2002-11-13	Joel Sherrill <joel@OARcorp.com>
+
 	* include/.cvsignore: Corrected.
 	* network/.cvsignore: New file.
 

@@ -18,7 +18,7 @@ rtems_irq_connect_data cs8900_isr_data = {BSP_EINT3,
 
 char g_enetbuf[1520];
 
-rtems_irq_hdl cs8900_isr(rtems_vector_number v)
+rtems_isr cs8900_isr(rtems_vector_number v)
 {
     cs8900_interrupt(v, g_cs);
 }
