@@ -2,4 +2,26 @@
 #  $Id$
 #
 
-TBD
+This board support package works with the uti386ex, designed and built in
+house at the University of Toronto.  It should also be compatible the an
+Intel Evaluation board. 
+
+There are no decisions to be made at link time. The BSP reserves ALL
+available space between the end of the bss section and the start of the
+RTEMS Workspace for the heap.  If you wish to add network support, then
+you will not need to modify the heap size. 
+  
+
+See startup/linkcmds and bsp_start.c for details. 
+
+The clock is generated from an internal i386ex timer counter.  The console
+uses COMM2 -- configured as 9600 n,8,1.  COMM1 is available, also
+configured as 9600,n,8,1. 
+
+In general, all modification needed to support another i386ex based
+platform should be restricted to start.s.  Since there is no real-time
+clock on the Intel eval board, if RTclock support is required, then adding
+rtclock driver support is necessary. 
+
+Hope this helps! 
+
