@@ -37,7 +37,6 @@ void _TOD_Handler_initialization(
 {
   _TOD_Microseconds_per_tick = microseconds_per_tick;
 
-  _TOD_Ticks_since_boot = 0;
   _TOD_Seconds_since_epoch = 0;
 
   _TOD_Current.year   = TOD_BASE_YEAR;

@@ -2,6 +2,7 @@
  *  $Id$
  */
 
+#include <assert.h>
 #include <sched.h>
 
 #include <rtems/system.h>

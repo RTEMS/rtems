@@ -34,7 +34,7 @@
 
 #define _TOD_Tickle_ticks() \
   _TOD_Current.ticks++; \
-  _TOD_Ticks_since_boot++
+  _Watchdog_Ticks_since_boot++
 
 /*PAGE
  *

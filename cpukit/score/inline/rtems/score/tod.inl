@@ -45,7 +45,7 @@ STATIC INLINE boolean _TOD_Is_set( void )
 STATIC INLINE void _TOD_Tickle_ticks( void )
 {
   _TOD_Current.ticks += 1;
-  _TOD_Ticks_since_boot += 1;
+  _Watchdog_Ticks_since_boot += 1;
 }
 
 /*PAGE

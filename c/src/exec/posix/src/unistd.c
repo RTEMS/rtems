@@ -25,7 +25,7 @@ unsigned int sleep(
 
   nanosleep( &tp, &tm );
 
-  return tm->tv_sec;       /* seconds remaining */
+  return tm.tv_sec;       /* seconds remaining */
 }
 /*
  *  4.8.1 Get Configurable System Variables, P1003.1b-1993, p. 95

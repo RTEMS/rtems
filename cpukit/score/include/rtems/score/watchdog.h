@@ -82,6 +82,8 @@ typedef struct {
   Watchdog_States   state;
   Watchdog_Interval initial;
   Watchdog_Interval delta_interval;
+  Watchdog_Interval start_time;
+  Watchdog_Interval stop_time;
   Watchdog_Service_routine_entry  routine;
   Objects_Id        id;
   void             *user_data;
@@ -94,6 +96,13 @@ typedef struct {
 
 SCORE_EXTERN volatile unsigned32  _Watchdog_Sync_level;
 SCORE_EXTERN volatile unsigned32  _Watchdog_Sync_count;
+
+/*
+ *  The following contains the number of ticks since the
+ *  system was booted.
+ */
+
+SCORE_EXTERN Watchdog_Interval _Watchdog_Ticks_since_boot;
 
 /*
  *  The following defines the watchdog chains which are managed

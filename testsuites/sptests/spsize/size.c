@@ -329,7 +329,6 @@ uninitialized =
 
 /*tod.h*/       (sizeof _TOD_Current)                     +
                 (sizeof _TOD_Seconds_since_epoch)         +
-                (sizeof _TOD_Ticks_since_boot)            +
                 (sizeof _TOD_Microseconds_per_tick)       +
                 (sizeof _TOD_Ticks_per_second)            +
                 (sizeof _TOD_Seconds_watchdog)            +
@@ -343,6 +342,7 @@ uninitialized =
 
 /*watchdog.h*/  (sizeof _Watchdog_Sync_level)             +
                 (sizeof _Watchdog_Sync_count)             +
+                (sizeof _Watchdog_Ticks_since_boot)       +
                 (sizeof _Watchdog_Ticks_chain)            +
                 (sizeof _Watchdog_Seconds_chain)          +
 

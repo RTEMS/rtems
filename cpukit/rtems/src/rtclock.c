@@ -62,7 +62,7 @@ rtems_status_code rtems_clock_get(
       return RTEMS_SUCCESSFUL;
 
     case RTEMS_CLOCK_GET_TICKS_SINCE_BOOT:
-      *(rtems_interval *)time_buffer = _TOD_Ticks_since_boot;
+      *(rtems_interval *)time_buffer = _Watchdog_Ticks_since_boot;
       return RTEMS_SUCCESSFUL;
 
     case RTEMS_CLOCK_GET_TICKS_PER_SECOND:

@@ -174,7 +174,7 @@ int clock_gettime(
 
 #ifdef _POSIX_CPUTIME
     case CLOCK_PROCESS_CPUTIME:
-      /* could base this on _TOD_Ticks_since_boot -- must make set work though*/
+      /* could base this on _Watchdog_Ticks_since_boot -- must make set work though*/
       return POSIX_NOT_IMPLEMENTED();
       break;
 #endif

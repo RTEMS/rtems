@@ -32,6 +32,8 @@ void _Watchdog_Handler_initialization( void )
 {
   _Watchdog_Sync_count = 0;
   _Watchdog_Sync_level = 0;
+  _Watchdog_Ticks_since_boot = 0;
+
   _Chain_Initialize_empty( &_Watchdog_Ticks_chain );
   _Chain_Initialize_empty( &_Watchdog_Seconds_chain );
 }
@@ -82,6 +84,8 @@ Watchdog_States _Watchdog_Remove(
       _Chain_Extract_unprotected( &the_watchdog->Node );
       break;
   }
+  the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
+
   _ISR_Enable( level );
   return( previous_state );
 }
@@ -199,6 +203,8 @@ restart:
   the_watchdog->delta_interval = delta_interval;
 
   _Chain_Insert_unprotected( after->Node.previous, &the_watchdog->Node );
+
+  the_watchdog->start_time = _Watchdog_Ticks_since_boot;
 
 exit_insert:
   _Watchdog_Sync_level = insert_isr_nest_level;

@@ -81,13 +81,6 @@ SCORE_EXTERN TOD_Control _TOD_Current;
 SCORE_EXTERN Watchdog_Interval _TOD_Seconds_since_epoch;
 
 /*
- *  The following contains the number of ticks since the
- *  system was booted.
- */
-
-SCORE_EXTERN Watchdog_Interval _TOD_Ticks_since_boot;
-
-/*
  *  The following contains the number of microseconds per tick.
  */
 
