@@ -32,7 +32,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/targopts.h>
+#include <rtems/score/targopts.h> /* for INSTRUCTION_CACHE_ENABLE */
 
 #if ( defined(mbx821_001) || defined(mbx821_001b) || defined(mbx860_001b) )
 #if defined( INSTRUCTION_CACHE_ENABLE )
