@@ -19,9 +19,23 @@ This is the gcc/java compiler for %{gcc_target}
 %{_prefix}/bin/%{gcc_target}-jcf-dump%{_exeext}
 %{_prefix}/bin/%{gcc_target}-jv-scan%{_exeext}
 %{_prefix}/bin/%{gcc_target}-gcjh%{_exeext}
-%{_prefix}/man/man1/%{gcc_target}-gcj.1
+%doc %{_prefix}/man/man1/%{gcc_target}-gcj.1*
 
-%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/jc1%{_exeext}
-%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/jvgenmain%{_exeext}
+%if "%{gcc_version}" >= "3.4"
+%{_prefix}/bin/%{gcc_target}-jar%{_exeext}
+%{_prefix}/bin/%{gcc_target}-grepjar%{_exeext}
+%doc %{_prefix}/man/man1/%{gcc_target}-jar.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-grepjar.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-rmic.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-rmiregistry.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-gcjh.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-gij.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-jcf-dump.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-jv-convert.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-jv-scan.1*
+%endif
+
+%{gccexec}/%{gcc_target}/%{gcc_version}/jc1%{_exeext}
+%{gccexec}/%{gcc_target}/%{gcc_version}/jvgenmain%{_exeext}
 
 %endif

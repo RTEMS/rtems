@@ -46,12 +46,13 @@ NoSource:	1
 # Use rpm -ba --define 'gnat [0|1]' xxx.spec to override building gnat for 
 # those targets wanting to support ada.
 
-%if "%{gcc_version}" >= "3.4"
+%if "%{gcc_version}" > "3.4.0"
 # default to building gnat
 %define _gnat	%{?gnat:%gnat}%{!?gnat:1}
 %else
 # default to not building gnat
 # gcc-3.3: Doesn't support cross-building gnatlib
+# gcc-3.4.0: Doesn't support cross-build gnattools
 %define _gnat	%{?gnat:%gnat}%{!?gnat:0}
 %endif
 
@@ -210,38 +211,28 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %endif
 
 %if %build_gnat
+%if "%{gcc_version}" < "3.4"
   cd ../gcc-%{gcc_version}/gcc/ada
   touch treeprs.ads [es]info.h nmake.ad[bs]
   cd ../../../build
 %endif
+%endif
+
   make all
 %if %build_gnat
 # This gnat configuration is crap :(
 
-# This is what is documented, but it doesn't work for me (RC)
-#  make gnatlib_and_tools
+%if "%{gcc_version}" >= "3.4"
+# This is what is documented - Of cause it doesn't work.
+  make -C gcc gnatlib
   make -C gcc cross-gnattools
   make -C gcc ada.all.cross
-
-# This should work, but doesn't.
-#  make -C gcc gnatlib 
-
-%if "%{gcc_version}" >= "3.3"
-# gcc >= 3.3
-  rm -rf gnatlib
-  mkdir gnatlib
-  pushd gnatlib
-  ACC="../gcc/xgcc -B../gcc/ -B../%{gcc_target}/newlib/"
-  ACC="$ACC -isystem ../%{gcc_target}/newlib/targ-include"
-  ACC="$ACC -isystem ../../newlib-%{newlib_version}/newlib/libc/include"
-  CC="$ACC" ../../gcc-%{gcc_version}/gcc/configure --disable-nls \
-     --host=%{gcc_target} --target=%{gcc_target} --enable-languages=ada
-  popd
-  make -C gcc/ada ../stamp-gnatlib1 LN_S="ln -s"
-  rm -f gcc/ada/rts/auto-target.h gcc/ada/rts/config.h
-  cp gnatlib/auto-host.h gcc/ada/rts/auto-target.h
-  sed -e 's,auto-host,auto-target,' < gcc/config.h > gcc/ada/rts/config.h
 %endif
+
+%if "%{gcc_version}" < "3.4"
+# This is what had worked for some versions of gcc.
+  make -C gcc cross-gnattools
+  make -C gcc ada.all.cross
 # This is what gcc/ada/Makefile.in contains by default, 
 # but what we override below
   GNATLIBCFLAGS="-g -O2"
@@ -256,11 +247,14 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %endif
   make -C gcc GNATLIBCFLAGS="${GNATLIBCFLAGS}" gnatlib
 %endif
-
+%endif
   make info
 
 %install
   export PATH="%{_bindir}:${PATH}"
+  test $RPM_BUILD_ROOT = "%{_defaultbuildroot}" && \
+    rm -rf $RPM_BUILD_ROOT
+
   cd build
 # Bug in gcc-2.95.1: It doesn't build this installation directory
 # If it doesn't find it, gcc doesn't install %{gcc_target}/bin/gcc
@@ -299,10 +293,14 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 %if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-%{gcc_target}-gcjh%{_exeext}
+%if "%{gcc_version}" < "3.4.1"
+  # Broken in gcc-3.4.0pre
+  rm -f $RPM_BUILD_ROOT%{_infodir}/gccinstall.*
+%endif
 %endif
 
 %if "%{gcc_version}" >= "3.3"
-  # Bug in gcc-3.3.x: Despite we don't need fixincludes, it installs
+  # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
   rm -rf ${RPM_BUILD_ROOT}%{gccexec}/%{gcc_target}/%{gcc_version}/install-tools
 %endif

@@ -20,7 +20,7 @@ This is the files for gcc and newlib that are shared by all targets.
 %doc %{_prefix}/info/libc.info*
 %doc %{_prefix}/info/libm.info*
 %doc %{_prefix}/info/gccint.info*
-%if "%{gcc_version}" >= "3.4"
+%if "%{gcc_version}" > "3.4.0"
 %doc %{_prefix}/info/gccinstall.info*
 %endif
 
