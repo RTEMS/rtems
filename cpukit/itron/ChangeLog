@@ -4,24 +4,21 @@
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
-	Add PREINSTALL_FILES to CLEANFILES.
+	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
 
-2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am, again.
 
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Add libs to CLEANFILES
-	Set lib*_g_a_SOURCES = lib*_a_SOURCES.
-
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* Makefile.am: Add libs to CLEANFILES. Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
 	* Makefile.am: Build libitron$(LIB_VARIANT).a instead of
 	$(ARCH)/libitron.a.
 
-2004-01-07  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Build library using EXTRA_LIBRARIES and automake rules.
 
@@ -32,11 +29,7 @@
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add $(dirstamp) to compilation rules.
-
-2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Add $(dirstamp) to preinstallation rules.
-	Remove MACROS.
+	* Makefile.am: Add $(dirstamp) to preinstallation rules. Remove MACROS.
 
 2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -45,8 +38,7 @@
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/config.h: Remove.
-	* Makefile.am: Remove src/config.h
-	AM_CPPFLAGS += -I$(top_builddir).
+	* Makefile.am: Remove src/config.h. AM_CPPFLAGS += -I$(top_builddir).
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
@@ -91,14 +83,12 @@
 	src/snd_mbf.c, src/snd_mbx.c, src/sta_tsk.c, src/sus_tsk.c,
 	src/sysmgmt.c, src/task.c, src/ter_tsk.c, src/trcv_mbf.c,
 	src/trcv_mbx.c, src/tslp_tsk.c, src/tsnd_mbf.c, src/twai_sem.c,
-	src/vmempool.c, src/wai_sem.c, src/wup_tsk.c: URL for license
-	changed.
+	src/vmempool.c, src/wai_sem.c, src/wup_tsk.c: URL for license changed.
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Remove (Merged-in into ../configure.ac)
-	* Makefile.am:
-	Reflect having merged configure.ac into ../configure.ac.
+	* configure.ac: Remove (Merged-in into ../configure.ac).
+	* Makefile.am: Reflect having merged configure.ac into ../configure.ac.
 	* src/config.h: New.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -108,9 +98,6 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -129,9 +116,6 @@
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Cosmetical fixes.
-
-2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Fix package name.
 
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -140,51 +124,44 @@
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/Makefile.am: Use .$(OBJEXT) instead of .o.
-
-2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* src/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES.
 
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_TOP(../..).
 
-2002-07-01    Joel Sherrill <joel@OARcorp.com>
-
-	* Mega patch merge to change the format of the object IDs to
-	loosen the dependency between the SCORE and the various APIs.
-	There was considerable work to simplify the object name management
-        and it appears that the name_table field is no longer needed.
-	This patch also includes the addition of the internal mutex
-	which is currently only used to protect some types of allocation
-	and deallocation.  This significantly can reduce context 
-	switch latency under certain circumstances.  In particular,
-	some heap/region operations were O(n) and had dispatching
-	disabled.  This should help enormously.  With this merge,
-	the patch is not as clean as it should be.  In particular,
-	the documentation has not been modified to reflect the new object
-	ID layout, the IDs in the test screens are not updated, and
-	_Objects_Get_information needs to be a real routine not inlined.
-	As part of this patch a lot of MP code for thread/proxy blocking
-	was made conditional and cleaned up.
-	* src/cre_mbf.c, src/cre_sem.c, src/eventflags.c, src/fmempool.c,
-	src/itronsem.c, src/mbox.c, src/msgbuffer.c, src/port.c, src/task.c,
-	src/vmempool.c:  Modified as part of above.
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_PROJECT_ROOT.
 
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Mega patch merge to change the format of the object IDs to loosen the
+	dependency between the SCORE and the various APIs. There was
+	considerable work to simplify the object name management and it appears
+	that the name_table field is no longer needed. This patch also includes
+	the addition of the internal mutex which is currently only used to
+	protect some types of allocation and deallocation.  This significantly
+	can reduce context  switch latency under certain circumstances.  In
+	particular, some heap/region operations were O(n) and had dispatching
+	disabled.  This should help enormously.  With this merge, the patch is
+	not as clean as it should be.  In particular, the documentation has not
+	been modified to reflect the new object ID layout, the IDs in the test
+	screens are not updated, and _Objects_Get_information needs to be a real
+	routine not inlined. As part of this patch a lot of MP code for
+	thread/proxy blocking was made conditional and cleaned up.
+	* src/cre_mbf.c, src/cre_sem.c, src/eventflags.c, src/fmempool.c,
+	src/itronsem.c, src/mbox.c, src/msgbuffer.c, src/port.c, src/task.c,
+	src/vmempool.c:  Modified as part of above.
+
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Use AC_CONFIG_AUX_DIR(../..).
-	Add AC_PROG_RANLIB.
+	* configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -194,21 +171,14 @@
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	Use ../aclocal.
+	* Makefile.am: Include $(top_srcdir)/../automake/*.am. Use ../aclocal.
 	* inline/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	* macros/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	* src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 
-2001-04-22	Joel Sherrill <joel@OARcorp.com>
-
-	* src/task.c (_ITRON_Task_User_extensions): Add new fields to 
-	be correct in respect to newly added fields for separate switch list.
- 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
@@ -223,8 +193,8 @@
 2001-11-07	Joel Sherrill <joel@OARcorp.com>
 
 	Discovered while fixing PR36 reported by Todor.Todorov@barco.com.
-	* include/rtems/itron/object.h: Corrected _ITRON_Objects_Get() 
-	to use _Objects_Get_by_index().
+	* include/rtems/itron/object.h: Corrected _ITRON_Objects_Get()  to use
+	_Objects_Get_by_index().
 
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -256,8 +226,7 @@
 
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* src/Makefile.am: Revamp INCLUDES handling to make automake-1.5
-	happy.
+	* src/Makefile.am: Revamp INCLUDES handling to make automake-1.5 happy.
 
 2001-08-09	Joel Sherrill <joel@OARcorp.com>
 
@@ -270,18 +239,23 @@
 
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
 
+2001-04-22	Joel Sherrill <joel@OARcorp.com>
+
+	* src/task.c (_ITRON_Task_User_extensions): Add new fields to  be
+	correct in respect to newly added fields for separate switch list.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am, include/itronsys/Makefile.am,
 	include/rtems/itron/Makefile.am, inline/rtems/itron/Makefile.am,
-	macros/rtems/itron/Makefile.am:
-	Apply include_*HEADERS instead of H_FILES.
+	macros/rtems/itron/Makefile.am: Apply include_*HEADERS instead of
+	H_FILES.
 
 2001-01-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: Add src/config.h
-	* src/Makefile.am: Add INCLUDES += -I. to pickup config.h
-	* src/.cvsignore: Add config.h and stamp-h
+	* configure.in: Add src/config.h.
+	* src/Makefile.am: Add INCLUDES += -I. to pickup config.h.
+	* src/.cvsignore: Add config.h and stamp-h.
 	* src/*.c: Add config.h support.
 
 2000-12-01	Joel Sherrill <joel@OARcorp.com>
@@ -289,15 +263,15 @@
 	* Added macro support to ITRON API.  This is known to compile.
 	* Makefile.am: Added macros directory.
 	* configure.in: Removed error check for enabling macros.
-	* macros/.cvsignore, macros/Makefile.am,
-	macros/rtems/.cvsignore, macros/rtems/Makefile.am,
-	macros/rtems/itron/.cvsignore, macros/rtems/itron/Makefile.am,
-	macros/rtems/itron/eventflags.inl, macros/rtems/itron/fmempool.inl,
-	macros/rtems/itron/intr.inl, macros/rtems/itron/mbox.inl,
-	macros/rtems/itron/msgbuffer.inl, macros/rtems/itron/network.inl,
-	macros/rtems/itron/port.inl, macros/rtems/itron/semaphore.inl,
-	macros/rtems/itron/sysmgmt.inl, macros/rtems/itron/task.inl,
-	macros/rtems/itron/time.inl, macros/rtems/itron/vmempool.inl: New files.
+	* macros/.cvsignore, macros/Makefile.am, macros/rtems/.cvsignore,
+	macros/rtems/Makefile.am, macros/rtems/itron/.cvsignore,
+	macros/rtems/itron/Makefile.am, macros/rtems/itron/eventflags.inl,
+	macros/rtems/itron/fmempool.inl, macros/rtems/itron/intr.inl,
+	macros/rtems/itron/mbox.inl, macros/rtems/itron/msgbuffer.inl,
+	macros/rtems/itron/network.inl, macros/rtems/itron/port.inl,
+	macros/rtems/itron/semaphore.inl, macros/rtems/itron/sysmgmt.inl,
+	macros/rtems/itron/task.inl, macros/rtems/itron/time.inl,
+	macros/rtems/itron/vmempool.inl: New files.
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -309,8 +283,8 @@
 
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-        Switch to GNU canonicalization.
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
+	canonicalization.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -319,3 +293,4 @@
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+
