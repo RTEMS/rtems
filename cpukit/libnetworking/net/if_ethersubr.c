@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,6 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_ethersubr.c	8.1 (Berkeley) 6/10/93
+ * $FreeBSD: src/sys/net/if_ethersubr.c,v 1.179 2004/10/12 10:33:41 glebius Exp $
+ */
+ 
+/*
  * $Id$
  */
 
@@ -97,8 +97,8 @@ extern struct ifqueue pkintrq;
 #define llc_snap_org_code llc_un.type_snap.org_code
 #define llc_snap_ether_type llc_un.type_snap.ether_type
 
-extern u_char	at_org_code[ 3 ];
-extern u_char	aarp_org_code[ 3 ];
+extern u_char	at_org_code[3];
+extern u_char	aarp_org_code[3];
 #endif /* NETATALK */
 
 u_char	etherbroadcastaddr[6] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
@@ -112,11 +112,8 @@ u_char	etherbroadcastaddr[6] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
  * Assumes that ifp is actually pointer to arpcom structure.
  */
 int
-ether_output(ifp, m0, dst, rt0)
-	register struct ifnet *ifp;
-	struct mbuf *m0;
-	struct sockaddr *dst;
-	struct rtentry *rt0;
+ether_output(struct ifnet *ifp, struct mbuf *m,
+	struct sockaddr *dst, struct rtentry *rt0)
 {
 	short type;
 	int s, error = 0;
@@ -126,7 +123,6 @@ ether_output(ifp, m0, dst, rt0)
 	register struct mbuf *m2;
 #endif
 	u_char  edst[6];
-	register struct mbuf *m = m0;
 	register struct rtentry *rt;
 	struct mbuf *mcopy = (struct mbuf *)0;
 	register struct ether_header *eh;
@@ -684,6 +680,22 @@ ether_input(ifp, eh, m)
 	} else
 		IF_ENQUEUE(inq, m);
 	splx(s);
+}
+
+/*
+ * Convert Ethernet address to printable (loggable) representation.
+ * This routine is for compatibility; it's better to just use
+ *
+ *	printf("%6D", <pointer to address>, ":");
+ *
+ * since there's no static buffer involved.
+ */
+char *
+ether_sprintf(const u_char *ap)
+{
+	static char etherbuf[18];
+	snprintf(etherbuf, sizeof (etherbuf), "%6D", ap, ":");
+	return (etherbuf);
 }
 
 /*

@@ -2,6 +2,8 @@
 
 	* libnetworking/net/if.h; Cosmetical updates from FreeBSD.
 	Remove if_poll* (Not implemented in RTEMS, abandoned by FreeBSD).
+	* libnetworking/net/if_ethersubr.c: Cosmetical updates from FreeBSD.
+	Add ether_sprintf.
 
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
