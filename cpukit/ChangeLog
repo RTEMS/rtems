@@ -1,5 +1,9 @@
 2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Cosmetics.
+
+2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/enable-networking.m4: Don't AC_SUBST(RTEMS_HAS_NETWORKING).
 	* aclocal/check-networking.m4: Don't AC_SUBST(HAS_NETWORKING).
 	* automake/amcompile.am: Remove $(ARCH).

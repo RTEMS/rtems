@@ -108,9 +108,9 @@ $(ARCH)/librtemscpu$(LIB_VARIANT).a: ${LIBS}
 	rm -f $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	$(RANLIB) $@
 
-TMPINSTALL_FILES =
-
 all-local: $(TMPINSTALL_FILES)
+
+TMPINSTALL_FILES =
 
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
