@@ -31,7 +31,7 @@ all:	install
 #       file name conflicts
 
 install:
-	test -d $(PROJECT_INCLUDE)/sh || $(MKDIR) $(PROJECT_INCLUDE)/sh 
+	$(RTEMS_ROOT)/mkinstalldirs $(PROJECT_INCLUDE)/sh 
 	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/sh
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status

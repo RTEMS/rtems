@@ -53,6 +53,7 @@ dir=`dirname $i`;
   cd $dir;
   aclocal -I $aclocal_dir;
   autoconf;
+  test -n "`grep CONFIG_HEADER configure.in`" && autoheader ; 
   test -f Makefile.am && automake $verbose ;
 )
 done

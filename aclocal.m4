@@ -12,6 +12,184 @@ dnl PARTICULAR PURPOSE.
 
 dnl $Id$
 
+AC_DEFUN(RTEMS_TOP,
+[dnl
+RTEMS_TOPdir="$1";
+AC_SUBST(RTEMS_TOPdir)
+
+PROJECT_ROOT=`pwd`/$RTEMS_TOPdir;
+AC_SUBST(PROJECT_ROOT)
+
+RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
+AC_SUBST(RTEMS_ROOT)
+])dnl
+
+dnl $Id$
+dnl
+dnl Note: This option is considered obsolete
+
+AC_DEFUN(RTEMS_ENABLE_GMAKE_PRINT,
+[
+AC_ARG_ENABLE(gmake-print-directory,
+[  --enable-gmake-print-directory       enable GNU Make's print directory],
+[case "${enableval}" in 
+  yes) RTEMS_USE_OWN_PDIR=no ;;
+  no) RTEMS_USE_OWN_PDIR=yes ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for gmake-print-directory option)
+;;
+esac],[RTEMS_USE_OWN_PDIR=yes])
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_MULTIPROCESSING,
+[
+AC_ARG_ENABLE(multiprocessing,
+[  --enable-multiprocessing             enable multiprocessing interface],
+[case "${enableval}" in 
+  yes) RTEMS_HAS_MULTIPROCESSING=yes ;;
+  no) RTEMS_HAS_MULTIPROCESSING=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-multiprocessing option) ;;
+esac],[RTEMS_HAS_MULTIPROCESSING=no])
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_POSIX,
+[
+AC_ARG_ENABLE(posix,
+[  --enable-posix                       enable posix interface],
+[case "${enableval}" in 
+  yes) RTEMS_HAS_POSIX_API=yes ;;
+  no) RTEMS_HAS_POSIX_API=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-posix option) ;;
+esac],[RTEMS_HAS_POSIX_API=yes]) 
+
+changequote(,)dnl
+case "${target}" in
+  # hpux unix port should go here
+  i[3456]86-go32-rtems*)
+	RTEMS_HAS_POSIX_API=no
+	;;
+  i[3456]86-pc-linux*)         # unix "simulator" port
+	RTEMS_HAS_POSIX_API=no
+	;;
+  i[3456]86-*freebsd2*) # unix "simulator" port
+	RTEMS_HAS_POSIX_API=no
+	;;
+  no_cpu-*rtems*)
+	RTEMS_HAS_POSIX_API=no
+	;;
+  sparc-sun-solaris*)             # unix "simulator" port
+	RTEMS_HAS_POSIX_API=no
+	;;
+  *) 
+	;;
+esac
+changequote([,])dnl
+AC_SUBST(RTEMS_HAS_POSIX_API)
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_NETWORKING,
+[
+AC_ARG_ENABLE(networking,
+[  --enable-networking                  enable TCP/IP stack],
+[case "${enableval}" in
+  yes) RTEMS_HAS_NETWORKING=yes ;;
+  no) RTEMS_HAS_NETWORKING=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
+esac],[RTEMS_HAS_NETWORKING=yes])
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_RDBG,
+[
+AC_ARG_ENABLE(rdbg,
+[  --enable-rdbg                        enable remote debugger],
+[case "${enableval}" in
+  yes) RTEMS_HAS_RDBG=yes ;;
+  no) RTEMS_HAS_RDBG=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-rdbg option) ;;
+esac],[RTEMS_HAS_RDBG=no])
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_INLINES,
+[AC_ARG_ENABLE(rtems-inlines,
+[  --enable-rtems-inlines               enable RTEMS inline functions]
+[                                       (default:enabled, disable to use macros)],
+[case "${enableval}" in
+  yes) RTEMS_USE_MACROS=no ;;
+  no) RTEMS_USE_MACROS=yes ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
+esac],[RTEMS_USE_MACROS=no])
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_CXX,
+[
+AC_ARG_ENABLE(cxx,
+[  --enable-cxx                         enable C++ support,]
+[                                       and build the rtems++ library],
+[case "${enableval}" in
+  yes) RTEMS_HAS_CPLUSPLUS=yes ;;
+  no) RTEMS_HAS_CPLUSPLUS=no   ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for enable-cxx option) ;;
+esac], [RTEMS_HAS_CPLUSPLUS=no])
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_GCC28,
+[
+AC_ARG_ENABLE(gcc28,
+[  --enable-gcc28                       enable use of gcc 2.8.x features],
+[case "${enableval}" in
+  yes) RTEMS_USE_GCC272=no ;;
+  no) RTEMS_USE_GCC272=yes ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for gcc-28 option) ;;
+esac],[RTEMS_USE_GCC272=no])
+])
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_LIBCDIR,
+[
+AC_ARG_ENABLE(libcdir,
+[  --enable-libcdir=directory           set the directory for the C library],
+[ RTEMS_LIBC_DIR="${enableval}" ; \
+test -d ${enableval} || AC_MSG_ERROR("$enableval is not a directory" ) ] )
+])
+
+AC_DEFUN(RTEMS_ENABLE_BARE,
+[
+AC_ARG_ENABLE(bare-cpu-cflags,
+[  --enable-bare-cpu-cflags             specify a particular cpu cflag]
+[                                       (bare bsp specific)],
+[case "${enableval}" in
+  no) BARE_CPU_CFLAGS="" ;;
+  *)    BARE_CPU_CFLAGS="${enableval}" ;;
+esac],
+[BARE_CPU_CFLAGS=""])
+
+AC_ARG_ENABLE(bare-cpu-model,
+[  --enable-bare-cpu-model              specify a particular cpu model]
+[                                       (bare bsp specific)],
+[case "${enableval}" in
+  no)   BARE_CPU_MODEL="" ;;
+  *)    BARE_CPU_MODEL="${enableval}" ;;
+esac],
+[BARE_CPU_MODEL=""])
+])
+
+
+dnl $Id$
+
 AC_DEFUN(RTEMS_PATH_PERL,
 [
 AC_PATH_PROG(PERL,perl)
@@ -122,6 +300,48 @@ esac
 changequote([,])dnl
 AC_MSG_RESULT($target_cpu)
 ])
+
+dnl $Id$
+
+dnl check if RTEMS support a cpu
+AC_DEFUN(RTEMS_CHECK_CPU,
+[dnl
+AC_REQUIRE([RTEMS_TOP])
+AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])
+# Is this a supported CPU?
+AC_MSG_CHECKING([if cpu $target_cpu is supported])
+if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$target_cpu"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_ERROR(no)
+fi
+])dnl
+
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_CANONICAL_HOST,
+[dnl
+AC_REQUIRE([AC_CANONICAL_HOST])
+RTEMS_HOST=$host_os
+changequote(,)dnl
+case "${target}" in
+  # hpux unix port should go here
+  i[3456]86-pc-linux*)         # unix "simulator" port
+        RTEMS_HOST=Linux
+	;;
+  i[3456]86-*freebsd2*) # unix "simulator" port
+        RTEMS_HOST=FreeBSD
+	;;
+  sparc-sun-solaris*)             # unix "simulator" port
+        RTEMS_HOST=Solaris
+	;;
+  *) 
+	;;
+esac
+changequote([,])dnl
+AC_SUBST(RTEMS_HOST)
+])dnl
 
 dnl
 dnl  $Id$
@@ -481,67 +701,6 @@ EOF
 
 
 dnl
-dnl  $Id$
-dnl 
-dnl Detect the Cygwin32 environment (unix under Win32)
-dnl
-dnl 98/06/16 David Fiddes   	(D.J.Fiddes@hw.ac.uk)
-dnl				Hacked from automake-1.3
-
-# Check to see if we're running under Cygwin32, without using
-# AC_CANONICAL_*.  If so, set output variable CYGWIN32 to "yes".
-# Otherwise set it to "no".
-
-dnl RTEMS_CYGWIN32()
-AC_DEFUN(RTEMS_CYGWIN32,
-[AC_CACHE_CHECK(for Cygwin32 environment, rtems_cv_cygwin32,
-[AC_TRY_COMPILE(,[return __CYGWIN32__;],
-rtems_cv_cygwin32=yes, rtems_cv_cygwin32=no)
-rm -f conftest*])
-CYGWIN32=
-test "$rtems_cv_cygwin32" = yes && CYGWIN32=yes])
-
-
-dnl
-dnl  $Id$
-dnl 
-dnl Set the EXE extension
-dnl
-dnl 98/06/16 David Fiddes   	(D.J.Fiddes@hw.ac.uk)
-dnl				Hacked from automake-1.3
-
-# Check to see if we're running under Win32, without using
-# AC_CANONICAL_*.  If so, set output variable EXEEXT to ".exe".
-# Otherwise set it to "".
-
-dnl RTEMS_EXEEXT()
-dnl This knows we add .exe if we're building in the Cygwin32
-dnl environment. But if we're not, then it compiles a test program
-dnl to see if there is a suffix for executables.
-AC_DEFUN(RTEMS_EXEEXT,
-[AC_REQUIRE([RTEMS_CYGWIN32])
-AC_MSG_CHECKING([for executable suffix])
-AC_CACHE_VAL(rtems_cv_exeext,
-[if test "$CYGWIN32" = yes; then
-rtems_cv_exeext=.exe
-else
-cat > rtems_c_test.c << 'EOF'
-int main() {
-/* Nothing needed here */
-}
-EOF
-${CC-cc} -o rtems_c_test $CFLAGS $CPPFLAGS $LDFLAGS rtems_c_test.c $LIBS 1>&5
-rtems_cv_exeext=`echo rtems_c_test.* | grep -v rtems_c_test.c | sed -e s/rtems_c_test//`
-rm -f rtems_c_test*])
-test x"${rtems_cv_exeext}" = x && rtems_cv_exeext=no
-fi
-EXEEXT=""
-test x"${rtems_cv_exeext}" != xno && EXEEXT=${rtems_cv_exeext}
-AC_MSG_RESULT(${rtems_cv_exeext})
-AC_SUBST(EXEEXT)])
-
-
-dnl
 dnl $Id$
 dnl
 dnl Check for System V IPC calls used by Unix simulators
@@ -675,4 +834,35 @@ else
 fi
 ])
 
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_ENABLE_TESTS,
+[
+# If the tests are enabled, then find all the test suite Makefiles
+AC_MSG_CHECKING([if the test suites are enabled? ])
+tests_enabled=yes
+AC_ARG_ENABLE(tests,
+[  --enable-tests                       enable tests (default:disabled)],
+  [case "${enableval}" in
+    yes) AC_MSG_RESULT(yes) ;;
+    no)  AC_MSG_RESULT(no) ; tests_enabled=no ;;
+    *)   AC_MSG_ERROR(bad value ${enableval} for tests option) ;;
+  esac], AC_MSG_RESULT(no))
+])
+
+dnl $Id$
+dnl
+dnl FIXME: this needs to be reworked
+
+AC_DEFUN(RTEMS_ENABLE_HWAPI,
+[dnl
+AC_ARG_ENABLE(hwapi, \
+[  --enable-hwapi                       enable hardware API library],
+[case "${enableval}" in
+    yes) RTEMS_HAS_HWAPI=yes ;;
+    no)  RTEMS_HAS_HWAPI=no ;;
+    *)  AC_MSG_ERROR(bad value ${enableval} for hwapi option) ;;
+  esac],[RTEMS_HAS_HWAPI=no])
+])dnl
 

@@ -37,7 +37,7 @@ CLOBBER_ADDITIONS +=
 
 $(LIB): ${LIBS} $(RELS)
 	$(RM) -r $(ARCH)
-	$(MKDIR) $(ARCH)
+	mkdir $(ARCH)
 	cd $(ARCH); for lib in $(LIBS:%=../%); do \
                          $(AR) -xv $$lib; \
                     done

@@ -81,7 +81,8 @@ make_src_makefiles: Makefile.in Makefile
 	-rm make_src_makefiles.tmp
 
 pre_install_src: env make_src_makefiles
-	cd build-tools/scripts; $(MAKE)
+	cd build-tools/scripts; \
+	 $(MAKE) RTEMS_BSP=${RTEMS_BSP} install-exec-local
 	@echo "Order of preinstall directories"
 	cat make_src_makefiles
 	@echo 
@@ -112,7 +113,7 @@ clean_wrapup: clean_tools clean_dirs clean_modules
 .PHONY:	dirs clean_wrapup clean_dirs clean_tools clean_modules env install
 
 $(BUILD_DIRS):
-	-$(MKDIR) $(BUILD_DIRS)
+	$(RTEMS_ROOT)/mkinstalldirs $(BUILD_DIRS)
 	if test -d $(PROJECT_ROOT)/c/src/lib/libhwapi; then \
 		(cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs) \
 	fi

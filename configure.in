@@ -2,102 +2,27 @@ dnl Process this file with autoconf to produce a configure script.
 dnl
 dnl  $Id$
 
-AC_PREREQ(2.12)
+AC_PREREQ(2.13)
 AC_INIT(README)
 RTEMS_TOP(.)
 
 dnl Checks for programs.
 AC_PROG_MAKE_SET
 AC_CANONICAL_SYSTEM
+
 AC_ARG_WITH(cross-host,[  --with-cross-host=HOST      host (cygnus)], \
 host=$withval)
 
-AC_ARG_ENABLE(gmake-print-directory, \
-[  --enable-gmake-print-directory    enable GNU Make's print directory], \
-[case "${enableval}" in
-  yes) RTEMS_USE_OWN_PDIR=no ;;
-  no) RTEMS_USE_OWN_PDIR=yes ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for gmake-print-directory option) ;;
-esac],[RTEMS_USE_OWN_PDIR=yes])
-
-AC_ARG_ENABLE(multiprocessing, \
-[  --enable-multiprocessing 	     	    enable multiprocessing interface], \
-[case "${enableval}" in 
-  yes) RTEMS_HAS_MULTIPROCESSING=yes ;;
-  no) RTEMS_HAS_MULTIPROCESSING=no ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-multiprocessing option) ;;
-esac],[RTEMS_HAS_MULTIPROCESSING=no])
-
-AC_ARG_ENABLE(posix, \
-[  --enable-posix 	     	    enable posix interface], \
-[case "${enableval}" in 
-  yes) RTEMS_HAS_POSIX_API=yes ;;
-  no) RTEMS_HAS_POSIX_API=no ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-posix option) ;;
-esac],[RTEMS_HAS_POSIX_API=yes])
-
-AC_ARG_ENABLE(networking, \
-[  --enable-networking                enable TCP/IP stack], \
-[case "${enableval}" in
-  yes) RTEMS_HAS_NETWORKING=yes ;;
-  no) RTEMS_HAS_NETWORKING=no ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
-esac],[RTEMS_HAS_NETWORKING=yes])
-
-AC_ARG_ENABLE(rdbg, \
-[  --enable-rdbg                enable remote debugger], \
-[case "${enableval}" in
-  yes) RTEMS_HAS_RDBG=yes ;;
-  no) RTEMS_HAS_RDBG=no ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-rdbg option) ;;
-esac],[RTEMS_HAS_RDBG=no])
-
-AC_ARG_ENABLE(rtems-inlines, \
-[  --enable-rtems-inlines 	    enable RTEMS inline functions, the default (disable to use macros)], \
-[case "${enableval}" in 
-  yes) RTEMS_USE_MACROS=no ;;
-  no) RTEMS_USE_MACROS=yes ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
-esac],[RTEMS_USE_MACROS=no])
-
-AC_ARG_ENABLE(cxx, \
-[  --enable-cxx            enable C++ support, and build the rtems++ library], \
-[case "${enableval}" in 
-  yes) RTEMS_HAS_CPLUSPLUS=yes ;;
-  no) RTEMS_HAS_CPLUSPLUS=no   ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-cxx option) ;;
-esac], [RTEMS_HAS_CPLUSPLUS=no])
-
-AC_ARG_ENABLE(gcc28, \
-[  --enable-gcc28		    enable use of gcc 2.8.x features], \
-[case "${enableval}" in 
-  yes) RTEMS_USE_GCC272=no ;;
-  no) RTEMS_USE_GCC272=yes ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for gcc-28 option) ;;
-esac],[RTEMS_USE_GCC272=no])
-
-AC_ARG_ENABLE(libcdir, \
-[  --enable-libcdir=directory	    set the directory for the C library], \
-[ RTEMS_LIBC_DIR="${enableval}" ; \
-test -d ${enableval} || AC_MSG_ERROR("$enableval is not a directory" ) ] )
-
-AC_ARG_ENABLE(bare-cpu-cflags,
-[  --enable-bare-cpu-cflags          \
-         specify a particular cpu cflag (bare bsp specific)],
-[case "${enableval}" in
-  no) BARE_CPU_CFLAGS="" ;;
-  *)    BARE_CPU_CFLAGS="${enableval}" ;;
-esac],
-[BARE_CPU_CFLAGS=""])
-
-AC_ARG_ENABLE(bare-cpu-model,
-[  --enable-bare-cpu-model              \
-         specify a particular cpu model (bare bsp specific)],
-[case "${enableval}" in
-  no)   BARE_CPU_MODEL="" ;;
-  *)    BARE_CPU_MODEL="${enableval}" ;;
-esac],
-[BARE_CPU_MODEL=""])
+RTEMS_ENABLE_GMAKE_PRINT
+RTEMS_ENABLE_MULTIPROCESSING
+RTEMS_ENABLE_POSIX
+RTEMS_ENABLE_NETWORKING
+RTEMS_ENABLE_RDBG
+RTEMS_ENABLE_INLINES
+RTEMS_ENABLE_CXX
+RTEMS_ENABLE_GCC28
+RTEMS_ENABLE_LIBCDIR
+RTEMS_ENABLE_BARE
 
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
 
@@ -115,6 +40,11 @@ AC_PROG_INSTALL
 RTEMS_PATH_PERL
 
 dnl check mkdir behaviour, try to get mkdir -p -m 0755
+dnl NOTE: This is considered obsolete
+dnl MKDIR is not used anywhere in the source tree anymore.
+dnl In Makefile.ins/Makefile.ams, use 
+dnl "mkinstalldirs" for recursive mkdir and 
+dnl "mkdir" for non-recursive mkdir, instead
 RTEMS_PATH_MKDIR
 RTEMS_PROG_MKDIR_M
 RTEMS_PROG_MKDIR_P
@@ -150,52 +80,25 @@ dnl a BSP library would be used to link an application.
 RTEMS_HOST=$host_os
 
 RTEMS_CANONICAL_TARGET_CPU
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
 
 changequote(,)dnl
 case "${target}" in
-  # hpux unix port should go here
   i[3456]86-go32-rtems*)
-	rtems_bsp="go32 go32_p5"
-       	skip_startfiles="yes"
-	RTEMS_HAS_POSIX_API=no
-	;;
-  i[3456]86-pc-linux*)         # unix "simulator" port
-        RTEMS_HOST=Linux
-        # override these settings
-	RTEMS_HAS_POSIX_API=no
-	;;
-  i[3456]86-*freebsd2*) # unix "simulator" port
-        RTEMS_HOST=FreeBSD
-        # override these settings
-	RTEMS_HAS_POSIX_API=no
-	;;
-  no_cpu-*rtems*)
-	RTEMS_HAS_POSIX_API=no
-	;;
-  sparc-sun-solaris*)             # unix "simulator" port
-        RTEMS_HOST=Solaris
-        # override these settings
-	RTEMS_HAS_POSIX_API=no
-	;;
-  *) 
-	;;
+    rtems_bsp="go32 go32_p5"
+    skip_startfiles="yes"
+    ;;
+  *)
+    ;;
 esac
 changequote([,])dnl
-
 
 # Override the set of BSPs to be built.
 AC_ARG_ENABLE(rtemsbsp, \
   [  --enable-rtemsbsp=bsp1 bsp2 ..   BSPs to include in build], \
       rtems_bsp=$enableval \
 )
-
-# Is this a supported CPU?
-AC_MSG_CHECKING([if cpu $target_cpu is supported])
-if test -d "$srcdir/c/src/exec/score/cpu/$target_cpu"; then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_ERROR(no)
-fi
 
 RTEMS_TOOL_PREFIX
 
@@ -236,9 +139,8 @@ RTEMS_I386_GAS_CODE16
 
 dnl check host cc
 AC_PROG_CC
-
-RTEMS_CYGWIN32
-RTEMS_EXEEXT
+dnl check for .exe (Cygwin)
+AC_EXEEXT
 
 dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*
 case $host_os in
@@ -260,10 +162,6 @@ fi
 
 dnl Add -g if the host compiler accepts -g, assume -g means debugging
 test "$ac_cv_prog_cc_g" = "yes" && CC_CFLAGS_DEBUG_V=${CC_CFLAGS_DEBUG_V-"-g"}
-
-dnl check for host library functions
-dnl NOTE: must be called after AC_PROG_CC
-AC_CHECK_FUNCS(strerror)
 
 dnl check for SysV IPC used by simulators
 if test "$target_cpu" = "unix" ; then
@@ -379,7 +277,6 @@ fi
 
 dnl END configure.target.in
 
-
 PROJECT_ROOT=`pwd;`
 
 # If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
@@ -409,18 +306,7 @@ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
   makefiles="$makefiles c/src/lib/librtems++/Makefile"
 fi
 
-# If the tests are enabled, then find all the test suite Makefiles
-AC_MSG_CHECKING([if the test suites are enabled? ])
-tests_enabled=no
-AC_ARG_ENABLE(tests, \
-[  --enable-tests 	     	    enable tests (default:disabled)], \
-  [case "${enableval}" in
-    yes) AC_MSG_RESULT(yes) ; tests_enabled=yes ;;
-    no)  AC_MSG_RESULT(no) ; tests_enabled=no ;;
-    *)   AC_MSG_ERROR(bad value ${enableval} for tests option) ;;
-  esac],
-AC_MSG_RESULT(no)
-)
+RTEMS_ENABLE_TESTS
 
 RTEMS_CHECK_MAKEFILE(c/src/tests/tools/$target_cpu)
 
@@ -437,29 +323,23 @@ if test "$tests_enabled" = "yes"; then
 fi 
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
-AC_MSG_CHECKING([if the HWAPI is enabled? ])
-AC_ARG_ENABLE(hwapi, \
-[  --enable-hwapi                 enable hardware API library], \
-  [case "${enableval}" in
-    yes) AC_MSG_RESULT(yes) 
-         if test -f ${srcdir}/c/src/lib/libhwapi/Makefile.in ; then
-            makefiles="$makefiles c/src/lib/libhwapi/Makefile"
-            RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/analog)
-            RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/discrete)
-            RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/drivers)
-            RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/non_volatile_memory)
-            RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/serial)
-            RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/support)
-            RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/wrapup)
-         else
-            AC_MSG_ERROR(No source code found for the HWAPI)
-         fi
-         ;;
-    no)  AC_MSG_RESULT(no) ;;
-    *)  AC_MSG_ERROR(bad value ${enableval} for hwapi option) ;;
-  esac],
-  AC_MSG_RESULT(no)
-)
+RTEMS_ENABLE_HWAPI
+if test "$RTEMS_HAS_HWAPI" = "yes"; then
+  AC_MSG_CHECKING(whether libwapi is present)
+  if test -f ${srcdir}/c/src/lib/libhwapi/Makefile.in ; then
+    AC_MSG_RESULT(yes)
+    makefiles="$makefiles c/src/lib/libhwapi/Makefile"
+    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/analog)
+    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/discrete)
+    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/drivers)
+    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/non_volatile_memory)
+    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/serial)
+    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/support)
+    RTEMS_CHECK_MAKEFILE(c/src/lib/libhwapi/wrapup)
+  else
+    AC_MSG_ERROR(No source code found for the HWAPI)
+  fi
+fi
 
 AC_SUBST(RTEMS_GAS_CODE16)
 AC_SUBST(rtems_cv_prog_cc_cross)
@@ -484,13 +364,14 @@ AC_SUBST(CC_CFLAGS_PROFILE_V)
 AC_SUBST(CC_LDFLAGS_PROFILE_V)
 
 # pick up all the Makefiles in required parts of the tree
-RTEMS_CHECK_MAKEFILE(c/build-tools)
 RTEMS_CHECK_MAKEFILE(make)
 RTEMS_CHECK_MAKEFILE(c/src/lib/libchip)
 RTEMS_CHECK_MAKEFILE(c/src/lib/libmisc)
 RTEMS_CHECK_MAKEFILE(c/src/tests/samples)
 
-AC_CONFIG_HEADER(c/build-tools/src/config.h)
+AC_CONFIG_SUBDIRS(c/build-tools)
+# FIXME: libwapi needs a separate configure.in in future ;-
+# AC_CONFIG_SUBDIRS(c/src/lib/libwapi)
 
 # try not to explicitly list a Makefile here 
 AC_OUTPUT( 

@@ -1,9 +1,4 @@
-/*
- *  This file is editted automatically by autoconf.
- *
- *  $Id$
- */
+/* src/config.h.in.  Generated automatically from configure.in by autoheader.  */
 
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR
-

@@ -28,7 +28,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 all:	install
 
 install:
-	test -d $(PROJECT_INCLUDE)/mpc860 || $(MKDIR) $(PROJECT_INCLUDE)/mpc860
+	$(RTEMS_ROOT)/mkinstalldirs $(PROJECT_INCLUDE)/mpc860
 	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/mpc860
 
 all: FORCEIT
