@@ -54,7 +54,7 @@ struct svc_raw_private {
 	XDR	xdr_stream;
 	char	verf_body[MAX_AUTH_BYTES];
 };
-#define svcraw_private ((struct svc_raw_private *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_raw_private)
+#define svcraw_private ((struct svc_raw_private *)(rtems_rpc_task_variables)->svc_raw_private)
 
 static bool_t		svcraw_recv();
 static enum xprt_stat 	svcraw_stat();

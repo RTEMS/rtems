@@ -87,7 +87,7 @@ struct authsvc {
 	enum	auth_stat (*handler)();
 	struct	authsvc	  *next;
 };
-#define Auths ((struct authsvc *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_auths_Auths)
+#define Auths ((struct authsvc *)(rtems_rpc_task_variables)->svc_auths_Auths)
 
 /*
  * The call rpc message, msg has been obtained from the wire.  The msg contains

@@ -1,3 +1,15 @@
+2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rpc/rpc.hinclude/rpc/rpc.h: Rename struct
+	rtems_rpc_task_variables into struct _rtems_rpc_task_variables
+	(Avoid symbol conflict between struct and variable).
+	struct _rtems_rpc_task_variables *rtems_rpc_task_variables;
+	Reflect changes above.
+	* src/rpc/clnt_perror.c, src/rpc/clnt_raw.c, src/rpc/clnt_simple.c,
+	src/rpc/rpcdname.c, src/rpc/rtems_rpc.c, src/rpc/svc.c, 
+	src/rpc/svc_auth.c, src/rpc/svc_raw.c, src/rpc/svc_simple.c:
+	Reflect changes above.
+
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/rpc/Makefile.am: Remove __P from AM_CPPFLAGS.

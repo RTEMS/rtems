@@ -60,7 +60,7 @@ struct clnt_raw_private {
 	char	mashl_callmsg[MCALL_MSG_SIZE];
 	u_int	mcnt;
 };
-#define clntraw_private ((struct clnt_raw_private *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->clnt_raw_private)
+#define clntraw_private ((struct clnt_raw_private *) (rtems_rpc_task_variables)->clnt_raw_private)
 
 static enum clnt_stat	clntraw_call();
 static void		clntraw_abort();

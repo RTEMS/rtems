@@ -9,21 +9,21 @@
 /*
  * RPC variables for single-thread
  */
-static struct rtems_rpc_task_variables rpc_default = {
+static struct _rtems_rpc_task_variables rpc_default = {
 	-1,		/* svc_maxfd */
 };
 
 /*
  * RPC values for initializing a new per-task set of variables
  */
-static const struct rtems_rpc_task_variables rpc_init = {
+static const struct _rtems_rpc_task_variables rpc_init = {
 	-1,		/* svc_maxfd */
 };
 
 /*
  * Per-task pointer to RPC data
  */
-void *rtems_rpc_task_variables = &rpc_default;
+struct _rtems_rpc_task_variables *rtems_rpc_task_variables = &rpc_default;
 
 /*
  * Set up per-task RPC variables
@@ -31,7 +31,7 @@ void *rtems_rpc_task_variables = &rpc_default;
 int rtems_rpc_task_init (void)
 {
 	rtems_status_code sc;
-	struct rtems_rpc_task_variables *tvp;
+	struct _rtems_rpc_task_variables *tvp;
 
 	if (rtems_rpc_task_variables == &rpc_default) {
 		tvp = malloc (sizeof *tvp);

@@ -56,9 +56,9 @@ struct prog_lst {
 	struct prog_lst *p_nxt;
 };
 static void universal();
-#define proglst ((struct prog_lst *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_simple_proglst)
-#define pl ((struct prog_lst *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_simple_pl)
-#define transp ((SVCXPRT *)((struct rtems_rpc_task_variables *)rtems_rpc_task_variables)->svc_simple_transp)
+#define proglst ((struct prog_lst *)(rtems_rpc_task_variables)->svc_simple_proglst)
+#define pl ((struct prog_lst *)(rtems_rpc_task_variables)->svc_simple_pl)
+#define transp ((SVCXPRT *)(rtems_rpc_task_variables)->svc_simple_transp)
 
 int
 registerrpc(prognum, versnum, procnum, progname, inproc, outproc)
