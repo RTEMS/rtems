@@ -9,7 +9,7 @@ RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.8])
+AM_INIT_AUTOMAKE([no-define foreign subdir-objects 1.8.2])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_BARE
@@ -33,11 +33,9 @@ AM_CONDITIONAL(mongoosev, test "$RTEMS_CPU_MODEL" = "mongoosev")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-clock/Makefile
 mongoosev/Makefile
 shared/Makefile
 r46xx/Makefile
-timer/Makefile
 tx39/Makefile
 ])
 AC_OUTPUT

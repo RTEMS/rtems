@@ -1,3 +1,15 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am, timer/Makefile.am: Remove.
+	* r46xx/Makefile.am: Built timer.rel, clock.rel.
+	Add PREINSTALL_DIRS.
+	* Makefile.am: Remove timer, clock.
+	* tx39/Makefile.am, mongoosev/Makefile.am, shared/Makefile.am:
+	Add PREINSTALL_DIRS.
+	* configure.ac: Reflect removing clock/Makefile.am,
+	timer/Makefile.am.
+	Add subdir-objects to AUTOMAKE_OPTIONS.
+
 2004-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Convert to using automake compilation rules.
