@@ -1,0 +1,71 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@:@srcdir@/../../../shared
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+INSTALL = @INSTALL@
+
+PGM=${ARCH}/startup.rel
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=bspclean bsplibc bsppost bspstart main sbrk setvec \
+    Hwr_init spurious genpvec $(STARTUP_PIECES)
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES=
+
+# Assembly source names, if any, go here -- minus the .s
+S_PIECES=
+S_FILES=$(S_PIECES:%=%.s)
+S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+
+SRCS=linkcmds $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
+OBJS=$(C_O_FILES) $(S_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+# First and second generation use different Bridge chips :(
+# C source names, if any, go here -- minus the .c
+ifeq ($(SCORE603E_GENERATION),1)
+STARTUP_PIECES=82378zb
+else
+ifeq ($(SCORE603E_GENERATION),2)
+STARTUP_PIECES=FPGA
+endif # generation 2
+endif # generation 1
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+${PGM}: ${SRCS} ${OBJS}
+	$(make-rel)
+
+all:	${ARCH} $(SRCS) $(INSTALLED_O_FILES) $(PGM)
+	$(INSTALL) $(srcdir)/linkcmds ${PROJECT_RELEASE}/lib
+	$(INSTALL_VARIANT) $(INSTALLED_O_FILES) ${PROJECT_RELEASE}/lib

@@ -1,0 +1,55 @@
+#
+#  $Id$
+#
+
+BSP NAME:           score603e
+BOARD:              VISTA SCORE 603e Generation I and II
+BUS:                N/A
+CPU FAMILY:         ppc
+CPU:                PowerPC 603e
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+
+DEBUG MONITOR:      see note.
+
+PERIPHERALS
+===========
+TIMERS:             PPC internal Timebase register
+  RESOLUTION:         
+SERIAL PORTS:       2 Z85C30s
+REAL-TIME CLOCK:    Generation  I: SGSM48T18
+                    Generation II: ICM7170AIBG
+DMA:                none
+VIDEO:              none
+SCSI:               none
+NETWORKING:         none
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       PPC internal
+IOSUPP DRIVER:      N/A
+SHMSUPP:            N/A
+TIMER DRIVER:       PPC internal
+TTY DRIVER:         PPC internal
+
+STDIO
+=====
+PORT:               Console port 0
+ELECTRICAL:         na
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             n
+STOP BITS:          1
+
+Notes
+=====
+
+This BSP has been tested using any Rom monitor.  There have
+been three rom chips loaded on the boards.  One with the SDS
+debug monitor, one with the firmworks monitor, and one with
+the OAR Boot chip.  The OAR Boot chip contains the basic 
+initialization from the SDS debugger and a jump to flash
+location 0x04001200.
+
+The compiler option SCORE603E_GENERATION is set to 1 or 2,
+for the generation to be produced.
