@@ -256,8 +256,10 @@ int pthread_cond_destroy(
       return EINVAL;
     case OBJECTS_LOCAL:
  
-      if ( _Thread_queue_First( &the_cond->Wait_queue ) ) 
+      if ( _Thread_queue_First( &the_cond->Wait_queue ) ) {
+        _Thread_Enable_dispatch();
         return EBUSY;
+      }
  
       _Objects_Close(
         &_POSIX_Condition_variables_Information,
