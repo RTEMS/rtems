@@ -253,7 +253,7 @@ void bsp_start( void )
    * provided by the RAVEN
    */
   /* T. Straumann: give more PCI address space */
-  setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x30000000, IO_PAGE);
+  setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
   /*
    * Must have acces to open pic PCI ACK registers 
    * provided by the RAVEN
@@ -310,9 +310,7 @@ void bsp_start( void )
     }
     else
        printk("pci : Interrupt routing not available for this bsp\n");
-
  }
-
 
 
 #ifdef SHOW_MORE_INIT_SETTINGS
@@ -340,6 +338,7 @@ void bsp_start( void )
 
   /* clear hostbridge errors and enable MCP */
   _BSP_clear_hostbridge_errors(1/*enableMCP*/, 0/*quiet*/);
+
 
   /* Allocate and set up the page table mappings
    * This is only available on >604 CPUs.
