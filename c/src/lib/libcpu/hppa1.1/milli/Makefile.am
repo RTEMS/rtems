@@ -9,8 +9,8 @@ S_FILES = milli.S
 
 milli_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -25,4 +25,4 @@ all-local: $(ARCH) $(milli_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = milli.S
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

@@ -23,4 +23,4 @@ all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = runway.h semaphore.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am
