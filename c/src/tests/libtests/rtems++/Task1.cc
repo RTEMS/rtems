@@ -625,8 +625,8 @@ void Task1::screen6(void)
   else
     printf("%s - message b1 size incorrect, size=%i\n", name_string(), size);
 
-  // wait for task 3_1, and 3_2 to complete their timeout tests, will start these after
-  // getting the broadcast message
+  // wait for task 3_1, and 3_2 to complete their timeout tests, will
+  // start these after getting the broadcast message
   wake_after(7000000);  
 
   char *f1 = "flush message";
@@ -674,7 +674,7 @@ EndTask::EndTask(const char* name,
 {
 }
   
-void EndTask::body(rtems_task_argument )
+void EndTask::body(rtems_task_argument)
 {
  printf("*** END OF RTEMS++ TEST ***\n");
  exit(0);

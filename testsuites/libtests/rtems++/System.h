@@ -92,7 +92,7 @@ public:
           const rtems_unsigned32 stack_size);
 };
 
-#ifdef 0
+#if 0
 
 //
 // Not sure this can be tested in a generic manner, any ideas anyone !!
