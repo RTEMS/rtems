@@ -185,14 +185,14 @@ struct MD {
 #define START_TRANSMIT_EVENT	RTEMS_EVENT_2
 
 #if defined(__PPC)
-#define phys_to_bus(address) ((unsigned int)((address)) + PREP_PCI_DRAM_OFFSET)
-#define bus_to_phys(address) ((unsigned int)((address)) - PREP_PCI_DRAM_OFFSET)
+#define phys_to_bus(address) ((unsigned int)((address)) + PCI_DRAM_OFFSET)
+#define bus_to_phys(address) ((unsigned int)((address)) - PCI_DRAM_OFFSET)
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PPC_CACHE_ALIGNMENT
 #else
 extern void Wait_X_ms( unsigned int timeToWait );
 #define phys_to_bus(address) ((unsigned int) ((address)))
 #define bus_to_phys(address) ((unsigned int) ((address)))
-#define delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
+#define rtems_bsp_delay_in_bus_cycles(cycle) Wait_X_ms( cycle/100 )
 #define CPU_CACHE_ALIGNMENT_FOR_BUFFER PG_SIZE
 
 inline void st_le32(volatile unsigned32 *addr, unsigned32 value)
@@ -331,20 +331,20 @@ static int eeget16(volatile unsigned int *ioaddr, int location)
 	for (i = 10; i >= 0; i--) {
 		short dataval = (read_cmd & (1 << i)) ? EE_DATA_WRITE : 0;
 		st_le32(ioaddr, EE_ENB | dataval);
-		delay_in_bus_cycles(200);
+		rtems_bsp_delay_in_bus_cycles(200);
 		st_le32(ioaddr, EE_ENB | dataval | EE_SHIFT_CLK);
-		delay_in_bus_cycles(200);
+		rtems_bsp_delay_in_bus_cycles(200);
 		st_le32(ioaddr, EE_ENB | dataval); /* Finish EEPROM a clock tick. */
-		delay_in_bus_cycles(200);
+		rtems_bsp_delay_in_bus_cycles(200);
 	}
 	st_le32(ioaddr, EE_ENB);
 	
 	for (i = 16; i > 0; i--) {
 		st_le32(ioaddr, EE_ENB | EE_SHIFT_CLK);
-		delay_in_bus_cycles(200);
+		rtems_bsp_delay_in_bus_cycles(200);
 		retval = (retval << 1) | ((ld_le32(ioaddr) & EE_DATA_READ) ? 1 : 0);
 		st_le32(ioaddr, EE_ENB);
-		delay_in_bus_cycles(200);
+		rtems_bsp_delay_in_bus_cycles(200);
 	}
 
 	/* Terminate the EEPROM access. */
@@ -373,7 +373,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    */
   st_le32( (tbase+memCSR6), CSR6_INIT);  
   st_le32( (tbase+memCSR0), RESET_CHIP);  
-  delay_in_bus_cycles(200);
+  rtems_bsp_delay_in_bus_cycles(200);
 
   /*
    * Init CSR0
@@ -893,7 +893,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
 
 	tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK)) 
-	  + (unsigned int)PREP_ISA_MEM_BASE;
+	  + (unsigned int)PCI_MEM_BASE;
 	sc->base = (unsigned int *)(tmp);
 
 	(void)pci_read_config_byte(0,
