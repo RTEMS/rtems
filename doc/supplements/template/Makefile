@@ -18,12 +18,11 @@ all: html info ps
 dirs:
 	$(make-dirs)
 
-COMMON_FILES=../../common/cpright.texi ../../common/setup.texi \
-  ../../common/timing.texi
+COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
 GENERATED_FILES=\
   cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
-  bsp.texi cputable.texi wksheets.texi
+  bsp.texi cputable.texi wksheets.texi timing.texi timeBSP.texi
 
 #  timetbl.texi timedata.texi wksheets.texi 
 
@@ -54,17 +53,17 @@ $(PROJECT).dvi: $(FILES)
 cpumodel.texi: cpumodel.t Makefile
 	$(BMENU) -p "Preface" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Calling Conventions" ${*}.t
 
 callconv.texi: callconv.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "CPU Model Dependent Features Another Optional Feature" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Memory Model" ${*}.t
 
 memmodel.texi: memmodel.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Calling Conventions User-Provided Routines" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Interrupt Processing" ${*}.t
 
 # Interrupt Chapter:
 #  1.  Replace Times and Sizes
@@ -74,27 +73,27 @@ intr.t: intr_NOTIMES.t BSP_TIMES
 	mv intr_NOTIMES.t.fixed intr.t
 
 intr.texi: intr.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Memory Model Flat Memory Model" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Default Fatal Error Processing" ${*}.t
 
 fatalerr.texi: fatalerr.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Interrupt Processing Interrupt Stack" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Board Support Packages" ${*}.t
 
 bsp.texi: bsp.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Default Fatal Error Processing Default Fatal Error Handler Operations" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Processor Dependent Information Table" ${*}.t
 
 cputable.texi: cputable.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Board Support Packages Processor Initialization" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Memory Requirements" ${*}.t
 
 # Worksheets Chapter:
-#  1.  Specialize the Shared File
+#  1.  Copy the Shared File
 #  2.  Replace Times and Sizes
 #  3.  Build Node Structure
 
@@ -106,23 +105,38 @@ wksheets.t: wksheets_NOTIMES.t BSP_TIMES
 	mv wksheets_NOTIMES.t.fixed wksheets.t
 
 wksheets.texi: wksheets.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Processor Dependent Information Table CPU Dependent Information Table" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Timing Specification" ${*}.t
 
-replace: timedata.texi
+# Timing Specification Chapter:
+#  1.  Copy the Shared File
+#  3.  Build Node Structure
 
-timetbl.t: ../../common/timetbl.t
-	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-            <../../common/timetbl.t >timetbl.t
+timing.t: ../../common/timing.t
+	cp ../../common/timing.t timing.t
 
-timetbl.texi: timetbl.t BSP_TIMES
-	${REPLACE} -p BSP_TIMES timetbl.t
-	mv timetbl.t.fixed timetbl.texi
+timing.texi: timing.t Makefile
+	$(BMENU) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
+	    -u "Top" \
+	    -n "BSP_FOR_TIMES Timing Data" ${*}.t
 
-timedata.texi: timedata.t BSP_TIMES
-	${REPLACE} -p BSP_TIMES timedata.t
-	mv timedata.t.fixed timedata.texi
+# Timing Data for BSP Chapter:
+#  1.  Copy the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
+
+timeBSP_.t: ../../common/timetbl.t timeBSP.t
+	cat timeBSP.t ../../common/timetbl.t                 >timeBSP_.t
+	@echo                                               >>timeBSP_.t
+	@echo "@tex"                                        >>timeBSP_.t
+	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeBSP_.t
+	@echo "@end tex"                                    >>timeBSP_.t
+
+timeBSP.texi: timeBSP_.t Makefile
+	$(BMENU) -p "Timing Specification Terminology" \
+	    -u "Top" \
+	    -n "Command and Variable Index" ${*}.t
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
@@ -135,6 +149,6 @@ clean:
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_$(PROJECT) c_$(PROJECT)-*
 	rm -f wksheets.t wksheets_NOTIMES.t 
-	#rm -f timedata.texi timetbl.texi intr.t 
-	#rm -f timetbl.t 
+	rm -f intr.t 
+	rm -f timeBSP_.t timing.t
 	rm -f *.fixed _* $(GENERATED_FILES)

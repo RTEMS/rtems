@@ -72,11 +72,11 @@ END-INFO-DIR-ENTRY
 @include bsp.texi
 @include cputable.texi
 @include wksheets.texi
-@c @include ../../common/timing.texi
-@c @include timedata.texi
+@include timing.texi
+@include timeBSP.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top c_m68k
+@top c_template
 
 This is the online version of the RTEMS Template
 Applications Supplement.
@@ -91,8 +91,8 @@ Applications Supplement.
 * Board Support Packages::
 * Processor Dependent Information Table::
 * Memory Requirements::
-** Timing Specification::
-** MVME136 Timing Data::
+* Timing Specification::
+* BSP_FOR_TIMES Timing Data::
 * Command and Variable Index::
 * Concept Index::
 @end menu
@@ -103,7 +103,7 @@ Applications Supplement.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, , Top
+@node Command and Variable Index, Concept Index, BSP_FOR_TIMES Timing Data Context Switch, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.
