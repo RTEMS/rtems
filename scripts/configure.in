@@ -1,0 +1,40 @@
+AC_INIT(binutils)
+AM_INIT_AUTOMAKE(scripts,19991020-0,no)
+
+test -f ./setup.cache || cp ./setup.def ./setup.cache
+. ./setup.cache
+
+# Some linux distributions use /usr/src/packages
+# redhat uses /usr/src/redhat
+# others might use /usr/src
+AC_MSG_CHECKING(for rpm SPECS directory)
+if test -d /usr/src/packages/SPECS;
+then
+RPM_SPECSdir=/usr/src/packages/SPECS;
+elif test -d /usr/src/redhat/SPECS;
+then
+RPM_SPECSdirs=/usr/src/redhat/SPECS;
+elif test -d /usr/src/SPECS/;
+then
+RPM_SPECSdir=/usr/src/SPECS;
+fi
+if test x"$RPM_SPECSdir" = x; then
+AC_MSG_ERROR(not found)
+fi
+AC_MSG_RESULT($RPM_SPECSdir)
+AC_SUBST(RPM_SPECSdir)
+
+GCCNEWLIBVERS="gcc-${gcc_version}-newlib-${newlib_version}"
+AC_SUBST(GCCNEWLIBVERS)
+BINUTILSVERS="binutils-${binutils_version}"
+AC_SUBST(BINUTILSVERS)
+GDBVERS="gdb-${gdb_version}"
+AC_SUBST(GDBVERS)
+
+AC_OUTPUT(
+Makefile
+mkbinutilspec
+mkgccnewlibspec
+binutils/Makefile
+gccnewlib/Makefile
+)

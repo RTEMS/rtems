@@ -13,7 +13,7 @@ release=0
 #${RTEMS_DIR}/scripts/mkbinutilspec $target_alias
 #${RTEMS_DIR}/scripts/mkgccnewlibspec $target_alias
 #${RTEMS_DIR}/scripts/mkgdbspec $target_alias
-${RTEMS_DIR}/mkbinutilspec $target_alias
-${RTEMS_DIR}/mkgccnewlibspec $target_alias
-${RTEMS_DIR}/mkgdbspec $target_alias
+./mkbinutilspec $target_alias
+./mkgccnewlibspec $target_alias
+./mkgdbspec $target_alias
 

@@ -6,8 +6,6 @@
 # please send bugfixes or comments to joel@OARcorp.com
 #
 
-# neededforbuild  @target_alias@-binutils @target_alias@-gcc
-
 Vendor:       OAR Corporation
 Distribution: Linux
 Name:         rtems-@target_alias@-@bsp@
@@ -57,14 +55,26 @@ Authors:
   make RTEMS_BSP=@bsp@ 
 %install
   make RTEMS_BSP=@bsp@ prefix=$RPM_BUILD_ROOT/opt/rtems/@target_alias@ install
-%files
-%dir /opt/rtems/@target_alias@/@bsp@
-/opt/rtems/@target_alias@/@bsp@/*
-/opt/rtems/@target_alias@/make/*
-/opt/rtems/@target_alias@/bin/install-if-change
-/opt/rtems/@target_alias@/bin/packhex
-/opt/rtems/@target_alias@/bin/unhex
-/opt/rtems/@target_alias@/bin/lock-directory
-/opt/rtems/@target_alias@/bin/unlock-directory
-/opt/rtems/@target_alias@/bin/eolstrip
-/opt/rtems/@target_alias@/bin/cklength
+  find $RPM_BUILD_ROOT/opt/rtems/@target_alias@/@bsp@ -type d | \
+    sed "s,^$RPM_BUILD_ROOT,%dir ,g" > files
+  find $RPM_BUILD_ROOT/opt/rtems/@target_alias@/@bsp@ -type f | \
+    sed "s,^$RPM_BUILD_ROOT,,g" >> files
+  find $RPM_BUILD_ROOT/opt/rtems/@target_alias@/make -type d | \
+    sed "s,^$RPM_BUILD_ROOT,%dir ,g" >> files
+  find $RPM_BUILD_ROOT/opt/rtems/@target_alias@/make -type f | \
+    sed "s,^$RPM_BUILD_ROOT,,g" >> files
+
+%post
+  if test "$RPM_INSTALL_PREFIX" != "/opt/";
+  then
+    if test -f $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg; 
+    then
+    sed -e 's,/opt/rtems/,$RPM_INSTALL_PREFIX/rtems,g' \
+      < $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg \
+      > $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg~
+    mv $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg~ \
+      $RPM_INSTALL_PREFIX/rtems/@target_alias@/make/target.cfg
+    fi
+  fi
+
+%files -f files

@@ -1,0 +1,83 @@
+#!/bin/bash
+
+CFG=setup.cache
+
+# RTEMS tools setup
+
+test -f ./CFG || echo "restoring default setup.cache" && cp ./setup.def ./$CFG
+
+echo -n "loading setup from ./$CFG .."
+. ./$CFG
+echo "done"
+echo
+
+menu_setup()
+{
+while true;
+do
+  echo
+  echo "       Source packages setup"
+  echo
+  echo "1 binutils version        : $binutils_version"
+  echo "2 binutils patch version  : $binutils_patch_version"
+  echo "3 gcc version             : $gcc_version"
+  echo "4 gcc patch version       : $gcc_patch_version"
+  echo "5 newlib version          : $newlib_version"
+  echo "6 newlib patch version    : $newlib_patch_version"
+  echo "7 gdb version             : $gdb_version"
+  echo "8 gdb patch version       : $gdb_patch_version"
+  echo
+
+  echo -n "[1-8] or any other key to quit >"
+  read sel
+  case $sel in
+  1) echo -n "BINUTILS source >"
+     read binutils_version ;;
+  2) echo -n "BINUTILS patch version >"
+     read binutils_patch_version ;;
+  3) echo -n "GCC source >"
+     read gcc_version ;;
+  4) echo -n "GCC patch version>"
+     read gcc_patch_version ;;
+  5) echo -n "NEWLIB source >"
+     read newlib_version ;;
+  6) echo -n "NEWLIB patch version>"
+     read newlib_patch_version ;;
+  7) echo -n "GDB source >"
+     read GDB_SOURCE ;;
+  8) echo -n "GDB patch version>"
+     read gdb_patch_version ;;
+  *) 
+     return 0 ;;
+  esac
+done
+}
+
+
+save_setup()
+{
+echo -n "saving setup to $CFG .."
+
+echo "# RTEMS tools setup" > $CFG
+echo "binutils_version=$binutils_version" >> $CFG
+echo "binutils_patch_version=$binutils_patch_version" >> $CFG
+echo "newlib_version=$newlib_version" >> $CFG
+echo "newlib_patch_version=$newlib_patch_version" >> $CFG
+echo "gcc_version=$gcc_version" >> $CFG
+echo "gcc_patch_version=$gcc_patch_version" >> $CFG
+echo "gdb_version=$gdb_version" >> $CFG
+echo "gdb_patch_version=$gdb_patch_version" >> $CFG
+
+echo " done"
+test -f Makefile || ./configure
+}
+
+menu_setup
+
+echo
+echo -n "Save setup [y|n] >"
+read sel
+case $sel in
+''|y*|Y*) save_setup ;;
+*) ;;
+esac

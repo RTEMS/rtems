@@ -1,12 +1,12 @@
 #!/bin/sh 
 #
-#  Usage: mktoolspec CPU
+#  Usage: mkbinutilspec CPU
 #
 
 RTEMS_DIR=`dirname $0`
 
 CFG=user.cfg
-dst=/usr/src/packages/SPECS
+dst=@RPM_SPECSdir@
 
 usage()
 {
@@ -50,15 +50,13 @@ rpm_release=0
 
 . ./$CFG
 
-specfile=${dst}/$target_alias-gcc-${gcc_version}-newlib-${newlib_version}.spec
+specfile=${dst}/$target_alias-binutils-${binutils_version}.spec
 
 sed -e "s%@Release@%${rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
-    -e "s%@gcc_version@%${gcc_version}%g" \
-    -e "s%@gcc_patch_version@%${gcc_patch_version}%g" \
-    -e "s%@newlib_version@%${newlib_version}%g" \
-    -e "s%@newlib_patch_version@%${newlib_patch_version}%g" \
-< ${RTEMS_DIR}/gccnewlib/gccnewlib.spec.in \
+    -e "s%@binutils_version@%${binutils_version}%g" \
+    -e "s%@binutils_patch_version@%${binutils_patch_version}%g" \
+< ${RTEMS_DIR}/binutils/binutils.spec.in \
 > ${specfile}
 
-echo Generated ${specfile}.
+echo Generated ${specfile}
