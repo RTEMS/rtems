@@ -1,5 +1,5 @@
 /** 
- *  @file thread.h
+ *  @file  rtems/score/thread.h
  *
  *  This include file contains all constants and structures associated
  *  with the thread control block.

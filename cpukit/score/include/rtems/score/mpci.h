@@ -1,5 +1,5 @@
 /** 
- *  @file mpci.h
+ *  @file  rtems/score/mpci.h
  *
  *  This include file contains all the constants and structures associated
  *  with the MPCI layer.  It provides mechanisms to utilize packets.

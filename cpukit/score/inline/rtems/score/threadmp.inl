@@ -1,5 +1,5 @@
 /** 
- *  @file threadmp.inl
+ *  @file  rtems/score/threadmp.inl
  *
  *  This include file contains the bodies of all inlined routines
  *  for the multiprocessing part of thread package.

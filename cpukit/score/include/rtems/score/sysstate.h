@@ -1,5 +1,5 @@
 /** 
- *  @file sysstate.h
+ *  @file  rtems/score/sysstate.h
  *
  *  This include file contains information regarding the system state.
  */

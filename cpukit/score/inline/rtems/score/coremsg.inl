@@ -1,5 +1,5 @@
 /** 
- *  @file coremsg.inl
+ *  @file  rtems/score/coremsg.inl
  *
  *  This include file contains the static inline implementation of all
  *  inlined routines in the Core Message Handler.

@@ -1,5 +1,5 @@
 /** 
- *  @file stack.inl
+ *  @file  rtems/score/stack.inl
  *
  *  This file contains the static inline implementation of the inlined
  *  routines from the Stack Handler.

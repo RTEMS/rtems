@@ -1,5 +1,5 @@
 /** 
- *  @file thread.inl
+ *  @file  rtems/score/thread.inl
  *
  *  This file contains the macro implementation of the inlined
  *  routines from the Thread handler.

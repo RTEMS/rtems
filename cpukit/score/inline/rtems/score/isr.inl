@@ -1,5 +1,5 @@
 /** 
- *  @file isr.inl
+ *  @file  rtems/score/isr.inl
  *
  *  This include file contains the static implementation of all
  *  inlined routines in the Interrupt Handler.

@@ -1,5 +1,5 @@
 /** 
- *  @file mppkt.h
+ *  @file  rtems/score/mppkt.h
  *
  *  This package is the specification for the Packet Handler.
  *  This handler defines the basic packet and provides

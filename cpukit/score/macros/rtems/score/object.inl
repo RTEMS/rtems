@@ -1,5 +1,8 @@
-/*  object.inl
- *
+/**
+ *  @file rtems/score/object.inl
+ */
+
+/*
  *  This include file contains the macro implementation of all
  *  of the inlined routines in the Object Handler.
  *

@@ -1,5 +1,5 @@
 /** 
- *  @file isr.h
+ *  @file  rtems/score/isr.h
  *
  *  This include file contains all the constants and structures associated
  *  with the management of processor interrupt levels.  This handler

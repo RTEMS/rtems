@@ -1,5 +1,5 @@
 /** 
- *  @file heap.h
+ *  @file  rtems/score/heap.h
  *
  *  This include file contains the information pertaining to the Heap
  *  Handler.  A heap is a doubly linked list of variable size

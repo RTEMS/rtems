@@ -1,5 +1,5 @@
 /** 
- *  @file copyrt.h
+ *  @file  rtems/score/copyrt.h
  *
  *  This include file contains the copyright notice for RTEMS
  *  which is included in every binary copy of the executive.

@@ -1,5 +1,5 @@
 /** 
- *  @file states.h
+ *  @file  rtems/score/states.h
  *
  *  This include file contains thread execution state information.
  */

@@ -1,5 +1,5 @@
 /** 
- *  @file threadmp.h
+ *  @file  rtems/score/threadmp.h
  *
  *  This include file contains the specification for all routines
  *  and data specific to the multiprocessing portion of the thread package.

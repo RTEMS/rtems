@@ -1,5 +1,5 @@
 /** 
- *  @file address.inl
+ *  @file  rtems/score/address.inl
  *
  *  This include file contains the bodies of the routines
  *  about addresses which are inlined.

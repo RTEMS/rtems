@@ -1,5 +1,5 @@
 /** 
- *  @file coremutex.h
+ *  @file  rtems/score/coremutex.h
  *
  *  This include file contains all the constants and structures associated
  *  with the Mutex Handler.  A mutex is an enhanced version of the standard

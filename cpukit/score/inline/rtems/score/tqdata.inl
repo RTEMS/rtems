@@ -1,5 +1,5 @@
 /** 
- *  @file tqdata.inl
+ *  @file  rtems/score/tqdata.inl
  *
  *  This file contains the static inline implementation of the inlined
  *  routines needed to support the Thread Queue Data.

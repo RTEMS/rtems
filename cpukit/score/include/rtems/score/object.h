@@ -1,5 +1,8 @@
-/*  object.h
- *
+/**
+ * @file  rtems/score/object.h
+ */
+ 
+/*
  *  This include file contains all the constants and structures associated
  *  with the Object Handler.  This Handler provides mechanisms which
  *  can be used to initialize and manipulate all objects which have

@@ -1,5 +1,5 @@
 /** 
- *  @file sysstate.inl
+ *  @file  rtems/score/sysstate.inl
  *
  *  This file contains the inline implementation of routines regarding the 
  *  system state.

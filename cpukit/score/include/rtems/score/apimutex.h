@@ -1,5 +1,5 @@
 /** 
- *  @file apimutex.h
+ *  @file  rtems/score/apimutex.h
  *
  *  This include file contains all the constants and structures associated
  *  with the API Mutex Handler.  This handler is used by API level

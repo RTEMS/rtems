@@ -1,5 +1,5 @@
 /** 
- *  @file tod.inl
+ *  @file  rtems/score/tod.inl
  *
  *  This file contains the static inline implementation of the inlined routines
  *  from the Time of Day Handler.

@@ -1,5 +1,5 @@
 /** 
- *  @file userext.h
+ *  @file  rtems/score/userext.h
  *
  *  This include file contains all information about user extensions.  This
  *  Handler provides mechanisms which can be used to initialize and manipulate

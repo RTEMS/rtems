@@ -1,5 +1,5 @@
 /** 
- *  @file coresem.h
+ *  @file  rtems/score/coresem.h
  *
  *  This include file contains all the constants and structures associated
  *  with the Counting Semaphore Handler.  A counting semaphore is the

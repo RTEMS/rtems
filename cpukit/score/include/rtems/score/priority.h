@@ -1,5 +1,5 @@
 /** 
- *  @file priority.h
+ *  @file  rtems/score/priority.h
  *
  *  This include file contains all thread priority manipulation routines.
  *  This Handler provides mechanisms which can be used to

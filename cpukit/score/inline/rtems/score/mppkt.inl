@@ -1,5 +1,5 @@
 /** 
- *  @file mppkt.inl
+ *  @file  rtems/score/mppkt.inl
  *
  *  This package is the implementation of the Packet Handler
  *  routines which are inlined.

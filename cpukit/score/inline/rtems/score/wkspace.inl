@@ -1,5 +1,5 @@
 /** 
- *  @file wkspace.inl
+ *  @file  rtems/score/wkspace.inl
  *
  *  This include file contains the bodies of the routines which contains
  *  information related to the RAM Workspace.

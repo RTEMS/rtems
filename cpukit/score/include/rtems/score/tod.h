@@ -1,5 +1,5 @@
 /** 
- *  @file tod.h
+ *  @file  rtems/score/tod.h
  *
  *  This include file contains all the constants and structures associated
  *  with the Time of Day Handler.

@@ -1,5 +1,5 @@
 /** 
- *  @file coremutex.inl
+ *  @file  rtems/score/coremutex.inl
  *
  *  This include file contains all of the inlined routines associated
  *  with the CORE mutexes.

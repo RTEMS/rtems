@@ -1,5 +1,5 @@
 /**
- *  @file seterr.h
+ *  @file  rtems/seterr.h
  *
  *  This file contains macros and definitions which ease the burden
  *  of consistently setting errno and returning -1.

@@ -1,5 +1,5 @@
 /** 
- *  @file states.inl
+ *  @file  rtems/score/states.inl
  *
  *  This file contains the macro implementation of the inlined
  *  routines associated with thread state information.

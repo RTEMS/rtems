@@ -1,5 +1,5 @@
 /** 
- *  @file stack.h
+ *  @file  rtems/score/stack.h
  *
  *  This include file contains all information about the thread
  *  Stack Handler.  This Handler provides mechanisms which can be used to

@@ -1,5 +1,5 @@
 /**
- *  @file  chain.inl
+ *  @file  rtems/score/chain.inl
  *
  *  This include file contains the bodies of the routines which are
  *  associated with doubly linked chains and inlined.

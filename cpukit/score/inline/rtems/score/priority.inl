@@ -1,5 +1,5 @@
 /** 
- *  @file priority.inl
+ *  @file  rtems/score/priority.inl
  *
  *  This file contains the static inline implementation of all inlined
  *  routines in the Priority Handler.

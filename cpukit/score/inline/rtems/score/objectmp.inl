@@ -1,5 +1,5 @@
 /** 
- *  @file objectmp.inl
+ *  @file  rtems/score/objectmp.inl
  *
  *  This include file contains the bodies of all inlined routines
  *  which deal with global objects.

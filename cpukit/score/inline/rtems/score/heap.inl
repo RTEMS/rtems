@@ -1,5 +1,5 @@
 /** 
- *  @file heap.inl
+ *  @file  rtems/score/heap.inl
  *
  *  This file contains the static inline implementation of the inlined
  *  routines from the heap handler.

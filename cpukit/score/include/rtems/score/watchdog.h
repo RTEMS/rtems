@@ -1,5 +1,5 @@
 /** 
- *  @file watchdog.h
+ *  @file  rtems/score/watchdog.h
  *
  *  This include file contains all the constants and structures associated
  *  with watchdog timers.   This Handler provides mechanisms which can be

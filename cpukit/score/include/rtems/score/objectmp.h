@@ -1,5 +1,5 @@
 /** 
- *  @file objectmp.h
+ *  @file  rtems/score/objectmp.h
  *
  *  This include file contains all the constants and structures associated
  *  with the manipulation of Global RTEMS Objects.

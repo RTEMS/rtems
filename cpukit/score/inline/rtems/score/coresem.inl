@@ -1,5 +1,5 @@
 /** 
- *  @file coresem.inl
+ *  @file  rtems/score/coresem.inl
  *
  *  This include file contains all of the inlined routines associated
  *  with the CORE semaphore.

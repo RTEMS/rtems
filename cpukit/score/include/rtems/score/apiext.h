@@ -1,5 +1,5 @@
 /** 
- *  @file apiext.h
+ *  @file  rtems/score/apiext.h
  *
  *  This is the API Extensions Handler.
  */

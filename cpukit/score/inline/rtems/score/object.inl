@@ -1,4 +1,8 @@
-/*  object.inl
+/**
+ * @file rtems/score/object.inl
+ */
+
+/*
  *
  *  This include file contains the static inline implementation of all
  *  of the inlined routines in the Object Handler.

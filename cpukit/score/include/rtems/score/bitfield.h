@@ -1,5 +1,5 @@
 /** 
- *  @file bitfield.h
+ *  @file  rtems/score/bitfield.h
  *
  *  This include file contains all bit field manipulation routines.
  */

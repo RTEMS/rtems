@@ -1,5 +1,5 @@
 /** 
- *  @file coremsg.h
+ *  @file  rtems/score/coremsg.h
  *
  *  This include file contains all the constants and structures associated
  *  with the Message queue Handler.

@@ -1,5 +1,5 @@
 /** 
- *  @file system.h
+ *  @file  rtems/system.h
  *
  *  This include file contains information that is included in every
  *  function in the executive.  This must be the first include file
