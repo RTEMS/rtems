@@ -1,3 +1,122 @@
+2003-07-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ada.am: Add .adp to SUFFIXES.
+	Remove c-compilation rule. 
+	* samples/base_sp/Makefile.am: Add init.$(OBJEXT).
+	* samples/hello/Makefile.am: Add init.$(OBJEXT).
+	* samples/ticker/Makefile.am: Add init.$(OBJEXT).
+	* samples/ticker/Makefile.am: Remove VPATH.
+	* sptests/sp01/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp01/Makefile.am: Don't include */lib.am.
+	* sptests/sp01/Makefile.am: Remove VPATH.
+	* sptests/sp02/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp02/Makefile.am: Don't include */lib.am.
+	* sptests/sp03/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp03/Makefile.am: Don't include */lib.am.
+	* sptests/sp04/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp04/Makefile.am: Don't include */lib.am.
+	* sptests/sp04/Makefile.am: Remove EXPADA.
+	* sptests/sp04/Makefile.am: Remove VPATH.
+	* sptests/sp05/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp05/Makefile.am: Don't include */lib.am.
+	* sptests/sp06/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp06/Makefile.am: Don't include */lib.am.
+	* sptests/sp07/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp07/Makefile.am: Don't include */lib.am.
+	* sptests/sp07/Makefile.am: Remove EXPADA.
+	* sptests/sp08/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp08/Makefile.am: Don't include */lib.am.
+	* sptests/sp09/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp09/Makefile.am: Don't include */lib.am.
+	* sptests/sp11/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp11/Makefile.am: Don't include */lib.am.
+	* sptests/sp12/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp12/Makefile.am: Don't include */lib.am.
+	* sptests/sp13/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp13/Makefile.am: Don't include */lib.am.
+	* sptests/sp14/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp14/Makefile.am: Don't include */lib.am.
+	* sptests/sp15/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp15/Makefile.am: Don't include */lib.am.
+	* sptests/sp16/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp16/Makefile.am: Don't include */lib.am.
+	* sptests/sp17/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp17/Makefile.am: Don't include */lib.am.
+	* sptests/sp19/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp19/Makefile.am: Don't include */lib.am.
+	* sptests/sp20/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp20/Makefile.am: Don't include */lib.am.
+	* sptests/sp21/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp21/Makefile.am: Don't include */lib.am.
+	* sptests/sp22/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp22/Makefile.am: Don't include */lib.am.
+	* sptests/sp23/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp23/Makefile.am: Don't include */lib.am.
+	* sptests/sp24/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp24/Makefile.am: Don't include */lib.am.
+	* sptests/sp25/Makefile.am: Add init.$(OBJEXT).
+	* sptests/sp25/Makefile.am: Don't include */lib.am.
+	* sptests/spsize/Makefile.am: Add init.$(OBJEXT).
+	* sptests/spsize/Makefile.am: Don't include */lib.am.
+	* tmtests/tm01/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm01/Makefile.am: Don't include */lib.am.
+	* tmtests/tm02/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm02/Makefile.am: Don't include */lib.am.
+	* tmtests/tm03/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm03/Makefile.am: Don't include */lib.am.
+	* tmtests/tm04/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm04/Makefile.am: Don't include */lib.am.
+	* tmtests/tm05/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm05/Makefile.am: Don't include */lib.am.
+	* tmtests/tm06/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm06/Makefile.am: Don't include */lib.am.
+	* tmtests/tm07/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm07/Makefile.am: Don't include */lib.am.
+	* tmtests/tm08/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm08/Makefile.am: Don't include */lib.am.
+	* tmtests/tm09/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm09/Makefile.am: Don't include */lib.am.
+	* tmtests/tm10/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm10/Makefile.am: Don't include */lib.am.
+	* tmtests/tm11/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm11/Makefile.am: Don't include */lib.am.
+	* tmtests/tm12/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm12/Makefile.am: Don't include */lib.am.
+	* tmtests/tm13/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm13/Makefile.am: Don't include */lib.am.
+	* tmtests/tm14/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm14/Makefile.am: Don't include */lib.am.
+	* tmtests/tm15/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm15/Makefile.am: Don't include */lib.am.
+	* tmtests/tm16/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm16/Makefile.am: Don't include */lib.am.
+	* tmtests/tm17/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm17/Makefile.am: Don't include */lib.am.
+	* tmtests/tm18/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm18/Makefile.am: Don't include */lib.am.
+	* tmtests/tm19/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm19/Makefile.am: Don't include */lib.am.
+	* tmtests/tm20/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm20/Makefile.am: Don't include */lib.am.
+	* tmtests/tm21/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm21/Makefile.am: Don't include */lib.am.
+	* tmtests/tm22/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm22/Makefile.am: Don't include */lib.am.
+	* tmtests/tm23/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm23/Makefile.am: Don't include */lib.am.
+	* tmtests/tm24/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm24/Makefile.am: Don't include */lib.am.
+	* tmtests/tm25/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm25/Makefile.am: Don't include */lib.am.
+	* tmtests/tm28/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm28/Makefile.am: Don't include */lib.am.
+	* tmtests/tm29/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tm29/Makefile.am: Don't include */lib.am.
+	* tmtests/tmck/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tmck/Makefile.am: Don't include */lib.am.
+	* tmtests/tmoverhd/Makefile.am: Add init.$(OBJEXT).
+	* tmtests/tmoverhd/Makefile.am: Don't include */lib.am.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

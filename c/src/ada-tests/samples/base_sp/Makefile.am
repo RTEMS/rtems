@@ -5,8 +5,11 @@ include $(top_srcdir)/../../../automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-base_sp$(EXEEXT): base_sp.adb
+base_sp$(EXEEXT): base_sp.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
+
+init.$(OBJEXT): ../../support/init.c
+	$(COMPILE.c) -I$(srcdir) -c $<
 
 noinst_PROGRAMS = base_sp
 

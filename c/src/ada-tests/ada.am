@@ -1,4 +1,4 @@
-SUFFIXES = .adb .ali .ads
+SUFFIXES = .adb .ali .ads .adp
 
 GNATMAKE = @GNATMAKE@ -cargs $(GCCSPECS) -largs $(GCCSPECS)
 
@@ -15,5 +15,8 @@ $(AM_LDFLAGS) $(LDFLAGS) init.o
 
 CLEANFILES = *.ali *.o b~*.adb b~*.ads
 
-%.o: %.c
-	$(CC) $(CFLAGS) -I@srcdir@ -c $< -o $@
+#%.o: %.c
+#	$(CC) $(CFLAGS) -I@srcdir@ -c $< -o $@
+
+.adp.adb:
+	pwd=`pwd` && cd $(srcdir) && $(M4) < $*.adp > $${pwd}/$*.adb

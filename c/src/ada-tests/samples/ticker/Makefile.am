@@ -1,14 +1,15 @@
 ## $Id$
 
-VPATH = @srcdir@:@srcdir@/../../support
-
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-ticker$(EXEEXT): ticker.adb init.o
+ticker$(EXEEXT): ticker.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
+
+init.$(OBJEXT): ../../support/init.c
+	$(COMPILE.c) -I$(srcdir) -c $<
 
 noinst_PROGRAMS = ticker
 
