@@ -147,16 +147,27 @@ typedef struct {
 } rtems_initialization_tasks_table;
 
 /*
+ *  Per task variable structure
+ */
+
+struct rtems_task_variable_t {
+  struct rtems_task_variable_t  *next;
+  int                           *ptr;
+  int                            var;
+};
+
+/*
  *  This is the API specific information required by each thread for
  *  the RTEMS API to function correctly.
  */
 
  
 typedef struct {
-  unsigned32                Notepads[ RTEMS_NUMBER_NOTEPADS ];
-  rtems_event_set           pending_events;
-  rtems_event_set           event_condition;
-  ASR_Information           Signal;
+  unsigned32                    Notepads[ RTEMS_NUMBER_NOTEPADS ];
+  rtems_event_set               pending_events;
+  rtems_event_set               event_condition;
+  ASR_Information               Signal;
+  struct rtems_task_variable_t *task_variables;
 }  RTEMS_API_Control;
 
 /*
@@ -405,6 +416,27 @@ rtems_status_code rtems_task_is_suspended(
   Objects_Id id
 );
 
+/*
+ *  rtems_task_variable_add
+ *
+ *  This directive adds a per task variable.
+ */
+
+rtems_status_code rtems_task_variable_add(
+  rtems_id  tid,
+  int      *ptr
+);
+
+/*
+ *  rtems_task_variable_delete
+ *
+ *  This directive removes a per task variable.
+ */
+
+rtems_status_code rtems_task_variable_delete(
+  rtems_id  tid,
+  int      *ptr
+);
 
 /*
  *  _RTEMS_tasks_Initialize_user_tasks
