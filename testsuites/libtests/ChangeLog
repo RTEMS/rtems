@@ -1,3 +1,10 @@
+2004-11-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Remove -ansi to prevent folks from further damaging
+	the code with broken prototypes.
+	* putenvtest/init.c: Remove broken putenv prototype.
+	* termios/init.c (print_c_cc): Don't loop over NCCS.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

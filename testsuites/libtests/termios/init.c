@@ -401,8 +401,8 @@ void print_c_cflag( struct termios * tp )
 
 void print_c_cc( struct termios * tp )
 {
-  int i;
-  char * cc_index_names [NCCS] = {
+  size_t i;
+  char * cc_index_names [ /* NCCS */ ] = {
     "[VINTR]   ",   /* 0 */
     "[VQUIT]   ",   /* 1 */
     "[VERASE]  ",   /* 2 */
@@ -424,7 +424,7 @@ void print_c_cc( struct termios * tp )
     "unknown   ",   /* 18 */
   };
 
-  for( i = 0; i < NCCS; i++ ) {
+  for( i = 0; i < sizeof(cc_index_names)/sizeof(char*) ; i++ ) {
     printf( "c_cc%s = 0x%08x\n", cc_index_names[i], tp->c_cc[i] );
   }
 }
