@@ -63,15 +63,10 @@ dnl and we have to fix it for rtems ourselves
 
 AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
 [
-rtems_target=$target;
-case "$target" in
-no_cpu*) target=$host;;
-*) ;;
-esac
 AC_CANONICAL_SYSTEM
 AC_MSG_CHECKING(rtems target cpu)
 changequote(,)dnl
-case "${rtems_target}" in
+case "${target}" in
   # hpux unix port should go here
   i[3456]86-go32-rtems*)
 	RTEMS_CPU=i386
@@ -89,7 +84,7 @@ case "${rtems_target}" in
 	RTEMS_CPU=unix
 	;;
   *) 
-	RTEMS_CPU=`echo $rtems_target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
+	RTEMS_CPU=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
 	;;
 esac
 changequote([,])dnl
