@@ -40,12 +40,6 @@
  *  $Id$
  */
 
-/**************************************************************************
- *     Note this file contains two pair of independent sections which are
- *     used conditionally, depending on whether the module is being built
- *     for the SH703x or SH704x families of processor
- **************************************************************************/
-
 #include <rtems/system.h>
 #include <rtems/score/shtypes.h>
 
