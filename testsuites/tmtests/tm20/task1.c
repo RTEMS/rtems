@@ -12,6 +12,7 @@
 
 #define TEST_INIT
 #include "system.h"
+#include <assert.h>
 
 rtems_device_major_number _STUB_major = 1;
 
@@ -19,18 +20,23 @@ rtems_id         Region_id;
 rtems_name       Region_name;
 rtems_unsigned8  Region_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
 
+#define PARTITION_SIZE         2048
+#define PARTITION_ELEMENT_SIZE  128
+#define PARTITION_BUFFER_POINTERS \
+    ((PARTITION_SIZE / PARTITION_ELEMENT_SIZE) + 2)
+
 rtems_id         Partition_id;
 rtems_name       Partition_name;
-rtems_unsigned8  Partition_area[ 2048 ] CPU_STRUCTURE_ALIGNMENT;
+rtems_unsigned8  Partition_area[ PARTITION_SIZE ] CPU_STRUCTURE_ALIGNMENT;
 
-void            *Buffer_address_1;
-void            *Buffer_address_2;
-void            *Buffer_address_3;
-void            *Buffer_address_4;
+void  *Buffer_address_1;
+void  *Buffer_address_2;
+void  *Buffer_address_3;
+void  *Buffer_address_4;
 
 rtems_unsigned32 buffer_count;
 
-void            *Buffer_addresses[ OPERATION_COUNT+1 ];
+void  *Buffer_addresses[ PARTITION_BUFFER_POINTERS ];
 
 rtems_task Task_1(
   rtems_task_argument argument
@@ -95,7 +101,7 @@ rtems_task Task_1(
     rtems_partition_create(
       Partition_name,
       Partition_area,
-      2048,
+      PARTITION_SIZE,
       128,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Partition_id
@@ -154,6 +160,8 @@ rtems_task Task_1(
     if ( status == RTEMS_UNSATISFIED ) break;
 
     buffer_count++;
+
+    assert( buffer_count < PARTITION_BUFFER_POINTERS );
   }
 
   Timer_initialize();
@@ -209,7 +217,7 @@ rtems_task Task_1(
              RTEMS_NO_TIMEOUT,
              &Buffer_address_2
            );
-  directive_failed( status, "region_get_semgent" );
+  directive_failed( status, "region_get_segment" );
 
   Timer_initialize();
     (void) rtems_region_get_segment(
