@@ -1,4 +1,9 @@
 
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Use 'CLEANFILES ='.
+	* include/Makefile.am: Use 'TMPINSTALL_FILES ='.
+
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile: Use GENERIC_FILES = to make automake-1.5 happy.

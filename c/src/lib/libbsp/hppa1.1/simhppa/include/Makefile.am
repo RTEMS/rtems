@@ -19,12 +19,12 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 	$(INSTALL_DATA) $< $@
-CLEANFILES += coverhd.h
+CLEANFILES = coverhd.h
 
 $(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
+TMPINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=%(PROJECT_INCLUDE)/%) \
     $(PROJECT_INCLUDE)/rtems \
     $(include_HEADERS:%=%(PROJECT_INCLUDE)/rtems/%) 

@@ -1,3 +1,8 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Use 'CLEANFILES ='.
+	* include/Makefile.am: Use 'TMPINSTALL_FILES ='.
+
 2001-06-19	Joel Sherrill <joel@OARcorp.com>
 
  	* start/start.S: Reverse sense of conditional compilation so the

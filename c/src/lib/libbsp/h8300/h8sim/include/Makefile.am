@@ -8,7 +8,7 @@ include_HEADERS = bsp.h coverhd.h bspopts.h
 
 coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 	cp $< $@
-CLEANFILES += coverhd.h
+CLEANFILES = coverhd.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
@@ -16,7 +16,7 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
+TMPINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(TMPINSTALL_FILES)

@@ -14,9 +14,9 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 mvme16x_hw.h: $(srcdir)/../../mvme162/include/mvme16x_hw.h
 	cp $< $@
-CLEANFILES += mvme16x_hw.h
+CLEANFILES = mvme16x_hw.h
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
+TMPINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all: $(TMPINSTALL_FILES)

@@ -28,7 +28,7 @@ $(PROJECT_ROOT)/posix/tests/shmdump: shmdump
 $(PROJECT_ROOT)/posix/tests/semdump: semdump
 	$(INSTALL_SCRIPT) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_ROOT)/posix/tests \
+TMPINSTALL_FILES = $(PROJECT_ROOT)/posix/tests \
     $(PROJECT_ROOT)/posix/tests/runtest $(PROJECT_ROOT)/posix/tests/looptest
 
 ## HACK: install to build-tree
