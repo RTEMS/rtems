@@ -1,3 +1,7 @@
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* start.S: Include <rtems/asm.h> instead of <asm.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* bspspuriousinit.c: Convert to using c99 fixed size types.

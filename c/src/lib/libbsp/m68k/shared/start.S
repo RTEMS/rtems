@@ -15,7 +15,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 
 #if (M68K_COLDFIRE_ARCH == 0) /* All ColdFire BSPs must provide their own start vector */
 
