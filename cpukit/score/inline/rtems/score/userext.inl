@@ -20,6 +20,33 @@
 
 /*PAGE
  *
+ *  _User_extensions_Add_set
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine is used to add a user extension set to the active list.
+ */
+
+RTEMS_INLINE_ROUTINE void _User_extensions_Add_set (
+  User_extensions_Control *the_extension,
+  User_extensions_Table   *extension_table
+)
+{
+  the_extension->Callouts = *extension_table;
+
+  _Chain_Append( &_User_extensions_List, &the_extension->Node );
+
+  /*
+   * If a switch handler is present, append it to the switch chain.
+   */
+  if ( extension_table->thread_switch != NULL ) {
+    the_extension->Switch.thread_switch = extension_table->thread_switch;
+    _Chain_Append( &_User_extensions_Switches_list, &the_extension->Switch.Node );
+  }
+}
+
+/*PAGE
+ *
  *  _User_extensions_Handler_initialization
  *
  *  DESCRIPTION:
@@ -36,40 +63,31 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Handler_initialization (
   unsigned32               i;
 
   _Chain_Initialize_empty( &_User_extensions_List );
+  _Chain_Initialize_empty( &_User_extensions_Switches_list );
 
   if ( initial_extensions ) {
-    for (i=0 ; i<number_of_extensions ; i++ ) {
-      extension =
-         _Workspace_Allocate_or_fatal_error( sizeof(User_extensions_Control) );
-
-      extension->Callouts = initial_extensions[i];
-      _Chain_Append( &_User_extensions_List, &extension->Node );
+    extension = 
+      _Workspace_Allocate_or_fatal_error(
+        number_of_extensions * sizeof( User_extensions_Control )
+      );
+  
+    memset (
+      extension,
+      0,
+      number_of_extensions * sizeof( User_extensions_Control )
+    );
+  
+    for ( i = 0 ; i < number_of_extensions ; i++ ) {
+      _User_extensions_Add_set (extension, &initial_extensions[i]);
+      extension++;
     }
   }
 }
 
 /*PAGE
  *
- *  _User_extensions_Add_set
- *
- *  DESCRIPTION:
- *
- *  This routine is used to add a user extension set to the active list.
- */
-
-RTEMS_INLINE_ROUTINE void _User_extensions_Add_set (
-  User_extensions_Control *the_extension,
-  User_extensions_Table   *extension_table
-)
-{
-  the_extension->Callouts = *extension_table;
-
-  _Chain_Append( &_User_extensions_List, &the_extension->Node );
-}
-
-/*PAGE
- *
  *  _User_extensions_Add_API_set
+ *
  *  DESCRIPTION:
  *
  *  This routine is used to add an API extension set to the active list.
@@ -79,9 +97,9 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Add_API_set (
   User_extensions_Control *the_extension
 )
 {
-  _Chain_Prepend( &_User_extensions_List, &the_extension->Node );
+  _User_extensions_Add_set( the_extension );
 }
- 
+
 /*PAGE
  *
  *  _User_extensions_Remove_set
@@ -96,6 +114,13 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Remove_set (
 )
 {
   _Chain_Extract( &the_extension->Node );
+  
+  /*
+   * If a switch handler is present, remove it.
+   */
+
+  if ( the_extension->Callouts.thread_switch != NULL )
+    _Chain_Extract( &the_extension->Switch.Node );
 }
 
 /*PAGE
@@ -113,17 +138,16 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Thread_switch (
   Thread_Control *heir
 )
 {
-  Chain_Node              *the_node;
-  User_extensions_Control *the_extension;
-
-  for ( the_node = _User_extensions_List.first ;
-        !_Chain_Is_tail( &_User_extensions_List, the_node ) ;
+  Chain_Node                     *the_node;
+  User_extensions_Switch_control *the_extension_switch;
+  
+  for ( the_node = _User_extensions_Switches_list.first ;
+        !_Chain_Is_tail( &_User_extensions_Switches_list, the_node ) ;
         the_node = the_node->next ) {
 
-    the_extension = (User_extensions_Control *) the_node;
+    the_extension_switch = (User_extensions_Switch_control *) the_node;
 
-    if ( the_extension->Callouts.thread_switch != NULL )
-      (*the_extension->Callouts.thread_switch)( executing, heir );
+    (*the_extension_switch->thread_switch)( executing, heir );
   }
 }
 

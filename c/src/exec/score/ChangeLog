@@ -1,3 +1,11 @@
+2002-04-08	Chris Johns <ccj@acm.org>
+
+	* Per PR142, make task switch extension its own list.
+	* include/rtems/score/userext.h: Reflect above by adding 
+	User_extensions_Switch_control and adding it to User_extenions_Control.
+	* inline/rtems/score/userext.inl: Allocate all memory in one chunk
+	to minimize overhead.  Address processing dedicated switch chain.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* cpu/Makefile.am: Remove AUTOMAKE_OPTIONS.
