@@ -83,7 +83,7 @@ union tftpPacket {
      * RRQ/WRQ packet
      */
     struct tftpRWRQ {
-        rtems_unsigned16    opcode;
+        uint16_t      opcode;
         char                filename_mode[TFTP_BUFSIZE];
     } tftpRWRQ;
 
@@ -91,25 +91,25 @@ union tftpPacket {
      * DATA packet
      */
     struct tftpDATA {
-        rtems_unsigned16    opcode;
-        rtems_unsigned16    blocknum;
-        rtems_unsigned8     data[TFTP_BUFSIZE];
+        uint16_t      opcode;
+        uint16_t      blocknum;
+        uint8_t       data[TFTP_BUFSIZE];
     } tftpDATA;
 
     /*
      * ACK packet
      */
     struct tftpACK {
-        rtems_unsigned16    opcode;
-        rtems_unsigned16    blocknum;
+        uint16_t      opcode;
+        uint16_t      blocknum;
     } tftpACK;
 
     /*
      * ERROR packet
      */
     struct tftpERROR {
-        rtems_unsigned16    opcode;
-        rtems_unsigned16    errorCode;
+        uint16_t      opcode;
+        uint16_t      errorCode;
         char                errorMessage[TFTP_BUFSIZE];
     } tftpERROR;
 };
@@ -126,7 +126,7 @@ struct tftpStream {
     /*
      * Last block number transferred
      */
-    rtems_unsigned16    blocknum;
+    uint16_t      blocknum;
 
     /*
      * Data transfer socket
@@ -289,8 +289,8 @@ sendStifle (struct tftpStream *tp, struct sockaddr_in *to)
 {
     int len;
     struct {
-        rtems_unsigned16    opcode;
-        rtems_unsigned16    errorCode;
+        uint16_t      opcode;
+        uint16_t      errorCode;
         char                errorMessage[12];
     } msg;
 
@@ -539,8 +539,8 @@ static int rtems_tftp_eval_path(
 static int rtems_tftp_open_worker(
     rtems_libio_t *iop,
     char          *full_path_name,
-    unsigned32     flags,
-    unsigned32     mode
+    uint32_t       flags,
+    uint32_t       mode
 )
 {
     struct tftpStream    *tp;
@@ -710,7 +710,7 @@ static int rtems_tftp_open_worker(
              && (ntohs (tp->pkbuf.tftpDATA.blocknum) == 1)) {
                 tp->nused = 0;
                 tp->blocknum = 1;
-                tp->nleft = len - 2 * sizeof (rtems_unsigned16);
+                tp->nleft = len - 2 * sizeof (uint16_t  );
                 tp->eof = (tp->nleft < TFTP_BUFSIZE);
                 if (sendAck (tp) != 0) {
                     close (tp->socket);
@@ -752,8 +752,8 @@ static int rtems_tftp_open_worker(
 static int rtems_tftp_open(
     rtems_libio_t *iop,
     const char    *new_name,
-    unsigned32     flags,
-    unsigned32     mode
+    uint32_t       flags,
+    uint32_t       mode
 )
 {
     char *full_path_name;
@@ -794,7 +794,7 @@ static int rtems_tftp_open(
 static ssize_t rtems_tftp_read(
     rtems_libio_t *iop,
     void          *buffer,
-    unsigned32    count
+    uint32_t      count
 )
 {
     char              *bp;
@@ -834,11 +834,11 @@ static ssize_t rtems_tftp_read(
             int len = getPacket (tp, retryCount);
             if (len >= (int)sizeof tp->pkbuf.tftpACK) {
                 int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
-                rtems_unsigned16 nextBlock = tp->blocknum + 1;
+                uint16_t   nextBlock = tp->blocknum + 1;
                 if ((opcode == TFTP_OPCODE_DATA)
                  && (ntohs (tp->pkbuf.tftpDATA.blocknum) == nextBlock)) {
                     tp->nused = 0;
-                    tp->nleft = len - 2 * sizeof (rtems_unsigned16);
+                    tp->nleft = len - 2 * sizeof (uint16_t  );
                     tp->eof = (tp->nleft < TFTP_BUFSIZE);
                     tp->blocknum++;
                     if (sendAck (tp) != 0)
@@ -869,7 +869,7 @@ static int rtems_tftp_flush ( struct tftpStream *tp )
     int wlen, rlen;
     int retryCount = 0;
 
-    wlen = tp->nused + 2 * sizeof (rtems_unsigned16);
+    wlen = tp->nused + 2 * sizeof (uint16_t  );
     for (;;) {
         tp->pkbuf.tftpDATA.opcode = htons (TFTP_OPCODE_DATA);
         tp->pkbuf.tftpDATA.blocknum = htons (tp->blocknum);
@@ -935,7 +935,7 @@ static int rtems_tftp_close(
 static ssize_t rtems_tftp_write(
     rtems_libio_t   *iop,
     const void      *buffer,
-    unsigned32      count
+    uint32_t        count
 )
 {
     const char        *bp;

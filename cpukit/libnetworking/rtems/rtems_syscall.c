@@ -684,19 +684,19 @@ rtems_bsdnet_close (rtems_libio_t *iop)
 }
 
 static ssize_t
-rtems_bsdnet_read (rtems_libio_t *iop, void *buffer, unsigned32 count)
+rtems_bsdnet_read (rtems_libio_t *iop, void *buffer, uint32_t   count)
 {
 	return recv (iop->data0, buffer, count, 0);
 }
 
 static ssize_t
-rtems_bsdnet_write (rtems_libio_t *iop, const void *buffer, unsigned32 count)
+rtems_bsdnet_write (rtems_libio_t *iop, const void *buffer, uint32_t   count)
 {
 	return send (iop->data0, buffer, count, 0);
 }
 
 static int
-so_ioctl (rtems_libio_t *iop, struct socket *so, unsigned32 command, void *buffer)
+so_ioctl (rtems_libio_t *iop, struct socket *so, uint32_t   command, void *buffer)
 {
 	switch (command) {
 	case FIONBIO:
@@ -723,7 +723,7 @@ so_ioctl (rtems_libio_t *iop, struct socket *so, unsigned32 command, void *buffe
 }
 
 static int
-rtems_bsdnet_ioctl (rtems_libio_t *iop, unsigned32 command, void *buffer)
+rtems_bsdnet_ioctl (rtems_libio_t *iop, uint32_t   command, void *buffer)
 {
 	struct socket *so;
 	int error;

@@ -45,10 +45,10 @@
  *  A little more complicated on little endian CPUs
  */
 
-#define       ntohl(_x)        ((long)  CPU_swap_u32((unsigned32)_x))
-#define       ntohs(_x)        ((short) CPU_swap_u16((unsigned16)_x))
-#define       htonl(_x)        ((long)  CPU_swap_u32((unsigned32)_x))
-#define       htons(_x)        ((short) CPU_swap_u16((unsigned16)_x))
+#define       ntohl(_x)        ((long)  CPU_swap_u32((uint32_t  )_x))
+#define       ntohs(_x)        ((short) CPU_swap_u16((uint16_t  )_x))
+#define       htonl(_x)        ((long)  CPU_swap_u32((uint32_t  )_x))
+#define       htons(_x)        ((short) CPU_swap_u16((uint16_t  )_x))
 
 #define NTOHS(x) (x) = ntohs(x)
 #define HTONS(x) (x) = htons(x)

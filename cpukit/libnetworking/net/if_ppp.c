@@ -388,7 +388,7 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
 static void ppp_init(struct ppp_softc *sc)
 {
   rtems_status_code   status;
-  rtems_unsigned32    priority = 100;
+  uint32_t      priority = 100;
 
   /* determine priority value */
   if ( rtems_bsdnet_config.network_task_priority ) {

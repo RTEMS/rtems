@@ -175,7 +175,7 @@ void rtems_bsdnet_detach (struct rtems_bsdnet_ifconfig *ifconfig);
 /*
  * Interface configuration. The commands are listed in `sys/sockio.h'.
  */
-int rtems_bsdnet_ifconfig (const char *ifname, unsigned32 cmd, void *param);
+int rtems_bsdnet_ifconfig (const char *ifname, uint32_t   cmd, void *param);
 
 void rtems_bsdnet_do_bootp (void);
 void rtems_bsdnet_do_bootp_and_rootfs (void);

@@ -35,17 +35,17 @@
 #define UNIX_BASE_TO_NTP_BASE (((70UL*365UL)+17UL) * (24*60*60))
 
 struct timestamp {
-	rtems_unsigned32	integer;
-	rtems_unsigned32	fraction;
+	uint32_t  	integer;
+	uint32_t  	fraction;
 };
 
 struct ntpPacketSmall {
-	rtems_unsigned8		li_vn_mode;
-	rtems_unsigned8		stratum;
-	rtems_signed8		poll_interval;
-	rtems_signed8		precision;
-	rtems_signed32		root_delay;
-	rtems_signed32		root_dispersion;
+	uint8_t  		li_vn_mode;
+	uint8_t  		stratum;
+	int8_t  		poll_interval;
+	int8_t  		precision;
+	int32_t  		root_delay;
+	int32_t  		root_dispersion;
 	char			reference_identifier[4];
 	struct timestamp	reference_timestamp;
 	struct timestamp	originate_timestamp;

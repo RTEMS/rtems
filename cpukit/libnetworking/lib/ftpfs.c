@@ -520,8 +520,8 @@ int rtems_ftp_eval_path(
 int rtems_ftp_open(
   rtems_libio_t *iop,
   const char    *new_name,
-  unsigned32     flag,
-  unsigned32     mode
+  uint32_t       flag,
+  uint32_t       mode
 )
 {
   int s = 0;
@@ -530,8 +530,8 @@ int rtems_ftp_open(
   char *upass     = NULL;
   char *hostname  = NULL;
   char port_buffer[sizeof(FTP_PORT_CMD)+6*4+1+1];
-  rtems_unsigned32 my_ip;
-  rtems_unsigned16 my_port;
+  uint32_t   my_ip;
+  uint16_t   my_port;
   int eno = 0;
   rtems_status_code rc;
   rtems_boolean is_write = FALSE;
@@ -962,7 +962,7 @@ int rtems_ftp_open(
 ssize_t rtems_ftp_read(
   rtems_libio_t *iop,
   void          *buffer,
-  unsigned32     count
+  uint32_t       count
 )
 {
   int eno = 0;
@@ -1016,7 +1016,7 @@ ssize_t rtems_ftp_read(
 ssize_t rtems_ftp_write(
   rtems_libio_t *iop,
   const void    *buffer,
-  unsigned32     count
+  uint32_t       count
 )
 {
   int eno = EIO;

@@ -1,5 +1,15 @@
 2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/lib/ftpfs.c, libnetworking/lib/rtems_bsdnet_ntp.c,
+	libnetworking/lib/tftpDriver.c, libnetworking/machine/endian.h,
+	libnetworking/net/if_ppp.c, libnetworking/rtems/rtems_bsdnet.h,
+	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/rtems/rtems_glue.c,
+	libnetworking/rtems/rtems_syscall.c: Convert to using c99 fixed size
+	types.
+
+2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* score/include/rtems/debug.h, score/include/rtems/score/bitfield.h,
 	score/include/rtems/score/chain.h,
 	score/include/rtems/score/coremsg.h,

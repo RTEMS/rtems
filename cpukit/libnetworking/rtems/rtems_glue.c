@@ -60,7 +60,7 @@ static rtems_id networkSemaphore;
 Semaphore_Control   *the_networkSemaphore;
 #endif
 static rtems_id networkDaemonTid;
-static rtems_unsigned32 networkDaemonPriority;
+static uint32_t   networkDaemonPriority;
 static void networkDaemon (void *task_argument);
 
 /*
@@ -507,7 +507,7 @@ networkDaemon (void *task_argument)
 	rtems_event_set events;
 	rtems_interval now;
 	int ticksPassed;
-	unsigned32 timeout;
+	uint32_t   timeout;
 	struct callout *c;
 
 	for (;;) {
@@ -759,12 +759,12 @@ rtems_bsdnet_log (int priority, const char *fmt, ...)
 u_int
 in_cksum_hdr (const void *ip)
 {
-	rtems_unsigned32 sum;
-	const rtems_unsigned16 *sp;
+	uint32_t   sum;
+	const uint16_t   *sp;
 	int i;
 
 	sum = 0;
-	sp = (rtems_unsigned16 *)ip;
+	sp = (uint16_t   *)ip;
 	for (i = 0 ; i < 10 ; i++)
 		sum += *sp++;
 	while (sum > 0xFFFF)
@@ -982,7 +982,7 @@ void rtems_bsdnet_detach (struct rtems_bsdnet_ifconfig *ifp)
 /*
  * Interface Configuration.
  */
-int rtems_bsdnet_ifconfig (const char *ifname, unsigned32 cmd, void *param)
+int rtems_bsdnet_ifconfig (const char *ifname, uint32_t   cmd, void *param)
 {
 	int s, r = 0;
 	struct ifreq ifreq;
