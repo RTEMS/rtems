@@ -3,7 +3,7 @@
  *  This is the entry point for the application.  It calls
  *  the bsp_start routine to the actual dirty work.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

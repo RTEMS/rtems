@@ -5,7 +5,7 @@
  *  which should be provided by all BSPs for VMEbus Single Board
  *  Computers but currently only a few do so.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

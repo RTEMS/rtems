@@ -3,7 +3,7 @@
  *  This include file contains information about support functions for
  *  the RTEMS API.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

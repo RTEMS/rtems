@@ -7,7 +7,7 @@
  *         to complex.  No other Chain Handler routine is referenced
  *         unless it has already been defined.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

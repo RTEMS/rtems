@@ -9,7 +9,7 @@
  *     + establish an asynchronous signal routine
  *     + send a signal set to a task
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

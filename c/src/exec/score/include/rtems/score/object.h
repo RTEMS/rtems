@@ -5,7 +5,7 @@
  *  can be used to initialize and manipulate all objects which have 
  *  ids.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -5,7 +5,7 @@
  *  two (2) CPU dependent files to tailor its data structures for a
  *  particular processor.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -6,7 +6,7 @@
  *  The order of this file is to allow proper compilation due to the
  *  order of inlining required by the compiler.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -3,7 +3,7 @@
  *  This include file contains type definitions which are appropriate
  *  for a typical modern UNIX box using GNU C for the RTEMS simulator.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -10,7 +10,7 @@
  *  NOTE: This file shares as much as possible with the include
  *        file for the Z8036 via z8x36.h.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

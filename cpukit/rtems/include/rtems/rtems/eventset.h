@@ -4,7 +4,7 @@
  *  Event Sets Handler.  This handler provides methods for the manipulation
  *  of event sets which will be sent and received by tasks.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

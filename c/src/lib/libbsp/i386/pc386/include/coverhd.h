@@ -3,7 +3,7 @@
  *  This include file has defines to represent the overhead associated
  *  with calling a particular directive from C on this target.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994. 
  *

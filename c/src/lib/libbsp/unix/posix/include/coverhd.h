@@ -10,7 +10,7 @@
  *  NOTE:  If these are all zero, then the times reported include
  *         all calling overhead including passing of arguments.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

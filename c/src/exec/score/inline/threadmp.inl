@@ -3,7 +3,7 @@
  *  This include file contains the bodies of all inlined routines
  *  for the multiprocessing part of thread package.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -3,7 +3,7 @@
  *  This include file contains all the constants and structures associated
  *  with the manipulation of Global RTEMS Objects.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

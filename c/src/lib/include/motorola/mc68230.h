@@ -7,7 +7,7 @@
  * Format taken partly from RTEMS code and mostly from Motorola IDP user's
  * manual.  RTEMS copyright information below.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

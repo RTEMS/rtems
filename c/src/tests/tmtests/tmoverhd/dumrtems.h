@@ -3,7 +3,7 @@
  *  This include file contains phony macros to map
  *  executive calls to Empty_directive().
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

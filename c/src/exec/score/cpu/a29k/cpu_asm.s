@@ -22,7 +22,7 @@
 ; *
 ; *  NOTE:  This is supposed to be a .S or .s file NOT a C file.
 ; *
-; *  COPYRIGHT (c) 1989-1997.
+; *  COPYRIGHT (c) 1989-1998.
 ; *  On-Line Applications Research Corporation (OAR).
 ; *  Copyright assigned to U.S. Government, 1994.
 ; *

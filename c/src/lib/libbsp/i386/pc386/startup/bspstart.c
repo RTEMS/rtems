@@ -21,7 +21,7 @@
 |   bspstart.c,v 1.8 1996/05/28 13:12:40 joel Exp - go32 BSP
 | With the following copyright notice:
 | **************************************************************************
-| *  COPYRIGHT (c) 1989-1997.
+| *  COPYRIGHT (c) 1989-1998.
 | *  On-Line Applications Research Corporation (OAR).
 | *  Copyright assigned to U.S. Government, 1994. 
 | *

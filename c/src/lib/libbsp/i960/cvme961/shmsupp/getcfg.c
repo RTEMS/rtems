@@ -31,7 +31,7 @@
  *                         POLLED   LITTLE  2+
  *                        INTERRUPT LITTLE  2-8
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -3,7 +3,7 @@
  *  This package is the implementation of the Packet Handler
  *  routines which are inlined.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

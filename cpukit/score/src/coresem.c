@@ -7,7 +7,7 @@
  *  This core object utilizes standard Dijkstra counting semaphores to provide
  *  synchronization and mutual exclusion capabilities.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -9,7 +9,7 @@
  *  NOTE: It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

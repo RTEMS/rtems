@@ -18,7 +18,7 @@
  *
  *  Derived from c/src/exec/cpu/no_cpu/cpu.c:
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

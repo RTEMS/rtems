@@ -4,7 +4,7 @@
  *  function in the executive.  This must be the first include file
  *  included in all internal RTEMS files.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -20,7 +20,7 @@
  *
  *  Derived from c/src/lib/libcpu/hppa1_1/clock/clock.c:
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

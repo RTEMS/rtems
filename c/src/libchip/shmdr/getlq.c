@@ -10,7 +10,7 @@
  *    returns - pointer to an envelope control block
  *            - NULL if no envelopes on specified queue
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

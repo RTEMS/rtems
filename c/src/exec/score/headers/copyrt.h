@@ -3,7 +3,7 @@
  *  This include file contains the copyright notice for RTEMS
  *  which is included in every binary copy of the executive.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *
@@ -24,7 +24,7 @@ extern "C" {
 #ifdef SCORE_INIT
 
 const char _Copyright_Notice[] =
-"COPYRIGHT (c) 1989-1997.\n\
+"COPYRIGHT (c) 1989-1998.\n\
 On-Line Applications Research Corporation (OAR).\n\
 Copyright assigned to U.S. Government, 1994.\n";
 

@@ -5,7 +5,7 @@
  *  if it is implemented as a ".S" file (preprocessed by cpp) instead
  *  of a ".s" file (preprocessed by gm4 or gasp).
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

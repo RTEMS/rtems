@@ -13,7 +13,7 @@
  *  NOTES:  The SIGLP interrupt on the MVME147 is used as an interprocessor
  *          interrupt.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

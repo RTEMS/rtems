@@ -3,7 +3,7 @@
  *  This file contains the static inline implementation of the inlined
  *  routines needed to support the Thread Queue Data.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -8,7 +8,7 @@
  *  If the times are skewed from these values, then the calendar time
  *  does not correspond correctly with the number of ticks.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

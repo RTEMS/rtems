@@ -3,7 +3,7 @@
  *  This include file contains the macro implementation of all
  *  inlined routines in the Core Message Handler.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

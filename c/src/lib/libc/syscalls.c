@@ -6,7 +6,7 @@
  *  has been implemented in terms of RTEMS services, it should be
  *  taken out of this file.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

@@ -14,7 +14,7 @@
  *  NOTES:  This driver is capable of supporting a practically unlimited
  *          number of nodes.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

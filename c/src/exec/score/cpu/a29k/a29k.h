@@ -1,6 +1,6 @@
 /*  a29k.h
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

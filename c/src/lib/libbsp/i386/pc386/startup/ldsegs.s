@@ -24,7 +24,7 @@
 |   ldsegs.s,v 1.4 1996/04/20 16:48:30 joel Exp - go32 BSP
 | With the following copyright notice:
 | **************************************************************************
-| *  COPYRIGHT (c) 1989-1997.
+| *  COPYRIGHT (c) 1989-1998.
 | *  On-Line Applications Research Corporation (OAR).
 | *  Copyright assigned to U.S. Government, 1994. 
 | *

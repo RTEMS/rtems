@@ -3,7 +3,7 @@
  *  This include file contains the specification for all routines
  *  and data specific to the multiprocessing portion of the thread package.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

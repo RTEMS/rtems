@@ -3,7 +3,7 @@
  *  This program is run to determine the data space and work space
  *  requirements of the current version of RTEMS.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

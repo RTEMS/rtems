@@ -19,7 +19,7 @@
 |   timerisr.s,v 1.5 1995/12/19 20:07:45 joel Exp - go32 BSP
 | With the following copyright notice:
 | **************************************************************************
-| *  COPYRIGHT (c) 1989-1997.
+| *  COPYRIGHT (c) 1989-1998.
 | *  On-Line Applications Research Corporation (OAR).
 | *  Copyright assigned to U.S. Government, 1994. 
 | *

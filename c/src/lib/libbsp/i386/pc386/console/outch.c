@@ -17,7 +17,7 @@
 |   outch.c,v 1.4 1995/12/19 20:07:27 joel Exp - go32 BSP
 | With the following copyright notice:
 | **************************************************************************
-| *  COPYRIGHT (c) 1989-1997.
+| *  COPYRIGHT (c) 1989-1998.
 | *  On-Line Applications Research Corporation (OAR).
 | *  Copyright assigned to U.S. Government, 1994. 
 | *

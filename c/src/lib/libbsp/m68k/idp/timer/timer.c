@@ -15,7 +15,7 @@
  *
  *  Code Modified for the MC68230 by Doug McBride, Colorado Space Grant College
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

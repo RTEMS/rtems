@@ -7,7 +7,7 @@
  *  NOTE:  No stack has been established when this routine
  *         is invoked.  It returns by jumping back to bspentry.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

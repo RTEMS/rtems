@@ -4,7 +4,7 @@
  *  RAM Workspace.  This Handler provides mechanisms which can be used to
  *  define, initialize and manipulate the workspace.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *
