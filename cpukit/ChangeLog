@@ -1,3 +1,27 @@
+2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/chain.h,
+	libcsupport/include/clockdrv.h,
+	libcsupport/include/console.h,
+	libcsupport/include/iosupp.h,
+	libcsupport/include/ringbuf.h,
+	libcsupport/include/rtc.h,
+	libcsupport/include/spurious.h,
+	libcsupport/include/timerdrv.h,
+	libcsupport/include/vmeintr.h,
+	libcsupport/include/motorola/mc68230.h,
+	libcsupport/include/motorola/mc68681.h,
+	libcsupport/include/rtems/assoc.h,
+	libcsupport/include/rtems/cdefs.h,
+	libcsupport/include/rtems/error.h,
+	libcsupport/include/rtems/libcsupport.h,
+	libcsupport/include/rtems/libio.h,
+	libcsupport/include/rtems/libio_.h,
+	libcsupport/include/rtems/termiostypes.h,
+	libcsupport/include/zilog/z8036.h,
+	libcsupport/include/zilog/z8530.h,
+	libcsupport/include/zilog/z8536.h: Add doxygen preamble.
+
 2004-11-29	Joel Sherrill <joel@OARcorp.com>
 
 	* libcsupport/src/mallocfreespace.c, rtems/Makefile.am,
