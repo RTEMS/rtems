@@ -49,6 +49,7 @@ void *POSIX_Init(
 )
 {
   int             status;
+  int             priority;
   pthread_t       thread_id;
   time_t          seconds;
   time_t          remaining;
@@ -118,6 +119,28 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
 
+  /* print the minimum priority */
+
+  priority = sched_get_priority_min( SCHED_FIFO );
+  printf( "Minimum priority for FIFO is %d\n", priority );
+  assert( priority != -1 );
+
+  /* print the maximum priority */
+ 
+  priority = sched_get_priority_max( SCHED_FIFO );
+  printf( "Maximum priority for FIFO is %d\n", priority );
+  assert( priority != -1 );
+
+  /* print the round robin time quantum */
+ 
+  status = sched_rr_get_interval( getpid(), &tr );
+  printf(
+    "Round Robin quantum is %d seconds, %d nanoseconds\n",
+    tr.tv_sec,
+    tr.tv_nsec
+  );
+  assert( !status );
+  
   /* create a thread */
 
   status = pthread_create( &thread_id, NULL, Task_1_through_3, NULL );
