@@ -21,7 +21,7 @@ typedef struct t_cmbx {
   VP    exinf;    /* extended information */
   ATR   mbxatr;   /* mailbox attributes */
   /* Following is implementation-dependent function */
-  INT   bufcnt;   /* ring buffer size */
+  INT   bufcnt;   /* maximum number of messages to let pend */
   /* additional information may be included depending on the implementation */
 } T_CMBX;
 
@@ -38,7 +38,11 @@ typedef struct t_msg {
   /*
    *  A region (header) reserved by the OS may be included first
    *  depending on the implementation.
+   *
+   *  NOTE: The first two fields are RTEMS specific.
    */
+
+  INT       msgpri;   /* priority of each message */
   /* VB   msgcont[];  XXX */
   unsigned8 msgcont[1];
 } T_MSG;
@@ -63,8 +67,8 @@ typedef struct t_rmbx {
  */
 
 ER cre_mbx(
-  ID mbxid,
-  T_CMBX* pk_cmbx
+  ID      mbxid,
+  T_CMBX *pk_cmbx
 );
 
 /*
@@ -80,7 +84,7 @@ ER del_mbx(
  */
 
 ER snd_msg(
-  ID mbxid,
+  ID     mbxid,
   T_MSG *pk_msg
 );
 
@@ -90,7 +94,7 @@ ER snd_msg(
 
 ER rcv_msg(
   T_MSG **ppk_msg,
-  ID mbxid
+  ID      mbxid
 );
 
 /*
@@ -99,7 +103,7 @@ ER rcv_msg(
 
 ER prcv_msg(
   T_MSG **ppk_msg,
-  ID mbxid
+  ID      mbxid
 );
 
 /*
@@ -108,8 +112,8 @@ ER prcv_msg(
 
 ER trcv_msg(
   T_MSG **ppk_msg,
-  ID mbxid,
-  TMO tmout
+  ID      mbxid,
+  TMO     tmout
 );
 
 /*
@@ -118,7 +122,7 @@ ER trcv_msg(
 
 ER ref_mbx(
   T_RMBX *pk_rmbx,
-  ID mbxid
+  ID      mbxid
 );
 
 

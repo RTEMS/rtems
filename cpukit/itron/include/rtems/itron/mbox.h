@@ -14,14 +14,17 @@ extern "C" {
 #endif
 
 #include <rtems/itron/object.h>
+#include <rtems/score/coremsg.h>
 
 /*
  *  The following defines the control block used to manage each mailbox.
  */
 
 typedef struct {
-  ITRON_Objects_Control   Object;
-  unsigned32              XXX_more_stuff_goes_here;
+  ITRON_Objects_Control       Object;
+  unsigned32                  count;
+  boolean                     do_message_priority;
+  CORE_message_queue_Control  message_queue;
 }   ITRON_Mailbox_Control;
 
 /*
@@ -44,8 +47,17 @@ void _ITRON_Mailbox_Manager_initialization(
 );
 
 /*
- *  XXX insert private stuff here
+ *  _ITRON_Mailbox_Translate_core_message_queue_return_code
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine translates a core message queue object status
+ *  into the appropriate ITRON status code.
  */
+
+ER _ITRON_Mailbox_Translate_core_message_queue_return_code(
+  CORE_message_queue_Status status
+);
 
 #include <rtems/itron/mbox.inl>
 
