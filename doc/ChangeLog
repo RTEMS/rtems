@@ -1,3 +1,10 @@
+2003-09-19	Joel Sherrill <joel@OARcorp.com>
+
+	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,
+	rtems_support.html.in, ada_user/ada_user.texi: Merge from branch.
+	* acinclude.m4, images/rtems_logo.jpg: New files.
+	* SUPPORT, tools/texi2www/archive/texi2www-960103.tgz: Removed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
