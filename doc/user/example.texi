@@ -74,6 +74,8 @@ rtems_task user_application(rtems_task_argument argument)
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER  /* for stdio */
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER    /* for time services */
 
+#define CONFIGURE_MAXIMUM_TASKS 2
+
 #define CONFIGURE_INIT_TASK_NAME rtems_build_name( 'E', 'X', 'A', 'M' )
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

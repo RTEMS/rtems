@@ -62,6 +62,7 @@ a message queue and a time slice of 50 milliseconds is configured:
 #define CONFIGURE_MICROSECONDS_PER_TICK   1000 /* 1 millisecond */
 #define CONFIGURE_TICKS_PER_TIMESLICE       50 /* 50 milliseconds */
 
+#define CONFIGURE_MAXIMUM_TASKS 4
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 @end group
 @end example
@@ -81,6 +82,46 @@ application that includes @code{confdefs.h} or the symbol
 table will be instantiated multiple times and linking errors
 produced.
 
+The user should be aware that the defaults are intentionally
+set as low as possible.  By default, no application resources
+are configured.  The @code{confdefs.h} file ensures that
+at least one application tasks or thread is configured
+and that at least one of the initialization task/thread
+tables is configured.
+
+The @code{confdefs.h} file estimates the amount of 
+memory required for the RTEMS Executive Workspace.  This
+estimate is only as accurate as the information given
+to @code{confdefs.h} and may be either too high or too
+low for a variety of reasons.  Some of the reasons that
+@code{confdefs.h} may reserve too much memory for RTEMS
+are:
+
+@itemize @bullet
+@item All tasks/threads are assumed to be floating point.
+@end itemize
+
+Conversely, there are many more reasons, the resource
+estimate could be too low:
+
+@itemize @bullet
+@item Task/thread stacks greater than minimum size must be
+accounted for explicitly by developer.
+
+@item Memory for messages is not included.
+
+@item Device driver requirements are not included.
+
+
+@item Network stack requirements are not included.
+
+@item Requirements for add-on libraries are not included.
+@end itemize
+
+In general, @code{confdefs.h} is very accurate when given
+enough information.  However, it is quite easy to use
+a library and not account for its resources.
+
 The following subsection list all of the constants which can be
 set by the user.
 
@@ -95,7 +136,22 @@ related configuration parameters supported by
 @item @code{CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS} is set to the
 maximum number of files that can be concurrently open.  Libio requires
 a Classic RTEMS semaphore for each file descriptor as well as one 
-global one.  The default value is 20 file descriptors.  
+global one.  The default value is 3 file descriptors which is
+enough to support standard input, output, and error output.
+
+@findex CONFIGURE_TERMIOS_DISABLED
+@item @code{CONFIGURE_TERMIOS_DISABLED} is defined if the
+software implementing POSIX termios functionality is
+not going to be used by this application.  By default, this
+is not defined and resources are reserved for the
+termios functionality.
+
+@findex CONFIGURE_NUMBER_OF_TERMIOS_PORTS
+@item @code{CONFIGURE_NUMBER_OF_TERMIOS_PORTS} is set to the
+number of ports using the termios functionality.  Each 
+concurrently active termios port requires resources.
+By default, this is set to 1 so a console port can be
+used.
 
 @findex CONFIGURE_HAS_OWN_MOUNT_TABLE
 @item @code{CONFIGURE_HAS_OWN_MOUNT_TABLE} is defined when the
@@ -106,15 +162,16 @@ entries pointed to by the global variable
 entries in this table is in an integer variable named
 @code{rtems_filesystem_mount_table_t}.
 
-@findex CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
-@item @code{CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM} is defined
-if the application wishes to use a minimal functionality subset
-of the In-Memory FileSystem (IMFS).  The miniIMFS is comparable
+@findex CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
+@item @code{CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM} is defined
+if the application wishes to use the full functionality
+IMFS.  By default, the miniIMFS is used.  The miniIMFS
+is a minimal functionality subset of the In-Memory
+FileSystem (IMFS).  The miniIMFS is comparable
 in functionality to the pseudo-filesystem name space provided 
 before RTEMS release 4.5.0.  The miniIMFS supports
 only directories and device nodes and is smaller in executable
-code size than the full IMFS.  By default, this is not
-defined and the full functionality IMFS is used.
+code size than the full IMFS.
 
 @findex STACK_CHECKER_ON
 @item @code{STACK_CHECKER_ON} is defined when the application 
@@ -141,7 +198,10 @@ tables.
 size of the interrupt stack.  The interrupt stack size is
 usually set by the BSP but since this memory is allocated
 from the RTEMS Ram Workspace, it must be accounted for.  The
-default for this field is RTEMS_MINIMUM_STACK_SIZE.
+default for this field is RTEMS_MINIMUM_STACK_SIZE.  [NOTE:
+At this time, changing this constant does NOT change the
+size of the interrupt stack, only the amount of memory
+reserved for it.]
 
 @findex CONFIGURE_EXECUTIVE_RAM_WORK_AREA
 @item @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA} is the base 
@@ -287,7 +347,7 @@ system configuration parameters supported by @code{confdefs.h}.
 @findex CONFIGURE_MAXIMUM_TASKS
 @item @code{CONFIGURE_MAXIMUM_TASKS} is the maximum number of
 Classic API tasks that can be concurrently active. 
-The default for this field is 10.
+The default for this field is 0.
 
 @findex CONFIGURE_MAXIMUM_TIMERS
 @item @code{CONFIGURE_MAXIMUM_TIMERS} is the maximum number of
@@ -415,7 +475,7 @@ is enabled at configure time using the @code{--enable-posix} option.
 @findex CONFIGURE_MAXIMUM_POSIX_THREADS
 @item @code{CONFIGURE_MAXIMUM_POSIX_THREADS} is the maximum number of
 POSIX API threads that can be concurrently active.
-The default is 10.
+The default is 0.
 
 @findex CONFIGURE_MAXIMUM_POSIX_MUTEXES
 @item @code{CONFIGURE_MAXIMUM_POSIX_MUTEXES} is the maximum number of
@@ -503,7 +563,7 @@ is enabled at configure time using the @code{--enable-itron} option.
 @item @code{CONFIGURE_MAXIMUM_ITRON_TASKS}
 is the maximum number of
 ITRON API tasks that can be concurrently active.
-The default is 10.
+The default is 0.
 
 @findex CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
 @item @code{CONFIGURE_MAXIMUM_ITRON_SEMAPHORES}
