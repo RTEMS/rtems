@@ -147,7 +147,6 @@ C_FILES = src/adasupp.c $(CANCEL_C_FILES) $(CONDITION_VARIABLE_C_FILES) \
     $(SEMAPHORE_C_FILES) src/sysconf.c $(TIME_C_FILES) $(TIMER_C_FILES) \
     src/types.c $(ENOSYS_C_FILES) $(BUILD_FOR_NOW_C_FILES)
 
-AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = libposix.a

@@ -6,8 +6,6 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST = README
 
-AM_CPPFLAGS += -I$(top_builddir)
-
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS =
 noinst_LIBRARIES =

@@ -21,7 +21,6 @@ include_rtems_HEADERS += macros/rtems/extension.inl
 endif
 
 ## src
-AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = libsapi.a

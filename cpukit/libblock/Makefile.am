@@ -5,8 +5,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-AM_CPPFLAGS += -I$(top_builddir)
-
 CLEANFILES =
 
 if !UNIX
