@@ -6,7 +6,7 @@
 PGM = $(ARCH)/network.rel
 
 C_FILES = amd79c970.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
