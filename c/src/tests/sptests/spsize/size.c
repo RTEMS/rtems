@@ -60,7 +60,8 @@
     ((RTEMS_MAXIMUM_PRIORITY + 1) * sizeof(Chain_Control ))
 
 #define PER_TASK      \
-     (sizeof (Thread_Control) + NAME_PTR_SIZE + HEAP_OVHD)
+     (sizeof (Thread_Control) + \
+      NAME_PTR_SIZE + HEAP_OVHD + sizeof( RTEMS_API_Control ))
 #define PER_SEMAPHORE \
      (sizeof (Semaphore_Control) + NAME_PTR_SIZE)
 #define PER_TIMER     \
