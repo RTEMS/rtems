@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <pthread.h>
 #include <signal.h>
 
 #include <rtems/system.h>
@@ -28,9 +29,12 @@
 /*** PROCESS WIDE STUFF ****/
 
 sigset_t  _POSIX_signals_Pending;
-sigset_t  _POSIX_signals_Ignored;
 
-#define _POSIX_signals_Abormal_termination_handler NULL
+void _POSIX_signals_Abormal_termination_handler( int signo )
+{
+  exit( 1 );
+}
+
 #define _POSIX_signals_Stop_handler NULL
 #define _POSIX_signals_Continue_handler NULL
 
@@ -114,10 +118,14 @@ boolean _POSIX_signals_Check_signal(
 
   do_callout = FALSE;
 
+  /* XXX this is not right for siginfo type signals yet */
+  /* XXX since they can't be cleared the same way */
   _ISR_Disable( level );
     if ( is_global ) {
-       ;
-       /* XXX check right place for thread versus global */
+       if ( mask & (_POSIX_signals_Pending & ~api->signals_blocked ) ) {
+         _POSIX_signals_Pending &= ~mask;
+         do_callout = TRUE;
+       }
     } else {
       if ( mask & (api->signals_pending & ~api->signals_blocked ) ) {
         api->signals_pending &= ~mask;
@@ -271,16 +279,6 @@ void _POSIX_signals_Manager_Initialization( void )
   sigemptyset( &_POSIX_signals_Pending );
 
   /*
-   *  Calculate the mask for the set of signals which are being ignored.
-   */
-
-  sigemptyset( &_POSIX_signals_Ignored );
- 
-  for ( signo=1 ; signo<= SIGRTMAX ; signo++ )
-    if ( _POSIX_signals_Default_vectors[ signo ].sa_handler == SIG_IGN )
-      sigaddset( &_POSIX_signals_Ignored, signo );
-    
-  /*
    *  Initialize the timer used to implement alarm().
    */
 
@@ -400,24 +398,51 @@ int sigaction(
   struct sigaction       *oact
 )
 {
+  ISR_Level     level;
+
   if ( !is_valid_signo(sig) )
     set_errno_and_return_minus_one( EINVAL );
   
   if ( oact )
     *oact = _POSIX_signals_Vectors[ sig ];
 
-  /* XXX some signals cannot be ignored */
-  /* XXX can't find this in spec -- ignore calls on SIGKILL and SIGSTOP */
-  /* XXX we don't do SIGSTOP */
+  /* 
+   *  Some signals cannot be ignored (P1003.1b-1993, pp. 70-72 and references.
+   *
+   *  NOTE: Solaris documentation claims to "silently enforce" this which
+   *        contradicts the POSIX specification.
+   */
 
   if ( sig == SIGKILL )
     set_errno_and_return_minus_one( EINVAL );
   
-  /* XXX need to interpret some stuff here */
+  /*
+   *  Evaluate the new action structure and set the global signal vector
+   *  appropriately.
+   */
 
   if ( act ) {
-    _POSIX_signals_Vectors[ sig ] = *act;
+
+    _ISR_Disable( level );
+      if ( act->sa_handler == SIG_DFL ) {
+        _POSIX_signals_Vectors[ sig ] = _POSIX_signals_Default_vectors[ sig ];
+      } else if ( act->sa_handler == SIG_DFL ) {
+        _POSIX_signals_Pending &= ~signo_to_mask( sig );
+      } else {
+        _POSIX_signals_Pending &= ~signo_to_mask( sig );
+        _POSIX_signals_Vectors[ sig ] = *act;
+      }
+    _ISR_Enable( level );
   }
+
+  /*
+   *  No need to evaluate or dispatch because:
+   *
+   *    + If we were ignoring the signal before, none could be pending 
+   *      now (signals not posted when SIG_IGN).
+   *    + If we are now ignoring a signal that was previously pending,
+   *      we clear the pending signal indicator.
+   */
 
   return 0;
 }
@@ -456,8 +481,6 @@ int pthread_sigmask(
 {
   POSIX_API_Control  *api;
 
-/* XXX some signals can not be ignored */
-
   if ( !set && !oset )
     set_errno_and_return_minus_one( EFAULT );
 
@@ -489,7 +512,6 @@ int pthread_sigmask(
 
   if ( ~api->signals_blocked & 
        (api->signals_pending | _POSIX_signals_Pending) ) {
-    api->signals_global_pending &= _POSIX_signals_Pending;
     _Thread_Executing->do_post_task_switch_extension = TRUE;
     _Thread_Dispatch();
   }
@@ -590,11 +612,26 @@ int sigqueue(
  *  NOTE: Behavior of kill() depends on _POSIX_SAVED_IDS.
  */
 
+#define _POSIX_signals_Is_interested( _api, _mask ) \
+  ( ~(_api)->signals_blocked & (_mask) )
+          
 int kill(
   pid_t pid,
   int   sig
 )
 {
+  sigset_t              mask;
+  POSIX_API_Control    *api;
+  unsigned32            the_class;
+  unsigned32            index;
+  unsigned32            maximum;
+  Objects_Information  *the_info;
+  Objects_Control     **object_table;
+  Thread_Control       *the_thread;
+  Thread_Control       *interested_thread;
+  Priority_Control      interested_priority;
+
+
   /*
    *  Only supported for the "calling process" (i.e. this node).
    */
@@ -602,14 +639,200 @@ int kill(
   if( pid != getpid() );
     set_errno_and_return_minus_one( ESRCH );
 
+  /*
+   *  If the signal is being ignored, then we are out of here.
+   */
+
   if ( !sig || _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN )
     return 0;
 
+  /*
+   *  P1003.1c/Draft 10, p. 33 says that certain signals should always 
+   *  be directed to the executing thread such as those caused by hardware
+   *  faults.
+   */
+
+  switch ( sig ) {
+    case SIGFPE:
+    case SIGILL:
+    case SIGSEGV:
+      return pthread_kill( pthread_self(), sig );
+    default:
+      break;
+  }
+
+  mask = signo_to_mask( sig );
+
+  _Thread_Disable_dispatch();
+
+  _POSIX_signals_Pending |= mask;
+
+  /*
+   *  Is the currently executing thread interested?
+   */
+
+  the_thread = _Thread_Executing;
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  if ( _POSIX_signals_Is_interested( api, mask ) )
+    goto process_it;
+
+  /*
+   *  Is an interested thread waiting for this signal (sigwait())?
+   */
+
+  /* XXX wait for signal functions need to be done */
+
+  /*
+   *  Is any other thread interested?  The highest priority interested
+   *  thread is selected.  In the event of a tie, then the following
+   *  additional criteria is used:
+   *
+   *    + ready thread over blocked
+   *    + blocked on call interruptible by signal (can return EINTR)
+   *    + blocked on call not interruptible by signal
+   *
+   *  This looks at every thread in the system regardless of the creating API.
+   *
+   *  NOTES:
+   *
+   *    + rtems internal threads do not receive signals.
+   */
+
+  interested_thread = NULL;
+  interested_priority = PRIORITY_MAXIMUM + 1;
+
+  for ( the_class = OBJECTS_CLASSES_FIRST_THREAD_CLASS;
+        the_class <= OBJECTS_CLASSES_LAST_THREAD_CLASS;
+        the_class++ ) {
+
+    if ( the_class == OBJECTS_INTERNAL_THREADS )
+      continue;
+
+    the_info = _Objects_Information_table[ the_class ];
+
+    if ( !the_info )
+      continue;
+
+    maximum = the_info->maximum;
+    object_table = the_info->local_table;
+
+    assert( object_table );
+
+    object_table++;                         /* skip entry 0 */
+
+    for ( index = 1 ; index <= maximum ; index++ ) {
+      the_thread = (Thread_Control *) object_table++;
+
+      /*
+       *  If this thread is of lower priority than the interested thread,
+       *  go on to the next thread.
+       */
+
+      if ( the_thread->current_priority > interested_priority )
+        continue;
+
+      /*
+       *  If this thread is not interested, then go on to the next thread.
+       */
+
+      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+      if ( !_POSIX_signals_Is_interested( api, mask ) )
+        continue;
+
+      /*
+       *  If this thread is of higher priority logically and interested, then
+       *  it becomes the interested thread.
+       */
+
+      if ( the_thread->current_priority < interested_priority ) {
+        interested_thread   = the_thread;
+        interested_priority = the_thread->current_priority;
+        continue;
+      }
+
+      /*
+       *  Now the thread and the interested thread have the same priority.
+       *  If the interested thread is ready, then we don't need to send it
+       *  to a blocked thread.
+       */
+
+      if ( _States_Is_ready( interested_thread->current_state ) )
+        continue;
+
+      /*
+       *  The interested thread is blocked and the thread we are considering
+       *  is not, so it becomes the interested thread.
+       */
+
+      if ( _States_Is_ready( the_thread->current_state ) ) {
+        interested_thread   = the_thread;
+        interested_priority = the_thread->current_priority;
+        continue;
+      }
+
+      /*
+       *  If the interested thread is interruptible, then just use it.
+       */
+
+      /* XXX need a new states macro */
+      if ( interested_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL )
+        continue;
+
+      /*
+       *  Both the thread under consideration and the interested thread are
+       *  blocked and the interested thread is not interruptible by a signal.
+       *  If the thread under consideration is interruptible by a signal,
+       *  then it becomes the interested thread.
+       */
+
+      /* XXX need a new states macro */
+      if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
+        interested_thread   = the_thread;
+        interested_priority = the_thread->current_priority;
+      }
+    }
+  }
+
+  if ( interested_thread ) {
+    the_thread = interested_thread;
+    goto process_it;
+  }
+
+  /*
+   *  OK so no threads were interested right now.  It will be left on the
+   *  global pending until a thread receives it.  The global set of threads
+   *  can change interest in this signal in one of the following ways:
+   *
+   *    + a thread is created with the signal unblocked,
+   *    + pthread_sigmask() unblocks the signal,
+   *    + sigprocmask() unblocks the signal, OR
+   *    + sigaction() which changes the handler to SIG_IGN. 
+   */
+
+  _Thread_Enable_dispatch();
+  return 0;
+
+  /*
+   *  We found a thread which was interested, so now we mark that this 
+   *  thread needs to do the post context switch extension so it can 
+   *  evaluate the signals pending.
+   */
+
+process_it:
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  the_thread->do_post_task_switch_extension = TRUE;
+
+  _Thread_Enable_dispatch();
+
+   /* XXX take this out when a little more confident */
   /* SIGABRT comes from abort via assert and must work no matter what */
   if ( sig == SIGABRT ) {
     exit( 1 );
   }
-  return POSIX_NOT_IMPLEMENTED();
+  return 0;
 }
 
 /*
