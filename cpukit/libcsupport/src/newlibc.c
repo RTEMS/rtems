@@ -92,14 +92,61 @@ void libc_wrapup(void)
   fclose (stderr);
 }
 
-
+/* 
+ * reent struct allocation moved here from libc_start_hook() to avoid
+ * mutual exclusion problems when memory is allocated from the start hook.
+ *
+ * Memory is also now allocated from the workspace rather than the heap.
+ *  -- ptorre 9/30/03
+ */
 rtems_boolean libc_create_hook(
   rtems_tcb *current_task,
   rtems_tcb *creating_task
 )
 {
-  creating_task->libc_reent = NULL;
-  return TRUE;
+  struct _reent *ptr;
+
+  /*  NOTE: The RTEMS malloc is reentrant without a reent ptr since
+   *        it is based on the Classic API Region Manager.
+   */
+
+#define REENT_MALLOCED 0
+#if REENT_MALLOCED
+  ptr = (struct _reent *) calloc(1, sizeof(struct _reent));
+#else
+  /* It is OK to allocate from the workspace because these
+   * hooks run with thread dispatching disabled.
+   */
+  ptr = (struct _reent *) _Workspace_Allocate(sizeof(struct _reent));
+#endif
+
+  if (ptr)
+  {   
+ 
+#ifdef __GNUC__
+	  /* GCC extension: structure constants */
+	  _REENT_INIT_PTR((ptr));
+#else
+	  /* 
+	   *  WARNING: THIS IS VERY DEPENDENT ON NEWLIB!!! 
+	   *           Last visual check was against newlib 1.8.2 but last known
+	   *           use was against 1.7.0.  This is basically an exansion of
+	   *           REENT_INIT() in <sys/reent.h>.
+	   */
+	  memset(ptr, 0, sizeof(*ptr));
+	  ptr->_stdin = &ptr->__sf[0];
+	  ptr->_stdout = &ptr->__sf[1];
+	  ptr->_stderr = &ptr->__sf[2];
+	  ptr->_current_locale = "C";
+	  ptr->_new._reent._rand_next = 1;
+#endif
+
+	  creating_task->libc_reent = ptr;
+	  return TRUE;
+  }	  
+  else
+      return FALSE;
+
 }
 
 /*
@@ -111,36 +158,6 @@ rtems_extension libc_start_hook(
   rtems_tcb *starting_task
 )
 {
-  struct _reent *ptr;
-
-  /*  NOTE: The RTEMS malloc is reentrant without a reent ptr since
-   *        it is based on the Classic API Region Manager.
-   */
-
-  ptr = (struct _reent *) calloc(1, sizeof(struct _reent));
-
-  if (!ptr)
-     rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
- 
-#ifdef __GNUC__
-  /* GCC extension: structure constants */
-  _REENT_INIT_PTR((ptr));
-#else
-  /* 
-   *  WARNING: THIS IS VERY DEPENDENT ON NEWLIB!!! 
-   *           Last visual check was against newlib 1.8.2 but last known
-   *           use was against 1.7.0.  This is basically an exansion of
-   *           REENT_INIT() in <sys/reent.h>.
-   *  NOTE:    calloc() takes care of zeroing fields.
-   */
-  ptr->_stdin = &ptr->__sf[0];
-  ptr->_stdout = &ptr->__sf[1];
-  ptr->_stderr = &ptr->__sf[2];
-  ptr->_current_locale = "C";
-  ptr->_new._reent._rand_next = 1;
-#endif
-
-  starting_task->libc_reent = ptr;
 }
 
 /*
@@ -200,7 +217,11 @@ rtems_extension libc_delete_hook(
   if (ptr && ptr != &libc_global_reent) {
     _wrapup_reent(ptr);
     _reclaim_reent(ptr);
+#if REENT_MALLOCED
     free(ptr);
+#else
+	_Workspace_Free(ptr);
+#endif
   }
 
   deleted_task->libc_reent = NULL;
