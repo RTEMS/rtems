@@ -77,7 +77,7 @@ sometimes referred to as a "keep alive" or a "deadman" timer.
 @subsection Timer Service Routines
 
 The timer service routine should adhere to @value{LANGUAGE} calling
-conventions and have a prototype similar to the following::
+conventions and have a prototype similar to the following:
 
 @ifset is-C
 @example
