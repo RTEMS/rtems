@@ -6,20 +6,10 @@
  *
  * This file has been created by John S. Gwynne for the efi68k
  * project.
- * 
- * Redistribution and use in source and binary forms are permitted
- * provided that the following conditions are met:
- * 1. Redistribution of source code and documentation must retain
- *    the above authorship, this list of conditions and the
- *    following disclaimer.
- * 2. The name of the author may not be used to endorse or promote
- *    products derived from this software without specific prior
- *    written permission.
  *
- * This software is provided "AS IS" without warranty of any kind,
- * either expressed or implied, including, but not limited to, the
- * implied warranties of merchantability, title and fitness for a
- * particular purpose.
+ *  The license and distribution terms for this file may in
+ *  the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  *
  *------------------------------------------------------------------
  *
