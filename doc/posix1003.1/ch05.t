@@ -92,6 +92,8 @@ mkdir(), Function, Implemented
 mkfifo(), Function, Untested Implementation
 @end example
 
+NOTE: mkfifo() is implemented but no filesystem supports FIFOs.
+
 @section File Removal
 
 @subsection Remove Directory Entries
