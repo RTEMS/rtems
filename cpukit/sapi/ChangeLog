@@ -1,3 +1,8 @@
+2000-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* include/confdefs.h: Account for initialization tasks and
+	threads which use larger than minimum stack sizes.
+
 2000-09-28	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/io.h (rtems_driver_address_table): Added "_entry"
