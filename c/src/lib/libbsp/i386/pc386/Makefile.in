@@ -11,9 +11,9 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-# # We only build the Network library if HAS_NETWORKING was defined
-# NETWORK_yes_V = network
-# NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
+# We only build the Network library if HAS_NETWORKING was defined
+NETWORK_yes_V = network
+NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
