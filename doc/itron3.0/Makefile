@@ -58,7 +58,7 @@ html: $(FILES)
 clean:
 	rm -f *.o $(PROG) *.txt core *.html 
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
+	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES) $(PROJECT).pdf
 	rm -rf html
 
 status.texi: status.t Makefile
