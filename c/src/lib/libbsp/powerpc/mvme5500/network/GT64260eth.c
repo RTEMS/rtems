@@ -156,25 +156,6 @@ static void GTeth_hash_init(struct GTeth_softc *sc);
 static struct GTeth_softc *root_GT64260eth_dev = NULL;
 static int GTeth_MissedFrame_err=0;  
 
-/*
- * Convert Ethernet address to printable (loggable) representation.
- */
-static const char digits[] = "0123456789abcdef";
-char * ether_sprintf(unsigned char *ap)
-{
-  int i;
-  static char etherbuf[18];
-  char *cp = etherbuf;
-
-  for (i = 0; i < 6; i++) {
-      *cp++ = digits[*ap >> 4];
-      *cp++ = digits[*ap++ & 0xf];
-      *cp++ = ':';
-  }
-  *--cp = 0;
-  return (etherbuf);
-}
-
 /* We can hard code the address here if config->hardware_address failed */
 static int GTethGet_macaddr(int macno, char *hwaddr)
 {

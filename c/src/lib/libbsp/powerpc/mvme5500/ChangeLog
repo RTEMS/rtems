@@ -1,3 +1,7 @@
+2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* network/GT64260eth.c: Remove ether_sprintf.
+
 2004-10-21	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/bspstart.c: Remove warnings for variables only used when
