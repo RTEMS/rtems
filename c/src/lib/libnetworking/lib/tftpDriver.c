@@ -430,35 +430,30 @@ int rtems_tftp_open(
   char               *remoteFilename;
   rtems_interval      now;
   rtems_status_code   sc;
+  char               *hostname;
 
   /*
    * This came from the evaluate path. 
    */
 
   cp2 = iop->file_info;  
-  if (*cp2 == '/') {
-    farAddress = rtems_bsdnet_bootp_server_address.s_addr;
+
+  cp1 = cp2;
+  while (*cp2 != '/') {
+    if (*cp2 == '\0')
+      return ENOENT;
+    cp2++;
   }
-  else {
-    char *hostname;
 
-    cp1 = cp2;
-    while (*cp2 != '/') {
-      if (*cp2 == '\0')
-        return ENOENT;
-      cp2++;
-    }
+  len = cp2 - cp1;
+  hostname = malloc (len + 1);
+  if (hostname == NULL)
+    return ENOMEM; 
 
-    len = cp2 - cp1;
-    hostname = malloc (len + 1);
-    if (hostname == NULL)
-      return ENOMEM; 
-
-    strncpy (hostname, cp1, len);
-    hostname[len] = '\0';
-    farAddress = inet_addr (hostname);
-    free (hostname);
-  }
+  strncpy (hostname, cp1, len);
+  hostname[len] = '\0';
+  farAddress = inet_addr (hostname);
+  free (hostname);
 
   if ((farAddress == 0) || (farAddress == ~0))
     return ENOENT;
