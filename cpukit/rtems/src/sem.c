@@ -126,7 +126,8 @@ rtems_status_code rtems_semaphore_create(
     if ( _Attributes_Is_inherit_priority( attribute_set ) )
       return RTEMS_NOT_DEFINED;
 
-  } else if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
+  } else if ( _Attributes_Is_inherit_priority( attribute_set ) || 
+              _Attributes_Is_priority_ceiling( attribute_set ) ) {
 
     if ( ! ( _Attributes_Is_binary_semaphore( attribute_set ) &&
              _Attributes_Is_priority( attribute_set ) ) )

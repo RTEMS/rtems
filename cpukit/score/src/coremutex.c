@@ -40,7 +40,7 @@
  *
  *  Output parameters:  NONE
  */
- 
+
 void _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
   Objects_Classes               the_class,
@@ -57,7 +57,7 @@ void _CORE_mutex_Initialize(
 
   the_mutex->Attributes = *the_mutex_attributes;
   the_mutex->lock          = initial_lock;
- 
+
   if ( initial_lock == CORE_MUTEX_LOCKED ) {
     the_mutex->nest_count = 1;
     the_mutex->holder     = _Thread_Executing;
@@ -144,14 +144,37 @@ void _CORE_mutex_Seize(
   executing->Wait.id         = id;
   _ISR_Enable( level );
 
-  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) &&
-    the_mutex->holder->current_priority >
-                                      _Thread_Executing->current_priority ) {
-    _Thread_Change_priority(
-    the_mutex->holder, _Thread_Executing->current_priority );
+  switch ( the_mutex->Attributes.discipline ) {
+    case CORE_MUTEX_DISCIPLINES_FIFO:
+    case CORE_MUTEX_DISCIPLINES_PRIORITY:
+    case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
+      break;
+    case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
+      if ( the_mutex->holder->current_priority > executing->current_priority ) {
+        _Thread_Change_priority(
+          the_mutex->holder,
+          executing->current_priority
+        );
+      }
+      break;
   }
 
   _Thread_queue_Enqueue( &the_mutex->Wait_queue, timeout );
+
+  if ( _Thread_Executing->Wait.return_code == CORE_MUTEX_STATUS_SUCCESSFUL ) {
+    switch ( the_mutex->Attributes.discipline ) {
+      case CORE_MUTEX_DISCIPLINES_FIFO:
+      case CORE_MUTEX_DISCIPLINES_PRIORITY:
+      case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
+        break;
+      case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
+        _Thread_Change_priority(
+          executing,
+          the_mutex->Attributes.priority_ceiling
+        );
+        break;
+    }
+  }
 }
 
 /*
@@ -172,7 +195,7 @@ void _CORE_mutex_Seize(
  *    CORE_MUTEX_STATUS_SUCCESSFUL - if successful
  *    core error code              - if unsuccessful
  */
- 
+
 CORE_mutex_Status _CORE_mutex_Surrender(
   CORE_mutex_Control                *the_mutex,
   Objects_Id                         id,
@@ -180,62 +203,70 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 )
 {
   Thread_Control *the_thread;
+  Thread_Control *executing;
+
+  executing = _Thread_Executing;
 
   if ( !_Objects_Are_ids_equal(
            _Thread_Executing->Object.id, the_mutex->holder_id ) )
     return( CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE );
- 
+
   the_mutex->nest_count--;
- 
+
   if ( the_mutex->nest_count != 0 )
     return( CORE_MUTEX_STATUS_SUCCESSFUL );
- 
+
   _Thread_Executing->resource_count--;
   the_mutex->holder    = NULL;
   the_mutex->holder_id = 0;
- 
+
   /*
    *  Whether or not someone is waiting for the mutex, an
    *  inherited priority must be lowered if this is the last
    *  mutex (i.e. resource) this task has.
    */
- 
-  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) &&
-          _Thread_Executing->resource_count == 0 &&
-          _Thread_Executing->real_priority !=
-          _Thread_Executing->current_priority ) {
-     _Thread_Change_priority(
-       _Thread_Executing,
-       _Thread_Executing->real_priority
-     );
+
+  switch ( the_mutex->Attributes.discipline ) {
+    case CORE_MUTEX_DISCIPLINES_FIFO:
+    case CORE_MUTEX_DISCIPLINES_PRIORITY:
+      break;
+    case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
+    case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
+      if ( executing->resource_count == 0 &&
+           executing->real_priority !=
+           executing->current_priority ) {
+         _Thread_Change_priority( executing, executing->real_priority );
+      }
+      break;
   }
 
+
   if ( ( the_thread = _Thread_queue_Dequeue( &the_mutex->Wait_queue ) ) ) {
- 
+
     if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
       
       the_mutex->holder     = NULL;
       the_mutex->holder_id  = the_thread->Object.id;
       the_mutex->nest_count = 1;
- 
+
       ( *api_mutex_mp_support)( the_thread, id );
 
     } else {
- 
+
       the_mutex->holder     = the_thread;
       the_mutex->holder_id  = the_thread->Object.id;
       the_thread->resource_count++;
       the_mutex->nest_count = 1;
- 
+
      /*
-      *  No special action for priority inheritance because the_thread
-      *  is guaranteed to be the highest priority thread waiting for
-      *  the mutex.
+      *  No special action for priority inheritance or priority ceiling
+      *  because the_thread is guaranteed to be the highest priority
+      *  thread waiting for the mutex.
       */
     }
   } else
     the_mutex->lock = CORE_MUTEX_UNLOCKED;
- 
+
   return( CORE_MUTEX_STATUS_SUCCESSFUL );
 }
 
@@ -252,18 +283,16 @@ CORE_mutex_Status _CORE_mutex_Surrender(
  *
  *  Output parameters:  NONE
  */
- 
+
 void _CORE_mutex_Flush(
   CORE_mutex_Control         *the_mutex,
   Thread_queue_Flush_callout  remote_extract_callout,
   unsigned32                  status
 )
 {
- 
   _Thread_queue_Flush(
     &the_mutex->Wait_queue,
     remote_extract_callout,
     status
   );
- 
 }
