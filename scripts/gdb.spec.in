@@ -19,7 +19,7 @@ Provides:     @target_alias@-gdb
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      gdb-@gdb_version@
+Version:      gdb@gdb_version@
 Summary:      gdb for target @target_alias@
 Source0:      	gdb-@gdb_version@.tar.gz
 Patch0:		gdb-@gdb_version@-rtems-@gdb_patch_version@.diff

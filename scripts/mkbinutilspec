@@ -30,7 +30,7 @@ fi
 
 specfile=${dst}/$target_alias-binutils-${binutils_version}.spec
 
-sed -e "s%@Release@%${release}%g" \
+sed -e "s%@Release@%${rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
     -e "s%@binutils_version@%${binutils_version}%g" \
     -e "s%@binutils_patch_version@%${binutils_patch_version}%g" \
