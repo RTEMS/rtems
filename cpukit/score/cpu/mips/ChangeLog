@@ -3,6 +3,7 @@
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
 
 2005-01-03	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
 	PR 739
 	* iregdef.h: Fixes gcc warning about redundant definition of R_SZ
 	when compiling cpu_asm.S.  Problem was a #define sneaked in in
@@ -10,6 +11,7 @@
 	builds.
 
 2005-01-03	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
 	PR 737 
 	* cpu_asm.S: Fixes gcc warning about instructions in branch delay
 	slot when compiling cpu_asm.S
@@ -19,9 +21,10 @@
 	* Makefile.am: Remove build-variant support.
 
 2004-12-02	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
 	PR 730 
 	* cpu_asm.S: Collected PR 601 changes for commit to cvshead
-	for rtems-4.7
+	for rtems-4.7.
 
 2004-04-09	Joel Sherrill <joel@OARcorp.com>
 
