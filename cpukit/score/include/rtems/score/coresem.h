@@ -55,7 +55,8 @@ typedef enum {
   CORE_SEMAPHORE_STATUS_SUCCESSFUL,
   CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT,
   CORE_SEMAPHORE_WAS_DELETED,
-  CORE_SEMAPHORE_TIMEOUT
+  CORE_SEMAPHORE_TIMEOUT,
+  CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED
 }   CORE_semaphore_Status;
 
 /*
@@ -64,6 +65,7 @@ typedef enum {
  */
 
 typedef struct {
+  unsigned32                  maximum_count;
   CORE_semaphore_Disciplines  discipline;
 }   CORE_semaphore_Attributes;
  

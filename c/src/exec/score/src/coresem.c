@@ -91,16 +91,26 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
 )
 {
   Thread_Control *the_thread;
+  ISR_Level       level;
+  CORE_semaphore_Status status;
+
+  status = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
 
   if ( (the_thread = _Thread_queue_Dequeue(&the_semaphore->Wait_queue)) ) {
 
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       (*api_semaphore_mp_support) ( the_thread, id );
 
-  } else
-    the_semaphore->count += 1;
+  } else {
+    _ISR_Disable( level );
+      if ( the_semaphore->count <= the_semaphore->Attributes.maximum_count )
+        the_semaphore->count += 1;
+      else
+        status = CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED;
+    _ISR_Enable( level );
+  }
 
-  return( CORE_SEMAPHORE_STATUS_SUCCESSFUL );
+  return status;
 }
 
 /*PAGE
