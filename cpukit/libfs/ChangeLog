@@ -1,3 +1,8 @@
+2003-10-22	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 515/filesystem
+	* src/dosfs/fat_fat_operations.c: Remove commented out code.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 509/filesystem

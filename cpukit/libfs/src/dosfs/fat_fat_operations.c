@@ -63,8 +63,7 @@ fat_scan_fat_for_free_clusters(
     if (count == 0)
         return rc;
         
-    if ((fs_info->vol.type & FAT_FAT32) && 
-        (fs_info->vol.next_cl != FAT_UNDEFINED_VALUE))  
+    if (fs_info->vol.next_cl != FAT_UNDEFINED_VALUE)
         cl4find = fs_info->vol.next_cl;  
 
     /* 
@@ -82,7 +81,6 @@ fat_scan_fat_for_free_clusters(
             return rc;
         }    
 
-        /*if ((next_cln & fs_info->vol.mask) == FAT_GENFAT_FREE)*/
         if (next_cln == FAT_GENFAT_FREE)
         {
             /*
@@ -132,12 +130,9 @@ fat_scan_fat_for_free_clusters(
             /* have we satisfied request ? */
             if (*cls_added == count)
             {
-                if (fs_info->vol.type & FAT_FAT32) 
-                {
                     fs_info->vol.next_cl = save_cln;
                     if (fs_info->vol.free_cls != 0xFFFFFFFF)
                         fs_info->vol.free_cls -= (*cls_added);
-                }        
                 *last_cl = save_cln;    
                 fat_buf_release(fs_info);
                 return rc;  
@@ -149,12 +144,10 @@ fat_scan_fat_for_free_clusters(
             cl4find = 2;
     }
 
-    if (fs_info->vol.type & FAT_FAT32)
-    { 
         fs_info->vol.next_cl = save_cln;
         if (fs_info->vol.free_cls != 0xFFFFFFFF)
             fs_info->vol.free_cls -= (*cls_added);    
-    }        
+
     *last_cl = save_cln;
     fat_buf_release(fs_info);
     return RC_OK;    
@@ -187,9 +180,9 @@ fat_free_fat_clusters_chain(
         rc = fat_get_fat_cluster(mt_entry, cur_cln, &next_cln);
         if ( rc != RC_OK )
         {
-            if ((fs_info->vol.type & FAT_FAT32) && 
-                (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE))
+              if(fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
                 fs_info->vol.free_cls += freed_cls_cnt;
+
             fat_buf_release(fs_info);    
             return rc;
         }    
@@ -202,12 +195,9 @@ fat_free_fat_clusters_chain(
         cur_cln = next_cln;
     }
 
-    if (fs_info->vol.type & FAT_FAT32)
-    {
         fs_info->vol.next_cl = chain;
         if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
             fs_info->vol.free_cls += freed_cls_cnt;
-    }    
 
     fat_buf_release(fs_info);
     if (rc1 != RC_OK)
@@ -346,16 +336,7 @@ fat_set_fat_cluster(
         case FAT_FAT12:
             if ( FAT_CLUSTER_IS_ODD(cln) )
             {
-#if 0
-	      /* 
-	       * do not perform endian conversion explicitely,
-	       * because following code will enforce little 
-	       * endian format implicitly!
-	       */		 
-                fat16_clv = CT_LE_W((((unsigned16)in_val) << FAT_FAT12_SHIFT));
-#else
                 fat16_clv = ((unsigned16)in_val) << FAT_FAT12_SHIFT;
-#endif
                 *((unsigned8 *)(block0->buffer + ofs)) = 
                         (*((unsigned8 *)(block0->buffer + ofs))) & 0x0F;
 
@@ -391,16 +372,7 @@ fat_set_fat_cluster(
             }
             else
             {
-#if 0
-	      /* 
-	       * do not perform endian conversion explicitely,
-	       * because following code will enforce little 
-	       * endian format implicitly!
-	       */		 
-                fat16_clv = CT_LE_W((((unsigned16)in_val) & FAT_FAT12_MASK));
-#else
                 fat16_clv = ((unsigned16)in_val) & FAT_FAT12_MASK;
-#endif
                 *((unsigned8 *)(block0->buffer + ofs)) &= 0x00;
 
                 *((unsigned8 *)(block0->buffer + ofs)) = 
