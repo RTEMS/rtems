@@ -199,9 +199,11 @@ LINK_OBJS = \
 LINK_FILES =\
     $(START_FILE) \
     $(OBJS) \
-    $(MANAGERS_NOT_WANTED:%=$(PROJECT_RELEASE)/lib/no-%$(LIB_VARIANT).rel) \
-    $(PROJECT_RELEASE)/lib/librtemsbsp$(LIBSUFFIX_VA) \
-    $(PROJECT_RELEASE)/lib/librtemscpu$(LIBSUFFIX_VA) \
+    $(MANAGERS_NOT_WANTED:%=$(PROJECT_RELEASE)/lib/no-%$(LIB_VARIANT).rel)
+
+# FIXME: Do we want this? Only useful below tests/.
+#    $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/librtemcpu$(LIBSUFFIX_VA)
+#    $(PROJECT_RELEASE)/lib/librtembsp$(LIBSUFFIX_VA)
 
 if RTEMS_USE_GCC
 if RTEMS_USE_GCC272
