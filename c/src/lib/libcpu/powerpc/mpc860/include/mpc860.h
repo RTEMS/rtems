@@ -112,8 +112,8 @@
  * Memory controller registers
  */
 typedef struct m860MEMCRegisters_ {
-  rtems_unsigned32        br;
-  rtems_unsigned32        or;
+  rtems_unsigned32        _br;
+  rtems_unsigned32        _or;
 } m860MEMCRegisters_t;
 
 /*
