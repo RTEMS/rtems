@@ -46,6 +46,10 @@
 
 #include <sys/reent.h>          /* for extern of _REENT (aka _impure_ptr) */
 
+#ifdef RTEMS_UNIX
+#include <stdio.h>              /* for setvbuf() */
+#endif
+
 #include "internal.h"
 
 #define LIBC_NOTEPAD RTEMS_NOTEPAD_LAST
@@ -109,6 +113,24 @@ libc_start_hook(rtems_tcb *current_task,
 
     MY_task_set_note(starting_task, LIBC_NOTEPAD, (rtems_unsigned32) ptr);
 }
+
+/*
+ * Called for all user TASKS (system tasks are SYSI and IDLE)
+ *
+ *  NOTE: When using RTEMS fake stat, fstat, and isatty, all output 
+ *        is line buffered so this setvbuf is not necessary.  This
+ *        setvbuf insures that we can redirect the output of a test
+ *        on the UNIX simulator and it is in the same order as for a 
+ *        real target.
+ */
+ 
+#ifdef RTEMS_UNIX
+rtems_extension
+libc_begin_hook(rtems_tcb *current_task)
+{
+  setvbuf( stdout, NULL, _IOLBF, BUFSIZ );
+}
+#endif
 
 rtems_extension
 libc_switch_hook(rtems_tcb *current_task,
@@ -244,6 +266,9 @@ libc_init(int reentrant)
 
         libc_extension.thread_create  = libc_create_hook;
         libc_extension.thread_start   = libc_start_hook;
+#ifdef RTEMS_UNIX
+        libc_extension.thread_begin   = libc_begin_hook;
+#endif
         libc_extension.thread_switch  = libc_switch_hook;
         libc_extension.thread_delete  = libc_delete_hook;
 
