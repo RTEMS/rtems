@@ -1,3 +1,8 @@
+2004-03-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/canonicalize-tools.m4: Revert Joel's 2004-03-04's patch.
+	There are no application level Makefiles in here.
+
 2004-03-04	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/canonicalize-tools.m4: Add SIZE, NM, and OBJCOPY so
