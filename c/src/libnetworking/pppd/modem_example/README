@@ -1,7 +1,0 @@
-#
-#  $Id$
-#
-
-This is a modem driver which should work with limited modifications
-on any 16550.
-

@@ -2,39 +2,28 @@
 #  $Id$
 #
 
+The pppd application seems to very stable.  It has been tested using
+the example application with the i386/pc586 and m68k/sbc5206e BSPs.
+The tests were executed using a null modem serial cable to connect
+with a UNIX box running either the ppp or pppd application and with
+an external modem to dial up a local ISP.
 
-Notes from Mike Siers <mikes@poliac.com>
-========================================
+If you have problems getting your target to make consistent connections
+with an ISP, the problem is most likely with the ppp options.  First
+try using the "novj" and "noaccomp" options.  If you have questions
+about what other option values are available for the rtems_pppd_set_option
+function, please look at the pppd.8 man page file or the the source code.
+The majority of options that are documented in man page should work
+with this function call.
 
-I know that several users have tried out this version of
-pppd under RTEMS.  It has been successfully used as both
-a client and server.  Below are the only issues that I
-know of.
+The pppd application requires the BSP termios driver support task
+driven I/O.  Below is a list of known issues that need to be resolved:
 
-1) Large packet ping causes RTEMS box to lock up
-   If you ping the RTEMS box over the ppp link with a packet
-   size greater than 1500, the RTEMS box locks up.  I think
-   the problem is in the pppd ethernet driver.
+  - pppd locks up when it receives large packet pings (> 1500 bytes)
+  - pppd occasionaly locks up with mbuf allocation error
+    (problem is rare and may be BSP related)
 
-2) Upgrade the libnetworking/modem files
-   This upgrade did not modify the ppp ethernet driver files
-   in the libnetworking/modem directory.  Would like to
-   upgrade these files.  Hopefully, it will fix the large
-   packet ping problem.
+If you find any other problems or fix some problems, please post your
+changes to the RTEMS mailing list.
 
-3) The files cbcp.c and cbcp.h provide a callback feature
-   that I have not tried to compile or use.  The files in 
-   this directory are identical to the 2.3.11 versions.  
-   for completeness.
-
-
-JOEL: Are the modifications to the original pppd such that the 
-      real maintainers will accept them?
-
-No.  The pppd 2.3.11 branch is an old branch.  The current
-version is 2.4.x and it contains alot of extra items that
-just did not make sense to have in an embedded environment.
-I could make the RTEMS changes compatible with the standard
-2.3.11 release by using compilation flags.  I have not
-contacted the maintainers to see if they are interested.
-
+Good Luck

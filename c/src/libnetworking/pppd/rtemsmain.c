@@ -107,8 +107,6 @@ int phase;			/* where the link is at */
 int kill_link;
 int open_ccp_flag;
 
-static int waiting;
-
 char **script_env;		/* Env. variable values for scripts */
 int s_env_nalloc;		/* # words avail at script_env */
 
@@ -233,8 +231,6 @@ pppdmain(argc, argv)
     /* if (debug)
 	setlogmask(LOG_UPTO(LOG_DEBUG));
     */
-
-    waiting = 0;
 
     do_callback = 0;
     for (;;) {
@@ -400,12 +396,10 @@ pppdmain(argc, argv)
 	status = EXIT_NEGOTIATION_FAILED;
 	new_phase(PHASE_ESTABLISH);
 	while (phase != PHASE_DEAD) {
-	    waiting = 1;
    	    wait_input(timeleft(&timo));
-	    waiting = 0;
-
 	    calltimeout();
 	    get_input();
+
 	    if (kill_link) {
 		lcp_close(0, "User request");
 		kill_link = 0;
@@ -469,9 +463,7 @@ pppdmain(argc, argv)
 	    new_phase(PHASE_HOLDOFF);
 	    TIMEOUT(holdoff_end, NULL, t);
 	    do {
-	        waiting = 1;
    	        wait_input(timeleft(&timo));
-	        waiting = 0;
 
 		calltimeout();
 		if (kill_link) {

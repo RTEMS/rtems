@@ -16,5 +16,9 @@ provided the modem driver as well.
 
 The port was updated to 2.3.11 by Mike Siers <mikes@poliac.com>
 who added an example test.
+
+Updated the chat program to return the correct errors and support
+the ABORT commands.  Removed some dead code and did a lot of
+testing on a new Coldfire BSP.  Version seems to be very stable.
 =================================================================
 

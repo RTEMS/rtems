@@ -589,6 +589,8 @@ extern void (*auth_linkdown_hook) __P((void));
 #define DEBUGCHAP	1
 #endif
 #define DEBUGMAIN	1
+#define DEBUGUPAP	1
+#define DEBUGCHAP	1
 
 
 #ifdef DEBUGMAIN

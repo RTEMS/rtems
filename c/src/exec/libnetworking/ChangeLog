@@ -1,3 +1,14 @@
+2001-10-12	Mike Siers <mikes@poliac.com>
+
+	* Update to stable working state.  Congratulations Mike! :)
+	* modem_example: Directory removed.
+	* modem_example/16550.h, modem_example/README, modem_example/modem.c,
+	modem_example/modem.h, modem_example/ppp.c, modem_example/ppp.h,
+	modem_example/pppcompress.c: Files removed.
+	* pppd/example/pppd.options: New file.
+	* pppd/README, pppd/STATUS, pppd/cbcp.c, pppd/cbcp.h, pppd/chat.c,
+	pppd/pppd.h, pppd/rtemsmain.c: Updated.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

@@ -14,6 +14,12 @@
  *	This software is in the public domain.
  *
  * -----------------
+ *	22-May-99 added environment substitutuion, enabled with -E switch.
+ *	Andreas Arens <andras@cityweb.de>.
+ *
+ *	12-May-99 added a feature to read data to be sent from a file,
+ *	if the send string starts with @.  Idea from gpk <gpk@onramp.net>.
+ *
  *	added -T and -U option and \T and \U substitution to pass a phone
  *	number into chat script. Two are needed for some ISDN TA applications.
  *	Keith Dart <kdart@cisco.com>
@@ -74,18 +80,12 @@
  *		Columbus, OH  43221
  *		(614)451-1883
  *
- *
  */
-
-#ifndef lint
-/* static char rcsid[] = ""; */
-#endif
 
 #include <stdio.h>
 #include <ctype.h>
 #include <time.h>
 #include <fcntl.h>
-#include <signal.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
@@ -93,12 +93,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <syslog.h>
+#include <termios.h>
+#include "pppd.h"
 
 #undef	TERMIOS
 #define TERMIOS
 
-
-#include <termios.h>
 
 #define	STR_LEN	1024
 char temp2[STR_LEN];
@@ -142,39 +142,34 @@ static int _O = 0;		/* Internal state */
 
 char *program_name;
 
-#define	MAX_ABORTS		5
-#define	MAX_REPORTS		5
+#define	MAX_ABORTS		16
+#define	MAX_REPORTS		16
 #define	DEFAULT_CHAT_TIMEOUT	45
-#define fcntl(a, b,c ) 0
-#define MAX_TIMEOUTS 10
+#define MAX_TIMEOUTS            10
 
-int echo          = 0;
-int verbose       = 0;
-int to_log        = 1;
-int to_stderr     = 0;
-int Verbose       = 0;
-int quiet         = 0;
-int report        = 0;
-int exit_code     = 0;
-char *report_file = (char *) 0;
-char *chat_file   = (char *) 0;
-char *phone_num   = (char *) 0;
-char *phone_num2  = (char *) 0;
-int chat_timeout       = DEFAULT_CHAT_TIMEOUT;
-static int timeout       = DEFAULT_CHAT_TIMEOUT;
-int have_tty_parameters = 0;
+int echo             = 0;
+int quiet            = 0;
+int report           = 0;
+int use_env          = 0;
+int exit_code        = 0;
+char *report_file    = (char *) 0;
+char *chat_file      = (char *) 0;
+char *phone_num      = (char *) 0;
+char *phone_num2     = (char *) 0;
+static int timeout   = DEFAULT_CHAT_TIMEOUT;
 
 #ifdef TERMIOS
 #define term_parms struct termios
-#define get_term_param(param) tcgetattr(ttyfd, param)
-#define set_term_param(param) tcsetattr(ttyfd, TCSANOW, param)
+#define get_term_param(param) tcgetattr(0, param)
+#define set_term_param(param) tcsetattr(0, TCSANOW, param)
 struct termios saved_tty_parameters;
 #endif
 
-char *abort_string[MAX_ABORTS]={"BUSY","NO DIALTONE","NO CARRIER","NO ASWER","RINGING\r\n\r\nRINGING"};
-char *fail_reason = (char *)0,
-	fail_buffer[50];
-int n_aborts = MAX_ABORTS, abort_next = 0, timeout_next = 0, echo_next = 0;
+char *fail_reason = (char *)0;
+char  fail_buffer[50];
+char *abort_string[MAX_ABORTS]={"BUSY","NO DIALTONE","NO CARRIER","NO ANSWER","RING\r\nRING"};
+int n_aborts = 5;
+int abort_next = 0, timeout_next = 0, echo_next = 0;
 int clear_abort_next = 0;
 
 char *report_string[MAX_REPORTS] ;
@@ -186,19 +181,7 @@ int say_next = 0, hup_next = 0;
 
 void *dup_mem __P((void *b, size_t c));
 void *copy_of __P((char *s));
-/*
-SIGTYPE sigalrm __P((int signo));
-SIGTYPE sigint __P((int signo));
-SIGTYPE sigterm __P((int signo));
-SIGTYPE sighup __P((int signo));
-*/
-void unalarm __P((void));
-void init __P((void));
-void set_tty_parameters __P((void));
-void echo_stderr __P((int));
 void break_sequence __P((void));
-void terminate __P((int status));
-void do_file __P((char *chat_file));
 int  get_string __P((register char *string));
 int  put_string __P((register char *s));
 int  write_char __P((int c));
@@ -208,19 +191,9 @@ void chat_send __P((register char *s));
 char *character __P((int c));
 void chat_expect __P((register char *s));
 char *clean __P((register char *s, int sending));
-void break_sequence __P((void));
-void terminate __P((int status));
-void pack_array __P((char **array, int end));
 char *expect_strtok __P((char *, char *));
-int vfmtmsg __P((char *, int, const char *, va_list));	/* vsprintf++ */
+int chatmain __P((char *));
 
-#if 0
-int usleep( long usec );				  /* returns 0 if ok, else -1 */
-#endif
-    
-extern int input_fd,output_fd;
-
-int main __P((int, char *[]));
 
 void *dup_mem(b, c)
 void *b;
@@ -228,29 +201,22 @@ size_t c;
 {
     void *ans = malloc (c);
     if (!ans)
-		return NULL;
+	return NULL;
 
-    memcpy (ans, b, c);
+    memcpy(ans, b, c);
     return ans;
 }
 
 void *copy_of (s)
 char *s;
 {
-    return dup_mem (s, strlen (s) + 1);
+    return dup_mem(s, strlen (s) + 1);
 }
 
-/*
- * chat [ -v ] [-T number] [-U number] [ -t timeout ] [ -f chat-file ] \
- * [ -r report-file ] \
- *		[...[[expect[-say[-expect...]] say expect[-say[-expect]] ...]]]
- *
- *	Perform a UUCP-dialer-like chat script on stdin and stdout.
- */
 char *getnextcommand(char **string)
 {
 	char *buf=*string,*res;
-	res=strchr(buf,'@');
+	res=strchr(buf,'|');
 	if (res==NULL)
 		return NULL;
 	*res='\0';
@@ -258,8 +224,6 @@ char *getnextcommand(char **string)
 	return buf;
 }
 
- 
-extern int ttyfd;
 int chatmain(argv)
 char *argv;
 {
@@ -268,78 +232,40 @@ char *argv;
   /* initialize exit code */
   exit_code = 0;
 
-printf("chat_main: %s\n", argv);
+  if ( debug ) {
+    dbglog("chat_main: %s\n", argv);
+  }
 
   /* get first expect string */
   arg = getnextcommand(&argv);
-  while ( arg != NULL ) {
+  while (( arg != NULL ) && ( exit_code == 0 )) {
     /* process the expect string */
     chat_expect(arg);
-
-    /* get the next send string */
-    arg = getnextcommand(&argv);
-    if ( arg != NULL ) {
-      /* process the send string */
-      chat_send(arg);
-
-      /* get the next expect string */
+    if ( exit_code == 0 ) {
+      /* get the next send string */
       arg = getnextcommand(&argv);
+      if ( arg != NULL ) {
+        /* process the send string */
+        chat_send(arg);
+
+        /* get the next expect string */
+        arg = getnextcommand(&argv);
+      }
     }
   }
 
-  return 0;
-}
+  if ( exit_code ) {
+   exit_code = -exit_code;
+  }
 
-
-
-/*
- *	Print an error message and terminate.
- */
-
-void init()
-{
-    set_tty_parameters();
-}
-
-void set_tty_parameters()
-{
-    term_parms t;
-
-	if (get_term_param (&t) < 0)
-		syslog(LOG_NOTICE,"Can't get terminal parameters:")
-		;
-	
-    saved_tty_parameters = t;
-    have_tty_parameters  = 1;
-    t.c_iflag     |= IGNBRK | ISTRIP | IGNPAR;
-    t.c_oflag      = 0;
-    t.c_lflag      = 0;
-    t.c_cc[VERASE] =
-    t.c_cc[VKILL]  = 0;
-    t.c_cc[VMIN]   = 0;
-    t.c_cc[VTIME]  = 1;
-    if (set_term_param (&t) < 0)
-		syslog(LOG_NOTICE,"Can't set terminal parameters:")
-		;
+  return ( exit_code );
 }
 
 void break_sequence()
 {
-
-/*    tcsendbreak (0, 0);*/
+  tcsendbreak(ttyfd, 0);
 }
 
-/*void terminate(status)
-int status;
-{
-    echo_stderr(-1);
-
-    if (have_tty_parameters) {
-	if (set_term_param (&saved_tty_parameters) < 0)
-	    fatal(2, "Can't restore terminal parameters: %m");
-    }
-}
-*/
 /*
  *	'Clean up' this string.
  */
@@ -347,10 +273,14 @@ char *clean(s, sending)
 register char *s;
 int sending;  /* set to 1 when sending (putting) this string. */
 {
-    char temp[STR_LEN], cur_chr;
+    char temp[STR_LEN], env_str[STR_LEN], cur_chr;
     register char *s1, *phchar;
     int add_return = sending;
-#define isoctal(chr) (((chr) >= '0') && ((chr) <= '7'))
+#define isoctal(chr)	(((chr) >= '0') && ((chr) <= '7'))
+#define isalnumx(chr)	((((chr) >= '0') && ((chr) <= '9')) \
+			 || (((chr) >= 'a') && ((chr) <= 'z')) \
+			 || (((chr) >= 'A') && ((chr) <= 'Z')) \
+			 || (chr) == '_')
 
     s1 = temp;
     while (*s) {
@@ -365,6 +295,18 @@ int sending;  /* set to 1 when sending (putting) this string. */
 	    if (cur_chr != 0) {
 		*s1++ = cur_chr;
 	    }
+	    continue;
+	}
+	
+	if (use_env && cur_chr == '$') {		/* ARI */
+	    phchar = env_str;
+	    while (isalnumx(*s))
+		*phchar++ = *s++;
+	    *phchar = '\0';
+	    phchar = getenv(env_str);
+	    if (phchar)
+		while (*phchar)
+		    *s1++ = *phchar++;
 	    continue;
 	}
 
@@ -400,13 +342,12 @@ int sending;  /* set to 1 when sending (putting) this string. */
 	case 'd':
 	    if (sending)
 		*s1++ = '\\';
-
 	    *s1++ = cur_chr;
 	    break;
 
 	case 'T':
 	    if (sending && phone_num) {
-		for ( phchar = phone_num; *phchar != '\0'; phchar++) 
+		for (phchar = phone_num; *phchar != '\0'; phchar++) 
 		    *s1++ = *phchar;
 	    }
 	    else {
@@ -417,7 +358,7 @@ int sending;  /* set to 1 when sending (putting) this string. */
 
 	case 'U':
 	    if (sending && phone_num2) {
-		for ( phchar = phone_num2; *phchar != '\0'; phchar++) 
+		for (phchar = phone_num2; *phchar != '\0'; phchar++) 
 		    *s1++ = *phchar;
 	    }
 	    else {
@@ -455,6 +396,13 @@ int sending;  /* set to 1 when sending (putting) this string. */
 		*s1++ = 'N';
 	    break;
 	    
+	case '$':			/* ARI */
+	    if (use_env) {
+		*s1++ = cur_chr;
+		break;
+	    }
+	    /* FALL THROUGH */
+
 	default:
 	    if (isoctal (cur_chr)) {
 		cur_chr &= 0x07;
@@ -493,7 +441,6 @@ int sending;  /* set to 1 when sending (putting) this string. */
 /*
  * A modified version of 'strtok'. This version skips \ sequences.
  */
-
 char *expect_strtok (s, term)
      char *s, *term;
 {
@@ -548,8 +495,7 @@ char *expect_strtok (s, term)
 /*
  * Process the expect string
  */
-
-void   chat_expect (s)
+void chat_expect (s)
 char *s;
 {
     char *expect;
@@ -557,42 +503,42 @@ char *s;
 
     if (strcmp(s, "HANGUP") == 0) {
 	++hup_next;
-        return ;
+        return;
     }
  
     if (strcmp(s, "ABORT") == 0) {
 	++abort_next;
-	return ;
+	return;
     }
 
     if (strcmp(s, "CLR_ABORT") == 0) {
 	++clear_abort_next;
-	return ;
+	return;
     }
 
     if (strcmp(s, "REPORT") == 0) {
 	++report_next;
-	return ;
+	return;
     }
 
     if (strcmp(s, "CLR_REPORT") == 0) {
 	++clear_report_next;
-	return ;
+	return;
     }
 
     if (strcmp(s, "TIMEOUT") == 0) {
 	++timeout_next;
-	return ;
+	return;
     }
 
     if (strcmp(s, "ECHO") == 0) {
 	++echo_next;
-	return ;
+	return;
     }
 
     if (strcmp(s, "SAY") == 0) {
 	++say_next;
-	return ;
+	return;
     }
 
 /*
@@ -600,10 +546,10 @@ char *s;
  */
     for (;;) {
 	expect = expect_strtok (s, "-");
-	s      = (char *)0 ;
+	s      = (char *) 0;
 
 	if (expect == (char *) 0)
-	    return ;
+	    return;
 
 	reply = expect_strtok (s, "-");
 
@@ -622,11 +568,30 @@ char *s;
 
 	chat_send (reply);
     }
+}
 
 /*
- * The expectation did not occur. This is terminal.
+ * Translate the input character to the appropriate string for printing
+ * the data.
  */
-    return ;
+
+char *character(c)
+int c;
+{
+    static char string[10];
+    char *meta;
+
+    meta = (c & 0x80) ? "M-" : "";
+    c &= 0x7F;
+
+    if (c < 32)
+	sprintf(string, "%s^%c", meta, (int)c + '@');
+    else if (c == 127)
+	sprintf(string, "%s^?", meta);
+    else
+	sprintf(string, "%s%c", meta, c);
+
+    return (string);
 }
 
 /*
@@ -635,16 +600,19 @@ char *s;
 void chat_send (s)
 register char *s;
 {
+    char file_data[STR_LEN];
+
     if (say_next) {
 	say_next = 0;
-	s = clean(s,0);
-	write(ttyfd, s, strlen(s));
+	s = clean(s, 1);
+	write(2, s, strlen(s));
         free(s);
 	return;
     }
 
     if (hup_next) {
         hup_next = 0;
+        return;
     }
 
     if (echo_next) {
@@ -654,36 +622,53 @@ register char *s;
     }
 
     if (abort_next) {
-	/* char *s1; */
+	char *s1;
 	
-	
-	   ;
-	
+	abort_next = 0;
+	if ( n_aborts < MAX_ABORTS ) {
+	  s1 = clean(s, 0);
+	  if (( strlen(s1) <= strlen(s) ) &&
+              ( strlen(s1) <  sizeof(fail_buffer))) {
 
+	    abort_string[n_aborts++] = s1;
+          }
+        }
+	return;
+    }
+
+    if (clear_abort_next) {
+	clear_abort_next = 0;
+	return;
+    }
+
+    if (report_next) {
+	report_next = 0;
+	return;
+    }
+
+    if (clear_report_next) {
+	clear_report_next = 0;
 	return;
     }
 
     if (timeout_next) {
-	timeout=atoi(s);
 	timeout_next = 0;
-	chat_timeout = atoi(s);
+	timeout = atoi(s);
 	
-	if (chat_timeout <= 0)
-	    chat_timeout = DEFAULT_CHAT_TIMEOUT;
-
+	if (timeout <= 0)
+	    timeout = DEFAULT_CHAT_TIMEOUT;
 
 	return;
     }
+
     if (strcmp(s, "EOT") == 0)
 	s = "^D\\c";
     else if (strcmp(s, "BREAK") == 0)
 	s = "\\K\\c";
 
-    if (!put_string(s))
-	    {
-	      exit_code=1;
-	      return;
-	    }
+    if (!put_string(s)) {
+      exit_code = 2;
+    }
 }
 
 int get_char()
@@ -708,21 +693,10 @@ int get_char()
 int put_char(c)
 int c;
 {
-    int status;
-    char ch = c;
+  char ch = c;
 
-	/* inter-character typing delay (?) */
+  write(ttyfd, &ch, 1);
 
-    status = write(ttyfd, &ch, 1);
-
-    switch (status) {
-    case 1:
-	return (0);
-	
-    default:
-	
-	
-    }
   return 0;
 }
 
@@ -774,44 +748,12 @@ register char *s;
 	}
     }
 
-   /* alarm(0);*/
     return (1);
-}
-
-/*
- *	Echo a character to stderr.
- *	When called with -1, a '\n' character is generated when
- *	the cursor is not at the beginning of a line.
- */
-void echo_stderr(n)
-int n;
-{
-/*    static int need_lf;
-    char *s;
-
-    switch (n) {
-    case '\r':		 
-	break;
-    case -1:
-	if (need_lf == 0)
-	    break;
- 
-    case '\n':
-	write(2, "\n", 1);
-	need_lf = 0;
-	break;
-    default:
-	s = character(n);
-	write(2, s, strlen(s));
-	need_lf = 1;
-	break;
-    }*/
 }
 
 /*
  *	'Wait for' this string to appear on this file descriptor.
  */
-
 int get_string(string)
 register char *string;
 {
@@ -819,6 +761,8 @@ register char *string;
     register char *s = temp2, *end = s + STR_LEN;
     char *logged = temp2;
     struct termios tios;
+
+    memset(temp2, 0, sizeof(temp2));
 
     tcgetattr(ttyfd, &tios);
     tios.c_cc[VMIN] = 0;
@@ -838,13 +782,12 @@ register char *string;
 			return (1);
     }
 
-
    while ( (c = get_char()) >= 0) {
 		int n, abort_len;
 
 	*s++ = c;
 	*s=0;
-	
+
 	if (s - temp2 >= len &&
 	    c == string[len - 1] &&
 	    strncmp(s - len, string, len) == 0) {
@@ -871,60 +814,7 @@ register char *string;
 	    s = temp2 + minlen;
 	}
     }
+
     exit_code = 3;
     return (0);
 }
-
-/*
- * Gross kludge to handle Solaris versions >= 2.6 having usleep.
- */
-
-/*
-  usleep -- support routine for 4.2BSD system call emulations
-  last edit:  29-Oct-1984     D A Gwyn
-  */
-
-
-#if 0
-int
-usleep( usec )				  /* returns 0 if ok, else -1 */
-    long		usec;		/* delay in microseconds */
-{
-  rtems_status_code status;
-  rtems_interval    ticks_per_second;
-  rtems_interval    ticks;
-  status = rtems_clock_get(
-    RTEMS_CLOCK_GET_TICKS_PER_SECOND,
-    &ticks_per_second);
-    ticks = (usec * (ticks_per_second/1000))/1000;
-    status = rtems_task_wake_after( ticks );
-  return 0;
-}
-#endif
-
-void pack_array (array, end)
-    char **array; /* The address of the array of string pointers */
-    int    end;   /* The index of the next free entry before CLR_ */
-{
-    int i, j;
-
-    for (i = 0; i < end; i++) {
-	if (array[i] == NULL) {
-	    for (j = i+1; j < end; ++j)
-		if (array[j] != NULL)
-		    array[i++] = array[j];
-	    for (; i < end; ++i)
-		array[i] = NULL;
-	    break;
-	}
-    }
-}
-
-/*
- * vfmtmsg - format a message into a buffer.  Like vsprintf except we
- * also specify the length of the output buffer, and we handle the
- * %m (error message) format.
- * Doesn't do floating-point formats.
- * Returns the number of chars put into buf.
- */
-#define OUTCHAR(c)	(buflen > 0? (--buflen, *buf++ = (c)): 0)
