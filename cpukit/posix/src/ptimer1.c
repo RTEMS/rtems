@@ -341,18 +341,13 @@ int timer_create(
         /* NEW VERSION*/
         timer_struct[timer_pos].thread_id = pthread_self ();
         
-
         if ( evp != NULL ) {
-
            timer_struct[timer_pos].inf.sigev_notify = evp->sigev_notify;
            timer_struct[timer_pos].inf.sigev_signo  = evp->sigev_signo;
            timer_struct[timer_pos].inf.sigev_value  = evp->sigev_value;
-
         }
 
-
         timer_struct[timer_pos].timer_id = timer_id;
-
         timer_struct[timer_pos].overrun  = 0;
 
         timer_struct[timer_pos].timer_data.it_value.tv_sec     = 0;
@@ -361,20 +356,16 @@ int timer_create(
         timer_struct[timer_pos].timer_data.it_interval.tv_nsec = 0;
 
         return 0;
-    
 
      case RTEMS_INVALID_NAME : /* The assigned name is not valid */
 
        PRINT_MSG_S ("ERROR: rtems create timer RTEMS_INVALID_NAME");
-
        set_errno_and_return_minus_one( EINVAL );
 
      case RTEMS_TOO_MANY :
 
-       PRINT_MSG_S ("ERROR: rtems create timer RTEMS_TOO_MANY ");
- 
        /* There has been created too much timers for the same process */
-
+       PRINT_MSG_S ("ERROR: rtems create timer RTEMS_TOO_MANY ");
        set_errno_and_return_minus_one( EAGAIN );
      
      default :
@@ -386,7 +377,6 @@ int timer_create(
         */
 
        set_errno_and_return_minus_one( EINVAL );
-
   }
 
   /* 
@@ -394,7 +384,6 @@ int timer_create(
    */
 
   set_errno_and_return_minus_one( EINVAL );
-
 }
 
 /*

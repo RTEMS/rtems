@@ -1,5 +1,9 @@
 2000-08-15	Joel Sherrill <joel@OARcorp.com>
 
+	* src/ptimer1.c: Minor formatting fixes.
+
+2000-08-15	Joel Sherrill <joel@OARcorp.com>
+
 	* src/ptimer1.c: Removed unused routine PRINT_ERRNO_S.
 	* src/ptimer1.c: Removed unnecessary routine COPY_ITIMERSPEC_S
 	and used structure copy instead.
