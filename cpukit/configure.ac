@@ -150,7 +150,6 @@ AC_CONFIG_FILES([Makefile
 include/Makefile
 rtems/Makefile
 sapi/Makefile
-sapi/include/rtems/sptables.h
 score/Makefile
 score/cpu/Makefile
 wrapup/Makefile
