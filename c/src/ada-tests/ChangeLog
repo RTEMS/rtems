@@ -1,3 +1,8 @@
+2002-08-27	Joel Sherrill <joel@OARcorp.com>
+
+	* tmtests/tm20/tmtest.adb, tmtests/tmoverhd/tmtest.adb: Fixed
+	call to RTEMS IO Manager services.
+
 2002-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* sptests/sp19/sptest.adp: Fix include paths.

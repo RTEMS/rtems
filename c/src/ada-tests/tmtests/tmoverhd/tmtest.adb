@@ -147,7 +147,6 @@ package body TMTEST is
       COUNT          : RTEMS.UNSIGNED32;
       MAJOR          : RTEMS.DEVICE_MAJOR_NUMBER;
       MINOR          : RTEMS.DEVICE_MINOR_NUMBER;
-      IO_RESULT      : RTEMS.UNSIGNED32;
       ERROR          : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
@@ -1305,7 +1304,6 @@ TEST_SUPPORT.PAUSE;
                MAJOR,
                MINOR,
                ADDRESS_1,
-               IO_RESULT,
                STATUS
             );
          end loop;
@@ -1328,7 +1326,6 @@ TEST_SUPPORT.PAUSE;
                MAJOR,
                MINOR,
                ADDRESS_1,
-               IO_RESULT,
                STATUS
             );
          end loop;
@@ -1351,7 +1348,6 @@ TEST_SUPPORT.PAUSE;
                MAJOR,
                MINOR,
                ADDRESS_1,
-               IO_RESULT,
                STATUS
             );
          end loop;
@@ -1374,7 +1370,6 @@ TEST_SUPPORT.PAUSE;
                MAJOR,
                MINOR,
                ADDRESS_1,
-               IO_RESULT,
                STATUS
             );
          end loop;
@@ -1397,7 +1392,6 @@ TEST_SUPPORT.PAUSE;
                MAJOR,
                MINOR,
                ADDRESS_1,
-               IO_RESULT,
                STATUS
             );
          end loop;
@@ -1420,7 +1414,6 @@ TEST_SUPPORT.PAUSE;
                MAJOR,
                MINOR,
                ADDRESS_1,
-               IO_RESULT,
                STATUS
             );
          end loop;

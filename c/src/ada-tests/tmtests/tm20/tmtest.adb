@@ -100,7 +100,6 @@ package body TMTEST is
       INDEX             : RTEMS.UNSIGNED32;
       PREVIOUS_MODE     : RTEMS.MODE;
       PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
-      RETURN_VALUE      : RTEMS.UNSIGNED32;
       OVERHEAD          : RTEMS.UNSIGNED32;
       STATUS            : RTEMS.STATUS_CODES;
    begin
@@ -411,7 +410,6 @@ package body TMTEST is
                1, 
                0,
                RTEMS.NULL_ADDRESS,
-               RETURN_VALUE,
                STATUS
             );
          end loop;
