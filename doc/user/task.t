@@ -712,6 +712,7 @@ procedure Task_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - task created successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
 @code{@value{RPREFIX}INVALID_SIZE} - stack too small@*
 @code{@value{RPREFIX}INVALID_PRIORITY} - invalid task priority@*
@@ -819,6 +820,7 @@ procedure Task_Ident (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - task identified successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
 @code{@value{RPREFIX}INVALID_NODE} - invalid node id
 
@@ -1260,7 +1262,7 @@ rtems_status_code rtems_task_mode(
 
 @ifset is-Ada
 @example
-procedure Task_Delete (
+procedure Task_Mode (
    Mode_Set          : in     RTEMS.Mode;
    Mask              : in     RTEMS.Mode;
    Previous_Mode_Set : in     RTEMS.Mode;
@@ -1270,7 +1272,8 @@ procedure Task_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - task mode set successfully
+@code{@value{RPREFIX}SUCCESSFUL} - task mode set successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{previous_mode_set} is NULL
 
 @subheading DESCRIPTION:
 This directive manipulates the execution mode of the calling
@@ -1431,6 +1434,7 @@ procedure Task_Get_Note (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - note obtained successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{note} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid task id@*
 @code{@value{RPREFIX}INVALID_NUMBER} - invalid notepad location
 
@@ -1589,6 +1593,7 @@ procedure Task_Wake_When (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - awakened at date/time successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL@*
 @code{@value{RPREFIX}INVALID_TIME_OF_DAY} - invalid time buffer@*
 @code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
 
@@ -1618,7 +1623,7 @@ A clock tick is required to support the functionality of this directive.
 @example
 rtems_status_code rtems_task_variable_add(
   rtems_id  tid,
-  void    **ptr,
+  void    **task_variable,
   void    (*dtor)(void *)
 );
 @end example
@@ -1641,6 +1646,7 @@ procedure Task_Variable_Add (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid task id@*
 @code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
 @code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks@*
@@ -1680,8 +1686,8 @@ In this case the destructor function could be `free'.
 @example
 rtems_status_code rtems_task_variable_get(
   rtems_id  tid,
-  void    **ptr,
-  void    **result
+  void    **task_variable,
+  void    **task_variable_value
 );
 @end example
 @end ifset
@@ -1699,7 +1705,9 @@ procedure Task_Variable_Get (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
-@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable_value} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable} is not found@*
 @code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
 @code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks@*
 
@@ -1711,9 +1719,10 @@ task, which can get its private value by directly accessing the variable.
 
 @subheading NOTES:
 
-If you change memory which @code{result} points to, remember to declare that
-memory as volatile, so that the compiler will optimize it correctly.  In this
-case both the pointer @code{result} and data referenced by @code{result}
+If you change memory which @code{task_variable_value} points to,
+remember to declare that memory as volatile, so that the compiler
+will optimize it correctly.  In this case both the pointer
+@code{task_variable_value} and data referenced by @code{task_variable_value}
 should be considered volatile.
 
 @page
@@ -1731,7 +1740,7 @@ should be considered volatile.
 @example
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
-  void    **ptr
+  void    **task_variable
 );
 @end example
 @end ifset
@@ -1750,6 +1759,7 @@ procedure Task_Variable_Delete (
 @code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid task id@*
 @code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable} is NULL@*
 @code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks@*
 
 @subheading DESCRIPTION:

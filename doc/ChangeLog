@@ -1,3 +1,10 @@
+2004-05-06	Joel Sherrill <joel@OARcorp.com>
+
+	PR 618/rtems
+	* user/clock.t, user/dpmem.t, user/event.t, user/msg.t, user/part.t,
+	user/region.t, user/sem.t, user/task.t, user/timer.t: Add NULL
+	checks.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* started/buildc.t: Use tar xjf for bzip'ed files.

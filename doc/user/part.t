@@ -173,6 +173,8 @@ procedure Partition_Create (
 @code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
 @code{@value{RPREFIX}TOO_MANY} - too many partitions created@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{starting_address} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_SIZE} - length or buffer size is 0@*
 @code{@value{RPREFIX}INVALID_SIZE} - length is less than the buffer size@*
 @code{@value{RPREFIX}INVALID_SIZE} - buffer size not a multiple of 4@*
@@ -257,6 +259,7 @@ procedure Partition_Ident (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - partition identified successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NAME} - partition name not found@*
 @code{@value{RPREFIX}INVALID_NODE} - invalid node id
 
@@ -376,6 +379,7 @@ procedure Partition_Get_Buffer (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - buffer obtained successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{buffer} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid partition id@*
 @code{@value{RPREFIX}UNSATISFIED} - all buffers are allocated
 
@@ -430,6 +434,7 @@ procedure Partition_Return_Buffer (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - buffer returned successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{buffer} is NULL@*
 @code{@value{RPREFIX}INVALID_ID} - invalid partition id@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - buffer address not in partition
 

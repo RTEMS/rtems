@@ -295,6 +295,7 @@ procedure Event_Receive (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - event received successfully@*
 @code{@value{RPREFIX}UNSATISFIED} - input event not satisfied (@code{@value{RPREFIX}NO_WAIT})@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{event_out} is NULL@*
 @code{@value{RPREFIX}TIMEOUT} - timed out waiting for event
 
 @subheading DESCRIPTION:
