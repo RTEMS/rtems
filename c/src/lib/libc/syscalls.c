@@ -1,5 +1,3 @@
-#if !defined(RTEMS_UNIX)
-
 /*
  *  RTEMS Fake System Calls
  *
@@ -27,6 +25,9 @@
 #include <string.h>
 #include <stdio.h>  /* only for puts */
 
+#include <rtems.h>
+
+#ifdef RTEMS_NEWLIB
 /*
  *  fstat, stat, and isatty must lie consistently and report that everything
  *  is a tty or stdout will not be line buffered.
@@ -50,6 +51,7 @@ int __rtems_isatty(int _fd)
   return 1;
 }
 
+#if !defined(RTEMS_UNIX)
 int stat( const char *path, struct stat *buf )
 {
   if ( strncmp( "/dev/", path, 5 ) ) {
@@ -93,5 +95,6 @@ int wait() {
   errno = ENOSYS;
   return -1;
 }
+#endif
 
 #endif
