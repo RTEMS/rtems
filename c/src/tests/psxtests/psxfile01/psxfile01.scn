@@ -3,19 +3,19 @@
 *** FILE TEST 1 ***
 *************** Dump of Entire IMFS ***************
 /
-    dev/
-        console (device 0, 0)
+....dev/
+........console (device 0, 0)
 ***************       End of Dump        ***************
 stat of /dev/console
-    st_dev     (0x0:0x0)
-    st_ino     3
-    mode  = 00020771
-    nlink = 1
-    uid = 0
-    gid = 0
-    atime = Fri Jan 01 00:00:00 1988
-    mtime = Fri Jan 01 00:00:00 1988
-    ctime = Fri Jan 01 00:00:00 1988
+....st_dev     (0x0:0x0)
+....st_ino     3
+....mode  = 00020771
+....nlink = 1
+....uid = 0
+....gid = 0
+....atime = Fri Jan 01 00:00:00 1988
+....mtime = Fri Jan 01 00:00:00 1988
+....ctime = Fri Jan 01 00:00:00 1988
 
 mkdir /dev/tty
 
@@ -53,14 +53,14 @@ mknod /tmp/joel
 (10)the first write!!!
 
 stat( /tmp/joel ) returned     st_dev     (0x0:0x0)
-    st_ino     10
-    mode  = 00100700
-    nlink = 1
-    uid = 0
-    gid = 0
-    atime = Sat Dec 31 09:00:00 1988
-    mtime = Sat Dec 31 09:00:00 1988
-    ctime = Sat Dec 31 09:00:00 1988
+....st_ino     10
+....mode  = 00100700
+....nlink = 1
+....uid = 0
+....gid = 0
+....atime = Sat Dec 31 09:00:00 1988
+....mtime = Sat Dec 31 09:00:00 1988
+....ctime = Sat Dec 31 09:00:00 1988
 unlink /tmp/joel
 unlink /tmp/joel
 mknod /tmp/joel
@@ -82,25 +82,25 @@ mknod /tmp/joel
 
 (139743)
 stat( /tmp/joel ) returned     st_dev     (0x0:0x0)
-    st_ino     11
-    mode  = 00100700
-    nlink = 1
-    uid = 0
-    gid = 0
-    atime = Sat Dec 31 09:00:00 1988
-    mtime = Sat Dec 31 09:00:00 1988
-    ctime = Sat Dec 31 09:00:00 1988
+....st_ino     11
+....mode  = 00100700
+....nlink = 1
+....uid = 0
+....gid = 0
+....atime = Sat Dec 31 09:00:00 1988
+....mtime = Sat Dec 31 09:00:00 1988
+....ctime = Sat Dec 31 09:00:00 1988
 stat of /tmp/j
 stat(/tmp/j) returned -1 (errno=2)
-    st_dev     (0x0:0x0)
-    st_ino     3
-    mode  = 00020771
-    nlink = 1
-    uid = 0
-    gid = 0
-    atime = Fri Jan 01 00:00:00 1988
-    mtime = Fri Jan 01 00:00:00 1988
-    ctime = Fri Jan 01 00:00:00 1988
+....st_dev     (0x0:0x0)
+....st_ino     3
+....mode  = 00020771
+....nlink = 1
+....uid = 0
+....gid = 0
+....atime = Fri Jan 01 00:00:00 1988
+....mtime = Fri Jan 01 00:00:00 1988
+....ctime = Fri Jan 01 00:00:00 1988
 fopen of /tmp/j
 fprintf to /tmp/j
 (1) 26 characters written to the file
@@ -108,69 +108,69 @@ fprintf to /tmp/j
 (3) 26 characters written to the file
 (4) 26 characters written to the file
 (5) 26 characters written to the file
-    st_dev     (0x0:0x0)
-    st_ino     12
-    mode  = 00100660
-    nlink = 1
-    uid = 0
-    gid = 0
-    atime = Sat Dec 31 09:00:00 1988
-    mtime = Sat Dec 31 09:00:00 1988
-    ctime = Sat Dec 31 09:00:00 1988
+....st_dev     (0x0:0x0)
+....st_ino     12
+....mode  = 00100660
+....nlink = 1
+....uid = 0
+....gid = 0
+....atime = Sat Dec 31 09:00:00 1988
+....mtime = Sat Dec 31 09:00:00 1988
+....ctime = Sat Dec 31 09:00:00 1988
 This is call 1 to fprintf
 This is call 2 to fprintf
 This is call 3 to fprintf
 This is call 4 to fprintf
 This is call 5 to fprintf
-    st_dev     (0x0:0x0)
-    st_ino     12
-    mode  = 00100660
-    nlink = 1
-    uid = 0
-    gid = 0
-    atime = Sat Dec 31 09:00:01 1988
-    mtime = Sat Dec 31 09:00:00 1988
-    ctime = Sat Dec 31 09:00:00 1988
+....st_dev     (0x0:0x0)
+....st_ino     12
+....mode  = 00100660
+....nlink = 1
+....uid = 0
+....gid = 0
+....atime = Sat Dec 31 09:00:01 1988
+....mtime = Sat Dec 31 09:00:00 1988
+....ctime = Sat Dec 31 09:00:00 1988
 *************** Dump of Entire IMFS ***************
 /
-    dev/
-        console (device 0, 0)
-        tty/
-            S3 (device 255, 128)
-        test_console (device 0, 0)
-    etc/
-        passwd (file 0 0x0 0x0 0x0)
-    tmp/
-        my_dir/
-        tom (file 0 0x0 0x0 0x0)
-        john (file 0 0x0 0x0 0x0)
-        joel (file 279487 0x7d58d8 0x7d5388 0x7cfe38)
-        j (file 130 0x77a338 0x0 0x0)
+....dev/
+........console (device 0, 0)
+........tty/
+............S3 (device 255, 128)
+........test_console (device 0, 0)
+....etc/
+........passwd (file 0 0x0 0x0 0x0)
+....tmp/
+........my_dir/
+........tom (file 0 0x0 0x0 0x0)
+........john (file 0 0x0 0x0 0x0)
+........joel (file 279487 0x7d58d8 0x7d5388 0x7cfe38)
+........j (file 130 0x77a338 0x0 0x0)
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 40
-    st_dev     (0x0:0x0)
-    st_ino     12
-    mode  = 00100660
-    nlink = 1
-    uid = 0
-    gid = 0
-    atime = Sat Dec 31 09:00:02 1988
-    mtime = Sat Dec 31 09:00:00 1988
-    ctime = Sat Dec 31 09:00:00 1988
+....st_dev     (0x0:0x0)
+....st_ino     12
+....mode  = 00100660
+....nlink = 1
+....uid = 0
+....gid = 0
+....atime = Sat Dec 31 09:00:02 1988
+....mtime = Sat Dec 31 09:00:00 1988
+....ctime = Sat Dec 31 09:00:00 1988
 *************** Dump of Entire IMFS ***************
 /
-    dev/
-        console (device 0, 0)
-        tty/
-            S3 (device 255, 128)
-        test_console (device 0, 0)
-    etc/
-        passwd (file 0 0x0 0x0 0x0)
-    tmp/
-        my_dir/
-        tom (file 0 0x0 0x0 0x0)
-        john (file 0 0x0 0x0 0x0)
-        j (file 40 0x77a338 0x0 0x0)
+....dev/
+........console (device 0, 0)
+........tty/
+............S3 (device 255, 128)
+........test_console (device 0, 0)
+....etc/
+........passwd (file 0 0x0 0x0 0x0)
+....tmp/
+........my_dir/
+........tom (file 0 0x0 0x0 0x0)
+........john (file 0 0x0 0x0 0x0)
+........j (file 40 0x77a338 0x0 0x0)
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 0
 truncate /tmp to length of 0 should fail with EISDIR
@@ -178,18 +178,18 @@ truncate /tmp to length of 0 should fail with EISDIR
 21: Is a directory
 *************** Dump of Entire IMFS ***************
 /
-    dev/
-        console (device 0, 0)
-        tty/
-            S3 (device 255, 128)
-        test_console (device 0, 0)
-    etc/
-        passwd (file 0 0x0 0x0 0x0)
-    tmp/
-        my_dir/
-        tom (file 0 0x0 0x0 0x0)
-        john (file 0 0x0 0x0 0x0)
-        j (file 0 0x77a338 0x0 0x0)
+....dev/
+........console (device 0, 0)
+........tty/
+............S3 (device 255, 128)
+........test_console (device 0, 0)
+....etc/
+........passwd (file 0 0x0 0x0 0x0)
+....tmp/
+........my_dir/
+........tom (file 0 0x0 0x0 0x0)
+........john (file 0 0x0 0x0 0x0)
+........j (file 0 0x77a338 0x0 0x0)
 ***************       End of Dump        ***************
 *** END OF FILE TEST 1 ***
 

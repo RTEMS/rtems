@@ -76,21 +76,21 @@ void dump_statbuf( struct stat *buf )
   rtems_filesystem_split_dev_t( buf->st_dev, major1, minor1 );
   rtems_filesystem_split_dev_t( buf->st_rdev, major2, minor2 );
 
-  printf( "    st_dev     (0x%x:0x%x)\n", major1, minor1 );
-  printf( "    st_ino     %x\n", buf->st_ino );
-  printf( "    mode  = %08o\n", buf->st_mode );
-  printf( "    nlink = %d\n", buf->st_nlink );
+  printf( "....st_dev     (0x%x:0x%x)\n", major1, minor1 );
+  printf( "....st_ino     %x\n", buf->st_ino );
+  printf( "....mode  = %08o\n", buf->st_mode );
+  printf( "....nlink = %d\n", buf->st_nlink );
 
-  printf( "    uid = %d\n", buf->st_uid );
-  printf( "    gid = %d\n", buf->st_gid );
+  printf( "....uid = %d\n", buf->st_uid );
+  printf( "....gid = %d\n", buf->st_gid );
 
-  printf( "    atime = %s", ctime(&buf->st_atime) );
-  printf( "    mtime = %s", ctime(&buf->st_mtime) );
-  printf( "    ctime = %s", ctime(&buf->st_ctime) );
+  printf( "....atime = %s", ctime(&buf->st_atime) );
+  printf( "....mtime = %s", ctime(&buf->st_mtime) );
+  printf( "....ctime = %s", ctime(&buf->st_ctime) );
 
 #if defined(__svr4__) && !defined(__PPC__) && !defined(__sun__)
-  printf(  "   st_blksize %x\n", buf.st_blksize );
-  printf(  "   st_blocks  %x\n", buf.st_blocks );
+  printf( "....st_blksize %x\n", buf.st_blksize );
+  printf( "....st_blocks  %x\n", buf.st_blocks );
 #endif
 
 }

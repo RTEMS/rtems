@@ -193,20 +193,20 @@ void stat_a_file(
     rtems_filesystem_split_dev_t( statbuf.st_rdev, major2, minor2 );
 
 
-    printf("\n   st_dev     (0x%x:0x%x)\n", major1, minor1 );
-    printf(  "   st_ino     %x\n", statbuf.st_ino );
-    printf(  "   st_mode    %o\n", statbuf.st_mode );
-    printf(  "   st_nlink   %x\n", statbuf.st_nlink );
-    printf(  "   st_uid     %d\n", statbuf.st_uid );
-    printf(  "   st_gid     %d\n", statbuf.st_gid );
-    printf(  "   st_rdev    (0x%x:0x%x)\n", major2, minor2 );
-    printf(  "   st_size    %d\n",(unsigned int) statbuf.st_size );
-    printf(  "   st_atime   %s", ctime( &statbuf.st_atime ) );
-    printf(  "   st_mtime   %s", ctime( &statbuf.st_mtime ) );
-    printf(  "   st_ctime   %s", ctime( &statbuf.st_ctime ) );
+    printf("\n\tst_dev     (0x%x:0x%x)\n", major1, minor1 );
+    printf(  "...st_ino     %x\n", statbuf.st_ino );
+    printf(  "...st_mode    %o\n", statbuf.st_mode );
+    printf(  "...st_nlink   %x\n", statbuf.st_nlink );
+    printf(  "...st_uid     %d\n", statbuf.st_uid );
+    printf(  "...st_gid     %d\n", statbuf.st_gid );
+    printf(  "...st_rdev    (0x%x:0x%x)\n", major2, minor2 );
+    printf(  "...st_size    %d\n",(unsigned int) statbuf.st_size );
+    printf(  "...st_atime   %s", ctime( &statbuf.st_atime ) );
+    printf(  "...st_mtime   %s", ctime( &statbuf.st_mtime ) );
+    printf(  "...st_ctime   %s", ctime( &statbuf.st_ctime ) );
 #if defined(__svr4__) && !defined(__PPC__) && !defined(__sun__)
-    printf(  "   st_blksize %x\n", statbuf.st_blksize );
-    printf(  "   st_blocks  %x\n", statbuf.st_blocks );
+    printf(  "...st_blksize %x\n", statbuf.st_blksize );
+    printf(  "...st_blocks  %x\n", statbuf.st_blocks );
 #endif
 
   }

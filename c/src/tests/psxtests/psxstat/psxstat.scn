@@ -51,343 +51,343 @@ Making file links///links_r1_d1 f1
 
 Doing the stat() on all the good absolute paths
 stat( /dev ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     2
-   st_mode    40771
-   st_nlink   1
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    268
-   st_atime   Fri Jan 01 00:00:00 1988
-   st_mtime   Fri Jan 01 00:00:00 1988
-   st_ctime   Fri Jan 01 00:00:00 1988
+...st_dev     (0x0:0x0)
+...st_ino     2
+...st_mode    40771
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    268
+...st_atime   Fri Jan 01 00:00:00 1988
+...st_mtime   Fri Jan 01 00:00:00 1988
+...st_ctime   Fri Jan 01 00:00:00 1988
 stat( ////dir1/\//file1\\// ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     c
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     c
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( /dir1/\\/file2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     d
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     d
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( /dir1/file3/////\\\ ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     e
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     e
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( /dir1/file4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     f
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     f
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( /dir1/dir1/file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     10
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     10
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( /dir1/dir1/ file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     11
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     11
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( /dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     4
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1608
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     4
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1608
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( /dir2//////\ ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     5
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     5
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( /dir3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     6
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     6
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( /dir4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     7
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     7
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( /dir1/dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     8
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    536
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     8
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    536
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( /dir1/ dir1///\\ ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     9
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     9
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( /\/\/\/\/\/\/links\/\/\/\/\/\ ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     a
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    6968
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     a
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    6968
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 
 Doing the stat() on all the good relative paths
 stat( dev ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     2
-   st_mode    40771
-   st_nlink   1
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    268
-   st_atime   Fri Jan 01 00:00:00 1988
-   st_mtime   Fri Jan 01 00:00:00 1988
-   st_ctime   Fri Jan 01 00:00:00 1988
+...st_dev     (0x0:0x0)
+...st_ino     2
+...st_mode    40771
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    268
+...st_atime   Fri Jan 01 00:00:00 1988
+...st_mtime   Fri Jan 01 00:00:00 1988
+...st_ctime   Fri Jan 01 00:00:00 1988
 stat( dir1/\//file1\\// ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     c
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     c
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( dir1/\\/file2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     d
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     d
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( dir1/file3/////\\\ ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     e
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     e
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( dir1/file4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     f
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     f
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( dir1/dir1/file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     10
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     10
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( dir1/dir1/ file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     11
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     11
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     4
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1608
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     4
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1608
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( dir2//////\ ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     5
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     5
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( dir3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     6
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     6
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( dir4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     7
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     7
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( dir1/dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     8
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    536
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     8
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    536
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( dir1/ dir1///\\ ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     9
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     9
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( main.c ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     12
-   st_mode    100000
-   st_nlink   1
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:00 1988
+...st_dev     (0x0:0x0)
+...st_ino     12
+...st_mode    100000
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:00 1988
 
 chdir to dev
 
@@ -411,317 +411,317 @@ chdir to ../links
 Doing the stat() on good links
 
 stat( dir1/dir1/../../links/dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     4
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1608
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     4
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1608
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links/dir2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     5
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     5
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links/dir3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     6
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     6
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links/dir4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     7
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     7
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links/dir1_dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     8
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    536
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     8
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    536
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links/dir1_ dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     9
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     9
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links/../links/../links/links ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     a
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    6968
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     a
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    6968
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links/dir1_file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     c
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     c
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links/dir1_file2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     d
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     d
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links/dir1_file3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     e
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     e
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links/dir1_file4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     f
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     f
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links/dir1_dir1_f1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     10
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     10
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links/dir1_dir1 f1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     11
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     11
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links/links/links/links_dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     4
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1608
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     4
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1608
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links//links_dir2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     5
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     5
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links//links_dir3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     6
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     6
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links//links_dir4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     7
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     7
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links//links_dir1_d1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     8
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    536
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     8
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    536
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links//links_dir1 d1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     9
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     9
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links//links_links ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     a
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    6968
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     a
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    6968
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( links///links_d1_file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     c
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     c
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links///links_d1_file2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     d
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     d
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links///links_d1_file3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     e
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     e
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links///links_d1_file4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     f
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     f
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links///links_d1_d1_f1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     10
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     10
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( links///links_r1_d1 f1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     11
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     11
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 chmod of /dir1/dir1 to Read/Write
 
 Doing the stat() on all the bad paths
@@ -746,54 +746,54 @@ Verify with readlink
 Making file /symlinks/links
 Verify with readlink
 stat( /symlinks/a_file_symlink ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     c
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:10 1988
+...st_dev     (0x0:0x0)
+...st_ino     c
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:10 1988
 stat( /symlinks/a_dir_symlink ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     4
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1876
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     4
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1876
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( /symlinks/a_link_symlink ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     4
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1876
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     4
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1876
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 stat( ../symlinks/no_file ) returned : No such file or directory
 stat( /symlinks/a_dir_symlink/a_file_symlink ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     4
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1876
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:05 1988
+...st_dev     (0x0:0x0)
+...st_ino     4
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1876
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:05 1988
 Making file 1
 Verify with readlink
 Making file 2
@@ -813,53 +813,53 @@ Verify with readlink
 Making file 9
 Verify with readlink
 stat( 1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     b
-   st_mode    40700
-   st_nlink   1
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1340
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:00 1988
+...st_dev     (0x0:0x0)
+...st_ino     b
+...st_mode    40700
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1340
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:00 1988
 stat( 2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     b
-   st_mode    40700
-   st_nlink   1
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1340
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:00 1988
+...st_dev     (0x0:0x0)
+...st_ino     b
+...st_mode    40700
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1340
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:00 1988
 stat( 3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     b
-   st_mode    40700
-   st_nlink   1
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1340
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:00 1988
+...st_dev     (0x0:0x0)
+...st_ino     b
+...st_mode    40700
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1340
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:00 1988
 stat( 4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     b
-   st_mode    40700
-   st_nlink   1
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    1340
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:00 1988
+...st_dev     (0x0:0x0)
+...st_ino     b
+...st_mode    40700
+...st_nlink   1
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    1340
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:00 1988
 stat( 5 ) returned : Too many symbolic links
 stat( 6 ) returned : Too many symbolic links
 stat( 7 ) returned : Too many symbolic links
@@ -893,29 +893,29 @@ chdir to /
 Remove /./././dir1/ dir1
 stat( /./././dir1/ dir1 ) returned : No such file or directory
 stat( links/dir1_ dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     9
-   st_mode    40700
-   st_nlink   2
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:20 1988
+...st_dev     (0x0:0x0)
+...st_ino     9
+...st_mode    40700
+...st_nlink   2
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:20 1988
 stat( links//links_dir1 d1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     9
-   st_mode    40700
-   st_nlink   2
-   st_uid     0
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:20 1988
+...st_dev     (0x0:0x0)
+...st_ino     9
+...st_mode    40700
+...st_nlink   2
+...st_uid     0
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:20 1988
 Chdir to links/dir1_ dir1
 Chdir to .. should fail with ENOENT
 mkdir ../t should fail with ENOENT
@@ -946,322 +946,322 @@ pass fstat a null pointer should fail with EFAULT
 chdir to / 
 Change group of ////dir1/\//file1\\//
 stat( ////dir1/\//file1\\// ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     c
-   st_mode    100011
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     c
+...st_mode    100011
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change owner of ////dir1/\//file1\\//
 stat( ////dir1/\//file1\\// ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     c
-   st_mode    100011
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     c
+...st_mode    100011
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change group of /dir1/file2
 stat( /dir1/file2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     d
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     d
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change owner of /dir1/file2
 stat( /dir1/file2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     d
-   st_mode    100000
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     d
+...st_mode    100000
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change group of /dir1/file3
 stat( /dir1/file3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     e
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     e
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change owner of /dir1/file3
 stat( /dir1/file3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     e
-   st_mode    100000
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     e
+...st_mode    100000
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change group of /dir1/file4
 stat( /dir1/file4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     f
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     f
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change owner of /dir1/file4
 stat( /dir1/file4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     f
-   st_mode    100000
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     f
+...st_mode    100000
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change group of /dir1/dir1/file1
 stat( /dir1/dir1/file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     10
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     10
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change owner of /dir1/dir1/file1
 stat( /dir1/dir1/file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     10
-   st_mode    100000
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     10
+...st_mode    100000
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change group of ../../..//dir1/./././dir1/ file1
 stat( ../../..//dir1/./././dir1/ file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     11
-   st_mode    100000
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     11
+...st_mode    100000
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change owner of ../../..//dir1/./././dir1/ file1
 stat( ../../..//dir1/./././dir1/ file1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     11
-   st_mode    100000
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     11
+...st_mode    100000
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change group of main.c
 stat( main.c ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     12
-   st_mode    100000
-   st_nlink   1
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     12
+...st_mode    100000
+...st_nlink   1
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change owner of main.c
 stat( main.c ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     12
-   st_mode    100000
-   st_nlink   1
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:25 1988
+...st_dev     (0x0:0x0)
+...st_ino     12
+...st_mode    100000
+...st_nlink   1
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:25 1988
 Change group of dir1/dir1/../../links/dir1
 stat( dir1/dir1/../../links/dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     4
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    1876
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     4
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    1876
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change owner of dir1/dir1/../../links/dir1
 stat( dir1/dir1/../../links/dir1 ) returned : Permission denied
 Change group of links/dir2
 stat( links/dir2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     5
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     5
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change owner of links/dir2
 stat( links/dir2 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     5
-   st_mode    40700
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     5
+...st_mode    40700
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change group of links/dir3
 stat( links/dir3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     6
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     6
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change owner of links/dir3
 stat( links/dir3 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     6
-   st_mode    40700
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     6
+...st_mode    40700
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change group of links/dir4
 stat( links/dir4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     7
-   st_mode    40500
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     7
+...st_mode    40500
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change owner of links/dir4
 stat( links/dir4 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     7
-   st_mode    40500
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    0
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     7
+...st_mode    40500
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    0
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change group of links/dir1_dir1
 stat( links/dir1_dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     8
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    536
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     8
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    536
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change owner of links/dir1_dir1
 stat( links/dir1_dir1 ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     8
-   st_mode    40700
-   st_nlink   3
-   st_uid     1
-   st_gid     0
-   st_rdev    (0x0:0x0)
-   st_size    536
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     8
+...st_mode    40700
+...st_nlink   3
+...st_uid     1
+...st_gid     0
+...st_rdev    (0x0:0x0)
+...st_size    536
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change group of links/dir1_ dir1
 stat( links/dir1_ dir1 ) returned : No such file or directory
 Change owner of links/dir1_ dir1
 stat( links/dir1_ dir1 ) returned : No such file or directory
 Change group of links/../links/../links/links
 stat( links/../links/../links/links ) returned 
-   st_dev     (0x0:0x0)
-   st_ino     a
-   st_mode    40700
-   st_nlink   3
-   st_uid     0
-   st_gid     1
-   st_rdev    (0x0:0x0)
-   st_size    8844
-   st_atime   Sat Dec 31 09:00:00 1988
-   st_mtime   Sat Dec 31 09:00:00 1988
-   st_ctime   Sat Dec 31 09:00:30 1988
+...st_dev     (0x0:0x0)
+...st_ino     a
+...st_mode    40700
+...st_nlink   3
+...st_uid     0
+...st_gid     1
+...st_rdev    (0x0:0x0)
+...st_size    8844
+...st_atime   Sat Dec 31 09:00:00 1988
+...st_mtime   Sat Dec 31 09:00:00 1988
+...st_ctime   Sat Dec 31 09:00:30 1988
 Change owner of links/../links/../links/links
 stat( links/../links/../links/links ) returned : Permission denied
 
