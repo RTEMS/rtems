@@ -8,16 +8,15 @@
 %(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
 *lib:
-%{!qrtems: %(old_lib)} %{qrtems: --start-group \
-%{!qrtems_debug: -lrtemsall} %{qrtems_debug: -lrtemsall_g} \
--lc -lgcc --end-group \
-%{!qnolinkcmds: -T linkcmds%s}}
+%{!qrtems: %(old_lib)} \
+%{qrtems: --start-group %{!qrtems_debug: -lrtemsall } %{qrtems_debug: -lrtemsall_g} \
+ -lc -lgcc --end-group \
+ %{!qnolinkcmds: -T linkcmds%s}}
 
 *startfile:
-%{!qrtems: %(old_startfile)} %{qrtems: \
-%{!qrtems_debug: start.o%s} \
-%{qrtems_debug: start_g.o%s}}
+%{!qrtems: %(old_startfile)} \
+%{qrtems: %{qrtems_debug: start_g.o%s} %{!qrtems_debug: start.o%s}}
 
 *link:
-%(old_link) %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}
+%(old_link) %{qrtems: -dc -dp -N -e _start}
 

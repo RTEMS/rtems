@@ -1,3 +1,12 @@
+2001-05-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* scitab/.cvsignore: Add.
+	* configure.in: Add --enable-console, CPU_CLOCK_RATE_HZ, autoheader
+	bspopt.h.
+	* include/bsp.h: Complete rewrite based on the AMOS-BSP.
+	* README: Update.
+	* bsp_specs: copy from gensh1
+
 2001-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add scitab, gdbsci to SUBDIRS.
