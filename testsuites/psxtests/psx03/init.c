@@ -146,7 +146,7 @@ void *POSIX_Init(
   status = pthread_create( &Task_id, NULL, Task_2, NULL );
   assert( !status );
 
-  /* signal handler is still installed, mask is still set for SIGUSR1 */
+  /* signal handler is still installed, waitset is still set for SIGUSR1 */
  
   /* wait on SIGUSR1 for 3 seconds, will receive SIGUSR1 from Task_2 */
  
@@ -160,70 +160,13 @@ void *POSIX_Init(
   siginfo.si_value.sival_int = -1;
 
   puts( "Init: waiting on any signal for 3 seconds." );
-  signo = sigtimedwait( &mask, &siginfo, &timeout );
-  printf( "Init: correctly received SIGUSR1 - %d\n", siginfo.si_signo );
+  signo = sigtimedwait( &waitset, &siginfo, &timeout );
+  printf( "Init: received (%d) SIGUSR1=%d\n", siginfo.si_signo, SIGUSR1 );
   assert( signo == SIGUSR1 );
   assert( siginfo.si_signo == SIGUSR1 );
   assert( siginfo.si_code == SI_USER );
   assert( siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
  
-
-/*
-  status = sigemptyset( &mask );
-  assert( !status );
-
-  status = sigaddset( &mask, SIGUSR1 );
-  assert( !status );
-
-  printf( "Init: Block SIGUSR1\n" );
-  status = sigprocmask( SIG_BLOCK, &mask, NULL );
-  assert( !status );
-
-  status = sigpending( &pending_set );
-  assert( !status );
-  printf( "Init: Signals pending 0x%08x\n", pending_set );
-  
-  printf( "Init: send SIGUSR1 to self\n" );
-  status = pthread_kill( Init_id, SIGUSR1 );
-  assert( !status );
-
-  status = sigpending( &pending_set );
-  assert( !status );
-  printf( "Init: Signals pending 0x%08x\n", pending_set );
-  
-  printf( "Init: Unblock SIGUSR1\n" );
-  status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
-  assert( !status );
-
-*/
-
-  /*
-   *  Loop for 5 seconds seeing how many signals we catch 
-   */
-
-/*
-  tr.tv_sec = 5;
-  tr.tv_nsec = 0;
- 
-  do {
-    tv = tr;
-
-    Signal_occurred = 0;
-
-    status = nanosleep ( &tv, &tr );
-    assert( !status );
-
-    printf(
-      "Init: signal was %sprocessed with %d:%d time remaining\n",
-      (Signal_occurred) ? "" : "not ",
-      (int) tr.tv_sec,
-      (int) tr.tv_nsec
-   );
-
-  } while ( tr.tv_sec || tr.tv_nsec );
-
-*/
-
   /* exit this thread */
 
   puts( "*** END OF POSIX TEST 3 ***" );
