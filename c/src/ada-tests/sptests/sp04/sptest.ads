@@ -113,4 +113,21 @@ package SPTEST is
       HEIR   : in     RTEMS.TCB_POINTER
    );
 
+--
+--  This is the User Extension Table for this test.
+--
+
+   EXTENSIONS : aliased RTEMS.EXTENSIONS_TABLE := 
+   (
+        NULL,                                        -- Task create
+        NULL,                                        -- Task start
+        NULL,                                        -- Task restart
+        NULL,                                        -- Task delete
+        SPTEST.TASK_SWITCH'ACCESS,                   -- Task switch
+        NULL,                                        -- Task post switch
+        NULL,                                        -- Task begin
+        NULL,                                        -- Task exitted
+        NULL                                         -- Fatal error
+   );
+
 end SPTEST;

@@ -282,9 +282,15 @@ package body SPTEST is
       INDEX  : RTEMS.UNSIGNED32;
       TIME   : RTEMS.TIME_OF_DAY;
       STATUS : RTEMS.STATUS_CODES;
+      function TCB_To_ID (
+         TCB : RTEMS.TCB_POINTER
+      ) return RTEMS.ID;
+      pragma Import (C, TCB_To_ID, "tcb_to_id" );
+         
    begin
 
-      INDEX := TEST_SUPPORT.TASK_NUMBER( HEIR.OBJECT.ID );
+      --INDEX := TEST_SUPPORT.TASK_NUMBER( HEIR.OBJECT.ID );
+      INDEX := TCB_To_ID( HEIR );
 
       case INDEX is
          when 1  | 2 | 3 =>
