@@ -10,6 +10,7 @@
 
 #include <rtems.h>
 #include <libchip/rtc.h>
+#include <tod.h>
 
 /*
  *  Configuration Information
