@@ -63,7 +63,7 @@ extern "C" {
 /*
  *  Does the executive manage a dedicated interrupt stack in software?
  *
- *  If TRUE, then a stack is allocated in _Interrupt_Manager_initialization.
+ *  If TRUE, then a stack is allocated in _ISR_Handler_initialization.
  *  If FALSE, nothing is done.
  *
  *  The SPARC does not have a dedicated HW interrupt stack and one has
