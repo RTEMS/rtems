@@ -1,16 +1,14 @@
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ChangeLog: Merge-in libnetworking/ChangeLog.
-	* libnetworking/ChangeLog: Remove.
 	* ChangeLog: Merge-in libcsupport/ChangeLog.
-	* libcsupport/ChangeLog: Remove.
 	* ChangeLog: Merge-in libblock/ChangeLog, libfs/ChangeLog.
-	* libblock/ChangeLog, libfs/ChangeLog: Remove.
 	* ChangeLog: Merge-in libmisc/ChangeLog, librpc/ChangeLog.
-	* libmisc/ChangeLog, librpc/ChangeLog: Remove.
 	* ChangeLog: Merge-in itron/ChangeLog, posix/ChangeLog, score/ChangeLog,
 	sapi/ChangeLog, rtems/ChangeLog.
-	* itron/ChangeLog, posix/ChangeLog, score/ChangeLog, sapi/ChangeLog,
+	* libblock/ChangeLog, libfs/ChangeLog, libcsupport/ChangeLog,
+	libmisc/ChangeLog, librpc/ChangeLog, libnetworking/ChangeLog,
+	itron/ChangeLog, posix/ChangeLog, score/ChangeLog, sapi/ChangeLog,
 	rtems/ChangeLog: Remove.
 
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -30,18 +28,15 @@
 
 	* wrapup/Makefile.am: Remove $(ARCH)/$(dirstamp). Add TMPINSTALL_FILES
 	to CLEANFILES.
-	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
-	PREINSTALL_FILES to CLEANFILES.
 	* automake/local.am: Remove depend-am.
 	* automake/subdirs.am: Remove depend-recursive.
-	* itron/Makefile.am, posix/Makefile.am: Re-add dirstamps to
-	PREINSTALL_FILES. Add PREINSTALL_FILES to CLEANFILES.
 	* score/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
 	PREINSTALL_FILES to CLEANFILES. Add cpuopts.h to DISTCLEANFILES.
-	* sapi/Makefile.am, rtems/Makefile.am, libmisc/Makefile.am,
-	librpc/Makefile.am, libblock/Makefile.am, libfs/Makefile.am,
-	libcsupport/Makefile.am, libnetworking/Makefile.am: Re-add dirstamps to
-	PREINSTALL_FILES. Add PREINSTALL_FILES to CLEANFILES.
+	* Makefile.am, itron/Makefile.am, posix/Makefile.am, sapi/Makefile.am,
+	rtems/Makefile.am, libmisc/Makefile.am, librpc/Makefile.am,
+	libblock/Makefile.am, libfs/Makefile.am, libcsupport/Makefile.am,
+	libnetworking/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
 	* libnetworking/netinet/in_cksum.c: #include netinet/in_cksum_<cpu>.h.
 
 2004-01-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -49,13 +44,13 @@
 	PR/549 networking
 	* libnetworking/netinet/in_cksum_powerpc.h: New (copy of
 	in_cksum_powerpc.c).
-	* libnetworking/netinet/in_cksum_powerpc.c: Remove.
 	* libnetworking/netinet/in_cksum_i386.h: New (copy of in_cksum_i386.c).
-	* libnetworking/netinet/in_cksum_i386.c: Remove.
 	* libnetworking/netinet/in_cksum_arm.h: New (copy of in_cksum_arm.c).
-	* libnetworking/netinet/in_cksum_arm.c: Remove.
 	* libnetworking/netinet/in_cksum_m68k.c: New (copy of in_cksum_m68k.c).
-	* libnetworking/netinet/in_cksum_m68k.c: Remove.
+	* libnetworking/netinet/in_cksum_i386.c,
+	libnetworking/netinet/in_cksum_arm.c,
+	libnetworking/netinet/in_cksum_powerpc.c,
+	libnetworking/netinet/in_cksum_m68k.c: Remove.
 	* libnetworking/netinet/Makefile.am: Reflect changes above.
 
 2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -308,22 +303,15 @@
 	libnetworking/lib/Makefile.am.
 	* configure.ac: Reflect changes to libmisc/*.
 	* libmisc/Makefile.am: Reformat.
-	* libmisc/capture/Makefile.am: Remove.
-	* libmisc/cpuuse/Makefile.am: Remove.
-	* libmisc/devnull/Makefile.am: Remove.
-	* libmisc/dummy/Makefile.am: Remove.
-	* libmisc/dumpbuf/Makefile.am: Remove.
-	* libmisc/fsmount/Makefile.am: Remove.
-	* libmisc/monitor/Makefile.am: Remove.
-	* libmisc/mw-fb/Makefile.am: Remove.
-	* libmisc/rtmonuse/Makefile.am: Remove.
-	* libmisc/serdbg/Makefile.am: Remove.
-	* libmisc/shell/Makefile.am: Remove.
-	* libmisc/stackchk/Makefile.am: Remove.
-	* libmisc/untar/Makefile.am: Remove.
+	* libmisc/capture/Makefile.am, libmisc/cpuuse/Makefile.am,
+	libmisc/devnull/Makefile.am, libmisc/dummy/Makefile.am,
+	libmisc/dumpbuf/Makefile.am, libmisc/fsmount/Makefile.am,
+	libmisc/monitor/Makefile.am, libmisc/mw-fb/Makefile.am,
+	libmisc/rtmonuse/Makefile.am, libmisc/serdbg/Makefile.am,
+	libmisc/shell/Makefile.am, libmisc/stackchk/Makefile.am,
+	libmisc/untar/Makefile.am: Remove.
 	* libmisc/Makefile.am: Merge-in the Makefile.ams above.
-	* libnetworking/libc/Makefile.am: Remove.
-	* libnetworking/lib/Makefile.am: Remove.
+	* libnetworking/libc/Makefile.am, libnetworking/lib/Makefile.am: Remove.
 	* libnetworking/Makefile.am: Merge-in the Makefile.ams above.
 
 2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -338,8 +326,7 @@
 	* aclocal/check-itron.m4: Remove HAS_IRON_API.
 	* aclocal/check-multiprocessing.m4: Remove HAS_MP.
 	* aclocal/check-posix.m4: Remove HAS_POSIX_API.
-	* libmisc/wrapup/Makefile.am: Remove.
-	* libmisc/wrapup/.cvsignore: Remove.
+	* libmisc/wrapup/Makefile.am, libmisc/wrapup/.cvsignore: Remove.
 	* libmisc/Makefile.am: Reflect changes above.
 	* librpc/src/rpc/Makefile.am, librpc/src/xdr/Makefile.am,
 	librpc/src/Makefile.am: Removed.
@@ -409,11 +396,9 @@
 	* configure.ac: Make RTEMS_DEBUG an RTEMS_CPUOPT.
 	PR 525/rtems
 	* score/include/rtems/system.h: Use RTEMS_INLINES instead of USE_INLINES.
-	* score/include/rtems/score/chain.h: Ditto.
-	* score/include/rtems/score/thread.h: Ditto.
-	* score/src/chain.c: Ditto.
-	* score/src/coremutexseize.c: Ditto.
-	* score/src/threadget.c: Ditto.
+	* score/include/rtems/score/chain.h, score/include/rtems/score/thread.h,
+	score/src/chain.c, score/src/coremutexseize.c, score/src/threadget.c:
+	Ditto.
 	* score/Makefile.am: Don't use gmake to preinstall.
 	* sapi/Makefile.am: Reworked.
 
@@ -421,10 +406,8 @@
 
 	* wrapup/Makefile.am: Reflect having removed libnetworking/wrapup.
 	* configure.ac: Ditto.
-	* itron/Makefile.am: Reworked.
-	* posix/Makefile.am: Reworked.
-	* rtems/Makefile.am: Reworked.
-	* libblock/Makefile.am: Reworked.
+	* itron/Makefile.am, posix/Makefile.am, rtems/Makefile.am,
+	libblock/Makefile.am: Reworked.
 	* libcsupport/include/rtems/cdefs.h: Use _RTEMS_CDEFS_H guards.
 	* libcsupport/include/rtems/cdefs.h: New.
 	* libcsupport/Makefile.am: Completely reworked.
@@ -440,63 +423,32 @@
 	autoheader config.h.
 	* aclocal/canonical-target-name.m4: Require AC_CANONICAL_HOST.
 	* aclocal/enable-inlines.m4: Remove USE_MACROS (Unused).
-	* itron/src/config.h: Remove.
 	* itron/Makefile.am: Remove src/config.h. AM_CPPFLAGS +=
 	-I$(top_builddir).
-	* posix/src/config.h: Remove.
 	* posix/Makefile.am: Remove src/config.h AM_CPPFLAGS +=
 	-I$(top_builddir).
-	* libmisc/capture/config.h: Remove.
-	* libmisc/capture/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/cpuuse/config.h: Remove.
-	* libmisc/cpuuse/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/devnull/config.h: Remove.
-	* libmisc/devnull/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/dummy/config.h: Remove.
-	* libmisc/dummy/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/dumpbuf/config.h: Remove.
-	* libmisc/dumpbuf/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/monitor/config.h: Remove.
-	* libmisc/monitor/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/mw-fb/config.h: Remove.
-	* libmisc/mw-fb/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/rtmonuse/config.h: Remove.
-	* libmisc/rtmonuse/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/serdbg/config.h: Remove.
-	* libmisc/serdbg/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/shell/config.h: Remove.
-	* libmisc/shell/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/stackchk/config.h: Remove.
-	* libmisc/stackchk/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libmisc/untar/config.h: Remove.
-	* libmisc/untar/Makefile.am: Remove config.h. AM_CPPFLAGS +=
-	-I$(top_builddir).
+	* libmisc/capture/Makefile.am, libmisc/cpuuse/Makefile.am,
+	libmisc/devnull/Makefile.am, libmisc/dummy/Makefile.am,
+	libmisc/dumpbuf/Makefile.am, libmisc/monitor/Makefile.am,
+	libmisc/mw-fb/Makefile.am, libmisc/rtmonuse/Makefile.am,
+	libmisc/serdbg/Makefile.am, libmisc/shell/Makefile.am,
+	libmisc/stackchk/Makefile.am, libmisc/untar/Makefile.am: Remove
+	config.h. AM_CPPFLAGS += -I$(top_builddir).
 	* libblock/Makefile.am: AM_CPPFLAGS += -I$(top_builddir). Use
 	AM_CPPFLAGS instead of AM_CFLAGS.
 	* libblock/src/ata.c: Include config.h.
-	* libblock/src/bdbuf.c: Ditto.
-	* libblock/src/blkdev.c: Ditto.
-	* libblock/src/diskdevs.c: Ditto.
-	* libblock/src/ide_part_table.c: Ditto.
-	* libblock/src/ramdisk.c: Ditto.
-	* libfs/src/dosfs/config.h: Remove.
-	* libfs/src/dosfs/Makefile.am: Remove config.h AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libfs/src/imfs/config.h: Remove.
-	* libfs/src/imfs/Makefile.am: Remove config.h AM_CPPFLAGS +=
-	-I$(top_builddir).
-	* libcsupport/src/config.h: Remove.
+	* libblock/src/bdbuf.c, libblock/src/blkdev.c, libblock/src/diskdevs.c,
+	libblock/src/ide_part_table.c, libblock/src/ramdisk.c: Ditto.
+	* libfs/src/dosfs/Makefile.am, libfs/src/imfs/Makefile.am: Remove
+	config.h AM_CPPFLAGS += -I$(top_builddir).
+	* itron/src/config.h, posix/src/config.h, libmisc/capture/config.h,
+	libmisc/cpuuse/config.h, libmisc/devnull/config.h,
+	libmisc/dummy/config.h, libmisc/dumpbuf/config.h,
+	libmisc/monitor/config.h, libmisc/mw-fb/config.h,
+	libmisc/rtmonuse/config.h, libmisc/serdbg/config.h,
+	libmisc/stackchk/config.h, libmisc/shell/config.h,
+	libmisc/untar/config.h, libfs/src/dosfs/config.h,
+	libfs/src/imfs/config.h, libcsupport/src/config.h: Remove.
 	* libcsupport/src/Makefile.am: AM_CPPFLAGS += -I$(top_builddir).
 
 2003-11-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -545,10 +497,8 @@
 	AC_CANONICAL_TARGET. Use $host instead of $target.
 	* aclocal/check-multiprocessing.m4: Add m4-quotes. Remove
 	RTEMS_CHECK_CPU.
-	* aclocal/check-itron.m4: Add m4-quotes. Require
-	RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
-	* aclocal/check-networking.m4: Add m4-quotes. Require
-	RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/check-itron.m4, aclocal/check-networking.m4: Add m4-quotes.
+	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
 	* aclocal/check-cpu.m4: Remove.
 	* aclocal/canonical-target-name.m4: Add m4-quotes.
 	* configure.ac: Merge-in former aclocal/check-cpu.m4.
@@ -558,10 +508,8 @@
 	* score/src/coremsgseize.c, score/src/coremsgsubmit.c: Remove
 	unnecessary typecasts in assignments to  thread->Wait.return_argument.
 	* libmisc/capture/capture-cli.c: Reflect new rtems_monitor_command_arg_t.
-	* librpc/src/rpc/Makefile.am: Remove __P from AM_CPPFLAGS. Rely on
-	sys/cdefs.h providing it.
-	* librpc/src/xdr/Makefile.am: Remove __P from AM_CPPFLAGS. Rely on
-	sys/cdefs.h providing it.
+	* librpc/src/rpc/Makefile.am, librpc/src/xdr/Makefile.am: Remove __P
+	from AM_CPPFLAGS. Rely on sys/cdefs.h providing it.
 	* libfs/src/dosfs/Makefile.am: noinst_HEADERS += fat.h.
 	* libfs/src/dosfs/msdos_file.c (msdos_file_read,
 	libfs/msdos_file_write): Use '0' as initial value for ret instead of
@@ -622,16 +570,14 @@
 
 2003-09-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Merge-in include/Makefile.am.
-	* include/Makefile.am: Remove.
+	* Makefile.am, librpc/Makefile.am: Merge-in include/Makefile.am.
+	* include/Makefile.am, librpc/include/Makefile.am: Remove.
 	* configure.ac: Reflect having removed include/Makefile.am and
 	librpc/include/Makefile.am.
-	* librpc/Makefile.am: Merge-in include/Makefile.am.
-	* librpc/include/Makefile.am: Remove.
 
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* libmisc/monitor/monitor.h:  Add rtems_monitor_commands[] (Illegally
+	* libmisc/monitor/monitor.h: Add rtems_monitor_commands[] (Illegally
 	applied by shell/). Remove ifdef(__mips64) (Make broken code visible
 	again).
 	* libmisc/monitor/mon-command.c: Add several ifndef RTEMS_UNIX to avoid
@@ -702,9 +648,8 @@
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
-	* include/rtems/bspIo.h, include/rtems/fs.h, include/rtems/userenv.h:
-	URL for license changed.
-	* itron/include/itron.h, itron/include/itronsys/eventflags.h,
+	* include/rtems/bspIo.h, include/rtems/fs.h, include/rtems/userenv.h,
+	itron/include/itron.h, itron/include/itronsys/eventflags.h,
 	itron/include/itronsys/fmempool.h, itron/include/itronsys/intr.h,
 	itron/include/itronsys/mbox.h, itron/include/itronsys/msgbuffer.h,
 	itron/include/itronsys/network.h, itron/include/itronsys/port.h,
@@ -757,10 +702,10 @@
 	itron/src/task.c, itron/src/ter_tsk.c, itron/src/trcv_mbf.c,
 	itron/src/trcv_mbx.c, itron/src/tslp_tsk.c, itron/src/tsnd_mbf.c,
 	itron/src/twai_sem.c, itron/src/vmempool.c, itron/src/wai_sem.c,
-	itron/src/wup_tsk.c: URL for license changed.
-	* posix/include/rtems/posix/cond.h, posix/include/rtems/posix/condmp.h,
-	posix/include/rtems/posix/config.h, posix/include/rtems/posix/intr.h,
-	posix/include/rtems/posix/key.h, posix/include/rtems/posix/mqueue.h,
+	itron/src/wup_tsk.c, posix/include/rtems/posix/cond.h,
+	posix/include/rtems/posix/condmp.h, posix/include/rtems/posix/config.h,
+	posix/include/rtems/posix/intr.h, posix/include/rtems/posix/key.h,
+	posix/include/rtems/posix/mqueue.h,
 	posix/include/rtems/posix/mqueuemp.h, posix/include/rtems/posix/mutex.h,
 	posix/include/rtems/posix/mutexmp.h,
 	posix/include/rtems/posix/posixapi.h,
@@ -805,8 +750,8 @@
 	posix/src/sigfillset.c, posix/src/sigismember.c, posix/src/signal_2.c,
 	posix/src/sigpending.c, posix/src/sigprocmask.c, posix/src/sigqueue.c,
 	posix/src/sigsuspend.c, posix/src/sigtimedwait.c, posix/src/sigwait.c,
-	posix/src/sigwaitinfo.c, posix/src/ualarm.c: URL for license changed.
-	* score/include/rtems/debug.h, score/include/rtems/seterr.h,
+	posix/src/sigwaitinfo.c, posix/src/ualarm.c,
+	score/include/rtems/debug.h, score/include/rtems/seterr.h,
 	score/include/rtems/system.h, score/include/rtems/score/address.h,
 	score/include/rtems/score/apiext.h,
 	score/include/rtems/score/apimutex.h,
@@ -912,8 +857,8 @@
 	score/src/threadyieldprocessor.c, score/src/userext.c,
 	score/src/watchdog.c, score/src/watchdogadjust.c,
 	score/src/watchdoginsert.c, score/src/watchdogremove.c,
-	score/src/watchdogtickle.c, score/src/wkspace.c: URL for license changed.
-	* sapi/include/confdefs.h, sapi/include/rtems/config.h,
+	score/src/watchdogtickle.c, score/src/wkspace.c,
+	sapi/include/confdefs.h, sapi/include/rtems/config.h,
 	sapi/include/rtems/extension.h, sapi/include/rtems/fatal.h,
 	sapi/include/rtems/init.h, sapi/include/rtems/io.h,
 	sapi/include/rtems/mptables.h, sapi/include/rtems/sptables.h,
@@ -922,12 +867,11 @@
 	sapi/src/extension.c, sapi/src/extensioncreate.c,
 	sapi/src/extensiondelete.c, sapi/src/extensionident.c, sapi/src/fatal.c,
 	sapi/src/io.c, sapi/src/itronapi.c, sapi/src/posixapi.c,
-	sapi/src/rtemsapi.c: URL for license changed.
-	* rtems/include/rtems.h, rtems/include/rtems/rtems/asr.h,
-	rtems/include/rtems/rtems/attr.h, rtems/include/rtems/rtems/cache.h,
-	rtems/include/rtems/rtems/clock.h, rtems/include/rtems/rtems/config.h,
-	rtems/include/rtems/rtems/dpmem.h, rtems/include/rtems/rtems/event.h,
-	rtems/include/rtems/rtems/eventmp.h,
+	sapi/src/rtemsapi.c, rtems/include/rtems.h,
+	rtems/include/rtems/rtems/asr.h, rtems/include/rtems/rtems/attr.h,
+	rtems/include/rtems/rtems/cache.h, rtems/include/rtems/rtems/clock.h,
+	rtems/include/rtems/rtems/config.h, rtems/include/rtems/rtems/dpmem.h,
+	rtems/include/rtems/rtems/event.h, rtems/include/rtems/rtems/eventmp.h,
 	rtems/include/rtems/rtems/eventset.h, rtems/include/rtems/rtems/intr.h,
 	rtems/include/rtems/rtems/message.h, rtems/include/rtems/rtems/modes.h,
 	rtems/include/rtems/rtems/mp.h, rtems/include/rtems/rtems/msgmp.h,
@@ -1007,24 +951,23 @@
 	rtems/src/timerdelete.c, rtems/src/timerfireafter.c,
 	rtems/src/timerfirewhen.c, rtems/src/timergetinfo.c,
 	rtems/src/timerident.c, rtems/src/timerreset.c, rtems/src/timerserver.c,
-	rtems/src/timerserverfireafter.c, rtems/src/timerserverfirewhen.c: URL
-	for license changed.
-	* libmisc/cpuuse/cpuuse.c, libmisc/cpuuse/cpuuse.h,
+	rtems/src/timerserverfireafter.c, rtems/src/timerserverfirewhen.c,
+	libmisc/cpuuse/cpuuse.c, libmisc/cpuuse/cpuuse.h,
 	libmisc/devnull/devnull.c, libmisc/devnull/devnull.h,
 	libmisc/dummy/dummy.c, libmisc/dumpbuf/dumpbuf.c,
 	libmisc/dumpbuf/dumpbuf.h, libmisc/fsmount/fsmount.c,
 	libmisc/fsmount/fsmount.h, libmisc/serdbg/serdbgio.c,
 	libmisc/serdbg/termios_printk.c, libmisc/stackchk/check.c,
 	libmisc/stackchk/internal.h, libmisc/stackchk/stackchk.h,
-	libmisc/untar/untar.c, libmisc/untar/untar.h: URL for license changed.
-	* libblock/include/rtems/ide_part_table.h, libblock/src/ata.c,
-	libblock/src/ide_part_table.c: URL for license changed.
-	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.h,
-	libfs/src/dosfs/fat_fat_operations.h, libfs/src/dosfs/fat_file.h,
-	libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_create.c,
-	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_eval.c,
-	libfs/src/dosfs/msdos_file.c, libfs/src/dosfs/msdos_free.c,
-	libfs/src/dosfs/msdos_fsunmount.c, libfs/src/dosfs/msdos_handlers_dir.c,
+	libmisc/untar/untar.c, libmisc/untar/untar.h,
+	libblock/include/rtems/ide_part_table.h, libblock/src/ata.c,
+	libblock/src/ide_part_table.c, libfs/src/dosfs/dosfs.h,
+	libfs/src/dosfs/fat.h, libfs/src/dosfs/fat_fat_operations.h,
+	libfs/src/dosfs/fat_file.h, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_dir.c,
+	libfs/src/dosfs/msdos_eval.c, libfs/src/dosfs/msdos_file.c,
+	libfs/src/dosfs/msdos_free.c, libfs/src/dosfs/msdos_fsunmount.c,
+	libfs/src/dosfs/msdos_handlers_dir.c,
 	libfs/src/dosfs/msdos_handlers_file.c, libfs/src/dosfs/msdos_init.c,
 	libfs/src/dosfs/msdos_initsupp.c, libfs/src/dosfs/msdos_misc.c,
 	libfs/src/dosfs/msdos_mknod.c, libfs/src/dosfs/msdos_node_type.c,
@@ -1047,12 +990,11 @@
 	libfs/src/imfs/imfs_unlink.c, libfs/src/imfs/imfs_unmount.c,
 	libfs/src/imfs/imfs_utime.c, libfs/src/imfs/ioman.c,
 	libfs/src/imfs/linearfile.c, libfs/src/imfs/memfile.c,
-	libfs/src/imfs/miniimfs_init.c: URL for license changed.
-	* libcsupport/include/chain.h, libcsupport/include/clockdrv.h,
-	libcsupport/include/console.h, libcsupport/include/iosupp.h,
-	libcsupport/include/rtc.h, libcsupport/include/spurious.h,
-	libcsupport/include/timerdrv.h, libcsupport/include/vmeintr.h,
-	libcsupport/include/motorola/mc68230.h,
+	libfs/src/imfs/miniimfs_init.c, libcsupport/include/chain.h,
+	libcsupport/include/clockdrv.h, libcsupport/include/console.h,
+	libcsupport/include/iosupp.h, libcsupport/include/rtc.h,
+	libcsupport/include/spurious.h, libcsupport/include/timerdrv.h,
+	libcsupport/include/vmeintr.h, libcsupport/include/motorola/mc68230.h,
 	libcsupport/include/rtems/libcsupport.h,
 	libcsupport/include/rtems/libio.h, libcsupport/include/rtems/libio_.h,
 	libcsupport/include/rtems/termiostypes.h,
@@ -1095,14 +1037,13 @@
 	libcsupport/src/termiosinitialize.c, libcsupport/src/truncate.c,
 	libcsupport/src/umask.c, libcsupport/src/unixlibc.c,
 	libcsupport/src/unlink.c, libcsupport/src/unmount.c,
-	libcsupport/src/utime.c, libcsupport/src/write.c: URL for license
-	changed.
+	libcsupport/src/utime.c, libcsupport/src/write.c,
+	libnetworking/rtems/mkrootfs.c, libnetworking/rtems/mkrootfs.h: URL for
+	license changed.
 	PR 479/rtems_misc
 	* libcsupport/src/malloc.c: Per multiple standards realloc does not free
 	the original memory if the allocation of the requested larger block
 	fails.
-	* libnetworking/rtems/mkrootfs.c, libnetworking/rtems/mkrootfs.h: URL
-	for license changed.
 
 2003-09-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -1131,34 +1072,23 @@
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-debug.m4: Remove.
-	* aclocal/enable-rtems-debug.m4: New (Split out from rtems-debug.m4).
-	* aclocal/check-rtems-debug.m4: New (Split out from rtems-debug.m4).
+	* aclocal/enable-rtems-debug.m4, aclocal/check-rtems-debug.m4: New
+	(Split out from rtems-debug.m4).
 	* automake/local.am: Remove "debug".
 	PR 449/rtems:
-	* posix/src/getegid.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/geteuid.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/getgid.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/getgroups.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/getlogin.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/getpgrp.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/getpid.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/getppid.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/getuid.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/setpgid.c: Remove (Moved to ../libcsupport/src).
-	* posix/src/setsid.c: Remove (Moved to ../libcsupport/src).
+	* posix/src/getegid.c, posix/src/geteuid.c, posix/src/getgid.c,
+	posix/src/getgroups.c, posix/src/getlogin.c, posix/src/getpgrp.c,
+	posix/src/getpid.c, posix/src/getppid.c, posix/src/getuid.c,
+	posix/src/setpgid.c, posix/src/setsid.c: Remove (Moved to
+	../libcsupport/src).
 	* posix/Makefile.am: Reflect changes above.
 	PR 449/rtems:
-	* libcsupport/src/getegid.c: New (Copied from ../posix/src).
-	* libcsupport/src/geteuid.c: New (Copied from ../posix/src).
-	* libcsupport/src/getgid.c: New (Copied from ../posix/src).
-	* libcsupport/src/getgroups.c: New (Copied from ../posix/src).
-	* libcsupport/src/getlogin.c: New (Copied from ../posix/src).
-	* libcsupport/src/getpgrp.c: New (Copied from ../posix/src).
-	* libcsupport/src/getpid.c: New (Copied from ../posix/src).
-	* libcsupport/src/getppid.c: New (Copied from ../posix/src).
-	* libcsupport/src/getuid.c: New (Copied from ../posix/src).
-	* libcsupport/src/setpgid.c: New (Copied from ../posix/src).
-	* libcsupport/src/setsid.c: New (Copied from ../posix/src).
+	* libcsupport/src/getegid.c, libcsupport/src/geteuid.c,
+	libcsupport/src/getgid.c, libcsupport/src/getgroups.c,
+	libcsupport/src/getlogin.c, libcsupport/src/getpgrp.c,
+	libcsupport/src/getpid.c, libcsupport/src/getppid.c,
+	libcsupport/src/getuid.c, libcsupport/src/setpgid.c,
+	libcsupport/src/setsid.c: New (Copied from ../posix/src).
 	* libcsupport/src/no_posix: Remove getpid and _getpid_r.
 	* libcsupport/Makefile.am: Reflect changes above.
 
@@ -1190,10 +1120,7 @@
 	system and perform an action on them.
 	* score/score/src/iterateoverthreads.c: New file.
 	* score/ChangeLog: Fixed screwup.
-	* sapi/src/extensionident.c: Added ID to name lookup service and changed
-	name of id/name translation status code. This propagated to multiple
-	functions. The user API service added was rtems_object_id_to_name().
-	* rtems/Makefile.am, rtems/include/rtems.h,
+	* sapi/src/extensionident.c, rtems/Makefile.am, rtems/include/rtems.h,
 	rtems/include/rtems/rtems/status.h, rtems/src/dpmemident.c,
 	rtems/src/msgqident.c, rtems/src/partident.c, rtems/src/ratemonident.c,
 	rtems/src/regionident.c, rtems/src/semident.c, rtems/src/taskident.c,
@@ -1265,17 +1192,15 @@
 2003-08-04	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 441/filesystem
-	* libfs/src/dosfs/msdos.h: add rename support to DOSFS.
-	* libfs/src/dosfs/msdos_create.c: add rename support to DOSFS.
-	* libfs/src/dosfs/msdos_file.c: add rename support to DOSFS.
-	* libfs/src/dosfs/msdos_init.c: add rename support to DOSFS.
-	* libfs/src/dosfs/msdos_mknod.c: add rename support to DOSFS.
+	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_create.c,
+	libfs/src/dosfs/msdos_file.c, libfs/src/dosfs/msdos_init.c,
+	libfs/src/dosfs/msdos_mknod.c: add rename support to DOSFS.
 
 2003-07-24	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 434/filesystem
-	* libfs/src/imfs/imfs_init.c: Modified to return error code.
-	* libfs/src/imfs/miniimfs_init.c: Modified to return error code.
+	* libfs/src/imfs/imfs_init.c, libfs/src/imfs/miniimfs_init.c: Modified
+	to return error code.
 	* libfs/src/imfs/imfs_initsup.c: Modified to set error upon memory
 	failure.
 
@@ -1340,7 +1265,7 @@
 	* posix/src/config.h: New.
 	* score/cpu/Makefile.am: Add DIST_SUBDIRS = $(RTEMS_CPU).
 	* libmisc/configure.ac: Remove (Merged into ../configure.ac).
-	* libmisc/Makefile.am:  Reflect having merged configure.ac into
+	* libmisc/Makefile.am: Reflect having merged configure.ac into
 	../configure.ac.
 	* libmisc/capture/config.h: New.
 	* libmisc/capture/Makefile.am: Add config.h. Reflect having merged
@@ -1380,36 +1305,22 @@
 	configure.ac into ../configure.ac.
 	* libmisc/wrapup/Makefile.am: Reflect having merged configure.ac into
 	../configure.ac.
-	* libmisc/capture/capture-cli.c: Add config-header support.
-	* libmisc/capture/capture.c: Add config-header support.
-	* libmisc/cpuuse/cpuuse.c: Add config-header support.
-	* libmisc/devnull/devnull.c: Add config-header support.
-	* libmisc/dummy/dummy.c: Add config-header support.
-	* libmisc/dumpbuf/dumpbuf.c: Add config-header support.
-	* libmisc/monitor/mon-command.c: Add config-header support.
-	* libmisc/monitor/mon-config.c: Add config-header support.
-	* libmisc/monitor/mon-dname.c: Add config-header support.
-	* libmisc/monitor/mon-driver.c: Add config-header support.
-	* libmisc/monitor/mon-extension.c: Add config-header support.
-	* libmisc/monitor/mon-itask.c: Add config-header support.
-	* libmisc/monitor/mon-manager.c: Add config-header support.
-	* libmisc/monitor/mon-monitor.c: Add config-header support.
-	* libmisc/monitor/mon-mpci.c: Add config-header support.
-	* libmisc/monitor/mon-object.c: Add config-header support.
-	* libmisc/monitor/mon-prmisc.c: Add config-header support.
-	* libmisc/monitor/mon-queue.c: Add config-header support.
-	* libmisc/monitor/mon-server.c: Add config-header support.
-	* libmisc/monitor/mon-symbols.c: Add config-header support.
-	* libmisc/monitor/mon-task.c: Add config-header support.
-	* libmisc/mw-fb/mw_fb.c: Add config-header support.
-	* libmisc/mw-fb/mw_uid.c: Add config-header support.
-	* libmisc/rtmonuse/rtmonuse.c: Add config-header support.
-	* libmisc/serdbg/serdbg.c: Add config-header support.
-	* libmisc/serdbg/serdbgio.c: Add config-header support.
-	* libmisc/serdbg/termios_printk.c: Add config-header support.
-	* libmisc/shell/cmds.c: Add config-header support.
-	* libmisc/stackchk/check.c: Add config-header support.
-	* libmisc/untar/untar.c: Add config-header support.
+	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
+	libmisc/cpuuse/cpuuse.c, libmisc/devnull/devnull.c,
+	libmisc/dummy/dummy.c, libmisc/dumpbuf/dumpbuf.c,
+	libmisc/monitor/mon-command.c, libmisc/monitor/mon-config.c,
+	libmisc/monitor/mon-dname.c, libmisc/monitor/mon-driver.c,
+	libmisc/monitor/mon-extension.c, libmisc/monitor/mon-itask.c,
+	libmisc/monitor/mon-manager.c, libmisc/monitor/mon-monitor.c,
+	libmisc/monitor/mon-mpci.c, libmisc/monitor/mon-object.c,
+	libmisc/monitor/mon-prmisc.c, libmisc/monitor/mon-queue.c,
+	libmisc/monitor/mon-server.c, libmisc/monitor/mon-symbols.c,
+	libmisc/monitor/mon-task.c, libmisc/mw-fb/mw_fb.c,
+	libmisc/mw-fb/mw_uid.c, libmisc/rtmonuse/rtmonuse.c,
+	libmisc/serdbg/serdbg.c, libmisc/serdbg/serdbgio.c,
+	libmisc/serdbg/termios_printk.c, libmisc/shell/cmds.c,
+	libmisc/stackchk/check.c, libmisc/untar/untar.c: Add config-header
+	support.
 	* librpc/configure.ac: Remove (Merged-in into ../configure.ac).
 	* librpc/Makefile.am, librpc/include/Makefile.am,
 	librpc/src/Makefile.am, librpc/src/rpc/Makefile.am,
@@ -1428,17 +1339,16 @@
 	* libfs/src/imfs/Makefile.am: Add config.h.  Remove COMMON_C_FILES,
 	DOC_FILES (Unused).
 	* libfs/src/dosfs/fat.c: include config-header "config.h".
-	* libfs/src/dosfs/fat_fat_operations.c: Ditto.
-	* libfs/src/dosfs/fat_file.c: Ditto.
-	* libfs/src/dosfs/msdos_conv.c: Ditto.
+	* libfs/src/dosfs/fat_fat_operations.c, libfs/src/dosfs/fat_file.c,
+	libfs/src/dosfs/msdos_conv.c: Ditto.
 	* libcsupport/configure.ac: Remove (Merged-in into ../configure.ac).
 	* libcsupport/Makefile.am: DOC_FILES = src/TODO src/CASES, Reflect
 	having merged configure.ac into ../configure.ac.
 	* libcsupport/src/config.h: New.
 	* libnetworking/configure.ac: Remove (Merged into ../configure.ac).
 	* libnetworking/Makefile.am, libnetworking/libc/Makefile.am,
-	libnetworking/lib/Makefile.am, libnetworking/wrapup/Makefile.am: 
-	Reflect having merged configure.ac into ../configure.ac.
+	libnetworking/lib/Makefile.am, libnetworking/wrapup/Makefile.am: Reflect
+	having merged configure.ac into ../configure.ac.
 	* libnetworking/kern/kern_mib.c: Use RTEMS_VERSION to setup osrelease.
 
 2003-07-08	Joel Sherrill <joel@OARcorp.com>
@@ -1478,8 +1388,8 @@
 
 2003-06-12	Joel Sherrill <joel@OARcorp.com>
 
-	* score/src/objectmp.c: Removed warnings.
-	* rtems/include/rtems/rtems/msgmp.h, rtems/include/rtems/rtems/partmp.h,
+	* score/src/objectmp.c, rtems/include/rtems/rtems/msgmp.h,
+	rtems/include/rtems/rtems/partmp.h,
 	rtems/include/rtems/rtems/regionmp.h, rtems/include/rtems/rtems/semmp.h,
 	rtems/src/msgmp.c, rtems/src/partmp.c, rtems/src/regionmp.c,
 	rtems/src/semmp.c: Removed warnings.
@@ -1492,8 +1402,8 @@
 
 2003-06-04	Joel Sherrill <joel@OARcorp.com>
 
-	* libmisc/stackchk/check.c: Removed warnings.
-	* libblock/src/ide_part_table.c: Removed warnings.
+	* libmisc/stackchk/check.c, libblock/src/ide_part_table.c: Removed
+	warnings.
 
 2003-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1512,8 +1422,7 @@
 	* include/rtems/stdint.h: New.
 	PR 321/bsps
 	* aclocal/env-rtemscpu.m4: Remove support for profile-variant.
-	* automake/compile.am: Ditto.
-	* automake/local.am: Ditto.
+	* automake/compile.am, automake/local.am: Ditto.
 	PR 409:
 	* rtems/include/rtems/rtems/types.h: Include rtems/stdint.h. Apply
 	c99-types to typedef rtems_[un]signed[8|16|32|64].
@@ -1532,8 +1441,7 @@
 2003-05-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/env-rtemscpu.m4: Merge-in env-rtemsbsp.m4.
-	* aclocal/env-rtemsbsp.m4: Remove.
-	* aclocal/enable-rtemsbsp.m4: Remove.
+	* aclocal/env-rtemsbsp.m4, aclocal/enable-rtemsbsp.m4: Remove.
 	* aclocal/env-rtemscpu.m4: Remove stray '/' in setting up 
 	project_libdir.
 
@@ -1568,7 +1476,6 @@
 
 2003-04-11	Joel Sherrill <joel@OARcorp.com>
 
-	* aclocal/version.m4: Updated to rtems-ss-20030411.
 	* aclocal/version.m4: Updated to rtems-ss-20020411.
 
 2003-04-03	Eri Valette <eric.valette@free.fr>
@@ -1627,8 +1534,8 @@
 2003-03-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libcsupport/configure.ac: AC_CHECK_FUNCS(strlcpy strlcat).
-	* libcsupport/src/strlcat.c: New (extracted from pppd/utils.c).
-	* libcsupport/src/strlcpy.c: New (extracted from pppd/utils.c).
+	* libcsupport/src/strlcat.c, libcsupport/src/strlcpy.c: New (extracted
+	from pppd/utils.c).
 	* libcsupport/Makefile.am: Add BSD_C_FILES, strlcat.c, strlcpy.c.
 
 2003-03-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -1654,20 +1561,14 @@
 	* configure.ac: Remove sptables.h.in.
 	* itron/configure.ac: Remove AC_CONFIG_AUX_DIR.
 	* sapi/Makefile.am: Remove stray reference to sptables.h.in.
-	* sapi/include/rtems/sptables.h.in: Remove.
 	* sapi/include/rtems/sptables.h: New.
-	* sapi/include/.cvsignore: Remove.
-	* sapi/include/rtems/.cvsignore: Remove.
-	* sapi/inline/.cvsignore: Remove.
-	* sapi/inline/rtems/.cvsignore: Remove.
-	* sapi/macros/.cvsignore: Remove.
-	* sapi/macros/rtems/.cvsignore: Remove.
-	* sapi/src/.cvsignore: Remove.
-	* libmisc/configure.ac: Remove AC_CONFIG_AUX_DIR.
-	* libblock/configure.ac: Remove AC_CONFIG_AUX_DIR.
-	* libfs/configure.ac: Remove AC_CONFIG_AUX_DIR.
-	* libcsupport/configure.ac: Remove AC_CONFIG_AUX_DIR.
-	* libnetworking/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* sapi/include/rtems/sptables.h.in, sapi/include/.cvsignore,
+	sapi/include/rtems/.cvsignore, sapi/inline/.cvsignore,
+	sapi/inline/rtems/.cvsignore, sapi/macros/.cvsignore,
+	sapi/macros/rtems/.cvsignore, sapi/src/.cvsignore: Remove.
+	* libmisc/configure.ac, libblock/configure.ac, libfs/configure.ac,
+	libcsupport/configure.ac, libnetworking/configure.ac: Remove
+	AC_CONFIG_AUX_DIR.
 	* libnetworking/netinet/in_chksum.c: Remove duplicate case to include
 	in_chksum_arm.c.
 
@@ -1685,7 +1586,7 @@
 2003-02-20	Wolfram Wadepohl <W.Wadepohl@indumat.de>
 
 	PR 357/rtems_misc
-	* libcsupport/src/termios.c (rtems_termios_open):  Fixed code the
+	* libcsupport/src/termios.c (rtems_termios_open): Fixed code the
 	incorrectly checked that the wrong pointer during allocation was NULL.
 
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
@@ -1852,10 +1753,9 @@
 
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* libnetworking/netinet/tcp_subr.c: Add args to INP_INFO_RLOCK,
-	INP_INFO_RUNLOCK,  INP_LOCK, INP_UNLOCK macros.
-	* libnetworking/netinet/udp_usrreq.c: Add args to INP_INFO_RLOCK,
-	INP_INFO_RUNLOCK,  INP_LOCK, INP_UNLOCK macros.
+	* libnetworking/netinet/tcp_subr.c, libnetworking/netinet/udp_usrreq.c:
+	Add args to INP_INFO_RLOCK, INP_INFO_RUNLOCK,  INP_LOCK, INP_UNLOCK
+	macros.
 
 2003-01-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1873,7 +1773,10 @@
 
 2003-01-03	Till Straumann  <strauman@slac.stanford.edu>
 
-	* ChangeLog, base_fs.c, getpwent.c, privateenv.c  Per PR303, Fix violation of node_access copy syemantics 
+	PR 303
+	* libcsupport/src/base_fs.c, libcsupport/src/getpwent.c,
+	libcsupport/src/privateenv.c: Fix violation of node_access  copy
+	symantics.
 
 2003-01-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -1975,24 +1878,19 @@
 	install librtemscpu.a.
 	* wrapup/Makefile.am: Add libmisc.
 	* configure.ac: Add AC_CONFIG_SUBDIR(libmisc).
-	* itron/Makefile.am: Don't create $ARCH as side-effect of compilation.
-	* posix/Makefile.am: Don't create $ARCH as side-effect of compilation.
+	* itron/Makefile.am, posix/Makefile.am: Don't create $ARCH as
+	side-effect of compilation.
 	* score/Makefile.am: Don't create $ARCH.
 	* sapi/Makefile.am: Don't create $ARCH as side-effect of compilation.
 	* rtems/Makefile.am: Don't create $ARCH as side-effect of compilation.
 	Re-order all-local.
 	* libmisc/configure.ac: Require autoconf-2.57+automake-1.7.2.
 	* libmisc/capture/Makefile.am: Eliminate C_O_FILES.
-	* libmisc/cpuuse/Makefile.am: Ditto.
-	* libmisc/devnull/Makefile.am: Ditto.
-	* libmisc/dummy/Makefile.am: Ditto.
-	* libmisc/dumpbuf/Makefile.am: Ditto.
-	* libmisc/monitor/Makefile.am: Ditto.
-	* libmisc/rtmonuse/Makefile.am: Ditto.
-	* libmisc/serdbg/Makefile.am: Ditto.
-	* libmisc/shell/Makefile.am: Ditto.
-	* libmisc/stackchk/Makefile.am: Ditto.
-	* libmisc/untar/Makefile.am: Ditto.
+	* libmisc/cpuuse/Makefile.am, libmisc/devnull/Makefile.am,
+	libmisc/dummy/Makefile.am, libmisc/dumpbuf/Makefile.am,
+	libmisc/monitor/Makefile.am, libmisc/rtmonuse/Makefile.am,
+	libmisc/serdbg/Makefile.am, libmisc/shell/Makefile.am,
+	libmisc/stackchk/Makefile.am, libmisc/untar/Makefile.am: Ditto.
 	* libmisc/mw-fb/Makefile.am: Eliminate C_O_FILES. Eliminate SRCS. Moving
 	libmisc from rtems/c/src to rtems/cpukit.
 	* libmisc/Makefile.am: Reflect new path.
@@ -2000,17 +1898,12 @@
 	instead of RTEMS_ENV_RTEMSBSP. Remove RTEMS_PROJECT_ROOT.
 	* libmisc/capture/Makefile.am: Reflect new path. Remove OBJS from
 	all-local.
-	* libmisc/cpuuse/Makefile.am: Ditto.
-	* libmisc/devnull/Makefile.am: Ditto.
-	* libmisc/dummy/Makefile.am: Ditto.
-	* libmisc/dumpbuf/Makefile.am: Ditto.
-	* libmisc/monitor/Makefile.am: Ditto.
-	* libmisc/mw-fb/Makefile.am: Ditto.
-	* libmisc/rtmonuse/Makefile.am: Ditto.
-	* libmisc/serdbg/Makefile.am: Ditto.
-	* libmisc/shell/Makefile.am: Ditto.
-	* libmisc/stackchk/Makefile.am: Ditto.
-	* libmisc/untar/Makefile.am: Ditto.
+	* libmisc/cpuuse/Makefile.am, libmisc/devnull/Makefile.am,
+	libmisc/dummy/Makefile.am, libmisc/dumpbuf/Makefile.am,
+	libmisc/monitor/Makefile.am, libmisc/mw-fb/Makefile.am,
+	libmisc/rtmonuse/Makefile.am, libmisc/serdbg/Makefile.am,
+	libmisc/shell/Makefile.am, libmisc/stackchk/Makefile.am,
+	libmisc/untar/Makefile.am: Ditto.
 	* libmisc/wrapup/Makefile.am: Reflect new path.
 	* libblock/Makefile.am: Eliminate C_O_FILES. Eliminate SRCS.
 	* libfs/src/imfs/Makefile.am: Eliminate C_O_FILES.
@@ -2033,74 +1926,52 @@
 
 	* libnetworking/kern/Makefile.am: Remove C_O_FILES.  Don't let all-local
 	depend on $OBJS).
-	* libnetworking/lib/Makefile.am: Ditto.
-	* libnetworking/libc/Makefile.am: Ditto.
-	* libnetworking/net/Makefile.am: Ditto.
-	* libnetworking/netinet/Makefile.am: Ditto.
-	* libnetworking/nfs/Makefile.am: Ditto.
-	* libnetworking/rtems/Makefile.am: Ditto.
+	* libnetworking/lib/Makefile.am, libnetworking/libc/Makefile.am,
+	libnetworking/net/Makefile.am, libnetworking/netinet/Makefile.am,
+	libnetworking/nfs/Makefile.am, libnetworking/rtems/Makefile.am: Ditto.
 
 2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libmisc/configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
-	* libmisc/capture/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/cpuuse/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/devnull/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/dummy/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/dumpbuf/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/monitor/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/mw-fb/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/rtmonuse/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/serdbg/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/shell/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/stackchk/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/untar/Makefile.am: Don't include @RTEMS_BSP@.cfg.
-	* libmisc/wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/capture/Makefile.am, libmisc/cpuuse/Makefile.am,
+	libmisc/devnull/Makefile.am, libmisc/dummy/Makefile.am,
+	libmisc/dumpbuf/Makefile.am, libmisc/monitor/Makefile.am,
+	libmisc/mw-fb/Makefile.am, libmisc/rtmonuse/Makefile.am,
+	libmisc/serdbg/Makefile.am, libmisc/shell/Makefile.am,
+	libmisc/stackchk/Makefile.am, libmisc/untar/Makefile.am,
+	libmisc/wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
 
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* aclocal/env-rtemsbsp.m4: Remove RTEMS_CHECK_CUSTOM_BSP.
-	* aclocal/env-rtemscpu.m4: Remove RTEMS_CHECK_CUSTOM_BSP.
+	* aclocal/env-rtemsbsp.m4, aclocal/env-rtemscpu.m4: Remove
+	RTEMS_CHECK_CUSTOM_BSP.
 	* aclocal/check-bsps.m4: Remove.
 	* wrapup/Makefile.am: Remove *_OBJS, use LIBS+= instead.
 	* configure.ac: Require autoconf >= 2.54, automake-1.7.2.
-	* wrapup/Makefile.am: Reflect changes to score/.
-	* configure.ac: Reflect changes to score/.
-	* wrapup/Makefile.am: Reflect changes to sapi/.
-	* configure.ac: Reflect changes to sapi/.
+	* wrapup/Makefile.am, configure.ac: Reflect changes to score/.
+	* wrapup/Makefile.am, configure.ac: Reflect changes to sapi/.
 	* configure.ac: Add AC_SUBST(INLINEdir).
-	* wrapup/Makefile.am: Reflect changes to rtems/.
-	* configure.ac: Reflect changes to rtems/.
+	* wrapup/Makefile.am, configure.ac: Reflect changes to rtems/.
 	* wrapup/Makefile.am: Reflect changes to posix/. Reflect changes to
 	itron/.
-	* itron/include/Makefile.am: Remove.
-	* itron/inline/Makefile.am: Remove.
-	* itron/macros/Makefile.am: Remove.
-	* itron/src/Makefile.am: Remove.
+	* itron/include/Makefile.am, itron/inline/Makefile.am,
+	itron/macros/Makefile.am, itron/src/Makefile.am: Remove.
 	* itron/Makefile.am: Merge-in removed Makefile.ams.
 	* itron/configure.ac: Reflect changes above.
-	* posix/include/Makefile.am: Remove.
-	* posix/inline/Makefile.am: Remove.
-	* posix/macros/Makefile.am: Remove.
-	* posix/src/Makefile.am: Remove.
+	* posix/include/Makefile.am, posix/inline/Makefile.am,
+	posix/macros/Makefile.am, posix/src/Makefile.am: Remove.
 	* posix/Makefile.am: Merge-in removed Makefile.ams.
 	* posix/configure.ac: Reflect changes above.
 	* score/Makefile.am: Fix macro-file installation.
 	* score/Makefile.am: Move include/rtems/score/cpuopts.h to STD_H_FILES.
-	* score/include/Makefile.am: Remove.
-	* score/inline/Makefile.am: Remove.
-	* score/macros/Makefile.am: Remove.
-	* score/src/Makefile.am: Remove.
+	* score/include/Makefile.am, score/inline/Makefile.am,
+	score/macros/Makefile.am, score/src/Makefile.am: Remove.
 	* score/Makefile.am: Merge-in removed Makefile.ams.
-	* sapi/include/Makefile.am: Remove.
-	* sapi/inline/Makefile.am: Remove.
-	* sapi/macros/Makefile.am: Remove.
-	* sapi/src/Makefile.am: Remove.
+	* sapi/include/Makefile.am, sapi/inline/Makefile.am,
+	sapi/macros/Makefile.am, sapi/src/Makefile.am: Remove.
 	* sapi/Makefile.am: Merge-in removed Makefile.ams.
-	* rtems/include/Makefile.am: Remove.
-	* rtems/inline/Makefile.am: Remove.
-	* rtems/macros/Makefile.am: Remove.
-	* rtems/src/Makefile.am: Remove.
+	* rtems/include/Makefile.am, rtems/inline/Makefile.am,
+	rtems/macros/Makefile.am, rtems/src/Makefile.am: Remove.
 	* rtems/Makefile.am: Merge-in removed Makefile.ams.
 
 2002-12-06	Vladimir Nesic <vnesic@dkts.co.yu>
@@ -2135,9 +2006,8 @@
 	posix/src/posixtimespecsubtract.c, posix/src/ptimer1.c,
 	posix/src/semunlink.c: Added casts to eliminate warnings on 16-bit
 	targets like the h8300.
-	* score/include/rtems/score/object.h, score/include/rtems/score/tod.h:
-	Added casts to eliminate warnings on 16 bit targets like the h8300.
-	* rtems/include/rtems/rtems/support.h: Added casts to eliminate warnings
+	* score/include/rtems/score/object.h, score/include/rtems/score/tod.h,
+	rtems/include/rtems/rtems/support.h: Added casts to eliminate warnings
 	on 16 bit targets like the h8300.
 	* libmisc/stackchk/check.c: Better handling of task name.
 	* libblock/src/bdbuf.c: Added cast to remove warning.
@@ -2152,9 +2022,9 @@
 
 2002-11-29	Eric Norum <eric.norum@usask.ca>
 
+	PR 316
 	* posix/src/sysconf.c: Add support for _SC_GETPW_R_SIZE_MAX. Return
-	error rather than panic if argument is unsupported. This was tracked as
-	PR316.
+	error rather than panic if argument is unsupported.
 
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2164,14 +2034,12 @@
 	* itron/configure.ac: Cosmetical fixes.
 	* itron/configure.ac: Fix package name.
 	* posix/configure.ac: Cosmetical fixes.
-	* posix/configure.ac: Fix package name.
-	* librpc/configure.ac: Fix package name.
-	* libblock/configure.ac: Fix package name.
+	* posix/configure.ac, librpc/configure.ac, libblock/configure.ac: Fix
+	package name.
 	* libfs/configure.ac: Cosmetical fixes.
 	* libfs/configure.ac: Fix package name.
 	* libcsupport/configure.ac: Cosmetical fixes.
-	* libcsupport/configure.ac: Fix package name.
-	* libnetworking/configure.ac: Fix package name.
+	* libcsupport/configure.ac, libnetworking/configure.ac: Fix package name.
 
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2185,9 +2053,8 @@
 	* libcsupport/Makefile.am: Unconditionally install sys/cdefs.h.
 	* libnetworking/Makefile.am: Merge-in HEADER-handling from
 	net/Makefile.am, netinet/Makefile.am, nfs/Makefile.am.
-	* libnetworking/net/Makefile.am: Remove *_HEADERS.
-	* libnetworking/netinet/Makefile.am: Remove *_HEADERS.
-	* libnetworking/nfs/Makefile.am: Remove *_HEADERS.
+	* libnetworking/net/Makefile.am, libnetworking/netinet/Makefile.am,
+	libnetworking/nfs/Makefile.am: Remove *_HEADERS.
 
 2002-11-18	Joel Sherrill <joel@OARcorp.com>
 
@@ -2204,19 +2071,17 @@
 	* libblock/src/diskdevs.c: Include <unistd.h> to remove warning.
 	* libnetworking/Makefile.am: Merge-in arpa/Makefile.am,
 	machine/Makefile.am, sys/Makefile.am, vm/Makefile.am. Add . to SUBDIRS.
-	* libnetworking/arpa/Makefile.am: Remove.
-	* libnetworking/machine/Makefile.am: Remove.
-	* libnetworking/sys/Makefile.am: Remove.
-	* libnetworking/vm/Makefile.am: Remove.
+	* libnetworking/arpa/Makefile.am, libnetworking/machine/Makefile.am,
+	libnetworking/sys/Makefile.am, libnetworking/vm/Makefile.am: Remove.
 	* libnetworking/configure.ac: Reflect changes above.
 
 2002-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* libmisc/capture/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/serdbg/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/capture/Makefile.am, libmisc/serdbg/Makefile.am: Remove
+	AUTOMAKE_OPTIONS.
 	* libmisc/serdbg/serdbgio.c: Add #include <unistd.h>.
-	* libmisc/shell/Makefile.am: Add RTEMS_LIBSHELL conditional.
-	* libmisc/wrapup/Makefile.am: Add RTEMS_LIBSHELL conditional.
+	* libmisc/shell/Makefile.am, libmisc/wrapup/Makefile.am: Add
+	RTEMS_LIBSHELL conditional.
 	* libmisc/configure.ac: Check for stdio assignments. Add RTEMS_LIBSHELL
 	conditional.
 
@@ -2232,7 +2097,6 @@
 
 2002-11-11	Joel Sherrill <joel@OARcorp.com>
 
-	* aclocal/version.m4: Updated to rtems-ss-20021111.
 	* aclocal/version.m4: Updated to rtems-ss-20021111.
 
 2002-11-07	<strauman@slac.stanford.edu>
@@ -2254,11 +2118,9 @@
 
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: Corrected.
-	* posix/ChangeLog: Corrected.
+	* ChangeLog, posix/ChangeLog: Corrected.
 	* libmisc/stackchk/check.c: Removed warnings.
-	* libcsupport/ChangeLog: Corrected.
-	* libnetworking/ChangeLog: Corrected.
+	* libcsupport/ChangeLog, libnetworking/ChangeLog: Corrected.
 
 2002-11-01	Eric Norum <eric.norum@usask.ca>
 
@@ -2325,7 +2187,7 @@
 	* libnetworking/libc/inet_ntoa.c: Prototype strcpy().
 	* libnetworking/libc/rcmd.c: Add include of <sys/select.h>.
 	* libnetworking/net/if_loop.c: Turn token at end of endif to comment.
-	* libnetworking/net/rtsock.c, libnetworking/nfs/bootp_subr.c: 
+	* libnetworking/net/rtsock.c, libnetworking/nfs/bootp_subr.c:
 	Conditional SYSINIT() usage on __rtems__.
 	* libnetworking/rtems/rtems_bootp.c: Add include of
 	<rtems/rtems_bsdnet_internal.h>.
@@ -2337,7 +2199,7 @@
 
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
-	* Added ATA  support.
+	* libblock/*: Added ATA support.
 	* libblock/include/rtems/blkdev.h: Added last IO status.
 	* libblock/include/rtems/ata.h, libblock/include/rtems/ata_internal.h,
 	libblock/include/rtems/ide_part_table.h, libblock/src/ata.c,
@@ -2350,14 +2212,10 @@
 
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
-	* itron/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
-	* posix/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
-	* librpc/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
-	* libblock/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
-	* libfs/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
-	* libcsupport/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
-	* libnetworking/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+	* configure.ac, itron/configure.ac, posix/configure.ac,
+	librpc/configure.ac, libblock/configure.ac, libfs/configure.ac,
+	libcsupport/configure.ac, libnetworking/configure.ac: Add nostdinc to
+	AM_INIT_AUTOMAKE.
 	* libnetworking/Makefile.am: Remove bogus reference to CHANGELOG.
 
 2002-10-24	Fabrizio Pirovano <pirovano.thysys@tiscalinet.it>
@@ -2373,24 +2231,17 @@
 
 2002-10-23	<strauman@slac.stanford.edu>
 
-	* src/mount.c per PR290, add check for ops->node_type_h
-	* src/mknod.c per PR291, remove erroneous call to freenod
+	PR 290
+	* src/mount.c: Add check for ops->node_type_h.
+	PR 291
+	* src/mknod.c: Remove erroneous call to freenod.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
-	* itron/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
-	* posix/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
-	* libmisc/.cvsignore: Reformat. Add autom4te*cache. Remove
-	autom4te.cache.
-	* librpc/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
-	* libblock/.cvsignore: Reformat. Add autom4te*cache. Remove
-	autom4te.cache.
-	* libfs/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
-	* libcsupport/.cvsignore: Reformat. Add autom4te*cache. Remove
-	autom4te.cache.
-	* libnetworking/.cvsignore: Reformat. Add autom4te*cache. Remove
-	autom4te.cache.
+	* .cvsignore, itron/.cvsignore, posix/.cvsignore, libmisc/.cvsignore,
+	librpc/.cvsignore, libblock/.cvsignore, libfs/.cvsignore,
+	libcsupport/.cvsignore, libnetworking/.cvsignore: Reformat. Add
+	autom4te*cache. Remove autom4te.cache.
 
 2002-10-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -2556,18 +2407,13 @@
 
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* libmisc/capture/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/cpuuse/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/devnull/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/dummy/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/dumpbuf/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/monitor/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/mw-fb/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/rtmonuse/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/serdbg/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/shell/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/stackchk/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libmisc/untar/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/capture/Makefile.am, libmisc/cpuuse/Makefile.am,
+	libmisc/devnull/Makefile.am, libmisc/dummy/Makefile.am,
+	libmisc/dumpbuf/Makefile.am, libmisc/monitor/Makefile.am,
+	libmisc/mw-fb/Makefile.am, libmisc/rtmonuse/Makefile.am,
+	libmisc/serdbg/Makefile.am, libmisc/shell/Makefile.am,
+	libmisc/stackchk/Makefile.am, libmisc/untar/Makefile.am: Use .$(OBJEXT)
+	instead of .o.
 	* librpc/src/rpc/rtems_portmapper.c: include <stdlib.h> (Get rid of
 	gcc31 warnings about abort/exit).
 
@@ -2611,8 +2457,8 @@
 
 2002-08-06	Joel Sherrill <joel@OARcorp.com>
 
-	* configure.ac: or32 does not currently support librpc.
-	* librpc/configure.ac: or32 does not currently support librpc.
+	* configure.ac, librpc/configure.ac: or32 does not currently support
+	librpc.
 
 2002-08-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2635,8 +2481,7 @@
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Use libscore.a.
-	* aclocal/canonicalize-tools.m4: Remove LD.
-	* automake/lib.am: Remove LD.
+	* aclocal/canonicalize-tools.m4, automake/lib.am: Remove LD.
 	* Makefile.am: Put preinstall-stamp into CLEANFILES.
 	* aclocal/rtems-top.m4: Use with_project_root and MULTIBUILDTOP to 
 	compose PROJECT_TOPdir (Fixes hppa1.1/genoffset problem).
@@ -2646,14 +2491,13 @@
 	* libblock/Makefile.am: Merge src/Makefile.am.
 	* libblock/src/Makefile.am: Remove.
 	* libblock/configure.ac: Remove src/Makefile.am.
-	* libfs/wrapup/Makefile.am: Remove.
-	* libfs/wrapup/.cvsignore: Remove.
+	* libfs/wrapup/Makefile.am, libfs/wrapup/.cvsignore: Remove.
 	* libfs/Makefile.am: Remove wrapup SUBDIR.
 	* libfs/configure.ac: Remove wrapup/Makefile.
 
 2002-07-31	Joel Sherrill <joel@OARcorp.com>
 
-	* aclocal/rtems-cpu-subdirs.m4:  Removed the or16 port was just a stub
+	* aclocal/rtems-cpu-subdirs.m4: Removed the or16 port was just a stub
 	and only the OR32 port is getting worked on.
 
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
@@ -2686,9 +2530,8 @@
 	* librpc/src/rpc/Makefile.am: Merge src/rpc/PSD.doc/Makefile.am.
 	* librpc/include/Makefile.am: Merge include/rpc/Makefile.am. Merge
 	include/rpcsvc/Makefile.am.
-	* librpc/include/rpc/Makefile.am: Remove.
-	* librpc/include/rpcsvc/Makefile.am: Remove.
-	* librpc/src/rpc/PSD.doc/Makefile.am: Remove.
+	* librpc/include/rpc/Makefile.am, librpc/include/rpcsvc/Makefile.am,
+	librpc/src/rpc/PSD.doc/Makefile.am: Remove.
 	* librpc/configure.ac: Remove duplicate AC_PROG_RANLIB. Remove
 	include/rpc/Makefile. Remove include/rpcsvc/Makefile. Remove
 	src/rpc/PSD.doc/Makefile.
@@ -2718,10 +2561,9 @@
 	$(PROJECT_RELEASE)/lib. Eliminate LIBNAME. Pickup *.o's instead of
 	*.rels for CPU_OBJS. Manually create $(project_libdir)$(MULTISUBDIR).
 	* automake/lib.am: Use project_libdir instead of $(PROJECT_RELEASE)/lib.
-	* aclocal/env-rtemsbsp.m4: Remove RTEMS_BSP_SPECS, PROJECT_RELEASE. Add
-	project_libdir, libdir. New GCC_SPECS. Various cleanups.
-	* aclocal/env-rtemscpu.m4: Remove RTEMS_BSP_SPECS, PROJECT_RELEASE. Add
-	project_libdir, libdir. New GCC_SPECS. Various cleanups.
+	* aclocal/env-rtemsbsp.m4, aclocal/env-rtemscpu.m4: Remove
+	RTEMS_BSP_SPECS, PROJECT_RELEASE. Add project_libdir, libdir. New
+	GCC_SPECS. Various cleanups.
 	* aclocal/rtems-top.m4: New PROJECT_ROOT handling.
 	* automake/compile.am: Remove RTEMS_BSP_SPECS, LD* flags, LINK,
 	references to bsp_specs. Use project_libdir instead of
@@ -2730,33 +2572,25 @@
 	* itron/src/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES.
 	* posix/src/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* posix/src/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES.
-	* score/src/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* sapi/src/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* rtems/src/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* librpc/src/xdr/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* librpc/src/rpc/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* librpc/src/xdr/Makefile.am: Eliminate LIBNAME.
-	* librpc/src/rpc/Makefile.am: Eliminate LIBNAME.
+	* score/src/Makefile.am, sapi/src/Makefile.am, rtems/src/Makefile.am,
+	librpc/src/xdr/Makefile.am, librpc/src/rpc/Makefile.am: Use .$(OBJEXT)
+	instead of .o.
+	* librpc/src/xdr/Makefile.am, librpc/src/rpc/Makefile.am: Eliminate
+	LIBNAME.
 	* libblock/src/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* libblock/src/Makefile.am: Eliminate LIBNAME. Cosmetical cleanups.
 	* libcsupport/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* libcsupport/Makefile.am: Eliminate LIBNAME. Use AM_CPPFLAGS instead of
 	INCLUDES (Upcoming automake standard).
 	* libnetworking/kern/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* libnetworking/lib/Makefile.am: Ditto.
-	* libnetworking/libc/Makefile.am: Ditto.
-	* libnetworking/net/Makefile.am: Ditto.
-	* libnetworking/netinet/Makefile.am: Ditto.
-	* libnetworking/nfs/Makefile.am: Ditto.
-	* libnetworking/rtems/Makefile.am: Ditto.
-	* libnetworking/wrapup/Makefile.am: Ditto.
+	* libnetworking/lib/Makefile.am, libnetworking/libc/Makefile.am,
+	libnetworking/net/Makefile.am, libnetworking/netinet/Makefile.am,
+	libnetworking/nfs/Makefile.am, libnetworking/rtems/Makefile.am,
+	libnetworking/wrapup/Makefile.am: Ditto.
 	* libnetworking/kern/Makefile.am: Eliminate LIBNAME.
-	* libnetworking/lib/Makefile.am: Ditto.
-	* libnetworking/libc/Makefile.am: Ditto.
-	* libnetworking/net/Makefile.am: Ditto.
-	* libnetworking/netinet/Makefile.am: Ditto.
-	* libnetworking/nfs/Makefile.am: Ditto.
-	* libnetworking/rtems/Makefile.am: Ditto.
+	* libnetworking/lib/Makefile.am, libnetworking/libc/Makefile.am,
+	libnetworking/net/Makefile.am, libnetworking/netinet/Makefile.am,
+	libnetworking/nfs/Makefile.am, libnetworking/rtems/Makefile.am: Ditto.
 	* libnetworking/wrapup/Makefile.am: Use project_libdir instead of
 	$(PROJECT_RELEASE)/lib.
 
@@ -2768,14 +2602,13 @@
 
 2002-07-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* libmisc/capture/capture.c: include <string.h> for memset.
-	* libmisc/capture/capture-cli.c: include <string.h> for memset.
+	* libmisc/capture/capture.c, libmisc/capture/capture-cli.c: include
+	<string.h> for memset.
 
 2002-07-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-top.m4: Reflect relocation of c/src/exec to cpukit.
-	* aclocal/check-cpu.m4: Ditto.
-	* aclocal/check-bsps.m4: Ditto.
+	* aclocal/check-cpu.m4, aclocal/check-bsps.m4: Ditto.
 
 2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
 
@@ -2795,23 +2628,18 @@
 	version.m4. Add --with-project-root. Reflect --with-project-root to
 	setting up PROJECT_ROOT.
 	* aclocal/env-rtemscpu.m4: Reflect new RTEMS_TOPdir (HACK).
-	* aclocal/check-cpu.m4:  Reflect new RTEMS_TOPdir.
-	* aclocal/check-bsps.m4: Reflect new RTEMS_TOPdir.
+	* aclocal/check-cpu.m4, aclocal/check-bsps.m4: Reflect new RTEMS_TOPdir.
 	* configure.ac: RTEMS_TOP(..).
-	* itron/configure.ac: RTEMS_TOP(../..).
-	* posix/configure.ac: RTEMS_TOP(../..).
-	* librpc/configure.ac: RTEMS_TOP(../..).
-	* libblock/configure.ac: RTEMS_TOP(../..).
-	* libfs/configure.ac: RTEMS_TOP(../..).
-	* libcsupport/configure.ac: RTEMS_TOP(../..).
-	* libnetworking/configure.ac: RTEMS_TOP(../..).
+	* itron/configure.ac, posix/configure.ac, librpc/configure.ac,
+	libblock/configure.ac, libfs/configure.ac, libcsupport/configure.ac,
+	libnetworking/configure.ac: RTEMS_TOP(../..).
 
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/include/rtems/posix/cancel.h, posix/src/cancel.c,
 	posix/src/cancelrun.c, posix/src/mqueue.c, posix/src/pthread.c,
 	posix/src/semaphore.c, posix/src/setcancelstate.c,
-	posix/src/setcanceltype.c, posix/src/testcancel.c:  Per PR164, corrected
+	posix/src/setcanceltype.c, posix/src/testcancel.c: Per PR164, corrected
 	the behavior of thread cancellation and did some cleanup as a
 	side-effect.
 	* score/macros/rtems/score/object.inl: Corrected implementation of
@@ -2827,7 +2655,7 @@
 
 	* Jump table for single entry point removed.
 	* sapi/include/rtems/directives.h, sapi/src/entrytable.c: Removed.
-	* sapi/include/Makefile.am, sapi/src/Makefile.am, sapi/src/exinit.c: 
+	* sapi/include/Makefile.am, sapi/src/Makefile.am, sapi/src/exinit.c:
 	Modified to reflect above.
 
 2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -2838,13 +2666,9 @@
 	* aclocal/project-root.m4: Remove.
 	* aclocal/enable-multiprocessing.m4: Fix typo.
 	* aclocal/prog-cc.m4: Remove obsolete comments. Comment out GCCSED.
-	* itron/configure.ac: Remove RTEMS_PROJECT_ROOT.
-	* posix/configure.ac: Remove RTEMS_PROJECT_ROOT.
-	* librpc/configure.ac: Remove RTEMS_PROJECT_ROOT.
-	* libblock/configure.ac: Remove RTEMS_PROJECT_ROOT.
-	* libfs/configure.ac: Remove RTEMS_PROJECT_ROOT.
-	* libcsupport/configure.ac: Remove RTEMS_PROJECT_ROOT.
-	* libnetworking/configure.ac: Remove RTEMS_PROJECT_ROOT.
+	* itron/configure.ac, posix/configure.ac, librpc/configure.ac,
+	libblock/configure.ac, libfs/configure.ac, libcsupport/configure.ac,
+	libnetworking/configure.ac: Remove RTEMS_PROJECT_ROOT.
 
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -2865,7 +2689,7 @@
 	* itron/src/cre_mbf.c, itron/src/cre_sem.c, itron/src/eventflags.c,
 	itron/src/fmempool.c, itron/src/itronsem.c, itron/src/mbox.c,
 	itron/src/msgbuffer.c, itron/src/port.c, itron/src/task.c,
-	itron/src/vmempool.c:  Modified as part of above.
+	itron/src/vmempool.c: Modified as part of above.
 	* Mega patch merge to change the format of the object IDs to loosen the
 	dependency between the SCORE and the various APIs. There was
 	considerable work to simplify the object name management and it appears
@@ -2885,8 +2709,8 @@
 	posix/src/keycreate.c, posix/src/keydelete.c, posix/src/killinfo.c,
 	posix/src/mqueue.c, posix/src/mqueuecreatesupp.c, posix/src/mutex.c,
 	posix/src/mutexinit.c, posix/src/psignal.c, posix/src/pthread.c,
-	posix/src/semaphore.c, posix/src/semaphorecreatesupp.c:  Modified as
-	part of above.
+	posix/src/semaphore.c, posix/src/semaphorecreatesupp.c: Modified as part
+	of above.
 	* Mega patch merge to change the format of the object IDs to loosen the
 	dependency between the SCORE and the various APIs. There was
 	considerable work to simplify the object name management and it appears
@@ -2932,7 +2756,7 @@
 	routine not inlined. As part of this patch a lot of MP code for
 	thread/proxy blocking was made conditional and cleaned up.
 	* sapi/include/confdefs.h, sapi/src/exinit.c, sapi/src/extension.c,
-	sapi/src/itronapi.c, sapi/src/posixapi.c, sapi/src/rtemsapi.c:  Modified
+	sapi/src/itronapi.c, sapi/src/posixapi.c, sapi/src/rtemsapi.c: Modified
 	as part of above.
 	* Mega patch merge to change the format of the object IDs to loosen the
 	dependency between the SCORE and the various APIs. There was
@@ -2982,7 +2806,7 @@
 	screens are not updated, and _Objects_Get_information needs to be a real
 	routine not inlined. As part of this patch a lot of MP code for
 	thread/proxy blocking was made conditional and cleaned up.
-	* libblock/src/bdbuf.c:  Modified as part of above.
+	* libblock/src/bdbuf.c: Modified as part of above.
 	* libcsupport/src/__times.c: Corrected from previous attempt to cleanup.
 
 2002-06-28	Joel Sherrill <joel@OARcorp.com>
@@ -3007,15 +2831,9 @@
 	* automake/compile.am: Remove CXX support. Replace AS by CCAS. Remove
 	LINK_LIBS, LINK_OBJS, LINK_FILES.
 	* configure.ac: Use AC_CONFIG_AUX_DIR(..).
-	* itron/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
-	* posix/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
-	* librpc/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
-	* libblock/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
-	AC_PROG_RANLIB.
-	* libfs/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
-	* libcsupport/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
-	AC_PROG_RANLIB.
-	* libnetworking/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
+	* itron/configure.ac, posix/configure.ac, librpc/configure.ac,
+	libblock/configure.ac, libfs/configure.ac, libcsupport/configure.ac,
+	libnetworking/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
 	AC_PROG_RANLIB.
 
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -3023,8 +2841,7 @@
 	* configure.ac: Remove references to RTEMS_BSP.
 	* aclocal/check-multiprocessing.m4: Remove references to RTEMS_BSP.
 	Allow building w/ --enable-multiprocessing --enable-multilib.
-	* aclocal/enable-multiprocessing.m4:  Eliminate
-	RTEMS_HAS_MULTIPROCESSING.
+	* aclocal/enable-multiprocessing.m4: Eliminate RTEMS_HAS_MULTIPROCESSING.
 	* itron/configure.ac: Remove references to RTEMS_BSP.
 	* itron/src/Makefile.am: Add libitron.a.
 	* posix/configure.ac: Remove references to RTEMS_BSP.
@@ -3057,17 +2874,14 @@
 	* librpc/configure.ac: RTEMS_TOP(../../../..).
 	AC_CONFIG_AUX_DIR(../../../..). Remove RTEMS_CANONICAL_HOST. Use
 	RTEMS_ENV_RTEMSCPU. Add AC_PROG_RANLIB.
-	* librpc/include/rpc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* librpc/include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* librpc/include/rpcsvc/Makefile.am: Include
+	* librpc/include/rpc/Makefile.am, librpc/include/Makefile.am,
+	librpc/include/rpcsvc/Makefile.am: Include
 	$(top_srcdir)/../automake/*.am.
 	* librpc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	ACLOCAL_AMFLAGS = -I ../aclocal.
-	* librpc/src/rpc/PSD.doc/Makefile.am: Include
+	* librpc/src/rpc/PSD.doc/Makefile.am, librpc/src/rpc/Makefile.am,
+	librpc/src/xdr/Makefile.am, librpc/src/Makefile.am: Include
 	$(top_srcdir)/../automake/*.am.
-	* librpc/src/rpc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* librpc/src/xdr/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* librpc/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 
 2002-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3085,78 +2899,45 @@
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include $(top_srcdir)/automake/*.am. Use aclocal.
-	* sapi/include/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* sapi/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* sapi/inline/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* sapi/macros/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* sapi/src/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* score/include/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* score/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* score/cpu/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* score/inline/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* score/macros/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* score/src/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* wrapup/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* include/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* rtems/include/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* rtems/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* rtems/inline/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* rtems/macros/Makefile.am: Include $(top_srcdir)/automake/*.am.
-	* rtems/src/Makefile.am: Include $(top_srcdir)/automake/*.am.
+	* sapi/include/Makefile.am, sapi/Makefile.am, sapi/inline/Makefile.am,
+	sapi/macros/Makefile.am, sapi/src/Makefile.am,
+	score/include/Makefile.am, score/Makefile.am, score/cpu/Makefile.am,
+	score/inline/Makefile.am, score/macros/Makefile.am,
+	score/src/Makefile.am, wrapup/Makefile.am, include/Makefile.am,
+	rtems/include/Makefile.am, rtems/Makefile.am, rtems/inline/Makefile.am,
+	rtems/macros/Makefile.am, rtems/src/Makefile.am: Include
+	$(top_srcdir)/automake/*.am.
 	* aclocal/bsp-alias.m4: Copied over from aclocal/.
-	* aclocal/canonical-host.m4: Ditto.
-	* aclocal/canonical-target-name.m4: Ditto.
-	* aclocal/canonicalize-tools.m4: Ditto.
-	* aclocal/check-bsp-cache.m4: Ditto.
-	* aclocal/check-bsps.m4: Ditto.
-	* aclocal/check-cpu.m4: Ditto.
-	* aclocal/check-itron.m4: Ditto.
-	* aclocal/check-multiprocessing.m4: Ditto.
-	* aclocal/check-networking.m4: Ditto.
-	* aclocal/check-newlib.m4: Ditto.
-	* aclocal/check-posix.m4: Ditto.
-	* aclocal/check-tool.m4: Ditto.
-	* aclocal/enable-bare.m4: Ditto.
-	* aclocal/enable-inlines.m4: Ditto.
-	* aclocal/enable-itron.m4: Ditto.
-	* aclocal/enable-multiprocessing.m4: Ditto.
-	* aclocal/enable-networking.m4: Ditto.
-	* aclocal/enable-posix.m4: Ditto.
-	* aclocal/enable-rtemsbsp.m4: Ditto.
-	* aclocal/env-rtemsbsp.m4: Ditto.
-	* aclocal/env-rtemscpu.m4: Ditto.
-	* aclocal/gcc-pipe.m4: Ditto.
-	* aclocal/gcc-specs.m4: Ditto.
-	* aclocal/multi.m4: Ditto.
-	* aclocal/multilib.m4: Ditto.
-	* aclocal/prog-cc.m4: Ditto.
-	* aclocal/project-root.m4: Ditto.
-	* aclocal/rtems-cpu-subdirs.m4: Ditto.
-	* aclocal/rtems-debug.m4: Ditto.
-	* aclocal/rtems-top.m4: Ditto.
-	* aclocal/subdirs.m4: Ditto.
-	* aclocal/sysv-ipc.m4: Ditto.
-	* aclocal/tool-paths.m4: Ditto.
-	* aclocal/version.m4: Ditto.
+	* aclocal/canonical-host.m4, aclocal/canonical-target-name.m4,
+	aclocal/canonicalize-tools.m4, aclocal/check-bsp-cache.m4,
+	aclocal/check-bsps.m4, aclocal/check-cpu.m4, aclocal/check-itron.m4,
+	aclocal/check-multiprocessing.m4, aclocal/check-networking.m4,
+	aclocal/check-newlib.m4, aclocal/check-posix.m4, aclocal/check-tool.m4,
+	aclocal/enable-bare.m4, aclocal/enable-inlines.m4,
+	aclocal/enable-itron.m4, aclocal/enable-multiprocessing.m4,
+	aclocal/enable-networking.m4, aclocal/enable-posix.m4,
+	aclocal/enable-rtemsbsp.m4, aclocal/env-rtemsbsp.m4,
+	aclocal/env-rtemscpu.m4, aclocal/gcc-pipe.m4, aclocal/gcc-specs.m4,
+	aclocal/multi.m4, aclocal/multilib.m4, aclocal/prog-cc.m4,
+	aclocal/project-root.m4, aclocal/rtems-cpu-subdirs.m4,
+	aclocal/rtems-debug.m4, aclocal/rtems-top.m4, aclocal/subdirs.m4,
+	aclocal/sysv-ipc.m4, aclocal/tool-paths.m4, aclocal/version.m4: Ditto.
 	* itron/include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	* itron/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
 	../aclocal.
-	* itron/inline/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* itron/macros/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* itron/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* posix/include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* itron/inline/Makefile.am, itron/macros/Makefile.am,
+	itron/src/Makefile.am, posix/include/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
 	* posix/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
 	../aclocal.
-	* posix/inline/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* posix/macros/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* posix/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libblock/include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* posix/inline/Makefile.am, posix/macros/Makefile.am,
+	posix/src/Makefile.am, libblock/include/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
 	* libblock/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
 	../aclocal.
-	* libblock/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libfs/src/dosfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libfs/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libfs/src/imfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libblock/src/Makefile.am, libfs/src/dosfs/Makefile.am,
+	libfs/src/Makefile.am, libfs/src/imfs/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
 	* libfs/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
 	../aclocal.
 	* libfs/wrapup/Makefile.am: Include $(top_srcdir)/../automake/*.am.
@@ -3165,33 +2946,21 @@
 	* libcsupport/src/Makefile.am: Remove.
 	* libcsupport/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
 	../aclocal.
-	* libcsupport/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libnetworking/arpa/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libnetworking/kern/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libcsupport/src/Makefile.am, libnetworking/arpa/Makefile.am,
+	libnetworking/kern/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 	* libnetworking/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
 	../aclocal.
-	* libnetworking/lib/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libnetworking/libc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libnetworking/machine/Makefile.am: Include
-	$(top_srcdir)/../automake/*.am.
-	* libnetworking/net/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libnetworking/netinet/Makefile.am: Include
-	$(top_srcdir)/../automake/*.am.
-	* libnetworking/nfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libnetworking/rtems/Makefile.am: Include
-	$(top_srcdir)/../automake/*.am.
-	* libnetworking/sys/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libnetworking/vm/Makefile.am: Include $(top_srcdir)/../automake/*.am.
-	* libnetworking/wrapup/Makefile.am: Include
+	* libnetworking/lib/Makefile.am, libnetworking/libc/Makefile.am,
+	libnetworking/machine/Makefile.am, libnetworking/net/Makefile.am,
+	libnetworking/netinet/Makefile.am, libnetworking/nfs/Makefile.am,
+	libnetworking/rtems/Makefile.am, libnetworking/sys/Makefile.am,
+	libnetworking/vm/Makefile.am, libnetworking/wrapup/Makefile.am: Include
 	$(top_srcdir)/../automake/*.am.
 
 2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* automake/compile.am: Copied over from automake/.
-	* automake/lib.am: Copied over from automake/.
-	* automake/local.am: Copied over from automake/.
-	* automake/multilib.am: Copied over from automake/.
-	* automake/subdirs.am: Copied over from automake/.
+	* automake/compile.am, automake/lib.am, automake/local.am,
+	automake/multilib.am, automake/subdirs.am: Copied over from automake/.
 	* Makefile.am: Add automake/*.am.
 
 2002-06-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -3208,21 +2977,14 @@
 2002-05-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add libnetworking.
-	* wrapup/Makefile.am: Ditto.
-	Relocate c/src/libnetworking.
+	* wrapup/Makefile.am: Ditto. Relocate c/src/libnetworking.
 	* libnetworking/Makefile.am: Reflect moval.
-	* libnetworking/machine/Makefile.am: Ditto.
-	* libnetworking/net/Makefile.am: Ditto.
-	* libnetworking/lib/Makefile.am: Ditto.
-	* libnetworking/netinet/Makefile.am: Ditto.
-	* libnetworking/vm/Makefile.am: Ditto.
-	* libnetworking/libc/Makefile.am: Ditto.
-	* libnetworking/sys/Makefile.am: Ditto.
-	* libnetworking/arpa/Makefile.am: Ditto.
-	* libnetworking/nfs/Makefile.am: Ditto.
-	* libnetworking/kern/Makefile.am: Ditto.
-	* libnetworking/rtems/Makefile.am: Ditto.
-	* libnetworking/configure.ac: Dittp.
+	* libnetworking/machine/Makefile.am, libnetworking/net/Makefile.am,
+	libnetworking/lib/Makefile.am, libnetworking/netinet/Makefile.am,
+	libnetworking/vm/Makefile.am, libnetworking/libc/Makefile.am,
+	libnetworking/sys/Makefile.am, libnetworking/arpa/Makefile.am,
+	libnetworking/nfs/Makefile.am, libnetworking/kern/Makefile.am,
+	libnetworking/rtems/Makefile.am, libnetworking/configure.ac: Ditto.
 	* libnetworking/wrapup/Makefile.am: Ditto. Remove references to
 	networking apps.
 
@@ -3238,20 +3000,15 @@
 	libblock/include/Makefile.am, libblock/src/Makefile.am: Reflect move
 	from c/src/libblock to c/src/exec/libblock.
 	* libfs/configure.ac: Reflect move from c/src/libfs to c/src/exec/libfs.
-	* libfs/Makefile.am: Ditto.
-	* libfs/src/Makefile.am: Ditto.
-	* libfs/src/dosfs/Makefile.am: Ditto.
-	* libfs/src/imfs/Makefile.am: Ditto.
-	* libfs/wrapup/Makefile.am: Ditto.
+	* libfs/Makefile.am, libfs/src/Makefile.am, libfs/src/dosfs/Makefile.am,
+	libfs/src/imfs/Makefile.am, libfs/wrapup/Makefile.am: Ditto.
 	* libnetworking/rtems_telnetd/pty.c: Remove bsp.h. Include
 	<rtems/bspIo.h>.
 
 2002-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* libmisc/rootfs/.cvsignore: Remove.
-	* libmisc/rootfs/Makefile.am: Remove.
-	* libmisc/rootfs/mkrootfs.h: Remove.
-	* libmisc/rootfs/mkrootfs.c: Remove.
+	* libmisc/rootfs/.cvsignore, libmisc/rootfs/Makefile.am,
+	libmisc/rootfs/mkrootfs.h, libmisc/rootfs/mkrootfs.c: Remove.
 	* libmisc/configure.ac: Remove rootfs and NETWORKING macros.
 	* libmisc/wrapup/Makefile.am: Remove rootfs and HAS_NETWORKING.
 	* libnetworking/rtems/mkrootfs.c: Add (relocated from libmisc/rootfs).
@@ -3260,7 +3017,8 @@
 
 2002-05-16	Chris Johns <ccj@acm.org>
 
-	* Per PR194, added the Capture engine.  
+	PR 194
+	* libmisc/*: Added the Capture engine.
 	* libmisc/capture/Makefile.am, libmisc/capture/README,
 	libmisc/capture/capture-cli.c, libmisc/capture/capture-cli.h,
 	libmisc/capture/capture.c, libmisc/capture/capture.h,
@@ -3278,16 +3036,15 @@
 
 	* score/include/rtems/score/thread.h,
 	score/inline/rtems/score/thread.inl, score/src/threaddispatch.c,
-	score/src/threadinitialize.c:  Move the C library re-enterrant support
+	score/src/threadinitialize.c: Move the C library re-enterrant support
 	directly into the thread dispatch code. RTEMS needs libc and so
 	requiring libc to use a user extension with its overhead is not the best
 	solution. This patch lowers the overhead to 2 pointer moves.
 
 2002-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* libnetworking/sys/ioctl.h: Remove.
-	* libnetworking/sys/sockio.h: Remove.
-	* libnetworking/sys/filio.h: Remove.
+	* libnetworking/sys/ioctl.h, libnetworking/sys/sockio.h,
+	libnetworking/sys/filio.h: Remove.
 	* libnetworking/sys/Makefile.am: Reflect changes above.
 
 2002-05-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -3340,10 +3097,11 @@
 
 2002-04-11	Chris Johns <ccj@acm.org>
 
-	* libnetworking/c/src/libnetworking/rtems/rtems_bsdnet.h: To address
-	PR59, added the drv_ctrl driver control block field to the ifconfig
-	network driver structure. This field is needed by the i82586 driver
-	which was ported from NetBSD as it had better hardware abstraction.
+	PR 59/networking
+	* libnetworking/c/src/libnetworking/rtems/rtems_bsdnet.h: Add the
+	drv_ctrl driver control block field to the ifconfig network driver
+	structure. This field is needed by the i82586 driver which was ported
+	from NetBSD as it had better hardware abstraction.
 
 2002-04-10	Victor V. Vengerov <vvv@oktet.ru>
 
@@ -3380,13 +3138,11 @@
 
 	* include/rtems/bspIo.h: Fix cpp-guards, remove references to i386.
 	* posix/src/psignal.c: Include <stdlib.h>.
-	* libblock/src/ramdisk.c: include <string.h>.
-	* libblock/src/blkdev.c: include <string.h>.
-	* libfs/src/imfs/imfs_getchild.c: include <string.h>.
-	* libfs/src/imfs/imfs_gtkn.c: Include <string.h>.
-	* libfs/src/imfs/ioman.c: Include <string.h>.
-	* libfs/src/imfs/linearfile.c: Include <string.h>.
-	* libfs/src/imfs/memfile.c: Include <string.h>.
+	* libblock/src/ramdisk.c, libblock/src/blkdev.c,
+	libfs/src/imfs/imfs_getchild.c: include <string.h>.
+	* libfs/src/imfs/imfs_gtkn.c, libfs/src/imfs/ioman.c,
+	libfs/src/imfs/linearfile.c, libfs/src/imfs/memfile.c: Include
+	<string.h>.
 	* libnetworking/ChangeLog: Fix dates.
 
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -3407,9 +3163,7 @@
 2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* posix/src/getegid.c: Remove <errno.h>.
-	* posix/src/geteuid.c: Ditto.
-	* posix/src/getgid.c: Ditto.
-	* posix/src/getuid.c: Ditto.
+	* posix/src/geteuid.c, posix/src/getgid.c, posix/src/getuid.c: Ditto.
 	* posix/src/getlogin.c: Move <errno.h>.
 
 2002-03-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -3418,7 +3172,7 @@
 
 2002-03-27	Thomas.Doerfler@imd-systems.de
 
-	* PR144
+	PR 144
 	* libnetworking/nfs/bootp_subr.c bootpc_init(): Performs a write to
 	memory address 0 when called for the first time. This is done when
 	trying to clear the variable "dhcp_hostname".
@@ -3427,103 +3181,69 @@
 
 	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am, Makefile.am, wrapup/Makefile.am: Remove
+	AUTOMAKE_OPTIONS.
 	* itron/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* itron/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* itron/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* itron/inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* itron/macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* itron/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* itron/include/Makefile.am, itron/Makefile.am,
+	itron/inline/Makefile.am, itron/macros/Makefile.am,
+	itron/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* posix/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* posix/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* posix/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* posix/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* posix/inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* posix/macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* score/cpu/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* score/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* score/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* score/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* score/inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* score/macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* sapi/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* sapi/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* sapi/inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* sapi/macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* sapi/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* rtems/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* rtems/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* rtems/inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* rtems/macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* rtems/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* posix/src/Makefile.am, posix/Makefile.am, posix/include/Makefile.am,
+	posix/inline/Makefile.am, posix/macros/Makefile.am,
+	score/cpu/Makefile.am, score/src/Makefile.am, score/Makefile.am,
+	score/include/Makefile.am, score/inline/Makefile.am,
+	score/macros/Makefile.am, sapi/Makefile.am, sapi/include/Makefile.am,
+	sapi/inline/Makefile.am, sapi/macros/Makefile.am, sapi/src/Makefile.am,
+	rtems/Makefile.am, rtems/include/Makefile.am, rtems/inline/Makefile.am,
+	rtems/macros/Makefile.am, rtems/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* libmisc/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* libmisc/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/cpuuse/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/devnull/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/dummy/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/dumpbuf/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/monitor/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/mw-fb/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/rootfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/rtmonuse/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/shell/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/stackchk/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/untar/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libmisc/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/Makefile.am, libmisc/cpuuse/Makefile.am,
+	libmisc/devnull/Makefile.am, libmisc/dummy/Makefile.am,
+	libmisc/dumpbuf/Makefile.am, libmisc/monitor/Makefile.am,
+	libmisc/mw-fb/Makefile.am, libmisc/rootfs/Makefile.am,
+	libmisc/rtmonuse/Makefile.am, libmisc/shell/Makefile.am,
+	libmisc/stackchk/Makefile.am, libmisc/untar/Makefile.am,
+	libmisc/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* librpc/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* librpc/include/rpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* librpc/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* librpc/include/rpcsvc/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* librpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* librpc/src/rpc/PSD.doc/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* librpc/src/rpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* librpc/src/xdr/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* librpc/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/include/rpc/Makefile.am, librpc/include/Makefile.am,
+	librpc/include/rpcsvc/Makefile.am, librpc/Makefile.am,
+	librpc/src/rpc/PSD.doc/Makefile.am, librpc/src/rpc/Makefile.am,
+	librpc/src/xdr/Makefile.am, librpc/src/Makefile.am: Remove
+	AUTOMAKE_OPTIONS.
 	* libblock/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* libblock/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libblock/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libblock/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libblock/include/Makefile.am, libblock/Makefile.am,
+	libblock/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* libfs/src/dosfs/fat_file.c: Remove bsp.h.  fat_file_write(.. const
 	char*buf ..).
 	* libfs/src/dosfs/fat_file.h: fat_file_write(.. const char*buf ..).
 	* libfs/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
-	* libfs/src/dosfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libfs/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libfs/src/imfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libfs/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libfs/src/dosfs/Makefile.am, libfs/src/Makefile.am,
+	libfs/src/imfs/Makefile.am, libfs/Makefile.am, libfs/wrapup/Makefile.am:
+	Remove AUTOMAKE_OPTIONS.
 	* libnetworking/configure.ac:
 	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS). AM_INIT_AUTOMAKE([no-define
 	foreign 1.6]).
-	* libnetworking/arpa/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/kern/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/lib/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/libc/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/machine/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/net/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/netinet/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/nfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/pppd/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/rtems/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/rtems_servers/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/rtems_telnetd/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/rtems_webserver/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/sys/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/vm/Makefile.am: Remove AUTOMAKE_OPTIONS.
-	* libnetworking/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libnetworking/arpa/Makefile.am, libnetworking/kern/Makefile.am,
+	libnetworking/Makefile.am, libnetworking/lib/Makefile.am,
+	libnetworking/libc/Makefile.am, libnetworking/machine/Makefile.am,
+	libnetworking/net/Makefile.am, libnetworking/netinet/Makefile.am,
+	libnetworking/nfs/Makefile.am, libnetworking/pppd/Makefile.am,
+	libnetworking/rtems/Makefile.am,
+	libnetworking/rtems_servers/Makefile.am,
+	libnetworking/rtems_telnetd/Makefile.am,
+	libnetworking/rtems_webserver/Makefile.am,
+	libnetworking/sys/Makefile.am, libnetworking/vm/Makefile.am,
+	libnetworking/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-03-27	Ilya Alexeev <ilya@continuum.ru>
 
-	* PR162
+	PR 162
 	* libnetworking/net/if_ppp.c ppp_txdaemon(),
 	libnetworking/net/if_pppvar.h pppstart(): Local variables must not be
 	used in a device write routines.  Now ppp_softc structure have own
@@ -3560,28 +3280,28 @@
 
 2002-03-20	Chris Johns <ccj@acm.org>
 
-	* libmisc/monitor/mon-command.c: Per PR192 the RTEMS monitor makes
-	everything lowercase. The capture engine need to set triggers or watches
-	on task with uppercase names.   Also stop the monitor repeating command
-	when enter is pressed.
-	* PR148.
+	PR 192
+	* libmisc/monitor/mon-command.c: The RTEMS monitor makes everything
+	lowercase. The capture engine need to set triggers or watches on task
+	with uppercase names.   Also stop the monitor repeating command when
+	enter is pressed.
+	PR 148.
 	* libmisc/monitor/mon-prmisc.c: Fixed to print task states correctly.
 
 2002-03-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Addressing PR 140.
-	* libfs/src/dosfs/config.h.in: Removed.
-	* libfs/src/dosfs/stamp-h2.in: Removed.
+	PR 140
+	* libfs/src/dosfs/config.h.in, libfs/src/dosfs/stamp-h2.in: Removed.
 	* libfs/.cvsignore: Add config.h*, stamp-h*.
 	* libfs/configure.ac: Remove AC_SRC_DIR(.../dosfs.h). Remove
 	AM_CONFIG_HEADER(src/dosfs/config.h). Remove
 	AM_CONFIG_HEADER(src/imfs/config.h). Add AM_CONFIG_HEADER(config.h).
-	* libfs/src/dosfs/Makefile.am: INCLUDES = -I../...
-	* libfs/src/imfs/Makefile.am: INCLUDES = -I../...
+	* libfs/src/dosfs/Makefile.am, libfs/src/imfs/Makefile.am: INCLUDES =
+	-I../...
 
 2002-03-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Reported and tracked as PR130.
+	PR 130
 	* libfs/src/dosfs/Makefile.am: Reworked, Disable dosfs for UNIX.
 	* libfs/wrapup/Makefile.am: Disable dosfs for UNIX.
 
@@ -3662,10 +3382,8 @@
 
 	* posix/src/getegid.c: Add #include <rtems/userenv.h>. Remove #include
 	<rtems/libio_.h>.
-	* posix/src/geteuid.c: Ditto.
-	* posix/src/getgid.c: Ditto.
-	* posix/src/getlogin.c: Ditto.
-	* posix/src/getuid.c: Ditto.
+	* posix/src/geteuid.c, posix/src/getgid.c, posix/src/getlogin.c,
+	posix/src/getuid.c: Ditto.
 
 2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -3689,12 +3407,12 @@
 2002-01-31	Mike Siers <mikes@poliac.com>
 
 	* libnetworking/pppd/rtemsdialer.h: New file missed in previous commit.
-	* Nice Update of PPPD support which eliminates the requiremetn that
-	drivers be in the termios TASK_DRIVEN mode. Mike did significant testing
-	and reports that it seems to be more stable and handle larger packets
-	better.  This patch replaces the termios tasks with more general pppd
-	network driver tasks.  The functions pppinput() and pppstart() get 
-	called from the interrupt service routine.
+	* libnetworking/*: Update of PPPD support which eliminates the
+	requirement that drivers be in the termios TASK_DRIVEN mode. Mike did
+	significant testing and reports that it seems to be more stable and
+	handle larger packets better.  This patch replaces the termios tasks
+	with more general pppd network driver tasks.  The functions pppinput()
+	and pppstart() get  called from the interrupt service routine.
 	* libnetworking/Makefile.am, libnetworking/configure.ac,
 	libnetworking/net/Makefile.am, libnetworking/net/bpf.h,
 	libnetworking/net/ethernet.h, libnetworking/net/if.c,
@@ -3755,20 +3473,17 @@
 	* libmisc/configure.ac: Add check for weak function attribute. Remove
 	AM_CONDITIONAL([RTEMS_LIBSHELL]. Add AM_CONDITIONAL(LIBSHELL),
 	AM_CONDITIONAL(LIBSERDBG).
-	* libmisc/capture/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/cpuuse/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/devnull/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/dummy/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/dumpbuf/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/monitor/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/mw-fb/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/rtmonuse/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/serdbg/Makefile.am:  Use *.a instead of *-tmp.a. Build iff
+	* libmisc/capture/Makefile.am, libmisc/cpuuse/Makefile.am,
+	libmisc/devnull/Makefile.am, libmisc/dummy/Makefile.am,
+	libmisc/dumpbuf/Makefile.am, libmisc/monitor/Makefile.am,
+	libmisc/mw-fb/Makefile.am, libmisc/rtmonuse/Makefile.am: Use *.a instead
+	of *-tmp.a.
+	* libmisc/serdbg/Makefile.am: Use *.a instead of *-tmp.a. Build iff
 	LIBSERDBG is true.
-	* libmisc/shell/Makefile.am:  Use *.a instead of *-tmp.a. Build iff
+	* libmisc/shell/Makefile.am: Use *.a instead of *-tmp.a. Build iff
 	LIBSHELL is true.
-	* libmisc/stackchk/Makefile.am:  Use *.a instead of *-tmp.a.
-	* libmisc/untar/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/stackchk/Makefile.am, libmisc/untar/Makefile.am: Use *.a
+	instead of *-tmp.a.
 	* libmisc/wrapup/Makefile.am: Reflect changes above.
 
 2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -3803,12 +3518,10 @@
 
 2002-01-07	Joel Sherrill <joel@OARcorp.com>
 
-	* posix/optman/, posix/optman/.cvsignore, posix/optman/Makefile.am:
-	Removed entire contents of optman/ directory since it has been moved.
-	* sapi/optman/, sapi/optman/.cvsignore, sapi/optman/Makefile.am,
-	sapi/optman/no-ext.c, sapi/optman/no-io.c: Removed entire contents of
-	optman/ directory since it has been moved.
-	* rtems/optman/, rtems/optman/.cvsignore, rtems/optman/Makefile.am,
+	* posix/optman/, posix/optman/.cvsignore, posix/optman/Makefile.am,
+	sapi/optman/, sapi/optman/.cvsignore, sapi/optman/Makefile.am,
+	sapi/optman/no-ext.c, sapi/optman/no-io.c, rtems/optman/,
+	rtems/optman/.cvsignore, rtems/optman/Makefile.am,
 	rtems/optman/no-dpmem.c, rtems/optman/no-event.c, rtems/optman/no-mp.c,
 	rtems/optman/no-msg.c, rtems/optman/no-part.c, rtems/optman/no-region.c,
 	rtems/optman/no-rtmon.c, rtems/optman/no-sem.c,
@@ -3825,35 +3538,14 @@
 	* score/include/rtems/seterr.h: Add do {..} while (0) in defines. Rename
 	set_errno_and_return_minus_one into rtems_set_errno_and_return_minus_one.
 	* libmisc/mw-fb/mw_uid.c: Apply rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_eval.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/memfile.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_readlink.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_unlink.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_link.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_chown.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/ioman.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_mount.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_directory.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_stat.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_fchmod.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_symlink.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_mknod.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/linearfile.c: Include <rtems/seterr.h>. Apply
-	rtems_set_errno_and_return_minus_one.
-	* libfs/src/imfs/imfs_unmount.c: Include <rtems/seterr.h>. Apply
+	* libfs/src/imfs/imfs_eval.c, libfs/src/imfs/memfile.c,
+	libfs/src/imfs/imfs_readlink.c, libfs/src/imfs/imfs_unlink.c,
+	libfs/src/imfs/imfs_link.c, libfs/src/imfs/imfs_chown.c,
+	libfs/src/imfs/ioman.c, libfs/src/imfs/imfs_mount.c,
+	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_stat.c,
+	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/imfs_symlink.c,
+	libfs/src/imfs/imfs_mknod.c, libfs/src/imfs/linearfile.c,
+	libfs/src/imfs/imfs_unmount.c: Include <rtems/seterr.h>. Apply
 	rtems_set_errno_and_return_minus_one.
 	* libfs/src/imfs/imfs.h: Apply rtems_set_errno_and_return_minus_one.
 	Comment out increment_and_check_linkcounts.
@@ -3871,32 +3563,26 @@
 	wrapup/rtems, wrapup/itron, wrapup/posix. Remove */optman/Makefile from
 	CONFIG_FILES.
 	* Makefile.am: Add include to SUBDIRS.
-	* rtems/Makefile.am: Remove optman from SUBDIRS.
-	* sapi/Makefile.am: Remove optman from SUBDIRS.
+	* rtems/Makefile.am, sapi/Makefile.am: Remove optman from SUBDIRS.
 	* include/Makefile.am: New file.
-	* include/rtems/bspIo.h: Relocated from lib/include.
-	* include/rtems/libio_.h: Relocated from lib/include.
+	* include/rtems/bspIo.h, include/rtems/libio_.h: Relocated from
+	lib/include.
 	* posix/configure.ac: Remove optman/Makefile from CONFIG_FILES.
 	* posix/Makefile.am: Remove optman from SUBDIRS.
 
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* wrapup/posix/Makefile.am: Add multilib support.
-	* wrapup/itron/Makefile.am: Add multilib support.
-	* wrapup/rtems/Makefile.am: Add multilib support.
-	* Makefile.am: Add multilib support.
-	* itron/src/Makefile.am: Add multilib support.
+	* wrapup/posix/Makefile.am, wrapup/itron/Makefile.am,
+	wrapup/rtems/Makefile.am, Makefile.am, itron/src/Makefile.am: Add
+	multilib support.
 	* posix/optman/Makefile.am: Add multilib support. Remove ASM4FLAGS.
 	* posix/src/Makefile.am: Add multilib support.
 	* score/inline/rtems/score/object.inl,
 	score/macros/rtems/score/object.inl: Add add casts to Objects_Id in
 	_Objects_Build_ids to avoid implicit typecasts from enum to int16 on
 	bit16 targets (here: h8300).
-	* score/src/Makefile.am: Add multilib support.
-	* sapi/optman/Makefile.am: Add multilib support.
-	* sapi/src/Makefile.am: Add multilib support.
-	* rtems/src/Makefile.am: Add multilib support.
-	* rtems/optman/Makefile.am: Add multilib support.
+	* score/src/Makefile.am, sapi/optman/Makefile.am, sapi/src/Makefile.am,
+	rtems/src/Makefile.am, rtems/optman/Makefile.am: Add multilib support.
 
 2001-12-18	Eric Norum <eric.norum@usask.ca>
 
@@ -3949,8 +3635,8 @@
 	* libblock/src/, libblock/include/, libblock/include/rtems/: New
 	directories.
 	* libblock/README, libblock/configure.ac, libblock/Makefile.am,
-	libblock/src/Makefile.am, libblock/include/Makefile.am: New files.
-	* libblock/include/rtems/bdbuf.h include/rtems/blkdev.h  
+	libblock/src/Makefile.am, libblock/include/Makefile.am,
+	libblock/include/rtems/bdbuf.h include/rtems/blkdev.h  
 	include/rtems/diskdevs.h include/rtems/ramdisk.h src/bdbuf.c
 	src/blkdev.c src/diskdevs.c src/ramdisk.c: New files.
 
@@ -4001,36 +3687,31 @@
 	* configure.ac: Use AC_CONFIG_SUBDIRS for posix and itron. Reflect
 	changes to configuration of rtems, score and sapi subdirs.
 	* Makefile.am: require automake-1.5.
-	* itron/include/itronsys/Makefile.am: Remove.
-	* itron/include/rtems/Makefile.am: Remove.
-	* itron/include/rtems/itron/Makefile.am: Remove.
-	* itron/inline/rtems/Makefile.am: Remove.
-	* itron/inline/rtems/itron/Makefile.am: Remove.
-	* itron/macros/rtems/Makefile.am: Remove.
-	* itron/macros/rtems/itron/Makefile.am: Remove.
-	* itron/include/Makefile.am: handle subdirs.
-	* itron/inline/Makefile.am: handle subdirs.
-	* itron/macros/Makefile.am: handle subdirs.
+	* itron/include/itronsys/Makefile.am, itron/include/rtems/Makefile.am,
+	itron/include/rtems/itron/Makefile.am, itron/inline/rtems/Makefile.am,
+	itron/inline/rtems/itron/Makefile.am, itron/macros/rtems/Makefile.am,
+	itron/macros/rtems/itron/Makefile.am: Remove.
+	* itron/include/Makefile.am, itron/inline/Makefile.am,
+	itron/macros/Makefile.am: handle subdirs.
 	* itron/configure.ac: Reflect changes above.
-	* posix/include/sys/Makefile.am: Remove.
-	* posix/include/rtems/Makefile.am: Remove.
-	* posix/include/rtems/posix/Makefile.am: Remove.
+	* posix/include/sys/Makefile.am, posix/include/rtems/Makefile.am,
+	posix/include/rtems/posix/Makefile.am: Remove.
 	* posix/include/Makefile.am: Handle subdirs.
-	* posix/inline/rtems/Makefile.am: Remove.
-	* posix/inline/rtems/posix/Makefile.am: Remove.
+	* posix/inline/rtems/Makefile.am, posix/inline/rtems/posix/Makefile.am:
+	Remove.
 	* posix/inline/Makefile.am: Handle subdirs.
-	* posix/macros/rtems/Makefile.am: Remove.
-	* posix/macros/rtems/posix/Makefile.am: Remove.
+	* posix/macros/rtems/Makefile.am, posix/macros/rtems/posix/Makefile.am:
+	Remove.
 	* posix/macros/Makefile.am: Handle subdirs.
 	* posix/configure.ac: Reflect changes above.
-	* score/include/rtems/Makefile.am: Remove.
-	* score/include/rtems/Makefile.am: Remove.
+	* score/include/rtems/Makefile.am, score/include/rtems/Makefile.am:
+	Remove.
 	* score/include/Makefile.am: Handle subdirs, require automake-1.5.
-	* score/macros/rtems/Makefile.am: Remove.
-	* score/macros/rtems/score/Makefile.am: Remove.
+	* score/macros/rtems/Makefile.am, score/macros/rtems/score/Makefile.am:
+	Remove.
 	* score/macros/Makefile.am: Handle subdirs, require automake-1.5.
-	* score/inline/rtems/Makefile.am: Remove.
-	* score/inline/rtems/score/Makefile.am: Remove.
+	* score/inline/rtems/Makefile.am, score/inline/rtems/score/Makefile.am:
+	Remove.
 	* score/inline/Makefile.am: Handle subdirs, require automake-1.5.
 	* score/Makefile.am: require automake-1.5.
 	* sapi/include/rtems/Makefile.am: Remove.
@@ -4039,14 +3720,14 @@
 	* sapi/inline/Makefile.am: Handle subdirs, require automake-1.5.
 	* sapi/macros/rtems/Makefile.am: Remove.
 	* sapi/Makefile.am: require automake-1.5.
-	* rtems/include/rtems/Makefile.am: Remove.
-	* rtems/include/rtems/rtems/Makefile.am: Remove.
+	* rtems/include/rtems/Makefile.am,
+	rtems/include/rtems/rtems/Makefile.am: Remove.
 	* rtems/include/Makefile.am: Handle subdirs, require automake-1.5.
-	* rtems/inline/rtems/Makefile.am: Remove.
-	* rtems/inline/rtems/rtems/Makefile.am: Remove.
+	* rtems/inline/rtems/Makefile.am, rtems/inline/rtems/rtems/Makefile.am:
+	Remove.
 	* rtems/inline/Makefile.am: Handle subdirs, require automake-1.5.
-	* rtems/macros/rtems/Makefile.am: Remove.
-	* rtems/macros/rtems/rtems/Makefile.am: Remove.
+	* rtems/macros/rtems/Makefile.am, rtems/macros/rtems/rtems/Makefile.am:
+	Remove.
 	* rtems/macros: Handle subdirs, require automake-1.5.
 	* rtems/Makefile.am: require automake-1.5.
 
@@ -4068,7 +3749,6 @@
 2001-10-12	Mike Siers <mikes@poliac.com>
 
 	* Update to stable working state.
-	* libnetworking/modem_example: Directory removed.
 	* libnetworking/modem_example/16550.h,
 	libnetworking/modem_example/README, libnetworking/modem_example/modem.c,
 	libnetworking/modem_example/modem.h, libnetworking/modem_example/ppp.c,
@@ -4082,8 +3762,8 @@
 
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
-	* sapi/include/rtems/directives.h: Fixed typo.
-	* libmisc/rootfs/mkrootfs.c, libmisc/rootfs/mkrootfs.h: Fixed typo.
+	* sapi/include/rtems/directives.h, libmisc/rootfs/mkrootfs.c,
+	libmisc/rootfs/mkrootfs.h: Fixed typo.
 
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -4122,30 +3802,19 @@
 
 2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* score/include/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* score/include/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* score/inline/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* score/macros/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* sapi/include/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* sapi/include/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* sapi/inline/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* sapi/macros/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* rtems/include/rtems/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* rtems/include/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* rtems/inline/rtems/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* rtems/macros/rtems/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/untar/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/monitor/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/shell/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/devnull/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/dumpbuf/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/mw-fb/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/stackchk/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/rtmonuse/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/cpuuse/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libmisc/rootfs/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* librpc/include/rpc/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libfs/src/imfs/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* score/include/rtems/score/Makefile.am,
+	score/include/rtems/Makefile.am, score/inline/rtems/score/Makefile.am,
+	score/macros/rtems/score/Makefile.am, sapi/include/rtems/Makefile.am,
+	sapi/include/Makefile.am, sapi/inline/rtems/Makefile.am,
+	sapi/macros/rtems/Makefile.am, rtems/include/rtems/rtems/Makefile.am,
+	rtems/include/Makefile.am, rtems/inline/rtems/rtems/Makefile.am,
+	rtems/macros/rtems/rtems/Makefile.am, libmisc/untar/Makefile.am,
+	libmisc/monitor/Makefile.am, libmisc/shell/Makefile.am,
+	libmisc/devnull/Makefile.am, libmisc/dumpbuf/Makefile.am,
+	libmisc/mw-fb/Makefile.am, libmisc/stackchk/Makefile.am,
+	libmisc/rtmonuse/Makefile.am, libmisc/cpuuse/Makefile.am,
+	libmisc/rootfs/Makefile.am, librpc/include/rpc/Makefile.am,
+	libfs/src/imfs/Makefile.am: Use 'PREINSTALL_FILES ='.
 
 2001-09-28	Joel Sherrill <joel@OARcorp.com>
 
@@ -4169,32 +3838,23 @@
 
 2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* itron/include/itronsys/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* itron/include/rtems/itron/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* itron/include/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* itron/inline/rtems/itron/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* itron/macros/rtems/itron/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* posix/include/sys/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* posix/include/rtems/posix/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* posix/include/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* posix/inline/rtems/posix/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* posix/macros/rtems/posix/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* score/include/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* score/include/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* score/inline/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* score/macros/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/machine/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/net/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/netinet/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/vm/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/pppd/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/sys/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/rtems_servers/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/arpa/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/nfs/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/rtems_webserver/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
-	* libnetworking/rtems_telnetd/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* itron/include/itronsys/Makefile.am,
+	itron/include/rtems/itron/Makefile.am, itron/include/Makefile.am,
+	itron/inline/rtems/itron/Makefile.am,
+	itron/macros/rtems/itron/Makefile.am, posix/include/sys/Makefile.am,
+	posix/include/rtems/posix/Makefile.am, posix/include/Makefile.am,
+	posix/inline/rtems/posix/Makefile.am,
+	posix/macros/rtems/posix/Makefile.am,
+	score/include/rtems/score/Makefile.am, score/include/rtems/Makefile.am,
+	score/inline/rtems/score/Makefile.am,
+	score/macros/rtems/score/Makefile.am, libnetworking/machine/Makefile.am,
+	libnetworking/net/Makefile.am, libnetworking/netinet/Makefile.am,
+	libnetworking/vm/Makefile.am, libnetworking/pppd/Makefile.am,
+	libnetworking/sys/Makefile.am, libnetworking/rtems_servers/Makefile.am,
+	libnetworking/arpa/Makefile.am, libnetworking/nfs/Makefile.am,
+	libnetworking/rtems_webserver/Makefile.am,
+	libnetworking/rtems/Makefile.am,
+	libnetworking/rtems_telnetd/Makefile.am: Use 'PREINSTALL_FILES ='.
 
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -4355,20 +4015,10 @@
 
 2001-08-09	Joel Sherrill <joel@OARcorp.com>
 
-	* itron/src/snd_mbx.c, itron/src/tsnd_mbf.c: Unblocking message queue
-	operations should NOT use _Thread_Executing for return status since it
-	is permissible to invoke message send operations from an ISR.  This was
-	reported by Suvrat Gupta <suvrat@utstar.com>.
-	* posix/src/mqueuesendsupp.c: Unblocking message queue operations should
-	NOT use _Thread_Executing for return status since it is permissible to
-	invoke message send operations from an ISR.  This was reported by Suvrat
-	Gupta <suvrat@utstar.com>.
-	* score/include/rtems/score/coremsg.h,
-	score/inline/rtems/score/coremsg.inl, score/src/coremsgsubmit.c:
-	Unblocking message queue operations should NOT use _Thread_Executing for
-	return status since it is permissible to invoke message send operations
-	from an ISR.  This was reported by Suvrat Gupta <suvrat@utstar.com>.
-	* rtems/src/msgqsubmit.c: Unblocking message queue operations should NOT
+	* itron/src/snd_mbx.c, itron/src/tsnd_mbf.c, posix/src/mqueuesendsupp.c,
+	score/include/rtems/score/coremsg.h,
+	score/inline/rtems/score/coremsg.inl, score/src/coremsgsubmit.c,
+	rtems/src/msgqsubmit.c: Unblocking message queue operations should NOT
 	use _Thread_Executing for return status since it is permissible to
 	invoke message send operations from an ISR.  This was reported by Suvrat
 	Gupta <suvrat@utstar.com>.
@@ -4511,10 +4161,8 @@
 
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
-	* itron/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
-	* posix/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
-	* libfs/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
+	* configure.in, itron/configure.in, posix/configure.in,
+	libfs/configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
 
 2001-04-26	Joel Sherrill <joel@OARcorp.com>
 
@@ -4692,36 +4340,31 @@
 	* itron/include/Makefile.am, itron/include/itronsys/Makefile.am,
 	itron/include/rtems/itron/Makefile.am,
 	itron/inline/rtems/itron/Makefile.am,
-	itron/macros/rtems/itron/Makefile.am: Apply include_*HEADERS instead of
-	H_FILES.
-	* posix/include/Makefile.am, posix/include/rtems/posix/Makefile.am,
-	posix/include/sys/Makefile.am, posix/inline/rtems/posix/Makefile.am,
-	posix/macros/rtems/posix/Makefile.am:  Apply include_*HEADERS instead of
+	itron/macros/rtems/itron/Makefile.am, posix/include/Makefile.am,
+	posix/include/rtems/posix/Makefile.am, posix/include/sys/Makefile.am,
+	posix/inline/rtems/posix/Makefile.am,
+	posix/macros/rtems/posix/Makefile.am: Apply include_*HEADERS instead of
 	H_FILES.
 	* include/rtems/Makefile.am, include/rtems/score/Makefile.am,
 	inline/rtems/score/Makefile.am, macros/rtems/score/Makefile.am Apply
 	include_*HEADERS instead of H_FILES.
 	* sapi/include/Makefile.am, sapi/include/rtems/Makefile.am,
-	sapi/inline/rtems/Makefile.am, sapi/macros/rtems/Makefile.am: Apply
-	include_*HEADERS instead of H_FILES.
-	* rtems/include/Makefile.am, rtems/include/rtems/rtems/Makefile.am,
+	sapi/inline/rtems/Makefile.am, sapi/macros/rtems/Makefile.am,
+	rtems/include/Makefile.am, rtems/include/rtems/rtems/Makefile.am,
 	rtems/inline/rtems/rtems/Makefile.am,
-	rtems/macros/rtems/rtems/Makefile.am, rtems/ rtems/optman/Makefile.am:
-	Apply include_*HEADERS instead of H_FILES.
-	* libmisc/untar/Makefile.am, libmisc/monitor/Makefile.am,
+	rtems/macros/rtems/rtems/Makefile.am, rtems/ rtems/optman/Makefile.am,
+	libmisc/untar/Makefile.am, libmisc/monitor/Makefile.am,
 	libmisc/dummy/Makefile.am, libmisc/devnull/Makefile.am,
 	libmisc/dumpbuf/Makefile.am, libmisc/mw-fb/Makefile.am,
 	libmisc/stackchk/Makefile.am, libmisc/rtmonuse/Makefile.am,
-	libmisc/cpuuse/Makefile.am: Apply include_*HEADERS instead of H_FILES.
-	* librpc/include/rpc/Makefile.am: Apply include_*HEADERS instead of
-	H_FILES.
-	* libfs/src/imfs/Makefile.am: Apply include_*HEADERS instead of H_FILES.
-	* libnetworking/Makefile.am, libnetworking/arpa/Makefile.am,
-	libnetworking/machine/Makefile.am, libnetworking/net/Makefile.am,
-	libnetworking/ netinet/Makefile.am, libnetworking/nfs/Makefile.am,
-	libnetworking/rtems/Makefile.am, libnetworking/
-	rtems_servers/Makefile.am, libnetworking/rtems_webserver/Makefile.am,
-	libnetworking/ sys/Makefile.am, libnetworking/vm/Makefile.am: Apply
+	libmisc/cpuuse/Makefile.am, librpc/include/rpc/Makefile.am,
+	libfs/src/imfs/Makefile.am, libnetworking/Makefile.am,
+	libnetworking/arpa/Makefile.am, libnetworking/machine/Makefile.am,
+	libnetworking/net/Makefile.am, libnetworking/ netinet/Makefile.am,
+	libnetworking/nfs/Makefile.am, libnetworking/rtems/Makefile.am,
+	libnetworking/ rtems_servers/Makefile.am,
+	libnetworking/rtems_webserver/Makefile.am,
+	libnetworking/sys/Makefile.am, libnetworking/vm/Makefile.am: Apply
 	include_*HEADERS instead of H_FILES.
 	* libnetworking/include/Makefile.am: Remove.
 	* libnetworking/Makefile.am: Add handling of *.h files.
@@ -4816,9 +4459,8 @@
 	posix/include/rtems/posix/semaphore.h,
 	posix/inline/rtems/posix/semaphore.inl, posix/src/alarm.c,
 	posix/src/ptimer1.c, posix/src/semaphorenametoid.c, posix/src/semopen.c,
-	posix/src/semunlink.c: Modifications to make CodeWarrior happy.
-	* rtems/include/rtems.h, rtems/src/signalcatch.c: Modifications to make
-	CodeWarrior happy.
+	posix/src/semunlink.c, rtems/include/rtems.h, rtems/src/signalcatch.c:
+	Modifications to make CodeWarrior happy.
 
 2001-01-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -4827,14 +4469,10 @@
 
 2001-01-18	Joel Sherrill <joel@OARcorp.com>
 
-	* score/include/rtems/system.h: Only include cpuopts.h when building a
-	multilib configuration.  Some ports still need targopts.h but this small
-	modification lets those ports work non-multilib while  fixing being
-	fixed for multilib.
-	* rtems/include/rtems/system.h: Only include cpuopts.h when building a
-	multilib configuration.  Some ports still need targopts.h but this small
-	modification lets those ports work non-multilib while  fixing being
-	fixed for multilib.
+	* score/include/rtems/system.h, rtems/include/rtems/system.h: Only
+	include cpuopts.h when building a multilib configuration.  Some ports
+	still need targopts.h but this small modification lets those ports work
+	non-multilib while  fixing being fixed for multilib.
 
 2001-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -4852,7 +4490,7 @@
 	* posix/inline/rtems/posix/mutex.inl (_POSIX_Mutex_Get_support):
 	Corrected name of routine in header.
 	* rtems/Added task-based timers to the Timer Manager.  This added three
-	new directives:  - rtems_timer_initiate_server -
+	new directives: - rtems_timer_initiate_server -
 	rtems_timer_server_fire_after - rtems_timer_server_fire_when In the
 	process of doing this, a number of cleanups were made.
 	* rtems/src/timerserver.c, rtems/src/timerserverfireafter.c,
@@ -4965,8 +4603,7 @@
 
 2000-12-12	Jake Janovetz <janovetz@uiuc.edu>
 
-	* libfs/ src/imfs/linearfile.c, libfs/src/imfs/imfs_load_tar.c: New
-	files.
+	* libfs/src/imfs/linearfile.c, libfs/src/imfs/imfs_load_tar.c: New files.
 	* libfs/src/imfs/Makefile.am, libfs/src/imfs/imfs.h,
 	libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
 	libfs/src/imfs/imfs_eval.c, libfs/src/imfs/imfs_handlers_memfile.c,
@@ -5090,9 +4727,8 @@
 
 2000-11-25	Antti P Miettinen  <antti.p.miettinen@nokia.com>
 
-	* libnetworking/wrapup/Makefile.am: Added modem subdir.
-	* libnetworking/configure.in, libnetworking/Makefile.am: Added modem
-	subdir.
+	* libnetworking/wrapup/Makefile.am, libnetworking/configure.in,
+	libnetworking/Makefile.am: Added modem subdir.
 	* libnetworking/net/Makefile.am: Added if_pppvar.h, pppcompress.h.
 	* libnetworking/pppd/Makefile.am: Added pppmain.c (which needs work).
 	* libnetworking/pppd/chat.c, libnetworking/pppd/fsm.c,
@@ -5110,30 +4746,16 @@
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
-	* itron/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
-	* posix/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
-	* libmisc/Makefile.am: Use ... instead of RTEMS_TOPdir in
-	ACLOCAL_AMFLAGS.
-	* librpc/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
-	* libfs/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
-	* libnetworking/Makefile.am: Use ... instead of RTEMS_TOPdir in
+	* Makefile.am, itron/Makefile.am, posix/Makefile.am,
+	libmisc/Makefile.am, librpc/Makefile.am, libfs/Makefile.am,
+	libnetworking/Makefile.am: Use ... instead of RTEMS_TOPdir in
 	ACLOCAL_AMFLAGS.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
-	* itron/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
-	$(RTEMS_TOPdir)/aclocal.
-	* posix/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
-	$(RTEMS_TOPdir)/aclocal.
-	* libmisc/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
-	$(RTEMS_TOPdir)/aclocal.
-	* librpc/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
-	$(RTEMS_TOPdir)/aclocal.
-	* libfs/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
-	$(RTEMS_TOPdir)/aclocal.
-	* libnetworking/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	* Makefile.am, itron/Makefile.am, posix/Makefile.am,
+	libmisc/Makefile.am, librpc/Makefile.am, libfs/Makefile.am,
+	libnetworking/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
 	$(RTEMS_TOPdir)/aclocal.
 
 2000-11-02	Joel Sherrill <joel@OARcorp.com>
@@ -5177,13 +4799,12 @@
 	* posix/include/unistd.h: Removed.  Now use newlib's.
 	* posix/include/rtems/posix/mqueue.h: Add include of <signal.h>.
 	* posix/include/rtems/posix/threadsup.h: Add include of <sys/signal.h>.
-	* posix/src/execv.c: Corrected prototype to agree with newlib.
-	* posix/src/execve.c: Corrected prototype to agree with newlib.
-	* posix/src/execvp.c: Corrected prototype to agree with newlib.
+	* posix/src/execv.c, posix/src/execve.c, posix/src/execvp.c: Corrected
+	prototype to agree with newlib.
 	* posix/src/psignal.c: Rewrote reference to <siginfo.h> in comment since
 	that file no longer exists.
-	* posix/src/pthreadkill.c: Added include of <signal.h>.
-	* posix/src/sigaction.c: Added include of <signal.h>.
+	* posix/src/pthreadkill.c, posix/src/sigaction.c: Added include of
+	<signal.h>.
 	* posix/src/sigtimedwait.c: Rewrote reference to <siginfo.h> in comment
 	since that file no longer exists.
 	* POSIX include files merged into newlib.  This resulted in some
@@ -5214,22 +4835,14 @@
 
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
+	* Makefile.am, itron/Makefile.am, posix/Makefile.am,
+	libmisc/Makefile.am, librpc/Makefile.am, libnetworking/Makefile.am:
+	ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch to GNU
 	canonicalization.
-	* itron/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
-	to GNU canonicalization.
-	* posix/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
-	to GNU canonicalization.
-	* libmisc/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-	Switch to GNU canonicalization.
-	* librpc/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
-	to GNU canonicalization.
-	* libnetworking/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
-	Switch to GNU canonicalization.
 
 2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* libfs/Makefile.am, libfs/configure.in:  Introduce GNU canonicalization
+	* libfs/Makefile.am, libfs/configure.in: Introduce GNU canonicalization
 	to libfs/. The approach is currently a bit of a hack as GNU
 	canonicalization does not support the per-BSP build some of the other
 	directories require.  As more of the tree is converted, this will become
@@ -5359,20 +4972,16 @@
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/itron/Makefile.am, wrapup/posix/Makefile.am, 
-	wrapup/rtems/Makefile.am: Include compile.am.
-	* itron/src/Makefile.am: Include compile.am.
-	* posix/src/Makefile.am, posix/optman/Makefile.am: Include compile.am.
-	* score/src/Makefile.am: Include compile.am.
-	* sapi/src/Makefile.am, sapi/optman/Makefile.am: Include compile.am.
-	* rtems/optman/Makefile.am, rtems/src/Makefile.am: Include compile.am.
-	* libmisc/cpuuse/Makefile.am, libmisc/dummy/Makefile.am,
-	libmisc/dumpbuf/Makefile.am, libmisc/monitor/Makefile.am,
-	libmisc/rtmonuse/Makefile.am, libmisc/stackchk/Makefile.am,
-	libmisc/untar/Makefile.am, libmisc/wrapup/Makefile.am,
-	libmisc/mw-fb/Makefile.am: Include compile.am.
-	* librpc/src/rpc/Makefile.am, librpc/src/xdr/Makefile.am: Include
-	compile.am.
-	* libnetworking/kern/Makefile.am, libnetworking/lib/Makefile.am,
+	wrapup/rtems/Makefile.am, itron/src/Makefile.am, posix/src/Makefile.am,
+	posix/optman/Makefile.am, score/src/Makefile.am, sapi/src/Makefile.am,
+	sapi/optman/Makefile.am, rtems/optman/Makefile.am,
+	rtems/src/Makefile.am, libmisc/cpuuse/Makefile.am,
+	libmisc/dummy/Makefile.am, libmisc/dumpbuf/Makefile.am,
+	libmisc/monitor/Makefile.am, libmisc/rtmonuse/Makefile.am,
+	libmisc/stackchk/Makefile.am, libmisc/untar/Makefile.am,
+	libmisc/wrapup/Makefile.am, libmisc/mw-fb/Makefile.am,
+	librpc/src/rpc/Makefile.am, librpc/src/xdr/Makefile.am,
+	libnetworking/kern/Makefile.am, libnetworking/lib/Makefile.am,
 	libnetworking/libc/Makefile.am, libnetworking/net/Makefile.am,
 	libnetworking/netinet/Makefile.am, libnetworking/nfs/Makefile.am,
 	libnetworking/pppd/Makefile.am, libnetworking/rtems/Makefile.am,
@@ -5411,14 +5020,11 @@
 
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 
-	* posix/Many files: Moved posix/include/rtems/posix/seterr.h to 
-	score/include/rtems/seterr.h so it would be available within all APIs.
-	* score/Many files: Moved posix/include/rtems/posix/seterr.h to 
-	score/include/rtems/seterr.h so it would be available within all APIs.
-	* libmisc/Many files: Moved posix/include/rtems/posix/seterr.h to 
-	score/include/rtems/seterr.h so it would be available within all APIs.
-	* libmisc/mw-fb/.cvsignore: New file.
-	* libnetworking/rtems_webserver/license.txt: New file.
+	* posix/Many files, score/Many files, libmisc/Many files: Moved
+	posix/include/rtems/posix/seterr.h to  score/include/rtems/seterr.h so
+	it would be available within all APIs.
+	* libmisc/mw-fb/.cvsignore, libnetworking/rtems_webserver/license.txt:
+	New file.
 
 2000-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
@@ -5437,11 +5043,9 @@
 	* libmisc/mw-bf: New directory.
 	* libmisc/Makefile.am, libmisc/configure.in, libmisc/wrapup/Makefile.am:
 	Account for mw-fb.
-	* libmisc/mw-fb/Makefile.am: New file.
-	* libmisc/mw-fb/mw_fb.c: New file.
-	* libmisc/mw-fb/mw_fb.h: New file.
-	* libmisc/mw-fb/mw_uid.c: New file.
-	* libmisc/mw-fb/mw_uid.h: New file.
+	* libmisc/mw-fb/Makefile.am, libmisc/mw-fb/mw_fb.c,
+	libmisc/mw-fb/mw_fb.h, libmisc/mw-fb/mw_uid.c, libmisc/mw-fb/mw_uid.h:
+	New file.
 
 2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
@@ -5470,13 +5074,7 @@
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: New file.
-	* itron/ChangeLog: New file.
-	* posix/ChangeLog: New file.
-	* score/ChangeLog: New file.
-	* sapi/ChangeLog: New file.
-	* rtems/ChangeLog: New file.
-	* libmisc/ChangeLog: New file.
-	* librpc/ChangeLog: New file.
-	* libnetworking/ChangeLog: New file.
+	* ChangeLog, itron/ChangeLog, posix/ChangeLog, score/ChangeLog,
+	sapi/ChangeLog, rtems/ChangeLog, libmisc/ChangeLog, librpc/ChangeLog,
+	libnetworking/ChangeLog: New file.
 
