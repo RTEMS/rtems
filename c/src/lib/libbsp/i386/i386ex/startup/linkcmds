@@ -125,6 +125,7 @@ SECTIONS
 	__DTOR_END__ = .;
 	_rodata_start = . ;
 	*(.rodata*)
+	*(.eh_frame)
 	*(.gnu.linkonce.r*)
 	_erodata = ALIGN( 0x10 ) ;
         _etext = ALIGN( 0x10 );
