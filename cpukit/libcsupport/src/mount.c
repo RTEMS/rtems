@@ -209,7 +209,7 @@ int mount(
     temp_mt_entry->mt_point_node.mt_entry = NULL;
   }
 
-  if ( !fs_ops->fsmount_me ){
+  if ( !fs_ops->fsmount_me ) {
     errno = ENOTSUP;
     goto cleanup_and_bail;
   }
