@@ -1,3 +1,7 @@
+2001-09-28	Joel Sherrill <joel@OARcorp.com>
+
+	* src/mqueueopen.c, src/semopen.c: Clarify type on va_arg.
+
 2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/sys/Makefile.am: Use 'PREINSTALL_FILES ='.
