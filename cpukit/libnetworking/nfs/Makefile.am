@@ -13,9 +13,9 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../../automake/multilib.am
-include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../automake/multilib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 #
 # Add local stuff here using +=
@@ -44,4 +44,4 @@ $(PROJECT_INCLUDE)/nfs:
 $(PROJECT_INCLUDE)/nfs/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

@@ -1,3 +1,20 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* arpa/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* kern/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	Use ../aclocal.
+	* lib/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* machine/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* net/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* netinet/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* nfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* rtems/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* sys/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* vm/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* wrapup/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+
 2002-06-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/Makefile.am: include multilib.am instead of RTEMS_BSP.cfg.

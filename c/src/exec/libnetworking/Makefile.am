@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = arpa kern machine sys vm lib libc net netinet nfs rtems
 # SUBDIRS += rtems_servers pppd rtems_telnetd rtems_webserver 
@@ -24,5 +24,5 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = CHANGELOG
 
-include $(top_srcdir)/../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
