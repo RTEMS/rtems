@@ -25,7 +25,7 @@ endif
 
 LIBCSUPPORT_OBJS = ../libcsupport/$(ARCH)/libcsupport.a
 
-LIBBLOCK_OBJS = ../libblock/src/$(ARCH)/libblock.a
+LIBBLOCK_OBJS = ../libblock/$(ARCH)/libblock.a
 if !UNIX
 LIBDOSFS_OBJS = ../libfs/src/dosfs/$(ARCH)/libdosfs.a
 endif
