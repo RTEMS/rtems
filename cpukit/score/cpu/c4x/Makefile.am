@@ -7,8 +7,8 @@ include $(top_srcdir)/automake/compile.am
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = asm.h
 
-include_rtems_c4xdir = $(includedir)/rtems/c4x
-include_rtems_c4x_HEADERS = c4xio.h
+include_rtems_tic4xdir = $(includedir)/rtems/tic4x
+include_rtems_tic4x_HEADERS = rtems/tic4x/c4xio.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/c4x.h \
@@ -32,14 +32,14 @@ $(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
-$(PROJECT_INCLUDE)/rtems/c4x/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/c4x
-	@: > $(PROJECT_INCLUDE)/rtems/c4x/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/c4x/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/tic4x/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/tic4x
+	@: > $(PROJECT_INCLUDE)/rtems/tic4x/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/tic4x/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/c4x/c4xio.h: c4xio.h $(PROJECT_INCLUDE)/rtems/c4x/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/c4x/c4xio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/c4x/c4xio.h
+$(PROJECT_INCLUDE)/rtems/tic4x/c4xio.h: rtems/tic4x/c4xio.h $(PROJECT_INCLUDE)/rtems/tic4x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tic4x/c4xio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tic4x/c4xio.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score

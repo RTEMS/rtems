@@ -1,3 +1,11 @@
+2005-02-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR rtems/752
+	* rtems/tic4x/c4xio.h: New (relocated from .).
+	New header guard.
+	* c4xio.h: Remove.
+	* Makefile.am: Reflect changes above.
+
 2004-01-28	Ralf Corsepius <ralf.corsepiu@rtems.org>
 
 	* asm.h, rtems/score/c4x.h, rtems/score/cpu.h,
