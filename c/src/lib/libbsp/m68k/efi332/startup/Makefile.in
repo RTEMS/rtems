@@ -18,7 +18,7 @@ VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 PGM=${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bsplibc bsppost bspstart bspclean main sbrk setvec
+C_PIECES=bsplibc bsppost bspstart bspclean main sbrk setvec gnatinstallhandler
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

@@ -9,7 +9,7 @@ RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=main bspstart bsppost bsplibc sbrk bspclean
+C_PIECES=main bspstart bsppost bsplibc sbrk bspclean gnatinstallhandler
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
