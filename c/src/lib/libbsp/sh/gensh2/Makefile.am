@@ -61,7 +61,7 @@ noinst_DATA += scitab$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += console.rel
 CLEANFILES += console.rel
-console_rel_SOURCES = ../shared/console.c console/config.c
+console_rel_SOURCES = ../../sh/shared/console.c console/config.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
