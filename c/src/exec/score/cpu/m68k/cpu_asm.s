@@ -160,11 +160,6 @@ SYM (_ISR_Handler):
         jbsr    a0@                      | invoke the user ISR
         addql   #4,a7                    | remove vector number
 
-/*
- *   The following entry should be unnecessary once the support is
- *   in place to know what vector we got on a 68000 core.
- */
-
         subql   #1,SYM (_ISR_Nest_level) | one less nest level
         subql   #1,SYM (_Thread_Dispatch_disable_level)
                                          | unnest multitasking

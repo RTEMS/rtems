@@ -131,7 +131,8 @@ void _CPU_Install_interrupt_stack( void )
 
   asm volatile ( "movec %0,%%isp" : "=r" (isp) : "0" (isp) );
 #else
-#warning "FIX ME... HOW DO I INSTALL THE INTERRUPT STACK!!!"
+#warning "FIX ME... NO DEDICATE INTERRUPT STACK!!!"
+#warning "FIX ME... INTERRUPTS RUN ON A TASK STACK!!!"
 #endif
 }
 
