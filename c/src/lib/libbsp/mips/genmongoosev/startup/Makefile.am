@@ -3,7 +3,7 @@
 ##
 
 
-VPATH = @srcdir@:@srcdir@/../../shared/gdbstub:@srcdir@/../../../shared
+VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/gdbstub:@srcdir@/../../../shared/gdbstub
 
 PGM = $(ARCH)/startup.rel
 
