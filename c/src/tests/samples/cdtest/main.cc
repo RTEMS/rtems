@@ -130,7 +130,7 @@ cdtest(void)
 
 
 rtems_task main_task(
-  rtems_task_argument ignored
+  rtems_task_argument 
 )
 {
     printf( "\n\n*** CONSTRUCTOR/DESTRUCTOR TEST ***\n" );
