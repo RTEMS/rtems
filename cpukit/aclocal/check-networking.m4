@@ -5,7 +5,7 @@ AC_DEFUN(RTEMS_CHECK_NETWORKING,
 AC_REQUIRE([RTEMS_CHECK_CPU])dnl
 AC_REQUIRE([RTEMS_ENABLE_NETWORKING])dnl
 
-AC_CACHE_CHECK([whether BSP supports networking],
+AC_CACHE_CHECK([whether CPU supports networking],
   rtems_cv_HAS_NETWORKING,
   [dnl
     case "$RTEMS_CPU" in

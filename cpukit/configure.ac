@@ -70,13 +70,14 @@ AC_CONFIG_SUBDIRS([libfs])
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
   AC_CONFIG_SUBDIRS(libnetworking)
 ## FIXME: Should better use a feature-based test
+AC_MSG_CHECKING([whether CPU supports librpc])
   case "$RTEMS_CPU" in
   c4x )  LIBRPC=no;;
   or32 ) LIBRPC=no;;
   * )    LIBRPC=yes;;
   esac
-
-  AS_IF([test "$LIBRPC" = "yes"]
+AC_MSG_RESULT([$LIBRPC])
+  AS_IF([test "$LIBRPC" = "yes"],
     [AC_CONFIG_SUBDIRS([librpc])
   ])
 ])
