@@ -12,7 +12,6 @@
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
               "elf32-powerpc")
 OUTPUT_ARCH(powerpc)
- SEARCH_DIR(/usr/local/powerpc-rtems/lib);
  
 ENTRY(download_entry)
  
