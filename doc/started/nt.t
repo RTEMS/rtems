@@ -53,7 +53,7 @@ process.  You must @b{NOT} use @code{WinZip} or
 the GNU @code{zip} and @code{tar} programs as shown below:
 
 @example
-tar -xzvf archive.gzip 
+tar -xzvf archive.tgz 
 @end example
 
 @code{tar} is provided with Cygwin32.
@@ -131,11 +131,11 @@ Web browser or ftp client.
 
 @subsection System Requirements
 
-Although the finished cross-compiler is fairly easy on resources
+Although the finished cross-compiler is fairly easy on resources,
 building it can take a significant amount of processing power and 
 disk space. The recommended build system spec is:
 
-@itemize @bullet
+@enumerate
 
 @item An AMD K6-300, Pentium II-300 or better processor. GNU C and Cygwin32 are
 @b{very} CPU hungry.
@@ -144,10 +144,10 @@ disk space. The recommended build system spec is:
 
 @item At least 400MB of FAT16 disk space or 250MB if you have an NTFS partition. 
 
-@end itemize
+@end enumerate
 
 Even with this spec of machine expect the full suite to take over 2 hours to 
-build with a further hour for RTEMS itself.
+build with a further half an hour for RTEMS itself.
 
 
 @section Installing Cygwin32 B19
@@ -241,8 +241,6 @@ are ready to proceed to building a cross-compiler.
 instructions in @ref{Unarchiving the Tools} into the /source directory.
 Apply the appropriate RTEMS specific patch as detailed in
 @ref{Apply RTEMS Patch to binutils}.
-
-@b{NOTE}: See @ref{Bug in Patch Utility}.
 
 @item In the @code{/build/binutils} directory, execute the following
 command to configure @value{BINUTILS-VERSION}:
@@ -342,7 +340,7 @@ make cross
 You must do a @code{make cross} (not a simple @code{make})
 to insure that the different packages are built in the correct
 order.   Making the compiler can take several hours even on
-fairly fast machines, beware
+fairly fast machines, beware.
 
 @item Install with the following command:
 
