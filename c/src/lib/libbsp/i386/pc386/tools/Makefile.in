@@ -22,11 +22,12 @@ VPATH=@srcdir@
 USE_HOST_COMPILER=yes
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=
-CC_PIECES=bin2boot Header Image
+C_PIECES=bin2boot Header Image
 C_FILES=$(C_PIECES:%=%.c)
-CC_FILES=$(CC_PIECES:%=%.cc)
 C_O_FILES=$(C_PIECES:%=$(ARCH)/%.o)
+
+CC_PIECES=
+CC_FILES=$(CC_PIECES:%=%.cc)
 CC_O_FILES=$(CC_PIECES:%=$(ARCH)/%.o)
 
 H_FILES=bytetype.h Header.h Image.h
@@ -45,11 +46,11 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 
 DEFINES  +=
 CPPFLAGS +=
-CFLAGS   +=
-CXXFLAGS += -g -Wall
+CFLAGS   += -g -Wall
+CXXFLAGS +=
 
 LD_PATHS  +=
-LD_LIBS   += -lstdc++
+LD_LIBS   +=
 LDFLAGS   += -g
 
 #
@@ -67,7 +68,7 @@ all:	$(ARCH) $(SRCS) $(PGMS)
 
 $(ARCH)/bin2boot: $(OBJS)
 	$(CC) $(LDFLAGS) $^ -o $@ $(LD_LIBS)
-$(ARCH)/bin2boot.o : bin2boot.cc Header.h Image.h bytetype.h
-$(ARCH)/Header.o: Header.cc Header.h bytetype.h
-$(ARCH)/Image.o: Image.cc Image.h bytetype.h
+$(ARCH)/bin2boot.o: bin2boot.c Header.h Image.h bytetype.h
+$(ARCH)/Header.o: Header.c Header.h bytetype.h
+$(ARCH)/Image.o: Image.c Image.h bytetype.h
 
