@@ -65,7 +65,7 @@ testing.texi: testing.t Makefile
 	   -n "Command and Variable Index" ${*}.t
 
 html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/network
+	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
 	rm -f $(WWW_INSTALL)/$(PROJECT)/networking.gif
 	cp networking.gif $(WWW_INSTALL)/$(PROJECT)/networking.gif
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \

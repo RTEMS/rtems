@@ -1,4 +1,4 @@
-\input texinfo   @c -*-texinfo-*-
+\input ../texinfo/texinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename networking
 @syncodeindex vr fn
