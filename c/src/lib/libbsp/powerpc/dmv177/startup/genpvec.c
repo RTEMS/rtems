@@ -17,7 +17,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  $Id: 
+ *  $Id$
  */
 
 #include <bsp.h>
@@ -76,6 +76,7 @@ rtems_isr external_exception_ISR (
    * Get all active interrupts. 
    */
   scv64_status = SCV64_Get_Interrupt();
+  scv64_status &= SCV64_Get_Interrupt_Enable();
 
   /*
    * Process any set interrupts.
@@ -229,6 +230,13 @@ rtems_isr_entry  set_EE_vector(
    */
   return 0;
 }
+
+
+
+
+
+
+
 
 
 
