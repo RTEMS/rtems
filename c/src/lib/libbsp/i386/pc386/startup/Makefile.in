@@ -18,7 +18,7 @@ VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/irq:@srcdir@/../
 PGM=${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bsplibc bsppost bspstart exit irq irq_init main sbrk i386-stub i386-stub-glue uart pcibios gnatinstallhandler
+C_PIECES=bsplibc bsppost bspstart exit irq irq_init bootcard main sbrk i386-stub i386-stub-glue uart pcibios gnatinstallhandler
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

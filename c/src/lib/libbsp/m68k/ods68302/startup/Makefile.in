@@ -18,8 +18,7 @@ VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 PGM=${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=crc debugport gdb-hooks main m68302scc m68k-stub memcheck trace \
-  gnatinstallhandler bsplibc bsppost bspstart bspclean sbrk setvec
+C_PIECES=crc debugport gdb-hooks bootcard main m68302scc m68k-stub memcheck trace gnatinstallhandler bsplibc bsppost bspstart bspclean sbrk setvec
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

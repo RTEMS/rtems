@@ -36,9 +36,9 @@ include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 # Files expected to be from the shared directory:
-#  sbrk main bsplibc bsppost
+#  sbrk bootcard main bsplibc bsppost
 STARTUP_PIECES=bspstart bspclean sbrk setvec spurious genpvec swap \
-  main bsplibc bsppost
+  main bootcard bsplibc bsppost
 
 #
 # (OPTIONAL) Add local stuff here using +=

@@ -45,7 +45,7 @@ CXX_MAIN=rtems-ctor
 C_MAIN=
 else
 CXX_MAIN=
-C_MAIN=main
+C_MAIN=main bootcard
 endif
 
 #
