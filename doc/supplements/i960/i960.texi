@@ -33,7 +33,7 @@ END-INFO-DIR-ENTRY
 @c  Title Page Stuff
 @c
 
-@set edition 4.1.0a
+@set edition 4.2.0-beta1
 @set update-date 1 June 1997
 @set update-month June 1997
 
@@ -48,7 +48,7 @@ END-INFO-DIR-ENTRY
 @finalout
 
 @title RTEMS Intel i960 Applications Supplement 
-@subtitle Edition @value{edition}, for RTEMS 4.1.0
+@subtitle Edition @value{edition}, for RTEMS 4.2.0-prerelease
 @sp 1
 @subtitle @value{update-month}
 @author On-Line Applications Research Corporation
