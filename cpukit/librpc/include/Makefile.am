@@ -27,4 +27,4 @@ EXTRA_DIST = rpcsvc/bootparam_prot.x rpcsvc/crypt.x rpcsvc/key_prot.x rpcsvc/klm
     rpcsvc/rstat.x rpcsvc/rwall.x rpcsvc/sm_inter.x rpcsvc/spray.x rpcsvc/yp.x rpcsvc/yp_prot.h rpcsvc/ypclnt.h rpcsvc/yppasswd.x \
     rpcsvc/ypupdate_prot.x rpcsvc/ypxfrd.x
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am
