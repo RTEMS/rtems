@@ -734,23 +734,6 @@ Thread_Control *_Thread_Get (
 #endif
 
 /*
- *  _Thread_Local_iterate
- *
- *  DESCRIPTION:
- *
- *  This function invokes the callback function for each existing thread.
- *  Iteration continues until either all threads have been processed, or,
- *  if break_on_error is TRUE, until an invocation of the callback returns
- *  an integer value other than 0.
- */
-
-unsigned32 _Thread_Local_iterate(
-  unsigned32 (*callback)(Thread_Control *the_thread, void * arg),
-  void * arg,
-  boolean break_on_error
-);
-
-/*
  *  _Thread_Idle_body
  *
  *  DESCRIPTION:

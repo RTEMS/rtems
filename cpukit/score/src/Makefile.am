@@ -27,18 +27,17 @@ OBJECT_C_FILES = object.c objectallocate.c objectallocatebyindex.c \
     objectclearname.c objectcomparenameraw.c objectcomparenamestring.c \
     objectcopynameraw.c objectcopynamestring.c objectextendinformation.c \
     objectfree.c objectget.c objectgetbyindex.c objectgetnext.c \
-    objectinitializeinformation.c objectlocaliterate.c objectnametoid.c \
-    objectshrinkinformation.c
+    objectinitializeinformation.c objectnametoid.c objectshrinkinformation.c
 
 THREAD_C_FILES = thread.c threadchangepriority.c threadclearstate.c \
     threadclose.c threadcreateidle.c threaddelayended.c threaddispatch.c \
     threadevaluatemode.c threadget.c threadhandler.c threadidlebody.c \
-    threadinitialize.c threadloadenv.c threadlocaliterate.c threadready.c \
-    threadresettimeslice.c threadreset.c threadrestart.c threadresume.c \
-    threadrotatequeue.c threadsetpriority.c threadsetstate.c \
-    threadsettransient.c threadstackallocate.c threadstackfree.c \
-    threadstart.c threadstartmultitasking.c threadsuspend.c \
-    threadtickletimeslice.c threadyieldprocessor.c
+    threadinitialize.c threadloadenv.c threadready.c threadresettimeslice.c \
+    threadreset.c threadrestart.c threadresume.c threadrotatequeue.c \
+    threadsetpriority.c threadsetstate.c threadsettransient.c \
+    threadstackallocate.c threadstackfree.c threadstart.c \
+    threadstartmultitasking.c threadsuspend.c threadtickletimeslice.c \
+    threadyieldprocessor.c
 
 THREADQ_C_FILES = threadq.c threadqdequeue.c threadqdequeuefifo.c \
     threadqdequeuepriority.c threadqenqueue.c threadqenqueuefifo.c \
@@ -54,8 +53,8 @@ WATCHDOG_C_FILES = watchdog.c watchdogadjust.c watchdoginsert.c \
     watchdogremove.c watchdogtickle.c
 
 STD_C_FILES = apiext.c chain.c $(CORE_MESSAGE_QUEUE_C_FILES) \
-    $(CORE_MUTEX_C_FILES) $(CORE_SEMAPHORE_C_FILES) $(HEAP_C_FILES) \
-    interr.c isr.c $(OBJECT_C_FILES) $(THREAD_C_FILES) $(THREADQ_C_FILES) \
+    $(CORE_MUTEX_C_FILES) $(CORE_SEMAPHORE_C_FILES) $(HEAP_C_FILES) interr.c \
+    isr.c $(OBJECT_C_FILES) $(THREAD_C_FILES) $(THREADQ_C_FILES) \
     $(TOD_C_FILES) userext.c $(WATCHDOG_C_FILES) wkspace.c
 
 if HAS_MP

@@ -44,7 +44,7 @@ RTEMS_CHECK_ITRON_API(RTEMS_BSP)
 
 if test "$tests_enabled" = "yes"; then
   # do functionality tests first, then performance tests
-  cfg_subdirs="libtests sptests libffi"
+  cfg_subdirs="libtests sptests"
   if test "$HAS_MP" = "yes"; then
     cfg_subdirs="$cfg_subdirs mptests"
   fi
