@@ -18,6 +18,7 @@
 #include <errno.h>
 #include <chain.h>
 #include <assert.h>
+#include <string.h> /* for "memset" declaration */
 
 #include <rtems/diskdevs.h>
 #include <rtems/blkdev.h>
@@ -1152,36 +1153,32 @@ ata_initialize(rtems_device_major_number major,
                 (unsigned8)(CF_LE_W(buffer[ATA_IDENT_WORD_MULT_SECS])) :
                  0;
 
-#ifndef ATA_DEV_IS_FLASH_DISK
             if ((CF_LE_W(buffer[ATA_IDENT_WORD_FIELD_VALIDITY]) & 
-                 ATA_IDENT_BIT_VALID) == 0)
+                 ATA_IDENT_BIT_VALID) == 0) {
+	      /* no "supported modes" info -> use default */
+	      ATA_DEV_INFO(ctrl_minor, dev).mode_active = ATA_MODES_PIO3;
+	    }
+	    else {
+	      ATA_DEV_INFO(ctrl_minor, dev).modes_avaible =
+		((CF_LE_W(buffer[64]) & 0x1) ? ATA_MODES_PIO3 : 0) |
+		((CF_LE_W(buffer[64]) & 0x2) ? ATA_MODES_PIO4 : 0) |
+		((CF_LE_W(buffer[63]) & 0x1) ? ATA_MODES_DMA0 : 0) |
+		((CF_LE_W(buffer[63]) & 0x2) ? 
+		 ATA_MODES_DMA0 | ATA_MODES_DMA1 : 0) |
+		((CF_LE_W(buffer[63]) & 0x4) ? 
+		 ATA_MODES_DMA0 | ATA_MODES_DMA1 | ATA_MODES_DMA2 : 0);
+	      if (ATA_DEV_INFO(ctrl_minor, dev).modes_avaible == 0)
                 continue;
-#endif
-            ATA_DEV_INFO(ctrl_minor, dev).modes_avaible =
-            ((CF_LE_W(buffer[64]) & 0x1) ? ATA_MODES_PIO3 : 0) |
-            ((CF_LE_W(buffer[64]) & 0x2) ? ATA_MODES_PIO4 : 0) |
-            ((CF_LE_W(buffer[63]) & 0x1) ? ATA_MODES_DMA0 : 0) |
-            ((CF_LE_W(buffer[63]) & 0x2) ? 
-            ATA_MODES_DMA0 | ATA_MODES_DMA1 : 0) |
-            ((CF_LE_W(buffer[63]) & 0x4) ? 
-            ATA_MODES_DMA0 | ATA_MODES_DMA1 | ATA_MODES_DMA2 : 0);
-
-            if (ATA_DEV_INFO(ctrl_minor, dev).modes_avaible == 0)
-                continue;
-            
-            /* 
-             * choose most appropriate ATA device data I/O speed supported by 
-             * the controller
-             */
-            status = ide_controller_config_io_speed(
+	      /* 
+	       * choose most appropriate ATA device data I/O speed supported
+	       * by the controller
+	       */
+	      status = ide_controller_config_io_speed(
                 ctrl_minor, 
                 ATA_DEV_INFO(ctrl_minor, dev).modes_avaible);
-            if (status != RTEMS_SUCCESSFUL)
+	      if (status != RTEMS_SUCCESSFUL)
                 continue;
-                    
-#ifdef ATA_DEV_IS_FLASH_DISK
-            ATA_DEV_INFO(ctrl_minor, dev).mode_active = ATA_MODES_PIO3;
-#endif        
+	    }      
             /*
              * Ok, let register new ATA device in the system
              */
