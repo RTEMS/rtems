@@ -110,7 +110,7 @@ in the following directory:
 c/src/exec/score/cpu/CPU
 @end example
 
-where CPU is replcaed with the CPU family name.
+where CPU is replaced with the CPU family name.
 
 Within each CPU dependent directory inside the executive proper is a 
 file named @code{CPU.h} which contains information about each of the

@@ -157,7 +157,7 @@ RTEMS_BSP_FAMILY=gen68340
 # CPU flag to pass to GCC
 CPU_CFLAGS = -mcpu32
 
-# optimisation flag to pass to GCC
+# optimization flag to pass to GCC
 CFLAGS_OPTIMIZE_V=-O4 -fomit-frame-pointer
 
 # The name of the start file to be linked with.  This file is the first

@@ -374,7 +374,7 @@ program is started.  It is common practice to place a copy of the initialized
 can be used for this purpose. 
 
 The following figure illustrates the steps a linked program goes through
-to become a downloadabled image.
+to become a downloadable image.
 
 @example
 @group
