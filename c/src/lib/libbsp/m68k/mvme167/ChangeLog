@@ -1,5 +1,9 @@
 2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
+	* console.c(_BSP_output_char): Output CR after LF for printk.
+
+2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
+
 	* README: Updated
 	* console/console.c: Fix polled input.
 	Add support for shared printk.
@@ -24,6 +28,7 @@
 
 	* network/network.c: Cleanup of network driver to reduce warnings.
 	Addition of second parameter to uti596_attach.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.

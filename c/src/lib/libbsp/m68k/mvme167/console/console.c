@@ -1451,6 +1451,7 @@ rtems_status_code do_poll_write(
 void _BSP_output_char(char c)
 {
   rtems_device_minor_number printk_minor;
+  char cr ='\r';
   
   /* 
    *  Can't rely on console_initialize having been called before this function
@@ -1458,11 +1459,13 @@ void _BSP_output_char(char c)
    */
   if ( NVRAM_CONFIGURE )
     /* J1-4 is on, use NVRAM info for configuration */
-    printk_minor = nvram->console_printk_port & 0x30;
+    printk_minor = (nvram->console_printk_port & 0x30) >> 4;
   else
     printk_minor = PRINTK_MINOR;
    
   _167Bug_pollWrite(printk_minor, &c, 1);
+  if ( c == '\n' )
+      _167Bug_pollWrite(printk_minor, &cr, 1);
 }
 
   
