@@ -28,6 +28,15 @@ AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
 
+## bsp-specific options
+RTEMS_BSPOPTS_SET([WORKSPACE_MB],[*],[2])
+RTEMS_BSPOPTS_HELP([WORKSPACE_MB],
+[The BSP's workspace RAM in MB.])
+
+RTEMS_BSPOPTS_SET([HEAPSPACE_MB],[*],[1])
+RTEMS_BSPOPTS_HELP([HEAPSPACE_MB],
+[The BSP's heapspace RAM in MB.])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
