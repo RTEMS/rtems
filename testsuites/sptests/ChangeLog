@@ -1,3 +1,8 @@
+2001-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* sp298/sp28.scn: Minor adjustment so test output matches the screen
+	file.
+
 2001-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* spsize/size.c: Use #if !defined(RTEMS_UNIX).
