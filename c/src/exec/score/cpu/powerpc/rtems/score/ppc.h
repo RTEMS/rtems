@@ -185,7 +185,7 @@ extern "C" {
 
 #define PPC_LOW_POWER_MODE PPC_LOW_POWER_MODE_STANDARD
 
-#elif defined(ppc604)
+#elif defined(mpc604)
 /*
  *  Submitted with original port -- book checked only.
  */
@@ -475,7 +475,7 @@ extern "C" {
 #define PPC_IRQ_LAST       PPC_IRQ_SYS_MGT    
 
 
-#elif defined(ppc604)
+#elif defined(mpc604)
 #define PPC_IRQ_ADDR_BRK (PPC_STD_IRQ_LAST+1) /*0x1300- Inst. addr break  */
 #define PPC_IRQ_SYS_MGT  (PPC_STD_IRQ_LAST+2) /*0x1400- System Management */
 #define PPC_IRQ_LAST     PPC_IRQ_SYS_MGT  

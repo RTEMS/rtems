@@ -18,9 +18,12 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
-ifeq ($(wildcard $(RTEMS_CPU_MODEL)),$(RTEMS_CPU_MODEL))
-SHARED_LIB = shared
-endif 
+ifeq ($(RTEMS_CPU_MODEL),mpc750)
+SHARED_LIB = shared mpc6xx
+endif
+ifeq ($(RTEMS_CPU_MODEL),mpc604)
+SHARED_LIB = shared mpc6xx
+endif
 
 SUBDIRS = $(SHARED_LIB) $(wildcard $(RTEMS_CPU_MODEL)) wrapup
 

@@ -20,11 +20,11 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 
 SHARED_LIB = shared
 
-ifeq ($(RTEMS_CPU_MODEL),mpc750)
-CPUDIR = mpc750
-else 
-CPUDIR = other_cpu
-endif 
+ifeq ($(RTEMS_PPC_EXCEPTION_PROCESSING_MODEL),new)
+CPUDIR = new_exception_processing
+else
+CPUDIR = old_exception_processing
+endif
 
 SUBDIRS = $(CPUDIR) $(SHARED_LIB)
 

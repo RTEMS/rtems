@@ -13,7 +13,13 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(srcdir)/nvram.h $(srcdir)/bsp.h
+H_FILES = $(srcdir)/../../shared/include/nvram.h \
+    $(srcdir)/../../shared/include/bsp.h
+
+BSP_H_FILES = $(srcdir)/../../shared/console/consoleIo.h \
+    $(srcdir)/../../shared/console/uart.h \
+    $(srcdir)/../../shared/irq/irq.h \
+    $(srcdir)/../../shared/motorola/motorola.h
 
 #
 #  Equate files are for including from assembly preprocessed by
@@ -43,7 +49,9 @@ CLOBBER_ADDITIONS +=
 
 preinstall: 
 	$(mkinstalldirs) $(PROJECT_INCLUDE)
+	$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
 	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)
+	@$(INSTALL_CHANGE) -m 644 $(BSP_H_FILES) $(PROJECT_INCLUDE)/bsp
 
 all: $(SRCS) preinstall
 

@@ -11,7 +11,7 @@ subdir = powerpc/mcp750/startup
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@:@srcdir@/../console:@srcdir@/../../../shared
+VPATH = @srcdir@:@srcdir@/../console:@srcdir@/../../../shared:@srcdir@/../../shared/startup
 
 # C source names, if any, go here -- minus the .c
 C_PIECES = bootcard main bspstart bsppost bsplibc sbrk bspclean \

@@ -11,16 +11,14 @@ subdir = powerpc/mcp750/vectors
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@:@srcdir@/../console:
-
-PGM = ${ARCH}/vectors.rel
+VPATH = @srcdir@:@srcdir@/../console:@srcdir@/../../shared/vectors
 
 # C source names, if any, go here -- minus the .c
 C_PIECES = vectors_init
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES = $(srcdir)/vectors.h
+H_FILES = $(srcdir)/../../shared/vectors/vectors.h
 
 # Assembly source names, if any, go here -- minus the .s
 S_PIECES = vectors

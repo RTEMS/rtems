@@ -11,14 +11,14 @@ subdir = powerpc/mcp750/irq
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@
+VPATH = @srcdir@:@srcdir@/../../shared/irq
 
 # C source names, if any, go here -- minus the .c
 C_PIECES = irq_init i8259 irq
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES = $(srcdir)/irq.h
+H_FILES = $(srcdir)/../../shared/irq/irq.h
 
 # Assembly source names, if any, go here -- minus the .s
 S_PIECES = irq_asm
@@ -61,11 +61,7 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-preinstall: 
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
-	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/bsp
-
-all: ${ARCH} $(SRCS) preinstall ${OBJS}
+all: ${ARCH} $(SRCS) ${OBJS}
 
 install: all
 

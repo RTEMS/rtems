@@ -14,7 +14,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 VPATH = @srcdir@
 
 # C source names, if any, go here -- minus the .c
-C_PIECES =
+C_PIECES = cpuIdent
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

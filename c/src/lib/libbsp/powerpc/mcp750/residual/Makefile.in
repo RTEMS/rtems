@@ -11,16 +11,14 @@ subdir = powerpc/mcp750/residual
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@
-
-PGM = ${ARCH}/residual.rel
+VPATH = @srcdir@:@srcdir@/../../shared/residual
 
 # C source names, if any, go here -- minus the .c
 C_PIECES = $(RESIDUAL_C_PIECES)
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES = $(srcdir)/pnp.h $(srcdir)/residual.h
+H_FILES = $(srcdir)/../../shared/residual/pnp.h $(srcdir)/../../shared/residual/residual.h
 
 SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
@@ -64,10 +62,7 @@ preinstall:
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
 	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/bsp
 
-$(PGM): ${OBJS}
-	$(make-rel)
-
-all: ${ARCH} $(SRCS) preinstall $(PGM)
+all: ${ARCH} $(SRCS) preinstall $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all

@@ -1,5 +1,5 @@
 #
-#  $Id: 
+#  $Id$
 #
 
 @SET_MAKE@
@@ -11,14 +11,14 @@ subdir = powerpc/mcp750/console
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@:@srcdir@/../../../shared
+VPATH = @srcdir@:@srcdir@/../../shared/console:@srcdir@/../../../shared
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = polled_io uart console inch console_reserve_resources
+C_PIECES = polled_io uart console inch
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES = $(srcdir)/consoleIo.h $(srcdir)/keyboard.h $(srcdir)/uart.h
+H_FILES = $(srcdir)/../../shared/console/consoleIo.h $(srcdir)/../../shared/console/keyboard.h $(srcdir)/../../shared/console/uart.h
 
 # Assembly source names, if any, go here -- minus the .s
 S_PIECES =
@@ -48,6 +48,7 @@ CC_O_FILES = $(CC_PIECES:%=${ARCH}/%.o)
 #
 
 CPPFLAGS += -DSTATIC_LOG_ALLOC
+CFLAGS +=
 #
 # Add your list of files to delete here.  The config files
 #  already know how to delete some stuff, so you may want
@@ -56,11 +57,7 @@ CPPFLAGS += -DSTATIC_LOG_ALLOC
 #  'make clobber' already includes 'make clean'
 #
 
-preinstall: 
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
-	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/bsp
-
-all: ${ARCH} $(SRCS) preinstall ${OBJS}
+all: ${ARCH} $(SRCS) ${OBJS}
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

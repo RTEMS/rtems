@@ -11,9 +11,7 @@ subdir = powerpc/mcp750/clock
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@
-
-PGM = ${ARCH}/clock.rel
+VPATH = @srcdir@:@srcdir@/../../shared/clock
 
 # C source names, if any, go here -- minus the .c
 C_PIECES = p_clock
@@ -58,10 +56,7 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-$(PGM): ${OBJS}
-	$(make-rel)
-
-all: ${ARCH} $(SRCS) $(PGM)
+all: ${ARCH} $(SRCS) $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all

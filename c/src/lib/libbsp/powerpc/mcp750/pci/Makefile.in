@@ -11,16 +11,14 @@ subdir = powerpc/mcp750/pci
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@
-
-PGM = ${ARCH}/pci.rel
+VPATH = @srcdir@:@srcdir@/../../shared/pci
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = $(PCI_C_PIECES)
+C_PIECES = pci
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES = $(srcdir)/pci.h
+H_FILES = $(srcdir)/../../shared/pci/pci.h
 
 SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
@@ -35,8 +33,6 @@ INSTALLDIRS = $(PROJECT_INCLUDE)/bsp
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)
-
-PCI_C_PIECES = pci
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -60,14 +56,11 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-$(PGM): ${OBJS}
-	$(make-rel)
-
 preinstall: 
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
 	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/bsp
 
-all: ${ARCH} $(SRCS) preinstall $(PGM)
+all: ${ARCH} $(SRCS) preinstall $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all

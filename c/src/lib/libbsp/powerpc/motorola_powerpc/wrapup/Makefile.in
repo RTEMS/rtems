@@ -18,7 +18,7 @@ NETWORK_yes_V = dec21140
 NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 BSP_PIECES = clock console irq openpic pci residual startup $(NETWORK) \
-    vectors
+    vectors motorola
 GENERIC_PIECES =
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x

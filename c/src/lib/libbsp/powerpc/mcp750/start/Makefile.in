@@ -11,7 +11,7 @@ subdir = powerpc/mcp750/start
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@
+VPATH = @srcdir@:@srcdir@/../../shared/start
 
 PGM = ${ARCH}/start.o
 
