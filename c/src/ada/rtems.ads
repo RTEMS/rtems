@@ -1323,7 +1323,6 @@ pragma Elaborate_Body (RTEMS);
       Major        : in     RTEMS.Device_Major_Number;
       Minor        : in     RTEMS.Device_Minor_Number;
       Argument     : in     RTEMS.Address;
-      Return_Value :    out RTEMS.Unsigned32;
       Result       :    out RTEMS.Status_Codes
    );
 
