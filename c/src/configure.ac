@@ -69,23 +69,30 @@ AS_IF([test x"$multilib" = x"no"],[
   RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],
   [--with-project-root="../../" --enable-rtemsbsp=$RTEMS_BSP
   ])
-  AC_SUBST([exec],[exec])
+  BSP_SUBDIRS="exec"
 ])
 
 ## Note: the order of the directories below is essential
 AC_CONFIG_SUBDIRS([make])
+BSP_SUBDIRS="$BSP_SUBDIRS make"
 AC_CONFIG_SUBDIRS([optman])
+BSP_SUBDIRS="$BSP_SUBDIRS optman"
 AC_CONFIG_SUBDIRS([lib/libcpu])
+BSP_SUBDIRS="$BSP_SUBDIRS lib/libcpu"
 AC_CONFIG_SUBDIRS([lib/libbsp])
+BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
 AC_CONFIG_SUBDIRS([libmisc])
+BSP_SUBDIRS="$BSP_SUBDIRS libmisc"
 
 AS_IF([test "$RTEMS_CPU" != "unix"],[
 ## HACK: Suppress libchip for unix
   AC_CONFIG_SUBDIRS([libchip])
+  BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 ])
 
 AS_IF([test "$HAS_NETWORKING" = "yes"],[
   AC_CONFIG_SUBDIRS(libnetworking)
+  BSP_SUBDIRS="$BSP_SUBDIRS libnetworking"
   AS_IF([test "$RTEMS_HAS_RDBG" = "yes"],[
     RTEMS_CHECK_RDBG(RTEMS_BSP)
   ])
@@ -93,13 +100,19 @@ AS_IF([test "$HAS_NETWORKING" = "yes"],[
 
 AS_IF([test "$HAS_RDBG" = "yes"],[
   AC_CONFIG_SUBDIRS([librdbg])
+  BSP_SUBDIRS="$BSP_SUBDIRS librdbg"
 ])
 
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
   AC_CONFIG_SUBDIRS([librtems++])
+  BSP_SUBDIRS="$BSP_SUBDIRS librtems++"
 ])
 
+BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 AC_CONFIG_SUBDIRS([tests])
+BSP_SUBDIRS="$BSP_SUBDIRS tests"
+
+AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
 
 AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes" )
 AM_CONDITIONAL(HAS_RDBG, test "$HAS_RDBG" = "yes" )

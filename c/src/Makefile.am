@@ -4,7 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-SUBDIRS = @exec@ @subdirs@ wrapup
+SUBDIRS = @BSP_SUBDIRS@
 
 clean-local:
 	$(RM) -r $(PROJECT_RELEASE)
