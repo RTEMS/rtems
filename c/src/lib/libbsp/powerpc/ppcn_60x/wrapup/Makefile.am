@@ -2,17 +2,16 @@
 ## $Id$
 ##
 
-# We only build the network device driver if HAS_NETWORK was defined
+OBJS = ../startup$(LIB_VARIANT).rel ../clock$(LIB_VARIANT).rel \
+    ../console$(LIB_VARIANT).rel ../timer$(LIB_VARIANT).rel \
+    ../tod$(LIB_VARIANT).rel ../nvram$(LIB_VARIANT).rel \
+    ../universe$(LIB_VARIANT).rel ../pci$(LIB_VARIANT).rel \
+    ../vectors$(LIB_VARIANT).rel
 if HAS_NETWORKING
-NETWORK = network
+OBJS += ../network$(LIB_VARIANT).rel
 endif
 
-BSP_PIECES = startup clock console timer tod $(NETWORK) nvram universe pci \
-    vectors
-
-# bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel
+OBJS += ../@exceptions@/rtems-cpu$(LIB_VARIANT).rel
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am

@@ -1,3 +1,17 @@
+2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
+	network/Makefile.am, nvram/Makefile.am, pci/Makefile.am,
+	startup/Makefile.am, timer/Makefile.am, tod/Makefile.am,
+	universe/Makefile.am, vectors/Makefile.am. Use automake compilation
+	rules.
+	* clock/Makefile.am, console/Makefile.am, network/Makefile.am,
+	nvram/Makefile.am, pci/Makefile.am, startup/Makefile.am,
+	timer/Makefile.am, tod/Makefile.am, universe/Makefile.am,
+	vectors/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+	* wrapup/Makefile.am: Reflect changes above.
+
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in start/Makefile.am.
