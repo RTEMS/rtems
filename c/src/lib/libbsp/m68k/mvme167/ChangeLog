@@ -1,3 +1,10 @@
+2001-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_BPSOPTS_*(CD2401_INT_LEVEL).
+	Add RTEMS_BPSOPTS_*(CD2401_IO_MODE).
+	Add RTEMS_BPSOPTS_*(CD2401_USE_TERMIOS). 
+	Add AC_DEFINE_UNQUOTED([mvme167]).
+
 2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.
