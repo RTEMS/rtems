@@ -15,7 +15,8 @@ gnu_tools="gnu_tools/newlib-1.8.0 gnu_tools/egcs-1.0.2"
 public_docs="user develenv ka9q posix_users started started_ada"
 support_docs="${supplements} ${gnu_tools}"
 partners_docs="posix1003.1 posix1003.1h"
-oar_manuals="ada_user hwapi supplements/powerpc tools/texi2www"
+oar_manuals="ada_user hwapi supplements/powerpc tools/texi2www \
+  browseable_rtems"
 
 # relnotes  is obsolete
 # posix_users manual left out until finished
