@@ -34,16 +34,38 @@ if [ $# -ne 1 ] ; then
   exit 1
 fi
 
-cpu=`echo $target | sed -e 's/-.*//'`
-case $cpu in 
-  hppa1.1) rtems_cpu=hppa1_1 ;;
-  powerpc) rtems_cpu=ppc ;;
-  *)       rtems_cpu=$cpu ;;
-esac
 bsp=$1
+board=$1
+
+cpu=`echo $target | sed -e 's/-.*//'`
+
+echo $target
+case $target in
+  sparc-sun-solaris*)
+      rtems_cpu=unix
+      bsp=solaris2
+      ;;
+  i[3456]86-pc-linux-gnu)
+      echo linux
+      rtems_cpu=unix
+      bsp=linux1
+      ;;
+  *-rtems*)
+    cpu=`echo $target | sed -e 's/-.*//'`
+    case $cpu in
+      hppa1.1) rtems_cpu=hppa1_1 ;;
+      powerpc) rtems_cpu=ppc ;;
+      *)       rtems_cpu=$cpu ;;
+    esac
+    ;;
+  *)
+    echo unknown target $target
+    exit 1
+    ;;
+esac
 
 echo
-echo Generating sizes for CPU ${cpu} on board ${bsp}
+echo Generating sizes for CPU ${cpu} on board ${board}
 echo
 
 #
@@ -59,8 +81,8 @@ else
   EOL="\\c"
 fi
 
-if [ ! -d ${bsp} ] ; then
-  echo "${bsp} does not exist ... is the current directory the build directory?"
+if [ ! -d ${board} ] ; then
+  echo "${board} does not exist ... is the current directory the build directory?"
   exit 1
 fi
 
@@ -69,7 +91,7 @@ CPUOBJ=c/src/exec/score/cpu/${rtems_cpu}/o-${bsp}
 COREOBJ=c/src/exec/score/src/o-${bsp}
 RTEMSOBJ=c/src/exec/rtems/src/o-${bsp}
 SAPIOBJ=c/src/exec/sapi/src/o-${bsp}
-OPTOBJ=${bsp}/lib
+OPTOBJ=${board}/lib
 
 MANLIST=" \
 ${RTEMSOBJ}/clock.o \
