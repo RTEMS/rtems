@@ -84,11 +84,9 @@ void rtems_filesystem_initialize( void )
    *
    *  If the mkdir() fails, we can't print anything so just fatal error.
    *
-   *  NOTE: UNIX root is 755 and owned by root/root (0/0).
+   *  NOTE: UNIX root is 755 and owned by root/root (0/0).  It is actually
+   *        created that way by the IMFS.
    */
-  status=chmod("/", 0755);
-  if ( status != 0 )
-    rtems_fatal_error_occurred( 0xABCD0003 );
 
   status = mkdir( "/dev", 0777);
   if ( status != 0 )

@@ -1,3 +1,9 @@
+2001-05-25	Joel Sherrill <joel@OARcorp.com>
+
+ 	* libc/base_fs.c: Deleted chmod() now that IMFS creates the
+	root node with the desired permissions.  chmod() is also not
+	supported by the miniIMFS so this is not allowable.
+
 2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
 
 	* include/rtems/libio_.h: Added login name, uid, gid, euid, and egid
