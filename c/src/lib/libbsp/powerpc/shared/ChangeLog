@@ -1,4 +1,15 @@
-2003-11-01      Greg Menke <gregory.menke@gsfc.nasa.gov>
+2004-09-27      Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	PR 606/bsps
+	* bootloader/pci.c: Fixed IO remapping so buses >= 1 are remapped.
+	Reduced PCI space to match bat2.  Fixed incorrect region size
+	calculation in pci_read_bases.  Set PCI latency timers to known
+	sane values.  Changed bridge PCI settings to minimum sane instead
+	of whatever sounded neat in the PCI spec.  Force pf regions to
+	memory mapped to preserve byte access.
+
+
+2004-09-27      Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	PR 606/bsps
 	* bootloader/pci.c: Fixed IO remapping so buses >= 1 are remapped.
@@ -9,6 +20,7 @@
 	memory mapped to preserve byte access.
 
 2003-07-16      Greg Menke <gregory.menke@gsfc.nasa.gov>
+
 	PR 432/bsps
 	* bootloader/pci.c: Re-instated code that prevents remapping small
 	IO regions, which if remapped would cause i8259 registers to move
