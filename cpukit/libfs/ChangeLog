@@ -1,3 +1,10 @@
+2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 509/filesystem
+	* src/dosfs/fat.c: _fat_block_read and _fat_block_write return error
+	codes instead of -1 in case of errors, as they are supposed to do
+	according to the comments documenting these functions.
+
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/dosfs/msdos_file.c (msdos_file_read, msdos_file_write):

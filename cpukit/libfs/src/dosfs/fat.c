@@ -64,8 +64,8 @@ _fat_block_read(
     {
         rc = fat_buf_access(fs_info, blk, FAT_OP_TYPE_READ, &block);
         if (rc != RC_OK)
-            return rc;
-    
+            return -1;
+
         c = MIN(count, (fs_info->vol.bps - ofs));
         memcpy((buff + cmpltd), (block->buffer + ofs), c);
 
@@ -119,7 +119,7 @@ _fat_block_write(
         else
             rc = fat_buf_access(fs_info, blk, FAT_OP_TYPE_READ, &block);
         if (rc != RC_OK)
-            return rc;
+            return -1;
     
         memcpy((block->buffer + ofs), (buff + cmpltd), c);
 
