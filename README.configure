@@ -173,15 +173,24 @@ The following bsps are supported:
 host-based	: posix (on Linux, Solaris and HPUX)
 
 a29k		: portsw
-i386		: i386ex pc386
-i960		: cvme961
+arm             : arm_bare_bsp armulator vegaplus
+c4x             : c4xsim
+h8300           : h8sim
+i386		: i386ex pc386 ts_386ex
+i960		: cvme961 i960sim rxgen960
 hppa1.1		: simhppa
 m68k		: dmv152 efi332 efi68k gen68302 gen68340 gen68360 
                   gen68360_040 idp mvme136 mvme147 mvme147s mvme162 ods68302
+                  mrm
 no_cpu          : no_bsp
-mips64orion 	: p4600 p4650 (p4000 port with either R4600 or R4650)
-powerpc		: papyrus psim helas403
-sh              : gensh1
+mips            : p4600 p4650 (p4000 port with either R4600 or R4650)
+                  jmr3904 genmongoosev
+mips64orion 	: (deprecated)
+                  p4600 p4650 (p4000 port with either R4600 or R4650)
+powerpc		: dmv177 eth_comm helas403 mbx8xx motorola_powerpc (covers
+                  most Motorola VMEbus and CompactPCI boards) ppcn_60x
+                  psim score603e
+sh              : gensh1 gensh2
 sparc 		: erc32 erc32nfp leon1 leon2
 any             : bare
 
