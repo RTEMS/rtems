@@ -5,8 +5,7 @@
 
 include_netdir = $(includedir)/net
 
-LIBNAME = lib.a
-LIB = $(ARCH)/$(LIBNAME)
+LIB = $(ARCH)/lib.a
 
 C_FILES = if.c if_ethersubr.c if_loop.c radix.c route.c rtsock.c raw_cb.c \
     raw_usrreq.c if_ppp.c ppp_tty.c pppcompress.c

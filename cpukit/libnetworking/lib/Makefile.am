@@ -2,9 +2,7 @@
 ## $Id$
 ##
 
-
-LIBNAME = lib.a
-LIB = $(ARCH)/$(LIBNAME)
+LIB = $(ARCH)/lib.a
 
 C_FILES = getprotoby.c rtems_bsdnet_ntp.c ftpfs.c syslog.c tftpDriver.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)

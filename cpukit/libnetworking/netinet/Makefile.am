@@ -2,11 +2,9 @@
 ## $Id$
 ##
 
-
 include_netinetdir = $(includedir)/netinet
 
-LIBNAME = lib.a
-LIB = $(ARCH)/$(LIBNAME)
+LIB = $(ARCH)/lib.a
 
 C_FILES = if_ether.c igmp.c in.c in_cksum.c in_pcb.c in_proto.c in_rmx.c \
     ip_divert.c ip_fw.c ip_icmp.c ip_input.c ip_mroute.c ip_output.c \

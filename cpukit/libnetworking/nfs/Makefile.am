@@ -2,11 +2,9 @@
 ## $Id$
 ##
 
-
 include_nfsdir = $(includedir)/nfs
 
-LIBNAME = lib.a
-LIB = $(ARCH)/$(LIBNAME)
+LIB = $(ARCH)/lib.a
 
 C_FILES = bootp_subr.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)

@@ -1,7 +1,20 @@
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* kern/Makefile.am: Eliminate LIBNAME.
+	* lib/Makefile.am: Ditto.
+	* libc/Makefile.am: Ditto.
+	* net/Makefile.am: Ditto.
+	* netinet/Makefile.am: Ditto.
+	* nfs/Makefile.am: Ditto.
+	* rtems/Makefile.am: Ditto.
+	* wrapup/Makefile.am: Use project_libdir instead of
+	$(PROJECT_RELEASE)/lib.
+
 2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* netinet/in.h, netinet/ip.h, netinet/ip_var.h, netinet/tcp.h:
 	Modified to added packed attribute.o
+
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_TOP(../..).

@@ -4,8 +4,7 @@
 
 include_rtemsdir = $(includedir)/rtems
 
-LIBNAME = lib.a
-LIB = $(ARCH)/$(LIBNAME)
+LIB = $(ARCH)/lib.a
 
 C_FILES = sghostname.c issetugid.c rtems_glue.c rtems_syscall.c \
     rtems_bootp.c rtems_showmbuf.c rtems_showroute.c rtems_showifstat.c \

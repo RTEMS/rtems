@@ -2,9 +2,7 @@
 ## $Id$
 ##
 
-
-LIBNAME = lib.a
-LIB = $(ARCH)/$(LIBNAME)
+LIB = $(ARCH)/lib.a
 
 C_FILES = addr2ascii.c ascii2addr.c base64.c gethostbydns.c gethostbyht.c \
     gethostbynis.c gethostnamadr.c getnetbydns.c getnetbyht.c getnetbynis.c \
