@@ -65,6 +65,9 @@ END-INFO-DIR-ENTRY
 @include preface.texi
 @include basefs.texi
 @include applayering.texi
+@include patheval.texi
+@include init.texi
+@include mounting.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top filesystem
@@ -75,6 +78,9 @@ This is the online version of the RTEMS Filesystem Design Guide.
 * Preface::
 * Base File System::
 * Applications and Functional Layering::
+* Pathname Evaluation::
+* System Initialization::
+* Mounting and Unmounting File Systems::
 * Command and Variable Index::
 * Concept Index::
 @end menu

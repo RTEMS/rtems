@@ -1,9 +1,15 @@
+@c
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@chapter System Initialization
 
 
-System Initialization
-
-
-	After the RTEMS initialization is performed, the application's initialization will 
+After the RTEMS initialization is performed, the application's initialization will 
 be performed. Part of initialization is a call to rtems_filesystem_initialize(). This routine 
 will mount the `In Memory File System' as the base file system. 
 
