@@ -72,19 +72,6 @@ rtems_status_code rtems_io_register_name(
   return RTEMS_NOT_CONFIGURED;
 }
 
-rtems_status_code rtems_io_lookup_name(
-    const char *pathname,
-    rtems_driver_name_t **rnp
-)
-{
-  _Internal_error_Occurred(
-    INTERNAL_ERROR_RTEMS_API,
-    FALSE,
-    RTEMS_NOT_CONFIGURED
-  );
-  return RTEMS_NOT_CONFIGURED;
-}
-
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,

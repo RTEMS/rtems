@@ -1,3 +1,9 @@
+2003-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	PR 338/filesystem
+	* sapi/no-io.c: Side-effect of fixing reentrancy problem with 
+	rtems_io_lookup_name() (API change).  Unused function removed.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Apply install-data-local to install *.rels.
