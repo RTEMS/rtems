@@ -31,7 +31,6 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 delay/Makefile
-include/Makefile
 score/Makefile
 timer/Makefile
 sci/Makefile])

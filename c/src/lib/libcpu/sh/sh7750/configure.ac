@@ -30,7 +30,6 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
-include/Makefile
 score/Makefile
 sci/Makefile
 timer/Makefile])
