@@ -61,6 +61,17 @@ RTEMS_ROOT=. make/${RTEMS_BSP}.cache
 # Read back the cache
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
+test -n "${RTEMS_BSP_CFLAGS}" && \
+  ac_configure_args="$ac_configure_args 'CPU_CFLAGS=${RTEMS_BSP_CFLAGS}'"
+test -n "{RTEMS_BSP_CFLAGS_OPTIMIZE_V}" && \
+  ac_configure_args="$ac_configure_args 'CFLAGS_OPTIMIZE_V=${RTEMS_BSP_CFLAGS_OPTIMIZE_V}'"
+test -n "${RTEMS_BSP_CFLAGS_DEBUG_V}" && \
+  ac_configure_args="$ac_configure_args 'CFLAGS_DEBUG_V=${RTEMS_BSP_CFLAGS_DEBUG_V}'"
+test -n "${RTEMS_BSP_CFLAGS_PROFILE_V}" && \
+  ac_configure_args="$ac_configure_args 'CFLAGS_PROFILE_V=${RTEMS_BSP_CFLAGS_PROFILE_V}'"
+test -n "${RTEMS_BSP_FAMILY}" && \
+  ac_configure_args="$ac_configure_args 'RTEMS_BSP_FAMILY=${RTEMS_BSP_FAMILY}'"
+
 AC_SUBST(CUSTOM_CFG_FILES)
 AC_SUBST(cfg_dir)
 
