@@ -1,3 +1,7 @@
+2004-11-10	Joel Sherrill <joel@oarcorp.com>
+
+	* aclocal/bsp-alias.m4: Add MVME2100 BSP as alias of motorola_shared.
+
 2004-10-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* alocal/check-custom-bsp.m4: Reflect new location of bspkit*cfg.
