@@ -80,6 +80,12 @@ boolean _POSIX_signals_Unblock_thread(
   siginfo_t       *info
 );
 
+boolean _POSIX_signals_Check_signal(
+  POSIX_API_Control  *api,
+  int                 signo,
+  boolean             is_global
+);
+
 boolean _POSIX_signals_Clear_signals(
   POSIX_API_Control  *api,
   int                 signo,

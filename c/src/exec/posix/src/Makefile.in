@@ -14,10 +14,10 @@ PROJECT_ROOT = @PROJECT_ROOT@
 VPATH = @srcdir@
 
 # following are semi-implemented and untested
-# C_PIECES=aio cancel devctl intr mqueue semaphore utsname
+# C_PIECES=aio cancel devctl intr utsname
 
 # These are really in the stand but not really functional
-BUILD_FOR_NOW_C_PIECES = aio cancel mqueue semaphore utsname
+BUILD_FOR_NOW_C_PIECES = aio cancel utsname
 
 ENOSYS_C_PIECES = execl execle execlp execv execve execvp fork pthreadatfork \
     wait waitpid
@@ -53,9 +53,15 @@ PSIGNAL_C_PIECES = psignal alarm kill killinfo pause \
     sigismember sigpending sigprocmask sigqueue sigsuspend sigtimedwait \
     sigwait sigwaitinfo signal_2
 
+SEMAPHORE_C_PIECES= semaphore semaphorecreatesupp semaphoredeletesupp \
+    semaphoremp semaphorenametoid semaphorewaitsupp semdestroy \
+    semgetvalue seminit semopen sempost semtimedwait semtrywait \
+    semunlink semwait
+
 C_PIECES = adasupp cond getpid key $(MESSAGE_QUEUE_PIECES) \
     $(MUTEX_C_PIECES) $(PTHREAD_C_PIECES) \
-    $(PSIGNAL_C_PIECES) ptimer sched time types unistd $(ENOSYS_C_PIECES) \
+    $(PSIGNAL_C_PIECES) ptimer sched $(SEMAPHORE_C_PIECES) \
+    time types unistd $(ENOSYS_C_PIECES) \
     $(BUILD_FOR_NOW_C_PIECES)
 
 C_FILES = $(C_PIECES:%=%.c)

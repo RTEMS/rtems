@@ -21,6 +21,7 @@
 extern "C" {
 #endif
 
+#include <semaphore.h>
 #include <rtems/score/coresem.h>
 
 #define SEM_FAILED (sem_t *) -1
@@ -113,11 +114,41 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Semaphore_Is_null (
 );
 
 /*
+ *  _POSIX_Semaphore_Create_support
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine supports the sem_init and sem_open routines.
+ */
+
+int _POSIX_Semaphore_Create_support(
+  const char                *name,
+  int                        pshared,
+  unsigned int               value,
+  POSIX_Semaphore_Control  **the_sem
+);
+
+/*
+ *  _POSIX_Semaphore_Wait_support
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine supports the sem_wait, sem_trywait, and sem_timedwait
+ *  services.
+ */
+
+int _POSIX_Semaphore_Wait_support(
+  sem_t              *sem,
+  boolean             blocking,
+  Watchdog_Interval   timeout
+);
+
+/*
  *  _POSIX_Semaphore_Name_to_id
  *
  *  DESCRIPTION:
  *
- *  XXX
+ *  This routine performs name to id translation.
  */
 
 int _POSIX_Semaphore_Name_to_id(
