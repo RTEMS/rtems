@@ -31,7 +31,7 @@ extern "C" {
  *  NOTE: Following are not defined and are board independent
  *
  */
-struct rtems_bsdnet_ifconfig *config;
+struct rtems_bsdnet_ifconfig;
 int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
                           int                          attaching);
 

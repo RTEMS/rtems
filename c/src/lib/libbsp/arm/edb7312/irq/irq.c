@@ -151,5 +151,3 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
     return 1;
 }
-
-

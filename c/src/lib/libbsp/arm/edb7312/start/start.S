@@ -40,7 +40,7 @@ _start:
 /*
  * Here is the code to initialize the low-level BSP environment
  * (Chip Select, PLL, ....?)
-
+ */
 	
 /* zero the bss */
         LDR     r1, =_bss_end_       /* get end of ZI region */
@@ -122,7 +122,7 @@ FIQ_Handler:
         B       FIQ_Handler
 
 init2 :	
-/* --- Initialise stack pointer registers
+/* --- Initialise stack pointer registers */
 	
 /* Enter IRQ mode and set up the IRQ stack pointer */
     MOV     r0, #Mode_IRQ | I_Bit | F_Bit     /* No interrupts */
