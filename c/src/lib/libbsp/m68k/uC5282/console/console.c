@@ -42,7 +42,11 @@ _BSP_null_char( char c )
 }
 BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
-#define MAX_UART_INFO     3
+/*
+ * The MCF5282 has three UARTs but we enable only two here since it's likely
+ * that the I/O pins available to the third will be used for CAN/I2C
+ */
+#define MAX_UART_INFO     2
 #define RX_BUFFER_SIZE    512
 
 struct IntUartInfoStruct
