@@ -8,8 +8,7 @@ shift
 public_docs="user develenv ka9q posix_users"
 support_docs="hppa1_1 i386 i960 m68k sparc"
 partners_docs="posix1003.1 posix1003.1h"
-
-extra_manuals="hwapi powerpc"
+oar_manuals="hwapi powerpc"
 
 # relnotes  is obsolete
 # posix_users manual left out until finished
@@ -30,7 +29,7 @@ case ${MANUAL_SET} in
     manuals="$public_docs $support_docs $partners_docs"
     ;;
   internal)
-    manuals="$public_docs $support_docs $partners_docs $extra_manuals"
+    manuals="$public_docs $support_docs $partners_docs $oar_manuals"
     ;;
   *)
     echo "ERROR: Unknown manual set ${MANUAL_SET}"
