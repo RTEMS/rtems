@@ -422,9 +422,10 @@ int _POSIX_Condition_variables_Wait_support(
         if ( status && status != ETIMEDOUT )
           return status;
 
-      }
-      else
+      } else {
+        _Thread_Enable_dispatch();
         status = ETIMEDOUT;
+      }
 
       /*
        *  When we get here the dispatch disable level is 0.
