@@ -111,7 +111,7 @@ void _Init68360 (void)
 	 * 70 nsec DRAM
 	 * 180 nsec ROM (3 wait states)
 	 */
-	m360.gmr = M360_GMR_RCNT(24) | M360_GMR_RFEN | 
+	m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN | 
 				M360_GMR_RCYC(0) | M360_GMR_PGS(1) |
 				M360_GMR_DPS_32BIT | M360_GMR_NCS |
 				M360_GMR_TSS40;
@@ -416,21 +416,21 @@ void _Init68360 (void)
 	switch ((unsigned long)&_RamSize) {
 	default:
 	case 4*1024*1024:
-		m360.gmr = M360_GMR_RCNT(24) | M360_GMR_RFEN | 
+		m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN | 
 					M360_GMR_RCYC(0) | M360_GMR_PGS(3) |
 					M360_GMR_DPS_32BIT | M360_GMR_NCS | 
 					M360_GMR_GAMX;
 		break;
 
 	case 16*1024*1024:
-		m360.gmr = M360_GMR_RCNT(24) | M360_GMR_RFEN | 
+		m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN | 
 					M360_GMR_RCYC(0) | M360_GMR_PGS(5) |
 					M360_GMR_DPS_32BIT | M360_GMR_NCS | 
 					M360_GMR_GAMX;
 		break;
 
 	case 64*1024*1024:
-		m360.gmr = M360_GMR_RCNT(24) | M360_GMR_RFEN | 
+		m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN | 
 					M360_GMR_RCYC(0) | M360_GMR_PGS(7) |
 					M360_GMR_DPS_32BIT | M360_GMR_NCS | 
 					M360_GMR_GAMX;
