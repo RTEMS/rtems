@@ -8,7 +8,7 @@ ACLOCAL = @ACLOCAL@ -I $(RTEMS_TOPdir)/aclocal
 noinst_SCRIPTS=difftest sorttimes
 
 # HACK: install to build-tree
-install-exec-local: $(SCRIPTS)
+all-local: $(SCRIPTS)
 	$(mkinstalldirs) $(PROJECT_ROOT)/${RTEMS_BSP}/tests
 	$(INSTALL_SCRIPT) difftest $(PROJECT_ROOT)/${RTEMS_BSP}/tests
 	$(INSTALL_SCRIPT) sorttimes $(PROJECT_ROOT)/${RTEMS_BSP}/tests

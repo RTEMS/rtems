@@ -3979,8 +3979,8 @@ subdirs="c/src/tests/tools/generic c/build-tools $scoretools_cfgdirs"
 subdirs="c/src/tests/tools/generic c/build-tools $scoretools_cfgdirs $bsptools_cfgdirs"
 
 
-# FIXME: libwapi needs a separate configure.in in future ;-
-# AC_CONFIG_SUBDIRS(c/src/lib/libwapi)
+# FIXME: libhwapi needs a separate configure.in in future ;-
+# AC_CONFIG_SUBDIRS(c/src/lib/libhwapi)
 
 # try not to explicitly list a Makefile here 
 trap '' 1 2 15
