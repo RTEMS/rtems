@@ -30,10 +30,10 @@ GENERATED_FILES=overview.texi concepts.texi init.texi task.texi \
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: dirs c_user
+info: dirs $(PROJECT)
 	cp $(PROJECT) $(PROJECT)-* $(INFO_INSTALL)
 
-c_user: $(FILES)
+$(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
 dvi: $(PROJECT).dvi
@@ -53,7 +53,7 @@ $(PROJECT).dvi: $(FILES)
 	texi2dvi -V $(PROJECT).texi
 
 html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/c_user
+	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
 	cp rtemsarc.png rtemspie.png states.png $(WWW_INSTALL)/c_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
@@ -183,3 +183,5 @@ mp.texi: mp.t
 	    -u "Top" \
 	    -n "Directive Status Codes" ${*}.t
 
+convert:
+	/usr/bin/gs -dMaxBitmap=300000000 -g5500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER  -sOutputFile=rtemspie.pdf -- rtemspie.eps -c -quit
