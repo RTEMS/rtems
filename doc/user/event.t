@@ -43,20 +43,20 @@ manager:
 @item Events do not hold or transport data.
 
 @item Events are not queued.  In other words, if an event is
-sent more than once before being received, the second and
-subsequent send operations have no effect.
+sent more than once to a task before being received, the second and
+subsequent send operations to that same task have no effect.  
 @end itemize
 
-An event set is posted when it is directed (or sent)
-to a task.  A pending event is an event that has been posted but
-not received.  An event condition is used to specify the events
-which the task desires to receive and the algorithm which will
-be used to determine when the request is satisfied. An event
-condition is satisfied based upon one of two algorithms which
-are selected by the user.  The @code{@value{RPREFIX}EVENT_ANY} algorithm states that
-an event condition is satisfied when at least a single requested
-event is posted.  The @code{@value{RPREFIX}EVENT_ALL} algorithm states that an event
-condition is satisfied when every requested event is posted.
+An event set is posted when it is directed (or sent) to a task.  A
+pending event is an event that has been posted but not received.  An event
+condition is used to specify the events which the task desires to receive
+and the algorithm which will be used to determine when the request is
+satisfied. An event condition is satisfied based upon one of two
+algorithms which are selected by the user.  The
+@code{@value{RPREFIX}EVENT_ANY} algorithm states that an event condition
+is satisfied when at least a single requested event is posted.  The
+@code{@value{RPREFIX}EVENT_ALL} algorithm states that an event condition
+is satisfied when every requested event is posted.
 
 @subsection Building an Event Set or Condition
 
