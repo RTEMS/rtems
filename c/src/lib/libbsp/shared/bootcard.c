@@ -18,7 +18,7 @@
 
 #include <bsp.h>
 
-#ifdef USE_INIT_FINI 
+#if defined(__USE_INIT_FINI__)
 #include <stdlib.h> /* for atexit() */
 #endif
 
@@ -36,7 +36,7 @@ posix_api_configuration_table BSP_POSIX_Configuration;
 #endif
 
 /* Initialize C++ global Ctor/Dtor and initializes exception handling. */
-#if defined(USE_INIT_FINI)
+#if defined(__USE_INIT_FINI__)
 extern void _fini( void );
 #endif
 
@@ -120,7 +120,7 @@ int boot_card(int argc, char **argv, char **envp)
    *  main() invoke the global constructors if there are any.
    */
 
-#ifdef USE_INIT_FINI 
+#if defined(__USE_INIT_FINI__)
    atexit( _fini );
 #endif
 

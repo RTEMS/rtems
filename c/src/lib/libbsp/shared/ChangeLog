@@ -1,3 +1,8 @@
+2001-10-22	Joel Sherrill <joel@OARcorp.com>
+
+	* bootcard.c: Use __USE_INIT_FINI__ since USE_INIT_FINI
+	pollutes the application namespace.
+
 2001-10-17	Joel Sherrill <joel@OARcorp.com>
 
 	* timerstub.c: New stub file for BSPs that don't have timer hardware.
