@@ -1,3 +1,16 @@
+2000-12-05	 Eric Valette <valette@crf.canon.fr>
+
+	* console/inch.c, console/keyboard.c, console/pc_keyb.c,
+	console/vt.c, include/bsp.h: Correct incorrect interrupt level
+	handling in new keyboard management code.  Correct
+	BSP_poll_char initialization routine.
+	* start/start.S, startup/bspstart.c: Correct when the video is
+	initialized.
+	* timer/timer.c (Calibrate_1ms_loop): Address problem where this
+	did not work correctly on all PC speeds. The new calibrate routine
+	has been tested on Pentium 166, pentium II 200, pentium III
+	300 Mhz and does work as expected.
+
 2000-12-05	Joel Sherrill <joel@OARcorp.com>
 
 	* pc386/console/console.c, pc386/console/serial_mouse.c,

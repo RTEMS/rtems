@@ -145,12 +145,21 @@ SYM (zero_bss):
 	shrl	ecx
 	xorl	eax, eax		# value to clear out memory
 	repne				# while ecx != 0
-	stosl				#   clear a long in the bss
+	stosl
+					#   clear a long in the bss
 
+/*-------------------------------------------------------------------+
+| Initialize the video because zero_bss has cleared initVideo parameters
+| if it was called earlier
+| So from now we can use printk
++-------------------------------------------------------------------*/
+	call _IBMPC_initVideo
+		
 /*---------------------------------------------------------------------+
 | Check CPU type. Enable Cache and init coprocessor if needed.
 +---------------------------------------------------------------------*/
 	call checkCPUtypeSetCr0
+	
 /*---------------------------------------------------------------------+
 | Transfer control to User's Board Support Package
 +---------------------------------------------------------------------*/

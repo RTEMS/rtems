@@ -122,6 +122,14 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #define TIMER_MSB      0x20            /* r/w counter MSB                */
 #define TIMER_16BIT    0x30            /* r/w counter 16 bits, LSB first */
 #define TIMER_BCD      0x01            /* count in BCD                   */
+#define TIMER_RD_BACK  0xc0	       /* Read Back Command 		 */
+		/* READ BACK command layout in the Command Register 	 */
+#define RB_NOT_COUNT	0x40	       /* Don't select counter latch 	 */
+#define RB_NOT_STATUS	0x20	       /* Don't select status latch 	 */
+#define	RB_COUNT_0	0x02	       /* Counter 0 latch 		 */
+#define RB_COUNT_1	0x04	       /* Counter 1 latch 		 */
+#define RB_COUNT_2	0x08	       /* Counter 2 latch 		 */
+#define RB_OUTPUT	0x80	       /* Output of the counter is 1 	 */
 
 #define	TIMER_TICK     1193182  /* The internal tick rate in ticks per second */
 

@@ -60,27 +60,27 @@ extern void rtemsReboot( void );
 
 int set_bit(int nr, unsigned long * addr)
 {
-	int	mask, retval;
+	int	mask, retval,level;
 
 	addr += nr >> 5;
 	mask = 1 << (nr & 0x1f);
-	cli();
+	_CPU_ISR_Disable(level)
 	retval = (mask & *addr) != 0;
 	*addr |= mask;
-	sti();
+	_CPU_ISR_Enable (level);
 	return retval;
 }
 
 int clear_bit(int nr, unsigned long * addr)
 {
-	int	mask, retval;
+	int	mask, retval,level;
 
 	addr += nr >> 5;
 	mask = 1 << (nr & 0x1f);
-	cli();
+	_CPU_ISR_Disable(level)
 	retval = (mask & *addr) != 0;
 	*addr &= ~mask;
-	sti();
+	_CPU_ISR_Enable (level);
 	return retval;
 }
 
