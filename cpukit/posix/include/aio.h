@@ -6,7 +6,11 @@
 #ifndef __POSIX_ASYNCHRONOUS_IO_h
 #define __POSIX_ASYNCHRONOUS_IO_h
 
-#include <rtems/posix/features.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <sys/features.h>
 
 #if defined(_POSIX_ASYNCHRONOUS_IO)
 
@@ -132,6 +136,10 @@ int aio_fsync(
 #endif /* _POSIX_SYNCHRONIZED_IO */
 
 #endif /* _POSIX_ASYNCHRONOUS_IO */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */
