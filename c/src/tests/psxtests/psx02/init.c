@@ -120,8 +120,14 @@ void *POSIX_Init(
     Signal_occurred = 0;
 
     status = nanosleep ( &tv, &tr );
-    assert( !status );
-
+  
+    if ( status == -1 ) {
+      assert( errno == EINTR );
+      assert( tr.tv_nsec || tr.tv_sec );
+    } else if ( !status ) {
+      assert( !tr.tv_nsec && !tr.tv_sec );
+    }
+     
     printf(
       "Init: signal was %sprocessed with %d:%d time remaining\n",
       (Signal_occurred) ? "" : "not ",
