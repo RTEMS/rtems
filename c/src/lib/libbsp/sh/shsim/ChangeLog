@@ -1,3 +1,13 @@
+2004-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in clock/Makefile.am, gdbsci/Makefile.am,
+	startup/Makefile.am, wrapup/Makefile.am, console/Makefile.am,
+	scitab/Makefile.am, trap34/Makefile.am. Use automake compilation rules.
+	* clock/Makefile.am, gdbsci/Makefile.am, startup/Makefile.am,
+	wrapup/Makefile.am, console/Makefile.am, scitab/Makefile.am,
+	trap34/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.

@@ -65,11 +65,5 @@ RTEMS_BSPOPTS_HELP([CPU_CLOCK_RATE_HZ],
 AC_SUBST(CPU_CLOCK_RATE_HZ)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-scitab/Makefile
-gdbsci/Makefile
-startup/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
