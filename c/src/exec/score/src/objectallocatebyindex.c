@@ -45,25 +45,21 @@ Objects_Control *_Objects_Allocate_by_index(
   Objects_Control *the_object;
 
   if ( index && information->maximum >= index ) {
-    /*
-     *  If the object is already in the local table, then
-     *  it has already been allocated/created by a previous
-     *  create call.
-     */
-
     the_object = _Objects_Get_local_object( information, index );
     if ( the_object )
       return NULL;
 
     /* XXX
      *  This whole section of code needs to be addressed.
-     *    +  The use of the index 0 for object_blocks should be dealt
-     *       with more properly so we can autoextend.
+     *    +  The 0 should be dealt with more properly so we can autoextend.
+     *    +  The pointer arithmetic is probably too expensive.
      *    +  etc.
      */
     
-    the_object = (Objects_Control *) information->object_blocks[ 0 ];
-
+    the_object = (Objects_Control *) _Addresses_Add_offset(
+      information->object_blocks[ 0 ],
+      (sizeof_control * (index - 1))
+    );
     _Chain_Extract( &the_object->Node );
  
     return the_object;   
