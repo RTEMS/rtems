@@ -33,6 +33,7 @@ if test "$RTEMS_USE_MACROS" = "yes"; then
 else
   INLINEdir="inline"
 fi
+AC_SUBST(INLINEdir)
 AM_CONDITIONAL(INLINE,test "$INLINEdir" = "inline" )
 AM_CONDITIONAL(MACROS,test "$INLINEdir" = "macros" )
 
@@ -45,11 +46,6 @@ AM_CONFIG_HEADER([src/config.h])
 ## FIXME: We configure and build the macros subdirectory, too.
 ## Should probably use AM_CONDITIONALs to disable them in future
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-src/Makefile
-include/Makefile
-inline/Makefile
-macros/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 

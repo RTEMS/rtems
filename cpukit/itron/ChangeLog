@@ -1,3 +1,12 @@
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Remove.
+	* inline/Makefile.am: Remove.
+	* macros/Makefile.am: Remove.
+	* src/Makefile.am: Remove.
+	* Makefile.am: Merge-in removed Makefile.ams.
+	* configure.ac: Reflect changes above.
+
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Cosmetical fixes.
