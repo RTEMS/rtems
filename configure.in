@@ -118,6 +118,8 @@ dnl imply all BSPs.  Eventually we would like to build a collection
 dnl of CPU model specific RTEMS libraries which in conjunction with
 dnl a BSP library would be used to link an application.
 
+RTEMS_HOST=$host_os
+
 case "${target}" in
   # hpux unix port should go here
   hppa1.1-rtems*)
@@ -135,6 +137,7 @@ case "${target}" in
   i[[3456]]86-pc-linux*)         # unix "simulator" port
 	target_cpu=unix
 	RTEMS_HAS_POSIX_API=no
+        RTEMS_HOST=Linux
 	;;
   no_cpu-rtems*)
         target_cpu=no_cpu
@@ -146,6 +149,7 @@ case "${target}" in
   sparc-sun-solaris*)             # unix "simulator" port
 	target_cpu=unix
 	RTEMS_HAS_POSIX_API=no
+        RTEMS_HOST=Solaris
 	;;
   *) 
 	RTEMS_CANONICAL_TARGET_CPU
@@ -168,6 +172,7 @@ else
 fi
 
 # find all the Executive Makefiles
+RTEMS_CHECK_MAKEFILE(c/src/exec/score/tools/$target_cpu)
 RTEMS_CHECK_MAKEFILE(c/src/exec/rtems)
 RTEMS_CHECK_MAKEFILE(c/src/exec/sapi)
 
@@ -258,7 +263,7 @@ dnl AC_PROG_CC
 dnl AC_PROG_CXX
 
 dnl RTEMS_BSP=$rtems_bsp
-RTEMS_HOST=$host_os
+dnl RTEMS_HOST=$host_os
 RTEMS_ROOT=`cd $srcdir/c; pwd`
 PROJECT_ROOT=`pwd;`
 
