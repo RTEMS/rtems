@@ -103,15 +103,15 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	/*
 	 *
 	 * Board Control/Status Register #1/#2: CS4, Start address 0xFA100000, (4 x 8 bits?)
-	 *	ASID=0x0, APG=0x0, guarded memory, copyback data cache policy, 
+	 *	ASID=0x0, APG=0x0, guarded memory, write-through data cache policy, 
 	 *	R/W,X for all, no ASID comparison, cache-inhibited.
 	 * EPN		TWC	RPN
 	 */
-	{ 0xFA100200,	0x11,	0xFA1009F7 },	/* BCSR - PS=4K */
+	{ 0xFA100200,	0x13,	0xFA1009F7 },	/* BCSR - PS=4K */
 	/*
 	 *
 	 * (IMMR-SPRs) Dual Port RAM: Start address 0xFA200000, 16K,
-	 *	ASID=0x0, APG=0x0, guarded memory, copyback data cache policy, 
+	 *	ASID=0x0, APG=0x0, guarded memory, write-through data cache policy, 
 	 *	R/W,X for all, no ASID comparison, cache-inhibited.
 	 *	
 	 *	Note: We use the value in MBXA/PG2, which is also the value that 
@@ -120,7 +120,7 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	 *	of the firmware.
 	 * EPN		TWC	RPN
 	 */
-	{ 0xFA200200,	0x11,	0xFA2009FF },	/* IMMR - PS=16K */
+	{ 0xFA200200,	0x13,	0xFA2009FF },	/* IMMR - PS=16K */
 	/*
 	 *
 	 * Flash: CS0, Start address 0xFE000000, 4M, (BootROM-EPPCBug)

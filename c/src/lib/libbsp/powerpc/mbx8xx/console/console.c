@@ -80,6 +80,7 @@
 #include <bspIo.h>
 #include <rtems/libio.h>
 #include <termios.h>
+#include <bsp/mbx.h>
 
 static int _EPPCBug_pollRead( int minor );
 static int _EPPCBug_pollWrite( int minor, const char *buf, int len );
@@ -87,8 +88,9 @@ static void _BSP_output_char( char c );
 static rtems_status_code do_poll_read( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
 static rtems_status_code do_poll_write( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
 
+static void _BSP_null_char( char c ) {return;}
 
-BSP_output_char_function_type BSP_output_char = _BSP_output_char;
+BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
 
 /*
@@ -502,6 +504,20 @@ static void _BSP_output_char( char c )
 #endif
 }
 
+bd_t *eppcbugInfo= (bd_t *)0xdeadbeef;
+bd_t fakeEppcBugInfo = {
+  	0x42444944,		/* Should be 0x42444944 "BDID" */
+	sizeof(bd_t),		/* Size of this structure */
+	0,			/* revision of this structure */
+	0,			/* EPPCbug date, i.e. 0x11061997 */
+	0,			/* Memory start address */
+	0x1000000,		/* Memory (end) size in bytes */
+	0x28,			/* Internal Freq, in Hz */
+	0,			/* Bus Freq, in Hz */
+	0,			/* Boot device controller */
+	0			/* Boot device logical dev */
+};
+
 
 /*
  ***************
@@ -566,7 +582,7 @@ rtems_device_driver console_initialize(
     m8xx_uart_scc_initialize(SCC4_MINOR); /* /dev/tty4    */
 
 #endif /* mpc860 */
-
+  BSP_output_char = _BSP_output_char;
 #else /* NVRAM_CONFIGURE != 1 */
 
     console_minor = CONSOLE_MINOR;
@@ -609,13 +625,10 @@ rtems_device_driver console_initialize(
 
 #endif /* mpc860 */
 
+  BSP_output_char = _BSP_output_char;
+
 #endif /* NVRAM_CONFIGURE != 1 */
 
-
-  /*
-   * Set up interrupts
-   */
-   m8xx_uart_interrupts_initialize();
 
   status = rtems_io_register_name ("/dev/tty0", major, SMC1_MINOR);
   if (status != RTEMS_SUCCESSFUL)

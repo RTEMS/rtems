@@ -9,7 +9,7 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 PGM = $(ARCH)/startup.rel
 
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c imbx8xx.c \
-    main.c mmutlbtab.c sbrk.c setvec.c gnatinstallhandler.c
+    main.c mmutlbtab.c sbrk.c gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 S_FILES = start.s

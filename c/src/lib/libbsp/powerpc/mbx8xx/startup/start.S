@@ -239,14 +239,20 @@ spin:
 	lwz	r3, spin@l(r3)
 	cmpwi	r3, 0x1
 	beq	.spin
-
+/*	
+ * #define LOADED_BY_EPPCBUG
+ */
 /*
  * Initialization code 
  */
 .startup:	
         /* Get the start address. */
         mflr    r1
-
+#ifdef LOADED_BY_EPPCBUG	
+	/* Save pointer to residual/board data */
+	lis	r9,eppcbugInfo@ha
+	stw	r3,eppcbugInfo@l(r9)
+#endif	
         /* Initialize essential registers. */
         bl      initregs
         nop
@@ -270,8 +276,8 @@ spin:
         bl      bssclr
         nop
 
-        lis 5,environ@ha
-        la 5,environ@l(5)		/* environp */
+	lis	r5,environ@ha
+        la	r5,environ@l(r5)		/* environp */
         /* clear argc and argv */
         xor     r3, r3, r3
         xor     r4, r4, r4
@@ -358,7 +364,7 @@ initregs:
 	mr	r8, r0
 	mr	r9, r0
 	mr	r10, r0
-	mr	r11, r0
+	mr	r11, r0 
 	mr	r12, r0
 	mr	r13, r0
 	mr	r14, r0

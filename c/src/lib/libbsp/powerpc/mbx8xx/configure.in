@@ -28,8 +28,11 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 # Explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile
+clock/Makefile
 console/Makefile
 include/Makefile
+irq/Makefile
 network/Makefile
 startup/Makefile
+vectors/Makefile
 wrapup/Makefile)

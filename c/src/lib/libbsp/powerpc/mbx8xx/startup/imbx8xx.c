@@ -258,7 +258,7 @@ void _InitMBX8xx (void)
   
   /* Initialize the Periodic Interrupt Status and Control Register (PISCR) */
   m8xx.piscrk = M8xx_UNLOCK_KEY;	/* unlock PISCR */
-  m8xx.piscr = 0x0083;			/* Default MBX and firmware value. */
+  m8xx.piscr = 0x0083; 			/* Default MBX and firmware value. */
       
   /* Initialize the System Clock and Reset Control Register (SCCR)
    * Set the clock sources and division factors:

@@ -1,3 +1,18 @@
+2001-03-30	Eric Valette <valette@crf.canon.fr>
+
+	* clock/.cvsignore, clock/Makefile.am, clock/p_clock.c,
+	include/8xx_immap.h, include/commproc.h, include/mbx.h,
+	irq/.cvsignore, irq/Makefile.am, irq/irq.c, irq/irq.h,
+	irq/irq_asm.S, irq/irq_init.c, vectors/.cvsignore,
+	vectors/Makefile.am, vectors/vectors.S, vectors/vectors.h,
+	vectors/vectors_init.c: New files.
+	* Makefile.am, configure.in, console/console.c,
+	include/Makefile.am, network/network.c, startup/Makefile.am,
+	startup/bspstart.c, startup/imbx8xx.c, startup/linkcmds,
+	startup/mmutlbtab.c, startup/start.S, wrapup/Makefile.am:
+	The modifications to this BSP reflect the conversion of the
+	mpc8xx CPU to the "new exception processing model."
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

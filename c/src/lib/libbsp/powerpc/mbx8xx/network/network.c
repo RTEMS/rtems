@@ -37,6 +37,7 @@
 
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
+#include <bsp/irq.h>
 
 /*
  * Number of interfaces supported by this driver
@@ -78,8 +79,6 @@
 #if (MCLBYTES < RBUF_SIZE)
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
-
-extern unsigned32 simask_copy;
 
 /*
  * Per-device data
@@ -124,11 +123,26 @@ struct m8xx_enet_struct {
 static struct m8xx_enet_struct enet_driver[NIFACES];
 
 
+static void  m8xx_scc1_ethernet_on(const rtems_irq_connect_data* ptr)
+{
+}
+
+static void  m8xx_scc1_ethernet_off(const rtems_irq_connect_data* ptr)
+{
+  /*
+   * Please put relevant code there
+   */
+}
+
+static void  m8xx_scc1_ethernet_isOn(const rtems_irq_connect_data* ptr)
+{
+  return BSP_irq_enabled_at_cpm (ptr->name);
+}
+
 /*
  * SCC1 interrupt handler
  */
-static rtems_isr
-m8xx_scc1_interrupt_handler (rtems_vector_number v)
+static void m8xx_scc1_interrupt_handler ()
 {
     /* Frame received? */
 	if ((m8xx.scc1.sccm & 0x8) && (m8xx.scc1.scce & 0x8)) {
@@ -145,15 +159,13 @@ m8xx_scc1_interrupt_handler (rtems_vector_number v)
 		enet_driver[0].txInterrupts++; /* Tx int has occurred */
 		rtems_event_send (enet_driver[0].txDaemonTid, INTERRUPT_EVENT);
 	}
-	m8xx.cisr = 1UL << 30;  /* Clear SCC1 interrupt-in-service bit */
 }
 
 #ifdef MPC860T
 /*
  * FEC interrupt handler
  */
-static rtems_isr
-m860_fec_interrupt_handler (rtems_vector_number v)
+static void m860_fec_interrupt_handler ()
 {
   /*
    * Frame received?
@@ -175,6 +187,13 @@ m860_fec_interrupt_handler (rtems_vector_number v)
 }
 #endif
 
+static rtems_irq_connect_data ethernetSCC1IrqData = {
+  BSP_CPM_IRQ_SCC1,
+  (rtems_irq_hdl) m8xx_scc1_interrupt_handler,
+  (rtems_irq_enable) m8xx_scc1_ethernet_on,
+  (rtems_irq_disable) m8xx_scc1_ethernet_off,
+  (rtems_irq_is_enabled)m8xx_scc1_ethernet_isOn
+};
 
 /*
  * Initialize the ethernet hardware
@@ -348,15 +367,12 @@ m8xx_enet_initialize (struct m8xx_enet_struct *sc)
   /*
    * Set up interrupts
    */
-  status = rtems_interrupt_catch (m8xx_scc1_interrupt_handler,
-				  PPC_IRQ_CPM_SCC1,
-				  &old_handler);
+  status = BSP_install_rtems_irq_handler (&ethernetSCC1IrqData);
   if (status != RTEMS_SUCCESSFUL) {
     rtems_panic ("Can't attach M8xx SCC1 interrupt handler: %s\n",
 		 rtems_status_text (status));
   }
   m8xx.scc1.sccm = 0;     /* No interrupts unmasked till necessary */
-  m8xx.cimr |= (1UL << 30);       /* Enable SCC1 interrupt */
   
   /*
    * Set up General SCC Mode Register
@@ -395,27 +411,6 @@ m8xx_enet_initialize (struct m8xx_enet_struct *sc)
   m8xx.pcpar |=  0x1;
   m8xx.pcdir &= ~0x1;
   
-  
-  /*
-   * Set up interrupts
-   * FIXME: DANGER: WARNING:
-   * CICR and SIMASK must be set in any module that uses
-   *   the CPM. Currently those are console-generic.c and
-   *   network.c. If the registers are not set the same
-   *   in both places, strange things may happen.
-   *   If they are only set in one place, then an application
-   *   that uses only the other module won't work correctly.
-   *   Put this comment in each module that sets these 2 registers
-   */
-#ifdef mpc860
-  m8xx.cicr = 0x00e43f80;   /* SCaP=SCC1, SCbP=SCC2, SCcP=SCC3, 
-			       			   SCdP=SCC4, IRL=1, HP=PC15, IEN=1 */
-#else
-  m8xx.cicr = 0x00043F80;   /* SCaP=SCC1, SCbP=SCC2, IRL=1, HP=PC15, IEN=1 */
-#endif
-  simask_copy = m8xx.simask | M8xx_SIMASK_LVM1; /* Enable level interrupts */
-  m8xx.simask |= M8xx_SIMASK_LVM1; /* Enable level interrupts */
-  
   /*
    * Enable receiver and transmitter
    */
@@ -424,6 +419,25 @@ m8xx_enet_initialize (struct m8xx_enet_struct *sc)
 
 
 #ifdef MPC860T
+/*
+ * Please organize FEC controller code better by moving code from
+ * m860_fec_initialize_hardware to m8xx_fec_ethernet_on
+ */
+static void m8xx_fec_ethernet_on(){};
+static void m8xx_fec_ethernet_off(){};
+static int m8xx_fec_ethernet_isOn (const rtems_irq_connect_data* ptr)
+{
+  return BSP_irq_enabled_at_siu (ptr->name);
+}
+
+static rtems_irq_connect_data ethernetFECIrqData = {
+  BSP_FAST_ETHERNET_CTRL,
+  (rtems_irq_hdl) m8xx_fec_interrupt_handler,
+  (rtems_irq_enable) m8xx_fec_ethernet_on,
+  (rtems_irq_disable) m8xx_fec_ethernet_off,
+  (rtems_irq_is_enabled)m8xx_fec_ethernet_isOn
+};
+
 static void
 m860_fec_initialize_hardware (struct m860_enet_struct *sc)
 {
@@ -458,7 +472,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
    * Set SIU interrupt level to LVL2
    *  
    */
-  m8xx.fec.ivec = 0x02 << 29;
+  m8xx.fec.ivec = ((((unsigned) BSP_FAST_ETHERNET_CTRL)/2) << 29);
   
   /*
    * Set the TX and RX fifo sizes. For now, we'll split it evenly
@@ -572,9 +586,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   /*
    * Set up interrupts
    */
-  status = rtems_interrupt_catch (m860_fec_interrupt_handler,
-                                  PPC_IRQ_LVL2,
-                                  &old_handler);
+  status = status = BSP_install_rtems_irq_handler (&ethernetFECIrqData);
   if (status != RTEMS_SUCCESSFUL)
     rtems_panic ("Can't attach M860 FEC interrupt handler: %s\n",
                  rtems_status_text (status));
@@ -1566,7 +1578,7 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
   /*
    * Process options
    */
- #if NVRAM_CONFIGURE == 1
+#if NVRAM_CONFIGURE == 1
  
   /* Configure from NVRAM */
   if ( (addr = nvram->ipaddr) ) {
@@ -1607,7 +1619,7 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
     rtems_panic("No Ethernet address specified!\n");
   }
     
- #else /* NVRAM_CONFIGURE != 1 */
+#else /* NVRAM_CONFIGURE != 1 */
  
   if (config->hardware_address) {
     memcpy (sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);

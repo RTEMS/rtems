@@ -1,0 +1,46 @@
+##
+## $Id$
+##
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+C_FILES = irq.c irq_init.c
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+
+H_FILES = irq.h
+
+S_FILES = irq_asm.S
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+
+OBJS = $(C_O_FILES) $(S_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
+include $(top_srcdir)/../../../../../../automake/lib.am
+
+SORDID_HACK:
+	rm -f $(PROJECT_INCLUDE)/bsp/irq.h
+
+$(PROJECT_INCLUDE)/bsp:
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/bsp/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp \
+    $(H_FILES:%.h=$(PROJECT_INCLUDE)/bsp/%.h)
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+$(PGM): $(OBJS)
+	$(make-rel)
+
+# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+
+all-local: SORDID_HACK $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(PGM)
+
+EXTRA_DIST = irq.c irq.h irq_asm.S irq_init.c
+
+include $(top_srcdir)/../../../../../../automake/local.am
