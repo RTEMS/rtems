@@ -23,7 +23,7 @@
 ##########################################################*/
 
 #include <bsp.h>
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
 
 rtems_isr C_Receive_ISR(rtems_vector_number vector);
 extern Ring_buffer_t  Console_Buffer[];
