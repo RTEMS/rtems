@@ -61,6 +61,10 @@ void bsp_start( void )
 
   _M68k_Ramsize = (unsigned long)&_RamSize; /* RAM size set in linker script */
 
+#if defined(cpu32)
+#warning "do something about vectors!!!"
+#endif
+
   /*
    *  Clear interrupt sources.
    */

@@ -55,6 +55,7 @@ V____IPC: .long  start - V___ISSP
 | Lots of macros, how-ever it creates a simple ROM vector table
 |
 
+#if !defined(mcpu32)
 #define MAKE_EXCEPTION_VECTOR(n) V___##n: .long (_CPU_ISR_jump_table  + (n * 10))
 
 MAKE_EXCEPTION_VECTOR(2)
@@ -336,6 +337,7 @@ MAKE_EXCEPTION_VECTOR(252)
 MAKE_EXCEPTION_VECTOR(253)
 MAKE_EXCEPTION_VECTOR(254)
 MAKE_EXCEPTION_VECTOR(255)                                
+#endif
 
 |
 | Start

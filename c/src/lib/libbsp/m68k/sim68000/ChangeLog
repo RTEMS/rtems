@@ -1,3 +1,9 @@
+2000-11-27	Joel Sherrill <joel@OARcorp.com>
+
+	* start/start.S, startup/bspstart.c: Not functional for CPU32
+	but hopefully will compile now and give a warning saying that
+	the CPU32 variant needs work.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
