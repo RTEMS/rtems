@@ -127,6 +127,55 @@
 #endif
 
 /*
+ *  Does the CPU have hardware floating point?
+ *
+ *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is supported.
+ *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is ignored.
+ *
+ *  If there is a FP coprocessor such as the i387 or mc68881, then
+ *  the answer is TRUE.
+ *
+ *  The macro name "PPC_HAS_FPU" should be made CPU specific.
+ *  It indicates whether or not this CPU model has FP support.  For
+ *  example, it would be possible to have an i386_nofp CPU model
+ *  which set this to false to indicate that you have an i386 without
+ *  an i387 and wish to leave floating point support out of RTEMS.
+ */
+
+#if ( PPC_HAS_FPU == 1 )
+#define CPU_HARDWARE_FP     TRUE
+#define CPU_SOFTWARE_FP     FALSE
+#else
+#define CPU_HARDWARE_FP     FALSE
+#define CPU_SOFTWARE_FP     FALSE
+#endif
+
+/*
+ *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
+ *
+ *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is assumed.
+ *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is followed.
+ *
+ *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
+ */
+
+#define CPU_ALL_TASKS_ARE_FP     FALSE
+
+/*
+ *  Should the IDLE task have a floating point context?
+ *
+ *  If TRUE, then the IDLE task is created as a RTEMS_FLOATING_POINT task
+ *  and it has a floating point context which is switched in and out.
+ *  If FALSE, then the IDLE task does not have a floating point context.
+ *
+ *  Setting this to TRUE negatively impacts the time required to preempt
+ *  the IDLE task from an interrupt because the floating point context
+ *  must be saved as part of the preemption.
+ */
+
+#define CPU_IDLE_TASK_IS_FP      FALSE
+
+/*
  *  Processor defined structures required for cpukit/score.
  */
 
