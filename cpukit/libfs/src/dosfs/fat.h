@@ -51,11 +51,11 @@ extern "C" {
  */
 
 #if (CPU_BIG_ENDIAN == TRUE)
-#    define CF_LE_W(v) CPU_swap_u16((uint16_t  )v)
-#    define CF_LE_L(v) CPU_swap_u32((uint32_t  )v)
-#    define CT_LE_W(v) CPU_swap_u16((uint16_t  )v)
-#    define CT_LE_L(v) CPU_swap_u32((uint32_t  )v)
-#else
+#    define CF_LE_W(v) CPU_swap_u16((uint16_t)(v))
+#    define CF_LE_L(v) CPU_swap_u32((uint32_t)(v))
+#    define CT_LE_W(v) CPU_swap_u16((uint16_t)(v))
+#    define CT_LE_L(v) CPU_swap_u32((uint32_t)(v))
+#else  
 #    define CF_LE_W(v) (v)
 #    define CF_LE_L(v) (v)
 #    define CT_LE_W(v) (v)
@@ -101,55 +101,180 @@ extern "C" {
 #define FAT_FAT32_MASK         (uint32_t  )0x0FFFFFFF
 
 #define FAT_MAX_BPB_SIZE       90
+#define FAT_TOTAL_MBR_SIZE    512
 
 /* size of useful information in FSInfo sector */
 #define FAT_USEFUL_INFO_SIZE   12
 
-#define FAT_VAL8(x, ofs)       (uint8_t  )(*((uint8_t   *)(x) + (ofs)))
+#define FAT_GET_ADDR(x, ofs)       ((uint8_t *)(x) + (ofs))
 
-#define FAT_VAL16(x, ofs)                                   \
-    (uint16_t  )( (*((uint8_t   *)(x) + (ofs))) |           \
-                  ((*((uint8_t   *)(x) + (ofs) + 1)) << 8) )
+#define FAT_GET_VAL8(x, ofs)       (uint8_t)(*((uint8_t *)(x) + (ofs))) 
 
-#define FAT_VAL32(x, ofs)                                                 \
-    (uint32_t  )( (uint32_t  )(*((uint8_t   *)(x) + (ofs))) |             \
-                  ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 1)) << 8)  | \
-                  ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 2)) << 16) | \
-                  ((uint32_t  )(*((uint8_t   *)(x) + (ofs) + 3)) << 24) )
+#define FAT_GET_VAL16(x, ofs)                               \
+    (uint16_t)( (*((uint8_t *)(x) + (ofs))) |           \
+                  ((*((uint8_t *)(x) + (ofs) + 1)) << 8) )
+
+#define FAT_GET_VAL32(x, ofs)                                             \
+    (uint32_t)( (uint32_t)(*((uint8_t *)(x) + (ofs))) |             \
+                  ((uint32_t)(*((uint8_t *)(x) + (ofs) + 1)) << 8)  | \
+                  ((uint32_t)(*((uint8_t *)(x) + (ofs) + 2)) << 16) | \
+                  ((uint32_t)(*((uint8_t *)(x) + (ofs) + 3)) << 24) )
+                    
+#define FAT_SET_VAL8(x, ofs,val)                    \
+                 (*((uint8_t *)(x)+(ofs))=(uint8_t)(val))
+ 
+#define FAT_SET_VAL16(x, ofs,val) do {              \
+                 FAT_SET_VAL8((x),(ofs),(val));     \
+                 FAT_SET_VAL8((x),(ofs)+1,(val)>>8);\
+                 } while (0)
+
+#define FAT_SET_VAL32(x, ofs,val) do {               \
+                 FAT_SET_VAL16((x),(ofs),(val));     \
+                 FAT_SET_VAL16((x),(ofs)+2,(val)>>16);\
+                 } while (0)
 
 /* macros to access boot sector fields */
-#define FAT_BR_BYTES_PER_SECTOR(x)       FAT_VAL16(x, 11)
-#define FAT_BR_SECTORS_PER_CLUSTER(x)    FAT_VAL8(x, 13)
-#define FAT_BR_RESERVED_SECTORS_NUM(x)   FAT_VAL16(x, 14)
-#define FAT_BR_FAT_NUM(x)                FAT_VAL8(x, 16)
-#define FAT_BR_FILES_PER_ROOT_DIR(x)     FAT_VAL16(x, 17)
-#define FAT_BR_TOTAL_SECTORS_NUM16(x)    FAT_VAL16(x, 19)
-#define FAT_BR_MEDIA(x)                  FAT_VAL8(x, 21)
-#define FAT_BR_SECTORS_PER_FAT(x)        FAT_VAL16(x, 22)
-#define FAT_BR_TOTAL_SECTORS_NUM32(x)    FAT_VAL32(x, 32)
-#define FAT_BR_SECTORS_PER_FAT32(x)      FAT_VAL32(x, 36)
-#define FAT_BR_EXT_FLAGS(x)              FAT_VAL16(x, 40)
-#define FAT_BR_FAT32_ROOT_CLUSTER(x)     FAT_VAL32(x, 44)
-#define FAT_BR_FAT32_FS_INFO_SECTOR(x)   FAT_VAL16(x, 48)
-#define FAT_FSINFO_LEAD_SIGNATURE(x)     FAT_VAL32(x, 0)
-/*
- * I read FSInfo sector from offset 484 to access the information, so offsets
+#define FAT_GET_BR_JMPBOOT(x)                FAT_GET_VAL8( x,  0)
+#define FAT_SET_BR_JMPBOOT(x,val)            FAT_SET_VAL8( x,  0,val)
+
+#define FAT_GET_ADDR_BR_OEMNAME(x)           FAT_GET_ADDR( x,  3)
+#define FAT_BR_OEMNAME_SIZE              (8)
+
+#define FAT_GET_BR_BYTES_PER_SECTOR(x)       FAT_GET_VAL16(x, 11)
+#define FAT_SET_BR_BYTES_PER_SECTOR(x,val)   FAT_SET_VAL16(x, 11,val)
+
+#define FAT_GET_BR_SECTORS_PER_CLUSTER(x)    FAT_GET_VAL8( x, 13) 
+#define FAT_SET_BR_SECTORS_PER_CLUSTER(x,val)FAT_SET_VAL8( x, 13,val) 
+
+#define FAT_GET_BR_RESERVED_SECTORS_NUM(x)   FAT_GET_VAL16(x, 14)
+#define FAT_SET_BR_RESERVED_SECTORS_NUM(x,val) FAT_SET_VAL16(x, 14,val)
+
+#define FAT_GET_BR_FAT_NUM(x)                FAT_GET_VAL8( x, 16)
+#define FAT_SET_BR_FAT_NUM(x,val)            FAT_SET_VAL8( x, 16,val)
+
+#define FAT_GET_BR_FILES_PER_ROOT_DIR(x)     FAT_GET_VAL16(x, 17)
+#define FAT_SET_BR_FILES_PER_ROOT_DIR(x,val) FAT_SET_VAL16(x, 17,val)
+
+#define FAT_GET_BR_TOTAL_SECTORS_NUM16(x)    FAT_GET_VAL16(x, 19)
+#define FAT_SET_BR_TOTAL_SECTORS_NUM16(x,val)FAT_SET_VAL16(x, 19,val)
+
+#define FAT_GET_BR_MEDIA(x)                  FAT_GET_VAL8( x, 21) 
+#define FAT_SET_BR_MEDIA(x,val)              FAT_SET_VAL8( x, 21,val) 
+
+#define FAT_GET_BR_SECTORS_PER_FAT(x)        FAT_GET_VAL16(x, 22)
+#define FAT_SET_BR_SECTORS_PER_FAT(x,val)    FAT_SET_VAL16(x, 22,val)
+
+#define FAT_GET_BR_SECTORS_PER_TRACK(x)      FAT_GET_VAL16(x, 24)
+#define FAT_SET_BR_SECTORS_PER_TRACK(x,val)  FAT_SET_VAL16(x, 24,val)
+
+#define FAT_GET_BR_NUMBER_OF_HEADS(x)        FAT_GET_VAL16(x, 26)
+#define FAT_SET_BR_NUMBER_OF_HEADS(x,val)    FAT_SET_VAL16(x, 26,val)
+
+#define FAT_GET_BR_HIDDEN_SECTORS(x)         FAT_GET_VAL32(x, 28)
+#define FAT_SET_BR_HIDDEN_SECTORS(x,val)     FAT_SET_VAL32(x, 28,val)
+
+#define FAT_GET_BR_TOTAL_SECTORS_NUM32(x)    FAT_GET_VAL32(x, 32)
+#define FAT_SET_BR_TOTAL_SECTORS_NUM32(x,val) FAT_SET_VAL32(x, 32,val)
+  /* --- start of FAT12/16 specific fields */
+#define FAT_GET_BR_DRVNUM(x)                 FAT_GET_VAL8( x, 36)
+#define FAT_SET_BR_DRVNUM(x,val)             FAT_SET_VAL8( x, 36,val)
+
+#define FAT_GET_BR_RSVD1(x)                  FAT_GET_VAL8( x, 37)
+#define FAT_SET_BR_RSVD1(x,val)              FAT_SET_VAL8( x, 37,val)
+
+#define FAT_GET_BR_BOOTSIG(x)                FAT_GET_VAL8( x, 38)
+#define FAT_SET_BR_BOOTSIG(x,val)            FAT_SET_VAL8( x, 38,val)
+#define FAT_BR_BOOTSIG_VAL               (0x29)
+
+#define FAT_GET_BR_VOLID(x)                  FAT_GET_VAL32(x, 39)
+#define FAT_SET_BR_VOLID(x,val)              FAT_SET_VAL32(x, 39,val)
+
+#define FAT_GET_ADDR_BR_VOLLAB(x)            FAT_GET_ADDR (x, 43)
+#define FAT_BR_VOLLAB_SIZE               (11)
+
+#define FAT_GET_ADDR_BR_FILSYSTYPE(x)        FAT_GET_ADDR (x, 54)
+#define FAT_BR_FILSYSTYPE_SIZE           (8)
+  /* --- end of FAT12/16 specific fields */
+  /* --- start of FAT32 specific fields */
+#define FAT_GET_BR_SECTORS_PER_FAT32(x)      FAT_GET_VAL32(x, 36)
+#define FAT_SET_BR_SECTORS_PER_FAT32(x,val)  FAT_SET_VAL32(x, 36,val)
+
+#define FAT_GET_BR_EXT_FLAGS(x)              FAT_GET_VAL16(x, 40)
+#define FAT_SET_BR_EXT_FLAGS(x,val)          FAT_SET_VAL16(x, 40,val)
+
+#define FAT_GET_BR_FSVER(x)                  FAT_GET_VAL16(x, 42)
+#define FAT_SET_BR_FSVER(x,val)              FAT_SET_VAL16(x, 42,val)
+
+#define FAT_GET_BR_FAT32_ROOT_CLUSTER(x)     FAT_GET_VAL32(x, 44)
+#define FAT_SET_BR_FAT32_ROOT_CLUSTER(x,val) FAT_SET_VAL32(x, 44,val)
+
+#define FAT_GET_BR_FAT32_FS_INFO_SECTOR(x)   FAT_GET_VAL16(x, 48)
+#define FAT_SET_BR_FAT32_FS_INFO_SECTOR(x,val) FAT_SET_VAL16(x, 48,val)
+
+#define FAT_GET_BR_FAT32_BK_BOOT_SECTOR(x)   FAT_GET_VAL16(x, 50)
+#define FAT_SET_BR_FAT32_BK_BOOT_SECTOR(x,val)  FAT_SET_VAL16(x, 50,val)
+
+#define FAT_GET_ADDR_BR_FAT32_RESERVED(x)    FAT_GET_ADDR (x, 52)
+#define FAT_BR_FAT32_RESERVED_SIZE       (12)
+
+#define FAT_GET_BR_FAT32_DRVNUM(x)           FAT_GET_VAL8( x, 64)
+#define FAT_SET_BR_FAT32_DRVNUM(x,val)       FAT_SET_VAL8( x, 64,val)
+
+#define FAT_GET_BR_FAT32_RSVD1(x)            FAT_GET_VAL8( x, 65)
+#define FAT_SET_BR_FAT32_RSVD1(x,val)        FAT_SET_VAL8( x, 65,val)
+
+#define FAT_GET_BR_FAT32_BOOTSIG(x)          FAT_GET_VAL8( x, 66)
+#define FAT_SET_BR_FAT32_BOOTSIG(x,val)      FAT_SET_VAL8( x, 66,val)
+#define FAT_BR_FAT32_BOOTSIG_VAL         (0x29)
+
+#define FAT_GET_BR_FAT32_VOLID(x)            FAT_GET_VAL32(x, 67)
+#define FAT_SET_BR_FAT32_VOLID(x,val)        FAT_SET_VAL32(x, 67,val)
+
+#define FAT_GET_ADDR_BR_FAT32_VOLLAB(x)      FAT_GET_ADDR (x, 71)
+#define FAT_BR_FAT32_VOLLAB_SIZE         (11)
+
+#define FAT_GET_ADDR_BR_FAT32_FILSYSTYPE(x)  FAT_GET_ADDR (x, 82)
+#define FAT_BR_FAT32_FILSYSTYPE_SIZE     (8)
+  /* --- end of FAT32 specific fields */
+
+#define FAT_GET_BR_SIGNATURE(x)              FAT_GET_VAL16(x,510)
+#define FAT_SET_BR_SIGNATURE(x,val)          FAT_SET_VAL16(x,510,val)
+#define FAT_BR_SIGNATURE_VAL                (0xAA55)
+
+  /*
+   * FAT32 FSINFO description
+   */
+#define FAT_GET_FSINFO_LEAD_SIGNATURE(x)      FAT_GET_VAL32(x,  0)
+#define FAT_SET_FSINFO_LEAD_SIGNATURE(x,val)  FAT_SET_VAL32(x,  0,val)
+#define FAT_FSINFO_LEAD_SIGNATURE_VALUE   (0x41615252)
+
+#define FAT_GET_FSINFO_STRUC_SIGNATURE(x)     FAT_GET_VAL32(x,484)
+#define FAT_SET_FSINFO_STRUC_SIGNATURE(x,val) FAT_SET_VAL32(x,484,val)
+#define FAT_FSINFO_STRUC_SIGNATURE_VALUE  (0x61417272)
+
+#define FAT_GET_FSINFO_TRAIL_SIGNATURE(x)     FAT_GET_VAL32(x,508)
+#define FAT_SET_FSINFO_TRAIL_SIGNATURE(x,val) FAT_SET_VAL32(x,508,val)
+#define FAT_FSINFO_TRAIL_SIGNATURE_VALUE  (0x000055AA)
+/* 
+ * I read FSInfo sector from offset 484 to access the information, so offsets 
  * of these fields a relative
  */
-#define FAT_FSINFO_FREE_CLUSTER_COUNT(x) FAT_VAL32(x, 4)
-#define FAT_FSINFO_NEXT_FREE_CLUSTER(x)  FAT_VAL32(x, 8)
+#define FAT_GET_FSINFO_FREE_CLUSTER_COUNT(x)      FAT_GET_VAL32(x, 4)
+#define FAT_SET_FSINFO_FREE_CLUSTER_COUNT(x,val)  FAT_SET_VAL32(x, 4,val)
+#define FAT_GET_FSINFO_NEXT_FREE_CLUSTER(x)       FAT_GET_VAL32(x, 8)
+#define FAT_SET_FSINFO_NEXT_FREE_CLUSTER(x,val)   FAT_SET_VAL32(x, 8,val)
 
-#define FAT_FSINFO_FREE_CLUSTER_COUNT_OFFSET 488
+#define FAT_FSI_INFO                         484
+#define FAT_FSINFO_STRUCT_OFFSET             488
+#define FAT_FSINFO_FREE_CLUSTER_COUNT_OFFSET (FAT_FSINFO_STRUCT_OFFSET+0)
 
-#define FAT_FSINFO_NEXT_FREE_CLUSTER_OFFSET  492
+#define FAT_FSINFO_NEXT_FREE_CLUSTER_OFFSET  (FAT_FSINFO_STRUCT_OFFSET+4)
 
 #define FAT_RSRVD_CLN                        0x02
 
-#define FAT_FSINFO_LEAD_SIGNATURE_VALUE      0x41615252
-
 #define FAT_FSI_LEADSIG_SIZE                 0x04
 
-#define FAT_FSI_INFO                         484
+#define FAT_TOTAL_FSINFO_SIZE               512
 
 #define MS_BYTES_PER_CLUSTER_LIMIT           0x8000     /* 32K */
 
@@ -157,6 +282,7 @@ extern "C" {
 
 #define FAT_BR_EXT_FLAGS_FAT_NUM             0x000F
 
+#define FAT_BR_MEDIA_FIXED                  0xf8
 
 #define FAT_DIRENTRY_SIZE          32
 

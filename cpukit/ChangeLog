@@ -1,6 +1,18 @@
 2004-11-20	Ralf Corsepius <ralf.corsepiu@rtems.org>
 
 	PR 720/filesystem:
+	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.c,
+	libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos_format.c:
+	Adaptations to msdos_format.
+	(From Thomas Doerfler <Thomas.Doerfler@imd-systems.de>).
+
+	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.c,
+	libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos_format.c:
+	Adaptations to RTEMS-4.7.
+
+2004-11-20	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
+	PR 720/filesystem:
 	* libfs/src/dosfs/msdos_format.c: New 
 	(From Thomas Doerfler <Thomas.Doerfler@imd-systems.de>).
 	* libfs/Makefile.am: Reflect changes above:

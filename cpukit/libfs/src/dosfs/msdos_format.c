@@ -42,27 +42,27 @@
 #include "dosfs.h"
 
 typedef struct {
-  unsigned32 bytes_per_sector;
-  unsigned32 totl_sector_cnt;
-  unsigned32 rsvd_sector_cnt;
+  uint32_t bytes_per_sector;
+  uint32_t totl_sector_cnt;
+  uint32_t rsvd_sector_cnt;
 
-  unsigned32 sectors_per_cluster;
-  unsigned32 sectors_per_fat;
+  uint32_t sectors_per_cluster;
+  uint32_t sectors_per_fat;
 
-  unsigned32 fat_start_sec;
-  unsigned32 files_per_root_dir;
-  unsigned32 root_dir_sectors;
-  unsigned32 root_dir_start_sec;
-  unsigned32 root_dir_fmt_sec_cnt;
-  unsigned32 mbr_copy_sec; /* location of copy of mbr or 0 */
-  unsigned32 fsinfo_sec;   /* location of fsinfo sector or 0 */
-  unsigned8  fat_num;
-  unsigned8  media_code;
-  unsigned8  fattype;
-  char       OEMName[FAT_BR_OEMNAME_SIZE+1];
-  char       VolLabel[FAT_BR_VOLLAB_SIZE+1];
-  boolean    VolLabel_present;
-  unsigned32 vol_id;
+  uint32_t fat_start_sec;
+  uint32_t files_per_root_dir;
+  uint32_t root_dir_sectors;
+  uint32_t root_dir_start_sec;
+  uint32_t root_dir_fmt_sec_cnt;
+  uint32_t mbr_copy_sec; /* location of copy of mbr or 0 */
+  uint32_t fsinfo_sec;   /* location of fsinfo sector or 0 */
+  uint8_t  fat_num;
+  uint8_t  media_code;
+  uint8_t  fattype;
+  char     OEMName[FAT_BR_OEMNAME_SIZE+1];
+  char     VolLabel[FAT_BR_VOLLAB_SIZE+1];
+  boolean  VolLabel_present;
+  uint32_t vol_id;
 }  msdos_format_param_t;
 
 /*=========================================================================*\
@@ -77,8 +77,8 @@ static int msdos_format_write_sec
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int         fd,                       /* file descriptor index            */
- unsigned32  start_sector,             /* sector number to write to        */
- unsigned32  sector_size,              /* size of sector                   */
+ uint32_t    start_sector,             /* sector number to write to        */
+ uint32_t    sector_size,              /* size of sector                   */
  const char *buffer                    /* buffer with write data           */
  )
 /*-------------------------------------------------------------------------*\
@@ -112,9 +112,9 @@ static int msdos_format_fill_sectors
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int         fd,                       /* file descriptor index            */
- unsigned32  start_sector,             /* sector number to fill to         */
- unsigned32  sector_cnt,               /* number of sectors to fill to     */
- unsigned32  sector_size,              /* size of sector                   */
+ uint32_t    start_sector,             /* sector number to fill to         */
+ uint32_t    sector_cnt,               /* number of sectors to fill to     */
+ uint32_t    sector_size,              /* size of sector                   */
  const char  fill_byte                 /* byte to fill into sectors        */
  )
 /*-------------------------------------------------------------------------*\
@@ -169,7 +169,7 @@ static int msdos_format_gen_volid
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- unsigned32 *volid_ptr                 /* volume ID return pointer         */
+ uint32_t *volid_ptr                   /* volume ID return pointer         */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -203,13 +203,13 @@ static int msdos_format_eval_sectors_per_cluster
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- int         fattype,                  /* type code of FAT (FAT_FAT12 ...) */
- unsigned32  bytes_per_sector,         /* byte count per sector (512)      */
- unsigned32  fatdata_sec_cnt,          /* sectors available for FAT and data */
- unsigned8   fat_num,                  /* number of fat copies             */
- unsigned32  sectors_per_cluster,      /* sectors per cluster (requested)  */
- unsigned32 *sectors_per_cluster_adj,  /* ret: sec per cluster (granted)   */
- unsigned32 *sectors_per_fat_ptr       /* ret: sectors needed for one FAT  */
+ int       fattype,                  /* type code of FAT (FAT_FAT12 ...) */
+ uint32_t  bytes_per_sector,         /* byte count per sector (512)      */
+ uint32_t  fatdata_sec_cnt,          /* sectors available for FAT and data */
+ uint8_t   fat_num,                  /* number of fat copies             */
+ uint32_t  sectors_per_cluster,      /* sectors per cluster (requested)  */
+ uint32_t *sectors_per_cluster_adj,  /* ret: sec per cluster (granted)   */
+ uint32_t *sectors_per_fat_ptr       /* ret: sectors needed for one FAT  */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -219,10 +219,10 @@ static int msdos_format_eval_sectors_per_cluster
 
   boolean finished = FALSE;
   int ret_val = 0;
-  unsigned32 fatdata_cluster_cnt;
-  unsigned32 fat_capacity;
-  unsigned32 sectors_per_fat;
-  unsigned32 data_cluster_cnt;
+  uint32_t fatdata_cluster_cnt;
+  uint32_t fat_capacity;
+  uint32_t sectors_per_fat;
+  uint32_t data_cluster_cnt;
   /*
    * ensure, that maximum cluster size (32KByte) is not exceeded
    */
@@ -308,9 +308,9 @@ static int msdos_format_determine_fmt_params
 \*=========================================================================*/
 {
   int ret_val = 0;
-  unsigned32 fatdata_sect_cnt;
-  unsigned32 onebit;
-  unsigned32 sectors_per_cluster_adj;
+  uint32_t fatdata_sect_cnt;
+  uint32_t onebit;
+  uint32_t sectors_per_cluster_adj;
 
   memset(fmt_params,0,sizeof(*fmt_params));
   /* 
@@ -396,13 +396,13 @@ static int msdos_format_determine_fmt_params
        * are a compromise concerning capacity and efficency
        */
       if (fmt_params->totl_sector_cnt 
-	  < ((unsigned32)FAT_FAT12_MAX_CLN)*8) {
+	  < ((uint32_t)FAT_FAT12_MAX_CLN)*8) {
 	fmt_params->fattype = FAT_FAT12;
 	/* start trying with small clusters */
 	fmt_params->sectors_per_cluster = 2; 
       }
       else if (fmt_params->totl_sector_cnt 
-	       < ((unsigned32)FAT_FAT16_MAX_CLN)*32) {
+	       < ((uint32_t)FAT_FAT16_MAX_CLN)*32) {
 	fmt_params->fattype = FAT_FAT16;
 	/* start trying with small clusters */
 	fmt_params->sectors_per_cluster = 2; 
@@ -638,8 +638,8 @@ static int msdos_format_gen_mbr
 |    0, if success, -1 and errno if failed                                  |
 \*=========================================================================*/
 {
-  unsigned32  total_sectors_num16 = 0;
-  unsigned32  total_sectors_num32 = 0;
+  uint32_t  total_sectors_num16 = 0;
+  uint32_t  total_sectors_num32 = 0;
 
   /* store total sector count in either 16 or 32 bit field in mbr */
   if (fmt_params->totl_sector_cnt < 0x10000) {
