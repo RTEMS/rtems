@@ -1,3 +1,8 @@
+2002-08-26	Eric Norum <eric.norum@usask.ca>
+
+	* cpu_asm.S: More PR267 tinkering which eliminates some conditional
+	compilation.
+
 2002-08-14	Brett Swimley <brett.swimley@aedinc.net>
 
 	* cpu_asm.S: Per PR267, the _ISR_Handler() function never was modifying

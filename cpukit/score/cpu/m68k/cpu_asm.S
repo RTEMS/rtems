@@ -139,8 +139,6 @@ SYM (_ISR_Handler):
 
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
-	tstl	SYM (_ISR_Nest_level)	| Interrupting an interrupt handler?
-	bne	2f			| Yes, just skip over stack switch code
 	movel	_CPU_Interrupt_stack_high,a0	| a0 now point just above interrupt stack
 	cmpl	_CPU_Interrupt_stack_low,a7	| stack below interrupt stack?
 	bcs.b	1f			| yes, switch to interrupt stack
@@ -167,18 +165,15 @@ SYM (_ISR_Handler):
         movel   d0,a7@-                  | push vector number
         jbsr    a0@                      | invoke the user ISR
         addql   #4,a7                    | remove vector number
+        subql	#1,SYM(_ISR_Nest_level)	| Reduce interrupt-nesting count
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
-	subql	#1,SYM(_ISR_Nest_level)	| Reduce interrupt-nesting count
-	bne	1f			| Skip if return to interrupt
 	movel	_CPU_Interrupt_stack_high,a0
 	subql	#4,a0
 	cmpl	a0,a7			| At top of interrupt stack?
 	bne.b	1f			| No, do not restore task stack pointer
 	movel	(a7),a7			| Restore task stack pointer
 1:
-#else
-	subql   #1,SYM (_ISR_Nest_level) | one less nest level
 #endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
         subql   #1,SYM (_Thread_Dispatch_disable_level)
                                          | unnest multitasking
