@@ -770,7 +770,7 @@ BSP_uart_termios_isr_com2()
 	  
   
 /* ================= GDB support     ===================*/ 
-static int sav[4];
+static int sav[4] __attribute__ ((unused));
 
 /*
  * Interrupt service routine for COM1 - all, 
