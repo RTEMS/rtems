@@ -13,7 +13,7 @@
  * MINIX date.c is adapted to run here. Like a exercise only....
  *
  * TODO: A lot of improvements of course. 
- *      cat, cp, rm, mv, ...
+ *      cp, mv, ...
  *      hexdump,
  *      
  *      More? Say me it, please...
@@ -34,6 +34,8 @@
 #include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <pwd.h>
+#include <grp.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <stddef.h>
@@ -257,6 +259,10 @@ int main_ls(int argc, char *argv[])
    DIR                 *dirp;
    struct dirent       *dp;
    struct stat         stat_buf;
+   struct passwd     * pwd;
+   struct group      * grp;
+   char * user;
+   char * group;
    char   sbuf[256];
    char   nbuf[1024];
    int  n,size;
@@ -279,7 +285,11 @@ int main_ls(int argc, char *argv[])
       if (stat(nbuf, &stat_buf) == 0)
       { /* AWFUL buts works...*/
 	 strftime(sbuf,sizeof(sbuf)-1,"%b %d %H:%M",gmtime(&stat_buf.st_atime));     
-         printf("%c%c%c%c%c%c%c%c%c%c %3d rtems  rtems  %11d %s %s%c\n",
+	 pwd=getpwuid(stat_buf.st_uid);
+	 user=pwd?pwd->pw_name:"nouser";
+	 grp=getgrgid(stat_buf.st_gid);
+	 group=grp?grp->gr_name:"nogrp";
+         printf("%c%c%c%c%c%c%c%c%c%c %3d %6.6s %6.6s %11d %s %s%c\n",
                  (S_ISLNK(stat_buf.st_mode)?('l'):
                     (S_ISDIR(stat_buf.st_mode)?('d'):('-'))),
                  (stat_buf.st_mode & S_IRUSR)?('r'):('-'),
@@ -292,6 +302,7 @@ int main_ls(int argc, char *argv[])
                  (stat_buf.st_mode & S_IWOTH)?('w'):('-'),
                  (stat_buf.st_mode & S_IXOTH)?('x'):('-'),
                  (int)stat_buf.st_nlink,
+	 	 user,group, 
                  (int)stat_buf.st_size,
 		 sbuf,
                  dp->d_name,
@@ -350,6 +361,28 @@ int main_chroot(int argc,char * argv[]) {
   return -1;
  };
  return 0;
+}
+/*-----------------------------------------------------------*/  	
+int main_cat   (int argc, char *argv[])
+{
+   int n;
+   n=1;
+   while (n<argc) cat_file(stdout,argv[n++]);
+   return 0;
+}
+/*-----------------------------------------------------------*/  	
+int main_rm    (int argc, char *argv[])
+{
+   int n;
+   n=1;
+   while (n<argc) {
+    if (unlink(argv[n])) {
+     printf("error %s:rm %s\n",strerror(errno),argv[n]);
+     return -1;
+    };
+    n++;
+   };
+   return 0;
 }
 /*-----------------------------------------------------------*/  	
 /* date - print or set time and date		Author: Jan Looyen */
@@ -424,6 +457,67 @@ int main_date(int argc,char *argv[])
   printf("%s", ctime(&t));
   return 0;
 }
+/*-----------------------------------------------------------*/
+int main_logoff(int argc,char *argv[]) 
+{
+  printf("logoff from the system...");	
+  current_shell_env->exit_shell=TRUE;	
+  return 0;
+}
+/*-----------------------------------------------------------*/
+int main_tty   (int argc,char *argv[]) 
+{
+  printf("%s\n",ttyname(fileno(stdin)));
+  return 0;
+}
+/*-----------------------------------------------------------*/
+int main_whoami(int argc,char *argv[]) 
+{
+   struct passwd     * pwd;
+   pwd=getpwuid(getuid());
+   printf("%s\n",pwd?pwd->pw_name:"nobody");
+   return 0;
+}
+/*-----------------------------------------------------------*/
+int main_id    (int argc,char *argv[]) 
+{
+   struct passwd     * pwd;
+   struct group      * grp;
+   pwd=getpwuid(getuid());
+   grp=getgrgid(getgid());
+   printf("uid=%d(%s),gid=%d(%s),",
+		   getuid(),pwd?pwd->pw_name:"",
+		   getgid(),grp?grp->gr_name:"");
+   pwd=getpwuid(geteuid());
+   grp=getgrgid(getegid());
+   printf("euid=%d(%s),egid=%d(%s)\n",
+		   geteuid(),pwd?pwd->pw_name:"",
+		   getegid(),grp?grp->gr_name:"");
+   return 0;
+}
+/*-----------------------------------------------------------*/
+int main_umask(int argc,char *argv[]) 
+{
+   mode_t msk=umask(0);
+   if (argc == 2) msk=str2int(argv[1]);
+   umask(msk);
+   msk=umask(0);
+   printf("0%o\n",msk);
+   umask(msk);
+   return 0;
+}
+/*-----------------------------------------------------------*/
+int main_chmod(int argc,char *argv[]) 
+{
+   int n;
+   mode_t mode;
+   if (argc > 2){
+    mode=str2int(argv[1])&0777;
+    n=2;
+    while (n<argc) chmod(argv[n++],mode);
+   };
+   return 0;
+}
 /*-----------------------------------------------------------*  	
  * with this you can call at all the rtems monitor commands.
  * Not all work fine but you can show the rtems status and more.
@@ -442,6 +536,14 @@ int main_monitor(int argc,char * argv[]) {
 void register_cmds(void) {
   rtems_monitor_command_entry_t *command;
   extern rtems_monitor_command_entry_t rtems_monitor_commands[];
+  /* monitor topic */
+  command=rtems_monitor_commands;
+  while (command) {
+   if (strcmp("exit",command->command)) /*Exclude EXIT (alias quit)*/
+    shell_add_cmd(command->command,"monitor",
+                  command->usage  ,main_monitor);
+   command=command->next;
+  };
   /* dir[ectories] topic */
   shell_add_cmd  ("ls"    ,"dir","ls [dir]     # list files in the directory" ,main_ls   );
   shell_add_cmd  ("chdir" ,"dir","chdir [dir]  # change the current directory",main_chdir);
@@ -449,14 +551,24 @@ void register_cmds(void) {
   shell_add_cmd  ("mkdir" ,"dir","mkdir  dir   # make a directory"            ,main_mkdir);
   shell_add_cmd  ("pwd"   ,"dir","pwd          # print work directory"        ,main_pwd  );
   shell_add_cmd  ("chroot","dir","chroot [dir] # change the root directory"   ,main_chroot);
+  shell_add_cmd  ("cat"   ,"dir","cat n1 [n2 [n3...]]# show the ascii contents",main_cat );
+  shell_add_cmd  ("rm"    ,"dir","rm n1 [n2 [n3...]]# remove files"           ,main_rm   );
+  shell_add_cmd  ("chmod" ,"dir","chmod 0777 n1 n2... #change filemode"       ,main_chmod);
 
   shell_alias_cmd("ls"    ,"dir");
   shell_alias_cmd("chdir" ,"cd");
 
   /* misc. topic */
+  shell_add_cmd  ("logoff","misc","logoff from the system"                    ,main_logoff);
+  shell_alias_cmd("logoff","exit"); 
   shell_add_cmd  ("date" ,"misc","date [[MMDDYY]hhmm[ss]]"                    ,main_date);
   shell_add_cmd  ("reset","misc","reset the BSP"                              ,main_reset);
   shell_add_cmd  ("alias","misc","alias old new"                              ,main_alias);
+  shell_add_cmd  ("tty"  ,"misc","show ttyname"                               ,main_tty  );
+  shell_add_cmd  ("whoami","misc","show current user"                         ,main_whoami);
+  shell_add_cmd  ("id"    ,"misc","show uid,gid,euid,egid"                    ,main_id    );
+  shell_add_cmd  ("umask" ,"misc","umask [new_umask]"                         ,main_umask );
+
 
   /* memory topic */
   shell_add_cmd  ("mdump","mem"  ,"mdump [adr [size]]"           ,main_mdump);
@@ -467,12 +579,5 @@ void register_cmds(void) {
 #ifdef MALLOC_STATS  /* /rtems/s/src/lib/libc/malloc.c */
   shell_add_cmd  ("malloc","mem","mem  show memory malloc'ed"                 ,main_mem);
 #endif  
-  /* monitor topic */
-  command=rtems_monitor_commands;
-  while (command) {
-   shell_add_cmd(command->command,"monitor",
-                 command->usage  ,main_monitor);
-   command=command->next;
-  };
 }
 /*-----------------------------------------------------------*/  	

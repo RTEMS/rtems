@@ -108,8 +108,8 @@ rtems_monitor_dump_name(rtems_name name)
     for (i=0; i<sizeof(u.c); i++)
         length += rtems_monitor_dump_char(u.c[i]);
 #else
-    for (i=sizeof(u.c)-1; i ; i--)
-        length += rtems_monitor_dump_char(u.c[i]);
+    for (i=0; i<sizeof(u.c); i++)
+        length += rtems_monitor_dump_char(u.c[sizeof(u.c)-1-i]);
 #endif
     return length;
 }

@@ -12,6 +12,9 @@
  *
  *  $Id$
  */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <stdio.h>
 
@@ -19,6 +22,8 @@
 #include <rtems/error.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h> 
+#include <rtems/system.h> 
+#include <rtems/shell.h>
 
 #include <termios.h>
 #include <string.h>
@@ -26,8 +31,8 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <errno.h>
+#include <pwd.h>
 
-#include <rtems/shell.h>
 /* ----------------------------------------------- *
  * This is a stupidity but is cute.
  * ----------------------------------------------- */
@@ -275,13 +280,21 @@ int shell_help(int argc,char * argv[]) {
 int shell_scanline(char * line,int size,FILE * in,FILE * out) {
   int c,col;
   col=0;
+  tcdrain(fileno(out));
   for (;;) {
    line[col]=0;	  
    c=fgetc(in);
    switch (c) {
+    case 0x04:/*Control-d*/
+	      if (col) break;
     case EOF :return 0;
+    case '\n':break;
+    case '\f':if (out) fputc('\f',out);
+    case 0x03:/*Control-C*/
+	      line[0]=0; 
     case '\r':if (out) fputc('\n',out);
 	      return 1;
+    case  127:
     case '\b':if (col) {
 	       if (out) {
 	        fputc('\b',out);
@@ -301,7 +314,8 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
 	          if (out) fputc('\a',out);
 		};
 	      } else {
-	        if (out) fputc('\a',out);
+	        if (out) 
+		 if (c=='\a') fputc('\a',out);
 	      };
 	      break;
    };
@@ -317,6 +331,101 @@ shell_env_t global_shell_env ,
 
 extern char **environ;	  
 
+void cat_file(FILE * out,char * name) {
+	FILE * fd;
+	int c;
+	if (out) {
+	  fd=fopen(name,"r");
+	  if (fd) {
+  	   while ((c=fgetc(fd))!=EOF) fputc(c,out);
+	   fclose(fd);
+	  };
+	};  
+}
+
+int shell_login(FILE * in,FILE * out) {
+	FILE * fd;
+	int c;
+	time_t t;
+	int times;
+	char name[128];
+	char pass[128];
+	struct passwd * passwd;
+        setuid(0);
+        setgid(0);
+        rtems_current_user_env->euid=
+        rtems_current_user_env->egid=0;
+	if (out) {
+         if((current_shell_env->devname[5]!='p')||
+            (current_shell_env->devname[6]!='t')||
+            (current_shell_env->devname[7]!='y')) {
+	   cat_file(out,"/etc/issue"); 
+	 } else {  
+	  fd=fopen("/etc/issue.net","r");
+	  if (fd) {
+  	   while ((c=fgetc(fd))!=EOF) {
+ 	    if (c=='%')  {
+             switch(c=fgetc(fd)) {
+	      case 't':fprintf(out,"%s",current_shell_env->devname);
+	 	      break;
+	      case 'h':fprintf(out,"0");
+		      break;
+              case 'D':fprintf(out," ");
+		      break;
+              case 'd':time(&t);
+		      fprintf(out,"%s",ctime(&t));
+		      break;
+              case 's':fprintf(out,"RTEMS");
+		      break;
+              case 'm':fprintf(out,"(" CPU_NAME "/" CPU_MODEL_NAME ")");
+		      break;
+              case 'r':fprintf(out,_RTEMS_version);
+		      break;
+              case 'v':fprintf(out,"%s\n%s",_RTEMS_version,_Copyright_Notice);
+		      break;
+              case '%':fprintf(out,"%%");
+		      break;
+	      default :fprintf(out,"%%%c",c);
+		      break;
+	     };
+ 	    } else {
+             fputc(c,out);				
+	    }; 
+	   };
+	   fclose(fd);
+	  } 
+	 };
+ 	};
+	times=0;
+	for (;;) {
+		times++;
+		if (times>3) break;
+		if (out) fprintf(out,"\nlogin: ");
+                if (!shell_scanline(name,sizeof(name),in,out )) break;
+		if (out) fprintf(out,"Password: ");
+                if (!shell_scanline(pass,sizeof(pass),in,NULL)) break;
+		if (out) fprintf(out,"\n");
+		if ((passwd=getpwnam(name))) {
+                 setuid(passwd->pw_uid);			
+                 setgid(passwd->pw_gid);			
+		 rtems_current_user_env->euid=
+		 rtems_current_user_env->egid=0;
+		 chown(current_shell_env->devname,passwd->pw_uid,0);
+		 rtems_current_user_env->euid=passwd->pw_uid;			
+		 rtems_current_user_env->egid=passwd->pw_gid;			
+		 if (!strcmp(passwd->pw_passwd,"*")) {
+		 /* /etc/shadow */
+		  return 0;
+		 } else {
+		  /* crypt() */
+		  return 0;
+		 };
+		};
+		if (out) fprintf(out,"Login incorrect\n");
+	};
+	return -1;
+}
+
 rtems_task shell_shell(rtems_task_argument task_argument) {
 
   shell_env_t * shell_env =(shell_env_t*) task_argument;
@@ -326,36 +435,38 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
 
   struct termios term;	
   char * devname;
-  char * curdir;
 
+  char curdir[256];
   char cmd[256];
   char last_cmd[256]; /* to repeat 'r' */
   int  argc;
   char * argv[128];
 
+  sc=rtems_task_variable_add(RTEMS_SELF,(void*)&current_shell_env,free);
+  if (sc!=RTEMS_SUCCESSFUL) {
+   rtems_error(sc,"rtems_task_variable_add(current_shell_env):");	 
+   rtems_task_delete(RTEMS_SELF);
+  }; 
+
+  current_shell_env=shell_env;  
+  
   sc=rtems_libio_set_private_env();
   if (sc!=RTEMS_SUCCESSFUL) {
    rtems_error(sc,"rtems_libio_set_private_env():");	 
-   printk("rtems_libio_set_private_env():%d",sc);	 
    rtems_task_delete(RTEMS_SELF);
   }; 
 
-  sc=rtems_task_variable_add(RTEMS_SELF,(void*)&current_shell_env,free);
-  if (sc!=RTEMS_SUCCESSFUL) {
-   rtems_error(sc,"rtems_task_variable_add():");	 
-   printk("rtems_task_variable_add():%d",sc);	 
-   rtems_task_delete(RTEMS_SELF);
-  }; 
-
-  current_shell_env=shell_env; /* Set the task var */
 
   devname=shell_env->devname;
+  setuid(0);
+  setgid(0);
+  rtems_current_user_env->euid=
+  rtems_current_user_env->egid=0;
 
   stdin =fopen(devname,"r+");
     
   if (!stdin) {
    fprintf(stderr,"shell:unable to open stdin.%s:%s\n",devname,strerror(errno));
-   printk("shell:unable to open stdin.(%s)",strerror(errno));	 
    rtems_task_delete(RTEMS_SELF);
   };
   setvbuf(stdin,NULL,_IONBF,0); /* Not buffered*/
@@ -363,7 +474,7 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
   if (tcgetattr (fileno(stdin), &term)>=0) {
    term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
    term.c_oflag &= ~OPOST;
-   term.c_oflag |= (OPOST|ONLCR);
+   term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
    term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
    term.c_cflag  = CLOCAL | CREAD |(shell_env->tcflag);
    term.c_cc[VMIN]  = 1;
@@ -385,46 +496,53 @@ rtems_task shell_shell(rtems_task_argument task_argument) {
     */
   };
   shell_add_cmd(NULL,NULL,NULL,NULL); /* init the chain list*/
-  strcpy(cmd,"");
-  printf("\n"
-         "RTEMS-SHELL:%s. "__DATE__". 'help' to list commands.\n",devname);
-  curdir=malloc(1024); 
-  chdir("/");
-  for (;;) {
-   /* Prompt section */	  
-   /* XXX: show_prompt user adjustable */
-   getcwd(curdir,1024);
-   printf("%s [%s] # ",devname,curdir);
-   /* getcmd section */	  
-   if (!shell_scanline(cmd,sizeof(cmd),stdin,stdout)) {
-    printf("shell:unable scanline(%s)\n",devname);	
-    break;
-   };
-   /* evaluate cmd section */	  
-   if (!strcmp(cmd,"r")) {  /* repeat last command, forced, not automatic */
-    strcpy(cmd,last_cmd);
-   } else 
-   if (strcmp(cmd,"")) { /* only for get a new prompt */
-    strcpy(last_cmd,cmd);
-   }; 
-   /* exec cmd section */	  
-   /* TODO: 
-    *  To avoid user crash catch the signals. 
-    *  Open a new stdio files with posibility of redirection *
-    *  Run in a new shell task background. (unix &)
-    *  Resuming. A little bash.
-    */	  
-   if (shell_make_args(cmd,&argc,argv)) {
-    if ((shell_cmd=shell_lookup_cmd(argv[0]))!=NULL) {
-     current_shell_env->errorlevel=shell_cmd->command(argc,argv);
-    } else {
-     printf("shell:%s command not found\n",argv[0]);
-     current_shell_env->errorlevel=-1;
+  do {
+  if (!shell_login(stdin,stdout))  {
+   cat_file(stdout,"/etc/motd");
+   strcpy(last_cmd,"");
+   strcpy(cmd,"");
+   printf("\n"
+          "RTEMS SHELL (Version 1.0-FRC):%s. "__DATE__". 'help' to list commands.\n",devname);
+   chdir("/");
+   shell_env->exit_shell=FALSE;
+   for (;;) {
+    /* Prompt section */	  
+    /* XXX: show_prompt user adjustable */
+    getcwd(curdir,sizeof(curdir));
+    printf("%s [%s] %c ",shell_env->taskname,curdir,geteuid()?'$':'#');
+    /* getcmd section */	  
+    if (!shell_scanline(cmd,sizeof(cmd),stdin,stdout)) break; /*EOF*/
+    /* evaluate cmd section */	  
+    if (!strcmp(cmd,"r")) {  /* repeat last command, forced, not automatic */
+     strcpy(cmd,last_cmd);
+    } else 
+    if (strcmp(cmd,"")) { /* only for get a new prompt */
+     strcpy(last_cmd,cmd);
+    }; 
+    /* exec cmd section */	  
+    /* TODO: 
+     *  To avoid user crash catch the signals. 
+     *  Open a new stdio files with posibility of redirection *
+     *  Run in a new shell task background. (unix &)
+     *  Resuming. A little bash.
+     */	  
+    if (shell_make_args(cmd,&argc,argv)) {
+     if ((shell_cmd=shell_lookup_cmd(argv[0]))!=NULL) {
+      shell_env->errorlevel=shell_cmd->command(argc,argv);
+     } else {
+      printf("shell:%s command not found\n",argv[0]);
+      shell_env->errorlevel=-1;
+     };
     };
+    /* end exec cmd section */	  
+    if (shell_env->exit_shell)  break;
    };
-   /* end exec cmd section */	  
+   printf("\nGoodbye from RTEMS SHELL :-(\n");
   };
-  free(curdir);
+  } while (shell_env->forever);
+  fclose(stdin );
+  fclose(stdout); 
+  fclose(stderr);
   rtems_task_delete(RTEMS_SELF);
 }
 /* ----------------------------------------------- */
@@ -432,14 +550,15 @@ rtems_status_code   shell_init (char * task_name,
 				rtems_unsigned32    task_stacksize,
 				rtems_task_priority task_priority,
 				char * devname,
-				tcflag_t tcflag) {
+				tcflag_t tcflag,
+				int forever) {
  rtems_id task_id;
  rtems_status_code sc;
  shell_env_t * shell_env;
  sc=rtems_task_create(new_rtems_name(task_name),
  		     task_priority,
 		     task_stacksize?task_stacksize:RTEMS_MINIMUM_STACK_SIZE,
-		     (RTEMS_DEFAULT_MODES&~RTEMS_ASR_MASK)|RTEMS_ASR,
+		     RTEMS_DEFAULT_MODES,
 		     RTEMS_DEFAULT_ATTRIBUTES,
 		     &task_id);
  if (sc!=RTEMS_SUCCESSFUL) {
@@ -454,16 +573,19 @@ rtems_status_code   shell_init (char * task_name,
   return sc;
  };
  if (global_shell_env.magic!=new_rtems_name("SENV")) {
-  global_shell_env.magic   =new_rtems_name("SENV");
-  global_shell_env.devname ="/dev/console";
-  global_shell_env.taskname="GLOBAL";
-  global_shell_env.tcflag   =0;
+  global_shell_env.magic     =new_rtems_name("SENV");
+  global_shell_env.devname   ="/dev/console";
+  global_shell_env.taskname  ="GLOBAL";
+  global_shell_env.tcflag    =0;
+  global_shell_env.exit_shell=0;
+  global_shell_env.forever   =TRUE;
  }; 
- shell_env->magic   =global_shell_env.magic; 
- shell_env->devname =devname;
- shell_env->taskname=task_name;
- shell_env->tcflag  =tcflag;
+ shell_env->magic     =global_shell_env.magic; 
+ shell_env->devname   =devname;
+ shell_env->taskname  =task_name;
+ shell_env->tcflag    =tcflag;
+ shell_env->exit_shell=FALSE;
+ shell_env->forever   =forever;
  return rtems_task_start(task_id,shell_shell,(rtems_task_argument) shell_env);
 }
 /* ----------------------------------------------- */
-

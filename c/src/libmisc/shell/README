@@ -19,10 +19,12 @@ NOTES:
 2.  You only need a termios dev to start a new session, add your new commands
     and enjoy it.
 
-
+3.  If you have tcp/ip inited you can start telnetd daemon.
+    You need register pseudo-terminals driver into device drivers table.
+    16 ptyX termios device terminales are created into /dev/.
+    Calling rtems_initialize_telnetd() starts the daemon.
+    Enjoy it.
 
 FUTURE:
 
 1.  Adding new commands in cmds.c to give file manegement to shell.
-
-2.  Create a telnetd daemon. (pseudo-terminal needed)

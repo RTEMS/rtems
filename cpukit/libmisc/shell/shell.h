@@ -45,20 +45,60 @@ typedef struct  {
   char * taskname;
   tcflag_t tcflag;
   /* user extensions */
+  int  exit_shell; /* logout */
+  int  forever   ; /* repeat login */
   int  errorlevel;
   int  mdump_adr;
 } shell_env_t;
 
 int shell_scanline(char * line,int size,FILE * in,FILE * out) ;
+void cat_file(FILE * out,char *name);
 	
 rtems_status_code shell_init(char * task_name      ,
                               rtems_unsigned32    task_stacksize,/*0 default*/
 		              rtems_task_priority task_priority ,
                               char * devname      ,
-			      tcflag_t tcflag     );
+			      tcflag_t tcflag     ,
+			      int forever         );	
 
 extern shell_env_t global_shell_env,
                 *  current_shell_env;
+/*--------*/
+/* pty.c */ 
+/*--------*/
+
+char * get_pty(int socket);
+
+
+rtems_device_driver pty_initialize(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg);
+rtems_device_driver pty_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg);
+rtems_device_driver pty_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg);
+rtems_device_driver pty_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg);
+rtems_device_driver pty_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg);
+rtems_device_driver pty_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg);
+
+
+#define PTY_DRIVER_TABLE_ENTRY \
+       { pty_initialize , pty_open , pty_close , \
+	 pty_read , pty_write , pty_control }
 /*--------*/
 /* cmds.c */ 
 /*--------*/

@@ -1,3 +1,24 @@
+2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
+
+	* monitor/mon-prmisc.c: Correct print line.
+	* shell/Makefile.am: Added new file telnetd.c.
+	* shell/telnetd.c, shell/telnetd.h, shell/pty.c: New files.
+	* shell/shell.c, shell/cmds.c, shell/shell.h: Numerous improvments:
+	   - The shell_init has a new parameter 'forever' because in
+	     /dev/console you need that this process runs forever but in
+	     tcp/ip not. (respawn?)
+	   - A new task for every session opened trought tcp/ip telnet client.
+	     (the chargen,daytime and more are possible of implementation but
+	     I ask me if they are necesary)
+	   - Exit from the session delete the task and when the client fails too.
+	   - More cmds have been implemented. (very reduced version of these)
+	     umask, chmod, id, whoami, rm, cat, ...
+	   - A reduced line edit has been implemented.
+	       Ctrl-C abort the input,
+	       Ctrl-d in the first position gives EOF (logout).
+	       '\b' and DEL makes the rubout operation.
+	       I think that readline() for every session spents a lot of resources.
+
 2001-04-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shell/cmds.c, shell/shell.c: Remove fileno-hacks.
