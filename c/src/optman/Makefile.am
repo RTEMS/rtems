@@ -18,11 +18,11 @@ C_O_FILES += $(rtems_C_FILES:rtems/%.c=${ARCH}/%.$(OBJEXT))
 PGMS = $(rtems_C_FILES:rtems/%.c=$(ARCH)/%$(LIB_VARIANT).rel)
 PGMS += $(sapi_C_FILES:sapi/%.c=$(ARCH)/%$(LIB_VARIANT).rel)
 
-${ARCH}/%.o: sapi/%.c
+${ARCH}/%.$(OBJEXT): sapi/%.c
 	test -d $(ARCH) || mkdir $(ARCH)
 	${COMPILE} -o $@ -c $<
 
-${ARCH}/%.o: rtems/%.c
+${ARCH}/%.$(OBJEXT): rtems/%.c
 	test -d $(ARCH) || mkdir $(ARCH)
 	${COMPILE} -o $@ -c $<
 
