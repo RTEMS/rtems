@@ -1,3 +1,8 @@
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
+	* src/mqueuesendsupp.c: Account for possibly blocking during the
+	core send operation.
+
 2001-08-09	Joel Sherrill <joel@OARcorp.com>
 
 	* src/mqueuesendsupp.c: Unblocking message queue operations should
