@@ -81,7 +81,9 @@
 #define msp REG (msp)
 #define usp REG (usp)
 #define isp REG (isp)
-#define sr REG (sr)
+#define sr  REG (sr)
+#define vbr REG (vbr)
+#define dfc REG (dfc)
 
 #define fp0 REG (fp0)
 #define fp1 REG (fp1)

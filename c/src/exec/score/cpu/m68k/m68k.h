@@ -58,6 +58,7 @@ extern "C" {
  *     m68040        (implies FP)
  *     m68lc040      (no FP)
  *     m68ec040      (no FP)
+ *     m68302        (no FP)
  *     m68360        (no FP)
  *
  *  Primary difference (for RTEMS) between m68040, m680lc040, and 
@@ -139,6 +140,15 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
+
+#elif defined(m68302)
+ /* essentially a m68000 with onboard peripherals */
+#define CPU_MODEL_NAME         "m68302"
+#define M68K_HAS_VBR             0
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_FPU             0
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_PREINDEXING     0
 
 #elif defined(m68332)
  
