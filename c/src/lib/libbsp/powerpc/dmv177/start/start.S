@@ -17,7 +17,6 @@
  *  $Id$
  */
 
-#include <rtems/score/targopts.h>
 #include "ppc-asm.h"
 
 	.file	"start.s"
