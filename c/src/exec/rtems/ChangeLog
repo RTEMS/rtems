@@ -1,3 +1,7 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am, src/Makefile.am: Include compile.am.
+
 2000-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* taskstart.c: Removed 1st cut at rtems_task_start_main_style.
