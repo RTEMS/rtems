@@ -6,10 +6,10 @@
 
 REPLACE2 = $(PERL) $(top_srcdir)/tools/word-replace2
 
-TEXINFO_TEX = ../../texinfo/texinfo.tex
-AM_MAKEINFOFLAGS = -I ../.. -I $(top_srcdir)
+AM_MAKEINFOFLAGS = -I $(top_builddir) -I $(top_srcdir)
+TEXI2DVI = @TEXI2DVI@ -I $(top_builddir) -I $(top_srcdir)
+TEXI2PDF = @TEXI2PDF@ -I $(top_builddir) -I $(top_srcdir)
 
-MAINTAINERCLEANFILES += $(GENERATED_FILES)
 html_projectdir = $(htmldir)/supplements/$(PROJECT)
 
 TEXI2WWW_ARGS=\

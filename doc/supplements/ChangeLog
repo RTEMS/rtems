@@ -1,3 +1,8 @@
+2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* supplements.am: Use automake rules to build ps, pdf, info.
+	Various minor changes.
+
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* supplement.am: Append -I $(topsrc_dir) to AM_MAKEINFOFLAGS.
