@@ -16,7 +16,7 @@
  */
 
 
-#include <asm.h>
+#include <rtems/asm.h>
 
         .text
 
