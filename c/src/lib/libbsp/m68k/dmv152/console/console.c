@@ -1,5 +1,9 @@
 /*
- *  This file contains the DMV152 console IO package.
+ *  This file contains the TTY driver for the serial ports on the DMV152.
+ *  The serial ports use a Zilog Z8530.
+ *
+ *  NOTE: This driver uses the termios pseudo driver.
+ *        This driver is polled only.
  *
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
@@ -12,20 +16,132 @@
  *  $Id$
  */
 
-#define D152_INIT
-
 #include <bsp.h>
 #include <rtems/libio.h>
- 
-/*  console_initialize
+#include <stdlib.h>
+#include <assert.h>
+
+/*
+ *  console_outbyte_polled
  *
- *  This routine initializes the console IO driver.
+ *  This routine transmits a character using polling.
+ */
+
+void console_outbyte_polled(
+  int  port,
+  char ch
+)
+{
+  rtems_unsigned32 control;
+  rtems_unsigned32 data;
+  rtems_unsigned8  rr_0;
+
+  if ( port == 0 ) {
+    control = CONSOLE_CONTROL_A;
+    data    = CONSOLE_DATA_A;
+  } else {
+    control = CONSOLE_CONTROL_B;
+    data    = CONSOLE_DATA_B;
+  }
+
+  for ( ; ; ) {
+    Z8x30_READ_CONTROL( control, RR_0, rr_0 );
+    if ( (rr_0 & RR_0_TX_BUFFER_EMPTY) != 0 )
+      break;
+  }
+
+  Z8x30_WRITE_DATA( control, ch );
+}
+
+/*
+ *  console_inbyte_nonblocking 
  *
- *  Input parameters: NONE
+ *  This routine polls for a character.
+ */
+
+int console_inbyte_nonblocking(
+  int port,
+  char *c
+)
+{
+  rtems_unsigned32 control;
+  rtems_unsigned32 data;
+  rtems_unsigned8  rr_0;
+  char             ch;
+
+  if ( port == 0 ) {
+    control = CONSOLE_CONTROL_A;
+    data    = CONSOLE_DATA_A;
+  } else {
+    control = CONSOLE_CONTROL_B;
+    data    = CONSOLE_DATA_B;
+  }
+
+  Z8x30_READ_CONTROL( control, RR_0, rr_0 );
+  if ( !(rr_0 & RR_0_RX_DATA_AVAILABLE) )
+    return 0;
+
+  Z8x30_READ_DATA( data, ch );
+  return ch;
+}
+
+/*
+ *  DEBUG_puts
+ *
+ *  This should be safe in the event of an error.  It attempts to insure
+ *  that no TX empty interrupts occur while it is doing polled IO.  Then
+ *  it restores the state of that external interrupt.
+ *
+ *  Input parameters:
+ *    string  - pointer to debug output string
  *
  *  Output parameters:  NONE
  *
- *  Return values:
+ *  Return values:      NONE
+ */
+
+void DEBUG_puts(
+  char *string
+)
+{
+  char *s;
+
+  /* should disable interrupts here */
+    for ( s = string ; *s ; s++ ) 
+      console_outbyte_polled( 0, *s );
+
+    console_outbyte_polled( 0, '\r' );
+    console_outbyte_polled( 0, '\n' );
+  /* should enable interrupts here */
+}
+
+
+/*
+ *  Console Termios Support Entry Points
+ *
+ */
+
+int console_write_support (int minor, char *buf, int len)
+{
+  int nwrite = 0;
+
+  while (nwrite < len) {
+    console_outbyte_polled( minor, *buf++ );
+    nwrite++;
+  }
+  return nwrite;
+}
+
+void console_reserve_resources(
+  rtems_configuration_table *configuration
+)
+{
+  rtems_termios_reserve_resources( configuration, 2 );
+}
+
+/*
+ *  Console Device Driver Entry Points
+ *
  */
  
 rtems_device_driver console_initialize(
@@ -34,93 +150,41 @@ rtems_device_driver console_initialize(
   void                      *arg
 )
 {
-  rtems_status_code status;
- 
-  status = rtems_io_register_name(
-    "/dev/console",
-    major,
-    (rtems_device_minor_number) 0
-  );
- 
+  rtems_status_code          status;
+  rtems_device_minor_number  console_minor;
+
+  rtems_termios_initialize();
+
+  /*
+   *  Register Device Names
+   */
+
+#if (USE_CHANNEL_A == 1)
+  console_minor = 0;
+#elif (USE_CHANNEL_B == 1)
+  console_minor = 1;
+#else
+#error "DMV152 Console Driver -- no console port configured!!!"
+#endif
+
+  status = rtems_io_register_name( "/dev/console", major, console_minor );
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
+
+  status = rtems_io_register_name( "/dev/console_a", major, 0 );
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+
+  status = rtems_io_register_name( "/dev/console_b", major, 1 );
+  if (status != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred(status);
+
+  /*
+   *  Initialize Hardware
+   */
  
   return RTEMS_SUCCESSFUL;
 }
-
-/*  inbyte
- *
- *  This routine reads a character from the SCC.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    character read from SCC
- */
-
-char inbyte( void )
-{
-  rtems_unsigned8 rr_0;
-  char ch;
-
-  for ( ; ; ) {
-    Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-    if ( (rr_0 & RR_0_RX_DATA_AVAILABLE) != 0 )
-      break;
-  }
-
-  Z8x30_READ_DATA( CONSOLE_DATA, ch );
-  return ( ch );
-}
-
-/*  outbyte
- *
- *  This routine transmits a character out the SCC.  It supports
- *  XON/XOFF flow control.
- *
- *  Input parameters:
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
- */
-
-void outbyte(
-  char ch
-)
-{
-  rtems_unsigned8 rr_0;
-  char            flow_control;
-
-  for ( ; ; ) {
-    Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-    if ( (rr_0 & RR_0_TX_BUFFER_EMPTY) != 0 )
-      break;
-  }
-
-  for ( ; ; ) {
-    Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-    if ( (rr_0 & RR_0_RX_DATA_AVAILABLE) == 0 )
-      break;
-
-    Z8x30_READ_DATA( CONSOLE_DATA, flow_control );
-
-    if ( flow_control == XOFF )
-      do {
-        do {
-          Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-        } while ( (rr_0 & RR_0_RX_DATA_AVAILABLE) == 0 );
-        Z8x30_READ_DATA( CONSOLE_DATA, flow_control );
-      } while ( flow_control != XON );
-  }
-
-  Z8x30_WRITE_DATA( CONSOLE_DATA, ch );
-}
-
-/*
- *  Open entry point
- */
 
 rtems_device_driver console_open(
   rtems_device_major_number major,
@@ -128,94 +192,54 @@ rtems_device_driver console_open(
   void                    * arg
 )
 {
+        rtems_status_code sc;
+
+        assert( minor <= 1 );
+        if ( minor > 2 )
+          return RTEMS_INVALID_NUMBER;
+ 
+        sc = rtems_termios_open (major, minor, arg,
+                        NULL,
+                        NULL,
+                        console_inbyte_nonblocking,
+                        console_write_support);
+
   return RTEMS_SUCCESSFUL;
 }
  
-/*
- *  Close entry point
- */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return RTEMS_SUCCESSFUL;
+  return rtems_termios_close (arg);
 }
-
-/*
- * read bytes from the serial port. We only have stdin.
- */
-
+ 
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  rtems_libio_rw_args_t *rw_args;
-  char *buffer;
-  int maximum;
-  int count = 0;
- 
-  rw_args = (rtems_libio_rw_args_t *) arg;
-
-  buffer = rw_args->buffer;
-  maximum = rw_args->count;
-
-  for (count = 0; count < maximum; count++) {
-    buffer[ count ] = inbyte();
-    if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
-      buffer[ count++ ]  = '\n';
-      break;
-    }
-  }
-
-  rw_args->bytes_moved = count;
-  return (count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
+  return rtems_termios_read (arg);
 }
-
-/*
- * write bytes to the serial port. Stdout and stderr are the same. 
- */
-
+ 
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  int count;
-  int maximum;
-  rtems_libio_rw_args_t *rw_args;
-  char *buffer;
-
-  rw_args = (rtems_libio_rw_args_t *) arg;
-
-  buffer = rw_args->buffer;
-  maximum = rw_args->count;
-
-  for (count = 0; count < maximum; count++) {
-    if ( buffer[ count ] == '\n') {
-      outbyte('\r');
-    }
-    outbyte( buffer[ count ] );
-  }
-
-  rw_args->bytes_moved = maximum;
-  return 0;
+  return rtems_termios_write (arg);
 }
-
-/*
- *  IO Control entry point
- */
-
+ 
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return RTEMS_SUCCESSFUL;
+  return rtems_termios_ioctl (arg);
 }
+

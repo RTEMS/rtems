@@ -127,23 +127,14 @@ extern "C" {
 #define TIMER 0x0c000000
 #define TIMER_VECTOR 0x4D
 
-#if (USE_CHANNEL_A == 1)
-#define CONSOLE_CONTROL  0x0C800005
-#define CONSOLE_DATA     0x0C800007
-#elif (USE_CHANNEL_B == 1)
-#define CONSOLE_CONTROL  0x0C800001
-#define CONSOLE_DATA     0x0C800003
-#endif
+#define CONSOLE_CONTROL_A  0x0C800005
+#define CONSOLE_DATA_A     0x0C800007
+#define CONSOLE_CONTROL_B  0x0C800001
+#define CONSOLE_DATA_B     0x0C800003
 
 /* Structures */
 
-#ifdef D152_INIT
-#undef EXTERN
-#define EXTERN
-#else
-#undef EXTERN
-#define EXTERN extern
-#endif
+   /* none */
 
 /* miscellaneous stuff assumed to exist */
 

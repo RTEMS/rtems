@@ -219,6 +219,12 @@ int main(
   BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
 
   /*
+   *  Account for the console's resources
+   */
+
+  console_reserve_resources( &BSP_Configuration );
+
+  /*
    * Add 1 extension for newlib libc
    */
 
