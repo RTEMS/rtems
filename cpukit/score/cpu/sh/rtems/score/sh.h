@@ -185,11 +185,11 @@ extern "C" {
  *  It must be static because it is referenced indirectly.
  */
  
-static inline unsigned int sh_swap_u32(
-  unsigned int value
+static inline uint32_t sh_swap_u32(
+  uint32_t value
 )
 {
-  register unsigned int swapped;
+  register uint32_t swapped;
   
   asm volatile ( 
     "swap.b %1,%0; "
