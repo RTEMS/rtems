@@ -20,7 +20,7 @@ rxgen_romld$(LIB_VARIANT).$(OBJEXT): start/rxgen_romld.S
 project_lib_DATA = rxgen_romld$(LIB_VARIANT).$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.real \
-startup/rom.ld
+    startup/rom.ld
 
 EXTRA_PROGRAMS += clock.rel
 CLEANFILES += clock.rel
@@ -125,8 +125,16 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
+$(PROJECT_LIB)/linkcmds.real: startup/linkcmds.real $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.real
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.real
+
+$(PROJECT_LIB)/rom.ld: startup/rom.ld $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/rom.ld
+TMPINSTALL_FILES += $(PROJECT_LIB)/rom.ld
+
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

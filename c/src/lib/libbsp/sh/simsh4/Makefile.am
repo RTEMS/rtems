@@ -138,7 +138,7 @@ $(PROJECT_LIB)/linkcmds-le.coff: startup/linkcmds-le.coff $(PROJECT_LIB)/$(dirst
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds-le.coff
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

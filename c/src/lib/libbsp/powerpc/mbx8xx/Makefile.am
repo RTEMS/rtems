@@ -19,7 +19,7 @@ include_bspdir = $(includedir)/bsp
 
 include_HEADERS += include/coverhd.h
 include_bsp_HEADERS = include/mbx.h include/commproc.h include/8xx_immap.h \
-  irq/irq.h vectors/vectors.h
+    irq/irq.h vectors/vectors.h
 
 EXTRA_DIST = times-mbx821 times-mbx860
 
@@ -171,7 +171,7 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/subdirs.am

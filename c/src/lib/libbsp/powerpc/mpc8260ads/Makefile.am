@@ -157,7 +157,7 @@ $(PROJECT_INCLUDE)/bsp/vectors.h: vectors/vectors.h $(PROJECT_INCLUDE)/bsp/$(dir
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/subdirs.am

@@ -171,7 +171,7 @@ $(PROJECT_LIB)/linkcmds.flash: startup/linkcmds.flash $(PROJECT_LIB)/$(dirstamp)
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.flash
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

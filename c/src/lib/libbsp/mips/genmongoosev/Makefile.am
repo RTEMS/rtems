@@ -31,14 +31,14 @@ startup_rel_SOURCES = ../../mips/shared/gdbstub/mips-stub.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
     startup/gdb-support.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
-$(startup_CPPFLAGS)
+    $(startup_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_PROGRAMS += startup_g.rel
 CLEANFILES += startup_g.rel
 startup_g_rel_SOURCES = $(startup_rel_SOURCES)
 startup_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
-$(startup_CPPFLAGS)
+    $(startup_CPPFLAGS)
 startup_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += startup$(LIB_VARIANT).rel
@@ -49,15 +49,13 @@ EXTRA_DIST += ../../mips/shared/clockdrv_shell.c
 EXTRA_PROGRAMS += clock.rel
 CLEANFILES += clock.rel
 clock_rel_SOURCES = clock/clockdrv.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
-$(clock_CPPFLAGS)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(clock_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_PROGRAMS += clock_g.rel
 CLEANFILES += clock_g.rel
 clock_g_rel_SOURCES = $(clock_rel_SOURCES)
-clock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
-$(clock_CPPFLAGS)
+clock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(clock_CPPFLAGS)
 clock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += clock$(LIB_VARIANT).rel
@@ -125,7 +123,7 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

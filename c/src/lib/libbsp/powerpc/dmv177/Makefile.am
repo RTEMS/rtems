@@ -42,7 +42,8 @@ noinst_DATA += clock$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += console.rel
 CLEANFILES += console.rel
-console_rel_SOURCES = console/conscfg.c console/debugio.c ../../shared/console.c
+console_rel_SOURCES = console/conscfg.c console/debugio.c \
+    ../../shared/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -158,7 +159,7 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/subdirs.am

@@ -118,7 +118,7 @@ $(PROJECT_LIB)/linkcmds.rom2ram: startup/linkcmds.rom2ram $(PROJECT_LIB)/$(dirst
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.rom2ram
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
