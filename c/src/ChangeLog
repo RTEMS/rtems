@@ -1,3 +1,7 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Add $(ARCH)/$(dirstamp) rules.
+
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/lead-dot.m4: New (from automake-1.7f).

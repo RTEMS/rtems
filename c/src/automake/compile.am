@@ -90,14 +90,18 @@ CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
 AS = $(CC)
 ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
 
-${ARCH}/%.o: %.c
+${ARCH}/%.o: %.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
-${ARCH}/%.o: %.cc
+${ARCH}/%.o: %.cc $(ARCH)/$(dirstamp)
 	${CXXCOMPILE} -o $@ -c $<
 
-${ARCH}/%.o: %.S
+${ARCH}/%.o: %.S $(ARCH)/$(dirstamp)
 	${CCASCOMPILE} -DASM -o $@ -c $<
+
+${ARCH}/$(dirstamp):
+	@$(mkinstalldirs) $(ARCH)
+	@: > $(ARCH)/$(dirstamp)
 
 # Dependency files for use by gmake
 # NOTE: we don't put them into $(ARCH)
