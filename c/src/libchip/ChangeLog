@@ -1,3 +1,14 @@
+2003-09-26	Cedric Aubert <cedric_aubert@yahoo.fr>
+
+	PR 499/rtems_misc
+	* serial/mc68681.c:  Miscellaneous corrections:
+	    - Correction of ACR_BIT[7] (Baudrate table) Configuration
+	    - Correction of Parity Bit Configuration (Odd was forced)
+	    - Correction of Stop Bit configuration (inversed)
+	    - Correction of ISR Handler to call 
+  	      rtems_termios_dequeue_character() only if is a Tx Empty IRQ.
+	    - Add RTS CTS Hardware flow control Configuration
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* ide/ata.c, ide/ata.h, ide/ata_internal.h, ide/ide_controller.c,

@@ -123,8 +123,8 @@ MC68681_STATIC int mc68681_set_attributes(
   if (t->c_cflag & PARENB) {
     if (t->c_cflag & PARODD)
       mode1 |= 0x04;
-    else
-      mode1 |= 0x04;
+    /* else
+		mode1 |= 0x04; */
   } else {
    mode1 |= 0x10;
   }
@@ -149,12 +149,22 @@ MC68681_STATIC int mc68681_set_attributes(
    */
   
   if (t->c_cflag & CSTOPB) {
-    mode2 |= 0x07;                      /* 2 stop bits */
+    mode2 |= 0x0F;                      /* 2 stop bits */
   } else {
-    if ((t->c_cflag & CSIZE) == CS5)    /* CS5 and 2 stop bits not supported */
+    if ((t->c_cflag & CSIZE) == CS5)    /* CS5 and 1 stop bits not supported */
       return -1;
-    mode2 |= 0x0F;                      /* 1 stop bit */
+    mode2 |= 0x07;                      /* 1 stop bit */
   }
+
+ /*
+  *   Hardware Flow Control
+  */
+
+  if(t->c_cflag & CRTSCTS) {
+	  mode1 |= 0x80; /* Enable Rx RTS Control */
+	  mode2 |= 0x10; /* Enable CTS Enable Tx */
+  }
+
 
   rtems_interrupt_disable(Irql);
     (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr_bit );
@@ -266,27 +276,30 @@ MC68681_STATIC int mc68681_open(
   unsigned32             pMC68681;
   unsigned32             pMC68681_port;
   unsigned int           baud;
-  unsigned int           acr;
+  unsigned int           acr_bit;
   unsigned int           vector;
   unsigned int           command;
   rtems_interrupt_level  Irql;
   setRegister_f          setReg;
-
+  unsigned int			 status;
+  
+  
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
   vector        = Console_Port_Tbl[minor].ulIntVector;
-
+    
   /* XXX default baud rate should be from configuration table */
 
-  (void) mc68681_baud_rate( minor, B9600, &baud, &acr, &command );
+  status = mc68681_baud_rate( minor, B9600, &baud, &acr_bit, &command );
+  if (status < 0) rtems_fatal_error_occurred (RTEMS_NOT_DEFINED);
 
   /*
    *  Set the DUART channel to a default useable state
    */
 
   rtems_interrupt_disable(Irql);
-    (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr );
+    (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr_bit << 7 );
     (*setReg)( pMC68681_port, MC68681_CLOCK_SELECT, baud );
     if ( command ) {
       (*setReg)( pMC68681_port, MC68681_COMMAND, command );         /* RX */
@@ -553,8 +566,10 @@ MC68681_STATIC int mc68681_baud_rate(
   acr_bit = 0;
   status = 0;
 
-  if ( !(Console_Port_Tbl[minor].ulDataPort & MC68681_DATA_BAUD_RATE_SET_1) )
+  if (Console_Port_Tbl[minor].ulDataPort & MC68681_DATA_BAUD_RATE_SET_2)
+  {
     acr_bit = 1;
+  }
 
   is_extended = 0;
 
@@ -611,6 +626,7 @@ MC68681_STATIC void mc68681_process(
   unsigned32              pMC68681;
   unsigned32              pMC68681_port;
   volatile unsigned8      ucLineStatus; 
+  volatile unsigned8      ucISRStatus; 
   unsigned char           cChar;
   getRegister_f           getReg;
   setRegister_f           setReg;
@@ -619,6 +635,19 @@ MC68681_STATIC void mc68681_process(
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
   getReg        = Console_Port_Tbl[minor].getRegister;
   setReg        = Console_Port_Tbl[minor].setRegister;
+
+  /* Get ISR at the beginning of the IT routine */ 
+  ucISRStatus = (*getReg)(pMC68681, MC68681_INTERRUPT_STATUS_REG);
+  
+  /* Get good ISR a or b channel */
+  if (pMC68681 != pMC68681_port){
+    ucISRStatus >>= 4;
+  }
+    
+  /* See if is usefull to call rtems_termios_dequeue */
+  if(Console_Port_Data[minor].bActive == FALSE) {
+		ucISRStatus = ucISRStatus & ~MC68681_IR_TX_READY;
+  }
 
   /*
    * Deal with any received characters
@@ -650,18 +679,14 @@ MC68681_STATIC void mc68681_process(
    *  Deal with the transmitter
    */
 
-  ucLineStatus = (*getReg)(pMC68681, MC68681_INTERRUPT_STATUS_REG);
-  if (pMC68681 != pMC68681_port)
-    ucLineStatus >>= 4;
-
-  if(ucLineStatus & MC68681_IR_TX_READY) {
-    if (rtems_termios_dequeue_characters(
-         Console_Port_Data[minor].termios_data, 1)) {
+  if (ucISRStatus & MC68681_IR_TX_READY) {
+    if (!rtems_termios_dequeue_characters(
+          Console_Port_Data[minor].termios_data, 1)) {
+	  /* If no more char to send, disable TX interrupt */
       Console_Port_Data[minor].bActive = FALSE;
       mc68681_enable_interrupts(minor, MC68681_IMR_ENABLE_ALL_EXCEPT_TX);
     }
   }
-
 }
 
 /*
