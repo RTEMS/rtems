@@ -257,44 +257,44 @@ skip_frestore:                                        \n\
 void return_to_super(void);
 void return_to_user(void);
 
-asm("
-       .text
-
-       .globl return_to_super
-       .align 4
-return_to_super:
-        movel   registers+60,%sp     /* get new stack pointer */        
-        movel   lastFrame,%a0        /* get last frame info  */              
-        bra     return_to_any
-
-        .globl return_to_user
-        .align 4
-
-return_to_user:
-        movel   registers+60,%a0     /* get usp */                          
-        movel   %a0,%usp             /* set usp */				
-        movel   superStack,%sp       /* get original stack pointer */        
-
-return_to_any:
-        movel   lastFrame,%a0        /* get last frame info  */              
-        movel   %a0@+,lastFrame      /* link in previous frame     */        
-        addql   #8,%a0               /* skip over pc, vector#*/              
-        movew   %a0@+,%d0            /* get # of words in cpu frame */       
-        addw    %d0,%a0              /* point to end of data        */       
-        addw    %d0,%a0              /* point to end of data        */       
-        movel   %a0,%a1                                                   
-#                                                                       
-# copy the stack frame                                                  
-        subql   #1,%d0
-
-copyUserLoop:                                                               
-        movew   %a1@-,%sp@-                                               
-        dbf     %d0,copyUserLoop                                             
-");                                                                     
-        RESTORE_FP_REGS()                                              
-asm("
-        moveml  registers,%d0-%d7/%a0-%a6
-        rte                          /* pop and go! */
+asm("\n\
+       .text\n\
+\n\
+       .globl return_to_super\n\
+       .align 4\n\
+return_to_super:\n\
+        movel   registers+60,%sp     /* get new stack pointer */        \n\
+        movel   lastFrame,%a0        /* get last frame info  */         \n\
+        bra     return_to_any\n\
+\n\
+        .globl return_to_user\n\
+        .align 4\n\
+\n\
+return_to_user:\n\
+        movel   registers+60,%a0     /* get usp */                      \n\
+        movel   %a0,%usp             /* set usp */				\n\
+        movel   superStack,%sp       /* get original stack pointer */        \n\
+\n\
+return_to_any:\n\
+        movel   lastFrame,%a0        /* get last frame info  */              \n\
+        movel   %a0@+,lastFrame      /* link in previous frame     */        \n\
+        addql   #8,%a0               /* skip over pc, vector#*/              \n\
+        movew   %a0@+,%d0            /* get # of words in cpu frame */       \n\
+        addw    %d0,%a0              /* point to end of data        */       \n\
+        addw    %d0,%a0              /* point to end of data        */       \n\
+        movel   %a0,%a1                                                   \n\
+#                                                                       \n\
+# copy the stack frame                                                  \n\
+        subql   #1,%d0\n\
+\n\
+copyUserLoop:                                                               \n\
+        movew   %a1@-,%sp@-                                               \n\
+        dbf     %d0,copyUserLoop                                             \n\
+");                                                                     \n\
+        RESTORE_FP_REGS()                                              \n\
+asm("\n\
+        moveml  registers,%d0-%d7/%a0-%a6\n\
+        rte                          /* pop and go! */\n\
 ");
 
 #define DISABLE_INTERRUPTS() asm("   oriw   #0x0700,%sr");
@@ -304,39 +304,39 @@ asm("
 /* if the previous interrupt level was 7 then we're already servicing  */
 /* this interrupt and an rte is in order to return to the debugger.    */
 /* For the 68000, the offset for sr is 6 due to the jsr return address */
-asm("
-        .text
-        .globl _debug_level7
-        .align 4
-
-_debug_level7:
-        movew   %d0,%sp@-
+asm("\n\
+        .text\n\
+        .globl _debug_level7\n\
+        .align 4\n\
+\n\
+_debug_level7:\n\
+        movew   %d0,%sp@-\n\
 ");
 
 #if defined(__mc68020__) || defined(__mc68332__)
-asm("
-        movew   %sp@(2),%d0
+asm("\n\
+        movew   %sp@(2),%d0\n\
 ");
 #else
-asm("
-        movew   %sp@(6),%d0
+asm("\n\
+        movew   %sp@(6),%d0\n\
 ");
 #endif
-asm("
-        andiw   #0x700,%d0
-    	  cmpiw   #0x700,%d0
-    	  beq     _already7
-        movew   %sp@+,%d0	
-        bra     _catchException
-_already7:
-	      movew   %sp@+,%d0
+asm("\n\
+        andiw   #0x700,%d0\n\
+    	  cmpiw   #0x700,%d0\n\
+    	  beq     _already7\n\
+        movew   %sp@+,%d0	\n\
+        bra     _catchException\n\
+_already7:\n\
+	      movew   %sp@+,%d0\n\
 ");
 #if defined (__mc68000__) && !defined(__mc68020__)
-asm("
-        lea     %sp@(4),%sp");       /* pull off 68000 return address */
+asm("\n\
+        lea     %sp@(4),%sp");       /* pull off 68000 return address */\n\
 #endif
-asm("
-        rte
+asm("\n\
+        rte\n\
 ");
 
 extern void _catchException(void);
@@ -357,87 +357,87 @@ extern void _catchException(void);
  *                                       
  *                                       
  */
-asm(" 
-        .text
-
-        .globl _catchException
-        .align 4
-_catchException:
+asm(" \n\
+        .text\n\
+\n\
+        .globl _catchException\n\
+        .align 4\n\
+_catchException:\n\
 ");
 
 DISABLE_INTERRUPTS();
 
-asm("
-        moveml  %d0-%d7/%a0-%a6,registers /* save registers        */
-        movel   lastFrame,%a0             /* last frame pointer */
+asm("\n\
+        moveml  %d0-%d7/%a0-%a6,registers /* save registers        */\n\
+        movel   lastFrame,%a0             /* last frame pointer */\n\
 ");
 SAVE_FP_REGS();        
-asm("
-        lea     registers,%a5   /* get address of registers     */
-        movew   %sp@,%d1        /* get status register          */
-        movew   %d1,%a5@(66)    /* save sr 	*/	
-        movel   %sp@(2),%a4     /* save pc in %a4 for later use  */
-        movel   %a4,%a5@(68)    /* save pc in _regisers[]	*/
-
-#
-# figure out how many bytes in the stack frame
-#
-        movew   %sp@(6),%d0	    /* get '020 exception format	*/
-        movew   %d0,%d2         /* make a copy of format word   */
-        andiw   #0xf000,%d0     /* mask off format type         */
-        rolw    #5,%d0          /* rotate into the low byte *2  */
-        lea     exceptionSize,%a1   
-        addw    %d0,%a1         /* index into the table         */
-        movew   %a1@,%d0        /* get number of words in frame */
-        movew   %d0,%d3         /* save it                      */
-        subw    %d0,%a0         /* adjust save pointer          */
-        subw    %d0,%a0         /* adjust save pointer(bytes)   */
-        movel   %a0,%a1         /* copy save pointer            */
-        subql   #1,%d0          /* predecrement loop counter    */
-#
-# copy the frame
-#
-saveFrameLoop:
-	      movew   %sp@+,%a1@+
-        dbf     %d0,saveFrameLoop
-#
-# now that the stack has been clenaed,
-# save the %a7 in use at time of exception
-
-        movel   %sp,superStack  /* save supervisor %sp           */
-        andiw   #0x2000,%d1     /* were we in supervisor mode ? */
-        beq     userMode       
-        movel   %a7,%a5@(60)    /* save %a7                  */
-        bra     a7saveDone
-userMode:  
-      	movel   %usp,%a1    	
-        movel   %a1,%a5@(60)    /* save user stack pointer	*/
-a7saveDone:
-
-#
-# save size of frame
-        movew   %d3,%a0@-
-
-#
-# compute exception number
-        andl    #0xfff,%d2   	  /* mask off vector offset	*/
-        lsrw    #2,%d2   	      /* divide by 4 to get vect num	*/
-        movel   %d2,%a0@-       /* save it                      */
-#
-# save pc causing exception
-        movel   %a4,%a0@-
-#
-# save old frame link and set the new value
-        movel	lastFrame,%a1	    /* last frame pointer */
-        movel   %a1,%a0@-		    /* save pointer to prev frame	*/
-        movel   %a0,lastFrame
-
-        movel   %d2,%sp@-		    /* push exception num           */
-        movel   exceptionHook,%a0  /* get address of handler */
-        jbsr    %a0@            /* and call it */
-        clrl    %sp@            /* replace exception num parm with frame ptr */
-        jbsr     _returnFromException   /* jbsr, but never returns */
-
+asm("\n\
+        lea     registers,%a5   /* get address of registers     */\n\
+        movew   %sp@,%d1        /* get status register          */\n\
+        movew   %d1,%a5@(66)    /* save sr 	*/	\n\
+        movel   %sp@(2),%a4     /* save pc in %a4 for later use  */\n\
+        movel   %a4,%a5@(68)    /* save pc in _regisers[]	*/\n\
+\n\
+#\n\
+# figure out how many bytes in the stack frame\n\
+#\n\
+        movew   %sp@(6),%d0	    /* get '020 exception format	*/\n\
+        movew   %d0,%d2         /* make a copy of format word   */\n\
+        andiw   #0xf000,%d0     /* mask off format type         */\n\
+        rolw    #5,%d0          /* rotate into the low byte *2  */\n\
+        lea     exceptionSize,%a1   \n\
+        addw    %d0,%a1         /* index into the table         */\n\
+        movew   %a1@,%d0        /* get number of words in frame */\n\
+        movew   %d0,%d3         /* save it                      */\n\
+        subw    %d0,%a0         /* adjust save pointer          */\n\
+        subw    %d0,%a0         /* adjust save pointer(bytes)   */\n\
+        movel   %a0,%a1         /* copy save pointer            */\n\
+        subql   #1,%d0          /* predecrement loop counter    */\n\
+#\n\
+# copy the frame\n\
+#\n\
+saveFrameLoop:\n\
+	      movew   %sp@+,%a1@+\n\
+        dbf     %d0,saveFrameLoop\n\
+#\n\
+# now that the stack has been clenaed,\n\
+# save the %a7 in use at time of exception\n\
+\n\
+        movel   %sp,superStack  /* save supervisor %sp           */\n\
+        andiw   #0x2000,%d1     /* were we in supervisor mode ? */\n\
+        beq     userMode       \n\
+        movel   %a7,%a5@(60)    /* save %a7                  */\n\
+        bra     a7saveDone\n\
+userMode:  \n\
+      	movel   %usp,%a1    	\n\
+        movel   %a1,%a5@(60)    /* save user stack pointer	*/\n\
+a7saveDone:\n\
+\n\
+#\n\
+# save size of frame\n\
+        movew   %d3,%a0@-\n\
+\n\
+#\n\
+# compute exception number\n\
+        andl    #0xfff,%d2   	  /* mask off vector offset	*/\n\
+        lsrw    #2,%d2   	      /* divide by 4 to get vect num	*/\n\
+        movel   %d2,%a0@-       /* save it                      */\n\
+#\n\
+# save pc causing exception\n\
+        movel   %a4,%a0@-\n\
+#\n\
+# save old frame link and set the new value\n\
+        movel	lastFrame,%a1	    /* last frame pointer */\n\
+        movel   %a1,%a0@-		    /* save pointer to prev frame	*/\n\
+        movel   %a0,lastFrame\n\
+\n\
+        movel   %d2,%sp@-		    /* push exception num           */\n\
+        movel   exceptionHook,%a0  /* get address of handler */\n\
+        jbsr    %a0@            /* and call it */\n\
+        clrl    %sp@            /* replace exception num parm with frame ptr */\n\
+        jbsr     _returnFromException   /* jbsr, but never returns */\n\
+\n\
 ");
 
 #else /* mc68000 */
@@ -455,74 +455,74 @@ a7saveDone:
  *   Return Address  LSWord             
  */
 asm("
-        .text
-        .globl _catchException
-        .align 4
-_catchException:
+        .text\n\
+        .globl _catchException\n\
+        .align 4\n\
+_catchException:\n\
 ");
 DISABLE_INTERRUPTS();
-asm("
-        moveml  %d0-%d7/%a0-%a6,registers  /* save registers               */
-        movel   lastFrame,%a0	/* last frame pointer */
+asm("\n\
+        moveml  %d0-%d7/%a0-%a6,registers  /* save registers               */\n\
+        movel   lastFrame,%a0	/* last frame pointer */\n\
 ");
 
 SAVE_FP_REGS();        
-asm("
-        moveq.l #0,%d2
-        movew   %sp@+,%d2
-        lea     registers,%a5    /* get address of registers     */
-
-        moveql  #3,%d3           /* assume a three word frame     */
-
-        cmpiw   #3,%d2           /* bus error or address error ? */
-        bgt     normal           /* if >3 then normal error      */
-        movel   %sp@+,%a0@-      /* copy error info to frame buff*/
-        movel   %sp@+,%a0@-      /* these are never used         */
-        moveql  #7,%d3           /* this is a 7 word frame       */
-     
-normal:   
-        movew   %sp@+,%d1         /* pop status register          */
-        movel   %sp@+,%a4         /* pop program counter          */
-
-        cmpiw   #33,%d2           /* trap #1, breakpoint ? */
-        bne     not_breakpoint
-
-        subql   #2,%a4            /* trap leaves the pc after the trap */
-
-not_breakpoint:
-        movew   %d1,%a5@(66)      /* save sr		 	*/	
-        movel   %a4,%a5@(68)      /* save pc in _regisers[]      	*/
-        movel   %a4,%a0@-         /* copy pc to frame buffer      */
-        movew   %d1,%a0@-         /* copy sr to frame buffer      */
-
-        movel   %sp,superStack    /* save supervisor %sp          */
-
-        andiw   #0x2000,%d1      /* were we in supervisor mode ? */
-        beq     userMode       
-        movel   %a7,%a5@(60)      /* save %a7                  */
-        bra     saveDone             
-userMode:
-        movel   %usp,%a1    	/* save user stack pointer 	*/
-        movel   %a1,%a5@(60)      /* save user stack pointer	*/
-saveDone:
-
-        movew   %d3,%a0@-         /* push frame size in words     */
-        movel   %d2,%a0@-         /* push vector number           */
-        movel   %a4,%a0@-         /* push exception pc            */
-
-#
-# save old frame link and set the new value
-#
-        movel   lastFrame,%a1	/* last frame pointer */
-        movel   %a1,%a0@-		/* save pointer to prev frame	*/
-        movel   %a0,lastFrame
-
-        movel   %d2,%sp@-		/* push exception num           */
-        movel   exceptionHook,%a0  /* get address of handler */
-
-        jbsr    %a0@             /* and call it */
-        clrl    %sp@             /* replace exception num parm with frame ptr */
-        jbsr     _returnFromException   /* jbsr, but never returns */
+asm("\n\
+        moveq.l #0,%d2\n\
+        movew   %sp@+,%d2\n\
+        lea     registers,%a5    /* get address of registers     */\n\
+\n\
+        moveql  #3,%d3           /* assume a three word frame     */\n\
+\n\
+        cmpiw   #3,%d2           /* bus error or address error ? */\n\
+        bgt     normal           /* if >3 then normal error      */\n\
+        movel   %sp@+,%a0@-      /* copy error info to frame buff*/\n\
+        movel   %sp@+,%a0@-      /* these are never used         */\n\
+        moveql  #7,%d3           /* this is a 7 word frame       */\n\
+     \n\
+normal:   \n\
+        movew   %sp@+,%d1         /* pop status register          */\n\
+        movel   %sp@+,%a4         /* pop program counter          */\n\
+\n\
+        cmpiw   #33,%d2           /* trap #1, breakpoint ? */\n\
+        bne     not_breakpoint\n\
+\n\
+        subql   #2,%a4            /* trap leaves the pc after the trap */\n\
+\n\
+not_breakpoint:\n\
+        movew   %d1,%a5@(66)      /* save sr		 	*/	\n\
+        movel   %a4,%a5@(68)      /* save pc in _regisers[]      	*/\n\
+        movel   %a4,%a0@-         /* copy pc to frame buffer      */\n\
+        movew   %d1,%a0@-         /* copy sr to frame buffer      */\n\
+\n\
+        movel   %sp,superStack    /* save supervisor %sp          */\n\
+\n\
+        andiw   #0x2000,%d1      /* were we in supervisor mode ? */\n\
+        beq     userMode       \n\
+        movel   %a7,%a5@(60)      /* save %a7                  */\n\
+        bra     saveDone             \n\
+userMode:\n\
+        movel   %usp,%a1    	/* save user stack pointer 	*/\n\
+        movel   %a1,%a5@(60)      /* save user stack pointer	*/\n\
+saveDone:\n\
+\n\
+        movew   %d3,%a0@-         /* push frame size in words     */\n\
+        movel   %d2,%a0@-         /* push vector number           */\n\
+        movel   %a4,%a0@-         /* push exception pc            */\n\
+\n\
+#\n\
+# save old frame link and set the new value\n\
+#\n\
+        movel   lastFrame,%a1	/* last frame pointer */\n\
+        movel   %a1,%a0@-		/* save pointer to prev frame	*/\n\
+        movel   %a0,lastFrame\n\
+\n\
+        movel   %d2,%sp@-		/* push exception num           */\n\
+        movel   exceptionHook,%a0  /* get address of handler */\n\
+\n\
+        jbsr    %a0@             /* and call it */\n\
+        clrl    %sp@             /* replace exception num parm with frame ptr */\n\
+        jbsr     _returnFromException   /* jbsr, but never returns */\n\
 ");
 #endif
 
