@@ -1,3 +1,7 @@
+2002-11-29	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Updated to gcc-3.2.1.
+
 2002-11-28	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Updated to gcc-3.2 and newlib1.1.0 RPM version 6.
