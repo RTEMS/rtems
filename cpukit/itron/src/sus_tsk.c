@@ -6,6 +6,7 @@
  *  $Id$
  */
 
+#include <limits.h>
 #include <itron.h>
 
 #include <rtems/score/thread.h>
@@ -42,6 +43,9 @@ ER sus_tsk(
 
       if ( _Thread_Is_executing( the_thread ) )
         _ITRON_return_errorno( E_OBJ );
+
+      if (the_thread->suspend_count == INT_MAX )
+        _ITRON_return_errorno( E_QOVR );
 
       _Thread_Suspend( the_thread );
       break;
