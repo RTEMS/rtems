@@ -1,5 +1,34 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* include/chain.h, include/clockdrv.h, include/console.h,
+	include/iosupp.h, include/rtc.h, include/spurious.h,
+	include/timerdrv.h, include/vmeintr.h, include/motorola/mc68230.h,
+	include/rtems/libcsupport.h, include/rtems/libio.h,
+	include/rtems/libio_.h, include/rtems/termiostypes.h,
+	include/sys/termios.h, include/zilog/z8036.h, include/zilog/z8530.h,
+	include/zilog/z8536.h, src/__brk.c, src/__gettod.c, src/__sbrk.c,
+	src/__times.c, src/access.c, src/base_fs.c, src/cfgetispeed.c,
+	src/cfgetospeed.c, src/cfsetispeed.c, src/cfsetospeed.c, src/chdir.c,
+	src/chmod.c, src/chown.c, src/chroot.c, src/close.c, src/ctermid.c,
+	src/dup.c, src/dup2.c, src/eval.c, src/fchdir.c, src/fchmod.c,
+	src/fcntl.c, src/fdatasync.c, src/fpathconf.c,
+	src/fs_null_handlers.c, src/fstat.c, src/fsync.c, src/ftruncate.c,
+	src/getdents.c, src/getpwent.c, src/hosterr.c, src/ioctl.c,
+	src/isatty.c, src/libio.c, src/libio_sockets.c, src/link.c,
+	src/lseek.c, src/lstat.c, src/malloc.c, src/mallocfreespace.c,
+	src/mkdir.c, src/mkfifo.c, src/mknod.c, src/mount.c, src/newlibc.c,
+	src/no_libc.c, src/no_posix.c, src/open.c, src/pathconf.c,
+	src/pipe.c, src/privateenv.c, src/read.c, src/readlink.c,
+	src/rewinddir.c, src/rmdir.c, src/seekdir.c, src/stat.c,
+	src/symlink.c, src/sync.c, src/tcdrain.c, src/tcflow.c,
+	src/tcflush.c, src/tcgetattr.c, src/tcgetprgrp.c, src/tcsendbreak.c,
+	src/tcsetattr.c, src/tcsetpgrp.c, src/telldir.c, src/termios.c,
+	src/termiosinitialize.c, src/truncate.c, src/umask.c, src/unixlibc.c,
+	src/unlink.c, src/unmount.c, src/utime.c, src/write.c: URL for
+	license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	PR 479/rtems_misc
 	* src/malloc.c: Per multiple standards realloc does not free the
 	original memory if the allocation of the requested larger block
