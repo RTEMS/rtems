@@ -26,11 +26,11 @@ int utime(
   rtems_filesystem_location_info_t   temp_loc;
   int                                result;
 
-  if ( !temp_loc.ops->utime )
-    set_errno_and_return_minus_one( ENOTSUP );
-
   if ( rtems_filesystem_evaluate_path( path, 0x00, &temp_loc, TRUE ) )
     return -1;
+
+  if ( !temp_loc.ops->utime )
+    set_errno_and_return_minus_one( ENOTSUP );
 
   result = (*temp_loc.ops->utime)( &temp_loc, times->actime, times->modtime );
 
