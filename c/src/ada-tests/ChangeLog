@@ -1,5 +1,34 @@
 2002-08-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Activate tmtests.
+	* configure.ac: Activate tmtests.
+	* samples/base_mp/Makefile.am: Add nodeX subdirs.
+	* sptests/sp01/Makefile.am: Add *.scn.
+	* sptests/sp02/Makefile.am: Add *.scn.
+	* sptests/sp03/Makefile.am: Add *.scn.
+	* sptests/sp04/Makefile.am: Add *.scn.
+	* sptests/sp05/Makefile.am: Add *.scn.
+	* sptests/sp06/Makefile.am: Add *.scn.
+	* sptests/sp07/Makefile.am: Add *.scn.
+	* sptests/sp08/Makefile.am: Add *.scn.
+	* sptests/sp09/Makefile.am: Add *.scn.
+	* sptests/sp11/Makefile.am: Add *.scn.
+	* sptests/sp12/Makefile.am: Add *.scn.
+	* sptests/sp13/Makefile.am: Add *.scn.
+	* sptests/sp14/Makefile.am: Add *.scn.
+	* sptests/sp15/Makefile.am: Add *.scn.
+	* sptests/sp16/Makefile.am: Add *.scn.
+	* sptests/sp17/Makefile.am: Add *.scn.
+	* sptests/sp19/Makefile.am: Add *.scn.
+	* sptests/sp20/Makefile.am: Add *.scn.
+	* sptests/sp21/Makefile.am: Add *.scn.
+	* sptests/sp22/Makefile.am: Add *.scn.
+	* sptests/sp23/Makefile.am: Add *.scn.
+	* sptests/sp24/Makefile.am: Add *.scn.
+	* sptests/sp25/Makefile.am: Add *.scn.
+
+2002-08-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* tmtests/Makefile.am: New.
 	* tmtests/tm01/Makefile.am: New.
 	* tmtests/tm02/Makefile.am: New.

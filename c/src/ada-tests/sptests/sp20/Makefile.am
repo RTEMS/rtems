@@ -12,4 +12,6 @@ sp20_SOURCES = sp20.adb config.h sptest.adb sptest.ads
 sp20$(EXEEXT): sp20.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp20.scn
+
 include $(top_srcdir)/../../../automake/local.am

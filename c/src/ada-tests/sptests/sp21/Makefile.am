@@ -15,4 +15,6 @@ sp21_SOURCES = sp21.adb config.h sptest.adb sptest.ads
 sp21$(EXEEXT): sp21.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp21.scn
+
 include $(top_srcdir)/../../../automake/local.am

@@ -12,4 +12,6 @@ sp06_SOURCES = sp06.adb config.h sptest.adb sptest.ads
 sp06$(EXEEXT): sp06.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp06.scn
+
 include $(top_srcdir)/../../../automake/local.am

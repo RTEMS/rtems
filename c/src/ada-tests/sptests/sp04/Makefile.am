@@ -15,4 +15,6 @@ sp04_SOURCES = sp04.adb config.h sptest.adb sptest.ads
 sp04$(EXEEXT): sp04.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp04.scn
+
 include $(top_srcdir)/../../../automake/local.am

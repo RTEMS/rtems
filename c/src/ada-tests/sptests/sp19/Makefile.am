@@ -17,4 +17,6 @@ sp19_SOURCES = sp19.adb config.h sptest.ads
 sp19$(EXEEXT): sp19.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp19.scn
+
 include $(top_srcdir)/../../../automake/local.am

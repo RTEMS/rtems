@@ -12,4 +12,6 @@ sp05_SOURCES = sp05.adb config.h sptest.adb sptest.ads
 sp05$(EXEEXT): sp05.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp05.scn
+
 include $(top_srcdir)/../../../automake/local.am

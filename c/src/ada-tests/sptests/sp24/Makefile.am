@@ -12,4 +12,6 @@ sp24_SOURCES = sp24.adb config.h sptest.adb sptest.ads
 sp24$(EXEEXT): sp24.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp24.scn
+
 include $(top_srcdir)/../../../automake/local.am

@@ -6,8 +6,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-SUBDIRS = support samples sptests
-# SUBDIRS += sptests tmtests mptests
+SUBDIRS = support samples sptests tmtests
+# SUBDIRS += mptests
 
 EXTRA_DIST = ada.am
 

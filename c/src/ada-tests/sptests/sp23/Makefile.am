@@ -12,4 +12,6 @@ sp23_SOURCES = sp23.adb config.h sptest.adb sptest.ads
 sp23$(EXEEXT): sp23.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp23.scn
+
 include $(top_srcdir)/../../../automake/local.am

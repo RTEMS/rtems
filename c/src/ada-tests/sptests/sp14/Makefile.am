@@ -12,4 +12,6 @@ sp14_SOURCES = sp14.adb config.h sptest.adb sptest.ads
 sp14$(EXEEXT): sp14.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp14.scn
+
 include $(top_srcdir)/../../../automake/local.am

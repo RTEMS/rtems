@@ -12,4 +12,6 @@ sp22_SOURCES = sp22.adb config.h sptest.adb sptest.ads
 sp22$(EXEEXT): sp22.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
+EXTRA_DIST = sp22.scn
+
 include $(top_srcdir)/../../../automake/local.am
