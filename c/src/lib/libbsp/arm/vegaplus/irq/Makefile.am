@@ -14,7 +14,7 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 S_FILES = irq_asm.S bsp_irq_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
-H_FILES = irq.h
+include_HEADERS = irq.h
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
 
@@ -28,6 +28,14 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 AM_CPPFLAGS += -I$(srcdir)
 
+$(PROJECT_INCLUDE):
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
+
 $(PGM): $(OBJS)
 	$(make-rel)
 
@@ -37,6 +45,6 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = bsp_irq_asm.S bsp_irq_init.c irq.c irq.h
+EXTRA_DIST = bsp_irq_asm.S bsp_irq_init.c irq.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

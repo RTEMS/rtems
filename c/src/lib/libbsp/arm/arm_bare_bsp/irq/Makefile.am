@@ -10,7 +10,7 @@ PGM = $(ARCH)/irq.rel
 
 C_FILES = irq.c irq_init.c bsp_irq_init.c
 S_FILES = irq_asm.S bsp_irq_asm.S
-H_FILES = irq.h
+include_HEADERS = irq.h
 
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -23,7 +23,7 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am

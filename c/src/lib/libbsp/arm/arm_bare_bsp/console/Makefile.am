@@ -11,7 +11,7 @@ PGM = $(ARCH)/console.rel
 C_FILES = uart.c console.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = uart.h
+noinst_HEADERS = uart.h
 
 console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
