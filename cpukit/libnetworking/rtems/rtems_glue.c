@@ -2,6 +2,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define RTEMS_FAST_MUTEX
 
 #ifdef RTEMS_FAST_MUTEX

@@ -4,6 +4,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 int
 issetugid (void)
 {
