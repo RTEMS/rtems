@@ -51,19 +51,14 @@ SYM (hiintstack):
 	PUBLIC (start_around)
 SYM (start_around):
         move.w  sr, SYM (initial_sr)
+        oriw    #0x3700,sr             | SUPV MODE,INTS OFF!!!
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movec   isp,a0
         move.l  a0, SYM (initial_isp)
-        movec   usp,a0
-        move.l  a0, SYM (initial_usp)
-        movec   msp,a0
-        move.l  a0, SYM (initial_msp)
-#else
-        move.l  a7, SYM (initial_msp)
 #endif
-        oriw    #0x0700,sr             | INTERRUPTS OFF!!!
-
-
+        move    usp,a0
+        move.l  a0, SYM (initial_usp)
+        move.l  a7, SYM (initial_msp)
 
         |
         | zero out uninitialized data area
