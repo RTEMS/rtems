@@ -4,13 +4,12 @@ dnl RTEMS_BSP_CONFIGURE
 dnl Common macro to be included by all bsp-configure.acs
 AC_DEFUN([RTEMS_BSP_CONFIGURE],
 [
-  AC_PREREQ([2.52])
+  AC_PREREQ([2.57])
   AM_MAINTAINER_MODE
   RTEMS_ENV_RTEMSBSP
 
   RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
-  RTEMS_CANONICAL_HOST
   AM_CONFIG_HEADER([include/bspopts.tmp:include/bspopts.h.in],[
 echo "/* BSP dependent options file */"         >$tmp/config.h
 echo "/* automatically generated -- DO NOT EDIT!! */" >>$tmp/config.h

@@ -1,5 +1,10 @@
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/bsp-configure.m4: AC_PREREQ(2.57).
+	Remove RTEMS_CANONICAL_HOST.
+
+2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/canonical-host.m4: Remove.
 	* aclocal/canonical-target-name.m4: Merge-in aclocal/canonical-host.m4.
 
