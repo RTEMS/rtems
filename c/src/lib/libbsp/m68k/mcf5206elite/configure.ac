@@ -13,17 +13,12 @@ RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
+RTEMS_PROG_CCAS
 
 RTEMS_CHECK_NETWORKING
 
 AC_CONFIG_SUBDIRS(tools)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-startup/Makefile
-console/Makefile
-i2c/Makefile
-tod/Makefile
-nvram/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
