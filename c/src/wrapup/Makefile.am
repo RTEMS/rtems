@@ -35,8 +35,7 @@ SRCS += ../libchip/network/$(ARCH)/libnetchip$(LIB_VARIANT).a
 endif
 endif
 
-SRCS += $(wildcard \
-    $(PROJECT_LIB)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
+SRCS += $(wildcard $(PROJECT_LIB)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
 if HAS_MP
 SRCS += ../libchip/shmdr/$(ARCH)/shmdr.rel
@@ -72,12 +71,17 @@ $(ARCH)/librtemsbsp$(LIB_VARIANT).a: $(SRCS) $(ARCH)/$(dirstamp)
 	$(AR) rc $@ $(ARCH)/*
 	$(RANLIB) $@
 
+TMPINSTALL_FILES =
+
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a: $(ARCH)/librtemsbsp$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a
 TMPINSTALL_FILES += $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
