@@ -70,8 +70,9 @@ extern rtems_filesystem_file_handlers_r  msdos_dir_handlers;
 /* a set of routines that handle the nodes which are files */
 extern rtems_filesystem_file_handlers_r  msdos_file_handlers;
 
-/* Volume semaphore timeout value */
-#define MSDOS_VOLUME_SEMAPHORE_TIMEOUT    100
+/* Volume semaphore timeout value. This value can be changed to a number
+ * of ticks to help debugging or if you need such a  */
+#define MSDOS_VOLUME_SEMAPHORE_TIMEOUT    RTEMS_NO_TIMEOUT
 
 /* Node types */
 #define MSDOS_DIRECTORY     RTEMS_FILESYSTEM_DIRECTORY
