@@ -1,5 +1,11 @@
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
+	PR 469/doc
+	* buildc.t: Clarifying text on patch file to account for various ways
+	they could be compressed or not.
+
+2003-08-22	Joel Sherrill <joel@OARcorp.com>
+
 	* tversions.texi: Correcting version information.
 
 2003-04-18	Joel Sherrill <joel@OARcorp.com>
