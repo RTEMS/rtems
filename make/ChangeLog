@@ -1,3 +1,7 @@
+2005-01-28	Eric Norum <norume@aps.anl.gov>
+
+	* Makefile.am, custom/uC5282.cfg: New BSP
+
 2005-01-20	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/arm_bare_bsp.cfg, custom/armulator.cfg, custom/csb336.cfg,
