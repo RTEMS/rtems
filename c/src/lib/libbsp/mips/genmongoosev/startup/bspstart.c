@@ -21,7 +21,6 @@
 #include <rtems/libcsupport.h>
 #include <libcpu/mongoose-v.h>
 
-
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -71,7 +70,6 @@ void bsp_pretasking_hook(void)
 #endif
 
 }
-
  
 /*
  *  bsp_start
@@ -95,10 +93,20 @@ void bsp_start( void )
 
   BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
 
-  MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER, 0 );
-  mips_set_sr( 0xff00 );  /* all interrupts unmasked but globally off */
+  /*mips_set_sr( 0xff00 );   all interrupts unmasked but globally off */
                           /* depend on the IRC to take care of things */
+
+  MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER, 0 );
+  MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER, 0 );
+
+  /*
+  mips_set_sr( (SR_CU0 | SR_CU1 | SR_IBIT1 | SR_IBIT2 | SR_IBIT3 | SR_IBIT4 | SR_IBIT6 | SR_IBIT8) );
+  */
+  mips_set_sr( (SR_CU0 | SR_CU1 | SR_IBIT1 | SR_IBIT2) );
+
   mips_install_isr_entries();
+
+  MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER, 0 );
 }
 
 /* XXX */

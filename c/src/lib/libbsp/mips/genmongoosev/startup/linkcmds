@@ -16,7 +16,13 @@ ClockRate = DEFINED(ClockRate) ? ClockRate : 12000000;
 
 SECTIONS
 { 
-    . = 0x80000000;
+/*
+Ken's response is correct.  Locate it at 0x80020000 or higher.  The PMON 
+data segment after the exception vectors and below 0x80020000,
+
+. = 0x80020000;
+*/
+    . = 0x80020000;
     .text : 
     { 
        _ftext = . ;
