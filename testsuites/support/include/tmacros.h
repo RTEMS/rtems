@@ -91,8 +91,10 @@ extern "C" {
   do { \
     check_dispatch_disable_level( _level ); \
     if ( (_stat) != (_desired) ) { \
-      printf( "\n%s FAILED -- expected (%s) got (%s)\n", \
-              (_msg), strerror(_desired), strerror(_stat) ); \
+      printf( "\n%s FAILED -- expected (%d - %s) got (%d - %s)\n", \
+              (_msg), _desired, strerror(_desired), _stat, strerror(_stat) ); \
+      printf( "\n FAILED -- errno (%d - %s)\n", \
+              errno, strerror(errno) ); \
       fflush(stdout); \
       exit( _stat ); \
     } \
