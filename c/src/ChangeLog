@@ -1,3 +1,10 @@
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libnetworking/rtems_webserver/Makefile.am: Add PREINSTALL_DIRS.
+	* libnetworking/rtems_telnetd/Makefile.am: Add PREINSTALL_DIRS.
+	* libnetworking/rtems_servers/Makefile.am: Add PREINSTALL_DIRS.
+	* libnetworking/pppd/Makefile.am: Add PREINSTALL_DIRS.
+
 2004-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-multiprocessing.m4: Remove AC_SUBST(HAS_MP).

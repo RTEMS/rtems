@@ -32,12 +32,13 @@ EXTRA_DIST = ccp.h chap.h chap_ms.h fsm.h ipcp.h ipxcp.c ipxcp.h lcp.c lcp.h \
 
 all-local: $(PREINSTALL_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/rtemspppd.h: rtemspppd.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -50,5 +51,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtemsdialer.h
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

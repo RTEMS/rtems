@@ -39,19 +39,20 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = webcomp.c webpage.c
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_NETWORKING
 if HAS_POSIX
 $(PROJECT_INCLUDE)/goahead/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/goahead
 	@: > $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/goahead/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems_webserver.h: rtems_webserver.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems_webserver.h
@@ -92,5 +93,6 @@ endif
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am
