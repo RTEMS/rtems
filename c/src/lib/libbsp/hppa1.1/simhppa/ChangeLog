@@ -1,3 +1,11 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* shmsupp/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* start/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* startup/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* tty/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-07-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Eliminate PGMS.
