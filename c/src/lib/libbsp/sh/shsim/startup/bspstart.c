@@ -4,7 +4,14 @@
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
  *
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 2001.
+ *  Ralf Corsepius (corsepiu@faw.uni-ulm.de).
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  COPYRIGHT (c) 2001.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -42,7 +49,6 @@ void bsp_libc_init( void *, unsigned32, int );
 
 /*
  *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
  *
  *  Description:
  *      BSP pretasking hook.  Called just before drivers are initialized.
@@ -56,20 +62,13 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    extern int HeapBase;
-    extern int HeapSize;
-    void         *heapStart = &HeapBase;
-    unsigned long heapSize = (unsigned long)&HeapSize;
-    unsigned long ramSpace;
-
-    bsp_libc_init(heapStart, (unsigned32) heapSize, 0);
-
+    bsp_libc_init(&HeapStart, sizeof(unsigned32) * (&HeapEnd - &HeapStart), 0);
+ 
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
-
 }
- 
+
 /*
  *  bsp_start
  *
@@ -78,40 +77,52 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  extern int _end;
-  extern int WorkspaceBase;
-  /* Configure Number of Register Caches */
+  /*
+     For real boards you need to setup the hardware 
+     and need to copy the vector table from rom to ram.
+
+     Depending on the board this can either be done from inside the rom 
+     startup code, rtems startup code or here.
+   */
+   
+  /*
+   *  Allocate the memory for the RTEMS Work Space.  This can come from
+   *  a variety of places: hard coded address, malloc'ed from outside
+   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
+   *  typically done by stock BSPs) by subtracting the required amount
+   *  of work space from the last physical address on the CPU board.
+   */
+
+  /*
+   *  Need to "allocate" the memory for the RTEMS Workspace and
+   *  tell the RTEMS configuration where it is.  This memory is
+   *  not malloc'ed.  It is just "pulled from the air".
+   */
+
+  BSP_Configuration.work_space_start = (void *) &WorkSpaceStart ;
+  BSP_Configuration.work_space_size  = 
+    (unsigned32) &WorkSpaceEnd - 
+    (unsigned32) &WorkSpaceStart ;
+  
+  /*
+   *  initialize the CPU table for this BSP
+   */
+
+#if ( CPU_ALLOCATE_INTERRUPT_STACK == FALSE )
+  _CPU_Interrupt_stack_low = &CPU_Interrupt_stack_low ;
+  _CPU_Interrupt_stack_high = &CPU_Interrupt_stack_high ;
+
+  Cpu_table.interrupt_stack_size = 
+    (unsigned32) (&CPU_Interrupt_stack_high) -
+    (unsigned32) (&CPU_Interrupt_stack_low) ;
+#endif
+
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-  Cpu_table.interrupt_stack_size = 4096;
-
-  if ( BSP_Configuration.work_space_size >(512*1024) )
-   _sys_exit( 1 );
-
-  BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
+  
+#if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
+#endif
+  Cpu_table.clicks_per_second = CPU_CLOCK_RATE_HZ ;
 }
-
-/* XXX */
-void clear_cache( void *address, size_t n )
-{
-}
-
-/* Structure filled in by get_mem_info.  Only the size field is
-   actually used (to clear bss), so the others aren't even filled in.  */
-
-struct s_mem
-{
-  unsigned int size;
-  unsigned int icsize;
-  unsigned int dcsize;
-};
-
-
-void
-get_mem_info (mem)
-     struct s_mem *mem;
-{
-  mem->size = 0x1000000;        /* XXX figure out something here */
-}
-

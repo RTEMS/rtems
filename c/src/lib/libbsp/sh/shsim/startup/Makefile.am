@@ -4,11 +4,11 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@:@srcdir@/../../../shared
+VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
 
-C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c main.c sbrk.c \
+C_FILES = bsplibc.c bsppost.c bspstart.c bspclean.c sbrk.c bootcard.c main.c \
     gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
@@ -35,6 +35,6 @@ all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = bspclean.c bspstart.c exit.c linkcmds setvec.c
+EXTRA_DIST = bspstart.c linkcmds
 
 include $(top_srcdir)/../../../../../../automake/local.am

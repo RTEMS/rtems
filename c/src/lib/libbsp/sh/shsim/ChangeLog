@@ -1,3 +1,11 @@
+2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]), adapt
+        bspopts.h handling to other sh-BSPs.
+        * include/.cvsignore: Add stamp-h*, bspopts.h*.
+        * include/Makefile.am: Use include_HEADERS instead of H_FILES.
+        * startup/bspstart.c: Reworked, based on the amos BSP.
+
 2001-05-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* scitab/.cvsignore: Add.
