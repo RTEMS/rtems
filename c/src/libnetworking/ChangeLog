@@ -1,3 +1,10 @@
+2002-03-27	Thomas.Doerfler@imd-systems.de
+
+	* PR144
+        * nfs/bootp_subr.c bootpc_init(): Performs a write to memory address
+	0 when called for the first time. This is done when trying to clear
+	the variable "dhcp_hostname".
+
 2002-03-27      Ilya Alexeev <ilya@continuum.ru>
 
 	* PR162

@@ -261,6 +261,31 @@ void bootpboot_p_iflist(void)
 }
 #endif
 
+/*
+ * - determine space needed to store src string
+ * - allocate or reallocate dst, so that string fits in
+ * - copy string from src to dest
+ */
+void *bootp_strdup_realloc(char *dst,const char *src)
+{
+  size_t len;
+  void *realloc(void * __r, size_t __size);
+
+  if (dst == NULL) {
+    /* first allocation, simply use strdup */
+    dst = strdup(src);
+  }
+  else {
+    /* already allocated, so use realloc/strcpy */
+    len = strlen(src) + 1;  
+    dst = realloc(dst,len);
+    if (dst != NULL) {
+      strcpy(dst,src);
+    }
+  }
+  return dst;
+}
+
 int
 bootpc_call(call,reply,procp)
      struct bootp_packet *call;
@@ -694,7 +719,7 @@ static char dhcp_gotserver = 0;
 static char dhcp_gotlogserver = 0;
 static struct sockaddr_in dhcp_netmask;
 static struct sockaddr_in dhcp_gw;
-static char *dhcp_hostname;
+static char *dhcp_hostname = NULL;
 
 static void
 processOptions (unsigned char *optbuf, int optbufSize)
@@ -801,7 +826,7 @@ processOptions (unsigned char *optbuf, int optbufSize)
       if (sethostname (p, len) < 0)
         panic("Can't set host name");
       printf("Hostname is %s\n", p);
-      dhcp_hostname = strdup(p);
+      dhcp_hostname = bootp_strdup_realloc(dhcp_hostname,p);
       break;
 
     case 7:
@@ -817,7 +842,8 @@ processOptions (unsigned char *optbuf, int optbufSize)
     case 15:
       /* Domain name */
       if (p[0]) {
-        rtems_bsdnet_domain_name = strdup (p);
+        rtems_bsdnet_domain_name = 
+	  bootp_strdup_realloc(rtems_bsdnet_domain_name,p);
         printf("Domain name is %s\n", rtems_bsdnet_domain_name);
       }
       break;
@@ -852,13 +878,15 @@ processOptions (unsigned char *optbuf, int optbufSize)
     case 66:
       /* DHCP server name option */
       if (p[0])
-        rtems_bsdnet_bootp_server_name = strdup (p);
+        rtems_bsdnet_bootp_server_name = 
+	  bootp_strdup_realloc(rtems_bsdnet_bootp_server_name,p);
       break;
 
     case 67:
       /* DHCP bootfile option */
       if (p[0])
-        rtems_bsdnet_bootp_boot_file_name = strdup (p);
+        rtems_bsdnet_bootp_boot_file_name = 
+	  bootp_strdup_realloc(rtems_bsdnet_bootp_boot_file_name,p);
       break;
 
     default:
@@ -904,8 +932,8 @@ bootpc_init(int update_files)
       update_files = 0;
     }
 
-  memset(dhcp_hostname, 0, sizeof(dhcp_hostname));
-  
+  dhcp_hostname = NULL;
+
   /*
    * Find a network interface.
    */
@@ -1010,14 +1038,16 @@ bootpc_init(int update_files)
   }
   else {
     if (reply.file[0])
-      rtems_bsdnet_bootp_boot_file_name = strdup (reply.file);
+      rtems_bsdnet_bootp_boot_file_name = 
+	bootp_strdup_realloc(rtems_bsdnet_bootp_boot_file_name,reply.file);
   }
   if (dhcpOptionOverload & 2) {
     processOptions (reply.sname, sizeof reply.sname);
   }
   else {
     if (reply.sname[0])
-      rtems_bsdnet_bootp_server_name = strdup (reply.sname);
+      rtems_bsdnet_bootp_server_name = 
+	bootp_strdup_realloc(rtems_bsdnet_bootp_server_name,reply.sname);
   }
   if (rtems_bsdnet_bootp_server_name)
     printf ("Server name is %s\n", rtems_bsdnet_bootp_server_name);
