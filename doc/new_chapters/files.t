@@ -35,7 +35,7 @@ The directives provided by the files and directories manager are:
 @item @code{rename} - Renames a file 
 @item @code{stat} - Gets information about a file.
 @item @code{fstat} - 
-@item @code{access} - 
+@item @code{access} - Check user's permissions for a file.
 @item @code{chmod} - Changes file mode
 @item @code{fchmod} - 
 @item @code{chown} - Changes the owner and/ or group of a file
@@ -941,13 +941,16 @@ The
 @subheading NOTES:
 
 @page
-@subsection access - 
+@subsection access - Check user's permissions for a file
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int access(
+#include <unistd.h>
+
+int access(const char *pathname,
+           int         mode
 );
 @end example
 @end ifset
@@ -958,14 +961,36 @@ int access(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EACCES
+The requested access would be denied, either to the file itself or
+one of the directories in @code{pathname}.
+@item EFAULT
+@code{Pathname} points outside your accessible address space.
+@item EINVAL
+@code{Mode} was incorrectly specified.
+@item ENAMETOOLONG
+@code{Pathname} is too long.
+@item ENOENT
+A directory component in @code{pathname} would have been accessible but
+does not exist or was a dangling symbolic link.
+@item ENOTDIR
+A component used as a directory in @code{pathname} is not, in fact, 
+a directory.
+@item ENOMEM
+Insufficient kernel memory was available.
 
 @end table
 
 @subheading DESCRIPTION:
 
-@subheading NOTES:
+@code{Access} checks whether the process would be allowed to read, write or 
+test for existence of the file (or other file system object) whose name is 
+@code{pathname}.  If @code{pathname} is a symbolic link permissions of the 
+file referred by this symbolic link are tested.
+
+@code{Mode} is a mask consisting of one or more of R_OK, W_OK, X_OK and F_OK.
+
+@subheading NOTES: None
 
 @page
 @subsection chmod - Changes file mode.
