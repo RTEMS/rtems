@@ -349,7 +349,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
   ( sizeof(Objects_Control *) + sizeof(rtems_name *) + sizeof(rtems_name) )
 
 #define CONFIGURE_MEMORY_FOR_TASKS(_tasks) \
-  ((_tasks) * \
+  (((_tasks) + 1 ) * \
    ((sizeof(Thread_Control) + CONTEXT_FP_SIZE + \
       STACK_MINIMUM_SIZE + sizeof( RTEMS_API_Control ) + \
       CONFIGURE_OBJECT_TABLE_STUFF)) \
@@ -401,7 +401,8 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 #define CONFIGURE_MEMORY_FOR_MP \
   ( CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
-    CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) \
+    CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) + \
+    CONFIGURE_MEMORY_FOR_TASKS(1)
   )
 
 #endif  /* CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE */
@@ -415,6 +416,12 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define CONFIGURE_MEMORY_OVERHEAD 0
 #endif
 
+#define CONFIGURE_MEMORY_FOR_SYSTEM_OVEREHAD \
+  ( CONFIGURE_MEMORY_FOR_TASKS(1) +    /* IDLE */ \
+    (256 * 12) +                       /* Ready chains */ \
+    256                                /* name/ptr table overhead */ \
+  )
+
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
 (( CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS) + \
    CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS) + \
@@ -427,6 +434,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
    CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS) + \
    CONFIGURE_MEMORY_FOR_DEVICES(CONFIGURE_MAXIMUM_DEVICES) + \
    CONFIGURE_MEMORY_FOR_MP + \
+   CONFIGURE_MEMORY_FOR_SYSTEM_OVEREHAD + \
    (((CONFIGURE_MEMORY_OVERHEAD)+1) * 1024) \
 ) & 0xfffffc00)
 #endif
