@@ -150,7 +150,7 @@ Yes, but not all are based on standards and the open source philosophy.
 
 RTEMS is distributed from @uref{@value{RTEMSHTTPURL},@value{RTEMSHTTPURL}}.
 This is a server dedicated to the RTEMS Project which was donated by and
-hosted by @uref{http://www.OARcorp.com,OAR Corporation} to provide
+hosted by @uref{http://www.oarcorp.com,OAR Corporation} to provide
 a focal point for all RTEMS activities.  Point your
 favorite browser at the following URL and following the link:
 
@@ -177,7 +177,7 @@ message to @code{@value{RTEMSUSERSSUBSCRIBE}}.  This
 mailing list is archived at:
 
 @example
-http://www.oarcorp.com/rtems/maillistArchives/rtems-users
+http://www.rtems.com/ml/rtems-users
 @end example
 
 The @code{@value{RTEMSSNAPSHOTS}} mailing list is for those
@@ -189,7 +189,7 @@ message to @code{@value{RTEMSSNAPSHOTSSUBSCRIBE}}.
 mailing list is archived at:
 
 @example
-http://www.oarcorp.com/rtems/maillistArchives/rtems-snapshots
+http://www.rtems.com/ml/rtems-snapshots
 @end example
 
 The archives for both mailing lists include discussions back 

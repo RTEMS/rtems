@@ -18,20 +18,20 @@ placed in your @code{archive} directory.
 @subheading @value{RTEMSVERSION}
 @example
     FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}
+    Directory:   @value{RTEMSFTPDIR}/@value{VERSION}
     File:        @value{RTEMSTAR}
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}, Download RTEMS components}
-    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}, Download RTEMS components}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}
 @end ifset
 @end example
 
-@subheading RTEMS Hello World
+@subheading RTEMS Examples including Hello World
 @example
     FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}
-    File:        hello_world_c.tgz
-    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/hello_world_c.tgz,,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/hello_world_c.tgz}
+    Directory:   @value{RTEMSFTPDIR}/@value{VERSION}
+    File:        examples-@value{VERSION}.tar.bz2
+    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}/examples-@value{VERSION}.tar.bz2,,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}/examples-@value{VERSION}.tar.bz2}
 @end example
 
 @c

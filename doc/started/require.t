@@ -21,9 +21,9 @@ assessing the amount of disk space required for your installation:
 +------------------------------------+--------------------------+
 |              Component             |   Disk Space Required    |
 +------------------------------------+--------------------------+
-|        archive directory           |        35 Mbytes         |
-|        tools src unarchived        |       150 Mbytes         |
-|  each individual build directory   |     up to 500 Mbytes     |
+|        archive directory           |        55 Mbytes         |
+|        tools src unarchived        |       350 Mbytes         |
+|  each individual build directory   |     up to 750 Mbytes     |
 |     each installation directory    |      20-200 Mbytes       |
 +------------------------------------+--------------------------+
 @end example
@@ -184,7 +184,8 @@ next section.
 When no packaging format requirements are present, the root directory for
 the storage of source archives and patches as well as for building the
 tools is up to the user.  The only concern is that there be enough
-disk space to complete the build.
+disk space to complete the build.  In this document, the following
+organization will be used.
 
 Make an @code{archive} directory to contain the downloaded
 source code and a @code{tools} directory to be used as a build
