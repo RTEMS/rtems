@@ -37,6 +37,7 @@ extern "C" {
  *     m68lc040      (no FP)
  *     m68ec040      (no FP)
  *     m68302        (no FP)
+ *     m68332        (no FP)
  *     mcpu32        (no FP)  (includes m68360)
  *
  *  Primary difference (for RTEMS) between m68040, m680lc040, and 
@@ -62,7 +63,7 @@ extern "C" {
  *
  *  NOTE:
  *    Eventually it would be nice to evaluate doing a lot of this section
- *    by having each model specigy which core it uses and then go from there.
+ *    by having each model specify which core it uses and then go from there.
  */
 
 #if defined(m68000)
@@ -74,6 +75,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
 #define M68K_HAS_EXTB_L          0
+#define M68K_HAS_FPSP_PACKAGE    0
 
 #elif defined(m68020)
  
@@ -84,6 +86,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_FPSP_PACKAGE    0
  
 #elif defined(m68020_nofp)
  
@@ -94,6 +97,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_FPSP_PACKAGE    0
  
 #elif defined(m68030)
  
@@ -104,6 +108,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_FPSP_PACKAGE    0
  
 #elif defined(m68040)
 
@@ -114,6 +119,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_FPSP_PACKAGE    1
  
 #elif defined(m68lc040)
 
@@ -124,6 +130,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_FPSP_PACKAGE    0
  
 #elif defined(m68ec040)
 
@@ -134,6 +141,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_FPSP_PACKAGE    0
 
 #elif defined(m68302)
  /* essentially a m68000 with onboard peripherals */
@@ -144,6 +152,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
 #define M68K_HAS_EXTB_L          0
+#define M68K_HAS_FPSP_PACKAGE    0
 
 #elif defined(m68332)
  
@@ -154,6 +163,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_FPSP_PACKAGE    0
 
 #elif defined(mcpu32)
  
@@ -164,6 +174,7 @@ extern "C" {
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_FPSP_PACKAGE    0
 
 #else
 

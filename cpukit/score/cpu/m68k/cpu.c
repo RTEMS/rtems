@@ -76,10 +76,27 @@ void _CPU_ISR_install_raw_handler(
 {
   proc_ptr *interrupt_table = NULL;
 
+#if (M68K_HAS_FPSP_PACKAGE == 1)
+  /*
+   *  If this vector being installed is one related to FP, then the
+   *  FPSP will install the handler itself and handle it completely
+   *  with no intervention from RTEMS.
+   */
+
+  if (*_FPSP_install_raw_handler &&
+      (*_FPSP_install_raw_handler)(vector, new_handler, *old_handler))
+        return;
+#endif
+
+
+  /*
+   *  On CPU models without a VBR, it is necessary for there to be some
+   *  header code for each ISR which saves a register, loads the vector
+   *  number, and jumps to _ISR_Handler. 
+   */
+
   m68k_get_vbr( interrupt_table );
-
   *old_handler = interrupt_table[ vector ];
-
 #if ( M68K_HAS_VBR == 1 )
   interrupt_table[ vector ] = new_handler;
 #else

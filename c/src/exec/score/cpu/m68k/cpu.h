@@ -474,7 +474,7 @@ void _CPU_Context_switch(
  *  This routine saves the floating point context passed to it.
  */
 
-void _CPU_Context_restore_fp(
+void _CPU_Context_save_fp(
   void **fp_context_ptr
 );
 
@@ -484,9 +484,47 @@ void _CPU_Context_restore_fp(
  *  This routine restores the floating point context passed to it.
  */
 
-void _CPU_Context_save_fp(
+void _CPU_Context_restore_fp(
   void **fp_context_ptr
 );
+
+#if (M68K_HAS_FPSP_PACKAGE == 1)
+/*
+ *  Hooks for the Floating Point Support Package (FPSP) provided by Motorola
+ *
+ *  NOTES:  
+ *
+ *  Motorola 68k family CPU's before the 68040 used a coprocessor
+ *  (68881 or 68882) to handle floating point.  The 68040 has internal
+ *  floating point support -- but *not* the complete support provided by
+ *  the 68881 or 68882.  The leftover functions are taken care of by the
+ *  M68040 Floating Point Support Package.  Quoting from the MC68040
+ *  Microprocessors User's Manual, Section 9, Floating-Point Unit (MC68040):
+ *
+ *    "When used with the M68040FPSP, the MC68040 FPU is fully
+ *    compliant with IEEE floating-point standards."
+ *
+ *  M68KFPSPInstallExceptionHandlers is in libcpu/m68k/MODEL/fpsp and
+ *  is invoked early in the application code to insure that proper FP
+ *  behavior is installed.  This is not left to the BSP to call, since
+ *  this would force all applications using that BSP to use FPSP which
+ *  is not necessarily desirable.
+ *
+ *  There is a similar package for the 68060 but RTEMS does not yet
+ *  support the 68060.
+ */
+
+void M68KFPSPInstallExceptionHandlers (void);
+
+SCORE_EXTERN int (*_FPSP_install_raw_handler)(
+  unsigned32 vector,
+  proc_ptr new_handler,
+  proc_ptr *old_handler
+);
+
+#endif
+
+
 #endif
 
 #ifdef __cplusplus
