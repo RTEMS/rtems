@@ -87,7 +87,7 @@ struct	sigaltstack {
 	int	ss_flags;		/* SS_DISABLE and/or SS_ONSTACK */
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 typedef	int		boolean_t;
 typedef	struct vm_page	*vm_page_t;
 #endif

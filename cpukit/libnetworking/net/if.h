@@ -268,7 +268,7 @@ typedef void if_init_f_t __P((void *));
 	} \
 }
 
-#ifdef KERNEL
+#ifdef _KERNEL
 #define	IF_ENQ_DROP(ifq, m)	if_enq_drop(ifq, m)
 
 #if defined(__GNUC__) && defined(MT_HEADER)
@@ -295,7 +295,7 @@ int	if_enq_drop __P((struct ifqueue *, struct mbuf *));
 #endif
 
 #endif
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #define	IFQ_MAXLEN	50
 #define	IFNET_SLOWHZ	1		/* granularity is 1 second */
@@ -422,7 +422,7 @@ struct	ifconf {
 
 #include <net/if_arp.h>
 
-#ifdef KERNEL
+#ifdef _KERNEL
 #define	IFAFREE(ifa) \
 	if ((ifa)->ifa_refcnt <= 0) \
 		ifafree(ifa); \
@@ -469,6 +469,6 @@ void	ifafree __P((struct ifaddr *));
 
 int	looutput __P((struct ifnet *,
 	   struct mbuf *, struct sockaddr *, struct rtentry *));
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* !_NET_IF_H_ */

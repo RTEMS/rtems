@@ -58,7 +58,7 @@ struct rawcb {
 #define	RAWSNDQ		8192
 #define	RAWRCVQ		8192
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern struct rawcb rawcb;		/* head of list */
 
 int	 raw_attach __P((struct socket *, int));

@@ -102,7 +102,7 @@ struct ctlname {
  */
 #define CTL_AUTO_START	0x100
 
-#ifdef KERNEL
+#ifdef _KERNEL
 #define SYSCTL_HANDLER_ARGS struct sysctl_oid *oidp, void *arg1, int arg2, \
 	struct sysctl_req *req
 
@@ -277,7 +277,7 @@ TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 	sysctl_add_oid(ctx, parent, nbr, name, (access),			    \
 	ptr, arg, handler, fmt, descr)
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 /*
  * Top-level identifiers
@@ -551,7 +551,7 @@ TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 	{ "timer_max", CTLTYPE_INT }, \
 }
 
-#ifdef KERNEL
+#ifdef _KERNEL
 
 /*
  * Declare some common oids.
@@ -602,7 +602,7 @@ int	sysctl_find_oid(int *name, u_int namelen, struct sysctl_oid **noid,
 			int *nindx, struct sysctl_req *req);
 void	sysctl_wire_old_buffer(struct sysctl_req *req, size_t len);
 
-#else	/* !KERNEL */
+#else	/* !_KERNEL */
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
@@ -610,6 +610,6 @@ int	sysctl(int *, u_int, void *, size_t *, void *, size_t);
 int	sysctlbyname(const char *, void *, size_t *, void *, size_t);
 int	sysctlnametomib(const char *, int *, size_t *);
 __END_DECLS
-#endif	/* KERNEL */
+#endif	/* _KERNEL */
 
 #endif	/* !_SYS_SYSCTL_H_ */

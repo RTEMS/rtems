@@ -89,7 +89,7 @@ struct	udpstat {
 	{ "recvspace", CTLTYPE_INT }, \
 }
 
-#ifdef KERNEL
+#ifdef _KERNEL
 SYSCTL_DECL(_net_inet_udp);
 
 extern struct	inpcbhead udb;

@@ -44,7 +44,7 @@ struct vmtotal;
 struct mount;
 struct vnode;
 
-#ifdef KERNEL
+#ifdef _KERNEL
 
 #ifdef TYPEDEF_FOR_UAP
 int getpagesize __P((struct proc * p, void *, int *));
@@ -98,6 +98,6 @@ void vm_object_print __P((/* db_expr_t */ int, boolean_t, /* db_expr_t */ int,
 			  char *));
 void vm_fault_quick __P((caddr_t v, int prot));
 
-#endif				/* KERNEL */
+#endif				/* _KERNEL */
 
 #endif				/* !_VM_EXTERN_H_ */

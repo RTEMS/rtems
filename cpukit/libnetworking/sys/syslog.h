@@ -151,7 +151,7 @@ CODE facilitynames[] = {
 };
 #endif
 
-#ifdef KERNEL
+#ifdef _KERNEL
 #define	LOG_PRINTF	-1	/* pseudo-priority to indicate use of printf */
 #endif
 
@@ -175,9 +175,9 @@ CODE facilitynames[] = {
 #define	LOG_PERROR	0x20	/* log to stderr as well */
 
 /*
-#ifdef KERNEL
+#ifdef _KERNEL
 
-#else not KERNEL */
+#else not _KERNEL */
 
 #include <sys/cdefs.h>
 #include <stdarg.h>
@@ -190,6 +190,6 @@ void	syslog __P((int, const char *, ...));
 void	vsyslog __P((int, const char *, va_list));
 __END_DECLS
 
-/* #endif !KERNEL */
+/* #endif !_KERNEL */
 
 #endif

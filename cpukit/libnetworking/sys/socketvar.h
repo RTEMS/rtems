@@ -200,7 +200,7 @@ struct socket {
 
 #define	sowwakeup(so)	sowakeup((so), &(so)->so_snd)
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern u_long	sb_max;
 
 /* to catch callers missing new second argument to sonewconn: */
@@ -276,6 +276,6 @@ int	sosetopt __P((struct socket *so, int level, int optname,
 	    struct mbuf *m0));
 int	soshutdown __P((struct socket *so, int how));
 void	sowakeup __P((struct socket *so, struct sockbuf *sb));
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* !_SYS_SOCKETVAR_H_ */

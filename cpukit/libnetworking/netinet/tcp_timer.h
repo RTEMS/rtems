@@ -126,7 +126,7 @@ static char *tcptimers[] =
 		(tv) = (tvmax); \
 }
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern int tcp_keepinit;		/* time to establish connection */
 extern int tcp_keepidle;		/* time before keepalive probes begin */
 extern int tcp_keepintvl;		/* time between keepalive probes */

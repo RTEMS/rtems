@@ -166,7 +166,7 @@ char *prurequests[] = {
 };
 #endif
 
-#ifdef	KERNEL			/* users shouldn't see this decl */
+#ifdef	_KERNEL			/* users shouldn't see this decl */
 struct stat;
 struct ifnet;
 
@@ -223,7 +223,7 @@ int	pru_sense_null __P((struct socket *so, struct stat *sb));
 extern	struct pr_usrreqs pru_oldstyle;
 #endif /* PRU_OLDSTYLE */
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 /*
  * The arguments to the ctlinput routine are
@@ -292,7 +292,7 @@ char	*prcorequests[] = {
 };
 #endif
 
-#ifdef KERNEL
+#ifdef _KERNEL
 struct protosw *pffindproto __P((int family, int protocol, int type));
 struct protosw *pffindtype __P((int family, int type));
 #endif

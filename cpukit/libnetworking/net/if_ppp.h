@@ -127,7 +127,7 @@ struct ifpppcstatsreq {
 #define ifr_mtu	ifr_ifru.ifru_metric
 #endif
 
-#if (defined(_KERNEL) || defined(KERNEL)) && !defined(NeXT)
+#if (defined(_KERNEL) || defined(_KERNEL)) && !defined(NeXT)
 void pppattach __P((void));
 void pppintr __P((void));
 #endif

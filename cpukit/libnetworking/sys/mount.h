@@ -37,7 +37,7 @@
 #ifndef _SYS_MOUNT_H_
 #define _SYS_MOUNT_H_
 
-#ifndef KERNEL
+#ifndef _KERNEL
 #include <sys/ucred.h>
 #endif
 #include <sys/queue.h>
@@ -233,7 +233,7 @@ struct vfsconf {
 /*
  * Operations supported on mounted file system.
  */
-#ifdef KERNEL
+#ifdef _KERNEL
 
 extern	int	doforce;	/* Flag to permit forcible unmounting. */
 extern struct vfsconf void_vfsconf;
@@ -312,7 +312,7 @@ struct vfsops {
 	DATA_SET(vfs_set,_fs_vfsconf)
 #endif /* VFS_LKM */
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 /*
  * Flags for various system call interfaces.
@@ -331,7 +331,7 @@ struct fhandle {
 };
 typedef struct fhandle	fhandle_t;
 
-#ifdef KERNEL
+#ifdef _KERNEL
 #include <net/radix.h>
 #include <sys/socket.h>		/* XXX for AF_MAX */
 
@@ -351,7 +351,7 @@ struct netexport {
 	struct	netcred ne_defexported;		      /* Default export */
 	struct	radix_node_head *ne_rtable[AF_MAX+1]; /* Individual exports */
 };
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 /*
  * Export arguments for local filesystem mount calls.
@@ -477,7 +477,7 @@ struct nfs_args {
 #define	NFSMNT_AUTHERR		0x80000000  /* Authentication error */
 #endif /* NFS */
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern	int (*mountroot) __P((void *));
 extern	struct vfsops	*mountrootvfsops;
 
@@ -503,7 +503,7 @@ void	vfs_unbusy __P((struct mount *));       /* mark a vfs not busy */
 extern	CIRCLEQ_HEAD(mntlist, mount) mountlist;	/* mounted filesystem list */
 extern	struct vfsops *vfssw[];			/* filesystem type table */
 
-#else /* KERNEL */
+#else /* _KERNEL */
 
 #include <sys/cdefs.h>
 
@@ -526,6 +526,6 @@ int	vfsisloadable __P((const char *));
 int	vfsload __P((const char *));
 __END_DECLS
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* !_SYS_MOUNT_H_ */

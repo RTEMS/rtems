@@ -150,7 +150,7 @@ struct	ipstat {
 	u_long	ips_toolong;		/* ip length > max ip packet size */
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 /* flags passed to ip_output as last parameter */
 #define	IP_FORWARDING		0x1		/* most of ip header exists */
 #define	IP_RAWOUTPUT		0x2		/* raw ip header exists */
@@ -207,6 +207,6 @@ extern u_short ip_divert_port;
 extern u_short ip_divert_ignore;
 #endif /* IPDIVERT */
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* _NETINET_IP_VAR_H_ */

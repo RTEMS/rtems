@@ -70,7 +70,7 @@
 #define	schednetisr(anisr)	rtems_bsdnet_schednetisr(anisr)
 
 #ifndef LOCORE
-#ifdef KERNEL
+#ifdef _KERNEL
 extern volatile unsigned int	netisr;	/* scheduling bits for network */
 
 typedef void netisr_t(void);

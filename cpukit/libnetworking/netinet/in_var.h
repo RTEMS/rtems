@@ -82,7 +82,7 @@ struct	in_aliasreq {
 	((ntohl((in).s_addr) & ~((struct in_ifaddr *)(ifa)->ia_subnetmask))
 
 
-#ifdef	KERNEL
+#ifdef	_KERNEL
 extern	struct	in_ifaddr *in_ifaddr;
 extern	struct	ifqueue	ipintrq;		/* ip packet input queue */
 extern	struct	in_addr zeroin_addr;
@@ -160,7 +160,7 @@ struct in_multi {
 	struct	router_info *inm_rti;	/* router info*/
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 
 #ifdef SYSCTL_DECL
 SYSCTL_DECL(_net_inet_ip);
@@ -236,6 +236,6 @@ int	in_control __P((struct socket *, u_long, caddr_t, struct ifnet *));
 void	in_rtqdrain __P((void));
 void	ip_input __P((struct mbuf *));
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* _NETINET_IN_VAR_H_ */

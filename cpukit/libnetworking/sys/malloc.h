@@ -258,7 +258,7 @@ struct kmembuckets {
 	long	kb_couldfree;	/* over high water mark and could free */
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 #define	MINALLOCSIZE	(1 << MINBUCKET)
 #define BUCKETINDX(size) \
 	((size) <= (MINALLOCSIZE * 128) \
@@ -350,6 +350,6 @@ void	*contigmalloc __P((unsigned long size, int type, int flags,
 			   unsigned long alignment, unsigned long boundary));
 void	free __P((void *addr, int type));
 void	*malloc __P((unsigned long size, int type, int flags));
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* !_SYS_MALLOC_H_ */

@@ -56,7 +56,7 @@
 #define	ETHERMTU	(ETHER_MAX_LEN-ETHER_HDR_LEN-ETHER_CRC_LEN)
 #define	ETHERMIN	(ETHER_MIN_LEN-ETHER_HDR_LEN-ETHER_CRC_LEN)
 
-#ifdef KERNEL
+#ifdef _KERNEL
 /*
  * Macro to map an IP multicast address to an Ethernet multicast address.
  * The high-order 25 bits of the Ethernet address are statically assigned,
@@ -127,7 +127,7 @@ struct sockaddr_inarp {
 #define	RTF_USETRAILERS	RTF_PROTO1	/* use trailers */
 #define RTF_ANNOUNCE	RTF_PROTO2	/* announce new arp entry */
 
-#ifdef	KERNEL
+#ifdef	_KERNEL
 extern u_char	etherbroadcastaddr[ETHER_ADDR_LEN];
 extern u_char	ether_ipmulticast_min[ETHER_ADDR_LEN];
 extern u_char	ether_ipmulticast_max[ETHER_ADDR_LEN];

@@ -246,7 +246,7 @@ struct tbf
     struct mbuf *tbf_t;		/* tail-insertion pointer	*/
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 
 extern int	(*ip_mrouter_set) __P((int, struct socket *, struct mbuf *));
 extern int	(*ip_mrouter_get) __P((int, struct socket *, struct mbuf **));
@@ -257,6 +257,6 @@ extern int	(*mrt_ioctl) __P((int, caddr_t));
 extern int	(*mrt_ioctl) __P((int, caddr_t, struct proc *));
 #endif
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* _NETINET_IP_MROUTE_H_ */

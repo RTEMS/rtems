@@ -56,7 +56,7 @@ enum uio_seg {
 	UIO_NOCOPY		/* don't copy, already in object */
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 struct uio {
 	struct	iovec *uio_iov;
 	int	uio_iovcnt;
@@ -72,13 +72,13 @@ struct uio {
  */
 #define UIO_MAXIOV	1024		/* max 1K of iov's */
 #define UIO_SMALLIOV	8		/* 8 on stack, else malloc */
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
-#ifdef KERNEL
+#ifdef _KERNEL
 
 int	uiomove __P((caddr_t, int, struct uio *));
 
-#else /* !KERNEL */
+#else /* !_KERNEL */
 
 #include <sys/cdefs.h>
 
@@ -87,6 +87,6 @@ ssize_t	readv __P((int, const struct iovec *, int));
 ssize_t	writev __P((int, const struct iovec *, int));
 __END_DECLS
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* !_SYS_UIO_H_ */

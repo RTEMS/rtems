@@ -50,7 +50,7 @@ struct ucred {
 #define NOCRED ((struct ucred *)0)	/* no credential available */
 #define FSCRED ((struct ucred *)-1)	/* filesystem credential */
 
-#ifdef KERNEL
+#ifdef _KERNEL
 #define	crhold(cr)	(cr)->cr_ref++
 
 struct ucred	*crcopy __P((struct ucred *cr));
@@ -59,6 +59,6 @@ void		crfree __P((struct ucred *cr));
 struct ucred	*crget __P((void));
 int		suser __P((struct ucred *cred, u_short *acflag));
 int		groupmember __P((gid_t gid, struct ucred *cred));
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* !_SYS_UCRED_H_ */

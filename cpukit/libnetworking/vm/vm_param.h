@@ -98,7 +98,7 @@
 
 #endif
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern vm_size_t page_mask;
 extern int page_shift;
 
@@ -153,13 +153,13 @@ extern int page_shift;
  *	Convert addresses to pages and vice versa.
  *	No rounding is used.
  */
-#ifdef KERNEL
+#ifdef _KERNEL
 #define num_pages(x) \
 	((vm_offset_t)((((vm_offset_t)(x)) + PAGE_MASK) >> PAGE_SHIFT))
 
 extern vm_size_t mem_size;	/* size of physical memory (bytes) */
 extern vm_offset_t first_addr;	/* first physical page */
 extern vm_offset_t last_addr;	/* last physical page */
-#endif				/* KERNEL */
+#endif				/* _KERNEL */
 #endif				/* ASSEMBLER */
 #endif				/* _VM_PARAM_ */

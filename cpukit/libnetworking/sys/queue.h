@@ -557,7 +557,7 @@ struct {								\
 		    (elm)->field.cqe_next;				\
 }
 
-#ifdef KERNEL
+#ifdef _KERNEL
 
 /*
  * XXX insque() and remque() are an old way of handling certain queues.

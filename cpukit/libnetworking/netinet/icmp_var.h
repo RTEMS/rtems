@@ -71,7 +71,7 @@ struct	icmpstat {
 	{ "stats", CTLTYPE_STRUCT }, \
 }
 
-#ifdef KERNEL
+#ifdef _KERNEL
 SYSCTL_DECL(_net_inet_icmp);
 extern struct	icmpstat icmpstat;
 #endif

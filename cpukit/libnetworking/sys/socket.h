@@ -342,7 +342,7 @@ struct omsghdr {
 	int	msg_accrightslen;
 };
 
-#ifndef	KERNEL
+#ifndef	_KERNEL
 
 __BEGIN_DECLS
 int	accept __P((int, struct sockaddr *, int *));
@@ -365,7 +365,7 @@ int	socket __P((int, int, int));
 int	socketpair __P((int, int, int, int *));
 __END_DECLS
 
-#else /* KERNEL */
+#else /* _KERNEL */
 void	pfctlinput __P((int, struct sockaddr *));
-#endif /* !KERNEL */
+#endif /* !_KERNEL */
 #endif /* !_SYS_SOCKET_H_ */

@@ -376,7 +376,7 @@ struct mbstat {
 	u_short	m_mtypes[256];	/* type specific mbuf allocations */
 };
 
-#ifdef	KERNEL
+#ifdef	_KERNEL
 extern struct mbuf *mbutl;		/* virtual address of mclusters */
 extern char	*mclrefcnt;		/* cluster reference counts */
 extern struct mbstat mbstat;

@@ -94,7 +94,7 @@ struct bdevsw {
 	int		d_maj;		/* the major number we were assigned */
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern struct bdevsw *bdevsw[];
 #endif
 
@@ -118,7 +118,7 @@ struct cdevsw {
 	int		d_maj;
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern struct cdevsw *cdevsw[];
 #endif
 
@@ -136,7 +136,7 @@ struct linesw {
 	l_modem_t	*l_modem;
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern struct linesw linesw[];
 extern int nlinesw;
 
@@ -158,7 +158,7 @@ struct swdevt {
 #define	SW_SEQUENTIAL	0x02
 #define	sw_freed	sw_flags	/* XXX compat */
 
-#ifdef KERNEL
+#ifdef _KERNEL
 d_open_t	noopen;
 d_close_t	noclose;
 d_read_t	noread;
@@ -221,7 +221,7 @@ int	isdisk __P((dev_t dev, int type));
 int	iskmemdev __P((dev_t dev));
 int	iszerodev __P((dev_t dev));
 void	setconf __P((void));
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #include <machine/conf.h>
 

@@ -49,7 +49,7 @@ struct callout {
 	int	c_time;				/* ticks to the event */
 };
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern struct	callout *callfree, *callout, calltodo;
 extern int	ncallout;
 #endif

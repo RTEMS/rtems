@@ -147,7 +147,7 @@ static int sigprop[NSIG + 1] = {
 
 #define	sigcantmask	(sigmask(SIGKILL) | sigmask(SIGSTOP))
 
-#ifdef KERNEL
+#ifdef _KERNEL
 /*
  * Machine-independent functions:
  */
@@ -167,5 +167,5 @@ void	trapsignal __P((struct proc *p, int sig, u_long code));
  * Machine-dependent functions:
  */
 void	sendsig __P((sig_t action, int sig, int returnmask, u_long code));
-#endif	/* KERNEL */
+#endif	/* _KERNEL */
 #endif	/* !_SYS_SIGNALVAR_H_ */

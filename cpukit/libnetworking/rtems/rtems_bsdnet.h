@@ -15,14 +15,14 @@
 
 #if defined(__INSIDE_RTEMS_BSD_TCPIP_STACK__)
 #undef _COMPILING_BSD_KERNEL_
-#undef KERNEL
+#undef _KERNEL
 #undef INET
 #undef NFS
 #undef DIAGNOSTIC
 #undef BOOTP_COMPAT
 
 #define _COMPILING_BSD_KERNEL_
-#define KERNEL
+#define _KERNEL
 #define INET
 #define NFS
 #define DIAGNOSTIC

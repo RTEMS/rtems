@@ -171,13 +171,13 @@ struct ip_fw_chain {
 /*
  * Main firewall chains definitions and global var's definitions.
  */
-#ifdef KERNEL
+#ifdef _KERNEL
 
 /*
  * Function definitions.
  */
 void ip_fw_init(void);
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* _IP_FW_H */

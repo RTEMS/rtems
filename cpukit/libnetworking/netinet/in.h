@@ -252,7 +252,7 @@ struct in_addr {
 
 #define	INADDR_ANY		(u_long)0x00000000
 #define	INADDR_BROADCAST	(u_long)0xffffffff	/* must be masked */
-#ifndef KERNEL
+#ifndef _KERNEL
 #define	INADDR_NONE		0xffffffff		/* -1 return */
 #endif
 
@@ -414,7 +414,7 @@ struct ip_mreq {
 }
 
 
-#ifdef KERNEL
+#ifdef _KERNEL
 struct ifnet; struct mbuf;	/* forward declarations for Standard C */
 
 int	 in_broadcast __P((struct in_addr, struct ifnet *));
@@ -438,6 +438,6 @@ extern	ip_nat_ctl_t *ip_nat_ctl_ptr;
 #define	IP_NAT_IN	0x00000001
 #define	IP_NAT_OUT	0x00000002
 
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif

@@ -186,7 +186,7 @@ extern TAILQ_HEAD(bqueues, buf) bufqueues[BUFFER_QUEUES];
 #define B_CLRBUF	0x01	/* Request allocated buffer be cleared. */
 #define B_SYNC		0x02	/* Do all allocations synchronously. */
 
-#ifdef KERNEL
+#ifdef _KERNEL
 extern int	nbuf;			/* The number of buffer headers */
 extern struct	buf *buf;		/* The buffer headers. */
 extern char	*buffers;		/* The buffer contents. */
@@ -243,6 +243,6 @@ void	vm_bounce_alloc __P((struct buf *));
 void	vm_bounce_free __P((struct buf *));
 vm_offset_t	vm_bounce_kva_alloc __P((int));
 void	vm_bounce_kva_alloc_free __P((vm_offset_t, int));
-#endif /* KERNEL */
+#endif /* _KERNEL */
 
 #endif /* !_SYS_BUF_H_ */
