@@ -23,7 +23,6 @@ include $(top_srcdir)/../../../../automake/lib.am
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
 $(LIB): $(OBJS)
 	$(make-library)
 
