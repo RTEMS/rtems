@@ -110,3 +110,5 @@ test -d build || mkdir build
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-?? 2>/dev/null
 %endif
 
+  # We don't ship info/dir
+  rm -f $RPM_BUILD_ROOT%{_prefix}/info/dir

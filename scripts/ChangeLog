@@ -1,3 +1,8 @@
+2004-02-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gdb/base-gdb.add: Add annotate.info.
+	* gdb/gdb.add: Remove info/dir.
+
 2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, gdb/Makefile.am: Cosmetics.

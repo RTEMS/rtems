@@ -28,6 +28,10 @@ This is the base for gdb regardless of target CPU.
 %doc %{_prefix}/info/readline.info*
 %endif
 
+%if "{gdb_version}" >= "6.0"
+%doc %{_prefix}/info/annotate.info*
+%endif
+
 %dir %{_prefix}/man
 %dir %{_prefix}/man/man1
 
