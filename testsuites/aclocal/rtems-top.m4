@@ -21,20 +21,25 @@ AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 ENDIF=endif
 AC_SUBST(ENDIF)
 
-RTEMS_TOPdir="$1";
-AC_SUBST(RTEMS_TOPdir)
+AC_SUBST([RTEMS_TOPdir],["$1"])
 
-## with_target_subdirs is handled implicitly by autoconf
-dots=`echo $with_target_subdir|\
-sed -e 's,^\.$,,' -e 's%^\./%%' -e 's%[[^/]]$%&/%' -e 's%[[^/]]*/%../%g'`
-PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
-AC_SUBST([PROJECT_TOPdir])
+rtems_updir=m4_if([$2],[],[],[$2/])
 
-RTEMS_ROOT=$with_rtems_root`echo "$1/" | sed 's,^../,,'`'$(top_builddir)'
-AC_SUBST(RTEMS_ROOT)
+AC_ARG_ENABLE([rtems-root],[
+AS_HELP_STRING(--enable-rtems-root,directory containing make/custom)],
+[case ${enable_rtems_root} in
+  [[\\/$]]* | ?:[[\\/]]* ) # absolute directory
+   RTEMS_ROOT=${enable_rtems_root}
+   ;;
+  *) # relative directory
+   RTEMS_ROOT=${enable_rtems_root}${rtems_updir}'$(top_builddir)'
+   ;;
+esac],
+[RTEMS_ROOT=${rtems_updir}'$(top_builddir)'])
+AC_SUBST([RTEMS_ROOT])
 
-PROJECT_ROOT=$with_project_root`echo "$1/" | sed 's,^../,,'`'$(top_builddir)'
-AC_SUBST(PROJECT_ROOT)
+AC_SUBST([PROJECT_TOPdir],[${with_project_top}${rtems_updir}'$(top_builddir)'])
+AC_SUBST([PROJECT_ROOT],[${with_project_root}${rtems_updir}'$(top_builddir)'])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
 ])dnl
