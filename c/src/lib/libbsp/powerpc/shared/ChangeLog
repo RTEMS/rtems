@@ -1,3 +1,19 @@
+2003-03-25  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
+	* irq/irq.c, vme/VME.h, vme/vmeconfig.c: Fixes library dependency
+	on the vmeUniverse driver. It is now possible to use the ppc/shared/irq
+	code on non-VME BSPs without triggering linkage of the vmeUniverse
+	driver.
+
+2003-03-25  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
+	* irq/irq.c, vme/VME.h, vme/vmeconfig.c: Fixes library dependency
+	on the vmeUniverse driver. It is now possible to use the ppc/shared/irq
+	code on non-VME BSPs without triggering linkage of the vmeUniverse
+	driver.
+
 2003-03-18  Till Straumann <strauman@slac.stanford.edu>
 
 	PR 356/bsps

@@ -315,6 +315,8 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
     return 0;
 }    
 
+int _BSP_vme_bridge_irq = -1;
+ 
 static unsigned spuriousIntr = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
@@ -381,7 +383,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
      * it can re-enable the openpic while handling
      * VME interrupts (-> VME priorities in software)
 	 */
-	if (BSP_PCI_VME_BRIDGE_IRQ!=irq)
+	if (_BSP_vme_bridge_irq != irq)
 #endif
     		openpic_eoi(0);
   }
