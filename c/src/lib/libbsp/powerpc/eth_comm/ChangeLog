@@ -1,3 +1,8 @@
+2000-10-20	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c: Add mbx8xx_console_get_configuration() which
+	returns either nvram configuration or a static equivalent.
+
 2000-09-29	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
 
 	* startup/linkcmds: Added lines so DWARF debug information
