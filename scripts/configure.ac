@@ -9,16 +9,6 @@ AM_INIT_AUTOMAKE([no-define foreign 1.6])
 
 AC_CANONICAL_HOST
 
-# Check for .exe suffix.
-# With autoconf > 2.13 AC_EXEEXT is not what we want to use.
-AC_MSG_CHECKING([for executable suffix])
-case "$host" in
-i?86-*cygwin*)
-  EXEEXT=.exe ;;
-esac
-AC_SUBST(EXEEXT)
-AC_MSG_RESULT([$EXEEXT])
-
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
 
@@ -90,6 +80,7 @@ cpukit/Makefile
 rtemsdoc/Makefile
 ])
 
+AC_CONFIG_FILES([common/common.add common/clean.add])
 AC_CONFIG_FILES([buildalltar],[chmod +x buildalltar])
 AC_CONFIG_FILES([buildall],[chmod +x buildall])
 AC_CONFIG_FILES([gdb/mkspec],[chmod +x gdb/mkspec])
