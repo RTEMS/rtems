@@ -99,7 +99,7 @@ typedef struct   /* Functions and constant returning Hex-record vital stats. */
 
 /*--------------------------- function prototypes ----------------------------*/
 
-Rec_vitals  * identify_first_data_record( char * );
+Rec_vitals  * identify_first_data_record( char *, int );
 Ulong         get_ndigit_hex( char *, int );
 
 
@@ -420,12 +420,15 @@ int main(
     char       inbuff[ MAX_LINE_SIZE ], outbuff[ MAX_LINE_SIZE ];
     char       *in_dptr, *out_dptr;
     int        d_total, d_count, d_excess, n;
+    int        length;
     Ulong      in_rec_addr, out_rec_addr = 0;
     Rec_vitals *rptr;
 
 
     /* Sift through file until first hex record is identified.    */
-    if ( ( rptr = identify_first_data_record( inbuff ) ) == NULL )
+
+    rptr = identify_first_data_record( inbuff, MAX_LINE_SIZE );
+    if ( rptr == NULL )
     {
         fputs( "No hex records found.\n", stderr );
         exit( EXIT_FAILURE );
@@ -434,8 +437,7 @@ int main(
 
     /* Attempt data-record splicing until end-of-file is reached. */
     d_total = 0;
-    do
-    {
+    for (;;) {
         if ( rptr->is_data_record( inbuff ) == YES )
         { /* Input record is a data record. */
             d_count     = rptr->get_data_count( inbuff );
@@ -481,7 +483,18 @@ int main(
             }
             puts( inbuff );
         }
-    } while ( gets( inbuff ) != NULL );
+
+        inbuff[ MAX_LINE_SIZE - 1 ] = '\0';
+        if ( !fgets( inbuff, MAX_LINE_SIZE, stdin ) )
+           break;
+        if ( inbuff[ MAX_LINE_SIZE - 1 ] ) {
+           fprintf( stderr, "Input line too long" );
+           exit( 1 );
+        }
+        length = strlen(inbuff);
+        inbuff[length - 1] = '\0';
+        
+    }
 
 
     return ( EXIT_SUCCESS );
@@ -503,12 +516,25 @@ int main(
 *
 *******************************************************************************/
 
-Rec_vitals * identify_first_data_record( char * buff_ptr )
+Rec_vitals * identify_first_data_record( char * buff_ptr, int max_length )
 {
     Rec_vitals  ** ptr;
+    int            length;
 
-    while ( gets( buff_ptr ) != NULL )
-    {
+
+
+    for ( ;; ) {
+
+        buff_ptr[ max_length - 1 ] = '\0';
+        if ( !fgets( buff_ptr, max_length, stdin ) )
+           break;
+        if ( buff_ptr[ max_length - 1 ] ) {
+           fprintf( stderr, "Input line too long" );
+           exit( 1 );
+        }
+        length = strlen(buff_ptr);
+        buff_ptr[length - 1] = '\0';
+
         for ( ptr = formats ; *ptr != ( Rec_vitals * ) NULL ; ptr++ )
             if ( ( *ptr )->is_data_record( buff_ptr ) == YES )
                 return( *ptr );        /* Successful return.        */
