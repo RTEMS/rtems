@@ -13,6 +13,7 @@ all: env info html ps
 env: tools dirs headers
 
 dirs:
+	$(make-dirs)
 
 headers:
 	sed -e 's/RTEMS_VERSION/$(RTEMS_VERSION)/' \

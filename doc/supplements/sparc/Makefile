@@ -25,9 +25,6 @@ FILES= $(PROJECT).texi \
   bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
   intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi wksheets.texi 
 
-dirs:
-	$(make-dirs)
-
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
 info: dirs c_sparc
@@ -73,7 +70,8 @@ wksheets.texi: wksheets.t SIS_TIMES
 	${REPLACE} -p SIS_TIMES wksheets.t
 	mv wksheets.t.fixed wksheets.texi
 
-html: dirs dirs $(FILES)
+html: dirs $(FILES)
+	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
  	    $(PROJECT).texi
 
