@@ -310,30 +310,30 @@ extern "C" {
 #ifndef ASM
 
 typedef struct {
-    unsigned32 gpr1;	/* Stack pointer for all */
-    unsigned32 gpr2;	/* TOC in PowerOpen, reserved SVR4, section ptr EABI + */
-    unsigned32 gpr13;	/* First non volatile PowerOpen, section ptr SVR4/EABI */
-    unsigned32 gpr14;	/* Non volatile for all */
-    unsigned32 gpr15;	/* Non volatile for all */
-    unsigned32 gpr16;	/* Non volatile for all */
-    unsigned32 gpr17;	/* Non volatile for all */
-    unsigned32 gpr18;	/* Non volatile for all */
-    unsigned32 gpr19;	/* Non volatile for all */
-    unsigned32 gpr20;	/* Non volatile for all */
-    unsigned32 gpr21;	/* Non volatile for all */
-    unsigned32 gpr22;	/* Non volatile for all */
-    unsigned32 gpr23;	/* Non volatile for all */
-    unsigned32 gpr24;	/* Non volatile for all */
-    unsigned32 gpr25;	/* Non volatile for all */
-    unsigned32 gpr26;	/* Non volatile for all */
-    unsigned32 gpr27;	/* Non volatile for all */
-    unsigned32 gpr28;	/* Non volatile for all */
-    unsigned32 gpr29;	/* Non volatile for all */
-    unsigned32 gpr30;	/* Non volatile for all */
-    unsigned32 gpr31;	/* Non volatile for all */
-    unsigned32 cr;	/* PART of the CR is non volatile for all */
-    unsigned32 pc;	/* Program counter/Link register */
-    unsigned32 msr;	/* Initial interrupt level */
+    uint32_t   gpr1;	/* Stack pointer for all */
+    uint32_t   gpr2;	/* TOC in PowerOpen, reserved SVR4, section ptr EABI + */
+    uint32_t   gpr13;	/* First non volatile PowerOpen, section ptr SVR4/EABI */
+    uint32_t   gpr14;	/* Non volatile for all */
+    uint32_t   gpr15;	/* Non volatile for all */
+    uint32_t   gpr16;	/* Non volatile for all */
+    uint32_t   gpr17;	/* Non volatile for all */
+    uint32_t   gpr18;	/* Non volatile for all */
+    uint32_t   gpr19;	/* Non volatile for all */
+    uint32_t   gpr20;	/* Non volatile for all */
+    uint32_t   gpr21;	/* Non volatile for all */
+    uint32_t   gpr22;	/* Non volatile for all */
+    uint32_t   gpr23;	/* Non volatile for all */
+    uint32_t   gpr24;	/* Non volatile for all */
+    uint32_t   gpr25;	/* Non volatile for all */
+    uint32_t   gpr26;	/* Non volatile for all */
+    uint32_t   gpr27;	/* Non volatile for all */
+    uint32_t   gpr28;	/* Non volatile for all */
+    uint32_t   gpr29;	/* Non volatile for all */
+    uint32_t   gpr30;	/* Non volatile for all */
+    uint32_t   gpr31;	/* Non volatile for all */
+    uint32_t   cr;	/* PART of the CR is non volatile for all */
+    uint32_t   pc;	/* Program counter/Link register */
+    uint32_t   msr;	/* Initial interrupt level */
 } Context_Control;
 
 typedef struct {
@@ -353,33 +353,33 @@ typedef struct {
 } Context_Control_fp;
 
 typedef struct CPU_Interrupt_frame {
-    unsigned32 stacklink;	/* Ensure this is a real frame (also reg1 save) */
-    unsigned32 calleeLr;	/* link register used by callees: SVR4/EABI */
+    uint32_t   stacklink;	/* Ensure this is a real frame (also reg1 save) */
+    uint32_t   calleeLr;	/* link register used by callees: SVR4/EABI */
   /* This is what is left out of the primary contexts */
-    unsigned32 gpr0;
-    unsigned32 gpr2;		/* play safe */
-    unsigned32 gpr3;
-    unsigned32 gpr4;
-    unsigned32 gpr5;
-    unsigned32 gpr6;
-    unsigned32 gpr7;
-    unsigned32 gpr8;
-    unsigned32 gpr9;
-    unsigned32 gpr10;
-    unsigned32 gpr11;
-    unsigned32 gpr12;
-    unsigned32 gpr13;   /* Play safe */
-    unsigned32 gpr28;   /* For internal use by the IRQ handler */
-    unsigned32 gpr29;   /* For internal use by the IRQ handler */
-    unsigned32 gpr30;   /* For internal use by the IRQ handler */
-    unsigned32 gpr31;   /* For internal use by the IRQ handler */
-    unsigned32 cr;	/* Bits of this are volatile, so no-one may save */
-    unsigned32 ctr;
-    unsigned32 xer;
-    unsigned32 lr;
-    unsigned32 pc;
-    unsigned32 msr;
-    unsigned32 pad[3];
+    uint32_t   gpr0;
+    uint32_t   gpr2;		/* play safe */
+    uint32_t   gpr3;
+    uint32_t   gpr4;
+    uint32_t   gpr5;
+    uint32_t   gpr6;
+    uint32_t   gpr7;
+    uint32_t   gpr8;
+    uint32_t   gpr9;
+    uint32_t   gpr10;
+    uint32_t   gpr11;
+    uint32_t   gpr12;
+    uint32_t   gpr13;   /* Play safe */
+    uint32_t   gpr28;   /* For internal use by the IRQ handler */
+    uint32_t   gpr29;   /* For internal use by the IRQ handler */
+    uint32_t   gpr30;   /* For internal use by the IRQ handler */
+    uint32_t   gpr31;   /* For internal use by the IRQ handler */
+    uint32_t   cr;	/* Bits of this are volatile, so no-one may save */
+    uint32_t   ctr;
+    uint32_t   xer;
+    uint32_t   lr;
+    uint32_t   pc;
+    uint32_t   msr;
+    uint32_t   pad[3];
 } CPU_Interrupt_frame;
   
 /*
@@ -393,29 +393,29 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-  unsigned32   clicks_per_usec;	       /* Timer clicks per microsecond */
+  uint32_t     clicks_per_usec;	       /* Timer clicks per microsecond */
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
 
 #if (defined(ppc403) || defined(mpc860) || defined(mpc821) || defined(mpc8260))
-  unsigned32   serial_per_sec;	       /* Serial clocks per second */
+  uint32_t     serial_per_sec;	       /* Serial clocks per second */
   boolean      serial_external_clock;
   boolean      serial_xon_xoff;
   boolean      serial_cts_rts;
-  unsigned32   serial_rate;
-  unsigned32   timer_average_overhead; /* Average overhead of timer in ticks */
-  unsigned32   timer_least_valid;      /* Least valid number from timer      */
+  uint32_t     serial_rate;
+  uint32_t     timer_average_overhead; /* Average overhead of timer in ticks */
+  uint32_t     timer_least_valid;      /* Least valid number from timer      */
   boolean      timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 #endif
 
 #if (defined(mpc860) || defined(mpc821) || defined(mpc8260))
-  unsigned32   clock_speed;            /* Speed of CPU in Hz */
+  uint32_t     clock_speed;            /* Speed of CPU in Hz */
 #endif
 }   rtems_cpu_table;
 
@@ -488,7 +488,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 #ifndef ASM
   
 SCORE_EXTERN struct {
-  unsigned32 *Disable_level;
+  uint32_t   *Disable_level;
   void *Stack;
   volatile boolean *Switch_necessary;
   boolean *Signal;
@@ -611,7 +611,7 @@ SCORE_EXTERN struct {
 
 #ifndef ASM
   
-static inline unsigned32 _CPU_ISR_Get_level( void )
+static inline uint32_t   _CPU_ISR_Get_level( void )
 {
   register unsigned int msr;
   _CPU_MSR_GET(msr);
@@ -619,7 +619,7 @@ static inline unsigned32 _CPU_ISR_Get_level( void )
   else	return 1;
 }
 
-static inline void _CPU_ISR_Set_level( unsigned32 level )
+static inline void _CPU_ISR_Set_level( uint32_t   level )
 {
   register unsigned int msr;
   _CPU_MSR_GET(msr);
@@ -658,9 +658,9 @@ void BSP_panic(char *);
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
-  unsigned32       *stack_base,
-  unsigned32        size,
-  unsigned32        new_level,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
   void             *entry_point,
   boolean           is_fp
 );
@@ -817,7 +817,7 @@ void _BSP_Fatal_error(unsigned int);
 
 /* variables */
 
-extern const unsigned32 _CPU_msrs[4];
+extern const uint32_t   _CPU_msrs[4];
 
 /* functions */
 
@@ -898,7 +898,7 @@ void _CPU_Context_restore_fp(
 );
 
 void _CPU_Fatal_error(
-  unsigned32 _error
+  uint32_t   _error
 );
 
 /*  The following routine swaps the endian format of an unsigned int.
@@ -925,7 +925,7 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-  unsigned32 swapped;
+  uint32_t   swapped;
  
   asm volatile("rlwimi %0,%1,8,24,31;"
 	       "rlwimi %0,%1,24,16,23;"

@@ -1,3 +1,8 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
+	rtems/powerpc/registers.h: Convert to using c99 fixed size types.
+
 2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: RTEMS_TOP([../../../..]).

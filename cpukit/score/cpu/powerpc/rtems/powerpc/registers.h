@@ -278,7 +278,7 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
 
 #define rtems_bsp_delay( _microseconds ) \
   do { \
-    unsigned32 start, ticks, now; \
+    uint32_t   start, ticks, now; \
     CPU_Get_timebase_low( start ) ; \
     ticks = (_microseconds) * rtems_cpu_configuration_get_clicks_per_usec(); \
     do \
@@ -288,7 +288,7 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
 
 #define rtems_bsp_delay_in_bus_cycles( _cycles ) \
   do { \
-    unsigned32 start, now; \
+    uint32_t   start, now; \
     CPU_Get_timebase_low( start ); \
     do \
       CPU_Get_timebase_low( now ); \
