@@ -612,7 +612,11 @@ SCORE_EXTERN struct {
 #define CPU_MINIMUM_STACK_FRAME_SIZE 8
 
 
-/* ISR handler macros */
+/*
+ *  ISR handler macros
+ */
+
+#define _CPU_Initialize_vectors()
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous

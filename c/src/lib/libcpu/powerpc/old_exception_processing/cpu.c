@@ -58,7 +58,6 @@ void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-  proc_ptr handler = (proc_ptr)ppc_spurious;
   int i;
 #if (PPC_ABI != PPC_ABI_POWEROPEN)
   register unsigned32 r2 = 0;
@@ -75,7 +74,7 @@ void _CPU_Initialize(
 
   _CPU_IRQ_info.Nest_level = &_ISR_Nest_level;
   _CPU_IRQ_info.Disable_level = &_Thread_Dispatch_disable_level;
-  _CPU_IRQ_info.Vector_table = _ISR_Vector_table;
+  /* fill in _CPU_IRQ_info.Vector_table later */
 #if (PPC_ABI == PPC_ABI_POWEROPEN)
   _CPU_IRQ_info.Dispatch_r2 = ((unsigned32 *)_Thread_Dispatch)[1];
 #endif
@@ -97,15 +96,34 @@ void _CPU_Initialize(
   asm volatile("mtspr 0x112, %0" : "=r" (i) : "0" (i)); /* SPRG 2 */
 #endif
 
-  if ( cpu_table->spurious_handler )
-    handler = (proc_ptr)cpu_table->spurious_handler;
+  _CPU_Table = *cpu_table;
+}
+
+/*
+ *  _CPU_Initialize_vectors()
+ *
+ *  Support routine to initialize the RTEMS vector table after it is allocated.
+ *
+ *  PowerPC Specific Information:
+ *
+ *  Complete initialization since the table is now allocated.
+ */
+ 
+void _CPU_Initialize_vectors(void)
+{
+  int i;
+  proc_ptr handler = (proc_ptr)ppc_spurious;
+
+  _CPU_IRQ_info.Vector_table = _ISR_Vector_table;
+
+  if ( _CPU_Table.spurious_handler )
+    handler = (proc_ptr)_CPU_Table.spurious_handler;
 
   for (i = 0; i < PPC_INTERRUPT_MAX;  i++)
     _ISR_Vector_table[i] = handler;
 
-  _CPU_Table = *cpu_table;
 }
-
+ 
 /*PAGE
  *
  *  _CPU_ISR_Calculate_level

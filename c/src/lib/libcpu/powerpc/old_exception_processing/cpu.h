@@ -706,7 +706,11 @@ SCORE_EXTERN struct {
 
 #define CPU_STACK_ALIGNMENT        (PPC_STACK_ALIGNMENT)
 
-/* ISR handler macros */
+/*
+ *  ISR handler macros
+ */
+
+void _CPU_Initialize_vectors(void);
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
