@@ -1,3 +1,7 @@
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/enable-itron.m4: Allow unix.
+
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove ACLOCAL_FILES.
