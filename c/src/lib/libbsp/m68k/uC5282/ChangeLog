@@ -1,0 +1,5 @@
+2005-01-28	Eric Norum <norume@aps.anl.gov>
+
+	* uC5282: New BSP
+	* acinclude.m4: uC5282 BSP
+
