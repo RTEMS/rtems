@@ -1,3 +1,10 @@
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_ENABLE_MULTIPROCESSING, 
+	RTEMS_ENABLE_POSIX, RTEMS_ENABLE_ITRON, RTEMS_ENABLE_INLINES,
+	RTEMS_ENABLE_RTEMS_DEBUG, RTEMS_CHECK_RTEMS_DEBUG,
+	RTEMS_CHECK_NEWLIB.
+
 2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove multilib support.
