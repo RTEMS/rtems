@@ -57,6 +57,15 @@ rtems_device_minor_number rtems_clock_minor;
 rtems_isr
 Clock_isr (rtems_vector_number vector)
 {
+	/*
+	 * Perform a dummy read of DPRAM.
+	 * This works around a bug in Rev. B of the 68360
+	 */
+	m360.dpram0[0];
+
+	/*
+	 * Announce the clock tick
+	 */
 	Clock_driver_ticks++;
 	rtems_clock_tick();
 }

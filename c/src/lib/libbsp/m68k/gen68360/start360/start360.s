@@ -1,4 +1,4 @@
-/*  entry.s
+/*
  *
  *  This file contains the entry point for the application.
  *  The name of this entry point is compiler dependent.
@@ -311,15 +311,19 @@ spurious_interrupt:
 	.align 2
 	.long	ETHERNET_ADDRESS	| Low-order 3 octets of ethernet address
 
+        .global start
 /*
  * Initial PC
  */
-         .global start
 start:	
 	/*
 	 * Step 2: Stay in Supervisor Mode
-	 * (i.e. just do nothing for this step)
 	 */
+#if ( M68K_HAS_SEPARATE_STACKS == 1 )
+	oriw	#0x3000,sr		| Switch to Master Stack Pointer
+	lea	SYM(m360)+1024-64,a7	| Load stack pointer with space
+					|   for the Interrupt Stack
+#endif
 
 	/*
 	 * Step 3: Write the VBR

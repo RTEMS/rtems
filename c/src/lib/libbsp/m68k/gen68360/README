@@ -24,15 +24,16 @@
 # MC68360 systems.  The choice of hardware is made at the final link-edit
 # phase by setting the Makefile LDFLAGS definition appropriately.
 #
-# Decisions to be made a link-edit time include:
-#	- The version of hardware on which the application is to run.
-#	  This is selected by defining the MC68360HardwareType variable.
-#	  Supported values are:
-#			MC68360HardwareTypeMotorolaGeneric (default)
-#			MC68360HardwareTypeAtlasHSB
-#	  To select the Atlas Computer Equipment HSB,
-#		--defsym MC68360HardwareType=MC68360HardwareTypeAtlasHSB
+# Decisions made at compile time include:
+#	- If the CPU is a member of the 68040 family, the BSP is
+#	  compiled for a generic 68040/68360 system as described
+#	  in Chapter 9 of the MC68360 User's Manual.
+#	- If the preprocessor symbol M68360_ATLAS_HSB is defined,
+#	  the BSP is compiled for an Atlas HSB card.
+#	- Otherwise, the BSP is compiled for a generic 68360 system
+#	  as described in Chapter 9 of the MC68360 User's Manual.
 #
+# Decisions to be made a link-edit time are:
 #	- The amount of dynamic RAM in the system.  This value applies
 #	  only to hardware versions which support different sizes of RAM.
 #	  The default value is 4 Mbytes.  To specify 16 Mbytes of memory,
@@ -45,13 +46,15 @@
 #	  To choose a heap size of 256 kbytes,
 #		--defsym HeapSize=0x40000
 #	  
+#	- The Ethernet address for network boot proms.
 
-BSP NAME:	    gen68360
+BSP NAME:	    gen68360 or gen68360_040
 BOARD:              Generic 68360 as described in Motorola MC68360 User's Manual
 BOARD:              Atlas Computer Equipment Inc. High Speed Bridge (HSB)
 BOARD:              Atlas Computer Equipment Inc. Advanced Communication Engine (ACE)
+BOARD:              Arnewsh SBC360 68040/68360 card
 BUS:                none
-CPU FAMILY:         Motorola CPU32+
+CPU FAMILY:         Motorola CPU32+, Motorola 68040
 COPROCESSORS:       none
 MODE:               not applicable
 
@@ -100,8 +103,8 @@ NEXTSTEP 3.3 (Intel and Motorola), Solaris 2.5
 gcc-2.7.2
 binutils-2.6
 
-Verification
-------------
+Verification (Standalone 68360)
+-------------------------------
 Single processor tests:  Passed
 Multi-processort tests:  not applicable
 Timing tests:
@@ -290,8 +293,13 @@ Processor Users' Manual.  The salient features of this hardware are:
 	Console serial port on SMC1
 	Ethernet interface on SCC1
 
-The board support package has been tested with a home-built board and with an
-ACE360A board produced by:
-	Atlas Computer Equipment
-	703 Colina Lane
-	Santa Barbara, CA 93103
+The board support package has been tested with:
+	A home-built 68360 board
+	An ACE360A and an HSB board produced by:
+		Atlas Computer Equipment
+		703 Colina Lane
+		Santa Barbara, CA 93103
+	A 68040/68360 board (SBC360) produced by:
+		Arnewsh Inc.
+		P.O. Box 270352
+		Fort Collins, CO 80527-0352

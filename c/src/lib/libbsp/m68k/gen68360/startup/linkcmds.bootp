@@ -4,16 +4,14 @@
  * by overriding some values with linker command-line arguments.
  *
  * These linker directives are for producing a PROM version.
- * To create the PROM image from the linker output you must use objcopy
- * (--adjust-section-vma) to place the data segment at the end of the text
- * segment in the PROM.  The start-up code takes care of copying this region
- * to RAM.
+ * The data segment is placed at the end of the text segment in the PROM.
+ * The start-up code takes care of copying this region to RAM.
  *
  * Saskatchewan Accelerator Laboratory
  * University of Saskatchewan
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
- * 
+ *
  *  $Id$
  */
 
@@ -28,13 +26,6 @@ HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
 
 /*
- * Declare hardware type
- */
-MC68360HardwareTypeMotorolaGeneric = 0; 
-MC68360HardwareTypeAtlasHSB = 1; 
-MC68360HardwareType = DEFINED(MC68360HardwareType) ? MC68360HardwareType : 0;
-
-/*
  * Declare on-board memory.
  * It would be nice if the ram length could be given as
  * LENGTH=RamSize, but gld doesn't allow non-constant
@@ -43,23 +34,14 @@ MC68360HardwareType = DEFINED(MC68360HardwareType) ? MC68360HardwareType : 0;
 MEMORY {
           ram : ORIGIN = 0x00000000, LENGTH = 64M
         myram : ORIGIN = 4M-512k,    LENGTH = 512k
-          rom : ORIGIN = 0xFF000000, LENGTH = 1M
-        dpram : ORIGIN = 0xFE000000, LENGTH = 8k
+          rom : ORIGIN = 0x0F000000, LENGTH = 1M
+        dpram : ORIGIN = 0x0E000000, LENGTH = 8k
 }
 
 /*
  * Declare low-order three octets of Ethernet address.
  */
 ETHERNET_ADDRESS = DEFINED(ETHERNET_ADDRESS) ? ETHERNET_ADDRESS : 0xDEAD12;
-
-/*
- * Declare hardware type.
- * Acceptable values are:
- *	0 - Generic system as described in the MC68360 User's Manual
- *	    (MC68360UM/AD Rev. 1).
- *	1 - ATLAS Computer Equipment Incorporated ACE360/HSB.
- */
-MC68360HardwareType = DEFINED(MC68360HardwareType) ? MC68360HardwareType : 0;
 
 /*
  * Load objects
@@ -70,12 +52,6 @@ SECTIONS {
 	 */
 	_RamSize = RamSize;
 	__RamSize = RamSize;
-	_MC68360HardwareType = MC68360HardwareType;
-	__MC68360HardwareType = MC68360HardwareType;
-	_MC68360HardwareTypeMotorolaGeneric = MC68360HardwareTypeMotorolaGeneric; 
-	__MC68360HardwareTypeMotorolaGeneric = MC68360HardwareTypeMotorolaGeneric; 
-	_MC68360HardwareTypeAtlasHSB = MC68360HardwareTypeAtlasHSB; 
-	__MC68360HardwareTypeAtlasHSB = MC68360HardwareTypeAtlasHSB; 
 
         /*
          * Boot PROM
